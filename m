@@ -2,164 +2,252 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 597402C2535
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Nov 2020 13:04:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5131A2C2537
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Nov 2020 13:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733153AbgKXMDW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 24 Nov 2020 07:03:22 -0500
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:45930 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732479AbgKXMDW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Nov 2020 07:03:22 -0500
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0AOBuSWn026089;
-        Tue, 24 Nov 2020 07:03:17 -0500
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2106.outbound.protection.outlook.com [104.47.70.106])
-        by mx0a-00128a01.pphosted.com with ESMTP id 34y0p88chc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 Nov 2020 07:03:17 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WxzIiEqc5yxrQozhAEcF9G3sKolyYV8xsy32xlTiRloSJEYd5TFxauaKMR9ZJdyInvR6KpmhneWDsKwTt2mkebjcgqKFS/7oZKFsy2uwFMO6+4VMchiXGU6wWQV1Dwqa9MeaGraZ5Xgh3DGL0ojvdpQBHMPcOP0wo6HmwFo0HbfmWRY7SPCTjk0tzTexESQnO/TSyQbaFijNkg2RoHdNlDBGJ12vTZNfrqlYvcUgG9oVUlZKmGTeNbnB70EgvtIgGsH4Q9Ptfc+AbGzpspFQmYoyfgsBLkrNLx2vQRf4Fy4PDdFDAGsgtGwe5jX9ZEwXTkcKOmBJUX3eeDS7nNDMug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gUCPWAAqi6PXnsprJIB+pRiZFOb7bMU1hngBsg+tqnc=;
- b=ASJk4nhzuMZJFW3Ye0isbYye9Xk+CJODG+z61fxLYJPSzv+nYMl/jHEMWi/dJj1auNkyujwgv9aP50DYxogO3r9CfhOpujmNQx6Gm+oacbw3Eq95jBMn1snvhNB4q2+q7DBu594SB1gDKNgbIzPlRl2Xj0DS9KK2zQCxaaFJ9IFdlwi0vO6UIin3aP3J48uRqenbiZJCdnJyZxi+xAikCPwAzvcFE8ySr5lnHvNAtTnkR/ap/7IiT5Yn76phNlK3tQpmncKxGFoPYgXQE5cbY/1rXlcKvFtjc7bcfXsrTvc7xzG+aHvsWiy2yH6X9SP2/BH4NkA7kADGr1/aG7YJKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
- dkim=pass header.d=analog.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gUCPWAAqi6PXnsprJIB+pRiZFOb7bMU1hngBsg+tqnc=;
- b=8ZrdksJOEv+g4igUNFJzWWLNKtmcuUOeCOI4M8bdPL6RWIyC+bCjWhhwrHD80bGKSU+sEICXVHnx61FpG6RThCFiXDJsPQvt9aKX/hMOPavTUJUcQ5PWH/KoBzmdnAzogBQAJqFfvBZJvkGqd/Zsfjc+Z4fOGKCvRkQ46PjXiqU=
-Received: from DM6PR03MB4411.namprd03.prod.outlook.com (2603:10b6:5:10f::14)
- by DS7PR03MB5623.namprd03.prod.outlook.com (2603:10b6:5:2cf::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.21; Tue, 24 Nov
- 2020 12:03:15 +0000
-Received: from DM6PR03MB4411.namprd03.prod.outlook.com
- ([fe80::f99d:8928:7e14:1a62]) by DM6PR03MB4411.namprd03.prod.outlook.com
- ([fe80::f99d:8928:7e14:1a62%6]) with mapi id 15.20.3589.030; Tue, 24 Nov 2020
- 12:03:15 +0000
-From:   "Ardelean, Alexandru" <alexandru.Ardelean@analog.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        kernel test robot <lkp@intel.com>
-CC:     linux-spi <linux-spi@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Bogdan, Dragos" <Dragos.Bogdan@analog.com>
-Subject: RE: [PATCH v2 1/3] spi: convert to BIT() all spi_device flags
-Thread-Topic: [PATCH v2 1/3] spi: convert to BIT() all spi_device flags
-Thread-Index: AQHWwkrvAuyngSX0h0uNjRtAQ54rBqnXKN4AgAACToCAAAJTwA==
-Date:   Tue, 24 Nov 2020 12:03:15 +0000
-Message-ID: <DM6PR03MB4411ABE610061A840224159EF9FB0@DM6PR03MB4411.namprd03.prod.outlook.com>
-References: <20201124102152.16548-1-alexandru.ardelean@analog.com>
- <202011241901.eIm4FyEB-lkp@intel.com>
- <CAHp75Vc+M2veG25pehO-8LSj0WcXvotijwaYvkYvAr3LF1n10Q@mail.gmail.com>
-In-Reply-To: <CAHp75Vc+M2veG25pehO-8LSj0WcXvotijwaYvkYvAr3LF1n10Q@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: =?utf-8?B?UEcxbGRHRStQR0YwSUc1dFBTSmliMlI1TG5SNGRDSWdjRDBpWXpwY2RYTmxj?=
- =?utf-8?B?bk5jWVdGeVpHVnNaV0ZjWVhCd1pHRjBZVnh5YjJGdGFXNW5YREE1WkRnME9X?=
- =?utf-8?B?STJMVE15WkRNdE5HRTBNQzA0TldWbExUWmlPRFJpWVRJNVpUTTFZbHh0YzJk?=
- =?utf-8?B?elhHMXpaeTB3Tnpka05EQTBNUzB5WlRSa0xURXhaV0l0WVRWalpDMDBNVFUy?=
- =?utf-8?B?TkRVd01EQXdNekJjWVcxbExYUmxjM1JjTURjM1pEUXdORE10TW1VMFpDMHhN?=
- =?utf-8?B?V1ZpTFdFMVkyUXROREUxTmpRMU1EQXdNRE13WW05a2VTNTBlSFFpSUhONlBT?=
- =?utf-8?B?SXhOREUwSWlCMFBTSXhNekkxTURZNU1qazVORGd3T1RZNE5qQWlJR2c5SWtG?=
- =?utf-8?B?NlUwWjNSbUpTTHpGTmFYRlZhVzlpVlc1MmExcDJjR0U1YXowaUlHbGtQU0lp?=
- =?utf-8?B?SUdKc1BTSXdJaUJpYnowaU1TSWdZMms5SW1OQlFVRkJSVkpJVlRGU1UxSlZS?=
- =?utf-8?B?azVEWjFWQlFVVnZRMEZCUW1ObFpGaEtWMk5NVjBGaWRtaFpaV2N3ZEdoa1Qz?=
- =?utf-8?B?VXJSbWcyUkZNeVJqQTBSRUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRklRVUZCUVVSaFFWRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGRlFVRlJRVUpCUVVGQlozTldNRFJSUVVGQlFVRkJRVUZCUVVGQlFVRkJT?=
- =?utf-8?B?alJCUVVGQ2FFRkhVVUZoVVVKbVFVaE5RVnBSUW1wQlNGVkJZMmRDYkVGR09F?=
- =?utf-8?B?RmpRVUo1UVVjNFFXRm5RbXhCUjAxQlpFRkNla0ZHT0VGYVowSm9RVWQzUVdO?=
- =?utf-8?B?M1FteEJSamhCV21kQ2RrRklUVUZoVVVJd1FVZHJRV1JuUW14QlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVWQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlowRkJRVUZCUVc1blFVRkJSMFZCV2tGQ2NFRkdPRUZqZDBKc1FVZE5RV1JS?=
- =?utf-8?B?UW5sQlIxVkJXSGRDZDBGSVNVRmlkMEp4UVVkVlFWbDNRakJCU0UxQldIZENN?=
- =?utf-8?B?RUZIYTBGYVVVSjVRVVJGUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRlJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRMEZCUVVGQlFVTmxRVUZCUVZsUlFtdEJSMnRCV0hkQ2Vr?=
- =?utf-8?B?RkhWVUZaZDBJeFFVaEpRVnBSUW1aQlNFRkJZMmRDZGtGSGIwRmFVVUpxUVVo?=
- =?utf-8?B?UlFXTjNRbVpCU0ZGQllWRkNiRUZJU1VGTlowRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZDUVVGQlFVRkJRVUZCUVVsQlFVRkJRVUZCUFQwaUx6NDhMMjFs?=
- =?utf-8?Q?dGE+?=
-x-dg-rorf: true
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=analog.com;
-x-originating-ip: [188.27.128.26]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: db8bb03a-effd-4eee-7d3c-08d89070ecec
-x-ms-traffictypediagnostic: DS7PR03MB5623:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DS7PR03MB562369771742C880333EEAF2F9FB0@DS7PR03MB5623.namprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cJo1SVVOfkOBrxVhX8N5n3iE1bqxWCxLlXQcz9lVNbjqQaukEc5keH9BCiRQfuT/xRxaG3lxQsmlDRSLat+RVYzFRiw3axIP77ejZYmTpD0caEekn6rPyNnvzd7NzmqHWjl4+r7NLS3f099pU22Sa1rDpxs51dV5IWSgRFiMtPEo6bC5ghvKOojk1L+quMgoXwSSo7Sj9G5Hpnp/oWLd4YdBiAP7YOozjjyKTYcK08wzN2jzl/+FQtWP04HjtiJHW+X9sweLYI/lkLxN/yvU6o27ezInBuvDyrLx2NYnAbsKEoktHi/7MsR/Fb/wPuGA
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB4411.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(366004)(396003)(39860400002)(136003)(8936002)(55016002)(8676002)(7696005)(76116006)(316002)(54906003)(26005)(107886003)(2906002)(186003)(9686003)(71200400001)(5660300002)(66946007)(83380400001)(53546011)(66446008)(66476007)(4326008)(478600001)(86362001)(6506007)(33656002)(110136005)(66556008)(52536014)(64756008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: RhcWgh3OkMSPKmf/7I4ccJCRtG00Y4YDb/CfNdf5mBGdMH/LTPCQmIB09l0/EiS8b3af2ONCXhADjw+9phZCOgJQhOFV/jutF2+6xz7cmZSumKLLI0QVgzt75GjatWP/JNqnmvdIsTIcnrfCAQmAP/OwqZEZ+8RnJXwVgTgDURPBgztjIaQjgbVmcxU3Rs1HlHRHV7GSq3E5UmmL4P6nHf8VlDGqrmed0Q7XT+QxPeKjd2P0LKqhCibI4wqfjI/08oaA6GpeUDIjV7BFE91IWWEIK7kIqRb37KgNILSpkksBwTOzrm8G3oIOGafQ4gJsIzWDWKTICJWg01Knrh7EWJQ5NhNL4ZA46ztCNBFhSLfqiR3r0U3hFIxtXfskMHFtvEZ/nL/0X0trO1JMAXynO/aMZs9+SgA/b3ziPbtN1SmO91pn8qn9tnEZAo+twFCJ69Ge850ABKs/A0iToP1sMJy3251n6bxYyFPWCFMEre7j6q3yX47Ylz0oVh3/LkSD6q3VQmdQenhGrkpk9sUwJcAR6D1VNfA9Q/SmFZy9cpIWiIGnc6rGJaHdTvWprF7th3nhXa6DLgw1K7QadxorVwCciM4bAkSMd5CDUDFFv4QqmZS0SgulI9G7EsFv33WHmGi4Tg5ZTC/xHbk5/78AfABbyRnDredEcxd/u75AlhIFlKPln/J84a9VmuryGu3/cjTQgofBOpH93bQIp2O7XnfXRKnmOBMw+OvJseAAdF4DpykRUJ3fEZQyJ9v6xmGePplc5gfAA6s4MPkt1HaWkGw6YvMJofXGvmkkrM7t7hSy9KbCeDf9W+Ou6JjpQh6hQzdAGzoAk38I7aaHKR25wAwHp4mMWEbE3jz55rILwUwbaWZSn14PiP2SS7gQ0ooF8DN/MaSBop/NOC6iB9/tkw==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1733250AbgKXMDh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 24 Nov 2020 07:03:37 -0500
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:42065 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732814AbgKXMDg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Nov 2020 07:03:36 -0500
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20201124120325euoutp01518eef4558a60ece2ecc32b91a1b2590~KcAn3G3FC2795927959euoutp01C
+        for <linux-spi@vger.kernel.org>; Tue, 24 Nov 2020 12:03:25 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20201124120325euoutp01518eef4558a60ece2ecc32b91a1b2590~KcAn3G3FC2795927959euoutp01C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1606219405;
+        bh=ohbV081x2d+qe+8QgkAe1mObHIdNUXUCiiRzPduyJsk=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=CMq5M3VEJuHczRUNLLDpAVvZApcZJJjoWvFPd+WtEmNTMw74XIyYnltNxpNzeO4qX
+         +RyOwlrt52R8p3uoixOU5DShGMWTlAIFoxy9Aa1cQIjarPAsrXxSsmn5f2tjy82MmA
+         Q25o9eQW10Xz+5wyDerJPibifRPPf42g2ge9oQ3Q=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20201124120324eucas1p27d3c1c8185b9bb27dbf9af46534d0a8d~KcAnQiFx82507925079eucas1p2k;
+        Tue, 24 Nov 2020 12:03:24 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 3E.53.27958.C86FCBF5; Tue, 24
+        Nov 2020 12:03:24 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20201124120324eucas1p189ec6eed6d6477e27a194f9d75d7b43a~KcAm1aTeU3037230372eucas1p1t;
+        Tue, 24 Nov 2020 12:03:24 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20201124120324eusmtrp23192203b4bc9a8bc1a520ec483a94450~KcAm0wZlY3019630196eusmtrp2y;
+        Tue, 24 Nov 2020 12:03:24 +0000 (GMT)
+X-AuditID: cbfec7f2-f15ff70000006d36-23-5fbcf68c4be3
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 9F.1C.16282.C86FCBF5; Tue, 24
+        Nov 2020 12:03:24 +0000 (GMT)
+Received: from [106.210.88.143] (unknown [106.210.88.143]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20201124120323eusmtip2a06e1517b7f60f41fa2500bcaf9917b6~KcAmbOSpu2324723247eusmtip2N;
+        Tue, 24 Nov 2020 12:03:23 +0000 (GMT)
+Subject: Re: [PATCH v2 2/3] spi: Use bus_type functions for probe, remove
+ and shutdown
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Message-ID: <9b86504f-c5f4-4c85-9bef-3d1ee4cbaf9c@samsung.com>
+Date:   Tue, 24 Nov 2020 13:03:25 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0)
+        Gecko/20100101 Thunderbird/78.5.0
 MIME-Version: 1.0
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB4411.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: db8bb03a-effd-4eee-7d3c-08d89070ecec
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Nov 2020 12:03:15.7993
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: KFYKAiOloczr+TUmleEz3pSoasvk0J8RYO8MC+2T1u4R385HDdUjoIYRDd3Ho9tXJQcy9LJO9AQFylO8HZHG5lSdyB6v+U2n4sg1ZUA7dKs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR03MB5623
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-24_04:2020-11-24,2020-11-24 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- lowpriorityscore=0 clxscore=1011 priorityscore=1501 adultscore=0
- mlxscore=0 malwarescore=0 bulkscore=0 suspectscore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011240075
+In-Reply-To: <20201119161604.2633521-2-u.kleine-koenig@pengutronix.de>
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHKsWRmVeSWpSXmKPExsWy7djP87o93/bEG6zbJ22xccZ6VoupD5+w
+        WTQvXs9msWrqThaLy7vmsFk0frzJbnF74mRGB3aPTas62Tz2z13D7tH/18Cjb8sqRo/Pm+QC
+        WKO4bFJSczLLUov07RK4Mg78+c5UsFmt4svTNSwNjPPluxg5OSQETCQuLW5g62Lk4hASWMEo
+        cerPASjnC6PExyvvmSGcz4wSpxecZINp+XbgHjtEYjmjxMSnrSwgCSGB94wSHUucQGxhgQiJ
+        vsPvWUFsEYFMiQmX3zGCNDAL7GWUODv7DjNIgk3AUKLrbRfYVF4BO4nLbZ/ZQWwWAVWJfd+W
+        gdmiAkkSBz8+gKoRlDg58wnYMk4BN4mHGzoYQWxmAXmJ5q2zmSFscYlbT+YzgSyTELjBIbF4
+        7QKos10kdr3YxQRhC0u8Or6FHcKWkfi/E6ahmVHi4bm17BBOD6PE5aYZjBBV1hJ3zv0CmsQB
+        tEJTYv0ufYiwo8Tk89NZQMISAnwSN94KQhzBJzFp23RmiDCvREebEES1msSs4+vg1h68cIl5
+        AqPSLCSvzULyziwk78xC2LuAkWUVo3hqaXFuemqxYV5quV5xYm5xaV66XnJ+7iZGYBI6/e/4
+        px2Mc1991DvEyMTBeIhRgoNZSYS3VW5nvBBvSmJlVWpRfnxRaU5q8SFGaQ4WJXHeVbPXxAsJ
+        pCeWpGanphakFsFkmTg4pRqYSnlSur4277qR+H+etS2PtH/Ptvaja6+XX5bM4GmdsfZg9xKu
+        xXf/OPo+N8yYK6sVlKpo551ZWpdweebS/E/cLPcsquMzGh6++zhPVf/Ut5UuEoGcXzMfc9ZP
+        fhcouLUlW3bVNqXT+Ws33JB6eFwyYUPTf+3VBvprdnGZHtIU7p23c/+2N2X1q0wU9fdGSp1p
+        sNb/8UWua821Y01/z5qcu2x6/ZNAiayt+64sRpkFFm+WVD/bmatndMfIPM9UQGWS9d0DrXeu
+        iv1I/q0XqDSrbrZi8fpI6fjbNr094tpHu2+fVPxpWPHHJ7OHQ91bqdo/rSWm4Pu22TN2n5wp
+        mHd82a1/c/mkvjSKHVgU5P1MiaU4I9FQi7moOBEA33YE4LEDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrIIsWRmVeSWpSXmKPExsVy+t/xe7o93/bEG3RMZLHYOGM9q8XUh0/Y
+        LJoXr2ezWDV1J4vF5V1z2CwaP95kt7g9cTKjA7vHplWdbB77565h9+j/a+DRt2UVo8fnTXIB
+        rFF6NkX5pSWpChn5xSW2StGGFkZ6hpYWekYmlnqGxuaxVkamSvp2NimpOZllqUX6dgl6GQf+
+        fGcq2KxW8eXpGpYGxvnyXYycHBICJhLfDtxj72Lk4hASWMooserBGVaIhIzEyWkNULawxJ9r
+        XWwQRW8ZJX6c3sgIkhAWiJA4vH4lG4gtIpApceP9WiaQImaBvYwSR14tYIboaGSU+LVhLlgH
+        m4ChRNfbLrAOXgE7icttn9lBbBYBVYl935aB2aICSRK/l66FqhGUODnzCQuIzSngJvFwQwfY
+        HGYBM4l5mx8yQ9jyEs1bZ0PZ4hK3nsxnmsAoNAtJ+ywkLbOQtMxC0rKAkWUVo0hqaXFuem6x
+        kV5xYm5xaV66XnJ+7iZGYNxtO/Zzyw7Gla8+6h1iZOJgPMQowcGsJMLbKrczXog3JbGyKrUo
+        P76oNCe1+BCjKdA/E5mlRJPzgZGfVxJvaGZgamhiZmlgamlmrCTOa3JkTbyQQHpiSWp2ampB
+        ahFMHxMHp1QDE9f9Rw92qTk2x7kYqNzTCd2wcOdj1gcO3N9W5ywQT1J1vn9aeZ8I9yS7qyVT
+        Fq5PvGb1KleQ89qyOJdMnsOtYXOqy+66eb3Z/0mJJ0l/W/DXaPdw9W0vIlcnHLvZldfUeSLg
+        2avU+4fmbPbNbEv4rr3si+NUrfDlCyw/MOeI7zu9/fP7/B380lvna71xuajlO/XQBds7QgIN
+        hSufKR7aX7VCYinLuYiFFa4TV69/oMDxIsDaOTWotD/6bpR2rbpKq+dCvz3aOS8+bthlxvNU
+        fmmgbkqwZCGXi+tuzzW+/Yfd3RIbH6yrUbzs8Sfz0b0AlxXy7d9e/56S9mRzzOJpFrXTgj5P
+        mLiB85GvReipJCWW4oxEQy3mouJEALC+sahEAwAA
+X-CMS-MailID: 20201124120324eucas1p189ec6eed6d6477e27a194f9d75d7b43a
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20201124120324eucas1p189ec6eed6d6477e27a194f9d75d7b43a
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20201124120324eucas1p189ec6eed6d6477e27a194f9d75d7b43a
+References: <20201119161604.2633521-1-u.kleine-koenig@pengutronix.de>
+        <20201119161604.2633521-2-u.kleine-koenig@pengutronix.de>
+        <CGME20201124120324eucas1p189ec6eed6d6477e27a194f9d75d7b43a@eucas1p1.samsung.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQW5keSBTaGV2Y2hlbmtv
-IDxhbmR5LnNoZXZjaGVua29AZ21haWwuY29tPg0KPiBTZW50OiBUdWVzZGF5LCBOb3ZlbWJlciAy
-NCwgMjAyMCAxOjUwIFBNDQo+IFRvOiBrZXJuZWwgdGVzdCByb2JvdCA8bGtwQGludGVsLmNvbT4N
-Cj4gQ2M6IEFyZGVsZWFuLCBBbGV4YW5kcnUgPGFsZXhhbmRydS5BcmRlbGVhbkBhbmFsb2cuY29t
-PjsgbGludXgtc3BpIDxsaW51eC0NCj4gc3BpQHZnZXIua2VybmVsLm9yZz47IGRldmljZXRyZWUg
-PGRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnPjsgTGludXggS2VybmVsDQo+IE1haWxpbmcgTGlz
-dCA8bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZz47IGtidWlsZC1hbGxAbGlzdHMuMDEub3Jn
-OyBNYXJrDQo+IEJyb3duIDxicm9vbmllQGtlcm5lbC5vcmc+OyBSb2IgSGVycmluZyA8cm9iaCtk
-dEBrZXJuZWwub3JnPjsgQm9nZGFuLA0KPiBEcmFnb3MgPERyYWdvcy5Cb2dkYW5AYW5hbG9nLmNv
-bT4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2MiAxLzNdIHNwaTogY29udmVydCB0byBCSVQoKSBh
-bGwgc3BpX2RldmljZSBmbGFncw0KPiANCj4gT24gVHVlLCBOb3YgMjQsIDIwMjAgYXQgMTo0MiBQ
-TSBrZXJuZWwgdGVzdCByb2JvdCA8bGtwQGludGVsLmNvbT4gd3JvdGU6DQo+IA0KPiA+IEFsbCB3
-YXJuaW5ncyAobmV3IG9uZXMgcHJlZml4ZWQgYnkgPj4pOg0KPiA+DQo+ID4gICAgSW4gZmlsZSBp
-bmNsdWRlZCBmcm9tIGRyaXZlcnMvc3BpL3NwaWRldi5jOjI2Og0KPiA+ID4+IGluY2x1ZGUvdWFw
-aS9saW51eC9zcGkvc3BpZGV2Lmg6MzM6IHdhcm5pbmc6ICJTUElfQ1BIQSIgcmVkZWZpbmVkDQo+
-ID4gICAgICAgMzMgfCAjZGVmaW5lIFNQSV9DUEhBICAweDAxDQo+IA0KPiBBcmdoISBDYW4gd2Ug
-aGF2ZSBvbmx5IG9uZSBzZXQgb2YgZmxhZ3M/DQo+DQoNCk15IGJhZCBoZXJlIGZvciBub3QgY2F0
-Y2hpbmcgdGhpcyBlYXJsaWVyLg0KDQpJdCBtaWdodCBiZSBhbiBpZGVhIHRvIGNyZWF0ZSBhICJp
-bmNsdWRlL3VhcGkvbGludXgvc3BpL3NwaS5oIiBhbmQgaW5jbHVkZSB0aGlzIGluICIgaW5jbHVk
-ZS91YXBpL2xpbnV4L3NwaS9zcGlkZXYuaCAiDQpUaGVuIHRoZSAiIGluY2x1ZGUvdWFwaS9saW51
-eC9zcGkvc3BpLmggIiB3b3VsZCBhbHNvIGJlIGluY2x1ZGVkIGluICIgaW5jbHVkZS9saW51eC9z
-cGkvc3BpLmggIg0KV2Ugd291bGQgbmF0dXJhbGx5IGRyb3AgdGhlIEJJVCgpIG1hY3JvcyBmb3Ig
-dGhlIHVhcGkgaGVhZGVyLg0KDQoNCj4gLS0NCj4gV2l0aCBCZXN0IFJlZ2FyZHMsDQo+IEFuZHkg
-U2hldmNoZW5rbw0K
+Hi Uwe,
+
+On 19.11.2020 17:16, Uwe Kleine-König wrote:
+> The eventual goal is to get rid of the callbacks in struct
+> device_driver. Other than not using driver callbacks there should be no
+> side effect of this patch.
+>
+> Signed-off-by: Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de>
+
+This patch landed recently in linux-next as commit 9db34ee64ce4 ("spi: 
+Use bus_type functions for probe, remove and shutdown").
+
+It causes a regression on some of my test boards:
+
+Unable to handle kernel NULL pointer dereference at virtual address 
+0000000000000018
+Mem abort info:
+   ESR = 0x96000004
+   EC = 0x25: DABT (current EL), IL = 32 bits
+   SET = 0, FnV = 0
+   EA = 0, S1PTW = 0
+Data abort info:
+   ISV = 0, ISS = 0x00000004
+   CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=00000000318ed000
+[0000000000000018] pgd=0000000000000000, p4d=0000000000000000
+Internal error: Oops: 96000004 [#1] PREEMPT SMP
+Modules linked in: cpufreq_powersave cpufreq_conservative brcmfmac 
+brcmutil cfg80211 crct10dif_ce s3fwrn5_i2c s3fwrn5 nci nfc s5p_mfc 
+s5p_jpeg hci_uart btqca btbc
+buf2_dma_contig videobuf2_memops videobuf2_v4l2 bluetooth 
+videobuf2_common videodev panfrost gpu_sched ecdh_generic mc ecc rfkill 
+ip_tables x_tables ipv6
+CPU: 0 PID: 1 Comm: systemd-shutdow Not tainted 
+5.10.0-rc5-next-20201124+ #9771
+Hardware name: Samsung TM2E board (DT)
+pstate: 60000005 (nZCv daif -PAN -UAO -TCO BTYPE=--)
+pc : spi_shutdown+0x10/0x38
+lr : device_shutdown+0x10c/0x350
+sp : ffff80001311bc70
+...
+Call trace:
+  spi_shutdown+0x10/0x38
+  kernel_restart_prepare+0x34/0x40
+  kernel_restart+0x14/0x88
+  __do_sys_reboot+0x148/0x248
+  __arm64_sys_reboot+0x1c/0x28
+  el0_svc_common.constprop.3+0x74/0x198
+  do_el0_svc+0x20/0x98
+  el0_sync_handler+0x140/0x1a8
+  el0_sync+0x140/0x180
+Code: f9403402 d1008041 f100005f 9a9f1021 (f9400c21)
+---[ end trace 266c07205a2d632e ]---
+Kernel panic - not syncing: Oops: Fatal exception
+Kernel Offset: disabled
+CPU features: 0x0240022,65006087
+Memory Limit: none
+---[ end Kernel panic - not syncing: Oops: Fatal exception ]---
+
+> ---
+>   drivers/spi/spi.c | 33 ++++++++++++++++-----------------
+>   1 file changed, 16 insertions(+), 17 deletions(-)
+>
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> index 5becf6c2c409..e8c0a000ee19 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -374,16 +374,7 @@ static int spi_uevent(struct device *dev, struct kobj_uevent_env *env)
+>   	return add_uevent_var(env, "MODALIAS=%s%s", SPI_MODULE_PREFIX, spi->modalias);
+>   }
+>   
+> -struct bus_type spi_bus_type = {
+> -	.name		= "spi",
+> -	.dev_groups	= spi_dev_groups,
+> -	.match		= spi_match_device,
+> -	.uevent		= spi_uevent,
+> -};
+> -EXPORT_SYMBOL_GPL(spi_bus_type);
+> -
+> -
+> -static int spi_drv_probe(struct device *dev)
+> +static int spi_probe(struct device *dev)
+>   {
+>   	const struct spi_driver		*sdrv = to_spi_driver(dev->driver);
+>   	struct spi_device		*spi = to_spi_device(dev);
+> @@ -414,7 +405,7 @@ static int spi_drv_probe(struct device *dev)
+>   	return ret;
+>   }
+>   
+> -static int spi_drv_remove(struct device *dev)
+> +static int spi_remove(struct device *dev)
+>   {
+>   	const struct spi_driver		*sdrv = to_spi_driver(dev->driver);
+>   	int ret = 0;
+> @@ -426,13 +417,25 @@ static int spi_drv_remove(struct device *dev)
+>   	return ret;
+>   }
+>   
+> -static void spi_drv_shutdown(struct device *dev)
+> +static void spi_shutdown(struct device *dev)
+>   {
+>   	const struct spi_driver		*sdrv = to_spi_driver(dev->driver);
+>   
+> -	sdrv->shutdown(to_spi_device(dev));
+> +	if (sdrv->shutdown)
+> +		sdrv->shutdown(to_spi_device(dev));
+>   }
+
+In the above function dev->driver might be NULL, so its use in 
+to_spi_driver() and sdrv->shutdown leads to NULL pointer dereference. I 
+didn't check the details, but a simple check for NULL dev->driver and 
+return is enough to fix this issue. I can send such fix if you want.
+
+> +struct bus_type spi_bus_type = {
+> +	.name		= "spi",
+> +	.dev_groups	= spi_dev_groups,
+> +	.match		= spi_match_device,
+> +	.uevent		= spi_uevent,
+> +	.probe		= spi_probe,
+> +	.remove		= spi_remove,
+> +	.shutdown	= spi_shutdown,
+> +};
+> +EXPORT_SYMBOL_GPL(spi_bus_type);
+> +
+>   /**
+>    * __spi_register_driver - register a SPI driver
+>    * @owner: owner module of the driver to register
+> @@ -445,10 +448,6 @@ int __spi_register_driver(struct module *owner, struct spi_driver *sdrv)
+>   {
+>   	sdrv->driver.owner = owner;
+>   	sdrv->driver.bus = &spi_bus_type;
+> -	sdrv->driver.probe = spi_drv_probe;
+> -	sdrv->driver.remove = spi_drv_remove;
+> -	if (sdrv->shutdown)
+> -		sdrv->driver.shutdown = spi_drv_shutdown;
+>   	return driver_register(&sdrv->driver);
+>   }
+>   EXPORT_SYMBOL_GPL(__spi_register_driver);
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
