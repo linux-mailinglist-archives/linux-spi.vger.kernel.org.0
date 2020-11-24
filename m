@@ -2,92 +2,80 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8082C2B22
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Nov 2020 16:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 127582C2B7E
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Nov 2020 16:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389627AbgKXPWD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 24 Nov 2020 10:22:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730771AbgKXPWC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Nov 2020 10:22:02 -0500
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E8CC0617A6
-        for <linux-spi@vger.kernel.org>; Tue, 24 Nov 2020 07:22:00 -0800 (PST)
-Received: by mail-lf1-x144.google.com with SMTP id z21so29354691lfe.12
-        for <linux-spi@vger.kernel.org>; Tue, 24 Nov 2020 07:22:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MzDXagPugS5o+KmKXpuVg51WsdU5lLTnROP0cd+1ApQ=;
-        b=rE6GLlPAJ9z/ChKNrYX53P+OJarMJAnhSG76r0IF5zJvaFsvxt81Y3J0uAnSml4uCm
-         N2NJhUI/Dao3ke0nui1hJbxrvEp30iNvHZQLLZVv46SqkTJ6UrknrOEX27CmrWfzGxjq
-         BAz2j9FUwy2E5GOmt5KMyJlc0L6xDpNVyyNg8dtuAv5LYZP5C/odDmQ5u9vS7kqJinKv
-         qDuZte5lQYsPIF+fI+Hf/bTJ1Sx95jVqjq+2Prg8sfMMYH5YhT/kdxoLxORtQXkPgA7+
-         GDYllGD/+XecM90G0e1f964iLZzLmXNns4TGpQfD+kLbZPoC0ZfRxyZ5H5WJDqIE1xZZ
-         TGdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MzDXagPugS5o+KmKXpuVg51WsdU5lLTnROP0cd+1ApQ=;
-        b=M+i/n2jCCQ9wsfeZrAHXPBpL429Ii5gq9m/d2v3P/3DzN9nsoLMOBkUIE7IcT9I+Qo
-         VG/e1UzwHpQB/KEYzfDCNrkdkLLsYsz0qtSPFRRlDyDODpXMOU/7q6/u/e0/8vN3a8nt
-         gmNXQcvfO6yNpAAMCH7G8RiypRcbq+fkWWt3ag11RjuyIU22SWFHAIbzXuv4jE4XXiML
-         5iJ/BO0uWDGh2DOv/zZcs0vSy7/CH6UGlALpuKASLOv7LvCFfNxSViiLGqgy2kbX7HPm
-         xtZ+LL8dlINewSHjusEHJ3Pui08PlZVEexgK+uZcN6jHM0GBUSXVhjSQcyXmZUmjsUPx
-         d0gA==
-X-Gm-Message-State: AOAM533ap54g3leBWBbGaK9ahZJE+up90M5ndJBAhnxtIvVAbrP6QO2K
-        Rid741QjjyK76sGMtkKLgXMBu89U0F1hVy1Ct+SwbFD6EYxsdA==
-X-Google-Smtp-Source: ABdhPJw9emUWnhbBIWCETbI02Q6AAMS1NjlG9mSwYBl2+eJFmM0BDZa8fxjOq0MJCuD18PQrSzVG5Xa65kvwkNKrMrs=
-X-Received: by 2002:a19:7b06:: with SMTP id w6mr2113166lfc.260.1606231319202;
- Tue, 24 Nov 2020 07:21:59 -0800 (PST)
+        id S2389340AbgKXPh4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 24 Nov 2020 10:37:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41038 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388538AbgKXPh4 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 24 Nov 2020 10:37:56 -0500
+Received: from localhost (cpc102334-sgyl38-2-0-cust884.18-2.cable.virginm.net [92.233.91.117])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AD8C0206FB;
+        Tue, 24 Nov 2020 15:37:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606232275;
+        bh=wysJbQawJky6HAom7k/wA773dcVsKPBMng7YnEY1ZP4=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=Kiz2G4P4CtGEkabgsI8B11VSp55/OyajcO6KwFkRQ6ZJGosN+Bu0ZIYLH82hezfph
+         boTIxn3/K2zApchX/TL+ed+rAr+SwiQ73m2NSqYqRs9x65A7zElkFLH5J/UxFARzgb
+         gJc67g/VEf1mE4nN6mX5pKYkGqofas7nOtv1YlKs=
+Date:   Tue, 24 Nov 2020 15:37:32 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Clark Wang <xiaoning.wang@nxp.com>, nikita.shubin@maquefel.me,
+        shawnguo@kernel.org, s.hauer@pengutronix.de
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        kernel@pengutronix.de, festevam@gmail.com
+In-Reply-To: <20201124085247.18025-1-xiaoning.wang@nxp.com>
+References: <20201124085247.18025-1-xiaoning.wang@nxp.com>
+Subject: Re: [PATCH] spi: imx: fix the unbalanced spi runtime pm management
+Message-Id: <160623225208.5156.18283999364037268437.b4-ty@kernel.org>
 MIME-Version: 1.0
-References: <20201106150706.29089-1-TheSven73@gmail.com> <CAHp75VfP1R7bXV6nWWnovWB5BMFcNNEmwBQXheBCUVDbr=xXGA@mail.gmail.com>
- <CAGngYiVu3cXtzb5PaoDOoyqjuuohLQ+em6Keg-qgDFFn2tdp=Q@mail.gmail.com>
- <CACRpkdagAK1X6FT=sug5FGA1iipXnOT_ujtMBh9cVnep_DpWyA@mail.gmail.com>
- <20201111123327.GB4847@sirena.org.uk> <CACRpkdZW3G48Yj3yGMTKZGwVEQOSs1VeVTTGLgyoJViM3=Yedg@mail.gmail.com>
- <20201116210632.GJ4739@sirena.org.uk> <CACRpkdayWzWKHv69cg_GL2O=NWozqi_ZLnH1WdMOHzEb1bU-xA@mail.gmail.com>
- <20201118114049.GA4827@sirena.org.uk>
-In-Reply-To: <20201118114049.GA4827@sirena.org.uk>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 24 Nov 2020 16:21:48 +0100
-Message-ID: <CACRpkdbJsiW_U2hrsT+t5gsbj+ow2t_kEmTQyD2jZxs3LCRfLw@mail.gmail.com>
-Subject: Re: [PATCH v1] spi: fix client driver breakages when using GPIO descriptors
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Grant Likely <grant.likely@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        Simon Han <z.han@kunbus.com>, Lukas Wunner <lukas@wunner.de>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Nov 18, 2020 at 12:41 PM Mark Brown <broonie@kernel.org> wrote:
+On Tue, 24 Nov 2020 16:52:47 +0800, Clark Wang wrote:
+> If set active without increase the usage count of pm, the dont use
+> autosuspend function will call the suspend callback to close the two
+> clocks of spi because the usage count is reduced to -1.
+> This will cause the warning dump below when the defer-probe occurs.
+> 
+> [  129.379701] ecspi2_root_clk already disabled
+> [  129.384005] WARNING: CPU: 1 PID: 33 at drivers/clk/clk.c:952 clk_core_disable+0xa4/0xb0
+> 
+> [...]
 
-> What people think they were sold was the idea that they shouldn't have
-> to write driver code or upstream things, something with more AML like
-> capabilities (not realising that AML works partly because ACPI hugely
-> constrains system design).
+Applied to
 
-This makes a lot of sense.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-I suppose what we need to think about is the bigger question of why
-people/companies/managers are so worried about working upstream
-that they will go to lengths to avoid it and jump at any chance of
-raising a wall of abstraction between their internal development and
-the in-kernel software development.
+Thanks!
 
-I think of this as vendor/community couples therapy or something,
-there is some form of deep disconnect or mistrust going on at times
-and having worked on both ends myself I would think I could
-understand it but I can't.
+[1/1] spi: imx: fix the unbalanced spi runtime pm management
+      commit: 7cd71202961090d8f2d2b863ec66b25ae43e1d39
 
-Yours,
-Linus Walleij
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
