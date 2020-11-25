@@ -2,35 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C243C2C418E
-	for <lists+linux-spi@lfdr.de>; Wed, 25 Nov 2020 14:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7BAB2C4190
+	for <lists+linux-spi@lfdr.de>; Wed, 25 Nov 2020 14:59:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726992AbgKYN6u (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 25 Nov 2020 08:58:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34624 "EHLO mail.kernel.org"
+        id S1729762AbgKYN64 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 25 Nov 2020 08:58:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34718 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725985AbgKYN6u (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 25 Nov 2020 08:58:50 -0500
+        id S1725985AbgKYN6z (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 25 Nov 2020 08:58:55 -0500
 Received: from localhost (cpc102334-sgyl38-2-0-cust884.18-2.cable.virginm.net [92.233.91.117])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A6E6E206E5;
-        Wed, 25 Nov 2020 13:58:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A4243206F9;
+        Wed, 25 Nov 2020 13:58:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606312730;
-        bh=kMWPLddZeJ+iT1zpRIFZnAm9AkHKhLeUv8iaxlk9Cvg=;
+        s=default; t=1606312735;
+        bh=o7d9fgU6mXGwYGbLFIRYfmgfnb1HDJ7zjumgwpqARWY=;
         h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=qnuaQW+uX8hpgq3lWYBTfGUCVPq6+QAYukHRnsbhQgYtuYRE8XDyaQlwFuv8nQVHY
-         gwi1g8J1snDO2660Hu917IR+c504zKPIi5HRmMyEkLd0iTVj8xH74iA3bRMlm1oSt/
-         FAkg85eHOZFWpUuIXABOl1wGhs6Q2Nt/GPuknPbo=
-Date:   Wed, 25 Nov 2020 13:58:25 +0000
+        b=aQ6aa79R8DU5b7+nisqI1fjMhRLxU0cT2zvnWXEnMs6Omaq1SeGuiZ/lt6L0LUM9Z
+         dhRKwvyj/K37RZkarmhvHFa+PeFLZJXyiJeJfiOro1W+P6ZJAQTQOCbMvJAfPhlimn
+         R8pdUWCXWhdFJ3eURsdXRVo6haUvVR1T22fbCYfI=
+Date:   Wed, 25 Nov 2020 13:58:30 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     fancer.lancer@gmail.com, Tian Tao <tiantao6@hisilicon.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <1606114975-31362-1-git-send-email-tiantao6@hisilicon.com>
-References: <1606114975-31362-1-git-send-email-tiantao6@hisilicon.com>
-Subject: Re: [PATCH] spi: dw: fixed missing resource_size
-Message-Id: <160631270510.29611.2327233732036915740.b4-ty@kernel.org>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        linux-spi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+In-Reply-To: <20201120213414.339701-1-lars.povlsen@microchip.com>
+References: <20201120213414.339701-1-lars.povlsen@microchip.com>
+Subject: Re: [PATCH] spi: dw: Fix spi registration for controllers overriding CS
+Message-Id: <160631270511.29611.7697782706321282080.b4-ty@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -38,10 +40,16 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 23 Nov 2020 15:02:55 +0800, Tian Tao wrote:
-> fixed the coccicheck:
-> drivers/spi/spi-dw-bt1.c:220:27-30: ERROR: Missing
-> resource_size with mem.
+On Fri, 20 Nov 2020 22:34:14 +0100, Lars Povlsen wrote:
+> When SPI DW memory ops support was introduced, there was a check for
+> excluding controllers which supplied their own CS function. Even so,
+> the mem_ops pointer is *always* presented to the SPI core.
+> 
+> This causes the SPI core sanity check in spi_controller_check_ops() to
+> refuse registration, since a mem_ops pointer is being supplied without
+> an exec_op member function.
+> 
+> [...]
 
 Applied to
 
@@ -49,8 +57,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: dw: fixed missing resource_size
-      commit: 459ea85049b01708e364c34deac24b00909c73ed
+[1/1] spi: dw: Fix spi registration for controllers overriding CS
+      commit: 0abdb0fba07322ce960d32a92a64847b3009b2e2
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
