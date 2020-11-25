@@ -2,260 +2,183 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D1E2C3BD2
-	for <lists+linux-spi@lfdr.de>; Wed, 25 Nov 2020 10:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D08202C3BD6
+	for <lists+linux-spi@lfdr.de>; Wed, 25 Nov 2020 10:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727194AbgKYJRj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 25 Nov 2020 04:17:39 -0500
-Received: from mail-vi1eur05on2087.outbound.protection.outlook.com ([40.107.21.87]:37768
+        id S1727639AbgKYJTf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 25 Nov 2020 04:19:35 -0500
+Received: from mail-vi1eur05on2042.outbound.protection.outlook.com ([40.107.21.42]:34785
         "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727030AbgKYJRi (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 25 Nov 2020 04:17:38 -0500
+        id S1726392AbgKYJTd (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 25 Nov 2020 04:19:33 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
  s=selector2-armh-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2Fv3ZFaasT5I30QyTsECHUHVZWbCgO4vJceFZn9AyPU=;
- b=68SXdFthuaM9Xi6CijZWzgIMaO5qW3t6g9zydtBXcCQnQmuCy5LYBeOpOl+JzSzh2hVr3mDl2IiHS966N0jal+lRsOddiritVOi6NzhJDTBfLJmMODPb7Z0Fg02/5rh088KlTiKM4wZCXqBR8ZSolGwXQ3S4wXzKZy1s2v9+spQ=
-Received: from AM5PR0201CA0007.eurprd02.prod.outlook.com
- (2603:10a6:203:3d::17) by AS8PR08MB6149.eurprd08.prod.outlook.com
- (2603:10a6:20b:29d::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20; Wed, 25 Nov
- 2020 09:17:33 +0000
-Received: from VE1EUR03FT005.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:203:3d:cafe::31) by AM5PR0201CA0007.outlook.office365.com
- (2603:10a6:203:3d::17) with Microsoft SMTP Server (version=TLS1_2,
+ bh=TXHMHxqy/Gk4+9EJVZHCSjEmvwUx9ZejVbYp40eC8w0=;
+ b=nLal1YvJpMLpD7iWoo7YRhQX41BF9mLEKtc3bBKNPFCRl4SUIyrXs1cmmETlWXiFFPgUP3LaY3RjX6Hz5Xz5O8Ow6PFRZ6eb4skEEsaK/180K4F2iqwrfya+1EfPyPjtg1kiG8T7EFFm2su9sHqS1hXhgmuZyuNwrvLn9Ua+oGA=
+Received: from DB6P192CA0001.EURP192.PROD.OUTLOOK.COM (2603:10a6:4:b8::11) by
+ AM6PR08MB4151.eurprd08.prod.outlook.com (2603:10a6:20b:a2::26) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3589.20; Wed, 25 Nov 2020 09:19:29 +0000
+Received: from DB5EUR03FT055.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:4:b8:cafe::50) by DB6P192CA0001.outlook.office365.com
+ (2603:10a6:4:b8::11) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.20 via Frontend
- Transport; Wed, 25 Nov 2020 09:17:31 +0000
-X-MS-Exchange-Authentication-Results: spf=temperror (sender IP is
- 63.35.35.123) smtp.mailfrom=arm.com; vger.kernel.org; dkim=pass (signature
- was verified) header.d=armh.onmicrosoft.com;vger.kernel.org; dmarc=temperror
- action=none header.from=arm.com;
-Received-SPF: TempError (protection.outlook.com: error in processing during
- lookup of arm.com: DNS Timeout)
+ Transport; Wed, 25 Nov 2020 09:19:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; vger.kernel.org; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;vger.kernel.org; dmarc=pass action=none
+ header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
 Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- VE1EUR03FT005.mail.protection.outlook.com (10.152.18.172) with Microsoft SMTP
+ DB5EUR03FT055.mail.protection.outlook.com (10.152.21.30) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3589.20 via Frontend Transport; Wed, 25 Nov 2020 09:17:28 +0000
-Received: ("Tessian outbound 39167997cde8:v71"); Wed, 25 Nov 2020 09:17:27 +0000
+ 15.20.3589.20 via Frontend Transport; Wed, 25 Nov 2020 09:19:28 +0000
+Received: ("Tessian outbound 797fb8e1da56:v71"); Wed, 25 Nov 2020 09:19:27 +0000
 X-CheckRecipientChecked: true
-X-CR-MTA-CID: bf315312d143582e
+X-CR-MTA-CID: 2e923c577d0e0cad
 X-CR-MTA-TID: 64aa7808
-Received: from d7d13d944e18.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id BD2327DA-EDF3-41E2-B64F-582A8FBB72CC.1;
-        Wed, 25 Nov 2020 09:17:22 +0000
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id d7d13d944e18.1
+Received: from ef1eaa489464.1
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 442E1BBD-1ED0-4578-819B-604375FB78E5.1;
+        Wed, 25 Nov 2020 09:19:22 +0000
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id ef1eaa489464.1
     (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Wed, 25 Nov 2020 09:17:22 +0000
+    Wed, 25 Nov 2020 09:19:22 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HdypKTjHm/YllEyVTJrJN56X16enOK3zDSmxwWwrR2dNzt2B3UpFqDYY3ilsuRvTHnIgYy0mDHEepjnDMnkT0tQexZtkWKB6OkmlYfrsbN5t9eco/sGolxZQW6qrVF446wGsMZAFjDwhWnn1DPIjX9Ahm5ewTvaJmzLIDAnJaVu8MphMaQ6NSMWTPee8suQIVJcP/khFzPoN8eBS34P5c+PetO25CqCkytCFAzCYZuLymKVQov5jfzVm1VxtKyVRRAHTI2v187/j/euKwL9kTCe6OXBKbd4bahLb9n3k4nmvaOVs2sm+hifqNIbaMD1V76tf3H2MgsyGxLi/bmXuuQ==
+ b=HJE/Q1s7ssnWNbalQ9a4r+fTUwYRKhKOsjyUvUEC3aT5yvDzgtJs8LsEjtP05ZchPEE/BT6bI9DANgSEDg2PGZIQJEQWVxAMV9ss0M+aseJIAAtNM8Heu4TLdTwOTNRuVYLwoyifSIYXodOqMkS6uOyEfJ7H3zjNamrLp8eyBCTIKCfh0fG1CenB/AamMqNyvjkfsME5jzWPQvPd6mWaqTJyxvjJE803a0cdL3719WD+fIhhkqHc84CetA2jyFaL5PtTVkfFszoTI0JF08ryxDgTPsuXxMDqfE/kM9UcMI7MAzh4lLl5WU57dZWdUyAhRlTPp5kvlHHYOASM1bOQSw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2Fv3ZFaasT5I30QyTsECHUHVZWbCgO4vJceFZn9AyPU=;
- b=jjVqJcaMG6hzo//6wlO8FyIYBNUTEUe29S0Ak84yRWj1IjZ8PqhrT+q69EEBXaM6t9ofIZUB48ZKAVio4TzoreHwlITOz23j+0IeAydgepk7EJyAuU3tNXN2pCrJqpYp0aFFRqMX4cF2/DX/0eZ1W7NbiBeVGmctoHi1AP5jSyrvhsc6092PseDGRUzirYhSO2t5DQmhubPbYKten6EhocUsiUDZgKYdgaebOwFrvOUcezCD2aX3iuciaqiyFHns4ZcKYrPz9uvszS4TohUh8vq4vN+bDmP+o1lj0bl28wxMBYaUf8m4Y3zGyvbX0pCuxNuCHDxT2gwkuJgNAkYUPQ==
+ bh=TXHMHxqy/Gk4+9EJVZHCSjEmvwUx9ZejVbYp40eC8w0=;
+ b=cMlFh45eUJ6szOz7URjjjIAznmTlxwednhFDl/wG4GupxMHj2QT0HMDjInJwdfCCyfck7w1g5WwEKDVUUdrpaNeYRRYrKkOeoLanHvLdbPlOjvek/Tk2CECR2E2gB1+mIJk2KoTlZBHj0BglscMxXFO93S8u6+Qtaf39s/mKsueAUhfwM3RDxGpLIZUsrMyQgyX8112idDL0h0Ul4ECO3UMo0GpQndRIozp3wCpzrAj+A6qhnnd4q1PpRsZxVX8C6M4pCQabckXXOO32xD7AcLpN2pCuOZPI78TM1fQEvCmXwTmR5Whn46XFfQKF9TJq+6wwj7rQKL8eGQt8UUidZA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
  header.d=arm.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
  s=selector2-armh-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2Fv3ZFaasT5I30QyTsECHUHVZWbCgO4vJceFZn9AyPU=;
- b=68SXdFthuaM9Xi6CijZWzgIMaO5qW3t6g9zydtBXcCQnQmuCy5LYBeOpOl+JzSzh2hVr3mDl2IiHS966N0jal+lRsOddiritVOi6NzhJDTBfLJmMODPb7Z0Fg02/5rh088KlTiKM4wZCXqBR8ZSolGwXQ3S4wXzKZy1s2v9+spQ=
-Authentication-Results-Original: vger.kernel.org; dkim=none (message not
- signed) header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=arm.com;
+ bh=TXHMHxqy/Gk4+9EJVZHCSjEmvwUx9ZejVbYp40eC8w0=;
+ b=nLal1YvJpMLpD7iWoo7YRhQX41BF9mLEKtc3bBKNPFCRl4SUIyrXs1cmmETlWXiFFPgUP3LaY3RjX6Hz5Xz5O8Ow6PFRZ6eb4skEEsaK/180K4F2iqwrfya+1EfPyPjtg1kiG8T7EFFm2su9sHqS1hXhgmuZyuNwrvLn9Ua+oGA=
+Authentication-Results-Original: arm.com; dkim=none (message not signed)
+ header.d=none;arm.com; dmarc=none action=none header.from=arm.com;
 Received: from DB8PR08MB4010.eurprd08.prod.outlook.com (2603:10a6:10:ab::15)
  by DBAPR08MB5606.eurprd08.prod.outlook.com (2603:10a6:10:1a7::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.22; Wed, 25 Nov
- 2020 09:17:20 +0000
+ 2020 09:19:19 +0000
 Received: from DB8PR08MB4010.eurprd08.prod.outlook.com
  ([fe80::a998:af0e:17cb:9389]) by DB8PR08MB4010.eurprd08.prod.outlook.com
  ([fe80::a998:af0e:17cb:9389%7]) with mapi id 15.20.3589.021; Wed, 25 Nov 2020
- 09:17:20 +0000
+ 09:19:19 +0000
 Subject: Re: [PATCH v1] spi: fix client driver breakages when using GPIO
  descriptors
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Sven Van Asbroeck <thesven73@gmail.com>,
+To:     Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         Jonathan Cameron <jonathan.cameron@huawei.com>,
         Simon Han <z.han@kunbus.com>, Lukas Wunner <lukas@wunner.de>,
         linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        nd <nd@arm.com>
 References: <20201106150706.29089-1-TheSven73@gmail.com>
  <CAHp75VfP1R7bXV6nWWnovWB5BMFcNNEmwBQXheBCUVDbr=xXGA@mail.gmail.com>
  <CAGngYiVu3cXtzb5PaoDOoyqjuuohLQ+em6Keg-qgDFFn2tdp=Q@mail.gmail.com>
  <CACRpkdagAK1X6FT=sug5FGA1iipXnOT_ujtMBh9cVnep_DpWyA@mail.gmail.com>
  <20201111123327.GB4847@sirena.org.uk>
  <CACRpkdZW3G48Yj3yGMTKZGwVEQOSs1VeVTTGLgyoJViM3=Yedg@mail.gmail.com>
+ <20201116210632.GJ4739@sirena.org.uk>
+ <CACRpkdayWzWKHv69cg_GL2O=NWozqi_ZLnH1WdMOHzEb1bU-xA@mail.gmail.com>
+ <20201118114049.GA4827@sirena.org.uk>
 From:   Grant Likely <grant.likely@arm.com>
-Message-ID: <30299db4-e149-ea7e-8f30-bb37187909d5@arm.com>
-Date:   Wed, 25 Nov 2020 09:17:17 +0000
+Message-ID: <9c7aee21-0d08-9092-acdd-93477ed17dba@arm.com>
+Date:   Wed, 25 Nov 2020 09:19:15 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.5.0
-In-Reply-To: <CACRpkdZW3G48Yj3yGMTKZGwVEQOSs1VeVTTGLgyoJViM3=Yedg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20201118114049.GA4827@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 X-Originating-IP: [94.196.85.203]
-X-ClientProxiedBy: LO2P265CA0083.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:8::23) To DB8PR08MB4010.eurprd08.prod.outlook.com
+X-ClientProxiedBy: LNXP265CA0090.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:76::30) To DB8PR08MB4010.eurprd08.prod.outlook.com
  (2603:10a6:10:ab::15)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.16.178] (94.196.85.203) by LO2P265CA0083.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:8::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.20 via Frontend Transport; Wed, 25 Nov 2020 09:17:18 +0000
+Received: from [192.168.16.178] (94.196.85.203) by LNXP265CA0090.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:76::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.20 via Frontend Transport; Wed, 25 Nov 2020 09:19:17 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 39576611-ef59-4834-18a9-08d89122ef3b
-X-MS-TrafficTypeDiagnostic: DBAPR08MB5606:|AS8PR08MB6149:
-X-Microsoft-Antispam-PRVS: <AS8PR08MB614949ABE591F2C740C3262A95FA0@AS8PR08MB6149.eurprd08.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: c4ec06fe-09ff-4312-e63b-08d891233620
+X-MS-TrafficTypeDiagnostic: DBAPR08MB5606:|AM6PR08MB4151:
+X-Microsoft-Antispam-PRVS: <AM6PR08MB41510E0543D219C43E1FF93195FA0@AM6PR08MB4151.eurprd08.prod.outlook.com>
 x-checkrecipientrouted: true
 NoDisclaimer: true
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;OLM:8273;
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;OLM:6790;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: tX9L2TDSP/QRn05kmxDoDCDZyU2CkT9JkYRNt6XzULtlpRxLQfKGlL3+Q7CRLPv1Xrihs4pzwSu4RVjagshOKeqKJw3h17baht7mEhBnxHlwR1bpNx9aLbOSAJv81LJMzIu+RUc2/8gsCNsjcvCEGr8GQynBWYquTfU11oJfiLo2+Wn1tsyjyEBo4IQSyHep48qREpiFlq9oE1jtdEDnoyIJWdQnh9R1vf+ZRnwucxUYSQ2i+wz2pmFEXfpCUU8oELwnQVyt6CwvI2i+Lt/8p7etZNR/DgfeARWl1fK3A9YcKnb6h+K/Qtt4jokbDX4dvpFD8Tx3HdGxCkDwfTydes5jXSq4bsvv3UIxbKgHUbxbGeUt/Q5EXLau1ImVdY8g
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR08MB4010.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(376002)(346002)(39850400004)(396003)(366004)(186003)(52116002)(44832011)(83380400001)(86362001)(54906003)(2616005)(4326008)(956004)(16526019)(26005)(31686004)(316002)(110136005)(2906002)(55236004)(16576012)(6486002)(66476007)(478600001)(8676002)(5660300002)(53546011)(36756003)(66946007)(8936002)(31696002)(66556008)(7416002)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: b1AbUmuqM0Zh4lHLqK6cxIKBlHTIKIqIxvtHJMkdkwVKQ1X3aWsCxyselpILbJwSNbHJ1uYxaonkNKsE1MYKWEKwW+tbPOVMC63O7WWMihvIrTQqgqtkoWpu/fKfzLHLc+r/l8Gu53jAyrRGyS5qS0w/a/Jgo7AI8IDHFscWJtR+etYp+T4NKzAugsgKZl6BXaPlwoisz8ur6Uvmzn6utDw7t8qSkNp+/S/WwTxpg9KXnkK9g5OpSSPQ6H+SCu+jiYYSiLLdN7m9GbpX8HNx3YBN2kh7EFAtHOYfW7lcRRPvVSdMJcufygosffy1ix+7bRJU60w78IwOG4CYdMDFqNLVwIvfgyJbl92IBbswlMjVQ7DyukqoWudd/D8OTM8zNY3Hd0S6k/H73o8h4IkqXi0bhRiumSOF1Rw/ZK7+mKwxHHjrNswfYJ6Z12AJilcE9mZYeHfWQzu0YYd5vzuljWFVOdwjajg02gYmq8KsVr54uyi39ZFNgzGJEQ5HehIx/UPRACgJjOEuD16CYPm26fZLVo5KpnS8/aEpzr9VLjOCEbnrBL64Lq58PbBy2Vp9F6zkvd5jA+bn+iBjbVI5k4TZ7URe+mUZXPLoMhvBhS/oppMm2N18pFl48HG3K1+fWpSyPgPQTTBv3+dlJ3abZ2KydW16+n/LLNbHogGmK0nY5/mEVGD7hh1FdkEH9KlYCRGH8rwcaA3QxuGQReeSndMg2npquK+UAPSgw7EqQ6+IhlZyEgv+m3NcCy+7pvwT6A/IXQz0gnYsu+tRgwOoD9lXMdZHuXh/TuYJRzH72JVHrzu71t+mZzScaPVVuhQmlG6QJF6RHDFHnChoB2l4Smq0/uq2rHWaJgqjDEUQZMh+po86CR7RJEqARnp706XgIUS+pmPqVgTyoMtsF3j3gg==
+X-Microsoft-Antispam-Message-Info-Original: QJQ6mOEgzEVDDD9IuWgkz+nlvgROFdHW485a+ROL9u4uewmyQwbnsW4A69FPNL5jB22PXEUb9USlZ3OMHDi6jL0+jUF6tIf77Oqh3CrbHp4dYcftElTBGFn6tcD3wxQCGtf3Lk1O5eBJPKlv5v1Gq9zs4aLc6oOtWNKTyJqAg/05qcSYStVDKp2sTlnb9dnKg8MYejsNSH0q7syjrQjfGTLSWZWFvtupy0V8Iq5W/mb6kzyxctFnHWVv4ntmPtK9CAKHRvx2Dtw1/iEBlRybFFKaxrd2+hDRjnOhueCwO9nHqRcJxAXBwvioTcdFiz+8aUOLVQxPV9l9iWu3wmFL7G+lSwRFRDP5ghbh32ZjKxT0N4QNvutqVqizjOJFQRDbDUj41tXmg+vBkTAsVpicODyD5a/6c0Hi1WrBTKSkp/pW6woEoeZ1RZVQJbmnHT6H5hw11soTRxM9YeJzRMPLzA==
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR08MB4010.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(376002)(346002)(39850400004)(396003)(366004)(186003)(52116002)(44832011)(86362001)(54906003)(2616005)(4326008)(956004)(16526019)(26005)(31686004)(316002)(110136005)(2906002)(55236004)(16576012)(6486002)(66476007)(478600001)(8676002)(5660300002)(53546011)(36756003)(66946007)(966005)(8936002)(31696002)(66556008)(7416002)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: sirBLjUcYQCIy0RLX6ehCyoIKMpCPZEBN1Ogy4JNbIYitNZ+NbPU2Q1N3Hl7hn6WElrE0kQeTy+NEqgOMGT1x83XVnCAyvr7Y2YTxB5P1DYRhBIaDOexwnrzU3l1xiEzGkhoF6G7h1HlHgIbaKgBZpDL75XhW+iRHBcsn3EIwuvjCF45kFHiS6XCKokH+jwedWmwW6EtvF5gzIEdCWqyvBpfycQZPusRevvbe6K003As6b8bMOpj7fLCHknidHChQsAW6h3jFHTuoy8Y8lob1jVcVfEK9OKy044G3JYUcngkNpAt6k8KGU5GokTwv/h04f7kcppcOp6kTfInqEBDmmWKwvTt1K6H3Mc3f+9qQSVhwAR7veNrmwsCklsmi5KnN1rU3ZSFLgSWdRt8S/Slzsn78qGYS9WuZws7zbTwrozqAXwLHXHDWhjzAPjNWn373NBGrfdJd3wcUjZIXP6nvqUTikUJB3mhO0CbUw6JcAG749X8zk6KpN9rz4YpA/cSvEb1ODSptTPydsmNb7a9RQ5+5sdhBJiLgVaMwxrGYFrMFhbzVXxCgVWkaiTzsmgRDYKgFA5+y8CxwQaiRqRk93YhXhHgeNNYa8RU7KZavvaEz/oYuCF/VZffCqJldwvwRTyp9MRcMp0wHjOOiy6K+c7eofK2N4adWQxQi3Z6F8J/chrMon2vRwY4ZZBRaRClrm0iXPRkGtbL44Y7j21HnuFhRvb9MEQokB/0jZAnEZp4QezmScNEnqdjw4/vSHqnNWDLbhpF8EbF+DZNt7LMj3bK7IjK/qiuTdpSpZIjh2z6SB2NpQYpT8DO4cnH5oE0NcUwRxDOdydSMfWUQ2Fwz3ewQRs4woRqWZV+85Os66bSObZ1c3ZebWoPChKDp3OV42+ZVdw8DML1ESWIn99cZQ==
+X-MS-Exchange-Transport-Forked: True
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR08MB5606
-Original-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=arm.com;
+Original-Authentication-Results: arm.com; dkim=none (message not signed)
+ header.d=none;arm.com; dmarc=none action=none header.from=arm.com;
 X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VE1EUR03FT005.eop-EUR03.prod.protection.outlook.com
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 0acc0161-0387-4c41-a503-08d89122e94d
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB5EUR03FT055.eop-EUR03.prod.protection.outlook.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs: dd8376d4-a914-4d8c-f2f5-08d891232ff9
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FnVVtUi/dz54GjHpuKTeR+8V+ZMUq0PzWHwqnNJXSXEVeVFMnLweCoLjabwHXrl2e2i2TzE19amPXyu7Gi75xMAtoc8PBfrIDQv3iAeCYeK0hVORURvOqMOhjtURtvR5A85WFhXp/3K4HKs2Cp4mBDEOmMp5Oc9Te71eO40V+ZkEPghgpEqRenzbLjCb3YqDn60JnM4uSZ4Z8Hg0sjA9tk2EK/D2beebhBB+LLY+Y9wfLVvDENFP493orW0gDc0GbPQizoCSWe8hRMelrrIjZfAMkDY27N6bWXfD1oHsuhtYuSEJVKSaeAOgyeNrVajPGpygP/pP9APpE2kH1vc1x7vb65hTGHlWhNUvCT4ClPEnosKRhD3rz6sBDzpeqecE7RhUA6lj0Hl5/PBXQJzB/D0ieU4dcp2vm+szH3uakVKJju44H6tOWuDArmBpGUzA
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(4636009)(346002)(376002)(39860400002)(396003)(136003)(46966005)(316002)(31686004)(83380400001)(4326008)(16576012)(16526019)(53546011)(6486002)(26005)(356005)(336012)(47076004)(186003)(54906003)(478600001)(55236004)(110136005)(82740400003)(44832011)(8676002)(956004)(63370400001)(2906002)(81166007)(36756003)(8936002)(31696002)(2616005)(70206006)(450100002)(86362001)(5660300002)(70586007)(63350400001)(82310400003)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: qIF01MD3gjJ4R4oCiNsLIBaeUyVWG2MR2dJis5lK8W+hpGkxZt8ZEJTGD8GI1oy3+nc7J6/O/lO08WfWcIc9E00catlbnZwpu8M1NC70HY2FbYtun2mlealGeReKg+9eszZjWJ/3Q9w8vieaAW2kndi+UrT25mTJeDqMCWC58cJl/ShxWf5cbRkYMGiuBPymUn9t7L8Bqka/LaWFrxDKx7zS3/7+oS+382S1vrdAp/Y6gDi194jFxygn9LBeJRVTVvTUcGKsS5GGDjLmwaCZJPnmUobKLdxEY+TBqpkTGSLxFO8gcpLNEocSVtwRDP1U/cXA55qjkErC6xVl4YMLed1ffMwUwSWM4oCZDGUNNfC6gMpQ7dvt5/hNIvwIbrK204K0hnySanxx8DXaDmoQV70BdHtw8DmUmoY8ATzAo1NUUVzEfr4+BwZICkPVTmxU/DJBaGk4LCHQpiPSqsCHsVzq707dNj5ELNFb1fJ/fnYT3xxnTwbP3AwDSknQ+wL3
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(4636009)(376002)(136003)(39860400002)(346002)(396003)(46966005)(110136005)(70206006)(16576012)(966005)(336012)(356005)(36756003)(53546011)(55236004)(54906003)(70586007)(82740400003)(16526019)(2906002)(81166007)(47076004)(186003)(8676002)(8936002)(4326008)(956004)(26005)(44832011)(2616005)(478600001)(450100002)(5660300002)(6486002)(31686004)(86362001)(316002)(31696002)(82310400003)(43740500002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2020 09:17:28.3117
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2020 09:19:28.9924
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39576611-ef59-4834-18a9-08d89122ef3b
+X-MS-Exchange-CrossTenant-Network-Message-Id: c4ec06fe-09ff-4312-e63b-08d891233620
 X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR03FT005.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR03FT055.eop-EUR03.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB6149
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR08MB4151
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
 
-On 11/11/2020 13:36, Linus Walleij wrote:
-> On Wed, Nov 11, 2020 at 1:33 PM Mark Brown <broonie@kernel.org> wrote:
->> On Wed, Nov 11, 2020 at 02:05:19AM +0100, Linus Walleij wrote:
->
->>> I would say that anything that has:
->>
->>> spi->mode =3D ...
->>
->>> is essentially broken.
->>
->> This is not clear to me, most of these settings are things that are
->> constant for the device so it's not clear that they should be being set
->> by the device tree in the first place.
->
-> This was added initially with some two properties
-> in drivers/of/of_spi.c in 2008:
-> commit 284b01897340974000bcc84de87a4e1becc8a83d
-> "spi: Add OF binding support for SPI busses"
->
-> This was around the time ARM was first starting to migrate
-> to device tree, so I suppose it made sense to them/us back
-> then.
->
-> Some properties were the accumulated over time.
->
-> commit d57a4282d04810417c4ed2a49cbbeda8b3569b18
-> "spi/devicetree: Move devicetree support code into spi directory"
-> made this part of the SPI subsystem.
->
-> This seems as simple as nobody was there to push back and
-> say "wait the devices can specify that with code, don't put it
-> as properties in device tree". To be honest we have kind of
-> moved back and forward on that topic over time. :/
->
->> The idea that the chip select
->> might be being inverted like it is by this whole gpiolib/DT/new binding
->> thing is breaking expectations too.
->
-> OK I think you're right, then this patch probably brings the behaviour
-> back to expectations and it's how I should have done it in the first
-> place. My bad code :/
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->
->>> The core sets up vital things in .mode from e.g. device tree in
->>> of_spi_parse_dt():
->>
->>>          /* Mode (clock phase/polarity/etc.) */
->>>          if (of_property_read_bool(nc, "spi-cpha"))
->>>                  spi->mode |=3D SPI_CPHA;
->>>          if (of_property_read_bool(nc, "spi-cpol"))
->>>                  spi->mode |=3D SPI_CPOL;
->>>          if (of_property_read_bool(nc, "spi-3wire"))
->>>                  spi->mode |=3D SPI_3WIRE;
->>>          if (of_property_read_bool(nc, "spi-lsb-first"))
->>>                  spi->mode |=3D SPI_LSB_FIRST;
->>>          if (of_property_read_bool(nc, "spi-cs-high"))
->>>                  spi->mode |=3D SPI_CS_HIGH;
->>
->>> All this gets overwritten and ignored when a client just assigns mode
->>> like that. Not just SPI_CS_HIGH. I doubt things are different
->>> with ACPI.
->>
->> OTOH most of these are things the device driver should just get right
->> without needing any input from DT, there's a few where there's plausible
->> options (eg, you can imagine pin strap configuration for 3 wire mode)
->
-> Yes I actually ran into a case where the same Samsung display support
-> both 4 and 3-wire mode so that needs to be configured in the device
-> tree depending on the layout of the electronics. Arguably we should have
-> just standardized the device tree bindings and let the individual SPI
-> drivers parse that themselves in such cases.
->
->> so generally it's not clear how many of these make sense for anything
->> other than spidev.  This binding all predates my involvement so I don't
->> know the thought process here.
->
-> I dug out some details, let's see if Grant has some historical anecdotes
-> to add. The usage document from back then doesn't really say what
-> device properties should be encoded in the device tree and what
-> should just be assigned by code and e.g. determined from the
-> compatible-string. It was later that especially Rob pointed out that
-> random properties on device nodes was overused and that simply
-> knowing the compatible is often enough.
+On 18/11/2020 11:40, Mark Brown wrote:
+> On Wed, Nov 18, 2020 at 02:03:41AM +0100, Linus Walleij wrote:
+>> On Mon, Nov 16, 2020 at 10:06 PM Mark Brown <broonie@kernel.org> wrote:
+> 
+>>> I think the main push in the other direction has always been people who
+>>> want to not have to write a driver at all and put absolutely everything
+>>> into DT which has scaling issues :/
+> 
+>> What I can't understand is what gave them that idea.
+> 
+>> This thing looks like a dream to these people for example:
+>> https://gist.github.com/Minecrell/56c2b20118ba00a9723f0785301bc5ec#file-dsi_panel_s6e88a0_ams452ef01_qhd_octa_video-dtsi
+>> And it looks like a nightmare to me.
+> 
+>> (There is even a tool to convert this description into a proper display
+>> driver now.)
+> 
+>> It just seems to be one of those golden hammer things: everything
+>> start to look like nails.
+> 
+> What people think they were sold was the idea that they shouldn't have
+> to write driver code or upstream things, something with more AML like
+> capabilities (not realising that AML works partly because ACPI hugely
+> constrains system design).
 
-I think your analysis is correct. When this was done we were still
-figuring stuff out and the abstraction between device and bus in SPI
-isn't exactly clean. I don't have anything to add.
+And is also untrue. AML only provides an API abstraction for a specific 
+power management model. All the actual driving of the device still 
+requires driver code and requires reading devices-specific properties 
+out of the ACPI node.
 
 g.
 
->
-> I don't know if we ever formalized it, there is nowadays a rule akin to
->
-> "if a property can be determined from the compatible-string, and if the
->   compatible-string is identifying the variant of the electronic componen=
-t,
->   then do not add this property to the device tree description. Just
->   deduce it from the compatible-string, assign it with code to the device
->   model of the operating system and handle it inside the operating system=
-."
->
-> I think this, while clear and intuitive, wasn't at all clear and intuitiv=
-e in
-> the recent past.
->
-> Yours,
-> Linus Walleij
->
-IMPORTANT NOTICE: The contents of this email and any attachments are confid=
-ential and may also be privileged. If you are not the intended recipient, p=
-lease notify the sender immediately and do not disclose the contents to any=
- other person, use it for any purpose, or store or copy the information in =
-any medium. Thank you.
