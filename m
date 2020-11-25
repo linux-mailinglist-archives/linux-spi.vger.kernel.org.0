@@ -2,108 +2,105 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 257882C405E
-	for <lists+linux-spi@lfdr.de>; Wed, 25 Nov 2020 13:39:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AA222C4092
+	for <lists+linux-spi@lfdr.de>; Wed, 25 Nov 2020 13:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728775AbgKYMjk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 25 Nov 2020 07:39:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
+        id S1726242AbgKYMu4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 25 Nov 2020 07:50:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726060AbgKYMjj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 Nov 2020 07:39:39 -0500
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEE2C0613D4;
-        Wed, 25 Nov 2020 04:39:39 -0800 (PST)
-Received: by mail-lj1-x242.google.com with SMTP id i17so2133437ljd.3;
-        Wed, 25 Nov 2020 04:39:39 -0800 (PST)
+        with ESMTP id S1726162AbgKYMuz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 Nov 2020 07:50:55 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6CCC0613D4;
+        Wed, 25 Nov 2020 04:50:55 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id d20so2925546lfe.11;
+        Wed, 25 Nov 2020 04:50:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=Vogu41GvnyEXsb76/iG5vdcVpgljETgqAkmSSwNYHVg=;
-        b=H1sMEGYhdc3dNhoq1TM+TBIy1qV1Xhrjp1EOy1EibLKIsRwbgduuihCXNXpmu+r74L
-         Jv6UsWKc4Q/APKsCtvHpKPqu1hKaHP28CHJ12YFT7zubb0hfddKKEMBvncGesjpfBRXn
-         OyMQqi7MCafVnHJTxBMrm2qcEp98tN6p4vwmQt7IiJUti/Ws9oVFmzM4u6sR9rnytASL
-         NFsxSWZK4TrCRl8fNqg7EVXg0HKkPx8IWvKn5WTpk7D/kBod4g1psejvVissu/i+6pQR
-         p1aK4Mv5Jvtg1CRXiOLouq8jvmlqv0AG2LI0UijXZ7AATWKFVMmSD1fPP1cPWao2c/rN
-         Opng==
+        bh=+fl0Adh1mh54cQ9Og4MLp5LZHOBD2iqcORQUaJwa2Jo=;
+        b=m2slVasvvvIUl1dUOYAlgUF3CnzR8MqUQZKD7k3capZvRezAl3S9p47sEHS7JoJVKV
+         dcZjpMWZiQoNnmugKJ1sZWECYJKpA6fqVlLBscHKGJNDysvMKEGCCwQRnXsdHsl3kAbD
+         62+I6/VuJ9yC7CAN2CPwTsI972noycYq81WvvSmbaFZwwjqHR5Outwj+o5Dk3lOjxVnM
+         KG9CYrJlUIu5jQFK3mTx2GQuPryjO9vsUbT4+XjfVV/9QniiY7tLv/b1msC7a/DxB9m0
+         91mpJBHPcIilg4VRfO6Z4yprBPfMacD1Vd7c6ta6lGhZ8+kPm8QRxnkiMDY9heHYdTur
+         4dbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Vogu41GvnyEXsb76/iG5vdcVpgljETgqAkmSSwNYHVg=;
-        b=a2qY2epl/OmePb3IkOjX+7o9HcHO0kOXsWFh62Heo2BjEno33aMsd9ybcZFc8H6gvw
-         62MSCV1b9tRgHFTERrOwuP47GE0DgPpj7Jjz/KquaqowS2ig3ohlcIs6duV8rtsWk6uG
-         3mNSyMtHBMO9vDlJRAorv3JyyYiBx0ltun7nxMj3xnwRx/a69GlZwhKQ/YQkXVKPp+tJ
-         3TvfPPnPwwBTM2hpwRkIrNwL49gTW18YGSt2JiLtnEeDYcrXcx1heBf5jKkpu1H2Ds2T
-         ZsiINwJiWO5Bt25HLkEaZw1et0/2Z1apcPfjCLrmcCKVEbhG3Pt8mnjgpJ6+ts+CKQk1
-         BGcQ==
-X-Gm-Message-State: AOAM532jSW/3Gvsciau6n+r8y04/i13ClDcMUgUZdJEvOt8rBXB4rVyl
-        AMEdEver+S6eX6+kqMrL/4Q=
-X-Google-Smtp-Source: ABdhPJySI50PIzXuSSEl4LVMjQ2iwkqW0T4br94Ukj0eXPmCxHgy1SQmWZYtzTsFt5anQw+QMNNeHQ==
-X-Received: by 2002:a2e:a408:: with SMTP id p8mr1204776ljn.411.1606307977894;
-        Wed, 25 Nov 2020 04:39:37 -0800 (PST)
+        bh=+fl0Adh1mh54cQ9Og4MLp5LZHOBD2iqcORQUaJwa2Jo=;
+        b=rV8wh/kW6xeR3UBOurp8E3s4pwnugmrMg3xZQVylGuL+emfc+4XqUiJ1SV7B0p2Lga
+         Z+RWzKw1vrty2fla0xeQyD/cb9n4TjchajaHaGv+avteEQO7va6UDiQ6wQ+UVsAfrbN3
+         6TdUkRHDFz0tsI6iOjlP+PnlVJ2nfY97Y9sBX84aKK2dIgm1PXU03eprqxhRmUNcgd8P
+         MwvraWgQLEYgHfqO9yALT49YcXHOBdkn9+uHLg1qm3xVtvTxw61lHVgqndi0LLWWrods
+         Jt0BfadQNLlNAQ4Sesnv2n95FC7HlUjoSJcGWKoUp71q13dCkUItr5MEskaYDaN7lkf7
+         lF9Q==
+X-Gm-Message-State: AOAM533D8DB5LMJfUKpyAkgXdAa63SH8Lz0OwNFQgQk03EdlwRk4+hji
+        oZWaaikYM7bX8+8dgnT5t68=
+X-Google-Smtp-Source: ABdhPJxl2Y2/nAwVvIzL9OSvm4w2yY1JE83F/cy/PjthEw1B0z4LHSXxH54RNsKIC2WqLLTrHqAACw==
+X-Received: by 2002:a19:ac07:: with SMTP id g7mr1466368lfc.125.1606308653774;
+        Wed, 25 Nov 2020 04:50:53 -0800 (PST)
 Received: from mobilestation ([95.79.141.114])
-        by smtp.gmail.com with ESMTPSA id p8sm244854lfk.109.2020.11.25.04.39.36
+        by smtp.gmail.com with ESMTPSA id a22sm251226lfl.11.2020.11.25.04.50.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2020 04:39:37 -0800 (PST)
-Date:   Wed, 25 Nov 2020 15:39:35 +0300
+        Wed, 25 Nov 2020 04:50:53 -0800 (PST)
+Date:   Wed, 25 Nov 2020 15:50:51 +0300
 From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Lars Povlsen <lars.povlsen@microchip.com>
+To:     Damien Le Moal <damien.lemoal@wdc.com>
 Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: dw: Fix spi registration for controllers overriding
- CS
-Message-ID: <20201125123935.akerf6mlgiwdemmm@mobilestation>
-References: <20201120213414.339701-1-lars.povlsen@microchip.com>
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Sean Anderson <seanga2@gmail.com>
+Subject: Re: [PATCH 3/3] dt-bindings: Update Synopsis DW apb ssi bindings
+Message-ID: <20201125125051.tx3knfzvezrhyq3a@mobilestation>
+References: <20201119120253.390883-1-damien.lemoal@wdc.com>
+ <20201119120253.390883-4-damien.lemoal@wdc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201120213414.339701-1-lars.povlsen@microchip.com>
+In-Reply-To: <20201119120253.390883-4-damien.lemoal@wdc.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Lars
+Hello Damien,
 
-On Fri, Nov 20, 2020 at 10:34:14PM +0100, Lars Povlsen wrote:
-> When SPI DW memory ops support was introduced, there was a check for
-> excluding controllers which supplied their own CS function. Even so,
-> the mem_ops pointer is *always* presented to the SPI core.
-> 
-> This causes the SPI core sanity check in spi_controller_check_ops() to
-> refuse registration, since a mem_ops pointer is being supplied without
-> an exec_op member function.
-> 
-> The end result is failure of the SPI DW driver on sparx5 and similar
-> platforms.
-> 
-> The fix in the core SPI DW driver is to avoid presenting the mem_ops
-> pointer if the exec_op function is not set.
+> [PATCH 3/3] dt-bindings: Update Synopsis DW apb ssi bindings
 
-Thanks for sending the patch fixing the regression.
+The patch subject is too uncertain. There is no subsystem name and
+what is added to the bindings. I'd suggest something like:
+"dt-bindings: spi: dw-apb-ssi: Add Canaan K210 SPI controller"
+
+Then feel free to add
 Acked-by: Serge Semin <fancer.lancer@gmail.com>
 
+-Sergey
+
+On Thu, Nov 19, 2020 at 09:02:53PM +0900, Damien Le Moal wrote:
+> Update the snps,dw-apb-ssi.yaml document to include the compatibility
+> string "canaan,k210-spi" compatible string for the Canaan Kendryte K210
+> RISC-V SoC DW apb_ssi V4 SPI controller.
 > 
-> Fixes: 6423207e57ea (spi: dw: Add memory operations support)
-> Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
+> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
 > ---
->  drivers/spi/spi-dw-core.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index 2e50cc0a9291..a0794eac2094 100644
-> --- a/drivers/spi/spi-dw-core.c
-> +++ b/drivers/spi/spi-dw-core.c
-> @@ -875,7 +875,8 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
->  		master->set_cs = dw_spi_set_cs;
->  	master->transfer_one = dw_spi_transfer_one;
->  	master->handle_err = dw_spi_handle_err;
-> -	master->mem_ops = &dws->mem_ops;
-> +	if (dws->mem_ops.exec_op)
-> +		master->mem_ops = &dws->mem_ops;
->  	master->max_speed_hz = dws->max_freq;
->  	master->dev.of_node = dev->of_node;
->  	master->dev.fwnode = dev->fwnode;
-> --
-> 2.25.1
+> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> index 99ed9b416e94..4825157cd92e 100644
+> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> @@ -65,6 +65,8 @@ properties:
+>          const: baikal,bt1-ssi
+>        - description: Baikal-T1 System Boot SPI Controller
+>          const: baikal,bt1-sys-ssi
+> +      - description: Canaan Kendryte K210 SoS SPI Controller
+> +        const: canaan,k210-spi
+>  
+>    reg:
+>      minItems: 1
+> -- 
+> 2.28.0
+> 
