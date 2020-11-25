@@ -2,79 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7BAB2C4190
-	for <lists+linux-spi@lfdr.de>; Wed, 25 Nov 2020 14:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF162C48A8
+	for <lists+linux-spi@lfdr.de>; Wed, 25 Nov 2020 20:44:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729762AbgKYN64 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 25 Nov 2020 08:58:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34718 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725985AbgKYN6z (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 25 Nov 2020 08:58:55 -0500
-Received: from localhost (cpc102334-sgyl38-2-0-cust884.18-2.cable.virginm.net [92.233.91.117])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A4243206F9;
-        Wed, 25 Nov 2020 13:58:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606312735;
-        bh=o7d9fgU6mXGwYGbLFIRYfmgfnb1HDJ7zjumgwpqARWY=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=aQ6aa79R8DU5b7+nisqI1fjMhRLxU0cT2zvnWXEnMs6Omaq1SeGuiZ/lt6L0LUM9Z
-         dhRKwvyj/K37RZkarmhvHFa+PeFLZJXyiJeJfiOro1W+P6ZJAQTQOCbMvJAfPhlimn
-         R8pdUWCXWhdFJ3eURsdXRVo6haUvVR1T22fbCYfI=
-Date:   Wed, 25 Nov 2020 13:58:30 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <fancer.lancer@gmail.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        linux-spi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-In-Reply-To: <20201120213414.339701-1-lars.povlsen@microchip.com>
-References: <20201120213414.339701-1-lars.povlsen@microchip.com>
-Subject: Re: [PATCH] spi: dw: Fix spi registration for controllers overriding CS
-Message-Id: <160631270511.29611.7697782706321282080.b4-ty@kernel.org>
+        id S1728153AbgKYTnm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 25 Nov 2020 14:43:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727251AbgKYTnm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 Nov 2020 14:43:42 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C0FC0613D4
+        for <linux-spi@vger.kernel.org>; Wed, 25 Nov 2020 11:43:40 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id r3so3096184wrt.2
+        for <linux-spi@vger.kernel.org>; Wed, 25 Nov 2020 11:43:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=MT4M9SX2NqdNuOObXhIV8Gtkw+yoDX+gRyJnh+feBwM=;
+        b=bWG60mbKmLs6INacykACSh4POMB9gsnViE2aJBbgk1TnlVNTpOZKe77HRPUod+mLa2
+         i3kK5EeyGQX7r4APQZg6h6ZMAHYo4X0hmX7aQ68VW/84/c2lhQcH1MdkL5mq7oBEySH4
+         f5OJKYNI5k6tqLQTa0P7y9Esnw6TgK1sEdEbNXqmHxeEz14Pb9JbkaIz/IhhHxnLTC7S
+         VQd/wlTl/6j0frj2BI4kTFHJA+hSmuJXGhPS3j2DFFlLBgTXzn22oEeTBdOa4wSd3tC8
+         UVQWwBXW7BqQCs1EuxV/L3NZy/TI79nsc1QrUHI3KMXwdIQC6cxaOfFpsVg1Mr4ud8hs
+         LDfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=MT4M9SX2NqdNuOObXhIV8Gtkw+yoDX+gRyJnh+feBwM=;
+        b=XNE4rnNfm/SeeapSXdXtRWqSBeTSSJyZvSUVqVReSgnuRUaPH8BlWwLVqfi4nSw/xE
+         z1Ed/qQd5Kds8H13/PGhsOHkjDILe3BXnU6QBUeGkSmbyZ2evO73yGmTrkXnALIHM45u
+         NYDc8q0caeUa9sLqTGlfGyfuUmlj4cUUqEZmxvrgek4FgU7uyiOA1zyLtfzi+Ubt4d0a
+         49ag0metNA9UCQ1wZ95thRSZpYDdXJcRkh/Ud0kbHF8XFtjHen7vgYWlESbxjn3t24Xq
+         xYfFRGhC2OUQKh0N1rf8JLo8Rw4aOp2k9YK+fhmF1YqUYdxa0ecQUqdbN5FeQYe11Lwt
+         7utw==
+X-Gm-Message-State: AOAM531uAJHtDm5w2/Kw2hu4lKXoI5WMMcoUTCbMOLeLI/aQBH/f215y
+        Uf9RpqVL/yp3XHYWAvfkVw8=
+X-Google-Smtp-Source: ABdhPJz5c/jemlDfZSkt8HoTqi/hw5OR0drI1s9UQ9JU/2zew46GkrZLGjldkHwL6pGjZQ7lDxjhVg==
+X-Received: by 2002:a5d:6886:: with SMTP id h6mr5833327wru.173.1606333419462;
+        Wed, 25 Nov 2020 11:43:39 -0800 (PST)
+Received: from [192.168.1.152] ([102.64.149.89])
+        by smtp.gmail.com with ESMTPSA id u129sm5090970wme.9.2020.11.25.11.43.30
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Wed, 25 Nov 2020 11:43:38 -0800 (PST)
+Message-ID: <5fbeb3ea.1c69fb81.a9b8d.bd07@mx.google.com>
+From:   "Dailborh R." <ritundailb333@gmail.com>
+X-Google-Original-From: Dailborh R.
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Please reply to me
+To:     Recipients <Dailborh@vger.kernel.org>
+Date:   Wed, 25 Nov 2020 19:43:10 +0000
+Reply-To: dailrrob.83@gmail.com
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 20 Nov 2020 22:34:14 +0100, Lars Povlsen wrote:
-> When SPI DW memory ops support was introduced, there was a check for
-> excluding controllers which supplied their own CS function. Even so,
-> the mem_ops pointer is *always* presented to the SPI core.
-> 
-> This causes the SPI core sanity check in spi_controller_check_ops() to
-> refuse registration, since a mem_ops pointer is being supplied without
-> an exec_op member function.
-> 
-> [...]
+I'm Dailborh R. from US. I picked interest in you and I would like to know
+more about you and establish relationship with you. i will wait for
+your response. thank you.
 
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: dw: Fix spi registration for controllers overriding CS
-      commit: 0abdb0fba07322ce960d32a92a64847b3009b2e2
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
