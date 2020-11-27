@@ -2,81 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 862912C67DC
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Nov 2020 15:25:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 282152C6843
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Nov 2020 15:54:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731110AbgK0OZV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 27 Nov 2020 09:25:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730855AbgK0OZT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 27 Nov 2020 09:25:19 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654D6C0613D1;
-        Fri, 27 Nov 2020 06:25:19 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id 62so4445214pgg.12;
-        Fri, 27 Nov 2020 06:25:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4BHoPQWs3wfoV3g79VgV8GEhoq3XXt8Ikk0xMwv5WoI=;
-        b=V9BtXLPOii4DpQATk+MmCsK+Ve2A/MjKgvZePZQJyiEHSpItKt8KhEPdLvQEYEOKcy
-         OP/HVvR2CWG+PuXjgeuy68l4UVFF3yRyTkF0P/9dUFEsFhfIw9DMVgwbv3c748hYDlZO
-         phu+1bdlsZwgoGQIE1SXKEerfddqam+4MTfgS1pSXB2IZ/8as50BGgREwJbF22EO/2+G
-         xfi+InCshjurjLJjWYpuXdXvaCfwVQDyyBQ5MXqLZI1RF8XpjXQjZ69I46+xiO3YenTZ
-         g7UsznWy1CW2glmc9pxQW+o1Iu0NB2klZi6O/nP6UQJ6HxRIii+p3ueBbcv+bz1iJE3v
-         BmKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4BHoPQWs3wfoV3g79VgV8GEhoq3XXt8Ikk0xMwv5WoI=;
-        b=j796bvwGLMV3HHBJYHOWJytE2oyBxm0PmtE4INYmhTxqebFAU4l0M8WYaNCgGk8Lca
-         r/Gamr5c7M+5PT1um3ddf2fH1wA1ZhiUM2oozCCqQPLlS2iiNd2f7DtIPPnb8zg5H2xs
-         pQL04+4lZ9mDBrMvdR/Zi6RT4+iB0/Rkc637PdGYwn6ARVuDATH96pytC6fUQxuJpmjC
-         o2mhpqhH2xz9H5PjK6Q38++jYiTAmqJvx6J454nkKgxgSLpRytpiKR60gT/eyFieTXGZ
-         ZmsZx917TwMg+c8Gap+FYfy19zYM/joTs0MNuVbY5HHtLUH5TjNxrRskQpUkT57WI6SJ
-         jbKg==
-X-Gm-Message-State: AOAM532eboZQA0cm9fZaYI1boMqIYBbtbbO6zEQ4l/SV6sPhSV8Def9F
-        gdmi6PUG/Qgn0aQ0e0u5EQiItstacXSmC1fINAU=
-X-Google-Smtp-Source: ABdhPJwwwmFIw2kctAp4qvXc/0jW/FjQNuczdO+/Ii1MF8qwXUPmNUj/XTt32yfEIgSQo1JNUdeC3g9PWWaRJ6X6Ba4=
-X-Received: by 2002:a17:90a:4816:: with SMTP id a22mr10437588pjh.228.1606487119026;
- Fri, 27 Nov 2020 06:25:19 -0800 (PST)
+        id S1730868AbgK0Oxt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 27 Nov 2020 09:53:49 -0500
+Received: from ns2.baikalelectronics.com ([94.125.187.42]:33640 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729913AbgK0Oxt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 27 Nov 2020 09:53:49 -0500
+X-Greylist: delayed 433 seconds by postgrey-1.27 at vger.kernel.org; Fri, 27 Nov 2020 09:53:47 EST
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Mark Brown <broonie@kernel.org>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        kernel test robot <lkp@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] spi: dw-bt1: Fix undefined devm_mux_control_get symbol
+Date:   Fri, 27 Nov 2020 17:46:11 +0300
+Message-ID: <20201127144612.4204-1-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20201116040721.8001-1-rdunlap@infradead.org>
+References: 
 MIME-Version: 1.0
-References: <20201127130834.136348-1-alexandru.ardelean@analog.com> <20201127130834.136348-3-alexandru.ardelean@analog.com>
-In-Reply-To: <20201127130834.136348-3-alexandru.ardelean@analog.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 27 Nov 2020 16:26:07 +0200
-Message-ID: <CAHp75Vcm5-i+n2dS7GxqK8Rp74+Y-+5CdMoBNP7ZCXkw1VnPkw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] spi: dt-bindings: document zero value for
- spi-{rx,tx}-bus-width properties
-To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
-Cc:     linux-spi <linux-spi@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Bogdan, Dragos" <dragos.bogdan@analog.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Nov 27, 2020 at 3:08 PM Alexandru Ardelean
-<alexandru.ardelean@analog.com> wrote:
->
-> Following a change to the SPI framework, providing a value of zero for
-> 'spi-rx-bus-width' and 'spi-tx-bus-width' is now possible and will
-> essentially mean than no RX or TX is allowed.
+I mistakenly added the select attributes to the SPI_DW_BT1_DIRMAP config
+instead of having them defined in SPI_DW_BT1. If the kernel doesn't have
+the MULTIPLEXER and MUX_MMIO configs manually enabled and the
+SPI_DW_BT1_DIRMAP config hasn't been selected, Baikal-T1 SPI device will
+always fail to be probed by the driver. Fix that and the error reported by
+the test robot:
 
-than -> that
+>> ld.lld: error: undefined symbol: devm_mux_control_get
+   >>> referenced by spi-dw-bt1.c
+   >>> spi/spi-dw-bt1.o:(dw_spi_bt1_sys_init) in archive drivers/built-in.a
 
-I'm wondering if we have a possibility to strict this for controllers
-that always duplex (I assume that schema works in a way that the
-generic bindings is most relaxed in comparison to the device specific
-ones in case of the same binding in question).
+by moving the MULTIPLEXER/MUX_MMIO configs selection to the SPI_DW_BT1
+config.
 
+Link: https://lore.kernel.org/lkml/202011161745.uYRlekse-lkp@intel.com/
+Link: https://lore.kernel.org/linux-spi/20201116040721.8001-1-rdunlap@infradead.org/
+Fixes: abf00907538e ("spi: dw: Add Baikal-T1 SPI Controller glue driver")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+
+---
+
+Mark, I see you haven't applied the previous version of the patch yet. So
+please replace it with this one.
+
+Randy, sorry for resending the patch. I've just realized that your
+solution doesn't completely fix the problem. Yeah, the kernel build won't
+fail to be linked after your patch being merged, but the driver still will
+fail to probe the device if the MULTIPLEXER and MUX_MMIO haven't been
+selected for the kernel. So the select attributes need to be moved from
+SPI_DW_BT1_DIRMAP to the SPI_DW_BT1 config.
+---
+ drivers/spi/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index 415d57b2057f..0707068ffe47 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -255,6 +255,8 @@ config SPI_DW_MMIO
+ config SPI_DW_BT1
+ 	tristate "Baikal-T1 SPI driver for DW SPI core"
+ 	depends on MIPS_BAIKAL_T1 || COMPILE_TEST
++	select MULTIPLEXER
++	select MUX_MMIO
+ 	help
+ 	  Baikal-T1 SoC is equipped with three DW APB SSI-based MMIO SPI
+ 	  controllers. Two of them are pretty much normal: with IRQ, DMA,
+@@ -268,8 +270,6 @@ config SPI_DW_BT1
+ config SPI_DW_BT1_DIRMAP
+ 	bool "Directly mapped Baikal-T1 Boot SPI flash support"
+ 	depends on SPI_DW_BT1
+-	select MULTIPLEXER
+-	select MUX_MMIO
+ 	help
+ 	  Directly mapped SPI flash memory is an interface specific to the
+ 	  Baikal-T1 System Boot Controller. It is a 16MB MMIO region, which
 -- 
-With Best Regards,
-Andy Shevchenko
+2.29.2
+
