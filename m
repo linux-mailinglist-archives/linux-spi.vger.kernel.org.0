@@ -2,53 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6052C7F8E
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Nov 2020 09:16:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 455C42C8A14
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Nov 2020 17:57:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726270AbgK3IQi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 30 Nov 2020 03:16:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58462 "EHLO mail.kernel.org"
+        id S1728594AbgK3Q5M (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 30 Nov 2020 11:57:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34702 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725880AbgK3IQi (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 30 Nov 2020 03:16:38 -0500
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        id S1729054AbgK3Q5K (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 30 Nov 2020 11:57:10 -0500
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8D2952074A;
-        Mon, 30 Nov 2020 08:15:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1606724152;
-        bh=StJZyUTZlK/zGHzfI0uu7FfQoqRxutjhzlAcDZjKsN0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2OfxX2LL239Kst4fs7VDihPh9f23fl9xQ+AblTuJkSEqkxOTmOi+Bjck5440iMCbG
-         8O7TLveLdis1uahzrvZGiXPRgAd1of4p9dT3ZcTskTxKGC/wo6IT0hkMvLyRKkIhtD
-         Z6o+pG1PALwC8XgGEX3/NVC7GfMLb30ds4OK0ceo=
-Date:   Mon, 30 Nov 2020 09:16:55 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nathan Chancellor <natechancellor@gmail.com>
-Cc:     Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Lukas Wunner <lukas@wunner.de>, linux-spi@vger.kernel.org
-Subject: Re: Apply d853b3406903a7dc5b14eb5bada3e8cd677f66a2 to 5.4 and 5.9
-Message-ID: <X8SqdxSC6Yq5YFS9@kroah.com>
-References: <20201130014016.GA1980658@ubuntu-m3-large-x86>
+        by mail.kernel.org (Postfix) with ESMTPSA id 2ADDD207FF;
+        Mon, 30 Nov 2020 16:56:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606755389;
+        bh=Ln6tKHVqYwgyYnlAD/TpM6pTq44rPqJWJHhf4PojvBA=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=1q3sCPPZXtMt0F+ickBbyJAWwwwMr0SVioJNqJDKysRyNPknnPKBHRF0nPdMwBUnN
+         djivFBgsfPZNSgbvgnYx8N9BAIBSI8JUEdTrnTP+NCHwbQtSC8fQ42fo6a8Z5mBjca
+         jLuQhlwUHWCXDqk1V/ZoKeutRtexJ7uauNBIQeyc=
+Date:   Mon, 30 Nov 2020 16:56:01 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        linux-spi@vger.kernel.org
+Cc:     Christophe Leroy <christophe.leroy@c-s.fr>, stable@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20201127152947.376-1-rasmus.villemoes@prevas.dk>
+References: <20201127152947.376-1-rasmus.villemoes@prevas.dk>
+Subject: Re: [PATCH] spi: fsl: fix use of spisel_boot signal on MPC8309
+Message-Id: <160675536158.30617.2427992198440401553.b4-ty@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201130014016.GA1980658@ubuntu-m3-large-x86>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Nov 29, 2020 at 06:40:16PM -0700, Nathan Chancellor wrote:
-> Hi Greg and Sasha,
+On Fri, 27 Nov 2020 16:29:47 +0100, Rasmus Villemoes wrote:
+> Commit 0f0581b24bd0 ("spi: fsl: Convert to use CS GPIO descriptors")
+> broke the use of the SPISEL_BOOT signal as a chip select on the
+> MPC8309.
 > 
-> Please apply commit d853b3406903 ("spi: bcm2835aux: Restore err
-> assignment in bcm2835aux_spi_probe") to linux-5.4.y and linux-5.9.y as a
-> fix for commit e13ee6cc4781 ("spi: bcm2835aux: Fix use-after-free on
-> unbind"). I did not realize that commit was tagged for stable so I did
-> not tag my fix accordingly, sorry for not noticing sooner.
+> pdata->max_chipselect, which becomes master->num_chipselect, must be
+> initialized to take into account the possibility that there's one more
+> chip select in use than the number of GPIO chip selects.
 
-Now queued up, thanks.
+Applied to
 
-greg k-h
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: fsl: fix use of spisel_boot signal on MPC8309
+      commit: 122541f2b10897b08f7f7e6db5f1eb693e51f0a1
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
