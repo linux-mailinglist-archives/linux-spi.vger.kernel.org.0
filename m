@@ -2,44 +2,43 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A68D92CA5CE
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Dec 2020 15:39:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7882CA966
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Dec 2020 18:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731007AbgLAOgu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Dec 2020 09:36:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54952 "EHLO mail.kernel.org"
+        id S1729687AbgLARSh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Dec 2020 12:18:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46768 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730995AbgLAOgu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 1 Dec 2020 09:36:50 -0500
+        id S1726303AbgLARSg (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 1 Dec 2020 12:18:36 -0500
 Received: from localhost (cpc102334-sgyl38-2-0-cust884.18-2.cable.virginm.net [92.233.91.117])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EB25120758;
-        Tue,  1 Dec 2020 14:36:08 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7E61E206E0;
+        Tue,  1 Dec 2020 17:17:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606833369;
-        bh=16u1ox3tsf5pplg/GM2lJdtCUI6+E5r4G860TvQ0vWk=;
+        s=default; t=1606843076;
+        bh=vUkiFQoX0qUZWqEs1DFnikAC99TYHcD6oGjwLUyqkKY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L5ua54a7s62SYM0aytx21BouCVthWiwQjD91Sye5xhgmcHxD6B+UpitioEl2/BfL6
-         +iBhTvjySU/ejQU5V693tZlVV1M3g8Z25m8zDvh9PjmldAwxjKiRnO338ogjw/RuhD
-         Q4BVGwBGaDOiYpa8fPgo6dQdTiPhPPPFW8hN7fxU=
-Date:   Tue, 1 Dec 2020 14:35:40 +0000
+        b=iKP0sp/TPAiwmyrrUJ6HNR3lkG80YJBypFKjN+TqboBJgKZkrlgTjOY+L1KVo8K47
+         7fKLpSZfyL7dJZ35MIuNVRVwRJcS+HmwPrbPjDerb0mg50a68fOX2PwCVTdz9R7o0E
+         kEkJBou5D7wBL98nDHjN6YMhojhMMZHBG3DboeDs=
+Date:   Tue, 1 Dec 2020 17:17:26 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Subject: Re: [PATCH v3] spi: fsl-dspi: fix NULL pointer dereference
-Message-ID: <20201201143540.GE5239@sirena.org.uk>
-References: <20200928085500.28254-1-michael@walle.cc>
- <160683107674.35139.13937083243515034859.b4-ty@kernel.org>
- <c1dd024150ed624a6b42562573851f84@walle.cc>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     linux-spi@vger.kernel.org, Tomer Maimon <tmaimon77@gmail.com>
+Subject: Re: [PATCH for-5.10] spi: npcm-fiu: Don't leak SPI master in probe
+ error path
+Message-ID: <20201201171726.GN5239@sirena.org.uk>
+References: <73adc6ba84a4f968f2e1499a776e5c928fbdde56.1605512876.git.lukas@wunner.de>
+ <a420c23a363a3bc9aa684c6e790c32a8af106d17.1605512876.git.lukas@wunner.de>
+ <160683107676.35139.5898255579541696458.b4-ty@kernel.org>
+ <20201201143027.GA23044@wunner.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BZaMRJmqxGScZ8Mx"
+        protocol="application/pgp-signature"; boundary="uMPAU7A2Er6+wvsD"
 Content-Disposition: inline
-In-Reply-To: <c1dd024150ed624a6b42562573851f84@walle.cc>
+In-Reply-To: <20201201143027.GA23044@wunner.de>
 X-Cookie: Who was that masked man?
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
@@ -47,30 +46,38 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---BZaMRJmqxGScZ8Mx
+--uMPAU7A2Er6+wvsD
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Tue, Dec 01, 2020 at 03:04:27PM +0100, Michael Walle wrote:
+On Tue, Dec 01, 2020 at 03:30:27PM +0100, Lukas Wunner wrote:
+> On Tue, Dec 01, 2020 at 01:57:56PM +0000, Mark Brown wrote:
 
-> Is that correct? Some time ago you've already applied that to your spi tree:
-> https://lore.kernel.org/linux-spi/160132174502.55568.11234605078950751454.b4-ty@kernel.org/
+> > [1/1] spi: npcm-fiu: Don't leak SPI master in probe error path
+> >       (no commit info)
 
-No, it's a bug in b4.
+> This patch is already in Linus' tree.
+> (You applied it to spi.git on Nov 17.)
 
---BZaMRJmqxGScZ8Mx
+Yes, b4 had a bug which caused it to generate notification e-mails
+for things it didn't find in git (as you can see from the "no commit
+info" bit).  BTW it would be really helpful if you could resend this
+stuff in some more normal fashion (either independently or as a numbered
+thread), it's really breaking my workflow.
+
+--uMPAU7A2Er6+wvsD
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/GVLsACgkQJNaLcl1U
-h9CP/wf/YySiGAKeGMGddCVsdyZABZAqMZ/lUgzqPP4bXtq2B4qRRgOu3QCGJqaW
-tMKd9o0FM58irsM7vZnY8HzfF6sjEG4RaD8ImAlsOQpYxIHT9IeBpE9ewONEr3K8
-5LgJYausWJNj7y4dwpWOqkogoB0v24bbOp5Zhgt5uhphxIS91bP3lrLS4a8xhVAE
-BW90LxQC7fzmS4RWc2/we+2PLNZu2v1u3ILVAtqdWlayFL+kFWfcrYkQMlRksBLj
-jlRoCJP6fUE+G59jJIyBod3OiuUksAoog39UHvhTuoAoLLLYHKHZNojv3yCYUtjv
-+LR6gy8tZwIKIUWH2q/Dj5MCdmEksg==
-=hpxu
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/GeqYACgkQJNaLcl1U
+h9DjVwf/WXtImo9xeZWrsJe/Wo/IkiQ1nktBjDmf0UxeVx6rslZJxjTRQx//Nhee
+xaV3c31M+D8D0jZ50eRKu/qyXQC0iBYFm96jonqu7+n7771quosofnuDMbAW6mcz
+7mN8h3vKo70w+B092Ueffo/87c5Muhj/azw4uczGoB+bUU81Zaq5B64RHDsmWGdT
+hP2XpN+CsuSvu8lLeH8Gu3e8qzRLS+NuLe7crlP9/I2wDIP2dkdXfSoOwTs+oJMh
+mU10xPdSCF0V9gXPcvCijKcpjUJWINR4N9bBtPOS7yDopo2aPtzixh4O89Iidojg
++WiZTOdlberY9pvMyeW+OjAFqIX5XQ==
+=/bzV
 -----END PGP SIGNATURE-----
 
---BZaMRJmqxGScZ8Mx--
+--uMPAU7A2Er6+wvsD--
