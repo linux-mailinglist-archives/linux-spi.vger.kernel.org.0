@@ -2,37 +2,34 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2122CA4C1
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Dec 2020 15:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 385912CA4C9
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Dec 2020 15:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403847AbgLAN7r (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Dec 2020 08:59:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45818 "EHLO mail.kernel.org"
+        id S2403887AbgLAOAM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Dec 2020 09:00:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46240 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728848AbgLAN7r (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 1 Dec 2020 08:59:47 -0500
+        id S2403876AbgLAOAL (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 1 Dec 2020 09:00:11 -0500
 Received: from localhost (cpc102334-sgyl38-2-0-cust884.18-2.cable.virginm.net [92.233.91.117])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DAADA2168B;
-        Tue,  1 Dec 2020 13:59:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D7407208FE;
+        Tue,  1 Dec 2020 13:59:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606831141;
-        bh=1f8DKykxSDA5io+UHgcjrB0nbmxwjwqm3ExrQn3rCnI=;
+        s=default; t=1606831171;
+        bh=Rn/Kl40yNcBnOCyq294nMqi1Xg+6oVIOdLhl43RGVVg=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=pddORyXloZvg6CqOfu+YVEB08+8cHMTMT68HRlLEhpqHlJHqu8Hnm0/V6Q3hrR+sH
-         YrtzLqsLx7PRlcK8g9ECjrmHJYPO0DPURWdgWnfzJwxpRPjZEy2pnvzLmTB0k0QTyx
-         k9FWaYuCE0nFwDDOi45GrUQ7Ipi1gta7oikqkkME=
+        b=CHhvei+mcRvoUbGW/Fmp59pwQISUgsxfqrGqIgApT48MHbz9uPAyn+G/krgbBw1tz
+         Cm0kbONV9mhh2+8wmEP+lHgqf2FbpNtsZpT9YrsmdmHcRGRfLToxThkmTXujnLLlh4
+         ZndI+hsCH+PMJJ+LqkyoCrWbBYNguAVvrfz76aFo=
 From:   Mark Brown <broonie@kernel.org>
 To:     Lukas Wunner <lukas@wunner.de>
-Cc:     linux-spi@vger.kernel.org, Abylay Ospan <aospan@netup.ru>,
-        Kozlov Sergey <serjk@netup.ru>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-In-Reply-To: <48e6a396526bcd0a26e970036dbe3207cce57ea6.1605512876.git.lukas@wunner.de>
-References: <73adc6ba84a4f968f2e1499a776e5c928fbdde56.1605512876.git.lukas@wunner.de> <48e6a396526bcd0a26e970036dbe3207cce57ea6.1605512876.git.lukas@wunner.de>
-Subject: Re: [PATCH for-5.10] media: netup_unidvb: Don't leak SPI master in probe error path
-Message-Id: <160683107676.35139.9712038469304834803.b4-ty@kernel.org>
+Cc:     linux-spi@vger.kernel.org, Tomer Maimon <tmaimon77@gmail.com>
+In-Reply-To: <a420c23a363a3bc9aa684c6e790c32a8af106d17.1605512876.git.lukas@wunner.de>
+References: <73adc6ba84a4f968f2e1499a776e5c928fbdde56.1605512876.git.lukas@wunner.de> <a420c23a363a3bc9aa684c6e790c32a8af106d17.1605512876.git.lukas@wunner.de>
+Subject: Re: [PATCH for-5.10] spi: npcm-fiu: Don't leak SPI master in probe error path
+Message-Id: <160683107676.35139.5898255579541696458.b4-ty@kernel.org>
 Date:   Tue, 01 Dec 2020 13:57:56 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -41,18 +38,13 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 16 Nov 2020 09:23:13 +0100, Lukas Wunner wrote:
-> If the call to spi_register_master() fails on probe of the NetUP
-> Universal DVB driver, the spi_master struct is erroneously not freed.
+On Mon, 16 Nov 2020 09:23:10 +0100, Lukas Wunner wrote:
+> If the calls to of_match_device(), of_alias_get_id(),
+> devm_ioremap_resource(), devm_regmap_init_mmio() or devm_clk_get()
+> fail on probe of the NPCM FIU SPI driver, the spi_controller struct is
+> erroneously not freed.
 > 
-> Likewise, if spi_new_device() fails, the spi_controller struct is
-> not unregistered.  Plug the leaks.
-> 
-> While at it, fix an ordering issue in netup_spi_release() wherein
-> spi_unregister_master() is called after fiddling with the IRQ control
-> register.  The correct order is to call spi_unregister_master() *before*
-> this teardown step because bus accesses may still be ongoing until that
-> function returns.
+> Fix by switching over to the new devm_spi_alloc_master() helper.
 
 Applied to
 
@@ -60,7 +52,7 @@ Applied to
 
 Thanks!
 
-[1/1] media: netup_unidvb: Don't leak SPI master in probe error path
+[1/1] spi: npcm-fiu: Don't leak SPI master in probe error path
       (no commit info)
 
 All being well this means that it will be integrated into the linux-next
