@@ -2,111 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACE82CC8D0
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Dec 2020 22:21:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E012CC927
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Dec 2020 22:51:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729431AbgLBVUm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 2 Dec 2020 16:20:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50304 "EHLO
+        id S1728124AbgLBVuS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 2 Dec 2020 16:50:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726471AbgLBVUm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Dec 2020 16:20:42 -0500
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48F6C0613D6;
-        Wed,  2 Dec 2020 13:20:01 -0800 (PST)
-Received: by mail-qt1-x843.google.com with SMTP id k4so2178013qtj.10;
-        Wed, 02 Dec 2020 13:20:01 -0800 (PST)
+        with ESMTP id S1726447AbgLBVuR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Dec 2020 16:50:17 -0500
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD15CC0617A7
+        for <linux-spi@vger.kernel.org>; Wed,  2 Dec 2020 13:49:37 -0800 (PST)
+Received: by mail-pl1-x641.google.com with SMTP id bj5so1878804plb.4
+        for <linux-spi@vger.kernel.org>; Wed, 02 Dec 2020 13:49:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=99Y7wB6PwhBW9HGShktQMrV6OKqAm5XRMWuYeiHOpak=;
-        b=BqzZHtMDKJpRPAQBquh46oC1vWNiD4dwoerDNazlU1w0YLUyXjUsoAlSewXGHZ4DPr
-         BPdkF0+l0vZHy3gZ3qTZg70oaSFUrLBUvj8qHjQKIWi178mTmlAkXt/HD1mo+/SlAjeC
-         7LhN+sBo6jS5Vlg0Lj149TfVnBXPwx402/q/w=
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ka6Z/ZcsAkJmAuTwn/KM+k744pqQbZeoUCVLzEch46Q=;
+        b=LUrztAYpFrGpLXuuYeTwq4AHlrAqLvdqXN5M+I/DSiGZQdEvyqyBcGGJvTdYKGs7Bw
+         6pKhk2/PgqdLHDyY3pCumHAGJtohG8vaFV4zvd70F1Kulw3D4ZSzWEu5Hpj9zYG+GkKJ
+         HxHILlU+2mBzOkFgzbmtwwhL90bQbzt85nSPc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=99Y7wB6PwhBW9HGShktQMrV6OKqAm5XRMWuYeiHOpak=;
-        b=ZGkwaKtKEWOqKLG1C9l7A3FAK3ET4FbIwHA2g7vKG7sDVO8Ps8v6+hYAh/TNdUtO+V
-         YTLue/CNSe6rjC2pfeyCp2OU3rKQ7WbPhCmbEi64o7FdLpnjD7dvHqf8nsn00TLFGBCt
-         7+BGULRb7IhSeIx5rPx1kagZk8Ignhod8HXJ7aWU4L+OSlnX1X1GIRitK27XSwnIFwmX
-         W0px8+34G9wiyml6ee8gYWyrStFw+HwDBfeOYxodXBnh/hDlsRjMk/XtrwJFjecDKmBw
-         bKRNqFoGf8uqnYDoTgArbDCGQcS1wH1mRm68Y+jKMIYN3PJFNzp8PmZ8PViE7v9tq/hL
-         elaQ==
-X-Gm-Message-State: AOAM531PgyBUuuJwXlT62vFHOHwHs8Kp2HWUxjx0s8Oa9xveRzOP22F5
-        5FyMMenTFnCUZb/M8ZBFXzPJj0dFUNl6fLpAi6DmAfQsOZk=
-X-Google-Smtp-Source: ABdhPJxIBl1u25BODd0tJolB1/liAW5YH4mGsYbeA+xrKq+OgjhUxHxZBjU+lV+Jfj2+NJdO5pwPenyT7U5LiMfTUPU=
-X-Received: by 2002:aed:2f64:: with SMTP id l91mr63647qtd.363.1606944000942;
- Wed, 02 Dec 2020 13:20:00 -0800 (PST)
-MIME-Version: 1.0
-References: <20201103072202.24705-1-chin-ting_kuo@aspeedtech.com> <160683107674.35139.14509237313835347013.b4-ty@kernel.org>
-In-Reply-To: <160683107674.35139.14509237313835347013.b4-ty@kernel.org>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 2 Dec 2020 21:19:47 +0000
-Message-ID: <CACPK8Xe4TcRVBnZL7vtqGq1PTe5NEx1k4hvk4FDeYgJQ9HALFg@mail.gmail.com>
-Subject: Re: [v2 0/4] Porting ASPEED FMC/SPI memory controller driver
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ka6Z/ZcsAkJmAuTwn/KM+k744pqQbZeoUCVLzEch46Q=;
+        b=LHh9FF7bjJubMKDJCiUsbxprAyKIOTDoKm/ZLFKa5ynzsaOxpJq3+pw/wqINmI4Mti
+         HuvoJFyvNnp7tly6kunMshY9XerJNOh2gthK11mKVDshNY6fTdOoCixiSrkwldFjcb/W
+         ZhSKk1ELqHlXgBb+cl7rQx1w0v57CCOPzmeuLoL9tpHgLDKUIQnyh0QNiQrH49Ol1wGr
+         nZTWS3JnPn2oSJsNTCE0Bp7JK9RfPYHu7eUU4p88tlmM0WcezcWIoSY5LaGZBzibnWfL
+         p0FTrQQNJHGQjTXK1q8WmOEi6rfxyPFlOwEgkfEex2OGo4nNMmMF/d/PMmcktC5r5VUk
+         nS6Q==
+X-Gm-Message-State: AOAM530hr+ICI5UM2QFizJ2qN+QZKDgkfh4NHo2YFMdMr1OBwXO1v4ud
+        ghb+ngrbyjLwLXEb1aY83y8QJA==
+X-Google-Smtp-Source: ABdhPJw7S7EAt3ICR9MGBNyO9g8s8Th1B2Y7e+RpQELxDFNRwEefTjFRoNfHUTulqwODlvC+nntrOA==
+X-Received: by 2002:a17:902:a503:b029:d8:e685:3e58 with SMTP id s3-20020a170902a503b02900d8e6853e58mr91635plq.68.1606945777199;
+        Wed, 02 Dec 2020 13:49:37 -0800 (PST)
+Received: from smtp.gmail.com ([2620:15c:202:201:3e52:82ff:fe6c:83ab])
+        by smtp.gmail.com with ESMTPSA id a5sm55371pfg.140.2020.12.02.13.49.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Dec 2020 13:49:36 -0800 (PST)
+From:   Stephen Boyd <swboyd@chromium.org>
 To:     Mark Brown <broonie@kernel.org>
-Cc:     Boris Brezillon <bbrezillon@kernel.org>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-spi@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, Akash Asthana <akashast@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>
+Subject: [PATCH] spi: spi-geni-qcom: Use the new method of gpio CS control
+Date:   Wed,  2 Dec 2020 13:49:35 -0800
+Message-Id: <20201202214935.1114381-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 1 Dec 2020 at 13:58, Mark Brown <broonie@kernel.org> wrote:
->
-> On Tue, 3 Nov 2020 15:21:58 +0800, Chin-Ting Kuo wrote:
-> > This patch series aims to porting ASPEED FMC/SPI memory controller
-> > driver with spi-mem interface. Adjust device tree setting of SPI NOR
-> > flash in order to fit real AST2600 EVB and new SPI memory controller
-> > driver. Also, this patch has been verified on AST2600-A1 EVB.
-> >
-> > v2: Fix sparse warnings reported by kernel test robot <lkp@intel.com>.
-> >
-> > [...]
->
-> Applied to
->
->    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+Let's set the 'use_gpio_descriptors' field so that we use the new way of
+requesting the CS GPIOs in the core. This allows us to avoid having to
+configure the CS pins in "output" mode with an 'output-enable' pinctrl
+setting.
 
-Really? Or is there a bug in one of your scripts :)
+Cc: Akash Asthana <akashast@codeaurora.org>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Acked-by: Alexandru M Stan <amstan@chromium.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+ drivers/spi/spi-geni-qcom.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Cheers,
+diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+index 25810a7eef10..c4c88984abc9 100644
+--- a/drivers/spi/spi-geni-qcom.c
++++ b/drivers/spi/spi-geni-qcom.c
+@@ -636,6 +636,7 @@ static int spi_geni_probe(struct platform_device *pdev)
+ 	spi->auto_runtime_pm = true;
+ 	spi->handle_err = handle_fifo_timeout;
+ 	spi->set_cs = spi_geni_set_cs;
++	spi->use_gpio_descriptors = true;
+ 
+ 	init_completion(&mas->cs_done);
+ 	init_completion(&mas->cancel_done);
 
-Joel
+base-commit: b65054597872ce3aefbc6a666385eabdf9e288da
+-- 
+https://chromeos.dev
 
->
-> Thanks!
->
-> [1/2] dt-bindings: spi: Add binding file for ASPEED FMC/SPI memory controller
->       (no commit info)
-> [2/2] spi: aspeed: Add ASPEED FMC/SPI memory controller driver
->       (no commit info)
->
-> All being well this means that it will be integrated into the linux-next
-> tree (usually sometime in the next 24 hours) and sent to Linus during
-> the next merge window (or sooner if it is a bug fix), however if
-> problems are discovered then the patch may be dropped or reverted.
->
-> You may get further e-mails resulting from automated or manual testing
-> and review of the tree, please engage with people reporting problems and
-> send followup patches addressing any issues that are reported if needed.
->
-> If any updates are required or you are submitting further changes they
-> should be sent as incremental updates against current git, existing
-> patches will not be replaced.
->
-> Please add any relevant lists and maintainers to the CCs when replying
-> to this mail.
->
-> Thanks,
-> Mark
