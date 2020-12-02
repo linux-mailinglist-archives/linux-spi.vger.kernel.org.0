@@ -2,40 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4942CC028
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Dec 2020 15:58:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E26DD2CC031
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Dec 2020 16:00:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728135AbgLBO5U (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 2 Dec 2020 09:57:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48616 "EHLO mail.kernel.org"
+        id S1728285AbgLBO7J (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 2 Dec 2020 09:59:09 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:34174 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726075AbgLBO5U (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 2 Dec 2020 09:57:20 -0500
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606920999;
-        bh=AqwDbHV6pFmyn18lGtNot1uyKd/xDQjZwY9FcP0yLFE=;
-        h=Subject:From:Date:To:From;
-        b=OUEAdUWOYLetnBvgCvuwkBFO0RHphRYHUE2vLznULpG6l9NdUU3iey+YiG1PJ5CYV
-         0lhuZ2KOeWGu+JyNhugNX1ZZUwDdKAbhzU4003sXUtLNt9W1N9y3LgXRCDiD8FH3mg
-         l9QJLu+YMR1d9T0WQEDjdsNWuXhrhsZzxripicK4=
+        id S1727415AbgLBO7J (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 2 Dec 2020 09:59:09 -0500
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94)
+        (envelope-from <andrew@lunn.ch>)
+        id 1kkTaJ-009sny-Sv; Wed, 02 Dec 2020 15:58:23 +0100
+Date:   Wed, 2 Dec 2020 15:58:23 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Yash Shah <yash.shah@sifive.com>
+Cc:     linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+        broonie@kernel.org, gregkh@linuxfoundation.org,
+        aou@eecs.berkeley.edu, lee.jones@linaro.org,
+        u.kleine-koenig@pengutronix.de, thierry.reding@gmail.com,
+        peter@korsgaard.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        robh+dt@kernel.org, bgolaszewski@baylibre.com,
+        linus.walleij@linaro.org, sachin.ghadi@sifive.com
+Subject: Re: [PATCH 1/4] dt-bindings: riscv: Update DT binding docs to
+ support SiFive FU740 SoC
+Message-ID: <20201202145823.GC2324545@lunn.ch>
+References: <1606896236-62780-1-git-send-email-yash.shah@sifive.com>
+ <1606896236-62780-2-git-send-email-yash.shah@sifive.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <160692099980.20315.17860552458464183026.git-patchwork-housekeeping@kernel.org>
-Date:   Wed, 02 Dec 2020 14:56:39 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1606896236-62780-2-git-send-email-yash.shah@sifive.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v1] spi: spi-fsl-dspi: Use max_native_cs instead of num_chipselect to set SPI_MCR (2020-12-02T14:25:52)
-  Superseding: [v1] spi: spi-fsl-dspi: Use max_native_cs instead of num_chipselect to set SPI_MCR (2020-12-01T08:59:16):
-    spi: spi-fsl-dspi: Use max_native_cs instead of num_chipselect to set SPI_MCR
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+> index 6b25a80..1966b2c 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+> @@ -3,9 +3,11 @@ Device tree configuration for i2c-ocores
+>  Required properties:
+>  - compatible      : "opencores,i2c-ocores"
+>                      "aeroflexgaisler,i2cmst"
+> -                    "sifive,fu540-c000-i2c", "sifive,i2c0"
+> +                    "sifive,<chip>-i2c", "sifive,i2c0"
 
+Please make this a full list. At some point, this file will get turned
+into yaml, at which point substitution like this will need
+expanding. It is better to do that now.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+     Andrew
