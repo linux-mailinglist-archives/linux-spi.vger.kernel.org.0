@@ -2,131 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 626D22CCA88
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Dec 2020 00:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3310D2CCAC5
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Dec 2020 01:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727702AbgLBX33 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 2 Dec 2020 18:29:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42062 "EHLO
+        id S1727983AbgLBX4R (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 2 Dec 2020 18:56:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726915AbgLBX32 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Dec 2020 18:29:28 -0500
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8CFC0617A7
-        for <linux-spi@vger.kernel.org>; Wed,  2 Dec 2020 15:28:48 -0800 (PST)
-Received: by mail-pf1-x444.google.com with SMTP id x24so36911pfn.6
-        for <linux-spi@vger.kernel.org>; Wed, 02 Dec 2020 15:28:48 -0800 (PST)
+        with ESMTP id S1727626AbgLBX4R (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Dec 2020 18:56:17 -0500
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D74C0613D6
+        for <linux-spi@vger.kernel.org>; Wed,  2 Dec 2020 15:55:37 -0800 (PST)
+Received: by mail-ej1-x643.google.com with SMTP id x16so707367ejj.7
+        for <linux-spi@vger.kernel.org>; Wed, 02 Dec 2020 15:55:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:content-transfer-encoding:in-reply-to:references
-         :subject:from:cc:to:date:message-id:user-agent;
-        bh=8pWp0SPCJ1XCZyPVveVZNUF1OKkzpTtMQOSE9/M77g4=;
-        b=bQAAzkO9ynlaSTKshCmW97hrKIoo0JqVWDL4kT0k3xJcu45mPAG8jgzadm2D/vRXkY
-         62rMlkELSeOseUuWiljXs2Q9bm7sKezVx9dULNvmzooAumZNPioKQG2sF5bPQgbQn6Cp
-         aiGWb9S7HXPxYi3vsF1ZWki8QtKsVQbBX7pdc=
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tTqDFIETtXY0Lt59TIQii5AHbzttQkXZ7nkEQUlJWNU=;
+        b=pwEPADFX4h1Drdp70LImtWMwWQeiaHLC20Opeh3X9ELIJBq6i57nrAMvDo65dTwneh
+         RBDAhzSBu6iZkkYUpejtYHIqG0tw1Be9NX0CMcs2ozAYm68iMBvZA1W01f85b8j9wTDP
+         yORgbhN8GuZJyx0SPvYma8au0HWXURT+ON5Gru7syKzXLwE81eifdsEPfIr2QEX3coFR
+         OGLzD4duCQFnIL+04Xh8ZlbzYL/VXAlE5bX1NinniOhyATNm31DX7YZ5usUKR+rueygb
+         h/y5kuv7zyItH37xM8nJ3EbDJZn02ahCpMvfUdFHLTKNhFjlYw9QEZ9hFjEzu1ph+y4l
+         GlaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding
-         :in-reply-to:references:subject:from:cc:to:date:message-id
-         :user-agent;
-        bh=8pWp0SPCJ1XCZyPVveVZNUF1OKkzpTtMQOSE9/M77g4=;
-        b=Uoz6wgXp/O2sZANI7HC+gUp4aPY5To/iqqDEOr838zmgLUd3qzUa5v/uMIp71SHJXS
-         0CHSJN9xLicg4/nHJwA/ZB+H7KUG87UX3OaWWLM6WMfII5Nyv5oCtBCo7MNohuuH7/dl
-         tQmWKPghyt9FpIWec8U8Y++Iw8RJhnmXTJ9jQYG84JAbsItCMujFHXGvSvhrxgH6cBa3
-         wodoDYw0Qc7GML47zuOSyvxZyD6rDWXq3Yerm7f3qdIXAfjxW7C6f3oCqH3KSYvLH6f6
-         Vip2LESfM/vyXgJLsA0ZuUVOA0J+ywrqeG97scv5ns5fKRtOvFpXtGdYEqgRDpWdbGLa
-         Okng==
-X-Gm-Message-State: AOAM530fVLDasta6UBY5cvKfikvifzBfB0HchuvEgXqk/KpWA/naS5p1
-        WTlDeGznjrX/7PKzJpByDiU5BA==
-X-Google-Smtp-Source: ABdhPJy3xZ3+XY/j3Fsbn4p0el59YjSVkKj3fLWs5fKu5+SYCItehaFYbnCFpE+3GubMxiaqj9DSpQ==
-X-Received: by 2002:a65:6891:: with SMTP id e17mr567267pgt.410.1606951728200;
-        Wed, 02 Dec 2020 15:28:48 -0800 (PST)
-Received: from chromium.org ([2620:15c:202:201:3e52:82ff:fe6c:83ab])
-        by smtp.gmail.com with ESMTPSA id n127sm151383pfd.143.2020.12.02.15.28.47
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tTqDFIETtXY0Lt59TIQii5AHbzttQkXZ7nkEQUlJWNU=;
+        b=F+5qhtFI9XcQBD8HAwe1IJL8oQ9YdyWbviRh7+ON+RvKim3XOvVrxvV2T5M8pKNqAS
+         Q0RWE7x40a44xlui4dOEO39VOpcSr+9XDgqtej/RZOxlhuBO+aL5hleCIt3dU/bL1G0e
+         fTRMUKg5birjpJCvlMI54ErWU8CxIDjmiubL8LMqn8g6X5BuhvnJeKgK+/bZdkQVRq8p
+         tadmN99rL/+f3174BOw1d+fKh8TFaF8uyBcpnhG1DTCVebR4iuSg5LWIRC9SOtVvMVcO
+         oIIyWB5xIOSPBzeqpP0gTygq6PHs8sWZ+o50w1hh3SgpZSUgu+eazrmC4NhJDeiaGimx
+         d2GQ==
+X-Gm-Message-State: AOAM531ItiRDgMrCaufFXscbHCJvdSxjEfN5ruqxfGmVmpMDUEQuqo13
+        l35GfjDqGpR6wMKDkGYEkUE=
+X-Google-Smtp-Source: ABdhPJx8bjdeI+UYOdF9gs89DDWzF0NMTMqq+2RXXbp0oVroUOJqULycX2DmjK/t6sJYYvjoKAAMxg==
+X-Received: by 2002:a17:906:12d3:: with SMTP id l19mr207063ejb.65.1606953335989;
+        Wed, 02 Dec 2020 15:55:35 -0800 (PST)
+Received: from skbuf ([188.25.2.120])
+        by smtp.gmail.com with ESMTPSA id j27sm111188ejo.61.2020.12.02.15.55.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Dec 2020 15:28:47 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 02 Dec 2020 15:55:35 -0800 (PST)
+Date:   Thu, 3 Dec 2020 01:55:34 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Maxim Kochetkov <fido_max@inbox.ru>, linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spi: spi-fsl-dspi: Use max_native_cs instead of
+ num_chipselect to set SPI_MCR
+Message-ID: <20201202235534.ksbpj6wfp7vkkwm2@skbuf>
+References: <20201201085916.63543-1-fido_max@inbox.ru>
+ <160683107678.35139.1439064414776102118.b4-ty@kernel.org>
+ <e19002f8-a8a8-6201-6680-ef0b586c6367@inbox.ru>
+ <20201202142220.GE5560@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAHNYxRwMD4XahHXWW9z7b=VCOEsdPe5Df4CohNwmBy_ijWJ62g@mail.gmail.com>
-References: <20201202214935.1114381-1-swboyd@chromium.org> <CAHNYxRwMD4XahHXWW9z7b=VCOEsdPe5Df4CohNwmBy_ijWJ62g@mail.gmail.com>
-Subject: Re: [PATCH] spi: spi-geni-qcom: Use the new method of gpio CS control
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        Akash Asthana <akashast@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>
-To:     Alexandru M Stan <amstan@chromium.org>
-Date:   Wed, 02 Dec 2020 15:28:45 -0800
-Message-ID: <160695172591.2717324.17788035024164242534@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201202142220.GE5560@sirena.org.uk>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Quoting Alexandru M Stan (2020-12-02 14:18:20)
-> On Wed, Dec 2, 2020 at 1:49 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > Let's set the 'use_gpio_descriptors' field so that we use the new way of
-> > requesting the CS GPIOs in the core. This allows us to avoid having to
-> > configure the CS pins in "output" mode with an 'output-enable' pinctrl
-> > setting.
-> >
-> > Cc: Akash Asthana <akashast@codeaurora.org>
-> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> > Acked-by: Alexandru M Stan <amstan@chromium.org>
-> I meant this as a joke in chat. It doesn't really mean anything in any ca=
-pacity.
+On Wed, Dec 02, 2020 at 02:22:20PM +0000, Mark Brown wrote:
+> On Wed, Dec 02, 2020 at 05:20:00PM +0300, Maxim Kochetkov wrote:
+>
+> > Should I resend it?
+>
+> If the patch isn't actually applied then yes.
 
-Sorry! It can be removed when applying.
-
->=20
-> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> > ---
-> >  drivers/spi/spi-geni-qcom.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-> > index 25810a7eef10..c4c88984abc9 100644
-> > --- a/drivers/spi/spi-geni-qcom.c
-> > +++ b/drivers/spi/spi-geni-qcom.c
-> > @@ -636,6 +636,7 @@ static int spi_geni_probe(struct platform_device *p=
-dev)
-> >         spi->auto_runtime_pm =3D true;
-> >         spi->handle_err =3D handle_fifo_timeout;
-> >         spi->set_cs =3D spi_geni_set_cs;
-> > +       spi->use_gpio_descriptors =3D true;
-> >
-> >         init_completion(&mas->cs_done);
-> >         init_completion(&mas->cancel_done);
-> >
-> > base-commit: b65054597872ce3aefbc6a666385eabdf9e288da
-> > --
-> > https://chromeos.dev
-> >
->=20
-> Unfortunately this patch makes my cros-ec (the main EC that used to
-> work even before my debugging) also fail to probe:
-> [    0.839533] cros-ec-spi spi6.0: EC failed to respond in time
-> [    1.040453] cros-ec-spi spi6.0: EC failed to respond in time
-> [    1.040852] cros-ec-spi spi6.0: Cannot identify the EC: error -110
-> [    1.040855] cros-ec-spi spi6.0: cannot register EC, fallback to spidev
-> [    1.040942] cros-ec-spi: probe of spi6.0 failed with error -110
->=20
-> I wasn't closely looking at this part closely when I was using my
-> other spi port with spidev, so this is why I haven't noticed it
-> before.
-> Doug suggests this might be a polarity issue. More scoping to be had.
->=20
-
-Ah I see. It looks like the cs-gpios polarity is wrong for the DTS on
-sc7180. That's a patch that Doug has sent in for the qcom tree, commit
-37dd4b777942 ("arm64: dts: qcom: sc7180: Provide pinconf for SPI to use
-GPIO for CS") and it is pending for the next release (v5.11). Doug says
-he will send in a fix for the DTS side, but this patch is still "good"
-as far as I can tell. It moves us to use gpio descriptors and also finds
-bugs like this in the DTS file that we would have missed otherwise
-because the legacy mode doesn't look at the polarity flags in DT.
+Do you frequently send out emails that you've applied a patch and then
+not apply it?
