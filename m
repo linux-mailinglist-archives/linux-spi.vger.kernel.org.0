@@ -2,102 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A5A92CD861
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Dec 2020 15:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C412CD896
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Dec 2020 15:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389081AbgLCOBj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Dec 2020 09:01:39 -0500
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:35346 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2389070AbgLCOBj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Dec 2020 09:01:39 -0500
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0B3E0cSx022951;
-        Thu, 3 Dec 2020 09:00:56 -0500
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com with ESMTP id 355vjenuxy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Dec 2020 09:00:55 -0500
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 0B3E0s6a025117
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Thu, 3 Dec 2020 09:00:54 -0500
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1779.2; Thu, 3 Dec 2020
- 09:00:53 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
- Transport; Thu, 3 Dec 2020 09:00:53 -0500
-Received: from localhost.localdomain ([10.48.65.12])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 0B3E0mEA012864;
-        Thu, 3 Dec 2020 09:00:52 -0500
-From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
-To:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <dragos.bogdan@analog.com>, <andy.shevchenko@gmail.com>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>
-Subject: [PATCH v4 3/3] spi: dt-bindings: document zero value for spi-{rx,tx}-bus-width properties
-Date:   Thu, 3 Dec 2020 16:05:31 +0200
-Message-ID: <20201203140531.74470-3-alexandru.ardelean@analog.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201203140531.74470-1-alexandru.ardelean@analog.com>
-References: <20201203140531.74470-1-alexandru.ardelean@analog.com>
+        id S1729048AbgLCOJz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Dec 2020 09:09:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37004 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729342AbgLCOJy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Dec 2020 09:09:54 -0500
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52990C061A4E;
+        Thu,  3 Dec 2020 06:09:14 -0800 (PST)
+Received: by mail-pf1-x444.google.com with SMTP id b26so1363811pfi.3;
+        Thu, 03 Dec 2020 06:09:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wJ7u1l2czPx09HJWCSw/GmDg+rkIf9SaGFfB2vz8DE0=;
+        b=MPP+YY48bbGpf4uMpzlQnJ0NsdZyHG5oMLo1ZX9mAuBJGih1zUDyIuwV/QENfZRoOm
+         mLio+3icihdlceE50ysgNBBczvZEfzLI/zukKmRRAKgNKylbUXLAZYQ/A19VIFbbxs6v
+         uhC7kcSOyzdEiAPYdc0NPr7fDE8OcB2+yqmnFM5tau+HzSNTvCI6dBzMjvVn0SMoVLy2
+         L25teH6LUHPkijypP3xIASQqUw/HG+xXB0e35x4A9q5Gmsjxz3KDZH0gz1r8jk+sT5DU
+         j6w4UbjjUxlk4kpQjVIC30uf5FcIyAbDkXpBXgJzRHDmUl20lJrokhNKhRzsgqCXrKJj
+         AZWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wJ7u1l2czPx09HJWCSw/GmDg+rkIf9SaGFfB2vz8DE0=;
+        b=Olqp2czTfCAajwLoz5l/6HpNyHYcmyjZFBi7tkHfFOwa4M4uAiPEVzRdW36hPBP0k6
+         LRIK0V19pJBcNNfZJdxGaCdL0zgZ0Wuo/WITajKq38sCWpDyl/PtA21Sdth71bruJKBD
+         BCt5/oAlvZA7hNjemX+hSx3i1xziFv6g1Vu2DMVMMfqNYbjTWT9KlCar9Hz199pdbjnz
+         Ob26CyFcoz5BfEZGpXbFNQH9uj1J5FeCQJYkK5FKnRnZCmNqnwqzhGczsuaUx3ftx+lv
+         W01vaBUBOmVYyi4I/iu+Obp+cK/FifqK9RRYkd+OpD4ysc8dgkhvsxIOCKtthmX7D/cc
+         r7Eg==
+X-Gm-Message-State: AOAM5325sbH0tgf53wDjwLG+/SqmFg67nxehu6TyIbwEa4JoD/JxJ2GX
+        61vHz+CIWHSJFORBmKREuAlCo4UQT/gfrYebgDc=
+X-Google-Smtp-Source: ABdhPJy8gwkOuaOTstt9oMs1cJBUajEsYkOqutZ5s21vSkL0HssiI9Fujv2aRtCbYo+mm3LSggCPb1WAXHXNmWVe/PY=
+X-Received: by 2002:a62:445:0:b029:19c:162b:bbef with SMTP id
+ 66-20020a6204450000b029019c162bbbefmr3227328pfe.40.1607004553823; Thu, 03 Dec
+ 2020 06:09:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-12-03_07:2020-12-03,2020-12-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 phishscore=0 clxscore=1015 mlxscore=0 mlxlogscore=739
- malwarescore=0 adultscore=0 impostorscore=0 priorityscore=1501 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012030085
+References: <20201203140531.74470-1-alexandru.ardelean@analog.com> <20201203140531.74470-2-alexandru.ardelean@analog.com>
+In-Reply-To: <20201203140531.74470-2-alexandru.ardelean@analog.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 3 Dec 2020 16:10:02 +0200
+Message-ID: <CAHp75Veh=b0JYOP_gETyqqGGEYhO9JcxFCGXSuzSX27-qioprA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] spi: Add SPI_NO_TX/RX support
+To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
+Cc:     linux-spi <linux-spi@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Bogdan, Dragos" <dragos.bogdan@analog.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Following a change to the SPI framework, providing a value of zero for
-'spi-rx-bus-width' and 'spi-tx-bus-width' is now possible and will
-essentially mean that no RX or TX is allowed.
+On Thu, Dec 3, 2020 at 4:00 PM Alexandru Ardelean
+<alexandru.ardelean@analog.com> wrote:
+> From: Dragos Bogdan <dragos.bogdan@analog.com>
+>
+> Transmit/receive only is a valid SPI mode. For example, the MOSI/TX line
+> might be missing from an ADC while for a DAC the MISO/RX line may be
+> optional. This patch adds these two new modes: SPI_NO_TX and
+> SPI_NO_RX. This way, the drivers will be able to identify if any of
+> these two lines is missing and to adjust the transfers accordingly.
 
-Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
----
+...
 
-Changelog v3 -> v4:
-* https://lore.kernel.org/linux-spi/20201127130834.136348-3-alexandru.ardelean@analog.com/
-* fix typos
+> +       BUILD_BUG_ON(SPI_MODE_USER_MASK & SPI_MODE_KERNEL_MASK);
 
- Documentation/devicetree/bindings/spi/spi-controller.yaml | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Please, use static_assert() as I have been pointed out. It may be
+located outside of a function scope. You may attach it directly to the
+definition of the KERNEL_MASK (I haven't tried yet with header
+though).
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-index 1b56d5e40f1f..cf663e4a4afe 100644
---- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-@@ -125,8 +125,9 @@ patternProperties:
-       spi-rx-bus-width:
-         description:
-           Bus width to the SPI bus used for read transfers.
-+          If 0 is provided, then no RX will be possible on this device.
-         $ref: /schemas/types.yaml#/definitions/uint32
--        enum: [1, 2, 4, 8]
-+        enum: [0, 1, 2, 4, 8]
-         default: 1
- 
-       spi-rx-delay-us:
-@@ -136,8 +137,9 @@ patternProperties:
-       spi-tx-bus-width:
-         description:
-           Bus width to the SPI bus used for write transfers.
-+          If 0 is provided, then no TX will be possible on this device.
-         $ref: /schemas/types.yaml#/definitions/uint32
--        enum: [1, 2, 4, 8]
-+        enum: [0, 1, 2, 4, 8]
-         default: 1
- 
-       spi-tx-delay-us:
+...
+
+> +#define SPI_NO_TX      BIT(31)         /* no transmit wire */
+> +#define SPI_NO_RX      BIT(30)         /* no receive wire */
+> +#define SPI_MODE_KERNEL_MASK   (SPI_NO_TX | SPI_NO_RX)
+
+This needs a comment to explain what's going on with the flags (split).
+
 -- 
-2.17.1
-
+With Best Regards,
+Andy Shevchenko
