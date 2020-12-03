@@ -2,171 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C85EB2CCF95
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Dec 2020 07:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E8B72CD08B
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Dec 2020 08:46:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387493AbgLCGh1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Dec 2020 01:37:27 -0500
-Received: from mail-mw2nam12on2077.outbound.protection.outlook.com ([40.107.244.77]:55649
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727908AbgLCGh0 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 3 Dec 2020 01:37:26 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CrY8CXsCXuqRCcVRedrhnrAjAfFDEP9h4NMUTxVAdw3I6eTrcUsNras8hLDnLevV74MHz8MXKGEe7sfSfRsr2XwGj3k7StaqTPTlo/IR5NYH4r8BsX20rkvpy9nMafC2QkIZjbJ8DAd5A84DO3v2o9M8c1oZOKuXrO+vbeyE3EWFFR6zztgppSg6/icluFEPmOTQj5bzJ12QTjOU1AWXwXw1GAnpc7AOEUWXuACFNzZFGz6zbTQqun7rg+X28JqjlwP/6nDqfbG0hf1WgjW0is4NKjFBymVUD7Z0zblStQfdLqXD45OxEyu2+N98mcwThSMvWcvhB4vPVHLXyqb2mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2RztgGnOW09w3RsugC599Ue61IRnRdky32cOFPWSVrY=;
- b=oJy2tImu0bM3lGqip9wVhvyCVUmiqog8ijblj0CRY5UETgYbNupV9yBmjiG4/7634eOJ2Mbbz1bNFlNkd1iLcEOKDzwgVyW/DNeoOhHhH3uBVwYc8FJKCkF7iR5mxRU8UPTHr+C5Nv+O3z/Pu5MefV8gPzbXzRZ1z5nZEn93STu8CPUA5HSZoxmRZ4x4OZf8vr0NdxAFzeNYNdwEt1uEjhFOte7LsAT4nXzknv7Ng5TRuH3NrnrNxJh63WMcsXjmW51v+3YDB84fBAJkqizcjh1yp+6/rBQmJCcdpazr/aTVSnkmcQRTwu3yi/j2dpwl1gFMnXe4FMbzERZlrorZZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=openfive.com; dmarc=pass action=none header.from=openfive.com;
- dkim=pass header.d=openfive.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=osportal.onmicrosoft.com; s=selector2-osportal-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2RztgGnOW09w3RsugC599Ue61IRnRdky32cOFPWSVrY=;
- b=IvOcrzSTjnBdL62IPGdKUclH4KfStoAg2D5IOs3fkWNOdMpIxfBs1IXaGiZFbvbZ6EJJu/zFEv1rtUeqf5Z6a84rTqcR1biljPBiYgXAkTC7IZnbf0N/EUi1xlCzQ3bGg3pE9CDNITwWUAC5X2IDOpe6vrLW8C3+IWjeciu466s=
-Received: from BY5PR13MB4453.namprd13.prod.outlook.com (2603:10b6:a03:1d1::19)
- by BY5PR13MB4520.namprd13.prod.outlook.com (2603:10b6:a03:1d3::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.6; Thu, 3 Dec
- 2020 06:36:32 +0000
-Received: from BY5PR13MB4453.namprd13.prod.outlook.com
- ([fe80::7c13:1ac6:9f2a:5eae]) by BY5PR13MB4453.namprd13.prod.outlook.com
- ([fe80::7c13:1ac6:9f2a:5eae%8]) with mapi id 15.20.3654.005; Thu, 3 Dec 2020
- 06:36:32 +0000
-From:   Yash Shah <yash.shah@openfive.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "peter@korsgaard.com" <peter@korsgaard.com>,
-        "Paul Walmsley ( Sifive)" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        Sachin Ghadi <sachin.ghadi@openfive.com>
-Subject: RE: [PATCH 1/4] dt-bindings: riscv: Update DT binding docs to support
- SiFive FU740 SoC
-Thread-Topic: [PATCH 1/4] dt-bindings: riscv: Update DT binding docs to
- support SiFive FU740 SoC
-Thread-Index: AQHWyIHBGfYvEaJ6f0qSdKOZggdFCqnj5iWAgAEFz3A=
-Date:   Thu, 3 Dec 2020 06:36:32 +0000
-Message-ID: <BY5PR13MB4453B21AD0714272B39B375982F20@BY5PR13MB4453.namprd13.prod.outlook.com>
-References: <1606896236-62780-1-git-send-email-yash.shah@sifive.com>
- <1606896236-62780-2-git-send-email-yash.shah@sifive.com>
- <20201202145823.GC2324545@lunn.ch>
-In-Reply-To: <20201202145823.GC2324545@lunn.ch>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: lunn.ch; dkim=none (message not signed)
- header.d=none;lunn.ch; dmarc=none action=none header.from=openfive.com;
-x-originating-ip: [103.109.13.228]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c01b394d-a1d6-44ce-3428-08d89755c648
-x-ms-traffictypediagnostic: BY5PR13MB4520:
-x-ld-processed: 22f88e9d-ae0d-4ed9-b984-cdc9be1529f1,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BY5PR13MB4520BF8E53256F7EC213475D82F20@BY5PR13MB4520.namprd13.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: PVJNyFs8K9RXxiUH/2oHgzFJ7Eg/HJftmqg8vnNP8KW2qju6E+p8iVcpUtPHf+1OD/o0Eqwi3d6EsfRpZtYqDoaWwpPAMc6CC3j+XellyDwag7uEqH+dxy7q3nK9VbdZYK2u3K3Noo98up96gG/LeiDMKbgUvUIix0dB4IbwAIMSIgn0XsP3+258m00MCPD4ceh/XdrO9ZQOgqHudzeTl5Jcqt5DegdvQjW05mUSZvKR4iYC+J3oyghZABW/fg4D2a0/oNpurNGdn3wn4UCGOa8XceCmrastKhvnaSEnGCvbs7/Sibd8ZCLlBkY8jBuQcJ7yhvDEG5rEOEs3mAzzbg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR13MB4453.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(6029001)(39840400004)(136003)(346002)(366004)(376002)(396003)(7696005)(66446008)(53546011)(52536014)(6506007)(4326008)(5660300002)(64756008)(107886003)(66946007)(66556008)(66476007)(186003)(26005)(76116006)(55016002)(9686003)(54906003)(71200400001)(6916009)(15650500001)(478600001)(2906002)(83380400001)(86362001)(8936002)(7416002)(33656002)(316002)(8676002)(44832011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?xYSfoCz+wR0kTQRgfwNFBhFbicJR5mHoDsUbKmmq19761rPQbBKUR9urL+5E?=
- =?us-ascii?Q?XuOv9Hs+GJUMZZP4y/Lw4vma86ZuMYxV7Mn48H41k46ge9m0aF65yrOJmmia?=
- =?us-ascii?Q?glTMbPpBlJlHM9p6YAxAdErKGCJYdCahxErp0qy4BqoXkA8pV7nFt/SAMAds?=
- =?us-ascii?Q?P3JdNaBlQn/owH002ZeD3LMR29Iudp/JXpn4DqVpdo5GJYg+GW66Ym+9klfZ?=
- =?us-ascii?Q?I8HCYAKIQOxE0umrgHrIeP3jBI9c+oMx6HwuYWvOxKB1B2hcoXc+2pjQGyaf?=
- =?us-ascii?Q?292HyRrAp8yC2ho6jOfVcbgQ2eAe3e0BhSF+DsFP7QzFoyyD2aut/BXVb4Xu?=
- =?us-ascii?Q?2yf5YEACb16R5WXM3sbnjpjQlRyPGP6yBqX59ZlGlZ57GA4g4vW9Ei9NHSvQ?=
- =?us-ascii?Q?Ri6fMJ15LXYMSllSJEqohNCfA8jtkAaZkdbXbaA4D58MsoMFqKH6NKChKpni?=
- =?us-ascii?Q?jOqYottsqIaqM3/tu2tNFEnDbpRoC4MZPwbSuHxQ87F0qQb0my5djM7YgsW0?=
- =?us-ascii?Q?LqtQPYWh72LxDlnIdQUu4rlPQCk3J0j06Vl6SghvkoB9YT+EFwgltizo9pYY?=
- =?us-ascii?Q?X8djNSVheD+zsfRIct1v6jJWeHI+bVdtqI5RXGsjEfRemVNOZs0V6gU7fBEZ?=
- =?us-ascii?Q?EfdJd4DNtFeGZBEVM+V6UC9zYtyILHMXcKRZsaNV/6O8P3oI25YoL7DVIyYH?=
- =?us-ascii?Q?H1Lvz6NKYTZzXcA1h4095ygxceDtDBho/DaVN1g6FLcxBq0pRmjq9Z6zZfxj?=
- =?us-ascii?Q?jFhrDlBaqlcrJWkGWoxvV3nIG6UCErS0nQ3Y7E5nUvoKHmuh6YO/UJBm17Gh?=
- =?us-ascii?Q?RAJSw2J2KbLG/1wzrzI2o+xy95laiDsjcY5iYr/j2cGpipQ7XjL39EydZfO7?=
- =?us-ascii?Q?1NET/I10p8kezUG6u4HuBKfvMK4hZa+n55vVvmWYqTEv/YvtEmrCtd9I6RoN?=
- =?us-ascii?Q?UKdEd6bKFbry+AYSEPESAFdmfhVkq1abyuPkVmrRSiU=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1727692AbgLCHqJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Dec 2020 02:46:09 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:30312 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725912AbgLCHqI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Dec 2020 02:46:08 -0500
+Received: from ironmsg07-lv.qualcomm.com (HELO ironmsg07-lv.qulacomm.com) ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 02 Dec 2020 23:45:27 -0800
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg07-lv.qulacomm.com with ESMTP/TLS/AES256-SHA; 02 Dec 2020 23:45:26 -0800
+X-QCInternal: smtphost
+Received: from c-rojay-linux.qualcomm.com ([10.206.21.80])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 03 Dec 2020 13:15:02 +0530
+Received: by c-rojay-linux.qualcomm.com (Postfix, from userid 88981)
+        id D45DF2819; Thu,  3 Dec 2020 13:15:01 +0530 (IST)
+From:   Roja Rani Yarubandi <rojay@codeaurora.org>
+To:     broonie@kernel.org
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, swboyd@chromium.org,
+        dianders@chromium.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        akashast@codeaurora.org, msavaliy@qti.qualcomm.com,
+        Roja Rani Yarubandi <rojay@codeaurora.org>
+Subject: [PATCH] spi: spi-geni-qcom: Fix NULL pointer access in geni_spi_isr
+Date:   Thu,  3 Dec 2020 13:14:59 +0530
+Message-Id: <20201203074459.13078-1-rojay@codeaurora.org>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-X-OriginatorOrg: openfive.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR13MB4453.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c01b394d-a1d6-44ce-3428-08d89755c648
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Dec 2020 06:36:32.6136
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 22f88e9d-ae0d-4ed9-b984-cdc9be1529f1
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 16wh5RM7AeJwrfdaNzH5FqDOJqCJC2qQWCzXXIw+fJ+ZCD6mnZo4EFY9MNtJm1EZx1pa8xrGHNrJtoqhXPFKDQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR13MB4520
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Here, there is a chance of race condition occurrence which leads to
+NULL pointer dereference with struct spi_geni_master member 'cur_xfer'
+between setup_fifo_xfer() and handle_fifo_timeout() functions.
 
+Fix this race condition with guarding the 'cur_xfer' where it gets updated,
+with spin_lock_irq/spin_unlock_irq in setup_fifo_xfer() as we do in
+handle_fifo_timeout() function.
 
-> -----Original Message-----
-> From: Andrew Lunn <andrew@lunn.ch>
-> Sent: 02 December 2020 20:28
-> To: Yash Shah <yash.shah@openfive.com>
-> Cc: linux-spi@vger.kernel.org; linux-serial@vger.kernel.org; linux-
-> pwm@vger.kernel.org; linux-i2c@vger.kernel.org; linux-
-> kernel@vger.kernel.org; linux-riscv@lists.infradead.org;
-> devicetree@vger.kernel.org; linux-gpio@vger.kernel.org;
-> broonie@kernel.org; gregkh@linuxfoundation.org; aou@eecs.berkeley.edu;
-> lee.jones@linaro.org; u.kleine-koenig@pengutronix.de;
-> thierry.reding@gmail.com; peter@korsgaard.com; Paul Walmsley ( Sifive)
-> <paul.walmsley@sifive.com>; palmer@dabbelt.com; robh+dt@kernel.org;
-> bgolaszewski@baylibre.com; linus.walleij@linaro.org; Sachin Ghadi
-> <sachin.ghadi@openfive.com>
-> Subject: Re: [PATCH 1/4] dt-bindings: riscv: Update DT binding docs to
-> support SiFive FU740 SoC
->=20
-> [External Email] Do not click links or attachments unless you recognize t=
-he
-> sender and know the content is safe
->=20
-> > diff --git a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-> > b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-> > index 6b25a80..1966b2c 100644
-> > --- a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-> > +++ b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
-> > @@ -3,9 +3,11 @@ Device tree configuration for i2c-ocores  Required
-> > properties:
-> >  - compatible      : "opencores,i2c-ocores"
-> >                      "aeroflexgaisler,i2cmst"
-> > -                    "sifive,fu540-c000-i2c", "sifive,i2c0"
-> > +                    "sifive,<chip>-i2c", "sifive,i2c0"
->=20
-> Please make this a full list. At some point, this file will get turned in=
-to yaml, at
-> which point substitution like this will need expanding. It is better to d=
-o that
-> now.
+Call trace:
+ geni_spi_isr+0x114/0x34c
+ __handle_irq_event_percpu+0xe0/0x23c
+ handle_irq_event_percpu+0x34/0x8c
+ handle_irq_event+0x48/0x94
+ handle_fasteoi_irq+0xd0/0x140
+ __handle_domain_irq+0x8c/0xcc
+ gic_handle_irq+0x114/0x1dc
+ el1_irq+0xcc/0x180
+ geni_spi a80000.spi: Failed to cancel/abort m_cmd
+ dev_watchdog+0x348/0x354
+ call_timer_fn+0xc4/0x220
+ __run_timers+0x228/0x2d4
+ spi_master spi6: failed to transfer one message from queue
+ run_timer_softirq+0x24/0x44
+ __do_softirq+0x16c/0x344
+ irq_exit+0xa8/0xac
+ __handle_domain_irq+0x94/0xcc
+ gic_handle_irq+0x114/0x1dc
+ el1_irq+0xcc/0x180
+ cpuidle_enter_state+0xf8/0x204
+ cpuidle_enter+0x38/0x4c
+ cros-ec-spi spi6.0: spi transfer failed: -110
+ ...
 
-Ok sure, will do that in patch v2.
+Fixes: 2ee471a1e28e ("spi: spi-geni-qcom: Mo' betta locking")
+Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
+---
+ drivers/spi/spi-geni-qcom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-- Yash
+diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+index 25810a7eef10..e65d6676602b 100644
+--- a/drivers/spi/spi-geni-qcom.c
++++ b/drivers/spi/spi-geni-qcom.c
+@@ -457,7 +457,6 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
+ 		len = xfer->len / (mas->cur_bits_per_word / BITS_PER_BYTE + 1);
+ 	len &= TRANS_LEN_MSK;
+ 
+-	mas->cur_xfer = xfer;
+ 	if (xfer->tx_buf) {
+ 		m_cmd |= SPI_TX_ONLY;
+ 		mas->tx_rem_bytes = xfer->len;
+@@ -475,6 +474,7 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
+ 	 * interrupt could come in at any time now.
+ 	 */
+ 	spin_lock_irq(&mas->lock);
++	mas->cur_xfer = xfer;
+ 	geni_se_setup_m_cmd(se, m_cmd, FRAGMENTATION);
+ 
+ 	/*
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+of Code Aurora Forum, hosted by The Linux Foundation
 
->=20
->      Andrew
