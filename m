@@ -2,102 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8B72CD08B
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Dec 2020 08:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B5E2CD0BE
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Dec 2020 09:05:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727692AbgLCHqJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Dec 2020 02:46:09 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:30312 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725912AbgLCHqI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Dec 2020 02:46:08 -0500
-Received: from ironmsg07-lv.qualcomm.com (HELO ironmsg07-lv.qulacomm.com) ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 02 Dec 2020 23:45:27 -0800
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg07-lv.qulacomm.com with ESMTP/TLS/AES256-SHA; 02 Dec 2020 23:45:26 -0800
-X-QCInternal: smtphost
-Received: from c-rojay-linux.qualcomm.com ([10.206.21.80])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 03 Dec 2020 13:15:02 +0530
-Received: by c-rojay-linux.qualcomm.com (Postfix, from userid 88981)
-        id D45DF2819; Thu,  3 Dec 2020 13:15:01 +0530 (IST)
-From:   Roja Rani Yarubandi <rojay@codeaurora.org>
-To:     broonie@kernel.org
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, swboyd@chromium.org,
-        dianders@chromium.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        akashast@codeaurora.org, msavaliy@qti.qualcomm.com,
-        Roja Rani Yarubandi <rojay@codeaurora.org>
-Subject: [PATCH] spi: spi-geni-qcom: Fix NULL pointer access in geni_spi_isr
-Date:   Thu,  3 Dec 2020 13:14:59 +0530
-Message-Id: <20201203074459.13078-1-rojay@codeaurora.org>
-X-Mailer: git-send-email 2.29.0
+        id S1729917AbgLCIDv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Dec 2020 03:03:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43960 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726451AbgLCIDv (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 3 Dec 2020 03:03:51 -0500
+Date:   Thu, 3 Dec 2020 08:02:40 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1606982590;
+        bh=3WNTeY4jXrQb/zwGcpPko0lS4saBdyJwWL+052R9QOY=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fEwo2wDaiWy1mWXQlH/jLj+TSFEXeYaexFq7JPUPexGbTD8ZFcD3QKpyLPnSJf8yI
+         y8PEegg3NvchptSE8npvhoYR7/TvL2cyuVc++Vkw/OhrB9PZLVTXOSS1vUVM/jtCOC
+         Jo2eT+yHPFDBxGHJtgq0vbM4I1NzWj7oBJN10VENUi5UJUo909teEfrpR3+ybRrEWZ
+         VjnzV2/Ub4WP1Iuaguo759y5B9975bmbpY3CDuRGixABOAxbz1vszBYTCBg8IvVzBW
+         oa3uUM9DgWqzjXGVE94qXlXnR5IxZKtiggeEzaEtXa67wMti+vGEMYhwCEWJKY5VDH
+         7Jd3Yy38EzI9w==
+From:   Mark Brown <broonie@kernel.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Maxim Kochetkov <fido_max@inbox.ru>, linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spi: spi-fsl-dspi: Use max_native_cs instead of
+ num_chipselect to set SPI_MCR
+Message-ID: <20201203080240.GA4700@sirena.org.uk>
+References: <20201201085916.63543-1-fido_max@inbox.ru>
+ <160683107678.35139.1439064414776102118.b4-ty@kernel.org>
+ <e19002f8-a8a8-6201-6680-ef0b586c6367@inbox.ru>
+ <20201202142220.GE5560@sirena.org.uk>
+ <20201202235534.ksbpj6wfp7vkkwm2@skbuf>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="MGYHOYXEY6WxJCY8"
+Content-Disposition: inline
+In-Reply-To: <20201202235534.ksbpj6wfp7vkkwm2@skbuf>
+X-Cookie: Sacred cows make great hamburgers.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Here, there is a chance of race condition occurrence which leads to
-NULL pointer dereference with struct spi_geni_master member 'cur_xfer'
-between setup_fifo_xfer() and handle_fifo_timeout() functions.
 
-Fix this race condition with guarding the 'cur_xfer' where it gets updated,
-with spin_lock_irq/spin_unlock_irq in setup_fifo_xfer() as we do in
-handle_fifo_timeout() function.
+--MGYHOYXEY6WxJCY8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Call trace:
- geni_spi_isr+0x114/0x34c
- __handle_irq_event_percpu+0xe0/0x23c
- handle_irq_event_percpu+0x34/0x8c
- handle_irq_event+0x48/0x94
- handle_fasteoi_irq+0xd0/0x140
- __handle_domain_irq+0x8c/0xcc
- gic_handle_irq+0x114/0x1dc
- el1_irq+0xcc/0x180
- geni_spi a80000.spi: Failed to cancel/abort m_cmd
- dev_watchdog+0x348/0x354
- call_timer_fn+0xc4/0x220
- __run_timers+0x228/0x2d4
- spi_master spi6: failed to transfer one message from queue
- run_timer_softirq+0x24/0x44
- __do_softirq+0x16c/0x344
- irq_exit+0xa8/0xac
- __handle_domain_irq+0x94/0xcc
- gic_handle_irq+0x114/0x1dc
- el1_irq+0xcc/0x180
- cpuidle_enter_state+0xf8/0x204
- cpuidle_enter+0x38/0x4c
- cros-ec-spi spi6.0: spi transfer failed: -110
- ...
+On Thu, Dec 03, 2020 at 01:55:34AM +0200, Vladimir Oltean wrote:
+> On Wed, Dec 02, 2020 at 02:22:20PM +0000, Mark Brown wrote:
 
-Fixes: 2ee471a1e28e ("spi: spi-geni-qcom: Mo' betta locking")
-Signed-off-by: Roja Rani Yarubandi <rojay@codeaurora.org>
----
- drivers/spi/spi-geni-qcom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > If the patch isn't actually applied then yes.
 
-diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-index 25810a7eef10..e65d6676602b 100644
---- a/drivers/spi/spi-geni-qcom.c
-+++ b/drivers/spi/spi-geni-qcom.c
-@@ -457,7 +457,6 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
- 		len = xfer->len / (mas->cur_bits_per_word / BITS_PER_BYTE + 1);
- 	len &= TRANS_LEN_MSK;
- 
--	mas->cur_xfer = xfer;
- 	if (xfer->tx_buf) {
- 		m_cmd |= SPI_TX_ONLY;
- 		mas->tx_rem_bytes = xfer->len;
-@@ -475,6 +474,7 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
- 	 * interrupt could come in at any time now.
- 	 */
- 	spin_lock_irq(&mas->lock);
-+	mas->cur_xfer = xfer;
- 	geni_se_setup_m_cmd(se, m_cmd, FRAGMENTATION);
- 
- 	/*
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
+> Do you frequently send out emails that you've applied a patch and then
+> not apply it?
 
+There was an issue the other day where b4 had a bug which caused it to
+send out mails for everything it had in its database, including things
+I'd downloaded to test but not applied for whatever reason.
+
+--MGYHOYXEY6WxJCY8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/Im58ACgkQJNaLcl1U
+h9DdBAf/Sg7ClD4AUrPDo4819Z0oEpBqfxr8doNZK0ApaZH7GQ+z7U4SsVWXfX9K
+uxAsfjHxeVHxR+1XrRXZxXH3zrAGjrr8O8LrPDjDPGmjTdF/xliwCnTuvXuOi+RI
+buKmy6MMhZqqSHW7OSNdKbeiF8w2VljYiH1Ru9SI7LeiO/+6oIwRRKRGn4vX+SbD
+ven8DqwaSnpgG8MpckmL9osM0Xq8zUNpDHzARb0T6KfTsZvUxkSFnzJzrG6ccbX0
++5G+5WfIHlkxKR41pGgm3in/5l0SruIG59eRq+vIn5JZ3aWKPbojvRYNFbaau869
+uJ7+5tNehqvPSXcE8R9TehXPtMfm3g==
+=pl6Q
+-----END PGP SIGNATURE-----
+
+--MGYHOYXEY6WxJCY8--
