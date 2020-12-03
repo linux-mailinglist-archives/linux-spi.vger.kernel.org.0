@@ -2,97 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC522CDCBC
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Dec 2020 18:51:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C8E2CDE05
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Dec 2020 19:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731390AbgLCRvP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Dec 2020 12:51:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
+        id S1726658AbgLCSu5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Dec 2020 13:50:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731330AbgLCRvN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Dec 2020 12:51:13 -0500
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65083C061A52;
-        Thu,  3 Dec 2020 09:50:27 -0800 (PST)
-Received: by mail-ed1-x541.google.com with SMTP id ck29so3018001edb.8;
-        Thu, 03 Dec 2020 09:50:27 -0800 (PST)
+        with ESMTP id S1725973AbgLCSu5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Dec 2020 13:50:57 -0500
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D20C061A4E;
+        Thu,  3 Dec 2020 10:50:17 -0800 (PST)
+Received: by mail-pj1-x1042.google.com with SMTP id b12so1651080pjl.0;
+        Thu, 03 Dec 2020 10:50:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=f/lU7wZvUZo1FXkT5r4NrXSCYN/0Xgw0B9cmSE39UdA=;
-        b=ZIrdH97CEuLYgmMBy23rE/QGKt+bIHisjsPFuKIE7wUvYV3UZFNVEhzsNg1prn/CYg
-         Sx+XjGfJnLksyoxByA08Tt86UCiamtth3ueqtTX34kokrB9JwOOMtq5POZ2Zw6Su/7aq
-         uPWhBxRIsrMjAS7wmJJU+ZE18TmWgb4RcxvJBboJCcjcc+aGc9fUTfb78MDX7WiN9A4V
-         WwXRvirp7LKRx8eEWA4HUsV7Nd2QrZg15ajBOsgy/AGi37XTs1sq8kWFOF/1RUnMTstt
-         aeB48LVWJzamq2NvARiHyUNDnIb1uztkt86aJDcTGuaxI8KlB+fcMwpKIUBuOJKRdZd4
-         x6SQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=5ctpCj7P2N5pzu+fYpWrqNY9UojjAbaSvtU9KocPQxw=;
+        b=lzbZQHAeImJ0w49ZMV6seVpjt0BMMh7VykbsywQGdlNL4xOPD0rWhhxg33853scsN3
+         o+CO7ucqRf7dMXrqIPqEtcbuvIP9zYScC0YxQk7XoWPzdoCCYJhjzxh8H/kapeY8YOH4
+         xbbofxUq/v5RTED/GHzjiQia2Lz7ht7HZPb0gkTB0zRv4jI5Vd38NW/49lptNTgG4Qp8
+         Zy9c/WE7b726xJXDo3Kwc1nbXRHljljjmVICo+XsG/AGLxutP2potFcqnBhUxHVmu6JM
+         uuUjzu8fp158WDYDAT0WArfrgHcukgRqLBVGFy3fVy2vQilpZfFnU5G3cig2xX8modIb
+         zHIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=f/lU7wZvUZo1FXkT5r4NrXSCYN/0Xgw0B9cmSE39UdA=;
-        b=lWlEau2AUyin7r1II56WgZj+wMyaGH9G3fy4lDXBz4N9pp2C9NImTnyx+M08wAFKsq
-         FXeCUGuM1duq7G+BxaZyY2zHtaEUYKRvoSb6+cysl7krAtNUZqBzVLULFfZOfkwpoAak
-         5K0An075w7epiDmE6z80n+MYRp3FsQetOfEHhHiRXLe0P0J7ZSpq+qiVz99zBhkFFwRg
-         h+yYRi7MThligzHUEIU5wqt0jF6vQdHojiRjfvrP7qbsx9vPZGHCVL6l45jz5Dcu3EUA
-         v6wUrt+qlxtHiQBZIOMfcFK/4bJbPi1AYb3qnkk/T5kbDlxc9GBcLQ7hsDR6xLWOiikr
-         JtHQ==
-X-Gm-Message-State: AOAM532Z8tY4M7r+HTtEpcokK9QPkeYAwSpvSau3jdgBumou310Jy1u8
-        pJbv2YuDfCeWfeOsxbk2lnfvHODBz7E=
-X-Google-Smtp-Source: ABdhPJwR6NWvGHwhc1bjgyRw9T3sLWlEraTCh5wKTlRR0UCa9FJmDVEgcg02OADiU5aky/CUj3whRA==
-X-Received: by 2002:a50:d6c6:: with SMTP id l6mr3958749edj.80.1607017826093;
-        Thu, 03 Dec 2020 09:50:26 -0800 (PST)
-Received: from skbuf ([188.25.2.120])
-        by smtp.gmail.com with ESMTPSA id r9sm1291588ejd.38.2020.12.03.09.50.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Dec 2020 09:50:25 -0800 (PST)
-Date:   Thu, 3 Dec 2020 19:50:24 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?0JzQsNC60YHQuNC8INCa0LjRgdC10LvRkdCy?= 
-        <bigunclemax@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5ctpCj7P2N5pzu+fYpWrqNY9UojjAbaSvtU9KocPQxw=;
+        b=knY77jgna14HFLUsG4whXVaMLeh8Lj1JXhHhw2ywDqbE0O6LuJnnMBnYdrCk79/rq7
+         8ZK97Fy63EeUZdU+HWk+3i+E0UkQYB0vdQyL+UIhwZ/u7QGSLZ5KFzkM1CoarhJqY8EY
+         eYXZPSCb+vQmeD7+W7LUW9bPx7ajKANsjfGM89TFhEJSK9+EdGe/GwgiAIJ8Lf3sO4g+
+         O2zq7rFGGeFb8QIdKERASv9pYKS//JWEEI5dzv4wyesf4JhDA14kp2jZMbGaCjXAvGXm
+         n3BtYIydVHeMWXFcopJJhghsWHe1m71gWFL0Z/2ei+9YIXyvRVEu2wcmJ4wlEIOL39bq
+         NrmA==
+X-Gm-Message-State: AOAM5329+9/ytPPu1Cmh17Q0tCN7kD/rfWQVBHGn1gF+pCVDwx0dK1Qr
+        K08D0QyNYdoiCnbwCu8ZSyhC1qAIdriPRZxNYfk=
+X-Google-Smtp-Source: ABdhPJw3uaQiAD4jl7qanldOYLTQVY2F1Ew1N2Vl5CpR0dnbn2Mmc2v+Oipvc6q5cQgDJo2YLjaBMX1Tec02DxLqc/c=
+X-Received: by 2002:a17:902:ab83:b029:d8:d979:f083 with SMTP id
+ f3-20020a170902ab83b02900d8d979f083mr340719plr.84.1607021415167; Thu, 03 Dec
+ 2020 10:50:15 -0800 (PST)
+MIME-Version: 1.0
+References: <CALHCpMgQPDqV1tB6v0sA0imwfZGkoG_j84NZCehOT1pf8MTuCA@mail.gmail.com>
+ <20201203175024.hzivclydoxp6txir@skbuf>
+In-Reply-To: <20201203175024.hzivclydoxp6txir@skbuf>
+From:   Maksim Kiselev <bigunclemax@gmail.com>
+Date:   Thu, 3 Dec 2020 21:50:04 +0300
+Message-ID: <CALHCpMgmdfScVhWKhhtisZ=-rf0wS8CujDoVWBJ8qkL_OXGu1g@mail.gmail.com>
+Subject: Re: [PATCH] spi: spi-fsl-dspi: Add GPIO chip select support
+To:     Vladimir Oltean <olteanv@gmail.com>
 Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org, Maxim Kochetkov <fido_max@inbox.ru>
-Subject: Re: [PATCH] spi: spi-fsl-dspi: Add GPIO chip select support
-Message-ID: <20201203175024.hzivclydoxp6txir@skbuf>
-References: <CALHCpMgQPDqV1tB6v0sA0imwfZGkoG_j84NZCehOT1pf8MTuCA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALHCpMgQPDqV1tB6v0sA0imwfZGkoG_j84NZCehOT1pf8MTuCA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Maxim,
+Hi Vladimir, thanks for the answer!
 
-On Thu, Dec 03, 2020 at 08:12:19PM +0300, Максим Киселёв wrote:
-> From: Maxim Kiselev <bigunclemax@gmail.com>
-> Date: Thu, 3 Dec 2020 18:56:12 +0300
-> Subject: [PATCH] spi: spi-fsl-dspi: Add GPIO chip select support
-> 
-> This patch allows use of GPIO for the chip select.
-> Because dSPI controller can't send transactions without hardware chip
-> selects, so first unused native CS will be set in SPI_PUSHR_CMD_PCS
+I must have missed these. In any case, I would like to add
+functionality for using GPIO as CS. Because I have a board which
+actually uses this. I'II check your solution and modify my patch.
 
-Are you sure?
-
-From the reference manual:
-
-SPIx_PUSHR bits 10–15 PCS:
-Select which PCS signals are to be asserted for the transfer. Refer to
-the chip-specific SPI information for the number of PCS signals used in
-this chip.
-0 Negate the PCS[x] signal.
-1 Assert the PCS[x] signal.
-
-And the definition is:
-
-#define SPI_PUSHR_CMD_PCS(x)		(BIT(x) & GENMASK(5, 0))
-
-Notice the BIT(x).
-
-I expect that you can set the PCS to 0 and no hard chip select will
-assert.
+=D1=87=D1=82, 3 =D0=B4=D0=B5=D0=BA. 2020 =D0=B3. =D0=B2 20:50, Vladimir Olt=
+ean <olteanv@gmail.com>:
+>
+> Hi Maxim,
+>
+> On Thu, Dec 03, 2020 at 08:12:19PM +0300, =D0=9C=D0=B0=D0=BA=D1=81=D0=B8=
+=D0=BC =D0=9A=D0=B8=D1=81=D0=B5=D0=BB=D1=91=D0=B2 wrote:
+> > From: Maxim Kiselev <bigunclemax@gmail.com>
+> > Date: Thu, 3 Dec 2020 18:56:12 +0300
+> > Subject: [PATCH] spi: spi-fsl-dspi: Add GPIO chip select support
+> >
+> > This patch allows use of GPIO for the chip select.
+> > Because dSPI controller can't send transactions without hardware chip
+> > selects, so first unused native CS will be set in SPI_PUSHR_CMD_PCS
+>
+> Are you sure?
+>
+> From the reference manual:
+>
+> SPIx_PUSHR bits 10=E2=80=9315 PCS:
+> Select which PCS signals are to be asserted for the transfer. Refer to
+> the chip-specific SPI information for the number of PCS signals used in
+> this chip.
+> 0 Negate the PCS[x] signal.
+> 1 Assert the PCS[x] signal.
+>
+> And the definition is:
+>
+> #define SPI_PUSHR_CMD_PCS(x)            (BIT(x) & GENMASK(5, 0))
+>
+> Notice the BIT(x).
+>
+> I expect that you can set the PCS to 0 and no hard chip select will
+> assert.
