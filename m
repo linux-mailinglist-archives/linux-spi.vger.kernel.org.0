@@ -2,46 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E27F2CD2D9
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Dec 2020 10:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 694872CD3B6
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Dec 2020 11:35:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730161AbgLCJsv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Dec 2020 04:48:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33570 "EHLO mail.kernel.org"
+        id S2388965AbgLCKdk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Dec 2020 05:33:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33886 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728900AbgLCJsu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 3 Dec 2020 04:48:50 -0500
-Date:   Thu, 3 Dec 2020 09:47:39 +0000
+        id S2388608AbgLCKdi (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 3 Dec 2020 05:33:38 -0500
+Date:   Thu, 3 Dec 2020 10:32:27 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1606988889;
-        bh=5X99CjF/w6FuCzH9ST9VSYb0yNBNDgAFDj6aEVF7hRE=;
+        s=k20201202; t=1606991577;
+        bh=43yNdax6pGHrO0BTp2xJ0YBAHuZmVV9Ah1L6cygJuMU=;
         h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aROK9D3oy/hXocbzQlxP1a9VxjKCwjp/rA+Azd9Jw16exRpgg5LyekFUUki7Nwy7o
-         Ajlr9geQHGbW0V0AOHJBExkMQnyr2DGGVEnkCSI+tlsy6z79sAz9QRmgaldF9iRxuN
-         JIn/A3HobTBLeGCpiPRcsPjOwp1Q27FV70dlUtx3BfU02hXJflgjnErfNZDu9pncGZ
-         8SzUeszP5AgPLA0U8QCzJpV+jm6V/IFc1YY8RG59R/qlhJ46dZJqdQiLF8/4E2ODB2
-         cbQ2dYorXPvmgcIsSPPujZZWmRYVtU4tvQAd3eMOhHcDInfnLWs9eDbrggoutcN0/k
-         VAjvo2k1EiD9g==
+        b=RNUgwCHMYUgjhrvu5Ze9nx9Prvgbl95hJ+4WEeXVeuh9jqHmetJY9lgIg17dQDyFO
+         J3XOiC68vEB9GfEGK8nUzLnbrroIZTiRqc+9tah/cO4DWnXm8wcmaaqjw8kBME2o+V
+         PLQV9D0DSnG+3gAY1fBep5BABJ/Xqt1IYdftBO4/NjonpKhNEhZBq+KWyo5VX8XjeK
+         9qdV2pHC3AJ3CiQtS9ebm+wMPONbSY1r/QQ0DzMB2yPIeumKROIrguVG/njTNK1AOk
+         prOAiZlmlqds7QlSLaj4xO8OhfSB4IidcNklQLwIgmRIbde3e6x0rJKrBQuNKyp6Mc
+         vqaDydV5/4g+w==
 From:   Mark Brown <broonie@kernel.org>
-To:     "Ardelean, Alexandru" <alexandru.Ardelean@analog.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Boris Brezillon <bbrezillon@kernel.org>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-spi@vger.kernel.org,
         devicetree <devicetree@vger.kernel.org>,
+        =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Bogdan, Dragos" <Dragos.Bogdan@analog.com>
-Subject: Re: [PATCH v3 2/3] spi: Add SPI_NO_TX/RX support
-Message-ID: <20201203094739.GB4700@sirena.org.uk>
-References: <20201127130834.136348-1-alexandru.ardelean@analog.com>
- <20201127130834.136348-2-alexandru.ardelean@analog.com>
- <CAHp75Vcd4t=RqC31S-b1PXMtd=8sypSLhTrSgRD9hbpSqOphoQ@mail.gmail.com>
- <CAHp75VctXhpyBVB7Zw+SB5LiGcj6r850x+ehL7u2H0R4=y5rVw@mail.gmail.com>
- <CY4PR03MB29661063937AD783F6B2A010F9F20@CY4PR03MB2966.namprd03.prod.outlook.com>
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        BMC-SW <BMC-SW@aspeedtech.com>
+Subject: Re: [v2 0/4] Porting ASPEED FMC/SPI memory controller driver
+Message-ID: <20201203103227.GC4700@sirena.org.uk>
+References: <20201103072202.24705-1-chin-ting_kuo@aspeedtech.com>
+ <160683107674.35139.14509237313835347013.b4-ty@kernel.org>
+ <CACPK8Xe4TcRVBnZL7vtqGq1PTe5NEx1k4hvk4FDeYgJQ9HALFg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hHWLQfXTYDoKhP50"
+        protocol="application/pgp-signature"; boundary="ZmUaFz6apKcXQszQ"
 Content-Disposition: inline
-In-Reply-To: <CY4PR03MB29661063937AD783F6B2A010F9F20@CY4PR03MB2966.namprd03.prod.outlook.com>
+In-Reply-To: <CACPK8Xe4TcRVBnZL7vtqGq1PTe5NEx1k4hvk4FDeYgJQ9HALFg@mail.gmail.com>
 X-Cookie: Sacred cows make great hamburgers.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
@@ -49,49 +50,34 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---hHWLQfXTYDoKhP50
+--ZmUaFz6apKcXQszQ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Thu, Dec 03, 2020 at 08:20:57AM +0000, Ardelean, Alexandru wrote:
+On Wed, Dec 02, 2020 at 09:19:47PM +0000, Joel Stanley wrote:
+> On Tue, 1 Dec 2020 at 13:58, Mark Brown <broonie@kernel.org> wrote:
 
-> > > > @@ -43,5 +43,7 @@
-> > > >  #define        SPI_TX_OCTAL            0x2000          /* transmit with 8 wires */
-> > > >  #define        SPI_RX_OCTAL            0x4000          /* receive with 8 wires */
-> > > >  #define        SPI_3WIRE_HIZ           0x8000          /* high impedance turnaround
-> > */
-> > > > +#define        SPI_NO_TX               0x10000         /* no transmit wire */
-> > > > +#define        SPI_NO_RX               0x20000         /* no receive wire */
+> > Applied to
+> >
+> >    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-> > > Is it really material for uAPI?
-> > > Perhaps we may have something like
-> > > SPI_MODE_USER_MASK in uAPI and
-> > > in internal headers
+> Really? Or is there a bug in one of your scripts :)
 
-> Hmm, in a way this could make sense for some SPIDEVs as well, to set these flags and get an error if they try to TX with the NO_TX flag set.
-> Not really sure about this.
-> Initially I mechanically added these here as an inertia to the previous patch which is just unifying the headers.
+Not my scripts, b4!
 
-> Any other opinions? Thoughts?
-> Mark?
-
-spidev is hacky at the best of times...  It *is* probably better to only
-have the usefully mainpulable modes exposed in uapi and then define the
-rest internally though.
-
---hHWLQfXTYDoKhP50
+--ZmUaFz6apKcXQszQ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/ItDoACgkQJNaLcl1U
-h9Ckwgf/VrYn5fwTeqHxZl9gZCMMNNATL4F7b+ly/CACve6HcvslrstmDsD7tOoV
-+wKtnrhgYWzqwHpNzk1ts5IBZSq37RDXbbvylJ/DfWLQLelRYR5ZLrWyThtXnCHP
-uBqM/YppX3AqWLfIAcwObA+QHzLhoxvVOIeMx2cOJrbYZN/5vg/BwvIucZ5aSAvU
-Tv+0HRVGTKG7Ul4CJKnxthqjjr2R3xu+oscuTymdibWSU0yYslpIicdkn13179ZK
-wDzRNXVmaJUPMn5vBSfgHh/GFe9P7287bhf5FksmN2HMkD8p9ZjCrUNDt4g4oVKg
-GJPCc7X4m35E6fZch0J4YViffIvvAA==
-=SB4J
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/IvrsACgkQJNaLcl1U
+h9CS2wf+JYv7MdfNnO9GFIy0AVuTJlRHvbhFYMX35CrKtG3bCDbrHP/9CgwE3NCP
+dv5bms58wdNxCvRtu180AHxs2pVBIZKYFIgIIiNayARpwxqupKFr6qMTGHtx76bR
+hu4n8ErziSlUzhfnTKsl9eB3DjKoYq5f6hyibKQvElzv72wjyeO21B/ME8x6CBiV
+8UGAYjhXnuuu+ovTvKUCp6cTgPrPJ/PVu2rFB//hTj3BxxAhMgUve9Wye6o3TRpC
+mQETkDnHgCPtrVHl0zqDK8LusqGDLf9hZ6FEM6DHC1HgMGizKlVaH2GceMJHFfd2
+pOFCbLwEik6HfoDBjv3wd8NWY7uhiQ==
+=7doF
 -----END PGP SIGNATURE-----
 
---hHWLQfXTYDoKhP50--
+--ZmUaFz6apKcXQszQ--
