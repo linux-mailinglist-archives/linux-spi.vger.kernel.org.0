@@ -2,64 +2,171 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2B62CCDFB
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Dec 2020 05:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C85EB2CCF95
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Dec 2020 07:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727670AbgLCEkJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 2 Dec 2020 23:40:09 -0500
-Received: from smtp33.i.mail.ru ([94.100.177.93]:51494 "EHLO smtp33.i.mail.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727309AbgLCEkI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 2 Dec 2020 23:40:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru; s=mail3;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=QvBzXi8qwcgCy4r2tg9JsYzcMug0+tOAx69fgU6vtLI=;
-        b=UUWJyFSBjxQjulnkPBz5J0tZVgEJw6Cn55fcyBq+wyKOpvtoSbCjdDUSSZE7XD9ZPBrfZytJ63fYSTR673862ZWciJU3YV2nETH6yYhXwpg4tM9RCHFW9BQiH3mPkH/m3x3Y8Pru7FH20/602HGxdqSXug64hqekSs4zdsg2Ri0=;
-Received: by smtp33.i.mail.ru with esmtpa (envelope-from <fido_max@inbox.ru>)
-        id 1kkgOm-00087b-ER; Thu, 03 Dec 2020 07:39:20 +0300
-Subject: Re: [PATCH] spi: spi-fsl-dspi: Use max_native_cs instead of
- num_chipselect to set SPI_MCR
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     broonie@kernel.org, linux-spi@vger.kernel.org
-References: <20201202142552.44385-1-fido_max@inbox.ru>
- <20201202235728.jihjacbuo2362f6v@skbuf>
-From:   Maxim Kochetkov <fido_max@inbox.ru>
-Message-ID: <f0fa00dc-292b-382d-7513-892b5a497759@inbox.ru>
-Date:   Thu, 3 Dec 2020 07:40:15 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
-MIME-Version: 1.0
-In-Reply-To: <20201202235728.jihjacbuo2362f6v@skbuf>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S2387493AbgLCGh1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Dec 2020 01:37:27 -0500
+Received: from mail-mw2nam12on2077.outbound.protection.outlook.com ([40.107.244.77]:55649
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727908AbgLCGh0 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 3 Dec 2020 01:37:26 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CrY8CXsCXuqRCcVRedrhnrAjAfFDEP9h4NMUTxVAdw3I6eTrcUsNras8hLDnLevV74MHz8MXKGEe7sfSfRsr2XwGj3k7StaqTPTlo/IR5NYH4r8BsX20rkvpy9nMafC2QkIZjbJ8DAd5A84DO3v2o9M8c1oZOKuXrO+vbeyE3EWFFR6zztgppSg6/icluFEPmOTQj5bzJ12QTjOU1AWXwXw1GAnpc7AOEUWXuACFNzZFGz6zbTQqun7rg+X28JqjlwP/6nDqfbG0hf1WgjW0is4NKjFBymVUD7Z0zblStQfdLqXD45OxEyu2+N98mcwThSMvWcvhB4vPVHLXyqb2mw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2RztgGnOW09w3RsugC599Ue61IRnRdky32cOFPWSVrY=;
+ b=oJy2tImu0bM3lGqip9wVhvyCVUmiqog8ijblj0CRY5UETgYbNupV9yBmjiG4/7634eOJ2Mbbz1bNFlNkd1iLcEOKDzwgVyW/DNeoOhHhH3uBVwYc8FJKCkF7iR5mxRU8UPTHr+C5Nv+O3z/Pu5MefV8gPzbXzRZ1z5nZEn93STu8CPUA5HSZoxmRZ4x4OZf8vr0NdxAFzeNYNdwEt1uEjhFOte7LsAT4nXzknv7Ng5TRuH3NrnrNxJh63WMcsXjmW51v+3YDB84fBAJkqizcjh1yp+6/rBQmJCcdpazr/aTVSnkmcQRTwu3yi/j2dpwl1gFMnXe4FMbzERZlrorZZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=openfive.com; dmarc=pass action=none header.from=openfive.com;
+ dkim=pass header.d=openfive.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=osportal.onmicrosoft.com; s=selector2-osportal-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2RztgGnOW09w3RsugC599Ue61IRnRdky32cOFPWSVrY=;
+ b=IvOcrzSTjnBdL62IPGdKUclH4KfStoAg2D5IOs3fkWNOdMpIxfBs1IXaGiZFbvbZ6EJJu/zFEv1rtUeqf5Z6a84rTqcR1biljPBiYgXAkTC7IZnbf0N/EUi1xlCzQ3bGg3pE9CDNITwWUAC5X2IDOpe6vrLW8C3+IWjeciu466s=
+Received: from BY5PR13MB4453.namprd13.prod.outlook.com (2603:10b6:a03:1d1::19)
+ by BY5PR13MB4520.namprd13.prod.outlook.com (2603:10b6:a03:1d3::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.6; Thu, 3 Dec
+ 2020 06:36:32 +0000
+Received: from BY5PR13MB4453.namprd13.prod.outlook.com
+ ([fe80::7c13:1ac6:9f2a:5eae]) by BY5PR13MB4453.namprd13.prod.outlook.com
+ ([fe80::7c13:1ac6:9f2a:5eae%8]) with mapi id 15.20.3654.005; Thu, 3 Dec 2020
+ 06:36:32 +0000
+From:   Yash Shah <yash.shah@openfive.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "peter@korsgaard.com" <peter@korsgaard.com>,
+        "Paul Walmsley ( Sifive)" <paul.walmsley@sifive.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        Sachin Ghadi <sachin.ghadi@openfive.com>
+Subject: RE: [PATCH 1/4] dt-bindings: riscv: Update DT binding docs to support
+ SiFive FU740 SoC
+Thread-Topic: [PATCH 1/4] dt-bindings: riscv: Update DT binding docs to
+ support SiFive FU740 SoC
+Thread-Index: AQHWyIHBGfYvEaJ6f0qSdKOZggdFCqnj5iWAgAEFz3A=
+Date:   Thu, 3 Dec 2020 06:36:32 +0000
+Message-ID: <BY5PR13MB4453B21AD0714272B39B375982F20@BY5PR13MB4453.namprd13.prod.outlook.com>
+References: <1606896236-62780-1-git-send-email-yash.shah@sifive.com>
+ <1606896236-62780-2-git-send-email-yash.shah@sifive.com>
+ <20201202145823.GC2324545@lunn.ch>
+In-Reply-To: <20201202145823.GC2324545@lunn.ch>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-Authentication-Results: smtp33.i.mail.ru; auth=pass smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-X-7564579A: 646B95376F6C166E
-X-77F55803: 4F1203BC0FB41BD913934B9F4F77822879238875636E12E80216BDF6A1F8E85C00894C459B0CD1B9914EA9B8EE230D1403F84FF3DE0059214E61F2C6E0D3C2FD31DEC98D3E96EC86
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7E9C30BC00893CB9AEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637EEA194BB48C104EF8638F802B75D45FF5571747095F342E8C7A0BC55FA0FE5FC2E9C86658F9FA5FE026B5D34646F77B93AFB9CE77B5CF27B389733CBF5DBD5E913377AFFFEAFD269176DF2183F8FC7C0A3E989B1926288338941B15DA834481FCF19DD082D7633A0E7DDDDC251EA7DABA471835C12D1D977725E5C173C3A84C34964A708C60C975A117882F4460429728AD0CFFFB425014E1D3B0F1236BFD7A076E601842F6C81A19E625A9149C048EE7B96B19DC40933211133410A2FE6C23AD8FC6C240DEA76429449624AB7ADAF37B2D370F7B14D4BC40A6AB1C7CE11FEE3C824672CB62AFFF29735652A29929C6CC4224003CC8364768BB5CB66B4D4C327A7F4EDE966BC389F9E8FC8737B5C22497A1503C2FF388B9B089D37D7C0E48F6CCF19DD082D7633A0E7DDDDC251EA7DABAAAE862A0553A39223F8577A6DFFEA7C46FB19369A11121443847C11F186F3C5E7DDDDC251EA7DABCC89B49CDF41148FA8EF81845B15A4842623479134186CDE6BA297DBC24807EABDAD6C7F3747799A
-X-C1DE0DAB: 0D63561A33F958A5BF51C7170A01D844F38BC33CEFF363F782CE54B1941735D1D59269BC5F550898D99A6476B3ADF6B47008B74DF8BB9EF7333BD3B22AA88B938A852937E12ACA75363A6695AA4CE4EF410CA545F18667F91A7EA1CDA0B5A7A0
-X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC444B13AA3CD6011C2E7B58BE4DC98E85AEFC8D8A905522F76A1C42CD26C19EC2A01248E331D56036872CF105D688DC0BF
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2bioj8a0f6CGnvE5hckXJJIjmpw==
-X-Mailru-Sender: 11C2EC085EDE56FA9C10FA2967F5AB24FB4D22226A7E8427D3C85F71B5F38861756B73AC4C353EEBEE9242D420CFEBFD3DDE9B364B0DF2891A624F84B2C74EDA4239CF2AF0A6D4F80DA7A0AF5A3A8387
-X-Mras: Ok
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: lunn.ch; dkim=none (message not signed)
+ header.d=none;lunn.ch; dmarc=none action=none header.from=openfive.com;
+x-originating-ip: [103.109.13.228]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c01b394d-a1d6-44ce-3428-08d89755c648
+x-ms-traffictypediagnostic: BY5PR13MB4520:
+x-ld-processed: 22f88e9d-ae0d-4ed9-b984-cdc9be1529f1,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BY5PR13MB4520BF8E53256F7EC213475D82F20@BY5PR13MB4520.namprd13.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: PVJNyFs8K9RXxiUH/2oHgzFJ7Eg/HJftmqg8vnNP8KW2qju6E+p8iVcpUtPHf+1OD/o0Eqwi3d6EsfRpZtYqDoaWwpPAMc6CC3j+XellyDwag7uEqH+dxy7q3nK9VbdZYK2u3K3Noo98up96gG/LeiDMKbgUvUIix0dB4IbwAIMSIgn0XsP3+258m00MCPD4ceh/XdrO9ZQOgqHudzeTl5Jcqt5DegdvQjW05mUSZvKR4iYC+J3oyghZABW/fg4D2a0/oNpurNGdn3wn4UCGOa8XceCmrastKhvnaSEnGCvbs7/Sibd8ZCLlBkY8jBuQcJ7yhvDEG5rEOEs3mAzzbg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR13MB4453.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(6029001)(39840400004)(136003)(346002)(366004)(376002)(396003)(7696005)(66446008)(53546011)(52536014)(6506007)(4326008)(5660300002)(64756008)(107886003)(66946007)(66556008)(66476007)(186003)(26005)(76116006)(55016002)(9686003)(54906003)(71200400001)(6916009)(15650500001)(478600001)(2906002)(83380400001)(86362001)(8936002)(7416002)(33656002)(316002)(8676002)(44832011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?xYSfoCz+wR0kTQRgfwNFBhFbicJR5mHoDsUbKmmq19761rPQbBKUR9urL+5E?=
+ =?us-ascii?Q?XuOv9Hs+GJUMZZP4y/Lw4vma86ZuMYxV7Mn48H41k46ge9m0aF65yrOJmmia?=
+ =?us-ascii?Q?glTMbPpBlJlHM9p6YAxAdErKGCJYdCahxErp0qy4BqoXkA8pV7nFt/SAMAds?=
+ =?us-ascii?Q?P3JdNaBlQn/owH002ZeD3LMR29Iudp/JXpn4DqVpdo5GJYg+GW66Ym+9klfZ?=
+ =?us-ascii?Q?I8HCYAKIQOxE0umrgHrIeP3jBI9c+oMx6HwuYWvOxKB1B2hcoXc+2pjQGyaf?=
+ =?us-ascii?Q?292HyRrAp8yC2ho6jOfVcbgQ2eAe3e0BhSF+DsFP7QzFoyyD2aut/BXVb4Xu?=
+ =?us-ascii?Q?2yf5YEACb16R5WXM3sbnjpjQlRyPGP6yBqX59ZlGlZ57GA4g4vW9Ei9NHSvQ?=
+ =?us-ascii?Q?Ri6fMJ15LXYMSllSJEqohNCfA8jtkAaZkdbXbaA4D58MsoMFqKH6NKChKpni?=
+ =?us-ascii?Q?jOqYottsqIaqM3/tu2tNFEnDbpRoC4MZPwbSuHxQ87F0qQb0my5djM7YgsW0?=
+ =?us-ascii?Q?LqtQPYWh72LxDlnIdQUu4rlPQCk3J0j06Vl6SghvkoB9YT+EFwgltizo9pYY?=
+ =?us-ascii?Q?X8djNSVheD+zsfRIct1v6jJWeHI+bVdtqI5RXGsjEfRemVNOZs0V6gU7fBEZ?=
+ =?us-ascii?Q?EfdJd4DNtFeGZBEVM+V6UC9zYtyILHMXcKRZsaNV/6O8P3oI25YoL7DVIyYH?=
+ =?us-ascii?Q?H1Lvz6NKYTZzXcA1h4095ygxceDtDBho/DaVN1g6FLcxBq0pRmjq9Z6zZfxj?=
+ =?us-ascii?Q?jFhrDlBaqlcrJWkGWoxvV3nIG6UCErS0nQ3Y7E5nUvoKHmuh6YO/UJBm17Gh?=
+ =?us-ascii?Q?RAJSw2J2KbLG/1wzrzI2o+xy95laiDsjcY5iYr/j2cGpipQ7XjL39EydZfO7?=
+ =?us-ascii?Q?1NET/I10p8kezUG6u4HuBKfvMK4hZa+n55vVvmWYqTEv/YvtEmrCtd9I6RoN?=
+ =?us-ascii?Q?UKdEd6bKFbry+AYSEPESAFdmfhVkq1abyuPkVmrRSiU=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: openfive.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR13MB4453.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c01b394d-a1d6-44ce-3428-08d89755c648
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Dec 2020 06:36:32.6136
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 22f88e9d-ae0d-4ed9-b984-cdc9be1529f1
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 16wh5RM7AeJwrfdaNzH5FqDOJqCJC2qQWCzXXIw+fJ+ZCD6mnZo4EFY9MNtJm1EZx1pa8xrGHNrJtoqhXPFKDQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR13MB4520
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-I'm sorry for that.
-I checked at https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ 
-before resend and didn't find any updates.
 
-03.12.2020 02:57, Vladimir Oltean пишет:
-> On Wed, Dec 02, 2020 at 05:25:52PM +0300, Maxim Kochetkov wrote:
->> If cs-gpios property is used in devicetree then ctlr->num_chipselect value
->> may be changed by spi_get_gpio_descs().
->> So use ctlr->max_native_cs instead of ctlr->num_chipselect to set SPI_MCR
->>
->> Fixes: 4fcc7c2292de (spi: spi-fsl-dspi: Don't access reserved fields in SPI_MCR)
->> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
->> ---
-> 
-> In this case, it looks like Mark did really apply it, Maxim, I'm not
-> sure why you resent:
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/commit/?h=for-5.10&id=2c2b3ad2c4c801bab1eec7264ea6991b1e4e8f2c
-> 
+
+> -----Original Message-----
+> From: Andrew Lunn <andrew@lunn.ch>
+> Sent: 02 December 2020 20:28
+> To: Yash Shah <yash.shah@openfive.com>
+> Cc: linux-spi@vger.kernel.org; linux-serial@vger.kernel.org; linux-
+> pwm@vger.kernel.org; linux-i2c@vger.kernel.org; linux-
+> kernel@vger.kernel.org; linux-riscv@lists.infradead.org;
+> devicetree@vger.kernel.org; linux-gpio@vger.kernel.org;
+> broonie@kernel.org; gregkh@linuxfoundation.org; aou@eecs.berkeley.edu;
+> lee.jones@linaro.org; u.kleine-koenig@pengutronix.de;
+> thierry.reding@gmail.com; peter@korsgaard.com; Paul Walmsley ( Sifive)
+> <paul.walmsley@sifive.com>; palmer@dabbelt.com; robh+dt@kernel.org;
+> bgolaszewski@baylibre.com; linus.walleij@linaro.org; Sachin Ghadi
+> <sachin.ghadi@openfive.com>
+> Subject: Re: [PATCH 1/4] dt-bindings: riscv: Update DT binding docs to
+> support SiFive FU740 SoC
+>=20
+> [External Email] Do not click links or attachments unless you recognize t=
+he
+> sender and know the content is safe
+>=20
+> > diff --git a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+> > b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+> > index 6b25a80..1966b2c 100644
+> > --- a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+> > +++ b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+> > @@ -3,9 +3,11 @@ Device tree configuration for i2c-ocores  Required
+> > properties:
+> >  - compatible      : "opencores,i2c-ocores"
+> >                      "aeroflexgaisler,i2cmst"
+> > -                    "sifive,fu540-c000-i2c", "sifive,i2c0"
+> > +                    "sifive,<chip>-i2c", "sifive,i2c0"
+>=20
+> Please make this a full list. At some point, this file will get turned in=
+to yaml, at
+> which point substitution like this will need expanding. It is better to d=
+o that
+> now.
+
+Ok sure, will do that in patch v2.
+
+- Yash
+
+>=20
+>      Andrew
