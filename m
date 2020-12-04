@@ -2,99 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1113F2CEA93
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Dec 2020 10:14:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF612CEA96
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Dec 2020 10:15:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387501AbgLDJOQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 4 Dec 2020 04:14:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729452AbgLDJOQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Dec 2020 04:14:16 -0500
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7107CC061A52
-        for <linux-spi@vger.kernel.org>; Fri,  4 Dec 2020 01:13:30 -0800 (PST)
-Received: by mail-oi1-x242.google.com with SMTP id h3so5437244oie.8
-        for <linux-spi@vger.kernel.org>; Fri, 04 Dec 2020 01:13:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=marsbioimaging.com; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=dq8W0t5WaM6Ax18AiS28LSLop4sUX34fd6LSLVMYGGQ=;
-        b=G6j90QZbtmBDpk60agAFI/bVb/mGLd+Vxs56y3trP/mmdGJhJmuyPZc+azT+RaCs3c
-         iOWWx4G0W1ZiCf8U0jEmqgO5bweo5AhlyEdDILxInd9ANnzeeTkb1xoBzRwvbLvjjr2O
-         m+MpWydEXXuXKTsqor8PrvNkNej8mPD4WdY1T0ymsJ+ahy2rBWeJI0pbKjko9zFOAsCR
-         6fQA+FotZPf3jetllWMRV/qeQscMHebctcDe9eNRpEEQGebF5tPFMfN0QVKXaWse8e6Z
-         z2Sw4Z4cIJCwoW4kZCaNtV9vtbeU7uvphyssypdlk8ehy8aVXMOOCPFMn6/UH5BijHBn
-         GI+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=dq8W0t5WaM6Ax18AiS28LSLop4sUX34fd6LSLVMYGGQ=;
-        b=OjJGEk36OFw7sBs6RHE9YYQJ91f1Q0jRQn3vh59iAHQ/mbBTsxhLHpPqqoGSrACrfv
-         ghCCSLywcpVJBhLDVUwLphwXOnsXEzawdCO7OQwC3AxoaraTfN0vZ+FzBChOPw+T+mob
-         1+S/gmCGLEcYi7bMHAciQ/PLT3Ek4dbUxSGC+bDMKsO4Vx0LBQj4vEzVJgXgarBf6/l2
-         gdOyAUwyMgApqRaN1CfzqO1dc9yReYcAXs/CyNIinTavW428sDP54e8+opENddo6LwXx
-         gppgStczlAYzpTK1EnstiSCq5qPFJHdj8ToN/iEV42zm59xUkSAtFuWdM5uWI6sEo+84
-         rz9g==
-X-Gm-Message-State: AOAM533F8xbSmKMUN7oUvQMWyf/mrxW8+ipW48dus80J7quH42q//zzh
-        nM3OewjF5jvp7kUr0oy2/ScscMYOH3NbkNvdStS2iw==
-X-Google-Smtp-Source: ABdhPJzcy2k9fgirKTBZRpEv9iABXpZ4nmrRUmHaaYd+R5/CBlMV+9EJLVP5WWZ68SvgKeoK6LdlOyReCxMkcaUSvCs=
-X-Received: by 2002:aca:ec09:: with SMTP id k9mr2491926oih.153.1607073209883;
- Fri, 04 Dec 2020 01:13:29 -0800 (PST)
+        id S2387534AbgLDJOi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 4 Dec 2020 04:14:38 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:44962 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387531AbgLDJOh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Dec 2020 04:14:37 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: eballetbo)
+        with ESMTPSA id 224221F45EF9
+Subject: Re: [PATCH] spi: spi-geni-qcom: Use the new method of gpio CS control
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>
+Cc:     Alexandru M Stan <amstan@chromium.org>,
+        Mark Brown <broonie@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Akash Asthana <akashast@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Benson Leung <bleung@chromium.org>
+References: <20201202214935.1114381-1-swboyd@chromium.org>
+ <CAHNYxRwMD4XahHXWW9z7b=VCOEsdPe5Df4CohNwmBy_ijWJ62g@mail.gmail.com>
+ <160695172591.2717324.17788035024164242534@swboyd.mtv.corp.google.com>
+ <160695644776.2717324.633265815704005177@swboyd.mtv.corp.google.com>
+ <CAD=FV=WDYdfURHWf8qGOSwT+7Y5i=9FMgRn5hYZA-oTfR6KoFQ@mail.gmail.com>
+ <160704063968.1580929.17834773484656581141@swboyd.mtv.corp.google.com>
+From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Message-ID: <8d864844-11d8-0eae-d85c-29136f035c1b@collabora.com>
+Date:   Fri, 4 Dec 2020 10:13:52 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-From:   Karen Dombroski <karen.dombroski@marsbioimaging.com>
-Date:   Fri, 4 Dec 2020 22:13:19 +1300
-Message-ID: <CAArsxNtnCuALXLHLETo5w_EbjrRJdSSte7Xa3nEnVcVw+hV=sQ@mail.gmail.com>
-Subject: [PATCH] spi: spi-zynq-qspi: fix stack violation bug
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Michal Simek <michal.simek@xilinx.com>, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <160704063968.1580929.17834773484656581141@swboyd.mtv.corp.google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-When the number of bytes for the op is greater than one, the read could
-run off the end of the function stack and cause a crash.
+Hi,
 
-This patch restores the behaviour of safely reading out of the original
-opcode location.
+On 4/12/20 1:10, Stephen Boyd wrote:
+> Quoting Doug Anderson (2020-12-03 12:06:10)
+>> On Wed, Dec 2, 2020 at 4:47 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>>>
+>>> And that is wrong. With even more investigation and Doug's eagle eyes it
+>>> seems that the cros-ec driver is overriding the spi::mode to clear out
+>>> the SPI_CS_HIGH bit that the spi core sets in there when using the gpio
+>>> descriptors. I'll send a patch for cros-ec-spi shortly.
+>>
+>> So do we need any coordinating here, are we OK w/ trogdor devices
+>> being broken for a short period of time?
+>>
+>> I think the device tree changes switching to use GPIO for chip select
+>> is already queued in linux-next.  That means if we land this patch
+>> before the fix to cros_ec [1] then we'll end up in a broken state.
+>> Would we be able to do some quick landing to get the cros-ec fix into
+>> v5.10 and then target the SPI patch for 5.11?
+> 
+> I don't think it really matters if the two patches meet up in linux-next
+> or cros-ec is fast tracked, but it would be bad if this patch was merged
+> without the cros-ec one. One option would be to apply the cros-ec fix to
+> the spi tree along with this patch (or vice versa) so that a bisection
+> hole isn't created. Or this patch can wait for a while until cros-ec is
+> fixed. I'm not the maintainer here so it's really up to Mark and
+> Enric/Benson.
+> 
 
-Fixes: caf72df48be3 ("spi: spi-mem: allow specifying a command's
-extension")
-Signed-off-by: Karen Dombroski <karen.dombroski@marsbioimaging.com>
-Reviewed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
----
-CR-1084036
----
- drivers/spi/spi-zynq-qspi.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+I am fine either way. I'm fine with pick all the patches and go through the
+chrome/platform tree if Mark is agree (I think this patch has no other
+dependencies and the patch applies cleanly to my tree) or all can go through the
+Mark's tree. If I need to an IB I can also do it without problems.
 
-diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
-index 5d8a5ee62fa2..2765289028fa 100644
---- a/drivers/spi/spi-zynq-qspi.c
-+++ b/drivers/spi/spi-zynq-qspi.c
-@@ -528,18 +528,17 @@ static int zynq_qspi_exec_mem_op(struct spi_mem *mem,
-       struct zynq_qspi *xqspi = spi_controller_get_devdata(mem->spi->master);
-       int err = 0, i;
-       u8 *tmpbuf;
--       u8 opcode = op->cmd.opcode;
+I'll leave Mark to decide who has much experience solving this kind of problems.
 
-       dev_dbg(xqspi->dev, "cmd:%#x mode:%d.%d.%d.%d\n",
--               opcode, op->cmd.buswidth, op->addr.buswidth,
-+               op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
-               op->dummy.buswidth, op->data.buswidth);
+Thanks,
+ Enric
 
-       zynq_qspi_chipselect(mem->spi, true);
-       zynq_qspi_config_op(xqspi, mem->spi);
 
--       if (op->cmd.nbytes) {
-+       if (op->cmd.opcode) {
-               reinit_completion(&xqspi->data_completion);
--               xqspi->txbuf = &opcode;
-+               xqspi->txbuf = (u8 *)&op->cmd.opcode;
-               xqspi->rxbuf = NULL;
-               xqspi->tx_bytes = op->cmd.nbytes;
-               xqspi->rx_bytes = op->cmd.nbytes;
---
-2.17.1
+>>
+>> [1] https://lore.kernel.org/r/20201203011649.1405292-2-swboyd@chromium.org/
