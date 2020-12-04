@@ -2,72 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14ABA2CE4B2
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Dec 2020 02:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C052CE8CC
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Dec 2020 08:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726075AbgLDBGj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Dec 2020 20:06:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726028AbgLDBGj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Dec 2020 20:06:39 -0500
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8098C061A4F;
-        Thu,  3 Dec 2020 17:05:58 -0800 (PST)
-Received: by mail-ej1-x644.google.com with SMTP id x16so6289918ejj.7;
-        Thu, 03 Dec 2020 17:05:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zawDXfV2e+DrFT4rJ/w7y+LtGY3DyFHn3h84rx+qbno=;
-        b=h1UiqMsbeNmUH1fPKuAQBtgCPE5vLxSFhl2ie/rxpmpTQi5yU6MJoDGGMTRJ1hpwAe
-         TkUP8X7hKp+/QqrL81ZnwIxhRLW1tEmejgoTKkh1UmxRHFFeg2oq6HIfG3v7ukjddbTY
-         W8KpIRk2zCt5ZFQYl0QO5CAJmKnLTDcniOf5dmpDqy/lGN9UZx/oh6hrt3RKy0vNhKan
-         lJWmNkNgQIu4ysLD38fe3hNlG95Siis3k2HUI1qeRiLxAWCRnjE7NupQFS8cH3dqSF7z
-         oIEtG/DsKKvHKfCa6N91vb/avmOozcxOcDVx89FQw+0MnRuevnQynSDR+YXJx1YoHrBE
-         we+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zawDXfV2e+DrFT4rJ/w7y+LtGY3DyFHn3h84rx+qbno=;
-        b=eWMVjqPfifHSEyp0Ag0oI8n9VJmNQ4FccuHHZt5Rc7oxb1inXsDBAXXunC/c7kQUxl
-         Dj+n273u0FdZAMptazVy87IZ+1CGbjzrXC5GlDOS5Q/GSh5+PUUi2yvPJjrd/NF7fbf4
-         Lh07iMrsaI8r255+sKkPzD6LIXN9b+DXGuh1/mnYBsNr+Xs6emOuM+c0aRJLp7BLHFJM
-         4HVX5Ce0UhXxukAmlWuE3T43RX8JI3STjDLY4MhICZkv52vum7TUG72eYfvlFSZ3tt2z
-         6uXBFShUakWBFSX51f+lvIzlqdBmAVDjdsdc4U7j//3MDnz7e9XVq3uYdrwXxPYzIXLs
-         iH6w==
-X-Gm-Message-State: AOAM5320m9C79tiEeAl1517CqLIbVkV2u6P4qNs1sxMqxM8yylryewxD
-        1up82L/72L2KmywN5iPQ1DI=
-X-Google-Smtp-Source: ABdhPJzfK8WlH2XeJMJhDdXMnMKcAMMY8492cn/wQmNh1GHt5/vyf4kCdXdXnmBDGnRp6n47B8jiBQ==
-X-Received: by 2002:a17:906:2602:: with SMTP id h2mr4855475ejc.358.1607043957416;
-        Thu, 03 Dec 2020 17:05:57 -0800 (PST)
-Received: from skbuf ([188.25.2.120])
-        by smtp.gmail.com with ESMTPSA id d22sm1990133eja.72.2020.12.03.17.05.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Dec 2020 17:05:56 -0800 (PST)
-Date:   Fri, 4 Dec 2020 03:05:55 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Maksim Kiselev <bigunclemax@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Maxim Kochetkov <fido_max@inbox.ru>
-Subject: Re: [PATCH] spi: spi-fsl-dspi: Add GPIO chip select support
-Message-ID: <20201204010555.oyipx77djdkm6xkz@skbuf>
-References: <CALHCpMgQPDqV1tB6v0sA0imwfZGkoG_j84NZCehOT1pf8MTuCA@mail.gmail.com>
- <20201203175024.hzivclydoxp6txir@skbuf>
- <CALHCpMgmdfScVhWKhhtisZ=-rf0wS8CujDoVWBJ8qkL_OXGu1g@mail.gmail.com>
+        id S1728431AbgLDHta (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 4 Dec 2020 02:49:30 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:9376 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728110AbgLDHta (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Dec 2020 02:49:30 -0500
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4CnPvk0BCgz78QY;
+        Fri,  4 Dec 2020 15:48:18 +0800 (CST)
+Received: from [127.0.0.1] (10.174.177.9) by DGGEMS401-HUB.china.huawei.com
+ (10.3.19.201) with Microsoft SMTP Server id 14.3.487.0; Fri, 4 Dec 2020
+ 15:48:42 +0800
+Subject: Re: [PATCH 5/6] ARM: dts: mmp2-olpc-xo-1-75: explicitly add
+ #address-cells=<0> for slave mode
+To:     Rob Herring <robh+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Dan Murphy <dmurphy@ti.com>,
+        linux-leds <linux-leds@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Benson Leung <bleung@chromium.org>,
+        "Enric Balletbo i Serra" <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20201013160845.1772-1-thunder.leizhen@huawei.com>
+ <20201013160845.1772-6-thunder.leizhen@huawei.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <698a7d6d-eceb-6c27-cca2-517218aec78f@huawei.com>
+Date:   Fri, 4 Dec 2020 15:48:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALHCpMgmdfScVhWKhhtisZ=-rf0wS8CujDoVWBJ8qkL_OXGu1g@mail.gmail.com>
+In-Reply-To: <20201013160845.1772-6-thunder.leizhen@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.9]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 09:50:04PM +0300, Maksim Kiselev wrote:
-> In any case, I would like to add functionality for using GPIO as CS.
-> Because I have a board which actually uses this.
+Hi everybody:
+  Can somebody apply this patch? When I do any YAML dtbs_check on arm, below Warnings always reported.
 
-I have absolutely nothing to object to that.
-But the patches should still be as clean as possible, though.
+arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SPI bus
+  also defined at arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts:225.7-237.3
+arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI bus
+  also defined at arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts:225.7-237.3
+arch/arm/boot/dts/mmp2-olpc-xo-1-75.dt.yaml: Warning (spi_bus_reg): Failed prerequisite 'spi_bus_bridge'
+
+
+On 2020/10/14 0:08, Zhen Lei wrote:
+> Delete the old property "#address-cells" and then explicitly add it with
+> zero value. The value of "#size-cells" is already zero, so keep it no
+> change.
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts b/arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts
+> index f1a41152e9dd70d..be88b6e551d58e9 100644
+> --- a/arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts
+> +++ b/arch/arm/boot/dts/mmp2-olpc-xo-1-75.dts
+> @@ -224,7 +224,7 @@
+>  
+>  &ssp3 {
+>  	/delete-property/ #address-cells;
+> -	/delete-property/ #size-cells;
+> +	#address-cells = <0>;
+>  	spi-slave;
+>  	status = "okay";
+>  	ready-gpio = <&gpio 125 GPIO_ACTIVE_HIGH>;
+> 
+
