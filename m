@@ -2,62 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6374A2CF793
-	for <lists+linux-spi@lfdr.de>; Sat,  5 Dec 2020 00:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7C22CF84B
+	for <lists+linux-spi@lfdr.de>; Sat,  5 Dec 2020 01:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727483AbgLDXcV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 4 Dec 2020 18:32:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42360 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727102AbgLDXcV (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 4 Dec 2020 18:32:21 -0500
-From:   Mark Brown <broonie@kernel.org>
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-spi@vger.kernel.org
-Cc:     Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-In-Reply-To: <20201204082409.183700-1-jarkko.nikula@linux.intel.com>
-References: <20201204082409.183700-1-jarkko.nikula@linux.intel.com>
-Subject: Re: [PATCH] spi: pxa2xx: Add support for Intel Alder Lake PCH-S
-Message-Id: <160712471232.7862.14553685397331355820.b4-ty@kernel.org>
-Date:   Fri, 04 Dec 2020 23:31:52 +0000
+        id S1731137AbgLEArR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 4 Dec 2020 19:47:17 -0500
+Received: from vsm-gw.hyogo-dai.ac.jp ([202.244.76.12]:50044 "EHLO
+        vsm-gw.hyogo-dai.ac.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726917AbgLEArR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Dec 2020 19:47:17 -0500
+Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [202.244.77.11])
+        by vsm-gw.hyogo-dai.ac.jp (Postfix) with ESMTP id 31A351A558B;
+        Sat,  5 Dec 2020 04:44:55 +0900 (JST)
+Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [127.0.0.1])
+        by postfix.imss71 (Postfix) with ESMTP id E5C39838858;
+        Sat,  5 Dec 2020 04:44:54 +0900 (JST)
+Received: from hyogo-dai.ac.jp (unknown [202.244.77.11])
+        by humans-kc.hyogo-dai.ac.jp (Postfix) with SMTP id B84F6838260;
+        Sat,  5 Dec 2020 04:44:54 +0900 (JST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Message-ID: <20201204194454.00002B21.0147@hyogo-dai.ac.jp>
+Date:   Sat, 05 Dec 2020 04:44:54 +0900
+From:   "Dr.Raymond" <tabata@hyogo-dai.ac.jp>
+To:     <infocarferr1@aim.com>
+Reply-To: <infocarfer@aim.com>
+Subject: I am Vice Chairman of Hang Seng Bank, Dr. Raymond Chien
+         Kuo Fung I have Important Matter to Discuss with you concerning
+         my late client. Died without a NEXT OF KIN. Send me your private
+         email for full details information. 
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MAILER: Active! mail
+X-TM-AS-MML: disable
+X-TM-AS-Product-Ver: IMSS-7.1.0.1808-8.2.0.1013-25446.007
+X-TM-AS-Result: No--4.326-5.0-31-10
+X-imss-scan-details: No--4.326-5.0-31-10
+X-TM-AS-User-Approved-Sender: No
+X-TMASE-MatchedRID: +T4Z3mpR0x5ITndh1lLRASsOycAMAhSTkCM77ifYafsBLhz6t76Ce/bj
+        Enpjm61/Gf23dqZJjE4Erxo5p8V1/E1+zyfzlN7y/sToY2qzpx7w5nZ/qYg41XEWw1TkKAjcYff
+        qdBtG2ocgOkCKsW/kbuunGEBqPil++coAzulIP8gMTyJMXCOBhj9BWL7GG0LsKrauXd3MZDUZaR
+        NzIP3XI5u3uLPgwbAMH5RdHnhWfwyq9gpuf+A6coDeeVSgzszVDx5n520Z3eZyT7DDRtYlKaWBy
+        ZE9nSaC/rhfyjvqkZu/pNa4BidtZEMMprcbiest
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 4 Dec 2020 10:24:09 +0200, Jarkko Nikula wrote:
-> Add support for LPSS SPI on Intel Alder Lake. It has four LPSS SPI
-> controllers each having two chip selects.
+infocarfer@aim.com
 
-Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Thanks!
-
-[1/1] spi: pxa2xx: Add support for Intel Alder Lake PCH-S
-      commit: b8450e014214982a6df3e62a5bee6c37b94f6b98
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
