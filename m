@@ -2,51 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CE42CF283
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Dec 2020 18:02:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63DD32CF35D
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Dec 2020 18:51:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726309AbgLDRBn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 4 Dec 2020 12:01:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59918 "EHLO mail.kernel.org"
+        id S1726186AbgLDRvj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 4 Dec 2020 12:51:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41106 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726173AbgLDRBn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 4 Dec 2020 12:01:43 -0500
-Date:   Fri, 4 Dec 2020 17:00:58 +0000
+        id S1726021AbgLDRvi (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 4 Dec 2020 12:51:38 -0500
+Date:   Fri, 4 Dec 2020 17:50:54 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607101262;
-        bh=4ltAGqyePwzC6mMogfJkZa93IzO6bxiuOkFWcBWhhME=;
+        s=k20201202; t=1607104258;
+        bh=Zelt8CAd5pxJ3bkmos8J2geSRPu13XtbYNa+w6ZJCw4=;
         h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lZR9O3t2sEReXp8CvktbnVg0x5nBMcxC/hNpv/tsM95tRcSPu/EwGhG4t2058oBTR
-         SLaeYyPWB3s+7ixmyf0wl2FrFukUK+Gh8EX3Bb0zCzZwS3UkrbuZSCmjGNJsWdtP4k
-         hggyrhd7H7et8ZiVgQyWkaaJ1G5mNRE4GEPUjFlJK0uCO6YBjFEWGkTjK9Sy+jXkTb
-         j6nyKOGz0DhK3BIGYthpXyYffIfQnIRKmK6XtgutIIe4MEJVqrBbnv7T2tJGiE05hk
-         Wpa4U9PMG5aaWjDMsPwutsJMFSEjH8eJAKTJEIjF+8YlhLSJxU2uZ4kTQYp+JRJqt9
-         VnY9h2K+Cfabg==
+        b=j7tjGJEjV/fMEVT0pTgM440Gq87sqjjzc2jFRuZk/Q298HrUyCMb8i4tlumygKQaY
+         mtit0YZoiAW/8RWd+1NFJpi5uKjYyCju+i3e7dSfHM7W8HtcwAgJM0R4eKTo9juTfd
+         yzu78hlYuSmk9ggTdBmXQFybHKdRF6uPkFB4+uYnnZvqb2L1seXZTKD3lkjL0OfCob
+         MVttTRyqJWDyL5wRvh3fUSg0yufywYYVpe0+8VmGWVqcnts7hu2KIz0NjK37vzvxSN
+         zpOAsGy9buQpks3WERYkvDQpQVY3MhvvqnwBL1yGAb8Fdr7pqqVI73y+tdZ51o2gPd
+         iZay+J6UXPoHw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Akash Asthana <akashast@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Benson Leung <bleung@chromium.org>
-Subject: Re: [PATCH] spi: spi-geni-qcom: Use the new method of gpio CS control
-Message-ID: <20201204170058.GA4558@sirena.org.uk>
-References: <20201202214935.1114381-1-swboyd@chromium.org>
- <CAHNYxRwMD4XahHXWW9z7b=VCOEsdPe5Df4CohNwmBy_ijWJ62g@mail.gmail.com>
- <160695172591.2717324.17788035024164242534@swboyd.mtv.corp.google.com>
- <160695644776.2717324.633265815704005177@swboyd.mtv.corp.google.com>
- <CAD=FV=WDYdfURHWf8qGOSwT+7Y5i=9FMgRn5hYZA-oTfR6KoFQ@mail.gmail.com>
- <160704063968.1580929.17834773484656581141@swboyd.mtv.corp.google.com>
- <8d864844-11d8-0eae-d85c-29136f035c1b@collabora.com>
+To:     Karen Dombroski <karen.dombroski@marsbioimaging.com>
+Cc:     Michal Simek <michal.simek@xilinx.com>, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: spi-zynq-qspi: fix stack violation bug
+Message-ID: <20201204175054.GD4558@sirena.org.uk>
+References: <CAArsxNtnCuALXLHLETo5w_EbjrRJdSSte7Xa3nEnVcVw+hV=sQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/04w6evG8XlLl3ft"
+        protocol="application/pgp-signature"; boundary="M38YqGLZlgb6RLPS"
 Content-Disposition: inline
-In-Reply-To: <8d864844-11d8-0eae-d85c-29136f035c1b@collabora.com>
+In-Reply-To: <CAArsxNtnCuALXLHLETo5w_EbjrRJdSSte7Xa3nEnVcVw+hV=sQ@mail.gmail.com>
 X-Cookie: Not a flying toy.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
@@ -54,41 +41,36 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---/04w6evG8XlLl3ft
+--M38YqGLZlgb6RLPS
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 04, 2020 at 10:13:52AM +0100, Enric Balletbo i Serra wrote:
+On Fri, Dec 04, 2020 at 10:13:19PM +1300, Karen Dombroski wrote:
+> When the number of bytes for the op is greater than one, the read could
+> run off the end of the function stack and cause a crash.
 
-> I am fine either way. I'm fine with pick all the patches and go through t=
-he
-> chrome/platform tree if Mark is agree (I think this patch has no other
-> dependencies and the patch applies cleanly to my tree) or all can go thro=
-ugh the
-> Mark's tree. If I need to an IB I can also do it without problems.
->=20
-> I'll leave Mark to decide who has much experience solving this kind of pr=
-oblems.
+This doesn't apply against current code, please check and resend:
 
-I'm happy to take both patches, there are some others in this area in
-the SPI tree so it might minimise bisection problems if I take them but
-not sure if there's any actual overlap there.  If someone could resend
-them as a series?
+Applying: spi: spi-zynq-qspi: fix stack violation bug
+Using index info to reconstruct a base tree...
+error: patch failed: drivers/spi/spi-zynq-qspi.c:528
+error: drivers/spi/spi-zynq-qspi.c: patch does not apply
+error: Did you hand edit your patch?
+It does not apply to blobs recorded in its index.
 
---/04w6evG8XlLl3ft
+--M38YqGLZlgb6RLPS
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/Ka0cACgkQJNaLcl1U
-h9BlBQf+OitvqxWFwbekqNW1Zy+tBC5mf9XOX/XVfwfXx/Ol8Reo7KEuaSHgfMTS
-ZdCnI/SA7ajzD8UGbkoli1TJxsVEKogr2RFUYR6NtPjYpnboPZZXR3NOjrMtzNrq
-H1dvMuq5ArRgdLHdmURBeTfPhc4yrLbSoubumzt/E355kgwklsgf8mHVEHt8X2fe
-SWa9u77sp/4JnWgLAqcT5W4T76QvP0Oz/o4RA0xZEhENVDrJw2HBlmG6q49dOadl
-DplosqeIZmqEIXXBrpUJrm07S54mcWNT2ZB7/LCaZsr5+28dkLzmPU53zoo/SJrV
-YyRjFT00tHqbS0qmdNGGP4jcVL6Ypg==
-=JM/D
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/Kdv4ACgkQJNaLcl1U
+h9Ah+Qf/dJaiwOJwn3LE7ZU6s1yQFl/dRN845jmJxKArKMyPGsBqTOBs4bQXUKJW
+Z9jc7Igq00BLR7ikdS7+mz4MOIwdHiWxvrMkrVhZ/c2tqPwJCV5r0dbl6uU2TTMx
+U6yaws/6NBuitggHPK+ew4kpeZVe8ls4Sjmfi3h3jStm3VulzX3I6bQ8II3FGfle
+XeRGU+P4qw6/F6R0+rQukJbHYXHHKHatUQpf0hEzHvMisFUl0b1f0lwFXIGIHqf+
+p54ir9xrNzL5Vr9++idx6fDZD9LAa7ZxlQ7rh8WboAU2YO2D6WUfDxHGsJ7uUkjG
+ldDmLR9xjHBYARs4AMqJjDsCuh1Zxg==
+=YIGh
 -----END PGP SIGNATURE-----
 
---/04w6evG8XlLl3ft--
+--M38YqGLZlgb6RLPS--
