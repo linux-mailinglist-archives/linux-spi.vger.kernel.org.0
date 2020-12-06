@@ -2,98 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C592D000D
-	for <lists+linux-spi@lfdr.de>; Sun,  6 Dec 2020 02:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE432D0010
+	for <lists+linux-spi@lfdr.de>; Sun,  6 Dec 2020 02:20:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726479AbgLFBT2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 5 Dec 2020 20:19:28 -0500
+        id S1726498AbgLFBUI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 5 Dec 2020 20:20:08 -0500
 Received: from esa2.hgst.iphmx.com ([68.232.143.124]:35643 "EHLO
         esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725920AbgLFBT1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 5 Dec 2020 20:19:27 -0500
+        with ESMTP id S1726488AbgLFBUI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 5 Dec 2020 20:20:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1607218696; x=1638754696;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=mp60X6pVJHdNQ6KKEVMrQ8erghAKgUH/2GXLx1/0VT8=;
-  b=f/+gJCBbaaYwXYnku/n/C6g6TLBbdrTqLnPxCzZcTU7VE6HSplCVtEUv
-   GLauAMrGfhdfrMp3z7sQ7/ePicUHYouDoAW3UcR0stNcz/aRzrX20vf2p
-   q8McsX1XJm7yEvsmQFWpE7TPzktwDazRuRdgIe1bLBz4HFpvdEBO3p193
-   mWCkUyrRDloTfYVD/NdOkfyB7q/Ys46aOlOyn/Qar/DmgfpL7wxV7R7xy
-   w1c7crc6p/w4Eja0E+gjNAqmaPfRosq6LaqjG5v1SQ5Lr3fQ7mpPcRNHw
-   Z60QBsFJw/e6wuN0zdJOw/pTOt0i1g2vnQxdvpTLPH8+qTVqv9OlzHhQS
+  t=1607218758; x=1638754758;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=0I4QzQzOsChmNRmAhZHgMo7j8PJFacdYYrWcPxv0oYw=;
+  b=jKlEXqx4NHOBFY78DmCZV2/zgxZBykzLA6dx4L7iY4e4KXu+Dv4gXJDS
+   Js7xw6o9PHhCnB4dJaizvP/nidZFsOqBogQxvQfrRvqrn2B7nkto4BhW3
+   U3wZMhDtgrU+uMrg9M1m2ziHxnV1JqC/ULjAh0ZcB8mUB5JIcehJMx/ML
+   JeT5aMlvohWET2AawUoYnh6mfWDvNhrJb32frW/kATG6P2sQZ00YonQN1
+   OQRDCkGObGz2/UsjTacI/MNFEGxg4UXK0avDSsxtCNd8/Oa17GvxXfv5W
+   MD8kgQNH6sv8D36szPcwiEm0f95zKrVSHddg5J+M7aGfmhbv3icL24J0F
    Q==;
-IronPort-SDR: uw9picmSVQ+Ew1pSQ/tg8wIlW1xIQYDutSufnXrHMUbRjppsF777d+8KUT8aFL05IW60lO5jmJ
- BY4FFo6Vc3wwxbulqEH9JzAratT+TIWuq8/65FWTZ9MRCjjjGu5dmEZasZ9/cQAP+z+RaYGQeq
- HBUCg3lIOJOBl7f+hO3RACKUtyymDBhSQzbEJ8AWmavFd0rSkTtgXphzD+3GtWxkMspppwL/oJ
- 4HdImu2Jzw7Y71Q/Dm2CBr3oWHH768CghxYihlLcCjLlpd5v66Po6F8eHAbXfBqzZLSfImh/3b
- NlU=
+IronPort-SDR: mQ5zs72xzp4425URVPxu22ND647gae3RXyz44nEpWpVLB58FZKIBaPAcHY1lUwkcJbFp/sG7nV
+ e4eAY2WrLohW4Cb0rePTssKsvV5rGRFDAM8VCxOI3T7psecxB+JefzgfHRawl/Rla7NT4tsEEt
+ 0ljpsqw0lCmR1i4PGw+1d0hI8LGcDfwIcTFkKmplm56/kjb/vzrDF4ILEX5ajZHphJbUVBZmpa
+ UWSAzS3WDC5AtpnqZ7KiD8fY+Lz877JMkpZdZDP/PaVFhbdyrdU/aQz5bEeSetJZFV1qtGvaHC
+ uuA=
 X-IronPort-AV: E=Sophos;i="5.78,396,1599494400"; 
-   d="scan'208";a="258231901"
+   d="scan'208";a="258231902"
 Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 06 Dec 2020 09:36:37 +0800
-IronPort-SDR: XXuZrISZiLzCc0zXN9/dcd0HAF/jKXplO9fY6LudkZdb0dXLqURdS4NthtzZkXq6JsaCjkRCug
- ZXAwnNEctGHWolpV+5k1rtGZ1D0l/uczQ=
+  by ob1.hgst.iphmx.com with ESMTP; 06 Dec 2020 09:36:39 +0800
+IronPort-SDR: 6oZHDvrAWUvTTjRdCSE4gNlnZWzVHDBfqi78acexTMKmdYHuXEiNZbywZz3Y/EblpvJ5Oh2/33
+ 2/Nr/xKlXuIRTW7HjgwomNjuaFiPk2Bc0=
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2020 17:02:25 -0800
-IronPort-SDR: RzPr34tM78+V6IcU0XcLxMSSGvSCsA8PwSA4WGw3YlKEDhq2whb1noHR/Pm/W8qgD56WSRMnio
- /qYh8qxXJwnw==
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2020 17:02:26 -0800
+IronPort-SDR: fuEYEf2IlrLD5G/bOGkuGCDZkpkN4CKsRXw+g+I+0EwzZ2N1ZRJqQpP7XZooPxjlYDu3eDscW7
+ hakcDMFmSKrQ==
 WDCIronportException: Internal
 Received: from cnf005296.ad.shared (HELO twashi.fujisawa.hgst.com) ([10.84.71.167])
-  by uls-op-cesaip02.wdc.com with ESMTP; 05 Dec 2020 17:18:20 -0800
+  by uls-op-cesaip02.wdc.com with ESMTP; 05 Dec 2020 17:18:21 -0800
 From:   Damien Le Moal <damien.lemoal@wdc.com>
 To:     Serge Semin <fancer.lancer@gmail.com>,
         Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
 Cc:     Sean Anderson <seanga2@gmail.com>
-Subject: [PATCH v3 0/3] DW apb_ssi V4 support for Kendryte K210 RISC-V SoC
-Date:   Sun,  6 Dec 2020 10:18:14 +0900
-Message-Id: <20201206011817.11700-1-damien.lemoal@wdc.com>
+Subject: [PATCH v3 1/3] dt-bindings: spi: dw-apb-ssi: Add Canaan K210 SPI controller
+Date:   Sun,  6 Dec 2020 10:18:15 +0900
+Message-Id: <20201206011817.11700-2-damien.lemoal@wdc.com>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201206011817.11700-1-damien.lemoal@wdc.com>
+References: <20201206011817.11700-1-damien.lemoal@wdc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The Canaan Kendryte K210 RISC-V SoC includes a DesignWare apb_ssi V4
-SPI controller implemented with a maximum data frame size of 32-bits
-(SSI_MAX_XFER_SIZE=32 synthesis parameter).
+Update the snps,dw-apb-ssi.yaml document to include the compatibility
+string "canaan,k210-spi" compatible string for the Canaan Kendryte K210
+RISC-V SoC DW apb_ssi V4 SPI controller.
 
-This series of patches adds support for this SoC by implementing support
-for the 32-bits xfer size configuration. This is done in patch 2.
+Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+Acked-by: Serge Semin <fancer.lancer@gmail.com>
+---
+ Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Patch 3 introduces a workaround for a HW bug on this SoC which triggers
-RX FIFO overrun errors when the RX FIFO fills up to its maximum detected
-depth of 32. The patch manually reduces the fifo depth to 31.
-
-The first patch documents the new compatible string "canaan,k210-spi"
-used to identify this SoC.
-
-Changes from v2:
-* Moved DT bindings update patch first in the series
-* Tweaked comments for the DFS32 detection code as suggested by Serge
-* Added Serge's Acked-by tag to patch 2.
-
-Changes from v1:
-* Fixed patch 1 as suggested by Serge: change capability flag name to
-  DW_SPI_CAP_DFS32 and fixed the capability detection to use the regular
-  position of the dfs filed rather than the new position with DFS32.
-  Also enable DW_SPI_CAP_DFS32 for SPI slaves.
-* Added Serge's Acked-by tag to patch 2 and 3.
-
-Damien Le Moal (3):
-  dt-bindings: spi: dw-apb-ssi: Add Canaan K210 SPI controller
-  spi: dw: Add support for 32-bits max xfer size
-  spi: dw: Add support for the Canaan K210 SoC SPI
-
- .../bindings/spi/snps,dw-apb-ssi.yaml         |  2 +
- drivers/spi/spi-dw-core.c                     | 44 ++++++++++++++++---
- drivers/spi/spi-dw-mmio.c                     | 16 +++++++
- drivers/spi/spi-dw.h                          |  5 +++
- 4 files changed, 60 insertions(+), 7 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+index 99ed9b416e94..4825157cd92e 100644
+--- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
++++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+@@ -65,6 +65,8 @@ properties:
+         const: baikal,bt1-ssi
+       - description: Baikal-T1 System Boot SPI Controller
+         const: baikal,bt1-sys-ssi
++      - description: Canaan Kendryte K210 SoS SPI Controller
++        const: canaan,k210-spi
+ 
+   reg:
+     minItems: 1
 -- 
 2.28.0
 
