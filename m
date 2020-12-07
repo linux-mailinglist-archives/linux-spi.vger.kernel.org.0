@@ -2,88 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A4C2D0BE8
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Dec 2020 09:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A462D0BEE
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Dec 2020 09:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726041AbgLGInZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Dec 2020 03:43:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
+        id S1726087AbgLGIpX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Dec 2020 03:45:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725905AbgLGInZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Dec 2020 03:43:25 -0500
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ef0:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A009C0613D0
-        for <linux-spi@vger.kernel.org>; Mon,  7 Dec 2020 00:42:45 -0800 (PST)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        with ESMTP id S1726024AbgLGIpX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Dec 2020 03:45:23 -0500
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E35C0613D0
+        for <linux-spi@vger.kernel.org>; Mon,  7 Dec 2020 00:44:43 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id E8D4C280001A5;
-        Mon,  7 Dec 2020 09:42:27 +0100 (CET)
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 9A16930000CF4;
+        Mon,  7 Dec 2020 09:44:05 +0100 (CET)
 Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 23463CD2; Mon,  7 Dec 2020 09:42:44 +0100 (CET)
-Message-Id: <72b680796149f5fcda0b3f530ffb7ee73b04f224.1607286887.git.lukas@wunner.de>
+        id 18AF710DB; Mon,  7 Dec 2020 09:44:42 +0100 (CET)
+Message-Id: <1d58367d74d55741e0c2730a51a2b65012c8ab33.1607286887.git.lukas@wunner.de>
 In-Reply-To: <cover.1607286887.git.lukas@wunner.de>
 References: <cover.1607286887.git.lukas@wunner.de>
 From:   Lukas Wunner <lukas@wunner.de>
-Date:   Mon, 7 Dec 2020 09:17:14 +0100
-Subject: [PATCH 14/17] spi: mt7621: Don't leak SPI master in probe error path
+Date:   Mon, 7 Dec 2020 09:17:15 +0100
+Subject: [PATCH 15/17] spi: ar934x: Don't leak SPI master in probe error path
 To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org
+Cc:     linux-spi@vger.kernel.org, Chuanhong Guo <gch981213@gmail.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-If the calls to device_reset() or devm_spi_register_controller() fail on
-probe of the MediaTek MT7621 SPI driver, the spi_controller struct is
+If the call to devm_spi_register_controller() fails on probe of the
+Qualcomm Atheros AR934x/QCA95xx SPI driver, the spi_controller struct is
 erroneously not freed.  Fix by switching over to the new
 devm_spi_alloc_master() helper.
 
-Additionally, there's an ordering issue in mt7621_spi_remove() wherein
-the spi_controller is unregistered after disabling the SYS clock.
-The correct order is to call spi_unregister_controller() *before* this
-teardown step because bus accesses may still be ongoing until that
-function returns.
+Moreover, the controller's clock is enabled on probe but not disabled if
+any of the subsequent probe steps fail.
+
+Finally, there's an ordering issue in ar934x_spi_remove() wherein the
+clock is disabled even though the controller is not yet unregistered.
+It is unregistered after ar934x_spi_remove() by the devres framework.
+As long as it is not unregistered, SPI transfers may still be ongoing
+and disabling the clock may break them.  It is not possible to use
+devm_spi_register_controller() in this case, so move to the non-devm
+variant.
 
 All of these bugs have existed since the driver was first introduced,
 so it seems fair to fix them together in a single commit.
 
-Fixes: 1ab7f2a43558 ("staging: mt7621-spi: add mt7621 support")
+Fixes: 047980c582af ("spi: add driver for ar934x spi controller")
 Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Reviewed-by: Stefan Roese <sr@denx.de>
-Cc: <stable@vger.kernel.org> # v4.17+: 5e844cc37a5c: spi: Introduce device-managed SPI controller allocation
-Cc: <stable@vger.kernel.org> # v4.17+
+Cc: <stable@vger.kernel.org> # v5.7+: 5e844cc37a5c: spi: Introduce device-managed SPI controller allocation
+Cc: <stable@vger.kernel.org> # v5.7+
+Cc: Chuanhong Guo <gch981213@gmail.com>
 ---
- drivers/spi/spi-mt7621.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/spi/spi-ar934x.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/spi/spi-mt7621.c b/drivers/spi/spi-mt7621.c
-index e227700808cb..b4b9b7309b5e 100644
---- a/drivers/spi/spi-mt7621.c
-+++ b/drivers/spi/spi-mt7621.c
-@@ -350,7 +350,7 @@ static int mt7621_spi_probe(struct platform_device *pdev)
- 	if (status)
- 		return status;
- 
--	master = spi_alloc_master(&pdev->dev, sizeof(*rs));
-+	master = devm_spi_alloc_master(&pdev->dev, sizeof(*rs));
- 	if (!master) {
- 		dev_info(&pdev->dev, "master allocation failed\n");
- 		clk_disable_unprepare(clk);
-@@ -382,7 +382,7 @@ static int mt7621_spi_probe(struct platform_device *pdev)
+diff --git a/drivers/spi/spi-ar934x.c b/drivers/spi/spi-ar934x.c
+index d08dec09d423..def32e0aaefe 100644
+--- a/drivers/spi/spi-ar934x.c
++++ b/drivers/spi/spi-ar934x.c
+@@ -176,10 +176,11 @@ static int ar934x_spi_probe(struct platform_device *pdev)
+ 	if (ret)
  		return ret;
+ 
+-	ctlr = spi_alloc_master(&pdev->dev, sizeof(*sp));
++	ctlr = devm_spi_alloc_master(&pdev->dev, sizeof(*sp));
+ 	if (!ctlr) {
+ 		dev_info(&pdev->dev, "failed to allocate spi controller\n");
+-		return -ENOMEM;
++		ret = -ENOMEM;
++		goto err_clk_disable;
  	}
  
--	ret = devm_spi_register_controller(&pdev->dev, master);
-+	ret = spi_register_controller(master);
- 	if (ret)
- 		clk_disable_unprepare(clk);
+ 	/* disable flash mapping and expose spi controller registers */
+@@ -202,7 +203,13 @@ static int ar934x_spi_probe(struct platform_device *pdev)
+ 	sp->clk_freq = clk_get_rate(clk);
+ 	sp->ctlr = ctlr;
  
-@@ -397,6 +397,7 @@ static int mt7621_spi_remove(struct platform_device *pdev)
- 	master = dev_get_drvdata(&pdev->dev);
- 	rs = spi_controller_get_devdata(master);
+-	return devm_spi_register_controller(&pdev->dev, ctlr);
++	ret = spi_register_controller(ctlr);
++	if (!ret)
++		return 0;
++
++err_clk_disable:
++	clk_disable_unprepare(clk);
++	return ret;
+ }
  
-+	spi_unregister_controller(master);
- 	clk_disable_unprepare(rs->clk);
+ static int ar934x_spi_remove(struct platform_device *pdev)
+@@ -213,6 +220,7 @@ static int ar934x_spi_remove(struct platform_device *pdev)
+ 	ctlr = dev_get_drvdata(&pdev->dev);
+ 	sp = spi_controller_get_devdata(ctlr);
+ 
++	spi_unregister_controller(ctlr);
+ 	clk_disable_unprepare(sp->clk);
  
  	return 0;
 -- 
