@@ -2,73 +2,138 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7827A2D280E
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Dec 2020 10:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1A22D292D
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Dec 2020 11:48:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727122AbgLHJrJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 8 Dec 2020 04:47:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726226AbgLHJq5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 8 Dec 2020 04:46:57 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF70C0613D6
-        for <linux-spi@vger.kernel.org>; Tue,  8 Dec 2020 01:46:11 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id m19so2317129lfb.1
-        for <linux-spi@vger.kernel.org>; Tue, 08 Dec 2020 01:46:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IWA7mZEVmYKxiKiaOAGDDtz5rgnnkaJr+YD5j24/dg0=;
-        b=zQx7+JhevD7T4oO95TZSap4NIdAVBNWKEROVc2xSSoeZBIjdQZ+O0dHs2vPUhoDAOn
-         T3aVo6eLfS2xxIb/SwvzV5x7mj28on/AbAMJv2Jj+LvgAPmRfyHfRUN8SaW/kT1ejOut
-         wBx2HQvB2D9Lm6ngLDuQKZESgRYxotp6cR62WYVYi76MAKH42jjb1w9SOa77wrtiYlLj
-         COMaTZXy6ynP7q0Yaa7ShRqthLcfiJeRVsXREnxKgs424i4cCMo6IOAtIKzjBpxmEqm3
-         pR/W2GPgnqAH9zk4Jtsp032K7V/R4sV24oDdXYd8uloAxeCwzSG8X6r2ycllX+q/eFqf
-         D9NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IWA7mZEVmYKxiKiaOAGDDtz5rgnnkaJr+YD5j24/dg0=;
-        b=k+02md61sQwIp6MQyDQ+ThPGzwbHoPj6WcovkzDxxYqCStxf72JJOib8N1VCBWCH6+
-         d8H8pBnnkp8R4TnBeTxa2s/oBRaiYUc+XeFnMhionds+RTPAWVnjp4gIVQ3Qm1VFGE+s
-         V9klLYyYdB7VjBM25QtQ3YBEhaqnaH5wKL81U4kiP02dxFg+Yv1OImSFUAsk2IwU+nAz
-         6ryOr+lO/fiYjonGiTuiBpISkSCVlpF01MU9/PmBZR3MnFfwbh0BFcco5OVTxyddxOD+
-         +cbpr4aHTBxcGCf/6qJY/vQsEJflliqu/cLH/OtZRJtiiHgbkyLzPgK3HtEcY1/MRC0F
-         HwWg==
-X-Gm-Message-State: AOAM532NdNUHHUbo4C8LIpgxa4OWnvK+CemGgATqm7s9g+nnww9WNm/c
-        W1UKv5GuOOPf2o0gFEfi2Fcl3cJCoda2ES6iNrRJaA==
-X-Google-Smtp-Source: ABdhPJy6WmZsWAlUbp6GT+E1b+E0f6msms+aRNFlbCB/8MzQqBAsg3J2Pw62QFPy4x+TTGE7rqBNAxJMZrXnx6Ynel8=
-X-Received: by 2002:ac2:47fc:: with SMTP id b28mr9542861lfp.157.1607420770078;
- Tue, 08 Dec 2020 01:46:10 -0800 (PST)
+        id S1728802AbgLHKsD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 8 Dec 2020 05:48:03 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:54492 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728735AbgLHKsD (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 8 Dec 2020 05:48:03 -0500
+Received: from [10.130.0.52] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn3+uWc9fcqsaAA--.664S3;
+        Tue, 08 Dec 2020 18:47:12 +0800 (CST)
+Subject: Re: [PATCH v2 2/4] spi: Add devicetree bindings documentation for
+ Loongson SPI
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <1607413467-17698-1-git-send-email-zhangqing@loongson.cn>
+ <1607413467-17698-2-git-send-email-zhangqing@loongson.cn>
+ <b97c4d59-3279-f67d-d951-1e9436faa640@gmail.com>
+Cc:     linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gaojuxin@loongson.cn,
+        yangtiezhu@loongson.cn
+From:   zhangqing <zhangqing@loongson.cn>
+Message-ID: <20e7dafc-8c67-79e4-e64a-a08e21101678@loongson.cn>
+Date:   Tue, 8 Dec 2020 18:47:10 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-References: <AM6PR04MB562311BBA0A439F2C1A0B80EF3F50@AM6PR04MB5623.eurprd04.prod.outlook.com>
- <CACRpkdbEFjJBpqdwTjXf4bMgVFUbv1Rhw3DXs7Q5dw5gFraFww@mail.gmail.com> <VI1PR04MB52942BDDB1D1CD63AE94BC6090CE0@VI1PR04MB5294.eurprd04.prod.outlook.com>
-In-Reply-To: <VI1PR04MB52942BDDB1D1CD63AE94BC6090CE0@VI1PR04MB5294.eurprd04.prod.outlook.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 8 Dec 2020 10:45:59 +0100
-Message-ID: <CACRpkdY=Ky_Mej6Q6SSDR_SLPys7pa6K4ySJA=B7vOMmWpXrPQ@mail.gmail.com>
-Subject: Re: Question about SPI_CS_HIGH setting when use controller->use_gpio_descriptors
-To:     Bough Chen <haibo.chen@nxp.com>
-Cc:     Clark Wang <xiaoning.wang@nxp.com>,
-        "lukas@wunner.de" <lukas@wunner.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <b97c4d59-3279-f67d-d951-1e9436faa640@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dxn3+uWc9fcqsaAA--.664S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF45Gr4UtFy8CF43ZF1rtFb_yoW8ZF48pF
+        1UCF4rtF4ktw1xCa1aqFn7C3W3JF4kuF4UGF4Iqr1jy3s0kFn3tw15KrsrZrZ5WF48AFWI
+        qFZ7CF1fKry2q3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkIecxEwVAFwVW8twCF04k20xvY0x0EwIxGrw
+        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
+        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
+        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxK
+        x2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267
+        AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUqeHgUUUUU=
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Dec 7, 2020 at 8:41 AM Bough Chen <haibo.chen@nxp.com> wrote:
+Hi Sergei Shtylyov,
 
-> I try to change the cs-gpios to GPIO_ACTIVE_LOW, seems this io extender still can work fine. Seems a bit wired.
 
-It's because as discussed in one of the threads, unfortunately the semantics
-are ambiguous so we let the SPI-specific cs-active-high attribute control
-it exclusively. GPIO_ACTIVE_LOW gets ignored. We haven't found
-any other way.
+On 12/08/2020 04:40 PM, Sergei Shtylyov wrote:
+> Hello!
+>
+> On 08.12.2020 10:44, Qing Zhang wrote:
+>
+>> Add spi-ls7a binding documentation.
+>>
+>> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+>> ---
+>>   Documentation/devicetree/bindings/spi/spi-ls7a.txt | 31 
+>> ++++++++++++++++++++++
+>>   1 file changed, 31 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/spi/spi-ls7a.txt
+>>
+>> diff --git a/Documentation/devicetree/bindings/spi/spi-ls7a.txt 
+>> b/Documentation/devicetree/bindings/spi/spi-ls7a.txt
+>> new file mode 100644
+>> index 0000000..56247b5
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/spi/spi-ls7a.txt
+>> @@ -0,0 +1,31 @@
+>> +Binding for LOONGSON LS7A SPI controller
+>> +
+>> +Required properties:
+>> +- compatible: should be 
+>> "pci0014,7a0b.0","pci0014,7a0b","pciclass088000","pciclass0880".
+>> +- reg: reference IEEE Std 1275-1994.
+>> +- #address-cells: <1>, as required by generic SPI binding.
+>> +- #size-cells: <0>, also as required by generic SPI binding.
+>> +- #interrupts: No hardware interrupt.
+>
+>    You say it's a required prop, yet yuoe example doesn't have it...
+         I want to emphasize here that LS7A SPI has no hardware 
+interrupts, and DT is not actually used.
+>
+>> +
+>> +Child nodes as per the generic SPI binding.
+>> +
+>> +Example:
+>> +
+>> +            spi@16,0 {
+>> +                compatible = "pci0014,7a0b.0",
+>> +                        "pci0014,7a0b",
+>> +                        "pciclass088000",
+>> +                        "pciclass0880";
+>> +
+>> +                #address-cells = <1>;
+>> +                #size-cells = <0>;
+>> +                reg = <0xb000 0x0 0x0 0x0 0x0>;
+>> +                num-chipselects = <0>;
+>> +                spiflash: s25fl016k@0 {
+>> +                #address-cells = <1>;
+>> +                #size-cells = <1>;
+>
+>    Once more?
+>
+>> +                compatible ="spansion,s25fl016k","jedec,spi-nor";
+>
+>    Once more?
+>
+>> + spi-max-frequency=<50000000>;
+>> +                reg=<0>;
+>
+>    Once more? Did you mean this for a child node?
+        Yes, these are child node attributes, the child node splash is 
+not necessary.
+>
+>> +                };
+>> +            };
+>
+      Thanks
 
-Yours,
-Linus Walleij
+      -Qing
+> MBR, Sergei
+
