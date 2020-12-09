@@ -2,81 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBBF92D4808
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Dec 2020 18:37:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D6E2D4813
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Dec 2020 18:39:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730407AbgLIRgk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Dec 2020 12:36:40 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:45155 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732068AbgLIRgk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Dec 2020 12:36:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1607535400; x=1639071400;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UEPzXZfvg0KRtVh8AOZLVzo/9yBPGv4fZLRNHDWR5Og=;
-  b=x/6wkeQfvv3bBB0Kkk0Sj4HKjV2WxVMw/nuGkcHVMhJ/c9oCWbsF1ZNM
-   /YtvpGE2SRMAzOB+31AyVcC6rpJppRt5jeapHvrnk+hy8Q4DV/WE30C43
-   C9VgqqdKLIKUxbO+Pm+szZ2RyYEdTIM5IJ/73KBcpSwDgfSWNL88gQI2s
-   BhHzwqeXoFf4eYiM72jgI1ca9d0BfXUNKsewKj2AuEuPM4MK+p4MhVzLk
-   IOP8kb2imU5IzISTSb+/I6BmzVlwk1kxeB8/T74lVY8T0E3VoWbeUjLvq
-   4Q4EDhz1Z/XNTiwsu8z20FFgWYtVylfNr0KHwj5RoF3bQMcnNnXb5XTXZ
-   A==;
-IronPort-SDR: pQYxnXH4juROvY7XLaPE9BX5iAY0Ym5tvs3eKVmdB4a3qBJ8ocuPfntfthYUW88SHHqFmSkjjx
- jtEhVpTka65La4+q0Sp1DZbLSGfTB+suN0TIS8d5RA5HvN+KunuM2EyYf/0co9CUe1X5yu8Bow
- nj8CiUA8fGx0NBLZEuwYM+jJ5lZMtbzneeRh8tvVISyRLOXIxU3Md0P4cifX2lt2vqZl/nFJ5A
- 9Oaw3U08Rtzs2cGDWOxF5ifyKlJTgoA6osc/PdmmsoqG07vZRFATAgdS8ROqeGzsRTV6TG/QxN
- sgs=
-X-IronPort-AV: E=Sophos;i="5.78,405,1599548400"; 
-   d="scan'208";a="36817605"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Dec 2020 10:35:19 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 9 Dec 2020 10:35:19 -0700
-Received: from atudor-ThinkPad-T470p.amer.actel.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.1979.3 via Frontend Transport; Wed, 9 Dec 2020 10:35:17 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <broonie@kernel.org>, <linux-spi@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH] spi: Limit the spi device max speed to controller's max speed
-Date:   Wed, 9 Dec 2020 19:35:14 +0200
-Message-ID: <20201209173514.93328-1-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        id S1732743AbgLIRhc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Dec 2020 12:37:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732511AbgLIRhc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Dec 2020 12:37:32 -0500
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17981C0613D6;
+        Wed,  9 Dec 2020 09:36:52 -0800 (PST)
+Received: by mail-vs1-xe41.google.com with SMTP id h6so1332765vsr.6;
+        Wed, 09 Dec 2020 09:36:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TcJtMb//+EPfBx4dkxoUg6Ti+FH+RqCACCceANTeFy8=;
+        b=Y78dYeBP7Q3T+CZ7oPp1D3rcvQi/waVMWIF+w3pAi7brg3wNNafn8JIS67BxeVwv2K
+         7lZVmVk1jL61cfm9Ik/fYSk/77szyAdSK70gZTl3Eue2yR2ULQAsdBGM0ryZGM20Z60W
+         OnQr5uUuUCk9zwtUSyL309h5D3zbynTXImgBulKek4ur6L6ySOeVSpmfjHuBYLkHbq4q
+         x51Ho944IUqt/5oVe9NQ+582Jrl2wP4oa9IW4X0BkDOXrmN4kGz50waz9H0QcrK4nH8n
+         61jvylCVQF0cXalElntPiknOj1NUC2RhxjpKrlWl6AZ66HTdf2bNRo36zDkT/SOVv/Fg
+         g4aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TcJtMb//+EPfBx4dkxoUg6Ti+FH+RqCACCceANTeFy8=;
+        b=kPBxqlXqWTqFFnf7lVmFRDbCNgPJ9l+9LuHU3WDf4vmDkfXOIIeWpe9ddHMJRM59U+
+         Q1ojWvHuh225UODnUiUSh59XUA3/x2SluSvKCJdILOyNscXllDer2au51Hhv1QOR99hS
+         8/NlGs12ODgYcDxTCiWQaSf8LVkjvdeygLehq1MCWIgMUuOiR6OBsZVlTdG93YlYdT6I
+         vC2DHAkdXEfwalkoukvy7mvrOwkCvd35rDB4dmJOqmwb6/n+VtLVrsqzcgEew9yDr7R5
+         9mvrl1Zgx80wlk9RSS/bK6sPIykVkl5CPrTY95Vn4RUyUi2xW+qTn5/0unkwiZWUxS6i
+         gvyg==
+X-Gm-Message-State: AOAM530709D4SeejG9UVSxQg2C4rs7EBD0RIW0w8ibLXfO2NuBjNORrx
+        AnzOSsCZ1lBPxic9rTVsbRUBMbUwDmRs4ZPnjyg=
+X-Google-Smtp-Source: ABdhPJwdex5HVUanotpQ+6UbaDV8Uz9CWq3GGsSLjV+gUdwtL3LLT+5Ll6mHB/s2OioozhetwkqYJSZSytkssiQo26U=
+X-Received: by 2002:a67:d319:: with SMTP id a25mr3032095vsj.57.1607535411238;
+ Wed, 09 Dec 2020 09:36:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <3bed61807fff6268789e7d411412fbc5cd6ffe2a.1607507863.git.hns@goldelico.com>
+In-Reply-To: <3bed61807fff6268789e7d411412fbc5cd6ffe2a.1607507863.git.hns@goldelico.com>
+From:   Sven Van Asbroeck <thesven73@gmail.com>
+Date:   Wed, 9 Dec 2020 12:36:40 -0500
+Message-ID: <CAGngYiVKHoXPGxmScCnb-R6xoo9GNw5pG8V8Cpyk3meoJbskiw@mail.gmail.com>
+Subject: Re: [PATCH] spi: dt-bindings: clarify CS behavior for spi-cs-high and
+ gpio descriptors
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-gpio@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andreas Kemnade <andreas@kemnade.info>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Make sure the max_speed_hz of spi_device does not override
-the max_speed_hz of controller.
+On Wed, Dec 9, 2020 at 4:57 AM H. Nikolaus Schaller <hns@goldelico.com> wrote:
+>
+> +
+> +      device node     | cs-gpio       | CS pin state active | Note
+> +      ================+===============+=====================+=====
+> +      spi-cs-high     | -             | H                   |
+> +      -               | -             | L                   |
+> +      spi-cs-high     | ACTIVE_HIGH   | H                   |
+> +      -               | ACTIVE_HIGH   | L                   | 1
+> +      spi-cs-high     | ACTIVE_LOW    | H                   | 2
+> +      -               | ACTIVE_LOW    | L                   |
+> +
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
----
- drivers/spi/spi.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Doesn't this table simply say:
+- specify   'spi-cs-high' for an active-high chip select
+- leave out 'spi-cs-high' for an active-low  chip select
+- the gpio active high/active low consumer flags are ignored
+?
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index cd3c395b4e90..51d7c004fbab 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -3378,7 +3378,8 @@ int spi_setup(struct spi_device *spi)
- 	if (status)
- 		return status;
- 
--	if (!spi->max_speed_hz)
-+	if (!spi->max_speed_hz ||
-+	    spi->max_speed_hz > spi->controller->max_speed_hz)
- 		spi->max_speed_hz = spi->controller->max_speed_hz;
- 
- 	mutex_lock(&spi->controller->io_mutex);
--- 
-2.25.1
-
+If so, then I would simply document it that way.
+Simple is beautiful.
