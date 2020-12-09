@@ -2,222 +2,154 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A02892D3C24
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Dec 2020 08:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC0F2D3C8F
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Dec 2020 08:59:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727311AbgLIHZI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Dec 2020 02:25:08 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:33170 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726065AbgLIHZH (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 9 Dec 2020 02:25:07 -0500
-Received: from [10.130.0.52] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx73+fe9BfHPUaAA--.43847S3;
-        Wed, 09 Dec 2020 15:24:16 +0800 (CST)
-Subject: Re: [PATCH v2 1/4] spi: LS7A: Add Loongson LS7A SPI controller driver
- support
-To:     Mark Brown <broonie@kernel.org>
-References: <1607413467-17698-1-git-send-email-zhangqing@loongson.cn>
- <20201208135644.GC6686@sirena.org.uk>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gaojuxin@loongson.cn,
-        yangtiezhu@loongson.cn
-From:   zhangqing <zhangqing@loongson.cn>
-Message-ID: <c916c525-7308-12a7-824b-7068fcead4cc@loongson.cn>
-Date:   Wed, 9 Dec 2020 15:24:15 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1725953AbgLIH7b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Dec 2020 02:59:31 -0500
+Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:23364 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725942AbgLIH7a (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Dec 2020 02:59:30 -0500
+Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
+        by mx0a-0014ca01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0B97vKFX029164;
+        Tue, 8 Dec 2020 23:58:24 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=proofpoint;
+ bh=hAn9QRiQLlv+e4+ZcGiTwPXpxp4i+wxQWgmSNb6Sbrk=;
+ b=OzO63BRsDXtkasFYw0nXlylC7rZqTxcbDHGnkm18Fv43k0jDovTY9mZUgkmIZucVez7T
+ 0IRmX2AGqqKKRKmEvtbZ+KUGIpeyPoClIXlEFWaLob+9Mr9W8/s7U+GFwDsTGbfqPyYn
+ PDF4yNlxY9Apys6JA0HEXv/r/kovHmbwmdGvEFDseZZBqbawguVKaken7dg3IRANzoW0
+ OAnbqQ++9K96n1SoFcfbp6qFq0qNouid1N1HMlnQWHDE11CWtDxLTkAYm8gHXQbuxMMQ
+ /hbxN60KCXaYoF/QA/ddrKj+YMkpy7pJjcOL3BfoDCjHZ7xwuav9ugp6/mcXq+Ow+zAv Iw== 
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2102.outbound.protection.outlook.com [104.47.70.102])
+        by mx0a-0014ca01.pphosted.com with ESMTP id 3587n2v16b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Dec 2020 23:58:24 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aJD72eGxNAivujY+I/Ra3LkCPgohdAFY1zHNbiguuS45q/YAHrPLMMJTZecyWbfnDlyfrHWujeqRbXzXXCTIXpHZv8oiczFwrEuiPXpg25HhfLOX0207vsONWIn9hjHkDIJjIJusKl/Ta+eaKpa3GbfZX3dzHno3hM0N3oUonDix2PbR6oWbswSsS963f2vaq54I2Rw+veN1tKrjnJQMsmTSutYVj0z9g8tdPMqEnwfv/b5SOJ/XpCbrdSfRQ+Zqzcf/HHTbh3ffW0f6v/XpFNZAMhovLMOIhi4jBCpZ9T3/0HdIlCYpGO/BAb93M5hIfY0IdmcqtNksKxnvyhIquA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hAn9QRiQLlv+e4+ZcGiTwPXpxp4i+wxQWgmSNb6Sbrk=;
+ b=J+ZV9mDeafh0Th5xblwl/w6my/5q4hNuqTHc1o2iTs/HYaM5eu+2s5Qdb58a30+DNwepUyRkJZelQ3lU3LzrVxhIpyoBl+v/frAZyz2hYy9PmOufZeHCoR+fJ4fULS1hSGT6iZWDe+q2AxgMje9D4V48GKTAibphIrhy+lNiyoXKUHjH0B6f/rup54wAs/4DoFBRdpGjdk5bdsFbLU81gFMN0kCpEo9G4BC69ovdLJZsZ8fk3C26KJL2qER5r74dEScPSwHb0OnmC9jKWX3M6CYDpwh9geN6Uew9KznRWtu5lLzBRVKP+qsOKeneOjiCb9GRZ+ZP7sGkBsihy0r5Tg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 158.140.1.147) smtp.rcpttodomain=bootlin.com smtp.mailfrom=cadence.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hAn9QRiQLlv+e4+ZcGiTwPXpxp4i+wxQWgmSNb6Sbrk=;
+ b=POQ1ucaN35Wls/0zeM6t45H8qAz4+ZtbjZLoQFJKIxgp5J66QBk7TxFaWSqxyzUW1DGA+ltT9RxPfNhaNnz0AH26RAHbePBGuBHTP/SOWocZ9egfh8YpTzs3OW/Fv9F/8kctNEkr/LC7d5/VZ0hFAgHKXioxhQU2lzGaEvZAHTw=
+Received: from DM6PR02CA0145.namprd02.prod.outlook.com (2603:10b6:5:332::12)
+ by SN4PR0701MB3808.namprd07.prod.outlook.com (2603:10b6:803:46::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.21; Wed, 9 Dec
+ 2020 07:58:20 +0000
+Received: from DM6NAM12FT043.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:5:332:cafe::29) by DM6PR02CA0145.outlook.office365.com
+ (2603:10b6:5:332::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.12 via Frontend
+ Transport; Wed, 9 Dec 2020 07:58:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.147)
+ smtp.mailfrom=cadence.com; bootlin.com; dkim=none (message not signed)
+ header.d=none;bootlin.com; dmarc=pass action=none header.from=cadence.com;
+Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
+ 158.140.1.147 as permitted sender) receiver=protection.outlook.com;
+ client-ip=158.140.1.147; helo=sjmaillnx1.cadence.com;
+Received: from sjmaillnx1.cadence.com (158.140.1.147) by
+ DM6NAM12FT043.mail.protection.outlook.com (10.13.179.162) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3654.10 via Frontend Transport; Wed, 9 Dec 2020 07:58:20 +0000
+Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
+        by sjmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 0B97wFQ8002826
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
+        Tue, 8 Dec 2020 23:58:19 -0800
+X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
+Received: from maileu3.global.cadence.com (10.160.88.99) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3; Wed, 9 Dec 2020 08:58:15 +0100
+Received: from vleu-orange.cadence.com (10.160.88.83) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3 via Frontend Transport; Wed, 9 Dec 2020 08:58:14 +0100
+Received: from vleu-orange.cadence.com (localhost.localdomain [127.0.0.1])
+        by vleu-orange.cadence.com (8.14.4/8.14.4) with ESMTP id 0B97wEhr024497;
+        Wed, 9 Dec 2020 08:58:14 +0100
+Received: (from jpawar@localhost)
+        by vleu-orange.cadence.com (8.14.4/8.14.4/Submit) id 0B97wEt7024496;
+        Wed, 9 Dec 2020 08:58:14 +0100
+From:   Jayshri Pawar <jpawar@cadence.com>
+To:     <linux-spi@vger.kernel.org>
+CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-kernel@vger.kernel.org>, <dkangude@cadence.com>,
+        <mparab@cadence.com>, <sjakhade@cadence.com>, <jpawar@cadence.com>
+Subject: [PATCH 0/2] Driver for Cadence xSPI flash controller
+Date:   Wed, 9 Dec 2020 08:57:56 +0100
+Message-ID: <1607500678-23862-1-git-send-email-jpawar@cadence.com>
+X-Mailer: git-send-email 2.4.5
 MIME-Version: 1.0
-In-Reply-To: <20201208135644.GC6686@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dx73+fe9BfHPUaAA--.43847S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF45uF1fZF4xWr48WrW8tFb_yoWrZr4rpa
-        yrWa1rKa1kXF4kZFWDJr4DW34rZw1SqryfGwn7t34xGas8ZF48GF1Fqr1FyrW3tFW7C3W7
-        ZF1jq3yY9F45u3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE14v_GF4l42xK82IYc2Ij64vIr4
-        1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
-        67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI
-        8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAv
-        wI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUffHUUUUUU=
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+Content-Type: text/plain
+X-OrganizationHeadersPreserved: maileu3.global.cadence.com
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e5f60e01-5101-4dfb-7792-08d89c1831f6
+X-MS-TrafficTypeDiagnostic: SN4PR0701MB3808:
+X-Microsoft-Antispam-PRVS: <SN4PR0701MB3808804A43FE56C812D95CD8C1CC0@SN4PR0701MB3808.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ppqlCTgOthnl6Fg4ObCizRJjtAuBSR6KoGPTyWC1/LMdlt9WbuMiBfom0Z1e5BgckC0PB3dVtQDT3BYLwRHC+lPyrd7NZxWcxR339YSN2Q7jN94PGJYoJvgsqrhcNxdL7q+1WJ77GsxBEderglzvsHYVh/d6AQcCO0/m+iuwTjCKely0f4KBPvw5lp4nqToSaVokQOXgHibmdRAG18z0QFpjkwtAEIeq2mXLjR5auUPNNz0jutRgJADY2OigthXaqnvM5patrjTG4Y41pEalF9gbHFySvcEvEnzMLxEwwSX5I29gZC5CIX7eKFe27TpybPEc0OGEOrYjMMQ34gOLrPrPU/SdD9cZF1jU4MdXt8TgRHrY0ygJh+R4NakWLK755gyhBRAVe93nWd7ejFpgoU73gBYLmhQm9eefAKoktQoIJF3rXOuBFVdqm6DjoJiI+bUyWkuxX5yRB74YK5XDyQ==
+X-Forefront-Antispam-Report: CIP:158.140.1.147;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx1.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(4636009)(346002)(376002)(136003)(36092001)(46966005)(70206006)(86362001)(8676002)(508600001)(36906005)(70586007)(2906002)(54906003)(2616005)(36756003)(107886003)(34020700004)(82310400003)(26005)(4326008)(8936002)(6666004)(47076004)(7636003)(356005)(5660300002)(186003)(426003)(6916009)(336012)(42186006);DIR:OUT;SFP:1101;
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2020 07:58:20.3369
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5f60e01-5101-4dfb-7792-08d89c1831f6
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.147];Helo=[sjmaillnx1.cadence.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM12FT043.eop-nam12.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR0701MB3808
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2020-12-09_07:2020-12-08,2020-12-09 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 mlxscore=0
+ clxscore=1015 phishscore=0 mlxlogscore=819 priorityscore=1501
+ suspectscore=1 impostorscore=0 malwarescore=0 adultscore=0 spamscore=0
+ lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2012090056
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Brown,
+Command processing
+Driver uses STIG work mode to communicate with flash memories.
+In this mode, controller sends low-level instructions to memory.
+Each instruction is 128-bit width. There is special instruction
+DataSequence which carries information about data phase.
+Driver uses Slave DMA interface to transfer data as only this
+interface can be used in STIG work mode.
 
-Thank you for your suggestions, these are achievable, I will send v3 in 
-the soon.
+PHY initialization
+The initialization of PHY module in Cadence XSPI controller
+is done by driving external pin-strap signals to controller.
+Next, driver runs PHY training to find optimal value of
+read_dqs_delay parameter. Controller checks device discovery
+status and if it's completed and with no error PHY training
+passes.
 
-Before sending v3, I would like to trouble you to see if this is 
-correct. It has been tested locally.
+Jayshri Pawar (2):
+  Add support for Cadence XSPI controller
+  Add dt-bindings documentation for Cadence XSPI controller
 
-On 12/08/2020 09:56 PM, Mark Brown wrote:
-> On Tue, Dec 08, 2020 at 03:44:24PM +0800, Qing Zhang wrote:
->
->> v2:
->> - keep Kconfig and Makefile sorted
->> - make the entire comment a C++ one so things look more intentional
-> You say this but...
->
->> +++ b/drivers/spi/spi-ls7a.c
->> @@ -0,0 +1,324 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Loongson LS7A SPI Controller driver
->> + *
->> + * Copyright (C) 2020 Loongson Technology Corporation Limited
->> + */
-> ...this is still a mix of C and C++ comments?
-       Replace all with //
+ .../devicetree/bindings/spi/cdns,xspi.yaml         | 164 ++++
+ drivers/spi/Kconfig                                |  11 +
+ drivers/spi/Makefile                               |   1 +
+ drivers/spi/spi-cadence-xspi.c                     | 894 +++++++++++++++++++++
+ 4 files changed, 1070 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/cdns,xspi.yaml
+ create mode 100644 drivers/spi/spi-cadence-xspi.c
 
->
->> +static int set_cs(struct ls7a_spi *ls7a_spi, struct spi_device  *spi, int val)
->> +{
->> +	int cs = ls7a_spi_read_reg(ls7a_spi, SFCS) & ~(0x11 << spi->chip_select);
->> +
->> +	if (spi->mode  & SPI_CS_HIGH)
->> +		val = !val;
->> +	ls7a_spi_write_reg(ls7a_spi, SFCS,
->> +		(val ? (0x11 << spi->chip_select):(0x1 << spi->chip_select)) | cs);
->> +
->> +	return 0;
->> +}
-> Why not just expose this to the core and let it handle things?
->
-> Please also write normal conditional statements to improve legibility.
-> There's quite a lot of coding style issues in this with things like
-> missing spaces
-     static void ls7a_spi_set_cs(struct spi_device *spi, bool enable)
-{
-         struct ls7a_spi *ls7a_spi;
-
-         int cs = ls7a_spi_read_reg(ls7a_spi, SFCS) & ~(0x11 << 
-spi->chip_select));
-
-         ls7a_spi = spi_master_get_devdata(spi->master);
-
-         if (!!(spi->mode & SPI_CS_HIGH) == enable)
-                 val = (0x11 << spi->chip_select) | cs;
-         else
-                 val = (0x1 << spi->chip_select) | cs;
-
-         ls7a_spi_write_reg(ls7a_spi, SFCS, val);
-}
-
-      static int ls7a_spi_pci_probe---->
-
-      +master->set_cs = ls7a_spi_set_cs;
-
->
->> +	if (t) {
->> +		hz = t->speed_hz;
->> +		if (!hz)
->> +			hz = spi->max_speed_hz;
->> +	} else
->> +		hz = spi->max_speed_hz;
-> If one branch of the conditional has braces please use them on both to
-> improve legibility.
->
->> +static int  ls7a_spi_transfer_one_message(struct spi_master *master,
->> +                                         struct spi_message *m)
-> I don't understand why the driver is implementing transfer_one_message()
-> - it looks like this is just open coding the standard loop that the
-> framework provides and should just be using transfer_one().
-
-static int  ls7a_spi_transfer_one(struct spi_master *master,
-                       struct spi_device *spi,
-                                   struct spi_transfer *t)
-{
-     struct ls7a_spi *ls7a_spi;
-     int param, status;
-
-     ls7a_spi = spi_master_get_devdata(master);
-
-     spin_lock(&ls7a_spi->lock);
-     param = ls7a_spi_read_reg(ls7a_spi, PARA);
-     ls7a_spi_write_reg(ls7a_spi, PARA, param&~1);
-     spin_unlock(&ls7a_spi->lock);
-
-         status = ls7a_spi_do_transfer(ls7a_spi, spi, t);
-         if(status < 0)
-                 return status;
-
-         if(t->len)
-         r = ls7a_spi_write_read(spi, t);
-
-         spin_lock(&ls7a_spi->lock);
-     ls7a_spi_write_reg(ls7a_spi, PARA, param);
-     spin_unlock(&ls7a_spi->lock);
-
-     return status;
-}
-
-   static int ls7a_spi_pci_probe---->
-
-  - master->transfer_one_message = ls7a_spi_transfer_one_message;
-  +master->transfer_one = ls7a_spi_transfer_one;
->
->> +		r = ls7a_spi_write_read(spi, t);
->> +		if (r < 0) {
->> +			status = r;
->> +			goto error;
->> +			}
-> The indentation here isn't following the kernel coding style.
->
->> +	master = spi_alloc_master(&pdev->dev, sizeof(struct ls7a_spi));
->> +	if (!master)
->> +		return -ENOMEM;
-> Why not use devm_ here?
-
-- master = spi_alloc_master(&pdev->dev, sizeof(struct ls7a_spi));
-
-   error:
-- spi_put_master(master);
-
-+ master = devm_spi_alloc_master(&pdev->dev, sizeof(struct ls7a_spi));
-
->
->> +	ret = devm_spi_register_master(dev, master);
->> +	if (ret)
->> +		goto err_free_master;
-> The driver uses devm_spi_register_master() here but...
->
->> +static void ls7a_spi_pci_remove(struct pci_dev *pdev)
->> +{
->> +	struct spi_master *master = pci_get_drvdata(pdev);
->> +	struct ls7a_spi *spi;
->> +
->> +	spi = spi_master_get_devdata(master);
->> +	if (!spi)
->> +		return;
->> +
->> +	pci_release_regions(pdev);
-> ...releases the PCI regions in the remove() function before the SPI
-> controller is freed so the controller could still be active.
-
-      static void ls7a_spi_pci_remove(struct pci_dev *pdev)
-{
-         struct spi_master *master = pci_get_drvdata(pdev);
-
-      + spi_unregister_master(master);
-         pci_release_regions(pdev);
-}
-
-Thanks,
-
--Qing
+-- 
+2.7.4
 
