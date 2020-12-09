@@ -2,54 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABD82D453B
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Dec 2020 16:22:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0632D46F9
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Dec 2020 17:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728441AbgLIPVT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Dec 2020 10:21:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38024 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726195AbgLIPVS (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 9 Dec 2020 10:21:18 -0500
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607527238;
-        bh=oP1/ghIggIcdAgTMo8gKtiiliLAPXkTFve4MepiTTmU=;
-        h=Subject:From:Date:To:From;
-        b=qdB7UTxxs1XiqlPdkLB2PfOzdgzWx7HBcdZ3Ng1ijfeQUMUahwY40OfC93D95Nd6b
-         w5JMmKXRy1e3czw8HLk/3K1OM5OG1+AIc9AQZk2X5ugVA2OStBuopCYs4rJyrVKtMA
-         RbJCILgIHSP3dYjWdGSZqytvVjBJkoReg7tWN2txlwFUuwK/4nSnz0cXXQbtMKmbOk
-         pmiFyqIiAj/R4pSuKZhaVLE0RYNYF0wYzXmRVJ5uQYCsus2damLA2nKGmWZKboC43z
-         EhkT2pfvBEgpvAYjMkRlthTfh3ARidRz9YKSEboZyjFn5cnknRA9RgfhQuEZsvO91x
-         XfE9Dm2eXz2Ug==
+        id S1729730AbgLIQmO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Dec 2020 11:42:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732122AbgLIQmA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Dec 2020 11:42:00 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F71C061793
+        for <linux-spi@vger.kernel.org>; Wed,  9 Dec 2020 08:41:19 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id r3so2460628wrt.2
+        for <linux-spi@vger.kernel.org>; Wed, 09 Dec 2020 08:41:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZtyuRdRz8sBuacydQZ1U8sV8ePK6VljMJ9YQuTchpwE=;
+        b=SGRrDcXx7kpNQT8MctEfTnNV6tsVPXc+l1wPopGzlWU4Bryx5Upueed8qDVEzdrVs8
+         GUP3ovO4MBPcAd81XrTibO5WDjJMDmALAps7mLG2kRr/coRbR7IDRt6qbOcXvaN1VCtH
+         j22C1KQ1P8v5mmfS7Wt6KQ/FNoZ6QsUZ8zcrA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZtyuRdRz8sBuacydQZ1U8sV8ePK6VljMJ9YQuTchpwE=;
+        b=mO5gQjquY9yBxxxN8jl4sbGhUQVkLACPx1yC8e/uEffmUHfvY1QTird7P8TUgrWWRd
+         NLdhdSJllXZpReymWTnqhxSWcy6+/UG7BtSHo07ioQHTwhy0WHwiu6UMXwmFEro4oDmb
+         of+b0bdzZWXkouFY5FVw03bLzCfH1lD0py4k/+vIJeHYvL1WWAVGNSgH7qBAM1hZ7gib
+         UBSfvdITDLlPyHQLMCXx7IPs4BqjypsEHVuyeJ7V9dAn6XpDOxis10e9lF/Le2Xi7cEF
+         hKWEs7u6djzotssA4FZloyitj5sfZTNa2EZcHtWwWmGC+dFoXbMyBZBJXRfjjNyFL3Wf
+         GGww==
+X-Gm-Message-State: AOAM531s3RtIb+V8NqG+kGBecUr5zxj/OI7WbaO1LgE7wOW/PeLvSNjK
+        5a9A+JpFP0HhPRPHRU/CrWpRSVV0tULOHbI0TBsPeg==
+X-Google-Smtp-Source: ABdhPJwEg372av2KNxoGuDDVEL4uVw1qajfMrJ17k9OJ6CGdKJDuSuYJ/scAeKBtFnzbgJfJw2ScvoDjE6gpSjHwQ+A=
+X-Received: by 2002:a5d:5146:: with SMTP id u6mr3839567wrt.66.1607532077897;
+ Wed, 09 Dec 2020 08:41:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <160752723825.28193.5514280504355665958.git-patchwork-summary@kernel.org>
-Date:   Wed, 09 Dec 2020 15:20:38 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+References: <20201204193540.3047030-1-swboyd@chromium.org> <20201204193540.3047030-3-swboyd@chromium.org>
+In-Reply-To: <20201204193540.3047030-3-swboyd@chromium.org>
+From:   Simon Glass <sjg@chromium.org>
+Date:   Wed, 9 Dec 2020 09:41:06 -0700
+Message-ID: <CAPnjgZ3d4pvp1ZMFeSf1zc7oVgUsVYDR-Q8bbQouwowS8jon+Q@mail.gmail.com>
+Subject: Re: [PATCH 2/3] platform/chrome: cros_ec_spi: Drop bits_per_word assignment
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Mark Brown <broonie@kernel.org>, lk <linux-kernel@vger.kernel.org>,
+        linux-spi@vger.kernel.org, Benson Leung <bleung@chromium.org>,
+        linux-arm-msm@vger.kernel.org,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Alexandru M Stan <amstan@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+On Fri, 4 Dec 2020 at 12:35, Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> This is already handed by default in spi_setup() if the bits_per_word is
+> 0, so just drop it to shave off a line.
+>
+> Cc: Simon Glass <sjg@chromium.org>
+> Cc: Gwendal Grignou <gwendal@chromium.org>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> Tested-by: Douglas Anderson <dianders@chromium.org>
+> Acked-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+> Cc: Alexandru M Stan <amstan@chromium.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  drivers/platform/chrome/cros_ec_spi.c | 1 -
+>  1 file changed, 1 deletion(-)
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (refs/heads/for-next):
-
-Series: DW apb_ssi V4 support for Kendryte K210 RISC-V SoC
-  Submitter: Damien Le Moal <damien.lemoal@wdc.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=396943
-  Lore link: https://lore.kernel.org/r/20201206011817.11700-1-damien.lemoal@wdc.com
-    Patches: [v3,1/3] dt-bindings: spi: dw-apb-ssi: Add Canaan K210 SPI controller
-             [v3,2/3] spi: dw: Add support for 32-bits max xfer size
-             [v3,3/3] spi: dw: Add support for the Canaan K210 SoC SPI
-
-Total patches: 3
-
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Reviewed-by: Simon Glass <sjg@chromium.org>
 
 
+>
+> diff --git a/drivers/platform/chrome/cros_ec_spi.c b/drivers/platform/chrome/cros_ec_spi.c
+> index f9df218fc2bb..14c4046fa04d 100644
+> --- a/drivers/platform/chrome/cros_ec_spi.c
+> +++ b/drivers/platform/chrome/cros_ec_spi.c
+> @@ -741,7 +741,6 @@ static int cros_ec_spi_probe(struct spi_device *spi)
+>         struct cros_ec_spi *ec_spi;
+>         int err;
+>
+> -       spi->bits_per_word = 8;
+>         spi->rt = true;
+>         err = spi_setup(spi);
+>         if (err < 0)
+> --
+> https://chromeos.dev
+>
