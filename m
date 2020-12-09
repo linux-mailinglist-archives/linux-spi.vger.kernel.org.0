@@ -2,92 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1692D4BEB
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Dec 2020 21:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0B72D4CDB
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Dec 2020 22:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388554AbgLIUbf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Dec 2020 15:31:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        id S2388008AbgLIV3F (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Dec 2020 16:29:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387695AbgLIUb0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Dec 2020 15:31:26 -0500
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3908C0613CF;
-        Wed,  9 Dec 2020 12:30:45 -0800 (PST)
-Received: by mail-lj1-x243.google.com with SMTP id f11so4036069ljn.2;
-        Wed, 09 Dec 2020 12:30:45 -0800 (PST)
+        with ESMTP id S1727369AbgLIV3F (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Dec 2020 16:29:05 -0500
+Received: from mail-vk1-xa44.google.com (mail-vk1-xa44.google.com [IPv6:2607:f8b0:4864:20::a44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED522C0613D6;
+        Wed,  9 Dec 2020 13:28:24 -0800 (PST)
+Received: by mail-vk1-xa44.google.com with SMTP id i62so701268vkb.7;
+        Wed, 09 Dec 2020 13:28:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=85hxXWABsz718FGqeAM9X1vREp73l60SrJ0DvZJoV24=;
-        b=Qgne1+qxY5AszIb9GLHu4a9cJhUe+ZOUHIIRM0txE9d2B74U3kVuJ9caHgbuqIDFKM
-         LVGiRiG6WeJB5Y7UspAZLrTEVP69g7mZEXmFXWd54O5GNyyhMHebdMJG9+OTlcY26q15
-         wQ+EpBhBXwq3qs2q962F2eF2b9swuMaiwFP1dmWHFzdPoiR7TV4ZjRUy/oq0hdAVcSLW
-         RL8suA5DFWo1w9khYfDU6XPv1EqSkKsWHuldflhOi0WqyFd015akUyMK38Omzomao+TB
-         D7if1Utly2e6M1DuANh05DG7999i+ddGcxkpbQzY1RzAhEMw/jdd3fNO9b61qAY0cl71
-         nqGQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/Y8EdRxn8dSpFUJIAxU90D9R+cEmBFpkuR2dcS1QMOQ=;
+        b=uBH77reQ5WSxZogdoGv9vsLQcBmmvl9zfLpdFq5vGV10KH1T1L6oKowHBtOm3Y/pgL
+         7Yi2n+U8wcL4iUqmlFLAseOwQK9XJjsIQD75uYiT88bfq33rvY46LYdrSbvC/N0GsKO7
+         TbnSe/qJUteYvvy1yP6mGWiI1QUfkobGgrwmDQ3oPGWvg6j94ke6hn5q29xdXLZJcV7U
+         w9Hf1RsJ1OOvBy54iPPp5ffksrmebhADRdhrvZoOGjMcTSUvktgleCUHVjCDiNgpwpFf
+         6Mf5QxS5oUFVqHwfjRtSU92E4qwe9o2wJ67PARiK+NWjeeyFJFYBsG6Jy4M1JlxjiNUS
+         Q0aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=85hxXWABsz718FGqeAM9X1vREp73l60SrJ0DvZJoV24=;
-        b=ulvwA0abo5+mg9h+csKNyVtckgkHbu24C1ueCRGD0f1DCn3SOgpjDeUkBopihc8AvU
-         yQ7TG5X2AEjfJYNphamqYe4NksY266gP39JbWEgy8kCkoqfJlpoXbZBnIac5VkyackPP
-         2kqbLBAlr1jUdkcXED2tTdENPXZav7rq/Md91gemrDG0Wr6yg70hLo8v0ukOaWGUKxnC
-         229VEUu0JU8o+2j+q1aIwQ4L7UvFA+J3361S+NcsEPbNkBykjnJ5Vclptycj6/OUVcmo
-         8UZ2dWsDncE4W9TXK7GDIl4j1rM+BYMkQzUp/3LbXX4bBTSNV8kpyAKoZjWv8/UZU4j5
-         c3Jw==
-X-Gm-Message-State: AOAM530U6E8k1CC6rVWZmeEtnqQ8hHJIbncvaTEH2iIc8EVR1vAHISBl
-        YpUuus9cZsE8DNRC2NOKE/g=
-X-Google-Smtp-Source: ABdhPJxteF6rv6Kun+85vNIc8PKdYHSeYKl8baMUaYUrSpIuhxROi0H7txkJvhcskIdmt3cQrplVaA==
-X-Received: by 2002:a2e:2e1a:: with SMTP id u26mr1707057lju.223.1607545844392;
-        Wed, 09 Dec 2020 12:30:44 -0800 (PST)
-Received: from mobilestation ([95.79.141.114])
-        by smtp.gmail.com with ESMTPSA id 14sm278472lfq.221.2020.12.09.12.30.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Dec 2020 12:30:43 -0800 (PST)
-Date:   Wed, 9 Dec 2020 23:30:42 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: Limit the spi device max speed to controller's max
- speed
-Message-ID: <20201209203042.oqbcijwaxqt5aa7b@mobilestation>
-References: <20201209173514.93328-1-tudor.ambarus@microchip.com>
- <20201209194636.32f4ioxxdggezklr@mobilestation>
- <20201209195420.GD4790@sirena.org.uk>
- <20201209201535.32g4kwpzo45jiqr3@mobilestation>
- <20201209202552.GE4790@sirena.org.uk>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/Y8EdRxn8dSpFUJIAxU90D9R+cEmBFpkuR2dcS1QMOQ=;
+        b=MBPNAPXAOnGo+KKhqQyALi3fISIAP8XcgS7R0QjKhd8J0osSrRIdGZBkEqtEoiy9ed
+         4IzrSiBuQasORioH9/u4SB2ZblePq4mttw5tTxpTLCvrpv2frUcn7F5cwkpi5GK3EARo
+         0KuwFeljFapBOSAMMCQUvfQWY2xPhJMn/bWq+DK2l0RgibCxwsaqHiTOUzZ0xDYMAYXX
+         +bOdxeABIhPyRkIT0WNSMx3tsLUXQJ6VxjN5u6l6u+/kLkILuhQqXWdG9qNwdZjNjLVZ
+         aVs+6j2kg/VEYoJ2hCUEjOexlyBXo9mzgHS9FnMImeiXib7zeM0Bh5yOY/zghC2W2RrC
+         m7aQ==
+X-Gm-Message-State: AOAM532EC1uhV6K8cGIFemhWl+PDYwcdyi5T8y5zcAs9Bo3WT/3qrxXh
+        o4c3T0I0LZrEEWFmL1jVuLIdi2rigzgz98XEjPI=
+X-Google-Smtp-Source: ABdhPJxrniZdXByb0gLOCGHbVq+71ilItd9cTm3O5PBX588zWLWH/Ww7xnDvuAabQ5vtA4PQcLOab+DyuE6G8CDHVMA=
+X-Received: by 2002:a1f:3a12:: with SMTP id h18mr4641949vka.23.1607549304008;
+ Wed, 09 Dec 2020 13:28:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201209202552.GE4790@sirena.org.uk>
+References: <3bed61807fff6268789e7d411412fbc5cd6ffe2a.1607507863.git.hns@goldelico.com>
+ <CAGngYiVKHoXPGxmScCnb-R6xoo9GNw5pG8V8Cpyk3meoJbskiw@mail.gmail.com>
+ <3FA1D050-3BD5-4A97-9D83-520CCF75D147@goldelico.com> <CAGngYiVL9M72hFRWnmT_8RRX9pUTSLsNuYz6mUo0Be4Vivk7Xw@mail.gmail.com>
+ <20201209210133.44ab9c97@aktux> <09D41BD9-F6BA-4566-8151-ACB3B2274B52@goldelico.com>
+In-Reply-To: <09D41BD9-F6BA-4566-8151-ACB3B2274B52@goldelico.com>
+From:   Sven Van Asbroeck <thesven73@gmail.com>
+Date:   Wed, 9 Dec 2020 16:28:12 -0500
+Message-ID: <CAGngYiU3DptnURBH=xf0eO4ZtKMH1sd2qWQqfBNbDkXDpzwGeg@mail.gmail.com>
+Subject: Re: [PATCH] spi: dt-bindings: clarify CS behavior for spi-cs-high and
+ gpio descriptors
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Andreas Kemnade <andreas@kemnade.info>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-gpio@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com,
+        Lukas Wunner <lukas@wunner.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Dec 09, 2020 at 08:25:52PM +0000, Mark Brown wrote:
-> On Wed, Dec 09, 2020 at 11:15:35PM +0300, Serge Semin wrote:
-> > On Wed, Dec 09, 2020 at 07:54:20PM +0000, Mark Brown wrote:
-> 
-> > > Right, in general we aim to do this sort of fixup on the transfers
-> > > and messages rather than the devices, I guess we might be missing
-> > > validation in some of the flash acceleration paths or was this an issue
-> > > seen through inspection?
-> 
-> > In case of DW SPI driver we just make sure the SPI-client device
-> > speed set in the max_speed_hz doesn't exceed the controller SPI-bus
-> > clock frequency and clamp it if it does. So the driver is safe in that
-> > matter.
-> 
+On Wed, Dec 9, 2020 at 3:08 PM H. Nikolaus Schaller <hns@goldelico.com> wrote:
+>
+> But I have tested with
+>
+> > spi->mode |= SPI_MODE_3;
+>
+> which should keep the mode intact. Right? That did not work either.
+>
 
-> Ideally the driver wouldn't have to check though (no harm in doing so of
-> course).
+- make sure ("spi: fix client driver breakages when using GPIO descriptors")
+  is in your tree
+- your panel's CS is active-low, so 'spi-cs-high' should be removed from its
+  devicetree entry. In accordance with the rules as explained in commit
+  message of 6953c57ab172. Also in accordance with the table you posted
+  in this patch.
 
-If so then we'd need to have a dedicated speed-related field in the
-spi_mem_op structure, which would be accordingly initialized by the
-SPI-mem core.
+When these two changes in place, your panel should work. I have tested this
+by mirroring your setup on my board:
 
--Sergey
+spi5-gpio {
+       compatible = "spi-gpio";
+       #address-cells = <0x1>;
+       #size-cells = <0x0>;
+       pinctrl-names = "default";
+       pinctrl-0 = <&...>;
+
+       sck-gpios = <&gpio... GPIO_ACTIVE_HIGH>;
+       miso-gpios = <&gpio... GPIO_ACTIVE_HIGH>;
+       mosi-gpios = <&gpio... GPIO_ACTIVE_HIGH>;
+       cs-gpios = <&gpio... GPIO_ACTIVE_HIGH>;
+       num-chipselects = <1>;
+
+       ethernet-switch@0 { /* active low cs */
+               compatible = "micrel,ksz8795";
+               spi-max-frequency = <1000000>;
+               reg = <0>;
+       };
+};
+
+If this does not work for you, then what are we missing?
