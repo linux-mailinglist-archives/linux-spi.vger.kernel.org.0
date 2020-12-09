@@ -2,85 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B22F42D4B16
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Dec 2020 20:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C36692D4B29
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Dec 2020 21:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730838AbgLITzI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Dec 2020 14:55:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48144 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729904AbgLITzI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 9 Dec 2020 14:55:08 -0500
-Date:   Wed, 9 Dec 2020 19:54:20 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607543667;
-        bh=U6M7AWAv6/CKWCwL3u7zyzCT2QpPcnIsDTnxCILhtoE=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B5oePjpSYh/pjaTGOBdUkD/N7rmXPeOGWuunrd7QJVC9tLjyz3Gu+CnZOXuqP2JDd
-         f7t1X14sl/CQtxf/+P/TN2h1DDCIbfBYvWFJl0Fv8c3rHGS3pZf6H8aDwUa8+Q7Qhq
-         0G21lwqvUiJjyiVhgX9p/0HIeFGKwazd2PzjLYv1iBV+4T31h6qF7pg/HSPshlUk7H
-         tGgCc+GIG4NDEeKu6GcUoT+AtckMhzVhXQw+niZS76SAwF72Zyx7BowkZle4akVw87
-         TXxBbXhHQXS8b6YknfSt56wB8/uT/t2KUmaat/YT48sUXK3w+15Sa1hk7rA9JXeWN1
-         eCoiWm2cN6RCQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: Limit the spi device max speed to controller's max
- speed
-Message-ID: <20201209195420.GD4790@sirena.org.uk>
-References: <20201209173514.93328-1-tudor.ambarus@microchip.com>
- <20201209194636.32f4ioxxdggezklr@mobilestation>
+        id S2388049AbgLIUCT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Dec 2020 15:02:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59664 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730106AbgLIUCS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Dec 2020 15:02:18 -0500
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3FFC0613CF;
+        Wed,  9 Dec 2020 12:01:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=8F3+EPqz0dxBHDJRmRDC3uMMxguu00ELq3fa08RQ0eo=; b=XiVCnKkhEeoXMupclMDczRuUsa
+        IG3QZN2hnju4jc5cQ+ke3ZjsK1VaPm4MnyjmKfLBznndhbolGqtzK7/G+OHm6VKJgqd/H2Fvc2P1z
+        4zDlwtZqLzTl3ejxY/NIZg0z5x7LyuCBoAyqNhIwWgXu0nZvcRzC/ccTg6X+VYy+wd1Y=;
+Received: from p200300ccff0981001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff09:8100:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1kn5eY-0000Cz-2v; Wed, 09 Dec 2020 21:01:34 +0100
+Date:   Wed, 9 Dec 2020 21:01:33 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Sven Van Asbroeck <thesven73@gmail.com>
+Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-gpio@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: Re: [PATCH] spi: dt-bindings: clarify CS behavior for spi-cs-high
+ and gpio descriptors
+Message-ID: <20201209210133.44ab9c97@aktux>
+In-Reply-To: <CAGngYiVL9M72hFRWnmT_8RRX9pUTSLsNuYz6mUo0Be4Vivk7Xw@mail.gmail.com>
+References: <3bed61807fff6268789e7d411412fbc5cd6ffe2a.1607507863.git.hns@goldelico.com>
+        <CAGngYiVKHoXPGxmScCnb-R6xoo9GNw5pG8V8Cpyk3meoJbskiw@mail.gmail.com>
+        <3FA1D050-3BD5-4A97-9D83-520CCF75D147@goldelico.com>
+        <CAGngYiVL9M72hFRWnmT_8RRX9pUTSLsNuYz6mUo0Be4Vivk7Xw@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YToU2i3Vx8H2dn7O"
-Content-Disposition: inline
-In-Reply-To: <20201209194636.32f4ioxxdggezklr@mobilestation>
-X-Cookie: sillema sillema nika su
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, 9 Dec 2020 14:04:26 -0500
+Sven Van Asbroeck <thesven73@gmail.com> wrote:
 
---YToU2i3Vx8H2dn7O
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> On Wed, Dec 9, 2020 at 1:16 PM H. Nikolaus Schaller <hns@goldelico.com> wrote:
+> >
+> > This is also what made me wonder if that is really intended because then
+> > the whole discussion about the cs-gpio-flags and inversion and the fixes
+> > would not have been needed. The current code and fixes are all about
+> > not ignoring the flags...  
+> 
+> The inversion you witnessed was a bug caused by spi client drivers that
+> simply "plow over" the SPI_CS_HIGH mode flag. This includes the panel driver
+> you're using, see:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/panel/panel-tpo-td028ttec1.c?h=v5.10-rc6#n337
+> 
+ah, it would be set in spi->mode and is cleared by
 
-On Wed, Dec 09, 2020 at 10:46:36PM +0300, Serge Semin wrote:
+spi->mode = SPI_MODE_3;
 
-> On Wed, Dec 09, 2020 at 07:35:14PM +0200, Tudor Ambarus wrote:
 
-> > Make sure the max_speed_hz of spi_device does not override
-> > the max_speed_hz of controller.
+Hmm, but we have
+                      spi-cpol;
+                        spi-cpha;
+in devicetree. Why do we need that spi->mode line at all?
 
-> I have doubts that's right thing to do. It seems better to let
-> the controller driver to handle the speed clamping itself, while
-> to leave the SPI client device max_speed_hz field describing the
-> device speed capability. Moreover the SPI-transfers passed to the
-> controller will have a SPI-bus speed fixed in accordance with the
-> controller and client device capabilities anyway.
-> See the __spi_validate() method for details:
-> https://elixir.bootlin.com/linux/v5.10-rc7/source/drivers/spi/spi.c#L3570
-
-Right, in general we aim to do this sort of fixup on the transfers
-and messages rather than the devices, I guess we might be missing
-validation in some of the flash acceleration paths or was this an issue
-seen through inspection?
-
---YToU2i3Vx8H2dn7O
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/RK2sACgkQJNaLcl1U
-h9AOogf/bm8GIbL9U7qDE6v/ghRo5Tj9+6YBvMNAsTKtmGctQqMB2AYegZ2VEeHQ
-9EuV70kEux34udEG4pgmOqcSyZOt1WWgkkE6BvEHQHONgZ9y75JkyIfBk3/iuwpN
-HIOugg60B1ZaJShUIQynQj5RWKlgZ/T4ksR+v5BGB30kZzirOgtSKEQ7o0bDKyAy
-1q1RK9r9ycVfWsqHQz9aFEoYWBmC9i/qyUxD0enjx+BjTEar7daNI1XrG4z5Bnzl
-6TpHTUSdFa+RLQP0gQ7/ltCBca2z9jDd96xk6jNTcjrEJhXSbuIA/BhCUDjG7WtY
-13AEwYvRAZMXSkYSuiNoXA9Y6S/N+g==
-=TYn1
------END PGP SIGNATURE-----
-
---YToU2i3Vx8H2dn7O--
+Regards,
+Andreas
