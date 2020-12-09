@@ -2,41 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 769C22D48C3
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Dec 2020 19:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D512D49C6
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Dec 2020 20:06:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732924AbgLISQt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Dec 2020 13:16:49 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.53]:27749 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732910AbgLISQt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Dec 2020 13:16:49 -0500
-X-Greylist: delayed 29744 seconds by postgrey-1.27 at vger.kernel.org; Wed, 09 Dec 2020 13:16:43 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1607537630;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:From:
-        Subject:Sender;
-        bh=385GotCTTVp6WiXp7P/PPzEqWXNcE+6k1Muc5VljLWs=;
-        b=BvdBAgYuw6xhVZz5S4NYc/xYpdRwes3c94gVBDDxUzC/dXuUZ/CaPgquS9zO9VdPZ1
-        mfi69MFsee5oJ0fzoc9cmCM4ebfptW5ZAfW3ob2NscV10onmXQN+r36kDeh2QreG39cD
-        P3nuXZLtMlHoT/zhshJ+JeWZBeOoaQyDtB1jzh22iz8Y3NdTuv02R9RGhc0Jv2yinIYc
-        eXFLKdeTZAJGT139yvwdMc6pixcgO2yPkxhEmZHJ9zwut2Gs+V5eIAr2V9yDxm2dO/vP
-        bTCMCy01Nw6lSHQNVF3lFjKLqJCJE7FTDgSIx2nTNzTX5wsrdfLwtTmaJSKnbv0CL2B0
-        0RsA==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Qpw97WFDlafXAoNHQ=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-        by smtp.strato.de (RZmta 47.6.2 DYNA|AUTH)
-        with ESMTPSA id 908871wB9IDe86J
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-        Wed, 9 Dec 2020 19:13:40 +0100 (CET)
-Subject: Re: [PATCH] spi: dt-bindings: clarify CS behavior for spi-cs-high and gpio descriptors
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Content-Type: text/plain; charset=us-ascii
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <CAGngYiVKHoXPGxmScCnb-R6xoo9GNw5pG8V8Cpyk3meoJbskiw@mail.gmail.com>
-Date:   Wed, 9 Dec 2020 19:13:39 +0100
+        id S2387509AbgLITFY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Dec 2020 14:05:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733155AbgLITFS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Dec 2020 14:05:18 -0500
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4162C0613D6;
+        Wed,  9 Dec 2020 11:04:38 -0800 (PST)
+Received: by mail-vs1-xe43.google.com with SMTP id j140so1492911vsd.4;
+        Wed, 09 Dec 2020 11:04:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8R1emGlkFCZsxKOchekRowPlTq2Uar4xze39TGRHNXE=;
+        b=BeDN6FOKor+IDI8aaoX66IwhGklASEbu3c1etaacMoxS1tFLyzuE5mA8bBD/UmQwsY
+         LiMxBrAbgYjvsLLG9QZvqT9tkiTbVmLifA911pMjDvu3IVw4Sn3En84zmIpxT4dz05RV
+         a+bS7zHOUfTk/lJD8YZHk0spkAPrv7xqPgKv1Ogfa8TbaMXhAZODHDoikO50AR3KFdZ0
+         xERQ0TOcQls0eVck1XCHv/FgYDGTwgex6cEDjwC2YUhQPKh4j1uOm7ukEAAMCkc1yXDG
+         /j2KAnuCLo3evAcyphQOH4w2beEHg3ZMlYnRE3RLiYojxbpXLii6ERHd705NbaUv3EAE
+         GReg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8R1emGlkFCZsxKOchekRowPlTq2Uar4xze39TGRHNXE=;
+        b=OwNZE8nCiY8S2e/I+Y8EV/YcWWrtnXBL6Y/FLxBnEaBvwxXkv/XqvWZFJ9jp8DPivn
+         URp7iAURzgo2qng2UVgMjLDKYrN5278h+2R+IOSoiidlDQBulh9fxFF4zFN5H4FUNrq/
+         HXf2iFMV7lsk9HnXXAeWnXFwz3zUnQmq0erW8IaJb+YOiwfgOIszc4jtm43hLxcn1iJR
+         jMAfYOZxMLDPePzNN6rZmplIwcMbVs5mYVoxnil3VWo2kOqzRONpjZNXMMKit4beVbo2
+         Huvp4XQMKgnucx3UvaZVosjZBiqLx/BT3HtH83mOHI1d5MHzFZcXTnaNN1qajM4MapFF
+         o2Fw==
+X-Gm-Message-State: AOAM530IpUC8CYwg8c0JMJZVkx1lHNUrLSOClX85VTOZYA6unO0jJqU6
+        gkV9e2hRmfLkNKUNmcHHOButsVK7Sso3JNfyRyQ=
+X-Google-Smtp-Source: ABdhPJyQ7CCmXTywKxDhDrU3RrhrzlYn16FTT/OFwg6lGeLoJd3r+t01cn9kYQUtfmGK0lw5z1Gai58BfxETvteuaX0=
+X-Received: by 2002:a67:d319:: with SMTP id a25mr3553529vsj.57.1607540677782;
+ Wed, 09 Dec 2020 11:04:37 -0800 (PST)
+MIME-Version: 1.0
+References: <3bed61807fff6268789e7d411412fbc5cd6ffe2a.1607507863.git.hns@goldelico.com>
+ <CAGngYiVKHoXPGxmScCnb-R6xoo9GNw5pG8V8Cpyk3meoJbskiw@mail.gmail.com> <3FA1D050-3BD5-4A97-9D83-520CCF75D147@goldelico.com>
+In-Reply-To: <3FA1D050-3BD5-4A97-9D83-520CCF75D147@goldelico.com>
+From:   Sven Van Asbroeck <thesven73@gmail.com>
+Date:   Wed, 9 Dec 2020 14:04:26 -0500
+Message-ID: <CAGngYiVL9M72hFRWnmT_8RRX9pUTSLsNuYz6mUo0Be4Vivk7Xw@mail.gmail.com>
+Subject: Re: [PATCH] spi: dt-bindings: clarify CS behavior for spi-cs-high and
+ gpio descriptors
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
 Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
         linux-spi <linux-spi@vger.kernel.org>,
@@ -50,108 +66,36 @@ Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Andreas Kemnade <andreas@kemnade.info>,
         Maxime Ripard <maxime@cerno.tech>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <3FA1D050-3BD5-4A97-9D83-520CCF75D147@goldelico.com>
-References: <3bed61807fff6268789e7d411412fbc5cd6ffe2a.1607507863.git.hns@goldelico.com> <CAGngYiVKHoXPGxmScCnb-R6xoo9GNw5pG8V8Cpyk3meoJbskiw@mail.gmail.com>
-To:     Sven Van Asbroeck <thesven73@gmail.com>
-X-Mailer: Apple Mail (2.3124)
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, Dec 9, 2020 at 1:16 PM H. Nikolaus Schaller <hns@goldelico.com> wrote:
+>
+> This is also what made me wonder if that is really intended because then
+> the whole discussion about the cs-gpio-flags and inversion and the fixes
+> would not have been needed. The current code and fixes are all about
+> not ignoring the flags...
 
-> Am 09.12.2020 um 18:36 schrieb Sven Van Asbroeck =
-<thesven73@gmail.com>:
->=20
-> On Wed, Dec 9, 2020 at 4:57 AM H. Nikolaus Schaller =
-<hns@goldelico.com> wrote:
->>=20
->> +
->> +      device node     | cs-gpio       | CS pin state active | Note
->> +      =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D
->> +      spi-cs-high     | -             | H                   |
->> +      -               | -             | L                   |
->> +      spi-cs-high     | ACTIVE_HIGH   | H                   |
->> +      -               | ACTIVE_HIGH   | L                   | 1
->> +      spi-cs-high     | ACTIVE_LOW    | H                   | 2
->> +      -               | ACTIVE_LOW    | L                   |
->> +
->=20
-> Doesn't this table simply say:
-> - specify   'spi-cs-high' for an active-high chip select
-> - leave out 'spi-cs-high' for an active-low  chip select
-> - the gpio active high/active low consumer flags are ignored
-> ?
+The inversion you witnessed was a bug caused by spi client drivers that
+simply "plow over" the SPI_CS_HIGH mode flag. This includes the panel driver
+you're using, see:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/panel/panel-tpo-td028ttec1.c?h=v5.10-rc6#n337
 
-Yes it does, but I don't know if it is what we want to have. Linus =
-confirmed
-and you also seem to agree. Let's wait for other verdicts.
+You responded to this inversion bug by inverting your chip select, which made
+things work again. Now that the bug is gone, you can indicate the correct
+polarity in your devicetree, i.e. add 'spi-cs-high' for an active-high
+CS, and leave it out for an active-low CS.
 
-This is also what made me wonder if that is really intended because then
-the whole discussion about the cs-gpio-flags and inversion and the fixes
-would not have been needed. The current code and fixes are all about
-not ignoring the flags...
+Your panel's CS is active-low, so it should not contain spi-cs-high.
 
-And I am sure the code would be much simpler than currently for treating
-special cases. Code would simply be: make any spi driver look at the =
-gpio
-descriptor and undo any inversion that gpiod_set_value() will do in
-gpiod_set_value_nocheck() so that we can really control the physical
-state by spi-cs-high instead of the logical gpio activity.
+> Secondly, please imagine some reader of a device tree who finds
+>
+>         cs-gpios = <&gpio 7 ACTIVE_LOW>;
+>         spi-cs-high;
 
-Something like:
-
-static void spi_gpio_chipselect(struct spi_device *spi, int is_active)
-{
-	struct spi_gpio *spi_gpio =3D spi_to_spi_gpio(spi);
-
-	/* set initial clock line level */
-	if (is_active)
-		gpiod_set_value_cansleep(spi_gpio->sck, spi->mode & =
-SPI_CPOL);
-
-	/* Drive chip select line, if we have one */
-
-	if (spi_gpio->cs_gpios) {
-		struct gpio_desc *cs =3D =
-spi_gpio->cs_gpios[spi->chip_select];
-
-		/* check if gpiod_set_value_nocheck() will invert */
-		if (test_bit(FLAG_ACTIVE_LOW, &cs->flags)
-			is_active =3D !is_active;
-
-		/* SPI chip selects are normally active-low */=09
-		gpiod_set_value_cansleep(cs, (spi->mode & SPI_CS_HIGH) ? =
-is_active : !is_active);
-	}
-}
-
-There would be no need to detect spi-cs-high etc. in gpio-lib or
-elsewhere. Only for printing warnings as suggested by Notes 1 and 2.
-
->=20
-> If so, then I would simply document it that way.
-> Simple is beautiful.
-
-Firstly, I would only think about collapsing the table if we agree that
-it is correct. Beauty is IMHO not a reason to declare the table to be
-correct.
-
-Secondly, please imagine some reader of a device tree who finds
-
-	cs-gpios =3D <&gpio 7 ACTIVE_LOW>;
-	spi-cs-high;
-
-Documentation should work well and be helpful especially in such a case.
-Otherwise you don't need documentation.
-
-Saying that the gpio flags are ignored would be helpful but a full table
-with Notes and recommendations how to resolve is even more helpful and
-unambiguous - even if it tells the same.
-
-BR and thanks,
-Nikolaus
-
-
+That reader looks at the rules, sees that:
+- the ACTIVE_LOW is ignored,
+- presence of spi-cs-high means active-high
+and concludes this chip-select is active-high.
