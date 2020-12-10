@@ -2,116 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 329312D5139
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Dec 2020 04:17:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 828E82D5228
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Dec 2020 04:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729157AbgLJDRn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Dec 2020 22:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728580AbgLJDRn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Dec 2020 22:17:43 -0500
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F23C0613CF
-        for <linux-spi@vger.kernel.org>; Wed,  9 Dec 2020 19:17:03 -0800 (PST)
-Received: by mail-pl1-x644.google.com with SMTP id p6so2055659plr.7
-        for <linux-spi@vger.kernel.org>; Wed, 09 Dec 2020 19:17:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:content-transfer-encoding:in-reply-to:references
-         :subject:from:cc:to:date:message-id:user-agent;
-        bh=k53PFT7deXWzGUQq0Qpf6W/21ZGbwiD77Sh9ifdNlYI=;
-        b=j/3AaR7Rv5E0+fKghUnWh6A8a2UeZzPe81/mLS/v3NuwDplaOQN7T01j81j978t12h
-         Bv9RlbNJWBBugNdKcx8NNnfildF6mmoJj0b92N2lH5GxU6SKQMNwTH9JTvNBpLJpl87c
-         ZbfOQwyLx35Nuie38/uNAF48DHT4i+K8moLJo=
+        id S1731643AbgLJD4u (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Dec 2020 22:56:50 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:45369 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731425AbgLJD4m (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Dec 2020 22:56:42 -0500
+Received: by mail-oi1-f195.google.com with SMTP id f132so4266485oib.12;
+        Wed, 09 Dec 2020 19:56:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding
-         :in-reply-to:references:subject:from:cc:to:date:message-id
-         :user-agent;
-        bh=k53PFT7deXWzGUQq0Qpf6W/21ZGbwiD77Sh9ifdNlYI=;
-        b=ei6UZrMqupXrUfNszixdjAWLEBUwXmN+sGF0+QhOJmaMb5UNYEZ8GKuoV3NTmqmffX
-         kuvQP7Gcgv8DfQhEBhDyzbDy2uV6aM2bEePFcly155vxdJX8D74bBv1p3lzZwJ6dj9q5
-         SACPk77hPk1TrxFWLNv5GKx+Qf0f4IQMPLgc/bsSLVWZwwxEdhc6tygmwTBnBDmqZehH
-         FLx/wGDiJCkPzFoLlq5jFFSZErrcs6huHHusBG/8jH7ZZRNHRaCZVeR+FNB43GWrjHY9
-         iHr0+u1LmjoR+cK8D0T/WUP6uARzB/9UilOMfS2hLoFRmmWedn4qyJQCpdK13jYJJXWc
-         bzlg==
-X-Gm-Message-State: AOAM5323Luv5UGlMoFDmNRLBo1hyw00dLHtrv178lJSxsfZoLhHajO/a
-        /tbqf9J1IVA3c8gRBbUyh3tgIw==
-X-Google-Smtp-Source: ABdhPJxCdPN48jN7aGTW0NAvFrMo0PSR1HiBugsItDALpwR1BgRUQBc57Mz37oFQa7zYg0hYEQiSfA==
-X-Received: by 2002:a17:902:74cc:b029:da:9287:2b4 with SMTP id f12-20020a17090274ccb02900da928702b4mr4650468plt.9.1607570222586;
-        Wed, 09 Dec 2020 19:17:02 -0800 (PST)
-Received: from chromium.org ([2620:15c:202:201:3e52:82ff:fe6c:83ab])
-        by smtp.gmail.com with ESMTPSA id l17sm3665289pjy.29.2020.12.09.19.17.01
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UaBW8kKjumKB5NsRdwxO15H0fluT5i+CZRLhsRHEAQc=;
+        b=C8MLF4bulyGXK3qXMqUq9K5i2BEuIlOmPxK9sjDF1/GaB8x+J96o+mvEnIdbPXKtCC
+         N8l+CvQgRSyAXtd9SPel9JrMstqIO5R4hkSYt3rTtMEmfTYIZp+pS+qqg4GlFLcmY/BH
+         q4oTCD1NSzT4F0h0JmuuE5WjOYGfVMH8QGKMn0xAWD+MtNRpzKi1UyVfr8qiUCDxM7+K
+         s/Xh5j/ayxmeIrMpKqN6O0t6PRShVuND3HQlpbjbqFGloB29otlphk3h8qRftiiridJK
+         OxRS5vDhVb7Y0HQ2E0VcnbZO/C2wp4S/k721U7J82jQNkg7UG9aVRuMz9ckeUH5S0B1D
+         2dWw==
+X-Gm-Message-State: AOAM531BKs7XYHfZRmm7D45KL49fp8wCY0aFs8sqegzbTbR/xvjl/PAI
+        6Ot7PxwoogQ8Re8RyyUv8w==
+X-Google-Smtp-Source: ABdhPJwOhrm+iTszJ9LZontta94nHHnjY/oxO3rxT338UzSFe4GWwGxrSlB90g+rA2ah/Usvy4il1Q==
+X-Received: by 2002:aca:60c4:: with SMTP id u187mr4120688oib.42.1607572557234;
+        Wed, 09 Dec 2020 19:55:57 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id v12sm759702ooi.46.2020.12.09.19.55.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Dec 2020 19:17:01 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 09 Dec 2020 19:55:56 -0800 (PST)
+Received: (nullmailer pid 1633035 invoked by uid 1000);
+        Thu, 10 Dec 2020 03:55:54 -0000
+Date:   Wed, 9 Dec 2020 21:55:54 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Yash Shah <yash.shah@sifive.com>
+Cc:     linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        broonie@kernel.org, linux-riscv@lists.infradead.org,
+        linux-i2c@vger.kernel.org, lee.jones@linaro.org,
+        linux-kernel@vger.kernel.org, palmer@dabbelt.com,
+        linux-gpio@vger.kernel.org, peter@korsgaard.com,
+        robh+dt@kernel.org, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, u.kleine-koenig@pengutronix.de,
+        bgolaszewski@baylibre.com, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, linux-pwm@vger.kernel.org,
+        linus.walleij@linaro.org, andrew@lunn.ch,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/9] dt-bindings: riscv: Update DT binding docs to
+ support SiFive FU740 SoC
+Message-ID: <20201210035554.GA1632991@robh.at.kernel.org>
+References: <1607403341-57214-1-git-send-email-yash.shah@sifive.com>
+ <1607403341-57214-2-git-send-email-yash.shah@sifive.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAD=FV=XKyXnjsM4iS-ydRWBnmYMojPOaYAdYhOkxkPTCQf0RLQ@mail.gmail.com>
-References: <20201203074459.13078-1-rojay@codeaurora.org> <CAD=FV=XKyXnjsM4iS-ydRWBnmYMojPOaYAdYhOkxkPTCQf0RLQ@mail.gmail.com>
-Subject: Re: [PATCH] spi: spi-geni-qcom: Fix NULL pointer access in geni_spi_isr
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     Mark Brown <broonie@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Akash Asthana <akashast@codeaurora.org>,
-        msavaliy@qti.qualcomm.com
-To:     Doug Anderson <dianders@chromium.org>,
-        Roja Rani Yarubandi <rojay@codeaurora.org>
-Date:   Wed, 09 Dec 2020 19:17:00 -0800
-Message-ID: <160757022002.1580929.8656750350166301192@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1607403341-57214-2-git-send-email-yash.shah@sifive.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Quoting Doug Anderson (2020-12-03 08:40:46)
+On Tue, 08 Dec 2020 10:25:33 +0530, Yash Shah wrote:
+> Add new compatible strings in cpus.yaml to support the E71 and U74 CPU
+> cores ("harts") that are present on FU740-C000 SoC.
+> 
+> Signed-off-by: Yash Shah <yash.shah@sifive.com>
+> ---
+>  Documentation/devicetree/bindings/riscv/cpus.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
 
-> I would guess that if "mas->cur_xfer" is NULL then
-> geni_spi_handle_rx() should read all data in the FIFO and throw it
-> away and geni_spi_handle_tx() should set SE_GENI_TX_WATERMARK_REG to
-> 0.  NOTE: I _think_ that with the synchronize_irq() I'm suggesting
-> above we'll avoid this case, but it never hurts to be defensive.
->=20
->=20
-> Does that all make sense?  So the summary is that instead of your patch:
-
-Can we get a CPU diagram describing the race and scenario where this
-happens? Something like:
-
-  CPU0                                CPU1
-  ----                                ----
-  setup_fifo_xfer()
-   spin_lock_irq(&mas->lock);
-   spin_unlock_irq(&mas->lock);
-   mas->cur_xfer =3D xfer
-   ...
-   <IRQ>
-                                      geni_spi_isr()
-				       geni_spi_handle_rx()
-				        <NULL deref boom explosion!>
-
-But obviously this example diagram is incorrect and some timeout happens
-instead? Sorry, I'm super lazy and don't want to read many paragraphs of
-text. :) I'd rather have a diagram like above that clearly points out
-the steps taken to the NULL pointer deref.
-
->=20
-> 1. Add synchronize_irq() at the start and end of
-> handle_fifo_timeout().  Not under lock.
->=20
-> 2. In geni_spi_handle_rx(), check for NULL "mas->cur_xfer".  Read all
-> data in the FIFO (don't cap at rx_rem_bytes), but throw it away.
->=20
-> 3. In geni_spi_handle_tx(), check for NULL "mas->cur_xfer".  Don't
-> write any data.  Just write 0 to SE_GENI_TX_WATERMARK_REG.
->=20
-> I think #1 is the real fix, but #2 and #3 will avoid crashes in case
-> there's another bug somewhere.
->=20
-
-Aren't 2 and 3 papering over some weird problem though where irqs are
-coming in unexpectedly?
+Reviewed-by: Rob Herring <robh@kernel.org>
