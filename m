@@ -2,187 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2AAD2D6484
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Dec 2020 19:09:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1A62D64C2
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Dec 2020 19:21:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392808AbgLJSIM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 10 Dec 2020 13:08:12 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:19556 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392547AbgLJSIG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Dec 2020 13:08:06 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5fd263da0000>; Thu, 10 Dec 2020 10:07:22 -0800
-Received: from [10.2.90.244] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 10 Dec
- 2020 18:07:21 +0000
-Subject: Re: [PATCH v1 2/7] dt-bindings: spi: Add Tegra QSPI device tree
- binding
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <1606857168-5839-1-git-send-email-skomatineni@nvidia.com>
- <1606857168-5839-3-git-send-email-skomatineni@nvidia.com>
- <20201209172643.GA638607@robh.at.kernel.org>
- <1a9f0391-321d-2463-827b-284bba38e07d@nvidia.com>
-Message-ID: <061c6770-860a-8b5b-7d14-32745a630922@nvidia.com>
-Date:   Thu, 10 Dec 2020 10:08:16 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S2403898AbgLJSRY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 10 Dec 2020 13:17:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47674 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2404142AbgLJSRT (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 10 Dec 2020 13:17:19 -0500
+Date:   Thu, 10 Dec 2020 18:16:30 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607624198;
+        bh=7IZC/FrtsCtLP8agrMBBowmGAoKsyQl86sQD/PfKEZU=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OUzOOvJyOHp5GCflFjoiyG4VB59OavtXbV9jSVhyoXaC12lCSvmzpTFd1xyY+S1Qy
+         fT/k5H14BlNQaligoStbWwpF1W4OPaHRFhmoU23yTSTUB5q69pumMqCbHzZeJZP6aH
+         q4LjMoEXp2D2SqIdiKT65jSYUHbeoD623TQYapCGn7g1k3YAjo4XyxtaaVyskqwRAW
+         kBwCp+73e6NN6E2muAAI93fAb1FZRLPKtEvl2XeVAmbitYBAgahP0ZfuWKk1X06a3P
+         qAooP42dP/cYmBZ2u0pGOxwF9Su5omBoGSBH51h8OrCOk66ATS+MtRFgdIgW2/ObVT
+         fO2YD3xEa0MUg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Tudor.Ambarus@microchip.com
+Cc:     fancer.lancer@gmail.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH] spi: Limit the spi device max speed to controller's
+ max speed
+Message-ID: <20201210181630.GE4747@sirena.org.uk>
+References: <20201209173514.93328-1-tudor.ambarus@microchip.com>
+ <20201209194636.32f4ioxxdggezklr@mobilestation>
+ <20201209195420.GD4790@sirena.org.uk>
+ <20201209201535.32g4kwpzo45jiqr3@mobilestation>
+ <20201209202552.GE4790@sirena.org.uk>
+ <20201209203042.oqbcijwaxqt5aa7b@mobilestation>
+ <48bf85a0-4a98-7e81-0802-c5fac762234f@microchip.com>
+ <20201210153351.GB4747@sirena.org.uk>
+ <6e182961-fb4e-d7f6-fe05-abfdd99d2ac5@microchip.com>
 MIME-Version: 1.0
-In-Reply-To: <1a9f0391-321d-2463-827b-284bba38e07d@nvidia.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1607623642; bh=mQCndjBdMDE2zRyHrOPCBno3Q9FtrmzY5DN+TW0E3OE=;
-        h=Subject:From:To:CC:References:Message-ID:Date:User-Agent:
-         MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-         Content-Language:X-Originating-IP:X-ClientProxiedBy;
-        b=iMuzQzBYFg7V9xtZEOU5XFuckw8QYJBPm9VwWp1T8xEAWlTQtpDkz+5jfM5BVKGCz
-         PSzh+6wk8GkMjAMbRE1iIbUcghnVGyKTw0j758WSubQZRNwsy7YiJF4Rq8wQjwHbUQ
-         3qn3pbJX+jSsq0kZjJmKWXLQU07FqhX3jzhGV4B7wvoxb13Mh4DVLv5dp7MPVl/DCn
-         r+YQpvdicoM9QyFRpmcjkQV1rhx/nlcR3k4xKPguYgiTMF/yuLuNL5zzeDIfQ5Iftq
-         fsJGDzqt5jeD2Xq9CrJoaTf98e41s4h3176iJWh4uK1oefBtHMAjRUEzs5KeWBtCw3
-         /rkhYgDbxvO4Q==
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Uwl7UQhJk99r8jnw"
+Content-Disposition: inline
+In-Reply-To: <6e182961-fb4e-d7f6-fe05-abfdd99d2ac5@microchip.com>
+X-Cookie: Your step will soil many countries.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-On 12/9/20 12:28 PM, Sowjanya Komatineni wrote:
->
-> On 12/9/20 9:26 AM, Rob Herring wrote:
->> On Tue, Dec 01, 2020 at 01:12:43PM -0800, Sowjanya Komatineni wrote:
->>> This patch adds YAML based device tree binding document for Tegra
->>> QSPI driver.
->>>
->>> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
->>> ---
->>> =C2=A0 .../devicetree/bindings/spi/nvidia,tegra-qspi.yaml | 77=20
->>> ++++++++++++++++++++++
->>> =C2=A0 1 file changed, 77 insertions(+)
->>> =C2=A0 create mode 100644=20
->>> Documentation/devicetree/bindings/spi/nvidia,tegra-qspi.yaml
->>>
->>> diff --git=20
->>> a/Documentation/devicetree/bindings/spi/nvidia,tegra-qspi.yaml=20
->>> b/Documentation/devicetree/bindings/spi/nvidia,tegra-qspi.yaml
->>> new file mode 100644
->>> index 0000000..038a085
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/spi/nvidia,tegra-qspi.yaml
->>> @@ -0,0 +1,77 @@
->>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/spi/nvidia,tegra-qspi.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Tegra Quad SPI Controller
->>> +
->>> +maintainers:
->>> +=C2=A0 - Thierry Reding <thierry.reding@gmail.com>
->>> +=C2=A0 - Jonathan Hunter <jonathanh@nvidia.com>
->>> +
->>> +properties:
->>> +=C2=A0 compatible:
->>> +=C2=A0=C2=A0=C2=A0 enum:
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - nvidia,tegra210-qspi
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - nvidia,tegra186-qspi
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - nvidia,tegra194-qspi
->>> +
->>> +=C2=A0 reg:
->>> +=C2=A0=C2=A0=C2=A0 items:
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - description: QSPI registers
->> Just 'maxItems: 1'
->>
->>> +
->>> +=C2=A0 interrupts:
->>> +=C2=A0=C2=A0=C2=A0 maxItems: 1
->>> +
->>> +=C2=A0 clock-names:
->>> +=C2=A0=C2=A0=C2=A0 items:
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: qspi
->> Kind of a pointless name.
-> Thanks Rob for feedback. Do you mean to change name something like=20
-> qspi-clk instead of qspi?
+--Uwl7UQhJk99r8jnw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Rob, reason I added clock name is later when we add ddr mode we will=20
-have additional clock.
+On Thu, Dec 10, 2020 at 04:32:02PM +0000, Tudor.Ambarus@microchip.com wrote:
+> On 12/10/20 5:33 PM, Mark Brown wrote:
 
-So driver uses clock name to retrieve.
+> > It does work for now but it'd be nicer if we were doing this through
+> > recording the decision on the transfer.
 
-Will add both clocks to dt-binding doc in v2 although support for ddr=20
-mode in qspi driver can be implemented later.
+> Ok, we can drop the patch, as nobody complained about this until now. I can
 
->>
->>> +
->>> +=C2=A0 clocks:
->>> +=C2=A0=C2=A0=C2=A0 maxItems: 1
->>> +
->>> +=C2=A0 reset-names:
->>> +=C2=A0=C2=A0=C2=A0 minItems: 1
->>> +=C2=A0=C2=A0=C2=A0 items:
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: qspi
->> Same here.
->>
->>> +
->>> +=C2=A0 resets:
->>> +=C2=A0=C2=A0=C2=A0 maxItems: 1
->>> +
->>> +=C2=A0 dmas:
->>> +=C2=A0=C2=A0=C2=A0 maxItems: 2
->>> +
->>> +=C2=A0 dma-names:
->>> +=C2=A0=C2=A0=C2=A0 items:
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: rx
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: tx
->>> +
->>> +required:
->>> +=C2=A0 - compatible
->>> +=C2=A0 - reg
->>> +=C2=A0 - interrupts
->>> +=C2=A0 - clock-names
->>> +=C2=A0 - clocks
->>> +=C2=A0 - reset-names
->>> +=C2=A0 - resets
->>> +
->>> +additionalProperties: true
->>> +
->>> +examples:
->>> +=C2=A0 - |
->>> +=C2=A0=C2=A0=C2=A0 #include <dt-bindings/clock/tegra210-car.h>
->>> +=C2=A0=C2=A0=C2=A0 #include <dt-bindings/reset/tegra210-car.h>
->>> +=C2=A0=C2=A0=C2=A0 #include <dt-bindings/interrupt-controller/arm-gic.=
-h>
->>> +
->>> +=C2=A0=C2=A0=C2=A0 spi@70410000 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 com=
-patible =3D "nvidia,tegra210-qspi";
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg=
- =3D <0x70410000 0x1000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int=
-errupts =3D <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clo=
-cks =3D <&tegra_car TEGRA210_CLK_QSPI>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clo=
-ck-names =3D "qspi";
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 res=
-ets =3D <&tegra_car 211>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 res=
-et-names =3D "qspi";
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dma=
-s =3D <&apbdma 5>, <&apbdma 5>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dma=
--names =3D "rx", "tx";
->>> +=C2=A0=C2=A0=C2=A0 };
->>> --=20
->>> 2.7.4
->>>
+TBH I've actually got it queued to apply and test, we can make things
+better incrementally but it seems fine for now and it's backportable if
+someone does run into trouble.
+
+> work on a better approach. Are you saying that we should calibrate/adjust the
+> maximum supported frequency on each operation/command? Most of the commands
+> can work at the same frequency. I know an exception: on SPI NOR flashes, the
+
+It's the way that everything else works.  It's a bit inefficent though.
+
+> jesd216 standard specifies that the READ SFDP command should be run at 50MHz,
+> even though the rest of the commands/opcodes can run at a higher frequency.
+> It is common that flashes can run this command at 50+ MHz, and nobody bothered
+> about adjusting the frequency at run-time until now. That being said, maybe we
+> can calibrate/adjust a generic max frequency for most of the commands and
+> treat the exceptions on a per operation basis.
+
+If the spec says 50MHz for that one op we should probably stick to that
+by default - the chances of it making a difference seem low but better
+to stay in spec if we can.
+
+--Uwl7UQhJk99r8jnw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/SZf0ACgkQJNaLcl1U
+h9A8nAf8DsnPV/slJruHMN4NMzGuJ7qZj/2TSZS3LxvSaIl5ottupNbWmXKwQxKn
+OGommhk1DVNihHALOz+XOyorMgL7HJSaRSb152LGQr1pbpy7YcLmkauNsqoougzo
+t1r3F/qqAgWnvUzj7KLXhShP7cPZCFQxIEfqaXDnconB7zqosfmFFTh66JyNhmwJ
+KkWObRMIgJblJCACY8F6Xve4r9OOlt86iHKB663iNY72PEBwQaQIYTE96gHNf0mI
+zVEqkUbKWufrTUDA2CsMAAV3annuAKM6rySuQ/6Mqg16xCejZnigGfo4zwaApl0T
+86xO0M1HEjpypZneDn1gtniJT2+mlw==
+=XJ24
+-----END PGP SIGNATURE-----
+
+--Uwl7UQhJk99r8jnw--
