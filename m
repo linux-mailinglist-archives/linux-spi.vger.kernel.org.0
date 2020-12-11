@@ -2,91 +2,120 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E86D2D713E
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Dec 2020 09:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D272D766D
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Dec 2020 14:20:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392004AbgLKINu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 11 Dec 2020 03:13:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391820AbgLKINl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Dec 2020 03:13:41 -0500
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72FAC0613D6
-        for <linux-spi@vger.kernel.org>; Fri, 11 Dec 2020 00:13:00 -0800 (PST)
-Received: by mail-lj1-x241.google.com with SMTP id x23so9906033lji.7
-        for <linux-spi@vger.kernel.org>; Fri, 11 Dec 2020 00:13:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7VoXnCBthI2L/2T3Qana/I/DjOclhIB0/A35c/8G8Po=;
-        b=mUq4n+bJwCZqwf4PRpv9TSTHLn5Xh6AZxE3lMXQ4ciL18s5orA99dqvWnn7wTo2aPM
-         ilUo+uRzl7qZO2wwCgl/41qrAZm9TuIx5hqfcp+b4MaWADO9pSYo8JNuQ2GPoMjL4RRM
-         mV9oY+FKvwCDWjRuusoE8PlyrGiUeqePIM0+DR3LWpMAsEND/nYsuYvc/hduFjLWY1n/
-         HTD9aZNRUvof5nPHL5CN5tWG+vvdtZ+Np1aUb9R/6sZG6XBHtheDpYQ5BwuZjh08OtZu
-         ksEh29nDYnWFQj5F2sXzMySjhLZUm5EqIvPEAu6I2ddc+aBpzicZThurRD023Lq3tArf
-         o79A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7VoXnCBthI2L/2T3Qana/I/DjOclhIB0/A35c/8G8Po=;
-        b=aeMKPG/MOXtqgNzFaFwVb4MkrlufIsgE8yMFXquS/icIIRC55zIAuklJaXIvhsdhuZ
-         DAxrnekza3oh5jJgLXE/tb9Q6xLo74QE9w739T0As5f0OsiEvixGGJ73vmmUd99m8OAC
-         UxGII3pRJRwYCgMKHIwHnIrYpf3kERqO5+v14By8w7rqg7J9PNrOGPiI02xZFC7bISMO
-         +pHXdbW3TeNKl6MwEJAr3oKj00PJISLN96LfOzpGVpAqv/k1ncbmn99N9TLO/anDIQFe
-         prRt+c+X5UXy66DhJAQIQ6lPQVc3EOz/bGkkEKY7t0sxGcYC8O7sepkX1rGPtqBs/pgT
-         tuJw==
-X-Gm-Message-State: AOAM530JZZ2dmNjgBiOYyJil4l/Pw0j6b0r3ysP50L4gEGhx5khSBks4
-        T3JhYZOslqFV87F0kq3/9FjWPLXbm934iPsUVGN0ow==
-X-Google-Smtp-Source: ABdhPJxWdWW3zxwdcNB575NyJ4L2g2+cRdR3mY7ME+FqxN3f0TeXt3uzd+Mb9qPY6xHM3BwWTSwfFHObZ+sgW3lHWNE=
-X-Received: by 2002:a05:651c:205b:: with SMTP id t27mr1220648ljo.368.1607674379166;
- Fri, 11 Dec 2020 00:12:59 -0800 (PST)
-MIME-Version: 1.0
-References: <3bed61807fff6268789e7d411412fbc5cd6ffe2a.1607507863.git.hns@goldelico.com>
-In-Reply-To: <3bed61807fff6268789e7d411412fbc5cd6ffe2a.1607507863.git.hns@goldelico.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 11 Dec 2020 09:12:48 +0100
-Message-ID: <CACRpkdZkopTef1KhcD+u=G9nn=pYN+jOsgJRdmKo3VSF5mG4HQ@mail.gmail.com>
-Subject: Re: [PATCH] spi: dt-bindings: clarify CS behavior for spi-cs-high and
- gpio descriptors
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        id S2406113AbgLKNTg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 11 Dec 2020 08:19:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52840 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2404425AbgLKNS6 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 11 Dec 2020 08:18:58 -0500
+Date:   Fri, 11 Dec 2020 13:18:10 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607692697;
+        bh=2E127mU5eJ6ue3tzTmMDUSWHAoCzUtkbINjTlopsJIA=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PA8BFLEUlLmq/basaIXKyyzg6K1lX9Eygrt9+Kdw6TmDi7YEYc92Zl5c+Tag37uQZ
+         l97JGYpnkd1BbYjzdB0RTno6/PTh6r+AZKiY0Vg7Ae1pcsKQX09d1aYDGIg8h9HnBw
+         RdvCvH+Jp+1Wg8Ee5T9sDAzSN1VLrvsEWkhWyXj/PzBplt2/zOnRoejD1g4tj2/HFo
+         Jo/eAUwu+GMTyQ4GEnoiUiBM21pdVD1i/YWZG7EaQK2FbvzI9KDD50ImnKewK4fUQ/
+         Z0IoDweyxZZohS4++spkMSy+eEM4mSgQchrSzDxLlpG0ZbTLBJbrKhGW/6t2Bsfa0s
+         SBHkOgeAcG7/w==
+From:   Mark Brown <broonie@kernel.org>
+To:     Sven Van Asbroeck <thesven73@gmail.com>
+Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
         linux-spi <linux-spi@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-gpio@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Discussions about the Letux Kernel 
         <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com,
         Maxime Ripard <maxime.ripard@bootlin.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
         Lukas Wunner <lukas@wunner.de>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Andreas Kemnade <andreas@kemnade.info>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] spi: dt-bindings: clarify CS behavior for spi-cs-high
+ and gpio descriptors
+Message-ID: <20201211131810.GB4929@sirena.org.uk>
+Mail-Followup-To: Sven Van Asbroeck <thesven73@gmail.com>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-spi <linux-spi@vger.kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Discussions about the Letux Kernel <letux-kernel@openphoenux.org>,
+        kernel@pyra-handheld.com, Maxime Ripard <maxime.ripard@bootlin.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andreas Kemnade <andreas@kemnade.info>
+References: <3bed61807fff6268789e7d411412fbc5cd6ffe2a.1607507863.git.hns@goldelico.com>
+ <CAGngYiVKHoXPGxmScCnb-R6xoo9GNw5pG8V8Cpyk3meoJbskiw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="TRYliJ5NKNqkz5bu"
+Content-Disposition: inline
+In-Reply-To: <CAGngYiVKHoXPGxmScCnb-R6xoo9GNw5pG8V8Cpyk3meoJbskiw@mail.gmail.com>
+X-Cookie: Nostalgia isn't what it used to be.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Dec 9, 2020 at 11:01 AM H. Nikolaus Schaller <hns@goldelico.com> wrote:
 
-> Behavior of CS signal in combination of spi-cs-high and gpio descriptors
-> is not clearly defined and documented. So clarify the documentation
->
-> Cc: linus.walleij@linaro.org
-> Cc: linux-gpio@vger.kernel.org
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+--TRYliJ5NKNqkz5bu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This is good because it is helpful to users.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+On Wed, Dec 09, 2020 at 12:36:40PM -0500, Sven Van Asbroeck wrote:
+> On Wed, Dec 9, 2020 at 4:57 AM H. Nikolaus Schaller <hns@goldelico.com> wrote:
 
-In cases like this I would actually consider to write a bit in the
-bindings saying "this is inconsistent because we screwed up
-so be careful", standard bodies usually try to avoid that kind of
-statements because they have all kind of prestige involved
-with their work, but we don't so we can just as well admit it.
+> > +      device node     | cs-gpio       | CS pin state active | Note
+> > +      ================+===============+=====================+=====
+> > +      spi-cs-high     | -             | H                   |
+> > +      -               | -             | L                   |
+> > +      spi-cs-high     | ACTIVE_HIGH   | H                   |
+> > +      -               | ACTIVE_HIGH   | L                   | 1
+> > +      spi-cs-high     | ACTIVE_LOW    | H                   | 2
+> > +      -               | ACTIVE_LOW    | L                   |
+> > +
 
-Yours,
-Linus Walleij
+> Doesn't this table simply say:
+> - specify   'spi-cs-high' for an active-high chip select
+> - leave out 'spi-cs-high' for an active-low  chip select
+> - the gpio active high/active low consumer flags are ignored
+> ?
+
+It seems to, yes.
+
+> If so, then I would simply document it that way.
+> Simple is beautiful.
+
+Yeah, it'd definitely be easier to read and clearer what people should
+actually do.  As Linus said it'd also be a good idea to explicitly say
+that this is not great design or particularly intentional since it could
+be pretty confusing for someone trying to understand why the bindings
+are the way they are.
+
+I'm going to apply this anyway to make sure we get this documentated but
+some incremental improvements along these lines would be good.
+
+--TRYliJ5NKNqkz5bu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/TcZEACgkQJNaLcl1U
+h9AhFggAgIvhGZX6g4DZGo69/v8qSfuNZJ8ZCbQTMs4G0PR/lhIG26joAjbftMvK
+zcxjD6svtCScdLgl3ES3AnmZYqUIy10wH6SGPd9XkpYwNRTHaGrLYsK59k//Luaq
+Qh3j7FtB42unAmTVI1rVA2KJac2FkvvNuBxNN8g75+95DXbtnvAkxbYTtFE0zit0
+q4jh58H0Zh24LpUhoZKZ2w6/Ra1XaqY1vkh0ys7tMTkShhs1LgSY8OzjDiZ36O1c
+JIlz5Fwn1uEkJhxwErccG3NYAdxOqiajOWZDM56ky4T1420W+MTwpux/YXfRWQTW
+X/ZvM2NIHyPr5ZnEfrYTVqp+uUKAqw==
+=bTcQ
+-----END PGP SIGNATURE-----
+
+--TRYliJ5NKNqkz5bu--
