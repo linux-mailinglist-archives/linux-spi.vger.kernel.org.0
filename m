@@ -2,128 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 908112D6DC1
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Dec 2020 02:54:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E86D2D713E
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Dec 2020 09:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390997AbgLKBxB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 10 Dec 2020 20:53:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41380 "EHLO
+        id S2392004AbgLKINu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 11 Dec 2020 03:13:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390970AbgLKBws (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Dec 2020 20:52:48 -0500
-Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95D3C0613CF
-        for <linux-spi@vger.kernel.org>; Thu, 10 Dec 2020 17:52:07 -0800 (PST)
-Received: by mail-ua1-x942.google.com with SMTP id n18so2377128ual.9
-        for <linux-spi@vger.kernel.org>; Thu, 10 Dec 2020 17:52:07 -0800 (PST)
+        with ESMTP id S2391820AbgLKINl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Dec 2020 03:13:41 -0500
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72FAC0613D6
+        for <linux-spi@vger.kernel.org>; Fri, 11 Dec 2020 00:13:00 -0800 (PST)
+Received: by mail-lj1-x241.google.com with SMTP id x23so9906033lji.7
+        for <linux-spi@vger.kernel.org>; Fri, 11 Dec 2020 00:13:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=tmocuTlFkdrvz3dSgRAckP0PaP8a7z+1zm1gMKMoKF4=;
-        b=GcBDxMDo90j9A7h0fSdxICMBTnOcZBbZMW3UYjwASf9i+VeD3cu9Xe7aYOZhu3sa3s
-         bZG1aSEw7WRdYQfbPOgVRXZ/h2De7AYllbhGxBEbRfuoObfkPYD+dxwofolcw324jfa0
-         8HD2185S9AE4Qme/uWqnEqEbt9sIA39nrHhI0=
+        bh=7VoXnCBthI2L/2T3Qana/I/DjOclhIB0/A35c/8G8Po=;
+        b=mUq4n+bJwCZqwf4PRpv9TSTHLn5Xh6AZxE3lMXQ4ciL18s5orA99dqvWnn7wTo2aPM
+         ilUo+uRzl7qZO2wwCgl/41qrAZm9TuIx5hqfcp+b4MaWADO9pSYo8JNuQ2GPoMjL4RRM
+         mV9oY+FKvwCDWjRuusoE8PlyrGiUeqePIM0+DR3LWpMAsEND/nYsuYvc/hduFjLWY1n/
+         HTD9aZNRUvof5nPHL5CN5tWG+vvdtZ+Np1aUb9R/6sZG6XBHtheDpYQ5BwuZjh08OtZu
+         ksEh29nDYnWFQj5F2sXzMySjhLZUm5EqIvPEAu6I2ddc+aBpzicZThurRD023Lq3tArf
+         o79A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tmocuTlFkdrvz3dSgRAckP0PaP8a7z+1zm1gMKMoKF4=;
-        b=cg3AcJuUgBhJmWrRsz3EOmuiUcEYWnYQQNwJQ0rmJdN9iYt6ajxxrw3IOixTiDf5ZG
-         /6uJr1yU59M1gxG3ahrC1sBTMCkiMENtMmurKd2dB7K5hpHN3XGbWZs7Cn+1H8ODiyd1
-         +sVKEsKqCBB13ot91ZzoU2qmu5TM9z7fW9RncIVUmL3GsPSe4alrwwjt03dnIRFigwgD
-         1LSnTMmlL+A4enhWA+dTlBnbxtm+kywcIk6hMng9QHsRwyzHytvZo78ZZmGLUETLAhA4
-         2+TPuYevTBvBc/Q9RfK5EaUllst/gUWgnJyCf8aQo+mHxPbWS0OKOgsw/wSUqqGoFFW7
-         mcPQ==
-X-Gm-Message-State: AOAM532zb04oc/mPE+5MP5Nq5+ifUfGvbRzUMnWVlZIi0hvr71+F33VM
-        GAyuqmnbUTem16pzs4csnBfjHjli0gRitA==
-X-Google-Smtp-Source: ABdhPJz9plPSpkdw+11dPuRIf1nFUFAMOBydOSJSIXdLdSbdnWf4EYONkEFu/Xcgd7Yh+EFGCqlzdA==
-X-Received: by 2002:ab0:1c0a:: with SMTP id a10mr11069313uaj.89.1607651526791;
-        Thu, 10 Dec 2020 17:52:06 -0800 (PST)
-Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com. [209.85.217.53])
-        by smtp.gmail.com with ESMTPSA id 2sm752957vso.25.2020.12.10.17.52.06
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Dec 2020 17:52:06 -0800 (PST)
-Received: by mail-vs1-f53.google.com with SMTP id j140so3988321vsd.4
-        for <linux-spi@vger.kernel.org>; Thu, 10 Dec 2020 17:52:06 -0800 (PST)
-X-Received: by 2002:a67:4242:: with SMTP id p63mr11018057vsa.34.1607651525656;
- Thu, 10 Dec 2020 17:52:05 -0800 (PST)
+        bh=7VoXnCBthI2L/2T3Qana/I/DjOclhIB0/A35c/8G8Po=;
+        b=aeMKPG/MOXtqgNzFaFwVb4MkrlufIsgE8yMFXquS/icIIRC55zIAuklJaXIvhsdhuZ
+         DAxrnekza3oh5jJgLXE/tb9Q6xLo74QE9w739T0As5f0OsiEvixGGJ73vmmUd99m8OAC
+         UxGII3pRJRwYCgMKHIwHnIrYpf3kERqO5+v14By8w7rqg7J9PNrOGPiI02xZFC7bISMO
+         +pHXdbW3TeNKl6MwEJAr3oKj00PJISLN96LfOzpGVpAqv/k1ncbmn99N9TLO/anDIQFe
+         prRt+c+X5UXy66DhJAQIQ6lPQVc3EOz/bGkkEKY7t0sxGcYC8O7sepkX1rGPtqBs/pgT
+         tuJw==
+X-Gm-Message-State: AOAM530JZZ2dmNjgBiOYyJil4l/Pw0j6b0r3ysP50L4gEGhx5khSBks4
+        T3JhYZOslqFV87F0kq3/9FjWPLXbm934iPsUVGN0ow==
+X-Google-Smtp-Source: ABdhPJxWdWW3zxwdcNB575NyJ4L2g2+cRdR3mY7ME+FqxN3f0TeXt3uzd+Mb9qPY6xHM3BwWTSwfFHObZ+sgW3lHWNE=
+X-Received: by 2002:a05:651c:205b:: with SMTP id t27mr1220648ljo.368.1607674379166;
+ Fri, 11 Dec 2020 00:12:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20201203074459.13078-1-rojay@codeaurora.org> <CAD=FV=WtU3cnRe6pDKFMA9_0cnQFtSOyohY_bJwZObK+KrbhVQ@mail.gmail.com>
- <160764107797.1580929.14768824290834396298@swboyd.mtv.corp.google.com>
- <CAD=FV=WuQjKC6GHy8d2nuqS-fgsUfxYrJosg3eyC9JU1FPCcjw@mail.gmail.com>
- <160764316821.1580929.18177257779550490986@swboyd.mtv.corp.google.com>
- <CAD=FV=WvG085orLqnvg9WUobL7iyxwgoxh-8RvOaRdi9rLeDUg@mail.gmail.com>
- <160764785500.1580929.4255309510717807485@swboyd.mtv.corp.google.com>
- <CAD=FV=VD78fmSRciFf38AbZG=EFPzDiT_e7QkEC08zA9iL1vTw@mail.gmail.com>
- <160764967649.1580929.3992720095789306793@swboyd.mtv.corp.google.com>
- <CAD=FV=Xgw+33pCycHyaMPsk64Qs+oh8e-RtJaM1yn0F27qZRVQ@mail.gmail.com> <160765077856.1580929.643282739071441296@swboyd.mtv.corp.google.com>
-In-Reply-To: <160765077856.1580929.643282739071441296@swboyd.mtv.corp.google.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 10 Dec 2020 17:51:53 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=WuyuF-PL2PMnLjWCyWGzOqn8beTVP3ZXWvfLdLhPh8=A@mail.gmail.com>
-Message-ID: <CAD=FV=WuyuF-PL2PMnLjWCyWGzOqn8beTVP3ZXWvfLdLhPh8=A@mail.gmail.com>
-Subject: Re: [PATCH] spi: spi-geni-qcom: Fix NULL pointer access in geni_spi_isr
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Roja Rani Yarubandi <rojay@codeaurora.org>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+References: <3bed61807fff6268789e7d411412fbc5cd6ffe2a.1607507863.git.hns@goldelico.com>
+In-Reply-To: <3bed61807fff6268789e7d411412fbc5cd6ffe2a.1607507863.git.hns@goldelico.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 11 Dec 2020 09:12:48 +0100
+Message-ID: <CACRpkdZkopTef1KhcD+u=G9nn=pYN+jOsgJRdmKo3VSF5mG4HQ@mail.gmail.com>
+Subject: Re: [PATCH] spi: dt-bindings: clarify CS behavior for spi-cs-high and
+ gpio descriptors
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         linux-spi <linux-spi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Akash Asthana <akashast@codeaurora.org>,
-        msavaliy@qti.qualcomm.com
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andreas Kemnade <andreas@kemnade.info>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+On Wed, Dec 9, 2020 at 11:01 AM H. Nikolaus Schaller <hns@goldelico.com> wrote:
 
-On Thu, Dec 10, 2020 at 5:39 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> Behavior of CS signal in combination of spi-cs-high and gpio descriptors
+> is not clearly defined and documented. So clarify the documentation
 >
-> Quoting Doug Anderson (2020-12-10 17:30:17)
-> > On Thu, Dec 10, 2020 at 5:21 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> > >
-> > > Yeah and so if it comes way later because it timed out then what's the
-> > > point of calling synchronize_irq() again? To make the completion
-> > > variable set when it won't be tested again until it is reinitialized?
-> >
-> > Presumably the idea is to try to recover to a somewhat usable state
-> > again?  We're not rebooting the machine so, even though this transfer
-> > failed, we will undoubtedly do another transfer later.  If that
-> > "abort" interrupt comes way later while we're setting up the next
-> > transfer we'll really confuse ourselves.
->
-> The interrupt handler just sets a completion variable. What does that
-> confuse?
+> Cc: linus.walleij@linaro.org
+> Cc: linux-gpio@vger.kernel.org
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 
-The interrupt handler sees a "DONE" interrupt.  If we've made it far
-enough into setting up the next transfer that "cur_xfer" has been set
-then it might do more, no?
+This is good because it is helpful to users.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
+In cases like this I would actually consider to write a bit in the
+bindings saying "this is inconsistent because we screwed up
+so be careful", standard bodies usually try to avoid that kind of
+statements because they have all kind of prestige involved
+with their work, but we don't so we can just as well admit it.
 
-> > I guess you could go the route of adding a synchronize_irq() at the
-> > start of the next transfer, but I'd rather add the overhead in the
-> > exceptional case (the timeout) than the normal case.  In the normal
-> > case we don't need to worry about random IRQs from the past transfer
-> > suddenly showing up.
-> >
->
-> How does adding synchronize_irq() at the end guarantee that the abort is
-> cleared out of the hardware though? It seems to assume that the abort is
-> pending at the GIC when it could still be running through the hardware
-> and not executed yet. It seems like a synchronize_irq() for that is
-> wishful thinking that the irq is merely pending even though it timed
-> out and possibly never ran. Maybe it's stuck in a write buffer in the
-> CPU?
-
-I guess I'm asserting that if a full second passed (because we timed
-out) and after that full second no interrupts are pending then the
-interrupt will never come.  That seems a reasonable assumption to me.
-It seems hard to believe it'd be stuck in a write buffer for a full
-second?
-
--Doug
+Yours,
+Linus Walleij
