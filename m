@@ -2,133 +2,136 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACD12D83DE
-	for <lists+linux-spi@lfdr.de>; Sat, 12 Dec 2020 02:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F1D2D84AB
+	for <lists+linux-spi@lfdr.de>; Sat, 12 Dec 2020 06:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406430AbgLLBc5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 11 Dec 2020 20:32:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405261AbgLLBcn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Dec 2020 20:32:43 -0500
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C87C0613D3
-        for <linux-spi@vger.kernel.org>; Fri, 11 Dec 2020 17:32:03 -0800 (PST)
-Received: by mail-pf1-x444.google.com with SMTP id p4so8135961pfg.0
-        for <linux-spi@vger.kernel.org>; Fri, 11 Dec 2020 17:32:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:content-transfer-encoding:in-reply-to:references
-         :subject:from:cc:to:date:message-id:user-agent;
-        bh=89PR1XJOQ3AXJnqqfEc8vjhhdDtUcMjkmWKDCFEBDfA=;
-        b=KziBoxlqrygnMqkQZIsOH1IqWRTRks0E0laPSHjpnzDIsngRIIM4b/UeleALrKa3YJ
-         4GKyhns8nOMvfT+0LrReca3YXhaHbbqyo2LOdX7LTMywJWPTkNzg2sgUkdhM0M7sved4
-         soStHWAioS20Du7cAwmgPNc8A/femXn/+xkGo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding
-         :in-reply-to:references:subject:from:cc:to:date:message-id
-         :user-agent;
-        bh=89PR1XJOQ3AXJnqqfEc8vjhhdDtUcMjkmWKDCFEBDfA=;
-        b=PMzU45eY6L+mpwDUyrbagmCi9LKxoj4HX+PXJxr6jc0HSIlCbMNX76gTJWq1hUBKQr
-         xcS6szPfEvIlsMoTicgwK4fqSS1nIwo1J/Q1Os4l1UdXXozqmWRFoJP54juQtjl+/xNT
-         /NG9/kxaq4yz4TzdP8qBG14DnKGGkloFiIqpf1SOhoqkSen0pPfS5SybFEsjLCfG1vrC
-         GwLpD/R54AFr0ai4Pz1y4QcTcXWn9MgLQB5BA4BvppGngvvAHPd8hgiizWlRut+2cEqC
-         Zz+VbcvlNj8IiYkO/YtDeYV0iMDhRGLNmCnt9PcFPnq9dSyOOSUE50LUIrFkhbQJ56QJ
-         KEbQ==
-X-Gm-Message-State: AOAM530LYimS3PuQR9Zd0YwRvz8ZS4Rt2sg3UNntu+7z5LmoXbYbidT3
-        0oXpvNtZo36/x8x9E3Y9evz+oA==
-X-Google-Smtp-Source: ABdhPJwMnvGRsZafrjgyMGtbAW3djZ4NDokRc5FKyg0KgrMLwX3pTXAWpcwmCaUsX1DAFXwRttktEg==
-X-Received: by 2002:a63:4e58:: with SMTP id o24mr14318396pgl.322.1607736722938;
-        Fri, 11 Dec 2020 17:32:02 -0800 (PST)
-Received: from chromium.org ([2620:15c:202:201:3e52:82ff:fe6c:83ab])
-        by smtp.gmail.com with ESMTPSA id ci2sm10838684pjb.40.2020.12.11.17.32.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Dec 2020 17:32:02 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1726517AbgLLFP4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 12 Dec 2020 00:15:56 -0500
+Received: from relay-us1.mymailcheap.com ([51.81.35.219]:43132 "EHLO
+        relay-us1.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730951AbgLLFPZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 12 Dec 2020 00:15:25 -0500
+Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.241.64])
+        by relay-us1.mymailcheap.com (Postfix) with ESMTPS id 4937020CCC
+        for <linux-spi@vger.kernel.org>; Sat, 12 Dec 2020 05:14:44 +0000 (UTC)
+Received: from relay4.mymailcheap.com (relay4.mymailcheap.com [137.74.199.117])
+        by relay5.mymailcheap.com (Postfix) with ESMTPS id 2C1952008F
+        for <linux-spi@vger.kernel.org>; Sat, 12 Dec 2020 05:13:52 +0000 (UTC)
+Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
+        by relay4.mymailcheap.com (Postfix) with ESMTPS id 587E13F1CF;
+        Sat, 12 Dec 2020 06:12:19 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by filter2.mymailcheap.com (Postfix) with ESMTP id 289532A7EF;
+        Sat, 12 Dec 2020 06:12:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
+        s=default; t=1607749939;
+        bh=eC+/mRVV3IfQDjzKV7feRYEg5BPAUoKHp3qINz76Op8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=b9tc5M8GGVIyzcUU+RdoJTuXZ071jgww+aW2MOxCxETHTFyqE/BV9gezMgZBjXFdv
+         HXJAhe6xC41M/aQQdBEmwCCyExmPAT/UiVxahqj55QOYPWkJAI59r0+DGriGUPxDGw
+         5t78BcTw5lQvsv9dmNPWgFtB9lequ9n2BR2GhIf0=
+X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
+Received: from filter2.mymailcheap.com ([127.0.0.1])
+        by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id R7CqmRB4-6OK; Sat, 12 Dec 2020 06:12:18 +0100 (CET)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by filter2.mymailcheap.com (Postfix) with ESMTPS;
+        Sat, 12 Dec 2020 06:12:18 +0100 (CET)
+Received: from [148.251.23.173] (ml.mymailcheap.com [148.251.23.173])
+        by mail20.mymailcheap.com (Postfix) with ESMTP id 5C32142F57;
+        Sat, 12 Dec 2020 05:12:17 +0000 (UTC)
+Authentication-Results: mail20.mymailcheap.com;
+        dkim=pass (1024-bit key; unprotected) header.d=aosc.io header.i=@aosc.io header.b="O1hWraWN";
+        dkim-atps=neutral
+AI-Spam-Status: Not processed
+Received: from ice-e5v2.lan (unknown [59.41.161.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id DA98942F46;
+        Sat, 12 Dec 2020 05:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
+        t=1607749933; bh=eC+/mRVV3IfQDjzKV7feRYEg5BPAUoKHp3qINz76Op8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=O1hWraWNUbKjJ4t+7ICgJcEf6Ck00BBSKjLVr7xr69Q6StlST8vS1ZwAZCp3X93g2
+         jeOKyKvxhRrHIMnHDEzeJrJa4R6/uPA/uAswkuPy30iB7PnpdK3hmEFiREaT0X2G/i
+         LHGRT06PGpa/Sj3XAWdADpL5QdljrEvXsqw0CFK8=
+From:   Icenowy Zheng <icenowy@aosc.io>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Icenowy Zheng <icenowy@aosc.io>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Subject: [RFC PATCH 10/12] dt-bindings: spi: sun6i: add compatible for V831 SPI
+Date:   Sat, 12 Dec 2020 13:12:00 +0800
+Message-Id: <20201212051202.3645115-1-icenowy@aosc.io>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201212040157.3639864-1-icenowy@aosc.io>
+References: <20201212040157.3639864-1-icenowy@aosc.io>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAD=FV=WuyuF-PL2PMnLjWCyWGzOqn8beTVP3ZXWvfLdLhPh8=A@mail.gmail.com>
-References: <20201203074459.13078-1-rojay@codeaurora.org> <CAD=FV=WuQjKC6GHy8d2nuqS-fgsUfxYrJosg3eyC9JU1FPCcjw@mail.gmail.com> <160764316821.1580929.18177257779550490986@swboyd.mtv.corp.google.com> <CAD=FV=WvG085orLqnvg9WUobL7iyxwgoxh-8RvOaRdi9rLeDUg@mail.gmail.com> <160764785500.1580929.4255309510717807485@swboyd.mtv.corp.google.com> <CAD=FV=VD78fmSRciFf38AbZG=EFPzDiT_e7QkEC08zA9iL1vTw@mail.gmail.com> <160764967649.1580929.3992720095789306793@swboyd.mtv.corp.google.com> <CAD=FV=Xgw+33pCycHyaMPsk64Qs+oh8e-RtJaM1yn0F27qZRVQ@mail.gmail.com> <160765077856.1580929.643282739071441296@swboyd.mtv.corp.google.com> <CAD=FV=WuyuF-PL2PMnLjWCyWGzOqn8beTVP3ZXWvfLdLhPh8=A@mail.gmail.com>
-Subject: Re: [PATCH] spi: spi-geni-qcom: Fix NULL pointer access in geni_spi_isr
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     Roja Rani Yarubandi <rojay@codeaurora.org>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Akash Asthana <akashast@codeaurora.org>,
-        msavaliy@qti.qualcomm.com
-To:     Doug Anderson <dianders@chromium.org>
-Date:   Fri, 11 Dec 2020 17:32:00 -0800
-Message-ID: <160773672053.1580929.15441111796129112926@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Server: mail20.mymailcheap.com
+X-Spamd-Result: default: False [6.40 / 20.00];
+         RCVD_VIA_SMTP_AUTH(0.00)[];
+         ARC_NA(0.00)[];
+         R_DKIM_ALLOW(0.00)[aosc.io:s=default];
+         RECEIVED_SPAMHAUS_PBL(0.00)[59.41.161.2:received];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         R_MISSING_CHARSET(2.50)[];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         TAGGED_RCPT(0.00)[dt];
+         MIME_GOOD(-0.10)[text/plain];
+         BROKEN_CONTENT_TYPE(1.50)[];
+         R_SPF_SOFTFAIL(0.00)[~all];
+         DMARC_NA(0.00)[aosc.io];
+         ML_SERVERS(-3.10)[148.251.23.173];
+         DKIM_TRACE(0.00)[aosc.io:+];
+         RCPT_COUNT_SEVEN(0.00)[10];
+         MID_CONTAINS_FROM(1.00)[];
+         RCVD_NO_TLS_LAST(0.10)[];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         ASN(0.00)[asn:24940, ipnet:148.251.0.0/16, country:DE];
+         RCVD_COUNT_TWO(0.00)[2];
+         SUSPICIOUS_RECIPS(1.50)[];
+         HFILTER_HELO_BAREIP(3.00)[148.251.23.173,1]
+X-Rspamd-Queue-Id: 5C32142F57
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Quoting Doug Anderson (2020-12-10 17:51:53)
-> Hi,
->=20
-> On Thu, Dec 10, 2020 at 5:39 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > Quoting Doug Anderson (2020-12-10 17:30:17)
-> > > On Thu, Dec 10, 2020 at 5:21 PM Stephen Boyd <swboyd@chromium.org> wr=
-ote:
-> > > >
-> > > > Yeah and so if it comes way later because it timed out then what's =
-the
-> > > > point of calling synchronize_irq() again? To make the completion
-> > > > variable set when it won't be tested again until it is reinitialize=
-d?
-> > >
-> > > Presumably the idea is to try to recover to a somewhat usable state
-> > > again?  We're not rebooting the machine so, even though this transfer
-> > > failed, we will undoubtedly do another transfer later.  If that
-> > > "abort" interrupt comes way later while we're setting up the next
-> > > transfer we'll really confuse ourselves.
-> >
-> > The interrupt handler just sets a completion variable. What does that
-> > confuse?
->=20
-> The interrupt handler sees a "DONE" interrupt.  If we've made it far
-> enough into setting up the next transfer that "cur_xfer" has been set
-> then it might do more, no?
+V831 has a SPI controller similar to the H6 one.
 
-I thought it saw a cancel/abort EN bit?
+Add a compatible string for it.
 
-        if (m_irq & M_CMD_CANCEL_EN)
-                complete(&mas->cancel_done);
-        if (m_irq & M_CMD_ABORT_EN)
-                complete(&mas->abort_done)
+Cc: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org
+Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+---
+H6 and V831 SPI controllers is not totally the same with H3: they have
+QSPI support added. Here V831 compatible string is just added in
+parallel with H6 one, but maybe we should make H6 SPI do not fallback to
+H3 one, and add H6 one as fallback to V831?
 
-and only a DONE bit if a transfer happened.
+ .../devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml         | 1 +
+ 1 file changed, 1 insertion(+)
 
->=20
->=20
-> > > I guess you could go the route of adding a synchronize_irq() at the
-> > > start of the next transfer, but I'd rather add the overhead in the
-> > > exceptional case (the timeout) than the normal case.  In the normal
-> > > case we don't need to worry about random IRQs from the past transfer
-> > > suddenly showing up.
-> > >
-> >
-> > How does adding synchronize_irq() at the end guarantee that the abort is
-> > cleared out of the hardware though? It seems to assume that the abort is
-> > pending at the GIC when it could still be running through the hardware
-> > and not executed yet. It seems like a synchronize_irq() for that is
-> > wishful thinking that the irq is merely pending even though it timed
-> > out and possibly never ran. Maybe it's stuck in a write buffer in the
-> > CPU?
->=20
-> I guess I'm asserting that if a full second passed (because we timed
-> out) and after that full second no interrupts are pending then the
-> interrupt will never come.  That seems a reasonable assumption to me.
-> It seems hard to believe it'd be stuck in a write buffer for a full
-> second?
->=20
-
-Ok, so if we don't expect an irq to come in why are we calling
-synchronize_irq()? I'm lost.
+diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+index 7866a655d81c..a620ff30033e 100644
+--- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
++++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+@@ -24,6 +24,7 @@ properties:
+       - items:
+           - enum:
+               - allwinner,sun8i-r40-spi
++              - allwinner,sun8i-v831-spi
+               - allwinner,sun50i-h6-spi
+           - const: allwinner,sun8i-h3-spi
+ 
+-- 
+2.28.0
