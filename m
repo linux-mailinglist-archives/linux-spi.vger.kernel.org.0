@@ -2,22 +2,22 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A37EE2D8C8D
-	for <lists+linux-spi@lfdr.de>; Sun, 13 Dec 2020 10:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E222D8CA0
+	for <lists+linux-spi@lfdr.de>; Sun, 13 Dec 2020 11:17:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405729AbgLMJzN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 13 Dec 2020 04:55:13 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:55304 "EHLO
+        id S2393178AbgLMKPx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 13 Dec 2020 05:15:53 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:55460 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726340AbgLMJzM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 13 Dec 2020 04:55:12 -0500
+        with ESMTP id S2394256AbgLMKPr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 13 Dec 2020 05:15:47 -0500
 Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:b93f:9fae:b276:a89a])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id E3F431F44F7D;
-        Sun, 13 Dec 2020 09:54:29 +0000 (GMT)
-Date:   Sun, 13 Dec 2020 10:54:26 +0100
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 530CA1F44A61;
+        Sun, 13 Dec 2020 10:15:00 +0000 (GMT)
+Date:   Sun, 13 Dec 2020 11:14:56 +0100
 From:   Boris Brezillon <boris.brezillon@collabora.com>
 To:     Sowjanya Komatineni <skomatineni@nvidia.com>
 Cc:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
@@ -26,14 +26,12 @@ Cc:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
         <tudor.ambarus@microchip.com>, <linux-spi@vger.kernel.org>,
         <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v3 5/9] spi: spi-mem: Allow masters to transfer dummy
- cycles directly by hardware
-Message-ID: <20201213105426.294827c8@collabora.com>
-In-Reply-To: <7efb281a-98d7-68c5-1515-0e980b6cfe12@nvidia.com>
+Subject: Re: [PATCH v3 6/9] spi: tegra210-quad: Add support for hardware
+ dummy cycles
+Message-ID: <20201213111456.4485a0b6@collabora.com>
+In-Reply-To: <1607721363-8879-7-git-send-email-skomatineni@nvidia.com>
 References: <1607721363-8879-1-git-send-email-skomatineni@nvidia.com>
-        <1607721363-8879-6-git-send-email-skomatineni@nvidia.com>
-        <20201212115715.31a8d755@collabora.com>
-        <7efb281a-98d7-68c5-1515-0e980b6cfe12@nvidia.com>
+        <1607721363-8879-7-git-send-email-skomatineni@nvidia.com>
 Organization: Collabora
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
@@ -43,121 +41,101 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, 12 Dec 2020 09:28:50 -0800
+On Fri, 11 Dec 2020 13:16:00 -0800
 Sowjanya Komatineni <skomatineni@nvidia.com> wrote:
 
-> On 12/12/20 2:57 AM, Boris Brezillon wrote:
-> > On Fri, 11 Dec 2020 13:15:59 -0800
-> > Sowjanya Komatineni <skomatineni@nvidia.com> wrote:
-> >  
-> >> This patch adds a flag SPI_MASTER_USES_HW_DUMMY_CYCLES for the controllers
-> >> that support transfer of dummy cycles by the hardware directly.  
-> > Hm, not sure this is a good idea. I mean, if we expect regular SPI
-> > devices to use this feature, then why not, but if it's just for
-> > spi-mem, I'd recommend implementing a driver-specific exec_op() instead
-> > of using the default one.  
+> Tegra Quad SPI controller hardware supports sending dummy cycles
+> after address bytes.
 > 
-> dummy cycles programming is SPI device specific.
+> This patch adds this support.
 > 
-> Transfer of dummy bytes by SW or HW controller can be depending on 
-> features supported by controller.
+> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+> ---
+>  drivers/spi/spi-tegra210-quad.c | 22 +++++++++++++++++++++-
+>  1 file changed, 21 insertions(+), 1 deletion(-)
 > 
-> Adding controller driver specific exec_op() Just for skipping dummy 
-> bytes transfer will have so much of redundant code pretty much what all 
-> spi_mem_exec_op does.
-> 
-> So in v1, I handled this in controller driver by skipping SW transfer of 
-> dummy bytes during dummy phase and programming dummy cycles in 
-> controller register to allow HW to transfer.
-> 
-> Based on v1 feedback discussion, added this flag 
-> SPI_MASTER_USES_HW_DUMMY_CYCLES which can be used by controllers 
-> supporting HW dummy bytes transfer and updated spi_mem_exec_op to skip 
-> SW dummy bytes.
-> 
-> This helps other controllers supporting HW transfer of dummy bytes as 
-> well just to set the flag and use dummy cycles directly.
+> diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
+> index 624f395..1d1b125 100644
+> --- a/drivers/spi/spi-tegra210-quad.c
+> +++ b/drivers/spi/spi-tegra210-quad.c
+> @@ -124,6 +124,13 @@
+>  #define QSPI_DMA_TIMEOUT			(msecs_to_jiffies(1000))
+>  #define DEFAULT_QSPI_DMA_BUF_LEN		(64 * 1024)
+>  
+> +enum transfer_phase {
+> +	CMD_BYTE_XFER = 0,
+> +	ADDR_BYTES_XFER,
+> +	DATA_BYTES_XFER,
+> +	MAX_XFERS,
+> +};
+> +
+>  struct tegra_qspi_client_data {
+>  	int tx_clk_tap_delay;
+>  	int rx_clk_tap_delay;
+> @@ -857,6 +864,8 @@ static int tegra_qspi_start_transfer_one(struct spi_device *spi,
+>  
+>  	tqspi->command1_reg = command1;
+>  
+> +	tegra_qspi_writel(tqspi, QSPI_NUM_DUMMY_CYCLE(tqspi->dummy_cycles), QSPI_MISC_REG);
+> +
+>  	ret = tegra_qspi_flush_fifos(tqspi, false);
+>  	if (ret < 0)
+>  		return ret;
+> @@ -977,7 +986,7 @@ static int tegra_qspi_transfer_one_message(struct spi_master *master, struct spi
+>  	struct spi_device *spi = msg->spi;
+>  	struct spi_transfer *xfer;
+>  	bool is_first_msg = true;
+> -	int ret;
+> +	int ret, xfer_phase = 0;
+>  
+>  	msg->status = 0;
+>  	msg->actual_length = 0;
+> @@ -987,6 +996,15 @@ static int tegra_qspi_transfer_one_message(struct spi_master *master, struct spi
+>  	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+>  		u32 cmd1;
+>  
+> +		/*
+> +		 * Program dummy clock cycles in Tegra QSPI register only
+> +		 * during address transfer phase.
+> +		 */
+> +		if (xfer_phase == ADDR_BYTES_XFER)
+> +			tqspi->dummy_cycles = msg->dummy_cycles;
+> +		else
+> +			tqspi->dummy_cycles = 0;
 
-Except saying a spi_message has X dummy cycle is not precise enough.
-Where are those dummy cycles in the transfer sequence? spi-mem has well
-defined sequencing (cmd[+addr][+dummy][+data]) so we know exacly where
-dummy cycles are, but trying to retro-fit the dummy-cycle concept in
-the generic spi_message is confusing IMHO. If want to avoid code
-duplication, I'm pretty sure the driver can be reworked so the
-spi_transfer/exec_op() path can share most of the logic (that probably
-implies declaring a tegra_qspi_op).
+That's fragile. You're trying to guess the phase (which is clearly a
+spi-mem concept) from the position of the transfer in the list. What
+happens if a spi-mem operation has no address bytes but requires dummy
+cycles after the command? What happens if we patch spi_mem_exec_op() to
+merge the cmd and address bytes in a single transfer (that's an option
+I considered at some point when designing the framework before deciding
+it was not worth the extra complexity)?
 
-> 
-> > If we go for those core changes, we should at least add a
-> > ctrl->max_dummy_cycles field so the core can fallback to regular writes
-> > when the number of dummy cycles in the spi_mem_op exceeds what the
-> > controller can do.  
-> Yes makes sense. Will add this once we decide on keeping this flag to 
-> identify controllers supporting HW transfer of dummy bytes Vs SW transfer.
-> >> For controller with this flag set, spi-mem driver will skip dummy bytes
-> >> transfer in the spi message.
-> >>
-> >> Controller drivers can get the number of dummy cycles from spi_message.
-> >>
-> >> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
-> >> ---
-> >>   drivers/spi/spi-mem.c   | 18 +++++++++++-------
-> >>   include/linux/spi/spi.h |  8 ++++++++
-> >>   2 files changed, 19 insertions(+), 7 deletions(-)
-> >>
-> >> diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-> >> index f3a3f19..38a523b 100644
-> >> --- a/drivers/spi/spi-mem.c
-> >> +++ b/drivers/spi/spi-mem.c
-> >> @@ -350,13 +350,17 @@ int spi_mem_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
-> >>   	}
-> >>   
-> >>   	if (op->dummy.nbytes) {
-> >> -		memset(tmpbuf + op->addr.nbytes + 1, 0xff, op->dummy.nbytes);
-> >> -		xfers[xferpos].tx_buf = tmpbuf + op->addr.nbytes + 1;
-> >> -		xfers[xferpos].len = op->dummy.nbytes;
-> >> -		xfers[xferpos].tx_nbits = op->dummy.buswidth;
-> >> -		spi_message_add_tail(&xfers[xferpos], &msg);
-> >> -		xferpos++;
-> >> -		totalxferlen += op->dummy.nbytes;
-> >> +		if (ctlr->flags & SPI_MASTER_USES_HW_DUMMY_CYCLES) {
-> >> +			msg.dummy_cycles = (op->dummy.nbytes * 8) / op->dummy.buswidth;
-> >> +		} else {
-> >> +			memset(tmpbuf + op->addr.nbytes + 1, 0xff, op->dummy.nbytes);
-> >> +			xfers[xferpos].tx_buf = tmpbuf + op->addr.nbytes + 1;
-> >> +			xfers[xferpos].len = op->dummy.nbytes;
-> >> +			xfers[xferpos].tx_nbits = op->dummy.buswidth;
-> >> +			spi_message_add_tail(&xfers[xferpos], &msg);
-> >> +			xferpos++;
-> >> +			totalxferlen += op->dummy.nbytes;
-> >> +		}
-> >>   	}
-> >>   
-> >>   	if (op->data.nbytes) {
-> >> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-> >> index aa09fdc..2024149 100644
-> >> --- a/include/linux/spi/spi.h
-> >> +++ b/include/linux/spi/spi.h
-> >> @@ -512,6 +512,8 @@ struct spi_controller {
-> >>   
-> >>   #define SPI_MASTER_GPIO_SS		BIT(5)	/* GPIO CS must select slave */
-> >>   
-> >> +#define SPI_MASTER_USES_HW_DUMMY_CYCLES	BIT(6)	/* HW dummy bytes transfer */
-> >> +
-> >>   	/* flag indicating this is an SPI slave controller */
-> >>   	bool			slave;
-> >>   
-> >> @@ -1022,6 +1024,12 @@ struct spi_message {
-> >>   	unsigned		actual_length;
-> >>   	int			status;
-> >>   
-> >> +	/*
-> >> +	 * dummy cycles in the message transfer. This is used by the controller
-> >> +	 * drivers supports transfer of dummy cycles directly by the hardware.
-> >> +	 */
-> >> +	u8			dummy_cycles;
-> >> +
-> >>   	/* for optional use by whatever driver currently owns the
-> >>   	 * spi_message ...  between calls to spi_async and then later
-> >>   	 * complete(), that's the spi_controller controller driver.  
+Besides, I keep thinking the regular transfer path should not assume
+it's being passed spi-mem operations, if it is, that means you should
+overload the default exec_op(). The more I look at it the less I like
+this idea of adding a dummy_cycles field to spi_message. I'm pretty
+sure we can find other ways to avoid code duplication if that's your
+main concern.
+
+> +
+>  		reinit_completion(&tqspi->xfer_completion);
+>  
+>  		cmd1 = tegra_qspi_setup_transfer_one(spi, xfer, is_first_msg);
+> @@ -1018,6 +1036,7 @@ static int tegra_qspi_transfer_one_message(struct spi_master *master, struct spi
+>  		}
+>  
+>  		msg->actual_length += xfer->len;
+> +		xfer_phase++;
+>  
+>  complete_xfer:
+>  		if (ret < 0) {
+> @@ -1203,6 +1222,7 @@ static int tegra_qspi_probe(struct platform_device *pdev)
+>  	master->mode_bits = SPI_MODE_0 | SPI_MODE_3 | SPI_CS_HIGH |
+>  			    SPI_TX_DUAL | SPI_RX_DUAL | SPI_TX_QUAD | SPI_RX_QUAD;
+>  	master->bits_per_word_mask = SPI_BPW_MASK(32) | SPI_BPW_MASK(16) | SPI_BPW_MASK(8);
+> +	master->flags = SPI_MASTER_USES_HW_DUMMY_CYCLES;
+>  	master->setup = tegra_qspi_setup;
+>  	master->cleanup = tegra_qspi_cleanup;
+>  	master->transfer_one_message = tegra_qspi_transfer_one_message;
 
