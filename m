@@ -2,45 +2,43 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3002D9C93
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Dec 2020 17:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 797D32D9E30
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Dec 2020 18:53:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440284AbgLNQYM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Dec 2020 11:24:12 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58892 "EHLO mail.kernel.org"
+        id S2407785AbgLNRtR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Dec 2020 12:49:17 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53970 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2440213AbgLNQYG (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 14 Dec 2020 11:24:06 -0500
-Date:   Mon, 14 Dec 2020 16:23:15 +0000
+        id S2408828AbgLNRtO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 14 Dec 2020 12:49:14 -0500
+Date:   Mon, 14 Dec 2020 17:48:22 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607963005;
-        bh=AHdANBBLNTJw739m69nu1X9LxbPWyebOEdf8x8REzLI=;
+        s=k20201202; t=1607968113;
+        bh=NcqAS0fdk9ddPfR571pdN63Yp0bFOzwqCtafAiwa0Mg=;
         h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m1I79GixJahrYdFPYjFIKqA6vALsyqCralLCJyWM3v6O2BYsc1VFHeMksKIlOzQLU
-         YhMKPRo+bElsRWMKtQ1OPne74/xQcD1lcX+VmsN4xJgKJlrK7TVJj3Vh+EezydIA9K
-         KYOhdXt20eceahFYp0oXWXCH7VWCFkrTtYjI/4NQBuMccz89J0v/39AlBCcQnx7fVR
-         exIwIVX83Eslw0S0KIdZDhLgOmBKnpW3LZMym1/AboPHHfSQ3CXybnaHAIkhwZwCOH
-         cnJdQt61NdwWjRveDyv6Zb+bFqR0WKdaMXYgL5m9QdRa4/oDeA4ieR+Hv6culExWqn
-         /zUfKSRFNqEsA==
+        b=WNmmvYml2MNGeb+1OLX1V7rfTCqp5bNGLdXL9oMr05FR+lJujOeYbEmWg9/mppLgl
+         FlojAqt/+wgn8kqstqSP3qkMN2Gh3Vw8s96yfhv318MKroqChPYhbmhDKuyQlGkLn7
+         5ruqWFfAqbbS2AHYS8vbC05m2iEuWid38KGnX/EvP51Y81RLV46q+xx0hLy+ByNrFd
+         UyhCCLPd9eTn0Pgf/GQmwpq0VpxdIO8Rbubjazqg7CRQQWlmp9prYxLca7YJ4O9t5V
+         DptZ9BBWPHCEQBp7XE+gZiHKnw+URjzsA306qZdttBijySBmrl1KVJY9//X6/3wQLJ
+         Sd/mEfWCXjS1g==
 From:   Mark Brown <broonie@kernel.org>
-To:     Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, robh+dt@kernel.org,
-        lukas@wunner.de, bbrezillon@kernel.org, p.yadav@ti.com,
-        tudor.ambarus@microchip.com, linux-spi@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 5/9] spi: spi-mem: Allow masters to transfer dummy
- cycles directly by hardware
-Message-ID: <20201214162315.GA4880@sirena.org.uk>
-References: <1607721363-8879-1-git-send-email-skomatineni@nvidia.com>
- <1607721363-8879-6-git-send-email-skomatineni@nvidia.com>
- <20201212115715.31a8d755@collabora.com>
+To:     Qing Zhang <zhangqing@loongson.cn>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Juxin Gao <gaojuxin@loongson.cn>
+Subject: Re: [PATCH v3 1/4] spi: LS7A: Add Loongson LS7A SPI controller
+ driver support
+Message-ID: <20201214174822.GC4880@sirena.org.uk>
+References: <1607925534-8312-1-git-send-email-zhangqing@loongson.cn>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SUOF0GtieIMvvwua"
+        protocol="application/pgp-signature"; boundary="f0KYrhQ4vYSV2aJu"
 Content-Disposition: inline
-In-Reply-To: <20201212115715.31a8d755@collabora.com>
+In-Reply-To: <1607925534-8312-1-git-send-email-zhangqing@loongson.cn>
 X-Cookie: Everything you know is wrong!
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
@@ -48,48 +46,58 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---SUOF0GtieIMvvwua
+--f0KYrhQ4vYSV2aJu
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Sat, Dec 12, 2020 at 11:57:15AM +0100, Boris Brezillon wrote:
-> Sowjanya Komatineni <skomatineni@nvidia.com> wrote:
+On Mon, Dec 14, 2020 at 01:58:51PM +0800, Qing Zhang wrote:
 
-> > This patch adds a flag SPI_MASTER_USES_HW_DUMMY_CYCLES for the controllers
-> > that support transfer of dummy cycles by the hardware directly.
+> +static int ls7a_spi_do_transfer(struct ls7a_spi *ls7a_spi,
+> +                               struct spi_device *spi,
+> +                               struct spi_transfer *t)
 
-> Hm, not sure this is a good idea. I mean, if we expect regular SPI
-> devices to use this feature, then why not, but if it's just for
-> spi-mem, I'd recommend implementing a driver-specific exec_op() instead
-> of using the default one.
+This does a lot of configuration, as far as I can see only the clock
+rate can actually vary per transfer though?  The mode configuration
+looks like it should be moved to prepare instead, the divider settings
+can be done with a read/modify/write.  It's also not clear to me why
+spcr and sper are being stored in the driver data, we never read the
+values outside of this function.
 
-I *have* seen other high speed devices which had padding bits in the
-transfer (see regmap's pad_bits feature), I think that corresponds to
-flash dummy bits but haven't checked that the hardware support lines up.
-I'm not sure it's ever been seen as something that we particularly
-needed to speed up with hardware offload though.
+> +static int  ls7a_spi_transfer_one(struct spi_master *master,
+> +				  struct spi_device *spi,
+> +				  struct spi_transfer *t)
+> +{
+> +	struct ls7a_spi *ls7a_spi;
+> +	int status;
+> +
+> +	ls7a_spi = spi_master_get_devdata(master);
+> +
+> +	status = ls7a_spi_do_transfer(ls7a_spi, spi, t);
+> +	if (status < 0)
+> +		return status;
+> +
+> +	ls7a_spi_write_read(spi, t);
 
-> If we go for those core changes, we should at least add a
-> ctrl->max_dummy_cycles field so the core can fallback to regular writes
-> when the number of dummy cycles in the spi_mem_op exceeds what the
-> controller can do.
+This is kind of confusing - _do_transfer() doesn't actually do the
+transfer so far as I can see, write_read() does the transfer?  Probably
+both functions should be renamed, or even just inlined here - it's
+really configuring the clocks and transferring the data.
 
-That seems sensible if there's a risk of controllers being too limited,
-which knowing hardware seems likely.
+Otherwise this looks good.
 
---SUOF0GtieIMvvwua
+--f0KYrhQ4vYSV2aJu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/XkXIACgkQJNaLcl1U
-h9CBsAf/XWrzX5DEizCXgE7T1DvfpDtH0jdGsooRqjRftlV5KVN61c4clryl717B
-ix3GAXx57e3OO/JyWtBuKeLChLsyvDcz4CWnr8AMTmHcxYO1KTlqS9GEEs4EEFIO
-lXBiuZ/9yb2/HJSdJTg0w+mudFvH3B2gsVDZ1C5Waupm+HdqPSP1xilOs1owTVpa
-0fNhf99+NIryvBNeGI4vt9okktA+fnhh0u2VjSXQwyyw4woVVrp+Zv5cn1KSx7cX
-DLP9ciLZBUUWoVX5Vh+IIL0k9un1kKBmAjtUgjdTGYyg0yPdJn+sEvHdnifN0wxP
-Pywb4/N/I3lzBeJah5fx5DH0AZ+GyA==
-=GioU
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/XpWYACgkQJNaLcl1U
+h9BzHAf/Rwxgo7t4Z5IvsSKHACOvItQQHanhkcSmK862aYJBHTRvoVpnQQzEtqU6
+Wodl6E4dZFq15FhWH12EsOBDv2LPsm4XiaYWbUljPip0ZEfbJNpoOUg43UZZSHri
+cjThPcPGG2UEQEDjyWivFKyip8ws8PJw9o2+2Wm5KygxoIsXX6sIIKQRpzgxcdqw
+k8774KI3eR1lKc6lWstuI442xqfUMGbBPfor59NB6iRkXlG1FlOo2grXwWhrwC4+
+Yvk45cnZDLQvrK5E72VLMVjK9JeA+K0Tkkkg0UGzR5m8YsgDCrWxW4rjCYEIdxpY
+tcpeQhGyu80pqDTE8b8y8k/ldAAC8g==
+=U/sN
 -----END PGP SIGNATURE-----
 
---SUOF0GtieIMvvwua--
+--f0KYrhQ4vYSV2aJu--
