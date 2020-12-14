@@ -2,172 +2,431 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE6F2D8F20
-	for <lists+linux-spi@lfdr.de>; Sun, 13 Dec 2020 18:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E702D9320
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Dec 2020 07:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726635AbgLMRfd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 13 Dec 2020 12:35:33 -0500
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:17185 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725924AbgLMRfd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 13 Dec 2020 12:35:33 -0500
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5fd650bc0000>; Sun, 13 Dec 2020 09:34:52 -0800
-Received: from [10.2.60.59] (172.20.145.6) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sun, 13 Dec
- 2020 17:34:48 +0000
-Subject: Re: [PATCH v3 5/9] spi: spi-mem: Allow masters to transfer dummy
- cycles directly by hardware
-To:     Boris Brezillon <boris.brezillon@collabora.com>
-CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <broonie@kernel.org>, <robh+dt@kernel.org>, <lukas@wunner.de>,
-        <bbrezillon@kernel.org>, <p.yadav@ti.com>,
-        <tudor.ambarus@microchip.com>, <linux-spi@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <1607721363-8879-1-git-send-email-skomatineni@nvidia.com>
- <1607721363-8879-6-git-send-email-skomatineni@nvidia.com>
- <20201212115715.31a8d755@collabora.com>
- <7efb281a-98d7-68c5-1515-0e980b6cfe12@nvidia.com>
- <20201213105426.294827c8@collabora.com>
- <20201213122849.65ddd988@collabora.com>
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-Message-ID: <56246e0c-9b9f-0170-9c4b-d53a9be16156@nvidia.com>
-Date:   Sun, 13 Dec 2020 09:34:45 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20201213122849.65ddd988@collabora.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [172.20.145.6]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1607880892; bh=/+r/OFkiTrJ9cwJUQwdpvx74rqFWWTz4XHd4+sExh/c=;
-        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
-         MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-         Content-Language:X-Originating-IP:X-ClientProxiedBy;
-        b=AHwzAau4L6pQm/I8MkJyiYFwCLK3MfSk2wB4hKuGKNm2kRLWyhHwUF2k/2mx/ZNTQ
-         roOuyfSC1YV4W5w6aF9Y/5HBKDTJIZn2yjDD+0She/UHy6RmEHS67n00fPZ1ba9BDY
-         +uTDxq+kuSiOHBxGEh+rGJtiTUkUdsPrgScYeyq0bWH4GxZW6YvP2uaOn/Gn//g8nD
-         BvVwtbUFyJewnQO4bz1wcLo0WSejIpCy7Nrw6IiONVkxPoFv5tW1WbLsxJHbUgPXNr
-         ZWRDcQqkaM0X7u/ZyezBQ0HbAOACPDkF03V6nRnmv0KAHuRH1vrIEoz5gNCY8uJu8z
-         yrq1P4x4NvrIw==
+        id S2388830AbgLNF74 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Dec 2020 00:59:56 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:43408 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387410AbgLNF74 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 14 Dec 2020 00:59:56 -0500
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx_38l_9ZfFUodAA--.52092S2;
+        Mon, 14 Dec 2020 13:59:01 +0800 (CST)
+From:   Qing Zhang <zhangqing@loongson.cn>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Juxin Gao <gaojuxin@loongson.cn>
+Subject: [PATCH v3 1/4] spi: LS7A: Add Loongson LS7A SPI controller driver support
+Date:   Mon, 14 Dec 2020 13:58:51 +0800
+Message-Id: <1607925534-8312-1-git-send-email-zhangqing@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dx_38l_9ZfFUodAA--.52092S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Zw1xJrWUJr4xZFWUuF4Uurg_yoWDWr4Dpa
+        1rW3yrta18JFyrAFZxJF4UWFyYqw1Sq34rX3yaq34Iga4YqF4DWF1YqryfArWaqFWUua4U
+        XFnFgrW5KF45ZaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvCb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjc
+        xK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
+        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JV
+        WxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc2xSY4AK67AK6r4rMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
+        nxnUUI43ZEXa7IU5p5l5UUUUU==
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The SPI controller has the following characteristics:
 
-On 12/13/20 3:28 AM, Boris Brezillon wrote:
-> On Sun, 13 Dec 2020 10:54:26 +0100
-> Boris Brezillon <boris.brezillon@collabora.com> wrote:
->
->> On Sat, 12 Dec 2020 09:28:50 -0800
->> Sowjanya Komatineni <skomatineni@nvidia.com> wrote:
->>
->>> On 12/12/20 2:57 AM, Boris Brezillon wrote:
->>>> On Fri, 11 Dec 2020 13:15:59 -0800
->>>> Sowjanya Komatineni <skomatineni@nvidia.com> wrote:
->>>>     
->>>>> This patch adds a flag SPI_MASTER_USES_HW_DUMMY_CYCLES for the controllers
->>>>> that support transfer of dummy cycles by the hardware directly.
->>>> Hm, not sure this is a good idea. I mean, if we expect regular SPI
->>>> devices to use this feature, then why not, but if it's just for
->>>> spi-mem, I'd recommend implementing a driver-specific exec_op() instead
->>>> of using the default one.
->>> dummy cycles programming is SPI device specific.
->>>
->>> Transfer of dummy bytes by SW or HW controller can be depending on
->>> features supported by controller.
->>>
->>> Adding controller driver specific exec_op() Just for skipping dummy
->>> bytes transfer will have so much of redundant code pretty much what all
->>> spi_mem_exec_op does.
->>>
->>> So in v1, I handled this in controller driver by skipping SW transfer of
->>> dummy bytes during dummy phase and programming dummy cycles in
->>> controller register to allow HW to transfer.
->>>
->>> Based on v1 feedback discussion, added this flag
->>> SPI_MASTER_USES_HW_DUMMY_CYCLES which can be used by controllers
->>> supporting HW dummy bytes transfer and updated spi_mem_exec_op to skip
->>> SW dummy bytes.
->>>
->>> This helps other controllers supporting HW transfer of dummy bytes as
->>> well just to set the flag and use dummy cycles directly.
->> Except saying a spi_message has X dummy cycle is not precise enough.
->> Where are those dummy cycles in the transfer sequence? spi-mem has well
->> defined sequencing (cmd[+addr][+dummy][+data]) so we know exacly where
->> dummy cycles are, but trying to retro-fit the dummy-cycle concept in
->> the generic spi_message is confusing IMHO. If want to avoid code
->> duplication, I'm pretty sure the driver can be reworked so the
->> spi_transfer/exec_op() path can share most of the logic (that probably
->> implies declaring a tegra_qspi_op).
-> Something like that might also do the trick:
->
-> --->8---
->
-> diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-> index ef53290b7d24..8b0476f37fbb 100644
-> --- a/drivers/spi/spi-mem.c
-> +++ b/drivers/spi/spi-mem.c
-> @@ -353,6 +353,7 @@ int spi_mem_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
->                  xfers[xferpos].tx_buf = tmpbuf + op->addr.nbytes + 1;
->                  xfers[xferpos].len = op->dummy.nbytes;
->                  xfers[xferpos].tx_nbits = op->dummy.buswidth;
-> +               xfers[xferpos].dummy_data = 1;
->                  spi_message_add_tail(&xfers[xferpos], &msg);
->                  xferpos++;
->                  totalxferlen += op->dummy.nbytes;
-> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-> index 99380c0825db..ecf7989318c5 100644
-> --- a/include/linux/spi/spi.h
-> +++ b/include/linux/spi/spi.h
-> @@ -807,6 +807,10 @@ extern void spi_res_release(struct spi_controller *ctlr,
->    *      transfer. If 0 the default (from @spi_device) is used.
->    * @bits_per_word: select a bits_per_word other than the device default
->    *      for this transfer. If 0 the default (from @spi_device) is used.
-> + * @dummy_data: set to 1 for a dummy transfer (a transfer whose data is
-> + *      ignored). Controllers that are able to issue dummy cycles can ignore
-> + *      tx_buf, for those that can't tx_buf will contain dummy bytes. The
-> + *      number of  dummy cycles to issue is (len * tx_bits) / 8.
->    * @cs_change: affects chipselect after this transfer completes
->    * @cs_change_delay: delay between cs deassert and assert when
->    *      @cs_change is set and @spi_transfer is not the last in @spi_message
-> @@ -919,6 +923,7 @@ struct spi_transfer {
->          struct sg_table tx_sg;
->          struct sg_table rx_sg;
->   
-> +       unsigned        dummy_data:1;
->          unsigned        cs_change:1;
->          unsigned        tx_nbits:3;
->          unsigned        rx_nbits:3;
+- Full-duplex synchronous serial data transmission
+- Support up to 4 variable length byte transmission
+- Main mode support
+- Mode failure generates an error flag and issues an interrupt request
+- Double buffer receiver
+- Serial clock with programmable polarity and phase
+- SPI can be controlled in wait mode
+- Support boot from SPI
 
-Thanks Boris.
+Use mtd_debug tool to earse/write/read /dev/mtd0 on development.
 
-Sorry was thinking of spi flash device only as we only support quad spi 
-flash on Tegra QSPI interface.
+eg:
 
-But to make it more generic where spi message preparation can happen 
-from any client driver, agree order of transfers may vary.
+[root@linux mtd-utils-1.0.0]# mtd_debug erase /dev/mtd0 0x20000 0x40000
+Erased 262144 bytes from address 0x00020000 in flash
+[root@linux mtd-utils-1.0.0]# mtd_debug write /dev/mtd0 0x20000 13 1.img
+Copied 13 bytes from 1.img to address 0x00020000 in flash
+[root@linux mtd-utils-1.0.0]# mtd_debug read /dev/mtd0 0x20000 13 2.img
+Copied 13 bytes from address 0x00020000 in flash to 2.img
+[root@linux mtd-utils-1.0.0]# cmp -l 1.img 2.img
 
-Also having controller driver implement exec_op callback is also not 
-useful considering cases where spi message transfers dont' go thru spi_mem.
+Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
+Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+---
 
-Yes adding dummy_data field to indicate transfer is dummy bytes transfer 
-helps for any types of message transfers.
+v2:
+- keep Kconfig and Makefile sorted
+- make the entire comment a C++ one so things look more intentional
+- Fix unclear indentation
+- make conditional statements to improve legibility
+- Don't use static inline
+- the core handle message queue
+- Add a new binding document
+- Fix probe part mixed pdev and PCI
 
-Tegra QSPI controller dummy cycles need be programmed with transfer 
-after which dummy cycles are needed.
+v3:
+- expose set_cs to the core and let it handle things
+- replace transfer_one_message to transfer_one
+- replace spi_alloc_master to devm_spi_alloc_master
+- split out into prepare/unprepare_message
+- releases pci regions before unregister master
 
-So, will have v4 to add dummy_data to spi_transfer and will update 
-controller driver to convert dummy bytes to dummy cycles and program 
-dummy cycles with its previous transfer and skip dummy transfer buffer.
+---
+ drivers/spi/Kconfig    |   7 ++
+ drivers/spi/Makefile   |   1 +
+ drivers/spi/spi-ls7a.c | 293 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 301 insertions(+)
+ create mode 100644 drivers/spi/spi-ls7a.c
 
-Thanks
-
-Sowjanya
-
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index aadaea0..af7c0d4 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -413,6 +413,13 @@ config SPI_LP8841_RTC
+ 	  Say N here unless you plan to run the kernel on an ICP DAS
+ 	  LP-8x4x industrial computer.
+ 
++config SPI_LS7A
++	tristate "Loongson LS7A SPI Controller Support"
++	depends on CPU_LOONGSON64 || COMPILE_TEST
++	help
++	  This drivers supports the Loongson LS7A SPI controller in master
++	  SPI mode.
++
+ config SPI_MPC52xx
+ 	tristate "Freescale MPC52xx SPI (non-PSC) controller support"
+ 	depends on PPC_MPC52xx
+diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+index 6fea582..d015cf2 100644
+--- a/drivers/spi/Makefile
++++ b/drivers/spi/Makefile
+@@ -61,6 +61,7 @@ obj-$(CONFIG_SPI_LANTIQ_SSC)		+= spi-lantiq-ssc.o
+ obj-$(CONFIG_SPI_JCORE)			+= spi-jcore.o
+ obj-$(CONFIG_SPI_LM70_LLP)		+= spi-lm70llp.o
+ obj-$(CONFIG_SPI_LP8841_RTC)		+= spi-lp8841-rtc.o
++obj-$(CONFIG_SPI_LS7A)			+= spi-ls7a.o
+ obj-$(CONFIG_SPI_MESON_SPICC)		+= spi-meson-spicc.o
+ obj-$(CONFIG_SPI_MESON_SPIFC)		+= spi-meson-spifc.o
+ obj-$(CONFIG_SPI_MPC512x_PSC)		+= spi-mpc512x-psc.o
+diff --git a/drivers/spi/spi-ls7a.c b/drivers/spi/spi-ls7a.c
+new file mode 100644
+index 0000000..d3b7e86
+--- /dev/null
++++ b/drivers/spi/spi-ls7a.c
+@@ -0,0 +1,293 @@
++// SPDX-License-Identifier: GPL-2.0-only
++//
++// Loongson LS7A SPI Controller driver
++//
++// Copyright (C) 2020 Loongson Technology Corporation Limited.
++//
++
++#include <linux/module.h>
++#include <linux/pci.h>
++#include <linux/spi/spi.h>
++
++/* define spi register */
++#define	SPCR	0x00
++#define	SPSR	0x01
++#define	FIFO	0x02
++#define	SPER	0x03
++#define	PARA	0x04
++#define	SFCS	0x05
++#define	TIMI	0x06
++
++struct ls7a_spi {
++	spinlock_t lock;
++	struct spi_master *master;
++	void __iomem *base;
++	unsigned int hz;
++	unsigned char spcr, sper;
++	unsigned int mode;
++};
++
++static void ls7a_spi_write_reg(struct ls7a_spi *spi,
++			       unsigned char reg,
++			       unsigned char data)
++{
++	writeb(data, spi->base + reg);
++}
++
++static char ls7a_spi_read_reg(struct ls7a_spi *spi, unsigned char reg)
++{
++	return readb(spi->base + reg);
++}
++
++static int ls7a_spi_prepare_message(struct spi_master *master,
++				    struct spi_message *msg)
++{
++	struct ls7a_spi *ls7a_spi;
++	int param;
++
++	ls7a_spi = spi_master_get_devdata(master);
++
++	spin_lock(&ls7a_spi->lock);
++	param = ls7a_spi_read_reg(ls7a_spi, PARA);
++	ls7a_spi_write_reg(ls7a_spi, PARA, param &= ~1);
++	spin_unlock(&ls7a_spi->lock);
++
++	return 0;
++}
++
++static int  ls7a_spi_unprepare_message(struct spi_master *master,
++				       struct spi_message *msg)
++{
++	struct ls7a_spi *ls7a_spi;
++	int param = 0;
++
++	ls7a_spi = spi_master_get_devdata(master);
++
++	spin_lock(&ls7a_spi->lock);
++	ls7a_spi_write_reg(ls7a_spi, PARA, param);
++	spin_unlock(&ls7a_spi->lock);
++
++	return 0;
++}
++
++static void ls7a_spi_set_cs(struct spi_device *spi, bool enable)
++{
++	struct ls7a_spi *ls7a_spi;
++	int cs;
++
++	ls7a_spi = spi_master_get_devdata(spi->master);
++
++	cs = ls7a_spi_read_reg(ls7a_spi, SFCS) & ~(0x11 << spi->chip_select);
++
++	if (!!(spi->mode & SPI_CS_HIGH) == enable)
++		ls7a_spi_write_reg(ls7a_spi, SFCS, (0x1 << spi->chip_select) | cs);
++	else
++		ls7a_spi_write_reg(ls7a_spi, SFCS, (0x11 << spi->chip_select) | cs);
++}
++
++static int ls7a_spi_do_transfer(struct ls7a_spi *ls7a_spi,
++				struct spi_device *spi,
++				struct spi_transfer *t)
++{
++	unsigned int hz;
++	unsigned int div, div_tmp;
++	unsigned int bit;
++	unsigned long clk;
++	unsigned char val;
++	const char rdiv[12] = {0, 1, 4, 2, 3, 5, 6, 7, 8, 9, 10, 11};
++
++	if (t) {
++		hz = t->speed_hz;
++		if (!hz)
++			hz = spi->max_speed_hz;
++	} else {
++		hz = spi->max_speed_hz;
++	}
++
++	if (((spi->mode ^ ls7a_spi->mode) & (SPI_CPOL | SPI_CPHA))
++		|| (hz && ls7a_spi->hz != hz)) {
++		clk = 100000000;
++
++		div = DIV_ROUND_UP(clk, hz);
++		if (div < 2)
++			div = 2;
++		if (div > 4096)
++			div = 4096;
++
++		bit = fls(div) - 1;
++		if ((1<<bit) == div)
++			bit--;
++		div_tmp = rdiv[bit];
++
++		dev_dbg(&spi->dev, "clk = %ld hz = %d div_tmp = %d bit = %d\n",
++			clk, hz, div_tmp, bit);
++
++		ls7a_spi->hz = hz;
++		ls7a_spi->spcr = div_tmp & 3;
++		ls7a_spi->sper = (div_tmp >> 2) & 3;
++
++		val = ls7a_spi_read_reg(ls7a_spi, SPCR);
++		val &= ~0xc;
++		if (spi->mode & SPI_CPOL)
++			val |= 8;
++		if (spi->mode & SPI_CPHA)
++			val |= 4;
++		ls7a_spi_write_reg(ls7a_spi, SPCR, (val & ~3) | ls7a_spi->spcr);
++		val = ls7a_spi_read_reg(ls7a_spi, SPER);
++		ls7a_spi_write_reg(ls7a_spi, SPER, (val & ~3) | ls7a_spi->sper);
++		ls7a_spi->mode = spi->mode;
++	}
++	return 0;
++}
++
++static int ls7a_spi_write_read_8bit(struct spi_device *spi,
++				    const u8 **tx_buf, u8 **rx_buf,
++				    unsigned int num)
++{
++	struct ls7a_spi *ls7a_spi;
++
++	ls7a_spi = spi_master_get_devdata(spi->master);
++
++	if (tx_buf && *tx_buf) {
++		ls7a_spi_write_reg(ls7a_spi, FIFO, *((*tx_buf)++));
++
++		while ((ls7a_spi_read_reg(ls7a_spi, SPSR) & 0x1) == 1)
++			;
++	} else {
++		ls7a_spi_write_reg(ls7a_spi, FIFO, 0);
++
++		while ((ls7a_spi_read_reg(ls7a_spi, SPSR) & 0x1) == 1)
++			;
++	}
++
++	if (rx_buf && *rx_buf)
++		*(*rx_buf)++ = ls7a_spi_read_reg(ls7a_spi, FIFO);
++	else
++		ls7a_spi_read_reg(ls7a_spi, FIFO);
++
++	return 1;
++}
++
++static unsigned int ls7a_spi_write_read(struct spi_device *spi,
++					struct spi_transfer *xfer)
++{
++	unsigned int count;
++	const u8 *tx = xfer->tx_buf;
++
++	u8 *rx = xfer->rx_buf;
++
++	count = xfer->len;
++
++	do {
++		if (ls7a_spi_write_read_8bit(spi, &tx, &rx, count) < 0)
++			goto out;
++		count--;
++	} while (count);
++
++out:
++	return xfer->len - count;
++}
++
++static int  ls7a_spi_transfer_one(struct spi_master *master,
++				  struct spi_device *spi,
++				  struct spi_transfer *t)
++{
++	struct ls7a_spi *ls7a_spi;
++	int status;
++
++	ls7a_spi = spi_master_get_devdata(master);
++
++	status = ls7a_spi_do_transfer(ls7a_spi, spi, t);
++	if (status < 0)
++		return status;
++
++	ls7a_spi_write_read(spi, t);
++
++	return status;
++}
++
++static int ls7a_spi_pci_probe(struct pci_dev *pdev,
++			      const struct pci_device_id *ent)
++{
++	struct spi_master *master;
++	struct ls7a_spi *spi;
++	int ret;
++
++	master = devm_spi_alloc_master(&pdev->dev, sizeof(*spi));
++	if (!master)
++		return -ENOMEM;
++
++	spi = spi_master_get_devdata(master);
++	ret = pcim_enable_device(pdev);
++	if (ret)
++		goto err_free_master;
++
++	ret = pci_request_regions(pdev, "ls7a-spi");
++	if (ret)
++		goto err_free_master;
++
++	spi->base = pcim_iomap(pdev, 0, pci_resource_len(pdev, 0));
++	if (!spi->base) {
++		ret = -EINVAL;
++		goto err_free_master;
++	}
++	ls7a_spi_write_reg(spi, SPCR, 0x51);
++	ls7a_spi_write_reg(spi, SPER, 0x00);
++	ls7a_spi_write_reg(spi, TIMI, 0x01);
++	ls7a_spi_write_reg(spi, PARA, 0x40);
++	spi->mode = 0;
++
++	spin_lock_init(&spi->lock);
++
++	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH;
++	master->prepare_message = ls7a_spi_prepare_message;
++	master->set_cs = ls7a_spi_set_cs;
++	master->transfer_one = ls7a_spi_transfer_one;
++	master->unprepare_message = ls7a_spi_unprepare_message;
++	master->bits_per_word_mask = SPI_BPW_MASK(8);
++	master->num_chipselect = 4;
++	master->dev.of_node = pdev->dev.of_node;
++
++	spi->master = master;
++
++	pci_set_drvdata(pdev, master);
++
++	ret = spi_register_master(master);
++	if (ret)
++		goto err_free_master;
++
++	return 0;
++
++err_free_master:
++	pci_release_regions(pdev);
++	return ret;
++}
++
++static void ls7a_spi_pci_remove(struct pci_dev *pdev)
++{
++	struct spi_master *master = pci_get_drvdata(pdev);
++
++	spi_unregister_master(master);
++	pci_release_regions(pdev);
++}
++
++static const struct pci_device_id ls7a_spi_pci_id_table[] = {
++	{ PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, 0x7a0b) },
++	{ 0, }
++};
++
++MODULE_DEVICE_TABLE(pci, ls7a_spi_pci_id_table);
++
++static struct pci_driver ls7a_spi_pci_driver = {
++	.name		= "ls7a-spi",
++	.id_table	= ls7a_spi_pci_id_table,
++	.probe		= ls7a_spi_pci_probe,
++	.remove		= ls7a_spi_pci_remove,
++};
++
++module_pci_driver(ls7a_spi_pci_driver);
++
++MODULE_AUTHOR("Juxin Gao <gaojuxin@loongson.cn>");
++MODULE_AUTHOR("Qing Zhang <zhangqing@loongson.cn>");
++MODULE_DESCRIPTION("Loongson LS7A SPI controller driver");
++MODULE_LICENSE("GPL v2");
+-- 
+2.1.0
 
