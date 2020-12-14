@@ -2,105 +2,239 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 872D02D99BD
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Dec 2020 15:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7DDE2D9A4B
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Dec 2020 15:50:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440073AbgLNOVi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Dec 2020 09:21:38 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:39612 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2440075AbgLNOVg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Dec 2020 09:21:36 -0500
-Received: by mail-ot1-f66.google.com with SMTP id d8so15830847otq.6;
-        Mon, 14 Dec 2020 06:21:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bMgE1mV+D84ls7Dep4laRCdXMSux3/HyOQ9lsiQUOHM=;
-        b=RcXQcQ4eZqksuhc5oE4fdr7Q9h7H+hWHIM90e2MnURnlmShLmDg5ZGYDyN//KNaPCV
-         UVccDotSKEFllC8d9MnmPn+xWOFvb4cYLJwTR+pVq6pt1v1FiQsi0vQlDPkPsaGTAveN
-         JmH5VrKfySrU75qUnk6+K624pMuxYX8Uj8LEu1N/MNiRO2s/h2/z8pzJr4Fpeg+kOX6M
-         WmmgBiSvKRe8LOjhdqNHV/w1VQQYRj9Ht0/lwRmbjpfdufHAUpBQExdkkwGUTNhApg8I
-         RZpyc9m41fypRG+QQRKW3jojPSIAD6lmOuX9ASr8DaPPu0v4jynuAhW5qK2HnZQWuMga
-         BckQ==
-X-Gm-Message-State: AOAM533d4hpagIwuu2l9VjbzEyiK6Se7xbqh8gQNrGvk07SxeXZRcGuH
-        xIZmntyFe0b6zN+8GNDhIA==
-X-Google-Smtp-Source: ABdhPJym+56a5b01xOe6vNW8dPKK6TXt7fv9TQK1/yLBNmbfiGcbyYLA7f+sxD5zoNw53DKH1xbsmA==
-X-Received: by 2002:a9d:2065:: with SMTP id n92mr19449009ota.150.1607955654943;
-        Mon, 14 Dec 2020 06:20:54 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id e10sm4336466otl.38.2020.12.14.06.20.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Dec 2020 06:20:54 -0800 (PST)
-Received: (nullmailer pid 1864046 invoked by uid 1000);
-        Mon, 14 Dec 2020 14:20:53 -0000
-Date:   Mon, 14 Dec 2020 08:20:53 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Qing Zhang <zhangqing@loongson.cn>
+        id S2407685AbgLNOtY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Dec 2020 09:49:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43264 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2408255AbgLNOtQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 14 Dec 2020 09:49:16 -0500
+From:   Mark Brown <broonie@kernel.org>
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhc@lemote.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] spi: ls7a: Add YAML schemas
-Message-ID: <20201214142053.GA1863733@robh.at.kernel.org>
-References: <1607925534-8312-1-git-send-email-zhangqing@loongson.cn>
- <1607925534-8312-2-git-send-email-zhangqing@loongson.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1607925534-8312-2-git-send-email-zhangqing@loongson.cn>
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI updates for v5.11
+Date:   Mon, 14 Dec 2020 14:48:10 +0000
+Message-Id: <20201214144830.39E172253A@mail.kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 14 Dec 2020 13:58:52 +0800, Qing Zhang wrote:
-> Switch the DT binding to a YAML schema to enable the DT validation.
-> 
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-> ---
->  .../devicetree/bindings/spi/loongson,spi-ls7a.yaml | 49 ++++++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
-> 
+The following changes since commit b65054597872ce3aefbc6a666385eabdf9e288da:
 
+  Linux 5.10-rc6 (2020-11-29 15:50:50 -0800)
 
-My bot found errors running 'make dt_binding_check' on your patch:
+are available in the Git repository at:
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml:10:4: [warning] wrong indentation: expected 2 but found 3 (indentation)
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v5.11
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml: Additional properties are not allowed ('all0f' was unexpected)
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml: 'additionalProperties' is a required property
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml: Additional properties are not allowed ('all0f' was unexpected)
-./Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/spi/loongson,spi-ls7a.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml: ignoring, error in schema: 
-warning: no schema found in file: ./Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
-Documentation/devicetree/bindings/spi/loongson,spi-ls7a.example.dts:25.13-44: Warning (reg_format): /example-0/spi@16,0:reg: property has invalid length (20 bytes) (#address-cells == 1, #size-cells == 1)
-Documentation/devicetree/bindings/spi/loongson,spi-ls7a.example.dt.yaml: Warning (pci_device_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/spi/loongson,spi-ls7a.example.dt.yaml: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/spi/loongson,spi-ls7a.example.dt.yaml: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/spi/loongson,spi-ls7a.example.dt.yaml: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/spi/loongson,spi-ls7a.example.dt.yaml: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.example.dt.yaml: example-0: spi@16,0:reg:0: [45056, 0, 0, 0, 0] is too long
-	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/reg.yaml
+for you to fetch changes up to 3e98a021cc85e7d52acdd1eae8a988e975ec5bf9:
 
+  Merge remote-tracking branch 'spi/for-5.11' into spi-next (2020-12-11 17:49:01 +0000)
 
-See https://patchwork.ozlabs.org/patch/1415811
+----------------------------------------------------------------
+spi: Updates for v5.11
 
-The base for the patch is generally the last rc1. Any dependencies
-should be noted.
+The big change this release has been some excellent work from Lukas
+Wunner which closes a bunch of holes in the cleanup paths for drivers,
+mainly introduced as a result of devm conversions causing bad
+interactions with the support SPI has for allocating the bus and driver
+data together.  Together with some of the other work done it feels like
+we've turned the corner on several long standing pain points with the
+API.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+ - Many cleanups around probe/remove and error handling from Lukas
+   Wunner and Uwe Kleine-König, and further fixes around PM from Zhang
+   Qilong.
+ - Provide a mask for which bits of the mode can safely be configured by
+   drivers and use that to fix an issue with the ADS7846 driver.
+ - Documentation of the expected interactions between SPI and GPIO level
+   chip select polarity configuration from H. Nikolaus Schaller,
+   hopefully we're pretty much at the end of sorting out the
+   interactions there.  Thanks to Nikolaus, Sven Van Asbroeck and Linus
+   Walleij for this.
+ - DMA support for Allwinner sun6i controllers.
+ - Support for Canaan K210 Designware implementations and Intel Adler Lake.
 
-pip3 install dtschema --upgrade
+----------------------------------------------------------------
+Alexander Kochetkov (3):
+      spi: spi-sun6i: implement DMA-based transfer mode
+      spi: rockchip: enable autosuspend feature
+      spi: spi-sun6i: enable autosuspend feature
 
-Please check and re-submit.
+Damien Le Moal (3):
+      dt-bindings: spi: dw-apb-ssi: Add Canaan K210 SPI controller
+      spi: dw: Add support for 32-bits max xfer size
+      spi: dw: Add support for the Canaan K210 SoC SPI
 
+Fabio Estevam (1):
+      spi: imx: Remove unused .id_table support
+
+H. Nikolaus Schaller (1):
+      spi: dt-bindings: clarify CS behavior for spi-cs-high and gpio descriptors
+
+Jarkko Nikula (1):
+      spi: pxa2xx: Add support for Intel Alder Lake PCH-S
+
+Lukas Wunner (21):
+      spi: atmel-quadspi: Disable clock in probe error path
+      spi: synquacer: Disable clock in probe error path
+      spi: pic32: Don't leak DMA channels in probe error path
+      spi: st-ssc4: Fix unbalanced pm_runtime_disable() in probe error path
+      spi: davinci: Fix use-after-free on unbind
+      spi: spi-geni-qcom: Fix use-after-free on unbind
+      spi: spi-qcom-qspi: Fix use-after-free on unbind
+      spi: spi-sh: Fix use-after-free on unbind
+      spi: pxa2xx: Fix use-after-free on unbind
+      spi: rpc-if: Fix use-after-free on unbind
+      spi: mxic: Don't leak SPI master in probe error path
+      spi: spi-mtk-nor: Don't leak SPI master in probe error path
+      spi: gpio: Don't leak SPI master in probe error path
+      spi: rb4xx: Don't leak SPI master in probe error path
+      spi: sc18is602: Don't leak SPI master in probe error path
+      media: netup_unidvb: Don't leak SPI master in probe error path
+      spi: mt7621: Disable clock in probe error path
+      spi: mt7621: Don't leak SPI master in probe error path
+      spi: ar934x: Don't leak SPI master in probe error path
+      spi: npcm-fiu: Disable clock in probe error path
+      spi: atmel-quadspi: Fix use-after-free on unbind
+
+Marek Szyprowski (1):
+      spi: Fix potential NULL pointer dereference in spi_shutdown()
+
+Mark Brown (9):
+      Merge existing fixes from spi/for-5.10
+      Merge series "SPI/ Input: ads7846: properly handle spi->mode flags" from Oleksij Rempel <o.rempel@pengutronix.de>:
+      Merge series "add axi clock control for MT8192 spi-nor" from Bayi Cheng <bayi.cheng@mediatek.com>:
+      Merge branch 'for-5.10' of https://git.kernel.org/.../broonie/spi into spi-5.11
+      Merge series "spi: atmel-quadspi: Fix AHB memory accesses" from Tudor Ambarus <tudor.ambarus@microchip.com>:
+      Merge series "spi: spi-geni-qcom: Use gpio descriptors for CS" from Stephen Boyd <swboyd@chromium.org>:
+      Merge remote-tracking branch 'spi/for-5.9' into spi-linus
+      Merge remote-tracking branch 'spi/for-5.10' into spi-linus
+      Merge remote-tracking branch 'spi/for-5.11' into spi-next
+
+Mauro Carvalho Chehab (1):
+      spi: fix a typo inside a kernel-doc markup
+
+Maxim Kochetkov (1):
+      spi: spi-fsl-dspi: Use max_native_cs instead of num_chipselect to set SPI_MCR
+
+Oleksij Rempel (2):
+      spi: introduce SPI_MODE_X_MASK macro
+      Input: ads7846: do not overwrite spi->mode flags set by spi framework
+
+Qing Zhang (1):
+      spi: amd: Use devm_platform_ioremap_resource() in amd_spi_probe
+
+Qinglang Miao (2):
+      spi: mt7621: fix missing clk_disable_unprepare() on error in mt7621_spi_probe
+      spi: bcm63xx-hsspi: fix missing clk_disable_unprepare() on error in bcm63xx_hsspi_resume
+
+Randy Dunlap (1):
+      spi: dw: fix build error by selecting MULTIPLEXER
+
+Rasmus Villemoes (1):
+      spi: fsl: fix use of spisel_boot signal on MPC8309
+
+Serge Semin (1):
+      spi: dw-bt1: Fix undefined devm_mux_control_get symbol
+
+Stephen Boyd (3):
+      platform/chrome: cros_ec_spi: Don't overwrite spi::mode
+      platform/chrome: cros_ec_spi: Drop bits_per_word assignment
+      spi: spi-geni-qcom: Use the new method of gpio CS control
+
+Tian Tao (1):
+      spi: dw: fixed missing resource_size
+
+Tudor Ambarus (6):
+      spi: atmel: Downgrade to dev_dbg when dma_request_chan() fails
+      spi: atmel-quadspi: Fix AHB memory accesses
+      spi: atmel-quadspi: Drop superfluous set of QSPI_IFR_APBTFRTYP_READ
+      spi: atmel-quadspi: Write QSPI_IAR only when needed
+      spi: atmel-quadspi: Move common code outside of if else
+      spi: Limit the spi device max speed to controller's max speed
+
+Uwe Kleine-König (3):
+      spi: fix resource leak for drivers without .remove callback
+      spi: Use bus_type functions for probe, remove and shutdown
+      spi: Warn when a driver's remove callback returns an error
+
+Yash Shah (1):
+      spi: Update DT binding docs to support SiFive FU740 SoC
+
+YueHaibing (1):
+      spi: spi-mem: Fix passing zero to 'PTR_ERR' warning
+
+Zhang Changzhong (1):
+      spi: dw: Fix error return code in dw_spi_bt1_probe()
+
+Zhang Qilong (11):
+      spi: img-spfi: fix reference leak in img_spfi_resume
+      spi: spi-mem: fix reference leak in spi_mem_access_start
+      spi: stm32: fix reference leak in stm32_spi_resume
+      spi: stm32-qspi: fix reference leak in stm32 qspi operations
+      spi: spi-ti-qspi: fix reference leak in ti_qspi_setup
+      spi: tegra20-slink: fix reference leak in slink ops of tegra20
+      spi: tegra20-sflash: fix reference leak in tegra_sflash_resume
+      spi: tegra114: fix reference leak in tegra spi ops
+      spi: imx: fix reference leak in two imx operations
+      spi: sprd: fix reference leak in sprd_spi_remove
+      spi: mxs: fix reference leak in mxs_spi_probe
+
+bayi cheng (1):
+      spi: spi-mtk-nor: add axi clock control for MT8192 spi-nor
+
+ .../devicetree/bindings/spi/snps,dw-apb-ssi.yaml   |   2 +
+ .../devicetree/bindings/spi/spi-controller.yaml    |  27 +++
+ .../devicetree/bindings/spi/spi-sifive.yaml        |  10 +-
+ drivers/input/touchscreen/ads7846.c                |   3 +-
+ drivers/media/pci/netup_unidvb/netup_unidvb_spi.c  |   5 +-
+ drivers/platform/chrome/cros_ec_spi.c              |   2 -
+ drivers/spi/Kconfig                                |   4 +-
+ drivers/spi/atmel-quadspi.c                        |  42 ++---
+ drivers/spi/spi-amd.c                              |   5 +-
+ drivers/spi/spi-ar934x.c                           |  14 +-
+ drivers/spi/spi-atmel.c                            |   6 +-
+ drivers/spi/spi-bcm63xx-hsspi.c                    |   4 +-
+ drivers/spi/spi-davinci.c                          |   2 +-
+ drivers/spi/spi-dw-bt1.c                           |   6 +-
+ drivers/spi/spi-dw-core.c                          |  44 ++++-
+ drivers/spi/spi-dw-mmio.c                          |  16 ++
+ drivers/spi/spi-dw.h                               |   5 +
+ drivers/spi/spi-fsl-dspi.c                         |   6 +-
+ drivers/spi/spi-fsl-spi.c                          |  11 +-
+ drivers/spi/spi-geni-qcom.c                        |   4 +-
+ drivers/spi/spi-gpio.c                             |  15 +-
+ drivers/spi/spi-img-spfi.c                         |   4 +-
+ drivers/spi/spi-imx.c                              |  33 +---
+ drivers/spi/spi-mem.c                              |   3 +-
+ drivers/spi/spi-mt7621.c                           |  11 +-
+ drivers/spi/spi-mtk-nor.c                          |  18 +-
+ drivers/spi/spi-mxic.c                             |  10 +-
+ drivers/spi/spi-mxs.c                              |   1 +
+ drivers/spi/spi-npcm-fiu.c                         |   8 +-
+ drivers/spi/spi-pic32.c                            |   1 +
+ drivers/spi/spi-pxa2xx.c                           |  10 +-
+ drivers/spi/spi-qcom-qspi.c                        |  42 ++---
+ drivers/spi/spi-rb4xx.c                            |   2 +-
+ drivers/spi/spi-rockchip.c                         |   4 +
+ drivers/spi/spi-rpc-if.c                           |   9 +-
+ drivers/spi/spi-sc18is602.c                        |  13 +-
+ drivers/spi/spi-sh.c                               |  13 +-
+ drivers/spi/spi-sprd.c                             |   1 +
+ drivers/spi/spi-st-ssc4.c                          |   5 +-
+ drivers/spi/spi-stm32-qspi.c                       |   8 +-
+ drivers/spi/spi-stm32.c                            |   1 +
+ drivers/spi/spi-sun6i.c                            | 199 +++++++++++++++++++--
+ drivers/spi/spi-synquacer.c                        |  15 +-
+ drivers/spi/spi-tegra114.c                         |   2 +
+ drivers/spi/spi-tegra20-sflash.c                   |   1 +
+ drivers/spi/spi-tegra20-slink.c                    |   2 +
+ drivers/spi/spi-ti-qspi.c                          |   1 +
+ drivers/spi/spi.c                                  |  70 ++++----
+ include/linux/spi/spi.h                            |   1 +
+ 49 files changed, 482 insertions(+), 239 deletions(-)
