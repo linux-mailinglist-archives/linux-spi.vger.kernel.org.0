@@ -2,87 +2,157 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E952DA3C6
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Dec 2020 23:58:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E65A02DA4EF
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Dec 2020 01:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441325AbgLNW5C (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Dec 2020 17:57:02 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:34485 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2441315AbgLNW44 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Dec 2020 17:56:56 -0500
-Received: by mail-ot1-f65.google.com with SMTP id a109so17486403otc.1;
-        Mon, 14 Dec 2020 14:56:40 -0800 (PST)
+        id S1726769AbgLOAcU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Dec 2020 19:32:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725874AbgLOAcQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Dec 2020 19:32:16 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6412AC061793
+        for <linux-spi@vger.kernel.org>; Mon, 14 Dec 2020 16:31:36 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id h186so2901249pfe.0
+        for <linux-spi@vger.kernel.org>; Mon, 14 Dec 2020 16:31:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f7OsK3yyie83mFsyxOZLO7U5mEgOhtDjdGrqc4pskdY=;
+        b=JnvNAr6HasYZClYsYYu9MLeQeCjXeoPbPpVc46mqEhnAHt3uYnri6YD1gJbaIRgMdh
+         gz8XbvbAkQyyapKi24Hp1xZZaMI0FvmEbKBWXi7O/6gO2SNVQ4YIsF67pC83F0Rc4DQq
+         lZUEXHhXNi5FxihFuTrxm+EiltW5RkVv651xk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6eV+/H1+wuql5Xj175B7CxNiRq52AmncCnPannTivxU=;
-        b=n3W4VjXTlZqubB9cX6CaLRjRvKNvwDkeqODi6O2W5sgAyiunW5ufkPn2UNhK1B6vB+
-         uzRrh2Y44HMqPdKkzPaaXVVms8nLXjsvyhxgJ2hpYH1Bj/1wCg/9f5L6r4/iMEDU9NH3
-         9MXZ/W18UXJG4MImvnqHGXgbm7Uqw0+h3j2N8gJptb+EvSVd+1QszMFrcfjPHnDWUTl4
-         A0m96F3SboloSzencuzWvF858q4y/jyNSymlvWQdljC9IvPJt/xOqVVoYuN/8wkyxWOL
-         SIQnp7irm44iosmy2wFjIebeTNu7PIUCfTdJh5qGzqTvwy7SPLL7mQPHHKI4zPbZ+Zov
-         nXtQ==
-X-Gm-Message-State: AOAM533qpBFBQe+443otamBeX+Cqs3NabILLTvTzkUzD+zB0199bWgO3
-        +FwRDyWSGnHxQkAgZY6nDA==
-X-Google-Smtp-Source: ABdhPJwDM6U4udpEYiXAy2gSlbztGdngQOcnWX4uPjrYbFwopnc0V36ZUTQRqWQ5M1hiz15LkX+/Lw==
-X-Received: by 2002:a05:6830:4b9:: with SMTP id l25mr20777707otd.218.1607986575094;
-        Mon, 14 Dec 2020 14:56:15 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id a18sm4611657oia.29.2020.12.14.14.56.13
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f7OsK3yyie83mFsyxOZLO7U5mEgOhtDjdGrqc4pskdY=;
+        b=QA54YYSsjTdUdUAAXhr0YEEe/OIYfCgqmaYhIyIUY85tjVqDTe7ebgunlIQWtiKMN0
+         GT/XtWynf7Wund3UB6EmZ3uzFX0QILAwB/sS4eI/YWRf2XoBoNcJUHqRLl6onCUwn8gN
+         KTvdcSwI9P56YD7cBCSQuzGELecdeUPNZ2I8cdwbNB3eWEWY48OEMf/LrK7OOOfQRhZU
+         ecIDfaNzGIiVko5x+mVO/dc3FpW/L7HTRS8xNPNUBpoXon1r7HDH0g0bVwba3M/F9kQt
+         s41nRfokXeFiCJHxDWp4FNaUnI9nxU0fVR1guI1a+fPlIXf0P91bWzSji9I5FQo6ze03
+         qFSg==
+X-Gm-Message-State: AOAM53174d9MTG274ZEVC2mOFNOrww/zwTW7PrlBPjUfwY1kZz4DXjcU
+        qrdZ5FJbdO3C2b0XzAOEty9jNA==
+X-Google-Smtp-Source: ABdhPJxMxgfSijCu0l6b2bbht2ujt9jAUUdhAg1vdv1oL4+PPMHAhJCCJICFQvVUud5ShcBzteE3xg==
+X-Received: by 2002:a62:8895:0:b029:19e:92ec:6886 with SMTP id l143-20020a6288950000b029019e92ec6886mr15472290pfd.12.1607992295840;
+        Mon, 14 Dec 2020 16:31:35 -0800 (PST)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:42b0:34ff:fe3d:58e6])
+        by smtp.gmail.com with ESMTPSA id 77sm20412834pfx.156.2020.12.14.16.31.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Dec 2020 14:56:14 -0800 (PST)
-Received: (nullmailer pid 2536446 invoked by uid 1000);
-        Mon, 14 Dec 2020 22:56:12 -0000
-Date:   Mon, 14 Dec 2020 16:56:12 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     linux-media@vger.kernel.org, linux-rtc@vger.kernel.org,
-        =?iso-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-sunxi@googlegroups.com, Chen-Yu Tsai <wens@csie.org>,
-        Icenowy Zheng <icenowy@aosc.xyz>, linux-i2c@vger.kernel.org,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-arm-kernel@lists.infradead.org,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        linux-spi@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH v2 18/21] dt-bindings: allwinner: Add H616 compatible
- strings
-Message-ID: <20201214225612.GA2536414@robh.at.kernel.org>
-References: <20201211011934.6171-1-andre.przywara@arm.com>
- <20201211011934.6171-19-andre.przywara@arm.com>
+        Mon, 14 Dec 2020 16:31:35 -0800 (PST)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     msavaliy@qti.qualcomm.com, akashast@codeaurora.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Roja Rani Yarubandi <rojay@codeaurora.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Alok Chauhan <alokc@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Girish Mahadevan <girishm@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: [PATCH 1/2] spi: spi-geni-qcom: Fix geni_spi_isr() NULL dereference in timeout case
+Date:   Mon, 14 Dec 2020 16:30:18 -0800
+Message-Id: <20201214162937.1.I99ee04f0cb823415df59bd4f550d6ff5756e43d6@changeid>
+X-Mailer: git-send-email 2.29.2.684.gfbc64c5ab5-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201211011934.6171-19-andre.przywara@arm.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 11 Dec 2020 01:19:31 +0000, Andre Przywara wrote:
-> Add simple "allwinner,sun50i-h616-xxx" compatible names to existing
-> bindings, and pair them with an existing fallback compatible string,
-> as the devices are compatible.
-> This covers I2C, infrared, RTC and SPI.
-> 
-> Use enums to group all compatible devices together.
-> 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> ---
->  .../bindings/i2c/marvell,mv64xxx-i2c.yaml     | 21 +++++++------------
->  .../media/allwinner,sun4i-a10-ir.yaml         | 16 ++++++--------
->  .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml |  3 +++
->  .../bindings/spi/allwinner,sun6i-a31-spi.yaml |  1 +
->  4 files changed, 17 insertions(+), 24 deletions(-)
-> 
+In commit 7ba9bdcb91f6 ("spi: spi-geni-qcom: Don't keep a local state
+variable") we changed handle_fifo_timeout() so that we set
+"mas->cur_xfer" to NULL to make absolutely sure that we don't mess
+with the buffers from the previous transfer in the timeout case.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Unfortunately, this caused the IRQ handler to dereference NULL in some
+cases.  One case:
+
+ CPU0                           CPU1
+ ----                           ----
+                                setup_fifo_xfer()
+                                 ...
+                                 geni_se_setup_m_cmd()
+                                 <hardware starts transfer>
+ <unrelated interrupt storm>     spin_unlock_irq()
+ <continued interrupt storm>    <time passes>
+ <continued interrupt storm>    <transfer complets in hardware>
+ <continued interrupt storm>    <hardware sets M_RX_FIFO_WATERMARK_EN>
+ <continued interrupt storm>    <time passes>
+ <continued interrupt storm>    handle_fifo_timeout()
+ <continued interrupt storm>     spin_lock_irq()
+ <continued interrupt storm>     mas->cur_xfer = NULL
+ <continued interrupt storm>     geni_se_cancel_m_cmd()
+ <continued interrupt storm>     spin_unlock_irq()
+ <continued interrupt storm>     wait_for_completion_timeout() => timeout
+ <continued interrupt storm>     spin_lock_irq()
+ <continued interrupt storm>     geni_se_abort_m_cmd()
+ <continued interrupt storm>     spin_unlock_irq()
+ <continued interrupt storm>     wait_for_completion_timeout() => timeout
+ <interrupt storm ends>
+ geni_spi_isr()
+  spin_lock()
+  if (m_irq & M_RX_FIFO_WATERMARK_EN)
+   geni_spi_handle_rx()
+    mas->cur_xfer NULL derefrence
+
+Specifically it should be noted that the RX/TX interrupts are still
+shown asserted even when a CANCEL/ABORT interrupt has asserted.
+
+Let's check for the NULL transfer in the TX and RX cases.
+
+NOTE: things still could get confused if we get timeouts all the way
+through handle_fifo_timeout(), meaning that interrupts are still
+pending.  A future patch will help these corner cases.
+
+Fixes: 561de45f72bd ("spi: spi-geni-qcom: Add SPI driver support for GENI based QUP")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+
+ drivers/spi/spi-geni-qcom.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+index 25810a7eef10..6f736e94e9f4 100644
+--- a/drivers/spi/spi-geni-qcom.c
++++ b/drivers/spi/spi-geni-qcom.c
+@@ -354,6 +354,12 @@ static bool geni_spi_handle_tx(struct spi_geni_master *mas)
+ 	unsigned int bytes_per_fifo_word = geni_byte_per_fifo_word(mas);
+ 	unsigned int i = 0;
+ 
++	/* Stop the watermark IRQ if nothing to send */
++	if (mas->cur_xfer == NULL) {
++		writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
++		return false;
++	}
++
+ 	max_bytes = (mas->tx_fifo_depth - mas->tx_wm) * bytes_per_fifo_word;
+ 	if (mas->tx_rem_bytes < max_bytes)
+ 		max_bytes = mas->tx_rem_bytes;
+@@ -396,6 +402,17 @@ static void geni_spi_handle_rx(struct spi_geni_master *mas)
+ 		if (rx_last_byte_valid && rx_last_byte_valid < 4)
+ 			rx_bytes -= bytes_per_fifo_word - rx_last_byte_valid;
+ 	}
++
++	/* Clear out the FIFO and bail if nowhere to put it */
++	if (mas->cur_xfer == NULL) {
++		unsigned int words = DIV_ROUND_UP(rx_bytes, bytes_per_fifo_word);
++
++		for (i = 0; i < words; i++)
++			readl(se->base + SE_GENI_RX_FIFOn);
++
++		return;
++	}
++
+ 	if (mas->rx_rem_bytes < rx_bytes)
+ 		rx_bytes = mas->rx_rem_bytes;
+ 
+-- 
+2.29.2.684.gfbc64c5ab5-goog
+
