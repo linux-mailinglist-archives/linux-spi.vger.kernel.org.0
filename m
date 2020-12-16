@@ -2,100 +2,142 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C0D2DC91E
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Dec 2020 23:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4EF22DC919
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Dec 2020 23:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730232AbgLPWnZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 16 Dec 2020 17:43:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
+        id S1727844AbgLPWnH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 16 Dec 2020 17:43:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727167AbgLPWnZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Dec 2020 17:43:25 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772AAC0611CD
-        for <linux-spi@vger.kernel.org>; Wed, 16 Dec 2020 14:42:36 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id 11so17555442pfu.4
-        for <linux-spi@vger.kernel.org>; Wed, 16 Dec 2020 14:42:36 -0800 (PST)
+        with ESMTP id S1728671AbgLPWnG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Dec 2020 17:43:06 -0500
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7D5C0617A7
+        for <linux-spi@vger.kernel.org>; Wed, 16 Dec 2020 14:42:26 -0800 (PST)
+Received: by mail-vk1-xa2d.google.com with SMTP id w66so6093271vka.3
+        for <linux-spi@vger.kernel.org>; Wed, 16 Dec 2020 14:42:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0Vd1QFcuFWIYhVvfHfG2jARGV8ifNdeNillFXaADRjI=;
-        b=XcQWXpjHUgixcOl67GSSIrQM4qzCd7i5k9g1qpnc16X47aSiTa+hJTCeHI7s/In4Hi
-         aXb1BbEJvbKJbYDhtvd4VbW+o2vFMQqVx+bVk34tvnWaKM/arWUO4hHP0oQJGIRQEWob
-         d7IS56reRQQwX2krJI5yM1JTr/nU47G1njeEU=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l84zCJ7SbWCk38L857tmBbT/ticKRRMfqTuIr+c884Q=;
+        b=iGzFcIYneBH6SXZdRU/VFCtin4OmgOitxNyHeeqIk6b/REmu3ZMXh7Blu34vhke8vi
+         WYwv2zsr/DzBHMGugpcZGTWoxIkn5YHLglDxz5p/QAUIxevX5r0DRSCsS0cU8r49nVnz
+         rY0l9gvm5Q2rrt8K1xCKfRJTT8HmnE/NPxWpk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0Vd1QFcuFWIYhVvfHfG2jARGV8ifNdeNillFXaADRjI=;
-        b=I7LgjRJeVM0RfUiHbuz2DqBnHt8cDZNYxc9c1QxBZjDtxapEk1uWRYDyPg31cz3sRj
-         m4RusMTWSPBxM6c961XR1Pd9PwkAXeEaTEfwwSTJGCJTKh4FRdrrbL9COJXy09+FONc4
-         bQIvCSeLSLRRcKEYHCs2xhxgP/AirHBH4nn824gsJCWQPheLt8iiaC+dALeQUQavW1hx
-         zUN6CZP+iakRJ72PtvrgkUYUzttQw6UFMyLagTrdRXYP72QmrcbWRey1Lmyikz2ty3ME
-         US0s5D5tteowIL0/mjZBgUxO9I6pIdUaVuVliBzH8YHCb2aIjlFvzzyoi3+iH04LrqLB
-         Ic2A==
-X-Gm-Message-State: AOAM5311HIeMxm2Xk2cm7ATU7BS/P0seFlgNlom2r0LJOyb/wBfyI3y7
-        PwlWne6E+dSNfU9nv7e/Epzjfg==
-X-Google-Smtp-Source: ABdhPJzXT6pePUqTG6AWzM3OjQ/9+uqfCpIe6yZioAT9ioqcgVoAY3922oZ2qpc5QX4Z9csUYEDYqQ==
-X-Received: by 2002:a63:f12:: with SMTP id e18mr35442800pgl.101.1608158556030;
-        Wed, 16 Dec 2020 14:42:36 -0800 (PST)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:42b0:34ff:fe3d:58e6])
-        by smtp.gmail.com with ESMTPSA id q26sm3561703pfl.219.2020.12.16.14.42.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Dec 2020 14:42:35 -0800 (PST)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     msavaliy@qti.qualcomm.com, akashast@codeaurora.org,
-        Stephen Boyd <swboyd@chromium.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l84zCJ7SbWCk38L857tmBbT/ticKRRMfqTuIr+c884Q=;
+        b=piFO+UlfIPPJYSVU50jh2U99YgY6JuHTTFWWGF/ffMy2LT4AcNyHsdGzcoxypdGogw
+         MPGHluRByQOQ7HeyGZaVUT2eytdhajWSphiHQUGuoOaGeeRqLrHIucVBmeQHchBJiBwk
+         uyimZnCzktxPRbDPzhtxeynUoUHSZa6yT8l5ZutDGrFXv8bYyrOO36F0uIYoG1FAw6gA
+         Mkhtdy+2u8Q0iqdfcV+EkyVTaSg/N14ITZ5eM1u6pcRRXyfsPbqjHFR2Jf7/kVe8PgXO
+         sim2k259hn1VvNmbHH1lZh3BzEp7iR4WcIPXt5IQbbF7fYi8fY1SMBA93oDZywotI4O8
+         pjIw==
+X-Gm-Message-State: AOAM532rmlFS63yMqJDZhajyaizFg6aW/zDLmsjzCAE6URg6wZ4ZsHYS
+        wTozcv43QgulbyRhLcie+KJU3GLRA2uFTg==
+X-Google-Smtp-Source: ABdhPJxMTs6b50tnXFUYPDnk74DhiL7hqP0UkTeaG6+ib9sxQATV6Zj33x5Sqgdns9RsDQoDZ6UtWg==
+X-Received: by 2002:a1f:9dd3:: with SMTP id g202mr36105235vke.21.1608158541960;
+        Wed, 16 Dec 2020 14:42:21 -0800 (PST)
+Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com. [209.85.217.46])
+        by smtp.gmail.com with ESMTPSA id 84sm504586vkz.34.2020.12.16.14.42.20
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Dec 2020 14:42:20 -0800 (PST)
+Received: by mail-vs1-f46.google.com with SMTP id s85so13888105vsc.3
+        for <linux-spi@vger.kernel.org>; Wed, 16 Dec 2020 14:42:20 -0800 (PST)
+X-Received: by 2002:a67:32c5:: with SMTP id y188mr32306099vsy.4.1608158539861;
+ Wed, 16 Dec 2020 14:42:19 -0800 (PST)
+MIME-Version: 1.0
+References: <20201214162937.1.I99ee04f0cb823415df59bd4f550d6ff5756e43d6@changeid>
+ <20201214162937.2.Ibade998ed587e070388b4bf58801f1107a40eb53@changeid>
+ <160800104145.1580929.10562113130948868794@swboyd.mtv.corp.google.com>
+ <CAD=FV=UT0+BKrUPbATGCbO1fmwwmrKbSy5c+mW-61wS1y6TtJw@mail.gmail.com>
+ <160807113302.1580929.9178584426202538854@swboyd.mtv.corp.google.com>
+ <CAD=FV=XSrqzDFHGpW3b_Sx+bA8u8MMGqdfMJnXkKhkWL6H952A@mail.gmail.com> <160808147515.1580929.1688687061880694586@swboyd.mtv.corp.google.com>
+In-Reply-To: <160808147515.1580929.1688687061880694586@swboyd.mtv.corp.google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 16 Dec 2020 14:42:08 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WL9ZWz-nGzP0CWWNVFuG8fnSsA8R906B10J-X6_jwMLg@mail.gmail.com>
+Message-ID: <CAD=FV=WL9ZWz-nGzP0CWWNVFuG8fnSsA8R906B10J-X6_jwMLg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] spi: spi-geni-qcom: Really ensure the previous xfer
+ is done before new one
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Mark Brown <broonie@kernel.org>, msavaliy@qti.qualcomm.com,
+        Akash Asthana <akashast@codeaurora.org>,
         Roja Rani Yarubandi <rojay@codeaurora.org>,
-        Douglas Anderson <dianders@chromium.org>,
+        Alok Chauhan <alokc@codeaurora.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: [PATCH v2 4/4] spi: spi-geni-qcom: Print an error when we timeout setting the CS
-Date:   Wed, 16 Dec 2020 14:41:52 -0800
-Message-Id: <20201216144114.v2.4.I666b37646de9652cef438ac7c2c6c2053367fc6b@changeid>
-X-Mailer: git-send-email 2.29.2.684.gfbc64c5ab5-goog
-In-Reply-To: <20201216144114.v2.1.I99ee04f0cb823415df59bd4f550d6ff5756e43d6@changeid>
-References: <20201216144114.v2.1.I99ee04f0cb823415df59bd4f550d6ff5756e43d6@changeid>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-If we're using geni to manage the chip select line (don't do it--use a
-GPIO!) and we happen to get a timeout waiting for the chip select
-command to be completed, no errors are printed even though things
-might not be in the best shape.  Let's add a print.
+Hi,
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+On Tue, Dec 15, 2020 at 5:18 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Doug Anderson (2020-12-15 15:34:59)
+> > On Tue, Dec 15, 2020 at 2:25 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> > >
+> > > Quoting Doug Anderson (2020-12-15 09:25:51)
+> > > > In general when we're starting a new transfer we assume that we can
+> > > > program the hardware willy-nilly.  If there's some chance something
+> > > > else is happening (or our interrupt could go off) then it breaks that
+> > > > whole model.
+> > >
+> > > Right. I thought this patch was making sure that the hardware wasn't in
+> > > the process of doing something else when we setup the transfer. I'm
+> > > saying that only checking the irq misses the fact that maybe the
+> > > transfer hasn't completed yet or a pending irq hasn't come in yet, but
+> > > the fifo status would tell us that the fifo is transferring something or
+> > > receiving something. If an RX can't happen, then the code should clearly
+> > > show that an RX irq isn't expected, and mask out that bit so it is
+> > > ignored or explicitly check for it and call WARN_ON() if the bit is set.
+> > >
+> > > I'm wondering why we don't check the FIFO status and the irq bits to
+> > > make sure that some previous cancelled operation isn't still pending
+> > > either in the FIFO or as an irq. While this patch will fix the scenario
+> > > where the irq is delayed but pending in the hardware it won't cover the
+> > > case that the hardware itself is wedged, for example because the
+> > > sequencer just decided to stop working entirely.
+> >
+> > It also won't catch the case where the SoC decided that all GPIOs are
+> > inverted and starts reporting highs for lows and lows for highs, nor
+> > does it handle the case where the CPU suddenly switches to Big Endian
+> > mode for no reason.  :-P
+> >
+> > ...by that, I mean I'm not trying to catch the case where the hardware
+> > itself is behaving in a totally unexpected way.  I have seen no
+> > instances where the hardware wedges nor where the sequencer stops
+> > working and until I see them happen I'm not inclined to add code for
+> > them.  Without seeing them actually happen I'm not really sure what
+> > the right way to recover would be.  We've already tried "cancel" and
+> > "abort" and then waited at least 1 second.  If you know of some sort
+> > of magic "unwedge" then we should add it into handle_fifo_timeout().
+>
+> I am not aware of an "unwedge" command. Presumably the cancel/abort
+> stuff makes the FIFO state "sane" so there's nothing to see in the FIFO
+> status registers. I wonder if we should keep around some "did we cancel
+> last time?" flag and only check the isr if we canceled out and timed
+> out to boot? That would be a cheap and easy check to make sure that we
+> don't check this each transaction.
 
-Changes in v2:
-- ("spi: spi-geni-qcom: Print an error when we timeout setting the CS") new for v2
+Sure.  I guess technically it would be a "did we fail to cancel last time".
 
- drivers/spi/spi-geni-qcom.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-index 0e4fa52ac017..744009875762 100644
---- a/drivers/spi/spi-geni-qcom.c
-+++ b/drivers/spi/spi-geni-qcom.c
-@@ -220,8 +220,10 @@ static void spi_geni_set_cs(struct spi_device *slv, bool set_flag)
- 	spin_unlock_irq(&mas->lock);
- 
- 	time_left = wait_for_completion_timeout(&mas->cs_done, HZ);
--	if (!time_left)
-+	if (!time_left) {
-+		dev_warn(mas->dev, "Timeout setting chip select\n");
- 		handle_fifo_timeout(spi, NULL);
-+	}
- 
- exit:
- 	pm_runtime_put(mas->dev);
--- 
-2.29.2.684.gfbc64c5ab5-goog
+> > However, super delayed interrupts due to software not servicing the
+> > interrupt in time is something that really happens, if rarely.  Adding
+> > code to account for that seems worth it and is easy to test...
+> >
+>
+> Agreed. The function name is wrong then as the device is not "busy". So
+> maybe spi_geni_isr_pending()? That would clearly describe what's being
+> checked.
 
+I changed this to just be about the abort.  See if v2 looks better to you.
