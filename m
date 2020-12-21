@@ -2,84 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A05D12DFE30
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Dec 2020 17:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E1D2DFF96
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Dec 2020 19:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725816AbgLUQvu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Dec 2020 11:51:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54086 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725780AbgLUQvt (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 21 Dec 2020 11:51:49 -0500
-Date:   Mon, 21 Dec 2020 16:50:53 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608569469;
-        bh=yaViPjdmmsCzAeL0va1vlA3tAOMvU2QaaNbTzhk/M2U=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iWiBh9ZTafNuO4cox7HBuO1CJjjbyRjmEGOPidRxtKWcZCXUr1hFutQORYEO6hPa4
-         r6N/mb174I1cKh8kJvDVb2Ay3q+pKikPwhfWQam6HQVLukKgL9ug9X0yozFgssd5IC
-         qYtbhN//od4WHh/LEkzdIXdugeu/Zyi9hQAefE3iO6hOYx9kHCgErtLeu1h9pKHbtD
-         Nz3kO0hPcUmaW6XdkSIs2erF129lcL8ht1RRIlFbfB6lbO0JuQJJ7wSSToSqlCsVmO
-         LxYLkNfKdFhQL2WRPKvHLNLI6W7lRHVg5Y+uaUQQWh8vOhFeUrhdSP2BLYHIMj7OHN
-         muxd/uwoL8szw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>
-Cc:     Pratyush Yadav <p.yadav@ti.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, robh+dt@kernel.org,
-        lukas@wunner.de, bbrezillon@kernel.org,
-        tudor.ambarus@microchip.com, linux-spi@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 5/9] spi: spi-mem: Mark dummy transfers by setting
- dummy_data bit
-Message-ID: <20201221165053.GA4521@sirena.org.uk>
-References: <1608236927-28701-1-git-send-email-skomatineni@nvidia.com>
- <1608236927-28701-6-git-send-email-skomatineni@nvidia.com>
- <20201218092106.skwej2g6bk3oksbb@ti.com>
- <20201218105759.43789ccf@collabora.com>
- <31c395ee-d7a6-edc5-a790-89fad91a0a27@nvidia.com>
- <20201218191936.hb6sq7zr3zdirar7@ti.com>
- <20201218204102.GF5333@sirena.org.uk>
- <20201218204414.GG5333@sirena.org.uk>
- <c9343475-44b2-c9c4-1790-f6b50ec9c1bd@nvidia.com>
+        id S1726557AbgLUSVX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 21 Dec 2020 13:21:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725946AbgLUSVW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Dec 2020 13:21:22 -0500
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A082CC0613D3;
+        Mon, 21 Dec 2020 10:21:07 -0800 (PST)
+Received: by mail-qv1-xf2b.google.com with SMTP id bd6so4834102qvb.9;
+        Mon, 21 Dec 2020 10:21:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YQyxMOAZavE8xWe7epnSrp7G2ojv5j6Sb/NY3BtEg90=;
+        b=EhkwNlHmCF+mbmZdrC06M89+vsXiApYrR+/qS/L6MPLb/pvSjaFJYYH6awt8PTWae2
+         27kLcdkE1a9okCsXHPMMmOwv89vzgvOLKGPcwcNndBT6ty3MyRjqeONUGfwIaX3j6pPg
+         tTT378bWBdGN+nexdiWHlZX3N6uW7HnFcPmAgWz00rN7X9ocjBiKW7K5dDyxK7wVTksI
+         eK7i1ySXUkklSJDoI8C1kdArK8orMTInF7eZr5G7tSq/AzYCWcWpiHe8i05T/sOQATK/
+         Ext7ImN/q/UEMzSa8/kBGFX2ecNISWKqszhFzH1WnpjqRxu+jysmW4VH/tw3p4yA2tDQ
+         Chww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YQyxMOAZavE8xWe7epnSrp7G2ojv5j6Sb/NY3BtEg90=;
+        b=Xo4qvHJrfLzVTmc0cBIzz71XwJAIkH8ir+CKAUXFUj7mkOg2lMFu6HC6rmcQbZvQu9
+         uf7HLAtnJDjZCYXqcmU/a9SVXDcLp5CyUloMEYKs3Px1+3kLEesdvLpAJgGxT/JIGeRt
+         voTREClL4ojEWKMQwYVxlYMfmtG1TSz8EPbldCbrGGghsINHs7KJ4RyCiPfg896jT2yP
+         kFZRD1YtZbUaPnWMVq2mCMHIP63pnYx6ihUbfkqBmaIVGmQFEu30yCzgz6/DhXwFbrM5
+         9CZO56VUsshw5WloJN2SbKxIo7mvz/N126+cuq2sNZJqfeTacgpb7xGDHpO/hHP9C68Z
+         VuhQ==
+X-Gm-Message-State: AOAM532flmMZbk+0NqXiajMs/7YCrT8/QN9mxYaL4nRifKkg5WFQW7gw
+        Z1An7wQxAc4LB+a/k0U3zyXnfCYfiu4CzFyJdwhKfO/ANjg=
+X-Google-Smtp-Source: ABdhPJx5AWw3ZNb2YvJW/rtqH2L4WLH+VXv1atxRvPxfxaY9gK+sKEVMevoq/0sY9BZzty5UBI4aZ6NX7Oy6hWq0I6k=
+X-Received: by 2002:a17:902:e98c:b029:da:cb88:f11d with SMTP id
+ f12-20020a170902e98cb02900dacb88f11dmr17381890plb.17.1608571434318; Mon, 21
+ Dec 2020 09:23:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tThc/1wpZn/ma/RB"
-Content-Disposition: inline
-In-Reply-To: <c9343475-44b2-c9c4-1790-f6b50ec9c1bd@nvidia.com>
-X-Cookie: Remember: use logout to logout.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20201221141906.48922-1-alexandru.ardelean@analog.com>
+ <20201221141906.48922-2-alexandru.ardelean@analog.com> <CAHp75VfR1eNMry8JwJoFuaU48KZ6rdBWau=yaR1AnsaRSLTC=g@mail.gmail.com>
+ <CAHp75VftBQEK10Z7pkD18fpr8B7ipCXUXVx=1Hnuq-2w=z2hgQ@mail.gmail.com> <CY4PR03MB29666C090DF4E882DFB5AA12F9C00@CY4PR03MB2966.namprd03.prod.outlook.com>
+In-Reply-To: <CY4PR03MB29666C090DF4E882DFB5AA12F9C00@CY4PR03MB2966.namprd03.prod.outlook.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 21 Dec 2020 19:24:42 +0200
+Message-ID: <CAHp75VcVDCL1VnUzmAmcDJ3deveXy-S8C4gaiKJGAts3V8FjSA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] spi: Add SPI_NO_TX/RX support
+To:     "Ardelean, Alexandru" <alexandru.Ardelean@analog.com>
+Cc:     linux-spi <linux-spi@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Bogdan, Dragos" <Dragos.Bogdan@analog.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, Dec 21, 2020 at 5:19 PM Ardelean, Alexandru
+<alexandru.Ardelean@analog.com> wrote:
+> > -----Original Message-----
+> > From: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > Sent: Monday, December 21, 2020 4:37 PM
+> > On Mon, Dec 21, 2020 at 4:34 PM Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote:
 
---tThc/1wpZn/ma/RB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+...
 
-On Fri, Dec 18, 2020 at 02:01:56PM -0800, Sowjanya Komatineni wrote:
+> > One nit, though...
+> >
+> > > > -               "setup: can not select dual and quad at the same time\n");
+> > > > +               "setup: can not select any two of dual, quad and no-rx/tx "
+> > > > +               "at the same time\n");
+> >
+> > Can we avoid splitting string literals which are assumed to be on one line when
+> > printed?
+>
+> It ends up at about 96 cols, but it's within limits.
+> The patch may have been written before the new 100 col-width limit.
 
-> From quick check, I see HW dummy cycles transfer of 128KB shows 18 Mb/s
-> while SW transfer of bytes shows 17.3 MB/s on average.
+JFYI: string literals do not have limits (neither 80, nor 100).
+It's a special category.
 
-OK, it's not going to revolutionize the world or anything but that's
-definitely a speedup.
-
---tThc/1wpZn/ma/RB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/g0mkACgkQJNaLcl1U
-h9D/FggAgryOP3kQjSN2Lz4KeSPSrsKO6HHCcgeCbfox61nIVRcJVOBKpJX0nuU+
-dbPP8gBvK3GNt/9J/WKP3k+LYD5NUfyq1lARlDe+WpU7P8VkE9TNpjctDFS2PiyO
-6asDGI7iPahkE0iBmGAPqWyiUngS3X7PdN2/uuv4uSf7Fs45+f98se+GLKGa+ryK
-UUTJg3DPwqmMrFqArDETTmVj7/urqREQo/gYUHtQgc7H8KCOOquuXeeOYa5dres2
-GEiFGR08bDJNX2nJ3xAHtLYRJw6DZnD421m5O+FG6pxNh8AfsHQTDnvEIq2TyA0O
-3D+sPY0zkYYNDEnjixQtJ8ycT5Qgdw==
-=a44r
------END PGP SIGNATURE-----
-
---tThc/1wpZn/ma/RB--
+-- 
+With Best Regards,
+Andy Shevchenko
