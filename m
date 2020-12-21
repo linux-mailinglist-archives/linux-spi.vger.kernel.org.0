@@ -2,23 +2,23 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ABC42E01E1
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Dec 2020 22:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE82D2E01FE
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Dec 2020 22:20:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726596AbgLUVSa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Dec 2020 16:18:30 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:4547 "EHLO
+        id S1726710AbgLUVTH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 21 Dec 2020 16:19:07 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:4590 "EHLO
         hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726413AbgLUVSa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Dec 2020 16:18:30 -0500
+        with ESMTP id S1725820AbgLUVTG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Dec 2020 16:19:06 -0500
 Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5fe110fd0008>; Mon, 21 Dec 2020 13:17:49 -0800
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 21 Dec
- 2020 21:17:44 +0000
+        id <B5fe110ff0001>; Mon, 21 Dec 2020 13:17:51 -0800
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 21 Dec
+ 2020 21:17:45 +0000
 Received: from skomatineni-linux.nvidia.com (172.20.145.6) by mail.nvidia.com
  (172.20.187.10) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
- Transport; Mon, 21 Dec 2020 21:17:44 +0000
+ Transport; Mon, 21 Dec 2020 21:17:45 +0000
 From:   Sowjanya Komatineni <skomatineni@nvidia.com>
 To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
         <broonie@kernel.org>, <robh+dt@kernel.org>, <lukas@wunner.de>
@@ -26,9 +26,9 @@ CC:     <skomatineni@nvidia.com>, <bbrezillon@kernel.org>,
         <p.yadav@ti.com>, <tudor.ambarus@microchip.com>,
         <linux-spi@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v5 6/9] spi: tegra210-quad: Add support for hardware dummy cycles transfer
-Date:   Mon, 21 Dec 2020 13:17:36 -0800
-Message-ID: <1608585459-17250-7-git-send-email-skomatineni@nvidia.com>
+Subject: [PATCH v5 7/9] arm64: tegra: Enable QSPI on Jetson Nano
+Date:   Mon, 21 Dec 2020 13:17:37 -0800
+Message-ID: <1608585459-17250-8-git-send-email-skomatineni@nvidia.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1608585459-17250-1-git-send-email-skomatineni@nvidia.com>
 References: <1608585459-17250-1-git-send-email-skomatineni@nvidia.com>
@@ -36,115 +36,66 @@ X-NVConfidentiality: public
 MIME-Version: 1.0
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1608585469; bh=5xQLb2sWtAGzefv1tnfhjT/+4lUyvepFNtfHqTrm+TM=;
+        t=1608585471; bh=dLZyD/aBfvEKW6lFi53KiLDsTnSc0dbBTCqhpZ4bRhM=;
         h=From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
          References:X-NVConfidentiality:MIME-Version:Content-Type;
-        b=PaMGgqMo5vrg9HiXuxRB5aS6XWWZVBZjL4Gln4c/2h8mSEFmIV1QGuCQTbiYGYo/4
-         55OMIF5cDomyoZPpdFB0wRAWHt4D6Zeff732cLlmxmJyZ00EqTAAtvmjwcWu/k0qrP
-         J8VY7bAvc5ofnvFvWWHOxhT9q6b4ffqjafY2JO2mJhH3mPDf601rhOhdb3Z5lDp1k4
-         wQzkJhMlq1PtfBrg6d5Mj7yk/dQozEIjxDiUSFcb2E/GLwrc66ygCrCZWBxEu3RpNj
-         MsMPinN8r1tFSJ+e4oul6vpNL7ZSucyLNhlgbj/dXHBiYcf733zXG9iwMLxVYy+nm+
-         QJ1IDLHtCEQEg==
+        b=hneZlWoY3OEP4zOyQTTa1yhx9fy5wNj0Bb47b6OnEV/PwEO5C4039qdY6SEURRUuG
+         hItnNtzKvwk/8JyuNQKGWVKshxfvymrVqtmhqV3DqCM5TxnkfID2KiMe1RgBaSiXFH
+         GEDwQu++18gru4cmSX7oBHs5yAAYMz4Zu3fY92KFOMjwayPgB32vM0ZrgvDfZmmnvp
+         Qa7hYYsVYxqmrknjnWDb7mNSpH2JfEG5Xu+yEw2JQbpbIL4l0Tc7S4vlheV9/PsfPX
+         jxP6W97j+sxQ0u7GH33KooqwvxvT4NU/V9DJTDQFoME7i561iBy6LPErc3Od4nmYNy
+         0rpnvFjecKBUA==
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Tegra Quad SPI controller hardware supports sending dummy bytes based
-on programmed dummy clock cycles after the actual transfer bytes.
-
-This patch adds this support of hardware dummy bytes transfer and
-skips transfer of dummy bytes from the software.
-
-For dummy cycles more than Tegra Quad SPI hardware maximum dummy
-cycles limit, driver transfers dummy bytes from the software.
+This patch enables QSPI on Jetson Nano.
 
 Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 ---
- drivers/spi/spi-tegra210-quad.c | 34 +++++++++++++++++++++++++++++++---
- 1 file changed, 31 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts | 12 ++++++++++++
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi           |  5 +++--
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
-index e7bee8d..2f806f4 100644
---- a/drivers/spi/spi-tegra210-quad.c
-+++ b/drivers/spi/spi-tegra210-quad.c
-@@ -117,6 +117,7 @@
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts b/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
+index 6a877de..a1b4603 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
++++ b/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
+@@ -638,6 +638,18 @@
+ 		};
+ 	};
  
- #define QSPI_MISC_REG                           0x194
- #define QSPI_NUM_DUMMY_CYCLE(x)			(((x) & 0xff) << 0)
-+#define QSPI_DUMMY_CYCLES_MAX			0xff
- 
- #define DATA_DIR_TX				BIT(0)
- #define DATA_DIR_RX				BIT(1)
-@@ -170,6 +171,7 @@ struct tegra_qspi {
- 	u32					def_command2_reg;
- 	u32					spi_cs_timing1;
- 	u32					spi_cs_timing2;
-+	u8					dummy_cycles;
- 
- 	struct completion			xfer_completion;
- 	struct spi_transfer			*curr_xfer;
-@@ -856,6 +858,8 @@ static int tegra_qspi_start_transfer_one(struct spi_device *spi,
- 
- 	tqspi->command1_reg = command1;
- 
-+	tegra_qspi_writel(tqspi, QSPI_NUM_DUMMY_CYCLE(tqspi->dummy_cycles), QSPI_MISC_REG);
++	spi@70410000 {
++		status = "okay";
 +
- 	ret = tegra_qspi_flush_fifos(tqspi, false);
- 	if (ret < 0)
- 		return ret;
-@@ -974,7 +978,7 @@ static int tegra_qspi_transfer_one_message(struct spi_master *master, struct spi
- {
- 	struct tegra_qspi *tqspi = spi_master_get_devdata(master);
- 	struct spi_device *spi = msg->spi;
--	struct spi_transfer *xfer;
-+	struct spi_transfer *transfer;
- 	bool is_first_msg = true;
- 	int ret;
- 
-@@ -983,9 +987,33 @@ static int tegra_qspi_transfer_one_message(struct spi_master *master, struct spi
- 	tqspi->tx_status = 0;
- 	tqspi->rx_status = 0;
- 
--	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
-+	list_for_each_entry(transfer, &msg->transfers, transfer_list) {
-+		struct spi_transfer *xfer = transfer;
-+		u8 dummy_bytes = 0;
- 		u32 cmd1;
- 
-+		tqspi->dummy_cycles = 0;
-+		/*
-+		 * Tegra QSPI hardware supports dummy bytes transfer after actual transfer
-+		 * bytes based on programmed dummy clock cycles in the QSPI_MISC register.
-+		 * So, check if the next transfer is dummy data transfer and program dummy
-+		 * clock cycles along with the current transfer and skip next transfer.
-+		 */
-+		if (!list_is_last(&xfer->transfer_list, &msg->transfers)) {
-+			struct spi_transfer *next_xfer;
++		flash@0 {
++			compatible = "spi-nor";
++			reg = <0>;
++			spi-max-frequency = <104000000>;
++			spi-tx-bus-width = <2>;
++			spi-rx-bus-width = <2>;
++		};
++	};
 +
-+			next_xfer = list_next_entry(xfer, transfer_list);
-+			if (next_xfer->dummy_data) {
-+				u32 dummy_cycles = next_xfer->len * 8 / next_xfer->tx_nbits;
-+
-+				if (dummy_cycles <= QSPI_DUMMY_CYCLES_MAX) {
-+					tqspi->dummy_cycles = dummy_cycles;
-+					dummy_bytes = next_xfer->len;
-+					transfer = next_xfer;
-+				}
-+			}
-+		}
-+
- 		reinit_completion(&tqspi->xfer_completion);
- 
- 		cmd1 = tegra_qspi_setup_transfer_one(spi, xfer, is_first_msg);
-@@ -1016,7 +1044,7 @@ static int tegra_qspi_transfer_one_message(struct spi_master *master, struct spi
- 			goto complete_xfer;
- 		}
- 
--		msg->actual_length += xfer->len;
-+		msg->actual_length += xfer->len + dummy_bytes;
- 
- complete_xfer:
- 		if (ret < 0) {
+ 	clk32k_in: clock@0 {
+ 		compatible = "fixed-clock";
+ 		clock-frequency = <32768>;
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210.dtsi b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
+index 4fbf8c1..998fa81 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra210.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
+@@ -1536,8 +1536,9 @@
+ 		interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+-		clocks = <&tegra_car TEGRA210_CLK_QSPI>;
+-		clock-names = "qspi";
++		clocks = <&tegra_car TEGRA210_CLK_QSPI>,
++			 <&tegra_car TEGRA210_CLK_QSPI_PM>;
++		clock-names = "qspi", "qspi_out";
+ 		resets = <&tegra_car 211>;
+ 		reset-names = "qspi";
+ 		dmas = <&apbdma 5>, <&apbdma 5>;
 -- 
 2.7.4
 
