@@ -2,46 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3AFB2DFCA2
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Dec 2020 15:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E6F2DFCA6
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Dec 2020 15:16:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726913AbgLUOPk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Dec 2020 09:15:40 -0500
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:3240 "EHLO
+        id S1727146AbgLUOPn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 21 Dec 2020 09:15:43 -0500
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:6656 "EHLO
         mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726848AbgLUOPk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Dec 2020 09:15:40 -0500
+        by vger.kernel.org with ESMTP id S1726848AbgLUOPm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Dec 2020 09:15:42 -0500
 Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0BLECOgk015393;
-        Mon, 21 Dec 2020 09:14:58 -0500
+        by mx0a-00128a01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0BLECPoE015398;
+        Mon, 21 Dec 2020 09:15:01 -0500
 Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com with ESMTP id 35hc8bdjdu-1
+        by mx0a-00128a01.pphosted.com with ESMTP id 35hc8bdjdx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Dec 2020 09:14:58 -0500
+        Mon, 21 Dec 2020 09:15:01 -0500
 Received: from SCSQMBX10.ad.analog.com (SCSQMBX10.ad.analog.com [10.77.17.5])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 0BLEEu8E047580
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 0BLEExFe047585
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 21 Dec 2020 09:14:57 -0500
-Received: from SCSQMBX10.ad.analog.com (10.77.17.5) by SCSQMBX10.ad.analog.com
- (10.77.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.721.2; Mon, 21 Dec 2020
- 06:14:55 -0800
-Received: from zeus.spd.analog.com (10.66.68.11) by scsqmbx10.ad.analog.com
- (10.77.17.5) with Microsoft SMTP Server id 15.2.721.2 via Frontend Transport;
- Mon, 21 Dec 2020 06:14:55 -0800
+        Mon, 21 Dec 2020 09:14:59 -0500
+Received: from SCSQMBX11.ad.analog.com (10.77.17.10) by
+ SCSQMBX10.ad.analog.com (10.77.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.721.2;
+ Mon, 21 Dec 2020 06:14:58 -0800
+Received: from zeus.spd.analog.com (10.66.68.11) by SCSQMBX11.ad.analog.com
+ (10.77.17.10) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
+ Transport; Mon, 21 Dec 2020 06:14:57 -0800
 Received: from localhost.localdomain ([10.48.65.12])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 0BLEEqnn030685;
-        Mon, 21 Dec 2020 09:14:53 -0500
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 0BLEEqno030685;
+        Mon, 21 Dec 2020 09:14:54 -0500
 From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
 To:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     <dragos.bogdan@analog.com>, <broonie@kernel.org>,
         <robh+dt@kernel.org>, <andy.shevchenko@gmail.com>,
         Alexandru Ardelean <alexandru.ardelean@analog.com>
-Subject: [PATCH v5 1/3] spi: uapi: unify SPI modes into a single spi.h header
-Date:   Mon, 21 Dec 2020 16:19:04 +0200
-Message-ID: <20201221141906.48922-1-alexandru.ardelean@analog.com>
+Subject: [PATCH v5 2/3] spi: Add SPI_NO_TX/RX support
+Date:   Mon, 21 Dec 2020 16:19:05 +0200
+Message-ID: <20201221141906.48922-2-alexandru.ardelean@analog.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201221141906.48922-1-alexandru.ardelean@analog.com>
+References: <20201221141906.48922-1-alexandru.ardelean@analog.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-ADIRuleOP-NewSCL: Rule Triggered
@@ -49,159 +51,171 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
  definitions=2020-12-21_08:2020-12-21,2020-12-21 signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
  priorityscore=1501 suspectscore=0 adultscore=0 mlxlogscore=999 spamscore=0
- lowpriorityscore=0 mlxscore=0 bulkscore=0 clxscore=1011 phishscore=0
+ lowpriorityscore=0 mlxscore=0 bulkscore=0 clxscore=1015 phishscore=0
  impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2012210100
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This change moves all the SPI mode bits into a separate 'spi.h' header in
-uAPI. This is meant to re-use these definitions inside the kernel as well
-as export them to userspace (via uAPI).
+From: Dragos Bogdan <dragos.bogdan@analog.com>
 
-The SPI mode definitions have usually been duplicated between between
-'include/linux/spi/spi.h' and 'include/uapi/linux/spi/spidev.h', so
-whenever adding a new entry, this would need to be put in both headers.
+Transmit/receive only is a valid SPI mode. For example, the MOSI/TX line
+might be missing from an ADC while for a DAC the MISO/RX line may be
+optional. This patch adds these two new modes: SPI_NO_TX and
+SPI_NO_RX. This way, the drivers will be able to identify if any of
+these two lines is missing and to adjust the transfers accordingly.
 
-They've been moved from 'include/linux/spi/spi.h', since that seems a bit
-more complete; the bits have descriptions and there is the SPI_MODE_X_MASK.
-
-This change also does a conversion of these bitfields to _BITUL() macro.
-
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Dragos Bogdan <dragos.bogdan@analog.com>
 Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
 ---
 
 Changelog v4 -> v5:
-* https://lore.kernel.org/linux-spi/20201203140531.74470-1-alexandru.ardelean@analog.com/
-* added 'Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>'
+* https://lore.kernel.org/linux-spi/20201203140531.74470-2-alexandru.ardelean@analog.com/
+* using static_assert() vs BUILD_BUG_ON()
+* added comments for SPI_MODE_KERNEL_MASK & SPI_MODE_USER_MASK
+* using shorter form defining SPI_MODE_KERNEL_MASK & SPI_MODE_USER_MASK
 
- include/linux/spi/spi.h         | 23 ++---------------------
- include/uapi/linux/spi/spi.h    | 31 +++++++++++++++++++++++++++++++
- include/uapi/linux/spi/spidev.h | 30 +-----------------------------
- 3 files changed, 34 insertions(+), 50 deletions(-)
- create mode 100644 include/uapi/linux/spi/spi.h
+ drivers/spi/spi.c            | 26 +++++++++++++++++++++-----
+ include/linux/spi/spi.h      | 17 +++++++++++++++++
+ include/uapi/linux/spi/spi.h | 10 ++++++++++
+ 3 files changed, 48 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 51d7c004fbab..0b69934698c3 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1941,6 +1941,9 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
+ 	/* Device DUAL/QUAD mode */
+ 	if (!of_property_read_u32(nc, "spi-tx-bus-width", &value)) {
+ 		switch (value) {
++		case 0:
++			spi->mode |= SPI_NO_TX;
++			break;
+ 		case 1:
+ 			break;
+ 		case 2:
+@@ -1962,6 +1965,9 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
+ 
+ 	if (!of_property_read_u32(nc, "spi-rx-bus-width", &value)) {
+ 		switch (value) {
++		case 0:
++			spi->mode |= SPI_NO_RX;
++			break;
+ 		case 1:
+ 			break;
+ 		case 2:
+@@ -3329,12 +3335,17 @@ int spi_setup(struct spi_device *spi)
+ 	unsigned	bad_bits, ugly_bits;
+ 	int		status;
+ 
+-	/* check mode to prevent that DUAL and QUAD set at the same time
++	/*
++	 * check mode to prevent that any two of DUAL, QUAD and NO_MOSI/MISO
++	 * are set at the same time
+ 	 */
+-	if (((spi->mode & SPI_TX_DUAL) && (spi->mode & SPI_TX_QUAD)) ||
+-		((spi->mode & SPI_RX_DUAL) && (spi->mode & SPI_RX_QUAD))) {
++	if ((hweight_long(spi->mode &
++		(SPI_TX_DUAL | SPI_TX_QUAD | SPI_NO_TX)) > 1) ||
++	    (hweight_long(spi->mode &
++		(SPI_RX_DUAL | SPI_RX_QUAD | SPI_NO_RX)) > 1)) {
+ 		dev_err(&spi->dev,
+-		"setup: can not select dual and quad at the same time\n");
++		"setup: can not select any two of dual, quad and no-rx/tx "
++		"at the same time\n");
+ 		return -EINVAL;
+ 	}
+ 	/* if it is SPI_3WIRE mode, DUAL and QUAD should be forbidden
+@@ -3348,7 +3359,8 @@ int spi_setup(struct spi_device *spi)
+ 	 * SPI_CS_WORD has a fallback software implementation,
+ 	 * so it is ignored here.
+ 	 */
+-	bad_bits = spi->mode & ~(spi->controller->mode_bits | SPI_CS_WORD);
++	bad_bits = spi->mode & ~(spi->controller->mode_bits | SPI_CS_WORD |
++				 SPI_NO_TX | SPI_NO_RX);
+ 	/* nothing prevents from working with active-high CS in case if it
+ 	 * is driven by GPIO.
+ 	 */
+@@ -3610,6 +3622,8 @@ static int __spi_validate(struct spi_device *spi, struct spi_message *message)
+ 		 * 2. check tx/rx_nbits match the mode in spi_device
+ 		 */
+ 		if (xfer->tx_buf) {
++			if (spi->mode & SPI_NO_TX)
++				return -EINVAL;
+ 			if (xfer->tx_nbits != SPI_NBITS_SINGLE &&
+ 				xfer->tx_nbits != SPI_NBITS_DUAL &&
+ 				xfer->tx_nbits != SPI_NBITS_QUAD)
+@@ -3623,6 +3637,8 @@ static int __spi_validate(struct spi_device *spi, struct spi_message *message)
+ 		}
+ 		/* check transfer rx_nbits */
+ 		if (xfer->rx_buf) {
++			if (spi->mode & SPI_NO_RX)
++				return -EINVAL;
+ 			if (xfer->rx_nbits != SPI_NBITS_SINGLE &&
+ 				xfer->rx_nbits != SPI_NBITS_DUAL &&
+ 				xfer->rx_nbits != SPI_NBITS_QUAD)
 diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index aa09fdc8042d..a08c3f37e202 100644
+index a08c3f37e202..9bfdfaf286eb 100644
 --- a/include/linux/spi/spi.h
 +++ b/include/linux/spi/spi.h
-@@ -15,6 +15,8 @@
- #include <linux/gpio/consumer.h>
- #include <linux/ptp_clock_kernel.h>
+@@ -6,6 +6,7 @@
+ #ifndef __LINUX_SPI_H
+ #define __LINUX_SPI_H
  
-+#include <uapi/linux/spi/spi.h>
-+
- struct dma_chan;
- struct property_entry;
- struct spi_controller;
-@@ -165,27 +167,6 @@ struct spi_device {
++#include <linux/bits.h>
+ #include <linux/device.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/slab.h>
+@@ -166,6 +167,18 @@ struct spi_device {
+ 	u8			chip_select;
  	u8			bits_per_word;
  	bool			rt;
++#define SPI_NO_TX	BIT(31)		/* no transmit wire */
++#define SPI_NO_RX	BIT(30)		/* no receive wire */
++	/*
++	 * All bits defined above should be covered by SPI_MODE_KERNEL_MASK.
++	 * The SPI_MODE_KERNEL_MASK has the SPI_MODE_USER_MASK counterpart,
++	 * which is defined in 'include/uapi/linux/spi/spi.h'.
++	 * The bits defined here are from bit 31 downwards, while in
++	 * SPI_MODE_USER_MASK are from 0 upwards.
++	 * These bits must not overlap. A static assert check should make sure of that.
++	 * If adding extra bits, make sure to decrease the bit index below as well.
++	 */
++#define SPI_MODE_KERNEL_MASK	(~(BIT(30) - 1))
  	u32			mode;
--#define	SPI_CPHA	0x01			/* clock phase */
--#define	SPI_CPOL	0x02			/* clock polarity */
--#define	SPI_MODE_0	(0|0)			/* (original MicroWire) */
--#define	SPI_MODE_1	(0|SPI_CPHA)
--#define	SPI_MODE_2	(SPI_CPOL|0)
--#define	SPI_MODE_3	(SPI_CPOL|SPI_CPHA)
--#define	SPI_MODE_X_MASK	(SPI_CPOL|SPI_CPHA)
--#define	SPI_CS_HIGH	0x04			/* chipselect active high? */
--#define	SPI_LSB_FIRST	0x08			/* per-word bits-on-wire */
--#define	SPI_3WIRE	0x10			/* SI/SO signals shared */
--#define	SPI_LOOP	0x20			/* loopback mode */
--#define	SPI_NO_CS	0x40			/* 1 dev/bus, no chipselect */
--#define	SPI_READY	0x80			/* slave pulls low to pause */
--#define	SPI_TX_DUAL	0x100			/* transmit with 2 wires */
--#define	SPI_TX_QUAD	0x200			/* transmit with 4 wires */
--#define	SPI_RX_DUAL	0x400			/* receive with 2 wires */
--#define	SPI_RX_QUAD	0x800			/* receive with 4 wires */
--#define	SPI_CS_WORD	0x1000			/* toggle cs after each word */
--#define	SPI_TX_OCTAL	0x2000			/* transmit with 8 wires */
--#define	SPI_RX_OCTAL	0x4000			/* receive with 8 wires */
--#define	SPI_3WIRE_HIZ	0x8000			/* high impedance turnaround */
  	int			irq;
  	void			*controller_state;
- 	void			*controller_data;
+@@ -189,6 +202,10 @@ struct spi_device {
+ 	 */
+ };
+ 
++/* Make sure that SPI_MODE_KERNEL_MASK & SPI_MODE_USER_MASK don't overlap */
++static_assert((SPI_MODE_KERNEL_MASK & SPI_MODE_USER_MASK) == 0,
++	      "SPI_MODE_USER_MASK & SPI_MODE_KERNEL_MASK must not overlap");
++
+ static inline struct spi_device *to_spi_device(struct device *dev)
+ {
+ 	return dev ? container_of(dev, struct spi_device, dev) : NULL;
 diff --git a/include/uapi/linux/spi/spi.h b/include/uapi/linux/spi/spi.h
-new file mode 100644
-index 000000000000..703b586f35df
---- /dev/null
+index 703b586f35df..236a85f08ded 100644
+--- a/include/uapi/linux/spi/spi.h
 +++ b/include/uapi/linux/spi/spi.h
-@@ -0,0 +1,31 @@
-+/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
-+#ifndef _UAPI_SPI_H
-+#define _UAPI_SPI_H
-+
-+#include <linux/const.h>
-+
-+#define	SPI_CPHA		_BITUL(0)	/* clock phase */
-+#define	SPI_CPOL		_BITUL(1)	/* clock polarity */
-+
-+#define	SPI_MODE_0		(0|0)		/* (original MicroWire) */
-+#define	SPI_MODE_1		(0|SPI_CPHA)
-+#define	SPI_MODE_2		(SPI_CPOL|0)
-+#define	SPI_MODE_3		(SPI_CPOL|SPI_CPHA)
-+#define	SPI_MODE_X_MASK		(SPI_CPOL|SPI_CPHA)
-+
-+#define	SPI_CS_HIGH		_BITUL(2)	/* chipselect active high? */
-+#define	SPI_LSB_FIRST		_BITUL(3)	/* per-word bits-on-wire */
-+#define	SPI_3WIRE		_BITUL(4)	/* SI/SO signals shared */
-+#define	SPI_LOOP		_BITUL(5)	/* loopback mode */
-+#define	SPI_NO_CS		_BITUL(6)	/* 1 dev/bus, no chipselect */
-+#define	SPI_READY		_BITUL(7)	/* slave pulls low to pause */
-+#define	SPI_TX_DUAL		_BITUL(8)	/* transmit with 2 wires */
-+#define	SPI_TX_QUAD		_BITUL(9)	/* transmit with 4 wires */
-+#define	SPI_RX_DUAL		_BITUL(10)	/* receive with 2 wires */
-+#define	SPI_RX_QUAD		_BITUL(11)	/* receive with 4 wires */
-+#define	SPI_CS_WORD		_BITUL(12)	/* toggle cs after each word */
-+#define	SPI_TX_OCTAL		_BITUL(13)	/* transmit with 8 wires */
-+#define	SPI_RX_OCTAL		_BITUL(14)	/* receive with 8 wires */
-+#define	SPI_3WIRE_HIZ		_BITUL(15)	/* high impedance turnaround */
-+
-+#endif /* _UAPI_SPI_H */
-diff --git a/include/uapi/linux/spi/spidev.h b/include/uapi/linux/spi/spidev.h
-index d56427c0b3e0..0c3da08f2aff 100644
---- a/include/uapi/linux/spi/spidev.h
-+++ b/include/uapi/linux/spi/spidev.h
-@@ -25,35 +25,7 @@
+@@ -28,4 +28,14 @@
+ #define	SPI_RX_OCTAL		_BITUL(14)	/* receive with 8 wires */
+ #define	SPI_3WIRE_HIZ		_BITUL(15)	/* high impedance turnaround */
  
- #include <linux/types.h>
- #include <linux/ioctl.h>
--
--/* User space versions of kernel symbols for SPI clocking modes,
-- * matching <linux/spi/spi.h>
-- */
--
--#define SPI_CPHA		0x01
--#define SPI_CPOL		0x02
--
--#define SPI_MODE_0		(0|0)
--#define SPI_MODE_1		(0|SPI_CPHA)
--#define SPI_MODE_2		(SPI_CPOL|0)
--#define SPI_MODE_3		(SPI_CPOL|SPI_CPHA)
--
--#define SPI_CS_HIGH		0x04
--#define SPI_LSB_FIRST		0x08
--#define SPI_3WIRE		0x10
--#define SPI_LOOP		0x20
--#define SPI_NO_CS		0x40
--#define SPI_READY		0x80
--#define SPI_TX_DUAL		0x100
--#define SPI_TX_QUAD		0x200
--#define SPI_RX_DUAL		0x400
--#define SPI_RX_QUAD		0x800
--#define SPI_CS_WORD		0x1000
--#define SPI_TX_OCTAL		0x2000
--#define SPI_RX_OCTAL		0x4000
--#define SPI_3WIRE_HIZ		0x8000
--
--/*---------------------------------------------------------------------------*/
-+#include <linux/spi/spi.h>
- 
- /* IOCTL commands */
- 
++/*
++ * All the bits defined above should be covered by SPI_MODE_USER_MASK.
++ * The SPI_MODE_USER_MASK has the SPI_MODE_KERNEL_MASK counterpart in
++ * 'include/linux/spi/spi.h'. The bits defined here are from bit 0 upwards
++ * while in SPI_MODE_KERNEL_MASK they are from the other end downwards.
++ * These bits must not overlap. A static assert check should make sure of that.
++ * If adding extra bits, make sure to increase the bit index below as well.
++ */
++#define SPI_MODE_USER_MASK	(_BITUL(16) - 1)
++
+ #endif /* _UAPI_SPI_H */
 -- 
 2.17.1
 
