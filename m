@@ -2,148 +2,460 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D452E2D68
-	for <lists+linux-spi@lfdr.de>; Sat, 26 Dec 2020 07:33:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D20312E2D6A
+	for <lists+linux-spi@lfdr.de>; Sat, 26 Dec 2020 07:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726067AbgLZGct (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 26 Dec 2020 01:32:49 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:54746 "EHLO loongson.cn"
+        id S1727482AbgLZGhB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 26 Dec 2020 01:37:01 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:55304 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725998AbgLZGct (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 26 Dec 2020 01:32:49 -0500
+        id S1726811AbgLZGhA (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 26 Dec 2020 01:37:00 -0500
 Received: from [10.130.0.71] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Axicnb2OZftYcFAA--.14190S3;
-        Sat, 26 Dec 2020 14:31:57 +0800 (CST)
-Subject: Re: [PATCH v4 2/4] spi: ls7a: Add YAML schemas
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        ThomasBogendoerfer <tsbogend@alpha.franken.de>
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxNuDZ2eZf5ocFAA--.12862S3;
+        Sat, 26 Dec 2020 14:36:10 +0800 (CST)
+Subject: Re: [PATCH v4 1/4] spi: LS7A: Add Loongson LS7A SPI controller driver
+ support
+To:     Huacai Chen <chenhuacai@kernel.org>
 References: <1608892552-15457-1-git-send-email-zhangqing@loongson.cn>
- <1608892552-15457-2-git-send-email-zhangqing@loongson.cn>
- <7d26a91a-f463-9ae4-8420-28a1b591053b@flygoat.com>
-Cc:     linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+ <CAAhV-H5NHJD5=onVgpNrJK4ZiK6JaAkgCVR7e6=6Mkwg6q5qFw@mail.gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        ThomasBogendoerfer <tsbogend@alpha.franken.de>,
+        linux-spi@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        devicetree@vger.kernel.org,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 From:   zhangqing <zhangqing@loongson.cn>
-Message-ID: <4f83176f-64a9-ebf1-8446-bac9f9ee9c59@loongson.cn>
-Date:   Sat, 26 Dec 2020 14:31:55 +0800
+Message-ID: <ab464dd2-e13c-72ee-825c-75584f695f63@loongson.cn>
+Date:   Sat, 26 Dec 2020 14:36:09 +0800
 User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
  Thunderbird/45.4.0
 MIME-Version: 1.0
-In-Reply-To: <7d26a91a-f463-9ae4-8420-28a1b591053b@flygoat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <CAAhV-H5NHJD5=onVgpNrJK4ZiK6JaAkgCVR7e6=6Mkwg6q5qFw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Axicnb2OZftYcFAA--.14190S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7WrW8Gr1DCr1fJrW8Wry7GFg_yoW8ZFWfpF
-        17CasIvF4IqF1xCw4fta4kCw1YqryFk3Z8JFW7tr1UAF90k3Z5t343Kw1Uu3yfJF18AFyI
-        vFWUWr43KF48JaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkvb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+X-CM-TRANSID: AQAAf9AxNuDZ2eZf5ocFAA--.12862S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3CFy5GrWDXFW3Zr1UKr13XFb_yoWkWry7pF
+        W8Wa1rtF48JF18Ar9Fvr4DWF9Iqr4Sqry7Ww47ta4Ikr90vF4kGF15Wr13CrZ7ZF48CF18
+        ZF1j9rZIgF15XaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvab7Iv0xC_KF4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
         0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
         A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
         jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I
         8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r
         4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j189NUUUUU=
+        MxkIecxEwVAFwVW8AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
+        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
+        Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
+        vEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv
+        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
+        uYvjxUcsqXDUUUU
 X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi，Jiaxun
+Hi，Huacai
 
-Thank you for your reply.
+Thank you for your reply and suggestion .
 
-I will also delete the num chipelects attribute in the device tree.
-
-And I will send v5 in the soon.
+I will remove blank lines and  send v5 in the soon.
 
 Thanks,
 
 -Qing
 
-On 12/26/2020 11:31 AM, Jiaxun Yang wrote:
-> 在 2020/12/25 下午6:35, Qing Zhang 写道:
->> Switch the DT binding to a YAML schema to enable the DT validation.
+
+On 12/26/2020 12:28 PM, Huacai Chen wrote:
+> Hi, Qing
+>
+> On Fri, Dec 25, 2020 at 6:40 PM Qing Zhang <zhangqing@loongson.cn> wrote:
+>> The SPI controller has the following characteristics:
+>>
+>> - Full-duplex synchronous serial data transmission
+>> - Support up to 4 variable length byte transmission
+>> - Main mode support
+>> - Mode failure generates an error flag and issues an interrupt request
+>> - Double buffer receiver
+>> - Serial clock with programmable polarity and phase
+>> - SPI can be controlled in wait mode
+>> - Support boot from SPI
+>>
+>> Use mtd_debug tool to earse/write/read /dev/mtd0 on development.
+>>
+>> eg:
+>>
+>> [root@linux mtd-utils-1.0.0]# mtd_debug erase /dev/mtd0 0x20000 0x40000
+>> Erased 262144 bytes from address 0x00020000 in flash
+>> [root@linux mtd-utils-1.0.0]# mtd_debug write /dev/mtd0 0x20000 13 1.img
+>> Copied 13 bytes from 1.img to address 0x00020000 in flash
+>> [root@linux mtd-utils-1.0.0]# mtd_debug read /dev/mtd0 0x20000 13 2.img
+>> Copied 13 bytes from address 0x00020000 in flash to 2.img
+>> [root@linux mtd-utils-1.0.0]# cmp -l 1.img 2.img
 >>
 >> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
 >> ---
 >>
->> v4: fix warnings/errors about running 'make dt_binding_check'
+>> v2:
+>> - keep Kconfig and Makefile sorted
+>> - make the entire comment a C++ one so things look more intentional
+>> - Fix unclear indentation
+>> - make conditional statements to improve legibility
+>> - Don't use static inline
+>> - the core handle message queue
+>> - Add a new binding document
+>> - Fix probe part mixed pdev and PCI
+>>
+>> v3:
+>> - expose set_cs to the core and let it handle things
+>> - replace transfer_one_message to transfer_one
+>> - replace spi_alloc_master to devm_spi_alloc_master
+>> - split out into prepare/unprepare_message
+>> - releases pci regions before unregister master
+>>
+>> v4:
+>> - names used in the manual
+>> - rename ls7a_spi_do_transfer to ls7a_spi_setup_transfer
+>> - change read the spcr and sper outside of this function
+>> - mode configuration moved to prepare instead
+>> - remove redundancy code about unprepare/prepare_message
+>> - used 0x4 instead of 0x1,WFEMPTY instead of RFEMPTY
 >>
 >> ---
->>   .../devicetree/bindings/spi/loongson,spi-ls7a.yaml | 46 
->> ++++++++++++++++++++++
->>   1 file changed, 46 insertions(+)
->>   create mode 100644 
->> Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
+>>   drivers/spi/Kconfig    |   7 ++
+>>   drivers/spi/Makefile   |   1 +
+>>   drivers/spi/spi-ls7a.c | 283 +++++++++++++++++++++++++++++++++++++++++++++++++
+>>   3 files changed, 291 insertions(+)
+>>   create mode 100644 drivers/spi/spi-ls7a.c
 >>
->> diff --git 
->> a/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml 
->> b/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
+>> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+>> index aadaea0..af7c0d4 100644
+>> --- a/drivers/spi/Kconfig
+>> +++ b/drivers/spi/Kconfig
+>> @@ -413,6 +413,13 @@ config SPI_LP8841_RTC
+>>            Say N here unless you plan to run the kernel on an ICP DAS
+>>            LP-8x4x industrial computer.
+>>
+>> +config SPI_LS7A
+>> +       tristate "Loongson LS7A SPI Controller Support"
+>> +       depends on CPU_LOONGSON64 || COMPILE_TEST
+>> +       help
+>> +         This drivers supports the Loongson LS7A SPI controller in master
+>> +         SPI mode.
+>> +
+>>   config SPI_MPC52xx
+>>          tristate "Freescale MPC52xx SPI (non-PSC) controller support"
+>>          depends on PPC_MPC52xx
+>> diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+>> index 6fea582..d015cf2 100644
+>> --- a/drivers/spi/Makefile
+>> +++ b/drivers/spi/Makefile
+>> @@ -61,6 +61,7 @@ obj-$(CONFIG_SPI_LANTIQ_SSC)          += spi-lantiq-ssc.o
+>>   obj-$(CONFIG_SPI_JCORE)                        += spi-jcore.o
+>>   obj-$(CONFIG_SPI_LM70_LLP)             += spi-lm70llp.o
+>>   obj-$(CONFIG_SPI_LP8841_RTC)           += spi-lp8841-rtc.o
+>> +obj-$(CONFIG_SPI_LS7A)                 += spi-ls7a.o
+>>   obj-$(CONFIG_SPI_MESON_SPICC)          += spi-meson-spicc.o
+>>   obj-$(CONFIG_SPI_MESON_SPIFC)          += spi-meson-spifc.o
+>>   obj-$(CONFIG_SPI_MPC512x_PSC)          += spi-mpc512x-psc.o
+>> diff --git a/drivers/spi/spi-ls7a.c b/drivers/spi/spi-ls7a.c
 >> new file mode 100644
->> index 0000000..8cc9bc5
+>> index 0000000..d2be370
 >> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
->> @@ -0,0 +1,46 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/spi/loongson,spi-ls7a.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +++ b/drivers/spi/spi-ls7a.c
+>> @@ -0,0 +1,283 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +//
+>> +// Loongson LS7A SPI Controller driver
+>> +//
+>> +// Copyright (C) 2020 Loongson Technology Corporation Limited.
+>> +//
 >> +
->> +title: Loongson LS7A PCH SPI Controller
+>> +#include <linux/module.h>
+>> +#include <linux/pci.h>
+>> +#include <linux/spi/spi.h>
 >> +
->> +maintainers:
->> +  - Qing Zhang <zhangqing@loongson.cn>
+>> +/* define spi register */
+>> +#define        SPCR            0x00
+>> +#define        SPSR            0x01
+>> +#define        FIFO            0x02
+>> +#define        SPER            0x03
+>> +#define        SFC_PARAM       0x04
+>> +#define        SFC_SOFTCS      0x05
+>> +#define        SFC_TIMING      0x06
 >> +
->> +description: |
->> +  This controller can be found in Loongson-3 systems with LS7A PCH.
+>> +struct ls7a_spi {
+>> +       struct spi_master *master;
+>> +       void __iomem *base;
+>> +       unsigned int hz;
+>> +       unsigned int mode;
+>> +};
 >> +
->> +properties:
->> +  compatible:
->> +    const: loongson,ls7a-spi
+>> +static void ls7a_spi_write_reg(struct ls7a_spi *spi,
+>> +                              unsigned char reg,
+>> +                              unsigned char data)
+>> +{
+>> +       writeb(data, spi->base + reg);
+>> +}
 >> +
->> +  reg:
->> +    maxItems: 1
+>> +static char ls7a_spi_read_reg(struct ls7a_spi *spi, unsigned char reg)
+>> +{
+>> +       return readb(spi->base + reg);
+>> +}
 >> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - num-chipselects
+>> +static int ls7a_spi_prepare_message(struct spi_master *master,
+>> +                                   struct spi_message *msg)
+>> +{
+>> +       struct ls7a_spi *ls7a_spi;
+>> +       struct spi_device *spi = msg->spi;
+>> +       unsigned char val;
+>> +
+>> +       ls7a_spi = spi_master_get_devdata(master);
+>> +
+>> +       if (ls7a_spi->mode != spi->mode) {
+>> +               val = ls7a_spi_read_reg(ls7a_spi, SPCR);
+>> +               val &= ~0xc;
+>> +               if (spi->mode & SPI_CPOL)
+>> +                       val |= 8;
+>> +               if (spi->mode & SPI_CPHA)
+>> +                       val |= 4;
+>> +               ls7a_spi_write_reg(ls7a_spi, SPCR, val);
+>> +               val = ls7a_spi_read_reg(ls7a_spi, SPER);
+>> +               ls7a_spi_write_reg(ls7a_spi, SPER, val);
+>> +               ls7a_spi->mode = spi->mode;
+>> +       }
+>> +       return 0;
+>> +}
+>> +
+>> +static void ls7a_spi_set_cs(struct spi_device *spi, bool enable)
+>> +{
+>> +       struct ls7a_spi *ls7a_spi;
+>> +       int cs;
+>> +
+>> +       ls7a_spi = spi_master_get_devdata(spi->master);
+>> +
+>> +       cs = ls7a_spi_read_reg(ls7a_spi, SFC_SOFTCS) & ~(0x11 << spi->chip_select);
+>> +
+>> +       if (!!(spi->mode & SPI_CS_HIGH) == enable)
+>> +               ls7a_spi_write_reg(ls7a_spi, SFC_SOFTCS, (0x1 << spi->chip_select) | cs);
+>> +       else
+>> +               ls7a_spi_write_reg(ls7a_spi, SFC_SOFTCS, (0x11 << spi->chip_select) | cs);
+>> +}
+>> +
+>> +static int ls7a_spi_setup_transfer(struct spi_device *spi,
+>> +                                  struct spi_transfer *t)
+>> +{
+>> +       unsigned int hz;
+>> +       unsigned int div, div_tmp;
+>> +       unsigned int bit;
+>> +       unsigned long clk;
+>> +       unsigned char val;
+>> +       unsigned char spcr, sper;
+>> +       const char rdiv[12] = {0, 1, 4, 2, 3, 5, 6, 7, 8, 9, 10, 11};
+>> +       struct ls7a_spi *ls7a_spi;
+>> +
+>> +       ls7a_spi = spi_master_get_devdata(spi->master);
+>> +
+>> +       if (t) {
+>> +               hz = t->speed_hz;
+>> +               if (!hz)
+>> +                       hz = spi->max_speed_hz;
+>> +       } else {
+>> +               hz = spi->max_speed_hz;
+>> +       }
+>> +
+>> +       if (hz & (ls7a_spi->hz != hz)) {
+>> +               clk = 100000000;
+>> +
+>> +               div = DIV_ROUND_UP(clk, hz);
+>> +               if (div < 2)
+>> +                       div = 2;
+>> +               if (div > 4096)
+>> +                       div = 4096;
+>> +
+>> +               bit = fls(div) - 1;
+>> +               if ((1 << bit) == div)
+>> +                       bit--;
+>> +               div_tmp = rdiv[bit];
+>> +
+>> +               dev_dbg(&spi->dev, "clk = %ld hz = %d div_tmp = %d bit = %d\n",
+>> +                       clk, hz, div_tmp, bit);
+>> +
+>> +               ls7a_spi->hz = hz;
+>> +               spcr = div_tmp & 3;
+>> +               sper = (div_tmp >> 2) & 3;
+>> +
+>> +               val = ls7a_spi_read_reg(ls7a_spi, SPCR);
+>> +               ls7a_spi_write_reg(ls7a_spi, SPCR, (val & ~3) | spcr);
+>> +               val = ls7a_spi_read_reg(ls7a_spi, SPER);
+>> +               ls7a_spi_write_reg(ls7a_spi, SPER, (val & ~3) | sper);
+>> +       }
+>> +       return 0;
+>> +}
+>> +
+>> +static int ls7a_spi_setup(struct spi_device *spi)
+>> +{
+>> +       return  ls7a_spi_setup_transfer(spi, NULL);
+>> +}
+>> +
+>> +static int ls7a_spi_write_read_8bit(struct spi_device *spi,
+>> +                                   const u8 **tx_buf, u8 **rx_buf,
+>> +                                   unsigned int num)
+>> +{
+>> +       struct ls7a_spi *ls7a_spi;
+>> +
+>> +       ls7a_spi = spi_master_get_devdata(spi->master);
+>> +
+>> +       if (tx_buf && *tx_buf) {
+>> +               ls7a_spi_write_reg(ls7a_spi, FIFO, *((*tx_buf)++));
+>> +
+>> +               while ((ls7a_spi_read_reg(ls7a_spi, SPSR) & 0x4) == 1)
+>> +
+> This blank line can be removed.
 >
-> num-chipselects never parsed in code?
->
-> Thanks.
->
-> - Jiaxun
->
->
->
+>> +                       ;
+>> +       } else {
+>> +               ls7a_spi_write_reg(ls7a_spi, FIFO, 0);
 >> +
->> +additionalProperties: false
+>> +               while ((ls7a_spi_read_reg(ls7a_spi, SPSR) & 0x1) == 1)
 >> +
->> +examples:
->> +  - |
->> +    pci {
->> +        #address-cells = <3>;
->> +        #size-cells = <2>;
+> See above.
+>
+>> +                       ;
+>> +       }
 >> +
->> +        spi@16,0 {
->> +        compatible = "pci0014,7a0b.0",
->> +                        "pci0014,7a0b",
->> +                        "pciclass088000",
->> +                        "pciclass0800";
+>> +       if (rx_buf && *rx_buf)
+>> +               *(*rx_buf)++ = ls7a_spi_read_reg(ls7a_spi, FIFO);
+>> +       else
+>> +               ls7a_spi_read_reg(ls7a_spi, FIFO);
 >> +
->> +        reg = <0xb000 0x0 0x0 0x0 0x0>;
->> +        num-chipselects = <0>;
->> +        };
->> +    };
+>> +       return 1;
+>> +}
 >> +
->> +...
+>> +static unsigned int ls7a_spi_write_read(struct spi_device *spi,
+>> +                                       struct spi_transfer *xfer)
+>> +{
+>> +       unsigned int count;
+>> +       const u8 *tx = xfer->tx_buf;
+>> +
+> See above.
+>
+>> +       u8 *rx = xfer->rx_buf;
+>> +
+>> +       count = xfer->len;
+>> +
+>> +       do {
+>> +               if (ls7a_spi_write_read_8bit(spi, &tx, &rx, count) < 0)
+>> +                       goto out;
+>> +               count--;
+>> +       } while (count);
+>> +
+>> +out:
+>> +       return xfer->len - count;
+>> +}
+>> +
+>> +static int  ls7a_spi_transfer_one(struct spi_master *master,
+>> +                                 struct spi_device *spi,
+>> +                                 struct spi_transfer *t)
+>> +{
+>> +       int status = 0;
+>> +
+>> +       status = ls7a_spi_setup_transfer(spi, t);
+>> +       if (status < 0)
+>> +               return status;
+>> +
+>> +       if (t->len)
+>> +               ls7a_spi_write_read(spi, t);
+>> +
+>> +       return status;
+>> +}
+>> +
+>> +static int ls7a_spi_pci_probe(struct pci_dev *pdev,
+>> +                             const struct pci_device_id *ent)
+>> +{
+>> +       struct spi_master *master;
+>> +       struct ls7a_spi *spi;
+>> +       int ret;
+>> +
+>> +       master = devm_spi_alloc_master(&pdev->dev, sizeof(*spi));
+>> +       if (!master)
+>> +               return -ENOMEM;
+>> +
+>> +       spi = spi_master_get_devdata(master);
+>> +       ret = pcim_enable_device(pdev);
+>> +       if (ret)
+>> +               goto err_free_master;
+>> +
+>> +       ret = pci_request_regions(pdev, "ls7a-spi");
+>> +       if (ret)
+>> +               goto err_free_master;
+>> +
+>> +       spi->base = pcim_iomap(pdev, 0, pci_resource_len(pdev, 0));
+>> +       if (!spi->base) {
+>> +               ret = -EINVAL;
+>> +               goto err_free_master;
+>> +       }
+>> +       ls7a_spi_write_reg(spi, SPCR, 0x51);
+>> +       ls7a_spi_write_reg(spi, SPER, 0x00);
+>> +       ls7a_spi_write_reg(spi, SFC_TIMING, 0x01);
+>> +       ls7a_spi_write_reg(spi, SFC_PARAM, 0x40);
+>> +       spi->mode = 0;
+>> +
+>> +       master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH;
+>> +       master->set_cs = ls7a_spi_set_cs;
+>> +       master->prepare_message = ls7a_spi_prepare_message;
+>> +       master->setup = ls7a_spi_setup;
+>> +       master->transfer_one = ls7a_spi_transfer_one;
+>> +       master->bits_per_word_mask = SPI_BPW_MASK(8);
+>> +       master->num_chipselect = 4;
+>> +       master->dev.of_node = pdev->dev.of_node;
+>> +
+>> +       spi->master = master;
+>> +
+>> +       pci_set_drvdata(pdev, master);
+>> +
+>> +       ret = spi_register_master(master);
+>> +       if (ret)
+>> +               goto err_free_master;
+>> +
+>> +       return 0;
+>> +
+>> +err_free_master:
+>> +       pci_release_regions(pdev);
+>> +       return ret;
+>> +}
+>> +
+>> +static void ls7a_spi_pci_remove(struct pci_dev *pdev)
+>> +{
+>> +       struct spi_master *master = pci_get_drvdata(pdev);
+>> +
+>> +       spi_unregister_master(master);
+>> +       pci_release_regions(pdev);
+>> +}
+>> +
+>> +static const struct pci_device_id ls7a_spi_pci_id_table[] = {
+>> +       { PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, 0x7a0b) },
+>> +       { 0, }
+>> +};
+>> +
+>> +MODULE_DEVICE_TABLE(pci, ls7a_spi_pci_id_table);
+>> +
+>> +static struct pci_driver ls7a_spi_pci_driver = {
+>> +       .name           = "ls7a-spi",
+>> +       .id_table       = ls7a_spi_pci_id_table,
+>> +       .probe          = ls7a_spi_pci_probe,
+>> +       .remove         = ls7a_spi_pci_remove,
+>> +};
+>> +
+>> +module_pci_driver(ls7a_spi_pci_driver);
+>> +
+>> +MODULE_AUTHOR("Juxin Gao <gaojuxin@loongson.cn>");
+>> +MODULE_AUTHOR("Qing Zhang <zhangqing@loongson.cn>");
+>> +MODULE_DESCRIPTION("Loongson LS7A SPI controller driver");
+>> +MODULE_LICENSE("GPL v2");
+>> --
+>> 2.1.0
+>>
+> Huacai
 
