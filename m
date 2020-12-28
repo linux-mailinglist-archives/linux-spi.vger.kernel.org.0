@@ -2,113 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B5B2E2DE3
-	for <lists+linux-spi@lfdr.de>; Sat, 26 Dec 2020 11:06:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E8D2E3349
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Dec 2020 01:27:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725964AbgLZKFp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 26 Dec 2020 05:05:45 -0500
-Received: from tux.runtux.com ([176.9.82.136]:57772 "EHLO tux.runtux.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725924AbgLZKFp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 26 Dec 2020 05:05:45 -0500
-X-Greylist: delayed 375 seconds by postgrey-1.27 at vger.kernel.org; Sat, 26 Dec 2020 05:05:44 EST
-Received: from localhost (localhost [127.0.0.1])
-        by tux.runtux.com (Postfix) with ESMTP id 262A86F070;
-        Sat, 26 Dec 2020 10:58:48 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at tux.runtux.com
-Received: from tux.runtux.com ([127.0.0.1])
-        by localhost (tux2.runtux.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id IXeIB_tByXV2; Sat, 26 Dec 2020 10:58:46 +0100 (CET)
-Received: from bee.priv.zoo (62-99-217-90.static.upcbusiness.at [62.99.217.90])
-        (Authenticated sender: postmaster@runtux.com)
-        by tux.runtux.com (Postfix) with ESMTPSA id 81DFB6F01F;
-        Sat, 26 Dec 2020 10:58:46 +0100 (CET)
-Received: by bee.priv.zoo (Postfix, from userid 1002)
-        id 7505146C; Sat, 26 Dec 2020 10:58:45 +0100 (CET)
-Date:   Sat, 26 Dec 2020 10:58:45 +0100
-From:   Ralf Schlatterbeck <rsc@runtux.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] Fix SPI Chipselect/Clock bug for sun6i
-Message-ID: <20201226095845.c65lhsmluddvwxsl@runtux.com>
+        id S1726289AbgL1A1U (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 27 Dec 2020 19:27:20 -0500
+Received: from mail-il1-f176.google.com ([209.85.166.176]:45352 "EHLO
+        mail-il1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726226AbgL1A1U (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 27 Dec 2020 19:27:20 -0500
+Received: by mail-il1-f176.google.com with SMTP id w12so8167522ilm.12;
+        Sun, 27 Dec 2020 16:27:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GxF6gjxDj1D5oG9BFZvSKyyiGl1MUnLLDiE1YxgJ6wM=;
+        b=CUePESMrQCqJYogxcY0LfdtCZ57MDKTc/iWIRiIEzMxqAgomh8O3vB7QE4zucM++6G
+         1CtYmxVhnTuQHdR7OA694VOaMyC37OQxEa/JueCKuCYM6/tTP6LdXpXObbZBCzctLOQ1
+         0CPhZf70q/UPAKOkRfWrRpgD893joPdA2bzC0fVPIx82AK2xpa4y3OXIwbTv+rl1Qbvu
+         AxmIgQ8i7ZNFJqTjLSNXr4fJLhkuJZPdUjKTIbPg0/tuk1oqRUuNHhAFts9m4XDaGUPw
+         8xSLYWslOshl2f2awNsbOu33dDmxAchywkkTKhPd3XtS3Ud39tk+D0+018ltspu3tutW
+         f4+g==
+X-Gm-Message-State: AOAM531236MKOBVDQJ3LPXGbDAiHrpIlQhBtjubf8ajnrSl58SWnbuYs
+        GBuIoXFYmx2XYABIn/xZVe02a4UeSt08fpavaYg=
+X-Google-Smtp-Source: ABdhPJwqWQzgWx9rHhJtLVsy+SFYeDCm+6mrk4i78hCJjXkIngpvN6ZcMJqvBVVvccqmAsUPnBG5MBs4U7VGTuwuSEI=
+X-Received: by 2002:a05:6e02:1187:: with SMTP id y7mr42039158ili.143.1609115199086;
+ Sun, 27 Dec 2020 16:26:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-ray:  beware
-User-Agent: NeoMutt/20180716
+References: <1608973923-8328-1-git-send-email-zhangqing@loongson.cn> <1608973923-8328-2-git-send-email-zhangqing@loongson.cn>
+In-Reply-To: <1608973923-8328-2-git-send-email-zhangqing@loongson.cn>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Mon, 28 Dec 2020 08:26:27 +0800
+Message-ID: <CAAhV-H5xEf93_OXRLBFkaMhah5keHESiVbPhj0Fs=ajjCgWefg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/4] spi: ls7a: Add YAML schemas
+To:     Qing Zhang <zhangqing@loongson.cn>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        ThomasBogendoerfer <tsbogend@alpha.franken.de>,
+        linux-spi@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        devicetree@vger.kernel.org,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This patch makes additional GPIOs usable as chipselects for SPI.
-It is available for years on the linux-sunxi SPIdev page at
-http://linux-sunxi.org/SPIdev and probably is originally by the user
-"Mirko" there. I've tried unsuccessfully to contact the author.
-Note that contrary to what is stated on the page above, the bug doesn't
-have cosmetic implications only:
+Reviewed-by: Huacai Chen <chenhuacai@kernel.org>
 
-The SPI-Driver for the H2 Allwinner processor in the Linux kernel is
-supposed to support normal GPIOs as additional chipselects but fails to
-do so without the patch.
-
-For oscilloscope screenshots with/without the patch, see my blog post
-https://blog.runtux.com/posts/2019/04/18/
-or the discussion in the armbian forum at
-https://forum.armbian.com/topic/4330-spi-gpio-chip-select-support/
-(my logo there is a penguin).
-Please bear with me if I'm not following proper procedures, this is my
-first patch to the kernel in years.
-
-Thanks
-Ralf Schlatterbeck
-
-From 682ae1848b0df00cceb4c76486b971826b2737a9 Mon Sep 17 00:00:00 2001
-From: Ralf Schlatterbeck <rsc@runtux.com>
-Date: Thu, 11 Apr 2019 16:21:54 +0200
-Subject: [PATCH] Fix SPI Chipselect/Clock bug for sun6i
-Signed-off-by: Ralf Schlatterbeck <rsc@runtux.com>
-
-The current sun6i SPI implementation initializes the transfer too early,
-resulting in SCK going high before the transer. When using an additional
-(gpio) chipselect with sun6i, the chipselect is asserted at a time when
-clock is high, making the SPI transfer fail.  This patch from the sunxi
-spidev page http://linux-sunxi.org/SPIdev fixes this, without the patch
-no additional gpio chipselects can be used. The relevant code seems to
-be from the user "Mirko" of the linux-sunxi wiki page, I was unable to
-contact the original author.
----
- drivers/spi/spi-sun6i.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
-index 19238e1b76b4..9b292c6ade50 100644
---- a/drivers/spi/spi-sun6i.c
-+++ b/drivers/spi/spi-sun6i.c
-@@ -290,6 +290,10 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
- 	}
- 
- 	sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
-+	/* Finally enable the bus - doing so before might raise SCK to HIGH */
-+	sun6i_spi_write(sspi, SUN6I_GBL_CTL_REG,
-+			sun6i_spi_read(sspi, SUN6I_GBL_CTL_REG)
-+			| SUN6I_GBL_CTL_BUS_ENABLE);
- 
- 	/* Setup the transfer now... */
- 	if (sspi->tx_buf)
-@@ -398,7 +402,7 @@ static int sun6i_spi_runtime_resume(struct device *dev)
- 	}
- 
- 	sun6i_spi_write(sspi, SUN6I_GBL_CTL_REG,
--			SUN6I_GBL_CTL_BUS_ENABLE | SUN6I_GBL_CTL_MASTER | SUN6I_GBL_CTL_TP);
-+			SUN6I_GBL_CTL_MASTER | SUN6I_GBL_CTL_TP);
- 
- 	return 0;
- 
--- 
-2.20.1
--- 
-Dr. Ralf Schlatterbeck                  Tel:   +43/2243/26465-16
-Open Source Consulting                  www:   www.runtux.com
-Reichergasse 131, A-3411 Weidling       email: office@runtux.com
+On Sat, Dec 26, 2020 at 5:13 PM Qing Zhang <zhangqing@loongson.cn> wrote:
+>
+> Switch the DT binding to a YAML schema to enable the DT validation.
+>
+> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+> ---
+>
+> v4:
+>  - fix warnings/errors about running 'make dt_binding_check'
+>
+> v5:
+>  - remove num-chipelects
+>
+> ---
+>  .../devicetree/bindings/spi/loongson,spi-ls7a.yaml | 44 ++++++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml b/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
+> new file mode 100644
+> index 0000000..b90b28b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
+> @@ -0,0 +1,44 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/loongson,spi-ls7a.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson LS7A PCH SPI Controller
+> +
+> +maintainers:
+> +  - Qing Zhang <zhangqing@loongson.cn>
+> +
+> +description: |
+> +  This controller can be found in Loongson-3 systems with LS7A PCH.
+> +
+> +properties:
+> +  compatible:
+> +    const: loongson,ls7a-spi
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    pci {
+> +        #address-cells = <3>;
+> +        #size-cells = <2>;
+> +
+> +        spi@16,0 {
+> +            compatible = "pci0014,7a0b.0",
+> +                             "pci0014,7a0b",
+> +                             "pciclass088000",
+> +                             "pciclass0800";
+> +
+> +            reg = <0xb000 0x0 0x0 0x0 0x0>;
+> +        };
+> +    };
+> +
+> +...
+> --
+> 2.1.0
+>
