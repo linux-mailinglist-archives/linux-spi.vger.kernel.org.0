@@ -2,48 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1B32E6DD4
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Dec 2020 05:57:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FF72E6E4E
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Dec 2020 06:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726218AbgL2E5Z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Dec 2020 23:57:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55312 "EHLO mail.kernel.org"
+        id S1725967AbgL2FdA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 29 Dec 2020 00:33:00 -0500
+Received: from mga18.intel.com ([134.134.136.126]:18331 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726014AbgL2E5Y (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 28 Dec 2020 23:57:24 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 613D9207C5;
-        Tue, 29 Dec 2020 04:56:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609217804;
-        bh=Q5rcjBQ2c3CTE+U2GoSAaNQudmeRU3zHEDkW2H+WGgA=;
-        h=Subject:From:Date:To:From;
-        b=AeY+GgcwMGqNd2UrEzBxj/vTgqKjYPE9mAHe8qv6xrzuorSvwxo25PkXWsk0Obtq7
-         cXBPV3T02KuZjEeR71Hd6z5TTxPM8QWxoV+xb0f2Qvvm3+GuiTeaJs8Gl/ppD7WZZY
-         GYoD6QVnD4YgGI8ZNahf9u1Z7rW0c5wyeaUfjTv7PnhwJ9iBiLK/iSxV1YLS3KMHGh
-         uefjy9mJKo/y8YgzHommSnPOr/4INbcWSJG2YHxYFEDCMgOyd74EA2BNxP2dx059p0
-         siWAVmzfR0VibBJpaVqfRlNtwB0FskCvpFiCaNV3M3/MBsk3fk8pkLykBvUBqAXnu0
-         fYom6MrK/1qTQ==
-Received: from pdx-korg-docbuild-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-1.ci.codeaurora.org (Postfix) with ESMTP id 48E78600D9;
-        Tue, 29 Dec 2020 04:56:44 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <160921780423.8991.9506677216553492492.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 29 Dec 2020 04:56:44 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+        id S1725832AbgL2FdA (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 29 Dec 2020 00:33:00 -0500
+IronPort-SDR: IFSDHHKH4D47i/s64fh9tv3Zh11KTUGQSYwyjdCJWBgKaIAPbwYFoM9GyE7kHkMiZSYeAgO3jy
+ t0OmJV2qszlw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9848"; a="164170711"
+X-IronPort-AV: E=Sophos;i="5.78,457,1599548400"; 
+   d="scan'208";a="164170711"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2020 21:32:19 -0800
+IronPort-SDR: lacNd/9BuLT+r2v1mYTx6wdTVw3BvetJabXAOqHGiOBZGerSEbQsUMDhc+/jmfYp5V8Yw/I0g8
+ GpNrNsylZTGA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,457,1599548400"; 
+   d="scan'208";a="395307680"
+Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
+  by fmsmga002.fm.intel.com with ESMTP; 28 Dec 2020 21:32:16 -0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     broonie@kernel.org, linux-spi@vger.kernel.org
+Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
+        hao.wu@intel.com, matthew.gerlach@linux.intel.com,
+        russell.h.weight@intel.com, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] fix the issue when xfer by spi-altera
+Date:   Tue, 29 Dec 2020 13:27:40 +0800
+Message-Id: <1609219662-27057-1-git-send-email-yilun.xu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] spi: Fix regression when the SPI controller does not pass max_speed_hz (2020-12-29T04:04:50)
-  Superseding: [v1] spi: Fix regression when the SPI controller does not pass max_speed_hz (2020-12-28T19:32:50):
-    spi: Fix regression when the SPI controller does not pass max_speed_hz
+When doing spi xfer by spi-altera, divide by 0 exception happens in
+spi_transfer_wait(), This is because the xfer->speed_hz is always
+clamped to 0 by spi->controller->max_speed_hz, the feature is
+introduced in:
 
+commit 9326e4f1e5dd ("spi: Limit the spi device max speed to controller's max speed")
+
+The spi-altera doesn't have hardware indication for controller's
+max_speed_hz, so its value is uninitialized as 0.
+
+Patch #1 fixes the issue of spi_altera driver. When doing polling
+mode xfer, its transfer_one() callback should return 1, to indicate
+the xfer is finished. It should return 0 for irq mode xfer. With
+this patch the polling mode xfer is OK as it needs no
+spi_transfer_wait() anymore.
+
+But the irq mode xfer is still broken. So Patch #2 assumes 1khz xfer
+speed if the xfer->speed_hz is not assigned. I try to avoid the
+divide by 0 issue and ensures a reasonable tolerant waiting time in
+a generic way.
+
+Xu Yilun (2):
+  spi: altera: fix return value for altera_spi_txrx()
+  spi: fix the divide by 0 error when calculating xfer waiting time
+
+ drivers/spi/spi-altera.c | 26 ++++++++++++++------------
+ drivers/spi/spi.c        |  4 +++-
+ 2 files changed, 17 insertions(+), 13 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.7.4
 
