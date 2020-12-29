@@ -2,78 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 356D32E716A
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Dec 2020 15:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1EA2E7538
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Dec 2020 00:25:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726491AbgL2OeT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 29 Dec 2020 09:34:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57698 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726388AbgL2OeT (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 29 Dec 2020 09:34:19 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A60D720825;
-        Tue, 29 Dec 2020 14:33:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609252419;
-        bh=OM4yK2FWmzsUMhH7NnbeAd1mVNiGwmDdgVhLgqh66JY=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=rfsMvOxCxGJn4Rkpjxyzw430gzV2Szbm3dl+rI1zJ63q/f4HhXxkPzdpAGVhs/0aj
-         84MSPj7+Ff7fozUzlFMtqyb/69nUx+RNpQOpk09ixsNmF7BH75QA6p79fyjHmiKE4G
-         M/hi6imFtb5lFasZSPuQwTKB+CfwL1PlnnqQhSXe4vBBkhK+/nUGPgjLbKCQJjHwrJ
-         wTPJqFO4f3uQ4Grh1oNLQ5eM47t170f3p/GpdSEkyHslbPkAUz4p4j84OmQxn2nMi9
-         PtLUS0zkAAGU9f2IDiTTAwlFTibHGcnjX0ZDj3FCoqWbjfQkuFq2V7dqEU17AbbM1e
-         9ha1SmgSrgMiQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>
-Cc:     matthew.gerlach@linux.intel.com, linux-kernel@vger.kernel.org,
-        lgoncalv@redhat.com, trix@redhat.com, russell.h.weight@intel.com,
-        hao.wu@intel.com
-In-Reply-To: <1609219662-27057-1-git-send-email-yilun.xu@intel.com>
-References: <1609219662-27057-1-git-send-email-yilun.xu@intel.com>
-Subject: Re: (subset) [PATCH 0/2] fix the issue when xfer by spi-altera
-Message-Id: <160925239795.47982.14921180945738212657.b4-ty@kernel.org>
-Date:   Tue, 29 Dec 2020 14:33:17 +0000
+        id S1726190AbgL2XY6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 29 Dec 2020 18:24:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55838 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726161AbgL2XY6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Dec 2020 18:24:58 -0500
+Received: from yawp.biot.com (yawp.biot.com [IPv6:2a01:4f8:10a:8e::fce2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5590FC06179B
+        for <linux-spi@vger.kernel.org>; Tue, 29 Dec 2020 15:24:18 -0800 (PST)
+Received: from debian-spamd by yawp.biot.com with sa-checked (Exim 4.93)
+        (envelope-from <bert@biot.com>)
+        id 1kuOGq-00Acex-9h
+        for linux-spi@vger.kernel.org; Wed, 30 Dec 2020 00:19:16 +0100
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on yawp
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.4
+Received: from [2a02:578:460c:1:ae1f:6bff:fed1:9ca8] (helo=sumner.biot.com)
+        by yawp.biot.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <bert@biot.com>)
+        id 1kuOGg-00Acdi-5b; Wed, 30 Dec 2020 00:19:06 +0100
+Received: from bert by sumner.biot.com with local (Exim 4.93)
+        (envelope-from <bert@biot.com>)
+        id 1kuOGf-00Ajhn-Nc; Wed, 30 Dec 2020 00:19:05 +0100
+From:   Bert Vermeulen <bert@biot.com>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Bert Vermeulen <bert@biot.com>
+Subject: [PATCH RESEND v2 1/2] dt-bindings: spi: Realtek RTL838x/RTL839x SPI controller
+Date:   Wed, 30 Dec 2020 00:19:03 +0100
+Message-Id: <20201229231904.2558916-1-bert@biot.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 29 Dec 2020 13:27:40 +0800, Xu Yilun wrote:
-> When doing spi xfer by spi-altera, divide by 0 exception happens in
-> spi_transfer_wait(), This is because the xfer->speed_hz is always
-> clamped to 0 by spi->controller->max_speed_hz, the feature is
-> introduced in:
-> 
-> commit 9326e4f1e5dd ("spi: Limit the spi device max speed to controller's max speed")
-> 
-> [...]
+Signed-off-by: Bert Vermeulen <bert@biot.com>
+---
+(resent due to mail trouble)
 
-Applied to
+ .../devicetree/bindings/spi/realtek,spi.yaml  | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/realtek,spi.yaml
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+diff --git a/Documentation/devicetree/bindings/spi/realtek,spi.yaml b/Documentation/devicetree/bindings/spi/realtek,spi.yaml
+new file mode 100644
+index 000000000000..9831df6dc40d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/realtek,spi.yaml
+@@ -0,0 +1,36 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/realtek,spi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Realtek RTL838x/RTL839x SPI controller
++
++maintainers:
++  - Bert Vermeulen <bert@biot.com>
++  - Birger Koblitz <mail@birger-koblitz.de>
++
++allOf:
++  - $ref: "spi-controller.yaml#"
++
++properties:
++  compatible:
++    const: realtek,spi
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    spi: spi@1200 {
++        compatible = "realtek,spi";
++        reg = <0x1200 0x100>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++    };
+-- 
+2.25.1
 
-Thanks!
-
-[1/2] spi: altera: fix return value for altera_spi_txrx()
-      commit: ede090f5a438e97d0586f64067bbb956e30a2a31
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
