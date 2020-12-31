@@ -2,75 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8AD52E8034
-	for <lists+linux-spi@lfdr.de>; Thu, 31 Dec 2020 14:31:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 190E62E803A
+	for <lists+linux-spi@lfdr.de>; Thu, 31 Dec 2020 14:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726737AbgLaNbB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 31 Dec 2020 08:31:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40908 "EHLO mail.kernel.org"
+        id S1726352AbgLaNhq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 31 Dec 2020 08:37:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41478 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726686AbgLaNbB (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 31 Dec 2020 08:31:01 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8BC47223E8;
-        Thu, 31 Dec 2020 13:30:20 +0000 (UTC)
+        id S1726348AbgLaNhp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 31 Dec 2020 08:37:45 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A56C9223DB;
+        Thu, 31 Dec 2020 13:37:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609421421;
-        bh=1JDPYS3ihLPHyM4tLMRmn+UG7cyoF+sYLY0WHFFxA2I=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=bkj6IQzfOWKbbd7MtpMuuMvB1YlLN/LPYFB08zG280q1mCK782R5LfPNfmbIVLgTe
-         SgHHsJpmFYVGsKZrAygS+nkJpIh8lv2Xup3Cn0hhG57inQM6P5YHFqFgpLl2tycIW7
-         EMErk1+eemgm+1c9xSmYD4F3jkHiEMPOKYnoqeSRpTWsaRw96bw2e9YpeWdv/ZKUi9
-         OqGstcrk4HVRl1dYivUF4crWuCbjP4z+tz2NnDmWvFgR8OUbpcbu5GuWB9C/3Q729Z
-         rR6kb0HbEqNSGic3upP5WI4Ap8vnqBoCDr5qA4Q/0BYNxuC7L1yx6rIkzKI6VwctfL
-         WCC+7PKpe3j7w==
+        s=k20201202; t=1609421825;
+        bh=9oiIOqu0e3lAi2ckyUuiATWFM7DoY7Bz0/fXL+Gw6rg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uyXQ9a/ncvp/A8ZpnWMkNXGzp3TUTrjDxqCkDbH9hB3Gg2ZLM6bH3gL+3tLE338SD
+         gCgnFo3NGiU+rIzSOGEAN2jd1yZTxi4AnfKC0tEwe2CyPeJ4q5gsEs06+tVw6ov7QC
+         A+qHQp07loGekb2sKdSELqliJbmS+ibYJcOKK80tZ8NRRACzwEhHuT9p+fRduaccez
+         yr0AR95o1/+TcF6QdWA1NtoPS8MXsdIELfzdyZab/seO3VRWqocA47oc2ogxVFlmvY
+         oS+7oNuDFSgFe1GXjS72m16QJXQIRiQ+ImnFc2lg5JudT9yVdoCja6uB1wHbSgKm7/
+         6lFC2iDrW+71A==
+Date:   Thu, 31 Dec 2020 13:36:41 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     geert@linux-m68k.org, Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20201216092321.413262-1-tudor.ambarus@microchip.com>
-References: <20201216092321.413262-1-tudor.ambarus@microchip.com>
-Subject: Re: [PATCH] spi: Fix the clamping of spi->max_speed_hz
-Message-Id: <160942139227.56552.10180693102119888422.b4-ty@kernel.org>
-Date:   Thu, 31 Dec 2020 13:29:52 +0000
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     linux-spi@vger.kernel.org, trix@redhat.com, lgoncalv@redhat.com,
+        hao.wu@intel.com, matthew.gerlach@linux.intel.com,
+        russell.h.weight@intel.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] spi: fix the divide by 0 error when calculating xfer
+ waiting time
+Message-ID: <20201231133641.GB4720@sirena.org.uk>
+References: <1609219662-27057-1-git-send-email-yilun.xu@intel.com>
+ <1609219662-27057-3-git-send-email-yilun.xu@intel.com>
+ <20201229131308.GE4786@sirena.org.uk>
+ <20201230022420.GF14854@yilunxu-OptiPlex-7050>
+ <20201230134644.GE4428@sirena.org.uk>
+ <20201231032337.GA7980@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dTy3Mrz/UPE2dbVg"
+Content-Disposition: inline
+In-Reply-To: <20201231032337.GA7980@yilunxu-OptiPlex-7050>
+X-Cookie: May I ask a question?
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 16 Dec 2020 11:23:21 +0200, Tudor Ambarus wrote:
-> If spi->controller->max_speed_hz is zero, a non-zero spi->max_speed_hz
-> will be overwritten by zero. Make sure spi->controller->max_speed_hz
-> is not zero when clamping spi->max_speed_hz.
-> 
-> Put the spi->controller->max_speed_hz non-zero check higher in the if,
-> so that we avoid a superfluous init to zero when both spi->max_speed_hz
-> and spi->controller->max_speed_hz are zero.
 
-Applied to
+--dTy3Mrz/UPE2dbVg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+On Thu, Dec 31, 2020 at 11:23:37AM +0800, Xu Yilun wrote:
+> On Wed, Dec 30, 2020 at 01:46:44PM +0000, Mark Brown wrote:
 
-Thanks!
+> > > BTW, Could we keep the spi->max_speed_hz if no controller->max_speed_hz?
+> > > Always clamp the spi->max_speed_hz to 0 makes no sense.
 
-[1/1] spi: Fix the clamping of spi->max_speed_hz
-      commit: 6820e812dafb4258bc14692f686eec5bde6fba86
+> > Right, that's the fix.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+> Seems it still doesn't fix the case that neither controller nor client dev
+> provides the non-zero max_speed_hz. Do you think the patch is still
+> necessary?
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Right, something like this would help if we genuinely have no idea.  We
+probably shouldn't do it at validation stage which would be the other
+thing since it might cause us to realy hurt performance on systems which
+happen to have a sensible default in hardware but don't specify a
+maximum - we might set too low a default speed for the actual transfer.
+Please fix the coding style issue I mentioned and resubmit.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+--dTy3Mrz/UPE2dbVg
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Mark
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/t0+gACgkQJNaLcl1U
+h9DEJwf/crSGJ4AiCxml6EFFAQnO3u1C5ZGjO2DXeQzAVs6SSr1EFClRUfn7Xd9R
+lfHl+UjBZxqA/0l0xx5YhGiTWy5Pnux8S4PVmIaQDSVMx97zkXWWsc+fjfRw+B5w
+jVquYc0FkmtPJ6qYPWeqLBEkU8SqK/BLou/h9sW49KdSe7vo8aOT9DXjF6SvTBcM
+0eDH8ZVuSzT37vLk3FWB7DTKY5BrlW1Vn6NO1OBTu87Gax1/9UPpGl+midGrIR2i
+V73MV0bBPMHFv9RQBUS6PvECKB3xsZgp++/szdsdHVVA6HbUszoBDCTouGb+VKw3
+xcx1rDEaGFbf8zifGS7u6ZO7zE8S9A==
+=EwSW
+-----END PGP SIGNATURE-----
+
+--dTy3Mrz/UPE2dbVg--
