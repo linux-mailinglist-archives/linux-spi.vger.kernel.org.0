@@ -2,84 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A212E7D20
-	for <lists+linux-spi@lfdr.de>; Thu, 31 Dec 2020 00:18:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D882E7DDC
+	for <lists+linux-spi@lfdr.de>; Thu, 31 Dec 2020 04:29:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726323AbgL3XSI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 30 Dec 2020 18:18:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726277AbgL3XSG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Dec 2020 18:18:06 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3685C061573;
-        Wed, 30 Dec 2020 15:17:25 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id x2so16044468ybt.11;
-        Wed, 30 Dec 2020 15:17:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=z8q0Nh83KQJqdrU3Ti3YzSkwdpifTCJmR0XUgZguW3Q=;
-        b=WhUPBZY/x3x0VRC7PC223KPWQKbX6BbE2crEq/K7/wDpFGbvd1mfTTVKkg8p+aZdy3
-         yCjRUtxHVk1lpX7EvXsM2FNNGz6K48BKWiVP9j4gvaWUU4c68KzOaHllkB0lmzqZEqSa
-         jd7jfewbMlJIpxzRE3QgswTtksWV8L+62JLZ37W7Jjqf/88LM5e+R/2DHWEmQu8HsuwY
-         hzxCDcbSDWJgdA/T7Jt71Ky+ewCTi+uOKqvLzXZojQiNsOSHZj4Kq62qo7Dt3Lzy/EsV
-         WzSo0ADlVVkqA9B6K8VEkRajyebynpKybmJLjM0FOwVFf6Uraq8QwcjPrcGjbRzGSUOn
-         mBCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=z8q0Nh83KQJqdrU3Ti3YzSkwdpifTCJmR0XUgZguW3Q=;
-        b=LwlOjxwQXVtW8X2PQ1xGsExeIKIHXEdXxsR8iXTFRB6woyx7J92fX8VwZK7Zy2b0og
-         EkJcX1c0KI7iEaHEnpZvHv11Xsv79Oq4ZlCwoLyfT80teN8Klfwn7/bgxkx4oKGuNZRP
-         9cl4DQXaSKr+3onP9Gvgai+t6nyk+O5LGfhaunMwbbKnUrFi9CQwwKZXS0/oMGwc8ZaV
-         rSLK/DdFvtn28OvQbiQgx/SNHdk7USydUdc81HAbTvql+2k0WXDm04b2staC2VVx6RXn
-         62U3YdpXZ5UpTsylQQSYYqbZOZ4QKHKxDWQKt/nMm+igriDkLD/LRToOYVY9DAvpPJ2p
-         f9ng==
-X-Gm-Message-State: AOAM532wr0Peh8DEMkj7QsfDNea/ZecebpTkWy2bCOnyuANIL6CnDgFo
-        O4gVliKMaC+guWOftRkWBDxsFbBDv42WxYPhjG8=
-X-Google-Smtp-Source: ABdhPJzt7E5JtXHWlwqtDFR/KU2YqC8mMoZ4CNWFAOvMWUHN23R8bq4hIVK6SJSJr3P1SIeOOjM8uLv8MiM88Rmqm6k=
-X-Received: by 2002:a25:7c06:: with SMTP id x6mr16995551ybc.445.1609370244898;
- Wed, 30 Dec 2020 15:17:24 -0800 (PST)
+        id S1726524AbgLaD2z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 30 Dec 2020 22:28:55 -0500
+Received: from mga18.intel.com ([134.134.136.126]:55661 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726517AbgLaD2z (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 30 Dec 2020 22:28:55 -0500
+IronPort-SDR: fmiKhIlReQ1Xnn/rGvE3WWHIhcT/4IYf3+8qMcgbsFHOajvTAZiqyesas1dyjDST3QcNz3tDjr
+ bujcrYCebfmQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9850"; a="164375799"
+X-IronPort-AV: E=Sophos;i="5.78,462,1599548400"; 
+   d="scan'208";a="164375799"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2020 19:28:15 -0800
+IronPort-SDR: 4nEd9tuGFET2IJ17xLLLQk2AR5fGET0jtRv9hkcorEN37Rbx0woLwCABynHZk4y/aWyXhDzrTW
+ XzcLGdMl5ktQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,462,1599548400"; 
+   d="scan'208";a="419740778"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
+  by orsmga001.jf.intel.com with ESMTP; 30 Dec 2020 19:28:13 -0800
+Date:   Thu, 31 Dec 2020 11:23:37 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, trix@redhat.com, lgoncalv@redhat.com,
+        hao.wu@intel.com, matthew.gerlach@linux.intel.com,
+        russell.h.weight@intel.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] spi: fix the divide by 0 error when calculating xfer
+  waiting time
+Message-ID: <20201231032337.GA7980@yilunxu-OptiPlex-7050>
+References: <1609219662-27057-1-git-send-email-yilun.xu@intel.com>
+ <1609219662-27057-3-git-send-email-yilun.xu@intel.com>
+ <20201229131308.GE4786@sirena.org.uk>
+ <20201230022420.GF14854@yilunxu-OptiPlex-7050>
+ <20201230134644.GE4428@sirena.org.uk>
 MIME-Version: 1.0
-References: <20201230145708.28544-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20201230145708.28544-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <822dc356-4416-23a4-a460-90055dfd627a@gmail.com>
-In-Reply-To: <822dc356-4416-23a4-a460-90055dfd627a@gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 30 Dec 2020 23:16:58 +0000
-Message-ID: <CA+V-a8tOwOvYVRJj8Yf5U58DOfzwzY8XGZrYattLCPUFwG=cqQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] spi: rpc-if: Avoid use of C++ style comments
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jiri Kosina <trivial@kernel.org>, Pavel Machek <pavel@denx.de>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201230134644.GE4428@sirena.org.uk>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Sergei,
+On Wed, Dec 30, 2020 at 01:46:44PM +0000, Mark Brown wrote:
+> On Wed, Dec 30, 2020 at 10:24:20AM +0800, Xu Yilun wrote:
+> > On Tue, Dec 29, 2020 at 01:13:08PM +0000, Mark Brown wrote:
+> 
+> > > Does this still apply with current code?  There have been some fixes in
+> > > this area which I think should ensure that we don't turn the speed down
+> > > to 0 if the controller doesn't supply a limit IIRC.
+> 
+> > Yes, there is chance the speed is set to 0, some related code from 5.11-rc1
+> 
+> Please check the code in the SPI tree and -next.
 
-On Wed, Dec 30, 2020 at 4:27 PM Sergei Shtylyov
-<sergei.shtylyov@gmail.com> wrote:
->
-> On 12/30/20 5:57 PM, Lad Prabhakar wrote:
->
-> > Replace C++ style comment with C style.
->
->    Note that the switch to // was made following the SPI maintainer's request...
->
-Thanks for letting me know, let's drop this patch.
+I see the fix patches in maillist, thanks.
 
-Cheers,
-Prabhakar
+> 
+> > BTW, Could we keep the spi->max_speed_hz if no controller->max_speed_hz?
+> > Always clamp the spi->max_speed_hz to 0 makes no sense.
+> 
+> Right, that's the fix.
 
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> [...]
->
-> MBR, Sergei
+Seems it still doesn't fix the case that neither controller nor client dev
+provides the non-zero max_speed_hz. Do you think the patch is still
+necessary?
+
+Thanks,
+Yilun
