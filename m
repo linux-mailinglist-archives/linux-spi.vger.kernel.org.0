@@ -2,90 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 190E62E803A
-	for <lists+linux-spi@lfdr.de>; Thu, 31 Dec 2020 14:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E26EB2E8051
+	for <lists+linux-spi@lfdr.de>; Thu, 31 Dec 2020 15:24:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726352AbgLaNhq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 31 Dec 2020 08:37:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41478 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726348AbgLaNhp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 31 Dec 2020 08:37:45 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A56C9223DB;
-        Thu, 31 Dec 2020 13:37:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609421825;
-        bh=9oiIOqu0e3lAi2ckyUuiATWFM7DoY7Bz0/fXL+Gw6rg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uyXQ9a/ncvp/A8ZpnWMkNXGzp3TUTrjDxqCkDbH9hB3Gg2ZLM6bH3gL+3tLE338SD
-         gCgnFo3NGiU+rIzSOGEAN2jd1yZTxi4AnfKC0tEwe2CyPeJ4q5gsEs06+tVw6ov7QC
-         A+qHQp07loGekb2sKdSELqliJbmS+ibYJcOKK80tZ8NRRACzwEhHuT9p+fRduaccez
-         yr0AR95o1/+TcF6QdWA1NtoPS8MXsdIELfzdyZab/seO3VRWqocA47oc2ogxVFlmvY
-         oS+7oNuDFSgFe1GXjS72m16QJXQIRiQ+ImnFc2lg5JudT9yVdoCja6uB1wHbSgKm7/
-         6lFC2iDrW+71A==
-Date:   Thu, 31 Dec 2020 13:36:41 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     linux-spi@vger.kernel.org, trix@redhat.com, lgoncalv@redhat.com,
-        hao.wu@intel.com, matthew.gerlach@linux.intel.com,
-        russell.h.weight@intel.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] spi: fix the divide by 0 error when calculating xfer
- waiting time
-Message-ID: <20201231133641.GB4720@sirena.org.uk>
-References: <1609219662-27057-1-git-send-email-yilun.xu@intel.com>
- <1609219662-27057-3-git-send-email-yilun.xu@intel.com>
- <20201229131308.GE4786@sirena.org.uk>
- <20201230022420.GF14854@yilunxu-OptiPlex-7050>
- <20201230134644.GE4428@sirena.org.uk>
- <20201231032337.GA7980@yilunxu-OptiPlex-7050>
+        id S1726219AbgLaOYD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 31 Dec 2020 09:24:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46996 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726071AbgLaOYC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 31 Dec 2020 09:24:02 -0500
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F26CC061573;
+        Thu, 31 Dec 2020 06:23:22 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id C39C830000899;
+        Thu, 31 Dec 2020 15:23:19 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id B1FD74EA00; Thu, 31 Dec 2020 15:23:19 +0100 (CET)
+Date:   Thu, 31 Dec 2020 15:23:19 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Bert Vermeulen <bert@biot.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v2 2/2] Add support for Realtek RTL838x/RTL839x
+ SoC SPI controllers
+Message-ID: <20201231142319.GA28104@wunner.de>
+References: <20201229231904.2558916-1-bert@biot.com>
+ <20201229231904.2558916-2-bert@biot.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dTy3Mrz/UPE2dbVg"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201231032337.GA7980@yilunxu-OptiPlex-7050>
-X-Cookie: May I ask a question?
+In-Reply-To: <20201229231904.2558916-2-bert@biot.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, Dec 30, 2020 at 12:19:04AM +0100, Bert Vermeulen wrote:
+> +static inline void wait_ready(struct rtspi *rtspi)
+> +{
+> +	while (!(readl(REG(RTL8380_SPI_SFCSR)) & RTL8380_SPI_SFCSR_RDY))
+> +		;
+> +}
 
---dTy3Mrz/UPE2dbVg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I'd suggest calling cpu_relax() in the loop's body.
 
-On Thu, Dec 31, 2020 at 11:23:37AM +0800, Xu Yilun wrote:
-> On Wed, Dec 30, 2020 at 01:46:44PM +0000, Mark Brown wrote:
 
-> > > BTW, Could we keep the spi->max_speed_hz if no controller->max_speed_hz?
-> > > Always clamp the spi->max_speed_hz to 0 makes no sense.
+> +	err = devm_spi_register_controller(&pdev->dev, ctrl);
 
-> > Right, that's the fix.
+Since you're invoking devm_spi_register_controller() on probe,
+the controller must not be unregistered explicitly on remove.
+So the ->remove hook can be dropped altogether:
 
-> Seems it still doesn't fix the case that neither controller nor client dev
-> provides the non-zero max_speed_hz. Do you think the patch is still
-> necessary?
+> +static int realtek_spi_remove(struct platform_device *pdev)
+> +{
+> +	struct spi_controller *ctrl = platform_get_drvdata(pdev);
+> +
+> +	spi_unregister_controller(ctrl);
+> +
+> +	return 0;
+> +}
+[...]
+> +	.remove = realtek_spi_remove,
 
-Right, something like this would help if we genuinely have no idea.  We
-probably shouldn't do it at validation stage which would be the other
-thing since it might cause us to realy hurt performance on systems which
-happen to have a sensible default in hardware but don't specify a
-maximum - we might set too low a default speed for the actual transfer.
-Please fix the coding style issue I mentioned and resubmit.
+The ->probe hook otherwise LGTM.
 
---dTy3Mrz/UPE2dbVg
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks,
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/t0+gACgkQJNaLcl1U
-h9DEJwf/crSGJ4AiCxml6EFFAQnO3u1C5ZGjO2DXeQzAVs6SSr1EFClRUfn7Xd9R
-lfHl+UjBZxqA/0l0xx5YhGiTWy5Pnux8S4PVmIaQDSVMx97zkXWWsc+fjfRw+B5w
-jVquYc0FkmtPJ6qYPWeqLBEkU8SqK/BLou/h9sW49KdSe7vo8aOT9DXjF6SvTBcM
-0eDH8ZVuSzT37vLk3FWB7DTKY5BrlW1Vn6NO1OBTu87Gax1/9UPpGl+midGrIR2i
-V73MV0bBPMHFv9RQBUS6PvECKB3xsZgp++/szdsdHVVA6HbUszoBDCTouGb+VKw3
-xcx1rDEaGFbf8zifGS7u6ZO7zE8S9A==
-=EwSW
------END PGP SIGNATURE-----
-
---dTy3Mrz/UPE2dbVg--
+Lukas
