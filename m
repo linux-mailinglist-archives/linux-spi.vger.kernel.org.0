@@ -2,50 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2332E845A
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Jan 2021 17:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 417052E8460
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Jan 2021 17:58:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727402AbhAAQ46 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 1 Jan 2021 11:56:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
+        id S1727433AbhAAQ5K (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 1 Jan 2021 11:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727119AbhAAQ45 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Jan 2021 11:56:57 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0495FC0613C1;
-        Fri,  1 Jan 2021 08:56:17 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id i7so14724944pgc.8;
-        Fri, 01 Jan 2021 08:56:16 -0800 (PST)
+        with ESMTP id S1727119AbhAAQ5J (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Jan 2021 11:57:09 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9B4C061573;
+        Fri,  1 Jan 2021 08:56:29 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id hk16so6763387pjb.4;
+        Fri, 01 Jan 2021 08:56:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=3tAUeVcIKsbnNHgonKad43l224e/4lHHdw2qIBrPq38=;
-        b=FfK3KI96FFLjhzCZlFkiXR4NyaB4Q3hZrnhhwZxakVzjd9BwzCGaRpPqZv6oNDgVez
-         AzpTXNaYLpi1zc7Og4G3mKtUvpsBvnJSnmXLLDblxCrHjGhhkfHk8QqHMs6YCE4OQDvs
-         kkd5jxI1ZPv6vYGHG1nu8JkgsFUHoR8FDLozuAa4ilv6gRd3wyg/ZiiSN07zcOdli84A
-         v1wCExU4grKxuY2R1Y0iHskae3irQznyKqa86crMVzDabGs8V/5ykCd0gLlCe2VGOMdz
-         OYRkcTkAkhElq4zu0DQdfN9V+NrBDVg1vetM6iVLyM55o6oeUAkOXL7M4ruuyLg6nDWq
-         NRZQ==
+        bh=ulQjK7kE8S67z3HibvwlRCmu1V05Rz1A1b3NTvlFpsA=;
+        b=d37hsCjlIJM9PnHPvhDM8Aa1Yf1xLR++dqxOkxOD9FIdmzwWkxif7cz9rkA9Flnsk7
+         1xROyWnwh/glGfukWFhv6bF4yfFTgc4QT2gsWn0/pn8jj3Xkhnj636so0I9Bh/Nn6+Go
+         3iyEM96c1dC12FDDOYZJ6DIxBPiVFZoWF02+XhyPM/Pgxux579V/J9jfWKsgaZIxlGZ1
+         Aq1gv4RSFHr6q3+fsZR1Y3WjRXW6ayXVqg3FjRyG8Von4nnhB6QyMQRC4PmM/rpypECr
+         3k3+NI+o19zonId5ZjisleYBBN1DSQFwCIvWh60K3MxWCExqz1ti54jz6kLxmefZgYhL
+         a0Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=3tAUeVcIKsbnNHgonKad43l224e/4lHHdw2qIBrPq38=;
-        b=lHf0CkiQm2JSIizTqjiHMz/xpSaktD0CKRKabPe/WxcBUeWAIp6G82AN0SSbsR7I9k
-         EFBzcu6HnggzB8wYmms/DioKA2EU+9lRqkWqKCjP6Z78zM+7vhcIRJ3JmBqEkSGKAlsw
-         JtuHLNX8wTLUdJRHx4szHuykJUDoAPoQezMlpDGNySkZyvvBbEWKlFL+9gC2OC3XVnTe
-         WUAMD9d9Iz999Dmy5uWAxmyTKlcqXcYpU/88vz3A8ItmpMem1J7/cy7pP8nMILrozcQa
-         wvTCNH8896bfdIQzrMiO07TJLPGE4+NdIf/8pQKW2jtfEATH4woOuufr7ccZD27Z5tci
-         2HMA==
-X-Gm-Message-State: AOAM530eVKy6c/4mAVG7mYdc2gQR3aNidQvvgo0MN1dhk6G0JNbVATSv
-        hgctrEdonE5yDDdHPgBfUJo=
-X-Google-Smtp-Source: ABdhPJzfaJQaJwc5acHIqB/Y6TtZUJCofjXaLupMrsM/ldtJkO+4jA7SGw1u8nZFUn4jpc80sgpgbA==
-X-Received: by 2002:aa7:954c:0:b029:1a6:2130:db4f with SMTP id w12-20020aa7954c0000b02901a62130db4fmr56000791pfq.68.1609520176448;
-        Fri, 01 Jan 2021 08:56:16 -0800 (PST)
+        bh=ulQjK7kE8S67z3HibvwlRCmu1V05Rz1A1b3NTvlFpsA=;
+        b=PBzTX8RdI9sMTRSOxegIjPKvqUSXokADX1h7NHJwh3oxb8YPJgnOC45JX4AthE9YGv
+         dkbSKHXiYXfJ8lMH3lXMxLCS/1YsjACtkGfZ8YmLJqazWAIWVItNEUJctHwanjLsfwjT
+         LU+wbx2X2vFRdnbQLNzWps/8jUUhgIoVQIC+LF7y9ImWLW/NcznD3Jii1dMFwzPYWy2/
+         5GM7NUaoRHznzLG3/UAFdSLb44iU/yPZrD424vqXi45nUThp0BJtbUCjECqd92LBElYF
+         tTfy4BbExJT55TcrW+zhaSg+vN+FdiFKuqFL5LkxMdqTGQWSKMxI9K/APiV3B72SLFkp
+         VdoQ==
+X-Gm-Message-State: AOAM532cQDuGU2M719JjSpcB10eo4aO9Y1C0HIo12LcI3jSxJqgsnnzU
+        s0p+NfBXbMZx32O4m900+lI=
+X-Google-Smtp-Source: ABdhPJyHf7+sjNLEXdYcgzxEZu7mqhbeD6IKkSjgZZ/shmnq8zr/pyFYG91Cl9w3jRu6JPR+Ddm+pQ==
+X-Received: by 2002:a17:90a:5501:: with SMTP id b1mr18014940pji.7.1609520188919;
+        Fri, 01 Jan 2021 08:56:28 -0800 (PST)
 Received: from localhost.localdomain ([43.255.31.23])
-        by smtp.gmail.com with ESMTPSA id 84sm50002729pfy.9.2021.01.01.08.56.04
+        by smtp.gmail.com with ESMTPSA id 84sm50002729pfy.9.2021.01.01.08.56.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jan 2021 08:56:15 -0800 (PST)
+        Fri, 01 Jan 2021 08:56:28 -0800 (PST)
 From:   Yangtao Li <tiny.windzz@gmail.com>
 To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
         cw00.choi@samsung.com, krzk@kernel.org, shawnguo@kernel.org,
@@ -82,9 +82,9 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH 03/31] opp: Add devres wrapper for dev_pm_opp_set_supported_hw
-Date:   Fri,  1 Jan 2021 16:54:39 +0000
-Message-Id: <20210101165507.19486-4-tiny.windzz@gmail.com>
+Subject: [PATCH 04/31] opp: Add devres wrapper for dev_pm_opp_of_add_table
+Date:   Fri,  1 Jan 2021 16:54:40 +0000
+Message-Id: <20210101165507.19486-5-tiny.windzz@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210101165507.19486-1-tiny.windzz@gmail.com>
 References: <20210101165507.19486-1-tiny.windzz@gmail.com>
@@ -92,90 +92,86 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add devres wrapper for dev_pm_opp_set_supported_hw() to simplify driver
+Add devres wrapper for dev_pm_opp_of_add_table() to simplify driver
 code.
 
 Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 ---
- drivers/opp/core.c     | 38 ++++++++++++++++++++++++++++++++++++++
- include/linux/pm_opp.h |  8 ++++++++
- 2 files changed, 46 insertions(+)
+ drivers/opp/of.c       | 36 ++++++++++++++++++++++++++++++++++++
+ include/linux/pm_opp.h |  6 ++++++
+ 2 files changed, 42 insertions(+)
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 8709689a7152..6b83e373f0d8 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1674,6 +1674,44 @@ void dev_pm_opp_put_supported_hw(struct opp_table *opp_table)
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 03cb387236c4..50df483c7dc3 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -998,6 +998,42 @@ int dev_pm_opp_of_add_table(struct device *dev)
  }
- EXPORT_SYMBOL_GPL(dev_pm_opp_put_supported_hw);
+ EXPORT_SYMBOL_GPL(dev_pm_opp_of_add_table);
  
-+static void devm_pm_opp_supported_hw_release(void *data)
++static void devm_pm_opp_of_table_release(void *data)
 +{
-+	dev_pm_opp_put_supported_hw(data);
++	dev_pm_opp_of_remove_table(data);
 +}
 +
 +/**
-+ * devm_pm_opp_set_supported_hw() - Set supported platforms
-+ * @dev: Device for which supported-hw has to be set.
-+ * @versions: Array of hierarchy of versions to match.
-+ * @count: Number of elements in the array.
++ * devm_pm_opp_of_add_table() - Initialize opp table from device tree
++ * @dev:	device pointer used to lookup OPP table.
 + *
-+ * This is required only for the V2 bindings, and it enables a platform to
-+ * specify the hierarchy of versions it supports. OPP layer will then enable
-+ * OPPs, which are available for those versions, based on its 'opp-supported-hw'
-+ * property.
++ * Register the initial OPP table with the OPP library for given device.
 + *
 + * The opp_table structure will be freed after the device is destroyed.
++ *
++ * Return:
++ * 0		On success OR
++ *		Duplicate OPPs (both freq and volt are same) and opp->available
++ * -EEXIST	Freq are same and volt are different OR
++ *		Duplicate OPPs (both freq and volt are same) and !opp->available
++ * -ENOMEM	Memory allocation failure
++ * -ENODEV	when 'operating-points' property is not found or is invalid data
++ *		in device node.
++ * -ENODATA	when empty 'operating-points' property is found
++ * -EINVAL	when invalid entries are found in opp-v2 table
 + */
-+struct opp_table *devm_pm_opp_set_supported_hw(struct device *dev,
-+					       const u32 *versions,
-+					       unsigned int count)
++int devm_pm_opp_of_add_table(struct device *dev)
 +{
-+	struct opp_table *opp_table;
-+	int err;
++	int ret;
 +
-+	opp_table = dev_pm_opp_set_supported_hw(dev, versions, count);
-+	if (IS_ERR(opp_table))
-+		return opp_table;
++	ret = dev_pm_opp_of_add_table(dev);
++	if (ret)
++		return ret;
 +
-+	err = devm_add_action_or_reset(dev, devm_pm_opp_supported_hw_release,
-+				       opp_table);
-+	if (err)
-+		opp_table = ERR_PTR(err);
-+
-+	return opp_table;
++	return devm_add_action_or_reset(dev, devm_pm_opp_of_table_release, dev);
 +}
-+EXPORT_SYMBOL_GPL(devm_pm_opp_set_supported_hw);
++EXPORT_SYMBOL_GPL(devm_pm_opp_of_add_table);
 +
  /**
-  * dev_pm_opp_set_prop_name() - Set prop-extn name
-  * @dev: Device for which the prop-name has to be set.
+  * dev_pm_opp_of_add_table_indexed() - Initialize indexed opp table from device tree
+  * @dev:	device pointer used to lookup OPP table.
 diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-index 8a329247e08e..e5260fc82ba1 100644
+index e5260fc82ba1..e8bdac5f9555 100644
 --- a/include/linux/pm_opp.h
 +++ b/include/linux/pm_opp.h
-@@ -139,6 +139,7 @@ int dev_pm_opp_unregister_notifier(struct device *dev, struct notifier_block *nb
+@@ -398,6 +398,7 @@ static inline void dev_pm_opp_cpumask_remove_table(const struct cpumask *cpumask
+ int dev_pm_opp_of_add_table(struct device *dev);
+ int dev_pm_opp_of_add_table_indexed(struct device *dev, int index);
+ void dev_pm_opp_of_remove_table(struct device *dev);
++int devm_pm_opp_of_add_table(struct device *dev);
+ int dev_pm_opp_of_cpumask_add_table(const struct cpumask *cpumask);
+ void dev_pm_opp_of_cpumask_remove_table(const struct cpumask *cpumask);
+ int dev_pm_opp_of_get_sharing_cpus(struct device *cpu_dev, struct cpumask *cpumask);
+@@ -425,6 +426,11 @@ static inline void dev_pm_opp_of_remove_table(struct device *dev)
+ {
+ }
  
- struct opp_table *dev_pm_opp_set_supported_hw(struct device *dev, const u32 *versions, unsigned int count);
- void dev_pm_opp_put_supported_hw(struct opp_table *opp_table);
-+struct opp_table *devm_pm_opp_set_supported_hw(struct device *dev, const u32 *versions, unsigned int count);
- struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, const char *name);
- void dev_pm_opp_put_prop_name(struct opp_table *opp_table);
- struct opp_table *dev_pm_opp_set_regulators(struct device *dev, const char * const names[], unsigned int count);
-@@ -301,6 +302,13 @@ static inline struct opp_table *dev_pm_opp_set_supported_hw(struct device *dev,
- 
- static inline void dev_pm_opp_put_supported_hw(struct opp_table *opp_table) {}
- 
-+static inline struct opp_table *devm_pm_opp_set_supported_hw(struct device *dev,
-+							    const u32 *versions,
-+							    unsigned int count)
++static inline int devm_pm_opp_of_add_table(struct device *dev)
 +{
-+	return ERR_PTR(-ENOTSUPP);
++	return -ENOTSUPP;
 +}
 +
- static inline struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev,
- 			int (*set_opp)(struct dev_pm_set_opp_data *data))
+ static inline int dev_pm_opp_of_cpumask_add_table(const struct cpumask *cpumask)
  {
+ 	return -ENOTSUPP;
 -- 
 2.25.1
 
