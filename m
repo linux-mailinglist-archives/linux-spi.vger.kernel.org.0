@@ -2,75 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4DD72E81A1
-	for <lists+linux-spi@lfdr.de>; Thu, 31 Dec 2020 19:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C3A2E838D
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Jan 2021 12:30:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726641AbgLaSem (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 31 Dec 2020 13:34:42 -0500
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:34204 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726606AbgLaSem (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 31 Dec 2020 13:34:42 -0500
-Received: by mail-oi1-f170.google.com with SMTP id s75so22581336oih.1;
-        Thu, 31 Dec 2020 10:34:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MK9jvU5T0a1F8Z3yYz4MVsd9Im04HOuhBeQZHz3+74k=;
-        b=VyIjriE0xCvZ9WqWgsxcz9NUqLBQ6SlalIi3UGNnEH3JS9P8FI2/AEev4svx+URxsD
-         3Du1CYhcb4yyYwzKiM0u8aQS0cDWeXWC48Sv3y62WmMQhCD2xEVAboMoRuNXbk6UE85L
-         ql6YCTcCDd+8Rc8bFm4lXJl5re10MN2fEjm3QeJ7Z9sOSSGpUuWAAWvjuSO0cnk73nq0
-         GzfguNRThMd/qitV2Kj8PeNK9ZeRofrDMk4CY1lIzZMSHTkaYEMVsE8M8jMYFpyV0CAZ
-         ObJWbj2CiwQaegszzrK2yY+LA3h40dXCIXw5HDZ+05FIj6k2FsCnGM1MJGIQ9jMCNt+B
-         Ldkw==
-X-Gm-Message-State: AOAM53089UlvERat5fays4G9qzSRzSA5iMv92vx8Itbrvv34Ir74NCX2
-        3NIRaQxjYnv56XxFDwBXAA==
-X-Google-Smtp-Source: ABdhPJzNofcyoenZ3rFYiWkQqrq9Ao9OW2jxP+9TNZPxAR/jbffWTqlpqhPrO4Pi33AiFUHcZ3W+Jg==
-X-Received: by 2002:aca:fcd7:: with SMTP id a206mr8527220oii.134.1609439641451;
-        Thu, 31 Dec 2020 10:34:01 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id i25sm11241585oto.56.2020.12.31.10.33.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Dec 2020 10:34:00 -0800 (PST)
-Received: (nullmailer pid 2112255 invoked by uid 1000);
-        Thu, 31 Dec 2020 18:33:57 -0000
-Date:   Thu, 31 Dec 2020 11:33:57 -0700
-From:   Rob Herring <robh@kernel.org>
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, lukas@wunner.de, bbrezillon@kernel.org,
-        p.yadav@ti.com, linux-tegra@vger.kernel.org, broonie@kernel.org,
-        tudor.ambarus@microchip.com, devicetree@vger.kernel.org,
-        jonathanh@nvidia.com, thierry.reding@gmail.com
-Subject: Re: [PATCH v5 2/9] dt-bindings: spi: Add Tegra Quad SPI device tree
- binding
-Message-ID: <20201231183357.GA2112085@robh.at.kernel.org>
-References: <1608585459-17250-1-git-send-email-skomatineni@nvidia.com>
- <1608585459-17250-3-git-send-email-skomatineni@nvidia.com>
+        id S1727057AbhAAL2c (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 1 Jan 2021 06:28:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727052AbhAAL23 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Jan 2021 06:28:29 -0500
+Received: from yawp.biot.com (yawp.biot.com [IPv6:2a01:4f8:10a:8e::fce2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10138C061757
+        for <linux-spi@vger.kernel.org>; Fri,  1 Jan 2021 03:27:49 -0800 (PST)
+Received: from debian-spamd by yawp.biot.com with sa-checked (Exim 4.93)
+        (envelope-from <bert@biot.com>)
+        id 1kvIax-00B5KF-D4
+        for linux-spi@vger.kernel.org; Fri, 01 Jan 2021 12:27:47 +0100
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on yawp
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.4
+Received: from [2a02:578:460c:1:ae1f:6bff:fed1:9ca8]
+        by yawp.biot.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <bert@biot.com>)
+        id 1kvIas-00B5Js-4P; Fri, 01 Jan 2021 12:27:42 +0100
+Subject: Re: [PATCH RESEND v2 2/2] Add support for Realtek RTL838x/RTL839x SoC
+ SPI controllers
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20201229231904.2558916-1-bert@biot.com>
+ <20201229231904.2558916-2-bert@biot.com> <20201231142319.GA28104@wunner.de>
+From:   Bert Vermeulen <bert@biot.com>
+Message-ID: <e9870e2f-d16c-3ed7-d672-7baa9a5e278c@biot.com>
+Date:   Fri, 1 Jan 2021 12:27:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1608585459-17250-3-git-send-email-skomatineni@nvidia.com>
+In-Reply-To: <20201231142319.GA28104@wunner.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 21 Dec 2020 13:17:32 -0800, Sowjanya Komatineni wrote:
-> This patch adds YAML based device tree binding document for Tegra
-> Quad SPI driver.
+On 12/31/20 3:23 PM, Lukas Wunner wrote:
+> On Wed, Dec 30, 2020 at 12:19:04AM +0100, Bert Vermeulen wrote:
+>> +static inline void wait_ready(struct rtspi *rtspi)
+>> +{
+>> +	while (!(readl(REG(RTL8380_SPI_SFCSR)) & RTL8380_SPI_SFCSR_RDY))
+>> +		;
+>> +}
 > 
-> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
-> ---
->  .../bindings/spi/nvidia,tegra210-quad.yaml         | 117 +++++++++++++++++++++
->  1 file changed, 117 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
+> I'd suggest calling cpu_relax() in the loop's body.
 > 
+> 
+>> +	err = devm_spi_register_controller(&pdev->dev, ctrl);
+> 
+> Since you're invoking devm_spi_register_controller() on probe,
+> the controller must not be unregistered explicitly on remove.
+> So the ->remove hook can be dropped altogether:
+> 
+>> +static int realtek_spi_remove(struct platform_device *pdev)
+>> +{
+>> +	struct spi_controller *ctrl = platform_get_drvdata(pdev);
+>> +
+>> +	spi_unregister_controller(ctrl);
+>> +
+>> +	return 0;
+>> +}
+> [...]
+>> +	.remove = realtek_spi_remove,
+> 
+> The ->probe hook otherwise LGTM.
+
+Thanks Lukas, will fix those issues.
 
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
-
-If a tag was not added on purpose, please state why and what changed.
-
+-- 
+Bert Vermeulen
+bert@biot.com
