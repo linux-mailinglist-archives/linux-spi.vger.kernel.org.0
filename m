@@ -2,50 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8242E8507
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Jan 2021 18:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95FED2E8510
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Jan 2021 18:01:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727937AbhAARAz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 1 Jan 2021 12:00:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
+        id S1727310AbhAARBI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 1 Jan 2021 12:01:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727929AbhAARAy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Jan 2021 12:00:54 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3BAC061757;
-        Fri,  1 Jan 2021 09:00:13 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id y8so11250880plp.8;
-        Fri, 01 Jan 2021 09:00:13 -0800 (PST)
+        with ESMTP id S1727119AbhAARBH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Jan 2021 12:01:07 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5464C0613C1;
+        Fri,  1 Jan 2021 09:00:26 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id f14so6290365pju.4;
+        Fri, 01 Jan 2021 09:00:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Esa4NiAtIZhtLWaWjJVhH3nVuZJ3eKXT+OiaiAMEdVc=;
-        b=qlYytcJ/2MzwOV3LwrxaUFba/mYHC8CDBvxWd6lCkIkLlNH2mWUlKy84RDYOyqc31F
-         feDOz7mxtwpZ8c+n4J7yHPUmEJscYGljtNpQWCyU/42ErQjS4h3r7u7WizYlfNyAqSh0
-         HvkrQu7Egge2vU+w97NYle6WTOXuMkTV+bZ2U0c8ZGLof78QQHx49rc96OqBlstiLIgK
-         OfHyKjExDM7ggqTdyGEs1fwAQxKfZRA/34C0Jkxk564+5S48gAmeuvzwmAQTjho2gQwh
-         FlPiuRRvnqA4SkHgM/vAGL1u7cO9vpwSTZ4upa15WNR6gzeFbwCpqoCY2Ve/oXbHLcB/
-         QLKg==
+        bh=v2+TLusBTUAkCwnVOgtXWni7Et/Yf7vXjE1+hsx5ZzU=;
+        b=EX0OcKQpOXnzIRVe8wS4dyV6/9iw4J4GOJklKxVuY2Swsy+JGLGDJrw7W7VF8dRKH4
+         6Pklp2ygY8zH0utPLUcfY03nuzzpd13KO5KU9kJoao5nX1TkoQyDCYYhfLiolmeXPjhu
+         fojBaAdxdqpzDHp/ndl+CSe13lK/qByA3/O2NJCtcIbg0diztt7IH0Nsr/xePjKENQ2k
+         c5JWhqxLn0S9u3tJrZ7H469ZdE8gFMrmpf99NSca3H7PwWUSponNsno53N4/FpTBHylK
+         SRr0tNT42xjJjA0M9/NHZcQgcINOkkErcxWUPwg42oqUuPiE07eHI93J3FNaeCvGJjFa
+         bKVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=Esa4NiAtIZhtLWaWjJVhH3nVuZJ3eKXT+OiaiAMEdVc=;
-        b=t6V1nSNanqfjhsW1yxyYnOFvD0Q66YlkDh1WMSrizpxG4Ho8ZPniIv00uKml0gT1ff
-         fYsKJmdJ6cKCOUFgkutGjA9pEmz77/SJZ2wpbjFqD+PQnoFMs+wpSHofj10V45FTkgqV
-         5wZyIxq3ZOZHSc4pVQqfQJgmwMdvNAdpW2dP5UR96mNUoE2AtvfGlhxJxuHjAxgFQODP
-         LIu5kshYoHKuaX4skuHd7lhjbKvcUMZf1lfrzEIOo1IxoS88BpcHIbzG3GSB9TGRVtew
-         DpB2epaEAgAbEh9/rrFcRBW26Ocr8uiVHgv6FBKR4KeCKPolg5u387nGrMM92XLuVk0h
-         FK1w==
-X-Gm-Message-State: AOAM5307DASVezCa4SkhatPSLM/B5LcrvDV7vA+G9gMcvhzkF7IhZKGm
-        dUhRiye1uMTTMRsXI9+k+EU=
-X-Google-Smtp-Source: ABdhPJz6W2sQQ064VIhfp96RrbKHlDA3l3zB9C+asJD6z4ULlLYD2v0/5Cn/Jk4MSEeNZvNrJlXsqw==
-X-Received: by 2002:a17:90a:a45:: with SMTP id o63mr18750005pjo.146.1609520413583;
-        Fri, 01 Jan 2021 09:00:13 -0800 (PST)
+        bh=v2+TLusBTUAkCwnVOgtXWni7Et/Yf7vXjE1+hsx5ZzU=;
+        b=s7N2jPh6JDP4wFnJJA+jvZ5+HzRcuo1G2UHCeyr9ICuH7Bu9zV4fY0St0fTgUCGzWU
+         +WggJMzQGohNonkYdUJpVI95rvbc9HZtqS3g7CP+KgZ4cPbuZLplAvBunPQvwOvVbzNk
+         w7tbwqCWj6Bez6OPfFsRTVUiUVwdv3oK2FHLc31ATShV6ATUjL9mSNRMjqoESok8ppHA
+         kwwCTBehHbsi6lkBHviRFkyyG04vLrtnj6MBgxI2sxdE1RvCXWdpP9XmUP72ZuPQFpxy
+         OBPKriZropUUzKaW7hFJOKDzkxGbHgrZTFaeZDMesku3v+4/mFIsU6IYOg+SVIko+OiD
+         GiWQ==
+X-Gm-Message-State: AOAM531xm4pmzjwFkbUdy45YVZMSjAJcQK6C7aLdpe31R+MRWl24vBrM
+        48rRmjwTuUucW/S5d+Yks0w=
+X-Google-Smtp-Source: ABdhPJy7PrQB1FjN4FKGKenm0RoL4HL0rwa3UBT4fLvIdB/kvaM8JvdYCMxhiT8dThkTf6l+zrQNng==
+X-Received: by 2002:a17:902:599d:b029:da:fcfd:7088 with SMTP id p29-20020a170902599db02900dafcfd7088mr61666853pli.68.1609520426227;
+        Fri, 01 Jan 2021 09:00:26 -0800 (PST)
 Received: from localhost.localdomain ([43.255.31.23])
-        by smtp.gmail.com with ESMTPSA id 84sm50002729pfy.9.2021.01.01.09.00.01
+        by smtp.gmail.com with ESMTPSA id 84sm50002729pfy.9.2021.01.01.09.00.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jan 2021 09:00:12 -0800 (PST)
+        Fri, 01 Jan 2021 09:00:25 -0800 (PST)
 From:   Yangtao Li <tiny.windzz@gmail.com>
 To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
         cw00.choi@samsung.com, krzk@kernel.org, shawnguo@kernel.org,
@@ -82,9 +82,9 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH 22/31] memory: samsung: exynos5422-dmc: fix return error in exynos5_init_freq_table
-Date:   Fri,  1 Jan 2021 16:54:58 +0000
-Message-Id: <20210101165507.19486-23-tiny.windzz@gmail.com>
+Subject: [PATCH 23/31] memory: samsung: exynos5422-dmc: convert to use devm_pm_opp_* API
+Date:   Fri,  1 Jan 2021 16:54:59 +0000
+Message-Id: <20210101165507.19486-24-tiny.windzz@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210101165507.19486-1-tiny.windzz@gmail.com>
 References: <20210101165507.19486-1-tiny.windzz@gmail.com>
@@ -92,49 +92,72 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-We can't always return -EINVAL, let's fix it.
+Use devm_pm_opp_* API to simplify code.
 
 Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 ---
- drivers/memory/samsung/exynos5422-dmc.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/memory/samsung/exynos5422-dmc.c | 21 +++++----------------
+ 1 file changed, 5 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
-index c5ee4121a4d2..62a83633f837 100644
+index 62a83633f837..cab9fd74322b 100644
 --- a/drivers/memory/samsung/exynos5422-dmc.c
 +++ b/drivers/memory/samsung/exynos5422-dmc.c
-@@ -353,16 +353,20 @@ static int exynos5_init_freq_table(struct exynos5_dmc *dmc,
+@@ -343,7 +343,7 @@ static int exynos5_init_freq_table(struct exynos5_dmc *dmc,
+ 	int idx;
+ 	unsigned long freq;
+ 
+-	ret = dev_pm_opp_of_add_table(dmc->dev);
++	ret = devm_pm_opp_of_add_table(dmc->dev);
+ 	if (ret < 0) {
+ 		dev_err(dmc->dev, "Failed to get OPP table\n");
+ 		return ret;
+@@ -353,20 +353,16 @@ static int exynos5_init_freq_table(struct exynos5_dmc *dmc,
  
  	dmc->opp = devm_kmalloc_array(dmc->dev, dmc->opp_count,
  				      sizeof(struct dmc_opp_table), GFP_KERNEL);
--	if (!dmc->opp)
-+	if (!dmc->opp) {
-+		ret = -ENOMEM;
- 		goto err_opp;
-+	}
+-	if (!dmc->opp) {
+-		ret = -ENOMEM;
+-		goto err_opp;
+-	}
++	if (!dmc->opp)
++		return -ENOMEM;
  
  	idx = dmc->opp_count - 1;
  	for (i = 0, freq = ULONG_MAX; i < dmc->opp_count; i++, freq--) {
  		struct dev_pm_opp *opp;
  
  		opp = dev_pm_opp_find_freq_floor(dmc->dev, &freq);
--		if (IS_ERR(opp))
-+		if (IS_ERR(opp)) {
-+			ret = PTR_ERR(opp);
- 			goto err_opp;
-+		}
+-		if (IS_ERR(opp)) {
+-			ret = PTR_ERR(opp);
+-			goto err_opp;
+-		}
++		if (IS_ERR(opp))
++			return PTR_ERR(opp);
  
  		dmc->opp[idx - i].freq_hz = freq;
  		dmc->opp[idx - i].volt_uv = dev_pm_opp_get_voltage(opp);
-@@ -375,7 +379,7 @@ static int exynos5_init_freq_table(struct exynos5_dmc *dmc,
- err_opp:
- 	dev_pm_opp_of_remove_table(dmc->dev);
+@@ -375,11 +371,6 @@ static int exynos5_init_freq_table(struct exynos5_dmc *dmc,
+ 	}
  
--	return -EINVAL;
-+	return ret;
+ 	return 0;
+-
+-err_opp:
+-	dev_pm_opp_of_remove_table(dmc->dev);
+-
+-	return ret;
  }
  
  /**
+@@ -1571,8 +1562,6 @@ static int exynos5_dmc_remove(struct platform_device *pdev)
+ 	clk_disable_unprepare(dmc->mout_bpll);
+ 	clk_disable_unprepare(dmc->fout_bpll);
+ 
+-	dev_pm_opp_remove_table(dmc->dev);
+-
+ 	return 0;
+ }
+ 
 -- 
 2.25.1
 
