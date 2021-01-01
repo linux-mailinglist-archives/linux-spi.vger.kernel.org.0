@@ -2,50 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 233D12E84BE
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Jan 2021 18:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B47C12E84C6
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Jan 2021 18:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727759AbhAAQ7Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 1 Jan 2021 11:59:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
+        id S1727775AbhAAQ73 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 1 Jan 2021 11:59:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727230AbhAAQ7O (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Jan 2021 11:59:14 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5A5C061757;
-        Fri,  1 Jan 2021 08:58:34 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id g15so14726065pgu.9;
-        Fri, 01 Jan 2021 08:58:34 -0800 (PST)
+        with ESMTP id S1727241AbhAAQ71 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Jan 2021 11:59:27 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E22C0613C1;
+        Fri,  1 Jan 2021 08:58:46 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id h186so12675496pfe.0;
+        Fri, 01 Jan 2021 08:58:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=yu74XuJH53c+EXvKWMencH3rXiKT1m6r0c1T0r676aY=;
-        b=gh7RvhL62o/PSCpktmhn3EbfQ3dx1vvB+ZmqES+Jmm88swPVRtVyFOvVd2bYWOik29
-         Tf2nXsdUR5mBpBYKLAXO6pceBAG+flQxPB2Jvy/vdpPe3hCYniRi2wVmyV6KljZidpIl
-         7+ltUJSpOwmtrH+3uiSBW1XTFeAjnSeKy5Fhyn0mp8bJVgc1G0rxRm3FH1HR+zomceOW
-         w/Zi0Kk1vApmR2ie30W9zO5+3nbEioG2IGELTxjHbYMIIzvzfngUncqFIwWUdgMXjiuU
-         fmsVVrQWwoVQ40dUogwxdGBv2W0LcV1L+5Mgk0jrMk35BclmJuKCV9DZPpWeM4+osSWT
-         pGUA==
+        bh=U36W0smHOpfrbDvJ1LTZufZA8+bqUZFQOq+xGSvEz0Q=;
+        b=gKaKzWCjoMrxvhanzaf7tyCsDC/hfSnueuE8JW5m51OOp9Z6WvwF/9vPAZN7rMzBge
+         URiLDqq57o/V3sk4oFnTbpTF6dTUDM071vmfcj+39aaweZske2Hmg7/xz6Agpup5MvhE
+         VCTOBGdMDYWKKT3SSRBBBqzcBStN4t36/GnqgKjx7dpq6RneL6FgqY9pO5wzwvrNKhqy
+         FN0LMPSXoDbAUhapYneJJIH2yRgbV0fyIKNjmx0yEVcyCFbUAQaUPi14s3gI9TzG7kbr
+         5XkvuyB4qXKyvKfKF1Gw8IdLeTgbKRYYCaCx3fxt/AMk6UGti0Lm20Ll/jIh7L2BebN+
+         jesw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=yu74XuJH53c+EXvKWMencH3rXiKT1m6r0c1T0r676aY=;
-        b=q97Bj3IZGTqoz+JoHnpVbgCImEHTdo62xMnIA55A4cKH8HbwqI+21Oj0Y0XkD1T20f
-         aewQwUu4p78zO1LfYAyYNMK2AtdMOpbmnS1fv7dmIczrzWyjfvu9WPK+3yAZpAI36S3Z
-         8BQNVNOu3F52086Lv2/zXSXyBVOv+q477uPBUxNwsyXNd8l72dPSXfppsjILWD8pkQCp
-         aKLD6ChgDI1VDOdaiyI2c+YKaNT3OC67LeJW2+wRbxWrAt9dPTYea2CFd3w5blNeLeph
-         FwO7Qd/r8zl2/FzJUJCCOP47p5JH1WnUz+b2ALOh9VMqsv+2cKZKzZYqjSghxiZ1bNo/
-         ogMA==
-X-Gm-Message-State: AOAM531u+RToJ+aUjpG7Qtp0gaMSz5zfM/y+iTazD9NfPTawzhBUegyv
-        VnJ/xYCP3p0bp1852nQ7RgQ=
-X-Google-Smtp-Source: ABdhPJwOll/dMiWiDKZQBDwgbOKq3kdz6aVDzq67HtJRRsr7Oec5o4g1+GYjXRy8liLw+XYioZ4FhQ==
-X-Received: by 2002:a63:5023:: with SMTP id e35mr61063976pgb.56.1609520313911;
-        Fri, 01 Jan 2021 08:58:33 -0800 (PST)
+        bh=U36W0smHOpfrbDvJ1LTZufZA8+bqUZFQOq+xGSvEz0Q=;
+        b=jTRUFpKGUuU34oXkDpU4GO3n9Ve2wKfliQLhVds+ZGS0oemORcRRBM70Xro36pIhFy
+         oWqjWcoTb0qZvRYR6wgHgiBL0F45z9dW/VPRHFQDeXi9tWDLAxdjI/efegEG41EXB5Aj
+         t/lVOvaXzckYKDP47SyDUhAbJbYZJ6nfrzBJQqlQLDVXEPjH8fJjZqfysN+b9b8fVHX2
+         ia1RvBkKvCpMdU30mdy6F5LJIZJ3VG9UgDKgc4Ha2CyxNKrlDXtMqILsojsRBCWETOdl
+         cii4MKM4c1Um4jVrMHra+mkZfO2fusVUJ2ypGtm4at9KKb848vrcuhvEmGFe6tQe1Qid
+         0Z3w==
+X-Gm-Message-State: AOAM5324R8AO+x38K0nXR2iV48iBsfYEHGjwNk75bRk85h9tpSPKmNpb
+        w6Zb/UbIm8D1SzdtzyuHsuE=
+X-Google-Smtp-Source: ABdhPJzx00BSeoHxNsLlnYUTpYihiZKk22bXxnJ8w2R+GCGYn3Ld1jNT8zpXeyfnV8iIpkFNwzyFcw==
+X-Received: by 2002:aa7:9a07:0:b029:1a6:5f93:a19f with SMTP id w7-20020aa79a070000b02901a65f93a19fmr35843925pfj.21.1609520326359;
+        Fri, 01 Jan 2021 08:58:46 -0800 (PST)
 Received: from localhost.localdomain ([43.255.31.23])
-        by smtp.gmail.com with ESMTPSA id 84sm50002729pfy.9.2021.01.01.08.58.21
+        by smtp.gmail.com with ESMTPSA id 84sm50002729pfy.9.2021.01.01.08.58.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jan 2021 08:58:33 -0800 (PST)
+        Fri, 01 Jan 2021 08:58:45 -0800 (PST)
 From:   Yangtao Li <tiny.windzz@gmail.com>
 To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
         cw00.choi@samsung.com, krzk@kernel.org, shawnguo@kernel.org,
@@ -82,9 +82,9 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH 14/31] spi: spi-qcom-qspi: convert to use devm_pm_opp_* API
-Date:   Fri,  1 Jan 2021 16:54:50 +0000
-Message-Id: <20210101165507.19486-15-tiny.windzz@gmail.com>
+Subject: [PATCH 15/31] drm/msm: fix potential mem leak
+Date:   Fri,  1 Jan 2021 16:54:51 +0000
+Message-Id: <20210101165507.19486-16-tiny.windzz@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210101165507.19486-1-tiny.windzz@gmail.com>
 References: <20210101165507.19486-1-tiny.windzz@gmail.com>
@@ -92,71 +92,63 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Use devm_pm_opp_* API to simplify code, and remove opp_table
-from qcom_qspi.
+We should use dev_pm_opp_put_clkname() to free opp table each time
+dev_pm_opp_of_add_table() got error.
 
 Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 ---
- drivers/spi/spi-qcom-qspi.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 10 ++++++----
+ drivers/gpu/drm/msm/dsi/dsi_host.c      |  8 +++++---
+ 2 files changed, 11 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/spi/spi-qcom-qspi.c b/drivers/spi/spi-qcom-qspi.c
-index 915ae115d8c1..1a1ab153ff59 100644
---- a/drivers/spi/spi-qcom-qspi.c
-+++ b/drivers/spi/spi-qcom-qspi.c
-@@ -142,7 +142,6 @@ struct qcom_qspi {
- 	struct clk_bulk_data *clks;
- 	struct qspi_xfer xfer;
- 	struct icc_path *icc_path_cpu_to_qspi;
--	struct opp_table *opp_table;
- 	unsigned long last_speed;
- 	/* Lock to protect data accessed by IRQs */
- 	spinlock_t lock;
-@@ -459,6 +458,7 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- 	struct device *dev;
- 	struct spi_master *master;
- 	struct qcom_qspi *ctrl;
-+	struct opp_table *opp_table;
- 
- 	dev = &pdev->dev;
- 
-@@ -531,13 +531,13 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- 	master->handle_err = qcom_qspi_handle_err;
- 	master->auto_runtime_pm = true;
- 
--	ctrl->opp_table = dev_pm_opp_set_clkname(&pdev->dev, "core");
--	if (IS_ERR(ctrl->opp_table))
--		return PTR_ERR(ctrl->opp_table);
-+	opp_table = devm_pm_opp_set_clkname(dev, "core");
-+	if (IS_ERR(opp_table))
-+		return PTR_ERR(opp_table);
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+index 374b0e8471e6..6f19dfcb4965 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+@@ -1093,9 +1093,12 @@ static int dpu_bind(struct device *dev, struct device *master, void *data)
+ 		return PTR_ERR(dpu_kms->opp_table);
  	/* OPP table is optional */
--	ret = dev_pm_opp_of_add_table(&pdev->dev);
-+	ret = devm_pm_opp_of_add_table(dev);
- 	if (ret) {
--		dev_pm_opp_put_clkname(ctrl->opp_table);
-+		devm_pm_opp_put_clkname(dev, opp_table);
- 		if (ret != -ENODEV) {
- 			dev_err(&pdev->dev, "invalid OPP table in device tree\n");
- 			return ret;
-@@ -553,8 +553,6 @@ static int qcom_qspi_probe(struct platform_device *pdev)
- 		return 0;
+ 	ret = dev_pm_opp_of_add_table(dev);
+-	if (ret && ret != -ENODEV) {
+-		dev_err(dev, "invalid OPP table in device tree\n");
+-		goto put_clkname;
++	if (ret) {
++		dev_pm_opp_put_clkname(dpu_kms->opp_table);
++		if (ret != -ENODEV) {
++			dev_err(dev, "invalid OPP table in device tree\n");
++			return ret;
++		}
+ 	}
  
- 	pm_runtime_disable(dev);
--	dev_pm_opp_of_remove_table(&pdev->dev);
--	dev_pm_opp_put_clkname(ctrl->opp_table);
- 
+ 	mp = &dpu_kms->mp;
+@@ -1122,7 +1125,6 @@ static int dpu_bind(struct device *dev, struct device *master, void *data)
+ 	return ret;
+ err:
+ 	dev_pm_opp_of_remove_table(dev);
+-put_clkname:
+ 	dev_pm_opp_put_clkname(dpu_kms->opp_table);
  	return ret;
  }
-@@ -568,8 +566,6 @@ static int qcom_qspi_remove(struct platform_device *pdev)
- 	spi_unregister_master(master);
+diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+index ab281cba0f08..a282307f2799 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi_host.c
++++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+@@ -1891,10 +1891,12 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
+ 		return PTR_ERR(msm_host->opp_table);
+ 	/* OPP table is optional */
+ 	ret = dev_pm_opp_of_add_table(&pdev->dev);
+-	if (ret && ret != -ENODEV) {
+-		dev_err(&pdev->dev, "invalid OPP table in device tree\n");
++	if (ret) {
+ 		dev_pm_opp_put_clkname(msm_host->opp_table);
+-		return ret;
++		if (ret != -ENODEV) {
++			dev_err(&pdev->dev, "invalid OPP table in device tree\n");
++			return ret;
++		}
+ 	}
  
- 	pm_runtime_disable(&pdev->dev);
--	dev_pm_opp_of_remove_table(&pdev->dev);
--	dev_pm_opp_put_clkname(ctrl->opp_table);
- 
- 	return 0;
- }
+ 	init_completion(&msm_host->dma_comp);
 -- 
 2.25.1
 
