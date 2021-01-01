@@ -2,50 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D732E846D
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Jan 2021 17:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B3F2E8470
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Jan 2021 17:58:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727468AbhAAQ5Y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 1 Jan 2021 11:57:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
+        id S1727497AbhAAQ5f (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 1 Jan 2021 11:57:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727119AbhAAQ5V (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Jan 2021 11:57:21 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB08CC061575;
-        Fri,  1 Jan 2021 08:56:41 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id e2so14740566pgi.5;
-        Fri, 01 Jan 2021 08:56:41 -0800 (PST)
+        with ESMTP id S1726798AbhAAQ5e (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Jan 2021 11:57:34 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4BCC061757;
+        Fri,  1 Jan 2021 08:56:54 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id y8so11248142plp.8;
+        Fri, 01 Jan 2021 08:56:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ubat3ts9FbAfreFZfiBfut7K86ikhtjfvpeWs7xXMEk=;
-        b=J5Zl7BAcXm9OBOmHsB2ywSPSsP5FyZj1mInI7jaePvK/deKaOXY52OkOvVeosQOjvB
-         Lu5eaT0gNcc3bMY/D726LmsCh2ZIqnZkqhVX37tsTZXLaF5xdxDt9+GfEOVXqG4LxgYs
-         nTu+zD+7L4yuzwEQIf/LJU/XCkKUN1sJeew8plRjO8SesIOJG5jQoI5LhgWWW31YtGhG
-         4YETODXP4Vo4nCl69trrf/MrslK+223YUxnjeqXbO+6blM4l4ZV0m7l48z+6MWyVh2ON
-         /W0RqVC22XG9g6zBhvd0aItkxM5G4b/s2yFfsQ2A0RjaGj5zZ0qY991dz1LAc7uZMT6L
-         +R3A==
+        bh=9TIzmHgFsG6ITKjqTU0zZgw5fpm5ANHtZbVrmANAAI0=;
+        b=nb6EiLBe1rK90KNqgI7Tblud+L8ORicNaxgYlOLpDnSDma8JhPbC+sE0K6N9WC6lCg
+         e0wL0DyJ0iWBTM1v87pA6uoSqvkJSZrAVAd3hIOEOLdC5KQUZg8H7rgObvKQIKILT5BL
+         dYW8qJYXrH/0Dd1tFkT/FQp/UhNxQMBedmIaVPARfPPF2GXQ8jYhin3DOm6mcu8X8Ly5
+         3kX1oKS5TkXd/hSFBZvPsJ6xHQI5RKSk3QL9IyGt2d2ZKzUiG9ZinPumxn7CPr3QunRI
+         r31onRRx20ggyZxF+1eTR7PdiMUAks1Bd1qNwCzQYV2lkPBFhUHbIOULPhYiCySuuNsz
+         i5mQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=ubat3ts9FbAfreFZfiBfut7K86ikhtjfvpeWs7xXMEk=;
-        b=cgUtPkWwDZzfc2vpxpaQQYgDL2ZnC4tSW7b+o0F0GUGjPd8qrtSGesHwzcQmVbwE1h
-         lIvejYOuApMjLpCeUY5SLnNGgSg3j4NpaPR+P9YVxMKFuwAVE+Pw2zTcSc+hYWu57aYK
-         iDRJtf5XUKbmXgOQjRrjjG/yigfTO6T+FoQ0M7hG6XCim74+QTSAJUR+b5fzWJBD7tA2
-         T+PhqdVEtmuEpXNkQKvlu5+EbBmcq7dQ5etidNC69I1jRszRw/PMHxmj1Lgkg5JdWJxA
-         H+1s/K/ysM+qP0hpCiHN/6EsfgAcMlF9CBO/l2oTfSRgblXp97hmmoT9ua681bIel24w
-         qv4g==
-X-Gm-Message-State: AOAM531pQy4KyT9mAHt3S5AC1qwBRiXaVXXsOfTU8ewVKZXluL8/TxqW
-        Q8mRchWd+AhxOekmNMKprMI=
-X-Google-Smtp-Source: ABdhPJwYfspmIkGNgMSm1eZOYHmkHpx4SDoHG3+f04ZQo0UnHylmSn2hZZkZjzhdjSLhB9FfLgcUEw==
-X-Received: by 2002:a63:804a:: with SMTP id j71mr60757814pgd.307.1609520201310;
-        Fri, 01 Jan 2021 08:56:41 -0800 (PST)
+        bh=9TIzmHgFsG6ITKjqTU0zZgw5fpm5ANHtZbVrmANAAI0=;
+        b=Ty9zv+uB/zO6ctMabFSgQs4QUCLcIXfzX2E6bbfbXUqCZzfM8wX+zgUuSsvaA0O0YK
+         4A0VTMhrGiqtMk7iFfzDdzVjP5N2qokZ5XT6ctBWtYL2P7aUmJbGxSDUk6lDJgikK9+l
+         c8ndt+1umAsTSsvd2eJLYTzMe0TP8juZt/3ipuwIvLdQ8qb/G6x9R5v4ldjrs41daDIX
+         G9IyyMZd7jxzihEuhQEIADwPj084yr6hU92d6HaG+Xo9GvEGX0XfHQOI9Fvzzh6prvsy
+         lkfGmjV1TchrQw4iAvDtH48NTgh6JFSlz9dakcU66HSjH0Jb9cg213/bgOi2FyZpOREP
+         2Zrw==
+X-Gm-Message-State: AOAM53164loikawrJ5N+92q/Cor9jcltm/MbhM5rUCDc8JYlhSa5ouc8
+        NPziT0RfUx60xsaFXWart5k=
+X-Google-Smtp-Source: ABdhPJxF4JOJ2XJhhjVVExcwCvFxLYoAt6vZHBBSIOTAC4TphoEUsVxfStvnXrBY+Pi7P/mH2L3ddA==
+X-Received: by 2002:a17:90a:fb43:: with SMTP id iq3mr18956764pjb.175.1609520213736;
+        Fri, 01 Jan 2021 08:56:53 -0800 (PST)
 Received: from localhost.localdomain ([43.255.31.23])
-        by smtp.gmail.com with ESMTPSA id 84sm50002729pfy.9.2021.01.01.08.56.29
+        by smtp.gmail.com with ESMTPSA id 84sm50002729pfy.9.2021.01.01.08.56.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Jan 2021 08:56:40 -0800 (PST)
+        Fri, 01 Jan 2021 08:56:53 -0800 (PST)
 From:   Yangtao Li <tiny.windzz@gmail.com>
 To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
         cw00.choi@samsung.com, krzk@kernel.org, shawnguo@kernel.org,
@@ -82,9 +82,9 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH 05/31] opp: Add devres wrapper for dev_pm_opp_register_notifier
-Date:   Fri,  1 Jan 2021 16:54:41 +0000
-Message-Id: <20210101165507.19486-6-tiny.windzz@gmail.com>
+Subject: [PATCH 06/31] serial: qcom_geni_serial: fix potential mem leak in qcom_geni_serial_probe()
+Date:   Fri,  1 Jan 2021 16:54:42 +0000
+Message-Id: <20210101165507.19486-7-tiny.windzz@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210101165507.19486-1-tiny.windzz@gmail.com>
 References: <20210101165507.19486-1-tiny.windzz@gmail.com>
@@ -92,88 +92,42 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add devres wrapper for dev_pm_opp_register_notifier() to simplify driver
-code.
+We should use dev_pm_opp_put_clkname() to free opp table each time
+dev_pm_opp_of_add_table() got error.
 
 Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 ---
- drivers/opp/core.c     | 38 ++++++++++++++++++++++++++++++++++++++
- include/linux/pm_opp.h |  6 ++++++
- 2 files changed, 44 insertions(+)
+ drivers/tty/serial/qcom_geni_serial.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 6b83e373f0d8..ef3544f8cecd 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -2599,6 +2599,44 @@ int dev_pm_opp_unregister_notifier(struct device *dev,
- }
- EXPORT_SYMBOL(dev_pm_opp_unregister_notifier);
- 
-+static void devm_pm_opp_notifier_release(struct device *dev, void *res)
-+{
-+	struct notifier_block *nb = *(struct notifier_block **)res;
-+
-+	WARN_ON(dev_pm_opp_unregister_notifier(dev, nb));
-+}
-+
-+/**
-+ * devm_pm_opp_register_notifier() - Register OPP notifier for the device
-+ * @dev:	Device for which notifier needs to be registered
-+ * @nb:		Notifier block to be registered
-+ *
-+ * Return: 0 on success or a negative error value.
-+ *
-+ * The notifier will be unregistered after the device is destroyed.
-+ */
-+int devm_pm_opp_register_notifier(struct device *dev, struct notifier_block *nb)
-+{
-+	struct notifier_block **ptr;
-+	int ret;
-+
-+	ptr = devres_alloc(devm_pm_opp_notifier_release, sizeof(*ptr), GFP_KERNEL);
-+	if (!ptr)
-+		return -ENOMEM;
-+
-+	ret = dev_pm_opp_register_notifier(dev, nb);
+diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+index 291649f02821..5aada7ebae35 100644
+--- a/drivers/tty/serial/qcom_geni_serial.c
++++ b/drivers/tty/serial/qcom_geni_serial.c
+@@ -1438,9 +1438,12 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+ 		return PTR_ERR(port->se.opp_table);
+ 	/* OPP table is optional */
+ 	ret = dev_pm_opp_of_add_table(&pdev->dev);
+-	if (ret && ret != -ENODEV) {
+-		dev_err(&pdev->dev, "invalid OPP table in device tree\n");
+-		goto put_clkname;
 +	if (ret) {
-+		devres_free(ptr);
-+		return ret;
-+	}
-+
-+	*ptr = nb;
-+	devres_add(dev, ptr);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(devm_pm_opp_register_notifier);
-+
- /**
-  * dev_pm_opp_remove_table() - Free all OPPs associated with the device
-  * @dev:	device pointer used to lookup OPP table.
-diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-index e8bdac5f9555..c24bd34339d7 100644
---- a/include/linux/pm_opp.h
-+++ b/include/linux/pm_opp.h
-@@ -136,6 +136,7 @@ int dev_pm_opp_disable(struct device *dev, unsigned long freq);
++		dev_pm_opp_put_clkname(port->se.opp_table);
++		if (ret != -ENODEV) {
++			dev_err(&pdev->dev, "invalid OPP table in device tree\n");
++			return ret;
++		}
+ 	}
  
- int dev_pm_opp_register_notifier(struct device *dev, struct notifier_block *nb);
- int dev_pm_opp_unregister_notifier(struct device *dev, struct notifier_block *nb);
-+int devm_pm_opp_register_notifier(struct device *dev, struct notifier_block *nb);
- 
- struct opp_table *dev_pm_opp_set_supported_hw(struct device *dev, const u32 *versions, unsigned int count);
- void dev_pm_opp_put_supported_hw(struct opp_table *opp_table);
-@@ -288,6 +289,11 @@ static inline int dev_pm_opp_register_notifier(struct device *dev, struct notifi
- 	return -ENOTSUPP;
+ 	port->private_data.drv = drv;
+@@ -1482,7 +1485,6 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+ 	return 0;
+ err:
+ 	dev_pm_opp_of_remove_table(&pdev->dev);
+-put_clkname:
+ 	dev_pm_opp_put_clkname(port->se.opp_table);
+ 	return ret;
  }
- 
-+static inline int devm_pm_opp_register_notifier(struct device *dev, struct notifier_block *nb)
-+{
-+	return -ENOTSUPP;
-+}
-+
- static inline int dev_pm_opp_unregister_notifier(struct device *dev, struct notifier_block *nb)
- {
- 	return -ENOTSUPP;
 -- 
 2.25.1
 
