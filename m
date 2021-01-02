@@ -2,51 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6A32E8732
-	for <lists+linux-spi@lfdr.de>; Sat,  2 Jan 2021 12:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 100852E872E
+	for <lists+linux-spi@lfdr.de>; Sat,  2 Jan 2021 12:55:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726529AbhABLzF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 2 Jan 2021 06:55:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
+        id S1726618AbhABLzH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 2 Jan 2021 06:55:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726327AbhABLzE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 2 Jan 2021 06:55:04 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF97C061573;
-        Sat,  2 Jan 2021 03:54:24 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id k8so21040547ilr.4;
-        Sat, 02 Jan 2021 03:54:24 -0800 (PST)
+        with ESMTP id S1726327AbhABLzG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 2 Jan 2021 06:55:06 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F47CC0613C1;
+        Sat,  2 Jan 2021 03:54:26 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id q137so20712067iod.9;
+        Sat, 02 Jan 2021 03:54:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=T+jIrXGESdOQtBefzWtZLA4kpu1nBEQulHABKRZimnA=;
-        b=RL1E/y8Xffsed+lHHUOonOwgsSpZs4tjgzclG0xxW7rVYNjE3I24cwMZ/Y9UiWynOm
-         WtC9dca8thAfnfeSN+zYP7ZTVEf9Jyk0HPmzZ/S4kxcRJoafQbfMEIt9wAQeOxW6b5Vh
-         BxO+8xP/xUeYf7DHCMT5x54HFuQcE6XvNsiu3qE0LJ1GEkClpbIFJhJ7zdUP23Q+nB/H
-         Q/OnspaAPRFDFzaXW+9WrOUxOBfrZhrANwFZUAm23GOpwNp57GgKv+jRCaVCbVIR6fP+
-         TE8yTz2AdkTtf1gD3aV0v7E1b4uF3DFOBgpy3PAx8el71u76gkhf1czdItQJKvUEteof
-         CxCw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=mjq47Z+cVurscJY++LQtiaCWJOefRFw0FC6F4fr2FBI=;
+        b=fuz6hm7+C7tDxz9jA94wOKMo+W+j6n8SVUg+qlb6kctnADvsMg2KxNfNQHMJGhQOcs
+         HH3J2LwzhlpTBkyjwXBXD8eLRdvBAz0/9VJacFAAVfOxH7npOOEW2PJ9cIsWoe1KXkte
+         CpW6Lg173VDzUX2A+7QiRuV9HlUVmwa7NgIzXQJPbDpvAiLPc1sx7OUkLCMwZ4Fdxckl
+         0mUnn2iVJfC8RrTgItdrRNGaUC21bCoGZ7VgjWHabPoZfiB4TaFju0qOugaJVzjYnQ4S
+         GlxPwuJ3Z0rbblYydNQ37wvTQ13BJn0SRB/9ZXEo9Lzf1bx5NFRMWjEp3vrHi7DhtkXp
+         OGAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=T+jIrXGESdOQtBefzWtZLA4kpu1nBEQulHABKRZimnA=;
-        b=St70b+eS75asYRF8qag37TJ33ZcMktv95uHhOou0Kf9JldQfLdh1YQR4b2wKXIRw9N
-         RdoK4VYo2tyreFE3Bn0TwdDGfNt24Of6WBn5Q4rL4A3P9EL0Rmfp2s7tiG1ssHxmKjWP
-         VuyG1KEeKUgPurVRvCbDWsr6KXez4qViQVkbOYuSS8zn5FtY6hNK45DC2A+t6Z2V0oij
-         ylno2pEdQ6gZ+aDZmYL+eR6WM4b0ihxaNZUWnWDnUodHN7ms0pQ50OFPQJFkiKXIf5Mk
-         4O+FTq2ncNY0vJXGXuGQCfCF2gtV/qbRJMi9kZlomCc3fiyyVk2j7f8Jou+v7IyrqIXb
-         6YoA==
-X-Gm-Message-State: AOAM531Xe75H/VDUQbtx/IrHRbcsJ4v+wbzsWwHWSSvgwkvqP36d3HRs
-        vTDQmOHjihRUY6D+wtLLYqQY6U24Mtxu4w==
-X-Google-Smtp-Source: ABdhPJyBe3ahe0tS1nlWYwA0x4B+LRuX2MnMLeazUjjQETd7K0c8kTHLw8KP26oXfSLIYVMKz0ZyKQ==
-X-Received: by 2002:a92:ccce:: with SMTP id u14mr63354835ilq.152.1609588463278;
-        Sat, 02 Jan 2021 03:54:23 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=mjq47Z+cVurscJY++LQtiaCWJOefRFw0FC6F4fr2FBI=;
+        b=KgX2oR/qurKIRtE5iYRF2sv3s0xrhpiQU3dO/1HzJu9MWAoVqxIg2U2frISYkEwlbZ
+         jVg37lUnNstKEI3Sm8xcjboN7DxnWeO4pAhQTmhUjxqcfhfDFyIz3J2xzqGBHcD2v+Zd
+         7o9HvNVOaF+6C1YKhpotVMmT+TE5RCpPttAXAiayQPhkDNN2c/kTGdsCXqHV3XFUZjWu
+         7KTpEi7235xqyyitPKuvlWoA/Y6iW3gOq2WR1z6bxZDy67jbV52WvZze23Bnn2QST8FO
+         7xYIRl1tQxPcxQrzU0iWjqnc0tzVOhbvyDawtzP8Qdqoode2CUqoF9onGmLNW0l8ZCop
+         iBkw==
+X-Gm-Message-State: AOAM533yibYkNH6rjfXdcpi1QOQ0z3ZV5jEuBpna+qq4h6Rp6v+rkK6T
+        mbpeEdcAHUPGOmOyRCl+OFHXpe5hsRIFnA==
+X-Google-Smtp-Source: ABdhPJxNwUqtteAT+PKtpP0t7DaIWHFrSK3vamgKoJrUVRjNR9zRRAEWYe8+hXOX01XYgt1oeRSKkw==
+X-Received: by 2002:a6b:b8d6:: with SMTP id i205mr51909864iof.135.1609588465180;
+        Sat, 02 Jan 2021 03:54:25 -0800 (PST)
 Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:f45d:df49:9a4c:4914])
-        by smtp.gmail.com with ESMTPSA id l9sm37218245ilg.51.2021.01.02.03.54.21
+        by smtp.gmail.com with ESMTPSA id l9sm37218245ilg.51.2021.01.02.03.54.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jan 2021 03:54:22 -0800 (PST)
+        Sat, 02 Jan 2021 03:54:24 -0800 (PST)
 From:   Adam Ford <aford173@gmail.com>
 To:     linux-renesas-soc@vger.kernel.org
 Cc:     aford@beaconembedded.com, biju.das.jz@bp.renesas.com,
@@ -59,46 +59,46 @@ Cc:     aford@beaconembedded.com, biju.das.jz@bp.renesas.com,
         Sergei Shtylyov <sergei.shtylyov@gmail.com>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-spi@vger.kernel.org
-Subject: [PATCH V2 1/4] dt-bindings: memory: Renesas RPC-IF: Add support for RZ/G2 Series
-Date:   Sat,  2 Jan 2021 05:54:09 -0600
-Message-Id: <20210102115412.3402059-1-aford173@gmail.com>
+Subject: [PATCH V2 2/4] memory: renesas rpc-if: Update Add RZ/G2 to Kconfig description
+Date:   Sat,  2 Jan 2021 05:54:10 -0600
+Message-Id: <20210102115412.3402059-2-aford173@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210102115412.3402059-1-aford173@gmail.com>
+References: <20210102115412.3402059-1-aford173@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The RZ/G2 Series has the RPC-IF interface.
-Update bindings to support: r8a774a1, r8a774b1, r8a774c0, and r8a774e1
+The Renesas RPC-IF is present on the RZ/G2 Series.  Add that to
+the description.
 
+Suggested-by: Biju Das <biju.das.jz@bp.renesas.com>
 Signed-off-by: Adam Ford <aford173@gmail.com>
 ---
- .../bindings/memory-controllers/renesas,rpc-if.yaml         | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/memory/Kconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-V2:  Updated renesas,rcar-gen3-rpc-if to include RZ/G2
+V2:  New to series
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml b/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
-index 6d6ba608fd22..990489fdd2ac 100644
---- a/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
-+++ b/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
-@@ -26,10 +26,14 @@ properties:
-   compatible:
-     items:
-       - enum:
-+          - renesas,r8a774a1-rpc-if       # RZ/G2M
-+          - renesas,r8a774b1-rpc-if       # RZ/G2N
-+          - renesas,r8a774c0-rpc-if       # RZ/G2E
-+          - renesas,r8a774e1-rpc-if       # RZ/G2H
-           - renesas,r8a77970-rpc-if       # R-Car V3M
-           - renesas,r8a77980-rpc-if       # R-Car V3H
-           - renesas,r8a77995-rpc-if       # R-Car D3
--      - const: renesas,rcar-gen3-rpc-if   # a generic R-Car gen3 device
-+      - const: renesas,rcar-gen3-rpc-if   # a generic R-Car gen3 or RZ/G2 device
+diff --git a/drivers/memory/Kconfig b/drivers/memory/Kconfig
+index 3ea6913df176..d55252f349d4 100644
+--- a/drivers/memory/Kconfig
++++ b/drivers/memory/Kconfig
+@@ -202,9 +202,9 @@ config RENESAS_RPCIF
+ 	depends on ARCH_RENESAS || COMPILE_TEST
+ 	select REGMAP_MMIO
+ 	help
+-	  This supports Renesas R-Car Gen3 RPC-IF which provides either SPI
+-	  host or HyperFlash. You'll have to select individual components
+-	  under the corresponding menu.
++	  This supports Renesas R-Car Gen3 of RZ/G2 RPC-IF which provides
++	  either SPI host or HyperFlash. You'll have to select individual
++	  components under the corresponding menu.
  
-   reg:
-     items:
+ config STM32_FMC2_EBI
+ 	tristate "Support for FMC2 External Bus Interface on STM32MP SoCs"
 -- 
 2.25.1
 
