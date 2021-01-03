@@ -2,49 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7E82E8A3A
-	for <lists+linux-spi@lfdr.de>; Sun,  3 Jan 2021 04:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B38CA2E8A46
+	for <lists+linux-spi@lfdr.de>; Sun,  3 Jan 2021 04:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726636AbhACD4O (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 2 Jan 2021 22:56:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
+        id S1726691AbhACD4j (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 2 Jan 2021 22:56:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726512AbhACD4N (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 2 Jan 2021 22:56:13 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F6DC061573;
-        Sat,  2 Jan 2021 19:55:33 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id z21so16586577pgj.4;
-        Sat, 02 Jan 2021 19:55:33 -0800 (PST)
+        with ESMTP id S1726512AbhACD4i (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 2 Jan 2021 22:56:38 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0686C0613C1;
+        Sat,  2 Jan 2021 19:55:58 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id j1so12673433pld.3;
+        Sat, 02 Jan 2021 19:55:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=Y7HzXQDsnmIGgDTOmDGILMwV02kIMjNKdm8ZKEdeXsg=;
-        b=eotmQVpxVreVKXR3oezT+9H2WsardzWH1A4dZzoFoLIXCTMWKe9iaoIfuRs0IZr0Ii
-         xhSF5IcF8dP4L5taLEStTtfKdfbcFVu8m2GrnVFBVg4ujy0hOAV6WPVweG9JJBBJT/y0
-         5oVwwvgcmAy78H6McatzbUhblbZnRMHRrRP6rMC8HQztdvRWL8LEAzg8pUVsLmEP+q61
-         yeurrF1M5OAMvFPVKvm8kI4lRijYtowPU6kmkh784bshJDfvlXOtsG0wHW2pm7T5d75u
-         qmH1I+lAE7FQDM/ZhK4Rafnx7zSYSzxvReptopRtapiqcSt38bNkR9341aSb6u7goV6r
-         PG+g==
+        bh=SxpOyeiM3z18aNMuDs4uqaleFHYcq3v3an1mAR1G/5I=;
+        b=AfqoZriugPzwzYSNyVjK7DhI0hUXwCi2rh6VXlP87GQQa5fjpFiZGRGOKaa2bVC6qS
+         KNUGWoDbWwi99UvbXCoiMLncRbhKM90XVtGVix8wNxybq0PPu1+ANZovkGJ756+3RFhR
+         zP9nG/12bnrj5Ey60RFSl4qHGJol0jCLf9L4aQm1kwh4H56RYa/55+iY9tIgt++AW74x
+         mXgK8k3GTn0nq6GOCImWE6OxFd8cyGibeXduGU/UJnKTASfEHM+ZKRR8oQI5JGn3qfJV
+         M83qVzQsm8/sxJuz1JjMaoaibL2VVkB00j++VrDnODpsrfBQfYod9P5VyZH8xa8sT7su
+         muLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Y7HzXQDsnmIGgDTOmDGILMwV02kIMjNKdm8ZKEdeXsg=;
-        b=tBd3I1RTgL6QdtvfVbumsDyTK6KNoXR/gKAiiYLGDEZq253V0C9q++8Js3yIXPZyRy
-         oRhZI7gipvo7eBKRn+ASKnxUd8RRbsH11sR7+Fz/29aLIjRZWsQaGswq9zhxuiV3iUMm
-         +McSE2jygPmIbcpKHYKaFfwW4sgbOy4Ubrt9jESUJk0ZGR3MG4I/klZcGeqXOJUJg2Kf
-         qN01q+hMw5LLYcPmUguMEjlInmEoX+K8ahnzPn7qJgfzsC4O/YwHepQwM/fmWxAgL3SN
-         dxBsZnyplec6fcfwmMNN050TlXD1iWU5tG48tE7cxc04sK69z//AoOe2zTUJ73MQqy9+
-         Gg9A==
-X-Gm-Message-State: AOAM530TUrGL3Z74KW4dl9kX3EClHIm37XhtGGGnhcE3VdoKslceCQkV
-        FMJWUTJN9vXH3Ql7s13JRY4=
-X-Google-Smtp-Source: ABdhPJxbG4x+2xe/jKFrc0z4c/mz7QZfjYFTZamqCvYgW6Xt/IdV+YGfApUBbqxyjaHMHkPtOoCY4g==
-X-Received: by 2002:aa7:9eda:0:b029:19d:ce86:f941 with SMTP id r26-20020aa79eda0000b029019dce86f941mr60065476pfq.57.1609646133007;
-        Sat, 02 Jan 2021 19:55:33 -0800 (PST)
+        bh=SxpOyeiM3z18aNMuDs4uqaleFHYcq3v3an1mAR1G/5I=;
+        b=qa8NCsO46XRrbzZbBC601U+Vi0aeoOi5Y/0yufdJdSYTeWRugMExeIEI8pr+1gT9Ly
+         j4ywF3f39d6xzUlU+abxl66C4ux18MCKmBPb0yBGGnzQxTbra3D18OpX6PdRNzm0LAiP
+         YpxHARFpVVHg4ipLhrj48dJGo6JymjykHrB1d7YXb5pfs0pyB5TqfwgC1jIXpr1MDF9L
+         VELqgRoISZh4SlZs1/AnKW1jRS+hUnvYDYX/8RwA4QEod9WEGyyDTd1Kw8EDGvD73Y+N
+         RC8PfSMdRubW+fVEtVnI+rdZmt+tqw9fqVtFpjSKmy338wqC2HuIHZSQFn/hBFr4FFR3
+         YOBw==
+X-Gm-Message-State: AOAM533OfMgdneAtQEi3HxN7WQDLreqZXXBxgHZdxDe9xYf4SH4jPKpP
+        kXlR7cTES7ACRMfH3q2ZOFU=
+X-Google-Smtp-Source: ABdhPJw9UCd2o0dVAOrYYYoU83PIRdrJPypmz/g74Y1c9s2nzpejBc2/fDlERUdGOBi5P6mnd+gbww==
+X-Received: by 2002:a17:902:7489:b029:da:5aed:8ebf with SMTP id h9-20020a1709027489b02900da5aed8ebfmr66298619pll.35.1609646158201;
+        Sat, 02 Jan 2021 19:55:58 -0800 (PST)
 Received: from localhost.localdomain ([43.255.31.23])
-        by smtp.gmail.com with ESMTPSA id c13sm53063490pfp.147.2021.01.02.19.55.20
+        by smtp.gmail.com with ESMTPSA id f67sm45500049pfg.159.2021.01.02.19.55.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jan 2021 19:55:32 -0800 (PST)
+        Sat, 02 Jan 2021 19:55:57 -0800 (PST)
 From:   Yangtao Li <tiny.windzz@gmail.com>
 To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
         cw00.choi@samsung.com, krzk@kernel.org, shawnguo@kernel.org,
@@ -81,90 +81,74 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH 27/31] PM / devfreq: rk3399_dmc: convert to use devm_pm_opp_* API
-Date:   Sun,  3 Jan 2021 03:55:14 +0000
-Message-Id: <20210103035514.23788-1-tiny.windzz@gmail.com>
+Subject: [PATCH 28/31] PM / devfreq: imx8m-ddrc: convert to use devm_pm_opp_* API
+Date:   Sun,  3 Jan 2021 03:55:40 +0000
+Message-Id: <20210103035540.23886-1-tiny.windzz@gmail.com>
 X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Use devm_pm_opp_* API to simplify code. Since devres release
-can guarantee the order, let's remove
-devm_devfreq_unregister_opp_notifier().
+Use devm_pm_opp_* API to simplify code.
 
 Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 ---
- drivers/devfreq/rk3399_dmc.c | 22 +++-------------------
- 1 file changed, 3 insertions(+), 19 deletions(-)
+ drivers/devfreq/imx8m-ddrc.c | 15 ++-------------
+ 1 file changed, 2 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
-index 2e912166a993..9b8ab8be29d1 100644
---- a/drivers/devfreq/rk3399_dmc.c
-+++ b/drivers/devfreq/rk3399_dmc.c
-@@ -432,7 +432,7 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
- 	 * We add a devfreq driver to our parent since it has a device tree node
- 	 * with operating points.
- 	 */
--	if (dev_pm_opp_of_add_table(dev)) {
-+	if (devm_pm_opp_of_add_table(dev)) {
- 		dev_err(dev, "Invalid operating-points in device tree.\n");
- 		ret = -EINVAL;
- 		goto err_edev;
-@@ -448,7 +448,7 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
- 	opp = devfreq_recommended_opp(dev, &data->rate, 0);
- 	if (IS_ERR(opp)) {
- 		ret = PTR_ERR(opp);
--		goto err_free_opp;
-+		goto err_edev;
- 	}
- 
- 	data->rate = dev_pm_opp_get_freq(opp);
-@@ -463,7 +463,7 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
- 					   &data->ondemand_data);
- 	if (IS_ERR(data->devfreq)) {
- 		ret = PTR_ERR(data->devfreq);
--		goto err_free_opp;
-+		goto err_edev;
- 	}
- 
- 	devm_devfreq_register_opp_notifier(dev, data->devfreq);
-@@ -473,27 +473,12 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
- 
+diff --git a/drivers/devfreq/imx8m-ddrc.c b/drivers/devfreq/imx8m-ddrc.c
+index bc82d3653bff..9383d6e5538b 100644
+--- a/drivers/devfreq/imx8m-ddrc.c
++++ b/drivers/devfreq/imx8m-ddrc.c
+@@ -370,11 +370,6 @@ static int imx8m_ddrc_check_opps(struct device *dev)
  	return 0;
+ }
  
--err_free_opp:
--	dev_pm_opp_of_remove_table(&pdev->dev);
- err_edev:
- 	devfreq_event_disable_edev(data->edev);
+-static void imx8m_ddrc_exit(struct device *dev)
+-{
+-	dev_pm_opp_of_remove_table(dev);
+-}
+-
+ static int imx8m_ddrc_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -419,7 +414,7 @@ static int imx8m_ddrc_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
  
+-	ret = dev_pm_opp_of_add_table(dev);
++	ret = devm_pm_opp_of_add_table(dev);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to get OPP table\n");
+ 		return ret;
+@@ -427,12 +422,11 @@ static int imx8m_ddrc_probe(struct platform_device *pdev)
+ 
+ 	ret = imx8m_ddrc_check_opps(dev);
+ 	if (ret < 0)
+-		goto err;
++		return ret;
+ 
+ 	priv->profile.polling_ms = 1000;
+ 	priv->profile.target = imx8m_ddrc_target;
+ 	priv->profile.get_dev_status = imx8m_ddrc_get_dev_status;
+-	priv->profile.exit = imx8m_ddrc_exit;
+ 	priv->profile.get_cur_freq = imx8m_ddrc_get_cur_freq;
+ 	priv->profile.initial_freq = clk_get_rate(priv->dram_core);
+ 
+@@ -441,13 +435,8 @@ static int imx8m_ddrc_probe(struct platform_device *pdev)
+ 	if (IS_ERR(priv->devfreq)) {
+ 		ret = PTR_ERR(priv->devfreq);
+ 		dev_err(dev, "failed to add devfreq device: %d\n", ret);
+-		goto err;
+ 	}
+ 
+-	return 0;
+-
+-err:
+-	dev_pm_opp_of_remove_table(dev);
  	return ret;
  }
  
--static int rk3399_dmcfreq_remove(struct platform_device *pdev)
--{
--	struct rk3399_dmcfreq *dmcfreq = dev_get_drvdata(&pdev->dev);
--
--	/*
--	 * Before remove the opp table we need to unregister the opp notifier.
--	 */
--	devm_devfreq_unregister_opp_notifier(dmcfreq->dev, dmcfreq->devfreq);
--	dev_pm_opp_of_remove_table(dmcfreq->dev);
--
--	return 0;
--}
--
- static const struct of_device_id rk3399dmc_devfreq_of_match[] = {
- 	{ .compatible = "rockchip,rk3399-dmc" },
- 	{ },
-@@ -502,7 +487,6 @@ MODULE_DEVICE_TABLE(of, rk3399dmc_devfreq_of_match);
- 
- static struct platform_driver rk3399_dmcfreq_driver = {
- 	.probe	= rk3399_dmcfreq_probe,
--	.remove = rk3399_dmcfreq_remove,
- 	.driver = {
- 		.name	= "rk3399-dmc-freq",
- 		.pm	= &rk3399_dmcfreq_pm,
 -- 
 2.25.1
 
