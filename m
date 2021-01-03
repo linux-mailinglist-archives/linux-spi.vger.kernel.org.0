@@ -2,54 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 578C62E8A62
-	for <lists+linux-spi@lfdr.de>; Sun,  3 Jan 2021 04:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE522E8C2E
+	for <lists+linux-spi@lfdr.de>; Sun,  3 Jan 2021 13:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726889AbhACD6H (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 2 Jan 2021 22:58:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
+        id S1727096AbhACMxW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 3 Jan 2021 07:53:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726844AbhACD6G (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 2 Jan 2021 22:58:06 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01232C061573;
-        Sat,  2 Jan 2021 19:57:26 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id i5so16611634pgo.1;
-        Sat, 02 Jan 2021 19:57:25 -0800 (PST)
+        with ESMTP id S1726166AbhACMxS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 3 Jan 2021 07:53:18 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DCAC061573;
+        Sun,  3 Jan 2021 04:52:37 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id s26so58212924lfc.8;
+        Sun, 03 Jan 2021 04:52:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=bOqOQLWJhyl2a577YM0GR4m7krtGGKspJhBDUdooXQs=;
-        b=LG0ARZRkjmTXrJorhu/jihm0Mi+5yzddGgU9D1bfoBGcEAyoou58vPzfDIyONWYqDI
-         /4OAqr7Z/zf9ER+L2uOc24kSRn+qLmG4BY+JodzoFQF/B1c2wZHJyb4kvhKxgU+izRHv
-         8MRgEhNgPrZuxzSLQRqYfuvGfcvCuVUoshvt9sl0r4QAtutdKDW05rcIQ9dBdwIO5K0F
-         2hKHfKf0/Qu+0Hr5NyOotRE7Lw4UCKOU9MJ5nHdb3S33C4V0d4YDfF8LqHdXhsI1aUWM
-         ZsJ6w1waDejbsq3kHUW0bKB81kH8ze/DhP8Yctb91F8FeL2e5BM/CTjg2bOh51mUiQqc
-         m2ww==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=fk3XVwTVefOkLbjfXssBtwAHpD8Tcrjmd5/AelczwWk=;
+        b=OEwi935j2c7KzefgNI021QgzicjnnEwbFY0PXx/zRGw9iI/W1MDCJ33nGdFVdpmgK6
+         RIgzZmniThNKQQabZIGWFU35FpubtXtN1R5LazrU8yKIIFEOMvqtTZZ5S+ZI5PwASUDh
+         TxHNixDO7dAndqM40/SeY3e6JavgLO8CB6IJk5nojllWAWb2ldsg7Qly/g8+ynFW8oPL
+         cgNdsvF1E/S8ZWp6UVfr4ESinENcARg/2ifmbIPl9lUD5TbUttr2X8f7TQ9nNIigPWTg
+         IihawwezkYm0eV/L9yiGEhYwV/JPSY1nrPQG12uGVCCkWe86XrpZBpVdlnOYyDyypc5T
+         yDtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=bOqOQLWJhyl2a577YM0GR4m7krtGGKspJhBDUdooXQs=;
-        b=ChWckxCNeaxl6Pkr0XxM9neBeoSWK54vivbigGU8hSaO7oWfjvsVTXndvZVyfo8RUS
-         BMd3x1rUSJWMeLg/2Qs1XSAqwZalGFVLrqkbcPOWcemx18RMd3SynajrBmNfzbbfh67+
-         TeFm9QBfqE91TUOLscR7otxqKGBm9WallJ3uxgBg9n8bi6Fmyyc1JPiIu25UhH7GbtcB
-         /EhNxY/ZI4Tr8z4YpuwBv8UpxjOahQQ5U3jm2wX1HpmOZqUkV5QYFwSg+uDO2ONa4sVe
-         hiCrmI3cgDH30LQYnoTXM2v/825rGO4E5lbMW/8GxEa+xR0TPtAIv7vOKZmKfTZf9RNQ
-         7uIA==
-X-Gm-Message-State: AOAM530RBq+FYr2kEU1dL+hKz0uI46DooLW8dhc0dCtEklTROoI22+sT
-        edMZJJVEEqLSk/2J46WRCYo=
-X-Google-Smtp-Source: ABdhPJz6zhBwhrRUfur/KM3Xc29SF2oYTEQF68P1OftsFEJ1idogWYGRJDx/+HEraVeVhoNlpuXM5Q==
-X-Received: by 2002:a63:db54:: with SMTP id x20mr52218787pgi.200.1609646245532;
-        Sat, 02 Jan 2021 19:57:25 -0800 (PST)
-Received: from localhost.localdomain ([43.255.31.23])
-        by smtp.gmail.com with ESMTPSA id h12sm55934950pgs.7.2021.01.02.19.57.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jan 2021 19:57:24 -0800 (PST)
-From:   Yangtao Li <tiny.windzz@gmail.com>
-To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, krzk@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, digetx@gmail.com, thierry.reding@gmail.com,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fk3XVwTVefOkLbjfXssBtwAHpD8Tcrjmd5/AelczwWk=;
+        b=UiDySKvwgUMp0aJWlYasd22/NicHgjglLcBjz4Q751IwqBWHzZni59MNoQxzWf4ci2
+         fWaiWrq0pkSwtVsd/ufsMtavJAb0Ro4knKV22D84wlPuyWZQHX5rvRaFR7ceSf6DZvr1
+         EmsO+XCHXan/Bo0J3zjFH8GvnO2NN/FEKnX6+y8EjE234bF+763lbSCYq2BxmwIztYw2
+         ySkQhBVA6J8v5PELp4dGFtFTI5yUtL7V4XOjsn6+DQ7IMz8Fhbi+/cFNnGnxRevxQPHL
+         rOEhfc0zLS+kuJ1PWBpY1kenD65S3QkbkH90ot/AIE/6SPoHu11w38Qvi4hGVqnaggJv
+         B7aA==
+X-Gm-Message-State: AOAM533me0Pa2Z6ADRlIh7q/Cf8PFJEiE+yH5TTqo6ctMksMvpr32Cxq
+        KTsm5ueSVowmQ2IQ+dJSKQ7hwXCo2ps=
+X-Google-Smtp-Source: ABdhPJyPgqSAU0iBjgqgqRPmpr/i7kF7QwsvsLVJIEREfmn2IS2TU8rSoup8JfPW09bcJNWdHG7m2A==
+X-Received: by 2002:a05:6512:612:: with SMTP id b18mr32820924lfe.598.1609678355624;
+        Sun, 03 Jan 2021 04:52:35 -0800 (PST)
+Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
+        by smtp.googlemail.com with ESMTPSA id b26sm8429011ljk.132.2021.01.03.04.52.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 Jan 2021 04:52:34 -0800 (PST)
+Subject: Re: [PATCH 00/31] Introduce devm_pm_opp_* API
+To:     Yangtao Li <tiny.windzz@gmail.com>, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, cw00.choi@samsung.com, krzk@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, thierry.reding@gmail.com,
         jonathanh@nvidia.com, yuq825@gmail.com, airlied@linux.ie,
         daniel@ffwll.ch, robdclark@gmail.com, sean@poorly.run,
         robh@kernel.org, tomeu.vizoso@collabora.com, steven.price@arm.com,
@@ -64,16 +67,15 @@ To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
         emil.velikov@collabora.com, jonathan@marek.ca,
         akhilpo@codeaurora.org, smasetty@codeaurora.org,
         airlied@redhat.com, masneyb@onstation.org, kalyan_t@codeaurora.org,
-        tanmay@codeaurora.org, tiny.windzz@gmail.com,
-        ddavenport@chromium.org, jsanka@codeaurora.org,
-        rnayak@codeaurora.org, tongtiangen@huawei.com,
-        miaoqinglang@huawei.com, khsieh@codeaurora.org,
-        abhinavk@codeaurora.org, chandanu@codeaurora.org,
-        groeck@chromium.org, varar@codeaurora.org, mka@chromium.org,
-        harigovi@codeaurora.org, rikard.falkeborn@gmail.com,
-        natechancellor@gmail.com, georgi.djakov@linaro.org,
-        akashast@codeaurora.org, parashar@codeaurora.org,
-        dianders@chromium.org
+        tanmay@codeaurora.org, ddavenport@chromium.org,
+        jsanka@codeaurora.org, rnayak@codeaurora.org,
+        tongtiangen@huawei.com, miaoqinglang@huawei.com,
+        khsieh@codeaurora.org, abhinavk@codeaurora.org,
+        chandanu@codeaurora.org, groeck@chromium.org, varar@codeaurora.org,
+        mka@chromium.org, harigovi@codeaurora.org,
+        rikard.falkeborn@gmail.com, natechancellor@gmail.com,
+        georgi.djakov@linaro.org, akashast@codeaurora.org,
+        parashar@codeaurora.org, dianders@chromium.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-samsung-soc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
@@ -81,158 +83,107 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH 31/31] PM / devfreq: convert to devm_pm_opp_register_notifier and remove unused API
-Date:   Sun,  3 Jan 2021 03:57:06 +0000
-Message-Id: <20210103035706.24168-1-tiny.windzz@gmail.com>
-X-Mailer: git-send-email 2.17.1
+References: <20210101165507.19486-1-tiny.windzz@gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <819f4eaf-18e4-678d-84dd-e4ac9d88c414@gmail.com>
+Date:   Sun, 3 Jan 2021 15:52:32 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
+MIME-Version: 1.0
+In-Reply-To: <20210101165507.19486-1-tiny.windzz@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
- Use devm_pm_opp_* API to simplify code.
+01.01.2021 19:54, Yangtao Li пишет:
+> Hi,
+> 
+> This patchset add devm_pm_opp_set_clkname, devm_pm_opp_put_clkname,
+> devm_pm_opp_set_regulators, devm_pm_opp_put_regulators,
+> devm_pm_opp_set_supported_hw, devm_pm_opp_of_add_table and
+> devm_pm_opp_register_notifier.
+> 
+> Yangtao Li (31):
+>   opp: Add devres wrapper for dev_pm_opp_set_clkname and
+>     dev_pm_opp_put_clkname
+>   opp: Add devres wrapper for dev_pm_opp_set_regulators and
+>     dev_pm_opp_put_regulators
+>   opp: Add devres wrapper for dev_pm_opp_set_supported_hw
+>   opp: Add devres wrapper for dev_pm_opp_of_add_table
+>   opp: Add devres wrapper for dev_pm_opp_register_notifier
+>   serial: qcom_geni_serial: fix potential mem leak in
+>     qcom_geni_serial_probe()
+>   serial: qcom_geni_serial: convert to use devm_pm_opp_* API
+>   spi: spi-qcom-qspi: fix potential mem leak in spi_geni_probe()
+>   spi: spi-qcom-qspi: fix potential mem leak in spi_geni_probe()
+>   qcom-geni-se: remove opp_table
+>   mmc: sdhci-msm: fix potential mem leak in sdhci_msm_probe()
+>   mmc: sdhci-msm: convert to use devm_pm_opp_* API
+>   spi: spi-qcom-qspi: fix potential mem leak in qcom_qspi_probe()
+>   spi: spi-qcom-qspi: convert to use devm_pm_opp_* API
+>   drm/msm: fix potential mem leak
+>   drm/msm: convert to use devm_pm_opp_* API and remove dp_ctrl_put
+>   drm/lima: convert to use devm_pm_opp_* API
+>   drm/lima: remove unneeded devm_devfreq_remove_device()
+>   drm/panfrost: convert to use devm_pm_opp_* API
+>   media: venus: fix error check in core_get_v4()
+>   media: venus: convert to use devm_pm_opp_* API
+>   memory: samsung: exynos5422-dmc: fix return error in
+>     exynos5_init_freq_table
+>   memory: samsung: exynos5422-dmc: convert to use devm_pm_opp_* API
+>   memory: tegra20: convert to use devm_pm_opp_* API
+>   memory: tegra30: convert to use devm_pm_opp_* API
+>   PM / devfreq: tegra30: convert to use devm_pm_opp_* API
+>   PM / devfreq: rk3399_dmc: convert to use devm_pm_opp_* API
+>   PM / devfreq: imx8m-ddrc: convert to use devm_pm_opp_* API
+>   PM / devfreq: imx-bus: convert to use devm_pm_opp_* API
+>   PM / devfreq: exynos: convert to use devm_pm_opp_* API
+>   PM / devfreq: convert to devm_pm_opp_register_notifier and remove
+>     unused API
+> 
+>  drivers/devfreq/devfreq.c                     |  66 +------
+>  drivers/devfreq/exynos-bus.c                  |  42 +----
+>  drivers/devfreq/imx-bus.c                     |  14 +-
+>  drivers/devfreq/imx8m-ddrc.c                  |  15 +-
+>  drivers/devfreq/rk3399_dmc.c                  |  22 +--
+>  drivers/devfreq/tegra30-devfreq.c             |  21 +--
+>  drivers/gpu/drm/lima/lima_devfreq.c           |  45 +----
+>  drivers/gpu/drm/lima/lima_devfreq.h           |   2 -
+>  drivers/gpu/drm/msm/adreno/a5xx_gpu.c         |   2 +-
+>  drivers/gpu/drm/msm/adreno/a6xx_gmu.c         |   2 +-
+>  drivers/gpu/drm/msm/adreno/adreno_gpu.c       |   2 +-
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |  31 ++--
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h       |   2 -
+>  drivers/gpu/drm/msm/dp/dp_ctrl.c              |  29 +--
+>  drivers/gpu/drm/msm/dp/dp_ctrl.h              |   1 -
+>  drivers/gpu/drm/msm/dp/dp_display.c           |   5 +-
+>  drivers/gpu/drm/msm/dsi/dsi_host.c            |  23 ++-
+>  drivers/gpu/drm/panfrost/panfrost_devfreq.c   |  34 +---
+>  drivers/gpu/drm/panfrost/panfrost_devfreq.h   |   1 -
+>  .../media/platform/qcom/venus/pm_helpers.c    |  22 +--
+>  drivers/memory/samsung/exynos5422-dmc.c       |  13 +-
+>  drivers/memory/tegra/tegra20-emc.c            |  29 +--
+>  drivers/memory/tegra/tegra30-emc.c            |  29 +--
+>  drivers/mmc/host/sdhci-msm.c                  |  27 ++-
+>  drivers/opp/core.c                            | 173 ++++++++++++++++++
+>  drivers/opp/of.c                              |  36 ++++
+>  drivers/spi/spi-geni-qcom.c                   |  23 ++-
+>  drivers/spi/spi-qcom-qspi.c                   |  25 ++-
+>  drivers/tty/serial/qcom_geni_serial.c         |  31 ++--
+>  include/linux/devfreq.h                       |  23 ---
+>  include/linux/pm_opp.h                        |  38 ++++
+>  include/linux/qcom-geni-se.h                  |   2 -
+>  32 files changed, 402 insertions(+), 428 deletions(-)
+> 
 
-Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
----
- drivers/devfreq/devfreq.c | 66 +--------------------------------------
- include/linux/devfreq.h   | 23 --------------
- 2 files changed, 1 insertion(+), 88 deletions(-)
+Hello,
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 6aa10de792b3..f593f30529ec 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -2004,40 +2004,6 @@ struct dev_pm_opp *devfreq_recommended_opp(struct device *dev,
- }
- EXPORT_SYMBOL(devfreq_recommended_opp);
- 
--/**
-- * devfreq_register_opp_notifier() - Helper function to get devfreq notified
-- *				     for any changes in the OPP availability
-- *				     changes
-- * @dev:	The devfreq user device. (parent of devfreq)
-- * @devfreq:	The devfreq object.
-- */
--int devfreq_register_opp_notifier(struct device *dev, struct devfreq *devfreq)
--{
--	return dev_pm_opp_register_notifier(dev, &devfreq->nb);
--}
--EXPORT_SYMBOL(devfreq_register_opp_notifier);
--
--/**
-- * devfreq_unregister_opp_notifier() - Helper function to stop getting devfreq
-- *				       notified for any changes in the OPP
-- *				       availability changes anymore.
-- * @dev:	The devfreq user device. (parent of devfreq)
-- * @devfreq:	The devfreq object.
-- *
-- * At exit() callback of devfreq_dev_profile, this must be included if
-- * devfreq_recommended_opp is used.
-- */
--int devfreq_unregister_opp_notifier(struct device *dev, struct devfreq *devfreq)
--{
--	return dev_pm_opp_unregister_notifier(dev, &devfreq->nb);
--}
--EXPORT_SYMBOL(devfreq_unregister_opp_notifier);
--
--static void devm_devfreq_opp_release(struct device *dev, void *res)
--{
--	devfreq_unregister_opp_notifier(dev, *(struct devfreq **)res);
--}
--
- /**
-  * devm_devfreq_register_opp_notifier() - Resource-managed
-  *					  devfreq_register_opp_notifier()
-@@ -2047,40 +2013,10 @@ static void devm_devfreq_opp_release(struct device *dev, void *res)
- int devm_devfreq_register_opp_notifier(struct device *dev,
- 				       struct devfreq *devfreq)
- {
--	struct devfreq **ptr;
--	int ret;
--
--	ptr = devres_alloc(devm_devfreq_opp_release, sizeof(*ptr), GFP_KERNEL);
--	if (!ptr)
--		return -ENOMEM;
--
--	ret = devfreq_register_opp_notifier(dev, devfreq);
--	if (ret) {
--		devres_free(ptr);
--		return ret;
--	}
--
--	*ptr = devfreq;
--	devres_add(dev, ptr);
--
--	return 0;
-+	return devm_pm_opp_register_notifier(dev, &devfreq->nb);
- }
- EXPORT_SYMBOL(devm_devfreq_register_opp_notifier);
- 
--/**
-- * devm_devfreq_unregister_opp_notifier() - Resource-managed
-- *					    devfreq_unregister_opp_notifier()
-- * @dev:	The devfreq user device. (parent of devfreq)
-- * @devfreq:	The devfreq object.
-- */
--void devm_devfreq_unregister_opp_notifier(struct device *dev,
--					 struct devfreq *devfreq)
--{
--	WARN_ON(devres_release(dev, devm_devfreq_opp_release,
--			       devm_devfreq_dev_match, devfreq));
--}
--EXPORT_SYMBOL(devm_devfreq_unregister_opp_notifier);
--
- /**
-  * devfreq_register_notifier() - Register a driver with devfreq
-  * @devfreq:	The devfreq object.
-diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-index b6d3bae1c74d..aca2cc4f4fa4 100644
---- a/include/linux/devfreq.h
-+++ b/include/linux/devfreq.h
-@@ -230,14 +230,8 @@ int update_devfreq(struct devfreq *devfreq);
- /* Helper functions for devfreq user device driver with OPP. */
- struct dev_pm_opp *devfreq_recommended_opp(struct device *dev,
- 				unsigned long *freq, u32 flags);
--int devfreq_register_opp_notifier(struct device *dev,
--				struct devfreq *devfreq);
--int devfreq_unregister_opp_notifier(struct device *dev,
--				struct devfreq *devfreq);
- int devm_devfreq_register_opp_notifier(struct device *dev,
- 				struct devfreq *devfreq);
--void devm_devfreq_unregister_opp_notifier(struct device *dev,
--				struct devfreq *devfreq);
- int devfreq_register_notifier(struct devfreq *devfreq,
- 				struct notifier_block *nb,
- 				unsigned int list);
-@@ -355,29 +349,12 @@ static inline struct dev_pm_opp *devfreq_recommended_opp(struct device *dev,
- 	return ERR_PTR(-EINVAL);
- }
- 
--static inline int devfreq_register_opp_notifier(struct device *dev,
--					struct devfreq *devfreq)
--{
--	return -EINVAL;
--}
--
--static inline int devfreq_unregister_opp_notifier(struct device *dev,
--					struct devfreq *devfreq)
--{
--	return -EINVAL;
--}
--
- static inline int devm_devfreq_register_opp_notifier(struct device *dev,
- 					struct devfreq *devfreq)
- {
- 	return -EINVAL;
- }
- 
--static inline void devm_devfreq_unregister_opp_notifier(struct device *dev,
--					struct devfreq *devfreq)
--{
--}
--
- static inline int devfreq_register_notifier(struct devfreq *devfreq,
- 					struct notifier_block *nb,
- 					unsigned int list)
--- 
-2.25.1
+Could you please add helper for dev_pm_opp_attach_genpd() and make
+cpufreq drivers to use the helpers?
 
+I'd also like to see a devm helper for
+dev_pm_opp_register_set_opp_helper(), which should become useful for
+Tegra drivers sometime soon.
