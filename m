@@ -2,49 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E37B2E8A33
-	for <lists+linux-spi@lfdr.de>; Sun,  3 Jan 2021 04:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D7E82E8A3A
+	for <lists+linux-spi@lfdr.de>; Sun,  3 Jan 2021 04:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726573AbhACDzt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 2 Jan 2021 22:55:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52034 "EHLO
+        id S1726636AbhACD4O (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 2 Jan 2021 22:56:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726512AbhACDzs (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 2 Jan 2021 22:55:48 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F15C0613CF;
-        Sat,  2 Jan 2021 19:55:07 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id v19so16561270pgj.12;
-        Sat, 02 Jan 2021 19:55:07 -0800 (PST)
+        with ESMTP id S1726512AbhACD4N (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 2 Jan 2021 22:56:13 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F6DC061573;
+        Sat,  2 Jan 2021 19:55:33 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id z21so16586577pgj.4;
+        Sat, 02 Jan 2021 19:55:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=XukCghNiyOItZhHaZYN/GSrSL5U50HSG0l4LszYD+Co=;
-        b=YKg7J93UN+43tgiOnq52fm9GQJNJt8EzL0xhqubddoujHgkE6oqBQbiylU9wCJ0ugP
-         t7ei6QE6u2qNut7tLfJIvddWZj1EOvm7EWvxIxQWPDVcaMly5FywYUNKjuDaEDGQtSeZ
-         g80TdfUR8svyTcpN4r3lAg4UKTQtCIWJzWvLDvwp6vdp6RhY/b7hbW8ErpScpfbpKiHk
-         DUZvL/mpfw1msfOEX4ljnKoWshzYRLHH/pH1tFwfm9Am7ljlg28wTm+S4izfKEGzxIm4
-         Ov8IDeDWD2wzaOWLyjEqbGfJjCmNV5ywp7ylpoz+hdQ0IUvZvhiLLUG+xTGmA7m7chVh
-         qFKg==
+        bh=Y7HzXQDsnmIGgDTOmDGILMwV02kIMjNKdm8ZKEdeXsg=;
+        b=eotmQVpxVreVKXR3oezT+9H2WsardzWH1A4dZzoFoLIXCTMWKe9iaoIfuRs0IZr0Ii
+         xhSF5IcF8dP4L5taLEStTtfKdfbcFVu8m2GrnVFBVg4ujy0hOAV6WPVweG9JJBBJT/y0
+         5oVwwvgcmAy78H6McatzbUhblbZnRMHRrRP6rMC8HQztdvRWL8LEAzg8pUVsLmEP+q61
+         yeurrF1M5OAMvFPVKvm8kI4lRijYtowPU6kmkh784bshJDfvlXOtsG0wHW2pm7T5d75u
+         qmH1I+lAE7FQDM/ZhK4Rafnx7zSYSzxvReptopRtapiqcSt38bNkR9341aSb6u7goV6r
+         PG+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=XukCghNiyOItZhHaZYN/GSrSL5U50HSG0l4LszYD+Co=;
-        b=dfbxVBlDPgaI+VJLkCJn3Q91e321KTLO5V5CzFA2jmXrpTOpKNWB/UKqmq/jR3lECY
-         VFcrV+5bjrsxZ7rV7g1hthLr18bEJF32Yr69oInQXWnr503mqT8AXvwBz5/jky+6RFRK
-         mpplBROJKtF6gKYJ+aiBvvRAowTBmAnwjUk/EcHe+GwJZSPWZrTH9oQ9/Ihoirp0qcB2
-         IFFGh78RPaeWGqiP9D/wNCMKHECQUU1qX7lHBhgYnEiiDSEe4uv6aSHrAgsNTpQy89hG
-         fnG6KNwsAfuV7ze/jLCPk4aKkdCyUvcyjbt6JMOfewUvXjwuF8HAuhLRUKzgLOBP7DHi
-         f0ew==
-X-Gm-Message-State: AOAM530VeaKFzXia41a8SyUymF6gbQ8nacj1Rm4Ve4sH/k1LxSfkgMQw
-        clmQ+ilaAIn1XDsvcZncrb4=
-X-Google-Smtp-Source: ABdhPJztzvvTllaqz7ejOV4bbiE80gA6URGwLsGIb0AJ86cxZXMSpVpCDIvAE+92iRA1fFhFsGEGMw==
-X-Received: by 2002:a62:7c4a:0:b029:19d:b7bc:2c51 with SMTP id x71-20020a627c4a0000b029019db7bc2c51mr61899143pfc.30.1609646107481;
-        Sat, 02 Jan 2021 19:55:07 -0800 (PST)
+        bh=Y7HzXQDsnmIGgDTOmDGILMwV02kIMjNKdm8ZKEdeXsg=;
+        b=tBd3I1RTgL6QdtvfVbumsDyTK6KNoXR/gKAiiYLGDEZq253V0C9q++8Js3yIXPZyRy
+         oRhZI7gipvo7eBKRn+ASKnxUd8RRbsH11sR7+Fz/29aLIjRZWsQaGswq9zhxuiV3iUMm
+         +McSE2jygPmIbcpKHYKaFfwW4sgbOy4Ubrt9jESUJk0ZGR3MG4I/klZcGeqXOJUJg2Kf
+         qN01q+hMw5LLYcPmUguMEjlInmEoX+K8ahnzPn7qJgfzsC4O/YwHepQwM/fmWxAgL3SN
+         dxBsZnyplec6fcfwmMNN050TlXD1iWU5tG48tE7cxc04sK69z//AoOe2zTUJ73MQqy9+
+         Gg9A==
+X-Gm-Message-State: AOAM530TUrGL3Z74KW4dl9kX3EClHIm37XhtGGGnhcE3VdoKslceCQkV
+        FMJWUTJN9vXH3Ql7s13JRY4=
+X-Google-Smtp-Source: ABdhPJxbG4x+2xe/jKFrc0z4c/mz7QZfjYFTZamqCvYgW6Xt/IdV+YGfApUBbqxyjaHMHkPtOoCY4g==
+X-Received: by 2002:aa7:9eda:0:b029:19d:ce86:f941 with SMTP id r26-20020aa79eda0000b029019dce86f941mr60065476pfq.57.1609646133007;
+        Sat, 02 Jan 2021 19:55:33 -0800 (PST)
 Received: from localhost.localdomain ([43.255.31.23])
-        by smtp.gmail.com with ESMTPSA id z3sm10967448pfb.157.2021.01.02.19.54.52
+        by smtp.gmail.com with ESMTPSA id c13sm53063490pfp.147.2021.01.02.19.55.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Jan 2021 19:55:06 -0800 (PST)
+        Sat, 02 Jan 2021 19:55:32 -0800 (PST)
 From:   Yangtao Li <tiny.windzz@gmail.com>
 To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
         cw00.choi@samsung.com, krzk@kernel.org, shawnguo@kernel.org,
@@ -81,95 +81,90 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH 26/31] PM / devfreq: tegra30: convert to use devm_pm_opp_* API
-Date:   Sun,  3 Jan 2021 03:54:45 +0000
-Message-Id: <20210103035445.23696-1-tiny.windzz@gmail.com>
+Subject: [PATCH 27/31] PM / devfreq: rk3399_dmc: convert to use devm_pm_opp_* API
+Date:   Sun,  3 Jan 2021 03:55:14 +0000
+Message-Id: <20210103035514.23788-1-tiny.windzz@gmail.com>
 X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Use devm_pm_opp_* API to simplify code, and remove opp_table
-from tegra_devfreq.
+Use devm_pm_opp_* API to simplify code. Since devres release
+can guarantee the order, let's remove
+devm_devfreq_unregister_opp_notifier().
 
 Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 ---
- drivers/devfreq/tegra30-devfreq.c | 21 +++++++--------------
- 1 file changed, 7 insertions(+), 14 deletions(-)
+ drivers/devfreq/rk3399_dmc.c | 22 +++-------------------
+ 1 file changed, 3 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index 117cad7968ab..4984cb91e9ea 100644
---- a/drivers/devfreq/tegra30-devfreq.c
-+++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -178,7 +178,6 @@ struct tegra_devfreq_soc_data {
- 
- struct tegra_devfreq {
- 	struct devfreq		*devfreq;
--	struct opp_table	*opp_table;
- 
- 	struct reset_control	*reset;
- 	struct clk		*clock;
-@@ -794,6 +793,7 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
- 	struct tegra_devfreq_device *dev;
- 	struct tegra_devfreq *tegra;
- 	struct devfreq *devfreq;
-+	struct opp_tabl	*opp_table;
- 	unsigned int i;
- 	long rate;
- 	int err;
-@@ -841,25 +841,25 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
- 		return err;
+diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
+index 2e912166a993..9b8ab8be29d1 100644
+--- a/drivers/devfreq/rk3399_dmc.c
++++ b/drivers/devfreq/rk3399_dmc.c
+@@ -432,7 +432,7 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
+ 	 * We add a devfreq driver to our parent since it has a device tree node
+ 	 * with operating points.
+ 	 */
+-	if (dev_pm_opp_of_add_table(dev)) {
++	if (devm_pm_opp_of_add_table(dev)) {
+ 		dev_err(dev, "Invalid operating-points in device tree.\n");
+ 		ret = -EINVAL;
+ 		goto err_edev;
+@@ -448,7 +448,7 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
+ 	opp = devfreq_recommended_opp(dev, &data->rate, 0);
+ 	if (IS_ERR(opp)) {
+ 		ret = PTR_ERR(opp);
+-		goto err_free_opp;
++		goto err_edev;
  	}
  
--	tegra->opp_table = dev_pm_opp_set_supported_hw(&pdev->dev,
--						       &hw_version, 1);
--	err = PTR_ERR_OR_ZERO(tegra->opp_table);
-+	opp_table = devm_pm_opp_set_supported_hw(&pdev->dev,
-+						 &hw_version, 1);
-+	err = PTR_ERR_OR_ZERO(opp_table);
- 	if (err) {
- 		dev_err(&pdev->dev, "Failed to set supported HW: %d\n", err);
- 		return err;
+ 	data->rate = dev_pm_opp_get_freq(opp);
+@@ -463,7 +463,7 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
+ 					   &data->ondemand_data);
+ 	if (IS_ERR(data->devfreq)) {
+ 		ret = PTR_ERR(data->devfreq);
+-		goto err_free_opp;
++		goto err_edev;
  	}
  
--	err = dev_pm_opp_of_add_table(&pdev->dev);
-+	err = devm_pm_opp_of_add_table(&pdev->dev);
- 	if (err) {
- 		dev_err(&pdev->dev, "Failed to add OPP table: %d\n", err);
--		goto put_hw;
-+		return err;
- 	}
+ 	devm_devfreq_register_opp_notifier(dev, data->devfreq);
+@@ -473,27 +473,12 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
  
- 	err = clk_prepare_enable(tegra->clock);
- 	if (err) {
- 		dev_err(&pdev->dev,
- 			"Failed to prepare and enable ACTMON clock\n");
--		goto remove_table;
-+		return err;
- 	}
- 
- 	err = reset_control_reset(tegra->reset);
-@@ -917,10 +917,6 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
- 	reset_control_reset(tegra->reset);
- disable_clk:
- 	clk_disable_unprepare(tegra->clock);
--remove_table:
--	dev_pm_opp_of_remove_table(&pdev->dev);
--put_hw:
--	dev_pm_opp_put_supported_hw(tegra->opp_table);
- 
- 	return err;
- }
-@@ -935,9 +931,6 @@ static int tegra_devfreq_remove(struct platform_device *pdev)
- 	reset_control_reset(tegra->reset);
- 	clk_disable_unprepare(tegra->clock);
- 
--	dev_pm_opp_of_remove_table(&pdev->dev);
--	dev_pm_opp_put_supported_hw(tegra->opp_table);
--
  	return 0;
+ 
+-err_free_opp:
+-	dev_pm_opp_of_remove_table(&pdev->dev);
+ err_edev:
+ 	devfreq_event_disable_edev(data->edev);
+ 
+ 	return ret;
  }
  
+-static int rk3399_dmcfreq_remove(struct platform_device *pdev)
+-{
+-	struct rk3399_dmcfreq *dmcfreq = dev_get_drvdata(&pdev->dev);
+-
+-	/*
+-	 * Before remove the opp table we need to unregister the opp notifier.
+-	 */
+-	devm_devfreq_unregister_opp_notifier(dmcfreq->dev, dmcfreq->devfreq);
+-	dev_pm_opp_of_remove_table(dmcfreq->dev);
+-
+-	return 0;
+-}
+-
+ static const struct of_device_id rk3399dmc_devfreq_of_match[] = {
+ 	{ .compatible = "rockchip,rk3399-dmc" },
+ 	{ },
+@@ -502,7 +487,6 @@ MODULE_DEVICE_TABLE(of, rk3399dmc_devfreq_of_match);
+ 
+ static struct platform_driver rk3399_dmcfreq_driver = {
+ 	.probe	= rk3399_dmcfreq_probe,
+-	.remove = rk3399_dmcfreq_remove,
+ 	.driver = {
+ 		.name	= "rk3399-dmc-freq",
+ 		.pm	= &rk3399_dmcfreq_pm,
 -- 
 2.25.1
 
