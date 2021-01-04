@@ -2,41 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 383532E93E0
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Jan 2021 12:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E23AB2E93E5
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Jan 2021 12:05:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726652AbhADLDc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Jan 2021 06:03:32 -0500
-Received: from mail-oo1-f46.google.com ([209.85.161.46]:33913 "EHLO
-        mail-oo1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726176AbhADLDc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Jan 2021 06:03:32 -0500
-Received: by mail-oo1-f46.google.com with SMTP id x23so6187376oop.1;
-        Mon, 04 Jan 2021 03:03:17 -0800 (PST)
+        id S1726345AbhADLEY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Jan 2021 06:04:24 -0500
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:32818 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726253AbhADLEY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Jan 2021 06:04:24 -0500
+Received: by mail-oi1-f175.google.com with SMTP id d203so31732114oia.0;
+        Mon, 04 Jan 2021 03:04:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vgz855DfWv71v/NUg42dMP6FV3P5LJ1Dp9oOf7gYED8=;
-        b=lsYYKFRMSBmXyUBKFBWQPzTxJXcIVtxTp2zZBcZ7SB5XQJOwr6WTRcgZ9r8iJ+JQfS
-         0EepbijIYcrRnk0xlBGH6jUJDKLdGHwd60eiOiEEltU7EQfhUIBCkSIfWzGHDaE13r2I
-         wfMj617x9d+269frPev3Ref27HZ9GTCXnDhOGH4eEJvPycTmVQQm4EvKA+aE4sLv/Kuq
-         7AIH40YwUKHy2KmmNlt1+nnX/3W7QBw1QZwQrVmMKivFl4esMxVm92Luy/CtMlLAb+2X
-         1cbLHnKauYtwmyP48P8pDx3jL7HEw//mX0OTx7g2glndDZe82I9KBm+ykrw5elbYIvyy
-         2dGg==
-X-Gm-Message-State: AOAM531BN/uflnC9zut7HkNhjStOnlXQuBhH2//jjB0TGoDEiWkBqjEI
-        puav115/wS3cuavg5LH6Rv+WbArM2YWCIbmjpEkcU5dU
-X-Google-Smtp-Source: ABdhPJzr1K2Am+N2Q/mJdEccKDCfyY216KRTVXuy/doErF2NeQJAnzf4Bso+QzcOdpp3/DpfE19LAUmx1c+nIkV1eh0=
-X-Received: by 2002:a4a:ca14:: with SMTP id w20mr48734783ooq.11.1609758171783;
- Mon, 04 Jan 2021 03:02:51 -0800 (PST)
+        bh=H4g2ziabIiExWAC+uPZxI4bCHUzg0yvflC/2YZUTTYw=;
+        b=HyMgdvwxOciMkX4wU4fARIAyZoePZlquLhp4yP1mdce947Qb0csrIa9xw4VVE2qVR1
+         lcavWAcWCw+1jw4d2svtLXd85/OHXXBU+KaleL+Q1wLhfRBPGN65DA5dsipLldvCySiM
+         2Q2RktH7+fY8TmTFU9ley1VBcvmA8n+R47SSvK4Rfl7T/b0kDnGZ8AqbA1RQtTDri6yr
+         yCDunc/l2nBMswOQ22c+/nFsZNBf6WMpaqUxfcN2Z70d5UAmy64+RnjeM6gMvH9KfLAn
+         VygylsoZleZCorAbMQu8q99IFNI9jCBOuSSHO+Qsn22ZZW4VSs4eOWYM1Y28YC9FuWNf
+         cIvA==
+X-Gm-Message-State: AOAM532jYz3TAwNoyAtBAg/6qjWpa1miT8aOJ5TMZtCqJ33X47n4vtGx
+        2r087tc6f96/3+icwVcvGLZkgVEmjRx18rd4Wig=
+X-Google-Smtp-Source: ABdhPJzQr50t0WHB88K558MBAbgwFJoNsl8lbYFg8e/pADpO56kYAHzxhvPPsT4G5DDEC+RJARzSFgyPj/Wb7/hBB+w=
+X-Received: by 2002:aca:3cc5:: with SMTP id j188mr17555957oia.54.1609758223078;
+ Mon, 04 Jan 2021 03:03:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20210102115412.3402059-1-aford173@gmail.com> <20210102115412.3402059-2-aford173@gmail.com>
-In-Reply-To: <20210102115412.3402059-2-aford173@gmail.com>
+References: <20210102115412.3402059-1-aford173@gmail.com> <20210102115412.3402059-3-aford173@gmail.com>
+In-Reply-To: <20210102115412.3402059-3-aford173@gmail.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 4 Jan 2021 12:02:40 +0100
-Message-ID: <CAMuHMdXzK=d30RuWSDofR5uB2SmF5eiHMpQ0xakvUqDA7bWhOQ@mail.gmail.com>
-Subject: Re: [PATCH V2 2/4] memory: renesas rpc-if: Update Add RZ/G2 to
- Kconfig description
+Date:   Mon, 4 Jan 2021 12:03:32 +0100
+Message-ID: <CAMuHMdU5tYFisn-vco=ML2aoOaL7JcVn7_Rma4GU9RTnwVFKwA@mail.gmail.com>
+Subject: Re: [PATCH V2 3/4] spi: renesas rpc-if: Update Add RZ/G2 to Kconfig description
 To:     Adam Ford <aford173@gmail.com>
 Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         Adam Ford-BE <aford@beaconembedded.com>,
@@ -56,35 +55,15 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On Sat, Jan 2, 2021 at 12:54 PM Adam Ford <aford173@gmail.com> wrote:
->
-> The Renesas RPC-IF is present on the RZ/G2 Series.  Add that to
-> the description.
+> The SPI driver for the Renesas RPC-IF is present on the RZ/G2
+
+s/is/as/
+
+> Series.  Add that to the description.
 >
 > Suggested-by: Biju Das <biju.das.jz@bp.renesas.com>
 > Signed-off-by: Adam Ford <aford173@gmail.com>
 
-Thanks for your patch!
-
-> --- a/drivers/memory/Kconfig
-> +++ b/drivers/memory/Kconfig
-> @@ -202,9 +202,9 @@ config RENESAS_RPCIF
->         depends on ARCH_RENESAS || COMPILE_TEST
->         select REGMAP_MMIO
->         help
-> -         This supports Renesas R-Car Gen3 RPC-IF which provides either SPI
-> -         host or HyperFlash. You'll have to select individual components
-> -         under the corresponding menu.
-> +         This supports Renesas R-Car Gen3 of RZ/G2 RPC-IF which provides
-
-s/of/or/
-
-> +         either SPI host or HyperFlash. You'll have to select individual
-> +         components under the corresponding menu.
->
->  config STM32_FMC2_EBI
->         tristate "Support for FMC2 External Bus Interface on STM32MP SoCs"
-
-With the above fixed:
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Gr{oetje,eeting}s,
