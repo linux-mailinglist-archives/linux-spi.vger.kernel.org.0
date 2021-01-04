@@ -2,44 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5112E9F92
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Jan 2021 22:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C842B2E9F98
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Jan 2021 22:35:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726894AbhADVcj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Jan 2021 16:32:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40810 "EHLO mail.kernel.org"
+        id S1726418AbhADVfp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Jan 2021 16:35:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40958 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726680AbhADVcj (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 4 Jan 2021 16:32:39 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4023F216C4;
-        Mon,  4 Jan 2021 21:31:58 +0000 (UTC)
+        id S1726371AbhADVfp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 4 Jan 2021 16:35:45 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0F83221919;
+        Mon,  4 Jan 2021 21:35:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609795918;
-        bh=jGhGboXJLgp83o7a+zf9VPQq6PttDfIBMW/Cujx0Z6c=;
+        s=k20201202; t=1609796104;
+        bh=p9hRd4ZU6GhtvzVJXohp3lv14K7e/yS4HdflvdROGmg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kTWb+fz3CvA3RbZMI/d0XAbWS/8yPs4ixn9QK87DyhrDLdyCzm7G4vh/+Dkj5iSLI
-         8TNu5t7idY3cwhL1VXgeCxR6QUyuTX2wH+XX35OTfCjD5h572amb3DWKNpuY70kLZW
-         F2zvjboFVnFDwPCLL4Yk5ys1cI6AkvRocuS593OU2/60Kl+HK6XOHYBOZF/TPW59Tc
-         V8oomtwNcNb2N1sPEBoK3/QXvBlhJCsr8Mx8WsXOzuwefQLd1tJdqsCwLeeFwl74Qf
-         0WDxm52xYT/gVm4A5SlezTyexEn1aj+/G/Kso3kiKTgf/eAUPxuORdXg/LmWITp7lP
-         tHNWXPKRUkc8w==
-Date:   Mon, 4 Jan 2021 21:31:31 +0000
+        b=hIb7NdDPxXWguQfra/DwaPKwpBpTxf/2WRL0yTM6d4Tvq67xdw4LI91gdvDjIQZ13
+         9e+rCMu5pKOlKhQwHvqKv3rzj0YVbgyxQ6kxg5+a/oBLYhFP+74iZ2AUkYS1cWoVj8
+         jDdjeM7/yLD5CYCx0Ela4F7uvN1FqWWjm/UwqYJg94+m221TspUxczfecmi/XZMCe1
+         Y4PnaFUYxYfJOC1rLLdevSqKMu6o/chTqhSRJ9c2dBn7pxaZcKtvw84sKAaxJl1821
+         YGZxlvDMmVvF1or+zOohXv2EuVMn98WtRGk3zV/Y0/X35JjaCVNQX8MCG75JKIh1uA
+         RhqcrVu/b6UMw==
+Date:   Mon, 4 Jan 2021 21:34:37 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Bert Vermeulen <bert@biot.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Birger Koblitz <mail@birger-koblitz.de>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: spi: Realtek RTL838x/RTL839x SPI
- controller
-Message-ID: <20210104213131.GL5645@sirena.org.uk>
-References: <20210101132432.2785663-1-bert@biot.com>
- <20210101132432.2785663-2-bert@biot.com>
+To:     Gustav Wiklander <gustav.wiklander@axis.com>
+Cc:     kernel@axis.com, Gustav Wiklander <gustavwi@axis.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: spidev: Fix so the module is autoloaded when built
+ as external
+Message-ID: <20210104213437.GM5645@sirena.org.uk>
+References: <20210104153436.20083-1-gustav.wiklander@axis.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7l042bGvurpep9Wg"
+        protocol="application/pgp-signature"; boundary="KSyhVCl2eeZHT0Rn"
 Content-Disposition: inline
-In-Reply-To: <20210101132432.2785663-2-bert@biot.com>
+In-Reply-To: <20210104153436.20083-1-gustav.wiklander@axis.com>
 X-Cookie: Stupidity is its own reward.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
@@ -47,37 +44,38 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---7l042bGvurpep9Wg
+--KSyhVCl2eeZHT0Rn
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 01, 2021 at 02:24:31PM +0100, Bert Vermeulen wrote:
+On Mon, Jan 04, 2021 at 04:34:35PM +0100, Gustav Wiklander wrote:
+> From: Gustav Wiklander <gustavwi@axis.com>
+>=20
+> The spi framework sets the modalias for the spi device to belong in
+> either the acpi device table or the SPI device table. It can never
+> be in the OF table. Therefore the spidev driver should populate the
+> spi device table rather than the OF table.
+>=20
+> NOTE: platform drivers and i2c drivers support aliases in the
+>       OF device table.
 
-> +  compatible:
-> +    const: realtek,rtl-spi
+Why is this a good solution rather than ensuring the the OF IDs can be
+used directly?
 
-This is still just using rtl-spi as the compatible string, please
-address the feedback on the previous version.
-
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
-
---7l042bGvurpep9Wg
+--KSyhVCl2eeZHT0Rn
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/ziTMACgkQJNaLcl1U
-h9Dmkwf+IgiS05nspQXIaJkG86ncWujAt1joFokPRvyZ7r5TIfivPc2fJ0+dUOpr
-VvbD9EICjfq6QrJw+ufDhjEs/mcujM4N2QcEs9Dm6tZj4rS7OHQbbAmLv70zHt43
-OFTR9aZrtum1oT07q5g7MEoqDgUshxfiDL18x0y4AA227NvCMlAOgBXsqG9gl3Wr
-p0qlAY5bMnT3cRbyVMzwcdyNWOXm5/Vnwj7e7Sd+zEaEYOz8EHqi6ZRPP5jjqVUw
-XLkFNEG41F/nxhaml/GFWffwDFWBhZVq9l9E9TyuLBZQPuOCSTfoOLj8EgSsmdRB
-1qs4FUcE9zMIyYSE30J5vJ99bxS72A==
-=4CUf
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/zie0ACgkQJNaLcl1U
+h9D5xAf+L4jboiQY2mS70nBESCg1h9cb/iMPsgozlHUTXreWtx68MCAiBSpjwJds
+Dw7C3XGUPGgyIGdx+NJFugXkjUh9tz1znwVn8/1Tu3wT9nyX6Y4Pg47n4Vxzs8cy
+IPxBqgdt0EgQvvuHVu+j+IG/AaTWBmT6mDwQJOLAKD/VgKmrFNqIGrxSuhCGSLjN
+I8g+5KxO1Nm0ZLRAWqZI74aSMzjAfGKhTX8PxPEwK+HXO3AzZo7aeePTVl+LNjQ/
+dplHJTfJkNnOoKkvWEjmmTc45AqEuelO7IUw8l3gHncVUxNp9oHcItDgB63V12pn
+JZJ0i1y9Tqv4iC/Bo5oJQZF3cn3Gtw==
+=AEaJ
 -----END PGP SIGNATURE-----
 
---7l042bGvurpep9Wg--
+--KSyhVCl2eeZHT0Rn--
