@@ -2,115 +2,118 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BEF42E94E4
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Jan 2021 13:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0408F2E94EF
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Jan 2021 13:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726303AbhADMcZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Jan 2021 07:32:25 -0500
-Received: from mail-out.m-online.net ([212.18.0.9]:49849 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726328AbhADMcZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Jan 2021 07:32:25 -0500
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4D8ZkF0tDFz1qs3D;
-        Mon,  4 Jan 2021 13:31:33 +0100 (CET)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4D8ZkD6kHQz1qwHL;
-        Mon,  4 Jan 2021 13:31:32 +0100 (CET)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id UBpcbJBXi3YL; Mon,  4 Jan 2021 13:31:31 +0100 (CET)
-X-Auth-Info: RgYTZg3PO1nqOX+KXtrEzYKNrMuAK5yKDL3Cn6k+JsE=
-Received: from tr.lan (ip-89-176-112-137.net.upcbroadband.cz [89.176.112.137])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Mon,  4 Jan 2021 13:31:31 +0100 (CET)
-From:   Marek Vasut <marex@denx.de>
-To:     linux-spi@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>, Alain Volmat <alain.volmat@st.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
-        Antonio Borneo <antonio.borneo@st.com>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Roman Guskov <rguskov@dh-electronics.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH] spi: stm32: Simplify stm32h7_spi_prepare_fthlv()
-Date:   Mon,  4 Jan 2021 13:31:14 +0100
-Message-Id: <20210104123114.261596-1-marex@denx.de>
-X-Mailer: git-send-email 2.29.2
+        id S1726509AbhADMfJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Jan 2021 07:35:09 -0500
+Received: from mail-oi1-f182.google.com ([209.85.167.182]:33312 "EHLO
+        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726303AbhADMfH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Jan 2021 07:35:07 -0500
+Received: by mail-oi1-f182.google.com with SMTP id d203so31962099oia.0;
+        Mon, 04 Jan 2021 04:34:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5wGZ1GPhO3W//V4Lylox6bP5qdJ1wx1nVDn4V/XONEs=;
+        b=ek6Wt8xADzp3j6PEtaTHS71pGcg5Vu8G34HeBY0iMfCBh+7ZnniwkZPhdYlrnDY/rb
+         s4jQwdJq6klhvfVig4aIBkQlLVuf1hiQEFfwGRCsoIKGhbNkvQ1qNdsR5Fv343H549P2
+         E3j8X/wsXNdIq6HSHHF+AAbiVYEgsK1njFGhqEpI955V+zbwlnkIKXLBAepUw59qmez2
+         Fqp61BsnDZilQ6axv8DfFfiWY6yQNAjAkmBvfop1HHuJ/XZDFqOOWCZipe30W5c6b2kF
+         uYrp8slg/ZyoHHfxGMMnbw/ZzC7BMMuzbD7+xVK/6cBmjEkv24lYljNXdq5fJPe6oSkZ
+         ix7g==
+X-Gm-Message-State: AOAM532rgylUg1UAjpRNYFTCWfuCR0L03bY1H9BG2dFPXOoTPEfZPABW
+        FctydKkpVTfXq0TD1cDwr9+Y1wEskWxHjZE9wb4=
+X-Google-Smtp-Source: ABdhPJysTc7KkHukyoh6Hp8SXHzWfHR+MbWcqgt45wqLx93qW4DN7Nc5LRS0kcJXxTVGxdBY5Odt8A1fgV1Gd1cNodo=
+X-Received: by 2002:aca:3cc5:: with SMTP id j188mr17782563oia.54.1609763666850;
+ Mon, 04 Jan 2021 04:34:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201230145708.28544-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20201230145708.28544-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20201230145708.28544-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 4 Jan 2021 13:34:16 +0100
+Message-ID: <CAMuHMdVCD52-eTnEwftGz8ExMkZkJRyM=3M8zU11yhn1UNPxxA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] spi: rpc-if: Remove CONFIG_PM_SLEEP ifdefery
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Mark Brown <broonie@kernel.org>, Jiri Kosina <trivial@kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Pavel Machek <pavel@denx.de>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Chris Brandt <Chris.Brandt@renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Simplify stm32h7_spi_prepare_fthlv() function implementation,
-no functional change intended.
+Hi Prabhakar,
 
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Alain Volmat <alain.volmat@st.com>
-Cc: Alexandre Torgue <alexandre.torgue@st.com>
-Cc: Amelie Delaunay <amelie.delaunay@st.com>
-Cc: Antonio Borneo <antonio.borneo@st.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Roman Guskov <rguskov@dh-electronics.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-stm32@st-md-mailman.stormreply.com
-To: linux-spi@vger.kernel.org
----
-NOTE: Please review thoroughly and test
----
- drivers/spi/spi-stm32.c | 28 ++++------------------------
- 1 file changed, 4 insertions(+), 24 deletions(-)
+On Wed, Dec 30, 2020 at 4:00 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Use __maybe_unused for the suspend()/resume() hooks and get rid of
+> the CONFIG_PM_SLEEP ifdefery to improve the code.
+>
+> Suggested-by: Pavel Machek <pavel@denx.de>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 6017209c6d2f..510738191cd1 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -473,34 +473,14 @@ static int stm32_spi_prepare_mbr(struct stm32_spi *spi, u32 speed_hz,
-  */
- static u32 stm32h7_spi_prepare_fthlv(struct stm32_spi *spi, u32 xfer_len)
- {
--	u32 fthlv, half_fifo, packet;
-+	u32 packet, bpw;
- 
- 	/* data packet should not exceed 1/2 of fifo space */
--	half_fifo = (spi->fifo_size / 2);
--
--	/* data_packet should not exceed transfer length */
--	if (half_fifo > xfer_len)
--		packet = xfer_len;
--	else
--		packet = half_fifo;
--
--	if (spi->cur_bpw <= 8)
--		fthlv = packet;
--	else if (spi->cur_bpw <= 16)
--		fthlv = packet / 2;
--	else
--		fthlv = packet / 4;
-+	packet = clamp(xfer_len, 1U, spi->fifo_size / 2);
- 
- 	/* align packet size with data registers access */
--	if (spi->cur_bpw > 8)
--		fthlv += (fthlv % 2) ? 1 : 0;
--	else
--		fthlv += (fthlv % 4) ? (4 - (fthlv % 4)) : 0;
--
--	if (!fthlv)
--		fthlv = 1;
--
--	return fthlv;
-+	bpw = DIV_ROUND_UP(spi->cur_bpw, 8);
-+	return DIV_ROUND_UP(packet, bpw);
- }
- 
- /**
+Thanks for your patch!
+
+> --- a/drivers/spi/spi-rpc-if.c
+> +++ b/drivers/spi/spi-rpc-if.c
+> @@ -176,15 +176,14 @@ static int rpcif_spi_remove(struct platform_device *pdev)
+>         return 0;
+>  }
+>
+> -#ifdef CONFIG_PM_SLEEP
+> -static int rpcif_spi_suspend(struct device *dev)
+> +static int __maybe_unused rpcif_spi_suspend(struct device *dev)
+>  {
+>         struct spi_controller *ctlr = dev_get_drvdata(dev);
+>
+>         return spi_controller_suspend(ctlr);
+>  }
+>
+> -static int rpcif_spi_resume(struct device *dev)
+> +static int __maybe_unused rpcif_spi_resume(struct device *dev)
+>  {
+>         struct spi_controller *ctlr = dev_get_drvdata(dev);
+>
+> @@ -192,17 +191,13 @@ static int rpcif_spi_resume(struct device *dev)
+>  }
+>
+>  static SIMPLE_DEV_PM_OPS(rpcif_spi_pm_ops, rpcif_spi_suspend, rpcif_spi_resume);
+> -#define DEV_PM_OPS     (&rpcif_spi_pm_ops)
+> -#else
+> -#define DEV_PM_OPS     NULL
+> -#endif
+>
+>  static struct platform_driver rpcif_spi_driver = {
+>         .probe  = rpcif_spi_probe,
+>         .remove = rpcif_spi_remove,
+>         .driver = {
+>                 .name   = "rpc-if-spi",
+> -               .pm     = DEV_PM_OPS,
+> +               .pm     = &rpcif_spi_pm_ops,
+
+You're aware rpcif_spi_pm_ops is now always referenced and thus emitted,
+increasing kernel size by 92 bytes if CONFIG_PM_SLEEP=n?
+This may matter for RZ/A SoCs running from internal SRAM.
+
+>         },
+>  };
+>  module_platform_driver(rpcif_spi_driver);
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.29.2
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
