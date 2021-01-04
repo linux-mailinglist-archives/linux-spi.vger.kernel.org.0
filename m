@@ -2,85 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B60E2E913A
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Jan 2021 08:41:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E0C2E9235
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Jan 2021 09:58:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726198AbhADHlP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Jan 2021 02:41:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726098AbhADHlP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Jan 2021 02:41:15 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABC7C061796
-        for <linux-spi@vger.kernel.org>; Sun,  3 Jan 2021 23:40:34 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id s15so14093027plr.9
-        for <linux-spi@vger.kernel.org>; Sun, 03 Jan 2021 23:40:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=gkO4wZs2FgdAnD1CSmbghKQqG0ttWfnbDgOBZn/+SK0=;
-        b=D6+RF/PzRVYdDbp9mVXRZkgt05lZoa0HdRGJaUPrO11l6JEOewUo9sGrnKJp0JNgxX
-         4POzjUouMSaEkJq2p27xDPvg+5ijWyEmdf5pnItczrPqK51OZNq7N5eq6OIoVluRZbjF
-         creiG91y37GlocoV+MNhmAx4dcHTrwnsIEG6/A6vysRbuchsfHe7/gGt/dBIgmpS2Wzw
-         /e70y98Vovryj6fJVpAteYFt6iBaZlm3OKQOKIEBLSkkk515hA6eKIcl+kncJbYdnATE
-         DVyx+eTJWdSzWYY1JNH1ppkIdH3q1uEt2C2YgSlh24A3+oyYw+8NCHxgIKFT1XAj/Cxz
-         BZfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gkO4wZs2FgdAnD1CSmbghKQqG0ttWfnbDgOBZn/+SK0=;
-        b=VkUsKpdt8iMbwb5XqINAxRXO2e/eng9jng99Zy6MrNZHH1DEClu9Go4tXY9cSD5yo/
-         Pvh+rzFid9uyDyj7DynPXI7Uc5oiFD+5qWjPP0X4r2mBoocMrFS0yaOFyCvmg2vDzS9b
-         EZdfoJEJPw3eHkhV1O4kwdL2PGj5SC0Pyn9B7bTJ72lkNbRjfIAiKzV66fcg64YuwO9H
-         AnVUhJ/p82LP5R1ssY5UiDcioj9n/8F/JvwLbACT9EnSQeYiDWzUGVtzS6X4eZycVD9I
-         9WuTX0NGpBXGGz67quEX94bYCRduDj7fyZGHQtIMQ+SY5YH+v7SNwBV6oGQSJjfej3He
-         KNsw==
-X-Gm-Message-State: AOAM532BKECdkr50P94PmQYaVE0IbROlu+cu7Num6ZBUY25X5QgEXmA1
-        yxSKCYq5dBiq1+Veh8IT6FeKGg==
-X-Google-Smtp-Source: ABdhPJyzODUMq/AyS4aF5tDIj0lxzfRVSiJgpUf3lUkc6Hi0IU7ZVuxe+GHkfVxWnfCCseGDVj9amA==
-X-Received: by 2002:a17:90a:4817:: with SMTP id a23mr28191220pjh.16.1609746034333;
-        Sun, 03 Jan 2021 23:40:34 -0800 (PST)
-Received: from localhost ([122.172.20.109])
-        by smtp.gmail.com with ESMTPSA id b18sm55749806pfi.173.2021.01.03.23.40.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 03 Jan 2021 23:40:33 -0800 (PST)
-Date:   Mon, 4 Jan 2021 13:10:31 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Yangtao Li <tiny.windzz@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH 31/31] PM / devfreq: convert to
- devm_pm_opp_register_notifier and remove unused API
-Message-ID: <20210104074031.k7njtbjot4r22flb@vireshk-i7>
-References: <20210103035706.24168-1-tiny.windzz@gmail.com>
+        id S1726730AbhADI4m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Jan 2021 03:56:42 -0500
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:25064 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725468AbhADI4m (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Jan 2021 03:56:42 -0500
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1048ocXM030920;
+        Mon, 4 Jan 2021 03:55:45 -0500
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com with ESMTP id 35tkj9u552-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 04 Jan 2021 03:55:45 -0500
+Received: from SCSQMBX11.ad.analog.com (SCSQMBX11.ad.analog.com [10.77.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 1048thrJ004178
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Mon, 4 Jan 2021 03:55:44 -0500
+Received: from SCSQCASHYB7.ad.analog.com (10.77.17.133) by
+ SCSQMBX11.ad.analog.com (10.77.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Mon, 4 Jan 2021 00:55:42 -0800
+Received: from SCSQMBX11.ad.analog.com (10.77.17.10) by
+ SCSQCASHYB7.ad.analog.com (10.77.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.721.2;
+ Mon, 4 Jan 2021 00:55:42 -0800
+Received: from zeus.spd.analog.com (10.66.68.11) by SCSQMBX11.ad.analog.com
+ (10.77.17.10) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
+ Transport; Mon, 4 Jan 2021 00:55:42 -0800
+Received: from localhost.localdomain ([10.48.65.12])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 1048tdZL013983;
+        Mon, 4 Jan 2021 03:55:39 -0500
+From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
+To:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <andy.shevchenko@gmail.com>, <alexandru.ardelean@analog.com>,
+        <broonie@kernel.org>, <sfr@canb.auug.org.au>
+Subject: [PATCH] spi: stm32: update dev_dbg() print format for SPI params
+Date:   Mon, 4 Jan 2021 10:59:23 +0200
+Message-ID: <20210104085923.53705-1-alexandru.ardelean@analog.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210103035706.24168-1-tiny.windzz@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-04_07:2020-12-31,2021-01-04 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ spamscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
+ clxscore=1015 bulkscore=0 mlxscore=0 impostorscore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101040059
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 03-01-21, 03:57, Yangtao Li wrote:
->  Use devm_pm_opp_* API to simplify code.
-> 
-> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
-> ---
->  drivers/devfreq/devfreq.c | 66 +--------------------------------------
->  include/linux/devfreq.h   | 23 --------------
->  2 files changed, 1 insertion(+), 88 deletions(-)
+With the introduction of the 'include/uapi/linux/spi/spi.h' header, the
+type of the macros are enforced to 'unsigned long int' via the _BITUL()
+macro.
 
-Remove the unused stuff in a separate patch and let this layer keep
-doing the devm thing, I don't think others would need it.
+This causes some -Wformat warnings in the spi-stm32 driver.
+This patch changes the printf() specifiers from '%d' to '%lu' to
+accommodate for this change.
 
+Fixes: f7005142dace ("spi: uapi: unify SPI modes into a single spi.h header")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+---
+ drivers/spi/spi-stm32.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
+index 6017209c6d2f..47fd35acb651 100644
+--- a/drivers/spi/spi-stm32.c
++++ b/drivers/spi/spi-stm32.c
+@@ -1027,7 +1027,7 @@ static int stm32_spi_prepare_msg(struct spi_master *master,
+ 	else
+ 		clrb |= spi->cfg->regs->lsb_first.mask;
+ 
+-	dev_dbg(spi->dev, "cpol=%d cpha=%d lsb_first=%d cs_high=%d\n",
++	dev_dbg(spi->dev, "cpol=%lu cpha=%lu lsb_first=%lu cs_high=%lu\n",
+ 		spi_dev->mode & SPI_CPOL,
+ 		spi_dev->mode & SPI_CPHA,
+ 		spi_dev->mode & SPI_LSB_FIRST,
 -- 
-viresh
+2.17.1
+
