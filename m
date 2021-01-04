@@ -2,77 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E23AB2E93E5
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Jan 2021 12:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEF42E94E4
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Jan 2021 13:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726345AbhADLEY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Jan 2021 06:04:24 -0500
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:32818 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726253AbhADLEY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Jan 2021 06:04:24 -0500
-Received: by mail-oi1-f175.google.com with SMTP id d203so31732114oia.0;
-        Mon, 04 Jan 2021 03:04:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H4g2ziabIiExWAC+uPZxI4bCHUzg0yvflC/2YZUTTYw=;
-        b=HyMgdvwxOciMkX4wU4fARIAyZoePZlquLhp4yP1mdce947Qb0csrIa9xw4VVE2qVR1
-         lcavWAcWCw+1jw4d2svtLXd85/OHXXBU+KaleL+Q1wLhfRBPGN65DA5dsipLldvCySiM
-         2Q2RktH7+fY8TmTFU9ley1VBcvmA8n+R47SSvK4Rfl7T/b0kDnGZ8AqbA1RQtTDri6yr
-         yCDunc/l2nBMswOQ22c+/nFsZNBf6WMpaqUxfcN2Z70d5UAmy64+RnjeM6gMvH9KfLAn
-         VygylsoZleZCorAbMQu8q99IFNI9jCBOuSSHO+Qsn22ZZW4VSs4eOWYM1Y28YC9FuWNf
-         cIvA==
-X-Gm-Message-State: AOAM532jYz3TAwNoyAtBAg/6qjWpa1miT8aOJ5TMZtCqJ33X47n4vtGx
-        2r087tc6f96/3+icwVcvGLZkgVEmjRx18rd4Wig=
-X-Google-Smtp-Source: ABdhPJzQr50t0WHB88K558MBAbgwFJoNsl8lbYFg8e/pADpO56kYAHzxhvPPsT4G5DDEC+RJARzSFgyPj/Wb7/hBB+w=
-X-Received: by 2002:aca:3cc5:: with SMTP id j188mr17555957oia.54.1609758223078;
- Mon, 04 Jan 2021 03:03:43 -0800 (PST)
-MIME-Version: 1.0
-References: <20210102115412.3402059-1-aford173@gmail.com> <20210102115412.3402059-3-aford173@gmail.com>
-In-Reply-To: <20210102115412.3402059-3-aford173@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 4 Jan 2021 12:03:32 +0100
-Message-ID: <CAMuHMdU5tYFisn-vco=ML2aoOaL7JcVn7_Rma4GU9RTnwVFKwA@mail.gmail.com>
-Subject: Re: [PATCH V2 3/4] spi: renesas rpc-if: Update Add RZ/G2 to Kconfig description
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
+        id S1726303AbhADMcZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Jan 2021 07:32:25 -0500
+Received: from mail-out.m-online.net ([212.18.0.9]:49849 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726328AbhADMcZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Jan 2021 07:32:25 -0500
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4D8ZkF0tDFz1qs3D;
+        Mon,  4 Jan 2021 13:31:33 +0100 (CET)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4D8ZkD6kHQz1qwHL;
+        Mon,  4 Jan 2021 13:31:32 +0100 (CET)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id UBpcbJBXi3YL; Mon,  4 Jan 2021 13:31:31 +0100 (CET)
+X-Auth-Info: RgYTZg3PO1nqOX+KXtrEzYKNrMuAK5yKDL3Cn6k+JsE=
+Received: from tr.lan (ip-89-176-112-137.net.upcbroadband.cz [89.176.112.137])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Mon,  4 Jan 2021 13:31:31 +0100 (CET)
+From:   Marek Vasut <marex@denx.de>
+To:     linux-spi@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>, Alain Volmat <alain.volmat@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Amelie Delaunay <amelie.delaunay@st.com>,
+        Antonio Borneo <antonio.borneo@st.com>,
         Mark Brown <broonie@kernel.org>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-spi <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Roman Guskov <rguskov@dh-electronics.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: [PATCH] spi: stm32: Simplify stm32h7_spi_prepare_fthlv()
+Date:   Mon,  4 Jan 2021 13:31:14 +0100
+Message-Id: <20210104123114.261596-1-marex@denx.de>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, Jan 2, 2021 at 12:54 PM Adam Ford <aford173@gmail.com> wrote:
-> The SPI driver for the Renesas RPC-IF is present on the RZ/G2
+Simplify stm32h7_spi_prepare_fthlv() function implementation,
+no functional change intended.
 
-s/is/as/
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alain Volmat <alain.volmat@st.com>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Amelie Delaunay <amelie.delaunay@st.com>
+Cc: Antonio Borneo <antonio.borneo@st.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Roman Guskov <rguskov@dh-electronics.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-spi@vger.kernel.org
+---
+NOTE: Please review thoroughly and test
+---
+ drivers/spi/spi-stm32.c | 28 ++++------------------------
+ 1 file changed, 4 insertions(+), 24 deletions(-)
 
-> Series.  Add that to the description.
->
-> Suggested-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
+index 6017209c6d2f..510738191cd1 100644
+--- a/drivers/spi/spi-stm32.c
++++ b/drivers/spi/spi-stm32.c
+@@ -473,34 +473,14 @@ static int stm32_spi_prepare_mbr(struct stm32_spi *spi, u32 speed_hz,
+  */
+ static u32 stm32h7_spi_prepare_fthlv(struct stm32_spi *spi, u32 xfer_len)
+ {
+-	u32 fthlv, half_fifo, packet;
++	u32 packet, bpw;
+ 
+ 	/* data packet should not exceed 1/2 of fifo space */
+-	half_fifo = (spi->fifo_size / 2);
+-
+-	/* data_packet should not exceed transfer length */
+-	if (half_fifo > xfer_len)
+-		packet = xfer_len;
+-	else
+-		packet = half_fifo;
+-
+-	if (spi->cur_bpw <= 8)
+-		fthlv = packet;
+-	else if (spi->cur_bpw <= 16)
+-		fthlv = packet / 2;
+-	else
+-		fthlv = packet / 4;
++	packet = clamp(xfer_len, 1U, spi->fifo_size / 2);
+ 
+ 	/* align packet size with data registers access */
+-	if (spi->cur_bpw > 8)
+-		fthlv += (fthlv % 2) ? 1 : 0;
+-	else
+-		fthlv += (fthlv % 4) ? (4 - (fthlv % 4)) : 0;
+-
+-	if (!fthlv)
+-		fthlv = 1;
+-
+-	return fthlv;
++	bpw = DIV_ROUND_UP(spi->cur_bpw, 8);
++	return DIV_ROUND_UP(packet, bpw);
+ }
+ 
+ /**
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.29.2
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
