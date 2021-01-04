@@ -2,28 +2,28 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A15672E96AD
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Jan 2021 15:04:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A50CA2E96C2
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Jan 2021 15:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727175AbhADODd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Jan 2021 09:03:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42146 "EHLO mail.kernel.org"
+        id S1727203AbhADOGO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Jan 2021 09:06:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42728 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726993AbhADODc (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 4 Jan 2021 09:03:32 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E55CD22241;
-        Mon,  4 Jan 2021 14:02:50 +0000 (UTC)
+        id S1726762AbhADOGO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 4 Jan 2021 09:06:14 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E752D207BC;
+        Mon,  4 Jan 2021 14:05:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609768971;
-        bh=cjvypTeXkdOG/wGebkbRyr2S77+u7rAr75FfrW0xa3o=;
+        s=k20201202; t=1609769132;
+        bh=79TsA1bA8DKt3n7SY5XnXtm3knysfw0cfWKMLdkrzAc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Bm5aX9+92ww4jyTAcgiQK/3InHngR3u7Bf4Fyww8v2yTKG2kO3xTJLW/ZxA2X4l+w
-         LIqonA7x3lYVlyxMEDjl+xIIRrNrrxJgoPyGHDdNqJULwde/tiXeT8tBOUcVdsnjpl
-         BqsCVaImc9h2SDyEARthIdw2QC/WbLqMHwHo3Lv/vDa4xEdkmEO2Ow+EBbTvOjUCRg
-         OTSIezonhyS241uJ4Nh8sfUfxiVhUdgVJ+lVoVxGKpiPiibdHqsUt6rwE7oxiFOnG0
-         RTMQaO/WGUyigZgdtaupm74hL/9Mv6ZXMq5X9ql1Zphrx+BytBYOYOL9rZjpsBjCT0
-         vF6DKOEp3CZeg==
-Date:   Mon, 4 Jan 2021 14:02:25 +0000
+        b=iHN9zNRZrzzhE+ofXqwGY3v8yznfietvgJMSpIw+/Hb+3GY0GuhJL7mLLW9bt9kcZ
+         PxcqgpZD5FhAKNG8I5jGEXGBvLQpBmco8xGjMnaIc4EebNiLVje0BlJWOj45JL0/PB
+         vxtEJY5OhIuVTA6E/Lui4XNWCjztT9yf7D3//WPmqcmmDQBgRTjNFYUHE+LDDdYS2G
+         vDbXQowhqqzHV+4MYe0UswMc695n3mCySu0MBMSim5Ss3EsWmxmlkITnnS4eNLG3ZK
+         qcONCWIJbRc577IYCOT74XxUKKbK+estp/16xd1zq3Gyj1t5BuDxRAMQebZh9HQ2Px
+         ydgmSJ/nP9dUA==
+Date:   Mon, 4 Jan 2021 14:05:06 +0000
 From:   Mark Brown <broonie@kernel.org>
 To:     Yangtao Li <tiny.windzz@gmail.com>
 Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
@@ -60,16 +60,16 @@ Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
         linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
         linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH 13/31] spi: spi-qcom-qspi: fix potential mem leak in
- qcom_qspi_probe()
-Message-ID: <20210104140225.GE5645@sirena.org.uk>
+Subject: Re: [PATCH 14/31] spi: spi-qcom-qspi: convert to use devm_pm_opp_*
+ API
+Message-ID: <20210104140506.GF5645@sirena.org.uk>
 References: <20210101165507.19486-1-tiny.windzz@gmail.com>
- <20210101165507.19486-14-tiny.windzz@gmail.com>
+ <20210101165507.19486-15-tiny.windzz@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="19uQFt6ulqmgNgg1"
+        protocol="application/pgp-signature"; boundary="4VrXvz3cwkc87Wze"
 Content-Disposition: inline
-In-Reply-To: <20210101165507.19486-14-tiny.windzz@gmail.com>
+In-Reply-To: <20210101165507.19486-15-tiny.windzz@gmail.com>
 X-Cookie: Stupidity is its own reward.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
@@ -77,29 +77,29 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---19uQFt6ulqmgNgg1
+--4VrXvz3cwkc87Wze
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Fri, Jan 01, 2021 at 04:54:49PM +0000, Yangtao Li wrote:
-> We should use dev_pm_opp_put_clkname() to free opp table each time
-> dev_pm_opp_of_add_table() got error.
+On Fri, Jan 01, 2021 at 04:54:50PM +0000, Yangtao Li wrote:
+> Use devm_pm_opp_* API to simplify code, and remove opp_table
+> from qcom_qspi.
 
 Acked-by: Mark Brown <broonie@kernel.org>
 
---19uQFt6ulqmgNgg1
+--4VrXvz3cwkc87Wze
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/zH/AACgkQJNaLcl1U
-h9D/CQf/WT78Nop+3p+ORGoE4mDvVT5d8AmHOyLMsyM0nJeGHW0T18/rtZQUAmNl
-GEjHrJ2z0iZaV9JLLk1ifDvgRhTVQi1WHJRhtrJSGdj9NxTs19Q9M3aKHMxCGXw4
-maMVT2zyD7ym/wkY7JQDno+lQv890JF1AmQdZAYGW1x/wuVDbSonhUXXFKZPXe9/
-3Y8Ak9eawLXB0td0Sy/Qc40jojaeTr3beKYkMYskRqkARl+JRC4geB+mJD2GNplb
-OEK5pHfrqSLG7czW4m6iP2BdeYKMJbAycIRYoi8DBzUs7ttd7gZHOdDq94nGY76m
-S1IHnh+QgsXcCfp7pkE/486jjH0ylg==
-=G6ph
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/zIJEACgkQJNaLcl1U
+h9DFeQf+IHePH8ftvRUXVVunMDt5ucIZpHjc+KGKU8AM3jyZ+Xyy7jpftefB54+O
+D0zp7MZ5qmBT4HlKD4cibZcvesuW18PPYrUMXVV3H8MuTBZMfvl+XDsWm0NvMjE+
+mG+w8bSqPUM9Mjo5wa7UN8bbEjHzNtPZt0lUNfN+k0NGXJ3XhN5WtH3eGXQAPaIn
+o5aKfPOue5R/hIy2XhK9W7VLqa8NwnhL7tCfYme/Eto/F4ygM/JVeTwdMOeKe3Gi
+SeDV7n7fe5oPecANOGYXE6gdO2c7oAcJl36gxh2rjpz/yGyCykjmHBxU/YdSV3Jk
+T8oGZSZjqmlT+HfPp7aRXPMXmf3ncQ==
+=ApdX
 -----END PGP SIGNATURE-----
 
---19uQFt6ulqmgNgg1--
+--4VrXvz3cwkc87Wze--
