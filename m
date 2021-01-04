@@ -2,118 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0408F2E94EF
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Jan 2021 13:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C30292E9657
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Jan 2021 14:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726509AbhADMfJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Jan 2021 07:35:09 -0500
-Received: from mail-oi1-f182.google.com ([209.85.167.182]:33312 "EHLO
-        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726303AbhADMfH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Jan 2021 07:35:07 -0500
-Received: by mail-oi1-f182.google.com with SMTP id d203so31962099oia.0;
-        Mon, 04 Jan 2021 04:34:52 -0800 (PST)
+        id S1726419AbhADNuh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Jan 2021 08:50:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726396AbhADNug (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Jan 2021 08:50:36 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734A8C061574;
+        Mon,  4 Jan 2021 05:49:56 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id 30so14386218pgr.6;
+        Mon, 04 Jan 2021 05:49:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+DJZ244fWmm1Eu3AuZWtTvG/4qgtx5ebkDRnS934fwE=;
+        b=KNvpcfIuHglIYpeV2XoKyh7PP2hPT/N01s9VVO7BHOdFN5t7SA3yECdLD558utKc4Y
+         uMNyOz8qpMqJq41XG/HR9suOxw1LM12EpFoPFO1GWa3m9MqVUCSj4tITIkvSPVIS0gje
+         B8OrCdYuIzdK+GVU3dURuph0ggE9GZ+K2ediPWOB4WL4yt24S3zzHWVLXlqoH/0xU7GC
+         mP1oLTBFmlGd8xqhYURiNNKaobjfxAL0RKzj975tkyeR9oY8lLn535GArZWiZmgQgWTD
+         JUv9fFhbrLrjTH/HRfpoNKrCRtNEwQFd8h1RKbAB3gB1CvbAWEvVKrTTjyIqioF+1tMq
+         fGkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5wGZ1GPhO3W//V4Lylox6bP5qdJ1wx1nVDn4V/XONEs=;
-        b=ek6Wt8xADzp3j6PEtaTHS71pGcg5Vu8G34HeBY0iMfCBh+7ZnniwkZPhdYlrnDY/rb
-         s4jQwdJq6klhvfVig4aIBkQlLVuf1hiQEFfwGRCsoIKGhbNkvQ1qNdsR5Fv343H549P2
-         E3j8X/wsXNdIq6HSHHF+AAbiVYEgsK1njFGhqEpI955V+zbwlnkIKXLBAepUw59qmez2
-         Fqp61BsnDZilQ6axv8DfFfiWY6yQNAjAkmBvfop1HHuJ/XZDFqOOWCZipe30W5c6b2kF
-         uYrp8slg/ZyoHHfxGMMnbw/ZzC7BMMuzbD7+xVK/6cBmjEkv24lYljNXdq5fJPe6oSkZ
-         ix7g==
-X-Gm-Message-State: AOAM532rgylUg1UAjpRNYFTCWfuCR0L03bY1H9BG2dFPXOoTPEfZPABW
-        FctydKkpVTfXq0TD1cDwr9+Y1wEskWxHjZE9wb4=
-X-Google-Smtp-Source: ABdhPJysTc7KkHukyoh6Hp8SXHzWfHR+MbWcqgt45wqLx93qW4DN7Nc5LRS0kcJXxTVGxdBY5Odt8A1fgV1Gd1cNodo=
-X-Received: by 2002:aca:3cc5:: with SMTP id j188mr17782563oia.54.1609763666850;
- Mon, 04 Jan 2021 04:34:26 -0800 (PST)
+        bh=+DJZ244fWmm1Eu3AuZWtTvG/4qgtx5ebkDRnS934fwE=;
+        b=CJx+7HhDaIN3RJOiwH3drGcAEu3FIl9dUqsHyqwdPlpfQQA15Gl9sSjZ9qKs83chwd
+         bd0L7zsXMbUoodFe7JgLz0vT9/N8N7uisw/SI15BTfeja74ZwC3JKCRJcnuSO+mdGA/I
+         e9/1QZt6RnnxwSvQDC14DoklrAcHoji+7ph3PbaOXY5/5cIYpPNHuVjNIhp0vffmepWi
+         bmHxUrYALykv9NtHSW8Iu5JBXOWrV+fx/PSLeKuwJMtutgM1ZLenRrh4lcxHmh+kq7Gb
+         1OA1zrKXJPf9fKokWym89Yscpt76UYa5iTJzRHY8GipIzATYcs2ufwzIp+njXBagDiOB
+         V/eg==
+X-Gm-Message-State: AOAM531+nVW1gR4XPveP7wBRAnutPKpQ6/TIoKskQxNz9/RuNblLYzIv
+        +94FvmaAplTA3A2hN8awJnLZBkrMOf6yAmNM0Pc=
+X-Google-Smtp-Source: ABdhPJxqi8qDckN3jm/Qah53DZywTHfIi81ycD9UrvEU6ouSQLNhgM7OlLPtzLTUhoAq2snYcNXRpLt89kYbE7SI/5Q=
+X-Received: by 2002:a62:19cc:0:b029:19e:321b:a22e with SMTP id
+ 195-20020a6219cc0000b029019e321ba22emr66235798pfz.73.1609768195997; Mon, 04
+ Jan 2021 05:49:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20201230145708.28544-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20201230145708.28544-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20201230145708.28544-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 4 Jan 2021 13:34:16 +0100
-Message-ID: <CAMuHMdVCD52-eTnEwftGz8ExMkZkJRyM=3M8zU11yhn1UNPxxA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] spi: rpc-if: Remove CONFIG_PM_SLEEP ifdefery
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Mark Brown <broonie@kernel.org>, Jiri Kosina <trivial@kernel.org>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Pavel Machek <pavel@denx.de>,
-        linux-spi <linux-spi@vger.kernel.org>,
+References: <20210104085923.53705-1-alexandru.ardelean@analog.com>
+In-Reply-To: <20210104085923.53705-1-alexandru.ardelean@analog.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 4 Jan 2021 15:50:44 +0200
+Message-ID: <CAHp75VdsXDr8kAREiGhSF9-ffr05+LDHcqOzWnomfWTH2mN9Gw@mail.gmail.com>
+Subject: Re: [PATCH] spi: stm32: update dev_dbg() print format for SPI params
+To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
+Cc:     linux-spi <linux-spi@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Chris Brandt <Chris.Brandt@renesas.com>
+        Mark Brown <broonie@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Prabhakar,
-
-On Wed, Dec 30, 2020 at 4:00 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Use __maybe_unused for the suspend()/resume() hooks and get rid of
-> the CONFIG_PM_SLEEP ifdefery to improve the code.
+On Mon, Jan 4, 2021 at 10:55 AM Alexandru Ardelean
+<alexandru.ardelean@analog.com> wrote:
 >
-> Suggested-by: Pavel Machek <pavel@denx.de>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-
-Thanks for your patch!
-
-> --- a/drivers/spi/spi-rpc-if.c
-> +++ b/drivers/spi/spi-rpc-if.c
-> @@ -176,15 +176,14 @@ static int rpcif_spi_remove(struct platform_device *pdev)
->         return 0;
->  }
+> With the introduction of the 'include/uapi/linux/spi/spi.h' header, the
+> type of the macros are enforced to 'unsigned long int' via the _BITUL()
+> macro.
 >
-> -#ifdef CONFIG_PM_SLEEP
-> -static int rpcif_spi_suspend(struct device *dev)
-> +static int __maybe_unused rpcif_spi_suspend(struct device *dev)
->  {
->         struct spi_controller *ctlr = dev_get_drvdata(dev);
+> This causes some -Wformat warnings in the spi-stm32 driver.
+> This patch changes the printf() specifiers from '%d' to '%lu' to
+> accommodate for this change.
 >
->         return spi_controller_suspend(ctlr);
->  }
->
-> -static int rpcif_spi_resume(struct device *dev)
-> +static int __maybe_unused rpcif_spi_resume(struct device *dev)
->  {
->         struct spi_controller *ctlr = dev_get_drvdata(dev);
->
-> @@ -192,17 +191,13 @@ static int rpcif_spi_resume(struct device *dev)
->  }
->
->  static SIMPLE_DEV_PM_OPS(rpcif_spi_pm_ops, rpcif_spi_suspend, rpcif_spi_resume);
-> -#define DEV_PM_OPS     (&rpcif_spi_pm_ops)
-> -#else
-> -#define DEV_PM_OPS     NULL
-> -#endif
->
->  static struct platform_driver rpcif_spi_driver = {
->         .probe  = rpcif_spi_probe,
->         .remove = rpcif_spi_remove,
->         .driver = {
->                 .name   = "rpc-if-spi",
-> -               .pm     = DEV_PM_OPS,
-> +               .pm     = &rpcif_spi_pm_ops,
+> Fixes: f7005142dace ("spi: uapi: unify SPI modes into a single spi.h header")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-You're aware rpcif_spi_pm_ops is now always referenced and thus emitted,
-increasing kernel size by 92 bytes if CONFIG_PM_SLEEP=n?
-This may matter for RZ/A SoCs running from internal SRAM.
+LKP also reported this before.
 
->         },
->  };
->  module_platform_driver(rpcif_spi_driver);
+...
 
-Gr{oetje,eeting}s,
+> -       dev_dbg(spi->dev, "cpol=%d cpha=%d lsb_first=%d cs_high=%d\n",
+> +       dev_dbg(spi->dev, "cpol=%lu cpha=%lu lsb_first=%lu cs_high=%lu\n",
+>                 spi_dev->mode & SPI_CPOL,
+>                 spi_dev->mode & SPI_CPHA,
+>                 spi_dev->mode & SPI_LSB_FIRST,
 
-                        Geert
+Wouldn't the output be a bit awful with all these?
+
+I think the proper fix is to add !! to each bit mask.
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+With Best Regards,
+Andy Shevchenko
