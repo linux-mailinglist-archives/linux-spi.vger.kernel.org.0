@@ -2,41 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C54C2E9C48
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Jan 2021 18:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 960BF2E9C42
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Jan 2021 18:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727943AbhADRmY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Jan 2021 12:42:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36904 "EHLO mail.kernel.org"
+        id S1727718AbhADRmT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Jan 2021 12:42:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36684 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727377AbhADRmX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 4 Jan 2021 12:42:23 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E66102250E;
-        Mon,  4 Jan 2021 17:41:42 +0000 (UTC)
+        id S1727341AbhADRmS (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 4 Jan 2021 12:42:18 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EAB73206B2;
+        Mon,  4 Jan 2021 17:41:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609782103;
-        bh=BPnOnznoiq/XSjggH+RhjSgHG7IZo/HAB190GGe8BNA=;
+        s=k20201202; t=1609782098;
+        bh=DZlUi3P2nOehcJAFK3kCJp9endzedKfjdeaUrPBvfZw=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=E9ebn3aaDsyTlV1sgH+066O2byDbBpr7WQHuTRleZn4w86BdM2QLxtROk9THLw0L7
-         usZrstEtoc7TpqGMb4MsfcGU4nyPMCZNkus7/JA5xyL2Kln7k7N+5ixAP8XmiqD2FW
-         iH0rPAoX4nb8Bl+MPX4NOqOiIiVSThzFsjzXaI1bP1JG+/NmqDeY1DGHLPUihqMNGK
-         0vbmrHAUmYqR8VoZD9Aq3GTB8TFKTia6qw2re7QF4NCF3LcWK1BlvoCaFEhGVoLGrN
-         jTcvSPJm6lMyz9c0hEM0MfPeL1SkXymY/2/TWJzvl7f56U+GJvgRsTUY0oSWrRPEF6
-         aePWRdTjRrS8w==
+        b=DkeF9eERjOQ2YLAh4vVuWsDbOK55WIiXlgoWKLUyOudb6a1tsaI0ekUxbANMj7xCY
+         cnBZIfyHVknBKE3BLtCCUPdueBnfq8qXeKcZ9Ink3IF0xKCjKZP3LUjUTVn+Dmj3u3
+         BPnk+6JPONuNd+CmsFAorO4LUVqGs87CP5mf4XEyg9i0sAC4HMfK9X0i5zEqQ1kQg5
+         xo2cZVzWpqs+T8Oj1wTBvQwxkYmILxJxp3hLjAphF0wsccHvMbe/pn7Dk/DzbjIeXW
+         KPRvI38Zxnfgt0uO5HVgWVCRkfAP2stj4CHTJbPWw4bcc2iZYeCq7WE+bk8xOx702q
+         yoBfPi6bCywxQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-renesas-soc@vger.kernel.org, Adam Ford <aford173@gmail.com>
-Cc:     aford@beaconembedded.com,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        biju.das.jz@bp.renesas.com, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>
-In-Reply-To: <20210102115412.3402059-1-aford173@gmail.com>
-References: <20210102115412.3402059-1-aford173@gmail.com>
-Subject: Re: (subset) [PATCH V2 1/4] dt-bindings: memory: Renesas RPC-IF: Add support for RZ/G2 Series
-Message-Id: <160978207205.14552.17083840940357811641.b4-ty@kernel.org>
+To:     Xu Yilun <yilun.xu@intel.com>, linux-spi@vger.kernel.org
+Cc:     matthew.gerlach@linux.intel.com, lgoncalv@redhat.com,
+        russell.h.weight@intel.com, hao.wu@intel.com, trix@redhat.com,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <1609723749-3557-1-git-send-email-yilun.xu@intel.com>
+References: <1609723749-3557-1-git-send-email-yilun.xu@intel.com>
+Subject: Re: [PATCH v3] spi: fix the divide by 0 error when calculating xfer waiting time
+Message-Id: <160978207205.14552.6743738820178961736.b4-ty@kernel.org>
 Date:   Mon, 04 Jan 2021 17:41:12 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -45,9 +40,11 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, 2 Jan 2021 05:54:09 -0600, Adam Ford wrote:
-> The RZ/G2 Series has the RPC-IF interface.
-> Update bindings to support: r8a774a1, r8a774b1, r8a774c0, and r8a774e1
+On Mon, 4 Jan 2021 09:29:09 +0800, Xu Yilun wrote:
+> The xfer waiting time is the result of xfer->len / xfer->speed_hz. This
+> patch makes the assumption of 100khz xfer speed if the xfer->speed_hz is
+> not assigned and stays 0. This avoids the divide by 0 issue and ensures
+> a reasonable tolerant waiting time.
 
 Applied to
 
@@ -55,8 +52,8 @@ Applied to
 
 Thanks!
 
-[3/4] spi: renesas rpc-if: Update Add RZ/G2 to Kconfig description
-      commit: f4a10fc4225155ae4d2fcb411be9f24245bb5cf8
+[1/1] spi: fix the divide by 0 error when calculating xfer waiting time
+      commit: 6170d077bf92c5b3dfbe1021688d3c0404f7c9e9
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
