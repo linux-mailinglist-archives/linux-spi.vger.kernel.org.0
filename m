@@ -2,85 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 911982EAD1E
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Jan 2021 15:10:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 469672EAD37
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Jan 2021 15:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730720AbhAEOH1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Tue, 5 Jan 2021 09:07:27 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:44687 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728264AbhAEOH1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Jan 2021 09:07:27 -0500
-X-Originating-IP: 90.89.98.255
-Received: from xps13 (lfbn-tou-1-1535-bdcst.w90-89.abo.wanadoo.fr [90.89.98.255])
-        (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 4F0391C000F;
-        Tue,  5 Jan 2021 14:06:37 +0000 (UTC)
-Date:   Tue, 5 Jan 2021 15:06:36 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH 06/10] mtd: Remove drivers used by TX49xx
-Message-ID: <20210105150636.175598fc@xps13>
-In-Reply-To: <20210105140305.141401-7-tsbogend@alpha.franken.de>
-References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
-        <20210105140305.141401-7-tsbogend@alpha.franken.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726759AbhAEOQq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Jan 2021 09:16:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45370 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726504AbhAEOQp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 5 Jan 2021 09:16:45 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 87DFA22AAB;
+        Tue,  5 Jan 2021 14:16:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609856165;
+        bh=CLVMjissewD5ZdHzTYCaSNI7ZR8xFCiUY8G4oTJC+V8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l5lPIZw0Y4PQa+oyffi7WVuBTNZIJYMbhOb0Xx+wZv3DqMSjDes4Fvm1TfTlOr9YI
+         zTJTAO6G4SWFU0DL0XiFt5lbevHWdxg2kx/6uAh1XX+3zRR0rn5IxCbUwJpqg7//Hs
+         z/SlKPtkx7xRwYx20L6JNvYrwSkVnvBdCu8q6bJ4BXkvhZOV19lwmMeqXvuwlSncGb
+         O7Z9cdOZaM4aFeRVNTppg3vBFlkbSvhXIxblsyxB6qYYt6gILPfcYO/3+5+fIffX8/
+         JKkKCeMq3Ulym3Erl4yVuK1LzjONq49nMI0qKIBbfLSZLweklMMhtmFtBqgNLqG0JB
+         NM1G9qJJwVkzA==
+Date:   Tue, 5 Jan 2021 14:15:36 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Qing Zhang <zhangqing@loongson.cn>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        ThomasBogendoerfer <tsbogend@alpha.franken.de>,
+        linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, yangtiezhu@loongson.cn,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/4] spi: LS7A: Add Loongson LS7A SPI controller
+ driver support
+Message-ID: <20210105141536.GD4487@sirena.org.uk>
+References: <1609124381-9107-1-git-send-email-zhangqing@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mSxgbZZZvrAyzONB"
+Content-Disposition: inline
+In-Reply-To: <1609124381-9107-1-git-send-email-zhangqing@loongson.cn>
+X-Cookie: I'm ANN LANDERS!!  I can SHOPLIFT!!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Thomas,
 
-Thomas Bogendoerfer <tsbogend@alpha.franken.de> wrote on Tue,  5 Jan
-2021 15:02:51 +0100:
+--mSxgbZZZvrAyzONB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> CPU support for TX49xx is getting removed, so remove MTD support for it.
-> 
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+On Mon, Dec 28, 2020 at 10:59:38AM +0800, Qing Zhang wrote:
 
-If the removal happens, you may take this patch through the mips tree.
+> +	if (!!(spi->mode & SPI_CS_HIGH) == enable)
+> +		ls7a_spi_write_reg(ls7a_spi, SFC_SOFTCS, (0x1 << spi->chip_select) | cs);
+> +	else
+> +		ls7a_spi_write_reg(ls7a_spi, SFC_SOFTCS, (0x11 << spi->chip_select) | cs);
+> +}
 
-Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
+The core will handle inverting the chip select for the driver when
+SIP_CS_HIGH so doing it again here will cause bugs.  Just use the value
+of enable directly.  Otherwise this looks good.
 
-One less driver to convert to ->exec_op() :-)
+--mSxgbZZZvrAyzONB
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> ---
->  drivers/mtd/maps/Kconfig                 |   6 -
->  drivers/mtd/maps/Makefile                |   1 -
->  drivers/mtd/maps/rbtx4939-flash.c        | 133 -------
->  drivers/mtd/nand/raw/Kconfig             |   7 -
->  drivers/mtd/nand/raw/Makefile            |   1 -
->  drivers/mtd/nand/raw/txx9ndfmc.c         | 423 -----------------------
->  include/linux/platform_data/txx9/ndfmc.h |  28 --
->  7 files changed, 599 deletions(-)
->  delete mode 100644 drivers/mtd/maps/rbtx4939-flash.c
->  delete mode 100644 drivers/mtd/nand/raw/txx9ndfmc.c
->  delete mode 100644 include/linux/platform_data/txx9/ndfmc.h
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Miquèl
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/0dIcACgkQJNaLcl1U
+h9CFWAf8Drd3eCKlYj8r2/7Zu+rzTEA+cCKsN1h5sKGJ2+iTvwEnRJQoEMUE0LTc
+iFwyukIuELaVLbZRBfa2LkrMxxSG1gvkAFIEKRDTQ6SuWwSZeHNGNfZe0hv6hfhi
+K2ES8w+MDmqHYU3kQ/cOAZw2IhqTYk3f9VYT63Zk37xEl4osSEDhNy3St0k/yK8N
+4CW/xVqxR3wkjJnPWVvcLMlzlz6kf7Np4VXSMpXKXDuRXJ/hbucJR7HPr6WCe3ZG
+9A5DZ5siMMQegDGi78pZ/J4m76GIjMDUzHQ2d9hCgObTovmqVAZdUOU70MTgJN8S
+IAXXy5kaSjg8VQNZ7ObNzjvooudarg==
+=2jt+
+-----END PGP SIGNATURE-----
+
+--mSxgbZZZvrAyzONB--
