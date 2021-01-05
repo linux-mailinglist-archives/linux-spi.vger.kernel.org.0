@@ -2,182 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D24A32EB027
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Jan 2021 17:35:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E1A2EB103
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Jan 2021 18:07:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727895AbhAEQef (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Jan 2021 11:34:35 -0500
-Received: from foss.arm.com ([217.140.110.172]:57076 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726132AbhAEQee (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 5 Jan 2021 11:34:34 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83C64113E;
-        Tue,  5 Jan 2021 08:33:48 -0800 (PST)
-Received: from [192.168.1.179] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 647673F70D;
-        Tue,  5 Jan 2021 08:33:37 -0800 (PST)
-Subject: Re: [PATCH 19/31] drm/panfrost: convert to use devm_pm_opp_* API
-To:     Yangtao Li <tiny.windzz@gmail.com>, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com, cw00.choi@samsung.com, krzk@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, digetx@gmail.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, yuq825@gmail.com,
-        airlied@linux.ie, daniel@ffwll.ch, robdclark@gmail.com,
-        sean@poorly.run, robh@kernel.org, tomeu.vizoso@collabora.com,
-        alyssa.rosenzweig@collabora.com, stanimir.varbanov@linaro.org,
-        agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
-        lukasz.luba@arm.com, adrian.hunter@intel.com,
-        ulf.hansson@linaro.org, vireshk@kernel.org, nm@ti.com,
-        sboyd@kernel.org, broonie@kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, rjw@rjwysocki.net, jcrouse@codeaurora.org,
-        hoegsberg@google.com, eric@anholt.net, tzimmermann@suse.de,
-        marijn.suijten@somainline.org, gustavoars@kernel.org,
-        emil.velikov@collabora.com, jonathan@marek.ca,
-        akhilpo@codeaurora.org, smasetty@codeaurora.org,
-        airlied@redhat.com, masneyb@onstation.org, kalyan_t@codeaurora.org,
-        tanmay@codeaurora.org, ddavenport@chromium.org,
-        jsanka@codeaurora.org, rnayak@codeaurora.org,
-        tongtiangen@huawei.com, miaoqinglang@huawei.com,
-        khsieh@codeaurora.org, abhinavk@codeaurora.org,
-        chandanu@codeaurora.org, groeck@chromium.org, varar@codeaurora.org,
-        mka@chromium.org, harigovi@codeaurora.org,
-        rikard.falkeborn@gmail.com, natechancellor@gmail.com,
-        georgi.djakov@linaro.org, akashast@codeaurora.org,
-        parashar@codeaurora.org, dianders@chromium.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20210101165507.19486-1-tiny.windzz@gmail.com>
- <20210101165507.19486-20-tiny.windzz@gmail.com>
-From:   Steven Price <steven.price@arm.com>
-Message-ID: <63e5e2ae-0baf-cbd1-b2eb-43fac89acb7c@arm.com>
-Date:   Tue, 5 Jan 2021 16:33:32 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1729743AbhAERGu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Jan 2021 12:06:50 -0500
+Received: from mail-wm1-f42.google.com ([209.85.128.42]:51390 "EHLO
+        mail-wm1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729683AbhAERGt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Jan 2021 12:06:49 -0500
+Received: by mail-wm1-f42.google.com with SMTP id v14so215471wml.1;
+        Tue, 05 Jan 2021 09:06:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9YAAdpyFMqA6anlcQcter/Q+CJMEzgthAR/tnl6sjtA=;
+        b=Af9IoeI60Y03TBjvjRHmLKPALC8N+soWiO6dfZ2fXWazV62NFezarL24/LwoJMMkUt
+         9a0neKDEpUOWtVuDR3bP1C9XcoZQA7QbI8mdwjNSPQZDeWiV8kSczo3877Y+1ViGI2Nf
+         APHQpwNlVrb7lrosIUWvO+C1dE8imAbaLRFeP6STp4uh0J5fQyCP3v0ZWcyz4ogvbbBL
+         bcWqxg7u87fjO++q1cKBf6EiBw5o6UH3e8R8Gi9+kgGMGaEhsEIcitOUGR5hKWaEXPmQ
+         f/16U5tbtCkeT3R64rjNU2YAtrZeQPeDXSnS6bqZgJ9t43EjGLh6YUo/15ynhZJG2u6B
+         C0Mw==
+X-Gm-Message-State: AOAM530YNuclOQheXmEu323yAl06bEYuo9h5AeK4RwUTMs4gdhNCoq/v
+        y1peea13Fv2AR+FUuYVHYc4=
+X-Google-Smtp-Source: ABdhPJwAzn5n1uY0WAYpYglCpjpQ7wTQ2gVf/5VxObDSAC0+0hOeTHM7OsV/cLPDVW8XqRYVcBYVCQ==
+X-Received: by 2002:a1c:9e86:: with SMTP id h128mr81485wme.171.1609866367532;
+        Tue, 05 Jan 2021 09:06:07 -0800 (PST)
+Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.googlemail.com with ESMTPSA id l8sm137946wmf.35.2021.01.05.09.06.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jan 2021 09:06:06 -0800 (PST)
+Date:   Tue, 5 Jan 2021 18:06:04 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-renesas-soc@vger.kernel.org, aford@beaconembedded.com,
+        biju.das.jz@bp.renesas.com, Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH V2 1/4] dt-bindings: memory: Renesas RPC-IF: Add support
+ for RZ/G2 Series
+Message-ID: <20210105170604.GA26301@kozik-lap>
+References: <20210102115412.3402059-1-aford173@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210101165507.19486-20-tiny.windzz@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210102115412.3402059-1-aford173@gmail.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 01/01/2021 16:54, Yangtao Li wrote:
-> Use devm_pm_opp_* API to simplify code, and remove opp_table
-> from panfrost_devfreq.
+On Sat, Jan 02, 2021 at 05:54:09AM -0600, Adam Ford wrote:
+> The RZ/G2 Series has the RPC-IF interface.
+> Update bindings to support: r8a774a1, r8a774b1, r8a774c0, and r8a774e1
 > 
-> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
-
-Reviewed-by: Steven Price <steven.price@arm.com>
-
+> Signed-off-by: Adam Ford <aford173@gmail.com>
 > ---
->   drivers/gpu/drm/panfrost/panfrost_devfreq.c | 34 ++++++---------------
->   drivers/gpu/drm/panfrost/panfrost_devfreq.h |  1 -
->   2 files changed, 10 insertions(+), 25 deletions(-)
+>  .../bindings/memory-controllers/renesas,rpc-if.yaml         | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> index f44d28fad085..c42fa9eb43b1 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-> @@ -92,25 +92,26 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
->   	struct thermal_cooling_device *cooling;
->   	struct panfrost_devfreq *pfdevfreq = &pfdev->pfdevfreq;
->   
-> -	opp_table = dev_pm_opp_set_regulators(dev, pfdev->comp->supply_names,
-> +	opp_table = devm_pm_opp_set_regulators(dev, pfdev->comp->supply_names,
->   					      pfdev->comp->num_supplies);
->   	if (IS_ERR(opp_table)) {
->   		ret = PTR_ERR(opp_table);
->   		/* Continue if the optional regulator is missing */
->   		if (ret != -ENODEV) {
->   			DRM_DEV_ERROR(dev, "Couldn't set OPP regulators\n");
-> -			goto err_fini;
-> +			return ret;
->   		}
-> -	} else {
-> -		pfdevfreq->regulators_opp_table = opp_table;
->   	}
->   
-> -	ret = dev_pm_opp_of_add_table(dev);
-> +	ret = devm_pm_opp_of_add_table(dev);
->   	if (ret) {
-> +		if (!IS_ERR(opp_table))
-> +			devm_pm_opp_put_regulators(dev, opp_table);
-> +
->   		/* Optional, continue without devfreq */
->   		if (ret == -ENODEV)
->   			ret = 0;
-> -		goto err_fini;
-> +		return ret;
->   	}
->   	pfdevfreq->opp_of_table_added = true;
->   
-> @@ -121,10 +122,8 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
->   	cur_freq = clk_get_rate(pfdev->clock);
->   
->   	opp = devfreq_recommended_opp(dev, &cur_freq, 0);
-> -	if (IS_ERR(opp)) {
-> -		ret = PTR_ERR(opp);
-> -		goto err_fini;
-> -	}
-> +	if (IS_ERR(opp))
-> +		return PTR_ERR(opp);
->   
->   	panfrost_devfreq_profile.initial_freq = cur_freq;
->   	dev_pm_opp_put(opp);
-> @@ -133,8 +132,7 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
->   					  DEVFREQ_GOV_SIMPLE_ONDEMAND, NULL);
->   	if (IS_ERR(devfreq)) {
->   		DRM_DEV_ERROR(dev, "Couldn't initialize GPU devfreq\n");
-> -		ret = PTR_ERR(devfreq);
-> -		goto err_fini;
-> +		return PTR_ERR(devfreq);
->   	}
->   	pfdevfreq->devfreq = devfreq;
->   
-> @@ -145,10 +143,6 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
->   		pfdevfreq->cooling = cooling;
->   
->   	return 0;
-> -
-> -err_fini:
-> -	panfrost_devfreq_fini(pfdev);
-> -	return ret;
->   }
->   
->   void panfrost_devfreq_fini(struct panfrost_device *pfdev)
-> @@ -159,14 +153,6 @@ void panfrost_devfreq_fini(struct panfrost_device *pfdev)
->   		devfreq_cooling_unregister(pfdevfreq->cooling);
->   		pfdevfreq->cooling = NULL;
->   	}
-> -
-> -	if (pfdevfreq->opp_of_table_added) {
-> -		dev_pm_opp_of_remove_table(&pfdev->pdev->dev);
-> -		pfdevfreq->opp_of_table_added = false;
-> -	}
-> -
-> -	dev_pm_opp_put_regulators(pfdevfreq->regulators_opp_table);
-> -	pfdevfreq->regulators_opp_table = NULL;
->   }
->   
->   void panfrost_devfreq_resume(struct panfrost_device *pfdev)
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.h b/drivers/gpu/drm/panfrost/panfrost_devfreq.h
-> index db6ea48e21f9..a51854cc8c06 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.h
-> +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.h
-> @@ -15,7 +15,6 @@ struct panfrost_device;
->   
->   struct panfrost_devfreq {
->   	struct devfreq *devfreq;
-> -	struct opp_table *regulators_opp_table;
->   	struct thermal_cooling_device *cooling;
->   	bool opp_of_table_added;
->   
-> 
+> V2:  Updated renesas,rcar-gen3-rpc-if to include RZ/G2
+
+Thanks, applied.
+
+Best regards,
+Krzysztof
 
