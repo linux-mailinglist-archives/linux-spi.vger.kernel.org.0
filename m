@@ -2,145 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC902EADD3
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Jan 2021 16:01:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C172EAFB0
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Jan 2021 17:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726258AbhAEPAq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Jan 2021 10:00:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725813AbhAEPAo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Jan 2021 10:00:44 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38CFBC061574;
-        Tue,  5 Jan 2021 07:00:04 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id o11so29502422ote.4;
-        Tue, 05 Jan 2021 07:00:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XGIUsDvo7WL/btexdYta+TWVo7yH7QS69njrSf9tUEE=;
-        b=hWRzHPxYIl2QvM6KQJ9WCePC2Wc31LSxs2JVNGUIPUOr42yFSjzoHrNOYjC5mekUrA
-         xsTju6UJER/7sQ+NR5YY8vs1OzeCxiGXQGxq0+SLogI0lZU7oU1HxtNoDVaOYW6vl93K
-         1dJhOY9OrLtkfHU2AqYLxlEFia069SYwzxrP6rjT9iMxk2YIXlAnCaOChH6sRImAfgV9
-         VVsJXEIlDhiWb8XLdAdf+ffNqO5pHzxrROhQENUgdDdESieQYiyPDqqMLfRTn1mM1+Os
-         oq5NnVSiNAoyqIL8YGUTlYlVAV2WSmzlIVRh/tKWkmZxVCmUITW16zsne0uy8Wscpc3s
-         XGHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=XGIUsDvo7WL/btexdYta+TWVo7yH7QS69njrSf9tUEE=;
-        b=bNEp7eQNCmSBZnQuqnpmdhacnP5WAI2LKbJn/FCAacMGCTLj1RtyWmcd+sfO+OufrU
-         MpmIxpb2KUW5VfOR9VSJyF0FSxYCvFaYOT5KOPh/mySuUyvIFNwURq6zqmLuLh5Nuhii
-         gAFIWL+CbwGVkkpatuD41NBnOKmLQN3XDe6J3w2uFmbBr8LIwTTFjjS+BxX8IDDPL1q+
-         eF6wYh6gaXL6C+Dmb2lw+tHjillkbUJ3b4H0WnUbakLJktTUeR+gtCV7WoSkBT403+M9
-         N+umKwm2pmul1swTET9o5suWXNjPqdLQAPZZgXoHpO/qcwKt62HA8A37tCRWNaxZXAdE
-         CXCg==
-X-Gm-Message-State: AOAM531E7wyU6HqHyy01mtEu3q+DOzhFTtdW3dy7tZ17mevB67fsfOBe
-        TtiR/l3hC82kAzef3MY/SHw=
-X-Google-Smtp-Source: ABdhPJz+TmHa+yxltlgEjO+dajpTRAK0O0Tmhgc4dSJIjWXqp6kHPWJo155UzE1wR1B4hBd/MJHdlg==
-X-Received: by 2002:a05:6830:22f9:: with SMTP id t25mr57121090otc.14.1609858803649;
-        Tue, 05 Jan 2021 07:00:03 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h26sm15181205ots.9.2021.01.05.06.59.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Jan 2021 07:00:02 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 01/10] MIPS: TX49xx: Drop support
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org
-References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
- <20210105140305.141401-2-tsbogend@alpha.franken.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <4dfb9153-d130-7bbf-a016-45a630d1d0cd@roeck-us.net>
-Date:   Tue, 5 Jan 2021 06:59:58 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1727561AbhAEQJS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Jan 2021 11:09:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37836 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726571AbhAEQJS (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 5 Jan 2021 11:09:18 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 37A2A22C9D;
+        Tue,  5 Jan 2021 16:08:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609862917;
+        bh=KwT1+5zC90PlzAWP3moOhsVfP6sC0zSJnqQqeJ1t2UU=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=V8QxB0Ygce0FRhe8lBT6lu4aRQqN29jrSbVjJixUwP18dhPsUy1XGoZZOYwcvtnCj
+         frcydS4OiBW3i4CPFfUmg0WS0A3Y9ramsXwUaGQ/MHaNBXwcI6DmiCwQVbbyxAWk55
+         NzWJToemhFlV9uiMCZFqbln56gH/VhFofjPIh8e93LBA1KYKnvHvUM7EbAuuW9R5yC
+         +cLCOcY7rwiN5HLkx6CSooPPSOW9CG/UHvdgGjbfyCvVud7U/PtvEPUSviuSGBVJhn
+         TwVHBSgx6dvygGGl15+5S4eNY0JyzYBsbkoQjQ8OC++TxRDwl+GjAlKc+0TBwVvYdz
+         6KKLfpDbgNG5w==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>
+Cc:     andy.shevchenko@gmail.com, sfr@canb.auug.org.au
+In-Reply-To: <20210104143103.56510-1-alexandru.ardelean@analog.com>
+References: <20210104085923.53705-1-alexandru.ardelean@analog.com> <20210104143103.56510-1-alexandru.ardelean@analog.com>
+Subject: Re: [PATCH v2] spi: stm32: update dev_dbg() print format for SPI params
+Message-Id: <160986289006.50207.10241683421352392982.b4-ty@kernel.org>
+Date:   Tue, 05 Jan 2021 16:08:10 +0000
 MIME-Version: 1.0
-In-Reply-To: <20210105140305.141401-2-tsbogend@alpha.franken.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 1/5/21 6:02 AM, Thomas Bogendoerfer wrote:
-> Looks like there are no boards with TX49xx CPUS other than reference
-> boards available. So it's time to drop Linux support for it.
+On Mon, 4 Jan 2021 16:31:03 +0200, Alexandru Ardelean wrote:
+> With the introduction of the 'include/uapi/linux/spi/spi.h' header, the
+> type of the macros are enforced to 'unsigned long int' via the _BITUL()
+> macro.
 > 
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> ---
+> This causes some -Wformat warnings in the spi-stm32 driver.
+> This patch adds a double-negation operator to the bit-masks. Essentially,
+> the important values for debugging are 0 or 1, while masking them directly
+> would show 0 or BIT(x) values.
+> This way, the type of the arguments are automatically re-cast.
 
->  drivers/watchdog/Kconfig                      |   2 +-
+Applied to
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Guenter
+Thanks!
+
+[1/1] spi: stm32: update dev_dbg() print format for SPI params
+      commit: 8b835da61774d4482864bc081dfb428104842ad3
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
