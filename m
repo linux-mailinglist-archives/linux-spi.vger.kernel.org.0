@@ -2,76 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 859692EAFB4
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Jan 2021 17:10:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 815DB2EB014
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Jan 2021 17:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729032AbhAEQJY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Jan 2021 11:09:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37884 "EHLO mail.kernel.org"
+        id S1728561AbhAEQac (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Jan 2021 11:30:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40682 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726571AbhAEQJX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 5 Jan 2021 11:09:23 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5532622CA0;
-        Tue,  5 Jan 2021 16:08:42 +0000 (UTC)
+        id S1727036AbhAEQab (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 5 Jan 2021 11:30:31 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 705C422CA0;
+        Tue,  5 Jan 2021 16:29:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609862922;
-        bh=olx3sStOYZ7JD7sihmFq5o08FyuUWbQWbvXHSdgR84g=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=RR8N4lzXoFQq7oh4HIMwPgL9dpd3wRzAKRL4b3zFEjeEtTEXKEc7YaGKjLcJV/b5/
-         ZLj8W1HZLwn+/uN0JXz84mReRZpq5r581Z/+lul2bzUZzNykR8FgjIPM1dWhHYjFiu
-         iafwk8wyu/ZdBolxvtgdjzX3kxhzRXwfJMMvCOmlG4t1iEm6Mt1VpuFwvYMcaUS9n/
-         mMA0imAt3FeVet+aUeTKOob9YxnoqFtzBaTclHI924PXqaogBvE++zVxs7saWc0cRE
-         o2gCht1BB4VU28t5qjrY3lRNX1FsKtFZ6c1VIfdWywt5B8GGubez/FAsMKrjymutcY
-         IeXZgkqlYC4oQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>
-Cc:     andy.shevchenko@gmail.com, sfr@canb.auug.org.au
-In-Reply-To: <20210104085923.53705-1-alexandru.ardelean@analog.com>
-References: <20210104085923.53705-1-alexandru.ardelean@analog.com>
-Subject: Re: [PATCH] spi: stm32: update dev_dbg() print format for SPI params
-Message-Id: <160986289006.50207.8088539580258005147.b4-ty@kernel.org>
-Date:   Tue, 05 Jan 2021 16:08:10 +0000
+        s=k20201202; t=1609864191;
+        bh=rntfB7C5mBvVXgliBl2U7ngampY/9LrSTvoo5JN6PHE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S88AqmoJInnEWhe9qFDxHx5FvAYHSp2+rb+N2gfbHNDqaltI/vzxj97J0i6Zl4ZSo
+         FrMnv1h7c5jq1+J/SA2CzP53dUx9Ic5a226yVsQDL87Z/TQTi0ydw0WX0Gj6bWEpff
+         Bpyl/Wv92pZ60y5kZU+mTkDBRRw0n5k3Pfp6MyjOURgVKFyTCYlDKpmW+92zkIrrio
+         AiabCKPbajE3T7uFKNjPkX05HK+As0UcALR8Cs2/Crq2Iy/CX0hUrt7kpGlUCUKYks
+         Y3fP0co3+5kMdsvFM/c9iGlnTGd3Eki1+zbIW6H6Q7OPVStS8Z9lIf0SRS6tjSj6fW
+         QaCVt0a72co2w==
+Date:   Tue, 5 Jan 2021 17:29:46 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Icenowy Zheng <icenowy@aosc.xyz>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        =?utf-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
+        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@googlegroups.com,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 18/21] dt-bindings: allwinner: Add H616 compatible
+ strings
+Message-ID: <20210105162946.GI1842@ninjato>
+References: <20201211011934.6171-1-andre.przywara@arm.com>
+ <20201211011934.6171-19-andre.przywara@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WIIRZ1HQ6FgrlPgb"
+Content-Disposition: inline
+In-Reply-To: <20201211011934.6171-19-andre.przywara@arm.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 4 Jan 2021 10:59:23 +0200, Alexandru Ardelean wrote:
-> With the introduction of the 'include/uapi/linux/spi/spi.h' header, the
-> type of the macros are enforced to 'unsigned long int' via the _BITUL()
-> macro.
-> 
-> This causes some -Wformat warnings in the spi-stm32 driver.
-> This patch changes the printf() specifiers from '%d' to '%lu' to
-> accommodate for this change.
 
-Applied to
+--WIIRZ1HQ6FgrlPgb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+On Fri, Dec 11, 2020 at 01:19:31AM +0000, Andre Przywara wrote:
+> Add simple "allwinner,sun50i-h616-xxx" compatible names to existing
+> bindings, and pair them with an existing fallback compatible string,
+> as the devices are compatible.
+> This covers I2C, infrared, RTC and SPI.
+>=20
+> Use enums to group all compatible devices together.
+>=20
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 
-Thanks!
+Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
 
-[1/1] spi: stm32: update dev_dbg() print format for SPI params
-      commit: 8b835da61774d4482864bc081dfb428104842ad3
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+--WIIRZ1HQ6FgrlPgb
+Content-Type: application/pgp-signature; name="signature.asc"
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-----BEGIN PGP SIGNATURE-----
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl/0k/oACgkQFA3kzBSg
+KbYcAA//fxeNSjKkeAsUP+tmVP+6UOmYGFWuzggJQKr5y0aThBUNYPfWWF/lDRa/
+wuzgurDJZhsKyb8BxhgY2Bc/EoPsxWZi30fz2l6YdTLi3NfYoky2LhUECl+JYGjV
+MgMCCNdVyLZ8uU39J/PuCBH4oN2gBcuLxmOsiVnXcfkbbWjI6c1DNOxRDJdXx9WU
+4YDBk98pbmW7Bxik+11pmF9nncF1HvMQ4MYU+Z7fDvQfwGV74dogLu4Psr0q30o+
+zNgU/BPvf/U7DLlkcTz18ChX+v9++OZe0AnEPKMtugTZW1rI28SYvNSGhE3QDXcW
+otfDp2FvmbilDX5CtK14mlIi+0mVqu0xx6o20pNVAmx4QTjuDr2zAh+EHJ11kP6O
+KEKQRZIP7Wj0NBbaSi/mAieeF/DvH8lK9FNKUFMj8108wNF05NB00KuZ4DFvhpDA
+M1IgSiSLqJOokZw9Kbw1coKROsYZcWuCrY4tCLVe3m7u0mE9wHIgXsnDtEKLajqL
+Vd7GLY60FVPoF9OMlz2Q2liy4D+gz/NIwKYsrFU87FrMag9Lw0JZQVeH9eqw1akl
+ACSHHN3JNDJUIH5g1Yiem+VGAOQSBrz4Lr0sTTHm+OAo6b9q8k7DJtyuwUrUajG9
+s26hNzxVo+c5AbLTltlCd9esoPiHr4/zia2oKz8kM6WYsDLwKMU=
+=9MjQ
+-----END PGP SIGNATURE-----
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+--WIIRZ1HQ6FgrlPgb--
