@@ -2,55 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FFC2EA480
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Jan 2021 05:36:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80CDC2EA4F2
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Jan 2021 06:39:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727815AbhAEEgf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Jan 2021 23:36:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
+        id S1726132AbhAEFiE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Jan 2021 00:38:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726330AbhAEEge (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Jan 2021 23:36:34 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62621C061574;
-        Mon,  4 Jan 2021 20:35:53 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id m25so69612140lfc.11;
-        Mon, 04 Jan 2021 20:35:53 -0800 (PST)
+        with ESMTP id S1725768AbhAEFiE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Jan 2021 00:38:04 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6795BC061574;
+        Mon,  4 Jan 2021 21:37:23 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id y19so69706107lfa.13;
+        Mon, 04 Jan 2021 21:37:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:reply-to:from:date:message-id
          :subject:to:cc;
-        bh=qD0FtR3erA6kwegaSx7IL4OPdx8eCkd9tLpFM4vCzPY=;
-        b=rYL8dvYN5oG6NMZCw7RacaHc5WfWoK4sWwnsrAxrQ6ENTf7OgGvXR2CaVxxY3Pm0xj
-         2wHteUcLw+UdA9zkhQnfjL+pDwM/S7IfQ9+rvd/GHb5ZzQN/fEeUdz0uN+2/j9SOg6DP
-         5vw3ERODdcr+6F4e/FN03trftl/vgCdI7R9pya3NN2I51/sPqojOow2owtRxTygVBuvp
-         LE3KiAjk/uSPfMpnzHMs1jABf71rOnSyPVWDTYkUJlTy5/AC0VJb3lfQ2g1NinVUBHlt
-         Zr9u+Za3bswf+TvU9qLTO5vVv+3sgI0BfHR1yLjB0T/AJqaBrNwZRriBTLVmchP0zYQA
-         YOgA==
+        bh=BJ/BPOn4zLwcKVC4z1IVu61Cm54JUVzrqo0fobfeksQ=;
+        b=M2Es2CYFztXBLoaAP1ExQ7Vg6pKuoSXUrIU64+JTXYurORjVHO4RUkWy9a4XEoyOmG
+         p+VIGZyFQ/Ing35CuPyPBd6B4LN5jbTFWoeaA6uNlz16qXwUa5QLGdINIx92MIRiXt7L
+         Zr2800UU5QComKFAIo/5zErU+/CEX/4DxD1wTH9rYHenrgCp8KW1mnHqhljdneV9CceE
+         iqZGVqZc1D9tzQGGs54/GpfLBIPz2RVk4vGUsoB8JaGKT8svSxHoGEdC1W3xaidDname
+         k13zeTaPJz88q5qUalH7p2qGQftucEcvNP+dpZhBsrFsu193HiFOUS2RkJzRrsvQmy5X
+         /6uQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
          :from:date:message-id:subject:to:cc;
-        bh=qD0FtR3erA6kwegaSx7IL4OPdx8eCkd9tLpFM4vCzPY=;
-        b=Vu9Xw2jvmLjSXf7pygsxgbH7sUqvYa/Nzt0XvSj96i93RTuJSQ13d1qtzflyatmTF0
-         Klsx2PoLlUX3oBzLeUy8MlAeNd4aVeV8sVnzra+1KLgvMufhFI7UqV21iiLa/pcanmSL
-         BSNFz3v3rCCKHUjv7fQMAklnVwT+DUl1bZCTZM3uMo0gDedJSyF535i2fTQxKWqMHNuO
-         CjBwg7I11uTy36Jgu8B9GqVheiLmToigBGoRDPs1zZflPKUeh2EuECLrf52ujKgfpUE+
-         uH678vaYmEfLxmodr0EPeNMEc7wjF00t2QbeDmw0jZS44RGnclHFsCw13slbBeL82T4c
-         Mi0g==
-X-Gm-Message-State: AOAM532S79zbqKaJf9HMm9o2xrPoN9+vvv0GVEZl82k+k4SGH1cOpAz+
-        IkrC/uyt+7KIzj9XHMARGPzYhLFpKcY7ZL8k46s=
-X-Google-Smtp-Source: ABdhPJyWYSFe/zFRwlGX58UpgZM9x8XaWgX72JT+MdQWG2gDkQiLQbB2JXbuavsJ8jCM6zO6wI9/iwcg9EeH+QwJSXE=
-X-Received: by 2002:a05:6512:94f:: with SMTP id u15mr31040115lft.389.1609821351878;
- Mon, 04 Jan 2021 20:35:51 -0800 (PST)
+        bh=BJ/BPOn4zLwcKVC4z1IVu61Cm54JUVzrqo0fobfeksQ=;
+        b=dSGIWRMrGV2wI6AAe9Hd0nYjc//DnIiTX+tz3BwTWbpotphs3DeuqCpo7Tl4jHdS/J
+         uA4GCNr8zuRC6iDP2Aa0A9GTJpazNAxv6oQ+rKDf6Az40Ot9h85irthFiKIS82PWlsbM
+         GYBIBDxReE5Cy11faNNXhRBLXixXylvt1myreWmmcGzk6i0t8oDOLecqmI/gPNKPnRsn
+         rXiqqo93MNI91exC4qMrv+IdtD2bolb4w9U+d8ybnsiTebgrvSVGCxZS3JRovK1GoOds
+         Bkph9nHZGqT/HbJOFO79C/qwbNxbKbWlqvFMTU0RLagKkW0TAaw4TBJu9K/2F35GFgLP
+         RxMg==
+X-Gm-Message-State: AOAM530j0EM4TUHTEZl7YtpwC1K2F2vjwXFJCsyBVrVUtnjQTJcqZbOC
+        k1ditAJWsuUSoHiqi5O9gZjzyGisRZ/kCnUf8xg=
+X-Google-Smtp-Source: ABdhPJxBh2b69EQE0oS8msD6rntMrwUkYVv9SESod0vmy4ovFZpV4FPqGzA4LTLOdctSMhxU1bPsvxj13MHhmKM2D30=
+X-Received: by 2002:a05:6512:2e9:: with SMTP id m9mr32046955lfq.118.1609825041442;
+ Mon, 04 Jan 2021 21:37:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20210103035639.24076-1-tiny.windzz@gmail.com>
-In-Reply-To: <20210103035639.24076-1-tiny.windzz@gmail.com>
+References: <20210103035706.24168-1-tiny.windzz@gmail.com>
+In-Reply-To: <20210103035706.24168-1-tiny.windzz@gmail.com>
 Reply-To: cwchoi00@gmail.com
 From:   Chanwoo Choi <cwchoi00@gmail.com>
-Date:   Tue, 5 Jan 2021 13:35:15 +0900
-Message-ID: <CAGTfZH3Rb8qsT6ZtT9QWb_oU_Nt9z+UaiyWkExo1uzSDKz6g8A@mail.gmail.com>
-Subject: Re: [PATCH 30/31] PM / devfreq: exynos: convert to use devm_pm_opp_* API
+Date:   Tue, 5 Jan 2021 14:36:44 +0900
+Message-ID: <CAGTfZH0s0iiR1jaebU8KyJ7mdvZMOUQXfmuxGh0PJ_v0diXtfA@mail.gmail.com>
+Subject: Re: [PATCH 31/31] PM / devfreq: convert to devm_pm_opp_register_notifier
+ and remove unused API
 To:     Yangtao Li <tiny.windzz@gmail.com>
 Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -107,166 +108,102 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 On Sun, Jan 3, 2021 at 12:59 PM Yangtao Li <tiny.windzz@gmail.com> wrote:
 >
-> Use devm_pm_opp_* API to simplify code, and remove opp_table
-> from exynos_bus.
+>  Use devm_pm_opp_* API to simplify code.
 >
 > Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 > ---
->  drivers/devfreq/exynos-bus.c | 42 ++++++++----------------------------
->  1 file changed, 9 insertions(+), 33 deletions(-)
+>  drivers/devfreq/devfreq.c | 66 +--------------------------------------
+>  include/linux/devfreq.h   | 23 --------------
+>  2 files changed, 1 insertion(+), 88 deletions(-)
 >
-> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-> index e689101abc93..51752e5ce980 100644
-> --- a/drivers/devfreq/exynos-bus.c
-> +++ b/drivers/devfreq/exynos-bus.c
-> @@ -33,7 +33,6 @@ struct exynos_bus {
->
->         unsigned long curr_freq;
->
-> -       struct opp_table *opp_table;
->         struct clk *clk;
->         unsigned int ratio;
->  };
-> @@ -159,10 +158,7 @@ static void exynos_bus_exit(struct device *dev)
->
->         platform_device_unregister(bus->icc_pdev);
->
-> -       dev_pm_opp_of_remove_table(dev);
->         clk_disable_unprepare(bus->clk);
-> -       dev_pm_opp_put_regulators(bus->opp_table);
-
-OPP uses the clock and regulator. It means that there are dependency
-between them and the sequence for resource free.
-
-I think that OPP should be removed before clock and regulator.
-Your patch always guarantee this dependency? If not, we have to
-free the resource according to the dependency.
-
-> -       bus->opp_table = NULL;
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 6aa10de792b3..f593f30529ec 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -2004,40 +2004,6 @@ struct dev_pm_opp *devfreq_recommended_opp(struct device *dev,
 >  }
+>  EXPORT_SYMBOL(devfreq_recommended_opp);
 >
->  static void exynos_bus_passive_exit(struct device *dev)
-> @@ -171,7 +167,6 @@ static void exynos_bus_passive_exit(struct device *dev)
->
->         platform_device_unregister(bus->icc_pdev);
->
-> -       dev_pm_opp_of_remove_table(dev);
->         clk_disable_unprepare(bus->clk);
->  }
->
-> @@ -183,15 +178,13 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
->         const char *vdd = "vdd";
->         int i, ret, count, size;
->
-> -       opp_table = dev_pm_opp_set_regulators(dev, &vdd, 1);
-> +       opp_table = devm_pm_opp_set_regulators(dev, &vdd, 1);
->         if (IS_ERR(opp_table)) {
->                 ret = PTR_ERR(opp_table);
->                 dev_err(dev, "failed to set regulators %d\n", ret);
->                 return ret;
->         }
->
-> -       bus->opp_table = opp_table;
+> -/**
+> - * devfreq_register_opp_notifier() - Helper function to get devfreq notified
+> - *                                  for any changes in the OPP availability
+> - *                                  changes
+> - * @dev:       The devfreq user device. (parent of devfreq)
+> - * @devfreq:   The devfreq object.
+> - */
+> -int devfreq_register_opp_notifier(struct device *dev, struct devfreq *devfreq)
+> -{
+> -       return dev_pm_opp_register_notifier(dev, &devfreq->nb);
+> -}
+> -EXPORT_SYMBOL(devfreq_register_opp_notifier);
 > -
->         /*
->          * Get the devfreq-event devices to get the current utilization of
->          * buses. This raw data will be used in devfreq ondemand governor.
-> @@ -199,25 +192,20 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
->         count = devfreq_event_get_edev_count(dev, "devfreq-events");
->         if (count < 0) {
->                 dev_err(dev, "failed to get the count of devfreq-event dev\n");
-> -               ret = count;
-> -               goto err_regulator;
-> +               return count;
->         }
->         bus->edev_count = count;
->
->         size = sizeof(*bus->edev) * count;
->         bus->edev = devm_kzalloc(dev, size, GFP_KERNEL);
-> -       if (!bus->edev) {
-> -               ret = -ENOMEM;
-> -               goto err_regulator;
+> -/**
+> - * devfreq_unregister_opp_notifier() - Helper function to stop getting devfreq
+> - *                                    notified for any changes in the OPP
+> - *                                    availability changes anymore.
+> - * @dev:       The devfreq user device. (parent of devfreq)
+> - * @devfreq:   The devfreq object.
+> - *
+> - * At exit() callback of devfreq_dev_profile, this must be included if
+> - * devfreq_recommended_opp is used.
+> - */
+> -int devfreq_unregister_opp_notifier(struct device *dev, struct devfreq *devfreq)
+> -{
+> -       return dev_pm_opp_unregister_notifier(dev, &devfreq->nb);
+> -}
+> -EXPORT_SYMBOL(devfreq_unregister_opp_notifier);
+> -
+> -static void devm_devfreq_opp_release(struct device *dev, void *res)
+> -{
+> -       devfreq_unregister_opp_notifier(dev, *(struct devfreq **)res);
+> -}
+> -
+>  /**
+>   * devm_devfreq_register_opp_notifier() - Resource-managed
+>   *                                       devfreq_register_opp_notifier()
+> @@ -2047,40 +2013,10 @@ static void devm_devfreq_opp_release(struct device *dev, void *res)
+>  int devm_devfreq_register_opp_notifier(struct device *dev,
+>                                        struct devfreq *devfreq)
+>  {
+> -       struct devfreq **ptr;
+> -       int ret;
+> -
+> -       ptr = devres_alloc(devm_devfreq_opp_release, sizeof(*ptr), GFP_KERNEL);
+> -       if (!ptr)
+> -               return -ENOMEM;
+> -
+> -       ret = devfreq_register_opp_notifier(dev, devfreq);
+> -       if (ret) {
+> -               devres_free(ptr);
+> -               return ret;
 > -       }
-> +       if (!bus->edev)
-> +               return -ENOMEM;
->
->         for (i = 0; i < count; i++) {
->                 bus->edev[i] = devfreq_event_get_edev_by_phandle(dev,
->                                                         "devfreq-events", i);
-> -               if (IS_ERR(bus->edev[i])) {
-> -                       ret = -EPROBE_DEFER;
-> -                       goto err_regulator;
-> -               }
-> +               if (IS_ERR(bus->edev[i]))
-> +                       return -EPROBE_DEFER;
->         }
->
->         /*
-> @@ -234,12 +222,6 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
->                 bus->ratio = DEFAULT_SATURATION_RATIO;
->
->         return 0;
 > -
-> -err_regulator:
-> -       dev_pm_opp_put_regulators(bus->opp_table);
-> -       bus->opp_table = NULL;
+> -       *ptr = devfreq;
+> -       devres_add(dev, ptr);
 > -
-> -       return ret;
+> -       return 0;
+> +       return devm_pm_opp_register_notifier(dev, &devfreq->nb);
 >  }
+>  EXPORT_SYMBOL(devm_devfreq_register_opp_notifier);
 >
->  static int exynos_bus_parse_of(struct device_node *np,
-> @@ -264,7 +246,7 @@ static int exynos_bus_parse_of(struct device_node *np,
->         }
->
->         /* Get the freq and voltage from OPP table to scale the bus freq */
-> -       ret = dev_pm_opp_of_add_table(dev);
-> +       ret = devm_pm_opp_of_add_table(dev);
->         if (ret < 0) {
->                 dev_err(dev, "failed to get OPP table\n");
->                 goto err_clk;
-> @@ -276,15 +258,13 @@ static int exynos_bus_parse_of(struct device_node *np,
->         if (IS_ERR(opp)) {
->                 dev_err(dev, "failed to find dev_pm_opp\n");
->                 ret = PTR_ERR(opp);
-> -               goto err_opp;
-> +               goto err_clk;
->         }
->         bus->curr_freq = dev_pm_opp_get_freq(opp);
->         dev_pm_opp_put(opp);
->
->         return 0;
->
-> -err_opp:
-> -       dev_pm_opp_of_remove_table(dev);
->  err_clk:
->         clk_disable_unprepare(bus->clk);
->
-> @@ -425,7 +405,7 @@ static int exynos_bus_probe(struct platform_device *pdev)
->         /* Parse the device-tree to get the resource information */
->         ret = exynos_bus_parse_of(np, bus);
->         if (ret < 0)
-> -               goto err_reg;
-> +               return ret;
->
->         if (passive)
->                 ret = exynos_bus_profile_init_passive(bus, profile);
-> @@ -456,11 +436,7 @@ static int exynos_bus_probe(struct platform_device *pdev)
->         return 0;
->
->  err:
-> -       dev_pm_opp_of_remove_table(dev);
->         clk_disable_unprepare(bus->clk);
-> -err_reg:
-> -       dev_pm_opp_put_regulators(bus->opp_table);
-> -       bus->opp_table = NULL;
->
->         return ret;
->  }
-> --
-> 2.25.1
->
+> -/**
+> - * devm_devfreq_unregister_opp_notifier() - Resource-managed
+> - *                                         devfreq_unregister_opp_notifier()
+> - * @dev:       The devfreq user device. (parent of devfreq)
+> - * @devfreq:   The devfreq object.
+> - */
+> -void devm_devfreq_unregister_opp_notifier(struct device *dev,
+> -                                        struct devfreq *devfreq)
+> -{
+> -       WARN_ON(devres_release(dev, devm_devfreq_opp_release,
+> -                              devm_devfreq_dev_match, devfreq));
+> -}
+> -EXPORT_SYMBOL(devm_devfreq_unregister_opp_notifier);
 
+Need to support devm_devfreq_unregister_opp_notifier()
+because sometimes, the user wants to release the resource by himself.
 
--- 
+(snip)
+
 Best Regards,
 Chanwoo Choi
