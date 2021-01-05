@@ -2,85 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D952EA7D4
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Jan 2021 10:47:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2192EA90F
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Jan 2021 11:43:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728168AbhAEJpL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Jan 2021 04:45:11 -0500
-Received: from smtp2.axis.com ([195.60.68.18]:26248 "EHLO smtp2.axis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727682AbhAEJpL (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 5 Jan 2021 04:45:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1609839910;
-  x=1641375910;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=CeICFgPaITmi9nZ9tSZ1FQ/bbzfnJaESHlPO8SjV7sU=;
-  b=IjI+E8+Tgo9md3pRitg0ZJs4R1fWGYblmW4VsHgQEn+eRJdFCIfX3uxq
-   4f84YWjfrEyNyRyt12TkJq/UU95aXowtzpQ3EG+LyYwi6Uy2i4LTYx6DK
-   kyIKz3LopqrrAa3Imo3dWTqM+ueKpcMsRqEX/hQlOpHz62Wyb0sEDKLLl
-   WC0v3M986i/0GKufzsl5e85T2Mjo4i+RyfO4e2JT0P1yxVmq2FwJFVG1V
-   x1LNBq6WZ2UkyExmPJpuzi6FjFy1tYXW4pHFW/4yJXPJqazhjGTWMlFYc
-   NtlhPyKGydTFS7NVUfAZkJYj21jDDn4OD25qQF4fRhlRILlgJ25qyYT7d
-   A==;
-Subject: Re: [PATCH] spi: spidev: Fix so the module is autoloaded when built
- as external
-To:     Mark Brown <broonie@kernel.org>,
-        Gustav Wiklander <gustav.wiklander@axis.com>
-CC:     <kernel@axis.com>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20210104153436.20083-1-gustav.wiklander@axis.com>
- <20210104213437.GM5645@sirena.org.uk>
-From:   Gustav Wiklander <gustavwi@axis.com>
-Message-ID: <124e3214-37b9-524b-7888-a31e8cb455da@axis.com>
-Date:   Tue, 5 Jan 2021 10:44:21 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S1729287AbhAEKnR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Jan 2021 05:43:17 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:51692 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729278AbhAEKnQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Jan 2021 05:43:16 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 040721C0B7D; Tue,  5 Jan 2021 11:42:35 +0100 (CET)
+Date:   Tue, 5 Jan 2021 11:42:34 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Pavel Machek <pavel@denx.de>, Mark Brown <broonie@kernel.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Jiri Kosina <trivial@kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Chris Brandt <Chris.Brandt@renesas.com>
+Subject: Re: [PATCH 2/2] spi: rpc-if: Remove CONFIG_PM_SLEEP ifdefery
+Message-ID: <20210105104234.GA29908@amd>
+References: <20201230145708.28544-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20201230145708.28544-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdVCD52-eTnEwftGz8ExMkZkJRyM=3M8zU11yhn1UNPxxA@mail.gmail.com>
+ <CA+V-a8tHVkGxCECspfcV9c1UW81bod4N4YzRLJwU8zJ0+awJUw@mail.gmail.com>
+ <20210104213005.GK5645@sirena.org.uk>
+ <20210104234018.GA19909@amd>
+ <CAMuHMdUjevJ+DgJGnPUN0+ctxm2ML1NYSTgYsjC4c8tDqjUkxQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210104213437.GM5645@sirena.org.uk>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: XBOX03.axis.com (10.0.5.17) To XBOX01.axis.com (10.0.5.15)
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="6c2NcOVqGQ03X4Wi"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUjevJ+DgJGnPUN0+ctxm2ML1NYSTgYsjC4c8tDqjUkxQ@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 1/4/21 10:34 PM, Mark Brown wrote:
-> On Mon, Jan 04, 2021 at 04:34:35PM +0100, Gustav Wiklander wrote:
->> From: Gustav Wiklander <gustavwi@axis.com>
->>
->> The spi framework sets the modalias for the spi device to belong in
->> either the acpi device table or the SPI device table. It can never
->> be in the OF table. Therefore the spidev driver should populate the
->> spi device table rather than the OF table.
->>
->> NOTE: platform drivers and i2c drivers support aliases in the
->>        OF device table.
-> 
-> Why is this a good solution rather than ensuring the the OF IDs can be
-> used directly?
-> 
 
-Hi Mark,
+--6c2NcOVqGQ03X4Wi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-You suggestion is of course a solid alternative forward. However, the 
-downside with supporting the OF device table for automatic module 
-loading is that a lot of spi device drivers must be updated. Also
-it is unclear what is the preferred way to do this in the kernel see
-this patch:
-https://lore.kernel.org/lkml/20190618052644.32446-1-bjorn.andersson@linaro.org/
+Hi!
 
-If adding support of OF device table the spi device drivers must now 
-include a MODULE_DEVICE_TABLE(of,...) as the spi device alias will no 
-longer match the alias in the module.
+> On Tue, Jan 5, 2021 at 12:40 AM Pavel Machek <pavel@denx.de> wrote:
+> > > > > >                 .name   =3D "rpc-if-spi",
+> > > > > > -               .pm     =3D DEV_PM_OPS,
+> > > > > > +               .pm     =3D &rpcif_spi_pm_ops,
+> > >
+> > > > > You're aware rpcif_spi_pm_ops is now always referenced and thus e=
+mitted,
+> > > > > increasing kernel size by 92 bytes if CONFIG_PM_SLEEP=3Dn?
+> > > > > This may matter for RZ/A SoCs running from internal SRAM.
+> > >
+> > > > Hmm didn't realise this would be an issue on RZ/A.
+> > >
+> > > > Mark, could you please drop this patch from your branch.
+> > >
+> > > Please send an incremental patch with an appropriate changelog.
+> >
+> > Let's fix this properly. I'm pretty sure we have some macros that can
+> > solve this without re-introducing the ifdefs...
+>=20
+> There's pm_ptr(), but it uses CONFIG_PM as a selector, not CONFIG_PM_SLEE=
+P.
 
-This command gives 186 spi device drivers.
-git grep "MODULE_DEVICE_TABLE(spi" | wc -l 
+Okay; so we could introduce pm_sleep_ptr().
 
-186
+Or we could just put single #ifdef CONFIG_PM_SLEEP around the .pm
+assignment? That would be improvement on the original, and still
+result in the same binary, right?
 
-Best regards
-Gustav Wiklander
+> > (Besides... 92 bytes. How big is kernel these days? 4MB? More? How
+> > much SRAM do you have?)
+>=20
+> 92 bytes is indeed not much (on 64-bit it would be doubled).
+> Still, it's good to make people think about innocent looking changes,
+> once in a while.
+>=20
+> RZ/A1H and RZ/A1M have 10 resp. 5 MiB of SRAM.
+> RZ/A2 has 4 MiB SRAM, which is sufficient to run Linux when used with
+> XIP (requires a one-line Kconfig change rmk has been vetoing for
+ > years).
+
+Aha, that is a bit smaller than I expected.
+
+Best regards,
+								Pavel
+
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--6c2NcOVqGQ03X4Wi
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAl/0QpoACgkQMOfwapXb+vKbWgCgptuU+iF7DWVlD/RG7ZKYXcgm
+SI8AoKMVB2V+RfTH4L+ahzlVFhP/HlNd
+=29YJ
+-----END PGP SIGNATURE-----
+
+--6c2NcOVqGQ03X4Wi--
