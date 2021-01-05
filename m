@@ -2,312 +2,265 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A55222EB641
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Jan 2021 00:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE18F2EB667
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Jan 2021 00:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727791AbhAEX3U (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Jan 2021 18:29:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726049AbhAEX3U (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Jan 2021 18:29:20 -0500
-Received: from yawp.biot.com (yawp.biot.com [IPv6:2a01:4f8:10a:8e::fce2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78F3C061796
-        for <linux-spi@vger.kernel.org>; Tue,  5 Jan 2021 15:28:39 -0800 (PST)
-Received: from debian-spamd by yawp.biot.com with sa-checked (Exim 4.93)
-        (envelope-from <bert@biot.com>)
-        id 1kwvkj-00Br0a-Vu
-        for linux-spi@vger.kernel.org; Wed, 06 Jan 2021 00:28:38 +0100
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on yawp
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.4
-Received: from [2a02:578:460c:1:ae1f:6bff:fed1:9ca8] (helo=sumner.biot.com)
-        by yawp.biot.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <bert@biot.com>)
-        id 1kwvka-00BqzB-5n; Wed, 06 Jan 2021 00:28:28 +0100
-Received: from bert by sumner.biot.com with local (Exim 4.93)
-        (envelope-from <bert@biot.com>)
-        id 1kwvkZ-00DVBA-Np; Wed, 06 Jan 2021 00:28:27 +0100
-From:   Bert Vermeulen <bert@biot.com>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Birger Koblitz <mail@birger-koblitz.de>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Bert Vermeulen <bert@biot.com>
-Subject: [PATCH v4 2/2] spi: realtek-rtl: Add support for Realtek RTL838x/RTL839x SoC SPI controllers
-Date:   Wed,  6 Jan 2021 00:28:15 +0100
-Message-Id: <20210105232815.3218063-3-bert@biot.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210105232815.3218063-1-bert@biot.com>
-References: <20210105232815.3218063-1-bert@biot.com>
+        id S1727005AbhAEXoT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Jan 2021 18:44:19 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:41808 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725813AbhAEXoS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Jan 2021 18:44:18 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 105Ngoas062857;
+        Tue, 5 Jan 2021 17:42:50 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1609890170;
+        bh=6dhfOFmcZvlhHUA7H0jJjPacgVUfTjK3LaKxIV3EFVQ=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=u1+jEY40acep8COqpooLBvAa/WyVfwYiXTGsLN1HL2YcOpLEpp0hCHrnIXdd6IzIy
+         fHAzrBaAirWjFfMrAP+xFL+7SAXEdOrf7GANCKEuuar4UWoXdhijvqdt3EbqDOHdEO
+         6nydFbUDiEqnSRWNDoCilUL5yH/+xXexFR7kwmQ4=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 105NgoF5036388
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 5 Jan 2021 17:42:50 -0600
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 5 Jan
+ 2021 17:42:49 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Tue, 5 Jan 2021 17:42:49 -0600
+Received: from [10.250.37.61] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 105Ngn67081191;
+        Tue, 5 Jan 2021 17:42:49 -0600
+Subject: Re: [PATCH] dt-bindings: Add missing array size constraints
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh@kernel.org>
+CC:     <devicetree@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+        <linux-usb@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <dri-devel@lists.freedesktop.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        <linux-ide@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        <netdev@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Marc Zyngier <maz@kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        <linux-serial@vger.kernel.org>, <linux-input@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        <linux-media@vger.kernel.org>, Ohad Ben-Cohen <ohad@wizery.com>,
+        <linux-pm@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, Sebastian Reichel <sre@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jonathan Cameron <jic23@kernel.org>, <paul@crapouillou.net>
+References: <20210104230253.2805217-1-robh@kernel.org>
+ <20210105232729.GA2864340@xps15>
+From:   Suman Anna <s-anna@ti.com>
+Message-ID: <3223d736-285a-7465-03c6-4b73198fdaca@ti.com>
+Date:   Tue, 5 Jan 2021 17:42:43 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210105232729.GA2864340@xps15>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This driver likely also supports earlier (RTL8196) and later (RTL93xx)
-SoCs.
+On 1/5/21 5:27 PM, Mathieu Poirier wrote:
+> Adding Suman and Paul - guys please have a look.
+> 
+> On Mon, Jan 04, 2021 at 04:02:53PM -0700, Rob Herring wrote:
+>> DT properties which can have multiple entries need to specify what the
+>> entries are and define how many entries there can be. In the case of
+>> only a single entry, just 'maxItems: 1' is sufficient.
+>>
+>> Add the missing entry constraints. These were found with a modified
+>> meta-schema. Unfortunately, there are a few cases where the size
+>> constraints are not defined such as common bindings, so the meta-schema
+>> can't be part of the normal checks.
+>>
+>> Cc: Jens Axboe <axboe@kernel.dk>
+>> Cc: Stephen Boyd <sboyd@kernel.org>
+>> Cc: Thierry Reding <thierry.reding@gmail.com>
+>> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
+>> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+>> Cc: Linus Walleij <linus.walleij@linaro.org>
+>> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+>> Cc: Jonathan Cameron <jic23@kernel.org>
+>> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Marc Zyngier <maz@kernel.org>
+>> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+>> Cc: Chen-Yu Tsai <wens@csie.org>
+>> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+>> Cc: "David S. Miller" <davem@davemloft.net>
+>> Cc: Jakub Kicinski <kuba@kernel.org>
+>> Cc: Sebastian Reichel <sre@kernel.org>
+>> Cc: Ohad Ben-Cohen <ohad@wizery.com>
+>> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> Signed-off-by: Rob Herring <robh@kernel.org>
+>> ---
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linux-ide@vger.kernel.org
+>> Cc: linux-clk@vger.kernel.org
+>> Cc: dri-devel@lists.freedesktop.org
+>> Cc: linux-gpio@vger.kernel.org
+>> Cc: linux-iio@vger.kernel.org
+>> Cc: linux-input@vger.kernel.org
+>> Cc: linux-media@vger.kernel.org
+>> Cc: linux-mmc@vger.kernel.org
+>> Cc: netdev@vger.kernel.org
+>> Cc: linux-pm@vger.kernel.org
+>> Cc: linux-remoteproc@vger.kernel.org
+>> Cc: linux-riscv@lists.infradead.org
+>> Cc: linux-serial@vger.kernel.org
+>> Cc: alsa-devel@alsa-project.org
+>> Cc: linux-spi@vger.kernel.org
+>> Cc: linux-usb@vger.kernel.org
+>> ---
+>>  .../socionext,uniphier-system-cache.yaml      |  4 ++--
+>>  .../bindings/ata/sata_highbank.yaml           |  1 +
+>>  .../bindings/clock/canaan,k210-clk.yaml       |  1 +
+>>  .../bindings/display/brcm,bcm2711-hdmi.yaml   |  1 +
+>>  .../bindings/display/brcm,bcm2835-hdmi.yaml   |  1 +
+>>  .../display/panel/jdi,lt070me05000.yaml       |  1 +
+>>  .../display/panel/mantix,mlaf057we51-x.yaml   |  3 ++-
+>>  .../display/panel/novatek,nt36672a.yaml       |  1 +
+>>  .../devicetree/bindings/dsp/fsl,dsp.yaml      |  2 +-
+>>  .../devicetree/bindings/eeprom/at25.yaml      |  3 +--
+>>  .../bindings/extcon/extcon-ptn5150.yaml       |  2 ++
+>>  .../bindings/gpio/gpio-pca95xx.yaml           |  1 +
+>>  .../bindings/iio/adc/adi,ad7768-1.yaml        |  2 ++
+>>  .../bindings/iio/adc/aspeed,ast2400-adc.yaml  |  1 +
+>>  .../bindings/iio/adc/lltc,ltc2496.yaml        |  2 +-
+>>  .../bindings/iio/adc/qcom,spmi-vadc.yaml      |  1 +
+>>  .../bindings/iio/adc/st,stm32-adc.yaml        |  2 ++
+>>  .../iio/magnetometer/asahi-kasei,ak8975.yaml  |  1 +
+>>  .../iio/potentiometer/adi,ad5272.yaml         |  1 +
+>>  .../input/touchscreen/elan,elants_i2c.yaml    |  1 +
+>>  .../interrupt-controller/fsl,intmux.yaml      |  2 +-
+>>  .../interrupt-controller/st,stm32-exti.yaml   |  2 ++
+>>  .../allwinner,sun4i-a10-video-engine.yaml     |  1 +
+>>  .../devicetree/bindings/media/i2c/imx219.yaml |  1 +
+>>  .../memory-controllers/exynos-srom.yaml       |  2 ++
+>>  .../bindings/misc/fsl,dpaa2-console.yaml      |  1 +
+>>  .../bindings/mmc/mmc-controller.yaml          |  2 ++
+>>  .../bindings/net/ti,k3-am654-cpsw-nuss.yaml   |  1 +
+>>  .../bindings/net/ti,k3-am654-cpts.yaml        |  1 +
+>>  .../phy/allwinner,sun4i-a10-usb-phy.yaml      |  2 ++
+>>  .../phy/allwinner,sun50i-a64-usb-phy.yaml     |  2 ++
+>>  .../phy/allwinner,sun50i-h6-usb-phy.yaml      |  2 ++
+>>  .../phy/allwinner,sun5i-a13-usb-phy.yaml      |  2 ++
+>>  .../phy/allwinner,sun6i-a31-usb-phy.yaml      |  2 ++
+>>  .../phy/allwinner,sun8i-a23-usb-phy.yaml      |  2 ++
+>>  .../phy/allwinner,sun8i-a83t-usb-phy.yaml     |  2 ++
+>>  .../phy/allwinner,sun8i-h3-usb-phy.yaml       |  2 ++
+>>  .../phy/allwinner,sun8i-r40-usb-phy.yaml      |  2 ++
+>>  .../phy/allwinner,sun8i-v3s-usb-phy.yaml      |  2 ++
+>>  .../phy/allwinner,sun9i-a80-usb-phy.yaml      | 19 ++++++++-----------
+>>  .../phy/socionext,uniphier-ahci-phy.yaml      |  2 +-
+>>  .../phy/socionext,uniphier-pcie-phy.yaml      |  2 +-
+>>  .../phy/socionext,uniphier-usb3hs-phy.yaml    |  2 +-
+>>  .../phy/socionext,uniphier-usb3ss-phy.yaml    |  2 +-
+>>  .../bindings/phy/ti,phy-gmii-sel.yaml         |  2 +-
+>>  .../pinctrl/aspeed,ast2400-pinctrl.yaml       |  3 +--
+>>  .../pinctrl/aspeed,ast2500-pinctrl.yaml       |  4 ++--
+>>  .../bindings/power/supply/bq25980.yaml        |  1 +
+>>  .../bindings/remoteproc/ingenic,vpu.yaml      |  2 +-
+>>  .../remoteproc/ti,omap-remoteproc.yaml        |  3 +++
+>>  .../bindings/riscv/sifive-l2-cache.yaml       |  1 +
+>>  .../bindings/serial/renesas,hscif.yaml        |  2 ++
+>>  .../bindings/serial/renesas,scif.yaml         |  2 ++
+>>  .../bindings/serial/renesas,scifa.yaml        |  2 ++
+>>  .../bindings/serial/renesas,scifb.yaml        |  2 ++
+>>  .../sound/allwinner,sun4i-a10-codec.yaml      |  1 +
+>>  .../bindings/sound/google,sc7180-trogdor.yaml |  1 +
+>>  .../bindings/sound/samsung,aries-wm8994.yaml  |  3 +++
+>>  .../bindings/sound/samsung,midas-audio.yaml   |  2 ++
+>>  .../devicetree/bindings/sound/tas2562.yaml    |  2 ++
+>>  .../devicetree/bindings/sound/tas2770.yaml    |  2 ++
+>>  .../bindings/sound/tlv320adcx140.yaml         |  1 +
+>>  .../devicetree/bindings/spi/renesas,rspi.yaml |  2 ++
+>>  .../devicetree/bindings/sram/sram.yaml        |  2 ++
+>>  .../timer/allwinner,sun4i-a10-timer.yaml      |  2 ++
+>>  .../bindings/timer/intel,ixp4xx-timer.yaml    |  2 +-
+>>  .../usb/allwinner,sun4i-a10-musb.yaml         |  2 +-
+>>  .../bindings/usb/brcm,usb-pinmap.yaml         |  3 +++
+>>  .../devicetree/bindings/usb/generic-ehci.yaml |  1 +
+>>  .../devicetree/bindings/usb/generic-ohci.yaml |  1 +
+>>  .../devicetree/bindings/usb/ingenic,musb.yaml |  2 +-
+>>  .../bindings/usb/renesas,usbhs.yaml           |  1 +
+>>  .../devicetree/bindings/usb/ti,j721e-usb.yaml |  3 ++-
+>>  .../bindings/usb/ti,keystone-dwc3.yaml        |  2 ++
+>>  74 files changed, 118 insertions(+), 33 deletions(-)
+>>
 
-The SPI hardware in these SoCs is specifically intended for connecting NOR
-bootflash chips, and only used for that in dozens of examined devices.
-However boiled down to basics, it's really just a half-duplex SPI
-controller.
+[snip]
 
-The hardware appears to have a vestigial second chip-select control, but
-it hasn't been seen in the wild and is thus not supported.
+>>  
+>> diff --git a/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml b/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml
+>> index c019f9fbe916..d0aa91bbf5e5 100644
+>> --- a/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml
+>> +++ b/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml
+>> @@ -44,7 +44,7 @@ properties:
+>>        - const: vpu
+>>  
+>>    interrupts:
+>> -    description: VPU hardware interrupt
+>> +    maxItems: 1
+>>  
+>>  required:
+>>    - compatible
+>> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
+>> index 084960a8f17a..1a1159097a2a 100644
+>> --- a/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
+>> +++ b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
+>> @@ -70,10 +70,13 @@ properties:
+>>        the firmware image.
+>>  
+>>    clocks:
+>> +    maxItems: 1
+>>      description: |
+>>        Main functional clock for the remote processor
+>>  
+>>    resets:
+>> +    minItems: 1
+>> +    maxItems: 2
 
-Signed-off-by: Bert Vermeulen <bert@biot.com>
----
- MAINTAINERS                   |   6 +
- drivers/spi/Makefile          |   1 +
- drivers/spi/spi-realtek-rtl.c | 206 ++++++++++++++++++++++++++++++++++
- 3 files changed, 213 insertions(+)
- create mode 100644 drivers/spi/spi-realtek-rtl.c
+While this works for passing the schema, if we want to be specifically accurate
+between the different remoteprocs, the DSPs will have 1 items while the IPUs
+should have 2 items.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ad0e34bf8453..c6cb954e5ecf 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15048,6 +15048,12 @@ F:	Documentation/devicetree/bindings/net/dsa/realtek-smi.txt
- F:	drivers/net/dsa/realtek-smi*
- F:	drivers/net/dsa/rtl83*
- 
-+REALTEK RTL83XX SPI DRIVER
-+M:	Bert Vermeulen <bert@biot.com>
-+M:	Birger Koblitz <mail@birger-koblitz.de>
-+S:	Maintained
-+F:	drivers/spi/spi-realtek-rtl.c
-+
- REALTEK WIRELESS DRIVER (rtlwifi family)
- M:	Ping-Ke Shih <pkshih@realtek.com>
- L:	linux-wireless@vger.kernel.org
-diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-index 6fea5821662e..182adef17013 100644
---- a/drivers/spi/Makefile
-+++ b/drivers/spi/Makefile
-@@ -94,6 +94,7 @@ obj-$(CONFIG_SPI_QCOM_QSPI)		+= spi-qcom-qspi.o
- obj-$(CONFIG_SPI_QUP)			+= spi-qup.o
- obj-$(CONFIG_SPI_ROCKCHIP)		+= spi-rockchip.o
- obj-$(CONFIG_SPI_RB4XX)			+= spi-rb4xx.o
-+obj-$(CONFIG_MACH_REALTEK_RTL)		+= spi-realtek-rtl.o
- obj-$(CONFIG_SPI_RPCIF)			+= spi-rpc-if.o
- obj-$(CONFIG_SPI_RSPI)			+= spi-rspi.o
- obj-$(CONFIG_SPI_S3C24XX)		+= spi-s3c24xx-hw.o
-diff --git a/drivers/spi/spi-realtek-rtl.c b/drivers/spi/spi-realtek-rtl.c
-new file mode 100644
-index 000000000000..c46894c6797f
---- /dev/null
-+++ b/drivers/spi/spi-realtek-rtl.c
-@@ -0,0 +1,206 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/spi/spi.h>
-+
-+struct rtspi {
-+	void __iomem *base;
-+};
-+
-+/* SPI Flash Configuration Register */
-+#define RTL_SPI_SFCR			0x00
-+#define RTL_SPI_SFCR_RBO		BIT(28)
-+#define RTL_SPI_SFCR_WBO		BIT(27)
-+
-+/* SPI Flash Control and Status Register */
-+#define RTL_SPI_SFCSR			0x08
-+#define RTL_SPI_SFCSR_CSB0		BIT(31)
-+#define RTL_SPI_SFCSR_CSB1		BIT(30)
-+#define RTL_SPI_SFCSR_RDY		BIT(27)
-+#define RTL_SPI_SFCSR_CS		BIT(24)
-+#define RTL_SPI_SFCSR_LEN_MASK		~(0x03 << 28)
-+#define RTL_SPI_SFCSR_LEN1		(0x00 << 28)
-+#define RTL_SPI_SFCSR_LEN4		(0x03 << 28)
-+
-+/* SPI Flash Data Register */
-+#define RTL_SPI_SFDR			0x0c
-+
-+#define REG(x)		(rtspi->base + x)
-+
-+
-+static void rt_set_cs(struct spi_device *spi, bool active)
-+{
-+	struct rtspi *rtspi = spi_controller_get_devdata(spi->controller);
-+	u32 value;
-+
-+	/* CS0 bit is active low */
-+	value = readl(REG(RTL_SPI_SFCSR));
-+	if (active)
-+		value |= RTL_SPI_SFCSR_CSB0;
-+	else
-+		value &= ~RTL_SPI_SFCSR_CSB0;
-+	writel(value, REG(RTL_SPI_SFCSR));
-+}
-+
-+static void set_size(struct rtspi *rtspi, int size)
-+{
-+	u32 value;
-+
-+	value = readl(REG(RTL_SPI_SFCSR));
-+	value &= RTL_SPI_SFCSR_LEN_MASK;
-+	if (size == 4)
-+		value |= RTL_SPI_SFCSR_LEN4;
-+	else if (size == 1)
-+		value |= RTL_SPI_SFCSR_LEN1;
-+	writel(value, REG(RTL_SPI_SFCSR));
-+}
-+
-+static inline void wait_ready(struct rtspi *rtspi)
-+{
-+	while (!(readl(REG(RTL_SPI_SFCSR)) & RTL_SPI_SFCSR_RDY))
-+		cpu_relax();
-+}
-+static void send4(struct rtspi *rtspi, const u32 *buf)
-+{
-+	wait_ready(rtspi);
-+	set_size(rtspi, 4);
-+	writel(*buf, REG(RTL_SPI_SFDR));
-+}
-+
-+static void send1(struct rtspi *rtspi, const u8 *buf)
-+{
-+	wait_ready(rtspi);
-+	set_size(rtspi, 1);
-+	writel(buf[0] << 24, REG(RTL_SPI_SFDR));
-+}
-+
-+static void rcv4(struct rtspi *rtspi, u32 *buf)
-+{
-+	wait_ready(rtspi);
-+	set_size(rtspi, 4);
-+	*buf = readl(REG(RTL_SPI_SFDR));
-+}
-+
-+static void rcv1(struct rtspi *rtspi, u8 *buf)
-+{
-+	wait_ready(rtspi);
-+	set_size(rtspi, 1);
-+	*buf = readl(REG(RTL_SPI_SFDR)) >> 24;
-+}
-+
-+static int transfer_one(struct spi_controller *ctrl, struct spi_device *spi,
-+			struct spi_transfer *xfer)
-+{
-+	struct rtspi *rtspi = spi_controller_get_devdata(ctrl);
-+	void *rx_buf;
-+	const void *tx_buf;
-+	int cnt;
-+
-+	tx_buf = xfer->tx_buf;
-+	rx_buf = xfer->rx_buf;
-+	cnt = xfer->len;
-+	if (tx_buf) {
-+		while (cnt >= 4) {
-+			send4(rtspi, tx_buf);
-+			tx_buf += 4;
-+			cnt -= 4;
-+		}
-+		while (cnt) {
-+			send1(rtspi, tx_buf);
-+			tx_buf++;
-+			cnt--;
-+		}
-+	} else if (rx_buf) {
-+		while (cnt >= 4) {
-+			rcv4(rtspi, rx_buf);
-+			rx_buf += 4;
-+			cnt -= 4;
-+		}
-+		while (cnt) {
-+			rcv1(rtspi, rx_buf);
-+			rx_buf++;
-+			cnt--;
-+		}
-+	}
-+
-+	spi_finalize_current_transfer(ctrl);
-+
-+	return 0;
-+}
-+
-+static void init_hw(struct rtspi *rtspi)
-+{
-+	u32 value;
-+
-+	/* Turn on big-endian byte ordering */
-+	value = readl(REG(RTL_SPI_SFCR));
-+	value |= RTL_SPI_SFCR_RBO | RTL_SPI_SFCR_WBO;
-+	writel(value, REG(RTL_SPI_SFCR));
-+
-+	value = readl(REG(RTL_SPI_SFCSR));
-+	/* Permanently disable CS1, since it's never used */
-+	value |= RTL_SPI_SFCSR_CSB1;
-+	/* Select CS0 for use */
-+	value &= RTL_SPI_SFCSR_CS;
-+	writel(value, REG(RTL_SPI_SFCSR));
-+}
-+
-+static int realtek_rtl_spi_probe(struct platform_device *pdev)
-+{
-+	struct spi_controller *ctrl;
-+	struct rtspi *rtspi;
-+	int err;
-+
-+	ctrl = devm_spi_alloc_master(&pdev->dev, sizeof(*rtspi));
-+	if (!ctrl) {
-+		dev_err(&pdev->dev, "Error allocating SPI controller\n");
-+		return -ENOMEM;
-+	}
-+	platform_set_drvdata(pdev, ctrl);
-+	rtspi = spi_controller_get_devdata(ctrl);
-+
-+	rtspi->base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
-+	if (IS_ERR(rtspi->base)) {
-+		dev_err(&pdev->dev, "Could not map SPI register address");
-+		return -ENOMEM;
-+	}
-+
-+	init_hw(rtspi);
-+
-+	ctrl->dev.of_node = pdev->dev.of_node;
-+	ctrl->flags = SPI_CONTROLLER_HALF_DUPLEX;
-+	ctrl->set_cs = rt_set_cs;
-+	ctrl->transfer_one = transfer_one;
-+
-+	err = devm_spi_register_controller(&pdev->dev, ctrl);
-+	if (err) {
-+		dev_err(&pdev->dev, "Could not register SPI controller\n");
-+		return -ENODEV;
-+	}
-+
-+	return 0;
-+}
-+
-+
-+static const struct of_device_id realtek_rtl_spi_of_ids[] = {
-+	{ .compatible = "realtek,rtl838x-spi" },
-+	{ .compatible = "realtek,rtl839x-spi" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, realtek_rtl_spi_of_ids);
-+
-+static struct platform_driver realtek_rtl_spi_driver = {
-+	.probe = realtek_rtl_spi_probe,
-+	.driver = {
-+		.name = "realtek-rtl83xx-spi",
-+		.of_match_table = realtek_rtl_spi_of_ids,
-+	},
-+};
-+
-+module_platform_driver(realtek_rtl_spi_driver);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_AUTHOR("Bert Vermeulen <bert@biot.com>");
-+MODULE_DESCRIPTION("Realtek RTL SPI driver");
--- 
-2.25.1
+I can submit an incremental update if that's ok. Otherwise, for this file,
 
+Reviewed-by: Suman Anna <s-anna@ti.com>
+
+
+>>      description: |
+>>        Reset handles for the remote processor
+>>  
+
+[snip]
+
+regards
+Suman
