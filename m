@@ -2,72 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED572EA6B5
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Jan 2021 09:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D952EA7D4
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Jan 2021 10:47:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727612AbhAEIor (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Jan 2021 03:44:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726202AbhAEIoq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Jan 2021 03:44:46 -0500
-Received: from yawp.biot.com (yawp.biot.com [IPv6:2a01:4f8:10a:8e::fce2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74750C061795
-        for <linux-spi@vger.kernel.org>; Tue,  5 Jan 2021 00:44:06 -0800 (PST)
-Received: from debian-spamd by yawp.biot.com with sa-checked (Exim 4.93)
-        (envelope-from <bert@biot.com>)
-        id 1kwhwi-00Bks0-Rj
-        for linux-spi@vger.kernel.org; Tue, 05 Jan 2021 09:44:04 +0100
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on yawp
-X-Spam-Level: 
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,HELO_MISC_IP,
-        RDNS_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.4
-Received: from [85.234.217.28] (helo=[10.0.1.5])
-        by yawp.biot.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <bert@biot.com>)
-        id 1kwhwd-00Bkrb-M4; Tue, 05 Jan 2021 09:43:59 +0100
-Subject: Re: [PATCH v3 1/2] dt-bindings: spi: Realtek RTL838x/RTL839x SPI
- controller
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Birger Koblitz <mail@birger-koblitz.de>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210101132432.2785663-1-bert@biot.com>
- <20210101132432.2785663-2-bert@biot.com>
- <20210104213131.GL5645@sirena.org.uk>
-From:   Bert Vermeulen <bert@biot.com>
-Message-ID: <121d9dc6-7993-d43b-291f-74dd943f4fc6@biot.com>
-Date:   Tue, 5 Jan 2021 09:43:59 +0100
+        id S1728168AbhAEJpL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Jan 2021 04:45:11 -0500
+Received: from smtp2.axis.com ([195.60.68.18]:26248 "EHLO smtp2.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727682AbhAEJpL (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 5 Jan 2021 04:45:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1609839910;
+  x=1641375910;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=CeICFgPaITmi9nZ9tSZ1FQ/bbzfnJaESHlPO8SjV7sU=;
+  b=IjI+E8+Tgo9md3pRitg0ZJs4R1fWGYblmW4VsHgQEn+eRJdFCIfX3uxq
+   4f84YWjfrEyNyRyt12TkJq/UU95aXowtzpQ3EG+LyYwi6Uy2i4LTYx6DK
+   kyIKz3LopqrrAa3Imo3dWTqM+ueKpcMsRqEX/hQlOpHz62Wyb0sEDKLLl
+   WC0v3M986i/0GKufzsl5e85T2Mjo4i+RyfO4e2JT0P1yxVmq2FwJFVG1V
+   x1LNBq6WZ2UkyExmPJpuzi6FjFy1tYXW4pHFW/4yJXPJqazhjGTWMlFYc
+   NtlhPyKGydTFS7NVUfAZkJYj21jDDn4OD25qQF4fRhlRILlgJ25qyYT7d
+   A==;
+Subject: Re: [PATCH] spi: spidev: Fix so the module is autoloaded when built
+ as external
+To:     Mark Brown <broonie@kernel.org>,
+        Gustav Wiklander <gustav.wiklander@axis.com>
+CC:     <kernel@axis.com>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20210104153436.20083-1-gustav.wiklander@axis.com>
+ <20210104213437.GM5645@sirena.org.uk>
+From:   Gustav Wiklander <gustavwi@axis.com>
+Message-ID: <124e3214-37b9-524b-7888-a31e8cb455da@axis.com>
+Date:   Tue, 5 Jan 2021 10:44:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <20210104213131.GL5645@sirena.org.uk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
+In-Reply-To: <20210104213437.GM5645@sirena.org.uk>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.0.5.60]
+X-ClientProxiedBy: XBOX03.axis.com (10.0.5.17) To XBOX01.axis.com (10.0.5.15)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 1/4/21 10:31 PM, Mark Brown wrote:
-> On Fri, Jan 01, 2021 at 02:24:31PM +0100, Bert Vermeulen wrote:
+On 1/4/21 10:34 PM, Mark Brown wrote:
+> On Mon, Jan 04, 2021 at 04:34:35PM +0100, Gustav Wiklander wrote:
+>> From: Gustav Wiklander <gustavwi@axis.com>
+>>
+>> The spi framework sets the modalias for the spi device to belong in
+>> either the acpi device table or the SPI device table. It can never
+>> be in the OF table. Therefore the spidev driver should populate the
+>> spi device table rather than the OF table.
+>>
+>> NOTE: platform drivers and i2c drivers support aliases in the
+>>        OF device table.
 > 
->> +  compatible:
->> +    const: realtek,rtl-spi
+> Why is this a good solution rather than ensuring the the OF IDs can be
+> used directly?
 > 
-> This is still just using rtl-spi as the compatible string, please
-> address the feedback on the previous version.
 
-Mark,
+Hi Mark,
 
-The rtl prefix really is as close as it gets. This is being developed on 
-RTL838x and RTL839x, but the driver very likely also works on RTL8196C and 
-RTL93xx series. There's no difference to the SPI block in those SoCs.
+You suggestion is of course a solid alternative forward. However, the 
+downside with supporting the OF device table for automatic module 
+loading is that a lot of spi device drivers must be updated. Also
+it is unclear what is the preferred way to do this in the kernel see
+this patch:
+https://lore.kernel.org/lkml/20190618052644.32446-1-bjorn.andersson@linaro.org/
 
-Do you really want a different per-series compatible when the "IP block" was 
-just copy-pasted between series in hardware?
+If adding support of OF device table the spi device drivers must now 
+include a MODULE_DEVICE_TABLE(of,...) as the spi device alias will no 
+longer match the alias in the module.
 
+This command gives 186 spi device drivers.
+git grep "MODULE_DEVICE_TABLE(spi" | wc -l 
 
--- 
-Bert Vermeulen
-bert@biot.com
+186
+
+Best regards
+Gustav Wiklander
