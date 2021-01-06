@@ -2,73 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA752EBE2A
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Jan 2021 14:02:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7C92EBFF5
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Jan 2021 16:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726581AbhAFNB6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 6 Jan 2021 08:01:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37928 "EHLO mail.kernel.org"
+        id S1726803AbhAFO7X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 6 Jan 2021 09:59:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35098 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726579AbhAFNB5 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 6 Jan 2021 08:01:57 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C865E22DD3;
-        Wed,  6 Jan 2021 13:01:16 +0000 (UTC)
+        id S1726326AbhAFO7W (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 6 Jan 2021 09:59:22 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E5D8723110;
+        Wed,  6 Jan 2021 14:58:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609938077;
-        bh=CD0iNCkpztEvHdJ9A3TiuhkWfAXCret5rxhU18dMqTY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IofVltuY0CVBWHJW1asMas7R3/Bm45tY46e2QZ6OC92OVrCN+70ooD6xUYqS9Wgp+
-         aPQug9AlybvtskczgP+yoXha02wiJ04z7VijsNI09D1ldTgFZ4a++GBLDTl/qTkOx+
-         tazN2WqQolSqGGT58oR03fMXysjCcVw+VkMGtsvaia+4c25U4iO5TWxaItzk2MgRqy
-         WhBEbDWnquEbRknQKIXm+w9VzhccZ+VGXtnxJwFCt5ntYFyzv70dVey6qAA5CBqVQC
-         GCV0F1AqzhzM0YFs+w562/zdSVQQxDgEf88RT2oRHaVQh6RoaqcDDik3PtIqfvk71P
-         DjFR7HtDxim2Q==
-Date:   Wed, 6 Jan 2021 13:00:49 +0000
+        s=k20201202; t=1609945121;
+        bh=fs4tnAAHZc6P9CcCZmtXnqhshJdz+3INo0fDCULFaD8=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=grRap1qACe13qOi+OZcRSFbPBF+dIr/ws3L/0hIw9hJfGzIKvP7l6ogZ4IDw43yGy
+         2LHdh5/KkLIX5OZy0HUphNkwfKucd730v8Tp6LLuzacbNiujVv7S8AcFgKaat4EO7E
+         y+/PvinZw7ISykZaboaWt60Ak3aP6L6FH/2ur96+2LlVa2dRoeg/GHIVTXjbL9m+/N
+         lmUrNwQGiW3vl9pfoybJQC9JwzVTaaO03pya7nRF3kZVYLga8QDzM2brjULMEAV5En
+         tz4bM66daxGgVwHYO/b7ctz5giI8LEijCXhmI8MPhXeH67zs/Q6iAskX79k3QrpAy9
+         gww2PkLy1Faag==
 From:   Mark Brown <broonie@kernel.org>
-To:     Vincent Pelletier <plr.vincent@gmail.com>
-Cc:     linux-spi@vger.kernel.org
-Subject: Re: 5.11.0-rc1+: "Division by zero in kernel." when writing to spidev
-Message-ID: <20210106130049.GC4752@sirena.org.uk>
-References: <CAF78GY3NWQ1jzkauG26nagcMuqR0=u7zcWLh+wDdrJ8G=e7how@mail.gmail.com>
+To:     Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, Guenter Roeck <linux@roeck-us.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-rtc@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-spi@vger.kernel.org, linux-ide@vger.kernel.org,
+        Jaroslav Kysela <perex@perex.cz>, linux-crypto@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Richard Weinberger <richard@nod.at>, dmaengine@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        netdev@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Matt Mackall <mpm@selenic.com>, alsa-devel@alsa-project.org,
+        linux-mips@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alessandro Zummo <a.zummo@towertech.it>
+In-Reply-To: <20210105140305.141401-1-tsbogend@alpha.franken.de>
+References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
+Subject: Re: (subset) [PATCH 00/10] Remove support for TX49xx
+Message-Id: <160994509314.52132.9683741232298303961.b4-ty@kernel.org>
+Date:   Wed, 06 Jan 2021 14:58:13 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="V88s5gaDVPzZ0KCq"
-Content-Disposition: inline
-In-Reply-To: <CAF78GY3NWQ1jzkauG26nagcMuqR0=u7zcWLh+wDdrJ8G=e7how@mail.gmail.com>
-X-Cookie: Happy feast of the pig!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, 5 Jan 2021 15:02:45 +0100, Thomas Bogendoerfer wrote:
+> I couldn't find any buyable product other than reference boards using
+> TX49xx CPUs. And since nobody showed interest in keeping support for
+> it, it's time to remove it.
+> 
+> I've split up the removal into seperate parts for different maintainers.
+> So if the patch fits your needs, please take it via your tree or
+> give me an ack so I can apply them  the mips-next tree.
+> 
+> [...]
 
---V88s5gaDVPzZ0KCq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Wed, Jan 06, 2021 at 09:55:45PM +0900, Vincent Pelletier wrote:
-> Hello,
->=20
-> I am somehow triggering a division by zero when writing to spidev
-> (a pair of traces at the end of this email).
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Please check with the latest SPI tree, there were some issues fixed
-there that might be relevant.
+Thanks!
 
---V88s5gaDVPzZ0KCq
-Content-Type: application/pgp-signature; name="signature.asc"
+[10/10] ASoC: txx9: Remove driver
+        commit: a8644292ea46064f990e4a3c4585bdb294c0d89a
 
------BEGIN PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/1tIAACgkQJNaLcl1U
-h9CtOAgAgaf8Apxu4mvVlFIm9Ku0otASgbipQ0P0BeTbeVrUnY7uHLrWzhWMZW1Q
-zzExqdvCx2ivDeJ1jpt8oNGzTv14JVcvWvpZGhhIJlpuHPNqL3vVoNGwfl/pwflw
-g51f4qJ99VDidBL+jRIGmCTaI3Wa8Lajtuif0pviCw1zHcZxYCQg85VE5YF9ch8y
-Bq5vurV5yV4R2hLlIMzLz5Nroh6z9r9K2b8DFilVfe7mpNiQbFYSO5RQnguh8ElL
-Tw51/o4x7eQghEU2DpHubl432b3q68+YQgbMZfz3exXhjzU+q1moIlhRJjpc+/em
-l74IaBp65y7s+DwqNdvcdrNMgMiIYg==
-=2zQq
------END PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---V88s5gaDVPzZ0KCq--
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
