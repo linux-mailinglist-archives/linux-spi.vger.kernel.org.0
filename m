@@ -2,38 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 400462EBFFF
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Jan 2021 16:01:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0CD2EC003
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Jan 2021 16:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725925AbhAFPAY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 6 Jan 2021 10:00:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35376 "EHLO mail.kernel.org"
+        id S1726430AbhAFPAb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 6 Jan 2021 10:00:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35426 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725800AbhAFPAY (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 6 Jan 2021 10:00:24 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F05FC22B45;
-        Wed,  6 Jan 2021 14:59:42 +0000 (UTC)
+        id S1725800AbhAFPAa (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 6 Jan 2021 10:00:30 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 26FF123110;
+        Wed,  6 Jan 2021 14:59:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609945183;
-        bh=9N8TfJsEA7J2oir+XxY6pt6ih2/gDFppXOSBqjRFQOs=;
+        s=k20201202; t=1609945189;
+        bh=NmLEKaHFaQj2FdVXf3M8f6wskoQf6jjP+lz/quwA+0I=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=LQs3UkTF5XQpfKOdKGHBK3cwfbvmsE0Ls7v4mQkI4g4TSuZFkqTfWOpneqE5DLMDJ
-         BrKEH8mGCJkLuIwswM8W5kkgRZikYv8MOWSPASgB4CkKd1wtRtRLv6X3FpOEwLNz97
-         h8FtG0cbhqHEHKTVvU0cecybvehPnYzC1VwsEiIsh7Q7UFsGDO1xn7PJv8ffJES8Mo
-         D3S4PGchojs+uFaWGgdJ9kigr54BsB6cymwSPv3NyaynRkXQTZ2qqDpYzym6zKke15
-         yD2qaCWdx52rKAQEQnfZKpSim0y1eCmpNilRiAZQV+B9JO2MFn3xi5PCfipmJePwJO
-         Yusqz6Qij+OvA==
+        b=Qv9F7qK/tJv/ZzILdFas5ooDo9Wv55uDWWxbtf+7wA2ky12xqxOqB46ms3OWIgrA8
+         fgeBUnvh4Hy3IK3vawN43+jjFGLiHdWE7muoW2gH+oQfcnKdARKsXc8D+fTLoKdk6v
+         7TiknfwYlXw1kExVh8XLX69j1jL37/r/TIF96cWLkJlnPrCd1B3SlXC2pXC4kUUVPm
+         yUC3WBMRDWyra/DCTx02LjHZRWprwo+/V84G9e7WmKWKSm1S0CCthOgvv9YsRzLgni
+         fsQCK8IEnjm2PfEUNOd1A9ZVsA0TDcRyl6VCTF/xrcM4+pbbXiiX4ELb2sAIn1uh/b
+         kPv2NPVkQYiFw==
 From:   Mark Brown <broonie@kernel.org>
-To:     thierry.reding@gmail.com, lukas@wunner.de, robh+dt@kernel.org,
-        jonathanh@nvidia.com, Sowjanya Komatineni <skomatineni@nvidia.com>
-Cc:     devicetree@vger.kernel.org, tudor.ambarus@microchip.com,
-        bbrezillon@kernel.org, linux-tegra@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        p.yadav@ti.com
-In-Reply-To: <1608585459-17250-1-git-send-email-skomatineni@nvidia.com>
-References: <1608585459-17250-1-git-send-email-skomatineni@nvidia.com>
-Subject: Re: (subset) [PATCH v5 0/9] Add Tegra Quad SPI driver
-Message-Id: <160994515510.52247.6457410235851345560.b4-ty@kernel.org>
+To:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Pratyush Yadav <p.yadav@ti.com>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+In-Reply-To: <20201222184425.7028-1-p.yadav@ti.com>
+References: <20201222184425.7028-1-p.yadav@ti.com>
+Subject: Re: [PATCH 0/7] spi: cadence-quadspi: Add Octal DTR support
+Message-Id: <160994515510.52247.9169476392444387381.b4-ty@kernel.org>
 Date:   Wed, 06 Jan 2021 14:59:15 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -42,15 +39,15 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 21 Dec 2020 13:17:30 -0800, Sowjanya Komatineni wrote:
-> This series adds Tegra210, Tegra186, and Tegra194 Quad SPI driver and
-> enables Quad SPI on Jetson Nano and Jetson Xavier NX.
+On Wed, 23 Dec 2020 00:14:18 +0530, Pratyush Yadav wrote:
+> This series adds support for Octal DTR mode now that SPI NOR supports
+> these flashes. Patches 1/7 to 4/7 and 6/7 fix some minor bugs and issues.
+> Patche 5/7 lays some groundwork by implementing the supports_op() hook.
+> Patch 7/7 adds the Octal DTR mode support.
 > 
-> QSPI controller is available on Tegra210, Tegra186 and Tegra194.
-> 
-> Tegra186 and Tegra194 has additional feature of combined sequence mode
-> where command, address and data can all be transferred in a single transfer.
-> Combined sequence mode is useful only when using DMA mode transfer.
+> While the main aim of this series is to support 8D-8D-8D mode, other
+> modes like 4D-4D-4D or 2S-2S-2S should also now be supported, though
+> they have not been tested.
 > 
 > [...]
 
@@ -60,18 +57,20 @@ Applied to
 
 Thanks!
 
-[1/9] dt-bindings: clock: tegra: Add clock ID TEGRA210_CLK_QSPI_PM
-      commit: b499779761278d6f5339daa230938211d98861ef
-[2/9] dt-bindings: spi: Add Tegra Quad SPI device tree binding
-      commit: 9684752e5fe3989b45f686a4e0202a683038be4a
-[3/9] MAINTAINERS: Add Tegra Quad SPI driver section
-      commit: e5c92bb924ce4bda9c4312b8596cf62ad7b07e2e
-[4/9] spi: tegra210-quad: Add support for Tegra210 QSPI controller
-      commit: 921fc1838fb036f690b8ba52e6a6d3644b475cbb
-[5/9] spi: spi-mem: Mark dummy transfers by setting dummy_data bit
-      commit: 98621ed011c57ba6e52e01a5982b221c9943b6d9
-[6/9] spi: tegra210-quad: Add support for hardware dummy cycles transfer
-      commit: 6a8a8b51703c69fa2d6adbbcbf731ce9b991c696
+[1/7] spi: cadence-quadspi: Set master max_speed_hz
+      commit: 3a5c09c8d1ed9a7323f0e5c435021531f0865c16
+[2/7] spi: cadence-quadspi: Abort read if dummy cycles required are too many
+      commit: ceeda328edeeeeac7579e9dbf0610785a3b83d39
+[3/7] spi: cadence-quadspi: Set dummy cycles from STIG commands
+      commit: 888d517b992532df2b6115fbdc9620673ca7c651
+[4/7] spi: cadence-quadspi: Fix dummy cycle calculation when buswidth > 1
+      commit: 7512eaf54190e4cc9247f18439c008d44b15022c
+[5/7] spi: cadence-quadspi: Implement a simple supports_op hook
+      commit: a273596b9b50c76a9cc1f65d3eb7f8ab5c3eb3e3
+[6/7] spi: cadence-quadspi: Wait at least 500 ms for direct reads
+      commit: 0920a32cf6f20467aa133a47b776ee782daa889f
+[7/7] spi: cadence-quadspi: Add DTR support
+      commit: f453f293979fb648d2e505c132887811acb6bde6
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
