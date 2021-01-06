@@ -2,120 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB0F2EC31A
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Jan 2021 19:18:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6AD22EC37F
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Jan 2021 19:50:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726731AbhAFSS3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 6 Jan 2021 13:18:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725789AbhAFSS2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Jan 2021 13:18:28 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDC1C061575;
-        Wed,  6 Jan 2021 10:17:48 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id b26so8604119lff.9;
-        Wed, 06 Jan 2021 10:17:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=HYWLWTmJNILkmHihZoZqMnAVOHO5Z+JPD1TRn5rR9L8=;
-        b=GYiaiaGEtT4BPqTlK0KXvA/lu341yArrXOfwIqhkoVUJgJS2obaAQT2iqcnRMLlEj2
-         86dYKLxag/6o7FFGTh1Vt5TIkPdSdG+zPtevOxa7j54gud87De0pnPPNNbmeyzFcKIe1
-         4YIh5yiiCYo2x6drTLogG5BS1FtgZ7nId5Q/AwMgojxtj5XPEyq3STR1fkLiu+XesnUc
-         QU5ia5w8dG/71l1Z55HnJQmRQInADBb1sNl7x6aeuUT/y6q1BPYSDCvgpmBhWeM+Z+mh
-         AXVxDGWhMUV9j3VOAFcsUFiIntWY+dOOFoXQpYyyfUUEdyjbQguMaGGbtpj5p1vrw984
-         ODXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=HYWLWTmJNILkmHihZoZqMnAVOHO5Z+JPD1TRn5rR9L8=;
-        b=gUHBZ8U2efQmGA2O1aY6esLBhZl22SEnXW8Fg6IvFjlC6YPcI6t4svX7qrsllTpKY2
-         qnqBhZHo9dzi7Ik0Na8bh5zb9ngAq7jr9blVbuTAFs/XjqypBbdvPyMehnhMrUvuYjc2
-         7w+AKcDQhk69mFYiwD7Eixso8A68MAROJ4XwUC99aO7jA1eApLZOGYODtcvsU6grjkUX
-         H5gfZmIvNCgFu7rq9TL2ay0hnjzMQ+M/idp4lEwYrYwlpAuUe6Y1zpD312uSDwdQWg2p
-         VZnSUJUCEgj+QJCly0ojIyZeywW5CFSp29LVpDN6Rg6fKmmHf3tSGqcRl0ePd8BhhuQ6
-         eiyg==
-X-Gm-Message-State: AOAM531UAHmQL5aOHOBQbGkx5C0zo0uWUwMB5HTWi2i0fvlFY/fbiVkB
-        NqZO05oBgz0pc6OV8rZGinuEvNvNm+A=
-X-Google-Smtp-Source: ABdhPJyPxFIsokqex0tU1bZCyssoNhQcXmbMg7xmBfVSnpJHRzc1xaOuhg1qqDeBQDzHj7VlWoc+4Q==
-X-Received: by 2002:a19:2358:: with SMTP id j85mr2490159lfj.264.1609957066448;
-        Wed, 06 Jan 2021 10:17:46 -0800 (PST)
-Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.googlemail.com with ESMTPSA id q7sm556364ljp.77.2021.01.06.10.17.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Jan 2021 10:17:45 -0800 (PST)
-Subject: Re: [PATCH 26/31] PM / devfreq: tegra30: convert to use devm_pm_opp_*
- API
-To:     cwchoi00@gmail.com, Yangtao Li <tiny.windzz@gmail.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>, yuq825@gmail.com,
-        David Airlie <airlied@linux.ie>, daniel@ffwll.ch,
-        robdclark@gmail.com, sean@poorly.run,
-        Rob Herring <robh@kernel.org>, tomeu.vizoso@collabora.com,
-        steven.price@arm.com, alyssa.rosenzweig@collabora.com,
-        stanimir.varbanov@linaro.org, agross@kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        mchehab@kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
-        adrian.hunter@intel.com, Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        id S1726511AbhAFStp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 6 Jan 2021 13:49:45 -0500
+Received: from elvis.franken.de ([193.175.24.41]:33363 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726249AbhAFSto (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 6 Jan 2021 13:49:44 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1kxDra-0005fm-00; Wed, 06 Jan 2021 19:48:54 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 4B798C0808; Wed,  6 Jan 2021 19:48:39 +0100 (CET)
+Date:   Wed, 6 Jan 2021 19:48:39 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>, jirislaby@kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, jcrouse@codeaurora.org,
-        hoegsberg@google.com, eric@anholt.net, tzimmermann@suse.de,
-        marijn.suijten@somainline.org, gustavoars@kernel.org,
-        emil.velikov@collabora.com, jonathan@marek.ca,
-        akhilpo@codeaurora.org, smasetty@codeaurora.org,
-        airlied@redhat.com, masneyb@onstation.org, kalyan_t@codeaurora.org,
-        tanmay@codeaurora.org, ddavenport@chromium.org,
-        jsanka@codeaurora.org, rnayak@codeaurora.org,
-        tongtiangen@huawei.com, miaoqinglang@huawei.com,
-        khsieh@codeaurora.org, abhinavk@codeaurora.org,
-        chandanu@codeaurora.org, Guenter Roeck <groeck@chromium.org>,
-        varar@codeaurora.org, Matthias Kaehlcke <mka@chromium.org>,
-        harigovi@codeaurora.org, rikard.falkeborn@gmail.com,
-        natechancellor@gmail.com, Georgi Djakov <georgi.djakov@linaro.org>,
-        akashast@codeaurora.org, parashar@codeaurora.org,
-        Doug Anderson <dianders@chromium.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-tegra@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        lima@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org
-References: <20210103035445.23696-1-tiny.windzz@gmail.com>
- <CAGTfZH0sLh=8XhBVOzUr9qO2w_=jp-OuWoh5vgNpnmXq6EzYHA@mail.gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <e49d60f3-f753-6679-7148-f7ea72973197@gmail.com>
-Date:   Wed, 6 Jan 2021 21:17:42 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        dmaengine <dmaengine@vger.kernel.org>, linux-ide@vger.kernel.org,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        netdev <netdev@vger.kernel.org>, linux-rtc@vger.kernel.org,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Atsushi Nemoto <anemo@mba.ocn.ne.jp>
+Subject: Re: [PATCH 00/10] Remove support for TX49xx
+Message-ID: <20210106184839.GA7773@alpha.franken.de>
+References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
+ <CAMuHMdX=trGqj8RzV7r1iTneqDjWOc4e1T-X+R_B34rxxhJpbg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAGTfZH0sLh=8XhBVOzUr9qO2w_=jp-OuWoh5vgNpnmXq6EzYHA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdX=trGqj8RzV7r1iTneqDjWOc4e1T-X+R_B34rxxhJpbg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-05.01.2021 06:47, Chanwoo Choi пишет:
-> You might remove the 'devm_pm_opp_remove_all_dynamic(&pdev->dev)
-> under ' remove_opp' goto statement.kkkk
+On Wed, Jan 06, 2021 at 09:37:11AM +0100, Geert Uytterhoeven wrote:
+> Hi Thomas,
+> 
+> CC Nemoto-san (de-facto TX49XX maintainer)
+> 
+> On Tue, Jan 5, 2021 at 3:03 PM Thomas Bogendoerfer
+> <tsbogend@alpha.franken.de> wrote:
+> > I couldn't find any buyable product other than reference boards using
+> > TX49xx CPUs. And since nobody showed interest in keeping support for
+> > it, it's time to remove it.
+> 
+> I have an RBTX4927 development board in my board farm, boot-test every
+> bi-weekly renesas-drivers release on it, and fix kernel issues when they
+> appear.
+> 
+> Is that sufficient to keep it?
 
-Good catch, thank you.
+for me it is. But now we probaly need some reverts then...
+
+I wonder whether you have seen my mail about the removal
+
+https://lore.kernel.org/linux-mips/20201207105627.GA15866@alpha.franken.de
+
+and my call for people owning MIPS machines
+
+https://lore.kernel.org/linux-mips/20200227144910.GA25011@alpha.franken.de/
+
+Still "unclaimed" machines are
+
+IMG Pistachio SoC based boards (MACH_PISTACHIO(
+Toshiba TX39 series based machines (MACH_TX39XX)
+NEC VR4100 series based machines (MACH_VR41XX)
+Netlogic XLR/XLS based systems (NLM_XLR_BOARD)
+Netlogic XLP based systems (NLM_XLP_BOARD)
+Sibyte BCM91120C-CRhine (SIBYTE_CRHINE)
+Sibyte BCM91120x-Carmel (SIBYTE_CARMEL)
+Sibyte BCM91125C-CRhone (SIBYTE_CRHONE)
+Sibyte BCM91125E-Rhone (SIBYTE_RHONE)
+Sibyte BCM91250C2-LittleSur (SIBYTE_LITTLESUR)
+Sibyte BCM91250E-Sentosa (SIBYTE_SENTOSA)
+
+Is there something on this list you also regulary use ?
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
