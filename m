@@ -2,53 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7C92EBFF5
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Jan 2021 16:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 400462EBFFF
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Jan 2021 16:01:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726803AbhAFO7X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 6 Jan 2021 09:59:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35098 "EHLO mail.kernel.org"
+        id S1725925AbhAFPAY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 6 Jan 2021 10:00:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35376 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726326AbhAFO7W (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 6 Jan 2021 09:59:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E5D8723110;
-        Wed,  6 Jan 2021 14:58:40 +0000 (UTC)
+        id S1725800AbhAFPAY (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 6 Jan 2021 10:00:24 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F05FC22B45;
+        Wed,  6 Jan 2021 14:59:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609945121;
-        bh=fs4tnAAHZc6P9CcCZmtXnqhshJdz+3INo0fDCULFaD8=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=grRap1qACe13qOi+OZcRSFbPBF+dIr/ws3L/0hIw9hJfGzIKvP7l6ogZ4IDw43yGy
-         2LHdh5/KkLIX5OZy0HUphNkwfKucd730v8Tp6LLuzacbNiujVv7S8AcFgKaat4EO7E
-         y+/PvinZw7ISykZaboaWt60Ak3aP6L6FH/2ur96+2LlVa2dRoeg/GHIVTXjbL9m+/N
-         lmUrNwQGiW3vl9pfoybJQC9JwzVTaaO03pya7nRF3kZVYLga8QDzM2brjULMEAV5En
-         tz4bM66daxGgVwHYO/b7ctz5giI8LEijCXhmI8MPhXeH67zs/Q6iAskX79k3QrpAy9
-         gww2PkLy1Faag==
+        s=k20201202; t=1609945183;
+        bh=9N8TfJsEA7J2oir+XxY6pt6ih2/gDFppXOSBqjRFQOs=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=LQs3UkTF5XQpfKOdKGHBK3cwfbvmsE0Ls7v4mQkI4g4TSuZFkqTfWOpneqE5DLMDJ
+         BrKEH8mGCJkLuIwswM8W5kkgRZikYv8MOWSPASgB4CkKd1wtRtRLv6X3FpOEwLNz97
+         h8FtG0cbhqHEHKTVvU0cecybvehPnYzC1VwsEiIsh7Q7UFsGDO1xn7PJv8ffJES8Mo
+         D3S4PGchojs+uFaWGgdJ9kigr54BsB6cymwSPv3NyaynRkXQTZ2qqDpYzym6zKke15
+         yD2qaCWdx52rKAQEQnfZKpSim0y1eCmpNilRiAZQV+B9JO2MFn3xi5PCfipmJePwJO
+         Yusqz6Qij+OvA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, Guenter Roeck <linux@roeck-us.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-rtc@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-spi@vger.kernel.org, linux-ide@vger.kernel.org,
-        Jaroslav Kysela <perex@perex.cz>, linux-crypto@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Richard Weinberger <richard@nod.at>, dmaengine@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        netdev@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Matt Mackall <mpm@selenic.com>, alsa-devel@alsa-project.org,
-        linux-mips@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alessandro Zummo <a.zummo@towertech.it>
-In-Reply-To: <20210105140305.141401-1-tsbogend@alpha.franken.de>
-References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
-Subject: Re: (subset) [PATCH 00/10] Remove support for TX49xx
-Message-Id: <160994509314.52132.9683741232298303961.b4-ty@kernel.org>
-Date:   Wed, 06 Jan 2021 14:58:13 +0000
+To:     thierry.reding@gmail.com, lukas@wunner.de, robh+dt@kernel.org,
+        jonathanh@nvidia.com, Sowjanya Komatineni <skomatineni@nvidia.com>
+Cc:     devicetree@vger.kernel.org, tudor.ambarus@microchip.com,
+        bbrezillon@kernel.org, linux-tegra@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        p.yadav@ti.com
+In-Reply-To: <1608585459-17250-1-git-send-email-skomatineni@nvidia.com>
+References: <1608585459-17250-1-git-send-email-skomatineni@nvidia.com>
+Subject: Re: (subset) [PATCH v5 0/9] Add Tegra Quad SPI driver
+Message-Id: <160994515510.52247.6457410235851345560.b4-ty@kernel.org>
+Date:   Wed, 06 Jan 2021 14:59:15 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,25 +42,36 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 5 Jan 2021 15:02:45 +0100, Thomas Bogendoerfer wrote:
-> I couldn't find any buyable product other than reference boards using
-> TX49xx CPUs. And since nobody showed interest in keeping support for
-> it, it's time to remove it.
+On Mon, 21 Dec 2020 13:17:30 -0800, Sowjanya Komatineni wrote:
+> This series adds Tegra210, Tegra186, and Tegra194 Quad SPI driver and
+> enables Quad SPI on Jetson Nano and Jetson Xavier NX.
 > 
-> I've split up the removal into seperate parts for different maintainers.
-> So if the patch fits your needs, please take it via your tree or
-> give me an ack so I can apply them  the mips-next tree.
+> QSPI controller is available on Tegra210, Tegra186 and Tegra194.
+> 
+> Tegra186 and Tegra194 has additional feature of combined sequence mode
+> where command, address and data can all be transferred in a single transfer.
+> Combined sequence mode is useful only when using DMA mode transfer.
 > 
 > [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[10/10] ASoC: txx9: Remove driver
-        commit: a8644292ea46064f990e4a3c4585bdb294c0d89a
+[1/9] dt-bindings: clock: tegra: Add clock ID TEGRA210_CLK_QSPI_PM
+      commit: b499779761278d6f5339daa230938211d98861ef
+[2/9] dt-bindings: spi: Add Tegra Quad SPI device tree binding
+      commit: 9684752e5fe3989b45f686a4e0202a683038be4a
+[3/9] MAINTAINERS: Add Tegra Quad SPI driver section
+      commit: e5c92bb924ce4bda9c4312b8596cf62ad7b07e2e
+[4/9] spi: tegra210-quad: Add support for Tegra210 QSPI controller
+      commit: 921fc1838fb036f690b8ba52e6a6d3644b475cbb
+[5/9] spi: spi-mem: Mark dummy transfers by setting dummy_data bit
+      commit: 98621ed011c57ba6e52e01a5982b221c9943b6d9
+[6/9] spi: tegra210-quad: Add support for hardware dummy cycles transfer
+      commit: 6a8a8b51703c69fa2d6adbbcbf731ce9b991c696
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
