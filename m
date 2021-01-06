@@ -2,107 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EABAB2EBB2D
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Jan 2021 09:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A592EBD16
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Jan 2021 12:22:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726647AbhAFIiF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 6 Jan 2021 03:38:05 -0500
-Received: from mail-oo1-f48.google.com ([209.85.161.48]:42963 "EHLO
-        mail-oo1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726074AbhAFIiE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Jan 2021 03:38:04 -0500
-Received: by mail-oo1-f48.google.com with SMTP id x203so586896ooa.9;
-        Wed, 06 Jan 2021 00:37:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7OzcDXMwatEtiJomNBi1fhi3zuuxEWhyROAP2OwThNY=;
-        b=EQ71xKWn6jEzk16xLKPw5tpURAioSNiH1WBf7m9kaDOShUYzWqDQ2s2wBGAg4P9H3J
-         Mn4cea36V3yDJZZrvHcNzPWnFPRSJt/NLvTmeFnFgsH0whYPMW6IM5yqwm8jTr01KMl9
-         ZZEi8CE6gy5fRn7AkvD+pvWO05miEnxQilI78QQh7PLj6v+I+0jCuNrUcUv+dhGZEZiv
-         v0c6RD3T94Qw07f4jhO5ADNuzjlIEToYcUiiqj4wivYB6ei9N9PpupqdcyyFF4eRsE0X
-         6gjpUPUB00Jm1SxknefDlc66XhPGX55zcpbDjCYhJR+gAdb4eHo6ri1rjep5ilymjGKm
-         mnxQ==
-X-Gm-Message-State: AOAM530lsAiSTA+Tt8ZbOkvKTVNeR7z6UzFGVNcIKOS+9jJv/Yr6Dj3n
-        xMVsCDhZjaRef2yEGQJb1xW7zzukJ5CfJtulSPc=
-X-Google-Smtp-Source: ABdhPJz+riLQ42T+q9EFB1XsbUqjCK7bS2nCYCFI4IXj5lNnjzpQBlfNrLzEuiXe37snmeLQrap5l7udgxcoLsEDH3o=
-X-Received: by 2002:a4a:8353:: with SMTP id q19mr2071403oog.40.1609922242555;
- Wed, 06 Jan 2021 00:37:22 -0800 (PST)
+        id S1725789AbhAFLVy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 6 Jan 2021 06:21:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51932 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726211AbhAFLVx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 6 Jan 2021 06:21:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EF87322B37;
+        Wed,  6 Jan 2021 11:21:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609932073;
+        bh=+wHV95cjtd29O/6YjPf4mbiYORoQZumDE8X6pwT66Wk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m3NLj6sMllngqAoLruvI8qZwDv3d/NNNcI+C4b/LDjHL/U6HZCCV+bOg8WMklIs6E
+         /yGQaDfuXmLoD3im1sSlyqkNOjEEY2iwSyCk2KfxQbxufZDnri340dMzJcwwJOx1gj
+         yoiSWD5rvNyr+gKAfwzVlp4YxZWHpehqAilpnFihF7wn8go+Yt/Y9WTTTZwgNexZ2C
+         05xGKrUg0gwhMqWMCPhqKvYfoBinZruuUHx5F8dYMx1hlRhSmgwZ1u+O2JdyQriLJM
+         V/U9chsfMVtfw9pac6QOLANzGQQwy/8++X1GZ2pKPYAip7RjzHPdMRFz9zJBXbvZOd
+         dBRWQGfLHkTFw==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1kx6sJ-00074Q-Pk; Wed, 06 Jan 2021 12:21:12 +0100
+Date:   Wed, 6 Jan 2021 12:21:11 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     Johan Hovold <johan@kernel.org>, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: Linux gnss driver SPI support?
+Message-ID: <X/WdJ6WEWtK1zix+@hovoldconsulting.com>
+References: <CAJ+vNU1XJCisZWpr-huf5gt3V592gz8kX+VHga58iM-Kx+h5=Q@mail.gmail.com>
 MIME-Version: 1.0
-References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
-In-Reply-To: <20210105140305.141401-1-tsbogend@alpha.franken.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 6 Jan 2021 09:37:11 +0100
-Message-ID: <CAMuHMdX=trGqj8RzV7r1iTneqDjWOc4e1T-X+R_B34rxxhJpbg@mail.gmail.com>
-Subject: Re: [PATCH 00/10] Remove support for TX49xx
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dmaengine <dmaengine@vger.kernel.org>, linux-ide@vger.kernel.org,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        netdev <netdev@vger.kernel.org>, linux-rtc@vger.kernel.org,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Atsushi Nemoto <anemo@mba.ocn.ne.jp>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJ+vNU1XJCisZWpr-huf5gt3V592gz8kX+VHga58iM-Kx+h5=Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Thomas,
+On Tue, Jan 05, 2021 at 10:23:43AM -0800, Tim Harvey wrote:
+> Johan,
+> 
+> I have noticed you maintain a gnss receiver subsystem and according to
+> the device-tree binding Documentation it looks like it supports SPI
+> but I'm not seeing any code support for SPI. Am I missing something or
+> would that support need to be added for use?
 
-CC Nemoto-san (de-facto TX49XX maintainer)
+Correct, there are currently no drivers supporting SPI and hence no
+shared implementation either like there is for UART interfaces.
 
-On Tue, Jan 5, 2021 at 3:03 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
-> I couldn't find any buyable product other than reference boards using
-> TX49xx CPUs. And since nobody showed interest in keeping support for
-> it, it's time to remove it.
+The driver for your device would need to handle the SPI bits itself for
+now. What kind of device is it?
 
-I have an RBTX4927 development board in my board farm, boot-test every
-bi-weekly renesas-drivers release on it, and fix kernel issues when they
-appear.
-
-Is that sufficient to keep it?
-
-TX49xx SoCs were used in Sony LocationFree base stations, running
-VxWorks. You can no longer buy them.
-I'm not aware of anyone ever porting Linux to them.
-https://en.wikipedia.org/wiki/LocationFree_Player
-
->   spi: txx9: Remove driver
-
-I only noticed the planned removal when I saw the SPI patch was applied.
-Doesn't matter for me, as SPI is only present on TX4938, not on TX4927 ;-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Johan
