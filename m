@@ -2,44 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87FC92EBE15
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Jan 2021 13:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA752EBE2A
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Jan 2021 14:02:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726638AbhAFM6p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 6 Jan 2021 07:58:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37364 "EHLO mail.kernel.org"
+        id S1726581AbhAFNB6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 6 Jan 2021 08:01:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37928 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726571AbhAFM6p (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 6 Jan 2021 07:58:45 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 20EF5229EF;
-        Wed,  6 Jan 2021 12:58:03 +0000 (UTC)
+        id S1726579AbhAFNB5 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 6 Jan 2021 08:01:57 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C865E22DD3;
+        Wed,  6 Jan 2021 13:01:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609937884;
-        bh=HSMx8d9zy+tZkY9keTyJN0MxqU4glFmqhX63BZf7qyI=;
+        s=k20201202; t=1609938077;
+        bh=CD0iNCkpztEvHdJ9A3TiuhkWfAXCret5rxhU18dMqTY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f93pOZYmLaNT4qGfs8aJ7j9C7Y7hvOgFgp0N8HFPrG76q8mQboC2kzKhkH4i/fWDP
-         c9te+0IBQw7P40nSPWAyi0tdXab7QVdGf23Ws3+k1146ZDKPChFyXpdTTvnpGCBTPK
-         M+KUT6WmZt0L0x5UL3sSzg+/1ku1kxs6T01dIWIDi3zkGp8iqBo+f2T3WBBbCDS9L6
-         gx+nYD1d9vjWaHrfIYGK8Cfir48CUCFgS30hqbDwTtnK3rHZtw2xSZHZ5ZdK20/Lj1
-         9xrE7bIx4CEJjISblFjKTDMrLvYKt5vl/em8DFFrcAxYkREVrG7nxHMmmRLkBrR4CO
-         ID/cxOJmDQg7w==
-Date:   Wed, 6 Jan 2021 12:57:35 +0000
+        b=IofVltuY0CVBWHJW1asMas7R3/Bm45tY46e2QZ6OC92OVrCN+70ooD6xUYqS9Wgp+
+         aPQug9AlybvtskczgP+yoXha02wiJ04z7VijsNI09D1ldTgFZ4a++GBLDTl/qTkOx+
+         tazN2WqQolSqGGT58oR03fMXysjCcVw+VkMGtsvaia+4c25U4iO5TWxaItzk2MgRqy
+         WhBEbDWnquEbRknQKIXm+w9VzhccZ+VGXtnxJwFCt5ntYFyzv70dVey6qAA5CBqVQC
+         GCV0F1AqzhzM0YFs+w562/zdSVQQxDgEf88RT2oRHaVQh6RoaqcDDik3PtIqfvk71P
+         DjFR7HtDxim2Q==
+Date:   Wed, 6 Jan 2021 13:00:49 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Bert Vermeulen <bert@biot.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Birger Koblitz <mail@birger-koblitz.de>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: spi: Realtek RTL838x/RTL839x SPI
- controller
-Message-ID: <20210106125735.GB4752@sirena.org.uk>
-References: <20210105232815.3218063-1-bert@biot.com>
- <20210105232815.3218063-2-bert@biot.com>
+To:     Vincent Pelletier <plr.vincent@gmail.com>
+Cc:     linux-spi@vger.kernel.org
+Subject: Re: 5.11.0-rc1+: "Division by zero in kernel." when writing to spidev
+Message-ID: <20210106130049.GC4752@sirena.org.uk>
+References: <CAF78GY3NWQ1jzkauG26nagcMuqR0=u7zcWLh+wDdrJ8G=e7how@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="98e8jtXdkpgskNou"
+        protocol="application/pgp-signature"; boundary="V88s5gaDVPzZ0KCq"
 Content-Disposition: inline
-In-Reply-To: <20210105232815.3218063-2-bert@biot.com>
+In-Reply-To: <CAF78GY3NWQ1jzkauG26nagcMuqR0=u7zcWLh+wDdrJ8G=e7how@mail.gmail.com>
 X-Cookie: Happy feast of the pig!
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
@@ -47,31 +42,33 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---98e8jtXdkpgskNou
+--V88s5gaDVPzZ0KCq
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 06, 2021 at 12:28:14AM +0100, Bert Vermeulen wrote:
+On Wed, Jan 06, 2021 at 09:55:45PM +0900, Vincent Pelletier wrote:
+> Hello,
+>=20
+> I am somehow triggering a division by zero when writing to spidev
+> (a pair of traces at the end of this email).
 
-> +    oneOf:
-> +      - const: realtek,rtl838x-spi
-> +      - const: realtek,rtl839x-spi
+Please check with the latest SPI tree, there were some issues fixed
+there that might be relevant.
 
-These should list exact models, not wildcards.
-
---98e8jtXdkpgskNou
+--V88s5gaDVPzZ0KCq
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/1s78ACgkQJNaLcl1U
-h9BWEQf+NleJ5fXZOwgfeBGDb7tGHF0T9waVgNLaLZ1hg/wrDNi9cw40Y0EieKhm
-2UceJlnz4L8BSh+4RyojYk6G9sKLsqRgl2YV6Glb4RYtTxlbfAqi7RwLLz8DFlFs
-o251gz9g05/+TxIaK07LBNSuZAq15MuyRX+j2f+AWDzHm1lyV5lNmTvoXVVaHc8Y
-ksYYot0SBsvHJ8zS8ZVvY8dfb2EpYKE91K0YbPkFxe30Nna61oQvV8Dllt601Wwm
-t8qMnk8Fp/UUmevV7+35vswn9DCOUxVpd/NGNIrtUlcCCuh0UYjfmx2FXvPlmERX
-5Dfr1HoX4FdQbODlEIx6urt/wRUv3w==
-=4t1j
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/1tIAACgkQJNaLcl1U
+h9CtOAgAgaf8Apxu4mvVlFIm9Ku0otASgbipQ0P0BeTbeVrUnY7uHLrWzhWMZW1Q
+zzExqdvCx2ivDeJ1jpt8oNGzTv14JVcvWvpZGhhIJlpuHPNqL3vVoNGwfl/pwflw
+g51f4qJ99VDidBL+jRIGmCTaI3Wa8Lajtuif0pviCw1zHcZxYCQg85VE5YF9ch8y
+Bq5vurV5yV4R2hLlIMzLz5Nroh6z9r9K2b8DFilVfe7mpNiQbFYSO5RQnguh8ElL
+Tw51/o4x7eQghEU2DpHubl432b3q68+YQgbMZfz3exXhjzU+q1moIlhRJjpc+/em
+l74IaBp65y7s+DwqNdvcdrNMgMiIYg==
+=2zQq
 -----END PGP SIGNATURE-----
 
---98e8jtXdkpgskNou--
+--V88s5gaDVPzZ0KCq--
