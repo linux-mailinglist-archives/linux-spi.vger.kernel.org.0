@@ -2,84 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E422EC20D
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Jan 2021 18:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9152EC27C
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Jan 2021 18:39:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726468AbhAFRYz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 6 Jan 2021 12:24:55 -0500
-Received: from mrdf004.ocn.ad.jp ([125.206.160.152]:38233 "EHLO
-        mrdf004.ocn.ad.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725789AbhAFRYy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Jan 2021 12:24:54 -0500
-X-Greylist: delayed 4742 seconds by postgrey-1.27 at vger.kernel.org; Wed, 06 Jan 2021 12:24:52 EST
-Received: from mogw6101.ocn.ad.jp (mogw6101.ocn.ad.jp [210.163.236.2])
-        by mrdf004.ocn.ad.jp (Postfix) with ESMTP id 639463801B0;
-        Thu,  7 Jan 2021 01:04:34 +0900 (JST)
-Received: from mf-smf-unw009c1.ocn.ad.jp (mf-smf-unw009c1.ocn.ad.jp [153.138.219.105])
-        by mogw6101.ocn.ad.jp (Postfix) with ESMTP id 8CCA81E002A;
-        Thu,  7 Jan 2021 01:03:15 +0900 (JST)
-Received: from ocn-vc-mts-202c1.ocn.ad.jp ([153.138.219.215])
-        by mf-smf-unw009c1.ocn.ad.jp with ESMTP
-        id xBBQkW5DGUrLKxBHHke1vh; Thu, 07 Jan 2021 01:03:15 +0900
-Received: from smtp.ocn.ne.jp ([153.149.227.167])
-        by ocn-vc-mts-202c1.ocn.ad.jp with ESMTP
-        id xBHGk2ikJIfvlxBHGkV6m2; Thu, 07 Jan 2021 01:03:15 +0900
-Received: from localhost (p1601136-ipoe.ipoe.ocn.ne.jp [114.172.254.135])
-        by smtp.ocn.ne.jp (Postfix) with ESMTPA;
-        Thu,  7 Jan 2021 01:03:14 +0900 (JST)
-Date:   Thu, 07 Jan 2021 01:03:14 +0900 (JST)
-Message-Id: <20210107.010314.1817045693815939591.anemo@mba.ocn.ne.jp>
-To:     geert@linux-m68k.org
-Cc:     tsbogend@alpha.franken.de, mpm@selenic.com,
-        herbert@gondor.apana.org.au, dan.j.williams@intel.com,
-        vkoul@kernel.org, davem@davemloft.net, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, kuba@kernel.org,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
-        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH 00/10] Remove support for TX49xx
-From:   Atsushi Nemoto <anemo@mba.ocn.ne.jp>
-In-Reply-To: <CAMuHMdX=trGqj8RzV7r1iTneqDjWOc4e1T-X+R_B34rxxhJpbg@mail.gmail.com>
-References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
-        <CAMuHMdX=trGqj8RzV7r1iTneqDjWOc4e1T-X+R_B34rxxhJpbg@mail.gmail.com>
-X-Mailer: Mew version 6.7 on Emacs 24.5 / Mule 6.0 (HANACHIRUSATO)
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S1727021AbhAFRjJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 6 Jan 2021 12:39:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53688 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725800AbhAFRjJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 6 Jan 2021 12:39:09 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2186C20657;
+        Wed,  6 Jan 2021 17:38:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609954708;
+        bh=gPZe3RwvYiI/TNiE18vbiIhIebJXS18w8JLeo0/9YTM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ejWNEiQZcdqta2bMRMawWXqqa7eECYbFPwC1f5nuimxbpCqcSPdUiqPKX1NWOH+XA
+         D9FyYwkwbpR2Il7JaaEfnadzHIznKjIBhyOVxHBb37fHFtlEJ/e8/M31XpbTYrTpIe
+         ePUBa9utTkKe00EaqmUCBzi2eQf75LLrf9nclAt5q7FhtDjSkdxGVWiBTEkCFN2VT8
+         FwB+kwLJr535sZJxznqqKOVBRra8UTlaT1WvA5Q6Mjgq49jR5sENkWUnkaI3OBfZ2I
+         p41DfWiftntQq5TqlCMVvQyPzOz15OyXcYIXnMwY5GF6VI6S1DFLoeonUSJFAZyfmA
+         AC6SRJkegMANQ==
+Date:   Wed, 6 Jan 2021 17:37:59 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Vincent Pelletier <plr.vincent@gmail.com>
+Cc:     linux-spi@vger.kernel.org
+Subject: Re: 5.11.0-rc1+: "Division by zero in kernel." when writing to spidev
+Message-ID: <20210106173759.GF4752@sirena.org.uk>
+References: <CAF78GY3NWQ1jzkauG26nagcMuqR0=u7zcWLh+wDdrJ8G=e7how@mail.gmail.com>
+ <20210106130049.GC4752@sirena.org.uk>
+ <CAF78GY3=m0kMd3d4tS92tZS57mY5XeRuXtET+BVVvnTwcdtO3g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="HCdXmnRlPgeNBad2"
+Content-Disposition: inline
+In-Reply-To: <CAF78GY3=m0kMd3d4tS92tZS57mY5XeRuXtET+BVVvnTwcdtO3g@mail.gmail.com>
+X-Cookie: Happy feast of the pig!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Geert!
 
-On Wed, 6 Jan 2021 09:37:11 +0100, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> Hi Thomas,
-> 
-> CC Nemoto-san (de-facto TX49XX maintainer)
-> 
-> On Tue, Jan 5, 2021 at 3:03 PM Thomas Bogendoerfer
-> <tsbogend@alpha.franken.de> wrote:
->> I couldn't find any buyable product other than reference boards using
->> TX49xx CPUs. And since nobody showed interest in keeping support for
->> it, it's time to remove it.
-> 
-> I have an RBTX4927 development board in my board farm, boot-test every
-> bi-weekly renesas-drivers release on it, and fix kernel issues when they
-> appear.
-> 
-> Is that sufficient to keep it?
+--HCdXmnRlPgeNBad2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-It have been about 10 years since last time I see any TX49 board :-)
+On Thu, Jan 07, 2021 at 12:06:19AM +0900, Vincent Pelletier wrote:
 
-AFAIK Geert is the last user of TX49 SoC.
-I'm OK with whole TX49xx (and TX39xx) removal if Geert (or any other
-users) agreed.
+> FWIW, I am now getting a "normal" error message now:
+> [  +1.046688] spidev spi0.0: SPI transfer timed out
+> [  +0.005210] spi_master spi0: failed to transfer one message from queue
+> [  +0.922799] spidev spi0.0: SPI transfer timed out
+> [  +0.012172] spi_master spi0: failed to transfer one message from queue
+> but it is getting late here and I have not investigated why (my overlay
+> needs tweaking for 5.11 maybe ?).
 
----
-Atsushi Nemoto
+I wouldn't have thought that would be something in your DT, unless it
+was previously buggy and some issue has been exposed, but then nothing
+springs to mind as being potentially relevant either.
+
+--HCdXmnRlPgeNBad2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/19XcACgkQJNaLcl1U
+h9Aqgwf/WUdyDN01gKCq4EAYpXhry3X/9BeQt5u8SinBwo3PJgQvaTaoQpbeGIbO
+IU0NPlRSBbr8mdraXGo0+6Bg1cmONa2lCptlBJN6DAzy9L8mIuVRzvGCuWI9V+fP
+0J9DHtO1IwqcYBrkOpDDMd5kSb1NPBoxGk/XPTtgZYiYPdgMlU1jYv5b984xnYOa
+5dliE5h94Ys572vPbN45ONXzfC7+1BArqK7uRjXYtgBFf/nVwG4fimoFxlCdXlND
+7I8dZy3xMnfTMe2uLiBrM5Teqq5FrTwzwWNtUy8560ANmU1ITsZPlXscJP1BL4jO
+LWabHc/pgc9IMAU7sLyRBViM9U8iBg==
+=wPhh
+-----END PGP SIGNATURE-----
+
+--HCdXmnRlPgeNBad2--
