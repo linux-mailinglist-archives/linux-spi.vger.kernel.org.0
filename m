@@ -2,71 +2,134 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4F02ECC44
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Jan 2021 10:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A612ECC63
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Jan 2021 10:13:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726924AbhAGJEb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Jan 2021 04:04:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41630 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726890AbhAGJEa (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 7 Jan 2021 04:04:30 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B3B5923120;
-        Thu,  7 Jan 2021 09:03:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610010229;
-        bh=7mRF/UpDXKObT3hyG6tl9Nq2g6HneEvAVqS1pFJMSNo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AfubH2QbRxm97gWiea7OI8eCNrJQXqnKPZuvX2Hk/3jvmv0QXbGtB0pNjb7NPeP71
-         ivkbvCv7LOzWN6XM/9XhBiG1t3n74kiQPAywb9/FB8KM4dhn2F6nGAci4/9ttDf/qd
-         sBkNQOjHQ2NSBRLmpwqjNs9zFeznyLLFfg5XQRwmcbow3V09yr800douq+8imqaLYv
-         deuMXn53s9lTTPzOxD4m2oc1T2OMWEPKamXlozYwGga5HOJJxr+G0gmH3SgwhbjxXR
-         M1ni6fgVjYLSU8bp4a0/wZFwGz0ZrimGSWwrigVFWZByFQW2JJhFP6PJaIKNI/owwS
-         bu2n0dwRtJFUw==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1kxRCv-0003sb-Ul; Thu, 07 Jan 2021 10:03:50 +0100
-Date:   Thu, 7 Jan 2021 10:03:49 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     Johan Hovold <johan@kernel.org>, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: Linux gnss driver SPI support?
-Message-ID: <X/bOdQMe80v4N3AF@hovoldconsulting.com>
-References: <CAJ+vNU1XJCisZWpr-huf5gt3V592gz8kX+VHga58iM-Kx+h5=Q@mail.gmail.com>
- <X/WdJ6WEWtK1zix+@hovoldconsulting.com>
- <CAJ+vNU3WyXT5ozp1mc2EnxHrPGxzEGy8Tt1sNVLV+5WSfeAA+w@mail.gmail.com>
+        id S1727359AbhAGJLa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Jan 2021 04:11:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727278AbhAGJL3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Jan 2021 04:11:29 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCF0C0612FA
+        for <linux-spi@vger.kernel.org>; Thu,  7 Jan 2021 01:10:20 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id a12so12948602lfl.6
+        for <linux-spi@vger.kernel.org>; Thu, 07 Jan 2021 01:10:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=T+iZKNW1gmpT+HQqIiqmRRpQMcaG8pgogUVWa/pKYOM=;
+        b=cyz7QwbTfHcC+qnorIFVkv7DnbL/oyA5L+VJJAN8XWkNMg42oKdig8X5tU4xa7X7pN
+         01zspKzmEcVvu5fY2nzlSr3geA/q2812tr8Wz0sUieGMHhvg1aGrsz+m0J4b8Wmr2jr4
+         Bxuqd5E5gXQb8ARkFssKYAOK0W62M412pmNUBd9NwRQD04zf23syAxjzcLmFBod8VeLt
+         Wkczn2W4OJkxg0o6mQ3tRUOpKTABRCCUpHtxAiPQFjxJEJCf/WQ1QzYZHEZTgGgMtnu2
+         jNC0bNdR63+2S3cfHE4fDoxHLsYIWb3l6Ja+q5Vt8aM4kBs1TbyhYMIEDY91gB4GZfH3
+         2CvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T+iZKNW1gmpT+HQqIiqmRRpQMcaG8pgogUVWa/pKYOM=;
+        b=ZvthwYjZ6ftbzvtAl/tPcuYIyaOToyw0vlyix+GilsPVqhNJSnq6rgC/e9ZCvR/tld
+         ML6be1etSd/k0BOPvCR1dfBcre4Cuo/Quca+b/Umj4FD9HDYYKczpC/jWpHfY0qOiFe2
+         4YYpoLIXw/PHlBK9hH4136LJCoZkj/s1Aa0iMpd2KMJ4OZZuYZhmnf2WRnJaIx9kfI/F
+         5DjTrG4SW0Tx/apO1O29ZRfPgD5dYwwbmY7Ortzk6sw8GYmnZFnwWmJn4x5OhhbuipSx
+         VE+CDvm81bXe11qmX1PP0dNlvgn3C3XzUiXh1nAUOLoPznUJS3i7Yft/aii+w90VAWSh
+         NWOQ==
+X-Gm-Message-State: AOAM530WAnFt2QCgeGhZGZDOcdgcK9gUDu827L8gqnTl21IswnXNoGTk
+        Ahc7U6RNqgXk7VQ0rOjIWIjRIojOdygzRYSrbyTCkg==
+X-Google-Smtp-Source: ABdhPJz6FNuZKYGADUxlk9Tv8Rh/lJVu/2CmZBJO3UIrMaB/edLmB9ZlsVBcuBoQ7GbjgHsRrGXCE/gOnIldpK4OwK0=
+X-Received: by 2002:a19:495d:: with SMTP id l29mr3392190lfj.465.1610010618615;
+ Thu, 07 Jan 2021 01:10:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJ+vNU3WyXT5ozp1mc2EnxHrPGxzEGy8Tt1sNVLV+5WSfeAA+w@mail.gmail.com>
+References: <20210104230253.2805217-1-robh@kernel.org>
+In-Reply-To: <20210104230253.2805217-1-robh@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 7 Jan 2021 10:10:07 +0100
+Message-ID: <CACRpkdZVC8RE-DTes+p6g-1EAHxQWpu2u+sBCX2ei32cvaCrDA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Add missing array size constraints
+To:     Rob Herring <robh@kernel.org>
+Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>, linux-clk <linux-clk@vger.kernel.org>,
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Input <linux-input@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
+        <alsa-devel@alsa-project.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Jan 06, 2021 at 12:17:01PM -0800, Tim Harvey wrote:
-> On Wed, Jan 6, 2021 at 3:21 AM Johan Hovold <johan@kernel.org> wrote:
+On Tue, Jan 5, 2021 at 12:03 AM Rob Herring <robh@kernel.org> wrote:
 
-> > Correct, there are currently no drivers supporting SPI and hence no
-> > shared implementation either like there is for UART interfaces.
-> >
-> > The driver for your device would need to handle the SPI bits itself for
-> > now. What kind of device is it?
+> DT properties which can have multiple entries need to specify what the
+> entries are and define how many entries there can be. In the case of
+> only a single entry, just 'maxItems: 1' is sufficient.
+>
+> Add the missing entry constraints. These were found with a modified
+> meta-schema. Unfortunately, there are a few cases where the size
+> constraints are not defined such as common bindings, so the meta-schema
+> can't be part of the normal checks.
+>
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Ohad Ben-Cohen <ohad@wizery.com>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-> It is the u-blox ZOE-M8Q which has a UART as well as SPI/I2C/SQI
-> interface. The particular board design we are working on is
-> unfortunately out of UART's which is why we were looking at connecting
-> it via SPI.
+This is good. The stricter the better.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-So we'd need to add support for the SPI interface to the ublox driver,
-which is currently UART only.
-
-> I did come across a posting about this [1] which uses a userspace app
-> that creates a spy to pty bridge but it seems like they ran into some
-> performance/latency issues.
-
-Yeah, that is one of the problems that the gnss subsystem is meant to
-solve; to handle the transport interface in the kernel and provide a
-generic interface to user space.
-
-Johan
+Yours,
+Linus Walleij
