@@ -2,82 +2,132 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2C82ED536
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Jan 2021 18:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 316F42ED5A8
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Jan 2021 18:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728821AbhAGRLp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Jan 2021 12:11:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52084 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728265AbhAGRLp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 7 Jan 2021 12:11:45 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EE51F2342C;
-        Thu,  7 Jan 2021 17:11:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610039464;
-        bh=t1Gp2oo3VLef1KacdDRypyEhQ0ao26y+8U5vpHSprDQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YDiHmK9y+SoviYeeCmkcueyJ6ZEjnCVAPehbjLC5BWasEEak9OST/syPJ0zuzJ65i
-         qy+QJLDKqy9ISA5kZbdbzjq3i7qdzhljHHcHl322XkClnpnClpGK9MSTKqZWlxqjOg
-         UBGDOZMypFG9CcDqFEQaqI/H0HC0iGigOmgXtoxyUPcA5fyyvNPmbDeiQydqgDr0rV
-         k1SF2qWidk3IP6sbIbo46FylXHGhpHcsvQx2fKYSjWnxHFvjrt4m5BDuyW/V55pYyW
-         hBE/VUQrhi2C4G1RmjYzs6Rg1mhokkbYCkhE1FX77xgEU7r91AWErfW33EzqbD/tPl
-         3SQvEnTAGzzZA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v5.11-rc2
-Date:   Thu, 07 Jan 2021 17:10:22 +0000
-Message-Id: <20210107171103.EE51F2342C@mail.kernel.org>
+        id S1728542AbhAGRas (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Jan 2021 12:30:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728338AbhAGRas (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Jan 2021 12:30:48 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BD7C0612F5
+        for <linux-spi@vger.kernel.org>; Thu,  7 Jan 2021 09:30:07 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id n9so7524987ili.0
+        for <linux-spi@vger.kernel.org>; Thu, 07 Jan 2021 09:30:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=73649eJTBFUD2IK37c/cv6X9hiG+wNAZHTq86G2mAmk=;
+        b=CmM3ePgxc8oGXzyPTiOXR5SAufN4NRtzOtciTJTdiD4QNn2y8XP+7AKpsYD2Odpeju
+         rLDAw6agzIUc9ZM5n55YpVx2ppxhmLj9H+ijhARINGcbP9NJGKFhp2K/p7XYhahVFgWW
+         OYwJSmrUkaJTlhCDLVaMceSUC07QYoLicvZVfM+VNB6pOWC7uMDa4hKRStyqc7RiE2bo
+         6MVdEtbknnJXOMpYepeMwQfcZ7MZnyN/k6SfQ0sd1DAyuymU6zev7zrJF7TkwglfiZFq
+         iojBkzsi8rXA5JNLtlJ/4oVCphKPnxBCpVMzWLfK/N8ozfQ+UtzzmIFThwqDgWsOC0ta
+         qGFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=73649eJTBFUD2IK37c/cv6X9hiG+wNAZHTq86G2mAmk=;
+        b=by47cD8Wmd1t6EN1uK9ECgCiRF4urdrGXYRsMEyljxIzKtuAP8h/kUtYpM/DJUw9wA
+         7Fhi0nsaqGGJ0BZ4lYJvuYQI7j/tRFWtPPw4XvFRLmiTIfJqEitRmKYh//LJbwlCSXXm
+         NvVXa2D3I540eAq3BfsiqqBgj2j41sQsPOXwwlWASJ1ibU+IiKWkWKDaKBPmReUMI3UU
+         MfKzXzjqyn1XFfbAg1TMj9NNRltN2sWzZiw01NItssYzBa7MywfMtLSrZn7X+mVP2VRt
+         cOPBFbFuCKlLbsYw/lQAy/JNxE8nOUkt/5XEaRpWNKrirReq+qgjcb2+7AEUcU8ot2lU
+         zezg==
+X-Gm-Message-State: AOAM533qsDFUy6FdJlDFxWuhVfRq2/Z8JYnK3vMIGYyO+kdUpIqwhxUG
+        WgyWJmpA39NHia5o9ZKMbW7NvDeHAPk=
+X-Google-Smtp-Source: ABdhPJwd0WM01Za7Scnmwo/6ZrIVuvFbd/Jabwk7H0Wro/STkg5pPeZpYphcUzP8VsGKFGfcQuAJCw==
+X-Received: by 2002:a92:444c:: with SMTP id a12mr10291010ilm.53.1610040606996;
+        Thu, 07 Jan 2021 09:30:06 -0800 (PST)
+Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
+        by smtp.gmail.com with ESMTPSA id l6sm5334420ili.78.2021.01.07.09.30.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jan 2021 09:30:06 -0800 (PST)
+Date:   Thu, 7 Jan 2021 10:30:04 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Yanteng Si <siyanteng@loongson.cn>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-spi@vger.kernel.org, Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Yanteng Si <siyanteng@gmail.com>
+Subject: Re: [PATCH] SPI: Fix distinct pointer types warning for ARCH=MIPS
+Message-ID: <20210107173004.GA2169893@ubuntu-m3-large-x86>
+References: <20210107115704.3835282-1-siyanteng@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210107115704.3835282-1-siyanteng@loongson.cn>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+On Thu, Jan 07, 2021 at 07:57:04PM +0800, Yanteng Si wrote:
+> Fix a new warning report by build for make ARCH=MIPS allmodconfig:
+> 
+> drivers/spi/spi-cadence-quadspi.c: In function 'cqspi_direct_read_execute':
+>  ./include/linux/minmax.h:18:28: warning: comparison of distinct pointer types lacks a cast
+>     18 |  (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+>        |                            ^~
+>  ./include/linux/minmax.h:32:4: note: in expansion of macro '__typecheck'
+>     32 |   (__typecheck(x, y) && __no_side_effects(x, y))
+>        |    ^~~~~~~~~~~
+>  ./include/linux/minmax.h:42:24: note: in expansion of macro '__safe_cmp'
+>     42 |  __builtin_choose_expr(__safe_cmp(x, y), \
+>        |                        ^~~~~~~~~~
+>  ./include/linux/minmax.h:58:19: note: in expansion of macro '__careful_cmp'
+>     58 | #define max(x, y) __careful_cmp(x, y, >)
+>        |                   ^~~~~~~~~~~~~
+>  drivers/spi/spi-cadence-quadspi.c:1153:24: note: in expansion of macro 'max'
+>   1153 |       msecs_to_jiffies(max(len, 500UL)))) {
+>        |                        ^~~
+> 
+> "len" is unsigned,however,"500" is unsigned long.
+> 
+> Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
+> ---
+>  drivers/spi/spi-cadence-quadspi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+> index 06a65e9a8a60..576610ba1118 100644
+> --- a/drivers/spi/spi-cadence-quadspi.c
+> +++ b/drivers/spi/spi-cadence-quadspi.c
+> @@ -1150,7 +1150,7 @@ static int cqspi_direct_read_execute(struct cqspi_flash_pdata *f_pdata,
+>  
+>  	dma_async_issue_pending(cqspi->rx_chan);
+>  	if (!wait_for_completion_timeout(&cqspi->rx_dma_complete,
+> -					 msecs_to_jiffies(max(len, 500UL)))) {
+> +					 msecs_to_jiffies(max(len, 500U)))) {
+>  		dmaengine_terminate_sync(cqspi->rx_chan);
+>  		dev_err(dev, "DMA wait_for_completion_timeout\n");
+>  		ret = -ETIMEDOUT;
+> -- 
+> 2.27.0
+> 
 
-  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
+Isn't this just going to cause warnings on 64-bit platforms now because
+size_t is defined as unsigned long and it will now be compared against
+unsigned int? This fix should work for everyone, not sure how pretty it
+is though.
 
-are available in the Git repository at:
+Cheers,
+Nathan
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.11-rc2
-
-for you to fetch changes up to 6170d077bf92c5b3dfbe1021688d3c0404f7c9e9:
-
-  spi: fix the divide by 0 error when calculating xfer waiting time (2021-01-04 14:24:58 +0000)
-
-----------------------------------------------------------------
-spi: Fixes for v5.11
-
-A couple of core fixes here, both to do with handling of drivers which
-don't report their maximum speed since we factored some of the handling
-for transfer speeds out into the core in the previous release.  There's
-also some driver specific fixes, including a relatively large set for
-some races around timeouts in spi-geni-qcom.
-
-----------------------------------------------------------------
-Douglas Anderson (4):
-      spi: spi-geni-qcom: Fix geni_spi_isr() NULL dereference in timeout case
-      spi: spi-geni-qcom: Fail new xfers if xfer/cancel/abort pending
-      spi: spi-geni-qcom: Don't try to set CS if an xfer is pending
-      spi: spi-geni-qcom: Print an error when we timeout setting the CS
-
-Mark Brown (2):
-      Merge remote-tracking branch 'spi/for-5.10' into spi-5.11
-      Merge tag 'v5.11-rc1' into spi-5.11
-
-Roman Guskov (1):
-      spi: stm32: FIFO threshold level - fix align packet size
-
-Tudor Ambarus (1):
-      spi: Fix the clamping of spi->max_speed_hz
-
-Xu Yilun (2):
-      spi: altera: fix return value for altera_spi_txrx()
-      spi: fix the divide by 0 error when calculating xfer waiting time
-
- drivers/spi/spi-altera.c    | 26 +++++++-------
- drivers/spi/spi-geni-qcom.c | 84 ++++++++++++++++++++++++++++++++++++++++++---
- drivers/spi/spi-stm32.c     |  4 +--
- drivers/spi/spi.c           | 11 ++++--
- 4 files changed, 104 insertions(+), 21 deletions(-)
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 06a65e9a8a60..af13c0025bf5 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -1150,7 +1150,7 @@ static int cqspi_direct_read_execute(struct cqspi_flash_pdata *f_pdata,
+ 
+ 	dma_async_issue_pending(cqspi->rx_chan);
+ 	if (!wait_for_completion_timeout(&cqspi->rx_dma_complete,
+-					 msecs_to_jiffies(max(len, 500UL)))) {
++					 msecs_to_jiffies(max_t(size_t, len, 500)))) {
+ 		dmaengine_terminate_sync(cqspi->rx_chan);
+ 		dev_err(dev, "DMA wait_for_completion_timeout\n");
+ 		ret = -ETIMEDOUT;
