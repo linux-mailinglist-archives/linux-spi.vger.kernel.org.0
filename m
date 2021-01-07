@@ -2,159 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B982ED39B
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Jan 2021 16:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C84622ED47C
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Jan 2021 17:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726780AbhAGPg5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Jan 2021 10:36:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34494 "EHLO mail.kernel.org"
+        id S1728292AbhAGQld (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Jan 2021 11:41:33 -0500
+Received: from elvis.franken.de ([193.175.24.41]:34782 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726503AbhAGPg5 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 7 Jan 2021 10:36:57 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A8CBA23428;
-        Thu,  7 Jan 2021 15:36:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610033776;
-        bh=nf9ZDJUWZ91Pr9DLAW/Srg3b6tZhGcc403BBHh5TTiA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kyZlEooieL/PC2dcKuNzDEEi+tpx6NlTlr5JWB0LCYjPqqz6iFHSI+S6zUv420kVF
-         zbFLnwmoqK2/ztqq4kS/jpPswv8GvM+DdGkbEN7LhSVgq7bm1XkZ7b/tUPbnEmqPa2
-         quMG8IayuCsX4GfYUX8Mnnox/DkONaSVIFbSg6HKu28+sYCUOmiXu3FnbzNzFI6i2D
-         mmn9GzKN0KggJwFnYiD40zIRpQ56YC8nwz9yv/mh4jgQT9fDtG+iOYt5/9AE+CRt3v
-         8ZuK4eX+lh+l+n0wuLFwb9VjmHr5JEley9h/T5J5ODtdsCvqtUWQctFMN4CxWMCtWR
-         QlIqqPqeSFlVQ==
-Date:   Thu, 7 Jan 2021 15:35:46 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Vincent Pelletier <plr.vincent@gmail.com>
-Cc:     linux-spi@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        linux-rpi-kernel@lists.infradead.org
-Subject: Re: 5.11.0-rc1+: "Division by zero in kernel." when writing to spidev
-Message-ID: <20210107153546.GD4726@sirena.org.uk>
-References: <CAF78GY3NWQ1jzkauG26nagcMuqR0=u7zcWLh+wDdrJ8G=e7how@mail.gmail.com>
- <20210106130049.GC4752@sirena.org.uk>
- <CAF78GY3=m0kMd3d4tS92tZS57mY5XeRuXtET+BVVvnTwcdtO3g@mail.gmail.com>
- <20210106173759.GF4752@sirena.org.uk>
- <CAF78GY0xnKrOj5RhU2GHcQUTo2MLryrBj3+5dAMKoGzJn2okYw@mail.gmail.com>
+        id S1727874AbhAGQld (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 7 Jan 2021 11:41:33 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1kxYL4-0000Tv-00; Thu, 07 Jan 2021 17:40:42 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 98E5BC080E; Thu,  7 Jan 2021 17:40:15 +0100 (CET)
+Date:   Thu, 7 Jan 2021 17:40:15 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Joe Perches <joe@perches.com>
+Cc:     Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH 05/10] dma: tx49 removal
+Message-ID: <20210107164015.GA12533@alpha.franken.de>
+References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
+ <20210105140305.141401-6-tsbogend@alpha.franken.de>
+ <b84dadc2e98b1986dc800c5f6f202880ed905b38.camel@perches.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8w3uRX/HFJGApMzv"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAF78GY0xnKrOj5RhU2GHcQUTo2MLryrBj3+5dAMKoGzJn2okYw@mail.gmail.com>
-X-Cookie: See store for details.
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b84dadc2e98b1986dc800c5f6f202880ed905b38.camel@perches.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, Jan 06, 2021 at 11:10:38AM -0800, Joe Perches wrote:
+> On Tue, 2021-01-05 at 15:02 +0100, Thomas Bogendoerfer wrote:
+> > Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> []
+> > diff --git a/drivers/dma/txx9dmac.h b/drivers/dma/txx9dmac.h
+> []
+> > @@ -26,11 +26,6 @@
+> >   * DMA channel.
+> >   */
+> >  
+> > 
+> > -#ifdef CONFIG_MACH_TX49XX
+> > -static inline bool txx9_dma_have_SMPCHN(void)
+> > -{
+> > -	return true;
+> > -}
+> >  #define TXX9_DMA_USE_SIMPLE_CHAIN
+> >  #else
+> >  static inline bool txx9_dma_have_SMPCHN(void)
+> 
+> This doesn't look like it compiles as there's now an #else
+> without an #if
 
---8w3uRX/HFJGApMzv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+you are right, no idea what I had in mind while doing that.
 
-On Thu, Jan 07, 2021 at 09:57:01AM +0900, Vincent Pelletier wrote:
+Vinod,
 
-> I've started reading spi-bcm2835.c, and while I cannot claim that I under=
-stand
-> everything I'm reading, it raises some flags:
+as this patch series found a still active user of the platform,
+could you drop the patch from your tree, or do you want a revert
+from me ?
 
-Copying in a bunch of people for that driver.
+Thomas.
 
-> - it does not use "spi_finalize_current_transfer(...)" at all, but rather
->   "complete(&...->xfer_completion)". The former only calls the latter,
->   so this code seems technically correct, but this looks like an
->   abstraction layer bust.
-
-Yes.
-
-> - while it uses "complete(...)" on its IRQ and DMA transfer codepaths,
->   I do not see it being called on its polled codepath
->   (bcm2835_spi_transfer_one_poll).
-
-I'd not expect this to be required with a polled path, it's only needed
-if the transfer function returns a positive value indicating that the
-transfer is still in progress which shouldn't be the case when things
-are polled.
-
-> - ...polled codepath which checks bs->rx_len to tell when it's done,
->   independently of transfer direction. And while tx_len and rx_len are
-> initialised
->   to the same value, only the field actually corresponding to the
-> actual transfer
->   direction will be updated within this polling loop.
->   So maybe some transfers could timeout in the polled codepath and would
->   still end up in the IRQ one which would end up calling "complete", but =
-this
->   looks suspicious.
->=20
-> Checking on 5.10.4, I see:
-> root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat count_transfer=
-_dma
-> 2
-> root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat count_transfer=
-_irq
-> 1
-> root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat
-> count_transfer_polling
-> 27
-> root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat
-> count_transfer_irq_after_polling
-> 0
->=20
-> so I am apparently not triggering the poll-then-IRQ case, but am
-> triggering the others
-> on this kernel version.
->=20
-> On 5.11, this becomes:
-> root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat count_transfer=
-_dma
-> 2
-> root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat count_transfer=
-_irq
-> 24
-> root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat
-> count_transfer_polling
-> 0
-> root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat
-> count_transfer_irq_after_polling
-> 0
->=20
-> so somehow this is not triggering polling transfers anymore, so the
-> maybe-missing
-> completion call would probably not matter.
->=20
-> Also, it sets can_dma with a function pointer, but ends up only
-> checking can_dma as
-> a boolean and then calls the function by name rather than using the
-> value stored in
-> can_dma. Again this looks technically correct (and is very much
-> unrelated to my issue)
-> as can_dma does not take any other value and a valid function address wou=
-ld not
-> evaluate as false, but it is surprising to my naive reading.
->=20
-> I'll continue poking around later (especially checking computed timeout v=
-alues),
-> should I submit patches for s/complete/spi_finalize_current_transfer/ ?
-
-Probably send the completion patch, yes.
-
---8w3uRX/HFJGApMzv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/3KlEACgkQJNaLcl1U
-h9Avxwf+POcQ9p9Im5CRxIDy09z0IDLF9fu0nV06tFo02qT6OkhdYZREwQvViVHl
-hJGDzdO6utIfY2dij61yum0o+l/7k4NK3tX1ttsnBqgzjsHyhbGvnJrTXew0bpgs
-zgXLRqnxZSP85uEHalLYeiCwilg2NMRnXpRZ5b11DmmbOPlFE8/st3R1SFEluwKq
-POdEX1QyBfFUOiuxIfIbulXJlIDa+csIw/ZyUWk6eOPXnO4eb5gH1Pi2LZ6n9ZUy
-/lWtVBIQauhjo1I8SuJ/KTDD8lX1JEu5HTtAjk25Sn/97PxhCcGJQk3RH4c47slc
-fdx2LlbxiE155KhiLf6PKXQU++dNcg==
-=xgEY
------END PGP SIGNATURE-----
-
---8w3uRX/HFJGApMzv--
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
