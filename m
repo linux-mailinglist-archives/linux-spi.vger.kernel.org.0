@@ -2,134 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A612ECC63
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Jan 2021 10:13:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F23B32ECF47
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Jan 2021 12:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727359AbhAGJLa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Jan 2021 04:11:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727278AbhAGJL3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Jan 2021 04:11:29 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCF0C0612FA
-        for <linux-spi@vger.kernel.org>; Thu,  7 Jan 2021 01:10:20 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id a12so12948602lfl.6
-        for <linux-spi@vger.kernel.org>; Thu, 07 Jan 2021 01:10:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T+iZKNW1gmpT+HQqIiqmRRpQMcaG8pgogUVWa/pKYOM=;
-        b=cyz7QwbTfHcC+qnorIFVkv7DnbL/oyA5L+VJJAN8XWkNMg42oKdig8X5tU4xa7X7pN
-         01zspKzmEcVvu5fY2nzlSr3geA/q2812tr8Wz0sUieGMHhvg1aGrsz+m0J4b8Wmr2jr4
-         Bxuqd5E5gXQb8ARkFssKYAOK0W62M412pmNUBd9NwRQD04zf23syAxjzcLmFBod8VeLt
-         Wkczn2W4OJkxg0o6mQ3tRUOpKTABRCCUpHtxAiPQFjxJEJCf/WQ1QzYZHEZTgGgMtnu2
-         jNC0bNdR63+2S3cfHE4fDoxHLsYIWb3l6Ja+q5Vt8aM4kBs1TbyhYMIEDY91gB4GZfH3
-         2CvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T+iZKNW1gmpT+HQqIiqmRRpQMcaG8pgogUVWa/pKYOM=;
-        b=ZvthwYjZ6ftbzvtAl/tPcuYIyaOToyw0vlyix+GilsPVqhNJSnq6rgC/e9ZCvR/tld
-         ML6be1etSd/k0BOPvCR1dfBcre4Cuo/Quca+b/Umj4FD9HDYYKczpC/jWpHfY0qOiFe2
-         4YYpoLIXw/PHlBK9hH4136LJCoZkj/s1Aa0iMpd2KMJ4OZZuYZhmnf2WRnJaIx9kfI/F
-         5DjTrG4SW0Tx/apO1O29ZRfPgD5dYwwbmY7Ortzk6sw8GYmnZFnwWmJn4x5OhhbuipSx
-         VE+CDvm81bXe11qmX1PP0dNlvgn3C3XzUiXh1nAUOLoPznUJS3i7Yft/aii+w90VAWSh
-         NWOQ==
-X-Gm-Message-State: AOAM530WAnFt2QCgeGhZGZDOcdgcK9gUDu827L8gqnTl21IswnXNoGTk
-        Ahc7U6RNqgXk7VQ0rOjIWIjRIojOdygzRYSrbyTCkg==
-X-Google-Smtp-Source: ABdhPJz6FNuZKYGADUxlk9Tv8Rh/lJVu/2CmZBJO3UIrMaB/edLmB9ZlsVBcuBoQ7GbjgHsRrGXCE/gOnIldpK4OwK0=
-X-Received: by 2002:a19:495d:: with SMTP id l29mr3392190lfj.465.1610010618615;
- Thu, 07 Jan 2021 01:10:18 -0800 (PST)
+        id S1726607AbhAGL5r (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Jan 2021 06:57:47 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:47954 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726467AbhAGL5q (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 7 Jan 2021 06:57:46 -0500
+Received: from localhost.localdomain (unknown [112.20.112.14])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxeL4I9_ZfddEAAA--.1869S2;
+        Thu, 07 Jan 2021 19:56:57 +0800 (CST)
+From:   Yanteng Si <siyanteng@loongson.cn>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>, linux-spi@vger.kernel.org,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Yanteng Si <siyanteng@gmail.com>,
+        Yanteng Si <siyanteng@loongson.cn>
+Subject: [PATCH] SPI: Fix distinct pointer types warning for ARCH=MIPS
+Date:   Thu,  7 Jan 2021 19:57:04 +0800
+Message-Id: <20210107115704.3835282-1-siyanteng@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20210104230253.2805217-1-robh@kernel.org>
-In-Reply-To: <20210104230253.2805217-1-robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 7 Jan 2021 10:10:07 +0100
-Message-ID: <CACRpkdZVC8RE-DTes+p6g-1EAHxQWpu2u+sBCX2ei32cvaCrDA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Add missing array size constraints
-To:     Rob Herring <robh@kernel.org>
-Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>, linux-clk <linux-clk@vger.kernel.org>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
-        <alsa-devel@alsa-project.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9DxeL4I9_ZfddEAAA--.1869S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ArWUJr15CryrGr15Wr4UArb_yoW8AF4kpF
+        W7tF1UGFW2qF4I9ryUAw45u3W3J397J3yUua4ak342ga4jvFZxXFnYvFyYkrs8AFsaya12
+        9rW3GFs8J3WUuw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
+        KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbeT5PUUUU
+        U==
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Jan 5, 2021 at 12:03 AM Rob Herring <robh@kernel.org> wrote:
+Fix a new warning report by build for make ARCH=MIPS allmodconfig:
 
-> DT properties which can have multiple entries need to specify what the
-> entries are and define how many entries there can be. In the case of
-> only a single entry, just 'maxItems: 1' is sufficient.
->
-> Add the missing entry constraints. These were found with a modified
-> meta-schema. Unfortunately, there are a few cases where the size
-> constraints are not defined such as common bindings, so the meta-schema
-> can't be part of the normal checks.
->
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
-> Cc: Chanwoo Choi <cw00.choi@samsung.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Ohad Ben-Cohen <ohad@wizery.com>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Rob Herring <robh@kernel.org>
+drivers/spi/spi-cadence-quadspi.c: In function 'cqspi_direct_read_execute':
+ ./include/linux/minmax.h:18:28: warning: comparison of distinct pointer types lacks a cast
+    18 |  (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+       |                            ^~
+ ./include/linux/minmax.h:32:4: note: in expansion of macro '__typecheck'
+    32 |   (__typecheck(x, y) && __no_side_effects(x, y))
+       |    ^~~~~~~~~~~
+ ./include/linux/minmax.h:42:24: note: in expansion of macro '__safe_cmp'
+    42 |  __builtin_choose_expr(__safe_cmp(x, y), \
+       |                        ^~~~~~~~~~
+ ./include/linux/minmax.h:58:19: note: in expansion of macro '__careful_cmp'
+    58 | #define max(x, y) __careful_cmp(x, y, >)
+       |                   ^~~~~~~~~~~~~
+ drivers/spi/spi-cadence-quadspi.c:1153:24: note: in expansion of macro 'max'
+  1153 |       msecs_to_jiffies(max(len, 500UL)))) {
+       |                        ^~~
 
-This is good. The stricter the better.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+"len" is unsigned,however,"500" is unsigned long.
 
-Yours,
-Linus Walleij
+Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
+---
+ drivers/spi/spi-cadence-quadspi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 06a65e9a8a60..576610ba1118 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -1150,7 +1150,7 @@ static int cqspi_direct_read_execute(struct cqspi_flash_pdata *f_pdata,
+ 
+ 	dma_async_issue_pending(cqspi->rx_chan);
+ 	if (!wait_for_completion_timeout(&cqspi->rx_dma_complete,
+-					 msecs_to_jiffies(max(len, 500UL)))) {
++					 msecs_to_jiffies(max(len, 500U)))) {
+ 		dmaengine_terminate_sync(cqspi->rx_chan);
+ 		dev_err(dev, "DMA wait_for_completion_timeout\n");
+ 		ret = -ETIMEDOUT;
+-- 
+2.27.0
+
