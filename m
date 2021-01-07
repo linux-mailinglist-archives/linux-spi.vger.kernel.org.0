@@ -2,142 +2,131 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D46A62EC54C
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Jan 2021 21:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F982EC78D
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Jan 2021 01:58:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727310AbhAFUmR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 6 Jan 2021 15:42:17 -0500
-Received: from mail-ot1-f47.google.com ([209.85.210.47]:39292 "EHLO
-        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726807AbhAFUmR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Jan 2021 15:42:17 -0500
-Received: by mail-ot1-f47.google.com with SMTP id d8so4281674otq.6;
-        Wed, 06 Jan 2021 12:42:00 -0800 (PST)
+        id S1725803AbhAGA5z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 6 Jan 2021 19:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42510 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725789AbhAGA5y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Jan 2021 19:57:54 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43CF5C0612EF
+        for <linux-spi@vger.kernel.org>; Wed,  6 Jan 2021 16:57:14 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id l11so10921394lfg.0
+        for <linux-spi@vger.kernel.org>; Wed, 06 Jan 2021 16:57:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4L2ilwEvbFs0xPTIVaPMjECMC0O+wLtADzZ9JsyRFeg=;
+        b=Bn4ch0i5S38AJBnXHyCVm6uQyAganNYXM90ZPc3JLVAIeGESBMn/VDv2B5WkSxT5Zk
+         aFtc/uh9iD/6roVxYUcp8qHFiQ5z2XMh6DibpzrTrPrmaQAiMbDKfWjRGZfOFNBqnLe6
+         QqH1SzRJO2gTV9w/c1OuWzs7064u9CVpF0ZsoMU+YIOMDxDgLHJWFNa/a6FBhNEXaZyK
+         LFBejmjNW193YjkYPZ8Oq9qxHBkXHZhGcjVC8ysP6FJX4JXJTEaaRe4f7mxC4xkSZ+HL
+         VscL71JR+01iznouCY0f31m0m29uGO2KWtRsKPEEnzQfv7a++g8lTCSGkv03bfMVbd3M
+         XLDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+nn1mS9duynrGzRRIiFhGe9v+GbfGVRWJu+NZK2hPWU=;
-        b=UDuCsxFJodQ7UtSUWcHcnQKi4acOn3zHTLZODVkQGgcICl8piK2c+ydqsyeyPV4AaM
-         mxCXQxvApj4NHYjswZkKusri1CS+/6E+Ee3Lh7L4gw2lBVVxbRujJWVRSUb//RlKtJig
-         Dh6N7d+x3vclv5zXDmtzv64XLPv7807aoIRs5OjdxJmMjy4bFjklAvBaiXh1DDyj7KoG
-         ibNKXV0CilBaHhan0UQrraOWIQBoxejggaLBlONa8Qp26xD6I69G4UYZkASsCJAG/ZA5
-         p7T769/o0BqRLQi/+SMlQ7q8NZCRkhHcAYANTI/pKdGJ2GDZgARWuftLq2QQ7xS/4hAh
-         y1Mw==
-X-Gm-Message-State: AOAM531MvxeRBdRjaSvpWTDMq2b3idI2cZs6V5V8CIb8K1pipGZtfKZI
-        cxEe/FQlojeigUdOWKj5lulfExQf8dh/JF3rWzs=
-X-Google-Smtp-Source: ABdhPJzU2VNqomItTpW9N5EsZUcSxwbWydRvzmZvuW0h6PN+1EDrO5WVGcImI85plCOq8i6uJPLffPJf+e8BxB/lkhA=
-X-Received: by 2002:a05:6830:1f5a:: with SMTP id u26mr4549619oth.250.1609965695506;
- Wed, 06 Jan 2021 12:41:35 -0800 (PST)
+        bh=4L2ilwEvbFs0xPTIVaPMjECMC0O+wLtADzZ9JsyRFeg=;
+        b=gYF48RD6t91RtdeX8pkSfMcxqrfSIBZft5ER4Bf/R9mH124EKh2wBpFFHCJHnjC9V/
+         6BkDVLl8sol+udBNqLkjVEQYrwfSNCsPwMuycEacMwBthqgWwBW4EFvXF0+u8oh+vUn0
+         w+IG+djZUrIMAtRlvf8vAZ9yeveB/ughIHSi8vRi4mz84gFbETeRbJlQRtc5J1lHdBQ7
+         BfSrh9NYMbB7H76zKYzSpuchwMpoe30YxCTTysrsNMf/EDjht9pGK2R6xRAyE7bOpemL
+         M+FIga0ME8y3QNfdV5CDMEp4GeE1oe4/BGHS4J6uBaxm+Z9Bx2kFezZwFLqf1vHG2XKS
+         cNMQ==
+X-Gm-Message-State: AOAM533G/7tAVJdUP+Y7iBa3Z3Dxr5YJO/ZtUNVwjfVx8pT4Ea3dywzH
+        YVsrhf1mw5WyisKUsdvNddxFgydGD4WnITqCx5mnn8ErU9M=
+X-Google-Smtp-Source: ABdhPJwEIoGz3gjoJckfsYt8Y9qlGH7O7xR+2wqdBsFwh2u5+jLhkSEENB7t+gtFi/4a5Ov6GU/9xOuoz/hdtv+2YgM=
+X-Received: by 2002:a19:40d7:: with SMTP id n206mr2794336lfa.27.1609981032737;
+ Wed, 06 Jan 2021 16:57:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
- <CAMuHMdX=trGqj8RzV7r1iTneqDjWOc4e1T-X+R_B34rxxhJpbg@mail.gmail.com> <20210106184839.GA7773@alpha.franken.de>
-In-Reply-To: <20210106184839.GA7773@alpha.franken.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 6 Jan 2021 21:41:24 +0100
-Message-ID: <CAMuHMdV86BES7dmWr-7j1jbtoSy0bH1J0e5W41p8evagi0Nqcw@mail.gmail.com>
-Subject: Re: [PATCH 00/10] Remove support for TX49xx
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dmaengine <dmaengine@vger.kernel.org>, linux-ide@vger.kernel.org,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        netdev <netdev@vger.kernel.org>, linux-rtc@vger.kernel.org,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Atsushi Nemoto <anemo@mba.ocn.ne.jp>
+References: <CAF78GY3NWQ1jzkauG26nagcMuqR0=u7zcWLh+wDdrJ8G=e7how@mail.gmail.com>
+ <20210106130049.GC4752@sirena.org.uk> <CAF78GY3=m0kMd3d4tS92tZS57mY5XeRuXtET+BVVvnTwcdtO3g@mail.gmail.com>
+ <20210106173759.GF4752@sirena.org.uk>
+In-Reply-To: <20210106173759.GF4752@sirena.org.uk>
+From:   Vincent Pelletier <plr.vincent@gmail.com>
+Date:   Thu, 7 Jan 2021 09:57:01 +0900
+Message-ID: <CAF78GY0xnKrOj5RhU2GHcQUTo2MLryrBj3+5dAMKoGzJn2okYw@mail.gmail.com>
+Subject: Re: 5.11.0-rc1+: "Division by zero in kernel." when writing to spidev
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Thomas,
+On Thu, Jan 7, 2021 at 2:38 AM Mark Brown <broonie@kernel.org> wrote:
+> I wouldn't have thought that would be something in your DT, unless it
+> was previously buggy and some issue has been exposed, but then nothing
+> springs to mind as being potentially relevant either.
 
-On Wed, Jan 6, 2021 at 7:49 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
-> On Wed, Jan 06, 2021 at 09:37:11AM +0100, Geert Uytterhoeven wrote:
-> > On Tue, Jan 5, 2021 at 3:03 PM Thomas Bogendoerfer
-> > <tsbogend@alpha.franken.de> wrote:
-> > > I couldn't find any buyable product other than reference boards using
-> > > TX49xx CPUs. And since nobody showed interest in keeping support for
-> > > it, it's time to remove it.
-> >
-> > I have an RBTX4927 development board in my board farm, boot-test every
-> > bi-weekly renesas-drivers release on it, and fix kernel issues when they
-> > appear.
-> >
-> > Is that sufficient to keep it?
->
-> for me it is. But now we probaly need some reverts then...
+I've started reading spi-bcm2835.c, and while I cannot claim that I understand
+everything I'm reading, it raises some flags:
+- it does not use "spi_finalize_current_transfer(...)" at all, but rather
+  "complete(&...->xfer_completion)". The former only calls the latter,
+  so this code seems technically correct, but this looks like an
+  abstraction layer bust.
+- while it uses "complete(...)" on its IRQ and DMA transfer codepaths,
+  I do not see it being called on its polled codepath
+  (bcm2835_spi_transfer_one_poll).
+- ...polled codepath which checks bs->rx_len to tell when it's done,
+  independently of transfer direction. And while tx_len and rx_len are
+initialised
+  to the same value, only the field actually corresponding to the
+actual transfer
+  direction will be updated within this polling loop.
+  So maybe some transfers could timeout in the polled codepath and would
+  still end up in the IRQ one which would end up calling "complete", but this
+  looks suspicious.
 
-Indeed. Fortunately not all of it, as some removals were TX4938-only.
+Checking on 5.10.4, I see:
+root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat count_transfer_dma
+2
+root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat count_transfer_irq
+1
+root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat
+count_transfer_polling
+27
+root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat
+count_transfer_irq_after_polling
+0
 
-> I wonder whether you have seen my mail about the removal
->
-> https://lore.kernel.org/linux-mips/20201207105627.GA15866@alpha.franken.de
->
-> and my call for people owning MIPS machines
->
-> https://lore.kernel.org/linux-mips/20200227144910.GA25011@alpha.franken.de/
+so I am apparently not triggering the poll-then-IRQ case, but am
+triggering the others
+on this kernel version.
 
-Sorry, I'm not following the linux-mips list that closely, so I hadn't
-seen them.  It's always a good idea to CC linux-kernel, and perhaps the
-few people who last touched the affected files.
+On 5.11, this becomes:
+root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat count_transfer_dma
+2
+root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat count_transfer_irq
+24
+root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat
+count_transfer_polling
+0
+root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat
+count_transfer_irq_after_polling
+0
 
-> Still "unclaimed" machines are
->
-> IMG Pistachio SoC based boards (MACH_PISTACHIO(
-> Toshiba TX39 series based machines (MACH_TX39XX)
-> NEC VR4100 series based machines (MACH_VR41XX)
-> Netlogic XLR/XLS based systems (NLM_XLR_BOARD)
-> Netlogic XLP based systems (NLM_XLP_BOARD)
-> Sibyte BCM91120C-CRhine (SIBYTE_CRHINE)
-> Sibyte BCM91120x-Carmel (SIBYTE_CARMEL)
-> Sibyte BCM91125C-CRhone (SIBYTE_CRHONE)
-> Sibyte BCM91125E-Rhone (SIBYTE_RHONE)
-> Sibyte BCM91250C2-LittleSur (SIBYTE_LITTLESUR)
-> Sibyte BCM91250E-Sentosa (SIBYTE_SENTOSA)
->
-> Is there something on this list you also regulary use ?
+so somehow this is not triggering polling transfers anymore, so the
+maybe-missing
+completion call would probably not matter.
 
-No, I don't have anything from the list above.
-The RBTX4927 is basically my last MIPS-based system I do boot
-current kernels on.
+Also, it sets can_dma with a function pointer, but ends up only
+checking can_dma as
+a boolean and then calls the function by name rather than using the
+value stored in
+can_dma. Again this looks technically correct (and is very much
+unrelated to my issue)
+as can_dma does not take any other value and a valid function address would not
+evaluate as false, but it is surprising to my naive reading.
 
-In active use, not for development:
-  - Ubiquiti EdgeRouter-X (Ralink-based).
+I'll continue poking around later (especially checking computed timeout values),
+should I submit patches for s/complete/spi_finalize_current_transfer/ ?
 
-Stored in my attic:
-  - NetGear WNDR4300 (AtherOS-based),
-  - MikroTik Routerboard 150 (ADMtek-based, no (longer?) supported upstream),
-  - NEC DDB VRC-5476 (upstream support removed 15 years ago ;-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+Regards,
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Vincent Pelletier
