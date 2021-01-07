@@ -2,60 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DAA02EE6C5
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Jan 2021 21:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE6122EEA0F
+	for <lists+linux-spi@lfdr.de>; Fri,  8 Jan 2021 01:01:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726437AbhAGUYd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Jan 2021 15:24:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54212 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726064AbhAGUYd (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 7 Jan 2021 15:24:33 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id F2A4023406;
-        Thu,  7 Jan 2021 20:23:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610051033;
-        bh=Dj2QWyo30J8bbFxXEj7TdXQ0PjuLFuwxYQ/Sb74QLys=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=aiMDgi914zjhpm8EoL/EdZd7zfUh2c/ryz5483VU/Rpe0ppqF3rLcWDFzEKHKK/jL
-         1BYRHgRZ4uBR3gVFfuAot77XT+uo4LUIRY/WlrbkaAldJL7H683PQEVghzCdKunwtT
-         hsHkz7WQSmaLu/cv5BdwsScv91ZdTVSVIM5dMcXhDlQ463PhdYXPO34520NKqqxDxM
-         mYEdxo+jFDBCZ4D74WyMK9d0YC+1mai6gvLJjSTfENptsvl64gcd/GJxo2E4awAWSo
-         jdbXoiSS+feM5P0lwVKwpS02UfxasC5tut6aunsnlg0jc1vjG2w6LAcfN4SbK6TNyx
-         QBNSg+Do0oN1g==
-Received: from pdx-korg-docbuild-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-1.ci.codeaurora.org (Postfix) with ESMTP id DAFFA60508;
-        Thu,  7 Jan 2021 20:23:52 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v5.11-rc2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20210107171103.EE51F2342C@mail.kernel.org>
-References: <20210107171103.EE51F2342C@mail.kernel.org>
-X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20210107171103.EE51F2342C@mail.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.11-rc2
-X-PR-Tracked-Commit-Id: 6170d077bf92c5b3dfbe1021688d3c0404f7c9e9
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f5e6c330254ae691f6d7befe61c786eb5056007e
-Message-Id: <161005103282.19187.5682766892624812410.pr-tracker-bot@kernel.org>
-Date:   Thu, 07 Jan 2021 20:23:52 +0000
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
+        id S1727858AbhAGX7y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Jan 2021 18:59:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727300AbhAGX7y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Jan 2021 18:59:54 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7208C0612F5
+        for <linux-spi@vger.kernel.org>; Thu,  7 Jan 2021 15:59:13 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id 4so4724408plk.5
+        for <linux-spi@vger.kernel.org>; Thu, 07 Jan 2021 15:59:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i+8d2HurmLuY/fjmxjePAkINENkGN3Pzqi7ebx49cCY=;
+        b=CKsRpny0W3qEoMZ3k5PEtqHfo8t69e1shu/9KLTONKOxB/S/AgzMlChZplWwWdFx/x
+         4XdDlPAGvA5eLw2CjTIqGZEJDNSErKRUnRVtcjTGM+8YLdCuMep5qLMgHWeR4+BNow/6
+         3sdWYk5liQfpx+H/9fJAIAt459EJUqN8pfNKq0ZbESYrY01ELl40pMNAhs2b8hqS7CgS
+         EkxIMoUq3ZeNlpnleTfWo0i2U+Fp2+f/bylMYjHlTvbSZA/BuzllghsZmnG2l3uiL067
+         Ma/DoY+eXp0mjwJjJxQWvLM9oD/TPRdbWJrgtKPcCbw4APKHAsb+9/IKdzUFxuTGNMbh
+         8Sww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i+8d2HurmLuY/fjmxjePAkINENkGN3Pzqi7ebx49cCY=;
+        b=mE6X4ytIKODTjUl4XRUCiBOb2M/V60Tb4GABgMstD1bSduMOhiX6cfV/jnemAo0IsL
+         iN6o1La1fuzTm4grTFnpoIG7O09TUn7iVktEpLOrkMoxnJ3+QR4GH2n8Uizz0ZJCBqXy
+         sld1nNe1qj2JFWPxJwqLX2vTCx+mWmPRBkk5BmSsVWgq4feGML02FpCwMgGurYssdj5Q
+         GnR5f8VkdziPrfpcaFFPabfEjmrBT9BU6+3DaaQbLBJcnlUaYVsko8E1NcONc22YpZew
+         RDssenOuJrDJfcuziexFfeLlMVIEG9mmDIgasb3rk5IbJ6J4zAvllaeksUfnKMZ4RdEA
+         5leA==
+X-Gm-Message-State: AOAM531X7SfEfVtvTCBEbhLjelmpTrcHiIMBybR+TGkLRoc9gYHqgJZR
+        HnbqWoa/eunrC+/gBWoJ0to=
+X-Google-Smtp-Source: ABdhPJzetQAFGdnSIb5NP1F1agOCW+TZUH0FGEVsGuGgipmIrUBL7jVjaqb1BMvkq2J5gt/jKOgH4Q==
+X-Received: by 2002:a17:90a:ea02:: with SMTP id w2mr872195pjy.99.1610063953408;
+        Thu, 07 Jan 2021 15:59:13 -0800 (PST)
+Received: from x2.lan ([2400:4070:175b:7500::7a7])
+        by smtp.gmail.com with ESMTPSA id bf3sm6448195pjb.45.2021.01.07.15.59.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jan 2021 15:59:12 -0800 (PST)
+From:   Vincent Pelletier <plr.vincent@gmail.com>
+To:     Mark Brown <broonie@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        linux-spi@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-rpi-kernel@lists.infradead.org
+Subject: spi: *: Call the dedicated transfer completion function.
+Date:   Thu,  7 Jan 2021 23:58:29 +0000
+Message-Id: <20210107235832.839221-1-plr.vincent@gmail.com>
+X-Mailer: git-send-email 2.30.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The pull request you sent on Thu, 07 Jan 2021 17:10:22 +0000:
+Hello,
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.11-rc2
+I started this fix on bcm2835.c and, because of its simplicity, thought
+I should check other controllers as well.
+This patch set should fix all occurrences, as of v5.11-rc2, of an SPI
+controller driver calling
+  complete(&...->xfer_completion);
+when it could call
+  spi_finalize_current_transfer(...);
+as requested in Documentation/spi/spi-summary.rst .
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f5e6c330254ae691f6d7befe61c786eb5056007e
+While I did build all modified files, and these should be trivial to
+check for correctness, I have not exercised all codepaths.
+I have exercised spi-bcm2835 IRQ and DMA tx, but I am still hunting
+for another issue which causes completion timeouts at spi/spi.c level
+which seem to affect spi-bcm2835 dma transfers (both before and after
+this patch set).
 
-Thank you!
+Regards,
+Vincent Pelletier
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+
