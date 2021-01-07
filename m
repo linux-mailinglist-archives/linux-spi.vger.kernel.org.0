@@ -2,51 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D32912EEA11
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Jan 2021 01:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9262EEA12
+	for <lists+linux-spi@lfdr.de>; Fri,  8 Jan 2021 01:01:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729391AbhAHAAA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Jan 2021 19:00:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
+        id S1729388AbhAHAAD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Jan 2021 19:00:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729388AbhAHAAA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Jan 2021 19:00:00 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECBCC0612F8
-        for <linux-spi@vger.kernel.org>; Thu,  7 Jan 2021 15:59:20 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id a188so5071199pfa.11
-        for <linux-spi@vger.kernel.org>; Thu, 07 Jan 2021 15:59:20 -0800 (PST)
+        with ESMTP id S1727300AbhAHAAD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Jan 2021 19:00:03 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB26C0612F9
+        for <linux-spi@vger.kernel.org>; Thu,  7 Jan 2021 15:59:23 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id 30so6452062pgr.6
+        for <linux-spi@vger.kernel.org>; Thu, 07 Jan 2021 15:59:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=gVWRVkXWEtpIQllAztl5ByGC/c1eu5QBEtUSi0NXW/E=;
-        b=i2YgCFwgtZZdzRZJD4YSySL+q2WsW9ZSAkmserIOkBQABL1Cl6Xj+Fz0WYqQEi4png
-         Y1V8zuiIrxG6y1fSAHsrqb0IJPI/bwuDcdEh60XvU8mqNiPYn78RAEemIn/DupetEaL7
-         RFTNQDuZmagTKCjD+1xmsSinxjHAUCxBRR9+0lg1yHM1JaYSPgik4JXN6ovAo59ckBJG
-         k74Mb62iLRIVxvXxCUFmRNOY8jfviVzfjqqfubRKbfYRm4vZnotTkC+qgLb0Nm8y98rd
-         QGS+5IgvGfyKq8aNtflEXaLM6nwfGWAKw9vUkRAINbOzWPelHiqpzcjKtUILw6OeUcWU
-         hovg==
+        bh=oJVh/my9+9Gu7+k7keDLqkZNyRGli6f9+DmOVRImkkY=;
+        b=CWZJyXyJQbF9Na1Pzs4NcHk2oB3TaHSm2tHAKLDv9bNLnngpjSwEi6m7CG/CPflpZC
+         tVzwSakepZZWnoIW1sALg3ZjoZ4BF7lKyKdoPTkzVAmSgLcwe8CoymbdqiBC8kC7iErB
+         yQbpAVE6WXn8ON0w9sUuMcxh1BxlTZJaQm/Z0Ztb/wAIBHpVP4hqX3lGrTUq4kS40+FS
+         oHplBwspj//AOKKcPQQR/qdRYc+Tiv6VaRx2LIaapwvsHzzQHJZCR8GNCzklAsc49YD6
+         +B8yn/7/oHcRA364M4w4gZ3nn6BzaIsGMAQpMdqkPqPsTYbRPUBSdGjap6RNx0soylYm
+         thAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=gVWRVkXWEtpIQllAztl5ByGC/c1eu5QBEtUSi0NXW/E=;
-        b=S+yip80bxr08oYsLjYkLCE7tHAP++u9Xr9TmAo7bFWT+YIKe/EduZkHo/OleNoZVJh
-         iaR0FseB5q8TD9qxWXpS4Kduyb/o40u4WfkA6oE3yEbjLXpo2xy9dAr/QltB8I1A3Rci
-         6asAjzvF42uvhin9OxDG7oCYzNFWJcapxG0KEZVBF46owpIo2OVWNqd2+oDBsPx1qv+I
-         XOTjZVw78mDMIx9DEpHnraGH3ZzgxiZKexbTV01ai/y6qm30kc5UUX/mniPBmPN3HQVX
-         Xz76CBEzE9JNYSvAWGBSPhC2Z97vBVSzD5D9FyfMNQ5kRmmGeXY8hYOaK7Jjk8fx5FbS
-         dWkg==
-X-Gm-Message-State: AOAM5302/wIbn4TXWIxD3UBp37V2fU2CZ03dMgvYcItRbLxUm1ZYf2D6
-        rcMu+jet2oF0OpJLVMkppoQ=
-X-Google-Smtp-Source: ABdhPJy63j9zOI2U7M1X9Cl7DDOIvjhpbkAHlxM9fj1EcOvbRS5cAbyP56glxIhoqpxTXx1uNFvn8A==
-X-Received: by 2002:a63:c64:: with SMTP id 36mr4200685pgm.255.1610063959705;
-        Thu, 07 Jan 2021 15:59:19 -0800 (PST)
+        bh=oJVh/my9+9Gu7+k7keDLqkZNyRGli6f9+DmOVRImkkY=;
+        b=ofm9WPFjaHnsFK1Xh6R5ORga/cGIYyEFh4qUE6j/6DgZ9oriAjMZddLmY9FBKtxz8B
+         8whjNO+ZMinanvA3SBPEZVs+wM03HNHYIjwiTIiYJI1fgvMgCWHIp4e/pFdZTFs8lJEK
+         +3FokWYJR8SHaGsnQHZu8cAwnM81+RHptBi4l8M9EJfoVf1hl/F8v7VMmQtCLqfi2sRf
+         fvOFJOBvrpCEKrHLG/3NCOQMSbyGzWNLLxxxKY8K7mwpujevkYeDztVEzKOYr6BuLO62
+         zqJuI21/YOOQZ6eHIZS8C6OvJlmg/sG0yBgLEHlYNhpTZpD7lnod6UwvjtWFfLVwFj5z
+         CA0Q==
+X-Gm-Message-State: AOAM533a5ETzvwCO6QX5SDImh/6E+VBS9jzVNjyHZsHXnmMVChGLckTq
+        lbtdua5JkqpIX6ZUHecvEqI=
+X-Google-Smtp-Source: ABdhPJz3du2kRkADciN7SImnBCQ6L07nS036HGi6RwOFEunY/bLqZLsRFbrNvPFqaexZ/qjIuPzXlQ==
+X-Received: by 2002:a63:f19:: with SMTP id e25mr4200495pgl.220.1610063962848;
+        Thu, 07 Jan 2021 15:59:22 -0800 (PST)
 Received: from x2.lan ([2400:4070:175b:7500::7a7])
-        by smtp.gmail.com with ESMTPSA id bf3sm6448195pjb.45.2021.01.07.15.59.16
+        by smtp.gmail.com with ESMTPSA id bf3sm6448195pjb.45.2021.01.07.15.59.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jan 2021 15:59:19 -0800 (PST)
+        Thu, 07 Jan 2021 15:59:22 -0800 (PST)
 From:   Vincent Pelletier <plr.vincent@gmail.com>
 To:     Mark Brown <broonie@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
         linux-spi@vger.kernel.org, linux-rockchip@lists.infradead.org,
@@ -55,9 +55,9 @@ To:     Mark Brown <broonie@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
         Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>,
         linux-rpi-kernel@lists.infradead.org
-Subject: [2/3] spi: bcm2835aux: Call the dedicated transfer completion function.
-Date:   Thu,  7 Jan 2021 23:58:31 +0000
-Message-Id: <2636096a3b40febf680f9fff33944a5480561df9.1610062884.git.plr.vincent@gmail.com>
+Subject: [3/3] spi: rockchip: Call the dedicated transfer completion function.
+Date:   Thu,  7 Jan 2021 23:58:32 +0000
+Message-Id: <f3e1cf19a7dcdd77adc0a719adf46449b84ccadd.1610062884.git.plr.vincent@gmail.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <633c3d5c350dde4d14ce2120c32698c25b95d302.1610062884.git.plr.vincent@gmail.com>
 References: <633c3d5c350dde4d14ce2120c32698c25b95d302.1610062884.git.plr.vincent@gmail.com>
@@ -72,22 +72,22 @@ functional change is expected.
 
 Signed-off-by: Vincent Pelletier <plr.vincent@gmail.com>
 ---
- drivers/spi/spi-bcm2835aux.c | 2 +-
+ drivers/spi/spi-rockchip.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-bcm2835aux.c b/drivers/spi/spi-bcm2835aux.c
-index 1a26865c42f8..75589ac6e95f 100644
---- a/drivers/spi/spi-bcm2835aux.c
-+++ b/drivers/spi/spi-bcm2835aux.c
-@@ -254,7 +254,7 @@ static irqreturn_t bcm2835aux_spi_interrupt(int irq, void *dev_id)
- 	/* and if rx_len is 0 then disable interrupts and wake up completion */
- 	if (!bs->rx_len) {
- 		bcm2835aux_wr(bs, BCM2835_AUX_SPI_CNTL1, bs->cntl[1]);
--		complete(&master->xfer_completion);
-+		spi_finalize_current_transfer(master);
- 	}
+diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
+index 09d8e92400eb..936ef54e0903 100644
+--- a/drivers/spi/spi-rockchip.c
++++ b/drivers/spi/spi-rockchip.c
+@@ -566,7 +566,7 @@ static int rockchip_spi_slave_abort(struct spi_controller *ctlr)
+ 	struct rockchip_spi *rs = spi_controller_get_devdata(ctlr);
  
- 	return IRQ_HANDLED;
+ 	rs->slave_abort = true;
+-	complete(&ctlr->xfer_completion);
++	spi_finalize_current_transfer(ctlr);
+ 
+ 	return 0;
+ }
 -- 
 2.30.0
 
