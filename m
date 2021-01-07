@@ -2,67 +2,159 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CDD12ED314
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Jan 2021 15:55:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B982ED39B
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Jan 2021 16:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726165AbhAGOzH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Jan 2021 09:55:07 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:34261 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726151AbhAGOzH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Jan 2021 09:55:07 -0500
-X-IronPort-AV: E=Sophos;i="5.79,329,1602514800"; 
-   d="scan'208";a="68320324"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 07 Jan 2021 23:54:15 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id B8DF54010916;
-        Thu,  7 Jan 2021 23:54:13 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Pavel Machek <pavel@denx.de>, Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] spi: rpc-if: Gaurd .pm assignment with CONFIG_PM_SLEEP #ifdef check
-Date:   Thu,  7 Jan 2021 14:53:29 +0000
-Message-Id: <20210107145329.27966-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726780AbhAGPg5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Jan 2021 10:36:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34494 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726503AbhAGPg5 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 7 Jan 2021 10:36:57 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A8CBA23428;
+        Thu,  7 Jan 2021 15:36:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610033776;
+        bh=nf9ZDJUWZ91Pr9DLAW/Srg3b6tZhGcc403BBHh5TTiA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kyZlEooieL/PC2dcKuNzDEEi+tpx6NlTlr5JWB0LCYjPqqz6iFHSI+S6zUv420kVF
+         zbFLnwmoqK2/ztqq4kS/jpPswv8GvM+DdGkbEN7LhSVgq7bm1XkZ7b/tUPbnEmqPa2
+         quMG8IayuCsX4GfYUX8Mnnox/DkONaSVIFbSg6HKu28+sYCUOmiXu3FnbzNzFI6i2D
+         mmn9GzKN0KggJwFnYiD40zIRpQ56YC8nwz9yv/mh4jgQT9fDtG+iOYt5/9AE+CRt3v
+         8ZuK4eX+lh+l+n0wuLFwb9VjmHr5JEley9h/T5J5ODtdsCvqtUWQctFMN4CxWMCtWR
+         QlIqqPqeSFlVQ==
+Date:   Thu, 7 Jan 2021 15:35:46 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Vincent Pelletier <plr.vincent@gmail.com>
+Cc:     linux-spi@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        linux-rpi-kernel@lists.infradead.org
+Subject: Re: 5.11.0-rc1+: "Division by zero in kernel." when writing to spidev
+Message-ID: <20210107153546.GD4726@sirena.org.uk>
+References: <CAF78GY3NWQ1jzkauG26nagcMuqR0=u7zcWLh+wDdrJ8G=e7how@mail.gmail.com>
+ <20210106130049.GC4752@sirena.org.uk>
+ <CAF78GY3=m0kMd3d4tS92tZS57mY5XeRuXtET+BVVvnTwcdtO3g@mail.gmail.com>
+ <20210106173759.GF4752@sirena.org.uk>
+ <CAF78GY0xnKrOj5RhU2GHcQUTo2MLryrBj3+5dAMKoGzJn2okYw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8w3uRX/HFJGApMzv"
+Content-Disposition: inline
+In-Reply-To: <CAF78GY0xnKrOj5RhU2GHcQUTo2MLryrBj3+5dAMKoGzJn2okYw@mail.gmail.com>
+X-Cookie: See store for details.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-With CONFIG_PM_SLEEP disabled the rpcif_spi_pm_ops variable is still
-referenced and thus increasing the size of kernel.
 
-Fix this issue by adding CONFIG_PM_SLEEP #ifdef check around the .pm
-assignment (image size is critical on RZ/A SoC's where the SRAM sizes
-range 4~5 MiB).
+--8w3uRX/HFJGApMzv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 9584fc95cadc0 ("spi: rpc-if: Remove CONFIG_PM_SLEEP ifdefery")
-Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Suggested-by: Pavel Machek <pavel@denx.de>
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- drivers/spi/spi-rpc-if.c | 2 ++
- 1 file changed, 2 insertions(+)
+On Thu, Jan 07, 2021 at 09:57:01AM +0900, Vincent Pelletier wrote:
 
-diff --git a/drivers/spi/spi-rpc-if.c b/drivers/spi/spi-rpc-if.c
-index c313dbe6185c..c53138ce0030 100644
---- a/drivers/spi/spi-rpc-if.c
-+++ b/drivers/spi/spi-rpc-if.c
-@@ -197,7 +197,9 @@ static struct platform_driver rpcif_spi_driver = {
- 	.remove	= rpcif_spi_remove,
- 	.driver = {
- 		.name	= "rpc-if-spi",
-+#ifdef CONFIG_PM_SLEEP
- 		.pm	= &rpcif_spi_pm_ops,
-+#endif
- 	},
- };
- module_platform_driver(rpcif_spi_driver);
--- 
-2.17.1
+> I've started reading spi-bcm2835.c, and while I cannot claim that I under=
+stand
+> everything I'm reading, it raises some flags:
 
+Copying in a bunch of people for that driver.
+
+> - it does not use "spi_finalize_current_transfer(...)" at all, but rather
+>   "complete(&...->xfer_completion)". The former only calls the latter,
+>   so this code seems technically correct, but this looks like an
+>   abstraction layer bust.
+
+Yes.
+
+> - while it uses "complete(...)" on its IRQ and DMA transfer codepaths,
+>   I do not see it being called on its polled codepath
+>   (bcm2835_spi_transfer_one_poll).
+
+I'd not expect this to be required with a polled path, it's only needed
+if the transfer function returns a positive value indicating that the
+transfer is still in progress which shouldn't be the case when things
+are polled.
+
+> - ...polled codepath which checks bs->rx_len to tell when it's done,
+>   independently of transfer direction. And while tx_len and rx_len are
+> initialised
+>   to the same value, only the field actually corresponding to the
+> actual transfer
+>   direction will be updated within this polling loop.
+>   So maybe some transfers could timeout in the polled codepath and would
+>   still end up in the IRQ one which would end up calling "complete", but =
+this
+>   looks suspicious.
+>=20
+> Checking on 5.10.4, I see:
+> root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat count_transfer=
+_dma
+> 2
+> root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat count_transfer=
+_irq
+> 1
+> root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat
+> count_transfer_polling
+> 27
+> root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat
+> count_transfer_irq_after_polling
+> 0
+>=20
+> so I am apparently not triggering the poll-then-IRQ case, but am
+> triggering the others
+> on this kernel version.
+>=20
+> On 5.11, this becomes:
+> root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat count_transfer=
+_dma
+> 2
+> root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat count_transfer=
+_irq
+> 24
+> root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat
+> count_transfer_polling
+> 0
+> root@sushi:/sys/kernel/debug/spi-bcm2835-20204000.spi# cat
+> count_transfer_irq_after_polling
+> 0
+>=20
+> so somehow this is not triggering polling transfers anymore, so the
+> maybe-missing
+> completion call would probably not matter.
+>=20
+> Also, it sets can_dma with a function pointer, but ends up only
+> checking can_dma as
+> a boolean and then calls the function by name rather than using the
+> value stored in
+> can_dma. Again this looks technically correct (and is very much
+> unrelated to my issue)
+> as can_dma does not take any other value and a valid function address wou=
+ld not
+> evaluate as false, but it is surprising to my naive reading.
+>=20
+> I'll continue poking around later (especially checking computed timeout v=
+alues),
+> should I submit patches for s/complete/spi_finalize_current_transfer/ ?
+
+Probably send the completion patch, yes.
+
+--8w3uRX/HFJGApMzv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/3KlEACgkQJNaLcl1U
+h9Avxwf+POcQ9p9Im5CRxIDy09z0IDLF9fu0nV06tFo02qT6OkhdYZREwQvViVHl
+hJGDzdO6utIfY2dij61yum0o+l/7k4NK3tX1ttsnBqgzjsHyhbGvnJrTXew0bpgs
+zgXLRqnxZSP85uEHalLYeiCwilg2NMRnXpRZ5b11DmmbOPlFE8/st3R1SFEluwKq
+POdEX1QyBfFUOiuxIfIbulXJlIDa+csIw/ZyUWk6eOPXnO4eb5gH1Pi2LZ6n9ZUy
+/lWtVBIQauhjo1I8SuJ/KTDD8lX1JEu5HTtAjk25Sn/97PxhCcGJQk3RH4c47slc
+fdx2LlbxiE155KhiLf6PKXQU++dNcg==
+=xgEY
+-----END PGP SIGNATURE-----
+
+--8w3uRX/HFJGApMzv--
