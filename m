@@ -2,92 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F23B32ECF47
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Jan 2021 12:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E267B2ED134
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Jan 2021 14:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726607AbhAGL5r (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Jan 2021 06:57:47 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:47954 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726467AbhAGL5q (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 7 Jan 2021 06:57:46 -0500
-Received: from localhost.localdomain (unknown [112.20.112.14])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxeL4I9_ZfddEAAA--.1869S2;
-        Thu, 07 Jan 2021 19:56:57 +0800 (CST)
-From:   Yanteng Si <siyanteng@loongson.cn>
-To:     Mark Brown <broonie@kernel.org>
+        id S1728091AbhAGNyp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Jan 2021 08:54:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36002 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725835AbhAGNyp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 7 Jan 2021 08:54:45 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 118F523142;
+        Thu,  7 Jan 2021 13:54:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610027644;
+        bh=JC8B6lBRxho+1ODflmPrVl9UKrYdblTNvt6nNyneuxk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uzY/Hon3PQidJf6ttYVo7P0dBz+O0ES93bOHvW7sdP8xDcV+kf6/Hg12+zfkIsVl+
+         R39e1pUUExT0RCBvoYoPelnr440VI6RqulM2tUbx4I2ndIXOWrMB1MuqliiSo3c26r
+         1RNpWcHKuL+QrnBKIOZhnfi/Wcpo/Taf3eUJv5raaINDBxyAiKncI6wEUJxuvLsvPW
+         554ylAWP7R9552vUXpNap7CurvbD2G4VfpcuyEKlKEnQovPGPpXfyVMheT/BUebYcW
+         CWVnWN3bRHYakcQ0tJ3YSDxinHbgyx+47RYlRJIFBSNmvAHqMG2OLif85i4IJolRvJ
+         dx9hjhpIxKmdQ==
+Date:   Thu, 7 Jan 2021 13:53:35 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Yanteng Si <siyanteng@loongson.cn>
 Cc:     Philipp Zabel <p.zabel@pengutronix.de>, linux-spi@vger.kernel.org,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Yanteng Si <siyanteng@gmail.com>,
-        Yanteng Si <siyanteng@loongson.cn>
-Subject: [PATCH] SPI: Fix distinct pointer types warning for ARCH=MIPS
-Date:   Thu,  7 Jan 2021 19:57:04 +0800
-Message-Id: <20210107115704.3835282-1-siyanteng@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+        Yanteng Si <siyanteng@gmail.com>
+Subject: Re: [PATCH] SPI: Fix distinct pointer types warning for ARCH=MIPS
+Message-ID: <20210107135335.GA4726@sirena.org.uk>
+References: <20210107115704.3835282-1-siyanteng@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxeL4I9_ZfddEAAA--.1869S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ArWUJr15CryrGr15Wr4UArb_yoW8AF4kpF
-        W7tF1UGFW2qF4I9ryUAw45u3W3J397J3yUua4ak342ga4jvFZxXFnYvFyYkrs8AFsaya12
-        9rW3GFs8J3WUuw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
-        KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbeT5PUUUU
-        U==
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="PNTmBPCT7hxwcZjr"
+Content-Disposition: inline
+In-Reply-To: <20210107115704.3835282-1-siyanteng@loongson.cn>
+X-Cookie: See store for details.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Fix a new warning report by build for make ARCH=MIPS allmodconfig:
 
-drivers/spi/spi-cadence-quadspi.c: In function 'cqspi_direct_read_execute':
- ./include/linux/minmax.h:18:28: warning: comparison of distinct pointer types lacks a cast
-    18 |  (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-       |                            ^~
- ./include/linux/minmax.h:32:4: note: in expansion of macro '__typecheck'
-    32 |   (__typecheck(x, y) && __no_side_effects(x, y))
-       |    ^~~~~~~~~~~
- ./include/linux/minmax.h:42:24: note: in expansion of macro '__safe_cmp'
-    42 |  __builtin_choose_expr(__safe_cmp(x, y), \
-       |                        ^~~~~~~~~~
- ./include/linux/minmax.h:58:19: note: in expansion of macro '__careful_cmp'
-    58 | #define max(x, y) __careful_cmp(x, y, >)
-       |                   ^~~~~~~~~~~~~
- drivers/spi/spi-cadence-quadspi.c:1153:24: note: in expansion of macro 'max'
-  1153 |       msecs_to_jiffies(max(len, 500UL)))) {
-       |                        ^~~
+--PNTmBPCT7hxwcZjr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-"len" is unsigned,however,"500" is unsigned long.
+On Thu, Jan 07, 2021 at 07:57:04PM +0800, Yanteng Si wrote:
 
-Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
----
- drivers/spi/spi-cadence-quadspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Fix a new warning report by build for make ARCH=MIPS allmodconfig:
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 06a65e9a8a60..576610ba1118 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -1150,7 +1150,7 @@ static int cqspi_direct_read_execute(struct cqspi_flash_pdata *f_pdata,
- 
- 	dma_async_issue_pending(cqspi->rx_chan);
- 	if (!wait_for_completion_timeout(&cqspi->rx_dma_complete,
--					 msecs_to_jiffies(max(len, 500UL)))) {
-+					 msecs_to_jiffies(max(len, 500U)))) {
- 		dmaengine_terminate_sync(cqspi->rx_chan);
- 		dev_err(dev, "DMA wait_for_completion_timeout\n");
- 		ret = -ETIMEDOUT;
--- 
-2.27.0
+Please submit patches using subject lines reflecting the style for the
+subsystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and
+make sure your subject lines visually resemble what they're doing.
+There's no need to resubmit to fix this alone.
 
+--PNTmBPCT7hxwcZjr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/3El4ACgkQJNaLcl1U
+h9BADgf/Yoc1itNJtl6V/Ir8SypswnoNyiqPdzCbJmgWSrA7IGIhUgbtHVA6GLBf
+uiR2+ddAB6j076SnwKxIBZ5FSyiqec5dutgC8rtczQj8vg7zLUgtXNEGLF9tO4li
+tIGW675EwpAklAXYVjPI3XCSJijxdj6Xt45YBlBLFhYnKtXa5ylY+nPEhnpHisnj
+SEL9KOS39Fq8vr9BBDPN99BA/sKq0oXym39U87/fml67mrAM5peeRqalUGacEhRg
+uCEI+qmlLucboRtoAMwBilDr6Ur9236KCy0e5l2aFQ1M0bnlnS5Zzm1nfRXqicrm
+tj4z5Sn8Sfi2p2QpZIxQpSP6V1vIPw==
+=U1it
+-----END PGP SIGNATURE-----
+
+--PNTmBPCT7hxwcZjr--
