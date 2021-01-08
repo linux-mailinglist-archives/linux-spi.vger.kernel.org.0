@@ -2,58 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 354642EEF53
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Jan 2021 10:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE022EF0BF
+	for <lists+linux-spi@lfdr.de>; Fri,  8 Jan 2021 11:36:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727045AbhAHJS7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 Jan 2021 04:18:59 -0500
-Received: from tux.runtux.com ([176.9.82.136]:57126 "EHLO tux.runtux.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726120AbhAHJS7 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 8 Jan 2021 04:18:59 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by tux.runtux.com (Postfix) with ESMTP id DCA666F0DC;
-        Fri,  8 Jan 2021 10:18:17 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at tux.runtux.com
-Received: from tux.runtux.com ([127.0.0.1])
-        by localhost (tux2.runtux.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id qsUDoNvo58W9; Fri,  8 Jan 2021 10:18:17 +0100 (CET)
-Received: from bee.priv.zoo (62-99-217-90.static.upcbusiness.at [62.99.217.90])
-        (Authenticated sender: postmaster@runtux.com)
-        by tux.runtux.com (Postfix) with ESMTPSA id 646FF6EF54;
-        Fri,  8 Jan 2021 10:18:16 +0100 (CET)
-Received: by bee.priv.zoo (Postfix, from userid 1002)
-        id 068AF46C; Fri,  8 Jan 2021 10:18:15 +0100 (CET)
-Date:   Fri, 8 Jan 2021 10:18:15 +0100
-From:   Ralf Schlatterbeck <rsc@runtux.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] Fix SPI Chipselect/Clock bug for sun6i
-Message-ID: <20210108091815.h35ane6xe6bzhje2@runtux.com>
-References: <20201226095845.c65lhsmluddvwxsl@runtux.com>
- <20210108085855.p255fioaax4zin4q@gilmour>
+        id S1726875AbhAHKgI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 8 Jan 2021 05:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727199AbhAHKgI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Jan 2021 05:36:08 -0500
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76979C0612F8
+        for <linux-spi@vger.kernel.org>; Fri,  8 Jan 2021 02:35:27 -0800 (PST)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by michel.telenet-ops.be with bizsmtp
+        id EAbR2400c4C55Sk06AbR1R; Fri, 08 Jan 2021 11:35:26 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1kxp77-001zoy-FQ; Fri, 08 Jan 2021 11:35:25 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1kxp77-008V2G-0f; Fri, 08 Jan 2021 11:35:25 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v2] spi: renesas,sh-msiof: Add r8a779a0 support
+Date:   Fri,  8 Jan 2021 11:35:22 +0100
+Message-Id: <20210108103522.2025880-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210108085855.p255fioaax4zin4q@gilmour>
-X-ray:  beware
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jan 08, 2021 at 09:58:55AM +0100, Maxime Ripard wrote:
-> 
-> Unfortunately, without the author's Signed-off-by (and yours), we can't
-> merge that patch.
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Thanks for the Reply. I've researched more and found out who the
-probable Author of the patch is. I've tried to contact him via Email,
-I'll follow up with correct signed-off etc when I've got permission.
+Document R-Car V3U (R8A779A0) SoC bindings.
 
-Ralf
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+v2:
+  - Improve patch description.
+---
+ Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml b/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
+index 44c7ddb4b1098e15..b104899205f6d2da 100644
+--- a/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
++++ b/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
+@@ -47,6 +47,7 @@ properties:
+               - renesas,msiof-r8a77980      # R-Car V3H
+               - renesas,msiof-r8a77990      # R-Car E3
+               - renesas,msiof-r8a77995      # R-Car D3
++              - renesas,msiof-r8a779a0      # R-Car V3U
+           - const: renesas,rcar-gen3-msiof  # generic R-Car Gen3 and RZ/G2
+                                             # compatible device
+       - items:
 -- 
-Dr. Ralf Schlatterbeck                  Tel:   +43/2243/26465-16
-Open Source Consulting                  www:   www.runtux.com
-Reichergasse 131, A-3411 Weidling       email: office@runtux.com
+2.25.1
+
