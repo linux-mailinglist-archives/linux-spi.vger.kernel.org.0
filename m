@@ -2,137 +2,132 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 075D82EEBC4
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Jan 2021 04:14:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2902EEBEF
+	for <lists+linux-spi@lfdr.de>; Fri,  8 Jan 2021 04:42:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726474AbhAHDNy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Jan 2021 22:13:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726281AbhAHDNy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Jan 2021 22:13:54 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEFDC0612FB
-        for <linux-spi@vger.kernel.org>; Thu,  7 Jan 2021 19:12:28 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id v19so6720028pgj.12
-        for <linux-spi@vger.kernel.org>; Thu, 07 Jan 2021 19:12:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SjIxw593j/BG7x2X3ksVVnxB2uu71tEZmxrMsCj4BiM=;
-        b=h2ktI7s4n8xCoqkoSVH4EHqwEk9bp/enKaHzfXG4daTjSVem3smhzGjWZOERytTBt1
-         uct1LT+TzDwe1P+tWsKICLXw/a9f1Y5NGttqGWBIlq7W0terFsRHlavDYV15Cf8egItt
-         ssfplpyFYDBmZLa4Bss7IeleNkqZcrj7JtyEEWkZPzvoHbtHiUCt9ectPN4fr1muZPpM
-         ywgRFdcUijDEgD1cnBXSpdui63N7Pur/ocDaLM3e7YxpSFI76doqdNO0TUcSv7NbVbUQ
-         egGDX7XIhDuYYpHZ5nnBoNW06xDqi3t8gF0kGVKM7WpiLVNcmrFR1T8datur+4zctrQd
-         fHgw==
+        id S1726776AbhAHDld (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Jan 2021 22:41:33 -0500
+Received: from mail-io1-f54.google.com ([209.85.166.54]:46367 "EHLO
+        mail-io1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726730AbhAHDld (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Jan 2021 22:41:33 -0500
+Received: by mail-io1-f54.google.com with SMTP id 81so8408890ioc.13;
+        Thu, 07 Jan 2021 19:41:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=SjIxw593j/BG7x2X3ksVVnxB2uu71tEZmxrMsCj4BiM=;
-        b=Mc+wy9hSl73rKperH1qTouNafbPRSMrJIjmiL+gplepYOsYxI09FWHNzi4R1+EO+Gg
-         VuQd6JW/3f5L0cTM9d5a1wfrxyuhjmEaxiyxZgJrzNU1lXmCIgvZwB0kjIerQ3pRYIA/
-         pHGrD70QFGBgoVHFT2B8lK6SWziB18JoG3bfvBWP/VY0+Pb2cN9fMLDKC+xcpw/WON5C
-         z5qgOr4MNUimrdh1W+J3lwxduQykY8bFwfGDJzzu6Za1sIoleLEs3lpL/5HrDYaW13Lk
-         Ypr8vVlT55WWA127d14FaHFWU9w5LhJXFV3HnooAXhqyrNlRaSqsafptP0i67cm3p4ek
-         RsXw==
-X-Gm-Message-State: AOAM532ak2God/Me7J3xaT6abNKDvBGQ+xNs6luLnjdLkiG075CkTdup
-        +jAOSsYNrCpmQinfpwwvYYK6sui3UvT9Sw==
-X-Google-Smtp-Source: ABdhPJxeTiUgNKGaw5qtkvFU0vf1c4xAKljKlMnfqJb88DCjQRxBowLvlBQ4gqSHPM+ucT8Xlx08sQ==
-X-Received: by 2002:a63:1f47:: with SMTP id q7mr4962672pgm.10.1610075547296;
-        Thu, 07 Jan 2021 19:12:27 -0800 (PST)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id r185sm6938981pfc.53.2021.01.07.19.12.26
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZABm+0zPMrafjNf/NaA+AvmZGg7YOMgwzG0f+U3Y50k=;
+        b=BLc3ENrNQ49BFG8RDxpIw4QC0rdBviqUBb4eIfnrAKGEytk0KThZcQHlM03QcTxHtB
+         dXRTb6pfzu7BgSe05xQUfmKpU0rsEDJq9LtL+K0hV6GzeHZqRPRcTttnqieA1ClsSho7
+         n8N63rkwmwR0e1lA7+Z2/KeK7KG2fs11pHa7PITKxTTNMK+mwcNhjMrd2ou0Ylc/YQoZ
+         /gLNsHJ7YRHNghi8Qk803oGw0mLTyG7AVMfgH0yU3MYrvfzurED7RbSX+Blb1MzXVPgM
+         xWw8k6uG3vCoPTNRhplCKE4lK7IZWT6O5P0Rh2U/pcobWuI3jULjCKEr8YBqoEec2dwF
+         pNfA==
+X-Gm-Message-State: AOAM532nf9Rr4mFCXIYP4nAwg2efeyvs8BP5sdAzXjdEe3fsmdwRGLs/
+        gbAuoh+cI6N/S/vy2XnnaySXKxRDjA==
+X-Google-Smtp-Source: ABdhPJwiQy1ZUywcBJNCHO2TfdW68wQDG7QMFWTBoayDKoihoTNm+kzAr6GXdtwUte5HWNq0NQQ4fw==
+X-Received: by 2002:a02:7692:: with SMTP id z140mr1624254jab.21.1610077246078;
+        Thu, 07 Jan 2021 19:40:46 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id v5sm4587781iob.26.2021.01.07.19.40.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jan 2021 19:12:26 -0800 (PST)
-Date:   Thu, 07 Jan 2021 19:12:26 -0800 (PST)
-X-Google-Original-Date: Thu, 07 Jan 2021 17:52:56 PST (-0800)
-Subject:     Re: [PATCH v2 0/9] arch: riscv: add board and SoC DT file support
-In-Reply-To: <1607403341-57214-1-git-send-email-yash.shah@sifive.com>
-CC:     linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-        broonie@kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        aou@eecs.berkeley.edu, lee.jones@linaro.org,
-        u.kleine-koenig@pengutronix.de, thierry.reding@gmail.com,
-        andrew@lunn.ch, peter@korsgaard.com,
-        Paul Walmsley <paul.walmsley@sifive.com>, robh+dt@kernel.org,
-        bgolaszewski@baylibre.com, linus.walleij@linaro.org,
-        yash.shah@sifive.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     yash.shah@sifive.com
-Message-ID: <mhng-abbd57b3-7d81-4c66-9883-67bc11f1f3a3@palmerdabbelt-glaptop>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Thu, 07 Jan 2021 19:40:44 -0800 (PST)
+Received: (nullmailer pid 1845015 invoked by uid 1000);
+        Fri, 08 Jan 2021 03:40:42 -0000
+Date:   Thu, 7 Jan 2021 20:40:42 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     Qing Zhang <zhangqing@loongson.cn>
+Cc:     Mark Brown <broonie@kernel.org>,
+        ThomasBogendoerfer <tsbogend@alpha.franken.de>,
+        linux-spi@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, yangtiezhu@loongson.cn,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 2/4] spi: ls7a: Add YAML schemas
+Message-ID: <20210108034042.GA1839426@robh.at.kernel.org>
+References: <1609124381-9107-1-git-send-email-zhangqing@loongson.cn>
+ <1609124381-9107-2-git-send-email-zhangqing@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1609124381-9107-2-git-send-email-zhangqing@loongson.cn>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 07 Dec 2020 20:55:32 PST (-0800), yash.shah@sifive.com wrote:
-> Start board support by adding initial support for the SiFive FU740 SoC
-> and the first development board that uses it, the SiFive HiFive
-> Unmatched A00.
->
-> Boot-tested on Linux 5.10-rc4 on a HiFive Unmatched A00 board using the
-> U-boot and OpenSBI.
->
-> This patch series is dependent on Zong's Patchset[0]. The patchset also
-> adds two new nodes in dtsi file. The binding documentation patch
-> for these nodes are already posted on the mailing list[1][2].
->
-> [0]: https://lore.kernel.org/linux-riscv/20201130082330.77268-4-zong.li@sifive.com/T/#u
-> [1]: https://lore.kernel.org/linux-riscv/1606714984-16593-1-git-send-email-yash.shah@sifive.com/T/#t
-> [2]: https://lore.kernel.org/linux-riscv/20201126030043.67390-1-zong.li@sifive.com/T/#u
->
-> Changes in v2:
-> - The dt bindings patch is split into several individual patches.
-> - Expand the full list for compatible strings in i2c-ocores.txt
->
-> Yash Shah (9):
->   dt-bindings: riscv: Update DT binding docs to support SiFive FU740 SoC
->   dt-bindings: spi: Update DT binding docs to support SiFive FU740 SoC
->   dt-bindings: pwm: Update DT binding docs to support SiFive FU740 SoC
->   dt-bindings: serial: Update DT binding docs to support SiFive FU740
->     SoC
->   dt-bindings: gpio: Update DT binding docs to support SiFive FU740 SoC
->   dt-bindings: i2c: Update DT binding docs to support SiFive FU740 SoC
->   riscv: dts: add initial support for the SiFive FU740-C000 SoC
->   dt-bindings: riscv: Update YAML doc to support SiFive HiFive Unmatched
->     board
->   riscv: dts: add initial board data for the SiFive HiFive Unmatched
->
->  .../devicetree/bindings/gpio/sifive,gpio.yaml      |   4 +-
->  .../devicetree/bindings/i2c/i2c-ocores.txt         |   8 +-
->  .../devicetree/bindings/pwm/pwm-sifive.yaml        |   9 +-
->  Documentation/devicetree/bindings/riscv/cpus.yaml  |   6 +
->  .../devicetree/bindings/riscv/sifive.yaml          |  17 +-
->  .../devicetree/bindings/serial/sifive-serial.yaml  |   4 +-
->  .../devicetree/bindings/spi/spi-sifive.yaml        |  10 +-
->  arch/riscv/boot/dts/sifive/Makefile                |   3 +-
->  arch/riscv/boot/dts/sifive/fu740-c000.dtsi         | 293 +++++++++++++++++++++
->  .../riscv/boot/dts/sifive/hifive-unmatched-a00.dts | 253 ++++++++++++++++++
->  10 files changed, 590 insertions(+), 17 deletions(-)
->  create mode 100644 arch/riscv/boot/dts/sifive/fu740-c000.dtsi
->  create mode 100644 arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
+On Mon, Dec 28, 2020 at 10:59:39AM +0800, Qing Zhang wrote:
+> Switch the DT binding to a YAML schema to enable the DT validation.
+> 
+> Reviewed-by: Huacai Chen <chenhuacai@kernel.org>
+> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+> ---
+> 
+> v4:
+> - fix warnings/errors about running 'make dt_binding_check'
+> 
+> v5:
+> - remove num-chipelects
+> 
+> v6:
+> - No changes
+> 
+> ---
+>  .../devicetree/bindings/spi/loongson,spi-ls7a.yaml | 44 ++++++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml b/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
+> new file mode 100644
+> index 0000000..b90b28b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/loongson,spi-ls7a.yaml
+> @@ -0,0 +1,44 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/loongson,spi-ls7a.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson LS7A PCH SPI Controller
+> +
+> +maintainers:
+> +  - Qing Zhang <zhangqing@loongson.cn>
+> +
+> +description: |
+> +  This controller can be found in Loongson-3 systems with LS7A PCH.
 
-Thanks, these are on for-next.  There was one checkpatch warning about the
-missing ISSI device tree entry, but we already had that in the FU540 so I'm OK
-letting it slide.
+allOf:
+  - $ref: spi-controller.yaml#
 
-I'm also not really sure this is the right way to do this sort of thing: most
-of the patches here really aren't RISC-V things, they're SiFive SOC things.
-Some of these patches have been picked up by other trees, but I just took the
-rest.  I'm not all that happy about taking DT bindings for things like GPIO or
-PWM bindings, but as they're pretty small I'm OK doing it in this instance.
+> +
+> +properties:
+> +  compatible:
+> +    const: loongson,ls7a-spi
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    pci {
+> +        #address-cells = <3>;
+> +        #size-cells = <2>;
+> +
+> +        spi@16,0 {
+> +            compatible = "pci0014,7a0b.0",
+> +                             "pci0014,7a0b",
+> +                             "pciclass088000",
+> +                             "pciclass0800";
 
-In the future it would really be better to split these up and land them via
-their respectitve trees, rather than trying to do all the SOC stuff over here.
-I know that can be a headache, but we have that SOC group for this purpose to
-try and keep things a bit more together -- I know it was a while ago and there
-really hasn't been much SOC activity on the RISC-V side of things so maybe it
-hasn't been that widley discussed, but that was really designed to solve these
-sorts of problems.
+Doesn't match the schema. If this is on PCI bus, then the example is 
+correct. Though you could drop some of the strings. And I think leading 
+0s should be omitted. So 'pci14,7a0b'. But please double check that.
+
+Rob
