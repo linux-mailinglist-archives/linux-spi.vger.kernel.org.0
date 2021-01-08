@@ -2,86 +2,137 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2736C2EEB22
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Jan 2021 02:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 075D82EEBC4
+	for <lists+linux-spi@lfdr.de>; Fri,  8 Jan 2021 04:14:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729883AbhAHBx7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Jan 2021 20:53:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
+        id S1726474AbhAHDNy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Jan 2021 22:13:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729862AbhAHBx7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Jan 2021 20:53:59 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6025C0612F4
-        for <linux-spi@vger.kernel.org>; Thu,  7 Jan 2021 17:53:18 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id s26so19255675lfc.8
-        for <linux-spi@vger.kernel.org>; Thu, 07 Jan 2021 17:53:18 -0800 (PST)
+        with ESMTP id S1726281AbhAHDNy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Jan 2021 22:13:54 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEFDC0612FB
+        for <linux-spi@vger.kernel.org>; Thu,  7 Jan 2021 19:12:28 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id v19so6720028pgj.12
+        for <linux-spi@vger.kernel.org>; Thu, 07 Jan 2021 19:12:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Jpkzu2NlKH8tLq+b0mrXcxeZYQO2IJS1mmz+PwfsaYM=;
-        b=HZ0NVWFFbLcmJlolt2oZlk9r24Ln15LaxYvmtXviqPBpAh7nYsbkcw6wDbPCUhHzBe
-         3avy02cTmlmsjBJbZQMRiLPxWLRrocdMEbhQ8vomIEs1pVY6POkV3ryLgILdzWZuqBRI
-         6n4XxkgzbF+HvnkNiF/9ELgfZXSp/MW4XjZI8i+PXH9ACvfKRsvEhtmf92XUedPhxXat
-         Z1wQPHAwtZ/UZRTPAPj/bJflX/tO2YodP+GiKp/lE00zsYifUnJhIxep512LnACeh6cV
-         tB/bPB/x0+2oHsi7W6O+EM4TVC/cp5E1703NjP0I7qjiJuXUm8Bwtctdd8lVd54CfJpG
-         OFMQ==
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SjIxw593j/BG7x2X3ksVVnxB2uu71tEZmxrMsCj4BiM=;
+        b=h2ktI7s4n8xCoqkoSVH4EHqwEk9bp/enKaHzfXG4daTjSVem3smhzGjWZOERytTBt1
+         uct1LT+TzDwe1P+tWsKICLXw/a9f1Y5NGttqGWBIlq7W0terFsRHlavDYV15Cf8egItt
+         ssfplpyFYDBmZLa4Bss7IeleNkqZcrj7JtyEEWkZPzvoHbtHiUCt9ectPN4fr1muZPpM
+         ywgRFdcUijDEgD1cnBXSpdui63N7Pur/ocDaLM3e7YxpSFI76doqdNO0TUcSv7NbVbUQ
+         egGDX7XIhDuYYpHZ5nnBoNW06xDqi3t8gF0kGVKM7WpiLVNcmrFR1T8datur+4zctrQd
+         fHgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Jpkzu2NlKH8tLq+b0mrXcxeZYQO2IJS1mmz+PwfsaYM=;
-        b=ulVm8rRte3RtSJPTPX98eM6Rw1i/BtlLb7sLJKW5URfQZi4HEvCUxwnHSsG0YPiGU4
-         mEuXijUri447DzmI29+OK7U7jjbx24p/UVaEaat+dVe2x1bpCuZyg/hm9ZxJerYYC8Y/
-         zYNPVSe6W50TEzeVgvzdXhGahF6J+Sqjh/aLF7w4e49dk2CqaijccfLE6bHY1XzxOrYu
-         RD+yvnn0E47H0rBaswigfSYf7NK/dzILzIih41ZD0Fo4/US7YbcTteGwCWjAakOc6Dpn
-         9u/Q1xeWDBbvEiDI/NC2x/Ke0PtD/jsXLSFkdqTD0yVz/qSQDia2ib+Q6Lo/4280s9y6
-         Jntg==
-X-Gm-Message-State: AOAM531tt5+L4Vi1G0bQr36CSe0XKgEr1AZY/1dDKWa7woDc/R6oeouH
-        uLpiP9vuDUhnbMQ6gkww2I4DxuLPdEOQdJ62L7g=
-X-Google-Smtp-Source: ABdhPJzDJDfMApTFjjQOSARghJZ8tJyeLSzo3QMzr5ob2PNzT0Ew6JmD1mNOGc8vrO2JLycGcgEHmvEjS8kF9/x00VA=
-X-Received: by 2002:a19:e20a:: with SMTP id z10mr695261lfg.295.1610070797313;
- Thu, 07 Jan 2021 17:53:17 -0800 (PST)
-MIME-Version: 1.0
-References: <CAF78GY3NWQ1jzkauG26nagcMuqR0=u7zcWLh+wDdrJ8G=e7how@mail.gmail.com>
- <20210106130049.GC4752@sirena.org.uk> <CAF78GY3=m0kMd3d4tS92tZS57mY5XeRuXtET+BVVvnTwcdtO3g@mail.gmail.com>
- <20210106173759.GF4752@sirena.org.uk> <CAF78GY0xnKrOj5RhU2GHcQUTo2MLryrBj3+5dAMKoGzJn2okYw@mail.gmail.com>
- <20210107153546.GD4726@sirena.org.uk> <20210108011044.5780aa96@gmail.com>
-In-Reply-To: <20210108011044.5780aa96@gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 7 Jan 2021 22:53:05 -0300
-Message-ID: <CAOMZO5DSw2Nz5e_0Qn0LcqT-uvvpbjEczUOs2qoEbgC+H8Ho5g@mail.gmail.com>
-Subject: Re: 5.11.0-rc1+: "Division by zero in kernel." when writing to spidev
-To:     Vincent Pelletier <plr.vincent@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        linux-rpi-kernel@lists.infradead.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=SjIxw593j/BG7x2X3ksVVnxB2uu71tEZmxrMsCj4BiM=;
+        b=Mc+wy9hSl73rKperH1qTouNafbPRSMrJIjmiL+gplepYOsYxI09FWHNzi4R1+EO+Gg
+         VuQd6JW/3f5L0cTM9d5a1wfrxyuhjmEaxiyxZgJrzNU1lXmCIgvZwB0kjIerQ3pRYIA/
+         pHGrD70QFGBgoVHFT2B8lK6SWziB18JoG3bfvBWP/VY0+Pb2cN9fMLDKC+xcpw/WON5C
+         z5qgOr4MNUimrdh1W+J3lwxduQykY8bFwfGDJzzu6Za1sIoleLEs3lpL/5HrDYaW13Lk
+         Ypr8vVlT55WWA127d14FaHFWU9w5LhJXFV3HnooAXhqyrNlRaSqsafptP0i67cm3p4ek
+         RsXw==
+X-Gm-Message-State: AOAM532ak2God/Me7J3xaT6abNKDvBGQ+xNs6luLnjdLkiG075CkTdup
+        +jAOSsYNrCpmQinfpwwvYYK6sui3UvT9Sw==
+X-Google-Smtp-Source: ABdhPJxeTiUgNKGaw5qtkvFU0vf1c4xAKljKlMnfqJb88DCjQRxBowLvlBQ4gqSHPM+ucT8Xlx08sQ==
+X-Received: by 2002:a63:1f47:: with SMTP id q7mr4962672pgm.10.1610075547296;
+        Thu, 07 Jan 2021 19:12:27 -0800 (PST)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id r185sm6938981pfc.53.2021.01.07.19.12.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jan 2021 19:12:26 -0800 (PST)
+Date:   Thu, 07 Jan 2021 19:12:26 -0800 (PST)
+X-Google-Original-Date: Thu, 07 Jan 2021 17:52:56 PST (-0800)
+Subject:     Re: [PATCH v2 0/9] arch: riscv: add board and SoC DT file support
+In-Reply-To: <1607403341-57214-1-git-send-email-yash.shah@sifive.com>
+CC:     linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+        broonie@kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        aou@eecs.berkeley.edu, lee.jones@linaro.org,
+        u.kleine-koenig@pengutronix.de, thierry.reding@gmail.com,
+        andrew@lunn.ch, peter@korsgaard.com,
+        Paul Walmsley <paul.walmsley@sifive.com>, robh+dt@kernel.org,
+        bgolaszewski@baylibre.com, linus.walleij@linaro.org,
+        yash.shah@sifive.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     yash.shah@sifive.com
+Message-ID: <mhng-abbd57b3-7d81-4c66-9883-67bc11f1f3a3@palmerdabbelt-glaptop>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Vincent,
-
-On Thu, Jan 7, 2021 at 10:16 PM Vincent Pelletier <plr.vincent@gmail.com> wrote:
-
-> Thanks.
-> I added Tudor Ambarus as well as my debugging points in the direction
-> of:
-> commit 9326e4f1e5dd1a4410c429638d3c412b6fc17040 (spi/for-5.10)
-> Author: Tudor Ambarus <tudor.ambarus@microchip.com>
-> Date:   Wed Dec 9 19:35:14 2020 +0200
+On Mon, 07 Dec 2020 20:55:32 PST (-0800), yash.shah@sifive.com wrote:
+> Start board support by adding initial support for the SiFive FU740 SoC
+> and the first development board that uses it, the SiFive HiFive
+> Unmatched A00.
 >
->     spi: Limit the spi device max speed to controller's max speed
+> Boot-tested on Linux 5.10-rc4 on a HiFive Unmatched A00 board using the
+> U-boot and OpenSBI.
 >
->     Make sure the max_speed_hz of spi_device does not override
->     the max_speed_hz of controller.
+> This patch series is dependent on Zong's Patchset[0]. The patchset also
+> adds two new nodes in dtsi file. The binding documentation patch
+> for these nodes are already posted on the mailing list[1][2].
+>
+> [0]: https://lore.kernel.org/linux-riscv/20201130082330.77268-4-zong.li@sifive.com/T/#u
+> [1]: https://lore.kernel.org/linux-riscv/1606714984-16593-1-git-send-email-yash.shah@sifive.com/T/#t
+> [2]: https://lore.kernel.org/linux-riscv/20201126030043.67390-1-zong.li@sifive.com/T/#u
+>
+> Changes in v2:
+> - The dt bindings patch is split into several individual patches.
+> - Expand the full list for compatible strings in i2c-ocores.txt
+>
+> Yash Shah (9):
+>   dt-bindings: riscv: Update DT binding docs to support SiFive FU740 SoC
+>   dt-bindings: spi: Update DT binding docs to support SiFive FU740 SoC
+>   dt-bindings: pwm: Update DT binding docs to support SiFive FU740 SoC
+>   dt-bindings: serial: Update DT binding docs to support SiFive FU740
+>     SoC
+>   dt-bindings: gpio: Update DT binding docs to support SiFive FU740 SoC
+>   dt-bindings: i2c: Update DT binding docs to support SiFive FU740 SoC
+>   riscv: dts: add initial support for the SiFive FU740-C000 SoC
+>   dt-bindings: riscv: Update YAML doc to support SiFive HiFive Unmatched
+>     board
+>   riscv: dts: add initial board data for the SiFive HiFive Unmatched
+>
+>  .../devicetree/bindings/gpio/sifive,gpio.yaml      |   4 +-
+>  .../devicetree/bindings/i2c/i2c-ocores.txt         |   8 +-
+>  .../devicetree/bindings/pwm/pwm-sifive.yaml        |   9 +-
+>  Documentation/devicetree/bindings/riscv/cpus.yaml  |   6 +
+>  .../devicetree/bindings/riscv/sifive.yaml          |  17 +-
+>  .../devicetree/bindings/serial/sifive-serial.yaml  |   4 +-
+>  .../devicetree/bindings/spi/spi-sifive.yaml        |  10 +-
+>  arch/riscv/boot/dts/sifive/Makefile                |   3 +-
+>  arch/riscv/boot/dts/sifive/fu740-c000.dtsi         | 293 +++++++++++++++++++++
+>  .../riscv/boot/dts/sifive/hifive-unmatched-a00.dts | 253 ++++++++++++++++++
+>  10 files changed, 590 insertions(+), 17 deletions(-)
+>  create mode 100644 arch/riscv/boot/dts/sifive/fu740-c000.dtsi
+>  create mode 100644 arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
 
-There is a fix for this:
-https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git/commit/?h=for-linus&id=6820e812dafb4258bc14692f686eec5bde6fba86
+Thanks, these are on for-next.  There was one checkpatch warning about the
+missing ISSI device tree entry, but we already had that in the FU540 so I'm OK
+letting it slide.
+
+I'm also not really sure this is the right way to do this sort of thing: most
+of the patches here really aren't RISC-V things, they're SiFive SOC things.
+Some of these patches have been picked up by other trees, but I just took the
+rest.  I'm not all that happy about taking DT bindings for things like GPIO or
+PWM bindings, but as they're pretty small I'm OK doing it in this instance.
+
+In the future it would really be better to split these up and land them via
+their respectitve trees, rather than trying to do all the SOC stuff over here.
+I know that can be a headache, but we have that SOC group for this purpose to
+try and keep things a bit more together -- I know it was a while ago and there
+really hasn't been much SOC activity on the RISC-V side of things so maybe it
+hasn't been that widley discussed, but that was really designed to solve these
+sorts of problems.
