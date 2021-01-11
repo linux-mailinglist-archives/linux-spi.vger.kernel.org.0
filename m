@@ -2,82 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 793212F1B0F
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Jan 2021 17:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41AF62F1B36
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Jan 2021 17:42:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728745AbhAKQgR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 11 Jan 2021 11:36:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42600 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728591AbhAKQgR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 11 Jan 2021 11:36:17 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 74E41221FE;
-        Mon, 11 Jan 2021 16:35:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610382936;
-        bh=RE1Md8cmppu1xKF0msv57vimbUhlP4+7Lx/7ygdMAPs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cBk+zJJGnYddOl/czcVfF2W4yAH8sy1jqATOCC+tCVJkOywQ7sdsMXZVwnwYbcBdZ
-         kR/su628sjS3ApqkD1RtF0xSpksd67XwENPgHCeE6XF7cB/IAhpeUGE+H9sNqBR9oH
-         tLgiGSW/OreqsjsafiCgguIaiHPDH+LAIjnjE5HxnwzP25oGf1SQyu9CgiiACIlKc5
-         rHWXhXdBrgpRXbmEnGaNDj0Qtof1RJVWfxLWArysRtc2Z1dI2OYX6Wuvj4YF6L8YPp
-         QhAwoMEwW/EmmUF13zHi99e8R9ofvHT0iNnCZIT3p2Qft4SFkwGK3fFTi7NBqwnqL5
-         aWM53dmIa2gTg==
-Date:   Mon, 11 Jan 2021 16:35:04 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/7] spi: spi-geni-qcom: Add support for GPI dma
-Message-ID: <20210111163504.GD4728@sirena.org.uk>
-References: <20210111151651.1616813-1-vkoul@kernel.org>
- <20210111151651.1616813-5-vkoul@kernel.org>
+        id S2388047AbhAKQmG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 Jan 2021 11:42:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388011AbhAKQmF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Jan 2021 11:42:05 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D11DC061786;
+        Mon, 11 Jan 2021 08:41:24 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id 11so258818pfu.4;
+        Mon, 11 Jan 2021 08:41:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Uv3Cf1Z5wDBVRjdkUzWejQCce+4ctj5gFpl4bvSWCYM=;
+        b=lSzVM9PqiSVbqlpmsAk+B0KR8WYTSZR5fmen2TSlqw8dlp+hDUKO2cHRz9ntaRoMD8
+         pSP9QJQLhbAd2r67lH6g/1rHdti5J6nn1r2Vbr54QxHsoqXvrVIZuCshybrRoGXuq9K/
+         IoEpUALVfcuwWo8Wz2TWSdRCgybSQIcZLRK3C1qEwdOHe+1VTmyGzD+SpGc0f8igLNEH
+         AbF+ISr3nn83B3X3+pJWW8tv95kB08FH6q+YkGM+1FpZMek2sIOSvf/tTK8AF58/6qaK
+         tPU9HBuLJ8E7KPIAgsa+FDAVLtFG9WApKnuiCCp5MXk4EB0IS/EEiIhTUNFriv3ot5eU
+         NFJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Uv3Cf1Z5wDBVRjdkUzWejQCce+4ctj5gFpl4bvSWCYM=;
+        b=gwq7aZG2I3djqau385UQpK/euEv2PVc/E1lZfQyGF5dvFUYbYr/FjgJkYZVbu6VR9W
+         RXZIcb5/mf9qptwZlFBZ2yw81ppsO/cde/I3hcSJdZv3e6FUUezjBzI/yYJRobvZxKgE
+         YJLovd1XroHIrIlJjSYLAhpl23jeRXn4hnGZU0KQ9pn67kgDMEZFpfiQ/EsaTSgxX49O
+         JJK1TTImaeV+3izl/DaGWRnFzwAGTcUfc6Sf5g7QZtzhZZD5OsHAQkVn1T2FI9ueTYTS
+         awSyI12Urw8ocw+F2P2hul0m68U+yYxJKF+P+j+dyBY9tPjvnyjhpR4OGrZCAzexuzJ8
+         Oebw==
+X-Gm-Message-State: AOAM5331B9uQGypKRPyzxt/8jN5ece+X1F0qKi2KNd6HV9PAcV24Awmy
+        d5RUzxHGMANK51fwPDWw6pfdKGm4mLA=
+X-Google-Smtp-Source: ABdhPJwLUgwTfr4fPF+ZuqJQLAiJ+/Qq+dY2MiT5laB75HvFlUy1kZmfWRR1q0B0a+lBlkh266EYgQ==
+X-Received: by 2002:a62:7a43:0:b029:19e:c33b:c498 with SMTP id v64-20020a627a430000b029019ec33bc498mr258787pfc.20.1610383283434;
+        Mon, 11 Jan 2021 08:41:23 -0800 (PST)
+Received: from [10.230.29.29] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id gm18sm15971pjb.55.2021.01.11.08.41.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jan 2021 08:41:22 -0800 (PST)
+Subject: Re: [PATCH] spi: spi-bcm-qspi: style: Simplify bool comparison
+To:     Mark Brown <broonie@kernel.org>,
+        YANG LI <abaci-bugfix@linux.alibaba.com>, kdasu.kdev@gmail.com
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+References: <1610357189-60031-1-git-send-email-abaci-bugfix@linux.alibaba.com>
+ <161038255869.32886.11006261963964555197.b4-ty@kernel.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <ec735a59-0fbd-3d4a-e997-895099a8e534@gmail.com>
+Date:   Mon, 11 Jan 2021 08:41:19 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pQhZXvAqiZgbeUkD"
-Content-Disposition: inline
-In-Reply-To: <20210111151651.1616813-5-vkoul@kernel.org>
-X-Cookie: Too much is not enough.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <161038255869.32886.11006261963964555197.b4-ty@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---pQhZXvAqiZgbeUkD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Mon, Jan 11, 2021 at 08:46:48PM +0530, Vinod Koul wrote:
+On 1/11/2021 8:29 AM, Mark Brown wrote:
+> On Mon, 11 Jan 2021 17:26:29 +0800, YANG LI wrote:
+>> Fix the following coccicheck warning:
+>> ./drivers/spi/spi-bcm-qspi.c:884:5-34: WARNING: Comparison to bool
+> 
+> Applied to
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> 
+> Thanks!
+> 
+> [1/1] spi: spi-bcm-qspi: style: Simplify bool comparison
+>       commit: 6650ab2a44268af8d24995d28ae199b57b2ebff8
 
-> +static int get_xfer_mode(struct spi_master *spi)
-> +{
-> +	struct spi_geni_master *mas = spi_master_get_devdata(spi);
-> +	struct geni_se *se = &mas->se;
-> +	int mode = GENI_SE_FIFO;
-
-Why not use the core DMA mapping support?
-
---pQhZXvAqiZgbeUkD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/8fjcACgkQJNaLcl1U
-h9Dg7wf6AiVIGMV8fdSxV/+rvHOKoT4lSj+DxPZgO4ziYL6vqk7upbg1Qm7+ipoi
-EDQ68FPLAKZky09U0ZK3AP/kMn4hAAezlBysnKqYyNGF6fTbzszOP/WZICjFcWG8
-w4ebN0qPW8o1UoC7CUDDdD0GxlFS+rugmEogvdsrhtNiOSodkhn8ibqL5QVYIzYZ
-ndVwlAAgW3+WuDNd/vV4nTT8HvKp7a0ZJeoOygXCpX70uzD1Lztd6mA/v0aWIeub
-xv5mZJb54rUmooaudUoRI14Zs2xhU4iyo+Zj/SQpDAa5uwdkRT4NxV1zWyvR1Lup
-Ro3frvVVNALn6RtdXWhw1oo3GVtJXg==
-=SIUq
------END PGP SIGNATURE-----
-
---pQhZXvAqiZgbeUkD--
+I don't think that "style: " is a subject prefix that is used commonly
+and it certainly should not belong in a commit subject. Mark can you
+please people at least 10-12 hours to review changes before applying
+them? This one is trivial except the commit subject does not match
+previous changes done to this file and it should have been fixed.
+-- 
+Florian
