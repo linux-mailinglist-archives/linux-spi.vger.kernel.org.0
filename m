@@ -2,52 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D6C2F19B6
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Jan 2021 16:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2774F2F19D2
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Jan 2021 16:35:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731804AbhAKPb7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 11 Jan 2021 10:31:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
+        id S1730472AbhAKPfh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 Jan 2021 10:35:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731604AbhAKPb6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Jan 2021 10:31:58 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71691C061794
-        for <linux-spi@vger.kernel.org>; Mon, 11 Jan 2021 07:31:18 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id b24so60462otj.0
-        for <linux-spi@vger.kernel.org>; Mon, 11 Jan 2021 07:31:18 -0800 (PST)
+        with ESMTP id S1727957AbhAKPfg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Jan 2021 10:35:36 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32694C061786
+        for <linux-spi@vger.kernel.org>; Mon, 11 Jan 2021 07:34:56 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id s2so20528824oij.2
+        for <linux-spi@vger.kernel.org>; Mon, 11 Jan 2021 07:34:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=Q0ntm2t5I/I58bNqFBYR9s8vSME+9oFSHFOgNzLSJkk=;
-        b=bkjYqS4TxRHf9WHJd/jqSuyWxL70FdCUNm5YHaT1NJldgV+1+DRDsOE/rF9PIQsXO0
-         QnS7YCswiew67X9qVxQttkoQ7Z4UaTKfbRTusHbxvChJJCq6lG/dnwA228z3tb23wqeE
-         NzaU7mPjZmAOOOfgAF35MrJ/Z+GU3FKyVGIXbCEQ4lwhJeVcvan2OhyrI9uinNjzgKjQ
-         iO33sU6ewXO5/KHCNUiYmUL5xsTjDYCDZJrE02EQOXVZis+hpyKgZNL/4hXBgB7IZ5wY
-         apkuhhsZF8Q4+KOrh/QzIBoDf8ZKUf7l7PBFhpup+tIN7/hMsApmgee1cX49OkRqEh41
-         KE5Q==
+        bh=TzWprvP0E5iilUODRGt6CKDwV/2kCYGt43hwkGEjZBk=;
+        b=j18QL97ZdXcR/1Wial7AoWPFyJjXMopmtHu33rDETf1iyeWOD6oVQT9p4VCRatNVT1
+         xUOvXW6F/iyqr66IJQ6MgnpXo6l4M+p0POEb2ukFRsSVA3jPg8hJzBOL0bI2u6QGi9Ig
+         myarg/62h+TM2cWpKt/zt9AcNN3R+t8ssnjJAiBrEGeU61aVbjDeoA7JV0AusyvbpV0v
+         EJqf2oJNhxj+Rmrng5A+uaCoOs4VkcEyt2fUTArKugC/HhcC2rpN1Ra4aVdNbmz2CobJ
+         CfUlRS0ed4OoikQFKHMmA1Taldgx62rUup6ak93Y4L40X+WQtoKasiKo9sSZ3Tg8qCFW
+         R3pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Q0ntm2t5I/I58bNqFBYR9s8vSME+9oFSHFOgNzLSJkk=;
-        b=YgfpAnYYNOT/TvbQSoiSNahIp5aodgaitzp+0oPckVSlw0b0tNqvQzm/yiuDAf/GkR
-         D/BDmpwpB9PjUy8ZBM3bMhqd9biCCi4QdYl8K9y5YYb8J79Xwllow2rihXkhElMOZIVx
-         D3J5rjTkOVkVhVgZV4sKr0ewRmMgpbE8oRgnYMcz3dfxpZE2yLnN9H69pSz3kVuu51mK
-         yQkfmiiSvqdATiGSK7OPMRdGszzOAFnvNzyvtZ4dDF3JoRrXjOZJjCYJolou80qd6Sc/
-         UOBAed+NsRkyxIKlDlQ+JNMxwzwXmdX6jMRCDnGMIrOZXQ6PsM1ade9SwLV9JSiBRyqv
-         1QiQ==
-X-Gm-Message-State: AOAM53041YqrlX4Os4uvgDiLTtJRFB8DOsRSz3/BtPCLkF5YoN43oa6v
-        E+Xi9D1DqlMy9lXT0n9ZUJhIFw==
-X-Google-Smtp-Source: ABdhPJxAun/H9kOvpHpU39fZrdU4wkgEXkwXIJh6W1qnIBT830eXJ8FCj7sXKulUqqyNYY6lEuikoA==
-X-Received: by 2002:a9d:4e87:: with SMTP id v7mr11055840otk.302.1610379077753;
-        Mon, 11 Jan 2021 07:31:17 -0800 (PST)
+        bh=TzWprvP0E5iilUODRGt6CKDwV/2kCYGt43hwkGEjZBk=;
+        b=cXHeMJaYgcwlQPsZFClyo2ZY2YTlW+MqK58/rwjMoGMfbblh9VU0Hfc50+aCLwxcpy
+         faxe0wOI2J6CN4ZMZjtMNDXvytk8jCfhsyaL6349q7QVVXL/Hun3Ll7Q/1Au/EmURkaA
+         P3/kxaFUQ7AtZgomaTNUYXETFUylY1SWBfUl6tHiIVDcJnNh7B9AHzfGlHNXSBvhuObt
+         Bz7CrggmHh0dnGfY3oSiM2bX9uB9pf133UjuFGxF7zerGYxeyzC1MWVDmxRgKcjFr8FB
+         E+wXsmxvXw1jz3C9jyBtuJ3La4cBc1jfJaalsTqZOShFdqqd8xnyHXAgxU9j0KoXiIaK
+         IkSg==
+X-Gm-Message-State: AOAM531FR2X9LXwV8fNZItLPeEyW/y5tCglpfeU/9rDh1JYfFXEvMeF6
+        Z6oliWKuJ8/HkQXaMY3f9emdNQ==
+X-Google-Smtp-Source: ABdhPJym+3NChkBHA8NS/z2uVQ6cUCMR1A3L+017mVCHLkPPcp9m2j9LWQAt7zUUBArLpZtVIYAzDQ==
+X-Received: by 2002:aca:2807:: with SMTP id 7mr10727532oix.49.1610379295611;
+        Mon, 11 Jan 2021 07:34:55 -0800 (PST)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id f201sm13267oig.21.2021.01.11.07.31.16
+        by smtp.gmail.com with ESMTPSA id p4sm14419oib.24.2021.01.11.07.34.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jan 2021 07:31:17 -0800 (PST)
-Date:   Mon, 11 Jan 2021 09:31:15 -0600
+        Mon, 11 Jan 2021 07:34:54 -0800 (PST)
+Date:   Mon, 11 Jan 2021 09:34:53 -0600
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>,
@@ -58,60 +58,93 @@ Cc:     Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>,
         Amit Pundir <amit.pundir@linaro.org>,
         linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] soc: qcom: geni: move GENI_IF_DISABLE_RO to common
- header
-Message-ID: <X/xvQ4BscVREG6yp@builder.lan>
+Subject: Re: [PATCH 2/7] soc: qcom: geni: move struct geni_wrapper to header
+Message-ID: <X/xwHeRAs4Cl/efj@builder.lan>
 References: <20210111151651.1616813-1-vkoul@kernel.org>
- <20210111151651.1616813-2-vkoul@kernel.org>
+ <20210111151651.1616813-3-vkoul@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210111151651.1616813-2-vkoul@kernel.org>
+In-Reply-To: <20210111151651.1616813-3-vkoul@kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On Mon 11 Jan 09:16 CST 2021, Vinod Koul wrote:
 
-> GENI_IF_DISABLE_RO is used by geni spi driver as well to check the
-> status if GENI, so move this to common header qcom-geni-se.h
+> I2C geni driver needs to access struct geni_wrapper, so move it to
+> header.
 > 
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Please tell me more!
+
+Glanced through the other patches and the only user I can find it in
+patch 5 where you use this to get the struct device * of the wrapper.
+
+At least in the DT case this would be [SE]->dev->parent, perhaps we
+can't rely on this due to ACPI?
 
 Regards,
 Bjorn
 
 > Signed-off-by: Vinod Koul <vkoul@kernel.org>
 > ---
->  drivers/soc/qcom/qcom-geni-se.c | 1 -
->  include/linux/qcom-geni-se.h    | 1 +
->  2 files changed, 1 insertion(+), 1 deletion(-)
+>  drivers/soc/qcom/qcom-geni-se.c | 15 ---------------
+>  include/linux/qcom-geni-se.h    | 15 +++++++++++++++
+>  2 files changed, 15 insertions(+), 15 deletions(-)
 > 
 > diff --git a/drivers/soc/qcom/qcom-geni-se.c b/drivers/soc/qcom/qcom-geni-se.c
-> index f42954e2c98e..285ed86c2bab 100644
+> index 285ed86c2bab..a3868228ea05 100644
 > --- a/drivers/soc/qcom/qcom-geni-se.c
 > +++ b/drivers/soc/qcom/qcom-geni-se.c
-> @@ -108,7 +108,6 @@ static struct geni_wrapper *earlycon_wrapper;
->  #define GENI_OUTPUT_CTRL		0x24
->  #define GENI_CGC_CTRL			0x28
->  #define GENI_CLK_CTRL_RO		0x60
-> -#define GENI_IF_DISABLE_RO		0x64
->  #define GENI_FW_S_REVISION_RO		0x6c
->  #define SE_GENI_BYTE_GRAN		0x254
->  #define SE_GENI_TX_PACKING_CFG0		0x260
+> @@ -79,21 +79,6 @@
+>   */
+>  
+>  #define MAX_CLK_PERF_LEVEL 32
+> -#define NUM_AHB_CLKS 2
+> -
+> -/**
+> - * struct geni_wrapper - Data structure to represent the QUP Wrapper Core
+> - * @dev:		Device pointer of the QUP wrapper core
+> - * @base:		Base address of this instance of QUP wrapper core
+> - * @ahb_clks:		Handle to the primary & secondary AHB clocks
+> - * @to_core:		Core ICC path
+> - */
+> -struct geni_wrapper {
+> -	struct device *dev;
+> -	void __iomem *base;
+> -	struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
+> -	struct geni_icc_path to_core;
+> -};
+>  
+>  static const char * const icc_path_names[] = {"qup-core", "qup-config",
+>  						"qup-memory"};
 > diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h
-> index ec2ad4b0fe14..e3f4b16040d9 100644
+> index e3f4b16040d9..cb4e40908f9f 100644
 > --- a/include/linux/qcom-geni-se.h
 > +++ b/include/linux/qcom-geni-se.h
-> @@ -65,6 +65,7 @@ struct geni_se {
->  #define SE_GENI_STATUS			0x40
->  #define GENI_SER_M_CLK_CFG		0x48
->  #define GENI_SER_S_CLK_CFG		0x4c
-> +#define GENI_IF_DISABLE_RO		0x64
->  #define GENI_FW_REVISION_RO		0x68
->  #define SE_GENI_CLK_SEL			0x7c
->  #define SE_GENI_DMA_MODE_EN		0x258
+> @@ -38,6 +38,21 @@ struct geni_icc_path {
+>  	unsigned int avg_bw;
+>  };
+>  
+> +#define NUM_AHB_CLKS 2
+> +
+> +/**
+> + * @struct geni_wrapper - Data structure to represent the QUP Wrapper Core
+> + * @dev:		Device pointer of the QUP wrapper core
+> + * @base:		Base address of this instance of QUP wrapper core
+> + * @ahb_clks:		Handle to the primary & secondary AHB clocks
+> + */
+> +struct geni_wrapper {
+> +	struct device *dev;
+> +	void __iomem *base;
+> +	struct clk_bulk_data ahb_clks[NUM_AHB_CLKS];
+> +	struct geni_icc_path to_core;
+> +};
+> +
+>  /**
+>   * struct geni_se - GENI Serial Engine
+>   * @base:		Base Address of the Serial Engine's register block
 > -- 
 > 2.26.2
 > 
