@@ -2,48 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 673582F10A5
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Jan 2021 11:57:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED3812F195F
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Jan 2021 16:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729480AbhAKK50 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 11 Jan 2021 05:57:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53210 "EHLO mail.kernel.org"
+        id S1731840AbhAKPRv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 Jan 2021 10:17:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53920 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728986AbhAKK50 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 11 Jan 2021 05:57:26 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 0075B224D3;
-        Mon, 11 Jan 2021 10:56:45 +0000 (UTC)
+        id S1728444AbhAKPRu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 11 Jan 2021 10:17:50 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DDB6422795;
+        Mon, 11 Jan 2021 15:17:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610362606;
-        bh=iAMofg0vSyL4UVDFO4ukRUmmd/CNpDli2THXZAJVLjU=;
-        h=Subject:From:Date:To:From;
-        b=uq47CBEHGA3iXtubfD2ONA2Pi/w465r5Ttmrq/MqMOXRgCYDRtDGfujgqf7e/cjvT
-         PxEgqJFgj3qoGu8IJMlr4ufMsJfqgY7+/B2nM0nEEIs+jTP2r1W+3J71GzeAIyOkcj
-         C+U1/L1DdHTZRX0aRU4mcwHPeajgJf/oB8bt+vsECfQ94kdJjaxgKY/TaivUG04kY8
-         IAXBCRLSbuziUfhKZhq69ArdoFdIFauVqdvZgmHHIPAwXTvdxqM40gPKKXcUnwmzsd
-         5a+/z6RCRnE8SsABGdVcZj5CteiT5BWUJHN0sI6wK6sSex42qkjszsGVXFrwoulySJ
-         NqMCf16wypEWQ==
-Received: from pdx-korg-docbuild-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-1.ci.codeaurora.org (Postfix) with ESMTP id EDF8160188;
-        Mon, 11 Jan 2021 10:56:45 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1610378230;
+        bh=QqIEqDXkBOPauIfpjp6CQHoxGmT+IBo0bjk1fPqQook=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PxuROWJgIsfrtu8forYfa8hejmiYwSla+uXHR2V933YSPJwboBxAYKqW2aQ+c/SJK
+         GXQmEJVaduwCJQSqygrtNt+8FzINha1ExrFFF8t4khOGuQz1qzCduj5qI6zb9J3UOL
+         Rex/sXPobf4TxXfmRI4Ts1ibUc1fBFpYUQYrgqWJf7ZrQcepko8Sv2D0ONjAtSQ3RL
+         VXqAem+9U2EUUxX3/JXMi4VBD5A10xWiu7ZZiiWmqscakDZmiIwHFp13hcAdftZ0M8
+         xBNKaNYTRdVCPyIewaKgdkPDQeF4fnnfWP5Q5r1ytzbv8k8ONlxbpt7A7F5Tgvwh3X
+         g/YAZQR8BhKaw==
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/7] Add and enable GPI DMA users
+Date:   Mon, 11 Jan 2021 20:46:44 +0530
+Message-Id: <20210111151651.1616813-1-vkoul@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <161036260596.6052.16715988070469489963.git-patchwork-housekeeping@kernel.org>
-Date:   Mon, 11 Jan 2021 10:56:45 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v1] spi: spi-bcm-qspi: style: Simplify bool comparison (2021-01-11T09:54:48)
-  Superseding: [v1] spi: spi-bcm-qspi: style: Simplify bool comparison (2021-01-11T09:26:29):
-    spi: spi-bcm-qspi: style: Simplify bool comparison
+Hello,
 
+This series add the GPI DMA in qcom geni spi and i2c drivers. For this we
+first need to move GENI_IF_DISABLE_RO and struct geni_wrapper to common
+headers and then add support for gpi dma in geni driver.
 
+Then we add spi and i2c geni driver changes to support this DMA.
+
+Lastly, add the GPI dma nodes and enable dma for spi found in Rb3 board.
+
+To merge this, we could merge all thru qcom tree with ack on spi/i2c.
+
+Vinod Koul (7):
+  soc: qcom: geni: move GENI_IF_DISABLE_RO to common header
+  soc: qcom: geni: move struct geni_wrapper to header
+  soc: qcom: geni: Add support for gpi dma
+  spi: spi-geni-qcom: Add support for GPI dma
+  i2c: qcom-geni: Add support for GPI DMA
+  arm64: dts: qcom: sdm845: Add gpi dma node
+  arm64: dts: qcom: sdm845: enable dma for spi
+
+ arch/arm64/boot/dts/qcom/sdm845-db845c.dts |   4 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi       |  57 +++
+ drivers/i2c/busses/i2c-qcom-geni.c         | 246 ++++++++++++-
+ drivers/soc/qcom/qcom-geni-se.c            |  55 ++-
+ drivers/spi/spi-geni-qcom.c                | 395 ++++++++++++++++++++-
+ include/linux/qcom-geni-se.h               |  20 ++
+ 6 files changed, 747 insertions(+), 30 deletions(-)
+
+Thanks
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.26.2
 
