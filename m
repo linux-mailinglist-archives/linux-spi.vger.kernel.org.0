@@ -2,92 +2,80 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8D32F2DD5
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Jan 2021 12:24:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 358F72F2F56
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Jan 2021 13:49:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725773AbhALLYZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Jan 2021 06:24:25 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:11095 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725648AbhALLYY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Jan 2021 06:24:24 -0500
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DFSpp2Ql6zMHGt;
-        Tue, 12 Jan 2021 19:22:26 +0800 (CST)
-Received: from [127.0.0.1] (10.174.176.220) by DGGEMS407-HUB.china.huawei.com
- (10.3.19.207) with Microsoft SMTP Server id 14.3.498.0; Tue, 12 Jan 2021
- 19:23:39 +0800
-Subject: Re: [PATCH 1/1] spi: cadence-quadspi: Fix a compilation warning for
- 64-bit platform
-To:     Pratyush Yadav <p.yadav@ti.com>
-CC:     Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
+        id S1731154AbhALMsz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Jan 2021 07:48:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52216 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727907AbhALMsz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 12 Jan 2021 07:48:55 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A25C422B37;
+        Tue, 12 Jan 2021 12:48:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610455694;
+        bh=BToyKO6I53LJkegMwyfNmTPFV988ajxYziM4AKqOwIc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=skAThuuyG7aJJm2LZP+GaFrLtZNqe5KY2vUpfYs0fpcsr0vRPQf24aEvrVJ2UJzl/
+         sJITnCgGacGbhOqpLUyVGMSpmgLso+WgTXf9P3XLzitPoifROvcyirr9362rxKBMIX
+         jsoKD75tvfoTa3J1CCd01oi6+lAxtN7VzIumla/TKNk3lQ60jf5EBxRymwqqENEpz4
+         HDQenyHCCL5x4tEMWrWsjb6UZp7GAZWXI3TvlUyr2woXUDvtqw0QznUzoac6rdo+tB
+         I7jJrw5mll1jxWc9mh+V6ilVi+f13m/6O/sax62bdbZd5yBAUh7XRxOuqmpTSYynuo
+         xsLE8sAj9WaNg==
+Date:   Tue, 12 Jan 2021 12:47:41 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     linux-spi <linux-spi@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>
+        Yanteng Si <siyanteng@loongson.cn>,
+        Pratyush Yadav <p.yadav@ti.com>
+Subject: Re: [PATCH 0/1] spi: cadence-quadspi: Fix a compilation warning for
+ 64-bit platform
+Message-ID: <20210112124741.GA4646@sirena.org.uk>
 References: <20210112100637.747-1-thunder.leizhen@huawei.com>
- <20210112100637.747-2-thunder.leizhen@huawei.com>
- <20210112101634.ikmhj4au6eogkhoq@ti.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <6612b888-63aa-9d8f-c663-3b2857b79b70@huawei.com>
-Date:   Tue, 12 Jan 2021 19:23:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <20210112101634.ikmhj4au6eogkhoq@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.220]
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="azLHFNyN32YCQGCU"
+Content-Disposition: inline
+In-Reply-To: <20210112100637.747-1-thunder.leizhen@huawei.com>
+X-Cookie: Stay away from hurricanes for a while.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
+--azLHFNyN32YCQGCU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 2021/1/12 18:16, Pratyush Yadav wrote:
-> Hi Zhen,
-> 
-> On 12/01/21 06:06PM, Zhen Lei wrote:
->> The __typecheck() requires that the two arguments of max() must be of the
->> same type. For the current max(), the type of the first parameter "len" is
->> size_t. But the type of size_t is not fixed, it's "unsigned int" on 32-bit
->> platforms and "unsigned long" on 64-bit platforms. So both the suffix "U"
->> and "UL" are not appropriate for the second constant parameter. Therefore,
->> forcible type conversion is used.
->>
->> Fixes: 8728a81b8f10 ("spi: Fix distinct pointer types warning for ARCH=mips")
->> Fixes: 0920a32cf6f2 ("spi: cadence-quadspi: Wait at least 500 ms for direct reads")
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->> ---
->>  drivers/spi/spi-cadence-quadspi.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
->> index 576610ba11184c6..eb40b8d46b56b0c 100644
->> --- a/drivers/spi/spi-cadence-quadspi.c
->> +++ b/drivers/spi/spi-cadence-quadspi.c
->> @@ -1150,7 +1150,7 @@ static int cqspi_direct_read_execute(struct cqspi_flash_pdata *f_pdata,
->>
->>  	dma_async_issue_pending(cqspi->rx_chan);
->>  	if (!wait_for_completion_timeout(&cqspi->rx_dma_complete,
->> -					 msecs_to_jiffies(max(len, 500U)))) {
->> +				 msecs_to_jiffies(max_t(size_t, len, 500)))) {
-> 
-> I sent a patch with this exact fix already [0]. It has made it in Mark's 
-> for-next branch.
+On Tue, Jan 12, 2021 at 06:06:36PM +0800, Zhen Lei wrote:
+> This patch is based on the latest linux-next. So the Fixes commit-id
+> maybe changed when it merged int v5.12-rc1. For details about the problem
+> analysis, see the patch description. The auxiliary information is listed =
+here.
 
-OK，I don't known it.
+Please don't send cover letters for single patches, if there is anything
+that needs saying put it in the changelog of the patch or after the ---
+if it's administrative stuff.  This reduces mail volume and ensures that=20
+any important information is recorded in the changelog rather than being
+lost.=20
 
-> 
-> [0] https://lore.kernel.org/linux-spi/20210108181457.30291-1-p.yadav@ti.com/
-> 
->>  		dmaengine_terminate_sync(cqspi->rx_chan);
->>  		dev_err(dev, "DMA wait_for_completion_timeout\n");
->>  		ret = -ETIMEDOUT;
->> --
->> 1.8.3
->>
->>
-> 
+--azLHFNyN32YCQGCU
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl/9mmwACgkQJNaLcl1U
+h9C96Af/ZisxzCk9VAYqmV67HrqaXT7axsKplWisQLjyLG/AT6ZkllXAxQ1LZjON
+NSVX0Aex/EhVHHrW5i1FLhkco1Tg6YgtgwB0KsQe7HQr2Ly5p+KoBoqyZaeInF6q
+6cT+lSemwoPcKrrBMMBpvg1c9O5xa3938EiMmXq0lFw4XqQbU6kX8HApvVaPbSNV
+q1nQ9JIjwqAA7Cq0TMKoYriYdvsz5JT2C6H+Puy7xHqXjo7px5z0SN7r85WPyvwH
+7FvLqak/pJSjNZurCWDzyINpd/ipY9CVh7QrfaVkbskPxSI4xOwvjxPf9i6CYXbL
+/E0fPrMdl535c83C6VvuauMzgFZRAQ==
+=WKIK
+-----END PGP SIGNATURE-----
+
+--azLHFNyN32YCQGCU--
