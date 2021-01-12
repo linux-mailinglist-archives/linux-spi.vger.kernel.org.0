@@ -2,92 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD5242F3439
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Jan 2021 16:36:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0412F360A
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Jan 2021 17:45:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391719AbhALPfE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Jan 2021 10:35:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391716AbhALPfE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Jan 2021 10:35:04 -0500
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C0AC0617AA
-        for <linux-spi@vger.kernel.org>; Tue, 12 Jan 2021 07:34:13 -0800 (PST)
-Received: by mail-vs1-xe2c.google.com with SMTP id b23so1638563vsp.9
-        for <linux-spi@vger.kernel.org>; Tue, 12 Jan 2021 07:34:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qxCZhN0HPYWVbJAFHzviClBBvfiktQzKxiUuI/WHb64=;
-        b=JwBBAAjWC19z8UsuWqxUc5kVg0wMb6EWFRHoz7kkGUngbEhRU+C6/MCHia57wDr8X9
-         Jd86Mt63DQEmW6eSaffdLzO7z7LiNnNGMHUe46zYzJcyQA6RGLKr4Kmg011Z0Emovi4/
-         at0IHPfJVaNEMbSJ/B0M5S6vGzvw1vRl459Eo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qxCZhN0HPYWVbJAFHzviClBBvfiktQzKxiUuI/WHb64=;
-        b=COVfa4dCzUsfB06+Unr3H9OektxCj/C0fjD5OgjHrqNuHQVSVNrJX4VEx8WM19FRsJ
-         LU/jIoayWrsZtxCrxnsTgw4e0h+Ow1yvJksAZY6d/F45/2QRmSs/1EEEpn0FJwA/oWPb
-         xmiDiwXyARXeK5x3bNfNe3o8r1AiAo7BsrwGNhNT0LyYwlt0Yt6MIeBu5MuZat1NMY3x
-         Ve2mh3cyyN/Ck58CqlL3G2fWJ77ySLSkLV+l/DA3tc2tpA0SIxF7WBGBq9W7GyrI5MgN
-         6d7Jz6bp45CCa02u/hlLPQHCHLMnS4oKmlvGyU+dLgfZlzTOvB7xKbFTKA2VIul29jJq
-         K0ag==
-X-Gm-Message-State: AOAM5333Yfu8Zn3w12ORjFPXR+vSNWasapItQSk3CU1d3HYB7EST22KM
-        oIiZAOqzminEnVvHRMXAlGBE+4p5po0tiQ==
-X-Google-Smtp-Source: ABdhPJziCFnCkgzByDunalhNmYpnTlf1GCMudwDCktJzFMyXZnyYFWZ6SIBbmsNCHy4y7OlR0nK07A==
-X-Received: by 2002:a67:882:: with SMTP id 124mr1197471vsi.33.1610465652800;
-        Tue, 12 Jan 2021 07:34:12 -0800 (PST)
-Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com. [209.85.221.172])
-        by smtp.gmail.com with ESMTPSA id l20sm405257vsr.29.2021.01.12.07.34.11
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jan 2021 07:34:11 -0800 (PST)
-Received: by mail-vk1-f172.google.com with SMTP id e27so699772vkn.2
-        for <linux-spi@vger.kernel.org>; Tue, 12 Jan 2021 07:34:11 -0800 (PST)
-X-Received: by 2002:ac5:cde4:: with SMTP id v4mr4651199vkn.21.1610465651285;
- Tue, 12 Jan 2021 07:34:11 -0800 (PST)
+        id S2403943AbhALQog (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Jan 2021 11:44:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38684 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728901AbhALQog (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 12 Jan 2021 11:44:36 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8D39223107;
+        Tue, 12 Jan 2021 16:43:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610469836;
+        bh=g4E+bclw7/LIvnoXNckYeAd/7C3OTd2i42XOkzm/MVY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=iHs07gX/5trwO15bYCQc1FYHvfza0jIyYDTz+nivAmXoEEfsyJGm00YW9QID6Rn7/
+         ic1zxpx9Txg8qjN/1Rz+rEKO4pCyhrZStQR9/THYbi/6aBLYFBKycRrt6s1jfTq8yV
+         OP2eJS9yUYkaOtRv3qlTp5aFEAv4ReGkz5T0Tne3AiYykWon1bNP/jMUZFnEcKj8yK
+         DNa/yaJBcfdsJQUagvAnpqDC+KV08LYqdlXBYRn/ZB/0tp783Mkp7O6Ecot35/bSrf
+         Bkv4Am3JXCCnV6SWJMrtIGV5LbXSNBz+N1XttBki7YlDJxEZSD9+b4TMB8WUR0VJ8U
+         6vdBRl7jz5gQg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Pavel Machek <pavel@denx.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     linux-spi@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+In-Reply-To: <20210107145329.27966-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20210107145329.27966-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH] spi: rpc-if: Gaurd .pm assignment with CONFIG_PM_SLEEP #ifdef check
+Message-Id: <161046980299.975.8508169983614840511.b4-ty@kernel.org>
+Date:   Tue, 12 Jan 2021 16:43:22 +0000
 MIME-Version: 1.0
-References: <20210112001301.687628-1-swboyd@chromium.org>
-In-Reply-To: <20210112001301.687628-1-swboyd@chromium.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 12 Jan 2021 07:33:59 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=WRx2+jh7P5rM5S+C2shwbJiZSJxpf_fe57D+KpB4bijw@mail.gmail.com>
-Message-ID: <CAD=FV=WRx2+jh7P5rM5S+C2shwbJiZSJxpf_fe57D+KpB4bijw@mail.gmail.com>
-Subject: Re: [PATCH v2] spi: spi-qcom-qspi: Use irq trigger flags from firmware
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Mukesh Kumar Savaliya <msavaliy@codeaurora.org>,
-        Akash Asthana <akashast@codeaurora.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+On Thu, 7 Jan 2021 14:53:29 +0000, Lad Prabhakar wrote:
+> With CONFIG_PM_SLEEP disabled the rpcif_spi_pm_ops variable is still
+> referenced and thus increasing the size of kernel.
+> 
+> Fix this issue by adding CONFIG_PM_SLEEP #ifdef check around the .pm
+> assignment (image size is critical on RZ/A SoC's where the SRAM sizes
+> range 4~5 MiB).
 
-On Mon, Jan 11, 2021 at 4:13 PM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> We don't need to force this to be trigger high here, as the firmware
-> properly configures the irq flags already. Drop it to save a line.
->
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: Rajendra Nayak <rnayak@codeaurora.org>
-> Cc: Mukesh Kumar Savaliya <msavaliy@codeaurora.org>
-> Cc: Akash Asthana <akashast@codeaurora.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->
-> Changes from v1:
->  * Rebased onto v5.11-rc1
->
->  drivers/spi/spi-qcom-qspi.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+Applied to
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: rpc-if: Gaurd .pm assignment with CONFIG_PM_SLEEP #ifdef check
+      commit: bfeccc6a18de52529ada66ea3afe934004b4b36e
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
