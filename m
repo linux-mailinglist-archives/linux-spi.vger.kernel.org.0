@@ -2,39 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0412F360A
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Jan 2021 17:45:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BB32F405A
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Jan 2021 01:47:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403943AbhALQog (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Jan 2021 11:44:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38684 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728901AbhALQog (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 12 Jan 2021 11:44:36 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8D39223107;
-        Tue, 12 Jan 2021 16:43:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610469836;
-        bh=g4E+bclw7/LIvnoXNckYeAd/7C3OTd2i42XOkzm/MVY=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=iHs07gX/5trwO15bYCQc1FYHvfza0jIyYDTz+nivAmXoEEfsyJGm00YW9QID6Rn7/
-         ic1zxpx9Txg8qjN/1Rz+rEKO4pCyhrZStQR9/THYbi/6aBLYFBKycRrt6s1jfTq8yV
-         OP2eJS9yUYkaOtRv3qlTp5aFEAv4ReGkz5T0Tne3AiYykWon1bNP/jMUZFnEcKj8yK
-         DNa/yaJBcfdsJQUagvAnpqDC+KV08LYqdlXBYRn/ZB/0tp783Mkp7O6Ecot35/bSrf
-         Bkv4Am3JXCCnV6SWJMrtIGV5LbXSNBz+N1XttBki7YlDJxEZSD9+b4TMB8WUR0VJ8U
-         6vdBRl7jz5gQg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Pavel Machek <pavel@denx.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     linux-spi@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>
-In-Reply-To: <20210107145329.27966-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20210107145329.27966-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH] spi: rpc-if: Gaurd .pm assignment with CONFIG_PM_SLEEP #ifdef check
-Message-Id: <161046980299.975.8508169983614840511.b4-ty@kernel.org>
-Date:   Tue, 12 Jan 2021 16:43:22 +0000
+        id S2387536AbhALXe3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Jan 2021 18:34:29 -0500
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:36775 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733047AbhALXe2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Jan 2021 18:34:28 -0500
+X-Originating-IP: 86.202.109.140
+Received: from localhost (lfbn-lyo-1-13-140.w86-202.abo.wanadoo.fr [86.202.109.140])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id A8AE81BF20B;
+        Tue, 12 Jan 2021 23:33:41 +0000 (UTC)
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Matt Mackall <mpm@selenic.com>,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        "David S. Miller" <davem@davemloft.net>,
+        Mark Brown <broonie@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-crypto@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-ide@vger.kernel.org, linux-spi@vger.kernel.org
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: (subset) [PATCH 00/10] Remove support for TX49xx
+Date:   Wed, 13 Jan 2021 00:33:30 +0100
+Message-Id: <161049432258.352381.2804715824942772218.b4-ty@bootlin.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210105140305.141401-1-tsbogend@alpha.franken.de>
+References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -42,38 +53,22 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 7 Jan 2021 14:53:29 +0000, Lad Prabhakar wrote:
-> With CONFIG_PM_SLEEP disabled the rpcif_spi_pm_ops variable is still
-> referenced and thus increasing the size of kernel.
+On Tue, 5 Jan 2021 15:02:45 +0100, Thomas Bogendoerfer wrote:
+> I couldn't find any buyable product other than reference boards using
+> TX49xx CPUs. And since nobody showed interest in keeping support for
+> it, it's time to remove it.
 > 
-> Fix this issue by adding CONFIG_PM_SLEEP #ifdef check around the .pm
-> assignment (image size is critical on RZ/A SoC's where the SRAM sizes
-> range 4~5 MiB).
+> I've split up the removal into seperate parts for different maintainers.
+> So if the patch fits your needs, please take it via your tree or
+> give me an ack so I can apply them  the mips-next tree.
+> 
+> [...]
 
-Applied to
+Applied, thanks!
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+[08/10] rtc: tx4939: Remove driver
+        commit: 446667df283002fdda0530523347ffd1cf053373
 
-Thanks!
-
-[1/1] spi: rpc-if: Gaurd .pm assignment with CONFIG_PM_SLEEP #ifdef check
-      commit: bfeccc6a18de52529ada66ea3afe934004b4b36e
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Best regards,
+-- 
+Alexandre Belloni <alexandre.belloni@bootlin.com>
