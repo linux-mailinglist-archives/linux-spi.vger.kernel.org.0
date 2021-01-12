@@ -2,87 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB92D2F30FD
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Jan 2021 14:16:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5242F3439
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Jan 2021 16:36:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729471AbhALNOZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Jan 2021 08:14:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54632 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404086AbhALM5o (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 12 Jan 2021 07:57:44 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 054432313A;
-        Tue, 12 Jan 2021 12:56:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610456172;
-        bh=byiYvvTnmGUoUR8k/HrJGd3sxguP1G+iK44YQb320ig=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W8EiMvW3Vhho/DRULq45qK43uOrofv7veSw7jDklsFM3nK46UR4KIZywrWNUeAd+k
-         88nZUNsw93JG5kpU5qqMtdb13XP4L2WK+8KMJ4mcKVsw9RMDGsVYHhgUslk2RkSi6G
-         bOOuYdwepU6Bi7wV7BYVg6ncrlgkFQcjhYmQTKjiTOXM1r4tGMzFcr/6o8CP7I4ATc
-         UqyCG16HVUkh4mrABMUmnK/6Z5wvRzu8it89+XRmY+I/mxGNJIwo+6A7xjmf2oaNWD
-         x8gHnO9WXXE+uzlRh/DKHYjMX8NIRGMCnlhyUOO0R0cZOoO7c60hAQMuqsIG4rIDZB
-         buSS2EaDucaoA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Xu Yilun <yilun.xu@intel.com>, Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 29/51] spi: fix the divide by 0 error when calculating xfer waiting time
-Date:   Tue, 12 Jan 2021 07:55:11 -0500
-Message-Id: <20210112125534.70280-29-sashal@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210112125534.70280-1-sashal@kernel.org>
-References: <20210112125534.70280-1-sashal@kernel.org>
+        id S2391719AbhALPfE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Jan 2021 10:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391716AbhALPfE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Jan 2021 10:35:04 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C0AC0617AA
+        for <linux-spi@vger.kernel.org>; Tue, 12 Jan 2021 07:34:13 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id b23so1638563vsp.9
+        for <linux-spi@vger.kernel.org>; Tue, 12 Jan 2021 07:34:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qxCZhN0HPYWVbJAFHzviClBBvfiktQzKxiUuI/WHb64=;
+        b=JwBBAAjWC19z8UsuWqxUc5kVg0wMb6EWFRHoz7kkGUngbEhRU+C6/MCHia57wDr8X9
+         Jd86Mt63DQEmW6eSaffdLzO7z7LiNnNGMHUe46zYzJcyQA6RGLKr4Kmg011Z0Emovi4/
+         at0IHPfJVaNEMbSJ/B0M5S6vGzvw1vRl459Eo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qxCZhN0HPYWVbJAFHzviClBBvfiktQzKxiUuI/WHb64=;
+        b=COVfa4dCzUsfB06+Unr3H9OektxCj/C0fjD5OgjHrqNuHQVSVNrJX4VEx8WM19FRsJ
+         LU/jIoayWrsZtxCrxnsTgw4e0h+Ow1yvJksAZY6d/F45/2QRmSs/1EEEpn0FJwA/oWPb
+         xmiDiwXyARXeK5x3bNfNe3o8r1AiAo7BsrwGNhNT0LyYwlt0Yt6MIeBu5MuZat1NMY3x
+         Ve2mh3cyyN/Ck58CqlL3G2fWJ77ySLSkLV+l/DA3tc2tpA0SIxF7WBGBq9W7GyrI5MgN
+         6d7Jz6bp45CCa02u/hlLPQHCHLMnS4oKmlvGyU+dLgfZlzTOvB7xKbFTKA2VIul29jJq
+         K0ag==
+X-Gm-Message-State: AOAM5333Yfu8Zn3w12ORjFPXR+vSNWasapItQSk3CU1d3HYB7EST22KM
+        oIiZAOqzminEnVvHRMXAlGBE+4p5po0tiQ==
+X-Google-Smtp-Source: ABdhPJziCFnCkgzByDunalhNmYpnTlf1GCMudwDCktJzFMyXZnyYFWZ6SIBbmsNCHy4y7OlR0nK07A==
+X-Received: by 2002:a67:882:: with SMTP id 124mr1197471vsi.33.1610465652800;
+        Tue, 12 Jan 2021 07:34:12 -0800 (PST)
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com. [209.85.221.172])
+        by smtp.gmail.com with ESMTPSA id l20sm405257vsr.29.2021.01.12.07.34.11
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jan 2021 07:34:11 -0800 (PST)
+Received: by mail-vk1-f172.google.com with SMTP id e27so699772vkn.2
+        for <linux-spi@vger.kernel.org>; Tue, 12 Jan 2021 07:34:11 -0800 (PST)
+X-Received: by 2002:ac5:cde4:: with SMTP id v4mr4651199vkn.21.1610465651285;
+ Tue, 12 Jan 2021 07:34:11 -0800 (PST)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20210112001301.687628-1-swboyd@chromium.org>
+In-Reply-To: <20210112001301.687628-1-swboyd@chromium.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 12 Jan 2021 07:33:59 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WRx2+jh7P5rM5S+C2shwbJiZSJxpf_fe57D+KpB4bijw@mail.gmail.com>
+Message-ID: <CAD=FV=WRx2+jh7P5rM5S+C2shwbJiZSJxpf_fe57D+KpB4bijw@mail.gmail.com>
+Subject: Re: [PATCH v2] spi: spi-qcom-qspi: Use irq trigger flags from firmware
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Mukesh Kumar Savaliya <msavaliy@codeaurora.org>,
+        Akash Asthana <akashast@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Xu Yilun <yilun.xu@intel.com>
+Hi,
 
-[ Upstream commit 6170d077bf92c5b3dfbe1021688d3c0404f7c9e9 ]
+On Mon, Jan 11, 2021 at 4:13 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> We don't need to force this to be trigger high here, as the firmware
+> properly configures the irq flags already. Drop it to save a line.
+>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: Rajendra Nayak <rnayak@codeaurora.org>
+> Cc: Mukesh Kumar Savaliya <msavaliy@codeaurora.org>
+> Cc: Akash Asthana <akashast@codeaurora.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>
+> Changes from v1:
+>  * Rebased onto v5.11-rc1
+>
+>  drivers/spi/spi-qcom-qspi.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 
-The xfer waiting time is the result of xfer->len / xfer->speed_hz. This
-patch makes the assumption of 100khz xfer speed if the xfer->speed_hz is
-not assigned and stays 0. This avoids the divide by 0 issue and ensures
-a reasonable tolerant waiting time.
-
-Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-Link: https://lore.kernel.org/r/1609723749-3557-1-git-send-email-yilun.xu@intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 2eaa7dbb70108..7694e1ae5b0b2 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1100,6 +1100,7 @@ static int spi_transfer_wait(struct spi_controller *ctlr,
- {
- 	struct spi_statistics *statm = &ctlr->statistics;
- 	struct spi_statistics *stats = &msg->spi->statistics;
-+	u32 speed_hz = xfer->speed_hz;
- 	unsigned long long ms;
- 
- 	if (spi_controller_is_slave(ctlr)) {
-@@ -1108,8 +1109,11 @@ static int spi_transfer_wait(struct spi_controller *ctlr,
- 			return -EINTR;
- 		}
- 	} else {
-+		if (!speed_hz)
-+			speed_hz = 100000;
-+
- 		ms = 8LL * 1000LL * xfer->len;
--		do_div(ms, xfer->speed_hz);
-+		do_div(ms, speed_hz);
- 		ms += ms + 200; /* some tolerance */
- 
- 		if (ms > UINT_MAX)
--- 
-2.27.0
-
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
