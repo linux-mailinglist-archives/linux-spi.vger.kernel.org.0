@@ -2,41 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80EB22F4EB7
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Jan 2021 16:32:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0292F4EBB
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Jan 2021 16:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727162AbhAMP3p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Jan 2021 10:29:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33826 "EHLO mail.kernel.org"
+        id S1727130AbhAMP3z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Jan 2021 10:29:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33988 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727171AbhAMP3o (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 13 Jan 2021 10:29:44 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9F54F233EA;
-        Wed, 13 Jan 2021 15:29:03 +0000 (UTC)
+        id S1726779AbhAMP3z (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 13 Jan 2021 10:29:55 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3A50023447;
+        Wed, 13 Jan 2021 15:29:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610551744;
-        bh=bWsINNChrgBVID6nsVHR+SPM6eCH/SYMN0yzKSvyWLI=;
+        s=k20201202; t=1610551754;
+        bh=Xa/4cpk6WRT4Je2DTLHBVP565AvV4yzmpFLqBfU3h34=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=XMP2/xx8ExtxJfyOqTZWgN0c/YBvqPnFh8VaLHcBswHGtFWbgsfN9YKpB0TMerCPJ
-         yZPW+qv5gJ/qfncbHsAQF/GFt7RVJfeQcEDveTY3ijkQvRuzkNktbhUZBIN20nTlFF
-         gQi3LJbBcBuK3+6tckwmyRd2NGuLS7rqIcUE8tS1412Or/Q6oXaHbFmfn5YZA+PrUA
-         oBhZuSnErzsjj1IKDV3NJUVn9/y8Ju1SI0U6gUbaCyCCBNAzqCm/rmePtfkfF7bDQg
-         T/h0UOeT7daQN8SuwBrygx1o8UiK58yhPOZQMbSxVjA5JybE/zIG6Tg4EYZMmM6EQG
-         d9xq+l1SD+iZw==
+        b=GYNAm7OT26Qh+b/qFrq17EV+Q6O2kFxn1h21Q8WagYhUoAcUKQ0XWpsd0TIYNsOh3
+         2Rzn//LqNOU5R8QupPjWARjmQ2Rux0qfBascrMvCwQQUytMoOHB6z9NIa3Loa+xXgG
+         M0YkHHoP2CN2qDueamDjwL6LUhRQq5zOyEtpAzFZQZkALMc/0dzOCRZkZNri5qrH/q
+         hHsMTxownUbwzPDU08z8JQjbXO8AyDZ/VurwZ70cscHqmpR9tXtDQ7gowpqENnvOoM
+         x5bGa3Nwoch0rIoalC8+PkUtVXbiEfX4B92HQLI/8scdjtiIAPy5O/TKOXUqcsZvgg
+         Dyq17ZPimKKYA==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, Marek Vasut <marex@denx.de>
-Cc:     Amelie Delaunay <amelie.delaunay@st.com>,
-        Alain Volmat <alain.volmat@st.com>,
-        Antonio Borneo <antonio.borneo@st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Roman Guskov <rguskov@dh-electronics.com>
-In-Reply-To: <20210104123114.261596-1-marex@denx.de>
-References: <20210104123114.261596-1-marex@denx.de>
-Subject: Re: [PATCH] spi: stm32: Simplify stm32h7_spi_prepare_fthlv()
-Message-Id: <161055171029.21847.15772313801435250449.b4-ty@kernel.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Mukesh Kumar Savaliya <msavaliy@codeaurora.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Akash Asthana <akashast@codeaurora.org>
+In-Reply-To: <20201213052948.308263-1-swboyd@chromium.org>
+References: <20201213052948.308263-1-swboyd@chromium.org>
+Subject: Re: [PATCH] spi: spi-qcom-qspi: Use irq trigger flags from firmware
+Message-Id: <161055171028.21847.6863638399695430601.b4-ty@kernel.org>
 Date:   Wed, 13 Jan 2021 15:28:30 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -45,9 +43,9 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 4 Jan 2021 13:31:14 +0100, Marek Vasut wrote:
-> Simplify stm32h7_spi_prepare_fthlv() function implementation,
-> no functional change intended.
+On Sat, 12 Dec 2020 21:29:48 -0800, Stephen Boyd wrote:
+> We don't need to force this to be trigger high here, as the firmware
+> properly configures the irq flags already. Drop it to save a line.
 
 Applied to
 
@@ -55,8 +53,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: stm32: Simplify stm32h7_spi_prepare_fthlv()
-      commit: 970e8eaa08195a26ba99ec0843968cbc7ad8e947
+[1/1] spi: spi-qcom-qspi: Use irq trigger flags from firmware
+      commit: eaecba8767835783bdd2f4e72406668cda7d8d54
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
