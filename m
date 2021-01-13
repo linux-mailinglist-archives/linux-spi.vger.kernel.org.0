@@ -2,61 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 530EE2F40CA
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Jan 2021 01:57:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B48D2F40C8
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Jan 2021 01:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392451AbhAMAnH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S2392320AbhAMAnH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Tue, 12 Jan 2021 19:43:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392082AbhAMACP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Jan 2021 19:02:15 -0500
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77CBC061786
-        for <linux-spi@vger.kernel.org>; Tue, 12 Jan 2021 16:01:34 -0800 (PST)
-Received: by mail-ua1-x932.google.com with SMTP id a31so119910uae.11
-        for <linux-spi@vger.kernel.org>; Tue, 12 Jan 2021 16:01:34 -0800 (PST)
+        with ESMTP id S2392097AbhAMACz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Jan 2021 19:02:55 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D403FC0617A4
+        for <linux-spi@vger.kernel.org>; Tue, 12 Jan 2021 16:01:39 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id z16so170441vsp.5
+        for <linux-spi@vger.kernel.org>; Tue, 12 Jan 2021 16:01:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=gfg+2keY06YZ/nx+eb2Z99bZR0RVYNOSVsua7Gb4moA=;
-        b=B+wv9FJSTXj8xIq83DoHItpz41AE9YM0wq5yOyeovHKGBNQjHVj+oWO6ZhjerMllRa
-         KBug0H5JNGNHwwCUwnxZO5N5diJc71qpHxNw+kMfIJc51XF6Y/bhNtC0DkA7FG5WtnW9
-         HpzWgT2DdTkLfxXg/Q6xi0XYG2KssKpVFgNyc=
+        bh=X1O0kACakbx2RcXU3rpwMtnI8YwFi/QQJx5lWup4tPs=;
+        b=TDD54LXJMIOHuHC7yNuKWAIpA7mi5lm/OaZT3vtTzB+EkbjAgXxIfvyiLWCvNt2eYd
+         7H015wWHRDVue0tnkGew/FoTWBQN5+AKOCCqt1KtEX+CVdeCsXBTX39Zm+9qh7Cme+C7
+         HYZTgCC2CbUmmy71bvcExAzSpON5Y5i8fhc5Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gfg+2keY06YZ/nx+eb2Z99bZR0RVYNOSVsua7Gb4moA=;
-        b=o8Zpa7LsdYUyszrg8k9QnxnFdz/4xtj0gp5T7IGy4xf4xYUwaQ79BNgHBQp6JrbS5k
-         k9uUPFW5Dmd+SjyiyoSfGlccWjMDa37R5jfLMTZYC0biAIAJJEupeT971nji+gPCtWDS
-         /OobYnCqIEvlhb5Y3Z6DgRf59NmFUQzGGbR5qqpVIkty9vtL/KaRLyesHjlrATFBFF2U
-         GIJ/ZHGQBiiiA1ggN9uVH8STXKYyDmTVU2mi6Z+2JiCBsFSzCzoFdMAa2GDoGR3+s1Ai
-         vCdjPGeZx+ECMssZhJmLmkZ0UJEozGwYawh8mWtRiY47B0HmjnQG1y12cGis4fPTfZSV
-         5sMA==
-X-Gm-Message-State: AOAM533FZmdodJMLLmz08IkkgANb0P4KVD84U03LCxhHArObUTjQhLKZ
-        1IC8NDxGR2goY/lrZWy1Ea1Az0gERKvnoQ==
-X-Google-Smtp-Source: ABdhPJxanzCeos3nl7Lc7EHSEVfEsF6jDsXSNVm6xAJRhHlpJ6YrPbOHQtpabUd41S4NBli4yeZYww==
-X-Received: by 2002:ab0:4064:: with SMTP id h91mr1764359uad.73.1610496093286;
-        Tue, 12 Jan 2021 16:01:33 -0800 (PST)
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
-        by smtp.gmail.com with ESMTPSA id 50sm50379uav.19.2021.01.12.16.01.31
+        bh=X1O0kACakbx2RcXU3rpwMtnI8YwFi/QQJx5lWup4tPs=;
+        b=fk54ZRT8Y8Hjp1wc+DSc98UA9iuC32bnACXmULi5JQ9cokkE7Peb7YZ3WqH26Df1ky
+         jcSVF3DIDpOL/zVJ8+QKPukOVXHdy8/Bun6Ec8p6AsLX+hrZ3VxZo2DEWx+SVMO1yRjx
+         8iiA7R2cluFfy+2A7AruV4RwiMg5wi+8x+fFdnipwh0I3at/BwgQASFP56F7MhGPmjIT
+         0PX5Rmc2i6Knry+cq763qBjg1IX/mA1apG2xcyeSs5pzWg2JC9MNOubH4kIquxKrtVkx
+         nOxNdf4WCWc2uUzw59bVhwHeEg4AwRqRJupJllsn+QuANSsHZWOZfQ84aU1qNwRL1NAG
+         zBQw==
+X-Gm-Message-State: AOAM5315hZgoUI/BHWcyGz8z1kXxJnsK1LQxCQL0CrfOE4UIDX8g/Kjv
+        icMlNTnspDQH2ov44SV7cL6GrdIh7YZiPg==
+X-Google-Smtp-Source: ABdhPJy8sXONEm9NTGxXSX3mNId9wzLv9+kEtfrcNdmQC8sZHncEouheEyuYsf4WQ0bWPVIlgjszpw==
+X-Received: by 2002:a05:6102:93:: with SMTP id t19mr1947909vsp.57.1610496098485;
+        Tue, 12 Jan 2021 16:01:38 -0800 (PST)
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com. [209.85.217.51])
+        by smtp.gmail.com with ESMTPSA id n20sm22989vsa.21.2021.01.12.16.01.37
         for <linux-spi@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jan 2021 16:01:31 -0800 (PST)
-Received: by mail-vs1-f41.google.com with SMTP id x4so161414vsp.7
-        for <linux-spi@vger.kernel.org>; Tue, 12 Jan 2021 16:01:31 -0800 (PST)
-X-Received: by 2002:a67:e286:: with SMTP id g6mr1897886vsf.42.1610496091010;
- Tue, 12 Jan 2021 16:01:31 -0800 (PST)
+        Tue, 12 Jan 2021 16:01:37 -0800 (PST)
+Received: by mail-vs1-f51.google.com with SMTP id e15so183248vsa.0
+        for <linux-spi@vger.kernel.org>; Tue, 12 Jan 2021 16:01:37 -0800 (PST)
+X-Received: by 2002:a67:7385:: with SMTP id o127mr2228991vsc.8.1610496096878;
+ Tue, 12 Jan 2021 16:01:36 -0800 (PST)
 MIME-Version: 1.0
-References: <20210111151651.1616813-1-vkoul@kernel.org> <20210111151651.1616813-5-vkoul@kernel.org>
-In-Reply-To: <20210111151651.1616813-5-vkoul@kernel.org>
+References: <20210111151651.1616813-1-vkoul@kernel.org>
+In-Reply-To: <20210111151651.1616813-1-vkoul@kernel.org>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 12 Jan 2021 16:01:18 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XmfpQXhK_tKor-ta+5dqT-aq7OnV1e=VY-vMuXmUQEfQ@mail.gmail.com>
-Message-ID: <CAD=FV=XmfpQXhK_tKor-ta+5dqT-aq7OnV1e=VY-vMuXmUQEfQ@mail.gmail.com>
-Subject: Re: [PATCH 4/7] spi: spi-geni-qcom: Add support for GPI dma
+Date:   Tue, 12 Jan 2021 16:01:24 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=XvgP5j3ikCnr2zDptFbWPRQhGGQotqyFGmN7NWNP8knA@mail.gmail.com>
+Message-ID: <CAD=FV=XvgP5j3ikCnr2zDptFbWPRQhGGQotqyFGmN7NWNP8knA@mail.gmail.com>
+Subject: Re: [PATCH 0/7] Add and enable GPI DMA users
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>,
@@ -76,210 +76,33 @@ Hi,
 
 On Mon, Jan 11, 2021 at 7:17 AM Vinod Koul <vkoul@kernel.org> wrote:
 >
-> We can use GPI DMA for devices where it is enabled by firmware. Add
-> support for this mode
+> Hello,
 >
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->  drivers/spi/spi-geni-qcom.c | 395 +++++++++++++++++++++++++++++++++++-
->  1 file changed, 384 insertions(+), 11 deletions(-)
-
-I did a somewhat cursory review, mostly focusing on making sure that
-the non-GPI/GSI stuff doesn't regress.  ;-)  I think you've already
-got a bunch of feedback for v2 so I'll plan to look back when I see
-the v2 and maybe will find time to look at some of the GSI/GPI stuff
-too...
-
-
-> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-> index 512e925d5ea4..5bb0e2192734 100644
-> --- a/drivers/spi/spi-geni-qcom.c
-> +++ b/drivers/spi/spi-geni-qcom.c
-> @@ -2,6 +2,8 @@
->  // Copyright (c) 2017-2018, The Linux foundation. All rights reserved.
+> This series add the GPI DMA in qcom geni spi and i2c drivers. For this we
+> first need to move GENI_IF_DISABLE_RO and struct geni_wrapper to common
+> headers and then add support for gpi dma in geni driver.
 >
->  #include <linux/clk.h>
-> +#include <linux/dmaengine.h>
-> +#include <linux/dma-mapping.h>
->  #include <linux/interrupt.h>
->  #include <linux/io.h>
->  #include <linux/log2.h>
-> @@ -10,6 +12,7 @@
->  #include <linux/pm_opp.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/qcom-geni-se.h>
-> +#include <linux/dma/qcom-gpi-dma.h>
-
-nit: sort ordering doesn't match other includes.  It seems like
-existing includes in this file are sorted ignoring subdirs.
-
-
->  static int spi_geni_prepare_message(struct spi_master *spi,
->                                         struct spi_message *spi_msg)
->  {
->         int ret;
->         struct spi_geni_master *mas = spi_master_get_devdata(spi);
-> +       struct geni_se *se = &mas->se;
-> +
-> +       mas->cur_xfer_mode = get_xfer_mode(spi);
-> +
-> +       if (mas->cur_xfer_mode == GENI_SE_FIFO) {
-> +               geni_se_select_mode(se, GENI_SE_FIFO);
-
-You don't need to do this over and over again.  We set up FIFO mode in
-spi_geni_init() and it'll never change.
-
-
-> +               reinit_completion(&mas->xfer_done);
-> +               ret = setup_fifo_params(spi_msg->spi, spi);
-> +               if (ret)
-> +                       dev_err(mas->dev, "Couldn't select mode %d\n", ret);
-> +
-> +       } else if (mas->cur_xfer_mode == GENI_GPI_DMA) {
-> +               mas->num_tx_eot = 0;
-> +               mas->num_rx_eot = 0;
-> +               mas->num_xfers = 0;
-> +               reinit_completion(&mas->tx_cb);
-> +               reinit_completion(&mas->rx_cb);
-> +               memset(mas->gsi, 0, (sizeof(struct spi_geni_gsi) * NUM_SPI_XFER));
-> +               geni_se_select_mode(se, GENI_GPI_DMA);
-> +               ret = spi_geni_map_buf(mas, spi_msg);
-> +
-
-Extra blank line?
-
-> +       } else {
-> +               dev_err(mas->dev, "%s: Couldn't select mode %d", __func__, mas->cur_xfer_mode);
-
-Please no __func__ in error messages unless you're doing a non-"dev"
-print.  If you want to fill your log with function names you should
-redefine the generic dev_xxx() functions to prefix "__func__" in your
-own kernel.  You probably don't even need a printout here since
-get_xfer_mode() already printed.
-
-
-> +static int spi_geni_unprepare_message(struct spi_master *spi_mas, struct spi_message *spi_msg)
-> +{
-> +       struct spi_geni_master *mas = spi_master_get_devdata(spi_mas);
-> +
-> +       mas->cur_speed_hz = 0;
-> +       mas->cur_bits_per_word = 0;
-
-I think doing the above zeros will make the code a bunch slower for
-FIFO mode.  Specifically we can avoid a whole bunch of (very slow)
-interconnect code if the speed doesn't change between transfers and
-the runtime PM auto power down hasn't hit.
-
-
-> @@ -328,8 +609,34 @@ static int spi_geni_init(struct spi_geni_master *mas)
->         spi_tx_cfg &= ~CS_TOGGLE;
->         writel(spi_tx_cfg, se->base + SE_SPI_TRANS_CFG);
+> Then we add spi and i2c geni driver changes to support this DMA.
 >
-> +       mas->tx = dma_request_slave_channel(mas->dev, "tx");
-> +       if (IS_ERR_OR_NULL(mas->tx)) {
-
-I didn't look too closely at this since I think Mark wanted you to
-look into the core DMA support, but...
-
-In general, don't you only need to do the DMA requests if you're in GPI mode?
-
-
-> +               dev_err(mas->dev, "Failed to get tx DMA ch %ld", PTR_ERR(mas->tx));
-> +               ret = PTR_ERR(mas->tx);
-> +               goto out_pm;
-> +       } else {
-
-No need for else since last "if" ended up with goto".
-
-
-> +               mas->rx = dma_request_slave_channel(mas->dev, "rx");
-> +               if (IS_ERR_OR_NULL(mas->rx)) {
-> +                       dev_err(mas->dev, "Failed to get rx DMA ch %ld", PTR_ERR(mas->rx));
-> +                       dma_release_channel(mas->tx);
-> +                       ret = PTR_ERR(mas->rx);
-> +                       goto out_pm;
-> +               }
-> +
-> +               gsi_sz = sizeof(struct spi_geni_gsi) * NUM_SPI_XFER;
-> +               mas->gsi = devm_kzalloc(mas->dev, gsi_sz, GFP_KERNEL);
-> +               if (IS_ERR_OR_NULL(mas->gsi)) {
-
-Is it ever an error?  Just check against NULL?
-
-
-> +                       dma_release_channel(mas->tx);
-> +                       dma_release_channel(mas->rx);
-> +                       mas->tx = NULL;
-> +                       mas->rx = NULL;
-
-ret = -ENOMEM ?
-
-
->  static unsigned int geni_byte_per_fifo_word(struct spi_geni_master *mas)
-> @@ -457,6 +765,11 @@ static void setup_fifo_xfer(struct spi_transfer *xfer,
->                 len = xfer->len / (mas->cur_bits_per_word / BITS_PER_BYTE + 1);
->         len &= TRANS_LEN_MSK;
+> Lastly, add the GPI dma nodes and enable dma for spi found in Rb3 board.
 >
-> +       if (!xfer->cs_change) {
-> +               if (!list_is_last(&xfer->transfer_list, &spi->cur_msg->transfers))
-> +                       m_param |= FRAGMENTATION;
-> +       }
+> To merge this, we could merge all thru qcom tree with ack on spi/i2c.
 
-Why are you changing this?  It's for FIFO mode which works correctly
-the way it is.  We _always_ want the FRAGMENTATION bit set because we
-explicitly set the CS.  I haven't tried it, but I'd imagine this
-change breaks stuff?  I'd expect all changes in setup_fifo_xfer() to
-be removed from your patch.  If there's some reason you need them then
-post a separate patch.
+It'd be super great if somewhere (ideally in the commit message and
+maybe somewhere in the code) you could talk more about the different
+modes.  Maybe something like this (if it's correct):
 
+GPI Mode (confusingly, also known as "GSI" mode in some places): In
+this mode something else running on the SoC is sharing access to the
+geni instance.  This mode allows sharing the device between the Linux
+kernel and other users including handling the fact that other users
+might be running the geni port at a different clock rate.  GPI mode
+limits what you can do with a port.  For instance, direct control of
+chip select is not allowed.  NOTE: if firmware has configured a geni
+instance for GPI then FIFO and SE_DMA usage is not allowed.
+Conversely, if firmware has not configured a geni instance for GPI
+then only FIFO and SE_DMA usage is allowed.
 
-> @@ -494,13 +807,52 @@ static int spi_geni_transfer_one(struct spi_master *spi,
->                                 struct spi_transfer *xfer)
->  {
->         struct spi_geni_master *mas = spi_master_get_devdata(spi);
-> +       unsigned long timeout, jiffies;
+SE DMA Mode: Data transfers happen over DMA.
 
-Doesn't this shadow the global "jiffies"?
-
-
-> +       int ret = 0i, i;
->
->         /* Terminate and return success for 0 byte length transfer */
->         if (!xfer->len)
-> -               return 0;
-> +               return ret;
-
-It feels more documenting to just leave this as "return 0".
-
-
-> +
-> +       if (mas->cur_xfer_mode == GENI_SE_FIFO) {
-> +               setup_fifo_xfer(xfer, mas, slv->mode, spi);
-
-It's super important to return "1" in this case to tell the SPI core
-that you left the transfer in progress.  You don't do that anymore, so
-boom.
-
-
-> +       } else {
-> +               setup_gsi_xfer(xfer, mas, slv, spi);
-
-This feels very non-symmetric.  In the FIFO case you just call a
-function.  in the GSI case you have a whole pile of stuff inline.  Can
-all the stuff below be stuck in setup_gsi_xfer() or maybe you can add
-an extra wrapper function?  That means you don't need the weird goto
-flow in this function...
-
-> @@ -661,6 +1025,15 @@ static int spi_geni_probe(struct platform_device *pdev)
->         if (ret)
->                 goto spi_geni_probe_runtime_disable;
->
-> +       /*
-> +        * query the mode supported and set_cs for fifo mode only
-> +        * for dma (gsi) mode, the gsi will set cs based on params passed in
-> +        * TRE
-> +        */
-> +       mas->cur_xfer_mode = get_xfer_mode(spi);
-> +       if (mas->cur_xfer_mode == GENI_SE_FIFO)
-
-nit: check against != GPI mode?
+SE FIFO Mode: Data is manually transferred into the FIFO by the CPU.
