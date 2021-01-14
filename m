@@ -2,103 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1822F64EA
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Jan 2021 16:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8802E2F6657
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Jan 2021 17:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729307AbhANPjq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 14 Jan 2021 10:39:46 -0500
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:12340 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726810AbhANPjq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 14 Jan 2021 10:39:46 -0500
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10EFZqg7016149;
-        Thu, 14 Jan 2021 10:39:05 -0500
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com with ESMTP id 35y779gygd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 Jan 2021 10:39:04 -0500
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 10EFd3BK009888
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Thu, 14 Jan 2021 10:39:03 -0500
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1779.2; Thu, 14 Jan
- 2021 10:39:02 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
- Transport; Thu, 14 Jan 2021 10:39:02 -0500
-Received: from localhost.localdomain ([10.48.65.12])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 10EFd1oT023272;
-        Thu, 14 Jan 2021 10:39:01 -0500
-From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
-To:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <broonie@kernel.org>, <harinik@xilinx.com>,
-        <michael.hennerich@analog.com>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>
-Subject: [PATCH] spi: cadence: cache reference clock rate during probe
-Date:   Thu, 14 Jan 2021 17:42:17 +0200
-Message-ID: <20210114154217.51996-1-alexandru.ardelean@analog.com>
-X-Mailer: git-send-email 2.17.1
+        id S1727143AbhANQuA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 14 Jan 2021 11:50:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51690 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726881AbhANQuA (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 14 Jan 2021 11:50:00 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 10D7523B2F;
+        Thu, 14 Jan 2021 16:49:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610642959;
+        bh=65pHwfEnxIO+KB+8lFvkgezdzPtnmMUdO//94olI6vI=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=jHfHFDrkdgJpDwQVRHeWH7b30XpaXrfdc82v4IFN913LRBw0YvDm28IVCZClxBv0L
+         l7LUzN1ljXzazxofxAQZ5MJYb00sqpIAvYqGSdQbkHXVwUM25k+1TkkzhD66+oIAY+
+         95aMx6p1Opg1xcRBLduZ/ST/jTvH2066akpcZvnzYPm8FxfNSe0uH9gWrKL13G8vgI
+         d7nurpcITHiVvedCfSIF0ox6wSYRJxF8q+88fj5bLADaXXFgcjAz89kAGc5FB9TlQy
+         IAFlMGOvUHhEKGTzSywqhiqlF/UlcFaM9oQKdBDF+I2un/Iqrg4UelvIF9VHwtX8v2
+         QcnNQGduZPXSg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Sven Van Asbroeck <thesven73@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-spi@vger.kernel.org
+In-Reply-To: <6b51cc2bfbca70d3e9b9da7b7aa4c7a9d793ca0e.1610629002.git.christophe.leroy@csgroup.eu>
+References: <6b51cc2bfbca70d3e9b9da7b7aa4c7a9d793ca0e.1610629002.git.christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH] spi: fsl: Fix driver breakage when SPI_CS_HIGH is not set in spi->mode
+Message-Id: <161064292109.43781.3127571598832303421.b4-ty@kernel.org>
+Date:   Thu, 14 Jan 2021 16:48:41 +0000
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2021-01-14_05:2021-01-14,2021-01-14 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- mlxscore=0 spamscore=0 mlxlogscore=999 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 clxscore=1011 phishscore=0 adultscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2101140090
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Michael Hennerich <michael.hennerich@analog.com>
+On Thu, 14 Jan 2021 13:09:37 +0000 (UTC), Christophe Leroy wrote:
+> Commit 766c6b63aa04 ("spi: fix client driver breakages when using GPIO
+> descriptors") broke fsl spi driver.
+> 
+> As now we fully rely on gpiolib for handling the polarity of
+> chip selects, the driver shall not alter the GPIO value anymore
+> when SPI_CS_HIGH is not set in spi->mode.
 
-The issue is that using SPI from a callback under the CCF lock will
-deadlock, since this code uses clk_get_rate().
+Applied to
 
-Fixes: c474b38665463 ("spi: Add driver for Cadence SPI controller")
-Signed-off-by: Michael Hennerich <michael.hennerich@analog.com>
-Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
----
- drivers/spi/spi-cadence.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
-index 70467b9d61ba..a3afd1b9ac56 100644
---- a/drivers/spi/spi-cadence.c
-+++ b/drivers/spi/spi-cadence.c
-@@ -115,6 +115,7 @@ struct cdns_spi {
- 	void __iomem *regs;
- 	struct clk *ref_clk;
- 	struct clk *pclk;
-+	unsigned int clk_rate;
- 	u32 speed_hz;
- 	const u8 *txbuf;
- 	u8 *rxbuf;
-@@ -250,7 +251,7 @@ static void cdns_spi_config_clock_freq(struct spi_device *spi,
- 	u32 ctrl_reg, baud_rate_val;
- 	unsigned long frequency;
- 
--	frequency = clk_get_rate(xspi->ref_clk);
-+	frequency = xspi->clk_rate;
- 
- 	ctrl_reg = cdns_spi_read(xspi, CDNS_SPI_CR);
- 
-@@ -558,8 +559,9 @@ static int cdns_spi_probe(struct platform_device *pdev)
- 	master->auto_runtime_pm = true;
- 	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH;
- 
-+	xspi->clk_rate = clk_get_rate(xspi->ref_clk);
- 	/* Set to default valid value */
--	master->max_speed_hz = clk_get_rate(xspi->ref_clk) / 4;
-+	master->max_speed_hz = xspi->clk_rate / 4;
- 	xspi->speed_hz = master->max_speed_hz;
- 
- 	master->bits_per_word_mask = SPI_BPW_MASK(8);
--- 
-2.17.1
+Thanks!
 
+[1/1] spi: fsl: Fix driver breakage when SPI_CS_HIGH is not set in spi->mode
+      commit: 7a2da5d7960a64ee923fe3e31f01a1101052c66f
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
