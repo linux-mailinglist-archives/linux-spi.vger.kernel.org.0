@@ -2,71 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2082E2FA671
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Jan 2021 17:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5A92FA807
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Jan 2021 18:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404845AbhARQjl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 18 Jan 2021 11:39:41 -0500
-Received: from honk.sigxcpu.org ([24.134.29.49]:51462 "EHLO honk.sigxcpu.org"
+        id S2436653AbhARRxt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 18 Jan 2021 12:53:49 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48174 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405747AbhARQja (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 18 Jan 2021 11:39:30 -0500
-X-Greylist: delayed 430 seconds by postgrey-1.27 at vger.kernel.org; Mon, 18 Jan 2021 11:39:29 EST
-Received: from localhost (localhost [127.0.0.1])
-        by honk.sigxcpu.org (Postfix) with ESMTP id 7B115FB03;
-        Mon, 18 Jan 2021 17:31:12 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
-Received: from honk.sigxcpu.org ([127.0.0.1])
-        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Pbhew2sWb8fE; Mon, 18 Jan 2021 17:31:11 +0100 (CET)
-Received: by bogon.sigxcpu.org (Postfix, from userid 1000)
-        id BDF5040885; Mon, 18 Jan 2021 17:31:10 +0100 (CET)
-From:   =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
-To:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Trent Piepho <tpiepho@impinj.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: imx: Don't print error on -EPROBEDEFER
-Date:   Mon, 18 Jan 2021 17:31:10 +0100
-Message-Id: <0f51ab42e7c7a3452f2f8652794d81584303ea0d.1610987414.git.agx@sigxcpu.org>
-X-Mailer: git-send-email 2.29.2
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        id S2436713AbhARRxs (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 18 Jan 2021 12:53:48 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 44A5320829;
+        Mon, 18 Jan 2021 17:53:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610992387;
+        bh=0OQWgKZQ6VGf6zu4G8sKJqZ/sYzVV9HDJ8zCK16fQbU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Q5bFs066xeFa+TKXr8qDQf+VNQtJ5K0GJM7YsMKAtVElRfaEF3Kp7ZixzKQj9jqHB
+         HCxjziWB494pclOdRf0LSXzlTgOi0fBEf8fodxZoXm9z304Xvn8if5mAd2S/GTXR09
+         IVZxhs2xWys0B57e7KqoXjDjCxe7D/BxSHV2qK9McGFdCGQmbPGi9igJu3xLyMR0Qp
+         xaTB+XneI0/V6p6KtfYtIFkFmq0xcsyfg4mszbmKOW6QtmGyWxlSqSl3uIDikYoHQj
+         36ZVzbO83L3z1/egKnn9qNlzsY0GDCOBsWCvgcyyDHnVgYRtjTHaRoxyuUOsiNZ9zj
+         4OpxwlI1pgZ6w==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v5.11-rc4
+Date:   Mon, 18 Jan 2021 17:52:20 +0000
+Message-Id: <20210118175307.44A5320829@mail.kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This avoids
+The following changes since commit 7c53f6b671f4aba70ff15e1b05148b10d58c2837:
 
-[    0.962538] spi_imx 30820000.spi: bitbang start failed with -517
+  Linux 5.11-rc3 (2021-01-10 14:34:50 -0800)
 
-durig driver probe.
+are available in the Git repository at:
 
-Fixes: 8197f489f4c4 ("spi: imx: Fix failure path leak on GPIO request error correctly")
-Signed-off-by: Guido Günther <agx@sigxcpu.org>
----
- drivers/spi/spi-imx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.11-rc4
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 73ca821763d6..5dc4ea4b4450 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -1685,7 +1685,7 @@ static int spi_imx_probe(struct platform_device *pdev)
- 	master->dev.of_node = pdev->dev.of_node;
- 	ret = spi_bitbang_start(&spi_imx->bitbang);
- 	if (ret) {
--		dev_err(&pdev->dev, "bitbang start failed with %d\n", ret);
-+		dev_err_probe(&pdev->dev, ret, "bitbang start failed\n");
- 		goto out_bitbang_start;
- 	}
- 
--- 
-2.29.2
+for you to fetch changes up to 4d163ad79b155c71bf30366dc38f8d2502f78844:
 
+  spi: cadence: cache reference clock rate during probe (2021-01-15 14:14:38 +0000)
+
+----------------------------------------------------------------
+spi: Fixes for v5.11
+
+A few more bug fixes for SPI, both driver specific ones.  The caching in
+the Cadence driver is to avoid a deadlock trying to retrieve the cached
+value later at runtime.
+
+----------------------------------------------------------------
+Christophe Leroy (1):
+      spi: fsl: Fix driver breakage when SPI_CS_HIGH is not set in spi->mode
+
+Michael Hennerich (1):
+      spi: cadence: cache reference clock rate during probe
+
+ drivers/spi/spi-cadence.c | 6 ++++--
+ drivers/spi/spi-fsl-spi.c | 5 ++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
