@@ -2,72 +2,154 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B2D22F8436
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Jan 2021 19:23:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9BA2F97B5
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Jan 2021 03:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733246AbhAOSVo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 15 Jan 2021 13:21:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44098 "EHLO mail.kernel.org"
+        id S1731194AbhARCMB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 17 Jan 2021 21:12:01 -0500
+Received: from foss.arm.com ([217.140.110.172]:48632 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388032AbhAOSVn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 15 Jan 2021 13:21:43 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B8B57222B3;
-        Fri, 15 Jan 2021 18:21:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610734863;
-        bh=e0oNvf86GUa97Isa1a5/fLm89OCm35ofDxoL0Fvrm10=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=rv2XEMqnDk1jnhPTGXA3wZ9vk740DBIgJ4HiBhn7CkDIFlPZWLvG7nymhtqVFq8v4
-         cWvIRrVvBE1Eo4ufMQKWdeO1YlV34l4nwKw2eqmQ59tXjEjOPLxLsRf9T8ASJ+D2k3
-         4gpCEG2Y2TMI5hWU9YXkcqiieoOYnBiebZA3BDy/bwx6TYj1mMppv0aS8Jo9O1Wq0M
-         +jtXRKx+1vNDj7QaBHsvZ2/xFOFqT7XRZWPa4YE6uyC00eLJbdb0ZZpcYXDOnv+Wgr
-         KeFKqZU2hM7shjV6RmbUVjZ0r+ASmlXrJYLsTfZbM3hXKwW+Uu9AMxplbLnghjSVX6
-         rk4SU1XMYIjxw==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        linux-kernel@vger.kernel.org
-Cc:     harinik@xilinx.com, michael.hennerich@analog.com
-In-Reply-To: <20210114154217.51996-1-alexandru.ardelean@analog.com>
-References: <20210114154217.51996-1-alexandru.ardelean@analog.com>
-Subject: Re: [PATCH] spi: cadence: cache reference clock rate during probe
-Message-Id: <161073482876.12522.5231767630721106173.b4-ty@kernel.org>
-Date:   Fri, 15 Jan 2021 18:20:28 +0000
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        id S1731152AbhARCLW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sun, 17 Jan 2021 21:11:22 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 22D2C147A;
+        Sun, 17 Jan 2021 18:10:11 -0800 (PST)
+Received: from localhost.localdomain (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 17A133F719;
+        Sun, 17 Jan 2021 18:10:07 -0800 (PST)
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+Cc:     Icenowy Zheng <icenowy@aosc.io>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@googlegroups.com,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: [PATCH v3 18/21] dt-bindings: allwinner: Add H616 compatible strings
+Date:   Mon, 18 Jan 2021 02:08:45 +0000
+Message-Id: <20210118020848.11721-19-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.14.1
+In-Reply-To: <20210118020848.11721-1-andre.przywara@arm.com>
+References: <20210118020848.11721-1-andre.przywara@arm.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 14 Jan 2021 17:42:17 +0200, Alexandru Ardelean wrote:
-> The issue is that using SPI from a callback under the CCF lock will
-> deadlock, since this code uses clk_get_rate().
+Add simple "allwinner,sun50i-h616-xxx" compatible names to existing
+bindings, and pair them with an existing fallback compatible string,
+as the devices are compatible.
+This covers I2C, infrared, RTC and SPI.
 
-Applied to
+Use enums to group all compatible devices together.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Acked-by: Rob Herring <robh@kernel.org>
+Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
+---
+ .../bindings/i2c/marvell,mv64xxx-i2c.yaml     | 21 +++++++------------
+ .../media/allwinner,sun4i-a10-ir.yaml         | 16 ++++++--------
+ .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml |  3 +++
+ .../bindings/spi/allwinner,sun6i-a31-spi.yaml |  1 +
+ 4 files changed, 17 insertions(+), 24 deletions(-)
 
-Thanks!
+diff --git a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
+index 5b5ae402f97a..eb72dd571def 100644
+--- a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
++++ b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
+@@ -18,21 +18,14 @@ properties:
+           - const: allwinner,sun4i-a10-i2c
+       - const: allwinner,sun6i-a31-i2c
+       - items:
+-          - const: allwinner,sun8i-a23-i2c
++          - enum:
++              - allwinner,sun8i-a23-i2c
++              - allwinner,sun8i-a83t-i2c
++              - allwinner,sun50i-a64-i2c
++              - allwinner,sun50i-a100-i2c
++              - allwinner,sun50i-h6-i2c
++              - allwinner,sun50i-h616-i2c
+           - const: allwinner,sun6i-a31-i2c
+-      - items:
+-          - const: allwinner,sun8i-a83t-i2c
+-          - const: allwinner,sun6i-a31-i2c
+-      - items:
+-          - const: allwinner,sun50i-a64-i2c
+-          - const: allwinner,sun6i-a31-i2c
+-      - items:
+-          - const: allwinner,sun50i-a100-i2c
+-          - const: allwinner,sun6i-a31-i2c
+-      - items:
+-          - const: allwinner,sun50i-h6-i2c
+-          - const: allwinner,sun6i-a31-i2c
+-
+       - const: marvell,mv64xxx-i2c
+       - const: marvell,mv78230-i2c
+       - const: marvell,mv78230-a0-i2c
+diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
+index 5fa19d4aeaf3..6d8395d6bca0 100644
+--- a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
++++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
+@@ -20,16 +20,12 @@ properties:
+       - const: allwinner,sun5i-a13-ir
+       - const: allwinner,sun6i-a31-ir
+       - items:
+-          - const: allwinner,sun8i-a83t-ir
+-          - const: allwinner,sun6i-a31-ir
+-      - items:
+-          - const: allwinner,sun8i-r40-ir
+-          - const: allwinner,sun6i-a31-ir
+-      - items:
+-          - const: allwinner,sun50i-a64-ir
+-          - const: allwinner,sun6i-a31-ir
+-      - items:
+-          - const: allwinner,sun50i-h6-ir
++          - enum:
++              - allwinner,sun8i-a83t-ir
++              - allwinner,sun8i-r40-ir
++              - allwinner,sun50i-a64-ir
++              - allwinner,sun50i-h6-ir
++              - allwinner,sun50i-h616-ir
+           - const: allwinner,sun6i-a31-ir
+ 
+   reg:
+diff --git a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
+index 37c2a601c3fa..97928efd2bc9 100644
+--- a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
+@@ -26,6 +26,9 @@ properties:
+           - const: allwinner,sun50i-a64-rtc
+           - const: allwinner,sun8i-h3-rtc
+       - const: allwinner,sun50i-h6-rtc
++      - items:
++          - const: allwinner,sun50i-h616-rtc
++          - const: allwinner,sun50i-h6-rtc
+ 
+   reg:
+     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+index 7866a655d81c..908248260afa 100644
+--- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
++++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+@@ -25,6 +25,7 @@ properties:
+           - enum:
+               - allwinner,sun8i-r40-spi
+               - allwinner,sun50i-h6-spi
++              - allwinner,sun50i-h616-spi
+           - const: allwinner,sun8i-h3-spi
+ 
+   reg:
+-- 
+2.17.5
 
-[1/1] spi: cadence: cache reference clock rate during probe
-      commit: 4d163ad79b155c71bf30366dc38f8d2502f78844
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
