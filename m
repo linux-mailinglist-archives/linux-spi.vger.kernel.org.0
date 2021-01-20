@@ -2,53 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A712FD50D
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Jan 2021 17:14:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 388EE2FD50F
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Jan 2021 17:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390998AbhATQCT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 Jan 2021 11:02:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44514 "EHLO
+        id S2391093AbhATQCV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 Jan 2021 11:02:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391211AbhATQBE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Jan 2021 11:01:04 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C5FC061575;
-        Wed, 20 Jan 2021 08:00:23 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id q8so3172464lfm.10;
-        Wed, 20 Jan 2021 08:00:23 -0800 (PST)
+        with ESMTP id S1730476AbhATQCH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Jan 2021 11:02:07 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB3BC061575;
+        Wed, 20 Jan 2021 08:01:26 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id j3so6978679ljb.9;
+        Wed, 20 Jan 2021 08:01:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6pR6fg/vKnYn4hcu/THLeviR1hmHEHC9vnXYnmcjF/Q=;
-        b=abtLr1uy/58LoLQJLzYbf0L+o2zJbLuT/uYCyd48HpLF2JAhOx0hrfWwOfIcXeXTgE
-         9HOfUHGHmtSumGGVFBAuddWJ/pQvwtaaVjlR8LOgYJgvOr0axxti6ZdEumKE2Pdt5BDV
-         FdhlVFIlj6sF2mxWlGuxZfNjGlGpgOG+qnZ8Et4+3QqTh7tvZ5Ct1Xh1dbAdXTf2umqX
-         8x4F+Ku4eBtZ7uQ6IoiGOouZ5VCOxgk5/J7a8NInuLXOSX16zmC+Z7HYRrj5QDJifKoe
-         cNs1iMgtdoOFx+imchuo2kJ4HyYbPQwyxvWWVEV3zFd+tqiJgOtPAD/z2arSBt5IR3Cd
-         InCg==
+        bh=3vLouel+HcUHHsPlMzqt3dQ9xZtrUWZy628SJkSoWOA=;
+        b=So3BD8K3remfQXHH4nf3lm2QXaIQO4LrSFWPfSDvDdczajiT1zZjM+X6Pyp7oVzACX
+         DQUhSNJKGaVBpUrEqB2a/mHhoP+IRYbbfm6S1exUM7PYOdO46swf9U2vYc08fUMud/Om
+         KNU09pGDtuJ5Vrzf8SK12hTxQWfkm/uNAwh3DapnBcYJxtZFkfX9+19cfAiUdqMhHp16
+         Qh5kUbWPdBWb+x6KeA5VyA2mjFhWlxuF9ELdk4uBa2909R4NP4kq2b6Y9+Ktn17HGRJk
+         Pd0gmvlCI6tzooR9HKEBx0LTif4oRiwF3FqvYNnvRW5pmoLQjfOeSrfixFQbqTUF4UZU
+         rZxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=6pR6fg/vKnYn4hcu/THLeviR1hmHEHC9vnXYnmcjF/Q=;
-        b=RjbihLs+ibnaGKRrtYsjPcyjTXNDV7TTEnrV4jv84GzBkhRCsf6C4+9ml9v9Ij1aiQ
-         cI+S5b/gQeCFcPYKEPyle9eSkE0VAcnHeGGChLKUt+QgIhfZ7MvGUFrB4p/L3/nenipY
-         WjQjso/bCG0pLaERjWTQoymZkrAwkW9MqeQhYfMg0ZAjQ9Soy+r34Gb+AnVTBYDxJjRs
-         M8V5I3+CdZudBI/QbdyJQ4vXynJC/jCmDOQSHy54jFcUm9VJAYbQTbkqn+YdcrMN2kNr
-         7utFUyomsaV2R11NuP+OLVmfxhZpCQqDJxTGo4F0d2Sd5HZMrctP0FYAMssiHnhLArbQ
-         JpXQ==
-X-Gm-Message-State: AOAM5328VRFpEImjdkhWz/tdhNBxlx2bY1/ImzfpKcMKILrUtjsm7HLB
-        sIFCN0EiJ3ybcJaz+VAdQTB6EjiP2aI=
-X-Google-Smtp-Source: ABdhPJx4ryhDhUccrXGgvid3ZVbrnrbevGoNExSyx1pGmnWuOH6PWddYTRxvkvma6v12P7EIGAI0ZA==
-X-Received: by 2002:ac2:58f2:: with SMTP id v18mr4396795lfo.623.1611158422110;
-        Wed, 20 Jan 2021 08:00:22 -0800 (PST)
+        bh=3vLouel+HcUHHsPlMzqt3dQ9xZtrUWZy628SJkSoWOA=;
+        b=UTOeU5qYDz3R35LRrEBADg1p+452zxxkoAt4eGs1YhpPj762W8Hm+q8hTWwVwtV/ew
+         r+QjyGc2e2mLbJeVP08doYs6hCrYmRaBR+ADw7OwTHpZ6ePij++pw/25cBSX7JGe5Hpd
+         Kppmdy2Ldf3iFiaBNH+xpjqeCRbcOfJ9/SkcEbOEyNxgUVLTCtV91hgvTAN3vzh+UYrz
+         7M4PgIa8KvK0ln+RMGDZlEUP+KDehr2sx1ikBpwedrd7GJjBiKZB0ws+3kiIkGxlb6Wo
+         Ha757KxulQ8VEQRt2fE+lJPjoj1FNr9gAqtCzLrEf9a5KS4vTgqQKs8B6z1Y4D+ErAgQ
+         wu+w==
+X-Gm-Message-State: AOAM531tHcXA1f0pohs9aErPwznhhlvpz6cg8/TJtyKIerPY47QzHNQH
+        aPk7mxrZWzPapOnM+NWwRxMli8ei9yE=
+X-Google-Smtp-Source: ABdhPJxufcMcdT1icHlQjBl7jPyg+FoY9nCNToNRuMAX2IYS0ZUuPjE9ss2lk3IaPlt5ucol79aNfw==
+X-Received: by 2002:a2e:a310:: with SMTP id l16mr4849551lje.142.1611158484855;
+        Wed, 20 Jan 2021 08:01:24 -0800 (PST)
 Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.googlemail.com with ESMTPSA id 76sm233715lfh.163.2021.01.20.08.00.19
+        by smtp.googlemail.com with ESMTPSA id i14sm234976lfo.189.2021.01.20.08.01.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jan 2021 08:00:21 -0800 (PST)
-Subject: Re: [PATCH 24/31] memory: tegra20: convert to use devm_pm_opp_* API
+        Wed, 20 Jan 2021 08:01:24 -0800 (PST)
+Subject: Re: [PATCH 00/31] Introduce devm_pm_opp_* API
 To:     Yangtao Li <tiny.windzz@gmail.com>, myungjoo.ham@samsung.com,
         kyungmin.park@samsung.com, cw00.choi@samsung.com, krzk@kernel.org,
         shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
@@ -84,14 +84,13 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
 References: <20210101165507.19486-1-tiny.windzz@gmail.com>
- <20210101165507.19486-25-tiny.windzz@gmail.com>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <b9f19bb2-c225-b64d-a995-1f84926bd18b@gmail.com>
-Date:   Wed, 20 Jan 2021 19:00:19 +0300
+Message-ID: <6bd6730c-6f4e-df93-65cd-93fa4785a8d8@gmail.com>
+Date:   Wed, 20 Jan 2021 19:01:21 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.4.2
 MIME-Version: 1.0
-In-Reply-To: <20210101165507.19486-25-tiny.windzz@gmail.com>
+In-Reply-To: <20210101165507.19486-1-tiny.windzz@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -99,16 +98,14 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-01.01.2021 19:55, Yangtao Li пишет:
-> Use devm_pm_opp_* API to simplify code.
+01.01.2021 19:54, Yangtao Li пишет:
+> Hi,
 > 
-> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
-> ---
->  drivers/memory/tegra/tegra20-emc.c | 29 +++++++++--------------------
->  1 file changed, 9 insertions(+), 20 deletions(-)
+> This patchset add devm_pm_opp_set_clkname, devm_pm_opp_put_clkname,
+> devm_pm_opp_set_regulators, devm_pm_opp_put_regulators,
+> devm_pm_opp_set_supported_hw, devm_pm_opp_of_add_table and
+> devm_pm_opp_register_notifier.
 
-There are also tegra30-emc.c and tegra124-emc.c with a similar OPP code.
+Hello Yangtao,
 
-But could we please not touch these memory drivers? I already have a
-prepared patch which replaces all the tegra_emc_opp_table_init() with a
-single common helper that will use devm_opp_* helpers.
+Thank you for your effort, looking forward to v2!
