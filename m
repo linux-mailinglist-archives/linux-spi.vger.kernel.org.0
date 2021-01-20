@@ -2,103 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E3C2FCBE1
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Jan 2021 08:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 854A22FCCE4
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Jan 2021 09:43:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729010AbhATHlp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 Jan 2021 02:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729599AbhATHlU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Jan 2021 02:41:20 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6053CC0613C1
-        for <linux-spi@vger.kernel.org>; Tue, 19 Jan 2021 23:40:40 -0800 (PST)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1l286U-0004eK-7C; Wed, 20 Jan 2021 08:40:34 +0100
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ore@pengutronix.de>)
-        id 1l286S-0001Md-2k; Wed, 20 Jan 2021 08:40:32 +0100
-Date:   Wed, 20 Jan 2021 08:40:32 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        Mark Brown <broonie@kernel.org>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-spi@vger.kernel.org, David Jander <david@protonic.nl>
-Subject: Re: [PATCH v2 2/2] Input: ads7846: convert to one message
-Message-ID: <20210120074032.2swvp7iqli6xttul@pengutronix.de>
-References: <20201110085041.16303-1-o.rempel@pengutronix.de>
- <20201110085041.16303-3-o.rempel@pengutronix.de>
- <20201118003138.GD2009714@dtor-ws>
+        id S1730805AbhATIk2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 Jan 2021 03:40:28 -0500
+Received: from mga09.intel.com ([134.134.136.24]:35476 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730650AbhATIkW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 20 Jan 2021 03:40:22 -0500
+IronPort-SDR: 6OLk+sVH+rA0jyw7UqTlWCYr32G+dmpo0fDXuzxKxUDMkgZwE5eMdXljuYEoljyh9xn/WAfAJx
+ wiizrzYsXs1A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9869"; a="179217788"
+X-IronPort-AV: E=Sophos;i="5.79,360,1602572400"; 
+   d="scan'208";a="179217788"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 00:39:29 -0800
+IronPort-SDR: mZqUniam7VcFuXD5LerhCNav9/39cJyr5DIghBgYfJqvLTX4cFYsqoM2xmK0sIEiEKIgiK59v1
+ fXAN1acu4PsQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,360,1602572400"; 
+   d="scan'208";a="426822497"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.141])
+  by orsmga001.jf.intel.com with ESMTP; 20 Jan 2021 00:39:27 -0800
+Date:   Wed, 20 Jan 2021 16:35:03 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Pan Bian <bianpan2016@163.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Tom Rix <trix@redhat.com>, Wu Hao <hao.wu@intel.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: altera: Fix memory leak on error path
+Message-ID: <20210120083502.GA15003@yilunxu-OptiPlex-7050>
+References: <20210120082635.49304-1-bianpan2016@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201118003138.GD2009714@dtor-ws>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 08:38:56 up 48 days, 21:45, 28 users,  load average: 0.00, 0.03,
- 0.00
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+In-Reply-To: <20210120082635.49304-1-bianpan2016@163.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-Hi Dmitry,
-
-On Tue, Nov 17, 2020 at 04:31:38PM -0800, Dmitry Torokhov wrote:
-> On Tue, Nov 10, 2020 at 09:50:41AM +0100, Oleksij Rempel wrote:
-> > Convert multiple full duplex transfers in to a single transfer to reduce
-> > CPU load.
-> > 
-> > Current driver version support following filtering modes:
-> > - ads7846_no_filter() - not filtered
-> > - ads7846_debounce_filter() - driver specific debounce filter
-> > - pdata->filter - platform specific debounce filter (do any platform
-> > 	provides such filter?)
-> > 
-> > Without filter this HW is not really usable, since the physic of
-> > resistive touchscreen can provide some bounce effects. With driver internal
-> > filter, we have constant amount of retries + debounce retries if some anomaly
-> > was detected.
-> > 
-> > High amount of tiny SPI transfers is the primer reason of high CPU load
-> > and interrupt frequency.
-> > 
-> > This patch create one SPI transfer with all fields and not optional retires. If
-> > bounce anomaly was detected, we will make more transfer if needed.
-> > 
-> > Without this patch, we will get about 10% CPU load on iMX6S on pen-down event.
-> > For example by holding stylus on the screen.
-> > 
-> > With this patch, depending in the amount of retries, the CPU load will
-> > be 1% with "ti,debounce-rep = <3>".
-> > 
-> > One buffer transfer allows us to use PIO FIFO or DMA engine, depending
-> > on the platform.
-> > 
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+On Wed, Jan 20, 2021 at 12:26:35AM -0800, Pan Bian wrote:
+> Release master that have been previously allocated if the number of
+> chipselect is invalid.
 > 
-> Applied, thank you.
+> Fixes: 8e04187c1bc7 ("spi: altera: add SPI core parameters support via platform data.")
+> Signed-off-by: Pan Bian <bianpan2016@163.com>
+> ---
+>  drivers/spi/spi-altera.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-altera.c b/drivers/spi/spi-altera.c
+> index cbc4c28c1541..62ea0c9e321b 100644
+> --- a/drivers/spi/spi-altera.c
+> +++ b/drivers/spi/spi-altera.c
+> @@ -254,7 +254,8 @@ static int altera_spi_probe(struct platform_device *pdev)
+>  			dev_err(&pdev->dev,
+>  				"Invalid number of chipselect: %hu\n",
+>  				pdata->num_chipselect);
+> -			return -EINVAL;
+> +			err = -EINVAL;
+> +			goto exit;
 
-I can't find this patch in your git repository. Should I rebase it
-against latest git and resend it?
+Thanks for the fix. Looks good to me.
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Yilun
