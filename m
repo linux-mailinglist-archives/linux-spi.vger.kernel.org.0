@@ -2,107 +2,113 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80FAF2FD596
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Jan 2021 17:26:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D4EA2FD572
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Jan 2021 17:22:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403914AbhATQ0b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 Jan 2021 11:26:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44306 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732197AbhATQWR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 20 Jan 2021 11:22:17 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E5FD7233EB
-        for <linux-spi@vger.kernel.org>; Wed, 20 Jan 2021 16:21:32 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-        dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="GL4cQ3DS"
-Envelope-to: broonie@sirena.co.uk
-Delivery-date: Wed, 20 Jan 2021 12:51:58 +0000
-Received: from mail.kernel.org ([198.145.29.99])
-        by cassiel.sirena.org.uk with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <SRS0=RSKV=GX=163.com=bianpan2016@kernel.org>)
-        id 1l2Cxo-0005UN-11
-        for broonie@sirena.co.uk; Wed, 20 Jan 2021 12:51:58 +0000
-Received: by mail.kernel.org (Postfix)
-        id 3F43C23355; Wed, 20 Jan 2021 12:51:54 +0000 (UTC)
-X-Greylist: delayed 1037 seconds by postgrey-1.34 at mail.kernel.org; Wed, 20 Jan 2021 12:51:48 UTC
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DBFA62333C
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=bianpan2016@163.com
-Received: by mail.kernel.org (Postfix) with SMTP id DBFA62333C
-        for <broonie@kernel.org>; Wed, 20 Jan 2021 12:51:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=QKBPJdPhe6W3ktMeVz
-        19YEpmtpvlJjr+9MD8d5vLnQc=; b=GL4cQ3DSEwXQ3/jn/OTpk3Nih5M4X1pnhP
-        H7zdG+1pJntREwK7czGn0zQ7ipNtbKhBcL/YZC17JMzRTNbqJZJz9VdquacdWcs6
-        bsyX/q5awCDYd4FFqk/2jdpDPNeQPvwW4tdg6C49mstAWpN6gOVEVkTCb5DJrw73
-        p3gAPT/Lo=
-Received: from localhost.localdomain (unknown [119.3.119.20])
-        by smtp8 (Coremail) with SMTP id DMCowADHLNoLIwhgVejfMw--.54081S4;
-        Wed, 20 Jan 2021 20:33:18 +0800 (CST)
-From:   Pan Bian <bianpan2016@163.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Carlo Caione <carlo@caione.org>
-Cc:     linux-kernel@vger.kernel.org, Pan Bian <bianpan2016@163.com>
-Date:   Wed, 20 Jan 2021 04:33:13 -0800
-Message-Id: <20210120123313.107640-1-bianpan2016@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: DMCowADHLNoLIwhgVejfMw--.54081S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Kw45Jr4fJr1ftFykXry7KFg_yoW8JFyDpa
-        15WFZFkr48CFy8Gw48G39Fva4YqF1jy3s7Z3y8GwsYkF98JFnxJrn7ZFy5AayrKrykJr42
-        yrZrtr18AF18XrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07bxv38UUUUU=
-X-Originating-IP: [119.3.119.20]
-X-CM-SenderInfo: held01tdqsiiqw6rljoofrz/xtbBUQ8gclaD9tCoEwAAsE
-X-SA-Exim-Connect-IP: 198.145.29.99
-X-SA-Exim-Mail-From: SRS0=RSKV=GX=163.com=bianpan2016@kernel.org
-Subject: [PATCH] regulator: axp20x: Fix reference cout leak
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: No (on cassiel.sirena.org.uk); Unknown failure
-X-TUID: H60/oaCO9bgn
+        id S2391274AbhATQUk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 Jan 2021 11:20:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42998 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726694AbhATPyA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Jan 2021 10:54:00 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E386C061757;
+        Wed, 20 Jan 2021 07:53:20 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id f17so26614029ljg.12;
+        Wed, 20 Jan 2021 07:53:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lE0By9BdqcLq0DFuPQl1N1WFBOvj2HiI4v8fCey86OI=;
+        b=O8YbneSc0EPrK+x+ACTtxER1MN0M1XBi9LAGKH0nJM/5YJ1U79U/haRbmcrTpw14Ng
+         lBaEFHTJj6uIY63LJCsu0OOLazGC+3p3cBzv4s5khXMYyJCLeRJM3f/UJi7Rf3bv7HNz
+         k0aqDb53e+mRms17Zo1upTYQlWehrToOd/0vHZ7fRfi1mE9K/82zL3j5wsS+Se83qP/e
+         xJAYfHeMu3zMp0M4hy//z7iIh2UPaY0XFSze5PIVkL8fgXJw/hKGhv8n54eHuLqO+3jk
+         XMsUhVHZrUptWva+QjeF42vhw1p0cSAIbp9cNnBd1rO1Ez8jfoRVI+SaUV/sESqO5CFJ
+         xJSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lE0By9BdqcLq0DFuPQl1N1WFBOvj2HiI4v8fCey86OI=;
+        b=G/qkOJG89j1/4D02sop5zAUjwYix+kQpe0eYSS+LTFmocrxl2HAAf5BTWfvu8pqhvX
+         MpXeubbdZbmk2lLcDtJC+M4ojSza5cfrYmkLZzFnRm4KUyiL3+dtCrAt5hm6hnQS7UXd
+         wfaRTjq667VzvGq49YB4EBZLaVPhP3uwevjN0Je/R+5K+zF3h4xDAH7k+VwTbQIALG9l
+         1LTteBXqZJ1TJjVBtIh52Tq1T3SXSk2eistEvmj2ptkZvNb3L3knhpA/kSJ2tmJt14bt
+         aSmV5VB2qYu1DZfCQSoJbzVDrWkYf8aifIH7pTe0YhcZAD43DiOlOGLElaXmaezF4LTv
+         fbyQ==
+X-Gm-Message-State: AOAM5309kl+IeJfedEDaTEsY/ZKmku/vEnr12aRXYmHmSrBLuMcN8k7G
+        2pXBYCNptFfNy3Z0Gvn7M6Np+u01T4A=
+X-Google-Smtp-Source: ABdhPJyBy+9sQjBpII9U0Ep8TbQz3BXDkf0PkENZMYoEspvmyYtpJD0VWDKPNhL7YKEOT6kR2w2cOw==
+X-Received: by 2002:a2e:a366:: with SMTP id i6mr4945023ljn.427.1611157998525;
+        Wed, 20 Jan 2021 07:53:18 -0800 (PST)
+Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
+        by smtp.googlemail.com with ESMTPSA id w13sm188387ljw.115.2021.01.20.07.53.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jan 2021 07:53:17 -0800 (PST)
+Subject: Re: [PATCH 03/31] opp: Add devres wrapper for
+ dev_pm_opp_set_supported_hw
+To:     Yangtao Li <tiny.windzz@gmail.com>, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, cw00.choi@samsung.com, krzk@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, yuq825@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, robdclark@gmail.com, sean@poorly.run,
+        robh@kernel.org, tomeu.vizoso@collabora.com, steven.price@arm.com,
+        alyssa.rosenzweig@collabora.com, stanimir.varbanov@linaro.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
+        lukasz.luba@arm.com, adrian.hunter@intel.com,
+        ulf.hansson@linaro.org, vireshk@kernel.org, nm@ti.com,
+        sboyd@kernel.org, broonie@kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, rjw@rjwysocki.net, jcrouse@codeaurora.org,
+        hoegsberg@google.com, eric@anholt.net, tzimmermann@suse.de,
+        marijn.suijten@somainline.org, gustavoars@kernel.org,
+        emil.velikov@collabora.com, jonathan@marek.ca,
+        akhilpo@codeaurora.org, smasetty@codeaurora.org,
+        airlied@redhat.com, masneyb@onstation.org, kalyan_t@codeaurora.org,
+        tanmay@codeaurora.org, ddavenport@chromium.org,
+        jsanka@codeaurora.org, rnayak@codeaurora.org,
+        tongtiangen@huawei.com, miaoqinglang@huawei.com,
+        khsieh@codeaurora.org, abhinavk@codeaurora.org,
+        chandanu@codeaurora.org, groeck@chromium.org, varar@codeaurora.org,
+        mka@chromium.org, harigovi@codeaurora.org,
+        rikard.falkeborn@gmail.com, natechancellor@gmail.com,
+        georgi.djakov@linaro.org, akashast@codeaurora.org,
+        parashar@codeaurora.org, dianders@chromium.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
+References: <20210101165507.19486-1-tiny.windzz@gmail.com>
+ <20210101165507.19486-4-tiny.windzz@gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <fc9a1f79-639c-4384-c324-87249ac576fd@gmail.com>
+Date:   Wed, 20 Jan 2021 18:53:15 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
+MIME-Version: 1.0
+In-Reply-To: <20210101165507.19486-4-tiny.windzz@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Decrements the reference count of device node and its child node.
+01.01.2021 19:54, Yangtao Li пишет:
+> Add devres wrapper for dev_pm_opp_set_supported_hw() to simplify driver
+> code.
+> 
+> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+> ---
+>  drivers/opp/core.c     | 38 ++++++++++++++++++++++++++++++++++++++
+>  include/linux/pm_opp.h |  8 ++++++++
+>  2 files changed, 46 insertions(+)
 
-Fixes: dfe7a1b058bb ("regulator: AXP20x: Add support for regulators subsystem")
-Signed-off-by: Pan Bian <bianpan2016@163.com>
----
- drivers/regulator/axp20x-regulator.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/regulator/axp20x-regulator.c b/drivers/regulator/axp20x-regulator.c
-index 90cb8445f721..d260c442b788 100644
---- a/drivers/regulator/axp20x-regulator.c
-+++ b/drivers/regulator/axp20x-regulator.c
-@@ -1070,7 +1070,7 @@ static int axp20x_set_dcdc_freq(struct platform_device *pdev, u32 dcdcfreq)
- static int axp20x_regulator_parse_dt(struct platform_device *pdev)
- {
- 	struct device_node *np, *regulators;
--	int ret;
-+	int ret = 0;
- 	u32 dcdcfreq = 0;
- 
- 	np = of_node_get(pdev->dev.parent->of_node);
-@@ -1085,13 +1085,12 @@ static int axp20x_regulator_parse_dt(struct platform_device *pdev)
- 		ret = axp20x_set_dcdc_freq(pdev, dcdcfreq);
- 		if (ret < 0) {
- 			dev_err(&pdev->dev, "Error setting dcdc frequency: %d\n", ret);
--			return ret;
- 		}
--
- 		of_node_put(regulators);
- 	}
- 
--	return 0;
-+	of_node_put(np);
-+	return ret;
- }
- 
- static int axp20x_set_dcdc_workmode(struct regulator_dev *rdev, int id, u32 workmode)
--- 
-2.17.1
-
-
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Tested-by: Dmitry Osipenko <digetx@gmail.com>
