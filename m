@@ -2,104 +2,113 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF9F2FD391
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Jan 2021 16:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5E62FD4A6
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Jan 2021 16:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390499AbhATPKf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 Jan 2021 10:10:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:58023 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2390953AbhATPFO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Jan 2021 10:05:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611155027;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DLkTnoEhhqT5XnK+V0Ri+zXEP8mtFMltsuZRc1io4Mo=;
-        b=C9Msq6DDbsdV64K16bJvg511xxqMo6cHXVeRzmGGBspEKlpi9eUbh8VjwUVS+0iz9kbFXU
-        AIXZIZeIkfsYOD29bNYAHwl1+/bk4DV8c5uu7RpJphWIAl+KLexE+qX2gQcwcNkYO8N6LO
-        BMYSiPh2NvAGTjoLiPEaPeST7Ad2p/8=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-360-Uvt78s-fMvOilLWfimF-KQ-1; Wed, 20 Jan 2021 10:03:45 -0500
-X-MC-Unique: Uvt78s-fMvOilLWfimF-KQ-1
-Received: by mail-qv1-f70.google.com with SMTP id k16so23393075qve.19
-        for <linux-spi@vger.kernel.org>; Wed, 20 Jan 2021 07:03:45 -0800 (PST)
+        id S2389360AbhATPyq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 Jan 2021 10:54:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390562AbhATPx3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Jan 2021 10:53:29 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FE4C061575;
+        Wed, 20 Jan 2021 07:52:49 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id o17so34757590lfg.4;
+        Wed, 20 Jan 2021 07:52:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=/KIgJpukkTUseLKOL+nfTNs+iHfOcLiaf/sA4jMSc7o=;
+        b=b2NLVokQPZCUuJAyv3kiWNUb/D7/YvKoWfUJcCHR1heKGaiZjLpcSwBstX7Q3YX8MD
+         0VSL3nGarP20z1Z7t1EQA7XA2H4vpXyhlGms2qwFGmlN5vFPCkNOEwhXvgcl2dX2OHl0
+         Fk8lwe7s8eUZ2wwS5RMH6/mUWuXSRNmTjNvQCAwK5Dd3NdzmkpZHt4llHrw8Ni5khkmn
+         myMjJRhAiEUeq/sHdT1yh60NnMmGAROPatvIjJ8mP6HQeV19cvk6YGXY87IpFAtncwaV
+         v00shKKr9e/yxCXAB3jbsK18rnr4dn0SL3OuJ8SyDsoqZnywmH2zxXJFRB0YEqFQqi04
+         OP8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=DLkTnoEhhqT5XnK+V0Ri+zXEP8mtFMltsuZRc1io4Mo=;
-        b=bYan7Fvkwv8ERBHCY1AsZ4WNTF7XmKH9IYRiKPI7jOj5tFLDSvA6LV8lDFfqXZBNAn
-         za9dnULsQTLbQSFVizYn3UfFuSse2XRc/zailaoANiywxHtv6GftSouVuK91sHoldU7q
-         peXQjs+i6EycC31LpOAiMp/mYxHaWGOAVvEmDtTqIj3zZ0c5YFpwd60mzM1t+WBCCWwG
-         ftjgD8cTW8cK6HlLhZ0cON7RTSbGbzr4KF/nJUsYgZRCXkddRdlE5Y0D4jhUDq1rgYMe
-         1Zew7Z/bjSrYFwxPiwNKDUfHItv76koGwc8/5T9AfeXwUGQkVY1zUNEWWfrlJaZ/lMG9
-         EWhw==
-X-Gm-Message-State: AOAM531b39lmTpMZP4OP/+a09jgHLvgLGjeekbeCUEMouast5mm7y7W8
-        OIoEzHLrc3NJdKsCogG4ssEl1xUpYOldCnVN98nRW93mzKJuSn7ItvCUc2taN5PoOGNfCefBnBY
-        UMlwlYNWvjDse/JREprHx
-X-Received: by 2002:a37:9f14:: with SMTP id i20mr9933237qke.321.1611155024820;
-        Wed, 20 Jan 2021 07:03:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy1NgZWfa0FoCcv72Jr91hrje7OB2eR1AjLOB6y9Mz3IUwCYNr1bPZ94I/AV1xVad9LFx/jWA==
-X-Received: by 2002:a37:9f14:: with SMTP id i20mr9933207qke.321.1611155024575;
-        Wed, 20 Jan 2021 07:03:44 -0800 (PST)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id b78sm1477745qkg.29.2021.01.20.07.03.42
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/KIgJpukkTUseLKOL+nfTNs+iHfOcLiaf/sA4jMSc7o=;
+        b=nbGUUFMp2tvkeX6XBsXTytoIiQPoz2eDIbHMmu4obTt01NoNLbaj2f9zx3wVyrCp4j
+         XIEjmjHhN6R1F1fnjSKUn9LIH2fe1HWXJOARadqqsVIByKni7NkJOPdLj+5chmh06SoZ
+         6TH9b14hriqgE1+ThonVV1NND8L1OGT9qf8dXWsrbFRjvgVWZ0Hv2ANhdQP7Pp0rUInH
+         DdyJhS2vnOcnkWMdS4WMk+TAwt6OmI0ezULfIAVj4iUL3FbjIeIkwceqBm8ZxGEFnVmy
+         1k1exhCfw1zlHcU/HC6vF73fyQJL7udqR/YCzWTZyBsWL6xCKgckEZ+apslDjtXdNUTt
+         jDZQ==
+X-Gm-Message-State: AOAM5338hi7aA1pHPOm9dFhgTGZXp4CKCcQIfKiU3dvNwEKhL+T6Bgjo
+        K/NSxyBc5oPD2aA5LNiSlbJh8+WQmjY=
+X-Google-Smtp-Source: ABdhPJz54jp4p6N7ro9OB4UGTlGLwMbj9w9A1NhmVFwuW25RiB7kgYemoqd4C3nN1Esa+ddCNU5GUA==
+X-Received: by 2002:a19:ac45:: with SMTP id r5mr4942869lfc.305.1611157967504;
+        Wed, 20 Jan 2021 07:52:47 -0800 (PST)
+Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
+        by smtp.googlemail.com with ESMTPSA id b4sm74228ljp.53.2021.01.20.07.52.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jan 2021 07:03:43 -0800 (PST)
-Subject: Re: [PATCH] spi: altera: Fix memory leak on error path
-To:     Pan Bian <bianpan2016@163.com>, Mark Brown <broonie@kernel.org>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Wu Hao <hao.wu@intel.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210120082635.49304-1-bianpan2016@163.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <29bc2be2-911e-e892-4d1c-cc5c8ce10571@redhat.com>
-Date:   Wed, 20 Jan 2021 07:03:42 -0800
+        Wed, 20 Jan 2021 07:52:46 -0800 (PST)
+Subject: Re: [PATCH 02/31] opp: Add devres wrapper for
+ dev_pm_opp_set_regulators and dev_pm_opp_put_regulators
+To:     Yangtao Li <tiny.windzz@gmail.com>, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, cw00.choi@samsung.com, krzk@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, yuq825@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, robdclark@gmail.com, sean@poorly.run,
+        robh@kernel.org, tomeu.vizoso@collabora.com, steven.price@arm.com,
+        alyssa.rosenzweig@collabora.com, stanimir.varbanov@linaro.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
+        lukasz.luba@arm.com, adrian.hunter@intel.com,
+        ulf.hansson@linaro.org, vireshk@kernel.org, nm@ti.com,
+        sboyd@kernel.org, broonie@kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, rjw@rjwysocki.net, jcrouse@codeaurora.org,
+        hoegsberg@google.com, eric@anholt.net, tzimmermann@suse.de,
+        marijn.suijten@somainline.org, gustavoars@kernel.org,
+        emil.velikov@collabora.com, jonathan@marek.ca,
+        akhilpo@codeaurora.org, smasetty@codeaurora.org,
+        airlied@redhat.com, masneyb@onstation.org, kalyan_t@codeaurora.org,
+        tanmay@codeaurora.org, ddavenport@chromium.org,
+        jsanka@codeaurora.org, rnayak@codeaurora.org,
+        tongtiangen@huawei.com, miaoqinglang@huawei.com,
+        khsieh@codeaurora.org, abhinavk@codeaurora.org,
+        chandanu@codeaurora.org, groeck@chromium.org, varar@codeaurora.org,
+        mka@chromium.org, harigovi@codeaurora.org,
+        rikard.falkeborn@gmail.com, natechancellor@gmail.com,
+        georgi.djakov@linaro.org, akashast@codeaurora.org,
+        parashar@codeaurora.org, dianders@chromium.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
+References: <20210101165507.19486-1-tiny.windzz@gmail.com>
+ <20210101165507.19486-3-tiny.windzz@gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <43c251a2-430a-040c-4152-94cf10c884e0@gmail.com>
+Date:   Wed, 20 Jan 2021 18:52:43 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-In-Reply-To: <20210120082635.49304-1-bianpan2016@163.com>
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
+In-Reply-To: <20210101165507.19486-3-tiny.windzz@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
 Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-On 1/20/21 12:26 AM, Pan Bian wrote:
-> Release master that have been previously allocated if the number of
-> chipselect is invalid.
->
-> Fixes: 8e04187c1bc7 ("spi: altera: add SPI core parameters support via platform data.")
-> Signed-off-by: Pan Bian <bianpan2016@163.com>
+01.01.2021 19:54, Yangtao Li пишет:
+> Add devres wrapper for dev_pm_opp_set_regulators()
+> dev_pm_opp_put_regulators () to simplify driver code.
+> 
+> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 > ---
->  drivers/spi/spi-altera.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/spi/spi-altera.c b/drivers/spi/spi-altera.c
-> index cbc4c28c1541..62ea0c9e321b 100644
-> --- a/drivers/spi/spi-altera.c
-> +++ b/drivers/spi/spi-altera.c
-> @@ -254,7 +254,8 @@ static int altera_spi_probe(struct platform_device *pdev)
->  			dev_err(&pdev->dev,
->  				"Invalid number of chipselect: %hu\n",
->  				pdata->num_chipselect);
-> -			return -EINVAL;
-> +			err = -EINVAL;
-> +			goto exit;
->  		}
->  
->  		master->num_chipselect = pdata->num_chipselect;
-Reviewed-by: Tom Rix <trix@redhat.com>
+>  drivers/opp/core.c     | 50 ++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/pm_opp.h |  9 ++++++++
+>  2 files changed, 59 insertions(+)
 
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Tested-by: Dmitry Osipenko <digetx@gmail.com>
