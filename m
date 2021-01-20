@@ -2,113 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5E62FD4A6
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Jan 2021 16:58:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80FAF2FD596
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Jan 2021 17:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389360AbhATPyq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 Jan 2021 10:54:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390562AbhATPx3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Jan 2021 10:53:29 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FE4C061575;
-        Wed, 20 Jan 2021 07:52:49 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id o17so34757590lfg.4;
-        Wed, 20 Jan 2021 07:52:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/KIgJpukkTUseLKOL+nfTNs+iHfOcLiaf/sA4jMSc7o=;
-        b=b2NLVokQPZCUuJAyv3kiWNUb/D7/YvKoWfUJcCHR1heKGaiZjLpcSwBstX7Q3YX8MD
-         0VSL3nGarP20z1Z7t1EQA7XA2H4vpXyhlGms2qwFGmlN5vFPCkNOEwhXvgcl2dX2OHl0
-         Fk8lwe7s8eUZ2wwS5RMH6/mUWuXSRNmTjNvQCAwK5Dd3NdzmkpZHt4llHrw8Ni5khkmn
-         myMjJRhAiEUeq/sHdT1yh60NnMmGAROPatvIjJ8mP6HQeV19cvk6YGXY87IpFAtncwaV
-         v00shKKr9e/yxCXAB3jbsK18rnr4dn0SL3OuJ8SyDsoqZnywmH2zxXJFRB0YEqFQqi04
-         OP8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/KIgJpukkTUseLKOL+nfTNs+iHfOcLiaf/sA4jMSc7o=;
-        b=nbGUUFMp2tvkeX6XBsXTytoIiQPoz2eDIbHMmu4obTt01NoNLbaj2f9zx3wVyrCp4j
-         XIEjmjHhN6R1F1fnjSKUn9LIH2fe1HWXJOARadqqsVIByKni7NkJOPdLj+5chmh06SoZ
-         6TH9b14hriqgE1+ThonVV1NND8L1OGT9qf8dXWsrbFRjvgVWZ0Hv2ANhdQP7Pp0rUInH
-         DdyJhS2vnOcnkWMdS4WMk+TAwt6OmI0ezULfIAVj4iUL3FbjIeIkwceqBm8ZxGEFnVmy
-         1k1exhCfw1zlHcU/HC6vF73fyQJL7udqR/YCzWTZyBsWL6xCKgckEZ+apslDjtXdNUTt
-         jDZQ==
-X-Gm-Message-State: AOAM5338hi7aA1pHPOm9dFhgTGZXp4CKCcQIfKiU3dvNwEKhL+T6Bgjo
-        K/NSxyBc5oPD2aA5LNiSlbJh8+WQmjY=
-X-Google-Smtp-Source: ABdhPJz54jp4p6N7ro9OB4UGTlGLwMbj9w9A1NhmVFwuW25RiB7kgYemoqd4C3nN1Esa+ddCNU5GUA==
-X-Received: by 2002:a19:ac45:: with SMTP id r5mr4942869lfc.305.1611157967504;
-        Wed, 20 Jan 2021 07:52:47 -0800 (PST)
-Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.googlemail.com with ESMTPSA id b4sm74228ljp.53.2021.01.20.07.52.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jan 2021 07:52:46 -0800 (PST)
-Subject: Re: [PATCH 02/31] opp: Add devres wrapper for
- dev_pm_opp_set_regulators and dev_pm_opp_put_regulators
-To:     Yangtao Li <tiny.windzz@gmail.com>, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com, cw00.choi@samsung.com, krzk@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, yuq825@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, robdclark@gmail.com, sean@poorly.run,
-        robh@kernel.org, tomeu.vizoso@collabora.com, steven.price@arm.com,
-        alyssa.rosenzweig@collabora.com, stanimir.varbanov@linaro.org,
-        agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
-        lukasz.luba@arm.com, adrian.hunter@intel.com,
-        ulf.hansson@linaro.org, vireshk@kernel.org, nm@ti.com,
-        sboyd@kernel.org, broonie@kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, rjw@rjwysocki.net, jcrouse@codeaurora.org,
-        hoegsberg@google.com, eric@anholt.net, tzimmermann@suse.de,
-        marijn.suijten@somainline.org, gustavoars@kernel.org,
-        emil.velikov@collabora.com, jonathan@marek.ca,
-        akhilpo@codeaurora.org, smasetty@codeaurora.org,
-        airlied@redhat.com, masneyb@onstation.org, kalyan_t@codeaurora.org,
-        tanmay@codeaurora.org, ddavenport@chromium.org,
-        jsanka@codeaurora.org, rnayak@codeaurora.org,
-        tongtiangen@huawei.com, miaoqinglang@huawei.com,
-        khsieh@codeaurora.org, abhinavk@codeaurora.org,
-        chandanu@codeaurora.org, groeck@chromium.org, varar@codeaurora.org,
-        mka@chromium.org, harigovi@codeaurora.org,
-        rikard.falkeborn@gmail.com, natechancellor@gmail.com,
-        georgi.djakov@linaro.org, akashast@codeaurora.org,
-        parashar@codeaurora.org, dianders@chromium.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20210101165507.19486-1-tiny.windzz@gmail.com>
- <20210101165507.19486-3-tiny.windzz@gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <43c251a2-430a-040c-4152-94cf10c884e0@gmail.com>
-Date:   Wed, 20 Jan 2021 18:52:43 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
-MIME-Version: 1.0
-In-Reply-To: <20210101165507.19486-3-tiny.windzz@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S2403914AbhATQ0b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 Jan 2021 11:26:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44306 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732197AbhATQWR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 20 Jan 2021 11:22:17 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E5FD7233EB
+        for <linux-spi@vger.kernel.org>; Wed, 20 Jan 2021 16:21:32 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+        dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="GL4cQ3DS"
+Envelope-to: broonie@sirena.co.uk
+Delivery-date: Wed, 20 Jan 2021 12:51:58 +0000
+Received: from mail.kernel.org ([198.145.29.99])
+        by cassiel.sirena.org.uk with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <SRS0=RSKV=GX=163.com=bianpan2016@kernel.org>)
+        id 1l2Cxo-0005UN-11
+        for broonie@sirena.co.uk; Wed, 20 Jan 2021 12:51:58 +0000
+Received: by mail.kernel.org (Postfix)
+        id 3F43C23355; Wed, 20 Jan 2021 12:51:54 +0000 (UTC)
+X-Greylist: delayed 1037 seconds by postgrey-1.34 at mail.kernel.org; Wed, 20 Jan 2021 12:51:48 UTC
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DBFA62333C
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=bianpan2016@163.com
+Received: by mail.kernel.org (Postfix) with SMTP id DBFA62333C
+        for <broonie@kernel.org>; Wed, 20 Jan 2021 12:51:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=QKBPJdPhe6W3ktMeVz
+        19YEpmtpvlJjr+9MD8d5vLnQc=; b=GL4cQ3DSEwXQ3/jn/OTpk3Nih5M4X1pnhP
+        H7zdG+1pJntREwK7czGn0zQ7ipNtbKhBcL/YZC17JMzRTNbqJZJz9VdquacdWcs6
+        bsyX/q5awCDYd4FFqk/2jdpDPNeQPvwW4tdg6C49mstAWpN6gOVEVkTCb5DJrw73
+        p3gAPT/Lo=
+Received: from localhost.localdomain (unknown [119.3.119.20])
+        by smtp8 (Coremail) with SMTP id DMCowADHLNoLIwhgVejfMw--.54081S4;
+        Wed, 20 Jan 2021 20:33:18 +0800 (CST)
+From:   Pan Bian <bianpan2016@163.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Carlo Caione <carlo@caione.org>
+Cc:     linux-kernel@vger.kernel.org, Pan Bian <bianpan2016@163.com>
+Date:   Wed, 20 Jan 2021 04:33:13 -0800
+Message-Id: <20210120123313.107640-1-bianpan2016@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: DMCowADHLNoLIwhgVejfMw--.54081S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Kw45Jr4fJr1ftFykXry7KFg_yoW8JFyDpa
+        15WFZFkr48CFy8Gw48G39Fva4YqF1jy3s7Z3y8GwsYkF98JFnxJrn7ZFy5AayrKrykJr42
+        yrZrtr18AF18XrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07bxv38UUUUU=
+X-Originating-IP: [119.3.119.20]
+X-CM-SenderInfo: held01tdqsiiqw6rljoofrz/xtbBUQ8gclaD9tCoEwAAsE
+X-SA-Exim-Connect-IP: 198.145.29.99
+X-SA-Exim-Mail-From: SRS0=RSKV=GX=163.com=bianpan2016@kernel.org
+Subject: [PATCH] regulator: axp20x: Fix reference cout leak
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: No (on cassiel.sirena.org.uk); Unknown failure
+X-TUID: H60/oaCO9bgn
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-01.01.2021 19:54, Yangtao Li пишет:
-> Add devres wrapper for dev_pm_opp_set_regulators()
-> dev_pm_opp_put_regulators () to simplify driver code.
-> 
-> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
-> ---
->  drivers/opp/core.c     | 50 ++++++++++++++++++++++++++++++++++++++++++
->  include/linux/pm_opp.h |  9 ++++++++
->  2 files changed, 59 insertions(+)
+Decrements the reference count of device node and its child node.
 
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
-Tested-by: Dmitry Osipenko <digetx@gmail.com>
+Fixes: dfe7a1b058bb ("regulator: AXP20x: Add support for regulators subsystem")
+Signed-off-by: Pan Bian <bianpan2016@163.com>
+---
+ drivers/regulator/axp20x-regulator.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/regulator/axp20x-regulator.c b/drivers/regulator/axp20x-regulator.c
+index 90cb8445f721..d260c442b788 100644
+--- a/drivers/regulator/axp20x-regulator.c
++++ b/drivers/regulator/axp20x-regulator.c
+@@ -1070,7 +1070,7 @@ static int axp20x_set_dcdc_freq(struct platform_device *pdev, u32 dcdcfreq)
+ static int axp20x_regulator_parse_dt(struct platform_device *pdev)
+ {
+ 	struct device_node *np, *regulators;
+-	int ret;
++	int ret = 0;
+ 	u32 dcdcfreq = 0;
+ 
+ 	np = of_node_get(pdev->dev.parent->of_node);
+@@ -1085,13 +1085,12 @@ static int axp20x_regulator_parse_dt(struct platform_device *pdev)
+ 		ret = axp20x_set_dcdc_freq(pdev, dcdcfreq);
+ 		if (ret < 0) {
+ 			dev_err(&pdev->dev, "Error setting dcdc frequency: %d\n", ret);
+-			return ret;
+ 		}
+-
+ 		of_node_put(regulators);
+ 	}
+ 
+-	return 0;
++	of_node_put(np);
++	return ret;
+ }
+ 
+ static int axp20x_set_dcdc_workmode(struct regulator_dev *rdev, int id, u32 workmode)
+-- 
+2.17.1
+
+
