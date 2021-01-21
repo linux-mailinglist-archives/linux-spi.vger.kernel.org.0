@@ -2,75 +2,72 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CCF2FF2E0
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Jan 2021 19:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A412FF4E5
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Jan 2021 20:44:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389462AbhAUSHn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 Jan 2021 13:07:43 -0500
-Received: from mga17.intel.com ([192.55.52.151]:42490 "EHLO mga17.intel.com"
+        id S1726672AbhAUTnU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 Jan 2021 14:43:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47546 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389446AbhAUSHj (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 21 Jan 2021 13:07:39 -0500
-IronPort-SDR: R3uaTUyQQeHh91xQnzgeUAvjNjZI50UtqFf4qp7r7ydRGBeNZmauttN2ssX4peSN0HNqsv+QBL
- /vCknqU7YMPA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9871"; a="159094055"
-X-IronPort-AV: E=Sophos;i="5.79,364,1602572400"; 
-   d="scan'208";a="159094055"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 10:05:53 -0800
-IronPort-SDR: 9cu1I8h5Lp1klRFw0EE+R04Z18BzUkbxAHRM6F44I1AsFlQgnBeg+gbC8OAc8JtEzkHyUyPAHG
- 8GSy722I2XFg==
-X-IronPort-AV: E=Sophos;i="5.79,364,1602572400"; 
-   d="scan'208";a="385400859"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.42])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 10:05:53 -0800
-Date:   Thu, 21 Jan 2021 10:07:11 -0800 (PST)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Pan Bian <bianpan2016@163.com>
-cc:     Mark Brown <broonie@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-        Tom Rix <trix@redhat.com>, Wu Hao <hao.wu@intel.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: altera: Fix memory leak on error path
-In-Reply-To: <20210120082635.49304-1-bianpan2016@163.com>
-Message-ID: <alpine.DEB.2.22.394.2101211006500.482327@rhweight-WRK1>
-References: <20210120082635.49304-1-bianpan2016@163.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        id S1726860AbhAUTmr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 21 Jan 2021 14:42:47 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 36DC023A56;
+        Thu, 21 Jan 2021 19:42:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611258126;
+        bh=rAgkYszEJz9W4BMbxLbBcrUeLlnFsko4ChyAd3HIxyo=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=u1rmMPo/4QX07QvFkBlynU4YL2LzHu5B1HWmHrUeEBQEqWQwqlsHjM4RqcYZYmD66
+         uwu2SlcQt3UL/Bs8bYTStZl9/5obekZHzbiC9GH/Q4qRBNUmvQZQJRIiJn65JviVQj
+         SWQAl1mfyoBT5rQzsFqgu+gxgK4RqJyrXMiq9oFeLE3VAT/Y41kBk5wsAoac6MKVOr
+         UMwdZkIwJfD8czrjhF9SeZxbSbH1eXLCLOBtpul05MtXM2ab/XKxES1KItslcqwZb5
+         dcYHvZyOic8+zoB+wPoGjNTqwXuAkr/IVC1c5/fb3LpT1C05dbiikSF6xMGvHRutdQ
+         zDOSeEnvT67iw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Barry Song <baohua@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+In-Reply-To: <20210120161658.3820610-1-arnd@kernel.org>
+References: <20210120161658.3820610-1-arnd@kernel.org>
+Subject: Re: [PATCH] spi: remove sirf prima/atlas driver
+Message-Id: <161125807796.36053.17088209626222757814.b4-ty@kernel.org>
+Date:   Thu, 21 Jan 2021 19:41:17 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, 20 Jan 2021 17:14:00 +0100, Arnd Bergmann wrote:
+> The CSR SiRF prima2/atlas platforms are getting removed, so this driver
+> is no longer needed.
 
+Applied to
 
-On Wed, 20 Jan 2021, Pan Bian wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> Release master that have been previously allocated if the number of
-> chipselect is invalid.
->
-> Fixes: 8e04187c1bc7 ("spi: altera: add SPI core parameters support via platform data.")
-> Signed-off-by: Pan Bian <bianpan2016@163.com>
-Acked-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
-> drivers/spi/spi-altera.c | 3 ++-
-> 1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/spi/spi-altera.c b/drivers/spi/spi-altera.c
-> index cbc4c28c1541..62ea0c9e321b 100644
-> --- a/drivers/spi/spi-altera.c
-> +++ b/drivers/spi/spi-altera.c
-> @@ -254,7 +254,8 @@ static int altera_spi_probe(struct platform_device *pdev)
-> 			dev_err(&pdev->dev,
-> 				"Invalid number of chipselect: %hu\n",
-> 				pdata->num_chipselect);
-> -			return -EINVAL;
-> +			err = -EINVAL;
-> +			goto exit;
-> 		}
->
-> 		master->num_chipselect = pdata->num_chipselect;
-> -- 
-> 2.17.1
->
->
+Thanks!
+
+[1/1] spi: remove sirf prima/atlas driver
+      commit: 181997b4940880b6ebc317b34dca38a17f107318
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
