@@ -2,59 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D467D2FFE10
-	for <lists+linux-spi@lfdr.de>; Fri, 22 Jan 2021 09:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 852AB3001A4
+	for <lists+linux-spi@lfdr.de>; Fri, 22 Jan 2021 12:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726247AbhAVIWK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 Jan 2021 03:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
+        id S1728048AbhAVLcy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 22 Jan 2021 06:32:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725899AbhAVIWI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 Jan 2021 03:22:08 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A1CC0613D6;
-        Fri, 22 Jan 2021 00:21:27 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id e15so3586004wme.0;
-        Fri, 22 Jan 2021 00:21:27 -0800 (PST)
+        with ESMTP id S1728339AbhAVLcF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 Jan 2021 06:32:05 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54870C0613D6;
+        Fri, 22 Jan 2021 03:31:24 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id c127so4030878wmf.5;
+        Fri, 22 Jan 2021 03:31:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=iIov58JYpMWXYAc4LiGP6ZzAFZsr1Wt1BbAslAKCrgs=;
-        b=p+MfCjgPUdBI5/7GBfXLj+UmuknaLtUf9H9/HyXDc2qZZwieN2HBtz37LNJ2U6CvpO
-         AOFN0q9KuQ6RbxSIu8MKx+kVDouVVKzvpZOQxFCwn690dB0B0JLRW6tLb4YKW9j3TlrK
-         0zmsun9ipxuPhb2wiBobvMVQjvlWbKb2hMJagkctqTwDNRUaAkPCB3mwTsVEJSe7+q/Z
-         qFI0+d7JlHZX4ri2aTxJroP2IlrYkBYldGBrMYdSwMY8dB72Ob2+YHeWFiRsQFa/4Nkq
-         mlsmqB61bSR+2tgEkiHy6UkK853uWXFn/BBXoJpuo7XsRxz+ZuJIVZP/WDUgvbIPpqfx
-         Y2QQ==
+        bh=5UtKHtNpBZjEuHd6aKkGs7s/LKu1xlwebERl/VisAQM=;
+        b=rZ+62y0lEb0Ivj5CZRg54wFWA8hsE3iHyZsK0fu4L0iYYhswdIYHVmbjmvZaPeZyu8
+         avvOoDrJ+QT+S/DqvVTTuGSpPR5aRKnW+8E4ZZuhYGz0TVdRDfvWHCRDQLQyTvsJAylm
+         xtNh9L9iTv2tnnbMQ72zYu8zaw71JRghSSTrMva+2tZl1s7GUWNBvwki+6tg+Gw4xK0Q
+         PARxt1TEeItSSNITVxot05/i8dcc7vq514k8F4dosnC8QrkdZ7vLsfhoM8Zbpzsy+2k4
+         FDdkxS74SHCHVowC8UGemHWXRb73DEhI5tD4wVTR7duDsysqsL2Hz48u58JU9KdekSXu
+         PZlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=iIov58JYpMWXYAc4LiGP6ZzAFZsr1Wt1BbAslAKCrgs=;
-        b=g1Ncb5H6AVERZFrCecPYD5cJcsaaaMug/vE4bCzO9Q9yKDjftxpy1GwfCL3xmFNx2N
-         1TTlYUjAL/Q48M5JmgxgEq0SBWt4nvOWWgR/+p5FqNpkJseeUoFk2/uOzPQQnpEeXNgV
-         b2WdKVQD1uWaLJjCi5RNxhNzrPQtU4xMfpDqCE03amBeBYN8zSm3L9N/yB8X/V3WvO9J
-         MPR2vnj2SZKhWteAp0ejYa2V2SQa3NPrTkMI+PIilH/hHH4R/bdMszUt8vClFI6J4gFN
-         bAOvsQCJQWhDpw+ZnuQXuQYigIfPYYorORYLN1+Yg2+hy0velJZVFr+8VFCjD5tyPAFx
-         Yxgg==
-X-Gm-Message-State: AOAM531YHMyFxNcV5csLAihA9X7NGRnGbwRyWgZlAwRqYLIoP1yGk832
-        FffDd0ufcvYUgmndgPRqXw0=
-X-Google-Smtp-Source: ABdhPJxxCqelGf+rxQGEbhJh4Iv4dQwW6jPm81pbZ2qdHzqhNjFirxZ63+qIt1+TfWmfymo0IwcJdQ==
-X-Received: by 2002:a1c:f70f:: with SMTP id v15mr2740656wmh.38.1611303686427;
-        Fri, 22 Jan 2021 00:21:26 -0800 (PST)
-Received: from localhost.localdomain ([37.170.192.23])
-        by smtp.googlemail.com with ESMTPSA id g132sm11266513wmg.2.2021.01.22.00.21.24
+        bh=5UtKHtNpBZjEuHd6aKkGs7s/LKu1xlwebERl/VisAQM=;
+        b=R3me/d66LSNbN60oH/pT/Jze3HSri5NRwavlbT2q/IF1eDL1QkPGWfMfYdbq5VyJms
+         EYrgLeyx5LMX6MulKVO71VScCWRXSeBkIkpOvrm39iJZEHxRWrrHoROVqSAebaCuu1JY
+         oxSUUTqyAAu0F3cOcC524WWK8MXVL5Ym2Vpi8q7xW+E1OkD5HnQhye330hmwCULR+ffK
+         d0V19GD/7NsC5D1Z6+ksvqurg0KrlyZEO2Mj0Nxre2YRxpovaSuPNHxD8FvKmp7oLdMp
+         UjbnVPb0wghbHAc/mQH6mkl4kGifCjNjdhEbRdcWuLE7Z8fjXbR2KVdTznkhw1/QZPcG
+         XW9Q==
+X-Gm-Message-State: AOAM532IymM9PghsNfR5notHPtMq0lhsC5BzUexlRYe/zfA4GXfGy+Di
+        n8hdkjUXcTY1oFF5Ue2HWs4=
+X-Google-Smtp-Source: ABdhPJwoNIZIK69jzqzq0hOQYQ1r08m0p0syE8q0NqZFMejIR2GyvOFGoyh84CNz4xCv2VVJuUzw5Q==
+X-Received: by 2002:a1c:6089:: with SMTP id u131mr3596188wmb.187.1611315083021;
+        Fri, 22 Jan 2021 03:31:23 -0800 (PST)
+Received: from localhost.localdomain ([37.166.244.59])
+        by smtp.googlemail.com with ESMTPSA id x1sm857953wmi.14.2021.01.22.03.31.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jan 2021 00:21:25 -0800 (PST)
+        Fri, 22 Jan 2021 03:31:22 -0800 (PST)
 From:   corentin <corentin.noel56@gmail.com>
-X-Google-Original-From: corentin <corentin.noel.external@stormshield.eu>
 To:     broonie@kernel.org
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         corentin <corentin.noel56@gmail.com>
-Subject: [PATCH] drivers: spi: spi-au1550: Fix various whitespace warnings
-Date:   Fri, 22 Jan 2021 09:20:40 +0100
-Message-Id: <20210122082040.30788-1-corentin.noel.external@stormshield.eu>
+Subject: [PATCH] drivers: spi: spi-au1550: quoted string break
+Date:   Fri, 22 Jan 2021 12:30:52 +0100
+Message-Id: <20210122113052.40429-1-corentin.noel56@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -62,82 +61,47 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: corentin <corentin.noel56@gmail.com>
-
 Signed-off-by: corentin <corentin.noel56@gmail.com>
 ---
- drivers/spi/spi-au1550.c | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ drivers/spi/spi-au1550.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/spi/spi-au1550.c b/drivers/spi/spi-au1550.c
-index dfb7196f4caf..ca9121ce668d 100644
+index dfb7196f4caf..cbb6604ba8f7 100644
 --- a/drivers/spi/spi-au1550.c
 +++ b/drivers/spi/spi-au1550.c
-@@ -74,8 +74,7 @@ struct au1550_spi {
+@@ -447,8 +447,8 @@ static irqreturn_t au1550_spi_dma_irq_callback(struct au1550_spi *hw)
+ 				"dma transfer: receive FIFO overflow!\n");
+ 		else
+ 			dev_err(hw->dev,
+-				"dma transfer: unexpected SPI error "
+-				"(event=0x%x stat=0x%x)!\n", evnt, stat);
++				"dma transfer: unexpected SPI error (event=0x%x stat=0x%x)!\n",
++				evnt, stat);
  
- 
- /* we use an 8-bit memory device for dma transfers to/from spi fifo */
--static dbdev_tab_t au1550_spi_mem_dbdev =
--{
-+static dbdev_tab_t au1550_spi_mem_dbdev = {
- 	.dev_id			= DBDMA_MEM_CHAN,
- 	.dev_flags		= DEV_FLAGS_ANYUSE|DEV_FLAGS_SYNC,
- 	.dev_tsize		= 0,
-@@ -399,10 +398,10 @@ static int au1550_spi_dma_txrxb(struct spi_device *spi, struct spi_transfer *t)
- 			DMA_FROM_DEVICE);
+ 		complete(&hw->master_done);
+ 		return IRQ_HANDLED;
+@@ -567,8 +567,8 @@ static irqreturn_t au1550_spi_pio_irq_callback(struct au1550_spi *hw)
+ 		au1550_spi_mask_ack_all(hw);
+ 		au1550_spi_reset_fifos(hw);
+ 		dev_err(hw->dev,
+-			"pio transfer: unexpected SPI error "
+-			"(event=0x%x stat=0x%x)!\n", evnt, stat);
++			"pio transfer: unexpected SPI error (event=0x%x stat=0x%x)!\n",
++			evnt, stat);
+ 		complete(&hw->master_done);
+ 		return IRQ_HANDLED;
  	}
- 	/* unmap buffers if mapped above */
--	if (t->rx_buf && t->rx_dma == 0 )
-+	if (t->rx_buf && t->rx_dma == 0)
- 		dma_unmap_single(hw->dev, dma_rx_addr, t->len,
- 			DMA_FROM_DEVICE);
--	if (t->tx_buf && t->tx_dma == 0 )
-+	if (t->tx_buf && t->tx_dma == 0)
- 		dma_unmap_single(hw->dev, dma_tx_addr, t->len,
- 			DMA_TO_DEVICE);
- 
-@@ -493,12 +492,12 @@ static void au1550_spi_tx_word_##size(struct au1550_spi *hw)		\
- 	wmb(); /* drain writebuffer */					\
+@@ -972,8 +972,7 @@ static int __init au1550_spi_init(void)
+ 	if (usedma) {
+ 		ddma_memid = au1xxx_ddma_add_device(&au1550_spi_mem_dbdev);
+ 		if (!ddma_memid)
+-			printk(KERN_ERR "au1550-spi: cannot add memory"
+-					"dbdma device\n");
++			printk(KERN_ERR "au1550-spi: cannot add memory dbdma device\n");
+ 	}
+ 	return platform_driver_register(&au1550_spi_drv);
  }
- 
--AU1550_SPI_RX_WORD(8,0xff)
--AU1550_SPI_RX_WORD(16,0xffff)
--AU1550_SPI_RX_WORD(32,0xffffff)
--AU1550_SPI_TX_WORD(8,0xff)
--AU1550_SPI_TX_WORD(16,0xffff)
--AU1550_SPI_TX_WORD(32,0xffffff)
-+AU1550_SPI_RX_WORD(8, 0xff)
-+AU1550_SPI_RX_WORD(16, 0xffff)
-+AU1550_SPI_RX_WORD(32, 0xffffff)
-+AU1550_SPI_TX_WORD(8, 0xff)
-+AU1550_SPI_TX_WORD(16, 0xffff)
-+AU1550_SPI_TX_WORD(32, 0xffffff)
- 
- static int au1550_spi_pio_txrxb(struct spi_device *spi, struct spi_transfer *t)
- {
-@@ -636,12 +635,14 @@ static irqreturn_t au1550_spi_pio_irq_callback(struct au1550_spi *hw)
- static int au1550_spi_txrx_bufs(struct spi_device *spi, struct spi_transfer *t)
- {
- 	struct au1550_spi *hw = spi_master_get_devdata(spi->master);
-+
- 	return hw->txrx_bufs(spi, t);
- }
- 
- static irqreturn_t au1550_spi_irq(int irq, void *dev)
- {
- 	struct au1550_spi *hw = dev;
-+
- 	return hw->irq_callback(hw);
- }
- 
-@@ -872,6 +873,7 @@ static int au1550_spi_probe(struct platform_device *pdev)
- 	{
- 		int min_div = (2 << 0) * (2 * (4 + 1));
- 		int max_div = (2 << 3) * (2 * (63 + 1));
-+
- 		master->max_speed_hz = hw->pdata->mainclk_hz / min_div;
- 		master->min_speed_hz =
- 				hw->pdata->mainclk_hz / (max_div + 1) + 1;
 -- 
 2.25.1
 
