@@ -2,106 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 852AB3001A4
-	for <lists+linux-spi@lfdr.de>; Fri, 22 Jan 2021 12:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B14300424
+	for <lists+linux-spi@lfdr.de>; Fri, 22 Jan 2021 14:28:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728048AbhAVLcy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 Jan 2021 06:32:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42076 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728339AbhAVLcF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 Jan 2021 06:32:05 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54870C0613D6;
-        Fri, 22 Jan 2021 03:31:24 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id c127so4030878wmf.5;
-        Fri, 22 Jan 2021 03:31:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5UtKHtNpBZjEuHd6aKkGs7s/LKu1xlwebERl/VisAQM=;
-        b=rZ+62y0lEb0Ivj5CZRg54wFWA8hsE3iHyZsK0fu4L0iYYhswdIYHVmbjmvZaPeZyu8
-         avvOoDrJ+QT+S/DqvVTTuGSpPR5aRKnW+8E4ZZuhYGz0TVdRDfvWHCRDQLQyTvsJAylm
-         xtNh9L9iTv2tnnbMQ72zYu8zaw71JRghSSTrMva+2tZl1s7GUWNBvwki+6tg+Gw4xK0Q
-         PARxt1TEeItSSNITVxot05/i8dcc7vq514k8F4dosnC8QrkdZ7vLsfhoM8Zbpzsy+2k4
-         FDdkxS74SHCHVowC8UGemHWXRb73DEhI5tD4wVTR7duDsysqsL2Hz48u58JU9KdekSXu
-         PZlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5UtKHtNpBZjEuHd6aKkGs7s/LKu1xlwebERl/VisAQM=;
-        b=R3me/d66LSNbN60oH/pT/Jze3HSri5NRwavlbT2q/IF1eDL1QkPGWfMfYdbq5VyJms
-         EYrgLeyx5LMX6MulKVO71VScCWRXSeBkIkpOvrm39iJZEHxRWrrHoROVqSAebaCuu1JY
-         oxSUUTqyAAu0F3cOcC524WWK8MXVL5Ym2Vpi8q7xW+E1OkD5HnQhye330hmwCULR+ffK
-         d0V19GD/7NsC5D1Z6+ksvqurg0KrlyZEO2Mj0Nxre2YRxpovaSuPNHxD8FvKmp7oLdMp
-         UjbnVPb0wghbHAc/mQH6mkl4kGifCjNjdhEbRdcWuLE7Z8fjXbR2KVdTznkhw1/QZPcG
-         XW9Q==
-X-Gm-Message-State: AOAM532IymM9PghsNfR5notHPtMq0lhsC5BzUexlRYe/zfA4GXfGy+Di
-        n8hdkjUXcTY1oFF5Ue2HWs4=
-X-Google-Smtp-Source: ABdhPJwoNIZIK69jzqzq0hOQYQ1r08m0p0syE8q0NqZFMejIR2GyvOFGoyh84CNz4xCv2VVJuUzw5Q==
-X-Received: by 2002:a1c:6089:: with SMTP id u131mr3596188wmb.187.1611315083021;
-        Fri, 22 Jan 2021 03:31:23 -0800 (PST)
-Received: from localhost.localdomain ([37.166.244.59])
-        by smtp.googlemail.com with ESMTPSA id x1sm857953wmi.14.2021.01.22.03.31.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jan 2021 03:31:22 -0800 (PST)
-From:   corentin <corentin.noel56@gmail.com>
-To:     broonie@kernel.org
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corentin <corentin.noel56@gmail.com>
-Subject: [PATCH] drivers: spi: spi-au1550: quoted string break
-Date:   Fri, 22 Jan 2021 12:30:52 +0100
-Message-Id: <20210122113052.40429-1-corentin.noel56@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S1727354AbhAVN1j (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 22 Jan 2021 08:27:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53718 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727439AbhAVN1g (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 22 Jan 2021 08:27:36 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BA98923433;
+        Fri, 22 Jan 2021 13:26:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611322016;
+        bh=hjXQm8uoGxiu0jpIfIS+/eytZP7PKz1arwZhIf9bWIc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ku0u4ERgQVPxliCOIqFC85nnpxA29kEo/CrzgZNYgLcfQHTru18aajmd62E5IeIex
+         wt6MWMyKHnDYggnHGwrkDjLK5TL7BAAzHkAbOZ32MJQyEyiKVJ5fXZWr/BRQy0LLw8
+         Frme03AQAhrBRbtqoy/yh//hXnj7w5TrTx9AdL6UsSuH+P/h9ud7AXiwLOygpB6up8
+         jw/GwH1c/8k2hFgjEgdPNii9uR3tJIycayswqC+Hido+mCBjaewAOQca5RZiWkPj/e
+         MQoZ8pML5F87LEb5ZuexDz4NKwFflq50rlP3/QR2bfpTm6n7dB6QqdpuzUoJhBrPNV
+         3XL9DoSH8egZQ==
+Date:   Fri, 22 Jan 2021 13:26:16 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Daniel Walker <danielwa@cisco.com>
+Cc:     xe-linux-external@cisco.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] spidev: Add cisco device compatible
+Message-ID: <20210122132616.GA6391@sirena.org.uk>
+References: <20210121231237.30664-2-danielwa@cisco.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="UugvWAfsgieZRqgk"
+Content-Disposition: inline
+In-Reply-To: <20210121231237.30664-2-danielwa@cisco.com>
+X-Cookie: 98% lean.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Signed-off-by: corentin <corentin.noel56@gmail.com>
----
- drivers/spi/spi-au1550.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/spi/spi-au1550.c b/drivers/spi/spi-au1550.c
-index dfb7196f4caf..cbb6604ba8f7 100644
---- a/drivers/spi/spi-au1550.c
-+++ b/drivers/spi/spi-au1550.c
-@@ -447,8 +447,8 @@ static irqreturn_t au1550_spi_dma_irq_callback(struct au1550_spi *hw)
- 				"dma transfer: receive FIFO overflow!\n");
- 		else
- 			dev_err(hw->dev,
--				"dma transfer: unexpected SPI error "
--				"(event=0x%x stat=0x%x)!\n", evnt, stat);
-+				"dma transfer: unexpected SPI error (event=0x%x stat=0x%x)!\n",
-+				evnt, stat);
- 
- 		complete(&hw->master_done);
- 		return IRQ_HANDLED;
-@@ -567,8 +567,8 @@ static irqreturn_t au1550_spi_pio_irq_callback(struct au1550_spi *hw)
- 		au1550_spi_mask_ack_all(hw);
- 		au1550_spi_reset_fifos(hw);
- 		dev_err(hw->dev,
--			"pio transfer: unexpected SPI error "
--			"(event=0x%x stat=0x%x)!\n", evnt, stat);
-+			"pio transfer: unexpected SPI error (event=0x%x stat=0x%x)!\n",
-+			evnt, stat);
- 		complete(&hw->master_done);
- 		return IRQ_HANDLED;
- 	}
-@@ -972,8 +972,7 @@ static int __init au1550_spi_init(void)
- 	if (usedma) {
- 		ddma_memid = au1xxx_ddma_add_device(&au1550_spi_mem_dbdev);
- 		if (!ddma_memid)
--			printk(KERN_ERR "au1550-spi: cannot add memory"
--					"dbdma device\n");
-+			printk(KERN_ERR "au1550-spi: cannot add memory dbdma device\n");
- 	}
- 	return platform_driver_register(&au1550_spi_drv);
- }
--- 
-2.25.1
+--UugvWAfsgieZRqgk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Thu, Jan 21, 2021 at 03:12:36PM -0800, Daniel Walker wrote:
+> Add compatible string for Cisco device present on the Cisco Petra
+> platform.
+
+I'm missing patch 1 of this series, what's the story with dependencies?
+
+--UugvWAfsgieZRqgk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmAK0ncACgkQJNaLcl1U
+h9AMoAf/SWETMvs5TwzdE0BaIffSd0xEsbkHnNQxMBpViE16u+H15jx4DcGFZo6n
+mfmtCo5ywobgcHaFuxKpN/nZ3gQW8oUGoHWw3xzUFVwQNVdD3vZQx8nmnUrWkYwW
+AVd9TD7bIYJVil+rQj8Y8afzV0fV5hnXlHdD67pVNZ58fMU5tgSFuagWuK2fLm6F
+Db4hZ2HfRir4QQjBgCpS3sLzHWZtc7Ol8fDKTtRcS1wTGKVlUK/Zp/P/5oM9Cs2/
+jFQoYlwYjugynxEkYwGdtlvrTqpWQnspTgDy2Op+EFU8Cah2xceLRlI+x7xwnfVL
+H0xt1AI3OwkyXCxcnV+b+QYxoC4xQA==
+=pnSl
+-----END PGP SIGNATURE-----
+
+--UugvWAfsgieZRqgk--
