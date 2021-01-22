@@ -2,70 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B14300424
-	for <lists+linux-spi@lfdr.de>; Fri, 22 Jan 2021 14:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D2930061B
+	for <lists+linux-spi@lfdr.de>; Fri, 22 Jan 2021 15:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727354AbhAVN1j (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 Jan 2021 08:27:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53718 "EHLO mail.kernel.org"
+        id S1728949AbhAVOwz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 22 Jan 2021 09:52:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50770 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727439AbhAVN1g (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 22 Jan 2021 08:27:36 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BA98923433;
-        Fri, 22 Jan 2021 13:26:55 +0000 (UTC)
+        id S1728932AbhAVOuk (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 22 Jan 2021 09:50:40 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5584F239D1;
+        Fri, 22 Jan 2021 14:49:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611322016;
-        bh=hjXQm8uoGxiu0jpIfIS+/eytZP7PKz1arwZhIf9bWIc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ku0u4ERgQVPxliCOIqFC85nnpxA29kEo/CrzgZNYgLcfQHTru18aajmd62E5IeIex
-         wt6MWMyKHnDYggnHGwrkDjLK5TL7BAAzHkAbOZ32MJQyEyiKVJ5fXZWr/BRQy0LLw8
-         Frme03AQAhrBRbtqoy/yh//hXnj7w5TrTx9AdL6UsSuH+P/h9ud7AXiwLOygpB6up8
-         jw/GwH1c/8k2hFgjEgdPNii9uR3tJIycayswqC+Hido+mCBjaewAOQca5RZiWkPj/e
-         MQoZ8pML5F87LEb5ZuexDz4NKwFflq50rlP3/QR2bfpTm6n7dB6QqdpuzUoJhBrPNV
-         3XL9DoSH8egZQ==
-Date:   Fri, 22 Jan 2021 13:26:16 +0000
+        s=k20201202; t=1611326999;
+        bh=LIWbCD2uGrjrfSZ9ob2z4YekJdktPLRnNNKEEy7uPxk=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=NXEdvqImj9TGCWc5YRa2oX6/NVgZYfUo4lMHg12/nyA2RLnt4vIueFV9nZtIFtkGQ
+         O7at/6PdjJP0KiQ5+1dNfHkcuMKKBayCK8GJhOFOGl/yif74NDQQ4D1/qZs5dxRRxT
+         +tlqQnj1pVs0t1PItyFFzCX/SMJsCkPlDghTSSwBU+C8FIhH3f83ew6PQ+25YMW+TM
+         SSr0ZXMsWYHf92a38sUH8HQk+xWWC5WpFTybVJCSRS6suB3wWWbsUX+/QgVhLG1bn1
+         y2HspCgh9O7eQPaAQ9+4oJSw+xas2zSYnoKufJUs1d+HL04XTOZs27B8j5liZiRxLe
+         tSHBXxPFqZiCQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Daniel Walker <danielwa@cisco.com>
-Cc:     xe-linux-external@cisco.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] spidev: Add cisco device compatible
-Message-ID: <20210122132616.GA6391@sirena.org.uk>
-References: <20210121231237.30664-2-danielwa@cisco.com>
+To:     corentin <corentin.noel56@gmail.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20210122082040.30788-1-corentin.noel.external@stormshield.eu>
+References: <20210122082040.30788-1-corentin.noel.external@stormshield.eu>
+Subject: Re: [PATCH] drivers: spi: spi-au1550: Fix various whitespace warnings
+Message-Id: <161132696017.45468.3045415103092275760.b4-ty@kernel.org>
+Date:   Fri, 22 Jan 2021 14:49:20 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UugvWAfsgieZRqgk"
-Content-Disposition: inline
-In-Reply-To: <20210121231237.30664-2-danielwa@cisco.com>
-X-Cookie: 98% lean.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, 22 Jan 2021 09:20:40 +0100, corentin wrote:
+> 
 
---UugvWAfsgieZRqgk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Thu, Jan 21, 2021 at 03:12:36PM -0800, Daniel Walker wrote:
-> Add compatible string for Cisco device present on the Cisco Petra
-> platform.
+Applied to
 
-I'm missing patch 1 of this series, what's the story with dependencies?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
---UugvWAfsgieZRqgk
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks!
 
------BEGIN PGP SIGNATURE-----
+[1/1] drivers: spi: spi-au1550: Fix various whitespace warnings
+      commit: 21f68c8259a8100ddee985c1536f32a19ed521df
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmAK0ncACgkQJNaLcl1U
-h9AMoAf/SWETMvs5TwzdE0BaIffSd0xEsbkHnNQxMBpViE16u+H15jx4DcGFZo6n
-mfmtCo5ywobgcHaFuxKpN/nZ3gQW8oUGoHWw3xzUFVwQNVdD3vZQx8nmnUrWkYwW
-AVd9TD7bIYJVil+rQj8Y8afzV0fV5hnXlHdD67pVNZ58fMU5tgSFuagWuK2fLm6F
-Db4hZ2HfRir4QQjBgCpS3sLzHWZtc7Ol8fDKTtRcS1wTGKVlUK/Zp/P/5oM9Cs2/
-jFQoYlwYjugynxEkYwGdtlvrTqpWQnspTgDy2Op+EFU8Cah2xceLRlI+x7xwnfVL
-H0xt1AI3OwkyXCxcnV+b+QYxoC4xQA==
-=pnSl
------END PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---UugvWAfsgieZRqgk--
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
