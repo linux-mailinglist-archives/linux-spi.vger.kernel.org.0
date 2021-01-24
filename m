@@ -2,58 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC22F30127A
-	for <lists+linux-spi@lfdr.de>; Sat, 23 Jan 2021 04:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 644A0301F2B
+	for <lists+linux-spi@lfdr.de>; Sun, 24 Jan 2021 23:19:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726413AbhAWDFM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 Jan 2021 22:05:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
+        id S1726627AbhAXWSy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 24 Jan 2021 17:18:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726111AbhAWDFK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 Jan 2021 22:05:10 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B2BC06174A;
-        Fri, 22 Jan 2021 19:04:29 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id rv9so10403875ejb.13;
-        Fri, 22 Jan 2021 19:04:29 -0800 (PST)
+        with ESMTP id S1726625AbhAXWSw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 24 Jan 2021 17:18:52 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67270C061573
+        for <linux-spi@vger.kernel.org>; Sun, 24 Jan 2021 14:18:12 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id jx18so1830394pjb.5
+        for <linux-spi@vger.kernel.org>; Sun, 24 Jan 2021 14:18:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=2Ener4CSJbezhco33AGXGSfODg8ypwK518kRv1pQb/E=;
-        b=pDf1LH4FAFY99EV2ZwneV3JMXssmWnyrASNUDcGmTS30XhFdhFQ1DFRI/M/yt17zV7
-         I7O8IgT/OnQtj0L6X1/4kHsC4IQyeNm04KmsDSiySUWQS76poBwYyb9aqyL3TWGqI5AB
-         Ju9Qd3laDeFXV56HOpvS7wqemq/3iafa9AnTo/v/WYm1vFhajQ7TmxSDG5IQ5oeeC3ZL
-         LMrO8dJ3dGJ+oP4Bb1dz4i7T5+WCOzV4qfTCZ8dmzs+uGic7TzrgxUODEJGoay6me5UQ
-         uE/P9x+Csvb1waZ/mIp6TbjfJsb56rfpslf0WzjvxHd0v1BI6av2mltoa7f1bfGXaXR4
-         49XQ==
+        bh=5OqmWKFgrNUflJ6LxYheGG2wEX3U+Swxg7aiGM75A98=;
+        b=u5UgUo3/AmtgLV74TIiuvKKDbY/B5ZVzKN+5jO34/tyAG2/uo2i1GPt07EwB1it59K
+         YM9nbT0TJrORxlxdLy9ikPw+3XEEVXxch9d1vwezAHJ/Pmk6Z7i7qWAch9iogvUj/gLm
+         5xB9ppZolDbMNhV89IFObQicPqchAHMnjsysRS6w7WR/tnac7ay8JZkjRmDSLpuq6aA+
+         yfPLADDOnuELyjafkXRLgjSAWUwOu6uKVeJI4gwGsR/IRi/ZtSRXRIOqwRtds+euaQDy
+         09Ltnh/bZI9roaTyHPA2R3pr6awFUtCYT85g9ypaz6wN/MODOiuQNKTcMfv/3rM44MU1
+         LoTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=2Ener4CSJbezhco33AGXGSfODg8ypwK518kRv1pQb/E=;
-        b=RgdrRqxqHeer8bUMGqfpS165MoMnPmgFDuC30w1KL1x+/KmacAC4aVWq7jFOoEp+0b
-         YhRJCGwwJERYjDow3YCYNxo+jooF0tqfXBPvRVCdq5F8d8ha3PUxP0qVqlxnIveIOB8B
-         rUQ2Lcpw3Yb8E/U4o8E7Gwt0sZDElMtiG2AYl7bQo4H1iT2aKUup7t8eIfULA8RrRsP2
-         s5forDVMY2DqYQhOF4BztJRG1YeFtIBWgKmmj8Uz+1EH0bNs6BcedZkXN9AycuV5+6jA
-         yj7HINUcvj2Vie0DINszxy8yvuv+tLpJbtm7pCLdQziamFnYCdxpTOv3xxS0kYMm6uth
-         U50Q==
-X-Gm-Message-State: AOAM532BAlaBcVXDMBRHVATYKZgqARQAyo4bc9Ijt4DUp3JtVMS7LY8q
-        6QogBWB6FdGXhuq7R4oj7tNXfTf79WQ=
-X-Google-Smtp-Source: ABdhPJyf15A1qs8KWGwEOtYcIASNBXNq9IKtBmSf9+od8qZvlDpT0apdVOxMcJMRZwwLWnKtjs04Ag==
-X-Received: by 2002:a17:906:e106:: with SMTP id gj6mr48316ejb.337.1611371068355;
-        Fri, 22 Jan 2021 19:04:28 -0800 (PST)
-Received: from localhost.localdomain ([37.166.133.137])
-        by smtp.googlemail.com with ESMTPSA id f9sm6503967edm.6.2021.01.22.19.04.25
+        bh=5OqmWKFgrNUflJ6LxYheGG2wEX3U+Swxg7aiGM75A98=;
+        b=AzqpuPWWyBfeX05lwQeNquYb0cfkc+MnkC01NL0BKl08FiNGEQEsRBLNzrrW/HBpmh
+         6De+CHK5tpxGeM48PKu5PflFhxsdeZi875AFzHMshx6gbUKOSERCKnTVhvDA/SIHtgUH
+         fAcdOmgnyslvZ4F6LUtoHYRryNaLUo3J8L6H7m5mcPhb0U+w0ljJzS1Ia/k86Ca0eyGV
+         izjyN1n8aTjKnj0zaQiAzSemV0KemtETgS4kH2barfG9cm3mFk1RRniJbJC7I6UV4k/Q
+         tUwCScPMjnsQgrEz7ZOz7PEI6YjJl3leY5qvUOY+XVtV3xvdKufWYW0ekX9quTMBoX3D
+         prgA==
+X-Gm-Message-State: AOAM530E4rkAjO/B5BpT5JUMsxC362/c3IoBRYK2C5v3aWTH0iuGKEg/
+        WOi5yqMSq7lxC+8PEcnPQ5rA/1w6sP0=
+X-Google-Smtp-Source: ABdhPJxqc1DRT6hbtrknyV64xPi7Oaj/O2Rt1Rt/idfaBDtlxbDDfP0GSuRAxzBsEAwNnTxsCz/guA==
+X-Received: by 2002:a17:90b:1107:: with SMTP id gi7mr2075272pjb.123.1611526691645;
+        Sun, 24 Jan 2021 14:18:11 -0800 (PST)
+Received: from localhost.localdomain (S0106d80d17472dbd.wp.shawcable.net. [24.79.253.190])
+        by smtp.gmail.com with ESMTPSA id q22sm13887973pgi.66.2021.01.24.14.18.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jan 2021 19:04:27 -0800 (PST)
-From:   corentin noel <corentin.noel56@gmail.com>
-To:     broonie@kernel.org
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corentin noel <corentin.noel56@gmail.com>
-Subject: [PATCH] spi: spi-au1550: pr_err instead of printk
-Date:   Sat, 23 Jan 2021 04:03:44 +0100
-Message-Id: <20210123030344.15999-1-corentin.noel56@gmail.com>
+        Sun, 24 Jan 2021 14:18:10 -0800 (PST)
+From:   jassisinghbrar@gmail.com
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Cc:     ard.biesheuvel@linaro.org, jaswinder.singh@linaro.org,
+        masahisa.kojima@linaro.org
+Subject: spi: spi-synquacer: fix set_cs handling
+Date:   Sun, 24 Jan 2021 16:17:55 -0600
+Message-Id: <20210124221755.1587718-1-jassisinghbrar@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -61,25 +61,72 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Signed-off-by: corentin noel <corentin.noel56@gmail.com>
+From: Jassi Brar <jaswinder.singh@linaro.org>
+
+Respect the set_cs() request by actually flushing the FIFOs
+and start/stop the SPI instance.
+
+Fixes: b0823ee35cf9b ("spi: Add spi driver for Socionext SynQuacer platform")
+Signed-off-by: Masahisa Kojima <masahisa.kojima@linaro.org>
+Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
 ---
- drivers/spi/spi-au1550.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/spi/spi-synquacer.c | 35 ++++++++++++++++++++++++-----------
+ 1 file changed, 24 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/spi/spi-au1550.c b/drivers/spi/spi-au1550.c
-index dfb7196f4caf..8f92bbdf391b 100644
---- a/drivers/spi/spi-au1550.c
-+++ b/drivers/spi/spi-au1550.c
-@@ -972,8 +972,7 @@ static int __init au1550_spi_init(void)
- 	if (usedma) {
- 		ddma_memid = au1xxx_ddma_add_device(&au1550_spi_mem_dbdev);
- 		if (!ddma_memid)
--			printk(KERN_ERR "au1550-spi: cannot add memory"
--					"dbdma device\n");
-+			pr_err("au1550-spi: cannot add memory dbdma device\n");
- 	}
- 	return platform_driver_register(&au1550_spi_drv);
- }
 -- 
-2.25.1
+2.14.2
 
+diff --git a/drivers/spi/spi-synquacer.c b/drivers/spi/spi-synquacer.c
+index f99abd85c50a..3905d1e1dea6 100644
+--- a/drivers/spi/spi-synquacer.c
++++ b/drivers/spi/spi-synquacer.c
+@@ -365,11 +365,6 @@ static int synquacer_spi_transfer_one(struct spi_master *master,
+ 	val &= ~SYNQUACER_HSSPI_DMSTOP_STOP;
+ 	writel(val, sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
+ 
+-	val = readl(sspi->regs + SYNQUACER_HSSPI_REG_FIFOCFG);
+-	val |= SYNQUACER_HSSPI_FIFOCFG_RX_FLUSH;
+-	val |= SYNQUACER_HSSPI_FIFOCFG_TX_FLUSH;
+-	writel(val, sspi->regs + SYNQUACER_HSSPI_REG_FIFOCFG);
+-
+ 	/*
+ 	 * See if we can transfer 4-bytes as 1 word
+ 	 * to maximize the FIFO buffer efficiency.
+@@ -463,10 +458,6 @@ static int synquacer_spi_transfer_one(struct spi_master *master,
+ 			msecs_to_jiffies(SYNQUACER_HSSPI_TRANSFER_TMOUT_MSEC));
+ 		writel(0, sspi->regs + SYNQUACER_HSSPI_REG_RXE);
+ 
+-		/* stop RX and clean RXFIFO */
+-		val = readl(sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
+-		val |= SYNQUACER_HSSPI_DMSTOP_STOP;
+-		writel(val, sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
+ 		sspi->rx_buf = buf;
+ 		sspi->rx_words = SYNQUACER_HSSPI_FIFO_DEPTH;
+ 		read_fifo(sspi);
+@@ -486,11 +477,25 @@ static void synquacer_spi_set_cs(struct spi_device *spi, bool enable)
+ 	struct synquacer_spi *sspi = spi_master_get_devdata(spi->master);
+ 	u32 val;
+ 
++	if (!(spi->mode & SPI_CS_HIGH))
++		enable = !enable;
++
+ 	val = readl(sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
+ 	val &= ~(SYNQUACER_HSSPI_DMPSEL_CS_MASK <<
+ 		 SYNQUACER_HSSPI_DMPSEL_CS_SHIFT);
+ 	val |= spi->chip_select << SYNQUACER_HSSPI_DMPSEL_CS_SHIFT;
+-	writel(val, sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
++
++	if (enable)
++		val &= ~SYNQUACER_HSSPI_DMSTOP_STOP;
++	else
++		val |= SYNQUACER_HSSPI_DMSTOP_STOP;
++
++	writel_relaxed(val, sspi->regs + SYNQUACER_HSSPI_REG_DMSTART);
++
++	val = readl(sspi->regs + SYNQUACER_HSSPI_REG_FIFOCFG);
++	val |= SYNQUACER_HSSPI_FIFOCFG_RX_FLUSH;
++	val |= SYNQUACER_HSSPI_FIFOCFG_TX_FLUSH;
++	writel(val, sspi->regs + SYNQUACER_HSSPI_REG_FIFOCFG);
+ }
+ 
+ static int synquacer_spi_wait_status_update(struct synquacer_spi *sspi,
