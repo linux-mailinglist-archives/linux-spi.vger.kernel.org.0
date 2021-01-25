@@ -2,85 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3149304423
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Jan 2021 18:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 367E8304427
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Jan 2021 18:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727848AbhAZGB1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 Jan 2021 01:01:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39810 "EHLO mail.kernel.org"
+        id S1729016AbhAZGB3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 Jan 2021 01:01:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53156 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728357AbhAYMtg (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 25 Jan 2021 07:49:36 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1716E22D50;
-        Mon, 25 Jan 2021 12:37:50 +0000 (UTC)
+        id S1729376AbhAYOUK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 25 Jan 2021 09:20:10 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E42AA2228A;
+        Mon, 25 Jan 2021 14:19:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611578271;
-        bh=ssQqDM0hD2SsqIY9J1TXGam73KnE+UIiuVS8gXVJT08=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iQ8QfW3Iyo5j2SNESL3+m7Lj4uBhniM9jBrRKysETC6eW7vioQbfehkkQzdg2O2Od
-         d23AdRwOtQo/mOUYf6bm2LIVS3UHz7UtZA+GBhVH4essaljKudjD0PNNSn26mR4aLj
-         oRLtTezjBbnfm3Y8gIs5fPSsDkryFEAX7FFBA2rQbAijIBn+N3tWrYnnRgBZHcwUpC
-         udpO2NHmjiExWTUTWWuKqeTUUD/5410ekKcFyF0XsCY7lnMel8qlh/Ko6AA+FxUlhT
-         yGBWJRqafZkwIMUme7TlVM1IOBeYm8aib2vi1poPcp1+dt8McjPy3lIlPMAdTjcZBV
-         ETjat9qhfI3aA==
-Date:   Mon, 25 Jan 2021 12:37:09 +0000
+        s=k20201202; t=1611584370;
+        bh=7fpC+lTJSKxpC4pR/T7CZ14Iq6EymDL3VFSG9czVQ7M=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=iB6Y6xf+/afU+e1dBXKFAVyDkgLDNaPfZ/lS/xU2wbHUzebK2Papr3magQ+88sSrp
+         MBcXZZDW1hugZVvSZwxNbs5veQR87pmKIZ2VXz4t0Fc3lEiiZJf2M+ZRZc+xOrIuaq
+         bsmrUC5jXApAMYfFc/Ueau/7vikJz6MR4NMSlW9DEqt2T7od5GmlQzz73TIfoL2+RL
+         VTcxKDVdoRXV2dqqzE5zQEoYCGt1qCGUVwn0nGKDlCyiiXp0OLAhtf0QbuEZr+3p4S
+         t3Es3m0iL7a2nc/RykX5Oot98plEbzvnd/vRzi2f0O2R++xI4AqbTuRQCSn0oZ0bvh
+         ngxpcp73vFnOw==
 From:   Mark Brown <broonie@kernel.org>
-To:     jassisinghbrar@gmail.com
-Cc:     linux-spi@vger.kernel.org, ard.biesheuvel@linaro.org,
-        jaswinder.singh@linaro.org, masahisa.kojima@linaro.org
-Subject: Re: spi: spi-synquacer: fix set_cs handling
-Message-ID: <20210125123709.GA4510@sirena.org.uk>
-References: <20210124221755.1587718-1-jassisinghbrar@gmail.com>
+To:     Daniel Walker <danielwa@cisco.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xe-linux-external@cisco.com
+In-Reply-To: <20210121231237.30664-2-danielwa@cisco.com>
+References: <20210121231237.30664-2-danielwa@cisco.com>
+Subject: Re: [PATCH 2/2] spidev: Add cisco device compatible
+Message-Id: <161158432930.33513.16598539718945571721.b4-ty@kernel.org>
+Date:   Mon, 25 Jan 2021 14:18:49 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="h31gzZEtNLTqOjlF"
-Content-Disposition: inline
-In-Reply-To: <20210124221755.1587718-1-jassisinghbrar@gmail.com>
-X-Cookie: Drive defensively.  Buy a tank.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, 21 Jan 2021 15:12:36 -0800, Daniel Walker wrote:
+> Add compatible string for Cisco device present on the Cisco Petra
+> platform.
 
---h31gzZEtNLTqOjlF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Sun, Jan 24, 2021 at 04:17:55PM -0600, jassisinghbrar@gmail.com wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> Respect the set_cs() request by actually flushing the FIFOs
-> and start/stop the SPI instance.
+Thanks!
 
-set_cs() is a request to set the chip select not flush the FIFOs or
-restart the hardware - what's the actual issue here?  Transfers should
-happen in the transfer callback, the driver shouldn't be assuming there
-is anything going on with chip select when completing transfers.
+[2/2] spidev: Add cisco device compatible
+      commit: 396cf2a46adddbf51373e16225c1d25254310046
 
->  	struct synquacer_spi *sspi =3D spi_master_get_devdata(spi->master);
->  	u32 val;
-> =20
-> +	if (!(spi->mode & SPI_CS_HIGH))
-> +		enable =3D !enable;
-> +
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Let the core handle SET_CS_HIGH, this will double invert so is buggy.
-It's also not called out in the changelog.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---h31gzZEtNLTqOjlF
-Content-Type: application/pgp-signature; name="signature.asc"
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
------BEGIN PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmAOu3UACgkQJNaLcl1U
-h9DQJAgAhsQHWVvpR7RIiQIoEegZHgDws90Uu9IAgCAUWJe/F6R+Q5nP8u4ngUfd
-FmKhnpu4doGKIOPXduaKdVPwsB42BWumUf53f05RWTmlJkve8VjKmhIkAwlEQeZG
-m/9kg6ZaHrVn5EQnJlpfWneBzLOK4kuQuwAEWyI+q2j+dQZFBBYvn5WZ5IQR4C5X
-6QsevNnYwYUmWVPxgnnZCb+k+W01VT53Q4f3SSZqA+ackwYwIGqtpk7Kqnn589Qr
-1g5S3ePeYDQTYbL4NpbZSMSS/Z6ye4neoC5f6VXhKaJGNLaooxouwvvpF7mW8Q1a
-1frAnqE56QcZaEPEWLC/9BcFeWFw4g==
-=3j6f
------END PGP SIGNATURE-----
-
---h31gzZEtNLTqOjlF--
+Thanks,
+Mark
