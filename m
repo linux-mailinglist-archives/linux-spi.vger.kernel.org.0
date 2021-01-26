@@ -2,71 +2,154 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 367E8304427
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Jan 2021 18:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED4B304C6B
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Jan 2021 23:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729016AbhAZGB3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 Jan 2021 01:01:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53156 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729376AbhAYOUK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 25 Jan 2021 09:20:10 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E42AA2228A;
-        Mon, 25 Jan 2021 14:19:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611584370;
-        bh=7fpC+lTJSKxpC4pR/T7CZ14Iq6EymDL3VFSG9czVQ7M=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=iB6Y6xf+/afU+e1dBXKFAVyDkgLDNaPfZ/lS/xU2wbHUzebK2Papr3magQ+88sSrp
-         MBcXZZDW1hugZVvSZwxNbs5veQR87pmKIZ2VXz4t0Fc3lEiiZJf2M+ZRZc+xOrIuaq
-         bsmrUC5jXApAMYfFc/Ueau/7vikJz6MR4NMSlW9DEqt2T7od5GmlQzz73TIfoL2+RL
-         VTcxKDVdoRXV2dqqzE5zQEoYCGt1qCGUVwn0nGKDlCyiiXp0OLAhtf0QbuEZr+3p4S
-         t3Es3m0iL7a2nc/RykX5Oot98plEbzvnd/vRzi2f0O2R++xI4AqbTuRQCSn0oZ0bvh
-         ngxpcp73vFnOw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Daniel Walker <danielwa@cisco.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xe-linux-external@cisco.com
-In-Reply-To: <20210121231237.30664-2-danielwa@cisco.com>
-References: <20210121231237.30664-2-danielwa@cisco.com>
-Subject: Re: [PATCH 2/2] spidev: Add cisco device compatible
-Message-Id: <161158432930.33513.16598539718945571721.b4-ty@kernel.org>
-Date:   Mon, 25 Jan 2021 14:18:49 +0000
+        id S1729712AbhAZWlt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 Jan 2021 17:41:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391719AbhAZRcY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Jan 2021 12:32:24 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F4DC06174A
+        for <linux-spi@vger.kernel.org>; Tue, 26 Jan 2021 09:31:44 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1l4RgD-00045p-EA; Tue, 26 Jan 2021 17:59:01 +0100
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1l4Rg3-0003hY-Ft; Tue, 26 Jan 2021 17:58:51 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Russell King <linux@armlinux.org.uk>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Eric Anholt <eric@anholt.net>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig.org@pengutronix.de>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        kvm@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: [PATCH v3 0/5] amba: minor fix and various cleanups
+Date:   Tue, 26 Jan 2021 17:58:30 +0100
+Message-Id: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 21 Jan 2021 15:12:36 -0800, Daniel Walker wrote:
-> Add compatible string for Cisco device present on the Cisco Petra
-> platform.
+From: Uwe Kleine-König <u.kleine-koenig.org@pengutronix.de
 
-Applied to
+Hello,
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Changes since v2 sent with Message-Id:
+20201124133139.3072124-1-uwe@kleine-koenig.org:
 
-Thanks!
+ - Rebase to v5.11-rc1 (which resulted in a few conflicts in
+   drivers/hwtracing).
+ - Add various Acks.
+ - Send to more maintainers directly (which I think is one of the
+   reasons why there are so few Acks).
 
-[2/2] spidev: Add cisco device compatible
-      commit: 396cf2a46adddbf51373e16225c1d25254310046
+For my taste patch 4 needs some more acks (drivers/char/hw_random,
+drivers/dma, drivers/gpu/drm/pl111, drivers/i2c, drivers/mmc,
+drivers/vfio, drivers/watchdog and sound/arm have no maintainer feedback
+yet).
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+My suggestion is to let this series go in via Russell King (who cares
+for amba). Once enough Acks are there I can also provide a tag for
+merging into different trees. Just tell me if you prefer this solution.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Would be great if this could make it for v5.12, but I'm aware it's
+already late in the v5.11 cycle so it might have to wait for v5.13.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Best regards
+Uwe
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Uwe Kleine-König (5):
+  amba: Fix resource leak for drivers without .remove
+  amba: reorder functions
+  vfio: platform: simplify device removal
+  amba: Make the remove callback return void
+  amba: Make use of bus_type functions
 
-Thanks,
-Mark
+ drivers/amba/bus.c                            | 234 +++++++++---------
+ drivers/char/hw_random/nomadik-rng.c          |   3 +-
+ drivers/dma/pl330.c                           |   3 +-
+ drivers/gpu/drm/pl111/pl111_drv.c             |   4 +-
+ drivers/hwtracing/coresight/coresight-catu.c  |   3 +-
+ .../hwtracing/coresight/coresight-cpu-debug.c |   4 +-
+ .../hwtracing/coresight/coresight-cti-core.c  |   4 +-
+ drivers/hwtracing/coresight/coresight-etb10.c |   4 +-
+ .../coresight/coresight-etm3x-core.c          |   4 +-
+ .../coresight/coresight-etm4x-core.c          |   4 +-
+ .../hwtracing/coresight/coresight-funnel.c    |   4 +-
+ .../coresight/coresight-replicator.c          |   4 +-
+ drivers/hwtracing/coresight/coresight-stm.c   |   4 +-
+ .../hwtracing/coresight/coresight-tmc-core.c  |   4 +-
+ drivers/hwtracing/coresight/coresight-tpiu.c  |   4 +-
+ drivers/i2c/busses/i2c-nomadik.c              |   4 +-
+ drivers/input/serio/ambakmi.c                 |   3 +-
+ drivers/memory/pl172.c                        |   4 +-
+ drivers/memory/pl353-smc.c                    |   4 +-
+ drivers/mmc/host/mmci.c                       |   4 +-
+ drivers/rtc/rtc-pl030.c                       |   4 +-
+ drivers/rtc/rtc-pl031.c                       |   4 +-
+ drivers/spi/spi-pl022.c                       |   5 +-
+ drivers/tty/serial/amba-pl010.c               |   4 +-
+ drivers/tty/serial/amba-pl011.c               |   3 +-
+ drivers/vfio/platform/vfio_amba.c             |  15 +-
+ drivers/video/fbdev/amba-clcd.c               |   4 +-
+ drivers/watchdog/sp805_wdt.c                  |   4 +-
+ include/linux/amba/bus.h                      |   2 +-
+ sound/arm/aaci.c                              |   4 +-
+ 30 files changed, 157 insertions(+), 198 deletions(-)
+
+
+base-commit: 5c8fe583cce542aa0b84adc939ce85293de36e5e
+-- 
+2.29.2
+
