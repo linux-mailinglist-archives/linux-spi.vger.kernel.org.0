@@ -2,32 +2,34 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED4B304C6B
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Jan 2021 23:42:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 685A0304C6A
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Jan 2021 23:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729712AbhAZWlt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 Jan 2021 17:41:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391719AbhAZRcY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Jan 2021 12:32:24 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F4DC06174A
-        for <linux-spi@vger.kernel.org>; Tue, 26 Jan 2021 09:31:44 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1l4RgD-00045p-EA; Tue, 26 Jan 2021 17:59:01 +0100
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1l4Rg3-0003hY-Ft; Tue, 26 Jan 2021 17:58:51 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        id S1729054AbhAZWlm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 Jan 2021 17:41:42 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37158 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388864AbhAZRbZ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 26 Jan 2021 12:31:25 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D541121919;
+        Tue, 26 Jan 2021 17:30:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611682245;
+        bh=p9tGPF9ccd/d++aM4n9LyAfYAIV1RaM4Dz9iiSI4D3c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=upI/kMhl7eE4+5uUph8S2tnMemQz5UbOopsKlNTDclqyTUBBILQcZKMXkwORHX8Yq
+         cJWujimFLxD3PUXP3Q6R5vs2zcoQMtooqvBAs2SfrBJr86tAjNEuPYdfB5MvusQjhA
+         rfnXzeJTXEVfQT42qqoxlu/1tgXRz2T+JTiZP73bnjiQwVao3xvBwc5M7G4UXf469U
+         VF6liyETyFxIuLw+hAqs6DjITpSX4hILsnFHO/EYiFxk0F2hgX4ucJit2xkGTa6SJ/
+         LEzImN7uvO2sCqNSCL4qH0V6E+R6lLaPerEq4KlBRAb7BizMVwvcu+25e7achCvt2Z
+         DlVP64TyyHfRA==
+Date:   Tue, 26 Jan 2021 23:00:40 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Russell King <linux@armlinux.org.uk>,
+Cc:     Russell King <linux@armlinux.org.uk>,
         Matt Mackall <mpm@selenic.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
-        Vinod Koul <vkoul@kernel.org>,
         Dan Williams <dan.j.williams@intel.com>,
         Eric Anholt <eric@anholt.net>, David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
@@ -51,11 +53,9 @@ To:     Russell King <linux@armlinux.org.uk>,
         Cornelia Huck <cohuck@redhat.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig.org@pengutronix.de>,
-        Mike Leach <mike.leach@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, Mike Leach <mike.leach@linaro.org>,
         Leo Yan <leo.yan@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
         linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
         dri-devel@lists.freedesktop.org, coresight@lists.linaro.org,
@@ -66,90 +66,45 @@ Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de,
         linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
         kvm@vger.kernel.org, linux-fbdev@vger.kernel.org,
         linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [PATCH v3 0/5] amba: minor fix and various cleanups
-Date:   Tue, 26 Jan 2021 17:58:30 +0100
-Message-Id: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.29.2
+Subject: Re: [PATCH v3 4/5] amba: Make the remove callback return void
+Message-ID: <20210126173040.GY2771@vkoul-mobl>
+References: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
+ <20210126165835.687514-5-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+In-Reply-To: <20210126165835.687514-5-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Uwe Kleine-KÃ¶nig <u.kleine-koenig.org@pengutronix.de
+On 26-01-21, 17:58, Uwe Kleine-König wrote:
+> All amba drivers return 0 in their remove callback. Together with the
+> driver core ignoring the return value anyhow, it doesn't make sense to
+> return a value here.
+> 
+> Change the remove prototype to return void, which makes it explicit that
+> returning an error value doesn't work as expected. This simplifies changing
+> the core remove callback to return void, too.
+> 
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Acked-by: Krzysztof Kozlowski <krzk@kernel.org> # for drivers/memory
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/amba/bus.c                                 | 5 ++---
+>  drivers/char/hw_random/nomadik-rng.c               | 3 +--
+>  drivers/dma/pl330.c                                | 3 +--
 
-Hello,
+For dmaengine:
 
-Changes since v2 sent with Message-Id:
-20201124133139.3072124-1-uwe@kleine-koenig.org:
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
- - Rebase to v5.11-rc1 (which resulted in a few conflicts in
-   drivers/hwtracing).
- - Add various Acks.
- - Send to more maintainers directly (which I think is one of the
-   reasons why there are so few Acks).
-
-For my taste patch 4 needs some more acks (drivers/char/hw_random,
-drivers/dma, drivers/gpu/drm/pl111, drivers/i2c, drivers/mmc,
-drivers/vfio, drivers/watchdog and sound/arm have no maintainer feedback
-yet).
-
-My suggestion is to let this series go in via Russell King (who cares
-for amba). Once enough Acks are there I can also provide a tag for
-merging into different trees. Just tell me if you prefer this solution.
-
-Would be great if this could make it for v5.12, but I'm aware it's
-already late in the v5.11 cycle so it might have to wait for v5.13.
-
-Best regards
-Uwe
-
-Uwe Kleine-KÃ¶nig (5):
-  amba: Fix resource leak for drivers without .remove
-  amba: reorder functions
-  vfio: platform: simplify device removal
-  amba: Make the remove callback return void
-  amba: Make use of bus_type functions
-
- drivers/amba/bus.c                            | 234 +++++++++---------
- drivers/char/hw_random/nomadik-rng.c          |   3 +-
- drivers/dma/pl330.c                           |   3 +-
- drivers/gpu/drm/pl111/pl111_drv.c             |   4 +-
- drivers/hwtracing/coresight/coresight-catu.c  |   3 +-
- .../hwtracing/coresight/coresight-cpu-debug.c |   4 +-
- .../hwtracing/coresight/coresight-cti-core.c  |   4 +-
- drivers/hwtracing/coresight/coresight-etb10.c |   4 +-
- .../coresight/coresight-etm3x-core.c          |   4 +-
- .../coresight/coresight-etm4x-core.c          |   4 +-
- .../hwtracing/coresight/coresight-funnel.c    |   4 +-
- .../coresight/coresight-replicator.c          |   4 +-
- drivers/hwtracing/coresight/coresight-stm.c   |   4 +-
- .../hwtracing/coresight/coresight-tmc-core.c  |   4 +-
- drivers/hwtracing/coresight/coresight-tpiu.c  |   4 +-
- drivers/i2c/busses/i2c-nomadik.c              |   4 +-
- drivers/input/serio/ambakmi.c                 |   3 +-
- drivers/memory/pl172.c                        |   4 +-
- drivers/memory/pl353-smc.c                    |   4 +-
- drivers/mmc/host/mmci.c                       |   4 +-
- drivers/rtc/rtc-pl030.c                       |   4 +-
- drivers/rtc/rtc-pl031.c                       |   4 +-
- drivers/spi/spi-pl022.c                       |   5 +-
- drivers/tty/serial/amba-pl010.c               |   4 +-
- drivers/tty/serial/amba-pl011.c               |   3 +-
- drivers/vfio/platform/vfio_amba.c             |  15 +-
- drivers/video/fbdev/amba-clcd.c               |   4 +-
- drivers/watchdog/sp805_wdt.c                  |   4 +-
- include/linux/amba/bus.h                      |   2 +-
- sound/arm/aaci.c                              |   4 +-
- 30 files changed, 157 insertions(+), 198 deletions(-)
-
-
-base-commit: 5c8fe583cce542aa0b84adc939ce85293de36e5e
 -- 
-2.29.2
-
+~Vinod
