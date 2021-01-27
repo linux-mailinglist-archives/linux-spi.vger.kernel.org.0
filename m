@@ -2,17 +2,17 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E6D30573A
+	by mail.lfdr.de (Postfix) with ESMTP id 74B03305739
 	for <lists+linux-spi@lfdr.de>; Wed, 27 Jan 2021 10:45:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235139AbhA0JpN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 Jan 2021 04:45:13 -0500
-Received: from szxga06-in.huawei.com ([45.249.212.32]:11452 "EHLO
+        id S235017AbhA0JpL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 Jan 2021 04:45:11 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:11453 "EHLO
         szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235448AbhA0Jnu (ORCPT
+        with ESMTP id S235451AbhA0Jnu (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Jan 2021 04:43:50 -0500
 Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4DQdt95476zjCtx;
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4DQdt95jmBzjCw0;
         Wed, 27 Jan 2021 17:42:09 +0800 (CST)
 Received: from localhost.localdomain (10.67.165.24) by
  DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
@@ -23,9 +23,9 @@ To:     <tudor.ambarus@microchip.com>, <broonie@kernel.org>,
         <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>
 CC:     <john.garry@huawei.com>, <prime.zeng@huawei.com>,
         <yangyicong@hisilicon.com>, <linuxarm@openeuler.org>
-Subject: [PATCH 1/2] mtd: spi-nor: check 4-byte address support when parsing 4bait
-Date:   Wed, 27 Jan 2021 17:40:49 +0800
-Message-ID: <1611740450-47975-2-git-send-email-yangyicong@hisilicon.com>
+Subject: [PATCH 2/2] spi: hisi-sfc-v3xx: add address mode check
+Date:   Wed, 27 Jan 2021 17:40:50 +0800
+Message-ID: <1611740450-47975-3-git-send-email-yangyicong@hisilicon.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1611740450-47975-1-git-send-email-yangyicong@hisilicon.com>
 References: <1611740450-47975-1-git-send-email-yangyicong@hisilicon.com>
@@ -37,88 +37,85 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The spi-nor core will convert the address mode to 4-btye,
-without checking whether 4-byte address is supported or not.
-For example, the 16M s25fs128s1 can work under both 3-byte
-and 4-byte address and provides a 4bait table. The spi-nor
-will drive the flash under 4-byte address mode after parsing
-the 4bait and will cause it unusable on platforms doesn't
-support 4-byte.
-
-Add checking of 4-byte address support when parsing the 4bait
-table, stop converting the address mode if it's not supported.
+The address mode is either 3 or 4 for the controller, which is configured
+by the firmware and cannot be modified in the OS driver. Get the
+firmware configuration and add address mode check in the .supports_op()
+to block invalid operations.
 
 Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+Acked-by: John Garry <john.garry@huawei.com>
 ---
- drivers/mtd/spi-nor/sfdp.c | 48 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ drivers/spi/spi-hisi-sfc-v3xx.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/spi-nor/sfdp.c b/drivers/mtd/spi-nor/sfdp.c
-index 6ee7719..fdafc9b 100644
---- a/drivers/mtd/spi-nor/sfdp.c
-+++ b/drivers/mtd/spi-nor/sfdp.c
-@@ -940,6 +940,27 @@ static int spi_nor_parse_smpt(struct spi_nor *nor,
- 	return ret;
+diff --git a/drivers/spi/spi-hisi-sfc-v3xx.c b/drivers/spi/spi-hisi-sfc-v3xx.c
+index 4650b48..f71b780 100644
+--- a/drivers/spi/spi-hisi-sfc-v3xx.c
++++ b/drivers/spi/spi-hisi-sfc-v3xx.c
+@@ -19,6 +19,8 @@
+ 
+ #define HISI_SFC_V3XX_VERSION (0x1f8)
+ 
++#define HISI_SFC_V3XX_GLB_CFG (0x100)
++#define HISI_SFC_V3XX_GLB_CFG_CS0_ADDR_MODE BIT(2)
+ #define HISI_SFC_V3XX_RAW_INT_STAT (0x120)
+ #define HISI_SFC_V3XX_INT_STAT (0x124)
+ #define HISI_SFC_V3XX_INT_MASK (0x128)
+@@ -75,6 +77,7 @@ struct hisi_sfc_v3xx_host {
+ 	void __iomem *regbase;
+ 	int max_cmd_dword;
+ 	struct completion *completion;
++	u8 address_mode;
+ 	int irq;
+ };
+ 
+@@ -168,10 +171,18 @@ static int hisi_sfc_v3xx_adjust_op_size(struct spi_mem *mem,
+ static bool hisi_sfc_v3xx_supports_op(struct spi_mem *mem,
+ 				      const struct spi_mem_op *op)
+ {
++	struct spi_device *spi = mem->spi;
++	struct hisi_sfc_v3xx_host *host;
++
++	host = spi_controller_get_devdata(spi->master);
++
+ 	if (op->data.buswidth > 4 || op->dummy.buswidth > 4 ||
+ 	    op->addr.buswidth > 4 || op->cmd.buswidth > 4)
+ 		return false;
+ 
++	if (op->addr.nbytes != host->address_mode && op->addr.nbytes)
++		return false;
++
+ 	return spi_mem_default_supports_op(mem, op);
  }
  
-+static int spi_nor_spimem_check_4byte_addr(struct spi_nor *nor,
-+					   const struct spi_nor_read_command *read)
-+{
-+	struct spi_mem_op op = SPI_MEM_OP(SPI_MEM_OP_CMD(read->opcode, 1),
-+					  SPI_MEM_OP_ADDR(4, 0, 1),
-+					  SPI_MEM_OP_DUMMY(0, 1),
-+					  SPI_MEM_OP_DATA_IN(0, NULL, 1));
-+
-+	op.cmd.buswidth = spi_nor_get_protocol_inst_nbits(read->proto);
-+	op.addr.buswidth = spi_nor_get_protocol_addr_nbits(read->proto);
-+	op.data.buswidth = spi_nor_get_protocol_data_nbits(read->proto);
-+	op.dummy.buswidth = op.addr.buswidth;
-+	op.dummy.nbytes = (read->num_mode_clocks + read->num_wait_states) *
-+			  op.dummy.buswidth / 8;
-+
-+	if (!spi_mem_supports_op(nor->spimem, &op))
-+		return -EOPNOTSUPP;
-+
-+	return 0;
-+}
-+
- /**
-  * spi_nor_parse_4bait() - parse the 4-Byte Address Instruction Table
-  * @nor:		pointer to a 'struct spi_nor'.
-@@ -1061,6 +1082,33 @@ static int spi_nor_parse_4bait(struct spi_nor *nor,
- 		goto out;
+@@ -416,7 +427,7 @@ static int hisi_sfc_v3xx_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct hisi_sfc_v3xx_host *host;
+ 	struct spi_controller *ctlr;
+-	u32 version;
++	u32 version, glb_config;
+ 	int ret;
  
- 	/*
-+	 * Check whether the 4-byte address is supported before converting
-+	 * the instruction set to 4-byte.
-+	 */
-+	if (nor->spimem) {
-+		bool support = false;
-+
-+		for (i = 0; i < SNOR_CMD_READ_MAX; i++) {
-+			struct spi_nor_read_command read_cmd;
-+
-+			memcpy(&read_cmd, &params->reads[i], sizeof(read_cmd));
-+
-+			read_cmd.opcode = spi_nor_convert_3to4_read(read_cmd.opcode);
-+			if (!spi_nor_spimem_check_4byte_addr(nor, &read_cmd)) {
-+				support = true;
-+				break;
-+			}
-+		}
-+
-+		/*
-+		 * No supported 4-byte instruction is found, stop parsing the
-+		 * 4bait table.
-+		 */
-+		if (!support)
-+			goto out;
-+	}
-+
+ 	ctlr = spi_alloc_master(&pdev->dev, sizeof(*host));
+@@ -463,6 +474,18 @@ static int hisi_sfc_v3xx_probe(struct platform_device *pdev)
+ 	ctlr->num_chipselect = 1;
+ 	ctlr->mem_ops = &hisi_sfc_v3xx_mem_ops;
+ 
 +	/*
- 	 * Discard all operations from the 4-byte instruction set which are
- 	 * not supported by this memory.
- 	 */
++	 * The address mode of the controller is either 3 or 4,
++	 * which is indicated by the address mode bit in
++	 * the global config register. The register is read only
++	 * for the OS driver.
++	 */
++	glb_config = readl(host->regbase + HISI_SFC_V3XX_GLB_CFG);
++	if (glb_config & HISI_SFC_V3XX_GLB_CFG_CS0_ADDR_MODE)
++		host->address_mode = 4;
++	else
++		host->address_mode = 3;
++
+ 	version = readl(host->regbase + HISI_SFC_V3XX_VERSION);
+ 
+ 	switch (version) {
 -- 
 2.8.1
 
