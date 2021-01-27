@@ -2,64 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D13A3062A4
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Jan 2021 18:52:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E87530626B
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Jan 2021 18:45:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344222AbhA0Rvy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 Jan 2021 12:51:54 -0500
-Received: from foss.arm.com ([217.140.110.172]:56922 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1343536AbhA0R1k (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 27 Jan 2021 12:27:40 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A580D1478;
-        Wed, 27 Jan 2021 09:26:19 -0800 (PST)
-Received: from localhost.localdomain (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6C4373F66E;
-        Wed, 27 Jan 2021 09:26:17 -0800 (PST)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>
-Cc:     Jernej Skrabec <jernej.skrabec@siol.net>,
-        Samuel Holland <samuel@sholland.org>,
-        Icenowy Zheng <icenowy@aosc.io>, Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>,
-        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com, Mark Brown <broonie@kernel.org>,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH v5 13/20] dt-bindings: spi: sunxi: Add H616 compatible string
-Date:   Wed, 27 Jan 2021 17:24:53 +0000
-Message-Id: <20210127172500.13356-14-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.14.1
-In-Reply-To: <20210127172500.13356-1-andre.przywara@arm.com>
-References: <20210127172500.13356-1-andre.przywara@arm.com>
+        id S1344097AbhA0RpE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 Jan 2021 12:45:04 -0500
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:43381 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236425AbhA0Ro7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Jan 2021 12:44:59 -0500
+Received: by mail-ot1-f41.google.com with SMTP id v1so2489144ott.10;
+        Wed, 27 Jan 2021 09:44:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iHVRlfV9EQu4gPj5dVenKguyA2U2WXu41Z7MOBH2q+k=;
+        b=LPm4Nd3P5iDXt5n/WX5rX0Qet0y5kDWLmoWOWa4cdU+SCGR4EPxkY9OZQdBnKmFhUw
+         YK7xnUBHrWykplK/+mR4h38u8jUWPIuUwvX2x88oLc7pWusPZWwb7M9OfyTZVnrb29X8
+         y/l1Vyci1kIRyFduiNT4Gma3gxUIc731uEdPwEOTHhPHqqt/hovG+z0I329Sr8ZKUJrY
+         INh0uY+30oxqw+eg3mF9VOWZohZ8kr44hRNFx51eHpntvCEq0cMrd4dmmSOSbIBbHgQ9
+         kksksED3Qms4/sQ10tJ2HFk2OamNUiJ3vYiwv/o7FgNUBCJdyv4AioAoMfUCvKCxf6wo
+         suNw==
+X-Gm-Message-State: AOAM532UMZbORRP7Nu0TUJW6tvf1zU1TmEnx9b524b0BcR4IsrEwmwxU
+        KxLHZxoSkO/zCNM8B5Bznt/WCBLCY3cqhuZ6FMs=
+X-Google-Smtp-Source: ABdhPJx3wpBSkXPSpXDG6M0ltMbmguxQMImznzdVeAu1VT6FKAr93J3QfMztoWACmNnTeM4RMvDtc7yrOgIFRwkLX6w=
+X-Received: by 2002:a05:6830:2313:: with SMTP id u19mr8675107ote.321.1611769458811;
+ Wed, 27 Jan 2021 09:44:18 -0800 (PST)
+MIME-Version: 1.0
+References: <CAJZ5v0ir4=urUviCR_4N96revWZkHVDyNNUiaJ3jjGzpX8zLVQ@mail.gmail.com>
+ <20210127160650.GA2991034@bjorn-Precision-5520>
+In-Reply-To: <20210127160650.GA2991034@bjorn-Precision-5520>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 27 Jan 2021 18:44:07 +0100
+Message-ID: <CAJZ5v0gmP2QBmMWkdVaGy+j6+FFPH6VGfRMU9ncz6m4BhBPgFA@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: Test for ACPI_SUCCESS rather than !ACPI_FAILURE
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Corentin Chary <corentin.chary@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        acpi4asus-user@lists.sourceforge.net, linux-hwmon@vger.kernel.org,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
+        <alsa-devel@alsa-project.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add the obvious compatible name to the existing SPI binding, and pair
-it with the existing H3 fallback compatible string, as the devices are
-compatible.
+On Wed, Jan 27, 2021 at 5:06 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Wed, Jan 27, 2021 at 04:44:02PM +0100, Rafael J. Wysocki wrote:
+> > On Wed, Jan 27, 2021 at 4:16 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > >
+> > > On Tue, Jan 26, 2021 at 02:23:17PM -0600, Bjorn Helgaas wrote:
+> > > > From: Bjorn Helgaas <bhelgaas@google.com>
+> > > >
+> > > > The double negative makes it hard to read "if (!ACPI_FAILURE(status))".
+> > > > Replace it with "if (ACPI_SUCCESS(status))".
+> > > >
+> > > > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> > > > ---
+> > > >
+> > > > This isn't really an ACPI patch, but I'm sending it to you, Rafael, since
+> > > > it seems easier to just apply these all at once.  But I'd be happy to split
+> > > > them up into individual patches if you'd rather.
+> > >
+> > > Thanks, everybody.  Rafael, I'll just merge this via my tree to avoid
+> > > burdening you.
+> >
+> > It may conflict with some janitorial stuff I'm doing, though, so
+> > unless you've already applied it, I'd prefer to take it via the ACPI
+> > tree.
+>
+> No problem, it's all yours!
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Acked-by: Rob Herring <robh@kernel.org>
----
- .../devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml         | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-index 7866a655d81c..908248260afa 100644
---- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-+++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-@@ -25,6 +25,7 @@ properties:
-           - enum:
-               - allwinner,sun8i-r40-spi
-               - allwinner,sun50i-h6-spi
-+              - allwinner,sun50i-h616-spi
-           - const: allwinner,sun8i-h3-spi
- 
-   reg:
--- 
-2.17.5
-
+Applied as 5.12 material with the ACKs, thanks!
