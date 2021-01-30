@@ -2,100 +2,137 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B05307F2E
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Jan 2021 21:10:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77FA13096BB
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Jan 2021 17:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbhA1UJ6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 28 Jan 2021 15:09:58 -0500
-Received: from spe6-3.ucebox.co.za ([197.242.159.209]:33672 "EHLO
-        spe6-3.ucebox.co.za" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbhA1UH4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 Jan 2021 15:07:56 -0500
-X-Greylist: delayed 6416 seconds by postgrey-1.27 at vger.kernel.org; Thu, 28 Jan 2021 15:07:02 EST
-Received: from cornucopia.aserv.co.za ([154.0.175.203])
-        by spe4.ucebox.co.za with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <manornutgrovemanor@gmail.com>)
-        id 1l5Brs-0002Dc-Q5; Thu, 28 Jan 2021 20:18:43 +0200
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by cornucopia.aserv.co.za (Postfix) with ESMTPA id 37618C1250;
-        Thu, 28 Jan 2021 20:17:07 +0200 (SAST)
+        id S231857AbhA3QZ5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 30 Jan 2021 11:25:57 -0500
+Received: from mail-vi1eur05on2119.outbound.protection.outlook.com ([40.107.21.119]:30305
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231394AbhA3Ogz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 30 Jan 2021 09:36:55 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NzMWTkxLrkiC3d8Q8/aTzl4MMv6hucpMFplXusYwNggXTpH+8+2CKPqOF5dEvls48riDd97We+/oOj1AaNwUJRH/92JyyaRmrsm4Ka7GaIx6SZdmiZ/1CeDCRCbtehfgwZC+P9k+PeKlgZ3960Ab5xMVui5n4JN9tE3CcrQei/lyzpNOFI4GSpdkUKP73orm/5ODQAhCMhdhdovnIDygJTlnOaY4WVYczD+DaEedJ44on9lXl05wN5j1oOHo5fGgFWXhBis6O8Khi4EjO1Y6FhfnaCaf9A6so2HUfIJePlo5nbUGfZMjp2H5bfHMqsvy1AulTOgznYP1+kfYhTSsgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YRZUeqSyKjUVAMbC9EnBVD06J5pPCNa6Ry/HrvZEvA4=;
+ b=VL5zulM2SVUPU1Kb+5+y55sVFAZHazWXzqEKNShGbnCGDQPs59MWn+f9qXSoHkzP61KG/+UaWIl8MjivHxE6JZ/5kfCGgJTYqeRqFsSzGlKJICN4HnCAX4RSsqXQg/9iG99GxL9NwQQv/TMgRxmVyY2FyFO72L4ajQjc5Mfk4L14ZG3L3mkx58eQ8Fydyj0sgOpZSNiHFlRiQQtcAOrYs3s4N8zjc7S15XfzeVTbTII2BWAxbahRhkAYxooyCq6hLToZkyIOT2qDE5xn8CTA9BhzMhYXh7fvMnBpnDXHD82TioeLD6yJQexnnGjmyeVYLJks/DgfustN6U3S6DBW4w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=prevas.dk; dmarc=pass action=none header.from=prevas.dk;
+ dkim=pass header.d=prevas.dk; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.dk;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YRZUeqSyKjUVAMbC9EnBVD06J5pPCNa6Ry/HrvZEvA4=;
+ b=HFl4lebcaNHZcpAsTGk+gNZtQBsvMT/Fiw1q5Q3yOSklDM6ZdLxfgyvyPf6qoT0qlLjGRiRD6+9dzO8GtdJ4agLdDgnD4C+Cs31gLs+JCeQaaIDvtRtdHSB9MEHQJ6f+pZB9GppgOv2IEHPFhSGpOSTA96QqvCQisL7tjtqZYUQ=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=prevas.dk;
+Received: from AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:3f::10)
+ by AM9PR10MB4434.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:273::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.17; Sat, 30 Jan
+ 2021 14:35:54 +0000
+Received: from AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::58b2:6a2a:b8f9:bc1a]) by AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::58b2:6a2a:b8f9:bc1a%3]) with mapi id 15.20.3784.021; Sat, 30 Jan 2021
+ 14:35:54 +0000
+From:   Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+To:     Mark Brown <broonie@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        stable@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: fsl: invert spisel_boot signal on MPC8309
+Date:   Sat, 30 Jan 2021 15:35:45 +0100
+Message-Id: <20210130143545.505613-1-rasmus.villemoes@prevas.dk>
+X-Mailer: git-send-email 2.23.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [5.186.115.188]
+X-ClientProxiedBy: AM6P194CA0034.EURP194.PROD.OUTLOOK.COM
+ (2603:10a6:209:90::47) To AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:3f::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 28 Jan 2021 20:17:07 +0200
-From:   Nut Grove Manor <manornutgrovemanor@gmail.com>
-To:     undisclosed-recipients:;
-Subject: Invitation To Quote
-User-Agent: Roundcube Webmail/1.4.1
-Message-ID: <b09951c581c69bcd4c3d48c21f6885b3@gmail.com>
-X-Sender: manornutgrovemanor@gmail.com
-X-Originating-IP: 154.0.175.203
-X-Afrihost-Domain: pesci.aserv.co.za
-X-Afrihost-Username: 154.0.175.203
-Authentication-Results: ucebox.co.za; auth=pass smtp.auth=154.0.175.203@pesci.aserv.co.za
-X-Afrihost-Outgoing-Class: unsure
-X-Afrihost-Outgoing-Evidence: Combined (0.71)
-X-Recommended-Action: accept
-X-Filter-ID: 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
- F2m4bBx/YCvbzEWyHpfJdFJnGm+sTRDggxgVxQ==
-X-Report-Abuse-To: spam@spe1.ucebox.co.za
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from prevas-ravi.prevas.se (5.186.115.188) by AM6P194CA0034.EURP194.PROD.OUTLOOK.COM (2603:10a6:209:90::47) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.16 via Frontend Transport; Sat, 30 Jan 2021 14:35:53 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ecb73bbd-d2bb-474d-1b01-08d8c52c594a
+X-MS-TrafficTypeDiagnostic: AM9PR10MB4434:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM9PR10MB44349F6AFA2373016FF476CB93B89@AM9PR10MB4434.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kCI/uOpfq4SD+UGOFK+waTys5Rv0ACNojBMU/aoCk+73O09IvTM+Mx8TfGilnehy0NxLdpNnMcnM/tC62XrVblxFlPvcCymSBAFaxRvve+n6ATcD6ZVqSf/LfszeAY9N9L6M5U05Ua+ExdahUAbz0oNxvUFDQMWKlhKm1oCY24rmIdfNwMaxaAmvA1g1Iqq4x9oyN/d+SJBaikrNK7/kdBFptpTNIzF+MRhS4f28fEcfSjbwhH2VrEyyDKtXFgA97wolgwtUrib5qg0Pn5Q7FN7H9O1epLroEOz1Fn1HypOtE/oyX0Jxlz4XyrpKzA/528fXwwIPQAtVJfIocRH5m5iVrGMh5OMzSdvyiogxyQfugBbVYk6YeybMESka+eb3gqzp5GL6NAEryUpeYoqh9HWmSXO5fVsk8sq5+mbyFDvQdhocFvZN1Bji65+5F4R/dCdkZZvgDulDt5iGnSemJy3QvjxhqvDlPLSOVKyqFLopsqwxEdjeqalvhA3YfsgaEiWsf2Q/7SSQLuI5TB3CCw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(39830400003)(136003)(366004)(396003)(346002)(376002)(2616005)(956004)(110136005)(44832011)(86362001)(16526019)(186003)(26005)(8936002)(478600001)(52116002)(5660300002)(316002)(6506007)(4326008)(6486002)(1076003)(6512007)(83380400001)(8676002)(8976002)(66556008)(66476007)(66946007)(36756003)(2906002)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?m+qWT2iw6mFZ7OevyzvHuSBsP8QmHrbkylcP1T+BaCN7NahjvXYTC7dAx8Qs?=
+ =?us-ascii?Q?tGYqk9d86kYkgnt8gkChPcEgZCI6GzK4WaoIqcQa27SSsoufnck90CRnEK+b?=
+ =?us-ascii?Q?+M2FLB7Yi6GTlTySDTfABw4F0dO4LbFtApRduZ3mZvThfklJ5bT/Spg9dCo+?=
+ =?us-ascii?Q?BeYC7GYVPi0jyI67aXKWC0760zci0JIT+CkQYfhh9xbxq+ghm1maCHx0IN/b?=
+ =?us-ascii?Q?3MqVdmJTtznxQ+Mx3FbH7Gl5E8G5J+/wrLLXj3yWdCBO0rZb21w7Uu+R/ns4?=
+ =?us-ascii?Q?kHxL+C8E8nkB8J9kZBlafB+DN+9KTVp1fBMcXRARkH7PrgrNgCygeWqZ/RG4?=
+ =?us-ascii?Q?8827HQx/3Qh1/86m6RO4yzaqTp+mREV5oknBv3iBJQ6WT0Ar7XjFyJA5trW5?=
+ =?us-ascii?Q?1+NDX1teEHqEZjPg9uKq6JsCHs8uvwy3C9DTDoafev/H5HqJI1QFNz35u1sa?=
+ =?us-ascii?Q?G3StSbgN4jZFSddNLxHcrX/9uXHkmEfylq3yHWVYN3bc5B3DptC8XBUQ2l5/?=
+ =?us-ascii?Q?L34ETgQ6LbZ/UXTtgIMVJwGTDHXgH4gFoy7NAQFOrWBAQex91kShZEyEmhai?=
+ =?us-ascii?Q?dpWnKA5SCZfzPZX4Sbiz5tg5r+paQSgRXTyPRX+mrxwZ/tKWupX7Y8opmf68?=
+ =?us-ascii?Q?BmOkeY0EWHCMTxL3wr2/40EUtQm+ILemCqtFFN6zAmzvxuCkXesrTsw+Vi6p?=
+ =?us-ascii?Q?5NJNWGn9vDx71F2i6Us74Fparhu6L6f6d2oP+xh59VKOqF8/LRNazlfxqJit?=
+ =?us-ascii?Q?IvlIm5ouQAiRk3wH8YigngNipmvzMKKiru3K3tXMH8e3U5WJK/q6FwqWu3w9?=
+ =?us-ascii?Q?Sg1FGtSgBgkSdDzt9qoqNrtlbqHzybG6MK0gfrKCdBIU9VJ1Btt6Vrgi8Xxi?=
+ =?us-ascii?Q?XV7qqvlsrKyEjSQpFBMmDoK8ICkOmGn9K8LCe9WgfxceGDdH/8aFT9oed899?=
+ =?us-ascii?Q?pGVhi+MFQSIXPW4LcnrZcFlej+niGtebFizzoUxHOgTWt9Qf6Wtks9fjts+k?=
+ =?us-ascii?Q?4voAbYeUS3TagqvvlvWeXLQAndNrL7QO56YzCuPwPsmF/giQ6tEBtRyqmiCf?=
+ =?us-ascii?Q?CuIzO1TK?=
+X-OriginatorOrg: prevas.dk
+X-MS-Exchange-CrossTenant-Network-Message-Id: ecb73bbd-d2bb-474d-1b01-08d8c52c594a
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2021 14:35:54.2215
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d350cf71-778d-4780-88f5-071a4cb1ed61
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: i4XG316i3GVFIRA+BAZpHrGAq4RhFEOvrEogJt7PLYH+cOpvMFEHqIABeMFOvZXVEQnN6Cef5E/zFXMZG0vNGvbxabRKGlVUyrKu/6TLOUI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR10MB4434
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Good Day Sir
+Commit 7a2da5d7960a ("spi: fsl: Fix driver breakage when SPI_CS_HIGH
+is not set in spi->mode") broke our MPC8309 board by effectively
+inverting the boolean value passed to fsl_spi_cs_control. The
+SPISEL_BOOT signal is used as chipselect, but it's not a gpio, so
+we cannot rely on gpiolib handling the polarity.
 
-We are please to invite you/your company to quote the following item
-listed
-below:
+Adapt to the new world order by inverting the logic here. This does
+assume that the slave sitting at the SPISEL_BOOT is active low, but
+should that ever turn out not to be the case, one can create a stub
+gpiochip driver controlling a single gpio (or rather, a single "spo",
+special-purpose output).
 
-Product/Model No: TM9653 PRESSURE REGULATOR
-Product Name:MEKO
-Qty. 30 units
+Fixes: 7a2da5d7960a ("spi: fsl: Fix driver breakage when SPI_CS_HIGH is not set in spi->mode")
+Cc: stable@vger.kernel.org
+Signed-off-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+---
+ drivers/spi/spi-fsl-spi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Compulsory,Kindly send your quotation
-for immediate approval.
+diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
+index 6d8e0a05a535..e4a8d203f940 100644
+--- a/drivers/spi/spi-fsl-spi.c
++++ b/drivers/spi/spi-fsl-spi.c
+@@ -695,7 +695,7 @@ static void fsl_spi_cs_control(struct spi_device *spi, bool on)
+ 
+ 		if (WARN_ON_ONCE(!pinfo->immr_spi_cs))
+ 			return;
+-		iowrite32be(on ? SPI_BOOT_SEL_BIT : 0, pinfo->immr_spi_cs);
++		iowrite32be(on ? 0 : SPI_BOOT_SEL_BIT, pinfo->immr_spi_cs);
+ 	}
+ }
+ 
+-- 
+2.23.0
 
-Kind Regards,
-Albert Bourla
-PFIZER B.V Supply Chain Manager
-Tel: +31(0)208080 880
-ADDRESS: Rivium Westlaan 142, 2909 LD
-Capelle aan den IJssel, Netherlands
