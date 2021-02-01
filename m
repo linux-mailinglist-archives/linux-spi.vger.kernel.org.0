@@ -2,55 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A00731119C
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Feb 2021 20:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FFD3111B7
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Feb 2021 21:01:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbhBESPY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 Feb 2021 13:15:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32858 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232098AbhBESOv (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 5 Feb 2021 13:14:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 21F7764FB9;
-        Fri,  5 Feb 2021 19:56:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612554995;
-        bh=b1FoFPhl57GIBtdaZICDup5TbLO3OSZmHBe9M6P4uMs=;
-        h=Subject:From:Date:To:From;
-        b=ZY1+IVRJnBuG6mPQt2x5fvQ5OCM4bbVroB1FreeIJYvlK0VCY4+o82bKRcQu8xEc3
-         vsp/9ZED1D1uk09Hx9fNeLX5wB08iddgXXmgun+vV6ayqmpyNDy74n4fQCSxfffh04
-         5RmIjOClhK7O6Ey6m476cbutIFCvAz7kaOfptW03rhsJVOQuncAwgs208wDLOkXNUE
-         6rVObGgwTG7FCTd6EVJ3yGfR+dDWaoSW5kN1uomRqynFJ29Zaar/uzViQ0TsBHbRBW
-         MVKWdRsC07/rk16+65IimjqRNqnoaMfXrSGePfHxi9hDXBoEqTa4s1npdpUVHxYmvf
-         1LvGaXt5bXseg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 117C4609E5;
-        Fri,  5 Feb 2021 19:56:35 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S233616AbhBESRz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 Feb 2021 13:17:55 -0500
+Received: from [20.39.40.203] ([20.39.40.203]:55697 "EHLO optinix.in"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S233183AbhBEPTk (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 5 Feb 2021 10:19:40 -0500
+dkim-signature: v=1; a=rsa-sha256; d=digitalsol.in; s=dkim;
+        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=wK2neTcOXNiSQ+RBxrnFed+mRrGUU/ndLGEgvo8IMCc=;
+        b=JFt3cjfr2gf0oZFNAIkKMxcz4dJD/YGkc0fGvOoSd3DydZ6om7JzTU837vBFVq1NIPU0D2QA5BLHZXE1+7cBmkJlbZjYCUFmJkkaBVbP88e4KHnDVRcctmBLIZ1pL5VerRqjcciKkL4DSuyXFJlGk3Z0CRoskvUoLBM7ZhpxLeqIU2BKsbHQXJZ1h2qHQhaHiD+VrGx+bGKjZzbhmRvwLDQIByq6jRcjht5MzYCcxpzOzp/k+Dev9dQj7B
+        WId68CyP4XonlI4wIMRo1xiGfUtKZ+P3cZo2ejPWBjr+ynq3dK3OxibTTEKfmOc5W1zmJFMAPQ+ZKxsa3M4d1PiYxHmg==
+Received: from User (Unknown [52.231.31.5])
+        by optinix.in with ESMTP
+        ; Mon, 1 Feb 2021 08:50:14 +0000
+Message-ID: <D474448D-A325-42CC-A881-8334C6C84BA7@optinix.in>
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <support@digitalsol.in>
+Subject: Re:read
+Date:   Mon, 1 Feb 2021 08:50:13 -0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <161255499506.29987.4157883655096370093.git-patchwork-housekeeping@kernel.org>
-Date:   Fri, 05 Feb 2021 19:56:35 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] spi: stm32: fix and enhancements for spi-stm32 (2021-02-05T18:59:25)
-  Superseding: [v1] spi: stm32: fix and enhancements for spi-stm32 (2021-02-05T11:09:02):
-    [1/8] spi: stm32: properly handle 0 byte transfer
-    [2/8] spi: stm32: do not mandate cs_gpio
-    [3/8] spi: stm32h7: ensure message are smaller than max size
-    [4/8] spi: stm32: driver uses reset controller only at init
-    [5/8] spi: stm32: defer probe for reset
-    [6/8] spi: stm32: use bitfield macros
-    [7/8] spi: stm32h7: replace private SPI_1HZ_NS with NSEC_PER_SEC
-    [8/8] spi: stm32: make spurious and overrun interrupts visible
+Hello,
 
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
+
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
+
+Regards,
+Ms. Reem.
 
