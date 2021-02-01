@@ -2,64 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 759DF30CF15
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Feb 2021 23:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 794A630A2A5
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Feb 2021 08:27:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235906AbhBBWed (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 2 Feb 2021 17:34:33 -0500
-Received: from [20.39.40.203] ([20.39.40.203]:61037 "EHLO optinix.in"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S230091AbhBBWeU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 2 Feb 2021 17:34:20 -0500
-dkim-signature: v=1; a=rsa-sha256; d=digitalsol.in; s=dkim;
-        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=wK2neTcOXNiSQ+RBxrnFed+mRrGUU/ndLGEgvo8IMCc=;
-        b=Z/qoYR5e93G/1E5Uh8tLreepyziGYShILI7fcXozE97A3DqZKBadv9kcBZBcmHZnqAUcLkt0g+COxgI6WqJ5gdfKqksQSW540KJaAE4DNiZ+EZYtErJhsiZnZCgjfp9yI8W2dpgN2EsH5zUvgVY6Bl2MWU8ziaGqy1DCXSk4DXXi+2CTtkJX9uQrf2ohPvP7bhav6zr4dJxTQjQYoopWjV3h9j7RqQq/UIXqX3VBjVDZARoXQTZUB0KN0A
-        F7X8DeijiSCFEdYkkdQwasjHi3K0B6KloKBXegK0TgQ39PHt5t2MVnmtmeZadY0DbdImfujjk25mqjLTG700JJRoTl9A==
-Received: from User (Unknown [52.231.31.5])
-        by optinix.in with ESMTP
-        ; Sat, 30 Jan 2021 02:14:15 +0000
-Message-ID: <B0CC978E-0149-4652-A2D0-17DE1F49BCC1@optinix.in>
-Reply-To: <ms.reem@yandex.com>
-From:   "Ms. Reem" <support@digitalsol.in>
-Subject: Re:read
-Date:   Sat, 30 Jan 2021 02:14:13 -0000
+        id S229557AbhBAH0t (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 1 Feb 2021 02:26:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231597AbhBAH0r (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 1 Feb 2021 02:26:47 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575AFC061573
+        for <linux-spi@vger.kernel.org>; Sun, 31 Jan 2021 23:26:07 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id o16so11484464pgg.5
+        for <linux-spi@vger.kernel.org>; Sun, 31 Jan 2021 23:26:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=st35ya39PRwTDO/THE02rgYudJLgg+5H5DVN469+W60=;
+        b=B/ZLF/7fm/kDoPErknk1CjR+2/3AIkAJHfaz1PdchDYLSJBMOLEYSDPjwpExgaJuuM
+         8BO6HiAitvLEvH0ZYVw5WpxPZpGTkSUQoXqQr2WLAQ9xID1exLKGRgIn0+CnPsDJx5JL
+         XqhymXXny7o7iOmSbsT0Ps7B75jcPqI/xkU5p/R4QrBJkAN2w2gKUkppGQDEtIYCuaEO
+         6Fvzya6++R2ldzl8yUOjhFEeKNKydmju0qIX56doT4zgJ4rUJrgmEEdEkFFCGt0kYZfM
+         gY0LO17TaWYjjQglAwGsP66N43WpOeaxXrJCdRO82bnnAJFRLYXJQxxj8EbUmZ9+O1nk
+         /K4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=st35ya39PRwTDO/THE02rgYudJLgg+5H5DVN469+W60=;
+        b=C04KyxkSD5kvO0UDZw8dMedJbjy5DYhdEpy1PWyO9QpyOHMJuuhxmQ9guTQWVcaGlx
+         gfOh/Ky22UlBQWuG2wnoq+2OhYffPoOjQ+cxNn0RC+Nce9ec4PfzlmDbrcCnZOXooH/G
+         8hdbZa6k729pvQMHzWloFjZsVpjF37eWzxt7m/F3ub+5Tp7Nt6dIsvWRRzvjVy9SxJpZ
+         r/CcTPQg45yzDi7BTIIpJyORlZaDUzqo5lQjAWiasqHDcY4tcRLGpzbumJBXeiSY9BNW
+         TZWtuJlaZVjNWC0WVAauN/pK3It9kyjNcL3IN3Z9E5N5lsro9fsOC/F2GjgfOjGJseGC
+         FASQ==
+X-Gm-Message-State: AOAM532NeS50cfBDUDttz+VoPiQZn0JbqjCPS0Sv6V6Ix99MSZzIQ7Yu
+        +vg0jM33a60J0qdr3znFSyQ3T/WGaRItveuq8Mb3ig==
+X-Google-Smtp-Source: ABdhPJyZv/4x/jrC2WKRVXznIPBvbfL3mCHH2Bd4OX04vY6GImicIe0l77b1RnYNPaoYE4ayz2ltOnasV/P7TyT2Rbw=
+X-Received: by 2002:a65:6881:: with SMTP id e1mr16322492pgt.290.1612164366886;
+ Sun, 31 Jan 2021 23:26:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-To:     unlisted-recipients:; (no To-header on input)
+References: <20210124221755.1587718-1-jassisinghbrar@gmail.com> <20210125123709.GA4510@sirena.org.uk>
+In-Reply-To: <20210125123709.GA4510@sirena.org.uk>
+From:   Jassi Brar <jaswinder.singh@linaro.org>
+Date:   Mon, 1 Feb 2021 01:25:55 -0600
+Message-ID: <CAJe_ZhenU_VxKgeC0P-quiZr1RfqfNqXUuZjA40LGUu8vCjBMQ@mail.gmail.com>
+Subject: Re: spi: spi-synquacer: fix set_cs handling
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Jassi Brar <jassisinghbrar@gmail.com>, linux-spi@vger.kernel.org,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello,
+On Mon, 25 Jan 2021 at 06:37, Mark Brown <broonie@kernel.org> wrote:
+>
+> On Sun, Jan 24, 2021 at 04:17:55PM -0600, jassisinghbrar@gmail.com wrote:
+>
+> > Respect the set_cs() request by actually flushing the FIFOs
+> > and start/stop the SPI instance.
+>
+> set_cs() is a request to set the chip select not flush the FIFOs or
+> restart the hardware - what's the actual issue here?  Transfers should
+> happen in the transfer callback, the driver shouldn't be assuming there
+> is anything going on with chip select when completing transfers.
+>
+The controller has one block for each slave-select, and we need to
+actually stop the block to deassert the CS. At the minimum we need to
+set the DMSTOP_STOP bit.
+I will revise the patch to be much easier on the eyes.
 
-My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
-and Petroleum" also "Minister of State for International Cooperation"
-in UAE. I write to you on behalf of my other "three (3) colleagues"
-who has approved me to solicit for your "partnership in claiming of
-{us$47=Million}" from a Financial Home in Cambodia on their behalf and
-for our "Mutual Benefits".
-
-The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
-deal with Cambodian/Vietnam Government within 2013/2014, however, we
-don't want our government to know about the fund. If this proposal
-interests you, let me know, by sending me an email and I will send to
-you detailed information on how this business would be successfully
-transacted. Be informed that nobody knows about the secret of this
-fund except us, and we know how to carry out the entire transaction.
-So I am compelled to ask, that you will stand on our behalf and
-receive this fund into any account that is solely controlled by you.
-
-We will compensate you with 15% of the total amount involved as
-gratification for being our partner in this transaction. Reply to:
-ms.reem@yandex.com
-
-Regards,
-Ms. Reem.
-
+thanks.
