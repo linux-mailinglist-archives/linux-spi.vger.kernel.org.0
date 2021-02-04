@@ -2,71 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE50D30E4B3
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Feb 2021 22:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C412630F1B3
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Feb 2021 12:14:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231712AbhBCVJy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 3 Feb 2021 16:09:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36020 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232222AbhBCVJs (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 3 Feb 2021 16:09:48 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9CED764F5F;
-        Wed,  3 Feb 2021 21:09:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612386548;
-        bh=vMN2ZwN3DmW+Bfkh7W+rkJVdTFGNkh40nq5AITVU4P8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=tQqrVbRzFt9pT18LzgvEPe6/P5CE8Ae0Z3ACEOW8TKlqzfPBNTcgyLtUVPf9k/ykL
-         NE4HhaBzOFVwlaF59ns7/AsvJjTrn8/u3+GyLHLvW5l5zovHrnVM010fCEYgcOVoBm
-         U5GhjijUkrWD1GwDHv/pyTqgTeTtaboPctvkItJT6chPDNOXIfGclCFhS8Oerhf3Sj
-         0cgncTmkbb/6LG4hjq17lSuTZNh+LXvkfiQ6lGurifDMiQon/bp1rqq2sSOx4oQrsP
-         oFRidxjMM9hriCcTcrRM0od+qtHis+vH3Z/bPn5Cr1u6KKlDV7GpS9bLkU4MTv/KK7
-         Oe3A0SFkEwbAA==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, jassisinghbrar@gmail.com
-Cc:     Masahisa Kojima <masahisa.kojima@linaro.org>,
-        stable@vger.kernel.org, Jassi Brar <jaswinder.singh@linaro.org>
-In-Reply-To: <20210201073109.9036-1-jassisinghbrar@gmail.com>
-References: <20210201073109.9036-1-jassisinghbrar@gmail.com>
-Subject: Re: [PATCH] spi: spi-synquacer: fix set_cs handling
-Message-Id: <161238649945.34568.2886009579298697252.b4-ty@kernel.org>
-Date:   Wed, 03 Feb 2021 21:08:19 +0000
+        id S235647AbhBDLLP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 4 Feb 2021 06:11:15 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:12399 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235641AbhBDLLN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Feb 2021 06:11:13 -0500
+Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4DWbQv2v9xz7gPS;
+        Thu,  4 Feb 2021 19:09:11 +0800 (CST)
+Received: from localhost.localdomain (10.67.165.24) by
+ DGGEMS409-HUB.china.huawei.com (10.3.19.209) with Microsoft SMTP Server id
+ 14.3.498.0; Thu, 4 Feb 2021 19:10:19 +0800
+From:   Yicong Yang <yangyicong@hisilicon.com>
+To:     <broonie@kernel.org>, <shc_work@mail.ru>,
+        <linux-spi@vger.kernel.org>
+CC:     <yangyicong@hisilicon.com>, <prime.zeng@huawei.com>,
+        <linuxarm@openeuler.org>
+Subject: [PATCH] spi: clps711xx: remove redundant white-space
+Date:   Thu, 4 Feb 2021 19:08:06 +0800
+Message-ID: <1612436886-42839-1-git-send-email-yangyicong@hisilicon.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.67.165.24]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 1 Feb 2021 01:31:09 -0600, jassisinghbrar@gmail.com wrote:
-> When the slave chip select is deasserted, DMSTOP bit
-> must be set.
+From: Junhao He <hejunhao2@hisilicon.com>
 
-Applied to
+Remove redundant white-space, no functional change.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Signed-off-by: Junhao He <hejunhao2@hisilicon.com>
+Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+---
+ drivers/spi/spi-clps711x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks!
+diff --git a/drivers/spi/spi-clps711x.c b/drivers/spi/spi-clps711x.c
+index 5e900f2..0bef5ce 100644
+--- a/drivers/spi/spi-clps711x.c
++++ b/drivers/spi/spi-clps711x.c
+@@ -104,7 +104,7 @@ static int spi_clps711x_probe(struct platform_device *pdev)
+ 	master->use_gpio_descriptors = true;
+ 	master->bus_num = -1;
+ 	master->mode_bits = SPI_CPHA | SPI_CS_HIGH;
+-	master->bits_per_word_mask =  SPI_BPW_RANGE_MASK(1, 8);
++	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(1, 8);
+ 	master->dev.of_node = pdev->dev.of_node;
+ 	master->prepare_message = spi_clps711x_prepare_message;
+ 	master->transfer_one = spi_clps711x_transfer_one;
+-- 
+2.8.1
 
-[1/1] spi: spi-synquacer: fix set_cs handling
-      commit: 1c9f1750f0305bf605ff22686fc0ac89c06deb28
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
