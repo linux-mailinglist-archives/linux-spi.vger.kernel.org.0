@@ -2,61 +2,153 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C412630F1B3
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Feb 2021 12:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A17630F4BE
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Feb 2021 15:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235647AbhBDLLP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 4 Feb 2021 06:11:15 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:12399 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235641AbhBDLLN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Feb 2021 06:11:13 -0500
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4DWbQv2v9xz7gPS;
-        Thu,  4 Feb 2021 19:09:11 +0800 (CST)
-Received: from localhost.localdomain (10.67.165.24) by
- DGGEMS409-HUB.china.huawei.com (10.3.19.209) with Microsoft SMTP Server id
- 14.3.498.0; Thu, 4 Feb 2021 19:10:19 +0800
-From:   Yicong Yang <yangyicong@hisilicon.com>
-To:     <broonie@kernel.org>, <shc_work@mail.ru>,
-        <linux-spi@vger.kernel.org>
-CC:     <yangyicong@hisilicon.com>, <prime.zeng@huawei.com>,
-        <linuxarm@openeuler.org>
-Subject: [PATCH] spi: clps711xx: remove redundant white-space
-Date:   Thu, 4 Feb 2021 19:08:06 +0800
-Message-ID: <1612436886-42839-1-git-send-email-yangyicong@hisilicon.com>
-X-Mailer: git-send-email 2.8.1
+        id S236493AbhBDORc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 4 Feb 2021 09:17:32 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:47280 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236673AbhBDONW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Feb 2021 09:13:22 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 114ECM6Y098588;
+        Thu, 4 Feb 2021 08:12:22 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1612447942;
+        bh=vSix/bWL9afVl8T+g4konnqAhGR2zbbqyEmN8MzpnlA=;
+        h=From:To:CC:Subject:Date;
+        b=qUXtEhkGs2mIduc2HQILwwkG9NT4af3s7swC7DGS/k3hBlCXPxC7fTV8rAoMYWeZ8
+         1J0HpHJquQXbvKO3FFEV/JnCXuv81brXkBi72Sb4njSQZcXhLsikRMzzwIjXl/qJSV
+         fVrMlClfsBtSDrxZgRHthTpAWqQrrnbpY0i3sK7k=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 114ECM3v033783
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 4 Feb 2021 08:12:22 -0600
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 4 Feb
+ 2021 08:12:21 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 4 Feb 2021 08:12:21 -0600
+Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 114ECJIt123632;
+        Thu, 4 Feb 2021 08:12:20 -0600
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Pratyush Yadav <p.yadav@ti.com>, <zhengxunli@mxic.com.tw>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH 1/2] spi: spi-mem: add spi_mem_dtr_supports_op()
+Date:   Thu, 4 Feb 2021 19:42:17 +0530
+Message-ID: <20210204141218.32229-1-p.yadav@ti.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.67.165.24]
-X-CFilter-Loop: Reflected
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Junhao He <hejunhao2@hisilicon.com>
+spi_mem_default_supports_op() rejects DTR ops by default to ensure that
+the controller drivers that haven't been updated with DTR support
+continue to reject them. It also makes sure that controllers that don't
+support DTR mode at all (which is most of them at the moment) also
+reject them.
 
-Remove redundant white-space, no functional change.
+This means that controller drivers that want to support DTR mode can't
+use spi_mem_default_supports_op(). Driver authors have to roll their own
+supports_op() function and mimic the buswidth checks. See
+spi-cadence-quadspi.c for example. Or even worse, driver authors might
+skip it completely or get it wrong.
 
-Signed-off-by: Junhao He <hejunhao2@hisilicon.com>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+Add spi_mem_dtr_supports_op(). It provides a basic sanity check for DTR
+ops and performs the buswidth requirement check. Move the logic for
+checking buswidth in spi_mem_default_supports_op() to a separate
+function so the logic is not repeated twice.
+
+Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 ---
- drivers/spi/spi-clps711x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-mem.c       | 22 +++++++++++++++++++---
+ include/linux/spi/spi-mem.h |  9 +++++++++
+ 2 files changed, 28 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/spi/spi-clps711x.c b/drivers/spi/spi-clps711x.c
-index 5e900f2..0bef5ce 100644
---- a/drivers/spi/spi-clps711x.c
-+++ b/drivers/spi/spi-clps711x.c
-@@ -104,7 +104,7 @@ static int spi_clps711x_probe(struct platform_device *pdev)
- 	master->use_gpio_descriptors = true;
- 	master->bus_num = -1;
- 	master->mode_bits = SPI_CPHA | SPI_CS_HIGH;
--	master->bits_per_word_mask =  SPI_BPW_RANGE_MASK(1, 8);
-+	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(1, 8);
- 	master->dev.of_node = pdev->dev.of_node;
- 	master->prepare_message = spi_clps711x_prepare_message;
- 	master->transfer_one = spi_clps711x_transfer_one;
+diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+index c64371ce6c38..dc713b0c3c4d 100644
+--- a/drivers/spi/spi-mem.c
++++ b/drivers/spi/spi-mem.c
+@@ -137,8 +137,8 @@ static int spi_check_buswidth_req(struct spi_mem *mem, u8 buswidth, bool tx)
+ 	return -ENOTSUPP;
+ }
+ 
+-bool spi_mem_default_supports_op(struct spi_mem *mem,
+-				 const struct spi_mem_op *op)
++static bool spi_mem_check_buswidth(struct spi_mem *mem,
++				   const struct spi_mem_op *op)
+ {
+ 	if (spi_check_buswidth_req(mem, op->cmd.buswidth, true))
+ 		return false;
+@@ -156,13 +156,29 @@ bool spi_mem_default_supports_op(struct spi_mem *mem,
+ 				   op->data.dir == SPI_MEM_DATA_OUT))
+ 		return false;
+ 
++	return true;
++}
++
++bool spi_mem_dtr_supports_op(struct spi_mem *mem,
++			     const struct spi_mem_op *op)
++{
++	if (op->cmd.nbytes != 2)
++		return false;
++
++	return spi_mem_check_buswidth(mem, op);
++}
++EXPORT_SYMBOL_GPL(spi_mem_dtr_supports_op);
++
++bool spi_mem_default_supports_op(struct spi_mem *mem,
++				 const struct spi_mem_op *op)
++{
+ 	if (op->cmd.dtr || op->addr.dtr || op->dummy.dtr || op->data.dtr)
+ 		return false;
+ 
+ 	if (op->cmd.nbytes != 1)
+ 		return false;
+ 
+-	return true;
++	return spi_mem_check_buswidth(mem, op);
+ }
+ EXPORT_SYMBOL_GPL(spi_mem_default_supports_op);
+ 
+diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
+index 159463cc659c..2b65c9edc34e 100644
+--- a/include/linux/spi/spi-mem.h
++++ b/include/linux/spi/spi-mem.h
+@@ -311,6 +311,9 @@ void spi_controller_dma_unmap_mem_op_data(struct spi_controller *ctlr,
+ bool spi_mem_default_supports_op(struct spi_mem *mem,
+ 				 const struct spi_mem_op *op);
+ 
++bool spi_mem_dtr_supports_op(struct spi_mem *mem,
++			     const struct spi_mem_op *op);
++
+ #else
+ static inline int
+ spi_controller_dma_map_mem_op_data(struct spi_controller *ctlr,
+@@ -334,6 +337,12 @@ bool spi_mem_default_supports_op(struct spi_mem *mem,
+ 	return false;
+ }
+ 
++static inline
++bool spi_mem_dtr_supports_op(struct spi_mem *mem,
++			     const struct spi_mem_op *op)
++{
++	return false;
++}
+ #endif /* CONFIG_SPI_MEM */
+ 
+ int spi_mem_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op);
 -- 
-2.8.1
+2.30.0
 
