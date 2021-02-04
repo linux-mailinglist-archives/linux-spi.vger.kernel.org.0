@@ -2,158 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A2130F4BC
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Feb 2021 15:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F9430F8A6
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Feb 2021 17:56:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236664AbhBDOR2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 4 Feb 2021 09:17:28 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:50082 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236674AbhBDONf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Feb 2021 09:13:35 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 114ECOGL084754;
-        Thu, 4 Feb 2021 08:12:24 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1612447944;
-        bh=mcjR2G19gYaIPmqrIxviuqIGzP715O2RZTLlQKsRu2g=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=BZfd8UqOlEN51X9hFdmKfvBOIoFa9eFrthg2Ai2GqyYhzaFGCJ6+sYUCK/APuz+6k
-         jQXGz47hfoAwdDPgzHrdu6kgbt/jiVB406NUcI0emYe2L5kV57P28HkXh+Kc79/qMv
-         DfQc9MfO26momXHtKfXMH15qR4ki+3l+pszoMS+c=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 114ECOtm033810
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 4 Feb 2021 08:12:24 -0600
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 4 Feb
- 2021 08:12:24 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Thu, 4 Feb 2021 08:12:24 -0600
-Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 114ECJIu123632;
-        Thu, 4 Feb 2021 08:12:22 -0600
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Pratyush Yadav <p.yadav@ti.com>, <zhengxunli@mxic.com.tw>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 2/2] spi: cadence-quadspi: Use spi_mem_dtr_supports_op()
-Date:   Thu, 4 Feb 2021 19:42:18 +0530
-Message-ID: <20210204141218.32229-2-p.yadav@ti.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210204141218.32229-1-p.yadav@ti.com>
-References: <20210204141218.32229-1-p.yadav@ti.com>
+        id S238233AbhBDQyb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 4 Feb 2021 11:54:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56810 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238191AbhBDQxo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Feb 2021 11:53:44 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD47C06178B;
+        Thu,  4 Feb 2021 08:52:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=rU7kGtAV6x4h9PYVWyoXz+PtjR1Ekd/aEUlrk7YawjA=; b=VTPukyRsHKDa6AiBC7g1A33pB
+        SwzVRoY12CgfihopuGU84sVuVRYsUfiv6b3Emwm8BDSGMl47NJ4gm0qIsiqAwyM3pSwTIf2l6vha2
+        cDzPmBjk1ljXfebW71uB6xJtMeptgxH+fOQ7FkYaFWun/B6T1rfINwGd+rlb8M/Klezy3l/ReCdrv
+        V0d4qDQKYRRMYic1iTAdlcZh5yvqjMKyuvjs8Wsy37fKFKVUMlPg8hW+P5sXiwO/tuao+vtETwe0A
+        yHWeGg7btn+Meuk+vfx/5ICUUCrM+vrThjyBDk8k7p21ma/Hklw+jYC+vHctVDNhR+i6P6uievpnI
+        PK8/XvaQg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:39164)
+        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1l7hrw-0006on-3V; Thu, 04 Feb 2021 16:52:36 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1l7hrk-0005Ka-VR; Thu, 04 Feb 2021 16:52:24 +0000
+Date:   Thu, 4 Feb 2021 16:52:24 +0000
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-fbdev@vger.kernel.org, kvm@vger.kernel.org,
+        alsa-devel@alsa-project.org, dri-devel@lists.freedesktop.org,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig.org@pengutronix.de>, linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-input@vger.kernel.org, Mike Leach <mike.leach@linaro.org>,
+        linux-watchdog@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-crypto@vger.kernel.org,
+        kernel@pengutronix.de, Leo Yan <leo.yan@linaro.org>,
+        dmaengine@vger.kernel.org, Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Eric Anholt <eric@anholt.net>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: Re: [GIT PULL] immutable branch for amba changes targeting v5.12-rc1
+Message-ID: <20210204165224.GA1463@shell.armlinux.org.uk>
+References: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
+ <20210202135350.36nj3dmcoq3t7gcf@pengutronix.de>
+ <YBlcTXlxemmC2lgr@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YBlcTXlxemmC2lgr@kroah.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+Sender: Russell King - ARM Linux admin <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Use the newly introduced spi_mem_dtr_supports_op() to check DTR op
-support. This means the buswidth check does not need to be replicated.
-It also happens to fix a bug where STR ops with a 2-byte opcode would be
-reported as supported.
+On Tue, Feb 02, 2021 at 03:06:05PM +0100, Greg Kroah-Hartman wrote:
+> I'm glad to take this through my char/misc tree, as that's where the
+> other coresight changes flow through.  So if no one else objects, I will
+> do so...
 
-Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
----
+Greg, did you end up pulling this after all? If not, Uwe produced a v2.
+I haven't merged v2 yet as I don't know what you've done.
 
-Tested on TI's J721E with MT35XU512ABA and J7200 with S28HS512T.
+Thanks.
 
- drivers/spi/spi-cadence-quadspi.c | 63 ++-----------------------------
- 1 file changed, 4 insertions(+), 59 deletions(-)
-
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index b7ecbc8c1caa..442cc7c53a47 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -1219,65 +1219,11 @@ static int cqspi_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
- 	return ret;
- }
-
--static int cqspi_check_buswidth_req(struct spi_mem *mem, u8 buswidth, bool tx)
--{
--	u32 mode = mem->spi->mode;
--
--	switch (buswidth) {
--	case 1:
--		return 0;
--
--	case 2:
--		if ((tx &&
--		     (mode & (SPI_TX_DUAL | SPI_TX_QUAD | SPI_TX_OCTAL))) ||
--		    (!tx &&
--		     (mode & (SPI_RX_DUAL | SPI_RX_QUAD | SPI_RX_OCTAL))))
--			return 0;
--
--		break;
--
--	case 4:
--		if ((tx && (mode & (SPI_TX_QUAD | SPI_TX_OCTAL))) ||
--		    (!tx && (mode & (SPI_RX_QUAD | SPI_RX_OCTAL))))
--			return 0;
--
--		break;
--
--	case 8:
--		if ((tx && (mode & SPI_TX_OCTAL)) ||
--		    (!tx && (mode & SPI_RX_OCTAL)))
--			return 0;
--
--		break;
--
--	default:
--		break;
--	}
--
--	return -EOPNOTSUPP;
--}
--
- static bool cqspi_supports_mem_op(struct spi_mem *mem,
- 				  const struct spi_mem_op *op)
- {
- 	bool all_true, all_false;
-
--	if (cqspi_check_buswidth_req(mem, op->cmd.buswidth, true))
--		return false;
--
--	if (op->addr.nbytes &&
--	    cqspi_check_buswidth_req(mem, op->addr.buswidth, true))
--		return false;
--
--	if (op->dummy.nbytes &&
--	    cqspi_check_buswidth_req(mem, op->dummy.buswidth, true))
--		return false;
--
--	if (op->data.nbytes &&
--	    cqspi_check_buswidth_req(mem, op->data.buswidth,
--				     op->data.dir == SPI_MEM_DATA_OUT))
--		return false;
--
- 	all_true = op->cmd.dtr && op->addr.dtr && op->dummy.dtr &&
- 		   op->data.dtr;
- 	all_false = !op->cmd.dtr && !op->addr.dtr && !op->dummy.dtr &&
-@@ -1287,11 +1233,10 @@ static bool cqspi_supports_mem_op(struct spi_mem *mem,
- 	if (!(all_true || all_false))
- 		return false;
-
--	/* DTR mode opcodes should be 2 bytes. */
--	if (all_true && op->cmd.nbytes != 2)
--		return false;
--
--	return true;
-+	if (all_true)
-+		return spi_mem_dtr_supports_op(mem, op);
-+	else
-+		return spi_mem_default_supports_op(mem, op);
- }
-
- static int cqspi_of_get_flash_pdata(struct platform_device *pdev,
---
-2.30.0
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
