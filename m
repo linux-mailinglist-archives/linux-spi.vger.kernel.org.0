@@ -2,64 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FFD3111B7
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Feb 2021 21:01:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 453C3311223
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Feb 2021 21:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233616AbhBESRz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 Feb 2021 13:17:55 -0500
-Received: from [20.39.40.203] ([20.39.40.203]:55697 "EHLO optinix.in"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S233183AbhBEPTk (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 5 Feb 2021 10:19:40 -0500
-dkim-signature: v=1; a=rsa-sha256; d=digitalsol.in; s=dkim;
-        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=wK2neTcOXNiSQ+RBxrnFed+mRrGUU/ndLGEgvo8IMCc=;
-        b=JFt3cjfr2gf0oZFNAIkKMxcz4dJD/YGkc0fGvOoSd3DydZ6om7JzTU837vBFVq1NIPU0D2QA5BLHZXE1+7cBmkJlbZjYCUFmJkkaBVbP88e4KHnDVRcctmBLIZ1pL5VerRqjcciKkL4DSuyXFJlGk3Z0CRoskvUoLBM7ZhpxLeqIU2BKsbHQXJZ1h2qHQhaHiD+VrGx+bGKjZzbhmRvwLDQIByq6jRcjht5MzYCcxpzOzp/k+Dev9dQj7B
-        WId68CyP4XonlI4wIMRo1xiGfUtKZ+P3cZo2ejPWBjr+ynq3dK3OxibTTEKfmOc5W1zmJFMAPQ+ZKxsa3M4d1PiYxHmg==
-Received: from User (Unknown [52.231.31.5])
-        by optinix.in with ESMTP
-        ; Mon, 1 Feb 2021 08:50:14 +0000
-Message-ID: <D474448D-A325-42CC-A881-8334C6C84BA7@optinix.in>
-Reply-To: <ms.reem@yandex.com>
-From:   "Ms. Reem" <support@digitalsol.in>
-Subject: Re:read
-Date:   Mon, 1 Feb 2021 08:50:13 -0000
+        id S233272AbhBESfa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 Feb 2021 13:35:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36154 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233184AbhBESfF (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 5 Feb 2021 13:35:05 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 81BD264FD4;
+        Fri,  5 Feb 2021 20:16:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612556210;
+        bh=TW5sax6toZxgcvGW6CkeLa+wpYzcbGpP5G0uPmTyGpU=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=ZXY+qw45N/aT6D+fdKLdJAiqeoip3CY8NPEReiTqSNjmUswblItrouOqQPxHeiOHG
+         9F/74wYMTx1qfYYLXLrRSrlCpuLOEXYdC64e3ncJFmOTg1ed/FxY/1Idwd14yW7CA5
+         7yD/pKofWeQfD6R+79OBJy7zatCgx9zwEOVFAvwqEDXFEHYvQ+KcsDcMzsGqIQj7uW
+         35w61e9kicTU3QG6acd8Lkg644k8d5pkrn4drp63MlllkHQgPfIlSyIKXbUqWGT0+o
+         y9CpZ5Zkicfm05pvzXMXga8yFLnpI9z0HL51YzczPQPSPAVLagqMK8oQWjdwt+v0h4
+         AUSX4+Bjj1M+g==
+From:   Mark Brown <broonie@kernel.org>
+To:     amelie.delaunay@foss.st.com,
+        Alain Volmat <alain.volmat@foss.st.com>
+Cc:     mcoquelin.stm32@gmail.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        fabrice.gasnier@foss.st.com, linux-kernel@vger.kernel.org,
+        alexandre.torgue@foss.st.com
+In-Reply-To: <1612551572-495-1-git-send-email-alain.volmat@foss.st.com>
+References: <1612551572-495-1-git-send-email-alain.volmat@foss.st.com>
+Subject: Re: [PATCH v2 0/8] spi: stm32: fix and enhancements for spi-stm32
+Message-Id: <161255616019.56748.1388196714207020895.b4-ty@kernel.org>
+Date:   Fri, 05 Feb 2021 20:16:00 +0000
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello,
+On Fri, 5 Feb 2021 19:59:24 +0100, Alain Volmat wrote:
+> The serie provides a fix for the spi-stm32 driver, allowing to properly
+> handle 0 byte transfer (and thus being able to run spi-loopback-test).
+> 
+> In addition to that, important enhancements are implemented, among them,
+> supporting transfer larger that what the IP can setup in one go or
+> allowing to use the SPI bus without cs_gpio.
+> 
+> [...]
 
-My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
-and Petroleum" also "Minister of State for International Cooperation"
-in UAE. I write to you on behalf of my other "three (3) colleagues"
-who has approved me to solicit for your "partnership in claiming of
-{us$47=Million}" from a Financial Home in Cambodia on their behalf and
-for our "Mutual Benefits".
+Applied to
 
-The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
-deal with Cambodian/Vietnam Government within 2013/2014, however, we
-don't want our government to know about the fund. If this proposal
-interests you, let me know, by sending me an email and I will send to
-you detailed information on how this business would be successfully
-transacted. Be informed that nobody knows about the secret of this
-fund except us, and we know how to carry out the entire transaction.
-So I am compelled to ask, that you will stand on our behalf and
-receive this fund into any account that is solely controlled by you.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-We will compensate you with 15% of the total amount involved as
-gratification for being our partner in this transaction. Reply to:
-ms.reem@yandex.com
+Thanks!
 
-Regards,
-Ms. Reem.
+[1/8] spi: stm32: properly handle 0 byte transfer
+      commit: 2269f5a8b1a7b38651d62676b98182828f29d11a
+[2/8] spi: stm32: do not mandate cs_gpio
+      commit: 8f8d0e3e33e36ba63416cad64b9a9ad6b0129eed
+[3/8] spi: stm32: use bitfield macros
+      commit: 5a380b833ad437123dca91bf900a696709d9b6ab
+[4/8] spi: stm32h7: ensure message are smaller than max size
+      commit: 084de5232820c9e857ccc2282c3d94f33f92a381
+[5/8] spi: stm32: driver uses reset controller only at init
+      commit: 1c75cfd53e213044523141b464eb06813e39ecea
+[6/8] spi: stm32: defer probe for reset
+      commit: c63b95b76e69b679b9b95014552db099eb77a4fa
+[7/8] spi: stm32h7: replace private SPI_1HZ_NS with NSEC_PER_SEC
+      commit: e1e2093b16cb1cefe4dc483b00e73d1333260784
+[8/8] spi: stm32: make spurious and overrun interrupts visible
+      commit: c64e7efe46b7de21937ef4b3594d9b1fc74f07df
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
