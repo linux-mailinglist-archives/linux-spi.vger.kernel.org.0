@@ -2,153 +2,217 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA82310969
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Feb 2021 11:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B343109D2
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Feb 2021 12:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbhBEKoy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 Feb 2021 05:44:54 -0500
-Received: from twhmllg3.macronix.com ([122.147.135.201]:36263 "EHLO
-        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbhBEKmm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 Feb 2021 05:42:42 -0500
-Received: from TWHMLLG3.macronix.com (localhost [127.0.0.2] (may be forged))
-        by TWHMLLG3.macronix.com with ESMTP id 1159eDVu015628
-        for <linux-spi@vger.kernel.org>; Fri, 5 Feb 2021 17:40:13 +0800 (GMT-8)
-        (envelope-from zhengxunli@mxic.com.tw)
-Received: from localhost.localdomain ([172.17.195.94])
-        by TWHMLLG3.macronix.com with ESMTP id 1159cf8G014367;
-        Fri, 5 Feb 2021 17:39:05 +0800 (GMT-8)
-        (envelope-from zhengxunli@mxic.com.tw)
-From:   zhengxunli <zhengxunli@mxic.com.tw>
-To:     linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        miquel.raynal@bootlin.com, broonie@kernel.org, vigneshr@ti.com
-Cc:     ycllin@mxic.com.tw, juliensu@mxic.com.tw,
-        zhengxunli <zhengxunli@mxic.com.tw>
-Subject: [PATCH v2 2/2] spi: mxic: patch for octal DTR mode support
-Date:   Fri,  5 Feb 2021 17:36:48 +0800
-Message-Id: <1612517808-10010-3-git-send-email-zhengxunli@mxic.com.tw>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1612517808-10010-1-git-send-email-zhengxunli@mxic.com.tw>
-References: <1612517808-10010-1-git-send-email-zhengxunli@mxic.com.tw>
-X-MAIL: TWHMLLG3.macronix.com 1159cf8G014367
+        id S231998AbhBELGv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 Feb 2021 06:06:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231944AbhBEK7A (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 Feb 2021 05:59:00 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F103C06121F
+        for <linux-spi@vger.kernel.org>; Fri,  5 Feb 2021 02:58:20 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1l7ymj-00035C-2Q; Fri, 05 Feb 2021 11:56:21 +0100
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1l7ymd-0004Fb-NN; Fri, 05 Feb 2021 11:56:15 +0100
+Date:   Fri, 5 Feb 2021 11:56:15 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-fbdev@vger.kernel.org, Cornelia Huck <cohuck@redhat.com>,
+        kvm@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        dri-devel@lists.freedesktop.org, Jaroslav Kysela <perex@perex.cz>,
+        Eric Anholt <eric@anholt.net>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig.org@pengutronix.de>, linux-i2c@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        linux-rtc@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Russell King - ARM Linux admin <linux@armlinux.org.uk>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mike Leach <mike.leach@linaro.org>,
+        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matt Mackall <mpm@selenic.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-mmc@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+        linux-spi@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-crypto@vger.kernel.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Leo Yan <leo.yan@linaro.org>, dmaengine@vger.kernel.org
+Subject: Re: [GIT PULL] immutable branch for amba changes targeting v5.12-rc1
+Message-ID: <20210205105615.qumu45huvntf2v4j@pengutronix.de>
+References: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
+ <20210202135350.36nj3dmcoq3t7gcf@pengutronix.de>
+ <YBlcTXlxemmC2lgr@kroah.com>
+ <20210204165224.GA1463@shell.armlinux.org.uk>
+ <YBwnUrQqlAz2LDPI@kroah.com>
+ <20210204165951.GB1463@shell.armlinux.org.uk>
+ <20210204181551.ethtuzm65flujmwe@pengutronix.de>
+ <20210205093744.kr4rc7yvfiq6wimq@pengutronix.de>
+ <YB0baUzgvpd+EoO6@kroah.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vslstwmibba5nymi"
+Content-Disposition: inline
+In-Reply-To: <YB0baUzgvpd+EoO6@kroah.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Driver patch for octal DTR mode support.
 
-Owing to the spi_mem_default_supports_op() is not support dtr
-operation. Based on Pratyush patch "spi: spi-mem: add spi_mem_dtr
-_supports_op()" add spi_mem_dtr_supports_op() to support dtr and
-keep checking the buswidth and command bytes.
+--vslstwmibba5nymi
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: zhengxunli <zhengxunli@mxic.com.tw>
----
- drivers/spi/spi-mxic.c | 41 ++++++++++++++++++++++++++++++-----------
- 1 file changed, 30 insertions(+), 11 deletions(-)
+On Fri, Feb 05, 2021 at 11:18:17AM +0100, Greg Kroah-Hartman wrote:
+> On Fri, Feb 05, 2021 at 10:37:44AM +0100, Uwe Kleine-K=F6nig wrote:
+> > Hello Russell, hello Greg,
+> >=20
+> > On Thu, Feb 04, 2021 at 07:15:51PM +0100, Uwe Kleine-K=F6nig wrote:
+> > > On Thu, Feb 04, 2021 at 04:59:51PM +0000, Russell King - ARM Linux ad=
+min wrote:
+> > > > On Thu, Feb 04, 2021 at 05:56:50PM +0100, Greg Kroah-Hartman wrote:
+> > > > > On Thu, Feb 04, 2021 at 04:52:24PM +0000, Russell King - ARM Linu=
+x admin wrote:
+> > > > > > On Tue, Feb 02, 2021 at 03:06:05PM +0100, Greg Kroah-Hartman wr=
+ote:
+> > > > > > > I'm glad to take this through my char/misc tree, as that's wh=
+ere the
+> > > > > > > other coresight changes flow through.  So if no one else obje=
+cts, I will
+> > > > > > > do so...
+> > > > > >=20
+> > > > > > Greg, did you end up pulling this after all? If not, Uwe produc=
+ed a v2.
+> > > > > > I haven't merged v2 yet as I don't know what you've done.
+> > > > >=20
+> > > > > I thought you merged this?
+> > > >=20
+> > > > I took v1, and put it in a branch I've promised in the past not to
+> > > > rebase/rewind. Uwe is now asking for me to take a v2 or apply a pat=
+ch
+> > > > on top.
+> > > >=20
+> > > > The only reason to produce an "immutable" branch is if it's the bas=
+is
+> > > > for some dependent work and you need that branch merged into other
+> > > > people's trees... so the whole "lets produce a v2" is really odd
+> > > > workflow... I'm confused about what I should do, and who has to be
+> > > > informed which option I take.
+> > > >=20
+> > > > I'm rather lost here too.
+> > >=20
+> > > Sorry to have cause this confusion. After I saw that my initial tag
+> > > missed to adapt a driver I wanted to make it easy for you to fix the
+> > > situation.
+> > > So I created a patch to fix it and created a second tag with the patch
+> > > squashed in. Obviously only one of them have to be picked and I hoped
+> > > you (=3D Russell + Greg) would agree which option to pick.
+> > >=20
+> > > My preference would be if you both pick up v2 of the tag to yield a
+> > > history that is bisectable without build problems, but if Russell (who
+> > > already picked up the broken tag) considers his tree immutable and so
+> > > isn't willing to rebase, then picking up the patch is the way to go.
+> >=20
+> > OK, the current state is that Russell applied the patch fixing
+> > drivers/mailbox/arm_mhuv2.c on top of merging my first tag.
+> >=20
+> > So the way forward now is that Greg pulls
+> >=20
+> > 	git://git.armlinux.org.uk/~rmk/linux-arm.git devel-stable
+> >=20
+> > which currently points to=20
+> >=20
+> > 	860660fd829e ("ARM: 9055/1: mailbox: arm_mhuv2: make remove callback r=
+eturn void")
+> >=20
+> > , into his tree that contains the hwtracing changes that conflict with =
+my
+> > changes. @Greg: Is this good enough, or do you require a dedicated tag
+> > to pull that?
+> >=20
+> > I think these conflicting hwtracing changes are not yet in any of Greg's
+> > trees (at least they are not in next).
+> >=20
+> > When I pull
+> >=20
+> > 	https://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git ne=
+xt
+> >=20
+> > (currently pointing to 4e73ff249184 ("coresight: etm4x: Handle accesses
+> > to TRCSTALLCTLR")) into 860660fd829e, I get a conflict in
+> > drivers/hwtracing/coresight/coresight-etm4x-core.c as expected. My
+> > resolution looks as follows:
+>=20
+> Ok, my resolution looked a bit different.
+>=20
+> Can you pull my char-misc-testing branch and verify I got this all
+> pulled in correctly?
 
-diff --git a/drivers/spi/spi-mxic.c b/drivers/spi/spi-mxic.c
-index 96b4182..32e757a 100644
---- a/drivers/spi/spi-mxic.c
-+++ b/drivers/spi/spi-mxic.c
-@@ -335,8 +335,10 @@ static int mxic_spi_data_xfer(struct mxic_spi *mxic, const void *txbuf,
- static bool mxic_spi_mem_supports_op(struct spi_mem *mem,
- 				     const struct spi_mem_op *op)
- {
--	if (op->data.buswidth > 4 || op->addr.buswidth > 4 ||
--	    op->dummy.buswidth > 4 || op->cmd.buswidth > 4)
-+	bool all_false;
-+
-+	if (op->data.buswidth > 8 || op->addr.buswidth > 8 ||
-+	    op->dummy.buswidth > 8 || op->cmd.buswidth > 8)
- 		return false;
- 
- 	if (op->data.nbytes && op->dummy.nbytes &&
-@@ -346,7 +348,13 @@ static bool mxic_spi_mem_supports_op(struct spi_mem *mem,
- 	if (op->addr.nbytes > 7)
- 		return false;
- 
--	return spi_mem_default_supports_op(mem, op);
-+	all_false = !op->cmd.dtr && !op->addr.dtr && !op->dummy.dtr &&
-+		    !op->data.dtr;
-+
-+	if (all_false)
-+		return spi_mem_default_supports_op(mem, op);
-+	else
-+		return spi_mem_dtr_supports_op(mem, op);
- }
- 
- static int mxic_spi_mem_exec_op(struct spi_mem *mem,
-@@ -355,14 +363,15 @@ static int mxic_spi_mem_exec_op(struct spi_mem *mem,
- 	struct mxic_spi *mxic = spi_master_get_devdata(mem->spi->master);
- 	int nio = 1, i, ret;
- 	u32 ss_ctrl;
--	u8 addr[8];
--	u8 opcode = op->cmd.opcode;
-+	u8 addr[8], cmd[2];
- 
- 	ret = mxic_spi_set_freq(mxic, mem->spi->max_speed_hz);
- 	if (ret)
- 		return ret;
- 
--	if (mem->spi->mode & (SPI_TX_QUAD | SPI_RX_QUAD))
-+	if (mem->spi->mode & (SPI_TX_OCTAL | SPI_RX_OCTAL))
-+		nio = 8;
-+	else if (mem->spi->mode & (SPI_TX_QUAD | SPI_RX_QUAD))
- 		nio = 4;
- 	else if (mem->spi->mode & (SPI_TX_DUAL | SPI_RX_DUAL))
- 		nio = 2;
-@@ -374,19 +383,25 @@ static int mxic_spi_mem_exec_op(struct spi_mem *mem,
- 	       mxic->regs + HC_CFG);
- 	writel(HC_EN_BIT, mxic->regs + HC_EN);
- 
--	ss_ctrl = OP_CMD_BYTES(1) | OP_CMD_BUSW(fls(op->cmd.buswidth) - 1);
-+	ss_ctrl = OP_CMD_BYTES(op->cmd.nbytes) |
-+		  OP_CMD_BUSW(fls(op->cmd.buswidth) - 1) |
-+		  (op->cmd.dtr ? OP_CMD_DDR : 0);
- 
- 	if (op->addr.nbytes)
- 		ss_ctrl |= OP_ADDR_BYTES(op->addr.nbytes) |
--			   OP_ADDR_BUSW(fls(op->addr.buswidth) - 1);
-+			   OP_ADDR_BUSW(fls(op->addr.buswidth) - 1) |
-+			   (op->addr.dtr ? OP_ADDR_DDR : 0);
- 
- 	if (op->dummy.nbytes)
- 		ss_ctrl |= OP_DUMMY_CYC(op->dummy.nbytes);
- 
- 	if (op->data.nbytes) {
--		ss_ctrl |= OP_DATA_BUSW(fls(op->data.buswidth) - 1);
-+		ss_ctrl |= OP_DATA_BUSW(fls(op->data.buswidth) - 1) |
-+			   (op->data.dtr ? OP_DATA_DDR : 0);
- 		if (op->data.dir == SPI_MEM_DATA_IN)
- 			ss_ctrl |= OP_READ;
-+			if (op->data.dtr)
-+				ss_ctrl |= OP_DQS_EN;
- 	}
- 
- 	writel(ss_ctrl, mxic->regs + SS_CTRL(mem->spi->chip_select));
-@@ -394,7 +409,10 @@ static int mxic_spi_mem_exec_op(struct spi_mem *mem,
- 	writel(readl(mxic->regs + HC_CFG) | HC_CFG_MAN_CS_ASSERT,
- 	       mxic->regs + HC_CFG);
- 
--	ret = mxic_spi_data_xfer(mxic, &opcode, NULL, 1);
-+	for (i = 0; i < op->cmd.nbytes; i++)
-+		cmd[i] = op->cmd.opcode >> (8 * (op->cmd.nbytes - i - 1));
-+
-+	ret = mxic_spi_data_xfer(mxic, cmd, NULL, op->cmd.nbytes);
- 	if (ret)
- 		goto out;
- 
-@@ -567,7 +585,8 @@ static int mxic_spi_probe(struct platform_device *pdev)
- 	master->bits_per_word_mask = SPI_BPW_MASK(8);
- 	master->mode_bits = SPI_CPOL | SPI_CPHA |
- 			SPI_RX_DUAL | SPI_TX_DUAL |
--			SPI_RX_QUAD | SPI_TX_QUAD;
-+			SPI_RX_QUAD | SPI_TX_QUAD |
-+			SPI_RX_OCTAL | SPI_TX_OCTAL;
- 
- 	mxic_spi_hw_init(mxic);
- 
--- 
-1.9.1
+minor side-note: mentioning the repo url would have simplified that test.
 
+I looked at
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git char-=
+misc-testing
+
+commit 0573d3fa48640f0fa6b105ff92dcb02b94d6c1ab now.
+
+I didn't compile test, but I'm willing to bet your resolution is wrong.
+You have no return statement in etm4_remove_dev() but its return type is
+int and etm4_remove_amba() still returns int but should return void.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--vslstwmibba5nymi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmAdJEwACgkQwfwUeK3K
+7AkhPggAk0ucNSGkkTWYbQF9BBYOZDKVlqvPHzvkMilvBGuAa1EXhuHHKu3esHxh
+NZf5xH5Lh7cnNyXodWF4Mp20NZfV0VFjzhbfNFexDfO2QfKJhJbATh9YiJ5onzsT
+cbMDvw+fQNUmooGN1gOW4OCiRvEPcYf8Z/TdrAkBXuRDaCYLiqJBPX1PCFTumEr3
+8Lxp3+k4zN9Wpkt17sqmgJxalvUHqNFOuL+1II2APrzMSZHB6T5fNtxEzMXUGXHx
+LzNGWjnnUKovRddHUyjFZu+rr6B/MUELKSYf9WH7lPI6osLnyjQf6vtczDdyZmlP
+PmCOMN9d1QJAKEMe6RJZvyfO22d11w==
+=kmsA
+-----END PGP SIGNATURE-----
+
+--vslstwmibba5nymi--
