@@ -2,132 +2,161 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDBB310884
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Feb 2021 10:58:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DCBF3108EA
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Feb 2021 11:22:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbhBEJ4l convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Fri, 5 Feb 2021 04:56:41 -0500
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:40905 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbhBEJyh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 Feb 2021 04:54:37 -0500
-Received: from relay11.mail.gandi.net (unknown [217.70.178.231])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id ABA973C0760
-        for <linux-spi@vger.kernel.org>; Fri,  5 Feb 2021 09:49:52 +0000 (UTC)
-Received: from xps13 (aputeaux-654-1-105-144.w90-2.abo.wanadoo.fr [90.2.4.144])
-        (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 9DA9A100004;
-        Fri,  5 Feb 2021 09:47:40 +0000 (UTC)
-Date:   Fri, 5 Feb 2021 10:47:36 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     zhengxunli <zhengxunli@mxic.com.tw>
-Cc:     linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        broonie@kernel.org, vigneshr@ti.com, ycllin@mxic.com.tw,
-        juliensu@mxic.com.tw
-Subject: Re: [PATCH v2 1/2] mtd: spi-nor: macronix: add support for Macronix
- octaflash
-Message-ID: <20210205104736.2771074c@xps13>
-In-Reply-To: <1612517808-10010-2-git-send-email-zhengxunli@mxic.com.tw>
-References: <1612517808-10010-1-git-send-email-zhengxunli@mxic.com.tw>
-        <1612517808-10010-2-git-send-email-zhengxunli@mxic.com.tw>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S231343AbhBEKWe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 Feb 2021 05:22:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54648 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231328AbhBEKTb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 5 Feb 2021 05:19:31 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CEC5A64FED;
+        Fri,  5 Feb 2021 10:18:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1612520300;
+        bh=s6zOJkZnJEbm1xu0sX2TF5RgsugvUfGcTGQRbF8fYFQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l8kKbOl3cDdM3E0eg11Cb78ojX1U42q1MLOpEbO9ohJ6ZsUhbIINgE9AGpi57xg07
+         nrjjNaNlf57dKR3WfAKi/M4HzTfRDGroizd8ACmJPeidm7+lvaabIXe7cQPaeWn9o/
+         A7dwUkMkXN6n1qunw/7DRnw+YFcS0Z5Mmkh9/ecc=
+Date:   Fri, 5 Feb 2021 11:18:17 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Russell King - ARM Linux admin <linux@armlinux.org.uk>,
+        linux-fbdev@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        kvm@vger.kernel.org,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        alsa-devel@alsa-project.org, dri-devel@lists.freedesktop.org,
+        Jaroslav Kysela <perex@perex.cz>,
+        Eric Anholt <eric@anholt.net>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig.org@pengutronix.de>, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-watchdog@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mike Leach <mike.leach@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, Vladimir Zapolskiy <vz@mleia.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matt Mackall <mpm@selenic.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>, linux-crypto@vger.kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>, Leo Yan <leo.yan@linaro.org>,
+        dmaengine@vger.kernel.org
+Subject: Re: [GIT PULL] immutable branch for amba changes targeting v5.12-rc1
+Message-ID: <YB0baUzgvpd+EoO6@kroah.com>
+References: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
+ <20210202135350.36nj3dmcoq3t7gcf@pengutronix.de>
+ <YBlcTXlxemmC2lgr@kroah.com>
+ <20210204165224.GA1463@shell.armlinux.org.uk>
+ <YBwnUrQqlAz2LDPI@kroah.com>
+ <20210204165951.GB1463@shell.armlinux.org.uk>
+ <20210204181551.ethtuzm65flujmwe@pengutronix.de>
+ <20210205093744.kr4rc7yvfiq6wimq@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210205093744.kr4rc7yvfiq6wimq@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello,
-
-zhengxunli <zhengxunli@mxic.com.tw> wrote on Fri,  5 Feb 2021 17:36:47
-+0800:
-
-> The ocatflash is an xSPI compliant octal DTR flash. Add support
-> for using it in octal DTR mode.
+On Fri, Feb 05, 2021 at 10:37:44AM +0100, Uwe Kleine-Kˆnig wrote:
+> Hello Russell, hello Greg,
 > 
-> Enable Octal DTR mode with 20 dummy cycles to allow running at the
-> maximum supported frequency of 200Mhz.
+> On Thu, Feb 04, 2021 at 07:15:51PM +0100, Uwe Kleine-Kˆnig wrote:
+> > On Thu, Feb 04, 2021 at 04:59:51PM +0000, Russell King - ARM Linux admin wrote:
+> > > On Thu, Feb 04, 2021 at 05:56:50PM +0100, Greg Kroah-Hartman wrote:
+> > > > On Thu, Feb 04, 2021 at 04:52:24PM +0000, Russell King - ARM Linux admin wrote:
+> > > > > On Tue, Feb 02, 2021 at 03:06:05PM +0100, Greg Kroah-Hartman wrote:
+> > > > > > I'm glad to take this through my char/misc tree, as that's where the
+> > > > > > other coresight changes flow through.  So if no one else objects, I will
+> > > > > > do so...
+> > > > > 
+> > > > > Greg, did you end up pulling this after all? If not, Uwe produced a v2.
+> > > > > I haven't merged v2 yet as I don't know what you've done.
+> > > > 
+> > > > I thought you merged this?
+> > > 
+> > > I took v1, and put it in a branch I've promised in the past not to
+> > > rebase/rewind. Uwe is now asking for me to take a v2 or apply a patch
+> > > on top.
+> > > 
+> > > The only reason to produce an "immutable" branch is if it's the basis
+> > > for some dependent work and you need that branch merged into other
+> > > people's trees... so the whole "lets produce a v2" is really odd
+> > > workflow... I'm confused about what I should do, and who has to be
+> > > informed which option I take.
+> > > 
+> > > I'm rather lost here too.
+> > 
+> > Sorry to have cause this confusion. After I saw that my initial tag
+> > missed to adapt a driver I wanted to make it easy for you to fix the
+> > situation.
+> > So I created a patch to fix it and created a second tag with the patch
+> > squashed in. Obviously only one of them have to be picked and I hoped
+> > you (= Russell + Greg) would agree which option to pick.
+> > 
+> > My preference would be if you both pick up v2 of the tag to yield a
+> > history that is bisectable without build problems, but if Russell (who
+> > already picked up the broken tag) considers his tree immutable and so
+> > isn't willing to rebase, then picking up the patch is the way to go.
 > 
-> Try to verify the flash ID to check whether the flash memory in octal
-> DTR mode is correct. When reading ID in OCTAL DTR mode, ID will appear
-> in a repeated manner. ex: ID[0] = 0xc2, ID[1] = 0xc2, ID[2] = 0x94,
-> ID[3] = 0x94... Rearrange the order so that the ID can pass.
+> OK, the current state is that Russell applied the patch fixing
+> drivers/mailbox/arm_mhuv2.c on top of merging my first tag.
 > 
-> Signed-off-by: zhengxunli <zhengxunli@mxic.com.tw>
-> ---
->  drivers/mtd/spi-nor/macronix.c | 121 +++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 121 insertions(+)
+> So the way forward now is that Greg pulls
 > 
-> diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macronix.c
-> index 9203aba..7498978 100644
-> --- a/drivers/mtd/spi-nor/macronix.c
-> +++ b/drivers/mtd/spi-nor/macronix.c
-> @@ -8,6 +8,16 @@
->  
->  #include "core.h"
->  
-> +#define SPINOR_OP_RD_CR2		0x71		/* Read configuration register 2 */
-> +#define SPINOR_OP_WR_CR2		0x72		/* Write configuration register 2 */
-> +#define SPINOR_OP_MXIC_DTR_RD		0xee		/* Fast Read opcode in DTR mode */
-> +#define SPINOR_REG_MXIC_CR2_MODE	0x00000000	/* For setting octal DTR mode */
-> +#define SPINOR_REG_MXIC_OPI_DTR_EN	0x2		/* Enable Octal DTR */
-> +#define SPINOR_REG_MXIC_OPI_DTR_DIS	0x1		/* Disable Octal DTR */
-> +#define SPINOR_REG_MXIC_CR2_DC		0x00000300	/* For setting dummy cycles */
-> +#define SPINOR_REG_MXIC_DC_20		0x0		/* Setting dummy cycles to 20 */
-> +#define MXIC_MAX_DC			20		/* Maximum value of dummy cycles */
-> +
->  static int
->  mx25l25635_post_bfpt_fixups(struct spi_nor *nor,
->  			    const struct sfdp_parameter_header *bfpt_header,
-> @@ -33,6 +43,113 @@
->  	.post_bfpt = mx25l25635_post_bfpt_fixups,
->  };
->  
-> +/**
-> + * spi_nor_macronix_octal_dtr_enable() - Enable octal DTR on Macronix flashes.
-> + * @nor:		pointer to a 'struct spi_nor'
-> + * @enable:		whether to enable or disable Octal DTR
-> + *
-> + * This also sets the memory access dummy cycles to 20 to allow the flash to
-> + * run at up to 200MHz.
-> + *
-> + * Return: 0 on success, -errno otherwise.
-> + */
-> +static int spi_nor_macronix_octal_dtr_enable(struct spi_nor *nor, bool enable)
-> +{
-> +	struct spi_mem_op op;
-> +	u8 *buf = nor->bouncebuf, i;
-> +	int ret;
-> +
-> +	if (enable) {
-> +		/* Use 20 dummy cycles for memory array reads. */
-> +		ret = spi_nor_write_enable(nor);
-> +		if (ret)
-> +			return ret;
-> +
-> +		*buf = SPINOR_REG_MXIC_DC_20;
-> +		op = (struct spi_mem_op)
-> +			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WR_CR2, 1),
-> +				   SPI_MEM_OP_ADDR(4, SPINOR_REG_MXIC_CR2_DC, 1),
-> +				   SPI_MEM_OP_NO_DUMMY,
-> +				   SPI_MEM_OP_DATA_OUT(1, buf, 1));
-> +
-> +		ret = spi_mem_exec_op(nor->spimem, &op);
-> +		if (ret)
-> +			return ret;
-> +
-> +		ret = spi_nor_wait_till_ready(nor);
-> +		if (ret)
-> +			return ret;
-> +
-> +		nor->read_dummy = MXIC_MAX_DC;
+> 	git://git.armlinux.org.uk/~rmk/linux-arm.git devel-stable
+> 
+> which currently points to 
+> 
+> 	860660fd829e ("ARM: 9055/1: mailbox: arm_mhuv2: make remove callback return void")
+> 
+> , into his tree that contains the hwtracing changes that conflict with my
+> changes. @Greg: Is this good enough, or do you require a dedicated tag
+> to pull that?
+> 
+> I think these conflicting hwtracing changes are not yet in any of Greg's
+> trees (at least they are not in next).
+> 
+> When I pull
+> 
+> 	https://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git next
+> 
+> (currently pointing to 4e73ff249184 ("coresight: etm4x: Handle accesses
+> to TRCSTALLCTLR")) into 860660fd829e, I get a conflict in
+> drivers/hwtracing/coresight/coresight-etm4x-core.c as expected. My
+> resolution looks as follows:
 
-I am still not convinced by this constant value.
+Ok, my resolution looked a bit different.
 
-The rest looks good to me.
+Can you pull my char-misc-testing branch and verify I got this all
+pulled in correctly?
 
+thanks,
 
-Thanks,
-Miqu√®l
+greg k-h
