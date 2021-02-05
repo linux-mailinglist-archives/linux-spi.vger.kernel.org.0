@@ -2,110 +2,123 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0E6310A05
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Feb 2021 12:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC880310B97
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Feb 2021 14:13:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbhBELPR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 Feb 2021 06:15:17 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:28620 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231907AbhBELKk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 Feb 2021 06:10:40 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 115Aqveb005643;
-        Fri, 5 Feb 2021 12:09:47 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=selector1;
- bh=lTWDW7UWKtdfAtxzUJg52hXQyx1D0jvTv81GWOrYd9w=;
- b=6sDyTfwOxh4J6qVSsXn1qLT9cVnzP/bK5GLL+oLPWA3OYza6DL+Ih6t9bfxP6b/XjPGZ
- M57GUonjq5BPgMyfdiBe9Y6yOCsVZnfLU9GZuERYDtoXSUdSMQX9WP9LntJyUWVq19Ex
- IW2pwGSf1RlA/1EBQOyRLyROD1yZ+K5lebC/a654y3emvhWn15CX4+uzcg1JKZ3nYtO8
- QKejhwHB/iv4HsnOecp3PdJUWfyd5vY7Rlpste3Tp12r7M3KwMmTa4EnWM2Km5Xp2lYG
- MpQ+RIe4pbnNwrv9mptIRPhpv2p+jsc6ZtHyKId45TbKr09u8vUnN1AmKVz/rLZECo+/ qw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 36d0nsf3ap-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Feb 2021 12:09:47 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 59DA1100039;
-        Fri,  5 Feb 2021 12:09:47 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 49DA122A8CD;
-        Fri,  5 Feb 2021 12:09:47 +0100 (CET)
-Received: from localhost (10.75.127.51) by SFHDAG2NODE3.st.com (10.75.127.6)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 5 Feb 2021 12:09:47
- +0100
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     <broonie@kernel.org>, <amelie.delaunay@foss.st.com>
-CC:     <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <alain.volmat@foss.st.com>
-Subject: [PATCH 8/8] spi: stm32: make spurious and overrun interrupts visible
-Date:   Fri, 5 Feb 2021 12:09:02 +0100
-Message-ID: <1612523342-10466-9-git-send-email-alain.volmat@foss.st.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1612523342-10466-1-git-send-email-alain.volmat@foss.st.com>
-References: <1612523342-10466-1-git-send-email-alain.volmat@foss.st.com>
+        id S231249AbhBENMp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 Feb 2021 08:12:45 -0500
+Received: from antares.kleine-koenig.org ([94.130.110.236]:34562 "EHLO
+        antares.kleine-koenig.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231284AbhBENJ7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 Feb 2021 08:09:59 -0500
+Received: by antares.kleine-koenig.org (Postfix, from userid 1000)
+        id D67A7AED6A1; Fri,  5 Feb 2021 14:08:50 +0100 (CET)
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        kvm@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jaroslav Kysela <perex@perex.cz>,
+        Eric Anholt <eric@anholt.net>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig.org@pengutronix.de>, linux-i2c@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-watchdog@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Takashi Iwai <tiwai@suse.com>,
+        Russell King - ARM Linux admin <linux@armlinux.org.uk>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mike Leach <mike.leach@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        alsa-devel@alsa-project.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, Vladimir Zapolskiy <vz@mleia.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matt Mackall <mpm@selenic.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-crypto@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        Leo Yan <leo.yan@linaro.org>, dmaengine@vger.kernel.org
+Subject: [PATCH] coresight: etm4x: Fix merge resolution for amba rework
+Date:   Fri,  5 Feb 2021 14:08:47 +0100
+Message-Id: <20210205130848.20009-1-uwe@kleine-koenig.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
- definitions=2021-02-05_06:2021-02-05,2021-02-05 signatures=0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-We do not expect to receive spurious interrupts so rise a warning
-if it happens.
+This was non-trivial to get right because commits
+c23bc382ef0e ("coresight: etm4x: Refactor probing routine") and
+5214b563588e ("coresight: etm4x: Add support for sysreg only devices")
+changed the code flow considerably. With this change the driver can be
+built again.
 
-RX overrun is an error condition that signals a corrupted RX
-stream both in dma and in irq modes. Report the error and
-abort the transfer in either cases.
-
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Fixes: 0573d3fa4864 ("Merge branch 'devel-stable' of git://git.armlinux.org.uk/~rmk/linux-arm into char-misc-next")
+Signed-off-by: Uwe Kleine-König <uwe@kleine-koenig.org>
 ---
- drivers/spi/spi-stm32.c | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
+On Fri, Feb 05, 2021 at 12:07:09PM +0100, Greg Kroah-Hartman wrote:
+> On Fri, Feb 05, 2021 at 11:56:15AM +0100, Uwe Kleine-König wrote:
+> > I didn't compile test, but I'm willing to bet your resolution is wrong.
+> > You have no return statement in etm4_remove_dev() but its return type is
+> > int and etm4_remove_amba() still returns int but should return void.
+> 
+> Can you send a patch to fix this up?
 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 7692e2778df5..e7699758c609 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -895,8 +895,8 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
- 		mask |= STM32H7_SPI_SR_RXP;
+Sure, here it comes. As I'm unsure if you want to squash it into the
+merge or want to keep it separate I crafted a commit message. If you
+prefer squashing feel free to do so.
+
+This change corresponds to the merge resolution I suggested before.
+
+Best regards
+Uwe
+
+ drivers/hwtracing/coresight/coresight-etm4x-core.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+index bc55b261af23..c8ecd91e289e 100644
+--- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
++++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+@@ -1906,15 +1906,16 @@ static int __exit etm4_remove_dev(struct etmv4_drvdata *drvdata)
+ 	cpus_read_unlock();
  
- 	if (!(sr & mask)) {
--		dev_dbg(spi->dev, "spurious IT (sr=0x%08x, ier=0x%08x)\n",
--			sr, ier);
-+		dev_warn(spi->dev, "spurious IT (sr=0x%08x, ier=0x%08x)\n",
-+			 sr, ier);
- 		spin_unlock_irqrestore(&spi->lock, flags);
- 		return IRQ_NONE;
- 	}
-@@ -923,15 +923,8 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
- 	}
+ 	coresight_unregister(drvdata->csdev);
++
++	return 0;
+ }
  
- 	if (sr & STM32H7_SPI_SR_OVR) {
--		dev_warn(spi->dev, "Overrun: received value discarded\n");
--		if (!spi->cur_usedma && (spi->rx_buf && (spi->rx_len > 0)))
--			stm32h7_spi_read_rxfifo(spi, false);
--		/*
--		 * If overrun is detected while using DMA, it means that
--		 * something went wrong, so stop the current transfer
--		 */
--		if (spi->cur_usedma)
--			end = true;
-+		dev_err(spi->dev, "Overrun: RX data lost\n");
-+		end = true;
- 	}
+-static int __exit etm4_remove_amba(struct amba_device *adev)
++static void __exit etm4_remove_amba(struct amba_device *adev)
+ {
+ 	struct etmv4_drvdata *drvdata = dev_get_drvdata(&adev->dev);
  
- 	if (sr & STM32H7_SPI_SR_EOT) {
+ 	if (drvdata)
+-		return etm4_remove_dev(drvdata);
+-	return 0;
++		etm4_remove_dev(drvdata);
+ }
+ 
+ static int __exit etm4_remove_platform_dev(struct platform_device *pdev)
 -- 
-2.17.1
+2.29.2
 
