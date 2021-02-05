@@ -2,112 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E343110B5
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Feb 2021 20:08:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A00731119C
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Feb 2021 20:59:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233328AbhBERYe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 Feb 2021 12:24:34 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:47617 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233728AbhBERSa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 Feb 2021 12:18:30 -0500
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 115IpxT5022513;
-        Fri, 5 Feb 2021 19:59:49 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=selector1;
- bh=rpRVpeMqY05scC8ONlNNaolclDZcKJC+t70jj36hAoE=;
- b=f1V0IYOOI24Pt7bgd2jRMqxC0ko9o/lBf26YJQsx8R8BYVRS1S9vZ1XNZx/q0DqCNtX3
- sRB0S5EgNWpQ3rfP+2KHcYESr74+M9aPG6E7Q++NXzL14w4G7jcZCnaPWnvM3q1LCYgb
- LtTUjWv3zJpvD5KIX25D1okxQEfbpDEdJZZqWGbm42kOMD3kkJJKnYMZm16XUlhCtdJR
- 0+RbSufwwQZoaEc4/Ea3jq9ZaAQi/xNf4QkMCp81tzD/Q0EoHVqoHo8izzDIbslP1Fmn
- vPX9eGiviPQ8nNyorhmro/T/QCJVigkGPJ+Z2/gTDWGV61IObAIgivbSyTsiGVCvQad/ 0w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 36d0fsgjqt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Feb 2021 19:59:48 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9160510002A;
-        Fri,  5 Feb 2021 19:59:48 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 863282C38D3;
-        Fri,  5 Feb 2021 19:59:48 +0100 (CET)
-Received: from localhost (10.75.127.47) by SFHDAG2NODE3.st.com (10.75.127.6)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 5 Feb 2021 19:59:48
- +0100
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     <broonie@kernel.org>, <amelie.delaunay@foss.st.com>
-CC:     <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <alain.volmat@foss.st.com>
-Subject: [PATCH v2 8/8] spi: stm32: make spurious and overrun interrupts visible
-Date:   Fri, 5 Feb 2021 19:59:32 +0100
-Message-ID: <1612551572-495-9-git-send-email-alain.volmat@foss.st.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1612551572-495-1-git-send-email-alain.volmat@foss.st.com>
-References: <1612551572-495-1-git-send-email-alain.volmat@foss.st.com>
+        id S229866AbhBESPY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 Feb 2021 13:15:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:32858 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232098AbhBESOv (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 5 Feb 2021 13:14:51 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 21F7764FB9;
+        Fri,  5 Feb 2021 19:56:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612554995;
+        bh=b1FoFPhl57GIBtdaZICDup5TbLO3OSZmHBe9M6P4uMs=;
+        h=Subject:From:Date:To:From;
+        b=ZY1+IVRJnBuG6mPQt2x5fvQ5OCM4bbVroB1FreeIJYvlK0VCY4+o82bKRcQu8xEc3
+         vsp/9ZED1D1uk09Hx9fNeLX5wB08iddgXXmgun+vV6ayqmpyNDy74n4fQCSxfffh04
+         5RmIjOClhK7O6Ey6m476cbutIFCvAz7kaOfptW03rhsJVOQuncAwgs208wDLOkXNUE
+         6rVObGgwTG7FCTd6EVJ3yGfR+dDWaoSW5kN1uomRqynFJ29Zaar/uzViQ0TsBHbRBW
+         MVKWdRsC07/rk16+65IimjqRNqnoaMfXrSGePfHxi9hDXBoEqTa4s1npdpUVHxYmvf
+         1LvGaXt5bXseg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 117C4609E5;
+        Fri,  5 Feb 2021 19:56:35 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG1NODE1.st.com (10.75.127.1) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
- definitions=2021-02-05_10:2021-02-05,2021-02-05 signatures=0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <161255499506.29987.4157883655096370093.git-patchwork-housekeeping@kernel.org>
+Date:   Fri, 05 Feb 2021 19:56:35 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-We do not expect to receive spurious interrupts so rise a warning
-if it happens.
+Latest series: [v2] spi: stm32: fix and enhancements for spi-stm32 (2021-02-05T18:59:25)
+  Superseding: [v1] spi: stm32: fix and enhancements for spi-stm32 (2021-02-05T11:09:02):
+    [1/8] spi: stm32: properly handle 0 byte transfer
+    [2/8] spi: stm32: do not mandate cs_gpio
+    [3/8] spi: stm32h7: ensure message are smaller than max size
+    [4/8] spi: stm32: driver uses reset controller only at init
+    [5/8] spi: stm32: defer probe for reset
+    [6/8] spi: stm32: use bitfield macros
+    [7/8] spi: stm32h7: replace private SPI_1HZ_NS with NSEC_PER_SEC
+    [8/8] spi: stm32: make spurious and overrun interrupts visible
 
-RX overrun is an error condition that signals a corrupted RX
-stream both in dma and in irq modes. Report the error and
-abort the transfer in either cases.
 
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
----
-v2: identical to v1
-
- drivers/spi/spi-stm32.c | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index f3a4ff60ac4b..25c076461011 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -895,8 +895,8 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
- 		mask |= STM32H7_SPI_SR_RXP;
- 
- 	if (!(sr & mask)) {
--		dev_dbg(spi->dev, "spurious IT (sr=0x%08x, ier=0x%08x)\n",
--			sr, ier);
-+		dev_warn(spi->dev, "spurious IT (sr=0x%08x, ier=0x%08x)\n",
-+			 sr, ier);
- 		spin_unlock_irqrestore(&spi->lock, flags);
- 		return IRQ_NONE;
- 	}
-@@ -923,15 +923,8 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
- 	}
- 
- 	if (sr & STM32H7_SPI_SR_OVR) {
--		dev_warn(spi->dev, "Overrun: received value discarded\n");
--		if (!spi->cur_usedma && (spi->rx_buf && (spi->rx_len > 0)))
--			stm32h7_spi_read_rxfifo(spi, false);
--		/*
--		 * If overrun is detected while using DMA, it means that
--		 * something went wrong, so stop the current transfer
--		 */
--		if (spi->cur_usedma)
--			end = true;
-+		dev_err(spi->dev, "Overrun: RX data lost\n");
-+		end = true;
- 	}
- 
- 	if (sr & STM32H7_SPI_SR_EOT) {
 -- 
-2.17.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
