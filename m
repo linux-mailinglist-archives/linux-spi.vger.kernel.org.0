@@ -2,123 +2,179 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC880310B97
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Feb 2021 14:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6966E310BEE
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Feb 2021 14:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbhBENMp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 Feb 2021 08:12:45 -0500
-Received: from antares.kleine-koenig.org ([94.130.110.236]:34562 "EHLO
-        antares.kleine-koenig.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbhBENJ7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 Feb 2021 08:09:59 -0500
-Received: by antares.kleine-koenig.org (Postfix, from userid 1000)
-        id D67A7AED6A1; Fri,  5 Feb 2021 14:08:50 +0100 (CET)
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        kvm@vger.kernel.org, David Airlie <airlied@linux.ie>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Jaroslav Kysela <perex@perex.cz>,
-        Eric Anholt <eric@anholt.net>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig.org@pengutronix.de>, linux-i2c@vger.kernel.org,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-watchdog@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Takashi Iwai <tiwai@suse.com>,
-        Russell King - ARM Linux admin <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mike Leach <mike.leach@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        alsa-devel@alsa-project.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org, Vladimir Zapolskiy <vz@mleia.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matt Mackall <mpm@selenic.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-crypto@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        Leo Yan <leo.yan@linaro.org>, dmaengine@vger.kernel.org
-Subject: [PATCH] coresight: etm4x: Fix merge resolution for amba rework
-Date:   Fri,  5 Feb 2021 14:08:47 +0100
-Message-Id: <20210205130848.20009-1-uwe@kleine-koenig.org>
-X-Mailer: git-send-email 2.29.2
+        id S229892AbhBENg6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 Feb 2021 08:36:58 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:40642 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230264AbhBENfO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 Feb 2021 08:35:14 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 115DY5aj104300;
+        Fri, 5 Feb 2021 07:34:05 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1612532045;
+        bh=7G5EZgBALAwKINIVceA7zaBP6Xj9+w1PtD8gISNG/Jw=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=KCP3EQwi4Q/m+R9xLbeKPQxyBboXpPBAOoLd2aoH1yiygn7MSFZKggitsX6D3EXdr
+         vyjSfExKEn2j4awRiL4bMoXGGFc+J4H934HGECFOHdVVzrZxvpJfwDwla5miMFogUH
+         P/dvrXNdunJsdNF2MEkyzlc6g4XoaA0OD/fKEpaE=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 115DY5Ds031613
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 5 Feb 2021 07:34:05 -0600
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 5 Feb
+ 2021 07:34:05 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Fri, 5 Feb 2021 07:34:05 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 115DY4h0041694;
+        Fri, 5 Feb 2021 07:34:05 -0600
+Date:   Fri, 5 Feb 2021 19:04:04 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     zhengxunli <zhengxunli@mxic.com.tw>, <vigneshr@ti.com>,
+        <juliensu@mxic.com.tw>, <ycllin@mxic.com.tw>,
+        <linux-spi@vger.kernel.org>, <broonie@kernel.org>,
+        <linux-mtd@lists.infradead.org>
+Subject: Re: [PATCH v2 1/2] mtd: spi-nor: macronix: add support for Macronix
+ octaflash
+Message-ID: <20210205133404.esqqeokhlp4askpq@ti.com>
+References: <1612517808-10010-1-git-send-email-zhengxunli@mxic.com.tw>
+ <1612517808-10010-2-git-send-email-zhengxunli@mxic.com.tw>
+ <20210205104736.2771074c@xps13>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20210205104736.2771074c@xps13>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This was non-trivial to get right because commits
-c23bc382ef0e ("coresight: etm4x: Refactor probing routine") and
-5214b563588e ("coresight: etm4x: Add support for sysreg only devices")
-changed the code flow considerably. With this change the driver can be
-built again.
-
-Fixes: 0573d3fa4864 ("Merge branch 'devel-stable' of git://git.armlinux.org.uk/~rmk/linux-arm into char-misc-next")
-Signed-off-by: Uwe Kleine-König <uwe@kleine-koenig.org>
----
-On Fri, Feb 05, 2021 at 12:07:09PM +0100, Greg Kroah-Hartman wrote:
-> On Fri, Feb 05, 2021 at 11:56:15AM +0100, Uwe Kleine-König wrote:
-> > I didn't compile test, but I'm willing to bet your resolution is wrong.
-> > You have no return statement in etm4_remove_dev() but its return type is
-> > int and etm4_remove_amba() still returns int but should return void.
+On 05/02/21 10:47AM, Miquel Raynal wrote:
+> Hello,
 > 
-> Can you send a patch to fix this up?
+> zhengxunli <zhengxunli@mxic.com.tw> wrote on Fri,  5 Feb 2021 17:36:47
+> +0800:
+> 
+> > The ocatflash is an xSPI compliant octal DTR flash. Add support
+> > for using it in octal DTR mode.
+> > 
+> > Enable Octal DTR mode with 20 dummy cycles to allow running at the
+> > maximum supported frequency of 200Mhz.
+> > 
+> > Try to verify the flash ID to check whether the flash memory in octal
+> > DTR mode is correct. When reading ID in OCTAL DTR mode, ID will appear
+> > in a repeated manner. ex: ID[0] = 0xc2, ID[1] = 0xc2, ID[2] = 0x94,
+> > ID[3] = 0x94... Rearrange the order so that the ID can pass.
+> > 
+> > Signed-off-by: zhengxunli <zhengxunli@mxic.com.tw>
+> > ---
+> >  drivers/mtd/spi-nor/macronix.c | 121 +++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 121 insertions(+)
+> > 
+> > diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macronix.c
+> > index 9203aba..7498978 100644
+> > --- a/drivers/mtd/spi-nor/macronix.c
+> > +++ b/drivers/mtd/spi-nor/macronix.c
+> > @@ -8,6 +8,16 @@
+> >  
+> >  #include "core.h"
+> >  
+> > +#define SPINOR_OP_RD_CR2		0x71		/* Read configuration register 2 */
+> > +#define SPINOR_OP_WR_CR2		0x72		/* Write configuration register 2 */
+> > +#define SPINOR_OP_MXIC_DTR_RD		0xee		/* Fast Read opcode in DTR mode */
+> > +#define SPINOR_REG_MXIC_CR2_MODE	0x00000000	/* For setting octal DTR mode */
+> > +#define SPINOR_REG_MXIC_OPI_DTR_EN	0x2		/* Enable Octal DTR */
+> > +#define SPINOR_REG_MXIC_OPI_DTR_DIS	0x1		/* Disable Octal DTR */
+> > +#define SPINOR_REG_MXIC_CR2_DC		0x00000300	/* For setting dummy cycles */
+> > +#define SPINOR_REG_MXIC_DC_20		0x0		/* Setting dummy cycles to 20 */
+> > +#define MXIC_MAX_DC			20		/* Maximum value of dummy cycles */
+> > +
+> >  static int
+> >  mx25l25635_post_bfpt_fixups(struct spi_nor *nor,
+> >  			    const struct sfdp_parameter_header *bfpt_header,
+> > @@ -33,6 +43,113 @@
+> >  	.post_bfpt = mx25l25635_post_bfpt_fixups,
+> >  };
+> >  
+> > +/**
+> > + * spi_nor_macronix_octal_dtr_enable() - Enable octal DTR on Macronix flashes.
+> > + * @nor:		pointer to a 'struct spi_nor'
+> > + * @enable:		whether to enable or disable Octal DTR
+> > + *
+> > + * This also sets the memory access dummy cycles to 20 to allow the flash to
+> > + * run at up to 200MHz.
+> > + *
+> > + * Return: 0 on success, -errno otherwise.
+> > + */
+> > +static int spi_nor_macronix_octal_dtr_enable(struct spi_nor *nor, bool enable)
+> > +{
+> > +	struct spi_mem_op op;
+> > +	u8 *buf = nor->bouncebuf, i;
+> > +	int ret;
+> > +
+> > +	if (enable) {
+> > +		/* Use 20 dummy cycles for memory array reads. */
+> > +		ret = spi_nor_write_enable(nor);
+> > +		if (ret)
+> > +			return ret;
+> > +
+> > +		*buf = SPINOR_REG_MXIC_DC_20;
+> > +		op = (struct spi_mem_op)
+> > +			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WR_CR2, 1),
+> > +				   SPI_MEM_OP_ADDR(4, SPINOR_REG_MXIC_CR2_DC, 1),
+> > +				   SPI_MEM_OP_NO_DUMMY,
+> > +				   SPI_MEM_OP_DATA_OUT(1, buf, 1));
+> > +
+> > +		ret = spi_mem_exec_op(nor->spimem, &op);
+> > +		if (ret)
+> > +			return ret;
+> > +
+> > +		ret = spi_nor_wait_till_ready(nor);
+> > +		if (ret)
+> > +			return ret;
+> > +
+> > +		nor->read_dummy = MXIC_MAX_DC;
+> 
+> I am still not convinced by this constant value.
 
-Sure, here it comes. As I'm unsure if you want to squash it into the
-merge or want to keep it separate I crafted a commit message. If you
-prefer squashing feel free to do so.
+I think a constant value is fine. This dummy cycle value reflects how 
+many cycles the master clock would go through before the flash starts 
+emitting the data. If the master (aka the controller) is running at a 
+lower frequency then those cycles go through slower, but the flash still 
+waits for them to finish before emitting data. And since the master is 
+driving the clock and the flash is just "reading" it, both remain in 
+sync.
 
-This change corresponds to the merge resolution I suggested before.
+The dummy cycles need to be set for the worst case scenario [0]. The 
+flash usually needs a minimum amount of time before it is ready to emit 
+the data. So for example if the master is at 25 MHz, the clock period is 
+longer so 8 clock cycles [1] might be long enough to exceed that minimum 
+time. But when the master is running at 200 MHz, the clock period is 
+smaller so 8 cycles might not give the flash enough time to prepare. So 
+we need to to wait at least 20 cycles [1] before emitting data.
 
-Best regards
-Uwe
+This is what my patches do for the Cypress S28 flash. I have tested it 
+on both 25 MHz and 166 MHz with 22 dummy cycles. It is not the most 
+efficient at 25 MHz since 5 dummy cycles is all that is needed for that 
+speed, but its the best we can do right now.
 
- drivers/hwtracing/coresight/coresight-etm4x-core.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-index bc55b261af23..c8ecd91e289e 100644
---- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-+++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-@@ -1906,15 +1906,16 @@ static int __exit etm4_remove_dev(struct etmv4_drvdata *drvdata)
- 	cpus_read_unlock();
+[0] Since SPI NOR has no way of knowing what speed the controller is 
+running at, assume the fastest speed the flash can run at.
+[1] Hypothetical example. Don't know the actual values for this flash.
  
- 	coresight_unregister(drvdata->csdev);
-+
-+	return 0;
- }
- 
--static int __exit etm4_remove_amba(struct amba_device *adev)
-+static void __exit etm4_remove_amba(struct amba_device *adev)
- {
- 	struct etmv4_drvdata *drvdata = dev_get_drvdata(&adev->dev);
- 
- 	if (drvdata)
--		return etm4_remove_dev(drvdata);
--	return 0;
-+		etm4_remove_dev(drvdata);
- }
- 
- static int __exit etm4_remove_platform_dev(struct platform_device *pdev)
+> The rest looks good to me.
+
 -- 
-2.29.2
-
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
