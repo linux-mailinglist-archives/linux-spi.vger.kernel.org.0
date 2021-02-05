@@ -2,116 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 739BE31129B
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Feb 2021 21:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A0BC3112A0
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Feb 2021 21:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbhBESwp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 Feb 2021 13:52:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45594 "EHLO mail.kernel.org"
+        id S233184AbhBESza (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 Feb 2021 13:55:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45950 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233085AbhBEPEk (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        id S233093AbhBEPEk (ORCPT <rfc822;linux-spi@vger.kernel.org>);
         Fri, 5 Feb 2021 10:04:40 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 04DC0614A5;
-        Fri,  5 Feb 2021 16:21:20 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6668964EE0;
+        Fri,  5 Feb 2021 16:42:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612542081;
-        bh=a7Z+lMVA9/ZigX13Q0RIPSzBjbE3hutWIXG0gkKqk0Q=;
+        s=k20201202; t=1612543364;
+        bh=Z2xR3YEsMozd9AyI+P+EUP0GmbkPKQfSuwpY0Cq0H9Y=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fWrVlxs0VDv9SfFUqHytMiPYfL9njaAO/b08YerC5AIwMh2hWBOIHEqz91oxbuPre
-         7Pwd6APTLKLNemLc/DC1RDIUYjb8wXNLvjmX3qDXsNyuP6edjK7GlScV297CApsf2W
-         P//Jlv1PHYvYCeIpJQr5E7RSDvNlwL3EXS67On4QSxZNOXNiIXMR8wu/VXYxjOwjYU
-         7IjYXk5ut/x4aGE40Ub+7+YVZe0Q0A75yI2M09YFuEbK9FYMQHqiyipW0f+7omCGUl
-         KgA8dZbbC0TG9D+IQL3FHPM9a5XfYwXITJdz9KYt4G7VKcFMaK/S680NVSz12JMNYu
-         MqPmnYNYc7lOA==
-Date:   Fri, 5 Feb 2021 16:20:31 +0000
+        b=swGUw+mQ4bIYUUhZhteYutOf+pkR0+VMNeyWaPIohGmo55Bg6ribIYoWtTST+wZbH
+         zZ68lQGIK1hp/cOI26fD/DYSV327ZrkLP17UBW7EdO3V/7Gs6dvWuDUFigaPYuQ2KQ
+         pvnojUsPq4fMlg/sMPV8wtuwgfPF93b3hBr/vh4OwSwknOoNMnYy6g3NRLORfmfqlM
+         afaCFvHKBTdmYu+BiVMOgjxWjjnxgVV9CEiWu5mNks8KmcovTTy6/DSmuSIS2Vxgbr
+         NvVzKFhur3LxTh3Ow4mR+5jfgaelPVCAza8via4uxDW5+pIQcSBopgqzSH6ZXs0c5u
+         YRUQ2OujKo1Fg==
+Date:   Fri, 5 Feb 2021 16:41:54 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Aleksandar Gerasimovski 
-        <aleksandar.gerasimovski@hitachi-powergrids.com>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH] spi: tools: fix input string formatting
-Message-ID: <20210205162031.GG4720@sirena.org.uk>
-References: <VI1PR06MB402928E3B0E4C887104BCE22D2B29@VI1PR06MB4029.eurprd06.prod.outlook.com>
+To:     Alain Volmat <alain.volmat@foss.st.com>
+Cc:     amelie.delaunay@foss.st.com, linux-kernel@vger.kernel.org,
+        alexandre.torgue@foss.st.com, fabrice.gasnier@foss.st.com,
+        mcoquelin.stm32@gmail.com, linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 5/8] spi: stm32: defer probe for reset
+Message-ID: <20210205164154.GA8179@sirena.org.uk>
+References: <1612523342-10466-1-git-send-email-alain.volmat@foss.st.com>
+ <1612523342-10466-6-git-send-email-alain.volmat@foss.st.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WkfBGePaEyrk4zXB"
+        protocol="application/pgp-signature"; boundary="6TrnltStXW4iwmi0"
 Content-Disposition: inline
-In-Reply-To: <VI1PR06MB402928E3B0E4C887104BCE22D2B29@VI1PR06MB4029.eurprd06.prod.outlook.com>
-X-Cookie: Huh?
+In-Reply-To: <1612523342-10466-6-git-send-email-alain.volmat@foss.st.com>
+X-Cookie: Sentient plasmoids are a gas.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---WkfBGePaEyrk4zXB
+--6TrnltStXW4iwmi0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 05, 2021 at 08:04:10AM +0000, Aleksandar Gerasimovski wrote:
-> The actual unescape implementation has two bugs:
+On Fri, Feb 05, 2021 at 12:08:59PM +0100, Alain Volmat wrote:
+> Defer the probe operation when a reset controller device is expected
+> but have not yet been probed.
+>=20
+> This change replaces use of devm_reset_control_get_exclusive() with
+> devm_reset_control_get_optional_exclusive() as reset controller is
+> optional which is now explicitly stated.
 
-This is two bugs with two separate fixes, it should be two separate
-patches.
+This has trouble building an x86 allmodconfig build:
 
-> 1. quotation marks from the input string are not removed and are sent
->   to the spidev, e.g: input string: \"\\xFE\\x01\" will be sent to the
->   spidev as 0x22 0xfe 0x01 0x22
+/mnt/kernel/drivers/spi/spi-stm32.c: In function 'stm32_spi_prepare_msg':
+/mnt/kernel/drivers/spi/spi-stm32.c:1022:9: error: 'STM32H7_SPI_TSIZE_MAX' =
+undeclared (first use in this function); did you mean 'STM32H7_SPI_CR1_MASR=
+X'?
+         STM32H7_SPI_TSIZE_MAX,
+         ^~~~~~~~~~~~~~~~~~~~~
+         STM32H7_SPI_CR1_MASRX
+/mnt/kernel/drivers/spi/spi-stm32.c:1022:9: note: each undeclared identifie=
+r is reported only once for each function it appears in
 
-It is not clear to me what the issue you see here is - could you be more
-specific about where you see this input string and why you believe that
-the handling is incorrect?  After going through the shell the above will
-be
+This may be due to an earlier patch in the series, my script is working
+back through the patch series.
 
-	"\xFE\x01"
-
-which includes quotation marks which then get sent on to the device.
-
->  /*
->   *  Unescape - process hexadecimal escape character
-> - *      converts shell input "\x23" -> 0x23
-> + *      converts shell input "\\x23" -> 0x23
->   */
-
-This is changing the documented input format and not mentioned in the
-changelog?
-
-> +		if (*src == '"') {
-> +			src++;
-> +			continue;
-> +		}
->  		if (*src == '\\' && *(src+1) == 'x') {
->  			match = sscanf(src + 2, "%2x", &ch);
->  			if (!match)
-
-This just appears to ignore quotes which isn't at all what I'd expect?
-
-> @@ -108,6 +112,9 @@ static int unescape(char *_dst, char *_src, size_t len)
->  			src += 4;
->  			*dst++ = (unsigned char)ch;
->  		} else {
-> +			match = sscanf(src, "%2d", &ch);
-> +			if (!match)
-> +				pabort("malformed input string");
->  			*dst++ = *src++;
-
-This appears to be requiring that anything passed into unescape() be a
-number which isn't something we'd obviously want?  I'd expect the
-function to unescape things, not to do other random validation which may
-or may not be appropriate in context.
-
---WkfBGePaEyrk4zXB
+--6TrnltStXW4iwmi0
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmAdcEgACgkQJNaLcl1U
-h9B+7Af/SZQI+CEQyXLtfw7Do0XZ6974RwYOAgq9BZrqXwJl4zxEFPF8D4ncwkz5
-MjmFLUS3k5uDlCkFOeCyGRXTNPSJ4NeDQnCTaJPJ/kX0m154dT+29nYpPpNWdVpj
-jhh1nJMM0xg544BtCUXftxrnBoT4NCUhFJG2AxywahtJqV/5eLA9KIgoaLPNxQRg
-r1K6N66Wfrm4vHY5cJ2CgWo7rENGEyeGXm14/Kr89uf3fQJn2ky/Yy88E2NYwqin
-tHDfgvLRSdCLn99KUpUlZNVQqIsiJ37mH8lt5mUvvxBpeAjrpE6NAL701Cgd1/ae
-uRTyzjBgRQBO/DPDWcwzX4dna0q62A==
-=htnJ
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmAddVEACgkQJNaLcl1U
+h9D5ngf/U0NKtBGQTpM/vYV8lyZzpsFLniAZnJzyq4E6SXXJQeY6+VmQt/7XWygG
+t8Q0KgHNLRep+Ks7DeqdFPbTQU2dzJ6hExzybysoHSyzsEz+Tbjvt7qaoQq9jnY5
+WQwFDz5Xsurc8zbWoSlZmKv9DhGPxxGaUAnMt6z0WjNcc5XQr8EboNJO6piMXMkY
+uMKmHUI/zRiFRm0vpgodW2dKa/Y4InIoRg9IESu2+p4Gv5fa3mVAApx5LWB0oFg4
+qMwbjllQl6XUuCJySDPQk/GjIXFN0h4nrE98uZAi8P6zgceT+6q2p3jWl+LvyBQZ
+MzLSVjaf7lv3SPp3b2/pFO2jeGt98A==
+=JrV5
 -----END PGP SIGNATURE-----
 
---WkfBGePaEyrk4zXB--
+--6TrnltStXW4iwmi0--
