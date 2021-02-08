@@ -2,85 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72046313CEF
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Feb 2021 19:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0AB313DCE
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Feb 2021 19:42:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232719AbhBHSN6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Feb 2021 13:13:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235552AbhBHSNL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Feb 2021 13:13:11 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E93C06178A;
-        Mon,  8 Feb 2021 10:12:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=M/evnVn9TCTrgOS7lMU8kDG+WlcHOHkMBOuqA/rlMNU=; b=DJioOhO3ay/e6VYsVYnspxfYu4
-        5hVJe9q3VHYjm9x8c9FP24XshRpJhNmP1RMUo0B6QDQYqjp98VGFYSUlVe8ocfhawLt5I/io8BFbd
-        bn3AZ6HkyY9CGc3BX3IfJB4KLayo9UcRA5wi0SRdxMvVbAihRkT+5+4wharpuLLBonsHo3lNuOebL
-        eLwsZyuKc3wucy0ZJhz9PyXWdRrC5oEQz4YnZCgvqMTKg8CXCm3sVjSjnBsDH0zoAomNkbIUDflmp
-        uxT2rXTr2bHyLQVAHelqvlb3myffkW02GYaAL2Ak1qo7o4wP/KaNZ5IcypBXTTUDCXVWUhTDUqoJS
-        DAdg1g8g==;
-Received: from [2601:1c0:6280:3f0::cf3b]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1l9B1Q-0004Bq-TI; Mon, 08 Feb 2021 18:12:29 +0000
-Subject: Re: [PATCH V2] include: linux: spi: Change provied to provided in the
- file spi.h
-To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>, broonie@kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210208114928.32241-1-unixbhaskar@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <6da5b770-e5d5-1994-12e8-7654493cae82@infradead.org>
-Date:   Mon, 8 Feb 2021 10:12:25 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
-MIME-Version: 1.0
+        id S235758AbhBHSlx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Feb 2021 13:41:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58640 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233190AbhBHSlt (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 8 Feb 2021 13:41:49 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 26B6164E6B;
+        Mon,  8 Feb 2021 18:41:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612809668;
+        bh=vTFLaxAADKzqZc3O8+8IiHG0JWSrmHu6qXQlxma2p2s=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=ZmkGSdhxUHUJBSxqe2iKZd637miKPxZjxuDvfB7197CFkyYclmXzT5fWsJ0+KVpLY
+         UoF1RRE23KT6/UIIuKLZtqsuqkfS1UAMc8mH+OcbjHu65HdtAQH0IlVFEHzN6c8+kx
+         a39ASd4l9BKEQReMmF+AFwKJ1+egkylrZ4b34dp13nQWx46S+n8Pf7k9aAWcgYB4B9
+         XPKizKyB1kbZdSxg0TKc9lH/ZbbLs95HCMvD49fzxnySC3/tYp1mb5nkXg5mw0hQnZ
+         5goYxClZnEZMsTxHfyFiPPjpmwIxR3+gPKdVqrRceidyiefPShvBZSe0qmiNVAMgmc
+         sh3DP89JwA8KA==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Bhaskar Chowdhury <unixbhaskar@gmail.com>
+Cc:     rdunlap@infradead.org
 In-Reply-To: <20210208114928.32241-1-unixbhaskar@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210208114928.32241-1-unixbhaskar@gmail.com>
+Subject: Re: [PATCH V2] include: linux: spi: Change provied to provided in the file spi.h
+Message-Id: <161280960942.11009.15341072593194758573.b4-ty@kernel.org>
+Date:   Mon, 08 Feb 2021 18:40:09 +0000
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 2/8/21 3:49 AM, Bhaskar Chowdhury wrote:
-> 
+On Mon, 8 Feb 2021 17:19:28 +0530, Bhaskar Chowdhury wrote:
 > s/provied/provided/
-> 
-> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
 
-OK.
+Applied to
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> ---
-> Changes from V1:
->   As Mark pointed out change provide to provided for the context
-> 
->  include/linux/spi/spi.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-> index aa09fdc8042d..79f89fd250de 100644
-> --- a/include/linux/spi/spi.h
-> +++ b/include/linux/spi/spi.h
-> @@ -624,7 +624,7 @@ struct spi_controller {
-> 
->  	/*
->  	 * These hooks are for drivers that use a generic implementation
-> -	 * of transfer_one_message() provied by the core.
-> +	 * of transfer_one_message() provided by the core.
->  	 */
->  	void (*set_cs)(struct spi_device *spi, bool enable);
->  	int (*transfer_one)(struct spi_controller *ctlr, struct spi_device *spi,
-> --
-> 2.20.1
-> 
+Thanks!
 
+[1/1] include: linux: spi: Change provied to provided in the file spi.h
+      commit: 883c36a32fc031046218ef5802023d5aa54d6cb0
 
--- 
-~Randy
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
