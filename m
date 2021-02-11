@@ -2,37 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1BF318F0A
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Feb 2021 16:45:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA46F318FF5
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Feb 2021 17:31:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbhBKPoF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 Feb 2021 10:44:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57474 "EHLO mail.kernel.org"
+        id S231865AbhBKQaB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 11 Feb 2021 11:30:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36506 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229647AbhBKPl4 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 11 Feb 2021 10:41:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 80F7A64E9A;
-        Thu, 11 Feb 2021 15:40:51 +0000 (UTC)
+        id S231978AbhBKQ1s (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 11 Feb 2021 11:27:48 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 98D7364E95;
+        Thu, 11 Feb 2021 16:27:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613058052;
-        bh=KQNzTZZgEk2YLxXuy5hmyB3R3k6WHpCdU4PEwQbAo3o=;
+        s=k20201202; t=1613060826;
+        bh=tw9ZxcZmOUYy92B+IooOB7mfJ8Ub+KW+ZN8JlTS9YGM=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=V3sRrr1ZDTgVDtJ2VMo0baraI1RWjmzWu7ZZvZ2FRmT92fm+KChq1Bl1FwaHIQt9O
-         22xLSW6Kx9k0yD8/Uugd5nQaIZZD43A5eqxSbvfVst0S6Wl/ADFbRGgPzOtYl8HaHe
-         zM/ZBJQPCQaixM9BCMlPQpdpx01BMyqFidtqfRgbzb+4Baq3ZXm1C623L5JMuWNzGl
-         V9oAyIpaWOdGE4jqvXQR0HmyKS+soqrvGjng9WoJWw1Q2coYuqKubJ0x1lfn9gFzuv
-         RdNqntMBkOLdYiofE/aL76t1NGR1kN8skbjYN/GNRtwqS23LvifNNMuPqvynFaOAcj
-         2ut+sj/4RyJdw==
+        b=OQMCbMwSVvawyRHbxbg3CPIbAr+LX9StLZqrnaPyQ2PVpN6kWa8Q6ZGj5l9xBSt2v
+         OdhK0zCBjY2U+TvFXO3fYqgu6m+u1SxAj1mDTDyZelY6egYgxu490umFZB/k5sy35Q
+         6Uumm8dVLERNNUwKvELQsZinjYPXKOAkLNTUcF92gNWTslxKw/dZDIOjoO3s80A58u
+         /joY/SATay94+JyPZtMSr4gH7dPmtlRuLB9rHsIkfyWD1YaqdRodHbRJXGe5QKPDjf
+         kpu2EiztUt0BYOEH5gcEqfFs2d+nYusyU9dCkeKsK6qoFyf9T2uQV71chiakj5n2wy
+         HTRNpQzWQN/tQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, alexandre.belloni@bootlin.com,
-        linux-spi@vger.kernel.org, ludovic.desroches@microchip.com,
-        linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20210210135428.204134-1-tudor.ambarus@microchip.com>
-References: <20210210135428.204134-1-tudor.ambarus@microchip.com>
-Subject: Re: [PATCH] spi: atmel-quadspi: Disable the QSPI IP at suspend()
-Message-Id: <161305799890.12648.15037245423068627644.b4-ty@kernel.org>
-Date:   Thu, 11 Feb 2021 15:39:58 +0000
+To:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Pratyush Yadav <p.yadav@ti.com>
+Cc:     zhengxunli@mxic.com.tw, Miquel Raynal <miquel.raynal@bootlin.com>
+In-Reply-To: <20210204141218.32229-1-p.yadav@ti.com>
+References: <20210204141218.32229-1-p.yadav@ti.com>
+Subject: Re: [PATCH 1/2] spi: spi-mem: add spi_mem_dtr_supports_op()
+Message-Id: <161306077271.51686.18172352701549316815.b4-ty@kernel.org>
+Date:   Thu, 11 Feb 2021 16:26:12 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -40,11 +39,20 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 10 Feb 2021 15:54:28 +0200, Tudor Ambarus wrote:
-> It is safer to disable the QSPI IP at suspend, in order to avoid
-> possible impact of glitches on the internal FSMs. This is a theoretical
-> fix, there were no problems seen as of now. Tested on sama5d2 and
-> sam9x60 versions of the IP.
+On Thu, 4 Feb 2021 19:42:17 +0530, Pratyush Yadav wrote:
+> spi_mem_default_supports_op() rejects DTR ops by default to ensure that
+> the controller drivers that haven't been updated with DTR support
+> continue to reject them. It also makes sure that controllers that don't
+> support DTR mode at all (which is most of them at the moment) also
+> reject them.
+> 
+> This means that controller drivers that want to support DTR mode can't
+> use spi_mem_default_supports_op(). Driver authors have to roll their own
+> supports_op() function and mimic the buswidth checks. See
+> spi-cadence-quadspi.c for example. Or even worse, driver authors might
+> skip it completely or get it wrong.
+> 
+> [...]
 
 Applied to
 
@@ -52,8 +60,10 @@ Applied to
 
 Thanks!
 
-[1/1] spi: atmel-quadspi: Disable the QSPI IP at suspend()
-      commit: df6978b7ea6349eb32078c42b917559f5510aebd
+[1/2] spi: spi-mem: add spi_mem_dtr_supports_op()
+      commit: 539cf68cd51bfcd2987ce1c44e628e9da69de7c8
+[2/2] spi: cadence-quadspi: Use spi_mem_dtr_supports_op()
+      commit: d2275139649bc34b8b5c3e33d26d991ab8a1364c
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
