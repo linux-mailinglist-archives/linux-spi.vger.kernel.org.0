@@ -2,80 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D422031C96F
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Feb 2021 12:12:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F156031C968
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Feb 2021 12:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbhBPLL5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 Feb 2021 06:11:57 -0500
-Received: from mga05.intel.com ([192.55.52.43]:36591 "EHLO mga05.intel.com"
+        id S229830AbhBPLKE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 16 Feb 2021 06:10:04 -0500
+Received: from mga09.intel.com ([134.134.136.24]:49486 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230171AbhBPLLU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 16 Feb 2021 06:11:20 -0500
-IronPort-SDR: Xc8wtMyjr+79jtNgaACrzDoOzmAIG6VHN3HJOVNABnQvhsb7+BOn+hdjZNAYpLrDrGWVDp3vst
- SBxA+a0GJGXA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9896"; a="267705908"
+        id S230049AbhBPLJU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 16 Feb 2021 06:09:20 -0500
+IronPort-SDR: F/ONUZqqmfmlElqziYAoT9gvFoUBrv9dl1vGSfft/n1RjT95KIaAACuNsa+zk4AP9X7SS16Bt7
+ cBstjTbGBvDA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9896"; a="182992613"
 X-IronPort-AV: E=Sophos;i="5.81,183,1610438400"; 
-   d="scan'208";a="267705908"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2021 03:07:47 -0800
-IronPort-SDR: u+q53oNoCbELQJ1jYWb5CE66uod0DukWLUxwHEjP1+ollnjegC/VTvd23HsE7fW8JzmvI2eXXs
- ACzNoTLTUA8w==
+   d="scan'208";a="182992613"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2021 03:07:47 -0800
+IronPort-SDR: yIB21iHD5n0T4QrLFJY27zSx33lUfLBxLL7myxINaHMWDtx4u7jQgkzd8AQb1V3giPoz0+yPrg
+ 12KxDVBCD1Ww==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,183,1610438400"; 
-   d="scan'208";a="418038625"
+   d="scan'208";a="377522912"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 16 Feb 2021 03:07:45 -0800
+  by orsmga002.jf.intel.com with ESMTP; 16 Feb 2021 03:07:46 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 157991F1; Tue, 16 Feb 2021 13:07:44 +0200 (EET)
+        id 1E692169; Tue, 16 Feb 2021 13:07:45 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Mark Brown <broonie@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
         linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/3] parport: Introduce module_parport_driver() helper macro
-Date:   Tue, 16 Feb 2021 13:07:39 +0200
-Message-Id: <20210216110741.1286-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 2/3] spi: butterfly: Switch to use module_parport_driver()
+Date:   Tue, 16 Feb 2021 13:07:40 +0200
+Message-Id: <20210216110741.1286-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20210216110741.1286-1-andriy.shevchenko@linux.intel.com>
+References: <20210216110741.1286-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Introduce module_parport_driver() helper macro to reduce boilerplate
-in the existing and new code.
+Switch to use module_parport_driver() to reduce boilerplate code.
+Note, device_initcall() is a default for module_init().
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Mark Brown <broonie@kernel.org>
 ---
-v2: fixed typo in the macro
- include/linux/parport.h | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+v2: added Ack (Mark)
+ drivers/spi/spi-butterfly.c | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
-diff --git a/include/linux/parport.h b/include/linux/parport.h
-index 1fb508c19e83..54539b80021e 100644
---- a/include/linux/parport.h
-+++ b/include/linux/parport.h
-@@ -301,9 +301,19 @@ int __must_check __parport_register_driver(struct parport_driver *,
- 	__parport_register_driver(driver, THIS_MODULE, KBUILD_MODNAME)
+diff --git a/drivers/spi/spi-butterfly.c b/drivers/spi/spi-butterfly.c
+index 7e71a351f3b7..cceae816cebc 100644
+--- a/drivers/spi/spi-butterfly.c
++++ b/drivers/spi/spi-butterfly.c
+@@ -317,18 +317,7 @@ static struct parport_driver butterfly_driver = {
+ 	.detach =	butterfly_detach,
+ 	.devmodel = true,
+ };
+-
+-static int __init butterfly_init(void)
+-{
+-	return parport_register_driver(&butterfly_driver);
+-}
+-device_initcall(butterfly_init);
+-
+-static void __exit butterfly_exit(void)
+-{
+-	parport_unregister_driver(&butterfly_driver);
+-}
+-module_exit(butterfly_exit);
++module_parport_driver(butterfly_driver);
  
- /* Unregister a high-level driver. */
--extern void parport_unregister_driver (struct parport_driver *);
- void parport_unregister_driver(struct parport_driver *);
- 
-+/**
-+ * module_parport_driver() - Helper macro for registering a modular parport driver
-+ * @__parport_driver: struct parport_driver to be used
-+ *
-+ * Helper macro for parport drivers which do not do anything special in module
-+ * init and exit. This eliminates a lot of boilerplate. Each module may only
-+ * use this macro once, and calling it replaces module_init() and module_exit().
-+ */
-+#define module_parport_driver(__parport_driver) \
-+	module_driver(__parport_driver, parport_register_driver, parport_unregister_driver)
-+
- /* If parport_register_driver doesn't fit your needs, perhaps
-  * parport_find_xxx does. */
- extern struct parport *parport_find_number (int);
+ MODULE_DESCRIPTION("Parport Adapter driver for AVR Butterfly");
+ MODULE_LICENSE("GPL");
 -- 
 2.30.0
 
