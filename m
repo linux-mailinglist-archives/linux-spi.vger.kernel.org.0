@@ -2,33 +2,33 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D40731C3F7
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Feb 2021 23:17:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E44531C47E
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Feb 2021 01:06:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbhBOWQn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Feb 2021 17:16:43 -0500
-Received: from mga11.intel.com ([192.55.52.93]:28549 "EHLO mga11.intel.com"
+        id S229742AbhBPAEu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Feb 2021 19:04:50 -0500
+Received: from mga11.intel.com ([192.55.52.93]:13586 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229668AbhBOWQm (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 15 Feb 2021 17:16:42 -0500
-IronPort-SDR: u1U3bpy7+/SeJBEuY5VAVjgocszix85S02uE+f+mYDJyRmUvfuQkKPKmP66AGs1gZ1PaJzrxjG
- QcYOsNmLNfgQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9896"; a="179265530"
-X-IronPort-AV: E=Sophos;i="5.81,181,1610438400"; 
-   d="gz'50?scan'50,208,50";a="179265530"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2021 14:16:01 -0800
-IronPort-SDR: E+rFHnkFe1EyheJoKDemevjrKCqcAl04YHSzZLGlFQFxQIHkO3rLJQYZxnpgR873DcabawOwTP
- oh0EHe+yhnNg==
+        id S229652AbhBPAEt (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 15 Feb 2021 19:04:49 -0500
+IronPort-SDR: Pf+deiWvXNFgeli21bs7L0F+1BF5jxIos7vogrfiiG9dTBhccqz/WpcZSu5MiopX8EuPdR5p8B
+ 530DqvllWzIw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9896"; a="179276671"
+X-IronPort-AV: E=Sophos;i="5.81,182,1610438400"; 
+   d="gz'50?scan'50,208,50";a="179276671"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2021 16:04:08 -0800
+IronPort-SDR: bgecROVv6sIMgPP1FN3dLt/N1bTV5mweXlFaaGKyOqw1J2kae8C18Pq9/gHmhyYJRCRwlfr8Hn
+ i+6yJ22rw1iw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,181,1610438400"; 
-   d="gz'50?scan'50,208,50";a="377349851"
+X-IronPort-AV: E=Sophos;i="5.81,182,1610438400"; 
+   d="gz'50?scan'50,208,50";a="591684736"
 Received: from lkp-server02.sh.intel.com (HELO cd560a204411) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 15 Feb 2021 14:15:57 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 15 Feb 2021 16:04:05 -0800
 Received: from kbuild by cd560a204411 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1lBm9t-0007aB-5B; Mon, 15 Feb 2021 22:15:57 +0000
-Date:   Tue, 16 Feb 2021 06:15:20 +0800
+        id 1lBnqW-0007fA-PS; Tue, 16 Feb 2021 00:04:04 +0000
+Date:   Tue, 16 Feb 2021 08:03:42 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -36,21 +36,21 @@ To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     kbuild-all@lists.01.org, clang-built-linux@googlegroups.com,
         linux-media@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v1 2/3] spi: butterfly: Switch to use
+Subject: Re: [PATCH v1 3/3] spi: lm70llp: Switch to use
  module_parport_driver()
-Message-ID: <202102160625.vup9ebc1-lkp@intel.com>
-References: <20210215202353.18515-2-andriy.shevchenko@linux.intel.com>
+Message-ID: <202102160737.ZoASVJ6b-lkp@intel.com>
+References: <20210215202353.18515-3-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="6c2NcOVqGQ03X4Wi"
+Content-Type: multipart/mixed; boundary="xHFwDpU9dbj6ez1V"
 Content-Disposition: inline
-In-Reply-To: <20210215202353.18515-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20210215202353.18515-3-andriy.shevchenko@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---6c2NcOVqGQ03X4Wi
+--xHFwDpU9dbj6ez1V
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -73,10 +73,10 @@ reproduce (this is a W=1 build):
         chmod +x ~/bin/make.cross
         # install powerpc cross compiling tool for clang build
         # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/0day-ci/linux/commit/59847957f9c092e0c9530501dcaf0d0b5e3f193a
+        # https://github.com/0day-ci/linux/commit/b436c5f6666ea5fb47d7b1826a66d4110bb37072
         git remote add linux-review https://github.com/0day-ci/linux
         git fetch --no-tags linux-review Andy-Shevchenko/parport-Introduce-module_parport_driver-helper-macro/20210216-042909
-        git checkout 59847957f9c092e0c9530501dcaf0d0b5e3f193a
+        git checkout b436c5f6666ea5fb47d7b1826a66d4110bb37072
         # save the attached .config to linux build tree
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=powerpc 
 
@@ -89,7 +89,7 @@ All errors (new ones prefixed by >>):
    arch/powerpc/include/asm/io.h:537:62: note: expanded from macro '__do_outl'
    #define __do_outl(val, port)    writel(val,(PCI_IO_ADDR)_IO_BASE+port);
                                               ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/spi/spi-butterfly.c:15:
+   In file included from drivers/spi/spi-lm70llp.c:19:
    In file included from include/linux/spi/spi.h:15:
    In file included from include/linux/scatterlist.h:9:
    In file included from arch/powerpc/include/asm/io.h:619:
@@ -99,13 +99,13 @@ All errors (new ones prefixed by >>):
    arch/powerpc/include/asm/io.h:616:3: note: expanded from macro 'DEF_PCI_AC_NORET'
                    __do_##name al;                                 \
                    ^~~~~~~~~~~~~~
-   <scratch space>:211:1: note: expanded from here
+   <scratch space>:205:1: note: expanded from here
    __do_insb
    ^
    arch/powerpc/include/asm/io.h:556:56: note: expanded from macro '__do_insb'
    #define __do_insb(p, b, n)      readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/spi/spi-butterfly.c:15:
+   In file included from drivers/spi/spi-lm70llp.c:19:
    In file included from include/linux/spi/spi.h:15:
    In file included from include/linux/scatterlist.h:9:
    In file included from arch/powerpc/include/asm/io.h:619:
@@ -115,13 +115,13 @@ All errors (new ones prefixed by >>):
    arch/powerpc/include/asm/io.h:616:3: note: expanded from macro 'DEF_PCI_AC_NORET'
                    __do_##name al;                                 \
                    ^~~~~~~~~~~~~~
-   <scratch space>:213:1: note: expanded from here
+   <scratch space>:207:1: note: expanded from here
    __do_insw
    ^
    arch/powerpc/include/asm/io.h:557:56: note: expanded from macro '__do_insw'
    #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/spi/spi-butterfly.c:15:
+   In file included from drivers/spi/spi-lm70llp.c:19:
    In file included from include/linux/spi/spi.h:15:
    In file included from include/linux/scatterlist.h:9:
    In file included from arch/powerpc/include/asm/io.h:619:
@@ -131,13 +131,13 @@ All errors (new ones prefixed by >>):
    arch/powerpc/include/asm/io.h:616:3: note: expanded from macro 'DEF_PCI_AC_NORET'
                    __do_##name al;                                 \
                    ^~~~~~~~~~~~~~
-   <scratch space>:215:1: note: expanded from here
+   <scratch space>:209:1: note: expanded from here
    __do_insl
    ^
    arch/powerpc/include/asm/io.h:558:56: note: expanded from macro '__do_insl'
    #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/spi/spi-butterfly.c:15:
+   In file included from drivers/spi/spi-lm70llp.c:19:
    In file included from include/linux/spi/spi.h:15:
    In file included from include/linux/scatterlist.h:9:
    In file included from arch/powerpc/include/asm/io.h:619:
@@ -147,13 +147,13 @@ All errors (new ones prefixed by >>):
    arch/powerpc/include/asm/io.h:616:3: note: expanded from macro 'DEF_PCI_AC_NORET'
                    __do_##name al;                                 \
                    ^~~~~~~~~~~~~~
-   <scratch space>:217:1: note: expanded from here
+   <scratch space>:211:1: note: expanded from here
    __do_outsb
    ^
    arch/powerpc/include/asm/io.h:559:58: note: expanded from macro '__do_outsb'
    #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
                                            ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/spi/spi-butterfly.c:15:
+   In file included from drivers/spi/spi-lm70llp.c:19:
    In file included from include/linux/spi/spi.h:15:
    In file included from include/linux/scatterlist.h:9:
    In file included from arch/powerpc/include/asm/io.h:619:
@@ -163,13 +163,13 @@ All errors (new ones prefixed by >>):
    arch/powerpc/include/asm/io.h:616:3: note: expanded from macro 'DEF_PCI_AC_NORET'
                    __do_##name al;                                 \
                    ^~~~~~~~~~~~~~
-   <scratch space>:219:1: note: expanded from here
+   <scratch space>:213:1: note: expanded from here
    __do_outsw
    ^
    arch/powerpc/include/asm/io.h:560:58: note: expanded from macro '__do_outsw'
    #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
                                            ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from drivers/spi/spi-butterfly.c:15:
+   In file included from drivers/spi/spi-lm70llp.c:19:
    In file included from include/linux/spi/spi.h:15:
    In file included from include/linux/scatterlist.h:9:
    In file included from arch/powerpc/include/asm/io.h:619:
@@ -179,23 +179,23 @@ All errors (new ones prefixed by >>):
    arch/powerpc/include/asm/io.h:616:3: note: expanded from macro 'DEF_PCI_AC_NORET'
                    __do_##name al;                                 \
                    ^~~~~~~~~~~~~~
-   <scratch space>:221:1: note: expanded from here
+   <scratch space>:215:1: note: expanded from here
    __do_outsl
    ^
    arch/powerpc/include/asm/io.h:561:58: note: expanded from macro '__do_outsl'
    #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
                                            ~~~~~~~~~~~~~~~~~~~~~^
->> drivers/spi/spi-butterfly.c:320:1: error: implicit declaration of function 'parport_add_driver' [-Werror,-Wimplicit-function-declaration]
-   module_parport_driver(butterfly_driver);
+>> drivers/spi/spi-lm70llp.c:323:1: error: implicit declaration of function 'parport_add_driver' [-Werror,-Wimplicit-function-declaration]
+   module_parport_driver(spi_lm70llp_drv);
    ^
    include/linux/parport.h:315:34: note: expanded from macro 'module_parport_driver'
            module_driver(__parport_driver, parport_add_driver, parport_del_driver)
                                            ^
->> drivers/spi/spi-butterfly.c:320:1: error: implicit declaration of function 'parport_del_driver' [-Werror,-Wimplicit-function-declaration]
+>> drivers/spi/spi-lm70llp.c:323:1: error: implicit declaration of function 'parport_del_driver' [-Werror,-Wimplicit-function-declaration]
    include/linux/parport.h:315:54: note: expanded from macro 'module_parport_driver'
            module_driver(__parport_driver, parport_add_driver, parport_del_driver)
                                                                ^
-   drivers/spi/spi-butterfly.c:320:1: note: did you mean 'parport_del_port'?
+   drivers/spi/spi-lm70llp.c:323:1: note: did you mean 'parport_del_port'?
    include/linux/parport.h:315:54: note: expanded from macro 'module_parport_driver'
            module_driver(__parport_driver, parport_add_driver, parport_del_driver)
                                                                ^
@@ -205,28 +205,28 @@ All errors (new ones prefixed by >>):
    12 warnings and 2 errors generated.
 
 
-vim +/parport_add_driver +320 drivers/spi/spi-butterfly.c
+vim +/parport_add_driver +323 drivers/spi/spi-lm70llp.c
 
-   313	
-   314	static struct parport_driver butterfly_driver = {
-   315		.name =		"spi_butterfly",
-   316		.match_port =	butterfly_attach,
-   317		.detach =	butterfly_detach,
-   318		.devmodel = true,
-   319	};
- > 320	module_parport_driver(butterfly_driver);
-   321	
+   316	
+   317	static struct parport_driver spi_lm70llp_drv = {
+   318		.name =		DRVNAME,
+   319		.match_port =	spi_lm70llp_attach,
+   320		.detach =	spi_lm70llp_detach,
+   321		.devmodel =	true,
+   322	};
+ > 323	module_parport_driver(spi_lm70llp_drv);
+   324	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---6c2NcOVqGQ03X4Wi
+--xHFwDpU9dbj6ez1V
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICP3nKmAAAy5jb25maWcAnFxbc+O2kn7Pr1BNqrbOeZiMLrbH3i0/gCQoYkQQHILUxS8o
+H4sICAP2KmAAAy5jb25maWcAnFxbc+O2kn7Pr1BNqrbOeZiMLrbH3i0/gCQoYkQQHILUxS8o
 RZYn3vh2JHuS+ffbDfACkJAntak6idXduDe6v+4Gz6+//Doib6/Pj9vX+9324eHH6Nv+aX/Y
 vu5vR3f3D/v/GUVilIlyRCNW/gbC6f3T29+fXp7/2h9edqPz3yaT38YfD7vPo8X+8LR/GIXP
 T3f3396gh/vnp19+/SUUWczmKgzVkhaSiUyVdF1ef9g9bJ++jb7vD0eQG02mv41/G4/+9e3+
@@ -675,4 +675,4 @@ T7V/O6K6gop28Pzv/evdtz1dc+uaN8W0cn2jlprhstbdzCLliYgDbqHY4nB7jJQx+Dpti2cR
 cYI2Oosp45grE+iwndVp8B8uo2GDC1Qzf6mt1jp/yui9DvKNZ52ScOjmm5Y5WtECSM9rFnDO
 KtFNWxuG63XDOvV3pn3Ril8u3m0s7U/8fxycQ6wLaQEA
 
---6c2NcOVqGQ03X4Wi--
+--xHFwDpU9dbj6ez1V--
