@@ -2,164 +2,130 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A5631F4F0
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Feb 2021 07:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3E1320F75
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Feb 2021 03:35:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbhBSGAJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 19 Feb 2021 01:00:09 -0500
-Received: from twhmllg3.macronix.com ([122.147.135.201]:20393 "EHLO
-        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbhBSGAI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 19 Feb 2021 01:00:08 -0500
-Received: from twhfmlp1.macronix.com (twhfmlp1.macronix.com [172.17.20.91])
-        by TWHMLLG3.macronix.com with ESMTP id 11J5weuK059515;
-        Fri, 19 Feb 2021 13:58:40 +0800 (GMT-8)
-        (envelope-from zhengxunli@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
-        by Forcepoint Email with ESMTP id 88D083DC107C4987CF0E;
-        Fri, 19 Feb 2021 13:58:40 +0800 (CST)
-In-Reply-To: <1612517808-10010-3-git-send-email-zhengxunli@mxic.com.tw>
-References: <1612517808-10010-1-git-send-email-zhengxunli@mxic.com.tw> <1612517808-10010-3-git-send-email-zhengxunli@mxic.com.tw>
-To:     broonie@kernel.org
-Cc:     juliensu@mxic.com.tw, linux-mtd@lists.infradead.org,
-        linux-spi@vger.kernel.org, miquel.raynal@bootlin.com,
-        vigneshr@ti.com, ycllin@mxic.com.tw
-Subject: Re: [PATCH v2 2/2] spi: mxic: patch for octal DTR mode support
+        id S231659AbhBVCfh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 21 Feb 2021 21:35:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231631AbhBVCfh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 21 Feb 2021 21:35:37 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77593C061574;
+        Sun, 21 Feb 2021 18:34:56 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id w4so12065257wmi.4;
+        Sun, 21 Feb 2021 18:34:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UUWfmmu8/MSSQ/CGog/7Af40QRm3i4Uz451jOqVr8Ko=;
+        b=llPwk55sZ4y4UJM/0xOBAUAKjkG3CgnmdJXfkWCz27lsaXPeNHBfWdqk4TdIhkVikc
+         6vnqdA6xddu/jtf8lOhT6aY7XEcIJXcGK/Q+e+RZMvkbynD5Vt/dxDYxH84cpdgb8UI0
+         x5dR/HAJkH78+zcvhVabmxEZB0S6QEtBUrO1t5Z96oFKK68E/uMQG3ic+uzQCIj/whbv
+         rHHAZtsae+913GZtnqE+V7FeByaPDgz54advLm3LdnAdb8wyAPFWBX0gtkfBLiCeORlH
+         8t8fMh9FZ235eWIr/Udmrq2DJqLFpXGqBzzLq4Vt6X4RBdHPPES81jCoeI/KZaj0t8bw
+         wXfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UUWfmmu8/MSSQ/CGog/7Af40QRm3i4Uz451jOqVr8Ko=;
+        b=PhKzaSZGD8wE18FWt7/Zha000fH5jiTzlwhJLyQ+EZlh4PZRqiiFOQSUJqY8LJU1K5
+         d+Kf0EUvJdmwd6KHdgbByyCkajWrf9g9xtVnBYWeDJBu81Sreuz7gZnIvsl0ct6SRsYZ
+         6Y4Tf66lmewPEc4YxvE7pjLiQ0yXTzMNAHk/PZ3s0vceLNORRJaJ5jC4/D/vTnFrxnNr
+         dK8ZQqbt3+wyW4PtPo8c3fPEGHET5GLl4DzYy0etIBkZXzKXeXn5ZtmMBntPVnMGK30v
+         ZCeLFv5odu5dn3jftANrbV2V1WVC6BtwnGJGFmUPd96R0OYQyR4uvMlhK9R/GqTd529C
+         aazQ==
+X-Gm-Message-State: AOAM5308K89AEA0ZqJlJyH9IbQnNxqIh1bF8O8wkD+kc9DAEO/rHe/Yv
+        2rV9hvzVQX6115RgIIwZxbJACYDJZx0=
+X-Google-Smtp-Source: ABdhPJxikA1Kx8VGY9k+tYHdKEvoC0iXMWun+BF8aSsaa68Pj9Cuz3l00y8RO5sep2TF+7uzma5fRw==
+X-Received: by 2002:a1c:c3d5:: with SMTP id t204mr12572195wmf.114.1613961295319;
+        Sun, 21 Feb 2021 18:34:55 -0800 (PST)
+Received: from localhost.localdomain ([195.245.17.255])
+        by smtp.gmail.com with ESMTPSA id g1sm23918827wmh.9.2021.02.21.18.34.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Feb 2021 18:34:54 -0800 (PST)
+From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To:     linux-spi@vger.kernel.org
+Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: omap2-mcspi: Activate pinctrl idle state during runtime suspend
+Date:   Mon, 22 Feb 2021 03:32:43 +0100
+Message-Id: <20210222023243.491432-1-alexander.sverdlin@gmail.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-X-KeepSent: BB82A762:591077E7-48258681:001E4996;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3FP6 SHF907 April 26, 2018
-Message-ID: <OFBB82A762.591077E7-ON48258681.001E4996-48258681.0020D66E@mxic.com.tw>
-From:   zhengxunli@mxic.com.tw
-Date:   Fri, 19 Feb 2021 13:58:40 +0800
-X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2021/02/19 PM 01:58:40,
-        Serialize complete at 2021/02/19 PM 01:58:40
-Content-Type: text/plain; charset="Big5"
-Content-Transfer-Encoding: base64
-X-MAIL: TWHMLLG3.macronix.com 11J5weuK059515
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Set the (optional) idle pinctrl state during runtime suspend. This is the
+same schema used in PL022 driver and can help with HW designs sharing
+the SPI lines for different purposes.
 
-SGkgTWFyaywNCg0KSSBzZWUgdGhhdCBQcmF0eXVzaCBwYXRjaCAic3BpOiBzcGktbWVtOiBhZGQg
-c3BpX21lbV9kdHJfc3VwcG9ydHNfb3AoKSINCmhhcyBiZWVuIGFjY2VwdGVkLCBjYW4geW91IGhl
-bHAgcmV2aWV3IHRoaXMgcGF0Y2ggYW5kIG1ha2Ugc29tZSANCnN1Z2dlc3Rpb25zPw0KDQoNCiJ6
-aGVuZ3h1bmxpIiA8emhlbmd4dW5saUBteGljLmNvbS50dz4gd3JvdGUgb24gMjAyMS8wMi8wNSCk
-VaTIIDA1OjM2OjQ4Og0KDQo+ICJ6aGVuZ3h1bmxpIiA8emhlbmd4dW5saUBteGljLmNvbS50dz4g
-DQo+IDIwMjEvMDIvMDUgpFWkyCAwNTo0MA0KPiANCj4gVG8NCj4gDQo+IGxpbnV4LW10ZEBsaXN0
-cy5pbmZyYWRlYWQub3JnLCBsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnLCANCj4gbWlxdWVsLnJh
-eW5hbEBib290bGluLmNvbSwgYnJvb25pZUBrZXJuZWwub3JnLCB2aWduZXNockB0aS5jb20sIA0K
-PiANCj4gY2MNCj4gDQo+IHljbGxpbkBteGljLmNvbS50dywganVsaWVuc3VAbXhpYy5jb20udHcs
-ICJ6aGVuZ3h1bmxpIiANCj4gPHpoZW5neHVubGlAbXhpYy5jb20udHc+DQo+IA0KPiBTdWJqZWN0
-DQo+IA0KPiBbUEFUQ0ggdjIgMi8yXSBzcGk6IG14aWM6IHBhdGNoIGZvciBvY3RhbCBEVFIgbW9k
-ZSBzdXBwb3J0DQo+IA0KPiBEcml2ZXIgcGF0Y2ggZm9yIG9jdGFsIERUUiBtb2RlIHN1cHBvcnQu
-DQo+IA0KPiBPd2luZyB0byB0aGUgc3BpX21lbV9kZWZhdWx0X3N1cHBvcnRzX29wKCkgaXMgbm90
-IHN1cHBvcnQgZHRyDQo+IG9wZXJhdGlvbi4gQmFzZWQgb24gUHJhdHl1c2ggcGF0Y2ggInNwaTog
-c3BpLW1lbTogYWRkIHNwaV9tZW1fZHRyDQo+IF9zdXBwb3J0c19vcCgpIiBhZGQgc3BpX21lbV9k
-dHJfc3VwcG9ydHNfb3AoKSB0byBzdXBwb3J0IGR0ciBhbmQNCj4ga2VlcCBjaGVja2luZyB0aGUg
-YnVzd2lkdGggYW5kIGNvbW1hbmQgYnl0ZXMuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiB6aGVuZ3h1
-bmxpIDx6aGVuZ3h1bmxpQG14aWMuY29tLnR3Pg0KPiAtLS0NCj4gIGRyaXZlcnMvc3BpL3NwaS1t
-eGljLmMgfCA0MSArKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0tLQ0KPiAg
-MSBmaWxlIGNoYW5nZWQsIDMwIGluc2VydGlvbnMoKyksIDExIGRlbGV0aW9ucygtKQ0KPiANCj4g
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvc3BpL3NwaS1teGljLmMgYi9kcml2ZXJzL3NwaS9zcGktbXhp
-Yy5jDQo+IGluZGV4IDk2YjQxODIuLjMyZTc1N2EgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvc3Bp
-L3NwaS1teGljLmMNCj4gKysrIGIvZHJpdmVycy9zcGkvc3BpLW14aWMuYw0KPiBAQCAtMzM1LDgg
-KzMzNSwxMCBAQCBzdGF0aWMgaW50IG14aWNfc3BpX2RhdGFfeGZlcihzdHJ1Y3QgbXhpY19zcGkg
-DQo+ICpteGljLCBjb25zdCB2b2lkICp0eGJ1ZiwNCj4gIHN0YXRpYyBib29sIG14aWNfc3BpX21l
-bV9zdXBwb3J0c19vcChzdHJ1Y3Qgc3BpX21lbSAqbWVtLA0KPiAgICAgICAgICAgICAgICAgICBj
-b25zdCBzdHJ1Y3Qgc3BpX21lbV9vcCAqb3ApDQo+ICB7DQo+IC0gICBpZiAob3AtPmRhdGEuYnVz
-d2lkdGggPiA0IHx8IG9wLT5hZGRyLmJ1c3dpZHRoID4gNCB8fA0KPiAtICAgICAgIG9wLT5kdW1t
-eS5idXN3aWR0aCA+IDQgfHwgb3AtPmNtZC5idXN3aWR0aCA+IDQpDQo+ICsgICBib29sIGFsbF9m
-YWxzZTsNCj4gKw0KPiArICAgaWYgKG9wLT5kYXRhLmJ1c3dpZHRoID4gOCB8fCBvcC0+YWRkci5i
-dXN3aWR0aCA+IDggfHwNCj4gKyAgICAgICBvcC0+ZHVtbXkuYnVzd2lkdGggPiA4IHx8IG9wLT5j
-bWQuYnVzd2lkdGggPiA4KQ0KPiAgICAgICAgcmV0dXJuIGZhbHNlOw0KPiANCj4gICAgIGlmIChv
-cC0+ZGF0YS5uYnl0ZXMgJiYgb3AtPmR1bW15Lm5ieXRlcyAmJg0KPiBAQCAtMzQ2LDcgKzM0OCwx
-MyBAQCBzdGF0aWMgYm9vbCBteGljX3NwaV9tZW1fc3VwcG9ydHNfb3Aoc3RydWN0IHNwaV9tZW0g
-DQoqbWVtLA0KPiAgICAgaWYgKG9wLT5hZGRyLm5ieXRlcyA+IDcpDQo+ICAgICAgICByZXR1cm4g
-ZmFsc2U7DQo+IA0KPiAtICAgcmV0dXJuIHNwaV9tZW1fZGVmYXVsdF9zdXBwb3J0c19vcChtZW0s
-IG9wKTsNCj4gKyAgIGFsbF9mYWxzZSA9ICFvcC0+Y21kLmR0ciAmJiAhb3AtPmFkZHIuZHRyICYm
-ICFvcC0+ZHVtbXkuZHRyICYmDQo+ICsgICAgICAgICAgIW9wLT5kYXRhLmR0cjsNCj4gKw0KPiAr
-ICAgaWYgKGFsbF9mYWxzZSkNCj4gKyAgICAgIHJldHVybiBzcGlfbWVtX2RlZmF1bHRfc3VwcG9y
-dHNfb3AobWVtLCBvcCk7DQo+ICsgICBlbHNlDQo+ICsgICAgICByZXR1cm4gc3BpX21lbV9kdHJf
-c3VwcG9ydHNfb3AobWVtLCBvcCk7DQo+ICB9DQo+IA0KPiAgc3RhdGljIGludCBteGljX3NwaV9t
-ZW1fZXhlY19vcChzdHJ1Y3Qgc3BpX21lbSAqbWVtLA0KPiBAQCAtMzU1LDE0ICszNjMsMTUgQEAg
-c3RhdGljIGludCBteGljX3NwaV9tZW1fZXhlY19vcChzdHJ1Y3Qgc3BpX21lbSANCiptZW0sDQo+
-ICAgICBzdHJ1Y3QgbXhpY19zcGkgKm14aWMgPSBzcGlfbWFzdGVyX2dldF9kZXZkYXRhKG1lbS0+
-c3BpLT5tYXN0ZXIpOw0KPiAgICAgaW50IG5pbyA9IDEsIGksIHJldDsNCj4gICAgIHUzMiBzc19j
-dHJsOw0KPiAtICAgdTggYWRkcls4XTsNCj4gLSAgIHU4IG9wY29kZSA9IG9wLT5jbWQub3Bjb2Rl
-Ow0KPiArICAgdTggYWRkcls4XSwgY21kWzJdOw0KPiANCj4gICAgIHJldCA9IG14aWNfc3BpX3Nl
-dF9mcmVxKG14aWMsIG1lbS0+c3BpLT5tYXhfc3BlZWRfaHopOw0KPiAgICAgaWYgKHJldCkNCj4g
-ICAgICAgIHJldHVybiByZXQ7DQo+IA0KPiAtICAgaWYgKG1lbS0+c3BpLT5tb2RlICYgKFNQSV9U
-WF9RVUFEIHwgU1BJX1JYX1FVQUQpKQ0KPiArICAgaWYgKG1lbS0+c3BpLT5tb2RlICYgKFNQSV9U
-WF9PQ1RBTCB8IFNQSV9SWF9PQ1RBTCkpDQo+ICsgICAgICBuaW8gPSA4Ow0KPiArICAgZWxzZSBp
-ZiAobWVtLT5zcGktPm1vZGUgJiAoU1BJX1RYX1FVQUQgfCBTUElfUlhfUVVBRCkpDQo+ICAgICAg
-ICBuaW8gPSA0Ow0KPiAgICAgZWxzZSBpZiAobWVtLT5zcGktPm1vZGUgJiAoU1BJX1RYX0RVQUwg
-fCBTUElfUlhfRFVBTCkpDQo+ICAgICAgICBuaW8gPSAyOw0KPiBAQCAtMzc0LDE5ICszODMsMjUg
-QEAgc3RhdGljIGludCBteGljX3NwaV9tZW1fZXhlY19vcChzdHJ1Y3Qgc3BpX21lbSANCiptZW0s
-DQo+ICAgICAgICAgICAgbXhpYy0+cmVncyArIEhDX0NGRyk7DQo+ICAgICB3cml0ZWwoSENfRU5f
-QklULCBteGljLT5yZWdzICsgSENfRU4pOw0KPiANCj4gLSAgIHNzX2N0cmwgPSBPUF9DTURfQllU
-RVMoMSkgfCBPUF9DTURfQlVTVyhmbHMob3AtPmNtZC5idXN3aWR0aCkgLSAxKTsNCj4gKyAgIHNz
-X2N0cmwgPSBPUF9DTURfQllURVMob3AtPmNtZC5uYnl0ZXMpIHwNCj4gKyAgICAgICAgT1BfQ01E
-X0JVU1coZmxzKG9wLT5jbWQuYnVzd2lkdGgpIC0gMSkgfA0KPiArICAgICAgICAob3AtPmNtZC5k
-dHIgPyBPUF9DTURfRERSIDogMCk7DQo+IA0KPiAgICAgaWYgKG9wLT5hZGRyLm5ieXRlcykNCj4g
-ICAgICAgIHNzX2N0cmwgfD0gT1BfQUREUl9CWVRFUyhvcC0+YWRkci5uYnl0ZXMpIHwNCj4gLSAg
-ICAgICAgICAgIE9QX0FERFJfQlVTVyhmbHMob3AtPmFkZHIuYnVzd2lkdGgpIC0gMSk7DQo+ICsg
-ICAgICAgICAgICBPUF9BRERSX0JVU1coZmxzKG9wLT5hZGRyLmJ1c3dpZHRoKSAtIDEpIHwNCj4g
-KyAgICAgICAgICAgIChvcC0+YWRkci5kdHIgPyBPUF9BRERSX0REUiA6IDApOw0KPiANCj4gICAg
-IGlmIChvcC0+ZHVtbXkubmJ5dGVzKQ0KPiAgICAgICAgc3NfY3RybCB8PSBPUF9EVU1NWV9DWUMo
-b3AtPmR1bW15Lm5ieXRlcyk7DQo+IA0KPiAgICAgaWYgKG9wLT5kYXRhLm5ieXRlcykgew0KPiAt
-ICAgICAgc3NfY3RybCB8PSBPUF9EQVRBX0JVU1coZmxzKG9wLT5kYXRhLmJ1c3dpZHRoKSAtIDEp
-Ow0KPiArICAgICAgc3NfY3RybCB8PSBPUF9EQVRBX0JVU1coZmxzKG9wLT5kYXRhLmJ1c3dpZHRo
-KSAtIDEpIHwNCj4gKyAgICAgICAgICAgIChvcC0+ZGF0YS5kdHIgPyBPUF9EQVRBX0REUiA6IDAp
-Ow0KPiAgICAgICAgaWYgKG9wLT5kYXRhLmRpciA9PSBTUElfTUVNX0RBVEFfSU4pDQo+ICAgICAg
-ICAgICBzc19jdHJsIHw9IE9QX1JFQUQ7DQo+ICsgICAgICAgICBpZiAob3AtPmRhdGEuZHRyKQ0K
-PiArICAgICAgICAgICAgc3NfY3RybCB8PSBPUF9EUVNfRU47DQo+ICAgICB9DQo+IA0KPiAgICAg
-d3JpdGVsKHNzX2N0cmwsIG14aWMtPnJlZ3MgKyBTU19DVFJMKG1lbS0+c3BpLT5jaGlwX3NlbGVj
-dCkpOw0KPiBAQCAtMzk0LDcgKzQwOSwxMCBAQCBzdGF0aWMgaW50IG14aWNfc3BpX21lbV9leGVj
-X29wKHN0cnVjdCBzcGlfbWVtIA0KKm1lbSwNCj4gICAgIHdyaXRlbChyZWFkbChteGljLT5yZWdz
-ICsgSENfQ0ZHKSB8IEhDX0NGR19NQU5fQ1NfQVNTRVJULA0KPiAgICAgICAgICAgIG14aWMtPnJl
-Z3MgKyBIQ19DRkcpOw0KPiANCj4gLSAgIHJldCA9IG14aWNfc3BpX2RhdGFfeGZlcihteGljLCAm
-b3Bjb2RlLCBOVUxMLCAxKTsNCj4gKyAgIGZvciAoaSA9IDA7IGkgPCBvcC0+Y21kLm5ieXRlczsg
-aSsrKQ0KPiArICAgICAgY21kW2ldID0gb3AtPmNtZC5vcGNvZGUgPj4gKDggKiAob3AtPmNtZC5u
-Ynl0ZXMgLSBpIC0gMSkpOw0KPiArDQo+ICsgICByZXQgPSBteGljX3NwaV9kYXRhX3hmZXIobXhp
-YywgY21kLCBOVUxMLCBvcC0+Y21kLm5ieXRlcyk7DQo+ICAgICBpZiAocmV0KQ0KPiAgICAgICAg
-Z290byBvdXQ7DQo+IA0KPiBAQCAtNTY3LDcgKzU4NSw4IEBAIHN0YXRpYyBpbnQgbXhpY19zcGlf
-cHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSANCipwZGV2KQ0KPiAgICAgbWFzdGVyLT5iaXRz
-X3Blcl93b3JkX21hc2sgPSBTUElfQlBXX01BU0soOCk7DQo+ICAgICBtYXN0ZXItPm1vZGVfYml0
-cyA9IFNQSV9DUE9MIHwgU1BJX0NQSEEgfA0KPiAgICAgICAgICAgU1BJX1JYX0RVQUwgfCBTUElf
-VFhfRFVBTCB8DQo+IC0gICAgICAgICBTUElfUlhfUVVBRCB8IFNQSV9UWF9RVUFEOw0KPiArICAg
-ICAgICAgU1BJX1JYX1FVQUQgfCBTUElfVFhfUVVBRCB8DQo+ICsgICAgICAgICBTUElfUlhfT0NU
-QUwgfCBTUElfVFhfT0NUQUw7DQo+IA0KPiAgICAgbXhpY19zcGlfaHdfaW5pdChteGljKTsNCj4g
-DQo+IC0tIA0KPiAxLjkuMQ0KPiANCg0KVGhhbmtzLA0KWmhlbmd4dW4NCg0KDQpDT05GSURFTlRJ
-QUxJVFkgTk9URToNCg0KVGhpcyBlLW1haWwgYW5kIGFueSBhdHRhY2htZW50cyBtYXkgY29udGFp
-biBjb25maWRlbnRpYWwgaW5mb3JtYXRpb24gDQphbmQvb3IgcGVyc29uYWwgZGF0YSwgd2hpY2gg
-aXMgcHJvdGVjdGVkIGJ5IGFwcGxpY2FibGUgbGF3cy4gUGxlYXNlIGJlIA0KcmVtaW5kZWQgdGhh
-dCBkdXBsaWNhdGlvbiwgZGlzY2xvc3VyZSwgZGlzdHJpYnV0aW9uLCBvciB1c2Ugb2YgdGhpcyBl
-LW1haWwgDQooYW5kL29yIGl0cyBhdHRhY2htZW50cykgb3IgYW55IHBhcnQgdGhlcmVvZiBpcyBw
-cm9oaWJpdGVkLiBJZiB5b3UgcmVjZWl2ZSANCnRoaXMgZS1tYWlsIGluIGVycm9yLCBwbGVhc2Ug
-bm90aWZ5IHVzIGltbWVkaWF0ZWx5IGFuZCBkZWxldGUgdGhpcyBtYWlsIGFzIA0Kd2VsbCBhcyBp
-dHMgYXR0YWNobWVudChzKSBmcm9tIHlvdXIgc3lzdGVtLiBJbiBhZGRpdGlvbiwgcGxlYXNlIGJl
-IA0KaW5mb3JtZWQgdGhhdCBjb2xsZWN0aW9uLCBwcm9jZXNzaW5nLCBhbmQvb3IgdXNlIG9mIHBl
-cnNvbmFsIGRhdGEgaXMgDQpwcm9oaWJpdGVkIHVubGVzcyBleHByZXNzbHkgcGVybWl0dGVkIGJ5
-IHBlcnNvbmFsIGRhdGEgcHJvdGVjdGlvbiBsYXdzLiANClRoYW5rIHlvdSBmb3IgeW91ciBhdHRl
-bnRpb24gYW5kIGNvb3BlcmF0aW9uLg0KDQpNYWNyb25peCBJbnRlcm5hdGlvbmFsIENvLiwgTHRk
-Lg0KDQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT0NCg0KDQoNCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCg0KQ09ORklERU5U
-SUFMSVRZIE5PVEU6DQoNClRoaXMgZS1tYWlsIGFuZCBhbnkgYXR0YWNobWVudHMgbWF5IGNvbnRh
-aW4gY29uZmlkZW50aWFsIGluZm9ybWF0aW9uIGFuZC9vciBwZXJzb25hbCBkYXRhLCB3aGljaCBp
-cyBwcm90ZWN0ZWQgYnkgYXBwbGljYWJsZSBsYXdzLiBQbGVhc2UgYmUgcmVtaW5kZWQgdGhhdCBk
-dXBsaWNhdGlvbiwgZGlzY2xvc3VyZSwgZGlzdHJpYnV0aW9uLCBvciB1c2Ugb2YgdGhpcyBlLW1h
-aWwgKGFuZC9vciBpdHMgYXR0YWNobWVudHMpIG9yIGFueSBwYXJ0IHRoZXJlb2YgaXMgcHJvaGli
-aXRlZC4gSWYgeW91IHJlY2VpdmUgdGhpcyBlLW1haWwgaW4gZXJyb3IsIHBsZWFzZSBub3RpZnkg
-dXMgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSB0aGlzIG1haWwgYXMgd2VsbCBhcyBpdHMgYXR0YWNo
-bWVudChzKSBmcm9tIHlvdXIgc3lzdGVtLiBJbiBhZGRpdGlvbiwgcGxlYXNlIGJlIGluZm9ybWVk
-IHRoYXQgY29sbGVjdGlvbiwgcHJvY2Vzc2luZywgYW5kL29yIHVzZSBvZiBwZXJzb25hbCBkYXRh
-IGlzIHByb2hpYml0ZWQgdW5sZXNzIGV4cHJlc3NseSBwZXJtaXR0ZWQgYnkgcGVyc29uYWwgZGF0
-YSBwcm90ZWN0aW9uIGxhd3MuIFRoYW5rIHlvdSBmb3IgeW91ciBhdHRlbnRpb24gYW5kIGNvb3Bl
-cmF0aW9uLg0KDQpNYWNyb25peCBJbnRlcm5hdGlvbmFsIENvLiwgTHRkLg0KDQo9PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT0NCg==
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+---
+ drivers/spi/spi-omap2-mcspi.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
+index d4c9510af393..999c22736416 100644
+--- a/drivers/spi/spi-omap2-mcspi.c
++++ b/drivers/spi/spi-omap2-mcspi.c
+@@ -1327,6 +1327,17 @@ static int omap2_mcspi_controller_setup(struct omap2_mcspi *mcspi)
+ 	return 0;
+ }
+ 
++static int omap_mcspi_runtime_suspend(struct device *dev)
++{
++	int error;
++
++	error = pinctrl_pm_select_idle_state(dev);
++	if (error)
++		dev_warn(dev, "%s: failed to set pins: %i\n", __func__, error);
++
++	return 0;
++}
++
+ /*
+  * When SPI wake up from off-mode, CS is in activate state. If it was in
+  * inactive state when driver was suspend, then force it to inactive state at
+@@ -1338,6 +1349,11 @@ static int omap_mcspi_runtime_resume(struct device *dev)
+ 	struct omap2_mcspi *mcspi = spi_master_get_devdata(master);
+ 	struct omap2_mcspi_regs *ctx = &mcspi->ctx;
+ 	struct omap2_mcspi_cs *cs;
++	int error;
++
++	error = pinctrl_pm_select_default_state(dev);
++	if (error)
++		dev_warn(dev, "%s: failed to set pins: %i\n", __func__, error);
+ 
+ 	/* McSPI: context restore */
+ 	mcspi_write_reg(master, OMAP2_MCSPI_MODULCTRL, ctx->modulctrl);
+@@ -1566,11 +1582,6 @@ static int __maybe_unused omap2_mcspi_resume(struct device *dev)
+ 	struct omap2_mcspi *mcspi = spi_master_get_devdata(master);
+ 	int error;
+ 
+-	error = pinctrl_pm_select_default_state(dev);
+-	if (error)
+-		dev_warn(mcspi->dev, "%s: failed to set pins: %i\n",
+-			 __func__, error);
+-
+ 	error = spi_master_resume(master);
+ 	if (error)
+ 		dev_warn(mcspi->dev, "%s: master resume failed: %i\n",
+@@ -1582,7 +1593,8 @@ static int __maybe_unused omap2_mcspi_resume(struct device *dev)
+ static const struct dev_pm_ops omap2_mcspi_pm_ops = {
+ 	SET_SYSTEM_SLEEP_PM_OPS(omap2_mcspi_suspend,
+ 				omap2_mcspi_resume)
+-	.runtime_resume	= omap_mcspi_runtime_resume,
++	.runtime_suspend	= omap_mcspi_runtime_suspend,
++	.runtime_resume		= omap_mcspi_runtime_resume,
+ };
+ 
+ static struct platform_driver omap2_mcspi_driver = {
+-- 
+2.29.2
 
