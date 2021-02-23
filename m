@@ -2,51 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E80A322D52
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Feb 2021 16:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA086322D55
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Feb 2021 16:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233113AbhBWPTm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 23 Feb 2021 10:19:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39806 "EHLO
+        id S232599AbhBWPUJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 23 Feb 2021 10:20:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbhBWPTi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 23 Feb 2021 10:19:38 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5E2C06178B;
-        Tue, 23 Feb 2021 07:18:55 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id r3so11314963wro.9;
-        Tue, 23 Feb 2021 07:18:55 -0800 (PST)
+        with ESMTP id S233157AbhBWPT5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 23 Feb 2021 10:19:57 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D1EC06178C;
+        Tue, 23 Feb 2021 07:18:57 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id y17so1395248wrs.12;
+        Tue, 23 Feb 2021 07:18:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=YfZ/5xe9NBSnHkO39Gxsq3EH9tS2Heq5rSvmJq9KbeU=;
-        b=UGL2Rf0qxeubaDNyvNg0c2oDmQUoK5yYzaNczecD/rcq9iWECM5jDtFGZQpi6In1O3
-         jmcwAN+SInZoH09/mhZIv2F9F3pytR9bgD57Feg3iUOGk5tqEfcX2NAPwNfam09yg+Dx
-         L2+Zs8ictn/0Bh1diu4JIU5IwT8WH+vOSnEdRKG4sSNXNTTPaIQFXIhAMzlwnkDckLSG
-         QTQGJzha7dF9XrEdV6sXVjW/zFSe0p4X69TFi/fIKDZucM9jHfC4A4nZpTYInpZ/xNDy
-         BfQt79OzQIZU5EyGujo9n1/ueNLYjQTRsRek5nm3Hf1bcWgWlf36rh4669CoDhl5aXbg
-         bEBw==
+        bh=VVd28ukkiNf74ssL9JqbPQSRVlXUhzl9Tn7fvTHWtHY=;
+        b=KzERRjJLX86zYsWtBHnmkxT1WDbq5FWR+wZQPCpW9xgAW2bT8jJo4In3zG7ppvjp8M
+         WTV0hKaDdDKb/hrUuO4YQ0k7ldZzwGCQzkxcGvYaXXNmUmekybNZwyBbJaTqXfNIoZk2
+         Ex8+L5pfKsUtkA5d0z+MzilBFSmqtsz9zGXEuExSfFIeodp5tI0nzFOQrzUv1RQcA0xr
+         UXizyAD6MCeVrd0JQGkNRL4IP51snhnwhIa3iXi7av9qeLorZ4WPrrQc+JTc62/d0HQM
+         Rr9P5/xyNGq6WXmAtesMFc+beRd0R1X05leaM0AJLZe32r5kbycvslOcpe0w2nI0JkNV
+         MFBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=YfZ/5xe9NBSnHkO39Gxsq3EH9tS2Heq5rSvmJq9KbeU=;
-        b=WZGCjop+hTIvtdOyEc0BUKowwAmIhv3AwW38B1Zv7Q56S3CvrcERuVZh2q9gCIFZsS
-         WhSXybMTcJScPTNe1ajvs4AfbQUp9avFXFzr4M7pbrbdKx4zlwTKKn09fVGKaYgbIFE2
-         E0y8Bw2Qp8nbeeBlGL3e6kL3+MixL1E9nqQHHql1rKkCoW2GaIi8IX6uS7UrmbO6BPvg
-         Uw7+Rk0OL+Pbq3yKWoa5fZCbd0uHW39KsacUGhiI39gpuxC5bMclDuiXIAPr9VzKheow
-         vvF/6P9RVXa10k1opg5lCGleH1Bw6DnI+Y1s0zkXLbm1eq2kDn8eBZ/YtRXP5PAbu+pj
-         RsOA==
-X-Gm-Message-State: AOAM530vnL6dr7alcCNcO+nPPbQV0fjug5pLDEamR1zkIrEpoX0RGNio
-        v521iWyQfE76pFPXrcFtR/0=
-X-Google-Smtp-Source: ABdhPJxY+e838XSKAzRF/xlUuk7lvyEq5pa7fOjHOft5xgDgm9MD4ImwkIFchjmDyFZWd4juTFg4uA==
-X-Received: by 2002:a5d:5283:: with SMTP id c3mr26182950wrv.319.1614093534689;
-        Tue, 23 Feb 2021 07:18:54 -0800 (PST)
+        bh=VVd28ukkiNf74ssL9JqbPQSRVlXUhzl9Tn7fvTHWtHY=;
+        b=pxNQEpFVBkRkmFxGO8SOPteMdi9rqg//g67hlDWfUybsjjd6t0bDKRtpDkWW52fj8F
+         c3T9RaIEXcwGE08LLWaDFOig88cQDri5aLLvQGKb5MdgnA2RhVsqLBh+LiHpA42eABN4
+         Xkzu6NNqVLBhoQiMqWnezUKKPjuf4RLmin3xX/vB6CbRiEnJYxn1eIOfMAY2k/WmG8Sc
+         cLvRxM7m0sa8YPSKc5ysIfMtEAjiSPBfjL8p59f74YsW9RELH9KtLnGENAeNSdDu0YqX
+         d3YCpmchQULJsC3bkSxwNxMmVms2ixK79ft4/2JWry+or53BK52rdfs95dr/IiY8seXJ
+         rpAw==
+X-Gm-Message-State: AOAM533HjxR+v4epvwiUkJedb9GKwDxTK6W1NjGa3Ygkd5aiE3UkHIdI
+        Tet09T9nqj8gJcKZwCqdJpP2gNd/I+kX9dU6
+X-Google-Smtp-Source: ABdhPJyJ7As5wlQUT5W5m0iAAoD7gNJJ4/lM+5c4AaEQpyuF/D8PiZShtoxKYnYe7fVuDfrvI7ft+w==
+X-Received: by 2002:adf:80e7:: with SMTP id 94mr26725351wrl.5.1614093535715;
+        Tue, 23 Feb 2021 07:18:55 -0800 (PST)
 Received: from skynet.lan (170.red-88-1-105.dynamicip.rima-tde.net. [88.1.105.170])
-        by smtp.gmail.com with ESMTPSA id y6sm3018071wma.10.2021.02.23.07.18.53
+        by smtp.gmail.com with ESMTPSA id y6sm3018071wma.10.2021.02.23.07.18.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Feb 2021 07:18:54 -0800 (PST)
+        Tue, 23 Feb 2021 07:18:55 -0800 (PST)
 From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
 To:     jonas.gorski@gmail.com, Mark Brown <broonie@kernel.org>,
@@ -55,9 +55,9 @@ To:     jonas.gorski@gmail.com, Mark Brown <broonie@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
         <noltari@gmail.com>
-Subject: [PATCH 1/2] spi: bcm63xx-spi: fix pm_runtime
-Date:   Tue, 23 Feb 2021 16:18:50 +0100
-Message-Id: <20210223151851.4110-2-noltari@gmail.com>
+Subject: [PATCH 2/2] spi: bcm63xx-hsspi: fix pm_runtime
+Date:   Tue, 23 Feb 2021 16:18:51 +0100
+Message-Id: <20210223151851.4110-3-noltari@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210223151851.4110-1-noltari@gmail.com>
 References: <20210223151851.4110-1-noltari@gmail.com>
@@ -74,37 +74,40 @@ is enabled.
 
 Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 ---
- drivers/spi/spi-bcm63xx.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/spi/spi-bcm63xx-hsspi.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-bcm63xx.c b/drivers/spi/spi-bcm63xx.c
-index 96d075e633f4..d08bb7600150 100644
---- a/drivers/spi/spi-bcm63xx.c
-+++ b/drivers/spi/spi-bcm63xx.c
-@@ -593,11 +593,13 @@ static int bcm63xx_spi_probe(struct platform_device *pdev)
+diff --git a/drivers/spi/spi-bcm63xx-hsspi.c b/drivers/spi/spi-bcm63xx-hsspi.c
+index 1f08d7553f07..b871fd810d80 100644
+--- a/drivers/spi/spi-bcm63xx-hsspi.c
++++ b/drivers/spi/spi-bcm63xx-hsspi.c
+@@ -21,6 +21,7 @@
+ #include <linux/mutex.h>
+ #include <linux/of.h>
+ #include <linux/reset.h>
++#include <linux/pm_runtime.h>
  
- 	bcm_spi_writeb(bs, SPI_INTR_CLEAR_ALL, SPI_INT_STATUS);
+ #define HSSPI_GLOBAL_CTRL_REG			0x0
+ #define GLOBAL_CTRL_CS_POLARITY_SHIFT		0
+@@ -439,13 +440,17 @@ static int bcm63xx_hsspi_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto out_put_master;
  
 +	pm_runtime_enable(&pdev->dev);
 +
  	/* register and we are done */
  	ret = devm_spi_register_master(dev, master);
- 	if (ret) {
- 		dev_err(dev, "spi register failed\n");
--		goto out_clk_disable;
+ 	if (ret)
+-		goto out_put_master;
 +		goto out_pm_disable;
- 	}
- 
- 	dev_info(dev, "at %pr (irq %d, FIFOs size %d)\n",
-@@ -605,6 +607,8 @@ static int bcm63xx_spi_probe(struct platform_device *pdev)
  
  	return 0;
  
 +out_pm_disable:
 +	pm_runtime_disable(&pdev->dev);
- out_clk_disable:
- 	clk_disable_unprepare(clk);
- out_err:
+ out_put_master:
+ 	spi_master_put(master);
+ out_disable_pll_clk:
 -- 
 2.20.1
 
