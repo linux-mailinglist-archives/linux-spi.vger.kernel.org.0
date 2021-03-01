@@ -2,43 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0010032A5D7
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Mar 2021 17:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E59332A5DB
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Mar 2021 17:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241628AbhCBNS5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 2 Mar 2021 08:18:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33146 "EHLO mail.kernel.org"
+        id S1343759AbhCBNXb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 2 Mar 2021 08:23:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33308 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346256AbhCAXkB (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 1 Mar 2021 18:40:01 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 498E460240;
-        Mon,  1 Mar 2021 23:39:03 +0000 (UTC)
+        id S1346260AbhCAXkL (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 1 Mar 2021 18:40:11 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2A5C860C3E;
+        Mon,  1 Mar 2021 23:39:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614641943;
-        bh=11tc3XCd4ttATWcpDw1lCPmytuMBwWlibLxpQSnMXC4=;
+        s=k20201202; t=1614641959;
+        bh=lD2SkyugVzga06mWkg354UptjEsLdfh72kAzjiRP6fg=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=GcmFDVy/XO0MF3h2k+3kRlAYVcIjZhsNdcaOD1aAC0d++PaSK8FIatnNxc2asVRH1
-         KVsQlpwfgQC7AlTMuhmxCj7cTSJoNagR8eincqRB258X1vTWmc20y6Eh/orJRkm7BT
-         tU2yWjneoN24CCcSFhLKsMydQrYBj6sTAcBzf0b/KJF6ASjwClDudoGWvn0Vj3poy0
-         6ZXZMQ6zZlSh72LdObtMK5FSbcyPwvtKbI2KEvz4wuV1FTyi4R0EvjU6qiBGIevc9a
-         leyq4vLdyN2PesuaeeJoc3P+1qvqxF1y43zQjNvycpgY/ewF1s9mrBeeGrxO4V/T1O
-         aMP/TBHCfCuPg==
+        b=JOOw/tZ17ZJ2Tn9ZK+gXHBKdtD+riuvLSnYyM/8GRS18mZ2R+XcNi6bhOZG48XbOb
+         lCrSHfYFP3lxODCEWoYvaDMGSqFamKdEZF/LGPwX2zQa1VrzL5OIAHh5Cc28JYe++O
+         9KRHuf06QtnyLit5MYJ5s+xnlFLAMyCk3jG8RjKe+z0Ic7Ac4VqFJl9stuCKdJEXb0
+         z2pVvq9hFWmsNUSPQZCLwH83Y20EDIl6R/NGuf08voT8rx9AsdK0Od6FhpqOSHx++q
+         BE2Dp6NK8hCUrncR6LKME7m+rK1V/cbf4YtxJt+U77e9j4U4p9CpPOaqxl4CT5OPLf
+         BOwx4O/VvcihQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Heiko Stuebner <heiko@sntech.de>, Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-rockchip@lists.infradead.org,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Jon Lin <jon.lin@rock-chips.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Arnd Bergmann <arnd@arndb.de>
-In-Reply-To: <20210226140109.3477093-1-arnd@kernel.org>
-References: <20210226140109.3477093-1-arnd@kernel.org>
-Subject: Re: [PATCH] [v2] spi: rockchip: avoid objtool warning
-Message-Id: <161464187231.31555.9991392584243139110.b4-ty@kernel.org>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, ludovic.desroches@microchip.com,
+        linux-spi@vger.kernel.org, alexandre.belloni@bootlin.com,
+        linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20210218132840.131898-1-tudor.ambarus@microchip.com>
+References: <20210218132840.131898-1-tudor.ambarus@microchip.com>
+Subject: Re: [PATCH] spi: atmel: Drop unused variable
+Message-Id: <161464187230.31555.12644458080257725528.b4-ty@kernel.org>
 Date:   Mon, 01 Mar 2021 23:37:52 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -47,15 +40,10 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 26 Feb 2021 15:00:48 +0100, Arnd Bergmann wrote:
-> Building this file with clang leads to a an unreachable code path
-> causing a warning from objtool:
-> 
-> drivers/spi/spi-rockchip.o: warning: objtool: rockchip_spi_transfer_one()+0x2e0: sibling call from callable instruction with modified stack frame
-> 
-> Change the unreachable() into an error return that can be
-> handled if it ever happens, rather than silently crashing
-> the kernel.
+On Thu, 18 Feb 2021 15:28:40 +0200, Tudor Ambarus wrote:
+> The DMA cap mask is no longer used since:
+> commit 7758e390699f ("spi: atmel: remove compat for non DT board when requesting dma chan")
+> Drop it now.
 
 Applied to
 
@@ -63,8 +51,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: rockchip: avoid objtool warning
-      commit: d86e880f7a7c5b64a650146a1353f98750863f21
+[1/1] spi: atmel: Drop unused variable
+      commit: c5f754fd0a31d2c6f2f8d11f3db1427b5566f1e7
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
