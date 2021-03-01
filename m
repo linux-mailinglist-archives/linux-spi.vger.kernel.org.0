@@ -2,67 +2,219 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8818D3275F1
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Mar 2021 02:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3ACF327B89
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Mar 2021 11:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231526AbhCABxn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 28 Feb 2021 20:53:43 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:52098 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231522AbhCABxm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 28 Feb 2021 20:53:42 -0500
-X-UUID: 8e960fac560f456494d8b6cd1179dce6-20210301
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=lZn0loMDBlLQ+v3do751492I2dJdgs8xXjuL08g8siA=;
-        b=gq6r6V10aCF68AJenigWvFpZWPqzWNI94P+VCm9IH8Tm9VUZuXMp7869ymZ0QgXORF8RwPD2N4knVhGCh+71xOVxvDIGNaHp/DH1rcEJQb0aEnXNQ1PyC50LAbp6kS+eqrWe7exq58BrmA54zsUlhVXHW3SgubqJfJtewslQP7c=;
-X-UUID: 8e960fac560f456494d8b6cd1179dce6-20210301
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <mason.zhang@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 75423923; Mon, 01 Mar 2021 09:52:57 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 1 Mar 2021 09:52:56 +0800
-Received: from [10.15.20.246] (10.15.20.246) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 1 Mar 2021 09:52:55 +0800
-Message-ID: <1614563278.1578.6.camel@mbjsdccf07>
-Subject: Re: [PATCH 2/2] dt-binding: mediatek: mt6779: update spi document
-From:   Mason Zhang <mason.zhang@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <hanks.chen@mediatek.com>,
-        <wsd_upstream@mediatek.com>
-Date:   Mon, 1 Mar 2021 09:47:58 +0800
-In-Reply-To: <20210226170705.GB4518@sirena.org.uk>
-References: <20210226110109.30500-1-Mason.Zhang@mediatek.com>
-         <20210226170705.GB4518@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
-MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+        id S231645AbhCAKGm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 1 Mar 2021 05:06:42 -0500
+Received: from inva021.nxp.com ([92.121.34.21]:51106 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232039AbhCAKGK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 1 Mar 2021 05:06:10 -0500
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id D1ED4200441;
+        Mon,  1 Mar 2021 11:04:27 +0100 (CET)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id AF476200427;
+        Mon,  1 Mar 2021 11:04:23 +0100 (CET)
+Received: from lsv03124.swis.in-blr01.nxp.com (lsv03124.swis.in-blr01.nxp.com [92.120.146.121])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id CE1CC40291;
+        Mon,  1 Mar 2021 11:04:18 +0100 (CET)
+From:   Kuldeep Singh <kuldeep.singh@nxp.com>
+To:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Ashish Kumar <ashish.kumar@nxp.com>,
+        Kuldeep Singh <kuldeep.singh@nxp.com>
+Subject: [PATCH] dt-bindings: spi: Convert NXP flexspi to json schema
+Date:   Mon,  1 Mar 2021 15:34:06 +0530
+Message-Id: <1614593046-23832-1-git-send-email-kuldeep.singh@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-RGVhciBNYXJrOg0KDQoJUGF0Y2ggMS8yIGlzIGluIHRoaXMgbGluazoNCglsa21sLm9yZy9sa21s
-LzIwMjEvMi8yNi8zMjUNCglJIHdpbGwgZW1haWwgeW91IGxhdGVyIGFib3V0IHBhdGNoIDEvMi4N
-CgkNCglUaGFuayB5b3UgZm9yIHlvdXIgc3VnZ2VzdGlvbiENCg0KVGhhbmtzDQpNYXNvbg0KLS0t
-LS0tLS0tLS0tLS0tLS0NCk9uIEZyaSwgMjAyMS0wMi0yNiBhdCAxNzowNyArMDAwMCwgTWFyayBC
-cm93biB3cm90ZToNCj4gT24gRnJpLCBGZWIgMjYsIDIwMjEgYXQgMDc6MDE6MTBQTSArMDgwMCwg
-TWFzb24gWmhhbmcgd3JvdGU6DQo+ID4gdGhpcyBwYXRjaCB1cGRhdGUgc3BpIGRvY3VtZW50IGZv
-ciBNVDY3NzkgU09DLg0KPiANCj4gSSdtIG1pc3NpbmcgcGF0Y2ggMS8yIGhlcmUsIHdoYXQncyB0
-aGUgc3Rvcnkgd2l0aCBkZXBlbmRlbmNpZXM/DQo+IA0KPiBQbGVhc2Ugc3VibWl0IHBhdGNoZXMg
-dXNpbmcgc3ViamVjdCBsaW5lcyByZWZsZWN0aW5nIHRoZSBzdHlsZSBmb3IgdGhlDQo+IHN1YnN5
-c3RlbSwgdGhpcyBtYWtlcyBpdCBlYXNpZXIgZm9yIHBlb3BsZSB0byBpZGVudGlmeSByZWxldmFu
-dCBwYXRjaGVzLg0KPiBMb29rIGF0IHdoYXQgZXhpc3RpbmcgY29tbWl0cyBpbiB0aGUgYXJlYSB5
-b3UncmUgY2hhbmdpbmcgYXJlIGRvaW5nIGFuZA0KPiBtYWtlIHN1cmUgeW91ciBzdWJqZWN0IGxp
-bmVzIHZpc3VhbGx5IHJlc2VtYmxlIHdoYXQgdGhleSdyZSBkb2luZy4NCj4gVGhlcmUncyBubyBu
-ZWVkIHRvIHJlc3VibWl0IHRvIGZpeCB0aGlzIGFsb25lLg0KDQo=
+Convert the NXP FlexSPI binding to DT schema format using json-schema.
+Also, update MAINTAINERS to reflect the change.
+
+Signed-off-by: Kuldeep Singh <kuldeep.singh@nxp.com>
+---
+ .../bindings/spi/nxp,spi-nxp-fspi.yaml        | 101 ++++++++++++++++++
+ .../devicetree/bindings/spi/spi-nxp-fspi.txt  |  42 --------
+ MAINTAINERS                                   |   2 +-
+ 3 files changed, 102 insertions(+), 43 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/nxp,spi-nxp-fspi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-nxp-fspi.txt
+
+diff --git a/Documentation/devicetree/bindings/spi/nxp,spi-nxp-fspi.yaml b/Documentation/devicetree/bindings/spi/nxp,spi-nxp-fspi.yaml
+new file mode 100644
+index 000000000000..56598b87ba15
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/nxp,spi-nxp-fspi.yaml
+@@ -0,0 +1,101 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/nxp,spi-nxp-fspi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP Flex Serial Peripheral Interface (FSPI)
++
++maintainers:
++  - Ashish Kumar <ashish.kumar@nxp.com>
++
++allOf:
++  - $ref: "/schemas/spi/spi-controller.yaml#"
++
++properties:
++  compatible:
++    enum:
++      - nxp,lx2160a-fspi
++      - nxp,imx8qxp-fspi
++      - nxp,imx8mm-fspi
++      - nxp,imx8dxl-fspi
++
++  reg:
++    items:
++      - description: registers
++      - description: memory mapping
++
++  reg-names:
++    items:
++      - const: fspi_base
++      - const: fspi_mmap
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 2
++    items:
++      - description: SoC SPI fspi_en clock
++      - description: SoC SPI fspi clock
++
++  clock-names:
++    items:
++      - const: fspi_en
++      - const: fspi
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - interrupts
++  - clocks
++  - clock-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    spi@20c0000 {
++      compatible = "nxp,lx2160a-fspi";
++      reg = <0x0 0x20c0000 0x0 0x100000>, <0x0 0x20000000 0x0 0x10000>;
++      reg-names = "fspi_base", "fspi_mmap";
++      interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
++      clocks = <&clockgen QORIQ_CLK_PLATFORM_PLL QORIQ_CLK_PLL_DIV(4)>,
++               <&clockgen QORIQ_CLK_PLATFORM_PLL QORIQ_CLK_PLL_DIV(4)>,
++      clock-names = "fspi_en", "fspi";
++      #address-cells = <1>;
++      #size-cells = <1>;
++
++      flash@0 {
++        compatible = "jedec,spi-nor";
++        spi-max-frequency = <50000000>;
++        reg = <0>;
++        spi-rx-bus-width = <8>;
++        spi-tx-bus-width = <8>;
++      };
++    };
++
++  - |
++    #include <dt-bindings/clock/imx8mm-clock.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    spi@30bb0000 {
++      compatible = "nxp,imx8mm-fspi";
++      reg = <0x30bb0000 0x10000>, <0x8000000 0x10000000>;
++      reg-names = "fspi_base", "fspi_mmap";
++      interrupts = <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>;
++      clocks = <&clk IMX8MM_CLK_QSPI_ROOT>,
++               <&clk IMX8MM_CLK_QSPI_ROOT>;
++      clock-names = "fspi", "fspi_en";
++
++      flash@0 {
++        compatible = "jedec,spi-nor";
++        spi-max-frequency = <80000000>;
++        reg = <0>;
++        spi-rx-bus-width = <4>;
++        spi-tx-bus-width = <4>;
++      };
++    };
+diff --git a/Documentation/devicetree/bindings/spi/spi-nxp-fspi.txt b/Documentation/devicetree/bindings/spi/spi-nxp-fspi.txt
+deleted file mode 100644
+index 7ac60d9fe357..000000000000
+--- a/Documentation/devicetree/bindings/spi/spi-nxp-fspi.txt
++++ /dev/null
+@@ -1,42 +0,0 @@
+-* NXP Flex Serial Peripheral Interface (FSPI)
+-
+-Required properties:
+-  - compatible : Should be "nxp,lx2160a-fspi"
+-			    "nxp,imx8qxp-fspi"
+-			    "nxp,imx8mm-fspi"
+-
+-  - reg :        First contains the register location and length,
+-                 Second contains the memory mapping address and length
+-  - reg-names :  Should contain the resource reg names:
+-	         - fspi_base: configuration register address space
+-                 - fspi_mmap: memory mapped address space
+-  - interrupts : Should contain the interrupt for the device
+-
+-Required SPI slave node properties:
+-  - reg :        There are two buses (A and B) with two chip selects each.
+-                 This encodes to which bus and CS the flash is connected:
+-                 - <0>: Bus A, CS 0
+-                 - <1>: Bus A, CS 1
+-                 - <2>: Bus B, CS 0
+-                 - <3>: Bus B, CS 1
+-
+-Example showing the usage of two SPI NOR slave devices on bus A:
+-
+-fspi0: spi@20c0000 {
+-	compatible = "nxp,lx2160a-fspi";
+-	reg = <0x0 0x20c0000 0x0 0x10000>, <0x0 0x20000000 0x0 0x10000000>;
+-	reg-names = "fspi_base", "fspi_mmap";
+-	interrupts = <0 25 0x4>; /* Level high type */
+-	clocks = <&clockgen 4 3>, <&clockgen 4 3>;
+-	clock-names = "fspi_en", "fspi";
+-
+-	mt35xu512aba0: flash@0 {
+-		reg = <0>;
+-		....
+-	};
+-
+-	mt35xu512aba1: flash@1 {
+-		reg = <1>;
+-		....
+-	};
+-};
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f9d462c8f4d6..9179722cff2e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12731,7 +12731,7 @@ M:	Ashish Kumar <ashish.kumar@nxp.com>
+ R:	Yogesh Gaur <yogeshgaur.83@gmail.com>
+ L:	linux-spi@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/spi/spi-nxp-fspi.txt
++F:	Documentation/devicetree/bindings/spi/nxp,spi-nxp-fspi.yaml
+ F:	drivers/spi/spi-nxp-fspi.c
+ 
+ NXP FXAS21002C DRIVER
+-- 
+2.25.1
 
