@@ -2,72 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D7A327DFE
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Mar 2021 13:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A255B327F75
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Mar 2021 14:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233591AbhCAMN4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 1 Mar 2021 07:13:56 -0500
-Received: from mga11.intel.com ([192.55.52.93]:8898 "EHLO mga11.intel.com"
+        id S235662AbhCAN13 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 1 Mar 2021 08:27:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34862 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233604AbhCAMNx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 1 Mar 2021 07:13:53 -0500
-IronPort-SDR: vPTR7ZLpB6wC1YkSD0kOM07L639n12T/D0lcct6ky2Xtzx4iknYFO9pNG7vu5JYGHlwTk5hrtK
- JqXDcJp1qTMg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9909"; a="183042587"
-X-IronPort-AV: E=Sophos;i="5.81,215,1610438400"; 
-   d="scan'208";a="183042587"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2021 04:12:00 -0800
-IronPort-SDR: EsaEcILB1OFORR2RiFKnNrMEx+lPqdyP/Dgd6Tt8YfhFDpGDHmIf4R/yX/oSQTcubfowW+JtsE
- 97v1cdo9sXcw==
-X-IronPort-AV: E=Sophos;i="5.81,215,1610438400"; 
-   d="scan'208";a="397700326"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2021 04:11:59 -0800
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lGhP1-0098VT-WC; Mon, 01 Mar 2021 14:11:55 +0200
-Date:   Mon, 1 Mar 2021 14:11:55 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] parport: Introduce module_parport_driver() helper
- macro
-Message-ID: <YDzaC2ahcHCrCI8V@smile.fi.intel.com>
-References: <20210216110741.1286-1-andriy.shevchenko@linux.intel.com>
- <YDkpzZ8jL7O9HJuG@smile.fi.intel.com>
- <YDwmznD58ZtOwHgb@debian>
+        id S235308AbhCAN10 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 1 Mar 2021 08:27:26 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E6C3164DBD;
+        Mon,  1 Mar 2021 13:26:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614605205;
+        bh=y235OLLbbPJD5I84kL0KJV6s4+cN8jpOh60zl77HMVU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SjwYrxF0OKO1FHQA/5DKflI1JOZOptfYnYr4F1sxxaDBJZqrFd6rNCyfvYuzKnv4z
+         hVxlqDZ8qhGumH/XbRpaa3cX17b6qVsU0VIAeD02JViJ4omNqNLbaOmkDhhQzJp08P
+         FrzZPn19iaUtPmE2+jWX2NJAm7uxPa6s5yyAIqz9+Vd8nJr3uGBhQ71bKVB/gAP1QI
+         +PBP7t5HmFAaQxms7ezuv9F9pOqqO77K8k8ptsJpFTW2jmFvDkQrbcxwevSG/568e9
+         F/tSA1RSGlgDwgzFTUOrWIWH+Ci0TqAVySwvA/JrCDm5UN0R6FjicU2ixaUzKkn0uo
+         XkP8NigNWX1Ww==
+Date:   Mon, 1 Mar 2021 13:25:39 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Kuldeep Singh <kuldeep.singh@nxp.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ashish Kumar <ashish.kumar@nxp.com>, Han Xu <han.xu@nxp.com>
+Subject: Re: [PATCH 2/3] spi: spi-nxp-fspi: Add driver support for imx8dxl
+Message-ID: <20210301132539.GB4628@sirena.org.uk>
+References: <20210301103230.1816168-1-kuldeep.singh@nxp.com>
+ <20210301103230.1816168-3-kuldeep.singh@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="UHN/qo2QbUvPLonB"
 Content-Disposition: inline
-In-Reply-To: <YDwmznD58ZtOwHgb@debian>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20210301103230.1816168-3-kuldeep.singh@nxp.com>
+X-Cookie: Body by Nautilus, Brain by Mattel.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Feb 28, 2021 at 11:27:10PM +0000, Sudip Mukherjee wrote:
-> On Fri, Feb 26, 2021 at 07:03:09PM +0200, Andy Shevchenko wrote:
-> > On Tue, Feb 16, 2021 at 01:07:39PM +0200, Andy Shevchenko wrote:
-> > > Introduce module_parport_driver() helper macro to reduce boilerplate
-> > > in the existing and new code.
-> > 
-> > Sudip, any comments on this?
-> 
-> Sorry for the delay in reply.
-> lgtm. I think there are few more drivers which can also use this new helper.
-> Will you like to do them also?
 
-Yes, that's the (slow going) plan.
+--UHN/qo2QbUvPLonB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Acked-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+On Mon, Mar 01, 2021 at 04:02:29PM +0530, Kuldeep Singh wrote:
 
-Thanks! I considered that you take it thru parport tree. Do you have something
-else in mind?
+> This patch is dependent on
+> https://patchwork.kernel.org/project/spi-devel-general/patch/1614593046-2=
+3832-1-git-send-email-kuldeep.singh@nxp.com/
 
--- 
-With Best Regards,
-Andy Shevchenko
+Please include human readable descriptions of things like commits and
+issues being discussed in e-mail in your mails, this makes them much
+easier for humans to read especially when they have no internet access.
+I do frequently catch up on my mail on flights or while otherwise
+travelling so this is even more pressing for me than just being about
+making things a bit easier to read.
 
+That's a DT binding YAML conversion patch, why would there be a
+dependency on it?
 
+>=20
+>  drivers/spi/spi-nxp-fspi.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+
+This needs a DT binding update adding the new compatible.
+
+--UHN/qo2QbUvPLonB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmA861IACgkQJNaLcl1U
+h9DqcAf/UqwancFfxEoW7LdZHLWClxvwX2qbMjZKbxjefy/N55bvEaqOz9RuZsD7
+ZyAbse27gIEB8x7jrBTQw0fSP38TrilHL2rgBqtC67DJA9NXpiFIkPphDbEoSzPz
+SQ1FBZxqVOspVoxRUQlKlPJmrT4YTGgB3ZodtKhZ/KJTdPwk273ladeCHNmTd+fV
+BqnV/g9EFdz0/FYXRYZUCY7gpZv+/T86TEKRRgAVqN5cDh3wWzQ2IoUOHf54IBWm
+DjKheYdyh8mKo8kfIMukBT4/n5qqNgoTH+aQ2UUjVHJP5LX+OlVFsZmS4ekrmrku
+HXVztGhTvtna47uvw36taDMAx7/mcw==
+=qU6p
+-----END PGP SIGNATURE-----
+
+--UHN/qo2QbUvPLonB--
