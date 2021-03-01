@@ -2,50 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1260C327C43
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Mar 2021 11:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE790327C49
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Mar 2021 11:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234536AbhCAKfG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 1 Mar 2021 05:35:06 -0500
-Received: from mail-am6eur05on2060.outbound.protection.outlook.com ([40.107.22.60]:11105
+        id S234140AbhCAKfi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 1 Mar 2021 05:35:38 -0500
+Received: from mail-am6eur05on2086.outbound.protection.outlook.com ([40.107.22.86]:13344
         "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234577AbhCAKdl (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 1 Mar 2021 05:33:41 -0500
+        id S234512AbhCAKeO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 1 Mar 2021 05:34:14 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PMxt6suWljXuhfj1OGV97sysJmvRW6CsNeinmKhd6C9trP2ONn+UaRtVAlJiCEOtDLE7ahFFJM5aGAKXXwbyEo8Mzq9x22YA0Apd9MvRQtfWPxHAS8W+D61bofqqcMl3bDKo0/ovmq0m5++yV4dgnLzvRtKXh+W5EdxQ5JsvMyhzHOGA0rmR/Xeyd4UjCmF3rIkWBTU41A8HootGhMO5VIFJ39Xtskdt54CgFrpbBCqENp7rU1Agy1Xy30GJqok4Gcsh1V7Xy9LxuRzmLDPUpyjFQaXcUI9cgjvQsRA1aJ0n+1DeZ766iD90vGVrM3/2vQtG6LWrNiO5dhxuVKFpVw==
+ b=UTQ60qbteh1P+Umtqb9XmamT+pwJsuYLvBFj9IqxHp4ukjSX3tcM2k3CYwht774R0OTng8h2fecU6ZZM8BiakbLljXkGn4RmUsnI3ZXsryIXc1ZXpJaZH8EFFrFLuph3sc7NY9ev30xTufdUVqx4yXNPo2G7yE8Rt9QAKSrlMYmFfaqRfMucHcwalMQoc13BnKtG7p7ptXfGQGjzHLNP7kGN4gGyOdldfGQ8jAH7briBafiBh+LJBTUz9zolVlPQAI7T6C1+M9Sd5QC9T4iogZNx9EQgukA9rx8wj9HIU9ImCxl0YltcovyA9EmfXLEygOuHMcE9w+sLfbQ3fEhA6Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uTFMXDWjybHc4iaRx1utV9PfV+PFfb1l4kwUwoIihF4=;
- b=QSSOdvtuenleY7/QwpY2/aqgkyYHlurMU621ugZ4VYTvkTW/molBXdjswPxzluMB2Gi7P+i9JMDJkrF2war3o5j61tEdgnvd5Pg4XdT/p0jBmrV7P3HzSbzLUkPgpq+SupU9qPkkabWMkQdhC70p/IBBgkLO/kwCMJSR/7VTxInbPQZg41CfyuyrUJj28t2CWZa/cW5l5/1sN2oVbgPOI+5nc+AfwZaGXaXp4pKH7awC6oycrj8fOUcQVJtbkY7vfusaIK5zh6Ddof0rsHUBD9JoUdN9smeCELBpduAmRvmS8cpRIZHKKhkyBKxNv10Q+FOELhSNCFixA6GgnSgjwA==
+ bh=+KdcLIJuE20GDPx8dfX8Ryie72EJbuU70G1qnuuEqnY=;
+ b=JNGf5OIZL75cjsnwhOlYls3Yx5EG0Vo3JxHNEL5X/OjyiE8zNxltgFXWbidDk4JZqQeFFGIFpsg/CC1NoIFYd/SSKBwAUv9bijDsedEmrsuchncpu3ppqEK9cMvE9iQMTuKWkZ06fEAYxm7nW9Yb+HbBmaX9bulLvLscDeqWOVbiRDv7kszuTJ4+ee2uzGIdE2In70TcXSmO5Bv90s0HaQUY6DJ32c5xwusoVG/lPv3lJW+otdpjVRKOPVCM0H120cB5HnLm+VTMOJ7eYCYGw7jU48aAgzzQOSAvqheAQ80YHgEeLKBwVOOgQ+dstk4+xFacYSs2OV4sgNshRmqDsA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uTFMXDWjybHc4iaRx1utV9PfV+PFfb1l4kwUwoIihF4=;
- b=O+vNfaWXeEL74NU1Rl8zPPe7tdGD8XzHRIdyOj11zcb2oFZfO3wHUysWrGPie0g5s4y1Tt7B1uB+pgEz88sB95YARA1XWWV3KHDfUbpdtl/P0e3w56cfJ24GlJgD0HJmcZ58GnPtGDdnKxaJ7luUTj7TMLkWJufT4Sfw2bS4DGg=
+ bh=+KdcLIJuE20GDPx8dfX8Ryie72EJbuU70G1qnuuEqnY=;
+ b=L+SI0WWz7qhZqitAQ7EhbaYYmxK/H7aWO5NQ/+JU+jQNUgKsGniVR8sKadZaJochjx3Ykk4FqPK4a57UrKD/4N6QOgkPzzf0a6kzNiLGlqN8QEH9PnVef9CrmVR5ccfkXN4OeeIAnUg2oOUkqjqs08lWoHCvPKn9VdIJpEQcZkY=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=nxp.com;
 Received: from DB6PR0402MB2758.eurprd04.prod.outlook.com (2603:10a6:4:96::7)
  by DB7PR04MB4236.eurprd04.prod.outlook.com (2603:10a6:5:27::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.20; Mon, 1 Mar
- 2021 10:32:51 +0000
+ 2021 10:32:54 +0000
 Received: from DB6PR0402MB2758.eurprd04.prod.outlook.com
  ([fe80::c99c:dbc3:ed75:e6e8]) by DB6PR0402MB2758.eurprd04.prod.outlook.com
  ([fe80::c99c:dbc3:ed75:e6e8%5]) with mapi id 15.20.3890.028; Mon, 1 Mar 2021
- 10:32:51 +0000
+ 10:32:54 +0000
 From:   Kuldeep Singh <kuldeep.singh@nxp.com>
 To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Ashish Kumar <ashish.kumar@nxp.com>,
         Mark Brown <broonie@kernel.org>,
         Kuldeep Singh <kuldeep.singh@nxp.com>
-Subject: [PATCH 0/3] NXP Flexspi driver patches
-Date:   Mon,  1 Mar 2021 16:02:27 +0530
-Message-Id: <20210301103230.1816168-1-kuldeep.singh@nxp.com>
+Subject: [PATCH 1/3] spi: spi-nxp-fspi: Add support for IP read only
+Date:   Mon,  1 Mar 2021 16:02:28 +0530
+Message-Id: <20210301103230.1816168-2-kuldeep.singh@nxp.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210301103230.1816168-1-kuldeep.singh@nxp.com>
+References: <20210301103230.1816168-1-kuldeep.singh@nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-Originating-IP: [14.142.151.118]
@@ -54,79 +56,135 @@ X-ClientProxiedBy: HK2PR02CA0142.apcprd02.prod.outlook.com
  (2603:10a6:4:96::7)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from lsv03378.swis.in-blr01.nxp.com (14.142.151.118) by HK2PR02CA0142.apcprd02.prod.outlook.com (2603:1096:202:16::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.20 via Frontend Transport; Mon, 1 Mar 2021 10:32:49 +0000
+Received: from lsv03378.swis.in-blr01.nxp.com (14.142.151.118) by HK2PR02CA0142.apcprd02.prod.outlook.com (2603:1096:202:16::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.20 via Frontend Transport; Mon, 1 Mar 2021 10:32:51 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 9c963864-4ac5-4e31-bb46-08d8dc9d5da4
+X-MS-Office365-Filtering-Correlation-Id: e3b0ac76-8df3-4e03-ac58-08d8dc9d5f39
 X-MS-TrafficTypeDiagnostic: DB7PR04MB4236:
-X-MS-Exchange-MinimumUrlDomainAge: kernel.org#8760
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DB7PR04MB4236FA4DE7D1C6A4C07B24A4E09A9@DB7PR04MB4236.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-Microsoft-Antispam-PRVS: <DB7PR04MB42368792143B4DEE552CDE08E09A9@DB7PR04MB4236.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZDmyjq6Q7l9w7rYy72YBWObcf6zNPwaQ4ft3nCgNR3j1fXFShbUZDkrifJSwze3VipDfaraPqOVte0tU54iEf7XUnxeZqa7CvLzDFV0phhdrG46jXuJ+H+xbSg+WUcsAyx/4o4hiiBxOYJB6J0iNqNQWZwtygLxIPdR0bTNqzpkjNeUNVe9hxg7gzfbWeDqh64n90dIR90TZllooobwtHSo4ffSakWqbz5dd9Dwi+O6lBcTXiAWz7b9VksatCqBIULF8SyXIWPdMZDlcsmf1avfMy9VuvT9kOSh687Nm6Y/uGT/IgmAhKCr/DqYzrpZwqi0wXfwro+3d5T16HlpQnj0QD3y7Ql0uh7245VLltYK7jEKjDL04q6aO3DAg0Ja3N0BeOWvXzSnQecNjSA3VRz9spFTQ5B6IkZSsP9Mdg9sLsdONglI/Wc/zTmK/4qxvX60OK87var0MiSvYmY/fcMdEaCiexBzNBZca4Ja2pBzCD4eWCr/7SU+bzwJ68KSk8CBpjs18lj6hX6mjj9Mhifz6+tajaOBn0CYXqpEsW7O388DJ+AlbJVoYqOPui9gvQFy8pGkMf59kKeDikiXyGoc7FSAh3obQpR7O28hUvMI8vslWPTAlxVrruEb/mR1WRNWbrVtD7WSX9Bd+gHSi2Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0402MB2758.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(376002)(346002)(39860400002)(136003)(86362001)(1006002)(5660300002)(7696005)(52116002)(4744005)(6666004)(66556008)(66476007)(66946007)(54906003)(316002)(966005)(478600001)(16526019)(1076003)(55236004)(36756003)(186003)(4326008)(26005)(956004)(2906002)(44832011)(8676002)(6486002)(8936002)(2616005)(83380400001)(110426009);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?b7nwatQj8czN/7AYlWjcj5H0dcDMZI7as6sy34Hp25RdSV+PGM0tWfRojWXo?=
- =?us-ascii?Q?MrqrjyS3fR5nRSRXS8+KX7w1+1TXe8WQNFUDTMsliXKRIIOHhZBCLUG+cCQ9?=
- =?us-ascii?Q?yWHPowAYy6xen41RJmn9B2dMszdAp6KINk7YgQE5naE+VIotPF5qIq6Us08j?=
- =?us-ascii?Q?GDcz0dR52nTpxxkDFMB7PAj1CCoRTy7zAa2phMdkPRroHVyzc4apOcbs2VcH?=
- =?us-ascii?Q?3TuLgGC3WzvuoECpcF7BWI1iUNx54ZggtGWFTq1tDbnWmwm+jTuC4MCJjVCB?=
- =?us-ascii?Q?VQRMHg3jCNRcVjAvHrqkKZGIQCCWFKGAWBQhAJfLJcLFCVEujDC6YzsabsAS?=
- =?us-ascii?Q?WRRb9+Rk3+99lUcUcdIqf/JmJ0NobkZI6BICXRdxM94bo2mQlCL/XIC7/3Lp?=
- =?us-ascii?Q?iyNPjhvBW0BQIzgEuYvnoIlJkHQDXDvQ+EN4YxnBNv8sRZanO+Y8YS2KjmAw?=
- =?us-ascii?Q?tEUMYCvIjQhbMMx5v621Mo1eDMFFa9lOMWKCDiw+IaxvJbIo1EFfjreuzW3f?=
- =?us-ascii?Q?1Fi75Shb4YknNakW9kIe/Xyb1u+jZm+VMGt8lqQf+XpLdrCFygRwDj6KDlw0?=
- =?us-ascii?Q?317xm8d+b4IMTKEeW5rCbuYC9ZOp6wYdPEY7TRKQmLv5R5JesZ0l0uG5AFxx?=
- =?us-ascii?Q?MnktcIWbTeaFSLmYnxp/ztIn6XWe59Cvr/9p44g1bwtffpaLaiZ/l6+YG9y7?=
- =?us-ascii?Q?m/rrDOq0jOSnpLHe35PBnl9egNzwpJCHV2lU2RJcfrNfioGK0OrDnFh6bOcP?=
- =?us-ascii?Q?bcV1XwA4e6GSkZarX/aeNq6Dn9X8PCKrQdy1y0SYLs5paWW/2HZAyUw1BxYm?=
- =?us-ascii?Q?2uSZLonorMpJXitS+JjGRqmvxVKGG0l3NrRgrjuFA7o2b01SGXISVUuERUQY?=
- =?us-ascii?Q?+vz0cwIoTjrtyWv2Wos9/8ZcbJIkxXYp0B2wbZ7SyCYR8qPB8AL8ZA8CRjA8?=
- =?us-ascii?Q?R8n/MT5+Wql0kEHXPgf4cYtaB/1UWqgxhG3eObqK8p5ZQ/kj8eF89YoZDLre?=
- =?us-ascii?Q?mkgIxkEGYnkCbbDImNt0rmHHxHziw/gj4+P3wsvpGGc2J12CTeNFxCEctKCm?=
- =?us-ascii?Q?JOd6zj0FNLr46bGpuK+BQJkMmr3QgYUdvuZoqubxGU249JGtuiQw/aU44zyX?=
- =?us-ascii?Q?YbjhFvTB4kKSnU1jPcUbEyaDL0cw5XH+oGO5Q1CXQdlQKuHEZNJ5rSldsnRG?=
- =?us-ascii?Q?LYQoxDdjNeNEWr3kJmmluqxQmVP2sxYcH7qJMoNsowyp1PbM3Jh7ETYNLT/z?=
- =?us-ascii?Q?mjRugWqw4nLq+cv3U3OQ4JYlPJoZLNoU5EmhkzKuAF8ex6SR3H4f3JqedFxi?=
- =?us-ascii?Q?iX49bKmQdo2zK6H1nzM3J0q3?=
+X-Microsoft-Antispam-Message-Info: 2wiAcurn/i5GSEroKiZ3hd+BiH/+zaJpPwdESsKBmm2cXxhJ8m80nndOXkw81LLOI8UiOAFFdOJiPTajXWi7Yvj+iEMw9jgTFwGMYcdo/FO6ZdzAxx25hCuzY1ivguYTAGtBMeMsIJ8PurU0qlQ86D0PVskV4CjNi2nXWwNUnYKISaJKbS0735tT5HPH4zPewfR54JGlJp0eajJ8FViZpg2/y8/+M/6WsemzbD7/hJH0duwXACLZlCunfCMak9HZBJDSU0AboSzbYZNj4poHe8nulPppQkmFmX22CqzzWSLLdlB4s1u9jR2Kn0qKUdSbehxGN4t8E2YVEyz7Z/mo893POjAvaMC1d/YjXkaIjgkmXW/i5kKBhvc6p96Wb1YkJDjqFazkCVrIeSOWTtu0xljyIhsW4oyBHATG4X14nJS+HtFf8yvzsd1mUbZzal2dC+v/lNCoDqGC8eCk/qhpvWyFQ8YB9a/DhL7FBRJkv1WTZYT/jlvChnR9MVqHo/0rGxLykkjPQU6AIT+48K1oC5TzwfwFRBVNFFuKxRSX62Vu7xfrfQUeTpWodmhIGpuXmug9Cf0YEFhidWwNBXV7FQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0402MB2758.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(376002)(346002)(39860400002)(136003)(86362001)(1006002)(5660300002)(7696005)(52116002)(6666004)(66556008)(66476007)(66946007)(54906003)(316002)(478600001)(16526019)(1076003)(55236004)(36756003)(186003)(4326008)(26005)(956004)(2906002)(44832011)(8676002)(6486002)(8936002)(2616005)(83380400001)(110426009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?fbvse6f/8naleQZh69EZjT4Rz7AZU0e8qUfauQK3Z1vV9TqkOFoZ/rRSKdIk?=
+ =?us-ascii?Q?LXzWkCopC1j9XiqcJ7G3F8tcN6Fn3VLhLOF6eOjspJHBJlk8vAbm9zI7PRTD?=
+ =?us-ascii?Q?Oi3o7uIFwFZ0lIIRZopTQoXyYAKWsHLd94jJNsr0IrLOGj6u26Z3FtWJnfUF?=
+ =?us-ascii?Q?z1kSZjUDiW3I1mevW5qUbQv/czgLob+Y6C9H2Kfq8gBnLk5ri/Bl9wm2cRav?=
+ =?us-ascii?Q?WPakOzbIp6UGH5GFSFwVDJrf9a2Ylu+QoLXw3bAe4kSVSx3OAp2nQmYgSVo1?=
+ =?us-ascii?Q?NqOmGGlzzCaP4FRM4Up3JPehx2x8G6AHL0j58mqfFRhdutxlzduyXCL9ZsFX?=
+ =?us-ascii?Q?QvWSy8DBiRnqcYWW8X90hmBTB0TQJtoEQI9a6aq077PyoLwxjhsMn8SZh2c8?=
+ =?us-ascii?Q?Kd10Is6CdejON0uV0SVJnJtmK4Gc1AuhQuu4uCAa1w/jVnkR9h+l5lbd0Xpv?=
+ =?us-ascii?Q?R0ywEehURcZZIPqmBGO+qlpsBTKy2Bykx8MCT9CdVD7JJSKdvp2Q8Os4Uejr?=
+ =?us-ascii?Q?rYhKL+TM5qtlVX3QI6266MwEqfWHzngq7RFUe9lYmFP/8i/jNjUSlBn0ZJSc?=
+ =?us-ascii?Q?9SAMFmVZ781R3ZhdNCfXNkc0eNhK2hJJfa4gb3aXtqkMh3cxIdmjoZ3UAZYu?=
+ =?us-ascii?Q?Ta1zQnuPHmXess5AH3fQZHDNvbEC1gUV6+fuWJfc9rtxuYmY++Kqmc4loEGc?=
+ =?us-ascii?Q?qEr4rwg/3L6w5ENNK/ocLnTn0nmDLgwU/q1maddIAHAXyzSqiGR8hTQqLVj8?=
+ =?us-ascii?Q?3vH0koc6ozIODcIqIE6FWYfW+hg523nyiIQD+jxfOPs7CXpW01SLpa6XLbtb?=
+ =?us-ascii?Q?a2fo6yTTR4v6QlctWRtufOBEX0AtpuD7rYC+3FLWHQXDmH2RHbi+ZpWxj2oX?=
+ =?us-ascii?Q?NYq03ixc7aBn2o1SkgP4FLXMXt2S5q6hI3pCaoIyHpIrFOujJMh5GgYkllqo?=
+ =?us-ascii?Q?9jpO668PHBslgBMRgK4DU1Nd2fFKCSOM3AAJQqob2RMOJGYqBF/mw9IsbdQr?=
+ =?us-ascii?Q?yXpIk+zRMBVcFW3mnYAYVccjAsRCaYkORONxKequrOFaWdz+qqTZYOJZlAsM?=
+ =?us-ascii?Q?Vuj/DJhCOZrAwxrLP001WX1ZJyXyFGLcyK5jIBNrQISHez6mu6tDmR3zzQhT?=
+ =?us-ascii?Q?t/iP+ZZM16Kjyw3i+exciQ1pd+f7F25jSN3GX5IXEo34zjUQCLL6RkxhJXUc?=
+ =?us-ascii?Q?ZBiAWsuJoLph9JUad9CK+6sF5LFCs4yw3jnGFqoJiuGJJcn8oCZ8hrAWjVVz?=
+ =?us-ascii?Q?q9C62+EUPjK2I8BJHSFOu/33d9N5Rae98x42lW1HeV/Pil28ZS/C+zj3RAcI?=
+ =?us-ascii?Q?wsilayUKeUfyL68YwmybmHKa?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9c963864-4ac5-4e31-bb46-08d8dc9d5da4
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3b0ac76-8df3-4e03-ac58-08d8dc9d5f39
 X-MS-Exchange-CrossTenant-AuthSource: DB6PR0402MB2758.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2021 10:32:51.5266
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2021 10:32:54.1215
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mAR7n6iVxkCkZNe2kOfoFbS73TA5PYavpEfPLd6NWVT8DWyqSgHOD0VylqIun6peOHR7Ruuo9OzvtkCyuEwAxg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: x2Df8ROzFs9YfDAMG8PZ6QbwqsQsoQZU4UrvcXWz3xkooZUYRSrgHM/+vmW10BROYnlJ/XuAscHrwcE73ji5aw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4236
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
-This patchset involves changes in NXP Flexspi driver.
-Please note, though all patches might not be related to each other, I
-have clubbed them so as to make easy application of series.
+Add support for disabling AHB bus and read entire flash contents via IP
+only. Please note, this enables IP bus read using a quirk which can be
+enabled directly in device-type data or in existence of an errata where
+AHB bus may need to be disabled.
 
-Patch2 is dependent on dt-bindings
-https://patchwork.kernel.org/project/spi-devel-general/patch/1614593046-23832-1-git-send-email-kuldeep.singh@nxp.com/
+Signed-off-by: Kuldeep Singh <kuldeep.singh@nxp.com>
+---
+ drivers/spi/spi-nxp-fspi.c | 28 ++++++++++++++++++++++------
+ 1 file changed, 22 insertions(+), 6 deletions(-)
 
-Patch1: Enables IP read in flexspi
-Patch2: Add imx8dxl support
-Patch3: Errata workaround for LS1028A
-
-Han Xu (1):
-  spi: spi-nxp-fspi: Add driver support for imx8dxl
-
-Kuldeep Singh (2):
-  spi: spi-nxp-fspi: Add support for IP read only
-  spi: spi-nxp-fspi: Implement errata workaround for LS1028A
-
- drivers/spi/spi-nxp-fspi.c | 114 +++++++++++++++++++++++++++++++++----
- 1 file changed, 103 insertions(+), 11 deletions(-)
-
+diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
+index ab9035662717..829391e20e92 100644
+--- a/drivers/spi/spi-nxp-fspi.c
++++ b/drivers/spi/spi-nxp-fspi.c
+@@ -311,6 +311,9 @@
+ #define NXP_FSPI_MAX_CHIPSELECT		4
+ #define NXP_FSPI_MIN_IOMAP	SZ_4M
+ 
++/* Access flash memory using IP bus only */
++#define FSPI_QUIRK_USE_IP_ONLY	BIT(0)
++
+ struct nxp_fspi_devtype_data {
+ 	unsigned int rxfifo;
+ 	unsigned int txfifo;
+@@ -359,6 +362,11 @@ struct nxp_fspi {
+ 	int selected;
+ };
+ 
++static inline int needs_ip_only(struct nxp_fspi *f)
++{
++	return f->devtype_data->quirks & FSPI_QUIRK_USE_IP_ONLY;
++}
++
+ /*
+  * R/W functions for big- or little-endian registers:
+  * The FSPI controller's endianness is independent of
+@@ -553,8 +561,8 @@ static void nxp_fspi_prepare_lut(struct nxp_fspi *f,
+ 	for (i = 0; i < ARRAY_SIZE(lutval); i++)
+ 		fspi_writel(f, lutval[i], base + FSPI_LUT_REG(i));
+ 
+-	dev_dbg(f->dev, "CMD[%x] lutval[0:%x \t 1:%x \t 2:%x \t 3:%x]\n",
+-		op->cmd.opcode, lutval[0], lutval[1], lutval[2], lutval[3]);
++	dev_dbg(f->dev, "CMD[%x] lutval[0:%x \t 1:%x \t 2:%x \t 3:%x], size: 0x%08x\n",
++		op->cmd.opcode, lutval[0], lutval[1], lutval[2], lutval[3], op->data.nbytes);
+ 
+ 	/* lock LUT */
+ 	fspi_writel(f, FSPI_LUTKEY_VALUE, f->iobase + FSPI_LUTKEY);
+@@ -852,12 +860,14 @@ static int nxp_fspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 
+ 	nxp_fspi_prepare_lut(f, op);
+ 	/*
+-	 * If we have large chunks of data, we read them through the AHB bus
+-	 * by accessing the mapped memory. In all other cases we use
+-	 * IP commands to access the flash.
++	 * If we have large chunks of data, we read them through the AHB bus by
++	 * accessing the mapped memory. In all other cases we use IP commands
++	 * to access the flash. Read via AHB bus may be corrupted due to
++	 * existence of an errata and therefore discard AHB read in such cases.
+ 	 */
+ 	if (op->data.nbytes > (f->devtype_data->rxfifo - 4) &&
+-	    op->data.dir == SPI_MEM_DATA_IN) {
++	    op->data.dir == SPI_MEM_DATA_IN &&
++	    !needs_ip_only(f)) {
+ 		err = nxp_fspi_read_ahb(f, op);
+ 	} else {
+ 		if (op->data.nbytes && op->data.dir == SPI_MEM_DATA_OUT)
+@@ -888,6 +898,12 @@ static int nxp_fspi_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
+ 			op->data.nbytes = ALIGN_DOWN(op->data.nbytes, 8);
+ 	}
+ 
++	/* Limit data bytes to RX FIFO in case of IP read only */
++	if (op->data.dir == SPI_MEM_DATA_IN &&
++	    needs_ip_only(f) &&
++	    op->data.nbytes > f->devtype_data->rxfifo)
++		op->data.nbytes = f->devtype_data->rxfifo;
++
+ 	return 0;
+ }
+ 
 -- 
 2.25.1
 
