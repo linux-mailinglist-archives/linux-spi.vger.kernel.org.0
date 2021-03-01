@@ -2,219 +2,131 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3ACF327B89
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Mar 2021 11:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1260C327C43
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Mar 2021 11:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbhCAKGm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 1 Mar 2021 05:06:42 -0500
-Received: from inva021.nxp.com ([92.121.34.21]:51106 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232039AbhCAKGK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 1 Mar 2021 05:06:10 -0500
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id D1ED4200441;
-        Mon,  1 Mar 2021 11:04:27 +0100 (CET)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id AF476200427;
-        Mon,  1 Mar 2021 11:04:23 +0100 (CET)
-Received: from lsv03124.swis.in-blr01.nxp.com (lsv03124.swis.in-blr01.nxp.com [92.120.146.121])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id CE1CC40291;
-        Mon,  1 Mar 2021 11:04:18 +0100 (CET)
+        id S234536AbhCAKfG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 1 Mar 2021 05:35:06 -0500
+Received: from mail-am6eur05on2060.outbound.protection.outlook.com ([40.107.22.60]:11105
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234577AbhCAKdl (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 1 Mar 2021 05:33:41 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PMxt6suWljXuhfj1OGV97sysJmvRW6CsNeinmKhd6C9trP2ONn+UaRtVAlJiCEOtDLE7ahFFJM5aGAKXXwbyEo8Mzq9x22YA0Apd9MvRQtfWPxHAS8W+D61bofqqcMl3bDKo0/ovmq0m5++yV4dgnLzvRtKXh+W5EdxQ5JsvMyhzHOGA0rmR/Xeyd4UjCmF3rIkWBTU41A8HootGhMO5VIFJ39Xtskdt54CgFrpbBCqENp7rU1Agy1Xy30GJqok4Gcsh1V7Xy9LxuRzmLDPUpyjFQaXcUI9cgjvQsRA1aJ0n+1DeZ766iD90vGVrM3/2vQtG6LWrNiO5dhxuVKFpVw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uTFMXDWjybHc4iaRx1utV9PfV+PFfb1l4kwUwoIihF4=;
+ b=QSSOdvtuenleY7/QwpY2/aqgkyYHlurMU621ugZ4VYTvkTW/molBXdjswPxzluMB2Gi7P+i9JMDJkrF2war3o5j61tEdgnvd5Pg4XdT/p0jBmrV7P3HzSbzLUkPgpq+SupU9qPkkabWMkQdhC70p/IBBgkLO/kwCMJSR/7VTxInbPQZg41CfyuyrUJj28t2CWZa/cW5l5/1sN2oVbgPOI+5nc+AfwZaGXaXp4pKH7awC6oycrj8fOUcQVJtbkY7vfusaIK5zh6Ddof0rsHUBD9JoUdN9smeCELBpduAmRvmS8cpRIZHKKhkyBKxNv10Q+FOELhSNCFixA6GgnSgjwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uTFMXDWjybHc4iaRx1utV9PfV+PFfb1l4kwUwoIihF4=;
+ b=O+vNfaWXeEL74NU1Rl8zPPe7tdGD8XzHRIdyOj11zcb2oFZfO3wHUysWrGPie0g5s4y1Tt7B1uB+pgEz88sB95YARA1XWWV3KHDfUbpdtl/P0e3w56cfJ24GlJgD0HJmcZ58GnPtGDdnKxaJ7luUTj7TMLkWJufT4Sfw2bS4DGg=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=nxp.com;
+Received: from DB6PR0402MB2758.eurprd04.prod.outlook.com (2603:10a6:4:96::7)
+ by DB7PR04MB4236.eurprd04.prod.outlook.com (2603:10a6:5:27::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.20; Mon, 1 Mar
+ 2021 10:32:51 +0000
+Received: from DB6PR0402MB2758.eurprd04.prod.outlook.com
+ ([fe80::c99c:dbc3:ed75:e6e8]) by DB6PR0402MB2758.eurprd04.prod.outlook.com
+ ([fe80::c99c:dbc3:ed75:e6e8%5]) with mapi id 15.20.3890.028; Mon, 1 Mar 2021
+ 10:32:51 +0000
 From:   Kuldeep Singh <kuldeep.singh@nxp.com>
-To:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Ashish Kumar <ashish.kumar@nxp.com>,
+To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ashish Kumar <ashish.kumar@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
         Kuldeep Singh <kuldeep.singh@nxp.com>
-Subject: [PATCH] dt-bindings: spi: Convert NXP flexspi to json schema
-Date:   Mon,  1 Mar 2021 15:34:06 +0530
-Message-Id: <1614593046-23832-1-git-send-email-kuldeep.singh@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
+Subject: [PATCH 0/3] NXP Flexspi driver patches
+Date:   Mon,  1 Mar 2021 16:02:27 +0530
+Message-Id: <20210301103230.1816168-1-kuldeep.singh@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [14.142.151.118]
+X-ClientProxiedBy: HK2PR02CA0142.apcprd02.prod.outlook.com
+ (2603:1096:202:16::26) To DB6PR0402MB2758.eurprd04.prod.outlook.com
+ (2603:10a6:4:96::7)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from lsv03378.swis.in-blr01.nxp.com (14.142.151.118) by HK2PR02CA0142.apcprd02.prod.outlook.com (2603:1096:202:16::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.20 via Frontend Transport; Mon, 1 Mar 2021 10:32:49 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 9c963864-4ac5-4e31-bb46-08d8dc9d5da4
+X-MS-TrafficTypeDiagnostic: DB7PR04MB4236:
+X-MS-Exchange-MinimumUrlDomainAge: kernel.org#8760
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DB7PR04MB4236FA4DE7D1C6A4C07B24A4E09A9@DB7PR04MB4236.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZDmyjq6Q7l9w7rYy72YBWObcf6zNPwaQ4ft3nCgNR3j1fXFShbUZDkrifJSwze3VipDfaraPqOVte0tU54iEf7XUnxeZqa7CvLzDFV0phhdrG46jXuJ+H+xbSg+WUcsAyx/4o4hiiBxOYJB6J0iNqNQWZwtygLxIPdR0bTNqzpkjNeUNVe9hxg7gzfbWeDqh64n90dIR90TZllooobwtHSo4ffSakWqbz5dd9Dwi+O6lBcTXiAWz7b9VksatCqBIULF8SyXIWPdMZDlcsmf1avfMy9VuvT9kOSh687Nm6Y/uGT/IgmAhKCr/DqYzrpZwqi0wXfwro+3d5T16HlpQnj0QD3y7Ql0uh7245VLltYK7jEKjDL04q6aO3DAg0Ja3N0BeOWvXzSnQecNjSA3VRz9spFTQ5B6IkZSsP9Mdg9sLsdONglI/Wc/zTmK/4qxvX60OK87var0MiSvYmY/fcMdEaCiexBzNBZca4Ja2pBzCD4eWCr/7SU+bzwJ68KSk8CBpjs18lj6hX6mjj9Mhifz6+tajaOBn0CYXqpEsW7O388DJ+AlbJVoYqOPui9gvQFy8pGkMf59kKeDikiXyGoc7FSAh3obQpR7O28hUvMI8vslWPTAlxVrruEb/mR1WRNWbrVtD7WSX9Bd+gHSi2Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0402MB2758.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(376002)(346002)(39860400002)(136003)(86362001)(1006002)(5660300002)(7696005)(52116002)(4744005)(6666004)(66556008)(66476007)(66946007)(54906003)(316002)(966005)(478600001)(16526019)(1076003)(55236004)(36756003)(186003)(4326008)(26005)(956004)(2906002)(44832011)(8676002)(6486002)(8936002)(2616005)(83380400001)(110426009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?b7nwatQj8czN/7AYlWjcj5H0dcDMZI7as6sy34Hp25RdSV+PGM0tWfRojWXo?=
+ =?us-ascii?Q?MrqrjyS3fR5nRSRXS8+KX7w1+1TXe8WQNFUDTMsliXKRIIOHhZBCLUG+cCQ9?=
+ =?us-ascii?Q?yWHPowAYy6xen41RJmn9B2dMszdAp6KINk7YgQE5naE+VIotPF5qIq6Us08j?=
+ =?us-ascii?Q?GDcz0dR52nTpxxkDFMB7PAj1CCoRTy7zAa2phMdkPRroHVyzc4apOcbs2VcH?=
+ =?us-ascii?Q?3TuLgGC3WzvuoECpcF7BWI1iUNx54ZggtGWFTq1tDbnWmwm+jTuC4MCJjVCB?=
+ =?us-ascii?Q?VQRMHg3jCNRcVjAvHrqkKZGIQCCWFKGAWBQhAJfLJcLFCVEujDC6YzsabsAS?=
+ =?us-ascii?Q?WRRb9+Rk3+99lUcUcdIqf/JmJ0NobkZI6BICXRdxM94bo2mQlCL/XIC7/3Lp?=
+ =?us-ascii?Q?iyNPjhvBW0BQIzgEuYvnoIlJkHQDXDvQ+EN4YxnBNv8sRZanO+Y8YS2KjmAw?=
+ =?us-ascii?Q?tEUMYCvIjQhbMMx5v621Mo1eDMFFa9lOMWKCDiw+IaxvJbIo1EFfjreuzW3f?=
+ =?us-ascii?Q?1Fi75Shb4YknNakW9kIe/Xyb1u+jZm+VMGt8lqQf+XpLdrCFygRwDj6KDlw0?=
+ =?us-ascii?Q?317xm8d+b4IMTKEeW5rCbuYC9ZOp6wYdPEY7TRKQmLv5R5JesZ0l0uG5AFxx?=
+ =?us-ascii?Q?MnktcIWbTeaFSLmYnxp/ztIn6XWe59Cvr/9p44g1bwtffpaLaiZ/l6+YG9y7?=
+ =?us-ascii?Q?m/rrDOq0jOSnpLHe35PBnl9egNzwpJCHV2lU2RJcfrNfioGK0OrDnFh6bOcP?=
+ =?us-ascii?Q?bcV1XwA4e6GSkZarX/aeNq6Dn9X8PCKrQdy1y0SYLs5paWW/2HZAyUw1BxYm?=
+ =?us-ascii?Q?2uSZLonorMpJXitS+JjGRqmvxVKGG0l3NrRgrjuFA7o2b01SGXISVUuERUQY?=
+ =?us-ascii?Q?+vz0cwIoTjrtyWv2Wos9/8ZcbJIkxXYp0B2wbZ7SyCYR8qPB8AL8ZA8CRjA8?=
+ =?us-ascii?Q?R8n/MT5+Wql0kEHXPgf4cYtaB/1UWqgxhG3eObqK8p5ZQ/kj8eF89YoZDLre?=
+ =?us-ascii?Q?mkgIxkEGYnkCbbDImNt0rmHHxHziw/gj4+P3wsvpGGc2J12CTeNFxCEctKCm?=
+ =?us-ascii?Q?JOd6zj0FNLr46bGpuK+BQJkMmr3QgYUdvuZoqubxGU249JGtuiQw/aU44zyX?=
+ =?us-ascii?Q?YbjhFvTB4kKSnU1jPcUbEyaDL0cw5XH+oGO5Q1CXQdlQKuHEZNJ5rSldsnRG?=
+ =?us-ascii?Q?LYQoxDdjNeNEWr3kJmmluqxQmVP2sxYcH7qJMoNsowyp1PbM3Jh7ETYNLT/z?=
+ =?us-ascii?Q?mjRugWqw4nLq+cv3U3OQ4JYlPJoZLNoU5EmhkzKuAF8ex6SR3H4f3JqedFxi?=
+ =?us-ascii?Q?iX49bKmQdo2zK6H1nzM3J0q3?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9c963864-4ac5-4e31-bb46-08d8dc9d5da4
+X-MS-Exchange-CrossTenant-AuthSource: DB6PR0402MB2758.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2021 10:32:51.5266
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mAR7n6iVxkCkZNe2kOfoFbS73TA5PYavpEfPLd6NWVT8DWyqSgHOD0VylqIun6peOHR7Ruuo9OzvtkCyuEwAxg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4236
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Convert the NXP FlexSPI binding to DT schema format using json-schema.
-Also, update MAINTAINERS to reflect the change.
+Hi Mark,
+This patchset involves changes in NXP Flexspi driver.
+Please note, though all patches might not be related to each other, I
+have clubbed them so as to make easy application of series.
 
-Signed-off-by: Kuldeep Singh <kuldeep.singh@nxp.com>
----
- .../bindings/spi/nxp,spi-nxp-fspi.yaml        | 101 ++++++++++++++++++
- .../devicetree/bindings/spi/spi-nxp-fspi.txt  |  42 --------
- MAINTAINERS                                   |   2 +-
- 3 files changed, 102 insertions(+), 43 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/spi/nxp,spi-nxp-fspi.yaml
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-nxp-fspi.txt
+Patch2 is dependent on dt-bindings
+https://patchwork.kernel.org/project/spi-devel-general/patch/1614593046-23832-1-git-send-email-kuldeep.singh@nxp.com/
 
-diff --git a/Documentation/devicetree/bindings/spi/nxp,spi-nxp-fspi.yaml b/Documentation/devicetree/bindings/spi/nxp,spi-nxp-fspi.yaml
-new file mode 100644
-index 000000000000..56598b87ba15
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/nxp,spi-nxp-fspi.yaml
-@@ -0,0 +1,101 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/nxp,spi-nxp-fspi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: NXP Flex Serial Peripheral Interface (FSPI)
-+
-+maintainers:
-+  - Ashish Kumar <ashish.kumar@nxp.com>
-+
-+allOf:
-+  - $ref: "/schemas/spi/spi-controller.yaml#"
-+
-+properties:
-+  compatible:
-+    enum:
-+      - nxp,lx2160a-fspi
-+      - nxp,imx8qxp-fspi
-+      - nxp,imx8mm-fspi
-+      - nxp,imx8dxl-fspi
-+
-+  reg:
-+    items:
-+      - description: registers
-+      - description: memory mapping
-+
-+  reg-names:
-+    items:
-+      - const: fspi_base
-+      - const: fspi_mmap
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 2
-+    items:
-+      - description: SoC SPI fspi_en clock
-+      - description: SoC SPI fspi clock
-+
-+  clock-names:
-+    items:
-+      - const: fspi_en
-+      - const: fspi
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    spi@20c0000 {
-+      compatible = "nxp,lx2160a-fspi";
-+      reg = <0x0 0x20c0000 0x0 0x100000>, <0x0 0x20000000 0x0 0x10000>;
-+      reg-names = "fspi_base", "fspi_mmap";
-+      interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-+      clocks = <&clockgen QORIQ_CLK_PLATFORM_PLL QORIQ_CLK_PLL_DIV(4)>,
-+               <&clockgen QORIQ_CLK_PLATFORM_PLL QORIQ_CLK_PLL_DIV(4)>,
-+      clock-names = "fspi_en", "fspi";
-+      #address-cells = <1>;
-+      #size-cells = <1>;
-+
-+      flash@0 {
-+        compatible = "jedec,spi-nor";
-+        spi-max-frequency = <50000000>;
-+        reg = <0>;
-+        spi-rx-bus-width = <8>;
-+        spi-tx-bus-width = <8>;
-+      };
-+    };
-+
-+  - |
-+    #include <dt-bindings/clock/imx8mm-clock.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    spi@30bb0000 {
-+      compatible = "nxp,imx8mm-fspi";
-+      reg = <0x30bb0000 0x10000>, <0x8000000 0x10000000>;
-+      reg-names = "fspi_base", "fspi_mmap";
-+      interrupts = <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>;
-+      clocks = <&clk IMX8MM_CLK_QSPI_ROOT>,
-+               <&clk IMX8MM_CLK_QSPI_ROOT>;
-+      clock-names = "fspi", "fspi_en";
-+
-+      flash@0 {
-+        compatible = "jedec,spi-nor";
-+        spi-max-frequency = <80000000>;
-+        reg = <0>;
-+        spi-rx-bus-width = <4>;
-+        spi-tx-bus-width = <4>;
-+      };
-+    };
-diff --git a/Documentation/devicetree/bindings/spi/spi-nxp-fspi.txt b/Documentation/devicetree/bindings/spi/spi-nxp-fspi.txt
-deleted file mode 100644
-index 7ac60d9fe357..000000000000
---- a/Documentation/devicetree/bindings/spi/spi-nxp-fspi.txt
-+++ /dev/null
-@@ -1,42 +0,0 @@
--* NXP Flex Serial Peripheral Interface (FSPI)
--
--Required properties:
--  - compatible : Should be "nxp,lx2160a-fspi"
--			    "nxp,imx8qxp-fspi"
--			    "nxp,imx8mm-fspi"
--
--  - reg :        First contains the register location and length,
--                 Second contains the memory mapping address and length
--  - reg-names :  Should contain the resource reg names:
--	         - fspi_base: configuration register address space
--                 - fspi_mmap: memory mapped address space
--  - interrupts : Should contain the interrupt for the device
--
--Required SPI slave node properties:
--  - reg :        There are two buses (A and B) with two chip selects each.
--                 This encodes to which bus and CS the flash is connected:
--                 - <0>: Bus A, CS 0
--                 - <1>: Bus A, CS 1
--                 - <2>: Bus B, CS 0
--                 - <3>: Bus B, CS 1
--
--Example showing the usage of two SPI NOR slave devices on bus A:
--
--fspi0: spi@20c0000 {
--	compatible = "nxp,lx2160a-fspi";
--	reg = <0x0 0x20c0000 0x0 0x10000>, <0x0 0x20000000 0x0 0x10000000>;
--	reg-names = "fspi_base", "fspi_mmap";
--	interrupts = <0 25 0x4>; /* Level high type */
--	clocks = <&clockgen 4 3>, <&clockgen 4 3>;
--	clock-names = "fspi_en", "fspi";
--
--	mt35xu512aba0: flash@0 {
--		reg = <0>;
--		....
--	};
--
--	mt35xu512aba1: flash@1 {
--		reg = <1>;
--		....
--	};
--};
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f9d462c8f4d6..9179722cff2e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12731,7 +12731,7 @@ M:	Ashish Kumar <ashish.kumar@nxp.com>
- R:	Yogesh Gaur <yogeshgaur.83@gmail.com>
- L:	linux-spi@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/spi/spi-nxp-fspi.txt
-+F:	Documentation/devicetree/bindings/spi/nxp,spi-nxp-fspi.yaml
- F:	drivers/spi/spi-nxp-fspi.c
- 
- NXP FXAS21002C DRIVER
+Patch1: Enables IP read in flexspi
+Patch2: Add imx8dxl support
+Patch3: Errata workaround for LS1028A
+
+Han Xu (1):
+  spi: spi-nxp-fspi: Add driver support for imx8dxl
+
+Kuldeep Singh (2):
+  spi: spi-nxp-fspi: Add support for IP read only
+  spi: spi-nxp-fspi: Implement errata workaround for LS1028A
+
+ drivers/spi/spi-nxp-fspi.c | 114 +++++++++++++++++++++++++++++++++----
+ 1 file changed, 103 insertions(+), 11 deletions(-)
+
 -- 
 2.25.1
 
