@@ -2,99 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 529DF32B4F5
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Mar 2021 06:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0775032B4F2
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Mar 2021 06:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235324AbhCCFrG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 3 Mar 2021 00:47:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39744 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1448076AbhCBNzG (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 2 Mar 2021 08:55:06 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9E9C164F86;
-        Tue,  2 Mar 2021 11:58:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614686283;
-        bh=JxBOvQlb1mV3WHzKwhlOFEdlY0k8MJZTgRuw+0Gkp5U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eqf370pCtxv/9RNoR5hlUuVNvQ5FKwfEZ6AO/RAnkKgilZ2CTtaf6ijKp7EadryFI
-         RIQIJTWovgBxYfWDITQu3wC0t5+DisXN35n1duOuXERvJrMfkaz7PyLf2R6ZT1zjB1
-         Ya2nj+eQzryYbsHFby8K3hPnchkaq57jeOzk7o7iNCDFc8aXMwibYVtwM92W6us3nO
-         BE62qlUPu2l0j9pX/QwvZxcWM9jslWe0XXbc3WJcw6k8gzbGX65/oRmTAVKJ42LMdk
-         wynrv6UWU7vqvdgMaIXTJlze0V+Q8/lT9bFLstmIDgeuf++XSiZ8DzndeEzUg3swSt
-         lVoHc36bDoQHA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alain Volmat <alain.volmat@foss.st.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 10/33] spi: stm32: make spurious and overrun interrupts visible
-Date:   Tue,  2 Mar 2021 06:57:26 -0500
-Message-Id: <20210302115749.62653-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210302115749.62653-1-sashal@kernel.org>
-References: <20210302115749.62653-1-sashal@kernel.org>
+        id S235056AbhCCFgx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 3 Mar 2021 00:36:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1447518AbhCBNl1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Mar 2021 08:41:27 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C0CC061756;
+        Tue,  2 Mar 2021 05:40:38 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id q25so11076955lfc.8;
+        Tue, 02 Mar 2021 05:40:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=sy2937whkD36NnxmnEnOHu/2WmMpJHhESVIp923Q2ms=;
+        b=WR417b2TXL4XluWU3Q62QUJQT2KHPwbcPUhvSl9ZQVrVxjti1bnY0rVY28lskvQOQ9
+         Wd4ONpWLQsrq2U9ZfDpZJ9FfQ0enFUDeq957Rh8PhHNklfHjRCfh4w3CGHcGpKedn3JL
+         JU325/yJb/LyWrSRbGakExDJSSgUVg+qczoU+PFZZ2dZHklZkgt4nYBqwUHa/sX6A7Vq
+         KcMVXJKg88SR6oBSveZT8yEuJBNqlxOaa9sbDxhpRkGsJXaBT3wgy8o8QOEuUJEnZHii
+         cNSLUqZnaK/Zmp1Gtp5hNnFenxB8+j+e6Auapc+QBS0WcKBPGyzm5C2dO3+rub2odxvy
+         Guzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sy2937whkD36NnxmnEnOHu/2WmMpJHhESVIp923Q2ms=;
+        b=EhoMuAQ7DKnyEuzgvbgptxDcLLMmpunXnYHxlPxyQYlBX0OjfsollGtZPKjopFc4Lg
+         40uNKjaP3JVWNk8+DhBnFwh+LBgGeIjsGt1KOGWWPQ6QdlGquhp9IGcyncV8+zJ9+2f5
+         G8iTj7VRvZcK7Q2lH57ZD6t4xt7SuCdvGwj+LwntDW857ylrcIbL/0VPpgQHQjkEYJta
+         5Lo7y4tW9K19X3AOCHs7IMsOarZG9apGXTnCmJi+bn106t5rMpMZinFyvug+/mNeArqF
+         njguiz5NpnMpZqLrAVnYeMA/vQhlwJ7Ba2xQkbipd1eT1OAM52UoQc7J32a3skK9648c
+         92eQ==
+X-Gm-Message-State: AOAM531ECC0QCVft70Sjj/KRUzLAwuj20RwAe+0fj/VW89xsh5eOzvau
+        65n4IeFIMCeoXganNFUiRbwUBmbuuUo=
+X-Google-Smtp-Source: ABdhPJxRPWPVr1JuoC8bNRBtDqyUDprT1LYGiwQlldtoe/FBCoxaKt0EfpMAr+/aLHyNPv+Ih4vpaQ==
+X-Received: by 2002:ac2:4ecd:: with SMTP id p13mr5165188lfr.421.1614692436754;
+        Tue, 02 Mar 2021 05:40:36 -0800 (PST)
+Received: from [192.168.2.145] (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
+        by smtp.googlemail.com with ESMTPSA id 192sm2462749ljj.95.2021.03.02.05.40.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Mar 2021 05:40:36 -0800 (PST)
+Subject: Re: [PATCH 00/31] Introduce devm_pm_opp_* API
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Yangtao Li <tiny.windzz@gmail.com>, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, cw00.choi@samsung.com, krzk@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, yuq825@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, robdclark@gmail.com, sean@poorly.run,
+        robh@kernel.org, tomeu.vizoso@collabora.com, steven.price@arm.com,
+        alyssa.rosenzweig@collabora.com, stanimir.varbanov@linaro.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
+        lukasz.luba@arm.com, adrian.hunter@intel.com,
+        ulf.hansson@linaro.org, vireshk@kernel.org, nm@ti.com,
+        sboyd@kernel.org, broonie@kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, rjw@rjwysocki.net, jcrouse@codeaurora.org,
+        hoegsberg@google.com, eric@anholt.net, tzimmermann@suse.de,
+        marijn.suijten@somainline.org, gustavoars@kernel.org,
+        emil.velikov@collabora.com, jonathan@marek.ca,
+        akhilpo@codeaurora.org, smasetty@codeaurora.org,
+        airlied@redhat.com, masneyb@onstation.org, kalyan_t@codeaurora.org,
+        tanmay@codeaurora.org, ddavenport@chromium.org,
+        jsanka@codeaurora.org, rnayak@codeaurora.org,
+        tongtiangen@huawei.com, miaoqinglang@huawei.com,
+        khsieh@codeaurora.org, abhinavk@codeaurora.org,
+        chandanu@codeaurora.org, groeck@chromium.org, varar@codeaurora.org,
+        mka@chromium.org, harigovi@codeaurora.org,
+        rikard.falkeborn@gmail.com, natechancellor@gmail.com,
+        georgi.djakov@linaro.org, akashast@codeaurora.org,
+        parashar@codeaurora.org, dianders@chromium.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
+References: <20210101165507.19486-1-tiny.windzz@gmail.com>
+ <6bd6730c-6f4e-df93-65cd-93fa4785a8d8@gmail.com>
+Message-ID: <c7a246a4-ab25-a193-f74a-98351780135e@gmail.com>
+Date:   Tue, 2 Mar 2021 16:40:34 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+In-Reply-To: <6bd6730c-6f4e-df93-65cd-93fa4785a8d8@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Alain Volmat <alain.volmat@foss.st.com>
+20.01.2021 19:01, Dmitry Osipenko пишет:
+> 01.01.2021 19:54, Yangtao Li пишет:
+>> Hi,
+>>
+>> This patchset add devm_pm_opp_set_clkname, devm_pm_opp_put_clkname,
+>> devm_pm_opp_set_regulators, devm_pm_opp_put_regulators,
+>> devm_pm_opp_set_supported_hw, devm_pm_opp_of_add_table and
+>> devm_pm_opp_register_notifier.
+> 
+> Hello Yangtao,
+> 
+> Thank you for your effort, looking forward to v2!
 
-[ Upstream commit c64e7efe46b7de21937ef4b3594d9b1fc74f07df ]
-
-We do not expect to receive spurious interrupts so rise a warning
-if it happens.
-
-RX overrun is an error condition that signals a corrupted RX
-stream both in dma and in irq modes. Report the error and
-abort the transfer in either cases.
-
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-Link: https://lore.kernel.org/r/1612551572-495-9-git-send-email-alain.volmat@foss.st.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi-stm32.c | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 77ddf23b65d6..c7546683fc80 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -924,8 +924,8 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
- 		mask |= STM32H7_SPI_SR_RXP;
- 
- 	if (!(sr & mask)) {
--		dev_dbg(spi->dev, "spurious IT (sr=0x%08x, ier=0x%08x)\n",
--			sr, ier);
-+		dev_warn(spi->dev, "spurious IT (sr=0x%08x, ier=0x%08x)\n",
-+			 sr, ier);
- 		spin_unlock_irqrestore(&spi->lock, flags);
- 		return IRQ_NONE;
- 	}
-@@ -952,15 +952,8 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
- 	}
- 
- 	if (sr & STM32H7_SPI_SR_OVR) {
--		dev_warn(spi->dev, "Overrun: received value discarded\n");
--		if (!spi->cur_usedma && (spi->rx_buf && (spi->rx_len > 0)))
--			stm32h7_spi_read_rxfifo(spi, false);
--		/*
--		 * If overrun is detected while using DMA, it means that
--		 * something went wrong, so stop the current transfer
--		 */
--		if (spi->cur_usedma)
--			end = true;
-+		dev_err(spi->dev, "Overrun: RX data lost\n");
-+		end = true;
- 	}
- 
- 	if (sr & STM32H7_SPI_SR_EOT) {
--- 
-2.30.1
-
+Yangtao, could you please let me know what is the status of this series?
+Will you be able to make a v2 anytime soon?
