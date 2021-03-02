@@ -2,39 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1980332A5E1
+	by mail.lfdr.de (Postfix) with ESMTP id E578D32A5E2
 	for <lists+linux-spi@lfdr.de>; Tue,  2 Mar 2021 17:25:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446189AbhCBN1q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 2 Mar 2021 08:27:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39616 "EHLO mail.kernel.org"
+        id S1446192AbhCBN1w (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 2 Mar 2021 08:27:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42430 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244070AbhCBMAe (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 2 Mar 2021 07:00:34 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 505DD64F21;
-        Tue,  2 Mar 2021 11:55:58 +0000 (UTC)
+        id S1443527AbhCBMLa (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 2 Mar 2021 07:11:30 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4338E64F5A;
+        Tue,  2 Mar 2021 11:57:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614686159;
+        s=k20201202; t=1614686226;
         bh=ttBSAstuxahvrv6pryYeHwkR2zP2IIvHIkOm3LxkB/Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hDr/PYJHzZTt7ieblGQo/YFcyeKJL2hzxeLCRCMia2uk/rLDIcID7TBuhzv2hJ0Be
-         TYuoCTnqayTRu0Ml3WizNoOD6b/FeqB+ttfTJUUwOddTFl0LbqxkEB4emLEizKJ8aL
-         TCHYGjgsYPJSevPvxY4q898I+xn4Oagvo3ce1gle48x/6qbMeGqXFmVrNLSqqBrVPT
-         im4JPRbA4vJuovT0uogU6oKL676MdIZN1ZnJEifMjwgfeiqfMNZfwB/0d6OYz9ScQp
-         7aegolC8LS2qYeQ/KPK3slgKLKC4EFj4avTA9WntwZUuzsmjpBSNl71IPgivFyEnE3
-         IIpZU6Rli5zLg==
+        b=EWvWZ0zehZnFwlm1SuPprezHBsNpcwmzCOvBdSRtaniTLtfqhL+SoJcLfMuvjzOxZ
+         UsEkA8Wxf2SWO5St91CBE7pS5yJ6pDKrEyT0SIvA99fo6YeoiwZa5L6yxukR1J+dsg
+         Ja+VSuLSbpkDIHHZ0BL3yTamfHXIAZYWJFcRhPnKSVuKuN0ju80E93E7JooZew3H3F
+         +gvoy4bXJFBq63wPG7N+LVks4UArhn7MVbJInzyE1lxSupNJS+waLyqfuFMWYanRbL
+         PaHfVE+coev1yEL9FEacJOkQ6v7K91A1S8MkQckL3g/N0N2siqV5IMkn0lBCxj4x+R
+         ecZKAb65FBs8g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Alain Volmat <alain.volmat@foss.st.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.11 18/52] spi: stm32: make spurious and overrun interrupts visible
-Date:   Tue,  2 Mar 2021 06:54:59 -0500
-Message-Id: <20210302115534.61800-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 15/47] spi: stm32: make spurious and overrun interrupts visible
+Date:   Tue,  2 Mar 2021 06:56:14 -0500
+Message-Id: <20210302115646.62291-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210302115534.61800-1-sashal@kernel.org>
-References: <20210302115534.61800-1-sashal@kernel.org>
+In-Reply-To: <20210302115646.62291-1-sashal@kernel.org>
+References: <20210302115646.62291-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
