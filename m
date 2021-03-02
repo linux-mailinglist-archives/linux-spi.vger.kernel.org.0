@@ -2,83 +2,134 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E3332A5DC
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Mar 2021 17:24:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACDB32A5DF
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Mar 2021 17:25:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351057AbhCBNY4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 2 Mar 2021 08:24:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47224 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242462AbhCBA1G (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 1 Mar 2021 19:27:06 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 82BA760200;
-        Mon,  1 Mar 2021 23:54:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614642876;
-        bh=QDGSCePDNhRSvaJVsu8HLs45JWtSz5MZLlAZPyX4wBA=;
-        h=Subject:From:Date:To:From;
-        b=HinJpyKSfFJpjLqFNeJGbB4ETJB7jCOLMplnx598XyL/6SyVlkxkOBHaujrVv0Ern
-         ysz1UifVzQVoAhJ0h0orXK7R0R11pc/UpNkUU9WfTbMHRpzzC2bXprYcwU5PJnZFQK
-         2Gbz/Ft0bKL6p/jN3O0oDc17TMhiBu++jxcdP7DLMVJC/PcFqe8HBFtm0O2lL9iFvY
-         /C7Sgynh3yrTxfVyvhQSC8PS/pIoRD7MxBSjXTfyXJYfoK5t03COv7D7x3ehkRSb14
-         ZGAMlG7bujUMh3AQ1TqTV13z5/8IQd6c/XwI0cj+SSdCvmNw0ikVYxmvMZ1dTr+Euj
-         6TNFOTZ344kFg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 6DA036095D;
-        Mon,  1 Mar 2021 23:54:36 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S1446152AbhCBN12 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 2 Mar 2021 08:27:28 -0500
+Received: from mail-eopbgr70047.outbound.protection.outlook.com ([40.107.7.47]:9088
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1381333AbhCBFUr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 2 Mar 2021 00:20:47 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ifsRdxRrRTkYgf+59HwevtexaRPAzqbpHBgyx2tS5pmI4guLQQln+qvjBrurG1gIv1xJYhtdHhSddrMIc8kooJfkqGHfr3a3SNhx2i/L5/jgo/iMz7fE0SudCShsl9h1FIv4dBAN8WCBj66GeujF/X/0NYYPT0r9WZ6GXn7QJnS3mz/DrTZCBe9Qli0q/lNR2HH+dP+web0xE0DJ6o0GZJ81QrZN6jx21Z+7pglCRq0YCijYvaHPtVRkwRdzWdHfDA95kWxBxkOysviMObv2FtafmYPqTRRtbj84kp9kINNsiXIWW1hvtCTQ2rcYJ1OtPQGhbz/yFjM5MNjtUHo3Ow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JrSpHxl7EtR9QktsNP7nQMKiNZWNeg6JnsBKKtaZNXY=;
+ b=kL/nEf8k5toHLg9gKhZg/3O3lGrHcYQYwns0ooz2C0qz90Woi4wBe76f2P7ugEFkzFIW/lxcaVtvM45ZLemzYgWYnoyPs8He8IkpUxyOt8IX8tkH4+EblkXYtw+duqUK74YDibH6tmEr28Ls/D6TYX71FUtmpnxIqOlTUZVTcI+N1Dl7s8go5BRouKJD5HmdDCzMtkopfGz/wHCTu1Nr71XGJzKJJh+wgcqjds4BiHypAo3ok4FIyoBULyEM4Nftu0eVfNNH2Gd3VXhw7rIVK37UqNCqwImJ80f2b1jWP+ETyfARlDcB727i4ugHrk/vfzo7Q3aegVaXNf29I2I0wA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JrSpHxl7EtR9QktsNP7nQMKiNZWNeg6JnsBKKtaZNXY=;
+ b=lGkNnLfcP1c/mtBnIz6mMc3HptusLrCynO1HZaX2G3MKyXfmFU3XGGV6UaWI2T5Z2md9N08nBGupbMGCDD+zXIrhTAS0XWvQ0IvZ00XNeXEHOttdyhDYSco70s9r6PTfweCupN8TpHLeHs2nERvUi+vKGXfXQkgXaClaQyGV/ME=
+Received: from DB6PR0402MB2758.eurprd04.prod.outlook.com (2603:10a6:4:96::7)
+ by DB6PR04MB3128.eurprd04.prod.outlook.com (2603:10a6:6:10::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.28; Tue, 2 Mar
+ 2021 05:19:57 +0000
+Received: from DB6PR0402MB2758.eurprd04.prod.outlook.com
+ ([fe80::c99c:dbc3:ed75:e6e8]) by DB6PR0402MB2758.eurprd04.prod.outlook.com
+ ([fe80::c99c:dbc3:ed75:e6e8%5]) with mapi id 15.20.3890.028; Tue, 2 Mar 2021
+ 05:19:56 +0000
+From:   Kuldeep Singh <kuldeep.singh@nxp.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ashish Kumar <ashish.kumar@nxp.com>, Han Xu <han.xu@nxp.com>
+Subject: RE: [EXT] Re: [PATCH 2/3] spi: spi-nxp-fspi: Add driver support for
+ imx8dxl
+Thread-Topic: [EXT] Re: [PATCH 2/3] spi: spi-nxp-fspi: Add driver support for
+ imx8dxl
+Thread-Index: AQHXDoY+gDfnhwGOzEaNbBXq0bNZoqpvH7GAgAAzDSCAAAv2gIAAx0ug
+Date:   Tue, 2 Mar 2021 05:19:56 +0000
+Message-ID: <DB6PR0402MB275830516E1930F051982B88E0999@DB6PR0402MB2758.eurprd04.prod.outlook.com>
+References: <20210301103230.1816168-1-kuldeep.singh@nxp.com>
+ <20210301103230.1816168-3-kuldeep.singh@nxp.com>
+ <20210301132539.GB4628@sirena.org.uk>
+ <DB6PR0402MB2758C61D8320CD0A88DC3B38E09A9@DB6PR0402MB2758.eurprd04.prod.outlook.com>
+ <20210301171111.GE4628@sirena.org.uk>
+In-Reply-To: <20210301171111.GE4628@sirena.org.uk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [122.176.14.156]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: c0efa184-bb66-48ad-5190-08d8dd3ad1b3
+x-ms-traffictypediagnostic: DB6PR04MB3128:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB6PR04MB3128A33374977046F25F63BEE0999@DB6PR04MB3128.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qgZ2wUNE5RfapT0pqmpAmYT3JqAT4447FeqwPCXeSqTbN9tkO8u6gJQmYbGUSsdQdT5Zn05QiLpDKtwexUyvv6j7TiHDXp9NTi5IwsVR/ITEOps+a3rEqXQfgaSQ55L2Ajp9vqCEAGwcFw+H9pCCOCaQ6toF2y1kA8Prlqp46lwHc+0kOEPskuPqfr4skC4zJgcn4d+E0skXglxE0MzwKDbW1pllnd0+AAeOou8R6DzOnkL6AXglztmS0k4Z3bYkOL+dhzNjZJZ7ekrb/bV2GVfiqpedc0bXoFtFU1C4QnHX82fu7bJCN8Zv3IuoyTiU+wHWkp7+T3nniWEUV4NEvbz83hqQ/27aoWLKOTCPkxoDGDpjfDDt0CZ/oiuzQDcH22KDOiOqASDdGj9Jrll+Kn9BPpfw6yNO3RSzVSlKrwqFK7MzA+UpayXLyp+0RIPIp4R+ODjSYNB2Tq/waQKUd5Rm61Lsr60tMVHE1TGlERLh2AfYxDYwHHWJD4FXaPnoe4hf0hJOEp65xC7UglTJM55vzWhTr6WVyxUnWjpXEVjP/EZ5PSHEA6Fl1zVhiQgL
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0402MB2758.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(366004)(376002)(39860400002)(136003)(396003)(478600001)(66556008)(86362001)(4326008)(8676002)(4744005)(52536014)(55236004)(44832011)(33656002)(71200400001)(2906002)(186003)(5660300002)(316002)(66446008)(64756008)(66476007)(6916009)(66946007)(9686003)(7696005)(54906003)(26005)(55016002)(76116006)(6506007)(8936002)(32563001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?C5gHWyRgxnMMcHBCJBf5waZlV1MDghmXWdzmXkDXk1Yl3FCB+r5H8C7CalJB?=
+ =?us-ascii?Q?hklyZznM92wjePHB0itwCpeM+909d/4Y9MHF5I4dxS270gfX9ZEAXc37OAAx?=
+ =?us-ascii?Q?JXq3hp7HSUbjP7erT3T/HoxY9ugUJ1hlyUzCXDHVINy1ctwYBIwrGc1uL40R?=
+ =?us-ascii?Q?aaHDeeioPyq5YzoVF1/VDFjIuRegRFzL+4XS7vjt2Cp5/PIt+4+vyDiZFSKt?=
+ =?us-ascii?Q?7bL/oofj/1fF+DpZb+x/aiWxng6pIFJu3i3lkqwMsLRdV42o8ooTJTp52KM0?=
+ =?us-ascii?Q?9RWySllKnoM7k7nemECqV2t1UA/oX6n/cHKEHjS6Y1hYkqwrkqiD01kHvLb9?=
+ =?us-ascii?Q?SzeuOkubZxjY9X+SY3S+sXucCxag41r4pFQwddM7Ewt8++HG1yD1MMOnLnd5?=
+ =?us-ascii?Q?JJltunT412FKHNB8jxE2wgPsj4zYAbmSJBDp3TGyWwS1fFncOJ54UxCWUHOC?=
+ =?us-ascii?Q?pz3P85w24YKdObkAlje/yCPB1PaWxaI8Vz8b0qpe48IipI8Mb51upnoqUzMf?=
+ =?us-ascii?Q?pXUBGDypT+peljOFdUYjmM3B7lpVY2DMlcmKvjuHB3QZAkspFzdUyN1JAnMc?=
+ =?us-ascii?Q?pDYTp2FtU3QQJ+e5pMYmdkixgxDVywkxl60lg5BmTSaWfKfbBh28H3+Pe3Tn?=
+ =?us-ascii?Q?trjmbaCb5fGT7V82mdSCTc3BhB8dQ+6cja8w5R6hvnNcYtCrrmJFKt8F1sRY?=
+ =?us-ascii?Q?DObGm3fD+KlNaHGR2qRZzr3JUoUevekpkmx5BdtslS/iwPP1+CEjToX884Ff?=
+ =?us-ascii?Q?tSvYqWBB4yd45i6y4Qzx6wVlpMbdhszic4Rrh6mqTBknhCG+nojAizcn2A+Z?=
+ =?us-ascii?Q?ib7ZTZ5dE0PMyrLtCgKt3hFO8zcl2j//zidENVgSTIWviWnUdTKt+F3veJLV?=
+ =?us-ascii?Q?BGPg+QBTEZmZnJCgkA5eF9fL+0SCgMySQc7BzyYZNYnrKWv0V2QteFSr1eqn?=
+ =?us-ascii?Q?aGSiTU/rGNUqCtA+UsslY07LdfSfzbPGUzcafYp9E9IwM449YwkqXtSrkgnm?=
+ =?us-ascii?Q?okCVpTEER99xtFEt60kez+XZRuRnorSzINc0VEgyT5LRDTUR8Ow4hdZpGrkO?=
+ =?us-ascii?Q?XFlE4NfBNNHrfrzJ/GYylz6nQu4fWt3DIijT6zds4+diNmPw++zwV/YOPWw5?=
+ =?us-ascii?Q?SodkN0NxjMKtwJ5iWibTAV2asi6A2X3rIk+92148xW5K7oSLju32hkFXMSTE?=
+ =?us-ascii?Q?izp12cFFIbpUavXCXcee3c29aD95Cg9mvxj8K61+WbOchr5UKUYay9ccGMwG?=
+ =?us-ascii?Q?ep6h3d9emOVi1HkVZ8NFhgd6QOVPGRplygzdcZQ1YwipS2i/imRNRdc0uUHA?=
+ =?us-ascii?Q?s0QnlUFFP3uoimSvQF0QNtvS?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <161464287640.7970.16929056515501051427.git-patchwork-summary@kernel.org>
-Date:   Mon, 01 Mar 2021 23:54:36 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB6PR0402MB2758.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c0efa184-bb66-48ad-5190-08d8dd3ad1b3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Mar 2021 05:19:56.8037
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4e0NCaXLazsCOSfriG8qrPCVmpYDh67a9et6xY2o99UT+4IaZUr5D+5mtLk+M0ft7apPzeRJmYwzZ7xUVMuLyg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR04MB3128
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+> > I have converted bindings to yaml version in the patch and also added
+> imx8dxl compatible along-with the conversion. Please see the difference i=
+n
+> compatible entries from txt to yaml conversion[1].
+> > Kindly let me know do I need to submit different patch for adding new
+> compatible or ok to include in the conversion patch itself?
+>=20
+> Your YAML binding conversion should have been a standalone patch only
+> doing that conversion, the new compatible should have been split out and
+> gone first - each patch should only do one thing as covered in submitting=
+-
+> patches.rst.  As things stand the changelog for the conversion is mislead=
+ing
+> since it doesn't mention the new compatible.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (refs/heads/for-next):
+Thanks Mark for mentioning.
+I will send compatible adding patch with this series and post yaml conversi=
+on later.
 
-Series: [1/3] spi: mpc52xx: Avoid using get_tbl()
-  Submitter: Christophe Leroy <christophe.leroy@csgroup.eu>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=430565
-  Lore link: https://lore.kernel.org/r/99bf008e2970de7f8ed3225cda69a6d06ae1a644.1612866360.git.christophe.leroy@csgroup.eu
-    Patches: [1/3] spi: mpc52xx: Avoid using get_tbl()
-             [2/3] powerpc/time: Avoid using get_tbl()
-             [3/3] powerpc/time: Remove get_tbl()
-Patch: regulator: axp20x: Fix reference cout leak
-  Submitter: Pan Bian <bianpan2016@163.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=419445
-  Lore link: https://lore.kernel.org/r/20210120123313.107640-1-bianpan2016@163.com
-Patch: coresight: etm4x: Fix merge resolution for amba rework
-  Submitter: Uwe Kleine-König <uwe@kleine-koenig.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=428749
-  Lore link: https://lore.kernel.org/r/20210205130848.20009-1-uwe@kleine-koenig.org
-Patch: [GIT,PULL] immutable branch for amba changes targeting v5.12-rc1
-  Submitter: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=426429
-  Lore link: https://lore.kernel.org/r/20210202135350.36nj3dmcoq3t7gcf@pengutronix.de
-Patch: mailbox: arm_mhuv2: make remove callback return void
-  Submitter: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=426527
-  Lore link: https://lore.kernel.org/r/20210202194308.jm66vblqjwr5wo6v@pengutronix.de
-Patch: ACPI: Test for ACPI_SUCCESS rather than !ACPI_FAILURE
-  Submitter: Bjorn Helgaas <helgaas@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=422933
-  Lore link: https://lore.kernel.org/r/20210126202317.2914080-1-helgaas@kernel.org
-Patch: [v2] dt-bindings: spi: zynq: Convert Zynq QSPI binding to yaml
-  Submitter: Michal Simek <michal.simek@xilinx.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=431341
-  Lore link: https://lore.kernel.org/r/4ece21a7e9691ed1e775fd6b0b4046b1562e44bd.1612951821.git.michal.simek@xilinx.com
-
-Total patches: 9
-
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Regards
+Kuldeep
