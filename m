@@ -2,92 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B1D32B4F9
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Mar 2021 06:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2D2932B500
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Mar 2021 06:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237341AbhCCFrd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 3 Mar 2021 00:47:33 -0500
-Received: from mga04.intel.com ([192.55.52.120]:35710 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1573782AbhCBPNv (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 2 Mar 2021 10:13:51 -0500
-IronPort-SDR: dx9XuLqeK0TtJoDiLJifNnIPaVDclBrDoFlaWuBB7L3eKz7a29HPFGQghJ/I37DU53x7jUUYYU
- VhYAedcdG7nQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9911"; a="184407291"
-X-IronPort-AV: E=Sophos;i="5.81,216,1610438400"; 
-   d="scan'208";a="184407291"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2021 07:06:31 -0800
-IronPort-SDR: nCZf4m0fIcNr0lM3tYhWS5qUqhcVPJbY5hXtRObSvBZyV1EgQh4U3EudaNnCLQf3LQxJj2YovM
- aWcs6f+N8SLw==
-X-IronPort-AV: E=Sophos;i="5.81,216,1610438400"; 
-   d="scan'208";a="399055993"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2021 07:06:29 -0800
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lH6bT-009PhQ-87; Tue, 02 Mar 2021 17:06:27 +0200
-Date:   Tue, 2 Mar 2021 17:06:27 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] parport: Introduce module_parport_driver() helper
- macro
-Message-ID: <YD5Uc7j2MAFbFWZ3@smile.fi.intel.com>
-References: <20210216110741.1286-1-andriy.shevchenko@linux.intel.com>
- <YDkpzZ8jL7O9HJuG@smile.fi.intel.com>
- <YDwmznD58ZtOwHgb@debian>
- <YDzaC2ahcHCrCI8V@smile.fi.intel.com>
- <CADVatmP7V+pbpUC4xV+BmNzbfudPE5S0tT-6CgUKbQrC-FMrBA@mail.gmail.com>
+        id S237693AbhCCFsf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 3 Mar 2021 00:48:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245403AbhCCDHD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Mar 2021 22:07:03 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0830FC06178A
+        for <linux-spi@vger.kernel.org>; Tue,  2 Mar 2021 19:06:17 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id ci14so20356110ejc.7
+        for <linux-spi@vger.kernel.org>; Tue, 02 Mar 2021 19:06:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ingics-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=RKwqvjc2wk7e2+JEpQKXBE74c6T76PfSJ5fS7l5tMvw=;
+        b=bFfFxkZfnEuSe+zD3dOESM/J8Phx3ou9kd9mPXToUzSdfQAb53Qs3YeQEEyLDTBDzM
+         SqXy56RHCu+89Z6rlaZ/G920014szsVlNvAyH3Js+p9W5gbReYP9j83NcTH5tGY8rHar
+         1OQ3ZP6fXm2KK4F4y19TLAygolEdoc7d0+vHt6kmmMTyL5wDi3Oaw09zpmACmxMt0eNw
+         tgbsGnzfLfgUA/ccDdv/wDDoOIiCS4AiK7jHapszlkpK19V7XFeoVOBWUb/5RDW1OzhT
+         csD+LtfQ/zQCYu+SdJ3LE8Dzpgc9/pR9p9mLmlAs2SdCrwCO5KE//k0c4i9nH3P9dxix
+         hFcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RKwqvjc2wk7e2+JEpQKXBE74c6T76PfSJ5fS7l5tMvw=;
+        b=h0x5RiCzW0I8VPGffNvIlehG4C3EQtRwMc9pPTgXbbZEhTDQKOAIFY9g0P7H+JxvOV
+         QIIgrSZP8kw1XBRQ+UdRc8Y5QDA7ZJtlIrhV+HQwuxl2cIs2v5odR2fg+BGbLFXydCjV
+         VwX1IIBEIq0Rz8/Apednzfg+S8WtpZ6dFKNJ3Ee1ZFiPfJi6wq2QIbG3uble2b67bgAc
+         gEe5TnmxhoiL18kqXYSUAGlNlEr1jt6x9TI2zTQCXIBs/4OoHqmjnKxVtGD9dYDIhIcR
+         GiGp/OeI/nfUTniJixbOpwGsHusXrFCj9tK3RA6WnJKCsAwKrqkcWSZJ8TeO5wEtSNwC
+         wU3Q==
+X-Gm-Message-State: AOAM5339+MGxMoQt60ngkOn5Oknvadeehl8oBOQetB/Ba0YoC15U1QqV
+        hU3bLdMk2Cc7TqqXg9ciyBYUDscxQzoFfYTfjQEpWw==
+X-Google-Smtp-Source: ABdhPJyYqGm/IkXBg72idjlWOcasJpO+3VO1/ceWLHr+GEA9ohQQX4RYUV2o/t1wOsx2Xn55vwqBtBe54xMV9cUzjVI=
+X-Received: by 2002:a17:906:4c8b:: with SMTP id q11mr23806065eju.270.1614740775721;
+ Tue, 02 Mar 2021 19:06:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADVatmP7V+pbpUC4xV+BmNzbfudPE5S0tT-6CgUKbQrC-FMrBA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20210303025636.795-1-leilk.liu@mediatek.com>
+In-Reply-To: <20210303025636.795-1-leilk.liu@mediatek.com>
+From:   Axel Lin <axel.lin@ingics.com>
+Date:   Wed, 3 Mar 2021 11:05:39 +0800
+Message-ID: <CAFRkauDpNmPRpnM-iz8az2N_cUEhEtDKMq6qfP-f++2iyxqVTw@mail.gmail.com>
+Subject: Re: [PATCH] spi: mediatek: Re-license MTK SPI driver as Dual MIT/GPL
+To:     Leilk Liu <leilk.liu@mediatek.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        "luhua . xu" <luhua.xu@mediatek.com>,
+        Wei Yongjun <weiyj.lk@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Pi-Hsun Shih <pihsun@chromium.org>,
+        Markus Elfring <elfring@users.sourceforge.net>,
+        Javier Martinez Canillas <javier@osg.samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fengguang Wu <fengguang.wu@intel.com>,
+        Daniel Kurtz <djkurtz@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org, fparent@baylibre.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Mar 02, 2021 at 02:51:45PM +0000, Sudip Mukherjee wrote:
-> On Mon, Mar 1, 2021 at 12:12 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > On Sun, Feb 28, 2021 at 11:27:10PM +0000, Sudip Mukherjee wrote:
-> > > On Fri, Feb 26, 2021 at 07:03:09PM +0200, Andy Shevchenko wrote:
-> > > > On Tue, Feb 16, 2021 at 01:07:39PM +0200, Andy Shevchenko wrote:
-> > > > > Introduce module_parport_driver() helper macro to reduce boilerplate
-> > > > > in the existing and new code.
-> > > >
-> > > > Sudip, any comments on this?
-> > >
-> > > Sorry for the delay in reply.
-> > > lgtm. I think there are few more drivers which can also use this new helper.
-> > > Will you like to do them also?
-> >
-> > Yes, that's the (slow going) plan.
-> >
-> > > Acked-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-> >
-> > Thanks! I considered that you take it thru parport tree. Do you have something
-> > else in mind?
-> 
-> I dont have a separate parport tree (parport is not under active
-> development to have a separate tree). I send everything parport
-> related to Greg and then he adds it to his tree.
-
-MAINTAINERS doesn't show this. But good to know.
-
-> I guess in this case if Greg agrees it can go via Mark's tree as the
-> series will also have SPI related patches.
-
-Okay, if Greg wants to handle this himself, I think I have to resend (he wasn't
-in the Cc list). Otherwise Mark can also apply this if Greg is okay (but sounds
-like I have to resend anyway to let him understand what's going on here).
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Leilk Liu <leilk.liu@mediatek.com> =E6=96=BC 2021=E5=B9=B43=E6=9C=883=E6=97=
+=A5 =E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=8810:57=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> From: "leilk.liu" <leilk.liu@mediatek.com>
+>
+> It is wanted to use MTK spi bus driver with GPL-2.0 or MIT license.
+> But now it is only licensed as GPL-2.0, so re-license it as dual
+> MIT/GPL.
+>
+> Signed-off-by: leilk.liu <leilk.liu@mediatek.com>
+Acked-by: Axel Lin <axel.lin@ingics.com>
