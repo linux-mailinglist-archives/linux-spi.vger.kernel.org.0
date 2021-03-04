@@ -2,173 +2,117 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAFDE32CF60
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Mar 2021 10:13:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7918732CFBE
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Mar 2021 10:35:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233175AbhCDJLZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 4 Mar 2021 04:11:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50642 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233302AbhCDJLK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Mar 2021 04:11:10 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB57C06175F;
-        Thu,  4 Mar 2021 01:10:29 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id d3so41933300lfg.10;
-        Thu, 04 Mar 2021 01:10:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lYt7mYpM9/m04UA7Mdu92MabZprxTpAcM5FOuDuthS4=;
-        b=fmPBN3OVw4OwkdjJx8DpFvbIIja2mK2GdJqOtQW1Ioet6C2AJbxyHtAZ43/5yCOrfX
-         YIhF1TjFDL94mY63OlkM7Tq6ADqjKKprw16c8Rsl1jpf2nBbSqTnFGk2RXPVonxnt9mT
-         fptNyLQvpVUQ/TG+NGemc2z47SIYdWwdjRXzM17FTZhE5A031EofI372xV0+oqP5UZVq
-         nIyNDc0PwajjCfDf0tRpSuO0P0eR5eXRnz3KYdEiM2KwNi0pRoBf5K7MFlmaXIvBjzBt
-         Fbr9yiWSaoKtGJwoFQbveoUS5IWzzmBgTS0OU1XKvhO64UA+q/yHFcctocMAHLsJSuZB
-         DG+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lYt7mYpM9/m04UA7Mdu92MabZprxTpAcM5FOuDuthS4=;
-        b=TdMNexNqEuHK2H5ayU55TCMRLVj/kE8KdYt3/HQiQsf9nUE2bfvdAby1f6MOKWzpGE
-         wj+HjAojFGpFdNIlhCM3C1IfFcCIid2ItVdbrfrenvbEwuEI70QEDOOg5kYsIhZDwXtN
-         l/iYiyimWGiSYEBGq4QtL4HEo3z1anVXLgTiPxnr4AhJy+WaU0oHYft5bciHXArw9HY6
-         M9gKywl8S3rRPASyCjRflPf1PLbBNBxDyGqFQK+I2E+IqIiAs5UD690S0sUDbGyE89bm
-         7lDdYvDCqLTarfeRs54oyRxK2cf6jqGA6q5Hxi44lpyBG5G9xR3SB0wm50GDZYIJfTH9
-         2HxA==
-X-Gm-Message-State: AOAM532ha5sSKb/XyPBJUxwVT3R6uVB+s4n1uvp4a5y+8GxsN76vBxJ6
-        nm957asXoFfQFTetHR16NGE=
-X-Google-Smtp-Source: ABdhPJwlzUi5evrB7tfs/CevoAu3N1l1PJFqqId94eiMubcRbH8Dlr2a1CzIcdo2ScMeyBt/EDehfA==
-X-Received: by 2002:ac2:5232:: with SMTP id i18mr1839362lfl.30.1614849028522;
-        Thu, 04 Mar 2021 01:10:28 -0800 (PST)
-Received: from mobilestation ([95.79.88.254])
-        by smtp.gmail.com with ESMTPSA id e24sm2536883lfn.62.2021.03.04.01.10.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Mar 2021 01:10:28 -0800 (PST)
-Date:   Thu, 4 Mar 2021 12:10:25 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Brad Larson <brad@pensando.io>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
+        id S237618AbhCDJdT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 4 Mar 2021 04:33:19 -0500
+Received: from mout.kundenserver.de ([212.227.17.10]:35387 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237553AbhCDJcv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Mar 2021 04:32:51 -0500
+Received: from mail-oi1-f178.google.com ([209.85.167.178]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MBDrM-1lUMHm2BTC-00Cj4A; Thu, 04 Mar 2021 10:30:16 +0100
+Received: by mail-oi1-f178.google.com with SMTP id w65so5825197oie.7;
+        Thu, 04 Mar 2021 01:30:15 -0800 (PST)
+X-Gm-Message-State: AOAM533wP01QFagunv9I2PTmsnsJ2jj3qeCwgJi3uiEHeke0a3GGjwAB
+        Gj17FI6fRWtNPxn8WHpe1SSJVThJoDhMQa5SD4Y=
+X-Google-Smtp-Source: ABdhPJw9uBr6qnUdYOKxaWbXMTUVBRRhs8WjTeJMLjKfrKtwZ6pHKDu0JmaPxdme0uAqtllpnrMi8LbsIwEL/vQ9FQo=
+X-Received: by 2002:aca:4fd3:: with SMTP id d202mr2227269oib.11.1614850214795;
+ Thu, 04 Mar 2021 01:30:14 -0800 (PST)
+MIME-Version: 1.0
+References: <20210304034141.7062-1-brad@pensando.io> <20210304034141.7062-3-brad@pensando.io>
+In-Reply-To: <20210304034141.7062-3-brad@pensando.io>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 4 Mar 2021 10:29:58 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1aVfA=kp-dW+YKZ9cG=sD6+efSBYtB6GXu0X4MBjb0xg@mail.gmail.com>
+Message-ID: <CAK8P3a1aVfA=kp-dW+YKZ9cG=sD6+efSBYtB6GXu0X4MBjb0xg@mail.gmail.com>
+Subject: Re: [PATCH 2/8] spi: cadence-quadspi: Add QSPI support for Pensando
+ Elba SoC
+To:     Brad Larson <brad@pensando.io>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Olof Johansson <olof@lixom.net>,
         "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         linux-spi <linux-spi@vger.kernel.org>,
         linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/8] gpio: Add Elba SoC gpio driver for spi cs control
-Message-ID: <20210304091025.ny52qjm7wbfvmjgl@mobilestation>
-References: <20210304034141.7062-1-brad@pensando.io>
- <20210304034141.7062-2-brad@pensando.io>
- <CACRpkdbQD6p7fbGtuu1c92uXfSFDCTwqjqsXHpgnD5Lg4v0Okw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACRpkdbQD6p7fbGtuu1c92uXfSFDCTwqjqsXHpgnD5Lg4v0Okw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:zZDvOlE4nqNUUuAyZzh/usSCD0KiQ6nlGSFZT31UI2ETik+ilI4
+ IKMM9laWEXaB0mWupyr6SiXwcQandLRlTe5uc7B/09Z9Iss2AcUUILFTg5BJq24Bk9lf0Hj
+ /BbpxcG1Wj19syF42c5Fw0F4/ZhbKOc540253cxBRNUUFBvKwMSJDKFbjHwxqE08hAzOsIF
+ CQWU7RF3KIKj7S9HOZoow==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:0spHj1g4cLg=:/DrpZTpnGKr0guHu+hAKCQ
+ 6tCdSb8KPfbXYXg/dPzh80u//KkMVzb9MuL/KHFXKDj+olT/iSCh1fPcSmNVI91Cg9j4klMX9
+ NcR80sEptP0ndCSYcThS9ejKd4q2ODIjqgNBf4Qn7PjGhuddjmVi+yXNSbR7LkaJq4J+Y1Rgw
+ etl9brsnVCYdR+/9o+G4kWmXA/3G/Z87ixcaukYDgSOmorYQL8O0WErazzCX3cHWcn2w/heZv
+ BjkYb1ArrBQk9yS7swOIVlq3/INq/UDAns1l+YPn3TwqWLIXuWjYZMp1ahYe5n0oQFygezPly
+ 41xhNTUQXBXj3k2cMtg/ne5R6nnf7uLSn+0nxtaws0TA9AAqS2ijmpQYRwx6pT74iuhtAKSzv
+ hX0x0cgU2BvFTcBrlZYqQdKTQLkkwg8pyfqiQ/ijzKGLaM91Vtl5U5sABCkc2Z/COHN0iC1On
+ 8q6ouMGMroMPoejVVJD/V49w5umDSdWxP5RXie3BD1gURndjUQLHZlCaAiXhp6VgMSnJBvKEo
+ pWImVsG8sbm7WX7sK3imTisPnJmn8C3SkI56Bg6T5UoajCBcC2X0v/qSVwlXtKqcg==
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Linus,
+On Thu, Mar 4, 2021 at 4:41 AM Brad Larson <brad@pensando.io> wrote:
+>
+> Add QSPI controller support fo Pensando Elba SoC.
+>
+> Signed-off-by: Brad Larson <brad@pensando.io>
+> ---
+>  drivers/spi/spi-cadence-quadspi.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+> index 442cc7c53a47..fb0d9b0bd596 100644
+> --- a/drivers/spi/spi-cadence-quadspi.c
+> +++ b/drivers/spi/spi-cadence-quadspi.c
+> @@ -1353,6 +1353,7 @@ static int cqspi_request_mmap_dma(struct cqspi_st *cqspi)
+>         cqspi->rx_chan = dma_request_chan_by_mask(&mask);
+>         if (IS_ERR(cqspi->rx_chan)) {
+>                 int ret = PTR_ERR(cqspi->rx_chan);
+> +
+>                 cqspi->rx_chan = NULL;
+>                 return dev_err_probe(&cqspi->pdev->dev, ret, "No Rx DMA available\n");
+>         }
 
-I started reviewing from the DW APB SPI driver part of this series,
-that's why I suggested to remove the CS callback from there seeing it
-doesn't really differ much from the generic one. But after looking at
-the dts file and in this driver I think that the alterations layout
-needs to be a bit different.
+Please don't mix whitespace changes with code changes.
 
-This module looks more like being a part of a SoC System Controller
-seeing it's just a single register. Corresponding pins seem like
-being multiplexed between SPI controller and GPO (being directly driven
-by setting a bit in the corresponding register). See the next comment.
+> @@ -1632,6 +1633,10 @@ static const struct cqspi_driver_platdata intel_lgm_qspi = {
+>         .quirks = CQSPI_DISABLE_DAC_MODE,
+>  };
+>
+> +static const struct cqspi_driver_platdata pen_cdns_qspi = {
+> +       .quirks = CQSPI_NEEDS_WR_DELAY | CQSPI_DISABLE_DAC_MODE,
+> +};
+> +
+>  static const struct of_device_id cqspi_dt_ids[] = {
+>         {
+>                 .compatible = "cdns,qspi-nor",
+> @@ -1649,6 +1654,10 @@ static const struct of_device_id cqspi_dt_ids[] = {
+>                 .compatible = "intel,lgm-qspi",
+>                 .data = &intel_lgm_qspi,
+>         },
+> +       {
+> +               .compatible = "pensando,cdns-qspi",
+> +               .data = &pen_cdns_qspi,
+> +       },
+>         { /* end of table */ }
 
-On Thu, Mar 04, 2021 at 09:29:33AM +0100, Linus Walleij wrote:
-> Hi Brad,
-> 
-> thanks for your patch!
-> 
-> On Thu, Mar 4, 2021 at 4:42 AM Brad Larson <brad@pensando.io> wrote:
-> 
-> > This GPIO driver is for the Pensando Elba SoC which
-> > provides control of four chip selects on two SPI busses.
-> >
-> > Signed-off-by: Brad Larson <brad@pensando.io>
-> (...)
-> 
-> > +#include <linux/gpio.h>
-> 
-> Use this in new drivers:
-> #include <linux/gpio/driver.h>
-> 
-> > + * pin:             3            2        |       1            0
-> > + * bit:         7------6------5------4----|---3------2------1------0
-> > + *             cs1  cs1_ovr  cs0  cs0_ovr |  cs1  cs1_ovr  cs0  cs0_ovr
-> > + *                        ssi1            |             ssi0
-> > + */
-> > +#define SPICS_PIN_SHIFT(pin)   (2 * (pin))
-> > +#define SPICS_MASK(pin)                (0x3 << SPICS_PIN_SHIFT(pin))
-> > +#define SPICS_SET(pin, val)    ((((val) << 1) | 0x1) << SPICS_PIN_SHIFT(pin))
-> 
+As mentioned in my reply to the dts file, the compatible string needs to be
+somewhat more specific.
 
-> So 2 bits per GPIO line in one register? (Nice doc!)
+I also wonder if it would be better to define separate DT properties for the
+quirks at this point, so not every new SoC using this device needs to have
+its own quirks definition.
 
-I suppose the first bit is the CS-pin-override flag. So when it's set
-the output is directly driven by the second bit, otherwise the
-corresponding DW APB SPI controller drives it. That's how the
-multiplexing is implemented here.
-
-> 
-> > +struct elba_spics_priv {
-> > +       void __iomem *base;
-> > +       spinlock_t lock;
-> > +       struct gpio_chip chip;
-> > +};
-> > +
-> > +static int elba_spics_get_value(struct gpio_chip *chip, unsigned int pin)
-> > +{
-> > +       return -ENXIO;
-> > +}
-> 
-> Write a comment that the chip only supports output mode,
-> because it repurposes SPI CS pins as generic GPIO out,
-> maybe at the top of the file?
-> 
-
-> I suppose these systems also actually (ab)use the SPI cs
-> for things that are not really SPI CS?
-
-I haven't noticed that in the dts file submitted by Brad. So most
-likely these are just CS pins, which can be either automatically
-driven by the DW APB SPI controller (yeah, DW APB SPI controller
-doesn't provide a way to directly set he native CS value, it
-sets the CS value low automatically when starts SPI xfers) or can be
-manually set low/high by means of that SPI-CS register.
-
-> Because otherwise
-> this could just be part of the SPI driver (native chip select).
-
-That's what I suggested in my comment to the patch
-[PATCH 7/8] arm64: dts: Add Pensando Elba SoC support
-in this series. Although imho it's better to be done by means
-of a System Controller.
-
--Sergey
-
-> 
-> > +static const struct of_device_id ebla_spics_of_match[] = {
-> > +       { .compatible = "pensando,elba-spics" },
-> 
-> Have you documented this?
-> 
-> Other than that this is a nice and complete driver.
-> 
-> Yours,
-> Linus Walleij
+       Arnd
