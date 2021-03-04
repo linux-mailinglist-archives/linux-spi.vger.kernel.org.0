@@ -2,62 +2,117 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D689532D118
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Mar 2021 11:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A667032D350
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Mar 2021 13:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231919AbhCDKsb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 4 Mar 2021 05:48:31 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:13057 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232882AbhCDKsD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Mar 2021 05:48:03 -0500
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DrnZH3hq3zMhf8;
-        Thu,  4 Mar 2021 18:45:11 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS411-HUB.china.huawei.com (10.3.19.211) with Microsoft SMTP Server id
- 14.3.498.0; Thu, 4 Mar 2021 18:47:11 +0800
-From:   Jay Fang <f.fangjian@huawei.com>
-To:     <linux-spi@vger.kernel.org>
-CC:     <broonie@kernel.org>, <dan.carpenter@oracle.com>,
-        <huangdaode@huawei.com>
-Subject: [PATCH] spi: cadence-quadspi: Silence shiftTooManyBitsSigned warning
-Date:   Thu, 4 Mar 2021 18:47:52 +0800
-Message-ID: <1614854872-8694-1-git-send-email-f.fangjian@huawei.com>
-X-Mailer: git-send-email 2.7.4
+        id S232702AbhCDMgd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 4 Mar 2021 07:36:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37692 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233218AbhCDMgN (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 4 Mar 2021 07:36:13 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E95B564EF6;
+        Thu,  4 Mar 2021 12:35:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614861333;
+        bh=EkeZUZO/3whI1YQlQvZZ+yLF1lahGtpnZIGIom+hslc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TW17k1FzZlqya+rwuPIALsn+dOaBmxAEEXpa5x72LPd7/qiNda7IEEHvfiIHIJbBz
+         MfK8jIBZMIU0924x/Uo8I75172YdXv3rlP0colBqF3uM8oho9huXEaUvNcDnkexUY3
+         sgc6GSCsKB+6/iadBa4dv/apWr2PHkaZF03Ql6cRSk5Q3ScOSVdhqQgX1hoUWKvBrS
+         vq+dNucew/F7AFl9W6UPGVREJFPsPQNdqyhspk6VvSW9JN2la9QRpKpSgpw274ZeMh
+         5SY0xGDur/CfNGl/WiiNzXkr/9LKkln7W9NugVHouTufY1I5ZetFOLzfVD7ayTvzml
+         Ia9cBFWPLub9g==
+Date:   Thu, 4 Mar 2021 12:34:25 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     "Fangjian (Jay)" <f.fangjian@huawei.com>
+Cc:     linux-spi@vger.kernel.org, huangdaode@huawei.com,
+        linuxarm@huawei.com
+Subject: Re: [PATCH] spi: Add HiSilicon SPI controller driver support
+Message-ID: <20210304123425.GA4731@sirena.org.uk>
+References: <1614599771-33629-1-git-send-email-f.fangjian@huawei.com>
+ <20210301135405.GC4628@sirena.org.uk>
+ <79a0bb79-654b-8afc-f34a-c3a08bae275c@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="SLDf9lqlvOQaIe6s"
+Content-Disposition: inline
+In-Reply-To: <79a0bb79-654b-8afc-f34a-c3a08bae275c@huawei.com>
+X-Cookie: I think my career is ruined!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-drivers/spi/spi-cadence-quadspi.c:267:18: warning: Shifting signed 32-bit
-value by 31 bits is undefined behaviour [shiftTooManyBitsSigned]
-    return reg & (1 << CQSPI_REG_CONFIG_IDLE_LSB);
-                    ^
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Jay Fang <f.fangjian@huawei.com>
----
- drivers/spi/spi-cadence-quadspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--SLDf9lqlvOQaIe6s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 442cc7c..9a2798a5 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -264,7 +264,7 @@ static bool cqspi_is_idle(struct cqspi_st *cqspi)
- {
- 	u32 reg = readl(cqspi->iobase + CQSPI_REG_CONFIG);
- 
--	return reg & (1 << CQSPI_REG_CONFIG_IDLE_LSB);
-+	return reg & (1UL << CQSPI_REG_CONFIG_IDLE_LSB);
- }
- 
- static u32 cqspi_get_rd_sram_level(struct cqspi_st *cqspi)
--- 
-2.7.4
+On Thu, Mar 04, 2021 at 10:54:40AM +0800, Fangjian (Jay) wrote:
+> On 2021/3/1 21:54, Mark Brown wrote:
+> > On Mon, Mar 01, 2021 at 07:56:11PM +0800, Jay Fang wrote:
 
+> > > +/* Disable IRQ bits */
+> > > +static void hisi_spi_mask_intr(struct hisi_spi *hs, u32 mask)
+> > > +{
+> > > +	u32 new_mask;
+> > > +
+> > > +	new_mask = readl(hs->regs + HISI_SPI_IMR) | mask;
+> > > +	writel(new_mask, hs->regs + HISI_SPI_IMR);
+> > > +}
+
+> > This is a read/modify/write cycle and appears to be called from at least
+> > process and interrupt context but I'm not seeing anything that stops two
+> > different callers of it or the matching unmask function from running at
+> > the same time.
+
+> Those mask/unmask will not be called at the same time from process and
+> interrupt context. In process context, unmask will be called after SPI
+> controller be Disable and Flush (interrupt handing has ended).
+
+Given that this is disabling the interrupt that doesn't sound like it's
+going to be entirely robust - if we need to disable the interrupt
+presumably there's some chance it might fire.
+
+> > > +	struct hisi_spi *hs = spi_controller_get_devdata(master);
+> > > +
+> > > +	hs->n_bytes = hisi_spi_n_bytes(transfer);
+> > > +	hs->tx = (void *)transfer->tx_buf;
+> > If there's a need to cast to void * something is very wrong here.
+
+> Yes, fix compile warning.
+
+This cast just masks whatever the problem is, if the compiler is
+complaining about using a void pointer it's spotted an issue.
+
+> > > +	/* Ensure the data above is visible for all CPUs */
+> > > +	smp_mb();
+
+> > This memory barrier seems worrying...  are you *sure* this is the best
+> > way to sync, and that the sync is best done here if it is needed rather
+> > than after everything else is set up?
+
+> The commit 0b6bfad ("spi: spi-dw: Remove extraneous locking") explains
+> why memory barrier is needed here. And put it here to make it easier to
+> understand.
+
+The reader of this code won't have any kind of pointer to that commit,
+this needs to be clearer.
+
+--SLDf9lqlvOQaIe6s
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBA09EACgkQJNaLcl1U
+h9BjtAf6A6uZA32MFUJjJ1X9No5n7z58lnrZ3ROGdda+JhWLlYKtrbbPnUVADo0q
+g/omw34V4+gqOi0O2Iy7BY8IiRXDWgGgIQE42b4QiZ7NZIbbk5wNKCGtTMBwedGC
+NmU+sxTkznqt8vxjXW2O2KfCzuGvX4ogyStRbXvMcguETokcJgBDt7t1zm/IkVZy
+WM8Y5dksofqXYQPWpyy6eHSoLEvBYEV/PxgIMoOaSxT5/3DPQS6wrkWSULkk2kMv
+2NdA1L5kUIJam0z72WTa/BEC1oAvK3r4OMkRlsBVEVMUYPIkzuwVtCvXnqf6k62B
+BbWAYZVnf/UI7eaUN6759R+/RfLOMg==
+=BGMO
+-----END PGP SIGNATURE-----
+
+--SLDf9lqlvOQaIe6s--
