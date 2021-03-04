@@ -2,100 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A0932D3FC
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Mar 2021 14:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0DB32D449
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Mar 2021 14:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241174AbhCDNO7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 4 Mar 2021 08:14:59 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:44584 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241179AbhCDNOp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Mar 2021 08:14:45 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 124CnnEs131670;
-        Thu, 4 Mar 2021 13:08:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=R562JOLzTjTOBlvS9isvPcEBbfWxb/+5B82DTC5j09s=;
- b=oolEGxOH2oI98kOpPSd8zskmwsHCA6NddZai89CCHF5K/opTpTduRS3V1MYbArsXStpo
- 79NfsnSUpxZbqmlrxS3mnEtAic4NfdjqZ5aw/P4sPS4rygt/j1GMtEYN8x7FBrcR+Gfg
- M84TplISWVobmiFKXJBN0n97q6k8OGiLcuIcAzXSRAz+20QgRTzxthadB3ahhhpAIPr9
- 3FgRPkNZcxD5ZUkQ1zrR+TI99+W3JWpYZUaKtEzEBGIVvMpvLODTZ27bwAMOPNU1hwW7
- CuW543AMHS84hYTLas7KgPHZt6LOThRsS5k2VUHofyuqCcIJhnn1JOa6mEIf5lUSO20t kg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 371hhc8bax-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 04 Mar 2021 13:08:58 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 124Cp8Ka059649;
-        Thu, 4 Mar 2021 13:08:56 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 370002mu5g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 04 Mar 2021 13:08:56 +0000
-Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 124D8rLK032470;
-        Thu, 4 Mar 2021 13:08:53 GMT
-Received: from kadam (/102.36.221.92)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 04 Mar 2021 13:08:52 +0000
-Date:   Thu, 4 Mar 2021 16:08:45 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Jay Fang <f.fangjian@huawei.com>
-Cc:     linux-spi@vger.kernel.org, broonie@kernel.org,
-        huangdaode@huawei.com
-Subject: Re: [PATCH] spi: cadence-quadspi: Silence shiftTooManyBitsSigned
- warning
-Message-ID: <20210304130845.GE2222@kadam>
-References: <1614854872-8694-1-git-send-email-f.fangjian@huawei.com>
+        id S241345AbhCDNjA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 4 Mar 2021 08:39:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241375AbhCDNiy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Mar 2021 08:38:54 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6F0C06175F
+        for <linux-spi@vger.kernel.org>; Thu,  4 Mar 2021 05:38:14 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id k9so23317891lfo.12
+        for <linux-spi@vger.kernel.org>; Thu, 04 Mar 2021 05:38:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Sy4nEQi288EJ0M7NsP9fNgE7Qbg6ZfSce++n7QC7VuE=;
+        b=HDEyZwrEB46msqvh9yZL6EIpSxJmqDcC7gwO0qmA5ppFeUZZynGA6jUe7EyfCmsk8Q
+         rcBnKK1vNt9y/wlSP7cHt9bjTpe55w38EsfRix7wkpzfpiWxwAsFdAyMlNpRS2Vvh6w3
+         fawXFbtO/97KGmx+9feW42Ya5GUueAsIb/TRpTlmNJ5s6egRp9BtUOyo0gqFaq+xdPEV
+         T1zZT8nF1Ni3+X79Dae5i7HiscmcOz6U3D2PZKXsvPFXricPI9lr/5a9b1eetyEuexsL
+         QYuoLhT95aAs2djBuEz3/JU7g7CqeaarcznXmDsFvDWyfCEJvHFKCp3bOPwouJhVFNPf
+         XRfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Sy4nEQi288EJ0M7NsP9fNgE7Qbg6ZfSce++n7QC7VuE=;
+        b=ADPHCKgro+JScgxvBd1PTJBawtf84sS/1dHOonf8/NgcSzJEwNvpqX9IBQlBBoc12T
+         pbmkHg1Xk4Y8i1Ao3jA6GesvHBBNzzruLh1pMGpIEWUF0+lFQRdQAudZTxwnG2DAPDag
+         nj/fL5msrNh1jBiBcWN5XBMduTr0OMDLFRy3sK8Vfz+A5LjRwGOrJxE1Ny+Tx1VqfqPi
+         cji+K+32L2ZC1MfCjDg5GiMGtDLe51ZycqdI83RIIgG/O4c2re1znn7bUl36INAhJEEr
+         iow9aSOl+VT9bLjKM91lLNgqDR0ODAEc5BILu/eGBsVYf0eu9qOPY9CyhcHNvoXrnLYn
+         L8lA==
+X-Gm-Message-State: AOAM530mcuvcMlx8FClI6vM5VxjxR4FRggTAHSbQriL1HBpXD6Q7CgJA
+        WFDFwlevOK98LEZxnJpLH8reV8hSjFsyU0DHTeAOCw==
+X-Google-Smtp-Source: ABdhPJzFb3M5KKDc0P6vzgQhF75tV/IB16cKzRo83AG6u77j3RQ1zLFiwZGnOCt2xN7WcZZR4msr6H1Iqkoxi26D0cs=
+X-Received: by 2002:a19:548:: with SMTP id 69mr2287824lff.465.1614865092582;
+ Thu, 04 Mar 2021 05:38:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1614854872-8694-1-git-send-email-f.fangjian@huawei.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-IMR: 1
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9912 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
- phishscore=0 bulkscore=0 mlxscore=0 spamscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103040060
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9912 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1011 malwarescore=0
- mlxlogscore=999 spamscore=0 phishscore=0 lowpriorityscore=0
- impostorscore=0 mlxscore=0 suspectscore=0 bulkscore=0 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103040060
+References: <20210304034141.7062-1-brad@pensando.io> <20210304034141.7062-2-brad@pensando.io>
+ <CACRpkdbQD6p7fbGtuu1c92uXfSFDCTwqjqsXHpgnD5Lg4v0Okw@mail.gmail.com> <20210304091025.ny52qjm7wbfvmjgl@mobilestation>
+In-Reply-To: <20210304091025.ny52qjm7wbfvmjgl@mobilestation>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 4 Mar 2021 14:38:01 +0100
+Message-ID: <CACRpkdZroi+_oHqipS71MAGif190y7jWU5Myf55vz=_um4w5cQ@mail.gmail.com>
+Subject: Re: [PATCH 1/8] gpio: Add Elba SoC gpio driver for spi cs control
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Brad Larson <brad@pensando.io>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Olof Johansson <olof@lixom.net>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Mar 04, 2021 at 06:47:52PM +0800, Jay Fang wrote:
-> drivers/spi/spi-cadence-quadspi.c:267:18: warning: Shifting signed 32-bit
-> value by 31 bits is undefined behaviour [shiftTooManyBitsSigned]
->     return reg & (1 << CQSPI_REG_CONFIG_IDLE_LSB);
->                     ^
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Jay Fang <f.fangjian@huawei.com>
-> ---
->  drivers/spi/spi-cadence-quadspi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-> index 442cc7c..9a2798a5 100644
-> --- a/drivers/spi/spi-cadence-quadspi.c
-> +++ b/drivers/spi/spi-cadence-quadspi.c
-> @@ -264,7 +264,7 @@ static bool cqspi_is_idle(struct cqspi_st *cqspi)
->  {
->  	u32 reg = readl(cqspi->iobase + CQSPI_REG_CONFIG);
->  
-> -	return reg & (1 << CQSPI_REG_CONFIG_IDLE_LSB);
-> +	return reg & (1UL << CQSPI_REG_CONFIG_IDLE_LSB);
+On Thu, Mar 4, 2021 at 10:10 AM Serge Semin <fancer.lancer@gmail.com> wrote:
+> On Thu, Mar 04, 2021 at 09:29:33AM +0100, Linus Walleij wrote:
 
-This is always going to be false because reg is a u32.
+> > > + * pin:             3            2        |       1            0
+> > > + * bit:         7------6------5------4----|---3------2------1------0
+> > > + *             cs1  cs1_ovr  cs0  cs0_ovr |  cs1  cs1_ovr  cs0  cs0_ovr
+> > > + *                        ssi1            |             ssi0
+> > > + */
+> > > +#define SPICS_PIN_SHIFT(pin)   (2 * (pin))
+> > > +#define SPICS_MASK(pin)                (0x3 << SPICS_PIN_SHIFT(pin))
+> > > +#define SPICS_SET(pin, val)    ((((val) << 1) | 0x1) << SPICS_PIN_SHIFT(pin))
+> >
+>
+> > So 2 bits per GPIO line in one register? (Nice doc!)
+>
+> I suppose the first bit is the CS-pin-override flag. So when it's set
+> the output is directly driven by the second bit, otherwise the
+> corresponding DW APB SPI controller drives it. That's how the
+> multiplexing is implemented here.
 
-regards,
-dan carpenter
+If these output lines are so tightly coupled to the SPI block
+and will not be used for any other GPO (general purpose output)
+I think it makes more sense to bundle the handling into the
+DW SPI driver, and activate it based on the Elba compatible
+string (if of_is_compatible(...)).
 
+I am a bit cautious because it has happened in the past that
+people repurpose CS lines who were originally for SPI CS
+to all kind of other purposes, such as a power-on LED and
+in that case it needs to be a separate GPIO driver. So the
+author needs to have a good idea about what is a realistic
+use case here.
+
+Yours,
+Linus Walleij
