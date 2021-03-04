@@ -2,73 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB3632C700
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Mar 2021 02:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0A932C9E1
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Mar 2021 02:20:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240783AbhCDAao (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 3 Mar 2021 19:30:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39474 "EHLO mail.kernel.org"
+        id S237888AbhCDBOa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 3 Mar 2021 20:14:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33868 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1388021AbhCCU0V (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 3 Mar 2021 15:26:21 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AE3CB64EEF;
-        Wed,  3 Mar 2021 20:25:40 +0000 (UTC)
+        id S235954AbhCDA6R (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 3 Mar 2021 19:58:17 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 55E4264EA4;
+        Thu,  4 Mar 2021 00:57:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614803141;
-        bh=LpWfD3rHOMB8ouLQKR28xxNUDGgTmhb/W2lE5TK/P+Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V9i/j7DGzpTHEwhTMj8BxosEZ4cA5oYZJ1VEFwssB9oBjFm/nKPQdka6ntnA8xJ02
-         CjOEUSKsPA/N92SA4Sys4VLRazprYVSRI8WK9kw5wlZC+NOtTBnJKEJytp+xL7VD6Q
-         W7z7DOM3LWGa8gMANWlZre8EmSWcKb46OCRs5BV6ZczRHcOMgxCj5QhGhPhupyzN4d
-         fKrlOGSxd1k0nPyhjizFoxCRJVHpxcunuIqFzJj2SakAPWjQO6vID7n2eWqRZSfDuu
-         KP3Lnkt1MY6uJtn12wKGNChX9qrVTNuaJ1uGL4TO5d/cd+58u4DfdaWa2iOw4Jgz1Y
-         VqU4W6O6IqprQ==
-Date:   Wed, 3 Mar 2021 20:24:32 +0000
+        s=k20201202; t=1614819455;
+        bh=Pq4DTgSCjnSumX710lov1lOw0nQOtcqw+vfcG1lo/Pc=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Tdnob7jiXNdDi17lsuc72VMI3tt/UMDiEwW4yfC7c/TeL88U/lLgz2mfaSK6aGSQg
+         QsBYbKsprv4EUhMtlsd7weUdDXdKAy4IYlnMrlU9Q9+dg3CKBEUBGaR8sPVnnpZ1+u
+         a6C2OfxDOH3mHNG505Wr+I2Z+yQwco/0FILule0NmCqci5ODbhCRtrKIdriX5/9e89
+         lxSyWkvPbTeBvel0Rq6Y6kuibJudzPdKQlRcX9FU1dt9MeWPefAo7koIQASIUep+rp
+         z6KUBhK4p9FSJO6FjnGYCEcim29UcoRQX4hz4C18AEiQ0cruqRhkdNr9dzCY66taaQ
+         yg3MHZBy8r1sQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v3 0/3] parport: Introduce module_parport_driver() and
- use it
-Message-ID: <20210303202432.GD5027@sirena.org.uk>
-References: <20210303091642.23929-1-andriy.shevchenko@linux.intel.com>
+To:     Kuldeep Singh <kuldeep.singh@nxp.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Ashish Kumar <ashish.kumar@nxp.com>
+In-Reply-To: <20210302124936.1972546-1-kuldeep.singh@nxp.com>
+References: <20210302124936.1972546-1-kuldeep.singh@nxp.com>
+Subject: Re: [Patch v2 0/4] NXP Flexspi driver patches
+Message-Id: <161481938860.10000.18184476826270231027.b4-ty@kernel.org>
+Date:   Thu, 04 Mar 2021 00:56:28 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2Z2K0IlrPCVsbNpk"
-Content-Disposition: inline
-In-Reply-To: <20210303091642.23929-1-andriy.shevchenko@linux.intel.com>
-X-Cookie: Results are not typical.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, 2 Mar 2021 18:19:32 +0530, Kuldeep Singh wrote:
+> This patchset involves changes in NXP Flexspi driver.
+> 
+> Patch1 adds support for disabling AHB and enabling IP read only using a
+> quirk which is later used by patch3 and patch4.
+> 
+> Patch3 and Patch4 are not related to each and are rather dependent on
+> patch1 and that's why I kept them in series. This also helps in easy
+> application of series.
+> 
+> [...]
 
---2Z2K0IlrPCVsbNpk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Wed, Mar 03, 2021 at 11:16:39AM +0200, Andy Shevchenko wrote:
-> Introduce module_parport_driver() and use it.
-> Greg or Mark, since we have this series tagged, can somebody of you pick it up?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Greg, are you OK with me applying this?
+Thanks!
 
---2Z2K0IlrPCVsbNpk
-Content-Type: application/pgp-signature; name="signature.asc"
+[1/4] spi: spi-nxp-fspi: Add support for IP read only
+      commit: 1e1c30db2ccba3ec891e683f5e8eca2aca6238eb
+[2/4] dt-bindings: spi: spi-nxp-fspi: Add imx8dxl support
+      commit: a53a9159a6774b393bb4b620430328940fa853b8
+[3/4] spi: spi-nxp-fspi: Add imx8dxl driver support
+      commit: 99a6a399a61e95cd6639453f87d5c96a121dec07
+[4/4] spi: spi-nxp-fspi: Implement errata workaround for LS1028A
+      commit: 94f302f374b4544fa4d84526569f884ebb008f4d
 
------BEGIN PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmA/8H8ACgkQJNaLcl1U
-h9B45Qf/Sqb09N87wbsEpeYUOOY8kyQrdv8nbqrSyTDFuZ3rBies2Zuw//T43SKI
-RqZmWxyBe/+BrsGEutC/uAV9zmT7HS2m7Swa6+zK8neQFCSdByKAktpnlfAcitul
-Q+k3utLpDj8mNvpz1693rRikopZGX7o9kjcn4hP5p5Ds9RoZPOhnHGFDM31gmGTy
-ky1iXC82GEi/Kf+IVdLOKr0rvHYWjyynfQBDPAZvFhtB5fCtAU39vKeiL1A3c8z/
-PfIDMuNC6of/e7IZAkDNZ6mHL52fE/35jqS6UOW1a7vToWfGY1aQ9njzQu52k5jW
-X2nRcs00YTzr+PyohhrjwhCXthFymw==
-=wg95
------END PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---2Z2K0IlrPCVsbNpk--
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
