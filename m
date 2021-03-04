@@ -2,76 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D752632D97C
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Mar 2021 19:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D1832DA78
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Mar 2021 20:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbhCDSdQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 4 Mar 2021 13:33:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59038 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233441AbhCDSc4 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 4 Mar 2021 13:32:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 93F4264F62;
-        Thu,  4 Mar 2021 18:32:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614882736;
-        bh=H1MGf+9DPpMfGJa2izpM3w8GZ1XcL+dT9Sxx86sYOc4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=GohWxrr9kwfjDxKuv5navLQvLk8COE/3Mu74Qzg9NjmXVkCyNxFnUxL0G7VftjvUz
-         JzRM2RwhXYCfj3re5K5C4540BfPlZYa6GkcVvKOQvhmnV3eN8zA9DlLv86BzjW1+7Z
-         nVaojxuX4JliLy3NNv4pAdIHASGrP1d11pfP8HH7yZbX7m4W+3qoPDhGDaCXUZsGRn
-         iHHBPNz5KBK9pBDtwzYdzHTVc6N3fDmd3XkSmSza61ZjToVcPM05nQOLO56S8sP7hG
-         VqJBPFNqCPFnVq62bTP+/aKDTnvphvpqdHhY71e526G4c6Cu07Hnh5y333hrF5MpK8
-         ocpMBb7UC4VoA==
-From:   Mark Brown <broonie@kernel.org>
-To:     David Bauer <mail@david-bauer.net>
-Cc:     linux-spi@vger.kernel.org
-In-Reply-To: <20210303160837.165771-1-mail@david-bauer.net>
-References: <20210303160837.165771-1-mail@david-bauer.net>
-Subject: Re: [PATCH 1/2] spi: ath79: always call chipselect function
-Message-Id: <161488266862.55981.13951450710640989938.b4-ty@kernel.org>
-Date:   Thu, 04 Mar 2021 18:31:08 +0000
+        id S231202AbhCDTgT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 4 Mar 2021 14:36:19 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:53700 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233561AbhCDTgP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Mar 2021 14:36:15 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 124JYToM121432;
+        Thu, 4 Mar 2021 13:34:29 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1614886469;
+        bh=lF0mQ5MhA2gJ1UfDZX2ECvmj+tO2BOviRmsIssFGgDs=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=xqoWjfnMH38CtxwUzyVEBMuVzY6as8fblOPuh25JxtPNgeZRUrD7+6HtQA7rfzQYX
+         wx4mMgLShcpXACNmlhlsufB869xNEO7ty6h2EodDKixLFLdDT2jlRUgbsdbGafSAiR
+         o1qGmFBqm7vogR61xAEGhRHK9uYvpenKaCBgGens=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 124JYTl2126840
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 4 Mar 2021 13:34:29 -0600
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 4 Mar
+ 2021 13:34:28 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 4 Mar 2021 13:34:28 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 124JYRAN036390;
+        Thu, 4 Mar 2021 13:34:28 -0600
+Date:   Fri, 5 Mar 2021 01:04:27 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+CC:     Jay Fang <f.fangjian@huawei.com>, <linux-spi@vger.kernel.org>,
+        <broonie@kernel.org>, <huangdaode@huawei.com>
+Subject: Re: [PATCH] spi: cadence-quadspi: Silence shiftTooManyBitsSigned
+ warning
+Message-ID: <20210304193427.rdtu75tv6invjq2d@ti.com>
+References: <1614854872-8694-1-git-send-email-f.fangjian@huawei.com>
+ <20210304130845.GE2222@kadam>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20210304130845.GE2222@kadam>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 3 Mar 2021 17:08:36 +0100, David Bauer wrote:
-> spi-bitbang has to call the chipselect function on the ath79 SPI driver
-> in order to communicate with the SPI slave device, as the ath79 SPI
-> driver has three dedicated chipselect lines but can also be used with
-> GPIOs for the CS lines.
+On 04/03/21 04:08PM, Dan Carpenter wrote:
+> On Thu, Mar 04, 2021 at 06:47:52PM +0800, Jay Fang wrote:
+> > drivers/spi/spi-cadence-quadspi.c:267:18: warning: Shifting signed 32-bit
+> > value by 31 bits is undefined behaviour [shiftTooManyBitsSigned]
+> >     return reg & (1 << CQSPI_REG_CONFIG_IDLE_LSB);
+> >                     ^
+> > 
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > Signed-off-by: Jay Fang <f.fangjian@huawei.com>
+> > ---
+> >  drivers/spi/spi-cadence-quadspi.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+> > index 442cc7c..9a2798a5 100644
+> > --- a/drivers/spi/spi-cadence-quadspi.c
+> > +++ b/drivers/spi/spi-cadence-quadspi.c
+> > @@ -264,7 +264,7 @@ static bool cqspi_is_idle(struct cqspi_st *cqspi)
+> >  {
+> >  	u32 reg = readl(cqspi->iobase + CQSPI_REG_CONFIG);
+> >  
+> > -	return reg & (1 << CQSPI_REG_CONFIG_IDLE_LSB);
+> > +	return reg & (1UL << CQSPI_REG_CONFIG_IDLE_LSB);
 > 
-> Fixes commit 4a07b8bcd503 ("spi: bitbang: Make chipselect callback optional")
+> This is always going to be false because reg is a u32.
 
-Applied to
+Hmm... I don't see why it would always be false. reg would promoted to 
+unsigned long and the result should then depend on the actual value of 
+the bit, which can be represented by an unsigned long. There is no loss 
+of information.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Anyway, it still makes more sense to make it 1U because reg is u32. Just 
+keep the types same and avoid all the conversion rules.
 
-Thanks!
-
-[1/2] spi: ath79: always call chipselect function
-      commit: 49fb4b971bac8e88070d8b6ea34fbdb57ca80cf6
-[2/2] spi: ath79: remove spi-master setup and cleanup assignment
-      commit: 6a7e4db6eb8930a26469200a8b2e5bda7ca773fb
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
