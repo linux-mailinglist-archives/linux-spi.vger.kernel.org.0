@@ -2,104 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD8E32DB63
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Mar 2021 21:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2AC432E51C
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Mar 2021 10:43:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237209AbhCDUs5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 4 Mar 2021 15:48:57 -0500
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:43146 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235648AbhCDUsc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Mar 2021 15:48:32 -0500
-Received: by mail-ot1-f46.google.com with SMTP id v12so27544423ott.10;
-        Thu, 04 Mar 2021 12:48:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=2OoGTJOyct6c2S8dv3hmx3zLqIL0twuJ2fEgd59m/TU=;
-        b=VZwxrZ5bA/QdC0MS7WdX3QbMN4hfMXIkI1TDesxNvVMN9KMYmCs9WJ5ncBEJLb1ftw
-         DzinOM30H/PZDFCU0sT/rnikrq1FimmdCG2kYyCVe1L34kg0TKlkKgo6d01bPu37R199
-         VMfZ8Uy7Kjozo/YAhG276N7VE9L8D79n73nZpZYBd9GF3lXeDN+Bi/MtpOMXz2zIBnMn
-         fDS3fJfOtlVorTkoX80VqrZqSYTy8Sk8395FIYmlJAaNU6aL8MsEl3Eeg79HIIgjfTHW
-         9rpSjC10ZMBhQxWZQzCydSZYm9+LQy+GpTLvNETUN5JctwnGehOR7msuvRu1ypPTi3zO
-         tokA==
-X-Gm-Message-State: AOAM533Oc+d6wXDAKp/4x/uIDHq7TYldc31r18I1GJiUOJ6qNcbQenFB
-        1c246niHGvmEYpJLQz4alg==
-X-Google-Smtp-Source: ABdhPJzd3nJvYXZhRJFS+SMlJsLzkWd0UMzd0TMfhc3TUuc6jKDJCflKn9KZ8VetSGIqdeybqOJ9ew==
-X-Received: by 2002:a9d:3422:: with SMTP id v31mr653634otb.260.1614890871544;
-        Thu, 04 Mar 2021 12:47:51 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id t4sm98452ooh.4.2021.03.04.12.47.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Mar 2021 12:47:50 -0800 (PST)
-Received: (nullmailer pid 2778955 invoked by uid 1000);
-        Thu, 04 Mar 2021 20:47:29 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Brad Larson <brad@pensando.io>
-Cc:     arnd@arndb.de, linux-spi@vger.kernel.org,
-        bgolaszewski@baylibre.com, adrian.hunter@intel.com,
-        ulf.hansson@linaro.org, linus.walleij@linaro.org,
-        broonie@kernel.org, olof@lixom.net, devicetree@vger.kernel.org,
-        fancer.lancer@gmail.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-In-Reply-To: <20210304034141.7062-8-brad@pensando.io>
-References: <20210304034141.7062-1-brad@pensando.io> <20210304034141.7062-8-brad@pensando.io>
-Subject: Re: [PATCH 7/8] arm64: dts: Add Pensando Elba SoC support
-Date:   Thu, 04 Mar 2021 14:47:29 -0600
-Message-Id: <1614890849.092166.2778954.nullmailer@robh.at.kernel.org>
+        id S229464AbhCEJnZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 Mar 2021 04:43:25 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:46662 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229517AbhCEJnF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 Mar 2021 04:43:05 -0500
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 1259TIqx186143;
+        Fri, 5 Mar 2021 09:42:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=PCNF0maNKEy5JAKfPPEFutJHU2aFpiWvTLmNBjcWJGs=;
+ b=gvHZ0oPYQjb0Bcp1bN0RGnawa7vAgd8Bo/RbcI1FSmJSsmkueoGGoDY964LoY9slhgr0
+ 5JfkDOSfZwSYNn1BrQ9rO4EgESUWLMnz7ChNTg2sE25NYh4o+gA7bBmgi+zDqrl4eUhC
+ kMuvkB4qaNdTdbLR3KD8DfECgKESaEfd0ciOdrH9AJr9lsSKXlGrhZ5/BE2r01xe4yf+
+ capvmOexNp260UDq+1zggdaLzY7VQM0UL5cQBhHnR0zMgvS+lU9T4iCPky7ci5KwSzID
+ Rn2TfBg6pkfBTrwxVJ51m2Ao9Sq3U3kZFvzUbBuxsqoA0vSNfFOOynzoORFY6GYo4Tjq PA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2130.oracle.com with ESMTP id 36ybkbhy52-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 05 Mar 2021 09:42:54 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 1259V9IP082732;
+        Fri, 5 Mar 2021 09:42:52 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 3700121a2j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 05 Mar 2021 09:42:52 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 1259goug017448;
+        Fri, 5 Mar 2021 09:42:50 GMT
+Received: from kadam (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 05 Mar 2021 09:42:49 +0000
+Date:   Fri, 5 Mar 2021 12:42:42 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Jay Fang <f.fangjian@huawei.com>, linux-spi@vger.kernel.org,
+        broonie@kernel.org, huangdaode@huawei.com
+Subject: Re: [PATCH] spi: cadence-quadspi: Silence shiftTooManyBitsSigned
+ warning
+Message-ID: <20210305094242.GH2222@kadam>
+References: <1614854872-8694-1-git-send-email-f.fangjian@huawei.com>
+ <20210304130845.GE2222@kadam>
+ <20210304193427.rdtu75tv6invjq2d@ti.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210304193427.rdtu75tv6invjq2d@ti.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-IMR: 1
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9913 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 phishscore=0
+ malwarescore=0 spamscore=0 mlxlogscore=999 suspectscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2103050046
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9913 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 impostorscore=0
+ suspectscore=0 phishscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0
+ clxscore=1011 mlxlogscore=999 adultscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103050046
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 03 Mar 2021 19:41:40 -0800, Brad Larson wrote:
-> Add Pensando common and Elba SoC specific device nodes
-> and corresponding binding documentation.
+On Fri, Mar 05, 2021 at 01:04:27AM +0530, Pratyush Yadav wrote:
+> On 04/03/21 04:08PM, Dan Carpenter wrote:
+> > On Thu, Mar 04, 2021 at 06:47:52PM +0800, Jay Fang wrote:
+> > > drivers/spi/spi-cadence-quadspi.c:267:18: warning: Shifting signed 32-bit
+> > > value by 31 bits is undefined behaviour [shiftTooManyBitsSigned]
+> > >     return reg & (1 << CQSPI_REG_CONFIG_IDLE_LSB);
+> > >                     ^
+> > > 
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > > Signed-off-by: Jay Fang <f.fangjian@huawei.com>
+> > > ---
+> > >  drivers/spi/spi-cadence-quadspi.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+> > > index 442cc7c..9a2798a5 100644
+> > > --- a/drivers/spi/spi-cadence-quadspi.c
+> > > +++ b/drivers/spi/spi-cadence-quadspi.c
+> > > @@ -264,7 +264,7 @@ static bool cqspi_is_idle(struct cqspi_st *cqspi)
+> > >  {
+> > >  	u32 reg = readl(cqspi->iobase + CQSPI_REG_CONFIG);
+> > >  
+> > > -	return reg & (1 << CQSPI_REG_CONFIG_IDLE_LSB);
+> > > +	return reg & (1UL << CQSPI_REG_CONFIG_IDLE_LSB);
+> > 
+> > This is always going to be false because reg is a u32.
 > 
-> Signed-off-by: Brad Larson <brad@pensando.io>
-> ---
->  .../bindings/gpio/pensando,elba-spics.txt     |  24 ++
->  .../devicetree/bindings/mmc/cdns,sdhci.yaml   |   2 +-
->  .../bindings/spi/cadence-quadspi.txt          |   1 +
->  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
->  arch/arm64/boot/dts/Makefile                  |   1 +
->  arch/arm64/boot/dts/pensando/Makefile         |   6 +
->  arch/arm64/boot/dts/pensando/elba-16core.dtsi | 171 ++++++++++
->  .../boot/dts/pensando/elba-asic-common.dtsi   | 113 +++++++
->  arch/arm64/boot/dts/pensando/elba-asic.dts    |   8 +
->  .../boot/dts/pensando/elba-flash-parts.dtsi   |  80 +++++
->  arch/arm64/boot/dts/pensando/elba.dtsi        | 310 ++++++++++++++++++
->  11 files changed, 717 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/devicetree/bindings/gpio/pensando,elba-spics.txt
->  create mode 100644 arch/arm64/boot/dts/pensando/Makefile
->  create mode 100644 arch/arm64/boot/dts/pensando/elba-16core.dtsi
->  create mode 100644 arch/arm64/boot/dts/pensando/elba-asic-common.dtsi
->  create mode 100644 arch/arm64/boot/dts/pensando/elba-asic.dts
->  create mode 100644 arch/arm64/boot/dts/pensando/elba-flash-parts.dtsi
->  create mode 100644 arch/arm64/boot/dts/pensando/elba.dtsi
+> Hmm... I don't see why it would always be false. reg would promoted to 
+> unsigned long and the result should then depend on the actual value of 
+> the bit, which can be represented by an unsigned long. There is no loss 
+> of information.
 > 
+> Anyway, it still makes more sense to make it 1U because reg is u32. Just 
+> keep the types same and avoid all the conversion rules.
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Ah, crap.  I'm sorry.  I somehow thought when I forwarded this bug the
+other day that CQSPI_REG_CONFIG_IDLE_LSB was more than 31.
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/cdns,sdhci.example.dt.yaml: mmc@5a000000: compatible: ['socionext,uniphier-sd4hc', 'cdns,sd4hc', 'pensando,elba-emmc'] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/cdns,sdhci.example.dt.yaml: mmc@5a000000: compatible: Additional items are not allowed ('pensando,elba-emmc' was unexpected)
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-
-See https://patchwork.ozlabs.org/patch/1447072
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+regards,
+dan carpenter
 
