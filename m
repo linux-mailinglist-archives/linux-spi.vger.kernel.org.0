@@ -2,97 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E0A32ECAC
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Mar 2021 14:58:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0763D330230
+	for <lists+linux-spi@lfdr.de>; Sun,  7 Mar 2021 15:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbhCEN5y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 5 Mar 2021 08:57:54 -0500
-Received: from mail-vs1-f47.google.com ([209.85.217.47]:44872 "EHLO
-        mail-vs1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbhCEN5m (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 5 Mar 2021 08:57:42 -0500
-Received: by mail-vs1-f47.google.com with SMTP id d25so980988vsr.11;
-        Fri, 05 Mar 2021 05:57:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Wlv2raXctHckbeXP1zL3FcneicW28YXK69//DrBPOK4=;
-        b=tdtJrAcUbrToxEtM2TRpna6tv9k49Qr/0H9WtkYttdTOYj6CN3dp+UB5Ucetd1bKjk
-         GXFaYQbbqecZdU35Dvyqv+LmI7fTJVAkFOfUANigRmecnyEsfWelVRKHJheGjYf55dOX
-         PyhZ0s2eztf8hwARqLMvAyzOJwMKVw9d+UeNl0bAJaMH217Mu8QL1Z6LABbyY0+T8aiY
-         wB+1mN1OaM9tuHaeQPCPbcd8r5DV1yoZyJMDPc6K3Ur7RRZJo6LdqDrgtrubJYN4URE7
-         N5LN6zMn26rUYmWpZR/EU8yd5XaIp5Ps1YuFEKL16DvjjxDF6PgeanHcgjoon848MmXo
-         DARw==
-X-Gm-Message-State: AOAM5308ati/nniXK1f5EIDApuzGNIPgI61n2jMqKf2iZwqWjw3ugosi
-        heaaV7AZObceHa+BJl9aotSWN254ZcoSUi933V8=
-X-Google-Smtp-Source: ABdhPJw0V2g02eK+sAULP8zrVz/fuz3tVVUfaWr3omUwlkrp6fuCKZw8yaHGFawnjKLWZ05hjvKPz2X/m7/k7/1fOYg=
-X-Received: by 2002:a05:6102:2403:: with SMTP id j3mr5822400vsi.40.1614952661682;
- Fri, 05 Mar 2021 05:57:41 -0800 (PST)
+        id S230476AbhCGOoA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 7 Mar 2021 09:44:00 -0500
+Received: from bmailout3.hostsharing.net ([176.9.242.62]:46247 "EHLO
+        bmailout3.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231249AbhCGOnZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 7 Mar 2021 09:43:25 -0500
+X-Greylist: delayed 404 seconds by postgrey-1.27 at vger.kernel.org; Sun, 07 Mar 2021 09:43:25 EST
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 33805100D9410;
+        Sun,  7 Mar 2021 15:36:37 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id E9B45105B5; Sun,  7 Mar 2021 15:36:36 +0100 (CET)
+Date:   Sun, 7 Mar 2021 15:36:36 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Jay Fang <f.fangjian@huawei.com>
+Cc:     linux-spi@vger.kernel.org, broonie@kernel.org,
+        huangdaode@huawei.com
+Subject: Re: [PATCH] spi: Add HiSilicon SPI controller driver support
+Message-ID: <20210307143636.GA10974@wunner.de>
+References: <1614599771-33629-1-git-send-email-f.fangjian@huawei.com>
 MIME-Version: 1.0
-References: <20210304034141.7062-1-brad@pensando.io> <20210304034141.7062-2-brad@pensando.io>
-In-Reply-To: <20210304034141.7062-2-brad@pensando.io>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 5 Mar 2021 14:57:30 +0100
-Message-ID: <CAMuHMdUsFb-qpssVXkxv0gV8qpi6mUNx+3o+ZUhc5UMCKppzrQ@mail.gmail.com>
-Subject: Re: [PATCH 1/8] gpio: Add Elba SoC gpio driver for spi cs control
-To:     Brad Larson <brad@pensando.io>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1614599771-33629-1-git-send-email-f.fangjian@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Brad,
-
-On Thu, Mar 4, 2021 at 4:59 AM Brad Larson <brad@pensando.io> wrote:
-> This GPIO driver is for the Pensando Elba SoC which
-> provides control of four chip selects on two SPI busses.
->
-> Signed-off-by: Brad Larson <brad@pensando.io>
-
-Thanks for your patch!
-
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -241,6 +241,12 @@ config GPIO_EIC_SPRD
->         help
->           Say yes here to support Spreadtrum EIC device.
->
-> +config GPIO_ELBA_SPICS
-> +       bool "Pensando Elba SPI chip-select"
-> +       depends on ARCH_PENSANDO_ELBA_SOC
-
-Any specific reason this can't be "... || COMPILE_TEST"?
-
-> +       help
-> +         Say yes here to support the Pensndo Elba SoC SPI chip-select driver
+On Mon, Mar 01, 2021 at 07:56:11PM +0800, Jay Fang wrote:
+> +static int hisi_spi_setup(struct spi_device *spi)
+> +{
+> +	struct hisi_spi *hs = spi_controller_get_devdata(spi->controller);
+> +	struct hisi_chip_data *chip;
 > +
->  config GPIO_EM
->         tristate "Emma Mobile GPIO"
->         depends on (ARCH_EMEV2 || COMPILE_TEST) && OF_GPIO
+> +	/* Only alloc on first setup */
+> +	chip = spi_get_ctldata(spi);
+> +	if (!chip) {
+> +		chip = kzalloc(sizeof(*chip), GFP_KERNEL);
+> +		if (!chip)
+> +			return -ENOMEM;
+> +		spi_set_ctldata(spi, chip);
+> +	}
+[...]
+> +	master = devm_spi_alloc_master(dev, 0);
 
-Gr{oetje,eeting}s,
+It would seem simpler to just pass "sizeof struct hisi_chip_data"
+to devm_spi_alloc_master(), thus obviating the need to allocate
+it on first incocation of the ->setup hook.
 
-                        Geert
+Thanks,
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Lukas
