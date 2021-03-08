@@ -2,103 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02948331426
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Mar 2021 18:08:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4EE63315C0
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Mar 2021 19:19:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbhCHRHu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Mar 2021 12:07:50 -0500
-Received: from www381.your-server.de ([78.46.137.84]:56058 "EHLO
-        www381.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbhCHRHZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Mar 2021 12:07:25 -0500
-X-Greylist: delayed 1515 seconds by postgrey-1.27 at vger.kernel.org; Mon, 08 Mar 2021 12:07:24 EST
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-         s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=TzaqzNZ5/Fp8lTYyeKtH9GBmnc2sIncwn71iQvdnlBA=; b=fQ5ZX63LM3J4j/xr/WKkGBW97u
-        pLCR+JdYGE5oAFeNLpqhzoYZmzEKLwmerJmarikSJ/sHl9o8wvZ/OUOLPnFqLa/cuV/+wxylNSzb9
-        wnb1a7viLJ4fXVqTqDEixl3P4vzVN/a0CT71oj3R1+4sMNkkZDHKM6yNyRSGN+uey08bF2pURA5pC
-        guXumxSvr4e2ALghBd4BLRxe+WEW6wgx+atUQHIZu09Jp6F+x5o9a8QZ1hXwqqKh1eQXcYxrfUtzn
-        SxC76aTOTVL0RbTfdN1Cis0i0MP87mmnfPGihVQuiPDfKroXcsrM68S9pqDeYVpGVi+VbgAomQ+Oq
-        uFrjkRwQ==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www381.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <lars@metafoo.de>)
-        id 1lJIxL-0007HI-1U; Mon, 08 Mar 2021 17:42:07 +0100
-Received: from [62.216.202.180] (helo=[192.168.178.20])
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1lJIxK-000WTg-OM; Mon, 08 Mar 2021 17:42:06 +0100
-Subject: Re: [PATCH 01/10] spi: spi-axi-spi-engine: remove usage of
- delay_usecs
-To:     Alexandru Ardelean <aardelean@deviqon.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        greybus-dev@lists.linaro.org, devel@driverdev.osuosl.org,
-        linux-tegra@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com
-Cc:     broonie@kernel.org, gregkh@linuxfoundation.org, elder@kernel.org,
-        johan@kernel.org, vireshk@kernel.org, rmfrfs@gmail.com,
-        f.fainelli@gmail.com, ldewangan@nvidia.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, linux@deviqon.com
-References: <20210308145502.1075689-1-aardelean@deviqon.com>
- <20210308145502.1075689-2-aardelean@deviqon.com>
-From:   Lars-Peter Clausen <lars@metafoo.de>
-Message-ID: <8a6ec9a1-71f8-ce1d-600a-66eba9244a54@metafoo.de>
-Date:   Mon, 8 Mar 2021 17:42:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S231153AbhCHSTO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Mar 2021 13:19:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230212AbhCHSSr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Mar 2021 13:18:47 -0500
+X-Greylist: delayed 99728 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 08 Mar 2021 10:18:47 PST
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D2F2C06174A
+        for <linux-spi@vger.kernel.org>; Mon,  8 Mar 2021 10:18:47 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 5E556100D9419;
+        Mon,  8 Mar 2021 19:18:39 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 2E21F1F80A8; Mon,  8 Mar 2021 19:18:39 +0100 (CET)
+Date:   Mon, 8 Mar 2021 19:18:39 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Jay Fang <f.fangjian@huawei.com>, linux-spi@vger.kernel.org,
+        huangdaode@huawei.com
+Subject: Re: [PATCH] spi: Add HiSilicon SPI controller driver support
+Message-ID: <20210308181839.GA6444@wunner.de>
+References: <1614599771-33629-1-git-send-email-f.fangjian@huawei.com>
+ <20210301135405.GC4628@sirena.org.uk>
+ <20210307144313.GA15472@wunner.de>
+ <20210308141101.GC4656@sirena.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <20210308145502.1075689-2-aardelean@deviqon.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.102.4/26102/Mon Mar  8 13:03:13 2021)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210308141101.GC4656@sirena.org.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 3/8/21 3:54 PM, Alexandru Ardelean wrote:
-> The 'delay_usecs' field was handled for backwards compatibility in case
-> there were some users that still configured SPI delay transfers with
-> this field.
->
-> They should all be removed by now.
->
-> Signed-off-by: Alexandru Ardelean <aardelean@deviqon.com>
-> ---
->   drivers/spi/spi-axi-spi-engine.c | 12 ++++--------
->   1 file changed, 4 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-engine.c
-> index af86e6d6e16b..80c3e38f5c1b 100644
-> --- a/drivers/spi/spi-axi-spi-engine.c
-> +++ b/drivers/spi/spi-axi-spi-engine.c
-> @@ -170,14 +170,10 @@ static void spi_engine_gen_sleep(struct spi_engine_program *p, bool dry,
->   	unsigned int t;
->   	int delay;
->   
-> -	if (xfer->delay_usecs) {
-> -		delay = xfer->delay_usecs;
-> -	} else {
-> -		delay = spi_delay_to_ns(&xfer->delay, xfer);
-> -		if (delay < 0)
-> -			return;
-> -		delay /= 1000;
-> -	}
-> +	delay = spi_delay_to_ns(&xfer->delay, xfer);
-> +	if (delay < 0)
-> +		return;
+On Mon, Mar 08, 2021 at 02:11:01PM +0000, Mark Brown wrote:
+> On Sun, Mar 07, 2021 at 03:43:13PM +0100, Lukas Wunner wrote:
+> > Transfers may still be ongoing until spi_unregister_controller() returns.
+> > (It's called from devres_release_all() in this case.)  Since the IRQ is
+> > presumably necessary to handle those transfers, freeing the IRQ after
+> > unregistering is actually correct.  So the code looks fine in principle.
+> > However, because the IRQ is requested with IRQF_SHARED, the handler may
+> > be invoked at any time, even after the controller has been unregistered.
+> > It is therefore necessary to quiesce the SPI controller's interrupt on
+> > unregistering and it is also necessary to check in the IRQ handler whether
+> > an interrupt is actually pending (and bail out if not).
+> 
+> It's also important and even more of a concern that even if there is a
+> valid interrupt the handler doesn't try to use structures that might
+> have been deallocated before the handler uses it as this controller
+> does, that will segfault which is more serious.
 
-Bit of a nit, but this could be `delay <= 0` and then drop the check for 
-`delay == 0` below.
+At least struct spi_controller and struct hisi_spi are allocated with
+devm_*() before the call to devm_request_irq(), hence those two
+are always accessible from the IRQ handler AFAICS.
 
-> +	delay /= 1000;
->   
->   	if (delay == 0)
->   		return;
+Thanks,
 
-
+Lukas
