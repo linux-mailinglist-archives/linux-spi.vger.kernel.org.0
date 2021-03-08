@@ -2,141 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5269330C44
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Mar 2021 12:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9C34331084
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Mar 2021 15:12:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbhCHLYe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Mar 2021 06:24:34 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:3350 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbhCHLYS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Mar 2021 06:24:18 -0500
-Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4DvGBy3mmqz5Yq9;
-        Mon,  8 Mar 2021 19:22:02 +0800 (CST)
-Received: from [127.0.0.1] (10.40.188.234) by dggeme758-chm.china.huawei.com
- (10.3.19.104) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2106.2; Mon, 8 Mar
- 2021 19:24:15 +0800
+        id S230111AbhCHOM2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Mar 2021 09:12:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40044 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231307AbhCHOMM (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 8 Mar 2021 09:12:12 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D8C6E650F2;
+        Mon,  8 Mar 2021 14:12:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615212732;
+        bh=TpYHSv5nK8/7K9g1DZ6mZmGpQI/dDZxeoiKf7FDZj7k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s1Trenm8s5+P7MTFrWH3/PL8Ph7ExbOVf3gDt+TPUTnRzOVI1S008+zqRfwmUuu9L
+         zKKVz67Bjgmuf+6vyZr9K/7hIjO2ZtcCeB6vMAtS/g2zzPa5S7mRjaLNpMb+XTUA2X
+         UYCpckQ4JJG7vnCoOAJbHqqYq4GBu0MzzKf5Nym/+T7w7k8EzLRhpLANDETtHbD3kZ
+         qvp5i8eVegFI+ybyq19MCPIjij0lOXDVsKZT36xeO45Ws8N90SIo+ztYlAbbE3ZQhG
+         nKkBffD41siP/MlC7FZoRr13Y/kGIrOh0K7M34uSVBP0AFWUZv0Lleb/Angctd3dsV
+         /YKN+oQvIHfjw==
+Date:   Mon, 8 Mar 2021 14:11:01 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Jay Fang <f.fangjian@huawei.com>, linux-spi@vger.kernel.org,
+        huangdaode@huawei.com
 Subject: Re: [PATCH] spi: Add HiSilicon SPI controller driver support
-To:     Mark Brown <broonie@kernel.org>
-CC:     <linux-spi@vger.kernel.org>, <huangdaode@huawei.com>,
-        <linuxarm@huawei.com>
+Message-ID: <20210308141101.GC4656@sirena.org.uk>
 References: <1614599771-33629-1-git-send-email-f.fangjian@huawei.com>
  <20210301135405.GC4628@sirena.org.uk>
- <79a0bb79-654b-8afc-f34a-c3a08bae275c@huawei.com>
- <20210304123425.GA4731@sirena.org.uk>
-From:   Jay Fang <f.fangjian@huawei.com>
-Message-ID: <88de0bfa-c0a5-f2b9-ab10-bc163e36d92a@huawei.com>
-Date:   Mon, 8 Mar 2021 19:24:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+ <20210307144313.GA15472@wunner.de>
 MIME-Version: 1.0
-In-Reply-To: <20210304123425.GA4731@sirena.org.uk>
-Content-Type: text/plain; charset="windows-1252"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.40.188.234]
-X-ClientProxiedBy: dggeme701-chm.china.huawei.com (10.1.199.97) To
- dggeme758-chm.china.huawei.com (10.3.19.104)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="eRtJSFbw+EEWtPj3"
+Content-Disposition: inline
+In-Reply-To: <20210307144313.GA15472@wunner.de>
+X-Cookie: Am I SHOPLIFTING?
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Dear Mark,
 
-On 2021/3/4 20:34, Mark Brown wrote:
-> On Thu, Mar 04, 2021 at 10:54:40AM +0800, Fangjian (Jay) wrote:
->> On 2021/3/1 21:54, Mark Brown wrote:
->>> On Mon, Mar 01, 2021 at 07:56:11PM +0800, Jay Fang wrote:
-> 
->>>> +/* Disable IRQ bits */
->>>> +static void hisi_spi_mask_intr(struct hisi_spi *hs, u32 mask)
->>>> +{
->>>> +	u32 new_mask;
->>>> +
->>>> +	new_mask = readl(hs->regs + HISI_SPI_IMR) | mask;
->>>> +	writel(new_mask, hs->regs + HISI_SPI_IMR);
->>>> +}
-> 
->>> This is a read/modify/write cycle and appears to be called from at least
->>> process and interrupt context but I'm not seeing anything that stops two
->>> different callers of it or the matching unmask function from running at
->>> the same time.
-> 
->> Those mask/unmask will not be called at the same time from process and
->> interrupt context. In process context, unmask will be called after SPI
->> controller be Disable and Flush (interrupt handing has ended).
-> 
-> Given that this is disabling the interrupt that doesn't sound like it's
-> going to be entirely robust - if we need to disable the interrupt
-> presumably there's some chance it might fire.
+--eRtJSFbw+EEWtPj3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> +
-> +	/* Disable is needed to deal with transfer timeout */
-> +	hisi_spi_disable(hs);
-> +
-> +	hisi_spi_flush_fifo(hs);
-> +	hisi_spi_update_cr(hs, spi, transfer);
-Especially given this, if there may be some left over operations going
-on elsewhere might there be races due to that?  I'm also wondering if
-it's faster to just reset the controller as is done in some error
-handling paths. (Mark)
+On Sun, Mar 07, 2021 at 03:43:13PM +0100, Lukas Wunner wrote:
+> On Mon, Mar 01, 2021 at 01:54:05PM +0000, Mark Brown wrote:
+> > On Mon, Mar 01, 2021 at 07:56:11PM +0800, Jay Fang wrote:
 
-As the previous review said, would it be better to reset controller
-and waiting for interrupt to complete in error handling paths?
-As shown in the code below.
+> > > +	ret = devm_request_irq(dev, hs->irq, hisi_spi_irq, IRQF_SHARED,
+> > > +				dev_name(dev), master);
+> > > +	if (ret < 0) {
+> > > +		dev_err(dev, "failed to get IRQ=%d, ret=%d\n", hs->irq, ret);
+> > > +		return ret;
+> > > +	}
 
-	static void hisi_spi_handle_err(struct spi_controller *master,
-		struct spi_message *msg)
-	{
-		struct hisi_spi *hs = spi_controller_get_devdata(master);
+> > This will free the IRQ *after* the controller is unregistered, it's
+> > better to manually free the interrupt
 
-		hisi_spi_reset(hs);
-		hisi_spi_flush_fifo(hs);
+> Transfers may still be ongoing until spi_unregister_controller() returns.
+> (It's called from devres_release_all() in this case.)  Since the IRQ is
+> presumably necessary to handle those transfers, freeing the IRQ after
+> unregistering is actually correct.  So the code looks fine in principle.
 
-		/*
-		 * Wait for interrupt handler that is
-		 * already in timeout to complete.
-		 */
-		synchronize_irq(hs->irq);
-	}
+Well, it should just time out which is annoying.
 
-This ensures that the new transfer will not start until the previous
-transfer is completed. And we don't need to disable the controller
-every time before data transfer.
+> However, because the IRQ is requested with IRQF_SHARED, the handler may
+> be invoked at any time, even after the controller has been unregistered.
+> It is therefore necessary to quiesce the SPI controller's interrupt on
+> unregistering and it is also necessary to check in the IRQ handler whether
+> an interrupt is actually pending (and bail out if not).
 
+It's also important and even more of a concern that even if there is a
+valid interrupt the handler doesn't try to use structures that might
+have been deallocated before the handler uses it as this controller
+does, that will segfault which is more serious.
 
-Thanks
-Jay
+--eRtJSFbw+EEWtPj3
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
->>>> +	struct hisi_spi *hs = spi_controller_get_devdata(master);
->>>> +
->>>> +	hs->n_bytes = hisi_spi_n_bytes(transfer);
->>>> +	hs->tx = (void *)transfer->tx_buf;
->>> If there's a need to cast to void * something is very wrong here.
-> 
->> Yes, fix compile warning.
-> 
-> This cast just masks whatever the problem is, if the compiler is
-> complaining about using a void pointer it's spotted an issue.
-Will fix.
-> 
->>>> +	/* Ensure the data above is visible for all CPUs */
->>>> +	smp_mb();
-> 
->>> This memory barrier seems worrying...  are you *sure* this is the best
->>> way to sync, and that the sync is best done here if it is needed rather
->>> than after everything else is set up?
-> 
->> The commit 0b6bfad ("spi: spi-dw: Remove extraneous locking") explains
->> why memory barrier is needed here. And put it here to make it easier to
->> understand.
-> 
-> The reader of this code won't have any kind of pointer to that commit,
-> this needs to be clearer.
-Will fix.
-> 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBGMHUACgkQJNaLcl1U
+h9BKWgf8DT5qM2k5+JsYrmuVeoJbBijnMoT4P90g3dkSSHrfP6+VQdlSTvmLGrRH
+rtIcIfzuuTKYhJGFapWgE71ZPoIW+G12ZKe0ao0hV6Tbvv92ClaYWV7CEYO0i0o6
+PTbpfjmpuEHh1Ld3gXeGbia0Jz/feLq9WCzuGUcRmkj7Nr48grJe1uwoLrAcJ22V
+KVpOTY6hs0cL14wHFtUOdYaC+0nybDc+chRwLxRBja+xoqQhj8V+1MZFoBU91OOH
+NmpOPzbaWJmEz4EBNODbxJbO0WaOpew6r313yaPJeEZLpsAqmkRTAxlnsrpqdxwO
+CSEry5OhUluavwdcMjGHR6U/ZH9tdQ==
+=iimQ
+-----END PGP SIGNATURE-----
 
+--eRtJSFbw+EEWtPj3--
