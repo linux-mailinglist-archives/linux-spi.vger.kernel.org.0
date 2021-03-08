@@ -2,98 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C34331084
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Mar 2021 15:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D51C7331153
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Mar 2021 15:56:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbhCHOM2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Mar 2021 09:12:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40044 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231307AbhCHOMM (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 8 Mar 2021 09:12:12 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D8C6E650F2;
-        Mon,  8 Mar 2021 14:12:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615212732;
-        bh=TpYHSv5nK8/7K9g1DZ6mZmGpQI/dDZxeoiKf7FDZj7k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s1Trenm8s5+P7MTFrWH3/PL8Ph7ExbOVf3gDt+TPUTnRzOVI1S008+zqRfwmUuu9L
-         zKKVz67Bjgmuf+6vyZr9K/7hIjO2ZtcCeB6vMAtS/g2zzPa5S7mRjaLNpMb+XTUA2X
-         UYCpckQ4JJG7vnCoOAJbHqqYq4GBu0MzzKf5Nym/+T7w7k8EzLRhpLANDETtHbD3kZ
-         qvp5i8eVegFI+ybyq19MCPIjij0lOXDVsKZT36xeO45Ws8N90SIo+ztYlAbbE3ZQhG
-         nKkBffD41siP/MlC7FZoRr13Y/kGIrOh0K7M34uSVBP0AFWUZv0Lleb/Angctd3dsV
-         /YKN+oQvIHfjw==
-Date:   Mon, 8 Mar 2021 14:11:01 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Jay Fang <f.fangjian@huawei.com>, linux-spi@vger.kernel.org,
-        huangdaode@huawei.com
-Subject: Re: [PATCH] spi: Add HiSilicon SPI controller driver support
-Message-ID: <20210308141101.GC4656@sirena.org.uk>
-References: <1614599771-33629-1-git-send-email-f.fangjian@huawei.com>
- <20210301135405.GC4628@sirena.org.uk>
- <20210307144313.GA15472@wunner.de>
+        id S231334AbhCHOzi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Mar 2021 09:55:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230212AbhCHOzb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Mar 2021 09:55:31 -0500
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF40C061760
+        for <linux-spi@vger.kernel.org>; Mon,  8 Mar 2021 06:55:27 -0800 (PST)
+Received: by mail-ej1-x642.google.com with SMTP id bm21so20928850ejb.4
+        for <linux-spi@vger.kernel.org>; Mon, 08 Mar 2021 06:55:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=deviqon.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Bnsuh0vq+62rnjm7MYYTgLga5GlY2kr+7IxJtOibpCI=;
+        b=N1FVc8Z2tRKpwYH9fL4HKr6THyo8PevHEbp5v/qmeSlrVfPEeD2O4/S67ivryQUiAm
+         aHbIGxNRQCHxify3UOabLTHBV+N4iuRCqJGz1dioXQpq6yiOrHxiTpU1B2/04j7FeGYD
+         naZAz5C88GdXr02+gdOeKgpp+/vPN5i9r6DE6Jevg/trUbSIPqGOA12rwUmXfk/3xlPE
+         gI2iKvVsLM8N4x4iI6yZvqFllB/T5QTPrEFU/UBhAK6dMYmeo9NL18w9OAUhg5WrdFh7
+         CZRO1vh1Gqqw4UoKII36MvrLn7gDqM6bTGT1nTcvH49iRiMerZw5pVKwtsOJqOAfeb6n
+         C3sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Bnsuh0vq+62rnjm7MYYTgLga5GlY2kr+7IxJtOibpCI=;
+        b=RkEf2Kg8W18AZvtKBGLRxIQteUQcReEd5WBPriVzUi+7XT2MsTQBsNKtMm6G+Zrnc/
+         KhQXafTiXGr3r6T2PC9tJBeXvuV2tdKzOGi1gsZKeD6D18kfMx1T7M1LyqP46yMN+Sj9
+         lVLSw08XlfUtDxidFcA2gkyOZpU63ja3N7QjzRGo4D4DzuSw+LMrzRg/HK3ouTi/6Gqu
+         H8Bv0F3nckkUu4BO7uCsOAouE6YJOImqKqz9EIM76HbxdzIai+oWhWqPaE4u2epPmJnv
+         0KJUesOIJovcA9urduYA1zxQWbW4/684ZAf7jLVNih6JAWIKIyr0WRIfkqMqUaMUy6zA
+         JY/Q==
+X-Gm-Message-State: AOAM531i+2+8RY9RLXqnwVMqiMF6xliCZScmRrjJDO/nyDsvnXQFvJGm
+        627K77Gv+X/xQ9j5xkXv/AEYTQDhWPVcYgZE/DI=
+X-Google-Smtp-Source: ABdhPJycjUzbWfr6Q1XYlchcZzEFGdtIgBWKvfrweQMg1xKHbjHGHXbtsc0WmUKOX45WAIgHuFYsOA==
+X-Received: by 2002:a17:906:3c50:: with SMTP id i16mr15683196ejg.175.1615215325807;
+        Mon, 08 Mar 2021 06:55:25 -0800 (PST)
+Received: from localhost.localdomain ([5.2.193.191])
+        by smtp.gmail.com with ESMTPSA id bt14sm7411234edb.92.2021.03.08.06.55.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Mar 2021 06:55:25 -0800 (PST)
+From:   Alexandru Ardelean <aardelean@deviqon.com>
+To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        greybus-dev@lists.linaro.org, devel@driverdev.osuosl.org,
+        linux-tegra@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com
+Cc:     broonie@kernel.org, gregkh@linuxfoundation.org, elder@kernel.org,
+        johan@kernel.org, vireshk@kernel.org, rmfrfs@gmail.com,
+        f.fainelli@gmail.com, ldewangan@nvidia.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, linux@deviqon.com,
+        Alexandru Ardelean <aardelean@deviqon.com>
+Subject: [PATCH 00/10] spi: finalize 'delay_usecs' removal/transition
+Date:   Mon,  8 Mar 2021 16:54:52 +0200
+Message-Id: <20210308145502.1075689-1-aardelean@deviqon.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eRtJSFbw+EEWtPj3"
-Content-Disposition: inline
-In-Reply-To: <20210307144313.GA15472@wunner.de>
-X-Cookie: Am I SHOPLIFTING?
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+A while back I started the introduction of the 'spi_delay' data type:
+  https://lore.kernel.org/linux-spi/20190926105147.7839-1-alexandru.ardelean@analog.com/
 
---eRtJSFbw+EEWtPj3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Users of the 'delay_usecs' were removed from drivers.
 
-On Sun, Mar 07, 2021 at 03:43:13PM +0100, Lukas Wunner wrote:
-> On Mon, Mar 01, 2021 at 01:54:05PM +0000, Mark Brown wrote:
-> > On Mon, Mar 01, 2021 at 07:56:11PM +0800, Jay Fang wrote:
+Now it's time to remove the 'delay_usecs' from the SPI subsystem and use
+only the 'delay' field.
 
-> > > +	ret = devm_request_irq(dev, hs->irq, hisi_spi_irq, IRQF_SHARED,
-> > > +				dev_name(dev), master);
-> > > +	if (ret < 0) {
-> > > +		dev_err(dev, "failed to get IRQ=%d, ret=%d\n", hs->irq, ret);
-> > > +		return ret;
-> > > +	}
+This changeset adapts all SPI drivers to do without 'delay_usecs'.
+Additionally, for greybus we need to adapt it to use the 'delay' in
+nano-seconds and convert it to micro-seconds.
 
-> > This will free the IRQ *after* the controller is unregistered, it's
-> > better to manually free the interrupt
+Alexandru Ardelean (10):
+  spi: spi-axi-spi-engine: remove usage of delay_usecs
+  spi: bcm63xx-spi: don't check 'delay_usecs' field
+  spi: spi-bcm-qspi: replace 'delay_usecs' with 'delay.value' check
+  spi: spi-sh: replace 'delay_usecs' with 'delay.value' in pr_debug
+  spi: spi-tegra20-flash: don't check 'delay_usecs' field for spi
+    transfer
+  staging: greybus: spilib: use 'spi_delay_to_ns' for getting xfer delay
+  spi: spi-falcon: remove check for 'delay_usecs'
+  spi: fsl-espi: remove usage of 'delay_usecs' field
+  spi: core: remove 'delay_usecs' field from spi_transfer
+  spi: docs: update info about 'delay_usecs'
 
-> Transfers may still be ongoing until spi_unregister_controller() returns.
-> (It's called from devres_release_all() in this case.)  Since the IRQ is
-> presumably necessary to handle those transfers, freeing the IRQ after
-> unregistering is actually correct.  So the code looks fine in principle.
+ Documentation/spi/spi-summary.rst |  7 +++++--
+ drivers/spi/spi-axi-spi-engine.c  | 12 ++++--------
+ drivers/spi/spi-bcm-qspi.c        |  2 +-
+ drivers/spi/spi-bcm63xx.c         |  2 +-
+ drivers/spi/spi-falcon.c          |  2 +-
+ drivers/spi/spi-fsl-espi.c        | 17 +++++------------
+ drivers/spi/spi-sh.c              |  4 ++--
+ drivers/spi/spi-tegra20-sflash.c  |  3 +--
+ drivers/spi/spi.c                 |  1 -
+ drivers/staging/greybus/spilib.c  |  5 ++++-
+ include/linux/spi/spi.h           | 12 ------------
+ 11 files changed, 24 insertions(+), 43 deletions(-)
 
-Well, it should just time out which is annoying.
+-- 
+2.29.2
 
-> However, because the IRQ is requested with IRQF_SHARED, the handler may
-> be invoked at any time, even after the controller has been unregistered.
-> It is therefore necessary to quiesce the SPI controller's interrupt on
-> unregistering and it is also necessary to check in the IRQ handler whether
-> an interrupt is actually pending (and bail out if not).
-
-It's also important and even more of a concern that even if there is a
-valid interrupt the handler doesn't try to use structures that might
-have been deallocated before the handler uses it as this controller
-does, that will segfault which is more serious.
-
---eRtJSFbw+EEWtPj3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBGMHUACgkQJNaLcl1U
-h9BKWgf8DT5qM2k5+JsYrmuVeoJbBijnMoT4P90g3dkSSHrfP6+VQdlSTvmLGrRH
-rtIcIfzuuTKYhJGFapWgE71ZPoIW+G12ZKe0ao0hV6Tbvv92ClaYWV7CEYO0i0o6
-PTbpfjmpuEHh1Ld3gXeGbia0Jz/feLq9WCzuGUcRmkj7Nr48grJe1uwoLrAcJ22V
-KVpOTY6hs0cL14wHFtUOdYaC+0nybDc+chRwLxRBja+xoqQhj8V+1MZFoBU91OOH
-NmpOPzbaWJmEz4EBNODbxJbO0WaOpew6r313yaPJeEZLpsAqmkRTAxlnsrpqdxwO
-CSEry5OhUluavwdcMjGHR6U/ZH9tdQ==
-=iimQ
------END PGP SIGNATURE-----
-
---eRtJSFbw+EEWtPj3--
