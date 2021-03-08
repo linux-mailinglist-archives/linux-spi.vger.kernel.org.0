@@ -2,72 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE3B331303
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Mar 2021 17:10:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02948331426
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Mar 2021 18:08:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbhCHQKH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Mar 2021 11:10:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42294 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231424AbhCHQJ4 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 8 Mar 2021 11:09:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1D67865210;
-        Mon,  8 Mar 2021 16:09:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615219796;
-        bh=g9EyKfsYRqVbOXlteLRR15Bn9zOHc3c4i5cWelXXwFg=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=kcjssyaM/IPILcuHQ7ohp12HS1wZ2Db/nmaUwEHlTaWkqYinonuAPlCphTV4B1436
-         JNHNaS20PLe0pCS5wy54uO6RIwmApsn0q6aRM5vRwfiV1FHANoa+kOLCi9tzQ7BFyo
-         jUtwpoJ6Zs2TJeXBd1XRW6rqnpQqodP6VM8sXKIrfxAr4vyd5zv8TbcyuEmZkK/MRu
-         AhatraA0PSZfxnapuPInuVRgez1xxS+dxMhSJ2u8cSOMKl7NO8hY5g5//YcZ9Vo/Ca
-         7ffLpz6BLcsUODviG8tuYnuaL+/gObuxoGl6eP+uh3sAalCFa7HwbJv8MNpmk0I90i
-         +pBf9uTVz5L5Q==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, Jay Fang <f.fangjian@huawei.com>
-Cc:     huangdaode@huawei.com, dan.carpenter@oracle.com
-In-Reply-To: <1614854872-8694-1-git-send-email-f.fangjian@huawei.com>
-References: <1614854872-8694-1-git-send-email-f.fangjian@huawei.com>
-Subject: Re: [PATCH] spi: cadence-quadspi: Silence shiftTooManyBitsSigned warning
-Message-Id: <161521972632.10046.6571535354886838464.b4-ty@kernel.org>
-Date:   Mon, 08 Mar 2021 16:08:46 +0000
+        id S230124AbhCHRHu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Mar 2021 12:07:50 -0500
+Received: from www381.your-server.de ([78.46.137.84]:56058 "EHLO
+        www381.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229690AbhCHRHZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Mar 2021 12:07:25 -0500
+X-Greylist: delayed 1515 seconds by postgrey-1.27 at vger.kernel.org; Mon, 08 Mar 2021 12:07:24 EST
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
+         s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=TzaqzNZ5/Fp8lTYyeKtH9GBmnc2sIncwn71iQvdnlBA=; b=fQ5ZX63LM3J4j/xr/WKkGBW97u
+        pLCR+JdYGE5oAFeNLpqhzoYZmzEKLwmerJmarikSJ/sHl9o8wvZ/OUOLPnFqLa/cuV/+wxylNSzb9
+        wnb1a7viLJ4fXVqTqDEixl3P4vzVN/a0CT71oj3R1+4sMNkkZDHKM6yNyRSGN+uey08bF2pURA5pC
+        guXumxSvr4e2ALghBd4BLRxe+WEW6wgx+atUQHIZu09Jp6F+x5o9a8QZ1hXwqqKh1eQXcYxrfUtzn
+        SxC76aTOTVL0RbTfdN1Cis0i0MP87mmnfPGihVQuiPDfKroXcsrM68S9pqDeYVpGVi+VbgAomQ+Oq
+        uFrjkRwQ==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www381.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <lars@metafoo.de>)
+        id 1lJIxL-0007HI-1U; Mon, 08 Mar 2021 17:42:07 +0100
+Received: from [62.216.202.180] (helo=[192.168.178.20])
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lars@metafoo.de>)
+        id 1lJIxK-000WTg-OM; Mon, 08 Mar 2021 17:42:06 +0100
+Subject: Re: [PATCH 01/10] spi: spi-axi-spi-engine: remove usage of
+ delay_usecs
+To:     Alexandru Ardelean <aardelean@deviqon.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        greybus-dev@lists.linaro.org, devel@driverdev.osuosl.org,
+        linux-tegra@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com
+Cc:     broonie@kernel.org, gregkh@linuxfoundation.org, elder@kernel.org,
+        johan@kernel.org, vireshk@kernel.org, rmfrfs@gmail.com,
+        f.fainelli@gmail.com, ldewangan@nvidia.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, linux@deviqon.com
+References: <20210308145502.1075689-1-aardelean@deviqon.com>
+ <20210308145502.1075689-2-aardelean@deviqon.com>
+From:   Lars-Peter Clausen <lars@metafoo.de>
+Message-ID: <8a6ec9a1-71f8-ce1d-600a-66eba9244a54@metafoo.de>
+Date:   Mon, 8 Mar 2021 17:42:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210308145502.1075689-2-aardelean@deviqon.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Authenticated-Sender: lars@metafoo.de
+X-Virus-Scanned: Clear (ClamAV 0.102.4/26102/Mon Mar  8 13:03:13 2021)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 4 Mar 2021 18:47:52 +0800, Jay Fang wrote:
-> drivers/spi/spi-cadence-quadspi.c:267:18: warning: Shifting signed 32-bit
-> value by 31 bits is undefined behaviour [shiftTooManyBitsSigned]
->     return reg & (1 << CQSPI_REG_CONFIG_IDLE_LSB);
->                     ^
+On 3/8/21 3:54 PM, Alexandru Ardelean wrote:
+> The 'delay_usecs' field was handled for backwards compatibility in case
+> there were some users that still configured SPI delay transfers with
+> this field.
+>
+> They should all be removed by now.
+>
+> Signed-off-by: Alexandru Ardelean <aardelean@deviqon.com>
+> ---
+>   drivers/spi/spi-axi-spi-engine.c | 12 ++++--------
+>   1 file changed, 4 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-engine.c
+> index af86e6d6e16b..80c3e38f5c1b 100644
+> --- a/drivers/spi/spi-axi-spi-engine.c
+> +++ b/drivers/spi/spi-axi-spi-engine.c
+> @@ -170,14 +170,10 @@ static void spi_engine_gen_sleep(struct spi_engine_program *p, bool dry,
+>   	unsigned int t;
+>   	int delay;
+>   
+> -	if (xfer->delay_usecs) {
+> -		delay = xfer->delay_usecs;
+> -	} else {
+> -		delay = spi_delay_to_ns(&xfer->delay, xfer);
+> -		if (delay < 0)
+> -			return;
+> -		delay /= 1000;
+> -	}
+> +	delay = spi_delay_to_ns(&xfer->delay, xfer);
+> +	if (delay < 0)
+> +		return;
 
-Applied to
+Bit of a nit, but this could be `delay <= 0` and then drop the check for 
+`delay == 0` below.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> +	delay /= 1000;
+>   
+>   	if (delay == 0)
+>   		return;
 
-Thanks!
 
-[1/1] spi: cadence-quadspi: Silence shiftTooManyBitsSigned warning
-      commit: 55794b1d8623f73d9a4bf12e4343bc8fc96024e1
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
