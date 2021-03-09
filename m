@@ -2,79 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C45D332590
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Mar 2021 13:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48130332610
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Mar 2021 14:06:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbhCIMh0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 9 Mar 2021 07:37:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36694 "EHLO mail.kernel.org"
+        id S231149AbhCINFn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 9 Mar 2021 08:05:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41200 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230140AbhCIMhM (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 9 Mar 2021 07:37:12 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A627165272;
-        Tue,  9 Mar 2021 12:37:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615293432;
-        bh=mruvFKZBvCYrEJiGtVUC6A1pI2TNU9dGDRBfJmF933E=;
+        id S230477AbhCINFN (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 9 Mar 2021 08:05:13 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 809C765272;
+        Tue,  9 Mar 2021 13:05:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1615295113;
+        bh=BJBJpVVoiY6gCZUtVubIMzNfBlkVauLEWMwsKwElL1w=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YA95Mav+ou0vbpC5EDZqdK4j8osZOAeEFLNJvirHsPEiblzGYGamJPf+AwUWyyPzt
-         vZfzspanjCKktSOAsyVpm0FYuJGSpLXZ0Pe0RqBPyb2lG1Vadn3okPwLMhynotcjau
-         WL5Gf8gF3Qk2SJ9qUTv+tEL1oc95BRoonZXgpxSz//bRdIXt/nyBplUW783pihE+tv
-         jEvy0xpolH0gBcLh3eel/zNThxH+ZnR3cdnO+R2au2i4d/VB1lGDfr1FyXasCZeIm4
-         DqvUqmzDr+vuw3SXHA4A+uwIQo+kTOxBttz8TlYrxOOFTnZHJ2QZI9GxPBanNDp2Q1
-         Oe8IoVLo/1FVg==
-Date:   Tue, 9 Mar 2021 12:36:01 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Kuldeep Singh <kuldeep.singh@nxp.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ashish Kumar <ashish.kumar@nxp.com>
-Subject: Re: [PATCH] dt-bindings: spi: Convert NXP flexspi to json schema
-Message-ID: <20210309123601.GA4878@sirena.org.uk>
-References: <20210309103528.3538910-1-kuldeep.singh@nxp.com>
- <DB6PR0402MB275834FAF7CEF44AB7F342B2E0929@DB6PR0402MB2758.eurprd04.prod.outlook.com>
+        b=wJBItVNZ/Rf6BYqvp1pv4sAaOBG4icG+Nv+1x6/ql225wtv8ohchgyPJN4ynowY3o
+         CbW9B8MKlE/kTa5LY89OlfLifaAqEw7k3iGQzFpUqyBCSO9dID2k2qXYTrsYyDEOG5
+         i5qlF1Ivyl+rJIiDa9hCmmiUbcm7+AScmVMmAHU4=
+Date:   Tue, 9 Mar 2021 14:05:10 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Alexandru Ardelean <aardelean@deviqon.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        greybus-dev@lists.linaro.org, devel@driverdev.osuosl.org,
+        linux-tegra@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
+        thierry.reding@gmail.com, elder@kernel.org, johan@kernel.org,
+        jonathanh@nvidia.com, broonie@kernel.org, ldewangan@nvidia.com,
+        vireshk@kernel.org, f.fainelli@gmail.com, linux@deviqon.com
+Subject: Re: [PATCH 06/10] staging: greybus: spilib: use 'spi_delay_to_ns'
+ for getting xfer delay
+Message-ID: <YEdyhjayjbztoWI+@kroah.com>
+References: <20210308145502.1075689-1-aardelean@deviqon.com>
+ <20210308145502.1075689-7-aardelean@deviqon.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="k1lZvvs/B4yU6o8G"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DB6PR0402MB275834FAF7CEF44AB7F342B2E0929@DB6PR0402MB2758.eurprd04.prod.outlook.com>
-X-Cookie: Immanuel doesn't pun, he Kant.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210308145502.1075689-7-aardelean@deviqon.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, Mar 08, 2021 at 04:54:58PM +0200, Alexandru Ardelean wrote:
+> The intent is the removal of the 'delay_usecs' field from the
+> spi_transfer struct, as there is a 'delay' field that does the same
+> thing.
+> 
+> The spi_delay_to_ns() can be used to get the transfer delay. It works by
+> using the 'delay_usecs' field first (if it is non-zero), and finally
+> uses the 'delay' field.
+> 
+> Since the 'delay_usecs' field is going away, this change makes use of the
+> spi_delay_to_ns() function. This also means dividing the return value of
+> the function by 1000, to convert it to microseconds.
+> To prevent any potential faults when converting to microseconds and since
+> the result of spi_delay_to_ns() is int, the delay is being computed in 32
+> bits and then clamped between 0 & U16_MAX.
+> 
+> Signed-off-by: Alexandru Ardelean <aardelean@deviqon.com>
+> ---
+>  drivers/staging/greybus/spilib.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/greybus/spilib.c b/drivers/staging/greybus/spilib.c
+> index 672d540d3365..30655153df6a 100644
+> --- a/drivers/staging/greybus/spilib.c
+> +++ b/drivers/staging/greybus/spilib.c
+> @@ -245,6 +245,7 @@ static struct gb_operation *gb_spi_operation_create(struct gb_spilib *spi,
+>  	/* Fill in the transfers array */
+>  	xfer = spi->first_xfer;
+>  	while (msg->state != GB_SPI_STATE_OP_DONE) {
+> +		int xfer_delay;
+>  		if (xfer == spi->last_xfer)
+>  			xfer_len = spi->last_xfer_size;
+>  		else
+> @@ -259,7 +260,9 @@ static struct gb_operation *gb_spi_operation_create(struct gb_spilib *spi,
+>  
+>  		gb_xfer->speed_hz = cpu_to_le32(xfer->speed_hz);
+>  		gb_xfer->len = cpu_to_le32(xfer_len);
+> -		gb_xfer->delay_usecs = cpu_to_le16(xfer->delay_usecs);
+> +		xfer_delay = spi_delay_to_ns(&xfer->delay, xfer) / 1000;
+> +		xfer_delay = clamp_t(u16, xfer_delay, 0, U16_MAX);
+> +		gb_xfer->delay_usecs = cpu_to_le16(xfer_delay);
+>  		gb_xfer->cs_change = xfer->cs_change;
+>  		gb_xfer->bits_per_word = xfer->bits_per_word;
+>  
 
---k1lZvvs/B4yU6o8G
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Tue, Mar 09, 2021 at 11:41:50AM +0000, Kuldeep Singh wrote:
-> + Mark (Forgot to add him previously)
-
-...
-
-> I was not sure with which tree this patch will go through.
-> Currently, I have rebased this on top of tree(git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git, branch: for-next)
-
-Binding patches generally go through the subsystem tree so please send
-the patch to me.
-
---k1lZvvs/B4yU6o8G
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBHa7AACgkQJNaLcl1U
-h9AmRQf+I75/5nY3XFdUzjldnH/ak4vuJJDxyK5n1OjfodnIYXZRnofrZrv+1WNC
-OWmuqB7SvWXFd6zus811PcggxS29YXXF0Xei0Yze8ST7tYegZ0t49klXg1gzSxmt
-IBjy0EBAJfOY2s5rH4FWoeW2x/ttRBNRfu4rZQKNr/QblPAe3N7CNdhZhPcXQ3c7
-vGWcgpmJUg5q0whA8tPOx85Wp5mAmJLTMQxtfN/7VAnmvzz7qFZXyZVx8PDsMGnt
-9w3psbRDKP7kEp8tAJcZAYWXUzbHarpquIAXyj644yJf41LPF2D52vQhga8joIv9
-C/SazhUd5xl+BnXII94ixbDq7WnnbQ==
-=8uCH
------END PGP SIGNATURE-----
-
---k1lZvvs/B4yU6o8G--
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
