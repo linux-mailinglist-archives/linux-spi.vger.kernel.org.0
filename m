@@ -2,51 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C62C337E09
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Mar 2021 20:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7D0337E14
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Mar 2021 20:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbhCKTW3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S231336AbhCKTW3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Thu, 11 Mar 2021 14:22:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbhCKTVy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 Mar 2021 14:21:54 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9C9C061574;
-        Thu, 11 Mar 2021 11:21:54 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id k9so41607308lfo.12;
-        Thu, 11 Mar 2021 11:21:54 -0800 (PST)
+        with ESMTP id S230212AbhCKTV4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 Mar 2021 14:21:56 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E4EC061574;
+        Thu, 11 Mar 2021 11:21:55 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id m22so41607188lfg.5;
+        Thu, 11 Mar 2021 11:21:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=uvJsQOP1p7E9AffUBE2QJK2LpjrpqogJTnHjdmlAy3g=;
-        b=AUzo78cMdsJJJhGMTgl8WEDo8UZcgsgRLS0Yrs3VHylHmn638Xd0SAmqI/iOnJbWSm
-         ra6zNdyXsoQnp0pdaJ/2AJ+T2f1vxGN7nkfcyzC7lnVdgVqe6j3PeF83K9+mRN7lCkKF
-         hQAq0EPSrB3u3utzKBpo32mTaZpxpncfzYqtxGLU1AZ9wDs6a+iUwi3/tM/THbo/ZDAN
-         xgEZOlxDMPiB0d0auUpg8aYp4Qwd6tjWO3N9l7/0IolDJz5q2IH9RlTR1XQDHY7RfC0b
-         zEx5c6UR/WdmgjlHVlAyXchnUUOiwUpQuyG21mOoptBg6CEVwXiQ26Urb5leOWVJKlXQ
-         Z0Tg==
+        bh=uqKfei5o+p1LDmMPic3/GGcfRGKV9mArN/Kd0be+sRk=;
+        b=iiXXfpB1C+gnbK0/DeT43KLI/fORWdk2wUnK2WbfXh1yfxR6laQU0kdWW9RB9j/u2B
+         +iWWZnNjK92tl5VaWjTwR6B44ECS+loZ74TlWriWfCEo4x34cX20+DAK0Z1yWbk04E1f
+         ykCJ56ZNamFlTXptrAN+d6XLxlaJZKnYdg7Ap3ee/6prcStBNurIfldD+vWg56ijpX+h
+         vWzU8iilkhQqhmL6p8UuEdQphJl4t6wFggy8TATlvH+3hnBz4aZ+NLBzVi03+lB3FFAY
+         xIlmwo/13YpOTDAip7ZeKkJj7mb+NA5I3J4+5/nfz956+QWxhOOatqRWDWgV5TlGblul
+         FPRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=uvJsQOP1p7E9AffUBE2QJK2LpjrpqogJTnHjdmlAy3g=;
-        b=DuBJSK63xfLGvuP+8DvJ87HH7+Ob70MHt66wOw66eJ49GQw4IfcvWz08mXSHkgF3Jx
-         +fIu2XxLoPYY+mzQphKc7jUg66E63pWTFNlV0lLKCVdeaxJ2uSraaE13BaiIq3h+TsS8
-         /k9zsFANjfBTozbiIEQkGpFGhcuta6zgRBx+Vef8nI9L1lVGfNkRwNrmnmg1nKr+JcZD
-         YLvcA1kLACfK8BksR1JelwPJH1kwZNabbATBb/SRyVnpbhIzsxZfo/qu/UYg6ZCh+3lr
-         fmbLDx60+l+dGVoKTRK9nicmH3IKJszZ7Qq93Q5rXrdqq9ydUpyweTk9DRmUvST5Otge
-         WJgw==
-X-Gm-Message-State: AOAM533ygs+XnK5JoxQylVBTkQtoTQA0aI/5RDrpqTrW933XM+qgDtq4
-        nksPTQ3Nv5csvG4xocy7DUg=
-X-Google-Smtp-Source: ABdhPJwW9M4QeeMi8R8HV+0T6eXqDdFannBfc6ezCO7f5Qrvj5lHmCCOXOavy0TnJcIgzJWLxaLzHw==
-X-Received: by 2002:a05:6512:2212:: with SMTP id h18mr3101616lfu.330.1615490512780;
-        Thu, 11 Mar 2021 11:21:52 -0800 (PST)
+        bh=uqKfei5o+p1LDmMPic3/GGcfRGKV9mArN/Kd0be+sRk=;
+        b=G3GvTBoYxs8iy4SyOdpGoVz0DQj1wUxSFk3SZHvNjeoSUt1/TmdP25yw/rAw8ypQdn
+         WQo8+AtCrg6XVD2RkooynK5u2lWhzxTMBPDGWHdQdkHtro/xYnlzbaigkl0cE0Dn1mGS
+         EjrAXd87ZULczaSn+R2S5Fsm0CZT47Ss1PjVAGshl2qYfpkRc/YDB5hbCb2nP1ssYBUq
+         Y1pVEq5bcQI2avk3UB1jOPhc8Q7zkMO+tr7+HKQDyG+YNvCel2VBrfj50M8vCpfw+bV6
+         Q2quqypdOlcLXkLvfuCE726XH8ygLpxq3kfWnXgKmcXrpbTjFtfvW4pvplmK0l6BZOdb
+         FlKA==
+X-Gm-Message-State: AOAM5313xMXRXcSR9/Y/iqkEKiFEbOWfmPCV3awkXGVeafI8Hw++cpNY
+        sK6PJ3RI0XV2W+tH6vUJ+ck=
+X-Google-Smtp-Source: ABdhPJxHhzSO5qkov352chgUZ1noI4EztWWaTwMtjW0L+gOi4Y6lGvXdtI/aQNvF79jf49rIBHoPxQ==
+X-Received: by 2002:a05:6512:1192:: with SMTP id g18mr3233341lfr.102.1615490514041;
+        Thu, 11 Mar 2021 11:21:54 -0800 (PST)
 Received: from localhost.localdomain (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
-        by smtp.gmail.com with ESMTPSA id u14sm1121153lfl.40.2021.03.11.11.21.51
+        by smtp.gmail.com with ESMTPSA id u14sm1121153lfl.40.2021.03.11.11.21.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 11:21:52 -0800 (PST)
+        Thu, 11 Mar 2021 11:21:53 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Qiang Yu <yuq825@gmail.com>, Rob Clark <robdclark@gmail.com>,
         Sean Paul <sean@poorly.run>, Rob Herring <robh@kernel.org>,
@@ -74,9 +74,9 @@ Cc:     Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
         linux-samsung-soc@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-tegra@vger.kernel.org
-Subject: [PATCH v2 13/14] media: venus: Convert to use resource-managed OPP API
-Date:   Thu, 11 Mar 2021 22:21:04 +0300
-Message-Id: <20210311192105.14998-14-digetx@gmail.com>
+Subject: [PATCH v2 14/14] memory: samsung: exynos5422-dmc: Convert to use resource-managed OPP API
+Date:   Thu, 11 Mar 2021 22:21:05 +0300
+Message-Id: <20210311192105.14998-15-digetx@gmail.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210311192105.14998-1-digetx@gmail.com>
 References: <20210311192105.14998-1-digetx@gmail.com>
@@ -88,67 +88,67 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Yangtao Li <tiny.windzz@gmail.com>
 
-Use resource-managed OPP API to simplify code.
+Use resource-managed API to simplify code.
 
 Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/media/platform/qcom/venus/pm_helpers.c | 18 +++---------------
- 1 file changed, 3 insertions(+), 15 deletions(-)
+ drivers/memory/samsung/exynos5422-dmc.c | 13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index 43c4e3d9e281..14fa27f26a7d 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -860,45 +860,33 @@ static int core_get_v4(struct device *dev)
- 	if (legacy_binding)
- 		return 0;
+diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
+index 1dabb509dec3..56f6e65d40cd 100644
+--- a/drivers/memory/samsung/exynos5422-dmc.c
++++ b/drivers/memory/samsung/exynos5422-dmc.c
+@@ -343,7 +343,7 @@ static int exynos5_init_freq_table(struct exynos5_dmc *dmc,
+ 	int idx;
+ 	unsigned long freq;
  
--	core->opp_table = dev_pm_opp_set_clkname(dev, "core");
-+	core->opp_table = devm_pm_opp_set_clkname(dev, "core");
- 	if (IS_ERR(core->opp_table))
- 		return PTR_ERR(core->opp_table);
+-	ret = dev_pm_opp_of_add_table(dmc->dev);
++	ret = devm_pm_opp_of_add_table(dmc->dev);
+ 	if (ret < 0) {
+ 		dev_err(dmc->dev, "Failed to get OPP table\n");
+ 		return ret;
+@@ -354,7 +354,7 @@ static int exynos5_init_freq_table(struct exynos5_dmc *dmc,
+ 	dmc->opp = devm_kmalloc_array(dmc->dev, dmc->opp_count,
+ 				      sizeof(struct dmc_opp_table), GFP_KERNEL);
+ 	if (!dmc->opp)
+-		goto err_opp;
++		return -ENOMEM;
  
- 	if (core->res->opp_pmdomain) {
--		ret = dev_pm_opp_of_add_table(dev);
-+		ret = devm_pm_opp_of_add_table(dev);
- 		if (!ret) {
- 			core->has_opp_table = true;
- 		} else if (ret != -ENODEV) {
- 			dev_err(dev, "invalid OPP table in device tree\n");
--			dev_pm_opp_put_clkname(core->opp_table);
- 			return ret;
- 		}
+ 	idx = dmc->opp_count - 1;
+ 	for (i = 0, freq = ULONG_MAX; i < dmc->opp_count; i++, freq--) {
+@@ -362,7 +362,7 @@ static int exynos5_init_freq_table(struct exynos5_dmc *dmc,
+ 
+ 		opp = dev_pm_opp_find_freq_floor(dmc->dev, &freq);
+ 		if (IS_ERR(opp))
+-			goto err_opp;
++			return PTR_ERR(opp);
+ 
+ 		dmc->opp[idx - i].freq_hz = freq;
+ 		dmc->opp[idx - i].volt_uv = dev_pm_opp_get_voltage(opp);
+@@ -371,11 +371,6 @@ static int exynos5_init_freq_table(struct exynos5_dmc *dmc,
  	}
  
- 	ret = vcodec_domains_get(dev);
--	if (ret) {
--		if (core->has_opp_table)
--			dev_pm_opp_of_remove_table(dev);
--		dev_pm_opp_put_clkname(core->opp_table);
-+	if (ret)
- 		return ret;
--	}
+ 	return 0;
+-
+-err_opp:
+-	dev_pm_opp_of_remove_table(dmc->dev);
+-
+-	return -EINVAL;
+ }
  
+ /**
+@@ -1567,8 +1562,6 @@ static int exynos5_dmc_remove(struct platform_device *pdev)
+ 	clk_disable_unprepare(dmc->mout_bpll);
+ 	clk_disable_unprepare(dmc->fout_bpll);
+ 
+-	dev_pm_opp_remove_table(dmc->dev);
+-
  	return 0;
  }
  
- static void core_put_v4(struct device *dev)
- {
--	struct venus_core *core = dev_get_drvdata(dev);
--
- 	if (legacy_binding)
- 		return;
- 
- 	vcodec_domains_put(dev);
--
--	if (core->has_opp_table)
--		dev_pm_opp_of_remove_table(dev);
--	dev_pm_opp_put_clkname(core->opp_table);
--
- }
- 
- static int core_power_v4(struct device *dev, int on)
 -- 
 2.29.2
 
