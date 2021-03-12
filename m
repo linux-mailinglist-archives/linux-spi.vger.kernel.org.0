@@ -2,122 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 998DD338A55
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Mar 2021 11:37:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F1C338AFB
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Mar 2021 12:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233189AbhCLKh0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 12 Mar 2021 05:37:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233600AbhCLKhZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 Mar 2021 05:37:25 -0500
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D432BC061764
-        for <linux-spi@vger.kernel.org>; Fri, 12 Mar 2021 02:37:24 -0800 (PST)
-Received: by mail-vs1-xe33.google.com with SMTP id e21so10272734vsh.5
-        for <linux-spi@vger.kernel.org>; Fri, 12 Mar 2021 02:37:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K3/Vc1Ah6eKHyLWI1pgidt8/nWh+3HJqZHQUqW0QsJY=;
-        b=e/OV4wNhRA/Hs5pdnjxqlm48AcxIBgreDOOJNjy58xe/C+lYYaCP1LvYHtxw5nNMDd
-         ALc5X7QtHJfqYjQJtkk29KbBS+sCEO+r861cukBYcKfIkwG7Ou4nlCW1n/UmnxXDl8UZ
-         Z/fv7WEl9eLwGeyto13VUunS/sfPRI2c3QsnbpFtyEdc7Gfom8B6Uyb0CQaIhkyCgJpI
-         Vsh00DPD7rj87XdaxRSYPfBsBAN7FvwewFG9kAbAybHO8w6BrDs7Q/oHkpYaTspxVr8g
-         hG55hBJ9e6DnKN6cjQsuVlY7/n4MxMQTtSF3SukeI2+Zdfpe9OF7WCVtCu8zUxSY8ajX
-         hHEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K3/Vc1Ah6eKHyLWI1pgidt8/nWh+3HJqZHQUqW0QsJY=;
-        b=c4iPjm3UhHtqa4TTtSRCIJib9l2JE0hP0kgn7IXphG/iQJs9JslzVnnnIacSp4fHm4
-         iDg8807TiwQjq10j38hEH1h98+0RKFPe77LmkKxQ6zGfbRXJSs/+3cprjU8QJC1gPdqS
-         zirMJS7dvnbtiDl6tD7O4XdqKurJcYFTQ6tI/CAD9uNgxDEXfR5Oir+ecKJGd2MYoosA
-         p15VbGADJYo9Xbg2NOe77o6Jn7uJ/u+z9z9bKaLBmlM0rLQPWwsx1u6OKqlIWL8Swq53
-         MaQLa84NNho79XGQ5mLcUhJNqu2jrafXNskzoc7MtNxF6F/1MNOQxJ9Jd2QQsQG8govd
-         jUZA==
-X-Gm-Message-State: AOAM5328OkfbOBM09v5WdyRsdAT47e6eNt8w4ir0f1uhV/+Zdl9GhBGa
-        OJl50mMICmDLemI/jJatjtVAhyQGy07/x0/+tucOcg==
-X-Google-Smtp-Source: ABdhPJyLTgXQd1zTmLlKpEGuucdoDu6MxM1Ifem4y53cs/Xb9ONexPA+wPxOnpJgqOBWr4/fpZSZO+YOQXGKhLX6tmk=
-X-Received: by 2002:a67:6942:: with SMTP id e63mr8188302vsc.48.1615545442849;
- Fri, 12 Mar 2021 02:37:22 -0800 (PST)
+        id S233634AbhCLLHn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 12 Mar 2021 06:07:43 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:60036 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233641AbhCLLHW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 Mar 2021 06:07:22 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 12CB7BTr067919;
+        Fri, 12 Mar 2021 05:07:11 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1615547231;
+        bh=ppnSwE3fKaBg0neIztuqXvH2QrPjE/AfI+3qNHSV6wo=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=REHTjEo5aenRX8Q/huU1uf1giLvZ2+sOJw6Sjd86J71wAnWEOLQjIIQ1hugv6hUTH
+         A6vfQFIbG/Qf0QDysyt9s9uFku4WCBXc5gghZ0NdFjmKyuMfKhAAK1LvRyFo63fV9H
+         8CE3A9RPz45iOuBmEJ8o0lK6flj9ZwI/qilojN7E=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 12CB7BKD116117
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 12 Mar 2021 05:07:11 -0600
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 12
+ Mar 2021 05:07:10 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Fri, 12 Mar 2021 05:07:10 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 12CB7Apw023321;
+        Fri, 12 Mar 2021 05:07:10 -0600
+Date:   Fri, 12 Mar 2021 16:37:09 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     <Tudor.Ambarus@microchip.com>, <nm@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <miquel.raynal@bootlin.com>,
+        <richard@nod.at>, <vigneshr@ti.com>, <broonie@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        <lokeshvutla@ti.com>
+Subject: Re: [RFC PATCH 0/6] spi: Add OSPI PHY calibration support for
+ spi-cadence-quadspi
+Message-ID: <20210312110707.lrabch4ketqyyepn@ti.com>
+References: <20210311191216.7363-1-p.yadav@ti.com>
+ <9c551f56-4c00-b41a-f051-8b7e197fbcdc@microchip.com>
+ <20210312101036.jfz2733ssv4nhfey@ti.com>
+ <676386736df5e5b22e34b0b5af91c894@walle.cc>
 MIME-Version: 1.0
-References: <20210311192105.14998-1-digetx@gmail.com> <20210311192105.14998-2-digetx@gmail.com>
- <20210312053312.zgke2mzjkqmwn67i@vireshk-i7>
-In-Reply-To: <20210312053312.zgke2mzjkqmwn67i@vireshk-i7>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 12 Mar 2021 11:36:46 +0100
-Message-ID: <CAPDyKFqrUCjTfrNqZ4gFfQS6LpoQCevGc-tv4WVOwuGhx5iiBg@mail.gmail.com>
-Subject: Re: [PATCH v2 01/14] opp: Add devres wrapper for dev_pm_opp_set_clkname
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Qiang Yu <yuq825@gmail.com>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>, Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        lima@lists.freedesktop.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <676386736df5e5b22e34b0b5af91c894@walle.cc>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 12 Mar 2021 at 06:33, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 11-03-21, 22:20, Dmitry Osipenko wrote:
-> > +struct opp_table *devm_pm_opp_set_clkname(struct device *dev, const char *name)
-> > +{
-> > +     struct opp_table *opp_table;
-> > +     int err;
-> > +
-> > +     opp_table = dev_pm_opp_set_clkname(dev, name);
-> > +     if (IS_ERR(opp_table))
-> > +             return opp_table;
-> > +
-> > +     err = devm_add_action_or_reset(dev, devm_pm_opp_clkname_release, opp_table);
-> > +     if (err)
-> > +             opp_table = ERR_PTR(err);
-> > +
-> > +     return opp_table;
-> > +}
->
-> I wonder if we still need to return opp_table from here, or a simple
-> integer is fine.. The callers shouldn't be required to use the OPP
-> table directly anymore I believe and so better simplify the return
-> part of this and all other routines you are adding here..
+On 12/03/21 11:20AM, Michael Walle wrote:
+> Am 2021-03-12 11:10, schrieb Pratyush Yadav:
+> > There is usually a delay from when the flash drives the data line (IOW,
+> > puts a data bit on it) and when the signal reaches the controller. This
+> > delay can vary by the flash, board, silicon characteristics,
+> > temperature, etc.
+> 
+> Temperature might change over time, but the calibration is only done
+> once. I don't know how much influence the temperature actually has, but
+> our boards are usually operating from -40°C to +85°C. So there might be
+> a possible temperature difference of 125K between actual calibration and
+> when the flash is accessed.
 
-Yes, please. I was thinking along the same lines, when I reviewed the
-mmc patch (patch9).
+The algorithm supports a temperature range of -45 C to +130 C. The 
+temperature is checked at calibration time and adjustments are made to 
+make sure the reads work over the entire temperature range [0].
 
->
-> If there is a user which needs the opp_table, let it use the regular
-> non-devm variant.
+[0] The current implementation does not have a way to query the 
+temperature from the sensor (see cqspi_get_temp()), so it always assumes 
+the temperature at calibration time is 45 C. But that can be added later 
+once the temperature sensor driver is implemented.
 
-Kind regards
-Uffe
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
