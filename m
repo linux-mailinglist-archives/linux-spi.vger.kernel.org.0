@@ -2,122 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8360338A48
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Mar 2021 11:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 998DD338A55
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Mar 2021 11:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233287AbhCLKfu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 12 Mar 2021 05:35:50 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:6564 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233666AbhCLKfk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 Mar 2021 05:35:40 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12CAR5hm019095;
-        Fri, 12 Mar 2021 11:35:30 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=selector1;
- bh=jeeT0fYtdjbqH8XvYs0z6C68jKHV25fKAFrzPTK3EuE=;
- b=Ls8bwc+rDnh8dHDhMWklEWpPDf+Qlr5p9sbhAZi3tcjVQ3iyRWhG4CExXtJD+qPWK1ih
- femoawGZw7OUiVnzFSscO6Xi7So5k0G+MrgmP5cgDzi0UFUPPAz3LuLkahQwI3iVDDF0
- bhL7uUqUVkWqPwx/JPPfWRmMt2oA4Lg/0PrZTARpmiv4WKXzM9iTns3mo7CM+SfqTwrH
- hlzKHLVay/uuEQLbcv9H+pda4hJeW4h5epLLjDgrQ2h7Csz4fnmbM6w5eKgcUkDoMmhB
- UP3/h73ES9byzjrelsrPR5DRgLGYtMYaNw1RsTUUNrfdu95xXg0SRWcBTWr0epCt3m+8 FA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 373yrf58ey-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 Mar 2021 11:35:30 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 55F7E10002A;
-        Fri, 12 Mar 2021 11:35:30 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 47DCE234BA5;
-        Fri, 12 Mar 2021 11:35:30 +0100 (CET)
-Received: from localhost (10.75.127.48) by SFHDAG2NODE3.st.com (10.75.127.6)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 12 Mar 2021 11:35:29
- +0100
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     <broonie@kernel.org>, <amelie.delaunay@foss.st.com>
-CC:     <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <alain.volmat@foss.st.com>
-Subject: [PATCH] spi: stm32: avoid ifdef CONFIG_PM for pm callbacks
-Date:   Fri, 12 Mar 2021 11:35:29 +0100
-Message-ID: <1615545329-5496-1-git-send-email-alain.volmat@foss.st.com>
-X-Mailer: git-send-email 2.7.4
+        id S233189AbhCLKh0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 12 Mar 2021 05:37:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233600AbhCLKhZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 Mar 2021 05:37:25 -0500
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D432BC061764
+        for <linux-spi@vger.kernel.org>; Fri, 12 Mar 2021 02:37:24 -0800 (PST)
+Received: by mail-vs1-xe33.google.com with SMTP id e21so10272734vsh.5
+        for <linux-spi@vger.kernel.org>; Fri, 12 Mar 2021 02:37:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K3/Vc1Ah6eKHyLWI1pgidt8/nWh+3HJqZHQUqW0QsJY=;
+        b=e/OV4wNhRA/Hs5pdnjxqlm48AcxIBgreDOOJNjy58xe/C+lYYaCP1LvYHtxw5nNMDd
+         ALc5X7QtHJfqYjQJtkk29KbBS+sCEO+r861cukBYcKfIkwG7Ou4nlCW1n/UmnxXDl8UZ
+         Z/fv7WEl9eLwGeyto13VUunS/sfPRI2c3QsnbpFtyEdc7Gfom8B6Uyb0CQaIhkyCgJpI
+         Vsh00DPD7rj87XdaxRSYPfBsBAN7FvwewFG9kAbAybHO8w6BrDs7Q/oHkpYaTspxVr8g
+         hG55hBJ9e6DnKN6cjQsuVlY7/n4MxMQTtSF3SukeI2+Zdfpe9OF7WCVtCu8zUxSY8ajX
+         hHEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K3/Vc1Ah6eKHyLWI1pgidt8/nWh+3HJqZHQUqW0QsJY=;
+        b=c4iPjm3UhHtqa4TTtSRCIJib9l2JE0hP0kgn7IXphG/iQJs9JslzVnnnIacSp4fHm4
+         iDg8807TiwQjq10j38hEH1h98+0RKFPe77LmkKxQ6zGfbRXJSs/+3cprjU8QJC1gPdqS
+         zirMJS7dvnbtiDl6tD7O4XdqKurJcYFTQ6tI/CAD9uNgxDEXfR5Oir+ecKJGd2MYoosA
+         p15VbGADJYo9Xbg2NOe77o6Jn7uJ/u+z9z9bKaLBmlM0rLQPWwsx1u6OKqlIWL8Swq53
+         MaQLa84NNho79XGQ5mLcUhJNqu2jrafXNskzoc7MtNxF6F/1MNOQxJ9Jd2QQsQG8govd
+         jUZA==
+X-Gm-Message-State: AOAM5328OkfbOBM09v5WdyRsdAT47e6eNt8w4ir0f1uhV/+Zdl9GhBGa
+        OJl50mMICmDLemI/jJatjtVAhyQGy07/x0/+tucOcg==
+X-Google-Smtp-Source: ABdhPJyLTgXQd1zTmLlKpEGuucdoDu6MxM1Ifem4y53cs/Xb9ONexPA+wPxOnpJgqOBWr4/fpZSZO+YOQXGKhLX6tmk=
+X-Received: by 2002:a67:6942:: with SMTP id e63mr8188302vsc.48.1615545442849;
+ Fri, 12 Mar 2021 02:37:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-12_03:2021-03-10,2021-03-12 signatures=0
+References: <20210311192105.14998-1-digetx@gmail.com> <20210311192105.14998-2-digetx@gmail.com>
+ <20210312053312.zgke2mzjkqmwn67i@vireshk-i7>
+In-Reply-To: <20210312053312.zgke2mzjkqmwn67i@vireshk-i7>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 12 Mar 2021 11:36:46 +0100
+Message-ID: <CAPDyKFqrUCjTfrNqZ4gFfQS6LpoQCevGc-tv4WVOwuGhx5iiBg@mail.gmail.com>
+Subject: Re: [PATCH v2 01/14] opp: Add devres wrapper for dev_pm_opp_set_clkname
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Qiang Yu <yuq825@gmail.com>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>, Rob Herring <robh@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        lima@lists.freedesktop.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Avoid CONFIG_PM preprocessor check for pm suspend/resume
-callbacks and identify the functions with __maybe_unused.
+On Fri, 12 Mar 2021 at 06:33, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 11-03-21, 22:20, Dmitry Osipenko wrote:
+> > +struct opp_table *devm_pm_opp_set_clkname(struct device *dev, const char *name)
+> > +{
+> > +     struct opp_table *opp_table;
+> > +     int err;
+> > +
+> > +     opp_table = dev_pm_opp_set_clkname(dev, name);
+> > +     if (IS_ERR(opp_table))
+> > +             return opp_table;
+> > +
+> > +     err = devm_add_action_or_reset(dev, devm_pm_opp_clkname_release, opp_table);
+> > +     if (err)
+> > +             opp_table = ERR_PTR(err);
+> > +
+> > +     return opp_table;
+> > +}
+>
+> I wonder if we still need to return opp_table from here, or a simple
+> integer is fine.. The callers shouldn't be required to use the OPP
+> table directly anymore I believe and so better simplify the return
+> part of this and all other routines you are adding here..
 
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
----
- drivers/spi/spi-stm32.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+Yes, please. I was thinking along the same lines, when I reviewed the
+mmc patch (patch9).
 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 25c076461011..3cc978e477a2 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -1976,8 +1976,7 @@ static int stm32_spi_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--#ifdef CONFIG_PM
--static int stm32_spi_runtime_suspend(struct device *dev)
-+static int __maybe_unused stm32_spi_runtime_suspend(struct device *dev)
- {
- 	struct spi_master *master = dev_get_drvdata(dev);
- 	struct stm32_spi *spi = spi_master_get_devdata(master);
-@@ -1987,7 +1986,7 @@ static int stm32_spi_runtime_suspend(struct device *dev)
- 	return pinctrl_pm_select_sleep_state(dev);
- }
- 
--static int stm32_spi_runtime_resume(struct device *dev)
-+static int __maybe_unused stm32_spi_runtime_resume(struct device *dev)
- {
- 	struct spi_master *master = dev_get_drvdata(dev);
- 	struct stm32_spi *spi = spi_master_get_devdata(master);
-@@ -1999,10 +1998,8 @@ static int stm32_spi_runtime_resume(struct device *dev)
- 
- 	return clk_prepare_enable(spi->clk);
- }
--#endif
- 
--#ifdef CONFIG_PM_SLEEP
--static int stm32_spi_suspend(struct device *dev)
-+static int __maybe_unused stm32_spi_suspend(struct device *dev)
- {
- 	struct spi_master *master = dev_get_drvdata(dev);
- 	int ret;
-@@ -2014,7 +2011,7 @@ static int stm32_spi_suspend(struct device *dev)
- 	return pm_runtime_force_suspend(dev);
- }
- 
--static int stm32_spi_resume(struct device *dev)
-+static int __maybe_unused stm32_spi_resume(struct device *dev)
- {
- 	struct spi_master *master = dev_get_drvdata(dev);
- 	struct stm32_spi *spi = spi_master_get_devdata(master);
-@@ -2044,7 +2041,6 @@ static int stm32_spi_resume(struct device *dev)
- 
- 	return 0;
- }
--#endif
- 
- static const struct dev_pm_ops stm32_spi_pm_ops = {
- 	SET_SYSTEM_SLEEP_PM_OPS(stm32_spi_suspend, stm32_spi_resume)
--- 
-2.17.1
+>
+> If there is a user which needs the opp_table, let it use the regular
+> non-devm variant.
 
+Kind regards
+Uffe
