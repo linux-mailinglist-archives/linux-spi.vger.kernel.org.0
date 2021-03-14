@@ -2,73 +2,111 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B773C3398AA
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Mar 2021 21:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D84A339FF5
+	for <lists+linux-spi@lfdr.de>; Sat, 13 Mar 2021 19:36:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235054AbhCLUs3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 12 Mar 2021 15:48:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38702 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235073AbhCLUsW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 12 Mar 2021 15:48:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4904864F4F;
-        Fri, 12 Mar 2021 20:48:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615582101;
-        bh=/XMXUxTFOXG/ohVMyBKky01OWeEbHdqSnYFUhvmw1dI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eZHB8kKRpDwoL/t7AQbJtyT3TyUcDpimLJnj9lvLP9jPDKb/3w9SCfRaVu5TCT54T
-         LP7s8Jox5Rhd1ZChZE4GRNY1shOwrghzqjXkSLuPKEXrzO/PwQiUTIAXOoR+OZuvkZ
-         J8viu++q0JjBnvhIPD1Hmql6xMTjgaTxIRWjYFyYl59zUMMa97qLfM2E8aVnTsDiUG
-         5+HmJpczd7B2bKunuct2bi94eXX0ptuc2PBAK+R2Kqh2+g/igjncGkNWrvgY6q4eNc
-         Nc5HxLcVztRiXeI4ckymSTEPCAsMekvO/IW8+nODOgwiOSo7MuyKYRgcUpgPZbPc4p
-         7Rw007YGkpvEA==
-Date:   Fri, 12 Mar 2021 20:47:08 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] spi: Adding support for software nodes
-Message-ID: <20210312204708.GM5348@sirena.org.uk>
-References: <20210303152814.35070-1-heikki.krogerus@linux.intel.com>
+        id S234351AbhCMSgT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Sat, 13 Mar 2021 13:36:19 -0500
+Received: from smtp.econet.co.zw ([77.246.51.158]:65277 "EHLO
+        ironportDMZ.econet.co.zw" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234286AbhCMSf6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 13 Mar 2021 13:35:58 -0500
+X-Greylist: delayed 472 seconds by postgrey-1.27 at vger.kernel.org; Sat, 13 Mar 2021 13:35:46 EST
+IronPort-SDR: 2VH7uDjPUxuRF84kGIuoHHaISSCuqZi+ufUVCFmh+/0u/DCFCtj5VFDT1b4h9dNnVvA6flspH+
+ 3h9rw6M4gXRTOO/x00E/RP0IaZ5bJ/VFJjak29BaaBMRsZ8SomhBLF6NshxP1CgwykLJQtbFhT
+ f57yb5yFlreJnhCu99okX5fHlhFOs37BIGqeR55agFxRF7WOiDsNKvGtFuzjle44yqE/60PUcB
+ eSRuIQK9gCbtZaBXI6W4OKIxrnCmM+n1gcMJCNZUjbl9kcbsSMLo+94gqXFyBTYwkpasFfSfmL
+ xM0=
+IronPort-HdrOrdr: A9a23:z3onBKxoaNoCa6u/wVCbKrPwgr1zdoIgy1knxilNYDZSddGVkN
+ 3roe8S0gX6hC1UdHYrn92BP6foewK+ybde544NMbC+GDT3oWfAFuFfxKbr3jGIIUPD38FH06
+ MIScRDIfnRKXQ/ssrg+gm/FL8boeWv1Kyzn+/RwzNMYGhRGsddxjx0AAqaDUF6LTMubfFSKL
+ Om6tNDt36cfx0sA/iTPXUZQ/PF4+TCiZOOW29/Ozcc9AKMgTm0gYSULzGk2H4lIkpy6IZn1V
+ Lgmwz9opy5s/ehygLNvlWjiqh+qZ/EwttHCNfksLlwFhzcziKpYIhGfpHqhkFTnMifrG8wkN
+ /WowoxVv4DiU/sQg==
+X-IronPort-AV: E=Sophos;i="5.81,245,1610402400"; 
+   d="scan'208";a="3444522"
+Received: from unknown (HELO WVALE-MB-SVR-05.econetzw.local) ([192.168.101.173])
+  by ironportLAN.econet.co.zw with ESMTP; 13 Mar 2021 20:27:52 +0200
+Received: from WVALE-CAS-SVR-9.econetzw.local (192.168.101.184) by
+ WVALE-MB-SVR-05.econetzw.local (192.168.101.173) with Microsoft SMTP Server
+ (TLS) id 15.0.1473.3; Sat, 13 Mar 2021 20:27:48 +0200
+Received: from User (165.231.148.189) by WVALE-CAS-SVR-9.econetzw.local
+ (10.10.11.230) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
+ Transport; Sat, 13 Mar 2021 20:27:59 +0200
+Reply-To: <r19772744@daum.net>
+From:   "Reem E. A" <chawora@econet.co.zw>
+Subject: Re:
+Date:   Sat, 13 Mar 2021 18:27:46 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bZ2MuwyI/0uB8yuJ"
-Content-Disposition: inline
-In-Reply-To: <20210303152814.35070-1-heikki.krogerus@linux.intel.com>
-X-Cookie: Lake Erie died for your sins.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 8BIT
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <96f8ff6fe77b4507830ab5cf78a93340@WVALE-CAS-SVR-9.econetzw.local>
+To:     Undisclosed recipients:;
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hello,
 
---bZ2MuwyI/0uB8yuJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (2) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home on their behalf and
+for our "Mutual Benefits".
 
-On Wed, Mar 03, 2021 at 06:28:10PM +0300, Heikki Krogerus wrote:
-> Hi,
->=20
-> The older API used to supply additional device properties for the
-> devices - so mainly the function device_add_properties() - is going to
-> be removed. The reason why the API will be removed is because it gives
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Turkish Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
-This makes sense to me, OK to apply the PXA patches via the SPI tree?
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+reem.alhashimi@yandex.com
 
---bZ2MuwyI/0uB8yuJ
-Content-Type: application/pgp-signature; name="signature.asc"
+Regards,
+Ms. Reem.
+This mail was sent through Econet Wireless, a Global telecoms leader.
 
------BEGIN PGP SIGNATURE-----
+DISCLAIMER
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBL00sACgkQJNaLcl1U
-h9C2Jwf+KSe+06U3nl5gd7TKg71kSd3x6YZc07UnJK+u1jp5/bqaUHemS+Q3C5gV
-I6ZHExnAnriDxkN1/a7OkdDi8q3LoIUY3X3HTEPwMMfjqC1Dy6dqpFS0avXxRHAF
-aoiAa+JjB/sl56HQBQNYgRphnMw2lfb1nuNCcmpPLIKqnJiLU02WWQVcI2krJryT
-dpKzUCtad54slZh7QJAi4Ehgkn1JYcikHnjajRyw3o0Gx7C3zfXKigf+E7JV2qMS
-V14W3q9zre2t/wJYV9+5eqZUEx53Ri+61qwUsCIakVxILLEXbQeD6Lb0FypxNRuJ
-t36v0PSAhEUu4NvsVfzM0dl4Lu03kg==
-=gs0W
------END PGP SIGNATURE-----
+The information in this message is confidential and is legally privileged. It is intended solely for the addressee. Access to this message by anyone else is unauthorized. If received in error please accept our apologies and notify the sender immediately. You must also delete the original message from your machine. If you are not the intended recipient, any use, disclosure, copying, distribution or action taken in reliance of it, is prohibited and may be unlawful. The information, attachments, opinions or advice contained in this email are not the views or opinions of Econet Wireless, its subsidiaries or affiliates. Econet Wireless therefore accepts no liability for claims, losses, or damages arising from the inaccuracy, incorrectness, or lack of integrity of such information.
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/AgileBanner.png]
+WORK ISN'T A PLACE
+IT'S WHAT WE DO
+________________________________
 
---bZ2MuwyI/0uB8yuJ--
+
+
+
+
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/telephone.png]
+
+
+
+
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/email.png]
+
+<mailto:>
+
+
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/location.png]
+
+
+
+
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/website.png]
+
+www.econet.co.zw<https://www.econet.co.zw>
+
+
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/inspired.jpg]
