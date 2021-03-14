@@ -2,51 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A3433A654
-	for <lists+linux-spi@lfdr.de>; Sun, 14 Mar 2021 17:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 821CF33A658
+	for <lists+linux-spi@lfdr.de>; Sun, 14 Mar 2021 17:36:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234434AbhCNQfM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 14 Mar 2021 12:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
+        id S234453AbhCNQfN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 14 Mar 2021 12:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234015AbhCNQeo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 14 Mar 2021 12:34:44 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DC9C061574;
-        Sun, 14 Mar 2021 09:34:43 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id d15so7478209wrv.5;
-        Sun, 14 Mar 2021 09:34:43 -0700 (PDT)
+        with ESMTP id S234033AbhCNQeq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 14 Mar 2021 12:34:46 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE370C061574;
+        Sun, 14 Mar 2021 09:34:45 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id y124-20020a1c32820000b029010c93864955so18824918wmy.5;
+        Sun, 14 Mar 2021 09:34:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=C/5Ng/DtkoydDqBvZq8AbYfbXEoAPbsENXRNj6fGs4M=;
-        b=AZIjeihL2yluu7+ziQ9v+nQ1dEmp58/PiHa0qg4i1Vn3Us0fHEIXwilYfY2Mz+8lLz
-         c0juj89+qh1eRLRy5OMe/Jc0YneZIEpze02hLIQDNsNBds7JdxWpqbbstGB5knFg9k6u
-         4aBoy9+aqAMV/zw4Y++14Ku4isUFAILx12+GIfbpZ8ByRBABxrTKObpDvkf/ykkr2FaM
-         IPxLz8UE1vQ68mW6wRIOz4EbI8tzujeA0Uu/zc1thT/j9I+8ZI0y6pR8ZqFxc+P9y8Yf
-         nkHE2w3spY5YhLMok/47iL83KVGZ9r8YxpSc6TDfDdTuqNkCBpRiZrHzRt5Fz7dxuqZC
-         XkGQ==
+        bh=sWkE1WsTkUBL6nZDojhWUmQnQSjSLYp0gyDUfjHX3tw=;
+        b=cSRN2y/tFestNZrESCS+KzkQ57FoXybXRzZLeRHuPVB2i3UPQ3T0LMt8IYTS1MtSw3
+         k7WXzZh1XLATuVEVwbHL7djV2gSVBx++Z5JLAS3gAfGoDt0sYVs8MWg+HYvgYjsyn6T4
+         tI1eoDiYa61+/CCL8pvSFBl/wqpe3xS7UYtoMbT2jJJvGqkbAnTqdbC73psUVGasoTI9
+         OJNkYM0JrO83EBXuM/zzwgNM2RCf2VjL8h4Q+hqyqJWvsnSrADr4kBW0ZGVTdTcrzbgv
+         p00a9xQNc7hrR27z/yJrIEyCSpUsg9iO4FoUiGw7EON9ZgIM2LqG7bsd0oWFd90pRO6P
+         X8xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=C/5Ng/DtkoydDqBvZq8AbYfbXEoAPbsENXRNj6fGs4M=;
-        b=nmH8BL8DK99DCw6hwaNeXgNbXxJURrkohanxLSBfrOiRDBsnSnLzXMLmU3f8pry0//
-         NFfkEOEBnjwkB7kCFFrjB6UlDqOOznLLakgcKzfnjQpPwjQ/0LRK8dBDyO1ntm4PDGWQ
-         1gqUfrDqkeH25OsvwFI4h3kEocklAKoOcaWf+zIGrZPQ0gK7nw1X9uax51syKOIRwQux
-         sl3Xgh2oN9N1bJMb/iBoaaAv/JH+6xNQGdgThqjcgDjpUqpG67s/HeIsNjxCDFmYvI/2
-         CeA0nm3p211ZB/jyTpJ7no+9s4eRdrjv4Zgwlu4dND+zi5Ay2qahz0s7STjBxPtkh6GE
-         dahQ==
-X-Gm-Message-State: AOAM531Ns8pCUD++dl4gx9OJCBlpzxwI1+8eE+uT2eo9lprqfLct1VQO
-        GSPujxRi1yODawpdqmkQN+c=
-X-Google-Smtp-Source: ABdhPJwTslpY31/qqM5Kj4SW4qqIUgqTVjIObWqN26uqLWPcyfaojPCdZoyfNAhylicplEYulZuQuQ==
-X-Received: by 2002:a5d:53c8:: with SMTP id a8mr23285997wrw.323.1615739682317;
-        Sun, 14 Mar 2021 09:34:42 -0700 (PDT)
+        bh=sWkE1WsTkUBL6nZDojhWUmQnQSjSLYp0gyDUfjHX3tw=;
+        b=kDs4qFsdMUet7yuSrYl4qDIG4KJlIAmRym3XOdm1O07gxuVOB6UlwXF8jDAD9e1IiG
+         V5hlQkomnx49fJbVVZ/iCdXyEi/KZ+EfpReGxaTxs4dY/AOr38jE2IbI5a634REXob9b
+         dw9kIAkujdcTSL+auuS9flffvteeRIqORqGiy15rl69iOsJ8mMuo/2ot3NxVQBLivseh
+         n9MaPlD8YKna8QWawX0te3bMCe5L6vpnrW4hhSOCIkSJEL12P9uFuLqpnBKfG98PFEMO
+         oDwZWs5ZObzPkQwXS44KTb+PdR+3Ef5CNsy/v6aTrLeaS4I0tl141YbUrzlcm+I7D+Hc
+         GiRA==
+X-Gm-Message-State: AOAM532k1L5hWjrQqwH92P8DUMXoaMJuFlGiiYdSzyTyskBjxiZK6OKZ
+        fctm5k3Gv8wBclVaphf0UdY=
+X-Google-Smtp-Source: ABdhPJzytN+oHophUDTCGClKZO9DIbz4gbFiuvi8oNRIXU4bqMoNeMMCp+cq4eL36pRbJLjGGBYMcg==
+X-Received: by 2002:a1c:7715:: with SMTP id t21mr22166814wmi.132.1615739684501;
+        Sun, 14 Mar 2021 09:34:44 -0700 (PDT)
 Received: from localhost.localdomain (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
-        by smtp.gmail.com with ESMTPSA id o7sm15723239wrs.16.2021.03.14.09.34.40
+        by smtp.gmail.com with ESMTPSA id o7sm15723239wrs.16.2021.03.14.09.34.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Mar 2021 09:34:42 -0700 (PDT)
+        Sun, 14 Mar 2021 09:34:44 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Qiang Yu <yuq825@gmail.com>, Rob Clark <robdclark@gmail.com>,
         Sean Paul <sean@poorly.run>, Rob Herring <robh@kernel.org>,
@@ -74,9 +74,9 @@ Cc:     Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
         linux-samsung-soc@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-tegra@vger.kernel.org
-Subject: [PATCH v3 06/15] opp: Change return type of devm_pm_opp_attach_genpd()
-Date:   Sun, 14 Mar 2021 19:33:59 +0300
-Message-Id: <20210314163408.22292-7-digetx@gmail.com>
+Subject: [PATCH v3 07/15] serial: qcom_geni_serial: Convert to use resource-managed OPP API
+Date:   Sun, 14 Mar 2021 19:34:00 +0300
+Message-Id: <20210314163408.22292-8-digetx@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210314163408.22292-1-digetx@gmail.com>
 References: <20210314163408.22292-1-digetx@gmail.com>
@@ -86,80 +86,85 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Make devm_pm_opp_attach_genpd() to return error code instead of
-opp_table pointer in order to have return type consistent with the
-other resource-managed OPP helpers.
+From: Yangtao Li <tiny.windzz@gmail.com>
 
+Use resource-managed OPP API to simplify code.
+
+Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/opp/core.c     | 18 ++++++------------
- include/linux/pm_opp.h |  9 +++++----
- 2 files changed, 11 insertions(+), 16 deletions(-)
+ drivers/tty/serial/qcom_geni_serial.c | 23 ++++++++---------------
+ 1 file changed, 8 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 4f44f02e6049..2076b12c039b 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -2460,25 +2460,19 @@ static void devm_pm_opp_detach_genpd(void *data)
-  *
-  * This is a resource-managed version of dev_pm_opp_attach_genpd().
-  *
-- * Return: pointer to 'struct opp_table' on success and errorno otherwise.
-+ * Return: 0 on success and errorno otherwise.
-  */
--struct opp_table *
--devm_pm_opp_attach_genpd(struct device *dev, const char **names,
--			 struct device ***virt_devs)
-+int devm_pm_opp_attach_genpd(struct device *dev, const char **names,
-+			     struct device ***virt_devs)
- {
- 	struct opp_table *opp_table;
--	int err;
+diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+index 291649f02821..3872bbfac24b 100644
+--- a/drivers/tty/serial/qcom_geni_serial.c
++++ b/drivers/tty/serial/qcom_geni_serial.c
+@@ -1433,14 +1433,14 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+ 	if (of_property_read_bool(pdev->dev.of_node, "cts-rts-swap"))
+ 		port->cts_rts_swap = true;
  
- 	opp_table = dev_pm_opp_attach_genpd(dev, names, virt_devs);
- 	if (IS_ERR(opp_table))
--		return opp_table;
--
--	err = devm_add_action_or_reset(dev, devm_pm_opp_detach_genpd,
--				       opp_table);
--	if (err)
--		return ERR_PTR(err);
-+		return PTR_ERR(opp_table);
+-	port->se.opp_table = dev_pm_opp_set_clkname(&pdev->dev, "se");
+-	if (IS_ERR(port->se.opp_table))
+-		return PTR_ERR(port->se.opp_table);
++	ret = devm_pm_opp_set_clkname(&pdev->dev, "se");
++	if (ret)
++		return ret;
+ 	/* OPP table is optional */
+-	ret = dev_pm_opp_of_add_table(&pdev->dev);
++	ret = devm_pm_opp_of_add_table(&pdev->dev);
+ 	if (ret && ret != -ENODEV) {
+ 		dev_err(&pdev->dev, "invalid OPP table in device tree\n");
+-		goto put_clkname;
++		return ret;
+ 	}
  
--	return opp_table;
-+	return devm_add_action_or_reset(dev, devm_pm_opp_detach_genpd,
-+					opp_table);
- }
- EXPORT_SYMBOL_GPL(devm_pm_opp_attach_genpd);
+ 	port->private_data.drv = drv;
+@@ -1450,7 +1450,7 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
  
-diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-index 865426b525a8..a5ae69c40ea7 100644
---- a/include/linux/pm_opp.h
-+++ b/include/linux/pm_opp.h
-@@ -158,7 +158,7 @@ void dev_pm_opp_unregister_set_opp_helper(struct opp_table *opp_table);
- int devm_pm_opp_register_set_opp_helper(struct device *dev, int (*set_opp)(struct dev_pm_set_opp_data *data));
- struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names, struct device ***virt_devs);
- void dev_pm_opp_detach_genpd(struct opp_table *opp_table);
--struct opp_table *devm_pm_opp_attach_genpd(struct device *dev, const char **names, struct device ***virt_devs);
-+int devm_pm_opp_attach_genpd(struct device *dev, const char **names, struct device ***virt_devs);
- struct dev_pm_opp *dev_pm_opp_xlate_required_opp(struct opp_table *src_table, struct opp_table *dst_table, struct dev_pm_opp *src_opp);
- int dev_pm_opp_xlate_performance_state(struct opp_table *src_table, struct opp_table *dst_table, unsigned int pstate);
- int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq);
-@@ -384,10 +384,11 @@ static inline struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, cons
+ 	ret = uart_add_one_port(drv, uport);
+ 	if (ret)
+-		goto err;
++		return ret;
  
- static inline void dev_pm_opp_detach_genpd(struct opp_table *opp_table) {}
+ 	irq_set_status_flags(uport->irq, IRQ_NOAUTOEN);
+ 	ret = devm_request_irq(uport->dev, uport->irq, qcom_geni_serial_isr,
+@@ -1458,7 +1458,7 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+ 	if (ret) {
+ 		dev_err(uport->dev, "Failed to get IRQ ret %d\n", ret);
+ 		uart_remove_one_port(drv, uport);
+-		goto err;
++		return ret;
+ 	}
  
--static inline struct opp_table *devm_pm_opp_attach_genpd(struct device *dev,
--				const char **names, struct device ***virt_devs)
-+static inline int devm_pm_opp_attach_genpd(struct device *dev,
-+					   const char **names,
-+					   struct device ***virt_devs)
- {
--	return ERR_PTR(-EOPNOTSUPP);
-+	return -EOPNOTSUPP;
+ 	/*
+@@ -1475,16 +1475,11 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+ 		if (ret) {
+ 			device_init_wakeup(&pdev->dev, false);
+ 			uart_remove_one_port(drv, uport);
+-			goto err;
++			return ret;
+ 		}
+ 	}
+ 
+ 	return 0;
+-err:
+-	dev_pm_opp_of_remove_table(&pdev->dev);
+-put_clkname:
+-	dev_pm_opp_put_clkname(port->se.opp_table);
+-	return ret;
  }
  
- static inline struct dev_pm_opp *dev_pm_opp_xlate_required_opp(struct opp_table *src_table,
+ static int qcom_geni_serial_remove(struct platform_device *pdev)
+@@ -1492,8 +1487,6 @@ static int qcom_geni_serial_remove(struct platform_device *pdev)
+ 	struct qcom_geni_serial_port *port = platform_get_drvdata(pdev);
+ 	struct uart_driver *drv = port->private_data.drv;
+ 
+-	dev_pm_opp_of_remove_table(&pdev->dev);
+-	dev_pm_opp_put_clkname(port->se.opp_table);
+ 	dev_pm_clear_wake_irq(&pdev->dev);
+ 	device_init_wakeup(&pdev->dev, false);
+ 	uart_remove_one_port(drv, &port->uport);
 -- 
 2.30.2
 
