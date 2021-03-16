@@ -2,88 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A69B33DBC9
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Mar 2021 19:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF5233DC2E
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Mar 2021 19:08:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239534AbhCPSAJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 Mar 2021 14:00:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46454 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239548AbhCPR74 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 16 Mar 2021 13:59:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 36283650D9;
-        Tue, 16 Mar 2021 17:59:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615917595;
-        bh=LWv2RdOQ+K7J7vxOu5wGgipIwfQAL+SqFszPu4v3NEs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HSRXgZNTD4gsIDvZWY4dsu/7l90O0N9RIw0WJugAuyyjXs0q7aPL7MTwd4fhijGRH
-         38qUdUVoSe7DCnKhkRALpnNpif3H96qMZNww5fo2r19IQant4EFuHArT7DX0G1hAf4
-         91E8TWYhYMvP++bc9it8uzDRF8AH/jUO9c3bTlFAXuykEN+iLd+A7IE5R8v0nIOed5
-         foO9cR5SmwR0jYZuyTFWFwkWNGFoSvechRJpz/PcMOFeCdeSGFKT6I/4A9jxu+u8Zr
-         va4bXqylWZfG70d7EHn5C3gTDGqlymhg1PCc+Oeu6jq9gBdUW7xM8lMRyms7t3086h
-         yMTxkCA8ZrE9g==
-From:   Mark Brown <broonie@kernel.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] spi: Adding support for software nodes
-Date:   Tue, 16 Mar 2021 17:59:40 +0000
-Message-Id: <161591750212.14124.15654416621714459381.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210303152814.35070-1-heikki.krogerus@linux.intel.com>
-References: <20210303152814.35070-1-heikki.krogerus@linux.intel.com>
+        id S239720AbhCPSIT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 16 Mar 2021 14:08:19 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:57590 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239872AbhCPSHN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 Mar 2021 14:07:13 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 12GI6xuZ071441;
+        Tue, 16 Mar 2021 13:06:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1615918019;
+        bh=2r9YstoNEEa/M6gol0Amif0/Vm23LBs3Ked7QXVENQY=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=Nu54O/l0X+v6dYIjZoHxoOk2mNpYPd3via5MJmGXOj5YF/59/sPKbl3LOfSjO5ICF
+         UiLY+O/cRXEpwpt9QfZR/oupLZg62Zxw8ZxNylFo/W4CXJvuY8PkDKVv8U1KTgab1j
+         E0irDDFjZvwWdeLr3FMN5LA4iS7eAppnamVKi6z0=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 12GI6xjn075564
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 16 Mar 2021 13:06:59 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Tue, 16
+ Mar 2021 13:06:59 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Tue, 16 Mar 2021 13:06:59 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 12GI6wdx045156;
+        Tue, 16 Mar 2021 13:06:59 -0500
+Date:   Tue, 16 Mar 2021 23:36:58 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     Kuldeep Singh <kuldeep.singh@nxp.com>, <linux-spi@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        <linux-mtd@lists.infradead.org>
+Subject: Re: [PATCH] dt-bindings: spi: Convert Freescale DSPI to json schema
+Message-ID: <20210316180655.6oidvffum7yuwknr@ti.com>
+References: <20210315121518.3710171-1-kuldeep.singh@nxp.com>
+ <20210315183051.ugvmz4zqrvuo6iqq@ti.com>
+ <067c42f3726578ebe60d201a141dfdb6@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <067c42f3726578ebe60d201a141dfdb6@walle.cc>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 3 Mar 2021 18:28:10 +0300, Heikki Krogerus wrote:
-> The older API used to supply additional device properties for the
-> devices - so mainly the function device_add_properties() - is going to
-> be removed. The reason why the API will be removed is because it gives
-> false impression that the properties are assigned directly to the
-> devices, which has actually never been the case - the properties have
-> always been assigned to a software fwnode which was then just directly
-> linked with the device when the old API was used. By only accepting
-> device properties instead of complete software nodes, the subsystems
-> remove any change of taking advantage of the other features the
-> software nodes have.
+On 16/03/21 06:45PM, Michael Walle wrote:
+> Am 2021-03-15 19:30, schrieb Pratyush Yadav:
 > 
-> [...]
+> ..
+> > > +patternProperties:
+> > > +  "@[0-9a-f]+":
+> 
+> Shouldn't this be "^.*@[0-9a-f]+$"?
 
-Applied to
+The pattern has to match _anywhere_ in the string so both should match 
+the flash node. Your pattern is more "strict" or "precise". See the note 
+at [0].
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+[0] https://json-schema.org/understanding-json-schema/reference/string.html#regular-expressions
 
-Thanks!
+> 
+> > > +    type: object
+> > > +
+> > > +    properties:
+> > > +      fsl,spi-cs-sck-delay:
+> > > +        description:
+> > > +          Delay in nanoseconds between activating chip select and
+> > > the start of
+> > > +          clock signal, at the start of a transfer.
+> > > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > > +
+> > > +      fsl,spi-sck-cs-delay:
+> > > +        description:
+> > > +          Delay in nanoseconds between stopping the clock signal and
+> > > +          deactivating chip select, at the end of a transfer.
+> > > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > > +
+> ..
+> 
+> -michael
 
-[1/4] spi: Add support for software nodes
-      commit: 47afc77bbfeac163d81c7a675d608c18561aa680
-[2/4] ARM: pxa: icontrol: Constify the software node
-      commit: 2df0c4a640c55c0eff7f97907b98ad6fdfedd226
-[3/4] ARM: pxa: zeus: Constify the software node
-      commit: d4272a7adf26c62c5afe86b6829712de519b4a26
-[4/4] spi: Remove support for dangling device properties
-      commit: df41a5dad586c8ead1bb7082b4b6fcb563e02199
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
