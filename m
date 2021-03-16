@@ -2,247 +2,160 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 909A033CDC2
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Mar 2021 07:10:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B92AC33CE0A
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Mar 2021 07:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232727AbhCPGIk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 Mar 2021 02:08:40 -0400
-Received: from mail-am6eur05on2069.outbound.protection.outlook.com ([40.107.22.69]:12545
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        id S231503AbhCPGmt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 16 Mar 2021 02:42:49 -0400
+Received: from mail-eopbgr20077.outbound.protection.outlook.com ([40.107.2.77]:46861
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232718AbhCPGIT (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 16 Mar 2021 02:08:19 -0400
+        id S230385AbhCPGm0 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 16 Mar 2021 02:42:26 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GC5wD6sRQPahT6kMJ536wqJslTwoCcUvgtvjkw3cWqoQ2vFSGOzJRORjAKPkVqYPcKAfc/eDnpPS9DXUJw0A3YO8JQHp8dAoK1+G/m5oceYfe523H4svNL6keVAqBHzgNEQQOKkLY9l00ZtfO24/XPwKClQ4ApLk5fR8wcwp7gCNuKQfnxQ9BMtTTpocCnRJF65vR8MDbsWphR+Ei1GfCgmHlqhN5m6nL0YtSyhcuIDGjqPLv0JUVYHJLa+jVKNkhTAGzDan7gCpKxMeQy0FjN+VpMP27FCwF+ck+e41wjZuXNKCScsrQVBdnD2tbnc9tNxFNghDpA/tErQTodaR5g==
+ b=IpEmyw53Vpx8WMmIW9LpKIICgBtGTMyRygPAfiBTsT72di1o2QxAf2THam7iSjvXkMKKnMVFSl3Fs583KA71UW1YHDO7axZT6W1LiOw0oADcD7FCux3MXs5gF3UiVr7HuM162CppsZ9CTMxNmMd3CnLG/J/nk/riJ4dnImEeyUyykOyMst4jCwfO5ifwqZBl/thJ7iS2usCi9jGiVZPj11WDCc44nMROxLuREujtc3g2HxVH9ZpfKZIiZH11er3XavFqsEIcyoalibwhE2K3B0qIVwI9UhDjgPIQ2fOKXKku07YakF3nQl9pbdG22oYnWNaUMaOOlT6jgSP+2oHojg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LyFHmDebShXkul0hDxlq/aE0FTguH3QQdXLSaJv/0+E=;
- b=JzT9N2QP3Uy4wTiGAQ7Bt/wP4DfAtihPm8v1iVpRGPz13xAkf0j7Ym1nXoj6fUIWB/FkH0MSNGn+Z8ZXEVRIu4ZCaca6MIsW1rqTsH1kqlCMNlKEHlSxB1RY6Co1nWctfuOG4SkEqSfFJ/FiwkvrGbHZac+v4lDMMtJuLgho9bEwoZ6b7Tx5GomLoHQDqVJi11pIX0RHqGyX1S81xWD2IhTnB8ZYM1eaROFHEHh8QPE2S3ZmEzZnp1Yj8+y7x49yinfMrsZhaYr2oqunEpttMN9FHtivyfbEgHMXnbNEU1PVNRr5wasJd2siikUg9vRmcsg55DZUcXosAopum+kA8A==
+ bh=9kotEWciMuVcCTxStL+MFLWlEZhjUREv3Pf/3Yk5BFk=;
+ b=NY7a5S/FCdGoNXbXAEVcsVpdmoT+mua1LohxOqAUyEfkVN3B4CD35LCXmbbkvwfmvGA+E88ed6/NknaFfYhJHNh+JHXXg1Y7/j7vT0pVDxBhUvlVRu+OMgzyjjhORlVbIVkAciX1ZRHbbHaKtqFcrZ5vmopEA7rk5jfr9YGyvONH+FwARYHv94PuNxMgPmf7RDCi9lyplz9dvX2zG7LLI62VnQ6R4fmFRDO39cdO0pYYgWhPuwXhmeKoAyns6T1h+QtDNPO+1O8O8EA6VRNR7/Vl5qwR1bmtHH7jM6nT6jmqMKEZvk4vWkYcKSrveW/wVwKEuL5RauxaluqgKzkGYw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LyFHmDebShXkul0hDxlq/aE0FTguH3QQdXLSaJv/0+E=;
- b=d+IQLwaYErYQAeJDdfdz/mLfLGo1548GBgogFDsplNddk8rlUMTAKm1yimPhjvvJbVfoLA1KDrSSSPKUx5oCIwfkTPCFyJxmHBCM/G6e4IX0aNTyS6YtoKcPlDIi6QeNvMx1+Qe16wM9PStG6b+sBk/bbBbpGuZRfClQR8EfX4U=
+ bh=9kotEWciMuVcCTxStL+MFLWlEZhjUREv3Pf/3Yk5BFk=;
+ b=Cy6797fv3l+/Y0rNLaPk5dih0MQ7A288CjlyznWx7c05C2vBFC1YjvJVrIa8vJJHtgjvCeMUG7NmxIh2igoIG4MmJsBk9EW3wuypJ6tMWvKIKT2AhSzv9rpB03K7Z/aBqxUw8cGfLMbEcyJeOyZrDhA+fSxNPqNen3QdXcLhPtg=
 Received: from DB6PR0402MB2758.eurprd04.prod.outlook.com (2603:10a6:4:96::7)
- by DB8PR04MB6857.eurprd04.prod.outlook.com (2603:10a6:10:114::21) with
+ by DBBPR04MB7787.eurprd04.prod.outlook.com (2603:10a6:10:1e3::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.32; Tue, 16 Mar
- 2021 06:08:17 +0000
+ 2021 06:42:23 +0000
 Received: from DB6PR0402MB2758.eurprd04.prod.outlook.com
  ([fe80::c99c:dbc3:ed75:e6e8]) by DB6PR0402MB2758.eurprd04.prod.outlook.com
  ([fe80::c99c:dbc3:ed75:e6e8%5]) with mapi id 15.20.3933.032; Tue, 16 Mar 2021
- 06:08:17 +0000
+ 06:42:23 +0000
 From:   Kuldeep Singh <kuldeep.singh@nxp.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+To:     Heiko Schocher <hs@denx.de>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Ashish Kumar <ashish.kumar@nxp.com>,
         Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: RE: [EXT] Re: [PATCH] dt-bindings: spi: Convert Freescale DSPI to
- json schema
-Thread-Topic: [EXT] Re: [PATCH] dt-bindings: spi: Convert Freescale DSPI to
- json schema
-Thread-Index: AQHXGZTp77oN99ywtki2W2/Bm/x6J6qFh6sAgACXclA=
-Date:   Tue, 16 Mar 2021 06:08:17 +0000
-Message-ID: <DB6PR0402MB27580AF77ED738B995616EB5E06B9@DB6PR0402MB2758.eurprd04.prod.outlook.com>
-References: <20210315121518.3710171-1-kuldeep.singh@nxp.com>
- <20210315205440.lb6hcrvzxtqxdb5x@skbuf>
-In-Reply-To: <20210315205440.lb6hcrvzxtqxdb5x@skbuf>
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Yogesh Gaur <yogeshgaur.83@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [EXT] [PATCH 0/2] enable flexspi support on imx8mp
+Thread-Topic: [EXT] [PATCH 0/2] enable flexspi support on imx8mp
+Thread-Index: AQHXGiHilVAG0/q0oE2pkR62eySgfqqGI38w
+Date:   Tue, 16 Mar 2021 06:42:23 +0000
+Message-ID: <DB6PR0402MB2758717E38C20E7BFEC5FED8E06B9@DB6PR0402MB2758.eurprd04.prod.outlook.com>
+References: <20210316050425.1758778-1-hs@denx.de>
+In-Reply-To: <20210316050425.1758778-1-hs@denx.de>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=nxp.com;
+authentication-results: denx.de; dkim=none (message not signed)
+ header.d=none;denx.de; dmarc=none action=none header.from=nxp.com;
 x-originating-ip: [223.236.221.34]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 01b4920a-357c-4729-d56f-08d8e841e462
-x-ms-traffictypediagnostic: DB8PR04MB6857:
-x-microsoft-antispam-prvs: <DB8PR04MB6857878C0E34C038A72492B4E06B9@DB8PR04MB6857.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-office365-filtering-correlation-id: 1a317c45-d598-459e-8370-08d8e846a7f9
+x-ms-traffictypediagnostic: DBBPR04MB7787:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DBBPR04MB778707940AC3CC5B3B717D9BE06B9@DBBPR04MB7787.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3383;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 94thw/Gn4qI9A1Dm1MGZS6+zkj3PCQP/cjZjTyuMK6mGRDIG8m6b5CCK3X1L3wXzfHQkobE8kzgJeyvb3Cd1mxMnZfaiYIzr8PqEzI/kqpPLBW6n2XzGEfruI+V2kpGtNyIuSPD1L9shXTYojWw4/ZyJ/uVEwTVBvz36XRFX400+L28wrl4TDwQ0+FHP5hxgD/HIl1Z9Y/kYLKhUf7YLgaHWkOJrovTAu2Kl4y7XAz7GUI1xRADt4/KSZvab9textHFY0kXirH4u/mVObocpyEC8brD2lRk9PDlYNQmLoNvTH7Z+j1DcNme6lRzh/FratnGTSoc3j1HU3mEPm2nR+7Ko29G0UKjyJnrk/J8TtL87b6yEGvCIItC8BjDykWnSsVNXqrxCvxJNyLvc/XpeviZzQ9yIAWlt9j+7G/1IKja3HXEGRJ/6JkuYjTRI318cstuwzX7A0aZ+ygmdWPwEPGB1m1+U5InWEOecLbevIpUB5kwWDEFaeNzYziefiFoZk/VxQeMb5l2ZG3FzHh5TS2j8wM8/+xKCq6BkYmGYWs7gdx5wPkHGuCO46Bz9POyv
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0402MB2758.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(346002)(396003)(136003)(376002)(366004)(186003)(316002)(54906003)(7696005)(33656002)(9686003)(71200400001)(53546011)(8676002)(8936002)(83380400001)(6506007)(26005)(44832011)(2906002)(86362001)(66556008)(66946007)(66446008)(64756008)(4326008)(6916009)(76116006)(66476007)(55016002)(52536014)(478600001)(5660300002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?mv0TkaWVc9kMUnISN0hXbYeFxr6oURuIesCG4E0IfJRdBJFTuRYSq1jaVjgx?=
- =?us-ascii?Q?4s+ckEs/EA0tTIDz7KCezt3IQPlex+6EJMJ/Eu7JVvCk7T+DSy5eK03IQRCr?=
- =?us-ascii?Q?a3Wncc04FfWcAxSH1/ACR9pHCh4s8mLLZSPt/M2X0e4oXjfcuB8PpMuH5IHD?=
- =?us-ascii?Q?Mrt5jnrWhyp0YTB17m6vipjINLG0sTc2NTnXVIenj5y41gu8Z+vv0zOzfkdm?=
- =?us-ascii?Q?KLqCEkxaG+3WQLkrY1slmwkmlkkpd9f05xq2uYh/cKAp1G7TOYKv4XDz9vMo?=
- =?us-ascii?Q?pXXg8/YVrl58ZCBCoMk14FvPguN5qbwXrInDE9OE5ADXfNxpOZ7jCP3Aem5Z?=
- =?us-ascii?Q?6fhjPtp07/Up92TBL8hv/Qqk149ZEHpsjtMMlGMA6jJztAUtfuCl2WL3J8A0?=
- =?us-ascii?Q?JoG43hxNELNALLiW7W+NJr+V24NB/VjfLzktfDWmxRCkjEMME2l3urpxyWs2?=
- =?us-ascii?Q?a0TO+3xGYC9PHXH9cFM439JJ8+iy5XEyNQXc+dSNfMbR3YAOP7lLWcMkS3uq?=
- =?us-ascii?Q?LqiG10eLl1z+hIUuVZdKQKAROYKr73fuxhERbvJlrSOzbURf8/8nunl7uPWp?=
- =?us-ascii?Q?kbbP+vTbu4NFvfwzAHT3y5lhQGP38J1D/zHCS+dWTF5id6lRMpml2nO+gXwD?=
- =?us-ascii?Q?PhQ5AwhCcsmtuMxP3MI6WmSMQ8629Fk41cb4D/wgXsYmMQWa2ozxmG5y2Q8d?=
- =?us-ascii?Q?uminJk45scTXcMgMks4aC//sIOnyliACPf5/TXRqy7qe79NgoTtXcHg+ayrD?=
- =?us-ascii?Q?Wr1IGc+BRDuOgUZZQfYfdb0gz6PKN3GTd2u0H8sqiA1H15siWFYKkt0jMcA/?=
- =?us-ascii?Q?wUcS2lpmrneYr0fj/mD80G3JiKqWmfv86p99Ts7x+G4G4FxFEfYpwiqrbNOs?=
- =?us-ascii?Q?7+R5Sgk6XtEMei804xdGXcmMuopdSbXeJpNT5nPa3Ca0vdjmKkENMAhK3+V6?=
- =?us-ascii?Q?dafIdLGlYcT0bPMKuVfnmeo5RMEv64xUoTyxuQ3bdP2B8/ZfV0hWVEmZz8yL?=
- =?us-ascii?Q?N/i20CcnDXyNVeBxeHzfQ6LLEFwkgzJZOZWd8UzmBrIhbpaoEz4pYmyGs+bj?=
- =?us-ascii?Q?nhkcoUy0CeC2+AsPXI2nhV/3+bycblQs3ay/0TyhYYI06jsaex0e7c+uSW7m?=
- =?us-ascii?Q?BiJjRWokn68OChGlLMu+cVtrBJ2TKC+aGb3K7qusaXBN5Uf6m3XgC6ScYi1R?=
- =?us-ascii?Q?e7R1fsqUG/RLQqmOTaUdzziPiEgDOFlR0dYu4ZGPhgrhJztZTHlL6Jr9M3ho?=
- =?us-ascii?Q?em/mkeLmXYBAls4kwwgmlcL5tzrnWEaa8lu8co6fJ5VO9smnMiMukaRDU9Qj?=
- =?us-ascii?Q?tdng4iMdFQzhA7Q6VI73ojkt?=
-x-ms-exchange-transport-forked: True
+x-microsoft-antispam-message-info: E95yjg1YW0nCvxP/vJMSxm25U07zbVtxo/a7XdgpFYq3lRPLhsochoTFjzrnq0fHMmwy0MRFvWoX0cBzVqG47UftR2PIhW4eJPpk02B4qVRsuUwg7qOVVTN7AjgoDN2jiQklahcic5Lk+53l2n/Eie0bt5RASoT0EDJU7H4WwaX+ZVs3fPU70AMhx7H0g75PyzsFAxWe0E6bxMrTvdoydJaU4xxrdNpwkQ7An9m/enok/fEwu/Fx//jMjzqMbHv+KdUIF5rmbd7Yk0mWgJbdj5TiLdUt5HHdZXIM1HZDqGawzjFFbyExuR1qVnJjUGdsvrz+GqhLEqIhGTpIE++oICgmwk6Ula5oZhp19JWDgPpnQiJAN1SDX9xTBaoGA1H+phTqMi6dq8QKdyg81FI0Pnp+/xEd52BKtIYqtzAVUtFb+TH7gywfEioiKoq6VLVk/UZ1V6VhCQqVsc9W6dR8R00wipe9IMTVKugqk0bejYbiX8WS3SMiRTOu8JDnJn/O/5JD5QtAlYBeDu42dBXLmaehR+baG/8VIQdFRdf0GrdL9qsX/s2Xenm5RC4l2k3+rcVkIb29qcz9g0XqNCY11zNOFG4XxKNC3NlKqdwFje1hSHy6VkdiZwB17HNKb51rc6FMWTcUs3IaBqx5QgIIRw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0402MB2758.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(376002)(346002)(39860400002)(136003)(396003)(4326008)(55016002)(316002)(2906002)(71200400001)(54906003)(26005)(83380400001)(76116006)(5660300002)(33656002)(186003)(44832011)(66446008)(9686003)(66556008)(45080400002)(110136005)(53546011)(64756008)(6506007)(7696005)(966005)(478600001)(86362001)(8676002)(52536014)(66476007)(66946007)(8936002)(32563001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?pT4ul0HF8+zPUIT1t9GK4X4MT8WxZCSWamAQPye35akKk8TlH1twwax/ZCn7?=
+ =?us-ascii?Q?xtfmLOPeawKx5h4Z7JeOc/UygYNGWEWRl3OGswr/UNnUokaLowu0NkvAD/wX?=
+ =?us-ascii?Q?A7HWTbf+EfpmoZAzoPlyTXUkXPMyugUuUln0P/epKuHzoLkFJh3MVa3i+6au?=
+ =?us-ascii?Q?PCeleWr8FrR0Lkzd4CvxDjo7eYEbvzLPRmwj533KQ/5i55MIO7Y9H0IQBFfs?=
+ =?us-ascii?Q?8LK+x242BgVfGnnr+Wm9n14V+i6HE8H6OBdgs/5dBLbUKA5lLUUYbTrxz6Gw?=
+ =?us-ascii?Q?HJOJmZXXH1OkepBn+xRbfJGqJo+/hLMfuFxwsGkunJ3iHJl6xr4ljWK/ZjhP?=
+ =?us-ascii?Q?mx5frZ31pdthxTlp7Tyqy7D+vaQWm2LEx670Ykuha0NPx4fOqD8QlQrjWsfo?=
+ =?us-ascii?Q?Bxu7VAOt+66DzmpExMH5f3V7E51XcIdCFG1rnnsrWJ6PSrYY7h5NpwjXMFat?=
+ =?us-ascii?Q?m5xuL+EL7rmLs8SMPh4PPTFX+lwgUp5TbkGLXDXEDTRUCrq2b3AVjes5hbSS?=
+ =?us-ascii?Q?bJZrjqFCw2ssqTMRIm/Qtr7stx4gmRaCGvB3zitas92BF26aOvZXk/8ki6FW?=
+ =?us-ascii?Q?d7E2yRKUMQHpkNYf3QtTNcT/3GWlss+Dkva164fWhZ0iIWQIpHMjLu0bb537?=
+ =?us-ascii?Q?Vuz0TlSwZdZ6LMZU/cQtad3zYtclRibbRj9eXty+klJT/2VLPh/C5co8p7Ck?=
+ =?us-ascii?Q?wEeuIpLlusP/CEpZ2xfPnJpV7uOAWD57Jw56fDPdK4N4prRSyJkxxlEKuipU?=
+ =?us-ascii?Q?JzMnmrjxnSJE3rY1Pg7aoAX3i+Jaxx+AhtoXyNUdjMyBj54TX/my/ZE1Y/Vz?=
+ =?us-ascii?Q?ic3o6pVJA29+G4Y9+etDHO9aGmk9swujm9YwT5VoNBd2wIJZkhlcqewnNh8g?=
+ =?us-ascii?Q?LidTRbltOVLZr6lJNjlksN57KCD85gHsSOiyni95tSkx4mrri6GmYUTyM5PS?=
+ =?us-ascii?Q?pAoS8iPXr9uayvgfRPcsnIQvbJRW5LkzV/9ek9LGhcQlq4+b4Q8vLJiyaJ6d?=
+ =?us-ascii?Q?vQ0LCMMhBPnfrWt/egMgMIk7wFIDSbk+SIlDGUXpbEO1vlJyQX0fANfgxqeL?=
+ =?us-ascii?Q?bPUl/2lMEzwcsC+ufPYIJ74IDuVQyZcGNarq4fR5Nxqoq5rKWYS+bCU/R4A3?=
+ =?us-ascii?Q?MViUnrUYAniQ7HXtn/+zZIiZCStn1FNYtQEfXFHO2cHHTD02ZvQDTk+08Xcs?=
+ =?us-ascii?Q?pM5alFl8xJ2ftxyfHBiaLFNc0j6TAqSA96tFVMEL2A4K83XlQ1ujAJYzWyeo?=
+ =?us-ascii?Q?KUV7QPjiN2NKPG5r+eGEd9k5LVirxlz9I4jxnSlgWfa3mbj/ttNhtXOoiMFL?=
+ =?us-ascii?Q?cAba0Mmxl6eNah5dyh1ApNry?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DB6PR0402MB2758.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 01b4920a-357c-4729-d56f-08d8e841e462
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2021 06:08:17.4776
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a317c45-d598-459e-8370-08d8e846a7f9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2021 06:42:23.5447
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JQ5ANNMa0B1yt9IXdF0srTkPq3zbbCNLmWvAthnzxCsglC6gokWmaE0GVW9w9obBTYO/tU5ARdghTlV0HbNITg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6857
+X-MS-Exchange-CrossTenant-userprincipalname: ZF/0GcpDJ7p+3uTaDz/1f0fw1HH/eIYzt9Hr92e5RDJuv6VyeP5/ewQo3qE+McsNRufmLtfQoVYnciVaNEJByg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7787
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Vladimir,
+Hi Heiko,
 
 > -----Original Message-----
-> From: Vladimir Oltean <olteanv@gmail.com>
-> Sent: Tuesday, March 16, 2021 2:25 AM
-> To: Kuldeep Singh <kuldeep.singh@nxp.com>
-> Cc: linux-spi@vger.kernel.org; devicetree@vger.kernel.org; linux-
-> kernel@vger.kernel.org; Mark Brown <broonie@kernel.org>; Rob Herring
-> <robh+dt@kernel.org>
-> Subject: [EXT] Re: [PATCH] dt-bindings: spi: Convert Freescale DSPI to js=
-on schema
+> From: Heiko Schocher <hs@denx.de>
+> Sent: Tuesday, March 16, 2021 10:34 AM
+> To: linux-spi@vger.kernel.org
+> Cc: Heiko Schocher <hs@denx.de>; linux-arm-kernel@lists.infradead.org;
+> Ashish Kumar <ashish.kumar@nxp.com>; Kuldeep Singh
+> <kuldeep.singh@nxp.com>; Mark Brown <broonie@kernel.org>; Rob Herring
+> <robh+dt@kernel.org>; Shawn Guo <shawnguo@kernel.org>; Yogesh Gaur
+> <yogeshgaur.83@gmail.com>; devicetree@vger.kernel.org; linux-
+> kernel@vger.kernel.org
+> Subject: [EXT] [PATCH 0/2] enable flexspi support on imx8mp
 >=20
 > Caution: EXT Email
 >=20
-> Hi Kuldeep,
+> add compatible entry in nxp_fspi driver for imx8mp
 >=20
-> On Mon, Mar 15, 2021 at 05:45:18PM +0530, Kuldeep Singh wrote:
-> > Convert the Freescale DSPI binding to DT schema format using json-schem=
-a.
-> >
-> > Signed-off-by: Kuldeep Singh <kuldeep.singh@nxp.com>
-> > ---
-[...]
-> > +
-> > +allOf:
-> > +  - $ref: "spi-controller.yaml#"
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - enum:
-> > +          - fsl,vf610-dspi
-> > +          - fsl,ls1021a-v1.0-dspi
-> > +          - fsl,ls1028a-dspi
-> > +          - fsl,ls2085a-dspi
-> > +          - fsl,lx2160a-dspi
-> > +      - items:
-> > +          - enum:
-> > +              - fsl,ls1012a-dspi
-> > +              - fsl,ls1028a-dspi
-> > +              - fsl,ls1043a-dspi
-> > +              - fsl,ls1046a-dspi
-> > +              - fsl,ls1088a-dspi
-> > +          - const: fsl,ls1021a-v1.0-dspi
-> > +      - items:
-> > +          - enum:
-> > +              - fsl,ls2080a-dspi
-> > +              - fsl,lx2160a-dspi
-> > +          - const: fsl,ls2085a-dspi
+> new in v3:
+> seperate spi changes from series:
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Flists.=
+inf
+> radead.org%2Fpipermail%2Flinux-arm-kernel%2F2021-
+> March%2F643289.html&amp;data=3D04%7C01%7Ckuldeep.singh%40nxp.com%
+> 7C5da0c3da3dbe410baaf508d8e83903f4%7C686ea1d3bc2b4c6fa92cd99c5c3
+> 01635%7C0%7C0%7C637514678868305498%7CUnknown%7CTWFpbGZsb3d8
+> eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3
+> D%7C1000&amp;sdata=3D2uy0EKUh4Nt0BceSQbIkCZDfakid3wx5uwebw0DhEIQ
+> %3D&amp;reserved=3D0
 >=20
-> Can this simply be:
->   compatible:
->     oneOf:
->       - enum:
->           - fsl,vf610-dspi
->           - fsl,ls1021a-v1.0-dspi
->           - fsl,ls1012a-dspi
->           - fsl,ls1028a-dspi
->           - fsl,ls1043a-dspi
->           - fsl,ls1046a-dspi
->           - fsl,ls1088a-dspi
->           - fsl,ls2080a-dspi
->           - fsl,ls2085a-dspi
->           - fsl,lx2160a-dspi
-> ?
+> into own series as Kuldeep suggested and rebased against
+> git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> 144c79ef33536 ("Merge tag 'perf-tools-fixes-for-v5.12-2020-03-07' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux")
 
-Compatible entries in conjugation require enum and const pair.
-For example, ls1012a.dtsi uses compatible =3D "fsl,ls1012a-dspi","fsl,ls102=
-1a-v1.0-dspi";
-Same goes for LS1028 as well.
+The changes are not on on top of spi tree
+git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+and therefore may not apply seamlessly.
 
-Therefore, can't mention the compatible entry as single entity otherwise
-it may fail "make dt_binding_check" and "make dtbs_check".
+I recently added driver support for imx8dxl which is accepted in spi tree
+And these patches will cause conflict with it.
 
->=20
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/clock/fsl,qoriq-clockgen.h>
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +
-> > +    soc {
-> > +        #address-cells =3D <2>;
-> > +        #size-cells =3D <2>;
-> > +
-> > +        spi@2100000 {
-> > +            compatible =3D "fsl,ls1028a-dspi", "fsl,ls1021a-v1.0-dspi"=
-;
->=20
-> This doesn't need the "fsl,ls1021a-v1.0-dspi" compatible, can you please =
-remove
-> it?
-
-I have taken this example from LS1028a.dtsi and it uses these compatibles i=
-n conjugation.
-If "fsl,ls1021a-v1.0-dspi" is not required, then it should also be removed =
-from device-tree
-As well as from bindings both.
-
->=20
-> > +            #address-cells =3D <1>;
-> > +            #size-cells =3D <0>;
-> > +            reg =3D <0x0 0x2100000 0x0 0x10000>;
-> > +            interrupts =3D <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
-> > +            clock-names =3D "dspi";
-> > +            clocks =3D <&clockgen QORIQ_CLK_PLATFORM_PLL
-> QORIQ_CLK_PLL_DIV(2)>;
-> > +            dmas =3D <&edma0 0 62>, <&edma0 0 60>;
-> > +            dma-names =3D "tx", "rx";
-> > +            spi-num-chipselects =3D <4>;
-> > +            little-endian;
-> > +
-> > +            flash@0 {
-> > +                compatible =3D "jedec,spi-nor";
-> > +                spi-max-frequency =3D <10000000>;
-> > +                reg =3D <0>;
-> > +            };
-> > +        };
-> > +    };
->=20
-> (...)
->=20
-> > -Optional property:
-> > -- big-endian: If present the dspi device's registers are implemented
-> > -  in big endian mode.
->=20
-> I don't see "big-endian" being covered in any common yaml, could you plea=
-se not
-> delete it? The driver calls of_device_is_big_endian.
-
-Thanks for mentioning.
-Will consider this in next version after receiving feedback on other thread=
-.
+Kindly rebase these patches on top of the tree.
 
 Regards
 Kuldeep
