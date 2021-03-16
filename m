@@ -2,78 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE60933DB39
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Mar 2021 18:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD1733DBC8
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Mar 2021 19:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232363AbhCPRqS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 Mar 2021 13:46:18 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:59151 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239056AbhCPRpv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 Mar 2021 13:45:51 -0400
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 9348F22238;
-        Tue, 16 Mar 2021 18:45:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1615916749;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=N0IPrSvHYfb2D9+Dd0sH+zRB2NKqcmSi14A5U5gAz1U=;
-        b=vZPeLHy6uNVuYY2qpX/N+aK0vmnYAv16QOqug9shJdIwhIQhfGZ5hPdSipGLf66uqrWM3Y
-        SQN9TmxaDkOgIBYObE3YJf/ggiqo6eeISSs02/yDfOPyKQCvBWVnAleFs2UzZxV6KJpNg2
-        kMgVEKn3ieff9cHXxn0HGhn6RMmex74=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 16 Mar 2021 18:45:49 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Pratyush Yadav <p.yadav@ti.com>
-Cc:     Kuldeep Singh <kuldeep.singh@nxp.com>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
+        id S239505AbhCPSAI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 16 Mar 2021 14:00:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46408 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239547AbhCPR7x (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 16 Mar 2021 13:59:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 68DBA6512B;
+        Tue, 16 Mar 2021 17:59:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615917592;
+        bh=nXlw2vfyIp1WV4usGhcoH7XilW2OrIy0e0d+yxJsh9E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=e8pqAQMPjtlThMC66+kC/1hiYm64eWZ4wYu4wYB5j5y7/non75NV+4zzyXJ/+Whf9
+         LsklXdLpM/fJxJNyg7ccJ6WdDe7xFKiYpv2nB9fIQUiYIeLbzoGxzdIlAQxx5BJQtj
+         fg9JlGMFIYeHWV7iJ00Ct6qCS2rqxHtF0cOYWY8rsWRzYkdKqZb2UPFQnPsXQZSNGa
+         aupAREoPkP7+LV5Iv7X4CgE5SqmeIchFynOt+etteCZ7Ly3mq8mzFp5pkV8b56iEZf
+         mFvvw9TdSuroBaPuJqFasTU/ZmQQUSXe+4uRAi5ygoUtfFeyL5IdN6r0zaWBGh69I6
+         Z0WRHjPpDrV/g==
+From:   Mark Brown <broonie@kernel.org>
+To:     Seiya Wang <seiya.wang@mediatek.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        linux-mtd@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: spi: Convert Freescale DSPI to json schema
-In-Reply-To: <20210315183051.ugvmz4zqrvuo6iqq@ti.com>
-References: <20210315121518.3710171-1-kuldeep.singh@nxp.com>
- <20210315183051.ugvmz4zqrvuo6iqq@ti.com>
-User-Agent: Roundcube Webmail/1.4.11
-Message-ID: <067c42f3726578ebe60d201a141dfdb6@walle.cc>
-X-Sender: michael@walle.cc
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>, linux-iio@vger.kernel.org,
+        Bayi Cheng <bayi.cheng@mediatek.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        linux-serial@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-spi@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-mmc@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Sean Wang <sean.wang@mediatek.com>,
+        linux-kernel@vger.kernel.org,
+        Stanley Chu <stanley.chu@mediatek.com>
+Subject: Re: (subset) [PATCH 00/10] Add basic node support for Mediatek MT8195 SoC
+Date:   Tue, 16 Mar 2021 17:59:39 +0000
+Message-Id: <161591750213.14124.1270039699331063876.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210316111443.3332-1-seiya.wang@mediatek.com>
+References: <20210316111443.3332-1-seiya.wang@mediatek.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Am 2021-03-15 19:30, schrieb Pratyush Yadav:
+On Tue, 16 Mar 2021 19:14:33 +0800, Seiya Wang wrote:
+> MT8195 is a SoC based on 64bit ARMv8 architecture.
+> It contains 4 CA55 and 4 CA78 cores.
+> MT8195 share many HW IP with MT65xx series.
+> This patchset was tested on MT8195 evaluation board to shell.
+> 
+> Based on v5.12-rc2
+> 
+> [...]
 
-..
->> +patternProperties:
->> +  "@[0-9a-f]+":
+Applied to
 
-Shouldn't this be "^.*@[0-9a-f]+$"?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
->> +    type: object
->> +
->> +    properties:
->> +      fsl,spi-cs-sck-delay:
->> +        description:
->> +          Delay in nanoseconds between activating chip select and the 
->> start of
->> +          clock signal, at the start of a transfer.
->> +        $ref: /schemas/types.yaml#/definitions/uint32
->> +
->> +      fsl,spi-sck-cs-delay:
->> +        description:
->> +          Delay in nanoseconds between stopping the clock signal and
->> +          deactivating chip select, at the end of a transfer.
->> +        $ref: /schemas/types.yaml#/definitions/uint32
->> +
-..
+Thanks!
 
--michael
+[05/10] dt-bindings: spi: Add compatible for Mediatek MT8195
+        commit: 5ac1b909e5b60cc2735bd9174f631dc2c7f44c5a
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
