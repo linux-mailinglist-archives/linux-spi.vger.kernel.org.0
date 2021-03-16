@@ -2,100 +2,109 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC8033D19D
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Mar 2021 11:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7485033D286
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Mar 2021 12:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236419AbhCPKPX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 Mar 2021 06:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236411AbhCPKPJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 Mar 2021 06:15:09 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FACC06174A;
-        Tue, 16 Mar 2021 03:15:09 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id ci14so70999817ejc.7;
-        Tue, 16 Mar 2021 03:15:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=77E0sK5htid3cTi1HbVWtxEXQROVn0j5JhaPDUXKt4Y=;
-        b=VTtyWZplkzBRJ3ClYoxTYqpLZXCnWRX+/+7p11pv3yLSAiR0npxgXNCgxqPieONGJI
-         vY08B50lWfSUoJS4LW+WQOerUxCy1i09MV9FzMtIDp0MQ0hn9QbRurCJwxgV/fX2mEqT
-         p3e/R8sjYwBfjRWubRlEyXSQm7/6tgz0G5V4MCj4nyyVwReOJTWHGbncB9KitcwdnaoU
-         Zl5SXby8TNugQtQo2VI6707dEu7uPW+y8rFo07PBro5k4u5OT3X81uaPFfptTNkfVu+V
-         2S2zPJhiJq80MOtUDCM2RvlkexV3hEfW+cdIiIgJzyHb3jfcR9FLeTuyMClDwzdqEUUI
-         /wHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=77E0sK5htid3cTi1HbVWtxEXQROVn0j5JhaPDUXKt4Y=;
-        b=euqTycbCJW56K/u71+SwYm5IDrMu3A+INA609XCQMP42DsD02wXqZH8ZlVSHt18MHY
-         TMwNYJvL8jo+IWh4SS9o8rRyUstttwUAQUe48P2n1x7b56EG/hiO/1p599sTDiZeX6Xt
-         Mq7Sp8BRhYC8m9Zw3S7EaC+Qs18Q9QAVUrULKzedcYYnsMBEKAhqFo5hhiC9RCF2WwSt
-         ICP2nAtVTyKC76UCarUI6OrJEVxp2aynUEa8rP/kQuxcTW2bx7L4OpzV67Fc9kTklPNK
-         JU1Cm3BK3w96SZTfpbPSJ0TsDqc9sziuKE3MU4q7I/DdEQyFXASvOGqbyVZUBoLrW40+
-         VLfg==
-X-Gm-Message-State: AOAM530+VHCfFek9Z5aj3uIGokrmu4zFZjE6A0OcAyTqmNx40K4ciBwO
-        QJbHn8eLMyvoGewuDM6IGVI=
-X-Google-Smtp-Source: ABdhPJz/KkLwMnv8WASA17OH2zZ16aCXuzYPqwr76GspbnLGslXWyKqWM/X6PLSzNEIXUls6CebgMA==
-X-Received: by 2002:a17:907:2716:: with SMTP id w22mr28748171ejk.328.1615889707842;
-        Tue, 16 Mar 2021 03:15:07 -0700 (PDT)
-Received: from skbuf (5-12-16-165.residential.rdsnet.ro. [5.12.16.165])
-        by smtp.gmail.com with ESMTPSA id y17sm9085001ejf.116.2021.03.16.03.15.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Mar 2021 03:15:07 -0700 (PDT)
-Date:   Tue, 16 Mar 2021 12:15:06 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Kuldeep Singh <kuldeep.singh@nxp.com>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        id S237133AbhCPLP1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 16 Mar 2021 07:15:27 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:48763 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231918AbhCPLPM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 Mar 2021 07:15:12 -0400
+X-UUID: ac5815ebc7ad4d688bf8836e49b6a38d-20210316
+X-UUID: ac5815ebc7ad4d688bf8836e49b6a38d-20210316
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <seiya.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 20464300; Tue, 16 Mar 2021 19:15:07 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 16 Mar 2021 19:15:04 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 16 Mar 2021 19:15:04 +0800
+From:   Seiya Wang <seiya.wang@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [EXT] Re: [PATCH] dt-bindings: spi: Convert Freescale DSPI to
- json schema
-Message-ID: <20210316101506.rkqcxkw6slv4vuhr@skbuf>
-References: <20210315121518.3710171-1-kuldeep.singh@nxp.com>
- <20210315205440.lb6hcrvzxtqxdb5x@skbuf>
- <DB6PR0402MB27580AF77ED738B995616EB5E06B9@DB6PR0402MB2758.eurprd04.prod.outlook.com>
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Seiya Wang <seiya.wang@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bayi Cheng <bayi.cheng@mediatek.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <srv_heupstream@mediatek.com>
+Subject: [PATCH 00/10] Add basic node support for Mediatek MT8195 SoC
+Date:   Tue, 16 Mar 2021 19:14:33 +0800
+Message-ID: <20210316111443.3332-1-seiya.wang@mediatek.com>
+X-Mailer: git-send-email 2.14.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DB6PR0402MB27580AF77ED738B995616EB5E06B9@DB6PR0402MB2758.eurprd04.prod.outlook.com>
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 34B5F28517A2B2BB210610747DFA29DBD96DC8560E0C1DF5C1860E28986D62C82000:8
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Mar 16, 2021 at 06:08:17AM +0000, Kuldeep Singh wrote:
-> Compatible entries in conjugation require enum and const pair.
-> For example, ls1012a.dtsi uses compatible = "fsl,ls1012a-dspi","fsl,ls1021a-v1.0-dspi";
-> Same goes for LS1028 as well.
-> 
-> Therefore, can't mention the compatible entry as single entity otherwise
-> it may fail "make dt_binding_check" and "make dtbs_check".
-> 
-> > 
-> > > +examples:
-> > > +  - |
-> > > +    #include <dt-bindings/clock/fsl,qoriq-clockgen.h>
-> > > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > > +
-> > > +    soc {
-> > > +        #address-cells = <2>;
-> > > +        #size-cells = <2>;
-> > > +
-> > > +        spi@2100000 {
-> > > +            compatible = "fsl,ls1028a-dspi", "fsl,ls1021a-v1.0-dspi";
-> > 
-> > This doesn't need the "fsl,ls1021a-v1.0-dspi" compatible, can you please remove
-> > it?
-> 
-> I have taken this example from LS1028a.dtsi and it uses these compatibles in conjugation.
-> If "fsl,ls1021a-v1.0-dspi" is not required, then it should also be removed from device-tree
-> As well as from bindings both.
 
-Yes, the second compatible is never required by the driver and should be
-removed from existing device trees if that makes "make dtbs_check" fail.
+MT8195 is a SoC based on 64bit ARMv8 architecture.
+It contains 4 CA55 and 4 CA78 cores.
+MT8195 share many HW IP with MT65xx series.
+This patchset was tested on MT8195 evaluation board to shell.
+
+Based on v5.12-rc2
+
+Seiya Wang (10):
+  dt-bindings: timer: Add compatible for Mediatek MT8195
+  dt-bindings: serial: Add compatible for Mediatek MT8195
+  dt-bindings: watchdog: Add compatible for Mediatek MT8195
+  dt-bindings: mmc: Add compatible for Mediatek MT8195
+  dt-bindings: spi: Add compatible for Mediatek MT8195
+  dt-bindings: iio: adc: Add compatible for Mediatek MT8195
+  dt-bindings: phy: Add compatible for Mediatek MT8195
+  dt-bindings: phy: Add compatible for Mediatek MT8195
+  dt-bindings: arm: Add compatible for Mediatek MT8195
+  arm64: dts: Add Mediatek SoC MT8195 and evaluation board dts and
+    Makefile
+
+ .../devicetree/bindings/arm/mediatek.yaml          |   4 +
+ .../bindings/iio/adc/mediatek,mt2701-auxadc.yaml   |   1 +
+ Documentation/devicetree/bindings/mmc/mtk-sd.yaml  |   1 +
+ .../devicetree/bindings/phy/mediatek,tphy.yaml     |   1 +
+ .../devicetree/bindings/phy/mediatek,ufs-phy.yaml  |   1 +
+ .../devicetree/bindings/serial/mtk-uart.txt        |   1 +
+ .../bindings/spi/mediatek,spi-mtk-nor.yaml         |   1 +
+ .../bindings/timer/mediatek,mtk-timer.txt          |   1 +
+ .../devicetree/bindings/watchdog/mtk-wdt.txt       |   1 +
+ arch/arm64/boot/dts/mediatek/Makefile              |   1 +
+ arch/arm64/boot/dts/mediatek/mt8195-evb.dts        |  29 ++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi           | 477 +++++++++++++++++++++
+ 12 files changed, 519 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8195-evb.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8195.dtsi
+
+--
+2.14.1
+
