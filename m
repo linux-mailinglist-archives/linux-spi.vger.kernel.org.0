@@ -2,37 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3DCA33F152
+	by mail.lfdr.de (Postfix) with ESMTP id 756FD33F151
 	for <lists+linux-spi@lfdr.de>; Wed, 17 Mar 2021 14:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbhCQNl6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 17 Mar 2021 09:41:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40456 "EHLO mail.kernel.org"
+        id S231209AbhCQNl7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 17 Mar 2021 09:41:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40472 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230330AbhCQNlm (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 17 Mar 2021 09:41:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8340464DFF;
-        Wed, 17 Mar 2021 13:41:41 +0000 (UTC)
+        id S230378AbhCQNlp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 17 Mar 2021 09:41:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E3F3A64DFF;
+        Wed, 17 Mar 2021 13:41:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615988502;
-        bh=YbODQsKROeQrRlteUONt+KwDn47LMp1qB7GsHBk2lgo=;
+        s=k20201202; t=1615988505;
+        bh=f4UAEQNRtpH9UQ8NCylaE3uRW1RanW+ukgXOpvx74bw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mOu55MoQzWIg3Nu0N4Wv+q/7hPk73dAZqw9OhLzaG27UHmxhyNi5Jztozo3TL/oUH
-         njmmHxt/tu3RVSIIhpyvE1UPtkkySVTpdmhQixxhjoXWlyUcD3gQpuKK0C/MFYuqyu
-         qqQcl8zv9vNTkRuTKp14WMx9OUVG2wJE83H2rwwdsMYYgIQocGjbyShDh98p1Uj9+k
-         w/OvOVM9kxayUxU1SRj48TPU1eyffCIhrQeXLH5knm04pfLl82lmK22kwD6XG2t++o
-         9Uf0r4ANB2YDa490REENGT29keNzpxVd/BjwGzwC3liczLBwjUbHKxibiA2iuyXXfF
-         X8fMmlgshITgw==
+        b=g1UzE2tMaILyKBm56VgA1V0PMwetYlAH/QWUHR1FC8Mm3LZk9mcVGWe4mWuUs0cnF
+         iiYF7xgK74j6gZ9co/YQ9biC9kWUZmMfbKoQbRQB71j+QFQPL2o6YMpPTWEkm5gE+o
+         dmuHWXAeXZnR28enHkriTxQuU5sodQfb8lvlV1rio+mq9ZSmWlSPzbXCkzQiexY2DU
+         5cVV+vD2j+NzZLm53+VvqPM1x2oZJVr3rxhf3zunZYEihz4TpnnlHi4XndkvFTgDlw
+         xnz/Xt19lkA6pRuv9XkvHrvWv5AyqTM1XhHOZLu70CNWU/F1r2IxTrYIuG4dVvqfXl
+         xhZRW7AkW5lAg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Colin King <colin.king@canonical.com>, linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH][next] spi: Fix spelling mistake "softwade" -> "software"
-Date:   Wed, 17 Mar 2021 13:41:36 +0000
-Message-Id: <161598843909.8643.16208027141094463560.b4-ty@kernel.org>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, s.hauer@pengutronix.de,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spi: imx: Improve driver description
+Date:   Wed, 17 Mar 2021 13:41:37 +0000
+Message-Id: <161598843909.8643.6777001095876039228.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210317093936.5572-1-colin.king@canonical.com>
-References: <20210317093936.5572-1-colin.king@canonical.com>
+In-Reply-To: <20210316180922.239805-1-festevam@gmail.com>
+References: <20210316180922.239805-1-festevam@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -40,8 +40,10 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 17 Mar 2021 09:39:36 +0000, Colin King wrote:
-> There is a spelling mistake in a dev_err message. Fix it.
+On Tue, 16 Mar 2021 15:09:22 -0300, Fabio Estevam wrote:
+> "SPI Controller driver" is a too generic description.
+> 
+> Make it i.MX specific instead.
 
 Applied to
 
@@ -49,8 +51,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: Fix spelling mistake "softwade" -> "software"
-      commit: 9d902c2a9a258e1e17cfcce7ea558b1c427b2757
+[1/1] spi: imx: Improve driver description
+      commit: 92bad4a4c755cdf286f6b303dd482a573f2b89e6
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
