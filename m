@@ -2,148 +2,623 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E5534003A
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Mar 2021 08:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C35340274
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Mar 2021 10:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbhCRHZN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 18 Mar 2021 03:25:13 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:10204 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229807AbhCRHZE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 Mar 2021 03:25:04 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12I7LxaQ026406;
-        Thu, 18 Mar 2021 08:24:51 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=selector1;
- bh=L6hFjRfW38kA/3DDVvaywuHi1CE85UA4QEQ5HDfFuqQ=;
- b=S28fc1q7ySmJ5ulkisVhFlqcZTtLyeyiFq6KUa5oqFJKP0CWW/Pl/dtwmdnsnIHOS/Vy
- niCpoAhbXmnXy1ch+aqzh/W+yY/k7+yAEOoByqtfS2WRADYLUU64Or+onYwpSscepDX6
- KP9ZvkueMQFeyxsjE8l4TToKJ6He2lXzjqHym73GVwdPQWuGCaQB32MzumKo4Qp2jM89
- /jSO9E1+eAaXTA6STisEvNgkrfmQlMP3Q2FYvai8uIAW3Cin/MxqkbH14IYTJEfKpB3/
- JYVHYm2s0pcoCwr5HpFt0zItfXKyfxfF1Z1/vVj6ejIvMLOdzhRQfODd3koLQtvqEZkv fA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 37a8pr9kue-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Mar 2021 08:24:51 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9A1F510002A;
-        Thu, 18 Mar 2021 08:24:50 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 83936220FC0;
-        Thu, 18 Mar 2021 08:24:50 +0100 (CET)
-Received: from localhost (10.75.127.44) by SFHDAG2NODE3.st.com (10.75.127.6)
- with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 18 Mar 2021 08:24:50
- +0100
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     <broonie@kernel.org>, <amelie.delaunay@foss.st.com>
-CC:     <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <antonio.borneo@foss.st.com>, <alain.volmat@foss.st.com>
-Subject: [PATCH] spi: stm32: Fix use-after-free on unbind
-Date:   Thu, 18 Mar 2021 08:24:50 +0100
-Message-ID: <1616052290-10887-1-git-send-email-alain.volmat@foss.st.com>
+        id S229640AbhCRJuI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 18 Mar 2021 05:50:08 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:13981 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229570AbhCRJuB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 Mar 2021 05:50:01 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F1Mdx187PzrXh9;
+        Thu, 18 Mar 2021 17:48:05 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
+ 14.3.498.0; Thu, 18 Mar 2021 17:49:50 +0800
+From:   Jay Fang <f.fangjian@huawei.com>
+To:     <broonie@kernel.org>, <linux-spi@vger.kernel.org>
+CC:     <huangdaode@huawei.com>, <linuxarm@huawei.com>
+Subject: [PATCH V2] spi: Add HiSilicon SPI Controller Driver for Kunpeng SoCs
+Date:   Thu, 18 Mar 2021 17:50:24 +0800
+Message-ID: <1616061024-57818-1-git-send-email-f.fangjian@huawei.com>
 X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG3NODE3.st.com (10.75.127.9) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-18_02:2021-03-17,2021-03-18 signatures=0
+X-Originating-IP: [10.69.192.56]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-stm32_spi_remove() accesses the driver's private data after calling
-spi_unregister_master() even though that function releases the last
-reference on the spi_master and thereby frees the private data.
+This driver supports SPI Controller for HiSilicon Kunpeng SoCs. This
+driver supports SPI operations using FIFO mode of transfer.
 
-Fix by switching over to the new devm_spi_alloc_master() helper which
-keeps the private data accessible until the driver has unbound.
+DMA is not supported, and we just use IRQ mode for operation completion
+notification.
 
-Fixes: 8d559a64f00b ("spi: stm32: drop devres version of spi_register_master")
+Only ACPI firmware is supported.
 
-Reported-by: Lukas Wunner <lukas@wunner.de>
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Signed-off-by: Jay Fang <f.fangjian@huawei.com>
 ---
- drivers/spi/spi-stm32.c | 24 ++++++++++--------------
- 1 file changed, 10 insertions(+), 14 deletions(-)
+Changes in v2:
+- Use a more specific name (Kunpeng SoCs) for this driver.
+- Remove interrupt mask/unmask/clear functions.
+- Merge some tiny functions.
+- Optimize the interrupt handling process.
+- Add detailed comments for memory barrier.
+- Use devm_spi_alloc_master() to allocte 'struct hisi_spi'.
+---
+ MAINTAINERS            |   7 +
+ drivers/spi/Kconfig    |  10 +
+ drivers/spi/Makefile   |   1 +
+ drivers/spi/spi-hisi.c | 505 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 523 insertions(+)
+ create mode 100644 drivers/spi/spi-hisi.c
 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 97cf3a2d4180..7f0244a246e9 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -1803,7 +1803,7 @@ static int stm32_spi_probe(struct platform_device *pdev)
- 	struct reset_control *rst;
- 	int ret;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 546aa66..913c62d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8080,6 +8080,13 @@ F:	drivers/crypto/hisilicon/sec2/sec_crypto.c
+ F:	drivers/crypto/hisilicon/sec2/sec_crypto.h
+ F:	drivers/crypto/hisilicon/sec2/sec_main.c
  
--	master = spi_alloc_master(&pdev->dev, sizeof(struct stm32_spi));
-+	master = devm_spi_alloc_master(&pdev->dev, sizeof(struct stm32_spi));
- 	if (!master) {
- 		dev_err(&pdev->dev, "spi master allocation failed\n");
- 		return -ENOMEM;
-@@ -1821,18 +1821,16 @@ static int stm32_spi_probe(struct platform_device *pdev)
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	spi->base = devm_ioremap_resource(&pdev->dev, res);
--	if (IS_ERR(spi->base)) {
--		ret = PTR_ERR(spi->base);
--		goto err_master_put;
--	}
-+	if (IS_ERR(spi->base))
-+		return PTR_ERR(spi->base);
- 
- 	spi->phys_addr = (dma_addr_t)res->start;
- 
- 	spi->irq = platform_get_irq(pdev, 0);
--	if (spi->irq <= 0) {
--		ret = dev_err_probe(&pdev->dev, spi->irq, "failed to get irq\n");
--		goto err_master_put;
--	}
-+	if (spi->irq <= 0)
-+		return dev_err_probe(&pdev->dev, spi->irq,
-+				     "failed to get irq\n");
++HISILICON SPI Controller DRIVER FOR KUNPENG SOCS
++M:	Jay Fang <f.fangjian@huawei.com>
++L:	linux-spi@vger.kernel.org
++S:	Maintained
++W:	http://www.hisilicon.com
++F:	drivers/spi/spi-hisi.c
 +
- 	ret = devm_request_threaded_irq(&pdev->dev, spi->irq,
- 					spi->cfg->irq_handler_event,
- 					spi->cfg->irq_handler_thread,
-@@ -1840,20 +1838,20 @@ static int stm32_spi_probe(struct platform_device *pdev)
- 	if (ret) {
- 		dev_err(&pdev->dev, "irq%d request failed: %d\n", spi->irq,
- 			ret);
--		goto err_master_put;
-+		return ret;
- 	}
+ HISILICON STAGING DRIVERS FOR HIKEY 960/970
+ M:	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+ L:	devel@driverdev.osuosl.org
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index aadaea0..57f5a8c 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -339,6 +339,16 @@ config SPI_FSL_QUADSPI
+ 	  This controller does not support generic SPI messages. It only
+ 	  supports the high-level SPI memory interface.
  
- 	spi->clk = devm_clk_get(&pdev->dev, NULL);
- 	if (IS_ERR(spi->clk)) {
- 		ret = PTR_ERR(spi->clk);
- 		dev_err(&pdev->dev, "clk get failed: %d\n", ret);
--		goto err_master_put;
++config SPI_HISI
++	tristate "HiSilicon SPI Controller for Kunpeng SoCs"
++	depends on (ARM64 && ACPI) || COMPILE_TEST
++	help
++	  This enables support for HiSilicon SPI controller found on
++	  Kunpeng SoCs.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called spi-hisi.
++
+ config SPI_HISI_SFC_V3XX
+ 	tristate "HiSilicon SPI NOR Flash Controller for Hi16XX chipsets"
+ 	depends on (ARM64 && ACPI) || COMPILE_TEST
+diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+index 6fea582..902a907 100644
+--- a/drivers/spi/Makefile
++++ b/drivers/spi/Makefile
+@@ -54,6 +54,7 @@ obj-$(CONFIG_SPI_FSL_LPSPI)		+= spi-fsl-lpspi.o
+ obj-$(CONFIG_SPI_FSL_QUADSPI)		+= spi-fsl-qspi.o
+ obj-$(CONFIG_SPI_FSL_SPI)		+= spi-fsl-spi.o
+ obj-$(CONFIG_SPI_GPIO)			+= spi-gpio.o
++obj-$(CONFIG_SPI_HISI)			+= spi-hisi.o
+ obj-$(CONFIG_SPI_HISI_SFC_V3XX)		+= spi-hisi-sfc-v3xx.o
+ obj-$(CONFIG_SPI_IMG_SPFI)		+= spi-img-spfi.o
+ obj-$(CONFIG_SPI_IMX)			+= spi-imx.o
+diff --git a/drivers/spi/spi-hisi.c b/drivers/spi/spi-hisi.c
+new file mode 100644
+index 00000000..330ed13
+--- /dev/null
++++ b/drivers/spi/spi-hisi.c
+@@ -0,0 +1,505 @@
++// SPDX-License-Identifier: GPL-2.0-only
++//
++// HiSilicon SPI Controller Driver for Kunpeng SoCs
++//
++// Copyright (c) 2021 HiSilicon Technologies Co., Ltd.
++// Author: Jay Fang <f.fangjian@huawei.com>
++//
++// This code is based on spi-dw-core.c.
++
++#include <linux/acpi.h>
++#include <linux/bitfield.h>
++#include <linux/delay.h>
++#include <linux/err.h>
++#include <linux/interrupt.h>
++#include <linux/module.h>
++#include <linux/property.h>
++#include <linux/platform_device.h>
++#include <linux/slab.h>
++#include <linux/spi/spi.h>
++
++/* Register offsets */
++#define HISI_SPI_CSCR		0x00	/* cs control register */
++#define HISI_SPI_CR		0x04	/* spi common control register */
++#define HISI_SPI_ENR		0x08	/* spi enable register */
++#define HISI_SPI_FIFOC		0x0c	/* fifo level control register */
++#define HISI_SPI_IMR		0x10	/* interrupt mask register */
++#define HISI_SPI_DIN		0x14	/* data in register */
++#define HISI_SPI_DOUT		0x18	/* data out register */
++#define HISI_SPI_SR		0x1c	/* status register */
++#define HISI_SPI_RISR		0x20	/* raw interrupt status register */
++#define HISI_SPI_ISR		0x24	/* interrupt status register */
++#define HISI_SPI_ICR		0x28	/* interrupt clear register */
++#define HISI_SPI_VERSION	0xe0	/* version register */
++
++/* Bit fields in HISI_SPI_CR */
++#define CR_LOOP_MASK		GENMASK(1, 1)
++#define CR_CPOL_MASK		GENMASK(2, 2)
++#define CR_CPHA_MASK		GENMASK(3, 3)
++#define CR_DIV_PRE_MASK		GENMASK(11, 4)
++#define CR_DIV_POST_MASK	GENMASK(19, 12)
++#define CR_BPW_MASK		GENMASK(24, 20)
++#define CR_SPD_MODE_MASK	GENMASK(25, 25)
++
++/* Bit fields in HISI_SPI_FIFOC */
++#define FIFOC_TX_MASK		GENMASK(5, 3)
++#define FIFOC_RX_MASK		GENMASK(11, 9)
++
++/* Bit fields in HISI_SPI_IMR, 4 bits */
++#define IMR_RXOF		BIT(0)		/* Receive Overflow */
++#define IMR_RXTO		BIT(1)		/* Receive Timeout */
++#define IMR_RX			BIT(2)		/* Receive */
++#define IMR_TX			BIT(3)		/* Transmit */
++#define IMR_MASK		(IMR_RXOF | IMR_RXTO | IMR_RX | IMR_TX)
++
++/* Bit fields in HISI_SPI_SR, 5 bits */
++#define SR_TXE			BIT(0)		/* Transmit FIFO empty */
++#define SR_TXNF			BIT(1)		/* Transmit FIFO not full */
++#define SR_RXNE			BIT(2)		/* Receive FIFO not empty */
++#define SR_RXF			BIT(3)		/* Receive FIFO full */
++#define SR_BUSY			BIT(4)		/* Busy Flag */
++
++/* Bit fields in HISI_SPI_ISR, 4 bits */
++#define ISR_RXOF		BIT(0)		/* Receive Overflow */
++#define ISR_RXTO		BIT(1)		/* Receive Timeout */
++#define ISR_RX			BIT(2)		/* Receive */
++#define ISR_TX			BIT(3)		/* Transmit */
++#define ISR_MASK		(ISR_RXOF | ISR_RXTO | ISR_RX | ISR_TX)
++
++/* Bit fields in HISI_SPI_ICR, 2 bits */
++#define ICR_RXOF		BIT(0)		/* Receive Overflow */
++#define ICR_RXTO		BIT(1)		/* Receive Timeout */
++#define ICR_MASK		(ICR_RXOF | ICR_RXTO)
++
++#define DIV_POST_MAX		0xFF
++#define DIV_POST_MIN		0x00
++#define DIV_PRE_MAX		0xFE
++#define DIV_PRE_MIN		0x02
++#define CLK_DIV_MAX		((1 + DIV_POST_MAX) * DIV_PRE_MAX)
++#define CLK_DIV_MIN		((1 + DIV_POST_MIN) * DIV_PRE_MIN)
++
++#define DEFAULT_NUM_CS		1
++
++#define HISI_SPI_WAIT_TIMEOUT_MS	10UL
++
++enum hisi_spi_rx_level_trig {
++	HISI_SPI_RX_1,
++	HISI_SPI_RX_4,
++	HISI_SPI_RX_8,
++	HISI_SPI_RX_16,
++	HISI_SPI_RX_32,
++	HISI_SPI_RX_64,
++	HISI_SPI_RX_128
++};
++
++enum hisi_spi_tx_level_trig {
++	HISI_SPI_TX_1_OR_LESS,
++	HISI_SPI_TX_4_OR_LESS,
++	HISI_SPI_TX_8_OR_LESS,
++	HISI_SPI_TX_16_OR_LESS,
++	HISI_SPI_TX_32_OR_LESS,
++	HISI_SPI_TX_64_OR_LESS,
++	HISI_SPI_TX_128_OR_LESS
++};
++
++enum hisi_spi_frame_n_bytes {
++	HISI_SPI_N_BYTES_NULL,
++	HISI_SPI_N_BYTES_U8,
++	HISI_SPI_N_BYTES_U16,
++	HISI_SPI_N_BYTES_U32 = 4
++};
++
++/* Slave spi_dev related */
++struct hisi_chip_data {
++	u32 cr;
++	u32 speed_hz;	/* baud rate */
++	u16 clk_div;	/* baud rate divider */
++
++	/* clk_div = (1 + div_post) * div_pre */
++	u8 div_post;	/* value from 0 to 255 */
++	u8 div_pre;	/* value from 2 to 254 (even only!) */
++};
++
++struct hisi_spi {
++	struct device		*dev;
++
++	void __iomem		*regs;
++	int			irq;
++	u32			fifo_len; /* depth of the FIFO buffer */
++
++	/* Current message transfer state info */
++	const void		*tx;
++	unsigned int		tx_len;
++	void			*rx;
++	unsigned int		rx_len;
++	u8			n_bytes; /* current is a 1/2/4 bytes op */
++};
++
++static u32 hisi_spi_busy(struct hisi_spi *hs)
++{
++	return readl(hs->regs + HISI_SPI_SR) & SR_BUSY;
++}
++
++static u32 hisi_spi_rx_not_empty(struct hisi_spi *hs)
++{
++	return readl(hs->regs + HISI_SPI_SR) & SR_RXNE;
++}
++
++static u32 hisi_spi_tx_not_full(struct hisi_spi *hs)
++{
++	return readl(hs->regs + HISI_SPI_SR) & SR_TXNF;
++}
++
++static void hisi_spi_flush_fifo(struct hisi_spi *hs)
++{
++	unsigned long limit = loops_per_jiffy << 1;
++
++	do {
++		while (hisi_spi_rx_not_empty(hs))
++			readl(hs->regs + HISI_SPI_DOUT);
++	} while (hisi_spi_busy(hs) && limit--);
++}
++
++/* Disable the controller and all interrupts */
++static void hisi_spi_disable(struct hisi_spi *hs)
++{
++	writel(0, hs->regs + HISI_SPI_ENR);
++	writel(IMR_MASK, hs->regs + HISI_SPI_IMR);
++	writel(ICR_MASK, hs->regs + HISI_SPI_ICR);
++}
++
++static u8 hisi_spi_n_bytes(struct spi_transfer *transfer)
++{
++	if (transfer->bits_per_word <= 8)
++		return HISI_SPI_N_BYTES_U8;
++	else if (transfer->bits_per_word <= 16)
++		return HISI_SPI_N_BYTES_U16;
++	else
++		return HISI_SPI_N_BYTES_U32;
++}
++
++static void hisi_spi_reader(struct hisi_spi *hs)
++{
++	u32 max = min_t(u32, hs->rx_len, hs->fifo_len);
++	u32 rxw;
++
++	while (hisi_spi_rx_not_empty(hs) && max--) {
++		rxw = readl(hs->regs + HISI_SPI_DOUT);
++		/* Check the transfer's original "rx" is not null */
++		if (hs->rx) {
++			switch (hs->n_bytes) {
++			case HISI_SPI_N_BYTES_U8:
++				*(u8 *)(hs->rx) = rxw;
++				break;
++			case HISI_SPI_N_BYTES_U16:
++				*(u16 *)(hs->rx) = rxw;
++				break;
++			case HISI_SPI_N_BYTES_U32:
++				*(u32 *)(hs->rx) = rxw;
++				break;
++			}
++			hs->rx += hs->n_bytes;
++		}
++		--hs->rx_len;
++	}
++}
++
++static void hisi_spi_writer(struct hisi_spi *hs)
++{
++	u32 max = min_t(u32, hs->tx_len, hs->fifo_len);
++	u32 txw = 0;
++
++	while (hisi_spi_tx_not_full(hs) && max--) {
++		/* Check the transfer's original "tx" is not null */
++		if (hs->tx) {
++			switch (hs->n_bytes) {
++			case HISI_SPI_N_BYTES_U8:
++				txw = *(u8 *)(hs->tx);
++				break;
++			case HISI_SPI_N_BYTES_U16:
++				txw = *(u16 *)(hs->tx);
++				break;
++			case HISI_SPI_N_BYTES_U32:
++				txw = *(u32 *)(hs->tx);
++				break;
++			}
++			hs->tx += hs->n_bytes;
++		}
++		writel(txw, hs->regs + HISI_SPI_DIN);
++		--hs->tx_len;
++	}
++}
++
++static void __hisi_calc_div_reg(struct hisi_chip_data *chip)
++{
++	chip->div_pre = DIV_PRE_MAX;
++	while (chip->div_pre >= DIV_PRE_MIN) {
++		if (chip->clk_div % chip->div_pre == 0)
++			break;
++
++		chip->div_pre -= 2;
++	}
++
++	if (chip->div_pre > chip->clk_div)
++		chip->div_pre = chip->clk_div;
++
++	chip->div_post = (chip->clk_div / chip->div_pre) - 1;
++}
++
++static u32 hisi_calc_effective_speed(struct spi_controller *master,
++			struct hisi_chip_data *chip, u32 speed_hz)
++{
++	u32 effective_speed;
++
++	/* Note clock divider doesn't support odd numbers */
++	chip->clk_div = DIV_ROUND_UP(master->max_speed_hz, speed_hz) + 1;
++	chip->clk_div &= 0xfffe;
++	if (chip->clk_div > CLK_DIV_MAX)
++		chip->clk_div = CLK_DIV_MAX;
++
++	effective_speed = master->max_speed_hz / chip->clk_div;
++	if (chip->speed_hz != effective_speed) {
++		__hisi_calc_div_reg(chip);
++		chip->speed_hz = effective_speed;
++	}
++
++	return effective_speed;
++}
++
++static u32 hisi_spi_prepare_cr(struct spi_device *spi)
++{
++	u32 cr = FIELD_PREP(CR_SPD_MODE_MASK, 1);
++
++	cr |= FIELD_PREP(CR_CPHA_MASK, (spi->mode & SPI_CPHA) ? 1 : 0);
++	cr |= FIELD_PREP(CR_CPOL_MASK, (spi->mode & SPI_CPOL) ? 1 : 0);
++	cr |= FIELD_PREP(CR_LOOP_MASK, (spi->mode & SPI_LOOP) ? 1 : 0);
++
++	return cr;
++}
++
++static void hisi_spi_hw_init(struct hisi_spi *hs)
++{
++	hisi_spi_disable(hs);
++
++	/* FIFO default config */
++	writel(FIELD_PREP(FIFOC_TX_MASK, HISI_SPI_TX_64_OR_LESS) |
++		FIELD_PREP(FIFOC_RX_MASK, HISI_SPI_RX_16),
++		hs->regs + HISI_SPI_FIFOC);
++
++	hs->fifo_len = 256;
++}
++
++static irqreturn_t hisi_spi_irq(int irq, void *dev_id)
++{
++	struct spi_controller *master = dev_id;
++	struct hisi_spi *hs = spi_controller_get_devdata(master);
++	u32 irq_status = readl(hs->regs + HISI_SPI_ISR) & ISR_MASK;
++
++	if (!irq_status)
++		return IRQ_NONE;
++
++	if (!master->cur_msg)
++		return IRQ_HANDLED;
++
++	/* Error handling */
++	if (irq_status & ISR_RXOF) {
++		dev_err(hs->dev, "interrupt_transfer: fifo overflow\n");
++		master->cur_msg->status = -EIO;
++		goto finalize_transfer;
++	}
++
++	/*
++	 * Read data from the Rx FIFO every time. If there is
++	 * nothing left to receive, finalize the transfer.
++	 */
++	hisi_spi_reader(hs);
++	if (!hs->rx_len)
++		goto finalize_transfer;
++
++	/* Send data out when Tx FIFO IRQ triggered */
++	if (irq_status & ISR_TX)
++		hisi_spi_writer(hs);
++
++	return IRQ_HANDLED;
++
++finalize_transfer:
++	hisi_spi_disable(hs);
++	spi_finalize_current_transfer(master);
++	return IRQ_HANDLED;
++}
++
++static int hisi_spi_transfer_one(struct spi_controller *master,
++		struct spi_device *spi, struct spi_transfer *transfer)
++{
++	struct hisi_spi *hs = spi_controller_get_devdata(master);
++	struct hisi_chip_data *chip = spi_get_ctldata(spi);
++	u32 cr = chip->cr;
++
++	/* Update per transfer options for speed and bpw */
++	transfer->effective_speed_hz =
++		hisi_calc_effective_speed(master, chip, transfer->speed_hz);
++	cr |= FIELD_PREP(CR_DIV_PRE_MASK, chip->div_pre);
++	cr |= FIELD_PREP(CR_DIV_POST_MASK, chip->div_post);
++	cr |= FIELD_PREP(CR_BPW_MASK, transfer->bits_per_word - 1);
++	writel(cr, hs->regs + HISI_SPI_CR);
++
++	hisi_spi_flush_fifo(hs);
++
++	hs->n_bytes = hisi_spi_n_bytes(transfer);
++	hs->tx = transfer->tx_buf;
++	hs->tx_len = transfer->len / hs->n_bytes;
++	hs->rx = transfer->rx_buf;
++	hs->rx_len = hs->tx_len;
++
++	/*
++	 * Ensure that the transfer data above has been updated
++	 * before the interrupt to start.
++	 */
++	smp_mb();
++
++	/* Enable all interrupts and the controller */
++	writel(~IMR_MASK, hs->regs + HISI_SPI_IMR);
++	writel(1, hs->regs + HISI_SPI_ENR);
++
++	return 1;
++}
++
++static void hisi_spi_handle_err(struct spi_controller *master,
++		struct spi_message *msg)
++{
++	struct hisi_spi *hs = spi_controller_get_devdata(master);
++
++	hisi_spi_disable(hs);
++
++	/*
++	 * Wait for interrupt handler that is
++	 * already in timeout to complete.
++	 */
++	msleep(HISI_SPI_WAIT_TIMEOUT_MS);
++}
++
++static int hisi_spi_setup(struct spi_device *spi)
++{
++	struct hisi_chip_data *chip;
++
++	/* Only alloc on first setup */
++	chip = spi_get_ctldata(spi);
++	if (!chip) {
++		chip = kzalloc(sizeof(*chip), GFP_KERNEL);
++		if (!chip)
++			return -ENOMEM;
++		spi_set_ctldata(spi, chip);
++	}
++
++	chip->cr = hisi_spi_prepare_cr(spi);
++
++	return 0;
++}
++
++static void hisi_spi_cleanup(struct spi_device *spi)
++{
++	struct hisi_chip_data *chip = spi_get_ctldata(spi);
++
++	kfree(chip);
++	spi_set_ctldata(spi, NULL);
++}
++
++static int hisi_spi_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct spi_controller *master;
++	struct hisi_spi *hs;
++	int ret, irq;
++
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
++		return irq;
++
++	master = devm_spi_alloc_master(dev, sizeof(*hs));
++	if (!master)
++		return -ENOMEM;
++
++	platform_set_drvdata(pdev, master);
++
++	hs = spi_controller_get_devdata(master);
++	hs->dev = dev;
++	hs->irq = irq;
++
++	hs->regs = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(hs->regs))
++		return PTR_ERR(hs->regs);
++
++	/* Specify maximum SPI clocking speed (master only) by firmware */
++	ret = device_property_read_u32(dev, "spi-max-frequency",
++					&master->max_speed_hz);
++	if (ret) {
++		dev_err(dev, "failed to get max SPI clocking speed, ret=%d\n",
++			ret);
++		return -EINVAL;
++	}
++
++	ret = device_property_read_u16(dev, "num-cs",
++					&master->num_chipselect);
++	if (ret)
++		master->num_chipselect = DEFAULT_NUM_CS;
++
++	master->use_gpio_descriptors = true;
++	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LOOP;
++	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
++	master->bus_num = pdev->id;
++	master->setup = hisi_spi_setup;
++	master->cleanup = hisi_spi_cleanup;
++	master->transfer_one = hisi_spi_transfer_one;
++	master->handle_err = hisi_spi_handle_err;
++	master->dev.fwnode = dev->fwnode;
++
++	hisi_spi_hw_init(hs);
++
++	ret = devm_request_irq(dev, hs->irq, hisi_spi_irq, 0, dev_name(dev),
++			master);
++	if (ret < 0) {
++		dev_err(dev, "failed to get IRQ=%d, ret=%d\n", hs->irq, ret);
 +		return ret;
- 	}
- 
- 	ret = clk_prepare_enable(spi->clk);
- 	if (ret) {
- 		dev_err(&pdev->dev, "clk enable failed: %d\n", ret);
--		goto err_master_put;
++	}
++
++	ret = spi_register_controller(master);
++	if (ret) {
++		dev_err(dev, "failed to register spi master, ret=%d\n", ret);
 +		return ret;
- 	}
- 	spi->clk_rate = clk_get_rate(spi->clk);
- 	if (!spi->clk_rate) {
-@@ -1949,8 +1947,6 @@ static int stm32_spi_probe(struct platform_device *pdev)
- 		dma_release_channel(spi->dma_rx);
- err_clk_disable:
- 	clk_disable_unprepare(spi->clk);
--err_master_put:
--	spi_master_put(master);
- 
- 	return ret;
- }
++	}
++
++	dev_info(dev, "hw version:0x%x max-freq:%u kHz\n",
++		readl(hs->regs + HISI_SPI_VERSION),
++		master->max_speed_hz / 1000);
++
++	return 0;
++}
++
++static int hisi_spi_remove(struct platform_device *pdev)
++{
++	struct spi_controller *master = platform_get_drvdata(pdev);
++
++	spi_unregister_controller(master);
++
++	return 0;
++}
++
++static const struct acpi_device_id hisi_spi_acpi_match[] = {
++	{"HISI03E1", 0},
++	{}
++};
++MODULE_DEVICE_TABLE(acpi, hisi_spi_acpi_match);
++
++static struct platform_driver hisi_spi_driver = {
++	.probe		= hisi_spi_probe,
++	.remove		= hisi_spi_remove,
++	.driver		= {
++		.name	= "hisi_spi",
++		.acpi_match_table = hisi_spi_acpi_match,
++	},
++};
++module_platform_driver(hisi_spi_driver);
++
++MODULE_AUTHOR("Jay Fang <f.fangjian@huawei.com>");
++MODULE_DESCRIPTION("HiSilicon SPI Controller Driver for Kunpeng SoCs");
++MODULE_LICENSE("GPL v2");
 -- 
-2.17.1
+2.7.4
 
