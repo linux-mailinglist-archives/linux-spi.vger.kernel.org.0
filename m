@@ -2,623 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C35340274
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Mar 2021 10:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD62E340316
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Mar 2021 11:25:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbhCRJuI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 18 Mar 2021 05:50:08 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:13981 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbhCRJuB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 Mar 2021 05:50:01 -0400
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F1Mdx187PzrXh9;
-        Thu, 18 Mar 2021 17:48:05 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
- 14.3.498.0; Thu, 18 Mar 2021 17:49:50 +0800
-From:   Jay Fang <f.fangjian@huawei.com>
-To:     <broonie@kernel.org>, <linux-spi@vger.kernel.org>
-CC:     <huangdaode@huawei.com>, <linuxarm@huawei.com>
-Subject: [PATCH V2] spi: Add HiSilicon SPI Controller Driver for Kunpeng SoCs
-Date:   Thu, 18 Mar 2021 17:50:24 +0800
-Message-ID: <1616061024-57818-1-git-send-email-f.fangjian@huawei.com>
-X-Mailer: git-send-email 2.7.4
+        id S229996AbhCRKZG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 18 Mar 2021 06:25:06 -0400
+Received: from mail-eopbgr700042.outbound.protection.outlook.com ([40.107.70.42]:5217
+        "EHLO NAM04-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229849AbhCRKYy (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 18 Mar 2021 06:24:54 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=STakEqtnRCuvqg9bYVeKGKMhIM8W3ajSuVPldc6Y7NM1cuexRIKVgH0+M15RXXuALa9P3kmYkYCmSjCY0FE8yHsGvshxvCfR7omgNJN1JC/EHv0zLE5qL3dfkrq7UPSvRqWytF985snf0O+tKJc1Egjd4397zx88V/MwLNjIE7xP+B5Y9UzocDj9HFOP5StcFk3kn3wzLazPKOrGDT5rMEHu/23xksHtShCxXsu65uksvv+eMdtAgtRCSgDdX1EhHlbWGh+ytn79Qek/HdjDhhrAWZuDcBb+jsC3b7tZau8obuZsxMGrmsnLVXmmCrhCygLF/tvFVR6mfVFBqdai2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UGSPArxD0Er6XwpU2O4xQGOB0IiOTAfdRns4Ps8NVZ8=;
+ b=bzE8KvdAVtYrBEQcXYiwdDh7wE7jUACrv+6kSYyoEBc1esyt/ScIiv3jeY91Jl18jc/rCB1x2Qjm9srrAeQ5INZzo4o3uje5+kIjfG9hzGr8iNKuN9IlJyZmLERFSLNSMJxnApb7wVSFGftHqaIabt18s9n126UWg1w0QL0igXXYMl9Qgi/5BSa8GunZkj9r4Q5nb4G43/hZkS8d39qZahi+IdC3zeTtjEsKkkqQKbpxxbFOQuveIQmKmHk51QoHoUZyh++xvwUkiz1V3I76fUFPvJ+t7/hub0h3aPLZlbJ4myuHrieoWu1ajnKLPV9IRCzxQhTvd8wgz0g/wuVwdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UGSPArxD0Er6XwpU2O4xQGOB0IiOTAfdRns4Ps8NVZ8=;
+ b=hOdriMY5RdZ70TKhNG/RKIi1WiujOVrVbeT9Kk4LzKGvKSd0TyloqD8UYOBGIPwluxRvKFjn4tILAQ5N+oPmHQmjTLfc1zrqIjDuF6KUpy52AoR3RafnvXXe08OIO2EW1L69PlbSToQi/t225JzSTVkBeqlBAXVkvUzQxhmnBZc=
+Received: from SN6PR05CA0007.namprd05.prod.outlook.com (2603:10b6:805:de::20)
+ by BL0PR02MB5618.namprd02.prod.outlook.com (2603:10b6:208:8f::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3933.31; Thu, 18 Mar
+ 2021 10:24:52 +0000
+Received: from SN1NAM02FT022.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:805:de:cafe::1d) by SN6PR05CA0007.outlook.office365.com
+ (2603:10b6:805:de::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3977.9 via Frontend
+ Transport; Thu, 18 Mar 2021 10:24:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT022.mail.protection.outlook.com (10.152.72.148) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.3933.32 via Frontend Transport; Thu, 18 Mar 2021 10:24:51 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Thu, 18 Mar 2021 03:24:50 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2106.2 via Frontend Transport; Thu, 18 Mar 2021 03:24:50 -0700
+Envelope-to: git@xilinx.com,
+ broonie@kernel.org,
+ linux-spi@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Received: from [10.140.6.25] (port=50704 helo=xhdnagasure40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <amit.kumar-mahapatra@xilinx.com>)
+        id 1lMpph-0007CY-MB; Thu, 18 Mar 2021 03:24:50 -0700
+From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+To:     <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <git@xilinx.com>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+Subject: [PATCH 0/2]spi: spi-zynq-qspi: Fix stack violation bug
+Date:   Thu, 18 Mar 2021 04:24:44 -0600
+Message-ID: <20210318102446.25142-1-amit.kumar-mahapatra@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-CFilter-Loop: Reflected
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 02d05562-ccf1-45f4-59f1-08d8e9f81106
+X-MS-TrafficTypeDiagnostic: BL0PR02MB5618:
+X-Microsoft-Antispam-PRVS: <BL0PR02MB5618DEAF50957F23546CC293BA699@BL0PR02MB5618.namprd02.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:2582;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: I5173mKJ96475COOg/n0NOYysUIYSthNhQSlPuTqxeqnkyWhHq62zglPd6QN464HRg1JIFdepxoYnubROMkMQy3s0WCVpyhMrwxzTsz+QyqVELL0Uty2nwQ1JmdS7P6oWW0hqk6Da3hUqmjyL6WlhZBEt7Ya/Yn/P0wuVMRFE3tbi9Aa0eN4Cm8XIjPsWxwAE4YEIWnvk36pk5Is5cG1pSPn8VvI2AuSXcO8Cd1CXU/aShUcTdxwRmP77opw0HK7fRDRIDNLzlzcDKbhf9dHVmXa47cojODkHs95ODfqOeqmPtMbUSKz4ywYnnkMAZge5S5rZbvv0OuCtPYklZAhwsVD/y+1k0eYK5zl4DN8ilIpZkqiBWUc5iZNr8+zbfUzoKaEBE0kXmTwHzmf4ndlJ+QpxWJGyFkMEgu02ZkEa2VT3Q66YdF/xwqLXpJSunOcsit339rcNC//u1pfBXlFXrfVAK+r+Jn3/vxJ83nTEvk9sKbSby+4P3mTJH70RL3+d8dOxwlOkbrFw6PTPO+AW/jPndDKuVQGo4PqOVQbHSfEaWz6AT1SmxIxHRsPzpw+OQcBDBcsNuGWke9OZmY0EJ/tp+jLKFnF9a7QGG1z8TyjFX6fE39238WmtRtVL+KaRvfEsoYyI0pJ5NJTUB7SRIowUbNimerlb2+iQgTiNcCvOWlAdOWVmvFW2DQSymrE
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(376002)(396003)(346002)(136003)(39860400002)(46966006)(36840700001)(7636003)(82740400003)(9786002)(70206006)(70586007)(83380400001)(36756003)(426003)(8676002)(336012)(6916009)(8936002)(2906002)(82310400003)(186003)(1076003)(6666004)(4744005)(26005)(36860700001)(54906003)(478600001)(107886003)(4326008)(5660300002)(356005)(47076005)(2616005)(316002)(7696005)(36906005)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2021 10:24:51.8915
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 02d05562-ccf1-45f4-59f1-08d8e9f81106
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT022.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB5618
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This driver supports SPI Controller for HiSilicon Kunpeng SoCs. This
-driver supports SPI operations using FIFO mode of transfer.
-
-DMA is not supported, and we just use IRQ mode for operation completion
-notification.
-
-Only ACPI firmware is supported.
-
-Signed-off-by: Jay Fang <f.fangjian@huawei.com>
+This patch series fixes kernel-doc warnings and stack violation
+issues in Zynq qspi driver file
 ---
-Changes in v2:
-- Use a more specific name (Kunpeng SoCs) for this driver.
-- Remove interrupt mask/unmask/clear functions.
-- Merge some tiny functions.
-- Optimize the interrupt handling process.
-- Add detailed comments for memory barrier.
-- Use devm_spi_alloc_master() to allocte 'struct hisi_spi'.
+Branch: for-next
 ---
- MAINTAINERS            |   7 +
- drivers/spi/Kconfig    |  10 +
- drivers/spi/Makefile   |   1 +
- drivers/spi/spi-hisi.c | 505 +++++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 523 insertions(+)
- create mode 100644 drivers/spi/spi-hisi.c
+Amit Kumar Mahapatra (1):
+  spi: spi-zynq-qspi: Fix kernel-doc warning
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 546aa66..913c62d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8080,6 +8080,13 @@ F:	drivers/crypto/hisilicon/sec2/sec_crypto.c
- F:	drivers/crypto/hisilicon/sec2/sec_crypto.h
- F:	drivers/crypto/hisilicon/sec2/sec_main.c
- 
-+HISILICON SPI Controller DRIVER FOR KUNPENG SOCS
-+M:	Jay Fang <f.fangjian@huawei.com>
-+L:	linux-spi@vger.kernel.org
-+S:	Maintained
-+W:	http://www.hisilicon.com
-+F:	drivers/spi/spi-hisi.c
-+
- HISILICON STAGING DRIVERS FOR HIKEY 960/970
- M:	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
- L:	devel@driverdev.osuosl.org
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index aadaea0..57f5a8c 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -339,6 +339,16 @@ config SPI_FSL_QUADSPI
- 	  This controller does not support generic SPI messages. It only
- 	  supports the high-level SPI memory interface.
- 
-+config SPI_HISI
-+	tristate "HiSilicon SPI Controller for Kunpeng SoCs"
-+	depends on (ARM64 && ACPI) || COMPILE_TEST
-+	help
-+	  This enables support for HiSilicon SPI controller found on
-+	  Kunpeng SoCs.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called spi-hisi.
-+
- config SPI_HISI_SFC_V3XX
- 	tristate "HiSilicon SPI NOR Flash Controller for Hi16XX chipsets"
- 	depends on (ARM64 && ACPI) || COMPILE_TEST
-diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-index 6fea582..902a907 100644
---- a/drivers/spi/Makefile
-+++ b/drivers/spi/Makefile
-@@ -54,6 +54,7 @@ obj-$(CONFIG_SPI_FSL_LPSPI)		+= spi-fsl-lpspi.o
- obj-$(CONFIG_SPI_FSL_QUADSPI)		+= spi-fsl-qspi.o
- obj-$(CONFIG_SPI_FSL_SPI)		+= spi-fsl-spi.o
- obj-$(CONFIG_SPI_GPIO)			+= spi-gpio.o
-+obj-$(CONFIG_SPI_HISI)			+= spi-hisi.o
- obj-$(CONFIG_SPI_HISI_SFC_V3XX)		+= spi-hisi-sfc-v3xx.o
- obj-$(CONFIG_SPI_IMG_SPFI)		+= spi-img-spfi.o
- obj-$(CONFIG_SPI_IMX)			+= spi-imx.o
-diff --git a/drivers/spi/spi-hisi.c b/drivers/spi/spi-hisi.c
-new file mode 100644
-index 00000000..330ed13
---- /dev/null
-+++ b/drivers/spi/spi-hisi.c
-@@ -0,0 +1,505 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+//
-+// HiSilicon SPI Controller Driver for Kunpeng SoCs
-+//
-+// Copyright (c) 2021 HiSilicon Technologies Co., Ltd.
-+// Author: Jay Fang <f.fangjian@huawei.com>
-+//
-+// This code is based on spi-dw-core.c.
-+
-+#include <linux/acpi.h>
-+#include <linux/bitfield.h>
-+#include <linux/delay.h>
-+#include <linux/err.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/property.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+#include <linux/spi/spi.h>
-+
-+/* Register offsets */
-+#define HISI_SPI_CSCR		0x00	/* cs control register */
-+#define HISI_SPI_CR		0x04	/* spi common control register */
-+#define HISI_SPI_ENR		0x08	/* spi enable register */
-+#define HISI_SPI_FIFOC		0x0c	/* fifo level control register */
-+#define HISI_SPI_IMR		0x10	/* interrupt mask register */
-+#define HISI_SPI_DIN		0x14	/* data in register */
-+#define HISI_SPI_DOUT		0x18	/* data out register */
-+#define HISI_SPI_SR		0x1c	/* status register */
-+#define HISI_SPI_RISR		0x20	/* raw interrupt status register */
-+#define HISI_SPI_ISR		0x24	/* interrupt status register */
-+#define HISI_SPI_ICR		0x28	/* interrupt clear register */
-+#define HISI_SPI_VERSION	0xe0	/* version register */
-+
-+/* Bit fields in HISI_SPI_CR */
-+#define CR_LOOP_MASK		GENMASK(1, 1)
-+#define CR_CPOL_MASK		GENMASK(2, 2)
-+#define CR_CPHA_MASK		GENMASK(3, 3)
-+#define CR_DIV_PRE_MASK		GENMASK(11, 4)
-+#define CR_DIV_POST_MASK	GENMASK(19, 12)
-+#define CR_BPW_MASK		GENMASK(24, 20)
-+#define CR_SPD_MODE_MASK	GENMASK(25, 25)
-+
-+/* Bit fields in HISI_SPI_FIFOC */
-+#define FIFOC_TX_MASK		GENMASK(5, 3)
-+#define FIFOC_RX_MASK		GENMASK(11, 9)
-+
-+/* Bit fields in HISI_SPI_IMR, 4 bits */
-+#define IMR_RXOF		BIT(0)		/* Receive Overflow */
-+#define IMR_RXTO		BIT(1)		/* Receive Timeout */
-+#define IMR_RX			BIT(2)		/* Receive */
-+#define IMR_TX			BIT(3)		/* Transmit */
-+#define IMR_MASK		(IMR_RXOF | IMR_RXTO | IMR_RX | IMR_TX)
-+
-+/* Bit fields in HISI_SPI_SR, 5 bits */
-+#define SR_TXE			BIT(0)		/* Transmit FIFO empty */
-+#define SR_TXNF			BIT(1)		/* Transmit FIFO not full */
-+#define SR_RXNE			BIT(2)		/* Receive FIFO not empty */
-+#define SR_RXF			BIT(3)		/* Receive FIFO full */
-+#define SR_BUSY			BIT(4)		/* Busy Flag */
-+
-+/* Bit fields in HISI_SPI_ISR, 4 bits */
-+#define ISR_RXOF		BIT(0)		/* Receive Overflow */
-+#define ISR_RXTO		BIT(1)		/* Receive Timeout */
-+#define ISR_RX			BIT(2)		/* Receive */
-+#define ISR_TX			BIT(3)		/* Transmit */
-+#define ISR_MASK		(ISR_RXOF | ISR_RXTO | ISR_RX | ISR_TX)
-+
-+/* Bit fields in HISI_SPI_ICR, 2 bits */
-+#define ICR_RXOF		BIT(0)		/* Receive Overflow */
-+#define ICR_RXTO		BIT(1)		/* Receive Timeout */
-+#define ICR_MASK		(ICR_RXOF | ICR_RXTO)
-+
-+#define DIV_POST_MAX		0xFF
-+#define DIV_POST_MIN		0x00
-+#define DIV_PRE_MAX		0xFE
-+#define DIV_PRE_MIN		0x02
-+#define CLK_DIV_MAX		((1 + DIV_POST_MAX) * DIV_PRE_MAX)
-+#define CLK_DIV_MIN		((1 + DIV_POST_MIN) * DIV_PRE_MIN)
-+
-+#define DEFAULT_NUM_CS		1
-+
-+#define HISI_SPI_WAIT_TIMEOUT_MS	10UL
-+
-+enum hisi_spi_rx_level_trig {
-+	HISI_SPI_RX_1,
-+	HISI_SPI_RX_4,
-+	HISI_SPI_RX_8,
-+	HISI_SPI_RX_16,
-+	HISI_SPI_RX_32,
-+	HISI_SPI_RX_64,
-+	HISI_SPI_RX_128
-+};
-+
-+enum hisi_spi_tx_level_trig {
-+	HISI_SPI_TX_1_OR_LESS,
-+	HISI_SPI_TX_4_OR_LESS,
-+	HISI_SPI_TX_8_OR_LESS,
-+	HISI_SPI_TX_16_OR_LESS,
-+	HISI_SPI_TX_32_OR_LESS,
-+	HISI_SPI_TX_64_OR_LESS,
-+	HISI_SPI_TX_128_OR_LESS
-+};
-+
-+enum hisi_spi_frame_n_bytes {
-+	HISI_SPI_N_BYTES_NULL,
-+	HISI_SPI_N_BYTES_U8,
-+	HISI_SPI_N_BYTES_U16,
-+	HISI_SPI_N_BYTES_U32 = 4
-+};
-+
-+/* Slave spi_dev related */
-+struct hisi_chip_data {
-+	u32 cr;
-+	u32 speed_hz;	/* baud rate */
-+	u16 clk_div;	/* baud rate divider */
-+
-+	/* clk_div = (1 + div_post) * div_pre */
-+	u8 div_post;	/* value from 0 to 255 */
-+	u8 div_pre;	/* value from 2 to 254 (even only!) */
-+};
-+
-+struct hisi_spi {
-+	struct device		*dev;
-+
-+	void __iomem		*regs;
-+	int			irq;
-+	u32			fifo_len; /* depth of the FIFO buffer */
-+
-+	/* Current message transfer state info */
-+	const void		*tx;
-+	unsigned int		tx_len;
-+	void			*rx;
-+	unsigned int		rx_len;
-+	u8			n_bytes; /* current is a 1/2/4 bytes op */
-+};
-+
-+static u32 hisi_spi_busy(struct hisi_spi *hs)
-+{
-+	return readl(hs->regs + HISI_SPI_SR) & SR_BUSY;
-+}
-+
-+static u32 hisi_spi_rx_not_empty(struct hisi_spi *hs)
-+{
-+	return readl(hs->regs + HISI_SPI_SR) & SR_RXNE;
-+}
-+
-+static u32 hisi_spi_tx_not_full(struct hisi_spi *hs)
-+{
-+	return readl(hs->regs + HISI_SPI_SR) & SR_TXNF;
-+}
-+
-+static void hisi_spi_flush_fifo(struct hisi_spi *hs)
-+{
-+	unsigned long limit = loops_per_jiffy << 1;
-+
-+	do {
-+		while (hisi_spi_rx_not_empty(hs))
-+			readl(hs->regs + HISI_SPI_DOUT);
-+	} while (hisi_spi_busy(hs) && limit--);
-+}
-+
-+/* Disable the controller and all interrupts */
-+static void hisi_spi_disable(struct hisi_spi *hs)
-+{
-+	writel(0, hs->regs + HISI_SPI_ENR);
-+	writel(IMR_MASK, hs->regs + HISI_SPI_IMR);
-+	writel(ICR_MASK, hs->regs + HISI_SPI_ICR);
-+}
-+
-+static u8 hisi_spi_n_bytes(struct spi_transfer *transfer)
-+{
-+	if (transfer->bits_per_word <= 8)
-+		return HISI_SPI_N_BYTES_U8;
-+	else if (transfer->bits_per_word <= 16)
-+		return HISI_SPI_N_BYTES_U16;
-+	else
-+		return HISI_SPI_N_BYTES_U32;
-+}
-+
-+static void hisi_spi_reader(struct hisi_spi *hs)
-+{
-+	u32 max = min_t(u32, hs->rx_len, hs->fifo_len);
-+	u32 rxw;
-+
-+	while (hisi_spi_rx_not_empty(hs) && max--) {
-+		rxw = readl(hs->regs + HISI_SPI_DOUT);
-+		/* Check the transfer's original "rx" is not null */
-+		if (hs->rx) {
-+			switch (hs->n_bytes) {
-+			case HISI_SPI_N_BYTES_U8:
-+				*(u8 *)(hs->rx) = rxw;
-+				break;
-+			case HISI_SPI_N_BYTES_U16:
-+				*(u16 *)(hs->rx) = rxw;
-+				break;
-+			case HISI_SPI_N_BYTES_U32:
-+				*(u32 *)(hs->rx) = rxw;
-+				break;
-+			}
-+			hs->rx += hs->n_bytes;
-+		}
-+		--hs->rx_len;
-+	}
-+}
-+
-+static void hisi_spi_writer(struct hisi_spi *hs)
-+{
-+	u32 max = min_t(u32, hs->tx_len, hs->fifo_len);
-+	u32 txw = 0;
-+
-+	while (hisi_spi_tx_not_full(hs) && max--) {
-+		/* Check the transfer's original "tx" is not null */
-+		if (hs->tx) {
-+			switch (hs->n_bytes) {
-+			case HISI_SPI_N_BYTES_U8:
-+				txw = *(u8 *)(hs->tx);
-+				break;
-+			case HISI_SPI_N_BYTES_U16:
-+				txw = *(u16 *)(hs->tx);
-+				break;
-+			case HISI_SPI_N_BYTES_U32:
-+				txw = *(u32 *)(hs->tx);
-+				break;
-+			}
-+			hs->tx += hs->n_bytes;
-+		}
-+		writel(txw, hs->regs + HISI_SPI_DIN);
-+		--hs->tx_len;
-+	}
-+}
-+
-+static void __hisi_calc_div_reg(struct hisi_chip_data *chip)
-+{
-+	chip->div_pre = DIV_PRE_MAX;
-+	while (chip->div_pre >= DIV_PRE_MIN) {
-+		if (chip->clk_div % chip->div_pre == 0)
-+			break;
-+
-+		chip->div_pre -= 2;
-+	}
-+
-+	if (chip->div_pre > chip->clk_div)
-+		chip->div_pre = chip->clk_div;
-+
-+	chip->div_post = (chip->clk_div / chip->div_pre) - 1;
-+}
-+
-+static u32 hisi_calc_effective_speed(struct spi_controller *master,
-+			struct hisi_chip_data *chip, u32 speed_hz)
-+{
-+	u32 effective_speed;
-+
-+	/* Note clock divider doesn't support odd numbers */
-+	chip->clk_div = DIV_ROUND_UP(master->max_speed_hz, speed_hz) + 1;
-+	chip->clk_div &= 0xfffe;
-+	if (chip->clk_div > CLK_DIV_MAX)
-+		chip->clk_div = CLK_DIV_MAX;
-+
-+	effective_speed = master->max_speed_hz / chip->clk_div;
-+	if (chip->speed_hz != effective_speed) {
-+		__hisi_calc_div_reg(chip);
-+		chip->speed_hz = effective_speed;
-+	}
-+
-+	return effective_speed;
-+}
-+
-+static u32 hisi_spi_prepare_cr(struct spi_device *spi)
-+{
-+	u32 cr = FIELD_PREP(CR_SPD_MODE_MASK, 1);
-+
-+	cr |= FIELD_PREP(CR_CPHA_MASK, (spi->mode & SPI_CPHA) ? 1 : 0);
-+	cr |= FIELD_PREP(CR_CPOL_MASK, (spi->mode & SPI_CPOL) ? 1 : 0);
-+	cr |= FIELD_PREP(CR_LOOP_MASK, (spi->mode & SPI_LOOP) ? 1 : 0);
-+
-+	return cr;
-+}
-+
-+static void hisi_spi_hw_init(struct hisi_spi *hs)
-+{
-+	hisi_spi_disable(hs);
-+
-+	/* FIFO default config */
-+	writel(FIELD_PREP(FIFOC_TX_MASK, HISI_SPI_TX_64_OR_LESS) |
-+		FIELD_PREP(FIFOC_RX_MASK, HISI_SPI_RX_16),
-+		hs->regs + HISI_SPI_FIFOC);
-+
-+	hs->fifo_len = 256;
-+}
-+
-+static irqreturn_t hisi_spi_irq(int irq, void *dev_id)
-+{
-+	struct spi_controller *master = dev_id;
-+	struct hisi_spi *hs = spi_controller_get_devdata(master);
-+	u32 irq_status = readl(hs->regs + HISI_SPI_ISR) & ISR_MASK;
-+
-+	if (!irq_status)
-+		return IRQ_NONE;
-+
-+	if (!master->cur_msg)
-+		return IRQ_HANDLED;
-+
-+	/* Error handling */
-+	if (irq_status & ISR_RXOF) {
-+		dev_err(hs->dev, "interrupt_transfer: fifo overflow\n");
-+		master->cur_msg->status = -EIO;
-+		goto finalize_transfer;
-+	}
-+
-+	/*
-+	 * Read data from the Rx FIFO every time. If there is
-+	 * nothing left to receive, finalize the transfer.
-+	 */
-+	hisi_spi_reader(hs);
-+	if (!hs->rx_len)
-+		goto finalize_transfer;
-+
-+	/* Send data out when Tx FIFO IRQ triggered */
-+	if (irq_status & ISR_TX)
-+		hisi_spi_writer(hs);
-+
-+	return IRQ_HANDLED;
-+
-+finalize_transfer:
-+	hisi_spi_disable(hs);
-+	spi_finalize_current_transfer(master);
-+	return IRQ_HANDLED;
-+}
-+
-+static int hisi_spi_transfer_one(struct spi_controller *master,
-+		struct spi_device *spi, struct spi_transfer *transfer)
-+{
-+	struct hisi_spi *hs = spi_controller_get_devdata(master);
-+	struct hisi_chip_data *chip = spi_get_ctldata(spi);
-+	u32 cr = chip->cr;
-+
-+	/* Update per transfer options for speed and bpw */
-+	transfer->effective_speed_hz =
-+		hisi_calc_effective_speed(master, chip, transfer->speed_hz);
-+	cr |= FIELD_PREP(CR_DIV_PRE_MASK, chip->div_pre);
-+	cr |= FIELD_PREP(CR_DIV_POST_MASK, chip->div_post);
-+	cr |= FIELD_PREP(CR_BPW_MASK, transfer->bits_per_word - 1);
-+	writel(cr, hs->regs + HISI_SPI_CR);
-+
-+	hisi_spi_flush_fifo(hs);
-+
-+	hs->n_bytes = hisi_spi_n_bytes(transfer);
-+	hs->tx = transfer->tx_buf;
-+	hs->tx_len = transfer->len / hs->n_bytes;
-+	hs->rx = transfer->rx_buf;
-+	hs->rx_len = hs->tx_len;
-+
-+	/*
-+	 * Ensure that the transfer data above has been updated
-+	 * before the interrupt to start.
-+	 */
-+	smp_mb();
-+
-+	/* Enable all interrupts and the controller */
-+	writel(~IMR_MASK, hs->regs + HISI_SPI_IMR);
-+	writel(1, hs->regs + HISI_SPI_ENR);
-+
-+	return 1;
-+}
-+
-+static void hisi_spi_handle_err(struct spi_controller *master,
-+		struct spi_message *msg)
-+{
-+	struct hisi_spi *hs = spi_controller_get_devdata(master);
-+
-+	hisi_spi_disable(hs);
-+
-+	/*
-+	 * Wait for interrupt handler that is
-+	 * already in timeout to complete.
-+	 */
-+	msleep(HISI_SPI_WAIT_TIMEOUT_MS);
-+}
-+
-+static int hisi_spi_setup(struct spi_device *spi)
-+{
-+	struct hisi_chip_data *chip;
-+
-+	/* Only alloc on first setup */
-+	chip = spi_get_ctldata(spi);
-+	if (!chip) {
-+		chip = kzalloc(sizeof(*chip), GFP_KERNEL);
-+		if (!chip)
-+			return -ENOMEM;
-+		spi_set_ctldata(spi, chip);
-+	}
-+
-+	chip->cr = hisi_spi_prepare_cr(spi);
-+
-+	return 0;
-+}
-+
-+static void hisi_spi_cleanup(struct spi_device *spi)
-+{
-+	struct hisi_chip_data *chip = spi_get_ctldata(spi);
-+
-+	kfree(chip);
-+	spi_set_ctldata(spi, NULL);
-+}
-+
-+static int hisi_spi_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct spi_controller *master;
-+	struct hisi_spi *hs;
-+	int ret, irq;
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
-+
-+	master = devm_spi_alloc_master(dev, sizeof(*hs));
-+	if (!master)
-+		return -ENOMEM;
-+
-+	platform_set_drvdata(pdev, master);
-+
-+	hs = spi_controller_get_devdata(master);
-+	hs->dev = dev;
-+	hs->irq = irq;
-+
-+	hs->regs = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(hs->regs))
-+		return PTR_ERR(hs->regs);
-+
-+	/* Specify maximum SPI clocking speed (master only) by firmware */
-+	ret = device_property_read_u32(dev, "spi-max-frequency",
-+					&master->max_speed_hz);
-+	if (ret) {
-+		dev_err(dev, "failed to get max SPI clocking speed, ret=%d\n",
-+			ret);
-+		return -EINVAL;
-+	}
-+
-+	ret = device_property_read_u16(dev, "num-cs",
-+					&master->num_chipselect);
-+	if (ret)
-+		master->num_chipselect = DEFAULT_NUM_CS;
-+
-+	master->use_gpio_descriptors = true;
-+	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LOOP;
-+	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
-+	master->bus_num = pdev->id;
-+	master->setup = hisi_spi_setup;
-+	master->cleanup = hisi_spi_cleanup;
-+	master->transfer_one = hisi_spi_transfer_one;
-+	master->handle_err = hisi_spi_handle_err;
-+	master->dev.fwnode = dev->fwnode;
-+
-+	hisi_spi_hw_init(hs);
-+
-+	ret = devm_request_irq(dev, hs->irq, hisi_spi_irq, 0, dev_name(dev),
-+			master);
-+	if (ret < 0) {
-+		dev_err(dev, "failed to get IRQ=%d, ret=%d\n", hs->irq, ret);
-+		return ret;
-+	}
-+
-+	ret = spi_register_controller(master);
-+	if (ret) {
-+		dev_err(dev, "failed to register spi master, ret=%d\n", ret);
-+		return ret;
-+	}
-+
-+	dev_info(dev, "hw version:0x%x max-freq:%u kHz\n",
-+		readl(hs->regs + HISI_SPI_VERSION),
-+		master->max_speed_hz / 1000);
-+
-+	return 0;
-+}
-+
-+static int hisi_spi_remove(struct platform_device *pdev)
-+{
-+	struct spi_controller *master = platform_get_drvdata(pdev);
-+
-+	spi_unregister_controller(master);
-+
-+	return 0;
-+}
-+
-+static const struct acpi_device_id hisi_spi_acpi_match[] = {
-+	{"HISI03E1", 0},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(acpi, hisi_spi_acpi_match);
-+
-+static struct platform_driver hisi_spi_driver = {
-+	.probe		= hisi_spi_probe,
-+	.remove		= hisi_spi_remove,
-+	.driver		= {
-+		.name	= "hisi_spi",
-+		.acpi_match_table = hisi_spi_acpi_match,
-+	},
-+};
-+module_platform_driver(hisi_spi_driver);
-+
-+MODULE_AUTHOR("Jay Fang <f.fangjian@huawei.com>");
-+MODULE_DESCRIPTION("HiSilicon SPI Controller Driver for Kunpeng SoCs");
-+MODULE_LICENSE("GPL v2");
--- 
-2.7.4
+Karen Dombroski (1):
+  spi: spi-zynq-qspi: Fix stack violation bug
 
+ drivers/spi/spi-zynq-qspi.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+--
+2.17.1
+
+This email and any attachments are intended for the sole use of the named r=
+ecipient(s) and contain(s) confidential information that may be proprietary=
+, privileged or copyrighted under applicable law. If you are not the intend=
+ed recipient, do not read, copy, or forward this email message or any attac=
+hments. Delete this email message and any attachments immediately.
