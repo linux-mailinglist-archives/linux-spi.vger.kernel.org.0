@@ -2,83 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F2334220A
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Mar 2021 17:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C37EC342C82
+	for <lists+linux-spi@lfdr.de>; Sat, 20 Mar 2021 12:51:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbhCSQhZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 19 Mar 2021 12:37:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56020 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230129AbhCSQhJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 19 Mar 2021 12:37:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7CF526148E;
-        Fri, 19 Mar 2021 16:37:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616171829;
-        bh=vze3nZ9XGVQKBDHy8nsHBoCFG5qVh398Hqss19Pvgcs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZuDXGH84pbQdkB3SSfKOf0aSsTvCpyL0Mlax46k9BnxI/78JRYfBGQ2Qr2YtVdJn+
-         +7goMlBb6oAJyl9Qb30pwkTAqQgWmQhNQjgXl8nb1a3ww1E/DwhVaGpthffkGr0xMt
-         N2IGeaTnwA67m9c7v9kVMO/gt49gBoZGXgI/mqjnNOt+5PBKF5oZNWxR6MvsDRavEa
-         PBb45JvsX0r0zNhl4PUDHvffqnE/q7fLzk1idS65IIgQaTkZgPHOBWzDKge8xsL+j1
-         BbBFN0v6c04fP2PJj0cc6KD/0bqT+XX4wgAufxTc9NIiIv5Za2YZZ8/aslQq883f0v
-         3/BDim9n61K6Q==
-From:   Mark Brown <broonie@kernel.org>
-To:     amelie.delaunay@foss.st.com,
-        Alain Volmat <alain.volmat@foss.st.com>
-Cc:     Mark Brown <broonie@kernel.org>, mcoquelin.stm32@gmail.com,
-        fabrice.gasnier@foss.st.com, alexandre.torgue@foss.st.com,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        antonio.borneo@foss.st.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: stm32: Fix use-after-free on unbind
-Date:   Fri, 19 Mar 2021 16:37:03 +0000
-Message-Id: <161617166734.9851.4969692619964809885.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <1616052290-10887-1-git-send-email-alain.volmat@foss.st.com>
-References: <1616052290-10887-1-git-send-email-alain.volmat@foss.st.com>
+        id S229640AbhCTLum (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 20 Mar 2021 07:50:42 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:3910 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229583AbhCTLuM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 20 Mar 2021 07:50:12 -0400
+Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4F2bRC1pDgz5dxh;
+        Sat, 20 Mar 2021 17:43:03 +0800 (CST)
+Received: from [127.0.0.1] (10.40.188.234) by dggeme758-chm.china.huawei.com
+ (10.3.19.104) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2106.2; Sat, 20
+ Mar 2021 17:44:58 +0800
+Subject: Re: [PATCH V2] spi: Add HiSilicon SPI Controller Driver for Kunpeng
+ SoCs
+To:     Mark Brown <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, <huangdaode@huawei.com>,
+        <linuxarm@huawei.com>
+References: <1616061024-57818-1-git-send-email-f.fangjian@huawei.com>
+ <20210318132821.GH5469@sirena.org.uk>
+From:   Jay Fang <f.fangjian@huawei.com>
+Message-ID: <49383980-62e4-08b2-f594-e00abab44749@huawei.com>
+Date:   Sat, 20 Mar 2021 17:44:58 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210318132821.GH5469@sirena.org.uk>
+Content-Type: text/plain; charset="windows-1252"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.40.188.234]
+X-ClientProxiedBy: dggeme704-chm.china.huawei.com (10.1.199.100) To
+ dggeme758-chm.china.huawei.com (10.3.19.104)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 18 Mar 2021 08:24:50 +0100, Alain Volmat wrote:
-> stm32_spi_remove() accesses the driver's private data after calling
-> spi_unregister_master() even though that function releases the last
-> reference on the spi_master and thereby frees the private data.
+Dear Mark,
+
+On 2021/3/18 21:28, Mark Brown wrote:
+> On Thu, Mar 18, 2021 at 05:50:24PM +0800, Jay Fang wrote:
 > 
-> Fix by switching over to the new devm_spi_alloc_master() helper which
-> keeps the private data accessible until the driver has unbound.
+>> Changes in v2:
+>> - Use a more specific name (Kunpeng SoCs) for this driver.
 > 
-> [...]
+>>  drivers/spi/spi-hisi.c | 505 +++++++++++++++++++++++++++++++++++++++++++++++++
+> 
+>> +config SPI_HISI
+>> +	tristate "HiSilicon SPI Controller for Kunpeng SoCs"
+> 
+> You've changed the display name for the driver but the Kconfig symbol
+> and filename are still very generic - can you update them as well
+> please?
+> 
+Will change.
 
-Applied to
+Thanks
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> Otherwise this looks good.
+> 
 
-Thanks!
 
-[1/1] spi: stm32: Fix use-after-free on unbind
-      commit: 79c6246ae8793448c05da86a4c82298eed8549b0
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
