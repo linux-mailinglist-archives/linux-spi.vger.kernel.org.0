@@ -2,94 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41FFE344592
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Mar 2021 14:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C54345009
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Mar 2021 20:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbhCVNXu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 22 Mar 2021 09:23:50 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:45812 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233240AbhCVNWi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 Mar 2021 09:22:38 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 12MDKScU111557;
-        Mon, 22 Mar 2021 08:20:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1616419228;
-        bh=26DPjYQQRL+10iBnOu2PfjSw1h9HtqmQpGx0mKS6rfc=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=X1qtgf3E6OtWvC74sm9vBiyMIKB8KkHDLR26uraWd4kzAJg4cX+yZ58v2jnguNrQF
-         SE8MJz+4mLoiflb4ve9bUdtgY4xu4lsc4vh42a27i0U2VAddUv383tdkDGp4vMzgjK
-         gD0xXheAIufthqa7WfJqm6HvrJfXc1EGE9JUM72Y=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 12MDKRVA120742
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 22 Mar 2021 08:20:27 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Mon, 22
- Mar 2021 08:20:08 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Mon, 22 Mar 2021 08:20:08 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 12MDK7dk112900;
-        Mon, 22 Mar 2021 08:20:08 -0500
-Date:   Mon, 22 Mar 2021 18:50:06 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Kuldeep Singh <kuldeep.singh@nxp.com>
-CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        <linux-mtd@lists.infradead.org>
-Subject: Re: [PATCH] dt-bindings: spi: Convert Freescale DSPI to json schema
-Message-ID: <20210322132004.n4r2thznsm7poq74@ti.com>
-References: <20210315121518.3710171-1-kuldeep.singh@nxp.com>
- <20210315183051.ugvmz4zqrvuo6iqq@ti.com>
+        id S232342AbhCVTil (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 22 Mar 2021 15:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232314AbhCVTiU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 Mar 2021 15:38:20 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3EAC061756;
+        Mon, 22 Mar 2021 12:38:19 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id f10so2284149pgl.9;
+        Mon, 22 Mar 2021 12:38:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UmylCooiO0FY0gD1VBuaPpMX4uX4JIruNT0RggphLD0=;
+        b=Brh5JugJp6hqBfFECLtJTjn4r46TPjcn9pSfTTnMx8/mDAzgdUeOzdum0r0CY0DF4/
+         PfvoP5+ceuUzZmAQsxkw5ByIAQ1KyUxCpbNW831vhxESFOIGVCbBnNthoGw6AfWIxehq
+         SkHvpZiFzTCjQNNW/5UIVK1HXhExMyjg1m03Py4YaQzzavHksoml8ZBqOIjCLkJ+NBeC
+         jIAqxfXJGdidya0l2UqWa9xtc12Ie5XOu3qLaXe7Ic2WMNzeV5rDcHv1CyYIWkYuGjyR
+         y6dhskUW7sbbyQb89mTaP9YsyEh0ekt4L6CsYXhlgOKz4nC7V6uGdVZ9fpLdHp2UjqmJ
+         fHlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UmylCooiO0FY0gD1VBuaPpMX4uX4JIruNT0RggphLD0=;
+        b=Nbm53RAnOnu4Pdo/PwnsD0L1K7scQDwBuxPKo88ZYWE/v+x0B5AyILMBl5v3Bx8J9Z
+         4uDsL+wAScxFxqYR8aEZlvzFycAf4Qh2dtgZ8hr6+kCd/SD7mzQiTMTC/cA7YxXrOmon
+         Dg4KkBcVVyxzl1aLLYsGEQ86FmlOhEAzGg/0gaXYgEYA+bJDGqbVUAx/LPio/dFlDetp
+         L++2NhrBbz7tEiLNuKbHojAANakodHKRMlEflMS89RjKp09A+wxO80nZQy1HcEdHnvyc
+         Qbw7TNnEzVsCrUK5hVolxPdCBmW3KFgr1YW1K9TDPTxccuUzK7zzWGXihi6l6DJ3/nOz
+         G4iQ==
+X-Gm-Message-State: AOAM533VZckTxPViyfUlyodCXQiCgvKlCpO4HsV/nMkkLmkpyh75Fw+5
+        t2ScRpOjoaQHGFIp3E4pbqU=
+X-Google-Smtp-Source: ABdhPJy5TGoMd6KmEhCjbhCpzBBMUIVSKnTyFbEhxlGnJk92WGw1MC433yPuVLTbTXPMX5KqQ3sQ8w==
+X-Received: by 2002:a17:902:26c:b029:e6:648f:2668 with SMTP id 99-20020a170902026cb02900e6648f2668mr1153472plc.66.1616441898801;
+        Mon, 22 Mar 2021 12:38:18 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:499f:7361:582b:fd05])
+        by smtp.gmail.com with ESMTPSA id t125sm10514566pgt.71.2021.03.22.12.38.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Mar 2021 12:38:17 -0700 (PDT)
+Date:   Mon, 22 Mar 2021 12:38:15 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: ensure timely release of driver-allocated resources
+Message-ID: <YFjyJycuAXdTX42D@google.com>
+References: <YFf2RD931nq3RudJ@google.com>
+ <20210322123707.GB4681@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210315183051.ugvmz4zqrvuo6iqq@ti.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <20210322123707.GB4681@sirena.org.uk>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 16/03/21 12:00AM, Pratyush Yadav wrote:
-> +Cc mtd list
+On Mon, Mar 22, 2021 at 12:37:07PM +0000, Mark Brown wrote:
+> On Sun, Mar 21, 2021 at 06:43:32PM -0700, Dmitry Torokhov wrote:
 > 
-> Hi,
+> > Note that this is not SPI-specific issue. I already send a similar
+> > patch for I2C and will be sending more.
 > 
-> On 15/03/21 05:45PM, Kuldeep Singh wrote:
-> > Convert the Freescale DSPI binding to DT schema format using json-schema.
-> > 
-> > Signed-off-by: Kuldeep Singh <kuldeep.singh@nxp.com>
-> > ---
-> > Hi Rob,
-> > This patch is checked with following commands with no warnings observed.
-> > make distclean; make allmodconfig;
-> > make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/fsl,spi-fsl-dspi.yaml;
-> > make dtbs_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/fsl,spi-fsl-dspi.yaml
-> 
-> When I add the "fsl,spi-cs-sck-delay" property under the flash@0 node in 
-> the example and run dt_binding_check, I see the below error:
-> 
->   /home/pratyush/src/linux/Documentation/devicetree/bindings/spi/fsl,spi-fsl-dspi.example.dt.yaml: flash@0: 'fsl,spi-cs-sck-delay' does not match any of the regexes: '^partition@', 'pinctrl-[0-9]+'
->      From schema: /home/pratyush/src/lin/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
-> 
-> I am trying to solve a similar problem for the Cadence QSPI controller 
-> binding and I wonder what the best solution for this is. The obvious one 
-> would be to add these properties to jedec,spi-nor.yaml. I haven't 
-> managed to come up with any other solution to this problem.
-> 
-> Rob, all, any suggestions on how to best model this?
+> This feels like it might make sense to push up to the driver core level
+> then rather than doing in individual buses?
 
-Ping. Any ideas?
+That is exactly the issue: we can't. Driver core already releases all
+resources when a device is being unbound but that happens after bus
+"remove" code is executed and therefore is too late. The device might
+already be powered down, but various devm release() callbacks will be
+trying to access it.
+
+devm only works when you do not mix manual resources with managed ones,
+and when bus code allocates resources themselves (attaching a device to
+a power domain can be viewed as resource acquisition) we violate this
+principle. We could, of course, to make SPI bus' probe() use
+devm_add_action_or_reset() to work in removal of the device from the
+power domain into the stream of devm resources, but that still requires
+changes at bus code, and I believe will complicate matters if we need to
+extend SPI bus code to allocate more resources in probe(). So I opted
+for opening a devm group to separate resources allocated before and
+after probe() to be able to release them in the right order.
+
+Thanks.
 
 -- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+Dmitry
