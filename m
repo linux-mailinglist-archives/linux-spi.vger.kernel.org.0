@@ -2,98 +2,154 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA2C34667C
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Mar 2021 18:37:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D239D346870
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Mar 2021 20:05:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbhCWRg3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 23 Mar 2021 13:36:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37486 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230280AbhCWRgP (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 23 Mar 2021 13:36:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E8543619C3;
-        Tue, 23 Mar 2021 17:36:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616520974;
-        bh=oDC/AlOMNNqiI3w/qogsybWspWiOPV+oFkeENBLzUMg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=myKgCJ1K9JXiNlZrZija6Srb7E89+e5UhlYmdYsJAmdeWS1+WGF+cB/ZTW9yUPXLi
-         omGoWJIkIXPBBE5APjgWtvMAWnlqpXpg1g3GsDzTXVH7b7o7vmDJLA/TIY1y3vDvdx
-         5jgJOo8ISO0oCa8lJ7wTExA6EBkZ000uPDv7iNNvZhfT2afK87hMJdw5+0Fi5wV/Gg
-         7ASWUDUXxXTRjwFbfpxY7a9KvAGDMy7Bs81oNzoi10ZtvkLtwEq6RE0mddT6FlnfDP
-         srpH41snZB5JJ9thyCUq95Ybk6HyZp8VK3lTwSC1gFzJp87q2O1OlqmbGa9MiBXRWO
-         DkNPqOMDPycgQ==
-Date:   Tue, 23 Mar 2021 17:36:06 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+        id S233010AbhCWTFJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 23 Mar 2021 15:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232970AbhCWTEk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 23 Mar 2021 15:04:40 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CC3C061763;
+        Tue, 23 Mar 2021 12:04:39 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id a22-20020a17090aa516b02900c1215e9b33so12601348pjq.5;
+        Tue, 23 Mar 2021 12:04:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mOoV6NglxaO34D7E/LEb/wD+88EOY1QvctA0zUc+clA=;
+        b=Jyo+0+4mxPVgA/fM4574ACwHQi23psRIg5eNX8N8Y5lVRf/Wz+uDT77vINBVF65bnW
+         2D4ZpJC1oAwAtLPL5cYkL+C4/FH20kNR+Xwey6Otrt/EIUfO/rYzPUeVSzC4hlAYwxSL
+         UDuPN/eL8uI87UNlDu+JLwikoKZ4Vr8AWNgx5sMde9BgCmuNcgzMDwSn1mUtyaOjrh1x
+         KKUGjhrIB9u/T+MeTEybjrILwNPv7NaFtNjSGgiodHjX7zvZSmfoTqRRZOJrACipjRcr
+         Z/2P3EZvvRyDQZtk3c87dyhJmi4b6885Jr5pBh6q8me/QhTxUpvT4Bs8Duo4Wsko6+RA
+         JyOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mOoV6NglxaO34D7E/LEb/wD+88EOY1QvctA0zUc+clA=;
+        b=rH2jjPO/WWZZfzDYwkpZJvCgPG1hip5zgO/fHdar90yRqtjN23GeGO9fbQ/WqCwlkC
+         mjK8pSPoeLNKVbeAm/Lb++NQRaU7A6NckXgRo5/4xA4pnaKBzD4+9we8ZbFY9nkiOcPr
+         HA5W88MyAusC+I51+GqEljcR8oCBg+RdUz3L6ARXecZPhXF1W5C3czvIw+1tukyzI1I/
+         LauL+2o+ZiK/Eku6qu+R+0y/tNaUnuWuo1Ua0BjXvNI4jlWJxWqx98WguPt4RT9fJr8K
+         NzZRCO7wTa8sGYgVbabTVRG5haq/2QiM/iWC2lHJ2tREyWVs2Yp5TW2Wm3qdnVgZ9e1S
+         7q/g==
+X-Gm-Message-State: AOAM532uAb4OVL2fUKfaDajrP1Lxyx51ognTxdp/rmylpQ4Q2ixBlYxk
+        hKSH67WDlfRVORrA7AuChv0=
+X-Google-Smtp-Source: ABdhPJxHbzgizGpkWqcw90BCMdfjJ0GIQGZFlAJ1gbQECc981kaAiP3H52DMoXq1CYIphhFtCEKA8w==
+X-Received: by 2002:a17:90a:c207:: with SMTP id e7mr5761602pjt.188.1616526278573;
+        Tue, 23 Mar 2021 12:04:38 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:4d6b:ca5a:c720:f5c9])
+        by smtp.gmail.com with ESMTPSA id j2sm16067633pgh.39.2021.03.23.12.04.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Mar 2021 12:04:37 -0700 (PDT)
+Date:   Tue, 23 Mar 2021 12:04:34 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] spi: ensure timely release of driver-allocated resources
-Message-ID: <20210323173606.GB5490@sirena.org.uk>
+Message-ID: <YFo7wkq037P2Dosz@google.com>
 References: <YFf2RD931nq3RudJ@google.com>
  <20210322123707.GB4681@sirena.org.uk>
  <YFjyJycuAXdTX42D@google.com>
+ <20210323173606.GB5490@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3lcZGd9BuhuYXNfi"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YFjyJycuAXdTX42D@google.com>
-X-Cookie: Formatted to fit your screen.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210323173606.GB5490@sirena.org.uk>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, Mar 23, 2021 at 05:36:06PM +0000, Mark Brown wrote:
+> On Mon, Mar 22, 2021 at 12:38:15PM -0700, Dmitry Torokhov wrote:
+> > On Mon, Mar 22, 2021 at 12:37:07PM +0000, Mark Brown wrote:
+> 
+> > > This feels like it might make sense to push up to the driver core level
+> > > then rather than doing in individual buses?
+> 
+> > That is exactly the issue: we can't. Driver core already releases all
+> > resources when a device is being unbound but that happens after bus
+> > "remove" code is executed and therefore is too late. The device might
+> > already be powered down, but various devm release() callbacks will be
+> > trying to access it.
+> 
+> Can you provide a concrete example of something that is causing problems
+> here?  If something is trying to access the device after remove() has
+> run that sounds like it's abusing devres somehow.  It sounded from your
+> commit log like this was something to do with the amount of time it took
+> the driver core to action the frees rather than an ordering issue.
 
---3lcZGd9BuhuYXNfi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+No it is ordering issue. I do not have a proven real-life example for
+SPI, but we do have one for I2C:
 
-On Mon, Mar 22, 2021 at 12:38:15PM -0700, Dmitry Torokhov wrote:
-> On Mon, Mar 22, 2021 at 12:37:07PM +0000, Mark Brown wrote:
+https://lore.kernel.org/linux-devicetree/20210305041236.3489-7-jeff@labundy.com/
 
-> > This feels like it might make sense to push up to the driver core level
-> > then rather than doing in individual buses?
+However, if we consider fairly typical SPI driver, such as
+drivers/input/touchscreen/ad7877.c, you can see that it uses devm in its
+probe() and because all resources are managed, it does not define
+remove() at all.
 
-> That is exactly the issue: we can't. Driver core already releases all
-> resources when a device is being unbound but that happens after bus
-> "remove" code is executed and therefore is too late. The device might
-> already be powered down, but various devm release() callbacks will be
-> trying to access it.
+So during proble we have:
 
-Can you provide a concrete example of something that is causing problems
-here?  If something is trying to access the device after remove() has
-run that sounds like it's abusing devres somehow.  It sounded from your
-commit log like this was something to do with the amount of time it took
-the driver core to action the frees rather than an ordering issue.
+<driver core allocations>
+SPI: dev_pm_domain_attach
+AD7877: devm_kzalloc driver structure
+AD7877: devm allocation of input device
+AD7877: devm custom action to disable the chip on removal
+AD7877: devm IRQ request
+AD7877: devm sysfs attribute group
+AD7877: devm input registration
+<additional devm driver core allocations?>
 
-> devm only works when you do not mix manual resources with managed ones,
-> and when bus code allocates resources themselves (attaching a device to
-> a power domain can be viewed as resource acquisition) we violate this
-> principle. We could, of course, to make SPI bus' probe() use
-> devm_add_action_or_reset() to work in removal of the device from the
-> power domain into the stream of devm resources, but that still requires
-> changes at bus code, and I believe will complicate matters if we need to
-> extend SPI bus code to allocate more resources in probe(). So I opted
-> for opening a devm group to separate resources allocated before and
-> after probe() to be able to release them in the right order.
+And on remove:
 
-Sure, these are standard issues that people create with excessive use of
-devm but the device's remove() callback is surely already a concern by
-itself here?
+SPI: dev_pm_domain_detach !!!!!!
+<deallocate additional devm driver core allocations?>
+AD7877: devm input unregistration
+AD7877: devm sysfs attribute group removal
+AD7877: devm freeing IRQ
+AD7877: devm disable the chip
+AD7877: devm freeing of input device
+AD7877: devm free driver structure
+<deallocate driver core allocations>
 
---3lcZGd9BuhuYXNfi
-Content-Type: application/pgp-signature; name="signature.asc"
+Note how dev_pm_domain_detach() jumped ahead of everything, and
+strictly speaking past this point we can no longer guarantee that we can
+access the chip and disable it.
 
------BEGIN PGP SIGNATURE-----
+> 
+> > devm only works when you do not mix manual resources with managed ones,
+> > and when bus code allocates resources themselves (attaching a device to
+> > a power domain can be viewed as resource acquisition) we violate this
+> > principle. We could, of course, to make SPI bus' probe() use
+> > devm_add_action_or_reset() to work in removal of the device from the
+> > power domain into the stream of devm resources, but that still requires
+> > changes at bus code, and I believe will complicate matters if we need to
+> > extend SPI bus code to allocate more resources in probe(). So I opted
+> > for opening a devm group to separate resources allocated before and
+> > after probe() to be able to release them in the right order.
+> 
+> Sure, these are standard issues that people create with excessive use of
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBaJwYACgkQJNaLcl1U
-h9BoyQf/f2ROjm2etfrH/N3efFqG1QWOvF+H63dZdFFDyZbRvY4BxxI66hV7Pke4
-aOOpTQWfbTKL4mydhrbhlV10yjU7U0rZgq68bL14Dk8y+5X1pUhJkcPx1hfIp81y
-4o1Os0ZmbsiMO5wiJ4ZIPFMsPd7Ya0pamF1TFV7PA2V0YJioyktMP3+ik69C16wf
-l6nu365V8DSdOs2OWc7/HX2LSwDsUqSDCFAG1DgOlzMql8nOT5kGPujGa1jcBzyb
-SgU+2T8C8ONPeno+n47hXoFQ56kh9JaK9QrA3q2PlgZ2icUhAnpHpnbiSEDU6u/1
-nGlNpKrdGEhDsGgVns3Q99gwEP5tIg==
-=xtvY
------END PGP SIGNATURE-----
+devm is a fact of life and we need to live with it. I am unconvinced if
+it solved more issues that it brought in, but it is something that
+driver authors like to use and are pushed towards.
 
---3lcZGd9BuhuYXNfi--
+> devm but the device's remove() callback is surely already a concern by
+> itself here?
+
+In the example above there is not one, but even if it exists, it is
+called first, so in some limited cases you could have non-managed
+resources allocated very last and released first in remove(), and then
+have devm release the rest. However driver's remove() is not issue here,
+it is bus' non-trivial remove.
+
+Thanks.
+
+-- 
+Dmitry
