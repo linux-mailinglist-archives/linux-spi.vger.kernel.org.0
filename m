@@ -2,128 +2,105 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BEC13482D5
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Mar 2021 21:23:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E8C3483C8
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Mar 2021 22:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238106AbhCXUXR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 24 Mar 2021 16:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238077AbhCXUXD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 Mar 2021 16:23:03 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6CAC061763
-        for <linux-spi@vger.kernel.org>; Wed, 24 Mar 2021 13:23:03 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lPA1q-00024w-Ra; Wed, 24 Mar 2021 21:22:58 +0100
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lPA1q-0001th-Hu; Wed, 24 Mar 2021 21:22:58 +0100
-Date:   Wed, 24 Mar 2021 21:22:58 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: davinci: Simplify using devm_clk_get_prepared()
-Message-ID: <20210324202258.bossedmrhj35nyvc@pengutronix.de>
-References: <20210301135053.1462168-1-u.kleine-koenig@pengutronix.de>
- <20210324201723.76299-1-u.kleine-koenig@pengutronix.de>
+        id S233935AbhCXVcl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 24 Mar 2021 17:32:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35852 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238488AbhCXVce (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 24 Mar 2021 17:32:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A80AB61A01;
+        Wed, 24 Mar 2021 21:32:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616621554;
+        bh=Rb5aGgF5XSHVHPvvz0Biht5ShVFVbaxFO6erPbXbWRQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=psapsN6KxcLfNEO9rGI8wJGzJoV5zV/B8oTJuMQGLBIcmOtCH6MG1gfszKpNf122o
+         w2gYUNkqL3HZDF5TNOZu2xHor/OSOEAnmX1dSSu8jQ4CfkUjEfh7CfpryJgvd3+LUN
+         YKpRQYAnc/ebJrWA33iJsfsIavNEeXczjLkn+byjDMPa0+CcE/MtfEh0lSt9xRCBtf
+         taY4LpiQMKmTp2z4fUiLeJVRZ7u7ZmJ72Y4jEMRigRUyreiqnZKLGGiP8Qu/1gM0Dr
+         CaxNO1kW55kNXh3D/gcSAMOrWRFJlggunPjwdWGO7+opD5/0O3E8Q6PeQGYtXGDhL3
+         0e3QGzn1QpH7w==
+Date:   Wed, 24 Mar 2021 21:32:26 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: ensure timely release of driver-allocated resources
+Message-ID: <20210324213225.GD4596@sirena.org.uk>
+References: <YFf2RD931nq3RudJ@google.com>
+ <20210322123707.GB4681@sirena.org.uk>
+ <YFjyJycuAXdTX42D@google.com>
+ <20210323173606.GB5490@sirena.org.uk>
+ <YFo7wkq037P2Dosz@google.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="h2ekt5s5ojowan2a"
+        protocol="application/pgp-signature"; boundary="W5WqUoFLvi1M7tJE"
 Content-Disposition: inline
-In-Reply-To: <20210324201723.76299-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+In-Reply-To: <YFo7wkq037P2Dosz@google.com>
+X-Cookie: The eyes of taxes are upon you.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---h2ekt5s5ojowan2a
-Content-Type: text/plain; charset=iso-8859-1
+--W5WqUoFLvi1M7tJE
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 24, 2021 at 09:17:23PM +0100, Uwe Kleine-K=F6nig wrote:
-> devm_clk_get_prepared returns the clk already prepared and the
-> automatically called cleanup cares for unpreparing. So simplify .probe
-> and .remove accordingly.
->=20
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> ---
-> Hello,
->=20
-> this simplification depends on a patch set that introduces
-> devm_clk_get_prepared() and friends.
->=20
-> The most recent version of this patch set can be found at
->=20
-> 	https://lore.kernel.org/r/20210301135053.1462168-1-u.kleine-koenig@pengu=
-tronix.de
->=20
-> Unfortunately I didn't get any feedback at all from the clk maintainers
-> on it, so I try to make other maintainers aware of it in the expectation
-> that the simplifications are welcome and so lure the clk maintainers to
-> share their thoughts.
->=20
-> Best regards
-> Uwe
->=20
->  drivers/spi/spi-davinci.c | 11 ++---------
->  1 file changed, 2 insertions(+), 9 deletions(-)
->=20
-> diff --git a/drivers/spi/spi-davinci.c b/drivers/spi/spi-davinci.c
-> index 7453a1dbbc06..c170bccf9710 100644
-> --- a/drivers/spi/spi-davinci.c
-> +++ b/drivers/spi/spi-davinci.c
-> @@ -936,14 +936,11 @@ static int davinci_spi_probe(struct platform_device=
- *pdev)
-> =20
->  	dspi->bitbang.master =3D master;
-> =20
-> -	dspi->clk =3D devm_clk_get(&pdev->dev, NULL);
-> +	dspi->clk =3D devm_clk_get_prepared(&pdev->dev, NULL);
+On Tue, Mar 23, 2021 at 12:04:34PM -0700, Dmitry Torokhov wrote:
+> On Tue, Mar 23, 2021 at 05:36:06PM +0000, Mark Brown wrote:
 
-oops, I got that wrong, this must be devm_clk_get_enabled, not
-devm_clk_get_prepared. So if the clk patches go in, please let me resend
-a fixed patch (or adapt yourself, whatever you prefer).
+> No it is ordering issue. I do not have a proven real-life example for
+> SPI, but we do have one for I2C:
 
-Best regards
-Uwe
+> https://lore.kernel.org/linux-devicetree/20210305041236.3489-7-jeff@labundy.com/
 
->  	if (IS_ERR(dspi->clk)) {
->  		ret =3D -ENODEV;
->  		goto free_master;
->  	}
-> -	ret =3D clk_prepare_enable(dspi->clk);
-> -	if (ret)
-> -		goto free_master;
+TBH that looks like a fairly standard case where you probably don't want
+to be using devm for the interrupts in the first place.  Leaving the
+interrupts live after the bus thinks it freed the device doesn't seem
+like the best idea, I'm not sure I'd expect that to work reliably when
+the device tries to call into the bus code to interact with the device
+that the bus thought was already freed anyway.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+If we want this to work reliably it really feels like we should have two
+remove callbacks in the driver core doing this rather than open coding
+in every single bus which is what we'd need to do - this is going to
+affect any bus that does anything other than just call the device's
+remove() callback.  PCI looks like it might have issues too for example,
+and platform does as well and those were simply the first two buses I
+looked at.  Possibly we want a driver core callback which is scheduled
+via devm (remove_devm(), cleanup() or something).  We'd still need to
+move things about in all the buses but it seems preferable to do it that
+way rather than open coding opening a group and the comments about
+what's going on and the ordering requirements everywhere, it's a little
+less error prone going forward.
 
---h2ekt5s5ojowan2a
+> Note how dev_pm_domain_detach() jumped ahead of everything, and
+> strictly speaking past this point we can no longer guarantee that we can
+> access the chip and disable it.
+
+Frankly it looks like the PM domain stuff shouldn't be in the probe()
+and remove() paths at all and this has been bogusly copies from other
+buses, it should be in the device registration paths.  The device is in
+the domain no matter what's going on with binding it.  Given how generic
+code is I'm not even sure why it's in the buses.
+
+--W5WqUoFLvi1M7tJE
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmBbn58ACgkQwfwUeK3K
-7An0Kwf9Gb6Gap7dLohuhBIvvIaava8POgNLy14HJ9c7+b12IkeLadFXClal9etN
-1hyF0idewSJvQ4M2jfRUG6L26/Gml8vgKS+std15q98TzC35i/21cwS7H9fbfKBF
-qbqsZR+k+7uV7rV9guBJshVVX03sIs2O9DpfndQsoxFpEqWHuHiFLE+loGwKXMp/
-3i1+fa3Ngb9y5k3RfA4kvXWMDC0FJirUgfmOWNvZJnmxw8FB8tdPjKjc2M3bq44j
-NIazz/rxRGGkCsjEBPT3Rnr11S2jGZGAig4L10RXpMAveiorKD3TRVrJqEG6g616
-PaN2hZgqLteBl9lcj5nSWcUs2WzVKQ==
-=9DaC
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBbr+kACgkQJNaLcl1U
+h9Cragf8C50+G8gLDvLBvBvm+Ko43dFwGt2cZIwVyrwRJleFlHvl1Ao+1xVNBDvW
+h1KWWY1LhXRDrRIxmDPKsstiFb8HSDjmZPea/lZ/OG7E/plYmgtg2VTT2mKEUp06
++vD2ciF90VODAgBqlJX10/kFI7K23S55NW/6J167vKd11kfG5y7KtVBeD2Rp1w2u
+795aNs4LyGKr1DSEq1GMoif1wILj7ruXF5Iq5gZdrIePRW1tQ+3ZriWgr7SXM5i6
+A5c9Q7NaiS4EoOLlxwgd9yltViJmt6ROBLpUM0ASqi+lxtaJ84/V4UgZm3g7h/MH
+vXUBrg/FarZKaHuR8A5q/i1yI3oPTw==
+=uQy2
 -----END PGP SIGNATURE-----
 
---h2ekt5s5ojowan2a--
+--W5WqUoFLvi1M7tJE--
