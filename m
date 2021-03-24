@@ -2,105 +2,144 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E8C3483C8
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Mar 2021 22:33:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E9B348454
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Mar 2021 23:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233935AbhCXVcl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 24 Mar 2021 17:32:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35852 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238488AbhCXVce (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 24 Mar 2021 17:32:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A80AB61A01;
-        Wed, 24 Mar 2021 21:32:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616621554;
-        bh=Rb5aGgF5XSHVHPvvz0Biht5ShVFVbaxFO6erPbXbWRQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=psapsN6KxcLfNEO9rGI8wJGzJoV5zV/B8oTJuMQGLBIcmOtCH6MG1gfszKpNf122o
-         w2gYUNkqL3HZDF5TNOZu2xHor/OSOEAnmX1dSSu8jQ4CfkUjEfh7CfpryJgvd3+LUN
-         YKpRQYAnc/ebJrWA33iJsfsIavNEeXczjLkn+byjDMPa0+CcE/MtfEh0lSt9xRCBtf
-         taY4LpiQMKmTp2z4fUiLeJVRZ7u7ZmJ72Y4jEMRigRUyreiqnZKLGGiP8Qu/1gM0Dr
-         CaxNO1kW55kNXh3D/gcSAMOrWRFJlggunPjwdWGO7+opD5/0O3E8Q6PeQGYtXGDhL3
-         0e3QGzn1QpH7w==
-Date:   Wed, 24 Mar 2021 21:32:26 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: ensure timely release of driver-allocated resources
-Message-ID: <20210324213225.GD4596@sirena.org.uk>
-References: <YFf2RD931nq3RudJ@google.com>
- <20210322123707.GB4681@sirena.org.uk>
- <YFjyJycuAXdTX42D@google.com>
- <20210323173606.GB5490@sirena.org.uk>
- <YFo7wkq037P2Dosz@google.com>
+        id S235030AbhCXWFp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 24 Mar 2021 18:05:45 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:44446 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238720AbhCXWF2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 Mar 2021 18:05:28 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12OM2vJq026543;
+        Wed, 24 Mar 2021 18:05:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=l8or5TUcHsvNqpPcmEDhSobfz5xeCciUB5blaMfLtOo=;
+ b=lvGVgowbFsqmRYQ8j9UBzEIFo+TVOJZPf0TS3rKdTPON5+rV3+xg0Q8KX0YuUBf/iFI6
+ 7Dga4Y7gJOt2rGbmFM1q31G7vbQUqC073pvKjYWwpe/VDs2HEKuc1ZE/8/a6NzlDYOJB
+ 4geZG+FggVkL+2Dhn1zZrMlItAvkeuWQi0q4ijbkgBrTjlX4olo9d0GfFFFMJU27UAd7
+ f4BSwo1437Mh6I99BgoxqJh5m/HEm1VtW9z4E6JK33IAsRYx0B36TxqbDLS893wqLLYw
+ CaPybm/XkJJ9/dhvPHppph+3CkYITAVhKOMRm8LyiSYbyqOsqEr/Itm1hfDACu0Vg+eV Cg== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 37gca625hp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Mar 2021 18:05:26 -0400
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12OLlOqI010248;
+        Wed, 24 Mar 2021 22:05:25 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma01dal.us.ibm.com with ESMTP id 37equds2ut-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 Mar 2021 22:05:25 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12OM5Otk22348224
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 24 Mar 2021 22:05:24 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C77B1AE076;
+        Wed, 24 Mar 2021 22:05:24 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1F16EAE05F;
+        Wed, 24 Mar 2021 22:05:24 +0000 (GMT)
+Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.68.238])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 24 Mar 2021 22:05:23 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-spi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, broonie@kernel.org, joel@jms.id.au,
+        Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH] spi: fsi: Remove multiple sequenced ops for restricted chips
+Date:   Wed, 24 Mar 2021 17:05:16 -0500
+Message-Id: <20210324220516.41192-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="W5WqUoFLvi1M7tJE"
-Content-Disposition: inline
-In-Reply-To: <YFo7wkq037P2Dosz@google.com>
-X-Cookie: The eyes of taxes are upon you.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-24_13:2021-03-24,2021-03-24 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=934 malwarescore=0 lowpriorityscore=0 impostorscore=0
+ priorityscore=1501 bulkscore=0 spamscore=0 mlxscore=0 adultscore=0
+ phishscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103240157
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Updated restricted chips have trouble processing multiple sequenced
+operations. So remove the capability to sequence multiple operations and
+reduce the maximum transfer size to 8 bytes.
 
---W5WqUoFLvi1M7tJE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+---
+ drivers/spi/spi-fsi.c | 27 +++++++--------------------
+ 1 file changed, 7 insertions(+), 20 deletions(-)
 
-On Tue, Mar 23, 2021 at 12:04:34PM -0700, Dmitry Torokhov wrote:
-> On Tue, Mar 23, 2021 at 05:36:06PM +0000, Mark Brown wrote:
+diff --git a/drivers/spi/spi-fsi.c b/drivers/spi/spi-fsi.c
+index 3920cd3286d8..de359718e816 100644
+--- a/drivers/spi/spi-fsi.c
++++ b/drivers/spi/spi-fsi.c
+@@ -26,7 +26,7 @@
+ #define SPI_FSI_BASE			0x70000
+ #define SPI_FSI_INIT_TIMEOUT_MS		1000
+ #define SPI_FSI_MAX_XFR_SIZE		2048
+-#define SPI_FSI_MAX_XFR_SIZE_RESTRICTED	32
++#define SPI_FSI_MAX_XFR_SIZE_RESTRICTED	8
+ 
+ #define SPI_FSI_ERROR			0x0
+ #define SPI_FSI_COUNTER_CFG		0x1
+@@ -265,14 +265,12 @@ static int fsi_spi_sequence_transfer(struct fsi_spi *ctx,
+ 				     struct fsi_spi_sequence *seq,
+ 				     struct spi_transfer *transfer)
+ {
+-	bool docfg = false;
+ 	int loops;
+ 	int idx;
+ 	int rc;
+ 	u8 val = 0;
+ 	u8 len = min(transfer->len, 8U);
+ 	u8 rem = transfer->len % len;
+-	u64 cfg = 0ULL;
+ 
+ 	loops = transfer->len / len;
+ 
+@@ -292,28 +290,17 @@ static int fsi_spi_sequence_transfer(struct fsi_spi *ctx,
+ 		return -EINVAL;
+ 	}
+ 
+-	if (ctx->restricted) {
+-		const int eidx = rem ? 5 : 6;
+-
+-		while (loops > 1 && idx <= eidx) {
+-			idx = fsi_spi_sequence_add(seq, val);
+-			loops--;
+-			docfg = true;
+-		}
+-
+-		if (loops > 1) {
+-			dev_warn(ctx->dev, "No sequencer slots; aborting.\n");
+-			return -EINVAL;
+-		}
++	if (ctx->restricted && loops > 1) {
++		dev_warn(ctx->dev,
++			 "Transfer too large; no branches permitted.\n");
++		return -EINVAL;
+ 	}
+ 
+ 	if (loops > 1) {
++		u64 cfg = SPI_FSI_COUNTER_CFG_LOOPS(loops - 1);
++
+ 		fsi_spi_sequence_add(seq, SPI_FSI_SEQUENCE_BRANCH(idx));
+-		docfg = true;
+-	}
+ 
+-	if (docfg) {
+-		cfg = SPI_FSI_COUNTER_CFG_LOOPS(loops - 1);
+ 		if (transfer->rx_buf)
+ 			cfg |= SPI_FSI_COUNTER_CFG_N2_RX |
+ 				SPI_FSI_COUNTER_CFG_N2_TX |
+-- 
+2.27.0
 
-> No it is ordering issue. I do not have a proven real-life example for
-> SPI, but we do have one for I2C:
-
-> https://lore.kernel.org/linux-devicetree/20210305041236.3489-7-jeff@labundy.com/
-
-TBH that looks like a fairly standard case where you probably don't want
-to be using devm for the interrupts in the first place.  Leaving the
-interrupts live after the bus thinks it freed the device doesn't seem
-like the best idea, I'm not sure I'd expect that to work reliably when
-the device tries to call into the bus code to interact with the device
-that the bus thought was already freed anyway.
-
-If we want this to work reliably it really feels like we should have two
-remove callbacks in the driver core doing this rather than open coding
-in every single bus which is what we'd need to do - this is going to
-affect any bus that does anything other than just call the device's
-remove() callback.  PCI looks like it might have issues too for example,
-and platform does as well and those were simply the first two buses I
-looked at.  Possibly we want a driver core callback which is scheduled
-via devm (remove_devm(), cleanup() or something).  We'd still need to
-move things about in all the buses but it seems preferable to do it that
-way rather than open coding opening a group and the comments about
-what's going on and the ordering requirements everywhere, it's a little
-less error prone going forward.
-
-> Note how dev_pm_domain_detach() jumped ahead of everything, and
-> strictly speaking past this point we can no longer guarantee that we can
-> access the chip and disable it.
-
-Frankly it looks like the PM domain stuff shouldn't be in the probe()
-and remove() paths at all and this has been bogusly copies from other
-buses, it should be in the device registration paths.  The device is in
-the domain no matter what's going on with binding it.  Given how generic
-code is I'm not even sure why it's in the buses.
-
---W5WqUoFLvi1M7tJE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBbr+kACgkQJNaLcl1U
-h9Cragf8C50+G8gLDvLBvBvm+Ko43dFwGt2cZIwVyrwRJleFlHvl1Ao+1xVNBDvW
-h1KWWY1LhXRDrRIxmDPKsstiFb8HSDjmZPea/lZ/OG7E/plYmgtg2VTT2mKEUp06
-+vD2ciF90VODAgBqlJX10/kFI7K23S55NW/6J167vKd11kfG5y7KtVBeD2Rp1w2u
-795aNs4LyGKr1DSEq1GMoif1wILj7ruXF5Iq5gZdrIePRW1tQ+3ZriWgr7SXM5i6
-A5c9Q7NaiS4EoOLlxwgd9yltViJmt6ROBLpUM0ASqi+lxtaJ84/V4UgZm3g7h/MH
-vXUBrg/FarZKaHuR8A5q/i1yI3oPTw==
-=uQy2
------END PGP SIGNATURE-----
-
---W5WqUoFLvi1M7tJE--
