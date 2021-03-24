@@ -2,144 +2,162 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E9B348454
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Mar 2021 23:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A93348499
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Mar 2021 23:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235030AbhCXWFp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 24 Mar 2021 18:05:45 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:44446 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238720AbhCXWF2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 Mar 2021 18:05:28 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12OM2vJq026543;
-        Wed, 24 Mar 2021 18:05:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=l8or5TUcHsvNqpPcmEDhSobfz5xeCciUB5blaMfLtOo=;
- b=lvGVgowbFsqmRYQ8j9UBzEIFo+TVOJZPf0TS3rKdTPON5+rV3+xg0Q8KX0YuUBf/iFI6
- 7Dga4Y7gJOt2rGbmFM1q31G7vbQUqC073pvKjYWwpe/VDs2HEKuc1ZE/8/a6NzlDYOJB
- 4geZG+FggVkL+2Dhn1zZrMlItAvkeuWQi0q4ijbkgBrTjlX4olo9d0GfFFFMJU27UAd7
- f4BSwo1437Mh6I99BgoxqJh5m/HEm1VtW9z4E6JK33IAsRYx0B36TxqbDLS893wqLLYw
- CaPybm/XkJJ9/dhvPHppph+3CkYITAVhKOMRm8LyiSYbyqOsqEr/Itm1hfDACu0Vg+eV Cg== 
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 37gca625hp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 Mar 2021 18:05:26 -0400
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12OLlOqI010248;
-        Wed, 24 Mar 2021 22:05:25 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma01dal.us.ibm.com with ESMTP id 37equds2ut-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 Mar 2021 22:05:25 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12OM5Otk22348224
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 24 Mar 2021 22:05:24 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C77B1AE076;
-        Wed, 24 Mar 2021 22:05:24 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1F16EAE05F;
-        Wed, 24 Mar 2021 22:05:24 +0000 (GMT)
-Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.68.238])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 24 Mar 2021 22:05:23 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-spi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, broonie@kernel.org, joel@jms.id.au,
-        Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH] spi: fsi: Remove multiple sequenced ops for restricted chips
-Date:   Wed, 24 Mar 2021 17:05:16 -0500
-Message-Id: <20210324220516.41192-1-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
+        id S232000AbhCXW1g (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 24 Mar 2021 18:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230005AbhCXW1b (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 Mar 2021 18:27:31 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E825AC06174A;
+        Wed, 24 Mar 2021 15:27:27 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id u19so15759211pgh.10;
+        Wed, 24 Mar 2021 15:27:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GRkYdhVDclltdfZ2FdYU31f1Z7mv5y7KNEhciLwpFQU=;
+        b=L9H7tXhLm56vOtoJETiA5o6hXACBJgzCuzRlItMdm19EkPpWmCFG30wGH+nqGkbgx5
+         NBNHCgJm3XI3cbQHWO3vNHWyiohZ49fY8CWv2sqCqxwoTJ0WddkFocj+Tj/5k6ABAbI/
+         wdzSJR8p2m+zQOamqMQEMhgzU8StOGgoshgjRwPCKM1YWeacwgRZ68VNGA0RXEAZBiSz
+         nw6pTh0NcIMXvkIu6nvlKGpHbz+CMhzR5iNWSR5F4J1HIMtPfgHJOVHH332Jsn6qXi4s
+         3mZzOzpx1nPOLBbyUwVx+pxenFBl0dPGcFg6BM4mXwn2J3QY1crGyXnicoQXL3bau+bd
+         JOrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GRkYdhVDclltdfZ2FdYU31f1Z7mv5y7KNEhciLwpFQU=;
+        b=ispM2z2h81p1Nv7bHFU+bBFTB55A8uBFY2ZTmKJKsNlXfVwtgvrA2gX9xTUuEMJgYl
+         MPYgiXAqqAyxYjQIa1c1NPMlE2Eu7PIsAVk6RjrRrmayZjoofH0B7MUPv+FYo5DK9BWv
+         ts2NiC4VStaB6rHPcW8ZV72EhDKIP9/yUA/PcD0Vh8ovOrqfXwZR4QNliw1Uq3lY+uGa
+         R8SDxGDJRceTp7VZVhG6bCzJfJ4+QSdcpLHgzJtAyw5BSWzp2gMCF0ky8z9aQ6nhoPBP
+         cTRAjPxvdaobX1xq3nlo89K7Zp+H3dmcSlXHII84i/Yb/MjQvZrIpOCtGPNUmy7tlqF2
+         pF5Q==
+X-Gm-Message-State: AOAM531RuWUO97Yyx6pMqbjKEETK1l5wNPvVZQEcT9lQKKZPNFXRYgDi
+        e4tqWYIEZnczhkVz7sR/sN8=
+X-Google-Smtp-Source: ABdhPJz1J7k4jp41C7Yu0tZrufMMQ9j+Nz6By7Pd6kpJyaRl16hQtHfu0Y8n77QNZqwTJyNx65OFGg==
+X-Received: by 2002:a17:903:22d1:b029:e7:1052:a979 with SMTP id y17-20020a17090322d1b02900e71052a979mr4819494plg.16.1616624847389;
+        Wed, 24 Mar 2021 15:27:27 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:4d6b:ca5a:c720:f5c9])
+        by smtp.gmail.com with ESMTPSA id i13sm3287456pgi.3.2021.03.24.15.27.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Mar 2021 15:27:26 -0700 (PDT)
+Date:   Wed, 24 Mar 2021 15:27:23 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: ensure timely release of driver-allocated resources
+Message-ID: <YFu8y9CuG6Mouxnq@google.com>
+References: <YFf2RD931nq3RudJ@google.com>
+ <20210322123707.GB4681@sirena.org.uk>
+ <YFjyJycuAXdTX42D@google.com>
+ <20210323173606.GB5490@sirena.org.uk>
+ <YFo7wkq037P2Dosz@google.com>
+ <20210324213225.GD4596@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-24_13:2021-03-24,2021-03-24 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=934 malwarescore=0 lowpriorityscore=0 impostorscore=0
- priorityscore=1501 bulkscore=0 spamscore=0 mlxscore=0 adultscore=0
- phishscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103240157
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210324213225.GD4596@sirena.org.uk>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Updated restricted chips have trouble processing multiple sequenced
-operations. So remove the capability to sequence multiple operations and
-reduce the maximum transfer size to 8 bytes.
+On Wed, Mar 24, 2021 at 09:32:26PM +0000, Mark Brown wrote:
+> On Tue, Mar 23, 2021 at 12:04:34PM -0700, Dmitry Torokhov wrote:
+> > On Tue, Mar 23, 2021 at 05:36:06PM +0000, Mark Brown wrote:
+> 
+> > No it is ordering issue. I do not have a proven real-life example for
+> > SPI, but we do have one for I2C:
+> 
+> > https://lore.kernel.org/linux-devicetree/20210305041236.3489-7-jeff@labundy.com/
+> 
+> TBH that looks like a fairly standard case where you probably don't want
+> to be using devm for the interrupts in the first place.  Leaving the
+> interrupts live after the bus thinks it freed the device doesn't seem
+> like the best idea, I'm not sure I'd expect that to work reliably when
+> the device tries to call into the bus code to interact with the device
+> that the bus thought was already freed anyway.
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/spi/spi-fsi.c | 27 +++++++--------------------
- 1 file changed, 7 insertions(+), 20 deletions(-)
+That is not an argument really. By that token we should not be using
+devm for anything but memory, and that is only until we implement some
+kind of memleak checker that will ensure that driver-allocated memory is
+released after driver's remove() method exits.
 
-diff --git a/drivers/spi/spi-fsi.c b/drivers/spi/spi-fsi.c
-index 3920cd3286d8..de359718e816 100644
---- a/drivers/spi/spi-fsi.c
-+++ b/drivers/spi/spi-fsi.c
-@@ -26,7 +26,7 @@
- #define SPI_FSI_BASE			0x70000
- #define SPI_FSI_INIT_TIMEOUT_MS		1000
- #define SPI_FSI_MAX_XFR_SIZE		2048
--#define SPI_FSI_MAX_XFR_SIZE_RESTRICTED	32
-+#define SPI_FSI_MAX_XFR_SIZE_RESTRICTED	8
- 
- #define SPI_FSI_ERROR			0x0
- #define SPI_FSI_COUNTER_CFG		0x1
-@@ -265,14 +265,12 @@ static int fsi_spi_sequence_transfer(struct fsi_spi *ctx,
- 				     struct fsi_spi_sequence *seq,
- 				     struct spi_transfer *transfer)
- {
--	bool docfg = false;
- 	int loops;
- 	int idx;
- 	int rc;
- 	u8 val = 0;
- 	u8 len = min(transfer->len, 8U);
- 	u8 rem = transfer->len % len;
--	u64 cfg = 0ULL;
- 
- 	loops = transfer->len / len;
- 
-@@ -292,28 +290,17 @@ static int fsi_spi_sequence_transfer(struct fsi_spi *ctx,
- 		return -EINVAL;
- 	}
- 
--	if (ctx->restricted) {
--		const int eidx = rem ? 5 : 6;
--
--		while (loops > 1 && idx <= eidx) {
--			idx = fsi_spi_sequence_add(seq, val);
--			loops--;
--			docfg = true;
--		}
--
--		if (loops > 1) {
--			dev_warn(ctx->dev, "No sequencer slots; aborting.\n");
--			return -EINVAL;
--		}
-+	if (ctx->restricted && loops > 1) {
-+		dev_warn(ctx->dev,
-+			 "Transfer too large; no branches permitted.\n");
-+		return -EINVAL;
- 	}
- 
- 	if (loops > 1) {
-+		u64 cfg = SPI_FSI_COUNTER_CFG_LOOPS(loops - 1);
-+
- 		fsi_spi_sequence_add(seq, SPI_FSI_SEQUENCE_BRANCH(idx));
--		docfg = true;
--	}
- 
--	if (docfg) {
--		cfg = SPI_FSI_COUNTER_CFG_LOOPS(loops - 1);
- 		if (transfer->rx_buf)
- 			cfg |= SPI_FSI_COUNTER_CFG_N2_RX |
- 				SPI_FSI_COUNTER_CFG_N2_TX |
+If we have devm API we need to make sure it works.
+
+You also misread that the issue is limited to interrupts, when i fact
+in this particular driver it is the input device that is being
+unregistered too late and fails to timely quiesce the device. Resulting
+interrupt storm is merely a side effect of this.
+
+> 
+> If we want this to work reliably it really feels like we should have two
+> remove callbacks in the driver core doing this rather than open coding
+> in every single bus which is what we'd need to do - this is going to
+> affect any bus that does anything other than just call the device's
+> remove() callback.  PCI looks like it might have issues too for example,
+> and platform does as well and those were simply the first two buses I
+> looked at.  Possibly we want a driver core callback which is scheduled
+> via devm (remove_devm(), cleanup() or something).  We'd still need to
+> move things about in all the buses but it seems preferable to do it that
+> way rather than open coding opening a group and the comments about
+> what's going on and the ordering requirements everywhere, it's a little
+> less error prone going forward.
+
+From the driver's perspective they expect devm-allocated resources to
+happen immediately after ->remove() method is run. I do not believe any
+driver is interested in additional callback, and you'd need to modify
+a boatload of drivers to fix this issue.
+
+I agree with you that manual group handling might be a bit confusing
+and sprinkling the same comment everywhere is not too nice, so how about
+we provide:
+
+	void *devm_mark_driver_resources(struct device *dev)
+
+and
+
+	void devm_release_driver_resources()
+
+and keep the commentary there? The question is where to keep
+driver_res_id field - in generic device structure or put it into bus'
+device structure as some buses and classes do not need it and we'd be
+sawing 4-8 bytes per device structure this way.
+
+Another way is to force buses to use devm for their resource management
+(I.e. in case of SPI wrap dev_pm_domain_detach() in
+devm_add_action_or_release()). It works for buses that have small number
+of resource allocated, but gets more unwieldy and more expensive the
+more resources are managed at bus level, that is why I opted for opening
+a group.
+
+> 
+> > Note how dev_pm_domain_detach() jumped ahead of everything, and
+> > strictly speaking past this point we can no longer guarantee that we can
+> > access the chip and disable it.
+> 
+> Frankly it looks like the PM domain stuff shouldn't be in the probe()
+> and remove() paths at all and this has been bogusly copies from other
+> buses, it should be in the device registration paths.  The device is in
+> the domain no matter what's going on with binding it.  Given how generic
+> code is I'm not even sure why it's in the buses.
+
+Here I will agree with you, bit I think it comes from power domain
+"duality". In OF power domain represents grouping of devices, and is
+static as devices do not move around, whereas in ACPI domain means
+control, and we are putting a device under control of ACPI PM when we
+bind it to a driver. As part of that control we bring the device into
+_D0, etc.
+
+Yay for mixing concepts, but this is not really material to the question
+of how to orderly release resources.
+
+Thanks.
+
 -- 
-2.27.0
-
+Dmitry
