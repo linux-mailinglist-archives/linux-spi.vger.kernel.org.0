@@ -2,27 +2,27 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5935734717E
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Mar 2021 07:17:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F2134717C
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Mar 2021 07:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233068AbhCXGQb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 24 Mar 2021 02:16:31 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:13675 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235487AbhCXGQY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 Mar 2021 02:16:24 -0400
-Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F4yby5DJKznVGC;
-        Wed, 24 Mar 2021 14:13:50 +0800 (CST)
+        id S235458AbhCXGQa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 24 Mar 2021 02:16:30 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:14442 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235446AbhCXGQX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 Mar 2021 02:16:23 -0400
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4F4yd03hzbzkf6V;
+        Wed, 24 Mar 2021 14:14:44 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.56) by
  DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
  14.3.498.0; Wed, 24 Mar 2021 14:16:14 +0800
 From:   Jay Fang <f.fangjian@huawei.com>
 To:     <broonie@kernel.org>
 CC:     <linux-spi@vger.kernel.org>, <huangdaode@huawei.com>
-Subject: [PATCH 03/11] spi: pxa2xx: Fix checkpatch spacing errors
-Date:   Wed, 24 Mar 2021 14:16:34 +0800
-Message-ID: <1616566602-13894-4-git-send-email-f.fangjian@huawei.com>
+Subject: [PATCH 04/11] spi: omap-100k: Fix checkpatch spacing errors
+Date:   Wed, 24 Mar 2021 14:16:35 +0800
+Message-ID: <1616566602-13894-5-git-send-email-f.fangjian@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1616566602-13894-1-git-send-email-f.fangjian@huawei.com>
 References: <1616566602-13894-1-git-send-email-f.fangjian@huawei.com>
@@ -37,45 +37,53 @@ X-Mailing-List: linux-spi@vger.kernel.org
 Fix checkpatch errors:
 
   ERROR: space prohibited before that ',' (ctx:WxW)
-  #255: FILE: spi-pxa2xx-pci.c:255:
-  +	ssp->clk = clk_register_fixed_rate(&dev->dev, buf , NULL, 0,
- 	                                                  ^
-  ERROR: "foo* bar" should be "foo *bar"
-  #621: FILE: spi-pxa2xx.c:621:
-  +static void int_error_stop(struct driver_data *drv_data, const char* msg)
+  #113: FILE: spi-omap-100k.c:113:
+  +	writew(data , spi100k->base + SPI_TX_MSB);
+ 	            ^
+  ERROR: space prohibited before that ',' (ctx:WxW)
+  #249: FILE: spi-omap-100k.c:249:
+  +	writew(0x3e , spi100k->base + SPI_SETUP1);
+ 	            ^
+  ERROR: space prohibited before that ',' (ctx:WxW)
+  #250: FILE: spi-omap-100k.c:250:
+  +	writew(0x00 , spi100k->base + SPI_STATUS);
+ 	            ^
+  ERROR: space prohibited before that ',' (ctx:WxW)
+  #251: FILE: spi-omap-100k.c:251:
+  +	writew(0x3e , spi100k->base + SPI_CTRL);
+ 	            ^
 
 Signed-off-by: Jay Fang <f.fangjian@huawei.com>
 ---
- drivers/spi/spi-pxa2xx-pci.c | 2 +-
- drivers/spi/spi-pxa2xx.c     | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/spi/spi-omap-100k.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/spi/spi-pxa2xx-pci.c b/drivers/spi/spi-pxa2xx-pci.c
-index 14fc41e..1833f58 100644
---- a/drivers/spi/spi-pxa2xx-pci.c
-+++ b/drivers/spi/spi-pxa2xx-pci.c
-@@ -252,7 +252,7 @@ static int pxa2xx_spi_pci_probe(struct pci_dev *dev,
- 	ssp->irq = pci_irq_vector(dev, 0);
+diff --git a/drivers/spi/spi-omap-100k.c b/drivers/spi/spi-omap-100k.c
+index 36a4922..189fd2d 100644
+--- a/drivers/spi/spi-omap-100k.c
++++ b/drivers/spi/spi-omap-100k.c
+@@ -110,7 +110,7 @@ static void spi100k_write_data(struct spi_master *master, int len, int data)
+ 	}
  
- 	snprintf(buf, sizeof(buf), "pxa2xx-spi.%d", ssp->port_id);
--	ssp->clk = clk_register_fixed_rate(&dev->dev, buf , NULL, 0,
-+	ssp->clk = clk_register_fixed_rate(&dev->dev, buf, NULL, 0,
- 					   c->max_clk_rate);
- 	 if (IS_ERR(ssp->clk))
- 		return PTR_ERR(ssp->clk);
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index 0cc7672..b83f325f 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -618,7 +618,7 @@ static void reset_sccr1(struct driver_data *drv_data)
- 	pxa2xx_spi_write(drv_data, SSCR1, sccr1_reg);
+ 	spi100k_enable_clock(master);
+-	writew(data , spi100k->base + SPI_TX_MSB);
++	writew(data, spi100k->base + SPI_TX_MSB);
+ 
+ 	writew(SPI_CTRL_SEN(0) |
+ 	       SPI_CTRL_WORD_SIZE(len) |
+@@ -246,9 +246,9 @@ static int omap1_spi100k_setup_transfer(struct spi_device *spi,
+ 	cs->word_len = word_len;
+ 
+ 	/* SPI init before transfer */
+-	writew(0x3e , spi100k->base + SPI_SETUP1);
+-	writew(0x00 , spi100k->base + SPI_STATUS);
+-	writew(0x3e , spi100k->base + SPI_CTRL);
++	writew(0x3e, spi100k->base + SPI_SETUP1);
++	writew(0x00, spi100k->base + SPI_STATUS);
++	writew(0x3e, spi100k->base + SPI_CTRL);
+ 
+ 	return 0;
  }
- 
--static void int_error_stop(struct driver_data *drv_data, const char* msg)
-+static void int_error_stop(struct driver_data *drv_data, const char *msg)
- {
- 	/* Stop and reset SSP */
- 	write_SSSR_CS(drv_data, drv_data->clear_sr);
 -- 
 2.7.4
 
