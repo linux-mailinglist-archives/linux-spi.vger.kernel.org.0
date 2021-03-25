@@ -2,42 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D18349845
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Mar 2021 18:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24CD834984D
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Mar 2021 18:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbhCYRhg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 25 Mar 2021 13:37:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45370 "EHLO mail.kernel.org"
+        id S229908AbhCYRiH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 25 Mar 2021 13:38:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45594 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230047AbhCYRhU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 25 Mar 2021 13:37:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0A60B61A2C;
-        Thu, 25 Mar 2021 17:37:19 +0000 (UTC)
+        id S230007AbhCYRhg (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 25 Mar 2021 13:37:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4E21661A33;
+        Thu, 25 Mar 2021 17:37:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616693840;
-        bh=6Ql/KyxL3rY0llO18x1iokuLqwO5tMJP51y5g3IBDy8=;
+        s=k20201202; t=1616693855;
+        bh=ESt2AXDOBcY/b0nA4MDdRj5zGAt7XthzQz/J+iuoDNw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F/aOPBwT+kBVq267e3QGpELZs8u/VIB1L5qrzRwIfrF0Ujv/cmQMVJHmXgzNCM9Ha
-         jQUgZAQLo7+rT7VenlbHseSzABzScsNPVG9m1GhyWvrAGlekpaWViHQ0vE6BXPZ8q0
-         kNj3WiMK7QJTDoXRL6v+9YpFQ9PkJk2V7Az2tZUx8FbEn+r1P/boqQv8H7X4+1zsc3
-         q1Ny7KKv0RU0bHftYx0ObZAJgh/uaCokU/h+ikN8mzU0+UyQzuXpo9668NoI9DuHRc
-         uBE37mvotgnjxQq5Dh92R+lGj5/Z+FmyvVdFOworYwIBEmicGuEjp4iEKcWfHQqdgT
-         6ntd/ea92jE4Q==
+        b=sp6KFqqnsk39cdqOkX8FH5BRP7cR/vAFap5PmY0BUFkDgK3L4IylCizThCHF2123A
+         Ap+YzS2ctWXMSPmlqlaCQaDSLv9xoV5vCo6ybEtCmMSIRGLd9iZUxoPRjPbBMeqTvk
+         VTGYW9wwoAb1BXeJlzPHywQC9a2b1nBjuDF5ZRdiaXEFJzWGMxRloxs/Sp/9L2pSQc
+         S5+kua538nZUylwUDK+AJPW3ro/DOuSTIntTiDZ/pw4tz5EyPqOwSx6CVtlYmy2LM4
+         Jhl6tgoBgVe/CRlkn1jXUS7QrC+oOKDfOk93zMGC1kNBKOm10ixVAfrHo1xqLCYw+C
+         aKcVv3FOWJ+dg==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, Heiko Schocher <hs@denx.de>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        Ashish Kumar <ashish.kumar@nxp.com>,
-        Yogesh Gaur <yogeshgaur.83@gmail.com>,
-        devicetree@vger.kernel.org, Kuldeep Singh <kuldeep.singh@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 0/2] enable flexspi support on imx8mp
-Date:   Thu, 25 Mar 2021 17:37:01 +0000
-Message-Id: <161669381898.42255.12902469942541515996.b4-ty@kernel.org>
+To:     Tian Tao <tiantao6@hisilicon.com>, shawnguo@kernel.org,
+        s.hauer@pengutronix.de
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spi: imx: Use of_device_get_match_data() helper
+Date:   Thu, 25 Mar 2021 17:37:06 +0000
+Message-Id: <161669370550.41585.15435158368623711168.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210316075928.1763460-1-hs@denx.de>
-References: <20210316075928.1763460-1-hs@denx.de>
+In-Reply-To: <1616385476-53327-1-git-send-email-tiantao6@hisilicon.com>
+References: <1616385476-53327-1-git-send-email-tiantao6@hisilicon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -45,26 +40,17 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 16 Mar 2021 08:59:26 +0100, Heiko Schocher wrote:
-> add compatible entry in nxp_fspi driver for imx8mp
-> 
-> @Shawn: If this series is accepted, can you apply the DTS patches from
-> series v2?
-> http://lists.infradead.org/pipermail/linux-arm-kernel/2021-March/643292.html
-> http://lists.infradead.org/pipermail/linux-arm-kernel/2021-March/643293.html
-> 
-> [...]
+On Mon, 22 Mar 2021 11:57:56 +0800, Tian Tao wrote:
+> Use the of_device_get_match_data() helper instead of open coding.
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
 Thanks!
 
-[1/2] spi: fspi: enable fspi driver for on imx8mp
-      commit: 0467a97367d4767d284ad46ba0e6413b621256a0
-[2/2] dt-bindings: spi: add compatible entry for imx8mp in FlexSPI controller
-      commit: 2801a62dfad46ff228d00126ce8592594c1d0613
+[1/1] spi: imx: Use of_device_get_match_data() helper
+      commit: 200d925e236f1a839bd52680f13649b23f727d51
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
