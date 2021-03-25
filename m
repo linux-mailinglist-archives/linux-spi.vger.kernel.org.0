@@ -2,87 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5813494A0
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Mar 2021 15:52:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC30B349843
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Mar 2021 18:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbhCYOwK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 25 Mar 2021 10:52:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55118 "EHLO mail.kernel.org"
+        id S229951AbhCYRhf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 25 Mar 2021 13:37:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45342 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230239AbhCYOwA (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 25 Mar 2021 10:52:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0B21961A02;
-        Thu, 25 Mar 2021 14:51:59 +0000 (UTC)
+        id S229933AbhCYRhR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 25 Mar 2021 13:37:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F292A61A28;
+        Thu, 25 Mar 2021 17:37:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616683920;
-        bh=xtiUPNT+gkTEazvbg7RxBkrQf7RL170bGGKjxpmjJS8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WeDkvV8rzROkU74VYQUxbJHUUZAOMbF8D7fDqwaptHpMqTjdhwAGiAi18DGzzrcdh
-         NpYMo1iRR08fJHEi6H3fCFVdXZlTAtYrh2BrnTbgymBTaWJjSDKQ7Vm+3UmZ7niky9
-         yQ2BuA/9CoBf76Nqfih8q0oTES8Sd6skCRb7MoxfWEo61ZYDh2uBfO4KHr5e/DmpRW
-         UbaSq/T7qQHcpIvO7EtIGeoTcXc4Tcq3KGYDVpp5wHHMU10/M7dP1Zduv7iOpcyubM
-         /XF9J8TuAkBNm9hiyDwezoV/ATqTZ791t/YnrJIF1LwTQio+Goq+Kr018vTXU/4Deb
-         bMaOlprtLjY/w==
-Date:   Thu, 25 Mar 2021 14:51:52 +0000
+        s=k20201202; t=1616693837;
+        bh=qLec3gCb+45Rnn6+rTF/mT8gPNAycvWQxkeeRLxyZ/U=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=koDkn7tTtgxBCVLKZ3OozAHFARA86K1TXh7lq0VTJzYqKBkrmPYDoNKW2JRXzN62j
+         ip8TIa/zKPcyDVaHzedx6Ds2PTQRJsNljYFEFuoeWBslkWSi4T7D+eoqOc4AcqzWa/
+         Le+N7O7snAFJTp1FKmwUvss/pxExenDZSYK/PnmiQBrpDYXJShKCjEoWQF0jmp0cNb
+         huMZc/5BRRnPVNB6nXpbrkg/MPFxguUjnu8uXNDX1bf6CJmEGzn5r1s3EwUVvPEEdn
+         gtlumbYhGkiCwUH+PcrkFMUbc/FH2ZftnTow+TUBmFKUiDP7HTFBZ5oGyXyj9Bk2Pu
+         BcHSvssKAnBhw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joel@jms.id.au
-Subject: Re: [PATCH] spi: fsi: Remove multiple sequenced ops for restricted
- chips
-Message-ID: <20210325145152.GB4620@sirena.org.uk>
+To:     linux-spi@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
+Cc:     Mark Brown <broonie@kernel.org>, joel@jms.id.au,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: fsi: Remove multiple sequenced ops for restricted chips
+Date:   Thu, 25 Mar 2021 17:37:00 +0000
+Message-Id: <161669381898.42255.17085051499776250683.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210324220516.41192-1-eajames@linux.ibm.com>
 References: <20210324220516.41192-1-eajames@linux.ibm.com>
- <20210325135038.GA4620@sirena.org.uk>
- <d79291deaa1e9960a177dd887884724f22eb0ea6.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UHN/qo2QbUvPLonB"
-Content-Disposition: inline
-In-Reply-To: <d79291deaa1e9960a177dd887884724f22eb0ea6.camel@linux.ibm.com>
-X-Cookie: Offer void where prohibited by law.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, 24 Mar 2021 17:05:16 -0500, Eddie James wrote:
+> Updated restricted chips have trouble processing multiple sequenced
+> operations. So remove the capability to sequence multiple operations and
+> reduce the maximum transfer size to 8 bytes.
 
---UHN/qo2QbUvPLonB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Thu, Mar 25, 2021 at 09:46:50AM -0500, Eddie James wrote:
-> On Thu, 2021-03-25 at 13:50 +0000, Mark Brown wrote:
-> > On Wed, Mar 24, 2021 at 05:05:16PM -0500, Eddie James wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > > Updated restricted chips have trouble processing multiple sequenced
-> > > operations. So remove the capability to sequence multiple
-> > > operations and
-> > > reduce the maximum transfer size to 8 bytes.
+Thanks!
 
-> > That's a very small limit, it would be nice to be able to identify
-> > devices that can use the larger limit so they don't suffer
-> > needlessly.
+[1/1] spi: fsi: Remove multiple sequenced ops for restricted chips
+      commit: 3ed4c84cc7ac59dd383f1d77f7b04148ede2548d
 
-> Yes, this is only for the "restricted" controllers which are marked by
-> a different compatible string. I guess the commit message isn't
-> perfectly clear.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-The commit message reads like there's a new version of the restricted
-controllers that have even more limits.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---UHN/qo2QbUvPLonB
-Content-Type: application/pgp-signature; name="signature.asc"
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
------BEGIN PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBco4YACgkQJNaLcl1U
-h9CDvQf/UtiQ7EaCZ+2IcZpzTTE1c/bJov/6eb3QLgO84bk1cVoyKuiVGpYlaW9I
-7Dvi/yDWbpueWJyXAXbplps0ME5HdjVJnIn5h81Yc4cPCAN5co8aBwndiZBlyU6c
-N/8aqhG6mtT4oC4+9V7HxyCtePpiXPieSkG5vydJrtoTwEhWI0fw/lpzPDreuyjm
-Mlwya1G0SA6oPtVAWFQ0y5h71zYSpAio5AYgVEBe9cMCwfVzOBCJGjcTrkKE1mkS
-v2LyXr1uTrgr0SQnRiGmZhBpXCL2Pb8Tb/7n0Djb9c9m9ylmn4zfGulq8Bx43Ewd
-tPojaow/meTZ9YHT3egJVXK1zs2HQQ==
-=YPnl
------END PGP SIGNATURE-----
-
---UHN/qo2QbUvPLonB--
+Thanks,
+Mark
