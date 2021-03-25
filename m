@@ -2,80 +2,137 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA980348635
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Mar 2021 02:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 169F63486E1
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Mar 2021 03:21:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbhCYBGv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 24 Mar 2021 21:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
+        id S234379AbhCYCU7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 24 Mar 2021 22:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbhCYBGp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 Mar 2021 21:06:45 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A24C06174A;
-        Wed, 24 Mar 2021 18:06:44 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id ce10so212690ejb.6;
-        Wed, 24 Mar 2021 18:06:44 -0700 (PDT)
+        with ESMTP id S234257AbhCYCU3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 24 Mar 2021 22:20:29 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA828C06174A;
+        Wed, 24 Mar 2021 19:20:28 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id q9so449524qvm.6;
+        Wed, 24 Mar 2021 19:20:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QyuEbp79sFDYbVUwlKgrT3LfkDPXhFyHRIfRwWBNnR0=;
-        b=dvATg1dMAPoLoOLjHBOVCfDoI3j9n5CnLc2/CgV5oLkTw+2nL7cIeeRWMapD9xCZAS
-         YcG8ksUQQuumx1IAYgRBPha9JrspUyivUC0jLMfMiDngQVmhzIQynadL4Yz3OXauECRj
-         +KjcoFSu2YHhASm29JwRy1Duc1c8JNsRPRYHIWDGn56i7nZ91tifgaIYwpwLy8/woYif
-         w3aZmBKE2aZOWuC5nVFVYBFqgDfe1MjlIINCe9Ipi2a9QjNWuOF3jlHx7Mnj/9OTDhlp
-         qd/qe00hrPiohh8AqKe9cSMZhWwYdkE44zqaYiOuweHAvtU7X+G+mkinWyfXFatnTy2X
-         Ibdw==
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VuMccf/7GNbicUmR6VyO6cnA/nu+0C0TDjY5czjZIEc=;
+        b=GEWZhBJIKlTAGwEYqWqYIOlwc2+gHdNaHQVQ8WtLn6zNbHwO9ZYQlUJ1MOw4RQXQ82
+         06iUx37ugrhzLyHe7zsy0XPNUdTUeDsloekiJeJowLL2t89sTzCfdsuEkg9WguQiE8Ek
+         QvLgF50IQnvSX7isygVk/w402Epl06VDGUdNE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QyuEbp79sFDYbVUwlKgrT3LfkDPXhFyHRIfRwWBNnR0=;
-        b=BgB6hi7ekFGR6joEyZVq+U06I3YwJ5c7Qy8HilxBK45VQ5P4cPo587RCQ1Lls8e1VX
-         n0I4GLsbSCDjpImzU/olfqJaoCq3Bi0IrPjQ4gJci7kb0Wr99nk6zwx0azoBZDqwTtg0
-         /cD4TWGjGYSXIT/G3a7h4dGdoVARjA/THE+ye9LceoPjZiolUG6Dy9/otRXsl/n/Zd37
-         7pl5byiluU+SAnrcBES6eyLLzNnmy0PmkGZq4bRf92tE0jH0xYCKlP0aQ9YS1X8Dr4hT
-         QcpciQXThTMXzaN3NaR4LW57JugujwlC1+9mRXjP9w5ySnO1nesEIBG4l2D4Kba1nNzB
-         a+wQ==
-X-Gm-Message-State: AOAM532H+j9nGFQ8A/QeBORPZCQLN6AD0kDebgMRJc9cHeXSQjelGsCh
-        OrTaUBzMmzdiPJ7dNPuro+Y=
-X-Google-Smtp-Source: ABdhPJxh7dE1K0DHwlsfznIPjQhExr4agS0ZTI2cZ0n0KlgDTuInl/2y+pu4Uc/IgZ5fw8RQXJ+lQg==
-X-Received: by 2002:a17:906:51c3:: with SMTP id v3mr6667120ejk.497.1616634403336;
-        Wed, 24 Mar 2021 18:06:43 -0700 (PDT)
-Received: from skbuf (5-12-16-165.residential.rdsnet.ro. [5.12.16.165])
-        by smtp.gmail.com with ESMTPSA id w6sm1672755eje.107.2021.03.24.18.06.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Mar 2021 18:06:42 -0700 (PDT)
-Date:   Thu, 25 Mar 2021 03:06:41 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Kuldeep Singh <kuldeep.singh@nxp.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [EXT] Re: [PATCH] dt-bindings: spi: Convert Freescale DSPI to
- json schema
-Message-ID: <20210325010641.4uaiw54xhqfyauqz@skbuf>
-References: <20210315121518.3710171-1-kuldeep.singh@nxp.com>
- <20210315205440.lb6hcrvzxtqxdb5x@skbuf>
- <DB6PR0402MB27580AF77ED738B995616EB5E06B9@DB6PR0402MB2758.eurprd04.prod.outlook.com>
- <20210316101506.rkqcxkw6slv4vuhr@skbuf>
- <20210324181403.GC3320002@robh.at.kernel.org>
- <20210324185302.dxi2wurf7lgr5yxi@skbuf>
- <CAL_Jsq+8xXcLr8sLk+gj9y+FOi9kiEtRHTxDUV+yxm9CXS+jbQ@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VuMccf/7GNbicUmR6VyO6cnA/nu+0C0TDjY5czjZIEc=;
+        b=k7Ey0W74MAdOarCEAwHpfTGJkYWvC0DnqxBczd1xuvV1BOtne2qhjgmDth0l1rfoa9
+         voetMGGRQZ3TdshGME/6KClHZZ4H7vtQ1XHo2ILJTlBgtLb/sQy6fIh5m77w0uuHHP9u
+         WJk0nlg9WW2R8G4NSKB8JwYqk/CZg6BNP17pw5VC5noK905JVPqtFs0cUe6S/Zzt414V
+         eLNt86eSxQFDC84HBctYUAt3fCEkVn/wI4qjDp/Tsob2uUmUvpi6xvASsEEdb88EBH7L
+         mPUg0zs217GnX5UXBZIkeJK5Jx/B4iBV+q9/M0kBiP/oG4N7iaaNwK7zsYikL+HfRZrb
+         OPpA==
+X-Gm-Message-State: AOAM530wCBANK/2/FPM/3lcpI8+KGG8IjTiRzv3MPAiW1NP8HYW3Ufry
+        tXGPaSrNZ9ef8iI6A0b77UkOi46ngqjRnaZ/O20pF+zSnJ8=
+X-Google-Smtp-Source: ABdhPJzYkjmv4WDutq97vzp5KAtJ4JMda9zt5+cWVGqQXmWAUgANGXoLilJm0skX18oeMuFyEl+NmsZYjMKHrR+PABY=
+X-Received: by 2002:a0c:d7ca:: with SMTP id g10mr6081798qvj.16.1616638828073;
+ Wed, 24 Mar 2021 19:20:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_Jsq+8xXcLr8sLk+gj9y+FOi9kiEtRHTxDUV+yxm9CXS+jbQ@mail.gmail.com>
+References: <20210324220516.41192-1-eajames@linux.ibm.com>
+In-Reply-To: <20210324220516.41192-1-eajames@linux.ibm.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Thu, 25 Mar 2021 02:20:16 +0000
+Message-ID: <CACPK8XeO7Oan+xBwOJ6VUfEF_gMs=NJ=rvVZjrFXczb4-YtCdA@mail.gmail.com>
+Subject: Re: [PATCH] spi: fsi: Remove multiple sequenced ops for restricted chips
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-spi@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Mar 24, 2021 at 01:20:33PM -0600, Rob Herring wrote:
-> In addition, "fsl,ls1088a-dspi" is not known by the Linux driver, so a
-> fallback is needed.
+On Wed, 24 Mar 2021 at 22:05, Eddie James <eajames@linux.ibm.com> wrote:
+>
+> Updated restricted chips have trouble processing multiple sequenced
+> operations. So remove the capability to sequence multiple operations and
+> reduce the maximum transfer size to 8 bytes.
+>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
 
-This is a good point, the LS1088A went completely off of my radar,
-thanks for pointing it out.
+Reviewed-by: Joel Stanley <joel@jms.id.au>
+
+> ---
+>  drivers/spi/spi-fsi.c | 27 +++++++--------------------
+>  1 file changed, 7 insertions(+), 20 deletions(-)
+>
+> diff --git a/drivers/spi/spi-fsi.c b/drivers/spi/spi-fsi.c
+> index 3920cd3286d8..de359718e816 100644
+> --- a/drivers/spi/spi-fsi.c
+> +++ b/drivers/spi/spi-fsi.c
+> @@ -26,7 +26,7 @@
+>  #define SPI_FSI_BASE                   0x70000
+>  #define SPI_FSI_INIT_TIMEOUT_MS                1000
+>  #define SPI_FSI_MAX_XFR_SIZE           2048
+> -#define SPI_FSI_MAX_XFR_SIZE_RESTRICTED        32
+> +#define SPI_FSI_MAX_XFR_SIZE_RESTRICTED        8
+>
+>  #define SPI_FSI_ERROR                  0x0
+>  #define SPI_FSI_COUNTER_CFG            0x1
+> @@ -265,14 +265,12 @@ static int fsi_spi_sequence_transfer(struct fsi_spi *ctx,
+>                                      struct fsi_spi_sequence *seq,
+>                                      struct spi_transfer *transfer)
+>  {
+> -       bool docfg = false;
+>         int loops;
+>         int idx;
+>         int rc;
+>         u8 val = 0;
+>         u8 len = min(transfer->len, 8U);
+>         u8 rem = transfer->len % len;
+> -       u64 cfg = 0ULL;
+>
+>         loops = transfer->len / len;
+>
+> @@ -292,28 +290,17 @@ static int fsi_spi_sequence_transfer(struct fsi_spi *ctx,
+>                 return -EINVAL;
+>         }
+>
+> -       if (ctx->restricted) {
+> -               const int eidx = rem ? 5 : 6;
+> -
+> -               while (loops > 1 && idx <= eidx) {
+> -                       idx = fsi_spi_sequence_add(seq, val);
+> -                       loops--;
+> -                       docfg = true;
+> -               }
+> -
+> -               if (loops > 1) {
+> -                       dev_warn(ctx->dev, "No sequencer slots; aborting.\n");
+> -                       return -EINVAL;
+> -               }
+> +       if (ctx->restricted && loops > 1) {
+> +               dev_warn(ctx->dev,
+> +                        "Transfer too large; no branches permitted.\n");
+> +               return -EINVAL;
+>         }
+>
+>         if (loops > 1) {
+> +               u64 cfg = SPI_FSI_COUNTER_CFG_LOOPS(loops - 1);
+> +
+>                 fsi_spi_sequence_add(seq, SPI_FSI_SEQUENCE_BRANCH(idx));
+> -               docfg = true;
+> -       }
+>
+> -       if (docfg) {
+> -               cfg = SPI_FSI_COUNTER_CFG_LOOPS(loops - 1);
+>                 if (transfer->rx_buf)
+>                         cfg |= SPI_FSI_COUNTER_CFG_N2_RX |
+>                                 SPI_FSI_COUNTER_CFG_N2_TX |
+> --
+> 2.27.0
+>
