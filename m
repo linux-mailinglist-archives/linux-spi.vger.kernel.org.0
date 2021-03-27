@@ -2,304 +2,625 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB23734A7C0
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Mar 2021 14:02:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5DA34B595
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Mar 2021 10:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbhCZNCN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 26 Mar 2021 09:02:13 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:40222 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbhCZNBr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Mar 2021 09:01:47 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 12QD1fsA030807;
-        Fri, 26 Mar 2021 08:01:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1616763701;
-        bh=y3laHF42dkwKrLqvZJLvyaokGsabYQVmkc2tEl8qRv8=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=nEc0XWd7ThHi/E+E/JdmxRAMmpO8Aq7BIa6p4VdtMU+h2maCSyuac2SVTn5QSN5ZJ
-         iEFSqKk9J6ZhFRg4M43ysFGuqdYXf0UaEZA+V1pWTIBOVdMPbs+ZcxymDlX4MDunUU
-         BgFG7XhZ2rl+OPHouUwhE4DihGAolYKeHhAqGkVI=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 12QD1fGk100114
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 26 Mar 2021 08:01:41 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 26
- Mar 2021 08:00:50 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Fri, 26 Mar 2021 08:00:50 -0500
-Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 12QD0Zvu029283;
-        Fri, 26 Mar 2021 08:00:48 -0500
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     Pratyush Yadav <p.yadav@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Subject: [PATCH 4/4] dt-bindings: spi: Convert cadence-quadspi.txt to cadence-quadspi.yaml
-Date:   Fri, 26 Mar 2021 18:30:34 +0530
-Message-ID: <20210326130034.15231-5-p.yadav@ti.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210326130034.15231-1-p.yadav@ti.com>
-References: <20210326130034.15231-1-p.yadav@ti.com>
+        id S230503AbhC0JJx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 27 Mar 2021 05:09:53 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:15007 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230471AbhC0JJo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 27 Mar 2021 05:09:44 -0400
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F6tJV37z5zPvyD;
+        Sat, 27 Mar 2021 17:07:06 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
+ 14.3.498.0; Sat, 27 Mar 2021 17:09:33 +0800
+From:   Jay Fang <f.fangjian@huawei.com>
+To:     <broonie@kernel.org>, <linux-spi@vger.kernel.org>
+CC:     <huangdaode@huawei.com>, <linuxarm@huawei.com>
+Subject: [PATCH V3] spi: Add HiSilicon SPI Controller Driver for Kunpeng SoCs
+Date:   Sat, 27 Mar 2021 17:10:00 +0800
+Message-ID: <1616836200-45827-1-git-send-email-f.fangjian@huawei.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Originating-IP: [10.69.192.56]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+This driver supports SPI Controller for HiSilicon Kunpeng SoCs. This
+driver supports SPI operations using FIFO mode of transfer.
 
-There is no way as of now to have a parent or bus defining properties
-for child nodes. For now, avoid it in the example to silence warnings on
-dt_schema_check. We can figure out how to deal with actual dts files
-later.
+DMA is not supported, and we just use IRQ mode for operation completion
+notification.
 
-Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
-Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-[p.yadav@ti.com: Fix how compatible is defined, make reset optional, fix
-minor typos, remove subnode properties in example, update commit
-message.]
+Only ACPI firmware is supported.
+
+Signed-off-by: Jay Fang <f.fangjian@huawei.com>
 ---
- .../bindings/spi/cadence-quadspi.txt          |  68 ---------
- .../bindings/spi/cdns,qspi-nor.yaml           | 143 ++++++++++++++++++
- 2 files changed, 143 insertions(+), 68 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/spi/cadence-quadspi.txt
- create mode 100644 Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+Changes in v3:
+- Update Kconfig symbol and filename.
+Changes in v2:
+- Use a more specific name (Kunpeng SoCs) for this driver.
+- Remove interrupt mask/unmask/clear functions.
+- Merge some tiny functions.
+- Optimize the interrupt handling process.
+- Add detailed comments for memory barrier.
+- Use devm_spi_alloc_master() to allocte 'struct hisi_spi'.
+---
+ MAINTAINERS                    |   7 +
+ drivers/spi/Kconfig            |  10 +
+ drivers/spi/Makefile           |   1 +
+ drivers/spi/spi-hisi-kunpeng.c | 505 +++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 523 insertions(+)
+ create mode 100644 drivers/spi/spi-hisi-kunpeng.c
 
-diff --git a/Documentation/devicetree/bindings/spi/cadence-quadspi.txt b/Documentation/devicetree/bindings/spi/cadence-quadspi.txt
-deleted file mode 100644
-index 8ace832a2d80..000000000000
---- a/Documentation/devicetree/bindings/spi/cadence-quadspi.txt
-+++ /dev/null
-@@ -1,68 +0,0 @@
--* Cadence Quad SPI controller
--
--Required properties:
--- compatible : should be one of the following:
--	Generic default - "cdns,qspi-nor".
--	For TI 66AK2G SoC - "ti,k2g-qspi", "cdns,qspi-nor".
--	For TI AM654 SoC  - "ti,am654-ospi", "cdns,qspi-nor".
--	For Intel LGM SoC - "intel,lgm-qspi", "cdns,qspi-nor".
--- reg : Contains two entries, each of which is a tuple consisting of a
--	physical address and length. The first entry is the address and
--	length of the controller register set. The second entry is the
--	address and length of the QSPI Controller data area.
--- interrupts : Unit interrupt specifier for the controller interrupt.
--- clocks : phandle to the Quad SPI clock.
--- cdns,fifo-depth : Size of the data FIFO in words.
--- cdns,fifo-width : Bus width of the data FIFO in bytes.
--- cdns,trigger-address : 32-bit indirect AHB trigger address.
--
--Optional properties:
--- cdns,is-decoded-cs : Flag to indicate whether decoder is used or not.
--- cdns,rclk-en : Flag to indicate that QSPI return clock is used to latch
--  the read data rather than the QSPI clock. Make sure that QSPI return
--  clock is populated on the board before using this property.
--
--Optional subnodes:
--Subnodes of the Cadence Quad SPI controller are spi slave nodes with additional
--custom properties:
--- cdns,read-delay : Delay for read capture logic, in clock cycles
--- cdns,tshsl-ns : Delay in nanoseconds for the length that the master
--                  mode chip select outputs are de-asserted between
--		  transactions.
--- cdns,tsd2d-ns : Delay in nanoseconds between one chip select being
--                  de-activated and the activation of another.
--- cdns,tchsh-ns : Delay in nanoseconds between last bit of current
--                  transaction and deasserting the device chip select
--		  (qspi_n_ss_out).
--- cdns,tslch-ns : Delay in nanoseconds between setting qspi_n_ss_out low
--                  and first bit transfer.
--- resets	: Must contain an entry for each entry in reset-names.
--		  See ../reset/reset.txt for details.
--- reset-names	: Must include either "qspi" and/or "qspi-ocp".
--
--Example:
--
--	qspi: spi@ff705000 {
--		compatible = "cdns,qspi-nor";
--		#address-cells = <1>;
--		#size-cells = <0>;
--		reg = <0xff705000 0x1000>,
--		      <0xffa00000 0x1000>;
--		interrupts = <0 151 4>;
--		clocks = <&qspi_clk>;
--		cdns,is-decoded-cs;
--		cdns,fifo-depth = <128>;
--		cdns,fifo-width = <4>;
--		cdns,trigger-address = <0x00000000>;
--		resets = <&rst QSPI_RESET>, <&rst QSPI_OCP_RESET>;
--		reset-names = "qspi", "qspi-ocp";
--
--		flash0: n25q00@0 {
--			...
--			cdns,read-delay = <4>;
--			cdns,tshsl-ns = <50>;
--			cdns,tsd2d-ns = <50>;
--			cdns,tchsh-ns = <4>;
--			cdns,tslch-ns = <4>;
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 546aa66..ced2731 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8080,6 +8080,13 @@ F:	drivers/crypto/hisilicon/sec2/sec_crypto.c
+ F:	drivers/crypto/hisilicon/sec2/sec_crypto.h
+ F:	drivers/crypto/hisilicon/sec2/sec_main.c
+ 
++HISILICON SPI Controller DRIVER FOR KUNPENG SOCS
++M:	Jay Fang <f.fangjian@huawei.com>
++L:	linux-spi@vger.kernel.org
++S:	Maintained
++W:	http://www.hisilicon.com
++F:	drivers/spi/spi-hisi-kunpeng.c
++
+ HISILICON STAGING DRIVERS FOR HIKEY 960/970
+ M:	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+ L:	devel@driverdev.osuosl.org
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index aadaea0..2e284ca 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -339,6 +339,16 @@ config SPI_FSL_QUADSPI
+ 	  This controller does not support generic SPI messages. It only
+ 	  supports the high-level SPI memory interface.
+ 
++config SPI_HISI_KUNPENG
++	tristate "HiSilicon SPI Controller for Kunpeng SoCs"
++	depends on (ARM64 && ACPI) || COMPILE_TEST
++	help
++	  This enables support for HiSilicon SPI controller found on
++	  Kunpeng SoCs.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called hisi-kunpeng-spi.
++
+ config SPI_HISI_SFC_V3XX
+ 	tristate "HiSilicon SPI NOR Flash Controller for Hi16XX chipsets"
+ 	depends on (ARM64 && ACPI) || COMPILE_TEST
+diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+index 6fea582..04291ff 100644
+--- a/drivers/spi/Makefile
++++ b/drivers/spi/Makefile
+@@ -54,6 +54,7 @@ obj-$(CONFIG_SPI_FSL_LPSPI)		+= spi-fsl-lpspi.o
+ obj-$(CONFIG_SPI_FSL_QUADSPI)		+= spi-fsl-qspi.o
+ obj-$(CONFIG_SPI_FSL_SPI)		+= spi-fsl-spi.o
+ obj-$(CONFIG_SPI_GPIO)			+= spi-gpio.o
++obj-$(CONFIG_SPI_HISI_KUNPENG)		+= spi-hisi-kunpeng.o
+ obj-$(CONFIG_SPI_HISI_SFC_V3XX)		+= spi-hisi-sfc-v3xx.o
+ obj-$(CONFIG_SPI_IMG_SPFI)		+= spi-img-spfi.o
+ obj-$(CONFIG_SPI_IMX)			+= spi-imx.o
+diff --git a/drivers/spi/spi-hisi-kunpeng.c b/drivers/spi/spi-hisi-kunpeng.c
 new file mode 100644
-index 000000000000..0e7087cc8bf9
+index 00000000..abc0cd5
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-@@ -0,0 +1,143 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/cdns,qspi-nor.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/spi/spi-hisi-kunpeng.c
+@@ -0,0 +1,505 @@
++// SPDX-License-Identifier: GPL-2.0-only
++//
++// HiSilicon SPI Controller Driver for Kunpeng SoCs
++//
++// Copyright (c) 2021 HiSilicon Technologies Co., Ltd.
++// Author: Jay Fang <f.fangjian@huawei.com>
++//
++// This code is based on spi-dw-core.c.
 +
-+title: Cadence Quad SPI controller
++#include <linux/acpi.h>
++#include <linux/bitfield.h>
++#include <linux/delay.h>
++#include <linux/err.h>
++#include <linux/interrupt.h>
++#include <linux/module.h>
++#include <linux/property.h>
++#include <linux/platform_device.h>
++#include <linux/slab.h>
++#include <linux/spi/spi.h>
 +
-+maintainers:
-+  - Pratyush Yadav <p.yadav@ti.com>
++/* Register offsets */
++#define HISI_SPI_CSCR		0x00	/* cs control register */
++#define HISI_SPI_CR		0x04	/* spi common control register */
++#define HISI_SPI_ENR		0x08	/* spi enable register */
++#define HISI_SPI_FIFOC		0x0c	/* fifo level control register */
++#define HISI_SPI_IMR		0x10	/* interrupt mask register */
++#define HISI_SPI_DIN		0x14	/* data in register */
++#define HISI_SPI_DOUT		0x18	/* data out register */
++#define HISI_SPI_SR		0x1c	/* status register */
++#define HISI_SPI_RISR		0x20	/* raw interrupt status register */
++#define HISI_SPI_ISR		0x24	/* interrupt status register */
++#define HISI_SPI_ICR		0x28	/* interrupt clear register */
++#define HISI_SPI_VERSION	0xe0	/* version register */
 +
-+allOf:
-+  - $ref: spi-controller.yaml#
++/* Bit fields in HISI_SPI_CR */
++#define CR_LOOP_MASK		GENMASK(1, 1)
++#define CR_CPOL_MASK		GENMASK(2, 2)
++#define CR_CPHA_MASK		GENMASK(3, 3)
++#define CR_DIV_PRE_MASK		GENMASK(11, 4)
++#define CR_DIV_POST_MASK	GENMASK(19, 12)
++#define CR_BPW_MASK		GENMASK(24, 20)
++#define CR_SPD_MODE_MASK	GENMASK(25, 25)
 +
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - ti,k2g-qspi
-+              - ti,am654-ospi
-+              - intel,lgm-qspi
-+          - const: cdns,qspi-nor
-+      - const: cdns,qspi-nor
++/* Bit fields in HISI_SPI_FIFOC */
++#define FIFOC_TX_MASK		GENMASK(5, 3)
++#define FIFOC_RX_MASK		GENMASK(11, 9)
 +
-+  reg:
-+    items:
-+      - description: the controller register set
-+      - description: the controller data area
++/* Bit fields in HISI_SPI_IMR, 4 bits */
++#define IMR_RXOF		BIT(0)		/* Receive Overflow */
++#define IMR_RXTO		BIT(1)		/* Receive Timeout */
++#define IMR_RX			BIT(2)		/* Receive */
++#define IMR_TX			BIT(3)		/* Transmit */
++#define IMR_MASK		(IMR_RXOF | IMR_RXTO | IMR_RX | IMR_TX)
 +
-+  interrupts:
-+    maxItems: 1
++/* Bit fields in HISI_SPI_SR, 5 bits */
++#define SR_TXE			BIT(0)		/* Transmit FIFO empty */
++#define SR_TXNF			BIT(1)		/* Transmit FIFO not full */
++#define SR_RXNE			BIT(2)		/* Receive FIFO not empty */
++#define SR_RXF			BIT(3)		/* Receive FIFO full */
++#define SR_BUSY			BIT(4)		/* Busy Flag */
 +
-+  clocks:
-+    maxItems: 1
++/* Bit fields in HISI_SPI_ISR, 4 bits */
++#define ISR_RXOF		BIT(0)		/* Receive Overflow */
++#define ISR_RXTO		BIT(1)		/* Receive Timeout */
++#define ISR_RX			BIT(2)		/* Receive */
++#define ISR_TX			BIT(3)		/* Transmit */
++#define ISR_MASK		(ISR_RXOF | ISR_RXTO | ISR_RX | ISR_TX)
 +
-+  cdns,fifo-depth:
-+    description:
-+      Size of the data FIFO in words.
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    enum: [ 128, 256 ]
-+    default: 128
++/* Bit fields in HISI_SPI_ICR, 2 bits */
++#define ICR_RXOF		BIT(0)		/* Receive Overflow */
++#define ICR_RXTO		BIT(1)		/* Receive Timeout */
++#define ICR_MASK		(ICR_RXOF | ICR_RXTO)
 +
-+  cdns,fifo-width:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      Bus width of the data FIFO in bytes.
-+    default: 4
++#define DIV_POST_MAX		0xFF
++#define DIV_POST_MIN		0x00
++#define DIV_PRE_MAX		0xFE
++#define DIV_PRE_MIN		0x02
++#define CLK_DIV_MAX		((1 + DIV_POST_MAX) * DIV_PRE_MAX)
++#define CLK_DIV_MIN		((1 + DIV_POST_MIN) * DIV_PRE_MIN)
 +
-+  cdns,trigger-address:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      32-bit indirect AHB trigger address.
++#define DEFAULT_NUM_CS		1
 +
-+  cdns,is-decoded-cs:
-+    type: boolean
-+    description:
-+      Flag to indicate whether decoder is used to select different chip select
-+      for different memory regions.
++#define HISI_SPI_WAIT_TIMEOUT_MS	10UL
 +
-+  cdns,rclk-en:
-+    type: boolean
-+    description:
-+      Flag to indicate that QSPI return clock is used to latch the read
-+      data rather than the QSPI clock. Make sure that QSPI return clock
-+      is populated on the board before using this property.
++enum hisi_spi_rx_level_trig {
++	HISI_SPI_RX_1,
++	HISI_SPI_RX_4,
++	HISI_SPI_RX_8,
++	HISI_SPI_RX_16,
++	HISI_SPI_RX_32,
++	HISI_SPI_RX_64,
++	HISI_SPI_RX_128
++};
 +
-+  resets:
-+    maxItems: 2
++enum hisi_spi_tx_level_trig {
++	HISI_SPI_TX_1_OR_LESS,
++	HISI_SPI_TX_4_OR_LESS,
++	HISI_SPI_TX_8_OR_LESS,
++	HISI_SPI_TX_16_OR_LESS,
++	HISI_SPI_TX_32_OR_LESS,
++	HISI_SPI_TX_64_OR_LESS,
++	HISI_SPI_TX_128_OR_LESS
++};
 +
-+  reset-names:
-+    minItems: 1
-+    maxItems: 2
-+    items:
-+      enum: [ qspi, qspi-ocp ]
++enum hisi_spi_frame_n_bytes {
++	HISI_SPI_N_BYTES_NULL,
++	HISI_SPI_N_BYTES_U8,
++	HISI_SPI_N_BYTES_U16,
++	HISI_SPI_N_BYTES_U32 = 4
++};
 +
-+# subnode's properties
-+patternProperties:
-+  "@[0-9a-f]+$":
-+    type: object
-+    description:
-+      Flash device uses the below defined properties in the subnode.
++/* Slave spi_dev related */
++struct hisi_chip_data {
++	u32 cr;
++	u32 speed_hz;	/* baud rate */
++	u16 clk_div;	/* baud rate divider */
 +
-+    properties:
-+      cdns,read-delay:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        description:
-+          Delay for read capture logic, in clock cycles.
++	/* clk_div = (1 + div_post) * div_pre */
++	u8 div_post;	/* value from 0 to 255 */
++	u8 div_pre;	/* value from 2 to 254 (even only!) */
++};
 +
-+      cdns,tshsl-ns:
-+        description:
-+          Delay in nanoseconds for the length that the master mode chip select
-+          outputs are de-asserted between transactions.
++struct hisi_spi {
++	struct device		*dev;
 +
-+      cdns,tsd2d-ns:
-+        description:
-+          Delay in nanoseconds between one chip select being de-activated
-+          and the activation of another.
++	void __iomem		*regs;
++	int			irq;
++	u32			fifo_len; /* depth of the FIFO buffer */
 +
-+      cdns,tchsh-ns:
-+        description:
-+          Delay in nanoseconds between last bit of current transaction and
-+          deasserting the device chip select (qspi_n_ss_out).
++	/* Current message transfer state info */
++	const void		*tx;
++	unsigned int		tx_len;
++	void			*rx;
++	unsigned int		rx_len;
++	u8			n_bytes; /* current is a 1/2/4 bytes op */
++};
 +
-+      cdns,tslch-ns:
-+        description:
-+          Delay in nanoseconds between setting qspi_n_ss_out low and
-+          first bit transfer.
++static u32 hisi_spi_busy(struct hisi_spi *hs)
++{
++	return readl(hs->regs + HISI_SPI_SR) & SR_BUSY;
++}
 +
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - cdns,fifo-depth
-+  - cdns,fifo-width
-+  - cdns,trigger-address
-+  - '#address-cells'
-+  - '#size-cells'
++static u32 hisi_spi_rx_not_empty(struct hisi_spi *hs)
++{
++	return readl(hs->regs + HISI_SPI_SR) & SR_RXNE;
++}
 +
-+unevaluatedProperties: false
++static u32 hisi_spi_tx_not_full(struct hisi_spi *hs)
++{
++	return readl(hs->regs + HISI_SPI_SR) & SR_TXNF;
++}
 +
-+examples:
-+  - |
-+    qspi: spi@ff705000 {
-+      compatible = "cdns,qspi-nor";
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      reg = <0xff705000 0x1000>,
-+            <0xffa00000 0x1000>;
-+      interrupts = <0 151 4>;
-+      clocks = <&qspi_clk>;
-+      cdns,fifo-depth = <128>;
-+      cdns,fifo-width = <4>;
-+      cdns,trigger-address = <0x00000000>;
-+      resets = <&rst 0x1>, <&rst 0x2>;
-+      reset-names = "qspi", "qspi-ocp";
++static void hisi_spi_flush_fifo(struct hisi_spi *hs)
++{
++	unsigned long limit = loops_per_jiffy << 1;
 +
-+      flash@0 {
-+              compatible = "jedec,spi-nor";
-+              reg = <0x0>;
-+      };
-+    };
++	do {
++		while (hisi_spi_rx_not_empty(hs))
++			readl(hs->regs + HISI_SPI_DOUT);
++	} while (hisi_spi_busy(hs) && limit--);
++}
++
++/* Disable the controller and all interrupts */
++static void hisi_spi_disable(struct hisi_spi *hs)
++{
++	writel(0, hs->regs + HISI_SPI_ENR);
++	writel(IMR_MASK, hs->regs + HISI_SPI_IMR);
++	writel(ICR_MASK, hs->regs + HISI_SPI_ICR);
++}
++
++static u8 hisi_spi_n_bytes(struct spi_transfer *transfer)
++{
++	if (transfer->bits_per_word <= 8)
++		return HISI_SPI_N_BYTES_U8;
++	else if (transfer->bits_per_word <= 16)
++		return HISI_SPI_N_BYTES_U16;
++	else
++		return HISI_SPI_N_BYTES_U32;
++}
++
++static void hisi_spi_reader(struct hisi_spi *hs)
++{
++	u32 max = min_t(u32, hs->rx_len, hs->fifo_len);
++	u32 rxw;
++
++	while (hisi_spi_rx_not_empty(hs) && max--) {
++		rxw = readl(hs->regs + HISI_SPI_DOUT);
++		/* Check the transfer's original "rx" is not null */
++		if (hs->rx) {
++			switch (hs->n_bytes) {
++			case HISI_SPI_N_BYTES_U8:
++				*(u8 *)(hs->rx) = rxw;
++				break;
++			case HISI_SPI_N_BYTES_U16:
++				*(u16 *)(hs->rx) = rxw;
++				break;
++			case HISI_SPI_N_BYTES_U32:
++				*(u32 *)(hs->rx) = rxw;
++				break;
++			}
++			hs->rx += hs->n_bytes;
++		}
++		--hs->rx_len;
++	}
++}
++
++static void hisi_spi_writer(struct hisi_spi *hs)
++{
++	u32 max = min_t(u32, hs->tx_len, hs->fifo_len);
++	u32 txw = 0;
++
++	while (hisi_spi_tx_not_full(hs) && max--) {
++		/* Check the transfer's original "tx" is not null */
++		if (hs->tx) {
++			switch (hs->n_bytes) {
++			case HISI_SPI_N_BYTES_U8:
++				txw = *(u8 *)(hs->tx);
++				break;
++			case HISI_SPI_N_BYTES_U16:
++				txw = *(u16 *)(hs->tx);
++				break;
++			case HISI_SPI_N_BYTES_U32:
++				txw = *(u32 *)(hs->tx);
++				break;
++			}
++			hs->tx += hs->n_bytes;
++		}
++		writel(txw, hs->regs + HISI_SPI_DIN);
++		--hs->tx_len;
++	}
++}
++
++static void __hisi_calc_div_reg(struct hisi_chip_data *chip)
++{
++	chip->div_pre = DIV_PRE_MAX;
++	while (chip->div_pre >= DIV_PRE_MIN) {
++		if (chip->clk_div % chip->div_pre == 0)
++			break;
++
++		chip->div_pre -= 2;
++	}
++
++	if (chip->div_pre > chip->clk_div)
++		chip->div_pre = chip->clk_div;
++
++	chip->div_post = (chip->clk_div / chip->div_pre) - 1;
++}
++
++static u32 hisi_calc_effective_speed(struct spi_controller *master,
++			struct hisi_chip_data *chip, u32 speed_hz)
++{
++	u32 effective_speed;
++
++	/* Note clock divider doesn't support odd numbers */
++	chip->clk_div = DIV_ROUND_UP(master->max_speed_hz, speed_hz) + 1;
++	chip->clk_div &= 0xfffe;
++	if (chip->clk_div > CLK_DIV_MAX)
++		chip->clk_div = CLK_DIV_MAX;
++
++	effective_speed = master->max_speed_hz / chip->clk_div;
++	if (chip->speed_hz != effective_speed) {
++		__hisi_calc_div_reg(chip);
++		chip->speed_hz = effective_speed;
++	}
++
++	return effective_speed;
++}
++
++static u32 hisi_spi_prepare_cr(struct spi_device *spi)
++{
++	u32 cr = FIELD_PREP(CR_SPD_MODE_MASK, 1);
++
++	cr |= FIELD_PREP(CR_CPHA_MASK, (spi->mode & SPI_CPHA) ? 1 : 0);
++	cr |= FIELD_PREP(CR_CPOL_MASK, (spi->mode & SPI_CPOL) ? 1 : 0);
++	cr |= FIELD_PREP(CR_LOOP_MASK, (spi->mode & SPI_LOOP) ? 1 : 0);
++
++	return cr;
++}
++
++static void hisi_spi_hw_init(struct hisi_spi *hs)
++{
++	hisi_spi_disable(hs);
++
++	/* FIFO default config */
++	writel(FIELD_PREP(FIFOC_TX_MASK, HISI_SPI_TX_64_OR_LESS) |
++		FIELD_PREP(FIFOC_RX_MASK, HISI_SPI_RX_16),
++		hs->regs + HISI_SPI_FIFOC);
++
++	hs->fifo_len = 256;
++}
++
++static irqreturn_t hisi_spi_irq(int irq, void *dev_id)
++{
++	struct spi_controller *master = dev_id;
++	struct hisi_spi *hs = spi_controller_get_devdata(master);
++	u32 irq_status = readl(hs->regs + HISI_SPI_ISR) & ISR_MASK;
++
++	if (!irq_status)
++		return IRQ_NONE;
++
++	if (!master->cur_msg)
++		return IRQ_HANDLED;
++
++	/* Error handling */
++	if (irq_status & ISR_RXOF) {
++		dev_err(hs->dev, "interrupt_transfer: fifo overflow\n");
++		master->cur_msg->status = -EIO;
++		goto finalize_transfer;
++	}
++
++	/*
++	 * Read data from the Rx FIFO every time. If there is
++	 * nothing left to receive, finalize the transfer.
++	 */
++	hisi_spi_reader(hs);
++	if (!hs->rx_len)
++		goto finalize_transfer;
++
++	/* Send data out when Tx FIFO IRQ triggered */
++	if (irq_status & ISR_TX)
++		hisi_spi_writer(hs);
++
++	return IRQ_HANDLED;
++
++finalize_transfer:
++	hisi_spi_disable(hs);
++	spi_finalize_current_transfer(master);
++	return IRQ_HANDLED;
++}
++
++static int hisi_spi_transfer_one(struct spi_controller *master,
++		struct spi_device *spi, struct spi_transfer *transfer)
++{
++	struct hisi_spi *hs = spi_controller_get_devdata(master);
++	struct hisi_chip_data *chip = spi_get_ctldata(spi);
++	u32 cr = chip->cr;
++
++	/* Update per transfer options for speed and bpw */
++	transfer->effective_speed_hz =
++		hisi_calc_effective_speed(master, chip, transfer->speed_hz);
++	cr |= FIELD_PREP(CR_DIV_PRE_MASK, chip->div_pre);
++	cr |= FIELD_PREP(CR_DIV_POST_MASK, chip->div_post);
++	cr |= FIELD_PREP(CR_BPW_MASK, transfer->bits_per_word - 1);
++	writel(cr, hs->regs + HISI_SPI_CR);
++
++	hisi_spi_flush_fifo(hs);
++
++	hs->n_bytes = hisi_spi_n_bytes(transfer);
++	hs->tx = transfer->tx_buf;
++	hs->tx_len = transfer->len / hs->n_bytes;
++	hs->rx = transfer->rx_buf;
++	hs->rx_len = hs->tx_len;
++
++	/*
++	 * Ensure that the transfer data above has been updated
++	 * before the interrupt to start.
++	 */
++	smp_mb();
++
++	/* Enable all interrupts and the controller */
++	writel(~IMR_MASK, hs->regs + HISI_SPI_IMR);
++	writel(1, hs->regs + HISI_SPI_ENR);
++
++	return 1;
++}
++
++static void hisi_spi_handle_err(struct spi_controller *master,
++		struct spi_message *msg)
++{
++	struct hisi_spi *hs = spi_controller_get_devdata(master);
++
++	hisi_spi_disable(hs);
++
++	/*
++	 * Wait for interrupt handler that is
++	 * already in timeout to complete.
++	 */
++	msleep(HISI_SPI_WAIT_TIMEOUT_MS);
++}
++
++static int hisi_spi_setup(struct spi_device *spi)
++{
++	struct hisi_chip_data *chip;
++
++	/* Only alloc on first setup */
++	chip = spi_get_ctldata(spi);
++	if (!chip) {
++		chip = kzalloc(sizeof(*chip), GFP_KERNEL);
++		if (!chip)
++			return -ENOMEM;
++		spi_set_ctldata(spi, chip);
++	}
++
++	chip->cr = hisi_spi_prepare_cr(spi);
++
++	return 0;
++}
++
++static void hisi_spi_cleanup(struct spi_device *spi)
++{
++	struct hisi_chip_data *chip = spi_get_ctldata(spi);
++
++	kfree(chip);
++	spi_set_ctldata(spi, NULL);
++}
++
++static int hisi_spi_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct spi_controller *master;
++	struct hisi_spi *hs;
++	int ret, irq;
++
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
++		return irq;
++
++	master = devm_spi_alloc_master(dev, sizeof(*hs));
++	if (!master)
++		return -ENOMEM;
++
++	platform_set_drvdata(pdev, master);
++
++	hs = spi_controller_get_devdata(master);
++	hs->dev = dev;
++	hs->irq = irq;
++
++	hs->regs = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(hs->regs))
++		return PTR_ERR(hs->regs);
++
++	/* Specify maximum SPI clocking speed (master only) by firmware */
++	ret = device_property_read_u32(dev, "spi-max-frequency",
++					&master->max_speed_hz);
++	if (ret) {
++		dev_err(dev, "failed to get max SPI clocking speed, ret=%d\n",
++			ret);
++		return -EINVAL;
++	}
++
++	ret = device_property_read_u16(dev, "num-cs",
++					&master->num_chipselect);
++	if (ret)
++		master->num_chipselect = DEFAULT_NUM_CS;
++
++	master->use_gpio_descriptors = true;
++	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LOOP;
++	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
++	master->bus_num = pdev->id;
++	master->setup = hisi_spi_setup;
++	master->cleanup = hisi_spi_cleanup;
++	master->transfer_one = hisi_spi_transfer_one;
++	master->handle_err = hisi_spi_handle_err;
++	master->dev.fwnode = dev->fwnode;
++
++	hisi_spi_hw_init(hs);
++
++	ret = devm_request_irq(dev, hs->irq, hisi_spi_irq, 0, dev_name(dev),
++			master);
++	if (ret < 0) {
++		dev_err(dev, "failed to get IRQ=%d, ret=%d\n", hs->irq, ret);
++		return ret;
++	}
++
++	ret = spi_register_controller(master);
++	if (ret) {
++		dev_err(dev, "failed to register spi master, ret=%d\n", ret);
++		return ret;
++	}
++
++	dev_info(dev, "hw version:0x%x max-freq:%u kHz\n",
++		readl(hs->regs + HISI_SPI_VERSION),
++		master->max_speed_hz / 1000);
++
++	return 0;
++}
++
++static int hisi_spi_remove(struct platform_device *pdev)
++{
++	struct spi_controller *master = platform_get_drvdata(pdev);
++
++	spi_unregister_controller(master);
++
++	return 0;
++}
++
++static const struct acpi_device_id hisi_spi_acpi_match[] = {
++	{"HISI03E1", 0},
++	{}
++};
++MODULE_DEVICE_TABLE(acpi, hisi_spi_acpi_match);
++
++static struct platform_driver hisi_spi_driver = {
++	.probe		= hisi_spi_probe,
++	.remove		= hisi_spi_remove,
++	.driver		= {
++		.name	= "hisi-kunpeng-spi",
++		.acpi_match_table = hisi_spi_acpi_match,
++	},
++};
++module_platform_driver(hisi_spi_driver);
++
++MODULE_AUTHOR("Jay Fang <f.fangjian@huawei.com>");
++MODULE_DESCRIPTION("HiSilicon SPI Controller Driver for Kunpeng SoCs");
++MODULE_LICENSE("GPL v2");
 -- 
-2.30.0
+2.7.4
 
