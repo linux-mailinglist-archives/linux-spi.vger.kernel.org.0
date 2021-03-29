@@ -2,178 +2,142 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E17B34C0F7
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Mar 2021 03:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5AD34C18F
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Mar 2021 04:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbhC2BUT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 28 Mar 2021 21:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
+        id S231224AbhC2CAK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 28 Mar 2021 22:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbhC2BTs (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 28 Mar 2021 21:19:48 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7ABFC061574
-        for <linux-spi@vger.kernel.org>; Sun, 28 Mar 2021 18:19:47 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id hq27so16867004ejc.9
-        for <linux-spi@vger.kernel.org>; Sun, 28 Mar 2021 18:19:47 -0700 (PDT)
+        with ESMTP id S230271AbhC2B7q (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 28 Mar 2021 21:59:46 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052CCC061756
+        for <linux-spi@vger.kernel.org>; Sun, 28 Mar 2021 18:59:45 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id t140so1100535pgb.13
+        for <linux-spi@vger.kernel.org>; Sun, 28 Mar 2021 18:59:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pensando.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rTJmlPXK9Et5rO0omoD1ZFN/iK1wPaRQINj5TjeHtqQ=;
-        b=lYiiziRBmj2GB+IbKZlbmM9RX2WNr44mGVjf31mYHMeckiXJmv45Kudaf2dzpdNCjZ
-         wZ6MRjv6ftUGjzL0AXJ7lrqY3+vVZeMvz1imVpT+DJOKu+M0LGS35eJTDAOoQPTIee/8
-         Boc+gAFxtWEOqVF8C3FD+KREqeiCMHX/Gz+iDXIktn5TH8kbCJsexe+mY49KWZ39Lsl3
-         gsR/Er3LcL3QbGv9BWpbmuYDjfDau2aiwZ0LClhsC+B3Pifg8eLrCcM4rAS9/3JKlRHU
-         Via8Daz2h03vS9Vg0fjtW4GehHNIpmla/zKRYj0+fVh2/RfSdyVIZgWH71G92DdBEZkl
-         QkqA==
+        h=from:to:cc:subject:date:message-id;
+        bh=AfF0syJPa3AZ/E4+2g/B+WMyDbSM6G2J2QkIgg8nw3Q=;
+        b=T01xgGlZn2BIwUsonZP5ixX/9LH8VPlr+gd5BDTNg0VMSdRtjDBE0JOwLw7igeBhko
+         wo/cM4iJlRvGHPcYYFLkDpM2mTG0+87twKvt7f7L68H+yRD62jlWQz0ZNgNyYtYWSSQr
+         BA8svNiCo0uY2Rnz8GKeTY24Ilt2icIb75h6AWPSvtD5nh+C1a/Uy8P5iYAXxog5e0KL
+         tdFUjRHfkIOF/IKP/A2P7xA4LBTWPZJC+8jOTUdtHvslE8R7lkQIGDMoucaQ5+rp5VzT
+         rbbzXdgF2AGjr3VCtT/3mxA6eyoDtcTs0u4Yk0mELcDT2BHKiCFn9ESQX+pUeUGUkti7
+         ssFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rTJmlPXK9Et5rO0omoD1ZFN/iK1wPaRQINj5TjeHtqQ=;
-        b=Agt9VfJ10bLydRDCpjAy5sNEdFYiMNMPcIGb/MAdQ4MXHt1WRG/W4m9KvjH98LGDHI
-         0tkcHf60Rgx+MKa8Hw8nbQczqhIIDCwiME6XHRg8wPjx49oeNx0Hf3cDrRQ0Bf0CYu6+
-         SgAqRlJ0O25eBaV+4fjeq99l8S+xNNWzZLd+tQ3duxzdaNV4rKrfbuaSDd/rGXm2wVXL
-         giWeipQ6tgQEDm6isd1Qx7RhJfvCSrX4ZFF0Tp6qYIMmW38AmH9V80SG2csaPrUMQymR
-         nYSYQwFlM6x+Dp4x6OQZbsjgCI5WlVsRvvQYSTrpRWkrrlV/H3rD2colOMBBIcidaPVn
-         dpYg==
-X-Gm-Message-State: AOAM533mgM1ctUupQHrLo/4UR4PR+qBD2XnawRl8OlGPrvDkZaITZi7v
-        kHh3poOWTUTVCkiz0KJHeX3jZKT5Sr3MzmpDSk1sgZNUKk7Org==
-X-Google-Smtp-Source: ABdhPJxUCgM9piyX/k7qbNVhsdRINxGdhoMnzDUbCOh+nLKRCALtdIKcq2Gil/lEH55ZxVLoJTsGdlPCF5JPUuvU/Jo=
-X-Received: by 2002:a17:906:52d0:: with SMTP id w16mr26022772ejn.172.1616980786565;
- Sun, 28 Mar 2021 18:19:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210304034141.7062-1-brad@pensando.io> <20210304034141.7062-2-brad@pensando.io>
- <CAHp75VcG9KajNpDbewDq7QzotB6t7MfwiGk15FaobX+cmMVSzg@mail.gmail.com>
-In-Reply-To: <CAHp75VcG9KajNpDbewDq7QzotB6t7MfwiGk15FaobX+cmMVSzg@mail.gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=AfF0syJPa3AZ/E4+2g/B+WMyDbSM6G2J2QkIgg8nw3Q=;
+        b=e/k0ApncIMU/TGCWidmXp1F0WC12+DFeQ60WM+wSFKDBCZhj15PPOLC5NEH7aAEL+/
+         rF3HMyV4ujtIUlen6EvRtH7My97EyReux/naVV/kFmTis0a9+IUVKV+wi13dIKWtfdvL
+         7+X1jy2R6NQA0BUWMCsQ8oR7+wZJRuZgs9n2jaSVyGAWxt0HwIoa1bv8xY5x5eMcMYh/
+         fm50YeKaaHMNUQTRMxw763/sbCOywMUovHNmb8YzLK/YfyD+4f8gc2gq1z/UX7gYkkYR
+         I3P2UseKWnEXVSyGC5ToD4GSytFAnDqkQW3IMK9viuSr/VK2nUWi+AiKV8ZS4a4FQdTx
+         WNqg==
+X-Gm-Message-State: AOAM532Szdk4o1+tKWwpoOi78SZpX/XDGVfaFM1uymxxJw9H5pCrZTaO
+        tSO2k90aFRL3r+UvMBRV6Flqwg==
+X-Google-Smtp-Source: ABdhPJwqvHlLi+PBJ/1vUPZIesu3HIRE3E2tVo/qHkMLNjVAZtT91oBjuqfdT4SzwP9uUl+pbfBhBA==
+X-Received: by 2002:a62:cfc1:0:b029:200:1eed:462 with SMTP id b184-20020a62cfc10000b02902001eed0462mr23229810pfg.55.1616983185403;
+        Sun, 28 Mar 2021 18:59:45 -0700 (PDT)
+Received: from platform-dev1.pensando.io ([12.226.153.42])
+        by smtp.gmail.com with ESMTPSA id w37sm14728027pgl.13.2021.03.28.18.59.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Mar 2021 18:59:45 -0700 (PDT)
 From:   Brad Larson <brad@pensando.io>
-Date:   Sun, 28 Mar 2021 18:19:35 -0700
-Message-ID: <CAK9rFnwrA=W2Vk5yFwG4N_WS=eBXXnhtexA+tqgAYb6xOAO4oQ@mail.gmail.com>
-Subject: Re: [PATCH 1/8] gpio: Add Elba SoC gpio driver for spi cs control
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        broonie@kernel.org, fancer.lancer@gmail.com,
+        adrian.hunter@intel.com, ulf.hansson@linaro.org, olof@lixom.net,
+        brad@pensando.io, linux-gpio@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/13] Support Pensando Elba SoC
+Date:   Sun, 28 Mar 2021 18:59:25 -0700
+Message-Id: <20210329015938.20316-1-brad@pensando.io>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Mar 7, 2021 at 11:21 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Thu, Mar 4, 2021 at 4:40 PM Brad Larson <brad@pensando.io> wrote:
-> >
-> > This GPIO driver is for the Pensando Elba SoC which
-> > provides control of four chip selects on two SPI busses.
->
-> > +config GPIO_ELBA_SPICS
-> > +       bool "Pensando Elba SPI chip-select"
->
-> Can't it be a module? Why?
+This series enables support for Pensando Elba SoC based platforms.
+The Elba SoC has the following features:
 
-All Elba SoC based platforms require this driver to be built-in to boot and
-removing the module would result in a variety of exceptions/errors.
+- Sixteen ARM64 A72 cores
+- Dual DDR 4/5 memory controllers
+- 32 lanes of PCIe Gen3/4 to the Host
+- Network interfaces: Dual 200GE, Quad 100GE, 50GE, 25GE, 10GE and
+  also a single 1GE management port.
+- Storage/crypto offloads and 144 programmable P4 cores.
+- QSPI and EMMC for SoC storage
+- Two SPI interfaces for peripheral management
+- I2C bus for platform management
 
-> > +       depends on ARCH_PENSANDO_ELBA_SOC
-> > +       help
-> > +         Say yes here to support the Pensndo Elba SoC SPI chip-select driver
->
-> Please give more explanation what it is and why users might need it,
-> and also tell users how the module will be named (if there is no
-> strong argument why it can't be a  module).
->
-Fixed the typo.
+See below for an overview of changes since v1.
 
-> > +#include <linux/of.h>
->
-> It's not used here, but you missed mod_devicetable.h.
+== Patch overview ==
 
-Removed <linux/of.h>.  There is no dependency on mod_devicetable.h.
+- 01    Fix typo, return code value and log message.
+- 03    Remove else clause, intrinsic DW chip-select is never used.
+- 08-11 Split out dts and bindings to sub-patches
+- 10    Converted existing cadence-quadspi.txt to YAML schema
+- 13    New driver should use <linux/gpio/driver.h>
 
-> ...
->
-> > +/*
-> > + * pin:             3            2        |       1            0
-> > + * bit:         7------6------5------4----|---3------2------1------0
-> > + *     cs1  cs1_ovr  cs0  cs0_ovr |  cs1  cs1_ovr  cs0  cs0_ovr
-> > + *                ssi1            |             ssi0
-> > + */
-> > +#define SPICS_PIN_SHIFT(pin)   (2 * (pin))
-> > +#define SPICS_MASK(pin)                (0x3 << SPICS_PIN_SHIFT(pin))
->
-> > +#define SPICS_SET(pin, val)    ((((val) << 1) | 0x1) << SPICS_PIN_SHIFT(pin))
->
-> Isn't it easier to define as ((value) << (2 * (pin) + 1) | BIT(2 * (pin)))
->
-> ...
->
-> > +struct elba_spics_priv {
-> > +       void __iomem *base;
-> > +       spinlock_t lock;
->
-> > +       struct gpio_chip chip;
->
-> If you put it as a first member a container_of() becomes a no-op. OTOH
-> dunno if there is any such container_of() use in the code.
->
+Brad Larson (13):
+  gpio: Add Elba SoC gpio driver for spi cs control
+  spi: cadence-quadspi: Add QSPI support for Pensando Elba SoC
+  spi: dw: Add support for Pensando Elba SoC SPI
+  spidev: Add Pensando CPLD compatible
+  mmc: sdhci-cadence: Add Pensando Elba SoC support
+  arm64: Add config for Pensando SoC platforms
+  arm64: dts: Add Pensando Elba SoC support
+  dt-bindings: Add pensando vendor prefix
+  dt-bindings: mmc: Add Pensando Elba SoC binding
+  dt-bindings: spi: cadence-qspi: Add support for Pensando Elba SoC
+  dt-bindings: gpio: Add Pensando Elba SoC support
+  MAINTAINERS: Add entry for PENSANDO
+  gpio: Use linux/gpio/driver.h
 
-There is no use of container_of()
+ .../bindings/gpio/pensando,elba-spics.yaml    |  50 +++
+ .../devicetree/bindings/mmc/cdns,sdhci.yaml   |   1 +
+ .../bindings/spi/cadence-quadspi.txt          |  68 ----
+ .../bindings/spi/cadence-quadspi.yaml         | 153 +++++++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |   9 +
+ arch/arm64/Kconfig.platforms                  |   5 +
+ arch/arm64/boot/dts/Makefile                  |   1 +
+ arch/arm64/boot/dts/pensando/Makefile         |   6 +
+ arch/arm64/boot/dts/pensando/elba-16core.dtsi | 170 ++++++++++
+ .../boot/dts/pensando/elba-asic-common.dtsi   | 112 +++++++
+ arch/arm64/boot/dts/pensando/elba-asic.dts    |   7 +
+ .../boot/dts/pensando/elba-flash-parts.dtsi   |  78 +++++
+ arch/arm64/boot/dts/pensando/elba.dtsi        | 310 ++++++++++++++++++
+ drivers/gpio/Kconfig                          |   6 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-elba-spics.c                | 113 +++++++
+ drivers/mmc/host/Kconfig                      |  15 +
+ drivers/mmc/host/Makefile                     |   1 +
+ drivers/mmc/host/sdhci-cadence-elba.c         | 137 ++++++++
+ drivers/mmc/host/sdhci-cadence.c              |  81 +++--
+ drivers/mmc/host/sdhci-cadence.h              |  68 ++++
+ drivers/spi/spi-cadence-quadspi.c             |   9 +
+ drivers/spi/spi-dw-mmio.c                     |  28 +-
+ drivers/spi/spidev.c                          |   1 +
+ 25 files changed, 1321 insertions(+), 111 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/gpio/pensando,elba-spics.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/cadence-quadspi.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/cadence-quadspi.yaml
+ create mode 100644 arch/arm64/boot/dts/pensando/Makefile
+ create mode 100644 arch/arm64/boot/dts/pensando/elba-16core.dtsi
+ create mode 100644 arch/arm64/boot/dts/pensando/elba-asic-common.dtsi
+ create mode 100644 arch/arm64/boot/dts/pensando/elba-asic.dts
+ create mode 100644 arch/arm64/boot/dts/pensando/elba-flash-parts.dtsi
+ create mode 100644 arch/arm64/boot/dts/pensando/elba.dtsi
+ create mode 100644 drivers/gpio/gpio-elba-spics.c
+ create mode 100644 drivers/mmc/host/sdhci-cadence-elba.c
+ create mode 100644 drivers/mmc/host/sdhci-cadence.h
 
-> > +static int elba_spics_get_value(struct gpio_chip *chip, unsigned int pin)
-> > +{
-> > +       return -ENXIO;
->
-> Hmm... Is it really acceptable error code here?
->
-> > +static int elba_spics_direction_input(struct gpio_chip *chip, unsigned int pin)
-> > +{
-> > +       return -ENXIO;
->
-> Ditto.
->
-Changed both to -ENOTSUPP.
+-- 
+2.17.1
 
-> > +       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > +       p->base = devm_ioremap_resource(&pdev->dev, res);
->
-> p->base = devm_platform_ioremap_resource(pdev, 0);
-
-Implementation follows devm_ioremap_resource() example in lib/devres.c.
-
-> > +       if (IS_ERR(p->base)) {
->
-> > +               dev_err(&pdev->dev, "failed to remap I/O memory\n");
->
-> Duplicate noisy message.
->
-> > +               return PTR_ERR(p->base);
-> > +       }
->
-> > +       ret = devm_gpiochip_add_data(&pdev->dev, &p->chip, p);
-> > +       if (ret) {
-> > +               dev_err(&pdev->dev, "unable to add gpio chip\n");
->
-> > +               return ret;
-> > +       }
-> > +
-> > +       dev_info(&pdev->dev, "elba spics registered\n");
-> > +       return 0;
->
-> if (ret)
->   dev_err(...);
-> return ret;
-
-Cleaned this up in patchset v2.
