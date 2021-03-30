@@ -2,79 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87DC834EF40
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Mar 2021 19:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 123CD34F0CF
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Mar 2021 20:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231650AbhC3RUO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 Mar 2021 13:20:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41328 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232404AbhC3RUF (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 30 Mar 2021 13:20:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9590F619CC;
-        Tue, 30 Mar 2021 17:20:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617124805;
-        bh=2/dPY9t5kX+DrpyqHP3skhadiWt2xW/f6QwafOFqAr4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mmqqrVgXK8BKxCXrHWxgFyu080dcpyxqmuq1Ck7EzTT2Tez5F5LPx3OhU2iDGYHRS
-         b1b/X9QDBPmCs1r/QRa4ljaZARr6q6QZRsO41qr2+c8Wf+o5aWEe0Xg2XDLRI2TCpB
-         Pff6etnmOMTxdqfvMkF/jm3TUsx0w8bDiO14kCnxIXtnqHwsR/lByvbcMHU8ZDqddx
-         3nyl1SNa7eOkDl4LGIeeUpyFytJVJxNXpb6XHLYOq0Nl8eU4juFBm1MoGtpDUvJ2C9
-         vgaCKEsJop6IQEs8QYWYE2oh8EcMXDRMzR3D/YBAL6XsIUrt29y3zLSwYrDKGMrEsk
-         J2KVGG6ST60jA==
-Date:   Tue, 30 Mar 2021 18:19:53 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: ensure timely release of driver-allocated resources
-Message-ID: <20210330171953.GI4976@sirena.org.uk>
-References: <YFf2RD931nq3RudJ@google.com>
- <20210322123707.GB4681@sirena.org.uk>
- <YFjyJycuAXdTX42D@google.com>
- <20210323173606.GB5490@sirena.org.uk>
- <YFo7wkq037P2Dosz@google.com>
- <20210324213225.GD4596@sirena.org.uk>
- <YFu8y9CuG6Mouxnq@google.com>
- <20210324233935.GE4596@sirena.org.uk>
- <YFvWsA3WnMAqVLGU@google.com>
+        id S232665AbhC3SSd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 Mar 2021 14:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39108 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232791AbhC3SSZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Mar 2021 14:18:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B67FC061574
+        for <linux-spi@vger.kernel.org>; Tue, 30 Mar 2021 11:18:25 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lRIwK-0007hs-TK; Tue, 30 Mar 2021 20:18:08 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lRIwH-0000Dn-TO; Tue, 30 Mar 2021 20:18:05 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org
+Subject: [PATCH v4 0/6] clk: provide new devm helpers for prepared and enabled clocks
+Date:   Tue, 30 Mar 2021 20:17:49 +0200
+Message-Id: <20210330181755.204339-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="54ZiyWcDhi/7bWb8"
-Content-Disposition: inline
-In-Reply-To: <YFvWsA3WnMAqVLGU@google.com>
-X-Cookie: Memory fault - where am I?
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hello,
 
---54ZiyWcDhi/7bWb8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+this series contains new helpers for devm managed clocks. Since v3 this
+is a series that also contains four example conversions to show the
+simplification that can be achieved. It was not hard to find these
+candidates, there are drivers all over that can benefit.
 
-On Wed, Mar 24, 2021 at 05:17:52PM -0700, Dmitry Torokhov wrote:
+The idea to provide these helpers is already quite old, I sent v1 back
+in October and unfortunately didn't receive any feedback from the clk
+maintainers yet on any of the patch series. It would be great if this
+series is considered obviously good enough to consider it.
 
-> OK, I can look into it. In the meantime wills something like below a bit
-> easier for you to stomach? If so I'll resubmit formally.
+Best regards
+Uwe
 
-Well, it's a bit nicer for a bus level bodge so I guess, but really I'm
-more thinking we need something in the driver core for this.
+Uwe Kleine-König (6):
+  clk: generalize devm_clk_get() a bit
+  clk: Provide new devm_clk_helpers for prepared and enabled clocks
+  pwm: atmel: Simplify using devm_clk_get_prepared()
+  rtc: at91sma9: Simplify using devm_clk_get_enabled()
+  i2c: imx: Simplify using devm_clk_get_enableded()
+  spi: davinci: Simplify using devm_clk_get_enabled()
 
---54ZiyWcDhi/7bWb8
-Content-Type: application/pgp-signature; name="signature.asc"
+ drivers/clk/clk-devres.c     | 96 ++++++++++++++++++++++++++++++------
+ drivers/i2c/busses/i2c-imx.c | 11 +----
+ drivers/pwm/pwm-atmel.c      | 15 +-----
+ drivers/rtc/rtc-at91sam9.c   | 22 ++-------
+ drivers/spi/spi-davinci.c    | 11 +----
+ include/linux/clk.h          | 87 +++++++++++++++++++++++++++++++-
+ 6 files changed, 176 insertions(+), 66 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+base-commit: a38fd8748464831584a19438cbb3082b5a2dab15
+-- 
+2.30.2
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBjXbgACgkQJNaLcl1U
-h9Bk7gf/buRs+lVX7ALKqplNAG8yg1soNU48Gbe5haaWHCBqxdM3YvLGIAiEYAY8
-qhqwoHy6psIHROgbdBZuUUx549QPqERFawXjUkjhhZstGT7yubbDNB7MJ6Gygz/L
-LeSXv2AWcoTyTctaflOb+PZAGFIt9A079/Kf0CcRgv+fN5ERCmBOEFqnHT4vwTs6
-iyi7IAif3Ak2qIt6ZNYTm0eR3LxfKOhY18MeMDH8wiWt/U2vAJ6GMW3Nai7ADtGi
-TkVsC2cTXuWu4+2Z6Rkte++4DKjPmiZLTTe5v8Tc3lA8JAScDtpR6a5kb+Qb7rYQ
-JjgXwfb0St5f7lCY+yXxUOuIfSxFxA==
-=uj9j
------END PGP SIGNATURE-----
-
---54ZiyWcDhi/7bWb8--
