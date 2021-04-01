@@ -2,108 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C9A351151
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Apr 2021 10:58:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAED351322
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Apr 2021 12:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233491AbhDAI5a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 1 Apr 2021 04:57:30 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:56000 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233527AbhDAI5B (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Apr 2021 04:57:01 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1318uqf5052252;
-        Thu, 1 Apr 2021 03:56:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1617267412;
-        bh=cGcqM28hwUnMq94RUS26mmi8GyO7P5f4FTSW7afpD1Y=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=iZfbQ5Sy9Wu91yo9y6VQYENbnmzoaYqIJePHSPdLbZTUa9ef+bukHc6ty6XBqSKJN
-         lft3Xt/UJu+ygFAm4JK9p+8o2r8LtzbxtMb4lhQDybXg005V5N1PMTllVY+ZVtwYKk
-         YltyydlpzG4nnepb4MfQ/+8kjiny3Bp27kGaFyuk=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1318uqga011899
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 1 Apr 2021 03:56:52 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 1 Apr
- 2021 03:56:52 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Thu, 1 Apr 2021 03:56:52 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1318uplB019785;
-        Thu, 1 Apr 2021 03:56:52 -0500
-Date:   Thu, 1 Apr 2021 14:26:51 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Vignesh Raghavendra <vigneshr@ti.com>
-CC:     Rob Herring <robh@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 4/4] dt-bindings: spi: Convert cadence-quadspi.txt to
- cadence-quadspi.yaml
-Message-ID: <20210401085649.deocs3cbd7kiljrf@ti.com>
-References: <20210326130034.15231-1-p.yadav@ti.com>
- <20210326130034.15231-5-p.yadav@ti.com>
- <20210327183628.GA345487@robh.at.kernel.org>
- <20210329182256.q4zhss6lezj3s44a@ti.com>
- <1161dc3b-c889-c5d7-f7c8-baf5b7b79505@ti.com>
+        id S233858AbhDAKQr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 1 Apr 2021 06:16:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38342 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233978AbhDAKQn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 1 Apr 2021 06:16:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E5C8260FDB;
+        Thu,  1 Apr 2021 10:16:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617272203;
+        bh=/4JZCYKJ34Ny/VV6useJAcsGbW6iKdWswaBA799Cid8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=umkEuqdcVMsL1xl3v7RxGfsWELRqFtLqv0J+9n4Al2hNvyIHX9czktZeVA38tu/hC
+         aH8xI/2mGVyKgnZ5Dd+ert4ZQKNCnKZ8rOUNn1LkhQetXatcUtnPj7krqzUEIGM+yi
+         79dNk4Z/GDX5xfZkLJ4HFVskO5q+XLtWdPuuOV/iY00ddFjBEuBukPFvVVVXvn4exM
+         mvOovjYsR+c7perUJ9gM4/H93iMMAFuMUzfOJqidoojTRFOxBaFKXJ6qdHqimiv0Wl
+         a6i5xf5qg7bwd1Ut8VK//YHAQ49SRIRBwjPtH3qjs5NVk07zEocoD1OYF3w4EvM3JD
+         bAuE1G2eBffaA==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH 1/3] spi: pl022: Drop custom per-chip cs_control
+Date:   Thu,  1 Apr 2021 11:16:14 +0100
+Message-Id: <161726952255.2486.14037510874353854208.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210330164907.2346010-1-linus.walleij@linaro.org>
+References: <20210330164907.2346010-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1161dc3b-c889-c5d7-f7c8-baf5b7b79505@ti.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 01/04/21 01:57PM, Vignesh Raghavendra wrote:
-> 
-> 
-> On 3/29/21 11:52 PM, Pratyush Yadav wrote:
-> >>> +  cdns,fifo-depth:
-> >>> +    description:
-> >>> +      Size of the data FIFO in words.
-> >>> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> >>> +    enum: [ 128, 256 ]
-> >>> +    default: 128
-> >>> +
-> >>> +  cdns,fifo-width:
-> >>> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >>> +    description:
-> >>> +      Bus width of the data FIFO in bytes.
-> >>> +    default: 4
-> >> I assume there's some constraints on this?
-> > IIUC this is a matter of how the peripheral is implemented and there are 
-> > no clear constraints. Different implementations can use different bus 
-> > widths for the SRAM bus but I don't see any mention of minimum or 
-> > maximum values. FWIW, all users in the kernel use a 4 byte bus.
-> > 
-> 
-> IMO a safe constraint would be to set a range of 1 to 4 (8/16/24/32 bit
-> wide) given this represents SRAM bus width. Binding can always be
-> updated if there exists an implementation with higher SRAM bus
-> width/fifo-width (although that's highly unlikely given there are no
-> such examples today).
-> 
-> But leaving it open ended with range of 0 to UINT_MAX sounds incorrect
-> to me.
+On Tue, 30 Mar 2021 18:49:05 +0200, Linus Walleij wrote:
+> Drop the custom cs_control() assigned through platform data,
+> we have no in-tree users and the only out-of-tree use I have
+> ever seen of this facility is to pull GPIO lines, which is
+> something the driver can already do for us.
 
-Ok. Will respin.
+Applied to
 
-> 
-> >> With that,
-> >>
-> >> Reviewed-by: Rob Herring <robh@kernel.org>
-> > Thanks.
-> > 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+Thanks!
+
+[1/3] spi: pl022: Drop custom per-chip cs_control
+      commit: 4179e576b56d82e5ce007b9f548efb90605e2713
+[2/3] spi: pl022: Use GPIOs looked up by the core
+      commit: 77f983a9df421fa00ca6a2f494dc79f8afca75a2
+[3/3] spi: pl022: Convert to use GPIO descriptors
+      commit: 8bb2dbf1e14d05e92a23e03bcbd1c27f7ee937f7
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
