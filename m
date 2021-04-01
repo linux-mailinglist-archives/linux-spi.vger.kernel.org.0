@@ -2,74 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 296803513E2
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Apr 2021 12:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3279351891
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Apr 2021 19:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233553AbhDAKqi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 1 Apr 2021 06:46:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48900 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233637AbhDAKqd (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 1 Apr 2021 06:46:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1B77F60FEF;
-        Thu,  1 Apr 2021 10:46:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617273992;
-        bh=9sKFnSc9rtGgqXQ0SUS258LJYfALb9fDVpeMtG6rJeI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q4Usc08o9FqlxwhfHOD6/pqxw0axGN8ETuAazPivL0XavDyMYa2Q580xMZWrepwLe
-         A8U0WXwO5ekvdBoqvULdVrDB5PeRIgCvfBlN5Vf0ReVMFgy8UoqqkcfjXKDzdXgaab
-         0Wb3xix3s5XKfmKYO4dshne3aUdVozc/eW4c9Wm62j1MaDKpPI3HBar4Jt0RezXCGl
-         /TVtyLIlm17u0LNYSdafulXS7Ren4kPsej/XwGXxCQAE/fDP+aez8jL3vplf6Jmt6B
-         MZrDheeFLYGet265zOQMUXilizgK2pUwa71gzSLW3yrAtTKKSjHHXdxlvfa9ArwgZE
-         7hCzXSYyew1Mg==
-Date:   Thu, 1 Apr 2021 11:46:19 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Wan Jiabing <wanjiabing@vivo.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kael_w@yeah.net
-Subject: Re: [PATCH] linux/spi: Remove repeated struct declaration
-Message-ID: <20210401104619.GA4512@sirena.org.uk>
-References: <20210401065904.994121-1-wanjiabing@vivo.com>
+        id S231550AbhDARqF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 1 Apr 2021 13:46:05 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:15521 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234768AbhDARkA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 1 Apr 2021 13:40:00 -0400
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FB4Wv5kvkzNrp3;
+        Thu,  1 Apr 2021 21:58:03 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by DGGEMS401-HUB.china.huawei.com
+ (10.3.19.201) with Microsoft SMTP Server id 14.3.498.0; Thu, 1 Apr 2021
+ 22:00:39 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>
+CC:     <broonie@kernel.org>
+Subject: [PATCH -next] spi: fsl: add missing iounmap() on error in of_fsl_spi_probe()
+Date:   Thu, 1 Apr 2021 22:03:50 +0800
+Message-ID: <20210401140350.1677925-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BOKacYhQ+x31HxR3"
-Content-Disposition: inline
-In-Reply-To: <20210401065904.994121-1-wanjiabing@vivo.com>
-X-Cookie: You will be successful in love.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Add the missing iounmap() before return from of_fsl_spi_probe()
+in the error handling case.
 
---BOKacYhQ+x31HxR3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Fixes: 0f0581b24bd0 ("spi: fsl: Convert to use CS GPIO descriptors")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/spi/spi-fsl-spi.c | 23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
 
-On Thu, Apr 01, 2021 at 02:59:04PM +0800, Wan Jiabing wrote:
-> struct spi_transfer is declared twice. One is declared at 24th line.
-> The blew one is not needed though. Remove the duplicate.
+diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
+index e4a8d203f940..d0e5aa18b7ba 100644
+--- a/drivers/spi/spi-fsl-spi.c
++++ b/drivers/spi/spi-fsl-spi.c
+@@ -707,6 +707,11 @@ static int of_fsl_spi_probe(struct platform_device *ofdev)
+ 	struct resource mem;
+ 	int irq, type;
+ 	int ret;
++	bool spisel_boot = false;
++#if IS_ENABLED(CONFIG_FSL_SOC)
++	struct mpc8xxx_spi_probe_info *pinfo = NULL;
++#endif
++
+ 
+ 	ret = of_mpc8xxx_spi_probe(ofdev);
+ 	if (ret)
+@@ -715,9 +720,8 @@ static int of_fsl_spi_probe(struct platform_device *ofdev)
+ 	type = fsl_spi_get_type(&ofdev->dev);
+ 	if (type == TYPE_FSL) {
+ 		struct fsl_spi_platform_data *pdata = dev_get_platdata(dev);
+-		bool spisel_boot = false;
+ #if IS_ENABLED(CONFIG_FSL_SOC)
+-		struct mpc8xxx_spi_probe_info *pinfo = to_of_pinfo(pdata);
++		pinfo = to_of_pinfo(pdata);
+ 
+ 		spisel_boot = of_property_read_bool(np, "fsl,spisel_boot");
+ 		if (spisel_boot) {
+@@ -746,15 +750,24 @@ static int of_fsl_spi_probe(struct platform_device *ofdev)
+ 
+ 	ret = of_address_to_resource(np, 0, &mem);
+ 	if (ret)
+-		return ret;
++		goto unmap_out;
+ 
+ 	irq = platform_get_irq(ofdev, 0);
+-	if (irq < 0)
+-		return irq;
++	if (irq < 0) {
++		ret = irq;
++		goto unmap_out;
++	}
+ 
+ 	master = fsl_spi_probe(dev, &mem, irq);
+ 
+ 	return PTR_ERR_OR_ZERO(master);
++
++unmap_out:
++#if IS_ENABLED(CONFIG_FSL_SOC)
++	if (spisel_boot)
++		iounmap(pinfo->immr_spi_cs);
++#endif
++	return ret;
+ }
+ 
+ static int of_fsl_spi_remove(struct platform_device *ofdev)
+-- 
+2.25.1
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
-
---BOKacYhQ+x31HxR3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBlpHoACgkQJNaLcl1U
-h9A6dwf7BCkbfn2J782vqDfyi3SzKIocf69ce2iuNjxKNMuahUASIg7IfU95F9eA
-YiCx7GFQOC+2Eb8Sa6OJdK8vPo8aENlmu49iocCtDmegwpyzdTTfsbkwhGI7ZnKC
-7liaoKBZrR+1opkY9nszscG7+MFDOp/UU2ZjZeRwsM6igJb45nMUvRTVXmBmScAS
-lzAuNSogX3tAF81tXLyPuY7koJKBeDISU5lHWaQMZpGIw+Wfy/w0GQnDmiH2XndI
-n/jVYrN00NClOu/9W9acb+wQ/BZeN5VRgZW22LFowBoJkAb2tmIP6wog7ONrAdM9
-b6rU1wCMHzg0rHd758q66pOJ06BiUA==
-=HzaJ
------END PGP SIGNATURE-----
-
---BOKacYhQ+x31HxR3--
