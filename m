@@ -2,36 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAED351322
-	for <lists+linux-spi@lfdr.de>; Thu,  1 Apr 2021 12:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EA9351320
+	for <lists+linux-spi@lfdr.de>; Thu,  1 Apr 2021 12:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233858AbhDAKQr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S233962AbhDAKQr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Thu, 1 Apr 2021 06:16:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38342 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:38386 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233978AbhDAKQn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 1 Apr 2021 06:16:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E5C8260FDB;
-        Thu,  1 Apr 2021 10:16:42 +0000 (UTC)
+        id S233989AbhDAKQr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 1 Apr 2021 06:16:47 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 18AF160FDB;
+        Thu,  1 Apr 2021 10:16:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617272203;
-        bh=/4JZCYKJ34Ny/VV6useJAcsGbW6iKdWswaBA799Cid8=;
+        s=k20201202; t=1617272206;
+        bh=7SS/q28coQNtVo7mGOuXXjbKNHD/niJXvmB6B1NFGOk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=umkEuqdcVMsL1xl3v7RxGfsWELRqFtLqv0J+9n4Al2hNvyIHX9czktZeVA38tu/hC
-         aH8xI/2mGVyKgnZ5Dd+ert4ZQKNCnKZ8rOUNn1LkhQetXatcUtnPj7krqzUEIGM+yi
-         79dNk4Z/GDX5xfZkLJ4HFVskO5q+XLtWdPuuOV/iY00ddFjBEuBukPFvVVVXvn4exM
-         mvOovjYsR+c7perUJ9gM4/H93iMMAFuMUzfOJqidoojTRFOxBaFKXJ6qdHqimiv0Wl
-         a6i5xf5qg7bwd1Ut8VK//YHAQ49SRIRBwjPtH3qjs5NVk07zEocoD1OYF3w4EvM3JD
-         bAuE1G2eBffaA==
+        b=BQgyTylLlzHUDyMo1fE5jrfZaC9P/iA2N/W+5R40NmQfFi4U4fhm1n3MZtbq05Cr/
+         pMEExeGQijARnwmFRmrYf1CrgS3zfXR22te8w9haci0jOJ1FRZ9Ge1+W0GURHT9uNf
+         MbcxZL6C+mY9wQ6kiP0cMCWsI7z3WNTVNPGDwhnCFNwiaqh3FT9QvVGEBnPgmZTQWi
+         fgZmsXcBpi7ckJlzXY+o5xGYPTGJ6VwCpop5jWjb6N7WqpE/JLvsgvUryuSdTGPLeT
+         1xVmCfOXfsYxvekJUJCT+CieayOfPz3E6gK44CAvvnmS3H05OwFllrTmqy/PZoqqUG
+         7edMbN1A7eE6g==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH 1/3] spi: pl022: Drop custom per-chip cs_control
-Date:   Thu,  1 Apr 2021 11:16:14 +0100
-Message-Id: <161726952255.2486.14037510874353854208.b4-ty@kernel.org>
+To:     linux-spi@vger.kernel.org, Jay Fang <f.fangjian@huawei.com>
+Cc:     Mark Brown <broonie@kernel.org>, linuxarm@huawei.com,
+        huangdaode@huawei.com
+Subject: Re: [PATCH V3] spi: Add HiSilicon SPI Controller Driver for Kunpeng SoCs
+Date:   Thu,  1 Apr 2021 11:16:15 +0100
+Message-Id: <161726952255.2486.8853737882622064782.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210330164907.2346010-1-linus.walleij@linaro.org>
-References: <20210330164907.2346010-1-linus.walleij@linaro.org>
+In-Reply-To: <1616836200-45827-1-git-send-email-f.fangjian@huawei.com>
+References: <1616836200-45827-1-git-send-email-f.fangjian@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -39,11 +40,14 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 30 Mar 2021 18:49:05 +0200, Linus Walleij wrote:
-> Drop the custom cs_control() assigned through platform data,
-> we have no in-tree users and the only out-of-tree use I have
-> ever seen of this facility is to pull GPIO lines, which is
-> something the driver can already do for us.
+On Sat, 27 Mar 2021 17:10:00 +0800, Jay Fang wrote:
+> This driver supports SPI Controller for HiSilicon Kunpeng SoCs. This
+> driver supports SPI operations using FIFO mode of transfer.
+> 
+> DMA is not supported, and we just use IRQ mode for operation completion
+> notification.
+> 
+> Only ACPI firmware is supported.
 
 Applied to
 
@@ -51,12 +55,8 @@ Applied to
 
 Thanks!
 
-[1/3] spi: pl022: Drop custom per-chip cs_control
-      commit: 4179e576b56d82e5ce007b9f548efb90605e2713
-[2/3] spi: pl022: Use GPIOs looked up by the core
-      commit: 77f983a9df421fa00ca6a2f494dc79f8afca75a2
-[3/3] spi: pl022: Convert to use GPIO descriptors
-      commit: 8bb2dbf1e14d05e92a23e03bcbd1c27f7ee937f7
+[1/1] spi: Add HiSilicon SPI Controller Driver for Kunpeng SoCs
+      commit: c770d8631e1810d8f1ce21b18ad5dd67eeb39e5c
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
