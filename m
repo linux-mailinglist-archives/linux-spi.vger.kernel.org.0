@@ -2,36 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CD523575F8
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Apr 2021 22:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F273575FA
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Apr 2021 22:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356187AbhDGU1V (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 7 Apr 2021 16:27:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57116 "EHLO mail.kernel.org"
+        id S1356143AbhDGU1W (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 7 Apr 2021 16:27:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57188 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356143AbhDGU0x (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 7 Apr 2021 16:26:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B094361184;
-        Wed,  7 Apr 2021 20:26:42 +0000 (UTC)
+        id S1356306AbhDGU0z (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 7 Apr 2021 16:26:55 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 564DF611CC;
+        Wed,  7 Apr 2021 20:26:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617827203;
-        bh=BQl6kvC+0krlBqoptPSe7kRirbxGSA0fqvqnQDi+OnM=;
+        s=k20201202; t=1617827205;
+        bh=aBi+ztS1JcoQHX4AoXcwLhI2piOEHtrnfEvzNlbOAyE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fNo8+Roz+B4NTmBQZIaTjn4YNHaas/xal+nSx0iG6vmb3mX2SKKwj5IdDqTKyQjc5
-         su8u9LglcGhVWWJdjKW0ac7LdgCOGW16Ae07XCyNnWWACHAZFMIXeBYLPoezTfNTR1
-         dpWFdokZ5uBLeHE6IRSm2mlVKnly3j7QurthcFuQME5X0SMfmMunyDimY2lWViOI01
-         Gr/4EFEUjDTaul+x4to5mnH/9D2CmegmVmn4tzciOfjkVpbL7ZCmst2kn0OxBav3Lr
-         8qzizv1YA35jxRDo4btnvYqFkJtuH+NLKPI4yYNBBcmY42B8y9wX1/6PHl8m+FYNAK
-         XyYQI5bh3ar6g==
+        b=g2w3YlXmQEzhw8sGgU8CvwdVE9XXYLC2Umo4SQJHUTdkF4Ffc83AXYa7/o+yA38SY
+         Nhl67rL4IuJXLPdU72sIgazOtIPPYQFFVWZMUmH3BwEO+80E2ACj0bMyPvyaXhFlfT
+         wCpi3aRvwdipZQWrUsfCF1rbvO/nAvmZiKEE/Dj1Ee/7fBcDvYDe9AoQBHgouf7fXu
+         fMbRYh/f9gnOejaplgGrabJnX0yGOJ9UJ3mJRBzWLzLincHMuLZf8/R4wuS8tgo+p2
+         Cti/K/Iwu/cgSSryFIAz1sxr3BIGaM63ebbl1y6mn/u0m3JDgiFCbfHpmAvgpLa8B+
+         7OhmhT1nUOOzg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Tian Tao <tiantao6@hisilicon.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: orion: Use device_get_match_data() helper
-Date:   Wed,  7 Apr 2021 21:26:18 +0100
-Message-Id: <161782716302.42932.9036142611686148966.b4-ty@kernel.org>
+To:     Jay Fang <f.fangjian@huawei.com>, linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>, huangdaode@huawei.com,
+        sfr@canb.auug.org.au, linuxarm@huawei.com
+Subject: Re: [PATCH-next] spi: hisi-kunpeng: Fix Woverflow warning on conversion
+Date:   Wed,  7 Apr 2021 21:26:19 +0100
+Message-Id: <161782716302.42932.3548818185133947415.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <1617258288-1490-1-git-send-email-tiantao6@hisilicon.com>
-References: <1617258288-1490-1-git-send-email-tiantao6@hisilicon.com>
+In-Reply-To: <1617762660-54681-1-git-send-email-f.fangjian@huawei.com>
+References: <1617762660-54681-1-git-send-email-f.fangjian@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -39,8 +40,13 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 1 Apr 2021 14:24:48 +0800, Tian Tao wrote:
-> Use the device_get_match_data() helper instead of open coding.
+On Wed, 7 Apr 2021 10:31:00 +0800, Jay Fang wrote:
+> Fix warning Woverflow on type conversion reported on x86_64:
+> 
+>   drivers/spi/spi-hisi-kunpeng.c:361:9: warning: conversion from 'long unsigned int' to 'u32'
+>   {aka 'unsigned int'} changes value from '18446744073709551600' to '4294967280' [-Woverflow]
+> 
+> The registers are 32 bit, so fix by casting to u32.
 
 Applied to
 
@@ -48,8 +54,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: orion: Use device_get_match_data() helper
-      commit: 0e6521f13c297de32906ad7f691905803b2b2880
+[1/1] spi: hisi-kunpeng: Fix Woverflow warning on conversion
+      commit: 9a446cf97af70ee81ba177703b67ac4955a5edcc
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
