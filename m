@@ -2,72 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD6A5358365
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Apr 2021 14:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F61358398
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Apr 2021 14:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbhDHMim (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 8 Apr 2021 08:38:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54876 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231420AbhDHMil (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 8 Apr 2021 08:38:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D5AA261179;
-        Thu,  8 Apr 2021 12:38:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617885510;
-        bh=gI7IQRVG/KjeWjtFz9xAONjp1agRGcNgXg+fjKKuvb8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f2Og5f+hYv3mMI0NeZRXkjb+OOjv5r7Qb9I+ssY9vp5fUeJSttguhq2kWJYQJli9o
-         bCfu2ZQ/sJhYUxpe2u5JZgoalFf0uYsHnTkZ9owV8sa01Q8rtN59TB9PD7XiyFa9xm
-         8M/0Sf92f0DFekI70JByVHdLbt+A5jhpV1yiqraBKe1Li5OmTtVmnpE+faUIBAb5k8
-         SCVqmMCnHvpZgO29oIC6Tt5HjcZmxIHAWbraOn87Gj91HVGNPsLkBXbAEDF+Qyx85d
-         DlcBHYMRRCW5DwGoigJcmkqN+x0w6b7U1lOxerwlGyIa525OZPp1qS29Uw94aWov/o
-         IfEf6u16Izv4Q==
-Date:   Thu, 8 Apr 2021 13:38:12 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     linux-spi@vger.kernel.org
-Subject: Re: Default configuration for CS-to-SCK/SCK-to-CS delays
-Message-ID: <20210408123812.GB4516@sirena.org.uk>
-References: <20210408094548.o4uj6jzlcrnnacb4@skbuf>
+        id S231221AbhDHMsc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 8 Apr 2021 08:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229803AbhDHMsb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Apr 2021 08:48:31 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7C2C061760;
+        Thu,  8 Apr 2021 05:48:20 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id A213E22234;
+        Thu,  8 Apr 2021 14:48:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1617886097;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yyglUwoXCuz0ysTDi3YJvq4eALpeWh9ZYLQqhbUo0lE=;
+        b=eGMCh33PKQSr1IcC4SXPqEI87EmqQVMRbunXLG1RTcr9lRiR5UaXoGdiZKuegxfHu/1OCt
+        JcX6cLF9kglN4YtT4ev96AzJ9Xdo6IpwuVpf5bCWaGk9jVYqLYi43qbI+LFUlpTWhUlITL
+        HhV0t0QsGEoNoOGaWgBWjBZpm4FTYVU=
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RASg3xLB4tUQ4RcS"
-Content-Disposition: inline
-In-Reply-To: <20210408094548.o4uj6jzlcrnnacb4@skbuf>
-X-Cookie: Editing is a rewording activity.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 08 Apr 2021 14:48:16 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, Lokesh Vutla <lokeshvutla@ti.com>
+Subject: Re: [RFC PATCH 2/6] mtd: spi-nor: core: consolidate read op creation
+In-Reply-To: <20210311191216.7363-3-p.yadav@ti.com>
+References: <20210311191216.7363-1-p.yadav@ti.com>
+ <20210311191216.7363-3-p.yadav@ti.com>
+User-Agent: Roundcube Webmail/1.4.11
+Message-ID: <22d1042e061e355b0ddd122ef1228535@walle.cc>
+X-Sender: michael@walle.cc
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Am 2021-03-11 20:12, schrieb Pratyush Yadav:
+> Currently the spi_mem_op to read from the flash is used in two places:
+> spi_nor_create_read_dirmap() and spi_nor_spimem_read_data(). In a later
+> commit this number will increase to three. Instead of repeating the 
+> same
+> code thrice, add a function that returns a template of the read op. The
+> callers can then fill in the details like address, data length, data
+> buffer location.
+> 
+> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 
---RASg3xLB4tUQ4RcS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Thu, Apr 08, 2021 at 12:45:48PM +0300, Vladimir Oltean wrote:
-
-> that there is any universal formula. Hence the question: is there any
-> default configuration that the driver can perform in order to avoid
-> having to put it in device tree?
-
-Something broadly proportional to the clock rate/peroid for the bus is
-probably going to work most of the time.
-
---RASg3xLB4tUQ4RcS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBu+TMACgkQJNaLcl1U
-h9AzUwf+MbBrhRQyN+7n03z01X6oCMdNeMLv+ZZfyZN2LjfCutfUItRJFPq/P2Zc
-uYT84IZAkSnpcFzwKmpMqARFY1TaVyE4kXMyvqOAy+6aoIbKpMZB927Q6jZoLqfz
-d092qor9Wrp3tIgjUwO/ghP3+uoKjBnwY9DgpLABHIyONYx+eHr2BAUDNlJZXzRV
-Pp2OHmFrLs4CZuRp6FWwjFGthmnHGJVc7IiECO7cCOgFEEZQQl9yOAYsVu++wOxr
-wIE5u9spxcsZ7SG3RRXnJjh1Q38g7EXsNCclJaruJ0CNZlOoPhck5QLv0CAyW0cw
-2lou0XMpXZz5GMlAFINj+UK/xWUyzg==
-=ytDx
------END PGP SIGNATURE-----
-
---RASg3xLB4tUQ4RcS--
+Reviewed-by: Michael Walle <michael@walle.cc>
