@@ -2,40 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB9C35843F
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Apr 2021 15:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13B95358508
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Apr 2021 15:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbhDHNM1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 8 Apr 2021 09:12:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34610 "EHLO mail.kernel.org"
+        id S231639AbhDHNoR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 8 Apr 2021 09:44:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46284 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229741AbhDHNM1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 8 Apr 2021 09:12:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4745061164;
-        Thu,  8 Apr 2021 13:12:15 +0000 (UTC)
+        id S230467AbhDHNoQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 8 Apr 2021 09:44:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 29FAF61041;
+        Thu,  8 Apr 2021 13:44:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617887535;
-        bh=UkxxqNBKlJ55P8VMwpXP5sFNvpwUPW3grgDAns1lO+g=;
+        s=k20201202; t=1617889445;
+        bh=+0nlg2lxYHP/+WmaERtnHRADuls/CQxYMRQaiEsLuyg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WT3GUcizBOlv68oy+sFxNpCQJMxP770siIVhSiAa3PcSwRRCCt5UYCA+kqinyniyL
-         8dfoHqwNkzOAI0FWD23WqA5u2Oii5zAAKh0egy/xjx2RG9qd3PgdoSCRhaE6UXrO6u
-         TQg1/ArMGf7gTMoyXGa/LITy+gYNmv9gUOASkGboVdnaP7dL6KI6jCmIpY31Q0AbVD
-         OpiPkBO5Gkd1GP4FFr5BxTCBC7wnMkiFBHRX0nyFThv6j51E+x4mPkXno6jIKlwnIn
-         0qJUOWTar82hUo1BOwgoyqIdIA6fCsng39Mhf4yBaE2FjES5bIMwnxUeGCDgfv+Dq+
-         kX6yqUDjCxhWQ==
-Date:   Thu, 8 Apr 2021 14:11:57 +0100
+        b=srsGv4QDJ2YXtQ3dk+ip8ynfU9TQwj+XOJO0yeP1q/LRRrCala/MD5cB0so0Dzit5
+         GwDZ8HxCNp7deVknSUTaAw6CEeR47cirXBLZ9xM3SUwoNi4hvAG/K3o5hntkoic/UH
+         mfFlGsnPmaL33yk12y6Ecbu6luRfD0CS2kPX7exYxogrR6ob5CO4KZOCSwYXxAeTMC
+         DvtAo+aWbwRfmJByuWya175fC5dTY/agHSNyTTZCg87JLWUj/r6Ku6v/gCvF6DGakR
+         /P8JxrWlRNAI4q4lzmeRJIR6etcUMlpNQrYtpi3jvbycoDqqzee+6uNImojZBJ1mDb
+         tv7hgzrr2IZ/g==
+Date:   Thu, 8 Apr 2021 14:43:47 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     "William A. Kennington III" <wak@google.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Joel Stanley <joel@jms.id.au>
-Subject: Re: [PATCH] spi: Fix use-after-free with devm_spi_alloc_*
-Message-ID: <20210408131157.GD4516@sirena.org.uk>
-References: <20210407095527.2771582-1-wak@google.com>
+To:     Clark Wang <xiaoning.wang@nxp.com>
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: imx: add a check for speed_hz before calculating
+ the clock
+Message-ID: <20210408134347.GE4516@sirena.org.uk>
+References: <20210408103347.244313-1-xiaoning.wang@nxp.com>
+ <20210408103347.244313-2-xiaoning.wang@nxp.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oj4kGyHlBMXGt3Le"
+        protocol="application/pgp-signature"; boundary="3O1VwFp74L81IIeR"
 Content-Disposition: inline
-In-Reply-To: <20210407095527.2771582-1-wak@google.com>
+In-Reply-To: <20210408103347.244313-2-xiaoning.wang@nxp.com>
 X-Cookie: Editing is a rewording activity.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
@@ -43,38 +47,51 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---oj4kGyHlBMXGt3Le
+--3O1VwFp74L81IIeR
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Wed, Apr 07, 2021 at 02:55:27AM -0700, William A. Kennington III wrote:
+On Thu, Apr 08, 2021 at 06:33:47PM +0800, Clark Wang wrote:
+> When some drivers use spi to send data, spi_transfer->speed_hz is
+> not assigned. If spidev->max_speed_hz is not assigned as well, it
+> will cause an error in configuring the clock.
 
-> ------------[ cut here ]------------
-> WARNING: CPU: 1 PID: 660 at lib/refcount.c:28 refcount_warn_saturate+0x108/0x174
-> [<b0396f04>] (refcount_warn_saturate) from [<b03c56a4>] (kobject_put+0x90/0x98)
-> [<b03c5614>] (kobject_put) from [<b0447b4c>] (put_device+0x20/0x24)
->  r4:b6700140
+> Add a check for these two values before configuring the clock. An
+> error will be returned when they are not assigned.
 
-Please think hard before including complete backtraces in upstream
-reports, they are very large and contain almost no useful information
-relative to their size so often obscure the relevant content in your
-message. If part of the backtrace is usefully illustrative (it often is
-for search engines if nothing else) then it's usually better to pull out
-the relevant sections.
+For the case where the transfer speed is not set __spi_validate() will
+take the controller's maximum speed so the controller should just be
+able to unconditionally use the transfer's speed.  Your issue is
+therefore that the controllers are sometimes not setting a maximum
+speed which this doesn't seem to fix AFAICT?  I'd expect the driver to
+be able to work one out based on the input clock.
 
---oj4kGyHlBMXGt3Le
+>  struct spi_imx_devtype_data {
+>  	void (*intctrl)(struct spi_imx_data *, int);
+>  	int (*prepare_message)(struct spi_imx_data *, struct spi_message *);
+> -	int (*prepare_transfer)(struct spi_imx_data *, struct spi_device *,
+> -				struct spi_transfer *);
+> +	int (*prepare_transfer)(struct spi_imx_data *, struct spi_device *);
+>  	void (*trigger)(struct spi_imx_data *);
+>  	int (*rx_available)(struct spi_imx_data *);
+>  	void (*reset)(struct spi_imx_data *);
+
+This seems to be a fairly big and surprising refactoring for the
+described change.  It's quite hard to tie the change to the changelog.
+
+--3O1VwFp74L81IIeR
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBvAR0ACgkQJNaLcl1U
-h9DWxQf9FuZoEVNDQAMRserLJRVhn6/DB//c7KRBHDyxactPwrQJIEenVgurmpUs
-KhSp0yV0H4AuM71aorlegp0JlDX54jLmkvTm7FiM17/qA26eOlVQOZeRiJiP7eb2
-5gD/gumnUIHJZ/HMxP1WmFmxULLAChdlBrHw8Jje70JdageWSBVunvKhc8QqiKXb
-of6WO8XWjKH43Cc9yVxTFFNi1XoPy6TktCq6sMNaISoQ3dgNrXhsetEPCLquFopj
-BOw2ogS9fg7PJ7Y+QCgh5f/rnUQZvXSsCoL7XMki4bsOcWUdt9oUpRfiqnFG0H0L
-HZhG4AVVwDUh4lq89ljAXqjcAlD2wg==
-=sWeT
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBvCJIACgkQJNaLcl1U
+h9CADAf/XsYEv65PROf5zL0d1q8Q96nubfrHJIDDSDpsrbRMWbKAwEGxTBGWBT2F
+3+xODJnXIhu/V5sXJ/dkh8Q8nfNaxdY/aRQE6lkX29Iu6midNb1gG2xb6M/D4ztz
+KfaCiJpVwjs5iHpo6rLMwo/oAi7bFCfw2UFFSVbP4VZVkTqvZNJJL/RtSN2czbJa
+69FAma1YVxRQF37b2WDFN18gm7XYyyF6WXU/f2qNRerh8qm6LfupTqKljtpsuzf8
+AO6ottepa2ttjKxtb6/cHuLLHWym0ip0Rq1KGj5Jtcrkma/H/zH1859VJaicXKW9
+1g0Si9UTTT1LjADlzAz4YhhjsRdEKg==
+=kJw/
 -----END PGP SIGNATURE-----
 
---oj4kGyHlBMXGt3Le--
+--3O1VwFp74L81IIeR--
