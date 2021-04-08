@@ -2,77 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B32B83585CB
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Apr 2021 16:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0BB358A31
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Apr 2021 18:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbhDHOFx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 8 Apr 2021 10:05:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52714 "EHLO mail.kernel.org"
+        id S231676AbhDHQzP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 8 Apr 2021 12:55:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41100 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231901AbhDHOFw (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 8 Apr 2021 10:05:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D048461130;
-        Thu,  8 Apr 2021 14:05:40 +0000 (UTC)
+        id S231566AbhDHQzP (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 8 Apr 2021 12:55:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9F8B1610A2;
+        Thu,  8 Apr 2021 16:55:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617890741;
-        bh=c/qgNDwkcocIuy/eJhJGCaujFtddkd4baMyo7n1aums=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ns7+gXE2w1OZn9jYpdIJWjit9ZZNsYeSuJW0uCfDubH9WxaFHMVJu/sURWi8vPrIG
-         4TmLX//CxkxFWmTGiaWRe+PTju1ZXj9KhlpJVqWCB9UaivlPp4ogyv9yxzz8shn5kv
-         uPSEu6a5H0bmsZYK/MDxQS5qQvVtqifBt7W3JuRcpRbmF7ASA2cNA+zcwryyTThAZ+
-         nnxOtJUw/XW6Fy0WR55AURmpMMhkRNSEatsiwIwul4BexTwPkgzswndY6HWic5sGoM
-         6TuIfWoUs8RSsmFf6/7goM9nJ/HxPYdfoDBKjQcljR5sR4Tbos9NzVsNWTilzPEBJe
-         T1R/fLC3ktdPQ==
-Date:   Thu, 8 Apr 2021 15:05:23 +0100
+        s=k20201202; t=1617900904;
+        bh=n4AaOm047gic1xsQMxn0173v6IZNNZIRxBSp/Uz27Vo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hm4CBDp1664YIT+p/PYrmsyeSZxZfd+StRgQxdFVvHcqTHl5EslIyqBLnwuivfUyb
+         9jO0mA+x0fq/KoZQ+p56QYcbI6QaEQjesxAMMBk+J4Gs/T6agFx2347mioQS4/oxeK
+         02SVFZd5aNY0resv9e2cAQ05pj632aowFNWZYydLhWgnU5POrFjfcv1BmVMKbeCQik
+         XZtUtYbFYP4X9AGA2i70sCYoXLBi0RoHm+YPpoBlvo4K+Wr9a4I3XAtHv3HLkDs2BB
+         w/WS47DGfFegbIKNYFftGbpePaTxN5Ob0nDh07yh69rNE3rgUFSRvDuX7TgstRMkex
+         hhexHYj8bh65w==
 From:   Mark Brown <broonie@kernel.org>
-To:     Clark Wang <xiaoning.wang@nxp.com>
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: imx: add a check for speed_hz before calculating
- the clock
-Message-ID: <20210408140523.GH4516@sirena.org.uk>
-References: <20210408103347.244313-1-xiaoning.wang@nxp.com>
- <20210408103347.244313-2-xiaoning.wang@nxp.com>
+To:     kjlu@umn.edu, Dinghao Liu <dinghao.liu@zju.edu.cn>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] spi: spi-zynqmp-gqspi: Fix runtime PM imbalance in zynqmp_qspi_probe
+Date:   Thu,  8 Apr 2021 17:54:31 +0100
+Message-Id: <161790025317.17096.4281795778439539038.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210408092559.3824-1-dinghao.liu@zju.edu.cn>
+References: <20210408092559.3824-1-dinghao.liu@zju.edu.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dMyqICaxQaaUjrCL"
-Content-Disposition: inline
-In-Reply-To: <20210408103347.244313-2-xiaoning.wang@nxp.com>
-X-Cookie: Editing is a rewording activity.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, 8 Apr 2021 17:25:59 +0800, Dinghao Liu wrote:
+> When platform_get_irq() fails, a pairing PM usage counter
+> increment is needed to keep the counter balanced. It's the
+> same for the following error paths.
 
---dMyqICaxQaaUjrCL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Thu, Apr 08, 2021 at 06:33:47PM +0800, Clark Wang wrote:
-> When some drivers use spi to send data, spi_transfer->speed_hz is
-> not assigned. If spidev->max_speed_hz is not assigned as well, it
-> will cause an error in configuring the clock.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Please don't send new patches in reply to other threads, this makes it
-harder to follow what current versions of things are and causes problems
-for tools.
+Thanks!
 
---dMyqICaxQaaUjrCL
-Content-Type: application/pgp-signature; name="signature.asc"
+[1/1] spi: spi-zynqmp-gqspi: Fix runtime PM imbalance in zynqmp_qspi_probe
+      commit: a21fbc42807b15b74b0891bd557063e6acf4fcae
 
------BEGIN PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBvDaIACgkQJNaLcl1U
-h9DpFwgAhu6kubADli5uS9eG0/RYPI4U2CNpsUZ+kwYdfdoNvEecSr9Qi16J+BG3
-/UB7gUUx0vszDmJoECWgeuJjRw05iAJJgyZmmo6V3V+0AwcdhDTaNxAZOJy3eYUF
-Lt/R/Prz3KFS8PReOGJ6tlZWjZ3FdSF7nzyQBcqkHqGAyLEBgE6j/r/2oeY6KSps
-L7BXJrOHrzZL6K8ahmtD5cm69uIg3M74f21Un+ndGVoZf8m0XpZR16ivf0G1zfLg
-Ci+301tdOHk/UjbBQkhlVO80WQyr9U+e8daNV2WwxPLUdR4tY9ZvQxqWKM2/uNQa
-zTOJu2uF2otRJ8SDqrXs6MIlIDhJMA==
-=58bV
------END PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---dMyqICaxQaaUjrCL--
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
