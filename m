@@ -2,70 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF731357F16
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Apr 2021 11:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97232357FB6
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Apr 2021 11:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbhDHJ0Z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 8 Apr 2021 05:26:25 -0400
-Received: from mail.zju.edu.cn ([61.164.42.155]:45120 "EHLO zju.edu.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229618AbhDHJ0Y (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 8 Apr 2021 05:26:24 -0400
-Received: from localhost.localdomain (unknown [10.192.24.118])
-        by mail-app2 (Coremail) with SMTP id by_KCgAXEPgnzG5g5vTdAA--.47586S4;
-        Thu, 08 Apr 2021 17:26:03 +0800 (CST)
-From:   Dinghao Liu <dinghao.liu@zju.edu.cn>
-To:     dinghao.liu@zju.edu.cn, kjlu@umn.edu
-Cc:     Mark Brown <broonie@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: spi-zynqmp-gqspi: Fix runtime PM imbalance in zynqmp_qspi_probe
-Date:   Thu,  8 Apr 2021 17:25:59 +0800
-Message-Id: <20210408092559.3824-1-dinghao.liu@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: by_KCgAXEPgnzG5g5vTdAA--.47586S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7GFWkGw1ftF1xGr17Cr18uFg_yoW3Zrc_Cw
-        4DWrn3GFsY9wnrJ3WkKr98ZF9F9rZ8Xr4DXr4vqayavrWDArsxCay8AF1DCr47Z3yxCr4k
-        CrWqga97Ar13WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbc8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
-        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
-        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26rxl6s0DM28EF7xvwVC2z280
-        aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07
-        x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18
-        McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
-        1lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIE
-        Y20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfU5sjjDUUUU
-X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAg0JBlZdtTTcOgASs+
+        id S230397AbhDHJqD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 8 Apr 2021 05:46:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46050 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231509AbhDHJqD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Apr 2021 05:46:03 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C588BC061761
+        for <linux-spi@vger.kernel.org>; Thu,  8 Apr 2021 02:45:50 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a7so1969833eju.1
+        for <linux-spi@vger.kernel.org>; Thu, 08 Apr 2021 02:45:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=LB/KmcYLjZI/oCsVp6U+bzgnGB9mkbdvneRbUEvlMZ8=;
+        b=a0dZv/+mmNPBMXkmtFv0vLM+bX1fDbelRyMg2yllEjuCCgLHXJwagSdZ5UHVTNZiAZ
+         Oauqtjp/Dis+/66ASg7dKycF/2g2WaMuBtc4gfNI/1YzYkTaxrzdtu+H0MI3IYWDsSEl
+         dRmte7a066M3R2amHhNtdwMmFC7iGFS3tIBxJ31YgFxHArikHRmJY5XrZ4+QzUarm2TJ
+         TqTinRy8BqBi6x9i/150CWnc623YnJjWs+dQtqWhfZPN3xb2Jg5QpFAoyC2mfGr8cDz2
+         EqlZ+Duqzo1PvGU8f/OZ3JYwQqDAHaFBNmo45H9nYyPqFn2cQ951PD9oEiXzRufOz78a
+         LJ4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=LB/KmcYLjZI/oCsVp6U+bzgnGB9mkbdvneRbUEvlMZ8=;
+        b=Spb1acWZjj3QmxFy79SZOAuIf9fiF1GrANMi6SfnP/XcBa66MQ1GO75AbxeOTpv8bn
+         L5pKztZnF10TDHULnFAxhe7GryxRHFTKAxKN0qoptv7R1FzUY0tXcMF/4eGMmG++PbnG
+         iCNf54Ycex11FUjtBhhvczRvYHyVm/8udAasDnKyhIAZOmg1gNITrdC3jrqMOBE9x/EU
+         /OhaeUC43vcvYiDBfYx+uNX4I4tY0pVvhhvSvU9xq/A9QTWVxFKpMZevu/xcgkgEjhQf
+         XhP+xLPu8s/8Rg0CN389GypBwv0FWZwJFPDXaVPZ0ImUmc/K3qR+4SAYExfHOrJdNLm9
+         Fmvw==
+X-Gm-Message-State: AOAM530gsQtHlN/9w2EhLxk2AEiTCI5Pqb17seIIAbTKhv37luiQ2Axp
+        CnAvSBEXZvXgGB7VlPzraR2B7Xoir1RlwA==
+X-Google-Smtp-Source: ABdhPJxUGQDSfuXm9V6OvKQ/901hW/dJmHjvQbioul2Ggb92Qq5si/N3Yzknr8WNVyvLWr3+7msdJA==
+X-Received: by 2002:a17:906:2704:: with SMTP id z4mr8972578ejc.137.1617875149564;
+        Thu, 08 Apr 2021 02:45:49 -0700 (PDT)
+Received: from skbuf (5-12-16-165.residential.rdsnet.ro. [5.12.16.165])
+        by smtp.gmail.com with ESMTPSA id b13sm3175894edw.45.2021.04.08.02.45.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Apr 2021 02:45:49 -0700 (PDT)
+Date:   Thu, 8 Apr 2021 12:45:48 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org
+Subject: Default configuration for CS-to-SCK/SCK-to-CS delays
+Message-ID: <20210408094548.o4uj6jzlcrnnacb4@skbuf>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-When platform_get_irq() fails, a pairing PM usage counter
-increment is needed to keep the counter balanced. It's the
-same for the following error paths.
+Hi,
 
-Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
----
- drivers/spi/spi-zynqmp-gqspi.c | 1 +
- 1 file changed, 1 insertion(+)
+The spi-fsl-dspi.c driver has two device tree properties per child node:
+- fsl,spi-cs-sck-delay: a delay in nanoseconds between activating chip
+  select and the start of clock signal, at the start of a transfer.
+- fsl,spi-sck-cs-delay: a delay in nanoseconds between stopping the clock
+  signal and deactivating chip select, at the end of a transfer.
 
-diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
-index c8fa6ee18ae7..95963a2de64a 100644
---- a/drivers/spi/spi-zynqmp-gqspi.c
-+++ b/drivers/spi/spi-zynqmp-gqspi.c
-@@ -1197,6 +1197,7 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
- 	return 0;
- 
- clk_dis_all:
-+	pm_runtime_get_noresume(&pdev->dev);
- 	pm_runtime_set_suspended(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
- 	clk_disable_unprepare(xqspi->refclk);
--- 
-2.17.1
+Some people are complaining about the fact that when these properties
+are missing, the DSPI controller will use zero delay values with that
+specific SPI slave. This is particularly relevant when the SPI slave
+driver is spidev, so you don't know exactly what is connected.
 
+I tried to search for "delay" under drivers/spi/, but I am not exactly
+edified as to what other drivers do to solve this problem. For example,
+a SPI-connected Ethernet switch I am working with does explicitly say in
+the datasheet that "after the CS signal has been asserted at the
+beginning of an SPI read or write operation, the SPI clock signal
+(SCK) must be stable for at least 0.5 x t_clk before being asserted".
+Many more peripherals may have similar requirements, but I'm not sure
+that there is any universal formula. Hence the question: is there any
+default configuration that the driver can perform in order to avoid
+having to put it in device tree?
+
+Thanks,
+-Vladimir
