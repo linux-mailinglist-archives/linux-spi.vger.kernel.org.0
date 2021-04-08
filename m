@@ -2,78 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF78358A38
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Apr 2021 18:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31674358DE8
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Apr 2021 21:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232395AbhDHQzb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 8 Apr 2021 12:55:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41350 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231752AbhDHQzY (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 8 Apr 2021 12:55:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E5DBA610CB;
-        Thu,  8 Apr 2021 16:55:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617900913;
-        bh=rbTuItiTLFrD2UbPN0IdtgNS9mA9OgOsKwcubsBPYNs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XNZsOZPmvJkKgwtcS2YKhgyARl9pGvz7IJbNYMHlheeG0YM1oNpXaJoS3xk1nSZ/L
-         17+d8VA4EhI7yGma93bBPe8zK7cb4KBSHOsXA1hWKWoMKR0Y2GUN9VU+sppPFhG9M6
-         HmtKSNLkXiCsnyx12qrZ3ScqZifFRm+387PGcDHrSnqbgJ1u8iFH5IO4A/rWQ5Gkzi
-         v8s5S/JnrVI9WpUQdQc7NJ1wAZxneEIU6F0hxqX/xP14mGs9ENq6ZUkECiUMPEzuNk
-         IeJMxjd82Roq4zna+zhNoCUyxo7dai2z7dSJawUaSjatIZCNlNd2sJwPRNcqErA/RR
-         tEQBzYdWKbrcQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     "William A. Kennington III" <wak@google.com>
-Cc:     Mark Brown <broonie@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: Fix use-after-free with devm_spi_alloc_*
-Date:   Thu,  8 Apr 2021 17:54:34 +0100
-Message-Id: <161790025317.17096.2046216267474815618.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210407095527.2771582-1-wak@google.com>
-References: <20210407095527.2771582-1-wak@google.com>
+        id S232467AbhDHT5j (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 8 Apr 2021 15:57:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232218AbhDHT5j (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Apr 2021 15:57:39 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6B5C061760;
+        Thu,  8 Apr 2021 12:57:27 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id j4-20020a05600c4104b029010c62bc1e20so1825608wmi.3;
+        Thu, 08 Apr 2021 12:57:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=pHid7b1osF0SpTWtp0Ym0Sv/8aucsroZP/wDvU5qRUY=;
+        b=SDD77RRxaFIx6pnvEz8lN7D1kL7Sn5GoTa3dNZUubUCb93BqP4nTqhhci6lRfoEsII
+         SxRKvuOgtDblZRWYQfC0QN/y+W+HLEVGTceTdV51m+4D4jo96HRbsA9TsMnOBwC4w4LG
+         XVTDxyKDLhfJTf9jHbjTCm0BVq1Vz0pEedbrCWuqThKbw7HAftXTYa26QHkwsp5ab4JA
+         gwsxSali9y8hG7caeSHE4ObRAsIuISWdLglO2MFIgik5JdIsRhYY9TrZQ7qbPM/BX4kH
+         YXvYd9Xxf1lj3aL57hC35j7aasE1eb2L6ltfO2Ecwk9Nyd7afkvx0AONrJvTNGF+bSLs
+         wJYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=pHid7b1osF0SpTWtp0Ym0Sv/8aucsroZP/wDvU5qRUY=;
+        b=QLW7tLSIluQ+iQhG/BTnZb1ClRMOFU1MCF/GLvqHUrvLSLZDomXhqNLiLj3x9JSVIa
+         V5LwieypOxJDF+/aJdKaXMpGHd/nsgvZqLDXHIKFjyZ6TP1Ph6zFG3AQ9IYWwtKCvlPz
+         Fi1qGGjfyc8GgfNtDEEP0LaV53tMpYWueuE171IR4MoHjq2NDGXW2VD8N1nwDJac91+V
+         LoGC8JNy3NsUJMScsjzpiAWfFjKhW6Sun67ue3eFoCemwBajIuJzZV1u1N38SaRtvYVd
+         PhT8F5Yfx0ISqRDScf4FZ3FXoPkDXaJNKGalLMYvYJbh0YbOp2+FQedWGq/Yyjipszch
+         moUw==
+X-Gm-Message-State: AOAM531Tg6klLCxM6yXe6IQkVkInod+3e4CC4dJpkbCueaRaAZb0PxDO
+        nEWcCS7TI1vMQ9Z452Lqw3Y=
+X-Google-Smtp-Source: ABdhPJwumd9NyP++HS8c5TOLkkrMEBeTlEaV4aIyq1qCaTKCVHgdihqEgAPi3I5S0vnHubKWaorvIQ==
+X-Received: by 2002:a1c:7409:: with SMTP id p9mr9787834wmc.153.1617911846245;
+        Thu, 08 Apr 2021 12:57:26 -0700 (PDT)
+Received: from LEGION ([39.46.7.73])
+        by smtp.gmail.com with ESMTPSA id j30sm480579wrj.62.2021.04.08.12.57.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Apr 2021 12:57:25 -0700 (PDT)
+Date:   Fri, 9 Apr 2021 00:57:18 +0500
+From:   Muhammad Usama Anjum <musamaanjum@gmail.com>
+To:     Mark Brown <broonie@kernel.org>, Tian Tao <tiantao6@hisilicon.com>,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     musamaanjum@gmail.com, kernel-janitors@vger.kernel.org,
+        colin.king@canonical.com, dan.carpenter@oracle.com
+Subject: [PATCH] spi: orion: set devdata properly as it is being used later
+Message-ID: <20210408195718.GA3075166@LEGION>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 7 Apr 2021 02:55:27 -0700, William A. Kennington III wrote:
-> We can't rely on the contents of the devres list during
-> spi_unregister_controller(), as the list is already torn down at the
-> time we perform devres_find() for devm_spi_release_controller. This
-> causes devices registered with devm_spi_alloc_{master,slave}() to be
-> mistakenly identified as legacy, non-devm managed devices and have their
-> reference counters decremented below 0.
-> 
-> [...]
+If device_get_match_data returns NULL, devdata isn't being updated
+properly. It is being used later in the function. Both devdata and
+spi->devdata should be updated to avoid NULL pointer dereference.
 
-Applied to
+Addresses-Coverity: ("NULL pointer dereference")
+Fixes: 0e6521f13c2 ("spi: orion: Use device_get_match_data() helper")
+Signed-off-by: Muhammad Usama Anjum <musamaanjum@gmail.com>
+---
+ drivers/spi/spi-orion.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+diff --git a/drivers/spi/spi-orion.c b/drivers/spi/spi-orion.c
+index d02c5c9def20..34b31aba3981 100644
+--- a/drivers/spi/spi-orion.c
++++ b/drivers/spi/spi-orion.c
+@@ -676,7 +676,8 @@ static int orion_spi_probe(struct platform_device *pdev)
+ 	spi->dev = &pdev->dev;
+ 
+ 	devdata = device_get_match_data(&pdev->dev);
+-	spi->devdata = devdata ? devdata : &orion_spi_dev_data;
++	devdata = devdata ? devdata : &orion_spi_dev_data;
++	spi->devdata = devdata;
+ 
+ 	spi->clk = devm_clk_get(&pdev->dev, NULL);
+ 	if (IS_ERR(spi->clk)) {
+-- 
+2.25.1
 
-Thanks!
-
-[1/1] spi: Fix use-after-free with devm_spi_alloc_*
-      commit: 794aaf01444d4e765e2b067cba01cc69c1c68ed9
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
