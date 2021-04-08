@@ -2,126 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A37357D9A
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Apr 2021 09:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 720D3357DB2
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Apr 2021 09:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbhDHHvA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 8 Apr 2021 03:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
+        id S229510AbhDHH4m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 8 Apr 2021 03:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbhDHHvA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Apr 2021 03:51:00 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1C7C061760
-        for <linux-spi@vger.kernel.org>; Thu,  8 Apr 2021 00:50:49 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id w28so2425249lfn.2
-        for <linux-spi@vger.kernel.org>; Thu, 08 Apr 2021 00:50:49 -0700 (PDT)
+        with ESMTP id S229505AbhDHH4l (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 8 Apr 2021 03:56:41 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68A7C061761
+        for <linux-spi@vger.kernel.org>; Thu,  8 Apr 2021 00:56:29 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id t140so811400pgb.13
+        for <linux-spi@vger.kernel.org>; Thu, 08 Apr 2021 00:56:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6U45pNdM0qN4a1O10k6aqNmRvSwq7HC5E/CC+/6kbdY=;
-        b=XRR7rBXeebmDkxmYIYN5rgebwUcGncYOZ/PtkC0j6YsuR86lapKeh9k4XFXaGaij0Q
-         Mtg8Odet2Ylc4ejK8w+BGU5HatAvS9MHUSI3u7WeBzvWbCZ1rFUYMKzZ228J7+iAPdGE
-         hxWZQ6/neNSpnTXs8BnkGCPJYEuP8ex/ksnjMmD2QP1mUEt/kuSsiLyHNLh9hT7Gcq2i
-         6qK6Q1t7b46s0onC+usETpAMoEvkmgCm5W/cM4GR7MjW2Wa03G4Oz0490Q+FWMIy/hoJ
-         X4Krso3ijAvumBIbYB9FL53tp6lpfji0dhBaGETduQsqJ4ssQr3rL56z/NDDxwU39pQz
-         rG3A==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=eSK2w9BVJvJYDrd5UzN4wEBAv/GM73hHz2rbX7pLLqI=;
+        b=Q9bfFEb70FfiLCpkb9T3eXrMDKOvuk06KTRvnxK1OiZzrlECSDErbl08YC2algNRir
+         vu0NmpD6LoyTbTarS906C3q4Rb0nj9YiOlIdKaxWE5WLuiZwGo7NfOn68tetazVJ1N5t
+         7jzv9abpNNovEUf5ZG90nyg+0RS7kkrBtNSz5yX5Jqn4c0x2DxXEaiMi5uHqKiDQ1t9n
+         PGeMhSip82kKLHngwdE8N14QrrOshqv1Fh8n7BaqWSdZa8zHTUeTswqf4yybgRJYEmyL
+         QJmb0LEHR8neoS06IxyHBsAxP9fatqbpP+ebs94BkJ4eNRNAP7MkTnZT/cxUL1rs72kH
+         O8TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6U45pNdM0qN4a1O10k6aqNmRvSwq7HC5E/CC+/6kbdY=;
-        b=sS27P683Fm04IA9J769ifgMqdy3s8BHaMWRYoAmaSLC51ddeg1IVvlxj/j8Hp5EHRQ
-         i33zzSNBnA/WC1+Gbqc8JtvLdzVcCVYqgr2tvP5kTLsax2YazGG2rUguaU1cfWKBO2xd
-         NmC9V4UV1uHSk0sE+XFnNmipbUY4V6nLdR0GbanKNqcLnTiluEVHa04WcDcQHbeLB2ZD
-         /6WggqdJLQhYwxgRCtEMpwvgNQtzEQ2B/jKdbI2MmOdr8QCpmF1DPjgkgYOyQqOwynCK
-         UM2FTHLAPYswD+CaBlElW8pIDWBr2wFJsdDmbRFnKndH1xY0Br2PU5op2QtfLVW62RJk
-         ITzA==
-X-Gm-Message-State: AOAM530bmMehRtZFskW/LmUW8gVgP/JIJg90YpP1QgR/UeVab/LVu9EZ
-        Q7aJ+DT2kAHpVj9D8iXKHOGUTw==
-X-Google-Smtp-Source: ABdhPJxschS7sHftq6y4Nq9zxIS/tz3Z1oIIE6idpIyBg0/cTsqk75eWFELbJzLgDos498C6xETIAw==
-X-Received: by 2002:a05:6512:1102:: with SMTP id l2mr5243471lfg.501.1617868247771;
-        Thu, 08 Apr 2021 00:50:47 -0700 (PDT)
-Received: from localhost.localdomain (c-14cb225c.014-348-6c756e10.bbcust.telenor.se. [92.34.203.20])
-        by smtp.gmail.com with ESMTPSA id x13sm2777709ljj.4.2021.04.08.00.50.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Apr 2021 00:50:47 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=eSK2w9BVJvJYDrd5UzN4wEBAv/GM73hHz2rbX7pLLqI=;
+        b=itvvgh38/ZvfkLhUInwAQ3B9cDLzwN4qgnZnRLi/ru0eKzsvqDmlm9x5ZOogPP3Z+U
+         Im2XLetCSRpFvlY8rej1i8D5A6Vb9cbuPxlp90CBXm0t2W8Vi8c0gdVSvn8gmMemdzW5
+         U50Sf1p2OZdXkB9CqyOphsqZg78Ubq7inopIYWE8HHU+ZbFL7YiCjsilcotwwTg3qJzd
+         dYXFtwK86aB57R8iOG+ClofvM1SqEQalA9qoiAgyeYMzKghGFc7hVENSXqTsx+AXrRP3
+         CkxfqHFvxhOCYpcO9TGrdtAFjpgTLhvTCQcAw0U6SN4Axn9HzWzyz95TovYt5HewoKLO
+         DRDA==
+X-Gm-Message-State: AOAM532TVHcNd/bxk0O+mrEqHzB0NYPqAZIHufWNEwiSsbt8I97dFXij
+        qtjPmV50R+nSvFfezQcFstgRjQ==
+X-Google-Smtp-Source: ABdhPJx74eqYozeBr+SBdkHjbAEzrINil3AnraPtpdCwe5uU1Uyln1gu9H2wDrpw0dOIFzNflgVOpA==
+X-Received: by 2002:a63:e5d:: with SMTP id 29mr6824327pgo.450.1617868589409;
+        Thu, 08 Apr 2021 00:56:29 -0700 (PDT)
+Received: from localhost ([136.185.154.93])
+        by smtp.gmail.com with ESMTPSA id k69sm11252936pga.45.2021.04.08.00.56.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 08 Apr 2021 00:56:28 -0700 (PDT)
+Date:   Thu, 8 Apr 2021 13:26:26 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
         Viresh Kumar <vireshk@kernel.org>,
         Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] ARM/spi: spear: Drop PL022 num_chipselect
-Date:   Thu,  8 Apr 2021 09:50:45 +0200
-Message-Id: <20210408075045.3435046-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.29.2
+Subject: Re: [PATCH] ARM/spi: spear: Drop PL022 num_chipselect
+Message-ID: <20210408075626.gkbbs3wd3bme3vgd@vireshk-i7>
+References: <20210408075045.3435046-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210408075045.3435046-1-linus.walleij@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-A previous refactoring moved the chip select number handling
-to the SPI core and we missed a leftover platform data user
-in the ST spear platform. The spear is not using this
-chipselect or PL022 for anything and should be using device
-tree like the rest of the platform so just delete the
-offending platform data.
+On 08-04-21, 09:50, Linus Walleij wrote:
+> A previous refactoring moved the chip select number handling
+> to the SPI core and we missed a leftover platform data user
+> in the ST spear platform. The spear is not using this
+> chipselect or PL022 for anything and should be using device
+> tree like the rest of the platform so just delete the
+> offending platform data.
+> 
+> Cc: Viresh Kumar <vireshk@kernel.org>
+> Cc: Shiraz Hashim <shiraz.linux.kernel@gmail.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> Mark: please apply this as a fix to the SPI tree unless there
+> are protests.
 
-Cc: Viresh Kumar <vireshk@kernel.org>
-Cc: Shiraz Hashim <shiraz.linux.kernel@gmail.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-Mark: please apply this as a fix to the SPI tree unless there
-are protests.
----
- arch/arm/mach-spear/spear320.c |  2 --
- arch/arm/mach-spear/spear3xx.c | 10 ----------
- 2 files changed, 12 deletions(-)
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-diff --git a/arch/arm/mach-spear/spear320.c b/arch/arm/mach-spear/spear320.c
-index 0958f68a21e2..926d5a243238 100644
---- a/arch/arm/mach-spear/spear320.c
-+++ b/arch/arm/mach-spear/spear320.c
-@@ -195,14 +195,12 @@ static struct pl022_ssp_controller spear320_ssp_data[] = {
- 		.dma_filter = pl08x_filter_id,
- 		.dma_tx_param = "ssp1_tx",
- 		.dma_rx_param = "ssp1_rx",
--		.num_chipselect = 2,
- 	}, {
- 		.bus_id = 2,
- 		.enable_dma = 1,
- 		.dma_filter = pl08x_filter_id,
- 		.dma_tx_param = "ssp2_tx",
- 		.dma_rx_param = "ssp2_rx",
--		.num_chipselect = 2,
- 	}
- };
- 
-diff --git a/arch/arm/mach-spear/spear3xx.c b/arch/arm/mach-spear/spear3xx.c
-index 8537fcffe5a8..f83321d5e353 100644
---- a/arch/arm/mach-spear/spear3xx.c
-+++ b/arch/arm/mach-spear/spear3xx.c
-@@ -30,16 +30,6 @@ struct pl022_ssp_controller pl022_plat_data = {
- 	.dma_filter = pl08x_filter_id,
- 	.dma_tx_param = "ssp0_tx",
- 	.dma_rx_param = "ssp0_rx",
--	/*
--	 * This is number of spi devices that can be connected to spi. There are
--	 * two type of chipselects on which slave devices can work. One is chip
--	 * select provided by spi masters other is controlled through external
--	 * gpio's. We can't use chipselect provided from spi master (because as
--	 * soon as FIFO becomes empty, CS is disabled and transfer ends). So
--	 * this number now depends on number of gpios available for spi. each
--	 * slave on each master requires a separate gpio pin.
--	 */
--	.num_chipselect = 2,
- };
- 
- /* dmac device registration */
 -- 
-2.29.2
-
+viresh
