@@ -2,81 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7996D35A1BE
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Apr 2021 17:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D4F35A2FD
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Apr 2021 18:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233915AbhDIPL7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 9 Apr 2021 11:11:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53708 "EHLO mail.kernel.org"
+        id S234102AbhDIQXb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 9 Apr 2021 12:23:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59734 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233974AbhDIPL7 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 9 Apr 2021 11:11:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8B9BE610A7;
-        Fri,  9 Apr 2021 15:11:45 +0000 (UTC)
+        id S233864AbhDIQXb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 9 Apr 2021 12:23:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5CE8C6105A;
+        Fri,  9 Apr 2021 16:23:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617981106;
-        bh=iJlwV9Pd9Pl4GnE2mK4mEArko08tDPv9FW2tNL2mixI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wqwq1UwhOj30ehy1LQErHVuUZMMZWGdfg3vkTSnd7uAkj9nJe1IX+Woh/Gi9r+JO6
-         n3MKswAdWa9gW9R0tdFf+IN/1m4Mfto6lMy+5sUPx4aFllTmufWaQfUVa0SF6gOec6
-         8u1IRACBp9Sp362cYcWpDeKqiKxVjuHXQt3SmeSakLwWg5qv1xwbB751ImkCMyAbb9
-         tDdL4ObBPDQL9uxggih2+dl5zyIQV1WebGLBVftY/3b6Odmw+TO6zZ3meVrAzU6EpI
-         SNyXxeKXJoHag3BIcz02VfHlkkskoaRrHZQXJ8FykzKOj6mrYKJA4xOePu1lOn2dJX
-         vYGzSdW+bQz5A==
-Date:   Fri, 9 Apr 2021 16:11:27 +0100
+        s=k20201202; t=1617985397;
+        bh=AtMxuAc0rwMUJsKBsJmtUeCRyl8bAabZIwT9Uehu7Bc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=LIMfGDncmDxz4CzhaLYP43ccv+bf8F20uwitMuVe1kIpdOtT3mHlkgMqReY0G55SW
+         wRBQXDInzUSPqQkzTecUsTnlr9TTA8L+wJVasrdTGJv5+LonihTyx+p8lQ5N2Bvk+v
+         H6rFjlNsXq72HKwOylEX4lX//0JemTP0pV2Tu+iBxzJieoCR8mQiu+dg3B0//XmJqF
+         VslgB9AndrumMls3xqyZVx6FqWyOjhLiYQ23kXoX3pecDxlQSeSjwJYNiA976+Jid5
+         UHH7oceyclz7ip9K0pG8+0C0AidLFKcwwLtlvDX7y5h/Wl1kNm8/cIqFeTFt6++YtA
+         0aOL1p2WGriyQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     Yicong Yang <yangyicong@hisilicon.com>, linux-spi@vger.kernel.org,
-        prime.zeng@huawei.com, linuxarm@huawei.com
-Subject: Re: [PATCH 2/2] spi: hisi-sfv-v3xx: drop unnecessary ACPI_PTR and
- related ifendif protection
-Message-ID: <20210409151127.GC4436@sirena.org.uk>
-References: <1617881505-51552-1-git-send-email-yangyicong@hisilicon.com>
- <1617881505-51552-3-git-send-email-yangyicong@hisilicon.com>
- <20210408135155.GG4516@sirena.org.uk>
- <26fad983-9e06-333c-c1b9-332c6acfddfa@hisilicon.com>
- <3869ef5f-eda6-907d-7565-29ae0bbf5dd0@huawei.com>
+To:     Muhammad Usama Anjum <musamaanjum@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>, kernel-janitors@vger.kernel.org,
+        colin.king@canonical.com, dan.carpenter@oracle.com
+Subject: Re: [PATCH] spi: orion: set devdata properly as it is being used later
+Date:   Fri,  9 Apr 2021 17:22:39 +0100
+Message-Id: <161798356987.48466.7574385472200837460.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210408195718.GA3075166@LEGION>
+References: <20210408195718.GA3075166@LEGION>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p2kqVDKq5asng8Dg"
-Content-Disposition: inline
-In-Reply-To: <3869ef5f-eda6-907d-7565-29ae0bbf5dd0@huawei.com>
-X-Cookie: I'm shaving!!  I'M SHAVING!!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, 9 Apr 2021 00:57:18 +0500, Muhammad Usama Anjum wrote:
+> If device_get_match_data returns NULL, devdata isn't being updated
+> properly. It is being used later in the function. Both devdata and
+> spi->devdata should be updated to avoid NULL pointer dereference.
 
---p2kqVDKq5asng8Dg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Fri, Apr 09, 2021 at 03:25:49PM +0100, John Garry wrote:
-> On 09/04/2021 08:17, Yicong Yang wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > yes. we're not using any acpi function in this driver. What ifdef macro
-> > and ACPI_PTR() protects is struct acpi_device_id, which is defined in
-> > mod_devicetable.h rather than acpi.h. It can be built when ACPI=n.
+Thanks!
 
-> I asked the exact same thing, so another version with an updated commit
-> message with this info could be useful. Mark's call, though.
+[1/1] spi: orion: set devdata properly as it is being used later
+      commit: e980048263ba72dcdbbf45d59e84c02001340f75
 
-Yes, please.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---p2kqVDKq5asng8Dg
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBwbp4ACgkQJNaLcl1U
-h9DZUgf/fbruyrERXt28skjKZpqslXWafOy4UPenI/sVpOZfRFPdRIZdFuWShl1V
-nBbAfnAMxBoXJKupgViuXQuAx7WwvuXYcEn2Vud+HzRbbuvbXJMYqCj4sgT7tSFZ
-5cwNGl16BHa/EPomvSYvL35CIJ3IfsSMC08gYG7zo0b9zIdS7B//ueaYLOeXkm7t
-1QB/Rx9APs/wiPnlzAKSpgXgLRBWesLbb2dzI4rxL+xDKPucWdcRmdXzZx2wqjh/
-L/6crDvqux4yY5koC6aKsBQR8DbGcJoJXq4yNXYkNEEZ0H1Z0qiHGFIbbUa4CF1G
-bT4X8TU5Aalsim+z1e0uMJs9aEINJw==
-=QhXN
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---p2kqVDKq5asng8Dg--
+Thanks,
+Mark
