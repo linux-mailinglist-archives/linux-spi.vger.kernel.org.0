@@ -2,39 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8112235A304
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Apr 2021 18:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1FD35A306
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Apr 2021 18:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234084AbhDIQXk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 9 Apr 2021 12:23:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59904 "EHLO mail.kernel.org"
+        id S234150AbhDIQXs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 9 Apr 2021 12:23:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59952 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234120AbhDIQXj (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 9 Apr 2021 12:23:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D4535610A7;
-        Fri,  9 Apr 2021 16:23:25 +0000 (UTC)
+        id S234000AbhDIQXm (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 9 Apr 2021 12:23:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8E59A6103E;
+        Fri,  9 Apr 2021 16:23:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617985406;
-        bh=pa2AjAoluq/aoXrCWtDRuMHjAZVPUHpKBrOfayVzouk=;
+        s=k20201202; t=1617985409;
+        bh=x47F8ElZJRgnbWvKxg8ERBb96pRnIYASca71WTeGtXI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G5NVjfM2LsLT8CzeBbO8qfTYWmQaOFItqCV2INyJHkuY4FjxWAkTwUhmdPz9mjFDM
-         YfVVLnSyLKHe/PAAYNlIYGpN42tI+DdfBGtT5ytbGwcdApaFDo6zrDKb1scU26B3Bp
-         7y0+wAKLYaHs0J5JbMBISRzus9W3U+RgWkrDJnoLodNPtAeJLugxe59UVEjzAmslD7
-         JqUnm0L/T7geeHUTZ0+tMXlrdXoP+7VglLuAcy9p2gaB7houOqnPe7OnQtakjiJgrt
-         ppn8/l3MDmdOcPrqLnnzNcgsYmgY5l9uVRZCr49k/1odFReqegaueEiM/oTTNMrDV5
-         6yj72O+Qz2MoA==
+        b=cC0degoThvSLalgM+klx5DuN69+2qD7e1J2gBxfJhGzDi13E500SWex+YvRjp67yk
+         CGlCezYINyf+SS7jIfeEa/R2uyyOl9hbZj96UtxHwnE/2MJ8JGuyXUU+g2jgUDa2RI
+         FSnIySnwywIEiLMfSL6wD1EY4SR5zKbTubrN/rYum3LnGcOsRlplr407tuawSDaYqB
+         hhffgKZg+ikCCysgd80ljrKTuVXZ0a/whmMwWJq/Z4NdndqxqsVSlm4OiDfdlY+lRu
+         qKOvBLsKwaIDCAHLB4fvUlnzE7z69OvhLj2NMVQb4SBQ8u7gnexOsS/Az9cOTBTggQ
+         Sos4zBt4EIOdQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     s.hauer@pengutronix.de, Clark Wang <xiaoning.wang@nxp.com>,
-        shawnguo@kernel.org, festevam@gmail.com
-Cc:     Mark Brown <broonie@kernel.org>, linux-imx@nxp.com,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
-Subject: Re: [PATCH] spi: imx: add a check for speed_hz before calculating the clock
-Date:   Fri,  9 Apr 2021 17:22:42 +0100
-Message-Id: <161798356988.48466.14829479576984252197.b4-ty@kernel.org>
+To:     festevam@gmail.com, Tian Tao <tiantao6@hisilicon.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v3] spi: davinci: Use device_get_match_data() helper
+Date:   Fri,  9 Apr 2021 17:22:43 +0100
+Message-Id: <161798356988.48466.11934953711806321676.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210408103347.244313-2-xiaoning.wang@nxp.com>
-References: <20210408103347.244313-1-xiaoning.wang@nxp.com> <20210408103347.244313-2-xiaoning.wang@nxp.com>
+In-Reply-To: <1617152319-17701-1-git-send-email-tiantao6@hisilicon.com>
+References: <1617152319-17701-1-git-send-email-tiantao6@hisilicon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -42,12 +39,8 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 8 Apr 2021 18:33:47 +0800, Clark Wang wrote:
-> When some drivers use spi to send data, spi_transfer->speed_hz is
-> not assigned. If spidev->max_speed_hz is not assigned as well, it
-> will cause an error in configuring the clock.
-> Add a check for these two values before configuring the clock. An
-> error will be returned when they are not assigned.
+On Wed, 31 Mar 2021 08:58:39 +0800, Tian Tao wrote:
+> Use the device_get_match_data() helper instead of open coding.
 
 Applied to
 
@@ -55,8 +48,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: imx: add a check for speed_hz before calculating the clock
-      commit: 4df2f5e1372e9eec8f9e1b4a3025b9be23487d36
+[1/1] spi: davinci: Use device_get_match_data() helper
+      commit: 30700a057ce84e6f18f4cc3627570f8b2ae3c17f
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
