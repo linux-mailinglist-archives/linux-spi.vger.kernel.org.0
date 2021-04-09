@@ -2,38 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D93BA35A307
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Apr 2021 18:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C760035A309
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Apr 2021 18:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234148AbhDIQXv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 9 Apr 2021 12:23:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60024 "EHLO mail.kernel.org"
+        id S234157AbhDIQXw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 9 Apr 2021 12:23:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60080 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234153AbhDIQXu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        id S234163AbhDIQXu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
         Fri, 9 Apr 2021 12:23:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4B19161074;
-        Fri,  9 Apr 2021 16:23:31 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 47A50610A7;
+        Fri,  9 Apr 2021 16:23:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617985411;
-        bh=tI7eVBrB/MCLoZhFb0CZzo3rY7WtHeLAiDdnaKfw8Z4=;
+        s=k20201202; t=1617985414;
+        bh=NbcpexnX5iU7IgpviaFOjg2Yh5s9Xswwnh9WEJBh2L4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nJMKlDJdDYI/HEyGe/s9/67pkNiQ1BH7my8989JCy9Da6vpYdyzJ+wGUpHIgfcSwn
-         +J51TZfl9YEzbeBV8huxR3yXDzwZcfkA7nZBnMmgT8jDk0NxJ3+zTG2IGb+WE3AFtO
-         PYHwtdjA051Ah5WvBc+tCyl/y4oG8GW7P/vUvJnKpxOA/EF+4uZerXgCN/E19TLRrd
-         ypqVEZhc7i3niq0Y4uoaOSJB7kVoIpqiygOdpc9wtnvT3Ovx2qydZRizzTJnspKuEk
-         5xV+HLBGZ/pWatSmmzGBfpNGRZQI3pVAsccx4IQKug0bmp2b14HllEcJEBhp3gmI6e
-         E/ekHw11EXGHw==
+        b=CZPlqqx/VRpFRuNe3kUipNgibH3Nzmt7PY5JTos9Vcxm3wkNNlYCll/mnSZpKiq+3
+         CPkvkCeGeci8tHq3mBDiXBsZ1gu3i9CHNra4NkBbegegR6fuv3rT1tW/OVgjhE8ptb
+         gzBJLbzVjcx8jkAFdPORvZVxr1XZ+SziJKK/DWr1M7bmQm2+QuLjVmwJqsmEw25MX4
+         TVfS1MFQKUmszGZAYxP/hXN3IrdKT5WUFbZbmGpRe/BiJBbHcXKdYAUZrWP93D9TCR
+         DPmWJPZ3huTgc3DH2q/M6HKwXATjNRcK0XBnZe+sAlRz++v5mc9qVLs7Il3MUhV2ZW
+         qsJr6FNP3layw==
 From:   Mark Brown <broonie@kernel.org>
-To:     xiaoning.wang@nxp.com, Wang Li <wangli74@huawei.com>,
-        frank.li@nxp.com, han.xu@nxp.com
+To:     quanyang.wang@windriver.com,
+        Michal Simek <michal.simek@xilinx.com>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
 Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH -next] spi: fsl-lpspi: Fix PM reference leak in lpspi_prepare_xfer_hardware()
-Date:   Fri,  9 Apr 2021 17:22:44 +0100
-Message-Id: <161798356988.48466.17209848169059258349.b4-ty@kernel.org>
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 0/4] spi: spi-zynqmp-gpspi: fix some issues
+Date:   Fri,  9 Apr 2021 17:22:45 +0100
+Message-Id: <161798356989.48466.13500615762726622805.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210409095430.29868-1-wangli74@huawei.com>
-References: <20210409095430.29868-1-wangli74@huawei.com>
+In-Reply-To: <20210408040223.23134-1-quanyang.wang@windriver.com>
+References: <20210408040223.23134-1-quanyang.wang@windriver.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -41,11 +42,15 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 9 Apr 2021 09:54:30 +0000, Wang Li wrote:
-> pm_runtime_get_sync will increment pm usage counter even it failed.
-> Forgetting to putting operation will result in reference leak here.
-> Fix it by replacing it with pm_runtime_resume_and_get to keep usage
-> counter balanced.
+On Thu, 8 Apr 2021 12:02:19 +0800, quanyang.wang@windriver.com wrote:
+> This series fix some issues that occurs when the gqspi driver switches to spi-mem framework.
+> 
+> Hi Amit,
+> I rewrite the "Subject" and "commit message" of these patches, so they
+> look different from the ones which you reviewed before. I still keep
+> your "Reviewed-by" and hope you will not mind.
+> 
+> [...]
 
 Applied to
 
@@ -53,8 +58,14 @@ Applied to
 
 Thanks!
 
-[1/1] spi: fsl-lpspi: Fix PM reference leak in lpspi_prepare_xfer_hardware()
-      commit: a03675497970a93fcf25d81d9d92a59c2d7377a7
+[1/4] spi: spi-zynqmp-gqspi: use wait_for_completion_timeout to make zynqmp_qspi_exec_op not interruptible
+      commit: a16bff68b75fd082d36aa0b14b540bd7a3ebebbd
+[2/4] spi: spi-zynqmp-gqspi: add mutex locking for exec_op
+      commit: a0f65be6e880a14d3445b75e7dc03d7d015fc922
+[3/4] spi: spi-zynqmp-gqspi: transmit dummy circles by using the controller's internal functionality
+      commit: 8ad07d79bd56a531990a1a3f3f1c0eb19d2de806
+[4/4] spi: spi-zynqmp-gqspi: fix incorrect operating mode in zynqmp_qspi_read_op
+      commit: 41d310930084502433fcb3c4baf219e7424b7734
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
