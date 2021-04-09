@@ -2,37 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DED7635A302
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Apr 2021 18:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8112235A304
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Apr 2021 18:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234096AbhDIQXh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 9 Apr 2021 12:23:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59860 "EHLO mail.kernel.org"
+        id S234084AbhDIQXk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 9 Apr 2021 12:23:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59904 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233577AbhDIQXg (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 9 Apr 2021 12:23:36 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0119D6108B;
-        Fri,  9 Apr 2021 16:23:22 +0000 (UTC)
+        id S234120AbhDIQXj (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 9 Apr 2021 12:23:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D4535610A7;
+        Fri,  9 Apr 2021 16:23:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617985403;
-        bh=Of3ySWlR/2RwBK3RGmzzdyGN4qP9uOE2nJVqqN9CwlQ=;
+        s=k20201202; t=1617985406;
+        bh=pa2AjAoluq/aoXrCWtDRuMHjAZVPUHpKBrOfayVzouk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EhsOttHYVP2nOm94c/vEgdfq3St5g0WfEBTRxsBoHwJMxwv8h/+soHzw8UoV25k/G
-         Jiiuw7Guiyf1rY7c1JR/LroQRB1Y5q8U6PDzf4M9ZBF6k/wlBlJJ6JY378yIk1dgxB
-         Pl7LNx/WzfxEx6Twb0OOWWSMXcQWUzRbFxjd+RpjEZu+gthilUT6zwvtZJ/69DXXTn
-         +ijrSkTFJ1a1ZLCTHr9bd3oHVbFaBAYZgkNfkKcj5r+y51QslvYc7Scif/ofU0LjNh
-         plyRBJPUzP4b6wHe8vITfhcBGshARvjkxmcr/m3oCXb1RLAbnpOaLCI7UYdOWusnjT
-         IoT1A0cJszq0w==
+        b=G5NVjfM2LsLT8CzeBbO8qfTYWmQaOFItqCV2INyJHkuY4FjxWAkTwUhmdPz9mjFDM
+         YfVVLnSyLKHe/PAAYNlIYGpN42tI+DdfBGtT5ytbGwcdApaFDo6zrDKb1scU26B3Bp
+         7y0+wAKLYaHs0J5JbMBISRzus9W3U+RgWkrDJnoLodNPtAeJLugxe59UVEjzAmslD7
+         JqUnm0L/T7geeHUTZ0+tMXlrdXoP+7VglLuAcy9p2gaB7houOqnPe7OnQtakjiJgrt
+         ppn8/l3MDmdOcPrqLnnzNcgsYmgY5l9uVRZCr49k/1odFReqegaueEiM/oTTNMrDV5
+         6yj72O+Qz2MoA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Wei Yongjun <weiyongjun1@huawei.com>
-Cc:     Mark Brown <broonie@kernel.org>, kernel-janitors@vger.kernel.org,
-        Hulk Robot <hulkci@huawei.com>, linux-spi@vger.kernel.org
-Subject: Re: [PATCH -next] spi: dln2: Fix reference leak to master
-Date:   Fri,  9 Apr 2021 17:22:41 +0100
-Message-Id: <161798356988.48466.14335938900773090714.b4-ty@kernel.org>
+To:     s.hauer@pengutronix.de, Clark Wang <xiaoning.wang@nxp.com>,
+        shawnguo@kernel.org, festevam@gmail.com
+Cc:     Mark Brown <broonie@kernel.org>, linux-imx@nxp.com,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
+Subject: Re: [PATCH] spi: imx: add a check for speed_hz before calculating the clock
+Date:   Fri,  9 Apr 2021 17:22:42 +0100
+Message-Id: <161798356988.48466.14829479576984252197.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210409082955.2907950-1-weiyongjun1@huawei.com>
-References: <20210409082955.2907950-1-weiyongjun1@huawei.com>
+In-Reply-To: <20210408103347.244313-2-xiaoning.wang@nxp.com>
+References: <20210408103347.244313-1-xiaoning.wang@nxp.com> <20210408103347.244313-2-xiaoning.wang@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -40,12 +42,12 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 9 Apr 2021 08:29:55 +0000, Wei Yongjun wrote:
-> Call spi_master_get() holds the reference count to master device, thus
-> we need an additional spi_master_put() call to reduce the reference
-> count, otherwise we will leak a reference to master.
-> 
-> This commit fix it by removing the unnecessary spi_master_get().
+On Thu, 8 Apr 2021 18:33:47 +0800, Clark Wang wrote:
+> When some drivers use spi to send data, spi_transfer->speed_hz is
+> not assigned. If spidev->max_speed_hz is not assigned as well, it
+> will cause an error in configuring the clock.
+> Add a check for these two values before configuring the clock. An
+> error will be returned when they are not assigned.
 
 Applied to
 
@@ -53,8 +55,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: dln2: Fix reference leak to master
-      commit: 9b844b087124c1538d05f40fda8a4fec75af55be
+[1/1] spi: imx: add a check for speed_hz before calculating the clock
+      commit: 4df2f5e1372e9eec8f9e1b4a3025b9be23487d36
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
