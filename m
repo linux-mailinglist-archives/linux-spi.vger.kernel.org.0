@@ -2,73 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F08D835A30D
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Apr 2021 18:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B326635BADE
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Apr 2021 09:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbhDIQX6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 9 Apr 2021 12:23:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60174 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233577AbhDIQXx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 9 Apr 2021 12:23:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F02DE6108B;
-        Fri,  9 Apr 2021 16:23:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617985420;
-        bh=Mn/CYV02N9fvkmLNxJq8JF8Vl5edtfQntyZwBg4n1x0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=roIpKc1Najw4Vc4U26pTdW9lUXFB3WBOeLYV1NPwYUwGwcBZ3u9amIV9+mhRCkkQp
-         BkP/3hJ+KlkKSKzjw2Vgnls9hl+DXoTqqOLG4NnoKDXy8ofdpCmpfWLw0Ji3jXMXO5
-         4s9gh8Ezid1tsa8NOZGRBD9XV2PPcspmo6GED8+TrLsGxdw6VTbTfc58rSDRBEMs1a
-         4EK29CrUPvKqFYg3unRv/iFloxmu3avHhf2/es4ZuCV6QFfblSs05w/EOS9sS5B8Qh
-         lgKsZ6WgIOocOn6tfS0UQCsSePiK21+VKEUHpHr0QporTnjctDpmNrJkgiKeSE8a52
-         05ml8L14yJIhw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Tian Tao <tiantao6@hisilicon.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        Yicong Yang <yangyicong@hisilicon.com>
-Subject: Re: [PATCH] spi: simplify devm_spi_register_controller
-Date:   Fri,  9 Apr 2021 17:22:47 +0100
-Message-Id: <161798356988.48466.11601967952451641527.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <1617843307-53853-1-git-send-email-tiantao6@hisilicon.com>
-References: <1617843307-53853-1-git-send-email-tiantao6@hisilicon.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        id S236808AbhDLHeA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 12 Apr 2021 03:34:00 -0400
+Received: from mail.zju.edu.cn ([61.164.42.155]:6606 "EHLO zju.edu.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236898AbhDLHd7 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 12 Apr 2021 03:33:59 -0400
+Received: from localhost.localdomain (unknown [10.192.139.175])
+        by mail-app3 (Coremail) with SMTP id cC_KCgD34Dxq93Ng3rYJAQ--.16326S4;
+        Mon, 12 Apr 2021 15:32:00 +0800 (CST)
+From:   Dinghao Liu <dinghao.liu@zju.edu.cn>
+To:     dinghao.liu@zju.edu.cn, kjlu@umn.edu
+Cc:     Mark Brown <broonie@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] [v2] spi: spi-zynqmp-gqspi: Fix runtime PM imbalance in zynqmp_qspi_probe
+Date:   Mon, 12 Apr 2021 15:31:54 +0800
+Message-Id: <20210412073154.25011-1-dinghao.liu@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgD34Dxq93Ng3rYJAQ--.16326S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFyfKw4kGryxtFykKFy5XFb_yoW8Gw1xpr
+        4vqFW7Kr40q3yftF1jk3y0qFy3XFyF93yxJrWkt3WFv3saqa4rtF1xJFyftFZ7AF97AFWj
+        gF48C3yS9as8ZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkS1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2
+        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
+        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWU
+        XwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv
+        6cx26r4fKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
+        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48J
+        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMI
+        IF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUF9a9DUUUU
+X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgcNBlZdtTWazAAIsb
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 8 Apr 2021 08:55:07 +0800, Tian Tao wrote:
-> Use devm_add_action_or_reset() instead of devres_alloc() and
-> devres_add(), which works the same. This will simplify the
-> code. There is no functional changes.
+There is a PM usage counter decrement after zynqmp_qspi_init_hw()
+without any refcount increment, which leads to refcount leak.Add
+a refcount increment to balance the refcount. Also set
+auto_runtime_pm to resume suspended spi controller.
 
-Applied to
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+---
+changelog:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+v2: - Add a refcount increment to fix refcout leak instead of the
+      refcount decrement on error.
+      Set ctlr->auto_runtime_pm = true.
+---
+ drivers/spi/spi-zynqmp-gqspi.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks!
+diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
+index c8fa6ee18ae7..8b21c7b0e7eb 100644
+--- a/drivers/spi/spi-zynqmp-gqspi.c
++++ b/drivers/spi/spi-zynqmp-gqspi.c
+@@ -1160,6 +1160,7 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
+ 	pm_runtime_set_autosuspend_delay(&pdev->dev, SPI_AUTOSUSPEND_TIMEOUT);
+ 	pm_runtime_set_active(&pdev->dev);
+ 	pm_runtime_enable(&pdev->dev);
++	pm_runtime_get_sync(&pdev->dev);
+ 	/* QSPI controller initializations */
+ 	zynqmp_qspi_init_hw(xqspi);
+ 
+@@ -1187,6 +1188,7 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
+ 	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_RX_DUAL | SPI_RX_QUAD |
+ 			    SPI_TX_DUAL | SPI_TX_QUAD;
+ 	ctlr->dev.of_node = np;
++	ctlr->auto_runtime_pm = true;
+ 
+ 	ret = devm_spi_register_controller(&pdev->dev, ctlr);
+ 	if (ret) {
+-- 
+2.17.1
 
-[1/1] spi: simplify devm_spi_register_controller
-      commit: 59ebbe40fb51e307032ae7f63b2749fad2d4635a
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
