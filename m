@@ -2,87 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFEF435DFC3
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Apr 2021 15:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C2E35E953
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Apr 2021 00:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbhDMNKV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Apr 2021 09:10:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54298 "EHLO mail.kernel.org"
+        id S232922AbhDMW50 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Apr 2021 18:57:26 -0400
+Received: from mga18.intel.com ([134.134.136.126]:32275 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231483AbhDMNKU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 13 Apr 2021 09:10:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7AA6B60FED;
-        Tue, 13 Apr 2021 13:10:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618319401;
-        bh=vvY4tuETc+Xa/tBMGoEIqFLIZ+8YzeuypXqR4OfLAyg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ELxWVDoMBrAD202t2nHfsmaQKjmghiJ2yY4IgObjsoxp4A/wUUzSx9dT5+6fHgPxN
-         P2fmbn5LchzAHvl1R7+nH31yLzzFckwydkiRhPXrtyClsoN6Z8oYl96lh9Cq+9XWEd
-         q2oOVYJEnlFkqrE1yuLJf8qCLxhkozXoS6C9w9xQ0mEtUkRPBaP6p3I+oQUOTi98nA
-         yFW/zflfLUl8axi6YLMWWUTvcKwr3p4orVIARvXsDnbFrPqU8YQEOOo3ESyZ7cmEeZ
-         qVGJ7asAxD1kmOOU0Mpx53SYAsvY5NudwMEtpPeFqVyaZeViiF8QI1bfUyen6U66ad
-         3f7t4lu/c4ynA==
-Date:   Tue, 13 Apr 2021 14:09:39 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Jay Fang <f.fangjian@huawei.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wei Xu <xuwei5@hisilicon.com>, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        huangdaode@huawei.com
-Subject: Re: [PATCH] spi: SPI_HISI_KUNPENG should depend on ARCH_HISI
-Message-ID: <20210413130939.GF5586@sirena.org.uk>
-References: <d93934dfdbb4d35e35371517de3b64c144aeb5ef.1618316782.git.geert+renesas@glider.be>
- <20210413124715.GE5586@sirena.org.uk>
- <46a47db2-338e-2ca4-0eac-c2b129ee7b7d@huawei.com>
+        id S231318AbhDMW5Z (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 13 Apr 2021 18:57:25 -0400
+IronPort-SDR: gXJYxn60sWaA8CXI/d6XGIUG6avMHdeJfljSRl14M1R4xKkG78evHP+I29q8d4dmUeRKrK3NMV
+ 7MxCnXkspjww==
+X-IronPort-AV: E=McAfee;i="6200,9189,9953"; a="182028999"
+X-IronPort-AV: E=Sophos;i="5.82,220,1613462400"; 
+   d="scan'208";a="182028999"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2021 15:57:04 -0700
+IronPort-SDR: YntJX6u7pJkd03PR56tI7/A/oJX7Xtt1vjhlaSB0JZ9EjdQ4UTTsjg6KinzO0gLjT5a7Az0I0E
+ i+sI//e6xNlQ==
+X-IronPort-AV: E=Sophos;i="5.82,220,1613462400"; 
+   d="scan'208";a="398943218"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.42])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2021 15:57:04 -0700
+From:   matthew.gerlach@linux.intel.com
+To:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yilun.xu@intel.com, jdelvare@suse.com, linux@roeck-us.net,
+        lee.jones@linaro.org, linux-hwmon@vger.kernel.org,
+        russell.h.weight@intel.com, broonie@kernel.org,
+        linux-spi@vger.kernel.org
+Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: [PATCH v2 0/2] spi: add BMC support for Intel D5005 card
+Date:   Tue, 13 Apr 2021 15:58:33 -0700
+Message-Id: <20210413225835.459662-1-matthew.gerlach@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="aPdhxNJGSeOG9wFI"
-Content-Disposition: inline
-In-Reply-To: <46a47db2-338e-2ca4-0eac-c2b129ee7b7d@huawei.com>
-X-Cookie: Shake well before using.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
---aPdhxNJGSeOG9wFI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This patch set adds support for the Board Management Controller (BMC)
+of an Intel D5005 card.  The BMC support requires a Device Feature
+List (DFL) bus driver for the Altera SPI Master controller and hwmon
+support for the sensors monitored by the BMC.
 
-On Tue, Apr 13, 2021 at 08:59:02PM +0800, Jay Fang wrote:
-> On 2021/4/13 20:47, Mark Brown wrote:
-> > On Tue, Apr 13, 2021 at 02:27:23PM +0200, Geert Uytterhoeven wrote:
+Patch 1 adds a dfl driver for the Altera SPI Master which is connected
+to the board's BMC.
 
-> >> The HiSilicon Kunpeng SPI controller is only present on HiSilicon
-> >> Kunpeng SoCs.  Hence add a dependency on ARCH_HISI, to prevent asking
-> >> the user about this driver when configuring a kernel without Hisilicon
-> >> platform support.
+Patch 2 adds hwmon support for the sensors monitored by the board's BMC.
+---
+v2: move drivers/fpga/dfl-spi-altera.c to drivers/spi/spi-altera-dfl.c
+    change variable name from m10bmc_bmc_subdevs to m10bmc_d5005_subdevs
+    added Acked-by: Lee Jones
 
-> > Are you *sure* about this?  HiSilicon produce a wide range of SoCs with
-> > very diverse target markets, this driver looks like it's for enterprise
-> > stuff while most things guarded by that config option look like they're
-> > for embedded applications.
+Matthew Gerlach (2):
+  spi: Add DFL bus driver for Altera SPI Master
+  hwmon: intel-m10-bmc-hwmon: add sensor support of Intel D5005 card
 
-> SPI_HISI_KUNPENG does not depend on ARCH_HISI.
+ drivers/hwmon/intel-m10-bmc-hwmon.c | 122 ++++++++++++++++++++
+ drivers/mfd/intel-m10-bmc.c         |  10 ++
+ drivers/spi/Kconfig                 |   9 ++
+ drivers/spi/Makefile                |   1 +
+ drivers/spi/spi-altera-dfl.c        | 221 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 363 insertions(+)
+ create mode 100644 drivers/spi/spi-altera-dfl.c
 
-Right, but that's what Geert is proposing to change - the question is
-does it make sense to do so or not?
+-- 
+1.8.3.1
 
---aPdhxNJGSeOG9wFI
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmB1mBMACgkQJNaLcl1U
-h9BibAf/UGsOeW1w9mT9jPqivXHv0DUWhbNDh4VWXrThIYf7eiLUwjPWWH6fT9hL
-XhjtAPDoZyknZByoC3IUCWsOSHFLhcZquBM+10Pto0auYaOvhKwfi0d+KyX9wu2e
-IwsgxZ0tlRssUroxZaVyLFjcEW6ExmHmibzCAyD4iM4bUt5NXSsIycmBfO8MnIma
-IO0pUYAljaAmlU96cZONUJW6RvD0RDIJbV2RZ52Kof+J5HtPoNeiBTl9uq+mqEpF
-jalNdK2F3XyrUjt1McgSSTqs0pVA76fgwDSnGqpaKuL9+ESOMv5EFbIQzmz7FohT
-QUFwsNBJf+60ufEcL8KF+uw30Ie7EQ==
-=pm6V
------END PGP SIGNATURE-----
-
---aPdhxNJGSeOG9wFI--
