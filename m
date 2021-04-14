@@ -2,288 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB58D35F7EE
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Apr 2021 17:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373A235FB56
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Apr 2021 21:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233556AbhDNPgd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 14 Apr 2021 11:36:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:37068 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232199AbhDNPgc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 14 Apr 2021 11:36:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618414571;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qx3/iLYPrCC/uAPin88FDvO6p98LMRUdvHQ9Rn3q//E=;
-        b=TZFKkG+N90DBIehrGjQy5lGMVDe3/hUS8YISq/O3Nw9v9yeYvF79Qws1zRnqaFuhSJ53ff
-        vXa/q6aqi/dW5V6zDFUUCqeq6fnsOzai4s6xHIK6p86tW/VkodIc9z5aDYmkC0d6sCXSsS
-        Sbw4ndAaZV/JmSbwIOQWYJGZkpUgFBU=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-549-i1RSzXZlNJyiVR7TVLjMtg-1; Wed, 14 Apr 2021 11:36:09 -0400
-X-MC-Unique: i1RSzXZlNJyiVR7TVLjMtg-1
-Received: by mail-qk1-f200.google.com with SMTP id p133so13300304qka.17
-        for <linux-spi@vger.kernel.org>; Wed, 14 Apr 2021 08:36:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=Qx3/iLYPrCC/uAPin88FDvO6p98LMRUdvHQ9Rn3q//E=;
-        b=XYEkfKUxOKEDeCBUdMzwTcK+Ww4+Hj1bF37ZL5avk4F3Q+OJZwP6ZNHjHcTSxP56YA
-         vfOqRZ+9LB3GJfK4JGYsgLRU0rUDk0gCa3ghsUS3qYUWVuzOq95MoSidRiNdXhqbV/G3
-         zhsXTt2JBWcFOJm9KJajgSmrDdmzcCsnGBNgHe1I4PUNJRHstqycRm4KXEKkMX+Iif7J
-         av+7ZXlGROWWxl594hJUFbyH8CJvhDfB0eocLIcCXsKDayAgGTAbFQ3GZYB9aGJx6GH+
-         qwbXWNVFi5OKg3WNrMbpoptmTY/l/+91K62BTcJCSQxc7Ay/+GH4kmVcHCTVo7RMo0vb
-         qw/g==
-X-Gm-Message-State: AOAM530rOYA6S1pRLI8JcCJ4Jqe5upkICmQdgeHPCFzpNmV1zEbTkyF7
-        ZG0pn/jOtQWve811LXDw7MhIu2wKBuJwZLyClZXGf3tnog/Oea+Wo4gIzJXI/m9+DLhIQZ3CN7d
-        4rj6ORYkAl00nHA9j+GFW
-X-Received: by 2002:ac8:4802:: with SMTP id g2mr5361829qtq.210.1618414568976;
-        Wed, 14 Apr 2021 08:36:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyVQwQDicZSgbLuYxjpagAqgn3QoywjmdVPa0hzhR27d7BS25kP7uXoSWCKwrKfVVF3ZEzWdg==
-X-Received: by 2002:ac8:4802:: with SMTP id g2mr5361816qtq.210.1618414568756;
-        Wed, 14 Apr 2021 08:36:08 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id x82sm9743300qkb.0.2021.04.14.08.36.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Apr 2021 08:36:08 -0700 (PDT)
-Subject: Re: [PATCH v2 2/2] hwmon: intel-m10-bmc-hwmon: add sensor support of
- Intel D5005 card
-To:     matthew.gerlach@linux.intel.com, hao.wu@intel.com, mdf@kernel.org,
+        id S1351493AbhDNTIo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 14 Apr 2021 15:08:44 -0400
+Received: from mga14.intel.com ([192.55.52.115]:12463 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1346306AbhDNTIn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 14 Apr 2021 15:08:43 -0400
+IronPort-SDR: kKFhk/85/RobLfCGWxU3/buJaQBXPdf1pQ3cC5WEP0g/6EM5mqHonGoTxfhwWpFFW+rnupClUt
+ T+P3djqovIcA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9954"; a="194278294"
+X-IronPort-AV: E=Sophos;i="5.82,223,1613462400"; 
+   d="scan'208";a="194278294"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2021 12:08:21 -0700
+IronPort-SDR: z6Ri1ebOTvWmj4PEWaqchvSi7jLBHlRCzk7MYia5l70Ebpg+H3Jn5ONHVaVpa6hrEkbekUY7PA
+ wok4FEiA+01A==
+X-IronPort-AV: E=Sophos;i="5.82,223,1613462400"; 
+   d="scan'208";a="424867041"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.42])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2021 12:08:21 -0700
+Date:   Wed, 14 Apr 2021 12:09:50 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Mark Brown <broonie@kernel.org>
+cc:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
         linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
         yilun.xu@intel.com, jdelvare@suse.com, linux@roeck-us.net,
         lee.jones@linaro.org, linux-hwmon@vger.kernel.org,
-        russell.h.weight@intel.com, broonie@kernel.org,
-        linux-spi@vger.kernel.org
-Cc:     Russ Weight <russell.h.weight@linux.intel.com>
-References: <20210413225835.459662-1-matthew.gerlach@linux.intel.com>
- <20210413225835.459662-3-matthew.gerlach@linux.intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <b2d402b9-0f48-b945-c47d-3fdb45a3cd45@redhat.com>
-Date:   Wed, 14 Apr 2021 08:36:05 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        russell.h.weight@intel.com, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] spi: Add DFL bus driver for Altera SPI Master
+In-Reply-To: <20210414141816.GD4535@sirena.org.uk>
+Message-ID: <alpine.DEB.2.22.394.2104141203480.482712@rhweight-WRK1>
+References: <20210413225835.459662-1-matthew.gerlach@linux.intel.com> <20210413225835.459662-2-matthew.gerlach@linux.intel.com> <20210414141816.GD4535@sirena.org.uk>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-In-Reply-To: <20210413225835.459662-3-matthew.gerlach@linux.intel.com>
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-On 4/13/21 3:58 PM, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+
+On Wed, 14 Apr 2021, Mark Brown wrote:
+
+> On Tue, Apr 13, 2021 at 03:58:34PM -0700, matthew.gerlach@linux.intel.com wrote:
 >
-> Like the Intel N3000 card, the Intel D5005 has a MAX10 based
-> BMC.  This commit adds support for the D5005 sensors that are
-> monitored by the MAX10 BMC.
+>> +++ b/drivers/spi/spi-altera-dfl.c
+>> @@ -0,0 +1,222 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * DFL bus driver for Altera SPI Master
+>> + *
 >
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Signed-off-by: Russ Weight <russell.h.weight@linux.intel.com>
-> Acked-by: Lee Jones <lee.jones@linaro.org>
+> Please make the entire comment a C++ one so things look more
+> intentional.
 
-lgtm
+Ok, I'll change it in the next revision.
 
-Reviewed-by: Tom Rix <trix@redhat.com>
-
-> ---
-> v2: change variable name from m10bmc_bmc_subdevs to m10bmc_d5005_subdevs
->      added Acked-by: Lee Jones
-> ---
->   drivers/hwmon/intel-m10-bmc-hwmon.c | 122 ++++++++++++++++++++++++++++++++++++
->   drivers/mfd/intel-m10-bmc.c         |  10 +++
->   2 files changed, 132 insertions(+)
 >
-> diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
-> index 17d5e6b..bd7ed2e 100644
-> --- a/drivers/hwmon/intel-m10-bmc-hwmon.c
-> +++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
-> @@ -99,6 +99,50 @@ struct m10bmc_hwmon {
->   	NULL
->   };
->   
-> +static const struct m10bmc_sdata d5005bmc_temp_tbl[] = {
-> +	{ 0x100, 0x104, 0x108, 0x10c, 0x0, 500, "Board Inlet Air Temperature" },
-> +	{ 0x110, 0x114, 0x118, 0x0, 0x0, 500, "FPGA Core Temperature" },
-> +	{ 0x11c, 0x120, 0x124, 0x128, 0x0, 500, "Board Exhaust Air Temperature" },
-> +	{ 0x12c, 0x130, 0x134, 0x0, 0x0, 500, "FPGA Transceiver Temperature" },
-> +	{ 0x138, 0x13c, 0x140, 0x144, 0x0, 500, "RDIMM0 Temperature" },
-> +	{ 0x148, 0x14c, 0x150, 0x154, 0x0, 500, "RDIMM1 Temperature" },
-> +	{ 0x158, 0x15c, 0x160, 0x164, 0x0, 500, "RDIMM2 Temperature" },
-> +	{ 0x168, 0x16c, 0x170, 0x174, 0x0, 500, "RDIMM3 Temperature" },
-> +	{ 0x178, 0x17c, 0x180, 0x0, 0x0, 500, "QSFP0 Temperature" },
-> +	{ 0x188, 0x18c, 0x190, 0x0, 0x0, 500, "QSFP1 Temperature" },
-> +	{ 0x1a0, 0x1a4, 0x1a8, 0x0, 0x0, 500, "3.3v Temperature" },
-> +	{ 0x1bc, 0x1c0, 0x1c4, 0x0, 0x0, 500, "VCCERAM Temperature" },
-> +	{ 0x1d8, 0x1dc, 0x1e0, 0x0, 0x0, 500, "VCCR Temperature" },
-> +	{ 0x1f4, 0x1f8, 0x1fc, 0x0, 0x0, 500, "VCCT Temperature" },
-> +	{ 0x210, 0x214, 0x218, 0x0, 0x0, 500, "1.8v Temperature" },
-> +	{ 0x22c, 0x230, 0x234, 0x0, 0x0, 500, "12v Backplane Temperature" },
-> +	{ 0x248, 0x24c, 0x250, 0x0, 0x0, 500, "12v AUX Temperature" },
-> +};
-> +
-> +static const struct m10bmc_sdata d5005bmc_in_tbl[] = {
-> +	{ 0x184, 0x0, 0x0, 0x0, 0x0, 1, "QSFP0 Supply Voltage" },
-> +	{ 0x194, 0x0, 0x0, 0x0, 0x0, 1, "QSFP1 Supply Voltage" },
-> +	{ 0x198, 0x0, 0x0, 0x0, 0x0, 1, "FPGA Core Voltage" },
-> +	{ 0x1ac, 0x1b0, 0x1b4, 0x0, 0x0, 1, "3.3v Voltage" },
-> +	{ 0x1c8, 0x1cc, 0x1d0, 0x0, 0x0, 1, "VCCERAM Voltage" },
-> +	{ 0x1e4, 0x1e8, 0x1ec, 0x0, 0x0, 1, "VCCR Voltage" },
-> +	{ 0x200, 0x204, 0x208, 0x0, 0x0, 1, "VCCT Voltage" },
-> +	{ 0x21c, 0x220, 0x224, 0x0, 0x0, 1, "1.8v Voltage" },
-> +	{ 0x238, 0x0, 0x0, 0x0, 0x23c, 1, "12v Backplane Voltage" },
-> +	{ 0x254, 0x0, 0x0, 0x0, 0x258, 1, "12v AUX Voltage" },
-> +};
-> +
-> +static const struct m10bmc_sdata d5005bmc_curr_tbl[] = {
-> +	{ 0x19c, 0x0, 0x0, 0x0, 0x0, 1, "FPGA Core Current" },
-> +	{ 0x1b8, 0x0, 0x0, 0x0, 0x0, 1, "3.3v Current" },
-> +	{ 0x1d4, 0x0, 0x0, 0x0, 0x0, 1, "VCCERAM Current" },
-> +	{ 0x1f0, 0x0, 0x0, 0x0, 0x0, 1, "VCCR Current" },
-> +	{ 0x20c, 0x0, 0x0, 0x0, 0x0, 1, "VCCT Current" },
-> +	{ 0x228, 0x0, 0x0, 0x0, 0x0, 1, "1.8v Current" },
-> +	{ 0x240, 0x244, 0x0, 0x0, 0x0, 1, "12v Backplane Current" },
-> +	{ 0x25c, 0x260, 0x0, 0x0, 0x0, 1, "12v AUX Current" },
-> +};
-> +
->   static const struct m10bmc_hwmon_board_data n3000bmc_hwmon_bdata = {
->   	.tables = {
->   		[hwmon_temp] = n3000bmc_temp_tbl,
-> @@ -110,6 +154,80 @@ struct m10bmc_hwmon {
->   	.hinfo = n3000bmc_hinfo,
->   };
->   
-> +static const struct hwmon_channel_info *d5005bmc_hinfo[] = {
-> +	HWMON_CHANNEL_INFO(temp,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL),
-> +	HWMON_CHANNEL_INFO(in,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MAX | HWMON_I_CRIT |
-> +			   HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MAX | HWMON_I_CRIT |
-> +			   HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MAX | HWMON_I_CRIT |
-> +			   HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MAX | HWMON_I_CRIT |
-> +			   HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MAX | HWMON_I_CRIT |
-> +			   HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_LABEL),
-> +	HWMON_CHANNEL_INFO(curr,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_LABEL),
-> +	NULL
-> +};
-> +
-> +static const struct m10bmc_hwmon_board_data d5005bmc_hwmon_bdata = {
-> +	.tables = {
-> +		[hwmon_temp] = d5005bmc_temp_tbl,
-> +		[hwmon_in] = d5005bmc_in_tbl,
-> +		[hwmon_curr] = d5005bmc_curr_tbl,
-> +	},
-> +
-> +	.hinfo = d5005bmc_hinfo,
-> +};
-> +
->   static umode_t
->   m10bmc_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
->   			u32 attr, int channel)
-> @@ -316,6 +434,10 @@ static int m10bmc_hwmon_probe(struct platform_device *pdev)
->   		.name = "n3000bmc-hwmon",
->   		.driver_data = (unsigned long)&n3000bmc_hwmon_bdata,
->   	},
-> +	{
-> +		.name = "d5005bmc-hwmon",
-> +		.driver_data = (unsigned long)&d5005bmc_hwmon_bdata,
-> +	},
->   	{ }
->   };
->   
-> diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
-> index 1161933..1a9bfb7 100644
-> --- a/drivers/mfd/intel-m10-bmc.c
-> +++ b/drivers/mfd/intel-m10-bmc.c
-> @@ -15,6 +15,11 @@
->   
->   enum m10bmc_type {
->   	M10_N3000,
-> +	M10_D5005
-> +};
-> +
-> +static struct mfd_cell m10bmc_d5005_subdevs[] = {
-> +	{ .name = "d5005bmc-hwmon" },
->   };
->   
->   static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
-> @@ -183,6 +188,10 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
->   		cells = m10bmc_pacn3000_subdevs;
->   		n_cell = ARRAY_SIZE(m10bmc_pacn3000_subdevs);
->   		break;
-> +	case M10_D5005:
-> +		cells = m10bmc_d5005_subdevs;
-> +		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
-> +		break;
->   	default:
->   		return -ENODEV;
->   	}
-> @@ -197,6 +206,7 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
->   
->   static const struct spi_device_id m10bmc_spi_id[] = {
->   	{ "m10-n3000", M10_N3000 },
-> +	{ "m10-d5005", M10_D5005 },
->   	{ }
->   };
->   MODULE_DEVICE_TABLE(spi, m10bmc_spi_id);
+>> +	memset(&pdevinfo, 0, sizeof(pdevinfo));
+>> +
+>> +	pdevinfo.name = "subdev_spi_altera";
+>> +	pdevinfo.id = PLATFORM_DEVID_AUTO;
+>> +	pdevinfo.parent = dev;
+>> +	pdevinfo.data = &pdata;
+>> +	pdevinfo.size_data = sizeof(pdata);
+>> +
+>> +	return platform_device_register_full(&pdevinfo);
+>
+> Don't create a platform device here, extend the spi-altera driver to
+> register with both DFL and platform buses.
+>
 
+Are you suggesting something like the SPI driver for the Designware 
+controller where there is spi-dw-core.c and bus specific code like 
+spi-dw-pci.c and spi-dw-mmioc.c?
+
+Thanks for the review.
+
+Matthew
