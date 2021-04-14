@@ -2,278 +2,319 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D833B35E98A
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Apr 2021 01:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 028BD35F3B5
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Apr 2021 14:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347841AbhDMXLw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Apr 2021 19:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
+        id S233293AbhDNMZn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 14 Apr 2021 08:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232517AbhDMXLv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Apr 2021 19:11:51 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C45C061574;
-        Tue, 13 Apr 2021 16:11:31 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id d3-20020a9d29030000b029027e8019067fso15768090otb.13;
-        Tue, 13 Apr 2021 16:11:31 -0700 (PDT)
+        with ESMTP id S230127AbhDNMZn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 14 Apr 2021 08:25:43 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F2FC061756
+        for <linux-spi@vger.kernel.org>; Wed, 14 Apr 2021 05:25:21 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id z1so23449764edb.8
+        for <linux-spi@vger.kernel.org>; Wed, 14 Apr 2021 05:25:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=D/nsAOP6P3wyUX5B/9lLlJTqvWKWmrSRu43xTW8RyS0=;
-        b=aeAWkYyAFe+etsxTV7kGg/Yh4JsEN6AvbNxT8v7t5DaabFe0hwozO/UPQmpp5mCi5l
-         avAM8/beC1+KBuJHmZKc1BXT+I3INHgC8cylmSOUCLD+qeJ71j8/VGubEDKT4e6Kkx/Y
-         d/uvx2gvGH+HFZ95M6SqdRMbeoOzGLsJp0KNDn8hsuVQl4Ozwx8Z2IWWcxnZ6WjAzxmf
-         KckKMvIPnP1UqgjEirY/DVXeHw25tq09AOJcRmx5uUefROCBp1ZgJFbk/gVhse5L2mKn
-         Qtut8dKXHRp5OBa2AAZ6k0NLac73hK1R6TMnDndC6tkqRKyVGFVUCspmis8Jxp+5yQ6W
-         tqRg==
+        d=devtank-co-uk.20150623.gappssmtp.com; s=20150623;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lr1X4qPtfOj8I8pn0HovtsnthddwkxztVDaDC8OO86E=;
+        b=Hhr4gSeUNYilkOpoDFPXl89lDs/S24n69zLy8pkb2U6TRTBPZMUETnygzMW/V1ZphJ
+         Ytjqmfs8IX1lc7vvxPPvOlo0dP8+7cCW36JcTRaVLQqTr7+nmd7BUaBubd4TzrtZ33YZ
+         wA0zYaQbqsWnuYvY81otQVY9eC5yqiOL6cDgIVoUyyZvhUhwru7Gg4S9YiEtyMGqblU9
+         CaBOEYynolKwi0U2386oHaylAxw1XJJfCyVibYqMlLlV8bfkjXZAva25Aa606d4GvM/R
+         mqonH8eMMG1LAzb6reu7OFWbD1sChGwUaqUsJdbT1gbtbXFljJp6EdMkUb1NIr2AwwZf
+         QZhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=D/nsAOP6P3wyUX5B/9lLlJTqvWKWmrSRu43xTW8RyS0=;
-        b=jIaDWp/vWoGyw+n+wnMmhDOnEkDi1d6k/x6WgpvVASq7siwy986ctFgCOYF7qmQobW
-         p5BKCarZhXFCEx9Q5zjoGlHGE9Py7HxcktH+s/mvCiJFhiT3u3I/ZBGclFTxZ48TxsnW
-         92xlgfzpFZKaojIRX5+1Hd/EPERTqYjCFruv8JmlukErb57ufZK/6DSIzkSffrTtVsTO
-         3Lnvd9KVj32BHbRGm+wE9f+gIy/LGpLiaw7xQuy/jvHKsgNh8STi1hYUF7onWS+SwPy0
-         W3s977lLeZappbtQFOvfBVekj0dthNu4Lxn2xJtY6Jef1FtD3sIF2iQCd/U1rjhq9xFc
-         io2g==
-X-Gm-Message-State: AOAM531kDoIpJGduIXn+8L/iivmSDPuCuwYPajXe4JUA3nElkxkhhNJ2
-        5aveWepuPUCvwU6Y5IraoJhyo2sRVMI=
-X-Google-Smtp-Source: ABdhPJy8byrme0loYU0UXKYPvEQPv8Yu8ePmX12D72J8lEczsFC4566hO4frKalzKW0KCjQQYTRrAQ==
-X-Received: by 2002:a9d:12e:: with SMTP id 43mr6873060otu.90.1618355490776;
-        Tue, 13 Apr 2021 16:11:30 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w24sm1838149otj.33.2021.04.13.16.11.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 13 Apr 2021 16:11:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 13 Apr 2021 16:11:29 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yilun.xu@intel.com, jdelvare@suse.com, lee.jones@linaro.org,
-        linux-hwmon@vger.kernel.org, russell.h.weight@intel.com,
-        broonie@kernel.org, linux-spi@vger.kernel.org,
-        Russ Weight <russell.h.weight@linux.intel.com>
-Subject: Re: [PATCH v2 2/2] hwmon: intel-m10-bmc-hwmon: add sensor support of
- Intel D5005 card
-Message-ID: <20210413231129.GA233651@roeck-us.net>
-References: <20210413225835.459662-1-matthew.gerlach@linux.intel.com>
- <20210413225835.459662-3-matthew.gerlach@linux.intel.com>
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lr1X4qPtfOj8I8pn0HovtsnthddwkxztVDaDC8OO86E=;
+        b=UAWJafGglKeJBOTHpXL4qd6wUqo26BxgfcE4vJou/WCvik17P17wNT18YF0GlRq6rG
+         Q4Uvb4qjwOrKbTalgRRFcN07+6IPObpoN45Ze/7wD12Rg6qXWLsu1AgIgLEH2JIgUEj8
+         5ezj8zHwMKslnHLYdPd378B12wP5qivstqKKpc4+EQ5+9NZxllmxNDd1tjYfFLGynF1d
+         zu+6HVQowyjdQObLWKfBNO65+cmlscuCh9T864VrAS/sO99nW0CVzCjgEWmOzcyj3uRh
+         z2frTBBRPtEQoC5d131/DHYf8Ar7C4pS2HlrWKrqXceRcjZljGpxaGmaZNnNVq4Kos7t
+         YZ/w==
+X-Gm-Message-State: AOAM532SCcWGzVJpiw7QA2fQNetITdzU048HUwsKPNcQI3Al1PnKWMSO
+        IpNoIB3zJ/ICBJmhdyxzP+KZDw==
+X-Google-Smtp-Source: ABdhPJwxvN5/0WaRJ0EpLWLBmahI89lvzh6kWzPEqVO39YGewLL6PZ3PSTrqYmI2/7zLNtBMjHHODA==
+X-Received: by 2002:a05:6402:344e:: with SMTP id l14mr41306634edc.184.1618403120044;
+        Wed, 14 Apr 2021 05:25:20 -0700 (PDT)
+Received: from jabjoe-desktop.lan ([2a02:8010:673b:0:27d5:da8f:c244:7b8a])
+        by smtp.googlemail.com with ESMTPSA id h15sm9896917ejs.72.2021.04.14.05.25.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Apr 2021 05:25:19 -0700 (PDT)
+From:   Joe Burmeister <joe.burmeister@devtank.co.uk>
+To:     joe.burmeister@devtank.co.uk, Mark Brown <broonie@kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-spi@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Remove BCM2835 SPI chipselect limit.
+Date:   Wed, 14 Apr 2021 13:25:07 +0100
+Message-Id: <20210414122507.203348-1-joe.burmeister@devtank.co.uk>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210413225835.459662-3-matthew.gerlach@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Apr 13, 2021 at 03:58:35PM -0700, matthew.gerlach@linux.intel.com wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> 
-> Like the Intel N3000 card, the Intel D5005 has a MAX10 based
-> BMC.  This commit adds support for the D5005 sensors that are
-> monitored by the MAX10 BMC.
-> 
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Signed-off-by: Russ Weight <russell.h.weight@linux.intel.com>
-> Acked-by: Lee Jones <lee.jones@linaro.org>
+The limit of 4 chipselects for the BCM2835 was not required and also was
+not inforced. Without inforcement it was possible to make a device tree
+over this limit which would trample memory.
 
-Applied to hwmon-next.
+The chipselect count is now obtained from the device tree and expanded
+if more devices are added.
 
-Thanks,
-Guenter
+Signed-off-by: Joe Burmeister <joe.burmeister@devtank.co.uk>
+---
+ drivers/spi/spi-bcm2835.c | 114 +++++++++++++++++++++++++++++++++-----
+ 1 file changed, 101 insertions(+), 13 deletions(-)
 
-> ---
-> v2: change variable name from m10bmc_bmc_subdevs to m10bmc_d5005_subdevs
->     added Acked-by: Lee Jones
-> ---
->  drivers/hwmon/intel-m10-bmc-hwmon.c | 122 ++++++++++++++++++++++++++++++++++++
->  drivers/mfd/intel-m10-bmc.c         |  10 +++
->  2 files changed, 132 insertions(+)
-> 
-> diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
-> index 17d5e6b..bd7ed2e 100644
-> --- a/drivers/hwmon/intel-m10-bmc-hwmon.c
-> +++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
-> @@ -99,6 +99,50 @@ struct m10bmc_hwmon {
->  	NULL
->  };
->  
-> +static const struct m10bmc_sdata d5005bmc_temp_tbl[] = {
-> +	{ 0x100, 0x104, 0x108, 0x10c, 0x0, 500, "Board Inlet Air Temperature" },
-> +	{ 0x110, 0x114, 0x118, 0x0, 0x0, 500, "FPGA Core Temperature" },
-> +	{ 0x11c, 0x120, 0x124, 0x128, 0x0, 500, "Board Exhaust Air Temperature" },
-> +	{ 0x12c, 0x130, 0x134, 0x0, 0x0, 500, "FPGA Transceiver Temperature" },
-> +	{ 0x138, 0x13c, 0x140, 0x144, 0x0, 500, "RDIMM0 Temperature" },
-> +	{ 0x148, 0x14c, 0x150, 0x154, 0x0, 500, "RDIMM1 Temperature" },
-> +	{ 0x158, 0x15c, 0x160, 0x164, 0x0, 500, "RDIMM2 Temperature" },
-> +	{ 0x168, 0x16c, 0x170, 0x174, 0x0, 500, "RDIMM3 Temperature" },
-> +	{ 0x178, 0x17c, 0x180, 0x0, 0x0, 500, "QSFP0 Temperature" },
-> +	{ 0x188, 0x18c, 0x190, 0x0, 0x0, 500, "QSFP1 Temperature" },
-> +	{ 0x1a0, 0x1a4, 0x1a8, 0x0, 0x0, 500, "3.3v Temperature" },
-> +	{ 0x1bc, 0x1c0, 0x1c4, 0x0, 0x0, 500, "VCCERAM Temperature" },
-> +	{ 0x1d8, 0x1dc, 0x1e0, 0x0, 0x0, 500, "VCCR Temperature" },
-> +	{ 0x1f4, 0x1f8, 0x1fc, 0x0, 0x0, 500, "VCCT Temperature" },
-> +	{ 0x210, 0x214, 0x218, 0x0, 0x0, 500, "1.8v Temperature" },
-> +	{ 0x22c, 0x230, 0x234, 0x0, 0x0, 500, "12v Backplane Temperature" },
-> +	{ 0x248, 0x24c, 0x250, 0x0, 0x0, 500, "12v AUX Temperature" },
-> +};
-> +
-> +static const struct m10bmc_sdata d5005bmc_in_tbl[] = {
-> +	{ 0x184, 0x0, 0x0, 0x0, 0x0, 1, "QSFP0 Supply Voltage" },
-> +	{ 0x194, 0x0, 0x0, 0x0, 0x0, 1, "QSFP1 Supply Voltage" },
-> +	{ 0x198, 0x0, 0x0, 0x0, 0x0, 1, "FPGA Core Voltage" },
-> +	{ 0x1ac, 0x1b0, 0x1b4, 0x0, 0x0, 1, "3.3v Voltage" },
-> +	{ 0x1c8, 0x1cc, 0x1d0, 0x0, 0x0, 1, "VCCERAM Voltage" },
-> +	{ 0x1e4, 0x1e8, 0x1ec, 0x0, 0x0, 1, "VCCR Voltage" },
-> +	{ 0x200, 0x204, 0x208, 0x0, 0x0, 1, "VCCT Voltage" },
-> +	{ 0x21c, 0x220, 0x224, 0x0, 0x0, 1, "1.8v Voltage" },
-> +	{ 0x238, 0x0, 0x0, 0x0, 0x23c, 1, "12v Backplane Voltage" },
-> +	{ 0x254, 0x0, 0x0, 0x0, 0x258, 1, "12v AUX Voltage" },
-> +};
-> +
-> +static const struct m10bmc_sdata d5005bmc_curr_tbl[] = {
-> +	{ 0x19c, 0x0, 0x0, 0x0, 0x0, 1, "FPGA Core Current" },
-> +	{ 0x1b8, 0x0, 0x0, 0x0, 0x0, 1, "3.3v Current" },
-> +	{ 0x1d4, 0x0, 0x0, 0x0, 0x0, 1, "VCCERAM Current" },
-> +	{ 0x1f0, 0x0, 0x0, 0x0, 0x0, 1, "VCCR Current" },
-> +	{ 0x20c, 0x0, 0x0, 0x0, 0x0, 1, "VCCT Current" },
-> +	{ 0x228, 0x0, 0x0, 0x0, 0x0, 1, "1.8v Current" },
-> +	{ 0x240, 0x244, 0x0, 0x0, 0x0, 1, "12v Backplane Current" },
-> +	{ 0x25c, 0x260, 0x0, 0x0, 0x0, 1, "12v AUX Current" },
-> +};
-> +
->  static const struct m10bmc_hwmon_board_data n3000bmc_hwmon_bdata = {
->  	.tables = {
->  		[hwmon_temp] = n3000bmc_temp_tbl,
-> @@ -110,6 +154,80 @@ struct m10bmc_hwmon {
->  	.hinfo = n3000bmc_hinfo,
->  };
->  
-> +static const struct hwmon_channel_info *d5005bmc_hinfo[] = {
-> +	HWMON_CHANNEL_INFO(temp,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-> +			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-> +			   HWMON_T_LABEL),
-> +	HWMON_CHANNEL_INFO(in,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MAX | HWMON_I_CRIT |
-> +			   HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MAX | HWMON_I_CRIT |
-> +			   HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MAX | HWMON_I_CRIT |
-> +			   HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MAX | HWMON_I_CRIT |
-> +			   HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MAX | HWMON_I_CRIT |
-> +			   HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_LABEL),
-> +	HWMON_CHANNEL_INFO(curr,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_LABEL),
-> +	NULL
-> +};
-> +
-> +static const struct m10bmc_hwmon_board_data d5005bmc_hwmon_bdata = {
-> +	.tables = {
-> +		[hwmon_temp] = d5005bmc_temp_tbl,
-> +		[hwmon_in] = d5005bmc_in_tbl,
-> +		[hwmon_curr] = d5005bmc_curr_tbl,
-> +	},
-> +
-> +	.hinfo = d5005bmc_hinfo,
-> +};
-> +
->  static umode_t
->  m10bmc_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
->  			u32 attr, int channel)
-> @@ -316,6 +434,10 @@ static int m10bmc_hwmon_probe(struct platform_device *pdev)
->  		.name = "n3000bmc-hwmon",
->  		.driver_data = (unsigned long)&n3000bmc_hwmon_bdata,
->  	},
-> +	{
-> +		.name = "d5005bmc-hwmon",
-> +		.driver_data = (unsigned long)&d5005bmc_hwmon_bdata,
-> +	},
->  	{ }
->  };
->  
-> diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
-> index 1161933..1a9bfb7 100644
-> --- a/drivers/mfd/intel-m10-bmc.c
-> +++ b/drivers/mfd/intel-m10-bmc.c
-> @@ -15,6 +15,11 @@
->  
->  enum m10bmc_type {
->  	M10_N3000,
-> +	M10_D5005
-> +};
-> +
-> +static struct mfd_cell m10bmc_d5005_subdevs[] = {
-> +	{ .name = "d5005bmc-hwmon" },
->  };
->  
->  static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
-> @@ -183,6 +188,10 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
->  		cells = m10bmc_pacn3000_subdevs;
->  		n_cell = ARRAY_SIZE(m10bmc_pacn3000_subdevs);
->  		break;
-> +	case M10_D5005:
-> +		cells = m10bmc_d5005_subdevs;
-> +		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
-> +		break;
->  	default:
->  		return -ENODEV;
->  	}
-> @@ -197,6 +206,7 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
->  
->  static const struct spi_device_id m10bmc_spi_id[] = {
->  	{ "m10-n3000", M10_N3000 },
-> +	{ "m10-d5005", M10_D5005 },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(spi, m10bmc_spi_id);
+diff --git a/drivers/spi/spi-bcm2835.c b/drivers/spi/spi-bcm2835.c
+index aab6c7e5c114..4f215ec3bd1b 100644
+--- a/drivers/spi/spi-bcm2835.c
++++ b/drivers/spi/spi-bcm2835.c
+@@ -28,6 +28,7 @@
+ #include <linux/gpio/consumer.h>
+ #include <linux/gpio/machine.h> /* FIXME: using chip internals */
+ #include <linux/gpio/driver.h> /* FIXME: using chip internals */
++#include <linux/of_gpio.h>
+ #include <linux/of_irq.h>
+ #include <linux/spi/spi.h>
+ 
+@@ -134,7 +135,8 @@ struct bcm2835_spi {
+ 	int tx_prologue;
+ 	int rx_prologue;
+ 	unsigned int tx_spillover;
+-	u32 prepare_cs[BCM2835_SPI_NUM_CS];
++	unsigned int allocated_cs_num;
++	u32 *prepare_cs;
+ 
+ 	struct dentry *debugfs_dir;
+ 	u64 count_transfer_polling;
+@@ -147,9 +149,9 @@ struct bcm2835_spi {
+ 	unsigned int rx_dma_active;
+ 	struct dma_async_tx_descriptor *fill_tx_desc;
+ 	dma_addr_t fill_tx_addr;
+-	struct dma_async_tx_descriptor *clear_rx_desc[BCM2835_SPI_NUM_CS];
++	struct dma_async_tx_descriptor **clear_rx_desc;
+ 	dma_addr_t clear_rx_addr;
+-	u32 clear_rx_cs[BCM2835_SPI_NUM_CS] ____cacheline_aligned;
++	u32 *clear_rx_cs;
+ };
+ 
+ #if defined(CONFIG_DEBUG_FS)
+@@ -859,14 +861,18 @@ static void bcm2835_dma_release(struct spi_controller *ctlr,
+ 	if (ctlr->dma_tx) {
+ 		dmaengine_terminate_sync(ctlr->dma_tx);
+ 
+-		if (bs->fill_tx_desc)
++		if (bs->fill_tx_desc) {
+ 			dmaengine_desc_free(bs->fill_tx_desc);
++			bs->fill_tx_desc = NULL;
++		}
+ 
+-		if (bs->fill_tx_addr)
++		if (bs->fill_tx_addr) {
+ 			dma_unmap_page_attrs(ctlr->dma_tx->device->dev,
+ 					     bs->fill_tx_addr, sizeof(u32),
+ 					     DMA_TO_DEVICE,
+ 					     DMA_ATTR_SKIP_CPU_SYNC);
++			bs->fill_tx_addr = 0;
++		}
+ 
+ 		dma_release_channel(ctlr->dma_tx);
+ 		ctlr->dma_tx = NULL;
+@@ -875,15 +881,19 @@ static void bcm2835_dma_release(struct spi_controller *ctlr,
+ 	if (ctlr->dma_rx) {
+ 		dmaengine_terminate_sync(ctlr->dma_rx);
+ 
+-		for (i = 0; i < BCM2835_SPI_NUM_CS; i++)
+-			if (bs->clear_rx_desc[i])
++		for (i = 0; i < bs->allocated_cs_num; i++)
++			if (bs->clear_rx_desc[i]) {
+ 				dmaengine_desc_free(bs->clear_rx_desc[i]);
++				bs->clear_rx_desc[i] = NULL;
++			}
+ 
+-		if (bs->clear_rx_addr)
++		if (bs->clear_rx_addr) {
+ 			dma_unmap_single(ctlr->dma_rx->device->dev,
+ 					 bs->clear_rx_addr,
+-					 sizeof(bs->clear_rx_cs),
++					 sizeof(u32) * bs->allocated_cs_num,
+ 					 DMA_TO_DEVICE);
++			bs->clear_rx_addr = 0;
++		}
+ 
+ 		dma_release_channel(ctlr->dma_rx);
+ 		ctlr->dma_rx = NULL;
+@@ -978,7 +988,7 @@ static int bcm2835_dma_init(struct spi_controller *ctlr, struct device *dev,
+ 
+ 	bs->clear_rx_addr = dma_map_single(ctlr->dma_rx->device->dev,
+ 					   bs->clear_rx_cs,
+-					   sizeof(bs->clear_rx_cs),
++					   sizeof(u32) * bs->allocated_cs_num,
+ 					   DMA_TO_DEVICE);
+ 	if (dma_mapping_error(ctlr->dma_rx->device->dev, bs->clear_rx_addr)) {
+ 		dev_err(dev, "cannot map clear_rx_cs - not using DMA mode\n");
+@@ -987,7 +997,7 @@ static int bcm2835_dma_init(struct spi_controller *ctlr, struct device *dev,
+ 		goto err_release;
+ 	}
+ 
+-	for (i = 0; i < BCM2835_SPI_NUM_CS; i++) {
++	for (i = 0; i < bs->allocated_cs_num; i++) {
+ 		bs->clear_rx_desc[i] = dmaengine_prep_dma_cyclic(ctlr->dma_rx,
+ 					   bs->clear_rx_addr + i * sizeof(u32),
+ 					   sizeof(u32), 0,
+@@ -1209,6 +1219,48 @@ static int bcm2835_spi_setup(struct spi_device *spi)
+ 	struct gpio_chip *chip;
+ 	u32 cs;
+ 
++	if (spi->chip_select >= bs->allocated_cs_num) {
++		unsigned int new_allocated_cs_num = spi->chip_select + 1;
++		void *new_prepare_cs, *new_clear_rx_desc, *new_clear_rx_cs;
++		int err;
++
++		dev_info(&spi->dev, "Increasing CS count to %u\n",
++			new_allocated_cs_num);
++
++		bcm2835_dma_release(ctlr, bs);
++
++		new_prepare_cs  = kmalloc_array(new_allocated_cs_num,
++			sizeof(u32), GFP_KERNEL);
++		new_clear_rx_desc = kmalloc_array(new_allocated_cs_num,
++			sizeof(struct dma_async_tx_descriptor *), GFP_KERNEL);
++		new_clear_rx_cs = kmalloc_array(new_allocated_cs_num,
++			sizeof(u32), GFP_DMA);
++
++		if (!new_prepare_cs || !new_clear_rx_desc || !new_clear_rx_cs) {
++			dev_err(&spi->dev, "Failed to allocate new CS arrays.\n");
++			return -ENOMEM;
++		}
++
++		memcpy(new_prepare_cs, bs->prepare_cs,
++			bs->allocated_cs_num * sizeof(u32));
++
++		kfree(bs->prepare_cs);
++		kfree(bs->clear_rx_desc);
++		kfree(bs->clear_rx_cs);
++
++		bs->prepare_cs  = new_prepare_cs;
++		bs->clear_rx_desc = new_clear_rx_desc;
++		bs->clear_rx_cs = new_clear_rx_cs;
++
++		bs->allocated_cs_num = new_allocated_cs_num;
++
++		err = bcm2835_dma_init(ctlr, &spi->dev, bs);
++		if (err) {
++			dev_err(&spi->dev, "Failed to reinit DMA after CS count change.");
++			return err;
++		}
++	}
++
+ 	/*
+ 	 * Precalculate SPI slave's CS register value for ->prepare_message():
+ 	 * The driver always uses software-controlled GPIO chip select, hence
+@@ -1233,7 +1285,7 @@ static int bcm2835_spi_setup(struct spi_device *spi)
+ 						    BCM2835_SPI_CS_CLEAR_RX;
+ 		dma_sync_single_for_device(ctlr->dma_rx->device->dev,
+ 					   bs->clear_rx_addr,
+-					   sizeof(bs->clear_rx_cs),
++					   sizeof(u32) * bs->allocated_cs_num,
+ 					   DMA_TO_DEVICE);
+ 	}
+ 
+@@ -1248,6 +1300,7 @@ static int bcm2835_spi_setup(struct spi_device *spi)
+ 	 */
+ 	if (spi->cs_gpiod)
+ 		return 0;
++
+ 	if (spi->chip_select > 1) {
+ 		/* error in the case of native CS requested with CS > 1
+ 		 * officially there is a CS2, but it is not documented
+@@ -1286,10 +1339,25 @@ static int bcm2835_spi_setup(struct spi_device *spi)
+ 	return 0;
+ }
+ 
++
++#ifdef CONFIG_OF
++static int bcm2835_spi_get_num_chipselect(struct platform_device *pdev)
++{
++	return max_t(int, of_gpio_named_count(pdev->dev.of_node, "cs-gpios"), BCM2835_SPI_NUM_CS);
++}
++#else
++static int bcm2835_spi_get_num_chipselect(struct platform_device *pdev)
++{
++	return BCM2835_SPI_NUM_CS;
++}
++#endif
++
++
+ static int bcm2835_spi_probe(struct platform_device *pdev)
+ {
+ 	struct spi_controller *ctlr;
+ 	struct bcm2835_spi *bs;
++	int num_chipselect;
+ 	int err;
+ 
+ 	ctlr = devm_spi_alloc_master(&pdev->dev, ALIGN(sizeof(*bs),
+@@ -1297,12 +1365,14 @@ static int bcm2835_spi_probe(struct platform_device *pdev)
+ 	if (!ctlr)
+ 		return -ENOMEM;
+ 
++	num_chipselect = bcm2835_spi_get_num_chipselect(pdev);
++
+ 	platform_set_drvdata(pdev, ctlr);
+ 
+ 	ctlr->use_gpio_descriptors = true;
+ 	ctlr->mode_bits = BCM2835_SPI_MODE_BITS;
+ 	ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
+-	ctlr->num_chipselect = BCM2835_SPI_NUM_CS;
++	ctlr->num_chipselect = num_chipselect;
+ 	ctlr->setup = bcm2835_spi_setup;
+ 	ctlr->transfer_one = bcm2835_spi_transfer_one;
+ 	ctlr->handle_err = bcm2835_spi_handle_err;
+@@ -1311,6 +1381,20 @@ static int bcm2835_spi_probe(struct platform_device *pdev)
+ 
+ 	bs = spi_controller_get_devdata(ctlr);
+ 	bs->ctlr = ctlr;
++	bs->allocated_cs_num = num_chipselect;
++
++	bs->prepare_cs = kmalloc_array(num_chipselect, sizeof(u32), GFP_KERNEL);
++	if (!bs->prepare_cs)
++		return -ENOMEM;
++
++	bs->clear_rx_desc = kmalloc_array(num_chipselect,
++		sizeof(struct dma_async_tx_descriptor *), GFP_KERNEL);
++	if (!bs->clear_rx_desc)
++		return -ENOMEM;
++
++	bs->clear_rx_cs = kmalloc_array(num_chipselect, sizeof(u32), GFP_DMA);
++	if (!bs->clear_rx_cs)
++		return -ENOMEM;
+ 
+ 	bs->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(bs->regs))
+@@ -1378,6 +1462,10 @@ static int bcm2835_spi_remove(struct platform_device *pdev)
+ 
+ 	clk_disable_unprepare(bs->clk);
+ 
++	kfree(bs->prepare_cs);
++	kfree(bs->clear_rx_desc);
++	kfree(bs->clear_rx_cs);
++
+ 	return 0;
+ }
+ 
+-- 
+2.30.2
+
