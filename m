@@ -2,85 +2,118 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51476360195
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Apr 2021 07:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 231CB360319
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Apr 2021 09:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbhDOF2O (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 15 Apr 2021 01:28:14 -0400
-Received: from spam.zju.edu.cn ([61.164.42.155]:52166 "EHLO zju.edu.cn"
+        id S230090AbhDOHSC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 15 Apr 2021 03:18:02 -0400
+Received: from spam.zju.edu.cn ([61.164.42.155]:17998 "EHLO zju.edu.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229503AbhDOF2M (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 15 Apr 2021 01:28:12 -0400
-Received: by ajax-webmail-mail-app3 (Coremail) ; Thu, 15 Apr 2021 13:27:22
- +0800 (GMT+08:00)
-X-Originating-IP: [222.205.72.8]
-Date:   Thu, 15 Apr 2021 13:27:22 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   dinghao.liu@zju.edu.cn
-To:     wqyoung <quanyang.wang@windriver.com>
-Cc:     kjlu@umn.edu, "Mark Brown" <broonie@kernel.org>,
-        "Michal Simek" <michal.simek@xilinx.com>,
+        id S231215AbhDOHSB (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 15 Apr 2021 03:18:01 -0400
+Received: from localhost.localdomain (unknown [10.192.139.175])
+        by mail-app4 (Coremail) with SMTP id cS_KCgBHmQ2C6Hdga8TPAA--.12438S4;
+        Thu, 15 Apr 2021 15:17:28 +0800 (CST)
+From:   Dinghao Liu <dinghao.liu@zju.edu.cn>
+To:     dinghao.liu@zju.edu.cn, kjlu@umn.edu
+Cc:     quanyang.wang@windriver.com, Mark Brown <broonie@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
         linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH] [v2] spi: spi-zynqmp-gqspi: Fix runtime PM
- imbalance in zynqmp_qspi_probe
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2021 www.mailtech.cn zju.edu.cn
-In-Reply-To: <20210415012158.GA2465158@pek-qwang2-d1>
-References: <20210412073154.25011-1-dinghao.liu@zju.edu.cn>
- <20210415012158.GA2465158@pek-qwang2-d1>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
-MIME-Version: 1.0
-Message-ID: <7b720ae6.58927.178d3ff88f3.Coremail.dinghao.liu@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cC_KCgC3nz66zndgCbQmAQ--.40483W
-X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgwNBlZdtTXCvwAIs7
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
+Subject: [PATCH] [v3] spi: spi-zynqmp-gqspi: Fix runtime PM imbalance in zynqmp_qspi_probe
+Date:   Thu, 15 Apr 2021 15:17:14 +0800
+Message-Id: <20210415071714.19334-1-dinghao.liu@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgBHmQ2C6Hdga8TPAA--.12438S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFyfKw4fAFWkAryrWFyfZwb_yoW8Kr1fpr
+        WvqFW7Kr4Iq3yxtF1qyw4kXFy5uryFg347JrykK3WIva4Fq3WrtF18JFy3tFW0yF97AFWU
+        WF48J3ySkF1YvFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
+        73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgwNBlZdtTXCvwAJs6
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-PiBIaSBEaW5naGFvLAo+IE9uIE1vbiwgQXByIDEyLCAyMDIxIGF0IDAzOjMxOjU0UE0gKzA4MDAs
-IERpbmdoYW8gTGl1IHdyb3RlOgo+ID4gVGhlcmUgaXMgYSBQTSB1c2FnZSBjb3VudGVyIGRlY3Jl
-bWVudCBhZnRlciB6eW5xbXBfcXNwaV9pbml0X2h3KCkKPiA+IHdpdGhvdXQgYW55IHJlZmNvdW50
-IGluY3JlbWVudCwgd2hpY2ggbGVhZHMgdG8gcmVmY291bnQgbGVhay5BZGQKPiA+IGEgcmVmY291
-bnQgaW5jcmVtZW50IHRvIGJhbGFuY2UgdGhlIHJlZmNvdW50LiBBbHNvIHNldAo+ID4gYXV0b19y
-dW50aW1lX3BtIHRvIHJlc3VtZSBzdXNwZW5kZWQgc3BpIGNvbnRyb2xsZXIuCj4gPiAKPiA+IFNp
-Z25lZC1vZmYtYnk6IERpbmdoYW8gTGl1IDxkaW5naGFvLmxpdUB6anUuZWR1LmNuPgo+ID4gLS0t
-Cj4gPiBjaGFuZ2Vsb2c6Cj4gPiAKPiA+IHYyOiAtIEFkZCBhIHJlZmNvdW50IGluY3JlbWVudCB0
-byBmaXggcmVmY291dCBsZWFrIGluc3RlYWQgb2YgdGhlCj4gPiAgICAgICByZWZjb3VudCBkZWNy
-ZW1lbnQgb24gZXJyb3IuCj4gPiAgICAgICBTZXQgY3Rsci0+YXV0b19ydW50aW1lX3BtID0gdHJ1
-ZS4KPiA+IC0tLQo+ID4gIGRyaXZlcnMvc3BpL3NwaS16eW5xbXAtZ3FzcGkuYyB8IDIgKysKPiA+
-ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspCj4gPiAKPiA+IGRpZmYgLS1naXQgYS9k
-cml2ZXJzL3NwaS9zcGktenlucW1wLWdxc3BpLmMgYi9kcml2ZXJzL3NwaS9zcGktenlucW1wLWdx
-c3BpLmMKPiA+IGluZGV4IGM4ZmE2ZWUxOGFlNy4uOGIyMWM3YjBlN2ViIDEwMDY0NAo+ID4gLS0t
-IGEvZHJpdmVycy9zcGkvc3BpLXp5bnFtcC1ncXNwaS5jCj4gPiArKysgYi9kcml2ZXJzL3NwaS9z
-cGktenlucW1wLWdxc3BpLmMKPiA+IEBAIC0xMTYwLDYgKzExNjAsNyBAQCBzdGF0aWMgaW50IHp5
-bnFtcF9xc3BpX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpCj4gPiAgCXBtX3J1
-bnRpbWVfc2V0X2F1dG9zdXNwZW5kX2RlbGF5KCZwZGV2LT5kZXYsIFNQSV9BVVRPU1VTUEVORF9U
-SU1FT1VUKTsKPiA+ICAJcG1fcnVudGltZV9zZXRfYWN0aXZlKCZwZGV2LT5kZXYpOwo+ID4gIAlw
-bV9ydW50aW1lX2VuYWJsZSgmcGRldi0+ZGV2KTsKPiA+ICsJcG1fcnVudGltZV9nZXRfc3luYygm
-cGRldi0+ZGV2KTsKPiBQbGVhc2UgY2hlY2sgdGhlIHJldHVybiB2YWx1ZSBoZXJlLCBpZiByZXQg
-aXMgIjwgMCIsIGdvdG8gZXJyb3IgbGFiZWwsCj4gYW5kIGEgcG1fcnVudGltZV9wdXRfc3luYyBp
-cyBuZWVkZWQgaW4gZXJyb3IgbGFiZWwKPiA+ICAJLyogUVNQSSBjb250cm9sbGVyIGluaXRpYWxp
-emF0aW9ucyAqLwo+ID4gIAl6eW5xbXBfcXNwaV9pbml0X2h3KHhxc3BpKTsKPiA+ICAKPiA+IEBA
-IC0xMTg3LDYgKzExODgsNyBAQCBzdGF0aWMgaW50IHp5bnFtcF9xc3BpX3Byb2JlKHN0cnVjdCBw
-bGF0Zm9ybV9kZXZpY2UgKnBkZXYpCj4gPiAgCWN0bHItPm1vZGVfYml0cyA9IFNQSV9DUE9MIHwg
-U1BJX0NQSEEgfCBTUElfUlhfRFVBTCB8IFNQSV9SWF9RVUFEIHwKPiA+ICAJCQkgICAgU1BJX1RY
-X0RVQUwgfCBTUElfVFhfUVVBRDsKPiA+ICAJY3Rsci0+ZGV2Lm9mX25vZGUgPSBucDsKPiA+ICsJ
-Y3Rsci0+YXV0b19ydW50aW1lX3BtID0gdHJ1ZTsKPiA+ICAKPiA+ICAJcmV0ID0gZGV2bV9zcGlf
-cmVnaXN0ZXJfY29udHJvbGxlcigmcGRldi0+ZGV2LCBjdGxyKTsKPiA+ICAJaWYgKHJldCkgewo+
-IFRoZXNlIDIgZnVuY3Rpb24KPiAgICAgIHBtX3J1bnRpbWVfbWFya19sYXN0X2J1c3koJnBkZXYt
-PmRldik7Cj4gICAgICAgcG1fcnVudGltZV9wdXRfYXV0b3N1c3BlbmQoJnBkZXYtPmRldik7Cj4g
-YXJlIHRoZSBsYXN0IG9wZXJhdGlvbnMgaW4gcHJvYmUgZnVuY3Rpb24gc2luY2UgaWYgdGhleSBy
-dW5zLAo+IHNwaV9jb250cm9sbGVyIHdpbGwgZW50ZXIgc3VzcGVuZCBzdGF0ZSBhbmQgZGlzYWJs
-ZSBjbGtzIGFmdGVyIDNzCj4gcGFzc2luZy4gU28gcGxlYXNlIG1vdmUgdGhlbSBqdXN0IGJlZm9y
-ZSAicmV0dXJuIDAiLgo+IAo+IEFuZCB3b3VsZCB5b3UgcGxlYXNlIGNjIG1lIHdoZW4geW91IHNl
-bmQgVjM/IEkgYW0gcHJlcGFyaW5nIHRvIHNlbmQgYSBwYXRjaCBzZXJpZXMKPiB0byBmaXggY2xr
-IGFuZCBzdXNwZW5kL3Jlc3VtZSBpc3N1ZXMgd2hpY2ggYmFzZXMgb24gdGhlIHBtX3J1bnRpbWUg
-aXNzdWUuCj4gCgpUaGFua3MgZm9yIHlvdXIgYWR2aWNlIGFuZCBJIHdpbGwgc2VuZCBhIG5ldyBw
-YXRjaCBzb29uLgoKUmVnYXJkcywKRGluZ2hhbw==
+There is a PM usage counter decrement after zynqmp_qspi_init_hw()
+without any refcount increment, which leads to refcount leak.Add
+a refcount increment to balance the refcount. Also set
+auto_runtime_pm to resume suspended spi controller.
+
+Fixes: 9e3a000362aec ("spi: zynqmp: Add pm runtime support")
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+---
+
+Changelog:
+
+v2: - Add a refcount increment to fix refcout leak instead of the
+      refcount decrement on error.
+      Set ctlr->auto_runtime_pm = true.
+
+v3: - Add fix tag.
+      Add a return value check against pm_runtime_get_sync().
+      Move pm_runtime_{mark_last_busy & put_autosuspend} to the
+      end of current function.
+---
+ drivers/spi/spi-zynqmp-gqspi.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
+index c8fa6ee18ae7..781ef3fc76e2 100644
+--- a/drivers/spi/spi-zynqmp-gqspi.c
++++ b/drivers/spi/spi-zynqmp-gqspi.c
+@@ -1160,11 +1160,14 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
+ 	pm_runtime_set_autosuspend_delay(&pdev->dev, SPI_AUTOSUSPEND_TIMEOUT);
+ 	pm_runtime_set_active(&pdev->dev);
+ 	pm_runtime_enable(&pdev->dev);
++
++	ret = pm_runtime_get_sync(&pdev->dev);
++	if (ret < 0)
++		goto clk_dis_all;
++
+ 	/* QSPI controller initializations */
+ 	zynqmp_qspi_init_hw(xqspi);
+ 
+-	pm_runtime_mark_last_busy(&pdev->dev);
+-	pm_runtime_put_autosuspend(&pdev->dev);
+ 	xqspi->irq = platform_get_irq(pdev, 0);
+ 	if (xqspi->irq <= 0) {
+ 		ret = -ENXIO;
+@@ -1187,6 +1190,7 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
+ 	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_RX_DUAL | SPI_RX_QUAD |
+ 			    SPI_TX_DUAL | SPI_TX_QUAD;
+ 	ctlr->dev.of_node = np;
++	ctlr->auto_runtime_pm = true;
+ 
+ 	ret = devm_spi_register_controller(&pdev->dev, ctlr);
+ 	if (ret) {
+@@ -1194,9 +1198,13 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
+ 		goto clk_dis_all;
+ 	}
+ 
++	pm_runtime_mark_last_busy(&pdev->dev);
++	pm_runtime_put_autosuspend(&pdev->dev);
++
+ 	return 0;
+ 
+ clk_dis_all:
++	pm_runtime_put_sync(&pdev->dev);
+ 	pm_runtime_set_suspended(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+ 	clk_disable_unprepare(xqspi->refclk);
+-- 
+2.17.1
+
