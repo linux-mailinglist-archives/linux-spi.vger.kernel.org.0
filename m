@@ -2,170 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 924C935FF39
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Apr 2021 03:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51476360195
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Apr 2021 07:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbhDOBXh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 14 Apr 2021 21:23:37 -0400
-Received: from mail-bn7nam10on2051.outbound.protection.outlook.com ([40.107.92.51]:35937
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        id S229843AbhDOF2O (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 15 Apr 2021 01:28:14 -0400
+Received: from spam.zju.edu.cn ([61.164.42.155]:52166 "EHLO zju.edu.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229450AbhDOBXg (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 14 Apr 2021 21:23:36 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gxYuWVKRkUYTcwoyA1Wj2ousAhUV2sUPclPGPBW/kYiaO3cEU0fMb4199YVFhds5FTGrQjrSR7thfqkF0teqe7SHRBYzR3QUMsLBf9LxQj0NdMnApcFjqcj6jil0uSG9+cYrZRHRSh+yyalPIzsB7ON4hvuKlLw6g1RhpvBk4bRuW+7mDUalGLkhGrCqfCHucXyoKwZ5To9ARhPjFHAHmEfDb36F2u2FfHNXYwCzFkiGIr8gnLQl0B/ioeDZWR9Q2xhlet2TpgH0HsDW55eaJNhminySL14+wDZaYd31OrYUpv7Vdh1RHhyfUzn1xldoEBiyr8EQ5r5br2AhWZdQUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KDrbCYCRnQoCqUO4ZYS5oPFYum9M8hTX/ZFF8jH60Vo=;
- b=Ux4ypMHD9NQOYc7ihHEJJQbIXtKd7OclXT7CvZA09FM7Gy8yncpWuU99m3kXfgV3faLeeKkF01Pbas0XabnOXY/cOoM3dqzkgu03I+Ah+EnQWGlccnL8hZpeQ38AnDsM9hQM7ESdHQLvqlXmFSLOKdZ6N1Jy5rUIXq3PcDfHReF/PbzDqar2KdULj5SzNyALEw2qgP3N6R4otAoI59VhL7/Xn1LOov2ocp1uD+aqj04z6xiWVbzu+CGAo3fbnkPV0rziYV2/wRKn5cAzOPzRu0gkcV5aaviGZVLCzQvYpHCcbx8VmiFbnub0Ub/JvnPH10ZnW6wNkLdryB3GvovDbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=windriversystems.onmicrosoft.com;
- s=selector2-windriversystems-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KDrbCYCRnQoCqUO4ZYS5oPFYum9M8hTX/ZFF8jH60Vo=;
- b=aEVJVqZRhv/usAt+4TfCrSrqLVkTZK7FdHsreVbUDiBGzA95HWNdYzcwHF0/+Z+jqLCEksZtpGJIVbZOBeUArP9XcHQFcWwB8wMyPRJ11RWVSfyCGScIgIrn9eOHZOp7LG1ZTJ8AqaG9GY2exlf4IOsxwdinrmZHGE7uEspdTuU=
-Authentication-Results: zju.edu.cn; dkim=none (message not signed)
- header.d=none;zju.edu.cn; dmarc=none action=none header.from=windriver.com;
-Received: from CY4PR11MB0071.namprd11.prod.outlook.com (2603:10b6:910:7a::30)
- by CY4PR11MB1544.namprd11.prod.outlook.com (2603:10b6:910:d::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.18; Thu, 15 Apr
- 2021 01:23:10 +0000
-Received: from CY4PR11MB0071.namprd11.prod.outlook.com
- ([fe80::f45f:e820:49f5:3725]) by CY4PR11MB0071.namprd11.prod.outlook.com
- ([fe80::f45f:e820:49f5:3725%6]) with mapi id 15.20.3999.037; Thu, 15 Apr 2021
- 01:23:10 +0000
-Date:   Thu, 15 Apr 2021 09:21:58 +0800
-From:   wqyoung <quanyang.wang@windriver.com>
-To:     Dinghao Liu <dinghao.liu@zju.edu.cn>
-Cc:     kjlu@umn.edu, Mark Brown <broonie@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
+        id S229503AbhDOF2M (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 15 Apr 2021 01:28:12 -0400
+Received: by ajax-webmail-mail-app3 (Coremail) ; Thu, 15 Apr 2021 13:27:22
+ +0800 (GMT+08:00)
+X-Originating-IP: [222.205.72.8]
+Date:   Thu, 15 Apr 2021 13:27:22 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   dinghao.liu@zju.edu.cn
+To:     wqyoung <quanyang.wang@windriver.com>
+Cc:     kjlu@umn.edu, "Mark Brown" <broonie@kernel.org>,
+        "Michal Simek" <michal.simek@xilinx.com>,
         linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v2] spi: spi-zynqmp-gqspi: Fix runtime PM imbalance in
- zynqmp_qspi_probe
-Message-ID: <20210415012158.GA2465158@pek-qwang2-d1>
+Subject: Re: Re: [PATCH] [v2] spi: spi-zynqmp-gqspi: Fix runtime PM
+ imbalance in zynqmp_qspi_probe
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2021 www.mailtech.cn zju.edu.cn
+In-Reply-To: <20210415012158.GA2465158@pek-qwang2-d1>
 References: <20210412073154.25011-1-dinghao.liu@zju.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210412073154.25011-1-dinghao.liu@zju.edu.cn>
-X-Originating-IP: [60.247.85.82]
-X-ClientProxiedBy: HK0PR03CA0097.apcprd03.prod.outlook.com
- (2603:1096:203:b0::13) To CY4PR11MB0071.namprd11.prod.outlook.com
- (2603:10b6:910:7a::30)
+ <20210415012158.GA2465158@pek-qwang2-d1>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from pek-qwang2-d1 (60.247.85.82) by HK0PR03CA0097.apcprd03.prod.outlook.com (2603:1096:203:b0::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.16 via Frontend Transport; Thu, 15 Apr 2021 01:23:08 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8afd654e-cf40-4111-1ba5-08d8ffad07f6
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1544:
-X-Microsoft-Antispam-PRVS: <CY4PR11MB1544C7647C2D9F14986698E8F04D9@CY4PR11MB1544.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9Yu2mvnLtiqAkTLImBgOSqE8mxrGPcm2+V3hpSJR+iw3QwItU0NQ8da4xw3LjNa+lRuOH8HefFf1Dzo/8HcdUFjLa51NK0mPtR9yiF2xzHFLeB0W1dc6FQIXtmWDTdLDBgV8X8P1UWbxhiTBc/4PlleXJTHCMl6U3gopqoW7MD13D7SxnrfDu6ZoPcVm4amW3bHn2qDfaoGtVotnpoEKS8g3JxhX1oecDs907t+i3UzIUuo4igutb07Z+PGbzpPWX8TwCPViSWJzV37u0GTscifP+hXe31/9nDSrGH6oa+Kc3u8DQwklgud7NrVoiSJaczvUiB6yXSXdP16RmnTdYlHItTUHRMdXSKV1nWOfUPYMKeu7W/1F2LAXQPPwauC4wPhEcnBiB3rQbK0kZENgUmZd+qg1EuBoEoVNTu9V/j/Gc3BiYBxwArZaulbKr2rKNvLutqKmbd6dXfuDv0+tgHvTJcKFS9LFsp40V3jl0TdM0h3MBfQpA3o+9MOOjsD+gpjrpr8d+WGLCtsf9Gnhrz2TvqKgGHFM60OFLaAznl7nOf2+COzOEtxLfWXFauBcdtC23fdQPDiakdNvjNSYnhnhUMdHAK/+xYzZFaNgqkQV98jBz2sLQ6ZaQR8/MIvr95I07PogESdH8q4fAwxGC7mpgvgUyA6utvaK6V3c/38=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB0071.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(366004)(396003)(136003)(39850400004)(376002)(6496006)(16526019)(33716001)(52116002)(66946007)(8936002)(86362001)(38100700002)(1076003)(5660300002)(83380400001)(478600001)(66556008)(38350700002)(6666004)(956004)(6916009)(9686003)(66476007)(26005)(33656002)(8676002)(55016002)(186003)(4326008)(316002)(54906003)(2906002)(43062005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?eGxiNnZ5TDJqS0xQVE9xK2lJRDZ0UHBBSU85S1FDM1RGSHMzVlpMVm52aUhx?=
- =?utf-8?B?VllDSS9tck1xNEhVbjJKcE8wVS85VHA0TGd0UzZ3UE5BSXVCazBGY0xKclM0?=
- =?utf-8?B?UkptK0ZmaWt1NXVicFJaV01EVmxobVhncFg5aDB0YjVnL3RHMVl1Vkp5Rmdw?=
- =?utf-8?B?eGdYM1VrTVFmNmJQUDRRQ2tKSUEwNjhDdG9BY1FqTTZobmk3dWJQVE1xMksv?=
- =?utf-8?B?eTVrU2xEZW5NaldOQ0RGdWJXeDU2bEtWNkVzMC9OR0NOV3FXTnF6eWlmKzRP?=
- =?utf-8?B?bHovaHAwMlhYWjRuSmp6dzd1Zm4rUy9xSi9ZaytvTityeWxLRzhGR3BzcmZN?=
- =?utf-8?B?R1hJbWN0RklFUFA2RWNmSmRYUm1XQ2VwK3lmUzFYUlNDN2dWWUVIOHcyVzVm?=
- =?utf-8?B?YnVza05IeXBpZG52alRFL3RLUEphQkVwQ01HZXUxejQzV3BXRVdQcnQ4Nllp?=
- =?utf-8?B?U2gwTkRiQjlYZTg3MEo0TDVWQ2NzejcvNzVZRlJZTFBBVFJQNzMvSCsrNEJX?=
- =?utf-8?B?TXdOd21zRytUbWNIbnVGck96NElObDhYNjkwSE1XbXByME14Nzc0K0wraXZq?=
- =?utf-8?B?YldqaS96OEgxT05YWUE5dzVEcWFUNkdDOTVPMDJmSDB4YzUyUGJIUWZPcnE5?=
- =?utf-8?B?WGNWNTJzUnJJZHBBUzlEZGcyeHRha0krMmIzZXNiSGpKZTNxZ1RIWlY1WWhE?=
- =?utf-8?B?ZnoyWm5LbGxSaXVEY1VUVGE1RFVHZEdrMlZuQmJZQzJiWkQvU3A0bWVVQ2ZM?=
- =?utf-8?B?dHhqdnMwZUdVbDR6SFhQbGhjT2RmM2duQ0hxTXkrQ2NHTkwweGtRNHB2bzhT?=
- =?utf-8?B?ZFNyZ29QMGU0SDJ1YU9QM3oxZURZR0VsaXZRTHNaaGVldkJwd0YrMXRBK1k5?=
- =?utf-8?B?SW5vZjB1QWF3MUFibmx6ZTlpMHVDTnN4c1pzejl0RXkyYk1jVEFycmZmakNh?=
- =?utf-8?B?cDl3N1N4YU5JRTJmckhuc3IrR0FPWWw1NzljeWV6U1I4NExUd0h0OXYwcEI1?=
- =?utf-8?B?cmRrU3FiV1FtVWpWeGNVZzRma2s2clBhM0RnbVpnQjF5RzV2ckJJZ1FReEdC?=
- =?utf-8?B?L3BIRTA1emxUN2FvNjU3WEcvTDJIOVJRbDZoV1dXSzB6cGQ2UFZLQ0U0WlZK?=
- =?utf-8?B?Q0NOWUE1cGZ5OTNRNk5USXRDRzVudmVrbEVpWWdFKzJXMlBxQ3JzYlBYcm4x?=
- =?utf-8?B?MUMyTXhWdTVBSG9QT3FqUGc0MmIzNUhtbFAvWGZ2KzJncDFqVERHQ3NVam93?=
- =?utf-8?B?dkZDZGJIVVRHT004am14YW1SSytGd1pDSTRyN1hKTkVpK2hmWmxXeGdLRVpp?=
- =?utf-8?B?RnN0SlYveFZTR3hjMFZoQnpTcmNyZFZuWEs3cnJic3RISHJNSlluK0FaZHlN?=
- =?utf-8?B?T1lld1lUOGU0ZVd3WjE2ak1tTmZsQXlmdUhicHg4NHBocHBUUUY0d3pxL3Qw?=
- =?utf-8?B?ZGJVTVhCZHhMY2hUY21ZMVVnV3BJMWx1TDkxSFE2S1UwVmJtWDFSNjBMM3dJ?=
- =?utf-8?B?dkVZZ2NHK2JFOFhKN2h6MVViaVdydjA0amJmWU5xbE1hNlJyRFNaVS9paldq?=
- =?utf-8?B?YmhkYVpXSHJVd0NEL0ErNXpuT29ZZ2xaTWY5NWk1dnQ3bDRSdVJKcVdTZExT?=
- =?utf-8?B?UlJXeFhERGhnTXFNMTRjMzUxU1M5dlBpVmcvbFBxek9HZWFzNTYxQVp3VzRx?=
- =?utf-8?B?cjd0QVZQTndxc0hZUTdET3VsTGN2Y0Q1YXgxZkhFc2U0NGpsL011V2hhV3Ru?=
- =?utf-8?Q?fAPm/MQd3ikKk0WbdNoBGfidfeniUpuNa+CFAJc?=
-X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8afd654e-cf40-4111-1ba5-08d8ffad07f6
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB0071.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2021 01:23:10.5627
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1fWCE+Y4zJ0qdgPi/Wtbc4gVKFNHgMt/Ds+o9MUvOq9A+xkPUZt29d/XcDzmDHhXLLxFb4Pn8OAmA63DMgNzyZNdnlX2niWWb9frqOzER3Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR11MB1544
+Message-ID: <7b720ae6.58927.178d3ff88f3.Coremail.dinghao.liu@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cC_KCgC3nz66zndgCbQmAQ--.40483W
+X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgwNBlZdtTXCvwAIs7
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Dinghao,
-On Mon, Apr 12, 2021 at 03:31:54PM +0800, Dinghao Liu wrote:
-> There is a PM usage counter decrement after zynqmp_qspi_init_hw()
-> without any refcount increment, which leads to refcount leak.Add
-> a refcount increment to balance the refcount. Also set
-> auto_runtime_pm to resume suspended spi controller.
-> 
-> Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
-> ---
-> changelog:
-> 
-> v2: - Add a refcount increment to fix refcout leak instead of the
->       refcount decrement on error.
->       Set ctlr->auto_runtime_pm = true.
-> ---
->  drivers/spi/spi-zynqmp-gqspi.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
-> index c8fa6ee18ae7..8b21c7b0e7eb 100644
-> --- a/drivers/spi/spi-zynqmp-gqspi.c
-> +++ b/drivers/spi/spi-zynqmp-gqspi.c
-> @@ -1160,6 +1160,7 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
->  	pm_runtime_set_autosuspend_delay(&pdev->dev, SPI_AUTOSUSPEND_TIMEOUT);
->  	pm_runtime_set_active(&pdev->dev);
->  	pm_runtime_enable(&pdev->dev);
-> +	pm_runtime_get_sync(&pdev->dev);
-Please check the return value here, if ret is "< 0", goto error label,
-and a pm_runtime_put_sync is needed in error label
->  	/* QSPI controller initializations */
->  	zynqmp_qspi_init_hw(xqspi);
->  
-> @@ -1187,6 +1188,7 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
->  	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_RX_DUAL | SPI_RX_QUAD |
->  			    SPI_TX_DUAL | SPI_TX_QUAD;
->  	ctlr->dev.of_node = np;
-> +	ctlr->auto_runtime_pm = true;
->  
->  	ret = devm_spi_register_controller(&pdev->dev, ctlr);
->  	if (ret) {
-These 2 function
-     pm_runtime_mark_last_busy(&pdev->dev);
-      pm_runtime_put_autosuspend(&pdev->dev);
-are the last operations in probe function since if they runs,
-spi_controller will enter suspend state and disable clks after 3s
-passing. So please move them just before "return 0".
-
-And would you please cc me when you send V3? I am preparing to send a patch series
-to fix clk and suspend/resume issues which bases on the pm_runtime issue.
-
-Thanks,
-Quanyang
-> -- 
-> 2.17.1
-> 
+PiBIaSBEaW5naGFvLAo+IE9uIE1vbiwgQXByIDEyLCAyMDIxIGF0IDAzOjMxOjU0UE0gKzA4MDAs
+IERpbmdoYW8gTGl1IHdyb3RlOgo+ID4gVGhlcmUgaXMgYSBQTSB1c2FnZSBjb3VudGVyIGRlY3Jl
+bWVudCBhZnRlciB6eW5xbXBfcXNwaV9pbml0X2h3KCkKPiA+IHdpdGhvdXQgYW55IHJlZmNvdW50
+IGluY3JlbWVudCwgd2hpY2ggbGVhZHMgdG8gcmVmY291bnQgbGVhay5BZGQKPiA+IGEgcmVmY291
+bnQgaW5jcmVtZW50IHRvIGJhbGFuY2UgdGhlIHJlZmNvdW50LiBBbHNvIHNldAo+ID4gYXV0b19y
+dW50aW1lX3BtIHRvIHJlc3VtZSBzdXNwZW5kZWQgc3BpIGNvbnRyb2xsZXIuCj4gPiAKPiA+IFNp
+Z25lZC1vZmYtYnk6IERpbmdoYW8gTGl1IDxkaW5naGFvLmxpdUB6anUuZWR1LmNuPgo+ID4gLS0t
+Cj4gPiBjaGFuZ2Vsb2c6Cj4gPiAKPiA+IHYyOiAtIEFkZCBhIHJlZmNvdW50IGluY3JlbWVudCB0
+byBmaXggcmVmY291dCBsZWFrIGluc3RlYWQgb2YgdGhlCj4gPiAgICAgICByZWZjb3VudCBkZWNy
+ZW1lbnQgb24gZXJyb3IuCj4gPiAgICAgICBTZXQgY3Rsci0+YXV0b19ydW50aW1lX3BtID0gdHJ1
+ZS4KPiA+IC0tLQo+ID4gIGRyaXZlcnMvc3BpL3NwaS16eW5xbXAtZ3FzcGkuYyB8IDIgKysKPiA+
+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspCj4gPiAKPiA+IGRpZmYgLS1naXQgYS9k
+cml2ZXJzL3NwaS9zcGktenlucW1wLWdxc3BpLmMgYi9kcml2ZXJzL3NwaS9zcGktenlucW1wLWdx
+c3BpLmMKPiA+IGluZGV4IGM4ZmE2ZWUxOGFlNy4uOGIyMWM3YjBlN2ViIDEwMDY0NAo+ID4gLS0t
+IGEvZHJpdmVycy9zcGkvc3BpLXp5bnFtcC1ncXNwaS5jCj4gPiArKysgYi9kcml2ZXJzL3NwaS9z
+cGktenlucW1wLWdxc3BpLmMKPiA+IEBAIC0xMTYwLDYgKzExNjAsNyBAQCBzdGF0aWMgaW50IHp5
+bnFtcF9xc3BpX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpCj4gPiAgCXBtX3J1
+bnRpbWVfc2V0X2F1dG9zdXNwZW5kX2RlbGF5KCZwZGV2LT5kZXYsIFNQSV9BVVRPU1VTUEVORF9U
+SU1FT1VUKTsKPiA+ICAJcG1fcnVudGltZV9zZXRfYWN0aXZlKCZwZGV2LT5kZXYpOwo+ID4gIAlw
+bV9ydW50aW1lX2VuYWJsZSgmcGRldi0+ZGV2KTsKPiA+ICsJcG1fcnVudGltZV9nZXRfc3luYygm
+cGRldi0+ZGV2KTsKPiBQbGVhc2UgY2hlY2sgdGhlIHJldHVybiB2YWx1ZSBoZXJlLCBpZiByZXQg
+aXMgIjwgMCIsIGdvdG8gZXJyb3IgbGFiZWwsCj4gYW5kIGEgcG1fcnVudGltZV9wdXRfc3luYyBp
+cyBuZWVkZWQgaW4gZXJyb3IgbGFiZWwKPiA+ICAJLyogUVNQSSBjb250cm9sbGVyIGluaXRpYWxp
+emF0aW9ucyAqLwo+ID4gIAl6eW5xbXBfcXNwaV9pbml0X2h3KHhxc3BpKTsKPiA+ICAKPiA+IEBA
+IC0xMTg3LDYgKzExODgsNyBAQCBzdGF0aWMgaW50IHp5bnFtcF9xc3BpX3Byb2JlKHN0cnVjdCBw
+bGF0Zm9ybV9kZXZpY2UgKnBkZXYpCj4gPiAgCWN0bHItPm1vZGVfYml0cyA9IFNQSV9DUE9MIHwg
+U1BJX0NQSEEgfCBTUElfUlhfRFVBTCB8IFNQSV9SWF9RVUFEIHwKPiA+ICAJCQkgICAgU1BJX1RY
+X0RVQUwgfCBTUElfVFhfUVVBRDsKPiA+ICAJY3Rsci0+ZGV2Lm9mX25vZGUgPSBucDsKPiA+ICsJ
+Y3Rsci0+YXV0b19ydW50aW1lX3BtID0gdHJ1ZTsKPiA+ICAKPiA+ICAJcmV0ID0gZGV2bV9zcGlf
+cmVnaXN0ZXJfY29udHJvbGxlcigmcGRldi0+ZGV2LCBjdGxyKTsKPiA+ICAJaWYgKHJldCkgewo+
+IFRoZXNlIDIgZnVuY3Rpb24KPiAgICAgIHBtX3J1bnRpbWVfbWFya19sYXN0X2J1c3koJnBkZXYt
+PmRldik7Cj4gICAgICAgcG1fcnVudGltZV9wdXRfYXV0b3N1c3BlbmQoJnBkZXYtPmRldik7Cj4g
+YXJlIHRoZSBsYXN0IG9wZXJhdGlvbnMgaW4gcHJvYmUgZnVuY3Rpb24gc2luY2UgaWYgdGhleSBy
+dW5zLAo+IHNwaV9jb250cm9sbGVyIHdpbGwgZW50ZXIgc3VzcGVuZCBzdGF0ZSBhbmQgZGlzYWJs
+ZSBjbGtzIGFmdGVyIDNzCj4gcGFzc2luZy4gU28gcGxlYXNlIG1vdmUgdGhlbSBqdXN0IGJlZm9y
+ZSAicmV0dXJuIDAiLgo+IAo+IEFuZCB3b3VsZCB5b3UgcGxlYXNlIGNjIG1lIHdoZW4geW91IHNl
+bmQgVjM/IEkgYW0gcHJlcGFyaW5nIHRvIHNlbmQgYSBwYXRjaCBzZXJpZXMKPiB0byBmaXggY2xr
+IGFuZCBzdXNwZW5kL3Jlc3VtZSBpc3N1ZXMgd2hpY2ggYmFzZXMgb24gdGhlIHBtX3J1bnRpbWUg
+aXNzdWUuCj4gCgpUaGFua3MgZm9yIHlvdXIgYWR2aWNlIGFuZCBJIHdpbGwgc2VuZCBhIG5ldyBw
+YXRjaCBzb29uLgoKUmVnYXJkcywKRGluZ2hhbw==
