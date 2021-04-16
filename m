@@ -2,25 +2,23 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 022AD3621A3
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Apr 2021 16:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA94362219
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Apr 2021 16:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235385AbhDPOFu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Apr 2021 10:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37926 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235875AbhDPOFs (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Apr 2021 10:05:48 -0400
-Received: from NAM04-CO1-obe.outbound.protection.outlook.com (mail-co1nam04on0621.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe4d::621])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69E6C061574;
-        Fri, 16 Apr 2021 07:05:22 -0700 (PDT)
+        id S235541AbhDPOWp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Apr 2021 10:22:45 -0400
+Received: from mail-mw2nam12on2089.outbound.protection.outlook.com ([40.107.244.89]:56161
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229706AbhDPOWp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 16 Apr 2021 10:22:45 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZUl9vimFoj8575Q4ZVmwgQhvXFlZC0g/bdxvq3eVIoy934cap7XD/OQDWyeAy0ein2PxA9N/22ql9qT/LlfYc0r63St0zuza5BQjCdyeBfeZsDJeXZRmdlGm6KdH8hd3greTMufEkl3TOzWtpFLeZqSjy4cQ9zatea+IEk0wTbUwDOBLhlQQKlQC834bU+bZ8wK/R6jfi/43XjWwaFjNNymzLNgrR39wD+AyqJZxMMQ7M8owbJXoXaiCe0qhokNazupdLtHH6D77igJbBrEgHr2lEHLeWQLvWxx000LkRiq5lLuciCcMGIjxZY2Dxj8TZPlVwmvYIH1qs4YiBMMMbg==
+ b=ES1ZsE6seP4EU6NVB7vfgYqc2X/nsmdaTHkB9w0SnexErZazDOqYGyV9CRkVXlQJrDnwzlNgV/3djbDxs2wkD9ZhShaJI9KnenTOFg159hXYpQmhE8HvSrOnMVkpgWdUrMIQvpKQRpIVf0/rZQLFb3uAc74R9HeuT/V3IHFr+cDu/yT8k0DuMA9MGFPogoqa4X/PwkxpZV7pSqQVd+Ni+qe/PpEhXzxAEr9bAB88LYyhHFnOLF9qD18u/ugKlXK33R1xOriHqpDD0y8G7DPOyYD7lHTvUkDHB7KlbOJ56mjci92+XfHgBm4yYb7dxwoboqhJGVH4bMMGckHP4vN1kA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Jz+6fDX/tpVCOhisCb3B49zCwzIk1ZgUcrcNuQeCHWc=;
- b=RJo259pAJ2j9IC36Oz+T18AlTYND9jBpELsoeY6kD7FRE4CYL+an3eouIj/EIbkoZw72U2p2q0FubuHWz//POW2GmzJZLKqfBzUJImm+qOsymX6DxOC4D+JoIkwNrMZcLx94enB2+8UwL1zn3tIZCERxp+thbc+nZ2zmF2EANVlEoo35pqE/GhvUenAFiKruKFiT5LvWi9PjxKtfDa6QM7Kk6ePIz2cZKdPwNM0q3gNgbSyq4Ely4z5ZDRP053MZWtV57NZ+yTMPbjBE4TlOKQOoFVaR58l1zSxPMFYby1KexzifznYAuR15Io+AQJoS8qYhMLudCe6wU0EzVjHPWw==
+ bh=TgWIQ7KBwmWdLpKJK+SiCfcEfz57bK96ejFlWArKmBc=;
+ b=SPcvLgnaKuhOrpnRFoKPdxMyoXKLUv+4CAd8wrGlKZNO+pbapb88FrQ+vo9JzBx9xH0qHkq3Bc/oZ2rrjGchR+HZCz0TtbVxZwtuNzm0op/lpMAeOihRB+tTaZ+zujxZ5DbnpLpJkglFNgk63QiijcVGDar2u60ecF6wFHvaZk/Y/wGJ+NBD/twUw0mxbG3H0XOD7txLHccXKOit4XfPFkML3DRTjf60gtZqvkh9AmAaEEd6jX6zCfbquu2CYib/jIJ8SIgyGuAIE+FXNTRwqjqtqVw8G9fDqraieZJb6PAVebv8UZ2+hUk4prz90dgB/z3cVlk0Jd17EmCgB0gjcw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=windriver.com; dmarc=pass action=none
  header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
@@ -28,116 +26,113 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=windriversystems.onmicrosoft.com;
  s=selector2-windriversystems-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Jz+6fDX/tpVCOhisCb3B49zCwzIk1ZgUcrcNuQeCHWc=;
- b=Vxtk/gtUoabjgAWOLHi5lTuJYeyRkYVo7+OvzcSgIz018ZOzsA83rfwMZQ8oNpq7UGc+QcW8HVHdz9JOie2dwjPks92/Bf2NaXOt0MnTOoq9R2FI0vq68FseOVs5kYk10XBroZvwxe3zA0yS9nF89d0oxgDYSiEKLGQbBBBocB0=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=windriver.com;
+ bh=TgWIQ7KBwmWdLpKJK+SiCfcEfz57bK96ejFlWArKmBc=;
+ b=XCK6zfCegi0YALFmKEOgFNBirR4UwD278dczCeILChG5m5FrvmetdCEHPFNSvi8XZZc04UrCXYtsvsfBCVXjJB4NJ8SqY+SvvuwnO9JrOoMZ5F0YX8J5gjzMWu/0vZVAY7UQ7eGWMVg1+hkkOEk3kwx93TkQYP54++mtQx6Sd94=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=windriver.com;
 Received: from CY4PR11MB0071.namprd11.prod.outlook.com (2603:10b6:910:7a::30)
- by CY4PR11MB1943.namprd11.prod.outlook.com (2603:10b6:903:123::17) with
+ by CY4PR1101MB2264.namprd11.prod.outlook.com (2603:10b6:910:24::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.16; Fri, 16 Apr
- 2021 14:05:21 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.21; Fri, 16 Apr
+ 2021 14:22:12 +0000
 Received: from CY4PR11MB0071.namprd11.prod.outlook.com
  ([fe80::f45f:e820:49f5:3725]) by CY4PR11MB0071.namprd11.prod.outlook.com
  ([fe80::f45f:e820:49f5:3725%6]) with mapi id 15.20.3999.037; Fri, 16 Apr 2021
- 14:05:21 +0000
-Subject: Re: [PATCH 1/5] spi: spi-zynqmp-gqspi: fix clk_enable/disable
- imbalance issue
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Michal Simek <michal.simek@xilinx.com>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20210416004652.2975446-1-quanyang.wang@windriver.com>
- <20210416004652.2975446-2-quanyang.wang@windriver.com>
- <20210416125558.GA5560@sirena.org.uk>
-From:   "quanyang.wang" <quanyang.wang@windriver.com>
-Message-ID: <03f4152a-e66e-6b4a-5b4a-5f79f9ce2302@windriver.com>
-Date:   Fri, 16 Apr 2021 22:04:30 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
-In-Reply-To: <20210416125558.GA5560@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+ 14:22:12 +0000
+From:   quanyang.wang@windriver.com
+To:     Mark Brown <broonie@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Quanyang Wang <quanyang.wang@windriver.com>
+Subject: [V2][PATCH 0/5] spi: spi-zynqmp-gqspi: fix spi issues
+Date:   Fri, 16 Apr 2021 22:20:42 +0800
+Message-Id: <20210416142047.6349-1-quanyang.wang@windriver.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Originating-IP: [60.247.85.82]
-X-ClientProxiedBy: HK2P15301CA0012.APCP153.PROD.OUTLOOK.COM
- (2603:1096:202:1::22) To CY4PR11MB0071.namprd11.prod.outlook.com
+X-ClientProxiedBy: HK2PR02CA0147.apcprd02.prod.outlook.com
+ (2603:1096:202:16::31) To CY4PR11MB0071.namprd11.prod.outlook.com
  (2603:10b6:910:7a::30)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [128.224.162.199] (60.247.85.82) by HK2P15301CA0012.APCP153.PROD.OUTLOOK.COM (2603:1096:202:1::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.2 via Frontend Transport; Fri, 16 Apr 2021 14:05:19 +0000
+Received: from pek-qwang2-d1.wrs.com (60.247.85.82) by HK2PR02CA0147.apcprd02.prod.outlook.com (2603:1096:202:16::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.16 via Frontend Transport; Fri, 16 Apr 2021 14:22:10 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b2cd8ade-cdfe-4177-e0fc-08d900e0ac1e
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1943:
-X-Microsoft-Antispam-PRVS: <CY4PR11MB19435B74106B89AB0A7D674DF04C9@CY4PR11MB1943.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:773;
+X-MS-Office365-Filtering-Correlation-Id: 6fae3a9e-5017-4a7f-80da-08d900e306ba
+X-MS-TrafficTypeDiagnostic: CY4PR1101MB2264:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <CY4PR1101MB226461E2858CEBE0A76809A9F04C9@CY4PR1101MB2264.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JDIZtNb0fgNeRg4C2yyEaM+y23k27FLHvHoNx/S/ZXW6QQwqE2/wSTzPDQ2Efp3QXEdO+uGTzVhIbi7iGQxqOjbCi8+dTPhS6l71SsjefLmesAXCy8w4caRNx23wyiBB+ORYoGTz9LXn1Zsw2S42bzc0t4pMzLbV0DlXnXK2mzDDPQN1WKJJOaOGOsMGjqI0LZ0CFkv1flz4aTzJtvdXymZ2jCW0JOWhjhuHT0EFnmWd9AHpBpng35yNpkqOznh28JZWRxLF0lliTlsl1FdBBeoenaCuMKUl1I43TwXPqA1cW8UDYxDy71ZTLKEQ6gB66JykWoeGIihor2BGcIlYiXgef4LG4Ej1PsbcS/hQThl1de7HQeU5IjjgunxkOyfxT+PGSBDWe53jxo+eleCW+CWzM4+gwRQVLeeF4IIYzZDTIbq3xFEu3a70mGqYxB6az1PQRYDXhj+OHKqHarrLy51T6DzV35oCNc07SubCIxPJSotHtvsdCz2Ld/4EjGzceDjytPqsWrVm9cs8mSA6TutXrzvAXhe57i6bTckspHUOJTu9g5dwoPawe4ejVzVRwJmB4RfwPaSRss8t8EX4LkUfxOS8B6G2bCa2tsFsDrOpP+Z3jMpWmTuFhdWZhMrEaxJVPDnPJ2P5JJ5me7bMG2CkcON7h/21qMK+JxqgD+bvybnJ0EyyqHnmb1e3OIZJzkNM94t+F/Nz7Zt2kMobvIGWPzdWfyRbkn6M4adt/wg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB0071.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(2906002)(6666004)(6916009)(83380400001)(5660300002)(16576012)(956004)(52116002)(38100700002)(6706004)(66946007)(16526019)(54906003)(8676002)(2616005)(66476007)(86362001)(31696002)(4326008)(53546011)(66556008)(8936002)(26005)(498600001)(36756003)(4744005)(31686004)(186003)(38350700002)(6486002)(78286007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?Windows-1252?Q?SGqGDOeMvlLCSa5I3KtbArt6sP9bkHXG9e9t6mVQ6S5/j5Iom+U1oM6i?=
- =?Windows-1252?Q?JVe6EswOeOEQFrqViGNseAdL3P5iHs1ZdOn4mqUCFYUUq2cnGOBXeOVd?=
- =?Windows-1252?Q?3CVoDaj1J6nt/vgRDl0mvdk33Cu0IIDkuZyl1QNK+b2C6ArU5iUP6HS4?=
- =?Windows-1252?Q?4krXADGQMp3QxAcxGIsMr5LnEuaWEREu1sUut0fPOlHLXV9yLu2tXqoR?=
- =?Windows-1252?Q?uqwaG1Tp1DN9aL9a+X0U2+M6vsfOyahKzL5kSeM7uOD0J98E+XtVcWoM?=
- =?Windows-1252?Q?o0/BXe1ZYCQz1eBL52YUzDQlmOUV8KIPI9wZ1g9MD0b+Za51Ki78qSZJ?=
- =?Windows-1252?Q?h1cTjBUmfBT8TQ2YuHo0GyZFkZIjNEpM0gNU62M8mIyS90DYldfO2/hs?=
- =?Windows-1252?Q?gcJcw9U4NaXMfgtKwM8rBD7J3hUzFZ2BETonaUv9ngy4W+RRsV13b6px?=
- =?Windows-1252?Q?6J7b9Zsxo1QSSR2h2Xq+eRUz/HbHNjYyFui5g6e0yAh81u4e5HMGTAye?=
- =?Windows-1252?Q?QFewE7zsl1Bch6uIv2vErZq5f2RyPAAWqEglhYslcAHs+hA+bKMQ+Hm5?=
- =?Windows-1252?Q?ElYX1JKRO4IGYDGjJMhBTRRO1HBRKbodHd4TrmhiIgAgAoLjxaLKm3ND?=
- =?Windows-1252?Q?kGGHA7xVHyrmZZeF4cLJEG384eoD63jkXBSH3sJzSwEPvc94rsl5OE8v?=
- =?Windows-1252?Q?kLR95QqZELjdtvcz2fUwzya/FW84qqL4p/ePKpT3zayppR0i8l+SZ434?=
- =?Windows-1252?Q?t4zouIsVWV70wykG0m8vZKE8v2r3oKwtTMggdAmqG/OV/DyrduGmn4CI?=
- =?Windows-1252?Q?MGgP96cTmaRZeOJJepgeRtC6Zo8aJA12yg/OfkEhJmA54SR51wk4OxmJ?=
- =?Windows-1252?Q?pjoDNyiMaIwB6vhqFFXIk8NPGyNY5nrfJ9PZ3oEQQCpq5LQbV6X2czsn?=
- =?Windows-1252?Q?isXJqAIFDr84sHHSdfEHAWBn9kMj3tCWA3J7mPUYyFzWwFI5JUcYEI8b?=
- =?Windows-1252?Q?Xm73IKwvg87V6g8teHIqteQKbsDFGeo/GNy45SpA5HtJzfhUJ8cHSxhZ?=
- =?Windows-1252?Q?q77rap7ABfLUjIYkKbWMZG0jADSCp09MmA4NHLFEn3EcPPJCIC2a5wmi?=
- =?Windows-1252?Q?VaTyHwU6LVLcUGrAFBf12MPiSxZBBoJntlZDcYLslGBcl71SO0fjVrdf?=
- =?Windows-1252?Q?6eQJT55TNT5PbV7UTLz4U1CRhm30Wz/fRag5wm7oGvp44o/6IUHQsHin?=
- =?Windows-1252?Q?1XD01MONU8oKt1+3CUTK/T/wOpXwJ2EK2K6/Yff2ve/08bQC4N62wcjf?=
- =?Windows-1252?Q?/JGvUG1lNUICAM/hFNvKKExsgm/Vnst/VZ5EW8/lUrUBypS9Wgs40yfr?=
- =?Windows-1252?Q?GMbc6ly9ptqfi+E+i7k28WWDNRltWmVYydACQ8WtQUc1e5/JDxILMgaU?=
+X-Microsoft-Antispam-Message-Info: 6l5rZbIPqZl25X+LdBO9u2hI6Ex4goci8glqHTH0VOhRYCrCYcG1jU/W9Z+4gJeVAvFqFCN+bl85edxc5biTxPU1pvi9DjI8+UrVQvcAnzK3ZFgrfle2a9fZRz1rm5Nt4KX+0JoX/LRgPL4+8enzIwQAG80RHqQ0rs2k9ErSQQ20CEWG1UNdaYnGPDIizREUvA+c4Q+gETTqab2UMHgOSy6O8GYMP4WIqycfAIc5SuGXK85ccEgDO6E+QDYrv7MXRQDSAZeKrk8A2Q7l6ve2SLKBAeyT//7Xi0skRl5HOrfOPq5I4mgRqhigMgjUAsWIgCiLNzGzoK2vQbit5WbnPjXUVfFzZ8lJBwdwKbXn13ykzhAk/Y2Q7RAHHba172QUNEqlGz9HVShH5zOw7H/5SoG2TWX4yPxp+Uw7CEojESREtwsPhUoGfXocgD03k+YPCU7ghcM64HxMxheokcMoaEW7L7zTfQLU1YZZNHRU1dSTi97sPSoOcZT7kf2NUork4ASefyu9pW4i8Vw4ffn6pDi5FIoBMRwaz5TEbzgp/AiOwlTOeWVWXKH4nZOsXUi6X3C2npH3NcGmXrM6qW7q1vNzgn9Mt4KpeihRweGEiKz0mH84AJossD9P1yhKUcndMFGdETEWrcTJTq4vm4uyW06C68esid67lh+vH1OAZOE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB0071.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(376002)(366004)(396003)(39850400004)(346002)(86362001)(186003)(2906002)(38350700002)(38100700002)(316002)(6506007)(9686003)(6486002)(83380400001)(66946007)(8676002)(66556008)(66476007)(478600001)(4744005)(16526019)(5660300002)(4326008)(26005)(6512007)(1076003)(52116002)(110136005)(956004)(6666004)(8936002)(107886003)(2616005)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?ixpzydprRklrprGcKX6i1VikmZoXPcEprxdUZgmvIpScN0Fd0bdyG83GuatD?=
+ =?us-ascii?Q?bHFCoJHSYCBwDJnjIIOCjPH7DHjSuhM3p2Wepy14aAUZ58sMavw220jhGxjD?=
+ =?us-ascii?Q?Rb4BjpqXZi2ckWCmwe0GurwsOX8zdA1U+fL50yIhvYzt+0udyqs+3CVkrrMm?=
+ =?us-ascii?Q?QrXAVYiGQ7cXCKHJaosymynqQiI7NypCu+WyWgj5oXzC7NYZyp9JaNMpPqGz?=
+ =?us-ascii?Q?nJh2q9y9mDa3kC9wkx+rW0vT4JR8O2+WoYfsmeftWjRvAB9Gk4jGIRVIQvyh?=
+ =?us-ascii?Q?rKuQ4b6fPRILYEsC0SjB2lfHpqlekvPFiyAx+/ku9Ebzzm2I6D9DdtXLyvmr?=
+ =?us-ascii?Q?2Pc7YGGjSSdAyHxYK9ZI21wmNflmazHG4/CQBpygzXge1bU3UJuc96grGbg1?=
+ =?us-ascii?Q?sv8pv5QJiiJjPmUfgeEn6Bh+QS9XrNWaYutdjoF2/CLzuymNPU8ezP6PrT8V?=
+ =?us-ascii?Q?+sXkJKicfH2jvktbFRWHPOf9NPDuJcvqAkqSlTlUZKTBIpRUUS1G9neZTj4c?=
+ =?us-ascii?Q?4qnrUCEKfxGe0n0dyJYEVdhaJ1n0/7qh4vTJmKMw0N+Q5hu1b+R8oLrR9A9S?=
+ =?us-ascii?Q?x7YbBOSpZUQENAkJ9SI681a6OWFlIbuEBxdiyN8KQwJQWuZPaGgk3QoRoN22?=
+ =?us-ascii?Q?OYJFjFbI423vNnrzoiWl4DTT4qMDPq8GxtaIhTtwSgGPHQ3SDqaupyg9Liu2?=
+ =?us-ascii?Q?xUqLdoF2L3v1IR6wPb8OAN/qA/4gX9AwrpdAiMig2vvjBeQbVY5OEALq0R/7?=
+ =?us-ascii?Q?z7hR6a2xD9W5kb9egLZH6xE+re1Y/0HnJcgjumoZhntWT+d3RQQYfYwfx7Rk?=
+ =?us-ascii?Q?uBi/+aYE7dPjVmeYmfT+F0WkCEIYu0zi7uVllpkn+YrfFn2EfulrHvlyL0hs?=
+ =?us-ascii?Q?OZJ5fWvWk6mbktqh2QAajapIBENCdLrpHWk+chgM+V2VmJ63imQ8SWvvMdRK?=
+ =?us-ascii?Q?8XHwQ0w94LWpnUoBH3ntV+USt8Cc1mqo7Tty8XnCMt935KDajqzVVFrbwN54?=
+ =?us-ascii?Q?EjrkrX1zRivpj8lKyDQgvF1Tp5Mtcj9HxyWSwV4MbWzSZYEMC6d96YHMLg93?=
+ =?us-ascii?Q?RP2uMFq4UwlRbPhu2JSTjNnuzqZcR1No/lOEWvGVgYkmD7046/sER0AEW+pB?=
+ =?us-ascii?Q?+ETVJz1wdeoIZKBy62A0Yhu3sqr1sYoHeTxGcKpxgKgEXgI0nQQYR0Nc0x+i?=
+ =?us-ascii?Q?+ZRHbkxOCxsSt0IZI3w8b7zeICi63ul5jWE8jNXTTew9aPWz7pELjtlSTi7c?=
+ =?us-ascii?Q?LYwmIikOssn+mUBSoGIfNS1jASYLwEKZCMY9RSekmYxjqjOz5E+YKFJRvDGt?=
+ =?us-ascii?Q?fM9UQgeEImky4leUZRksS1gs?=
 X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2cd8ade-cdfe-4177-e0fc-08d900e0ac1e
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6fae3a9e-5017-4a7f-80da-08d900e306ba
 X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB0071.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Apr 2021 14:05:21.2873
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Apr 2021 14:22:12.3586
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: t92qfQv2NldCEgKtnWZMngRMozrxt/R2qwMNelqsfi248zaX2+8ASDmBI3qs6g7kefMYKFocNt1O+F4GOk9i4FqPdNqvQYIIM6MyJUd2Eu0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR11MB1943
+X-MS-Exchange-CrossTenant-UserPrincipalName: AXBoGhJzHO4lLxUP1+wXbukP6TEcPk2GKXuNHoKwG9ka09kyzfrBOGZAk6m9i+E+nC3IZMc65yUmHRvtFw2K0BSxxa5xhq4EZeFLcHEZkcE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1101MB2264
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
+From: Quanyang Wang <quanyang.wang@windriver.com>
 
-On 4/16/21 8:55 PM, Mark Brown wrote:
-> On Fri, Apr 16, 2021 at 08:46:48AM +0800, quanyang.wang@windriver.com wrote:
->
->> Since pm_runtime works now, clks can be enabled/disabled by calling
->> zynqmp_runtime_suspend/resume. So we don't need to enable these clks
->> explicitly in zynqmp_qspi_setup_op. Remove them to fix this issue.
->> Fixes: 1c26372e5aa9 ("spi: spi-zynqmp-gqspi: Update driver to use spi-mem framework")
-> Are you *sure* this fixes is accurate?  The patch (and several of the
-> others that flag the same commit) doesn't apply against for-5.12, though
-> at this point there's not really enough time to send another pull request
-> so it doesn't super matter though someone will probably need to help out
-> with stable backports.
+Hi all,
 
-I am sorry. These patches should NOT be with "Fixes" tag since they base 
-on the patches
+V2:
+Remove all "Fixes:" tags since they base on some patches are not
+with "Fixes:".
 
-which are not with "Fixes". May I send a V2 patch series which remove 
-these "Fixes" tags?
+V1:
+This series fix some issues that occurs in spi-zynqmp-gqspi.c.
 
 Thanks,
-
 Quanyang
+
+Amit Kumar Mahapatra (1):
+  spi: spi-zynqmp-gqspi: Resolved slab-out-of-bounds bug
+
+Quanyang Wang (4):
+  spi: spi-zynqmp-gqspi: fix clk_enable/disable imbalance issue
+  spi: spi-zynqmp-gqspi: fix hang issue when suspend/resume
+  spi: spi-zynqmp-gqspi: fix use-after-free in zynqmp_qspi_exec_op
+  spi: spi-zynqmp-gqspi: return -ENOMEM if dma_map_single fails
+
+ drivers/spi/spi-zynqmp-gqspi.c | 115 +++++++++++++++------------------
+ 1 file changed, 51 insertions(+), 64 deletions(-)
+
+-- 
+2.25.1
 
