@@ -2,23 +2,23 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90D8D36221A
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Apr 2021 16:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 184BC36221B
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Apr 2021 16:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242273AbhDPOWq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Apr 2021 10:22:46 -0400
+        id S244179AbhDPOWr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Apr 2021 10:22:47 -0400
 Received: from mail-mw2nam12on2089.outbound.protection.outlook.com ([40.107.244.89]:56161
         "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235300AbhDPOWp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 16 Apr 2021 10:22:45 -0400
+        id S241677AbhDPOWq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 16 Apr 2021 10:22:46 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A0VDfuBk9ij7v4Sx3k6GqhXc8MwlzNzGRcB/xbVq7fkUmgGB8psiVDwlOp9p2BkythrY7x6Q6oPPLvzYOv8Caaa10nn6MtoL4bEeSjmLG6z8d8MpUGJg9fqHFY6KJDptPw2qjVkF4PJWdlL/Ljfe/GlXMivE/ANvQ1ZIOI/XMD8/Zrc7Q5WXoU+1m6R/veA0h9kxY5Osegcg40XD28F7EcV+XNeEQ4SZegWi0A5fOj4NPc7C9ewal/kN2eq0F+SWBOBcIbSRSflhMk3s/h5CVi+lm2MS+9DZYA+Y0oIbamddl7SneB1klEanMgQqLSUyPELSDx2OpEMDy4ihdd3OuQ==
+ b=al4Kp7w/6wPLdmsX2wZWoQ1DR3wC/Bfodpeiw0UtWezNqpYYFQnwTRnmcsHmWNByb57Mhl0J9i7cED3xATwgDAjEFh1jg4WKbPNxI2tuHK37LNA3irMLtbJAkMZa9588h2PP8ld50fVux3LfZVXd94A34uJXhpOag4OmD0SqYxaCcuQpusHXyOe0mS6V7oCJZYAFLTKQRp5+p+er1eUHhnrMkGjBrt1CilSsSbLHPqWuxyYxWGe3F2eI+wgl78lDmvEsRxJGxRQfqirb/J52cttX27KtTQQtoYbGRIZSmBP0Lp8UNa+vddKv3wDTbxFWxvkbbwtznF6CZ1TPIfx7+g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M/VHzESPyjV8fkVOcutFrKHaOw4oAKVGuUsCnUXpXpE=;
- b=ZwsGmtiBrm3ssBlu+IvsfdwN/KfsWh8s2xMNMm8IoG3Jz/z/ygSaC5DsMXdYAVMMPIUyIu3If9uHYQQ9BVrP4eK1cqQMfzLf5FgMUIJ/PlgcmRn+5T5VzPX2HNQa2y8Iol0lG3yFAUok50JY6gzXWfnQSBk8igXf544EALKeR7rGb9sjRn/N9E1Ngeh/TJPk9Aafme0Fz9HMfsM9SqTpQ4uZFYYraC4Gnve0EAGGtjiyxnbCrDtLUlOFNvK/lHLLD7L5+eU9nt5ueCI81Lj5rScQ/C75Q2OQUZ39CCda07u1Msvj6QE1Vb25hYVucAdOSWe427tnvYFIm2oKzBJd0A==
+ bh=4I7CUAfjMk3+NxBTFO1XpfCTeNf9E04NBBFxWYxq4ps=;
+ b=kvRtOET2RYwXSNSnSlBA6OF+yO8ryd2r6xN6tnnCqMXFBuVh3PQYN6kRUbuRedCkOCd1WKNIoufKCvDOz59ll443TX2xyPwo3NJaDmEyj6AQ82jixONMl8GrPz0ns1k+hQYgK/WDkfvn1pgRPOeHQ+9kydWqCbM4DUlQO2zBk3tIxOtPYqgHaO8yJdJLFV1zGHBz519UkYK25vcPabsU3utR6yWpgpj5CEsQhUmRHx+Y+EZNP72Qy6Wewayq+e11OzBg73xvPMDiPzmU/ZuaFM4VINxZMeaFiQ/Fjgr9hLb/tZPSrJtCeDhfFj+wJ7pOYs65uapgomSsQzeA2TH/dw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=windriver.com; dmarc=pass action=none
  header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
@@ -26,19 +26,19 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=windriversystems.onmicrosoft.com;
  s=selector2-windriversystems-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M/VHzESPyjV8fkVOcutFrKHaOw4oAKVGuUsCnUXpXpE=;
- b=dcGJthAb6n4Rf2SlZY9nIrw9Sa1ULkGVnR/KI016HbRmNqe3BpjutcXvWYVR7KnnJLnA3zSMNsOipnWAA1t9op3N5s5u8t82hBNMRRmRTY/D8dGgDtbPEInHYRxwb9/gY1h8/NDIu9tGOthEKD0+o71thpo/v9zrrisM/A4VdEk=
+ bh=4I7CUAfjMk3+NxBTFO1XpfCTeNf9E04NBBFxWYxq4ps=;
+ b=Mwl7KJc7uGGCgxyxSURNKiO4ndZcqtOzV4J7Ip29fj4Sl5pVcMEoqFj49rzbXf9ewh0GhCqwAsCimmO62JRcN83MC8eBqahFo3ZS9Y1/7wDVdnKIvrgE1k4kgn9J4fLG+tw7j5Lyp3wEcn776WMIyIC+kql2lAEbwCctYd7XCfQ=
 Authentication-Results: kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=none action=none header.from=windriver.com;
 Received: from CY4PR11MB0071.namprd11.prod.outlook.com (2603:10b6:910:7a::30)
  by CY4PR1101MB2264.namprd11.prod.outlook.com (2603:10b6:910:24::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.21; Fri, 16 Apr
- 2021 14:22:15 +0000
+ 2021 14:22:18 +0000
 Received: from CY4PR11MB0071.namprd11.prod.outlook.com
  ([fe80::f45f:e820:49f5:3725]) by CY4PR11MB0071.namprd11.prod.outlook.com
  ([fe80::f45f:e820:49f5:3725%6]) with mapi id 15.20.3999.037; Fri, 16 Apr 2021
- 14:22:15 +0000
+ 14:22:18 +0000
 From:   quanyang.wang@windriver.com
 To:     Mark Brown <broonie@kernel.org>,
         Michal Simek <michal.simek@xilinx.com>,
@@ -46,9 +46,9 @@ To:     Mark Brown <broonie@kernel.org>,
 Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Quanyang Wang <quanyang.wang@windriver.com>
-Subject: [V2][PATCH 1/5] spi: spi-zynqmp-gqspi: fix clk_enable/disable imbalance issue
-Date:   Fri, 16 Apr 2021 22:20:43 +0800
-Message-Id: <20210416142047.6349-2-quanyang.wang@windriver.com>
+Subject: [V2][PATCH 2/5] spi: spi-zynqmp-gqspi: fix hang issue when suspend/resume
+Date:   Fri, 16 Apr 2021 22:20:44 +0800
+Message-Id: <20210416142047.6349-3-quanyang.wang@windriver.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210416142047.6349-1-quanyang.wang@windriver.com>
 References: <20210416142047.6349-1-quanyang.wang@windriver.com>
@@ -60,50 +60,50 @@ X-ClientProxiedBy: HK2PR02CA0147.apcprd02.prod.outlook.com
  (2603:10b6:910:7a::30)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from pek-qwang2-d1.wrs.com (60.247.85.82) by HK2PR02CA0147.apcprd02.prod.outlook.com (2603:1096:202:16::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.16 via Frontend Transport; Fri, 16 Apr 2021 14:22:13 +0000
+Received: from pek-qwang2-d1.wrs.com (60.247.85.82) by HK2PR02CA0147.apcprd02.prod.outlook.com (2603:1096:202:16::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.16 via Frontend Transport; Fri, 16 Apr 2021 14:22:15 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0d17bedf-974b-40ed-c739-08d900e30894
+X-MS-Office365-Filtering-Correlation-Id: 9aee7060-f483-456a-57e9-08d900e30a2b
 X-MS-TrafficTypeDiagnostic: CY4PR1101MB2264:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <CY4PR1101MB2264618BAD4D8ED2B9127083F04C9@CY4PR1101MB2264.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-Microsoft-Antispam-PRVS: <CY4PR1101MB2264B1FBE93FF074E3B846E5F04C9@CY4PR1101MB2264.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Otln4KfR/aNvWIEsCTU9hfAd2M45mzPiie2tfmAUZI2YGu8u4z8uchLlgxTFDUfl9S8a1zBDj6EbbzlOfrcxsjEFITQlNmLnh0gJ8wtB3LiCdKMtGNX7RelP3fj7ZhIcTRtGEkNHr0FqvKmdI4wvbEs6S69NJH8wc8CSjO3dOacTcI6C94TcrC3ahUp62fXco6j++43c4RCKWH8f72YyRAusdnnSfmiTfsboadH2zRD1z+ZBe6m2u4yAExBgpsVjG62wfqtF4GLyrbg2O0i1pGT8S4UBBwCVG/boke+O2id3sx2BMdpP/8zri7SiOoEm3p+KcEXeY8QpfKl/MAe6FkC9dYt/ZuOmXmnVU+KYxq7i1K8xVSmm77VJ9VccKvpRONjTqFyHnjpyv/pQhz4lbDbBkTezeCNn9oD5JAtrIJMUF3F4K80F8Z99RUuaWBJ0i++iZ5hZjUE4T2vK+OhkPR9Rz5uw5X8GV/3TGWgpSraP7XwSYiTu0s2NqEv7hIXkBAqk6SGlEE5bCh6u80iRRLLkHd/oexWHKciomyao1M12YBeT2AUbvVlR2Ee6jcyOTCs+M2RUaIndF9y6GLhy9V+OUOaiQAb7715DdrKMyqYLiYFkNXbMMqsc152UQGBdeOKgJSHtlCEYzXnbX2Uwy6fhDUjCvl7DJn2qEr0X4NI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB0071.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(376002)(366004)(396003)(39850400004)(346002)(86362001)(186003)(2906002)(38350700002)(38100700002)(316002)(6506007)(9686003)(6486002)(83380400001)(66946007)(8676002)(66556008)(66476007)(478600001)(16526019)(5660300002)(4326008)(26005)(6512007)(1076003)(52116002)(110136005)(956004)(6666004)(8936002)(107886003)(2616005)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?9JbiplKsAlJ3FDtIyTbAudCFLGIvTAgyAr4+O4E5XuL2ShKSuA7g9n3ry3wg?=
- =?us-ascii?Q?3fJYQdNTmmjTh3mMjqJCSNCahjcZP101Ty98kn7BPjCAb5+9SUoFaGej36yU?=
- =?us-ascii?Q?kVYfxCMtXUKJKzuTKex/kLfs5TAU8eH+JQehGzrRiwhckAWOa419Fdnn+mmQ?=
- =?us-ascii?Q?XRtrcMNrSRgPvF1UYqY5iHgToxN9QhQjNnlS6LFJeXUoX0ensatYZt1uBRtI?=
- =?us-ascii?Q?jBtZzaEoAICiQC1ToFjd2WZzlW14hQYNbg9x5sgkPR2P5DP+zV/TH+ofmpFz?=
- =?us-ascii?Q?m/Tw6zAh0CraKL8Z9pwHzO23igmbmli5PwGTPDxkinQAPhHrfBcm66f+9Z5Y?=
- =?us-ascii?Q?2EZuOnA3vO4HMZlxdTTcQ0gG2Khb2SUtrKCJoOq/6Zgi089ALEXhB65R42vo?=
- =?us-ascii?Q?aYtG+m5z9+q4iGeRH/kzTPV9nfVpGpUAG2qixw+xLkgbHeI8MMsgf86X+Fr6?=
- =?us-ascii?Q?okmCbEbyUEdmQcHzJNUFaK7Aj6OnMH3f1LWRN6IBymldHvHdIib/gUerGp4o?=
- =?us-ascii?Q?lchQK5EDkXpuEOdm9gGYWS8HOJhJaEhu2Fzf9P/J+hfoWLWjjR1IIjyUKAeX?=
- =?us-ascii?Q?QmRJaPrLBo31YmqKdGR0O5tGPkKCv3LXEB68wfMOhJTER5b675afBie8eHiY?=
- =?us-ascii?Q?mk4/NGDP4m/hLnosR2fIUEdjLhuKDXhDM6hVfvjBZFiva3gw5vbD40Y3adFX?=
- =?us-ascii?Q?XQ27Lg/iKG9Bphw1RQVbNL9TAVYJAAK4tQswHyTqGsrYL9QDnXYKBjidga2I?=
- =?us-ascii?Q?JudUwLS3fjx6OOqyoy3ZfnCFRpb0wpjvN1ysPvZgAJp2H9u+5M5V+siuoVTa?=
- =?us-ascii?Q?FiIc/2K/21hEglE2QdEZ0+EBwn4aEgoDwYk0IXFqDlCqzb88lAFrvJttNGAu?=
- =?us-ascii?Q?QaB9YMG1dQ6oUqjajA7sVxv0sIimENe+ApBJWT5uN/MQlCUOLbFGQQuws8OO?=
- =?us-ascii?Q?G69J2TB8tZZwck1/30lKcHANMIL5nEaZWDbf3KNPRIVb1wK0/pK0XpXZ7OOK?=
- =?us-ascii?Q?LUuQ5vdLR08qBVFHQ3ODfgiQ464OoAClApisz+e36e3O2qLGmB0OuLLUjE+E?=
- =?us-ascii?Q?C6Rh3CWAxmWDMnpAdEmn5jZynQHjFZtOFBMB970P9AA/1L4VVw+rkNIZPBkM?=
- =?us-ascii?Q?IzTgZzsyenuvJ1Sk2/glsXn79Ckbui4E77hPDdiFhVaxbHQKoGp1WZBbxN9I?=
- =?us-ascii?Q?zs1cNunZa3oSf5kZMaKGko6XtCYHkH0crTVai+0mH71/LwteEjRFpk25DReM?=
- =?us-ascii?Q?ulJxJKhH7QftxD+XB4yJWHZMxblGA/KBZYU60Pt+gKZeRODRDSqvTg7/PQa+?=
- =?us-ascii?Q?VRWb8mEcpHQfIeujzwcO96GL?=
+X-Microsoft-Antispam-Message-Info: 1FRJAs/xyhahm09BTRYVYUxZu3OHLVJnDGftTITncsmkmm6PAF9zqPCh5pnMXeL2uzWwqjby6l5Ee/hiHa+5ye4OBmplXZPK5NE5zOOxh8ehkH99aeAHNDa0zc5H/bQ1/keliLK7L8KJvvs3kXp8au87H4UdZwL7CQLwqOTXNGej2S/n5Uad0/bCPUxNevl2rxTSSY2szDOSaTPRAEs5sqhfGpSPtN5tBeu19SIn337Wy5zvmLp0MydPt/3+VbK5fbThYz0qKY9/j2YBXuMfpQkvSiMawxZiP4OYQLAhis2QXrSQ1mVyM9G2aTwOwdvzTCE/CNcPYXZ45573ezJlYf66dBG+U0hYo8I9VdOu3sIKmh8tfn7XdJGXsmC4nfd4PBMgeyrbjDCgXmCL15UW8C2d6Rza7okGQY6vH07Y6dZ2edbtwiAhXnaEXZlB+HlWZwThqrGBa3LBldqRNk5FLbZtSRwXS3WmndOV12/Aeg/+MILbS97l/XKMa/N0S+gFmEkL/lhAtxj1tPHajKKSTuwUWTbt99eP3yqSA6TDV5dpmYGuSJomxCOvaPDNCWW11pSm/FrHMnVvn71o4wsQ9HL+plkgMX2Q6PUCVF6DtD4gSbJioR2CWsQGbdedcYNL94PAtT/sZMBcGcP4bo+h89U7JXeuwXdtUofq/3C7zyM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB0071.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(376002)(366004)(396003)(39850400004)(346002)(86362001)(186003)(2906002)(38350700002)(38100700002)(316002)(6506007)(9686003)(6486002)(83380400001)(66946007)(8676002)(66556008)(66476007)(478600001)(16526019)(5660300002)(4326008)(26005)(6512007)(1076003)(52116002)(110136005)(956004)(6666004)(15650500001)(8936002)(107886003)(2616005)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?vODrabnWduXzr+IsIYCsanQMb4PQxXyTClncF/N6EnSl95BOKuBLl2lZLKKn?=
+ =?us-ascii?Q?Qy6kGUJaYGZRenCecF7e3Yxi9t13tCKK758SXV0HGCwDmypV+gGD/WOgjewj?=
+ =?us-ascii?Q?cll5AekrCv7ecH51Zk9p8ioR6k7LaejmCwGc6I4DpVsEK/csjZcmiIebu+1P?=
+ =?us-ascii?Q?vmFpCACMTb2skbl0KIgFcuY8JS10JTtD18J/cDKqqSD5nP8B1VNhhEclqttq?=
+ =?us-ascii?Q?0PicD4qUIUyYW6qcpTttrJsdabW4yu6aAvC651cktSY0VITMLZuilzo7h3zY?=
+ =?us-ascii?Q?P6oJkt+4BlB39uLw8NknEGxFNOtu9LJ5/h1hGPCtLByseCUagh4sTr9EmzdF?=
+ =?us-ascii?Q?2gIPwgk/U8kBqwvLJD4hrRRqukCB1tgRlIdQz5HTmFUf5Mafk3+hnsd/polW?=
+ =?us-ascii?Q?4QLDs5Aa+l9JL/DqQ4r+SeFEgCUaEaJ7Vs3zUavCoU6QkTz+oLY+qIgKzBPu?=
+ =?us-ascii?Q?WK8BDx0C95+xrjXwXBeIYb8PnjaQWaTCDUlId+b7dTVAWA+AcNlJ1L9qxUbl?=
+ =?us-ascii?Q?D3VeziJa2SOJSOv8hxWWlBgI3c3gv81t4ToOgxJBM/qY6kvMb8SQmEo8R57K?=
+ =?us-ascii?Q?eYm2AkXNvWZQLGwtU8PG66tgLpppEkPdcYTQbrAE4/ca+Q3FCv/Ys0lNESG2?=
+ =?us-ascii?Q?POYHoLYM1MSn1ubLa7trsan79ZBOworgMh0hYlJ7LumrKVTsn06T/muSFkrw?=
+ =?us-ascii?Q?RWwLrLmrNxutF5lkdjJ4Hjn+NDpgAyGbq45Tgh30UVdJPq4bYNKOZ1QDO5f6?=
+ =?us-ascii?Q?cmkBrD2TtKKhjKsBZGcGQcu7qxyhDaOZBpEv/EvIHllrPZNbJu9crq/DgfCH?=
+ =?us-ascii?Q?ygvzkhU58JZd2RVnKK5NVpVkmYvjqoiuUEuo/FTbXyCSYHzoz9faKlocjIym?=
+ =?us-ascii?Q?LILdc95qDrew0ujzXXaX6lwmCks6v4bkDDIuFgB8/qhHdMJMMd+MLKxBx0RS?=
+ =?us-ascii?Q?c181rB4sSkehzHMF+/bwtS5iXiHgXjS+azX5Fy97yVHY7mZXINAfpROgpeXZ?=
+ =?us-ascii?Q?mrDBwCgG9vAP+Nx/rP5TXX0IJFTP1ob7/Tvogdqg47no6xGeKRWd9xH3/xz+?=
+ =?us-ascii?Q?2mKnurhE8IpFGPYL5PTndupNpaxIjhNL10/TAjArPcdc+4G+hK6gHSWhh29O?=
+ =?us-ascii?Q?XUx7yP3vtreimDwhPamUVLgKoXBFTNLFTShQObu/xtB8Z+BF9LEYaWsMt9BM?=
+ =?us-ascii?Q?cnHVXimfN6KyDW1l7PZnmidC+0lTH49lbQdPSiUH1r60Rp9lO4abnZEU/ckN?=
+ =?us-ascii?Q?tZqXsEmsq89c6nqcPtKJIjcoXt9Zq1UN/UL7ippNkvdFMlWWiCQqYdUvZriy?=
+ =?us-ascii?Q?8oRF0/uDZxiS0Xpcqii20ilp?=
 X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d17bedf-974b-40ed-c739-08d900e30894
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9aee7060-f483-456a-57e9-08d900e30a2b
 X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB0071.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Apr 2021 14:22:15.3079
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Apr 2021 14:22:18.0073
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NDg+vQdM5JhzM6cuUV5PdfjC0b5yUUdm3U/CgiSDIFq7nwrnmCmS8Gxqak7v/sHKOFwAjMqsZ2k0F1dExVWPaAK9S8oI2gnwtICsMR0D33M=
+X-MS-Exchange-CrossTenant-UserPrincipalName: aVEVTaKp0w8dqGSJ+U5fEXzLPyHAU8n3ImG8nKEtmevGrmkuI3CL/QDIra1jjqqBafegeiGs59dUkvp0W57AH4dhLyziYA0+aj0ajiFMb8A=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1101MB2264
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
@@ -111,142 +111,90 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Quanyang Wang <quanyang.wang@windriver.com>
 
-The clks "pclk" and "ref_clk" are enabled twice during the probe. The
-first time is in the function zynqmp_qspi_probe and the second time is
-in zynqmp_qspi_setup_op which is called by devm_spi_register_controller.
-Then calling zynqmp_qspi_remove (rmmod this module) to disable these clks
-will trigger a warning as below:
+After calling platform_set_drvdata(pdev, xqspi) in probe, the return
+value of dev_get_drvdata(dev) is a pointer to struct zynqmp_qspi but
+not struct spi_controller. A wrong structure type passing to the
+functions spi_controller_suspend/resume will hang the system.
 
-[  309.124604] Unpreparing enabled qspi_ref
-[  309.128641] WARNING: CPU: 1 PID: 537 at drivers/clk/clk.c:824 clk_core_unprepare+0x108/0x110
+And we should check the return value of spi_controller_suspend, if
+an error is returned, return it to PM subsystem to stop suspend.
 
-Since pm_runtime works now, clks can be enabled/disabled by calling
-zynqmp_runtime_suspend/resume. So we don't need to enable these clks
-explicitly in zynqmp_qspi_setup_op. Remove them to fix this issue.
-
-And remove clk enabling/disabling in zynqmp_qspi_resume because there is
-no spi transfer operation so enabling ref_clk is redundant meanwhile pclk
-is not disabled for it is shared with other peripherals.
-
-Furthermore replace clk_enable/disable with clk_prepare_enable and
-clk_disable_unprepare in runtime_suspend/resume functions.
+Also, GQSPI_EN_MASK should be written to GQSPI_EN_OFST to enable
+the spi controller in zynqmp_qspi_resume since it was disabled in
+zynqmp_qspi_suspend before.
 
 Signed-off-by: Quanyang Wang <quanyang.wang@windriver.com>
 ---
- drivers/spi/spi-zynqmp-gqspi.c | 47 ++++++----------------------------
- 1 file changed, 8 insertions(+), 39 deletions(-)
+ drivers/spi/spi-zynqmp-gqspi.c | 20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
-index 32e53f379e9b..f9056f0a480c 100644
+index f9056f0a480c..1146359528b9 100644
 --- a/drivers/spi/spi-zynqmp-gqspi.c
 +++ b/drivers/spi/spi-zynqmp-gqspi.c
-@@ -487,24 +487,10 @@ static int zynqmp_qspi_setup_op(struct spi_device *qspi)
+@@ -157,6 +157,7 @@ enum mode_type {GQSPI_MODE_IO, GQSPI_MODE_DMA};
+  * @data_completion:	completion structure
+  */
+ struct zynqmp_qspi {
++	struct spi_controller *ctlr;
+ 	void __iomem *regs;
+ 	struct clk *refclk;
+ 	struct clk *pclk;
+@@ -827,10 +828,13 @@ static void zynqmp_qspi_read_op(struct zynqmp_qspi *xqspi, u8 rx_nbits,
+  */
+ static int __maybe_unused zynqmp_qspi_suspend(struct device *dev)
  {
- 	struct spi_controller *ctlr = qspi->master;
- 	struct zynqmp_qspi *xqspi = spi_controller_get_devdata(ctlr);
--	struct device *dev = &ctlr->dev;
--	int ret;
+-	struct spi_controller *ctlr = dev_get_drvdata(dev);
+-	struct zynqmp_qspi *xqspi = spi_controller_get_devdata(ctlr);
++	struct zynqmp_qspi *xqspi = dev_get_drvdata(dev);
++	struct spi_controller *ctlr = xqspi->ctlr;
++	int ret;
  
- 	if (ctlr->busy)
- 		return -EBUSY;
+-	spi_controller_suspend(ctlr);
++	ret = spi_controller_suspend(ctlr);
++	if (ret)
++		return ret;
  
--	ret = clk_enable(xqspi->refclk);
--	if (ret) {
--		dev_err(dev, "Cannot enable device clock.\n");
--		return ret;
--	}
--
--	ret = clk_enable(xqspi->pclk);
--	if (ret) {
--		dev_err(dev, "Cannot enable APB clock.\n");
--		clk_disable(xqspi->refclk);
--		return ret;
--	}
- 	zynqmp_gqspi_write(xqspi, GQSPI_EN_OFST, GQSPI_EN_MASK);
+ 	zynqmp_gqspi_write(xqspi, GQSPI_EN_OFST, 0x0);
  
- 	return 0;
-@@ -863,26 +849,9 @@ static int __maybe_unused zynqmp_qspi_suspend(struct device *dev)
+@@ -848,7 +852,10 @@ static int __maybe_unused zynqmp_qspi_suspend(struct device *dev)
+  */
  static int __maybe_unused zynqmp_qspi_resume(struct device *dev)
  {
- 	struct spi_controller *ctlr = dev_get_drvdata(dev);
--	struct zynqmp_qspi *xqspi = spi_controller_get_devdata(ctlr);
--	int ret = 0;
--
--	ret = clk_enable(xqspi->pclk);
--	if (ret) {
--		dev_err(dev, "Cannot enable APB clock.\n");
--		return ret;
--	}
--
--	ret = clk_enable(xqspi->refclk);
--	if (ret) {
--		dev_err(dev, "Cannot enable device clock.\n");
--		clk_disable(xqspi->pclk);
--		return ret;
--	}
+-	struct spi_controller *ctlr = dev_get_drvdata(dev);
++	struct zynqmp_qspi *xqspi = dev_get_drvdata(dev);
++	struct spi_controller *ctlr = xqspi->ctlr;
++
++	zynqmp_gqspi_write(xqspi, GQSPI_EN_OFST, GQSPI_EN_MASK);
  
  	spi_controller_resume(ctlr);
  
--	clk_disable(xqspi->refclk);
--	clk_disable(xqspi->pclk);
- 	return 0;
- }
- 
-@@ -898,8 +867,8 @@ static int __maybe_unused zynqmp_runtime_suspend(struct device *dev)
+@@ -865,7 +872,7 @@ static int __maybe_unused zynqmp_qspi_resume(struct device *dev)
+  */
+ static int __maybe_unused zynqmp_runtime_suspend(struct device *dev)
  {
- 	struct zynqmp_qspi *xqspi = (struct zynqmp_qspi *)dev_get_drvdata(dev);
+-	struct zynqmp_qspi *xqspi = (struct zynqmp_qspi *)dev_get_drvdata(dev);
++	struct zynqmp_qspi *xqspi = dev_get_drvdata(dev);
  
--	clk_disable(xqspi->refclk);
--	clk_disable(xqspi->pclk);
-+	clk_disable_unprepare(xqspi->refclk);
-+	clk_disable_unprepare(xqspi->pclk);
- 
- 	return 0;
- }
-@@ -917,16 +886,16 @@ static int __maybe_unused zynqmp_runtime_resume(struct device *dev)
- 	struct zynqmp_qspi *xqspi = (struct zynqmp_qspi *)dev_get_drvdata(dev);
+ 	clk_disable_unprepare(xqspi->refclk);
+ 	clk_disable_unprepare(xqspi->pclk);
+@@ -883,7 +890,7 @@ static int __maybe_unused zynqmp_runtime_suspend(struct device *dev)
+  */
+ static int __maybe_unused zynqmp_runtime_resume(struct device *dev)
+ {
+-	struct zynqmp_qspi *xqspi = (struct zynqmp_qspi *)dev_get_drvdata(dev);
++	struct zynqmp_qspi *xqspi = dev_get_drvdata(dev);
  	int ret;
  
--	ret = clk_enable(xqspi->pclk);
-+	ret = clk_prepare_enable(xqspi->pclk);
- 	if (ret) {
- 		dev_err(dev, "Cannot enable APB clock.\n");
- 		return ret;
- 	}
- 
--	ret = clk_enable(xqspi->refclk);
-+	ret = clk_prepare_enable(xqspi->refclk);
- 	if (ret) {
- 		dev_err(dev, "Cannot enable device clock.\n");
--		clk_disable(xqspi->pclk);
-+		clk_disable_unprepare(xqspi->pclk);
- 		return ret;
- 	}
- 
-@@ -1136,13 +1105,11 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
- 		goto remove_master;
- 	}
- 
--	init_completion(&xqspi->data_completion);
--
- 	xqspi->refclk = devm_clk_get(&pdev->dev, "ref_clk");
- 	if (IS_ERR(xqspi->refclk)) {
- 		dev_err(dev, "ref_clk clock not found.\n");
- 		ret = PTR_ERR(xqspi->refclk);
--		goto clk_dis_pclk;
-+		goto remove_master;
- 	}
- 
  	ret = clk_prepare_enable(xqspi->pclk);
-@@ -1157,6 +1124,8 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
- 		goto clk_dis_pclk;
- 	}
+@@ -1090,6 +1097,7 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
  
-+	init_completion(&xqspi->data_completion);
-+
- 	mutex_init(&xqspi->op_lock);
+ 	xqspi = spi_controller_get_devdata(ctlr);
+ 	xqspi->dev = dev;
++	xqspi->ctlr = ctlr;
+ 	platform_set_drvdata(pdev, xqspi);
  
- 	pm_runtime_use_autosuspend(&pdev->dev);
+ 	xqspi->regs = devm_platform_ioremap_resource(pdev, 0);
 -- 
 2.25.1
 
