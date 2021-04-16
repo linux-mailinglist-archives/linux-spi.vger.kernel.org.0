@@ -2,75 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8F63625B8
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Apr 2021 18:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5933362617
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Apr 2021 18:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236058AbhDPQec (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Apr 2021 12:34:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44790 "EHLO mail.kernel.org"
+        id S236489AbhDPQ4P (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Apr 2021 12:56:15 -0400
+Received: from mga01.intel.com ([192.55.52.88]:11721 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235698AbhDPQeb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 16 Apr 2021 12:34:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A55E61002;
-        Fri, 16 Apr 2021 16:34:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618590846;
-        bh=Cuq2qJDVEyHN4LK1pCgJEum4rzMfHiP7uycM9J35CJs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G7XYQX06CzwDaLx0xh0n15LhCioAkAY9VVkBSNh521nNTLts/Mrh+XH630dBMWspM
-         vc2DhuRcuegGtpy2H/IbtOh+mrhxHbPuA1tWTF1QKYv23+Qn5XpSsTSP+r5oPk670Z
-         CTxv15GL1MYZlDvJrLeLpTPV34zDnIOv+YG5grcgymdqoqPJgUhNs142pprqbiowJi
-         1jJ0QT68ih/EH5heazfrw8dhE1uTI7VbfKbcC0EEM1HUJetuKefhepXeTnIFsuNThi
-         vU96RN0eLsUaPLpAfMxVKhFeMdST2uHN2Vcua1uCQTWaWOvOsf5SOtwKT5SNPDvW63
-         XVsh/CGrtG83g==
-Date:   Fri, 16 Apr 2021 17:33:41 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Quanyang Wang <quanyang.wang@windriver.com>
-Cc:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        id S236427AbhDPQ4P (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 16 Apr 2021 12:56:15 -0400
+IronPort-SDR: cNlLVOmq2U+697Z94jhZtwqAMfVR/0F8QDuv3VWqyIUvE8NRHGpKUAtZGiNxDbD1/jdQeq3vFR
+ hYJtRxE2w/IA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9956"; a="215606430"
+X-IronPort-AV: E=Sophos;i="5.82,226,1613462400"; 
+   d="scan'208";a="215606430"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2021 09:55:49 -0700
+IronPort-SDR: Rk5PKcOKypXYtpbTYOxE2eNxdeLq0C1bfWEBt8SWTn+GL8+j2RMTmLi46vkJY0KH1tvGzgbJP6
+ JKfycXrMjzrQ==
+X-IronPort-AV: E=Sophos;i="5.82,226,1613462400"; 
+   d="scan'208";a="425655933"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.42])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2021 09:55:49 -0700
+From:   matthew.gerlach@linux.intel.com
+To:     hao.wu@intel.com, trix@redhat.com, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yilun.xu@intel.com,
+        russell.h.weight@intel.com, broonie@kernel.org,
         linux-spi@vger.kernel.org
-Subject: Re: [PATCH 0/5] spi: spi-zynqmp-gqspi: fix spi issues
-Message-ID: <20210416163341.GJ5560@sirena.org.uk>
-References: <20210416142047.6349-1-quanyang.wang@windriver.com>
- <161858883110.29027.5432599534762847384.b4-ty@kernel.org>
- <fb308dee-6ca4-e2de-964a-f67684f15e54@windriver.com>
+Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: [PATCH v3 0/2] spi: altera: Add DFL bus support for Altera SPI
+Date:   Fri, 16 Apr 2021 09:57:18 -0700
+Message-Id: <20210416165720.554144-1-matthew.gerlach@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YPJ8CVbwFUtL7OFW"
-Content-Disposition: inline
-In-Reply-To: <fb308dee-6ca4-e2de-964a-f67684f15e54@windriver.com>
-X-Cookie: Snow Day -- stay home.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
---YPJ8CVbwFUtL7OFW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This patch set adds Device Feature List (DFL) bus support for
+the Altera SPI Master controller.
 
-On Sat, Apr 17, 2021 at 12:31:44AM +0800, Quanyang Wang wrote:
+Patch 1 separates spi-altera.c into spi-altera-core.c and
+spi-altera-platform.c.
 
-> Sorry for any confusion caused.
+Patch 2 adds spi-altera-dfl.c.
 
-No worries, it's mainly just an issue for anyone doing stable backports
-- hopefully they'll figure things out.
+Matthew Gerlach (2):
+  spi: altera: separate core code from platform code
+  spi: altera: Add DFL bus driver for Altera API Controller
 
---YPJ8CVbwFUtL7OFW
-Content-Type: application/pgp-signature; name="signature.asc"
+ drivers/spi/Kconfig               |  18 +-
+ drivers/spi/Makefile              |   4 +-
+ drivers/spi/spi-altera-core.c     | 222 ++++++++++++++++++++++
+ drivers/spi/spi-altera-dfl.c      | 204 ++++++++++++++++++++
+ drivers/spi/spi-altera-platform.c | 172 +++++++++++++++++
+ drivers/spi/spi-altera.c          | 378 --------------------------------------
+ include/linux/spi/altera.h        |  21 +++
+ 7 files changed, 639 insertions(+), 380 deletions(-)
+ create mode 100644 drivers/spi/spi-altera-core.c
+ create mode 100644 drivers/spi/spi-altera-dfl.c
+ create mode 100644 drivers/spi/spi-altera-platform.c
+ delete mode 100644 drivers/spi/spi-altera.c
 
------BEGIN PGP SIGNATURE-----
+-- 
+1.8.3.1
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmB5vGUACgkQJNaLcl1U
-h9Cf0gf+PXPfs0kUioBsZoQ5Y4KbrpGrA4iEvnF5B1g+VyMTH0mlAzl55gzuYiDw
-kF2j18mLbTWBq28VC00y2h66sLH5p0mzlMRtKEjsvcMxG2kBQaj8BXOEP79WJhKH
-0Yn/aIJGWtfKnd0sUIn8Ub6gOgqlx2alfSk6I1/2xn3RfhC9+nDvkyAavDLhgC0U
-FW6PuJoywqjrzBCU5zFwb9ZGCbdVNCFMRJMtUfiAFRp7JH52PuSDtuXSZAJPE2W4
-J5EbDoFnuWeoQggTJ2wqZr1qCcE/AitDxgyMtY8Yd6dDQu3Iuy39qT9AGZztDOvg
-Au5DIacH8z9u8u6wDS9Z5/irLZGYfA==
-=vI3k
------END PGP SIGNATURE-----
-
---YPJ8CVbwFUtL7OFW--
