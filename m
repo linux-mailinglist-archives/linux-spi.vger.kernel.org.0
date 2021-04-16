@@ -2,104 +2,132 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B4B3616CF
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Apr 2021 02:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7AE3616E6
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Apr 2021 02:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235682AbhDPAcj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 15 Apr 2021 20:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234865AbhDPAcj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Apr 2021 20:32:39 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA79CC061574;
-        Thu, 15 Apr 2021 17:32:15 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id z22-20020a17090a0156b029014d4056663fso13660534pje.0;
-        Thu, 15 Apr 2021 17:32:15 -0700 (PDT)
+        id S237288AbhDPAtP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 15 Apr 2021 20:49:15 -0400
+Received: from mail-co1nam11on2045.outbound.protection.outlook.com ([40.107.220.45]:62277
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S237139AbhDPAtL (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 15 Apr 2021 20:49:11 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PEqWFRWvJdeC+pDoern1zEaERwMB6YRnh83o/JC3s8DZpmnTZbiuURjNegC7zN3GEqrkBOlzT7cyL+QykOvaNgN8PIlFs2AHKGonuLIfrKpfLZsn6dNJJz5gwxM1dQAn2MeM3DV0uk3bfxbxcVIbDOzH2xcsPpMhT8GvAi0D8D7PiFH+eM70yJ+Qb5lqmAlUm+IEwCtU7aalLegqJVqhM9lcn8Annrf6Ov0/sU7rfJEGKQ5IdO03kQ1D5weGV7NBjgseUfvasWvm4cxRWKPD72VvHP7aoqMqauPWU1FpdB9f1iRpCcS5rKQVn+/Qz8YXVXP9k8K1B0SWYn2ED+FR2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=u/9gx7cYwefuIjIRlTeJLGSktrCfwnhSF9n8vX3HhBE=;
+ b=XJd/lLTEIGgUx7+UrfKig3N0r83DUE1CR9YVxB/6JB4S5NpnrLjRC9amoe3Zn8CVs2iih/p7bgJmQ2M8nUhY/Fw7O1G+M3wmerV2SylJGnnjSo4K0pkbNFDK3R6wFrE4L8xW/EnXhbL2XQa2zkA4IA/LZVqlcstsdGFDM5H4AKwJKflGbejpZff6881KtPtf7SZoE9QVaqzvwNtnni2lkz4obIO8PJiAjbCw+FIrJv48bMOICJiyA2mxQok3IdS8ozQxJmRRhmiYcY/3OCuwroMFo+DV5pbIA++jEusA47oYX+5AUcRYT+kr4qFD1hnyyKHnRKDB5R/nC9ksa8KXQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=subrh3SzNUvQ+3siFoS1Q3pvTbkNn7WivtC5eavv2hQ=;
-        b=oAW+K1DmLTfI8L0SOhGHF8MWeEosuHI1rO1hUjYvTVu/hlz4i3FdVtvB1yPV7/QKWW
-         wiMBy2vaTLOhWi2rI4qLXQdhkdp6B3P5Kc3iaNO9gjJrObuPQ/47jI+2Xsg/LPzMCROn
-         PH3hpbKE7yUTMGtENhWYoKJuUPquydfYtRpR5FGMcmJurEXITijXCWtp9f+c8DThCZY8
-         mb7Kp0dzxssUQmk/PDiw8yyDhGd8rUtvcDJvXxadZ6E6bXTVZT1mvslxL3F2VvmK8TQV
-         2pXWpb0Pp4O73IaRBxMxBS+/RcWuYdfd/iGIHC47JC1SvxpmPJvcBPzVpnG4a4zkSgT3
-         mCKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=subrh3SzNUvQ+3siFoS1Q3pvTbkNn7WivtC5eavv2hQ=;
-        b=PIKpuBaf3g/5DuacSDCXLf/M8g+AWEstkk9wMQ8OhhbmatMzCwXdMzkdiSXwTcfHxQ
-         TgC6xCoasoyXO4GddeFZdOLT/L3F93AlU9LNwuL95Jz9JmllUx0i/chIMElk2AKbRKEy
-         3AdubC+EUyF1asSZAiaWOBySSoZ3+2gPEyVzh2V0DIEUy8pB9iKERDUAIsTzczk9sJjI
-         ENyR90QFAI3VjJ/kN7hh6jsiUh+68VVblmu2vH2BslI9s/RF7v19oN+ZCygBcOqI708E
-         41zJAsmWgKgXzyZcKbXt+mDEyF5GL8AGF6gbhzRluwme46qnmpO30zBMeyOdWlPDbAV3
-         ikDg==
-X-Gm-Message-State: AOAM531c6YnfEzglkkK+Vc4mv28vHwwYBKgJ2ZAbBd5a1RCGK3nQzLPA
-        YjzspDDleS6diOUsN81jrf/FI/BUImQ=
-X-Google-Smtp-Source: ABdhPJwuqyHdJ6T5Cge4DOc6PZvogJe5hRtK78m/356bhDDUurMfaCO1Qjw0GTIgmL4KbFbB8EMebA==
-X-Received: by 2002:a17:90b:3b81:: with SMTP id pc1mr6590644pjb.40.1618533135399;
-        Thu, 15 Apr 2021 17:32:15 -0700 (PDT)
-Received: from [10.230.29.202] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id y3sm3082412pfo.79.2021.04.15.17.32.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Apr 2021 17:32:14 -0700 (PDT)
-Subject: Re: [PATCH] dt-bindings: spi: brcm,spi-bcm-qspi: convert to the
- json-schema
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Kamal Dasu <kdasu.kdev@gmail.com>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20210415220201.16429-1-zajec5@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <6e5a2693-fc19-efce-5aaa-4712b0dcb802@gmail.com>
-Date:   Thu, 15 Apr 2021 17:32:06 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.9.0
-MIME-Version: 1.0
-In-Reply-To: <20210415220201.16429-1-zajec5@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+ d=windriversystems.onmicrosoft.com;
+ s=selector2-windriversystems-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=u/9gx7cYwefuIjIRlTeJLGSktrCfwnhSF9n8vX3HhBE=;
+ b=qTh+WBUgpE834lNsh0W8x0vwkx1fgYITrR6RZcATxbpAWss+Qu1ufd2c0Rc/hdqHFOn+0fMTdDxiLEdZgfR+jLaSMsHMt0syiPnnfninhuQ920NHCxiZUVYGVDTzpwgg89SH+JWpCFSZzNlirE9hVIeqX/H2Cvya9cn5B10fTOY=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=windriver.com;
+Received: from CY4PR11MB0071.namprd11.prod.outlook.com (2603:10b6:910:7a::30)
+ by CY4PR11MB1256.namprd11.prod.outlook.com (2603:10b6:903:25::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.21; Fri, 16 Apr
+ 2021 00:48:46 +0000
+Received: from CY4PR11MB0071.namprd11.prod.outlook.com
+ ([fe80::f45f:e820:49f5:3725]) by CY4PR11MB0071.namprd11.prod.outlook.com
+ ([fe80::f45f:e820:49f5:3725%6]) with mapi id 15.20.3999.037; Fri, 16 Apr 2021
+ 00:48:46 +0000
+From:   quanyang.wang@windriver.com
+To:     Mark Brown <broonie@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Quanyang Wang <quanyang.wang@windriver.com>
+Subject: [PATCH 0/5] spi: spi-zynqmp-gqspi: fix spi issues
+Date:   Fri, 16 Apr 2021 08:46:47 +0800
+Message-Id: <20210416004652.2975446-1-quanyang.wang@windriver.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [60.247.85.82]
+X-ClientProxiedBy: SJ0PR13CA0026.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c0::31) To CY4PR11MB0071.namprd11.prod.outlook.com
+ (2603:10b6:910:7a::30)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from pek-qwang2-d1.wrs.com (60.247.85.82) by SJ0PR13CA0026.namprd13.prod.outlook.com (2603:10b6:a03:2c0::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.8 via Frontend Transport; Fri, 16 Apr 2021 00:48:43 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1e8217bc-02cc-4c96-705c-08d9007163d9
+X-MS-TrafficTypeDiagnostic: CY4PR11MB1256:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <CY4PR11MB1256903B605BBC511199DCC0F04C9@CY4PR11MB1256.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oLAFLDfWmEKqBrxGvrnfEjxLC1Ca+3IVpSDwANsg8nLBjODRq5ozfv6eMVOvtTJGMvrwre5BnxEqEY/DGoCiZ9udR5eXHzTmWJqjrSxS60vXkA1LYmdjZ3ZtpADRb9t5jrpoT5yG+HDGvjYK21WdMDbHOxvHOY9eDSVZyl0i+KBRXg2NKVxoTEKKPc4iPijzygc+mEi32oJhZK5E6l9QVjk53dGzo8PPIYV76KQi4PuS/DNqTCL+/IScGsO7mwNYZx8OMEycivoVQij5uhMds+unVsxlTnpbVZ7LPW6ntkCb+X8aESc/Runq1QkdMgBo0RnJlZGVRhjNsHtPK/TRkLfIYDh1pSdSwSdrtNZIXy7P7Dz1f6bYNV9C8tEWlsv5rNaj7da1+OOyq+nt/e4gYwD0xLpY5BvhYlQrEq2SPuZpqNoZKtJ13CtQgQhtDKBsgi5xIXguY3O05kcDCy04B3CSFRjcpckJpn0qhShuSyRlLI7Kjv/LRtUhLf/FRxFNa2kgLwN6TLaNAiDFBtp3ykrXI9iNPyAZWbwG+ULkPlG2EGYuvfJNdPxhEz05vYoG3awIVFSNq5CPJqtaiXcm/xCJMPfulcosdtMqqUyQOSYmrzolqemL+UtEiJgD8N6fkmqYSD9m3OkZOwlEYqL76aSY/wFpjI9bUrgQ3T0yYTk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB0071.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39840400004)(376002)(366004)(346002)(396003)(136003)(956004)(66476007)(2616005)(66946007)(86362001)(83380400001)(4326008)(6506007)(66556008)(107886003)(5660300002)(52116002)(1076003)(6486002)(9686003)(4744005)(2906002)(316002)(26005)(36756003)(8676002)(6512007)(38100700002)(110136005)(38350700002)(16526019)(478600001)(186003)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?n223HQy6UMOG/+IgYKDpAXvLv34A5zdRu2fGpFn7X/PllCMoSydXHhkRc1rn?=
+ =?us-ascii?Q?S33KhubyP3v+nO8C9AGU5Yixb223SZnO8zpn2QJiWeT+5EqHLDQOsq6hYgmL?=
+ =?us-ascii?Q?l4F822vA16737WydLi5nKyGQBrsmvjC/Jkwbp4HohawyYOWSQvXdpq4xTru1?=
+ =?us-ascii?Q?110IEsHEqgYFTg5L575cWoB3YHsjsEUwKzMMVzGBh+OXGsM0zzANDhnWJCko?=
+ =?us-ascii?Q?iC+6N9Wg06tkAspLE4uQ28u8ao+R6x4vlIMPvqEfNcKYg+NHd8nxAWOXMDJj?=
+ =?us-ascii?Q?haWjJ6ZptlRD4PL2ojzvEteULjv4x5GuPYI5G1GVoKXiqlUEI/fgifNPxwJe?=
+ =?us-ascii?Q?mZRHauoULZoxOfK46zpzOcLF3pYgagMjFnG+kRONXSGH2LbvKHTEBiv9I9t3?=
+ =?us-ascii?Q?vk+HwFkVaWwQDAIPkR4RxTD/ookWYSvAIbfjqRa+zUFPu/t3Sc/fn+VsJh0w?=
+ =?us-ascii?Q?1FkjSo+dhLu6YurV/34NEjZe25K3wsjsq/ttFBHD1TTH3TLxCrSJJaQgEfyz?=
+ =?us-ascii?Q?ZYlwS1YBntdG6T9V/8vj14g+LKZPvrb/6gaSXY24BgfokILPekj2hfIgWoSh?=
+ =?us-ascii?Q?5/Mpon3TlL7YhrjDZ+yv/ahUnGFE1jvLUA4Vs9DU6ejysU2YsqzGCdl5V8PV?=
+ =?us-ascii?Q?fUcwEQnWkzeTebEo3pkjchjk15gd5+PEmEP94tdpHrNV6/gqExDoZHyTQP7K?=
+ =?us-ascii?Q?2YSKEse8NtEvMLed9itgyJeMb5Nix7Rxhs864dCwaMKM6626Ya5Syvp6uj4V?=
+ =?us-ascii?Q?rI9eFcsx97MbxI4fRn2P6aW4ZhVJlq6MRuWsb2DDeRe+KU43VzYwkB2W2Mek?=
+ =?us-ascii?Q?3gHYh5nH7nPVSXSvLfk6kYoxZfMPpnsEkuE9uAejWMA+AI+HIhNjRZhZnkPa?=
+ =?us-ascii?Q?XPPpOioTQzW2gR1pldHbxvWtbjLXbhL7GF5oJkKOu61GvsDjRgH7F8rJbXSp?=
+ =?us-ascii?Q?56AXGWAmhSbZ2fGIGexJ4KnFu+2IB9YfKKw8F/vKmqPQimXV1wdJRsQb2h9y?=
+ =?us-ascii?Q?JbslGSiRdWGHc9GXUNviGZlc+E4ioGGBbhtrXITbEwk4UTcnnjR9lVxgLCY6?=
+ =?us-ascii?Q?BmWkLjk9lnt3xVkTx34C3MS77M3pC7WH81IfCyvdld4xsUAOVy/JYRZmrFGM?=
+ =?us-ascii?Q?YbWWC5XhYrwM51u4HXzorRkWVvkFB09JVbEr3KU1K/UYwX6Urac6GKi8LmZL?=
+ =?us-ascii?Q?ML/8Bry/JhWeMIaBdQMvTzAucfc5tFwXEs5XiuVTlJEWOYtxZX7zKnxjkPk3?=
+ =?us-ascii?Q?np4Z7ZF7rln6heqYVyQi2Ad/RLCWx62a3u423cAOo2utOT+cZf5Z+PPb/iv2?=
+ =?us-ascii?Q?9MC2LQUT8ll8crPqKyjlroYq?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e8217bc-02cc-4c96-705c-08d9007163d9
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB0071.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Apr 2021 00:48:45.9252
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: A1vY+ocx7tq6uNF7+UTvUjJpJWT49+oRR2nOtlhSW3r79J1gAFX0J35nNZBxZXwB2KszFhfvxU2zkynYGhO+TvwUVZzxkweVM0gABEDb5sM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR11MB1256
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Quanyang Wang <quanyang.wang@windriver.com>
 
+Hi all,
 
-On 4/15/2021 3:02 PM, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> This helps validating DTS files.
-> 
-> Changes that require mentioning:
-> 1. reg-names
->    "mspi_regs" and "bspi_regs" were renamed to "mspi" and "bspi" as that
->    is what's used in DTS files and in Linux driver
-> 2. interrupt-names
->    Names were reordered. "mspi_done" has to go first as it's always
->    required.
-> 3. spi-rx-bus-width
->    Property description was dropped as it's part of the
->    spi-controller.yaml
-> 4. Examples:
->    * flash0@0 was a duplicated node and got dropped
->    * regs and interrupts were formatted and reordered to match yaml
->    * <0x1c> was replaced with <&gic>
-> 
-> This rewritten binding validates cleanly using the  "dt_binding_check".
-> Some Linux stored DTS files will require reordering regs and interrupts
-> to make dtbs_check happy.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+This series fix some issues that occurs in spi-zynqmp-gqspi.c.
 
-Thanks a lot for doing that, do you mind adding Kamal as a maintainer
-for that binding if you have to send a v2?
---
-Florian
+Thanks,
+Quanyang
+
+Amit Kumar Mahapatra (1):
+  spi: spi-zynqmp-gqspi: Resolved slab-out-of-bounds bug
+
+Quanyang Wang (4):
+  spi: spi-zynqmp-gqspi: fix clk_enable/disable imbalance issue
+  spi: spi-zynqmp-gqspi: fix hang issue when suspend/resume
+  spi: spi-zynqmp-gqspi: fix use-after-free in zynqmp_qspi_exec_op
+  spi: spi-zynqmp-gqspi: return -ENOMEM if dma_map_single fails
+
+ drivers/spi/spi-zynqmp-gqspi.c | 115 +++++++++++++++------------------
+ 1 file changed, 51 insertions(+), 64 deletions(-)
+
+-- 
+2.25.1
+
