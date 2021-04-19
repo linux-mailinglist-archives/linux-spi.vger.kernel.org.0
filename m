@@ -2,36 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D3436490C
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Apr 2021 19:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D290B36490D
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Apr 2021 19:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232572AbhDSReq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 19 Apr 2021 13:34:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36114 "EHLO mail.kernel.org"
+        id S234270AbhDSReu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 19 Apr 2021 13:34:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36138 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230063AbhDSRep (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 19 Apr 2021 13:34:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 33295611F2;
-        Mon, 19 Apr 2021 17:34:15 +0000 (UTC)
+        id S230063AbhDSRes (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 19 Apr 2021 13:34:48 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 085B161246;
+        Mon, 19 Apr 2021 17:34:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618853655;
-        bh=htNNx7uBOidFypvXGwoCYr9UZZ2Sg1E6sIsSdEnYbN8=;
+        s=k20201202; t=1618853658;
+        bh=cEHv94ngU2KSQrihCyTESuDSOrXQjqsdy9SA/oN6vdA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ASDjUDEYW8rujcLm+wJLZFz9u9jxfhs1zXPs8NZ+MvFysLfPnsshvzNMJWx5RMHOw
-         +dLLK952CW9d7u1wLYxnrZvmJoVelJtwpQiIcz4Mn3fvlycS/vCX5fS+D9dvFTEngz
-         +LPbcwlUUFZ3ggC69Z3/zu4bc3PdtyetQuHmgHidd07ZvPitNTs5clryLQyy5jzCLG
-         G5Z3sAH75LXVR45lYOqPCr+vIGHs9kI8QJzQ1QjsNjOTT7cHJOWqmDkY2zcyzgNuDc
-         FUw3tQfHEel0LlUwtI0hFYbk3eTABRYkRAMqNmm/deGCulL1XlcG50z9wdkRk84W1F
-         Y2z+oEVkdtUNQ==
+        b=iKnhbiWgLmv9oKnVdh/c1vbCUINTA0nKgaua88LZBT982/X+iZQGhP/sSwHoElw61
+         0NLNgAEURcnvf34VIm3YMm8OQTmmiEZk2fqI8/IhuRAs2wIHL1go1J7Id0tH14P1gs
+         t5/sFkMoQaCm6mS2vX9DMu8HqOaO1VTO/dWOOhYpjk0qYvthoELL79RXzhacT9T1g8
+         FigK3pVkCoqbeMJahy36e8ezk0KW9YMu64wAsedwwQ5eOzZZ/xbi1htP2S+ZBXQ4pn
+         yPgptx7gGeHFwmra+xYsy1pU1YTuiBqP++xzw8Tib/6smsI8Myi+1G9108slxLqTLL
+         fJWoPfAKuZKKA==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, David Bauer <mail@david-bauer.net>
-Cc:     Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH] spi: sync up initial chipselect state
-Date:   Mon, 19 Apr 2021 18:33:44 +0100
-Message-Id: <161885314931.4710.17119271938651822220.b4-ty@kernel.org>
+To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        patrice.chotard@foss.st.com
+Cc:     Mark Brown <broonie@kernel.org>, christophe.kerello@foss.st.com,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH 0/3] spi: stm32-qspi: Fix and update
+Date:   Mon, 19 Apr 2021 18:33:45 +0100
+Message-Id: <161885314932.4710.7975812733588849701.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210416195956.121811-1-mail@david-bauer.net>
-References: <20210416195956.121811-1-mail@david-bauer.net>
+In-Reply-To: <20210419121541.11617-1-patrice.chotard@foss.st.com>
+References: <20210419121541.11617-1-patrice.chotard@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -39,14 +43,13 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 16 Apr 2021 21:59:56 +0200, David Bauer wrote:
-> When initially probing the SPI slave device, the call for disabling an
-> SPI device without the SPI_CS_HIGH flag is not applied, as the
-> condition for checking whether or not the state to be applied equals the
-> one currently set evaluates to true.
+On Mon, 19 Apr 2021 14:15:38 +0200, patrice.chotard@foss.st.com wrote:
+> Christophe Kerello (1):
+>   spi: stm32-qspi: fix pm_runtime usage_count counter
 > 
-> This however might not necessarily be the case, as the chipselect might
-> be active.
+> Patrice Chotard (2):
+>   spi: stm32-qspi: Trigger DMA only if more than 4 bytes to transfer
+>   spi: stm32-qspi: Add dirmap support
 > 
 > [...]
 
@@ -56,8 +59,12 @@ Applied to
 
 Thanks!
 
-[1/1] spi: sync up initial chipselect state
-      commit: d347b4aaa1a042ea528e385d9070b74c77a14321
+[1/3] spi: stm32-qspi: fix pm_runtime usage_count counter
+      commit: 102e9d1936569d43f55dd1ea89be355ad207143c
+[2/3] spi: stm32-qspi: Trigger DMA only if more than 4 bytes to transfer
+      commit: f3530f26f8e9869e6e8c3370cf6f61330774fe2b
+[3/3] spi: stm32-qspi: Add dirmap support
+      commit: 18674dee3cd651279eb3d9ba789fe483ddfe1137
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
