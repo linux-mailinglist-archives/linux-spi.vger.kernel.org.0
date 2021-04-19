@@ -2,131 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4175364075
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Apr 2021 13:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4803364155
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Apr 2021 14:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238619AbhDSLZo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 19 Apr 2021 07:25:44 -0400
-Received: from mga02.intel.com ([134.134.136.20]:42345 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238543AbhDSLZh (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 19 Apr 2021 07:25:37 -0400
-IronPort-SDR: zbbmBSk3Vh8WrJLBdvEle6br+/zAqWcwhaHGiqOXwu0eWTZ29WT6FFWoAzX49AJ1R78SIH8dEb
- N0hw1QwMD22w==
-X-IronPort-AV: E=McAfee;i="6200,9189,9958"; a="182440445"
-X-IronPort-AV: E=Sophos;i="5.82,234,1613462400"; 
-   d="scan'208";a="182440445"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2021 04:25:06 -0700
-IronPort-SDR: EmRQL1vW1CXPQXX7Ep5JqVxyjxNTf+NHB5aERjWSoOjAFGTYYnA8wVJBSzlK7ZZZK60cL4u5kf
- 1qLryOMjfKdw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,234,1613462400"; 
-   d="scan'208";a="422657726"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 19 Apr 2021 04:25:02 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 1E7BC2B8; Mon, 19 Apr 2021 14:25:20 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Yangbo Lu <yangbo.lu@nxp.com>, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 6/6] mmc: mmc_spi: Make of_mmc_spi.c resource provider agnostic
-Date:   Mon, 19 Apr 2021 14:24:59 +0300
-Message-Id: <20210419112459.25241-6-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210419112459.25241-1-andriy.shevchenko@linux.intel.com>
-References: <20210419112459.25241-1-andriy.shevchenko@linux.intel.com>
+        id S239048AbhDSMQa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 19 Apr 2021 08:16:30 -0400
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:1354 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239028AbhDSMQ3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Apr 2021 08:16:29 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13JCFEHJ009811;
+        Mon, 19 Apr 2021 14:15:43 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=zKHnDC/t1gVZr01XZJKPAzPKhFgNwrDSSFbSp/Msn3c=;
+ b=gODYIx5bRMwti3ZpTHRBbyWwr1OpnzJgr6iCiwwpX+L9r/NPOqOceNA3CObWoZQUiY/e
+ eaz/j6Isvt2xBkwU7ycLBKHde7tK/0XeTuQNwMOsSBT8kMtBnqPU8URwRstpwT6Dec4b
+ /QkUzLK9wPCfgptkQbqpSgD9Kldayba4GMUcJfTezI/5yZh8EMACtcpwGfba4znji707
+ +oUqyZy2+EGur7jcL47p6acbebKSO8Ugcq2H+tjUymW7etrelRyS9BkZi2fmEXiELXXt
+ Urus13k+Klt4DpT7kkblaW77MsnD9IK2yIbRdOuLL84MteBpSul+vdfi2znCqAZZAD3m Rw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 380rdgc933-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Apr 2021 14:15:43 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1900E10002A;
+        Mon, 19 Apr 2021 14:15:43 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 054F82139BC;
+        Mon, 19 Apr 2021 14:15:43 +0200 (CEST)
+Received: from localhost (10.75.127.46) by SFHDAG2NODE3.st.com (10.75.127.6)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 19 Apr 2021 14:15:42
+ +0200
+From:   <patrice.chotard@foss.st.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
+        <patrice.chotard@foss.st.com>
+Subject: [PATCH 0/3]  spi: stm32-qspi: Fix and update
+Date:   Mon, 19 Apr 2021 14:15:38 +0200
+Message-ID: <20210419121541.11617-1-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-19_10:2021-04-16,2021-04-19 signatures=0
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-In order to use the same driver on non-OF platforms, make
-of_mmc_spi.c resource provider agnostic.
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/mmc/host/Makefile     | 2 --
- drivers/mmc/host/of_mmc_spi.c | 6 ++----
- include/linux/spi/mmc_spi.h   | 9 ---------
- 3 files changed, 2 insertions(+), 15 deletions(-)
+Christophe Kerello (1):
+  spi: stm32-qspi: fix pm_runtime usage_count counter
 
-diff --git a/drivers/mmc/host/Makefile b/drivers/mmc/host/Makefile
-index 6df5c4774260..14004cc09aaa 100644
---- a/drivers/mmc/host/Makefile
-+++ b/drivers/mmc/host/Makefile
-@@ -34,9 +34,7 @@ obj-$(CONFIG_MMC_TIFM_SD)	+= tifm_sd.o
- obj-$(CONFIG_MMC_MVSDIO)	+= mvsdio.o
- obj-$(CONFIG_MMC_DAVINCI)       += davinci_mmc.o
- obj-$(CONFIG_MMC_SPI)		+= mmc_spi.o
--ifeq ($(CONFIG_OF),y)
- obj-$(CONFIG_MMC_SPI)		+= of_mmc_spi.o
--endif
- obj-$(CONFIG_MMC_S3C)   	+= s3cmci.o
- obj-$(CONFIG_MMC_SDRICOH_CS)	+= sdricoh_cs.o
- obj-$(CONFIG_MMC_TMIO)		+= tmio_mmc.o
-diff --git a/drivers/mmc/host/of_mmc_spi.c b/drivers/mmc/host/of_mmc_spi.c
-index 009c3885f6ba..9d480a05f655 100644
---- a/drivers/mmc/host/of_mmc_spi.c
-+++ b/drivers/mmc/host/of_mmc_spi.c
-@@ -51,10 +51,9 @@ struct mmc_spi_platform_data *mmc_spi_get_pdata(struct spi_device *spi)
- {
- 	struct mmc_host *mmc = dev_get_drvdata(&spi->dev);
- 	struct device *dev = &spi->dev;
--	struct device_node *np = dev->of_node;
- 	struct of_mmc_spi *oms;
- 
--	if (dev->platform_data || !np)
-+	if (dev->platform_data || !dev_fwnode(dev))
- 		return dev->platform_data;
- 
- 	oms = kzalloc(sizeof(*oms), GFP_KERNEL);
-@@ -83,10 +82,9 @@ EXPORT_SYMBOL(mmc_spi_get_pdata);
- void mmc_spi_put_pdata(struct spi_device *spi)
- {
- 	struct device *dev = &spi->dev;
--	struct device_node *np = dev->of_node;
- 	struct of_mmc_spi *oms = to_of_mmc_spi(dev);
- 
--	if (!dev->platform_data || !np)
-+	if (!dev->platform_data || !dev_fwnode(dev))
- 		return;
- 
- 	kfree(oms);
-diff --git a/include/linux/spi/mmc_spi.h b/include/linux/spi/mmc_spi.h
-index 778ae8eb1f3e..9ad9a06e488d 100644
---- a/include/linux/spi/mmc_spi.h
-+++ b/include/linux/spi/mmc_spi.h
-@@ -35,16 +35,7 @@ struct mmc_spi_platform_data {
- 	void (*setpower)(struct device *, unsigned int maskval);
- };
- 
--#ifdef CONFIG_OF
- extern struct mmc_spi_platform_data *mmc_spi_get_pdata(struct spi_device *spi);
- extern void mmc_spi_put_pdata(struct spi_device *spi);
--#else
--static inline struct mmc_spi_platform_data *
--mmc_spi_get_pdata(struct spi_device *spi)
--{
--	return spi->dev.platform_data;
--}
--static inline void mmc_spi_put_pdata(struct spi_device *spi) {}
--#endif /* CONFIG_OF */
- 
- #endif /* __LINUX_SPI_MMC_SPI_H */
+Patrice Chotard (2):
+  spi: stm32-qspi: Trigger DMA only if more than 4 bytes to transfer
+  spi: stm32-qspi: Add dirmap support
+
+ drivers/spi/spi-stm32-qspi.c | 106 +++++++++++++++++++++++++++--------
+ 1 file changed, 84 insertions(+), 22 deletions(-)
+
 -- 
-2.30.2
+2.17.1
 
