@@ -2,73 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3551B36490F
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Apr 2021 19:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B95DE364B46
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Apr 2021 22:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239432AbhDSRew (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 19 Apr 2021 13:34:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36164 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230063AbhDSRev (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 19 Apr 2021 13:34:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DDCDE6127C;
-        Mon, 19 Apr 2021 17:34:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618853661;
-        bh=yFFk46DO5amezDf+PMue/f7vFugbJyZHOR5kFpvNVvY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XwzbBTsyXYyKcCxNhYBeFVC1mMQTnVCUmT79NezM+aZf9gV20qJCtkNKQBf9BmDcr
-         WV2iyofys6X79k4SJDYYWiHc2vZZO8XvbXK7FI3/O4G1UucHvLdU6jNX/tTQTmsVC7
-         aaSF0TjQ208aOEWr9KI/BI2GNit6UgVN43sdzQ11PCopfOqW+92QHadcQ5HCNjgQqN
-         vRJbqldUE9Kz0NCWsLF/yMuOSWFk97rroXcFZ00CQ3DHYaB8us0RUyA4mfueoa9tzg
-         gJ9NR1VfShfoDDF5+4nKoolLRoOWT4GiSz5O61KgJzr+AXv08oey41SxXE7DX+r7QB
-         H8oX012mzwp4w==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org,
-        Joe Burmeister <joe.burmeister@devtank.co.uk>,
-        linux-kernel@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH] spi: Handle SPI device setup callback failure.
-Date:   Mon, 19 Apr 2021 18:33:46 +0100
-Message-Id: <161885314932.4710.14482969340567578006.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210419130631.4586-1-joe.burmeister@devtank.co.uk>
-References: <20210419130631.4586-1-joe.burmeister@devtank.co.uk>
+        id S237914AbhDSUkx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 19 Apr 2021 16:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43676 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234058AbhDSUkv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Apr 2021 16:40:51 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72083C06174A;
+        Mon, 19 Apr 2021 13:40:21 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id r12so54996420ejr.5;
+        Mon, 19 Apr 2021 13:40:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bw5IhZj9aI8jPgCDzrQQ4QwlvPSxNH5FozaD2GGrtoc=;
+        b=EQWjTrDQWErqauELNSlzFJqDxUggWownGF1Zl0SbYFLRZNg18oQDmQgBMaSgK3Znyh
+         N6CU2dZ3okbBgirspmicEVs1v5dZvkFsSgV+RL789MI0nrXz+Qui2sZY3+YbCpiGZJuZ
+         52RmWeitwmK1hPGuYvf/Rjw3vMnvqmoPrUrBuBw2ECcLhhFqZkvgvuRuD34hG9yYP9tg
+         /RYEx2gfvpbukpYSg11CxN6gdJcOHs4pqvW+1HxdjVS/Blapd3IlaDf3MuiDP+2QoFSS
+         uqpk6kA4tA/sx3P9T+4mA9M7Oe9S6Yv4NBroHUkGDiz2HMr56XTxWCTCt/43xLbcxbmN
+         d+BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bw5IhZj9aI8jPgCDzrQQ4QwlvPSxNH5FozaD2GGrtoc=;
+        b=jFUhp6kdnI8eoC0tigjZXRo+gYDZvl8vloycJqEENuWWCEz1Y6l85aF0Okxv+p9T3U
+         8ufNc0JeqarurlejRbSkbMjDRiX6nyQk2t0sE6gOFyY0RwBqROpJDlloFKL2taFNOEes
+         QBWS+W2oc2VeqATRI48UTcDJAwKZymt2roWZoy6xwkGkPdoWjYxAgSSx9/kIz0WNiEgI
+         vEndL77pHz9HOnFd2aY9m3wKo8BxXFzUUibMvv/q/t2r0UsbrH/8dcc5LtqFCkX0iR9C
+         adZZ5HG7AAc1Lgmpemrxmk4XCRVkz/m07W5p2DlMRbdbTIoOPG1aJu6cSvGRmQ+l+V4V
+         gTAw==
+X-Gm-Message-State: AOAM530EFvFvZ9EzVFxufn7oprX7gbGuffLgH893TcHhK61wWbL+yrDC
+        jGAYdOHfeJU/BHdQFUyQq1QeyGT7Q82Dt7+r
+X-Google-Smtp-Source: ABdhPJzDdIhOuuVIdayRFbBhxGTyoEn2sTN+kHETsPJbSv0KGWp6thFGiMfRAlfnQS9P47NL+BlxRA==
+X-Received: by 2002:a17:906:7795:: with SMTP id s21mr23593421ejm.309.1618864820097;
+        Mon, 19 Apr 2021 13:40:20 -0700 (PDT)
+Received: from microndev.lxd (ipbcc00c74.dynamic.kabel-deutschland.de. [188.192.12.116])
+        by smtp.gmail.com with ESMTPSA id u4sm11056706ejf.11.2021.04.19.13.40.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Apr 2021 13:40:19 -0700 (PDT)
+From:   shiva.linuxworks@gmail.com
+X-Google-Original-From: sshivamurthy@micron.com
+To:     broonie@kernel.org, linux-spi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Shivamurthy Shastri <sshivamurthy@micron.com>
+Subject: [PATCH] spidev: Add Micron SPI NOR Authenta device compatible
+Date:   Mon, 19 Apr 2021 20:40:15 +0000
+Message-Id: <20210419204015.1769-1-sshivamurthy@micron.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 19 Apr 2021 14:06:31 +0100, Joe Burmeister wrote:
-> If the setup callback failed, but the controller has auto_runtime_pm
-> and set_cs, the setup failure could be missed.
+From: Shivamurthy Shastri <sshivamurthy@micron.com>
 
-Applied to
+Add compatible string for Micron SPI NOR Authenta device.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Signed-off-by: Shivamurthy Shastri <sshivamurthy@micron.com>
+---
+ drivers/spi/spidev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks!
+diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+index 8cb4d923aeaa..f56e0e975a46 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -683,6 +683,7 @@ static const struct of_device_id spidev_dt_ids[] = {
+ 	{ .compatible = "dh,dhcom-board" },
+ 	{ .compatible = "menlo,m53cpld" },
+ 	{ .compatible = "cisco,spi-petra" },
++	{ .compatible = "micron,spi-authenta" },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, spidev_dt_ids);
+-- 
+2.25.1
 
-[1/1] spi: Handle SPI device setup callback failure.
-      commit: c914dbf88fa8619602e0913e8a952a19631ed195
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
