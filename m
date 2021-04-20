@@ -2,78 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8565365B39
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Apr 2021 16:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 238F3365B94
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Apr 2021 16:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232084AbhDTOeB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 20 Apr 2021 10:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232450AbhDTOeA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Apr 2021 10:34:00 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCA2C06174A;
-        Tue, 20 Apr 2021 07:33:29 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 31so11247499pgn.13;
-        Tue, 20 Apr 2021 07:33:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=o5s+uTm3uKcDwspuvE5tIia1o+W93TUOVR1mdiRVaUw=;
-        b=sNnmeeOCGsi0FfA4068XakKtInCDFiAS/mOiDtmzrPccc/3LQaaZlVxuWjE6jdPLcZ
-         dDg0/faPvAbMlcYbSsOUCUQUuqXQeyOD7hRCBP3FrrZHHOE+dtnru33SBwQgfI8tbU3T
-         6bK/xio8YdzIMZ0dNROEjJPvAqbKPLrUMFum0F+KEcfo6H1Y0svcpaDGmKavtLTkW6fD
-         RA1wMZAqrrzreJoRZbDE9TyCAVUL5oTViyJmUAs4FjC4YP/x0zghiGAAge624rqstgI0
-         fxAswV21TE7ayBItOHmvxveF8cXWrHvRpXtgORoqjlR+aiE+HehhtSBJ1hhDjs7JKleN
-         3+bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=o5s+uTm3uKcDwspuvE5tIia1o+W93TUOVR1mdiRVaUw=;
-        b=BHo1FyIEmISBVLfjx/XxBa0phBMpJt5a1Wva6AqCU5cZgv49gwep9gUAV6yHp3a6U4
-         cDMVA1XPCRTkujy3VzeaqCPkzjJKCtWscdsxDlZZ3b4V0/3ofIuN4YiaX28VXjsM85bk
-         47W3aasYXTXJQ3ox0g/qHasP5EEA9dfHksSjN8MWW8Q5N6p4Oy2PWR3uGOBKzgBhzxBc
-         GWhTvNLOmxPXY135K2Tw1wQcihCDH5Ki7vDdjQQ5WLEcoBrEqlw9c2EDV46h/8HMzFD7
-         j52dj5yUA1ceRAW/5R+K6Wo1hWR24hNDC3h+bBSot6BwSFng5AUz6mka/3BqeCXA5jTu
-         8mgA==
-X-Gm-Message-State: AOAM531dU5yR8AkCIYtM9zLd5KEZwBA6Zd98wvWTwiVqv578yJhLQHOL
-        OXGBOGHIb0XstNhr20f903Rm5Z7gRlCRs+Dts+fBr72Ti30=
-X-Google-Smtp-Source: ABdhPJy7uC4w76V7ZS6QtyqMxAawuOBbViNKZAvZ5DlmcUjJJ71YMg+3pavIA9hduVxcdfMNpwhLGa3v2Zpkvz5116E=
-X-Received: by 2002:a63:cd11:: with SMTP id i17mr13152405pgg.74.1618929208653;
- Tue, 20 Apr 2021 07:33:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210420131901.80233-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20210420131901.80233-1-andriy.shevchenko@linux.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 20 Apr 2021 17:33:12 +0300
-Message-ID: <CAHp75VdsRgV8vrTiZmJwL-fhms7NRT27cBbr9WCBFORqvthVjw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] spi: Don't overwrite num_chipselect with error code
+        id S232787AbhDTO5P (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 20 Apr 2021 10:57:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57246 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232507AbhDTO5P (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 20 Apr 2021 10:57:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DB6AE613C9;
+        Tue, 20 Apr 2021 14:56:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618930603;
+        bh=OjpAHxYSjz1nKguIwOjvjwG797cyGyxRd8zj1GA8A6I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QSi1gD4gRZii1uwZWu3lWIdjF68NqC0N2ErMHIfJSr9B2M4LxAR1tFLqHcXAyH8XU
+         qAcZN6Kzx0V82cKA4OzsAJHwDtTcrETA5zvlGn5DS2JRyaSYrVQ3OmVUpQyAXHqgT4
+         ZnRUXmA6fO5Uzs+Ab5XFMjtlnMCN06fX9Yh3rb79UZZdCtQGgMSHV0skPci6Rn8ED+
+         hTWyuZAvL3hfWxnIpnIHO/8n5Hxw4AQFdwL4MDTL+gW1igYuXWA+/ZxFk5uETX9gSt
+         zTKNmiLDuRWcyOyYUOYXWxe9OvEmBBpdtcjvCX/GmId605oKo4wqNs4DeiHpyVOAb1
+         pt3Ol4pRbgaug==
+Date:   Tue, 20 Apr 2021 15:56:16 +0100
+From:   Mark Brown <broonie@kernel.org>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] spi: Avoid potential UB when counting unused
+ native CSs
+Message-ID: <20210420145616.GC6073@sirena.org.uk>
+References: <20210420141004.59936-1-andriy.shevchenko@linux.intel.com>
+ <20210420141004.59936-2-andriy.shevchenko@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8X7/QrJGcKSMr1RN"
+Content-Disposition: inline
+In-Reply-To: <20210420141004.59936-2-andriy.shevchenko@linux.intel.com>
+X-Cookie: Falling rock.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Apr 20, 2021 at 4:19 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> The code currently organized in a way that num_chipselect is overwritten
-> each time we call spi_get_gpio_descs(). It might be potentially dangerous
-> in case when the gpiod_count() returns an error code.
->
-> Note, that gpiod_count() never returns 0, take this into account as well.
->
-> Fixes: f3186dd87669 ("spi: Optionally use GPIO descriptors for CS GPIOs")
 
-It doesn't fix anything. I missed the max_t(int).
-In any case it makes error handling cleaner, so I'll reformulate the
-commit message in v2 and drop Fixes tag.
+--8X7/QrJGcKSMr1RN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-With Best Regards,
-Andy Shevchenko
+On Tue, Apr 20, 2021 at 05:10:04PM +0300, Andy Shevchenko wrote:
+> ffz(), that has been used to count unused native CSs, might produce UB
+
+Bit of an IA there...
+
+--8X7/QrJGcKSMr1RN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmB+65AACgkQJNaLcl1U
+h9AJgQf/agvyEji+YtnLOMfyI4yiAeKBCbuq7ii0u6jLgUpgJBBA0cxRzNrUWCwt
+GPZyz+mbEm8XuHjviwgCDbRIC5Hr1r2HzDzD1LLPn1UmEwVC4MBJ/uY4x9pRa5gJ
+h/mfgt9U9k8mQzVIPwRq/ZWPAAXLA9uUf05a+sPmfgafrMcnAlDx+uiDZz0mRvZd
+Qd9B5qVd2sPhbgoYNwrARx8xMho0y8JryRVg5H3XIFmDWZa2bl5Wvjb42TEBiOXm
+Y6SIXzf0cLhWVqEf3pSOYA+DIfCYNY2otIrin7AaGYofLBqCC3J1gVgkP0zCIm1a
+XItdzeRynrjho8XN/kGghM2AklaDDg==
+=CmGw
+-----END PGP SIGNATURE-----
+
+--8X7/QrJGcKSMr1RN--
