@@ -2,71 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDC9365DA4
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Apr 2021 18:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 365AB365DFB
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Apr 2021 18:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233194AbhDTQop (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 20 Apr 2021 12:44:45 -0400
-Received: from mga14.intel.com ([192.55.52.115]:3030 "EHLO mga14.intel.com"
+        id S232504AbhDTQ5X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 20 Apr 2021 12:57:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46002 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232916AbhDTQoo (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 20 Apr 2021 12:44:44 -0400
-IronPort-SDR: LkK24RjWW/QGpmSByTyb66ASZuDCqrhh92aV16xH9hQKy7Fy6CNMKML/ygnLNB1mtVO690J0er
- L0KUEplSYGoA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9960"; a="195098657"
-X-IronPort-AV: E=Sophos;i="5.82,237,1613462400"; 
-   d="scan'208";a="195098657"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2021 09:44:12 -0700
-IronPort-SDR: HcaxeBXaOCRlZFWSlqoRGIc79xOi2yvB/OxQoB+GpZUB16je5aAAJ/a238bGskr4zNq0cYrISu
- NC+0XunhHXxQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,237,1613462400"; 
-   d="scan'208";a="427063562"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 20 Apr 2021 09:44:10 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 7FBAD103; Tue, 20 Apr 2021 19:44:28 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 2/2] spi: Avoid undefined behaviour when counting unused native CSs
-Date:   Tue, 20 Apr 2021 19:44:25 +0300
-Message-Id: <20210420164425.40287-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210420164425.40287-1-andriy.shevchenko@linux.intel.com>
-References: <20210420164425.40287-1-andriy.shevchenko@linux.intel.com>
+        id S232879AbhDTQ5X (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 20 Apr 2021 12:57:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 7BD1D613AB;
+        Tue, 20 Apr 2021 16:56:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618937811;
+        bh=TnBvDWeROMQRcbYAYW9CX3zr0XRFX9ybv6qCVXwFYyE=;
+        h=Subject:From:Date:To:From;
+        b=LvOqdcUGxrJk8fYOCHa4SrYkVcUOZhLJCTj4elsMcBGePVY5ko/uYQEfoMl7w2hcL
+         GGWV7ndd2S/PLMLU0O0xMPQpY9xHHxkY5LYO5ENEzhtpuWTlTpUCNXbjN5spCEtmTx
+         k1Xs+kWBUPOW6Vh0swqEiNxn+msTyL50gHDZaDnqPiSBVN3iSgqL/m7ED6t0cVkDT7
+         pwTxftrcCgvr+uK91jp2GNFQ3gHnVnKrDElJDT2MmHscIDDFNEnTDp+LOuEbxWC0X+
+         TrjJst/dKH5GelCz1pcm0T03N6MOudDBNIEqh2HSkuo+nMCGxPE13wlomuWCt/i7ty
+         G7K+fKvFEvklQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 73F2C60971;
+        Tue, 20 Apr 2021 16:56:51 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <161893781146.18519.973206230315173977.git-patchwork-housekeeping@kernel.org>
+Date:   Tue, 20 Apr 2021 16:56:51 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-ffz(), that has been used to count unused native CSs,
-might cause undefined behaviour when called against ~0U.
-To fix that, open code it with ffs(~value) - 1.
+Latest series: [v2] spi: Allow to have all native CSs in use along with GPIOs (2021-04-20T16:44:24)
+  Superseding: [v1] spi: Allow to have all native CSs in use along with GPIOs (2021-04-20T14:10:04):
+    [v1,1/2] spi: Allow to have all native CSs in use along with GPIOs
+    [v1,2/2] spi: Avoid potential UB when counting unused native CSs
 
-Fixes: 7d93aecdb58d ("spi: Add generic support for unused native cs with cs-gpios")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: decoded UB abbreviation (Mark)
- drivers/spi/spi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 9c3730a9f7d5..01f95bee2ac8 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2609,7 +2609,7 @@ static int spi_get_gpio_descs(struct spi_controller *ctlr)
- 		native_cs_mask |= BIT(i);
- 	}
- 
--	ctlr->unused_native_cs = ffz(native_cs_mask);
-+	ctlr->unused_native_cs = ffs(~native_cs_mask) - 1;
- 
- 	if ((ctlr->flags & SPI_MASTER_GPIO_SS) && num_cs_gpios &&
- 	    ctlr->max_native_cs && ctlr->unused_native_cs >= ctlr->max_native_cs) {
 -- 
-2.30.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
