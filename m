@@ -2,72 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E925B365EBF
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Apr 2021 19:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE999365F7C
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Apr 2021 20:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233074AbhDTRoS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 20 Apr 2021 13:44:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37812 "EHLO mail.kernel.org"
+        id S233543AbhDTSgd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 20 Apr 2021 14:36:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60264 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231549AbhDTRoS (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 20 Apr 2021 13:44:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D42DE613C4;
-        Tue, 20 Apr 2021 17:43:45 +0000 (UTC)
+        id S233521AbhDTSgc (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 20 Apr 2021 14:36:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BCE4C61002;
+        Tue, 20 Apr 2021 18:35:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618940626;
-        bh=O943Qoeocu5JxZwJqLj0exQx5HAHanOJdgZVbNSOI4M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UPD4ZqxXqz60p6+1W0k1wNRg0ps5RLOc+bbWuygtkoWSh9G4WmXnkhr4WfF1j1TGq
-         k7rfy83BeUVVWdRnRRbtSkv/GMeHP3gHeuTmmK9FLvc3ZdOelSlVr8zC6sXB4TfXQF
-         CdQLjCk0TIeI3+R7JrETJ4YTRAFIzTgM/EmgxKHxZZyXbxGx43ET1xfJEdEWxlDwWK
-         ATovgzUX+xJIzjhbNxTMpQgASX+6QJhrZplso/eWwedWUK8o0eCrXhgaTd5my5x8L0
-         s6fCWXLovI+h/fl68oPzX9enRHUD+WhmB/vRUQS5wBt1pYQNOyLYb7nntYgAXsTm8l
-         /6BRxJ3r5ZGjA==
-Date:   Tue, 20 Apr 2021 18:43:19 +0100
+        s=k20201202; t=1618943760;
+        bh=Vl/xDfhSSSaJydX/7Hg32mJnZm6/w8UcQTG3m5vrcuY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HUgPhxnv6izynLvQdPFBj2C4xdDAa0LJqBogAVwt3dctL/WvUb01Clwh5TugC5TwA
+         6vZUBKlvaLmy4sXc2ep2lkWUsJSukC3X1dB5mVG/sYkomE5qu3iK2eotwVHwHOYOdC
+         NbvDzx4LZT4CW4gxAmh/vzwnIjobOhWK0lpGIalCV3adsBiNBxWeuNeflLsfqxOtDK
+         XF+eU42lbcisn/UtvAXAxx2J48H82gQttNCmEYsVBj4UGTCLs9Hhy1ZKf8xoK22bow
+         cxBYmEk8MAtD52LgglRSdzl7c1gsafRd9iJI1vOIQ1jhScnDsiNWqRenUXEb1ZrD1v
+         2RtsAu4vf+inQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     David Bauer <mail@david-bauer.net>,
-        linux-spi <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH] spi: sync up initial chipselect state
-Message-ID: <20210420174319.GH6073@sirena.org.uk>
-References: <20210416195956.121811-1-mail@david-bauer.net>
- <CAHp75VfStm5OeQc-n_djG7vQcvQGbBYSejtTP=e+9VDpAnDE4g@mail.gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        linux-spi@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: Re: [PATCH V3] dt-bindings: spi: brcm,spi-bcm-qspi: convert to the json-schema
+Date:   Tue, 20 Apr 2021 19:35:29 +0100
+Message-Id: <161894372992.35357.4077976563390352628.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210416194723.23855-1-zajec5@gmail.com>
+References: <20210416062320.21414-1-zajec5@gmail.com> <20210416194723.23855-1-zajec5@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wj9ZLJVQDRFjGSdK"
-Content-Disposition: inline
-In-Reply-To: <CAHp75VfStm5OeQc-n_djG7vQcvQGbBYSejtTP=e+9VDpAnDE4g@mail.gmail.com>
-X-Cookie: Falling rock.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, 16 Apr 2021 21:47:23 +0200, Rafał Miłecki wrote:
+> This helps validating DTS files.
+> 
+> Changes that require mentioning:
+> 1. reg-names
+>    "mspi_regs" and "bspi_regs" were renamed to "mspi" and "bspi" as that
+>    is what's used in DTS files and in Linux driver
+> 2. interrupt-names
+>    Names were reordered. "mspi_done" has to go first as it's always
+>    required.
+> 3. spi-rx-bus-width
+>    Property description was dropped as it's part of the
+>    spi-controller.yaml
+> 4. Examples:
+>    * drop partitions as they are well documented elsewhere
+>    * regs and interrupts were formatted and reordered to match yaml
+>    * <0x1c> was replaced with <&gic>
+>    * "m25p80" node name became "flash"
+>    * dropped invalid "m25p,fast-read" property
+>    * dropped undocumented and Linux-unused "clock-names"
+> 
+> [...]
 
---wj9ZLJVQDRFjGSdK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Tue, Apr 20, 2021 at 08:31:25PM +0300, Andy Shevchenko wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> Mark, I guess you need to amend your scripts to check that.
+Thanks!
 
-I don't check anything, the scripts that were going around were just
-adding lots of noise over meaningless things and causing lots of noise.
+[1/1] dt-bindings: spi: brcm,spi-bcm-qspi: convert to the json-schema
+      commit: 7d82f89c39ad3193893d36924fc1f8d44f3dc612
 
---wj9ZLJVQDRFjGSdK
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmB/ErYACgkQJNaLcl1U
-h9CaOwf8COJ7DtCuJipBVJmFh1SZQmlzLvAcwdB8LrYR3cjJ5fqvEKUwGjOo8wpo
-K2rgyAgq2VwghezknKzMbymDHVWXxmJQFMQkbiVO9yHr9s7tfe3cXQce67hef/A8
-iLtjfZ8PXDCIYX4mRr7loIojyIRvlo08iHVwopqRzFRaJn+Htfb38fC4k6VOcgyR
-rns4IYKaiQpuGFSUjhSJg5zCOEdsrkjM209+3YBZb7FXG4zv7JDth33m8aNVxoum
-0xQ6mt9lc5Peo4zjM8lorveCRVZa7EBkG/nH8nSXEGDJFJhpLcL9zWCS86KVCPXH
-j9mmQJ2qik7qcGF36COFTALUbhxRuA==
-=4GnZ
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---wj9ZLJVQDRFjGSdK--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
