@@ -2,75 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E90A9365BDD
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Apr 2021 17:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C742365BE0
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Apr 2021 17:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232768AbhDTPHi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 20 Apr 2021 11:07:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60054 "EHLO mail.kernel.org"
+        id S231682AbhDTPHm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 20 Apr 2021 11:07:42 -0400
+Received: from mga12.intel.com ([192.55.52.136]:57498 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232764AbhDTPHh (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 20 Apr 2021 11:07:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2A3F760FF1;
-        Tue, 20 Apr 2021 15:07:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618931225;
-        bh=xNMcMUsfGio6rPsrbelG3fNcGLs63Q8YwKi3OLjPnPI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q+yY3Q0l9TIsa9rvbhDYFMT94L+nJvaK+YStTueNISG0ZYzsUOpstWhhUnS+jEb+E
-         EaXoh2q/+iNoBAFDDZ2JXTchwWORAdOc2M86DpiuoKvuuqprHl81+ClJ0y+ux64VGi
-         q6CajxjMH70EtBvTWhZnerNoclorMJdvMkGGCz+SZSJ7EalCc0bDmIRrTu4P7lvDMN
-         OqckAQeyV8m7Sv3uK2w7cCUdZkAtGJkYv49ucm8UB3U4u/gGDQvIjdHg50NeAh8gdP
-         lngyl6dv8JcINEB85wTiBeKx8QEkpCZV32lPbs+wpB2o1tjgQrUW3ikv28VS4160/H
-         b6qhsOEIOBvGg==
-From:   Mark Brown <broonie@kernel.org>
-To:     patrice.chotard@foss.st.com,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        christophe.kerello@foss.st.com,
-        linux-stm32@st-md-mailman.stormreply.com, linux-spi@vger.kernel.org
-Subject: Re: spi: stm32-qspi: Fix compilation warning in ARM64
-Date:   Tue, 20 Apr 2021 16:06:37 +0100
-Message-Id: <161893071088.55669.5165788447992164184.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210420082103.1693-1-patrice.chotard@foss.st.com>
-References: <20210420082103.1693-1-patrice.chotard@foss.st.com>
+        id S232450AbhDTPHl (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 20 Apr 2021 11:07:41 -0400
+IronPort-SDR: G5cTN16g3QeuYM0wus8A5k6MAzklftn+xtJjDGAJpcZm/YzGcHVpTTuBpXz7eHeTogZkWebWSr
+ jjLPCXaZPwwA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9960"; a="175008354"
+X-IronPort-AV: E=Sophos;i="5.82,237,1613462400"; 
+   d="scan'208";a="175008354"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2021 08:07:10 -0700
+IronPort-SDR: 9q13GGCrrghGbB9eslsi8trUnvImpwcPLvXvJd4rHoH4onIGxStG7XtiuzghhDcmRElWeGR0jj
+ WdtcHUSCTTCA==
+X-IronPort-AV: E=Sophos;i="5.82,237,1613462400"; 
+   d="scan'208";a="384111398"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2021 08:07:09 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lYrxy-005n4e-Lf; Tue, 20 Apr 2021 18:07:06 +0300
+Date:   Tue, 20 Apr 2021 18:07:06 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] spi: Avoid potential UB when counting unused
+ native CSs
+Message-ID: <YH7uGhEmnk2sBzVv@smile.fi.intel.com>
+References: <20210420141004.59936-1-andriy.shevchenko@linux.intel.com>
+ <20210420141004.59936-2-andriy.shevchenko@linux.intel.com>
+ <20210420145616.GC6073@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210420145616.GC6073@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 20 Apr 2021 10:21:03 +0200, patrice.chotard@foss.st.com wrote:
-> This fixes warnings detected when compiling in ARM64.
-> Introduced by 'commit 18674dee3cd6 ("spi: stm32-qspi: Add dirmap support")'
+On Tue, Apr 20, 2021 at 03:56:16PM +0100, Mark Brown wrote:
+> On Tue, Apr 20, 2021 at 05:10:04PM +0300, Andy Shevchenko wrote:
+> > ffz(), that has been used to count unused native CSs, might produce UB
+> 
+> Bit of an IA there...
 
-Applied to
+UB -- undefined behaviour.
+I'll decode it. Should I decode CS as well?
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Thanks!
 
-[1/1] spi: stm32-qspi: Fix compilation warning in ARM64
-      commit: 1b8a7d4282c038b3846f2485d86cb990c55c38d9
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
