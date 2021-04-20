@@ -2,184 +2,153 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7A63652C0
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Apr 2021 09:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5219D3652BE
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Apr 2021 09:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbhDTHCI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 20 Apr 2021 03:02:08 -0400
-Received: from twhmllg3.macronix.com ([122.147.135.201]:23596 "EHLO
+        id S230303AbhDTHCD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 20 Apr 2021 03:02:03 -0400
+Received: from twhmllg3.macronix.com ([122.147.135.201]:23592 "EHLO
         TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbhDTHCE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Apr 2021 03:02:04 -0400
+        with ESMTP id S230291AbhDTHCC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 20 Apr 2021 03:02:02 -0400
 Received: from TWHMLLG3.macronix.com (localhost [127.0.0.2] (may be forged))
-        by TWHMLLG3.macronix.com with ESMTP id 13K6V2xk084131
+        by TWHMLLG3.macronix.com with ESMTP id 13K6V2Wf084132
         for <linux-spi@vger.kernel.org>; Tue, 20 Apr 2021 14:31:02 +0800 (GMT-8)
         (envelope-from zhengxunli@mxic.com.tw)
 Received: from localhost.localdomain ([172.17.195.94])
-        by TWHMLLG3.macronix.com with ESMTP id 13K6UM7d083760;
-        Tue, 20 Apr 2021 14:30:36 +0800 (GMT-8)
+        by TWHMLLG3.macronix.com with ESMTP id 13K6UM7e083760;
+        Tue, 20 Apr 2021 14:30:39 +0800 (GMT-8)
         (envelope-from zhengxunli@mxic.com.tw)
 From:   Zhengxun Li <zhengxunli@mxic.com.tw>
 To:     linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
 Cc:     tudor.ambarus@microchip.com, miquel.raynal@bootlin.com,
         broonie@kernel.org, jaimeliao@mxic.com.tw,
         Zhengxun Li <zhengxunli@mxic.com.tw>
-Subject: [PATCH v3 2/3] mtd: spi-nor: macronix: add support for Macronix octaflash series
-Date:   Tue, 20 Apr 2021 14:29:38 +0800
-Message-Id: <1618900179-14546-3-git-send-email-zhengxunli@mxic.com.tw>
+Subject: [PATCH v3 3/3] spi: mxic: patch for octal DTR mode support
+Date:   Tue, 20 Apr 2021 14:29:39 +0800
+Message-Id: <1618900179-14546-4-git-send-email-zhengxunli@mxic.com.tw>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <1618900179-14546-1-git-send-email-zhengxunli@mxic.com.tw>
 References: <1618900179-14546-1-git-send-email-zhengxunli@mxic.com.tw>
-X-MAIL: TWHMLLG3.macronix.com 13K6UM7d083760
+X-MAIL: TWHMLLG3.macronix.com 13K6UM7e083760
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add 1.8V and 3V Octal NOR Flash IDs.
-MX25 series : Serial NOR Flash.
-MX66 series : Serial NOR Flash with stacked die.
-LM/UM series : Up to 250MHz clock frequency with both DTR/STR operation.
-LW/UW series : Support simultaneous Read-while-Write operation in multiple
-	       bank architecture. Read-while-write feature which means read
-	       data one bank while another bank is programing or erasing.
+Driver patch for octal DTR mode support.
 
-MX25LM : 3.0V Octal I/O
- -https://www.mxic.com.tw/Lists/Datasheet/Attachments/7841/MX25LM51245G,%203V,%20512Mb,%20v1.1.pdf
-
-MX25UM : 1.8V Octal I/O
- -https://www.mxic.com.tw/Lists/Datasheet/Attachments/7525/MX25UM51245G%20Extreme%20Speed,%201.8V,%20512Mb,%20v1.0.pdf
-
-MX66LM : 3.0V Octal I/O with stacked die
- -https://www.mxic.com.tw/Lists/Datasheet/Attachments/7929/MX66LM1G45G,%203V,%201Gb,%20v1.1.pdf
-
-MX66UM : 1.8V Octal I/O with stacked die
- -https://www.mxic.com.tw/Lists/Datasheet/Attachments/7721/MX66UM1G45G,%201.8V,%201Gb,%20v1.1.pdf
-
-MX25LW : 3.0V Octal I/O with Read-while-Write
-MX25UW : 1.8V Octal I/O with Read-while-Write
-MX66LW : 3.0V Octal I/O with Read-while-Write and stack die
-MX66UW : 1.8V Octal I/O with Read-while-Write and stack die
-
-About LW/UW series, please contact us freely if you have any
-questions. For adding Octal NOR Flash IDs, we have validated
-each Flash on plateform zynq-picozed.
+Owing to the spi_mem_default_supports_op() is not support dtr
+operation. Based on Pratyush patch "spi: spi-mem: add spi_mem_dtr
+_supports_op()" add spi_mem_dtr_supports_op() to support dtr and
+keep checking the buswidth and command bytes.
 
 Signed-off-by: Zhengxun Li <zhengxunli@mxic.com.tw>
 ---
- drivers/mtd/spi-nor/macronix.c | 100 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 100 insertions(+)
+ drivers/spi/spi-mxic.c | 41 ++++++++++++++++++++++++++++++-----------
+ 1 file changed, 30 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macronix.c
-index 881eaf8..8c1cf1b 100644
---- a/drivers/mtd/spi-nor/macronix.c
-+++ b/drivers/mtd/spi-nor/macronix.c
-@@ -203,6 +203,106 @@ static void octaflash_post_sfdp_fixup(struct spi_nor *nor)
- 	{ "mx66u2g45g",	 INFO(0xc2253c, 0, 64 * 1024, 4096,
- 			      SECT_4K | SPI_NOR_DUAL_READ |
- 			      SPI_NOR_QUAD_READ | SPI_NOR_4B_OPCODES) },
-+	{ "mx66lm2g45g", INFO(0xc2853c, 0, 64 * 1024, 4096,
-+			      SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			      SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx66lm1g45g", INFO(0xc2853b, 0, 32 * 1024, 4096,
-+			      SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			      SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx66lw1g45g", INFO(0xc2863b, 0, 32 * 1024, 4096,
-+			      SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			      SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx25lm51245g", INFO(0xc2853a, 0, 16 * 1024, 4096,
-+			       SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			       SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx25lw51245g", INFO(0xc2863a, 0, 16 * 1024, 4096,
-+			       SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			       SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx25lm25645g", INFO(0xc28539, 0, 8 * 1024, 4096,
-+			       SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			       SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx25lw25645g", INFO(0xc28639, 0, 8 * 1024, 4096,
-+			       SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			       SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx66um2g45g", INFO(0xc2803c, 0, 64 * 1024, 4096,
-+			      SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			      SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx66uw2g345g", INFO(0xc2843c, 0, 64 * 1024, 4096,
-+			       SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			       SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx66uw2g345gx0", INFO(0xc2943c, 0, 64 * 1024, 4096,
-+				 SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+				 SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx66um1g45g", INFO(0xc2803b, 0, 32 * 1024, 4096,
-+			      SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			      SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx66um1g45g40", INFO(0xc2808b, 0, 32 * 1024, 4096,
-+				SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+				SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx66uw1g45g", INFO(0xc2813b, 0, 32 * 1024, 4096,
-+			      SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			      SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx25um51245g", INFO(0xc2803a, 0, 16 * 1024, 4096,
-+			       SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			       SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx25uw51245g", INFO(0xc2813a, 0, 16 * 1024, 4096,
-+			       SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			       SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx25uw51345g", INFO(0xc2843a, 0, 16 * 1024, 4096,
-+			       SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			       SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx25um25645g", INFO(0xc28039, 0, 8 * 1024, 4096,
-+			       SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			       SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx25uw25645g", INFO(0xc28139, 0, 8 * 1024, 4096,
-+			       SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			       SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx25um25345g", INFO(0xc28339, 0, 8 * 1024, 4096,
-+			       SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			       SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx25uw25345g", INFO(0xc28439, 0, 8 * 1024, 4096,
-+			       SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			       SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx25uw12845g", INFO(0xc28138, 0, 4 * 1024, 4096,
-+			       SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			       SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx25uw12a45g", INFO(0xc28938, 0, 4 * 1024, 4096,
-+			       SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			       SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx25uw12345g", INFO(0xc28438, 0, 4 * 1024, 4096,
-+			       SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			       SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx25uw6445g", INFO(0xc28137, 0, 2 * 1024, 4096,
-+			      SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			      SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
-+	{ "mx25uw6345g", INFO(0xc28437, 0, 2 * 1024, 4096,
-+			      SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-+			      SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-+		.fixups = &octaflash_fixups },
- };
+diff --git a/drivers/spi/spi-mxic.c b/drivers/spi/spi-mxic.c
+index 96b4182..32e757a 100644
+--- a/drivers/spi/spi-mxic.c
++++ b/drivers/spi/spi-mxic.c
+@@ -335,8 +335,10 @@ static int mxic_spi_data_xfer(struct mxic_spi *mxic, const void *txbuf,
+ static bool mxic_spi_mem_supports_op(struct spi_mem *mem,
+ 				     const struct spi_mem_op *op)
+ {
+-	if (op->data.buswidth > 4 || op->addr.buswidth > 4 ||
+-	    op->dummy.buswidth > 4 || op->cmd.buswidth > 4)
++	bool all_false;
++
++	if (op->data.buswidth > 8 || op->addr.buswidth > 8 ||
++	    op->dummy.buswidth > 8 || op->cmd.buswidth > 8)
+ 		return false;
  
- static void macronix_default_init(struct spi_nor *nor)
+ 	if (op->data.nbytes && op->dummy.nbytes &&
+@@ -346,7 +348,13 @@ static bool mxic_spi_mem_supports_op(struct spi_mem *mem,
+ 	if (op->addr.nbytes > 7)
+ 		return false;
+ 
+-	return spi_mem_default_supports_op(mem, op);
++	all_false = !op->cmd.dtr && !op->addr.dtr && !op->dummy.dtr &&
++		    !op->data.dtr;
++
++	if (all_false)
++		return spi_mem_default_supports_op(mem, op);
++	else
++		return spi_mem_dtr_supports_op(mem, op);
+ }
+ 
+ static int mxic_spi_mem_exec_op(struct spi_mem *mem,
+@@ -355,14 +363,15 @@ static int mxic_spi_mem_exec_op(struct spi_mem *mem,
+ 	struct mxic_spi *mxic = spi_master_get_devdata(mem->spi->master);
+ 	int nio = 1, i, ret;
+ 	u32 ss_ctrl;
+-	u8 addr[8];
+-	u8 opcode = op->cmd.opcode;
++	u8 addr[8], cmd[2];
+ 
+ 	ret = mxic_spi_set_freq(mxic, mem->spi->max_speed_hz);
+ 	if (ret)
+ 		return ret;
+ 
+-	if (mem->spi->mode & (SPI_TX_QUAD | SPI_RX_QUAD))
++	if (mem->spi->mode & (SPI_TX_OCTAL | SPI_RX_OCTAL))
++		nio = 8;
++	else if (mem->spi->mode & (SPI_TX_QUAD | SPI_RX_QUAD))
+ 		nio = 4;
+ 	else if (mem->spi->mode & (SPI_TX_DUAL | SPI_RX_DUAL))
+ 		nio = 2;
+@@ -374,19 +383,25 @@ static int mxic_spi_mem_exec_op(struct spi_mem *mem,
+ 	       mxic->regs + HC_CFG);
+ 	writel(HC_EN_BIT, mxic->regs + HC_EN);
+ 
+-	ss_ctrl = OP_CMD_BYTES(1) | OP_CMD_BUSW(fls(op->cmd.buswidth) - 1);
++	ss_ctrl = OP_CMD_BYTES(op->cmd.nbytes) |
++		  OP_CMD_BUSW(fls(op->cmd.buswidth) - 1) |
++		  (op->cmd.dtr ? OP_CMD_DDR : 0);
+ 
+ 	if (op->addr.nbytes)
+ 		ss_ctrl |= OP_ADDR_BYTES(op->addr.nbytes) |
+-			   OP_ADDR_BUSW(fls(op->addr.buswidth) - 1);
++			   OP_ADDR_BUSW(fls(op->addr.buswidth) - 1) |
++			   (op->addr.dtr ? OP_ADDR_DDR : 0);
+ 
+ 	if (op->dummy.nbytes)
+ 		ss_ctrl |= OP_DUMMY_CYC(op->dummy.nbytes);
+ 
+ 	if (op->data.nbytes) {
+-		ss_ctrl |= OP_DATA_BUSW(fls(op->data.buswidth) - 1);
++		ss_ctrl |= OP_DATA_BUSW(fls(op->data.buswidth) - 1) |
++			   (op->data.dtr ? OP_DATA_DDR : 0);
+ 		if (op->data.dir == SPI_MEM_DATA_IN)
+ 			ss_ctrl |= OP_READ;
++			if (op->data.dtr)
++				ss_ctrl |= OP_DQS_EN;
+ 	}
+ 
+ 	writel(ss_ctrl, mxic->regs + SS_CTRL(mem->spi->chip_select));
+@@ -394,7 +409,10 @@ static int mxic_spi_mem_exec_op(struct spi_mem *mem,
+ 	writel(readl(mxic->regs + HC_CFG) | HC_CFG_MAN_CS_ASSERT,
+ 	       mxic->regs + HC_CFG);
+ 
+-	ret = mxic_spi_data_xfer(mxic, &opcode, NULL, 1);
++	for (i = 0; i < op->cmd.nbytes; i++)
++		cmd[i] = op->cmd.opcode >> (8 * (op->cmd.nbytes - i - 1));
++
++	ret = mxic_spi_data_xfer(mxic, cmd, NULL, op->cmd.nbytes);
+ 	if (ret)
+ 		goto out;
+ 
+@@ -567,7 +585,8 @@ static int mxic_spi_probe(struct platform_device *pdev)
+ 	master->bits_per_word_mask = SPI_BPW_MASK(8);
+ 	master->mode_bits = SPI_CPOL | SPI_CPHA |
+ 			SPI_RX_DUAL | SPI_TX_DUAL |
+-			SPI_RX_QUAD | SPI_TX_QUAD;
++			SPI_RX_QUAD | SPI_TX_QUAD |
++			SPI_RX_OCTAL | SPI_TX_OCTAL;
+ 
+ 	mxic_spi_hw_init(mxic);
+ 
 -- 
 1.9.1
 
