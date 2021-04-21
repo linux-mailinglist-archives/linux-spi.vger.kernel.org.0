@@ -2,37 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEA936730B
-	for <lists+linux-spi@lfdr.de>; Wed, 21 Apr 2021 21:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF3336730D
+	for <lists+linux-spi@lfdr.de>; Wed, 21 Apr 2021 21:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245355AbhDUTEm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 21 Apr 2021 15:04:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35340 "EHLO mail.kernel.org"
+        id S245367AbhDUTEp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 21 Apr 2021 15:04:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35432 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239751AbhDUTEl (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 21 Apr 2021 15:04:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3FCEE6145A;
-        Wed, 21 Apr 2021 19:04:07 +0000 (UTC)
+        id S245356AbhDUTEo (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 21 Apr 2021 15:04:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 47AF861454;
+        Wed, 21 Apr 2021 19:04:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619031847;
-        bh=z4/GPDUKpT7VDjqnMBqYjsGYvZ05rXY0DGFPEFp+NU4=;
+        s=k20201202; t=1619031850;
+        bh=EUamgAcBScttg/wRJDAg/kzndRLDlqHrPak55dTAxiA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TxZHJAhBi/TNcWYsPkSSyiGo2xBscBV2ij+ztdPl9UFQwINOjruz+GGXQZjaHw01f
-         bbs+BVkPjVmlhR+O4p5g3X3wM2/moArti4JTs73rSfUA9mv2Y47pB010asRye2LNO0
-         qCbjTiR4e4u3+MoFBr3rvziIPf3xmV4OnNWAgFuOu3JN83L7f9Z9SwaO5WdevSB2q4
-         qMQGEjLhrbGt7BIz/NSodz/VHKL0r91/GCJYZMw15JpwVG2O0oKo9YjjlM1yyHtlqG
-         gWZTPy0ZpwgH4rcE4tbq+US4/+6GjmXDiJ7T2SuwgFWUPlp6W1Zw+1Y8GXZRmb8qDc
-         BMAE0o3FlVIEQ==
+        b=sn1GGJaL6FbTz2sIQBc9TIgqmuQdTUPtoFsF297z00vXBoWGzxsQ93Oj28EEkgHi8
+         WDH0KN7+oUAvQnBIox2vGRQI7isMNdC/2k0P6Fg1QRGQxtOsDeQ2+zP4FetzMJYc4O
+         lo1jJVQqpgRa+ZmquRRH9dVKIqk7f2//2Kr/dBhyZI8sQyCEI35arIS3m2F+QDHSuk
+         Wnbg9CTiaDJd33MLLdYidFdpwds/RaIspR81oXB233iWlh1LSr+Ai4DPM3OMrUWfns
+         FKB5ilUlT/YfWaT7aEykW/1XPO3jVVU8qoptHDB1eGMWbYRIt+gP9hO4b9JagmJw6x
+         tCZzIXuxa3P4g==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2 1/1] spi: Make error handling of gpiod_count() call cleaner
-Date:   Wed, 21 Apr 2021 20:03:25 +0100
-Message-Id: <161903040536.13608.2514437013522557183.b4-ty@kernel.org>
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>,
+        saravanak@google.com
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linus.walleij@linaro.org
+Subject: Re: [PATCH] spi: Make of_register_spi_device also set the fwnode
+Date:   Wed, 21 Apr 2021 20:03:26 +0100
+Message-Id: <161903040535.13608.1822731950090796402.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210420164040.40055-1-andriy.shevchenko@linux.intel.com>
-References: <20210420164040.40055-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20210421101402.8468-1-ckeepax@opensource.cirrus.com>
+References: <20210421101402.8468-1-ckeepax@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -40,13 +41,17 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 20 Apr 2021 19:40:40 +0300, Andy Shevchenko wrote:
-> Each time we call spi_get_gpio_descs() the num_chipselect is overwritten
-> either by new value or by the old one. This is an extra operation in case
-> gpiod_count() returns an error. Besides that it slashes the error handling
-> of gpiod_count().
+On Wed, 21 Apr 2021 11:14:02 +0100, Charles Keepax wrote:
+> Currently, the SPI core doesn't set the struct device fwnode pointer
+> when it creates a new SPI device. This means when the device is
+> registered the fwnode is NULL and the check in device_add which sets
+> the fwnode->dev pointer is skipped. This wasn't previously an issue,
+> however these two patches:
 > 
-> Refactor the code to make error handling of gpiod_count() call cleaner.
+> commit 4731210c09f5 ("gpiolib: Bind gpio_device to a driver to enable
+> fw_devlink=on by default")
+> commit ced2af419528 ("gpiolib: Don't probe gpio_device if it's not the
+> primary device")
 > 
 > [...]
 
@@ -56,8 +61,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: Make error handling of gpiod_count() call cleaner
-      commit: 31ed8ebc7a27c1937184b956727bf71d4adc7df3
+[1/1] spi: Make of_register_spi_device also set the fwnode
+      commit: 0e793ba77c18382f08e440260fe72bc6fce2a3cb
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
