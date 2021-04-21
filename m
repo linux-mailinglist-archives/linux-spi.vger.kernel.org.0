@@ -2,70 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7383672B6
-	for <lists+linux-spi@lfdr.de>; Wed, 21 Apr 2021 20:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6524B367309
+	for <lists+linux-spi@lfdr.de>; Wed, 21 Apr 2021 21:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244556AbhDUSko (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 21 Apr 2021 14:40:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55252 "EHLO mail.kernel.org"
+        id S245197AbhDUTEi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 21 Apr 2021 15:04:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35272 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236033AbhDUSko (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 21 Apr 2021 14:40:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 873A661440;
-        Wed, 21 Apr 2021 18:40:10 +0000 (UTC)
+        id S239751AbhDUTEi (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 21 Apr 2021 15:04:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3D0B161454;
+        Wed, 21 Apr 2021 19:04:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619030410;
-        bh=abGli1SVsng6MpmeidLcd+yxm05wCHwJLhFuV91krWc=;
-        h=Subject:From:Date:To:From;
-        b=BKwT2VRQmb3+z4J7df2cCLmetsnoe8ciIoxIgM2RutyVZydUWH7GWnCuNsTfuUpn1
-         QcZgR/9AmQ8zJNvhiRhVwPD15TrrSEujAkRPZJfsbguj0/XGAnahr6Rh3GKDmbYovM
-         T9vhByRT+bdEn696PXAeDJKRIcuvQ4YKcl1dDbq1qQv3WZvjaacPrZRs2BlGHSmJbE
-         6F0HMY1XdTAngLuWV9tc2pMSqF4ytZkj/RK/GNdLtM+6/FhltgkKuN6Mi+6AS55Kj+
-         HXJ9D56g8OwF4M61zSXpn2EuKg3OP0rK9S1CksCnDIKNHW8QFRnYtuuEyzdEKoRLwy
-         wD1W45/LiMsgw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 750B260A39;
-        Wed, 21 Apr 2021 18:40:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1619031844;
+        bh=P7p/m28LizpKpkNHqvzpsT87mFsAqXnMWUuzJeLptMo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jebVWKKCJHeyZjm0zAe3vAMwAGFFd7v9v67M2vWfVx6KoZM3FO8wubigqfZS/903m
+         kWlumnspx/UcZSU40TkXg48UhcOeEtOFuncuHCZBDYjttD+A4ygN8DZ4soKXPpM1fH
+         yVndtAItH9uqhiG09Y6YjuWbKwWYe22QJSt/5ONbwz4S6M7pTwVZtScQU++i7tDAn+
+         k9eIxU6or2DSitIgUgw58zRxjS05oYHPS4G98tbFem4NYgNH18MD59rOVnys+W/Oip
+         T5Rd08ijsNN6iKhW4Os4ruatreD7Mhr72I542C+EEj3rSne0tCZpM0mehzod9xlsEF
+         R4vbmIIBlVqQA==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v2 1/2] spi: Allow to have all native CSs in use along with GPIOs
+Date:   Wed, 21 Apr 2021 20:03:24 +0100
+Message-Id: <161903040536.13608.17759253372901499681.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210420164425.40287-1-andriy.shevchenko@linux.intel.com>
+References: <20210420164425.40287-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <161903041042.9540.14318038003885316581.git-patchwork-summary@kernel.org>
-Date:   Wed, 21 Apr 2021 18:40:10 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+On Tue, 20 Apr 2021 19:44:24 +0300, Andy Shevchenko wrote:
+> The commit 7d93aecdb58d ("spi: Add generic support for unused native cs
+> with cs-gpios") excludes the valid case for the controllers that doesn't
+> need to switch native CS in order to perform the transfer, i.e. when
+> 
+>   0		native
+>   ...		...
+>   <n> - 1	native
+>   <n>		GPIO
+>   <n> + 1	GPIO
+>   ...		...
+> 
+> [...]
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (refs/heads/for-next):
+Applied to
 
-Patch: [v1,1/1] spi: Don't overwrite num_chipselect with error code
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=470279
-  Lore link: https://lore.kernel.org/r/20210420131901.80233-1-andriy.shevchenko@linux.intel.com
-Patch: [v2,1/1] spi: Make error handling of gpiod_count() call cleaner
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=470387
-  Lore link: https://lore.kernel.org/r/20210420164040.40055-1-andriy.shevchenko@linux.intel.com
-Series: [v2,1/2] spi: Allow to have all native CSs in use along with GPIOs
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=470391
-  Lore link: https://lore.kernel.org/r/20210420164425.40287-1-andriy.shevchenko@linux.intel.com
-    Patches: [v2,1/2] spi: Allow to have all native CSs in use along with GPIOs
-             [v2,2/2] spi: Avoid undefined behaviour when counting unused native CSs
-Patch: spi: Make of_register_spi_device also set the fwnode
-  Submitter: Charles Keepax <ckeepax@opensource.cirrus.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=470809
-  Lore link: https://lore.kernel.org/r/20210421101402.8468-1-ckeepax@opensource.cirrus.com
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Total patches: 5
+Thanks!
 
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+[1/2] spi: Allow to have all native CSs in use along with GPIOs
+      commit: dbaca8e56ea3f23fa215f48c2d46dd03ede06e02
+[2/2] spi: Avoid undefined behaviour when counting unused native CSs
+      commit: f60d7270c8a3d2beb1c23ae0da42497afa3584c2
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
