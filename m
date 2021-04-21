@@ -2,37 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6524B367309
-	for <lists+linux-spi@lfdr.de>; Wed, 21 Apr 2021 21:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DEA936730B
+	for <lists+linux-spi@lfdr.de>; Wed, 21 Apr 2021 21:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245197AbhDUTEi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 21 Apr 2021 15:04:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35272 "EHLO mail.kernel.org"
+        id S245355AbhDUTEm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 21 Apr 2021 15:04:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35340 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239751AbhDUTEi (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 21 Apr 2021 15:04:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3D0B161454;
-        Wed, 21 Apr 2021 19:04:04 +0000 (UTC)
+        id S239751AbhDUTEl (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 21 Apr 2021 15:04:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3FCEE6145A;
+        Wed, 21 Apr 2021 19:04:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619031844;
-        bh=P7p/m28LizpKpkNHqvzpsT87mFsAqXnMWUuzJeLptMo=;
+        s=k20201202; t=1619031847;
+        bh=z4/GPDUKpT7VDjqnMBqYjsGYvZ05rXY0DGFPEFp+NU4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jebVWKKCJHeyZjm0zAe3vAMwAGFFd7v9v67M2vWfVx6KoZM3FO8wubigqfZS/903m
-         kWlumnspx/UcZSU40TkXg48UhcOeEtOFuncuHCZBDYjttD+A4ygN8DZ4soKXPpM1fH
-         yVndtAItH9uqhiG09Y6YjuWbKwWYe22QJSt/5ONbwz4S6M7pTwVZtScQU++i7tDAn+
-         k9eIxU6or2DSitIgUgw58zRxjS05oYHPS4G98tbFem4NYgNH18MD59rOVnys+W/Oip
-         T5Rd08ijsNN6iKhW4Os4ruatreD7Mhr72I542C+EEj3rSne0tCZpM0mehzod9xlsEF
-         R4vbmIIBlVqQA==
+        b=TxZHJAhBi/TNcWYsPkSSyiGo2xBscBV2ij+ztdPl9UFQwINOjruz+GGXQZjaHw01f
+         bbs+BVkPjVmlhR+O4p5g3X3wM2/moArti4JTs73rSfUA9mv2Y47pB010asRye2LNO0
+         qCbjTiR4e4u3+MoFBr3rvziIPf3xmV4OnNWAgFuOu3JN83L7f9Z9SwaO5WdevSB2q4
+         qMQGEjLhrbGt7BIz/NSodz/VHKL0r91/GCJYZMw15JpwVG2O0oKo9YjjlM1yyHtlqG
+         gWZTPy0ZpwgH4rcE4tbq+US4/+6GjmXDiJ7T2SuwgFWUPlp6W1Zw+1Y8GXZRmb8qDc
+         BMAE0o3FlVIEQ==
 From:   Mark Brown <broonie@kernel.org>
 To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2 1/2] spi: Allow to have all native CSs in use along with GPIOs
-Date:   Wed, 21 Apr 2021 20:03:24 +0100
-Message-Id: <161903040536.13608.17759253372901499681.b4-ty@kernel.org>
+Subject: Re: [PATCH v2 1/1] spi: Make error handling of gpiod_count() call cleaner
+Date:   Wed, 21 Apr 2021 20:03:25 +0100
+Message-Id: <161903040536.13608.2514437013522557183.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210420164425.40287-1-andriy.shevchenko@linux.intel.com>
-References: <20210420164425.40287-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20210420164040.40055-1-andriy.shevchenko@linux.intel.com>
+References: <20210420164040.40055-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -40,17 +40,13 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 20 Apr 2021 19:44:24 +0300, Andy Shevchenko wrote:
-> The commit 7d93aecdb58d ("spi: Add generic support for unused native cs
-> with cs-gpios") excludes the valid case for the controllers that doesn't
-> need to switch native CS in order to perform the transfer, i.e. when
+On Tue, 20 Apr 2021 19:40:40 +0300, Andy Shevchenko wrote:
+> Each time we call spi_get_gpio_descs() the num_chipselect is overwritten
+> either by new value or by the old one. This is an extra operation in case
+> gpiod_count() returns an error. Besides that it slashes the error handling
+> of gpiod_count().
 > 
->   0		native
->   ...		...
->   <n> - 1	native
->   <n>		GPIO
->   <n> + 1	GPIO
->   ...		...
+> Refactor the code to make error handling of gpiod_count() call cleaner.
 > 
 > [...]
 
@@ -60,10 +56,8 @@ Applied to
 
 Thanks!
 
-[1/2] spi: Allow to have all native CSs in use along with GPIOs
-      commit: dbaca8e56ea3f23fa215f48c2d46dd03ede06e02
-[2/2] spi: Avoid undefined behaviour when counting unused native CSs
-      commit: f60d7270c8a3d2beb1c23ae0da42497afa3584c2
+[1/1] spi: Make error handling of gpiod_count() call cleaner
+      commit: 31ed8ebc7a27c1937184b956727bf71d4adc7df3
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
