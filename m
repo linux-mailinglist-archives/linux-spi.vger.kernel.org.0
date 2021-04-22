@@ -2,73 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF530367311
-	for <lists+linux-spi@lfdr.de>; Wed, 21 Apr 2021 21:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BB3367A69
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Apr 2021 08:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245379AbhDUTEv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 21 Apr 2021 15:04:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35518 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245377AbhDUTEr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 21 Apr 2021 15:04:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4348A6145F;
-        Wed, 21 Apr 2021 19:04:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619031853;
-        bh=g/8nf17kbeStmv6J0pgzqx/VDBN/9MWXjrwtGSSy01c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fRGeF2/vjXflG5d648nIuWmTnPIF3fyMyR/HBh2+67Bk/AM+qV1QjV46fvqS0A3Uj
-         R+wyzuXVKD8G4dmH+292QY2pUo2dphKSJjzPSqip4HpRnHKfBlsJ5Ptunz45f4F+n2
-         vDv1TNXxWDurw8t52pOPNAi6qH9hz0dbNEwol2NIVHxnnTbVB20sfEFPizuWcmhaEb
-         kle6AvOesGeKX+Ts/3DrmMdRGfd/XLh8V1lNcKYlL8yEnPE0zgwOTBjpLRwN+34EIm
-         K0U58P7MYB8khtSxwDDxL9yRjoA/GNrd72LrOQAoIcrv7H81LepkKwu1IH/3OMXdBQ
-         AhncME7/ZHcQg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        eajames@linux.ibm.com
-Cc:     Mark Brown <broonie@kernel.org>, kernel-janitors@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: fsi: add a missing of_node_put
-Date:   Wed, 21 Apr 2021 20:03:27 +0100
-Message-Id: <161903040535.13608.18069667099177914560.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <504e431b900341249d331b868d90312cf41f415a.1618947919.git.christophe.jaillet@wanadoo.fr>
-References: <504e431b900341249d331b868d90312cf41f415a.1618947919.git.christophe.jaillet@wanadoo.fr>
+        id S234967AbhDVG6T (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Apr 2021 02:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234955AbhDVG6T (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Apr 2021 02:58:19 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AABC06138C
+        for <linux-spi@vger.kernel.org>; Wed, 21 Apr 2021 23:57:45 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lZTHJ-0006TZ-VO; Thu, 22 Apr 2021 08:57:33 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lZTHI-0003O5-Cd; Thu, 22 Apr 2021 08:57:32 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kernel@pengutronix.de,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        linux-pwm@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: [PATCH v5 0/6] clk: provide new devm helpers for prepared and enabled clocks
+Date:   Thu, 22 Apr 2021 08:57:20 +0200
+Message-Id: <20210422065726.1646742-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 20 Apr 2021 21:46:13 +0200, Christophe JAILLET wrote:
-> 'for_each_available_child_of_node' performs an of_node_get on each
-> iteration, so a return from the middle of the loop requires an of_node_put.
+Hello,
 
-Applied to
+the only change since v5 is that the fixed i2c patch is now properly
+part of this series.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Can I please get a feedback by the clock maintainers? The series got
+positive feedback by several people now and is still unreplied by by the
+clk maintainers since October. Should I resend regularly, say once per
+two weeks? How many digits do I have to consider for the resend counter?
+At what point can I ask the maintainers further up in the chain to merge
+my series? Does a pull request help?
 
-Thanks!
+Best regards
+Uwe
 
-[1/1] spi: fsi: add a missing of_node_put
-      commit: 24b5515aa3ac075880be776bf36553ff7f9712c7
+Uwe Kleine-König (6):
+  clk: generalize devm_clk_get() a bit
+  clk: Provide new devm_clk_helpers for prepared and enabled clocks
+  pwm: atmel: Simplify using devm_clk_get_prepared()
+  rtc: at91sma9: Simplify using devm_clk_get_enabled()
+  i2c: imx: Simplify using devm_clk_get_enableded()
+  spi: davinci: Simplify using devm_clk_get_enabled()
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+ drivers/clk/clk-devres.c     | 96 ++++++++++++++++++++++++++++++------
+ drivers/i2c/busses/i2c-imx.c | 12 +----
+ drivers/pwm/pwm-atmel.c      | 15 +-----
+ drivers/rtc/rtc-at91sam9.c   | 22 ++-------
+ drivers/spi/spi-davinci.c    | 11 +----
+ include/linux/clk.h          | 87 +++++++++++++++++++++++++++++++-
+ 6 files changed, 176 insertions(+), 67 deletions(-)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+base-commit: a38fd8748464831584a19438cbb3082b5a2dab15
+-- 
+2.30.2
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
