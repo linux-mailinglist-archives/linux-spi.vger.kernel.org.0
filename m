@@ -2,80 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B683681D2
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Apr 2021 15:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E4B3681FF
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Apr 2021 15:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236344AbhDVNup (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 22 Apr 2021 09:50:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40588 "EHLO mail.kernel.org"
+        id S236432AbhDVN52 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Apr 2021 09:57:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44216 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230005AbhDVNum (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 22 Apr 2021 09:50:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 108BD61405;
-        Thu, 22 Apr 2021 13:50:04 +0000 (UTC)
+        id S236721AbhDVN51 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 22 Apr 2021 09:57:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 521F4613C8;
+        Thu, 22 Apr 2021 13:56:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619099407;
-        bh=2oJtReQyaeTSDvRLl66IrFTBKN7fQSwFZowLXmrUk3A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=s/qaYH7gxGP5emtXWIcBUyRq5DVNZh7XFCprfMm9WtRj/ECsrUCPYxl6x7rM7hqaB
-         Bw1QtfNgid+lL2DECA6OFP0ThIwEg4Cdc9MYbZPFkHLgpk7yoGaitqpKOi6dCsXbqU
-         GhhZWJcdRi90RAZIFlooIllt2Rx76fu+Dqaa26UO1L9q5SpraU1lN4KpNjjMEzaIwj
-         D0tJX6+b1tCJA+5BdSkh+F+fBcxUgo9OBgujZKzjvMZZqTjgbWtdKf7Lg+/1DhlFMI
-         XCxSBhSELKCXlwuQe+VkAg9oNaMZJUM+0GoXVsbs42ydIJ8uuWke4EnfW/ZgctK/Oj
-         V7/AcMhVT1W/w==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] [v2] spi: stm32-qspi: fix debug format string
-Date:   Thu, 22 Apr 2021 15:38:57 +0200
-Message-Id: <20210422134955.1988316-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        s=k20201202; t=1619099812;
+        bh=o5kegHqxFCw6UyhyTlJLSSUDEK5wBbL43LeBSoNwMA4=;
+        h=Subject:From:Date:To:From;
+        b=BrvdSC5zrR+IRasNH5yyfs7+S9VZa5/p/xnpTBhXXdLEumJh/ypLhnBcZVdVNCRnb
+         gTw+8ShjdAR+RoEDEzbXhJByiF/H02Fb2TH2VJue9xflAPKgFNiCczFbaXWnMLSN16
+         SRW9cuibpgj87kj3JGsWEWvw6Iu2whuHBS3FiBlHeqCquwQRj9DTB8N4F8AWm1/5qN
+         ACucvPN2wYJVq0ySfkEfPLEbhL3RSBhBVHH0/8eOr2GCFxUDTILCz2DOJhrKFGyOGQ
+         bdNoahiNu+7SGj+ojMIRpdrYRf8E8tUkcXs+ShcEfq8zMgGjNgouv7NDs7gHuPt1Uj
+         km7/PhLPgRNHg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4D732609AC;
+        Thu, 22 Apr 2021 13:56:52 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <161909981231.20184.11428209641855634334.git-patchwork-housekeeping@kernel.org>
+Date:   Thu, 22 Apr 2021 13:56:52 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Latest series: [v2] spi: stm32-qspi: fix debug format string (2021-04-22T13:38:57)
+  Superseding: [v1] spi: stm32-qspi: fix debug format string (2021-04-21T14:06:48):
+    spi: stm32-qspi: fix debug format string
 
-Printing size_t needs a special %zx format modifier to avoid a
-warning like:
 
-drivers/spi/spi-stm32-qspi.c:481:41: note: format string is defined here
-  481 |         dev_dbg(qspi->dev, "%s len = 0x%x offs = 0x%llx buf = 0x%p\n", __func__, len, offs, buf);
-
-Patrice already tried to fix this, but picked %lx instead of %zx,
-which fixed some architectures but broke others in the same way.
-Using %zx works everywhere.
-
-Fixes: 18674dee3cd6 ("spi: stm32-qspi: Add dirmap support")
-Fixes: 1b8a7d4282c0 ("spi: stm32-qspi: Fix compilation warning in ARM64")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/spi/spi-stm32-qspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index 02691c1603d9..7e640ccc7e77 100644
---- a/drivers/spi/spi-stm32-qspi.c
-+++ b/drivers/spi/spi-stm32-qspi.c
-@@ -478,7 +478,7 @@ static ssize_t stm32_qspi_dirmap_read(struct spi_mem_dirmap_desc *desc,
- 	 * all needed transfer information into struct spi_mem_op
- 	 */
- 	memcpy(&op, &desc->info.op_tmpl, sizeof(struct spi_mem_op));
--	dev_dbg(qspi->dev, "%s len = 0x%lx offs = 0x%llx buf = 0x%p\n", __func__, len, offs, buf);
-+	dev_dbg(qspi->dev, "%s len = 0x%zx offs = 0x%llx buf = 0x%p\n", __func__, len, offs, buf);
- 
- 	op.data.nbytes = len;
- 	op.addr.val = desc->info.offset + offs;
 -- 
-2.29.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
