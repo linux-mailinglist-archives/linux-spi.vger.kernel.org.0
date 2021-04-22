@@ -2,39 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1848368527
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Apr 2021 18:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5BC368528
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Apr 2021 18:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236357AbhDVQty (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 22 Apr 2021 12:49:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41726 "EHLO mail.kernel.org"
+        id S236657AbhDVQt4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Apr 2021 12:49:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41754 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236236AbhDVQtw (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 22 Apr 2021 12:49:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4747D613C3;
-        Thu, 22 Apr 2021 16:49:16 +0000 (UTC)
+        id S236287AbhDVQtz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 22 Apr 2021 12:49:55 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 791D661409;
+        Thu, 22 Apr 2021 16:49:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619110156;
-        bh=c5nRaByBV7G7KEgEhv5zB2ZbyxszwbwZAjjx76FFUlc=;
+        s=k20201202; t=1619110160;
+        bh=axWE37eq5CgD/yuWEg0pILGXxgQdLfIdnB2oGBaHdjI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FmrZ+MAXNb8bIXpisAPILE3UlkGtF0tHpm1YOXmtfxmDqjOzm6AWk9OCTngkdAhlR
-         rP4SA/n7g1miWo93o45DeT+3keZJxu/PalCiKxGyIifjOfg9hpTXO09z9t4q0UJSd3
-         4LRImAh0TpRb5N8ykJL9Lz8WTezbM1hPOJpaHtrOPXfR0SZ5dHabgyF7gh6AK5fPuQ
-         A3OdQ3RSvLJyChcjdRQkCSRu9kvwZOhWTTVcgwIpPsMkuD5bpn/wKZpfohZQZEf9PY
-         c9OM0HHjY6SQlRBa+qkylBj679sFAHdLfq9BSIceR22Xe8vUzY3Es3lVCyZaAOTlvu
-         6wgGSOw+5h93g==
+        b=PydCb0ZkiH8Vug2p+NgUgK2XQGK4GIEjhCevOYXkJIlwY07CBN0W6xg2IlYgnC7vv
+         3zB73nBNUT1d65y9IdQa9z0CelRgXLKy2MH14N/HpH0jB+UqWTrslFAyOBax6AveIj
+         WcMqjynBqDfy2FkITW8Nh6k59DyDuVqldh9ROB4OyxRiiEUD8aANEEcUYtoOFga9Rr
+         f9/xzvUm4V4b5Pck3zsMsoJXWC37EyM3/EWlUtuXFyHjM+diRRrg4aj4dSL4eCCmCl
+         KB7PexgKhNw0NueBldH2upC2yu+mp7NXXUk1Zi3ewYvLeM0OC79PTPYemqbX/+qIW9
+         heEhPiZNrA7EQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     quanyang.wang@windriver.com,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: tools: make a symbolic link to the header file spi.h
-Date:   Thu, 22 Apr 2021 17:48:44 +0100
-Message-Id: <161911005747.37738.13792341162405861105.b4-ty@kernel.org>
+To:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH] [v2] spi: stm32-qspi: fix debug format string
+Date:   Thu, 22 Apr 2021 17:48:45 +0100
+Message-Id: <161911005747.37738.3439795331125402090.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210422102604.3034217-1-quanyang.wang@windriver.com>
-References: <20210422102604.3034217-1-quanyang.wang@windriver.com>
+In-Reply-To: <20210422134955.1988316-1-arnd@kernel.org>
+References: <20210422134955.1988316-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -42,16 +48,16 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 22 Apr 2021 18:26:04 +0800, quanyang.wang@windriver.com wrote:
-> The header file spi.h in include/uapi/linux/spi is needed for spidev.h,
-> so we also need make a symbolic link to it to eliminate the error message
-> as below:
+On Thu, 22 Apr 2021 15:38:57 +0200, Arnd Bergmann wrote:
+> Printing size_t needs a special %zx format modifier to avoid a
+> warning like:
 > 
-> In file included from spidev_test.c:24:
-> include/linux/spi/spidev.h:28:10: fatal error: linux/spi/spi.h: No such file or directory
->    28 | #include <linux/spi/spi.h>
->       |          ^~~~~~~~~~~~~~~~~
-> compilation terminated.
+> drivers/spi/spi-stm32-qspi.c:481:41: note: format string is defined here
+>   481 |         dev_dbg(qspi->dev, "%s len = 0x%x offs = 0x%llx buf = 0x%p\n", __func__, len, offs, buf);
+> 
+> Patrice already tried to fix this, but picked %lx instead of %zx,
+> which fixed some architectures but broke others in the same way.
+> Using %zx works everywhere.
 
 Applied to
 
@@ -59,8 +65,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: tools: make a symbolic link to the header file spi.h
-      commit: bc2e9578baed90f36abe6bb922b9598a327b0555
+[1/1] spi: stm32-qspi: fix debug format string
+      commit: 14ef64ebdc2a4564893022780907747567452f6c
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
