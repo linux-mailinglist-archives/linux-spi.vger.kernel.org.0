@@ -2,102 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D20DF3698A5
-	for <lists+linux-spi@lfdr.de>; Fri, 23 Apr 2021 19:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC611369958
+	for <lists+linux-spi@lfdr.de>; Fri, 23 Apr 2021 20:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbhDWRub (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 23 Apr 2021 13:50:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41240 "EHLO mail.kernel.org"
+        id S243497AbhDWSZJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 23 Apr 2021 14:25:09 -0400
+Received: from mga09.intel.com ([134.134.136.24]:3219 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229549AbhDWRua (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 23 Apr 2021 13:50:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8DFEF6144E;
-        Fri, 23 Apr 2021 17:49:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619200194;
-        bh=EKqQdd3JsvHGu+wfjLmk/wXeSZjWsLUz+vRrJVYcYHE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MEVCkxIIEj+FggSVINLpIuRBDGoTlhn4ETwvVna2cyxpw2MibiEJBmiogqqHfuEyC
-         647JM0Q2XK67xTPlPrx655ONzBn/E65Eo1jMG8f/MIFMa8tv5a1IDk5oN7c4AuquLI
-         QX+39uKRwdCQbN9+gQ0bxHb+VkyclsvwRCuEZWz5kirqHeKu3rTmCvp52YB+jxc3eC
-         /WmDQIR+W3P+sgY/EXlcKEBDgMysWyIKoAFl7aX8F7k0JdgnGseSLVQ04V9QcTQ/7Q
-         yuTD7uUiTD8qNrs1AeaRSvmPxoc1MkMLKsvTyUKoxHXQuCAIetah/deIBZCD5Ni/8g
-         Yk5jM9M+RVD4g==
-Date:   Fri, 23 Apr 2021 18:49:25 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        id S243471AbhDWSZI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 23 Apr 2021 14:25:08 -0400
+IronPort-SDR: NIlvK3agrtx+kb+IKQxuFHFiSmZ1nMmcv8Fd4CkzDGM7aDL5IJRhjQ3hKKC8yIC06XbuEkkdQy
+ /pTq+/c39xLg==
+X-IronPort-AV: E=McAfee;i="6200,9189,9963"; a="196224389"
+X-IronPort-AV: E=Sophos;i="5.82,246,1613462400"; 
+   d="scan'208";a="196224389"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2021 11:24:29 -0700
+IronPort-SDR: /2YeD8bvSJ83Lc78E/vTHcFFeQjHt0sSD6U1jTeXnsZytf2DTGs3SfNHLhkP0Jdcl85iv1NlpY
+ Nx1gsNPC69ow==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,246,1613462400"; 
+   d="scan'208";a="614792175"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 23 Apr 2021 11:24:26 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D222411E; Fri, 23 Apr 2021 21:24:44 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Daniel Mack <daniel@zonque.org>,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Robert Jarzmik <robert.jarzmik@free.fr>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Jie Yang <yang.jie@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: Re: [PATCH v1 05/14] spi: pxa2xx: Consolidate related headers under
- include/linux/spi
-Message-ID: <20210423174924.GI5507@sirena.org.uk>
-References: <20210423163437.89306-1-andriy.shevchenko@linux.intel.com>
- <20210423163437.89306-5-andriy.shevchenko@linux.intel.com>
- <20210423165630.GH5507@sirena.org.uk>
- <YIMEIEnt4meMP6Hx@smile.fi.intel.com>
+Subject: [PATCH v2 00/14] spi: pxa2xx: Set of cleanups
+Date:   Fri, 23 Apr 2021 21:24:27 +0300
+Message-Id: <20210423182441.50272-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8/UBlNHSEJa6utmr"
-Content-Disposition: inline
-In-Reply-To: <YIMEIEnt4meMP6Hx@smile.fi.intel.com>
-X-Cookie: This is now.  Later is later.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Set of cleanups here and there related to the SPI PXA2xx driver.
+On top of them, adding the special type for Intel Merrifield.
 
---8/UBlNHSEJa6utmr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In v2:
+- cover letter (Mark)
+- drop moving the header in patch 5 (Mark)
 
-On Fri, Apr 23, 2021 at 08:30:08PM +0300, Andy Shevchenko wrote:
-> On Fri, Apr 23, 2021 at 05:56:30PM +0100, Mark Brown wrote:
-> > On Fri, Apr 23, 2021 at 07:34:28PM +0300, Andy Shevchenko wrote:
+Andy Shevchenko (14):
+  spi: pxa2xx: Use one point of return when ->probe() fails
+  spi: pxa2xx: Utilize MMIO and physical base from struct ssp_device
+  spi: pxa2xx: Utilize struct device from struct ssp_device
+  spi: pxa2xx: Replace header inclusions by forward declarations
+  spi: pxa2xx: Unify ifdeffery used in the headers
+  spi: pxa2xx: Group Intel Quark specific definitions
+  spi: pxa2xx: Introduce int_stop_and_reset() helper
+  spi: pxa2xx: Reuse int_error_stop() in pxa2xx_spi_slave_abort()
+  spi: pxa2xx: Use pxa_ssp_enable()/pxa_ssp_disable() in the driver
+  spi: pxa2xx: Extract pxa2xx_spi_update() helper
+  spi: pxa2xx: Extract clear_SSCR1_bits() helper
+  spi: pxa2xx: Extract read_SSSR_bits() helper
+  spi: pxa2xx: Constify struct driver_data parameter
+  spi: pxa2xx: Introduce special type for Merrifield SPIs
 
-> > > We have two headers split between include/linux and include/linux/spi.
-> > > Consolidated them under SPI realm, i.e. in the latter folder.
+ drivers/spi/spi-pxa2xx-dma.c   |  37 +++----
+ drivers/spi/spi-pxa2xx-pci.c   |   4 +-
+ drivers/spi/spi-pxa2xx.c       | 190 +++++++++++++++++----------------
+ drivers/spi/spi-pxa2xx.h       |  52 ++++-----
+ include/linux/pxa2xx_ssp.h     |  42 +++++++-
+ include/linux/spi/pxa2xx_spi.h |   9 +-
+ sound/soc/pxa/pxa-ssp.c        |  16 ---
+ 7 files changed, 185 insertions(+), 165 deletions(-)
 
-> > Why?  Isn't the point to maintain an abstraction between the general
-> > purpose use of the SSP IP and its application as a SPI controller?
+-- 
+2.30.2
 
-> Aren't the General Purpose of the SSP IP is an SPI controller either way?
-> What you are talking about is probably GP SPI vs. private (dedicated) SPI.
-
-SPI and any other serial protocols that happen to come up - these
-generic serial IPs also often get used for audio for example.
-
-> > I'd
-> > check the cover letter for the series but there doesn't seem to be one.
-
-> Set of cleanups here and there related to the SPI PXA2xx driver.
-> It's hard to add something else here.
-
-It doesn't need to be much more than what you just wrote.
-
---8/UBlNHSEJa6utmr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCDCKQACgkQJNaLcl1U
-h9AtYwf9ExEjCIqGM+Q3BnqwznDy/zJKu8//lEQgEI1UwO9mrRzH4hRPYDJlKQzb
-BBvSCChNpY6BiXRvYAL+Rou8kNRvo+XPUr/m+gFmY9hFhSK+k3zFsAlXVuyVgnVc
-/E8k7PBZsyDCK3EJsX7G6o+uVcqJI7YzQYobrGRmpWy78xkrgr9nDEELZqFSUzJj
-rmMkxWH8CLawROulDBbQVFNzip2rniOk8NnD6k4x8XH0hRSS/bTYBSEx/2vPhWuq
-d8OHhKcZgdCzvDQZroG/VkpXLd3ZOujucL+qo7UiOGXGmu1P2wA87wp+ny0b4zIL
-bLrbblN3MR5zkYi1zYi6JKbiISi2MQ==
-=VD8t
------END PGP SIGNATURE-----
-
---8/UBlNHSEJa6utmr--
