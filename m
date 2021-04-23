@@ -2,30 +2,34 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03504369778
-	for <lists+linux-spi@lfdr.de>; Fri, 23 Apr 2021 18:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A19E36985E
+	for <lists+linux-spi@lfdr.de>; Fri, 23 Apr 2021 19:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbhDWQ5f (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 23 Apr 2021 12:57:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39736 "EHLO mail.kernel.org"
+        id S230218AbhDWRay (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 23 Apr 2021 13:30:54 -0400
+Received: from mga06.intel.com ([134.134.136.31]:28650 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229691AbhDWQ5f (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 23 Apr 2021 12:57:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0FA89611AE;
-        Fri, 23 Apr 2021 16:56:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619197018;
-        bh=LfID890VAjx1GZR+zOrDOxEjOHzkC+fZhl1uOkQgHsw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r5veA+XwtEUJElzT1v6yOIVjcnYgfLhLHRdA/om5LzaouZiCO5kAYjkTP1F2/MQ+g
-         0yyG03jy82r4Ix6/aqifdqt2fg50ItCwKTNxi3eM8gkLvo+72oFxgZcUjLnc7FQkxT
-         jvOWV5pgX1FTP0wrCGMUEgo/gRBkWzkCr0r2iCcDon0sgEDfsGGN8BKERulBIdSgVp
-         CJHDeIjag9Q31U6GZnPxnlW6k0TUSNHPs/lE2zIobgahDbb6tEyzmjGcsAOgBDLt+n
-         eCfDuJ/9ngfXzXuGvv/3vkrnfk/zy8nPq+Z1ZOZo1pgIgrdEaGSg27/5hx1zU4YJjl
-         yIG8RNvTnJhng==
-Date:   Fri, 23 Apr 2021 17:56:30 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        id S229549AbhDWRay (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 23 Apr 2021 13:30:54 -0400
+IronPort-SDR: HH7J0U3oyCG414KCwiaIxEOQyMXv+p9cFG6DYK4E5+h2aU8d1QQruvQA6r6eBU7Soh+EylEHoJ
+ 6Z2IKDtw2CbA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9963"; a="257411468"
+X-IronPort-AV: E=Sophos;i="5.82,246,1613462400"; 
+   d="scan'208";a="257411468"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2021 10:30:16 -0700
+IronPort-SDR: H9+pJ0RnWOxq95zAbxojlapA9H16lEreXz5ioaDa6GiMX0Jc7ksJcaW+a51sLjX3NXrGLdTt9x
+ Yd6R36OQH8PA==
+X-IronPort-AV: E=Sophos;i="5.82,246,1613462400"; 
+   d="scan'208";a="386443849"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2021 10:30:11 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lZzd2-006cKS-BS; Fri, 23 Apr 2021 20:30:08 +0300
+Date:   Fri, 23 Apr 2021 20:30:08 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
 Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
         linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
@@ -40,47 +44,41 @@ Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
         Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
 Subject: Re: [PATCH v1 05/14] spi: pxa2xx: Consolidate related headers under
  include/linux/spi
-Message-ID: <20210423165630.GH5507@sirena.org.uk>
+Message-ID: <YIMEIEnt4meMP6Hx@smile.fi.intel.com>
 References: <20210423163437.89306-1-andriy.shevchenko@linux.intel.com>
  <20210423163437.89306-5-andriy.shevchenko@linux.intel.com>
+ <20210423165630.GH5507@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Rn7IEEq3VEzCw+ji"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210423163437.89306-5-andriy.shevchenko@linux.intel.com>
-X-Cookie: This is now.  Later is later.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210423165630.GH5507@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, Apr 23, 2021 at 05:56:30PM +0100, Mark Brown wrote:
+> On Fri, Apr 23, 2021 at 07:34:28PM +0300, Andy Shevchenko wrote:
+> 
+> > We have two headers split between include/linux and include/linux/spi.
+> > Consolidated them under SPI realm, i.e. in the latter folder.
+> 
+> Why?  Isn't the point to maintain an abstraction between the general
+> purpose use of the SSP IP and its application as a SPI controller?
 
---Rn7IEEq3VEzCw+ji
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Aren't the General Purpose of the SSP IP is an SPI controller either way?
+What you are talking about is probably GP SPI vs. private (dedicated) SPI.
 
-On Fri, Apr 23, 2021 at 07:34:28PM +0300, Andy Shevchenko wrote:
+But okay, I got the idea, I can drop this patch.
 
-> We have two headers split between include/linux and include/linux/spi.
-> Consolidated them under SPI realm, i.e. in the latter folder.
+> I'd
+> check the cover letter for the series but there doesn't seem to be one.
 
-Why?  Isn't the point to maintain an abstraction between the general
-purpose use of the SSP IP and its application as a SPI controller?  I'd
-check the cover letter for the series but there doesn't seem to be one.
+Set of cleanups here and there related to the SPI PXA2xx driver.
+It's hard to add something else here.
 
---Rn7IEEq3VEzCw+ji
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+With Best Regards,
+Andy Shevchenko
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCC/D0ACgkQJNaLcl1U
-h9CLHAf/eyWaZV/yF5wLiXo/wOpqfrx3e/NqVjLRELGlZE+ar0ILQQ9eW9MXKr1d
-dY8YMPYTi95D/hs2pHwY+69eqE/jSVqiDXg0ClNqfcNE+T/u+AJP5AjN8vxkHgA1
-2D5kguaPu/cBUZgByp4oDlAVTdFlT44mLDNwgjBaJR+/zMUl35CTKqzLYD2XB7+6
-vj9KiXPatFJLphF9XoDc0s8Z2lZZkUWhVG3hku2pvH8E2X+zJpAQYFKtxwXAKSrt
-zjuR7BvYrlIRgZnYT6ct3gtl+fPoBXimyvWDH86cxopeAsiHcFg7Jq7+TqlOYtPY
-ZEwe0ACiO9v2GD60nmZC4JwhDTSMgA==
-=0Eci
------END PGP SIGNATURE-----
-
---Rn7IEEq3VEzCw+ji--
