@@ -2,89 +2,112 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D410536B299
-	for <lists+linux-spi@lfdr.de>; Mon, 26 Apr 2021 13:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B46DF36B4B0
+	for <lists+linux-spi@lfdr.de>; Mon, 26 Apr 2021 16:18:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232249AbhDZL6B (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 26 Apr 2021 07:58:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35948 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231876AbhDZL54 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 26 Apr 2021 07:57:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5C53A60FE6;
-        Mon, 26 Apr 2021 11:57:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619438234;
-        bh=YAMGLDr484gnwUvmIKxfN/VOkDFd46Y2bk2JtoZTrxs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jY6inlmBl0DN2ZyWOs3VNzGPVKMDziPXKIzxbKn9SVs/bnRSAbA4RYJAEe+EsgI73
-         f1apQg9KsOuPHn9HvDNeOu0EcKrwv5TDmXlXzpcl3xsOhyJJlOSH6bcm+pfHAdh3SL
-         C4sC8hDQeVUz8RC6uRgc2AnfDvqudyLeNvG2blpWZnky0iliKU+QKnAgI8VQPJAzes
-         9RJ/bH7BmIbweBhqwu1tMEtg8ZQn8ks8Rw8B7hnKlCZGwm2jDgGxlHway26jWxlUBH
-         mUjm+KodlrjZXYBGEhPu766CVyTrspDe/y+GXlxt2e47xspeGAPvW7qRxqqw4E0tAa
-         dBQYOXiTKueBg==
-Date:   Mon, 26 Apr 2021 12:56:45 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Art Nikpal <email2tema@gmail.com>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>, jbrunet@baylibre.com,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        dri-devel@lists.freedesktop.org, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Artem Lapkin <art@khadas.com>, nick@khadas.com,
-        Gouwa Wang <gouwa@khadas.com>
-Subject: Re: [PATCH] SPI: meson-spifc add missed calls to remove function
-Message-ID: <20210426115645.GB4590@sirena.org.uk>
-References: <20210423034247.992052-1-art@khadas.com>
- <20210423114735.GA5507@sirena.org.uk>
- <CAKaHn9+d5crmmG-aKyLuvyxk+A7aC9qqfX_3wuMXm50pg+pZ4w@mail.gmail.com>
+        id S233735AbhDZOSg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 26 Apr 2021 10:18:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233788AbhDZOSf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 26 Apr 2021 10:18:35 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57E2C06175F
+        for <linux-spi@vger.kernel.org>; Mon, 26 Apr 2021 07:17:52 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lb23K-0002KB-Ie; Mon, 26 Apr 2021 16:17:34 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lb23I-0005nU-Px; Mon, 26 Apr 2021 16:17:32 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: [PATCH v6 0/6] clk: provide new devm helpers for prepared and enabled clocks
+Date:   Mon, 26 Apr 2021 16:17:24 +0200
+Message-Id: <20210426141730.2826832-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NDin8bjvE/0mNLFQ"
-Content-Disposition: inline
-In-Reply-To: <CAKaHn9+d5crmmG-aKyLuvyxk+A7aC9qqfX_3wuMXm50pg+pZ4w@mail.gmail.com>
-X-Cookie: Zeus gave Leda the bird.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hello,
 
---NDin8bjvE/0mNLFQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+compared to v5 sent last week this series only fixes two typos in the
+commit logs.
 
-On Sat, Apr 24, 2021 at 07:57:19AM +0800, Art Nikpal wrote:
+The range-diff is
+1:  0f2fe65a9c9c ! 1:  38f213c5eeff rtc: at91sma9: Simplify using devm_clk_get_enabled()
+    @@ Metadata
+     Author: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+     
+      ## Commit message ##
+    -    rtc: at91sma9: Simplify using devm_clk_get_enabled()
+    +    rtc: at91sam9: Simplify using devm_clk_get_enabled()
+     
+         devm_clk_get_enabled() returns the clk already (prepared and) enabled
+         and the automatically called cleanup cares for disabling (and
+2:  3f11b70e7427 ! 2:  b9cebea08a73 i2c: imx: Simplify using devm_clk_get_enableded()
+    @@ Metadata
+     Author: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+     
+      ## Commit message ##
+    -    i2c: imx: Simplify using devm_clk_get_enableded()
+    +    i2c: imx: Simplify using devm_clk_get_enabled()
+     
+         devm_clk_get_enabled() returns the clk already (prepared and) enabled
+         and the automatically called cleanup cares for disabling (and
+3:  6c357913e391 = 3:  8167605ad349 spi: davinci: Simplify using devm_clk_get_enabled()
+4:  71b3db526357 < -:  ------------ pwm: Clarify documentation about pwm_get_state()
 
-> > I would expect the driver to unregister the controller at the start of
-> > the remove function, suspend doesn't really make sense here
+Other than that the state is still unchanged: This is a series which
+allows several cleanups (as can be seen from patches 2 to 6) and I
+didn't get any feedback from the clock maintainers since v1 that I sent
+in October.
 
-> It's strange - But without spi_master_suspend i have randomly stucks when i
-> try unload this module - as was written before
-> i was test it (load/unload module in loop) and for me suspend make sense
-> here
+Best regards
+Uwe
 
-> If anybody has another solution - or real problem not here - please write
-> to me the right way!
+Uwe Kleine-König (6):
+  clk: generalize devm_clk_get() a bit
+  clk: Provide new devm_clk_helpers for prepared and enabled clocks
+  pwm: atmel: Simplify using devm_clk_get_prepared()
+  rtc: at91sam9: Simplify using devm_clk_get_enabled()
+  i2c: imx: Simplify using devm_clk_get_enabled()
+  spi: davinci: Simplify using devm_clk_get_enabled()
 
-As I said above unregister the controller at the start of the remove
-function.
+ drivers/clk/clk-devres.c     | 96 ++++++++++++++++++++++++++++++------
+ drivers/i2c/busses/i2c-imx.c | 12 +----
+ drivers/pwm/pwm-atmel.c      | 15 +-----
+ drivers/rtc/rtc-at91sam9.c   | 22 ++-------
+ drivers/spi/spi-davinci.c    | 11 +----
+ include/linux/clk.h          | 87 +++++++++++++++++++++++++++++++-
+ 6 files changed, 176 insertions(+), 67 deletions(-)
 
---NDin8bjvE/0mNLFQ
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+base-commit: a38fd8748464831584a19438cbb3082b5a2dab15
+-- 
+2.30.2
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCGqnwACgkQJNaLcl1U
-h9ChAQf6AzAWZAIxaf/Vi1T0miZmDkRpcCYrObYCduQZQzbR83zD+NtVRAQt5Hzd
-3TMxWVBMUD6hChyKOe4xA6ZfZQ8jh8s3LPNwTwCnBtrmpNPoovMkjAtB3xcXY0Qw
-vFonf9FoPRLLbjf63HL1qv4dHmxARdZZ4ZFS/fMx9670pPz1TlMwyVLzXw3iOycr
-9S2Gzap9QFqXP83avoh2cbxEgNRGlmN4OyNPx0fWYkvwx5vpQJ8/TZ4X9mO1Zi/q
-S7tS3jJW2UVtxHK3jXXSpqdr67o1+2YCRZwKReT0YPPQI9n689PAa1dmnxAMmoPg
-BIADUKIHULSv9i/fb0MGMkpRtdSTuQ==
-=kGPv
------END PGP SIGNATURE-----
-
---NDin8bjvE/0mNLFQ--
