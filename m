@@ -2,38 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7364D36B56F
-	for <lists+linux-spi@lfdr.de>; Mon, 26 Apr 2021 17:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D271C36B571
+	for <lists+linux-spi@lfdr.de>; Mon, 26 Apr 2021 17:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233825AbhDZPLQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 26 Apr 2021 11:11:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43686 "EHLO mail.kernel.org"
+        id S234013AbhDZPLR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 26 Apr 2021 11:11:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43752 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233829AbhDZPLJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 26 Apr 2021 11:11:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7E2F8600D1;
-        Mon, 26 Apr 2021 15:10:27 +0000 (UTC)
+        id S233973AbhDZPLM (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 26 Apr 2021 11:11:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 819DD61289;
+        Mon, 26 Apr 2021 15:10:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619449828;
-        bh=tNhBVbZyVLvP13Ud9BG50oFq3Cy/ZUDHknpXxPiCkI0=;
+        s=k20201202; t=1619449831;
+        bh=TFq7kiQdjGAQzF36BJ2uF0+GQaNJWuVwyE3Ppyv4z2M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W4BxdZK/0xYpU9z/h/JlErgA6RTtW04vpCDFkv7L6ozbyZBPsnGC55vMJIRreoFHG
-         CUUyOlowzKIwpi86n8JNS4JxVxv//gNHu8dIQ/cmCyo8yVeAk/6srb3xjMYlT2JFl2
-         EAIlnKWfC1OTfNsdqvuXv8iYOk4MQ2/UHcRCkdZ5H6SLa5PJNSOf4eIq++nAyny+I+
-         EI6AxbCFRRuZZHXZkSeTEotbxQ5enRngBkhg6+3XpSedShfXanEfY2tA8+FTab8hSc
-         PakWBAW7+KqDQ+6+XLNcwRsrTSe0ZA1HsGC/WnUVBw2+LnMUMRP4dFlQJrSnWfyEom
-         fRhTWlSruT2Ng==
+        b=vP/q0mM7spKtvBRV8gEuxRGV9D5TusU6QS94HuYTmwyJQ4x2AItGMdNDFVrXhrTnr
+         7TYKDWbpEAlK43oOLpsntGMkj60+ORP7XoFuR3URuzaET909meZe8mvJYmF8FPETug
+         j9Syib1JKoSPRIuBWisMRV2f/98KV7+mSb6Ba2Y2Xxe+EafXnw1EPd05Z1/b45yg5k
+         eFSIOJKmXz1z4AFzGofcZyyzXfm+Emc22sxsspoCtnZRKJ4FV/0ZetYCCRxuNRvTJM
+         elbEGkh5YKLbzhIY0ZtaYeuARnhOwoO/1uF1tWCluEY5bI03sBsrLfwAzP9+tGH3os
+         YNfg9svEjobCw==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v1 1/1] spi: Rename enable1 to activate in spi_set_cs()
-Date:   Mon, 26 Apr 2021 16:09:57 +0100
-Message-Id: <161944978786.15099.6336325529331688922.b4-ty@kernel.org>
+To:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        Kuldeep Singh <kuldeep.singh@nxp.com>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>, Han Xu <han.xu@nxp.com>
+Subject: Re: [PATCH] dt-bindings: spi: Convert Freescale QSPI binding to json schema
+Date:   Mon, 26 Apr 2021 16:09:58 +0100
+Message-Id: <161944978786.15099.9857213915602715493.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210420131846.75983-1-andriy.shevchenko@linux.intel.com>
-References: <20210420131846.75983-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20210312054038.3586706-1-kuldeep.singh@nxp.com>
+References: <20210312054038.3586706-1-kuldeep.singh@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -41,9 +41,8 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 20 Apr 2021 16:18:46 +0300, Andy Shevchenko wrote:
-> The enable1 is confusing name. Change it to clearly show what is
-> the intention behind it. No functional changes.
+On Fri, 12 Mar 2021 11:10:38 +0530, Kuldeep Singh wrote:
+> Convert the Freescale QSPI binding to DT schema format using json-schema.
 
 Applied to
 
@@ -51,8 +50,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: Rename enable1 to activate in spi_set_cs()
-      commit: 86527bcbc88922ea40df05d28189ee15489d2cf1
+[1/1] dt-bindings: spi: Convert Freescale QSPI binding to json schema
+      commit: 9ec2a73f0b09f5a5070a0092f08b1531b2cb0d8d
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
