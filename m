@@ -2,55 +2,30 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1846369DA4
-	for <lists+linux-spi@lfdr.de>; Sat, 24 Apr 2021 02:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D410536B299
+	for <lists+linux-spi@lfdr.de>; Mon, 26 Apr 2021 13:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbhDXAJq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 23 Apr 2021 20:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbhDXAJp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 23 Apr 2021 20:09:45 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A436EC061574;
-        Fri, 23 Apr 2021 17:09:08 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id b9so3010278iod.13;
-        Fri, 23 Apr 2021 17:09:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mUIgi8gr2tgzWKj4+8JDnT/+2+iJBvHpF1dlGi1xl7U=;
-        b=eIVk3kWDGLkxI6e7AjS74LPf7mENaT1FX8HKi8JueWU4UuoHBig3oizGT1ntPq+hbt
-         tFqvOi88/997OlaQMY6hKHbHb0cP7bLW4A31KySs7OgfFqPrP7xXw3Tf7xOvwuYRO7tN
-         U8wMXMyT/rmbqquvTLIWV2Pge5r3gtI6p3XlGqMcqM2ZOvKqFNIWyPTRNYFA3jw9elb/
-         gf/6N2VDaCiDyEDSBJooEq657o73WG9pD3kV8rb3dmsK5x3luSueweF7aDA6t2mKfM4Y
-         c79p1OBa/DJdJCA0N+cTn4qi7jZkVZhOoj/bdrMrHAxn6wt7+lo8xhY/GJiJ6EsvOGfp
-         TK9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mUIgi8gr2tgzWKj4+8JDnT/+2+iJBvHpF1dlGi1xl7U=;
-        b=sQau/zN0QlC8C2BdF/JuOZGpEEIvZ0x9mS4Nay3jhG+A4JB2OH11Ku85LaUL4FgHIE
-         qbJt8vjChaBJjrayxVh3NMiukAL28Y+vm9LvulHVLecju5VyJ/gppd/objVhc/KyKiAO
-         +ixyUNhl7THjFy1dhxKZSw1U78iI3PNOEn7cX6ODDXkJKTuYXwa9agI2Wb4+9KAeXSa0
-         WhyucSimwYYB/xGQxtJGzkL64Mz8NEvv3T3yMivUvI7/4pndvrYMscd2U6SLoqWLBM8T
-         Z1eS7u4REDgYAmInl4Dy1B5N+GwsXpCltQEPCQ0qQTiuJCyFjCRMUWyjTt/bOmMtyH4C
-         kLPw==
-X-Gm-Message-State: AOAM531R/StOsxOLPF9yj50J5wbDqTh4PPGxxkYRyxc3PkEdy9B7pwNy
-        o9QyJWC54jIc3AvzD0UQJYlRNYZvkcRXOfecens=
-X-Google-Smtp-Source: ABdhPJzpqEKzOQAznBrk9weKRq/P/QY2iIQeqtxS3bPY6W15AZaVS8+fIA29w7CgKa8lN9Gg4oFBEDPlkNfMCTJh7/8=
-X-Received: by 2002:a05:6602:22c9:: with SMTP id e9mr5125249ioe.73.1619222948139;
- Fri, 23 Apr 2021 17:09:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210423034247.992052-1-art@khadas.com> <20210423114735.GA5507@sirena.org.uk>
-In-Reply-To: <20210423114735.GA5507@sirena.org.uk>
-From:   Art Nikpal <email2tema@gmail.com>
-Date:   Sat, 24 Apr 2021 08:08:57 +0800
-Message-ID: <CAKaHn9LC19cduyrwxkDRAdM5pjgSPBCdZUjsEMgGqS7yVQS1-g@mail.gmail.com>
-Subject: Re: [PATCH] SPI: meson-spifc add missed calls to remove function
-To:     Mark Brown <broonie@kernel.org>
+        id S232249AbhDZL6B (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 26 Apr 2021 07:58:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35948 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231876AbhDZL54 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 26 Apr 2021 07:57:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5C53A60FE6;
+        Mon, 26 Apr 2021 11:57:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619438234;
+        bh=YAMGLDr484gnwUvmIKxfN/VOkDFd46Y2bk2JtoZTrxs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jY6inlmBl0DN2ZyWOs3VNzGPVKMDziPXKIzxbKn9SVs/bnRSAbA4RYJAEe+EsgI73
+         f1apQg9KsOuPHn9HvDNeOu0EcKrwv5TDmXlXzpcl3xsOhyJJlOSH6bcm+pfHAdh3SL
+         C4sC8hDQeVUz8RC6uRgc2AnfDvqudyLeNvG2blpWZnky0iliKU+QKnAgI8VQPJAzes
+         9RJ/bH7BmIbweBhqwu1tMEtg8ZQn8ks8Rw8B7hnKlCZGwm2jDgGxlHway26jWxlUBH
+         mUjm+KodlrjZXYBGEhPu766CVyTrspDe/y+GXlxt2e47xspeGAPvW7qRxqqw4E0tAa
+         dBQYOXiTKueBg==
+Date:   Mon, 26 Apr 2021 12:56:45 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Art Nikpal <email2tema@gmail.com>
 Cc:     Neil Armstrong <narmstrong@baylibre.com>,
         Kevin Hilman <khilman@baylibre.com>, jbrunet@baylibre.com,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
@@ -60,45 +35,56 @@ Cc:     Neil Armstrong <narmstrong@baylibre.com>,
         Christian Hewitt <christianshewitt@gmail.com>,
         Artem Lapkin <art@khadas.com>, nick@khadas.com,
         Gouwa Wang <gouwa@khadas.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] SPI: meson-spifc add missed calls to remove function
+Message-ID: <20210426115645.GB4590@sirena.org.uk>
+References: <20210423034247.992052-1-art@khadas.com>
+ <20210423114735.GA5507@sirena.org.uk>
+ <CAKaHn9+d5crmmG-aKyLuvyxk+A7aC9qqfX_3wuMXm50pg+pZ4w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NDin8bjvE/0mNLFQ"
+Content-Disposition: inline
+In-Reply-To: <CAKaHn9+d5crmmG-aKyLuvyxk+A7aC9qqfX_3wuMXm50pg+pZ4w@mail.gmail.com>
+X-Cookie: Zeus gave Leda the bird.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-> I would expect the driver to unregister the controller at the start of
-> the remove function, suspend doesn't really make sense here
 
-It's strange - But without spi_master_suspend i have randomly stucks
-when i try unload this module - as was written before
-i was test it (load/unload module in loop) and for me suspend make sense here
+--NDin8bjvE/0mNLFQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-If anybody has another solution - or real problem not here - please
-help to find the right way!
+On Sat, Apr 24, 2021 at 07:57:19AM +0800, Art Nikpal wrote:
 
-PS: i have another way for solve this problem (may be it can help us
-fix problem in kernel)
+> > I would expect the driver to unregister the controller at the start of
+> > the remove function, suspend doesn't really make sense here
 
-# before unload module need
-echo -n spi0.0 > /sys/bus/spi/drivers/spi-nor/unbind
-# after unbind driver we can unload module without problem
-rmmod spi_meson_spifc # can stuck without unbind driver before ...
+> It's strange - But without spi_master_suspend i have randomly stucks when i
+> try unload this module - as was written before
+> i was test it (load/unload module in loop) and for me suspend make sense
+> here
 
+> If anybody has another solution - or real problem not here - please write
+> to me the right way!
 
-On Fri, Apr 23, 2021 at 7:48 PM Mark Brown <broonie@kernel.org> wrote:
->
-> On Fri, Apr 23, 2021 at 11:42:47AM +0800, Artem Lapkin wrote:
-> > Problem: rmmod meson_gx_mmc - not stable without spi_master_suspend call
-> > and we can get stuck when try unload this module
->
-> > +++ b/drivers/spi/spi-meson-spifc.c
-> > @@ -359,6 +359,7 @@ static int meson_spifc_remove(struct platform_device *pdev)
-> >       struct spi_master *master = platform_get_drvdata(pdev);
-> >       struct meson_spifc *spifc = spi_master_get_devdata(master);
-> >
-> > +     spi_master_suspend(master);
-> >       pm_runtime_get_sync(&pdev->dev);
-> >       clk_disable_unprepare(spifc->clk);
-> >       pm_runtime_disable(&pdev->dev);
->
-> I would expect the driver to unregister the controller at the start of
-> the remove function, suspend doesn't really make sense here.
+As I said above unregister the controller at the start of the remove
+function.
+
+--NDin8bjvE/0mNLFQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCGqnwACgkQJNaLcl1U
+h9ChAQf6AzAWZAIxaf/Vi1T0miZmDkRpcCYrObYCduQZQzbR83zD+NtVRAQt5Hzd
+3TMxWVBMUD6hChyKOe4xA6ZfZQ8jh8s3LPNwTwCnBtrmpNPoovMkjAtB3xcXY0Qw
+vFonf9FoPRLLbjf63HL1qv4dHmxARdZZ4ZFS/fMx9670pPz1TlMwyVLzXw3iOycr
+9S2Gzap9QFqXP83avoh2cbxEgNRGlmN4OyNPx0fWYkvwx5vpQJ8/TZ4X9mO1Zi/q
+S7tS3jJW2UVtxHK3jXXSpqdr67o1+2YCRZwKReT0YPPQI9n689PAa1dmnxAMmoPg
+BIADUKIHULSv9i/fb0MGMkpRtdSTuQ==
+=kGPv
+-----END PGP SIGNATURE-----
+
+--NDin8bjvE/0mNLFQ--
