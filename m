@@ -2,107 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 873A836B49E
-	for <lists+linux-spi@lfdr.de>; Mon, 26 Apr 2021 16:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BDFF36B511
+	for <lists+linux-spi@lfdr.de>; Mon, 26 Apr 2021 16:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233717AbhDZOSV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 26 Apr 2021 10:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233603AbhDZOSU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 26 Apr 2021 10:18:20 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E32C06175F
-        for <linux-spi@vger.kernel.org>; Mon, 26 Apr 2021 07:17:39 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lb23L-0002L7-5b; Mon, 26 Apr 2021 16:17:35 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lb23K-0005np-RB; Mon, 26 Apr 2021 16:17:34 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        linux-spi@vger.kernel.org
-Subject: [PATCH v6 6/6] spi: davinci: Simplify using devm_clk_get_enabled()
-Date:   Mon, 26 Apr 2021 16:17:30 +0200
-Message-Id: <20210426141730.2826832-7-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210426141730.2826832-1-u.kleine-koenig@pengutronix.de>
-References: <20210426141730.2826832-1-u.kleine-koenig@pengutronix.de>
+        id S233927AbhDZOkg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 26 Apr 2021 10:40:36 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:24086 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S233834AbhDZOke (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 26 Apr 2021 10:40:34 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13QEcHYb015831;
+        Mon, 26 Apr 2021 16:39:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=Mrzdfe9ktCTQYQLDD8T2tbI9uH3nTpSKWd9+g32O7fc=;
+ b=BDKfB89jXqMpRpbWK2/JaaFGTiohOwRluwHq3rBnl2EXWRxw2tYZxT3xP1k0b0gakxmO
+ iRR/RLsBmoWcm+o3kMPLwHtcuhts00vDoSXt4+pzFkty+VcQ/wPo/xZpK1+oOchEmOCI
+ yi3V5hFTS3j8F15a9Iup6Bw+pp9elJjLyOUGVOvJWoGPPrWdiz8/j+VUaCdLQ9NvqXhA
+ du3NtTfg6l3dbhsYrA5Y2KfZE5nKdc8SiWgZBn/sKU35KJqGOZFDWSIFeYdGbyuarc5i
+ LaPLcuiJHsnZGuPg6w8zWLFypj6czyXBmfl1P6yEs5TENHKXZM7VA8D5KSodAWjK7mVv 1A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 385b0xx7cy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Apr 2021 16:39:39 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 698C310002A;
+        Mon, 26 Apr 2021 16:39:38 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4C4AD2178E6;
+        Mon, 26 Apr 2021 16:39:38 +0200 (CEST)
+Received: from localhost (10.75.127.51) by SFHDAG2NODE3.st.com (10.75.127.6)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 26 Apr 2021 16:39:37
+ +0200
+From:   <patrice.chotard@foss.st.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        <linux-mtd@lists.infradead.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <patrice.chotard@foss.st.com>, <christophe.kerello@foss.st.com>
+Subject: [PATCH 0/3] MTD: spinand: Add spi_mem_poll_status() support
+Date:   Mon, 26 Apr 2021 16:39:31 +0200
+Message-ID: <20210426143934.25275-1-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-26_07:2021-04-26,2021-04-26 signatures=0
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-devm_clk_get_enabled() returns the clk already (prepared and) enabled
-and the automatically called cleanup cares for disabling (and
-unpreparing). So simplify .probe() and .remove() accordingly.
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-Acked-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/spi/spi-davinci.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+This series adds support for the spi_mem_poll_status() spinand
+interface.
+Some QSPI controllers allows to poll automatically memory 
+status during operations (erase or write). This allows to 
+offload the CPU for this task.
+STM32 QSPI is supporting this feature, driver update are also
+part of this series.
 
-diff --git a/drivers/spi/spi-davinci.c b/drivers/spi/spi-davinci.c
-index 7453a1dbbc06..63ee918ecdb0 100644
---- a/drivers/spi/spi-davinci.c
-+++ b/drivers/spi/spi-davinci.c
-@@ -936,14 +936,11 @@ static int davinci_spi_probe(struct platform_device *pdev)
- 
- 	dspi->bitbang.master = master;
- 
--	dspi->clk = devm_clk_get(&pdev->dev, NULL);
-+	dspi->clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(dspi->clk)) {
- 		ret = -ENODEV;
- 		goto free_master;
- 	}
--	ret = clk_prepare_enable(dspi->clk);
--	if (ret)
--		goto free_master;
- 
- 	master->use_gpio_descriptors = true;
- 	master->dev.of_node = pdev->dev.of_node;
-@@ -968,7 +965,7 @@ static int davinci_spi_probe(struct platform_device *pdev)
- 
- 	ret = davinci_spi_request_dma(dspi);
- 	if (ret == -EPROBE_DEFER) {
--		goto free_clk;
-+		goto free_master;
- 	} else if (ret) {
- 		dev_info(&pdev->dev, "DMA is not supported (%d)\n", ret);
- 		dspi->dma_rx = NULL;
-@@ -1012,8 +1009,6 @@ static int davinci_spi_probe(struct platform_device *pdev)
- 		dma_release_channel(dspi->dma_rx);
- 		dma_release_channel(dspi->dma_tx);
- 	}
--free_clk:
--	clk_disable_unprepare(dspi->clk);
- free_master:
- 	spi_master_put(master);
- err:
-@@ -1039,8 +1034,6 @@ static int davinci_spi_remove(struct platform_device *pdev)
- 
- 	spi_bitbang_stop(&dspi->bitbang);
- 
--	clk_disable_unprepare(dspi->clk);
--
- 	if (dspi->dma_rx) {
- 		dma_release_channel(dspi->dma_rx);
- 		dma_release_channel(dspi->dma_tx);
+Christophe Kerello (3):
+  spi: spi-mem: add automatic poll status functions
+  mtd: spinand: use the spi-mem poll status APIs
+  spi: stm32-qspi: add automatic poll status feature
+
+ drivers/mtd/nand/spi/core.c  | 22 ++++++++--
+ drivers/spi/spi-mem.c        | 34 +++++++++++++++
+ drivers/spi/spi-stm32-qspi.c | 80 ++++++++++++++++++++++++++++++++----
+ include/linux/mtd/spinand.h  |  1 +
+ include/linux/spi/spi-mem.h  |  8 ++++
+ 5 files changed, 133 insertions(+), 12 deletions(-)
+
 -- 
-2.30.2
+2.17.1
 
