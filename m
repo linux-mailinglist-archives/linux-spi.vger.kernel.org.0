@@ -2,142 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C1C36BC62
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Apr 2021 01:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC1D36BD03
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Apr 2021 03:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234387AbhDZX51 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 26 Apr 2021 19:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232642AbhDZX50 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 26 Apr 2021 19:57:26 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486E7C061574
-        for <linux-spi@vger.kernel.org>; Mon, 26 Apr 2021 16:56:43 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id n11-20020a25808b0000b02904d9818b80e8so35120741ybk.14
-        for <linux-spi@vger.kernel.org>; Mon, 26 Apr 2021 16:56:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=bLpFuVYdmPMnBYEaz/LwZMrDFGhW/UaBfFKC3wD97bw=;
-        b=jtFpzcZtBpvmVY1OQxFz99OaCQ/fGYvIQYAsMbBQWsumpBgVpO8xEj/8Mdu8/VKkAE
-         zv/RYjenlWm2FfayETY4b50Z3O3i0hYcGuoefZnBASscfpyqLwNzqaTwTkTIBZSxGjNe
-         ZAacjTRxdZGCkWPvLfYtKwRHc44z/0sWRzovy820iYr8jKjXq1CMgC13KUneGdQ4lpWi
-         CExeaHOA8ukZOnu1Ox3SV7z5J92DawYKeTbHgdJ+1l8JJQ8ck4o7S0tL2DrKMfBlLfIg
-         GpU2kgeQYxrQfXI1DXOGj7vF76v+WsV5c+ZyEdkTm+LwCYxQzHlexbPeJqOL5J34K0yc
-         pmcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=bLpFuVYdmPMnBYEaz/LwZMrDFGhW/UaBfFKC3wD97bw=;
-        b=bJlMsmNLFLOwI/0L3DlVRaPFejetmTFaScXDSc5snXxb5+jOLtqiBLbV5phTv7Q84L
-         R13F9X8ZAriaHx+VcuiRd1Vm1KrnHxajZnIaWQkvAQlHa5qSbqulFTe3Hb72npPFFZrM
-         3AsJ2PeQ0aUGwIVDctJ00eTgEIAmN2gZNZU6Ebn8u0+7mBnmqFeN0MZFoTZVhG7QA2ls
-         sYCW5Ykubdfrb/f/NbTbuq8EIUeNjvdeWrXox5hClzW52FEH1hb6EdxzVTDHDuVOdBC2
-         cXnrdAJpQB1fo0FHbUyMSkbL99bxjvx9IsWFEerRMdXao1jL6QoMI4fMy21DZUk7mrMW
-         Te1Q==
-X-Gm-Message-State: AOAM530+Ab+IHHShZgldInPdJbow3w2I6ZrujVq+vc9v2Bt7TRvH1LsS
-        6rtNTNS/4DOlcVbVn2+BEBuHbLHFEmj1ZW0=
-X-Google-Smtp-Source: ABdhPJyssTCKXdLShQhExFAq2pBioU6ZEBWFFG5oiOoJL/kVfwi2w1LlaVZYGfaj8wii6xiRIYL8G7dgnUVa9Uc=
-X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:d0ce:dc79:218:3f25])
- (user=saravanak job=sendgmr) by 2002:a25:d40d:: with SMTP id
- m13mr235353ybf.170.1619481402352; Mon, 26 Apr 2021 16:56:42 -0700 (PDT)
-Date:   Mon, 26 Apr 2021 16:56:38 -0700
-Message-Id: <20210426235638.1285530-1-saravanak@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.31.1.498.g6c1eba8ee3d-goog
-Subject: [PATCH] spi: Fix spi device unregister flow
-From:   Saravana Kannan <saravanak@google.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        kernel-team@android.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S233038AbhD0Bty (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 26 Apr 2021 21:49:54 -0400
+Received: from twhmllg4.macronix.com ([211.75.127.132]:10397 "EHLO
+        TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232295AbhD0Btx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 26 Apr 2021 21:49:53 -0400
+Received: from twhfm1p2.macronix.com (twhfmlp2.macronix.com [172.17.20.92])
+        by TWHMLLG4.macronix.com with ESMTP id 13R1majp016941;
+        Tue, 27 Apr 2021 09:48:36 +0800 (GMT-8)
+        (envelope-from zhengxunli@mxic.com.tw)
+Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
+        by Forcepoint Email with ESMTP id C65D0F8794AF8785BB8B;
+        Tue, 27 Apr 2021 09:48:36 +0800 (CST)
+In-Reply-To: <20210426165358.GI4590@sirena.org.uk>
+References: <1618900179-14546-1-git-send-email-zhengxunli@mxic.com.tw> <1618900179-14546-4-git-send-email-zhengxunli@mxic.com.tw> <20210426165358.GI4590@sirena.org.uk>
+To:     "Mark Brown" <broonie@kernel.org>
+Cc:     jaimeliao@mxic.com.tw, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, miquel.raynal@bootlin.com,
+        tudor.ambarus@microchip.com
+Subject: Re: [PATCH v3 3/3] spi: mxic: patch for octal DTR mode support
+MIME-Version: 1.0
+X-KeepSent: 9A94F8F9:DF8D5789-482586C4:0008EE9F;
+ type=4; name=$KeepSent
+X-Mailer: Lotus Notes Release 8.5.3FP6 SHF907 April 26, 2018
+Message-ID: <OF9A94F8F9.DF8D5789-ON482586C4.0008EE9F-482586C4.0009F19F@mxic.com.tw>
+From:   zhengxunli@mxic.com.tw
+Date:   Tue, 27 Apr 2021 09:48:37 +0800
+X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
+ 2021/04/27 AM 09:48:36,
+        Serialize complete at 2021/04/27 AM 09:48:36
+Content-Type: text/plain; charset="Big5"
+Content-Transfer-Encoding: base64
+X-MAIL: TWHMLLG4.macronix.com 13R1majp016941
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-When an SPI device is unregistered, the spi->controller->cleanup() is
-called in the device's release callback. That's wrong for a couple of
-reasons:
 
-1. spi_dev_put() can be called before spi_add_device() is called. And
-   it's spi_add_device() that calls spi_setup(). This will cause clean()
-   to get called without the spi device ever being setup.
-
-2. There's no guarantee that the controller's driver would be present by
-   the time the spi device's release function gets called.
-
-3. It also causes "sleeping in atomic context" stack dump[1] when device
-   link deletion code does a put_device() on the spi device.
-
-Fix these issues by simply moving the cleanup from the device release
-callback to the actual spi_unregister_device() function.
-
-[1] - https://lore.kernel.org/lkml/CAHp75Vc=FCGcUyS0v6fnxme2YJ+qD+Y-hQDQLa2JhWNON9VmsQ@mail.gmail.com/
-Signed-off-by: Saravana Kannan <saravanak@google.com>
----
- drivers/spi/spi.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index b08efe88ccd6..7d0d89172a1d 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -47,10 +47,6 @@ static void spidev_release(struct device *dev)
- {
- 	struct spi_device	*spi = to_spi_device(dev);
- 
--	/* spi controllers may cleanup for released devices */
--	if (spi->controller->cleanup)
--		spi->controller->cleanup(spi);
--
- 	spi_controller_put(spi->controller);
- 	kfree(spi->driver_override);
- 	kfree(spi);
-@@ -558,6 +554,12 @@ static int spi_dev_check(struct device *dev, void *data)
- 	return 0;
- }
- 
-+static void spi_cleanup(struct spi_device *spi)
-+{
-+	if (spi->controller->cleanup)
-+		spi->controller->cleanup(spi);
-+}
-+
- /**
-  * spi_add_device - Add spi_device allocated with spi_alloc_device
-  * @spi: spi_device to register
-@@ -622,11 +624,13 @@ int spi_add_device(struct spi_device *spi)
- 
- 	/* Device may be bound to an active driver when this returns */
- 	status = device_add(&spi->dev);
--	if (status < 0)
-+	if (status < 0) {
- 		dev_err(dev, "can't add %s, status %d\n",
- 				dev_name(&spi->dev), status);
--	else
-+		spi_cleanup(spi);
-+	} else {
- 		dev_dbg(dev, "registered child %s\n", dev_name(&spi->dev));
-+	}
- 
- done:
- 	mutex_unlock(&spi_add_lock);
-@@ -713,6 +717,8 @@ void spi_unregister_device(struct spi_device *spi)
- 	if (!spi)
- 		return;
- 
-+	spi_cleanup(spi);
-+
- 	if (spi->dev.of_node) {
- 		of_node_clear_flag(spi->dev.of_node, OF_POPULATED);
- 		of_node_put(spi->dev.of_node);
--- 
-2.31.1.498.g6c1eba8ee3d-goog
+SGkgTWFyaywNCg0KVGhhbmtzIGZvciB5b3VyIHJlcGx5Lg0KDQoiTWFyayBCcm93biIgPGJyb29u
+aWVAa2VybmVsLm9yZz4gd3JvdGUgb24gMjAyMS8wNC8yNyCkV6TIIDEyOjUzOjU4Og0KDQo+ICJN
+YXJrIEJyb3duIiA8YnJvb25pZUBrZXJuZWwub3JnPiANCj4gMjAyMS8wNC8yNyCkV6TIIDEyOjU0
+DQo+IA0KPiBUbw0KPiANCj4gIlpoZW5neHVuIExpIiA8emhlbmd4dW5saUBteGljLmNvbS50dz4s
+IA0KPiANCj4gY2MNCj4gDQo+IGxpbnV4LW10ZEBsaXN0cy5pbmZyYWRlYWQub3JnLCBsaW51eC1z
+cGlAdmdlci5rZXJuZWwub3JnLCANCj4gdHVkb3IuYW1iYXJ1c0BtaWNyb2NoaXAuY29tLCBtaXF1
+ZWwucmF5bmFsQGJvb3RsaW4uY29tLCANCmphaW1lbGlhb0BteGljLmNvbS50dw0KPiANCj4gU3Vi
+amVjdA0KPiANCj4gUmU6IFtQQVRDSCB2MyAzLzNdIHNwaTogbXhpYzogcGF0Y2ggZm9yIG9jdGFs
+IERUUiBtb2RlIHN1cHBvcnQNCj4gDQo+IE9uIFR1ZSwgQXByIDIwLCAyMDIxIGF0IDAyOjI5OjM5
+UE0gKzA4MDAsIFpoZW5neHVuIExpIHdyb3RlOg0KPiANCj4gPiAtICAgcmV0dXJuIHNwaV9tZW1f
+ZGVmYXVsdF9zdXBwb3J0c19vcChtZW0sIG9wKTsNCj4gPiArICAgYWxsX2ZhbHNlID0gIW9wLT5j
+bWQuZHRyICYmICFvcC0+YWRkci5kdHIgJiYgIW9wLT5kdW1teS5kdHIgJiYNCj4gPiArICAgICAg
+ICAgICFvcC0+ZGF0YS5kdHI7DQo+ID4gKw0KPiA+ICsgICBpZiAoYWxsX2ZhbHNlKQ0KPiANCj4g
+VGhpcyBmZWVscyBsaWtlIHdlIG1pZ2h0IHdhbnQgYSBzcGlfbWVtX29wX2lzX2R0cigpIGhlbHBl
+cj8gIEkgY2FuIHNlZQ0KPiBvdGhlciBjb250cm9sbGVycyB3YW50aW5nIGEgc2ltaWxhciBjaGVj
+ay4NCg0KWWVzLCBzaW5jZSBzcGlfbWVtX2RlZmF1bHRfc3VwcG9ydHNfb3AgZG9lcyBub3Qgc3Vw
+cG9ydCBhbnkgZHRyIA0Kb3BlcmF0aW9ucywNCndlIG5lZWQgc3BpX21lbV9vcF9pcyBkdHIoKSB0
+byBoZWxwIHVzIGNoZWNrIGR0ciBvcGVyYXRpb25zLg0KDQpUaGFua3MsDQpaaGVuZ3h1biBMaQ0K
+DQoNCkNPTkZJREVOVElBTElUWSBOT1RFOg0KDQpUaGlzIGUtbWFpbCBhbmQgYW55IGF0dGFjaG1l
+bnRzIG1heSBjb250YWluIGNvbmZpZGVudGlhbCBpbmZvcm1hdGlvbiANCmFuZC9vciBwZXJzb25h
+bCBkYXRhLCB3aGljaCBpcyBwcm90ZWN0ZWQgYnkgYXBwbGljYWJsZSBsYXdzLiBQbGVhc2UgYmUg
+DQpyZW1pbmRlZCB0aGF0IGR1cGxpY2F0aW9uLCBkaXNjbG9zdXJlLCBkaXN0cmlidXRpb24sIG9y
+IHVzZSBvZiB0aGlzIGUtbWFpbCANCihhbmQvb3IgaXRzIGF0dGFjaG1lbnRzKSBvciBhbnkgcGFy
+dCB0aGVyZW9mIGlzIHByb2hpYml0ZWQuIElmIHlvdSByZWNlaXZlIA0KdGhpcyBlLW1haWwgaW4g
+ZXJyb3IsIHBsZWFzZSBub3RpZnkgdXMgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSB0aGlzIG1haWwg
+YXMgDQp3ZWxsIGFzIGl0cyBhdHRhY2htZW50KHMpIGZyb20geW91ciBzeXN0ZW0uIEluIGFkZGl0
+aW9uLCBwbGVhc2UgYmUgDQppbmZvcm1lZCB0aGF0IGNvbGxlY3Rpb24sIHByb2Nlc3NpbmcsIGFu
+ZC9vciB1c2Ugb2YgcGVyc29uYWwgZGF0YSBpcyANCnByb2hpYml0ZWQgdW5sZXNzIGV4cHJlc3Ns
+eSBwZXJtaXR0ZWQgYnkgcGVyc29uYWwgZGF0YSBwcm90ZWN0aW9uIGxhd3MuIA0KVGhhbmsgeW91
+IGZvciB5b3VyIGF0dGVudGlvbiBhbmQgY29vcGVyYXRpb24uDQoNCk1hY3Jvbml4IEludGVybmF0
+aW9uYWwgQ28uLCBMdGQuDQoNCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KDQoNCg0KPT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PQ0KDQpDT05GSURFTlRJQUxJVFkgTk9URToNCg0KVGhpcyBlLW1haWwgYW5kIGFueSBhdHRhY2ht
+ZW50cyBtYXkgY29udGFpbiBjb25maWRlbnRpYWwgaW5mb3JtYXRpb24gYW5kL29yIHBlcnNvbmFs
+IGRhdGEsIHdoaWNoIGlzIHByb3RlY3RlZCBieSBhcHBsaWNhYmxlIGxhd3MuIFBsZWFzZSBiZSBy
+ZW1pbmRlZCB0aGF0IGR1cGxpY2F0aW9uLCBkaXNjbG9zdXJlLCBkaXN0cmlidXRpb24sIG9yIHVz
+ZSBvZiB0aGlzIGUtbWFpbCAoYW5kL29yIGl0cyBhdHRhY2htZW50cykgb3IgYW55IHBhcnQgdGhl
+cmVvZiBpcyBwcm9oaWJpdGVkLiBJZiB5b3UgcmVjZWl2ZSB0aGlzIGUtbWFpbCBpbiBlcnJvciwg
+cGxlYXNlIG5vdGlmeSB1cyBpbW1lZGlhdGVseSBhbmQgZGVsZXRlIHRoaXMgbWFpbCBhcyB3ZWxs
+IGFzIGl0cyBhdHRhY2htZW50KHMpIGZyb20geW91ciBzeXN0ZW0uIEluIGFkZGl0aW9uLCBwbGVh
+c2UgYmUgaW5mb3JtZWQgdGhhdCBjb2xsZWN0aW9uLCBwcm9jZXNzaW5nLCBhbmQvb3IgdXNlIG9m
+IHBlcnNvbmFsIGRhdGEgaXMgcHJvaGliaXRlZCB1bmxlc3MgZXhwcmVzc2x5IHBlcm1pdHRlZCBi
+eSBwZXJzb25hbCBkYXRhIHByb3RlY3Rpb24gbGF3cy4gVGhhbmsgeW91IGZvciB5b3VyIGF0dGVu
+dGlvbiBhbmQgY29vcGVyYXRpb24uDQoNCk1hY3Jvbml4IEludGVybmF0aW9uYWwgQ28uLCBMdGQu
+DQoNCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PQ0K
 
