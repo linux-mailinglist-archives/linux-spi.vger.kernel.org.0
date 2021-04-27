@@ -2,67 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F36BE36C7D9
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Apr 2021 16:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C9536C808
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Apr 2021 16:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236531AbhD0Ojg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Apr 2021 10:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236461AbhD0Ojg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Apr 2021 10:39:36 -0400
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1583C061574
-        for <linux-spi@vger.kernel.org>; Tue, 27 Apr 2021 07:38:52 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:91bb:828d:42f8:4e5f])
-        by michel.telenet-ops.be with bizsmtp
-        id xqek2400M2ZBlDX06qekl9; Tue, 27 Apr 2021 16:38:45 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1lbOrM-000t7I-A9; Tue, 27 Apr 2021 16:38:44 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1lbOrL-00GAse-Kz; Tue, 27 Apr 2021 16:38:43 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Mark Brown <broonie@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] spi: altera: Make SPI_ALTERA_CORE invisible
-Date:   Tue, 27 Apr 2021 16:38:42 +0200
-Message-Id: <f0cb8e66baba4506db6f42fca74dc51b76883507.1619534253.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        id S236584AbhD0OyK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 27 Apr 2021 10:54:10 -0400
+Received: from mga05.intel.com ([192.55.52.43]:65116 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236427AbhD0OyH (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 27 Apr 2021 10:54:07 -0400
+IronPort-SDR: +nELwunGr/DRWrp/3csDTqOxpflkVR7gsJIhBrUQxkktx/9R4kQNBAOaJF5YaY1d7ixtkmrV16
+ yDhIw/lG/imw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9967"; a="281855663"
+X-IronPort-AV: E=Sophos;i="5.82,254,1613462400"; 
+   d="scan'208";a="281855663"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 07:53:19 -0700
+IronPort-SDR: mDYm9swO0IuEFDarQ/vqe6eBdCFtg+yA2WeYwo8epkvNzMg6f5HVuDg4J34X3OQrNE0Uz52loI
+ SzLtBCPIyjhA==
+X-IronPort-AV: E=Sophos;i="5.82,254,1613462400"; 
+   d="scan'208";a="457673982"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 07:53:17 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1lbP5O-007f4P-1b; Tue, 27 Apr 2021 17:53:14 +0300
+Date:   Tue, 27 Apr 2021 17:53:14 +0300
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: Re: [PATCH v2 00/14] spi: pxa2xx: Set of cleanups
+Message-ID: <YIglWpz8lSidXmDd@smile.fi.intel.com>
+References: <20210423182441.50272-1-andriy.shevchenko@linux.intel.com>
+ <CAHp75VeiHsk15QoG3X-OV8V8jqzCNeKkif9V=cx4nvKVHaKbKA@mail.gmail.com>
+ <20210427143457.GI4605@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210427143457.GI4605@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The SPI_ALTERA_CORE config symbol controls compilation of the Altera SPI
-Controller core code.  It is already selected by all of its users, so
-there is no reason to make it visible, unless compile-testing.
+On Tue, Apr 27, 2021 at 03:34:57PM +0100, Mark Brown wrote:
+> On Tue, Apr 27, 2021 at 02:46:02PM +0300, Andy Shevchenko wrote:
+> 
+> > Mark, are you accepting patches for v5.14 now, or should I resend
+> > after v5.13-rc1 is out?
+> 
+> > (I have few more in my queue :-)
+> 
+> Send them now if you like.
 
-Fixes: b0c3d9354de1f87e ("spi: altera: separate core code from platform code")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/spi/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Got it!
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 7f03d1e50361ea94..17a55214e66ad928 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -65,7 +65,7 @@ config SPI_ALTERA
- 	  This is the driver for the Altera SPI Controller.
- 
- config SPI_ALTERA_CORE
--	tristate "Altera SPI Controller core code"
-+	tristate "Altera SPI Controller core code" if COMPILE_TEST
- 	select REGMAP
- 	help
- 	  "The core code for the Altera SPI Controller"
+I think I prefer to produce a less noise in case this series for some reason
+needs to be changed / amended. I'll wait till this series lands in your queue.
+
+P.S. basically my question was about this series.
+
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
