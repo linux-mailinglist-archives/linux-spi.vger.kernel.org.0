@@ -2,84 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FDFB36C572
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Apr 2021 13:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D45AA36C57D
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Apr 2021 13:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235192AbhD0LnT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Apr 2021 07:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46000 "EHLO
+        id S235099AbhD0LrC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 27 Apr 2021 07:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbhD0LnT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Apr 2021 07:43:19 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E214C061574;
-        Tue, 27 Apr 2021 04:42:36 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id m11so747569pfc.11;
-        Tue, 27 Apr 2021 04:42:36 -0700 (PDT)
+        with ESMTP id S230365AbhD0LrB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Apr 2021 07:47:01 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1682C061574;
+        Tue, 27 Apr 2021 04:46:18 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id e15so4386989pfv.10;
+        Tue, 27 Apr 2021 04:46:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Wpk0SlupheQG7tbcO3ObJ3Bj5cU326C9p8KvsS434dI=;
-        b=kl9gXoRV3PyjeOmmdEfnAXKMGSi2g+d66eMeoMGPZlouQKiQUfxwZ7br1TxePCh6iL
-         rfLMbWK3uG0/5fDD4aNjWi9MVMwXTGKh5AMWUJVHLskQZQ88igM+UFORqX7z2GPooL2B
-         Zv8G9DT4xl33tofF/+bNSMJHG33lf5sRpUTi8OHJm89vaSaNTmT+OSZpqg+545wq62ZK
-         CCNhOuBaZT1+sH7nzY+hN4K36zaFopAoQpfMt3wApw+IanU9EX2lcMtsU5ZoAO8srFPP
-         w4P409G9KN5stmo3mD3nigfc3BlSJ6zjMF6REIkyQkyZnsReGw4XRMuCBs2nxxECyLgL
-         8zuA==
+        bh=iMMjjV+PTIV4vm6/IEmRAWhSVzJiCXiZU3/huO/x0nI=;
+        b=ZJ5BlTICDUmG7DguAEd0jOWxjwIIhOaHp4R6eP8WhcGhNHC51J05uSg8I6KYz03BN7
+         Gjdaf+CiMhQyG6HVJLl+RLDlLuxIyFICDTrM2iBH78c57SiT4P/QFvk4NhlTMWy0zsrz
+         YZCmbyMFpX9+/2dUK3valgqZBYVthS6aZBo9554CiRGCJ93prSUyJSVjSbJq3pg/Kts7
+         ZwIvwzkOgnEHhx+38D5EslxeSIcZNyFn/4If/iTP/5JwzQ6HQxGV1NL7yO9utIdh9fwP
+         OIRyaTMRRni21LQU12CZ8qc3FLxRIDbNEbCf7SRpr2TRSPXm7b1fmptX1R4tYhEdtzTm
+         Rkzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Wpk0SlupheQG7tbcO3ObJ3Bj5cU326C9p8KvsS434dI=;
-        b=CuywpTrdj5JsEnLs3OttPMs1gxufK7G82AbnECI+PiYkvW1IcovTesXNXVADFlA776
-         ZkXRrhCPZcz+AHSQ1olccTtH7gwL5uzgtROgNWHrEbDdbmuO02mqL67LPWvL/ti3xQ+i
-         qJuEUZXrVFAFAVlj0WaKhAj39uPMQStEyRg222G9MH3QpF40GsWCc20/wh0nZ85Ap0w/
-         vaOko3oR9O3eQmEDWKQGu3gIQs5F744XJoIhsjYIY7KSmNiko5tiTv3SVRK8gIn5lRtV
-         6Kddq4624o9r67GZT9IuaAX1G2vRIuQuNT9RawY+vQeAmk83A4TzaLtZORwZJygGDnD7
-         m++w==
-X-Gm-Message-State: AOAM532xMlGrvcXrviP2tBAGfY2iELMZrJyKxBwF5sUCoGMfXx2WBuhm
-        BohZo7uN0qm2mMvsu273F5cg+voHOfIrUIOaVH4=
-X-Google-Smtp-Source: ABdhPJzUlO+owwhKnnkcWN+K5NzW6e5+uAtFlm6ppXR6oTfeXGvMcdFh/l3dmjGXKjl1qf6m4dcKmbgHSLqBzkB6vu8=
-X-Received: by 2002:a63:a847:: with SMTP id i7mr21138054pgp.203.1619523755454;
- Tue, 27 Apr 2021 04:42:35 -0700 (PDT)
+        bh=iMMjjV+PTIV4vm6/IEmRAWhSVzJiCXiZU3/huO/x0nI=;
+        b=t48Bke7wBSXBXf059TFLxzyN2cGWPLsyv+6zzXWze3bQcDXSbsXmp4ZiojOvdRG+Is
+         2xFaQkU2ZdW1hxGhKGJ+xLD5Q+Ml7vAzmRqCdivOqAdHi8nngfydDG451Vxqk9yjEkWB
+         D8fOprzZIskJa2VPxdDnBnGyS9Q1p7bqN3zZ9wkM6tMoQ2Pq72W2QEuq4cGjxuL2tyqb
+         EqlhSRHcATFckB25ZkII565MU9uCAT05hTNcGxVgn8k9yKVHz19o+5Xh6gA73EJ8XKb1
+         PQY+CKWbm8uPnBXANLudPfrUB+sYDQpyqVLSjWopT8Pf7VIUXfmpYlYaMpk933YMQiyH
+         crUw==
+X-Gm-Message-State: AOAM531MzrHEVSyWnqz5kJuZpM2gJlSAYk9pdcbfQhZ6aUy1n6EZ5vih
+        /CP89cjwbu5Xrdd+wJdOsZpf4v3MXBORunGPSdQ=
+X-Google-Smtp-Source: ABdhPJyGaaSUm4K/1Z1ekcXcdw6ghOy8irdARQN0sjPb9GGewDmareqf3Qe4B4ZpG2WE8B1kUCUoVXdCRvOb+eKZlf4=
+X-Received: by 2002:a62:e50f:0:b029:214:8e4a:ae46 with SMTP id
+ n15-20020a62e50f0000b02902148e4aae46mr22977757pff.73.1619523978223; Tue, 27
+ Apr 2021 04:46:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210426235638.1285530-1-saravanak@google.com>
- <CAHp75VeNZ4-TgkevNF5tgmB1eU9E77RNsPWRABp6PvC6eGpQrQ@mail.gmail.com> <20210427104851.GC4605@sirena.org.uk>
-In-Reply-To: <20210427104851.GC4605@sirena.org.uk>
+References: <20210423182441.50272-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20210423182441.50272-1-andriy.shevchenko@linux.intel.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 27 Apr 2021 14:42:19 +0300
-Message-ID: <CAHp75VdpC687cHezCy5nP6BRYo-dS8COYvBBvu02f6W_dS6JEg@mail.gmail.com>
-Subject: Re: [PATCH] spi: Fix spi device unregister flow
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Android Kernel Team <kernel-team@android.com>,
+Date:   Tue, 27 Apr 2021 14:46:02 +0300
+Message-ID: <CAHp75VeiHsk15QoG3X-OV8V8jqzCNeKkif9V=cx4nvKVHaKbKA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/14] spi: pxa2xx: Set of cleanups
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
         linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Apr 27, 2021 at 1:49 PM Mark Brown <broonie@kernel.org> wrote:
+On Fri, Apr 23, 2021 at 9:25 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> On Tue, Apr 27, 2021 at 09:52:48AM +0300, Andy Shevchenko wrote:
-> > +Cc Lukas
+> Set of cleanups here and there related to the SPI PXA2xx driver.
+> On top of them, adding the special type for Intel Merrifield.
+
+Mark, are you accepting patches for v5.14 now, or should I resend
+after v5.13-rc1 is out?
+
+(I have few more in my queue :-)
+
+> In v2:
+> - cover letter (Mark)
+> - drop moving the header in patch 5 (Mark)
 >
-> The cleanup callback has been in release() since the framework was
-> merged AFAICT.
+> Andy Shevchenko (14):
+>   spi: pxa2xx: Use one point of return when ->probe() fails
+>   spi: pxa2xx: Utilize MMIO and physical base from struct ssp_device
+>   spi: pxa2xx: Utilize struct device from struct ssp_device
+>   spi: pxa2xx: Replace header inclusions by forward declarations
+>   spi: pxa2xx: Unify ifdeffery used in the headers
+>   spi: pxa2xx: Group Intel Quark specific definitions
+>   spi: pxa2xx: Introduce int_stop_and_reset() helper
+>   spi: pxa2xx: Reuse int_error_stop() in pxa2xx_spi_slave_abort()
+>   spi: pxa2xx: Use pxa_ssp_enable()/pxa_ssp_disable() in the driver
+>   spi: pxa2xx: Extract pxa2xx_spi_update() helper
+>   spi: pxa2xx: Extract clear_SSCR1_bits() helper
+>   spi: pxa2xx: Extract read_SSSR_bits() helper
+>   spi: pxa2xx: Constify struct driver_data parameter
+>   spi: pxa2xx: Introduce special type for Merrifield SPIs
+>
+>  drivers/spi/spi-pxa2xx-dma.c   |  37 +++----
+>  drivers/spi/spi-pxa2xx-pci.c   |   4 +-
+>  drivers/spi/spi-pxa2xx.c       | 190 +++++++++++++++++----------------
+>  drivers/spi/spi-pxa2xx.h       |  52 ++++-----
+>  include/linux/pxa2xx_ssp.h     |  42 +++++++-
+>  include/linux/spi/pxa2xx_spi.h |   9 +-
+>  sound/soc/pxa/pxa-ssp.c        |  16 ---
+>  7 files changed, 185 insertions(+), 165 deletions(-)
+>
+> --
+> 2.30.2
+>
 
-Yep.
-
-Personally it feels to me wrong to require device_release() being
-atomic. It might be that I missed something in documentation or
-somewhere else that suggests the opposite.
-But let's wait for other comments if any.
 
 -- 
 With Best Regards,
