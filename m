@@ -2,48 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B7D36C45A
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Apr 2021 12:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E38436C4AD
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Apr 2021 13:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235133AbhD0KuG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Apr 2021 06:50:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40838 "EHLO mail.kernel.org"
+        id S235635AbhD0LNt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 27 Apr 2021 07:13:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60738 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230365AbhD0KuG (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 27 Apr 2021 06:50:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 800A3611BE;
-        Tue, 27 Apr 2021 10:49:22 +0000 (UTC)
+        id S230270AbhD0LNs (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 27 Apr 2021 07:13:48 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D011F613E2;
+        Tue, 27 Apr 2021 11:13:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619520563;
-        bh=IynpH/1tZ1nW6uCOBCWBcA5G5XhdF8ILsL5RRo+T+rA=;
+        s=k20201202; t=1619521985;
+        bh=kp054zVcx7NkBNagP5MDckKe6a4zIhkTdKkBdOoYciE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kCZkWgNR7EUi6Vrj/X8aDl3mt046jiqPhrVvAxguXOa9QB+z/JAo/Y24oKGLaxKVB
-         SIiRW3cvOOHeoOIDledUTYnby6pd/0mw/fnp8cripxbX/yczVYeJMabawfS3+gNXc9
-         lpfxnCErRzhhe2DHMGbZ0qE6RHgTyInBmU0HVqg7zuAmuKtQOIZ8maul8RMgLfFk0G
-         1Z+fKR/k7z1WSA/yWx4NWbwM+CybubU4LUTHr2S+yqeuWZLKA3+wH7M3CB5bkqv9MZ
-         l9hdBQvMU2K/UfWzZ+n+H0Qo/UfigG3tmS5rFWsBHk+i87HnbNdkhjUpmD3A/yt1pO
-         SwQzKqop4hmVA==
-Date:   Tue, 27 Apr 2021 11:48:51 +0100
+        b=hQCAmOe8ncoo+RW6WRY3kGrKZ1k4g2J3rZcwZ9YeqPAVF+JKNjcEkcgZnx7vkun75
+         aMN4aeDec+uaaGpDqAjvxkD82lEmf/9Cc+MwwCLhidwyAp31eEvNjxwI5XahTGCmhm
+         NjVwmmdMOxRD/iVJws9Kh+JbaiXdo5nMD2lv4yZBruHnQPNIJuGB1hRsI/0a1TR010
+         fUw8jZefvS08Usy9y/BBR7ipXEpBV3bwXn4ByUtQg5gRJbub3jEtiqM/SsoTwCH7PC
+         7OrsE5k/FW8EBXtPVS2bTfLgPw69mySEtxjnWnOkX7bh47g8Yqk2bUZyeWd20C9IN2
+         gJCjIR5NJtKqw==
+Date:   Tue, 27 Apr 2021 12:12:33 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Android Kernel Team <kernel-team@android.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] spi: Fix spi device unregister flow
-Message-ID: <20210427104851.GC4605@sirena.org.uk>
-References: <20210426235638.1285530-1-saravanak@google.com>
- <CAHp75VeNZ4-TgkevNF5tgmB1eU9E77RNsPWRABp6PvC6eGpQrQ@mail.gmail.com>
+To:     Clark Wang <xiaoning.wang@nxp.com>
+Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: Re: [PATCH] spi: imx: add a check for speed_hz before
+ calculating the clock
+Message-ID: <20210427111233.GD4605@sirena.org.uk>
+References: <AM6PR04MB56233BE0FFF7E5D80527B54CF3419@AM6PR04MB5623.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eHhjakXzOLJAF9wJ"
+        protocol="application/pgp-signature"; boundary="+KJYzRxRHjYqLGl5"
 Content-Disposition: inline
-In-Reply-To: <CAHp75VeNZ4-TgkevNF5tgmB1eU9E77RNsPWRABp6PvC6eGpQrQ@mail.gmail.com>
+In-Reply-To: <AM6PR04MB56233BE0FFF7E5D80527B54CF3419@AM6PR04MB5623.eurprd04.prod.outlook.com>
 X-Cookie: Don't feed the bats tonight.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
@@ -51,29 +51,54 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---eHhjakXzOLJAF9wJ
+--+KJYzRxRHjYqLGl5
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 27, 2021 at 09:52:48AM +0300, Andy Shevchenko wrote:
-> +Cc Lukas
+On Tue, Apr 27, 2021 at 08:33:06AM +0000, Clark Wang wrote:
 
-The cleanup callback has been in release() since the framework was
-merged AFAICT.
+> However, I notice that you have applied this patch to the next branch?
+> Will you revert this patch?
 
---eHhjakXzOLJAF9wJ
+Well, it's redundant but not harmful.
+
+> I think you may want to apply this patch I sent before.
+>=20
+> Author: Clark Wang <xiaoning.wang@nxp.com>
+> Date:   Mon Dec 14 17:05:04 2020 +0800
+>=20
+>     spi: imx: add 16/32 bits per word support for slave mode
+>    =20
+>     Enable 16/32 bits per word support for spi-imx slave mode.
+>     It only support 8 bits per word in slave mode before.
+
+Please don't send content free pings and please allow a reasonable time
+for review.  People get busy, go on holiday, attend conferences and so=20
+on so unless there is some reason for urgency (like critical bug fixes)
+please allow at least a couple of weeks for review.  If there have been
+review comments then people may be waiting for those to be addressed.
+
+Sending content free pings adds to the mail volume (if they are seen at
+all) which is often the problem and since they can't be reviewed
+directly if something has gone wrong you'll have to resend the patches
+anyway, so sending again is generally a better approach though there are
+some other maintainers who like them - if in doubt look at how patches
+for the subsystem are normally handled.
+
+--+KJYzRxRHjYqLGl5
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCH7BMACgkQJNaLcl1U
-h9CF8wf7BURoXLMYVywhkygz0iKZ9Xze/7xlPD0oYbX4+PrmOs4si7yFfJ2qhhvk
-Z8D6ueLlYp3+YvoNglU5Y5laqgr8qCkzU2XlhomcMRVwy6iTjq63SF5CXgMH+xYE
-l6h49/4g3gPb6kXVPAPPJJ51yKmtYhpCZUXQ75CoxQs1mumadPlXfgNhU/bmNRsI
-CAMq4KkqiB9wF23QyrUngcscq2k5bcizXLDqw8j6b5ctjCMaHwJydqTpxyIIZ//9
-kAayA7U/MmSKYwsoMmAyqFwpy2ikNlRkIDUH5Dhq1+dCBh67sgjCqSUC/8jIOr7q
-LIN+kgWRo6dmPhk2WoDF7dwW+n2Zfg==
-=LOiQ
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCH8aAACgkQJNaLcl1U
+h9DH8Af9E4sVktmInWgPheZd4RZloM2pfJ2Zzgcn7TY9IytpznxzCbbXcZx0VFgi
+ixHVQzjH9FIrhindvTxRL2wuT7ZouOSMkHzd3zmCbOhvrrMkNtPzcEBncJdNU83e
+JtrY2lGj/OeCkwkGOh7kGWDWKByplQBznh6vO1oWcRC4r45q9z3dnFtWaCLqiy6r
+gxeCbhVYb+xTWCjvsSM4ps+dCu5gqoJVusI43CxTRKoN5Hwgx91seg/ixxLZGE0r
+dlulVUBJBfrRxsn6OyvPq4aJUWgyH1G2MmJMFhS/HmwoQY43pSzR35+HDN4SHSEE
+SjdxL3uCokOuz8UPseMbF8kfStQxwA==
+=9qYK
 -----END PGP SIGNATURE-----
 
---eHhjakXzOLJAF9wJ--
+--+KJYzRxRHjYqLGl5--
