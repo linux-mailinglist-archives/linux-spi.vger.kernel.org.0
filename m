@@ -2,37 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D29E836EEAE
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Apr 2021 19:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3DAC36EEAF
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Apr 2021 19:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233622AbhD2RRK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 29 Apr 2021 13:17:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42588 "EHLO mail.kernel.org"
+        id S233302AbhD2RRL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 29 Apr 2021 13:17:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42620 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233302AbhD2RRJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 29 Apr 2021 13:17:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CF8EA61447;
-        Thu, 29 Apr 2021 17:16:20 +0000 (UTC)
+        id S240894AbhD2RRL (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 29 Apr 2021 13:17:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C939461453;
+        Thu, 29 Apr 2021 17:16:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619716581;
-        bh=3ORfGYj/153sJmdrDzrnGnyPcEjT30k1byRVwSVWPHY=;
+        s=k20201202; t=1619716584;
+        bh=Bs2DkvTjvBhYZrCWK9wUuP3xTjP49b6oGWKDrTsofZY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ef0cN8Oq1Hq1J5Gqbmv0wQWX4Xua3tAgu1s4cnCmN9huXHvccSyR33NQODEjaYBh4
-         A/UKA1APOOQO1jV6IjqFwGBoLko9Y263TfFjcwwMPNnMahjNYg5SpDl0cWNPKbIG9C
-         TvQlQsBByCjRsDXWSrqeBjpVALit6e354pU27rOSihVTCo0akE64cZbb73BFcKzFCv
-         x3DSn2utg2WA8hvw3t7ZU3ml7uki8gc1ZhRjq4HjuN3ZlufmneXWQDsRRxPCuIFhyp
-         OZKUi+Pfz9Zhm290mRsrJaPWqth69S4NM6duOaCi0dwuhJ180G3M0jGs3zwSVLtiYd
-         7f4HQuDAa10YA==
+        b=QiYRwEZcvzd9yjZyGyOFHYtyv34FaaejXuZoK6roYnvJLPMXzbXL8XWHmium0A3Cv
+         azHzmg+fCzc9oh7hEusXV0foeFK+CkPGoefMA7kxU1b+IIAWFcs11Dy2yrisGDvFf3
+         kiJbbfNFwUs8WqC3jUu5q14aVW4Zb6e/63S2JXtt3P7hCFx95ZzgbfSQzlRTFGwJBC
+         dYykW+GnqTkpqIQ1WU2tw5os8K0ntkJBzi/l5qZ7o/HUxYCHEtHbs37YkexuyxADJI
+         8r5fyLzrK7gSJ06fbwrMK924seXYa7SYF4qMRmuHU3lHlhUOxFLL6xlfBBqx2Saszf
+         8ewIfdVM8SrBg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-Cc:     Mark Brown <broonie@kernel.org>, git@xilinx.com,
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, git@xilinx.com,
         linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND 0/2]spi: spi-zynq-qspi: Fix stack violation bug
-Date:   Thu, 29 Apr 2021 18:15:48 +0100
-Message-Id: <161970928184.41765.9202209200886629719.b4-ty@kernel.org>
+Subject: Re: [PATCH 0/2]spi: spi-zynq-qspi: Fix stack violation bug
+Date:   Thu, 29 Apr 2021 18:15:49 +0100
+Message-Id: <161970928183.41765.11956133765398420405.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210429053802.17650-1-amit.kumar-mahapatra@xilinx.com>
-References: <20210429053802.17650-1-amit.kumar-mahapatra@xilinx.com>
+In-Reply-To: <20210318102446.25142-1-amit.kumar-mahapatra@xilinx.com>
+References: <20210318102446.25142-1-amit.kumar-mahapatra@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -40,9 +41,9 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 28 Apr 2021 23:38:00 -0600, Amit Kumar Mahapatra wrote:
+On Thu, 18 Mar 2021 04:24:44 -0600, Amit Kumar Mahapatra wrote:
 > This patch series fixes kernel-doc warnings and stack violation
-> issues in Zynq qspi driver.
+> issues in Zynq qspi driver file
 
 Applied to
 
