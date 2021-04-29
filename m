@@ -2,49 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5160D36E4A6
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Apr 2021 07:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E5436E979
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Apr 2021 13:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbhD2F5f (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 29 Apr 2021 01:57:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48856 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229814AbhD2F5f (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 29 Apr 2021 01:57:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 898ED600D4;
-        Thu, 29 Apr 2021 05:56:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619675807;
-        bh=4BbeCVuF5CZFoe8IXWCc+ccyOQkd4Oe0kPObn/eh30A=;
-        h=Subject:From:Date:To:From;
-        b=p7AaIBA5lcDdoQeFp7KNptt77/bR2mcJPpcbNppeAJoDufDI/7FrbrMZZO7kQx48D
-         c/rOvyzecQr1/bmzBc7ebidW2l8JG+w+suNTbbMqiia58853McUcE1h7a/hYxDv8ZD
-         vnvgpVNirrAm3BDBisf0CHHS7RhThLS6Lk/qT6n/q6ale6Jj5AE0zlMSX1xIHvaoJC
-         tJZo3WI0Z5s7fJOCpt1YZRk78C4EoOWlEOR+i4jVlKpyuIqzzSQrsEmTfQSJg5yThv
-         q20UMklVVEM8KJ+8Cr7uvu5lH08cCxMnScYsBEbi0s0rtbJ6PkU4NhWqlq2BrmtUuD
-         QGUl7S+Iz+c0w==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 7110D60A36;
-        Thu, 29 Apr 2021 05:56:47 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S230193AbhD2LVe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 29 Apr 2021 07:21:34 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:17407 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230148AbhD2LVe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 29 Apr 2021 07:21:34 -0400
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FWCg72vqDzjcT7;
+        Thu, 29 Apr 2021 19:18:43 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
+ 14.3.498.0; Thu, 29 Apr 2021 19:20:37 +0800
+From:   Tian Tao <tiantao6@hisilicon.com>
+To:     <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, Tian Tao <tiantao6@hisilicon.com>
+Subject: [PATCH] spi: omap-100k: Fix the length judgment problem
+Date:   Thu, 29 Apr 2021 19:20:48 +0800
+Message-ID: <1619695248-39045-1-git-send-email-tiantao6@hisilicon.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <161967580739.31603.11974305687650664289.git-patchwork-housekeeping@kernel.org>
-Date:   Thu, 29 Apr 2021 05:56:47 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v1] spi: spi-zynq-qspi: Fix stack violation bug (2021-04-29T05:38:01)
-  Superseding: [v1] spi: spi-zynq-qspi: Fix stack violation bug (2021-03-18T10:24:44):
-    [1/2] spi: spi-zynq-qspi: Fix kernel-doc warning
-    [2/2] spi: spi-zynq-qspi: Fix stack violation bug
+word_len should be checked in the omap1_spi100k_setup_transfer
+function to see if it exceeds 32.
 
+Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
+---
+ drivers/spi/spi-omap-100k.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/spi/spi-omap-100k.c b/drivers/spi/spi-omap-100k.c
+index 7062f29..f104470 100644
+--- a/drivers/spi/spi-omap-100k.c
++++ b/drivers/spi/spi-omap-100k.c
+@@ -241,7 +241,7 @@ static int omap1_spi100k_setup_transfer(struct spi_device *spi,
+ 	else
+ 		word_len = spi->bits_per_word;
+ 
+-	if (spi->bits_per_word > 32)
++	if (word_len > 32)
+ 		return -EINVAL;
+ 	cs->word_len = word_len;
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.7.4
 
