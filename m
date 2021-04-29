@@ -2,23 +2,23 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7BD236E486
-	for <lists+linux-spi@lfdr.de>; Thu, 29 Apr 2021 07:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9DFF36E488
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Apr 2021 07:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbhD2FjL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 29 Apr 2021 01:39:11 -0400
-Received: from mail-dm6nam10on2087.outbound.protection.outlook.com ([40.107.93.87]:33537
+        id S238381AbhD2FjN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 29 Apr 2021 01:39:13 -0400
+Received: from mail-dm6nam10on2061.outbound.protection.outlook.com ([40.107.93.61]:55584
         "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229814AbhD2FjJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 29 Apr 2021 01:39:09 -0400
+        id S230103AbhD2FjL (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 29 Apr 2021 01:39:11 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XSSqtdSGytUgQwEVYkeMxIsNKL5Yg7C+WT1uwXQwDS7i89niuzEQ+nKR5QJXAkZ7HUbPPsALakihlnrk9bW+FAMTeqmVR74F68hm+qEI8pAlEiDywwzLQ2dhT4YKcTLuWZsS68UhEzuEEafh2wtxueM2+sxqnlx3xg2ae/BqqGvje3fAQjZ/zbotsSgJUuub0W666w97M+1fvoQmnQcSCW4LMebPhlWGYP6DnGj/eGe0NgnWWnuSI0jVcY+91/3BJDxNGggB3D13oMcWnAS4rs61RB3C7gMahHepPMqz8VxkYlwweaLSqmEXYZxtRDgNgyL3QINTD6TvWgI42zp4CA==
+ b=fz7akkpGfFC5PFjIrNv76XCYx+hXHR0i6jwLwSUidwOQtJ4sHfR1fxNC+3ElVCzHjLeuZL3yIWWDuPzwxCLlWXpX+ahVJbfIG8248dxCSDZmd8h2N3An3QNE0w3rI5aqh144K+xq1EM02gN4ymHNZuW1O6ebOjxiifdIi2aQXZCbKcTmZi7ordM25oa8WS2VgXgEL/CkrnDO6HXXycGrDcGJ3AtBuLqpFvaAEnOl6qJK4gTCFDCtAmi6e4N8OZS6VkytXMrZ7A2b1Ve2h3Vsw4TH69t77S7tdOXOAC9CkVyKJ335qeuPZLv55m+VOaD0oFeEupd8Zh+gkqn5LElDcA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8MIM6D1SCI/4FlJygVdpmHaYdzWwNqAkOiswEPfEX94=;
- b=enLv3VJ+LyvUg8KpDH2GK9zLi1s6aVmJ9973OavsQB6rBEiEZx0q3wuUTDTZKxL26W9gnZ5ZGicckm08nu1bt44RllzSE2lAKszE5bq4hmES69YYq7g1bQaIsYattu1hzx4RSGF9pomGSrEWxoKMK3F8PuIEScPGbjUHVnjZQI9JtHDJ6fYZofBCc1oIlCT/IigyO+VarHajtOsI8PbKrZL2SYxaKJozC6tOLCyWcLOAyWJHnRvNbboV6DWpieL1AaqWDtC9SZqxixWbMp3UkCvFgZl70AhjB6MYUowbdxHRMP/uwfs5vXZL9QoPgYu/WWWOTZJsuTIfOX7YShl/Yw==
+ bh=7e/HVwdePZqUHXhGpTXJkAEt6SddIo4Owlrd4CPEOec=;
+ b=QzegnVXWTYA/Y2F122VIMJb1+jXis5kc4IZka384PUuX2kfvzxLMOK2xhIMrlAnEtWo5YweABVae/AXrxSk0esRoMk8ZsfEdBfhx785tQBgBM3cJ+UJj3TQuEU75QBp7xqA/5MhhgsFK7yzP9QEsWjqUoji5OymfACLjgNr0wucClxK9Ra7zH6yOjjMLZX2QWZMXkrPpNORUP/W4kI5Z3j/G7m5BTVrFWcb5fGwqo855kKuakXN3g7NDOFAg3NKM/1SWvf74b2dZIFbrojkBjSP3aPxnz/i8WAXU3Qcuro++RJfmET06RsV0ZKHv5wRemLFIBiZR19DijdbQEAzxig==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
@@ -26,18 +26,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8MIM6D1SCI/4FlJygVdpmHaYdzWwNqAkOiswEPfEX94=;
- b=D5c3J2oZhTrI0TIuZc4lN8/tSf8UNZCmaGIzCanZYMXR0uRUG+4VUZNaXmD8fcxKwEJVo4SFRGFnuE21jUbEBK9JiWC5v7QGbcE0RuhBiNXzGLjQWfkOu5oZXVAgMs0YO+qz1UUCPZuC+7GYsAkzoEAlluQUm1r55l+cWLeoVd0=
-Received: from SN4PR0501CA0128.namprd05.prod.outlook.com
- (2603:10b6:803:42::45) by BL0PR02MB5394.namprd02.prod.outlook.com
- (2603:10b6:208:37::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.22; Thu, 29 Apr
- 2021 05:38:22 +0000
+ bh=7e/HVwdePZqUHXhGpTXJkAEt6SddIo4Owlrd4CPEOec=;
+ b=SdxHSO6O0l7I1FtpSoaVdqH3TVHXnEbi7Yi/DNYXKL5zQSiS/0RC+RxcJMbpKItB1DOYKvXMApJWYNOYGKH+ADl0LvETp96RfBm436peMJr0TJMRcdlw5vqTAJqkAPLXngr7Iv2oagvzs6qe8hcC0N9g+GkdrtIfPyP9xCUsXGM=
+Received: from SN4PR0501CA0108.namprd05.prod.outlook.com
+ (2603:10b6:803:42::25) by BN7PR02MB4098.namprd02.prod.outlook.com
+ (2603:10b6:406:fd::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.23; Thu, 29 Apr
+ 2021 05:38:23 +0000
 Received: from SN1NAM02FT061.eop-nam02.prod.protection.outlook.com
- (2603:10b6:803:42:cafe::3e) by SN4PR0501CA0128.outlook.office365.com
- (2603:10b6:803:42::45) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:803:42:cafe::e0) by SN4PR0501CA0108.outlook.office365.com
+ (2603:10b6:803:42::25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4108.8 via Frontend
- Transport; Thu, 29 Apr 2021 05:38:21 +0000
+ Transport; Thu, 29 Apr 2021 05:38:23 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
  smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
@@ -47,30 +47,32 @@ Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
 Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
  SN1NAM02FT061.mail.protection.outlook.com (10.152.72.196) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4065.21 via Frontend Transport; Thu, 29 Apr 2021 05:38:21 +0000
+ 15.20.4065.21 via Frontend Transport; Thu, 29 Apr 2021 05:38:23 +0000
 Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
  xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 28 Apr 2021 22:38:09 -0700
+ 15.1.2176.2; Wed, 28 Apr 2021 22:38:12 -0700
 Received: from smtp.xilinx.com (172.19.127.96) by
  xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Wed, 28 Apr 2021 22:38:09 -0700
+ 15.1.2176.2 via Frontend Transport; Wed, 28 Apr 2021 22:38:12 -0700
 Envelope-to: git@xilinx.com,
  broonie@kernel.org,
  linux-spi@vger.kernel.org,
- linux-kernel@vger.kernel.org
+ linux-kernel@vger.kernel.org,
+ karen.dombroski@marsbioimaging.com
 Received: from [10.140.6.25] (port=50950 helo=xhdnagasure40.xilinx.com)
         by smtp.xilinx.com with esmtp (Exim 4.90)
         (envelope-from <amit.kumar-mahapatra@xilinx.com>)
-        id 1lbzNI-0000R3-Is; Wed, 28 Apr 2021 22:38:09 -0700
+        id 1lbzNK-0000R3-NQ; Wed, 28 Apr 2021 22:38:11 -0700
 From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
 To:     <broonie@kernel.org>
 CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <git@xilinx.com>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-Subject: [RESEND 1/2] spi: spi-zynq-qspi: Fix kernel-doc warning
-Date:   Wed, 28 Apr 2021 23:38:01 -0600
-Message-ID: <20210429053802.17650-2-amit.kumar-mahapatra@xilinx.com>
+        Karen Dombroski <karen.dombroski@marsbioimaging.com>,
+        "Amit Kumar Mahapatra" <amit.kumar-mahapatra@xilinx.com>
+Subject: [RESEND 2/2] spi: spi-zynq-qspi: Fix stack violation bug
+Date:   Wed, 28 Apr 2021 23:38:02 -0600
+Message-ID: <20210429053802.17650-3-amit.kumar-mahapatra@xilinx.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210429053802.17650-1-amit.kumar-mahapatra@xilinx.com>
 References: <20210429053802.17650-1-amit.kumar-mahapatra@xilinx.com>
@@ -78,49 +80,69 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9e521ae7-08b8-46df-57de-08d90ad1004b
-X-MS-TrafficTypeDiagnostic: BL0PR02MB5394:
-X-Microsoft-Antispam-PRVS: <BL0PR02MB5394234D59BE400379351BFEBA5F9@BL0PR02MB5394.namprd02.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: a76e55c6-6598-43e6-d111-08d90ad1010b
+X-MS-TrafficTypeDiagnostic: BN7PR02MB4098:
+X-Microsoft-Antispam-PRVS: <BN7PR02MB4098708F1E6F25FDA13531E5BA5F9@BN7PR02MB4098.namprd02.prod.outlook.com>
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
+X-MS-Oob-TLC-OOBClassifiers: OLM:3968;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RS2w9mi8EefGpxi+EJfgaEOkjQnW4HVED0tIIzWPm4tZ8BJrQ39BI52JjyMLFt4cj5ygOE3KqZFnllpXJbmvGnXPlb+FGdToCmLfe8lfIgsqwEBGFytQf3NUqEWlpnqhjjIl5E6uBHNCqlemrGjaTNsxhkCLeXRcm++Cj0WIbszYOv8n9zChoEekfSrXZ5CawWZC0pZr2YScDTg+c0KoogmqJz+zu0yKuOVjAImLAew3BMP0NQy1yW7flFcQzAz9ivV1TIIrJTkaXIJAj022RqYJmOU9t5w+RWh3wA83kUN5XWvgDkeyLSNLeuK/7/J/t67fKOPM7kaqMmnnH91rgb+X9xMHCLCwTbFPL47rMF/k8p3btDrEiciQmzlsd+uXAkxtQ5RKjR05uUgJx+4162XD/mLjRBkSefDIoTJRzTo6XLYqhejwGsBLM6UZUJuww/JbEZUAGThVL3MjDs8nh/jaFxiP8ttE/8b5iswsPOqA4DD3xwgQFC4G/+4Cqob81pOP7t3I22bc1N89pYjyi8OVH5n/Vdyu66XRvzabzDuR9x5ZsqqUarXwo4+l1Laz/x4snzuuz+MBbqCByfSVgkHp+IgL10DObxeIwoVzUcINsJtSPkXCY+21Hv2LEICsA6S2r860zIDbho2g9HNx0ihdisPFBOcjvc14bsy1uhFsBMPh3gH5X6OovzbjoGI2
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(346002)(396003)(136003)(376002)(39860400002)(36840700001)(46966006)(5660300002)(82740400003)(36906005)(70586007)(70206006)(356005)(54906003)(316002)(2906002)(4744005)(36756003)(107886003)(6916009)(8676002)(7696005)(4326008)(82310400003)(9786002)(6666004)(8936002)(336012)(426003)(1076003)(7636003)(2616005)(26005)(36860700001)(186003)(47076005)(478600001)(83380400001)(102446001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: nBPEzR1KiTFxn0xDlwH8xgyBpk/HfKdYj4eN4frDTVBNZlqKjZRtijB6CzQn44uM3tctDVGK78AzYvt0XXc04DXqxX6CKlNtdaCStDr6m+AesCwn0DaGEuQ2n7nmMFJwnm4sT/MvcOS0qPGANtmjhOteL6YnLiEFP5Pm1xwCR8+j2aTojE+ogLqcRqsACToXxBVxGblospwov9XXdX1G+bE58BussJObTDeC9qpKLdWHMnUFQbcj5NuUPkRJvFktzz9Z+BKjFzX0SwOmzV2TkwA9Y9z2AdmyoQszKGT4YWo9wesSQZ8mduTeOcTPfqM+Pxq1UOzL+pYM3f99i1cne8ufypDr8HGz5AqCVl5xaqrLAm5cHudK7S7SwsgrQNMM0iS3TeapTj8TkgDzfQ2kmI2yad8/entGfT+xNCY+1kgYo+srUxzRtaPZIEYUHlfhgoyKarzRGUn7fh1WAd86yCtAcDYCsmatr8AiXFEzcQZyTtlVY5uUlm4w5t7GG38+owwPqacOIJrvhfzFwss7JebdwJtGZsPBnlwgIBgyGDLg9qgNexUgcomrGnXxK/5gLpEZ2h+Lk28rlJ51NOogqLCqxQGymxP36TO/tfu0Q5McvvzMSYt7PhbGgydcnlrbsgBALwbkcurcTAULjrFZjtnBcuLMpZuI+h79pW9e1N3Pof5nfBq7hYHVu866a7yL
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(376002)(136003)(396003)(346002)(39850400004)(46966006)(36840700001)(9786002)(5660300002)(83380400001)(426003)(1076003)(356005)(2616005)(70586007)(70206006)(2906002)(82740400003)(8676002)(478600001)(82310400003)(7696005)(107886003)(6666004)(36860700001)(6916009)(36756003)(4326008)(8936002)(336012)(316002)(186003)(36906005)(54906003)(47076005)(7636003)(26005)(102446001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2021 05:38:21.8216
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2021 05:38:23.0820
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e521ae7-08b8-46df-57de-08d90ad1004b
+X-MS-Exchange-CrossTenant-Network-Message-Id: a76e55c6-6598-43e6-d111-08d90ad1010b
 X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
 X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT061.eop-nam02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB5394
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR02MB4098
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Fix kernel-doc warning.
+From: Karen Dombroski <karen.dombroski@marsbioimaging.com>
 
+When the number of bytes for the op is greater than one, the read could
+run off the end of the function stack and cause a crash.
+
+This patch restores the behaviour of safely reading out of the original
+opcode location.
+
+Signed-off-by: Karen Dombroski <karen.dombroski@marsbioimaging.com>
 Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
 ---
- drivers/spi/spi-zynq-qspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-zynq-qspi.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
-index 5d8a5ee62fa2..1acde9e24973 100644
+index 1acde9e24973..5a3d81c31d04 100644
 --- a/drivers/spi/spi-zynq-qspi.c
 +++ b/drivers/spi/spi-zynq-qspi.c
-@@ -367,7 +367,7 @@ static int zynq_qspi_config_op(struct zynq_qspi *xqspi, struct spi_device *spi)
- }
+@@ -528,18 +528,17 @@ static int zynq_qspi_exec_mem_op(struct spi_mem *mem,
+ 	struct zynq_qspi *xqspi = spi_controller_get_devdata(mem->spi->master);
+ 	int err = 0, i;
+ 	u8 *tmpbuf;
+-	u8 opcode = op->cmd.opcode;
  
- /**
-- * zynq_qspi_setup - Configure the QSPI controller
-+ * zynq_qspi_setup_op - Configure the QSPI controller
-  * @spi:	Pointer to the spi_device structure
-  *
-  * Sets the operational mode of QSPI controller for the next QSPI transfer, baud
+ 	dev_dbg(xqspi->dev, "cmd:%#x mode:%d.%d.%d.%d\n",
+-		opcode, op->cmd.buswidth, op->addr.buswidth,
++		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
+ 		op->dummy.buswidth, op->data.buswidth);
+ 
+ 	zynq_qspi_chipselect(mem->spi, true);
+ 	zynq_qspi_config_op(xqspi, mem->spi);
+ 
+-	if (op->cmd.nbytes) {
++	if (op->cmd.opcode) {
+ 		reinit_completion(&xqspi->data_completion);
+-		xqspi->txbuf = &opcode;
++		xqspi->txbuf = (u8 *)&op->cmd.opcode;
+ 		xqspi->rxbuf = NULL;
+ 		xqspi->tx_bytes = op->cmd.nbytes;
+ 		xqspi->rx_bytes = op->cmd.nbytes;
 -- 
 2.17.1
 
