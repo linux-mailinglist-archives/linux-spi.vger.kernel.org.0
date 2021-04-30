@@ -2,30 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D9F37001D
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Apr 2021 20:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F393700AE
+	for <lists+linux-spi@lfdr.de>; Fri, 30 Apr 2021 20:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbhD3SCf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 30 Apr 2021 14:02:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47252 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231373AbhD3SCf (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 30 Apr 2021 14:02:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2B74761481;
-        Fri, 30 Apr 2021 18:01:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619805706;
-        bh=eAR+xhSb4s1B6tCxGTMHtsSZAg/KO8Jwq88qvH4ZTp8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qKNqRBSj+/r0FDGLc2d69LiF2DFZqQauXAdXy9SdqQEYwxmZqpw+3XJXKYMQZ/ZH3
-         BxWoBtiwTQQy+EmRt3UD0JBitAVtncgXxz+Sj5Pd2+AXcaXK3MwStyefBESjl5hXWq
-         PeOWDUvvVzU6azXxZFAbynK+gkjVzq5NpNYuhMwr/ISGFXgR7C/TAOcFmh8ud8/qXp
-         LPCRYapq8jAW5CItPAkivs9yFLckysKCpiKwhjTUcT19+NNfHS0EE5+83BKdIpj3Ga
-         YhfXTv7icmPhuPs2EO7Fg+2TJAHwDcfMYyKx87Q9BzMrZADld0nuDLufOHTg0zgt8S
-         wcFf+GvpRO5+w==
-Date:   Fri, 30 Apr 2021 19:01:14 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+        id S231373AbhD3SoY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 30 Apr 2021 14:44:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231267AbhD3SoY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 30 Apr 2021 14:44:24 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C14C06174A;
+        Fri, 30 Apr 2021 11:43:35 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id p12so49994603pgj.10;
+        Fri, 30 Apr 2021 11:43:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KI/MnFrdCFvAVp9lLRYtA+YcapFgP0IRl08eerf2/To=;
+        b=EEwXinkxNWph9iZIOreBSC7zDYIf1fW4nFLZ9aGiN3bwvDwrYmn92TWTRXOYPE/gU5
+         IEIGfcPhyvzGDxWsCp6G85OV3aytU4vjAqd6ZTQlvDIpFe7NuH5J/hWS+Gho6z/LU2mC
+         vLl7SnRb7g+jiDYNBc9VzyhHHyWENZN9vBOdNQvR+Bm3R0KQzdwO+3JCqXbeQWPUefDK
+         OI40DFmZm+IlTquzUee+j/GdeGb7NBy16gQ2LMtwHEBwww+Jvho3lJTcxObBnafL4DOo
+         vqFmzW5QtmyZEvQf5WvFN+wTpzJumIog+bKAvHkZYzRRkI9GMNMFPZgxf4h1YR8FHi2T
+         4wsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KI/MnFrdCFvAVp9lLRYtA+YcapFgP0IRl08eerf2/To=;
+        b=Ik692O+tvevhkBl9v2zdBdMQxXo7t77ZwHH+wjfnfvko1K403vfPgxtkhRl4ukqbCU
+         0jYovSDhVLwNgSj317fnM+ooD494gQ5OqaY2zCbd+I42kDnQGOx4LjazKZVesNF8SKb1
+         DU5xT1ekuIrgd9JKOdZTTWVhPcJAW2i2//mFPYmA99baOOdeeRmSk7JzRv3mJtVaciLr
+         i1VK+0VANlG468gJrRyx7uZBvaSoUHFP131P2CubhQh0e5s5wqORdKXFR4dhO7+IylTH
+         NOG8RcGVb5aNhe32255mGFIYs1X6I9p3StDWpAb27y0rWuBNYkVH4UV1ytEu3nwpOzt3
+         09Sw==
+X-Gm-Message-State: AOAM533dI+N9SHhctHMCPI8d2yQ7CMVPMN8Dxrg2JNVG9LzddvOnHhGY
+        7yS5+4zWyFxE1mnEyhNtAFS7+HXcJ1bD4NqnBhs=
+X-Google-Smtp-Source: ABdhPJxMPZpMkCGdC2AwEeUnojgwpbAa0yguUCDEQBxKd491/rtQyhV87+w7xmA2fqjNDpVJfvEvyYjKTUQmucHSixM=
+X-Received: by 2002:a63:a847:: with SMTP id i7mr5759407pgp.203.1619808215145;
+ Fri, 30 Apr 2021 11:43:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210423182441.50272-1-andriy.shevchenko@linux.intel.com>
+ <CAHp75VeiHsk15QoG3X-OV8V8jqzCNeKkif9V=cx4nvKVHaKbKA@mail.gmail.com>
+ <20210427143457.GI4605@sirena.org.uk> <YIglWpz8lSidXmDd@smile.fi.intel.com>
+ <CAHp75VfBSjHP1LJZJTdwXzGuE2YjxdW6r7Zf6ofHsquJBPMyWA@mail.gmail.com> <20210430180114.GF5981@sirena.org.uk>
+In-Reply-To: <20210430180114.GF5981@sirena.org.uk>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 30 Apr 2021 21:43:19 +0300
+Message-ID: <CAHp75Vd0MKSZJpw0=qKtORmHRijw0HZLGz+W=sG_cyhLr1JPoQ@mail.gmail.com>
+Subject: Re: [PATCH v2 00/14] spi: pxa2xx: Set of cleanups
+To:     Mark Brown <broonie@kernel.org>
 Cc:     linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
         linux-spi <linux-spi@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -35,54 +63,27 @@ Cc:     linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
         Robert Jarzmik <robert.jarzmik@free.fr>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: Re: [PATCH v2 00/14] spi: pxa2xx: Set of cleanups
-Message-ID: <20210430180114.GF5981@sirena.org.uk>
-References: <20210423182441.50272-1-andriy.shevchenko@linux.intel.com>
- <CAHp75VeiHsk15QoG3X-OV8V8jqzCNeKkif9V=cx4nvKVHaKbKA@mail.gmail.com>
- <20210427143457.GI4605@sirena.org.uk>
- <YIglWpz8lSidXmDd@smile.fi.intel.com>
- <CAHp75VfBSjHP1LJZJTdwXzGuE2YjxdW6r7Zf6ofHsquJBPMyWA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5Mfx4RzfBqgnTE/w"
-Content-Disposition: inline
-In-Reply-To: <CAHp75VfBSjHP1LJZJTdwXzGuE2YjxdW6r7Zf6ofHsquJBPMyWA@mail.gmail.com>
-X-Cookie: QOTD:
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, Apr 30, 2021 at 9:01 PM Mark Brown <broonie@kernel.org> wrote:
+> On Fri, Apr 30, 2021 at 07:29:48PM +0300, Andy Shevchenko wrote:
+>
+> > One item is still unclear to me. I noticed that you started already
+> > applying patches for-next release cycle (if I understood it
+> > correctly). Hence the question should or shouldn't I resend this
+>
+> No I haven't, I'm only applying things to for-5.13.  I've not even
+> created for-5.14 yet, that will only get created once -rc1 is out and
+> nothing for it is fixed yet.  If I look at it and find an issue I will
+> tell you, if I've not said anything and I've got through my first batch
+> of v5.14 stuff it's gone AWOL and you should resend.
 
---5Mfx4RzfBqgnTE/w
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ah, okay, it means I misread the idea of applied patches.
+Thanks for clarifying this for me!
 
-On Fri, Apr 30, 2021 at 07:29:48PM +0300, Andy Shevchenko wrote:
-
-> One item is still unclear to me. I noticed that you started already
-> applying patches for-next release cycle (if I understood it
-> correctly). Hence the question should or shouldn't I resend this
-
-No I haven't, I'm only applying things to for-5.13.  I've not even
-created for-5.14 yet, that will only get created once -rc1 is out and
-nothing for it is fixed yet.  If I look at it and find an issue I will
-tell you, if I've not said anything and I've got through my first batch
-of v5.14 stuff it's gone AWOL and you should resend.
-
---5Mfx4RzfBqgnTE/w
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCMRekACgkQJNaLcl1U
-h9DGsQgAga0H+vmLX/93TTc/hepJINQX8s8kTSyvJCoOO+q1rlf0udjdUvQLrQqO
-wA+VsJ+h72RIEmIAKdPbHMBR16N/e9kYvWb7edSIhgIAbJTYCfra8ie835Ab+HJ/
-940AfNU6jFC4k1Ot4g9TkvjcL3mFjN4NYoUdFJTiLK7huhacheX8gmCF5XmrlwAZ
-w3CMCpuWocOWji2MO/w+m+2yjTelU6sQPnlT4Hfnk6l+eNJF8WcRNNM1OlX9kciX
-47Ja6kMLll/XX7kQsXJ3dz86Fv5Bz8jmQMynPS3fMe1cGS69+sxfa1ubiSRxs9gI
-+YfKmy1ffamHjymkV8jSY/vN2Ud0cQ==
-=FhSI
------END PGP SIGNATURE-----
-
---5Mfx4RzfBqgnTE/w--
+-- 
+With Best Regards,
+Andy Shevchenko
