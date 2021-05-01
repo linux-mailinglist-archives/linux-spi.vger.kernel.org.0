@@ -2,88 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F393700AE
-	for <lists+linux-spi@lfdr.de>; Fri, 30 Apr 2021 20:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF073708D6
+	for <lists+linux-spi@lfdr.de>; Sat,  1 May 2021 21:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbhD3SoY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 30 Apr 2021 14:44:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbhD3SoY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 30 Apr 2021 14:44:24 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C14C06174A;
-        Fri, 30 Apr 2021 11:43:35 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id p12so49994603pgj.10;
-        Fri, 30 Apr 2021 11:43:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KI/MnFrdCFvAVp9lLRYtA+YcapFgP0IRl08eerf2/To=;
-        b=EEwXinkxNWph9iZIOreBSC7zDYIf1fW4nFLZ9aGiN3bwvDwrYmn92TWTRXOYPE/gU5
-         IEIGfcPhyvzGDxWsCp6G85OV3aytU4vjAqd6ZTQlvDIpFe7NuH5J/hWS+Gho6z/LU2mC
-         vLl7SnRb7g+jiDYNBc9VzyhHHyWENZN9vBOdNQvR+Bm3R0KQzdwO+3JCqXbeQWPUefDK
-         OI40DFmZm+IlTquzUee+j/GdeGb7NBy16gQ2LMtwHEBwww+Jvho3lJTcxObBnafL4DOo
-         vqFmzW5QtmyZEvQf5WvFN+wTpzJumIog+bKAvHkZYzRRkI9GMNMFPZgxf4h1YR8FHi2T
-         4wsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KI/MnFrdCFvAVp9lLRYtA+YcapFgP0IRl08eerf2/To=;
-        b=Ik692O+tvevhkBl9v2zdBdMQxXo7t77ZwHH+wjfnfvko1K403vfPgxtkhRl4ukqbCU
-         0jYovSDhVLwNgSj317fnM+ooD494gQ5OqaY2zCbd+I42kDnQGOx4LjazKZVesNF8SKb1
-         DU5xT1ekuIrgd9JKOdZTTWVhPcJAW2i2//mFPYmA99baOOdeeRmSk7JzRv3mJtVaciLr
-         i1VK+0VANlG468gJrRyx7uZBvaSoUHFP131P2CubhQh0e5s5wqORdKXFR4dhO7+IylTH
-         NOG8RcGVb5aNhe32255mGFIYs1X6I9p3StDWpAb27y0rWuBNYkVH4UV1ytEu3nwpOzt3
-         09Sw==
-X-Gm-Message-State: AOAM533dI+N9SHhctHMCPI8d2yQ7CMVPMN8Dxrg2JNVG9LzddvOnHhGY
-        7yS5+4zWyFxE1mnEyhNtAFS7+HXcJ1bD4NqnBhs=
-X-Google-Smtp-Source: ABdhPJxMPZpMkCGdC2AwEeUnojgwpbAa0yguUCDEQBxKd491/rtQyhV87+w7xmA2fqjNDpVJfvEvyYjKTUQmucHSixM=
-X-Received: by 2002:a63:a847:: with SMTP id i7mr5759407pgp.203.1619808215145;
- Fri, 30 Apr 2021 11:43:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210423182441.50272-1-andriy.shevchenko@linux.intel.com>
- <CAHp75VeiHsk15QoG3X-OV8V8jqzCNeKkif9V=cx4nvKVHaKbKA@mail.gmail.com>
- <20210427143457.GI4605@sirena.org.uk> <YIglWpz8lSidXmDd@smile.fi.intel.com>
- <CAHp75VfBSjHP1LJZJTdwXzGuE2YjxdW6r7Zf6ofHsquJBPMyWA@mail.gmail.com> <20210430180114.GF5981@sirena.org.uk>
-In-Reply-To: <20210430180114.GF5981@sirena.org.uk>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 30 Apr 2021 21:43:19 +0300
-Message-ID: <CAHp75Vd0MKSZJpw0=qKtORmHRijw0HZLGz+W=sG_cyhLr1JPoQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/14] spi: pxa2xx: Set of cleanups
+        id S231753AbhEATxL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 1 May 2021 15:53:11 -0400
+Received: from bmailout2.hostsharing.net ([83.223.78.240]:39245 "EHLO
+        bmailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231670AbhEATxL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 1 May 2021 15:53:11 -0400
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 9B61F2800B3D0;
+        Sat,  1 May 2021 21:51:35 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 8EE261BC5; Sat,  1 May 2021 21:51:35 +0200 (CEST)
+Date:   Sat, 1 May 2021 21:51:35 +0200
+From:   Lukas Wunner <lukas@wunner.de>
 To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Joe Burmeister <joe.burmeister@devtank.co.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-spi@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        nsaenz@kernel.org, phil@raspberrypi.com
+Subject: Re: [PATCH] spi: bcm2835: Fix buffer overflow with CS able to go
+ beyond limit.
+Message-ID: <20210501195135.GA18501@wunner.de>
+References: <20210420083402.6950-1-joe.burmeister@devtank.co.uk>
+ <c087ba2c-7839-02d1-a522-b104d8ffb8d2@gmail.com>
+ <7c9f9376-1a80-b624-7b9e-0f6d04437c02@devtank.co.uk>
+ <271ad212-a606-620e-3f0c-d6bff272be3c@gmail.com>
+ <380624c4-82f3-0e6e-8cdb-8a9732636db8@devtank.co.uk>
+ <20210423115724.GB5507@sirena.org.uk>
+ <672e8d77-ee5c-f10f-0bd3-f8708dfc24c8@devtank.co.uk>
+ <20210423162055.GE5507@sirena.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210423162055.GE5507@sirena.org.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Apr 30, 2021 at 9:01 PM Mark Brown <broonie@kernel.org> wrote:
-> On Fri, Apr 30, 2021 at 07:29:48PM +0300, Andy Shevchenko wrote:
->
-> > One item is still unclear to me. I noticed that you started already
-> > applying patches for-next release cycle (if I understood it
-> > correctly). Hence the question should or shouldn't I resend this
->
-> No I haven't, I'm only applying things to for-5.13.  I've not even
-> created for-5.14 yet, that will only get created once -rc1 is out and
-> nothing for it is fixed yet.  If I look at it and find an issue I will
-> tell you, if I've not said anything and I've got through my first batch
-> of v5.14 stuff it's gone AWOL and you should resend.
+On Fri, Apr 23, 2021 at 05:20:55PM +0100, Mark Brown wrote:
+> Part of the issue here is that there has been some variation in how
+> num_chipselect is interpreted with regard to GPIO based chip selects
+> over time.  It *should* be redundant, I'm not clear why it's in the
+> generic bindings at all but that's lost to history AFAICT.
 
-Ah, okay, it means I misread the idea of applied patches.
-Thanks for clarifying this for me!
+It seems num_chipselect is meant to be set to the maximum number of
+*native* chipselects supported by the controller.  Which is overwritten
+if GPIO chipselects are used.
 
--- 
-With Best Regards,
-Andy Shevchenko
+I failed to appreciate that when I changed num_chipselects for
+spi-bcm2835.c with commit 571e31fa60b3.  That single line change
+in the commit ought to be reverted.
+
+And the kernel-doc ought to be amended because the crucial detail
+that num_chipselect needs to be set to the maximum *native* chipselects
+isn't mentioned anywhere.
+
+
+> The best thing would be to have it not have a single array of chip
+> select specific data and instead store everything in the controller_data
+> that's there per-device.
+
+Unfortunately that's non-trivial.  The slave-specific data is DMA-mapped.
+It could be DMA-mapped in ->setup but there's no ->unsetup to DMA-unmap
+the memory once the slave is removed.  Note that the slave could be removed
+dynamically with a DT overlay, not just when the controller is unbound.
+
+So we'd need a new ->unsetup hook at the very least to make this work.
+
+The Foundation's downstream kernel now contains a bandaid commit which
+raises the limit to 24 and errors out of ->probe if the limit is exceeded.
+I would have preferred if it errored out of ->setup.  That way only
+the slaves exceeding the limit would fail to instantiate:
+
+https://github.com/raspberrypi/linux/commit/05f8d5826e28
+
+Thoughts?
+
+Lukas
