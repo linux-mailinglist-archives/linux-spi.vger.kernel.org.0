@@ -2,90 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF073708D6
-	for <lists+linux-spi@lfdr.de>; Sat,  1 May 2021 21:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9CB370BC2
+	for <lists+linux-spi@lfdr.de>; Sun,  2 May 2021 16:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231753AbhEATxL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 1 May 2021 15:53:11 -0400
-Received: from bmailout2.hostsharing.net ([83.223.78.240]:39245 "EHLO
-        bmailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbhEATxL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 1 May 2021 15:53:11 -0400
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 9B61F2800B3D0;
-        Sat,  1 May 2021 21:51:35 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 8EE261BC5; Sat,  1 May 2021 21:51:35 +0200 (CEST)
-Date:   Sat, 1 May 2021 21:51:35 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Joe Burmeister <joe.burmeister@devtank.co.uk>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-spi@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        nsaenz@kernel.org, phil@raspberrypi.com
-Subject: Re: [PATCH] spi: bcm2835: Fix buffer overflow with CS able to go
- beyond limit.
-Message-ID: <20210501195135.GA18501@wunner.de>
-References: <20210420083402.6950-1-joe.burmeister@devtank.co.uk>
- <c087ba2c-7839-02d1-a522-b104d8ffb8d2@gmail.com>
- <7c9f9376-1a80-b624-7b9e-0f6d04437c02@devtank.co.uk>
- <271ad212-a606-620e-3f0c-d6bff272be3c@gmail.com>
- <380624c4-82f3-0e6e-8cdb-8a9732636db8@devtank.co.uk>
- <20210423115724.GB5507@sirena.org.uk>
- <672e8d77-ee5c-f10f-0bd3-f8708dfc24c8@devtank.co.uk>
- <20210423162055.GE5507@sirena.org.uk>
+        id S232294AbhEBOEb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 2 May 2021 10:04:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49176 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231958AbhEBOEa (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sun, 2 May 2021 10:04:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 94C3D613B0;
+        Sun,  2 May 2021 14:03:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619964201;
+        bh=pgd1252rTW4FmboBZqeKmdDft2iOwqQhjAW9jP4Q6SE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=H2sEnYv4R+73ZrHGzCKIH9FjaHL7IAax1doA1RL0MQoVSBcSRSl0Tn/Gp+3sHXYfM
+         +zDN9CI/KZIDpWGLeGtnRXWFK++vZDUAOvKBQINDw6nrQtNKY8UWAEcoCEnnf+8U5I
+         2IQ1a2eBIrmBSdpyJlJ04i44hNKyISxkdpzzov7xFunodhKQqw3TGx9B6VvYbgO5SW
+         O7aBn0SlWw18PaxBCNWvFpSC1oXsi6PTOoqca59ead/Zmh4+270sU7PzyeI1fV1JrV
+         0cPh/IZixtkMGwgB3voDP8Rj35l4HmRD+sqL9p4DkX6qXfWPe6CIvmC2DL0nSas+Nd
+         aj5l4ofh1aCAw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     David Bauer <mail@david-bauer.net>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.12 03/79] spi: ath79: always call chipselect function
+Date:   Sun,  2 May 2021 10:02:00 -0400
+Message-Id: <20210502140316.2718705-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210502140316.2718705-1-sashal@kernel.org>
+References: <20210502140316.2718705-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210423162055.GE5507@sirena.org.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Apr 23, 2021 at 05:20:55PM +0100, Mark Brown wrote:
-> Part of the issue here is that there has been some variation in how
-> num_chipselect is interpreted with regard to GPIO based chip selects
-> over time.  It *should* be redundant, I'm not clear why it's in the
-> generic bindings at all but that's lost to history AFAICT.
+From: David Bauer <mail@david-bauer.net>
 
-It seems num_chipselect is meant to be set to the maximum number of
-*native* chipselects supported by the controller.  Which is overwritten
-if GPIO chipselects are used.
+[ Upstream commit 19e2132174583beb90c1bd3e9c842bc6d5c944d1 ]
 
-I failed to appreciate that when I changed num_chipselects for
-spi-bcm2835.c with commit 571e31fa60b3.  That single line change
-in the commit ought to be reverted.
+spi-bitbang has to call the chipselect function on the ath79 SPI driver
+in order to communicate with the SPI slave device, as the ath79 SPI
+driver has three dedicated chipselect lines but can also be used with
+GPIOs for the CS lines.
 
-And the kernel-doc ought to be amended because the crucial detail
-that num_chipselect needs to be set to the maximum *native* chipselects
-isn't mentioned anywhere.
+Fixes commit 4a07b8bcd503 ("spi: bitbang: Make chipselect callback optional")
 
+Signed-off-by: David Bauer <mail@david-bauer.net>
+Link: https://lore.kernel.org/r/20210303160837.165771-1-mail@david-bauer.net
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/spi/spi-ath79.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> The best thing would be to have it not have a single array of chip
-> select specific data and instead store everything in the controller_data
-> that's there per-device.
+diff --git a/drivers/spi/spi-ath79.c b/drivers/spi/spi-ath79.c
+index eb9a243e9526..436327fb58de 100644
+--- a/drivers/spi/spi-ath79.c
++++ b/drivers/spi/spi-ath79.c
+@@ -158,6 +158,7 @@ static int ath79_spi_probe(struct platform_device *pdev)
+ 	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(1, 32);
+ 	master->setup = spi_bitbang_setup;
+ 	master->cleanup = spi_bitbang_cleanup;
++	master->flags = SPI_MASTER_GPIO_SS;
+ 	if (pdata) {
+ 		master->bus_num = pdata->bus_num;
+ 		master->num_chipselect = pdata->num_chipselect;
+-- 
+2.30.2
 
-Unfortunately that's non-trivial.  The slave-specific data is DMA-mapped.
-It could be DMA-mapped in ->setup but there's no ->unsetup to DMA-unmap
-the memory once the slave is removed.  Note that the slave could be removed
-dynamically with a DT overlay, not just when the controller is unbound.
-
-So we'd need a new ->unsetup hook at the very least to make this work.
-
-The Foundation's downstream kernel now contains a bandaid commit which
-raises the limit to 24 and errors out of ->probe if the limit is exceeded.
-I would have preferred if it errored out of ->setup.  That way only
-the slaves exceeding the limit would fail to instantiate:
-
-https://github.com/raspberrypi/linux/commit/05f8d5826e28
-
-Thoughts?
-
-Lukas
