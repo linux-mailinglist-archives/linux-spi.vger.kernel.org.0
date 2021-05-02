@@ -2,35 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A3F0370C49
-	for <lists+linux-spi@lfdr.de>; Sun,  2 May 2021 16:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38898370C74
+	for <lists+linux-spi@lfdr.de>; Sun,  2 May 2021 16:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233102AbhEBOFv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 2 May 2021 10:05:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51056 "EHLO mail.kernel.org"
+        id S233436AbhEBOGZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 2 May 2021 10:06:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51596 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232936AbhEBOFb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sun, 2 May 2021 10:05:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 22AE5613DC;
-        Sun,  2 May 2021 14:04:39 +0000 (UTC)
+        id S233111AbhEBOFw (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sun, 2 May 2021 10:05:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DEB3B613CA;
+        Sun,  2 May 2021 14:04:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619964279;
-        bh=t6uuShaQBFm1A+tFPwZuHJ2zxR2QAMsD2HA7eO5/v58=;
+        s=k20201202; t=1619964300;
+        bh=yerl3LVPL+j+sR+WInYXxmtiDu1aifINyRVyNiiATYk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gng2sX3YiZP5VcxoUj+izURWBS3POeDkwsb6N2Ttt+/ahUbEzgaP8a/2tKnyYULlQ
-         nibC3eydKsNtgKTaZ5wVXigP7mvzCdkm0oJutXAw2xIUCwt2qKGHjBWNvmW06iN3Xs
-         QNYlu/5q9ECGkpEudaw5RDwkvt+7sXCs2XtX+Lxp0mZ8JD0jEfB6KDQ2RIQxhtY733
-         jXca+BUCq3BZGoBfUpnQQPfZ8FY+sAA1CtUNVo2kc5OVrL3JjXV4dtIHYbosid7Bjp
-         Mw+yFtS1K6+t37c5ZI2mKfH8FUhXRTObE6zGCj7o54wp5ikutWkUhyrnmuSoUcW8dK
-         PcT6z6xvkeHyA==
+        b=aNn5ih6cW8uVui2XWI/dGH1fLqI0PYQryNMDHGZ9pwwW8FlevYn25IIiCeYHbsMWA
+         n0Ghc5WCusmui+w1LIci/bLbpLk9gGiFlfLnHNYWys48y3d/6s1vgNAIZBbzRcPD7W
+         a+uLAuKW9toYNMPJnCaV/RV15FJL/oJf1Pg0VvWDY7Wo5hTFAr/c+haYq1y6xVlNDq
+         H5e/qlmMhObxXWCGGRBODMQfNUKPKl9LK5QuqVeqextuH4/ea86NYPpydn+w2gSz2S
+         Yx0Kku8upEMIsYKgq35WHAYanNl0WkW5JuiMPTZ+dlj0fxci+uil3YiSUlw10r14iY
+         TUH1EceEWZkFQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     David Bauer <mail@david-bauer.net>,
+Cc:     Wei Yongjun <weiyongjun1@huawei.com>,
+        Hulk Robot <hulkci@huawei.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 04/34] spi: ath79: remove spi-master setup and cleanup assignment
-Date:   Sun,  2 May 2021 10:04:04 -0400
-Message-Id: <20210502140434.2719553-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 21/34] spi: dln2: Fix reference leak to master
+Date:   Sun,  2 May 2021 10:04:21 -0400
+Message-Id: <20210502140434.2719553-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210502140434.2719553-1-sashal@kernel.org>
 References: <20210502140434.2719553-1-sashal@kernel.org>
@@ -42,39 +43,38 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: David Bauer <mail@david-bauer.net>
+From: Wei Yongjun <weiyongjun1@huawei.com>
 
-[ Upstream commit ffb597b2bd3cd78b9bfb68f536743cd46dbb2cc4 ]
+[ Upstream commit 9b844b087124c1538d05f40fda8a4fec75af55be ]
 
-This removes the assignment of setup and cleanup functions for the ath79
-target. Assigning the setup-method will lead to 'setup_transfer' not
-being assigned in spi_bitbang_init. Because of this, performing any
-TX/RX operation will lead to a kernel oops.
+Call spi_master_get() holds the reference count to master device, thus
+we need an additional spi_master_put() call to reduce the reference
+count, otherwise we will leak a reference to master.
 
-Also drop the redundant cleanup assignment, as it's also assigned in
-spi_bitbang_init.
+This commit fix it by removing the unnecessary spi_master_get().
 
-Signed-off-by: David Bauer <mail@david-bauer.net>
-Link: https://lore.kernel.org/r/20210303160837.165771-2-mail@david-bauer.net
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Link: https://lore.kernel.org/r/20210409082955.2907950-1-weiyongjun1@huawei.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-ath79.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/spi/spi-dln2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-ath79.c b/drivers/spi/spi-ath79.c
-index 436327fb58de..98ace748cd98 100644
---- a/drivers/spi/spi-ath79.c
-+++ b/drivers/spi/spi-ath79.c
-@@ -156,8 +156,6 @@ static int ath79_spi_probe(struct platform_device *pdev)
+diff --git a/drivers/spi/spi-dln2.c b/drivers/spi/spi-dln2.c
+index 75b33d7d14b0..9a4d942fafcf 100644
+--- a/drivers/spi/spi-dln2.c
++++ b/drivers/spi/spi-dln2.c
+@@ -780,7 +780,7 @@ static int dln2_spi_probe(struct platform_device *pdev)
  
- 	master->use_gpio_descriptors = true;
- 	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(1, 32);
--	master->setup = spi_bitbang_setup;
--	master->cleanup = spi_bitbang_cleanup;
- 	master->flags = SPI_MASTER_GPIO_SS;
- 	if (pdata) {
- 		master->bus_num = pdata->bus_num;
+ static int dln2_spi_remove(struct platform_device *pdev)
+ {
+-	struct spi_master *master = spi_master_get(platform_get_drvdata(pdev));
++	struct spi_master *master = platform_get_drvdata(pdev);
+ 	struct dln2_spi *dln2 = spi_master_get_devdata(master);
+ 
+ 	pm_runtime_disable(&pdev->dev);
 -- 
 2.30.2
 
