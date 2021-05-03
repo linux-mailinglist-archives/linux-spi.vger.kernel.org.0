@@ -2,183 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB33237133B
-	for <lists+linux-spi@lfdr.de>; Mon,  3 May 2021 11:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF8C37135A
+	for <lists+linux-spi@lfdr.de>; Mon,  3 May 2021 12:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233156AbhECJxu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 3 May 2021 05:53:50 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:48106 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233153AbhECJxt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 May 2021 05:53:49 -0400
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        id S233220AbhECKIb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 3 May 2021 06:08:31 -0400
+Received: from bmailout1.hostsharing.net ([83.223.95.100]:49815 "EHLO
+        bmailout1.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233095AbhECKIb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 May 2021 06:08:31 -0400
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id AC7471F4215B;
-        Mon,  3 May 2021 10:52:55 +0100 (BST)
-Date:   Mon, 3 May 2021 11:52:52 +0200
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Pratyush Yadav <p.yadav@ti.com>
-Cc:     <patrice.chotard@foss.st.com>, Mark Brown <broonie@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>
-Subject: Re: [PATCH 1/3] spi: spi-mem: add automatic poll status functions
-Message-ID: <20210503115252.08af412c@collabora.com>
-In-Reply-To: <20210503092935.vjitc7mc47wttn77@ti.com>
-References: <20210426143934.25275-1-patrice.chotard@foss.st.com>
-        <20210426143934.25275-2-patrice.chotard@foss.st.com>
-        <20210430185104.377d1bc6@collabora.com>
-        <20210503084742.7cp77snyohkdwwvv@ti.com>
-        <20210503111114.26b64e25@collabora.com>
-        <20210503092935.vjitc7mc47wttn77@ti.com>
-Organization: Collabora
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id E3FF030014809;
+        Mon,  3 May 2021 12:07:33 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id D5F1010C8F; Mon,  3 May 2021 12:07:33 +0200 (CEST)
+Date:   Mon, 3 May 2021 12:07:33 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        kernel-team@android.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: Fix spi device unregister flow
+Message-ID: <20210503100733.GA8114@wunner.de>
+References: <20210426235638.1285530-1-saravanak@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210426235638.1285530-1-saravanak@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 3 May 2021 14:59:37 +0530
-Pratyush Yadav <p.yadav@ti.com> wrote:
-
-> On 03/05/21 11:11AM, Boris Brezillon wrote:
-> > On Mon, 3 May 2021 14:17:44 +0530
-> > Pratyush Yadav <p.yadav@ti.com> wrote:
-> >   
-> > > On 30/04/21 06:51PM, Boris Brezillon wrote:  
-> > > > On Mon, 26 Apr 2021 16:39:32 +0200
-> > > > <patrice.chotard@foss.st.com> wrote:
-> > > >     
-> > > > > From: Christophe Kerello <christophe.kerello@foss.st.com>
-> > > > > 
-> > > > > With STM32 QSPI, it is possible to poll the status register of the device.
-> > > > > This could be done to offload the CPU during an operation (erase or
-> > > > > program a SPI NAND for example).
-> > > > > 
-> > > > > spi_mem_poll_status API has been added to handle this feature.
-> > > > > 
-> > > > > Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
-> > > > > Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-> > > > > ---
-> > > > >  drivers/spi/spi-mem.c       | 34 ++++++++++++++++++++++++++++++++++
-> > > > >  include/linux/spi/spi-mem.h |  8 ++++++++
-> > > > >  2 files changed, 42 insertions(+)
-> > > > > 
-> > > > > diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-> > > > > index 1513553e4080..43dce4b0efa4 100644
-> > > > > --- a/drivers/spi/spi-mem.c
-> > > > > +++ b/drivers/spi/spi-mem.c
-> > > > > @@ -743,6 +743,40 @@ static inline struct spi_mem_driver *to_spi_mem_drv(struct device_driver *drv)
-> > > > >  	return container_of(drv, struct spi_mem_driver, spidrv.driver);
-> > > > >  }
-> > > > >  
-> > > > > +/**
-> > > > > + * spi_mem_poll_status() - Poll memory device status
-> > > > > + * @mem: SPI memory device
-> > > > > + * @op: the memory operation to execute
-> > > > > + * @mask: status bitmask to ckeck
-> > > > > + * @match: status expected value
-> > > > > + * @timeout: timeout
-> > > > > + *
-> > > > > + * This function send a polling status request to the controller driver
-> > > > > + *
-> > > > > + * Return: 0 in case of success, -ETIMEDOUT in case of error,
-> > > > > + *         -EOPNOTSUPP if not supported.
-> > > > > + */
-> > > > > +int spi_mem_poll_status(struct spi_mem *mem,
-> > > > > +			const struct spi_mem_op *op,
-> > > > > +			u8 mask, u8 match, u16 timeout)
-> > > > > +{
-> > > > > +	struct spi_controller *ctlr = mem->spi->controller;
-> > > > > +	int ret = -EOPNOTSUPP;
-> > > > > +
-> > > > > +	if (ctlr->mem_ops && ctlr->mem_ops->poll_status) {
-> > > > > +		ret = spi_mem_access_start(mem);    
-> > > > 
-> > > > You should probably check that op is a single byte read before
-> > > > accepting the command.    
-> > > 
-> > > Please do not discriminate against 8D-8D-8D flashes ;-).  
-> > 
-> > Then mask and match should probably be u16 :P. And the check as it is
-> > seems a bit lax to me. Drivers will of course be able to reject the op
-> > when there's more than one byte (or 16bit word in case of 8D) to read,
-> > but it feels like the core could automate that a bit.  
+On Mon, Apr 26, 2021 at 04:56:38PM -0700, Saravana Kannan wrote:
+> When an SPI device is unregistered, the spi->controller->cleanup() is
+> called in the device's release callback. That's wrong for a couple of
+> reasons:
 > 
-> The two 8D flashes that are currently supported in SPI NOR both have a 
-> 1-byte status register. But to read it, the read op should be 2-byte 
-> long to avoid partial cycles at the end. The second byte is simply 
-> discarded.
-> 
-> 2-byte wide registers might show up in the future, but for now at least 
-> we don't have to worry about them.
+> 1. spi_dev_put() can be called before spi_add_device() is called. And
+>    it's spi_add_device() that calls spi_setup(). This will cause clean()
+>    to get called without the spi device ever being setup.
 
-Well, I guess it doesn't hurt to take it into account now. I mean,
-what's happening on the bus in that case is a 2byte transfer, with the
-second byte being ignored, which you can describe with a 16bit mask
-of 0xMM00 (assuming big endian transfers here, as done for other ops).
+Well, yes, but it's not a big problem in practice so far:
 
-> 
-> >   
-> > >   
-> > > >     
-> > > > > +		if (ret)
-> > > > > +			return ret;
-> > > > > +
-> > > > > +		ret = ctlr->mem_ops->poll_status(mem, op, mask, match, timeout);    
-> > > > 
-> > > > You also need some sort of ->poll_status_is_supported() to validate
-> > > > that the controller supports the status polling for this specific op (I    
-> > > 
-> > > I don't think a separate function is needed for checking if the poll 
-> > > status op is supported. Return value of -EOPNOTSUPP should be able to 
-> > > signal that. This can also be used to check if Octal DDR capable 
-> > > controllers are able to poll using 2-byte reads.  
-> > 
-> > Yeah, I had something more complex in mind to avoid doing this 'try
-> > native mode and fall back on sw-based more if not supported' dance
-> > every time a status poll is requested (something similar to what we do
-> > for dirmaps, with a status poll desc), but I guess that's a bit
-> > premature (and probably uneeded).  
-> 
-> I think Mark also suggested something similar. Make the CPU/non-CPU case 
-> transparent to the caller. I agree with with this direction. Makes the 
-> caller simpler.
+I've checked all drivers and there are only four which are affected
+by this: spi-mpc512x-psc.c spi-pic32.c spi-s3c64xx.c spi-st-ssc4.c
 
-It's kind of orthogonal to what I was suggesting, but yes, that's
-definitely a good idea. We certainly don't want the spi-nor layer to
-open code the same logic if the spi-mem layer can do it for us.
+They all fiddle with the chipselect GPIO in their ->cleanup hook
+and the GPIO may not have been requested yet because that happens
+during ->setup.
 
-> 
-> I also mentioned in a reply to this patch that supports_op() should be 
-> called before the op is executed. That should take care of "base" 
-> support for the op. The poll-specific checks can go in the poll_status() 
-> function itself. If either of those say the op is not supported, it 
-> should fall back to CPU based polling. That's the design that makes the 
-> most sense to me.
+All the other drivers merely invoke kzalloc() on ->setup and kfree()
+on ->cleanup.  The order doesn't matter in this case because
+kfree(NULL) is a no-op.
 
-What I had in mind was more:
 
-1/ create a poll desc with spi_mem_create_poll_status_desc(). The
-   "operation supported" check is done here. The controller can store
-   all its HW-specific state in there. If the operation is not natively
-   supported, a SW-based poll descriptor (similar to the SW-based
-   dirmap) is created
-2/ poll the status with spi_mem_poll_status(). This function is passed
-   a poll descriptor which helps select the path that should be taken
-   without having to check every time whether the hardware supports a
-   specific status polling op. I can also imagine some preparation
-   being done during the desc creation if that makes sense (preparing
-   reg values to be written when a status poll request is issued for
-   instance)
+> 2. There's no guarantee that the controller's driver would be present by
+>    the time the spi device's release function gets called.
 
-Anyway, as I said, this sort of optimization might be a bit premature.
+How so?  spi_devices are instantiated on ->probe of the controller
+via spi_register_controller() and destroyed on ->remove via
+spi_unregister_controller().  I don't see how the controller driver
+could ever be unavailable, so this point seems moot.
+
+
+> Fix these issues by simply moving the cleanup from the device release
+> callback to the actual spi_unregister_device() function.
+
+Unfortunately the fix is wrong, it introduces a new problem:
+
+> @@ -713,6 +717,8 @@ void spi_unregister_device(struct spi_device *spi)
+>  	if (!spi)
+>  		return;
+>  
+> +	spi_cleanup(spi);
+> +
+>  	if (spi->dev.of_node) {
+>  		of_node_clear_flag(spi->dev.of_node, OF_POPULATED);
+>  		of_node_put(spi->dev.of_node);
+
+Now you're running ->cleanup before the SPI slave's driver is unbound.
+That's bad, the driver may need to access the physical device on unbound,
+e.g. to quiesce interrupts.  That may not work now because the
+slave's controller_state is gone.
+
+NAK, this needs to be reverted.
+
+Thanks,
+
+Lukas
