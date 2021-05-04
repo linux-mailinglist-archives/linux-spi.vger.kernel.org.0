@@ -2,256 +2,111 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73095372589
-	for <lists+linux-spi@lfdr.de>; Tue,  4 May 2021 07:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08473726B5
+	for <lists+linux-spi@lfdr.de>; Tue,  4 May 2021 09:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbhEDFjw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 4 May 2021 01:39:52 -0400
-Received: from twhmllg3.macronix.com ([122.147.135.201]:33874 "EHLO
-        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbhEDFjv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 May 2021 01:39:51 -0400
-Received: from twhfmlp1.macronix.com (twhfmlp1.macronix.com [172.17.20.91])
-        by TWHMLLG3.macronix.com with ESMTP id 1445cYs0003421;
-        Tue, 4 May 2021 13:38:34 +0800 (GMT-8)
-        (envelope-from zhengxunli@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
-        by Forcepoint Email with ESMTP id 88B4794EB83C30D05EC4;
-        Tue,  4 May 2021 13:38:34 +0800 (CST)
-In-Reply-To: <20210427024707.hrr5r74apwghwsaj@ti.com>
-References: <1618900179-14546-1-git-send-email-zhengxunli@mxic.com.tw> <1618900179-14546-3-git-send-email-zhengxunli@mxic.com.tw> <20210427024707.hrr5r74apwghwsaj@ti.com>
-To:     "Pratyush Yadav" <p.yadav@ti.com>
-Cc:     broonie@kernel.org, jaimeliao@mxic.com.tw,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        miquel.raynal@bootlin.com, tudor.ambarus@microchip.com
-Subject: Re: [PATCH v3 2/3] mtd: spi-nor: macronix: add support for Macronix
- octaflash series
+        id S229969AbhEDHnc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 May 2021 03:43:32 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:49514 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229922AbhEDHna (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 May 2021 03:43:30 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1447gLMl109806;
+        Tue, 4 May 2021 02:42:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1620114141;
+        bh=dfU3OUcVoRBJbR3Exsd2SHBYTLZkiu3fPn4CwADJUF8=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=d6KcoZ4HCaCCrjUlx/wSPeKxYlt48C6UyQ7ng5VZlpNZnDymW/ZB5FmpRNWA+wR3a
+         oguojS8xWiOZ1VvyvuDtO8wm0izXjRJFCJz8M27bnIlohYQcMruesa3YOdnKVszaD4
+         ZbAglvqTT463wyYGp1FwckAjBK9jxPpmQhMkbA9Q=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1447gLNc098473
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 4 May 2021 02:42:21 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Tue, 4 May
+ 2021 02:42:21 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Tue, 4 May 2021 02:42:21 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1447gKu5018786;
+        Tue, 4 May 2021 02:42:21 -0500
+Date:   Tue, 4 May 2021 13:12:20 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     <zhengxunli@mxic.com.tw>
+CC:     <broonie@kernel.org>, <jaimeliao@mxic.com.tw>,
+        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        <miquel.raynal@bootlin.com>, <tudor.ambarus@microchip.com>
+Subject: Re: [PATCH v3 1/3] mtd: spi-nor: macronix: add support for Macronix
+ octal dtr operation
+Message-ID: <20210504074218.s2zezkt3imaanfmr@ti.com>
+References: <1618900179-14546-1-git-send-email-zhengxunli@mxic.com.tw>
+ <1618900179-14546-2-git-send-email-zhengxunli@mxic.com.tw>
+ <20210427023604.vamgepl4myrhpiwu@ti.com>
+ <OF2365AB9C.87E8927D-ON482586CA.0029B8EB-482586CB.001E5C1A@mxic.com.tw>
 MIME-Version: 1.0
-X-KeepSent: B742AAB3:BE2A05EA-482586CB:001E84DF;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3FP6 SHF907 April 26, 2018
-Message-ID: <OFB742AAB3.BE2A05EA-ON482586CB.001E84DF-482586CB.001EFF57@mxic.com.tw>
-From:   zhengxunli@mxic.com.tw
-Date:   Tue, 4 May 2021 13:38:34 +0800
-X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2021/05/04 PM 01:38:34,
-        Serialize complete at 2021/05/04 PM 01:38:34
-Content-Type: text/plain; charset="US-ASCII"
-X-MAIL: TWHMLLG3.macronix.com 1445cYs0003421
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <OF2365AB9C.87E8927D-ON482586CA.0029B8EB-482586CB.001E5C1A@mxic.com.tw>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-Hi,
-
+On 04/05/21 01:31PM, zhengxunli@mxic.com.tw wrote:
+> Hi Pratyush,
 > 
-> On 20/04/21 02:29PM, Zhengxun Li wrote:
-> > Add 1.8V and 3V Octal NOR Flash IDs.
-> > MX25 series : Serial NOR Flash.
-> > MX66 series : Serial NOR Flash with stacked die.
+> Thanks for your comment on this patch.
 > 
-> I only looked briefly at the datasheet, but I don't see any mention of 
-> stacked dies. I assume the stacked die part is transparent from software 
-
-> point of view, and is only a hardware implementation detail. Correct?
+> "Pratyush Yadav" <p.yadav@ti.com> wrote on 2021/04/27 上午 10:36:06:
 > 
-> > LM/UM series : Up to 250MHz clock frequency with both DTR/STR 
-operation.
-> > LW/UW series : Support simultaneous Read-while-Write operation in 
-multiple
-> >           bank architecture. Read-while-write feature which means read
-> >           data one bank while another bank is programing or erasing.
+[...]
+> > > +   if (!enable)
+> > > +      spi_nor_spimem_setup_op(nor, &op, SNOR_PROTO_8_8_8_DTR);
+> > 
+> > When disabling, the op would be in 8D-8D-8D mode so having a data length 
 > 
-> AFAIK, this feature is not currently supported in SPI NOR.
->
+> > of 1 would be invalid. This is currently the case even in the patches 
+> > that I sent for Micron and Cypress.
 > > 
-> > MX25LM : 3.0V Octal I/O
-> >  -https://www.mxic.com.tw/Lists/Datasheet/Attachments/7841/
-> MX25LM51245G,%203V,%20512Mb,%20v1.1.pdf
-> > 
-> > MX25UM : 1.8V Octal I/O
-> >  -https://www.mxic.com.tw/Lists/Datasheet/Attachments/7525/
-> MX25UM51245G%20Extreme%20Speed,%201.8V,%20512Mb,%20v1.0.pdf
-> > 
-> > MX66LM : 3.0V Octal I/O with stacked die
-> >  -https://www.mxic.com.tw/Lists/Datasheet/Attachments/7929/
-> MX66LM1G45G,%203V,%201Gb,%20v1.1.pdf
-> > 
-> > MX66UM : 1.8V Octal I/O with stacked die
-> >  -https://www.mxic.com.tw/Lists/Datasheet/Attachments/7721/
-> MX66UM1G45G,%201.8V,%201Gb,%20v1.1.pdf
-> > 
-> > MX25LW : 3.0V Octal I/O with Read-while-Write
-> > MX25UW : 1.8V Octal I/O with Read-while-Write
-> > MX66LW : 3.0V Octal I/O with Read-while-Write and stack die
-> > MX66UW : 1.8V Octal I/O with Read-while-Write and stack die
-> > 
-> > About LW/UW series, please contact us freely if you have any
-> > questions. For adding Octal NOR Flash IDs, we have validated
-> > each Flash on plateform zynq-picozed.
-> > 
-> > Signed-off-by: Zhengxun Li <zhengxunli@mxic.com.tw>
-> > ---
-> >  drivers/mtd/spi-nor/macronix.c | 100 ++++++++++++++++++++++++++++
-> +++++++++++++
-> >  1 file changed, 100 insertions(+)
-> > 
-> > diff --git a/drivers/mtd/spi-nor/macronix.c 
-b/drivers/mtd/spi-nor/macronix.c
-> > index 881eaf8..8c1cf1b 100644
-> > --- a/drivers/mtd/spi-nor/macronix.c
-> > +++ b/drivers/mtd/spi-nor/macronix.c
-> > @@ -203,6 +203,106 @@ static void octaflash_post_sfdp_fixup(struct
-> spi_nor *nor)
-> >     { "mx66u2g45g",    INFO(0xc2253c, 0, 64 * 1024, 4096,
-> >                 SECT_4K | SPI_NOR_DUAL_READ |
-> >                 SPI_NOR_QUAD_READ | SPI_NOR_4B_OPCODES) },
-> > +   { "mx66lm2g45g", INFO(0xc2853c, 0, 64 * 1024, 4096,
-> > +               SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +               SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx66lm1g45g", INFO(0xc2853b, 0, 32 * 1024, 4096,
-> > +               SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +               SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx66lw1g45g", INFO(0xc2863b, 0, 32 * 1024, 4096,
-> > +               SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +               SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx25lm51245g", INFO(0xc2853a, 0, 16 * 1024, 4096,
-> > +                SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +                SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx25lw51245g", INFO(0xc2863a, 0, 16 * 1024, 4096,
-> > +                SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +                SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx25lm25645g", INFO(0xc28539, 0, 8 * 1024, 4096,
-> > +                SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +                SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx25lw25645g", INFO(0xc28639, 0, 8 * 1024, 4096,
-> > +                SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +                SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx66um2g45g", INFO(0xc2803c, 0, 64 * 1024, 4096,
-> > +               SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +               SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx66uw2g345g", INFO(0xc2843c, 0, 64 * 1024, 4096,
-> > +                SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +                SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx66uw2g345gx0", INFO(0xc2943c, 0, 64 * 1024, 4096,
-> > +             SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +             SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx66um1g45g", INFO(0xc2803b, 0, 32 * 1024, 4096,
-> > +               SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +               SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx66um1g45g40", INFO(0xc2808b, 0, 32 * 1024, 4096,
-> > +            SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +            SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx66uw1g45g", INFO(0xc2813b, 0, 32 * 1024, 4096,
-> > +               SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +               SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx25um51245g", INFO(0xc2803a, 0, 16 * 1024, 4096,
-> > +                SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +                SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx25uw51245g", INFO(0xc2813a, 0, 16 * 1024, 4096,
-> > +                SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +                SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx25uw51345g", INFO(0xc2843a, 0, 16 * 1024, 4096,
-> > +                SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +                SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx25um25645g", INFO(0xc28039, 0, 8 * 1024, 4096,
-> > +                SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +                SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx25uw25645g", INFO(0xc28139, 0, 8 * 1024, 4096,
-> > +                SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +                SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx25um25345g", INFO(0xc28339, 0, 8 * 1024, 4096,
-> > +                SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +                SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx25uw25345g", INFO(0xc28439, 0, 8 * 1024, 4096,
-> > +                SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +                SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx25uw12845g", INFO(0xc28138, 0, 4 * 1024, 4096,
-> > +                SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +                SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx25uw12a45g", INFO(0xc28938, 0, 4 * 1024, 4096,
-> > +                SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +                SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx25uw12345g", INFO(0xc28438, 0, 4 * 1024, 4096,
-> > +                SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +                SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx25uw6445g", INFO(0xc28137, 0, 2 * 1024, 4096,
-> > +               SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +               SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
-> > +   { "mx25uw6345g", INFO(0xc28437, 0, 2 * 1024, 4096,
-> > +               SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-> > +               SPI_NOR_OCTAL_DTR_PP | SPI_NOR_4B_OPCODES)
-> > +      .fixups = &octaflash_fixups },
+> > I am not sure what the correct fix for this is though. One option is to 
+> > send the same byte twice, but I remember that on the Cypress flash the 
+> > second byte over-writes the register at the next address. I'm not sure 
+> > how Macronix flashes handle the second byte. Can you check what the 
+> > behavior for your flash is when you write 2 bytes to the register?
 > 
-> Reminder to self: Check if there are any ID collisions here. I have seen 
+> I checked the behavior of Macronix and the second byte will overwrites the 
+> register.
 
-> a couple of them show up recently on Macronix flashes.
+Yes, I see the same behaviour on Micron and Cypress flashes. Can your 
+controller send a 1-byte write in 8D mode? I am curious if this is 
+possible and how flashes react to it.
 
-Yes, we have checked for ID conflicts before sending the patch.
+My theory is that even if you ask the controller to send 1 byte in 8D 
+mode, it won't deassert the CS till the end of the cycle. This would 
+result the flash in taking the default value of the lines as the second 
+byte.
 
-> Anyway, not much to see here. I suggest you merge this with patch 1.
+> Do we need to send the same bytes to resolve this error?
 
-I will merge this to patch 1 in the next version.
+I think this is a design oversight by flash manufacturers. Having two 
+registers at consecutive addresses is problematic in 8D-8D-8D mode. The 
+only solution I see is to read the register at the next address, and set 
+its value as the second byte in the transaction. This way its value will 
+stay the same at the end of the transaction.
 
-> >  };
-> > 
-> >  static void macronix_default_init(struct spi_nor *nor)
-> 
+PS: If possible, please try to relay this issue to your hardware design 
+team. Hopefully they can come up with a clever solution for future 
+devices and make our lives easier ;-)
 
-Thanks,
-Zhengxun
-
-
-CONFIDENTIALITY NOTE:
-
-This e-mail and any attachments may contain confidential information 
-and/or personal data, which is protected by applicable laws. Please be 
-reminded that duplication, disclosure, distribution, or use of this e-mail 
-(and/or its attachments) or any part thereof is prohibited. If you receive 
-this e-mail in error, please notify us immediately and delete this mail as 
-well as its attachment(s) from your system. In addition, please be 
-informed that collection, processing, and/or use of personal data is 
-prohibited unless expressly permitted by personal data protection laws. 
-Thank you for your attention and cooperation.
-
-Macronix International Co., Ltd.
-
-=====================================================================
-
-
-
-============================================================================
-
-CONFIDENTIALITY NOTE:
-
-This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
-
-Macronix International Co., Ltd.
-
-=====================================================================
-
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
