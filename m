@@ -2,217 +2,251 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF13D371F64
-	for <lists+linux-spi@lfdr.de>; Mon,  3 May 2021 20:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E461372588
+	for <lists+linux-spi@lfdr.de>; Tue,  4 May 2021 07:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbhECSRX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 3 May 2021 14:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbhECSRW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 May 2021 14:17:22 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221B7C06138B
-        for <linux-spi@vger.kernel.org>; Mon,  3 May 2021 11:16:27 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id z1so8758650ybf.6
-        for <linux-spi@vger.kernel.org>; Mon, 03 May 2021 11:16:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3Reczk2pU6XhSh3ePtelqj5oU3zOAelzaFV/c9zrpX4=;
-        b=cIkaw53UK0YemVAZfbs3QzE9GbAx6wugK130duG3mwqCKuZd9+FVQULFiJWwPnOJgU
-         yR04Vq3ecnx7Agi3Onuvt3AFwlBb0AuaYyNrzyArJLdX7Ro3zL6kXixppT4ax+WGgGV9
-         g0zgMJcl4/sp9YjWn01+NFwqwwcGSYETpciErUB0R3Ex7I//SqqruNotqNS3nG8nws/h
-         IUv/ANW+q7Z5P0cLsQXgzvU3D99N4LP+6YqbVUuujJ5X0WQsPeG8O/MvkoNArP7VffdM
-         ymIY1Cu8702BNW3HIDYWXMqfHQiWrWBmWMD168VAos8vwExhaLeK9msjzAkGag23D+WS
-         rEMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3Reczk2pU6XhSh3ePtelqj5oU3zOAelzaFV/c9zrpX4=;
-        b=pPupUDsyb08I+QEmI/r7t83MeMDKcYxPVxYid6QBCa4TaDNfFXeF7fF2oKkgcxruhL
-         qSgFUpRR702oMyT/Qocciabt4Slo6rxPme0ibmO4K49/3SNCDmISEY1BbbEwAvnMQ49A
-         SOMAlHl61+mWQDHzrR8j/AzpKgaVI6m61dtgygoeUgEe97+cfAzcJyHD8TSI+oeEhxxK
-         YGmUJOzU17AXSxeqRqQDjeNfovMOQdNrOFVMfBrEo3PwVmNHgOaJ/7CY0Xa4KqysODgb
-         0h4PO0AXEDG9IQZOxk/g19GmzTh5TPCPkAGy4bJwIDgX1bMeHwalgfSDkyNEnUv0AWWL
-         OzRg==
-X-Gm-Message-State: AOAM5316KHypvbBp/WFUpe/HgLaejZP+52lBuPXb7fuVWaSykPyzqxFg
-        YQ/93p4otqpD+5Cq7enFpAKIJNfOuJKXCcMUPeGhSA==
-X-Google-Smtp-Source: ABdhPJzuTz8PJg7hIT1ZXdEYyj1jty71yGvb5QELrY/GEQav4jx7ika22HA6C+BWi8pstk09tKQip79KKHGfRfbu3ME=
-X-Received: by 2002:a25:a107:: with SMTP id z7mr27636496ybh.228.1620065786350;
- Mon, 03 May 2021 11:16:26 -0700 (PDT)
+        id S229737AbhEDFdI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 May 2021 01:33:08 -0400
+Received: from twhmllg3.macronix.com ([122.147.135.201]:62765 "EHLO
+        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229719AbhEDFdH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 May 2021 01:33:07 -0400
+Received: from twhfmlp1.macronix.com (twhfmlp1.macronix.com [172.17.20.91])
+        by TWHMLLG3.macronix.com with ESMTP id 1445VaTt098763;
+        Tue, 4 May 2021 13:31:36 +0800 (GMT-8)
+        (envelope-from zhengxunli@mxic.com.tw)
+Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
+        by Forcepoint Email with ESMTP id A60D1C2C4820CF76FF8C;
+        Tue,  4 May 2021 13:31:36 +0800 (CST)
+In-Reply-To: <20210427023604.vamgepl4myrhpiwu@ti.com>
+References: <1618900179-14546-1-git-send-email-zhengxunli@mxic.com.tw> <1618900179-14546-2-git-send-email-zhengxunli@mxic.com.tw> <20210427023604.vamgepl4myrhpiwu@ti.com>
+To:     "Pratyush Yadav" <p.yadav@ti.com>
+Cc:     broonie@kernel.org, jaimeliao@mxic.com.tw,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        miquel.raynal@bootlin.com, tudor.ambarus@microchip.com
+Subject: Re: [PATCH v3 1/3] mtd: spi-nor: macronix: add support for Macronix octal
+ dtr operation
 MIME-Version: 1.0
-References: <20210426235638.1285530-1-saravanak@google.com>
- <20210503100733.GA8114@wunner.de> <CAGETcx8qPg9NUS6BJLEJCZ-2La32_NPeaMf1GDArcWT6tsf_AQ@mail.gmail.com>
- <20210503175600.GA3864@wunner.de>
-In-Reply-To: <20210503175600.GA3864@wunner.de>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 3 May 2021 11:15:50 -0700
-Message-ID: <CAGETcx_Z9kjzjTaNUBgKNte8UZcT5HJ5tjkmRmFqddy78Nj9Qw@mail.gmail.com>
-Subject: Re: [PATCH] spi: Fix spi device unregister flow
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Android Kernel Team <kernel-team@android.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-KeepSent: 2365AB9C:87E8927D-482586CA:0029B8EB;
+ type=4; name=$KeepSent
+X-Mailer: Lotus Notes Release 8.5.3FP6 SHF907 April 26, 2018
+Message-ID: <OF2365AB9C.87E8927D-ON482586CA.0029B8EB-482586CB.001E5C1A@mxic.com.tw>
+From:   zhengxunli@mxic.com.tw
+Date:   Tue, 4 May 2021 13:31:36 +0800
+X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
+ 2021/05/04 PM 01:31:36,
+        Serialize complete at 2021/05/04 PM 01:31:36
+Content-Type: text/plain; charset="Big5"
+Content-Transfer-Encoding: base64
+X-MAIL: TWHMLLG3.macronix.com 1445VaTt098763
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, May 3, 2021 at 10:56 AM Lukas Wunner <lukas@wunner.de> wrote:
->
-> On Mon, May 03, 2021 at 10:21:59AM -0700, Saravana Kannan wrote:
-> > On Mon, May 3, 2021 at 3:07 AM Lukas Wunner <lukas@wunner.de> wrote:
-> > > On Mon, Apr 26, 2021 at 04:56:38PM -0700, Saravana Kannan wrote:
-> > > > When an SPI device is unregistered, the spi->controller->cleanup() is
-> > > > called in the device's release callback. That's wrong for a couple of
-> > > > reasons:
-> > > >
-> > > > 1. spi_dev_put() can be called before spi_add_device() is called. And
-> > > >    it's spi_add_device() that calls spi_setup(). This will cause clean()
-> > > >    to get called without the spi device ever being setup.
-> > >
-> > > Well, yes, but it's not a big problem in practice so far:
-> > >
-> > > I've checked all drivers and there are only four which are affected
-> > > by this: spi-mpc512x-psc.c spi-pic32.c spi-s3c64xx.c spi-st-ssc4.c
-> > >
-> > > They all fiddle with the chipselect GPIO in their ->cleanup hook
-> > > and the GPIO may not have been requested yet because that happens
-> > > during ->setup.
-> > >
-> > > All the other drivers merely invoke kzalloc() on ->setup and kfree()
-> > > on ->cleanup.  The order doesn't matter in this case because
-> > > kfree(NULL) is a no-op.
-> >
-> > That's making a lot of assumptions about drivers not doing certain
-> > things in the future or making assumptions about the hardware (chip
-> > select or whatever other configuration that might happen). Totally
-> > unnecessary and error prone.
->
-> I agree, I'm just not happy with the solution presented.
->
-> This could be solved by setting a flag in struct spi_device
-> once ->setup has returned successfully.
->
->
-> > > > 2. There's no guarantee that the controller's driver would be present by
-> > > >    the time the spi device's release function gets called.
-> > >
-> > > How so?  spi_devices are instantiated on ->probe of the controller
-> > > via spi_register_controller() and destroyed on ->remove via
-> > > spi_unregister_controller().  I don't see how the controller driver
-> > > could ever be unavailable, so this point seems moot.
-> >
-> > Just because put_device() is called on a struct device doesn't mean
-> > it's getting destroyed immediately. The refcount needs to reach zero
-> > for ->cleanup() to be called eventually. And there's no guarantee that
-> > by the time the ref count hits zero that your controller driver is
-> > still around. So, it's not a moot point.
->
-> In theory, yes, but concretely, how is that going to happen?
->
-> We remove all the things that might be holding a ref on the spi_device
-> (such as sysfs entries, child devices), so when device_unregister()
-> is called from spi_unregister_device(), the expectation is really that
-> that's the last reference being dropped.
->
-> In theory it would be possible for some other driver to hold a ref,
-> but I don't see why it would be doing that.
->
-> Perhaps spidev.c makes it possible to keep an spi_device around even
-> though the controller has been removed, simply by keeping the device
-> file open from user space.  I'm not sure if that's the case but it's
-> probably something worth checking.
 
-We can't rule out all the cases and assume refcount would hit zero
-when the framework does put_device() on the spi_device. So I don't
-think there's even a point in trying to find if this can happen. But
-since you asked, creating device links to this device is just one
-example of how this could happen.
+SGkgUHJhdHl1c2gsDQoNClRoYW5rcyBmb3IgeW91ciBjb21tZW50IG9uIHRoaXMgcGF0Y2guDQoN
+CiJQcmF0eXVzaCBZYWRhdiIgPHAueWFkYXZAdGkuY29tPiB3cm90ZSBvbiAyMDIxLzA0LzI3IKRX
+pMggMTA6MzY6MDY6DQoNCj4gIlByYXR5dXNoIFlhZGF2IiA8cC55YWRhdkB0aS5jb20+IA0KPiAy
+MDIxLzA0LzI3IKRXpMggMTA6MzYNCj4gDQo+IFRvDQo+IA0KPiAiWmhlbmd4dW4gTGkiIDx6aGVu
+Z3h1bmxpQG14aWMuY29tLnR3PiwgDQo+IA0KPiBjYw0KPiANCj4gPGxpbnV4LW10ZEBsaXN0cy5p
+bmZyYWRlYWQub3JnPiwgPGxpbnV4LXNwaUB2Z2VyLmtlcm5lbC5vcmc+LCANCj4gPHR1ZG9yLmFt
+YmFydXNAbWljcm9jaGlwLmNvbT4sIDxtaXF1ZWwucmF5bmFsQGJvb3RsaW4uY29tPiwgDQo+IDxi
+cm9vbmllQGtlcm5lbC5vcmc+LCA8amFpbWVsaWFvQG14aWMuY29tLnR3Pg0KPiANCj4gU3ViamVj
+dA0KPiANCj4gUmU6IFtQQVRDSCB2MyAxLzNdIG10ZDogc3BpLW5vcjogbWFjcm9uaXg6IGFkZCBz
+dXBwb3J0IGZvciBNYWNyb25peCANCj4gb2N0YWwgZHRyIG9wZXJhdGlvbg0KPiANCj4gSGksDQo+
+IA0KPiBPbiAyMC8wNC8yMSAwMjoyOVBNLCBaaGVuZ3h1biBMaSB3cm90ZToNCj4gPiBUaGUgb2Nh
+dGZsYXNoIGlzIGFuIHhTUEkgY29tcGxpYW50IG9jdGFsIERUUiBmbGFzaC4gQWRkIHN1cHBvcnQN
+Cj4gDQo+IFR5cG8uIHMvb2NhdGZsYXNoL29jdGFmbGFzaC8NCg0KT2theSwgaXQgd2lsbCBiZSBm
+aXhlZCBpbiB0aGUgbmV4dCB2ZXJzaW9uLg0KDQo+IA0KPiA+IGZvciB1c2luZyBpdCBpbiBvY3Rh
+bCBEVFIgbW9kZS4NCj4gPiANCj4gPiBFbmFibGUgT2N0YWwgRFRSIG1vZGUgd2l0aCAyMCBkdW1t
+eSBjeWNsZXMgdG8gYWxsb3cgcnVubmluZyBhdCB0aGUNCj4gPiBtYXhpbXVtIHN1cHBvcnRlZCBm
+cmVxdWVuY3kgb2YgMjAwTWh6Lg0KPiANCj4gV2hpY2ggb2N0YWZsYXNoIGlzIHRoYXQ/IFRoZSBm
+bGFzaCBkYXRhc2hlZXRzIHlvdSBoYXZlIGxpbmtlZCBpbiBwYXRjaCAyIA0KDQo+IGVpdGhlciBo
+YXZlIGEgbWF4IHN1cHBvcnRlZCBmcmVxdWVuY3kgb2YgMTMzIE1IeiBvciAyNTAgTUh6Lg0KDQpP
+a2F5LCBpdCB3aWxsIGJlIGZpeGVkIGluIHRoZSBuZXh0IHZlcnNpb24uDQoNCj4gPiANCj4gPiBU
+cnkgdG8gdmVyaWZ5IHRoZSBmbGFzaCBJRCB0byBjaGVjayB3aGV0aGVyIHRoZSBmbGFzaCBtZW1v
+cnkgaW4gb2N0YWwNCj4gPiBEVFIgbW9kZSBpcyBjb3JyZWN0LiBXaGVuIHJlYWRpbmcgSUQgaW4g
+T0NUQUwgRFRSIG1vZGUsIElEIHdpbGwgYXBwZWFyDQo+ID4gaW4gYSByZXBlYXRlZCBtYW5uZXIu
+IGV4OiBJRFswXSA9IDB4YzIsIElEWzFdID0gMHhjMiwgSURbMl0gPSAweDk0LA0KPiA+IElEWzNd
+ID0gMHg5NC4uLiBSZWFycmFuZ2UgdGhlIG9yZGVyIHNvIHRoYXQgdGhlIElEIGNhbiBwYXNzLg0K
+PiANCj4gT2suIEkgZG9uJ3Qgc2VlIHRoaXMgbWVudGlvbmVkIGluIHRoZSBkYXRhc2hlZXQgYnV0
+IHRoZSB0aW1pbmcgZGlhZ3JhbSANCj4gc2VlbXMgdG8gaW1wbHkgdGhpcy4NCj4gDQo+ID4gDQo+
+ID4gU2lnbmVkLW9mZi1ieTogWmhlbmd4dW4gTGkgPHpoZW5neHVubGlAbXhpYy5jb20udHc+DQo+
+ID4gLS0tDQo+ID4gIGRyaXZlcnMvbXRkL3NwaS1ub3IvbWFjcm9uaXguYyB8IDExNyArKysrKysr
+KysrKysrKysrKysrKysrKysrKysrDQo+ICsrKysrKysrKysrKysNCj4gPiAgMSBmaWxlIGNoYW5n
+ZWQsIDExNyBpbnNlcnRpb25zKCspDQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbXRk
+L3NwaS1ub3IvbWFjcm9uaXguYyANCmIvZHJpdmVycy9tdGQvc3BpLW5vci9tYWNyb25peC5jDQo+
+ID4gaW5kZXggNDJjMmNmMy4uODgxZWFmOCAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL210ZC9z
+cGktbm9yL21hY3Jvbml4LmMNCj4gPiArKysgYi9kcml2ZXJzL210ZC9zcGktbm9yL21hY3Jvbml4
+LmMNCj4gPiBAQCAtOCw2ICs4LDE2IEBADQo+ID4gDQo+ID4gICNpbmNsdWRlICJjb3JlLmgiDQo+
+ID4gDQo+ID4gKyNkZWZpbmUgU1BJTk9SX09QX1JEX0NSMiAgICAgIDB4NzEgICAgICAvKiBSZWFk
+IGNvbmZpZ3VyYXRpb24gDQpyZWdpc3RlciAyICovDQo+ID4gKyNkZWZpbmUgU1BJTk9SX09QX1dS
+X0NSMiAgICAgIDB4NzIgICAgICAvKiBXcml0ZSBjb25maWd1cmF0aW9uIA0KPiByZWdpc3RlciAy
+ICovDQo+ID4gKyNkZWZpbmUgU1BJTk9SX09QX01YSUNfRFRSX1JEICAgICAgMHhlZSAgICAgIC8q
+IEZhc3QgUmVhZCBvcGNvZGUgDQo+IGluIERUUiBtb2RlICovDQo+ID4gKyNkZWZpbmUgU1BJTk9S
+X1JFR19NWElDX0NSMl9NT0RFICAgMHgwMDAwMDAwMCAgIC8qIEZvciBzZXR0aW5nIA0KPiBvY3Rh
+bCBEVFIgbW9kZSAqLw0KPiA+ICsjZGVmaW5lIFNQSU5PUl9SRUdfTVhJQ19PUElfRFRSX0VOICAg
+MHgyICAgICAgLyogRW5hYmxlIE9jdGFsIERUUiAqLw0KPiA+ICsjZGVmaW5lIFNQSU5PUl9SRUdf
+TVhJQ19PUElfRFRSX0RJUyAgIDB4MSAgICAgIC8qIERpc2FibGUgT2N0YWwgRFRSIA0KKi8NCj4g
+DQo+IFRoaXMgd291bGQgc3dpdGNoIHRoZSBmbGFzaCB0byA4Uy04Uy04UyBtb2RlLCB3aGljaCBp
+c24ndCBhbGwgdGhhdCBtdWNoIA0KPiBiZXR0ZXIgdGhhbiA4RC04RC04RCAoaXQgaXMgYSBzdGF0
+ZWZ1bCBtb2RlLCB5b3UgbmVlZCB0byBrbm93IGJlZm9yZWhhbmQgDQoNCj4gdGhhdCB0aGUgZmxh
+c2ggaXMgaW4gdGhpcyBtb2RlIGJlZm9yZSB5b3UgY2FuIHVzZSBpdCBwcm9wZXJseSkuIEkgdGhp
+bmsgDQo+ICJkaXNhYmxpbmciIG9jdGFsIERUUiBzaG91bGQgbWVhbiBzd2l0Y2hpbmcgYmFjayB0
+byB0aGUgZGVmYXVsdCANCj4gKDFTLTFTLTFTKSBtb2RlLg0KPiANCg0KWWVzLCBzaG91bGQgYmUg
+c3dpdGNoaW5nIGJhY2sgdG8gZGVmYXVsdCgxcy0xcy0xcykgbW9kZS4NCg0KPiA+ICsjZGVmaW5l
+IFNQSU5PUl9SRUdfTVhJQ19DUjJfREMgICAgICAweDAwMDAwMzAwICAgLyogRm9yIHNldHRpbmcg
+DQo+IGR1bW15IGN5Y2xlcyAqLw0KPiA+ICsjZGVmaW5lIFNQSU5PUl9SRUdfTVhJQ19EQ18yMCAg
+ICAgIDB4MCAgICAgIC8qIFNldHRpbmcgZHVtbXkgDQo+IGN5Y2xlcyB0byAyMCAqLw0KPiA+ICsj
+ZGVmaW5lIE1YSUNfTUFYX0RDICAgICAgICAgMjAgICAgICAvKiBNYXhpbXVtIHZhbHVlIG9mIGR1
+bW15IGN5Y2xlcyANCiovDQo+ID4gKw0KPiA+ICBzdGF0aWMgaW50DQo+ID4gIG14MjVsMjU2MzVf
+cG9zdF9iZnB0X2ZpeHVwcyhzdHJ1Y3Qgc3BpX25vciAqbm9yLA0KPiA+ICAgICAgICAgICAgICAg
+Y29uc3Qgc3RydWN0IHNmZHBfcGFyYW1ldGVyX2hlYWRlciAqYmZwdF9oZWFkZXIsDQo+ID4gQEAg
+LTMyLDYgKzQyLDExMyBAQA0KPiA+ICAgICAucG9zdF9iZnB0ID0gbXgyNWwyNTYzNV9wb3N0X2Jm
+cHRfZml4dXBzLA0KPiA+ICB9Ow0KPiA+IA0KPiA+ICsvKioNCj4gPiArICogc3BpX25vcl9tYWNy
+b25peF9vY3RhbF9kdHJfZW5hYmxlKCkgLSBFbmFibGUgb2N0YWwgRFRSIG9uIA0KPiBNYWNyb25p
+eCBmbGFzaGVzLg0KPiA+ICsgKiBAbm9yOiAgICAgIHBvaW50ZXIgdG8gYSAnc3RydWN0IHNwaV9u
+b3InDQo+ID4gKyAqIEBlbmFibGU6ICAgICAgd2hldGhlciB0byBlbmFibGUgb3IgZGlzYWJsZSBP
+Y3RhbCBEVFINCj4gPiArICoNCj4gPiArICogVGhpcyBhbHNvIHNldHMgdGhlIG1lbW9yeSBhY2Nl
+c3MgZHVtbXkgY3ljbGVzIHRvIDIwIHRvIGFsbG93IA0KPiB0aGUgZmxhc2ggdG8NCj4gPiArICog
+cnVuIGF0IHVwIHRvIDIwME1Iei4NCj4gDQo+IEZvciBzb21lIGZsYXNoZXMgaXQgaXMgMjUwIE1I
+eiBhbmQgZm9yIHNvbWUgaXQgaXMgMTMzIE1Iei4gTW9yZSBvbiB0aGlzIA0KPiBiZWxvdy4uLg0K
+PiANCg0KT2theSwgaXQgd2lsbCBiZSBmaXhlZCBpbiB0aGUgbmV4dCB2ZXJzaW9uLg0KDQo+ID4g
+KyAqDQo+ID4gKyAqIFJldHVybjogMCBvbiBzdWNjZXNzLCAtZXJybm8gb3RoZXJ3aXNlLg0KPiA+
+ICsgKi8NCj4gPiArc3RhdGljIGludCBzcGlfbm9yX21hY3Jvbml4X29jdGFsX2R0cl9lbmFibGUo
+c3RydWN0IHNwaV9ub3IgKm5vciwNCj4gYm9vbCBlbmFibGUpDQo+ID4gK3sNCj4gPiArICAgc3Ry
+dWN0IHNwaV9tZW1fb3Agb3A7DQo+ID4gKyAgIHU4ICpidWYgPSBub3ItPmJvdW5jZWJ1ZiwgaTsN
+Cj4gPiArICAgaW50IHJldDsNCj4gPiArDQo+ID4gKyAgIGlmIChlbmFibGUpIHsNCj4gPiArICAg
+ICAgLyogVXNlIDIwIGR1bW15IGN5Y2xlcyBmb3IgbWVtb3J5IGFycmF5IHJlYWRzLiAqLw0KPiA+
+ICsgICAgICByZXQgPSBzcGlfbm9yX3dyaXRlX2VuYWJsZShub3IpOw0KPiA+ICsgICAgICBpZiAo
+cmV0KQ0KPiA+ICsgICAgICAgICByZXR1cm4gcmV0Ow0KPiA+ICsNCj4gPiArICAgICAgKmJ1ZiA9
+IFNQSU5PUl9SRUdfTVhJQ19EQ18yMDsNCj4gDQo+IEkndmUgbG9va2VkIGF0IGJvdGggdGhlIDEz
+MyBhbmQgMjUwIE1IeiBwYXJ0cy4gSW4gYm90aCwgdGhlIGRlZmF1bHQgDQo+IGR1bW15IGN5Y2xl
+cyBhcmUgYWxyZWFkeSAyMC4gVGhpcyBjYW4gYmUgc2tpcHBlZC4gVGhpcyB3YXkgeW91IGFsc28g
+DQo+IGRvbid0IGhhdmUgdG8gc2F5IGluIGNvbW1lbnRzIHdoZXRoZXIgdGhpcyBlbmFibGVzIDEz
+MyBNSHogb3IgMjUwIE1IeiANCj4gb3BlcmF0aW9uIChhZ2FpbiwgSSBkb24ndCBnZXQgd2hlcmUg
+dGhlIDIwMCBNSHogY29tZXMgZnJvbS4uLikuDQo+IA0KPiBUaGUgY2hpcCBtYW51ZmFjdHVyZXIg
+Y2hvc2Ugc2FuZSBkZWZhdWx0cyBmb3IgdGhlIGR1bW15IGN5Y2xlIHZhbHVlLiANCj4gTGV0J3Mg
+cmVhcCB0aGUgYmVuZWZpdHMgYW5kIHJlZHVjZSB0aGUgY29kZSB3ZSBoYXZlIHRvIG1haW50YWlu
+Lg0KDQpPa2F5LCBpdCB3aWxsIGJlIGZpeGVkIGluIHRoZSBuZXh0IHZlcnNpb24uDQoNCj4gPiAr
+ICAgICAgb3AgPSAoc3RydWN0IHNwaV9tZW1fb3ApDQo+ID4gKyAgICAgICAgIFNQSV9NRU1fT1Ao
+U1BJX01FTV9PUF9DTUQoU1BJTk9SX09QX1dSX0NSMiwgMSksDQo+ID4gKyAgICAgICAgICAgICAg
+IFNQSV9NRU1fT1BfQUREUig0LCBTUElOT1JfUkVHX01YSUNfQ1IyX0RDLCAxKSwNCj4gPiArICAg
+ICAgICAgICAgICAgU1BJX01FTV9PUF9OT19EVU1NWSwNCj4gPiArICAgICAgICAgICAgICAgU1BJ
+X01FTV9PUF9EQVRBX09VVCgxLCBidWYsIDEpKTsNCj4gPiArDQo+ID4gKyAgICAgIHJldCA9IHNw
+aV9tZW1fZXhlY19vcChub3ItPnNwaW1lbSwgJm9wKTsNCj4gPiArICAgICAgaWYgKHJldCkNCj4g
+PiArICAgICAgICAgcmV0dXJuIHJldDsNCj4gPiArDQo+ID4gKyAgICAgIHJldCA9IHNwaV9ub3Jf
+d2FpdF90aWxsX3JlYWR5KG5vcik7DQo+ID4gKyAgICAgIGlmIChyZXQpDQo+ID4gKyAgICAgICAg
+IHJldHVybiByZXQ7DQo+ID4gKw0KPiA+ICsgICAgICBub3ItPnJlYWRfZHVtbXkgPSBNWElDX01B
+WF9EQzsNCj4gDQo+IEkgZG9uJ3Qgc2VlIFNGRFAgdmFsdWVzIGxpc3RlZCBpbiB0aGUgZGF0YXNo
+ZWV0LiBTaW5jZSB0aGUgZmxhc2ggaXMgDQo+IHN1cHBvc2VkIHRvIGJlIHhTUEkgY29tcGxpYW50
+LCBpdCBzaG91bGQgaGF2ZSBhIFByb2ZpbGUgMS4wIHRhYmxlLiBEb2VzIA0KPiB0aGUgUHJvZmls
+ZSAxLjAgcGFyc2VyIGNvcnJlY3RseSBzZWxlY3QgMjAgZHVtbXkgY3ljbGVzIGZvciB0aGlzIGZs
+YXNoPyANCj4gSWYgeWVzLCB0aGVyZSBpcyBubyBuZWVkIGZvciB0aGlzLg0KDQp5ZXMsIHNob3Vs
+ZCBiZSByZW1vdmVkIGluIHRoZSBuZXh0IHZlcnNpb24uDQoNCj4gPiArICAgfQ0KPiA+ICsNCj4g
+PiArICAgLyogU2V0L3Vuc2V0IHRoZSBvY3RhbCBhbmQgRFRSIGVuYWJsZSBiaXRzLiAqLw0KPiA+
+ICsgICByZXQgPSBzcGlfbm9yX3dyaXRlX2VuYWJsZShub3IpOw0KPiA+ICsgICBpZiAocmV0KQ0K
+PiA+ICsgICAgICByZXR1cm4gcmV0Ow0KPiA+ICsNCj4gPiArICAgaWYgKGVuYWJsZSkNCj4gPiAr
+ICAgICAgKmJ1ZiA9IFNQSU5PUl9SRUdfTVhJQ19PUElfRFRSX0VOOw0KPiA+ICsgICBlbHNlDQo+
+ID4gKyAgICAgICpidWYgPSBTUElOT1JfUkVHX01YSUNfT1BJX0RUUl9ESVM7DQo+ID4gKw0KPiA+
+ICsgICBvcCA9IChzdHJ1Y3Qgc3BpX21lbV9vcCkNCj4gPiArICAgICAgU1BJX01FTV9PUChTUElf
+TUVNX09QX0NNRChTUElOT1JfT1BfV1JfQ1IyLCAxKSwNCj4gDQo+IEkgc2VlIHRoYXQgdGhlIGZs
+YXNoIHVzZXMgaW52ZXJ0ZWQgMm5kIGJ5dGUgZm9yIG9wY29kZSBpbiA4RCBtb2RlLiBJIA0KPiBh
+c3N1bWUgdGhpcyBpcyBkaXNjb3ZlcmVkIGNvcnJlY3RseSB2aWEgU0ZEUC4NCj4gDQo+ID4gKyAg
+ICAgICAgICAgIFNQSV9NRU1fT1BfQUREUig0LCBTUElOT1JfUkVHX01YSUNfQ1IyX01PREUsIDEp
+LA0KPiANCj4gNCBieXRlIGFkZHJlc3NpbmcgaXMgdXNlZCBmb3IgdGhpcyBjb21tYW5kIGV2ZW4g
+aW4gMVMtMVMtMVMgbW9kZS4gT2suDQo+IA0KPiA+ICsgICAgICAgICAgICBTUElfTUVNX09QX05P
+X0RVTU1ZLA0KPiA+ICsgICAgICAgICAgICBTUElfTUVNX09QX0RBVEFfT1VUKDEsIGJ1ZiwgMSkp
+Ow0KPiA+ICsNCj4gPiArICAgaWYgKCFlbmFibGUpDQo+ID4gKyAgICAgIHNwaV9ub3Jfc3BpbWVt
+X3NldHVwX29wKG5vciwgJm9wLCBTTk9SX1BST1RPXzhfOF84X0RUUik7DQo+IA0KPiBXaGVuIGRp
+c2FibGluZywgdGhlIG9wIHdvdWxkIGJlIGluIDhELThELThEIG1vZGUgc28gaGF2aW5nIGEgZGF0
+YSBsZW5ndGggDQoNCj4gb2YgMSB3b3VsZCBiZSBpbnZhbGlkLiBUaGlzIGlzIGN1cnJlbnRseSB0
+aGUgY2FzZSBldmVuIGluIHRoZSBwYXRjaGVzIA0KPiB0aGF0IEkgc2VudCBmb3IgTWljcm9uIGFu
+ZCBDeXByZXNzLg0KPiANCj4gSSBhbSBub3Qgc3VyZSB3aGF0IHRoZSBjb3JyZWN0IGZpeCBmb3Ig
+dGhpcyBpcyB0aG91Z2guIE9uZSBvcHRpb24gaXMgdG8gDQo+IHNlbmQgdGhlIHNhbWUgYnl0ZSB0
+d2ljZSwgYnV0IEkgcmVtZW1iZXIgdGhhdCBvbiB0aGUgQ3lwcmVzcyBmbGFzaCB0aGUgDQo+IHNl
+Y29uZCBieXRlIG92ZXItd3JpdGVzIHRoZSByZWdpc3RlciBhdCB0aGUgbmV4dCBhZGRyZXNzLiBJ
+J20gbm90IHN1cmUgDQo+IGhvdyBNYWNyb25peCBmbGFzaGVzIGhhbmRsZSB0aGUgc2Vjb25kIGJ5
+dGUuIENhbiB5b3UgY2hlY2sgd2hhdCB0aGUgDQo+IGJlaGF2aW9yIGZvciB5b3VyIGZsYXNoIGlz
+IHdoZW4geW91IHdyaXRlIDIgYnl0ZXMgdG8gdGhlIHJlZ2lzdGVyPw0KDQpJIGNoZWNrZWQgdGhl
+IGJlaGF2aW9yIG9mIE1hY3Jvbml4IGFuZCB0aGUgc2Vjb25kIGJ5dGUgd2lsbCBvdmVyd3JpdGVz
+IHRoZSANCnJlZ2lzdGVyLg0KRG8gd2UgbmVlZCB0byBzZW5kIHRoZSBzYW1lIGJ5dGVzIHRvIHJl
+c29sdmUgdGhpcyBlcnJvcj8NCg0KPiA+ICsNCj4gPiArICAgcmV0ID0gc3BpX21lbV9leGVjX29w
+KG5vci0+c3BpbWVtLCAmb3ApOw0KPiA+ICsgICBpZiAocmV0KQ0KPiA+ICsgICAgICByZXR1cm4g
+cmV0Ow0KPiA+ICsNCj4gPiArICAgLyogUmVhZCBmbGFzaCBJRCB0byBtYWtlIHN1cmUgdGhlIHN3
+aXRjaCB3YXMgc3VjY2Vzc2Z1bC4gKi8NCj4gPiArICAgb3AgPSAoc3RydWN0IHNwaV9tZW1fb3Ap
+DQo+ID4gKyAgICAgIFNQSV9NRU1fT1AoU1BJX01FTV9PUF9DTUQoU1BJTk9SX09QX1JESUQsIDEp
+LA0KPiA+ICsgICAgICAgICAgICBTUElfTUVNX09QX0FERFIoZW5hYmxlID8gNCA6IDAsIDAsIDEp
+LA0KPiA+ICsgICAgICAgICAgICBTUElfTUVNX09QX0RVTU1ZKGVuYWJsZSA/IDQgOiAwLCAxKSwN
+Cj4gPiArICAgICAgICAgICAgU1BJX01FTV9PUF9EQVRBX0lOKFNQSV9OT1JfTUFYX0lEX0xFTiwg
+YnVmLCAxKSk7DQo+ID4gKw0KPiA+ICsgICBpZiAoZW5hYmxlKQ0KPiA+ICsgICAgICBzcGlfbm9y
+X3NwaW1lbV9zZXR1cF9vcChub3IsICZvcCwgU05PUl9QUk9UT184XzhfOF9EVFIpOw0KPiA+ICsN
+Cj4gPiArICAgcmV0ID0gc3BpX21lbV9leGVjX29wKG5vci0+c3BpbWVtLCAmb3ApOw0KPiA+ICsg
+ICBpZiAocmV0KQ0KPiA+ICsgICAgICByZXR1cm4gcmV0Ow0KPiA+ICsNCj4gPiArICAgZm9yIChp
+ID0gMDsgaSA8IG5vci0+aW5mby0+aWRfbGVuOyBpKyspDQo+ID4gKyAgICAgIGlmIChidWZbaSAq
+IDJdICE9IG5vci0+aW5mby0+aWRbaV0pDQo+ID4gKyAgICAgICAgIHJldHVybiAtRUlOVkFMOw0K
+PiANCj4gT2suDQo+IA0KPiA+ICsNCj4gPiArICAgcmV0dXJuIDA7DQo+ID4gK30NCj4gPiArDQo+
+ID4gK3N0YXRpYyB2b2lkIG9jdGFmbGFzaF9kZWZhdWx0X2luaXQoc3RydWN0IHNwaV9ub3IgKm5v
+cikNCj4gPiArew0KPiA+ICsgICBub3ItPnBhcmFtcy0+b2N0YWxfZHRyX2VuYWJsZSA9IHNwaV9u
+b3JfbWFjcm9uaXhfb2N0YWxfZHRyX2VuYWJsZTsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGlj
+IHZvaWQgb2N0YWZsYXNoX3Bvc3Rfc2ZkcF9maXh1cChzdHJ1Y3Qgc3BpX25vciAqbm9yKQ0KPiA+
+ICt7DQo+ID4gKyAgIC8qIFNldCB0aGUgRmFzdCBSZWFkIHNldHRpbmdzLiAqLw0KPiA+ICsgICBu
+b3ItPnBhcmFtcy0+aHdjYXBzLm1hc2sgfD0gU05PUl9IV0NBUFNfUkVBRF84XzhfOF9EVFI7DQo+
+ID4gKyANCnNwaV9ub3Jfc2V0X3JlYWRfc2V0dGluZ3MoJm5vci0+cGFyYW1zLT5yZWFkc1tTTk9S
+X0NNRF9SRUFEXzhfOF84X0RUUl0sDQo+ID4gKyAgICAgICAgICAgICAgMCwgTVhJQ19NQVhfREMs
+IFNQSU5PUl9PUF9NWElDX0RUUl9SRCwNCj4gPiArICAgICAgICAgICAgICBTTk9SX1BST1RPXzhf
+OF84X0RUUik7DQo+ID4gKw0KPiA+ICsgICBub3ItPmNtZF9leHRfdHlwZSA9IFNQSV9OT1JfRVhU
+X0lOVkVSVDsNCj4gDQo+IFNob3VsZG4ndCB0aGlzIGJlIGRpc2NvdmVyZWQgdmlhIEJGUFQgRFdP
+UkQgMTg/DQoNCk9rYXksIGl0IHdpbGwgYmUgcmVtb3ZlZCBpbiB0aGUgbmV4dCB2ZXJzaW9uLg0K
+DQo+IA0KPiA+ICsgICBub3ItPnBhcmFtcy0+cmRzcl9kdW1teSA9IDQ7DQo+ID4gKyAgIG5vci0+
+cGFyYW1zLT5yZHNyX2FkZHJfbmJ5dGVzID0gNDsNCj4gDQo+IFNob3VsZG4ndCB0aGVzZSB0d28g
+YmUgZGlzY292ZXJlZCB2aWEgdGhlIFByb2ZpbGUgMS4wIHRhYmxlPw0KPiANCj4gSW4gZ2VuZXJh
+bCwgYXZvaWQgaGFyZC1jb2RpbmcgdmFsdWVzIHRoYXQgY2FuIGJlIGRpc2NvdmVyZWQgdGhyb3Vn
+aCANCj4gU0ZEUC4gVGhlIGRldmljZSB1c3VhbGx5IGtub3dzIG1vcmUgYWJvdXQgaXRzZWxmIHRo
+YW4gd2UgZG8uDQo+IA0KDQpPa2F5LCBpdCB3aWxsIGJlIHJlbW92ZWQgaW4gdGhlIG5leHQgdmVy
+c2lvbi4NCg0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgc3RydWN0IHNwaV9ub3JfZml4dXBz
+IG9jdGFmbGFzaF9maXh1cHMgPSB7DQo+IA0KPiBIbSwgSSBkb24ndCBsaWtlIHRoaXMgdW5yZWZl
+cmVuY2VkIHZhcmlhYmxlIGhlcmUuIEluIGZhY3QsIHlvdSBzaG91bGQNCj4gbWVyZ2UgcGF0Y2gg
+MSBhbmQgMiBpbnRvIGEgc2luZ2xlIHBhdGNoLiBUaGlzIHdvdWxkIGNvbWJpbmUgdGhpbmdzIGlu
+IGEgDQo+IHNpbmdsZSBuZWF0IGNvbW1pdCwgaW5jbHVkaW5nIHRoZSBsaW5rcyB0byBkYXRhc2hl
+ZXRzLiBUaGlzIHdpbGwgbWFrZSBpdCANCg0KPiBlYXNpZXIgZm9yIGZ1dHVyZSBhcmNoYWVvbG9n
+aXN0cyBkaWdnaW5nIGFyb3VuZCB3aXRoIGdpdCBibGFtZSB0byBmaW5kIA0KPiBzb21lIG1vcmUg
+aW5mbyBhYm91dCB0aGUgZmxhc2guDQoNCkl0IHdpbGwgYmUgbWVyZ2VkIGluIHRoZSBuZXh0IHZl
+cnNpb24uDQoNCj4gPiArICAgLmRlZmF1bHRfaW5pdCA9IG9jdGFmbGFzaF9kZWZhdWx0X2luaXQs
+DQo+ID4gKyAgIC5wb3N0X3NmZHAgPSBvY3RhZmxhc2hfcG9zdF9zZmRwX2ZpeHVwLA0KPiA+ICt9
+Ow0KPiA+ICsNCj4gPiAgc3RhdGljIGNvbnN0IHN0cnVjdCBmbGFzaF9pbmZvIG1hY3Jvbml4X3Bh
+cnRzW10gPSB7DQo+ID4gICAgIC8qIE1hY3Jvbml4ICovDQo+ID4gICAgIHsgIm14MjVsNTEyZSIs
+ICAgSU5GTygweGMyMjAxMCwgMCwgNjQgKiAxMDI0LCAgIDEsIFNFQ1RfNEspIH0sDQo+ID4gLS0g
+DQo+ID4gMS45LjENCj4gDQo+IFRoYXQncyBhbiBhbmNpZW50IHZlcnNpb24gb2YgR2l0IHlvdSdy
+ZSB1c2luZyB0aGVyZSA7LSkNCj4gDQo+IE92ZXJhbGwsIEkgbGlrZSB0aGUgZGlyZWN0aW9uIHRo
+aXMgcGF0Y2ggaXMgdGFraW5nLCBidXQgbG90cyBvZiBtaW5vciANCj4gdGhpbmdzIHRvIHBvbGlz
+aCBvdXQuDQoNClRoYW5rcywNClpoZW5neHVuDQoNCg0KQ09ORklERU5USUFMSVRZIE5PVEU6DQoN
+ClRoaXMgZS1tYWlsIGFuZCBhbnkgYXR0YWNobWVudHMgbWF5IGNvbnRhaW4gY29uZmlkZW50aWFs
+IGluZm9ybWF0aW9uIA0KYW5kL29yIHBlcnNvbmFsIGRhdGEsIHdoaWNoIGlzIHByb3RlY3RlZCBi
+eSBhcHBsaWNhYmxlIGxhd3MuIFBsZWFzZSBiZSANCnJlbWluZGVkIHRoYXQgZHVwbGljYXRpb24s
+IGRpc2Nsb3N1cmUsIGRpc3RyaWJ1dGlvbiwgb3IgdXNlIG9mIHRoaXMgZS1tYWlsIA0KKGFuZC9v
+ciBpdHMgYXR0YWNobWVudHMpIG9yIGFueSBwYXJ0IHRoZXJlb2YgaXMgcHJvaGliaXRlZC4gSWYg
+eW91IHJlY2VpdmUgDQp0aGlzIGUtbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlmeSB1cyBpbW1l
+ZGlhdGVseSBhbmQgZGVsZXRlIHRoaXMgbWFpbCBhcyANCndlbGwgYXMgaXRzIGF0dGFjaG1lbnQo
+cykgZnJvbSB5b3VyIHN5c3RlbS4gSW4gYWRkaXRpb24sIHBsZWFzZSBiZSANCmluZm9ybWVkIHRo
+YXQgY29sbGVjdGlvbiwgcHJvY2Vzc2luZywgYW5kL29yIHVzZSBvZiBwZXJzb25hbCBkYXRhIGlz
+IA0KcHJvaGliaXRlZCB1bmxlc3MgZXhwcmVzc2x5IHBlcm1pdHRlZCBieSBwZXJzb25hbCBkYXRh
+IHByb3RlY3Rpb24gbGF3cy4gDQpUaGFuayB5b3UgZm9yIHlvdXIgYXR0ZW50aW9uIGFuZCBjb29w
+ZXJhdGlvbi4NCg0KTWFjcm9uaXggSW50ZXJuYXRpb25hbCBDby4sIEx0ZC4NCg0KPT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09DQoNCg0KDQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQoNCkNPTkZJREVOVElBTElUWSBOT1RFOg0K
+DQpUaGlzIGUtbWFpbCBhbmQgYW55IGF0dGFjaG1lbnRzIG1heSBjb250YWluIGNvbmZpZGVudGlh
+bCBpbmZvcm1hdGlvbiBhbmQvb3IgcGVyc29uYWwgZGF0YSwgd2hpY2ggaXMgcHJvdGVjdGVkIGJ5
+IGFwcGxpY2FibGUgbGF3cy4gUGxlYXNlIGJlIHJlbWluZGVkIHRoYXQgZHVwbGljYXRpb24sIGRp
+c2Nsb3N1cmUsIGRpc3RyaWJ1dGlvbiwgb3IgdXNlIG9mIHRoaXMgZS1tYWlsIChhbmQvb3IgaXRz
+IGF0dGFjaG1lbnRzKSBvciBhbnkgcGFydCB0aGVyZW9mIGlzIHByb2hpYml0ZWQuIElmIHlvdSBy
+ZWNlaXZlIHRoaXMgZS1tYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHVzIGltbWVkaWF0ZWx5
+IGFuZCBkZWxldGUgdGhpcyBtYWlsIGFzIHdlbGwgYXMgaXRzIGF0dGFjaG1lbnQocykgZnJvbSB5
+b3VyIHN5c3RlbS4gSW4gYWRkaXRpb24sIHBsZWFzZSBiZSBpbmZvcm1lZCB0aGF0IGNvbGxlY3Rp
+b24sIHByb2Nlc3NpbmcsIGFuZC9vciB1c2Ugb2YgcGVyc29uYWwgZGF0YSBpcyBwcm9oaWJpdGVk
+IHVubGVzcyBleHByZXNzbHkgcGVybWl0dGVkIGJ5IHBlcnNvbmFsIGRhdGEgcHJvdGVjdGlvbiBs
+YXdzLiBUaGFuayB5b3UgZm9yIHlvdXIgYXR0ZW50aW9uIGFuZCBjb29wZXJhdGlvbi4NCg0KTWFj
+cm9uaXggSW50ZXJuYXRpb25hbCBDby4sIEx0ZC4NCg0KPT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQo=
 
->
-> > > > Fix these issues by simply moving the cleanup from the device release
-> > > > callback to the actual spi_unregister_device() function.
-> > >
-> > > Unfortunately the fix is wrong, it introduces a new problem:
-> > >
-> > > > @@ -713,6 +717,8 @@ void spi_unregister_device(struct spi_device *spi)
-> > > >       if (!spi)
-> > > >               return;
-> > > >
-> > > > +     spi_cleanup(spi);
-> > > > +
-> > > >       if (spi->dev.of_node) {
-> > > >               of_node_clear_flag(spi->dev.of_node, OF_POPULATED);
-> > > >               of_node_put(spi->dev.of_node);
-> > >
-> > > Now you're running ->cleanup before the SPI slave's driver is unbound.
-> >
-> > By "slave" device, you mean struct spi_device, right?
->
-> Yes.
->
->
-> > Sorry if I'm mistaken about my understanding of the SPI framework.
-> > Please explain how that's happening here. The main place
-> > spi_unregister_device() is getting called from is
-> > spi_controller_unregister(). If the controller's child/slave
-> > spi_device's aren't unbound by then, you've got bigger problems even
-> > without my patch?
->
-> Without your patch:
->
-> spi_unregister_device()
->   device_unregister()
->     device_del()
->       bus_remove_device()
->         device_release_driver() # access to physical SPI device in ->remove()
->     put_device()
->       kobject_put()
->         kref_put()
->           kobject_release()
->             kobject_cleanup()
->               device_release()
->                 spidev_release()
->                   spi->controller->cleanup() # controller_state freed
->
-> With your patch:
->
-> spi_unregister_device()
->   spi_cleanup()
->     spi->controller->cleanup() # controller_state freed
->   device_unregister()
->     device_del()
->       bus_remove_device()
->         device_release_driver() # access to physical SPI device in ->remove()
->
-> As a case in point, an SPI Ethernet driver I'm familiar with,
-> drivers/net/ethernet/micrel/ks8851_common.c, performs various
-> register accesses on driver unbind in ks8851_net_stop().
-> So on driver unbind, the SPI device still needs to be accessible.
->
-> However the controller_state may be necessary to access the device,
-> so freeing that before unbind is a no-go.
->
-> Let me know if this explanation wasn't sufficient.
-
-Ah, make sense. My bad. I saw the of_node_put() in
-spi_unregister_device() and glossed over the rest of the code because
-I assumed the of_node_put() wouldn't have been done before the device
-was released.
-
-So, it looks like the fix is simple. We just need to move
-spi_cleanup() to the bottom of spi_unregister_device(). I'll send a
-patch for that rather than reverting this and bringing back the other
-bugs.
-
--Saravana
