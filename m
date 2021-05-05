@@ -2,82 +2,124 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 849943735EE
-	for <lists+linux-spi@lfdr.de>; Wed,  5 May 2021 09:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CEE737364C
+	for <lists+linux-spi@lfdr.de>; Wed,  5 May 2021 10:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231868AbhEEIAo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Wed, 5 May 2021 04:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbhEEIAn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 May 2021 04:00:43 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891A8C061574
-        for <linux-spi@vger.kernel.org>; Wed,  5 May 2021 00:59:47 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1leCRW-0003vm-La; Wed, 05 May 2021 09:59:38 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1leCRT-0004SA-6P; Wed, 05 May 2021 09:59:35 +0200
-Date:   Wed, 5 May 2021 09:59:35 +0200
-To:     Jon Lin <jon.lin@rock-chips.com>
-Cc:     broonie@kernel.org, heiko@sntech.de, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@esmil.dk
-Subject: Re: [PATCH v2 2/8] spi: rockchip: Wait for STB status in slave mode
- tx_xfer
-Message-ID: <20210505075935.GB10432@pengutronix.de>
-References: <20210427073733.31419-1-jon.lin@rock-chips.com>
- <20210427073733.31419-2-jon.lin@rock-chips.com>
+        id S229566AbhEEIcx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 5 May 2021 04:32:53 -0400
+Received: from twhmllg4.macronix.com ([211.75.127.132]:63986 "EHLO
+        TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229538AbhEEIcw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 May 2021 04:32:52 -0400
+Received: from twhfm1p2.macronix.com (twhfmlp2.macronix.com [172.17.20.92])
+        by TWHMLLG4.macronix.com with ESMTP id 1458TQZv060006;
+        Wed, 5 May 2021 16:29:26 +0800 (GMT-8)
+        (envelope-from zhengxunli@mxic.com.tw)
+Received: from MXML06C.mxic.com.tw (mxml06c.mxic.com.tw [172.17.14.55])
+        by Forcepoint Email with ESMTP id 3AE9B92CFAD2F84EF8D3;
+        Wed,  5 May 2021 16:29:26 +0800 (CST)
+In-Reply-To: <20210504074218.s2zezkt3imaanfmr@ti.com>
+References: <1618900179-14546-1-git-send-email-zhengxunli@mxic.com.tw> <1618900179-14546-2-git-send-email-zhengxunli@mxic.com.tw> <20210427023604.vamgepl4myrhpiwu@ti.com> <OF2365AB9C.87E8927D-ON482586CA.0029B8EB-482586CB.001E5C1A@mxic.com.tw> <20210504074218.s2zezkt3imaanfmr@ti.com>
+To:     "Pratyush Yadav" <p.yadav@ti.com>
+Cc:     broonie@kernel.org, jaimeliao@mxic.com.tw,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        miquel.raynal@bootlin.com, tudor.ambarus@microchip.com
+Subject: Re: [PATCH v3 1/3] mtd: spi-nor: macronix: add support for Macronix octal
+ dtr operation
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20210427073733.31419-2-jon.lin@rock-chips.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 09:57:07 up 76 days, 11:21, 88 users,  load average: 0.04, 0.07,
- 0.08
-User-Agent: Mutt/1.10.1 (2018-07-13)
-From:   Sascha Hauer <sha@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+X-KeepSent: 69D02F1B:FA69BF23-482586CC:002C871B;
+ type=4; name=$KeepSent
+X-Mailer: Lotus Notes Release 8.5.3FP6 SHF907 April 26, 2018
+Message-ID: <OF69D02F1B.FA69BF23-ON482586CC.002C871B-482586CC.002EA3E6@mxic.com.tw>
+From:   zhengxunli@mxic.com.tw
+Date:   Wed, 5 May 2021 16:29:26 +0800
+X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
+ 2021/05/05 PM 04:29:26,
+        Serialize complete at 2021/05/05 PM 04:29:26
+Content-Type: text/plain; charset="Big5"
+Content-Transfer-Encoding: base64
+X-MAIL: TWHMLLG4.macronix.com 1458TQZv060006
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Jon Lin,
 
-On Tue, Apr 27, 2021 at 03:37:27PM +0800, Jon Lin wrote:
-> +static inline void wait_for_tx_idle(struct rockchip_spi *rs, bool slave_mode)
->  {
->  	unsigned long timeout = jiffies + msecs_to_jiffies(5);
->  
->  	do {
-> -		if (!(readl_relaxed(rs->regs + ROCKCHIP_SPI_SR) & SR_BUSY))
-> -			return;
-> +		if (slave_mode) {
-> +			if (!(readl_relaxed(rs->regs + ROCKCHIP_SPI_SR) & SR_SLAVE_TX_BUSY) &&
-> +			    !((readl_relaxed(rs->regs + ROCKCHIP_SPI_SR) & SR_BUSY))
-> +				return;
+SGksDQoNCiJQcmF0eXVzaCBZYWRhdiIgPHAueWFkYXZAdGkuY29tPiB3cm90ZSBvbiAyMDIxLzA1
+LzA0IKRVpMggMDM6NDI6MjA6DQoNCj4gIlByYXR5dXNoIFlhZGF2IiA8cC55YWRhdkB0aS5jb20+
+IA0KPiAyMDIxLzA1LzA0IKRVpMggMDM6NDINCj4gDQo+IFRvDQo+IA0KPiA8emhlbmd4dW5saUBt
+eGljLmNvbS50dz4sIA0KPiANCj4gY2MNCj4gDQo+IDxicm9vbmllQGtlcm5lbC5vcmc+LCA8amFp
+bWVsaWFvQG14aWMuY29tLnR3PiwgPGxpbnV4LQ0KPiBtdGRAbGlzdHMuaW5mcmFkZWFkLm9yZz4s
+IDxsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnPiwgDQo+IDxtaXF1ZWwucmF5bmFsQGJvb3RsaW4u
+Y29tPiwgPHR1ZG9yLmFtYmFydXNAbWljcm9jaGlwLmNvbT4NCj4gDQo+IFN1YmplY3QNCj4gDQo+
+IFJlOiBbUEFUQ0ggdjMgMS8zXSBtdGQ6IHNwaS1ub3I6IG1hY3Jvbml4OiBhZGQgc3VwcG9ydCBm
+b3IgTWFjcm9uaXggDQo+IG9jdGFsIGR0ciBvcGVyYXRpb24NCj4gDQo+IE9uIDA0LzA1LzIxIDAx
+OjMxUE0sIHpoZW5neHVubGlAbXhpYy5jb20udHcgd3JvdGU6DQo+ID4gSGkgUHJhdHl1c2gsDQo+
+ID4gDQo+ID4gVGhhbmtzIGZvciB5b3VyIGNvbW1lbnQgb24gdGhpcyBwYXRjaC4NCj4gPiANCj4g
+PiAiUHJhdHl1c2ggWWFkYXYiIDxwLnlhZGF2QHRpLmNvbT4gd3JvdGUgb24gMjAyMS8wNC8yNyCk
+V6TIIDEwOjM2OjA2Og0KPiA+IA0KPiBbLi4uXQ0KPiA+ID4gPiArICAgaWYgKCFlbmFibGUpDQo+
+ID4gPiA+ICsgICAgICBzcGlfbm9yX3NwaW1lbV9zZXR1cF9vcChub3IsICZvcCwgU05PUl9QUk9U
+T184XzhfOF9EVFIpOw0KPiA+ID4gDQo+ID4gPiBXaGVuIGRpc2FibGluZywgdGhlIG9wIHdvdWxk
+IGJlIGluIDhELThELThEIG1vZGUgc28gaGF2aW5nIGEgZGF0YSANCmxlbmd0aCANCj4gPiANCj4g
+PiA+IG9mIDEgd291bGQgYmUgaW52YWxpZC4gVGhpcyBpcyBjdXJyZW50bHkgdGhlIGNhc2UgZXZl
+biBpbiB0aGUgDQpwYXRjaGVzIA0KPiA+ID4gdGhhdCBJIHNlbnQgZm9yIE1pY3JvbiBhbmQgQ3lw
+cmVzcy4NCj4gPiA+IA0KPiA+ID4gSSBhbSBub3Qgc3VyZSB3aGF0IHRoZSBjb3JyZWN0IGZpeCBm
+b3IgdGhpcyBpcyB0aG91Z2guIE9uZSBvcHRpb24gaXMgDQp0byANCj4gPiA+IHNlbmQgdGhlIHNh
+bWUgYnl0ZSB0d2ljZSwgYnV0IEkgcmVtZW1iZXIgdGhhdCBvbiB0aGUgQ3lwcmVzcyBmbGFzaCAN
+CnRoZSANCj4gPiA+IHNlY29uZCBieXRlIG92ZXItd3JpdGVzIHRoZSByZWdpc3RlciBhdCB0aGUg
+bmV4dCBhZGRyZXNzLiBJJ20gbm90IA0Kc3VyZSANCj4gPiA+IGhvdyBNYWNyb25peCBmbGFzaGVz
+IGhhbmRsZSB0aGUgc2Vjb25kIGJ5dGUuIENhbiB5b3UgY2hlY2sgd2hhdCB0aGUgDQo+ID4gPiBi
+ZWhhdmlvciBmb3IgeW91ciBmbGFzaCBpcyB3aGVuIHlvdSB3cml0ZSAyIGJ5dGVzIHRvIHRoZSBy
+ZWdpc3Rlcj8NCj4gPiANCj4gPiBJIGNoZWNrZWQgdGhlIGJlaGF2aW9yIG9mIE1hY3Jvbml4IGFu
+ZCB0aGUgc2Vjb25kIGJ5dGUgd2lsbCBvdmVyd3JpdGVzIA0KdGhlIA0KPiA+IHJlZ2lzdGVyLg0K
+PiANCj4gWWVzLCBJIHNlZSB0aGUgc2FtZSBiZWhhdmlvdXIgb24gTWljcm9uIGFuZCBDeXByZXNz
+IGZsYXNoZXMuIENhbiB5b3VyIA0KPiBjb250cm9sbGVyIHNlbmQgYSAxLWJ5dGUgd3JpdGUgaW4g
+OEQgbW9kZT8gSSBhbSBjdXJpb3VzIGlmIHRoaXMgaXMgDQo+IHBvc3NpYmxlIGFuZCBob3cgZmxh
+c2hlcyByZWFjdCB0byBpdC4NCg0KT3VyIFNQSSBjb250cm9sbGVyIGNhbiBub3Qgc2VuZCAxIGJ5
+dGUgY29ycmVjdGx5IGluIDhEIG1vZGUuIEhvd2V2ZXIsIGlmIA0Kd2UNCnNlbmQgMiBieXRlcyBp
+biA4RCBtb2RlLCB0aGUgc2Vjb25kIGJ5dGUgd2lsbCBvdmVyd3JpdGUgdGhlIGZpcnN0IGJ5dGUu
+DQoNCj4gTXkgdGhlb3J5IGlzIHRoYXQgZXZlbiBpZiB5b3UgYXNrIHRoZSBjb250cm9sbGVyIHRv
+IHNlbmQgMSBieXRlIGluIDhEIA0KPiBtb2RlLCBpdCB3b24ndCBkZWFzc2VydCB0aGUgQ1MgdGls
+bCB0aGUgZW5kIG9mIHRoZSBjeWNsZS4gVGhpcyB3b3VsZCANCj4gcmVzdWx0IHRoZSBmbGFzaCBp
+biB0YWtpbmcgdGhlIGRlZmF1bHQgdmFsdWUgb2YgdGhlIGxpbmVzIGFzIHRoZSBzZWNvbmQgDQo+
+IGJ5dGUuDQo+IA0KPiA+IERvIHdlIG5lZWQgdG8gc2VuZCB0aGUgc2FtZSBieXRlcyB0byByZXNv
+bHZlIHRoaXMgZXJyb3I/DQo+IA0KPiBJIHRoaW5rIHRoaXMgaXMgYSBkZXNpZ24gb3ZlcnNpZ2h0
+IGJ5IGZsYXNoIG1hbnVmYWN0dXJlcnMuIEhhdmluZyB0d28gDQo+IHJlZ2lzdGVycyBhdCBjb25z
+ZWN1dGl2ZSBhZGRyZXNzZXMgaXMgcHJvYmxlbWF0aWMgaW4gOEQtOEQtOEQgbW9kZS4gVGhlIA0K
+PiBvbmx5IHNvbHV0aW9uIEkgc2VlIGlzIHRvIHJlYWQgdGhlIHJlZ2lzdGVyIGF0IHRoZSBuZXh0
+IGFkZHJlc3MsIGFuZCBzZXQgDQoNCj4gaXRzIHZhbHVlIGFzIHRoZSBzZWNvbmQgYnl0ZSBpbiB0
+aGUgdHJhbnNhY3Rpb24uIFRoaXMgd2F5IGl0cyB2YWx1ZSB3aWxsIA0KDQo+IHN0YXkgdGhlIHNh
+bWUgYXQgdGhlIGVuZCBvZiB0aGUgdHJhbnNhY3Rpb24uDQo+IA0KPiBQUzogSWYgcG9zc2libGUs
+IHBsZWFzZSB0cnkgdG8gcmVsYXkgdGhpcyBpc3N1ZSB0byB5b3VyIGhhcmR3YXJlIGRlc2lnbiAN
+Cj4gdGVhbS4gSG9wZWZ1bGx5IHRoZXkgY2FuIGNvbWUgdXAgd2l0aCBhIGNsZXZlciBzb2x1dGlv
+biBmb3IgZnV0dXJlIA0KPiBkZXZpY2VzIGFuZCBtYWtlIG91ciBsaXZlcyBlYXNpZXIgOy0pDQoN
+Ckkgd2lsbCB0cnkgdG8gYWR2aXNlIG91ciBkZXNpZ24gdGVhbS4gOj0pDQoNClRoYW5rcywNClpo
+ZW5neHVuDQoNCg0KDQpDT05GSURFTlRJQUxJVFkgTk9URToNCg0KVGhpcyBlLW1haWwgYW5kIGFu
+eSBhdHRhY2htZW50cyBtYXkgY29udGFpbiBjb25maWRlbnRpYWwgaW5mb3JtYXRpb24gDQphbmQv
+b3IgcGVyc29uYWwgZGF0YSwgd2hpY2ggaXMgcHJvdGVjdGVkIGJ5IGFwcGxpY2FibGUgbGF3cy4g
+UGxlYXNlIGJlIA0KcmVtaW5kZWQgdGhhdCBkdXBsaWNhdGlvbiwgZGlzY2xvc3VyZSwgZGlzdHJp
+YnV0aW9uLCBvciB1c2Ugb2YgdGhpcyBlLW1haWwgDQooYW5kL29yIGl0cyBhdHRhY2htZW50cykg
+b3IgYW55IHBhcnQgdGhlcmVvZiBpcyBwcm9oaWJpdGVkLiBJZiB5b3UgcmVjZWl2ZSANCnRoaXMg
+ZS1tYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHVzIGltbWVkaWF0ZWx5IGFuZCBkZWxldGUg
+dGhpcyBtYWlsIGFzIA0Kd2VsbCBhcyBpdHMgYXR0YWNobWVudChzKSBmcm9tIHlvdXIgc3lzdGVt
+LiBJbiBhZGRpdGlvbiwgcGxlYXNlIGJlIA0KaW5mb3JtZWQgdGhhdCBjb2xsZWN0aW9uLCBwcm9j
+ZXNzaW5nLCBhbmQvb3IgdXNlIG9mIHBlcnNvbmFsIGRhdGEgaXMgDQpwcm9oaWJpdGVkIHVubGVz
+cyBleHByZXNzbHkgcGVybWl0dGVkIGJ5IHBlcnNvbmFsIGRhdGEgcHJvdGVjdGlvbiBsYXdzLiAN
+ClRoYW5rIHlvdSBmb3IgeW91ciBhdHRlbnRpb24gYW5kIGNvb3BlcmF0aW9uLg0KDQpNYWNyb25p
+eCBJbnRlcm5hdGlvbmFsIENvLiwgTHRkLg0KDQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCg0KDQoNCj09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT0NCg0KQ09ORklERU5USUFMSVRZIE5PVEU6DQoNClRoaXMgZS1tYWlsIGFuZCBh
+bnkgYXR0YWNobWVudHMgbWF5IGNvbnRhaW4gY29uZmlkZW50aWFsIGluZm9ybWF0aW9uIGFuZC9v
+ciBwZXJzb25hbCBkYXRhLCB3aGljaCBpcyBwcm90ZWN0ZWQgYnkgYXBwbGljYWJsZSBsYXdzLiBQ
+bGVhc2UgYmUgcmVtaW5kZWQgdGhhdCBkdXBsaWNhdGlvbiwgZGlzY2xvc3VyZSwgZGlzdHJpYnV0
+aW9uLCBvciB1c2Ugb2YgdGhpcyBlLW1haWwgKGFuZC9vciBpdHMgYXR0YWNobWVudHMpIG9yIGFu
+eSBwYXJ0IHRoZXJlb2YgaXMgcHJvaGliaXRlZC4gSWYgeW91IHJlY2VpdmUgdGhpcyBlLW1haWwg
+aW4gZXJyb3IsIHBsZWFzZSBub3RpZnkgdXMgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSB0aGlzIG1h
+aWwgYXMgd2VsbCBhcyBpdHMgYXR0YWNobWVudChzKSBmcm9tIHlvdXIgc3lzdGVtLiBJbiBhZGRp
+dGlvbiwgcGxlYXNlIGJlIGluZm9ybWVkIHRoYXQgY29sbGVjdGlvbiwgcHJvY2Vzc2luZywgYW5k
+L29yIHVzZSBvZiBwZXJzb25hbCBkYXRhIGlzIHByb2hpYml0ZWQgdW5sZXNzIGV4cHJlc3NseSBw
+ZXJtaXR0ZWQgYnkgcGVyc29uYWwgZGF0YSBwcm90ZWN0aW9uIGxhd3MuIFRoYW5rIHlvdSBmb3Ig
+eW91ciBhdHRlbnRpb24gYW5kIGNvb3BlcmF0aW9uLg0KDQpNYWNyb25peCBJbnRlcm5hdGlvbmFs
+IENvLiwgTHRkLg0KDQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT0NCg==
 
-This doesn't compile. There is one opening brace too much before the
-readl_relaxed.
-
-Regards,
- Sascha
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
