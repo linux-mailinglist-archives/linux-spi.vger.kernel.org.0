@@ -2,88 +2,128 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 829FB372B66
-	for <lists+linux-spi@lfdr.de>; Tue,  4 May 2021 15:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50BE3733DA
+	for <lists+linux-spi@lfdr.de>; Wed,  5 May 2021 05:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbhEDNyv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 4 May 2021 09:54:51 -0400
-Received: from bmailout1.hostsharing.net ([83.223.95.100]:42073 "EHLO
-        bmailout1.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbhEDNyu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 May 2021 09:54:50 -0400
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id B0749300002D5;
-        Tue,  4 May 2021 15:53:53 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id A367F437A5; Tue,  4 May 2021 15:53:53 +0200 (CEST)
-Date:   Tue, 4 May 2021 15:53:53 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Joe Burmeister <joe.burmeister@devtank.co.uk>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-spi@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        nsaenz@kernel.org, phil@raspberrypi.com
-Subject: Re: [PATCH] spi: bcm2835: Fix buffer overflow with CS able to go
- beyond limit.
-Message-ID: <20210504135353.GA12996@wunner.de>
-References: <20210420083402.6950-1-joe.burmeister@devtank.co.uk>
- <c087ba2c-7839-02d1-a522-b104d8ffb8d2@gmail.com>
- <7c9f9376-1a80-b624-7b9e-0f6d04437c02@devtank.co.uk>
- <271ad212-a606-620e-3f0c-d6bff272be3c@gmail.com>
- <380624c4-82f3-0e6e-8cdb-8a9732636db8@devtank.co.uk>
- <20210423115724.GB5507@sirena.org.uk>
- <672e8d77-ee5c-f10f-0bd3-f8708dfc24c8@devtank.co.uk>
- <20210423162055.GE5507@sirena.org.uk>
- <20210501195135.GA18501@wunner.de>
- <20210504115130.GA7094@sirena.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210504115130.GA7094@sirena.org.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S230509AbhEEDPV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 May 2021 23:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230454AbhEEDPU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 May 2021 23:15:20 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CABC061574
+        for <linux-spi@vger.kernel.org>; Tue,  4 May 2021 20:14:23 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id u126-20020a3792840000b02902e769005fe1so260285qkd.2
+        for <linux-spi@vger.kernel.org>; Tue, 04 May 2021 20:14:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=6FMbAN7t12G/Juix+b9gMTv2kzO3C2P3Q5jEJeo40h4=;
+        b=RHKxy0nzZMKiiaUNg6+cDehHN1wDU7unHEmn9ng1SCsYUPc5cgsHrvLITgnMZ1z4KW
+         Xxg6wWzJHuuNnH8Z8YgFLdgnR9usVQNw94dFxzmTppUq2f2QRHago0bOsPsGuIPpU1Jh
+         LDz/07RjTFR73vDyiU2iBzST+K6dUns+UGNRnOrEGy3Ho0Y07Z2FeFNC60eBbmo5hShK
+         OxTnwzCMwmYS/i06DGdcQ943ZH/38mYOm1S3137p6HcT+KOpEjT+eEct4p1gcKjUtIV6
+         /6o0VO0lhc7yP1W4RLwDNzYt6Wdotd4KnpEI7n8ZtnNAoWkcz8iyhjYM1733toOiVMLi
+         f+7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=6FMbAN7t12G/Juix+b9gMTv2kzO3C2P3Q5jEJeo40h4=;
+        b=PtinKLWwqIVERW5YaQwlzYp0tgekkOjIzYjpWHnpa8h7ohtuGC9ZA/e6WgqRvMpW2q
+         O3o5Os6r09zSzk/XJlGTzphN24k15H6bNOMMcKK7Qq4xQsoX11ZFgFYtDME7/j1YMlvZ
+         Zye+3w5RHrCUTjUDeZBSsogBMGzaLV7CvGPA/2dUBItEdlwidCMh1cf34G4L+OqNyr8G
+         jl9sC48bgNSB+efUPbYoTcb3WwskVY8E/oDv8/SOaf16W6Ohq+V9Sk/prJvMzgzCPKXP
+         VcR9aADvtqJJqnu3toKt4Ye45ZPh5yn8ADqfyF5eg5jedDF2cAuFT4ShWmBbi54mXe9B
+         x76A==
+X-Gm-Message-State: AOAM530OagkPX3WBsY80096kdCVFh47+zx7kvMUaVdAgX6JdmheMu38W
+        Hja1uJcBnmCbBOqwUFCZKAMkwizDTkkb+ck=
+X-Google-Smtp-Source: ABdhPJxG9O+6Dqmq1pl0275GQdNWC3CuGBrHDFQUp40IO934UlNUR9csN1vCxTHLw+4ZGeFupcfTnE2b5niSMR4=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:423c:41e9:e02e:706e])
+ (user=saravanak job=sendgmr) by 2002:a05:6214:583:: with SMTP id
+ bx3mr19001972qvb.38.1620184462756; Tue, 04 May 2021 20:14:22 -0700 (PDT)
+Date:   Tue,  4 May 2021 20:14:16 -0700
+Message-Id: <20210505031416.30128-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.527.g47e6f16901-goog
+Subject: [PATCH v1] spi: Don't have controller clean up spi device before
+ driver unbind
+From:   Saravana Kannan <saravanak@google.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     Lukas Wunner <lukas@wunner.de>, kernel-team@android.com,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, May 04, 2021 at 12:51:30PM +0100, Mark Brown wrote:
-> On Sat, May 01, 2021 at 09:51:35PM +0200, Lukas Wunner wrote:
-> > I failed to appreciate that when I changed num_chipselects for
-> > spi-bcm2835.c with commit 571e31fa60b3.  That single line change
-> > in the commit ought to be reverted.
-> 
-> > And the kernel-doc ought to be amended because the crucial detail
-> > that num_chipselect needs to be set to the maximum *native* chipselects
-> > isn't mentioned anywhere.
-> 
-> Can you send patches for these please?
+When a spi device is unregistered and triggers a driver unbind, the
+driver might need to access the spi device. So, don't have the
+controller clean up the spi device before the driver is unbound. Clean
+up the spi device after the driver is unbound.
 
-Yup, I've cooked up two patches over the weekend, one bcm2835 short-term
-fix for-5.13 and one long-term solution for-5.14, they're on this branch:
+Fixes: c7299fea6769 ("spi: Fix spi device unregister flow")
+Reported-by: Lukas Wunner <lukas@wunner.de>
+Signed-off-by: Saravana Kannan <saravanak@google.com>
+---
+Lukas,
 
-https://github.com/l1k/linux/commits/bcm2835_spi_limit
-
-Just needs some more polishing and testing before submission (hopefully
-in the second half of this week).
-
-
-> > Unfortunately that's non-trivial.  The slave-specific data is DMA-mapped.
-> > It could be DMA-mapped in ->setup but there's no ->unsetup to DMA-unmap
-> > the memory once the slave is removed.  Note that the slave could be removed
-> > dynamically with a DT overlay, not just when the controller is unbound.
-> 
-> > So we'd need a new ->unsetup hook at the very least to make this work.
-> 
-> There's the cleanup() callback which seems to fit?
-
-Right, I initially missed that but found it and then prepared the patch
-on the above-linked branch.
+Can you test this out please?
 
 Thanks,
+Saravana
 
-Lukas
+ drivers/spi/spi.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 2350d131871b..b856f4a1e3a4 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -401,6 +401,12 @@ static int spi_probe(struct device *dev)
+ 	return ret;
+ }
+ 
++static void spi_cleanup(struct spi_device *spi)
++{
++	if (spi->controller->cleanup)
++		spi->controller->cleanup(spi);
++}
++
+ static int spi_remove(struct device *dev)
+ {
+ 	const struct spi_driver		*sdrv = to_spi_driver(dev->driver);
+@@ -415,6 +421,7 @@ static int spi_remove(struct device *dev)
+ 				 ERR_PTR(ret));
+ 	}
+ 
++	spi_cleanup(to_spi_device(dev));
+ 	dev_pm_domain_detach(dev, true);
+ 
+ 	return 0;
+@@ -554,12 +561,6 @@ static int spi_dev_check(struct device *dev, void *data)
+ 	return 0;
+ }
+ 
+-static void spi_cleanup(struct spi_device *spi)
+-{
+-	if (spi->controller->cleanup)
+-		spi->controller->cleanup(spi);
+-}
+-
+ /**
+  * spi_add_device - Add spi_device allocated with spi_alloc_device
+  * @spi: spi_device to register
+@@ -714,8 +715,6 @@ void spi_unregister_device(struct spi_device *spi)
+ 	if (!spi)
+ 		return;
+ 
+-	spi_cleanup(spi);
+-
+ 	if (spi->dev.of_node) {
+ 		of_node_clear_flag(spi->dev.of_node, OF_POPULATED);
+ 		of_node_put(spi->dev.of_node);
+-- 
+2.31.1.527.g47e6f16901-goog
+
