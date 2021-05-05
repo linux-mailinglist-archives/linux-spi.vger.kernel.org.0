@@ -2,124 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CEE737364C
-	for <lists+linux-spi@lfdr.de>; Wed,  5 May 2021 10:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91261373B8B
+	for <lists+linux-spi@lfdr.de>; Wed,  5 May 2021 14:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbhEEIcx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 5 May 2021 04:32:53 -0400
-Received: from twhmllg4.macronix.com ([211.75.127.132]:63986 "EHLO
-        TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbhEEIcw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 May 2021 04:32:52 -0400
-Received: from twhfm1p2.macronix.com (twhfmlp2.macronix.com [172.17.20.92])
-        by TWHMLLG4.macronix.com with ESMTP id 1458TQZv060006;
-        Wed, 5 May 2021 16:29:26 +0800 (GMT-8)
-        (envelope-from zhengxunli@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.mxic.com.tw [172.17.14.55])
-        by Forcepoint Email with ESMTP id 3AE9B92CFAD2F84EF8D3;
-        Wed,  5 May 2021 16:29:26 +0800 (CST)
-In-Reply-To: <20210504074218.s2zezkt3imaanfmr@ti.com>
-References: <1618900179-14546-1-git-send-email-zhengxunli@mxic.com.tw> <1618900179-14546-2-git-send-email-zhengxunli@mxic.com.tw> <20210427023604.vamgepl4myrhpiwu@ti.com> <OF2365AB9C.87E8927D-ON482586CA.0029B8EB-482586CB.001E5C1A@mxic.com.tw> <20210504074218.s2zezkt3imaanfmr@ti.com>
-To:     "Pratyush Yadav" <p.yadav@ti.com>
-Cc:     broonie@kernel.org, jaimeliao@mxic.com.tw,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        miquel.raynal@bootlin.com, tudor.ambarus@microchip.com
-Subject: Re: [PATCH v3 1/3] mtd: spi-nor: macronix: add support for Macronix octal
- dtr operation
+        id S232199AbhEEMkO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 5 May 2021 08:40:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56166 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229793AbhEEMkN (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 5 May 2021 08:40:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A2090608FE;
+        Wed,  5 May 2021 12:39:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620218357;
+        bh=54dU6dSYiEntoujKHzkvNojxOEYRfhM+A67m4LrvzSA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BIQ0HktfI4mtijUjcT18t4NFvBX/GgxkwzVxYeUvF3KexwRxv6BrPpu1mou61loSD
+         9Z7i5Wyy7nCRDpIsQhSGT2sZ7lqkoOM1ptUXJAjJKueyMRzS6hmwfOytBfY6L1kIbl
+         DmR/GiIyBrL13mLFTaWddeaMs9+33g69YjfiVTwOtHRPLObh0aStidVqMj7MQGXeW6
+         XJa/v7ATnPoyKYOyLnxdpkBS1DtQ5zAFqvtbWt16FcmPeD4PDFG/l7GeTB5Dq3GsSa
+         +pKdmo55rlI0Y6Wx7UmMd7BoBDq1XaJRYrllaZ8t7FvGROeoAcGLCrrqYWbJNK2ceQ
+         QZe4ZOGeAGi+w==
+Date:   Wed, 5 May 2021 13:38:40 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] spi: Don't have controller clean up spi device before
+ driver unbind
+Message-ID: <20210505123840.GA4541@sirena.org.uk>
+References: <20210505031416.30128-1-saravanak@google.com>
+ <20210505054838.GA22603@wunner.de>
 MIME-Version: 1.0
-X-KeepSent: 69D02F1B:FA69BF23-482586CC:002C871B;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3FP6 SHF907 April 26, 2018
-Message-ID: <OF69D02F1B.FA69BF23-ON482586CC.002C871B-482586CC.002EA3E6@mxic.com.tw>
-From:   zhengxunli@mxic.com.tw
-Date:   Wed, 5 May 2021 16:29:26 +0800
-X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2021/05/05 PM 04:29:26,
-        Serialize complete at 2021/05/05 PM 04:29:26
-Content-Type: text/plain; charset="Big5"
-Content-Transfer-Encoding: base64
-X-MAIL: TWHMLLG4.macronix.com 1458TQZv060006
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5vNYLRcllDrimb99"
+Content-Disposition: inline
+In-Reply-To: <20210505054838.GA22603@wunner.de>
+X-Cookie: Please ignore previous fortune.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-SGksDQoNCiJQcmF0eXVzaCBZYWRhdiIgPHAueWFkYXZAdGkuY29tPiB3cm90ZSBvbiAyMDIxLzA1
-LzA0IKRVpMggMDM6NDI6MjA6DQoNCj4gIlByYXR5dXNoIFlhZGF2IiA8cC55YWRhdkB0aS5jb20+
-IA0KPiAyMDIxLzA1LzA0IKRVpMggMDM6NDINCj4gDQo+IFRvDQo+IA0KPiA8emhlbmd4dW5saUBt
-eGljLmNvbS50dz4sIA0KPiANCj4gY2MNCj4gDQo+IDxicm9vbmllQGtlcm5lbC5vcmc+LCA8amFp
-bWVsaWFvQG14aWMuY29tLnR3PiwgPGxpbnV4LQ0KPiBtdGRAbGlzdHMuaW5mcmFkZWFkLm9yZz4s
-IDxsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnPiwgDQo+IDxtaXF1ZWwucmF5bmFsQGJvb3RsaW4u
-Y29tPiwgPHR1ZG9yLmFtYmFydXNAbWljcm9jaGlwLmNvbT4NCj4gDQo+IFN1YmplY3QNCj4gDQo+
-IFJlOiBbUEFUQ0ggdjMgMS8zXSBtdGQ6IHNwaS1ub3I6IG1hY3Jvbml4OiBhZGQgc3VwcG9ydCBm
-b3IgTWFjcm9uaXggDQo+IG9jdGFsIGR0ciBvcGVyYXRpb24NCj4gDQo+IE9uIDA0LzA1LzIxIDAx
-OjMxUE0sIHpoZW5neHVubGlAbXhpYy5jb20udHcgd3JvdGU6DQo+ID4gSGkgUHJhdHl1c2gsDQo+
-ID4gDQo+ID4gVGhhbmtzIGZvciB5b3VyIGNvbW1lbnQgb24gdGhpcyBwYXRjaC4NCj4gPiANCj4g
-PiAiUHJhdHl1c2ggWWFkYXYiIDxwLnlhZGF2QHRpLmNvbT4gd3JvdGUgb24gMjAyMS8wNC8yNyCk
-V6TIIDEwOjM2OjA2Og0KPiA+IA0KPiBbLi4uXQ0KPiA+ID4gPiArICAgaWYgKCFlbmFibGUpDQo+
-ID4gPiA+ICsgICAgICBzcGlfbm9yX3NwaW1lbV9zZXR1cF9vcChub3IsICZvcCwgU05PUl9QUk9U
-T184XzhfOF9EVFIpOw0KPiA+ID4gDQo+ID4gPiBXaGVuIGRpc2FibGluZywgdGhlIG9wIHdvdWxk
-IGJlIGluIDhELThELThEIG1vZGUgc28gaGF2aW5nIGEgZGF0YSANCmxlbmd0aCANCj4gPiANCj4g
-PiA+IG9mIDEgd291bGQgYmUgaW52YWxpZC4gVGhpcyBpcyBjdXJyZW50bHkgdGhlIGNhc2UgZXZl
-biBpbiB0aGUgDQpwYXRjaGVzIA0KPiA+ID4gdGhhdCBJIHNlbnQgZm9yIE1pY3JvbiBhbmQgQ3lw
-cmVzcy4NCj4gPiA+IA0KPiA+ID4gSSBhbSBub3Qgc3VyZSB3aGF0IHRoZSBjb3JyZWN0IGZpeCBm
-b3IgdGhpcyBpcyB0aG91Z2guIE9uZSBvcHRpb24gaXMgDQp0byANCj4gPiA+IHNlbmQgdGhlIHNh
-bWUgYnl0ZSB0d2ljZSwgYnV0IEkgcmVtZW1iZXIgdGhhdCBvbiB0aGUgQ3lwcmVzcyBmbGFzaCAN
-CnRoZSANCj4gPiA+IHNlY29uZCBieXRlIG92ZXItd3JpdGVzIHRoZSByZWdpc3RlciBhdCB0aGUg
-bmV4dCBhZGRyZXNzLiBJJ20gbm90IA0Kc3VyZSANCj4gPiA+IGhvdyBNYWNyb25peCBmbGFzaGVz
-IGhhbmRsZSB0aGUgc2Vjb25kIGJ5dGUuIENhbiB5b3UgY2hlY2sgd2hhdCB0aGUgDQo+ID4gPiBi
-ZWhhdmlvciBmb3IgeW91ciBmbGFzaCBpcyB3aGVuIHlvdSB3cml0ZSAyIGJ5dGVzIHRvIHRoZSBy
-ZWdpc3Rlcj8NCj4gPiANCj4gPiBJIGNoZWNrZWQgdGhlIGJlaGF2aW9yIG9mIE1hY3Jvbml4IGFu
-ZCB0aGUgc2Vjb25kIGJ5dGUgd2lsbCBvdmVyd3JpdGVzIA0KdGhlIA0KPiA+IHJlZ2lzdGVyLg0K
-PiANCj4gWWVzLCBJIHNlZSB0aGUgc2FtZSBiZWhhdmlvdXIgb24gTWljcm9uIGFuZCBDeXByZXNz
-IGZsYXNoZXMuIENhbiB5b3VyIA0KPiBjb250cm9sbGVyIHNlbmQgYSAxLWJ5dGUgd3JpdGUgaW4g
-OEQgbW9kZT8gSSBhbSBjdXJpb3VzIGlmIHRoaXMgaXMgDQo+IHBvc3NpYmxlIGFuZCBob3cgZmxh
-c2hlcyByZWFjdCB0byBpdC4NCg0KT3VyIFNQSSBjb250cm9sbGVyIGNhbiBub3Qgc2VuZCAxIGJ5
-dGUgY29ycmVjdGx5IGluIDhEIG1vZGUuIEhvd2V2ZXIsIGlmIA0Kd2UNCnNlbmQgMiBieXRlcyBp
-biA4RCBtb2RlLCB0aGUgc2Vjb25kIGJ5dGUgd2lsbCBvdmVyd3JpdGUgdGhlIGZpcnN0IGJ5dGUu
-DQoNCj4gTXkgdGhlb3J5IGlzIHRoYXQgZXZlbiBpZiB5b3UgYXNrIHRoZSBjb250cm9sbGVyIHRv
-IHNlbmQgMSBieXRlIGluIDhEIA0KPiBtb2RlLCBpdCB3b24ndCBkZWFzc2VydCB0aGUgQ1MgdGls
-bCB0aGUgZW5kIG9mIHRoZSBjeWNsZS4gVGhpcyB3b3VsZCANCj4gcmVzdWx0IHRoZSBmbGFzaCBp
-biB0YWtpbmcgdGhlIGRlZmF1bHQgdmFsdWUgb2YgdGhlIGxpbmVzIGFzIHRoZSBzZWNvbmQgDQo+
-IGJ5dGUuDQo+IA0KPiA+IERvIHdlIG5lZWQgdG8gc2VuZCB0aGUgc2FtZSBieXRlcyB0byByZXNv
-bHZlIHRoaXMgZXJyb3I/DQo+IA0KPiBJIHRoaW5rIHRoaXMgaXMgYSBkZXNpZ24gb3ZlcnNpZ2h0
-IGJ5IGZsYXNoIG1hbnVmYWN0dXJlcnMuIEhhdmluZyB0d28gDQo+IHJlZ2lzdGVycyBhdCBjb25z
-ZWN1dGl2ZSBhZGRyZXNzZXMgaXMgcHJvYmxlbWF0aWMgaW4gOEQtOEQtOEQgbW9kZS4gVGhlIA0K
-PiBvbmx5IHNvbHV0aW9uIEkgc2VlIGlzIHRvIHJlYWQgdGhlIHJlZ2lzdGVyIGF0IHRoZSBuZXh0
-IGFkZHJlc3MsIGFuZCBzZXQgDQoNCj4gaXRzIHZhbHVlIGFzIHRoZSBzZWNvbmQgYnl0ZSBpbiB0
-aGUgdHJhbnNhY3Rpb24uIFRoaXMgd2F5IGl0cyB2YWx1ZSB3aWxsIA0KDQo+IHN0YXkgdGhlIHNh
-bWUgYXQgdGhlIGVuZCBvZiB0aGUgdHJhbnNhY3Rpb24uDQo+IA0KPiBQUzogSWYgcG9zc2libGUs
-IHBsZWFzZSB0cnkgdG8gcmVsYXkgdGhpcyBpc3N1ZSB0byB5b3VyIGhhcmR3YXJlIGRlc2lnbiAN
-Cj4gdGVhbS4gSG9wZWZ1bGx5IHRoZXkgY2FuIGNvbWUgdXAgd2l0aCBhIGNsZXZlciBzb2x1dGlv
-biBmb3IgZnV0dXJlIA0KPiBkZXZpY2VzIGFuZCBtYWtlIG91ciBsaXZlcyBlYXNpZXIgOy0pDQoN
-Ckkgd2lsbCB0cnkgdG8gYWR2aXNlIG91ciBkZXNpZ24gdGVhbS4gOj0pDQoNClRoYW5rcywNClpo
-ZW5neHVuDQoNCg0KDQpDT05GSURFTlRJQUxJVFkgTk9URToNCg0KVGhpcyBlLW1haWwgYW5kIGFu
-eSBhdHRhY2htZW50cyBtYXkgY29udGFpbiBjb25maWRlbnRpYWwgaW5mb3JtYXRpb24gDQphbmQv
-b3IgcGVyc29uYWwgZGF0YSwgd2hpY2ggaXMgcHJvdGVjdGVkIGJ5IGFwcGxpY2FibGUgbGF3cy4g
-UGxlYXNlIGJlIA0KcmVtaW5kZWQgdGhhdCBkdXBsaWNhdGlvbiwgZGlzY2xvc3VyZSwgZGlzdHJp
-YnV0aW9uLCBvciB1c2Ugb2YgdGhpcyBlLW1haWwgDQooYW5kL29yIGl0cyBhdHRhY2htZW50cykg
-b3IgYW55IHBhcnQgdGhlcmVvZiBpcyBwcm9oaWJpdGVkLiBJZiB5b3UgcmVjZWl2ZSANCnRoaXMg
-ZS1tYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHVzIGltbWVkaWF0ZWx5IGFuZCBkZWxldGUg
-dGhpcyBtYWlsIGFzIA0Kd2VsbCBhcyBpdHMgYXR0YWNobWVudChzKSBmcm9tIHlvdXIgc3lzdGVt
-LiBJbiBhZGRpdGlvbiwgcGxlYXNlIGJlIA0KaW5mb3JtZWQgdGhhdCBjb2xsZWN0aW9uLCBwcm9j
-ZXNzaW5nLCBhbmQvb3IgdXNlIG9mIHBlcnNvbmFsIGRhdGEgaXMgDQpwcm9oaWJpdGVkIHVubGVz
-cyBleHByZXNzbHkgcGVybWl0dGVkIGJ5IHBlcnNvbmFsIGRhdGEgcHJvdGVjdGlvbiBsYXdzLiAN
-ClRoYW5rIHlvdSBmb3IgeW91ciBhdHRlbnRpb24gYW5kIGNvb3BlcmF0aW9uLg0KDQpNYWNyb25p
-eCBJbnRlcm5hdGlvbmFsIENvLiwgTHRkLg0KDQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCg0KDQoNCj09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT0NCg0KQ09ORklERU5USUFMSVRZIE5PVEU6DQoNClRoaXMgZS1tYWlsIGFuZCBh
-bnkgYXR0YWNobWVudHMgbWF5IGNvbnRhaW4gY29uZmlkZW50aWFsIGluZm9ybWF0aW9uIGFuZC9v
-ciBwZXJzb25hbCBkYXRhLCB3aGljaCBpcyBwcm90ZWN0ZWQgYnkgYXBwbGljYWJsZSBsYXdzLiBQ
-bGVhc2UgYmUgcmVtaW5kZWQgdGhhdCBkdXBsaWNhdGlvbiwgZGlzY2xvc3VyZSwgZGlzdHJpYnV0
-aW9uLCBvciB1c2Ugb2YgdGhpcyBlLW1haWwgKGFuZC9vciBpdHMgYXR0YWNobWVudHMpIG9yIGFu
-eSBwYXJ0IHRoZXJlb2YgaXMgcHJvaGliaXRlZC4gSWYgeW91IHJlY2VpdmUgdGhpcyBlLW1haWwg
-aW4gZXJyb3IsIHBsZWFzZSBub3RpZnkgdXMgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSB0aGlzIG1h
-aWwgYXMgd2VsbCBhcyBpdHMgYXR0YWNobWVudChzKSBmcm9tIHlvdXIgc3lzdGVtLiBJbiBhZGRp
-dGlvbiwgcGxlYXNlIGJlIGluZm9ybWVkIHRoYXQgY29sbGVjdGlvbiwgcHJvY2Vzc2luZywgYW5k
-L29yIHVzZSBvZiBwZXJzb25hbCBkYXRhIGlzIHByb2hpYml0ZWQgdW5sZXNzIGV4cHJlc3NseSBw
-ZXJtaXR0ZWQgYnkgcGVyc29uYWwgZGF0YSBwcm90ZWN0aW9uIGxhd3MuIFRoYW5rIHlvdSBmb3Ig
-eW91ciBhdHRlbnRpb24gYW5kIGNvb3BlcmF0aW9uLg0KDQpNYWNyb25peCBJbnRlcm5hdGlvbmFs
-IENvLiwgTHRkLg0KDQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT0NCg==
+--5vNYLRcllDrimb99
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Wed, May 05, 2021 at 07:48:38AM +0200, Lukas Wunner wrote:
+
+> As I've written yesterday, calling spi_cleanup() in
+> spi_unregister_device() should be fine if you move it to the end
+> of the function, but before the final put_device().  For that,
+> you need to open code the calls to device_del() and put_device()
+> that happen in device_unregister() so far.
+
+Indeed.
+
+--5vNYLRcllDrimb99
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCSkdAACgkQJNaLcl1U
+h9C8JQf+NaV0aho4M5PbriQYD/9COSKhGGUdlZypLj/s+ZRCIRXjryamrFajafek
+YqpStp4it+gRDz7Pg8W2vWA0QpvzA+O/KWM5DQJ+hwgUqiVffe5N8zIKhdmwFsTB
+hUwfuZ4Eg7TWC7KjK/0yuWn3+CH5+st5eqYO9aYhtEYV3POTVIxJajUgMcihOfpp
+bWDnNOfG05OkVIlABAoGslHpcSOigrl3YcQAKneIGaQXH8Plh/AGU5ryRNNAGSyw
+l+5lMmea74lJdfjs53bg6Z951S1VyTB4AJeeGRyaB5Squbj4+ieAdj5VqQaP9qwi
+DUeape1mbA8Gz/8ASfCIMnnHML9zRw==
+=CEzc
+-----END PGP SIGNATURE-----
+
+--5vNYLRcllDrimb99--
