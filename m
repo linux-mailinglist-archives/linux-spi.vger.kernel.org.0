@@ -2,93 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D363753AB
-	for <lists+linux-spi@lfdr.de>; Thu,  6 May 2021 14:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E163753DD
+	for <lists+linux-spi@lfdr.de>; Thu,  6 May 2021 14:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230475AbhEFMSU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 6 May 2021 08:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
+        id S229921AbhEFMbM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 6 May 2021 08:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbhEFMST (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 May 2021 08:18:19 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8142CC061574;
-        Thu,  6 May 2021 05:17:20 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id q2so4930823pfh.13;
-        Thu, 06 May 2021 05:17:20 -0700 (PDT)
+        with ESMTP id S229777AbhEFMbM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 May 2021 08:31:12 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC57C061574
+        for <linux-spi@vger.kernel.org>; Thu,  6 May 2021 05:30:13 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id j10so7478076lfb.12
+        for <linux-spi@vger.kernel.org>; Thu, 06 May 2021 05:30:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9qGhux9uV3p7YMDVV2UIEYRyjKzHm/Qxkdk6B58HDWg=;
-        b=aChKhmiqNG3NNR32W5zS2h3BhcyuqE+9Ofsi0fG14MUCWv95sbpBDqvzphTdxeb4lb
-         Ss0/rTbTLq2mNmCw39St2yYBZtQsss4/1whVE+KV87UkVJSy8hlUkkvpS8hvX5Kw5mRi
-         5kkMQwOr0XfBvimZPelelTEl+dW1usTyanvHziwmC418xp2mL5vv/OBqGa34YN9WO7Jb
-         vJIcFX3tKF7Io2jrdXNMah33mQo4bRG7MQ4sPV9lbW/yO4iivc8ILbdwVci2jPJ061OV
-         axgu2UwFIdhisooup1lzWsJT17WsJYs0bkubzdTJqn+6s4mkNxW27ny/jVzzSZKq1l86
-         kTcA==
+         :cc;
+        bh=400x6iZy6/HL/Nrl18LUmigZy1nnEx49HdlvgSm1I4E=;
+        b=M2NgilFY+TJZ3Zlc/+9hPTLqnpzPb5y9cMpKop1SX2v1GaaNRvSe3dbcSQuwfaZOb6
+         k2qv1+bnAaxyWKzHFVSKypWDNgphX7mgiOARHkfC+i6a4czrT7Lanpp9P0AcPJFgmYN+
+         cM0gJ/P/5nfccihyRhk69O1ryrZS1GaEz8URuFwsI3by2SafLaEeeSZI7BGg3mUbgiBh
+         D+NkN9YdEsjbNChkNwjiZJpbG3nRElcuFVQwRoMjidvTadtZZkMJNwX6p9Oxa5Q9KqS0
+         65WRR+de+m6MKaAG3RcMS7X8wc361aaaHZinNkmwAn7NtmEIapklqGfULVY188UV4Odv
+         N+CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9qGhux9uV3p7YMDVV2UIEYRyjKzHm/Qxkdk6B58HDWg=;
-        b=igWAc4ZnaIgrztyC9wKYYoz9CBd61YljtWTCjiWjDWOEqvUToD07+3PiMEI+FlJ2Le
-         T5ZC+3MQDbo0WDdRRahI4EpDNvlwgf0e3ZeUrqmggRNdYf2LGWiFyArl7NBhBeN77axr
-         3C3Np33VjmXh41Njiec2+y8pPpFanRmBhpjIB5Qgz15okq++GHhHG/uoByONCOVfO4Po
-         ouIY/eD+Ufe5bQqzxPhakPfPXLIT+oLSjVv7Vo5EEjsxamRAPrmp06tUdGP3Dv+ja5iO
-         Ne0DoggpzbST999vYOLJNTsVoSvNxkZSd1pPn+D+HS1PARnmA3BaCNpgjnBHhufZMD3Z
-         XEFw==
-X-Gm-Message-State: AOAM5330eS6B//6d0zT8zwZdh1BOVTB45/oXT545c6nFeb6zZfNzib3M
-        IwbxjiLSvBGZm1Gr4I6li2dJQMXOZ/3qPLeDdxI=
-X-Google-Smtp-Source: ABdhPJyEGAXFCv+6stiNkyCv3dEt2Sc/MfHoaTQBq/p4OKTwVdeyKK/lizfKvSlagkQREd7x0kwaFaLZOGL5Ryzekhw=
-X-Received: by 2002:aa7:8e85:0:b029:28f:2620:957e with SMTP id
- a5-20020aa78e850000b029028f2620957emr4292467pfr.40.1620303439937; Thu, 06 May
- 2021 05:17:19 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=400x6iZy6/HL/Nrl18LUmigZy1nnEx49HdlvgSm1I4E=;
+        b=fD0oTBTdRplb4WWKOtqmXBzASklHN9HJM0B0BOLMoCUy031S/JXYVPLyqHGaOtPAlj
+         KbG+pMjkDvXw+dBiDeqv6QM0XJn688rYIqunvl1kyd27nMtsgFpzdFB+eYvq8TF8hwV5
+         A+i2n6sLpSCvQJk9BqMGrA+LdoB8qj7Rmp3j6Q16zNpsjNLNDM8oFuc3SUAs4WyM4xHe
+         NADB0jXRSoqUdcA0c4IYtYlYZMRwTonWMxvdgckIRLTOTn4QU7Emk2eEx4uR/B5tLh4u
+         hFA7NImN8+YnkZWQ5y5rd0qOgkp3JHSGqbtafd+ogp+c3pbJAkN0VziJOT5OD6vbpdJ6
+         QWhQ==
+X-Gm-Message-State: AOAM532X76CYfG88/Q306Nrz9DR2kJWGqwEi/XfES6eyMc6RtYbSr/Th
+        fRgDq+GjPvUL7JNTC/wRU+rLBqPSuhAv3I49sfLkNw==
+X-Google-Smtp-Source: ABdhPJxA6lxDi3ZaNQ6iBPt1DpkaZbIueswU/r0EocErLyl7SXhoVeGhjQcLkVVc3iADVmx3RVAfFZ8bD5JtIhD1EbU=
+X-Received: by 2002:a19:b0b:: with SMTP id 11mr2611610lfl.291.1620304212322;
+ Thu, 06 May 2021 05:30:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <1620270017-52643-1-git-send-email-f.fangjian@huawei.com>
- <CAHp75Vfr8t9UVqVn6hLSN6Mi3=iNAn612eE-qKq9HfrwNhpg3Q@mail.gmail.com>
- <CAHp75Vei0QGaKiq5Nai7Gsa=jcMSipaXV_6qZbBy=f0OrN=DHQ@mail.gmail.com>
- <e919da77-a664-d78b-2c47-cc9ba8745a72@huawei.com> <CAHp75VdPYGLmDkmKETBHWLOQVHwZAdbk4wBtzMjXcX223eH1-w@mail.gmail.com>
- <CACRpkdYR99SRgDJEK6e-eT86hBOxz-Ym5pf8Zn+0k4u+i=nfOA@mail.gmail.com>
- <CAHp75Veoqnd3Hgzq8DAz-_=QxMt-+r608dkzPp67YA5eitLJNw@mail.gmail.com> <20210506113430.GB4642@sirena.org.uk>
-In-Reply-To: <20210506113430.GB4642@sirena.org.uk>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 6 May 2021 15:17:03 +0300
-Message-ID: <CAHp75Vf3yvSJUcmugjs8mcbnRa=PPviqqSrgB+Yyq6QV+J+Sbg@mail.gmail.com>
-Subject: Re: [PATCH 0/2] spi: Correct CS GPIOs polarity when using GPIO descriptors
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Jay Fang <f.fangjian@huawei.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linuxarm@huawei.com" <linuxarm@huawei.com>,
-        "huangdaode@huawei.com" <huangdaode@huawei.com>,
-        "tangzihao1@hisilicon.com" <tangzihao1@hisilicon.com>
+References: <424d37007b7e298cf9bca5ac38d45a723e0976ee.1620301297.git.xhao@linux.alibaba.com>
+In-Reply-To: <424d37007b7e298cf9bca5ac38d45a723e0976ee.1620301297.git.xhao@linux.alibaba.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 6 May 2021 14:30:01 +0200
+Message-ID: <CACRpkdYyXO=47aTyhUfY6MLNUFiRUzORLGDMeV7E4JULbx3hbQ@mail.gmail.com>
+Subject: Re: [PATCH v1] spi: fix client driver can't register success when use
+ GPIO as CS
+To:     bier@b-x3vxmd6m-2058.local
+Cc:     Mark Brown <broonie@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, May 6, 2021 at 2:35 PM Mark Brown <broonie@kernel.org> wrote:
-> On Thu, May 06, 2021 at 02:24:17PM +0300, Andy Shevchenko wrote:
-> > On Thursday, May 6, 2021, Linus Walleij <linus.walleij@linaro.org> wrot=
-e:
->
-> > > Curious that ACPI has SPI CS as always active high,
->
-> > Here I didn=E2=80=99t get what exactly you are pointing out. GPIOs are =
-active high,
-> > due to historical reasons. Otherwise SPI CS depends on the actual hardw=
-are
-> > and may be (most of the cases?) active low.
->
-> SPI chip selects are almost always active low - the signal is often
-> written nCS or /CS for that reason.
+On Thu, May 6, 2021 at 1:45 PM Xin Hao <bier@b-x3vxmd6m-2058.local> wrote:
 
-Exactly, and it's not altered with ACPI. That's the whole point of
-keeping it active high for _GPIO_ CS case.
+> From: Xin Hao <xhao@linux.alibaba.com>
+>
+> When i was testing the TPM2 device, I found that the driver
+> always failed to register which used SPI bus and GPIO as CS
+> signal, i found that the reason for the error was that CS could
+> not be set correctly, so there fixed it.
+>
+> Fixes: 766c6b63aa044e ("spi: fix client driver breakages when using
+> GPIO descriptors")
+> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
 
---=20
-With Best Regards,
-Andy Shevchenko
+(...)
+>                                 /* polarity handled by gpiolib */
+>                                 gpiod_set_value_cansleep(spi->cs_gpiod,
+> -                                                        enable1);
+> +                                                        !enable);
+
+We have been over this code a lot of times, can you
+help us to investigate the root cause here and check
+how the interrupts are provided on this platform.
+
+TPM2 makes me think that this is an Intel platform
+and maybe ACPI of some kind so you need to run
+it by Andy, who is working on some related fixes.
+
+Yours,
+Linus Walleij
