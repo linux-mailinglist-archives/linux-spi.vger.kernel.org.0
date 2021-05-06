@@ -2,48 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A3E37477C
-	for <lists+linux-spi@lfdr.de>; Wed,  5 May 2021 20:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE42374DC1
+	for <lists+linux-spi@lfdr.de>; Thu,  6 May 2021 05:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234890AbhEER6A (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 5 May 2021 13:58:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33762 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229901AbhEER5o (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 5 May 2021 13:57:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 0C2D2613C3;
-        Wed,  5 May 2021 17:56:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620237408;
-        bh=QKuqCq2rp2rA/n9sdleMb9bXmShxVTnmSxiELcg6CBw=;
-        h=Subject:From:Date:To:From;
-        b=lp+VsGtDc/sf8LqRGxFD4ZIot9UtgHj3LWuQD6dHEb7BKU4G9BwzDVNVbU6riaqEh
-         2Hn6h3Dy9m9hSGAp0j94pG6MZXnvg/9xXkV/q3qfHGj1X3ow2vdm3lkeMTApjT03wD
-         e4R2OlnYz4v3YrZRr3ZTjFW4p/jKw4aQ8O7HKBVZPvI6EbFw3FHC5K+E+rVuScfm4o
-         JBHwC7pQ45EdpDdwpUbxf0MVGjwaGJfynPhtYJV8RZCB0OkGY9vABivH/udP3Gq6KH
-         sMG/I1Iwt1/9qYRQIHCb3zlCdsz+ekAAbLWuhfg8jpPvX7VlJinM2kj9Gqny5rbP17
-         UND7yLn1jT4DA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id F23A4609AC;
-        Wed,  5 May 2021 17:56:47 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S229465AbhEFDBY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 5 May 2021 23:01:24 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:17133 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231473AbhEFDBY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 May 2021 23:01:24 -0400
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FbJC93v2xzmfff;
+        Thu,  6 May 2021 10:57:09 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
+ 14.3.498.0; Thu, 6 May 2021 11:00:16 +0800
+From:   Jay Fang <f.fangjian@huawei.com>
+To:     <broonie@kernel.org>, <linus.walleij@linaro.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linuxarm@huawei.com>, <huangdaode@huawei.com>,
+        <tangzihao1@hisilicon.com>
+Subject: [PATCH 0/2] spi: Correct CS GPIOs polarity when using GPIO descriptors
+Date:   Thu, 6 May 2021 11:00:15 +0800
+Message-ID: <1620270017-52643-1-git-send-email-f.fangjian@huawei.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <162023740798.898.8102206225185315688.git-patchwork-housekeeping@kernel.org>
-Date:   Wed, 05 May 2021 17:56:47 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] spi: Don't have controller clean up spi device before driver unbind (2021-05-05T16:47:34)
-  Superseding: [v1] spi: Don't have controller clean up spi device before driver unbind (2021-05-05T03:14:16):
-    [v1] spi: Don't have controller clean up spi device before driver unbind
+This series introduces a generic implementation to solve the conflict
+between the 'cs-gpios' flags and the optional SPI slaves flags. So we
+don't need to add two similar quirks separately for DT and ACPI.
 
+Jay Fang (2):
+  spi: Correct CS GPIOs polarity when using GPIO descriptors
+  Revert "gpio: of: Handle SPI chipselect legacy bindings"
+
+ drivers/gpio/gpiolib-of.c | 51 ++---------------------------------------------
+ drivers/spi/spi.c         | 22 ++++++++++++++++++--
+ 2 files changed, 22 insertions(+), 51 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.7.4
 
