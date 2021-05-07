@@ -2,28 +2,28 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4563137680F
-	for <lists+linux-spi@lfdr.de>; Fri,  7 May 2021 17:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1FB376846
+	for <lists+linux-spi@lfdr.de>; Fri,  7 May 2021 17:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237898AbhEGPdK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 7 May 2021 11:33:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56106 "EHLO mail.kernel.org"
+        id S235180AbhEGPuD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 7 May 2021 11:50:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46086 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237859AbhEGPdK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 7 May 2021 11:33:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E3F4B61460;
-        Fri,  7 May 2021 15:32:09 +0000 (UTC)
+        id S229558AbhEGPuC (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 7 May 2021 11:50:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 35869610E7;
+        Fri,  7 May 2021 15:49:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620401530;
-        bh=O3zHx8gGy8AU49D+Cnr2TBWRAoXneuMN59DU/Ks3vhs=;
+        s=k20201202; t=1620402542;
+        bh=zo5ZaLSYcdR5moJLPq+dp/uSFCyN6+28ysDvX0t73as=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RjOYIsvAC5gLtDgOeipF0F06gxKKV6y4oHApV4eIapZor+2Jwj5gHQ1ya1MhHIyme
-         bn61u5vsDc+ZcuMPSOH8v51zHMySSD8emcgVya6okdgrrzXFEwxxa//ImRHWGV1gJl
-         sHauyc5dg4V1lXYoUc+almVuAt38m/6XSH8ERigfRMQ7VQWrj8BibB6n8Q5FsVZ/cm
-         kvZ+evUd1a3JB8VP9Zh54XD9EHXQxm4XwVvCPMJ7P1rOOdwGkb7AAM04G8tAH2OFlK
-         0eu0oPZlAUEz/mqY+wnHxXUmeLJj3RCmP9mID3ZsScJvArFw7MoNkFYFTMyEy+EEP3
-         QZZHlc+e1zE9A==
-Date:   Fri, 7 May 2021 16:31:32 +0100
+        b=HYH4zmKqXK7asr2NCrAehDy7TJy4roOiA59dsBYIB3Y1rS3DLCAPQ1EIfdXmJlmIG
+         Lt31BDaF66DRiGb7F59boyJ6YvUqskTClejh8D9H+trDNsjE0g2pnHIwp9in4wZTvv
+         TggzLHr2yvnEYtCjj+6IxiB2fL8ladoShAtn4iuUwgGcxZ2xFOszRLhGbKVl0s4Fdi
+         F9Ld2SS6TAFQJr7WBBIyO0jBXXkcPIxN71xl5G1XF1YwdjrpT1zodVRK0QbSfb1uoT
+         hooQlM3yoTtHQsb5WQI/PIsTGEmPPRwcKQ/pcsNuRwjfnOf/h8VWNC193S5rfTPCJy
+         aG20rwLR+AOBg==
+Date:   Fri, 7 May 2021 16:48:25 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Pratyush Yadav <p.yadav@ti.com>
 Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
@@ -35,16 +35,14 @@ Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         linux-spi@vger.kernel.org
 Subject: Re: [PATCH 4/6] spi: spi-mem: reject partial cycle transfers in
  8D-8D-8D mode
-Message-ID: <20210507153132.GC6383@sirena.org.uk>
+Message-ID: <20210507154825.GE6383@sirena.org.uk>
 References: <20210506191829.8271-1-p.yadav@ti.com>
  <20210506191829.8271-5-p.yadav@ti.com>
- <20210507125533.GA6383@sirena.org.uk>
- <20210507135631.maue7gorfzsv4qpk@ti.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/e2eDi0V/xtL+Mc8"
+        protocol="application/pgp-signature"; boundary="Ns7jmDPpOpCD+GE/"
 Content-Disposition: inline
-In-Reply-To: <20210507135631.maue7gorfzsv4qpk@ti.com>
+In-Reply-To: <20210506191829.8271-5-p.yadav@ti.com>
 X-Cookie: Postage will be paid by addressee.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
@@ -52,42 +50,30 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---/e2eDi0V/xtL+Mc8
+--Ns7jmDPpOpCD+GE/
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 07, 2021 at 07:26:33PM +0530, Pratyush Yadav wrote:
+On Fri, May 07, 2021 at 12:48:27AM +0530, Pratyush Yadav wrote:
+> In 8D-8D-8D mode two bytes are transferred per cycle. So an odd number
+> of bytes cannot be transferred because it would leave a residual half
+> cycle at the end. Consider such a transfer invalid and reject it.
 
-> Patches 2 and 3 are a slightly different matter. They add an extra=20
-> register write. But most controllers I've come across don't support=20
-> 1-byte writes in 8D mode. It is likely that they are sending=20
-> bogus/undefined values in the second byte and deasserting CS only after=
-=20
-> the cycle is done. So they should _in theory_ change undefined behaviour=
-=20
-> to defined behaviour.
+Reviwed-by: Mark Brown <broonie@kernel.org>
 
-> Still, they introduce an extra register write. I'm not sure how=20
-> risk-tolerant you want to be for stable backports. I will leave the=20
-> judgement to you or Tudor or Vignesh.
-
-Ah, given that if nobody's seeing any issues I'd probably just hold off
-there TBH.
-
---/e2eDi0V/xtL+Mc8
+--Ns7jmDPpOpCD+GE/
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCVXVQACgkQJNaLcl1U
-h9B8HAf9GZh6wXoQyIjqchDq4kgwLgCdMTMAnT1LjmrcRaeTiLr30MVfyjO+eLan
-tCZYatA9w4eVKm2NbXI1G0JqZ+ZlmuGlgFEb1kRrSdWn/A6rUF0fHlCjygq6wQTR
-GBqZ4wWImXKcry+Wc8GsZWggtV7XCkQYE3bp4l2QfXkhFtASgPkSYtLfYbOOKjOP
-1Xpc4kqpfpaZIRDPJKqwTykeJaeTxY+T3Lfz/IUjFUa9mtr0RC6FjnA5+ekboY4C
-pEMICHbnrt2WDRAk6HXqypb5N+HJ2V84XLi3Q/uMjFlgC4+2lLe/OEIkgzGDJns3
-8/2LTp0aNJ+CgvTMYbnSmdorhvF2wA==
-=+ofb
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCVYUgACgkQJNaLcl1U
+h9D6iAf/X83wkW3EXwEG5bkyXGYvMLHjg2mUnr/2c7Sz3BjRF3mdrCLzBrI4He6j
+ndjUdq1s6d+AHEc34fMt1bamADb8ZeIlb8UNoJn/RpyZdtDIpNjnBey1jEGBsKBA
+a7gOkAiauV+IsanHu1ams3Ox8kcc3FLTsGF3DKc9RAo0HvjnWaxbdAG5Ygck+5GJ
+IsbAlJ2PxbIDI4wQwwJxRzUUZpCbPkMAQmG9H2KhyVcLZPXDDyrz81+eLlwBvhlp
+qJYYtL6RU5UNpMWEDMFPyMOHoKSNOihKZ4LUItsEMH91DYxcJDmbJncFy8Fh4hJg
+ey6Urvm1TTwaQfCxkaIPjVimR84ODQ==
+=nP+B
 -----END PGP SIGNATURE-----
 
---/e2eDi0V/xtL+Mc8--
+--Ns7jmDPpOpCD+GE/--
