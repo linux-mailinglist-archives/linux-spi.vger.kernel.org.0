@@ -2,228 +2,179 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35506376D26
-	for <lists+linux-spi@lfdr.de>; Sat,  8 May 2021 01:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA51376E01
+	for <lists+linux-spi@lfdr.de>; Sat,  8 May 2021 03:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbhEGXEN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 7 May 2021 19:04:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59790 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229836AbhEGXEJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 7 May 2021 19:04:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6D5AF6146D
-        for <linux-spi@vger.kernel.org>; Fri,  7 May 2021 23:03:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620428588;
-        bh=9we+90XkZC7CYYZK5CuqzJKrr6OiS41AMsawdknXwnk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cUQk5Y5IIX9qKA6Rty5WtKQDIzBbkUuznDoKSD4/3uxU//1JVIAbLmICmtCTkeHWJ
-         w49lrRC/4/kQd7+/SEeGrB0RrqeCLAms6695BDYt6kVmjGF2Wk5wxngIzrwZvjtO1i
-         ZwztnwDRYxrn00vDHRIluk5tAj8aZioONHgDyBRBup7owajVD4fsn/Cy7YIIhSb4iv
-         RDG7HvZqrg5AfGSb/+PjOP0j4hn3mBXhx3FjfH7lHjnCbBgff3ZwUxz1GJXt49FLXw
-         PIL0OYVyx6G7sfgttpNx1YInU0CHnZSgnCnfiAbe+TPJuLZil9cYVzPrXzzUWxfBNr
-         6yeGZsWUEpl9Q==
-Received: by mail-lf1-f54.google.com with SMTP id n138so14919961lfa.3
-        for <linux-spi@vger.kernel.org>; Fri, 07 May 2021 16:03:08 -0700 (PDT)
-X-Gm-Message-State: AOAM532nlqvnhVIqWb9EN8MrCylmVNf8MEmVDqy9bz4+TBOL2eeT/mos
-        OuokSxpLIfHCHIue19yV27i6sDZlkLf2FPhEgOk=
-X-Google-Smtp-Source: ABdhPJyIqyUo6dp7dk/YD2GzitA9pnyLyvcZEZPQluMiIhgSbJhO9r9tbztThHRfFufrFUmZxXh+5ZsaeoU0+KjFgDs=
-X-Received: by 2002:a05:6512:3c6:: with SMTP id w6mr7931458lfp.294.1620428586476;
- Fri, 07 May 2021 16:03:06 -0700 (PDT)
+        id S229524AbhEHBCt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 7 May 2021 21:02:49 -0400
+Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:42906 "EHLO
+        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229482AbhEHBCt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 7 May 2021 21:02:49 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R701e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=zhangliguang@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0UY5aemZ_1620435706;
+Received: from 30.225.35.234(mailfrom:zhangliguang@linux.alibaba.com fp:SMTPD_---0UY5aemZ_1620435706)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 08 May 2021 09:01:46 +0800
+Subject: Re: [PATCH] spi: set right CS polarity depend on gpiolib
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210507145117.43221-1-zhangliguang@linux.alibaba.com>
+ <20210507153009.GB6383@sirena.org.uk>
+From:   =?UTF-8?B?5Lmx55+z?= <zhangliguang@linux.alibaba.com>
+Message-ID: <2f8c5047-1058-8e01-b0af-06853858bf67@linux.alibaba.com>
+Date:   Sat, 8 May 2021 09:01:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20210507215319.3882138-1-jonathan.lemon@gmail.com>
-In-Reply-To: <20210507215319.3882138-1-jonathan.lemon@gmail.com>
-From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
-Date:   Sat, 8 May 2021 01:02:49 +0200
-X-Gmail-Original-Message-ID: <CAPybu_0eWaEdtaUWAZUaBDGonX7cjeLNCTszsCDEHrJeEC8QGQ@mail.gmail.com>
-Message-ID: <CAPybu_0eWaEdtaUWAZUaBDGonX7cjeLNCTszsCDEHrJeEC8QGQ@mail.gmail.com>
-Subject: Re: [PATCH] spi: xilinx: Inhibit transmitter while filling TX FIFO
-To:     Jonathan Lemon <jonathan.lemon@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>, kernel-team@fb.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210507153009.GB6383@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Jonathan
+Hi,
+在 2021/5/7 23:30, Mark Brown 写道:
+> On Fri, May 07, 2021 at 10:51:17PM +0800, Liguang Zhang wrote:
+>> After a kernel upgrade from 4.19 to 5.10, we found that tpm flow control
+>> always causes TIMEOUT which caused by wrong CS polarity setting depend
+>> on gpiolib.
+>>   			if (spi->cs_gpiod)
+>>   				/* polarity handled by gpiolib */
+>> -				gpiod_set_value_cansleep(spi->cs_gpiod, activate);
+>> +				gpiod_set_value_cansleep(spi->cs_gpiod, !enable);
+> Whatever is going on here it doesn't seem likely that this is a problem
+> in the SPI core given the widespread use of gpiod based chip selects -
+> can you provide more explanation of what you're seeing here, how is the
+> chip select configured, what is the hardware expectation and what
+> actually ends up happening?
 
-Thanks for your patch.
+The arm platform is  kunpeng-920, detail dsdt information here:
 
-On Fri, May 7, 2021 at 11:53 PM Jonathan Lemon <jonathan.lemon@gmail.com> wrote:
->
-> Contrary to the comment in xilinx_spi_txrx_bufs(), the transmitter
-> was not disabled on entry.  On my particular board, when sending a PP
-> sequence, the first address byte was clocked out 3 times, writing data
-> into the wrong location, and generally locking up the chip.
+         Device (SPI0)
+         {
+             Name (_HID, "HISI0173")  // _HID: Hardware ID
+             Name (_ADR, Zero)  // _ADR: Address
+             Name (_UID, Zero)  // _UID: Unique ID
+             Name (RBUF, ResourceTemplate ()
+             {
+                 GpioIo (Exclusive, PullUp, 0x0000, 0x0000, 
+IoRestrictionNone,
+                     "\\_SB.GPO1", 0x00, ResourceConsumer, ,
+                     )
+                     {   // Pin list
+                         0x0006
+                     }
+                 QWordMemory (ResourceConsumer, PosDecode, MinFixed, 
+MaxFixed, NonCacheable, ReadWrite,
+                     0x0000000000000000, // Granularity
+                     0x00000002011A0000, // Range Minimum
+                     0x00000002011AFFFF, // Range Maximum
+                     0x0000000000000000, // Translation Offset
+                     0x0000000000010000, // Length
+                     ,, , AddressRangeMemory, TypeStatic)
+                 Interrupt (ResourceConsumer, Level, ActiveHigh, 
+Exclusive, ,, )
+                 {
+                     0x000001EB,
+                 }
+             })
+             Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource 
+Settings
+             {
+                 Return (RBUF) /* \_SB_.SPI0.RBUF */
+             }
 
-Sorry, what do you mean by PP sequence?
+             Name (_DSD, Package (0x02)  // _DSD: Device-Specific Data
+             {
+                 ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301") /* 
+Device Properties for _DSD */,
+                 Package (0x03)
+                 {
+                     Package (0x02)
+                     {
+                         "reg-io-width",
+                         0x04
+                     },
 
-By clocked out 3 times you mean that the sequence is sent like
-B0........B1.........B2
-instead of:
-B0B1B2
-?
+                     Package (0x02)
+                     {
+                         "num-cs",
+                         One
+                     },
 
-If your hardware supports IRQ. can you try forcing use_irq to true?
+                     Package (0x02)
+                     {
+                         "cs-gpios",
+                         Package (0x04)
+                         {
+                             SPI0,
+                             Zero,
+                             Zero,
+                             Zero
+                         }
+                     }
+                 }
+             })
+         }
 
->
-> Fix this by inhibiting the transmitter at initialization time, and
-> then enabling/disabling it appropriately.
->
-> With this patch, I can successfully read/erase/program the flash.
+         Scope (SPI0)
+         {
+             Device (TPM)
+             {
+                 Name (_ADR, Zero)  // _ADR: Address
+                 Name (_CID, Package (0x01)  // _CID: Compatible ID
+                 {
+                     "SMO0768"
+                 })
+                 Name (_UID, Zero)  // _UID: Unique ID
+                 Name (_DSD, Package (0x02)  // _DSD: Device-Specific Data
+                 {
+                     ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301") /* 
+Device Properties for _DSD */,
+                     Package (0x00){}
+                 })
+                 Method (_CRS, 0, NotSerialized)  // _CRS: Current 
+Resource Settings
+                 {
+                     Name (RBUF, ResourceTemplate ()
+                     {
+                         SpiSerialBusV2 (0x0000, PolarityLow, 
+FourWireMode, 0x08,
+                             ControllerInitiated, 0x000F4240, 
+ClockPolarityLow,
+                             ClockPhaseFirst, "\\_SB.SPI0",
+                             0x00, ResourceConsumer, , Exclusive,
+                             )
+                     })
+                     Return (RBUF) /* \_SB_.SPI0.TPM_._CRS.RBUF */
+                 }
 
-Can you provide a bit more details about your setup? What core version
-are you using? C_PARAMS? Flash?
->
+                 Method (_STA, 0, NotSerialized)  // _STA: Status
+                 {
+                     If ((TPEN == One))
+                     {
+                         Return (0x0F)
+                     }
+                     Else
+                     {
+                         Return (Zero)
+                     }
+                 }
+             }
+         }
+     }
 
-In general, I think it makes more sense to title your patch as:
-Inhibit transfer while idle. Because the current code already inhibits
-before sending data in irq mode.
 
-The current design tries to limit as much as possible the register
-access and only enable inhibit in irq mode.
+The problem I meet is:
 
-In principle, I believe both approaches shall be equally valid, but if
-you have a use case that does not work with the current approach your
-patch is very welcome.
+    tpm_tis_spi_init
 
-> Signed-off-by: Jonathan Lemon <jonathan.lemon@gmail.com>
-> ---
->  drivers/spi/spi-xilinx.c | 54 +++++++++++++++++++++++++++++++---------
->  1 file changed, 42 insertions(+), 12 deletions(-)
->
-> diff --git a/drivers/spi/spi-xilinx.c b/drivers/spi/spi-xilinx.c
-> index 523edfdf5dcd..10eccfb09e20 100644
-> --- a/drivers/spi/spi-xilinx.c
-> +++ b/drivers/spi/spi-xilinx.c
-> @@ -179,8 +179,8 @@ static void xspi_init_hw(struct xilinx_spi *xspi)
->         /* Disable the transmitter, enable Manual Slave Select Assertion,
->          * put SPI controller into master mode, and enable it */
->         xspi->write_fn(XSPI_CR_MANUAL_SSELECT | XSPI_CR_MASTER_MODE |
-> -               XSPI_CR_ENABLE | XSPI_CR_TXFIFO_RESET | XSPI_CR_RXFIFO_RESET,
-> -               regs_base + XSPI_CR_OFFSET);
-> +               XSPI_CR_ENABLE | XSPI_CR_TXFIFO_RESET | XSPI_CR_RXFIFO_RESET |
-> +               XSPI_CR_TRANS_INHIBIT, regs_base + XSPI_CR_OFFSET);
->  }
->
->  static void xilinx_spi_chipselect(struct spi_device *spi, int is_on)
-> @@ -235,14 +235,46 @@ static int xilinx_spi_setup_transfer(struct spi_device *spi,
->         return 0;
->  }
->
-> +static void
-> +xilinx_spi_inhibit_master(struct xilinx_spi *xspi, bool inhibit)
-> +{
-> +       u16 cr;
-> +
-> +       cr = xspi->read_fn(xspi->regs + XSPI_CR_OFFSET);
-> +       if (inhibit)
-> +               cr |= XSPI_CR_TRANS_INHIBIT;
-> +       else
-> +               cr &= ~XSPI_CR_TRANS_INHIBIT;
-> +       xspi->write_fn(cr, xspi->regs + XSPI_CR_OFFSET);
-> +}
-> +
-> +static void
-> +xilinx_spi_enable_transfer(struct xilinx_spi *xspi)
-> +{
-> +       xilinx_spi_inhibit_master(xspi, false);
-> +}
-> +
-> +static void
-> +xilinx_spi_disable_transfer(struct xilinx_spi *xspi)
-> +{
-> +       xilinx_spi_inhibit_master(xspi, true);
-> +}
-> +
-> +static bool
-> +xilinx_spi_is_transfer_disabled(struct xilinx_spi *xspi)
-> +{
-> +       u16 cr = xspi->read_fn(xspi->regs + XSPI_CR_OFFSET);
-> +       return !!(cr & XSPI_CR_TRANS_INHIBIT);
-> +}
-> +
-Although these helper functions make very clear what you want to
-achieve, they run a lot of extra register access.
-In some platforms register access is VERY slow.
-Please embed them into txrx_bufs (use the cr variable as before)
+        tpm_tis_core_init
 
->  static int xilinx_spi_txrx_bufs(struct spi_device *spi, struct spi_transfer *t)
->  {
->         struct xilinx_spi *xspi = spi_master_get_devdata(spi->master);
->         int remaining_words;    /* the number of words left to transfer */
->         bool use_irq = false;
-> -       u16 cr = 0;
->
->         /* We get here with transmitter inhibited */
-> +       WARN_ON_ONCE(!xilinx_spi_is_transfer_disabled(xspi));
->
->         xspi->tx_ptr = t->tx_buf;
->         xspi->rx_ptr = t->rx_buf;
-> @@ -252,14 +284,13 @@ static int xilinx_spi_txrx_bufs(struct spi_device *spi, struct spi_transfer *t)
->                 u32 isr;
->                 use_irq = true;
->                 /* Inhibit irq to avoid spurious irqs on tx_empty*/
-You shall remove this comment also
-> -               cr = xspi->read_fn(xspi->regs + XSPI_CR_OFFSET);
-> -               xspi->write_fn(cr | XSPI_CR_TRANS_INHIBIT,
-> -                              xspi->regs + XSPI_CR_OFFSET);
-> +
->                 /* ACK old irqs (if any) */
->                 isr = xspi->read_fn(xspi->regs + XIPIF_V123B_IISR_OFFSET);
->                 if (isr)
->                         xspi->write_fn(isr,
->                                        xspi->regs + XIPIF_V123B_IISR_OFFSET);
-> +
->                 /* Enable the global IPIF interrupt */
->                 xspi->write_fn(XIPIF_V123B_GINTR_ENABLE,
->                                 xspi->regs + XIPIF_V123B_DGIER_OFFSET);
-> @@ -280,9 +311,9 @@ static int xilinx_spi_txrx_bufs(struct spi_device *spi, struct spi_transfer *t)
->                 /* Start the transfer by not inhibiting the transmitter any
->                  * longer
->                  */
-> +               xilinx_spi_enable_transfer(xspi);
->
->                 if (use_irq) {
-> -                       xspi->write_fn(cr, xspi->regs + XSPI_CR_OFFSET);
->                         wait_for_completion(&xspi->done);
->                         /* A transmit has just completed. Process received data
->                          * and check for more data to transmit. Always inhibit
-> @@ -290,8 +321,7 @@ static int xilinx_spi_txrx_bufs(struct spi_device *spi, struct spi_transfer *t)
->                          * register/FIFO, or make sure it is stopped if we're
->                          * done.
-This comment is not valid anymore., the ISR does not refill the FIFO.
-Can you send a following patch fixing this?
-Thanks!
->                          */
-> -                       xspi->write_fn(cr | XSPI_CR_TRANS_INHIBIT,
-> -                                      xspi->regs + XSPI_CR_OFFSET);
-> +                       xilinx_spi_disable_transfer(xspi);
->                         sr = XSPI_SR_TX_EMPTY_MASK;
->                 } else
->                         sr = xspi->read_fn(xspi->regs + XSPI_SR_OFFSET);
-> @@ -325,10 +355,10 @@ static int xilinx_spi_txrx_bufs(struct spi_device *spi, struct spi_transfer *t)
->                 remaining_words -= n_words;
->         }
->
-> -       if (use_irq) {
-> +       if (use_irq)
->                 xspi->write_fn(0, xspi->regs + XIPIF_V123B_DGIER_OFFSET);
-> -               xspi->write_fn(cr, xspi->regs + XSPI_CR_OFFSET);
-> -       }
-> +
-> +       xilinx_spi_disable_transfer(xspi);
-I believe this shall be moved to after:
-remaining_words -= n_words;
+             wait_startup     // Timeout is occured, appear every time.
 
-and be something like:
-if (!use_irq)
-  xspi->write_fn(cr | XSPI_CR_TRANS_INHIBIT , xspi->regs + XSPI_CR_OFFSET);
+If the modification below done, probe succeed.
 
->
->         return t->len;
->  }
-> --
-> 2.27.0
->
+gpiod_set_value_cansleep(spi->cs_gpiod, !enable)
+
