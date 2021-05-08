@@ -2,289 +2,138 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67706377080
-	for <lists+linux-spi@lfdr.de>; Sat,  8 May 2021 09:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2EC37711F
+	for <lists+linux-spi@lfdr.de>; Sat,  8 May 2021 12:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbhEHH4Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 8 May 2021 03:56:16 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:38268 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbhEHH4Q (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 8 May 2021 03:56:16 -0400
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:b93f:9fae:b276:a89a])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 950651F44390;
-        Sat,  8 May 2021 08:55:12 +0100 (BST)
-Date:   Sat, 8 May 2021 09:55:06 +0200
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     <patrice.chotard@foss.st.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>
-Subject: Re: [PATCH v2 1/3] spi: spi-mem: add automatic poll status
- functions
-Message-ID: <20210508095506.4d0d628a@collabora.com>
-In-Reply-To: <20210507131756.17028-2-patrice.chotard@foss.st.com>
-References: <20210507131756.17028-1-patrice.chotard@foss.st.com>
-        <20210507131756.17028-2-patrice.chotard@foss.st.com>
-Organization: Collabora
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        id S229701AbhEHKCm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 8 May 2021 06:02:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47398 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229583AbhEHKCl (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 8 May 2021 06:02:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 675BA61430
+        for <linux-spi@vger.kernel.org>; Sat,  8 May 2021 10:01:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620468100;
+        bh=Dg44+170piMGURncVRsGKJxAoxZ/bFZN2ZiXlnl9PPs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FAckYKOylh5fMwq+RypHhmfTxSuChAkmOtMgfIQy0U+ZXOv2Q3TkVhIQnZKiEnzMF
+         h8RqZDUBN7hRZZxGIizCArwAVwrGmb9mdYszvkGYeZlO8e9xUskfY6PbUByIEZ+yFP
+         mHPxKf0AKKmYHDkeD2O+FL3hfG59fAAaajAIFkvqVuST4oraTo0MmsauC6e4wj2eRY
+         WKySC3ImneyMf6XWjL83L5dXM1PagxhNs+m5pS2+yitlMBkOm5cEtW1vZUhp98sOuf
+         /bcB5/bUJ8AMlgU7ALFbIuaQmN/q4VlO7ZtQfQXpwKnlVhntjrzDmt2JEVjnmj7as1
+         b1P2I+7AgYKdQ==
+Received: by mail-lf1-f48.google.com with SMTP id b17so776163lfo.3
+        for <linux-spi@vger.kernel.org>; Sat, 08 May 2021 03:01:40 -0700 (PDT)
+X-Gm-Message-State: AOAM533Fvtg9iRHsA3kG/7hs/ETDIldenOT49Z4l+Rpgg5i0/jhcTcTm
+        d6cKZO3LfN9vbE/7HpC2TK0SzsYZXzjsWwSDdPQ=
+X-Google-Smtp-Source: ABdhPJwc9OtHNyXfqMsqwpJFElL4jfeKZ6q7Fe9giogBXXfeJnEmpb4Rwk8eQFfYS1CRARsXlGrQpDv6DKZ7sdOnwdY=
+X-Received: by 2002:ac2:5632:: with SMTP id b18mr9295725lff.62.1620468098718;
+ Sat, 08 May 2021 03:01:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20210507215319.3882138-1-jonathan.lemon@gmail.com>
+ <CAPybu_0eWaEdtaUWAZUaBDGonX7cjeLNCTszsCDEHrJeEC8QGQ@mail.gmail.com> <3E382801-224D-4B11-961D-4822F51F5496@gmail.com>
+In-Reply-To: <3E382801-224D-4B11-961D-4822F51F5496@gmail.com>
+From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
+Date:   Sat, 8 May 2021 12:01:22 +0200
+X-Gmail-Original-Message-ID: <CAPybu_2zLVCP3672BDALRDyb2sgGchG90MFuZEFd0irdpJW+UA@mail.gmail.com>
+Message-ID: <CAPybu_2zLVCP3672BDALRDyb2sgGchG90MFuZEFd0irdpJW+UA@mail.gmail.com>
+Subject: Re: [PATCH] spi: xilinx: Inhibit transmitter while filling TX FIFO
+To:     Jonathan Lemon <jonathan.lemon@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>, kernel-team@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 7 May 2021 15:17:54 +0200
-<patrice.chotard@foss.st.com> wrote:
+Hi Jonathan
 
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
-> 
-> With STM32 QSPI, it is possible to poll the status register of the device.
-> This could be done to offload the CPU during an operation (erase or
-> program a SPI NAND for example).
-> 
-> spi_mem_poll_status API has been added to handle this feature.
-> This new function take care of the offload/non-offload cases.
-> 
-> For the non-offload case, use read_poll_timeout() to poll the status in
-> order to release CPU during this phase.
-> 
-> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-> Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
-> ---
-> Changes in v2:
->   - Indicates the spi_mem_poll_status() timeout unit
->   - Use 2-byte wide status register
->   - Add spi_mem_supports_op() call in spi_mem_poll_status()
->   - Add completion management in spi_mem_poll_status()
->   - Add offload/non-offload case mangement in spi_mem_poll_status()
->   - Optimize the non-offload case by using read_poll_timeout()
-> 
->  drivers/spi/spi-mem.c       | 71 +++++++++++++++++++++++++++++++++++++
->  include/linux/spi/spi-mem.h | 10 ++++++
->  2 files changed, 81 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-> index 1513553e4080..3f29c604df7d 100644
-> --- a/drivers/spi/spi-mem.c
-> +++ b/drivers/spi/spi-mem.c
-> @@ -6,6 +6,7 @@
->   * Author: Boris Brezillon <boris.brezillon@bootlin.com>
->   */
->  #include <linux/dmaengine.h>
-> +#include <linux/iopoll.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/spi/spi.h>
->  #include <linux/spi/spi-mem.h>
-> @@ -743,6 +744,75 @@ static inline struct spi_mem_driver *to_spi_mem_drv(struct device_driver *drv)
->  	return container_of(drv, struct spi_mem_driver, spidrv.driver);
->  }
->  
-> +/**
-> + * spi_mem_finalize_op - report completion of spi_mem_op
-> + * @ctlr: the controller reporting completion
-> + *
-> + * Called by SPI drivers using the spi-mem spi_mem_poll_status()
-> + * implementation to notify it that the current spi_mem_op has
-> + * finished.
-> + */
-> +void spi_mem_finalize_op(struct spi_controller *ctlr)
-> +{
-> +	complete(&ctlr->xfer_completion);
-> +}
-> +EXPORT_SYMBOL_GPL(spi_mem_finalize_op);
-> +
-> +/**
-> + * spi_mem_poll_status() - Poll memory device status
-> + * @mem: SPI memory device
-> + * @op: the memory operation to execute
-> + * @mask: status bitmask to ckeck
-> + * @match: (status & mask) expected value
-> + * @timeout_ms: timeout in milliseconds
-> + *
-> + * This function send a polling status request to the controller driver
-> + *
-> + * Return: 0 in case of success, -ETIMEDOUT in case of error,
-> + *         -EOPNOTSUPP if not supported.
-> + */
-> +int spi_mem_poll_status(struct spi_mem *mem,
-> +			const struct spi_mem_op *op,
-> +			u16 mask, u16 match, u16 timeout_ms)
-> +{
-> +	struct spi_controller *ctlr = mem->spi->controller;
-> +	unsigned long ms;
-> +	int ret = -EOPNOTSUPP;
-> +	int exec_op_ret;
-> +	u16 *status;
-> +
-> +	if (!spi_mem_supports_op(mem, op))
-> +		return ret;
+On Sat, May 8, 2021 at 2:47 AM Jonathan Lemon <jonathan.lemon@gmail.com> wr=
+ote:
+>
+> On 7 May 2021, at 16:02, Ricardo Ribalda Delgado wrote:
+>
+> Hi Jonathan
+>
+> Thanks for your patch.
+>
+> On Fri, May 7, 2021 at 11:53 PM Jonathan Lemon <jonathan.lemon@gmail.com>=
+ wrote:
+>
+> Contrary to the comment in xilinx_spi_txrx_bufs(), the transmitter
+> was not disabled on entry. On my particular board, when sending a PP
+> sequence, the first address byte was clocked out 3 times, writing data
+> into the wrong location, and generally locking up the chip.
+>
+> Sorry, what do you mean by PP sequence?
+>
+> By clocked out 3 times you mean that the sequence is sent like
+> B0........B1.........B2
+> instead of:
+> B0B1B2
+>
+> PP: Page program. When I=E2=80=99m trying to write to the flash, the sequ=
+ence
+> [opcode 02][A1 A2 A3][D1 D2 ..] is sent. The result is a flash write
+> at location [A1 A1 A1] =3D [A2 A3 D1 D2 ...]
+>
+> In other words, the first byte of the address appears to have been
+> sent to the chip 3x.
 
-You should only test that in the SW-based polling path. The driver
-->poll_status() method is expected to check the operation and
-return -EOPNOTSUPP if HW-based polling doesn't work for this op,
-no need to check things twice.
+Any chance you could connect chipscope to the spi pins? Or a real
+logic analyser?
+>
+> If your hardware supports IRQ. can you try forcing use_irq to true?
+>
+> Will try this in a bit. The hw does have an irq registered, but it
+> it isn't always set, as it depends on how many how many bytes the
+> spi_transfer sets. So sometimes it will set use_irq, and sometimes not.
+>
+> Fix this by inhibiting the transmitter at initialization time, and
+> then enabling/disabling it appropriately.
+>
+> With this patch, I can successfully read/erase/program the flash.
+>
+> Can you provide a bit more details about your setup? What core version
+> are you using? C_PARAMS? Flash?
+>
+> Flash: https://media-www.micron.com/-/media/client/global/documents/produ=
+cts/data-sheet/nor-flash/serial-nor/n25q/n25q_128mb_3v_65nm.pdf
+>
+> xlinx-spi: https://www.xilinx.com/support/documentation/ip_documentation/=
+axi_quad_spi/v3_2/pg153-axi-quad-spi.pdf
 
-> +
-> +	if (ctlr->mem_ops && ctlr->mem_ops->poll_status) {
-> +		ret = spi_mem_access_start(mem);
-> +		if (ret)
-> +			return ret;
-> +
-> +		reinit_completion(&ctlr->xfer_completion);
-> +
-> +		ret = ctlr->mem_ops->poll_status(mem, op, mask, match,
-> +						 timeout_ms);
-> +
-> +		ms = wait_for_completion_timeout(&ctlr->xfer_completion,
-> +						 msecs_to_jiffies(timeout_ms));
+What are your C_PARAMS?
 
-Why do you need to wait here? I'd expect the poll_status to take care
-of this wait.
+>
+> In general, I think it makes more sense to title your patch as:
+> Inhibit transfer while idle. Because the current code already inhibits
+> before sending data in irq mode.
+>
+> But irq mode is entered/exited based on t->len:
+>
+>     if (xspi->irq >=3D 0 &&  remaining_words > xspi->buffer_size) {
+>
+> So sometimes it will set use_irq, and sometimes not.
+>
+> The current design tries to limit as much as possible the register
+> access and only enable inhibit in irq mode.
+>
+> In principle, I believe both approaches shall be equally valid, but if
+> you have a use case that does not work with the current approach your
+> patch is very welcome.
+>
+> My use case is I have a FPGA with a flash chip on a PCI board, my goal
+> is to reflash the firmware through the PCI driver. The existing code
+> works for flash reads, but for whatever reason, fails miserably when
+> sending the 'page program' write sequence without this patch.
 
-> +
-> +		spi_mem_access_end(mem);
-> +		if (!ms)
-> +			return -ETIMEDOUT;
-> +	} else {
-> +		status = (u16 *)op->data.buf.in;
-
-Hm, I don't think it's safe, for 2 reasons:
-
-1/ op->data.buf.in might be a 1byte buffer, but you're doing a 2byte check
-2/ data is in big endian in the SPI buffer, which means your check
-   won't work on LE architectures.
-
-You really need a dedicated spi_mem_read_status() function that's passed
-an u16 pointer:
-
-int spi_mem_read_status(struct spi_mem *mem,
-			const struct spi_mem_op *op,
-			u16 *status)
-{
-	const u8 *bytes = (u8 *)op->data.buf.in;
-	int ret;
-
-	ret = spi_mem_exec_op(mem, op);
-	if (ret)
-		return ret;
-
-	if (op->data.nbytes > 1)
-		*status = ((u16)bytes[0] << 8) | bytes[1];
-	else
-		*status = bytes[0];
-
-	return 0;
-}
-
-> +		ret = read_poll_timeout(spi_mem_exec_op, exec_op_ret,
-> +					((*status) & mask) == match, 20,
-> +					timeout_ms * 1000, false, mem, op);
-> +		if (exec_op_ret)
-> +			return exec_op_ret;
-> +	}
-> +
-
-I would do something like this instead:
-
-int spi_mem_poll_status(struct spi_mem *mem,
-			const struct spi_mem_op *op,
-			u16 mask, u16 match, u16 timeout_ms)
-{
-	struct spi_controller *ctlr = mem->spi->controller;
-	int ret = -EOPNOTSUPP;
-
-	if (op->data.nbytes < 1 || op->data.nbytes > 2)
-		return -EINVAL;
-
-	if (ctlr->mem_ops && ctlr->mem_ops->poll_status) {
-		ret = spi_mem_access_start(mem);
-		if (ret)
-			return ret;
-
-		ret = ctlr->mem_ops->poll_status(mem, op, mask, match,
-						 timeout_ms);
-
-		spi_mem_access_end(mem);
-	}
+I have been using this for a couple of years now :S
 
 
-	if (ret == -EOPNOTSUPP) {
-                u16 status;
-		int read_status_ret;
 
-		if (!spi_mem_supports_op(mem, op))
-			return -EOPNOTSUPP;
 
-		ret = read_poll_timeout(spi_mem_read_status, exec_op_ret,
-					(read_status_ret || ((status & mask) == match), 20,
-					timeout_ms * 1000, false, mem, op, &status);
-
-		if (read_status_ret)
-			return read_status_ret;
-	}
-
-	return ret;
-}
-
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(spi_mem_poll_status);
-> +
->  static int spi_mem_probe(struct spi_device *spi)
->  {
->  	struct spi_mem_driver *memdrv = to_spi_mem_drv(spi->dev.driver);
-> @@ -763,6 +833,7 @@ static int spi_mem_probe(struct spi_device *spi)
->  	if (IS_ERR_OR_NULL(mem->name))
->  		return PTR_ERR_OR_ZERO(mem->name);
->  
-> +	init_completion(&ctlr->xfer_completion);
->  	spi_set_drvdata(spi, mem);
->  
->  	return memdrv->probe(mem);
-> diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-> index 2b65c9edc34e..0fbf5d0a3d31 100644
-> --- a/include/linux/spi/spi-mem.h
-> +++ b/include/linux/spi/spi-mem.h
-> @@ -250,6 +250,7 @@ static inline void *spi_mem_get_drvdata(struct spi_mem *mem)
->   *		  the currently mapped area), and the caller of
->   *		  spi_mem_dirmap_write() is responsible for calling it again in
->   *		  this case.
-> + * @poll_status: poll memory device status
->   *
->   * This interface should be implemented by SPI controllers providing an
->   * high-level interface to execute SPI memory operation, which is usually the
-> @@ -274,6 +275,9 @@ struct spi_controller_mem_ops {
->  			       u64 offs, size_t len, void *buf);
->  	ssize_t (*dirmap_write)(struct spi_mem_dirmap_desc *desc,
->  				u64 offs, size_t len, const void *buf);
-> +	int (*poll_status)(struct spi_mem *mem,
-> +			   const struct spi_mem_op *op,
-> +			   u16 mask, u16 match, unsigned long timeout);
->  };
->  
->  /**
-> @@ -369,6 +373,12 @@ devm_spi_mem_dirmap_create(struct device *dev, struct spi_mem *mem,
->  void devm_spi_mem_dirmap_destroy(struct device *dev,
->  				 struct spi_mem_dirmap_desc *desc);
->  
-> +void spi_mem_finalize_op(struct spi_controller *ctlr);
-> +
-> +int spi_mem_poll_status(struct spi_mem *mem,
-> +			const struct spi_mem_op *op,
-> +			u16 mask, u16 match, u16 timeout);
-> +
->  int spi_mem_driver_register_with_owner(struct spi_mem_driver *drv,
->  				       struct module *owner);
->  
-
+> --
+> Jonathan
