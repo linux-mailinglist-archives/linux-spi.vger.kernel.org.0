@@ -2,163 +2,117 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D17376EDD
-	for <lists+linux-spi@lfdr.de>; Sat,  8 May 2021 04:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03DF9376EEF
+	for <lists+linux-spi@lfdr.de>; Sat,  8 May 2021 04:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbhEHCiK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 7 May 2021 22:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47068 "EHLO
+        id S229978AbhEHCqR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 7 May 2021 22:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbhEHCiK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 7 May 2021 22:38:10 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B19C061574
-        for <linux-spi@vger.kernel.org>; Fri,  7 May 2021 19:37:08 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id m9so11040614wrx.3
-        for <linux-spi@vger.kernel.org>; Fri, 07 May 2021 19:37:08 -0700 (PDT)
+        with ESMTP id S229775AbhEHCqR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 7 May 2021 22:46:17 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A1DC061574
+        for <linux-spi@vger.kernel.org>; Fri,  7 May 2021 19:45:16 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id b15so9217942pfl.4
+        for <linux-spi@vger.kernel.org>; Fri, 07 May 2021 19:45:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NJxaRPY0ZL3PjVP5ITH2Bmmpb0pT1kmJzWINEgWYK84=;
-        b=K8NjdVwCB9/XsPSzterq/GKY9lalaR5Mjr0mZ0gtMKftjdkY7YtjupHIUNkCCd6FKV
-         lBcDtXAZKOflXBqZeU5Xbo/fY6DVHEiq0593zr59Edjk9Nvho7RrAEL6JiPa/1JxqGxn
-         ot1T6GjQaJgLwp4acEXzH5FVOgFnusiwOKK1V5jTbLEax5lilgaAy+jwfawbd/ZWFMPj
-         COG6atlA84iZy8yYwDkTDnyX+/RnLndK5Z3pjtEpkXkq241om0s8l1t2mIFRf5KnOreJ
-         EnmXKztomeSshpQNEARdXOtogHPIe/M5+CLaKWQ0TbWqXC7BtK2Jr4aDWP/PchAcOALx
-         OFSA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=pbUNc5llcQ9qbObTLrmf/A1vx6tUtsC/Gdf50hgfp2k=;
+        b=TnlVk+E14A3u5p/jV4MAu/Kk6pGRvjic8kBTUpFLsJGtPxWiioeK7S5xiV6I4uQ+7J
+         6SIFAXpic9vmS9wEUc69WFEy5p5fShNr4QnOdxRCOnpvncDBCLKnV5zlPKZIb7+oP+pi
+         WINCBBLR+bnION2cO4lX1RB+tNoTKALq+OGD+MSdrneXEG3Hyqh5ts7IF0gvr+uZn+KW
+         kSpJvz6K0PyeG/QSIziLdhJ9f0rZG0D+w1M+7in3emDokNWLzjmd19iWOA5UEBTYEWym
+         w+4jYUBrgwQe5GosH9yoM7S1spDFzA2yivLW6+XGIOODVhIVQslBnoAQhrkwWnHRQmRp
+         KWcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NJxaRPY0ZL3PjVP5ITH2Bmmpb0pT1kmJzWINEgWYK84=;
-        b=RKTob1Nsl2w6mGBRvb2rO80HS64Jwr67ZoENZCu4PsOSak0rK62c9BLiWRGNVDpWJT
-         uYlDGAzIYerYJNuzZ4N1umHBYE4coeTuRFiV66eoJ5ct0APiMBNktGocZ4I3LyxLX/ns
-         Izx0jUnyOw3oNEZaP5tnmBtuG+26DIq0mOEiJwEmg2RJjK9eox6hwkXEDHo6DUmOkiQV
-         5W9Ith0006VF5dpVzm8lgWKrBmCGswadlbISzXMvq3IPCbFEi0A+8Uy/1DErplabOZ8f
-         r0M2KvT5YHa/g1ti7dAN5bAT8Vdzgk4PaV4bTPFIKh4UeGoiIql5p2SEDhTloGeFOW0U
-         6cjQ==
-X-Gm-Message-State: AOAM532ryqXZ0EbqK7JVcSZXiK7iCs4esXWf5hk5IYU0vX5XVCRUfa7p
-        G6wE+pa/H67tZ5a4LMfDiF4HRfvsAoLurIND0jxxbHYtmVy7Dw==
-X-Google-Smtp-Source: ABdhPJzFalQhj2u4vDNI913MNUzoPq604X8+Vrxn3OpX/5hDTpj/jNgP3Nwus+usYHByp2aeYS4VL4M422IXkQPYaVk=
-X-Received: by 2002:adf:d215:: with SMTP id j21mr16653067wrh.251.1620441426736;
- Fri, 07 May 2021 19:37:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=pbUNc5llcQ9qbObTLrmf/A1vx6tUtsC/Gdf50hgfp2k=;
+        b=RFTto96sP86kuPMoWSmWe16AZC9ELsmXNN6FjfraU27KfaHYM1o68Ez1GJ7MebSAg0
+         mRfhwG1JQu0WtzqFO0DlKEQgAm4tXJzeefnigkPx/49jyl6Pc1FWmQozmb/4UlFlmW5I
+         bUTWErCLaGdv0+b06Kz3iSU0FpRM8F/9vJLZzC/W9uL8khFeTkzpZKDhwNby7Ep+a8ct
+         EeydOwT7Yt/SYrkGVugZmuJq6njcOxw+vOYpKBZ8VnmyuvFH+Xm5Y4aZ9U9e/TszAS3w
+         ABHi5TnRBajm+hsXBp7LRfU4013hCGEzzxHrTLwb1NWlHj3Node3RGVtJpGItEmLfEF2
+         u8Hw==
+X-Gm-Message-State: AOAM5324pBjvYdEzvp+FmM7tUgddVRkQ3CzPtemIAs5ejy9B0kqKs44Q
+        FHNDQF8rGgx1+ByehOlNbSc=
+X-Google-Smtp-Source: ABdhPJwC9o8TNtVuRkmdDpEu5dIkKH4PUMjU/WRB0GMXhQRqAyNYd0TkhfHj56JSR7jk+BkD6p4aIQ==
+X-Received: by 2002:a62:ee09:0:b029:211:1113:2e7c with SMTP id e9-20020a62ee090000b029021111132e7cmr13329120pfi.49.1620441915581;
+        Fri, 07 May 2021 19:45:15 -0700 (PDT)
+Received: from [192.168.137.17] ([71.212.140.226])
+        by smtp.gmail.com with ESMTPSA id 132sm5471640pfu.107.2021.05.07.19.45.14
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 07 May 2021 19:45:15 -0700 (PDT)
+From:   "Jonathan Lemon" <jonathan.lemon@gmail.com>
+To:     "Ricardo Ribalda Delgado" <ribalda@kernel.org>
+Cc:     "Mark Brown" <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>, kernel-team@fb.com
+Subject: Re: [PATCH] spi: xilinx: Inhibit transmitter while filling TX FIFO
+Date:   Fri, 07 May 2021 19:44:58 -0700
+X-Mailer: MailMate (1.13.2r5673)
+Message-ID: <0B4232D1-E80F-404A-B388-C53EFDF70DDA@gmail.com>
+In-Reply-To: <3E382801-224D-4B11-961D-4822F51F5496@gmail.com>
+References: <20210507215319.3882138-1-jonathan.lemon@gmail.com>
+ <CAPybu_0eWaEdtaUWAZUaBDGonX7cjeLNCTszsCDEHrJeEC8QGQ@mail.gmail.com>
+ <3E382801-224D-4B11-961D-4822F51F5496@gmail.com>
 MIME-Version: 1.0
-References: <YJP6QIl+jnjKPlRo@smile.fi.intel.com> <83ab9b6c-8fb2-b053-ecb3-04230ca34e48@linux.alibaba.com>
- <CAHp75Vev1D5+QWyGCm+HgpdAyT4Uq_OAp7dCemVf9Cdvoay=Og@mail.gmail.com>
- <6bd8f178-51a2-3f45-8a16-80fdd4a3ed8e@linux.alibaba.com> <CAHp75Vfh+jqNLLbwWDe8pi1dQafnNFHak1Hk=5Cw3J+kJX9r3Q@mail.gmail.com>
- <CACRpkdZeKGP6Z8h3GaQ0=EA8mx+yRqzwZaQ5vDJrB4GiYLa26w@mail.gmail.com>
-In-Reply-To: <CACRpkdZeKGP6Z8h3GaQ0=EA8mx+yRqzwZaQ5vDJrB4GiYLa26w@mail.gmail.com>
-From:   Sven Van Asbroeck <thesven73@gmail.com>
-Date:   Fri, 7 May 2021 22:36:55 -0400
-Message-ID: <CAGngYiW=RTkHoSndJDr0mMUgLFfuB18g=AwKTvi8d2-tdBrroQ@mail.gmail.com>
-Subject: Re: [PATCH v1] spi: fix client driver can't register success when use
- GPIO as CS
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        "broonie@kernel.org" <broonie@kernel.org>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "xhao@linux.alibaba.com" <xhao@linux.alibaba.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Mike, Linus, Andy, XinHao,
+On 7 May 2021, at 17:46, Jonathan Lemon wrote:
 
-On Fri, May 7, 2021 at 5:33 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+> On 7 May 2021, at 16:02, Ricardo Ribalda Delgado wrote:
 >
-> But I think Andy's approach is the best.
+>> Hi Jonathan
+>>
+>> Thanks for your patch.
+>>
+>> On Fri, May 7, 2021 at 11:53 PM Jonathan Lemon 
+>> <jonathan.lemon@gmail.com> wrote:
+>>>
+>>> Contrary to the comment in xilinx_spi_txrx_bufs(), the transmitter
+>>> was not disabled on entry.  On my particular board, when sending a 
+>>> PP
+>>> sequence, the first address byte was clocked out 3 times, writing 
+>>> data
+>>> into the wrong location, and generally locking up the chip.
+>>
+>> Sorry, what do you mean by PP sequence?
+>>
+>> By clocked out 3 times you mean that the sequence is sent like
+>> B0........B1.........B2
+>> instead of:
+>> B0B1B2
+>
+> PP: Page program.  When I’m trying to write to the flash, the 
+> sequence
+> [opcode 02][A1 A2 A3][D1 D2 ..] is sent.  The result is a flash write
+> at location [A1 A1 A1] = [A2 A3 D1 D2 ...]
+>
+> In other words, the first byte of the address appears to have been
+> sent to the chip 3x.
+>
+>
+>> If your hardware supports IRQ. can you try forcing use_irq to true?
+>
+> Will try this in a bit.  The hw does have an irq registered, but it
+> it isn't always set, as it depends on how many how many bytes the
+> spi_transfer sets.  So sometimes it will set use_irq, and sometimes 
+> not.
 
-I too like Andy's approach. It would fix XinHao's use case (acpi) and
-not break OF.
+So I tried the following change:
 
-But, we have to be careful not to put work-around on top of
-work-around, and complicate the code too much. Sometimes when logic
-gets hard to follow, there's an opportunity to refactor and simplify.
-Perhaps if we put our heads together here, we can find that
-opportunity? Let's try?
+-       if (xspi->irq >= 0 &&  remaining_words > xspi->buffer_size) {
++       if (xspi->irq >= 0) {
 
-For reasons explained below, the gpiod OF code moves the SPI
-chip-select inverting logic from the SPI mode flags to the gpiods. If
-I understand XinHao/Andy's problem correctly, this breaks ACPI
-chip-selects, because the ACPI gpio code has no way to know that it's
-part of a SPI bus, and apply quirks. Does that sound right so far?
-
-If we were able to store the polarity in the SPI mode flag, then we
-could refactor very elegantly:
-
-1. Simplify Linus's OF gpio quirks, so:
-- they print warnings in case of polarity conflicts
-- but no longer change the gpiod polarity (i.e. they just keep what
-was specified in OF)
-
-2. Drive the gpiod chip select using the raw value, ignoring the
-built-in polarity, which treats it the same as a gpio_xxx. Nice!
-
-in driver/spi/spi.c:
-+       /*
-+        * invert the enable line, as active low is
-+        * default for SPI.
-+        */
-        if (spi->cs_gpiod)
--               /* polarity handled by gpiolib */
--               gpiod_set_value_cansleep(spi->cs_gpiod,
--                                        enable1);
-+               gpiod_set_raw_value_cansleep(spi->cs_gpiod, !enable);
-        else
--               /*
--                * invert the enable line, as active low is
--                * default for SPI.
--                */
-                gpio_set_value_cansleep(spi->cs_gpio, !enable);
-
-Andy/XinHao, is it correct that this will fix the ACPI case?
-Example: enable ACPI CS when SPI_CS_HIGH:
-        enable = true
-        mode & SPI_CS_HIGH => invert enable => false
-        gpiod_set_raw_value_cansleep(!enable => true)
-        ACPI gpiod: always active high
-        chip select goes high.
-
-Now we get to the tricky bit. Storing the polarity in the SPI mode
-breaks a lot of OF spi client drivers. Why? Hardware designers love to
-put chip-selects behind inverting gates. This is quite common in case
-a voltage domain shift is needed - a single transistor will work, but
-is inverting. So depending on the hardware topology (OF), sometimes
-client device X has SPI_CS_HIGH set, sometimes it doesn't.
-
-That would all be fine, but... a common pattern in SPI client drivers is this:
-
-drivers/net/phy/spi_ks8995.c:
-        spi->mode = SPI_MODE_0;
-        spi->bits_per_word = 8;
-        err = spi_setup(spi);
-
-In its zeal to specify the correct mode, the driver "plows" right over
-the SPI_CS_HIGH mode flag. That'll break stuff.
-
-If there was some way to prevent this from happening, we could make
-our code a lot simpler. So I'd like to reach out to Mike Brown to hear
-his opinion.
-
-In case of a SPI bus described by OF or ACPI, the mode flags have
-already been filled out, so there should be no need for the
-initialization in the driver? Could we perhaps replace the pattern
-with the following code?
-
-        spi->mode = spi->mode ? : SPI_MODE_0;
-        spi->bits_per_word = 8;
-        err = spi_setup(spi);
-
-I am not sure in which cases the spi->mode has not been filled out
-yet. I live mostly in the OF world, so I'm a bit myopic here.
-
-Even if Mike Brown agrees to change the pattern, it still means lots
-of changes to spi client drivers, all over the place. So in terms of
-stability, Andy's solution might be preferable.
-
-Looking forward to hearing your opinions,
-Sven
+And that also allows writes to to through successfully.   Perhaps
+this is a simpler change that would work?
+-- 
+Jonathan
