@@ -2,73 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32081378ECF
-	for <lists+linux-spi@lfdr.de>; Mon, 10 May 2021 15:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED5B378EE3
+	for <lists+linux-spi@lfdr.de>; Mon, 10 May 2021 15:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232025AbhEJNcD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 10 May 2021 09:32:03 -0400
-Received: from mga18.intel.com ([134.134.136.126]:62648 "EHLO mga18.intel.com"
+        id S232186AbhEJNcO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 10 May 2021 09:32:14 -0400
+Received: from mga07.intel.com ([134.134.136.100]:31643 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348133AbhEJMkQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 10 May 2021 08:40:16 -0400
-IronPort-SDR: /F+7haN7w14ep2tcd6GrwJ4ObO1r0XvmEHJuEQAt/Lm6cPAwEdvcvnPsdsodpdr5MERlIlWhYR
- JwvLzMI3BvLA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9979"; a="186630435"
+        id S239843AbhEJMme (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 10 May 2021 08:42:34 -0400
+IronPort-SDR: thlt/mWZjXb5OWzMfe0YwQaxdxQn+7G8fAp0AM16gY14rPkDNsrhfPGafbCrBgYJTebI6FiUiE
+ ZzaznKxT9dZQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,9979"; a="263114672"
+X-IronPort-AV: E=Sophos;i="5.82,286,1613462400"; 
+   d="scan'208";a="263114672"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2021 05:41:20 -0700
+IronPort-SDR: 5nN/+7mM/gojnHt//gtw2ISyE1hf0GSBEA0Igq5eujV0QPHMd1F9Pmq4FrvuZI5TRp33lU1ioh
+ udxzIQuO6WXQ==
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,287,1613462400"; 
-   d="scan'208";a="186630435"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2021 05:39:11 -0700
-IronPort-SDR: qr+vKfhFFOxuAriRn/h1VWiMb0tXm1Qu5IZa5twkTj1uqIaFfwLl8EDw5CS3NBEwX2Poquub4Y
- Pgla+J4ZgJjA==
-X-IronPort-AV: E=Sophos;i="5.82,287,1613462400"; 
-   d="scan'208";a="470782756"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2021 05:39:00 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lg5BY-00BAPk-PH; Mon, 10 May 2021 15:38:56 +0300
-Date:   Mon, 10 May 2021 15:38:56 +0300
+   d="scan'208";a="536401736"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 10 May 2021 05:41:16 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 1917FD7; Mon, 10 May 2021 15:41:37 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Robert Jarzmik <robert.jarzmik@free.fr>,
-        Daniel Mack <daniel@zonque.org>
-Subject: Re: [PATCH v2 07/14] spi: pxa2xx: Introduce int_stop_and_reset()
- helper
-Message-ID: <YJkpYDfoUg04UEMy@smile.fi.intel.com>
-References: <20210423182441.50272-1-andriy.shevchenko@linux.intel.com>
- <20210423182441.50272-8-andriy.shevchenko@linux.intel.com>
- <20210510120953.GA15173@sirena.org.uk>
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: [PATCH v3 00/14] spi: pxa2xx: Set of cleanups
+Date:   Mon, 10 May 2021 15:41:20 +0300
+Message-Id: <20210510124134.24638-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210510120953.GA15173@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Mailer: git-send-email 2.30.2
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, May 10, 2021 at 01:09:53PM +0100, Mark Brown wrote:
-> On Fri, Apr 23, 2021 at 09:24:34PM +0300, Andy Shevchenko wrote:
-> > Currently we have three times the same few lines repeated in the code.
-> > Deduplicate them by newly introduced int_stop_and_reset() helper.
-> 
-> This doesn't apply against current code, please check and resend.
+Set of cleanups here and there related to the SPI PXA2xx driver.
+On top of them, adding the special type for Intel Merrifield.
 
-Hmm...
+In v3:
+- rebased on top of v5.13-rc1 and/or spi/for-5,14
 
-Can you, please, point out, what branch should I use?
-It seems good against v5.13-rc1 and spi/for-5.14.
+In v2:
+- cover letter (Mark)
+- drop moving the header in patch 5 (Mark)
 
-Okay, I will resend against spi/for-5.14, but I don't see the issue here.
+Andy Shevchenko (14):
+  spi: pxa2xx: Use one point of return when ->probe() fails
+  spi: pxa2xx: Utilize MMIO and physical base from struct ssp_device
+  spi: pxa2xx: Utilize struct device from struct ssp_device
+  spi: pxa2xx: Replace header inclusions by forward declarations
+  spi: pxa2xx: Unify ifdeffery used in the headers
+  spi: pxa2xx: Group Intel Quark specific definitions
+  spi: pxa2xx: Introduce int_stop_and_reset() helper
+  spi: pxa2xx: Reuse int_error_stop() in pxa2xx_spi_slave_abort()
+  spi: pxa2xx: Use pxa_ssp_enable()/pxa_ssp_disable() in the driver
+  spi: pxa2xx: Extract pxa2xx_spi_update() helper
+  spi: pxa2xx: Extract clear_SSCR1_bits() helper
+  spi: pxa2xx: Extract read_SSSR_bits() helper
+  spi: pxa2xx: Constify struct driver_data parameter
+  spi: pxa2xx: Introduce special type for Merrifield SPIs
 
+ drivers/spi/spi-pxa2xx-dma.c   |  37 +++----
+ drivers/spi/spi-pxa2xx-pci.c   |   4 +-
+ drivers/spi/spi-pxa2xx.c       | 190 +++++++++++++++++----------------
+ drivers/spi/spi-pxa2xx.h       |  52 ++++-----
+ include/linux/pxa2xx_ssp.h     |  42 +++++++-
+ include/linux/spi/pxa2xx_spi.h |   9 +-
+ sound/soc/pxa/pxa-ssp.c        |  16 ---
+ 7 files changed, 185 insertions(+), 165 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.30.2
 
