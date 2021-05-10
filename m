@@ -2,59 +2,63 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6168377CA8
-	for <lists+linux-spi@lfdr.de>; Mon, 10 May 2021 08:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA170377E01
+	for <lists+linux-spi@lfdr.de>; Mon, 10 May 2021 10:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbhEJG7j (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 10 May 2021 02:59:39 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:2735 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbhEJG7j (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 May 2021 02:59:39 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FdsHz3j1BzqTtJ;
-        Mon, 10 May 2021 14:55:11 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
- 14.3.498.0; Mon, 10 May 2021 14:58:25 +0800
-From:   Jay Fang <f.fangjian@huawei.com>
-To:     <broonie@kernel.org>
-CC:     <linux-spi@vger.kernel.org>, <linuxarm@huawei.com>,
-        <huangdaode@huawei.com>
-Subject: [PATCH 4/4] spi: spi-loopback-test: Fix 'tx_buf' might be 'rx_buf'
-Date:   Mon, 10 May 2021 14:58:23 +0800
-Message-ID: <1620629903-15493-5-git-send-email-f.fangjian@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1620629903-15493-1-git-send-email-f.fangjian@huawei.com>
-References: <1620629903-15493-1-git-send-email-f.fangjian@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-CFilter-Loop: Reflected
+        id S230059AbhEJIWx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 10 May 2021 04:22:53 -0400
+Received: from twhmllg3.macronix.com ([211.75.127.131]:26834 "EHLO
+        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230106AbhEJIWx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 May 2021 04:22:53 -0400
+Received: from localhost.localdomain ([172.17.195.94])
+        by TWHMLLG3.macronix.com with ESMTP id 14A8Ldmm031761;
+        Mon, 10 May 2021 16:21:39 +0800 (GMT-8)
+        (envelope-from zhengxunli@mxic.com.tw)
+From:   Zhengxun Li <zhengxunli@mxic.com.tw>
+To:     linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
+Cc:     tudor.ambarus@microchip.com, p.yadav@ti.com,
+        miquel.raynal@bootlin.com, broonie@kernel.org,
+        jaimeliao@mxic.com.tw, Zhengxun Li <zhengxunli@mxic.com.tw>
+Subject: [PATCH v4 0/2] Add octal DTR support for Macronix flash
+Date:   Mon, 10 May 2021 16:20:34 +0800
+Message-Id: <1620634836-13181-1-git-send-email-zhengxunli@mxic.com.tw>
+X-Mailer: git-send-email 1.9.1
+X-MAIL: TWHMLLG3.macronix.com 14A8Ldmm031761
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-In function 'spi_test_run_iter': Value 'tx_buf' might be 'rx_buf'.
+This series adds support for Octal DTR for Macronix flashes. The
+first set of patches is add Macronix octal dtr mode support and
+Macronix octaflash series support. The second add the Octal DTR
+mode support for host driver.
 
-Signed-off-by: Jay Fang <f.fangjian@huawei.com>
----
- drivers/spi/spi-loopback-test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v4:
+- merge patch 2(support octaflash Id) to patch 1(support octal dtr)
+- add switching back to default mode(1-1-1) support if octal dtr is
+  disabled
+- delete the duplicate code settings initialized by the Profile 1.0
+  table. (such as cmd_ext_type, rdsr_dummy, rdsr_addr_nbytes, etc.)
+- add a description about stacked die
 
-diff --git a/drivers/spi/spi-loopback-test.c b/drivers/spi/spi-loopback-test.c
-index f1cf223..4d4f77a 100644
---- a/drivers/spi/spi-loopback-test.c
-+++ b/drivers/spi/spi-loopback-test.c
-@@ -875,7 +875,7 @@ static int spi_test_run_iter(struct spi_device *spi,
- 		test.transfers[i].len = len;
- 		if (test.transfers[i].tx_buf)
- 			test.transfers[i].tx_buf += tx_off;
--		if (test.transfers[i].tx_buf)
-+		if (test.transfers[i].rx_buf)
- 			test.transfers[i].rx_buf += rx_off;
- 	}
- 
+Changes in v3:
+- Add support for Macronix octaflash series.
+
+Changes in v2:
+- Define with a generic name to describe the maximum dummy cycles.
+- Compare the ID directly in the loop, no longer copy and execute
+  memcmp().
+- Add spi_mem_dtr_supports_op() to support dtr operation.
+
+Zhengxun Li (2):
+  mtd: spi-nor: macronix: add support for Macronix octaflash
+  spi: mxic: patch for octal DTR mode support
+
+ drivers/mtd/spi-nor/macronix.c | 172 +++++++++++++++++++++++++++++++++++++++++
+ drivers/spi/spi-mxic.c         |  41 +++++++---
+ 2 files changed, 202 insertions(+), 11 deletions(-)
+
 -- 
-2.7.4
+1.9.1
 
