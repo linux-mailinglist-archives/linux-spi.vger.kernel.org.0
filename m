@@ -2,50 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA2E379639
-	for <lists+linux-spi@lfdr.de>; Mon, 10 May 2021 19:42:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72297379629
+	for <lists+linux-spi@lfdr.de>; Mon, 10 May 2021 19:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232880AbhEJRnO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 10 May 2021 13:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
+        id S230081AbhEJRnC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 10 May 2021 13:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232243AbhEJRnL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 May 2021 13:43:11 -0400
+        with ESMTP id S231631AbhEJRnC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 May 2021 13:43:02 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89744C06175F
-        for <linux-spi@vger.kernel.org>; Mon, 10 May 2021 10:42:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E241C06175F
+        for <linux-spi@vger.kernel.org>; Mon, 10 May 2021 10:41:57 -0700 (PDT)
 Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1lg9ug-0005HJ-Ez; Mon, 10 May 2021 19:41:50 +0200
+        id 1lg9ug-0005Hb-SV; Mon, 10 May 2021 19:41:50 +0200
 Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1lg9uf-0006aW-D3; Mon, 10 May 2021 19:41:49 +0200
+        id 1lg9ug-0006ai-G4; Mon, 10 May 2021 19:41:50 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
+        Stephen Boyd <sboyd@kernel.org>,
+        Mark Brown <broonie@kernel.org>
 Cc:     linux-clk@vger.kernel.org,
         Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
         Alexandru Ardelean <aardelean@deviqon.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        kernel@pengutronix.de,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        linux-spi@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v7 2/6] clk: Provide new devm_clk_helpers for prepared and enabled clocks
-Date:   Mon, 10 May 2021 19:41:38 +0200
-Message-Id: <20210510174142.986250-3-u.kleine-koenig@pengutronix.de>
+        kernel@pengutronix.de, linux-spi@vger.kernel.org
+Subject: [PATCH v7 6/6] spi: davinci: Simplify using devm_clk_get_enabled()
+Date:   Mon, 10 May 2021 19:41:42 +0200
+Message-Id: <20210510174142.986250-7-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
 References: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
@@ -60,192 +49,63 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-When a driver keeps a clock prepared (or enabled) during the whole
-lifetime of the driver, these helpers allow to simplify the drivers.
+devm_clk_get_enabled() returns the clk already (prepared and) enabled
+and the automatically called cleanup cares for disabling (and
+unpreparing). So simplify .probe() and .remove() accordingly.
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Acked-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/clk/clk-devres.c | 31 ++++++++++++++
- include/linux/clk.h      | 90 +++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 120 insertions(+), 1 deletion(-)
+ drivers/spi/spi-davinci.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/clk/clk-devres.c b/drivers/clk/clk-devres.c
-index 91c995815b57..b54f7f0f2a35 100644
---- a/drivers/clk/clk-devres.c
-+++ b/drivers/clk/clk-devres.c
-@@ -67,12 +67,43 @@ struct clk *devm_clk_get(struct device *dev, const char *id)
- }
- EXPORT_SYMBOL(devm_clk_get);
+diff --git a/drivers/spi/spi-davinci.c b/drivers/spi/spi-davinci.c
+index e114e6fe5ea5..66884d068db5 100644
+--- a/drivers/spi/spi-davinci.c
++++ b/drivers/spi/spi-davinci.c
+@@ -931,14 +931,11 @@ static int davinci_spi_probe(struct platform_device *pdev)
  
-+struct clk *devm_clk_get_prepared(struct device *dev, const char *id)
-+{
-+	return __devm_clk_get(dev, id, clk_get, clk_prepare, clk_unprepare);
-+
-+}
-+EXPORT_SYMBOL(devm_clk_get_prepared);
-+
-+struct clk *devm_clk_get_enabled(struct device *dev, const char *id)
-+{
-+	return __devm_clk_get(dev, id, clk_get,
-+			      clk_prepare_enable, clk_disable_unprepare);
-+
-+}
-+EXPORT_SYMBOL(devm_clk_get_enabled);
-+
- struct clk *devm_clk_get_optional(struct device *dev, const char *id)
- {
- 	return __devm_clk_get(dev, id, clk_get_optional, NULL, NULL);
- }
- EXPORT_SYMBOL(devm_clk_get_optional);
+ 	dspi->bitbang.master = master;
  
-+struct clk *devm_clk_get_optional_prepared(struct device *dev, const char *id)
-+{
-+	return __devm_clk_get(dev, id, clk_get_optional,
-+			      clk_prepare, clk_unprepare);
-+
-+}
-+EXPORT_SYMBOL(devm_clk_get_optional_prepared);
-+
-+struct clk *devm_clk_get_optional_enabled(struct device *dev, const char *id)
-+{
-+	return __devm_clk_get(dev, id, clk_get_optional,
-+			      clk_prepare_enable, clk_disable_unprepare);
-+
-+}
-+EXPORT_SYMBOL(devm_clk_get_optional_enabled);
-+
- struct clk_bulk_devres {
- 	struct clk_bulk_data *clks;
- 	int num_clks;
-diff --git a/include/linux/clk.h b/include/linux/clk.h
-index 266e8de3cb51..b011dbba7109 100644
---- a/include/linux/clk.h
-+++ b/include/linux/clk.h
-@@ -449,7 +449,7 @@ int __must_check devm_clk_bulk_get_all(struct device *dev,
-  * the clock producer.  (IOW, @id may be identical strings, but
-  * clk_get may return different clock producers depending on @dev.)
-  *
-- * Drivers must assume that the clock source is not enabled.
-+ * Drivers must assume that the clock source is neither prepared nor enabled.
-  *
-  * devm_clk_get should not be called from within interrupt context.
-  *
-@@ -458,6 +458,47 @@ int __must_check devm_clk_bulk_get_all(struct device *dev,
-  */
- struct clk *devm_clk_get(struct device *dev, const char *id);
+-	dspi->clk = devm_clk_get(&pdev->dev, NULL);
++	dspi->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	if (IS_ERR(dspi->clk)) {
+ 		ret = -ENODEV;
+ 		goto free_master;
+ 	}
+-	ret = clk_prepare_enable(dspi->clk);
+-	if (ret)
+-		goto free_master;
  
-+/**
-+ * devm_clk_get_prepared - devm_clk_get() + clk_prepare()
-+ * @dev: device for clock "consumer"
-+ * @id: clock consumer ID
-+ *
-+ * Returns a struct clk corresponding to the clock producer, or
-+ * valid IS_ERR() condition containing errno.  The implementation
-+ * uses @dev and @id to determine the clock consumer, and thereby
-+ * the clock producer.  (IOW, @id may be identical strings, but
-+ * clk_get may return different clock producers depending on @dev.)
-+ *
-+ * The returned clk (if valid) is prepared. Drivers must however assume that the
-+ * clock is not enabled.
-+ *
-+ * devm_clk_get_prepared should not be called from within interrupt context.
-+ *
-+ * The clock will automatically be unprepared and freed when the
-+ * device is unbound from the bus.
-+ */
-+struct clk *devm_clk_get_prepared(struct device *dev, const char *id);
-+
-+/**
-+ * devm_clk_get_enabled - devm_clk_get() + clk_prepare_enable()
-+ * @dev: device for clock "consumer"
-+ * @id: clock consumer ID
-+ *
-+ * Returns a struct clk corresponding to the clock producer, or valid IS_ERR()
-+ * condition containing errno.  The implementation uses @dev and @id to
-+ * determine the clock consumer, and thereby the clock producer.  (IOW, @id may
-+ * be identical strings, but clk_get may return different clock producers
-+ * depending on @dev.)
-+ *
-+ * The returned clk (if valid) is prepared and enabled.
-+ *
-+ * devm_clk_get_prepared should not be called from within interrupt context.
-+ *
-+ * The clock will automatically be disabled, unprepared and freed when the
-+ * device is unbound from the bus.
-+ */
-+struct clk *devm_clk_get_enabled(struct device *dev, const char *id);
-+
- /**
-  * devm_clk_get_optional - lookup and obtain a managed reference to an optional
-  *			   clock producer.
-@@ -469,6 +510,29 @@ struct clk *devm_clk_get(struct device *dev, const char *id);
-  */
- struct clk *devm_clk_get_optional(struct device *dev, const char *id);
+ 	master->use_gpio_descriptors = true;
+ 	master->dev.of_node = pdev->dev.of_node;
+@@ -963,7 +960,7 @@ static int davinci_spi_probe(struct platform_device *pdev)
  
-+/**
-+ * devm_clk_get_optional_prepared - devm_clk_get_optional() + clk_prepare()
-+ * @dev: device for clock "consumer"
-+ * @id: clock consumer ID
-+ *
-+ * Behaves the same as devm_clk_get_prepared() except where there is no clock
-+ * producer.  In this case, instead of returning -ENOENT, the function returns
-+ * NULL.
-+ */
-+struct clk *devm_clk_get_optional_prepared(struct device *dev, const char *id);
-+
-+/**
-+ * devm_clk_get_optional_enabled - devm_clk_get_optional() +
-+ *                                 clk_prepare_enable()
-+ * @dev: device for clock "consumer"
-+ * @id: clock consumer ID
-+ *
-+ * Behaves the same as devm_clk_get_enabled() except where there is no clock
-+ * producer.  In this case, instead of returning -ENOENT, the function returns
-+ * NULL.
-+ */
-+struct clk *devm_clk_get_optional_enabled(struct device *dev, const char *id);
-+
- /**
-  * devm_get_clk_from_child - lookup and obtain a managed reference to a
-  *			     clock producer from child node.
-@@ -813,12 +877,36 @@ static inline struct clk *devm_clk_get(struct device *dev, const char *id)
- 	return NULL;
- }
+ 	ret = davinci_spi_request_dma(dspi);
+ 	if (ret == -EPROBE_DEFER) {
+-		goto free_clk;
++		goto free_master;
+ 	} else if (ret) {
+ 		dev_info(&pdev->dev, "DMA is not supported (%d)\n", ret);
+ 		dspi->dma_rx = NULL;
+@@ -1007,8 +1004,6 @@ static int davinci_spi_probe(struct platform_device *pdev)
+ 		dma_release_channel(dspi->dma_rx);
+ 		dma_release_channel(dspi->dma_tx);
+ 	}
+-free_clk:
+-	clk_disable_unprepare(dspi->clk);
+ free_master:
+ 	spi_master_put(master);
+ err:
+@@ -1034,8 +1029,6 @@ static int davinci_spi_remove(struct platform_device *pdev)
  
-+static inline struct clk *devm_clk_get_prepared(struct device *dev,
-+						const char *id)
-+{
-+	return NULL;
-+}
-+
-+static inline struct clk *devm_clk_get_enabled(struct device *dev,
-+					       const char *id)
-+{
-+	return NULL;
-+}
-+
- static inline struct clk *devm_clk_get_optional(struct device *dev,
- 						const char *id)
- {
- 	return NULL;
- }
+ 	spi_bitbang_stop(&dspi->bitbang);
  
-+static inline struct clk *devm_clk_get_optional_prepared(struct device *dev,
-+							 const char *id)
-+{
-+	return NULL;
-+}
-+
-+static inline struct clk *devm_clk_get_optional_enabled(struct device *dev,
-+							const char *id)
-+{
-+	return NULL;
-+}
-+
- static inline int __must_check devm_clk_bulk_get(struct device *dev, int num_clks,
- 						 struct clk_bulk_data *clks)
- {
+-	clk_disable_unprepare(dspi->clk);
+-
+ 	if (dspi->dma_rx) {
+ 		dma_release_channel(dspi->dma_rx);
+ 		dma_release_channel(dspi->dma_tx);
 -- 
 2.30.2
 
