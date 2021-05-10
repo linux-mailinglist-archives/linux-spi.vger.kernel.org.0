@@ -2,105 +2,136 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0DA37950B
-	for <lists+linux-spi@lfdr.de>; Mon, 10 May 2021 19:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E56379580
+	for <lists+linux-spi@lfdr.de>; Mon, 10 May 2021 19:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231805AbhEJRKR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Mon, 10 May 2021 13:10:17 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3053 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231713AbhEJRKR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 May 2021 13:10:17 -0400
-Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ff6gS3zHFz70gFg;
-        Tue, 11 May 2021 00:57:56 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 10 May 2021 19:09:09 +0200
-Received: from localhost (10.52.123.16) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Mon, 10 May
- 2021 18:09:08 +0100
-Date:   Mon, 10 May 2021 18:07:27 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-CC:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, <linux-rtc@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>,
+        id S232373AbhEJR2X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 10 May 2021 13:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47560 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232376AbhEJR2X (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 May 2021 13:28:23 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9E0C061574
+        for <linux-spi@vger.kernel.org>; Mon, 10 May 2021 10:27:18 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lg9gS-0002jf-3l; Mon, 10 May 2021 19:27:08 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lg9gQ-00063v-JJ; Mon, 10 May 2021 19:27:06 +0200
+Date:   Mon, 10 May 2021 19:27:06 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Mark Brown <broonie@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-pwm@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-spi@vger.kernel.org,
         Wolfram Sang <wsa@kernel.org>,
-        "Oleksij Rempel" <o.rempel@pengutronix.de>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
         Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
         Thierry Reding <thierry.reding@gmail.com>,
-        <kernel@pengutronix.de>, Andrew Morton <akpm@linux-foundation.org>,
-        <linux-spi@vger.kernel.org>, Lee Jones <lee.jones@linaro.org>,
-        <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Alexandru Ardelean <aardelean@deviqon.com>
-Subject: Re: [PATCH v6 RESEND 0/6] clk: provide new devm helpers for
- prepared and enabled clocks
-Message-ID: <20210510180727.0000056d@Huawei.com>
-In-Reply-To: <20210510061724.940447-1-u.kleine-koenig@pengutronix.de>
+        kernel@pengutronix.de, Andrew Morton <akpm@linux-foundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v6 RESEND 1/6] clk: generalize devm_clk_get() a bit
+Message-ID: <20210510172706.lfafdkfevya7ycqq@pengutronix.de>
 References: <20210510061724.940447-1-u.kleine-koenig@pengutronix.de>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; i686-w64-mingw32)
+ <20210510061724.940447-2-u.kleine-koenig@pengutronix.de>
+ <20210510180205.000004dd@Huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.52.123.16]
-X-ClientProxiedBy: lhreml720-chm.china.huawei.com (10.201.108.71) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="la5yu5g5mopezfed"
+Content-Disposition: inline
+In-Reply-To: <20210510180205.000004dd@Huawei.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 10 May 2021 08:17:18 +0200
-Uwe Kleine-König <u.kleine-koenig@pengutronix.de> wrote:
 
-> Hello,
-> 
-> this is just a resend as I didn't get any feedback in the two weeks
-> since the original v6 submission. Would be nice to hear something back,
-> I'm trying for more than half a year now to get feedback. :-\
+--la5yu5g5mopezfed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I have a bunch of usecases in IIO, (many with local devm_add_action_or_reset()
-doing the same thing.)
+On Mon, May 10, 2021 at 06:02:05PM +0100, Jonathan Cameron wrote:
+> On Mon, 10 May 2021 08:17:19 +0200
+> Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de> wrote:
+>=20
+> > Allow to add an exit hook to devm managed clocks. Also use
+> > clk_get_optional() in devm_clk_get_optional instead of open coding it.
+> > The generalisation will be used in the next commit to add some more
+> > devm_clk helpers.
+> >=20
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> If feels marginally odd to register cleanup that we know won't do anything
+> for the optional case, but it works as far as I can tell and it would be
+> a little fiddly to special case it.
 
-+CC Alex who sent out a series add more local handling of this case
-today.
+It took a moment for me to understand your concern. Yes, I register a
+cleanup even if (*init) happens to be clk_get_optional() and it returned
+NULL. It's not hard to optimize that:
 
-Code seems correct and clean to me, but whether the clk maintainers
-want to encourage this pattern is down to them (I've had similar discussions
-about regulators in the past where we've agreed to disagree on this topic).
+diff --git a/drivers/clk/clk-devres.c b/drivers/clk/clk-devres.c
+index b54f7f0f2a35..2420d6ae7b33 100644
+--- a/drivers/clk/clk-devres.c
++++ b/drivers/clk/clk-devres.c
+@@ -38,14 +38,17 @@ static struct clk *__devm_clk_get(struct device *dev, c=
+onst char *id,
+ 		goto err_clk_get;
+ 	}
+=20
+-	if (init) {
+-		ret =3D init(clk);
+-		if (ret)
+-			goto err_clk_init;
++	/* short-cut the case where clk_get_optional returned NULL */
++	if (clk) {
++		if (init) {
++			ret =3D init(clk);
++			if (ret)
++				goto err_clk_init;
++		}
++		state->exit =3D exit;
+ 	}
+=20
+ 	state->clk =3D clk;
+-	state->exit =3D exit;
+=20
+ 	devres_add(dev, state);
 
-Jonathan
+But I'd value simplicity over micro-optimizing and keep the code as is.
+=20
+Best regards
+Uwe
 
-> 
-> Best regards
-> Uwe
-> 
-> Uwe Kleine-König (6):
->   clk: generalize devm_clk_get() a bit
->   clk: Provide new devm_clk_helpers for prepared and enabled clocks
->   pwm: atmel: Simplify using devm_clk_get_prepared()
->   rtc: at91sam9: Simplify using devm_clk_get_enabled()
->   i2c: imx: Simplify using devm_clk_get_enabled()
->   spi: davinci: Simplify using devm_clk_get_enabled()
-> 
->  drivers/clk/clk-devres.c     | 96 ++++++++++++++++++++++++++++++------
->  drivers/i2c/busses/i2c-imx.c | 12 +----
->  drivers/pwm/pwm-atmel.c      | 15 +-----
->  drivers/rtc/rtc-at91sam9.c   | 22 ++-------
->  drivers/spi/spi-davinci.c    | 11 +----
->  include/linux/clk.h          | 87 +++++++++++++++++++++++++++++++-
->  6 files changed, 176 insertions(+), 67 deletions(-)
-> 
-> 
-> base-commit: a38fd8748464831584a19438cbb3082b5a2dab15
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
+--la5yu5g5mopezfed
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmCZbOcACgkQwfwUeK3K
+7AmXIQf/c3HuQfNTch4Xl+/TfVW1wBEkH4bhu2025v3mpSfZGRNTmKlBBMjvoJaQ
+ZaaoVaze/k9HY4AZPbYTsofDgDsRK2qFUDeKG4QF+kSxQ1YRsi3nDqwApmEtzbS2
+ANIm9kR97cOBMb3fxo7FZpCifLB/4fWyScYFksgu8INDv8qK+/U5NZvBgUzVZ29o
+K7va7sm/jadYgihQ/f4aJnNhCsGxMNxIP3SrMZM04AsY9J+smEdwYX/na6Px54Sj
+RqIK1fK7Ewiq2Be7fPuARD4JVRXWrxbpQ4wY8bkG5ZtqnxPz/dTQRcCYZDwSBozv
+v3RANwxRr6pdDrO/ECcd3myx7Mc33Q==
+=oeyl
+-----END PGP SIGNATURE-----
+
+--la5yu5g5mopezfed--
