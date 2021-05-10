@@ -2,84 +2,176 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B41E637921A
-	for <lists+linux-spi@lfdr.de>; Mon, 10 May 2021 17:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92BAE3794EF
+	for <lists+linux-spi@lfdr.de>; Mon, 10 May 2021 19:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233759AbhEJPIC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 10 May 2021 11:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243308AbhEJPG4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 May 2021 11:06:56 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2E4C049632
-        for <linux-spi@vger.kernel.org>; Mon, 10 May 2021 07:27:49 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id z6so16860341wrm.4
-        for <linux-spi@vger.kernel.org>; Mon, 10 May 2021 07:27:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6QUpLnwL5Ztd2UMxVwblTFeegcFTeZYE+oxBEv6V5uU=;
-        b=aTCVajgMygiZTtnQ4Q7j6vbW3+ZkvuMh+7qgG6J7j4a0kKzGpkFpneQFebYgaxQFAD
-         vI+GJZE80ci/Qmi+QdgCuzlCEnDlheUfiJXnBj+mpB5QBRGSmQ5lGxr3vYwmKZek7JYM
-         O5z2dJxEVkcy5aT5IVy38YXcxVzGjXBZKtMSZ2XXMUSqlQkw5kpgHHAwdSa0rPMnmBW0
-         1d6Oy2lbMs6pNPlc6U5enL4jsHu7EE+s9AfxvSBFU+0ufwaTmX0UG2xzUN7XOtsl6Uv3
-         TeyXOBiJVKeERHZGMQAqcx5HLeoJpnCo12dvCkglG1FPmzD6kDmvwqNG4cEqGzmLfZEA
-         UgFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6QUpLnwL5Ztd2UMxVwblTFeegcFTeZYE+oxBEv6V5uU=;
-        b=qwkJ3OjQPp5BBQbsAm/AyDyDcdFl9444iFND9XPNwKHKFpAujXb6GfWlknQNfNrA09
-         V2vtHLy7N1W6Z5HZNYfUWgfTDx5/NURd1skuj0now+Z3CCphAVnX3Tw5CnWRNT79StnS
-         Y/khn7s1pYVcZ8tEphfTFew0ItiKadFWIm9v++JWaPzq8ZtKHwlMH2jGcrSJce2ReBrG
-         Zb2FoCqmatDgvFQEEzFGkL8tJ71dQ0T7R2t8MoBoDftc20ggBXx3HqDTR3D647y43faf
-         DWxgXTP1SJPvClYzo2anut4BleyNB4Uq58+C4NATRDRvve3PALhZyv69xgt76CnXFnFQ
-         6gvw==
-X-Gm-Message-State: AOAM530pONHCQSEFSMaPgf16ZAjXLIAVfwZHJ/ExyDEnLjZKqVH6k2Xn
-        lIWd8N4QT6vT7XrJWnzu3r7d/B3plEgZHzxYHsQ=
-X-Google-Smtp-Source: ABdhPJxj+o/xqJXwU7No1HBM4XsyQRglkWLrnQcd0nb3r6fC5HlfLqJAR+02udeAxxXWqgMQqGchTQLv8Ox/O5MKTPY=
-X-Received: by 2002:adf:d215:: with SMTP id j21mr31759313wrh.251.1620656867795;
- Mon, 10 May 2021 07:27:47 -0700 (PDT)
+        id S232130AbhEJRFc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Mon, 10 May 2021 13:05:32 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3051 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232316AbhEJRE5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 May 2021 13:04:57 -0400
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ff6gN1SSkz6rnFt;
+        Tue, 11 May 2021 00:57:52 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 10 May 2021 19:03:48 +0200
+Received: from localhost (10.52.123.16) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Mon, 10 May
+ 2021 18:03:47 +0100
+Date:   Mon, 10 May 2021 18:02:05 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+CC:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Mark Brown <broonie@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        "Oleksij Rempel" <o.rempel@pengutronix.de>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        <kernel@pengutronix.de>, Andrew Morton <akpm@linux-foundation.org>,
+        <linux-spi@vger.kernel.org>, Lee Jones <lee.jones@linaro.org>,
+        <linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v6 RESEND 1/6] clk: generalize devm_clk_get() a bit
+Message-ID: <20210510180205.000004dd@Huawei.com>
+In-Reply-To: <20210510061724.940447-2-u.kleine-koenig@pengutronix.de>
+References: <20210510061724.940447-1-u.kleine-koenig@pengutronix.de>
+        <20210510061724.940447-2-u.kleine-koenig@pengutronix.de>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; i686-w64-mingw32)
 MIME-Version: 1.0
-References: <YJP6QIl+jnjKPlRo@smile.fi.intel.com> <83ab9b6c-8fb2-b053-ecb3-04230ca34e48@linux.alibaba.com>
- <CAHp75Vev1D5+QWyGCm+HgpdAyT4Uq_OAp7dCemVf9Cdvoay=Og@mail.gmail.com>
- <6bd8f178-51a2-3f45-8a16-80fdd4a3ed8e@linux.alibaba.com> <CAHp75Vfh+jqNLLbwWDe8pi1dQafnNFHak1Hk=5Cw3J+kJX9r3Q@mail.gmail.com>
- <CACRpkdZeKGP6Z8h3GaQ0=EA8mx+yRqzwZaQ5vDJrB4GiYLa26w@mail.gmail.com>
- <CAGngYiW=RTkHoSndJDr0mMUgLFfuB18g=AwKTvi8d2-tdBrroQ@mail.gmail.com>
- <CAHp75VfD5kEnjvvRWUJwpmFaWksnnTf_ewBNDsxz3W3kQMUv+w@mail.gmail.com>
- <CAGngYiVNE1FjsJZeHL5afpWeqf7pRhHqUcKkChML3KQ=6cj=Bw@mail.gmail.com>
- <YJkaqV4JalpS09bs@smile.fi.intel.com> <CAGngYiW=YP2xuxhiQFxmWD68nd9wKJJ_j+mWswGGT=m+44p3hw@mail.gmail.com>
- <CAHp75VeWqGpXPbO6JW2fA7fL=AsYCDbFdwJobuXwssOgRSdfQA@mail.gmail.com>
-In-Reply-To: <CAHp75VeWqGpXPbO6JW2fA7fL=AsYCDbFdwJobuXwssOgRSdfQA@mail.gmail.com>
-From:   Sven Van Asbroeck <thesven73@gmail.com>
-Date:   Mon, 10 May 2021 10:27:36 -0400
-Message-ID: <CAGngYiXyGkG73Ge7i_vMrfu0YS7jM_7VR7s4jUE6fUg7G2Ls6g@mail.gmail.com>
-Subject: Re: [PATCH v1] spi: fix client driver can't register success when use
- GPIO as CS
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "xhao@linux.alibaba.com" <xhao@linux.alibaba.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.52.123.16]
+X-ClientProxiedBy: lhreml720-chm.china.huawei.com (10.201.108.71) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Andy,
+On Mon, 10 May 2021 08:17:19 +0200
+Uwe Kleine-König <u.kleine-koenig@pengutronix.de> wrote:
 
-On Mon, May 10, 2021 at 10:02 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> For now I guess my patch is necessary to have. I don't think we may
-> delay its distribution while developing a better solution, do you
-> agree on this?
+> Allow to add an exit hook to devm managed clocks. Also use
+> clk_get_optional() in devm_clk_get_optional instead of open coding it.
+> The generalisation will be used in the next commit to add some more
+> devm_clk helpers.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Agreed 100%. Fixing your/XinHao's immediate issue is the important thing here.
+If feels marginally odd to register cleanup that we know won't do anything
+for the optional case, but it works as far as I can tell and it would be
+a little fiddly to special case it.
 
-From what I can see, your patch won't break OF, so I'm good with it. I
-can review / test the rebased patch on an OF system if you like. All
-subject to Mark Brown's agreement, of course.
+FWIW
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+> ---
+>  drivers/clk/clk-devres.c | 67 ++++++++++++++++++++++++++++++----------
+>  1 file changed, 50 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/clk/clk-devres.c b/drivers/clk/clk-devres.c
+> index be160764911b..91c995815b57 100644
+> --- a/drivers/clk/clk-devres.c
+> +++ b/drivers/clk/clk-devres.c
+> @@ -4,39 +4,72 @@
+>  #include <linux/export.h>
+>  #include <linux/gfp.h>
+>  
+> +struct devm_clk_state {
+> +	struct clk *clk;
+> +	void (*exit)(struct clk *clk);
+> +};
+> +
+>  static void devm_clk_release(struct device *dev, void *res)
+>  {
+> -	clk_put(*(struct clk **)res);
+> +	struct devm_clk_state *state = *(struct devm_clk_state **)res;
+> +
+> +	if (state->exit)
+> +		state->exit(state->clk);
+> +
+> +	clk_put(state->clk);
+>  }
+>  
+> -struct clk *devm_clk_get(struct device *dev, const char *id)
+> +static struct clk *__devm_clk_get(struct device *dev, const char *id,
+> +				  struct clk *(*get)(struct device *dev, const char *id),
+> +				  int (*init)(struct clk *clk),
+> +				  void (*exit)(struct clk *clk))
+>  {
+> -	struct clk **ptr, *clk;
+> +	struct devm_clk_state *state;
+> +	struct clk *clk;
+> +	int ret;
+>  
+> -	ptr = devres_alloc(devm_clk_release, sizeof(*ptr), GFP_KERNEL);
+> -	if (!ptr)
+> +	state = devres_alloc(devm_clk_release, sizeof(*state), GFP_KERNEL);
+> +	if (!state)
+>  		return ERR_PTR(-ENOMEM);
+>  
+> -	clk = clk_get(dev, id);
+> -	if (!IS_ERR(clk)) {
+> -		*ptr = clk;
+> -		devres_add(dev, ptr);
+> -	} else {
+> -		devres_free(ptr);
+> +	clk = get(dev, id);
+> +	if (IS_ERR(clk)) {
+> +		ret = PTR_ERR(clk);
+> +		goto err_clk_get;
+>  	}
+>  
+> +	if (init) {
+> +		ret = init(clk);
+> +		if (ret)
+> +			goto err_clk_init;
+> +	}
+> +
+> +	state->clk = clk;
+> +	state->exit = exit;
+> +
+> +	devres_add(dev, state);
+> +
+>  	return clk;
+> +
+> +err_clk_init:
+> +
+> +	clk_put(clk);
+> +err_clk_get:
+> +
+> +	devres_free(state);
+> +	return ERR_PTR(ret);
+>  }
+> -EXPORT_SYMBOL(devm_clk_get);
+>  
+> -struct clk *devm_clk_get_optional(struct device *dev, const char *id)
+> +struct clk *devm_clk_get(struct device *dev, const char *id)
+>  {
+> -	struct clk *clk = devm_clk_get(dev, id);
+> +	return __devm_clk_get(dev, id, clk_get, NULL, NULL);
+>  
+> -	if (clk == ERR_PTR(-ENOENT))
+> -		return NULL;
+> +}
+> +EXPORT_SYMBOL(devm_clk_get);
+>  
+> -	return clk;
+> +struct clk *devm_clk_get_optional(struct device *dev, const char *id)
+> +{
+> +	return __devm_clk_get(dev, id, clk_get_optional, NULL, NULL);
+>  }
+>  EXPORT_SYMBOL(devm_clk_get_optional);
+>  
+
