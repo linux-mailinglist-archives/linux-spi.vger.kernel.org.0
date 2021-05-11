@@ -2,163 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A17E237A8D9
-	for <lists+linux-spi@lfdr.de>; Tue, 11 May 2021 16:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B9CA37A915
+	for <lists+linux-spi@lfdr.de>; Tue, 11 May 2021 16:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbhEKOSa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 May 2021 10:18:30 -0400
-Received: from mga17.intel.com ([192.55.52.151]:11128 "EHLO mga17.intel.com"
+        id S231842AbhEKOZM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 May 2021 10:25:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60660 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231835AbhEKOSX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 11 May 2021 10:18:23 -0400
-IronPort-SDR: vPVcruXzKue/5uh/tm/bmzYlZ+dk7PQEYtUal3IusEWgqqXVIe6QAFm4KPAe0t4Y5zmymzCFGJ
- IjlOSHaNr80A==
-X-IronPort-AV: E=McAfee;i="6200,9189,9981"; a="179714748"
-X-IronPort-AV: E=Sophos;i="5.82,290,1613462400"; 
-   d="scan'208";a="179714748"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2021 07:17:14 -0700
-IronPort-SDR: VyT/2y6qXkkJZi0XmfugZaBYQh1RuvWOKYyLo2yIbq4v7qYat3PQxf6f2epjveWEOfaQpmFbuf
- pmOsVCIKIjfQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,290,1613462400"; 
-   d="scan'208";a="541661836"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 11 May 2021 07:17:10 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 9F61450E; Tue, 11 May 2021 17:17:27 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
+        id S231797AbhEKOZK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 11 May 2021 10:25:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F1E196191D;
+        Tue, 11 May 2021 14:24:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620743043;
+        bh=wJ+4cBBj7zHK6XS8zc7+fNwV8ORjVAMlWIuJ5Iuzs8o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mragve0FOBm1OVcs9ENSktykBXpTAlvDdbY6U6NYXsL4GRjFXu/8qzKrerur8//8v
+         //lUW+7b6CzoMSfZ3UtBghu6ZHq2tRYyjq7uY/uhGh4l6QbnKy5eAe/PJkdhoO5hHe
+         LgttsgFY2Nyso/RvJUs2oSgI4YOS2uPkS477/K9r1UwoK2R9VxwU8ovbJjeAdAnA+F
+         cPFqPA66I0uf/Y9izmGbWyvYZNNN/mU6vHh9P4tco+aZBSOn8rBFmEn+6ocX6JikH0
+         zKx+aFAc/FiG/AXOsmci4gnArTYyeVPYR8458InI8s35fqJfIKwircEu3f770mNoOb
+         fWejAlhMINwRw==
+Date:   Tue, 11 May 2021 15:23:23 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Daniel Mack <daniel@zonque.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: [PATCH v3 8/8] spi: Convert to use predefined time multipliers
-Date:   Tue, 11 May 2021 17:17:25 +0300
-Message-Id: <20210511141725.32097-9-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210511141725.32097-1-andriy.shevchenko@linux.intel.com>
-References: <20210511141725.32097-1-andriy.shevchenko@linux.intel.com>
+        Takashi Iwai <tiwai@suse.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>
+Subject: Re: [PATCH v2 00/14] spi: pxa2xx: Set of cleanups
+Message-ID: <20210511142323.GJ4496@sirena.org.uk>
+References: <20210423182441.50272-1-andriy.shevchenko@linux.intel.com>
+ <162072071980.33404.13031284441613044277.b4-ty@kernel.org>
+ <CAHp75Vck5izDB4mTRV5hTaknpx5Bm+OA4rNLVznQxVaEwigBZg@mail.gmail.com>
+ <20210511134706.GI4496@sirena.org.uk>
+ <CAHp75VdPHYEq+Xn5yQ+TyQn5uerc+afcVaHj22OmVzsBW2jcaQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5me2qT3T17SWzdxI"
+Content-Disposition: inline
+In-Reply-To: <CAHp75VdPHYEq+Xn5yQ+TyQn5uerc+afcVaHj22OmVzsBW2jcaQ@mail.gmail.com>
+X-Cookie: Beam me up, Scotty!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-We have a lot of hard coded values in nanoseconds or other units.
-Use predefined constants to make it more clear.
 
-While at it, add or amend comments in the corresponding functions.
+--5me2qT3T17SWzdxI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi.c | 41 ++++++++++++++++++++++++++++-------------
- 1 file changed, 28 insertions(+), 13 deletions(-)
+On Tue, May 11, 2021 at 04:52:40PM +0300, Andy Shevchenko wrote:
+> On Tue, May 11, 2021 at 4:47 PM Mark Brown <broonie@kernel.org> wrote:
+> > On Tue, May 11, 2021 at 03:28:18PM +0300, Andy Shevchenko wrote:
+> > > On Tue, May 11, 2021 at 11:27 AM Mark Brown <broonie@kernel.org> wrote:
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 2350d131871b..9160e9e52aae 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1118,10 +1118,20 @@ static int spi_transfer_wait(struct spi_controller *ctlr,
- 		if (!speed_hz)
- 			speed_hz = 100000;
- 
--		ms = 8LL * 1000LL * xfer->len;
-+		/*
-+		 * For each byte we wait for 8 cycles of the SPI clock.
-+		 * Since speed is defined in Hz and we want milliseconds,
-+		 * use respective multiplier, but before the division,
-+		 * otherwise we may get 0 for short transfers.
-+		 */
-+		ms = 8LL * MSEC_PER_SEC * xfer->len;
- 		do_div(ms, speed_hz);
--		ms += ms + 200; /* some tolerance */
- 
-+		/*
-+		 * Increase it twice and add 200 ms tolerance, use
-+		 * predefined maximum in case of overflow.
-+		 */
-+		ms += ms + 200;
- 		if (ms > UINT_MAX)
- 			ms = UINT_MAX;
- 
-@@ -1144,10 +1154,10 @@ static void _spi_transfer_delay_ns(u32 ns)
- {
- 	if (!ns)
- 		return;
--	if (ns <= 1000) {
-+	if (ns <= NSEC_PER_USEC) {
- 		ndelay(ns);
- 	} else {
--		u32 us = DIV_ROUND_UP(ns, 1000);
-+		u32 us = DIV_ROUND_UP(ns, NSEC_PER_USEC);
- 
- 		if (us <= 10)
- 			udelay(us);
-@@ -1167,21 +1177,25 @@ int spi_delay_to_ns(struct spi_delay *_delay, struct spi_transfer *xfer)
- 
- 	switch (unit) {
- 	case SPI_DELAY_UNIT_USECS:
--		delay *= 1000;
-+		delay *= NSEC_PER_USEC;
- 		break;
--	case SPI_DELAY_UNIT_NSECS: /* nothing to do here */
-+	case SPI_DELAY_UNIT_NSECS:
-+		/* Nothing to do here */
- 		break;
- 	case SPI_DELAY_UNIT_SCK:
- 		/* clock cycles need to be obtained from spi_transfer */
- 		if (!xfer)
- 			return -EINVAL;
--		/* if there is no effective speed know, then approximate
--		 * by underestimating with half the requested hz
-+		/*
-+		 * If there is unknown effective speed, approximate it
-+		 * by underestimating with half of the requested hz.
- 		 */
- 		hz = xfer->effective_speed_hz ?: xfer->speed_hz / 2;
- 		if (!hz)
- 			return -EINVAL;
--		delay *= DIV_ROUND_UP(1000000000, hz);
-+
-+		/* Convert delay to nanoseconds */
-+		delay *= DIV_ROUND_UP(NSEC_PER_SEC, hz);
- 		break;
- 	default:
- 		return -EINVAL;
-@@ -1213,6 +1227,7 @@ EXPORT_SYMBOL_GPL(spi_delay_exec);
- static void _spi_transfer_cs_change_delay(struct spi_message *msg,
- 					  struct spi_transfer *xfer)
- {
-+	u32 default_delay_ns = 10 * NSEC_PER_USEC;
- 	u32 delay = xfer->cs_change_delay.value;
- 	u32 unit = xfer->cs_change_delay.unit;
- 	int ret;
-@@ -1220,16 +1235,16 @@ static void _spi_transfer_cs_change_delay(struct spi_message *msg,
- 	/* return early on "fast" mode - for everything but USECS */
- 	if (!delay) {
- 		if (unit == SPI_DELAY_UNIT_USECS)
--			_spi_transfer_delay_ns(10000);
-+			_spi_transfer_delay_ns(default_delay_ns);
- 		return;
- 	}
- 
- 	ret = spi_delay_exec(&xfer->cs_change_delay, xfer);
- 	if (ret) {
- 		dev_err_once(&msg->spi->dev,
--			     "Use of unsupported delay unit %i, using default of 10us\n",
--			     unit);
--		_spi_transfer_delay_ns(10000);
-+			     "Use of unsupported delay unit %i, using default of %luus\n",
-+			     unit, default_delay_ns / NSEC_PER_USEC);
-+		_spi_transfer_delay_ns(default_delay_ns);
- 	}
- }
- 
--- 
-2.30.2
+> > > The above patches are effectively missed.
+> > > Anything to fix in your scripts / my patches?
 
+> > Like I said, patch 7 didn't apply so you should check and resend.
+
+> I didn't get it. I have effectively rebased the entire series and resend as v2.
+
+No, you resent it again as v3.  This was me applying the bits of v2 that
+would actually apply.
+
+> I can speculate that your scripts have a bug since they might try v1
+> as well (as far as I can see they usually send a confirmation of
+> application for all versions of the series in question).
+
+They end up sending confirmations for every version of the series I've
+tried to queue unless I go and explicitly delete the older versions.
+
+--5me2qT3T17SWzdxI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCak1oACgkQJNaLcl1U
+h9BuxQf+OegOJM0y6NfKvrOgJTzp2GmTk4h80iy95DznuLEjuM5uqMUHLkySbAsF
+ACndImPyX0HcJr1YWqWDnBjsp/f24gcAeWXyUYvFNUEtAyk+dBD5cagzHrRXX5ZU
+WQOXqJtpO6ergLfANl22xwENmHcKyWlGVzcw3WWZjp1s1+fkp/T+p1pjC84+3IBb
+v1PqVn0ozqU5ndAUVlpTWFWJ7codivp6LMPawIszqpXY5QL0j6cZlnxdLj6RJzjb
+u6aZ7HlN+GIDDqfv9x/FrnLC1m0DtFw3SGKGJ/grF1iF9k25fMzP1YPu/vQokKUv
+yqdh5VXfN8s2EVGn6IXTk1aqrKUWqw==
+=SINU
+-----END PGP SIGNATURE-----
+
+--5me2qT3T17SWzdxI--
