@@ -2,60 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B324637A1FC
-	for <lists+linux-spi@lfdr.de>; Tue, 11 May 2021 10:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF0637A584
+	for <lists+linux-spi@lfdr.de>; Tue, 11 May 2021 13:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbhEKIal (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 May 2021 04:30:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40162 "EHLO mail.kernel.org"
+        id S231365AbhEKLPR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 May 2021 07:15:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34012 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231134AbhEKIaN (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 11 May 2021 04:30:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id ED60661107;
-        Tue, 11 May 2021 08:29:06 +0000 (UTC)
+        id S230237AbhEKLPQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 11 May 2021 07:15:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F33D26162B;
+        Tue, 11 May 2021 11:14:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620721747;
-        bh=w2WXGZR6msz0prMcOk5jfPOF5Hbx4yUcBFHYzJomcPo=;
-        h=Subject:From:Date:To:From;
-        b=LvNtI3WwQThSXg+xk85YxMLZkY0NeFWwQcvdKyjinl2hWW/fES42niXY4Ik5HAnVy
-         CXkYX/YdvaAMNXhZXo8WLRrqdDu9SgdNDC9v4s1LGaTC11yT6wSSQpXjmSYtYBxo/Y
-         zkLeNiWzumwYA2J4dPSoIUdm6esCRCHdNth/aHHM27z3RXjMD7YiglSHaMkHPb2lNE
-         JA+hRQdHYNuaiO/98zzY878qeqzvmmrwVLnVGil5Cq+IRkScuYrZl0cs19eWLbiRgw
-         hWrGE2oLEQmP+eopXTwaz7XJ9QdzO88e/EXCTqZJ0xZgSGJSnOVBOv7rPsKy4MnvHa
-         OFVs0+68fiP8w==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id DD0C56098E;
-        Tue, 11 May 2021 08:29:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1620731650;
+        bh=2BDtz4VLzK2pxVtJLxrKEWcEDyk1Rm5cs5IGjo1f+jI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=psdFOoOgSnmieSVMlCCsG4B1GATrzRdeeerxvXXQRFv60cryGtuHJkpIwbjxkzkyi
+         E1DZzq5yZazlDk2f5jUEq+75oxEQQyscfJy8wcr/49861TIluVyydpcH/TklAzVFXM
+         9g691KoPE6/TiaFT4jLS5aR2P0hNMRARAi7VFSNIKY/lvFY75JmNf+L1nG7r8sBMjF
+         Be40qNw6JxQZaGZ3/tdaisMVDVRXCTg0uBguYCjAaO+cV6VCJWMSJwK5Wtz6gpLX/c
+         bPSwUbpRfgLVMV9CKFEpK1t7G6Wz/adcjBRLaVoJlr0vvXUDBOoWSCu1wCdB14BMlz
+         BwQQk1nW5P/6w==
+Date:   Tue, 11 May 2021 12:13:30 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Liguang Zhang <zhangliguang@linux.alibaba.com>,
+        Jay Fang <f.fangjian@huawei.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Xin Hao <xhao@linux.alibaba.com>
+Subject: Re: [PATCH v1 1/1] spi: Assume GPIO CS active high in ACPI case
+Message-ID: <20210511111330.GH4496@sirena.org.uk>
+References: <20210510141022.56499-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <162072174684.29505.7656806295448497792.git-patchwork-summary@kernel.org>
-Date:   Tue, 11 May 2021 08:29:06 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="0XhtP95kHFp3KGBe"
+Content-Disposition: inline
+In-Reply-To: <20210510141022.56499-1-andriy.shevchenko@linux.intel.com>
+X-Cookie: Beam me up, Scotty!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (refs/heads/for-next):
+--0XhtP95kHFp3KGBe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Patch: spi: imx: Use of_device_get_match_data() helper
-  Submitter: Tian Tao <tiantao6@hisilicon.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=452493
-  Lore link: https://lore.kernel.org/r/1616385476-53327-1-git-send-email-tiantao6@hisilicon.com
-Patch: dt-bindings: Clean-up undocumented compatible strings
-  Submitter: Rob Herring <robh@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=449453
-  Lore link: https://lore.kernel.org/r/20210316194918.3528417-1-robh@kernel.org
+On Mon, May 10, 2021 at 05:10:22PM +0300, Andy Shevchenko wrote:
 
-Total patches: 2
+> +			bool value = has_acpi_companion(&spi->dev) ? !enable : activate;
 
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Please write normal conditional statements to improve legibility.
 
+>  			if (spi->cs_gpiod)
+> -				/* polarity handled by gpiolib */
+> -				gpiod_set_value_cansleep(spi->cs_gpiod, activate);
+> +				/* Polarity handled by GPIO library */
+> +				gpiod_set_value_cansleep(spi->cs_gpiod, value);
+>  			else
+>  				/*
+> -				 * invert the enable line, as active low is
+> +				 * Invert the enable line, as active low is
+>  				 * default for SPI.
 
+The change would be clearer with the documentation formatting changes
+split out from the rest of it.
+
+--0XhtP95kHFp3KGBe
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCaZtkACgkQJNaLcl1U
+h9DKKwf9Hbn3hZ1NYkTyuwgwd/k2/ixjylBMeZAU9id53GP+c4yTF+pvLm1lCZVw
+Q61Wq5JdkEWR6fb0UHaNUpXWzDS18oV0kUrSnzr14z7dVvxomDNMQ9vA+7Q4Bysl
+feLOyEEu2ursmp4k6m7AxULCsk7SmrjDHp77kEKnKAVFCOTlfzDBv4gQ8UpuPS7f
+rbiLXjwKZU1Nkh3Zo+VI6kr4CB/Eq8YWTPK8+p+IGRObLn1JOqhrqmtGmYVuDtzb
+R1kHccbSmrYvZwl8leMGTSOTW2InG2Ixzo5zFli79/yZ9z/Ng+f7EftGcnhLat5S
+xYb/mqGALnJmxTF2ojObBu61tw76Mw==
+=7yhv
+-----END PGP SIGNATURE-----
+
+--0XhtP95kHFp3KGBe--
