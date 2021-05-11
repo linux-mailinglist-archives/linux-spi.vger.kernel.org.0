@@ -2,37 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A6437A1BF
-	for <lists+linux-spi@lfdr.de>; Tue, 11 May 2021 10:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF4D37A1C2
+	for <lists+linux-spi@lfdr.de>; Tue, 11 May 2021 10:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbhEKI2C (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 May 2021 04:28:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36128 "EHLO mail.kernel.org"
+        id S230410AbhEKI2G (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 May 2021 04:28:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36230 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230492AbhEKI15 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 11 May 2021 04:27:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 93B4D613CF;
-        Tue, 11 May 2021 08:26:50 +0000 (UTC)
+        id S230457AbhEKI2A (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 11 May 2021 04:28:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 95AA2613CB;
+        Tue, 11 May 2021 08:26:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620721611;
-        bh=fbL+mrDfjrI9qf9MzaJgYZbK83Y0UsK5f0jejXFbTIM=;
+        s=k20201202; t=1620721614;
+        bh=KSr+7Mbs6ELX8rQHz8tWoGmhN2IfYhlzuOWD5YDsW6w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=beWBa9va8imOqsCzaV3R3b1SgHU/blgkz+7IA2oo3xiFwjvdYoU9Q9afOfvqXImFB
-         tNz3wEbDpHZMCi/pA4LuuqHq3HkawXbgdGcJhUyEgz6NrY9fx84gQkEjCZIigG6MEP
-         micJdO9JRCPMAKD2EunphRrLtnWn4Hbh7OWGcn6BO/6kQRxe2vVdFbWK/JWgeSnNiP
-         suA3Mzer/Vw69xAyE/mvw/UCB+QDYt41INIxERH4KaWr11ornSR8fsptMw3yftkrv8
-         y8Tm9PzY6LqAp+KkEptADxW5CBhgrwc/vfynBNIes5W3TTsk7l263zbQt2Ro5ev2an
-         y6LlHB+S41rjA==
+        b=mxXbO/DO4Duo+zZXGJYKQWYPgY8KasUR7feuF3uMB+UjmRT3R7E2F0mQFKMQfMPda
+         /SnRztx3muM4Qj4z9HlVv8Hc0uKoroXSWN1BLJTqCXRXU+yQwfuqjfULSExafGGsKC
+         syV3luKUX6gxvVriLKHKJpSGpLav4ZS2HY8uMyOVsHcVd+JsJ4fL/KPr4YLmeR2VC2
+         2ka41qcl2Oq+ekmG2jD85GMKySsZbEJccFiScmzA8Tf2I7siwelOMHlhDi8WzQcz0L
+         IyQinAhx+5o2RIcnJSrn68kdVj3NQrG/PGkKfLSjkP5VdMIDspYtswow18K5stJBEQ
+         977jwwDHeoEtQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Jay Fang <f.fangjian@huawei.com>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>
 Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        huangdaode@huawei.com, linuxarm@huawei.com
-Subject: Re: [PATCH 0/4] spi: Set of cleanups
-Date:   Tue, 11 May 2021 09:25:32 +0100
-Message-Id: <162072071982.33404.13833923477423826663.b4-ty@kernel.org>
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: spi: dw-apb-ssi: Integrate Renesas RZ/N1 SPI controller
+Date:   Tue, 11 May 2021 09:25:33 +0100
+Message-Id: <162072071982.33404.2913820143971609057.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <1620629903-15493-1-git-send-email-f.fangjian@huawei.com>
-References: <1620629903-15493-1-git-send-email-f.fangjian@huawei.com>
+In-Reply-To: <aef15aa119ed02487ded4691141678bc1040c3b4.1620301936.git.geert+renesas@glider.be>
+References: <aef15aa119ed02487ded4691141678bc1040c3b4.1620301936.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -40,20 +43,15 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 10 May 2021 14:58:19 +0800, Jay Fang wrote:
-> Some cleanups of SPI drivers. No functional change.
+On Thu, 6 May 2021 13:52:59 +0200, Geert Uytterhoeven wrote:
+> Originally, the Renesas RZ/N1 SPI Controller DT bindings were not
+> integrated in the main DT bindings for the Synopsys DesignWare
+> Synchronous Serial Interface, but in its own file, as the RZ/N1
+> controller has additional registers for software CS control and DMA.
 > 
-> 
-> Thanks,
-> Jay
-> 
-> Jay Fang (4):
->   spi: ppc4xx: include <linux/io.h> instead of <asm/io.h>
->   spi: omap-100k: Clean the value of 'status' is not used
->   spi: delete repeated words in comments
->   spi: spi-loopback-test: Fix 'tx_buf' might be 'rx_buf'
-> 
-> [...]
+> As so far DMA is not supported on RZ/N1, and json-schema can handle any
+> possible differences fine, integrate the RZ/N1 compatible values in the
+> main DT bindings for the Synopsys DW SSI.
 
 Applied to
 
@@ -61,14 +59,8 @@ Applied to
 
 Thanks!
 
-[1/4] spi: ppc4xx: include <linux/io.h> instead of <asm/io.h>
-      commit: 66fe740317c82b0caa68ed8d756536d4ff7e910c
-[2/4] spi: omap-100k: Clean the value of 'status' is not used
-      commit: 856a9260e17129303102a7d4a5f71b7a8739e5b9
-[3/4] spi: delete repeated words in comments
-      commit: db56d03049524114696aa7158560d8f0e064c487
-[4/4] spi: spi-loopback-test: Fix 'tx_buf' might be 'rx_buf'
-      commit: 9e37a3ab0627011fb63875e9a93094b6fc8ddf48
+[1/1] dt-bindings: spi: dw-apb-ssi: Integrate Renesas RZ/N1 SPI controller
+      commit: 029d32a892a860017d33ff8d9598259731e776ad
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
