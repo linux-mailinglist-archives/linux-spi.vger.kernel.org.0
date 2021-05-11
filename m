@@ -2,102 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3569F37A8B0
-	for <lists+linux-spi@lfdr.de>; Tue, 11 May 2021 16:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C054A37A8E0
+	for <lists+linux-spi@lfdr.de>; Tue, 11 May 2021 16:17:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231567AbhEKOOi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 May 2021 10:14:38 -0400
-Received: from mga12.intel.com ([192.55.52.136]:39313 "EHLO mga12.intel.com"
+        id S231748AbhEKOSr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 May 2021 10:18:47 -0400
+Received: from mga05.intel.com ([192.55.52.43]:26618 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231154AbhEKOOh (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 11 May 2021 10:14:37 -0400
-IronPort-SDR: Ox2ATWqhoTEbygqkU67iwcz+HZiJLwcXd6qgdK8CbAM3I/j3c8Mhd7KDZRV/QasEMZ/4EruHdv
- a/Pbs4PyzBwQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9981"; a="179044594"
+        id S231864AbhEKOSk (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 11 May 2021 10:18:40 -0400
+IronPort-SDR: SbP5atqwA4LBQcTG4p1mK+/qKETFcMmS7Cv3q+dgnQWnmzCCXAdVw2HjrG75XmRADEL0aAeqNm
+ dkSspI9r/zkw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9981"; a="284942941"
 X-IronPort-AV: E=Sophos;i="5.82,290,1613462400"; 
-   d="scan'208";a="179044594"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2021 07:13:30 -0700
-IronPort-SDR: XWeliyNGUr1fBJgpmzQTk+wnAEIVoQ1NpxHUGgP7CmAWCiSgGYYn/E7tC/qPno4JAxIXTlmLzj
- GElIT6wMfHhw==
+   d="scan'208";a="284942941"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2021 07:17:10 -0700
+IronPort-SDR: kEyNBkIFqeMJtec6hWX8jf1qFI1k0McLtuBKIm6ufMJrwmXAZZoBeZtrSRtJYyznwMutc6EVwg
+ L0Ix+Bme+KXw==
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,290,1613462400"; 
-   d="scan'208";a="541660559"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2021 07:13:27 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1lgT8W-00BSqe-Oy; Tue, 11 May 2021 17:13:24 +0300
-Date:   Tue, 11 May 2021 17:13:24 +0300
+   d="scan'208";a="455031948"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 11 May 2021 07:17:06 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 5071514B; Tue, 11 May 2021 17:17:27 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
         Robert Jarzmik <robert.jarzmik@free.fr>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>
-Subject: Re: [PATCH v2 00/14] spi: pxa2xx: Set of cleanups
-Message-ID: <YJqRBIdTlvnsCYsn@smile.fi.intel.com>
-References: <20210423182441.50272-1-andriy.shevchenko@linux.intel.com>
- <162072071980.33404.13031284441613044277.b4-ty@kernel.org>
- <CAHp75Vck5izDB4mTRV5hTaknpx5Bm+OA4rNLVznQxVaEwigBZg@mail.gmail.com>
- <20210511134706.GI4496@sirena.org.uk>
- <CAHp75VdPHYEq+Xn5yQ+TyQn5uerc+afcVaHj22OmVzsBW2jcaQ@mail.gmail.com>
- <CAHp75Vca2KT4kd9zw3ECqym1rRDSg2NNbwRRVVA1L7vyD3VCJQ@mail.gmail.com>
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: [PATCH v3 0/8] spi: pxa2xx: Set of cleanups
+Date:   Tue, 11 May 2021 17:17:17 +0300
+Message-Id: <20210511141725.32097-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vca2KT4kd9zw3ECqym1rRDSg2NNbwRRVVA1L7vyD3VCJQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, May 11, 2021 at 04:56:05PM +0300, Andy Shevchenko wrote:
-> On Tue, May 11, 2021 at 4:52 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Tue, May 11, 2021 at 4:47 PM Mark Brown <broonie@kernel.org> wrote:
-> > >
-> > > On Tue, May 11, 2021 at 03:28:18PM +0300, Andy Shevchenko wrote:
-> > > > On Tue, May 11, 2021 at 11:27 AM Mark Brown <broonie@kernel.org> wrote:
-> > >
-> > > > > On Fri, 23 Apr 2021 21:24:27 +0300, Andy Shevchenko wrote:
-> > > > > > Set of cleanups here and there related to the SPI PXA2xx driver.
-> > > > > > On top of them, adding the special type for Intel Merrifield.
-> > >
-> > > > > [07/14] spi: pxa2xx: Introduce int_stop_and_reset() helper
-> > > > >         (no commit info)
-> > >
-> > > > The above patches are effectively missed.
-> > > > Anything to fix in your scripts / my patches?
-> > >
-> > > Like I said, patch 7 didn't apply so you should check and resend.
-> >
-> > I didn't get it. I have effectively rebased the entire series and resend as v2.
-> 
-> v2 --> v3
-> 
-> v3
-> https://lore.kernel.org/linux-spi/20210510124134.24638-1-andriy.shevchenko@linux.intel.com/T/#t
-> 
-> 
-> > I can speculate that your scripts have a bug since they might try v1
-> 
-> v1 --> v1 and / or v2
-> 
-> > as well (as far as I can see they usually send a confirmation of
-> > application for all versions of the series in question).
-> >
-> > Sorry, but I do not see an issue.
+Set of cleanups here and there related to the SPI PXA2xx driver.
+On top of them, adding the special type for Intel Merrifield.
 
-Just in case I'll send a v4 with only patches that missed.
-Otherwise it will be the same as in v3 (see above).
+In v4:
+- dropped applied patches
+
+In v3:
+- rebased on top of v5.13-rc1 and/or spi/for-5,14
+
+In v2:
+- cover letter (Mark)
+- drop moving the header in patch 5 (Mark)
+
+
+Andy Shevchenko (8):
+  spi: pxa2xx: Reuse int_error_stop() in pxa2xx_spi_slave_abort()
+  spi: pxa2xx: Use pxa_ssp_enable()/pxa_ssp_disable() in the driver
+  spi: pxa2xx: Extract pxa2xx_spi_update() helper
+  spi: pxa2xx: Extract clear_SSCR1_bits() helper
+  spi: pxa2xx: Extract read_SSSR_bits() helper
+  spi: pxa2xx: Constify struct driver_data parameter
+  spi: pxa2xx: Introduce special type for Merrifield SPIs
+  spi: Convert to use predefined time multipliers
+
+ drivers/spi/spi-pxa2xx-dma.c |  17 ++--
+ drivers/spi/spi-pxa2xx-pci.c |   2 +-
+ drivers/spi/spi-pxa2xx.c     | 147 ++++++++++++++++++-----------------
+ drivers/spi/spi-pxa2xx.h     |  16 +++-
+ drivers/spi/spi.c            |  41 ++++++----
+ include/linux/pxa2xx_ssp.h   |  32 ++++++++
+ sound/soc/pxa/pxa-ssp.c      |  16 ----
+ 7 files changed, 156 insertions(+), 115 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.30.2
 
