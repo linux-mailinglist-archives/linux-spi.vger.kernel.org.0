@@ -2,47 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C20A37AE56
-	for <lists+linux-spi@lfdr.de>; Tue, 11 May 2021 20:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F45C37AE58
+	for <lists+linux-spi@lfdr.de>; Tue, 11 May 2021 20:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbhEKSXX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 May 2021 14:23:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47036 "EHLO mail.kernel.org"
+        id S232126AbhEKSXa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 May 2021 14:23:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47156 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231551AbhEKSXX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 11 May 2021 14:23:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AFF9C61264;
-        Tue, 11 May 2021 18:22:15 +0000 (UTC)
+        id S232041AbhEKSXZ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 11 May 2021 14:23:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8ECF161207;
+        Tue, 11 May 2021 18:22:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620757336;
-        bh=WHWDb32n8erHoa2KBBUCLrLvLx9zfsrG16mxgBoCE2I=;
+        s=k20201202; t=1620757339;
+        bh=dQSfzo4R/3bBzXJnzj5RGjeZMuoyysyyRwOn7nqufAo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tvwfPnHpn+QdMPikfCiabHeLq+4VgtxfbsaaN1DSWqR2xzibetaaYfaJ7vdmm2vF7
-         6WYSp3xWqoQVjbk7WwzhL4gA6bNSys5acvAe0wMi6nQ4F31hjW9cP2l+FZBc5Mz35z
-         JF4MIl9DvlYQMQ+Xoi3ZFUtMTf3PB86U61ccjHk/yAIE6kyz3oVYX6RppZa2xGlkGi
-         63jLB00ZxuwMUbHs63PacmFwkP4Vlaigiz91mANBojGFwk5vh0qJRRFWRCj+AR0mgY
-         QEqlleJVYCEFacP8dSxoiB8lbJNqVHlJ6lqfTP6qPd4CkA3c8GrSy5JxIS/T34qIRw
-         hoi6GmeDyZ61Q==
+        b=Br9lfyFUMm/nzSgM4wa1SPQ7Y8BLQV+PAPfTW39kKD5RNpD3zf2fgai81vBdytw0X
+         Vg+UaILZy3hKNqn/HaQZ8iMpwB8M5RIYEA/VIYIk1pkCj7ypORYjY//jdjVe/OWmWP
+         /kC1qRtKlDrFZRkbxnRpzxnB+CwsiAz22G73IyfO+bpRLeselffgG01wOpoZQXILit
+         kpZhKARDGkHDTQT8saoENDfbQ36WPubpxejd0hGqUXGkO7u0YSZ4+Dcy2vNEityucZ
+         XuLgfkOHiwzxracK8ZHoA+uwxImL+Whee4gAU7820+8UV22eqzxAdAgRqy6AHKXgpy
+         Btqm7mrcBKmFA==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        openbmc@lists.ozlabs.org, Linus Walleij <linus.walleij@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Benjamin Fair <benjaminfair@google.com>
-Subject: Re: [PATCH v1 1/7] spi: Use SPI_MODE_X_MASK
-Date:   Tue, 11 May 2021 19:21:24 +0100
-Message-Id: <162075727216.18180.9757296985819359592.b4-ty@kernel.org>
+To:     Zou Wei <zou_wei@huawei.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] spi: altera: Remove redundant dev_err call in dfl_spi_altera_probe()
+Date:   Tue, 11 May 2021 19:21:25 +0100
+Message-Id: <162075727215.18180.3931869433075544732.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210510131217.49357-1-andriy.shevchenko@linux.intel.com>
-References: <20210510131217.49357-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <1620716922-108572-1-git-send-email-zou_wei@huawei.com>
+References: <1620716922-108572-1-git-send-email-zou_wei@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -50,10 +40,10 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 10 May 2021 16:12:11 +0300, Andy Shevchenko wrote:
-> Use SPI_MODE_X_MASK instead of open coded variant.
-> 
-> While at it, fix format specifier and drop explicit casting.
+On Tue, 11 May 2021 15:08:42 +0800, Zou Wei wrote:
+> There is a error message within devm_ioremap_resource
+> already, so remove the dev_err call to avoid redundant
+> error message.
 
 Applied to
 
@@ -61,20 +51,8 @@ Applied to
 
 Thanks!
 
-[1/7] spi: Use SPI_MODE_X_MASK
-      commit: 40b82c2d9a78593201a3a62dc9239d6405334561
-[2/7] spi: spidev: Use SPI_MODE_X_MASK
-      commit: dd507b5ec7ba44ab51e1a8404d04e815a91b472f
-[3/7] spi: npcm-pspi: Use SPI_MODE_X_MASK
-      commit: 56f47edf33fb55ab9381f61d60cf34c7578f3d75
-[4/7] spi: oc-tiny: Use SPI_MODE_X_MASK
-      commit: a2f2db6b2a8708f6ac592a362e34fb330f874cea
-[5/7] spi: omap-uwire: Use SPI_MODE_X_MASK
-      commit: fdb217a38808e041f6eca8c550f1b5981e401a45
-[6/7] spi: ppc4xx: Use SPI_MODE_X_MASK
-      commit: 4ccf05579b9d0f15443a0edc860e2be7472ccfc1
-[7/7] spi: uniphier: Use SPI_MODE_X_MASK
-      commit: 038b9de42269f33aca3e3741214c863a4e9328d0
+[1/1] spi: altera: Remove redundant dev_err call in dfl_spi_altera_probe()
+      commit: 532259bfd1c12d561215c32b94cd9bb7c997bc6f
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
