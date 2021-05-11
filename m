@@ -2,68 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D566B37AE44
-	for <lists+linux-spi@lfdr.de>; Tue, 11 May 2021 20:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C0837AE54
+	for <lists+linux-spi@lfdr.de>; Tue, 11 May 2021 20:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbhEKSVV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 May 2021 14:21:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45492 "EHLO mail.kernel.org"
+        id S231793AbhEKSXV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 May 2021 14:23:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46982 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231439AbhEKSVV (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 11 May 2021 14:21:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 4906A617ED;
-        Tue, 11 May 2021 18:20:14 +0000 (UTC)
+        id S231551AbhEKSXU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 11 May 2021 14:23:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DE7A061264;
+        Tue, 11 May 2021 18:22:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620757214;
-        bh=1xS6shtYnjIh3IDww/MAPy8ype2rwv5gzLmN8uf/sQM=;
-        h=Subject:From:Date:To:From;
-        b=UY5VD+9eYOH4JcNxbA57aXgPeU7dm5Yahmrb63VnGiCzoXu2+4+dyhSyc1648Z5ZX
-         LRNTc5I/RcSnj/VlqxnlJ+YNzp1m2PJ8ffNlpiFXMlKc33q2dIE27ghkeu7V2JkW3r
-         mona+fa9vF/CcumjHn9ZdXGUhCFWvGJTl4po1hoFSKPSaKOy5Swi/nPR/CEcBroPxm
-         m1Rmd/tURhGIle/hJ6yafncp+Bby4yZTSlq7ec90mTHyJAy48dM1Uvx1uFsO69IG3i
-         f0tl+jt4Avt9GapQ3RgHJHKI+WB8rIFScA39KPiazO3ap0nlXgAud858vsk6B0dUGY
-         hjW5ZyGtrpA8A==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 3500C60A02;
-        Tue, 11 May 2021 18:20:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1620757333;
+        bh=tY+DyOll1ID/TuAyNQeRTBvujHiXuMnT1EX9dNVopOU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rgcnNHeORTWT88XTjG1nd4GNQzBeflXwWnjsz8OY82TwfyD89+nxc3AJx4FvRhtOD
+         aq29tJLug6y1YGFk6AdezQawlyV2VceaMsLW5scbyOQ/L9meItMYJq8evVz7l2c6l5
+         6daMhFue1L1dtd1i7OKwBjV6HIb5joug9yCPy2OUC7Kpf0PzPpwo50C47MkVAM/27F
+         sCRapmd208Q24uhO8tHtPG8AmcfJ6LBrCFLClYkYp8/YyedZdnDrdu/orJMC897HQ1
+         +X0DCP9NawUZUSFGh32+tvETO7PJ0sWWWOnLvja4BytxRmeMFH0a6eCtR5wSeZ0F+/
+         WMIdXCTPg3LCQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v1 1/1] spi: Switch to signed types for *_native_cs SPI controller fields
+Date:   Tue, 11 May 2021 19:21:23 +0100
+Message-Id: <162075727216.18180.15052614228876859060.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210510131242.49455-1-andriy.shevchenko@linux.intel.com>
+References: <20210510131242.49455-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <162075721415.18313.8028028189410446151.git-patchwork-summary@kernel.org>
-Date:   Tue, 11 May 2021 18:20:14 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+On Mon, 10 May 2021 16:12:42 +0300, Andy Shevchenko wrote:
+> While fixing undefined behaviour the commit f60d7270c8a3 ("spi: Avoid
+> undefined behaviour when counting unused native CSs") missed the case
+> when all CSs are GPIOs and thus unused_native_cs will be evaluated to
+> -1 in unsigned representation. This will falsely trigger a condition
+> in the spi_get_gpio_descs().
+> 
+> Switch to signed types for *_native_cs SPI controller fields to fix above.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (refs/heads/for-next):
+Applied to
 
-Series: spi: pxa2xx: Set of cleanups
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=480467
-  Lore link: https://lore.kernel.org/r/20210511141725.32097-1-andriy.shevchenko@linux.intel.com
-    Patches: [v3,1/8] spi: pxa2xx: Reuse int_error_stop() in pxa2xx_spi_slave_abort()
-             [v3,2/8] spi: pxa2xx: Use pxa_ssp_enable()/pxa_ssp_disable() in the driver
-             [v3,3/8] spi: pxa2xx: Extract pxa2xx_spi_update() helper
-             [v3,4/8] spi: pxa2xx: Extract clear_SSCR1_bits() helper
-             [v3,5/8] spi: pxa2xx: Extract read_SSSR_bits() helper
-             [v3,6/8] spi: pxa2xx: Constify struct driver_data parameter
-             [v3,7/8] spi: pxa2xx: Introduce special type for Merrifield SPIs
-             [v3,8/8] spi: Convert to use predefined time multipliers
-Patch: [v1,1/1] spi: Convert to use predefined time multipliers
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=479557
-  Lore link: https://lore.kernel.org/r/20210510131120.49253-1-andriy.shevchenko@linux.intel.com
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Total patches: 9
+Thanks!
 
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+[1/1] spi: Switch to signed types for *_native_cs SPI controller fields
+      commit: 35f3f8504c3b60a1ae5576e178b27fc0ddd6157d
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
