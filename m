@@ -2,31 +2,31 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3618382E31
-	for <lists+linux-spi@lfdr.de>; Mon, 17 May 2021 16:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A74382E3F
+	for <lists+linux-spi@lfdr.de>; Mon, 17 May 2021 16:05:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237718AbhEQOE6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 May 2021 10:04:58 -0400
-Received: from mga09.intel.com ([134.134.136.24]:23534 "EHLO mga09.intel.com"
+        id S237709AbhEQOFH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 May 2021 10:05:07 -0400
+Received: from mga11.intel.com ([192.55.52.93]:59397 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237730AbhEQOEw (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 17 May 2021 10:04:52 -0400
-IronPort-SDR: G4lNUByrBuBn6+VCpXelSmxsiQEoB2woXpkDN/CKIK6KqcG+g8JmmKm412Jpgisc9EOPiY6A/V
- rsK9ShebqnYg==
-X-IronPort-AV: E=McAfee;i="6200,9189,9986"; a="200520354"
+        id S237653AbhEQOE5 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 17 May 2021 10:04:57 -0400
+IronPort-SDR: le9UCQqBnxL8ILeejqmEuSPg2MCGdevuk6gjF0UT3C/0OepT5RsxoE8pjsEOI8mhfUQ50dt/fi
+ NQ2WkJ5qR/qA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9986"; a="197388021"
 X-IronPort-AV: E=Sophos;i="5.82,307,1613462400"; 
-   d="scan'208";a="200520354"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2021 07:03:36 -0700
-IronPort-SDR: uqTErCmfac3hE9303c3MXXfxF71/YxBIhrWZOG6mRA9O8bttKuHN7LJy6CbtZay4pMf++Ml9RK
- fr3Uj9l5llcA==
+   d="scan'208";a="197388021"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2021 07:03:38 -0700
+IronPort-SDR: tYqysj2lWaiT9tzmSChSC/xpL0q8+5OXnRQrIfZdy3ivP5+KrOdgA/bx7IGRe9aDrTSYOA9sp0
+ HcUJM+SLVBCg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,307,1613462400"; 
-   d="scan'208";a="543710115"
+   d="scan'208";a="465860558"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 17 May 2021 07:03:33 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 17 May 2021 07:03:36 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 2F4C0796; Mon, 17 May 2021 17:03:55 +0300 (EEST)
+        id 3AD747E6; Mon, 17 May 2021 17:03:55 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
@@ -34,9 +34,9 @@ To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: [PATCH v1 4/9] spi: pxa2xx: Drop duplicate chip_select in struct chip_data
-Date:   Mon, 17 May 2021 17:03:46 +0300
-Message-Id: <20210517140351.901-5-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 5/9] spi: pxa2xx: Drop unneeded '!= 0' comparisons
+Date:   Mon, 17 May 2021 17:03:47 +0300
+Message-Id: <20210517140351.901-6-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210517140351.901-1-andriy.shevchenko@linux.intel.com>
 References: <20210517140351.901-1-andriy.shevchenko@linux.intel.com>
@@ -46,50 +46,47 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The struct chip_data had been introduced in order to keep the parameters
-that may be provided on stack during device allocation. There is no need
-to duplicate parameters there, which are carried on by SPI device itself.
+In the few places it's redundant to compare against 0.
+Drop the unneeded comparisons.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/spi/spi-pxa2xx.c | 4 +---
- drivers/spi/spi-pxa2xx.h | 1 -
- 2 files changed, 1 insertion(+), 4 deletions(-)
+ drivers/spi/spi-pxa2xx.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index 1a0bcd3bac1f..fb80f6013d54 100644
+index fb80f6013d54..f24851b3c020 100644
 --- a/drivers/spi/spi-pxa2xx.c
 +++ b/drivers/spi/spi-pxa2xx.c
-@@ -432,7 +432,7 @@ static void cs_assert(struct spi_device *spi)
- 		spi_controller_get_devdata(spi->controller);
- 
- 	if (drv_data->ssp_type == CE4100_SSP) {
--		pxa2xx_spi_write(drv_data, SSSR, chip->frm);
-+		pxa2xx_spi_write(drv_data, SSSR, spi->chip_select);
- 		return;
+@@ -1380,8 +1380,8 @@ static int setup(struct spi_device *spi)
  	}
  
-@@ -1303,8 +1303,6 @@ static int setup(struct spi_device *spi)
- 				kfree(chip);
- 				return -EINVAL;
- 			}
--
--			chip->frm = spi->chip_select;
- 		}
- 		chip->enable_dma = drv_data->controller_info->enable_dma;
- 		chip->timeout = TIMOUT_DFLT;
-diff --git a/drivers/spi/spi-pxa2xx.h b/drivers/spi/spi-pxa2xx.h
-index a91fe6edb275..db9de46110ad 100644
---- a/drivers/spi/spi-pxa2xx.h
-+++ b/drivers/spi/spi-pxa2xx.h
-@@ -72,7 +72,6 @@ struct chip_data {
- 	int (*write)(struct driver_data *drv_data);
- 	int (*read)(struct driver_data *drv_data);
+ 	chip->cr1 &= ~(SSCR1_SPO | SSCR1_SPH);
+-	chip->cr1 |= (((spi->mode & SPI_CPHA) != 0) ? SSCR1_SPH : 0)
+-			| (((spi->mode & SPI_CPOL) != 0) ? SSCR1_SPO : 0);
++	chip->cr1 |= ((spi->mode & SPI_CPHA) ? SSCR1_SPH : 0) |
++		     ((spi->mode & SPI_CPOL) ? SSCR1_SPO : 0);
  
--	unsigned int frm;
- 	void (*cs_control)(u32 command);
- };
+ 	if (spi->mode & SPI_LOOP)
+ 		chip->cr1 |= SSCR1_LBM;
+@@ -1859,7 +1859,7 @@ static int pxa2xx_spi_probe(struct platform_device *pdev)
+ 	/* Register with the SPI framework */
+ 	platform_set_drvdata(pdev, drv_data);
+ 	status = spi_register_controller(controller);
+-	if (status != 0) {
++	if (status) {
+ 		dev_err(&pdev->dev, "problem registering spi controller\n");
+ 		goto out_error_pm_runtime_enabled;
+ 	}
+@@ -1918,7 +1918,7 @@ static int pxa2xx_spi_suspend(struct device *dev)
+ 	int status;
  
+ 	status = spi_controller_suspend(drv_data->controller);
+-	if (status != 0)
++	if (status)
+ 		return status;
+ 
+ 	pxa_ssp_disable(ssp);
 -- 
 2.30.2
 
