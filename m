@@ -2,40 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE6F382BAB
-	for <lists+linux-spi@lfdr.de>; Mon, 17 May 2021 14:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5901E382BC1
+	for <lists+linux-spi@lfdr.de>; Mon, 17 May 2021 14:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236887AbhEQMBf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 May 2021 08:01:35 -0400
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:9734 "EHLO
+        id S236917AbhEQMGf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 May 2021 08:06:35 -0400
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:11264 "EHLO
         mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236882AbhEQMBf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 May 2021 08:01:35 -0400
+        by vger.kernel.org with ESMTP id S236859AbhEQMGd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 May 2021 08:06:33 -0400
 Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14HBup7o021853;
-        Mon, 17 May 2021 13:59:58 +0200
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14HBup8e021853;
+        Mon, 17 May 2021 14:05:00 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
  references : from : message-id : date : mime-version : in-reply-to :
  content-type : content-transfer-encoding; s=selector1;
- bh=TcmYJNU4eWE15FZk4OMDeaIOkzfFDoWeoFbrHlPKHBE=;
- b=SrBDm4E1fcMVUx6NrqfB71mvVNlmuO5I2IsbrlAgxKS3ciI408l5PHaYEBrZbGwJ55Yf
- iy5oedphfssetrHYMgq2nV37FgbtXL0jNlarfPnxw4qkZHT3T0BRk0P+XbSsb4MLE1Jy
- 4Cs5jDzTr2k+eNmE7gDfVQhBmN2WmaflfmHlr+MDqkR8wt8dFSChGHKsDHFyVY8TPRjj
- BGnJL9VTebB58sEDEiMfLBwaRmsoBHPwI8Dydp26kW3la9w+K3qsTBCDwC6/oQZ6ZcFe
- twl9SbmFGncDM4/kTflsV16mHyVpkAwWuqAlxbuhsl0NdoIgiZjjFMx60lSBIoh9Fwc7 dA== 
+ bh=2KwkkuHfRJE0R9CP+OHANEZfxy/RymkNrjObI5KIHhQ=;
+ b=gZJB3FgoPvoon//iQ+hgH13FcffMIydpr0sUF6PJpS4lHi458zGK5ciqye1a6xNEAq44
+ FQj3Hx/g6I6Gg4cus9TN5TieSvvu66lPfaIPjnlzvDEDMbGmOGZF8b8qja2uue9GDhRZ
+ D9guc+TvZz3gYklc/nHqMVibunhWsOgDwnY3lRDMSlBrrQwTv1CM+bWrI0deCsbL2257
+ sNaeYmbZxUrxGAITluHI0QBUfteLm8JZ5hcuny28NniA72yqrmBd36T8wYbAH8Gdc/Y8
+ xusY7byum1cc87K+N50C1lu6N0t+Y6FL6Nv8TLJpHyvEyMN9t2wtixefzGOr7/Qs77Nr +A== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 38kmb2sdhk-1
+        by mx07-00178001.pphosted.com with ESMTP id 38kmb2seew-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 May 2021 13:59:58 +0200
+        Mon, 17 May 2021 14:05:00 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A73A910002A;
-        Mon, 17 May 2021 13:59:56 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CB7D210002A;
+        Mon, 17 May 2021 14:04:59 +0200 (CEST)
 Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8919F22D614;
-        Mon, 17 May 2021 13:59:56 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B78B722D625;
+        Mon, 17 May 2021 14:04:59 +0200 (CEST)
 Received: from lmecxl0573.lme.st.com (10.75.127.49) by SFHDAG2NODE3.st.com
  (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 17 May
- 2021 13:59:55 +0200
+ 2021 14:04:58 +0200
 Subject: Re: [PATCH v2 1/3] spi: spi-mem: add automatic poll status functions
 To:     Boris Brezillon <boris.brezillon@collabora.com>
 CC:     Mark Brown <broonie@kernel.org>,
@@ -53,8 +53,8 @@ References: <20210507131756.17028-1-patrice.chotard@foss.st.com>
  <e70b13ba-7f65-7ff1-0517-94b39615dcdb@foss.st.com>
  <20210517132551.7dd56a5e@collabora.com>
 From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-Message-ID: <21717dd0-86a7-b3d9-952e-5c7539f90bee@foss.st.com>
-Date:   Mon, 17 May 2021 13:59:54 +0200
+Message-ID: <45ee6378-271d-aeb5-90ea-ed2e0673f3fb@foss.st.com>
+Date:   Mon, 17 May 2021 14:04:58 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
@@ -63,7 +63,7 @@ Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE3.st.com
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE3.st.com
  (10.75.127.6)
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
  definitions=2021-05-17_04:2021-05-17,2021-05-17 signatures=0
@@ -71,7 +71,7 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi 
+
 
 On 5/17/21 1:25 PM, Boris Brezillon wrote:
 > On Mon, 17 May 2021 11:24:25 +0200
@@ -146,16 +146,14 @@ On 5/17/21 1:25 PM, Boris Brezillon wrote:
 > 
 > ERASE -> initial_delay = 250us, poll_delay = 50us
 > PROG -> initial_delay = 100us, poll_delay = 20us
+
+another remark, it should be:  PROG -> initial_delay = 75 us (300 / 4) , poll_delay = 15us ( 300 / 20)
+
+Patrice
+
 > READ -> initial_delay = 6us, poll_delay = 5us
-
-
-What about RESET ? we also need an initial and poll delay too (see spinand_reset_op() )
-
 > 
 > Of course, that'd be even better if we were able to extract this
 > information from the NAND ID (or ONFI table), but I guess we can live
 > with those optimistic values in the meantime.
 > 
-
-Thanks
-Patrice
