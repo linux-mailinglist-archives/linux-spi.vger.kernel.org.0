@@ -2,25 +2,22 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC86387AE5
-	for <lists+linux-spi@lfdr.de>; Tue, 18 May 2021 16:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD56F387AEB
+	for <lists+linux-spi@lfdr.de>; Tue, 18 May 2021 16:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349882AbhEROT6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 May 2021 10:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52676 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243610AbhEROT4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 May 2021 10:19:56 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1590C061573;
-        Tue, 18 May 2021 07:18:38 -0700 (PDT)
+        id S1349937AbhEROUq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 May 2021 10:20:46 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:40890 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243610AbhEROUp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 May 2021 10:20:45 -0400
 Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 46DF61F4238F;
-        Tue, 18 May 2021 15:18:37 +0100 (BST)
-Date:   Tue, 18 May 2021 16:18:34 +0200
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 57F1B1F42B04;
+        Tue, 18 May 2021 15:19:26 +0100 (BST)
+Date:   Tue, 18 May 2021 16:19:23 +0200
 From:   Boris Brezillon <boris.brezillon@collabora.com>
 To:     <patrice.chotard@foss.st.com>
 Cc:     Mark Brown <broonie@kernel.org>,
@@ -33,7 +30,7 @@ Cc:     Mark Brown <broonie@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>
 Subject: Re: [PATCH v4 2/3] mtd: spinand: use the spi-mem poll status APIs
-Message-ID: <20210518161834.6860c310@collabora.com>
+Message-ID: <20210518161923.3bf75a25@collabora.com>
 In-Reply-To: <20210518134332.17826-3-patrice.chotard@foss.st.com>
 References: <20210518134332.17826-1-patrice.chotard@foss.st.com>
         <20210518134332.17826-3-patrice.chotard@foss.st.com>
@@ -58,6 +55,9 @@ On Tue, 18 May 2021 15:43:31 +0200
 > 
 > Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
 > Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+
+Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
+
 > ---
 > Changes in v4:
 >   - Update commit message.
@@ -113,11 +113,7 @@ On Tue, 18 May 2021 15:43:31 +0200
 > +	status = *spinand->scratchbuf;
 > +	if (!(status & STATUS_BUSY))
 > +		goto out;
-
-Looks like you expect the driver to not only wait for a status change
-but also fill the data buffer with the last status value. I think that
-should be documented in the SPI mem API.
-
+>  
 >  	/*
 >  	 * Extra read, just in case the STATUS_READY bit has changed
 > @@ -526,7 +532,10 @@ static int spinand_reset_op(struct spinand_device *spinand)
