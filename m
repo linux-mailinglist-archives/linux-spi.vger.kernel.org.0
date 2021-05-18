@@ -2,17 +2,17 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1081386F65
-	for <lists+linux-spi@lfdr.de>; Tue, 18 May 2021 03:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C09386F66
+	for <lists+linux-spi@lfdr.de>; Tue, 18 May 2021 03:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345952AbhERBk7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S1345957AbhERBk7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Mon, 17 May 2021 21:40:59 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:3720 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236042AbhERBk7 (ORCPT
+Received: from szxga05-in.huawei.com ([45.249.212.191]:3571 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240394AbhERBk7 (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Mon, 17 May 2021 21:40:59 -0400
-Received: from dggems702-chm.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Fkds342G1z16Phf;
+Received: from dggems702-chm.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Fkds35lF1zmV8q;
         Tue, 18 May 2021 09:36:55 +0800 (CST)
 Received: from dggpeml500005.china.huawei.com (7.185.36.59) by
  dggems702-chm.china.huawei.com (10.3.19.179) with Microsoft SMTP Server
@@ -26,9 +26,9 @@ From:   Zhiqi Song <songzhiqi1@huawei.com>
 To:     <broonie@kernel.org>
 CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linuxarm@huawei.com>, Zhiqi Song <songzhiqi1@huawei.com>
-Subject: [PATCH 2/7] spi: mpc512x-psc: add parenthesis for sizeof
-Date:   Tue, 18 May 2021 09:38:17 +0800
-Message-ID: <1621301902-64158-3-git-send-email-songzhiqi1@huawei.com>
+Subject: [PATCH 3/7] spi: mpc52xx: add parenthesis for sizeof
+Date:   Tue, 18 May 2021 09:38:18 +0800
+Message-ID: <1621301902-64158-4-git-send-email-songzhiqi1@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1621301902-64158-1-git-send-email-songzhiqi1@huawei.com>
 References: <1621301902-64158-1-git-send-email-songzhiqi1@huawei.com>
@@ -50,31 +50,22 @@ and add parenthesis.
 
 Signed-off-by: Zhiqi Song <songzhiqi1@huawei.com>
 ---
- drivers/spi/spi-mpc512x-psc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/spi/spi-mpc52xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-mpc512x-psc.c b/drivers/spi/spi-mpc512x-psc.c
-index ea1b079..78a9bca 100644
---- a/drivers/spi/spi-mpc512x-psc.c
-+++ b/drivers/spi/spi-mpc512x-psc.c
-@@ -369,7 +369,7 @@ static int mpc512x_psc_spi_setup(struct spi_device *spi)
- 		return -EINVAL;
+diff --git a/drivers/spi/spi-mpc52xx.c b/drivers/spi/spi-mpc52xx.c
+index 124cba7..5104152 100644
+--- a/drivers/spi/spi-mpc52xx.c
++++ b/drivers/spi/spi-mpc52xx.c
+@@ -415,7 +415,7 @@ static int mpc52xx_spi_probe(struct platform_device *op)
+ 	}
  
- 	if (!cs) {
--		cs = kzalloc(sizeof *cs, GFP_KERNEL);
-+		cs = kzalloc(sizeof(*cs), GFP_KERNEL);
- 		if (!cs)
- 			return -ENOMEM;
- 
-@@ -491,7 +491,7 @@ static int mpc512x_psc_spi_do_probe(struct device *dev, u32 regaddr,
- 	void *tempp;
- 	struct clk *clk;
- 
--	master = spi_alloc_master(dev, sizeof *mps);
-+	master = spi_alloc_master(dev, sizeof(*mps));
- 	if (master == NULL)
- 		return -ENOMEM;
- 
+ 	dev_dbg(&op->dev, "allocating spi_master struct\n");
+-	master = spi_alloc_master(&op->dev, sizeof *ms);
++	master = spi_alloc_master(&op->dev, sizeof(*ms));
+ 	if (!master) {
+ 		rc = -ENOMEM;
+ 		goto err_alloc;
 -- 
 2.7.4
 
