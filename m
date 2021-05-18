@@ -2,22 +2,22 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9EEB3877B3
-	for <lists+linux-spi@lfdr.de>; Tue, 18 May 2021 13:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C033877DA
+	for <lists+linux-spi@lfdr.de>; Tue, 18 May 2021 13:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236531AbhERLcS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 May 2021 07:32:18 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:38598 "EHLO
+        id S244962AbhERLlD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 May 2021 07:41:03 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:38774 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235787AbhERLcR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 May 2021 07:32:17 -0400
+        with ESMTP id S244264AbhERLlD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 May 2021 07:41:03 -0400
 Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id CB6D61F42F40;
-        Tue, 18 May 2021 12:30:58 +0100 (BST)
-Date:   Tue, 18 May 2021 13:30:54 +0200
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 108181F42F08;
+        Tue, 18 May 2021 12:39:44 +0100 (BST)
+Date:   Tue, 18 May 2021 13:39:40 +0200
 From:   Boris Brezillon <boris.brezillon@collabora.com>
 To:     <patrice.chotard@foss.st.com>
 Cc:     Mark Brown <broonie@kernel.org>,
@@ -29,12 +29,12 @@ Cc:     Mark Brown <broonie@kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>
-Subject: Re: [PATCH v3 1/3] spi: spi-mem: add automatic poll status
- functions
-Message-ID: <20210518133054.3240b088@collabora.com>
-In-Reply-To: <20210518093951.23136-2-patrice.chotard@foss.st.com>
+Subject: Re: [PATCH v3 3/3] spi: stm32-qspi: add automatic poll status
+ feature
+Message-ID: <20210518133940.7b14addc@collabora.com>
+In-Reply-To: <20210518093951.23136-4-patrice.chotard@foss.st.com>
 References: <20210518093951.23136-1-patrice.chotard@foss.st.com>
-        <20210518093951.23136-2-patrice.chotard@foss.st.com>
+        <20210518093951.23136-4-patrice.chotard@foss.st.com>
 Organization: Collabora
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
@@ -44,196 +44,221 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 18 May 2021 11:39:49 +0200
+On Tue, 18 May 2021 11:39:51 +0200
 <patrice.chotard@foss.st.com> wrote:
 
 > From: Patrice Chotard <patrice.chotard@foss.st.com>
 > 
-> With STM32 QSPI, it is possible to poll the status register of the device.
-> This could be done to offload the CPU during an operation (erase or
-> program a SPI NAND for example).
+> STM32 QSPI is able to automatically poll a specified register inside the
+> memory and relieve the CPU from this task.
 > 
-> spi_mem_poll_status API has been added to handle this feature.
-> This new function take care of the offload/non-offload cases.
+> As example, when erasing a large memory area, we got cpu load
+> equal to 50%. This patch allows to perform the same operation
+> with a cpu load around 2%.
 > 
-> For the non-offload case, use read_poll_timeout() to poll the status in
-> order to release CPU during this phase.
-> For example, previously, when erasing large area, in non-offload case,
-> CPU load can reach ~50%, now it decrease to ~35%.
-> 
-> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
 > Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
 > ---
 > Changes in v3:
->   - Add spi_mem_read_status() which allows to read 8 or 16 bits status.
->   - Add initial_delay_us and polling_delay_us parameters to spi_mem_poll_status()
->     and also to poll_status() callback.
->   - Move spi_mem_supports_op() in SW-based polling case.
->   - Add delay before invoking read_poll_timeout().
->   - Remove the reinit/wait_for_completion() added in v2.
+>   - Remove spi_mem_finalize_op() API added in v2.
 > 
 > Changes in v2:
->   - Indicates the spi_mem_poll_status() timeout unit
->   - Use 2-byte wide status register
->   - Add spi_mem_supports_op() call in spi_mem_poll_status()
->   - Add completion management in spi_mem_poll_status()
->   - Add offload/non-offload case management in spi_mem_poll_status()
->   - Optimize the non-offload case by using read_poll_timeout()
+>   - mask and match stm32_qspi_poll_status() parameters are 2-byte wide
+>   - Make usage of new spi_mem_finalize_op() API in stm32_qspi_wait_poll_status() 
 > 
->  drivers/spi/spi-mem.c       | 85 +++++++++++++++++++++++++++++++++++++
->  include/linux/spi/spi-mem.h | 14 ++++++
->  2 files changed, 99 insertions(+)
+>  drivers/spi/spi-stm32-qspi.c | 83 ++++++++++++++++++++++++++++++++----
+>  1 file changed, 75 insertions(+), 8 deletions(-)
 > 
-> diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-> index 1513553e4080..257dc501d5df 100644
-> --- a/drivers/spi/spi-mem.c
-> +++ b/drivers/spi/spi-mem.c
-> @@ -6,6 +6,7 @@
->   * Author: Boris Brezillon <boris.brezillon@bootlin.com>
->   */
->  #include <linux/dmaengine.h>
-> +#include <linux/iopoll.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/spi/spi.h>
->  #include <linux/spi/spi-mem.h>
-> @@ -743,6 +744,89 @@ static inline struct spi_mem_driver *to_spi_mem_drv(struct device_driver *drv)
->  	return container_of(drv, struct spi_mem_driver, spidrv.driver);
+> diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+> index 7e640ccc7e77..01168a859005 100644
+> --- a/drivers/spi/spi-stm32-qspi.c
+> +++ b/drivers/spi/spi-stm32-qspi.c
+> @@ -36,6 +36,7 @@
+>  #define CR_FTIE			BIT(18)
+>  #define CR_SMIE			BIT(19)
+>  #define CR_TOIE			BIT(20)
+> +#define CR_APMS			BIT(22)
+>  #define CR_PRESC_MASK		GENMASK(31, 24)
+>  
+>  #define QSPI_DCR		0x04
+> @@ -53,6 +54,7 @@
+>  #define QSPI_FCR		0x0c
+>  #define FCR_CTEF		BIT(0)
+>  #define FCR_CTCF		BIT(1)
+> +#define FCR_CSMF		BIT(3)
+>  
+>  #define QSPI_DLR		0x10
+>  
+> @@ -107,6 +109,7 @@ struct stm32_qspi {
+>  	u32 clk_rate;
+>  	struct stm32_qspi_flash flash[STM32_QSPI_MAX_NORCHIP];
+>  	struct completion data_completion;
+> +	struct completion match_completion;
+>  	u32 fmode;
+>  
+>  	struct dma_chan *dma_chtx;
+> @@ -115,6 +118,7 @@ struct stm32_qspi {
+>  
+>  	u32 cr_reg;
+>  	u32 dcr_reg;
+> +	unsigned long status_timeout;
+>  
+>  	/*
+>  	 * to protect device configuration, could be different between
+> @@ -128,11 +132,20 @@ static irqreturn_t stm32_qspi_irq(int irq, void *dev_id)
+>  	struct stm32_qspi *qspi = (struct stm32_qspi *)dev_id;
+>  	u32 cr, sr;
+>  
+> +	cr = readl_relaxed(qspi->io_base + QSPI_CR);
+>  	sr = readl_relaxed(qspi->io_base + QSPI_SR);
+>  
+> +	if (cr & CR_SMIE && sr & SR_SMF) {
+> +		/* disable irq */
+> +		cr &= ~CR_SMIE;
+> +		writel_relaxed(cr, qspi->io_base + QSPI_CR);
+> +		complete(&qspi->match_completion);
+> +
+> +		return IRQ_HANDLED;
+> +	}
+> +
+>  	if (sr & (SR_TEF | SR_TCF)) {
+>  		/* disable irq */
+> -		cr = readl_relaxed(qspi->io_base + QSPI_CR);
+>  		cr &= ~CR_TCIE & ~CR_TEIE;
+>  		writel_relaxed(cr, qspi->io_base + QSPI_CR);
+>  		complete(&qspi->data_completion);
+> @@ -319,6 +332,24 @@ static int stm32_qspi_wait_cmd(struct stm32_qspi *qspi,
+>  	return err;
 >  }
 >  
-> +int spi_mem_read_status(struct spi_mem *mem,
-> +			const struct spi_mem_op *op,
-> +			u16 *status)
+> +static int stm32_qspi_wait_poll_status(struct stm32_qspi *qspi,
+> +				       const struct spi_mem_op *op)
 > +{
-> +	const u8 *bytes = (u8 *)op->data.buf.in;
-> +	int ret;
+> +	u32 cr;
 > +
-> +	ret = spi_mem_exec_op(mem, op);
-> +	if (ret)
-> +		return ret;
+> +	reinit_completion(&qspi->match_completion);
+> +	cr = readl_relaxed(qspi->io_base + QSPI_CR);
+> +	writel_relaxed(cr | CR_SMIE, qspi->io_base + QSPI_CR);
 > +
-> +	if (op->data.nbytes > 1)
-> +		*status = ((u16)bytes[0] << 8) | bytes[1];
-> +	else
-> +		*status = bytes[0];
+> +	if (!wait_for_completion_timeout(&qspi->match_completion,
+> +				msecs_to_jiffies(qspi->status_timeout)))
+> +		return -ETIMEDOUT;
+> +
+> +	writel_relaxed(FCR_CSMF, qspi->io_base + QSPI_FCR);
 > +
 > +	return 0;
 > +}
 > +
-> +/**
-> + * spi_mem_poll_status() - Poll memory device status
-> + * @mem: SPI memory device
-> + * @op: the memory operation to execute
-> + * @mask: status bitmask to ckeck
-> + * @match: (status & mask) expected value
-> + * @initial_delay_us: delay in us before starting to poll
-> + * @polling_delay_us: time to sleep between reads in us
-> + * @timeout_ms: timeout in milliseconds
-> + *
-> + * This function send a polling status request to the controller driver
-> + *
-> + * Return: 0 in case of success, -ETIMEDOUT in case of error,
-> + *         -EOPNOTSUPP if not supported.
-> + */
-> +int spi_mem_poll_status(struct spi_mem *mem,
-> +			const struct spi_mem_op *op,
-> +			u16 mask, u16 match,
-> +			unsigned long initial_delay_us,
-> +			unsigned long polling_delay_us,
-> +			u16 timeout_ms)
+>  static int stm32_qspi_get_mode(struct stm32_qspi *qspi, u8 buswidth)
+>  {
+>  	if (buswidth == 4)
+> @@ -332,7 +363,7 @@ static int stm32_qspi_send(struct spi_mem *mem, const struct spi_mem_op *op)
+>  	struct stm32_qspi *qspi = spi_controller_get_devdata(mem->spi->master);
+>  	struct stm32_qspi_flash *flash = &qspi->flash[mem->spi->chip_select];
+>  	u32 ccr, cr;
+> -	int timeout, err = 0;
+> +	int timeout, err = 0, err_poll_status = 0;
+>  
+>  	dev_dbg(qspi->dev, "cmd:%#x mode:%d.%d.%d.%d addr:%#llx len:%#x\n",
+>  		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
+> @@ -378,6 +409,9 @@ static int stm32_qspi_send(struct spi_mem *mem, const struct spi_mem_op *op)
+>  	if (op->addr.nbytes && qspi->fmode != CCR_FMODE_MM)
+>  		writel_relaxed(op->addr.val, qspi->io_base + QSPI_AR);
+>  
+> +	if (qspi->fmode == CCR_FMODE_APM)
+> +		err_poll_status = stm32_qspi_wait_poll_status(qspi, op);
+> +
+>  	err = stm32_qspi_tx(qspi, op);
+>  
+>  	/*
+> @@ -387,7 +421,7 @@ static int stm32_qspi_send(struct spi_mem *mem, const struct spi_mem_op *op)
+>  	 *  byte of device (device size - fifo size). like device size is not
+>  	 *  knows, the prefetching is always stop.
+>  	 */
+> -	if (err || qspi->fmode == CCR_FMODE_MM)
+> +	if (err || err_poll_status || qspi->fmode == CCR_FMODE_MM)
+>  		goto abort;
+>  
+>  	/* wait end of tx in indirect mode */
+> @@ -406,15 +440,46 @@ static int stm32_qspi_send(struct spi_mem *mem, const struct spi_mem_op *op)
+>  						    cr, !(cr & CR_ABORT), 1,
+>  						    STM32_ABT_TIMEOUT_US);
+>  
+> -	writel_relaxed(FCR_CTCF, qspi->io_base + QSPI_FCR);
+> +	writel_relaxed(FCR_CTCF | FCR_CSMF, qspi->io_base + QSPI_FCR);
+>  
+> -	if (err || timeout)
+> -		dev_err(qspi->dev, "%s err:%d abort timeout:%d\n",
+> -			__func__, err, timeout);
+> +	if (err || err_poll_status || timeout)
+> +		dev_err(qspi->dev, "%s err:%d err_poll_status:%d abort timeout:%d\n",
+> +			__func__, err, err_poll_status, timeout);
+>  
+>  	return err;
+>  }
+>  
+> +static int stm32_qspi_poll_status(struct spi_mem *mem, const struct spi_mem_op *op,
+> +				  u16 mask, u16 match,
+> +				  unsigned long initial_delay_us,
+> +				  unsigned long polling_rate_us,
+> +				  unsigned long timeout_ms)
 > +{
-> +	struct spi_controller *ctlr = mem->spi->controller;
-> +	int ret = -EOPNOTSUPP;
-> +	int read_status_ret;
-> +	u16 status;
+> +	struct stm32_qspi *qspi = spi_controller_get_devdata(mem->spi->master);
+> +	int ret;
 > +
-> +	if (op->data.nbytes < 1 || op->data.nbytes > 2)
-> +		return -EINVAL;
-> +
-> +	if (ctlr->mem_ops && ctlr->mem_ops->poll_status) {
-> +		ret = spi_mem_access_start(mem);
-> +		if (ret)
-> +			return ret;
-> +
-> +		ret = ctlr->mem_ops->poll_status(mem, op, mask, match,
-> +						 initial_delay_us, polling_delay_us,
-> +						 timeout_ms);
-> +
-> +		spi_mem_access_end(mem);
+
+Don't you have special constraints on the op that can be passed to poll
+status request (does it support more than 1byte of status?)? If not, I
+think you should at least call spi_mem_supports_op().
+
+> +	ret = pm_runtime_get_sync(qspi->dev);
+> +	if (ret < 0) {
+> +		pm_runtime_put_noidle(qspi->dev);
+> +		return ret;
 > +	}
 > +
-> +	if (ret == -EOPNOTSUPP) {
-> +		if (!spi_mem_supports_op(mem, op))
-> +			return ret;
+> +	mutex_lock(&qspi->lock);
 > +
-> +		if (initial_delay_us < 10)
-> +			udelay(initial_delay_us);
-> +		else
-> +			usleep_range((initial_delay_us >> 2) + 1,
-> +				     initial_delay_us);
+> +	writel_relaxed(mask, qspi->io_base + QSPI_PSMKR);
+> +	writel_relaxed(match, qspi->io_base + QSPI_PSMAR);
+> +	qspi->fmode = CCR_FMODE_APM;
+> +	qspi->status_timeout = timeout_ms;
 > +
-> +		ret = read_poll_timeout(spi_mem_read_status, read_status_ret,
-> +					(read_status_ret || ((status) & mask) == match),
-> +					polling_delay_us, timeout_ms * 1000, false, mem,
-> +					op, &status);
-> +		if (read_status_ret)
-> +			return read_status_ret;
-> +	}
+> +	ret = stm32_qspi_send(mem, op);
+> +	mutex_unlock(&qspi->lock);
+> +
+> +	pm_runtime_mark_last_busy(qspi->dev);
+> +	pm_runtime_put_autosuspend(qspi->dev);
 > +
 > +	return ret;
 > +}
-> +EXPORT_SYMBOL_GPL(spi_mem_poll_status);
 > +
->  static int spi_mem_probe(struct spi_device *spi)
+>  static int stm32_qspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
 >  {
->  	struct spi_mem_driver *memdrv = to_spi_mem_drv(spi->dev.driver);
-> @@ -763,6 +847,7 @@ static int spi_mem_probe(struct spi_device *spi)
->  	if (IS_ERR_OR_NULL(mem->name))
->  		return PTR_ERR_OR_ZERO(mem->name);
+>  	struct stm32_qspi *qspi = spi_controller_get_devdata(mem->spi->master);
+> @@ -527,7 +592,7 @@ static int stm32_qspi_setup(struct spi_device *spi)
+>  	flash->presc = presc;
 >  
-> +	init_completion(&ctlr->xfer_completion);
-
-Is this still needed?
-
->  	spi_set_drvdata(spi, mem);
+>  	mutex_lock(&qspi->lock);
+> -	qspi->cr_reg = 3 << CR_FTHRES_SHIFT | CR_SSHIFT | CR_EN;
+> +	qspi->cr_reg = CR_APMS | 3 << CR_FTHRES_SHIFT | CR_SSHIFT | CR_EN;
+>  	writel_relaxed(qspi->cr_reg, qspi->io_base + QSPI_CR);
 >  
->  	return memdrv->probe(mem);
-> diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-> index 2b65c9edc34e..10375d9ad747 100644
-> --- a/include/linux/spi/spi-mem.h
-> +++ b/include/linux/spi/spi-mem.h
-> @@ -250,6 +250,7 @@ static inline void *spi_mem_get_drvdata(struct spi_mem *mem)
->   *		  the currently mapped area), and the caller of
->   *		  spi_mem_dirmap_write() is responsible for calling it again in
->   *		  this case.
-> + * @poll_status: poll memory device status
->   *
->   * This interface should be implemented by SPI controllers providing an
->   * high-level interface to execute SPI memory operation, which is usually the
-> @@ -274,6 +275,12 @@ struct spi_controller_mem_ops {
->  			       u64 offs, size_t len, void *buf);
->  	ssize_t (*dirmap_write)(struct spi_mem_dirmap_desc *desc,
->  				u64 offs, size_t len, const void *buf);
-> +	int (*poll_status)(struct spi_mem *mem,
-> +			   const struct spi_mem_op *op,
-> +			   u16 mask, u16 match,
-> +			   unsigned long initial_delay_us,
-> +			   unsigned long polling_rate_us,
-> +			   unsigned long timeout_ms);
+>  	/* set dcr fsize to max address */
+> @@ -607,6 +672,7 @@ static const struct spi_controller_mem_ops stm32_qspi_mem_ops = {
+>  	.exec_op	= stm32_qspi_exec_op,
+>  	.dirmap_create	= stm32_qspi_dirmap_create,
+>  	.dirmap_read	= stm32_qspi_dirmap_read,
+> +	.poll_status	= stm32_qspi_poll_status,
 >  };
 >  
->  /**
-> @@ -369,6 +376,13 @@ devm_spi_mem_dirmap_create(struct device *dev, struct spi_mem *mem,
->  void devm_spi_mem_dirmap_destroy(struct device *dev,
->  				 struct spi_mem_dirmap_desc *desc);
+>  static int stm32_qspi_probe(struct platform_device *pdev)
+> @@ -661,6 +727,7 @@ static int stm32_qspi_probe(struct platform_device *pdev)
+>  	}
 >  
-> +int spi_mem_poll_status(struct spi_mem *mem,
-> +			const struct spi_mem_op *op,
-> +			u16 mask, u16 match,
-> +			unsigned long initial_delay_us,
-> +			unsigned long polling_delay_us,
-> +			u16 timeout);
-> +
->  int spi_mem_driver_register_with_owner(struct spi_mem_driver *drv,
->  				       struct module *owner);
+>  	init_completion(&qspi->data_completion);
+> +	init_completion(&qspi->match_completion);
 >  
+>  	qspi->clk = devm_clk_get(dev, NULL);
+>  	if (IS_ERR(qspi->clk)) {
 
