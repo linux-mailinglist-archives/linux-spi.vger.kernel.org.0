@@ -2,85 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D0E38966F
-	for <lists+linux-spi@lfdr.de>; Wed, 19 May 2021 21:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C589038A512
+	for <lists+linux-spi@lfdr.de>; Thu, 20 May 2021 12:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbhESTUm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 May 2021 15:20:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52810 "EHLO mail.kernel.org"
+        id S235836AbhETKMp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 May 2021 06:12:45 -0400
+Received: from tux.runtux.com ([176.9.82.136]:43808 "EHLO tux.runtux.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229535AbhESTUm (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 19 May 2021 15:20:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5CC79610E9;
-        Wed, 19 May 2021 19:19:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621451961;
-        bh=CxcjeXZphMX8ikSAW2LO8uJN2ihmCuUCEEwRVbN9D64=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rSd5m9KJyLTnId6P36+q7OP6uzbpi1F5D6EjClmCZnsqr8IO1MPqHe6OIIuMT4KGT
-         KpPRqvNevSsYV1A/VFjEbTG9aBAu4AylNczwHnCAHhA/k4JnCp7So1ZmFCXohu1lvU
-         XlHrJjrcjUpc3+2mhqHYkOUYmeMp5diczczM+DBI+QETaguAEYOEKbwvDXc/B4xaB4
-         7Lgvww82oDmgsrLZSLWdAwznDoGFvZKODayku9Sa6lAjHcIHgRlTKm6y71fV3fENQr
-         nbCW4brWMJRvJGz0vUwTWhYYvI3udKVUio3bOjzYPGXS43xQKRkEle0LyWPN6j4P+f
-         9sErHwMiDcYow==
-Date:   Wed, 19 May 2021 20:18:36 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     patrice.chotard@foss.st.com
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        linux-mtd@lists.infradead.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        christophe.kerello@foss.st.com
-Subject: Re: [PATCH v5 0/3] MTD: spinand: Add spi_mem_poll_status() support
-Message-ID: <20210519191836.GH4224@sirena.org.uk>
-References: <20210518162754.15940-1-patrice.chotard@foss.st.com>
+        id S235184AbhETKKm (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 20 May 2021 06:10:42 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by tux.runtux.com (Postfix) with ESMTP id 10F896EF2C;
+        Thu, 20 May 2021 12:00:37 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at tux.runtux.com
+Received: from tux.runtux.com ([127.0.0.1])
+        by localhost (tux2.runtux.com [127.0.0.1]) (amavisd-new, port 10026)
+        with LMTP id czpMl34TZC6B; Thu, 20 May 2021 12:00:35 +0200 (CEST)
+Received: from bee.priv.zoo (62-99-217-90.static.upcbusiness.at [62.99.217.90])
+        (Authenticated sender: postmaster@runtux.com)
+        by tux.runtux.com (Postfix) with ESMTPSA id 22A776EFFE;
+        Thu, 20 May 2021 12:00:06 +0200 (CEST)
+Received: by bee.priv.zoo (Postfix, from userid 1002)
+        id AD6A0471; Thu, 20 May 2021 12:00:05 +0200 (CEST)
+Date:   Thu, 20 May 2021 12:00:05 +0200
+From:   Ralf Schlatterbeck <rsc@runtux.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] Fix SPI Chipselect/Clock bug for sun6i
+Message-ID: <20210520100005.vk4vzd7u6sqcogn3@runtux.com>
+References: <20201226095845.c65lhsmluddvwxsl@runtux.com>
+ <20210108085855.p255fioaax4zin4q@gilmour>
+ <20210108091815.h35ane6xe6bzhje2@runtux.com>
+ <20210111161004.a6suk2vreuslyj4m@gilmour>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="h3LYUU6HlUDSAOzy"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210518162754.15940-1-patrice.chotard@foss.st.com>
-X-Cookie: There's no time like the pleasant.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210111161004.a6suk2vreuslyj4m@gilmour>
+X-ray:  beware
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, Jan 11, 2021 at 05:10:04PM +0100, Maxime Ripard wrote:
+> On Fri, Jan 08, 2021 at 10:18:15AM +0100, Ralf Schlatterbeck wrote:
+> > On Fri, Jan 08, 2021 at 09:58:55AM +0100, Maxime Ripard wrote:
+> > > 
+> > > Unfortunately, without the author's Signed-off-by (and yours), we can't
+> > > merge that patch.
+> > 
+> > Thanks for the Reply. I've researched more and found out who the
+> > probable Author of the patch is. I've tried to contact him via Email,
+> > I'll follow up with correct signed-off etc when I've got permission.
+> 
+> Great, thanks!
+> Maxime
 
---h3LYUU6HlUDSAOzy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I've finally got permission :-) I'll re-submit in a separate thread.
 
-On Tue, May 18, 2021 at 06:27:51PM +0200, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
->=20
-> This series adds support for the spi_mem_poll_status() spinand
-> interface.
-> Some QSPI controllers allows to poll automatically memory=20
-> status during operations (erase, read or write). This allows to=20
-> offload the CPU for this task.
-> STM32 QSPI is supporting this feature, driver update are also
-> part of this series.
-
-The SPI bits look good to me - should we merge via MTD or SPI?
-
---h3LYUU6HlUDSAOzy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmClZIsACgkQJNaLcl1U
-h9DUugf+L02+HoVRB3gbN5ZpyjjoHmHs9up8UEcNStI4z5NEGfSDlLbFbODRNFlP
-E3sFR+ORhCM9vziPNYxXzkt6iqlVMmxNDyKntLntzno7g3v37ycpdpo1EVfRqCst
-Zgi7FauC4EhvCQcWdh4MZZJw27U8T/zhoGNK8X8J6+eZkz/TWfTPZETa7C/p31pB
-F3+Z8Nfd6EFKMJ++dJLmjgDpQPkcUV8xdiQIqKAAQFp8GTWNk5bKk3rZvA35VNcm
-ERAEJyYhESA4iIBzVQMTdsZp1mPZUW2zOWTMgYuqsha766iYTz1DcM3tCwtPs/4I
-1F+iui8vnadvaJxuv0ckWb+cZpfCGA==
-=WZaQ
------END PGP SIGNATURE-----
-
---h3LYUU6HlUDSAOzy--
+Ralf
+-- 
+Dr. Ralf Schlatterbeck                  Tel:   +43/2243/26465-16
+Open Source Consulting                  www:   www.runtux.com
+Reichergasse 131, A-3411 Weidling       email: office@runtux.com
