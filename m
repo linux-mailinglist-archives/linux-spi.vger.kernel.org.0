@@ -2,58 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C52D38AFBD
+	by mail.lfdr.de (Postfix) with ESMTP id 31BFA38AFBC
 	for <lists+linux-spi@lfdr.de>; Thu, 20 May 2021 15:13:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239112AbhETNOW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 May 2021 09:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
+        id S232596AbhETNOX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 May 2021 09:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243528AbhETNOV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 May 2021 09:14:21 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F52C061574
-        for <linux-spi@vger.kernel.org>; Thu, 20 May 2021 06:13:00 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id k14so21749169eji.2
-        for <linux-spi@vger.kernel.org>; Thu, 20 May 2021 06:13:00 -0700 (PDT)
+        with ESMTP id S239663AbhETNOW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 May 2021 09:14:22 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400BFC061574
+        for <linux-spi@vger.kernel.org>; Thu, 20 May 2021 06:13:01 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id w12so11586617edx.1
+        for <linux-spi@vger.kernel.org>; Thu, 20 May 2021 06:13:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=V/e9wmFRK34KVqxpuDLR0+Pbsau4yqa9WEQV9ibbe7U=;
-        b=S6Xz/8/jobrxo7PlvBJmOZZjArYZImPjbZJFQ0RT+k31XlHuPL93qi4EmaO2ZWXUfs
-         TxM8Z6tPCgncmeRGSlJ1ivFOcek7EMBalU329X8+JZMz9J+bmRgmN1YysQNjrquQsRZ8
-         N/UNV2Jhp2scPOPv9cKTqoTAXUgWuetwLJMBTrWSVRxaMY/v40RKWasHrPlAZb8O1Frt
-         3qY1VxP/iLpOHAVz884yt9D6W4yEsrZD8AhOzlTMi607wyX4I8wPkac2IFE7AdsO09XW
-         7+LxaFS+Ifzy8PRLxyebgIBI60kd6UBbT7w9lkGQqe1C5GbW1DPQaRkw46puBUpuojb6
-         G1Rg==
+        bh=NfeZuj9x+F+IOQGvDII5Rw/+DdFZ2cFpL7ax2dtu5+w=;
+        b=Gp/cn9U/FqapfBfEDzGYl61NRekjvJMrQTdjzecrmxMl5qWD4GgWsEYyX1pHTI9axq
+         pz9JNuLxspYOQHJD62hX03Z3ggy587vNHqBogMNc0eV1wK/6sOvOFE1mH6PfMlmEHj/E
+         opndfQPJ9/icCMKKIKrXpakx0xZF+V7WwkoPjNsunP3Z2e2mzIpFvvRfHEf3CA57h35L
+         l5FcDzg3E+EPcwWgubd/nKu0OWQWEBnysmKUIUAMAq/UuV+j3lOth9aPKjZqF+LDo6nZ
+         2GJDGUg16M3ASEhSZkyUY/PxhvDfOquEbUaLiVXIeShOG/S3oN1XARQxHjwU32+BROQT
+         uZww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=V/e9wmFRK34KVqxpuDLR0+Pbsau4yqa9WEQV9ibbe7U=;
-        b=AfwOMH7UbQ4Rf5wXlTTQAbLMoFMobg5mhv33BITJCBnDDt+Cs9mn/nkjP8BMbfXWju
-         47fDy50odvPXwEkt1/o7nlsH4lnUPwA7CbMhNf0Nd9doiTJVH02F8mPQHKv5ZhjxITzF
-         Hap7OY5eqaKr5tWqyhU/CHVAETAZc5iPwBjJp3i+yffSpaV7msPxWJRbA9XtN7QBuFk6
-         yWIhpmzIAps/Fq3rinH5ovHOM09oVNUd+qEKjGNVnzhBD3/ZD9Isp20n55GoG94K2y1u
-         mnMCSiM6SnArbghS1NOAlAjPDhhvfAOntzOOW5ejK1hR4pF/VoBpLfynrjCzTebot6Nt
-         xXAQ==
-X-Gm-Message-State: AOAM5329vC9aAxL3AEO9t/HIuxNkbi8VKYFcOkcFrGzBUWuahNlaaTKM
-        rGPZ8LHEY0fLzpW8kShyWYj3wG85P/0=
-X-Google-Smtp-Source: ABdhPJxFYNf6BERz5Twg5NxazBp/5DHJTjq/kFE10dnqWyi+IpPpCCBFmcBNNMvMGK8eS47spWcehQ==
-X-Received: by 2002:a17:907:1002:: with SMTP id ox2mr4518945ejb.337.1621516378967;
-        Thu, 20 May 2021 06:12:58 -0700 (PDT)
+        bh=NfeZuj9x+F+IOQGvDII5Rw/+DdFZ2cFpL7ax2dtu5+w=;
+        b=jJFPtrfRo1MHQ3EqoLqztfuMlY49KZYUvyYCEKKtxvTVLGgBx4S8GpXM130LM0rXAo
+         cZIFWKuq8BLKTtynUub76w/7fNI8Hjh2OUBKN2iIJHcMqNF7VY6zO5hMYu9Iew+NJcHA
+         mL382brLtUai6VZ/dh3fr6VMzQcib1n+S0p9PGUoEDXhSuiv2e8ApYC+/BqmzEXN09ZY
+         EXgWTSFTJ2j8DdH1q7XNuMZhpJ8WTOk+iK/PIrszZBkfoVc1zhkhaF/mDSNJKVqwZJz0
+         tr0nGJ5quT6IpeH+7PSzFs5GHQRlyvcDZvCMCAa6GcPLOoDi7iqRMYvmOmlocZS46S3v
+         XUBg==
+X-Gm-Message-State: AOAM533b5cNFXu4llvtx2nk+55HTR2SuVPHT8qTRiu2DC88E5p0UeGmz
+        JrGPVp6yoDsHolYO0yA6qdY=
+X-Google-Smtp-Source: ABdhPJyxZ3gAWRn8nfm3SbTUL3Qzv99dr45kRIUQXPwq4WmCAoTfBfkcwFU2stRYygjAfG/eE1OkeQ==
+X-Received: by 2002:a05:6402:1109:: with SMTP id u9mr5057359edv.174.1621516379869;
+        Thu, 20 May 2021 06:12:59 -0700 (PDT)
 Received: from localhost.localdomain ([188.26.52.84])
-        by smtp.gmail.com with ESMTPSA id gt12sm1362505ejb.60.2021.05.20.06.12.57
+        by smtp.gmail.com with ESMTPSA id gt12sm1362505ejb.60.2021.05.20.06.12.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 May 2021 06:12:58 -0700 (PDT)
+        Thu, 20 May 2021 06:12:59 -0700 (PDT)
 From:   Vladimir Oltean <olteanv@gmail.com>
 To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
 Cc:     Guenter Roeck <linux@roeck-us.net>,
         Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: [PATCH v1 1/2] spi: sc18is602: don't consider the chip select byte in sc18is602_check_transfer
-Date:   Thu, 20 May 2021 16:12:37 +0300
-Message-Id: <20210520131238.2903024-2-olteanv@gmail.com>
+Subject: [PATCH v1 2/2] spi: sc18is602: implement .max_{transfer,message}_size() for the controller
+Date:   Thu, 20 May 2021 16:12:38 +0300
+Message-Id: <20210520131238.2903024-3-olteanv@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210520131238.2903024-1-olteanv@gmail.com>
 References: <20210520131238.2903024-1-olteanv@gmail.com>
@@ -65,42 +65,55 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-For each spi_message, the sc18is602 I2C-to-SPI bridge driver checks the
-length of each spi_transfer against 200 (the size of the chip's internal
-buffer) minus hw->tlen (the number of bytes transferred so far).
+Allow SPI peripherals attached to this controller to know what is the
+maximum transfer size and message size, so they can limit their transfer
+lengths properly in case they are otherwise capable of larger transfer
+sizes. For the sc18is602, this is 200 bytes in both cases, since as far
+as I understand, it isn't possible to tell the controller to keep the
+chip select asserted after the STOP command is sent.
 
-The first byte of the transferred data is the Function ID (the SPI
-slave's chip select) and as per the documentation of the chip:
-https://www.nxp.com/docs/en/data-sheet/SC18IS602B.pdf
-the data buffer is up to 200 bytes deep _without_ accounting for the
-Function ID byte.
+The controller can support SPI messages larger than 200 bytes if
+cs_change is set for individual transfers such that the portions with
+chip select asserted are never longer than 200 bytes. What is not
+supported is just SPI messages with a continuous chip select larger than
+200. I don't think it is possible to express this using the current API,
+so drivers which do send SPI messages with cs_change can safely just
+look at the max_transfer_size limit.
 
-However, in sc18is602_txrx(), the driver keeps the Function ID as part
-of the buffer, and increments hw->tlen from 0 to 1. Combined with the
-check in sc18is602_check_transfer, this prevents us from issuing a
-transfer that has exactly 200 bytes in size, but only 199.
-
-Adjust the check function to reflect that the Function ID is not part of
-the 200 byte deep data buffer.
+An example of user for this is sja1105_xfer() in
+drivers/net/dsa/sja1105/sja1105_spi.c which sends by default 64 * 4 =
+256 byte transfers.
 
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
- drivers/spi/spi-sc18is602.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-sc18is602.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/drivers/spi/spi-sc18is602.c b/drivers/spi/spi-sc18is602.c
-index 297c512069a5..37871edc7962 100644
+index 37871edc7962..5d27ee482237 100644
 --- a/drivers/spi/spi-sc18is602.c
 +++ b/drivers/spi/spi-sc18is602.c
-@@ -174,7 +174,7 @@ static int sc18is602_setup_transfer(struct sc18is602 *hw, u32 hz, u8 mode)
- static int sc18is602_check_transfer(struct spi_device *spi,
- 				    struct spi_transfer *t, int tlen)
- {
--	if (t && t->len + tlen > SC18IS602_BUFSIZ)
-+	if (t && t->len + tlen > SC18IS602_BUFSIZ + 1)
- 		return -EINVAL;
+@@ -219,6 +219,11 @@ static int sc18is602_transfer_one(struct spi_master *master,
+ 	return status;
+ }
  
- 	return 0;
++static size_t sc18is602_max_transfer_size(struct spi_device *spi)
++{
++	return SC18IS602_BUFSIZ;
++}
++
+ static int sc18is602_setup(struct spi_device *spi)
+ {
+ 	struct sc18is602 *hw = spi_master_get_devdata(spi->master);
+@@ -293,6 +298,8 @@ static int sc18is602_probe(struct i2c_client *client,
+ 	master->bits_per_word_mask = SPI_BPW_MASK(8);
+ 	master->setup = sc18is602_setup;
+ 	master->transfer_one_message = sc18is602_transfer_one;
++	master->max_transfer_size = sc18is602_max_transfer_size;
++	master->max_message_size = sc18is602_max_transfer_size;
+ 	master->dev.of_node = np;
+ 	master->min_speed_hz = hw->freq / 128;
+ 	master->max_speed_hz = hw->freq / 4;
 -- 
 2.25.1
 
