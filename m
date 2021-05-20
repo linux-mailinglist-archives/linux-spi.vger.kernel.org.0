@@ -2,95 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 568FD38B8BE
-	for <lists+linux-spi@lfdr.de>; Thu, 20 May 2021 23:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0205838B8DD
+	for <lists+linux-spi@lfdr.de>; Thu, 20 May 2021 23:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbhETVJb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 May 2021 17:09:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39818 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229708AbhETVJa (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 20 May 2021 17:09:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8D96C611AD;
-        Thu, 20 May 2021 21:08:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621544889;
-        bh=EvVATraZB7E8n5NcWtsfxzj+03GDgZi3f8bDNL5+s5A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o7EfoLXIeE18DsIwSgllSOS+1jdt6RbObrpeTjyEtb+3ED5vDmn5R9T2zqU4Y/Nxf
-         plG44LC0irFGKNauD1zUBCIVYzhxAjholcR3tN8q6aHTIsjBAoT6RbP+JdSbqqPAZz
-         Re6jAt+he4SEEIPw/Y3ONN+1uyeTXsj93PQLzkczn53I1b7V4g+jf+woK3lm/Ltdu3
-         4oJqoZd4UoiCoV5kmoJq0orJkLlnhEr7sjzQ1R6rHAr/cB7qViq0u4bP+PVTJihCqs
-         sVzbcXAOg9WicQ+GOwKveiGG6kb5Vh8azu54zQF5reHtvFWvgKM4eQuM+snsMJkN2Y
-         AWKiJvhmW3sNg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Zhiqi Song <songzhiqi1@huawei.com>
-Cc:     Mark Brown <broonie@kernel.org>, linuxarm@huawei.com,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 0/7] drivers: spi - add parenthesis for sizeof
-Date:   Thu, 20 May 2021 22:07:59 +0100
-Message-Id: <162154480154.5312.11734127389788487385.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <1621301902-64158-1-git-send-email-songzhiqi1@huawei.com>
-References: <1621301902-64158-1-git-send-email-songzhiqi1@huawei.com>
+        id S229890AbhETVS0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 May 2021 17:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35620 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229808AbhETVS0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 May 2021 17:18:26 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBDBC061574;
+        Thu, 20 May 2021 14:17:04 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id k14so23982129eji.2;
+        Thu, 20 May 2021 14:17:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=P1hn6+pud/VwdmBZ5hvHt7UVqtcVYsS0pOmed7474aI=;
+        b=h1niVe0GHP5qCgymZCGrDQ87b9Hk6RpBM3TJneUXLyAp9wx5lYGgEoh6+3awlKcx4E
+         YCejFNRZLxv5Ast8GBiFPR0o0kWsZlEzGsGt20hLZRnrRHbarU612s5EAEAgUncAYdzU
+         i/Zjc1fw8+nDNj4fKdq97K6UlCrn6KA5VS18rP3rG7B26qdPdc9h0wEMmkYva8ytOsx8
+         8hASi2bzjExeBBuR89a1adDY+vseWyO+99me641ch+5IyrKOn4iLo6TZ/yS+/M5fqswq
+         9oKYJvxs57j7GRWpjUOLoaO4lX5dSknpnQlXhs4+/8mYcPxJrBth7myQs3k9u1giPRoL
+         FRVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=P1hn6+pud/VwdmBZ5hvHt7UVqtcVYsS0pOmed7474aI=;
+        b=P8cpfTHyjSgHN163tvhpbN/j5qgTQScKNXzSUhn/WsG/K0HM1NCWtIDRmQ/NGw4/wI
+         gkSM1GJUINXjKbLYS/3l6ws0iiG95sKB/Z1v5IR8+PLEFyDZiDxp7fpx8MrWEoGTy0Nl
+         rmmlTBGEtHaugTCaKax4bsHBUKRuPp4Z1d/ac+U69Kj6azrsS/WPqRHfPXfnDVUmnRLs
+         GTnMcxHpBrSFGxn4HYgLEaY1YhilA2aVwgIy3pwtWQBsidWO0gFYkATDNx0eB7WyWazn
+         8uo7p8VyFZkL91PnKwNZqVn9EgABwaoJUZTFJy+AQ2fOyMgxrP+/2thOCW39ANesslsv
+         fKcQ==
+X-Gm-Message-State: AOAM532xcQnLq25P/hWPfElK4+58HWSsDr3+Rg4VKvITq4rkweCHFUR/
+        zTi3EK2HUf97OmeH504homg=
+X-Google-Smtp-Source: ABdhPJz1Gi5WscCanz1btdOQT2cQrGNQ1RckUXBcgZyVu/rdgVUZaB4gT5CNgPsFpPnrpwtV3I8Kdw==
+X-Received: by 2002:a17:906:1e44:: with SMTP id i4mr6476561ejj.61.1621545423104;
+        Thu, 20 May 2021 14:17:03 -0700 (PDT)
+Received: from localhost.localdomain ([188.26.52.84])
+        by smtp.gmail.com with ESMTPSA id w10sm2084212ejq.48.2021.05.20.14.17.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 May 2021 14:17:02 -0700 (PDT)
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: [PATCH v3 net-next 0/2] Adapt the sja1105 DSA driver to the SPI controller's transfer limits
+Date:   Fri, 21 May 2021 00:16:55 +0300
+Message-Id: <20210520211657.3451036-1-olteanv@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 18 May 2021 09:38:15 +0800, Zhiqi Song wrote:
-> This patchset fixes missing parentheses of sizeof reported by checkpatch.pl
-> under drivers/spi/.
-> 
-> Zhiqi Song (7):
->   spi: lm70llp: add parenthesis for sizeof
->   spi: mpc512x-psc: add parenthesis for sizeof
->   spi: mpc52xx: add parenthesis for sizeof
->   spi: mpc52xx-psc: add parenthesis for sizeof
->   spi: omap2-mcspi: add parenthesis for sizeof
->   spi: omap-uwire: add parenthesis for sizeof
->   spi: ppc4xx: add parenthesis for sizeof
-> 
-> [...]
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Applied to
+This series changes the SPI transfer procedure in sja1105 to take into
+consideration the buffer size limitations that the SPI controller driver
+might have.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Changes in v3:
+- Avoid a signed vs unsigned issue in the interpretation of SIZE_MAX.
+- Move the max transfer length checks to probe time, since nothing will
+  change dynamically.
 
-Thanks!
+Changes in v2:
+Remove the driver's use of cs_change and send multiple, smaller SPI
+messages instead of a single large one.
 
-[1/7] spi: lm70llp: add parenthesis for sizeof
-      commit: a2bd5afd59c1dec8e559096c3a5c912360c267ca
-[2/7] spi: mpc512x-psc: add parenthesis for sizeof
-      commit: 722cb2b197e125d6816aac43ec2d411c7b22daa9
-[3/7] spi: mpc52xx: add parenthesis for sizeof
-      commit: ac7357ac769e3b4bd52e691f22d745c89126069f
-[4/7] spi: mpc52xx-psc: add parenthesis for sizeof
-      commit: 75d4c2d64b30c8583b82afdcc9dc4db2083dee5b
-[5/7] spi: omap2-mcspi: add parenthesis for sizeof
-      commit: 8267dc6d6889235e6dac21156cc9d6e5d5319d3b
-[6/7] spi: omap-uwire: add parenthesis for sizeof
-      commit: 19bae51b0191129fd9a6d163678404b77cab24c9
-[7/7] spi: ppc4xx: add parenthesis for sizeof
-      commit: 07c74f844b740a858e40fe6c15dd9a2f3b7f6476
+Vladimir Oltean (2):
+  net: dsa: sja1105: send multiple spi_messages instead of using
+    cs_change
+  net: dsa: sja1105: adapt to a SPI controller with a limited max
+    transfer size
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+ drivers/net/dsa/sja1105/sja1105.h             |  1 +
+ drivers/net/dsa/sja1105/sja1105_main.c        | 28 ++++++++
+ drivers/net/dsa/sja1105/sja1105_spi.c         | 66 +++++--------------
+ .../net/dsa/sja1105/sja1105_static_config.h   |  2 +
+ 4 files changed, 49 insertions(+), 48 deletions(-)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-- 
+2.25.1
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
