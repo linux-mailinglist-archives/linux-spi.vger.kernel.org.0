@@ -2,128 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 537C538B619
-	for <lists+linux-spi@lfdr.de>; Thu, 20 May 2021 20:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7B238B7FE
+	for <lists+linux-spi@lfdr.de>; Thu, 20 May 2021 22:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235390AbhETSfV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 May 2021 14:35:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60700 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233857AbhETSfT (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 20 May 2021 14:35:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 76780611AE;
-        Thu, 20 May 2021 18:33:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621535637;
-        bh=NMGesVtPQnY/FQJ7V9cpTdNOJfWW9YVR9/m3Tj3KVW8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N9DRU5zjc35Fx+EIojoqAGs/cPymC7vlHHGNikd4n4kC7zD6U5pu2mM7qcZ8lLipQ
-         2hsooLMbHwK9xCLriZvkkrq7jv/X0Kg9qeyzitXsmNW3m5hhi++GLTF9/PjMUZEDuk
-         7NUHo1m4B3lbnDIaQsCHkBC/ewXANNchbt5+C+mSGuzyXjmP0l9DCX5Mca8V1VhqOS
-         HLKxTmRbZsP43NnYtxwHWLlEkHRQpGomslDw95sT67UInPlPvxPywVrfGs4W3VEmF5
-         m3UzvwXZh1rrNBp3+PnTqEWm0Ww/e+mJ335NS5LZxdPXi+eLXTH0QFtObHaqGVMI2O
-         CfEl1uD8r1kYw==
-Date:   Thu, 20 May 2021 19:33:52 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Liang Liang <liang.liang@amd.com>
-Subject: Re: [PATCH] spi:amd: Add support for latest platform
-Message-ID: <20210520183352.GE3962@sirena.org.uk>
-References: <20210520133946.2263172-1-Nehal-Bakulchandra.shah@amd.com>
+        id S237013AbhETUED (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 May 2021 16:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236622AbhETUEC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 May 2021 16:04:02 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2779BC061574;
+        Thu, 20 May 2021 13:02:40 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id lg14so27155806ejb.9;
+        Thu, 20 May 2021 13:02:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=piApn4hueZMiHkK7L5NTTYDLJqVrmyE+9skDaAkLOww=;
+        b=Lor68eBWMLZ4VX2/MTf/Nu0a1XrjNwI0lhXArFDkmNwK6GUAvO/d9w2IZJrLiqb9Ue
+         BJriTeuwZYXG0E7az1j501OngiWtVMnxBoKCeSqXS4JbzNTVtiGaeQsmGMduApYk2w4R
+         b4mJiHM5XO+65LWKq5JsidqSmLUYX7hAHl2BQqWwR1AkdujHAgsWxDjQgDilr/pRFJel
+         1hrkUZ8P4aA4l0ye1r8JcYsSPqu1KMgI61ScaVVg4Gf1KUK9B5J8FW7ZKD+w2e2f6Ayc
+         X2nsz8BVHEwkdKJta0OWYXaY73IfOZCJC2Kh5uNncJkCWPCylqPu8xKIvBGeAOquhNP1
+         c+lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=piApn4hueZMiHkK7L5NTTYDLJqVrmyE+9skDaAkLOww=;
+        b=gJV+3MSAZ/w9HG+rMNp6JrzFRsyCO/wEiaTsDb3Ws8lXI4ahSyTbLJuOcP66Qrg/MG
+         /bzwgXH5B5XSfe19MqjJhCI2HCSlVnlxF2AePodd+fRk0Q0rTKnxHF3SPK22FPgJ60pw
+         PFTGDHQJvJ30nDpPXM+H1yGUIrDCMxoLF4HQ3O7JBXv3vGHD62iKtW8sGxKNZ43sDj+s
+         As3v+pL7i/5tWd49A8X9CnlrFQhHR6CIJPtE4J2dZn5MVmhNTaNaWizVPJ5hEzvfl3jD
+         qB/W1vJ7OOU3YJQp36TwJtkXprBAHrLNcOgykJyojYv7cc39xqaH2ufhSW/yb32v5EQi
+         T1IQ==
+X-Gm-Message-State: AOAM532vHLuPFYEGxAfrrl6rg7+gGMwG8+NeiUjErW4cYraO5tFJXb/B
+        wuOHVM1Jo3CF4Mt5BstIFoM=
+X-Google-Smtp-Source: ABdhPJzeEUxkPlXRveR9Z/OwCFGBnLKqkwTfmkYvxOIVXIwG5n6aFWCQJHKZe8TStnfDA8c0pIJ4/Q==
+X-Received: by 2002:a17:906:5d0a:: with SMTP id g10mr6239711ejt.349.1621540958717;
+        Thu, 20 May 2021 13:02:38 -0700 (PDT)
+Received: from localhost.localdomain ([188.26.52.84])
+        by smtp.gmail.com with ESMTPSA id y10sm1974288ejh.105.2021.05.20.13.02.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 May 2021 13:02:38 -0700 (PDT)
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: [PATCH v2 net-next 0/2] Adapt the sja1105 DSA driver to the SPI controller's transfer limits
+Date:   Thu, 20 May 2021 23:02:21 +0300
+Message-Id: <20210520200223.3375421-1-olteanv@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="C94crkcyjafcjHxo"
-Content-Disposition: inline
-In-Reply-To: <20210520133946.2263172-1-Nehal-Bakulchandra.shah@amd.com>
-X-Cookie: Offer void where prohibited by law.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
---C94crkcyjafcjHxo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series changes the SPI transfer procedure in sja1105 to take into
+consideration the buffer size limitations that the SPI controller driver
+might have.
 
-On Thu, May 20, 2021 at 07:09:46PM +0530, Nehal Bakulchandra Shah wrote:
+Changes in v2:
+Remove the driver's use of cs_change and send multiple, smaller SPI
+messages instead of a single large one.
 
-> *Support for latest platform
-> *Hardware Fifo has 72 bytes limitation so fix for the larger data size.
+Vladimir Oltean (2):
+  net: dsa: sja1105: send multiple spi_messages instead of using
+    cs_change
+  net: dsa: sja1105: adapt to a SPI controller with a limited max
+    transfer size
 
-These two things sound like they should be separate patches, and it
-looks like there are some other changes mixed in here which aren't
-called out in the changelog.  This should be a patch series with one
-change per patch, that makes things much easier to review.
+ drivers/net/dsa/sja1105/sja1105_spi.c | 80 ++++++++++++---------------
+ 1 file changed, 34 insertions(+), 46 deletions(-)
 
->  	while (spi_busy) {
-> -		usleep_range(10, 20);
-> +		usleep_range(10, 40);
+-- 
+2.25.1
 
-Why change the delay?  This looks like a separate patch.
-
->  	return 0;
-> @@ -146,9 +180,14 @@ static void amd_spi_execute_opcode(struct spi_master=
- *master)
->  {
->  	struct amd_spi *amd_spi =3D spi_master_get_devdata(master);
-> =20
-> +	amd_spi_busy_wait(amd_spi);
->  	/* Set ExecuteOpCode bit in the CTRL0 register */
-
-A blank line after the busy wait, and it'd be good to have a comment
-saying why there's a busy wait before actually doing the operation since
-this looks quite odd.
-
-> @@ -241,7 +325,8 @@ static int amd_spi_master_transfer(struct spi_master =
-*master,
->  	 * program the controller.
->  	 */
->  	amd_spi_fifo_xfer(amd_spi, master, msg);
-> -
-> +	if (amd_spi->devtype_data->version)
-> +		amd_spi_clear_chip(master);
-
-Does this disable the chip select?  Should there be a separate set_cs()
-operation?
-
->  	amd_spi =3D spi_master_get_devdata(master);
-> -	amd_spi->io_remap_addr =3D devm_platform_ioremap_resource(pdev, 0);
-> +
-> +	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	amd_spi->io_remap_addr =3D devm_ioremap_resource(&pdev->dev, res);
-> +
-
-res is never referenced so it's not clear why this change is being made?
-
->  	/* Initialize the spi_master fields */
->  	master->bus_num =3D 0;
->  	master->num_chipselect =3D 4;
->  	master->mode_bits =3D 0;
-> -	master->flags =3D SPI_MASTER_HALF_DUPLEX;
->  	master->setup =3D amd_spi_master_setup;
->  	master->transfer_one_message =3D amd_spi_master_transfer;
-
-I'm not seeing a change anywhere that looks like it adds full duplex
-support for the v1 hardware (or v2 for that matter) and this isn't
-called out in the changelog.
-
---C94crkcyjafcjHxo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCmq5AACgkQJNaLcl1U
-h9D+UAf4uppXruMhqwdp5uEqIkfYy/+WtyrHf+FXHv7GfXIkWWAUIxlPm3ka53Lq
-j3NxlYjqGd+NteFMXP3Y1nsI7VirtVUb/Olj7y6LJbEYX+FI85K1Kc/jQ7UIJXQB
-Kxzf1s/DNMl0hmQEPOJd6AfRYpzl9HsLzJDmMGJRlBi7rrisiOXFDwrIACCz498Z
-WZ4ARK+gU7rHK27Ryn1ZBmtFG3ahl2ksSlxflKqBJ3rFHoWhh4Xhj3OCvXC6xs6g
-vD+Bjy4aODtTAE+rmsq8ReDqhpQd0OP2TmBou+EMp/iIcOValyhNqlGgehB7w6Lr
-+ABrg+bvn5RfLfTZyCVdMtIjUnIQ
-=EvC4
------END PGP SIGNATURE-----
-
---C94crkcyjafcjHxo--
