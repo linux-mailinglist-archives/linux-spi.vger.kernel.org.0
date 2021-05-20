@@ -2,94 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 300F738A4CE
-	for <lists+linux-spi@lfdr.de>; Thu, 20 May 2021 12:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9C9F38AFBB
+	for <lists+linux-spi@lfdr.de>; Thu, 20 May 2021 15:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbhETKKJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 May 2021 06:10:09 -0400
-Received: from tux.runtux.com ([176.9.82.136]:43702 "EHLO tux.runtux.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234987AbhETKI2 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 20 May 2021 06:08:28 -0400
-X-Greylist: delayed 384 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 May 2021 06:08:27 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by tux.runtux.com (Postfix) with ESMTP id 90D2F6F0C7;
-        Thu, 20 May 2021 12:06:58 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at tux.runtux.com
-Received: from tux.runtux.com ([127.0.0.1])
-        by localhost (tux2.runtux.com [127.0.0.1]) (amavisd-new, port 10026)
-        with LMTP id SlQcJyNvDttS; Thu, 20 May 2021 12:06:57 +0200 (CEST)
-Received: from bee.priv.zoo (62-99-217-90.static.upcbusiness.at [62.99.217.90])
-        (Authenticated sender: postmaster@runtux.com)
-        by tux.runtux.com (Postfix) with ESMTPSA id 099B66EFFE;
-        Thu, 20 May 2021 12:06:57 +0200 (CEST)
-Received: by bee.priv.zoo (Postfix, from userid 1002)
-        id 8D429471; Thu, 20 May 2021 12:06:56 +0200 (CEST)
-Date:   Thu, 20 May 2021 12:06:56 +0200
-From:   Ralf Schlatterbeck <rsc@runtux.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Mirko Vogt <mirko-dev|linux@nanl.de>
-Subject: [PATCH 1/1] spi-sun6i: Fix chipselect/clock bug
-Message-ID: <20210520100656.rgkdexdvrddt3upy@runtux.com>
+        id S232571AbhETNOW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 May 2021 09:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37806 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243503AbhETNOU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 May 2021 09:14:20 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB58AC061574
+        for <linux-spi@vger.kernel.org>; Thu, 20 May 2021 06:12:58 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id lg14so25189764ejb.9
+        for <linux-spi@vger.kernel.org>; Thu, 20 May 2021 06:12:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f54UKwJhTJXefIxJnZnXzEyYN9YjOASRp/4wqeGvMCA=;
+        b=fOuKckuS4v5R11mvwAcqFCJD+eF2ZUlCYkgd7VnGA8V2ElWvV6J8+lsAKpn5NqiYfG
+         0j3i2iUNN+MAoGKu+Ms1PQ7klG4/7i50/9yHoShvHX/VEEYGLSAWgYq4mW1gCr9K3Wth
+         78ZvWTMNlanJxfjhNwuvQx6ystPgj7ga6MV23OjU9NhmMQNAUrZJSJ2Ao6ext5LmZcmE
+         boRuC3tcn38gNsX24gjBm+x6S9MKX7IDjL6v+V9RvroegOGudxDbq2RF6TK5QC17QRtu
+         l4Yi91KUBCwVGWQzDpMtR87ETMM727O30TUYar90e3RqN+QizvhR15Mx+jukj1i1nt7b
+         ZetA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f54UKwJhTJXefIxJnZnXzEyYN9YjOASRp/4wqeGvMCA=;
+        b=uZesZQuRTIRozix/U+sg47LYCzmIziV8AgZDxHCldMsRYHbkL5O8bZb606IwCZekNQ
+         0lXFBTYxPTGv/KBQZd+TZJqRqT17qheHJ95v54E6trfLFQU42MOdm+YKJc9K3CpafSzJ
+         T5xqGE8MHC2hONrexTWHubm5hrkMhYDnKxL3f8AxIgM4vUWglVWurzJoM3SL/XsLMyo0
+         MgFmMK6hneenThaeJot5q+89C72P30KKUfHqNMw1tOU1UCjyUvmnkz25AwV1HmSUpX6L
+         rvp/jkBD8aaA4OZwHYvEXmDBF5NJw5kITgQuNYfQ4uCBPpRYmrhfkoCV/rodKh9keqp5
+         g3ug==
+X-Gm-Message-State: AOAM5305rHueBDuBUVxKdMxHssFg5pgMlM3RsNsxcz4j5RAXw6QeA4t+
+        S4HHDeWaPiEAiEIqmMjgpc2pxoW+ork=
+X-Google-Smtp-Source: ABdhPJzYb9PeusqgNwjkiUu+TC1lYwXTSPdPuxwTzkEgihPzUQUWhdBQOWqvR1G/XwAxctFqDNCIrw==
+X-Received: by 2002:a17:906:3ed0:: with SMTP id d16mr4613069ejj.16.1621516377507;
+        Thu, 20 May 2021 06:12:57 -0700 (PDT)
+Received: from localhost.localdomain ([188.26.52.84])
+        by smtp.gmail.com with ESMTPSA id gt12sm1362505ejb.60.2021.05.20.06.12.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 May 2021 06:12:57 -0700 (PDT)
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: [PATCH v1 0/2] Export the spi-sc18is602's max transfer len limit to SPI slave drivers
+Date:   Thu, 20 May 2021 16:12:36 +0300
+Message-Id: <20210520131238.2903024-1-olteanv@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-ray:  beware
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The current sun6i SPI implementation initializes the transfer too early,
-resulting in SCK going high before the transfer. When using an additional
-(gpio) chipselect with sun6i, the chipselect is asserted at a time when
-clock is high, making the SPI transfer fail.
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-This is due to SUN6I_GBL_CTL_BUS_ENABLE being written into
-SUN6I_GBL_CTL_REG at an early stage. Moving that to the transfer
-function, hence, right before the transfer starts, mitigates that
-problem.
+These 2 patches make it possible for a SPI device driver which uses
+large transfer sizes (256 bytes) to limit itself to the maximum length
+supported by the spi-sc18is602 hardware.
 
-Signed-off-by: Ralf Schlatterbeck <rsc@runtux.com>
-Signed-off-by: Mirko Vogt <mirko-dev|linux@nanl.de>
----
-For oscilloscope screenshots with/without the patch, see my blog post
-https://blog.runtux.com/posts/2019/04/18/
-or the discussion in the armbian forum at
-https://forum.armbian.com/topic/4330-spi-gpio-chip-select-support/
-(my logo there is a penguin).
+Tested with 200 byte buffers on the SC18IS602B.
 
- drivers/spi/spi-sun6i.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Vladimir Oltean (2):
+  spi: sc18is602: don't consider the chip select byte in
+    sc18is602_check_transfer
+  spi: sc18is602: implement .max_{transfer,message}_size() for the
+    controller
 
-diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
-index cc8401980125..2db075c87f51 100644
---- a/drivers/spi/spi-sun6i.c
-+++ b/drivers/spi/spi-sun6i.c
-@@ -379,6 +379,10 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
- 	}
- 
- 	sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
-+	/* Finally enable the bus - doing so before might raise SCK to HIGH */
-+	sun6i_spi_write(sspi, SUN6I_GBL_CTL_REG,
-+			sun6i_spi_read(sspi, SUN6I_GBL_CTL_REG)
-+			| SUN6I_GBL_CTL_BUS_ENABLE);
- 
- 	/* Setup the transfer now... */
- 	if (sspi->tx_buf)
-@@ -504,7 +508,7 @@ static int sun6i_spi_runtime_resume(struct device *dev)
- 	}
- 
- 	sun6i_spi_write(sspi, SUN6I_GBL_CTL_REG,
--			SUN6I_GBL_CTL_BUS_ENABLE | SUN6I_GBL_CTL_MASTER | SUN6I_GBL_CTL_TP);
-+			SUN6I_GBL_CTL_MASTER | SUN6I_GBL_CTL_TP);
- 
- 	return 0;
- 
+ drivers/spi/spi-sc18is602.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
 -- 
-2.20.1
+2.25.1
+
