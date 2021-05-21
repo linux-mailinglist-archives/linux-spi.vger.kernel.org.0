@@ -2,76 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF2F338CF12
-	for <lists+linux-spi@lfdr.de>; Fri, 21 May 2021 22:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A1DE38CF6D
+	for <lists+linux-spi@lfdr.de>; Fri, 21 May 2021 22:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbhEUUbf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 May 2021 16:31:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54118 "EHLO mail.kernel.org"
+        id S229512AbhEUU6C (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 May 2021 16:58:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59474 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229517AbhEUUbe (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 21 May 2021 16:31:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 88482613EC;
-        Fri, 21 May 2021 20:30:10 +0000 (UTC)
+        id S229457AbhEUU6B (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 21 May 2021 16:58:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 5C5C1613D8;
+        Fri, 21 May 2021 20:56:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621629010;
-        bh=v46D6467eh6cu9MqtNzQFf2+EFLxmZk0QILP5LlHGu0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ZM0LSD4Y/RyEAhnq5thF6j5vh/f7dX6dhLxSyAJVYHSlxFvrClQr1Eot/agSwjlDx
-         bvxiEbIjb5/6KO5vACsmnONPEznQOvzOdxq/Am0wFNPuAaWHX7HKgfNw8iP1WpFtZG
-         qUbHwWDGxTQlVj26QlTi+7sxNBY54vck0FH49Sh5rM6N3utKEeHUc9C0snMB/KFeq3
-         RKzyBFlpFEcdztwRB6zJ5xF6ra67slLozg6hXsIVSFKUdu7KwHkMUDKjYzPC/cfVMk
-         /n9wMFU/MUROigygb9HKwpYGzM2KwkJ2VEEjj1Y/49jaIC/NKDRTIQAIzMulYqoyd4
-         hNwTbfxXlNGMw==
+        s=k20201202; t=1621630598;
+        bh=0O7b2oFVxnVmelge7uqUdiGX6/BBkCZ4gcmcyLXeAoc=;
+        h=Subject:From:Date:To:From;
+        b=QhL6Ona4NKarzbgHJuOZEqoF19XgLSWKwwrayRLREIga5ZpqaEt2c5Y8VGcIKKamg
+         bBuw8pOV8u0PzN4N0i+jYb3GRtmVS3BeG+bxKYays1UuASsMFwDMmQ8fnjdN0yt9ge
+         zDbNY5cPzKkWgKZcYzCWamhdFjFBoRsq/WSxPpqagwfc1hD10zFpvBFsvZu2q6Llx+
+         eR/QIpo+tHGVrFw5gwjEjsh3rPA66WUewkWMSc7fvHDSYzaQ1Pom5R7xL0GgRl6eQU
+         a7uRxc06Di/HN3qWFqTVTAI104aGD2mslRtqMZLVmN1xfIwPyvyvUqfe33napUIkId
+         9R7lswj57/a4g==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 7AED760A56;
-        Fri, 21 May 2021 20:30:10 +0000 (UTC)
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 48F56609E9;
+        Fri, 21 May 2021 20:56:38 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 net-next 0/2] Adapt the sja1105 DSA driver to the SPI
- controller's transfer limits
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162162901049.11427.12413955245468287025.git-patchwork-notify@kernel.org>
-Date:   Fri, 21 May 2021 20:30:10 +0000
-References: <20210520211657.3451036-1-olteanv@gmail.com>
-In-Reply-To: <20210520211657.3451036-1-olteanv@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        f.fainelli@gmail.com, andrew@lunn.ch, vivien.didelot@gmail.com,
-        broonie@kernel.org, linux-spi@vger.kernel.org, linux@roeck-us.net,
-        vladimir.oltean@nxp.com
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <162163059824.22775.1923697807052894433.git-patchwork-housekeeping@kernel.org>
+Date:   Fri, 21 May 2021 20:56:38 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+Latest series: [v1] spi-sun6i: Fix chipselect/clock bug (2021-05-21T20:19:13)
+  Superseding: [v1] spi-sun6i: Fix chipselect/clock bug (2021-05-20T10:06:56):
+    [1/1] spi-sun6i: Fix chipselect/clock bug
 
-This series was applied to netdev/net-next.git (refs/heads/master):
 
-On Fri, 21 May 2021 00:16:55 +0300 you wrote:
-> From: Vladimir Oltean <vladimir.oltean@nxp.com>
-> 
-> This series changes the SPI transfer procedure in sja1105 to take into
-> consideration the buffer size limitations that the SPI controller driver
-> might have.
-> 
-> Changes in v3:
-> - Avoid a signed vs unsigned issue in the interpretation of SIZE_MAX.
-> - Move the max transfer length checks to probe time, since nothing will
->   change dynamically.
-> 
-> [...]
-
-Here is the summary with links:
-  - [v3,net-next,1/2] net: dsa: sja1105: send multiple spi_messages instead of using cs_change
-    https://git.kernel.org/netdev/net-next/c/ca021f0dd851
-  - [v3,net-next,2/2] net: dsa: sja1105: adapt to a SPI controller with a limited max transfer size
-    https://git.kernel.org/netdev/net-next/c/718bad0e4da9
-
-You are awesome, thank you!
---
+-- 
 Deet-doot-dot, I am a bot.
 https://korg.docs.kernel.org/patchwork/pwbot.html
-
 
