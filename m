@@ -2,29 +2,29 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B98A338CEB5
-	for <lists+linux-spi@lfdr.de>; Fri, 21 May 2021 22:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D214938CED1
+	for <lists+linux-spi@lfdr.de>; Fri, 21 May 2021 22:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbhEUUSO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 May 2021 16:18:14 -0400
-Received: from tux.runtux.com ([176.9.82.136]:39598 "EHLO tux.runtux.com"
+        id S230306AbhEUUUm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 May 2021 16:20:42 -0400
+Received: from tux.runtux.com ([176.9.82.136]:39680 "EHLO tux.runtux.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229455AbhEUUSN (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 21 May 2021 16:18:13 -0400
+        id S230297AbhEUUUm (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 21 May 2021 16:20:42 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by tux.runtux.com (Postfix) with ESMTP id A67A36F00A;
-        Fri, 21 May 2021 22:16:47 +0200 (CEST)
+        by tux.runtux.com (Postfix) with ESMTP id DE1E96F00A;
+        Fri, 21 May 2021 22:19:15 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at tux.runtux.com
 Received: from tux.runtux.com ([127.0.0.1])
         by localhost (tux2.runtux.com [127.0.0.1]) (amavisd-new, port 10026)
-        with LMTP id iCAZBfAfgrdo; Fri, 21 May 2021 22:16:46 +0200 (CEST)
+        with LMTP id idEQAUquvFTc; Fri, 21 May 2021 22:19:14 +0200 (CEST)
 Received: from bee.priv.zoo (62-99-217-90.static.upcbusiness.at [62.99.217.90])
         (Authenticated sender: postmaster@runtux.com)
-        by tux.runtux.com (Postfix) with ESMTPSA id C17A26EF63;
-        Fri, 21 May 2021 22:16:45 +0200 (CEST)
+        by tux.runtux.com (Postfix) with ESMTPSA id EBA096EF63;
+        Fri, 21 May 2021 22:19:13 +0200 (CEST)
 Received: by bee.priv.zoo (Postfix, from userid 1002)
-        id 09F0246E; Fri, 21 May 2021 22:16:44 +0200 (CEST)
-Date:   Fri, 21 May 2021 22:16:44 +0200
+        id 9233046E; Fri, 21 May 2021 22:19:13 +0200 (CEST)
+Date:   Fri, 21 May 2021 22:19:13 +0200
 From:   Ralf Schlatterbeck <rsc@runtux.com>
 To:     Andre Przywara <andre.przywara@arm.com>
 Cc:     Mark Brown <broonie@kernel.org>,
@@ -34,8 +34,8 @@ Cc:     Mark Brown <broonie@kernel.org>,
         linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         Mirko Vogt <mirko-dev|linux@nanl.de>
-Subject: Re: [PATCH 1/1] spi-sun6i: Fix chipselect/clock bug
-Message-ID: <20210521201644.ksjgsjvdud2wblbe@runtux.com>
+Subject: [PATCH 1/1] spi-sun6i: Fix chipselect/clock bug
+Message-ID: <20210521201913.2gapcmrzynxekro7@runtux.com>
 References: <20210520100656.rgkdexdvrddt3upy@runtux.com>
  <20210521173011.1c602682@slackpad.fritz.box>
 MIME-Version: 1.0
@@ -48,39 +48,55 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, May 21, 2021 at 05:30:11PM +0100, Andre Przywara wrote:
-> On Thu, 20 May 2021 12:06:56 +0200
-> Ralf Schlatterbeck <rsc@runtux.com> wrote:
-> So if I get your last email correctly, your intention was to make this
-> Mirko's patch, which you just send?
+From: Mirko Vogt <mirko-dev|linux@nanl.de>
 
-Yes.
+The current sun6i SPI implementation initializes the transfer too early,
+resulting in SCK going high before the transfer. When using an additional
+(gpio) chipselect with sun6i, the chipselect is asserted at a time when
+clock is high, making the SPI transfer fail.
 
-> In this case the authorship should stay with him (git commit --amend
-> --author "..."), and you add your S-o-b (his first, your's next).
-> If you use git format-patch & git send-email, it will take care of
-> formatting this correctly (inserting a "From" line into the body).
+This is due to SUN6I_GBL_CTL_BUS_ENABLE being written into
+SUN6I_GBL_CTL_REG at an early stage. Moving that to the transfer
+function, hence, right before the transfer starts, mitigates that
+problem.
 
-I was using format-patch but editing the result. Would a 'Date' line in
-the body also be OK? The patch is really from 2019...
+Signed-off-by: Mirko Vogt <mirko-dev|linux@nanl.de>
+Signed-off-by: Ralf Schlatterbeck <rsc@runtux.com>
+---
+Updated patch with suggested improvements by Andre Przywara
+For oscilloscope screenshots with/without the patch, see my blog post
+https://blog.runtux.com/posts/2019/04/18/
+or the discussion in the armbian forum at
+https://forum.armbian.com/topic/4330-spi-gpio-chip-select-support/
+(my logo there is a penguin).
 
-I have it correctly in my git but was unaware that additional header
-lines in the body are ok.
+ drivers/spi/spi-sun6i.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-> One formatting thing below:
-> >  	sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
-> > +	/* Finally enable the bus - doing so before might raise SCK to HIGH */
-> > +	sun6i_spi_write(sspi, SUN6I_GBL_CTL_REG,
-> > +			sun6i_spi_read(sspi, SUN6I_GBL_CTL_REG)
-> > +			| SUN6I_GBL_CTL_BUS_ENABLE);
-> 
-> The "|" on the new line looks a bit odd. What about you utilise "reg"
-> here, as the other access do, to make this more readable?
-> 	reg = sun6i_spi_read(...);
-> 	reg |= ...
-> 	sun6i_spi_write(..., reg);
+diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
+index cc8401980125..23ad052528db 100644
+--- a/drivers/spi/spi-sun6i.c
++++ b/drivers/spi/spi-sun6i.c
+@@ -379,6 +379,10 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
+ 	}
+ 
+ 	sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
++	/* Finally enable the bus - doing so before might raise SCK to HIGH */
++	reg = sun6i_spi_read(sspi, SUN6I_GBL_CTL_REG);
++	reg |= SUN6I_GBL_CTL_BUS_ENABLE;
++	sun6i_spi_write(sspi, SUN6I_GBL_CTL_REG, reg);
+ 
+ 	/* Setup the transfer now... */
+ 	if (sspi->tx_buf)
+@@ -504,7 +508,7 @@ static int sun6i_spi_runtime_resume(struct device *dev)
+ 	}
+ 
+ 	sun6i_spi_write(sspi, SUN6I_GBL_CTL_REG,
+-			SUN6I_GBL_CTL_BUS_ENABLE | SUN6I_GBL_CTL_MASTER | SUN6I_GBL_CTL_TP);
++			SUN6I_GBL_CTL_MASTER | SUN6I_GBL_CTL_TP);
+ 
+ 	return 0;
+ 
+-- 
+2.20.1
 
-I've fixed this and will resubmit.
-
-Thanks,
-Ralf
