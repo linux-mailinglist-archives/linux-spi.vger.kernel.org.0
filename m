@@ -2,75 +2,121 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAAE138C9C4
-	for <lists+linux-spi@lfdr.de>; Fri, 21 May 2021 17:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4DA638CB04
+	for <lists+linux-spi@lfdr.de>; Fri, 21 May 2021 18:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233663AbhEUPJc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 May 2021 11:09:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49262 "EHLO mail.kernel.org"
+        id S234094AbhEUQb5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 May 2021 12:31:57 -0400
+Received: from foss.arm.com ([217.140.110.172]:51098 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232206AbhEUPJb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 21 May 2021 11:09:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0AA0D613CC;
-        Fri, 21 May 2021 15:08:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621609688;
-        bh=63ae20Ui0Z8uUIJTvxDkH6YhZBlZIrr97WYnPYcu/k8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YiCkkeJBMBXuK6pds27sl55gJoM906kz7ty8QCWB0or3y5Nk3t++jR6F/9vqrBrYQ
-         rw/Nx2TInBI1YCHYFVUQqX4EqCita4LbWp9ljmZ+yvQQVgv8voPHNos9x3Sp1/en6v
-         vIBgI3Xj+DWLu0INZo+DEoIKf2hLSF8bdQfQT3KTCfEQvED3P/UKdb5lq198KyBQI9
-         wY7PzLNvRPkDZD/55k63jzjw5l0IzovBaLv490bl97IzJeVAkM4gw60drll0bNZcgX
-         xZDs5RiTOerb8VqJeeLeUmgVk7jTJ/ZR89heUN6BT01gE6PLkSUqszDAiGnrnrjEo2
-         UDN6Gny121q3Q==
-From:   Mark Brown <broonie@kernel.org>
-To:     daniel@zonque.org, Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     Mark Brown <broonie@kernel.org>, haojian.zhuang@gmail.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-spi@vger.kernel.org, robert.jarzmik@free.fr
-Subject: Re: [PATCH] spi: pxa2xx: Fix inconsistent indenting
-Date:   Fri, 21 May 2021 16:08:00 +0100
-Message-Id: <162160967729.10785.7445217035686493697.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <1621590465-73594-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-References: <1621590465-73594-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+        id S231621AbhEUQb4 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 21 May 2021 12:31:56 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C39B81480;
+        Fri, 21 May 2021 09:30:32 -0700 (PDT)
+Received: from slackpad.fritz.box (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 401B73F93E;
+        Fri, 21 May 2021 09:30:31 -0700 (PDT)
+Date:   Fri, 21 May 2021 17:30:11 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Ralf Schlatterbeck <rsc@runtux.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Mirko Vogt <mirko-dev|linux@nanl.de>
+Subject: Re: [PATCH 1/1] spi-sun6i: Fix chipselect/clock bug
+Message-ID: <20210521173011.1c602682@slackpad.fritz.box>
+In-Reply-To: <20210520100656.rgkdexdvrddt3upy@runtux.com>
+References: <20210520100656.rgkdexdvrddt3upy@runtux.com>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 21 May 2021 17:47:45 +0800, Jiapeng Chong wrote:
-> Eliminate the follow smatch warning:
+On Thu, 20 May 2021 12:06:56 +0200
+Ralf Schlatterbeck <rsc@runtux.com> wrote:
+
+Hi Ralf,
+
+many thanks for taking care of upstreaming this!
+
+> The current sun6i SPI implementation initializes the transfer too early,
+> resulting in SCK going high before the transfer. When using an additional
+> (gpio) chipselect with sun6i, the chipselect is asserted at a time when
+> clock is high, making the SPI transfer fail.
 > 
-> drivers/spi/spi-pxa2xx-pci.c:260 pxa2xx_spi_pci_probe() warn:
-> inconsistent indenting.
+> This is due to SUN6I_GBL_CTL_BUS_ENABLE being written into
+> SUN6I_GBL_CTL_REG at an early stage. Moving that to the transfer
+> function, hence, right before the transfer starts, mitigates that
+> problem.
+> 
+> Signed-off-by: Ralf Schlatterbeck <rsc@runtux.com>
+> Signed-off-by: Mirko Vogt <mirko-dev|linux@nanl.de>
 
-Applied to
+So if I get your last email correctly, your intention was to make this
+Mirko's patch, which you just send?
+In this case the authorship should stay with him (git commit --amend
+--author "..."), and you add your S-o-b (his first, your's next).
+If you use git format-patch & git send-email, it will take care of
+formatting this correctly (inserting a "From" line into the body).
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+As for the technical part: I know as much about SPI to have quite some
+respect for the subtleties of the various modes. But your second
+oscilloscope shot looks much better, and matches the timing diagram in
+the manual (SS is the first to go down).
+So I trust you that's the right move.
 
-Thanks!
+One formatting thing below:
 
-[1/1] spi: pxa2xx: Fix inconsistent indenting
-      commit: dbfac814bb73624613f47d6e70391053ab6b8960
+> ---
+> For oscilloscope screenshots with/without the patch, see my blog post
+> https://blog.runtux.com/posts/2019/04/18/
+> or the discussion in the armbian forum at
+> https://forum.armbian.com/topic/4330-spi-gpio-chip-select-support/
+> (my logo there is a penguin).
+> 
+>  drivers/spi/spi-sun6i.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
+> index cc8401980125..2db075c87f51 100644
+> --- a/drivers/spi/spi-sun6i.c
+> +++ b/drivers/spi/spi-sun6i.c
+> @@ -379,6 +379,10 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
+>  	}
+>  
+>  	sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
+> +	/* Finally enable the bus - doing so before might raise SCK to HIGH */
+> +	sun6i_spi_write(sspi, SUN6I_GBL_CTL_REG,
+> +			sun6i_spi_read(sspi, SUN6I_GBL_CTL_REG)
+> +			| SUN6I_GBL_CTL_BUS_ENABLE);
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+The "|" on the new line looks a bit odd. What about you utilise "reg"
+here, as the other access do, to make this more readable?
+	reg = sun6i_spi_read(...);
+	reg |= ...
+	sun6i_spi_write(..., reg);
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Cheers,
+Andre
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+>  
+>  	/* Setup the transfer now... */
+>  	if (sspi->tx_buf)
+> @@ -504,7 +508,7 @@ static int sun6i_spi_runtime_resume(struct device *dev)
+>  	}
+>  
+>  	sun6i_spi_write(sspi, SUN6I_GBL_CTL_REG,
+> -			SUN6I_GBL_CTL_BUS_ENABLE | SUN6I_GBL_CTL_MASTER | SUN6I_GBL_CTL_TP);
+> +			SUN6I_GBL_CTL_MASTER | SUN6I_GBL_CTL_TP);
+>  
+>  	return 0;
+>  
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
