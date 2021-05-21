@@ -2,38 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5F338C9C3
-	for <lists+linux-spi@lfdr.de>; Fri, 21 May 2021 17:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAAE138C9C4
+	for <lists+linux-spi@lfdr.de>; Fri, 21 May 2021 17:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233248AbhEUPJ3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 May 2021 11:09:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49242 "EHLO mail.kernel.org"
+        id S233663AbhEUPJc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 May 2021 11:09:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49262 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232206AbhEUPJ3 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 21 May 2021 11:09:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 79947613AF;
-        Fri, 21 May 2021 15:08:05 +0000 (UTC)
+        id S232206AbhEUPJb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 21 May 2021 11:09:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0AA0D613CC;
+        Fri, 21 May 2021 15:08:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621609686;
-        bh=7ykpPg7h0iFlH71bVYS2r53l+t1SGzyOmhVqCVEl/ZA=;
+        s=k20201202; t=1621609688;
+        bh=63ae20Ui0Z8uUIJTvxDkH6YhZBlZIrr97WYnPYcu/k8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I34qb25lW8m1aKnm/TsBBTUvPks6ZLbZ6HzqiAGBpvadRDjMO+2Ru6wRQudY7Jcoc
-         VlXiwoj4XT5e+kI2sYA7Ydtf8KV9Sfpis4X0arUxnEXn/+YGPJ9/1C5SiWxeavmVFP
-         nsap1VO13oW9zlZpKdGPsqp4PN2ZolqZyfHiGw+/Mt8Rtv9vF3wJPI6ypWQD3lz98v
-         xDAljXvkkkMlWWwHsAqsHiMxNg/zLmG0bLF69gi1rDQLQ7CK9ZX/c8WYy3I+hcMytU
-         0H/QtmFFu62tQLaA20SO4ja1lE2nCY+b8aJIXmNHuQgqi72ciGgpXU6GUsXPnCsXhv
-         exN53HMmTqRiw==
+        b=YiCkkeJBMBXuK6pds27sl55gJoM906kz7ty8QCWB0or3y5Nk3t++jR6F/9vqrBrYQ
+         rw/Nx2TInBI1YCHYFVUQqX4EqCita4LbWp9ljmZ+yvQQVgv8voPHNos9x3Sp1/en6v
+         vIBgI3Xj+DWLu0INZo+DEoIKf2hLSF8bdQfQT3KTCfEQvED3P/UKdb5lq198KyBQI9
+         wY7PzLNvRPkDZD/55k63jzjw5l0IzovBaLv490bl97IzJeVAkM4gw60drll0bNZcgX
+         xZDs5RiTOerb8VqJeeLeUmgVk7jTJ/ZR89heUN6BT01gE6PLkSUqszDAiGnrnrjEo2
+         UDN6Gny121q3Q==
 From:   Mark Brown <broonie@kernel.org>
-To:     Vladimir Oltean <olteanv@gmail.com>, linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [PATCH v1 0/2] Export the spi-sc18is602's max transfer len limit to SPI slave drivers
-Date:   Fri, 21 May 2021 16:07:59 +0100
-Message-Id: <162160967729.10785.5397629735840128841.b4-ty@kernel.org>
+To:     daniel@zonque.org, Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     Mark Brown <broonie@kernel.org>, haojian.zhuang@gmail.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-spi@vger.kernel.org, robert.jarzmik@free.fr
+Subject: Re: [PATCH] spi: pxa2xx: Fix inconsistent indenting
+Date:   Fri, 21 May 2021 16:08:00 +0100
+Message-Id: <162160967729.10785.7445217035686493697.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210520131238.2903024-1-olteanv@gmail.com>
-References: <20210520131238.2903024-1-olteanv@gmail.com>
+In-Reply-To: <1621590465-73594-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+References: <1621590465-73594-1-git-send-email-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -41,20 +41,11 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 20 May 2021 16:12:36 +0300, Vladimir Oltean wrote:
-> These 2 patches make it possible for a SPI device driver which uses
-> large transfer sizes (256 bytes) to limit itself to the maximum length
-> supported by the spi-sc18is602 hardware.
+On Fri, 21 May 2021 17:47:45 +0800, Jiapeng Chong wrote:
+> Eliminate the follow smatch warning:
 > 
-> Tested with 200 byte buffers on the SC18IS602B.
-> 
-> Vladimir Oltean (2):
->   spi: sc18is602: don't consider the chip select byte in
->     sc18is602_check_transfer
->   spi: sc18is602: implement .max_{transfer,message}_size() for the
->     controller
-> 
-> [...]
+> drivers/spi/spi-pxa2xx-pci.c:260 pxa2xx_spi_pci_probe() warn:
+> inconsistent indenting.
 
 Applied to
 
@@ -62,10 +53,8 @@ Applied to
 
 Thanks!
 
-[1/2] spi: sc18is602: don't consider the chip select byte in sc18is602_check_transfer
-      commit: bda7db1d952c3ff7c24c11bc295aa72aaeb98451
-[2/2] spi: sc18is602: implement .max_{transfer,message}_size() for the controller
-      commit: b4e46c9954ad55092502e1e8c44ceb9b6744bade
+[1/1] spi: pxa2xx: Fix inconsistent indenting
+      commit: dbfac814bb73624613f47d6e70391053ab6b8960
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
