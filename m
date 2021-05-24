@@ -2,107 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1BF38E2E6
-	for <lists+linux-spi@lfdr.de>; Mon, 24 May 2021 11:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1FDA38E516
+	for <lists+linux-spi@lfdr.de>; Mon, 24 May 2021 13:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232401AbhEXJE6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 May 2021 05:04:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56856 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232396AbhEXJE5 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 24 May 2021 05:04:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9BA7260698;
-        Mon, 24 May 2021 09:03:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621847010;
-        bh=43P7ifsnYFSE/3iQU2ti66SsUBNlX+NB7DvG2QknK8U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=j/u+K278kPXY909NRb9AJJ7Ygalv7bb4uTcgJHlZ+EzmNxcs+aFenyAVp/wpkkOd9
-         bO0ljCTW6FxKo9DnYia/JBHjXjcz21LyAy31cQkGLZReW9jCQtgwx1wBXtjcsFKlTu
-         XL3soks19EUwsiJdbFTbZeBaHK/ZMtEjreAtVN41ErPkQaSBhYshZ9BADJIdkfZirW
-         whyrBcCzt6S3gafXHrB+pfrtWW0UwILoSv3Xgx5MVeoVzRglvPISoNc0ydteyUD7m0
-         ca7QyG3gED1dbhyjySuJOFjvgkSGVMUhNEAF2CfN9jAqbfOV5n7PjjxhO9DMgdKpwg
-         8bEycsH5zxMug==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v5.13-rc3
-Date:   Mon, 24 May 2021 10:03:14 +0100
-Message-Id: <20210524090329.9BA7260698@mail.kernel.org>
+        id S232814AbhEXLLt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 May 2021 07:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232784AbhEXLLq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 May 2021 07:11:46 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83812C061574
+        for <linux-spi@vger.kernel.org>; Mon, 24 May 2021 04:10:18 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ll8TF-00051P-01; Mon, 24 May 2021 13:10:05 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ll8TB-0003A0-Qt; Mon, 24 May 2021 13:10:01 +0200
+Date:   Mon, 24 May 2021 13:09:58 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-rtc@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Mark Brown <broonie@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        linux-clk@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        linux-spi@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v7 0/6] clk: provide new devm helpers for prepared and
+ enabled clocks
+Message-ID: <20210524110958.ytcqzdgkqw6jeah5@pengutronix.de>
+References: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7put5ziwze3atjbn"
+Content-Disposition: inline
+In-Reply-To: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The following changes since commit d07f6ca923ea0927a1024dfccafc5b53b61cfecc:
 
-  Linux 5.13-rc2 (2021-05-16 15:27:44 -0700)
+--7put5ziwze3atjbn
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-are available in the Git repository at:
+On Mon, May 10, 2021 at 07:41:36PM +0200, Uwe Kleine-K=F6nig wrote:
+> compared to v6 I rebased to v5.13-rc1 (which resulted in a conflict in
+> the pwm-atmel patch), reformated the doc comments in patch 2 (as
+> suggested by Jonathan Cameron) and added the two Reviewed-by tags for
+> Jonathan Cameron.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.13-rc3
+Another two weeks without maintainer feedback. I didn't find a single
+mail by either Michael Turquette nor by Stephen Boyd on the linux-clk
+list on lore dating from this month. This patch set didn't get a reply
+since more than half a year.
 
-for you to fetch changes up to b4e46c9954ad55092502e1e8c44ceb9b6744bade:
+Is the clk tree still maintained?  Would a pull request help? There are
+several people who expressed interest in this series and the cleanup it
+allows.
 
-  spi: sc18is602: implement .max_{transfer,message}_size() for the controller (2021-05-21 13:13:33 +0100)
+@Andrew: Would you be willing to take the first two patches if Michael
+and Stephen don't react in the near future?
 
-----------------------------------------------------------------
-spi: Fixes for v5.13
+Best regards
+Uwe
 
-There's some device specific fixes here but also an unusually large
-number of fixes for the core, including both fixes for breakage
-introduced on ACPI systems while fixing the long standing confusion
-about the polarity of GPIO chip selects specified through DT, and fixes
-for ordering issues on unregistration which have been exposed through
-the wider usage of devm_.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-----------------------------------------------------------------
-Alain Volmat (1):
-      MAINTAINERS: Add Alain Volmat as STM32 SPI maintainer
+--7put5ziwze3atjbn
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Amit Kumar Mahapatra (1):
-      spi: spi-zynq-qspi: Fix kernel-doc warning
+-----BEGIN PGP SIGNATURE-----
 
-Andy Shevchenko (2):
-      spi: Switch to signed types for *_native_cs SPI controller fields
-      spi: Assume GPIO CS active high in ACPI case
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmCriYMACgkQwfwUeK3K
+7Amfngf9Ga4caGfJs9XN3dun54N+DsOf8YkklfYBiAAjCixalrvdei8QJA3djFos
+TTUqAA5pZSaT5RZBoXVn7bwDkIOTJHIKgD05+7uZL01XZ6LaO0b6euqhSnpUSWV5
+yB8DteZUg4+FPgxa8a0DPgfBq5dRr1ADn3U2YBAvZXUnpIk49chH5viOQ7CockL/
+28GJcNA94L87QFKtUMiw5myBy+ThHJiA5G8WKSXbSJB4JpI24B113XZH9lmCpxEg
+1H9Z23S68CuV+9uvzIZAEhDPgwrSon7ILGeszXEYgBmGE2O/mL9WPptcCkRS0H35
+DfScTBSMeU7Cw4q6705OV82DdPyFmQ==
+=0Iaw
+-----END PGP SIGNATURE-----
 
-Christophe JAILLET (1):
-      spi: spi-fsl-dspi: Fix a resource leak in an error handling path
-
-Chunyan Zhang (1):
-      spi: sprd: Add missing MODULE_DEVICE_TABLE
-
-Geert Uytterhoeven (1):
-      spi: altera: Make SPI_ALTERA_CORE invisible
-
-Karen Dombroski (1):
-      spi: spi-zynq-qspi: Fix stack violation bug
-
-Leilk Liu (1):
-      spi: take the SPI IO-mutex in the spi_set_cs_timing method
-
-Mark Brown (1):
-      Merge tag 'v5.13-rc2' into spi-5.13
-
-Michael Walle (1):
-      dt-bindings: spi: spi-mux: rename flash node
-
-Saravana Kannan (2):
-      spi: Fix spi device unregister flow
-      spi: Don't have controller clean up spi device before driver unbind
-
-Vladimir Oltean (2):
-      spi: sc18is602: don't consider the chip select byte in sc18is602_check_transfer
-      spi: sc18is602: implement .max_{transfer,message}_size() for the controller
-
- Documentation/devicetree/bindings/spi/spi-mux.yaml |  2 +-
- MAINTAINERS                                        |  6 +++
- drivers/spi/Kconfig                                |  2 +-
- drivers/spi/spi-fsl-dspi.c                         |  4 +-
- drivers/spi/spi-sc18is602.c                        |  9 +++-
- drivers/spi/spi-sprd.c                             |  1 +
- drivers/spi/spi-zynq-qspi.c                        |  9 ++--
- drivers/spi/spi.c                                  | 51 ++++++++++++++++------
- include/linux/spi/spi.h                            |  4 +-
- 9 files changed, 64 insertions(+), 24 deletions(-)
+--7put5ziwze3atjbn--
