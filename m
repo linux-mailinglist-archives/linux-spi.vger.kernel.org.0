@@ -2,126 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F3F038E6A3
-	for <lists+linux-spi@lfdr.de>; Mon, 24 May 2021 14:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA1A38E709
+	for <lists+linux-spi@lfdr.de>; Mon, 24 May 2021 15:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbhEXMeq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 May 2021 08:34:46 -0400
-Received: from foss.arm.com ([217.140.110.172]:41764 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232401AbhEXMep (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 24 May 2021 08:34:45 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 49E77113E;
-        Mon, 24 May 2021 05:33:17 -0700 (PDT)
-Received: from slackpad.fritz.box (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B72CD3F719;
-        Mon, 24 May 2021 05:33:15 -0700 (PDT)
-Date:   Mon, 24 May 2021 13:33:01 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Ralf Schlatterbeck <rsc@runtux.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Mirko Vogt <mirko-dev|linux@nanl.de>
-Subject: Re: [PATCH 1/1] spi-sun6i: Fix chipselect/clock bug
-Message-ID: <20210524133301.32c74794@slackpad.fritz.box>
-In-Reply-To: <20210521201913.2gapcmrzynxekro7@runtux.com>
-References: <20210520100656.rgkdexdvrddt3upy@runtux.com>
-        <20210521173011.1c602682@slackpad.fritz.box>
-        <20210521201913.2gapcmrzynxekro7@runtux.com>
-Organization: Arm Ltd.
-X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.31; x86_64-slackware-linux-gnu)
+        id S232648AbhEXNDo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 May 2021 09:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232774AbhEXNDo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 May 2021 09:03:44 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD27C061574;
+        Mon, 24 May 2021 06:02:15 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id n2so41655254ejy.7;
+        Mon, 24 May 2021 06:02:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Yd1/iaKW3TN8qN9woa7p+We2hx8jMCCw0wQ0PVgabEA=;
+        b=QsKx+4RnhOtJgBLITpPnwMKHq/nSRUFL9KWZsxfWBPpMO1hsQQLqXLCwXcZJd2DGzE
+         hnP6YuydqTueDISxoA0/HnwxRaXe907UsjX/NGcku3BBkYCwapxua8cgvujaXaUbbF5v
+         SIo0T1g5IpAuoDwFIFMYGPXucAuvo6azaXP3peGPBJ1lCCVQwqmm3ZsAlbsGy7epmfG2
+         vxoeZINle7nE2fb6ki52SYG47ofwnKPj2dh5KUgQsUoewccR3gVqfzGK9QNtGuGetwrp
+         CET8+jxBS2TPrh2n3CVt99I15BIdZPZzmIXG5YdSCxPnonFNnpTbf+S1NLOXeoEfvMxe
+         H29g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Yd1/iaKW3TN8qN9woa7p+We2hx8jMCCw0wQ0PVgabEA=;
+        b=KJ6Sf9R1XO08zi9Znj5KCjYm+5IRm0MudvC6GTOi24RK0NmzWniLPcQh6v24Jia31x
+         /dtgUDitm/YXydZakDh94+JwM6H/NB4sFSJU/ivrxsQCjIqk+PnClmCG1p1VLDpOkBi3
+         IkpopgJW6tEYOcO4TqChd7mwgwo+3LxCWgpX2CIxotUb9cOkUKlvUd0YhY+GgOHCKRiv
+         nuxdvjIcW7qXaDTCZajbTcppSKK6M2ISe+2njfNPTFFlw/3Vf5GN95vgMkEvx7ZEvZJ0
+         /M7qLise+ufpjOP4beHbH4QV2RJvgKbnPN7qYWiCOItTfQp6jQxdY7RymZIofWYquQa4
+         TPkg==
+X-Gm-Message-State: AOAM532K/loAOv8mD8YZylrv/FQP6Hwd6lm4DqqtyP4xYmD5M27Q7Isv
+        uemHa63QQpNVypY3qZil5J4=
+X-Google-Smtp-Source: ABdhPJxLUJ0GYLsqlZz5cZDdqiER7V9uPQqvmYJz0SB8Dr+ueI8v3MEWwS3QDMesQodJiBVvZZi/tQ==
+X-Received: by 2002:a17:906:ae10:: with SMTP id le16mr23039652ejb.296.1621861333704;
+        Mon, 24 May 2021 06:02:13 -0700 (PDT)
+Received: from skbuf ([188.26.52.84])
+        by smtp.gmail.com with ESMTPSA id gw6sm7493819ejb.86.2021.05.24.06.02.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 May 2021 06:02:13 -0700 (PDT)
+Date:   Mon, 24 May 2021 16:02:12 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        linux-spi@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [PATCH v3 net-next 1/2] net: dsa: sja1105: send multiple
+ spi_messages instead of using cs_change
+Message-ID: <20210524130212.g6jcf7y4grc64mki@skbuf>
+References: <20210520211657.3451036-1-olteanv@gmail.com>
+ <20210520211657.3451036-2-olteanv@gmail.com>
+ <20210524083529.GA4318@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210524083529.GA4318@sirena.org.uk>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 21 May 2021 22:19:13 +0200
-Ralf Schlatterbeck <rsc@runtux.com> wrote:
-
-Hi,
-
-> From: Mirko Vogt <mirko-dev|linux@nanl.de>
+On Mon, May 24, 2021 at 09:35:29AM +0100, Mark Brown wrote:
+> On Fri, May 21, 2021 at 12:16:56AM +0300, Vladimir Oltean wrote:
 > 
-> The current sun6i SPI implementation initializes the transfer too early,
-> resulting in SCK going high before the transfer. When using an additional
-> (gpio) chipselect with sun6i, the chipselect is asserted at a time when
-> clock is high, making the SPI transfer fail.
+> > The fact of the matter is that spi_max_message_size() has an ambiguous
+> > meaning if any non-final transfer has cs_change = true.
 > 
-> This is due to SUN6I_GBL_CTL_BUS_ENABLE being written into
-> SUN6I_GBL_CTL_REG at an early stage. Moving that to the transfer
-> function, hence, right before the transfer starts, mitigates that
-> problem.
-> 
-> Signed-off-by: Mirko Vogt <mirko-dev|linux@nanl.de>
-> Signed-off-by: Ralf Schlatterbeck <rsc@runtux.com>
+> This is not the case, spi_message_max_size() is a limit on the size of a
+> spi_message.
 
-Looks good to me now, thanks for the changes!
-
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-
-Some comments for future contributions (should not hold back that
-patch, I think):
-- Single patch set series don't bother to have a "1/1" after the
-  "PATCH".
-- You are expected to increase the version number when you send a new
-  version, to show that *this* is better than the previous post and
-  this version should be merged. Otherwise the maintainer might pick
-  the wrong version. "git format-patch -v2" and "git send-email" will
-  automatically take care of this.
-
-> ---
-> Updated patch with suggested improvements by Andre Przywara
-> For oscilloscope screenshots with/without the patch, see my blog post
-> https://blog.runtux.com/posts/2019/04/18/
-> or the discussion in the armbian forum at
-> https://forum.armbian.com/topic/4330-spi-gpio-chip-select-support/
-> (my logo there is a penguin).
-
-Please keep in mind that text after the dashes doesn't make it in it
-repo, so this information would be lost there. Also, in general links in
-commit messages are somewhat frowned upon, since they tend to 404
-sooner or later. So ideally you can put a condensed version of your
-findings into the commit message? Don't worry if it grows long, it is
-not uncommon to have a 2 page commit message for a one-liner patch.
-
-Cheers,
-Andre
-
-
-
-> 
->  drivers/spi/spi-sun6i.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
-> index cc8401980125..23ad052528db 100644
-> --- a/drivers/spi/spi-sun6i.c
-> +++ b/drivers/spi/spi-sun6i.c
-> @@ -379,6 +379,10 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
->  	}
->  
->  	sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
-> +	/* Finally enable the bus - doing so before might raise SCK to HIGH */
-> +	reg = sun6i_spi_read(sspi, SUN6I_GBL_CTL_REG);
-> +	reg |= SUN6I_GBL_CTL_BUS_ENABLE;
-> +	sun6i_spi_write(sspi, SUN6I_GBL_CTL_REG, reg);
->  
->  	/* Setup the transfer now... */
->  	if (sspi->tx_buf)
-> @@ -504,7 +508,7 @@ static int sun6i_spi_runtime_resume(struct device *dev)
->  	}
->  
->  	sun6i_spi_write(sspi, SUN6I_GBL_CTL_REG,
-> -			SUN6I_GBL_CTL_BUS_ENABLE | SUN6I_GBL_CTL_MASTER | SUN6I_GBL_CTL_TP);
-> +			SUN6I_GBL_CTL_MASTER | SUN6I_GBL_CTL_TP);
->  
->  	return 0;
->  
-
+That is true, although it doesn't mean much, since in the presence of
+cs_change, a spi_message has no correspondent in the physical world
+(i.e. you can't look at a logic analyzer dump and say "this spi_message
+was from this to this point"), and that is the problem really.
+Describing the controller's inability to send more than N SPI words with
+continuous chip select using spi_message_max_size() is what seems flawed
+to me, but it's what we have, and what I've adapted to.
