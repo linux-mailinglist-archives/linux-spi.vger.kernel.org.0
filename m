@@ -2,81 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7889338F177
-	for <lists+linux-spi@lfdr.de>; Mon, 24 May 2021 18:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16FD38F247
+	for <lists+linux-spi@lfdr.de>; Mon, 24 May 2021 19:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233280AbhEXQ0H (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 May 2021 12:26:07 -0400
-Received: from tux.runtux.com ([176.9.82.136]:35482 "EHLO tux.runtux.com"
+        id S233022AbhEXRco (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 May 2021 13:32:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59444 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233026AbhEXQ0H (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 24 May 2021 12:26:07 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by tux.runtux.com (Postfix) with ESMTP id 442096EFC0;
-        Mon, 24 May 2021 18:24:36 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at tux.runtux.com
-Received: from tux.runtux.com ([127.0.0.1])
-        by localhost (tux2.runtux.com [127.0.0.1]) (amavisd-new, port 10026)
-        with LMTP id 7nT45oZLbKUC; Mon, 24 May 2021 18:24:35 +0200 (CEST)
-Received: from bee.priv.zoo (62-99-217-90.static.upcbusiness.at [62.99.217.90])
-        (Authenticated sender: postmaster@runtux.com)
-        by tux.runtux.com (Postfix) with ESMTPSA id 6DB866EF06;
-        Mon, 24 May 2021 18:24:34 +0200 (CEST)
-Received: by bee.priv.zoo (Postfix, from userid 1002)
-        id EFA9846F; Mon, 24 May 2021 18:24:33 +0200 (CEST)
-Date:   Mon, 24 May 2021 18:24:33 +0200
-From:   Ralf Schlatterbeck <rsc@runtux.com>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Mirko Vogt <mirko-dev|linux@nanl.de>
-Subject: Re: [PATCH 1/1] spi-sun6i: Fix chipselect/clock bug
-Message-ID: <20210524162433.6nebp2k7u66zbkx3@runtux.com>
-References: <20210520100656.rgkdexdvrddt3upy@runtux.com>
- <20210521173011.1c602682@slackpad.fritz.box>
- <20210521201913.2gapcmrzynxekro7@runtux.com>
- <20210524133301.32c74794@slackpad.fritz.box>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210524133301.32c74794@slackpad.fritz.box>
-X-ray:  beware
-User-Agent: NeoMutt/20180716
+        id S232693AbhEXRcn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 24 May 2021 13:32:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 98655613EC;
+        Mon, 24 May 2021 17:31:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621877475;
+        bh=+Mj+vVcsjvsi2b5DDLHc+QvWb7XgEygO03z0YmvsFqA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=VGyVW0+aa9sgidxH/YD8Xm3VLgEEGA0bXklIZ/fHBUGKs54qhP0GGZGkQU1hcTzjG
+         FKmBoZVx1xwb+Dc7wSKXsMiKYvCXMBg4zcqB+es/YQQaCoy7lfVaYV029oZ8jAdFoU
+         e7eHAsKSer8Lygv1lY622hDBo0h0uQPKkiRDGpuo0luol/K6ULOASuImgKMNhQ2iT4
+         vUVP+eIWDhcSApO7hIZZiVW4S8KNzptLpKtCniuGk+SJqZ3F2U3PYkHclTYlSkApAE
+         tsk2xhPKXb7BGMMrd+GAeT3a1OB2k/3K+Ru9rkJ+b9CpH/mDTLQGX6lPX41CKQX3jE
+         XSdEDSfn4uv9g==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 84BA560A39;
+        Mon, 24 May 2021 17:31:15 +0000 (UTC)
+Subject: Re: [GIT PULL] SPI fixes for v5.13-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20210524090329.9BA7260698@mail.kernel.org>
+References: <20210524090329.9BA7260698@mail.kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20210524090329.9BA7260698@mail.kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.13-rc3
+X-PR-Tracked-Commit-Id: b4e46c9954ad55092502e1e8c44ceb9b6744bade
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f71d49e01be6bb0f96ca33402477162511988e9d
+Message-Id: <162187747548.9813.17004866093200772240.pr-tracker-bot@kernel.org>
+Date:   Mon, 24 May 2021 17:31:15 +0000
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, May 24, 2021 at 01:33:01PM +0100, Andre Przywara wrote:
-> - Single patch set series don't bother to have a "1/1" after the
->   "PATCH".
-> - You are expected to increase the version number when you send a new
->   version, to show that *this* is better than the previous post and
->   this version should be merged. Otherwise the maintainer might pick
->   the wrong version. "git format-patch -v2" and "git send-email" will
->   automatically take care of this.
+The pull request you sent on Mon, 24 May 2021 10:03:14 +0100:
 
-OK I'll keep that in mind.
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.13-rc3
 
-> Please keep in mind that text after the dashes doesn't make it in it
-> repo, so this information would be lost there. Also, in general links in
-> commit messages are somewhat frowned upon, since they tend to 404
-> sooner or later. So ideally you can put a condensed version of your
-> findings into the commit message? Don't worry if it grows long, it is
-> not uncommon to have a 2 page commit message for a one-liner patch.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f71d49e01be6bb0f96ca33402477162511988e9d
 
-This was intentional, the commit message is only the upper part.
-The Links were meant to give a lot of details why the patch fixes
-something. I think the commit message already explains the condensed
-findings. I've put this additional explanation text after the '---' to
-not need an additional Patch 0/1 email ;-)
+Thank you!
 
-Thanks!
-Ralf
 -- 
-Dr. Ralf Schlatterbeck                  Tel:   +43/2243/26465-16
-Open Source Consulting                  www:   www.runtux.com
-Reichergasse 131, A-3411 Weidling       email: office@runtux.com
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
