@@ -2,107 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1FDA38E516
-	for <lists+linux-spi@lfdr.de>; Mon, 24 May 2021 13:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1AE738E5FC
+	for <lists+linux-spi@lfdr.de>; Mon, 24 May 2021 14:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232814AbhEXLLt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 May 2021 07:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232784AbhEXLLq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 May 2021 07:11:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83812C061574
-        for <linux-spi@vger.kernel.org>; Mon, 24 May 2021 04:10:18 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ll8TF-00051P-01; Mon, 24 May 2021 13:10:05 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ll8TB-0003A0-Qt; Mon, 24 May 2021 13:10:01 +0200
-Date:   Mon, 24 May 2021 13:09:58 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-rtc@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Mark Brown <broonie@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        linux-clk@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        kernel@pengutronix.de,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        linux-spi@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v7 0/6] clk: provide new devm helpers for prepared and
- enabled clocks
-Message-ID: <20210524110958.ytcqzdgkqw6jeah5@pengutronix.de>
-References: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
+        id S232711AbhEXMBc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 May 2021 08:01:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47772 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232689AbhEXMBb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 24 May 2021 08:01:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0923B61289;
+        Mon, 24 May 2021 12:00:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621857603;
+        bh=PugRtYLJNoVJuEvwoeKNQow3dG8JFwjBLVMYbwXXycE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=crlAaypzhHUg2TwEU3g/0fBNcKX8Af851Aw1gxuZRty8raNgJGaOWXdIX0CCmMRv0
+         0PfjndO7Pyp6BEzSTfDhl+xGcINi6HFSaLxuVJZkvAfGgxhW3lwLfBGmnTZf5M73aR
+         tOQjQm3FzeUueC6ZuIvbIiwBRn0FIjqpb7rBOotXim1cMeUprww0u2RUhepswhNQEE
+         Xm3ShP+tX79UmncgWvEzaa7h8Q/935mycwm+P5IIu6/9Ej6j31ISZDGX6mCJ0Lb3Jb
+         XkuvJF9OrG27uZK5I6iChDCScnN1xALI0hQYeSk+Ue/yrsVVv6dTh1JNJLMg1Bqh59
+         8DkNOZxgVp8hg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Joe Burmeister <joe.burmeister@devtank.co.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-spi@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>
+Subject: Re: [PATCH] spi: bcm2835: Fix out-of-bounds access with more than 4 slaves
+Date:   Mon, 24 May 2021 12:59:47 +0100
+Message-Id: <162185759496.49562.15428024536374749432.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <75854affc1923309fde05e47494263bde73e5592.1621703210.git.lukas@wunner.de>
+References: <75854affc1923309fde05e47494263bde73e5592.1621703210.git.lukas@wunner.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7put5ziwze3atjbn"
-Content-Disposition: inline
-In-Reply-To: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Sat, 22 May 2021 19:49:50 +0200, Lukas Wunner wrote:
+> Commit 571e31fa60b3 ("spi: bcm2835: Cache CS register value for
+> ->prepare_message()") limited the number of slaves to 3 at compile-time.
+> The limitation was necessitated by a statically-sized array prepare_cs[]
+> in the driver private data which contains a per-slave register value.
+> 
+> The commit sought to enforce the limitation at run-time by setting the
+> controller's num_chipselect to 3:  Slaves with a higher chipselect are
+> rejected by spi_add_device().
+> 
+> [...]
 
---7put5ziwze3atjbn
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Mon, May 10, 2021 at 07:41:36PM +0200, Uwe Kleine-K=F6nig wrote:
-> compared to v6 I rebased to v5.13-rc1 (which resulted in a conflict in
-> the pwm-atmel patch), reformated the doc comments in patch 2 (as
-> suggested by Jonathan Cameron) and added the two Reviewed-by tags for
-> Jonathan Cameron.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Another two weeks without maintainer feedback. I didn't find a single
-mail by either Michael Turquette nor by Stephen Boyd on the linux-clk
-list on lore dating from this month. This patch set didn't get a reply
-since more than half a year.
+Thanks!
 
-Is the clk tree still maintained?  Would a pull request help? There are
-several people who expressed interest in this series and the cleanup it
-allows.
+[1/1] spi: bcm2835: Fix out-of-bounds access with more than 4 slaves
+      commit: 13817d466eb8713a1ffd254f537402f091d48444
 
-@Andrew: Would you be willing to take the first two patches if Michael
-and Stephen don't react in the near future?
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Best regards
-Uwe
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---7put5ziwze3atjbn
-Content-Type: application/pgp-signature; name="signature.asc"
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmCriYMACgkQwfwUeK3K
-7Amfngf9Ga4caGfJs9XN3dun54N+DsOf8YkklfYBiAAjCixalrvdei8QJA3djFos
-TTUqAA5pZSaT5RZBoXVn7bwDkIOTJHIKgD05+7uZL01XZ6LaO0b6euqhSnpUSWV5
-yB8DteZUg4+FPgxa8a0DPgfBq5dRr1ADn3U2YBAvZXUnpIk49chH5viOQ7CockL/
-28GJcNA94L87QFKtUMiw5myBy+ThHJiA5G8WKSXbSJB4JpI24B113XZH9lmCpxEg
-1H9Z23S68CuV+9uvzIZAEhDPgwrSon7ILGeszXEYgBmGE2O/mL9WPptcCkRS0H35
-DfScTBSMeU7Cw4q6705OV82DdPyFmQ==
-=0Iaw
------END PGP SIGNATURE-----
-
---7put5ziwze3atjbn--
+Thanks,
+Mark
