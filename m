@@ -2,41 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1AE738E5FC
-	for <lists+linux-spi@lfdr.de>; Mon, 24 May 2021 14:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8852038E5FE
+	for <lists+linux-spi@lfdr.de>; Mon, 24 May 2021 14:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232711AbhEXMBc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 May 2021 08:01:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47772 "EHLO mail.kernel.org"
+        id S232574AbhEXMBf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 May 2021 08:01:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47848 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232689AbhEXMBb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 24 May 2021 08:01:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0923B61289;
-        Mon, 24 May 2021 12:00:02 +0000 (UTC)
+        id S232494AbhEXMBf (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 24 May 2021 08:01:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 054216128B;
+        Mon, 24 May 2021 12:00:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621857603;
-        bh=PugRtYLJNoVJuEvwoeKNQow3dG8JFwjBLVMYbwXXycE=;
+        s=k20201202; t=1621857607;
+        bh=cpBDu2w/z1YJxw4Gy1TQTrhQ5gIYKChQPLjl+piDaUM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=crlAaypzhHUg2TwEU3g/0fBNcKX8Af851Aw1gxuZRty8raNgJGaOWXdIX0CCmMRv0
-         0PfjndO7Pyp6BEzSTfDhl+xGcINi6HFSaLxuVJZkvAfGgxhW3lwLfBGmnTZf5M73aR
-         tOQjQm3FzeUueC6ZuIvbIiwBRn0FIjqpb7rBOotXim1cMeUprww0u2RUhepswhNQEE
-         Xm3ShP+tX79UmncgWvEzaa7h8Q/935mycwm+P5IIu6/9Ej6j31ISZDGX6mCJ0Lb3Jb
-         XkuvJF9OrG27uZK5I6iChDCScnN1xALI0hQYeSk+Ue/yrsVVv6dTh1JNJLMg1Bqh59
-         8DkNOZxgVp8hg==
+        b=UBa2sCcgFrqRqqmB4d58KJGzx3lZsrYXbdKTKmdX6YDipl+gXK9BvNOSfgsnljE6E
+         ufiTyI6I6ySJ9sbb0EA69cLLtICqLeBemsNesOXJgZqHB54vW2Q8IThMjRFS37vVy7
+         bAINgwMOXFoPKb33cIfRKz5K2H2Nub6wE8vI0v6an9OIHHcvOi4gKldNDlV2xzmB+3
+         FZTQFe8/JhBlWd8nzZ2ec45i4L1uqlxjSL8xFdk3XUqX2VLsKv0t1PiwDHgSjb94Y/
+         cvPoDxqNmZTp1sxkgNa5ExWoEAcb0p9aDPU7CVZu+hBTgcRtMqFO/7a/m1B34dCpHS
+         u7SpKY5i2/3SA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Joe Burmeister <joe.burmeister@devtank.co.uk>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-spi@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>
-Subject: Re: [PATCH] spi: bcm2835: Fix out-of-bounds access with more than 4 slaves
-Date:   Mon, 24 May 2021 12:59:47 +0100
-Message-Id: <162185759496.49562.15428024536374749432.b4-ty@kernel.org>
+To:     David Bauer <mail@david-bauer.net>, linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH 1/2] spi: ath79: drop platform data
+Date:   Mon, 24 May 2021 12:59:48 +0100
+Message-Id: <162185759495.49562.10449348259264010206.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <75854affc1923309fde05e47494263bde73e5592.1621703210.git.lukas@wunner.de>
-References: <75854affc1923309fde05e47494263bde73e5592.1621703210.git.lukas@wunner.de>
+In-Reply-To: <20210522074453.39299-1-mail@david-bauer.net>
+References: <20210522074453.39299-1-mail@david-bauer.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -44,17 +39,9 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, 22 May 2021 19:49:50 +0200, Lukas Wunner wrote:
-> Commit 571e31fa60b3 ("spi: bcm2835: Cache CS register value for
-> ->prepare_message()") limited the number of slaves to 3 at compile-time.
-> The limitation was necessitated by a statically-sized array prepare_cs[]
-> in the driver private data which contains a per-slave register value.
-> 
-> The commit sought to enforce the limitation at run-time by setting the
-> controller's num_chipselect to 3:  Slaves with a higher chipselect are
-> rejected by spi_add_device().
-> 
-> [...]
+On Sat, 22 May 2021 09:44:52 +0200, David Bauer wrote:
+> The ath79 platform has been converted to pure OF. The platform data is
+> not needed anymore because of this.
 
 Applied to
 
@@ -62,8 +49,10 @@ Applied to
 
 Thanks!
 
-[1/1] spi: bcm2835: Fix out-of-bounds access with more than 4 slaves
-      commit: 13817d466eb8713a1ffd254f537402f091d48444
+[1/2] spi: ath79: drop platform data
+      commit: 42a7dfa26fc6df1624d7c2955200e5053dd0b818
+[2/2] spi: ath79: set number of chipselect lines
+      commit: ab053f48f9264ed5c714d0427b3115f121d4c476
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
