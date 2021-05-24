@@ -2,73 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8852038E5FE
-	for <lists+linux-spi@lfdr.de>; Mon, 24 May 2021 14:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3F038E6A3
+	for <lists+linux-spi@lfdr.de>; Mon, 24 May 2021 14:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232574AbhEXMBf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 May 2021 08:01:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47848 "EHLO mail.kernel.org"
+        id S232530AbhEXMeq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 May 2021 08:34:46 -0400
+Received: from foss.arm.com ([217.140.110.172]:41764 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232494AbhEXMBf (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 24 May 2021 08:01:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 054216128B;
-        Mon, 24 May 2021 12:00:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621857607;
-        bh=cpBDu2w/z1YJxw4Gy1TQTrhQ5gIYKChQPLjl+piDaUM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UBa2sCcgFrqRqqmB4d58KJGzx3lZsrYXbdKTKmdX6YDipl+gXK9BvNOSfgsnljE6E
-         ufiTyI6I6ySJ9sbb0EA69cLLtICqLeBemsNesOXJgZqHB54vW2Q8IThMjRFS37vVy7
-         bAINgwMOXFoPKb33cIfRKz5K2H2Nub6wE8vI0v6an9OIHHcvOi4gKldNDlV2xzmB+3
-         FZTQFe8/JhBlWd8nzZ2ec45i4L1uqlxjSL8xFdk3XUqX2VLsKv0t1PiwDHgSjb94Y/
-         cvPoDxqNmZTp1sxkgNa5ExWoEAcb0p9aDPU7CVZu+hBTgcRtMqFO/7a/m1B34dCpHS
-         u7SpKY5i2/3SA==
-From:   Mark Brown <broonie@kernel.org>
-To:     David Bauer <mail@david-bauer.net>, linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH 1/2] spi: ath79: drop platform data
-Date:   Mon, 24 May 2021 12:59:48 +0100
-Message-Id: <162185759495.49562.10449348259264010206.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210522074453.39299-1-mail@david-bauer.net>
-References: <20210522074453.39299-1-mail@david-bauer.net>
+        id S232401AbhEXMep (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 24 May 2021 08:34:45 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 49E77113E;
+        Mon, 24 May 2021 05:33:17 -0700 (PDT)
+Received: from slackpad.fritz.box (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B72CD3F719;
+        Mon, 24 May 2021 05:33:15 -0700 (PDT)
+Date:   Mon, 24 May 2021 13:33:01 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Ralf Schlatterbeck <rsc@runtux.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Mirko Vogt <mirko-dev|linux@nanl.de>
+Subject: Re: [PATCH 1/1] spi-sun6i: Fix chipselect/clock bug
+Message-ID: <20210524133301.32c74794@slackpad.fritz.box>
+In-Reply-To: <20210521201913.2gapcmrzynxekro7@runtux.com>
+References: <20210520100656.rgkdexdvrddt3upy@runtux.com>
+        <20210521173011.1c602682@slackpad.fritz.box>
+        <20210521201913.2gapcmrzynxekro7@runtux.com>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, 22 May 2021 09:44:52 +0200, David Bauer wrote:
-> The ath79 platform has been converted to pure OF. The platform data is
-> not needed anymore because of this.
+On Fri, 21 May 2021 22:19:13 +0200
+Ralf Schlatterbeck <rsc@runtux.com> wrote:
 
-Applied to
+Hi,
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> From: Mirko Vogt <mirko-dev|linux@nanl.de>
+> 
+> The current sun6i SPI implementation initializes the transfer too early,
+> resulting in SCK going high before the transfer. When using an additional
+> (gpio) chipselect with sun6i, the chipselect is asserted at a time when
+> clock is high, making the SPI transfer fail.
+> 
+> This is due to SUN6I_GBL_CTL_BUS_ENABLE being written into
+> SUN6I_GBL_CTL_REG at an early stage. Moving that to the transfer
+> function, hence, right before the transfer starts, mitigates that
+> problem.
+> 
+> Signed-off-by: Mirko Vogt <mirko-dev|linux@nanl.de>
+> Signed-off-by: Ralf Schlatterbeck <rsc@runtux.com>
 
-Thanks!
+Looks good to me now, thanks for the changes!
 
-[1/2] spi: ath79: drop platform data
-      commit: 42a7dfa26fc6df1624d7c2955200e5053dd0b818
-[2/2] spi: ath79: set number of chipselect lines
-      commit: ab053f48f9264ed5c714d0427b3115f121d4c476
+Reviewed-by: Andre Przywara <andre.przywara@arm.com>
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Some comments for future contributions (should not hold back that
+patch, I think):
+- Single patch set series don't bother to have a "1/1" after the
+  "PATCH".
+- You are expected to increase the version number when you send a new
+  version, to show that *this* is better than the previous post and
+  this version should be merged. Otherwise the maintainer might pick
+  the wrong version. "git format-patch -v2" and "git send-email" will
+  automatically take care of this.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+> ---
+> Updated patch with suggested improvements by Andre Przywara
+> For oscilloscope screenshots with/without the patch, see my blog post
+> https://blog.runtux.com/posts/2019/04/18/
+> or the discussion in the armbian forum at
+> https://forum.armbian.com/topic/4330-spi-gpio-chip-select-support/
+> (my logo there is a penguin).
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Please keep in mind that text after the dashes doesn't make it in it
+repo, so this information would be lost there. Also, in general links in
+commit messages are somewhat frowned upon, since they tend to 404
+sooner or later. So ideally you can put a condensed version of your
+findings into the commit message? Don't worry if it grows long, it is
+not uncommon to have a 2 page commit message for a one-liner patch.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Cheers,
+Andre
 
-Thanks,
-Mark
+
+
+> 
+>  drivers/spi/spi-sun6i.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-sun6i.c b/drivers/spi/spi-sun6i.c
+> index cc8401980125..23ad052528db 100644
+> --- a/drivers/spi/spi-sun6i.c
+> +++ b/drivers/spi/spi-sun6i.c
+> @@ -379,6 +379,10 @@ static int sun6i_spi_transfer_one(struct spi_master *master,
+>  	}
+>  
+>  	sun6i_spi_write(sspi, SUN6I_CLK_CTL_REG, reg);
+> +	/* Finally enable the bus - doing so before might raise SCK to HIGH */
+> +	reg = sun6i_spi_read(sspi, SUN6I_GBL_CTL_REG);
+> +	reg |= SUN6I_GBL_CTL_BUS_ENABLE;
+> +	sun6i_spi_write(sspi, SUN6I_GBL_CTL_REG, reg);
+>  
+>  	/* Setup the transfer now... */
+>  	if (sspi->tx_buf)
+> @@ -504,7 +508,7 @@ static int sun6i_spi_runtime_resume(struct device *dev)
+>  	}
+>  
+>  	sun6i_spi_write(sspi, SUN6I_GBL_CTL_REG,
+> -			SUN6I_GBL_CTL_BUS_ENABLE | SUN6I_GBL_CTL_MASTER | SUN6I_GBL_CTL_TP);
+> +			SUN6I_GBL_CTL_MASTER | SUN6I_GBL_CTL_TP);
+>  
+>  	return 0;
+>  
+
