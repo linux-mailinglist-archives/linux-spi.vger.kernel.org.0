@@ -2,149 +2,182 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E52A93929CE
-	for <lists+linux-spi@lfdr.de>; Thu, 27 May 2021 10:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03058392A12
+	for <lists+linux-spi@lfdr.de>; Thu, 27 May 2021 10:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235459AbhE0IrQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 27 May 2021 04:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235457AbhE0IrQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 May 2021 04:47:16 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1A0C061574;
-        Thu, 27 May 2021 01:45:42 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id s22so6758403ejv.12;
-        Thu, 27 May 2021 01:45:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/cQwyco3zF02M7nTlGhSF9ivKxGvmlRN3UcsYlTk9ek=;
-        b=fMYMAS3NLVBE7kNccGYVDzrj+orSZV945AABDdZdU+V2xrbX50R86WCxE4JduqlXtD
-         WMqlBAHnu6q9YqAzbYvEXz5CCTCsZM+zY7npUgCuZRrHGQdy/PvXiTFwT9S6eioVtH2/
-         speSEK2c4p0oq0x+wxwDDNG+J6dv1jflurLJnX1KpSJ+y08WWuFhD+MYY5XDjaAn7dOX
-         8VwmYB055k1KCJivPu+lhv52NY5xqpQ5vbPk4z3B8IQVfm2eciG+Y7xCSeMU4pfno4oo
-         Uotenboe1oZr/Yq4ueENY8l4l04tW7CdqnIIrcAwNrA/yVnPgMKsDgCP9lgYhjxfVo7D
-         MB8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/cQwyco3zF02M7nTlGhSF9ivKxGvmlRN3UcsYlTk9ek=;
-        b=NHHngSkNSJgmbZ+oVtetr2mfKNjgu2YY93GT1Op4B5EKO91xcdZOGWT9ucvzd0T8jn
-         05W4PNVlknFmL0Aa0fiHfiP6PB+RYu2y78Kj7ZvATmRSUJ0Yb1KTGyoNtVJwHEM4JHjH
-         95yGZXQYGIjTJCa7Vy1OOzVUUWaLUqHxtJR5KjbbellfxzgpuNOtteGrYQlFNB5M3A4d
-         Y3BguBIHYplJlaZbRERbZpRJ1KSbCt4CCph6s/GMAaogXzVEFHSIYhCXM7JNHLlmT/0B
-         QwhHl6SjXXmornq9Nr4WYbSWJD4I0zerWUBCfrxQEi9NPflWhqAaRJjcJZM7X5j/efPC
-         LvAA==
-X-Gm-Message-State: AOAM530WlliBKMbI+tUScBmKUG+d/eNojhorqv6jiyJUUd7+IOYmpybr
-        DkmgicT8jHL/IHZuRAjzsRBCMiN7M58=
-X-Google-Smtp-Source: ABdhPJwkKT3yCdVllDuFVEIsx0pKHPYmRjfnymTyyoKwBYTwr/381V/lD+9K/PWm0yvn6ddu13Jpcg==
-X-Received: by 2002:a17:906:5d0c:: with SMTP id g12mr2613378ejt.447.1622105140804;
-        Thu, 27 May 2021 01:45:40 -0700 (PDT)
-Received: from localhost.localdomain.at (62-178-82-229.cable.dynamic.surfer.at. [62.178.82.229])
-        by smtp.gmail.com with ESMTPSA id jy21sm654578ejc.13.2021.05.27.01.45.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 May 2021 01:45:40 -0700 (PDT)
-From:   Christian Gmeiner <christian.gmeiner@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH] spidev: add platform driver support
-Date:   Thu, 27 May 2021 10:45:15 +0200
-Message-Id: <20210527084531.18989-1-christian.gmeiner@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        id S235622AbhE0IwJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 27 May 2021 04:52:09 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:50034 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S235741AbhE0Ivt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 May 2021 04:51:49 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14R8mESg000871;
+        Thu, 27 May 2021 10:50:03 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=eDyQ3JK/tNpdJeDvgtw0zoHW5bVANv2eEW/8n7UMnwA=;
+ b=GFw8vx3qiIEqpCzYmE9V1lyV+Qr/2DnF9eEfCKiXY8/NcpzzYnCqM8xvKejlyul1BpeM
+ tDuqhQhUCaR9ODjaAwlVMb7Q14ZOFH9dn3AhSxJfYzbazi1wUdR3tK+IfkbYqad7G3Wq
+ O5FECvE82angwwdFZi+dLaNu/IAmoQ/RB3Gaf6jWC1mi9SIod6vcLXNOGm7+OLq/GO2F
+ wj7yw36Z5RBRqLykStPG8xLQXHnD6bksF4gvUoFuPxg+Jx6Rnc6bgUJKtYmtGVK6LnO4
+ 4BCTL8hjPURBVTayKF1fklVvh1ET9N/NfBI0S4osQG1Hj6AoKrugZPyfGxgxIgwD9oX0 vA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 38t0fr2d43-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 May 2021 10:50:03 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D61EE100034;
+        Thu, 27 May 2021 10:50:02 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C03A821BF67;
+        Thu, 27 May 2021 10:50:02 +0200 (CEST)
+Received: from localhost (10.75.127.48) by SFHDAG2NODE3.st.com (10.75.127.6)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 27 May 2021 10:50:02
+ +0200
+From:   <patrice.chotard@foss.st.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        <linux-mtd@lists.infradead.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <patrice.chotard@foss.st.com>, <christophe.kerello@foss.st.com>
+Subject: [PATCH v2] mtd: spinand: add SPI-NAND MTD resume handler
+Date:   Thu, 27 May 2021 10:49:59 +0200
+Message-ID: <20210527084959.1548-1-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-05-27_04:2021-05-26,2021-05-27 signatures=0
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This makes it possible to use spidev in combination with the
-MFD subsystem. The MFD subsystem add platform_driver devices.
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+After power up, all SPI NAND's blocks are locked. Only read operations
+are allowed, write and erase operations are forbidden.
+The SPI NAND framework unlocks all the blocks during its initialization.
+
+During a standby low power, the memory is powered down, losing its
+configuration.
+During the resume, the QSPI driver state is restored but the SPI NAND
+framework does not reconfigured the memory.
+
+This patch adds SPI-NAND MTD PM handlers for resume ops.
+SPI NAND resume op re-initializes SPI NAND flash to its probed state.
+
+It also adds a new helper spinand_block_unlock() which is
+called in spinand_init() and in spinand_mtd_resume().
+
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
 ---
- drivers/spi/spidev.c | 45 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+Changes in v2:
+  - Add helper spinand_block_unlock().
+  - Add spinand_ecc_enable() call.
+  - Remove some dev_err().
+  - Fix commit's title and message.
 
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index f56e0e975a46..fb7b483ff70d 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -25,6 +25,8 @@
- #include <linux/spi/spi.h>
- #include <linux/spi/spidev.h>
- 
-+#include <linux/platform_device.h>
-+
- #include <linux/uaccess.h>
- 
- 
-@@ -827,6 +829,40 @@ static struct spi_driver spidev_spi_driver = {
- 	 */
- };
- 
-+static int spidev_platform_probe(struct platform_device *pdev)
-+{
-+	struct device *parent = pdev->dev.parent;
-+	struct spi_device *spi;
-+
-+	if (strcmp(parent->bus->name, "spi"))
-+		return -ENODEV;
-+
-+	spi = to_spi_device(parent);
-+
-+	/* This only works if no drvdata is stored */
-+	if (spi_get_drvdata(spi)) {
-+		dev_err(&pdev->dev, "drvdata is not NULL\n");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return spidev_probe(spi);
-+}
-+
-+static int spidev_platform_remove(struct platform_device *pdev)
-+{
-+	struct spi_device *spi = to_spi_device(pdev->dev.parent);
-+
-+	return spidev_remove(spi);
-+}
-+
-+static struct platform_driver spidev_platfoem_driver = {
-+	.probe = spidev_platform_probe,
-+	.remove = spidev_platform_remove,
-+	.driver = {
-+		.name = "spidev",
-+	},
-+};
-+
- /*-------------------------------------------------------------------------*/
- 
- static int __init spidev_init(void)
-@@ -853,12 +889,21 @@ static int __init spidev_init(void)
- 		class_destroy(spidev_class);
- 		unregister_chrdev(SPIDEV_MAJOR, spidev_spi_driver.driver.name);
- 	}
-+
-+	status = platform_driver_register(&spidev_platfoem_driver);
-+	if (status < 0) {
-+		spi_unregister_driver(&spidev_spi_driver);
-+		class_destroy(spidev_class);
-+		unregister_chrdev(SPIDEV_MAJOR, spidev_spi_driver.driver.name);
-+	}
-+
- 	return status;
+ drivers/mtd/nand/spi/core.c | 62 +++++++++++++++++++++++++++++++------
+ 1 file changed, 53 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
+index 17f63f95f4a2..f77aeff11f43 100644
+--- a/drivers/mtd/nand/spi/core.c
++++ b/drivers/mtd/nand/spi/core.c
+@@ -1074,6 +1074,55 @@ static int spinand_detect(struct spinand_device *spinand)
+ 	return 0;
  }
- module_init(spidev_init);
  
- static void __exit spidev_exit(void)
++static int spinand_block_unlock(struct spinand_device *spinand)
++{
++	struct device *dev = &spinand->spimem->spi->dev;
++	struct nand_device *nand = spinand_to_nand(spinand);
++	int ret = 0, i;
++
++	for (i = 0; i < nand->memorg.ntargets; i++) {
++		ret = spinand_select_target(spinand, i);
++		if (ret)
++			return ret;
++
++		ret = spinand_lock_block(spinand, BL_ALL_UNLOCKED);
++		if (ret)
++			return ret;
++	}
++
++	return ret;
++}
++
++static void spinand_mtd_resume(struct mtd_info *mtd)
++{
++	struct spinand_device *spinand = mtd_to_spinand(mtd);
++	struct nand_device *nand = mtd_to_nanddev(mtd);
++	struct device *dev = &spinand->spimem->spi->dev;
++	int ret;
++
++	ret = spinand_reset_op(spinand);
++	if (ret)
++		return;
++
++	ret = spinand_init_quad_enable(spinand);
++	if (ret)
++		return;
++
++	ret = spinand_upd_cfg(spinand, CFG_OTP_ENABLE, 0);
++	if (ret)
++		return;
++
++	ret = spinand_manufacturer_init(spinand);
++	if (ret)
++		return;
++
++	ret = spinand_block_unlock(spinand);
++	if (ret)
++		return;
++
++	spinand_ecc_enable(spinand, false);
++}
++
+ static int spinand_init(struct spinand_device *spinand)
  {
-+	platform_driver_unregister(&spidev_platfoem_driver);
- 	spi_unregister_driver(&spidev_spi_driver);
- 	class_destroy(spidev_class);
- 	unregister_chrdev(SPIDEV_MAJOR, spidev_spi_driver.driver.name);
+ 	struct device *dev = &spinand->spimem->spi->dev;
+@@ -1137,15 +1186,9 @@ static int spinand_init(struct spinand_device *spinand)
+ 	}
+ 
+ 	/* After power up, all blocks are locked, so unlock them here. */
+-	for (i = 0; i < nand->memorg.ntargets; i++) {
+-		ret = spinand_select_target(spinand, i);
+-		if (ret)
+-			goto err_manuf_cleanup;
+-
+-		ret = spinand_lock_block(spinand, BL_ALL_UNLOCKED);
+-		if (ret)
+-			goto err_manuf_cleanup;
+-	}
++	ret = spinand_block_unlock(spinand);
++	if ret)
++		goto err_manuf_cleanup;
+ 
+ 	ret = nanddev_init(nand, &spinand_ops, THIS_MODULE);
+ 	if (ret)
+@@ -1167,6 +1210,7 @@ static int spinand_init(struct spinand_device *spinand)
+ 	mtd->_block_isreserved = spinand_mtd_block_isreserved;
+ 	mtd->_erase = spinand_mtd_erase;
+ 	mtd->_max_bad_blocks = nanddev_mtd_max_bad_blocks;
++	mtd->_resume = spinand_mtd_resume;
+ 
+ 	if (nand->ecc.engine) {
+ 		ret = mtd_ooblayout_count_freebytes(mtd);
 -- 
-2.31.1
+2.17.1
 
