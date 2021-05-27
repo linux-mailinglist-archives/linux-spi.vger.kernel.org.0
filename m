@@ -2,110 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4108392B78
-	for <lists+linux-spi@lfdr.de>; Thu, 27 May 2021 12:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 264FB392BA2
+	for <lists+linux-spi@lfdr.de>; Thu, 27 May 2021 12:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235950AbhE0KL6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 27 May 2021 06:11:58 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:33406 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236083AbhE0KL6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 May 2021 06:11:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=bNKkv9yJxBEyyDXHTUI6SZKiK1yjUg98KtcVpsPAERU=; b=Ad4mx7H7JX+wqD1k7MIb21sNfA
-        B346yA3Yw8MFkddKzY6LWlqbCZhUMzWbR/iezUataMYFiyL/ZNPjv7PBOLxhQuQDYmEEOhRGplLWZ
-        vbkn+rXHT4rom83k8KsYdSVirrzXy9WoKv0/LXhF0lIFROTosso3MrWBLdoEOcSpyqEE=;
-Received: from 94.196.90.140.threembb.co.uk ([94.196.90.140] helo=fitzroy.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1lmCy7-006Lnc-Ts; Thu, 27 May 2021 10:10:24 +0000
-Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id 8CF61D0DEC8; Thu, 27 May 2021 11:10:21 +0100 (BST)
-Date:   Thu, 27 May 2021 11:10:21 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Christian Gmeiner <christian.gmeiner@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spidev: add platform driver support
-Message-ID: <YK9wDd/+c1uAjwk7@sirena.org.uk>
-References: <20210527084531.18989-1-christian.gmeiner@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="r3c1S3HTTKrvMj23"
-Content-Disposition: inline
-In-Reply-To: <20210527084531.18989-1-christian.gmeiner@gmail.com>
-X-Cookie: A penny saved has not been spent.
+        id S236134AbhE0KWv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 27 May 2021 06:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48000 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236126AbhE0KWu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 May 2021 06:22:50 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AFCC061574;
+        Thu, 27 May 2021 03:21:16 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id v13-20020a17090abb8db029015f9f7d7290so5224926pjr.0;
+        Thu, 27 May 2021 03:21:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=M9vjB2pQJwpAIYbq+Dq4Bd8NFKd209BgSoVio/gkh5Q=;
+        b=U1aPrbrXYsfBQ5AMy7Pyq2dLOhOEElyFR5vP/1SAcUJppXtBkdX12LnwNXArNAvwdj
+         /iwiIKZC7Lx5RfZNYoF5o7Kuz2FSVsz+mGvx/Z1WFtG2WSjjslDpfYRv2sLUjDGmZWg2
+         y17Ka7kru1ShEkvWEkg6KhCjQy4F3uPYneaqliX0IjJLtGgscW3TrQdv8o/INys55NIH
+         RE3M8iYitG3Lt9dZu46w8fkppZ6m16FykrL7LqaBgbkzmQL4ZriIXSY8DnRFuKzJHPyj
+         GXPmIpjq7yN49iNBQNNuueSZrrn4jVtDY2XHtekhZrIfwaYiAhyDWAjwZ1gqSBLJ70bL
+         S0hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=M9vjB2pQJwpAIYbq+Dq4Bd8NFKd209BgSoVio/gkh5Q=;
+        b=cdsdhd0OijATSVR07NpCn+nmCq+w4UOqbFwVoQfByU4KKCNkCmD9MyERAVwA8AWsER
+         eonhxRupNPhrOXFZT65CBzsRd6S1lyv/Iq6hCbVVyJbU6WE8PZgOSSiYxihnyEhzrWWf
+         x2ecTINnyim+b6nnsz9htuFOUyi7nvGv1X9nAGEtQ9Ie44nysB0dTrIJ9ZAh/lyT3n2L
+         LIfnSLISJa64VRpnKq+tNksKox1Y7NsVRkUhImx7UMgoetYYDQqzfY9n2YuGknPdGmQr
+         3emff9CNbwkwg+KpDZqpYM2xpiGQb2RYtamsqi6lgFGYyxoSgEhjR6hVsuQclxF3cE+Z
+         EM9A==
+X-Gm-Message-State: AOAM531MH2qRDIhLc9LQJchGHlViT5JTrwidBJSrVyXUGN935itZvHTs
+        qBWZDjuzHdVhDqZXvoSx6uE=
+X-Google-Smtp-Source: ABdhPJwo6uAZzIJYKnrRee/oae2aKfU0LEq3jXIL3+2GAMuVbDpAUtzDAZXtgXLoowqraNwEszsZ1A==
+X-Received: by 2002:a17:90a:9105:: with SMTP id k5mr2994174pjo.48.1622110876010;
+        Thu, 27 May 2021 03:21:16 -0700 (PDT)
+Received: from localhost.members.linode.com ([2400:8902::f03c:92ff:fe55:8c1e])
+        by smtp.gmail.com with ESMTPSA id 15sm1659315pjt.17.2021.05.27.03.21.13
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 27 May 2021 03:21:15 -0700 (PDT)
+From:   zpershuai <zpershuai@gmail.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     zpershuai <zpershuai@gmail.com>
+Subject: [PATCH] spi: spi-zynq-qspi: Fix some wrong goto jumps & missing error code
+Date:   Thu, 27 May 2021 18:20:57 +0800
+Message-Id: <1622110857-21812-1-git-send-email-zpershuai@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+In zynq_qspi_probe function, when enable the device clock is done,
+the return of all the functions should goto the clk_dis_all label.
 
---r3c1S3HTTKrvMj23
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+If num_cs is not right then this should return a negative error
+code but currently it returns success.
 
-On Thu, May 27, 2021 at 10:45:15AM +0200, Christian Gmeiner wrote:
+Signed-off-by: zpershuai <zpershuai@gmail.com>
+---
+ drivers/spi/spi-zynq-qspi.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-> This makes it possible to use spidev in combination with the
-> MFD subsystem. The MFD subsystem add platform_driver devices.
+diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
+index 5a3d81c31d04..9262c6418463 100644
+--- a/drivers/spi/spi-zynq-qspi.c
++++ b/drivers/spi/spi-zynq-qspi.c
+@@ -678,14 +678,14 @@ static int zynq_qspi_probe(struct platform_device *pdev)
+ 	xqspi->irq = platform_get_irq(pdev, 0);
+ 	if (xqspi->irq <= 0) {
+ 		ret = -ENXIO;
+-		goto remove_master;
++		goto clk_dis_all;
+ 	}
+ 	ret = devm_request_irq(&pdev->dev, xqspi->irq, zynq_qspi_irq,
+ 			       0, pdev->name, xqspi);
+ 	if (ret != 0) {
+ 		ret = -ENXIO;
+ 		dev_err(&pdev->dev, "request_irq failed\n");
+-		goto remove_master;
++		goto clk_dis_all;
+ 	}
+ 
+ 	ret = of_property_read_u32(np, "num-cs",
+@@ -693,8 +693,9 @@ static int zynq_qspi_probe(struct platform_device *pdev)
+ 	if (ret < 0) {
+ 		ctlr->num_chipselect = 1;
+ 	} else if (num_cs > ZYNQ_QSPI_MAX_NUM_CS) {
++		ret = -EINVAL;
+ 		dev_err(&pdev->dev, "only 2 chip selects are available\n");
+-		goto remove_master;
++		goto clk_dis_all;
+ 	} else {
+ 		ctlr->num_chipselect = num_cs;
+ 	}
+-- 
+2.17.1
 
-This is a really strange thing to want to do so it needs a
-changelog which explains what the goal is and why this is a good
-way of accomplishing that goal.
-
-> +static int spidev_platform_probe(struct platform_device *pdev)
-> +{
-> +	struct device *parent = pdev->dev.parent;
-> +	struct spi_device *spi;
-> +
-> +	if (strcmp(parent->bus->name, "spi"))
-> +		return -ENODEV;
-> +
-> +	spi = to_spi_device(parent);
-> +
-> +	/* This only works if no drvdata is stored */
-> +	if (spi_get_drvdata(spi)) {
-> +		dev_err(&pdev->dev, "drvdata is not NULL\n");
-
-Why?
-
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return spidev_probe(spi);
-
-This really does not seem like a good idea, this is exposing the
-entire device to userspace in a completely unstructured fashion
-while there will be other drivers controlling the same hardware.
-That seems like it's asking for trouble, there's absolutely
-nothing ensuring that userspace doesn't break things the drivers
-are doing.
-
-I really don't think it makes sense to mix kernel drivers with
-unmoderated userspace access to the hardware in a single driver.
-
-> +static struct platform_driver spidev_platfoem_driver = {
-
-platfoem?
-
---r3c1S3HTTKrvMj23
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCvcAwACgkQJNaLcl1U
-h9CA1gf+LtoavMTh0+w1zEhGPCH+/YYD6y9bOFbrKoh5teYYrLwMur2ogt9d50Jw
-qlyqeieFrDY9hWjQcDBUnT/Lt6Z2FEZTWpp4fmvhQwLQodHHkkDbpUaTDbgHBX7E
-cP4jxSHa3TaecEMV+405QQmKCX6g7EQXVQygipgAcYU2bxnt89GGWxNSuSdU+0SS
-aWNNj/Mx21sgUzIJQ0fJ4CL8I8duBXGoj3eNj3V2WVui7dTShyZUUYYrVZ/3nQ1l
-UnZZX2G0YC/IARmpCPuNWtkG+S9WFgvkQ1aeC22cBkNK9d8oqFG1oonPusv0aJcc
-vVJcrTDQNbbLxo5iChzksEZENG0exw==
-=vDdo
------END PGP SIGNATURE-----
-
---r3c1S3HTTKrvMj23--
