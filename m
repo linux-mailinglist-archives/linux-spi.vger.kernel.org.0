@@ -2,170 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC61392B63
-	for <lists+linux-spi@lfdr.de>; Thu, 27 May 2021 12:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4108392B78
+	for <lists+linux-spi@lfdr.de>; Thu, 27 May 2021 12:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235768AbhE0KGM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Thu, 27 May 2021 06:06:12 -0400
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:52923 "EHLO
-        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236054AbhE0KGM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 May 2021 06:06:12 -0400
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 21B77C0008;
-        Thu, 27 May 2021 10:04:30 +0000 (UTC)
-Date:   Thu, 27 May 2021 12:04:23 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Pratyush Yadav <p.yadav@ti.com>
-Cc:     <patrice.chotard@foss.st.com>, Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        <linux-mtd@lists.infradead.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>
-Subject: Re: mtd: spinand: add spi nand mtd resume handler
-Message-ID: <20210527120423.7bf18966@xps13>
-In-Reply-To: <20210527100015.abxcroi23zyvcyzk@ti.com>
-References: <20210526153016.32653-1-patrice.chotard@foss.st.com>
-        <20210527100015.abxcroi23zyvcyzk@ti.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S235950AbhE0KL6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 27 May 2021 06:11:58 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:33406 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236083AbhE0KL6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 May 2021 06:11:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=bNKkv9yJxBEyyDXHTUI6SZKiK1yjUg98KtcVpsPAERU=; b=Ad4mx7H7JX+wqD1k7MIb21sNfA
+        B346yA3Yw8MFkddKzY6LWlqbCZhUMzWbR/iezUataMYFiyL/ZNPjv7PBOLxhQuQDYmEEOhRGplLWZ
+        vbkn+rXHT4rom83k8KsYdSVirrzXy9WoKv0/LXhF0lIFROTosso3MrWBLdoEOcSpyqEE=;
+Received: from 94.196.90.140.threembb.co.uk ([94.196.90.140] helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1lmCy7-006Lnc-Ts; Thu, 27 May 2021 10:10:24 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id 8CF61D0DEC8; Thu, 27 May 2021 11:10:21 +0100 (BST)
+Date:   Thu, 27 May 2021 11:10:21 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Christian Gmeiner <christian.gmeiner@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spidev: add platform driver support
+Message-ID: <YK9wDd/+c1uAjwk7@sirena.org.uk>
+References: <20210527084531.18989-1-christian.gmeiner@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="r3c1S3HTTKrvMj23"
+Content-Disposition: inline
+In-Reply-To: <20210527084531.18989-1-christian.gmeiner@gmail.com>
+X-Cookie: A penny saved has not been spent.
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Pratyush,
 
-Pratyush Yadav <p.yadav@ti.com> wrote on Thu, 27 May 2021 15:30:17
-+0530:
+--r3c1S3HTTKrvMj23
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> On 26/05/21 05:30PM, patrice.chotard@foss.st.com wrote:
-> > From: Christophe Kerello <christophe.kerello@foss.st.com>
-> > 
-> > After power up, all SPI NAND's blocks are locked. Only read operations
-> > are allowed, write and erase operations are forbidden.
-> > The SPI NAND framework unlocks all the blocks during its initialization.
-> > 
-> > During a standby low power, the memory is powered down, losing its
-> > configuration.
-> > During the resume, the QSPI driver state is restored but the SPI NAND
-> > framework does not reconfigured the memory.
-> > 
-> > This patch adds spi nand mtd PM handlers for resume ops.
-> > SPI NAND resume op re-initializes SPI NAND flash to its probed state.
-> > 
-> > Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
-> > Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-> > ---
-> >  drivers/mtd/nand/spi/core.c | 56 +++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 56 insertions(+)
-> > 
-> > diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
-> > index 17f63f95f4a2..6abaf874eb3f 100644
-> > --- a/drivers/mtd/nand/spi/core.c
-> > +++ b/drivers/mtd/nand/spi/core.c
-> > @@ -1074,6 +1074,61 @@ static int spinand_detect(struct spinand_device *spinand)
-> >  	return 0;
-> >  }
-> >  
-> > +static void spinand_mtd_resume(struct mtd_info *mtd)
-> > +{
-> > +	struct spinand_device *spinand = mtd_to_spinand(mtd);
-> > +	struct nand_device *nand = mtd_to_nanddev(mtd);
-> > +	struct device *dev = &spinand->spimem->spi->dev;
-> > +	int ret, i;
-> > +
-> > +	ret = spinand_reset_op(spinand);
-> > +	if (ret)
-> > +		return;
-> > +
-> > +	ret = spinand_init_quad_enable(spinand);
-> > +	if (ret) {
-> > +		dev_err(dev,
-> > +			"Failed to initialize the quad part (err = %d)\n",
-> > +			ret);
-> > +		return;
-> > +	}
-> > +
-> > +	ret = spinand_upd_cfg(spinand, CFG_OTP_ENABLE, 0);
-> > +	if (ret) {
-> > +		dev_err(dev,
-> > +			"Failed to updtae the OTP (err = %d)\n",
-> > +			ret);
-> > +		return;
-> > +	}  
-> 
-> Since you have reset the flash, this cache is invalid. You should reset 
-> the cache and re-populate it before using it in any way.
-> 
-> > +
-> > +	ret = spinand_manufacturer_init(spinand);
-> > +	if (ret) {
-> > +		dev_err(dev,
-> > +			"Failed to initialize the SPI NAND chip (err = %d)\n",
-> > +			ret);
-> > +		return;
-> > +	}
-> > +
-> > +	/* After power up, all blocks are locked, so unlock them here. */
-> > +	for (i = 0; i < nand->memorg.ntargets; i++) {
-> > +		ret = spinand_select_target(spinand, i);
-> > +		if (ret) {
-> > +			dev_err(dev,
-> > +				"Failed to select the target (err = %d)\n",
-> > +				ret);
-> > +			return;
-> > +		}
-> > +
-> > +		ret = spinand_lock_block(spinand, BL_ALL_UNLOCKED);
-> > +		if (ret) {
-> > +			dev_err(dev,
-> > +				"Failed to unlock block (err = %d)\n",
-> > +				ret);
-> > +			return;
-> > +		}
-> > +	}
-> > +}
-> > +  
-> 
-> Most of these seem to be copied from spinand_init(). I think it is 
-> better to create a common function that can be called from both 
-> spinand_init() and spinand_mtd_resume(). This way when someone adds 
-> something new to the init procedure, like support for some other modes, 
-> they won't have to remember to update it in two places.
+On Thu, May 27, 2021 at 10:45:15AM +0200, Christian Gmeiner wrote:
 
-Agreed, let's write a common helper for more than just the unlocking
-sequence (still in a separate patch).
+> This makes it possible to use spidev in combination with the
+> MFD subsystem. The MFD subsystem add platform_driver devices.
 
-> 
-> >  static int spinand_init(struct spinand_device *spinand)
-> >  {
-> >  	struct device *dev = &spinand->spimem->spi->dev;
-> > @@ -1167,6 +1222,7 @@ static int spinand_init(struct spinand_device *spinand)
-> >  	mtd->_block_isreserved = spinand_mtd_block_isreserved;
-> >  	mtd->_erase = spinand_mtd_erase;
-> >  	mtd->_max_bad_blocks = nanddev_mtd_max_bad_blocks;
-> > +	mtd->_resume = spinand_mtd_resume;  
-> 
-> Is it possible that the userspace can use this mtd device before the 
-> resume is finished? Is there a way to temporarily "pause" or unregister 
-> an mtd device?
+This is a really strange thing to want to do so it needs a
+changelog which explains what the goal is and why this is a good
+way of accomplishing that goal.
 
-I don't expect this to happen, I would expect the kernel to resume
-entirely before giving the hand to userspace, but I am not 100% sure of
-that neither.
+> +static int spidev_platform_probe(struct platform_device *pdev)
+> +{
+> +	struct device *parent = pdev->dev.parent;
+> +	struct spi_device *spi;
+> +
+> +	if (strcmp(parent->bus->name, "spi"))
+> +		return -ENODEV;
+> +
+> +	spi = to_spi_device(parent);
+> +
+> +	/* This only works if no drvdata is stored */
+> +	if (spi_get_drvdata(spi)) {
+> +		dev_err(&pdev->dev, "drvdata is not NULL\n");
 
-> 
-> >  
-> >  	if (nand->ecc.engine) {
-> >  		ret = mtd_ooblayout_count_freebytes(mtd);  
-> 
+Why?
 
-Thanks,
-Miquèl
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return spidev_probe(spi);
+
+This really does not seem like a good idea, this is exposing the
+entire device to userspace in a completely unstructured fashion
+while there will be other drivers controlling the same hardware.
+That seems like it's asking for trouble, there's absolutely
+nothing ensuring that userspace doesn't break things the drivers
+are doing.
+
+I really don't think it makes sense to mix kernel drivers with
+unmoderated userspace access to the hardware in a single driver.
+
+> +static struct platform_driver spidev_platfoem_driver = {
+
+platfoem?
+
+--r3c1S3HTTKrvMj23
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCvcAwACgkQJNaLcl1U
+h9CA1gf+LtoavMTh0+w1zEhGPCH+/YYD6y9bOFbrKoh5teYYrLwMur2ogt9d50Jw
+qlyqeieFrDY9hWjQcDBUnT/Lt6Z2FEZTWpp4fmvhQwLQodHHkkDbpUaTDbgHBX7E
+cP4jxSHa3TaecEMV+405QQmKCX6g7EQXVQygipgAcYU2bxnt89GGWxNSuSdU+0SS
+aWNNj/Mx21sgUzIJQ0fJ4CL8I8duBXGoj3eNj3V2WVui7dTShyZUUYYrVZ/3nQ1l
+UnZZX2G0YC/IARmpCPuNWtkG+S9WFgvkQ1aeC22cBkNK9d8oqFG1oonPusv0aJcc
+vVJcrTDQNbbLxo5iChzksEZENG0exw==
+=vDdo
+-----END PGP SIGNATURE-----
+
+--r3c1S3HTTKrvMj23--
