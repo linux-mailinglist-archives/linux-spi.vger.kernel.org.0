@@ -2,235 +2,149 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BFD3392894
-	for <lists+linux-spi@lfdr.de>; Thu, 27 May 2021 09:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E52A93929CE
+	for <lists+linux-spi@lfdr.de>; Thu, 27 May 2021 10:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbhE0Hd4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 27 May 2021 03:33:56 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:50886 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229648AbhE0Hd4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 May 2021 03:33:56 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14R7S9x5008726;
-        Thu, 27 May 2021 09:32:13 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : from : to
- : cc : references : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=24c4Vwg7qSyidiemQylRls5fhbt+xsjE5P99vDEQ0jc=;
- b=x4RlBKbA+cT9ETJelwG4EFwLaBj4cVjvJrJxU4Ybyb/+aVDWIQHYnkzapQhrshMHv/JF
- zIzjGQpvxAbi9XdpIa2uNvzYxEKE+VjGYcsFMXKIxycmQrFoRHOxiegHFr5mLBEjNycQ
- 3wgW1A9L8GL+2iZ9JGrm5W00DmnbibbLSenRFo1c+jkKMcntbZDNbvDp3ORVY1x/ze5i
- ZZKEmiPV73nkp2iY4FJgb2v1CwqeIN5bSlewY9YLFJ4qto0XbJPfShLKDKvJtvzaOXoH
- /o5iZr3xHfvddZkuzqRBVNwhWdal0AFz/fn/ZyqaV17LmalsmWmkIWo7yLy036nm/H09 gQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 38t0fr1w9q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 May 2021 09:32:13 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7132510002A;
-        Thu, 27 May 2021 09:32:12 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5E9872138FD;
-        Thu, 27 May 2021 09:32:12 +0200 (CEST)
-Received: from lmecxl0573.lme.st.com (10.75.127.47) by SFHDAG2NODE3.st.com
- (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 27 May
- 2021 09:32:11 +0200
-Subject: Re: [Linux-stm32] mtd: spinand: add spi nand mtd resume handler
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-kernel@vger.kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-spi@vger.kernel.org>, Mark Brown <broonie@kernel.org>,
-        <linux-mtd@lists.infradead.org>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20210526153016.32653-1-patrice.chotard@foss.st.com>
- <20210526174224.2b8714fc@xps13>
- <bbfc7b31-c49c-e52d-0ea6-20ec81317cac@foss.st.com>
-Message-ID: <0072d5e7-3cf8-a8bb-569a-1ea1ba68bbae@foss.st.com>
-Date:   Thu, 27 May 2021 09:32:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S235459AbhE0IrQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 27 May 2021 04:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235457AbhE0IrQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 May 2021 04:47:16 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1A0C061574;
+        Thu, 27 May 2021 01:45:42 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id s22so6758403ejv.12;
+        Thu, 27 May 2021 01:45:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/cQwyco3zF02M7nTlGhSF9ivKxGvmlRN3UcsYlTk9ek=;
+        b=fMYMAS3NLVBE7kNccGYVDzrj+orSZV945AABDdZdU+V2xrbX50R86WCxE4JduqlXtD
+         WMqlBAHnu6q9YqAzbYvEXz5CCTCsZM+zY7npUgCuZRrHGQdy/PvXiTFwT9S6eioVtH2/
+         speSEK2c4p0oq0x+wxwDDNG+J6dv1jflurLJnX1KpSJ+y08WWuFhD+MYY5XDjaAn7dOX
+         8VwmYB055k1KCJivPu+lhv52NY5xqpQ5vbPk4z3B8IQVfm2eciG+Y7xCSeMU4pfno4oo
+         Uotenboe1oZr/Yq4ueENY8l4l04tW7CdqnIIrcAwNrA/yVnPgMKsDgCP9lgYhjxfVo7D
+         MB8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/cQwyco3zF02M7nTlGhSF9ivKxGvmlRN3UcsYlTk9ek=;
+        b=NHHngSkNSJgmbZ+oVtetr2mfKNjgu2YY93GT1Op4B5EKO91xcdZOGWT9ucvzd0T8jn
+         05W4PNVlknFmL0Aa0fiHfiP6PB+RYu2y78Kj7ZvATmRSUJ0Yb1KTGyoNtVJwHEM4JHjH
+         95yGZXQYGIjTJCa7Vy1OOzVUUWaLUqHxtJR5KjbbellfxzgpuNOtteGrYQlFNB5M3A4d
+         Y3BguBIHYplJlaZbRERbZpRJ1KSbCt4CCph6s/GMAaogXzVEFHSIYhCXM7JNHLlmT/0B
+         QwhHl6SjXXmornq9Nr4WYbSWJD4I0zerWUBCfrxQEi9NPflWhqAaRJjcJZM7X5j/efPC
+         LvAA==
+X-Gm-Message-State: AOAM530WlliBKMbI+tUScBmKUG+d/eNojhorqv6jiyJUUd7+IOYmpybr
+        DkmgicT8jHL/IHZuRAjzsRBCMiN7M58=
+X-Google-Smtp-Source: ABdhPJwkKT3yCdVllDuFVEIsx0pKHPYmRjfnymTyyoKwBYTwr/381V/lD+9K/PWm0yvn6ddu13Jpcg==
+X-Received: by 2002:a17:906:5d0c:: with SMTP id g12mr2613378ejt.447.1622105140804;
+        Thu, 27 May 2021 01:45:40 -0700 (PDT)
+Received: from localhost.localdomain.at (62-178-82-229.cable.dynamic.surfer.at. [62.178.82.229])
+        by smtp.gmail.com with ESMTPSA id jy21sm654578ejc.13.2021.05.27.01.45.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 May 2021 01:45:40 -0700 (PDT)
+From:   Christian Gmeiner <christian.gmeiner@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH] spidev: add platform driver support
+Date:   Thu, 27 May 2021 10:45:15 +0200
+Message-Id: <20210527084531.18989-1-christian.gmeiner@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <bbfc7b31-c49c-e52d-0ea6-20ec81317cac@foss.st.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG3NODE1.st.com (10.75.127.7) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-05-27_02:2021-05-26,2021-05-27 signatures=0
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 5/27/21 9:01 AM, Patrice CHOTARD wrote:
-> Hi Miquel
-> 
-> On 5/26/21 5:42 PM, Miquel Raynal wrote:
->> Hello,
->>
->> <patrice.chotard@foss.st.com> wrote on Wed, 26 May 2021 17:30:16 +0200:
->>
->>> From: Christophe Kerello <christophe.kerello@foss.st.com>
->>
->> Would you mind to use "add SPI-NAND MTD resume handler" as title? (with
->> upper case letters)
-> 
-> Ok
-> 
->>
->>> After power up, all SPI NAND's blocks are locked. Only read operations
->>> are allowed, write and erase operations are forbidden.
->>> The SPI NAND framework unlocks all the blocks during its initialization.
->>>
->>> During a standby low power, the memory is powered down, losing its
->>> configuration.
->>> During the resume, the QSPI driver state is restored but the SPI NAND
->>> framework does not reconfigured the memory.
->>>
->>> This patch adds spi nand mtd PM handlers for resume ops.
->>
->> ditto             ^^^^^^^^^^^^
-> 
-> Ok
-> 
->>
->>> SPI NAND resume op re-initializes SPI NAND flash to its probed state.
->>>
->>> Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
->>> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
->>> ---
->>>  drivers/mtd/nand/spi/core.c | 56 +++++++++++++++++++++++++++++++++++++
->>>  1 file changed, 56 insertions(+)
->>>
->>> diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
->>> index 17f63f95f4a2..6abaf874eb3f 100644
->>> --- a/drivers/mtd/nand/spi/core.c
->>> +++ b/drivers/mtd/nand/spi/core.c
->>> @@ -1074,6 +1074,61 @@ static int spinand_detect(struct spinand_device *spinand)
->>>  	return 0;
->>>  }
->>>  
->>> +static void spinand_mtd_resume(struct mtd_info *mtd)
->>> +{
->>> +	struct spinand_device *spinand = mtd_to_spinand(mtd);
->>> +	struct nand_device *nand = mtd_to_nanddev(mtd);
->>> +	struct device *dev = &spinand->spimem->spi->dev;
->>> +	int ret, i;
->>> +
->>> +	ret = spinand_reset_op(spinand);
->>> +	if (ret)
->>> +		return;
->>> +
->>> +	ret = spinand_init_quad_enable(spinand);
->>> +	if (ret) {
->>> +		dev_err(dev,
->>> +			"Failed to initialize the quad part (err = %d)\n",
->>
->> quad part? what about "Failed to resume the quad state" or something
->> alike?
-> 
-> Agree, i will update this
+This makes it possible to use spidev in combination with the
+MFD subsystem. The MFD subsystem add platform_driver devices.
 
-I will even remove the dev_err(), as in spinand_init() 
-no dev_err() was added on spinand_init_quad_enable() error.
+Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+---
+ drivers/spi/spidev.c | 45 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-> 
->>
->>> +			ret);
->>> +		return;
->>> +	}
->>> +
->>> +	ret = spinand_upd_cfg(spinand, CFG_OTP_ENABLE, 0);
->>> +	if (ret) {
->>> +		dev_err(dev,
->>> +			"Failed to updtae the OTP (err = %d)\n",
->>
->> update
-> 
-> ok
+diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+index f56e0e975a46..fb7b483ff70d 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -25,6 +25,8 @@
+ #include <linux/spi/spi.h>
+ #include <linux/spi/spidev.h>
+ 
++#include <linux/platform_device.h>
++
+ #include <linux/uaccess.h>
+ 
+ 
+@@ -827,6 +829,40 @@ static struct spi_driver spidev_spi_driver = {
+ 	 */
+ };
+ 
++static int spidev_platform_probe(struct platform_device *pdev)
++{
++	struct device *parent = pdev->dev.parent;
++	struct spi_device *spi;
++
++	if (strcmp(parent->bus->name, "spi"))
++		return -ENODEV;
++
++	spi = to_spi_device(parent);
++
++	/* This only works if no drvdata is stored */
++	if (spi_get_drvdata(spi)) {
++		dev_err(&pdev->dev, "drvdata is not NULL\n");
++		return -EOPNOTSUPP;
++	}
++
++	return spidev_probe(spi);
++}
++
++static int spidev_platform_remove(struct platform_device *pdev)
++{
++	struct spi_device *spi = to_spi_device(pdev->dev.parent);
++
++	return spidev_remove(spi);
++}
++
++static struct platform_driver spidev_platfoem_driver = {
++	.probe = spidev_platform_probe,
++	.remove = spidev_platform_remove,
++	.driver = {
++		.name = "spidev",
++	},
++};
++
+ /*-------------------------------------------------------------------------*/
+ 
+ static int __init spidev_init(void)
+@@ -853,12 +889,21 @@ static int __init spidev_init(void)
+ 		class_destroy(spidev_class);
+ 		unregister_chrdev(SPIDEV_MAJOR, spidev_spi_driver.driver.name);
+ 	}
++
++	status = platform_driver_register(&spidev_platfoem_driver);
++	if (status < 0) {
++		spi_unregister_driver(&spidev_spi_driver);
++		class_destroy(spidev_class);
++		unregister_chrdev(SPIDEV_MAJOR, spidev_spi_driver.driver.name);
++	}
++
+ 	return status;
+ }
+ module_init(spidev_init);
+ 
+ static void __exit spidev_exit(void)
+ {
++	platform_driver_unregister(&spidev_platfoem_driver);
+ 	spi_unregister_driver(&spidev_spi_driver);
+ 	class_destroy(spidev_class);
+ 	unregister_chrdev(SPIDEV_MAJOR, spidev_spi_driver.driver.name);
+-- 
+2.31.1
 
-ditto
-
-> 
->>
->>> +			ret);
->>> +		return;
->>> +	}
->>> +
->>> +	ret = spinand_manufacturer_init(spinand);
->>> +	if (ret) {
->>> +		dev_err(dev,
->>> +			"Failed to initialize the SPI NAND chip (err = %d)\n",
->>> +			ret);
->>> +		return;
->>> +	}
->>> +
->>> +	/* After power up, all blocks are locked, so unlock them here. */
->>> +	for (i = 0; i < nand->memorg.ntargets; i++) {
->>> +		ret = spinand_select_target(spinand, i);
->>> +		if (ret) {
->>> +			dev_err(dev,
->>> +				"Failed to select the target (err = %d)\n",
->>> +				ret);
-
-ditto
-
->>> +			return;
->>> +		}
->>> +
->>> +		ret = spinand_lock_block(spinand, BL_ALL_UNLOCKED);
->>> +		if (ret) {
->>> +			dev_err(dev,
->>> +				"Failed to unlock block (err = %d)\n",
->>> +				ret);
-
-ditto
-
->>> +			return;
->>> +		}
->>> +	}
->>
->> I bet this would deserve a helper as this is the exact same peace of
->> code that is being run in spinnand_init()?
-> 
-> I will add a new function spinand_block_unlock(struct spinand_device *spinand)
-> 
->>
->> At the very least I think that spinand_ecc_enable(spinand, false);
->> should be called.
-> I will add it. 
-> 
->>
->> Ideally, a resume operation should be provided by ECC engines, but that
->> can be added later.
->>
->>> +}
->>> +
->>>  static int spinand_init(struct spinand_device *spinand)
->>>  {
->>>  	struct device *dev = &spinand->spimem->spi->dev;
->>> @@ -1167,6 +1222,7 @@ static int spinand_init(struct spinand_device *spinand)
->>>  	mtd->_block_isreserved = spinand_mtd_block_isreserved;
->>>  	mtd->_erase = spinand_mtd_erase;
->>>  	mtd->_max_bad_blocks = nanddev_mtd_max_bad_blocks;
->>> +	mtd->_resume = spinand_mtd_resume;
->>>  
->>>  	if (nand->ecc.engine) {
->>>  		ret = mtd_ooblayout_count_freebytes(mtd);
->>
->> Thanks,
->> Miquèl
->>
-> Thanks
-> Patrice
-> _______________________________________________
-> Linux-stm32 mailing list
-> Linux-stm32@st-md-mailman.stormreply.com
-> https://st-md-mailman.stormreply.com/mailman/listinfo/linux-stm32
-> 
