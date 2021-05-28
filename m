@@ -2,30 +2,30 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3927393D0E
-	for <lists+linux-spi@lfdr.de>; Fri, 28 May 2021 08:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 597D5393D10
+	for <lists+linux-spi@lfdr.de>; Fri, 28 May 2021 08:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbhE1GZU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 May 2021 02:25:20 -0400
-Received: from bmailout3.hostsharing.net ([176.9.242.62]:37455 "EHLO
+        id S230189AbhE1G2C (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 May 2021 02:28:02 -0400
+Received: from bmailout3.hostsharing.net ([176.9.242.62]:52911 "EHLO
         bmailout3.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbhE1GZT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 May 2021 02:25:19 -0400
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        with ESMTP id S230180AbhE1G2C (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 May 2021 02:28:02 -0400
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout3.hostsharing.net (Postfix) with ESMTPS id C43F1100FC065;
-        Fri, 28 May 2021 08:23:43 +0200 (CEST)
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 731E41002B657;
+        Fri, 28 May 2021 08:26:27 +0200 (CEST)
 Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 8AABD132D6A; Fri, 28 May 2021 08:23:43 +0200 (CEST)
-Date:   Fri, 28 May 2021 08:23:43 +0200
+        id 410BD13B53A; Fri, 28 May 2021 08:26:27 +0200 (CEST)
+Date:   Fri, 28 May 2021 08:26:27 +0200
 From:   Lukas Wunner <lukas@wunner.de>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
 Cc:     "William A. Kennington III" <wak@google.com>,
         Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH v4.9-stable] spi: Fix use-after-free with devm_spi_alloc_*
-Message-ID: <20210528062343.GA29343@wunner.de>
+Subject: [PATCH v4.4-stable] spi: Fix use-after-free with devm_spi_alloc_*
+Message-ID: <20210528062627.GB29343@wunner.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -36,7 +36,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Dear Greg, Dear Sasha,
 
-please consider applying the patch below to v4.9-stable.
+please consider applying the patch below to v4.4-stable.
 
 It is a backport of upstream commit 794aaf01444d, which has already
 been applied to all stable kernels going back to v4.14.
@@ -47,6 +47,7 @@ Lukas
 
 -- >8 --
 
+From 429a36a750568599640ae8b9e603d639181fee9a Mon Sep 17 00:00:00 2001
 From: "William A. Kennington III" <wak@google.com>
 Date: Wed, 7 Apr 2021 02:55:27 -0700
 Subject: [PATCH] spi: Fix use-after-free with devm_spi_alloc_*
@@ -83,7 +84,7 @@ Fixes: 5e844cc37a5c ("spi: Introduce device-managed SPI controller allocation")
 Signed-off-by: William A. Kennington III <wak@google.com>
 Link: https://lore.kernel.org/r/20210407095527.2771582-1-wak@google.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
-[lukas: backport to v4.9.270]
+[lukas: backport to v4.4.270]
 Signed-off-by: Lukas Wunner <lukas@wunner.de>
 ---
  drivers/spi/spi.c       | 9 ++-------
@@ -91,10 +92,10 @@ Signed-off-by: Lukas Wunner <lukas@wunner.de>
  2 files changed, 5 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index f0ba5eb26128..84e2296c45a2 100644
+index e85feee750e3..f743b95d5171 100644
 --- a/drivers/spi/spi.c
 +++ b/drivers/spi/spi.c
-@@ -1869,6 +1869,7 @@ struct spi_master *devm_spi_alloc_master(struct device *dev, unsigned int size)
+@@ -1762,6 +1762,7 @@ struct spi_master *devm_spi_alloc_master(struct device *dev, unsigned int size)
  
  	master = spi_alloc_master(dev, size);
  	if (master) {
@@ -102,7 +103,7 @@ index f0ba5eb26128..84e2296c45a2 100644
  		*ptr = master;
  		devres_add(dev, ptr);
  	} else {
-@@ -2059,11 +2060,6 @@ int devm_spi_register_master(struct device *dev, struct spi_master *master)
+@@ -1951,11 +1952,6 @@ int devm_spi_register_master(struct device *dev, struct spi_master *master)
  }
  EXPORT_SYMBOL_GPL(devm_spi_register_master);
  
@@ -114,7 +115,7 @@ index f0ba5eb26128..84e2296c45a2 100644
  static int __unregister(struct device *dev, void *null)
  {
  	spi_unregister_device(to_spi_device(dev));
-@@ -2102,8 +2098,7 @@ void spi_unregister_master(struct spi_master *master)
+@@ -1994,8 +1990,7 @@ void spi_unregister_master(struct spi_master *master)
  	/* Release the last reference on the master if its driver
  	 * has not yet been converted to devm_spi_alloc_master().
  	 */
@@ -125,19 +126,19 @@ index f0ba5eb26128..84e2296c45a2 100644
  
  	if (IS_ENABLED(CONFIG_SPI_DYNAMIC))
 diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 8470695e5dd7..9c8445f1af0c 100644
+index f5d387140c46..da487e905337 100644
 --- a/include/linux/spi/spi.h
 +++ b/include/linux/spi/spi.h
-@@ -443,6 +443,9 @@ struct spi_master {
+@@ -425,6 +425,9 @@ struct spi_master {
  #define SPI_MASTER_MUST_RX      BIT(3)		/* requires rx */
  #define SPI_MASTER_MUST_TX      BIT(4)		/* requires tx */
  
 +	/* flag indicating this is a non-devres managed controller */
 +	bool			devm_allocated;
 +
- 	/*
- 	 * on some hardware transfer / message size may be constrained
- 	 * the limit may depend on device transfer settings
+ 	/* lock and mutex for SPI bus locking */
+ 	spinlock_t		bus_lock_spinlock;
+ 	struct mutex		bus_lock_mutex;
 -- 
 2.31.1
 
