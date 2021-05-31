@@ -2,40 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6473C3967B2
-	for <lists+linux-spi@lfdr.de>; Mon, 31 May 2021 20:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F7B3967B4
+	for <lists+linux-spi@lfdr.de>; Mon, 31 May 2021 20:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232258AbhEaSUO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 31 May 2021 14:20:14 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:59218 "EHLO
+        id S232319AbhEaSUS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 31 May 2021 14:20:18 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:59252 "EHLO
         fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbhEaSUE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 May 2021 14:20:04 -0400
+        with ESMTP id S232136AbhEaSUP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 May 2021 14:20:15 -0400
 Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 14VIII42078853;
-        Mon, 31 May 2021 13:18:18 -0500
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 14VIILv5078859;
+        Mon, 31 May 2021 13:18:21 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1622485098;
-        bh=Lbvml4LO8u8mq4+Jsg0QJUcjZqcDZe28EeBi6UXRwK4=;
+        s=ti-com-17Q1; t=1622485101;
+        bh=Sl31BUmX3/FJulfUqY3PNC/Qjz+pJuWiNkIVYGd5qs0=;
         h=From:To:Subject:Date:In-Reply-To:References;
-        b=T0eSUP4XQdt2We3MYdi4iGZvCClwsiw2TA0njJIv6Y3Qr59rxz4tcuHAAV0BARN1l
-         57lb8w7sZgpuW+/lTC1VzH0kHH/6zHXNPMMJtt0tCs4O+N4YI6smkhcpuzF/a78aAC
-         94k5kJGfgkakrzF9kYXnF0XYER7WzPyf4aeFxi/U=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 14VIIIc9028535
+        b=NfuXKZimM57kbNyutIUTJM6AQmbAJeZSoNqqHrlLgWl4z9pvTMaJl3/+9eXFtRs3z
+         g2Y+W0xB5DH8z4j+ETzjcWRrEMcLFd+xTtADNU10HcNjTnsLAf/xk/WE1OG3JJtRXL
+         KdvAAs3J4ejOE+WFsF4pYzDBzu83kTs9mr1RiPEc=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 14VIIL4i028558
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 31 May 2021 13:18:18 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 31 May 2021 13:18:21 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Mon, 31
- May 2021 13:18:17 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ May 2021 13:18:20 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Mon, 31 May 2021 13:18:17 -0500
+ Frontend Transport; Mon, 31 May 2021 13:18:20 -0500
 Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 14VIHwdK118543;
-        Mon, 31 May 2021 13:18:15 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 14VIHwdL118543;
+        Mon, 31 May 2021 13:18:18 -0500
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Michael Walle <michael@walle.cc>,
@@ -46,9 +46,9 @@ To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Mark Brown <broonie@kernel.org>,
         <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <linux-spi@vger.kernel.org>
-Subject: [PATCH v2 5/6] mtd: spi-nor: core: avoid odd length/address reads on 8D-8D-8D mode
-Date:   Mon, 31 May 2021 23:47:56 +0530
-Message-ID: <20210531181757.19458-6-p.yadav@ti.com>
+Subject: [PATCH v2 6/6] mtd: spi-nor: core: avoid odd length/address writes in 8D-8D-8D mode
+Date:   Mon, 31 May 2021 23:47:57 +0530
+Message-ID: <20210531181757.19458-7-p.yadav@ti.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210531181757.19458-1-p.yadav@ti.com>
 References: <20210531181757.19458-1-p.yadav@ti.com>
@@ -60,18 +60,14 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Octal DTR capable flashes like Micron Xcella reads cannot start or
-end at an odd address in Octal DTR mode. Extra bytes need to be read at
-the start or end to make sure both the start address and length remain
-even.
-
-To avoid allocating too much extra memory, thereby putting unnecessary
-memory pressure on the system, the temporary buffer containing the extra
-padding bytes is capped at PAGE_SIZE bytes. The rest of the 2-byte
-aligned part should be read directly in the main buffer.
+On Octal DTR capable flashes like Micron Xcella the writes cannot start
+or end at an odd address in Octal DTR mode. Extra 0xff bytes need to be
+appended or prepended to make sure the start address and end address are
+even. 0xff is used because on NOR flashes a program operation can only
+flip bits from 1 to 0, not the other way round. 0 to 1 flip needs to
+happen via erases.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-Reviewed-by: Michael Walle <michael@walle.cc>
 
 ---
 
@@ -80,58 +76,48 @@ Changes in v2:
 - Add a comment that ret < 0 after adjusting for extra bytes is not
   possible, and add a WARN_ON() on the condition to make sure it gets
   spotted quickly when some change triggers this bug.
-- Add Michael's R-by.
 
- drivers/mtd/spi-nor/core.c | 82 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 81 insertions(+), 1 deletion(-)
+ drivers/mtd/spi-nor/core.c | 73 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 72 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index d521ca577884..a696af6a1b71 100644
+index a696af6a1b71..d2a7e16e667d 100644
 --- a/drivers/mtd/spi-nor/core.c
 +++ b/drivers/mtd/spi-nor/core.c
-@@ -1904,6 +1904,83 @@ static const struct flash_info *spi_nor_read_id(struct spi_nor *nor)
- 	return ERR_PTR(-ENODEV);
+@@ -2023,6 +2023,72 @@ static int spi_nor_read(struct mtd_info *mtd, loff_t from, size_t len,
+ 	return ret;
  }
  
 +/*
-+ * On Octal DTR capable flashes like Micron Xcella reads cannot start or
-+ * end at an odd address in Octal DTR mode. Extra bytes need to be read
-+ * at the start or end to make sure both the start address and length
-+ * remain even.
++ * On Octal DTR capable flashes like Micron Xcella the writes cannot start or
++ * end at an odd address in Octal DTR mode. Extra 0xff bytes need to be appended
++ * or prepended to make sure the start address and end address are even. 0xff is
++ * used because on NOR flashes a program operation can only flip bits from 1 to
++ * 0, not the other way round. 0 to 1 flip needs to happen via erases.
 + */
-+static int spi_nor_octal_dtr_read(struct spi_nor *nor, loff_t from, size_t len,
-+				  u_char *buf)
++static int spi_nor_octal_dtr_write(struct spi_nor *nor, loff_t to, size_t len,
++				   const u8 *buf)
 +{
-+	u_char *tmp_buf;
-+	size_t tmp_len;
++	u8 *tmp_buf;
++	size_t bytes_written;
 +	loff_t start, end;
-+	int ret, bytes_read;
++	int ret;
 +
-+	if (IS_ALIGNED(from, 2) && IS_ALIGNED(len, 2))
-+		return spi_nor_read_data(nor, from, len, buf);
-+	else if (IS_ALIGNED(from, 2) && len > PAGE_SIZE)
-+		return spi_nor_read_data(nor, from, round_down(len, PAGE_SIZE),
-+					 buf);
++	if (IS_ALIGNED(to, 2) && IS_ALIGNED(len, 2))
++		return spi_nor_write_data(nor, to, len, buf);
 +
-+	tmp_buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
++	tmp_buf = kmalloc(nor->page_size, GFP_KERNEL);
 +	if (!tmp_buf)
 +		return -ENOMEM;
 +
-+	start = round_down(from, 2);
-+	end = round_up(from + len, 2);
++	memset(tmp_buf, 0xff, nor->page_size);
 +
-+	/*
-+	 * Avoid allocating too much memory. The requested read length might be
-+	 * quite large. Allocating a buffer just as large (slightly bigger, in
-+	 * fact) would put unnecessary memory pressure on the system.
-+	 *
-+	 * For example if the read is from 3 to 1M, then this will read from 2
-+	 * to 4098. The reads from 4098 to 1M will then not need a temporary
-+	 * buffer so they can proceed as normal.
-+	 */
-+	tmp_len = min_t(size_t, end - start, PAGE_SIZE);
++	start = round_down(to, 2);
++	end = round_up(to + len, 2);
 +
-+	ret = spi_nor_read_data(nor, start, tmp_len, tmp_buf);
++	memcpy(tmp_buf + (to - start), buf, len);
++
++	ret = spi_nor_write_data(nor, start, end - start, tmp_buf);
 +	if (ret == 0) {
 +		ret = -EIO;
 +		goto out;
@@ -140,51 +126,51 @@ index d521ca577884..a696af6a1b71 100644
 +		goto out;
 +
 +	/*
-+	 * More bytes are read than actually requested, but that number can't be
-+	 * reported to the calling function or it will confuse its calculations.
-+	 * Calculate how many of the _requested_ bytes were read.
++	 * More bytes are written than actually requested, but that number can't
++	 * be reported to the calling function or it will confuse its
++	 * calculations. Calculate how many of the _requested_ bytes were
++	 * written.
 +	 */
-+	bytes_read = ret;
++	bytes_written = ret;
 +
-+	if (from != start)
-+		ret -= from - start;
++	if (to != start)
++		ret -= to - start;
 +
 +	/*
-+	 * Only account for extra bytes at the end if they were actually read.
-+	 * For example, if the total length was truncated because of temporary
-+	 * buffer size limit then the adjustment for the extra bytes at the end
-+	 * is not needed.
++	 * Only account for extra bytes at the end if they were actually
++	 * written. For example, if for some reason the controller could only
++	 * complete a partial write then the adjustment for the extra bytes at
++	 * the end is not needed.
 +	 */
-+	if (start + bytes_read == end)
-+		ret -= end - (from + len);
++	if (start + bytes_written == end)
++		ret -= end - (to + len);
 +
 +	/* Should not be possible. */
-+	if (WARN_ON(ret < 0)) {
++	if (WARN_ON(ret < 0))
 +		ret = -EIO;
-+		goto out;
-+	}
 +
-+	memcpy(buf, tmp_buf + (from - start), ret);
 +out:
 +	kfree(tmp_buf);
 +	return ret;
 +}
 +
- static int spi_nor_read(struct mtd_info *mtd, loff_t from, size_t len,
- 			size_t *retlen, u_char *buf)
- {
-@@ -1921,7 +1998,10 @@ static int spi_nor_read(struct mtd_info *mtd, loff_t from, size_t len,
+ /*
+  * Write an address range to the nor chip.  Data must be written in
+  * FLASH_PAGESIZE chunks.  The address range may be any size provided
+@@ -2067,7 +2133,12 @@ static int spi_nor_write(struct mtd_info *mtd, loff_t to, size_t len,
+ 		if (ret)
+ 			goto write_err;
  
- 		addr = spi_nor_convert_addr(nor, addr);
- 
--		ret = spi_nor_read_data(nor, addr, len, buf);
-+		if (nor->read_proto == SNOR_PROTO_8_8_8_DTR)
-+			ret = spi_nor_octal_dtr_read(nor, addr, len, buf);
+-		ret = spi_nor_write_data(nor, addr, page_remain, buf + i);
++		if (nor->write_proto == SNOR_PROTO_8_8_8_DTR)
++			ret = spi_nor_octal_dtr_write(nor, addr, page_remain,
++						      buf + i);
 +		else
-+			ret = spi_nor_read_data(nor, addr, len, buf);
- 		if (ret == 0) {
- 			/* We shouldn't see 0-length reads */
- 			ret = -EIO;
++			ret = spi_nor_write_data(nor, addr, page_remain,
++						 buf + i);
+ 		if (ret < 0)
+ 			goto write_err;
+ 		written = ret;
 -- 
 2.30.0
 
