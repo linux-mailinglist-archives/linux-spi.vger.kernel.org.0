@@ -2,183 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 138833963B4
-	for <lists+linux-spi@lfdr.de>; Mon, 31 May 2021 17:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9E13967AC
+	for <lists+linux-spi@lfdr.de>; Mon, 31 May 2021 20:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231983AbhEaPbh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 31 May 2021 11:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234397AbhEaPZc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 May 2021 11:25:32 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134ABC043447
-        for <linux-spi@vger.kernel.org>; Mon, 31 May 2021 07:15:43 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id x10so4381291plg.3
-        for <linux-spi@vger.kernel.org>; Mon, 31 May 2021 07:15:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nigauri-org.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uusjoI9979v1pbLqldEYIkX8H2lrvgglLvoW87oRlIw=;
-        b=GG4xCYlmpXHc9owVweFw1MlfjhetkfkHGQvpNlAQcwNDM6WdV0akk4Gc8nqFcgfOBM
-         eR8PyLnQDmnrR3tCAyZt4pLadiRKtAK2QOMEcfsHunZWOg1ZkBDaYbcFXMZ6ZsRE9DgE
-         iWJDErwKg71ftjOoikFj1/5qzrK6JKw/PQW57R/DaB2oSzxAW1LBw6eSNANS21Sk/unj
-         3KtALWLdlUc3vitPyjhuiQxitwhQvZYXXkksXfJa4YbnV2afFKL8XkC5vUYVXCvW4IY4
-         f/90/5HT9dy1puAE6tMGTuvvY1MEH69aadXV53J8/921ufGZYNwdeLpEeQR5V2ypY3NI
-         KhqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uusjoI9979v1pbLqldEYIkX8H2lrvgglLvoW87oRlIw=;
-        b=NZnFdfknAKtzzoM3++ojfpTxe8R/DsWbYaA9BN4Le4BGVuRsShrOsgBh9zwywA0kbH
-         E4cATG+SzLFlOCjQ8WIXkyQXSbUeWgBUqF3nP+DGfYWEkFdaDBvcY8d+OvNRDN43PF4W
-         kojAEqA7Dp7H1nJGl5rXjlIkYWr/OMuuPcgaFJlig35zd3dS2tomwZixPyqp8jGj7+E+
-         dt/Q3uew/tjbbrStWwHUshpqIQ8iYdJJ+edFuf0N4e6qSUpo6Q9d3mSXMCRfuHtYsAfP
-         g7CLbSofgW7Ny+O8ZdoXp0RYInCLuIf7t3OyqnYBkF8nV9lRhz3gbo3ublCSHhlBX1zS
-         p0Ww==
-X-Gm-Message-State: AOAM531wZttJk35y1p0h5Fz0Zq+avAk3XdTBuoGJwFuIAW13IEpCkV64
-        k2hw2qGSPYIgWYOYjj2gMpWo
-X-Google-Smtp-Source: ABdhPJyqhZTIi030YGA5BmhjsNzclYh89CN4yKsyoGmPMTBP4RYkN9dcT6zmYrIL3nwREUDCs39qmQ==
-X-Received: by 2002:a17:902:c406:b029:ef:7ba2:f308 with SMTP id k6-20020a170902c406b02900ef7ba2f308mr20965460plk.9.1622470542580;
-        Mon, 31 May 2021 07:15:42 -0700 (PDT)
-Received: from localhost ([2405:6581:5360:1800:7285:c2ff:fec2:8f97])
-        by smtp.gmail.com with ESMTPSA id m2sm1370557pjf.24.2021.05.31.07.15.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 May 2021 07:15:42 -0700 (PDT)
-From:   Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Harini Katakam <harinik@xilinx.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Subject: [PATCH] dt-bindings: spi: convert Cadence SPI bindings to YAML
-Date:   Mon, 31 May 2021 23:15:38 +0900
-Message-Id: <20210531141538.721613-1-iwamatsu@nigauri.org>
+        id S231673AbhEaSUF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 31 May 2021 14:20:05 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:59202 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231409AbhEaSUE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 May 2021 14:20:04 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 14VII2qb078793;
+        Mon, 31 May 2021 13:18:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1622485082;
+        bh=HsbRxHmzurwf7J0PNrAE7LrJRA57/L7yoP2/CM+aImU=;
+        h=From:To:Subject:Date;
+        b=dzscoPH5ucskoi9X8RByttDJfSEw27wj15tKxGlVyBv2jaJnBAPs+647MwhDj0fln
+         bNh03cQ2X3ZTq3qxcdgE3/d0rmCLWcqz3kf0CuVESravHFlsDads3JmVKrwQuOUAOv
+         nFRTvcMbBuaa/8AX2zj1SVOuIA5IgdkDbC0nQRoo=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 14VII2qG026763
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 31 May 2021 13:18:02 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Mon, 31
+ May 2021 13:18:02 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Mon, 31 May 2021 13:18:02 -0500
+Received: from pratyush-OptiPlex-790.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 14VIHwdF118543;
+        Mon, 31 May 2021 13:17:59 -0500
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>
+Subject: [PATCH v2 0/6] Avoid odd length/address read/writes in 8D-8D-8D mode.
+Date:   Mon, 31 May 2021 23:47:51 +0530
+Message-ID: <20210531181757.19458-1-p.yadav@ti.com>
 X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Convert spi for Cadence SPI bindings documentation to YAML.
+Hi,
 
-Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
----
- .../devicetree/bindings/spi/spi-cadence.txt   | 30 ---------
- .../devicetree/bindings/spi/spi-cadence.yaml  | 63 +++++++++++++++++++
- 2 files changed, 63 insertions(+), 30 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-cadence.txt
- create mode 100644 Documentation/devicetree/bindings/spi/spi-cadence.yaml
+On Octal DTR flashes like Micron Xcella or Cypress S28 family, reads or
+writes cannot start at an odd address in 8D-8D-8D mode. Neither can they
+be odd bytes long. Upper layers like filesystems don't know what mode
+the flash is in, and hence don't know the read/write address or length
+limitations. They might issue reads or writes that leave the flash in an
+error state. In fact, using UBIFS on top of the flash was how I first
+noticed this problem.
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-cadence.txt b/Documentation/devicetree/bindings/spi/spi-cadence.txt
-deleted file mode 100644
-index 05a2ef945664be..00000000000000
---- a/Documentation/devicetree/bindings/spi/spi-cadence.txt
-+++ /dev/null
-@@ -1,30 +0,0 @@
--Cadence SPI controller Device Tree Bindings
---------------------------------------------
--
--Required properties:
--- compatible		: Should be "cdns,spi-r1p6" or "xlnx,zynq-spi-r1p6".
--- reg			: Physical base address and size of SPI registers map.
--- interrupts		: Property with a value describing the interrupt
--			  number.
--- clock-names		: List of input clock names - "ref_clk", "pclk"
--			  (See clock bindings for details).
--- clocks		: Clock phandles (see clock bindings for details).
--
--Optional properties:
--- num-cs		: Number of chip selects used.
--			  If a decoder is used, this will be the number of
--			  chip selects after the decoder.
--- is-decoded-cs		: Flag to indicate whether decoder is used or not.
--
--Example:
--
--	spi@e0007000 {
--		compatible = "xlnx,zynq-spi-r1p6";
--		clock-names = "ref_clk", "pclk";
--		clocks = <&clkc 26>, <&clkc 35>;
--		interrupt-parent = <&intc>;
--		interrupts = <0 49 4>;
--		num-cs = <4>;
--		is-decoded-cs = <0>;
--		reg = <0xe0007000 0x1000>;
--	} ;
-diff --git a/Documentation/devicetree/bindings/spi/spi-cadence.yaml b/Documentation/devicetree/bindings/spi/spi-cadence.yaml
-new file mode 100644
-index 00000000000000..27a7121ed0f9ae
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/spi-cadence.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/spi-cadence.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cadence SPI controller Device Tree Bindings
-+
-+maintainers:
-+  - Michal Simek <michal.simek@xilinx.com>
-+
-+allOf:
-+  - $ref: "spi-controller.yaml#"
-+
-+properties:
-+  compatible:
-+    enum:
-+      - cdns,spi-r1p6
-+      - xlnx,zynq-spi-r1p6
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: ref_clk
-+      - const: pclk
-+
-+  clocks:
-+    maxItems: 2
-+
-+  num-cs:
-+    description: |
-+      Number of chip selects used. If a decoder is used,
-+      this will be the number of chip selects after the
-+      decoder.
-+    minimum: 1
-+    maximum: 4
-+    default: 4
-+
-+  is-decoded-cs:
-+    description: |
-+      Flag to indicate whether decoder is used or not.
-+    default: 0
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    spi@e0007000 {
-+      compatible = "xlnx,zynq-spi-r1p6";
-+      clock-names = "ref_clk", "pclk";
-+      clocks = <&clkc 26>, <&clkc 35>;
-+      interrupt-parent = <&intc>;
-+      interrupts = <0 49 4>;
-+      num-cs = <4>;
-+      is-decoded-cs = <0>;
-+      reg = <0xe0007000 0x1000>;
-+    };
-+...
+This series fixes that problem by padding the read/write with extra
+bytes to make sure the final operation has an even address and length.
+More info in patches 5 and 6.
+
+Patches 1-3 fix some existing odd-byte long reads. Patch 4 adds checks
+to disallow odd length command/address/dummy/data phases in 8D-8D-8D
+mode. Note that this does not restrict the _value_ of the address from
+being odd since this is a restriction on the flash, not the protocol
+itself.
+
+Patch 4 should go through the SPI tree but I have included it in this
+series because if it goes in before patches 1-3, Micron MT35XU and
+Cypress S28HS flashes will stop working correctly.
+
+Tested on TI J721E for Micron MT35 and on TI J7200 for Cypress S28.
+
+Changes in v2:
+Collect R-bys and cosmetic fixes. No functional changes. See the patches
+for detailed changelog.
+
+Pratyush Yadav (6):
+  mtd: spi-nor: core: use 2 data bytes for template ops
+  mtd: spi-nor: spansion: write 2 bytes when disabling Octal DTR mode
+  mtd: spi-nor: micron-st: write 2 bytes when disabling Octal DTR mode
+  spi: spi-mem: reject partial cycle transfers in 8D-8D-8D mode
+  mtd: spi-nor: core: avoid odd length/address reads on 8D-8D-8D mode
+  mtd: spi-nor: core: avoid odd length/address writes in 8D-8D-8D mode
+
+ drivers/mtd/spi-nor/core.c      | 159 +++++++++++++++++++++++++++++++-
+ drivers/mtd/spi-nor/micron-st.c |  22 ++++-
+ drivers/mtd/spi-nor/spansion.c  |  18 +++-
+ drivers/spi/spi-mem.c           |  12 ++-
+ 4 files changed, 196 insertions(+), 15 deletions(-)
+
 -- 
 2.30.0
 
