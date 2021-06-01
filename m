@@ -2,66 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E47043972F2
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Jun 2021 14:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3488E39735A
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Jun 2021 14:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbhFAMEs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Jun 2021 08:04:48 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:6116 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233805AbhFAMEl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Jun 2021 08:04:41 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4FvW1q0hF2zYpP1;
-        Tue,  1 Jun 2021 20:00:15 +0800 (CST)
-Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 1 Jun 2021 20:02:58 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
- (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Tue, 1 Jun 2021
- 20:02:58 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>
-CC:     <broonie@kernel.org>
-Subject: [PATCH -next] spi: spi-mem: fix doc warning in spi-mem.c
-Date:   Tue, 1 Jun 2021 20:07:21 +0800
-Message-ID: <20210601120721.3198488-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        id S233409AbhFAMiL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Jun 2021 08:38:11 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:55921 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232965AbhFAMiL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Jun 2021 08:38:11 -0400
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 7214222236;
+        Tue,  1 Jun 2021 14:36:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1622550988;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KbCr62UBWzd91uPGhP19/e09ZyrN+lS6g3DQdq64C/A=;
+        b=DN6N48S0t7BUy1ObG3XMDfSA+JSidH0Pet1iGzTVl/ITZ1mOik8TV+mZvxe5mw9NlrHi5r
+        JyZ882Z4uCKn5v1ZFBnQVfLUehdWVE5GZOS0Z35Lz999CanT3O3Yw8dSz36x4N1Z7xba70
+        l2zgKKY6GjVHld5Sj00fW0xdwNRH7vI=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500017.china.huawei.com (7.185.36.243)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 01 Jun 2021 14:36:28 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Brown <broonie@kernel.org>, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] mtd: spi-nor: core: use 2 data bytes for template
+ ops
+In-Reply-To: <20210531181757.19458-2-p.yadav@ti.com>
+References: <20210531181757.19458-1-p.yadav@ti.com>
+ <20210531181757.19458-2-p.yadav@ti.com>
+User-Agent: Roundcube Webmail/1.4.11
+Message-ID: <543350e0bc25f84a0ba9f464dcfa15bf@walle.cc>
+X-Sender: michael@walle.cc
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Fix the following make W=1 warning:
+Am 2021-05-31 20:17, schrieb Pratyush Yadav:
+> The template ops used in spi_nor_spimem_check_pp() and
+> spi_nor_spimem_check_readop() currently set the data phase to 1 byte
+> long. This is problematic for 8D-8D-8D protocol where odd length data
+> phase is invalid since one cycle transfers 2 bytes and odd number of
+> bytes would mean half a cycle is left over. This could result in a
+> controller rejecting the op as "not supported" even though it actually
+> supports the protocol.
+> 
+> Change the data length to 2 bytes in these templates. One might argue
+> that this should only be done for 8D-8D-8D operations but when talking
+> about these templates, there is no functional difference between one 
+> and
+> two bytes, even in STR modes.
+> 
+> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+> ---
 
-  drivers/spi/spi-mem.c:819: warning: expecting prototype for spi_mem_driver_unregister_with_owner(). Prototype was for spi_mem_driver_unregister() instead
-
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/spi/spi-mem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-index 1513553e4080..d5f019064dca 100644
---- a/drivers/spi/spi-mem.c
-+++ b/drivers/spi/spi-mem.c
-@@ -810,7 +810,7 @@ int spi_mem_driver_register_with_owner(struct spi_mem_driver *memdrv,
- EXPORT_SYMBOL_GPL(spi_mem_driver_register_with_owner);
- 
- /**
-- * spi_mem_driver_unregister_with_owner() - Unregister a SPI memory driver
-+ * spi_mem_driver_unregister() - Unregister a SPI memory driver
-  * @memdrv: the SPI memory driver to unregister
-  *
-  * Unregisters a SPI memory driver.
--- 
-2.25.1
-
+Reviewed-by: Michael Walle <michael@walle.cc>
