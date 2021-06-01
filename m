@@ -2,51 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C5C397B02
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Jun 2021 22:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1FD397B01
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Jun 2021 22:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234638AbhFAUMQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S234656AbhFAUMQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Tue, 1 Jun 2021 16:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234513AbhFAUMO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Jun 2021 16:12:14 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F50AC061574
-        for <linux-spi@vger.kernel.org>; Tue,  1 Jun 2021 13:10:30 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id c31-20020a056830349fb02903a5bfa6138bso455363otu.7
-        for <linux-spi@vger.kernel.org>; Tue, 01 Jun 2021 13:10:30 -0700 (PDT)
+        with ESMTP id S234638AbhFAUMP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Jun 2021 16:12:15 -0400
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A37C06174A
+        for <linux-spi@vger.kernel.org>; Tue,  1 Jun 2021 13:10:31 -0700 (PDT)
+Received: by mail-oo1-xc30.google.com with SMTP id j17-20020a4ad6d10000b02901fef5280522so84953oot.0
+        for <linux-spi@vger.kernel.org>; Tue, 01 Jun 2021 13:10:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mVzJbLz4avCQ6iqrDP+6FIaD1/lSBVo1cZUC0xRIGSg=;
-        b=MGSQa6HI1+FfVt33IV019bZ9jcReWkaWmALHx9O1efEdzlLjhTkkZr4p8g2hpx/X9f
-         MDDJQbFRwlW81g5nu9+s/FnF+EL+7aTgZoXAZYHKR63tdQDDh9VF1Dw2NVo0jDi1J+U9
-         8A6M3HHFo1CwU2fDHNq0wJfEbtShF0C9Pwj/TSUbTgSqRp9vwnL+cmi/lVJoGYb3r4yj
-         YnV4htVFYCvLKkJR+J5muOPIhG2wRusY7FybrdV5lTsY3cfx1vt3sr+qQEia6XlXkpwP
-         Xsb6i8OEHotaM0Zp8P7Vj3sObNdJpw04N9pHYfe7VWBpkBbjmLn0beTXIVJfX+nuxUKa
-         /sQQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=QcUUMExtnu0Erc+KV6ZLS5k3H19BD2zY2/L6Th+LVvs=;
+        b=HYrYh1I8tDUYUIrssrpdcJcKrijkLQvDplLmwbrnKEolJDbNUacH0VTBj7j0+iK9ZR
+         0iqS2Pfr/gQmDjBIyokiAchJiyicRqeWhbna9R0TZM6Ne2G4mYxIUHW5isEyuOfzBmAv
+         6/vrPBowiFxMhcieAa0tO5HIWEeRGPmvt2WYlk4vuzbMV0YX4muMq4g1dvJcxpHdg1Xm
+         OX4rHlEIru0aL9KjhJ76RbUF8m2An45FTkVNln8cs//jeUiirRVsZ/8gyXuJHFbP6JaB
+         yVVRl/J6OY3N1wg/5ujle+Pptdw87jDeNzvgzaigWVy9sKocS5QmkDNOlAPdLUM8X4fv
+         v7uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mVzJbLz4avCQ6iqrDP+6FIaD1/lSBVo1cZUC0xRIGSg=;
-        b=mdO4XzBvcNr8Jp06kMe5rs8GMPZcwVbtcRZ0SgQrKbl+yIllli1dwuGYxU+trLRrQZ
-         7vNEc+JHFWiqqqN9ESwuskdOLUGVgfRhUDIBmm4zB5U0PRqsENjnjB6YhtLKlydwl5pi
-         bLqIj39oPh1ZfJlcMgx1rOUyPvIMqlLXF0GoGeQpvN5u5oURCq6FjqcC6T1lu47drPdg
-         h7MNYvaFdUjJXQ27YBdWoaxuF47PCT+i5toEzs9lIK4FSsaGHpwee7p1GKZo1arQ2S/v
-         x27E8M4k/8CJ+/HKBvMy1Pn9CcIh/Ay1c86FVRWII8u1iqH8I0XAai7Mzf5U981l+PcG
-         v4bg==
-X-Gm-Message-State: AOAM532p6r54Wc8+L/+odBeqpSjn4tjWLnNtOSVah380L14D2VMqrTX5
-        TqGvtkVJoEyMZHB76kh778ROVdm6+WQ=
-X-Google-Smtp-Source: ABdhPJy27nnsH60MFLgfdysVusgNgz+AOH7FfCeHXGCEMhWPeuQy5PQF5oTBspIRGQnxMdGHv/NrGQ==
-X-Received: by 2002:a05:6830:838:: with SMTP id t24mr21941698ots.119.1622578229060;
-        Tue, 01 Jun 2021 13:10:29 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=QcUUMExtnu0Erc+KV6ZLS5k3H19BD2zY2/L6Th+LVvs=;
+        b=qP2ZzB2gchYEtj5X+jICJIhXP1rulGR++OAGnfEotnfsXyjYSDM3QlhGOStSLY08t2
+         zM/QnpbOr2zHKKQVR9FMmg5VRQ4YLyBxmeGKKUITlpiyL4C8Gki5SfoMYPfzBlk6sgqr
+         9GpY8zUv8EunU/XNJYX2tZd/UiINiR95rKoQLmVIRpjSeeulD1s/ncVm3uwMJpfqnU57
+         8FF+zTmapht9NUNyMMF5YBwJNOe9zPlG8i7GgNHszSAEFvw1hvyT+0QS9bGbK5agXSPJ
+         BL6k4zTVen0CX3TRMIpUgns/zjkBu0zN2ACLWlknhDgz+KnMJuTFbEctrxsrH0SXXNeg
+         hMmQ==
+X-Gm-Message-State: AOAM5305jS1zal3lu1Bk4DCGZ+7zqKsrdoG9rCqTBdx9b92IM19hXS/H
+        u+4S08mVTtD+jkFrJMjNlN3liK6pBbI=
+X-Google-Smtp-Source: ABdhPJyfYNvCuMl5zFmhxki/Kb1XoDS0IsWbq1QMPdOCAgCmGmZJWjuBvTeJiTPly57HWh9iMUewXw==
+X-Received: by 2002:a4a:d809:: with SMTP id f9mr15514840oov.71.1622578230370;
+        Tue, 01 Jun 2021 13:10:30 -0700 (PDT)
 Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
-        by smtp.gmail.com with ESMTPSA id p25sm468118ood.4.2021.06.01.13.10.27
+        by smtp.gmail.com with ESMTPSA id p25sm468118ood.4.2021.06.01.13.10.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Jun 2021 13:10:28 -0700 (PDT)
+        Tue, 01 Jun 2021 13:10:29 -0700 (PDT)
 From:   Chris Morgan <macroalpha82@gmail.com>
 To:     linux-spi@vger.kernel.org
 Cc:     broonie@kernel.org, robh+dt@kernel.org, heiko@sntech.de,
@@ -54,10 +54,12 @@ Cc:     broonie@kernel.org, robh+dt@kernel.org, heiko@sntech.de,
         sugar.zhang@rock-chips.com, linux-rockchip@lists.infradead.org,
         linux-mtd@lists.infradead.org, p.yadav@ti.com,
         Chris Morgan <macromorgan@hotmail.com>
-Subject: [PATCH v3 0/4] Add Rockchip SFC(serial flash controller) support
-Date:   Tue,  1 Jun 2021 15:10:17 -0500
-Message-Id: <20210601201021.4406-1-macroalpha82@gmail.com>
+Subject: [PATCH v3 1/4] dt-bindings: rockchip-sfc: Bindings for Rockchip serial flash controller
+Date:   Tue,  1 Jun 2021 15:10:18 -0500
+Message-Id: <20210601201021.4406-2-macroalpha82@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210601201021.4406-1-macroalpha82@gmail.com>
+References: <20210601201021.4406-1-macroalpha82@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -66,64 +68,108 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Chris Morgan <macromorgan@hotmail.com>
 
-I'm trying to revive an abandoned patch series for the Rockchip serial
-flash controller (SFC) found on the Rockchip PX30 SOC, as well as other
-SOCs by Rockchip. I'm picking this up from version 8 of the patch
-series located from here:
+Add bindings for the Rockchip serial flash controller. New device
+specific parameter of rockchip,sfc-no-dma included in documentation.
 
-http://patchwork.ozlabs.org/project/linux-mtd/cover/1518091958-3672-1-git-send-email-andy.yan@rock-chips.com/
-
-Changes made in v3:
- - Changed the name of the clocks to sfc/ahb (from clk-sfc/clk-hsfc).
- - Changed the compatible string from rockchip,sfc to
-   rockchip,rk3036-sfc. A quick glance at the datasheets suggests this
-   driver should work for the PX30, RK180x, RK3036, RK312x, RK3308 and
-   RV1108 SoCs, and possibly more. However, I am currently only able
-   to test this on a PX30 (an RK3326). The technical reference manuals
-   appear to list the same registers for each device.
- - Corrected devicetree documentation for formatting and to note these
-   changes.
- - Replaced the maintainer with Heiko Stuebner and myself, as we will
-   take ownership of this going forward.
- - Noted that the device (per the reference manual) supports 4 CS, but
-   I am only able to test a single CS (CS 0).
- - Reordered patches to comply with upstream rules.
-
-Changes made in v2:
- - Reimplemented driver using spi-mem subsystem.
- - Removed power management code as I couldn't get it working properly.
- - Added device tree bindings for Odroid Go Advance.
-
-Changes made in this new series versus the v8 of the old series:
- - Added function to read spi-rx-bus-width from device tree, in the
-   event that the SPI chip supports 4x mode but only has 2 pins
-   wired (such as the Odroid Go Advance).
- - Changed device tree documentation from txt to yaml format.
- - Made "reset" message a dev_dbg from a dev_info.
- - Changed read and write fifo functions to remove redundant checks.
- - Changed the write and read from relaxed to non-relaxed when
-   starting the DMA transfer or reading the DMA IRQ.
- - Changed from dma_coerce_mask_and_coherent to just
-   dma_set_mask_and_coherent.
- - Changed name of get_if_type to rockchip_sfc_get_if_type.
-
-Chris Morgan (4):
-  dt-bindings: rockchip-sfc: Bindings for Rockchip serial flash
-    controller
-  spi: rockchip-sfc: add rockchip serial flash controller driver
-  arm64: dts: rockchip: Add SFC to PX30
-  arm64: dts: rockchip: Enable SFC for Odroid Go Advance
-
- .../devicetree/bindings/spi/rockchip,sfc.yaml |  87 ++
- arch/arm64/boot/dts/rockchip/px30.dtsi        |  38 +
- .../boot/dts/rockchip/rk3326-odroid-go2.dts   |  16 +
- drivers/spi/Kconfig                           |   9 +
- drivers/spi/Makefile                          |   1 +
- drivers/spi/spi-rockchip-sfc.c                | 861 ++++++++++++++++++
- 6 files changed, 1012 insertions(+)
+Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+---
+ .../devicetree/bindings/spi/rockchip,sfc.yaml | 87 +++++++++++++++++++
+ 1 file changed, 87 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/spi/rockchip,sfc.yaml
- create mode 100644 drivers/spi/spi-rockchip-sfc.c
 
+diff --git a/Documentation/devicetree/bindings/spi/rockchip,sfc.yaml b/Documentation/devicetree/bindings/spi/rockchip,sfc.yaml
+new file mode 100644
+index 000000000000..d5f8edd621ae
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/rockchip,sfc.yaml
+@@ -0,0 +1,87 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/rockchip,sfc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Rockchip Serial Flash Controller (SFC)
++
++maintainers:
++  - Heiko Stuebner <heiko@sntech.de>
++  - Chris Morgan <macromorgan@hotmail.com>
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - const: rockchip,px30-sfc
++      - const: rockchip,rk1806-sfc
++      - const: rockchip,rk1808-sfc
++      - const: rockchip,rk312x-sfc
++      - const: rockchip,rk3308-sfc
++      - const: rockchip,rv1108-sfc
++      - items:
++          - const: rockchip,rk3036-sfc
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Bus Clock
++      - description: Module Clock
++
++  clock-names:
++    items:
++      - const: ahb
++      - const: sfc
++
++  power-domains:
++    maxItems: 1
++
++  rockchip,sfc-no-dma:
++    vendor,bool-property:
++      descrption: Boolean value for disabling DMA
++      type: boolean
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/px30-cru.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    sfc: spi@ff3a0000 {
++        compatible = "rockchip,px30-sfc","rockchip,rk3036-sfc";
++        reg = <0x0 0xff3a0000 0x0 0x4000>;
++        interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&cru SCLK_SFC>, <&cru HCLK_SFC>;
++        clock-names = "sfc", "ahb";
++        pinctrl-0 = <&sfc_clk &sfc_cs &sfc_bus2>;
++        pinctrl-names = "default";
++        power-domains = <&power PX30_PD_MMC_NAND>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        flash@0 {
++            compatible = "jedec,spi-nor";
++            spi-max-frequency = <108000000>;
++            reg = <0>;
++            spi-rx-bus-width = <2>;
++            spi-tx-bus-width = <2>;
++        };
++    };
++
++...
 -- 
 2.25.1
 
