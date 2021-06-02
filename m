@@ -2,75 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19877399373
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Jun 2021 21:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94265399523
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Jun 2021 23:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229467AbhFBTZI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 2 Jun 2021 15:25:08 -0400
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:39680 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbhFBTZH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Jun 2021 15:25:07 -0400
-Received: by mail-oi1-f180.google.com with SMTP id j1so3750550oie.6;
-        Wed, 02 Jun 2021 12:23:08 -0700 (PDT)
+        id S229753AbhFBVGD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 2 Jun 2021 17:06:03 -0400
+Received: from mail-oi1-f177.google.com ([209.85.167.177]:47098 "EHLO
+        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229541AbhFBVGC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Jun 2021 17:06:02 -0400
+Received: by mail-oi1-f177.google.com with SMTP id x15so4010212oic.13;
+        Wed, 02 Jun 2021 14:04:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=XAeJv7qZUUGdgq8G5ai3wA48HtkAvEJX/GzuCHR5O/I=;
-        b=LkIrlajuQiyAXy+zGq0M8pHEFxhHvDGcKb1mID9laV4fg1ykl0VfoV8XaQWE9SKZ+O
-         HhpioxjRjWjcxwxd8RH9qozTAwYW9UdAfVU/F8FsRquVn+PtQOs1/fFtP3pPBGHiu446
-         R+m3xLgCuRFlGrCO/IRWcjw1RE/B3R7bR90bCv9CE/crMXN6t24kGScDx5a6JFTKSmsj
-         +2D1MHWpjo7vEzCXg6yifOULR/O845McxxIF7ZogtlPwfLpTdqW35G/2RhoL7Uq6gjCx
-         H5bmAdWrM5N9M+eoJZqmDLyqEbxzNFnJGF91iUH03+1lyIIH+1eU8BqhQwh94Ow3g27Q
-         wo7Q==
-X-Gm-Message-State: AOAM531yGfCpocSdilnDJA8lqzB1wap3yEPf24xwrC3Q4DTWPzK6uBz1
-        q1rxU4BKSZuHxxX2M9nuXA==
-X-Google-Smtp-Source: ABdhPJzFWhHH6ZTH6NHxgK8vQrtEvn9um2KBFsSzAS7v9gqy++YrEO587CRoDAFQCGfEuE4vLuHQ+Q==
-X-Received: by 2002:aca:1a06:: with SMTP id a6mr21706779oia.95.1622661788233;
-        Wed, 02 Jun 2021 12:23:08 -0700 (PDT)
+        bh=oVR3AvDB5YuftfnirDS6S655YqBrktVMLOvolfq9ZGQ=;
+        b=k8V2KqFQ8/l8Fvs0pOqGB2YZbdiFtQz3PDNwTIr6Jidpuz280VRboaF47Vr8GYrP6A
+         TMrQecDqv7L1D1Qu8KQEe9/N6C7yK12JLMNQj3EP+N+UnAZ8QvIw4vRFRsPxqM9pb82O
+         oK+aEbUFG/EqMEFevYlc7a1xb8Kfaxmi/C045AiuthVINKAjb5ANqRQEXb+bet/2D1kq
+         +ZN9gjUQKZrhGD34c1OT1Ji02tdx868bTryCCNvtRqPMoU/9Qldj2Vg+cswuAxmEnlE2
+         ZqK0qPfzTGbOnYVf8w/ul6T7gbEn73hr6lmM6Mx9Y3eR2J4X0hGZhHmcKEMBwZ+VUIwj
+         Em/Q==
+X-Gm-Message-State: AOAM530pox7+TffCzNKEdx1l87TimqmGEAEuZE8SHQtA8J1TDOOqjkrS
+        6fnYj5i5f0bw4oyXrySAug==
+X-Google-Smtp-Source: ABdhPJzyeoycgDbLMad+zV8zeFpz+fpMbATJOAz+M+rhuXu7mrVC5TLXcW3DEdGSxZh8+Iy2RdiLxg==
+X-Received: by 2002:a05:6808:1c9:: with SMTP id x9mr23365339oic.109.1622667843191;
+        Wed, 02 Jun 2021 14:04:03 -0700 (PDT)
 Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id a71sm178321oib.20.2021.06.02.12.23.06
+        by smtp.gmail.com with ESMTPSA id x14sm241146oic.3.2021.06.02.14.04.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jun 2021 12:23:07 -0700 (PDT)
-Received: (nullmailer pid 3822810 invoked by uid 1000);
-        Wed, 02 Jun 2021 19:23:06 -0000
-Date:   Wed, 2 Jun 2021 14:23:05 -0500
+        Wed, 02 Jun 2021 14:04:02 -0700 (PDT)
+Received: (nullmailer pid 4038638 invoked by uid 1000);
+        Wed, 02 Jun 2021 21:04:00 -0000
+Date:   Wed, 2 Jun 2021 16:04:00 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Ian Ray <ian.ray@ge.com>, Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Fabio Estevam <festevam@gmail.com>, linux-spi@vger.kernel.org,
-        kernel@collabora.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv3 2/5] spi: dt-bindings: support devices with multiple
- chipselects
-Message-ID: <20210602192305.GA3822744@robh.at.kernel.org>
-References: <20210528113346.37137-1-sebastian.reichel@collabora.com>
- <20210528113346.37137-3-sebastian.reichel@collabora.com>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Sekhar Nori <nsekhar@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Keerthy <j-keerthy@ti.com>, Nishanth Menon <nm@ti.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-i2c@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH 04/12] dt-bindings: clock: update ti,sci-clk.yaml
+ references
+Message-ID: <20210602210400.GA4038575@robh.at.kernel.org>
+References: <cover.1622648507.git.mchehab+huawei@kernel.org>
+ <0fae687366c09dfb510425b3c88316a727b27d6d.1622648507.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210528113346.37137-3-sebastian.reichel@collabora.com>
+In-Reply-To: <0fae687366c09dfb510425b3c88316a727b27d6d.1622648507.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 28 May 2021 13:33:44 +0200, Sebastian Reichel wrote:
-> Add binding support for devices, that have more than one
-> chip select. A typical example are SPI connected microcontroller,
-> that can also be programmed over SPI like NXP Kinetis or
-> chips with a configuration and a data chip select, such as
-> Microchip's MRF89XA transceiver.
+On Wed, 02 Jun 2021 17:43:10 +0200, Mauro Carvalho Chehab wrote:
+> Changeset a7dbfa6f3877 ("dt-bindings: clock: Convert ti,sci-clk to json schema")
+> renamed: Documentation/devicetree/bindings/clock/ti,sci-clk.txt
+> to: Documentation/devicetree/bindings/clock/ti,sci-clk.yaml.
 > 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> Update the cross-references accordingly.
+> 
+> Fixes: a7dbfa6f3877 ("dt-bindings: clock: Convert ti,sci-clk to json schema")
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 > ---
->  Documentation/devicetree/bindings/spi/spi-controller.yaml | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
+>  Documentation/devicetree/bindings/gpio/gpio-davinci.txt | 2 +-
+>  Documentation/devicetree/bindings/i2c/i2c-davinci.txt   | 2 +-
+>  Documentation/devicetree/bindings/mmc/ti-omap-hsmmc.txt | 2 +-
+>  Documentation/devicetree/bindings/net/can/c_can.txt     | 2 +-
+>  Documentation/devicetree/bindings/spi/spi-davinci.txt   | 2 +-
+>  MAINTAINERS                                             | 2 +-
+>  6 files changed, 6 insertions(+), 6 deletions(-)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Applied, thanks!
