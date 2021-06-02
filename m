@@ -2,109 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6FFF397B04
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Jun 2021 22:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C7A398355
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Jun 2021 09:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234671AbhFAUMS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Jun 2021 16:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234707AbhFAUMR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Jun 2021 16:12:17 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BEDEC061574
-        for <linux-spi@vger.kernel.org>; Tue,  1 Jun 2021 13:10:35 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id u11so591423oiv.1
-        for <linux-spi@vger.kernel.org>; Tue, 01 Jun 2021 13:10:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=S1IlgvnVJwHgpqMHaCMFQfQ+LU3PHCxwl3hNw4XjuSw=;
-        b=EeNU8PFN5nikWcHPD/AwUBoiScDgl3EWWa8zrjb9U/cIEJaY/YIDjVHe2I+r9DlqRz
-         keTAwHu+jIwm+1KlgwWXVTU6efE2liPqXwTj2+SqgtNecF85PawwDOJ+CD2PnjSEJpRM
-         Hho76fCx8UppcH6i+Y2LYtrUGMIZjP6pbStqRwo/EEdDqyYlu03GH4zXLTNpxUu7LpW3
-         cMCwetoqLRXuJ3YcBIbMVwMtyek4TGjTprNx8g4DQP4ZLQuip7yEDnnBZ+B9rRavhwOu
-         5/OsJ2FecXsBtzrQOa94o9MZDjM+jP+O8QLEcDmgLkduywyVbnLhZPmKjpIWuypuioHy
-         ZlHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=S1IlgvnVJwHgpqMHaCMFQfQ+LU3PHCxwl3hNw4XjuSw=;
-        b=jMWh/DJD3rMOLH+LuvsJyiNJFrnC1MUd5SNunhP7mqBuJ272FlGVQwPA94PEcoiinw
-         3EswX1YMeqbgrPazIIMus6XuGsUdL5th7PCEcKUEDRaNpYXqt8Izju0KHHQhHjHylhwD
-         yDIKc4KpfcNMES7Ru5N3inuW1A7cz35l2ohcVHhOOQzZyuxGeBNr9b3UsXE6OsAOu3JT
-         HGuqELTr2y5CZMaGvbZiiuZVRoVFXLOjHsn9Nsn+Fdy5MfM6oU3qpPK78z6sl7kejZE+
-         mIyCVI99uJSFWL/fQ5ZP+4pAdnQKST2UkjFYkObMm1CWSjW2+SGzZpu8epcfbfxj2b3Z
-         f4BA==
-X-Gm-Message-State: AOAM533ftoW5O3x/iOAV4ix8a6nRQO8qkN9OEdef6mzTzNrc3oqdyfbx
-        yTwZlp8E5KaLJFPuVZD+IDb9JoWVAqA=
-X-Google-Smtp-Source: ABdhPJz9bgTRA0/4PRS/IEFOuAyN5MObDSPJSbOquTl1lnc/ePqcF0ozUNWfTLHywvolDHjhWICuXg==
-X-Received: by 2002:aca:1c18:: with SMTP id c24mr7158644oic.139.1622578234094;
-        Tue, 01 Jun 2021 13:10:34 -0700 (PDT)
-Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
-        by smtp.gmail.com with ESMTPSA id p25sm468118ood.4.2021.06.01.13.10.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Jun 2021 13:10:33 -0700 (PDT)
-From:   Chris Morgan <macroalpha82@gmail.com>
-To:     linux-spi@vger.kernel.org
-Cc:     broonie@kernel.org, robh+dt@kernel.org, heiko@sntech.de,
-        jbx6244@gmail.com, hjc@rock-chips.com, yifeng.zhao@rock-chips.com,
-        sugar.zhang@rock-chips.com, linux-rockchip@lists.infradead.org,
-        linux-mtd@lists.infradead.org, p.yadav@ti.com,
-        Chris Morgan <macromorgan@hotmail.com>
-Subject: [PATCH v4 4/4] arm64: dts: rockchip: Enable SFC for Odroid Go Advance
-Date:   Tue,  1 Jun 2021 15:10:21 -0500
-Message-Id: <20210601201021.4406-5-macroalpha82@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210601201021.4406-1-macroalpha82@gmail.com>
-References: <20210601201021.4406-1-macroalpha82@gmail.com>
+        id S230284AbhFBHo0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 2 Jun 2021 03:44:26 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:54546 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229603AbhFBHo0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Jun 2021 03:44:26 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1527gGHk040486;
+        Wed, 2 Jun 2021 02:42:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1622619736;
+        bh=on221I0/fbDX/gm21Y2yHzs/Jt3SZPApRYBMpZhQw2g=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=lufhlBy4NtrGCtX5ePp062Lnf0ktHPnng6jRt3EU8AkLiTWWk6JoCQstL+kXMXnW0
+         z6lLXNfrZb4FVMOCxuBz/m8O8u9LLBIMbJxhbs62s5cU0YumCrXQ7C+QcGHSbxKdCc
+         BtcmLSCV1nENUu7u6eXsjNsgW9cS+BPxwnugD7X4=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1527gG5S014263
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 2 Jun 2021 02:42:16 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Wed, 2 Jun
+ 2021 02:42:15 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Wed, 2 Jun 2021 02:42:15 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1527gFSs037775;
+        Wed, 2 Jun 2021 02:42:15 -0500
+Date:   Wed, 2 Jun 2021 13:12:14 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>
+Subject: Re: [PATCH v2 2/6] mtd: spi-nor: spansion: write 2 bytes when
+ disabling Octal DTR mode
+Message-ID: <20210602074212.o4dmwry747wortsq@ti.com>
+References: <20210531181757.19458-1-p.yadav@ti.com>
+ <20210531181757.19458-3-p.yadav@ti.com>
+ <f875025538713a005b1c18f8eb5c24c0@walle.cc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <f875025538713a005b1c18f8eb5c24c0@walle.cc>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Chris Morgan <macromorgan@hotmail.com>
+On 01/06/21 02:47PM, Michael Walle wrote:
+> Am 2021-05-31 20:17, schrieb Pratyush Yadav:
+> > The Octal DTR configuration is stored in the CFR5V register. This
+> > register is 1 byte wide. But 1 byte long transactions are not allowed in
+> > 8D-8D-8D mode. Since the next byte address does not contain any
+> > register, it is safe to write any value to it. Write a 0 to it.
+> > 
+> > Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+> > ---
+> 
+> Can't say much, because there is no public datasheet, is there?
 
-This enables the Rockchip Serial Flash Controller for the Odroid Go
-Advance. Note that while the attached SPI NOR flash and the controller
-both support quad read mode, only 2 of the required 4 pins are present.
-The rx and tx bus width is set to 2 for this reason.
+https://www.cypress.com/file/513996/download
 
-Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
----
- .../boot/dts/rockchip/rk3326-odroid-go2.dts      | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+> 
+> But looks sane. Same for patch 3/6.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-index 49c97f76df77..46f1d2f356cc 100644
---- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-@@ -484,6 +484,22 @@ &sdmmc {
- 	status = "okay";
- };
- 
-+&sfc {
-+	pinctrl-0 = <&sfc_clk &sfc_cs &sfc_bus2>;
-+	pinctrl-names = "default";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	status = "okay";
-+
-+	flash@0 {
-+		compatible = "jedec,spi-nor";
-+		spi-max-frequency = <108000000>;
-+		reg = <0>;
-+		spi-rx-bus-width = <2>;
-+		spi-tx-bus-width = <2>;
-+	};
-+};
-+
- &tsadc {
- 	status = "okay";
- };
 -- 
-2.25.1
-
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
