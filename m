@@ -2,158 +2,165 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 012FC398F05
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Jun 2021 17:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BEC5398F8B
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Jun 2021 18:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232477AbhFBPpS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 2 Jun 2021 11:45:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46810 "EHLO mail.kernel.org"
+        id S232657AbhFBQFv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 2 Jun 2021 12:05:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52100 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232363AbhFBPpG (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 2 Jun 2021 11:45:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 749A96140A;
-        Wed,  2 Jun 2021 15:43:22 +0000 (UTC)
+        id S229881AbhFBQFu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 2 Jun 2021 12:05:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 421D961603;
+        Wed,  2 Jun 2021 16:04:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622648602;
-        bh=j4vbbGMmkpw6vv8LF4aIg9gX2V7O+Y4hZhiS1MaxEmc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AB7FT6nD0+rEQCgHBe5Cc5z4DRLD3icjFOBiw6oUwpll2X2vUmNqYYA86Mis0nQok
-         GUVdVQnl5wZ5UdKS1IFtwJmMOJbRm/TuUiIAkVHY4l1NYVVQAn1lpXU4WDZAJjZiIt
-         Zj3vPyUaPqYduitPsdm0HQRG0b4aNL/BErsSx7TEcKpEaV42FMxSH3GWTMWGTilfOy
-         EIHbJD4Wjmd3Kx44o49Q3rESdin3UZo0Het2NItM/PG8dKGKjyvqsS87KI7Dshih5t
-         LrRX46kAZV/zWvGzK5YQGEZTeNLdZD56yEF4sDICfrD6yFi4PlcnBGdp103t4oyP/V
-         easJ3WNVtDkDA==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1loT1b-006Xbn-D0; Wed, 02 Jun 2021 17:43:19 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Jakub Kicinski <kuba@kernel.org>, Keerthy <j-keerthy@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Rob Herring <robh+dt@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH 04/12] dt-bindings: clock: update ti,sci-clk.yaml references
-Date:   Wed,  2 Jun 2021 17:43:10 +0200
-Message-Id: <0fae687366c09dfb510425b3c88316a727b27d6d.1622648507.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1622648507.git.mchehab+huawei@kernel.org>
-References: <cover.1622648507.git.mchehab+huawei@kernel.org>
+        s=k20201202; t=1622649847;
+        bh=UmxHIs8gIZ5iLjR/tIvHTVnBvwuZRE0DAEiCxwneDmw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aBaMjmfPVyy0CncM3ugyGNGN1GgnjvoXUOZa0YGlofZfcZMV3nLe99BdBK8UxFFVR
+         Zq0goPPHKztTsxp/bfXsdCJxWVhXyanda9aQ1uPEp50gqLi4vs+ffgeOWho0IIdsod
+         DqETZuujZFXs7EXRghWku9W+0b+7QrX5K0xBbxHkAZwIUe8IY+Le8crK2DgA4JvEqs
+         nVHWUT29sLlZR54wNl1XJwo4Dre5KQckgtlodgwhxEbZDri4C1BgdwtI+boPEMTjBn
+         fw7ihMEONjzfhskR3IueuI41ifrfxmVXbSLP+sDmRlyolBCn6/loefvYDmcax8amrr
+         p9+9mrAzDjtiQ==
+Date:   Wed, 2 Jun 2021 17:03:57 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Chris Morgan <macroalpha82@gmail.com>
+Cc:     linux-spi@vger.kernel.org, robh+dt@kernel.org, heiko@sntech.de,
+        jbx6244@gmail.com, hjc@rock-chips.com, yifeng.zhao@rock-chips.com,
+        sugar.zhang@rock-chips.com, linux-rockchip@lists.infradead.org,
+        linux-mtd@lists.infradead.org, p.yadav@ti.com,
+        Chris Morgan <macromorgan@hotmail.com>
+Subject: Re: [PATCH v3 2/4] spi: rockchip-sfc: add rockchip serial flash
+ controller driver
+Message-ID: <20210602160357.GA4914@sirena.org.uk>
+References: <20210601201021.4406-1-macroalpha82@gmail.com>
+ <20210601201021.4406-3-macroalpha82@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9jxsPFA5p3P2qPhR"
+Content-Disposition: inline
+In-Reply-To: <20210601201021.4406-3-macroalpha82@gmail.com>
+X-Cookie: I have a TINY BOWL in my HEAD
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Changeset a7dbfa6f3877 ("dt-bindings: clock: Convert ti,sci-clk to json schema")
-renamed: Documentation/devicetree/bindings/clock/ti,sci-clk.txt
-to: Documentation/devicetree/bindings/clock/ti,sci-clk.yaml.
 
-Update the cross-references accordingly.
+--9jxsPFA5p3P2qPhR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Fixes: a7dbfa6f3877 ("dt-bindings: clock: Convert ti,sci-clk to json schema")
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- Documentation/devicetree/bindings/gpio/gpio-davinci.txt | 2 +-
- Documentation/devicetree/bindings/i2c/i2c-davinci.txt   | 2 +-
- Documentation/devicetree/bindings/mmc/ti-omap-hsmmc.txt | 2 +-
- Documentation/devicetree/bindings/net/can/c_can.txt     | 2 +-
- Documentation/devicetree/bindings/spi/spi-davinci.txt   | 2 +-
- MAINTAINERS                                             | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
+On Tue, Jun 01, 2021 at 03:10:19PM -0500, Chris Morgan wrote:
 
-diff --git a/Documentation/devicetree/bindings/gpio/gpio-davinci.txt b/Documentation/devicetree/bindings/gpio/gpio-davinci.txt
-index 696ea46227d1..8ad4fd9aaffd 100644
---- a/Documentation/devicetree/bindings/gpio/gpio-davinci.txt
-+++ b/Documentation/devicetree/bindings/gpio/gpio-davinci.txt
-@@ -32,7 +32,7 @@ Required Properties:
-           Documentation/devicetree/bindings/clock/keystone-gate.txt
-                             for 66AK2HK/66AK2L/66AK2E SoCs or,
- 
--          Documentation/devicetree/bindings/clock/ti,sci-clk.txt
-+          Documentation/devicetree/bindings/clock/ti,sci-clk.yaml
-                             for 66AK2G SoCs
- 
- - clock-names: Name should be "gpio";
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-davinci.txt b/Documentation/devicetree/bindings/i2c/i2c-davinci.txt
-index b35ad748ed68..6590501c53d4 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-davinci.txt
-+++ b/Documentation/devicetree/bindings/i2c/i2c-davinci.txt
-@@ -8,7 +8,7 @@ Required properties:
- - reg : Offset and length of the register set for the device
- - clocks: I2C functional clock phandle.
- 	  For 66AK2G this property should be set per binding,
--	  Documentation/devicetree/bindings/clock/ti,sci-clk.txt
-+	  Documentation/devicetree/bindings/clock/ti,sci-clk.yaml
- 
- SoC-specific Required Properties:
- 
-diff --git a/Documentation/devicetree/bindings/mmc/ti-omap-hsmmc.txt b/Documentation/devicetree/bindings/mmc/ti-omap-hsmmc.txt
-index 0663e7648ef9..57d077c0b7c1 100644
---- a/Documentation/devicetree/bindings/mmc/ti-omap-hsmmc.txt
-+++ b/Documentation/devicetree/bindings/mmc/ti-omap-hsmmc.txt
-@@ -28,7 +28,7 @@ The following are mandatory properties for 66AK2G SoCs only:
- 		Documentation/devicetree/bindings/soc/ti/sci-pm-domain.yaml
- - clocks:	Must contain an entry for each entry in clock-names. Should
- 		be defined as per the he appropriate clock bindings consumer
--		usage in Documentation/devicetree/bindings/clock/ti,sci-clk.txt
-+		usage in Documentation/devicetree/bindings/clock/ti,sci-clk.yaml
- - clock-names:	Shall be "fck" for the functional clock,
- 		and "mmchsdb_fck" for the debounce clock.
- 
-diff --git a/Documentation/devicetree/bindings/net/can/c_can.txt b/Documentation/devicetree/bindings/net/can/c_can.txt
-index febd2cc1ca14..366479806acb 100644
---- a/Documentation/devicetree/bindings/net/can/c_can.txt
-+++ b/Documentation/devicetree/bindings/net/can/c_can.txt
-@@ -22,7 +22,7 @@ The following are mandatory properties for Keystone 2 66AK2G SoCs only:
- 			  Documentation/devicetree/bindings/soc/ti/sci-pm-domain.yaml
- - clocks		: CAN functional clock phandle. This property is as per the
- 			  binding,
--			  Documentation/devicetree/bindings/clock/ti,sci-clk.txt
-+			  Documentation/devicetree/bindings/clock/ti,sci-clk.yaml
- 
- Optional properties:
- - syscon-raminit	: Handle to system control region that contains the
-diff --git a/Documentation/devicetree/bindings/spi/spi-davinci.txt b/Documentation/devicetree/bindings/spi/spi-davinci.txt
-index e2198a389484..200c7fc7b089 100644
---- a/Documentation/devicetree/bindings/spi/spi-davinci.txt
-+++ b/Documentation/devicetree/bindings/spi/spi-davinci.txt
-@@ -25,7 +25,7 @@ Required properties:
- - interrupts: interrupt number mapped to CPU.
- - clocks: spi clk phandle
-           For 66AK2G this property should be set per binding,
--          Documentation/devicetree/bindings/clock/ti,sci-clk.txt
-+          Documentation/devicetree/bindings/clock/ti,sci-clk.yaml
- 
- SoC-specific Required Properties:
- 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0f0a01b54c1b..790eff88b53e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18193,7 +18193,7 @@ L:	linux-arm-kernel@lists.infradead.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/arm/keystone/ti,k3-sci-common.yaml
- F:	Documentation/devicetree/bindings/arm/keystone/ti,sci.txt
--F:	Documentation/devicetree/bindings/clock/ti,sci-clk.txt
-+F:	Documentation/devicetree/bindings/clock/ti,sci-clk.yaml
- F:	Documentation/devicetree/bindings/interrupt-controller/ti,sci-inta.yaml
- F:	Documentation/devicetree/bindings/interrupt-controller/ti,sci-intr.yaml
- F:	Documentation/devicetree/bindings/reset/ti,sci-reset.txt
--- 
-2.31.1
+This looks mostly good, a few mostly minor comments below:
 
+> @@ -0,0 +1,861 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Rockchip Serial Flash Controller Driver
+
+Please make the entire comment a C++ one to make things look more
+intentional.
+
+> +static int rockchip_sfc_get_if_type(const struct spi_mem_op *op,
+> +				    struct rockchip_sfc *sfc)
+> +{
+> +	if (op->data.buswidth == 2)
+> +		return IF_TYPE_DUAL;
+> +	else if (op->data.buswidth == 4)
+> +		return IF_TYPE_QUAD;
+> +	else if (op->data.buswidth == 1)
+> +		return IF_TYPE_STD;
+> +
+> +	dev_err(sfc->dev, "unsupported SPI read mode\n");
+> +
+> +	return -EINVAL;
+> +}
+
+This would be more idiomatically implemented as a switch statement.
+
+> +static int rockchip_sfc_wait_fifo_ready(struct rockchip_sfc *sfc, int wr, u32 timeout)
+> +{
+> +	unsigned long deadline = jiffies + timeout;
+> +	int level;
+> +
+> +	while (!(level = rockchip_sfc_get_fifo_level(sfc, wr))) {
+> +		if (time_after_eq(jiffies, deadline)) {
+> +			dev_warn(sfc->dev, "%s fifo timeout\n", wr ? "write" : "read");
+> +			return -ETIMEDOUT;
+> +		}
+> +		udelay(1);
+> +	}
+> +
+> +	return level;
+
+The use of the assignment in the while conditional makes it hard to tell
+if this code is doing what was intended.
+
+> +static int rockchip_sfc_write_fifo(struct rockchip_sfc *sfc, const u8 *buf, int len)
+> +{
+> +	u8 bytes = len & 0x3;
+> +	u32 dwords;
+> +	int tx_level;
+> +	u32 write_words;
+> +	u32 tmp = 0;
+> +
+> +	dwords = len >> 2;
+> +	while (dwords) {
+> +		tx_level = rockchip_sfc_wait_fifo_ready(sfc, SFC_CMD_DIR_WR, HZ);
+> +		if (tx_level < 0)
+> +			return tx_level;
+> +		write_words = min_t(u32, tx_level, dwords);
+> +		iowrite32_rep(sfc->regbase + SFC_DATA, buf, write_words);
+> +		buf += write_words << 2;
+> +		dwords -= write_words;
+> +		}
+
+Weird indentation on the } here.
+
+> +	/* write the rest non word aligned bytes */
+> +	if (bytes) {
+> +		tx_level = rockchip_sfc_wait_fifo_ready(sfc, SFC_CMD_DIR_WR, HZ);
+
+It's not the source buffer being aligned that's the issue here, it's the
+buffer not being a multiple of word size.
+
+> +static irqreturn_t rockchip_sfc_irq_handler(int irq, void *dev_id)
+> +{
+> +	struct rockchip_sfc *sfc = dev_id;
+> +	u32 reg;
+> +
+> +	reg = readl(sfc->regbase + SFC_RISR);
+> +
+> +	/* Clear interrupt */
+> +	writel_relaxed(reg, sfc->regbase + SFC_ICLR);
+> +
+> +	if (reg & SFC_RISR_TRAN_FINISH)
+> +		complete(&sfc->cp);
+> +
+> +	return IRQ_HANDLED;
+> +}
+
+This will silently clear any unknown interrupt, and silently claim to
+have handled an interrupt even if none happened (eg, due to shared IRQs)
+- it would be better to only ack interrupts we handle and return
+IRQ_NONE if we didn't handle any.
+
+--9jxsPFA5p3P2qPhR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmC3q+wACgkQJNaLcl1U
+h9DaZwf/TBAW5Mib787bZ5E3BsaVGC/10vofELuvEYHcGtG4gCwlvutonxRUEKzc
+dJSlwxCCaA8oFIasCxs5CioPxVnO7VSmUra5XSOqBxgCmX+s/paa1GMB4Ej1fzAq
+qLrC4eqdp5GOM83BYrQ6Hx2H1ruqBP13Boie+TLLARIrqwkt/85EL/AbIQWFNUyy
+RIbHhyFcXj8CFB3k43GPmqXyNjXIhXJKxpE0NFicJ5YFcsMnFNpGFDzDmraiM9jm
+r24CurvxVZCRVQw4qIt4B7KJJIsFRrDn1P1Y8FQpFyQhPD6v1I714tUl5byIP8eH
+t//VBnR7kzk63aGmnx0NMMLSfp1YbQ==
+=vM+9
+-----END PGP SIGNATURE-----
+
+--9jxsPFA5p3P2qPhR--
