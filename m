@@ -2,165 +2,296 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BEC5398F8B
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Jun 2021 18:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC92C398FA4
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Jun 2021 18:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232657AbhFBQFv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 2 Jun 2021 12:05:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52100 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229881AbhFBQFu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 2 Jun 2021 12:05:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 421D961603;
-        Wed,  2 Jun 2021 16:04:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622649847;
-        bh=UmxHIs8gIZ5iLjR/tIvHTVnBvwuZRE0DAEiCxwneDmw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aBaMjmfPVyy0CncM3ugyGNGN1GgnjvoXUOZa0YGlofZfcZMV3nLe99BdBK8UxFFVR
-         Zq0goPPHKztTsxp/bfXsdCJxWVhXyanda9aQ1uPEp50gqLi4vs+ffgeOWho0IIdsod
-         DqETZuujZFXs7EXRghWku9W+0b+7QrX5K0xBbxHkAZwIUe8IY+Le8crK2DgA4JvEqs
-         nVHWUT29sLlZR54wNl1XJwo4Dre5KQckgtlodgwhxEbZDri4C1BgdwtI+boPEMTjBn
-         fw7ihMEONjzfhskR3IueuI41ifrfxmVXbSLP+sDmRlyolBCn6/loefvYDmcax8amrr
-         p9+9mrAzDjtiQ==
-Date:   Wed, 2 Jun 2021 17:03:57 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Chris Morgan <macroalpha82@gmail.com>
-Cc:     linux-spi@vger.kernel.org, robh+dt@kernel.org, heiko@sntech.de,
-        jbx6244@gmail.com, hjc@rock-chips.com, yifeng.zhao@rock-chips.com,
-        sugar.zhang@rock-chips.com, linux-rockchip@lists.infradead.org,
-        linux-mtd@lists.infradead.org, p.yadav@ti.com,
-        Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: [PATCH v3 2/4] spi: rockchip-sfc: add rockchip serial flash
- controller driver
-Message-ID: <20210602160357.GA4914@sirena.org.uk>
-References: <20210601201021.4406-1-macroalpha82@gmail.com>
- <20210601201021.4406-3-macroalpha82@gmail.com>
+        id S229837AbhFBQKU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 2 Jun 2021 12:10:20 -0400
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:16512 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229758AbhFBQKU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Jun 2021 12:10:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1622650118; x=1654186118;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=UjDEAZpz89SSiZ6EJwwrCicKYWz8Tlvi693/IFwHgWA=;
+  b=1vUMzj+empbFOLZ300eWUQToxs6BHPJ3Ct9GmV6FQwvi8SlC5wX2CzmI
+   jdLLCRi2sPmGLlzvz+pj1V7vXbl0J60ClRhGUTu5vhcHr3qyeIxaWn+NU
+   CmoWsPZh+f6UcuPJJ4XUVIUnPovdGOJmBOsQRxS96O+BSrWU6CvGv9W6H
+   287a9Bb9WAQlGAjDImuhJWp6Tn3EQlBZ0yzlMPmMTyikBavu3kB+UnHd9
+   9r7uy85yABexKgH/Qb13dFWALJmBkB/5t0VdIjezsPLGKlk76v65dz7Py
+   ML5YjIlGlkTecSuA3Z/9zcr7NA4NzWDfbfexRkfA64ujanhtXmOXhIcLd
+   Q==;
+IronPort-SDR: uEmO9FZw+ftc1lc44Cm3/4/qLkejKle6n4xy2E1HDTxzE4tynPRqhR0EZ8QuGNyvHpcg07HNog
+ W6Ls2yXYkCUSEqMLudMK4TA7Nt2R7I1EyEof8/7UVZsTRK0x3LBHakqCuVdOC289qrkZE+I4v/
+ trlvU8/na6ZXXJqxvwM9mIG8hFuGGYHCSAtutHituM2HEoLdf0B2cpuwosttou8+ck7RsHQKQk
+ wWkyRQ+hPsuviiQixgPEKf7+w68SZJ64JPjyhxLP/TdevSGePQ5myPGkJuL0hgwzpDr15hVA6N
+ xM8=
+X-IronPort-AV: E=Sophos;i="5.83,242,1616482800"; 
+   d="scan'208";a="123275440"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Jun 2021 09:08:36 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 2 Jun 2021 09:08:35 -0700
+Received: from dan-linux.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Wed, 2 Jun 2021 09:08:35 -0700
+From:   Dan Sneddon <dan.sneddon@microchip.com>
+To:     <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Dan Sneddon <dan.sneddon@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>
+Subject: [PATCH 1/2] spi: atmel: Switch to transfer_one transfer method
+Date:   Wed, 2 Jun 2021 09:08:14 -0700
+Message-ID: <20210602160816.4890-1-dan.sneddon@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9jxsPFA5p3P2qPhR"
-Content-Disposition: inline
-In-Reply-To: <20210601201021.4406-3-macroalpha82@gmail.com>
-X-Cookie: I have a TINY BOWL in my HEAD
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Switch from using our own transfer_one_message routine to using the one
+provided by the SPI core.
 
---9jxsPFA5p3P2qPhR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Dan Sneddon <dan.sneddon@microchip.com>
+---
+ drivers/spi/spi-atmel.c | 124 +++++++++++-----------------------------
+ 1 file changed, 33 insertions(+), 91 deletions(-)
 
-On Tue, Jun 01, 2021 at 03:10:19PM -0500, Chris Morgan wrote:
+diff --git a/drivers/spi/spi-atmel.c b/drivers/spi/spi-atmel.c
+index 7cd5fe00dfc1..0e693e72c922 100644
+--- a/drivers/spi/spi-atmel.c
++++ b/drivers/spi/spi-atmel.c
+@@ -863,7 +863,6 @@ static int atmel_spi_set_xfer_speed(struct atmel_spi *as,
+  * lock is held, spi irq is blocked
+  */
+ static void atmel_spi_pdc_next_xfer(struct spi_master *master,
+-					struct spi_message *msg,
+ 					struct spi_transfer *xfer)
+ {
+ 	struct atmel_spi	*as = spi_master_get_devdata(master);
+@@ -879,12 +878,12 @@ static void atmel_spi_pdc_next_xfer(struct spi_master *master,
+ 	spi_writel(as, RPR, rx_dma);
+ 	spi_writel(as, TPR, tx_dma);
+ 
+-	if (msg->spi->bits_per_word > 8)
++	if (xfer->bits_per_word > 8)
+ 		len >>= 1;
+ 	spi_writel(as, RCR, len);
+ 	spi_writel(as, TCR, len);
+ 
+-	dev_dbg(&msg->spi->dev,
++	dev_dbg(&master->dev,
+ 		"  start xfer %p: len %u tx %p/%08llx rx %p/%08llx\n",
+ 		xfer, xfer->len, xfer->tx_buf,
+ 		(unsigned long long)xfer->tx_dma, xfer->rx_buf,
+@@ -898,12 +897,12 @@ static void atmel_spi_pdc_next_xfer(struct spi_master *master,
+ 		spi_writel(as, RNPR, rx_dma);
+ 		spi_writel(as, TNPR, tx_dma);
+ 
+-		if (msg->spi->bits_per_word > 8)
++		if (xfer->bits_per_word > 8)
+ 			len >>= 1;
+ 		spi_writel(as, RNCR, len);
+ 		spi_writel(as, TNCR, len);
+ 
+-		dev_dbg(&msg->spi->dev,
++		dev_dbg(&master->dev,
+ 			"  next xfer %p: len %u tx %p/%08llx rx %p/%08llx\n",
+ 			xfer, xfer->len, xfer->tx_buf,
+ 			(unsigned long long)xfer->tx_dma, xfer->rx_buf,
+@@ -1273,12 +1272,28 @@ static int atmel_spi_setup(struct spi_device *spi)
+ 	return 0;
+ }
+ 
++static void atmel_spi_set_cs(struct spi_device *spi, bool enable)
++{
++	struct atmel_spi *as = spi_master_get_devdata(spi->master);
++	/* the core doesn't really pass us enable/disable, but CS HIGH vs CS LOW
++	 * since we already have routines for activate/deactivate translate
++	 * high/low to active/inactive
++	 */
++	enable = (!!(spi->mode & SPI_CS_HIGH) == enable);
++
++	if (enable) {
++		cs_activate(as, spi);
++	} else {
++		cs_deactivate(as, spi);
++	}
++
++}
++
+ static int atmel_spi_one_transfer(struct spi_master *master,
+-					struct spi_message *msg,
++					struct spi_device *spi,
+ 					struct spi_transfer *xfer)
+ {
+ 	struct atmel_spi	*as;
+-	struct spi_device	*spi = msg->spi;
+ 	u8			bits;
+ 	u32			len;
+ 	struct atmel_spi_device	*asd;
+@@ -1287,11 +1302,8 @@ static int atmel_spi_one_transfer(struct spi_master *master,
+ 	unsigned long		dma_timeout;
+ 
+ 	as = spi_master_get_devdata(master);
+-
+-	if (!(xfer->tx_buf || xfer->rx_buf) && xfer->len) {
+-		dev_dbg(&spi->dev, "missing rx or tx buf\n");
+-		return -EINVAL;
+-	}
++	/* This lock was orignally taken in atmel_spi_trasfer_one_message */
++	atmel_spi_lock(as);
+ 
+ 	asd = spi->controller_state;
+ 	bits = (asd->csr >> 4) & 0xf;
+@@ -1305,13 +1317,13 @@ static int atmel_spi_one_transfer(struct spi_master *master,
+ 	 * DMA map early, for performance (empties dcache ASAP) and
+ 	 * better fault reporting.
+ 	 */
+-	if ((!msg->is_dma_mapped)
++	if ((!master->cur_msg_mapped)
+ 		&& as->use_pdc) {
+ 		if (atmel_spi_dma_map_xfer(as, xfer) < 0)
+ 			return -ENOMEM;
+ 	}
+ 
+-	atmel_spi_set_xfer_speed(as, msg->spi, xfer);
++	atmel_spi_set_xfer_speed(as, spi, xfer);
+ 
+ 	as->done_status = 0;
+ 	as->current_transfer = xfer;
+@@ -1320,7 +1332,7 @@ static int atmel_spi_one_transfer(struct spi_master *master,
+ 		reinit_completion(&as->xfer_completion);
+ 
+ 		if (as->use_pdc) {
+-			atmel_spi_pdc_next_xfer(master, msg, xfer);
++			atmel_spi_pdc_next_xfer(master, xfer);
+ 		} else if (atmel_spi_use_dma(as, xfer)) {
+ 			len = as->current_remaining_bytes;
+ 			ret = atmel_spi_next_xfer_dma_submit(master,
+@@ -1328,7 +1340,8 @@ static int atmel_spi_one_transfer(struct spi_master *master,
+ 			if (ret) {
+ 				dev_err(&spi->dev,
+ 					"unable to use DMA, fallback to PIO\n");
+-				atmel_spi_next_xfer_pio(master, xfer);
++				as->done_status = ret;
++				break;
+ 			} else {
+ 				as->current_remaining_bytes -= len;
+ 				if (as->current_remaining_bytes < 0)
+@@ -1381,90 +1394,18 @@ static int atmel_spi_one_transfer(struct spi_master *master,
+ 		} else if (atmel_spi_use_dma(as, xfer)) {
+ 			atmel_spi_stop_dma(master);
+ 		}
+-
+-		if (!msg->is_dma_mapped
+-			&& as->use_pdc)
+-			atmel_spi_dma_unmap_xfer(master, xfer);
+-
+-		return 0;
+-
+-	} else {
+-		/* only update length if no error */
+-		msg->actual_length += xfer->len;
+ 	}
+ 
+-	if (!msg->is_dma_mapped
++	if (!master->cur_msg_mapped
+ 		&& as->use_pdc)
+ 		atmel_spi_dma_unmap_xfer(master, xfer);
+ 
+-	spi_transfer_delay_exec(xfer);
+-
+-	if (xfer->cs_change) {
+-		if (list_is_last(&xfer->transfer_list,
+-				 &msg->transfers)) {
+-			as->keep_cs = true;
+-		} else {
+-			cs_deactivate(as, msg->spi);
+-			udelay(10);
+-			cs_activate(as, msg->spi);
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-static int atmel_spi_transfer_one_message(struct spi_master *master,
+-						struct spi_message *msg)
+-{
+-	struct atmel_spi *as;
+-	struct spi_transfer *xfer;
+-	struct spi_device *spi = msg->spi;
+-	int ret = 0;
+-
+-	as = spi_master_get_devdata(master);
+-
+-	dev_dbg(&spi->dev, "new message %p submitted for %s\n",
+-					msg, dev_name(&spi->dev));
+-
+-	atmel_spi_lock(as);
+-	cs_activate(as, spi);
+-
+-	as->keep_cs = false;
+-
+-	msg->status = 0;
+-	msg->actual_length = 0;
+-
+-	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+-		trace_spi_transfer_start(msg, xfer);
+-
+-		ret = atmel_spi_one_transfer(master, msg, xfer);
+-		if (ret)
+-			goto msg_done;
+-
+-		trace_spi_transfer_stop(msg, xfer);
+-	}
+-
+ 	if (as->use_pdc)
+ 		atmel_spi_disable_pdc_transfer(as);
+ 
+-	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+-		dev_dbg(&spi->dev,
+-			"  xfer %p: len %u tx %p/%pad rx %p/%pad\n",
+-			xfer, xfer->len,
+-			xfer->tx_buf, &xfer->tx_dma,
+-			xfer->rx_buf, &xfer->rx_dma);
+-	}
+-
+-msg_done:
+-	if (!as->keep_cs)
+-		cs_deactivate(as, msg->spi);
+-
+ 	atmel_spi_unlock(as);
+ 
+-	msg->status = as->done_status;
+-	spi_finalize_current_message(spi->master);
+-
+-	return ret;
++	return as->done_status;
+ }
+ 
+ static void atmel_spi_cleanup(struct spi_device *spi)
+@@ -1554,7 +1495,8 @@ static int atmel_spi_probe(struct platform_device *pdev)
+ 	master->num_chipselect = 4;
+ 	master->setup = atmel_spi_setup;
+ 	master->flags = (SPI_MASTER_MUST_RX | SPI_MASTER_MUST_TX);
+-	master->transfer_one_message = atmel_spi_transfer_one_message;
++	master->transfer_one = atmel_spi_one_transfer;
++	master->set_cs = atmel_spi_set_cs;
+ 	master->cleanup = atmel_spi_cleanup;
+ 	master->auto_runtime_pm = true;
+ 	master->max_dma_len = SPI_MAX_DMA_XFER;
+-- 
+2.17.1
 
-This looks mostly good, a few mostly minor comments below:
-
-> @@ -0,0 +1,861 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Rockchip Serial Flash Controller Driver
-
-Please make the entire comment a C++ one to make things look more
-intentional.
-
-> +static int rockchip_sfc_get_if_type(const struct spi_mem_op *op,
-> +				    struct rockchip_sfc *sfc)
-> +{
-> +	if (op->data.buswidth == 2)
-> +		return IF_TYPE_DUAL;
-> +	else if (op->data.buswidth == 4)
-> +		return IF_TYPE_QUAD;
-> +	else if (op->data.buswidth == 1)
-> +		return IF_TYPE_STD;
-> +
-> +	dev_err(sfc->dev, "unsupported SPI read mode\n");
-> +
-> +	return -EINVAL;
-> +}
-
-This would be more idiomatically implemented as a switch statement.
-
-> +static int rockchip_sfc_wait_fifo_ready(struct rockchip_sfc *sfc, int wr, u32 timeout)
-> +{
-> +	unsigned long deadline = jiffies + timeout;
-> +	int level;
-> +
-> +	while (!(level = rockchip_sfc_get_fifo_level(sfc, wr))) {
-> +		if (time_after_eq(jiffies, deadline)) {
-> +			dev_warn(sfc->dev, "%s fifo timeout\n", wr ? "write" : "read");
-> +			return -ETIMEDOUT;
-> +		}
-> +		udelay(1);
-> +	}
-> +
-> +	return level;
-
-The use of the assignment in the while conditional makes it hard to tell
-if this code is doing what was intended.
-
-> +static int rockchip_sfc_write_fifo(struct rockchip_sfc *sfc, const u8 *buf, int len)
-> +{
-> +	u8 bytes = len & 0x3;
-> +	u32 dwords;
-> +	int tx_level;
-> +	u32 write_words;
-> +	u32 tmp = 0;
-> +
-> +	dwords = len >> 2;
-> +	while (dwords) {
-> +		tx_level = rockchip_sfc_wait_fifo_ready(sfc, SFC_CMD_DIR_WR, HZ);
-> +		if (tx_level < 0)
-> +			return tx_level;
-> +		write_words = min_t(u32, tx_level, dwords);
-> +		iowrite32_rep(sfc->regbase + SFC_DATA, buf, write_words);
-> +		buf += write_words << 2;
-> +		dwords -= write_words;
-> +		}
-
-Weird indentation on the } here.
-
-> +	/* write the rest non word aligned bytes */
-> +	if (bytes) {
-> +		tx_level = rockchip_sfc_wait_fifo_ready(sfc, SFC_CMD_DIR_WR, HZ);
-
-It's not the source buffer being aligned that's the issue here, it's the
-buffer not being a multiple of word size.
-
-> +static irqreturn_t rockchip_sfc_irq_handler(int irq, void *dev_id)
-> +{
-> +	struct rockchip_sfc *sfc = dev_id;
-> +	u32 reg;
-> +
-> +	reg = readl(sfc->regbase + SFC_RISR);
-> +
-> +	/* Clear interrupt */
-> +	writel_relaxed(reg, sfc->regbase + SFC_ICLR);
-> +
-> +	if (reg & SFC_RISR_TRAN_FINISH)
-> +		complete(&sfc->cp);
-> +
-> +	return IRQ_HANDLED;
-> +}
-
-This will silently clear any unknown interrupt, and silently claim to
-have handled an interrupt even if none happened (eg, due to shared IRQs)
-- it would be better to only ack interrupts we handle and return
-IRQ_NONE if we didn't handle any.
-
---9jxsPFA5p3P2qPhR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmC3q+wACgkQJNaLcl1U
-h9DaZwf/TBAW5Mib787bZ5E3BsaVGC/10vofELuvEYHcGtG4gCwlvutonxRUEKzc
-dJSlwxCCaA8oFIasCxs5CioPxVnO7VSmUra5XSOqBxgCmX+s/paa1GMB4Ej1fzAq
-qLrC4eqdp5GOM83BYrQ6Hx2H1ruqBP13Boie+TLLARIrqwkt/85EL/AbIQWFNUyy
-RIbHhyFcXj8CFB3k43GPmqXyNjXIhXJKxpE0NFicJ5YFcsMnFNpGFDzDmraiM9jm
-r24CurvxVZCRVQw4qIt4B7KJJIsFRrDn1P1Y8FQpFyQhPD6v1I714tUl5byIP8eH
-t//VBnR7kzk63aGmnx0NMMLSfp1YbQ==
-=vM+9
------END PGP SIGNATURE-----
-
---9jxsPFA5p3P2qPhR--
