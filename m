@@ -2,40 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B273989B5
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Jun 2021 14:35:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3933989B9
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Jun 2021 14:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbhFBMgw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 2 Jun 2021 08:36:52 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:35266 "EHLO
+        id S230087AbhFBMhI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 2 Jun 2021 08:37:08 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:35362 "EHLO
         fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbhFBMgw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Jun 2021 08:36:52 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 152CZ57o073672;
-        Wed, 2 Jun 2021 07:35:05 -0500
+        with ESMTP id S229610AbhFBMhH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Jun 2021 08:37:07 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 152CZIF7074362;
+        Wed, 2 Jun 2021 07:35:18 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1622637305;
-        bh=SqQKNsh6bz7/NUTj9eXT54AA/AulM1klcuIl12Cj+Cg=;
+        s=ti-com-17Q1; t=1622637318;
+        bh=kuxjG+bNDo9LAraeKqBvSOoxAacino0vY3k45dczBes=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=D7aob2CwOCZ3txJrCeNdFwhFxxDvIG9Va7J4ZKgBN7oR94NWSb3ZxOFDIeTEt03Lf
-         DQfsoyEk/QIwTREf1ARgYywRLc7DJTUBdzew/rk8aPvuDTGwCXX04gQJKooJ1FtRBW
-         2Qa/sI7GFxBRtFVvLiK4elrn+DMN1U0SPLmpBPrM=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 152CZ4IC014954
+        b=nNZzRhgXktJ9yNdwMw4z+pkdBtFztORMsoV4UTGvxSreIXW/TLuQt291IXGHlIzj5
+         kSpA0voyi0xXMI59ZiEQuFmwKzA7ZrHdQXngiwgunyLe7lx9jOpaWcV5+mMfOLRjZX
+         OSXIX9ZYTEoErodS7ixuTNYauYAUoO65KqPPxBHU=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 152CZIjc130886
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 2 Jun 2021 07:35:05 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 2 Jun 2021 07:35:18 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Wed, 2 Jun
- 2021 07:35:04 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ 2021 07:35:18 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Wed, 2 Jun 2021 07:35:05 -0500
+ Frontend Transport; Wed, 2 Jun 2021 07:35:18 -0500
 Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 152CYKN6023646;
-        Wed, 2 Jun 2021 07:34:55 -0500
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 152CYKN7023646;
+        Wed, 2 Jun 2021 07:35:08 -0500
 From:   Aswath Govindraju <a-govindraju@ti.com>
 CC:     Lokesh Vutla <lokeshvutla@ti.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
@@ -50,9 +50,9 @@ CC:     Lokesh Vutla <lokeshvutla@ti.com>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-omap@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH 3/5] arm64: dts: ti: am65: align ti,pindir-d0-out-d1-in property with dt-shema
-Date:   Wed, 2 Jun 2021 18:04:13 +0530
-Message-ID: <20210602123416.20378-4-a-govindraju@ti.com>
+Subject: [PATCH 4/5] arm64: dts: ti: k3-am642-evm: align ti,pindir-d0-out-d1-in property with dt-shema
+Date:   Wed, 2 Jun 2021 18:04:14 +0530
+Message-ID: <20210602123416.20378-5-a-govindraju@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210602123416.20378-1-a-govindraju@ti.com>
 References: <20210602123416.20378-1-a-govindraju@ti.com>
@@ -69,36 +69,22 @@ Therefore, fix the property accordingly.
 
 Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
 ---
- arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi | 2 +-
- arch/arm64/boot/dts/ti/k3-am654-base-board.dts     | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/ti/k3-am642-evm.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi b/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
-index f4ec9ed52939..23d51b6a9cf2 100644
---- a/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
-@@ -575,7 +575,7 @@
- 
- 	#address-cells = <1>;
- 	#size-cells= <0>;
--	ti,pindir-d0-out-d1-in = <1>;
-+	ti,pindir-d0-out-d1-in;
- };
- 
- &tscadc0 {
-diff --git a/arch/arm64/boot/dts/ti/k3-am654-base-board.dts b/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
-index eddb2ffb93ca..1b947e2c2e74 100644
---- a/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
-@@ -299,7 +299,7 @@
+diff --git a/arch/arm64/boot/dts/ti/k3-am642-evm.dts b/arch/arm64/boot/dts/ti/k3-am642-evm.dts
+index dad0efa961ed..2fd0de905e61 100644
+--- a/arch/arm64/boot/dts/ti/k3-am642-evm.dts
++++ b/arch/arm64/boot/dts/ti/k3-am642-evm.dts
+@@ -334,7 +334,7 @@
+ &main_spi0 {
+ 	pinctrl-names = "default";
  	pinctrl-0 = <&main_spi0_pins_default>;
- 	#address-cells = <1>;
- 	#size-cells= <0>;
 -	ti,pindir-d0-out-d1-in = <1>;
 +	ti,pindir-d0-out-d1-in;
- 
- 	flash@0{
- 		compatible = "jedec,spi-nor";
+ 	eeprom@0 {
+ 		compatible = "microchip,93lc46b";
+ 		reg = <0>;
 -- 
 2.17.1
 
