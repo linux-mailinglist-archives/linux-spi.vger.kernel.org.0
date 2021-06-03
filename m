@@ -2,100 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF28A399BA8
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Jun 2021 09:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8835E39A06A
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Jun 2021 13:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbhFCHg2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Jun 2021 03:36:28 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:28472 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229567AbhFCHg2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Jun 2021 03:36:28 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1537ROxn019474;
-        Thu, 3 Jun 2021 09:34:31 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=selector1;
- bh=M8auMruCTancpOkSvfb5Dqc6xkUzb7oAmg9WAVNNKKw=;
- b=sE/6zk8pEdJUvam5nVDtSSp5T4mk7u6Cwgioe0iSaLimTF99/PSM0708+HCHb+y7FpT2
- hM0PvzsspYHy6edpPJkOSELH9Hvjnda3M9fJKJarUeNczCXns5C4EVDu/yN0vGmNAyPm
- wnBCPtAW+k5ZvTsyUGNazCws18wv+8jZOwbb2birdTXk5uj4mNoVB4AjlK+jedxaUBBR
- lwTGYdpHMeHVJIFoHXGSyMpRWRZVeQuUROF8/WoMhe6n2nbk4pJ8L5trLefCSZwd0OcX
- vyUTchffh6BMjYgdj0I3IFvowL99j7+XPEJZn9I0ACDs68KjRQY4Vfn9f9ZVypoplY05 qQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 38x3gv33cx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Jun 2021 09:34:31 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CF02010002A;
-        Thu,  3 Jun 2021 09:34:30 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3FD1B2138CF;
-        Thu,  3 Jun 2021 09:34:30 +0200 (CEST)
-Received: from localhost (10.75.127.48) by SFHDAG2NODE3.st.com (10.75.127.6)
- with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 3 Jun 2021 09:34:29
- +0200
-From:   <patrice.chotard@foss.st.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
-        <patrice.chotard@foss.st.com>
-Subject: spi: stm32-qspi: Always wait BUSY bit to be cleared in stm32_qspi_wait_cmd()
-Date:   Thu, 3 Jun 2021 09:34:21 +0200
-Message-ID: <20210603073421.8441-1-patrice.chotard@foss.st.com>
-X-Mailer: git-send-email 2.17.1
+        id S229854AbhFCL6i (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Jun 2021 07:58:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43892 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229800AbhFCL6i (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 3 Jun 2021 07:58:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 652D860FE4;
+        Thu,  3 Jun 2021 11:56:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622721413;
+        bh=yNyMKERABSuu0uUxGjPMgn/EQtMIGsB3x1zSWqeIYm4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mvr4JeHEggGsMJf2lVgTV3NIpJk0wLSyFH/pvEep7xiSRT3JNGsr/wKeYSdBOVRbu
+         vKQEKj8aeRpjlc8Z3Jn6w2CVj29Sj00IUpkNAKz5G62NHF7GR/t1yIvEEssoFl3X6x
+         Nfa4e5n/72UzeT/Qv61RL0rEJODVcgipZieZLBa8QY1a4uxbDqnA6bQYrgYSV1js+Z
+         Z1vA/HWXKiEpoZNnpasLJwXMblSzWvL9AcObQNjd4UaeFtg0VDV0l298XyULStMYLW
+         b2B8ky1OE7ZvrBm/9NG0xGrTKUhXXmA/ITMD0w+mYWTFhJubvd+SS0EjLnxlIA6p4e
+         kGoibRb6R4IoQ==
+Date:   Thu, 3 Jun 2021 12:56:42 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     patrice.chotard@foss.st.com
+Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        christophe.kerello@foss.st.com
+Subject: Re: spi: stm32-qspi: Always wait BUSY bit to be cleared in
+ stm32_qspi_wait_cmd()
+Message-ID: <20210603115642.GC4257@sirena.org.uk>
+References: <20210603073421.8441-1-patrice.chotard@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-06-03_04:2021-06-02,2021-06-03 signatures=0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="w7PDEPdKQumQfZlR"
+Content-Disposition: inline
+In-Reply-To: <20210603073421.8441-1-patrice.chotard@foss.st.com>
+X-Cookie: Where am I?  Who am I?  Am I?  I
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-In U-boot side, an issue has been encountered when QSPI source clock is
-running at low frequency (24 MHz for example), waiting for TCF bit to be
-set didn't ensure that all data has been send out the FIFO, we should also
-wait that BUSY bit is cleared.
+--w7PDEPdKQumQfZlR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-To prevent similar issue in kernel driver, we implement similar behavior
-by always waiting BUSY bit to be cleared.
+On Thu, Jun 03, 2021 at 09:34:21AM +0200, patrice.chotard@foss.st.com wrote:
+> From: Patrice Chotard <patrice.chotard@foss.st.com>
+>=20
+> In U-boot side, an issue has been encountered when QSPI source clock is
+> running at low frequency (24 MHz for example), waiting for TCF bit to be
+> set didn't ensure that all data has been send out the FIFO, we should also
+> wait that BUSY bit is cleared.
 
-Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
----
- drivers/spi/spi-stm32-qspi.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Please remember to put the [PATCH] in your subject.
 
-diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index 7e640ccc7e77..594f64136208 100644
---- a/drivers/spi/spi-stm32-qspi.c
-+++ b/drivers/spi/spi-stm32-qspi.c
-@@ -294,7 +294,7 @@ static int stm32_qspi_wait_cmd(struct stm32_qspi *qspi,
- 	int err = 0;
- 
- 	if (!op->data.nbytes)
--		return stm32_qspi_wait_nobusy(qspi);
-+		goto wait_nobusy;
- 
- 	if (readl_relaxed(qspi->io_base + QSPI_SR) & SR_TCF)
- 		goto out;
-@@ -315,6 +315,9 @@ static int stm32_qspi_wait_cmd(struct stm32_qspi *qspi,
- out:
- 	/* clear flags */
- 	writel_relaxed(FCR_CTCF | FCR_CTEF, qspi->io_base + QSPI_FCR);
-+wait_nobusy:
-+	if (!err)
-+		err = stm32_qspi_wait_nobusy(qspi);
- 
- 	return err;
- }
--- 
-2.17.1
+--w7PDEPdKQumQfZlR
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmC4w3kACgkQJNaLcl1U
+h9AGvgf/c06cSrAIJt4WkAnSjIsVEZLJ6EtX2fhR1E3t7P/EQIOwLTAT5hlt3WMq
+vr56vrAhKSTgbDd1LKu12o9YKuM0IaU5IpBc5EbEKCtyV0uviSywNggFWtvxuegi
+CQzQRJGMlpTZ97Kbf/NR82O4wTUTgrJLWLF1xoNbLW5FqLb2oZ6PCdaZF7cP7JDu
+UVy9/JYGv6SBY4q6FDnF5avWVhQBKSjRZonrL1butvMA+7fgoaZrBhioZGKfojT0
+8twf8B8QHmjNMEdxeBBqbQIAMnKfgMC9Mc6spHybTm/qIoUehU6a1ZIf4yp/+RmH
+oWkC6cNs0d/I2R0iecV9x4Mj8ngQpA==
+=ktXv
+-----END PGP SIGNATURE-----
+
+--w7PDEPdKQumQfZlR--
