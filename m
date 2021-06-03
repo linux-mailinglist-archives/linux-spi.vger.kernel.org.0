@@ -2,43 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FDC839AA35
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Jun 2021 20:42:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB52439AA38
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Jun 2021 20:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbhFCSoB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Jun 2021 14:44:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52876 "EHLO mail.kernel.org"
+        id S229881AbhFCSoE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Jun 2021 14:44:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52966 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229576AbhFCSoB (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 3 Jun 2021 14:44:01 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 07DA5613EE;
-        Thu,  3 Jun 2021 18:42:15 +0000 (UTC)
+        id S229576AbhFCSoE (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 3 Jun 2021 14:44:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B76BC613F8;
+        Thu,  3 Jun 2021 18:42:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622745736;
-        bh=WQrPHRQ4Uy6mv7zGw5EJ9wsQksZq35+9fQzYLsvFDgg=;
+        s=k20201202; t=1622745739;
+        bh=g1/r4tEGhtCj6lkdxd0L3N8YRbkPXi360LES2CfwFOw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e1XTFevauO+76U45l2+gkVxOyE8b+lA2ZEG8V1VwuxLFozPpkdsltBw1qcnFjAa1e
-         wQCDGKOq7A4slp3QfctGw+BtbnHJQ8Zt/OQtLNvLTMBUKf+D5VcSdmgo+uj3nqUKFu
-         mtiKfwRoDljhf1UoAIZN0F0cA4ehR2K4VvAXd7PJXP3l3ETy9+SYIfd2Em2DCtIHU5
-         bfEsyYei9fe7c8ckUkMZQSXsFg+XukcLIFyj1K74uBQXdwUtvkp2tEgs/nFtNEQGTc
-         68oIJq2uFpnlgjM4/x80vHZMoDxsDGchA4javhUp0yRGrHyXrohc0lrLEpvy2h8IrV
-         C+VC2hnmQi7Aw==
+        b=vBRCnf4GPNeS8yf7UcWVMo+BtBm0a5n/daCHJ+ca3f0PNjN/ltDOrBq4a748B3brS
+         tHUK8rdhchXiHTpB/OU6+PTQuqMGX++SPwIGeWHKQL9T+v9Yz6gZJdwVMZUz6bN2+L
+         9vfuQ+CJQyrYLvnprtUyTZjHNDMo8mQqNO8b4+N8lWlGsyWS3mYyxAWSzHkfSAlQfG
+         czb3Gs8QwJ3lWHlE7L9zq/+mCUHLRVi0+48FxWwk+ExuMDR5c6hbzjn3J+i5GEAO+7
+         PS/n4KjxouY8M5WaJ1DLqvqd+sAdTqJRRZyKjsP2EjnmtYVUjVzKydcqBIIBd+MdVs
+         UC9oYSOZCeuPw==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
-        patrice.chotard@foss.st.com,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        patrice.chotard@foss.st.com
+Cc:     Mark Brown <broonie@kernel.org>, christophe.kerello@foss.st.com,
+        linux-spi@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        linux-mtd@lists.infradead.org
-Cc:     Mark Brown <broonie@kernel.org>, christophe.kerello@foss.st.com
-Subject: Re: [PATCH v5 0/3] MTD: spinand: Add spi_mem_poll_status() support
-Date:   Thu,  3 Jun 2021 19:41:44 +0100
-Message-Id: <162274571326.15050.6494166618231849468.b4-ty@kernel.org>
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: spi: stm32-qspi: Always wait BUSY bit to be cleared in stm32_qspi_wait_cmd()
+Date:   Thu,  3 Jun 2021 19:41:45 +0100
+Message-Id: <162274571327.15050.1265263305930790161.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210518162754.15940-1-patrice.chotard@foss.st.com>
-References: <20210518162754.15940-1-patrice.chotard@foss.st.com>
+In-Reply-To: <20210603073421.8441-1-patrice.chotard@foss.st.com>
+References: <20210603073421.8441-1-patrice.chotard@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -46,16 +43,14 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 18 May 2021 18:27:51 +0200, patrice.chotard@foss.st.com wrote:
-> This series adds support for the spi_mem_poll_status() spinand
-> interface.
-> Some QSPI controllers allows to poll automatically memory
-> status during operations (erase, read or write). This allows to
-> offload the CPU for this task.
-> STM32 QSPI is supporting this feature, driver update are also
-> part of this series.
+On Thu, 3 Jun 2021 09:34:21 +0200, patrice.chotard@foss.st.com wrote:
+> In U-boot side, an issue has been encountered when QSPI source clock is
+> running at low frequency (24 MHz for example), waiting for TCF bit to be
+> set didn't ensure that all data has been send out the FIFO, we should also
+> wait that BUSY bit is cleared.
 > 
-> [...]
+> To prevent similar issue in kernel driver, we implement similar behavior
+> by always waiting BUSY bit to be cleared.
 
 Applied to
 
@@ -63,12 +58,8 @@ Applied to
 
 Thanks!
 
-[1/3] spi: spi-mem: add automatic poll status functions
-      commit: c955a0cc8a286e5da1ebb88c19201e9bab8c2422
-[2/3] mtd: spinand: use the spi-mem poll status APIs
-      commit: 8941cd8d295e40f8ea1c0a5045d6d068b8e33eec
-[3/3] spi: stm32-qspi: add automatic poll status feature
-      commit: 86d1c6bbae32122c5f703b2d8acccf5d4258f2bb
+[1/1] spi: stm32-qspi: Always wait BUSY bit to be cleared in stm32_qspi_wait_cmd()
+      commit: d38fa9a155b2829b7e2cfcf8a4171b6dd3672808
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
