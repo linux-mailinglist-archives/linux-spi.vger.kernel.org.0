@@ -2,38 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1918539A799
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Jun 2021 19:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6883739A7DA
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Jun 2021 19:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbhFCRL7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Jun 2021 13:11:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43332 "EHLO mail.kernel.org"
+        id S232957AbhFCRM4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Jun 2021 13:12:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42858 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232428AbhFCRLQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 3 Jun 2021 13:11:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3C91F613FF;
-        Thu,  3 Jun 2021 17:09:30 +0000 (UTC)
+        id S232680AbhFCRME (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 3 Jun 2021 13:12:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 944EE6140F;
+        Thu,  3 Jun 2021 17:10:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622740170;
-        bh=/9WVnmVhkc1548IAmxcFZC35G4LhBlbFzeB7ta9aaqo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pVPyxYsrKbz8NBobATZuGtVuUITl92nBFZp0cyQ/fmVTpDDAWrKEGPhUbMrU2zqd2
-         ZRwdh3N9n629TieTi9Y2kIqNzlYTqny5n/TGMKuIBl5SzDkYsAzsSRjI8BUBWP434w
-         1Rlt/EbpLkz+VrtnH52PBxdwGsITQUeg59nJcsV8Vh/nkTcYpBpJTshR3UVn2byrtf
-         SOTabpFKNULj1siYk+77IBYv8MKOsEXdmZViW79p0K/BiwYnLfsgxyJPKoccDNqCJF
-         A6QkurbHLfGXdC06IKEVJgSq7xIF6QgNI5clVofjz/k1OwQ8lF+tgyWkQbo2N86Hmv
-         /gpQT4x3IKzxw==
+        s=k20201202; t=1622740201;
+        bh=T6IGzOx7Q8PNneXGVdQ5kIhGAfuLxwwNAP7uS5dhVpw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jytepGwgqC/hdTRuqVjJOqcupMnib8noKHRIn24fE5mrMcwlRDgk0FXazctV5sBOm
+         1q3yasMyTI1kIA8k2md7zDLizHyZwVgecbhbN5W2fbo56JLsLmWQ7CfjdwTripdmsm
+         HHzQRU8kDsIHR+KwNZE8eb2xGXwlT4O3xRaL0nuXuE30dr23PsbyGpD+wYNvOcWf/H
+         3ykQcH+n7b/WOk5anekL8MSovvBDDJ0DI0+E9zjxScqbSdANJTVsHxnkD3lhtfowA6
+         wxO6eXoNSSCkXllbAJZqkPf92FbeOAgcJccvUiBwlY2SG4h+jAhWC4RConoFtX8d3V
+         7cyvPP6ROSGAw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chunyan Zhang <chunyan.zhang@unisoc.com>,
+Cc:     Saravana Kannan <saravanak@google.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 09/31] spi: sprd: Add missing MODULE_DEVICE_TABLE
-Date:   Thu,  3 Jun 2021 13:08:57 -0400
-Message-Id: <20210603170919.3169112-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 01/23] spi: Fix spi device unregister flow
+Date:   Thu,  3 Jun 2021 13:09:37 -0400
+Message-Id: <20210603170959.3169420-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210603170919.3169112-1-sashal@kernel.org>
-References: <20210603170919.3169112-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,35 +40,90 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+From: Saravana Kannan <saravanak@google.com>
 
-[ Upstream commit 7907cad7d07e0055789ec0c534452f19dfe1fc80 ]
+[ Upstream commit c7299fea67696db5bd09d924d1f1080d894f92ef ]
 
-MODULE_DEVICE_TABLE is used to extract the device information out of the
-driver and builds a table when being compiled. If using this macro,
-kernel can find the driver if available when the device is plugged in,
-and then loads that driver and initializes the device.
+When an SPI device is unregistered, the spi->controller->cleanup() is
+called in the device's release callback. That's wrong for a couple of
+reasons:
 
-Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
-Link: https://lore.kernel.org/r/20210512093534.243040-1-zhang.lyra@gmail.com
+1. spi_dev_put() can be called before spi_add_device() is called. And
+   it's spi_add_device() that calls spi_setup(). This will cause clean()
+   to get called without the spi device ever being setup.
+
+2. There's no guarantee that the controller's driver would be present by
+   the time the spi device's release function gets called.
+
+3. It also causes "sleeping in atomic context" stack dump[1] when device
+   link deletion code does a put_device() on the spi device.
+
+Fix these issues by simply moving the cleanup from the device release
+callback to the actual spi_unregister_device() function.
+
+[1] - https://lore.kernel.org/lkml/CAHp75Vc=FCGcUyS0v6fnxme2YJ+qD+Y-hQDQLa2JhWNON9VmsQ@mail.gmail.com/
+
+Signed-off-by: Saravana Kannan <saravanak@google.com>
+Link: https://lore.kernel.org/r/20210426235638.1285530-1-saravanak@google.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-sprd.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/spi/spi.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/spi/spi-sprd.c b/drivers/spi/spi-sprd.c
-index c2bdf19ccdd2..44dc7b5b45ad 100644
---- a/drivers/spi/spi-sprd.c
-+++ b/drivers/spi/spi-sprd.c
-@@ -1066,6 +1066,7 @@ static const struct of_device_id sprd_spi_of_match[] = {
- 	{ .compatible = "sprd,sc9860-spi", },
- 	{ /* sentinel */ }
- };
-+MODULE_DEVICE_TABLE(of, sprd_spi_of_match);
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index bbe33016d371..39dfaad9097e 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -55,10 +55,6 @@ static void spidev_release(struct device *dev)
+ {
+ 	struct spi_device	*spi = to_spi_device(dev);
  
- static struct platform_driver sprd_spi_driver = {
- 	.driver = {
+-	/* spi controllers may cleanup for released devices */
+-	if (spi->controller->cleanup)
+-		spi->controller->cleanup(spi);
+-
+ 	spi_controller_put(spi->controller);
+ 	kfree(spi);
+ }
+@@ -506,6 +502,12 @@ static int spi_dev_check(struct device *dev, void *data)
+ 	return 0;
+ }
+ 
++static void spi_cleanup(struct spi_device *spi)
++{
++	if (spi->controller->cleanup)
++		spi->controller->cleanup(spi);
++}
++
+ /**
+  * spi_add_device - Add spi_device allocated with spi_alloc_device
+  * @spi: spi_device to register
+@@ -567,11 +569,13 @@ int spi_add_device(struct spi_device *spi)
+ 
+ 	/* Device may be bound to an active driver when this returns */
+ 	status = device_add(&spi->dev);
+-	if (status < 0)
++	if (status < 0) {
+ 		dev_err(dev, "can't add %s, status %d\n",
+ 				dev_name(&spi->dev), status);
+-	else
++		spi_cleanup(spi);
++	} else {
+ 		dev_dbg(dev, "registered child %s\n", dev_name(&spi->dev));
++	}
+ 
+ done:
+ 	mutex_unlock(&spi_add_lock);
+@@ -658,6 +662,8 @@ void spi_unregister_device(struct spi_device *spi)
+ 	if (!spi)
+ 		return;
+ 
++	spi_cleanup(spi);
++
+ 	if (spi->dev.of_node) {
+ 		of_node_clear_flag(spi->dev.of_node, OF_POPULATED);
+ 		of_node_put(spi->dev.of_node);
 -- 
 2.30.2
 
