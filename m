@@ -2,89 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94265399523
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Jun 2021 23:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF28A399BA8
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Jun 2021 09:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbhFBVGD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 2 Jun 2021 17:06:03 -0400
-Received: from mail-oi1-f177.google.com ([209.85.167.177]:47098 "EHLO
-        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbhFBVGC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Jun 2021 17:06:02 -0400
-Received: by mail-oi1-f177.google.com with SMTP id x15so4010212oic.13;
-        Wed, 02 Jun 2021 14:04:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oVR3AvDB5YuftfnirDS6S655YqBrktVMLOvolfq9ZGQ=;
-        b=k8V2KqFQ8/l8Fvs0pOqGB2YZbdiFtQz3PDNwTIr6Jidpuz280VRboaF47Vr8GYrP6A
-         TMrQecDqv7L1D1Qu8KQEe9/N6C7yK12JLMNQj3EP+N+UnAZ8QvIw4vRFRsPxqM9pb82O
-         oK+aEbUFG/EqMEFevYlc7a1xb8Kfaxmi/C045AiuthVINKAjb5ANqRQEXb+bet/2D1kq
-         +ZN9gjUQKZrhGD34c1OT1Ji02tdx868bTryCCNvtRqPMoU/9Qldj2Vg+cswuAxmEnlE2
-         ZqK0qPfzTGbOnYVf8w/ul6T7gbEn73hr6lmM6Mx9Y3eR2J4X0hGZhHmcKEMBwZ+VUIwj
-         Em/Q==
-X-Gm-Message-State: AOAM530pox7+TffCzNKEdx1l87TimqmGEAEuZE8SHQtA8J1TDOOqjkrS
-        6fnYj5i5f0bw4oyXrySAug==
-X-Google-Smtp-Source: ABdhPJzyeoycgDbLMad+zV8zeFpz+fpMbATJOAz+M+rhuXu7mrVC5TLXcW3DEdGSxZh8+Iy2RdiLxg==
-X-Received: by 2002:a05:6808:1c9:: with SMTP id x9mr23365339oic.109.1622667843191;
-        Wed, 02 Jun 2021 14:04:03 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id x14sm241146oic.3.2021.06.02.14.04.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jun 2021 14:04:02 -0700 (PDT)
-Received: (nullmailer pid 4038638 invoked by uid 1000);
-        Wed, 02 Jun 2021 21:04:00 -0000
-Date:   Wed, 2 Jun 2021 16:04:00 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Sekhar Nori <nsekhar@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Keerthy <j-keerthy@ti.com>, Nishanth Menon <nm@ti.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-i2c@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [PATCH 04/12] dt-bindings: clock: update ti,sci-clk.yaml
- references
-Message-ID: <20210602210400.GA4038575@robh.at.kernel.org>
-References: <cover.1622648507.git.mchehab+huawei@kernel.org>
- <0fae687366c09dfb510425b3c88316a727b27d6d.1622648507.git.mchehab+huawei@kernel.org>
+        id S229892AbhFCHg2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Jun 2021 03:36:28 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:28472 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229567AbhFCHg2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Jun 2021 03:36:28 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1537ROxn019474;
+        Thu, 3 Jun 2021 09:34:31 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=M8auMruCTancpOkSvfb5Dqc6xkUzb7oAmg9WAVNNKKw=;
+ b=sE/6zk8pEdJUvam5nVDtSSp5T4mk7u6Cwgioe0iSaLimTF99/PSM0708+HCHb+y7FpT2
+ hM0PvzsspYHy6edpPJkOSELH9Hvjnda3M9fJKJarUeNczCXns5C4EVDu/yN0vGmNAyPm
+ wnBCPtAW+k5ZvTsyUGNazCws18wv+8jZOwbb2birdTXk5uj4mNoVB4AjlK+jedxaUBBR
+ lwTGYdpHMeHVJIFoHXGSyMpRWRZVeQuUROF8/WoMhe6n2nbk4pJ8L5trLefCSZwd0OcX
+ vyUTchffh6BMjYgdj0I3IFvowL99j7+XPEJZn9I0ACDs68KjRQY4Vfn9f9ZVypoplY05 qQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 38x3gv33cx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Jun 2021 09:34:31 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CF02010002A;
+        Thu,  3 Jun 2021 09:34:30 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3FD1B2138CF;
+        Thu,  3 Jun 2021 09:34:30 +0200 (CEST)
+Received: from localhost (10.75.127.48) by SFHDAG2NODE3.st.com (10.75.127.6)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 3 Jun 2021 09:34:29
+ +0200
+From:   <patrice.chotard@foss.st.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
+        <patrice.chotard@foss.st.com>
+Subject: spi: stm32-qspi: Always wait BUSY bit to be cleared in stm32_qspi_wait_cmd()
+Date:   Thu, 3 Jun 2021 09:34:21 +0200
+Message-ID: <20210603073421.8441-1-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0fae687366c09dfb510425b3c88316a727b27d6d.1622648507.git.mchehab+huawei@kernel.org>
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-06-03_04:2021-06-02,2021-06-03 signatures=0
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 02 Jun 2021 17:43:10 +0200, Mauro Carvalho Chehab wrote:
-> Changeset a7dbfa6f3877 ("dt-bindings: clock: Convert ti,sci-clk to json schema")
-> renamed: Documentation/devicetree/bindings/clock/ti,sci-clk.txt
-> to: Documentation/devicetree/bindings/clock/ti,sci-clk.yaml.
-> 
-> Update the cross-references accordingly.
-> 
-> Fixes: a7dbfa6f3877 ("dt-bindings: clock: Convert ti,sci-clk to json schema")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->  Documentation/devicetree/bindings/gpio/gpio-davinci.txt | 2 +-
->  Documentation/devicetree/bindings/i2c/i2c-davinci.txt   | 2 +-
->  Documentation/devicetree/bindings/mmc/ti-omap-hsmmc.txt | 2 +-
->  Documentation/devicetree/bindings/net/can/c_can.txt     | 2 +-
->  Documentation/devicetree/bindings/spi/spi-davinci.txt   | 2 +-
->  MAINTAINERS                                             | 2 +-
->  6 files changed, 6 insertions(+), 6 deletions(-)
-> 
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-Applied, thanks!
+In U-boot side, an issue has been encountered when QSPI source clock is
+running at low frequency (24 MHz for example), waiting for TCF bit to be
+set didn't ensure that all data has been send out the FIFO, we should also
+wait that BUSY bit is cleared.
+
+To prevent similar issue in kernel driver, we implement similar behavior
+by always waiting BUSY bit to be cleared.
+
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+ drivers/spi/spi-stm32-qspi.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+index 7e640ccc7e77..594f64136208 100644
+--- a/drivers/spi/spi-stm32-qspi.c
++++ b/drivers/spi/spi-stm32-qspi.c
+@@ -294,7 +294,7 @@ static int stm32_qspi_wait_cmd(struct stm32_qspi *qspi,
+ 	int err = 0;
+ 
+ 	if (!op->data.nbytes)
+-		return stm32_qspi_wait_nobusy(qspi);
++		goto wait_nobusy;
+ 
+ 	if (readl_relaxed(qspi->io_base + QSPI_SR) & SR_TCF)
+ 		goto out;
+@@ -315,6 +315,9 @@ static int stm32_qspi_wait_cmd(struct stm32_qspi *qspi,
+ out:
+ 	/* clear flags */
+ 	writel_relaxed(FCR_CTCF | FCR_CTEF, qspi->io_base + QSPI_FCR);
++wait_nobusy:
++	if (!err)
++		err = stm32_qspi_wait_nobusy(qspi);
+ 
+ 	return err;
+ }
+-- 
+2.17.1
+
