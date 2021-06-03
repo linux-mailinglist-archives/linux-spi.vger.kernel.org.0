@@ -2,77 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D6A39AA3C
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Jun 2021 20:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D075139AB4F
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Jun 2021 22:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbhFCSoI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Jun 2021 14:44:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53046 "EHLO mail.kernel.org"
+        id S230127AbhFCUC2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Jun 2021 16:02:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37486 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229576AbhFCSoH (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 3 Jun 2021 14:44:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EA21C613F1;
-        Thu,  3 Jun 2021 18:42:21 +0000 (UTC)
+        id S230078AbhFCUC1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 3 Jun 2021 16:02:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E5E226140A;
+        Thu,  3 Jun 2021 20:00:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622745742;
-        bh=xKaG2pH2TD0bHEMiFecF7yskodJI26NYH6Xk5pWAnhE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JYH5KbYIbW6PQNNvZb9WEAvDTUmjCz8Y/0IA+7jcVKz2kinNk+XUCLneNstQtpGpX
-         6cGi9lMCRBskuekHWyQpZb0zu64T/hGL5r9nToj+/r/geB9lPG3ico1WIpLZTZ3Iwb
-         D/O/oOb/yfxByowy9YK+UxETIhQaL7lDi8UNx2s2f5YnaJaZO/0hWg95JcE0gCsIoj
-         AeIwRrZLTB/jCzHpJABplafXvdGYNAS0Cu8UFfs2MO9LGUa0R5WnxyS8H7CH3w4Vyn
-         KUcz/tLzJMp764RU/tSIQi9/8wxsULbOt04yKL4zQ+PvJiwRVUud7VxDCR3fav5/cX
-         fYdeoxl5+1ixw==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-spi@vger.kernel.org, Dan Sneddon <dan.sneddon@microchip.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>
-Subject: Re: [PATCH 1/2] spi: atmel: Switch to transfer_one transfer method
-Date:   Thu,  3 Jun 2021 19:41:46 +0100
-Message-Id: <162274571327.15050.7169168930168648183.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210602160816.4890-1-dan.sneddon@microchip.com>
-References: <20210602160816.4890-1-dan.sneddon@microchip.com>
+        s=k20201202; t=1622750441;
+        bh=bL91cu6ogtTyGxRPIZri6Ql+FCiu+SF6QSQHbM1zYpU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Tr2eRL2ruuI3sDRg5RflhkOkyV9mFTujf1VRSwWuWzGKIhZvbVCaAxYpgxsOn967z
+         NSAD7IYMIoOO8cgexRa8htj5TMa5JoT3Wkv0szF26PJNQMzsXvJWAGYrsny6UgxWOB
+         0DSG8won1tshR1VxRhArAz/SO25OQjYrnL5dyQS242aahuCLuEtgIYx6YTOuGDajz0
+         VHL9LXHRxKII0rPps4b8g2l1RYIZFPwbgL/Xx11gmnvOpzM53mf3Uy04x4VbkhOV+Z
+         glYdnkCOfixzeKFSHUpB7CAwyKWxHMoZF81Ql2bUy103FcIKpKZNrY/s3wN0K43mHs
+         i4TDGELShuacg==
+Received: by mail-ej1-f51.google.com with SMTP id a11so10323612ejf.3;
+        Thu, 03 Jun 2021 13:00:41 -0700 (PDT)
+X-Gm-Message-State: AOAM532vyxjdQayA5RHN/BZ3eSM5VLUqqhLnZp8Z0LjUv6v41+SWwB5I
+        gzz1Ys23MifmIGCwdrRsLZQ4Ow6jF77dUPl5Hg==
+X-Google-Smtp-Source: ABdhPJw+IpYqfuukI2sJnNmANmuAWrENFVxO3xUzzlu0fu/6+LhA82SGF/btdHtPoNYDNnkITP5uV0NhDBINu7IILPI=
+X-Received: by 2002:a17:906:1d0a:: with SMTP id n10mr868094ejh.341.1622750440433;
+ Thu, 03 Jun 2021 13:00:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <cover.1622648507.git.mchehab+huawei@kernel.org>
+In-Reply-To: <cover.1622648507.git.mchehab+huawei@kernel.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 3 Jun 2021 15:00:29 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKLwfgj1khYFxTykjaYPjbNRd=Ajr-bfEnNYY0cu0Z18A@mail.gmail.com>
+Message-ID: <CAL_JsqKLwfgj1khYFxTykjaYPjbNRd=Ajr-bfEnNYY0cu0Z18A@mail.gmail.com>
+Subject: Re: [PATCH 00/12] Fix broken docs references at next-20210602
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Keerthy <j-keerthy@ti.com>, Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Peter Rosin <peda@axentia.se>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 2 Jun 2021 09:08:14 -0700, Dan Sneddon wrote:
-> Switch from using our own transfer_one_message routine to using the one
-> provided by the SPI core.
+On Wed, Jun 2, 2021 at 10:43 AM Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
+>
+> There are some broken references at today's linux-next with regards
+> to files inside Documentation/.
+>
+> Address them.
 
-Applied to
+I've finally added this to my automated checks, so now anyone that
+breaks this on binding schema patches should get notified (with the
+exception of patches not Cc'ed to the DT list).
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/2] spi: atmel: Switch to transfer_one transfer method
-      commit: 5fa5e6dec762305a783e918a90a05369fc10e346
-[2/2] spi: atmel: Reduce spin lock usage
-      commit: 4abd641501663493764949f045ebf9f8c0da0307
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Rob
