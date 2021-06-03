@@ -2,82 +2,119 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D075139AB4F
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Jun 2021 22:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A0739AB92
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Jun 2021 22:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbhFCUC2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Jun 2021 16:02:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37486 "EHLO mail.kernel.org"
+        id S230103AbhFCUKv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Jun 2021 16:10:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39754 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230078AbhFCUC1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 3 Jun 2021 16:02:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E5E226140A;
-        Thu,  3 Jun 2021 20:00:41 +0000 (UTC)
+        id S230083AbhFCUKu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 3 Jun 2021 16:10:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8EBE8611C9;
+        Thu,  3 Jun 2021 20:09:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622750441;
-        bh=bL91cu6ogtTyGxRPIZri6Ql+FCiu+SF6QSQHbM1zYpU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Tr2eRL2ruuI3sDRg5RflhkOkyV9mFTujf1VRSwWuWzGKIhZvbVCaAxYpgxsOn967z
-         NSAD7IYMIoOO8cgexRa8htj5TMa5JoT3Wkv0szF26PJNQMzsXvJWAGYrsny6UgxWOB
-         0DSG8won1tshR1VxRhArAz/SO25OQjYrnL5dyQS242aahuCLuEtgIYx6YTOuGDajz0
-         VHL9LXHRxKII0rPps4b8g2l1RYIZFPwbgL/Xx11gmnvOpzM53mf3Uy04x4VbkhOV+Z
-         glYdnkCOfixzeKFSHUpB7CAwyKWxHMoZF81Ql2bUy103FcIKpKZNrY/s3wN0K43mHs
-         i4TDGELShuacg==
-Received: by mail-ej1-f51.google.com with SMTP id a11so10323612ejf.3;
-        Thu, 03 Jun 2021 13:00:41 -0700 (PDT)
-X-Gm-Message-State: AOAM532vyxjdQayA5RHN/BZ3eSM5VLUqqhLnZp8Z0LjUv6v41+SWwB5I
-        gzz1Ys23MifmIGCwdrRsLZQ4Ow6jF77dUPl5Hg==
-X-Google-Smtp-Source: ABdhPJw+IpYqfuukI2sJnNmANmuAWrENFVxO3xUzzlu0fu/6+LhA82SGF/btdHtPoNYDNnkITP5uV0NhDBINu7IILPI=
-X-Received: by 2002:a17:906:1d0a:: with SMTP id n10mr868094ejh.341.1622750440433;
- Thu, 03 Jun 2021 13:00:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1622648507.git.mchehab+huawei@kernel.org>
-In-Reply-To: <cover.1622648507.git.mchehab+huawei@kernel.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 3 Jun 2021 15:00:29 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKLwfgj1khYFxTykjaYPjbNRd=Ajr-bfEnNYY0cu0Z18A@mail.gmail.com>
-Message-ID: <CAL_JsqKLwfgj1khYFxTykjaYPjbNRd=Ajr-bfEnNYY0cu0Z18A@mail.gmail.com>
-Subject: Re: [PATCH 00/12] Fix broken docs references at next-20210602
+        s=k20201202; t=1622750945;
+        bh=vouxc5KMLEMa3QrqPqXja2Z4KHWtjXXf/sVDLuzgUZE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UYeXhRQkhsFG2wW4pMFx1ENgilnnfZtGlHetX3wkENSTPOwGglvuReS2frt1cjTtl
+         JLKCPkpKMa+NFqpLVPYTtBPL0W7QDpwuraSUhXTED5ruFCTZ9l/ZX9j2f0fTHd72HX
+         kez6g1QVBsDVie8+Ol70lWcbLUVi1CXU1PW0xR/2pCdlEh0uFsIt5t1odTPh3MK5Rr
+         a5Km3PlwQZ/OU5n1g2kWDQQWpus4Z5O11Vo1RXQubZjb3F/M7e1Zij82vHdp1Vv0Lw
+         PNnhqdSX0wMy7B0BUu9GlN4yLxGGR/WG4yMmJYO7tsywLyQGMS7Po49eXeaSRMo1qA
+         +IfEKzjVtpXVQ==
+Date:   Thu, 3 Jun 2021 22:09:02 +0200
+From:   Wolfram Sang <wsa@kernel.org>
 To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         "David S. Miller" <davem@davemloft.net>,
+        Jonathan Corbet <corbet@lwn.net>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Keerthy <j-keerthy@ti.com>, Lars-Peter Clausen <lars@metafoo.de>,
+        Jakub Kicinski <kuba@kernel.org>, Keerthy <j-keerthy@ti.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Peter Rosin <peda@axentia.se>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Rob Herring <robh+dt@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Tero Kristo <kristo@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 04/12] dt-bindings: clock: update ti,sci-clk.yaml
+ references
+Message-ID: <YLk23rrWN9ze+zru@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Jakub Kicinski <kuba@kernel.org>, Keerthy <j-keerthy@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Rob Herring <robh+dt@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, Tero Kristo <kristo@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wolfgang Grandegger <wg@grandegger.com>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, netdev@vger.kernel.org
+References: <cover.1622648507.git.mchehab+huawei@kernel.org>
+ <0fae687366c09dfb510425b3c88316a727b27d6d.1622648507.git.mchehab+huawei@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="HwDyggedf9K45ZIg"
+Content-Disposition: inline
+In-Reply-To: <0fae687366c09dfb510425b3c88316a727b27d6d.1622648507.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Jun 2, 2021 at 10:43 AM Mauro Carvalho Chehab
-<mchehab+huawei@kernel.org> wrote:
->
-> There are some broken references at today's linux-next with regards
-> to files inside Documentation/.
->
-> Address them.
 
-I've finally added this to my automated checks, so now anyone that
-breaks this on binding schema patches should get notified (with the
-exception of patches not Cc'ed to the DT list).
+--HwDyggedf9K45ZIg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Rob
+On Wed, Jun 02, 2021 at 05:43:10PM +0200, Mauro Carvalho Chehab wrote:
+> Changeset a7dbfa6f3877 ("dt-bindings: clock: Convert ti,sci-clk to json s=
+chema")
+> renamed: Documentation/devicetree/bindings/clock/ti,sci-clk.txt
+> to: Documentation/devicetree/bindings/clock/ti,sci-clk.yaml.
+>=20
+> Update the cross-references accordingly.
+>=20
+> Fixes: a7dbfa6f3877 ("dt-bindings: clock: Convert ti,sci-clk to json sche=
+ma")
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+
+Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
+
+
+--HwDyggedf9K45ZIg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmC5Nt4ACgkQFA3kzBSg
+KbYA5BAAmxrTszpFm+SFwkhyzevlAeZO+O6tTPRp2hAT0FogM2Us0fUzfwLEFgWP
+dR+9Lw8BinKXs9tNQwP3RGM6/azDSnS8tL5a1l0aaI52mxwwu0zGKPZmCvvMizT2
+AQX51DP3llTCDdTc85P1C7TYhRyhYy1GWPJrfhAxfUBS+maMcJJ3VX7rfnmQlAWG
+6FOy1eZaCP2d2DxVZNlMi0TXsYuudltp75a0T7k8wesRQv+BEEE4MpyfFwDquX/N
+3BtPLsuwSDnSQ1hL3gEPEbrm++yG+3g0PHdhWxdrDeRV/eRW8EM4rjJ0xHutgimp
+LyQ0SnSdM6/EMF0h4jjQ2CPLGedDPpKkBdXsAH0yU8GqD2P5mijVUJHZqqyCKdz4
+8elfRdDzaLOrwvZrqTQYqGpeup/953O/m8mbKfy0zhkc2X0Ceqmqb2iKDzvemODe
+OpVnrneL06Fo3k9Mi0c828teZf7T4kZPBFI896XMP8MYeT7ghBaOrRBt6mIaefTN
+dCZGUE9vm2SbKqBOJ88QHbyFwDwHDj7UU4O9uhZH77nUj3kzQC+yfp0xLhkkT3lE
+ME9gAuT18XacriGNwHQVpMUPTvMAcLUWeHqfYIvPVd/HQRNMwV/IB2paBkGThO7/
+gzP8cd9cYoh9D2thXE0J/EnXq+MPeo6KVP9Uirz9eSo6jxKoggM=
+=2IA3
+-----END PGP SIGNATURE-----
+
+--HwDyggedf9K45ZIg--
