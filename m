@@ -2,35 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6883739A7DA
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Jun 2021 19:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AFA739A840
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Jun 2021 19:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232957AbhFCRM4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Jun 2021 13:12:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42858 "EHLO mail.kernel.org"
+        id S233015AbhFCRO1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 3 Jun 2021 13:14:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43594 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232680AbhFCRME (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 3 Jun 2021 13:12:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 944EE6140F;
-        Thu,  3 Jun 2021 17:10:00 +0000 (UTC)
+        id S232975AbhFCRM6 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 3 Jun 2021 13:12:58 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E581861405;
+        Thu,  3 Jun 2021 17:10:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622740201;
-        bh=T6IGzOx7Q8PNneXGVdQ5kIhGAfuLxwwNAP7uS5dhVpw=;
+        s=k20201202; t=1622740231;
+        bh=TqDHKEHkGAAQwSsEKgY6SAmXTnwNgUnL0KE/aMZCgu0=;
         h=From:To:Cc:Subject:Date:From;
-        b=jytepGwgqC/hdTRuqVjJOqcupMnib8noKHRIn24fE5mrMcwlRDgk0FXazctV5sBOm
-         1q3yasMyTI1kIA8k2md7zDLizHyZwVgecbhbN5W2fbo56JLsLmWQ7CfjdwTripdmsm
-         HHzQRU8kDsIHR+KwNZE8eb2xGXwlT4O3xRaL0nuXuE30dr23PsbyGpD+wYNvOcWf/H
-         3ykQcH+n7b/WOk5anekL8MSovvBDDJ0DI0+E9zjxScqbSdANJTVsHxnkD3lhtfowA6
-         wxO6eXoNSSCkXllbAJZqkPf92FbeOAgcJccvUiBwlY2SG4h+jAhWC4RConoFtX8d3V
-         7cyvPP6ROSGAw==
+        b=RzalFnxPvFJ/56xTQWe42aNWugiMiU1cRNzI+EIl6I0joN9U334vukhackkEyR3Qe
+         sQjId4KKEZtIHzFoZa35q4CN7sJHMJ2NLcqGMWMlNdtJQGo5neFP6l9Nm6hZzXKhsF
+         WPxttiRsECRuGpKdws1KWVtpg3d66Gfa0NHU5C4FoI5E9iT05HlhzCNjCkBDjx1ohn
+         LDMGQKX/A5ywerld+BcaMPj8h7oVTkF5joNjGzD7DMe+CnoRc8VVZq7KVaMzlcxN/m
+         +0KpMBIB4pI7JgloK/G/QMsIzzw0QoGSQdhpk0A3HnAUPzg2HxG7M/GnfPsyvPNjSX
+         VBvYjuIDvZ+ig==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Saravana Kannan <saravanak@google.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 01/23] spi: Fix spi device unregister flow
-Date:   Thu,  3 Jun 2021 13:09:37 -0400
-Message-Id: <20210603170959.3169420-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 01/18] spi: Fix spi device unregister flow
+Date:   Thu,  3 Jun 2021 13:10:12 -0400
+Message-Id: <20210603171029.3169669-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 X-stable: review
@@ -72,10 +72,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 12 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index bbe33016d371..39dfaad9097e 100644
+index da71a53b0df7..49f39c54d679 100644
 --- a/drivers/spi/spi.c
 +++ b/drivers/spi/spi.c
-@@ -55,10 +55,6 @@ static void spidev_release(struct device *dev)
+@@ -52,10 +52,6 @@ static void spidev_release(struct device *dev)
  {
  	struct spi_device	*spi = to_spi_device(dev);
  
@@ -86,7 +86,7 @@ index bbe33016d371..39dfaad9097e 100644
  	spi_controller_put(spi->controller);
  	kfree(spi);
  }
-@@ -506,6 +502,12 @@ static int spi_dev_check(struct device *dev, void *data)
+@@ -501,6 +497,12 @@ static int spi_dev_check(struct device *dev, void *data)
  	return 0;
  }
  
@@ -99,7 +99,7 @@ index bbe33016d371..39dfaad9097e 100644
  /**
   * spi_add_device - Add spi_device allocated with spi_alloc_device
   * @spi: spi_device to register
-@@ -567,11 +569,13 @@ int spi_add_device(struct spi_device *spi)
+@@ -562,11 +564,13 @@ int spi_add_device(struct spi_device *spi)
  
  	/* Device may be bound to an active driver when this returns */
  	status = device_add(&spi->dev);
@@ -115,7 +115,7 @@ index bbe33016d371..39dfaad9097e 100644
  
  done:
  	mutex_unlock(&spi_add_lock);
-@@ -658,6 +662,8 @@ void spi_unregister_device(struct spi_device *spi)
+@@ -653,6 +657,8 @@ void spi_unregister_device(struct spi_device *spi)
  	if (!spi)
  		return;
  
