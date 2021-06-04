@@ -2,158 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CABBE39B351
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Jun 2021 08:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D13D439B449
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Jun 2021 09:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbhFDG5X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 4 Jun 2021 02:57:23 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:4467 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbhFDG5X (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Jun 2021 02:57:23 -0400
-Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4FxD3j2nhFzZcjq;
-        Fri,  4 Jun 2021 14:52:49 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- dggeme758-chm.china.huawei.com (10.3.19.104) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Fri, 4 Jun 2021 14:55:35 +0800
-From:   Jay Fang <f.fangjian@huawei.com>
-To:     <broonie@kernel.org>, <linux-spi@vger.kernel.org>
-CC:     <huangdaode@huawei.com>
-Subject: [PATCH] spi: hisi-kunpeng: Add debugfs support
-Date:   Fri, 4 Jun 2021 14:55:18 +0800
-Message-ID: <1622789718-13977-1-git-send-email-f.fangjian@huawei.com>
-X-Mailer: git-send-email 2.7.4
+        id S229922AbhFDHwU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 4 Jun 2021 03:52:20 -0400
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:60217 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229930AbhFDHwU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Jun 2021 03:52:20 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1547lKte015913;
+        Fri, 4 Jun 2021 09:50:20 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=aOKc3+bOmiN2HPGgLoviW5WOayT0hOfjwgnF4Bhbjfw=;
+ b=aL2TcYO8sO7alwCAyt8AF+Gc1smyw5DBGZrQyTC5LqoHG7RaFsINOArGL+T8UcNdWHAh
+ W5DwamsTCeBdvTPDEZ5efN0NspuEK4dvg0GSqK9oIOqOyUDvfD3s+MTSklu3Hh+NPe5N
+ qssG7aqsLwUZ71KJyVIwPoz+6NygZQ3x+Xl1rpETM9k9aL/1iXowviOYOuhssZnBjUNj
+ dWfEmGeAnWjMlDr7NjAlCSpISauZcZJM2b4wnaUMSK81jkdbr2yoE571GwQC6oLXoMS1
+ qEiZpeyZ+SPybc5TgqCM4HWvJXr1sL17BqRvRq6aFE6OMP9ZEuFZcAk9kmsolt5Ltyrs 9A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 38yea1gq1f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Jun 2021 09:50:20 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9D3CB10002A;
+        Fri,  4 Jun 2021 09:50:19 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0660B214D1B;
+        Fri,  4 Jun 2021 09:50:19 +0200 (CEST)
+Received: from localhost (10.75.127.47) by SFHDAG2NODE3.st.com (10.75.127.6)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 4 Jun 2021 09:50:18
+ +0200
+From:   <patrice.chotard@foss.st.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
+        <patrice.chotard@foss.st.com>
+Subject: [PATCH] spi: stm32-qspi: Fix W=1 build warning
+Date:   Fri, 4 Jun 2021 09:50:09 +0200
+Message-ID: <20210604075009.25914-1-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggeme758-chm.china.huawei.com (10.3.19.104)
-X-CFilter-Loop: Reflected
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-06-04_04:2021-06-04,2021-06-04 signatures=0
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This patch uses debugfs_regset32 interface to create the registers dump
-file. Use it instead of creating a generic debugfs file with manually
-written read callback function.
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-With these entries, users can check all the SPI controller registers
-during run time.
+Fix the following compilation warning using W=1 build:
+arm-linux-gnueabi-ld: drivers/spi/spi-stm32-qspi.o: in function `stm32_qspi_poll_status':
 
-Signed-off-by: Jay Fang <f.fangjian@huawei.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
 ---
- drivers/spi/spi-hisi-kunpeng.c | 51 +++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 50 insertions(+), 1 deletion(-)
+ drivers/spi/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/spi/spi-hisi-kunpeng.c b/drivers/spi/spi-hisi-kunpeng.c
-index 3f986ba..58b823a 100644
---- a/drivers/spi/spi-hisi-kunpeng.c
-+++ b/drivers/spi/spi-hisi-kunpeng.c
-@@ -9,6 +9,7 @@
- 
- #include <linux/acpi.h>
- #include <linux/bitfield.h>
-+#include <linux/debugfs.h>
- #include <linux/delay.h>
- #include <linux/err.h>
- #include <linux/interrupt.h>
-@@ -126,6 +127,7 @@ struct hisi_spi {
- 	void __iomem		*regs;
- 	int			irq;
- 	u32			fifo_len; /* depth of the FIFO buffer */
-+	u16			bus_num;
- 
- 	/* Current message transfer state info */
- 	const void		*tx;
-@@ -133,8 +135,49 @@ struct hisi_spi {
- 	void			*rx;
- 	unsigned int		rx_len;
- 	u8			n_bytes; /* current is a 1/2/4 bytes op */
-+
-+	struct dentry *debugfs;
-+	struct debugfs_regset32 regset;
-+};
-+
-+#define HISI_SPI_DBGFS_REG(_name, _off)	\
-+{					\
-+	.name = _name,			\
-+	.offset = _off,			\
-+}
-+
-+static const struct debugfs_reg32 hisi_spi_regs[] = {
-+	HISI_SPI_DBGFS_REG("CSCR", HISI_SPI_CSCR),
-+	HISI_SPI_DBGFS_REG("CR", HISI_SPI_CR),
-+	HISI_SPI_DBGFS_REG("ENR", HISI_SPI_ENR),
-+	HISI_SPI_DBGFS_REG("FIFOC", HISI_SPI_FIFOC),
-+	HISI_SPI_DBGFS_REG("IMR", HISI_SPI_IMR),
-+	HISI_SPI_DBGFS_REG("DIN", HISI_SPI_DIN),
-+	HISI_SPI_DBGFS_REG("DOUT", HISI_SPI_DOUT),
-+	HISI_SPI_DBGFS_REG("SR", HISI_SPI_SR),
-+	HISI_SPI_DBGFS_REG("RISR", HISI_SPI_RISR),
-+	HISI_SPI_DBGFS_REG("ISR", HISI_SPI_ISR),
-+	HISI_SPI_DBGFS_REG("ICR", HISI_SPI_ICR),
-+	HISI_SPI_DBGFS_REG("VERSION", HISI_SPI_VERSION),
- };
- 
-+static int hisi_spi_debugfs_init(struct hisi_spi *hs)
-+{
-+	char name[32];
-+
-+	snprintf(name, 32, "hisi_spi%d", hs->bus_num);
-+	hs->debugfs = debugfs_create_dir(name, NULL);
-+	if (!hs->debugfs)
-+		return -ENOMEM;
-+
-+	hs->regset.regs = hisi_spi_regs;
-+	hs->regset.nregs = ARRAY_SIZE(hisi_spi_regs);
-+	hs->regset.base = hs->regs;
-+	debugfs_create_regset32("registers", 0400, hs->debugfs, &hs->regset);
-+
-+	return 0;
-+}
-+
- static u32 hisi_spi_busy(struct hisi_spi *hs)
- {
- 	return readl(hs->regs + HISI_SPI_SR) & SR_BUSY;
-@@ -424,6 +467,7 @@ static int hisi_spi_probe(struct platform_device *pdev)
- 	hs = spi_controller_get_devdata(master);
- 	hs->dev = dev;
- 	hs->irq = irq;
-+	hs->bus_num = pdev->id;
- 
- 	hs->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(hs->regs))
-@@ -446,7 +490,7 @@ static int hisi_spi_probe(struct platform_device *pdev)
- 	master->use_gpio_descriptors = true;
- 	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LOOP;
- 	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
--	master->bus_num = pdev->id;
-+	master->bus_num = hs->bus_num;
- 	master->setup = hisi_spi_setup;
- 	master->cleanup = hisi_spi_cleanup;
- 	master->transfer_one = hisi_spi_transfer_one;
-@@ -462,6 +506,9 @@ static int hisi_spi_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	if (hisi_spi_debugfs_init(hs))
-+		dev_info(dev, "failed to create debugfs dir\n");
-+
- 	ret = spi_register_controller(master);
- 	if (ret) {
- 		dev_err(dev, "failed to register spi master, ret=%d\n", ret);
-@@ -478,7 +525,9 @@ static int hisi_spi_probe(struct platform_device *pdev)
- static int hisi_spi_remove(struct platform_device *pdev)
- {
- 	struct spi_controller *master = platform_get_drvdata(pdev);
-+	struct hisi_spi *hs = spi_controller_get_devdata(master);
- 
-+	debugfs_remove_recursive(hs->debugfs);
- 	spi_unregister_controller(master);
- 
- 	return 0;
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index f4481fe48bf0..e71a4c514f7b 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -806,6 +806,7 @@ config SPI_STM32_QSPI
+ 	tristate "STMicroelectronics STM32 QUAD SPI controller"
+ 	depends on ARCH_STM32 || COMPILE_TEST
+ 	depends on OF
++	depends on SPI_MEM
+ 	help
+ 	  This enables support for the Quad SPI controller in master mode.
+ 	  This driver does not support generic SPI. The implementation only
 -- 
-2.7.4
+2.17.1
 
