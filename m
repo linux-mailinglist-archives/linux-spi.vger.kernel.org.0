@@ -2,48 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5289F39BB7A
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Jun 2021 17:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 315C039BB7C
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Jun 2021 17:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbhFDPN7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 4 Jun 2021 11:13:59 -0400
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:37611 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbhFDPN7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Jun 2021 11:13:59 -0400
-Received: by mail-ot1-f51.google.com with SMTP id v19-20020a0568301413b0290304f00e3d88so9370650otp.4
-        for <linux-spi@vger.kernel.org>; Fri, 04 Jun 2021 08:12:12 -0700 (PDT)
+        id S229692AbhFDPOB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 4 Jun 2021 11:14:01 -0400
+Received: from mail-oi1-f170.google.com ([209.85.167.170]:36394 "EHLO
+        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229822AbhFDPOB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Jun 2021 11:14:01 -0400
+Received: by mail-oi1-f170.google.com with SMTP id a21so10084251oiw.3
+        for <linux-spi@vger.kernel.org>; Fri, 04 Jun 2021 08:12:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=rmERDzA/ERlMENTHiwmD7XH/Ew0+jugDLfjVr8CV6Vc=;
-        b=CRxqr94ZqH9d671tSQn0MTM+grqoReU2f9urbwT/W+ArDZyttNEfzit+tqZjXQqT6O
-         jb+HYb7pTJA3x07ewTDMBvaCFQC62kVFscprjJjmy/JY0MJGh8fbPnU1y5BS7ITFIgJp
-         N+EQGDuFLCBGvwyoMYbOQ8zC2djV3hwAT+/C8HDZE3WEX4ACdUm59TvwroAQ4IPscJiE
-         KsbBoj0Eh+LSlFxhOcFOsBseVAVPhXi8HGCv87eTrVFnks/D/alvg8EhgsGBwHr51LU7
-         1D3jzJ5dMETcEZnWPIZUpyJUgCo6Op3+0iM9bsJoO6emCV2DYxGVlBWaFdSaSK6h5Jd0
-         Lddw==
+        bh=za/Y7MXEJhVfJxix2rC6+OPvATSxOzABFwX8N4L6d/Y=;
+        b=SMWznNsizO2hohyPrP6PEcwM9Uu7usTTW+xf1XScQfcKLdMvf35oThs0NlOU84o3mF
+         ZZYFXi8q01mRkHJEzD+FOLmuweLTR4QLkSySA6zbzCbQaBYI40pe+9236Berfgy7CnEY
+         TrtXJzuumu1fGhim8wvvL62U8DHg7G6Lkar6G87VPaJUdRepov8KqWj0f22AFjtHP9CP
+         DA46CnY0H//ekab+b3Oa3Ajp4S5WE9PsGFvsqsTYND1wrowFTBrD1QEz7xmeLDctSIK0
+         obC9uoSlAZ4MV31KN8BPd5F8cjg2ViccGV3VZQKwR15oUSVunHB2YroRRLBT6cPYrwiJ
+         3Eyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rmERDzA/ERlMENTHiwmD7XH/Ew0+jugDLfjVr8CV6Vc=;
-        b=dlOYKu+q43ZEJRJ1YL5LS6Ch0AoVS/bb0UjH7br8PkrxLzfZbinlHnjAfhoP7MGin1
-         qvi4kss5iwOCSXd57wDCaYS/wMylE9ULMQ6wSPDfcCDHtm41WqoQh73TfEUACRn7a1Yw
-         XcFqFcftqQeJSlJ+FD4rVyGBCa++eVbIm+KaRmwbLGMwHJ8kfgV3r7EL+5ejhMyAD6z6
-         uhwrPfUl7NdBqLxrrLlWY+39qsApvZSUXgis49BcQaqLg9y9RIT4iZQDqU5BK9jXKzI+
-         u4UTblw/lZXvdhYy4m+FO2U8zzPhSfFMIqb9KpdIDQGyGnXHba52nb6qLZTeXRB8N2/a
-         Ue6Q==
-X-Gm-Message-State: AOAM533cesCeyxQcXo4sglGQUzOSFBjh5v5/j9WYjf42kSZakvhe/wPF
-        JZs8dTozJqEwePd0mVwMwgUaD8e4bRM=
-X-Google-Smtp-Source: ABdhPJxPipvsTaYVm4HD/RnZJ1adBvAEiC+ZGAajw9Jb6T1P7/BYagDEAJ1ajdqby7URhDqtlTbOBg==
-X-Received: by 2002:a9d:608b:: with SMTP id m11mr609120otj.146.1622819472219;
-        Fri, 04 Jun 2021 08:11:12 -0700 (PDT)
+        bh=za/Y7MXEJhVfJxix2rC6+OPvATSxOzABFwX8N4L6d/Y=;
+        b=GJ6dSHkYvmSTM7DUFlhSC8OLw2zHIGY2kdMw0Lf1/FJT2slMb+L3/eLFFBMHfFh7aL
+         F/88JFFH6sQDDgefsRFyHam5SQURN/H0HWNKX4wtHaFK7gR6ij4BNujfyOm+IOpHLM2X
+         V74d8c00F/xmqvJlC70au0fsK4GeRPW6zOg1ti8v4uQaYua2bxN//m/Hy9McIxGZF7v1
+         wDfMdz0JaJ9GrYqk0elH0aLVluYk7HK3hBgGXlKBa8FNIM2iC5z1N+eFpeeHHVL70krb
+         O59R8TUJZgtyy05xIetp8lX8ndwG2jJ/6drduDzyJRWIaZAa0B1VDLhh4ZAvfHfGpTda
+         +2Aw==
+X-Gm-Message-State: AOAM532MCxDVAy48XOSeg8yoO4LB95LFF3tHzi+Q8hQNoNH2p98KmZjh
+        sHH+d8K5rSz160FKBqV/KTMLPWYNRwY=
+X-Google-Smtp-Source: ABdhPJzJSbGDUnw7PXR67GZz6QBZdYUZsnqLXf0hDVgXaEPAro6BxeKWV7O5Na477GgRdfoj1nGStA==
+X-Received: by 2002:a54:400a:: with SMTP id x10mr11674852oie.158.1622819473377;
+        Fri, 04 Jun 2021 08:11:13 -0700 (PDT)
 Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
-        by smtp.gmail.com with ESMTPSA id k16sm523440otp.19.2021.06.04.08.11.11
+        by smtp.gmail.com with ESMTPSA id k16sm523440otp.19.2021.06.04.08.11.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Jun 2021 08:11:11 -0700 (PDT)
+        Fri, 04 Jun 2021 08:11:12 -0700 (PDT)
 From:   Chris Morgan <macroalpha82@gmail.com>
 To:     linux-spi@vger.kernel.org
 Cc:     jon.lin@rock-chips.com, broonie@kernel.org, robh+dt@kernel.org,
@@ -51,9 +51,9 @@ Cc:     jon.lin@rock-chips.com, broonie@kernel.org, robh+dt@kernel.org,
         yifeng.zhao@rock-chips.com, sugar.zhang@rock-chips.com,
         linux-rockchip@lists.infradead.org, linux-mtd@lists.infradead.org,
         p.yadav@ti.com, Chris Morgan <macromorgan@hotmail.com>
-Subject: [RFC v4 3/8] arm64: dts: rockchip: Add SFC to PX30
-Date:   Fri,  4 Jun 2021 10:10:50 -0500
-Message-Id: <20210604151055.28636-4-macroalpha82@gmail.com>
+Subject: [RFC v4 4/8] clk: rockchip: Add support for hclk_sfc on rk3036
+Date:   Fri,  4 Jun 2021 10:10:51 -0500
+Message-Id: <20210604151055.28636-5-macroalpha82@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210604151055.28636-1-macroalpha82@gmail.com>
 References: <20210604151055.28636-1-macroalpha82@gmail.com>
@@ -65,69 +65,41 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Chris Morgan <macromorgan@hotmail.com>
 
-Add a devicetree entry for the Rockchip SFC for the PX30 SOC.
+Add support for the bus clock for the serial flash controller on the
+rk3036. Taken from the Rockchip BSP kernel but not tested on real
+hardware (as I lack a 3036 based SoC to test).
 
 Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
 ---
- arch/arm64/boot/dts/rockchip/px30.dtsi | 38 ++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ drivers/clk/rockchip/clk-rk3036.c      | 2 +-
+ include/dt-bindings/clock/rk3036-cru.h | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/px30.dtsi b/arch/arm64/boot/dts/rockchip/px30.dtsi
-index 09baa8a167ce..cc7aced2dde9 100644
---- a/arch/arm64/boot/dts/rockchip/px30.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/px30.dtsi
-@@ -966,6 +966,18 @@ emmc: mmc@ff390000 {
- 		status = "disabled";
- 	};
+diff --git a/drivers/clk/rockchip/clk-rk3036.c b/drivers/clk/rockchip/clk-rk3036.c
+index 91d56ad45817..ebb628733f6d 100644
+--- a/drivers/clk/rockchip/clk-rk3036.c
++++ b/drivers/clk/rockchip/clk-rk3036.c
+@@ -403,7 +403,7 @@ static struct rockchip_clk_branch rk3036_clk_branches[] __initdata = {
+ 	GATE(HCLK_OTG0, "hclk_otg0", "hclk_peri", CLK_IGNORE_UNUSED, RK2928_CLKGATE_CON(5), 13, GFLAGS),
+ 	GATE(HCLK_OTG1, "hclk_otg1", "hclk_peri", CLK_IGNORE_UNUSED, RK2928_CLKGATE_CON(7), 3, GFLAGS),
+ 	GATE(HCLK_I2S, "hclk_i2s", "hclk_peri", 0, RK2928_CLKGATE_CON(7), 2, GFLAGS),
+-	GATE(0, "hclk_sfc", "hclk_peri", CLK_IGNORE_UNUSED, RK2928_CLKGATE_CON(3), 14, GFLAGS),
++	GATE(HCLK_SFC, "hclk_sfc", "hclk_peri", CLK_IGNORE_UNUSED, RK2928_CLKGATE_CON(3), 14, GFLAGS),
+ 	GATE(HCLK_MAC, "hclk_mac", "hclk_peri", 0, RK2928_CLKGATE_CON(3), 5, GFLAGS),
  
-+	sfc: spi@ff3a0000 {
-+		compatible = "rockchip,px30-sfc","rockchip,rk3036-sfc";
-+		reg = <0x0 0xff3a0000 0x0 0x4000>;
-+		interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru HCLK_SFC>, <&cru SCLK_SFC>;
-+		clock-names = "ahb", "sfc";
-+		pinctrl-0 = <&sfc_clk &sfc_cs0 &sfc_bus4>;
-+		pinctrl-names = "default";
-+		power-domains = <&power PX30_PD_MMC_NAND>;
-+		status = "disabled";
-+	};
-+
- 	nfc: nand-controller@ff3b0000 {
- 		compatible = "rockchip,px30-nfc";
- 		reg = <0x0 0xff3b0000 0x0 0x4000>;
-@@ -1967,6 +1979,32 @@ flash_bus8: flash-bus8 {
- 			};
- 		};
- 
-+		serial_flash {
-+			sfc_bus4: sfc-bus4 {
-+				rockchip,pins =
-+					<1 RK_PA0 3 &pcfg_pull_none>,
-+					<1 RK_PA1 3 &pcfg_pull_none>,
-+					<1 RK_PA2 3 &pcfg_pull_none>,
-+					<1 RK_PA3 3 &pcfg_pull_none>;
-+			};
-+
-+			sfc_bus2: sfc-bus2 {
-+				rockchip,pins =
-+					<1 RK_PA0 3 &pcfg_pull_none>,
-+					<1 RK_PA1 3 &pcfg_pull_none>;
-+			};
-+
-+			sfc_cs0: sfc-cs0 {
-+				rockchip,pins =
-+					<1 RK_PA4 3 &pcfg_pull_none>;
-+			};
-+
-+			sfc_clk: sfc-clk {
-+				rockchip,pins =
-+					<1 RK_PB1 3 &pcfg_pull_none>;
-+			};
-+		};
-+
- 		lcdc {
- 			lcdc_rgb_dclk_pin: lcdc-rgb-dclk-pin {
- 				rockchip,pins =
+ 	/* pclk_peri gates */
+diff --git a/include/dt-bindings/clock/rk3036-cru.h b/include/dt-bindings/clock/rk3036-cru.h
+index 35a5a01f9697..a96a9870ad59 100644
+--- a/include/dt-bindings/clock/rk3036-cru.h
++++ b/include/dt-bindings/clock/rk3036-cru.h
+@@ -81,6 +81,7 @@
+ #define HCLK_OTG0		449
+ #define HCLK_OTG1		450
+ #define HCLK_NANDC		453
++#define HCLK_SFC		454
+ #define HCLK_SDMMC		456
+ #define HCLK_SDIO		457
+ #define HCLK_EMMC		459
 -- 
 2.25.1
 
