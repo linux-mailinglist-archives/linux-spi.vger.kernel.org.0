@@ -2,52 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 665E139C4A6
-	for <lists+linux-spi@lfdr.de>; Sat,  5 Jun 2021 02:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5522739C71E
+	for <lists+linux-spi@lfdr.de>; Sat,  5 Jun 2021 11:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbhFEA62 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 4 Jun 2021 20:58:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34294 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230002AbhFEA61 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 4 Jun 2021 20:58:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id D91DA611AD;
-        Sat,  5 Jun 2021 00:56:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622854600;
-        bh=2gbOhOJCH2gUr2CFwhFTdsCDM//HMR9iB/MgL8aiqFs=;
-        h=Subject:From:Date:To:From;
-        b=EEcqv7K9VGtd8SO49UVDs/o64P5hZ0Yj0zDMTYW7901O6a7eee1OMguRsFxIU3To4
-         8LWAp0H9AOmCJiwcPe6XLwkfc5AV4gdnFQiPAgOSgtud86oroAprFOIrAnRRxEifM7
-         xIPVliPue2WwzQTwkbQcd7KE2BbjhaxGvAPXywi+t/fsubaz2qsPIRwU94BfT2AR6u
-         zn3muZsl0mAU5bC8G7eRl/Z0NQWlgg7fnFF4rvZwYfFzntQ4Jsml6yo3s4BlpkW+ve
-         V4wPCeKOFlzNGeU7m+dbXEgBVp0qKNSbwm7hz3LhuFNxXuY6//LC25i7zGoQLpNY/g
-         tH7lcaQr+bCHA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D1ED060BCF;
-        Sat,  5 Jun 2021 00:56:40 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <162285460085.19826.6839624402439161551.git-patchwork-housekeeping@kernel.org>
-Date:   Sat, 05 Jun 2021 00:56:40 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+        id S230039AbhFEJtb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 5 Jun 2021 05:49:31 -0400
+Received: from lucky1.263xmail.com ([211.157.147.134]:34564 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229963AbhFEJt2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 5 Jun 2021 05:49:28 -0400
+Received: from localhost (unknown [192.168.167.105])
+        by lucky1.263xmail.com (Postfix) with ESMTP id 0FD06C84C4;
+        Sat,  5 Jun 2021 17:47:05 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-ANTISPAM-LEVEL: 2
+X-ABS-CHECKED: 0
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P26721T140686913419008S1622886424373318_;
+        Sat, 05 Jun 2021 17:47:05 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <a9dc6455c61f54bdaf5d62da17de8dbf>
+X-RL-SENDER: jon.lin@rock-chips.com
+X-SENDER: jon.lin@rock-chips.com
+X-LOGIN-NAME: jon.lin@rock-chips.com
+X-FST-TO: broonie@kernel.org
+X-RCPT-COUNT: 8
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+From:   Jon Lin <jon.lin@rock-chips.com>
+To:     broonie@kernel.org
+Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@esmil.dk, Jon Lin <jon.lin@rock-chips.com>
+Subject: [PATCH v3 1/8] spi: rockchip: Set rx_fifo interrupt waterline base on transfer item
+Date:   Sat,  5 Jun 2021 17:46:52 +0800
+Message-Id: <20210605094659.13507-1-jon.lin@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] dt-bindings: spi: xilinx: convert to yaml (2021-06-05T00:29:31)
-  Superseding: [v1] dt-bindings: spi: xilinx: convert to yaml (2021-05-31T05:21:42):
-    dt-bindings: spi: xilinx: convert to yaml
+The error here is to calculate the width as 8 bits. In fact, 16 bits
+should be considered.
 
-Latest series: [v2] dt-bindings: spi: convert Cadence SPI bindings to YAML (2021-06-05T00:38:11)
-  Superseding: [v1] dt-bindings: spi: convert Cadence SPI bindings to YAML (2021-05-31T14:15:38):
-    dt-bindings: spi: convert Cadence SPI bindings to YAML
+Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
+---
+ drivers/spi/spi-rockchip.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
+diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
+index 52d6259d96ed..406ea3c6abd9 100644
+--- a/drivers/spi/spi-rockchip.c
++++ b/drivers/spi/spi-rockchip.c
+@@ -540,8 +540,8 @@ static int rockchip_spi_config(struct rockchip_spi *rs,
+ 	 * interrupt exactly when the fifo is full doesn't seem to work,
+ 	 * so we need the strict inequality here
+ 	 */
+-	if (xfer->len < rs->fifo_len)
+-		writel_relaxed(xfer->len - 1, rs->regs + ROCKCHIP_SPI_RXFTLR);
++	if ((xfer->len / rs->n_bytes) < rs->fifo_len)
++		writel_relaxed(xfer->len / rs->n_bytes - 1, rs->regs + ROCKCHIP_SPI_RXFTLR);
+ 	else
+ 		writel_relaxed(rs->fifo_len / 2 - 1, rs->regs + ROCKCHIP_SPI_RXFTLR);
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.17.1
+
+
 
