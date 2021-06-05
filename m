@@ -2,55 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9CC39C732
-	for <lists+linux-spi@lfdr.de>; Sat,  5 Jun 2021 11:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D63339C8FE
+	for <lists+linux-spi@lfdr.de>; Sat,  5 Jun 2021 16:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbhFEJ6b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 5 Jun 2021 05:58:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38274 "EHLO mail.kernel.org"
+        id S230025AbhFEOTC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 5 Jun 2021 10:19:02 -0400
+Received: from 0.mx.nanl.de ([217.115.11.12]:51780 "EHLO 0.mx.nanl.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229902AbhFEJ6b (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 5 Jun 2021 05:58:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id B802A6121E;
-        Sat,  5 Jun 2021 09:56:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622887003;
-        bh=Tt4F1k6rhW3yTlqyznTiF4AE9T0Hd0f95yHNbgxNNm8=;
-        h=Subject:From:Date:To:From;
-        b=XWzLlwKeuImdeqEtZ0F5XMZ/spuxvUWnSyNiXxPIT/DbMMdmsSaavJZyncNi+lXqd
-         66OgOlFhmO/VTVH4uZ+SR5S7TYxLZqgS/s3VjEoiIBgGcr1KebWZLYsiEPMxPv49W2
-         PfS3O5lUcWxROZ0g6adKOCSZVHtZA2aK86EJwFLKevoR8oYlZFTWHvNiCIQToIhVcg
-         ShtEkEbDJIhjsGbNt44Q40YxyeCLpYWlvgwic2UAQC0/s014a9BSXGsRxC60MyaKMT
-         SA1x4YDBiB4EYcFIY4KePihNzLJEH3OqT0yeY5AbTGt6kX//+1gjTcRlOuRu64f0Zj
-         jCm/CFKRXcMoQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id A1266609F7;
-        Sat,  5 Jun 2021 09:56:43 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S229930AbhFEOTC (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 5 Jun 2021 10:19:02 -0400
+X-Greylist: delayed 655 seconds by postgrey-1.27 at vger.kernel.org; Sat, 05 Jun 2021 10:19:02 EDT
+Received: from [217.115.11.14] (unknown [217.115.11.14])
+        by 0.mx.nanl.de (Postfix) with ESMTPSA id 2279D40302;
+        Sat,  5 Jun 2021 14:03:49 +0000 (UTC)
+Subject: Re: [PATCH 1/1] spi-sun6i: Fix chipselect/clock bug
+To:     Ralf Schlatterbeck <rsc@runtux.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Mirko Vogt <mirko-dev|linux@nanl.de>
+References: <20210520100656.rgkdexdvrddt3upy@runtux.com>
+ <20210521173011.1c602682@slackpad.fritz.box>
+ <20210521201913.2gapcmrzynxekro7@runtux.com> <YK0LR3077RUsSYti@sirena.org.uk>
+ <20210527113920.ncpzrpst2d6rij3t@runtux.com>
+From:   Mirko Vogt <mirko-dev|linux@nanl.de>
+Message-ID: <0418aba2-6bca-8de1-9f72-2fb10007fc81@nanl.de>
+Date:   Sat, 5 Jun 2021 16:06:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <162288700360.3424.2137741759830920282.git-patchwork-housekeeping@kernel.org>
-Date:   Sat, 05 Jun 2021 09:56:43 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+In-Reply-To: <20210527113920.ncpzrpst2d6rij3t@runtux.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v3] spi: rockchip: Set rx_fifo interrupt waterline base on transfer item (2021-06-05T09:46:54)
-  Superseding: [v2] spi: rockchip: Set rx_fifo interrupt waterline base on transfer item (2021-04-27T07:37:28):
-    [v2,1/8] spi: rockchip: Set rx_fifo interrupt waterline base on transfer item
-    [v2,2/8] spi: rockchip: Wait for STB status in slave mode tx_xfer
-    [v2,3/8] dt-bindings: spi: spi-rockchip: add description for rv1126
-    [v2,4/8] spi: rockchip: add compatible string for rv1126
-    [v2,5/8] spi: rockchip: Support cs-gpio
-    [v2,6/8] dt-bindings: spi: spi-rockchip: add description for rk3568
-    [v2,7/8] spi: rockchip: Add compatible string for rk3568
-    [v2,8/8] spi: rockchip: Support SPI_CS_HIGH
+On 5/27/21 1:39 PM, Ralf Schlatterbeck wrote
+> OK, let me know if I should repost in new thread with increased version
+> number in the subjec
+Assuming this wasn't answered yet: was this just a comment for further 
+patches and things are going their way or should it indeed be resent as 
+new thread/version with respective changes applied?
+Can I do something to help / resolve this?
 
+Have a nice weekend
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+   mirko
