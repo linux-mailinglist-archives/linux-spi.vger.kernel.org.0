@@ -2,128 +2,155 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C7A39D508
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Jun 2021 08:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C74F839D532
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Jun 2021 08:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbhFGGhk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Jun 2021 02:37:40 -0400
-Received: from lucky1.263xmail.com ([211.157.147.134]:44014 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbhFGGhj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Jun 2021 02:37:39 -0400
-Received: from localhost (unknown [192.168.167.235])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 072CFC7FE0;
-        Mon,  7 Jun 2021 14:35:19 +0800 (CST)
+        id S230220AbhFGGpz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Jun 2021 02:45:55 -0400
+Received: from regular1.263xmail.com ([211.150.70.205]:33426 "EHLO
+        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229545AbhFGGpy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Jun 2021 02:45:54 -0400
+X-Greylist: delayed 426 seconds by postgrey-1.27 at vger.kernel.org; Mon, 07 Jun 2021 02:45:53 EDT
+Received: from localhost (unknown [192.168.167.16])
+        by regular1.263xmail.com (Postfix) with ESMTP id E871C7D3;
+        Mon,  7 Jun 2021 14:35:55 +0800 (CST)
 X-MAIL-GRAY: 0
 X-MAIL-DELIVERY: 1
 X-ADDR-CHECKED4: 1
 X-ANTISPAM-LEVEL: 2
-X-ABS-CHECKED: 0
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P31748T140095280056064S1623047691557189_;
-        Mon, 07 Jun 2021 14:35:19 +0800 (CST)
+X-SKE-CHECKED: 1
+X-ABS-CHECKED: 1
+Received: from [172.16.12.73] (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P32531T140357140461312S1623047754740766_;
+        Mon, 07 Jun 2021 14:35:55 +0800 (CST)
 X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <29eb2e0c2790adcd07c244f9d7a566aa>
+X-UNIQUE-TAG: <7508cccd791cddd4389844d16fe8e0b2>
 X-RL-SENDER: jon.lin@rock-chips.com
 X-SENDER: jon.lin@rock-chips.com
 X-LOGIN-NAME: jon.lin@rock-chips.com
-X-FST-TO: broonie@kernel.org
-X-RCPT-COUNT: 7
+X-FST-TO: kernel@esmil.dk
+X-RCPT-COUNT: 8
 X-SENDER-IP: 58.22.7.114
 X-ATTACHMENT-NUM: 0
 X-System-Flag: 0
+Subject: Re: [PATCH v3 3/8] dt-bindings: spi: spi-rockchip: add description
+ for rv1126
+To:     Johan Jonker <jbx6244@gmail.com>, broonie@kernel.org
+Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@esmil.dk
+References: <20210605094659.13507-1-jon.lin@rock-chips.com>
+ <20210605094659.13507-3-jon.lin@rock-chips.com>
+ <4d60a524-5a54-f972-7605-25db3b825cfa@gmail.com>
 From:   Jon Lin <jon.lin@rock-chips.com>
-To:     broonie@kernel.org
-Cc:     Jon Lin <jon.lin@rock-chips.com>, Heiko Stuebner <heiko@sntech.de>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 4/6] spi: rockchip: Wait for STB status in slave mode tx_xfer
-Date:   Mon,  7 Jun 2021 14:34:46 +0800
-Message-Id: <20210607063448.29589-5-jon.lin@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210607063448.29589-1-jon.lin@rock-chips.com>
-References: <20210607063448.29589-1-jon.lin@rock-chips.com>
+Message-ID: <9d6c9b33-2e56-430b-0ea7-df0ebc0a16b4@rock-chips.com>
+Date:   Mon, 7 Jun 2021 14:36:01 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <4d60a524-5a54-f972-7605-25db3b825cfa@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-After ROCKCHIP_SPI_VER2_TYPE2, SR->STB is a more accurate judgment
-bit for spi slave transmition.
 
-Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
----
+On 6/6/21 4:30 AM, Johan Jonker wrote:
+> Hi Jon,
+>
+> Some comments. Have a look if it's useful.
+>
+> ===
+>
+> In order to get this patch reviewed by rob+dt you must include:
+> robh+dt@kernel.org
+> devicetree@vger.kernel.org
+>
+> Check your review status here:
+> https://patchwork.ozlabs.org/project/devicetree-bindings/list/
+>
+> Get the other lists and maintainers with:
+> ./scripts/get_maintainer.pl --noroles --norolestats --nogit-fallback
+> --nogit <patch1> <patch2>
 
-Changes in v4: None
-Changes in v3: None
+done.
 
- drivers/spi/spi-rockchip.c | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+> ===
+>
+> Please try to order patches like:
+> (1) dt-binding - compatible addition
+> (2) driver patches
+> (3) devicetree node patches
+>
+> The script below gives a warning if the wrong order is used.
+> ./scripts/checkpatch.pl --strict <patch1> <patch2>
 
-diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index c4eff9a8a14d..4dfff91b2743 100644
---- a/drivers/spi/spi-rockchip.c
-+++ b/drivers/spi/spi-rockchip.c
-@@ -116,13 +116,14 @@
- #define BAUDR_SCKDV_MIN				2
- #define BAUDR_SCKDV_MAX				65534
- 
--/* Bit fields in SR, 5bit */
--#define SR_MASK						0x1f
-+/* Bit fields in SR, 6bit */
-+#define SR_MASK						0x3f
- #define SR_BUSY						(1 << 0)
- #define SR_TF_FULL					(1 << 1)
- #define SR_TF_EMPTY					(1 << 2)
- #define SR_RF_EMPTY					(1 << 3)
- #define SR_RF_FULL					(1 << 4)
-+#define SR_SLAVE_TX_BUSY				(1 << 5)
- 
- /* Bit fields in ISR, IMR, ISR, RISR, 5bit */
- #define INT_MASK					0x1f
-@@ -197,13 +198,19 @@ static inline void spi_enable_chip(struct rockchip_spi *rs, bool enable)
- 	writel_relaxed((enable ? 1U : 0U), rs->regs + ROCKCHIP_SPI_SSIENR);
- }
- 
--static inline void wait_for_idle(struct rockchip_spi *rs)
-+static inline void wait_for_tx_idle(struct rockchip_spi *rs, bool slave_mode)
- {
- 	unsigned long timeout = jiffies + msecs_to_jiffies(5);
- 
- 	do {
--		if (!(readl_relaxed(rs->regs + ROCKCHIP_SPI_SR) & SR_BUSY))
--			return;
-+		if (slave_mode) {
-+			if (!(readl_relaxed(rs->regs + ROCKCHIP_SPI_SR) & SR_SLAVE_TX_BUSY) &&
-+			    !((readl_relaxed(rs->regs + ROCKCHIP_SPI_SR) & SR_BUSY)))
-+				return;
-+		} else {
-+			if (!(readl_relaxed(rs->regs + ROCKCHIP_SPI_SR) & SR_BUSY))
-+				return;
-+		}
- 	} while (!time_after(jiffies, timeout));
- 
- 	dev_warn(rs->dev, "spi controller is in busy state!\n");
-@@ -383,7 +390,7 @@ static void rockchip_spi_dma_txcb(void *data)
- 		return;
- 
- 	/* Wait until the FIFO data completely. */
--	wait_for_idle(rs);
-+	wait_for_tx_idle(rs, ctlr->slave);
- 
- 	spi_enable_chip(rs, false);
- 	spi_finalize_current_transfer(ctlr);
-@@ -545,7 +552,7 @@ static int rockchip_spi_config(struct rockchip_spi *rs,
- 	else
- 		writel_relaxed(rs->fifo_len / 2 - 1, rs->regs + ROCKCHIP_SPI_RXFTLR);
- 
--	writel_relaxed(rs->fifo_len / 2, rs->regs + ROCKCHIP_SPI_DMATDLR);
-+	writel_relaxed(rs->fifo_len / 2 - 1, rs->regs + ROCKCHIP_SPI_DMATDLR);
- 	writel_relaxed(rockchip_spi_calc_burst_size(xfer->len / rs->n_bytes) - 1,
- 		       rs->regs + ROCKCHIP_SPI_DMARDLR);
- 	writel_relaxed(dmacr, rs->regs + ROCKCHIP_SPI_DMACR);
--- 
-2.17.1
+done.
 
+> ===
+>
+> The [PATCH v3 2/8] has duplicate Signed-off-by's.
+>
+> Signed-off-by: Jon Lin <jon.lin at rock-chips.com>
+> Signed-off-by: Jon Lin <jon.lin at rock-chips.com>
+>
+> What has changed in version 3 ?
+> Maybe add a cover letter and a change log too?
+> git format-patch -v4 -8 --cover-letter HEAD
+
+done.
+
+> ===
+>
+> The commit message in [PATCH v3 4/8] has to many "applications", so
+> maybe restyle a bit?
+>
+> Add compatible string for rv1126 to applications for potential
+> applications.
+done.
+>
+> Adding "rockchip,rv1126-spi" to rockchip_spi_dt_match[] is strictly not
+> needed when using "rockchip,rk3066-spi" as fall back string.
+> Could a maintainer advice?
+>
+> Maybe this bug of mine should revert too?? Or is it legacy? ;)
+> spi: rockchip: add compatible string for px30 rk3308 rk3328
+> https://lore.kernel.org/r/20200309151004.7780-1-jbx6244@gmail.com
+I agree with you. If the maintainer doesn't have any comments, I will use
+"rockchip,spi" as compatible names for the subsequent rk platform.
+>
+> ===
+>
+> Johan
+>
+> On 6/5/21 11:46 AM, Jon Lin wrote:
+>> The description below will be used for rv1126.dtsi in the future
+>>
+>> Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
+>> ---
+>>   Documentation/devicetree/bindings/spi/spi-rockchip.yaml | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+>> index 1e6cf29e6388..4ed5b72a8494 100644
+>> --- a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+>> +++ b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+>> @@ -27,6 +27,7 @@ properties:
+>>         - items:
+>>             - enum:
+>>                 - rockchip,px30-spi
+>> +              - rockchip,rv1126-spi
+> Sort alphabetically.
+>
+>>                 - rockchip,rk3188-spi
+>>                 - rockchip,rk3288-spi
+>>                 - rockchip,rk3308-spi
+>>
+>
+>
 
 
