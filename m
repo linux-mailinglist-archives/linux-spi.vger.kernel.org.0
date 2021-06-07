@@ -2,105 +2,117 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D979239DCD4
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Jun 2021 14:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3422E39DDDC
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Jun 2021 15:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbhFGMqj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Jun 2021 08:46:39 -0400
-Received: from lucky1.263xmail.com ([211.157.147.134]:34152 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbhFGMqi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Jun 2021 08:46:38 -0400
-Received: from localhost (unknown [192.168.167.16])
-        by lucky1.263xmail.com (Postfix) with ESMTP id D454EC8492;
-        Mon,  7 Jun 2021 20:44:44 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-ABS-CHECKED: 0
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P32529T140357062862592S1623069879715065_;
-        Mon, 07 Jun 2021 20:44:46 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <80b9561bac60db3418677257b4859855>
-X-RL-SENDER: jon.lin@rock-chips.com
-X-SENDER: jon.lin@rock-chips.com
-X-LOGIN-NAME: jon.lin@rock-chips.com
-X-FST-TO: linux-spi@vger.kernel.org
-X-RCPT-COUNT: 17
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-From:   Jon Lin <jon.lin@rock-chips.com>
-To:     linux-spi@vger.kernel.org
-Cc:     jon.lin@rock-chips.com, broonie@kernel.org, robh+dt@kernel.org,
-        heiko@sntech.de, jbx6244@gmail.com, hjc@rock-chips.com,
-        yifeng.zhao@rock-chips.com, sugar.zhang@rock-chips.com,
-        linux-rockchip@lists.infradead.org, linux-mtd@lists.infradead.org,
-        p.yadav@ti.com, macroalpha82@gmail.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chris Morgan <macromorgan@hotmail.com>
-Subject: [PATCH v5 8/8] arm64: dts: rockchip: Enable SFC for Odroid Go Advance
-Date:   Mon,  7 Jun 2021 20:44:37 +0800
-Message-Id: <20210607124437.4143-4-jon.lin@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210607124437.4143-1-jon.lin@rock-chips.com>
-References: <20210607124303.22393-1-jon.lin@rock-chips.com>
- <20210607124437.4143-1-jon.lin@rock-chips.com>
+        id S230328AbhFGNmt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Jun 2021 09:42:49 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:46242 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230127AbhFGNms (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Jun 2021 09:42:48 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 157DelfA065132;
+        Mon, 7 Jun 2021 08:40:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1623073247;
+        bh=XIRhjm6c/H5np6FKJM7OWMRS5z/xWNTKW2NoHX5pFUI=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=hjrdjGA4/mkgRgErxkgA2WbdfJpaYYWTf4X8uwNvMU4pHOmBxmA41kpQmxR3A8q23
+         4dLEFWqc1WTQ8D1NlphXCOH/t7vE3CLlpZI5sgLI/heahqpOtC0wp6qqZafd3rjd9l
+         ipSqo9w48mfKlyb4JXBrvsDqumxXQ+KchqU5bn9U=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 157DelkS087488
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 7 Jun 2021 08:40:47 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Mon, 7 Jun
+ 2021 08:40:47 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Mon, 7 Jun 2021 08:40:47 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 157DeleB040758;
+        Mon, 7 Jun 2021 08:40:47 -0500
+Date:   Mon, 7 Jun 2021 08:40:47 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+CC:     Lokesh Vutla <lokeshvutla@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Tero Kristo <kristo@kernel.org>, <linux-spi@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-omap@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 3/5] arm64: dts: ti: am65: align ti,pindir-d0-out-d1-in
+ property with dt-shema
+Message-ID: <20210607134047.isfuedgjxpubpcb5@ungloved>
+References: <20210602123416.20378-1-a-govindraju@ti.com>
+ <20210602123416.20378-4-a-govindraju@ti.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20210602123416.20378-4-a-govindraju@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Chris Morgan <macromorgan@hotmail.com>
+On 18:04-20210602, Aswath Govindraju wrote:
+> ti,pindir-d0-out-d1-in property is expected to be of type boolean.
+> Therefore, fix the property accordingly.
+> 
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+No need for Fixes?
 
-This enables the Rockchip Serial Flash Controller for the Odroid Go
-Advance. Note that while the attached SPI NOR flash and the controller
-both support quad read mode, only 2 of the required 4 pins are present.
-The rx and tx bus width is set to 2 for this reason.
+Also please split up the patches per maintainer so that we are'nt
+confused on who should pick what etc..
 
-Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
----
+> ---
+>  arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi | 2 +-
+>  arch/arm64/boot/dts/ti/k3-am654-base-board.dts     | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi b/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
+> index f4ec9ed52939..23d51b6a9cf2 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
+> @@ -575,7 +575,7 @@
+>  
+>  	#address-cells = <1>;
+>  	#size-cells= <0>;
+> -	ti,pindir-d0-out-d1-in = <1>;
+> +	ti,pindir-d0-out-d1-in;
+>  };
+>  
+>  &tscadc0 {
+> diff --git a/arch/arm64/boot/dts/ti/k3-am654-base-board.dts b/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
+> index eddb2ffb93ca..1b947e2c2e74 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
+> @@ -299,7 +299,7 @@
+>  	pinctrl-0 = <&main_spi0_pins_default>;
+>  	#address-cells = <1>;
+>  	#size-cells= <0>;
+> -	ti,pindir-d0-out-d1-in = <1>;
+> +	ti,pindir-d0-out-d1-in;
+>  
+>  	flash@0{
+>  		compatible = "jedec,spi-nor";
+> -- 
+> 2.17.1
+> 
 
-Changes in v5: None
-Changes in v4: None
-Changes in v3: None
-Changes in v2: None
-Changes in v1: None
 
- .../boot/dts/rockchip/rk3326-odroid-go2.dts      | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-index 49c97f76df77..f78e11dd8447 100644
---- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-@@ -484,6 +484,22 @@
- 	status = "okay";
- };
- 
-+&sfc {
-+	pinctrl-0 = <&sfc_clk &sfc_cs0 &sfc_bus2>;
-+	pinctrl-names = "default";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	status = "okay";
-+
-+	flash@0 {
-+		compatible = "jedec,spi-nor";
-+		reg = <0>;
-+		spi-max-frequency = <108000000>;
-+		spi-rx-bus-width = <2>;
-+		spi-tx-bus-width = <2>;
-+	};
-+};
-+
- &tsadc {
- 	status = "okay";
- };
 -- 
-2.17.1
-
-
-
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
