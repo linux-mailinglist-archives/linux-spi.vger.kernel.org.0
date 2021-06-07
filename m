@@ -2,28 +2,28 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE91739DA6D
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Jun 2021 12:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C3D39DAF4
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Jun 2021 13:18:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbhFGLBn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Jun 2021 07:01:43 -0400
-Received: from lucky1.263xmail.com ([211.157.147.131]:48060 "EHLO
+        id S230479AbhFGLUd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Jun 2021 07:20:33 -0400
+Received: from lucky1.263xmail.com ([211.157.147.134]:50198 "EHLO
         lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbhFGLBn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Jun 2021 07:01:43 -0400
-Received: from localhost (unknown [192.168.167.224])
-        by lucky1.263xmail.com (Postfix) with ESMTP id B5197BA7E4;
-        Mon,  7 Jun 2021 18:59:50 +0800 (CST)
+        with ESMTP id S230434AbhFGLUd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Jun 2021 07:20:33 -0400
+Received: from localhost (unknown [192.168.167.16])
+        by lucky1.263xmail.com (Postfix) with ESMTP id C96B5C8500;
+        Mon,  7 Jun 2021 19:18:39 +0800 (CST)
 X-MAIL-GRAY: 0
 X-MAIL-DELIVERY: 1
 X-ADDR-CHECKED4: 1
-X-SKE-CHECKED: 1
 X-ANTISPAM-LEVEL: 2
+X-ABS-CHECKED: 0
 Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P15980T139899277661952S1623063587583133_;
-        Mon, 07 Jun 2021 18:59:50 +0800 (CST)
+        by smtp.263.net (postfix) whith ESMTP id P32529T140357062862592S1623064720154033_;
+        Mon, 07 Jun 2021 19:18:41 +0800 (CST)
 X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <4661d269662baee90cd4d89f83279709>
+X-UNIQUE-TAG: <12e3184ddaff61ebb4970c943d1e051f>
 X-RL-SENDER: jon.lin@rock-chips.com
 X-SENDER: jon.lin@rock-chips.com
 X-LOGIN-NAME: jon.lin@rock-chips.com
@@ -38,70 +38,44 @@ Cc:     jon.lin@rock-chips.com, heiko@sntech.de, robh+dt@kernel.org,
         linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v5 6/6] spi: rockchip: Support SPI_CS_HIGH
-Date:   Mon,  7 Jun 2021 18:59:46 +0800
-Message-Id: <20210607105946.24266-2-jon.lin@rock-chips.com>
+Subject: [PATCH v6 0/6] Support ROCKCHIP SPI new feature
+Date:   Mon,  7 Jun 2021 19:18:31 +0800
+Message-Id: <20210607111837.31074-1-jon.lin@rock-chips.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210607105946.24266-1-jon.lin@rock-chips.com>
-References: <20210607105802.23796-1-jon.lin@rock-chips.com>
- <20210607105946.24266-1-jon.lin@rock-chips.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-1.Add standard spi-cs-high support
-2.Refer to spi-controller.yaml for details
 
-Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
----
 
-Changes in v5: None
-Changes in v4: None
-Changes in v3: None
+Changes in v6:
+- Consider to compatibility, the "rockchip,rk3568-spi" is removed in
+  Series-changes v5, so the commit massage should also remove the
+  corresponding information
 
- drivers/spi/spi-rockchip.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Changes in v5:
+- Change to leave one compatible id rv1126, and rk3568 is compatible
+  with rv1126
 
-diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index 48b666d42d8a..d64cca34eef7 100644
---- a/drivers/spi/spi-rockchip.c
-+++ b/drivers/spi/spi-rockchip.c
-@@ -108,6 +108,8 @@
- #define CR0_OPM_MASTER				0x0
- #define CR0_OPM_SLAVE				0x1
- 
-+#define CR0_SOI_OFFSET				23
-+
- #define CR0_MTM_OFFSET				0x21
- 
- /* Bit fields in SER, 2bit */
-@@ -238,7 +240,7 @@ static void rockchip_spi_set_cs(struct spi_device *spi, bool enable)
- {
- 	struct spi_controller *ctlr = spi->controller;
- 	struct rockchip_spi *rs = spi_controller_get_devdata(ctlr);
--	bool cs_asserted = !enable;
-+	bool cs_asserted = spi->mode & SPI_CS_HIGH ? enable : !enable;
- 
- 	/* Return immediately for no-op */
- 	if (cs_asserted == rs->cs_asserted[spi->chip_select])
-@@ -509,6 +511,8 @@ static int rockchip_spi_config(struct rockchip_spi *rs,
- 	cr0 |= (spi->mode & 0x3U) << CR0_SCPH_OFFSET;
- 	if (spi->mode & SPI_LSB_FIRST)
- 		cr0 |= CR0_FBM_LSB << CR0_FBM_OFFSET;
-+	if (spi->mode & SPI_CS_HIGH)
-+		cr0 |= BIT(spi->chip_select) << CR0_SOI_OFFSET;
- 
- 	if (xfer->rx_buf && xfer->tx_buf)
- 		cr0 |= CR0_XFM_TR << CR0_XFM_OFFSET;
-@@ -787,7 +791,7 @@ static int rockchip_spi_probe(struct platform_device *pdev)
- 
- 	ctlr->auto_runtime_pm = true;
- 	ctlr->bus_num = pdev->id;
--	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LOOP | SPI_LSB_FIRST;
-+	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LOOP | SPI_LSB_FIRST | SPI_CS_HIGH;
- 	if (slave_mode) {
- 		ctlr->mode_bits |= SPI_NO_CS;
- 		ctlr->slave_abort = rockchip_spi_slave_abort;
+Changes in v4:
+- Adjust the order patches
+- Simply commit massage like redundancy "application" content
+
+Changes in v3:
+- Fix compile error which is find by Sascha in [v2,2/8]
+
+Jon Lin (6):
+  dt-bindings: spi: spi-rockchip: add description for rv1126
+  spi: rockchip: add compatible string for rv1126
+  spi: rockchip: Set rx_fifo interrupt waterline base on transfer item
+  spi: rockchip: Wait for STB status in slave mode tx_xfer
+  spi: rockchip: Support cs-gpio
+  spi: rockchip: Support SPI_CS_HIGH
+
+ .../devicetree/bindings/spi/spi-rockchip.yaml |  1 +
+ drivers/spi/spi-rockchip.c                    | 95 +++++++++++++++----
+ 2 files changed, 80 insertions(+), 16 deletions(-)
+
 -- 
 2.17.1
 
