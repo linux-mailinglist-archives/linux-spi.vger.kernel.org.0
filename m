@@ -2,18 +2,18 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F7FF39DAF7
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Jun 2021 13:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60BE139DAFA
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Jun 2021 13:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbhFGLUf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Jun 2021 07:20:35 -0400
-Received: from lucky1.263xmail.com ([211.157.147.130]:55020 "EHLO
+        id S231224AbhFGLUg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Jun 2021 07:20:36 -0400
+Received: from lucky1.263xmail.com ([211.157.147.132]:44492 "EHLO
         lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbhFGLUe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Jun 2021 07:20:34 -0400
+        with ESMTP id S231158AbhFGLUg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Jun 2021 07:20:36 -0400
 Received: from localhost (unknown [192.168.167.16])
-        by lucky1.263xmail.com (Postfix) with ESMTP id E01B8D1C44;
-        Mon,  7 Jun 2021 19:18:41 +0800 (CST)
+        by lucky1.263xmail.com (Postfix) with ESMTP id 0CBDFF4A7D;
+        Mon,  7 Jun 2021 19:18:43 +0800 (CST)
 X-MAIL-GRAY: 0
 X-MAIL-DELIVERY: 1
 X-ADDR-CHECKED4: 1
@@ -21,9 +21,9 @@ X-ANTISPAM-LEVEL: 2
 X-ABS-CHECKED: 0
 Received: from localhost.localdomain (unknown [58.22.7.114])
         by smtp.263.net (postfix) whith ESMTP id P32529T140357062862592S1623064720154033_;
-        Mon, 07 Jun 2021 19:18:42 +0800 (CST)
+        Mon, 07 Jun 2021 19:18:43 +0800 (CST)
 X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <cbeeb3a5b401e4e32cf6af6c73b8fcee>
+X-UNIQUE-TAG: <b8dbf287dc5c7750308cf644f6a4d8a5>
 X-RL-SENDER: jon.lin@rock-chips.com
 X-SENDER: jon.lin@rock-chips.com
 X-LOGIN-NAME: jon.lin@rock-chips.com
@@ -38,9 +38,9 @@ Cc:     jon.lin@rock-chips.com, heiko@sntech.de, robh+dt@kernel.org,
         linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v6 1/6] dt-bindings: spi: spi-rockchip: add description for rv1126
-Date:   Mon,  7 Jun 2021 19:18:32 +0800
-Message-Id: <20210607111837.31074-2-jon.lin@rock-chips.com>
+Subject: [PATCH v6 2/6] spi: rockchip: add compatible string for rv1126
+Date:   Mon,  7 Jun 2021 19:18:33 +0800
+Message-Id: <20210607111837.31074-3-jon.lin@rock-chips.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210607111837.31074-1-jon.lin@rock-chips.com>
 References: <20210607111837.31074-1-jon.lin@rock-chips.com>
@@ -48,43 +48,31 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The description below will be used for rv1126.dtsi or compatible one in
-the future
+Add compatible string for rv1126 for potential applications.
 
 Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
 ---
 
-Changes in v6:
-- Consider to compatibility, the "rockchip,rk3568-spi" is removed in
-  Series-changes v5, so the commit massage should also remove the
-  corresponding information
+Changes in v6: None
+Changes in v5: None
+Changes in v4: None
+Changes in v3: None
 
-Changes in v5:
-- Change to leave one compatible id rv1126, and rk3568 is compatible
-  with rv1126
-
-Changes in v4:
-- Adjust the order patches
-- Simply commit massage like redundancy "application" content
-
-Changes in v3:
-- Fix compile error which is find by Sascha in [v2,2/8]
-
- Documentation/devicetree/bindings/spi/spi-rockchip.yaml | 1 +
+ drivers/spi/spi-rockchip.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
-index 1e6cf29e6388..50d98c8f372c 100644
---- a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
-@@ -34,6 +34,7 @@ properties:
-               - rockchip,rk3368-spi
-               - rockchip,rk3399-spi
-           - const: rockchip,rk3066-spi
-+      - const: rockchip,rv1126-spi
- 
-   reg:
-     maxItems: 1
+diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
+index 52d6259d96ed..bbeed3ae4ee1 100644
+--- a/drivers/spi/spi-rockchip.c
++++ b/drivers/spi/spi-rockchip.c
+@@ -922,6 +922,7 @@ static const struct of_device_id rockchip_spi_dt_match[] = {
+ 	{ .compatible = "rockchip,rk3368-spi", },
+ 	{ .compatible = "rockchip,rk3399-spi", },
+ 	{ .compatible = "rockchip,rv1108-spi", },
++	{ .compatible = "rockchip,rv1126-spi", },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, rockchip_spi_dt_match);
 -- 
 2.17.1
 
