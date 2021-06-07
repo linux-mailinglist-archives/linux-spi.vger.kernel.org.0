@@ -2,109 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E972639DB06
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Jun 2021 13:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A088039DBD2
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Jun 2021 13:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbhFGLVL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Jun 2021 07:21:11 -0400
-Received: from lucky1.263xmail.com ([211.157.147.135]:44728 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbhFGLVK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Jun 2021 07:21:10 -0400
-Received: from localhost (unknown [192.168.167.16])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 1943FACE0F;
-        Mon,  7 Jun 2021 19:19:17 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-ABS-CHECKED: 0
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P32529T140357214529280S1623064756471506_;
-        Mon, 07 Jun 2021 19:19:18 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <4e5a287637b8e7f452479ddb5d15e06c>
-X-RL-SENDER: jon.lin@rock-chips.com
-X-SENDER: jon.lin@rock-chips.com
-X-LOGIN-NAME: jon.lin@rock-chips.com
-X-FST-TO: broonie@kernel.org
-X-RCPT-COUNT: 9
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-From:   Jon Lin <jon.lin@rock-chips.com>
-To:     broonie@kernel.org
-Cc:     jon.lin@rock-chips.com, heiko@sntech.de, robh+dt@kernel.org,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH v6 6/6] spi: rockchip: Support SPI_CS_HIGH
-Date:   Mon,  7 Jun 2021 19:19:14 +0800
-Message-Id: <20210607111914.31376-2-jon.lin@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210607111914.31376-1-jon.lin@rock-chips.com>
-References: <20210607111837.31074-1-jon.lin@rock-chips.com>
- <20210607111914.31376-1-jon.lin@rock-chips.com>
+        id S230209AbhFGL6l (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Jun 2021 07:58:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34666 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230127AbhFGL6l (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 7 Jun 2021 07:58:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 7000960FEB;
+        Mon,  7 Jun 2021 11:56:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623067010;
+        bh=LNX3Sau+QyBzRGBlgMHQyD9xygFAyDz7jAG41CBztD4=;
+        h=Subject:From:Date:To:From;
+        b=BMajFob20rQxgEa+sVQKWsOCvU3UPF7zALvRCsxGEdQRTl7dKdwVNMPYNFm+mJ5NJ
+         t3Pbi9SVO9ZhcQPu74BZIkI3L2S7vpWDFc2hU7iClOE35XNgL42dEGGsp2jroXSAIN
+         vjCEqvaxXwUJF3d7UdQnfhpnqzUDuypPuGCp1fRyakMqyCxpFw8ZJr+h6kHUCF8Oye
+         ZdO5kGAAwPin5zUC1gQGstDLYIbamC+NQyMkqfjKS2E6tqeBuLzbz7vlnbCB+oEqe9
+         arnKzPTWFrTShcl7YlcUg+gRq40L+okncMToXmuPiIrcS4f0MG8zBZPIs9DgzpfjB2
+         hY/sbGcuhXPpw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 6092760283;
+        Mon,  7 Jun 2021 11:56:50 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <162306701038.29931.16776187076507373445.git-patchwork-housekeeping@kernel.org>
+Date:   Mon, 07 Jun 2021 11:56:50 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-1.Add standard spi-cs-high support
-2.Refer to spi-controller.yaml for details
+Latest series: [v6] Support ROCKCHIP SPI new feature (2021-06-07T11:18:31)
+  Superseding: [v4] Support ROCKCHIP SPI new feature (2021-06-07T06:34:42):
+    [v4,1/6] dt-bindings: spi: spi-rockchip: add description for rv1126 and rk3568
+    [v4,2/6] spi: rockchip: add compatible string for rv1126 and rk3568
+    [v4,3/6] spi: rockchip: Set rx_fifo interrupt waterline base on transfer item
+    [v4,4/6] spi: rockchip: Wait for STB status in slave mode tx_xfer
+    [v4,5/6] spi: rockchip: Support cs-gpio
+    [v4,6/6] spi: rockchip: Support SPI_CS_HIGH
+  Superseding: [v5] Support ROCKCHIP SPI new feature (2021-06-07T10:57:56):
+    [v5,1/6] dt-bindings: spi: spi-rockchip: add description for rv1126
+    [v5,2/6] spi: rockchip: add compatible string for rv1126 and rk3568
+    [v5,3/6] spi: rockchip: Set rx_fifo interrupt waterline base on transfer item
+    [v5,4/6] spi: rockchip: Wait for STB status in slave mode tx_xfer
+    [v5,5/6] spi: rockchip: Support cs-gpio
+    [v5,6/6] spi: rockchip: Support SPI_CS_HIGH
 
-Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
----
 
-Changes in v6: None
-Changes in v5: None
-Changes in v4: None
-Changes in v3: None
-
- drivers/spi/spi-rockchip.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index 48b666d42d8a..d64cca34eef7 100644
---- a/drivers/spi/spi-rockchip.c
-+++ b/drivers/spi/spi-rockchip.c
-@@ -108,6 +108,8 @@
- #define CR0_OPM_MASTER				0x0
- #define CR0_OPM_SLAVE				0x1
- 
-+#define CR0_SOI_OFFSET				23
-+
- #define CR0_MTM_OFFSET				0x21
- 
- /* Bit fields in SER, 2bit */
-@@ -238,7 +240,7 @@ static void rockchip_spi_set_cs(struct spi_device *spi, bool enable)
- {
- 	struct spi_controller *ctlr = spi->controller;
- 	struct rockchip_spi *rs = spi_controller_get_devdata(ctlr);
--	bool cs_asserted = !enable;
-+	bool cs_asserted = spi->mode & SPI_CS_HIGH ? enable : !enable;
- 
- 	/* Return immediately for no-op */
- 	if (cs_asserted == rs->cs_asserted[spi->chip_select])
-@@ -509,6 +511,8 @@ static int rockchip_spi_config(struct rockchip_spi *rs,
- 	cr0 |= (spi->mode & 0x3U) << CR0_SCPH_OFFSET;
- 	if (spi->mode & SPI_LSB_FIRST)
- 		cr0 |= CR0_FBM_LSB << CR0_FBM_OFFSET;
-+	if (spi->mode & SPI_CS_HIGH)
-+		cr0 |= BIT(spi->chip_select) << CR0_SOI_OFFSET;
- 
- 	if (xfer->rx_buf && xfer->tx_buf)
- 		cr0 |= CR0_XFM_TR << CR0_XFM_OFFSET;
-@@ -787,7 +791,7 @@ static int rockchip_spi_probe(struct platform_device *pdev)
- 
- 	ctlr->auto_runtime_pm = true;
- 	ctlr->bus_num = pdev->id;
--	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LOOP | SPI_LSB_FIRST;
-+	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_LOOP | SPI_LSB_FIRST | SPI_CS_HIGH;
- 	if (slave_mode) {
- 		ctlr->mode_bits |= SPI_NO_CS;
- 		ctlr->slave_abort = rockchip_spi_slave_abort;
 -- 
-2.17.1
-
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
