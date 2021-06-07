@@ -2,98 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 147C839E5FE
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Jun 2021 19:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 896A239E6FD
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Jun 2021 21:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231225AbhFGR6R (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Jun 2021 13:58:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47800 "EHLO mail.kernel.org"
+        id S230444AbhFGTCx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Jun 2021 15:02:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37130 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231220AbhFGR6R (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 7 Jun 2021 13:58:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6933D610A8;
-        Mon,  7 Jun 2021 17:56:25 +0000 (UTC)
+        id S230409AbhFGTCx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 7 Jun 2021 15:02:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 77137610E7;
+        Mon,  7 Jun 2021 19:01:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623088585;
-        bh=FxlPlGwzOH68vLMvGAmu0DApAPfPqgM1WS9nhpC1Qys=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ceqn3Md5mBq7rpR+DevcxNZ2ndKbBJVYkLBgt0mvuCNQkp0UgZk+H6wgOG5IAUNuK
-         keJEnYh3XAWwmudcCOn6Nnj8KOuUnt7KLJYf2loRTzh2Pe1iwdtERBxu9+blDE2z8y
-         0zj4FUE/nVSAhtp8WpTGFOkiDg+XJJ6bTMx2SdAgzIanTQIP8shVTAFCqh8QzqnKJQ
-         kpHiIRHAFOitnqaBzfK0ghJACJauCkHRX8SER0GWoU3jUn70e/r4KcnldnRWFIOyiY
-         ybESfpuU6MgTd7gkKhzkGT6w/pw2lI7AOPE7lJXR9zf80fcc1xdzm8UhZOf+ROPqq2
-         wwijnNTTjm2fw==
-Date:   Mon, 7 Jun 2021 18:56:11 +0100
+        s=k20201202; t=1623092462;
+        bh=q/6zCxs7z1agffzeSnodIVy/QqCZoMUeb1yXDuUqJ0w=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PBDp3IwmxoV71mITERLUOPS3ReZcgGZok0EjnmWmwHUPoEHYvAY6l2eLdp84m99kV
+         3oBdfiv+kKS3xoFTD81w9M9VYENegn+Xj/MVUtB6Me2h+1vNTVCmtI/riJtpFmAuCi
+         d/tQ0o2+TZKWl4uIctFJRjSJSaWwBPt0bnt1AbD8uwvqJwLqw+nxMVu2JIxGkMw8fT
+         5+gtfeU5MViX3o3ZIeQkOxIwKOF6nTHK/Orc9yj8z/S8UPAqaUUywWAGVmusgIhSD2
+         IPcEPLn2+zTpO7ZQMo12cVwW94QUUG7VmBKUCzHiNG6694ZT8K5U6PRc7nh0Qs7oGa
+         JxSYJQdDSArBg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        linux-spi@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [PATCH v3 net-next 1/2] net: dsa: sja1105: send multiple
- spi_messages instead of using cs_change
-Message-ID: <20210607175611.GD10625@sirena.org.uk>
-References: <20210520211657.3451036-1-olteanv@gmail.com>
- <20210520211657.3451036-2-olteanv@gmail.com>
- <20210524083529.GA4318@sirena.org.uk>
- <20210524130212.g6jcf7y4grc64mki@skbuf>
+To:     linux-spi@vger.kernel.org, Jay Fang <f.fangjian@huawei.com>
+Cc:     Mark Brown <broonie@kernel.org>, huangdaode@huawei.com
+Subject: Re: [PATCH] spi: hisi-kunpeng: Add debugfs support
+Date:   Mon,  7 Jun 2021 20:00:40 +0100
+Message-Id: <162309242715.30805.13917758606581747697.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <1622789718-13977-1-git-send-email-f.fangjian@huawei.com>
+References: <1622789718-13977-1-git-send-email-f.fangjian@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jL2BoiuKMElzg3CS"
-Content-Disposition: inline
-In-Reply-To: <20210524130212.g6jcf7y4grc64mki@skbuf>
-X-Cookie: I never did it that way before.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, 4 Jun 2021 14:55:18 +0800, Jay Fang wrote:
+> This patch uses debugfs_regset32 interface to create the registers dump
+> file. Use it instead of creating a generic debugfs file with manually
+> written read callback function.
+> 
+> With these entries, users can check all the SPI controller registers
+> during run time.
 
---jL2BoiuKMElzg3CS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Mon, May 24, 2021 at 04:02:12PM +0300, Vladimir Oltean wrote:
-> On Mon, May 24, 2021 at 09:35:29AM +0100, Mark Brown wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > This is not the case, spi_message_max_size() is a limit on the size of a
-> > spi_message.
+Thanks!
 
-> That is true, although it doesn't mean much, since in the presence of
-> cs_change, a spi_message has no correspondent in the physical world
-> (i.e. you can't look at a logic analyzer dump and say "this spi_message
-> was from this to this point"), and that is the problem really.
+[1/1] spi: hisi-kunpeng: Add debugfs support
+      commit: 2b2142f247ebeef74aaadc1a646261c19627fd7e
 
-It may affect how things are implemented by the driver, for example if
-the driver can send a command stream to the hardware the limit might be
-due to that command stream.  There is no need or expectation for drivers
-to pattern match what the're being asked to do and parse out something
-that should be a string of messages from the spi_message they get, it is
-expected that client drivers should split things up naturally.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-> Describing the controller's inability to send more than N SPI words with
-> continuous chip select using spi_message_max_size() is what seems flawed
-> to me, but it's what we have, and what I've adapted to.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-I can't entirely parse that but the limit here isn't to do with how long
-chip select is asserted for.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---jL2BoiuKMElzg3CS
-Content-Type: application/pgp-signature; name="signature.asc"
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmC+XboACgkQJNaLcl1U
-h9DdMwf+L2U5OSSMrunBQzsZp+5RREPvEx2yKgVRob8DbI9vMpxB3aKbxV5ID0qC
-QRcbIwIC1O4GhLEKVmLM76uNZ0gEd0bUbR5ckMPSAUqhKttwQj0oZpmqEhEp5TSS
-nJG7DqGvnBPzyFoSWhX6yYPi+MIW12afAqp+yekYEi5BoAnPmrvUK6m8TVDqTxDr
-7ubMMg79xYyR8yiHLSd2l4ets49nH5ziAi1NTxr1eAQaiQf6SJLVI8fVFooAbxKY
-0UwEJcCxbsrQCXO7MluffsJSwbecF6hgkYpckVTmhX26+fo6Edc6cTU8MQyWib4a
-IjfuVJJPQSzq8dBe9RhQXSvjjfuIYg==
-=AiGc
------END PGP SIGNATURE-----
-
---jL2BoiuKMElzg3CS--
+Thanks,
+Mark
