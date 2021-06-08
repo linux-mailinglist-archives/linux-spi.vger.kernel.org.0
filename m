@@ -2,78 +2,155 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F4D39FBE2
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Jun 2021 18:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8268339FC98
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Jun 2021 18:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233485AbhFHQJZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 8 Jun 2021 12:09:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42846 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233032AbhFHQIp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 8 Jun 2021 12:08:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5D43E610A2;
-        Tue,  8 Jun 2021 16:06:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623168412;
-        bh=Trne5PSLFIXdUQlc3ISX2r+nTa2XMYIx4lId5HleE10=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PsqEU3/KwKPr+Tnzn5dyV+0sJRiabmnEhBUFV7chlC5+70s8yTQZnRKgRn2nFuCfP
-         q9Xk8B9vuJf0FMiruHXPb5SsrWDncp/w5KcdQvPcwmz5js8yKnFdCwNWdnmjVoLcbu
-         ghAfsxwxJSW+APno96CNplCTxZPJhmxwas+diPY2/RA718YWkL5CH/HCiIMLik/hwz
-         I3f+xFgRqaQU/Nlree4qQRLuS7wWeeT7AcB8RuAJ7iD3nzUEn1XHvusVar5Odo37NN
-         82VyyarFVIbnn+W5AnGmpPd5+mtXg1bK7klZQaosx+1RnV/08GB40I2k31li30ClY7
-         P2dqtnzLJjC0w==
-From:   Mark Brown <broonie@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jon Hunter <jonathanh@nvidia.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-tegra@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: tegra20-slink: Ensure SPI controller reset is deasserted
-Date:   Tue,  8 Jun 2021 17:06:30 +0100
-Message-Id: <162316838385.20882.12302385130544935534.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210608071518.93037-1-jonathanh@nvidia.com>
-References: <20210608071518.93037-1-jonathanh@nvidia.com>
+        id S232572AbhFHQdj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 8 Jun 2021 12:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58570 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231675AbhFHQdj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 8 Jun 2021 12:33:39 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09013C061574;
+        Tue,  8 Jun 2021 09:31:39 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id ba2so23507218edb.2;
+        Tue, 08 Jun 2021 09:31:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WUaKdqkyjh6EzjeWuZqdi2dYNMKlRLnh+NM1sHEfuao=;
+        b=X+CfpsFyq5hloeViHoJlyIds19uSTtUIlXAf7k7HrrJUDrSreBvTIyOHADrMjqCAEq
+         No4vVonjSBSX0Ql67lfm9mL8pDnFKjMF3mKZsNVqW/Pq6NBek2wKwW1hxbkgrKzu8tC4
+         43kO6TYrViuMaxdFjtiwt6J3TA6tHdQywILSow1IEt3NiZeVn2MTqF/aR0fLIxaGrV1w
+         ozG0OpRHBTDGcY06ZL/er2groWt3t9mndbpDjrnFXgIt92u4v22hUGD8Jtr+J3EiYFn7
+         eAPF1kPCdip9/viRZCIxtzLQB8eEnh7syshU+OfZSfYsV+FGiRrIs+VEHhi41s8cQ7hf
+         c1sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WUaKdqkyjh6EzjeWuZqdi2dYNMKlRLnh+NM1sHEfuao=;
+        b=HphpeI/aXUYcvWZHcIon2HL5/7g6V2xFf0FX+8p/A6hxWKa49xE50BLFNc7x1l8CaF
+         77OWSCB9VkN0KV9bE+X2n0L9Lb1sD9bAYeGj17VWtBjVMEoQSj8AiCa7aaK0jDWhbvCh
+         RjSbWOKj3aOzXqa4oKgEjgmF4g9qqnZsxCAO4FMo2+xOpfnuo3g3aa5eSWBuGRSrrEmv
+         lGmqxO4QMSzoDI1BWe8r1+L/bBuKNEa7TfARFBi8AH8J05Vfo8e2sP9vmNO7uS5kTSSX
+         eHj1QK0c1X/qmbJ+N/ZwiXrTCRifNHNIxULqBG9cze0jHXYF1nenNxbZegAywkeYV0Il
+         9KWg==
+X-Gm-Message-State: AOAM531Lqas9dpggSS2PT5C8VJgDcN84GlQ/m9hcNaTDmfdy42Nng7lD
+        1oFDoDLzX7TaHDIFb1OEieA=
+X-Google-Smtp-Source: ABdhPJzzR0UxUuKFEEiY/gFD3U2yfUWNfHociiNEWPmaKlEGhRv6BT2dZsFeIRBn1A82AD/+Z6C00Q==
+X-Received: by 2002:a05:6402:1592:: with SMTP id c18mr19539617edv.2.1623169896749;
+        Tue, 08 Jun 2021 09:31:36 -0700 (PDT)
+Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id f18sm74848ejz.119.2021.06.08.09.31.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Jun 2021 09:31:36 -0700 (PDT)
+Subject: Re: [PATCH v6 4/8] clk: rockchip: Add support for hclk_sfc on rk3036
+To:     Jon Lin <jon.lin@rock-chips.com>, linux-spi@vger.kernel.org
+Cc:     broonie@kernel.org, robh+dt@kernel.org, heiko@sntech.de,
+        hjc@rock-chips.com, yifeng.zhao@rock-chips.com,
+        sugar.zhang@rock-chips.com, linux-rockchip@lists.infradead.org,
+        linux-mtd@lists.infradead.org, p.yadav@ti.com,
+        macroalpha82@gmail.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chris Morgan <macromorgan@hotmail.com>
+References: <20210608022644.21074-1-jon.lin@rock-chips.com>
+ <20210608022644.21074-5-jon.lin@rock-chips.com>
+From:   Johan Jonker <jbx6244@gmail.com>
+Message-ID: <4a4524f5-ee85-c7f6-aa95-1df84f2a8a99@gmail.com>
+Date:   Tue, 8 Jun 2021 18:31:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210608022644.21074-5-jon.lin@rock-chips.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 8 Jun 2021 08:15:18 +0100, Jon Hunter wrote:
-> Commit 4782c0a5dd88 ("clk: tegra: Don't deassert reset on enabling
-> clocks") removed some legacy code for handling resets on Tegra from
-> within the Tegra clock code. This exposed an issue in the Tegra20 slink
-> driver where the SPI controller reset was not being deasserted as needed
-> during probe. This is causing the Tegra30 Cardhu platform to hang on
-> boot. Fix this by ensuring the SPI controller reset is deasserted during
-> probe.
+Hi Jon,
 
-Applied to
+For rk3036 we might need another fix added to this serie as well.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+clk: rockchip: rk3036: fix up the sclk_sfc parent error
+https://github.com/rockchip-linux/kernel/commit/100718ef0d44872db1672b6a88030374c0d1613b
 
-Thanks!
+===
+Add more people for clk driver changes:
 
-[1/1] spi: tegra20-slink: Ensure SPI controller reset is deasserted
-      commit: aceda401e84115bf9121454828f9da63c2a94482
+M:	Michael Turquette <mturquette@baylibre.com>
+M:	Stephen Boyd <sboyd@kernel.org>
+L:	linux-clk@vger.kernel.org
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+===
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Johan
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+On 6/8/21 4:26 AM, Jon Lin wrote:
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+> From: Chris Morgan <macromorgan@hotmail.com>
 
-Thanks,
-Mark
+From: Randy Li <randy.li@rock-chips.com>
+
+> 
+> Add support for the bus clock for the serial flash controller on the
+> rk3036. Taken from the Rockchip BSP kernel but not tested on real
+> hardware (as I lack a 3036 based SoC to test).
+> 
+
+Signed-off-by: Randy Li <randy.li@rock-chips.com>
+
+Maybe give credit to the original author?
+clk: rockchip: rk3036: export the sfc clocks
+https://github.com/rockchip-linux/kernel/commit/600925e8ef6edbdda0a4ac6b3c55b0199be1e03e
+
+> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+> Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
+> ---
+> 
+> Changes in v6: None
+> Changes in v5: None
+> Changes in v4: None
+> Changes in v3: None
+> Changes in v2: None
+> Changes in v1: None
+> 
+>  drivers/clk/rockchip/clk-rk3036.c      | 2 +-
+>  include/dt-bindings/clock/rk3036-cru.h | 1 +
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/rockchip/clk-rk3036.c b/drivers/clk/rockchip/clk-rk3036.c
+> index 91d56ad45817..ebb628733f6d 100644
+> --- a/drivers/clk/rockchip/clk-rk3036.c
+> +++ b/drivers/clk/rockchip/clk-rk3036.c
+> @@ -403,7 +403,7 @@ static struct rockchip_clk_branch rk3036_clk_branches[] __initdata = {
+>  	GATE(HCLK_OTG0, "hclk_otg0", "hclk_peri", CLK_IGNORE_UNUSED, RK2928_CLKGATE_CON(5), 13, GFLAGS),
+>  	GATE(HCLK_OTG1, "hclk_otg1", "hclk_peri", CLK_IGNORE_UNUSED, RK2928_CLKGATE_CON(7), 3, GFLAGS),
+>  	GATE(HCLK_I2S, "hclk_i2s", "hclk_peri", 0, RK2928_CLKGATE_CON(7), 2, GFLAGS),
+
+> -	GATE(0, "hclk_sfc", "hclk_peri", CLK_IGNORE_UNUSED, RK2928_CLKGATE_CON(3), 14, GFLAGS),
+> +	GATE(HCLK_SFC, "hclk_sfc", "hclk_peri", CLK_IGNORE_UNUSED, RK2928_CLKGATE_CON(3), 14, GFLAGS),
+
+Maybe CLK_IGNORE_UNUSED should be changed to 0 ?
+
+>  	GATE(HCLK_MAC, "hclk_mac", "hclk_peri", 0, RK2928_CLKGATE_CON(3), 5, GFLAGS),
+>  
+>  	/* pclk_peri gates */
+> diff --git a/include/dt-bindings/clock/rk3036-cru.h b/include/dt-bindings/clock/rk3036-cru.h
+> index 35a5a01f9697..a96a9870ad59 100644
+> --- a/include/dt-bindings/clock/rk3036-cru.h
+> +++ b/include/dt-bindings/clock/rk3036-cru.h
+> @@ -81,6 +81,7 @@
+>  #define HCLK_OTG0		449
+>  #define HCLK_OTG1		450
+>  #define HCLK_NANDC		453
+> +#define HCLK_SFC		454
+>  #define HCLK_SDMMC		456
+>  #define HCLK_SDIO		457
+>  #define HCLK_EMMC		459
+> 
