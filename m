@@ -2,183 +2,163 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4CAE3A00AE
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Jun 2021 20:47:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FA93A054C
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Jun 2021 22:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236014AbhFHSqD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 8 Jun 2021 14:46:03 -0400
-Received: from mail-ed1-f46.google.com ([209.85.208.46]:42515 "EHLO
-        mail-ed1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232603AbhFHSmg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 8 Jun 2021 14:42:36 -0400
-Received: by mail-ed1-f46.google.com with SMTP id i13so25722537edb.9;
-        Tue, 08 Jun 2021 11:40:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=W/V7ksUiiZB58zMxMRkULUFDegQBYCL2IF/rhUEMXHc=;
-        b=IJbqV6FUUfi7qCArMillGRxl4VycBJhs5gYs1Lf0mMvJYu5kw345uaLWVcikHjOxiy
-         TFJQhy70+KtzUmpSPBAGITjsAaU9yHpuRah8PWUPx3giAgGmLDxqxAxGFPEvIjWZjadh
-         /XjD+XNLZrd1n4PDsyvZtPLrlI1pJCUtfwVXSCJ8CiAXMFZFYxladyIDH8tGjl30wMkf
-         vtr/ZiqQVcAVouktL/hMNvpZFd06DgNsv1ovNfmfLhFR4HIfRNfViVNesEUjSkCN7EZV
-         pNso+09KKYl9bWgGxOaRKlV2AfV7pPF7LZelGToKFJmpdo8SJ2CMdKHVVOa5ZFr1TDSi
-         +4Mg==
+        id S231450AbhFHUxK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 8 Jun 2021 16:53:10 -0400
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:45570 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230482AbhFHUxJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 8 Jun 2021 16:53:09 -0400
+Received: by mail-ot1-f43.google.com with SMTP id 6-20020a9d07860000b02903e83bf8f8fcso8669824oto.12;
+        Tue, 08 Jun 2021 13:51:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=W/V7ksUiiZB58zMxMRkULUFDegQBYCL2IF/rhUEMXHc=;
-        b=GFGF6Xkp/7aqtHEYmokIbaHLRxFmlZFj70DLZsZXpQXaoI+aAWIrqyRNuTGruk1zs/
-         PQNm8YCD9hlS7+a5lPf4FgFIMS8YKaFUs6QXZGrg/T7MwONmmdAO+WfbHIzdlBYgOVTT
-         vcJjGrBuGZXddPv+q6hW1MD9yqRR0Caj7nzhRMVcscDB2P2cmPEtQS1daFJcE9G1MIqR
-         mdxpnOaDFHpONejmhTU+TE2ty4gCT5pgHHif0kmG4XtDXMv89tOjMmwy8Vpz22r2wlRO
-         OvA5RAgPrZlcMF0sUfsBoOHj3gf0XCeu7rIQ0B0XPwnLy2NogbDk+6GP5ZDT3WDbth1I
-         ds9w==
-X-Gm-Message-State: AOAM533uTpn2LR4Zk5tqDwN0soQrS/BUootlVlHP/f5cVoZ+knD5iAGo
-        EXeeKV3VzX3A3Jl8E7WyYDm76RNVs6VPCg==
-X-Google-Smtp-Source: ABdhPJxi/SXwX8f6NHTk5beJ5dr9fZw0669BTAJnkBXZ5K/oYpH7fAlpLbYQC+bUjrsGqeChFLoUQw==
-X-Received: by 2002:a50:8dc6:: with SMTP id s6mr27186109edh.50.1623177566310;
-        Tue, 08 Jun 2021 11:39:26 -0700 (PDT)
-Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id z7sm174358ejm.122.2021.06.08.11.39.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Jun 2021 11:39:25 -0700 (PDT)
-Subject: Re: [PATCH v6 5/8] arm: dts: rockchip: Add SFC to RK3036
-To:     Jon Lin <jon.lin@rock-chips.com>, linux-spi@vger.kernel.org
-Cc:     broonie@kernel.org, robh+dt@kernel.org, heiko@sntech.de,
-        hjc@rock-chips.com, yifeng.zhao@rock-chips.com,
-        sugar.zhang@rock-chips.com, linux-rockchip@lists.infradead.org,
-        linux-mtd@lists.infradead.org, p.yadav@ti.com,
-        macroalpha82@gmail.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chris Morgan <macromorgan@hotmail.com>
-References: <20210608022644.21074-1-jon.lin@rock-chips.com>
- <20210608023305.25371-1-jon.lin@rock-chips.com>
-From:   Johan Jonker <jbx6244@gmail.com>
-Message-ID: <b5f29e1c-f4ec-7a08-a97c-8a516ba6649a@gmail.com>
-Date:   Tue, 8 Jun 2021 20:39:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
-MIME-Version: 1.0
-In-Reply-To: <20210608023305.25371-1-jon.lin@rock-chips.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=yiKyoptaaysab5Fo1rGVaoicrRW/xpQQvXSGwjLxWNw=;
+        b=Cz/38WeZsnxQIkQerEXmkiBP5eVdd+kZAWXD7cqbiX9uvPTuNI67XX1FiASEnO3Tqq
+         o/yEtMVGzG6HsLuuTIbL6RGykznRqURg5ALtktV5a01RqA7mPgwTF+gPLKXvBjUt1DNM
+         D7bdASJOQYj100YJ9hxJXg75O394GW5BIAPtr8pEXR936zDGVhWBbg64/3aLwLVcdmCo
+         Ov0oPS9CemNMMsjxwDsI7hE9W8gESGcfctTzvKoWBaemF57mY2AMAy5iHtyJYfrnWa88
+         ENyLiyZiMB8RgBKVoVnAYeakMsqHfylcuQm5ODigxd6zsi6Q/ka7//vdGctyLoh3jLgH
+         Qg1g==
+X-Gm-Message-State: AOAM5303MWU+AKb5xqQijOi8fEw70qb7jiGL6Djng0AXEYRhaufE5yUB
+        P+2IpC7agY8mrJKa92uZgg==
+X-Google-Smtp-Source: ABdhPJy7TQBWX65tHgc+EHrt1j0YQ7W9UDW5Ax7Wb/tf4y/D7lnLWrIHb0ZAuQzJRawt41CRHLK1mA==
+X-Received: by 2002:a9d:6c89:: with SMTP id c9mr16701595otr.163.1623185460131;
+        Tue, 08 Jun 2021 13:51:00 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id n11sm3008569ooo.12.2021.06.08.13.50.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Jun 2021 13:50:59 -0700 (PDT)
+Received: (nullmailer pid 1556866 invoked by uid 1000);
+        Tue, 08 Jun 2021 20:50:56 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Jon Lin <jon.lin@rock-chips.com>
+Cc:     devicetree@vger.kernel.org, Chris Morgan <macromorgan@hotmail.com>,
+        linux-arm-kernel@lists.infradead.org, p.yadav@ti.com,
+        jbx6244@gmail.com, linux-kernel@vger.kernel.org, heiko@sntech.de,
+        macroalpha82@gmail.com, sugar.zhang@rock-chips.com,
+        hjc@rock-chips.com, linux-mtd@lists.infradead.org,
+        robh+dt@kernel.org, linux-spi@vger.kernel.org, broonie@kernel.org,
+        linux-rockchip@lists.infradead.org, yifeng.zhao@rock-chips.com
+In-Reply-To: <20210608022644.21074-2-jon.lin@rock-chips.com>
+References: <20210608022644.21074-1-jon.lin@rock-chips.com> <20210608022644.21074-2-jon.lin@rock-chips.com>
+Subject: Re: [PATCH v6 1/8] dt-bindings: rockchip-sfc: Bindings for Rockchip serial flash controller
+Date:   Tue, 08 Jun 2021 15:50:56 -0500
+Message-Id: <1623185456.817255.1556865.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-
-On 6/8/21 4:33 AM, Jon Lin wrote:
+On Tue, 08 Jun 2021 10:26:37 +0800, Jon Lin wrote:
 > From: Chris Morgan <macromorgan@hotmail.com>
 > 
-> Add a devicetree entry for the Rockchip SFC for the RK3036 SOC.
+> Add bindings for the Rockchip serial flash controller. New device
+> specific parameter of rockchip,sfc-no-dma included in documentation.
 > 
 > Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
 > Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
 > ---
 > 
-> Changes in v6: None
-> Changes in v5: None
-> Changes in v4: None
-> Changes in v3: None
-> Changes in v2: None
-> Changes in v1: None
+> Changes in v6:
+> - Add support in device trees for rv1126(Declared in series 5 but not
+>   submitted)
+> - Change to use "clk_sfc" "hclk_sfc" as clock lable, since it does not
+>   affect interpretation and has been widely used
+> - Support sfc tx_dual, tx_quad(Declared in series 5 but not submitted)
+> - Simplify the code, such as remove "rockchip_sfc_register_all"(Declared
+>   in series 5 but not submitted)
+> - Support SFC ver4 ver5(Declared in series 5 but not submitted)
+> - Add author Chris Morgan and Jon Lin to spi-rockchip-sfc.c
+> - Change to use devm_spi_alloc_master and spi_unregister_master
 > 
->  arch/arm/boot/dts/rk3036.dtsi | 42 +++++++++++++++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
+> Changes in v5:
+> - Add support in device trees for rv1126
+> - Support sfc tx_dual, tx_quad
+> - Simplify the code, such as remove "rockchip_sfc_register_all"
+> - Support SFC ver4 ver5
 > 
-> diff --git a/arch/arm/boot/dts/rk3036.dtsi b/arch/arm/boot/dts/rk3036.dtsi
-> index e24230d50a78..e7faf815ca74 100644
-> --- a/arch/arm/boot/dts/rk3036.dtsi
-> +++ b/arch/arm/boot/dts/rk3036.dtsi
-> @@ -206,6 +206,17 @@
->  		status = "disabled";
->  	};
->  
-> +	sfc: spi@10208000 {
-> +		compatible = "rockchip,rk3036-sfc";
-> +		reg = <0x10208000 0x4000>;
-> +		interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
-> +		clocks = <&cru HCLK_SFC>, <&cru SCLK_SFC>;
-> +		clock-names = "hclk_sfc", "clk_sfc";
-> +		pinctrl-0 = <&sfc_clk &sfc_cs0 &sfc_bus4>;
-> +		pinctrl-names = "default";
-> +		status = "disabled";
-> +	};
-> +
->  	sdmmc: mmc@10214000 {
->  		compatible = "rockchip,rk3036-dw-mshc", "rockchip,rk3288-dw-mshc";
->  		reg = <0x10214000 0x4000>;
-> @@ -684,6 +695,37 @@
->  			};
->  		};
->  
-
-> +		serial_flash {
-
-sfc {
-
-Nodes are sort alphabetically.
-Sort other patches with sfc nodes in this serie as well.
-Maybe rename nodename consistent with sfc label?
-Similar to nfc nodes?
-
-> +			sfc_bus4: sfc-bus4 {
-> +				rockchip,pins =
-
-> +					<1 RK_PD0 3 &pcfg_pull_none>,
-> +					<1 RK_PD1 3 &pcfg_pull_none>,
-> +					<1 RK_PD2 3 &pcfg_pull_none>,
-> +					<1 RK_PD3 3 &pcfg_pull_none>;
-
-Keep align with the rest in the pinctrl node.
-Check that in other sfc patches as well.
-
-> +			};
-> +
-> +			sfc_bus2: sfc-bus2 {
-> +				rockchip,pins =
-
-> +					<1 RK_PD0 3 &pcfg_pull_none>,
-> +					<1 RK_PD1 3 &pcfg_pull_none>;
-
-dito
-
-> +			};
-> +
-> +			sfc_cs0: sfc-cs0 {
-> +				rockchip,pins =
-
-> +					<2 RK_PA2 3 &pcfg_pull_none>;
-
-dito
-
-> +			};
-> +
-> +			sfc_cs1: sfc-cs1 {
-> +				rockchip,pins =
-
-> +					<2 RK_PA3 3 &pcfg_pull_none>;
-
-dito
-
-> +			};
-> +
-> +			sfc_clk: sfc-clk {
-> +				rockchip,pins =
-
-> +					<2 RK_PA4 3 &pcfg_pull_none>;
-
-dito
-
-> +			};
-> +		};
-> +
->  		emac {
->  			emac_xfer: emac-xfer {
->  				rockchip,pins = <2 RK_PB2 1 &pcfg_pull_default>, /* crs_dvalid */
+> Changes in v4:
+> - Changing patch back to an "RFC". An engineer from Rockchip
+>   reached out to me to let me know they are working on this patch for
+>   upstream, I am submitting this v4 for the community to see however
+>   I expect Jon Lin (jon.lin@rock-chips.com) will submit new patches
+>   soon and these are the ones we should pursue for mainlining. Jon's
+>   patch series should include support for more hardware than this
+>   series.
+> - Clean up documentation more and ensure it is correct per
+>   make dt_binding_check.
+> - Add support in device trees for rk3036, rk3308, and rv1108.
+> - Add ahb clock (hclk_sfc) support for rk3036.
+> - Change rockchip_sfc_wait_fifo_ready() to use a switch statement.
+> - Change IRQ code to only mark IRQ as handled if it handles the
+>   specific IRQ (DMA transfer finish) it is supposed to handle.
 > 
+> Changes in v3:
+> - Changed the name of the clocks to sfc/ahb (from clk-sfc/clk-hsfc).
+> - Changed the compatible string from rockchip,sfc to
+>   rockchip,rk3036-sfc. A quick glance at the datasheets suggests this
+>   driver should work for the PX30, RK180x, RK3036, RK312x, RK3308 and
+>   RV1108 SoCs, and possibly more. However, I am currently only able
+>   to test this on a PX30 (an RK3326). The technical reference manuals
+>   appear to list the same registers for each device.
+> - Corrected devicetree documentation for formatting and to note these
+>   changes.
+> - Replaced the maintainer with Heiko Stuebner and myself, as we will
+>   take ownership of this going forward.
+> - Noted that the device (per the reference manual) supports 4 CS, but
+>   I am only able to test a single CS (CS 0).
+> - Reordered patches to comply with upstream rules.
+> 
+> Changes in v2:
+> - Reimplemented driver using spi-mem subsystem.
+> - Removed power management code as I couldn't get it working properly.
+> - Added device tree bindings for Odroid Go Advance.
+> 
+> Changes in v1:
+> hanges made in this new series versus the v8 of the old series:
+> - Added function to read spi-rx-bus-width from device tree, in the
+>   event that the SPI chip supports 4x mode but only has 2 pins
+>   wired (such as the Odroid Go Advance).
+> - Changed device tree documentation from txt to yaml format.
+> - Made "reset" message a dev_dbg from a dev_info.
+> - Changed read and write fifo functions to remove redundant checks.
+> - Changed the write and read from relaxed to non-relaxed when
+>   starting the DMA transfer or reading the DMA IRQ.
+> - Changed from dma_coerce_mask_and_coherent to just
+>   dma_set_mask_and_coherent.
+> - Changed name of get_if_type to rockchip_sfc_get_if_type.
+> 
+>  .../devicetree/bindings/spi/rockchip-sfc.yaml | 87 +++++++++++++++++++
+>  1 file changed, 87 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/rockchip-sfc.yaml
+> 
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/rockchip-sfc.example.dt.yaml: spi@ff3a0000: clock-names:0: 'hclk_sfc' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/rockchip-sfc.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/rockchip-sfc.example.dt.yaml: spi@ff3a0000: clock-names:1: 'clk_sfc' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/rockchip-sfc.yaml
+\ndoc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1489062
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
