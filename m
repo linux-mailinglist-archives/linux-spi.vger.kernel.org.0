@@ -2,143 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 273803A0A3A
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Jun 2021 04:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 002C03A0A42
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Jun 2021 04:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbhFICt5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 8 Jun 2021 22:49:57 -0400
-Received: from regular1.263xmail.com ([211.150.70.196]:54620 "EHLO
-        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235876AbhFICt4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 8 Jun 2021 22:49:56 -0400
-X-Greylist: delayed 416 seconds by postgrey-1.27 at vger.kernel.org; Tue, 08 Jun 2021 22:49:55 EDT
-Received: from localhost (unknown [192.168.167.235])
-        by regular1.263xmail.com (Postfix) with ESMTP id 164081F5D;
-        Wed,  9 Jun 2021 10:40:41 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-SKE-CHECKED: 1
-X-ABS-CHECKED: 1
-Received: from [172.16.12.120] (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P31748T140095126476544S1623206439537590_;
-        Wed, 09 Jun 2021 10:40:40 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <109c2c5a014b780e9cd049b63178e813>
-X-RL-SENDER: kever.yang@rock-chips.com
-X-SENDER: yk@rock-chips.com
-X-LOGIN-NAME: kever.yang@rock-chips.com
-X-FST-TO: linux-arm-kernel@lists.infradead.org
-X-RCPT-COUNT: 10
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-Subject: Re: [PATCH v4 1/6] dt-bindings: spi: spi-rockchip: add description
- for rv1126 and rk3568
-To:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        Jon Lin <jon.lin@rock-chips.com>, broonie@kernel.org,
-        Johan Jonker <jbx6244@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <20210607063448.29589-1-jon.lin@rock-chips.com>
- <20210607063448.29589-2-jon.lin@rock-chips.com>
- <ef90ae6d-40bb-8389-f4f8-536a7b610fb7@gmail.com> <3681106.bcXerOTE6V@diego>
-From:   Kever Yang <kever.yang@rock-chips.com>
-Message-ID: <f815ad6c-36c5-039e-0ae8-0ab523a75caa@rock-chips.com>
-Date:   Wed, 9 Jun 2021 10:40:39 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S236032AbhFICvj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 8 Jun 2021 22:51:39 -0400
+Received: from mail-pl1-f178.google.com ([209.85.214.178]:40880 "EHLO
+        mail-pl1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232690AbhFICvj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 8 Jun 2021 22:51:39 -0400
+Received: by mail-pl1-f178.google.com with SMTP id e7so11763649plj.7;
+        Tue, 08 Jun 2021 19:49:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wtsD9Wl4PiCzwJ+AjHCemki/R0XFKsC3fAJOVKuHles=;
+        b=ACjwEp9McuoWtf0GsaLxG3hyeLvVzpMa4PiVhvkSulXlyybqhfo/8h1elQQaz+s5Nm
+         2YVbjVG5Izuv01+m54q9/3adYM7uXVdsiN1AmmDWBrgJSKbgnYuxjLcpGy9k8vxxX2X/
+         K6bLsW87/uMuypQ7p1BrJSHHm0gmsg20cdAzXXutZAGad0iX0BHqF/3vh1dX2Rk/MfvX
+         rwUH3+POjEs6R+cfAlOUumd3a54ZiK9xb2jFOtK7jaaHnovUTr2DiHZ5ESz/3cwAM4LE
+         ogh+KtHlohT6XC+jXR4WWv0FWm1/4ccTsdppBabvrZdNUjNiFL/H+JoFSQB6fi6L3Ue3
+         FLoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wtsD9Wl4PiCzwJ+AjHCemki/R0XFKsC3fAJOVKuHles=;
+        b=nK9YxmjpLqWcDNGguxuuNPBeWT6ASYbupywr0RR8b59DjPPa83RPUcCZVTkiHQMh4d
+         Z7ja4LhcjAE6FG8UV7f9NewQZgA/ALmYsK1HIcavPf0YbOoFW8u1aRxwYhgf4veggJxy
+         SCGNj1B1akIVCLaypTPKDBJZf2R0QwrdgJcpGYayZLxyQCxfI21ipRj0GsyTaMb8Zu25
+         dDs7OVhFLlVRg/JB1lDhLeiOVVlOA4AT9azHWsAOljiK+0mDrG8xZd67L5FOaztmbnlF
+         wGiIz7SGcZcGuYQbxUbKwOlxUHjidEjq6yTP6kjkQMYvyZ/OnX3dA5lcuQHe0/fH69SB
+         Zbvg==
+X-Gm-Message-State: AOAM532se+QbtHziTeneiJPotY+gDmRg1G2JuDTHMxm2VtRG66TJzb2X
+        Kgd61nzbVXj+VLXDQeHjk/lsOkflTt2i8gYbhK0=
+X-Google-Smtp-Source: ABdhPJzsB+JY5z4t0j0mUuJK6sBM5bxQw/2mh7pSOUNCA5Srll/a2Ufr13J59eCgiZcNtDnCheiU1Q==
+X-Received: by 2002:a17:90b:d98:: with SMTP id bg24mr26534224pjb.41.1623206912169;
+        Tue, 08 Jun 2021 19:48:32 -0700 (PDT)
+Received: from localhost.members.linode.com ([2400:8902::f03c:92ff:fe55:8c1e])
+        by smtp.gmail.com with ESMTPSA id 130sm13218444pgc.19.2021.06.08.19.48.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 08 Jun 2021 19:48:31 -0700 (PDT)
+From:   zpershuai <zpershuai@gmail.com>
+To:     Radu Pirea <radu_nicolae.pirea@upb.ro>,
+        Mark Brown <broonie@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     zpershuai <zpershuai@gmail.com>
+Subject: [PATCH v2] =?UTF-8?q?spi:=20spi-at91-usart:=C2=A0Fix=20wrong=20go?= =?UTF-8?q?to=20jump=20label=20when=20spi=5Falloc=5Fmaster()=20returns=20e?= =?UTF-8?q?rror.?=
+Date:   Wed,  9 Jun 2021 10:48:14 +0800
+Message-Id: <1623206895-8282-1-git-send-email-zpershuai@gmail.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <3681106.bcXerOTE6V@diego>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Heiko, Johan,
+When spi_alloc_master() returns null pointer, it’s no need to use
+spi_master_put() to release the memory, although spi_master_put()
+function has null pointer checks.
 
-On 2021/6/7 下午5:04, Heiko Stübner wrote:
-> Your comment in [PATCH v3 3/8]:
->>>> Adding "rockchip,rv1126-spi" to rockchip_spi_dt_match[] is strictly not
->>>> needed when using "rockchip,rk3066-spi" as fall back string.
->>>> Could a maintainer advise?
->>>>
->>>> Maybe this bug of mine should revert too?? Or is it legacy?
->>>> spi: rockchip: add compatible string for px30 rk3308 rk3328
->>>> https://lore.kernel.org/r/20200309151004.7780-1-jbx6244@gmail.com
->>> I agree with you. If the maintainer doesn't have any comments, I will use
->>> "rockchip,spi" as compatible names for the subsequent rk platform.
->> Compatibility strings are supposed to be SoC orientated.
->> So generic ones like in the manufacturer tree can't be used here.
-> Johan ist right :-) .
->
-> rockchip,spi won't work at all, especially as these controllers always change
-> over time. [0]
->
-> Best example is the iommu. We started with "rockchip,iommu" thinking this
-> won't change over time, but with the rk3568 we get a new slightly different
-> iommu.
+Signed-off-by: zpershuai <zpershuai@gmail.com>
+---
+ drivers/spi/spi-at91-usart.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-
-Rockchip SPI and SFC controller can use a generic compatible string, 
-because there is a version
-
-register inside the IP, and all the feature update will have a new IP 
-version, so the driver is
-
-used for the SPI/SFC IP  in all SoCs, we don't need to care which SoC is 
-using this driver.
-
-If we have to use the compatible string "rockchip,rk3066-spi" and each 
-for a new soc, then we
-
-have to update the driver compatible id list and document for each soc 
-which is totally not need
-
-and not correct  to do it.
-
-The example "iommu" is different, because there is no version register 
-inside the IP and the IP
-
-can not identify itself, which need a software define "-vX".
-
-
-Thanks,
-
-- Kever
-
-> The vendor-kernel then introduces somewhat random "-vX" additions to
-> distinguish them, but often they do seem to be very software-centric.
->
-> Meaning, hardware-designers moved stuff around and software-developers
-> then invented the versioning to differentiate between versions.
->
-> The devicetree is supposed to describe the hardware though, so going with
-> the relevant soc-specific compatible gives us the necessary hardware-centric
-> differentiation.
->
-> Also this allows to catch later issues with specific soc implementations ;-)
-> Like 6 monts down the road we discover some special behaviour on the
-> rk3568 and devicetree is supposed to be stable.
->
-> So having the relevant compatibles in place allows us to just add driver
-> fixes and have those apply on the rk3568 if that is need at some point.
->
-> Heiko
->
->
->
->
-> _______________________________________________
-> Linux-rockchip mailing list
-> Linux-rockchip@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-rockchip
->
->
-
+diff --git a/drivers/spi/spi-at91-usart.c b/drivers/spi/spi-at91-usart.c
+index 8c83526..e5c2d2c 100644
+--- a/drivers/spi/spi-at91-usart.c
++++ b/drivers/spi/spi-at91-usart.c
+@@ -531,10 +531,9 @@ static int at91_usart_spi_probe(struct platform_device *pdev)
+ 	if (IS_ERR(clk))
+ 		return PTR_ERR(clk);
+ 
+-	ret = -ENOMEM;
+ 	controller = spi_alloc_master(&pdev->dev, sizeof(*aus));
+ 	if (!controller)
+-		goto at91_usart_spi_probe_fail;
++		return -ENOMEM;
+ 
+ 	ret = at91_usart_gpio_setup(pdev);
+ 	if (ret)
+-- 
+2.7.4
 
