@@ -2,150 +2,111 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 581143A0DA1
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Jun 2021 09:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5723A0E39
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Jun 2021 10:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234126AbhFIHVk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Jun 2021 03:21:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37074 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237250AbhFIHVj (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 9 Jun 2021 03:21:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4AA3561361;
-        Wed,  9 Jun 2021 07:19:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623223169;
-        bh=I55EZUDspXTzWZV8NDrfytGqVmsJsokg7NgjMjvlhfg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=VWaCjlSvB8JIK6eTl5gbNGWb8maZ7qpPj6m8AT+AIf49hnaITX68OUSKCFSwyhZTm
-         b+RvPTWRrj+Ch8Io0mriXukncJfAgudgJzlULfS9bqvdCF/TYRui7uh5KX8D8iPqhB
-         YmCUT0LxKp1IXGICcS/AIYsmCwWpoXwbRkzrNK7o=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] spi: remove spi_set_cs_timing()
-Date:   Wed,  9 Jun 2021 09:19:18 +0200
-Message-Id: <20210609071918.2852069-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.32.0
+        id S237393AbhFIICc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Jun 2021 04:02:32 -0400
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:28582 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237360AbhFIICb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Jun 2021 04:02:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1623225637; x=1654761637;
+  h=subject:to:references:from:message-id:date:mime-version:
+   in-reply-to:content-transfer-encoding;
+  bh=zFZ6+Q6SWpwN89b6p/8yoeRZ1pCvucT0hx1LyvO5AWw=;
+  b=NL3Z77pTKP1CsouXmBCyi4JdODGTR/mUIWNw2jUlhMUOIE54Gid+TFj8
+   5KydK4fT+yJyiFhX8NA5b3OoulMA6JKDFurNi43hNPbOo00w4IVJ6ueBf
+   W0fX2huqybPacg3ih2X7skyoI2qHc03S5OFPeA7fk2EA9uEq+rbttSmzA
+   QVgEJxORCoEQqroY8XEJWHU3hzSqBhpyUH/ZzEBkCchRMrhqqSDSS7ZPf
+   Bt/Dlm4/46ugSZwASgfVqJmWtu10gxkIZ/BcJrmX8w5MC8G4lF6Fjhwan
+   1gOgJwvjebq+dZmtZIh/EL9KwMHmnNQPTfn9UA3ghHximkCmM+ILxCbDw
+   w==;
+IronPort-SDR: vwuga5tWXE8Ukmgn8W1HbaXBoECOGHl/BkSlGigNhZnAoZ71FlzHC85Bltvz6y1nxHb68nQ1zz
+ rK6QxfiRah4bQJwwRW16/9In0693Qh0NfPhevf6qiwzPBYceX1sS2wol/3rAkK4VFg+3x1L8Py
+ yIKLojF210ckyh5xJablEV8XxxdYRXY2SU7USGO1W/AlspYqBT5bw9kfqvFddNTZzDpCRbF1MK
+ ug+0NNt7Ba3gBXpjLT/2fYIlvWJ1+qs6u3TV92f0oRH9ldG7P/XhPao9fYyaArX5bNrNSj6JOi
+ 7fQ=
+X-IronPort-AV: E=Sophos;i="5.83,260,1616482800"; 
+   d="scan'208";a="58321815"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jun 2021 01:00:36 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 9 Jun 2021 01:00:36 -0700
+Received: from [10.12.74.10] (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+ Transport; Wed, 9 Jun 2021 01:00:34 -0700
+Subject: =?UTF-8?Q?Re=3a_=5bPATCH_v2=5d_spi=3a_spi-at91-usart=3a=c2=a0Fix_wr?=
+ =?UTF-8?Q?ong_goto_jump_label_when_spi=5falloc=5fmaster=28=29_returns_error?=
+ =?UTF-8?Q?=2e?=
+To:     zpershuai <zpershuai@gmail.com>,
+        Radu Pirea <radu_nicolae.pirea@upb.ro>,
+        Mark Brown <broonie@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1623206895-8282-1-git-send-email-zpershuai@gmail.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+Message-ID: <65351f67-4d35-b175-83a7-bb1dbe1b6f86@microchip.com>
+Date:   Wed, 9 Jun 2021 10:00:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3564; h=from:subject; bh=I55EZUDspXTzWZV8NDrfytGqVmsJsokg7NgjMjvlhfg=; b=owGbwMvMwCRo6H6F97bub03G02pJDAkHsvPve5YGlKj6/jrF8rg1yObo1rMMa/a6qtqzG7AmaO00 b37WEcvCIMjEICumyPJlG8/R/RWHFL0MbU/DzGFlAhnCwMUpABN5wcowP6Ipd9O/cM/d71SbN2ks01 K7fuZ4OsNcIfE0XtYvX75e3id+//o2gT6r+jlzAA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+In-Reply-To: <1623206895-8282-1-git-send-email-zpershuai@gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-No one seems to be using this global and exported function, so remove it
-as it is no longer needed.
+On 09/06/2021 at 04:48, zpershuai wrote:
+> When spi_alloc_master() returns null pointer, it’s no need to use
+> spi_master_put() to release the memory, although spi_master_put()
+> function has null pointer checks.
 
-Cc: Mark Brown <broonie@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/spi/spi.c       | 73 -----------------------------------------
- include/linux/spi/spi.h |  5 ---
- 2 files changed, 78 deletions(-)
+So, I don't see the benefit in changing then.
+at91_usart_spi_probe_fail label is nicely unified across the probe 
+function and having it called once more or once less is no interest to me.
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index e353b7a9e54e..86965c1d7ad0 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -3453,79 +3453,6 @@ int spi_setup(struct spi_device *spi)
- }
- EXPORT_SYMBOL_GPL(spi_setup);
- 
--/**
-- * spi_set_cs_timing - configure CS setup, hold, and inactive delays
-- * @spi: the device that requires specific CS timing configuration
-- * @setup: CS setup time specified via @spi_delay
-- * @hold: CS hold time specified via @spi_delay
-- * @inactive: CS inactive delay between transfers specified via @spi_delay
-- *
-- * Return: zero on success, else a negative error code.
-- */
--int spi_set_cs_timing(struct spi_device *spi, struct spi_delay *setup,
--		      struct spi_delay *hold, struct spi_delay *inactive)
--{
--	struct device *parent = spi->controller->dev.parent;
--	size_t len;
--	int status;
--
--	if (spi->controller->set_cs_timing &&
--	    !(spi->cs_gpiod || gpio_is_valid(spi->cs_gpio))) {
--		mutex_lock(&spi->controller->io_mutex);
--
--		if (spi->controller->auto_runtime_pm) {
--			status = pm_runtime_get_sync(parent);
--			if (status < 0) {
--				mutex_unlock(&spi->controller->io_mutex);
--				pm_runtime_put_noidle(parent);
--				dev_err(&spi->controller->dev, "Failed to power device: %d\n",
--					status);
--				return status;
--			}
--
--			status = spi->controller->set_cs_timing(spi, setup,
--								hold, inactive);
--			pm_runtime_mark_last_busy(parent);
--			pm_runtime_put_autosuspend(parent);
--		} else {
--			status = spi->controller->set_cs_timing(spi, setup, hold,
--							      inactive);
--		}
--
--		mutex_unlock(&spi->controller->io_mutex);
--		return status;
--	}
--
--	if ((setup && setup->unit == SPI_DELAY_UNIT_SCK) ||
--	    (hold && hold->unit == SPI_DELAY_UNIT_SCK) ||
--	    (inactive && inactive->unit == SPI_DELAY_UNIT_SCK)) {
--		dev_err(&spi->dev,
--			"Clock-cycle delays for CS not supported in SW mode\n");
--		return -ENOTSUPP;
--	}
--
--	len = sizeof(struct spi_delay);
--
--	/* copy delays to controller */
--	if (setup)
--		memcpy(&spi->controller->cs_setup, setup, len);
--	else
--		memset(&spi->controller->cs_setup, 0, len);
--
--	if (hold)
--		memcpy(&spi->controller->cs_hold, hold, len);
--	else
--		memset(&spi->controller->cs_hold, 0, len);
--
--	if (inactive)
--		memcpy(&spi->controller->cs_inactive, inactive, len);
--	else
--		memset(&spi->controller->cs_inactive, 0, len);
--
--	return 0;
--}
--EXPORT_SYMBOL_GPL(spi_set_cs_timing);
--
- static int _spi_xfer_word_delay_update(struct spi_transfer *xfer,
- 				       struct spi_device *spi)
- {
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 74239d65c7fd..f924160e995f 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -1108,11 +1108,6 @@ static inline void spi_message_free(struct spi_message *m)
- 	kfree(m);
- }
- 
--extern int spi_set_cs_timing(struct spi_device *spi,
--			     struct spi_delay *setup,
--			     struct spi_delay *hold,
--			     struct spi_delay *inactive);
--
- extern int spi_setup(struct spi_device *spi);
- extern int spi_async(struct spi_device *spi, struct spi_message *message);
- extern int spi_async_locked(struct spi_device *spi,
+Sorry but NACK until someone persuades me it's needed or common pattern 
+among spi drivers.
+
+Regards,
+   Nicolas
+
+> Signed-off-by: zpershuai <zpershuai@gmail.com>
+> ---
+>   drivers/spi/spi-at91-usart.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-at91-usart.c b/drivers/spi/spi-at91-usart.c
+> index 8c83526..e5c2d2c 100644
+> --- a/drivers/spi/spi-at91-usart.c
+> +++ b/drivers/spi/spi-at91-usart.c
+> @@ -531,10 +531,9 @@ static int at91_usart_spi_probe(struct platform_device *pdev)
+>          if (IS_ERR(clk))
+>                  return PTR_ERR(clk);
+> 
+> -       ret = -ENOMEM;
+>          controller = spi_alloc_master(&pdev->dev, sizeof(*aus));
+>          if (!controller)
+> -               goto at91_usart_spi_probe_fail;
+> +               return -ENOMEM;
+> 
+>          ret = at91_usart_gpio_setup(pdev);
+>          if (ret)
+> --
+> 2.7.4
+> 
+
+
 -- 
-2.32.0
-
+Nicolas Ferre
