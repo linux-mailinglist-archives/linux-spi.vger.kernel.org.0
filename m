@@ -2,138 +2,212 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B080B3A1E0F
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Jun 2021 22:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5865B3A1E52
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Jun 2021 22:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbhFIUXm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Jun 2021 16:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60524 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbhFIUXk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Jun 2021 16:23:40 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D0B7C061760
-        for <linux-spi@vger.kernel.org>; Wed,  9 Jun 2021 13:21:45 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lr4hc-0002WB-Au; Wed, 09 Jun 2021 22:21:28 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lr4hX-0003g3-WB; Wed, 09 Jun 2021 22:21:24 +0200
-Date:   Wed, 9 Jun 2021 22:21:23 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-rtc@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Mark Brown <broonie@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        linux-clk@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        kernel@pengutronix.de,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-spi@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PULL] Add variants of devm_clk_get for prepared and enabled clocks
- enabled clocks
-Message-ID: <20210609202123.u5rmw7al4x3rrvun@pengutronix.de>
-References: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
+        id S229814AbhFIUyG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Jun 2021 16:54:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42796 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229757AbhFIUyF (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 9 Jun 2021 16:54:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F24EE613EE;
+        Wed,  9 Jun 2021 20:52:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623271931;
+        bh=2xJm8+K9K3yMMtA6Yx9r/pcA3AR2W+Issga14oVL+C4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=AbzkJununfgwbAGwE3AtUtr2nA57hzQFqDq6jZfslDbmgZ7UrZM38e7a6e/0NNLZE
+         kVc3hq9v0BcJ1eyKCYiQoot0UDEP/qBq6yvZMYEQADfOBt5arC55BWrzX37JFASnQq
+         ytRoTFR6PFv+kdilSubISa8kwUShrPT3z+c3k96e8hgX5t+ZQqroG0FFSpdYL+Z8d0
+         IxC7L/72/i3QqRgPh5Qunwl4fH2RI7PrmSCRDrOUMx7ynM92sYwkLHCvfB0zddTPzZ
+         e/AEFrfu9KIY6E+UyAtnOe1Gv3X0i+V556FJg2YI3fSwIN8JR/38riT1T/VrJgdGic
+         XyySS5HyLbZ9g==
+Received: by mail-ed1-f51.google.com with SMTP id t3so30109341edc.7;
+        Wed, 09 Jun 2021 13:52:10 -0700 (PDT)
+X-Gm-Message-State: AOAM533QTWckisledz3UvSFh57lHW3WTSJBo6xsBGG1eYt2q6dNqn8Wg
+        QRb+4SM+ktv5OipW7amyiLAHPFC2d6ZDI9j9Ow==
+X-Google-Smtp-Source: ABdhPJzrK1tDX4o4Uy/uplvx+4AlBnNvKFj8nYmtpy43TZKhYfrjC8V5LdESsaQIeFWnDzy8sshEhj8QPP1doC80iXs=
+X-Received: by 2002:aa7:cd83:: with SMTP id x3mr1187447edv.373.1623271929496;
+ Wed, 09 Jun 2021 13:52:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jlb5tlnr3m7frksr"
-Content-Disposition: inline
-In-Reply-To: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+References: <20210609111707.9555-1-p.yadav@ti.com> <20210609111707.9555-2-p.yadav@ti.com>
+In-Reply-To: <20210609111707.9555-2-p.yadav@ti.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 9 Jun 2021 15:51:58 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqK5hu6NSVxiTpPvH_jHA97WTj3=DyJhDf5g1hwXXZ8MZA@mail.gmail.com>
+Message-ID: <CAL_JsqK5hu6NSVxiTpPvH_jHA97WTj3=DyJhDf5g1hwXXZ8MZA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] spi: dt-bindings: add schema listing slave-specific properties
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>, Michael Walle <michael@walle.cc>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, Jun 9, 2021 at 6:17 AM Pratyush Yadav <p.yadav@ti.com> wrote:
+>
+> Many SPI controllers need to add properties to slave devices. This could
+> be the delay in clock or data lines, etc. These properties are
+> controller specific but need to be defined in the slave node because
+> they are per-slave and there can be multiple slaves attached to a
+> controller.
+>
+> If these properties are not added to the slave binding, then the dtbs
+> check emits a warning. But these properties do not make much sense in
+> the slave binding because they are controller-specific and they will
+> just pollute every slave binding. So this binding is added to collect
+> all such properties from all such controllers. Slave bindings should
+> simply refer to this binding and they should be rid of the warnings.
 
---jlb5tlnr3m7frksr
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for working on this. I haven't thought of any better solution
+than this approach.
 
-Hello Stephen,
+> There are some limitations with this approach. Firstly, there is no way
+> to specify required properties. The schema contains properties for all
+> controllers and there is no way to know which controller is being used.
 
-given that I don't succeed in getting any feedback for my patch set, I'm
-trying with a pull request today. It would be really great if this pull
-request made it finally in for the next merge window.
+If required properties are a function of the controller and not the
+controller+device, then the controller schema can list required
+properties for child nodes.
 
-The changes are not as bad or complex as the diffstat suggests. The
-first patch contains all the complexity and only has
- 1 file changed, 50 insertions(+), 17 deletions(-)
-=2E The second patch makes use of this and just adds kernel-doc, four
-functions that are one-line wrappers around the newly introduced
-__devm_clk_get() function in the first patch and dummy implementations
-for the !CONFIG_HAVE_CLK case.
+> Secondly, there is no way to restrict additional properties. Since this
+> schema will be used with an allOf operator, additionalProperties needs
+> to be true. In addition, the slave schema will have to set
+> unevaluatedProperties: false.
 
-The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
+No issue there other than unevaluatedProperties is currently not implemented.
 
-  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
+> Despite these limitations, this appears to be the best solution to this
+> problem that doesn't involve modifying existing tools or schema specs.
+>
+> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+> ---
+>
+>  .../bindings/spi/cdns,qspi-nor.yaml           | 33 ------------
+>  .../bindings/spi/spi-slave-props.yaml         | 52 +++++++++++++++++++
 
-are available in the Git repository at:
+I think you need 2+ files here. A common one that's just an 'allOf' of
+all the controller specific schemas and then controller specific child
+node schemas.
 
-  https://git.pengutronix.de/git/ukl/linux tags/devm-clk-get-enabled
+>  2 files changed, 52 insertions(+), 33 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/spi-slave-props.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> index 0e7087cc8bf9..0730e6a8dc4a 100644
+> --- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> +++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> @@ -74,39 +74,6 @@ properties:
+>      items:
+>        enum: [ qspi, qspi-ocp ]
+>
+> -# subnode's properties
+> -patternProperties:
+> -  "@[0-9a-f]+$":
+> -    type: object
+> -    description:
+> -      Flash device uses the below defined properties in the subnode.
+> -
+> -    properties:
+> -      cdns,read-delay:
+> -        $ref: /schemas/types.yaml#/definitions/uint32
+> -        description:
+> -          Delay for read capture logic, in clock cycles.
+> -
+> -      cdns,tshsl-ns:
+> -        description:
+> -          Delay in nanoseconds for the length that the master mode chip select
+> -          outputs are de-asserted between transactions.
+> -
+> -      cdns,tsd2d-ns:
+> -        description:
+> -          Delay in nanoseconds between one chip select being de-activated
+> -          and the activation of another.
+> -
+> -      cdns,tchsh-ns:
+> -        description:
+> -          Delay in nanoseconds between last bit of current transaction and
+> -          deasserting the device chip select (qspi_n_ss_out).
+> -
+> -      cdns,tslch-ns:
+> -        description:
+> -          Delay in nanoseconds between setting qspi_n_ss_out low and
+> -          first bit transfer.
+> -
+>  required:
+>    - compatible
+>    - reg
+> diff --git a/Documentation/devicetree/bindings/spi/spi-slave-props.yaml b/Documentation/devicetree/bindings/spi/spi-slave-props.yaml
+> new file mode 100644
+> index 000000000000..b2248e01dc43
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/spi-slave-props.yaml
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/spi-slave-props.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Slave-specific properties for a SPI bus.
+> +
+> +description: |
+> +  Many SPI controllers need to add properties to slave devices. This could be
+> +  the delay in clock or data lines, etc. These properties are controller
+> +  specific but need to be defined in the slave node because they are per-slave
+> +  and there can be multiple slaves attached to a controller.
+> +
+> +  If these properties are not added to the slave binding, then the dtbs check
+> +  emits a warning. But these properties do not make much sense in the slave
+> +  binding because they are controller-specific and they will just pollute every
+> +  slave binding. So this binding is added to collect all such properties from
+> +  all such controllers. Slave bindings should simply refer to this binding and
+> +  they should be rid of the warnings.
 
-for you to fetch changes up to fec74d434d6f6016b6b2d5ab13aa28a0c657f5fb:
+I don't think this paragraph belongs in the schema.
 
-  clk: Provide new devm_clk_helpers for prepared and enabled clocks (2021-0=
-5-11 14:20:13 +0200)
-
-----------------------------------------------------------------
-New variants of devm_clk_get() for prepared and enabled clocks
-
-These two patches create a set of new devm helpers that return clocks
-already prepared or prepared-and-enabled. The automatic cleanup cares
-for unpreparing and disabling+unpreparing respectively.
-
-This allows to simplify various drivers as was demonstrated with
-additional patches sent with the various revisions of this patch set.
-See
-https://lore.kernel.org/r/20210510174142.986250-1-u.kleine-koenig@pengutron=
-ix.de
-for the last submission round. This pull request doesn't contain these
-patches though.
-
-----------------------------------------------------------------
-Uwe Kleine-K=F6nig (2):
-      clk: generalize devm_clk_get() a bit
-      clk: Provide new devm_clk_helpers for prepared and enabled clocks
-
- drivers/clk/clk-devres.c | 96 ++++++++++++++++++++++++++++++++++++++++----=
-----
- include/linux/clk.h      | 90 ++++++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 169 insertions(+), 17 deletions(-)
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---jlb5tlnr3m7frksr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmDBIsAACgkQwfwUeK3K
-7Alkugf/WZeWnWAV4qBqO+Z6x4ARRoga+Gjpg6BwHHpK+Kk9UNydeZtR0UeaVDZp
-hK/705S/EeZplYpkKxrxtsVV4EK2fqagBccxfYDtbcbjQsWEOZzqBAxtw+xoUPB0
-FXwwQcD6RIMMnMsILzsr43KX4gOmDp6rUSAGsQj9ctOJtGd0qp8Y0g2FxcUkXRYK
-tmLuixTBnOegyNmzK99qGA7bPNABkbt4wfnqPDrn30txhGV7ZOjeCm5FOApsgt2E
-BYIl6DTFCKRvE1EDQMFV1FHI8eX2ygJ/KjrDOm+OWkO4bEJfZxrS0I48gm3GFkbG
-l4kofwamfBagjIlMv2toKyH0CpDyEw==
-=OVXu
------END PGP SIGNATURE-----
-
---jlb5tlnr3m7frksr--
+> +
+> +maintainers:
+> +  - Pratyush Yadav <p.yadav@ti.com>
+> +
+> +properties:
+> +  # cdns,qspi-nor.yaml
+> +  cdns,read-delay:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Delay for read capture logic, in clock cycles.
+> +
+> +  cdns,tshsl-ns:
+> +    description:
+> +      Delay in nanoseconds for the length that the master mode chip select
+> +      outputs are de-asserted between transactions.
+> +
+> +  cdns,tsd2d-ns:
+> +    description:
+> +      Delay in nanoseconds between one chip select being de-activated
+> +      and the activation of another.
+> +
+> +  cdns,tchsh-ns:
+> +    description:
+> +      Delay in nanoseconds between last bit of current transaction and
+> +      deasserting the device chip select (qspi_n_ss_out).
+> +
+> +  cdns,tslch-ns:
+> +    description:
+> +      Delay in nanoseconds between setting qspi_n_ss_out low and
+> +      first bit transfer.
+> +
+> +additionalProperties: true
+> --
+> 2.30.0
+>
