@@ -2,55 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D62B3A183D
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Jun 2021 16:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4693A18D0
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Jun 2021 17:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238688AbhFIO6s (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Jun 2021 10:58:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34746 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238675AbhFIO6s (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 9 Jun 2021 10:58:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id B3640611CC;
-        Wed,  9 Jun 2021 14:56:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623250613;
-        bh=Qf778YamqAJtnkX91YU0TmCTXwNnme7fFusHHkby9QU=;
-        h=Subject:From:Date:To:From;
-        b=dvL0VcLfBRb1/scuJbuNn1xeve9PqVNTO39lQMI9Wk58W+KwUoJ/H8mY6+kIJNLLv
-         tWkJ4bX6fU6UldTTzgjAITKg5l2OVz6JFrsJTZVdhkp7qm2QV2Uj9/Zx2MAqAsxKAr
-         /bBnzuIJ5A68i2ISsGk9SU9kpZK7FCVT47BMaN1nw1cJUJFgLk0pxWGEdbShTT/pNU
-         RozDJLbLQeuD97hXlzGTY4GHz0myL5xi+SUACze9nOwQgcd1lcVdRIP/gEzft6bMdH
-         n0GzmrfzOmrblip5tJJXKUQ4j5UEJWUE6nDc4Ff2S7Wb2b9yOQXeuD3by3+iU7z/Xf
-         9E/5m07ssrj4w==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id A22E960A22;
-        Wed,  9 Jun 2021 14:56:53 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S238954AbhFIPOr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Jun 2021 11:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233424AbhFIPOp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Jun 2021 11:14:45 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBDDC061574;
+        Wed,  9 Jun 2021 08:12:50 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 391E11F43662
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id B70274800C6; Wed,  9 Jun 2021 17:12:46 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>, Ian Ray <ian.ray@ge.com>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, kernel@collabora.com,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCHv4 0/6] GE Healthcare PPD firmware upgrade driver for ACHC
+Date:   Wed,  9 Jun 2021 17:12:29 +0200
+Message-Id: <20210609151235.48964-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <162325061360.7713.15406931282825226069.git-patchwork-housekeeping@kernel.org>
-Date:   Wed, 09 Jun 2021 14:56:53 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v7] Add Rockchip SFC(serial flash controller) support (2021-06-09T14:04:07)
-  Superseding: [v6] Add Rockchip SFC(serial flash controller) support (2021-06-08T02:26:39):
-    [v6,1/8] dt-bindings: rockchip-sfc: Bindings for Rockchip serial flash controller
-    [v6,2/8] spi: rockchip-sfc: add rockchip serial flash controller
-    [v6,3/8] arm64: dts: rockchip: Add SFC to PX30
-    [v6,4/8] clk: rockchip: Add support for hclk_sfc on rk3036
-    [v6,5/8] arm: dts: rockchip: Add SFC to RK3036
-    [v6,6/8] arm: dts: rockchip: Add SFC to RV1108
-    [v6,7/8] arm64: dts: rockchip: Add SFC to RK3308
-    [v6,8/8] arm64: dts: rockchip: Enable SFC for Odroid Go Advance
+Hi,
 
+The PPD has a secondary processor (NXP Kinetis K20), which can be
+programmed from the main system. It is connected to the main processor
+by having it's EzPort interface connected to the SPI bus. Currently
+both (normal and EzPort) interfaces are simply exposed to userspace.
+This does not work for the EzPort, since EzPort usage requires a device
+reset. The proper solution is to do the flashing from kernel space
+with properly timed toggling of EzPort chip-select and reset line. In
+PATCHv2 it was suggested, that this should happen via an SPI ancillary
+device, so this is how it has been implemented now.
+
+Changes since PATCHv3:
+ * https://lore.kernel.org/lkml/20210528113346.37137-1-sebastian.reichel@collabora.com/
+ * Add Rob's Acked-by to 2nd patch
+ * use GPL-2-only instead of GPL-2+
+ * use %zu for printing a size_t
+ * use driver's .dev_groups to register sysfs group
+ * Add sysfs property documentation
+ * split EzPort and ACHC drivers into separate patches
+ * drop minItems/maxItems from achc binding, which seems to fix the problems
+   reported by dt_binding_check. The information of two items being required
+   is implied by the explicit item list.
+ * drop spidev functionality for the main SPI interface. The current firmware
+   communicates via UART and adding spidev support is complex. If future firmware
+   releases start using it, spidev support for the main interface can be added
+   later.
+
+Changes since PATCHv2:
+ * https://lore.kernel.org/lkml/20180327135259.30890-1-sebastian.reichel@collabora.co.uk/
+ * add SPI core support for ancillary devices
+ * modify ACHC binding to make use of ancillary device
+ * rewrite driver to use ancillary device
+ * rebased to 5.13-rc1
+
+Changes since PATCHv1:
+ * https://lore.kernel.org/lkml/20180320172201.2065-1-sebastian.reichel@collabora.co.uk/
+ * split DT binding update into its own patch
+ * add sysfs attribute documentation
+ * fix problem reported by kbuild test robot
+
+-- Sebastian
+
+Sebastian Reichel (6):
+  spi: add ancillary device support
+  spi: dt-bindings: support devices with multiple chipselects
+  dt-bindings: misc: ge-achc: Convert to DT schema format
+  ARM: dts: imx53-ppd: Fix ACHC entry
+  misc: nxp-ezport: introduce EzPort support
+  misc: gehc-achc: new driver
+
+ .../ABI/testing/sysfs-driver-ge-achc          |   9 +
+ .../devicetree/bindings/misc/ge-achc.txt      |  26 -
+ .../devicetree/bindings/misc/ge-achc.yaml     |  65 +++
+ .../bindings/spi/spi-controller.yaml          |   7 +-
+ arch/arm/boot/dts/imx53-ppd.dts               |  23 +-
+ drivers/misc/Kconfig                          |  15 +
+ drivers/misc/Makefile                         |   2 +
+ drivers/misc/gehc-achc.c                      | 136 +++++
+ drivers/misc/nxp-ezport.c                     | 476 ++++++++++++++++++
+ drivers/spi/spi.c                             | 139 +++--
+ drivers/spi/spidev.c                          |   1 -
+ include/linux/platform_data/nxp-ezport.h      |   9 +
+ include/linux/spi/spi.h                       |   2 +
+ 13 files changed, 839 insertions(+), 71 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-ge-achc
+ delete mode 100644 Documentation/devicetree/bindings/misc/ge-achc.txt
+ create mode 100644 Documentation/devicetree/bindings/misc/ge-achc.yaml
+ create mode 100644 drivers/misc/gehc-achc.c
+ create mode 100644 drivers/misc/nxp-ezport.c
+ create mode 100644 include/linux/platform_data/nxp-ezport.h
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.30.2
 
