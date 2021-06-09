@@ -2,117 +2,142 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D963A1711
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Jun 2021 16:23:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C0C3A171E
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Jun 2021 16:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237878AbhFIOYy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Jun 2021 10:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237810AbhFIOYp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Jun 2021 10:24:45 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF17C06175F;
-        Wed,  9 Jun 2021 07:22:36 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id h12so15661350pfe.2;
-        Wed, 09 Jun 2021 07:22:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PDoBgeXGas8ONL+4xxWqdRXTO15tMUsAgoTQmxOnpK0=;
-        b=C0YmE5h9l9ASPpHuN75UQGqMrb/OkBhyKVSkSt9iH+5kg3uUX5e1Cw7X9VLWwEz4Tw
-         usB7I6HJCFWW5ZjNXbaUbFnpEdx4MKnGeGmOCWp0C2w+FLqJaQ4xN/JZFvfGBeT/1XzL
-         GWXXbwzkMJ6SrokwfkCGxR0XlvmXi2EX6h5d7IVJ2ZZZxmUHWl2tpY8cfHZomWhJNswm
-         DiEILbXiDyOLl3xH6zJDsongoirPnn3mlPbL6UfqDJDal5BRwubys/xzQkkF5lSnZw2X
-         XD9fDeLRaEAJdnRjkaX+8cGHl8wo4+BeqWO4wnVDaFP2v9sKHdh5td4WxWRwpz4BqM4T
-         fk8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PDoBgeXGas8ONL+4xxWqdRXTO15tMUsAgoTQmxOnpK0=;
-        b=CVgWkZFKNdniXcnJpvB5xX4XlHfmTvOmCoegTq2FRnwePuan8r1YedabHndAfrsvIu
-         bB42hbCYriin6xsPWuSEdMfIjDVul1DSpcZZn5me9t13XgE0Jd3HmhuC0yhwfXFrEJks
-         Shd5vMHSsh14cuU0dsB22KVKD+PfpvgV7zR1kLYRoEV9fEZd/0lBS4lZzPjYNxnjyRag
-         pGRU4P1KBRdboL9hUHmD964P+Fv2FygQ4ZCARJWZOtKs8mDN67cqxB0EKoUAAdVjmw2r
-         EFavKgNQ+17eeSkbI4N7tUjLlw66JLvpX4LwT22hQODkjO9yJwNIlP7fkYJt9KfKWeO8
-         tpaw==
-X-Gm-Message-State: AOAM5306tsKkGyLH5ihX8s5NhYu4UcHPRRhMks3pJyX9ZdDocfR0Y0X+
-        yxot/JsLDjJPPHysQ4D2YCbt37z0Yo9dkCOCK6uk1Q==
-X-Google-Smtp-Source: ABdhPJwNfGVfozXjFPOmgigW9OaAlLh16hECyaYSxbmVCUR8PMj+EhBdPpirjL3Ntb0QGiy9Tbu6UQ==
-X-Received: by 2002:a65:4608:: with SMTP id v8mr4088470pgq.435.1623248556065;
-        Wed, 09 Jun 2021 07:22:36 -0700 (PDT)
-Received: from localhost.members.linode.com ([2400:8902::f03c:92ff:fe55:8c1e])
-        by smtp.gmail.com with ESMTPSA id k21sm42920pgb.56.2021.06.09.07.22.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 09 Jun 2021 07:22:35 -0700 (PDT)
-From:   zpershuai <zpershuai@gmail.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     zpershuai <zpershuai@gmail.com>
-Subject: [PATCH] =?UTF-8?q?Fix=20some=20wrong=20goto=20jumps=C2=A0for=20av?= =?UTF-8?q?oiding=20memory=20leak.?=
-Date:   Wed,  9 Jun 2021 22:22:18 +0800
-Message-Id: <1623248538-4352-1-git-send-email-zpershuai@gmail.com>
-X-Mailer: git-send-email 2.7.4
+        id S237964AbhFIOZw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Jun 2021 10:25:52 -0400
+Received: from regular1.263xmail.com ([211.150.70.204]:46194 "EHLO
+        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237830AbhFIOZq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Jun 2021 10:25:46 -0400
+Received: from localhost (unknown [192.168.167.69])
+        by regular1.263xmail.com (Postfix) with ESMTP id B1F9B3A4;
+        Wed,  9 Jun 2021 22:23:45 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-ANTISPAM-LEVEL: 2
+X-SKE-CHECKED: 1
+X-ABS-CHECKED: 1
+Received: from [172.16.12.73] (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P31907T140446225393408S1623248622928502_;
+        Wed, 09 Jun 2021 22:23:44 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <aaef219e8ac562c7c20e5d7e0c19fa90>
+X-RL-SENDER: jon.lin@rock-chips.com
+X-SENDER: jon.lin@rock-chips.com
+X-LOGIN-NAME: jon.lin@rock-chips.com
+X-FST-TO: macromorgan@hotmail.com
+X-RCPT-COUNT: 16
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+Subject: Re: [PATCH v6 4/8] clk: rockchip: Add support for hclk_sfc on rk3036
+To:     Johan Jonker <jbx6244@gmail.com>, linux-spi@vger.kernel.org
+Cc:     broonie@kernel.org, robh+dt@kernel.org, heiko@sntech.de,
+        hjc@rock-chips.com, yifeng.zhao@rock-chips.com,
+        sugar.zhang@rock-chips.com, linux-rockchip@lists.infradead.org,
+        linux-mtd@lists.infradead.org, p.yadav@ti.com,
+        macroalpha82@gmail.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chris Morgan <macromorgan@hotmail.com>
+References: <20210608022644.21074-1-jon.lin@rock-chips.com>
+ <20210608022644.21074-5-jon.lin@rock-chips.com>
+ <4a4524f5-ee85-c7f6-aa95-1df84f2a8a99@gmail.com>
+From:   Jon Lin <jon.lin@rock-chips.com>
+Message-ID: <90752de9-786d-171c-26a4-ee2851168c11@rock-chips.com>
+Date:   Wed, 9 Jun 2021 22:23:44 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <4a4524f5-ee85-c7f6-aa95-1df84f2a8a99@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-In meson_spifc_probe function, when  enable the device pclk clock is
-error, it should use clk_disable_unprepare to release the core clock.
 
-And when meson_spicc_clk_init returns failed,  it should goto the
-out_clk label.
+On 6/9/21 12:31 AM, Johan Jonker wrote:
+> Hi Jon,
+>
+> For rk3036 we might need another fix added to this serie as well.
+>
+> clk: rockchip: rk3036: fix up the sclk_sfc parent error
+> https://github.com/rockchip-linux/kernel/commit/100718ef0d44872db1672b6a88030374c0d1613b
+>
+> ===
+> Add more people for clk driver changes:
+>
+> M:	Michael Turquette <mturquette@baylibre.com>
+> M:	Stephen Boyd <sboyd@kernel.org>
+> L:	linux-clk@vger.kernel.org
+>
+> ===
+>
+> Johan
+>
+> On 6/8/21 4:26 AM, Jon Lin wrote:
+>
+>> From: Chris Morgan <macromorgan@hotmail.com>
+> From: Randy Li <randy.li@rock-chips.com>
+>
+>> Add support for the bus clock for the serial flash controller on the
+>> rk3036. Taken from the Rockchip BSP kernel but not tested on real
+>> hardware (as I lack a 3036 based SoC to test).
+>>
+> Signed-off-by: Randy Li <randy.li@rock-chips.com>
+>
+> Maybe give credit to the original author?
+> clk: rockchip: rk3036: export the sfc clocks
+> https://github.com/rockchip-linux/kernel/commit/600925e8ef6edbdda0a4ac6b3c55b0199be1e03e
+Randy Li has resigned from RK
+>> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+>> Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
+>> ---
+>>
+>> Changes in v6: None
+>> Changes in v5: None
+>> Changes in v4: None
+>> Changes in v3: None
+>> Changes in v2: None
+>> Changes in v1: None
+>>
+>>   drivers/clk/rockchip/clk-rk3036.c      | 2 +-
+>>   include/dt-bindings/clock/rk3036-cru.h | 1 +
+>>   2 files changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/clk/rockchip/clk-rk3036.c b/drivers/clk/rockchip/clk-rk3036.c
+>> index 91d56ad45817..ebb628733f6d 100644
+>> --- a/drivers/clk/rockchip/clk-rk3036.c
+>> +++ b/drivers/clk/rockchip/clk-rk3036.c
+>> @@ -403,7 +403,7 @@ static struct rockchip_clk_branch rk3036_clk_branches[] __initdata = {
+>>   	GATE(HCLK_OTG0, "hclk_otg0", "hclk_peri", CLK_IGNORE_UNUSED, RK2928_CLKGATE_CON(5), 13, GFLAGS),
+>>   	GATE(HCLK_OTG1, "hclk_otg1", "hclk_peri", CLK_IGNORE_UNUSED, RK2928_CLKGATE_CON(7), 3, GFLAGS),
+>>   	GATE(HCLK_I2S, "hclk_i2s", "hclk_peri", 0, RK2928_CLKGATE_CON(7), 2, GFLAGS),
+>> -	GATE(0, "hclk_sfc", "hclk_peri", CLK_IGNORE_UNUSED, RK2928_CLKGATE_CON(3), 14, GFLAGS),
+>> +	GATE(HCLK_SFC, "hclk_sfc", "hclk_peri", CLK_IGNORE_UNUSED, RK2928_CLKGATE_CON(3), 14, GFLAGS),
+> Maybe CLK_IGNORE_UNUSED should be changed to 0 ?
+>
+>>   	GATE(HCLK_MAC, "hclk_mac", "hclk_peri", 0, RK2928_CLKGATE_CON(3), 5, GFLAGS),
+>>   
+>>   	/* pclk_peri gates */
+>> diff --git a/include/dt-bindings/clock/rk3036-cru.h b/include/dt-bindings/clock/rk3036-cru.h
+>> index 35a5a01f9697..a96a9870ad59 100644
+>> --- a/include/dt-bindings/clock/rk3036-cru.h
+>> +++ b/include/dt-bindings/clock/rk3036-cru.h
+>> @@ -81,6 +81,7 @@
+>>   #define HCLK_OTG0		449
+>>   #define HCLK_OTG1		450
+>>   #define HCLK_NANDC		453
+>> +#define HCLK_SFC		454
+>>   #define HCLK_SDMMC		456
+>>   #define HCLK_SDIO		457
+>>   #define HCLK_EMMC		459
+>>
+>
+>
 
-Signed-off-by: zpershuai <zpershuai@gmail.com>
----
- drivers/spi/spi-meson-spicc.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
-index ecba6b4..b2c4621 100644
---- a/drivers/spi/spi-meson-spicc.c
-+++ b/drivers/spi/spi-meson-spicc.c
-@@ -725,7 +725,7 @@ static int meson_spicc_probe(struct platform_device *pdev)
- 	ret = clk_prepare_enable(spicc->pclk);
- 	if (ret) {
- 		dev_err(&pdev->dev, "pclk clock enable failed\n");
--		goto out_master;
-+		goto out_core_clk;
- 	}
- 
- 	device_reset_optional(&pdev->dev);
-@@ -752,7 +752,7 @@ static int meson_spicc_probe(struct platform_device *pdev)
- 	ret = meson_spicc_clk_init(spicc);
- 	if (ret) {
- 		dev_err(&pdev->dev, "clock registration failed\n");
--		goto out_master;
-+		goto out_clk;
- 	}
- 
- 	ret = devm_spi_register_master(&pdev->dev, master);
-@@ -764,9 +764,11 @@ static int meson_spicc_probe(struct platform_device *pdev)
- 	return 0;
- 
- out_clk:
--	clk_disable_unprepare(spicc->core);
- 	clk_disable_unprepare(spicc->pclk);
- 
-+out_core_clk:
-+	clk_disable_unprepare(spicc->core);
-+
- out_master:
- 	spi_master_put(master);
- 
--- 
-2.7.4
 
