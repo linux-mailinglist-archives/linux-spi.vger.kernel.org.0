@@ -2,28 +2,28 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E66C83A168B
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Jun 2021 16:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816F43A16CB
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Jun 2021 16:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237416AbhFIOGn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Jun 2021 10:06:43 -0400
-Received: from lucky1.263xmail.com ([211.157.147.130]:56902 "EHLO
+        id S237549AbhFIOPx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Jun 2021 10:15:53 -0400
+Received: from lucky1.263xmail.com ([211.157.147.134]:35088 "EHLO
         lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237408AbhFIOGm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Jun 2021 10:06:42 -0400
+        with ESMTP id S237545AbhFIOPw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Jun 2021 10:15:52 -0400
 Received: from localhost (unknown [192.168.167.235])
-        by lucky1.263xmail.com (Postfix) with ESMTP id D478BD1CBB;
-        Wed,  9 Jun 2021 22:04:21 +0800 (CST)
+        by lucky1.263xmail.com (Postfix) with ESMTP id 8762BC86DC;
+        Wed,  9 Jun 2021 22:13:51 +0800 (CST)
 X-MAIL-GRAY: 0
 X-MAIL-DELIVERY: 1
 X-ADDR-CHECKED4: 1
 X-ANTISPAM-LEVEL: 2
 X-ABS-CHECKED: 0
 Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P31748T140095042557696S1623247454096580_;
-        Wed, 09 Jun 2021 22:04:21 +0800 (CST)
+        by smtp.263.net (postfix) whith ESMTP id P31748T140095021577984S1623248030099962_;
+        Wed, 09 Jun 2021 22:13:52 +0800 (CST)
 X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <4a89ae5862db913a75d604af23e72152>
+X-UNIQUE-TAG: <c2af773bcc45f944c83246bbd82d93bd>
 X-RL-SENDER: jon.lin@rock-chips.com
 X-SENDER: jon.lin@rock-chips.com
 X-LOGIN-NAME: jon.lin@rock-chips.com
@@ -41,10 +41,10 @@ Cc:     jon.lin@rock-chips.com, broonie@kernel.org, robh+dt@kernel.org,
         p.yadav@ti.com, macroalpha82@gmail.com, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         mturquette@baylibre.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org, Elaine Zhang <zhangqing@rock-chips.com>
-Subject: [PATCH v7 4/9] clk: rockchip: rk3036: fix up the sclk_sfc parent error
-Date:   Wed,  9 Jun 2021 22:04:07 +0800
-Message-Id: <20210609140412.16058-5-jon.lin@rock-chips.com>
+        linux-clk@vger.kernel.org, Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH v7 5/9] clk: rockchip: Add support for hclk_sfc on rk3036
+Date:   Wed,  9 Jun 2021 22:13:44 +0800
+Message-Id: <20210609141348.19178-1-jon.lin@rock-chips.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210609140412.16058-1-jon.lin@rock-chips.com>
 References: <20210609140412.16058-1-jon.lin@rock-chips.com>
@@ -52,9 +52,13 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Choose the correct pll
+From: Chris Morgan <macromorgan@hotmail.com>
 
-Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+Add support for the bus clock for the serial flash controller on the
+rk3036. Taken from the Rockchip BSP kernel but not tested on real
+hardware (as I lack a 3036 based SoC to test).
+
+Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
 Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
 ---
 
@@ -66,30 +70,35 @@ Changes in v3: None
 Changes in v2: None
 Changes in v1: None
 
- drivers/clk/rockchip/clk-rk3036.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/clk/rockchip/clk-rk3036.c      | 2 +-
+ include/dt-bindings/clock/rk3036-cru.h | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/clk/rockchip/clk-rk3036.c b/drivers/clk/rockchip/clk-rk3036.c
-index 91d56ad45817..1986856d94b2 100644
+index 1986856d94b2..828af715d92e 100644
 --- a/drivers/clk/rockchip/clk-rk3036.c
 +++ b/drivers/clk/rockchip/clk-rk3036.c
-@@ -121,6 +121,7 @@ PNAME(mux_pll_src_3plls_p)	= { "apll", "dpll", "gpll" };
- PNAME(mux_timer_p)		= { "xin24m", "pclk_peri_src" };
+@@ -404,7 +404,7 @@ static struct rockchip_clk_branch rk3036_clk_branches[] __initdata = {
+ 	GATE(HCLK_OTG0, "hclk_otg0", "hclk_peri", CLK_IGNORE_UNUSED, RK2928_CLKGATE_CON(5), 13, GFLAGS),
+ 	GATE(HCLK_OTG1, "hclk_otg1", "hclk_peri", CLK_IGNORE_UNUSED, RK2928_CLKGATE_CON(7), 3, GFLAGS),
+ 	GATE(HCLK_I2S, "hclk_i2s", "hclk_peri", 0, RK2928_CLKGATE_CON(7), 2, GFLAGS),
+-	GATE(0, "hclk_sfc", "hclk_peri", CLK_IGNORE_UNUSED, RK2928_CLKGATE_CON(3), 14, GFLAGS),
++	GATE(HCLK_SFC, "hclk_sfc", "hclk_peri", 0, RK2928_CLKGATE_CON(3), 14, GFLAGS),
+ 	GATE(HCLK_MAC, "hclk_mac", "hclk_peri", 0, RK2928_CLKGATE_CON(3), 5, GFLAGS),
  
- PNAME(mux_pll_src_apll_dpll_gpll_usb480m_p)	= { "apll", "dpll", "gpll", "usb480m" };
-+PNAME(mux_pll_src_dmyapll_dpll_gpll_xin24_p)   = { "dummy_apll", "dpll", "gpll", "xin24m" };
- 
- PNAME(mux_mmc_src_p)	= { "apll", "dpll", "gpll", "xin24m" };
- PNAME(mux_i2s_pre_p)	= { "i2s_src", "i2s_frac", "ext_i2s", "xin12m" };
-@@ -340,7 +341,7 @@ static struct rockchip_clk_branch rk3036_clk_branches[] __initdata = {
- 			RK2928_CLKSEL_CON(16), 8, 2, MFLAGS, 10, 5, DFLAGS,
- 			RK2928_CLKGATE_CON(10), 4, GFLAGS),
- 
--	COMPOSITE(SCLK_SFC, "sclk_sfc", mux_pll_src_apll_dpll_gpll_usb480m_p, 0,
-+	COMPOSITE(SCLK_SFC, "sclk_sfc", mux_pll_src_dmyapll_dpll_gpll_xin24_p, 0,
- 			RK2928_CLKSEL_CON(16), 0, 2, MFLAGS, 2, 5, DFLAGS,
- 			RK2928_CLKGATE_CON(10), 5, GFLAGS),
- 
+ 	/* pclk_peri gates */
+diff --git a/include/dt-bindings/clock/rk3036-cru.h b/include/dt-bindings/clock/rk3036-cru.h
+index 35a5a01f9697..a96a9870ad59 100644
+--- a/include/dt-bindings/clock/rk3036-cru.h
++++ b/include/dt-bindings/clock/rk3036-cru.h
+@@ -81,6 +81,7 @@
+ #define HCLK_OTG0		449
+ #define HCLK_OTG1		450
+ #define HCLK_NANDC		453
++#define HCLK_SFC		454
+ #define HCLK_SDMMC		456
+ #define HCLK_SDIO		457
+ #define HCLK_EMMC		459
 -- 
 2.17.1
 
