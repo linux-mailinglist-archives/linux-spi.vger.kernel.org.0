@@ -2,114 +2,154 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C8D3A3792
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Jun 2021 01:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7463A39B9
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Jun 2021 04:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbhFJXFC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 10 Jun 2021 19:05:02 -0400
-Received: from mail-yb1-f181.google.com ([209.85.219.181]:38448 "EHLO
-        mail-yb1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbhFJXFB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Jun 2021 19:05:01 -0400
-Received: by mail-yb1-f181.google.com with SMTP id m9so1645904ybo.5
-        for <linux-spi@vger.kernel.org>; Thu, 10 Jun 2021 16:02:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ISgMIsod5G8ygL+wMDpDBYOa0SoO8LXCWRFKeW2i7ps=;
-        b=EAaVdN4oMV41AxPZjH7l+EoOIon4Nn8cNB7m0rKPoTzNev6l1j2QZ2oVYMKvvTEaBg
-         DyoWJ4DXf/7RGBTYpTLSe2+NvgDb3cd/WLp/Au1vgVeII0zUmor/361uAVaWR3Un63kN
-         e1SnW2f3wRch+/aKwhe8KIzspsZiapx8+uuSKDuaqRXXpl79bxF1EZuvQjl9AVAZfMqV
-         KhlCM+ImuK7NidTYsEybldgsiaeQd8TaWovxT8ywiTKX4CfF1qzxLCqbTPMWJI/Bx1Z4
-         ewV+4FpmdYPtvXZSEqaQKZ5+Wf6U3JckYv43FqFxmGsUTHfYg0D5YFT8IHQGrH4uVbgD
-         ngWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ISgMIsod5G8ygL+wMDpDBYOa0SoO8LXCWRFKeW2i7ps=;
-        b=QXTsZ65Tmb444tsV3bhmczYQxxHYIEiCw1Ty5dDi3M2krXW6N7ZLWSa38aqxuGuyPN
-         NAnXQbT6j9QVWaVCzoF/ZFYjbMBlcy3ij+YFROSPLRjDuVQjzxFhBEjsHNWQQ2FDMab9
-         bPMR57PvXjEQpiut8uypZmTYWoOpWyPWCCa+d2Yzi9fZo4p2ArHGVI3AMzWxwtqS2Laf
-         DCSANiCEw90RjLjbCaS8k3VyFV8QV3BU3AbromL2madJqtEtLKgg4MMp6KaKvaVbC01k
-         Y/A25sEK67SZ5lA9iFyAUq7B2XY57wQLquDWQtHAZP12yduLwDJ6jqsd/WTCixMMXS9y
-         vb9w==
-X-Gm-Message-State: AOAM532WIVRYiMsrfAXLR6WsU6G+VitSKgllUTrnG64NlkHMNxB8S0cz
-        b9FUnd54XVRmS0MLV4L0TKsXtWHe0MppJhZPSNmi1w==
-X-Google-Smtp-Source: ABdhPJyRUfLS5bW1FKnL1qw7wdbMMm1LxYtRLIGuPjUSbQfYUa6ZN2tQwhboaJtIUDx8pyA4P9k+OQFeVs1JexwZQT8=
-X-Received: by 2002:a25:cbc4:: with SMTP id b187mr1638263ybg.466.1623366107795;
- Thu, 10 Jun 2021 16:01:47 -0700 (PDT)
+        id S231437AbhFKC2p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 10 Jun 2021 22:28:45 -0400
+Received: from regular1.263xmail.com ([211.150.70.195]:56612 "EHLO
+        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231318AbhFKC2p (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Jun 2021 22:28:45 -0400
+Received: from localhost (unknown [192.168.167.32])
+        by regular1.263xmail.com (Postfix) with ESMTP id 75F991DAC;
+        Fri, 11 Jun 2021 10:26:37 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-SKE-CHECKED: 1
+X-ABS-CHECKED: 1
+X-ANTISPAM-LEVEL: 2
+Received: from [172.16.12.73] (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P24500T139649095816960S1623378394803816_;
+        Fri, 11 Jun 2021 10:26:36 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <76434981b7eff221154a68cfe3f38365>
+X-RL-SENDER: jon.lin@rock-chips.com
+X-SENDER: jon.lin@rock-chips.com
+X-LOGIN-NAME: jon.lin@rock-chips.com
+X-FST-TO: macromorgan@hotmail.com
+X-RCPT-COUNT: 19
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+Subject: Re: [PATCH v7 9/9] arm64: dts: rockchip: Enable SFC for Odroid Go
+ Advance
+To:     Chris Morgan <macroalpha82@gmail.com>
+Cc:     linux-spi@vger.kernel.org, broonie@kernel.org, robh+dt@kernel.org,
+        heiko@sntech.de, jbx6244@gmail.com, hjc@rock-chips.com,
+        yifeng.zhao@rock-chips.com, sugar.zhang@rock-chips.com,
+        linux-rockchip@lists.infradead.org, linux-mtd@lists.infradead.org,
+        p.yadav@ti.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org, Chris Morgan <macromorgan@hotmail.com>
+References: <20210609140412.16058-1-jon.lin@rock-chips.com>
+ <20210609141348.19178-1-jon.lin@rock-chips.com>
+ <20210609141348.19178-5-jon.lin@rock-chips.com>
+ <20210610173657.GA20228@wintermute.localdomain>
+From:   Jon Lin <jon.lin@rock-chips.com>
+Message-ID: <89283da6-b00e-4d0f-5c4a-0169bda101d3@rock-chips.com>
+Date:   Fri, 11 Jun 2021 10:26:35 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20210603170734.3168284-1-sashal@kernel.org> <20210603170734.3168284-3-sashal@kernel.org>
- <20210606111028.GA20948@wunner.de> <YMJR/FNCwDllHIDG@sashalap>
- <CAGETcx_w8pHs3OXQyVXYWV1CY4qGTWrZ9QNEwz=TL8SLbyq1bA@mail.gmail.com>
- <20210610192608.GA31461@wunner.de> <CAGETcx9xSsBMmxzKzgwkWYTrFbKidxY5ANmCmXsF6LduTMKtbA@mail.gmail.com>
- <20210610222933.GB6120@wunner.de>
-In-Reply-To: <20210610222933.GB6120@wunner.de>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 10 Jun 2021 16:01:11 -0700
-Message-ID: <CAGETcx8vvN-ATLHtmWLZDsNu0dM5DMxyHxiuq9mD0cRvRD0S3w@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.12 03/43] spi: Fix spi device unregister flow
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Sasha Levin <sashal@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>, Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210610173657.GA20228@wintermute.localdomain>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Jun 10, 2021 at 3:29 PM Lukas Wunner <lukas@wunner.de> wrote:
->
-> On Thu, Jun 10, 2021 at 12:30:18PM -0700, Saravana Kannan wrote:
-> > On Thu, Jun 10, 2021 at 12:26 PM Lukas Wunner <lukas@wunner.de> wrote:
-> > >
-> > > On Thu, Jun 10, 2021 at 12:22:40PM -0700, Saravana Kannan wrote:
-> > > > On Thu, Jun 10, 2021 at 10:55 AM Sasha Levin <sashal@kernel.org> wrote:
-> > > > > On Sun, Jun 06, 2021 at 01:10:28PM +0200, Lukas Wunner wrote:
-> > > > > >On Thu, Jun 03, 2021 at 01:06:53PM -0400, Sasha Levin wrote:
-> > > > > >> From: Saravana Kannan <saravanak@google.com>
-> > > > > >>
-> > > > > >> [ Upstream commit c7299fea67696db5bd09d924d1f1080d894f92ef ]
-> > > > > >
-> > > > > >This commit shouldn't be backported to stable by itself, it requires
-> > > > > >that the following fixups are applied on top of it:
-> > > > > >
-> > > > > >* Upstream commit 27e7db56cf3d ("spi: Don't have controller clean up spi
-> > > > > >  device before driver unbind")
-> > > > > >
-> > > > > >* spi.git commit 2ec6f20b33eb ("spi: Cleanup on failure of initial setup")
-> > > > > >  https://git.kernel.org/broonie/spi/c/2ec6f20b33eb
-> > > > > >
-> > > > > >Note that the latter is queued for v5.13, but hasn't landed there yet.
-> > > > > >So you probably need to back out c7299fea6769 from the stable queue and
-> > > > > >wait for 2ec6f20b33eb to land in upstream.
-> > > > > >
-> > > > > >Since you've applied c7299fea6769 to v5.12, v5.10, v5.4, v4.14 and v4.19
-> > > > > >stable trees, the two fixups listed above need to be backported to all
-> > > > > >of them.
-> > > > >
-> > > > > I took those two patches into 5.12-5.4, but as they needed a more
-> > > > > complex backport for 4.14 and 4.19, I've dropped c7299fea67 from those
-> > > > > trees.
-> > > >
-> > > > Sounds good. Also, there was a subsequent "Fixes" for this patch and I
-> > > > think another "Fixes" for the "Fixes". So, before picking this up,
-> > > > maybe make sure those Fixes patches are pickable too?
-> > >
-> > > Aren't those the commits I've listed above?  Or did I miss any fixes?
-> > > I'm not aware of any others besides these two.
-> >
-> > Ah, those are the ones. I didn't see them. My bad.
->
-> All good.  Sasha says that backporting the fixes is a little more
-> involved in the case of 4.14 and 4.19.  Do you consider the issue
-> critical enough that it should be addressed in those stable kernels
-> as well?  (I assume the issue concerns Android devices, not sure
-> in how far those are using 4.14 and 4.19?)
+Hi Chris
 
-It isn't android specific, but I don't think it's critical for those kernels.
+May you attach the XT25F128B device code to me, and I'll try to work it out.
 
--Saravana
+On 6/11/21 1:36 AM, Chris Morgan wrote:
+> On Wed, Jun 09, 2021 at 10:13:48PM +0800, Jon Lin wrote:
+>> From: Chris Morgan <macromorgan@hotmail.com>
+>>
+>> This enables the Rockchip Serial Flash Controller for the Odroid Go
+>> Advance. Note that while the attached SPI NOR flash and the controller
+>> both support quad read mode, only 2 of the required 4 pins are present.
+>> The rx and tx bus width is set to 2 for this reason.
+>>
+>> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+>> Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
+>> ---
+>>
+>> Changes in v7: None
+>> Changes in v6: None
+>> Changes in v5: None
+>> Changes in v4: None
+>> Changes in v3: None
+>> Changes in v2: None
+>> Changes in v1: None
+>>
+>>   .../boot/dts/rockchip/rk3326-odroid-go2.dts      | 16 ++++++++++++++++
+>>   1 file changed, 16 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
+>> index 49c97f76df77..f78e11dd8447 100644
+>> --- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
+>> +++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
+>> @@ -484,6 +484,22 @@
+>>   	status = "okay";
+>>   };
+>>   
+>> +&sfc {
+>> +	pinctrl-0 = <&sfc_clk &sfc_cs0 &sfc_bus2>;
+>> +	pinctrl-names = "default";
+>> +	#address-cells = <1>;
+>> +	#size-cells = <0>;
+>> +	status = "okay";
+>> +
+>> +	flash@0 {
+>> +		compatible = "jedec,spi-nor";
+>> +		reg = <0>;
+>> +		spi-max-frequency = <108000000>;
+>> +		spi-rx-bus-width = <2>;
+>> +		spi-tx-bus-width = <2>;
+> Note that I am still working with Jon Lin to research this, but it was
+> found in testing that if I set the tx bus width to 1 the problems I
+> encountered in earlier are resolved. At this time I do not know if it
+> is an issue with the driver for the flash controller, or if the NOR, or
+> board itself has some sort of errata which prevent dual tx from working
+> correctly. Note that as of right now the flash chip I am using (an
+> XTX XT25F128B) is not currently supported in mainline, so it's very
+> possible this is some sort of errata with the chip. It's also possible
+> that there is something with the board that is interferring with dual
+> mode TX.  When Jon comes back that he has tested dual mode on the SFC
+> with a different board/chip I will recommend that we change the tx
+> bus width here to a 1, and then once the XT25F128B gets mainlined we
+> can see if someone else has issues with dual tx mode so we can note
+> that as a problem with the chip. Or maybe there is something weird
+> with dual tx mode yet on the SFC driver/controller, I don't know yet.
+> I'm all too happy to work with a Rockchip engineer so things like
+> this can be determined before we hit mainline. :-)
+>
+> The XTX25F128B driver is currently awaiting a decision on how to handle
+> continuation codes, as this chip ID should be using continuation codes,
+> but doesn't appear to return them when you query for manufacturer ID.
+> So I should also note in the commit here that the SFC will still be
+> unusable on the Odroid Go Advance until the XTX25F128B is also
+> mainlined.
+>
+> Thank you.
+>
+>> +	};
+>> +};
+>> +
+>>   &tsadc {
+>>   	status = "okay";
+>>   };
+>> -- 
+>> 2.17.1
+>>
+>>
+>>
+>
+>
+
+
