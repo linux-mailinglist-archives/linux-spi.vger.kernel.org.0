@@ -2,115 +2,119 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2AEB3A435E
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Jun 2021 15:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F083A4382
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Jun 2021 15:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbhFKNxa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 11 Jun 2021 09:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45996 "EHLO
+        id S231896AbhFKN5U (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 11 Jun 2021 09:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbhFKNx3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Jun 2021 09:53:29 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB0EC061574;
-        Fri, 11 Jun 2021 06:51:17 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id a19so6600644ljq.12;
-        Fri, 11 Jun 2021 06:51:17 -0700 (PDT)
+        with ESMTP id S231845AbhFKN5F (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Jun 2021 09:57:05 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEF5C0617AF;
+        Fri, 11 Jun 2021 06:54:54 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id k5-20020a05600c1c85b02901affeec3ef8so8759504wms.0;
+        Fri, 11 Jun 2021 06:54:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xVxSNmZANvk4+xXEPZhmdlgwWkhMnsRF27bwwNOdZG8=;
-        b=Sgrn7Y/dVZ5kOr4om0rQqu9jRGg39+nyLDYicWqeVx2nZ9X+zJNj+CJOwHlPT+1Wrj
-         nXFlmDUb0Xo9Lh7dlg2DeS0XmhIW0zRjMZ2C4lhE/sI32mfOWFnYNbX2g9VkEhAusHZs
-         Rswn/8EOfge1thH6I+tYzikO23WTeSv27sOXizs2CCOK17B5Oi3rJgxoEBL+S/EcOKBz
-         7IauTY1u7kujy5CygP5aqFH7nogHvcJY/XYGEwNYeGtGl0TAbltX66XzI9hg0jXZtMh/
-         2Y8a3WsMbluns0GKIaW9mSaBXGyeFpJwpRlMLrm9tyA+MWXOHKv+Ph6Qq0v7eEI8mgpo
-         uhNw==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=t4GhLZNbe4X2F3Nkr5l8ySaeJ4eizRMsuR8A0/1Zt0Y=;
+        b=a/f8+4vbE1r6uJlb7Fjan9+4imWd4Zedf0Xckjd0d4AB2QSBHX5peJ7wmUNKD6RqI+
+         to/2lPyvcfU4XkwCX1knG7AuwfjX7/O2OISnaQPZ87aakBd6RbyLw4/U7RX49QraOXlq
+         QfLh4HN4i3aXmH2Ho1av8xEWIPTj/5AC3Myk3hLxEyLEmLS1IFpJ0UJssFbeGA2vAQ48
+         f6RIU2Tg+qkYwbz1YGFE2faT4qXVsIjz43HqDnXCDFi/AC/y3IdrajUzl6YjzxwxkJPz
+         e1RASmN2Y/FUn76nkutOI1G//cDXb97TqWLuuFECkcD3Pv2EU49R9fhmMV08LGh6AlGI
+         KWGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xVxSNmZANvk4+xXEPZhmdlgwWkhMnsRF27bwwNOdZG8=;
-        b=WSC7n7KN7VpOP7oAItt4icc/tSN4r93OmIn1OhImJV2UxNa3MR7XtxIZnChiX8vy3d
-         yrlgeOQYnagsIZ7NFdUeUfI4zHBYrNAbrdg2FWmrflPsPfQtmAmba1D+1x0b0ONWCZHW
-         RINUzlt5/ebViR0QDI4N6W9TmDNRM4Hep15j+khlQXafRiNLWighUclsz3HLsaX9j9JI
-         Jh9EXHhZC5LAB7xFHqeFIXXT/fJmNqtqugKzAYHM4HgO8fz3hRcQRkGkCdO+EprzG+x2
-         u8IXVTbz47D0WMqtXK93pO0v7kk1WL+B1vflxtRZVBxCGPHPuLfZ5ZtlA8m2JF/d7p3G
-         lPQA==
-X-Gm-Message-State: AOAM533G1bWwgkX5ddnBR/cPZUiiQGxMNzwlE3J5RRCvnW8FThsOPbnp
-        ZwVkzMLRNoi6D0nXmtofW4j5Ze4CT9BqvayUpYA=
-X-Google-Smtp-Source: ABdhPJzBC5HTrPREljfBNuYDFNUOpKk5D/S72tuVLMDbbEnMCeVyrTuboq9vTycZoGPYOJtPpiu6HfWjFyo+5AaDbZM=
-X-Received: by 2002:a05:651c:1193:: with SMTP id w19mr3110192ljo.264.1623419475775;
- Fri, 11 Jun 2021 06:51:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <1617809456-17693-1-git-send-email-yibin.gong@nxp.com>
-In-Reply-To: <1617809456-17693-1-git-send-email-yibin.gong@nxp.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Fri, 11 Jun 2021 10:51:04 -0300
-Message-ID: <CAOMZO5CNjpek0vkDrMyTmfbnr2cLcquck6QQBqXLBiyTDKPXvA@mail.gmail.com>
-Subject: Re: [PATCH v14 00/12] add ecspi ERR009165 for i.mx6/7 soc family
-To:     Robin Gong <yibin.gong@nxp.com>
-Cc:     Vinod <vkoul@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=t4GhLZNbe4X2F3Nkr5l8ySaeJ4eizRMsuR8A0/1Zt0Y=;
+        b=czkb4mmxLCh9+hF4Dr+8hYEm2HLwGYwjnSazLrglourXsj5nXl289k0x+dRLfCFQB5
+         kn37tvUV2T7MKvVD7annefuk3iBmbTABDpL8cHcWaw+kIRxNaYIHoLffZ35x6nj8FuhM
+         Tya0dkL5sExAincEoniFYGAJJKs7nfNKMwxmjkPI1YgJm2kOKfwpErVtlZ6K+Ym4bQ2L
+         4sngD8EpJfvgFLhGKqJ67yIRpcDD9Opg+cdhs45H0kS5Hb9M7wrS1bVyWkPOwiCl8u8/
+         Yb7QXQXeZNbonOgk2p0Sj+uhkogclaU9eW/hCuTRhCkxb0NDXWAC/gsFilrHQfnQrgLo
+         7Vzg==
+X-Gm-Message-State: AOAM532MszD2/gEI1m+9pRikShl7Ix4DsSdG13tY8Pt+uwQej1GZHfCI
+        45ti6gB5WBsPd0VSetiNB3XssyggSBX2SQ==
+X-Google-Smtp-Source: ABdhPJwGotQnlGnQ6Y9vwgx6pMAyzR0pOVPeMeus0XIW6adAlKXjSYCF3sSJwsvgh9y7r9m7GBGYrQ==
+X-Received: by 2002:a1c:1d04:: with SMTP id d4mr4074792wmd.126.1623419693316;
+        Fri, 11 Jun 2021 06:54:53 -0700 (PDT)
+Received: from ziggy.stardust ([213.195.126.134])
+        by smtp.gmail.com with ESMTPSA id d15sm7025666wri.58.2021.06.11.06.54.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Jun 2021 06:54:52 -0700 (PDT)
+Subject: Re: [PATCH 2/2] dt-binding: mediatek: mt6779: update spi document
+To:     Mason Zhang <mason.zhang@mediatek.com>,
         Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Martin Fuzzey <martin.fuzzey@flowbird.group>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Schrempf Frieder <frieder.schrempf@kontron.de>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        dmaengine@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, wsd_upstream@mediatek.com,
+        hanks.chen@mediatek.com, linux-kernel@vger.kernel.org,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <1623413625.22727.10.camel@mbjsdccf07>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Message-ID: <a00f4055-4f44-9acf-5a0f-579c300bd5c0@gmail.com>
+Date:   Fri, 11 Jun 2021 15:54:51 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
+MIME-Version: 1.0
+In-Reply-To: <1623413625.22727.10.camel@mbjsdccf07>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Robin,
+Hi Mason,
 
-On Wed, Apr 7, 2021 at 4:15 AM Robin Gong <yibin.gong@nxp.com> wrote:
->
-> There is ecspi ERR009165 on i.mx6/7 soc family, which cause FIFO
-> transfer to be send twice in DMA mode. Please get more information from:
-> https://www.nxp.com/docs/en/errata/IMX6DQCE.pdf. The workaround is adding
-> new sdma ram script which works in XCH  mode as PIO inside sdma instead
-> of SMC mode, meanwhile, 'TX_THRESHOLD' should be 0. The issue should be
-> exist on all legacy i.mx6/7 soc family before i.mx6ul.
-> NXP fix this design issue from i.mx6ul, so newer chips including i.mx6ul/
-> 6ull/6sll do not need this workaroud anymore. All other i.mx6/7/8 chips
-> still need this workaroud. This patch set add new 'fsl,imx6ul-ecspi'
-> for ecspi driver and 'ecspi_fixed' in sdma driver to choose if need errata
-> or not.
-> The first two reverted patches should be the same issue, though, it
-> seems 'fixed' by changing to other shp script. Hope Sean or Sascha could
-> have the chance to test this patch set if could fix their issues.
-> Besides, enable sdma support for i.mx8mm/8mq and fix ecspi1 not work
-> on i.mx8mm because the event id is zero.
->
-> PS:
->    Please get sdma firmware from below linux-firmware and copy it to your
-> local rootfs /lib/firmware/imx/sdma.
-> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/imx/sdma
+On 11/06/2021 14:13, Mason Zhang wrote:
+> 
+> this patch update spi document for MT6779 SOC.
+> 
+> Signed-off-by: Mason Zhang <Mason.Zhang@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/spi/spi-mt65xx.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/spi-mt65xx.txt b/Documentation/devicetree/bindings/spi/spi-mt65xx.txt
+> index 9e43721fa7d6..7bae7eef26c7 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-mt65xx.txt
+> +++ b/Documentation/devicetree/bindings/spi/spi-mt65xx.txt
+> @@ -13,6 +13,7 @@ Required properties:
+>      - mediatek,mt8183-spi: for mt8183 platforms
+>      - "mediatek,mt8192-spi", "mediatek,mt6765-spi": for mt8192 platforms
+>      - "mediatek,mt8516-spi", "mediatek,mt2712-spi": for mt8516 platforms
+> +    - "mediatek,mt6779-spi", "mediatek,mt6765-spi": for mt6779 platforms
+>  
+>  - #address-cells: should be 1.
+>  
+> 
+> Hi Matthias:
+> 	
+> 	I'm sorry to disturb you, this patch is stay here for a long time, Do
+> you have any suggestions about this patch? 
+> 	We hope this patch will be merged as soon as possible,If you have any
+> concern, I will fix it in time.
+> 
+> 	Looking forward to your reply~  
+> 
+> Thanks
+> Mason
+> 
 
-Without this series, SPI DMA does not work on i.MX8MM:
+Please put any comments below --- but before the diff, otherwise you break the
+patch.
 
- [   41.315984] spi_master spi1: I/O Error in DMA RX
+This patch was already upstreamed by:
+260864f797f2 ("spi: mt6779: update spi document")
 
-I applied your series and SPI DMA works now:
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
-
-Thanks
+Regards,
+Matthias
