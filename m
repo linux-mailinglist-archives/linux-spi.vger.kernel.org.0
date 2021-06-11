@@ -2,184 +2,169 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 568813A3A8E
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Jun 2021 05:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0AA3A3BC5
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Jun 2021 08:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbhFKD4N (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 10 Jun 2021 23:56:13 -0400
-Received: from regular1.263xmail.com ([211.150.70.200]:45668 "EHLO
-        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbhFKD4N (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Jun 2021 23:56:13 -0400
-Received: from localhost (unknown [192.168.167.235])
-        by regular1.263xmail.com (Postfix) with ESMTP id 9B7FA1DB8;
-        Fri, 11 Jun 2021 11:54:10 +0800 (CST)
+        id S231301AbhFKGNl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 11 Jun 2021 02:13:41 -0400
+Received: from lucky1.263xmail.com ([211.157.147.133]:40258 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230526AbhFKGNk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Jun 2021 02:13:40 -0400
+Received: from localhost (unknown [192.168.167.16])
+        by lucky1.263xmail.com (Postfix) with ESMTP id E586FCD8AF;
+        Fri, 11 Jun 2021 14:11:37 +0800 (CST)
 X-MAIL-GRAY: 0
 X-MAIL-DELIVERY: 1
 X-ADDR-CHECKED4: 1
 X-SKE-CHECKED: 1
-X-ABS-CHECKED: 1
 X-ANTISPAM-LEVEL: 2
-Received: from [172.16.12.73] (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P15328T140654309000960S1623383648787942_;
-        Fri, 11 Jun 2021 11:54:10 +0800 (CST)
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P16485T139919133304576S1623391896460797_;
+        Fri, 11 Jun 2021 14:11:38 +0800 (CST)
 X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <70eca2d5e53924834f14eb9922eb0b7d>
+X-UNIQUE-TAG: <40bc6dc8c98316e58bc91f50ef9d625a>
 X-RL-SENDER: jon.lin@rock-chips.com
 X-SENDER: jon.lin@rock-chips.com
 X-LOGIN-NAME: jon.lin@rock-chips.com
-X-FST-TO: linux-clk@vger.kernel.org
+X-FST-TO: linux-spi@vger.kernel.org
 X-RCPT-COUNT: 19
 X-SENDER-IP: 58.22.7.114
 X-ATTACHMENT-NUM: 0
 X-System-Flag: 0
-Subject: Re: [PATCH v7 9/9] arm64: dts: rockchip: Enable SFC for Odroid Go
- Advance
-To:     Chris Morgan <macromorgan@hotmail.com>
-Cc:     Chris Morgan <macroalpha82@gmail.com>, linux-spi@vger.kernel.org,
-        broonie@kernel.org, robh+dt@kernel.org, heiko@sntech.de,
-        jbx6244@gmail.com, hjc@rock-chips.com, yifeng.zhao@rock-chips.com,
-        sugar.zhang@rock-chips.com, linux-rockchip@lists.infradead.org,
-        linux-mtd@lists.infradead.org, p.yadav@ti.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linux-clk@vger.kernel.org
-References: <20210609140412.16058-1-jon.lin@rock-chips.com>
- <20210609141348.19178-1-jon.lin@rock-chips.com>
- <20210609141348.19178-5-jon.lin@rock-chips.com>
- <20210610173657.GA20228@wintermute.localdomain>
- <89283da6-b00e-4d0f-5c4a-0169bda101d3@rock-chips.com>
- <SN6PR06MB5342327048383CC3D416C93DA5349@SN6PR06MB5342.namprd06.prod.outlook.com>
 From:   Jon Lin <jon.lin@rock-chips.com>
-Message-ID: <19481190-2a28-8602-8f5f-6258a967833d@rock-chips.com>
-Date:   Fri, 11 Jun 2021 11:54:09 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <SN6PR06MB5342327048383CC3D416C93DA5349@SN6PR06MB5342.namprd06.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+To:     linux-spi@vger.kernel.org
+Cc:     jon.lin@rock-chips.com, broonie@kernel.org, robh+dt@kernel.org,
+        heiko@sntech.de, jbx6244@gmail.com, hjc@rock-chips.com,
+        yifeng.zhao@rock-chips.com, sugar.zhang@rock-chips.com,
+        linux-rockchip@lists.infradead.org, linux-mtd@lists.infradead.org,
+        p.yadav@ti.com, macroalpha82@gmail.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH v8 0/9] Add Rockchip SFC(serial flash controller) support
+Date:   Fri, 11 Jun 2021 14:11:25 +0800
+Message-Id: <20210611061134.31369-1-jon.lin@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-On 6/11/21 11:38 AM, Chris Morgan wrote:
-> On Fri, Jun 11, 2021 at 10:26:35AM +0800, Jon Lin wrote:
->> Hi Chris
->>
->> May you attach the XT25F128B device code to me, and I'll try to work it out.
-> Sure, here is the patch I am using:
->
-> https://patchwork.ozlabs.org/project/linux-mtd/patch/SN6PR06MB5342C82F372F37FB8E21B327A57A9@SN6PR06MB5342.namprd06.prod.outlook.com/
 
-this patch works well in my rk3308 tx-2 rx-2 XT25F128BSSIGU case.
+Changes in v8:
+- Fix indent 4 to 2 in yaml
 
-# dd if=/tmp/rand.img of=/dev/mtdblock0 bs=4096 seek=1024
-1024+0 records in
-1024+0 records out
-#
-# dd if=/dev/mtd0 of=/tmp/rand1.img bs=4096 skip=1024 count=1024
+Changes in v7:
+- Fix up the sclk_sfc parent error in rk3036
+- Unify to "rockchip,sfc" compatible id because all the feature update
+  will have a new IP version, so the driver is used for the SFC IP in
+  all SoCs
+- Change to use node "sfc" to name the SFC pinctrl group
+- Add subnode reg property check
+- Add rockchip_sfc_adjust_op_size to workaround in CMD + DUMMY case
+- Limit max_iosize to 32KB
 
-1024+0 records in
-1024+0 records out
-#
-#
-# md5sum /tmp/*.img
-83e45a56766168b47e6db1d41b1b403d  /tmp/rand.img
-83e45a56766168b47e6db1d41b1b403d  /tmp/rand1.img
-#
-# dmesg | grep XT25F128BSSIGU
-[    0.200738] spi-nor spi3.0: XT25F128BSSIGU (16384 Kbytes)
-#
+Changes in v6:
+- Add support in device trees for rv1126(Declared in series 5 but not
+  submitted)
+- Change to use "clk_sfc" "hclk_sfc" as clock lable, since it does not
+  affect interpretation and has been widely used
+- Support sfc tx_dual, tx_quad(Declared in series 5 but not submitted)
+- Simplify the code, such as remove "rockchip_sfc_register_all"(Declared
+  in series 5 but not submitted)
+- Support SFC ver4 ver5(Declared in series 5 but not submitted)
+- Add author Chris Morgan and Jon Lin to spi-rockchip-sfc.c
+- Change to use devm_spi_alloc_master and spi_unregister_master
 
->
->> On 6/11/21 1:36 AM, Chris Morgan wrote:
->>> On Wed, Jun 09, 2021 at 10:13:48PM +0800, Jon Lin wrote:
->>>> From: Chris Morgan <macromorgan@hotmail.com>
->>>>
->>>> This enables the Rockchip Serial Flash Controller for the Odroid Go
->>>> Advance. Note that while the attached SPI NOR flash and the controller
->>>> both support quad read mode, only 2 of the required 4 pins are present.
->>>> The rx and tx bus width is set to 2 for this reason.
->>>>
->>>> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
->>>> Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
->>>> ---
->>>>
->>>> Changes in v7: None
->>>> Changes in v6: None
->>>> Changes in v5: None
->>>> Changes in v4: None
->>>> Changes in v3: None
->>>> Changes in v2: None
->>>> Changes in v1: None
->>>>
->>>>    .../boot/dts/rockchip/rk3326-odroid-go2.dts      | 16 ++++++++++++++++
->>>>    1 file changed, 16 insertions(+)
->>>>
->>>> diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
->>>> index 49c97f76df77..f78e11dd8447 100644
->>>> --- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
->>>> +++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
->>>> @@ -484,6 +484,22 @@
->>>>    	status = "okay";
->>>>    };
->>>> +&sfc {
->>>> +	pinctrl-0 = <&sfc_clk &sfc_cs0 &sfc_bus2>;
->>>> +	pinctrl-names = "default";
->>>> +	#address-cells = <1>;
->>>> +	#size-cells = <0>;
->>>> +	status = "okay";
->>>> +
->>>> +	flash@0 {
->>>> +		compatible = "jedec,spi-nor";
->>>> +		reg = <0>;
->>>> +		spi-max-frequency = <108000000>;
->>>> +		spi-rx-bus-width = <2>;
->>>> +		spi-tx-bus-width = <2>;
->>> Note that I am still working with Jon Lin to research this, but it was
->>> found in testing that if I set the tx bus width to 1 the problems I
->>> encountered in earlier are resolved. At this time I do not know if it
->>> is an issue with the driver for the flash controller, or if the NOR, or
->>> board itself has some sort of errata which prevent dual tx from working
->>> correctly. Note that as of right now the flash chip I am using (an
->>> XTX XT25F128B) is not currently supported in mainline, so it's very
->>> possible this is some sort of errata with the chip. It's also possible
->>> that there is something with the board that is interferring with dual
->>> mode TX.  When Jon comes back that he has tested dual mode on the SFC
->>> with a different board/chip I will recommend that we change the tx
->>> bus width here to a 1, and then once the XT25F128B gets mainlined we
->>> can see if someone else has issues with dual tx mode so we can note
->>> that as a problem with the chip. Or maybe there is something weird
->>> with dual tx mode yet on the SFC driver/controller, I don't know yet.
->>> I'm all too happy to work with a Rockchip engineer so things like
->>> this can be determined before we hit mainline. :-)
->>>
->>> The XTX25F128B driver is currently awaiting a decision on how to handle
->>> continuation codes, as this chip ID should be using continuation codes,
->>> but doesn't appear to return them when you query for manufacturer ID.
->>> So I should also note in the commit here that the SFC will still be
->>> unusable on the Odroid Go Advance until the XTX25F128B is also
->>> mainlined.
->>>
->>> Thank you.
->>>
->>>> +	};
->>>> +};
->>>> +
->>>>    &tsadc {
->>>>    	status = "okay";
->>>>    };
->>>> -- 
->>>> 2.17.1
->>>>
->>>>
->>>>
->>>
->>
->
->
+Changes in v5:
+- Add support in device trees for rv1126
+- Support sfc tx_dual, tx_quad
+- Simplify the code, such as remove "rockchip_sfc_register_all"
+- Support SFC ver4 ver5
+
+Changes in v4:
+- Changing patch back to an "RFC". An engineer from Rockchip
+  reached out to me to let me know they are working on this patch for
+  upstream, I am submitting this v4 for the community to see however
+  I expect Jon Lin (jon.lin@rock-chips.com) will submit new patches
+  soon and these are the ones we should pursue for mainlining. Jon's
+  patch series should include support for more hardware than this
+  series.
+- Clean up documentation more and ensure it is correct per
+  make dt_binding_check.
+- Add support in device trees for rk3036, rk3308, and rv1108.
+- Add ahb clock (hclk_sfc) support for rk3036.
+- Change rockchip_sfc_wait_fifo_ready() to use a switch statement.
+- Change IRQ code to only mark IRQ as handled if it handles the
+  specific IRQ (DMA transfer finish) it is supposed to handle.
+
+Changes in v3:
+- Changed the name of the clocks to sfc/ahb (from clk-sfc/clk-hsfc).
+- Changed the compatible string from rockchip,sfc to
+  rockchip,rk3036-sfc. A quick glance at the datasheets suggests this
+  driver should work for the PX30, RK180x, RK3036, RK312x, RK3308 and
+  RV1108 SoCs, and possibly more. However, I am currently only able
+  to test this on a PX30 (an RK3326). The technical reference manuals
+  appear to list the same registers for each device.
+- Corrected devicetree documentation for formatting and to note these
+  changes.
+- Replaced the maintainer with Heiko Stuebner and myself, as we will
+  take ownership of this going forward.
+- Noted that the device (per the reference manual) supports 4 CS, but
+  I am only able to test a single CS (CS 0).
+- Reordered patches to comply with upstream rules.
+
+Changes in v2:
+- Reimplemented driver using spi-mem subsystem.
+- Removed power management code as I couldn't get it working properly.
+- Added device tree bindings for Odroid Go Advance.
+
+Changes in v1:
+hanges made in this new series versus the v8 of the old series:
+- Added function to read spi-rx-bus-width from device tree, in the
+  event that the SPI chip supports 4x mode but only has 2 pins
+  wired (such as the Odroid Go Advance).
+- Changed device tree documentation from txt to yaml format.
+- Made "reset" message a dev_dbg from a dev_info.
+- Changed read and write fifo functions to remove redundant checks.
+- Changed the write and read from relaxed to non-relaxed when
+  starting the DMA transfer or reading the DMA IRQ.
+- Changed from dma_coerce_mask_and_coherent to just
+  dma_set_mask_and_coherent.
+- Changed name of get_if_type to rockchip_sfc_get_if_type.
+
+Chris Morgan (8):
+  dt-bindings: rockchip-sfc: Bindings for Rockchip serial flash
+    controller
+  spi: rockchip-sfc: add rockchip serial flash controller
+  arm64: dts: rockchip: Add SFC to PX30
+  clk: rockchip: Add support for hclk_sfc on rk3036
+  arm: dts: rockchip: Add SFC to RK3036
+  arm: dts: rockchip: Add SFC to RV1108
+  arm64: dts: rockchip: Add SFC to RK3308
+  arm64: dts: rockchip: Enable SFC for Odroid Go Advance
+
+Jon Lin (1):
+  clk: rockchip: rk3036: fix up the sclk_sfc parent error
+
+ .../devicetree/bindings/spi/rockchip-sfc.yaml |  88 +++
+ arch/arm/boot/dts/rk3036.dtsi                 |  42 ++
+ arch/arm/boot/dts/rv1108.dtsi                 |  37 +
+ arch/arm64/boot/dts/rockchip/px30.dtsi        |  38 +
+ arch/arm64/boot/dts/rockchip/rk3308.dtsi      |  37 +
+ .../boot/dts/rockchip/rk3326-odroid-go2.dts   |  16 +
+ drivers/clk/rockchip/clk-rk3036.c             |   5 +-
+ drivers/spi/Kconfig                           |   9 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-rockchip-sfc.c                | 676 ++++++++++++++++++
+ include/dt-bindings/clock/rk3036-cru.h        |   1 +
+ 11 files changed, 948 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/rockchip-sfc.yaml
+ create mode 100644 drivers/spi/spi-rockchip-sfc.c
+
+-- 
+2.17.1
+
 
 
