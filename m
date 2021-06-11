@@ -2,25 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB483A3E82
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Jun 2021 11:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BAED3A3E93
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Jun 2021 11:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbhFKJFP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 11 Jun 2021 05:05:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32770 "EHLO mail.kernel.org"
+        id S231303AbhFKJIM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 11 Jun 2021 05:08:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33200 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230460AbhFKJFO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 11 Jun 2021 05:05:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8B0F961181;
-        Fri, 11 Jun 2021 09:03:01 +0000 (UTC)
+        id S231251AbhFKJIM (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 11 Jun 2021 05:08:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 157D961278;
+        Fri, 11 Jun 2021 09:06:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623402182;
-        bh=TsVXPLwnrlWET7PO8tQP/ey0ws/jRNpWg0MSbcEBVbk=;
+        s=korg; t=1623402361;
+        bh=V8rwQSPoiZTRk/jjRyvlQpQ1iIHmDQKQlGADOqOkmGs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f5xGFCpEwkaMul78gNStpklEFUzweU2WqSRXUcJeplNbZPfnBVMTdfXeIpKaHCyJ8
-         x1Ez1odI7Fj5ULmET1YYFwb8ET3yEg25hjbE5CoQoSQmQlhQQfGqE7b8xuL4G9906X
-         bvSLO4ZQ658ngjAxelgGRle+MIqJUjti0cEywyQk=
-Date:   Fri, 11 Jun 2021 11:02:59 +0200
+        b=lSsqjcdINb99LnurddKz51NDkHxokfj0nSeOELsQ8ON5ZQQ9cwd30j5b74FbN+CDp
+         gojDDtF2W8omSjn+/fFTB25cA8p2ONkJcw0olabKA0Bg0PBeQhiqa8nXJ7pAGHRbLh
+         3YZznU2rbyCsMisqO38iavqLi4fYfFC5oCyl38V8=
+Date:   Fri, 11 Jun 2021 11:05:59 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Sebastian Reichel <sebastian.reichel@collabora.com>
 Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
@@ -29,181 +29,102 @@ Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Fabio Estevam <festevam@gmail.com>, Ian Ray <ian.ray@ge.com>,
         linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCHv4 6/6] misc: gehc-achc: new driver
-Message-ID: <YMMmw11wOzMZejkS@kroah.com>
+Subject: Re: [PATCHv4 5/6] misc: nxp-ezport: introduce EzPort support
+Message-ID: <YMMnd3bBgT8QcuQu@kroah.com>
 References: <20210609151235.48964-1-sebastian.reichel@collabora.com>
- <20210609151235.48964-7-sebastian.reichel@collabora.com>
+ <20210609151235.48964-6-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210609151235.48964-7-sebastian.reichel@collabora.com>
+In-Reply-To: <20210609151235.48964-6-sebastian.reichel@collabora.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Jun 09, 2021 at 05:12:35PM +0200, Sebastian Reichel wrote:
-> General Electric Healthcare's PPD has a secondary processor from
-> NXP's Kinetis K20 series. That device has two SPI chip selects:
-> 
-> The main interface's behaviour depends on the loaded firmware
-> and is currently unused.
-> 
-> The secondary interface can be used to update the firmware using
-> EzPort protocol. This is implemented by this driver using the
-> kernel's firmware API. It's not done during probe time, since
-> the device has non-volatile memory and flashing lasts almost 3
-> minutes.
+On Wed, Jun 09, 2021 at 05:12:34PM +0200, Sebastian Reichel wrote:
+> Add new EzPort support code, which can be used to do
+> firmware updates of Kinetis coprocessors. The driver
+> is not usable on its own and thus not user selectable.
 > 
 > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  .../ABI/testing/sysfs-driver-ge-achc          |   9 ++
->  drivers/misc/Kconfig                          |  12 ++
->  drivers/misc/Makefile                         |   1 +
->  drivers/misc/gehc-achc.c                      | 136 ++++++++++++++++++
->  drivers/spi/spidev.c                          |   1 -
->  5 files changed, 158 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/ABI/testing/sysfs-driver-ge-achc
->  create mode 100644 drivers/misc/gehc-achc.c
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-ge-achc b/Documentation/ABI/testing/sysfs-driver-ge-achc
-> new file mode 100644
-> index 000000000000..3ca71a1b4836
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-driver-ge-achc
-> @@ -0,0 +1,9 @@
-> +What:		/sys/bus/spi/drivers/gehc-achc/<dev>/update_firmware
-
-Shouldn't the path be through the bus and not through the driver portion
-of sysfs?
-
-> +Date:		June 2021
-> +Contact:	linux-kernel@vger.kernel.org
-
-If you are not willing to put your name on this, I'm not willing to take
-this :(
-
-> +Description:	Write 1 to this file to trigger a firmware update.
-
-What exactly does this mean?  What will be "triggered" and what will
-happen?
-
-And it is not what the kernel code does, it will take any write to this
-file, not just "1" so something is wrong here.
-
-> +
-> +What:		/sys/bus/spi/drivers/gehc-achc/<dev>/reset
-> +Date:		June 2021
-> +Contact:	linux-kernel@vger.kernel.org
-
-Again, real name for a contact for obvious reasons.
-
-> +Description:	Write 1 to this file to trigger a device reset.
-
-Also does not match the code :(
 
 
-> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-> index 392c091891a1..a286f0775f2e 100644
-> --- a/drivers/misc/Kconfig
-> +++ b/drivers/misc/Kconfig
-> @@ -211,6 +211,18 @@ config CS5535_CLOCK_EVENT_SRC
->  config NXP_EZPORT
->  	tristate
->  
-> +config GEHC_ACHC
-> +	tristate "GEHC ACHC support"
-> +	depends on SPI && SYSFS && SPI_SPIDEV
-> +	select FW_LOADER
-> +	select NXP_EZPORT
-> +	help
-> +	  Support for GE ACHC microcontroller, that is part of the GE
-> +	  PPD device.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called gehc-achc.
-> +
->  config HP_ILO
->  	tristate "Channel interface driver for the HP iLO processor"
->  	depends on PCI
-> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-> index a85e763b9b33..b7bad5a16c8f 100644
-> --- a/drivers/misc/Makefile
-> +++ b/drivers/misc/Makefile
-> @@ -25,6 +25,7 @@ obj-$(CONFIG_SGI_XP)		+= sgi-xp/
->  obj-$(CONFIG_SGI_GRU)		+= sgi-gru/
->  obj-$(CONFIG_CS5535_MFGPT)	+= cs5535-mfgpt.o
->  obj-$(CONFIG_NXP_EZPORT)	+= nxp-ezport.o
-> +obj-$(CONFIG_GEHC_ACHC)		+= gehc-achc.o
->  obj-$(CONFIG_HP_ILO)		+= hpilo.o
->  obj-$(CONFIG_APDS9802ALS)	+= apds9802als.o
->  obj-$(CONFIG_ISL29003)		+= isl29003.o
-> diff --git a/drivers/misc/gehc-achc.c b/drivers/misc/gehc-achc.c
-> new file mode 100644
-> index 000000000000..5868ac99a3f6
-> --- /dev/null
-> +++ b/drivers/misc/gehc-achc.c
-> @@ -0,0 +1,136 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * datasheet: https://www.nxp.com/docs/en/data-sheet/K20P144M120SF3.pdf
-> + *
-> + * Copyright (C) 2018-2021 Collabora
-> + * Copyright (C) 2018-2021 GE Healthcare
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/spi/spi.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_data/nxp-ezport.h>
-> +
-> +#define ACHC_MAX_FREQ 300000
+Why is this a separate module if only 1 driver needs this?  Why not keep
+it together until you have a second user?
 
-What is the units here?
+And this module is not able to be unloaded ever?  Why not?
 
-> +
-> +struct achc_data {
-> +	struct spi_device *main;
-> +	struct spi_device *ezport;
-> +	struct gpio_desc *reset;
-> +
-> +	struct mutex device_lock; /* avoid concurrent device access */
-> +};
-> +
-> +static ssize_t update_firmware_store(struct device *dev, struct device_attribute *attr,
-> +				     const char *buf, size_t count)
+> +int ezport_flash(struct spi_device *spi, struct gpio_desc *reset, const char *fwname)
 > +{
-> +	struct achc_data *achc = dev_get_drvdata(dev);
 > +	int ret;
 > +
-> +	if (!count)
-> +		return -EINVAL;
-
-So just a non-empty string works?  As said above, that's not what you
-documented :(
-
-> +
-> +	mutex_lock(&achc->device_lock);
-> +	ret = ezport_flash(achc->ezport, achc->reset, "achc.bin");
-> +	mutex_unlock(&achc->device_lock);
-> +
-> +	if (ret < 0)
+> +	ret = ezport_start_programming(spi, reset);
+> +	if (ret)
 > +		return ret;
 > +
-> +	return count;
+> +	ret = ezport_firmware_load(spi, fwname);
+> +
+> +	ezport_stop_programming(spi, reset);
+> +
+> +	if (ret)
+> +		dev_err(&spi->dev, "Failed to flash firmware: %d\n", ret);
+
+%pe perhaps instead of %d?
+
+
+
+> +	else
+> +		dev_dbg(&spi->dev, "Finished FW flashing!\n");
+> +
+> +	return ret;
 > +}
-> +static DEVICE_ATTR_WO(update_firmware);
+> +EXPORT_SYMBOL_GPL(ezport_flash);
 > +
-> +static ssize_t reset_store(struct device *dev, struct device_attribute *attr,
-> +			   const char *buf, size_t count)
+> +/**
+> + * ezport_verify - verify device firmware
+> + * @spi: SPI device for NXP EzPort interface
+> + * @reset: the gpio connected to the device reset pin
+> + * @fwname: filename of the firmware that should be compared
+> + *
+> + * Context: can sleep
+> + *
+> + * Return: 0 on success; negative errno on failure
+> + */
+> +int ezport_verify(struct spi_device *spi, struct gpio_desc *reset, const char *fwname)
 > +{
-> +	struct achc_data *achc = dev_get_drvdata(dev);
+> +	int ret;
 > +
-> +	if (!count)
-> +		return -EINVAL;
+> +	ret = ezport_start_programming(spi, reset);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ezport_firmware_verify(spi, fwname);
+> +
+> +	ezport_stop_programming(spi, reset);
+> +
+> +	if (ret)
+> +		dev_err(&spi->dev, "Failed to verify firmware: %d\n", ret);
 
-Same here as above.
+Same here, %pe?
 
+
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(ezport_verify);
+> +
+> +MODULE_DESCRIPTION("NXP EzPort protocol support");
+> +MODULE_AUTHOR("Sebastian Reichel <sebastian.reichel@collabora.com>");
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/linux/platform_data/nxp-ezport.h b/include/linux/platform_data/nxp-ezport.h
+> new file mode 100644
+> index 000000000000..b0a2af9c1285
+> --- /dev/null
+> +++ b/include/linux/platform_data/nxp-ezport.h
+> @@ -0,0 +1,9 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+
+This license does NOT match up with the .c file's license.  Why?
 
 thanks,
 
