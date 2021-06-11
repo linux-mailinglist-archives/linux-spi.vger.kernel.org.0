@@ -2,77 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 132483A3F58
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Jun 2021 11:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BEE3A41FC
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Jun 2021 14:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbhFKJry (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 11 Jun 2021 05:47:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43484 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230212AbhFKJrx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 11 Jun 2021 05:47:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 48F63613CF;
-        Fri, 11 Jun 2021 09:45:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623404756;
-        bh=bV0c25psnxZ45TnMzhSLmCCDxKUGPIDab/Wtf/aPOA8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T35Yiby6dC7HtrS5nqPDscgVBRcBQPI6e3nQdSeCzBYNh9jAqsim5d5b7+3hfrX52
-         tV3sB878jEk3lILhvl4JHW8zzPQ4Ex1GjWcYlqs4jnnHE+zo+rFuTTzMaieUMzRd/w
-         C4ydotcwcSIXqg1XJ/5NCe5yR85xNTEyBxMgRUys=
-Date:   Fri, 11 Jun 2021 11:45:53 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>, Ian Ray <ian.ray@ge.com>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCHv4 5/6] misc: nxp-ezport: introduce EzPort support
-Message-ID: <YMMw0Xh+c/IRZ98R@kroah.com>
-References: <20210609151235.48964-1-sebastian.reichel@collabora.com>
- <20210609151235.48964-6-sebastian.reichel@collabora.com>
- <YMMnd3bBgT8QcuQu@kroah.com>
+        id S230233AbhFKMaE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 11 Jun 2021 08:30:04 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:55153 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230188AbhFKMaD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Jun 2021 08:30:03 -0400
+X-UUID: c71177d5340f476d9d37672459edf88e-20210611
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:Date:CC:To:From:Subject:Message-ID; bh=5WTI0sd3QrS6AzdAtUg1zyVx5qtJHQj3wy1A/5ifOvk=;
+        b=c3J8bZfFR7uB26v76G5+YiFVPE/BIYsvjJ66mKc8Q26DmTkgcFCCdOW2JxcxcReViIgxCDS9Mr3etmYy3yOa4yb9FOZLSab4frhlePsKHt8kSjXxWGP+w1XT0Ns2W0rPoKAz+alkeGDe8G2QRHjlQ145LNAqkjUw441lZLMh1is=;
+X-UUID: c71177d5340f476d9d37672459edf88e-20210611
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <mason.zhang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 442193545; Fri, 11 Jun 2021 20:28:03 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 11 Jun 2021 20:27:56 +0800
+Received: from [10.15.20.246] (10.15.20.246) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 11 Jun 2021 20:27:55 +0800
+Message-ID: <1623413625.22727.10.camel@mbjsdccf07>
+Subject: [PATCH 2/2] dt-binding: mediatek: mt6779: update spi document
+From:   Mason Zhang <mason.zhang@mediatek.com>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <devicetree@vger.kernel.org>,
+        Mason Zhang <Mason.Zhang@mediatek.com>,
+        <wsd_upstream@mediatek.com>, <hanks.chen@mediatek.com>,
+        <linux-kernel@vger.kernel.org>,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Fri, 11 Jun 2021 20:13:45 +0800
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YMMnd3bBgT8QcuQu@kroah.com>
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jun 11, 2021 at 11:05:59AM +0200, Greg Kroah-Hartman wrote:
-> On Wed, Jun 09, 2021 at 05:12:34PM +0200, Sebastian Reichel wrote:
-> > Add new EzPort support code, which can be used to do
-> > firmware updates of Kinetis coprocessors. The driver
-> > is not usable on its own and thus not user selectable.
-> > 
-> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> 
-> 
-> Why is this a separate module if only 1 driver needs this?  Why not keep
-> it together until you have a second user?
-> 
-> And this module is not able to be unloaded ever?  Why not?
-> 
-> > +int ezport_flash(struct spi_device *spi, struct gpio_desc *reset, const char *fwname)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = ezport_start_programming(spi, reset);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret = ezport_firmware_load(spi, fwname);
-> > +
-> > +	ezport_stop_programming(spi, reset);
-> > +
-> > +	if (ret)
-> > +		dev_err(&spi->dev, "Failed to flash firmware: %d\n", ret);
-> 
-> %pe perhaps instead of %d?
+DQp0aGlzIHBhdGNoIHVwZGF0ZSBzcGkgZG9jdW1lbnQgZm9yIE1UNjc3OSBTT0MuDQoNClNpZ25l
+ZC1vZmYtYnk6IE1hc29uIFpoYW5nIDxNYXNvbi5aaGFuZ0BtZWRpYXRlay5jb20+DQotLS0NCiBE
+b2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvc3BpL3NwaS1tdDY1eHgudHh0IHwgMSAr
+DQogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspDQoNCmRpZmYgLS1naXQgYS9Eb2N1bWVu
+dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvc3BpL3NwaS1tdDY1eHgudHh0IGIvRG9jdW1lbnRh
+dGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3NwaS9zcGktbXQ2NXh4LnR4dA0KaW5kZXggOWU0Mzcy
+MWZhN2Q2Li43YmFlN2VlZjI2YzcgMTAwNjQ0DQotLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRy
+ZWUvYmluZGluZ3Mvc3BpL3NwaS1tdDY1eHgudHh0DQorKysgYi9Eb2N1bWVudGF0aW9uL2Rldmlj
+ZXRyZWUvYmluZGluZ3Mvc3BpL3NwaS1tdDY1eHgudHh0DQpAQCAtMTMsNiArMTMsNyBAQCBSZXF1
+aXJlZCBwcm9wZXJ0aWVzOg0KICAgICAtIG1lZGlhdGVrLG10ODE4My1zcGk6IGZvciBtdDgxODMg
+cGxhdGZvcm1zDQogICAgIC0gIm1lZGlhdGVrLG10ODE5Mi1zcGkiLCAibWVkaWF0ZWssbXQ2NzY1
+LXNwaSI6IGZvciBtdDgxOTIgcGxhdGZvcm1zDQogICAgIC0gIm1lZGlhdGVrLG10ODUxNi1zcGki
+LCAibWVkaWF0ZWssbXQyNzEyLXNwaSI6IGZvciBtdDg1MTYgcGxhdGZvcm1zDQorICAgIC0gIm1l
+ZGlhdGVrLG10Njc3OS1zcGkiLCAibWVkaWF0ZWssbXQ2NzY1LXNwaSI6IGZvciBtdDY3NzkgcGxh
+dGZvcm1zDQogDQogLSAjYWRkcmVzcy1jZWxsczogc2hvdWxkIGJlIDEuDQogDQoNCkhpIE1hdHRo
+aWFzOg0KCQ0KCUknbSBzb3JyeSB0byBkaXN0dXJiIHlvdSwgdGhpcyBwYXRjaCBpcyBzdGF5IGhl
+cmUgZm9yIGEgbG9uZyB0aW1lLCBEbw0KeW91IGhhdmUgYW55IHN1Z2dlc3Rpb25zIGFib3V0IHRo
+aXMgcGF0Y2g/IA0KCVdlIGhvcGUgdGhpcyBwYXRjaCB3aWxsIGJlIG1lcmdlZCBhcyBzb29uIGFz
+IHBvc3NpYmxlLElmIHlvdSBoYXZlIGFueQ0KY29uY2VybiwgSSB3aWxsIGZpeCBpdCBpbiB0aW1l
+Lg0KDQoJTG9va2luZyBmb3J3YXJkIHRvIHlvdXIgcmVwbHl+ICANCg0KVGhhbmtzDQpNYXNvbg0K
 
-Oops, nope, my fault, that's not a pointer.
-
-greg k-h
