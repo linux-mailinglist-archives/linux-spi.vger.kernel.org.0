@@ -2,59 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3EAF3A5AAD
-	for <lists+linux-spi@lfdr.de>; Sun, 13 Jun 2021 23:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C96B13A5B08
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Jun 2021 01:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232114AbhFMVp3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 13 Jun 2021 17:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232020AbhFMVp3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 13 Jun 2021 17:45:29 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DCEC061574
-        for <linux-spi@vger.kernel.org>; Sun, 13 Jun 2021 14:43:27 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id w31so4589229pga.6
-        for <linux-spi@vger.kernel.org>; Sun, 13 Jun 2021 14:43:27 -0700 (PDT)
+        id S232288AbhFMXem (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 13 Jun 2021 19:34:42 -0400
+Received: from mail-wm1-f41.google.com ([209.85.128.41]:33517 "EHLO
+        mail-wm1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232282AbhFMXeh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 13 Jun 2021 19:34:37 -0400
+Received: by mail-wm1-f41.google.com with SMTP id s70-20020a1ca9490000b02901a589651424so8563448wme.0;
+        Sun, 13 Jun 2021 16:32:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nigauri-org.20150623.gappssmtp.com; s=20150623;
+        d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=F4FYr9FDMOpvwo3Zr3hfKXs3t7amppDGZQ7mivsffqA=;
-        b=TH0/0eKS4H6Ui936WKWhp7XjjY1XT2YWMJ80xz8p3SQWgtVyHwKkcOZRlAAiAvP4NV
-         nAz5sNz03gsSLLX7yFtqyXqZtQ/XGEu9167mSpjbj82O40LQWepesux0yk4up+cOsAa+
-         mLen7TPkfzbPmy83wwYg29MRCah5Y8k0lbPBlEAp+9dnmcE9/1YM0IxLYbXHuRpZMP5Q
-         WuVvNQDGt/5fNlYHTI236iDTFW2jD+jXFpJoe3pV4GnQPPshffPaxHzJT3YY2+lMr9tI
-         F5rLAVw0e40gX+C3CZ4ZAUbWwdmiimrXLI6ZoAERiCcC2y9dMWyCZBAQBY3JkIXV8RnZ
-         xlKw==
+        bh=iK+fdotc8MDTLXOWsCA+bd9ELHLX8yC6MN1FxLYw3Rc=;
+        b=ZBhL+xgB8mqWh3eLJJg3Z/iYwp+jlCYPiX8tmO8GhAowJpOg07QRw/MEPdckTj/kp+
+         ICniI5hVwGsS2PIQIlWz7735puYXK6TjX8gWwBgKxk0KY9JxzNDK4HNgatOrSXbe0Lc2
+         RF0bXch20IlR9KFs1iQsEc71ZlALOhvwrD83oO0VUwuxRnCiT+evKwNP8clkkhJYsdLG
+         2v3+5cf4d/Y1NCYCiml07nL8BeVVxec9FZ3KQ80Bn22GIvZNAaaBk93WERvanqg9kWA0
+         ZPH0exFbl36gqe7DWFdUYcjT3IueXbJU+jsky+TmkOdUHxBzQ1/+qlZBtvQrxT8vDCzz
+         AoUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=F4FYr9FDMOpvwo3Zr3hfKXs3t7amppDGZQ7mivsffqA=;
-        b=Bkyjm7usI62MIzfu+yQ29nYhNCGVvCxljscnFHzsWWI22XQyu+Y/EkX+dmN4Lbu8QS
-         GLrfZi0NgVYlArpkOOj8nYfVL1pNj6NKRc/PzCN1Cgy3G8GDIn4707HMiqVwT7fElsjq
-         WfH4NBrvcrNA6f5MXU+JmhRTrED4IbuL43MMQ1uerSIuWiH/zpBqbmifjsX0PkeTv8tK
-         naQoqLvLq/SegtlytcTwuEPrf3o7tXkrdf8Ybm94mZFvoVxkZiiCTdQlEuNBf+/yIodI
-         WIP9seoxETQPpCJPoIUsaNkVKLx6oFFRnSU1tQKs6T/hJRi2vM8ea6Q0GiMElgK6MTaw
-         Hk7g==
-X-Gm-Message-State: AOAM533gj3OXgwJPuvz42eREOg6iwcruGzPDT3uyGIYXPCbZPoOjRsRD
-        Gx5BlpBF0JK6x+/zqDPGZHTv
-X-Google-Smtp-Source: ABdhPJzPRCfWhO+6To0aOkO3oRK33VeKw3NdpVVaElBJxQWRhZ11AI2176yVIa3vwrqMB1jbpu/fSg==
-X-Received: by 2002:a63:d455:: with SMTP id i21mr14200610pgj.263.1623620606663;
-        Sun, 13 Jun 2021 14:43:26 -0700 (PDT)
-Received: from localhost ([2405:6581:5360:1800:7285:c2ff:fec2:8f97])
-        by smtp.gmail.com with ESMTPSA id u1sm10730938pfu.160.2021.06.13.14.43.25
+        bh=iK+fdotc8MDTLXOWsCA+bd9ELHLX8yC6MN1FxLYw3Rc=;
+        b=PO2F8DyGH8PQ0FeKbJ7b04R5e8EKgS74Ti6jXQf/dxYuehAxESXiruvmGy8ih5WzDE
+         G9wV/pAePtVR56X+NGceuB+BMlOMA6vD8INiIyd2t+qvBl6wQRNNCSH5kC8UVCgP4WR/
+         kUtuo63Y5SVGpvl1Ql/jXzAJcntoHx0m0byB0VYbs5O+Ett7AT4OEmrRlKxW+1I8gCCw
+         95iHpLAF4wCzgsUIuVUotn8kxh1Y2hEYc0j+Ta56lG8x1rsNjd/sn4ugtd4GOJjPlA6a
+         Dk8mUtfRMejQYsf5supx7niu1VRqimA0ugmypJAw9+yuTURPMvI0nud965z+hiuGe8+S
+         EiFQ==
+X-Gm-Message-State: AOAM532iB0vBqGJIN5/EP8sbuQaDdHs+45M6IfC8cCJ2JCHZ+2VsEDx5
+        I1ej3i2UdyEP+Nc/haaoqAE=
+X-Google-Smtp-Source: ABdhPJxxWZyZQBZ1JBZMI/iWKh4B0GGXrb7nldKK0n8tdDlT0f6lu/3UG+BAm2A+FtPRs1yAgbiy6w==
+X-Received: by 2002:a7b:c304:: with SMTP id k4mr29800169wmj.68.1623627079836;
+        Sun, 13 Jun 2021 16:31:19 -0700 (PDT)
+Received: from localhost.localdomain ([195.245.23.224])
+        by smtp.gmail.com with ESMTPSA id i9sm17882511wrn.54.2021.06.13.16.31.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Jun 2021 14:43:26 -0700 (PDT)
-From:   Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-To:     robh+dt@kernel.org, broonie@kernel.org, michal.simek@xilinx.com
-Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Subject: [PATCH] dt-bindings: spi: convert Xilinx Zynq UltraScale+ MPSoC GQSPI bindings to YAML
-Date:   Mon, 14 Jun 2021 06:43:17 +0900
-Message-Id: <20210613214317.296667-1-iwamatsu@nigauri.org>
+        Sun, 13 Jun 2021 16:31:18 -0700 (PDT)
+From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, dmaengine@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/7] Prepare EP93xx drivers for Common Clock Framework
+Date:   Mon, 14 Jun 2021 01:30:34 +0200
+Message-Id: <20210613233041.128961-1-alexander.sverdlin@gmail.com>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -62,105 +73,32 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Convert spi for Xilinx Zynq UltraScale+ MPSoC GQSPI bindings
-documentation to YAML.
+Nikita posted a patch converting EP93xx to use Common Clock Framework. It
+turns out some cleanup is necessary in the EP93xx drivers to avoid
+"Enabling unprepared" clock warnings.
 
-Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
----
- .../bindings/spi/spi-zynqmp-qspi.txt          | 25 ---------
- .../bindings/spi/spi-zynqmp-qspi.yaml         | 51 +++++++++++++++++++
- 2 files changed, 51 insertions(+), 25 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.txt
- create mode 100644 Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
+Patches with stack traces in the commit messages are tested on EP9302.
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.txt b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.txt
-deleted file mode 100644
-index 0f6d37ff541c4b..00000000000000
---- a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.txt
-+++ /dev/null
-@@ -1,25 +0,0 @@
--Xilinx Zynq UltraScale+ MPSoC GQSPI controller Device Tree Bindings
---------------------------------------------------------------------
--
--Required properties:
--- compatible		: Should be "xlnx,zynqmp-qspi-1.0".
--- reg			: Physical base address and size of GQSPI registers map.
--- interrupts		: Property with a value describing the interrupt
--			  number.
--- clock-names		: List of input clock names - "ref_clk", "pclk"
--			  (See clock bindings for details).
--- clocks		: Clock phandles (see clock bindings for details).
--
--Optional properties:
--- num-cs		: Number of chip selects used.
--
--Example:
--	qspi: spi@ff0f0000 {
--		compatible = "xlnx,zynqmp-qspi-1.0";
--		clock-names = "ref_clk", "pclk";
--		clocks = <&misc_clk &misc_clk>;
--		interrupts = <0 15 4>;
--		interrupt-parent = <&gic>;
--		num-cs = <1>;
--		reg = <0x0 0xff0f0000 0x1000>,<0x0 0xc0000000 0x8000000>;
--	};
-diff --git a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-new file mode 100644
-index 00000000000000..ea72c8001256fa
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-@@ -0,0 +1,51 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/spi-zynqmp-qspi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Xilinx Zynq UltraScale+ MPSoC GQSPI controller Device Tree Bindings
-+
-+maintainers:
-+  - Michal Simek <michal.simek@xilinx.com>
-+
-+allOf:
-+  - $ref: "spi-controller.yaml#"
-+
-+properties:
-+  compatible:
-+    const: xlnx,zynqmp-qspi-1.0
-+
-+  reg:
-+    maxItems: 2
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: ref_clk
-+      - const: pclk
-+
-+  clocks:
-+    maxItems: 2
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/xlnx-zynqmp-clk.h>
-+    soc {
-+      #address-cells = <2>;
-+      #size-cells = <2>;
-+
-+      qspi: spi@ff0f0000 {
-+        compatible = "xlnx,zynqmp-qspi-1.0";
-+        clocks = <&zynqmp_clk QSPI_REF>, <&zynqmp_clk LPD_LSBUS>;
-+        clock-names = "ref_clk", "pclk";
-+        interrupts = <0 15 4>;
-+        interrupt-parent = <&gic>;
-+        reg = <0x0 0xff0f0000 0x0 0x1000>,
-+              <0x0 0xc0000000 0x0 0x8000000>;
-+      };
-+    };
+Link: https://lore.kernel.org/patchwork/patch/1435884/
+
+Alexander Sverdlin (7):
+  iio: ep93xx: Prepare clock before using it
+  spi: spi-ep93xx: Prepare clock before using it
+  Input: ep93xx_keypad: Prepare clock before using it
+  video: ep93xx: Prepare clock before using it
+  dmaengine: ep93xx: Prepare clock before using it
+  ASoC: cirrus: i2s: Prepare clock before using it
+  pwm: ep93xx: Prepare clock before using it
+
+ drivers/dma/ep93xx_dma.c               |  6 +++---
+ drivers/iio/adc/ep93xx_adc.c           |  6 +++---
+ drivers/input/keyboard/ep93xx_keypad.c |  4 ++--
+ drivers/pwm/pwm-ep93xx.c               | 12 ++++++------
+ drivers/spi/spi-ep93xx.c               |  4 ++--
+ drivers/video/fbdev/ep93xx-fb.c        |  4 ++--
+ sound/soc/cirrus/ep93xx-i2s.c          | 12 ++++++------
+ 7 files changed, 24 insertions(+), 24 deletions(-)
+
 -- 
 2.32.0
 
