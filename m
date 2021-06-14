@@ -2,100 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9D23A5D88
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Jun 2021 09:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60D033A601B
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Jun 2021 12:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232455AbhFNHST (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Jun 2021 03:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbhFNHSS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Jun 2021 03:18:18 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B800AC061756
-        for <linux-spi@vger.kernel.org>; Mon, 14 Jun 2021 00:16:16 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lsgog-0000BB-Lg; Mon, 14 Jun 2021 09:15:26 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lsgoe-0005Jf-D8; Mon, 14 Jun 2021 09:15:24 +0200
-Date:   Mon, 14 Jun 2021 09:15:21 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Nikita Shubin <nikita.shubin@maquefel.me>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, dmaengine@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/7] Prepare EP93xx drivers for Common Clock Framework
-Message-ID: <20210614071521.bv6tc5d27tj3yvlv@pengutronix.de>
-References: <20210613233041.128961-1-alexander.sverdlin@gmail.com>
+        id S232920AbhFNKbi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Jun 2021 06:31:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38154 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232908AbhFNKbW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 14 Jun 2021 06:31:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C9DE5611CA;
+        Mon, 14 Jun 2021 10:29:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623666560;
+        bh=lSeXCd4lcJ0tTuMRN1HC4nFi6fATD6bu2jRIYot55WM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ko+f3laW2JB91Bc8p/Oxg7X5WOwVgspcCNOv3A/lGSGEFNFS0RZvmjPLuYLC37Zcy
+         FF9Dek5SERjFhw7J0R/SYulTkkNhuB7AHoVw8oRuFfOJ0s+PaQQxGisqrDS7gpFPCR
+         QvF8Bnzkm1llBwn7Wbiv9RAO9utRIAeIzYZKupieuN3qykkxjbQpnJjoh+0Yf3Dhw0
+         oPNCkTTmURuV3paBgSq0WXDOYnyO6zJw4pbcZv1nbBQobOKVXsq+iwcV4kTxpobuJr
+         P6oy/IKGBLvjmeECmOOFzOTa+jUm0VQFR6flZtRyTXMmmfxYQia41zd08i/CPRLS4W
+         LB+/BYqXHoPBQ==
+Date:   Mon, 14 Jun 2021 11:29:02 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Mason Zhang <mason.zhang@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, wsd_upstream@mediatek.com,
+        hanks.chen@mediatek.com, linux-kernel@vger.kernel.org,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/2] dt-binding: mediatek: mt6779: update spi document
+Message-ID: <20210614102902.GA5646@sirena.org.uk>
+References: <1623413625.22727.10.camel@mbjsdccf07>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tzksnyblxledsl3b"
+        protocol="application/pgp-signature"; boundary="LZvS9be/3tNcYl/X"
 Content-Disposition: inline
-In-Reply-To: <20210613233041.128961-1-alexander.sverdlin@gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+In-Reply-To: <1623413625.22727.10.camel@mbjsdccf07>
+X-Cookie: Some restrictions may apply.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---tzksnyblxledsl3b
-Content-Type: text/plain; charset=iso-8859-1
+--LZvS9be/3tNcYl/X
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 14, 2021 at 01:30:34AM +0200, Alexander Sverdlin wrote:
-> Nikita posted a patch converting EP93xx to use Common Clock Framework. It
-> turns out some cleanup is necessary in the EP93xx drivers to avoid
-> "Enabling unprepared" clock warnings.
->=20
-> Patches with stack traces in the commit messages are tested on EP9302.
+On Fri, Jun 11, 2021 at 08:13:45PM +0800, Mason Zhang wrote:
 
-One thing to note is: ep93xx currently doesn't provide a clk_prepare
-function, this isn't a problem though because include/linux/clk.h
-provides a dummy if CONFIG_HAVE_CLK_PREPARE isn't defined. So as ep93xx
-doesn't define this symbol the changes here effectively only add a
-might_sleep.
+> 	I'm sorry to disturb you, this patch is stay here for a long time, Do
+> you have any suggestions about this patch?=20
+> 	We hope this patch will be merged as soon as possible,If you have any
+> concern, I will fix it in time.
 
-Best regards
-Uwe
+Please submit patches using subject lines reflecting the style for the
+subsystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and
+make sure your subject lines visually resemble what they're doing.
+There's no need to resubmit to fix this alone.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---tzksnyblxledsl3b
+--LZvS9be/3tNcYl/X
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmDHAgYACgkQwfwUeK3K
-7Anz4wf/fZ6UpIbiQ9trvkqr6Bj6ontdmEdjh7ZjZkt/uCGHoWMQ1h2blpmdMD/z
-wzcscbTaQkBDOdRPlWqqRB77EOqy7TdJe7vKeGygZflhyBx6so3Yk+Jf9NhZ73sY
-WpFRQP5v/utpk7qmx7SXBdlJG3mkWmIujPAJd56OX6RwFped6Bqh+bpRv+jMKhHv
-KLWyqkKehDsDd9EQtPokkcgnhvFo584TGv3oWUFi0AtPTgVXCSSNCiIxkR8BKLhs
-/pwCZo/rdneUeHPZpvBsR2AAVefwMmCQphi9CA4JaCsxGkA6Hfa5c1YBpsPXKnSZ
-aL6XNpm9fn67SU0C3GhW4R4lGjRoMQ==
-=giTe
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmDHL20ACgkQJNaLcl1U
+h9CsAQf+Nn4HRlnSP3tQV0DnMF2cdXi1Iq99YwPbLlaUcaR573n/pt3ERW1fG+RQ
+Buc3s5ft40NrHag2fnlP1plJY3hlhBvcjyyPvK+JhJanfYd0YmiOAuMAssVASA0E
+QDPO76npJtv1EJ+Y5ZmNec2Xyt9kpbbHVZrk/kQ1Uv01p/a/wXRLNN55ZYmeQ2kQ
+xFObSTgbJEEZtl/WXK5A7EDT7kfUSQO2kQIwHDI2AmiCOtE0WbqEYALgdd0ijAx9
+IAvq6Cte2W8E5S6bWtyJ/0wL7VFdyI+e8fIuhoaNK56cttomrsfDy/maEDQIRukA
+Vj8gFPHEmIY2r4tRjLbrBcwg1baueQ==
+=nGK1
 -----END PGP SIGNATURE-----
 
---tzksnyblxledsl3b--
+--LZvS9be/3tNcYl/X--
