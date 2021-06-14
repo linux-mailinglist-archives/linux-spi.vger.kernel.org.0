@@ -2,43 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B04023A6F7F
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Jun 2021 21:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 951523A6F82
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Jun 2021 21:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234594AbhFNT40 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Jun 2021 15:56:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52446 "EHLO mail.kernel.org"
+        id S235137AbhFNT43 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Jun 2021 15:56:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52480 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233884AbhFNT4Y (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 14 Jun 2021 15:56:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E94BE61166;
-        Mon, 14 Jun 2021 19:54:20 +0000 (UTC)
+        id S235007AbhFNT41 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 14 Jun 2021 15:56:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1418F611CA;
+        Mon, 14 Jun 2021 19:54:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623700461;
-        bh=9H59Xz02Kl+iv21yoouobtliOku9p+EcM8ROFyfhWTc=;
+        s=k20201202; t=1623700464;
+        bh=6+jWKpDPCaLLPDz72qGZDobMO4QiVYKqrHRjzmR1Rbw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ehs1koXhYhnQJhJJvR8usrB0j9ZwqwOc5uAZo9Mub/OJw/4PHL81MgxHaC259emy6
-         JBxLmqjtsgBKEcHvUX7ND1/ZAxCsBqZyKWyGSR7u/3e6+G6UnZRYqe5SnmvXI54gDG
-         iUWPEb8u7jCPokEeD7nnqSyOfIx5N1ouawX3GPJ7zBSu8BKARk6J55rlvFSr40tVnc
-         vaLuLUnOPQPDnKF4SX3CHx3cxG8pfX/iPR2nWTA66FayfFCjNI+KFclffsJ9yx4hLD
-         i3tJx44lwpIL2VKANf+tB3Cbj+bQnzpJetKFB0KilYPnBWSHB1EXwe2qIAsVqzBsMU
-         Tc8nbAv62GZoQ==
+        b=iSGh2x8Q8QVNVKUh3a7BPqeQd4xqQBMkCNTSaq9xHcF+QZA2r1qDpmLJThnsiJw18
+         7YJut3tJ5DUxPGzAbEkBC1qsIMdC0wteARrVoDliKvhz9BsYAZB9rUw7rUZ+t24nyP
+         xvwm4cE0RngTHlcJX5cuUcX0Knwy8K+ckTHVIUvnnJvBKPuyHhRu6NbMODFQ6Kf0k+
+         x3Gvt/8Xb8K3t1ABHgORxlKZZhD2IWWF63/drVuVNnAaqPC6mvac8MP+XnZBmFoSPI
+         f0JDSYz5T3yzcda0Bo3U69AdfZlFjDm6maQe6PaIGK3CgFk4SqGt++4YRbClcT/Uzo
+         yiYhZg6Um3F5A==
 From:   Mark Brown <broonie@kernel.org>
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-spi@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        zpershuai <zpershuai@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2 1/2] spi: meson-spicc: fix memory leak in meson_spicc_probe
-Date:   Mon, 14 Jun 2021 20:53:32 +0100
-Message-Id: <162370043178.40904.2317762864895103950.b4-ty@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spi: remove spi_set_cs_timing()
+Date:   Mon, 14 Jun 2021 20:53:33 +0100
+Message-Id: <162370043177.40904.7910320297802442191.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <1623562156-21995-1-git-send-email-zpershuai@gmail.com>
-References: <1623562156-21995-1-git-send-email-zpershuai@gmail.com>
+In-Reply-To: <20210609071918.2852069-1-gregkh@linuxfoundation.org>
+References: <20210609071918.2852069-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -46,9 +40,9 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, 13 Jun 2021 13:29:16 +0800, zpershuai wrote:
-> when meson_spicc_clk_init returns failed, it should goto the
-> out_clk label.
+On Wed, 9 Jun 2021 09:19:18 +0200, Greg Kroah-Hartman wrote:
+> No one seems to be using this global and exported function, so remove it
+> as it is no longer needed.
 
 Applied to
 
@@ -56,8 +50,8 @@ Applied to
 
 Thanks!
 
-[1/2] spi: meson-spicc: fix memory leak in meson_spicc_probe
-      commit: b2d501c13470409ee7613855b17e5e5ec4111e1c
+[1/1] spi: remove spi_set_cs_timing()
+      commit: 4ccf359849ce709f4bf0214b4b5b8b6891d38770
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
