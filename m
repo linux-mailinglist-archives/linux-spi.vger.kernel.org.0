@@ -2,100 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD35F3A743A
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Jun 2021 04:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B37CB3A7510
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Jun 2021 05:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbhFOCpZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Jun 2021 22:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48052 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbhFOCpX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Jun 2021 22:45:23 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D78C061574;
-        Mon, 14 Jun 2021 19:43:18 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id x24so18761569lfr.10;
-        Mon, 14 Jun 2021 19:43:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7xvsLbXf65mdyb3qLUmqZwn3t2ST568AmCGF279evdw=;
-        b=mPte5ivMY13f4aHDh4e9CUXMO6E4zLQKcMuVaSfSD8gJ1LV2QGHNXsgvlYt6x4zJe9
-         ZbdVWvL71MVSwlEqrAczZWJ8UIbLR8s3G4Pk6JEKyOQLgW3iLhmzCkfhlYNfT8fh+M4c
-         tgsuT3GzuUwaVlVM05zw6KYVUYN7g8B+ga7LaWV+fjMPky8fgPtRyjd0Vx52mzwcHUfN
-         i0p0uP29sNA0EjVQ49ZYemjN0D9TKrbKVI9FfTOlyhvo1tGh7EBuv0YIJlikw3IX6F6X
-         CYKritPkVEMP8OaanyeoaNFMli9ICXEM4TnXRvth/mIlIjXbYtJfwt96ca32cbBAdrF8
-         TuOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7xvsLbXf65mdyb3qLUmqZwn3t2ST568AmCGF279evdw=;
-        b=En3Mh6IAbzcDfwKNAB1jiGL3gA4h9Spdszi3WNwfkoWN/EwAYxnbBqzRzmIYnFR+vQ
-         /s7bWl8qayG8rEwDWid9cZh63PEP7wLcP7AxTa1VYo31TIXzvrhExtxkruDddVzs4i2p
-         4Hymv6vd9AFajw9wWDn7CBFhbujk5l4Zjk97kZazZRpBL9l7FXpTZ7BFVNsePV+Yi1A0
-         lAcQcpt9AOQdPW3Bxl81leWa5TapKlU6YsFeSgT2gs7cMLXm60zEjud0pqgsaAm7BreR
-         zzjYVKiI9weHzhtcCWZuBOdoqZTagzLhJEn4drRMfa4mnvI+LKDwa36bq02v3EoUuwRy
-         8Ltg==
-X-Gm-Message-State: AOAM532i9YBC2v0svS3TXVYQJ2b7WyHnFkExqR9zWJr01V4kvs3oIKq6
-        RF0A1zk2SzqqoueJ9o0LoxUnzHVmUUAs0md3h/EmoCV5GBaOSQ==
-X-Google-Smtp-Source: ABdhPJxyKlOZpgSD8mTvCMHfxQgeU7FRe81qS8OkPHT5YyuLuoBqn1hSl1lR0cDDsmOfJI+GcTA0YKZ7+laCcXh5+Sk=
-X-Received: by 2002:a2e:97d1:: with SMTP id m17mr11254855ljj.490.1623723167236;
- Mon, 14 Jun 2021 19:12:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <1617809456-17693-1-git-send-email-yibin.gong@nxp.com>
-In-Reply-To: <1617809456-17693-1-git-send-email-yibin.gong@nxp.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Mon, 14 Jun 2021 23:12:36 -0300
-Message-ID: <CAOMZO5CVyaOXNxwv9hKV3RB9Q4kzW4VchEeBj1=b9PvHkskcow@mail.gmail.com>
-Subject: Re: [PATCH v14 00/12] add ecspi ERR009165 for i.mx6/7 soc family
-To:     Robin Gong <yibin.gong@nxp.com>
-Cc:     Vinod <vkoul@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Martin Fuzzey <martin.fuzzey@flowbird.group>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Schrempf Frieder <frieder.schrempf@kontron.de>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        dmaengine@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S231143AbhFOD2j (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Jun 2021 23:28:39 -0400
+Received: from lucky1.263xmail.com ([211.157.147.132]:38138 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229879AbhFOD2f (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Jun 2021 23:28:35 -0400
+Received: from localhost (unknown [192.168.167.16])
+        by lucky1.263xmail.com (Postfix) with ESMTP id 26F02F4C8D;
+        Tue, 15 Jun 2021 11:26:24 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-SKE-CHECKED: 1
+X-ANTISPAM-LEVEL: 2
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P16485T139919122814720S1623727582436580_;
+        Tue, 15 Jun 2021 11:26:23 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <2ae7b3ac56f8947e7a80825c06dfa1fa>
+X-RL-SENDER: jon.lin@rock-chips.com
+X-SENDER: jon.lin@rock-chips.com
+X-LOGIN-NAME: jon.lin@rock-chips.com
+X-FST-TO: broonie@kernel.org
+X-RCPT-COUNT: 9
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+From:   Jon Lin <jon.lin@rock-chips.com>
+To:     broonie@kernel.org
+Cc:     jon.lin@rock-chips.com, heiko@sntech.de, robh+dt@kernel.org,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v7 0/6] Support ROCKCHIP SPI new feature
+Date:   Tue, 15 Jun 2021 11:26:14 +0800
+Message-Id: <20210615032620.24769-1-jon.lin@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210607111837.31074-1-jon.lin@rock-chips.com>
+References: <20210607111837.31074-1-jon.lin@rock-chips.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Robin,
 
-On Wed, Apr 7, 2021 at 4:15 AM Robin Gong <yibin.gong@nxp.com> wrote:
->
-> There is ecspi ERR009165 on i.mx6/7 soc family, which cause FIFO
-> transfer to be send twice in DMA mode. Please get more information from:
-> https://www.nxp.com/docs/en/errata/IMX6DQCE.pdf. The workaround is adding
-> new sdma ram script which works in XCH  mode as PIO inside sdma instead
-> of SMC mode, meanwhile, 'TX_THRESHOLD' should be 0. The issue should be
 
-Could you please confirm whether the sdma-imx7d.bin firmware available at
-https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/log/imx/sdma/sdma-imx7d.bin
+Changes in v7:
+- Fall back "rockchip,rv1126-spi" to "rockchip,rk3066-spi"
 
-contains the "new sdma ram script which works in XCH  mode as PIO
-inside sdma instead
-of SMC mode" fix?
+Changes in v6:
+- Consider to compatibility, the "rockchip,rk3568-spi" is removed in
+  Series-changes v5, so the commit massage should also remove the
+  corresponding information
 
-Thanks,
+Changes in v5:
+- Change to leave one compatible id rv1126, and rk3568 is compatible
+  with rv1126
 
-Fabio Estevam
+Changes in v4:
+- Adjust the order patches
+- Simply commit massage like redundancy "application" content
+
+Changes in v3:
+- Fix compile error which is find by Sascha in [v2,2/8]
+
+Jon Lin (6):
+  dt-bindings: spi: spi-rockchip: add description for rv1126
+  spi: rockchip: add compatible string for rv1126
+  spi: rockchip: Set rx_fifo interrupt waterline base on transfer item
+  spi: rockchip: Wait for STB status in slave mode tx_xfer
+  spi: rockchip: Support cs-gpio
+  spi: rockchip: Support SPI_CS_HIGH
+
+ .../devicetree/bindings/spi/spi-rockchip.yaml |  1 +
+ drivers/spi/spi-rockchip.c                    | 95 +++++++++++++++----
+ 2 files changed, 80 insertions(+), 16 deletions(-)
+
+-- 
+2.17.1
+
+
+
