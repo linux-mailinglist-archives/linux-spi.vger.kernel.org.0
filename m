@@ -2,92 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A5B3A79B8
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Jun 2021 11:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F62F3A7A57
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Jun 2021 11:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbhFOJDk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Jun 2021 05:03:40 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:21572 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230490AbhFOJDk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Jun 2021 05:03:40 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15F8wAKp026433;
-        Tue, 15 Jun 2021 11:01:22 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=selector1;
- bh=gRyTEMsNce+t9PzYkspWEzqkwLAdHR7X8GDuQzd9e78=;
- b=ZrdAg3V8aKWvXfBxHpiKTuqqFdUfCBSTW/+ytzv+pRLlOzW6osgRxzGdJEU8EEiD5bUZ
- 3+NEfP7eK2q+310FJz3H77hM6RAMXnTel2BlekFDTubE0L8JOZkBUoBRDdTjHRi7Qekd
- WXpm0ZYo5NDqogqBBoyR3l2WGM8uD2HxZjhKwE08TugLXtybD4Fd1RypCEkOEuNZ2B3Q
- YOTzp/WbL6Tp8s/+KBistXOXuBpbwb7ixMGDmlWQOqQSBYY2FVk1Ljciny2TN2eS7Yqm
- /3dGIYLUJTNU6yMbUqWWviQzP8PmYGvGrrdbGTtJvUlO6l99rh6WhdwoEi9OhdeykVxy /g== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 396rb70djx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Jun 2021 11:01:22 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C2D3C10002A;
-        Tue, 15 Jun 2021 11:01:21 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AE4A221B300;
-        Tue, 15 Jun 2021 11:01:21 +0200 (CEST)
-Received: from localhost (10.75.127.49) by SFHDAG2NODE3.st.com (10.75.127.6)
- with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 15 Jun 2021 11:01:21
- +0200
-From:   <patrice.chotard@foss.st.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
-        <patrice.chotard@foss.st.com>
-Subject: [PATCH] spi: stm32-qspi: Remove unused qspi field of struct stm32_qspi_flash
-Date:   Tue, 15 Jun 2021 11:01:15 +0200
-Message-ID: <20210615090115.30702-1-patrice.chotard@foss.st.com>
-X-Mailer: git-send-email 2.17.1
+        id S231282AbhFOJXB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Jun 2021 05:23:01 -0400
+Received: from mail-vs1-f46.google.com ([209.85.217.46]:37504 "EHLO
+        mail-vs1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231281AbhFOJXA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Jun 2021 05:23:00 -0400
+Received: by mail-vs1-f46.google.com with SMTP id f21so9421263vsl.4;
+        Tue, 15 Jun 2021 02:20:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c0jK2g39WfsSdf60Km6mFt1odDDTr/mSQBmp9dz5+HI=;
+        b=Y51Ttck+8Df+Fmwgn1pI71iNoRyawqcuUMikI8u3RIglbha2HMKCJlhMR34A1M/O5P
+         VDGdPab2Y/c4zTJWuNAniU8T/PsUsDkXUetQQinX6Hvk4VgAOWxxr1ICNQd/Z1jvHb8G
+         GvNGt/4TSbua3mY1UEJaEED/InTOL3/x9oYSe+ILnPqPy96dM8rPaRsjPxvkb+3Wfxbb
+         xQ5fHaYA82KHX8+kt/VquJn/yDUC+r4tO4+nLl89NFiymQEckPnF1wJBgpLRopLGwFGc
+         xfLFgOGgrZ+NmB9y5tjDYdK66fHhU9jtefxVmBs3Fn28DmKR8rJe0caYsdM/Dp2/IU36
+         y63Q==
+X-Gm-Message-State: AOAM533fcT4jTx2JNFgaGXmoz68d5AF0xo+TcW1KJYIBtHZceDI/askf
+        ZAyU+6dNWa7T8qjlvWrSZ5KOJvizxbuknVu1v+s=
+X-Google-Smtp-Source: ABdhPJxFQ31CjllL9V28dyth5O3D9XZ9gTyWpGdc3FXIBH55QiETOOkopgK6U2Q0AISO+RefmXqpi+cLQaGhG2WTzy4=
+X-Received: by 2002:a67:3c2:: with SMTP id 185mr3852936vsd.42.1623748856463;
+ Tue, 15 Jun 2021 02:20:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-06-15_04:2021-06-14,2021-06-15 signatures=0
+References: <20210609071918.2852069-1-gregkh@linuxfoundation.org> <162370043177.40904.7910320297802442191.b4-ty@kernel.org>
+In-Reply-To: <162370043177.40904.7910320297802442191.b4-ty@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 15 Jun 2021 11:20:45 +0200
+Message-ID: <CAMuHMdX34LNV9Q3Yan_7fxS_CzchghYgoCzLTGNW0opKMgv67A@mail.gmail.com>
+Subject: Re: [PATCH] spi: remove spi_set_cs_timing()
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "leilk.liu" <leilk.liu@mediatek.com>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Patrice Chotard <patrice.chotard@foss.st.com>
+CC leilk, Alexandru Ardelean
 
-Remove struct stm32_qspi_flash's field qspi which is not used.
+On Mon, Jun 14, 2021 at 9:55 PM Mark Brown <broonie@kernel.org> wrote:
+> On Wed, 9 Jun 2021 09:19:18 +0200, Greg Kroah-Hartman wrote:
+> > No one seems to be using this global and exported function, so remove it
+> > as it is no longer needed.
+>
+> Applied to
+>
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+>
+> Thanks!
+>
+> [1/1] spi: remove spi_set_cs_timing()
+>       commit: 4ccf359849ce709f4bf0214b4b5b8b6891d38770
+>
+> All being well this means that it will be integrated into the linux-next
+> tree (usually sometime in the next 24 hours) and sent to Linus during
+> the next merge window (or sooner if it is a bug fix), however if
+> problems are discovered then the patch may be dropped or reverted.
+>
+> You may get further e-mails resulting from automated or manual testing
+> and review of the tree, please engage with people reporting problems and
+> send followup patches addressing any issues that are reported if needed.
+>
+> If any updates are required or you are submitting further changes they
+> should be sent as incremental updates against current git, existing
+> patches will not be replaced.
+>
+> Please add any relevant lists and maintainers to the CCs when replying
+> to this mail.
 
-Fixes: c530cd1d9d5e ("spi: spi-mem: add stm32 qspi controller")
-Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
----
- drivers/spi/spi-stm32-qspi.c | 2 --
- 1 file changed, 2 deletions(-)
+Gr{oetje,eeting}s,
 
-diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index a3ff0edf3eb7..27f35aa2d746 100644
---- a/drivers/spi/spi-stm32-qspi.c
-+++ b/drivers/spi/spi-stm32-qspi.c
-@@ -93,7 +93,6 @@
- #define STM32_AUTOSUSPEND_DELAY -1
- 
- struct stm32_qspi_flash {
--	struct stm32_qspi *qspi;
- 	u32 cs;
- 	u32 presc;
- };
-@@ -593,7 +592,6 @@ static int stm32_qspi_setup(struct spi_device *spi)
- 	presc = DIV_ROUND_UP(qspi->clk_rate, spi->max_speed_hz) - 1;
- 
- 	flash = &qspi->flash[spi->chip_select];
--	flash->qspi = qspi;
- 	flash->cs = spi->chip_select;
- 	flash->presc = presc;
- 
+                        Geert
+
 -- 
-2.17.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
