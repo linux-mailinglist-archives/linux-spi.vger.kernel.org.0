@@ -2,27 +2,27 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B2F3A84C0
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Jun 2021 17:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C363A84FE
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Jun 2021 17:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232240AbhFOPvz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Jun 2021 11:51:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46208 "EHLO mail.kernel.org"
+        id S232493AbhFOPw6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Jun 2021 11:52:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45776 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232125AbhFOPvb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 15 Jun 2021 11:51:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7481B61864;
-        Tue, 15 Jun 2021 15:49:26 +0000 (UTC)
+        id S232144AbhFOPv6 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 15 Jun 2021 11:51:58 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F2AD661929;
+        Tue, 15 Jun 2021 15:49:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623772167;
-        bh=B60Ie+OjEirDWdruJwC0k9ONKwgVsf/7BWwlQr6AOtI=;
+        s=k20201202; t=1623772193;
+        bh=9QCDooSLI5lGrufx4gMOLz7/kIWNX/cvUYTiHDEsmU4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bE6DHb4SQ++f39Pb2XHaX3IOqTDKdDC2ynOInAc5oNjQ27UfsVd8gakSZePPyChEG
-         SOGODuV7I2yrV78tEdp36GtkaCyji0WIlWvo+0VETPlpbOWQHW4PX3JlMXoBfTVdGA
-         WaJ6JmaIcE93PCkF18VZtS+LRpRUEURLV70CboMnrU8K83SPzCHDREVT6ZVsH6yKFT
-         annPbEMMDIujewUQuVQKW3GDcR5lZVP9IwTosBxMBWpS/kwhZjKK47p65kphyVyYyv
-         g/peHfT75R8I8nCiDBYp3pTeJW54N0Z81rFeiiVhcbfgiysx4/drI+Lvray/W1ffD0
-         r8tFW1CX0KsFQ==
+        b=tjefwNPz50wq0/gvxSMPLiMc0baOWvWMpQGBp4upTH4PldrUL4Ts/Qnmqd9dsxm+x
+         zodUfxb/iCyB+uMdwMyg5sW58s5oQCh4PJ0YRx8toVIS3cwQY0szkOqnrDUw7Ol7I8
+         SDPpB4D1LV3m28yzXszcmOAdnE+rLN8LH6IZGbYEySoeVxgj2xbnrUtg+/4zEUjNFV
+         X8cWiouuWdzHfaRqfIDODKMpGkrhBJSUOo6dwh0AM5wE+57M4XMdQT2Y8djArCRcKd
+         DxGqhx0W1+y0Ul1+mr5PD6rKY6zBKF+39454Y5fAVBmCJDx/0k1BbQLUcYT6zKlfqL
+         7PD3B0DXVEOYA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
@@ -30,12 +30,12 @@ Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.10 15/30] spi: stm32-qspi: Always wait BUSY bit to be cleared in stm32_qspi_wait_cmd()
-Date:   Tue, 15 Jun 2021 11:48:52 -0400
-Message-Id: <20210615154908.62388-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 04/15] spi: stm32-qspi: Always wait BUSY bit to be cleared in stm32_qspi_wait_cmd()
+Date:   Tue, 15 Jun 2021 11:49:36 -0400
+Message-Id: <20210615154948.62711-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210615154908.62388-1-sashal@kernel.org>
-References: <20210615154908.62388-1-sashal@kernel.org>
+In-Reply-To: <20210615154948.62711-1-sashal@kernel.org>
+References: <20210615154948.62711-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -65,10 +65,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index 2786470a5201..4f24f6392212 100644
+index 4e726929bb4f..ea77d915216a 100644
 --- a/drivers/spi/spi-stm32-qspi.c
 +++ b/drivers/spi/spi-stm32-qspi.c
-@@ -293,7 +293,7 @@ static int stm32_qspi_wait_cmd(struct stm32_qspi *qspi,
+@@ -291,7 +291,7 @@ static int stm32_qspi_wait_cmd(struct stm32_qspi *qspi,
  	int err = 0;
  
  	if (!op->data.nbytes)
@@ -77,7 +77,7 @@ index 2786470a5201..4f24f6392212 100644
  
  	if (readl_relaxed(qspi->io_base + QSPI_SR) & SR_TCF)
  		goto out;
-@@ -314,6 +314,9 @@ static int stm32_qspi_wait_cmd(struct stm32_qspi *qspi,
+@@ -312,6 +312,9 @@ static int stm32_qspi_wait_cmd(struct stm32_qspi *qspi,
  out:
  	/* clear flags */
  	writel_relaxed(FCR_CTCF | FCR_CTEF, qspi->io_base + QSPI_FCR);
