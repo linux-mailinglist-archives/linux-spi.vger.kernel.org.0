@@ -2,60 +2,63 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 359AF3A7575
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Jun 2021 05:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3673A76DD
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Jun 2021 08:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbhFOD6u (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Jun 2021 23:58:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37124 "EHLO mail.kernel.org"
+        id S230269AbhFOGIw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Jun 2021 02:08:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40946 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229659AbhFOD6u (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 14 Jun 2021 23:58:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id E683760FEE;
-        Tue, 15 Jun 2021 03:56:46 +0000 (UTC)
+        id S229918AbhFOGIw (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 15 Jun 2021 02:08:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id ABE996109E;
+        Tue, 15 Jun 2021 06:06:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623729406;
-        bh=ChmxcuHm4rqcigwdoaWdaefLPl9FEhRKVZ1PQP6a0GY=;
-        h=Subject:From:Date:To:From;
-        b=md1fOxu05pRhfTlHwyDHylKoXLTHSHRmN25E+kVQYLsOf026EBJ+FkyUohheUXXWH
-         o+p53dySEL7Zi8SjqfbVgkkU1ZaNFCR+pjGbO8sqod0CuaPnKZSTYRMvyXrWcMPr8O
-         fpWjCjnDoW5VKPaoBvgQ7G0C+8KUnj64ahxQ7wIVS7IE//gNiEeuxFetpbMyw9D/D4
-         V0PZhhpbNuahCB/b3bext/tTTSzjUU+byHmyKdtujTklGJDJ25m2Sagi+6PWKqPWM2
-         5YZMXUhI32rMhc7QvdUFxf5Tok0HdkRreUoikbMJNkZ3AzmI9EaHhAAZRGebIf4YdE
-         ycZjodXrlIlxA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D8246609AF;
-        Tue, 15 Jun 2021 03:56:46 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1623737208;
+        bh=MpmsCBWcltC7Z41R4ZBLvQ1UF4QXF8v/fU2nHODL1P0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Cd3TvAY4OhbYr1qccpe3ZqZYT9btNWpkCUgx+7jdGbjaCu3OLGHOl84AlBbfuuM0g
+         vn8bK2wxU+seJnyvWuUmce8g0W9hMCpYsJ9qP4WRyLs9jNYP8CNvX+t46woJwI9xMT
+         3xz2SJQ9jkWxvjTVSa72l6q8YG2rhrMhsooyXQzbJxKhDq0H/DMG6gR18rspJJE1zt
+         xKhdzy6iBwoX6O1GPVFkgcKVJYywbyHCZDsm7cl/3bn2BJv2xvtDMWUGmP5pbY975R
+         PDqNjlh7bMCbgrH/m+TQp+uUX9lJALhG7G/tHiJFBo9x5Qewfa5T35dmXJhnyZbx0J
+         kyGgUXxcUAyoA==
+Date:   Tue, 15 Jun 2021 11:36:45 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Robin Gong <yibin.gong@nxp.com>
+Cc:     mark.rutland@arm.com, broonie@kernel.org, robh+dt@kernel.org,
+        catalin.marinas@arm.com, will.deacon@arm.com, shawnguo@kernel.org,
+        festevam@gmail.com, s.hauer@pengutronix.de,
+        martin.fuzzey@flowbird.group, u.kleine-koenig@pengutronix.de,
+        dan.j.williams@intel.com, matthias.schiffer@ew.tq-group.com,
+        frieder.schrempf@kontron.de, m.felsch@pengutronix.de,
+        xiaoning.wang@nxp.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de,
+        dmaengine@vger.kernel.org, linux-imx@nxp.com
+Subject: Re: [PATCH v14 12/12] dmaengine: imx-sdma: add terminated list for
+ freed descriptor in worker
+Message-ID: <YMhDdXnZlELhG16P@vkoul-mobl>
+References: <1617809456-17693-1-git-send-email-yibin.gong@nxp.com>
+ <1617809456-17693-13-git-send-email-yibin.gong@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <162372940687.16349.6154321595879443381.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 15 Jun 2021 03:56:46 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1617809456-17693-13-git-send-email-yibin.gong@nxp.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v8] Support ROCKCHIP SPI new feature (2021-06-15T03:32:08)
-  Superseding: [v6] Support ROCKCHIP SPI new feature (2021-06-07T11:18:31):
-    [v6,1/6] dt-bindings: spi: spi-rockchip: add description for rv1126
-    [v6,2/6] spi: rockchip: add compatible string for rv1126
-    [v6,3/6] spi: rockchip: Set rx_fifo interrupt waterline base on transfer item
-    [v6,4/6] spi: rockchip: Wait for STB status in slave mode tx_xfer
-    [v6,5/6] spi: rockchip: Support cs-gpio
-    [v6,6/6] spi: rockchip: Support SPI_CS_HIGH
-  Superseding: [v7] Support ROCKCHIP SPI new feature (2021-06-15T03:26:15):
-    [v7,1/6] dt-bindings: spi: spi-rockchip: add description for rv1126
-    [v7,2/6] spi: rockchip: add compatible string for rv1126
-    [v7,3/6] spi: rockchip: Set rx_fifo interrupt waterline base on transfer item
-    [v7,4/6] spi: rockchip: Wait for STB status in slave mode tx_xfer
-    [v7,5/6] spi: rockchip: Support cs-gpio
-    [v7,6/6] spi: rockchip: Support SPI_CS_HIGH
+On 07-04-21, 23:30, Robin Gong wrote:
+> Add terminated list for keeping descriptor so that it could be freed in
+> worker without any potential involving next descriptor raised up before
+> this descriptor freed, because vchan_get_all_descriptors get all
+> descriptors including the last terminated descriptor and the next
+> descriptor, hence, the next descriptor maybe freed unexpectly when it's
+> done in worker without this patch.
+> https://www.spinics.net/lists/dmaengine/msg23367.html
 
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+~Vinod
