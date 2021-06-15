@@ -2,72 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8962F3A6F85
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Jun 2021 21:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE953A73F0
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Jun 2021 04:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235307AbhFNT4c (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Jun 2021 15:56:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52604 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235007AbhFNT4a (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 14 Jun 2021 15:56:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3678C611EE;
-        Mon, 14 Jun 2021 19:54:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623700467;
-        bh=uYSb6i6xWcdo2crsGhUalmIeQ/J0nRJkM9GD0E2xNng=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hJRmo7eZiB0eMmwUjEviy5GQji0jZxzEl6HhefwrMwS5t+lc7hgQwNVkrjpqKI06L
-         QJnM/QRru34D5W1/lndMziL7G7mGob9GvwnzWR5Uwdi2uocKahZVKp4v7sEfmdeZss
-         g8pKVp63XnRyBHcnPLaKUVIL+URut9ON536mZnyMWc5wRc0BA0OwFdcjyGdnnKHx1j
-         flNT0dHr3DOL/08ORYu3auT+V6i0RvWmLLCvwruvbOjbpsRgA2s1Y6UUCP/qTbL1gV
-         TGM1/rgRgBpZjOJuw/SVctDi4KFFWoK4lwTBT62ZefAPkYhZMgDxkykBSQaufm1JSh
-         pZyHE+X9WOArg==
-From:   Mark Brown <broonie@kernel.org>
-To:     ashish.kumar@nxp.com, haibo.chen@nxp.com, ran.wang_1@nxp.com
-Cc:     Mark Brown <broonie@kernel.org>, yogeshgaur.83@gmail.com,
-        linux-imx@nxp.com, linux-spi@vger.kernel.org, han.xu@nxp.com
-Subject: Re: [PATCH] spi: spi-nxp-fspi: move the register operation after the clock enable
-Date:   Mon, 14 Jun 2021 20:53:34 +0100
-Message-Id: <162370043177.40904.9243267469890500156.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <1623317073-25158-1-git-send-email-haibo.chen@nxp.com>
-References: <1623317073-25158-1-git-send-email-haibo.chen@nxp.com>
+        id S230195AbhFOC35 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Jun 2021 22:29:57 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:44245 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230017AbhFOC34 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Jun 2021 22:29:56 -0400
+X-UUID: 1a1dd5c6154e4b4d9f47f18dae7ae266-20210615
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:Date:CC:To:From:Subject:Message-ID; bh=HgQEMPAQwFVw316F5Bb8QONY/lmsE8nLMBDtacQX7JI=;
+        b=t3LvgieWBiOCwyg6dSv+mDsiKdf3OzAtFRQhDIgA06QHvTwrwjODC8+0XU4Caf1YqPyQkJgI4BvzQf8zOiEVVe6CJsmU1ipIuD+CefYkbNfLqGJzsBzTqwDlMxjko9L2ivHs3VYUBvs4o9PvgavCYhdcswbuWScXKY8gwAe3nHE=;
+X-UUID: 1a1dd5c6154e4b4d9f47f18dae7ae266-20210615
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <mason.zhang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 405860223; Tue, 15 Jun 2021 09:51:21 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 15 Jun 2021 09:51:12 +0800
+Received: from [10.15.20.246] (10.15.20.246) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 15 Jun 2021 09:51:11 +0800
+Message-ID: <1623721012.24597.3.camel@mbjsdccf07>
+Subject: [PATCH 2/2] dt-binding: mediatek: mt6779: update spi document
+From:   Mason Zhang <mason.zhang@mediatek.com>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <devicetree@vger.kernel.org>,
+        Mason Zhang <Mason.Zhang@mediatek.com>,
+        <wsd_upstream@mediatek.com>, <hanks.chen@mediatek.com>,
+        <linux-kernel@vger.kernel.org>,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Tue, 15 Jun 2021 09:36:52 +0800
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 10 Jun 2021 17:24:33 +0800, haibo.chen@nxp.com wrote:
-> Move the register operation after the clock enable, otherwise system
-> will stuck when this driver probe.
+DQp0aGlzIHBhdGNoIHVwZGF0ZSBzcGkgZG9jdW1lbnQgZm9yIE1UNjc3OSBTT0MuDQoNClNpZ25l
+ZC1vZmYtYnk6IE1hc29uIFpoYW5nIDxNYXNvbi5aaGFuZ0BtZWRpYXRlay5jb20+DQotLS0NCiBE
+b2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvc3BpL3NwaS1tdDY1eHgudHh0IHwgMSAr
+DQogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspDQoNCmRpZmYgLS1naXQgYS9Eb2N1bWVu
+dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvc3BpL3NwaS1tdDY1eHgudHh0IGIvRG9jdW1lbnRh
+dGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3NwaS9zcGktbXQ2NXh4LnR4dA0KaW5kZXggOWU0Mzcy
+MWZhN2Q2Li43YmFlN2VlZjI2YzcgMTAwNjQ0DQotLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRy
+ZWUvYmluZGluZ3Mvc3BpL3NwaS1tdDY1eHgudHh0DQorKysgYi9Eb2N1bWVudGF0aW9uL2Rldmlj
+ZXRyZWUvYmluZGluZ3Mvc3BpL3NwaS1tdDY1eHgudHh0DQpAQCAtMTMsNiArMTMsNyBAQCBSZXF1
+aXJlZCBwcm9wZXJ0aWVzOg0KICAgICAtIG1lZGlhdGVrLG10ODE4My1zcGk6IGZvciBtdDgxODMg
+cGxhdGZvcm1zDQogICAgIC0gIm1lZGlhdGVrLG10ODE5Mi1zcGkiLCAibWVkaWF0ZWssbXQ2NzY1
+LXNwaSI6IGZvciBtdDgxOTIgcGxhdGZvcm1zDQogICAgIC0gIm1lZGlhdGVrLG10ODUxNi1zcGki
+LCAibWVkaWF0ZWssbXQyNzEyLXNwaSI6IGZvciBtdDg1MTYgcGxhdGZvcm1zDQorICAgIC0gIm1l
+ZGlhdGVrLG10Njc3OS1zcGkiLCAibWVkaWF0ZWssbXQ2NzY1LXNwaSI6IGZvciBtdDY3NzkgcGxh
+dGZvcm1zDQogDQogLSAjYWRkcmVzcy1jZWxsczogc2hvdWxkIGJlIDEuDQogDQoNCg0KSGkgTWFy
+ayAmJiBNYXR0aGlhczoNCg0KCUkgaGF2ZSBmaXhlZCBjb21taXQgbWVzc2FnZSwgdGhhbmtzfg0K
+DQpUaGFua3MNCk1hc29uDQo=
 
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: spi-nxp-fspi: move the register operation after the clock enable
-      commit: f422316c8e9d3c4aff3c56549dfb44a677d02f14
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
