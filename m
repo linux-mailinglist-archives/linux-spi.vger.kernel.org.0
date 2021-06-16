@@ -2,80 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 169BC3A954A
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Jun 2021 10:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D46CD3A970D
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Jun 2021 12:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbhFPIwz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 16 Jun 2021 04:52:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44154 "EHLO mail.kernel.org"
+        id S232218AbhFPKSg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 16 Jun 2021 06:18:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44024 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231318AbhFPIwz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 16 Jun 2021 04:52:55 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 90DE86115B;
-        Wed, 16 Jun 2021 08:50:48 +0000 (UTC)
+        id S232013AbhFPKSf (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 16 Jun 2021 06:18:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 04FB76128B;
+        Wed, 16 Jun 2021 10:16:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623833449;
-        bh=0RiZqdL/N3p9wsukY1cKqE3It2WhUjFIue2G+sKSwRs=;
+        s=k20201202; t=1623838589;
+        bh=Yl3Fo5sP4nLowKYxQeJ+73AVzv13OFqSVG1zQ6Fifj0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o5D1UmSsCdG/nTX7zN1ZUAxjBIyR9Pug2ZB9dETlxGKdoU2Z87qMz18bljY/QR0FC
-         kk7+pbZby6Clz/OSqx/Yl4EdKRcX7WnneW0pSgcCYK7A7NSDpFPOtY0IckVfFlrKLQ
-         wqsd+YD0lg7u1WiCCb59eBau9fEzxPURFODhVymLMFTJnYEeHqcBS82IcC4Ruunr9R
-         nJcp0nNynW98it74rzdjKnAxmZqn8Hc3cPkBBCq8RvdRPC6tBRRy5IkN7cDAhNJcA0
-         x+4N6zN7rnRr/CVG2+7eQZStuZV8befS2yEg3meSa8PLY/1SAal2i/C58Dd7a0CPVZ
-         brZY5465JG81A==
-Date:   Wed, 16 Jun 2021 14:20:45 +0530
+        b=PCrvbYraugyfHXvka5f/phJsh3QDa6OznDlXu8faA7q37prFWtVHGl6LuEN00T0SS
+         vP0YR5YY0ohYfBI8cxPR0tMn4D90wmj+ELllI0RX5tfsn6vScrffmOccAburP9nQJR
+         3Wkdjg0tNJffmta+IbH+DNpGkQhWTPpjDA1fL4m2l3/tIeM+6uYqAwt8Bz2YHfq0wG
+         V017dBo6le+T6fViF9eDqgFhhX8H/1SntHmNcfD3zMIyXwfYvCqbtNUAy1d1Vsx8wJ
+         srdQAblkQP9BiT2EXtL/X1BAxtalPZjk6mJ6RUV6qA+IDGC4RzK9z5qQdqHjE1bfrg
+         CHm5+/UufwQiQ==
+Date:   Wed, 16 Jun 2021 15:46:24 +0530
 From:   Vinod Koul <vkoul@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/7] spi: spi-geni-qcom: Add support for GPI dma
-Message-ID: <YMm7ZWXnJyb8QT1u@vkoul-mobl>
-References: <20210111151651.1616813-1-vkoul@kernel.org>
- <20210111151651.1616813-5-vkoul@kernel.org>
- <20210111163504.GD4728@sirena.org.uk>
+To:     Robin Gong <yibin.gong@nxp.com>
+Cc:     Fabio Estevam <festevam@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Martin Fuzzey <martin.fuzzey@flowbird.group>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Schrempf Frieder <frieder.schrempf@kontron.de>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH v14 00/12] add ecspi ERR009165 for i.mx6/7 soc family
+Message-ID: <YMnPeLHM8SXTEVQP@vkoul-mobl>
+References: <1617809456-17693-1-git-send-email-yibin.gong@nxp.com>
+ <CAOMZO5CNjpek0vkDrMyTmfbnr2cLcquck6QQBqXLBiyTDKPXvA@mail.gmail.com>
+ <VE1PR04MB6688017E125D42C5DCB3C17D89309@VE1PR04MB6688.eurprd04.prod.outlook.com>
+ <YMhDvlPrFvSZP//I@vkoul-mobl>
+ <VE1PR04MB6688E8EECC03C5290DE10BC089309@VE1PR04MB6688.eurprd04.prod.outlook.com>
+ <YMiYEZDgutW+KRsO@vkoul-mobl>
+ <VE1PR04MB6688F98FE0B76AF20392DD6E89309@VE1PR04MB6688.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210111163504.GD4728@sirena.org.uk>
+In-Reply-To: <VE1PR04MB6688F98FE0B76AF20392DD6E89309@VE1PR04MB6688.eurprd04.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
+On 15-06-21, 14:10, Robin Gong wrote:
+> On 15/06/21 20:08 Vinod Koul <vkoul@kernel.org> wrote:
+> > On 15-06-21, 06:36, Robin Gong wrote:
+> > > On 15/06/21 14:08 Vinod Koul <vkoul@kernel.org> wrote:
+> > > > On 15-06-21, 01:55, Robin Gong wrote:
+> > > > > On 06/11/21 21:51 Fabio Estevam <festevam@gmail.com> wrote:
+> > > >
+> > > > > > Without this series, SPI DMA does not work on i.MX8MM:
+> > > > > >
+> > > > > >  [   41.315984] spi_master spi1: I/O Error in DMA RX
+> > > > > >
+> > > > > > I applied your series and SPI DMA works now:
+> > > > > >
+> > > > > > Reviewed-by: Fabio Estevam <festevam@gmail.com>
+> > > > > Thanks Fabio.
+> > > > > Hello Vinod, Mark,
+> > > > > Is my patch set good enough to merge? I remember someone else are
+> > > > > requesting it from last year like Fabio.
+> > > >
+> > > > I have acked the last dmaengine patch, is there any else required from me?
+> > > > Which tree will be this merged thru?
+> > > Thanks Vinod, mainline is enough I think.
+> > 
+> > I meant which subsystem tree will this go thru :)
+> I thought the patches with 'spi' tag could be merged into spi tree while
+> 'dmaengine' merged into dmaengine tree, the rest of dts patch merged
+> into i.mx branch. But from HW errata view, maybe merging all into i.mx
+> branch is a better way?
 
-On 11-01-21, 16:35, Mark Brown wrote:
-> On Mon, Jan 11, 2021 at 08:46:48PM +0530, Vinod Koul wrote:
-> 
-> > +static int get_xfer_mode(struct spi_master *spi)
-> > +{
-> > +	struct spi_geni_master *mas = spi_master_get_devdata(spi);
-> > +	struct geni_se *se = &mas->se;
-> > +	int mode = GENI_SE_FIFO;
-> 
-> Why not use the core DMA mapping support?
+Are there any dependecies between patches? If not all can merge thru
+respective subsystem. You already have the ack, so I dont mind if you
+pick thru imx tree
 
-Sorry I seemed to have missed replying to this one.
-
-Looking at the code, that is ideal case. Only issue I can see is that
-core DMA mapping device being used is incorrect. The core would use
-ctlr->dev.parent which is the spi0 device here.
-
-But in this case, that wont work. We have a parent qup device which is
-the parent for both spi and dma device and needs to be used for
-dma-mapping! 
-
-If we allow drivers to set dma mapping device and use that, then I can
-reuse the core. Let me know if that is agreeable to you and I can hack
-this up. Maybe add a new member in spi_controller which is filled by
-drivers in can_dma() callback?
-
-Thanks
 -- 
 ~Vinod
