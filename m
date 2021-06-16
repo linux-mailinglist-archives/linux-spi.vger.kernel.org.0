@@ -2,234 +2,158 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF803AA35E
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Jun 2021 20:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A483AA41A
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Jun 2021 21:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbhFPSoI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 16 Jun 2021 14:44:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42396 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231892AbhFPSoD (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 16 Jun 2021 14:44:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3914E610A3;
-        Wed, 16 Jun 2021 18:41:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623868917;
-        bh=A/u+qgoYDIfPJH2nR7TN1MVSs3c34aZySloJGmF3DxI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XW7Y4X4BrA5t9ijeAkMM5QcCdVYTcPYigARzxXFbf+hvb/uvp+9Mh4a34b6q7DC/i
-         sftLrmCBohcI5jLH7tRhCQG0oRbDHxXeJk4RnxcA6Ul46XtSEkqfRY8t/XGFaIFk86
-         qALO4rJMHfSIQDqcWwSZq03gCR35QANxOrYdPBiBe/2o4ooVhYHO++ff/Wjl3yD1k0
-         5+AqyA7gDeMM/vaNpWgsQ3+LVyhh+c7BqwX1vaXN+fU88HSnc2YCtVPrtUbPSvo8Oo
-         6qWAuSvjwilO69NivBQSK/Tx5fcLWTIvpS50NkVkCoknp6Umst4ITXs8YCSnSw0png
-         hRSa7JSohypWw==
-Date:   Wed, 16 Jun 2021 20:41:50 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
-        alsa-devel@alsa-project.org, iommu@lists.linux-foundation.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
-Message-ID: <YMpF7gkpbNQYX5EB@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
-        iommu@lists.linux-foundation.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-can@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>, Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-References: <20210615191543.1043414-1-robh@kernel.org>
+        id S232342AbhFPTTD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 16 Jun 2021 15:19:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232191AbhFPTTD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Jun 2021 15:19:03 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2326C061574;
+        Wed, 16 Jun 2021 12:16:56 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id y207so1627508vsy.12;
+        Wed, 16 Jun 2021 12:16:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cNxugS1gOpbkd57DjDo4gtxr8lmWpbvql6CFdMUNkIs=;
+        b=c3lEjjMQH+lwfQp6GfLhII7DPTHWW8sHTk6VHLQQVtIe6RY0k/MEeLcu3dhb6IrL5t
+         bq4aEjgEAQgnWJ/VajM+/h+yeDxXcdss5lU5mEzmgEwG8m3Ru4vFcPeUdbGr1dmGPUgm
+         rnpgTWxuj/eNQ/zgwGRk+MLkJe6K3d243OLte6b0AEQrOC+258aBBwzJBdGfV6bBC1Xx
+         2TEtBRMzpB6tfrTdOuLSSfxawJu3lD6dCyf/6OZVeTRpaPhY/+Yx0IXyl8zbD6tWk9ib
+         M5FWxaYm7EAG6Bc6H/hI1SCRUgu8vRAnsZFkB7+wtnXUKfwFn+U+PhEbvQn1Q9Z3I1Oj
+         ewug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cNxugS1gOpbkd57DjDo4gtxr8lmWpbvql6CFdMUNkIs=;
+        b=lE9XpJ48BTxxfW8EvlroOGd8JmAWUsJsVei+ICHezCsjocbKZ7G2BhbJqS1gpBgfAc
+         UxxcIAaTH799TizvAxw4cg91jYSbB4LSnq220CXP4UoAnYhsQOD5qbH8cmDeDUPV1wNa
+         0zbXJDvQw09qIIu25CowPIfPi/vY+iwNZ2j8gQvYh6+JOwP/vsBgcdzq0tJgQIiubvEl
+         Bz/kiY2/E/wZs/PRO4/l+noqCQqW+uOThaFx8h0bivFyr9SGmCb5GSafPZayssRWhRKQ
+         OzwhZ8M4kngC2M88i/5mpPIk3Us/JHPTMPxZeFFXJaPeKYfpx8fd5OdiI6ApF4i4ZGZC
+         nWHA==
+X-Gm-Message-State: AOAM531dSA46M+ObhiDR4u2cW0Jpj5zccbnMevFUvN0GbrgXu5zm4k6o
+        aAkHoNHBawmv7PlwdUlj2N81/7oYo69cNLp8hFNBYmJfqCw=
+X-Google-Smtp-Source: ABdhPJy5hdQvUAWsg6sDdwrc/mbiSu4NFkCaXjivdnsmSgQmdKv7SjwlZC/4lkJBfyFGznDgnGmon3fnOjjB9duwn3Y=
+X-Received: by 2002:a67:f48c:: with SMTP id o12mr877406vsn.13.1623871015850;
+ Wed, 16 Jun 2021 12:16:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ul4MnuDBL/PvPlAZ"
-Content-Disposition: inline
-In-Reply-To: <20210615191543.1043414-1-robh@kernel.org>
+References: <20210527084531.18989-1-christian.gmeiner@gmail.com>
+In-Reply-To: <20210527084531.18989-1-christian.gmeiner@gmail.com>
+From:   Christian Gmeiner <christian.gmeiner@gmail.com>
+Date:   Wed, 16 Jun 2021 21:16:44 +0200
+Message-ID: <CAH9NwWfh9-2+kLoTXJgkVSStb1cHHvC-He5jnfFxMpUngMeAtA@mail.gmail.com>
+Subject: Re: [PATCH] spidev: add platform driver support
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+ping
 
---Ul4MnuDBL/PvPlAZ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Am Do., 27. Mai 2021 um 10:45 Uhr schrieb Christian Gmeiner
+<christian.gmeiner@gmail.com>:
+>
+> This makes it possible to use spidev in combination with the
+> MFD subsystem. The MFD subsystem add platform_driver devices.
+>
+> Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+> ---
+>  drivers/spi/spidev.c | 45 ++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>
+> diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+> index f56e0e975a46..fb7b483ff70d 100644
+> --- a/drivers/spi/spidev.c
+> +++ b/drivers/spi/spidev.c
+> @@ -25,6 +25,8 @@
+>  #include <linux/spi/spi.h>
+>  #include <linux/spi/spidev.h>
+>
+> +#include <linux/platform_device.h>
+> +
+>  #include <linux/uaccess.h>
+>
+>
+> @@ -827,6 +829,40 @@ static struct spi_driver spidev_spi_driver = {
+>          */
+>  };
+>
+> +static int spidev_platform_probe(struct platform_device *pdev)
+> +{
+> +       struct device *parent = pdev->dev.parent;
+> +       struct spi_device *spi;
+> +
+> +       if (strcmp(parent->bus->name, "spi"))
+> +               return -ENODEV;
+> +
+> +       spi = to_spi_device(parent);
+> +
+> +       /* This only works if no drvdata is stored */
+> +       if (spi_get_drvdata(spi)) {
+> +               dev_err(&pdev->dev, "drvdata is not NULL\n");
+> +               return -EOPNOTSUPP;
+> +       }
+> +
+> +       return spidev_probe(spi);
+> +}
+> +
+> +static int spidev_platform_remove(struct platform_device *pdev)
+> +{
+> +       struct spi_device *spi = to_spi_device(pdev->dev.parent);
+> +
+> +       return spidev_remove(spi);
+> +}
+> +
+> +static struct platform_driver spidev_platfoem_driver = {
+> +       .probe = spidev_platform_probe,
+> +       .remove = spidev_platform_remove,
+> +       .driver = {
+> +               .name = "spidev",
+> +       },
+> +};
+> +
+>  /*-------------------------------------------------------------------------*/
+>
+>  static int __init spidev_init(void)
+> @@ -853,12 +889,21 @@ static int __init spidev_init(void)
+>                 class_destroy(spidev_class);
+>                 unregister_chrdev(SPIDEV_MAJOR, spidev_spi_driver.driver.name);
+>         }
+> +
+> +       status = platform_driver_register(&spidev_platfoem_driver);
+> +       if (status < 0) {
+> +               spi_unregister_driver(&spidev_spi_driver);
+> +               class_destroy(spidev_class);
+> +               unregister_chrdev(SPIDEV_MAJOR, spidev_spi_driver.driver.name);
+> +       }
+> +
+>         return status;
+>  }
+>  module_init(spidev_init);
+>
+>  static void __exit spidev_exit(void)
+>  {
+> +       platform_driver_unregister(&spidev_platfoem_driver);
+>         spi_unregister_driver(&spidev_spi_driver);
+>         class_destroy(spidev_class);
+>         unregister_chrdev(SPIDEV_MAJOR, spidev_spi_driver.driver.name);
+> --
+> 2.31.1
+>
 
-On Tue, Jun 15, 2021 at 01:15:43PM -0600, Rob Herring wrote:
-> If a property has an 'items' list, then a 'minItems' or 'maxItems' with t=
-he
-> same size as the list is redundant and can be dropped. Note that is DT
-> schema specific behavior and not standard json-schema behavior. The tooli=
-ng
-> will fixup the final schema adding any unspecified minItems/maxItems.
->=20
-> This condition is partially checked with the meta-schema already, but
-> only if both 'minItems' and 'maxItems' are equal to the 'items' length.
-> An improved meta-schema is pending.
->=20
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> Cc: Kamal Dasu <kdasu.kdev@gmail.com>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: Lars-Peter Clausen <lars@metafoo.de>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Joerg Roedel <joro@8bytes.org>
-> Cc: Jassi Brar <jassisinghbrar@gmail.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: Andrew Lunn <andrew@lunn.ch>
-> Cc: Vivien Didelot <vivien.didelot@gmail.com>
-> Cc: Vladimir Oltean <olteanv@gmail.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: "Uwe Kleine-K=C3=B6nig" <u.kleine-koenig@pengutronix.de>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Ohad Ben-Cohen <ohad@wizery.com>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Albert Ou <aou@eecs.berkeley.edu>
-> Cc: Alessandro Zummo <a.zummo@towertech.it>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
+-- 
+greets
+--
+Christian Gmeiner, MSc
 
-
---Ul4MnuDBL/PvPlAZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDKRekACgkQFA3kzBSg
-KbbFdA/+J6slaN90bvqrl9Kylr+F1vWPHBVKSRdA0mnhK09uqqdE0YEx3nLRBJYG
-zGjhfQY+0UCubghvsI8mYBKj+jv5fkzM8D2Mr13GL5b+zVFOML1f24o8y9Fwsi6A
-qbgTfoI0FaRdGTd1ocYLkYtywYrM9XmSeG9QuXBLIufeQsnOspjtQQ+WYRNM4qzw
-Qa+FkuAJZPED0sG7wbpPkzaA4eNfoKn0YQNwk8tIDdl5qvrw6W0cZ6lhog5v5kPB
-c3gC2OJzR4fXzt+uA2rIWWF9rujLHaiWT0nWXSz93ViX9pZPZ77kDSK4xEz8h3Rr
-mRX25SXmSnOf3xLGGkw6fx86sT5dZ6HlhWbhHbXdGzeYBeCfrgXwgj3wHXlyHA5S
-jIgGUlAeT9uMSmv3lmSQ4Lx3tUvKupZ8zX9N6/ay+2kiIei931x+sP73627hNjwz
-Tnbj1JBDeNgP0Oukiq6xMGyT5VxQk1rgh0garZvFZoPVEr/ae1Z5A8/mNKSwhOVj
-4PRKHuz72zpDbx7LuMaG6EnY5fzhDSGVRCSIeNs4yRX1cnVbtEGbsI7yOmrUx+wl
-3kAkYFZYbin5oRO36gDyYg5ZUyFDy4s+Jh5a8kPFANPY2ToOS8Ssa1hFNu0SSgve
-uONICGgcQoHO4Jbvea809td91bvqtiCieKCCX19GqJa37ktj2Ww=
-=EWxK
------END PGP SIGNATURE-----
-
---Ul4MnuDBL/PvPlAZ--
+https://christian-gmeiner.info/privacypolicy
