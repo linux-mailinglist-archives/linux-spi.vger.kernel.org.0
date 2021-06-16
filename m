@@ -2,158 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A483AA41A
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Jun 2021 21:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7C83AA47E
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Jun 2021 21:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbhFPTTD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 16 Jun 2021 15:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232191AbhFPTTD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Jun 2021 15:19:03 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2326C061574;
-        Wed, 16 Jun 2021 12:16:56 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id y207so1627508vsy.12;
-        Wed, 16 Jun 2021 12:16:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cNxugS1gOpbkd57DjDo4gtxr8lmWpbvql6CFdMUNkIs=;
-        b=c3lEjjMQH+lwfQp6GfLhII7DPTHWW8sHTk6VHLQQVtIe6RY0k/MEeLcu3dhb6IrL5t
-         bq4aEjgEAQgnWJ/VajM+/h+yeDxXcdss5lU5mEzmgEwG8m3Ru4vFcPeUdbGr1dmGPUgm
-         rnpgTWxuj/eNQ/zgwGRk+MLkJe6K3d243OLte6b0AEQrOC+258aBBwzJBdGfV6bBC1Xx
-         2TEtBRMzpB6tfrTdOuLSSfxawJu3lD6dCyf/6OZVeTRpaPhY/+Yx0IXyl8zbD6tWk9ib
-         M5FWxaYm7EAG6Bc6H/hI1SCRUgu8vRAnsZFkB7+wtnXUKfwFn+U+PhEbvQn1Q9Z3I1Oj
-         ewug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cNxugS1gOpbkd57DjDo4gtxr8lmWpbvql6CFdMUNkIs=;
-        b=lE9XpJ48BTxxfW8EvlroOGd8JmAWUsJsVei+ICHezCsjocbKZ7G2BhbJqS1gpBgfAc
-         UxxcIAaTH799TizvAxw4cg91jYSbB4LSnq220CXP4UoAnYhsQOD5qbH8cmDeDUPV1wNa
-         0zbXJDvQw09qIIu25CowPIfPi/vY+iwNZ2j8gQvYh6+JOwP/vsBgcdzq0tJgQIiubvEl
-         Bz/kiY2/E/wZs/PRO4/l+noqCQqW+uOThaFx8h0bivFyr9SGmCb5GSafPZayssRWhRKQ
-         OzwhZ8M4kngC2M88i/5mpPIk3Us/JHPTMPxZeFFXJaPeKYfpx8fd5OdiI6ApF4i4ZGZC
-         nWHA==
-X-Gm-Message-State: AOAM531dSA46M+ObhiDR4u2cW0Jpj5zccbnMevFUvN0GbrgXu5zm4k6o
-        aAkHoNHBawmv7PlwdUlj2N81/7oYo69cNLp8hFNBYmJfqCw=
-X-Google-Smtp-Source: ABdhPJy5hdQvUAWsg6sDdwrc/mbiSu4NFkCaXjivdnsmSgQmdKv7SjwlZC/4lkJBfyFGznDgnGmon3fnOjjB9duwn3Y=
-X-Received: by 2002:a67:f48c:: with SMTP id o12mr877406vsn.13.1623871015850;
- Wed, 16 Jun 2021 12:16:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210527084531.18989-1-christian.gmeiner@gmail.com>
-In-Reply-To: <20210527084531.18989-1-christian.gmeiner@gmail.com>
-From:   Christian Gmeiner <christian.gmeiner@gmail.com>
-Date:   Wed, 16 Jun 2021 21:16:44 +0200
-Message-ID: <CAH9NwWfh9-2+kLoTXJgkVSStb1cHHvC-He5jnfFxMpUngMeAtA@mail.gmail.com>
+        id S232845AbhFPTqP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 16 Jun 2021 15:46:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54312 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230197AbhFPTqO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 16 Jun 2021 15:46:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AC41861351;
+        Wed, 16 Jun 2021 19:44:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623872648;
+        bh=j9ynxHknBJ126O20yV9NCtBHpuMMSFHd+6cOx4bbSvA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ACVfc4MqIA2RzJDX3sLe7G5tBj6Sov2YBNJsDg2lvVsRT+yAZMeT40lFaoCtgoNJx
+         vuDdAfw7oQN6V7WBCwRrUUZs+AO8jqawrEI0m/TE64fEGhX3cWI5wmPwl8TNkvgP+c
+         Bhu8Wjg7IAiTRzbfTYhOX8mt7lS9xv5uCNGx5MV+zVX2c7UkZ+zMCQZekHhBT/XUO1
+         1CbITT3eXbQAwkmSSeNaCIRQaLTfaUzHCVyJO5MPMUZ2gkQRMjtiYlgAuFcQvJVo6d
+         UXtvCvHJ11x2bpotNSXftgldi+ceLNNehQnp44vW2JwRqT43UBv8OD1obmmAbOR5Mq
+         71YgHfoNXxmaw==
+Date:   Wed, 16 Jun 2021 20:43:47 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Christian Gmeiner <christian.gmeiner@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-spi@vger.kernel.org
 Subject: Re: [PATCH] spidev: add platform driver support
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <20210616194347.GC6418@sirena.org.uk>
+References: <20210527084531.18989-1-christian.gmeiner@gmail.com>
+ <CAH9NwWfh9-2+kLoTXJgkVSStb1cHHvC-He5jnfFxMpUngMeAtA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="GZVR6ND4mMseVXL/"
+Content-Disposition: inline
+In-Reply-To: <CAH9NwWfh9-2+kLoTXJgkVSStb1cHHvC-He5jnfFxMpUngMeAtA@mail.gmail.com>
+X-Cookie: Revenge is a form of nostalgia.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-ping
 
-Am Do., 27. Mai 2021 um 10:45 Uhr schrieb Christian Gmeiner
-<christian.gmeiner@gmail.com>:
->
-> This makes it possible to use spidev in combination with the
-> MFD subsystem. The MFD subsystem add platform_driver devices.
->
-> Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
-> ---
->  drivers/spi/spidev.c | 45 ++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
->
-> diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-> index f56e0e975a46..fb7b483ff70d 100644
-> --- a/drivers/spi/spidev.c
-> +++ b/drivers/spi/spidev.c
-> @@ -25,6 +25,8 @@
->  #include <linux/spi/spi.h>
->  #include <linux/spi/spidev.h>
->
-> +#include <linux/platform_device.h>
-> +
->  #include <linux/uaccess.h>
->
->
-> @@ -827,6 +829,40 @@ static struct spi_driver spidev_spi_driver = {
->          */
->  };
->
-> +static int spidev_platform_probe(struct platform_device *pdev)
-> +{
-> +       struct device *parent = pdev->dev.parent;
-> +       struct spi_device *spi;
-> +
-> +       if (strcmp(parent->bus->name, "spi"))
-> +               return -ENODEV;
-> +
-> +       spi = to_spi_device(parent);
-> +
-> +       /* This only works if no drvdata is stored */
-> +       if (spi_get_drvdata(spi)) {
-> +               dev_err(&pdev->dev, "drvdata is not NULL\n");
-> +               return -EOPNOTSUPP;
-> +       }
-> +
-> +       return spidev_probe(spi);
-> +}
-> +
-> +static int spidev_platform_remove(struct platform_device *pdev)
-> +{
-> +       struct spi_device *spi = to_spi_device(pdev->dev.parent);
-> +
-> +       return spidev_remove(spi);
-> +}
-> +
-> +static struct platform_driver spidev_platfoem_driver = {
-> +       .probe = spidev_platform_probe,
-> +       .remove = spidev_platform_remove,
-> +       .driver = {
-> +               .name = "spidev",
-> +       },
-> +};
-> +
->  /*-------------------------------------------------------------------------*/
->
->  static int __init spidev_init(void)
-> @@ -853,12 +889,21 @@ static int __init spidev_init(void)
->                 class_destroy(spidev_class);
->                 unregister_chrdev(SPIDEV_MAJOR, spidev_spi_driver.driver.name);
->         }
-> +
-> +       status = platform_driver_register(&spidev_platfoem_driver);
-> +       if (status < 0) {
-> +               spi_unregister_driver(&spidev_spi_driver);
-> +               class_destroy(spidev_class);
-> +               unregister_chrdev(SPIDEV_MAJOR, spidev_spi_driver.driver.name);
-> +       }
-> +
->         return status;
->  }
->  module_init(spidev_init);
->
->  static void __exit spidev_exit(void)
->  {
-> +       platform_driver_unregister(&spidev_platfoem_driver);
->         spi_unregister_driver(&spidev_spi_driver);
->         class_destroy(spidev_class);
->         unregister_chrdev(SPIDEV_MAJOR, spidev_spi_driver.driver.name);
-> --
-> 2.31.1
->
+--GZVR6ND4mMseVXL/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Jun 16, 2021 at 09:16:44PM +0200, Christian Gmeiner wrote:
 
--- 
-greets
---
-Christian Gmeiner, MSc
+> ping
 
-https://christian-gmeiner.info/privacypolicy
+I replied to your mail some time ago...
+
+Also:
+
+Please don't send content free pings and please allow a reasonable time
+for review.  People get busy, go on holiday, attend conferences and so=20
+on so unless there is some reason for urgency (like critical bug fixes)
+please allow at least a couple of weeks for review.  If there have been
+review comments then people may be waiting for those to be addressed.
+
+Sending content free pings adds to the mail volume (if they are seen at
+all) which is often the problem and since they can't be reviewed
+directly if something has gone wrong you'll have to resend the patches
+anyway, so sending again is generally a better approach though there are
+some other maintainers who like them - if in doubt look at how patches
+for the subsystem are normally handled.
+
+Please don't top post, reply in line with needed context.  This allows
+readers to readily follow the flow of conversation and understand what
+you are talking about and also helps ensure that everything in the
+discussion is being addressed.
+
+--GZVR6ND4mMseVXL/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmDKVHMACgkQJNaLcl1U
+h9CgAwf/SZkO/HjNIFM/RidhIxoBxxnQ5kxHSzWhR3ugDNQOg+JG7VY6A/62iTeD
+KdkG61J60c1sA2ZxJvSofEUSaylCtkq64ZTh6Uq7LNA5rdTdDdIrafiIpmx7MjEa
+eQ3qT9nb5iYQU9z0zR+x5SMD/jtbBCV0hohY+8jDNX9VTqEoYtNBIFEdwjkdyFJ4
+FflFhCSCfAX7Ac3V/vtiEo4Fajz2E4Gf+7xv1rio1W1PG/3IgGa0FneGkrytKgKz
+bsVGozjSr/6E4fUChAhR8Hn2vynfN5rKQJflUv11ardfGbPkMTVvyt81GkiSWxhC
+TGiz/phMGKzZVP+/S8KI13XVjU+BXA==
+=8tlc
+-----END PGP SIGNATURE-----
+
+--GZVR6ND4mMseVXL/--
