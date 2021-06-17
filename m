@@ -2,58 +2,112 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25CA73AA9D8
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Jun 2021 06:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA463AABC6
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Jun 2021 08:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbhFQEWJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Thu, 17 Jun 2021 00:22:09 -0400
-Received: from mail.rembat24.ru ([185.59.102.178]:33076 "EHLO mail.rembat24.ru"
+        id S229683AbhFQGXH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 17 Jun 2021 02:23:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51524 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229447AbhFQEWI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 17 Jun 2021 00:22:08 -0400
-X-Greylist: delayed 13845 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Jun 2021 00:22:08 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rembat24.ru (Postfix) with ESMTP id 5503A1D91E6;
-        Thu, 17 Jun 2021 00:56:21 +0300 (MSK)
-Received: from mail.rembat24.ru ([127.0.0.1])
-        by localhost (mail.rembat24.ru [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id FYMk1JGNKreI; Thu, 17 Jun 2021 00:56:21 +0300 (MSK)
-Received: from mail.rembat24.ru (localhost [127.0.0.1])
-        by mail.rembat24.ru (Postfix) with ESMTPS id DFDB51C79EF;
-        Thu, 17 Jun 2021 00:41:43 +0300 (MSK)
-Received: from cris-PC.wifi (unknown [105.9.118.225])
-        by mail.rembat24.ru (Postfix) with ESMTPSA id 5AE481D8921;
-        Thu, 17 Jun 2021 00:24:06 +0300 (MSK)
-Content-Type: text/plain; charset="utf-8"
+        id S229515AbhFQGXG (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 17 Jun 2021 02:23:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A9D6B60FEA;
+        Thu, 17 Jun 2021 06:20:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623910859;
+        bh=57dsMicloxNOk1lyxm1iyNvezjRmT/zehpa8a/omzhY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dFt2djALGgzeWAZu+Dk2zJpX39bUyQPeCqO6YtdyHU7HLGuVBvBJzacgi/liSnitV
+         O61ASU5ehkEC0aHKQjkcPLXw7EROtY140dw5GGXNAUAusxNX3jp0rjYmxX7dnNz6MO
+         op8hoyy0aWGypOGFUsvVav8cO1NS8lbH1N1UsMWk/lEdnRgXGijCCIxUyGURAC1l4I
+         Er5E9qY1Hf/4cXbDTlXdgPk6jEJln700T5ys6wL0nzIXvciKyobgL3BZK4rKfKiMJu
+         qQ+B89er/JIrUg/rcTudzgtQCbC1IClZpuPsXz5h7K56AQl7caMOP4336TQ1lrDRpo
+         vS3c3xVpY/3XA==
+Date:   Thu, 17 Jun 2021 11:50:55 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/7] spi: spi-geni-qcom: Add support for GPI dma
+Message-ID: <YMrpx7uK2pM4AwYh@vkoul-mobl>
+References: <20210111151651.1616813-1-vkoul@kernel.org>
+ <20210111151651.1616813-5-vkoul@kernel.org>
+ <20210111163504.GD4728@sirena.org.uk>
+ <YMm7ZWXnJyb8QT1u@vkoul-mobl>
+ <20210616113505.GB6418@sirena.org.uk>
+ <YMnoXKAvL0461GRR@vkoul-mobl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: spende von 2,000,000 euro
-To:     Recipients <har@rembat24.ru>
-From:   ''Tayeb souami'' <har@rembat24.ru>
-Date:   Wed, 16 Jun 2021 23:24:00 +0200
-Reply-To: Tayebsouam.spende@gmail.com
-Message-Id: <20210616212407.5AE481D8921@mail.rembat24.ru>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YMnoXKAvL0461GRR@vkoul-mobl>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Lieber Freund,
+On 16-06-21, 17:32, Vinod Koul wrote:
+> On 16-06-21, 12:35, Mark Brown wrote:
+> > On Wed, Jun 16, 2021 at 02:20:45PM +0530, Vinod Koul wrote:
+> > > But in this case, that wont work. We have a parent qup device which is
+> > > the parent for both spi and dma device and needs to be used for
+> > > dma-mapping! 
+> > 
+> > > If we allow drivers to set dma mapping device and use that, then I can
+> > > reuse the core. Let me know if that is agreeable to you and I can hack
+> > > this up. Maybe add a new member in spi_controller which is filled by
+> > > drivers in can_dma() callback?
+> > 
+> > Possibly, I'd need to see the code.
+> 
+> Ok, let me do a prototype and share ...
 
-Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden, um meine Gewinne zu überprüfen, sehen Sie bitte meine You Tube Seite unten.
+So setting the dma_map_dev in the can_dma() callback does not work as we
+would need device before we invoke can_dma(), so modified this to be set
+earlier by driver (in driver probe, set the dma_map_dev) and use in
+__spi_map_msg().
 
-UHR MICH HIER: https://www.youtube.com/watch?v=Z6ui8ZDQ6Ks
+With this it works for me & I was able to get rid of driver mapping code
 
+-- >8 --
 
-Das ist dein Spendencode: [TS530342018]
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index e353b7a9e54e..315f7e7545f7 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -961,11 +961,15 @@ static int __spi_map_msg(struct spi_controller *ctlr, struct spi_message *msg)
+ 
+ 	if (ctlr->dma_tx)
+ 		tx_dev = ctlr->dma_tx->device->dev;
++	else if (ctlr->dma_map_dev)
++		tx_dev = ctlr->dma_map_dev;
+ 	else
+ 		tx_dev = ctlr->dev.parent;
+ 
+ 	if (ctlr->dma_rx)
+ 		rx_dev = ctlr->dma_rx->device->dev;
++	else if (ctlr->dma_map_dev)
++		rx_dev = ctlr->dma_map_dev;
+ 	else
+ 		rx_dev = ctlr->dev.parent;
+ 
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 74239d65c7fd..4d3f116f5723 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -586,6 +586,7 @@ struct spi_controller {
+ 	bool			(*can_dma)(struct spi_controller *ctlr,
+ 					   struct spi_device *spi,
+ 					   struct spi_transfer *xfer);
++	struct device *dma_map_dev;
+ 
+ 	/*
+ 	 * These hooks are for drivers that want to use the generic
 
-
-Antworten Sie mit dem SPENDE-CODE an diese
-
-E-Mail:Tayebsouam.spende@gmail.com
-
-
-Ich hoffe, Sie und Ihre Familie glücklich zu machen.
-
-Grüße
-Herr Tayeb Souami
+-- 
+~Vinod
