@@ -2,69 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B92463AD9C5
-	for <lists+linux-spi@lfdr.de>; Sat, 19 Jun 2021 13:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0CFD3ADDAC
+	for <lists+linux-spi@lfdr.de>; Sun, 20 Jun 2021 10:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233479AbhFSLRR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 19 Jun 2021 07:17:17 -0400
-Received: from mga11.intel.com ([192.55.52.93]:29627 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233146AbhFSLRR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 19 Jun 2021 07:17:17 -0400
-IronPort-SDR: H+Tnpn9dSHKXDPY7ZiiIzenA7mtqTcoEd/5BM8mS1Zuj5kPNWhw0hyprhrrz7JRl67MvvYeZV1
- r16UMieuc7zg==
-X-IronPort-AV: E=McAfee;i="6200,9189,10019"; a="203643437"
-X-IronPort-AV: E=Sophos;i="5.83,285,1616482800"; 
-   d="scan'208";a="203643437"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2021 04:15:06 -0700
-IronPort-SDR: VOHIfHYdaYsxNBeDMl6EsAEVVpmXySX5K/MF8oRIOKSzqT42AQp+48ALE6X+KVSxRv7qCK6VoR
- Y4awXHbXJJ/A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,285,1616482800"; 
-   d="scan'208";a="453417325"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 19 Jun 2021 04:15:04 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 9B715262; Sat, 19 Jun 2021 14:15:29 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] spi: Remove unneeded parentheses in spi_map_buf()
-Date:   Sat, 19 Jun 2021 14:15:26 +0300
-Message-Id: <20210619111526.27776-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        id S229780AbhFTIIR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Sun, 20 Jun 2021 04:08:17 -0400
+Received: from 6-200-5-45.rpnnetprovedor.com.br ([45.5.200.6]:59519 "EHLO
+        srv01.rpnnetprovedor.com.br" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229795AbhFTIHz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 20 Jun 2021 04:07:55 -0400
+Received: from [84.38.130.143] (helo=IP-130-143.dataclub.eu)
+        by srv01.rpnnetprovedor.com.br with esmtpa (Exim 4.92.2)
+        (envelope-from <robertnellsona@citromail.hu>)
+        id 1lusSb-0005ze-TK
+        for linux-spi@vger.kernel.org; Sun, 20 Jun 2021 05:05:42 -0300
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: CAN YOU INVEST WITH ME?...6
+To:     linux-spi@vger.kernel.org
+From:   "Mr.  Robert" <robertnellsona@citromail.hu>
+Date:   Sun, 20 Jun 2021 11:05:41 +0300
+Reply-To: robertnellsona@citromail.hu
+Message-Id: <E1lusSb-0005ze-TK@srv01.rpnnetprovedor.com.br>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The boolean expression to get kmap_buf is hard to read due to
-too many unneeded parentheses. Remove them for good.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ATTENTION; linux-spi@vger.kernel.org,
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 16b377581d16..0e4917a55eaa 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -873,9 +873,8 @@ int spi_map_buf(struct spi_controller *ctlr, struct device *dev,
- 	const bool vmalloced_buf = is_vmalloc_addr(buf);
- 	unsigned int max_seg_size = dma_get_max_seg_size(dev);
- #ifdef CONFIG_HIGHMEM
--	const bool kmap_buf = ((unsigned long)buf >= PKMAP_BASE &&
--				(unsigned long)buf < (PKMAP_BASE +
--					(LAST_PKMAP * PAGE_SIZE)));
-+	const bool kmap_buf = (unsigned long)buf >= PKMAP_BASE &&
-+			      (unsigned long)buf < (PKMAP_BASE + LAST_PKMAP * PAGE_SIZE);
- #else
- 	const bool kmap_buf = false;
- #endif
--- 
-2.30.2
+IMPORTANT INVESTMENT INFORMATION
 
+We have a good investment program going on now.
+We have $95m USD for Investment in your Country.
+We use this opportunity to invest you to join the investment program and you will never regret it.
+Please kindly invest with us and you will be receiving monthly income/return/profit every month.
+We can also give you Loan, 
+
+We have: 
+
+1. Short Term Loan, 
+
+2. Medium Term Loan 
+
+3. and Long Term Loan, 
+
+There is no need of collateral security. We will use our company to sign agreement and guarantee on your behalf and our Lawyer will sign on your behalf.
+
+Reply for more detail.
+
+Thank you Sir.
+
+Robert Nellson.
+INVESTMENT MANAGER.
