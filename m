@@ -2,18 +2,18 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC123AE792
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Jun 2021 12:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2D53AE797
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Jun 2021 12:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbhFUKu1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Jun 2021 06:50:27 -0400
-Received: from lucky1.263xmail.com ([211.157.147.132]:39398 "EHLO
+        id S230334AbhFUKua (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 21 Jun 2021 06:50:30 -0400
+Received: from lucky1.263xmail.com ([211.157.147.135]:55314 "EHLO
         lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbhFUKu0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Jun 2021 06:50:26 -0400
+        with ESMTP id S230347AbhFUKu3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Jun 2021 06:50:29 -0400
 Received: from localhost (unknown [192.168.167.16])
-        by lucky1.263xmail.com (Postfix) with ESMTP id C923AF52FD;
-        Mon, 21 Jun 2021 18:48:10 +0800 (CST)
+        by lucky1.263xmail.com (Postfix) with ESMTP id B9CAEAD5E9;
+        Mon, 21 Jun 2021 18:48:12 +0800 (CST)
 X-MAIL-GRAY: 0
 X-MAIL-DELIVERY: 1
 X-ADDR-CHECKED4: 1
@@ -21,9 +21,9 @@ X-SKE-CHECKED: 1
 X-ANTISPAM-LEVEL: 2
 Received: from localhost.localdomain (unknown [58.22.7.114])
         by smtp.263.net (postfix) whith ESMTP id P24132T140365807994624S1624272484357256_;
-        Mon, 21 Jun 2021 18:48:10 +0800 (CST)
+        Mon, 21 Jun 2021 18:48:11 +0800 (CST)
 X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <e39c72ae8e8d8eb453e9cc4bb28bcf1c>
+X-UNIQUE-TAG: <b01d5eb4113524e34ae665cec3bb427a>
 X-RL-SENDER: jon.lin@rock-chips.com
 X-SENDER: jon.lin@rock-chips.com
 X-LOGIN-NAME: jon.lin@rock-chips.com
@@ -38,9 +38,9 @@ Cc:     jon.lin@rock-chips.com, heiko@sntech.de, robh+dt@kernel.org,
         linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v10 3/6] spi: rockchip: Set rx_fifo interrupt waterline base on transfer item
-Date:   Mon, 21 Jun 2021 18:47:57 +0800
-Message-Id: <20210621104800.19088-4-jon.lin@rock-chips.com>
+Subject: [PATCH v10 4/6] spi: rockchip: Wait for STB status in slave mode tx_xfer
+Date:   Mon, 21 Jun 2021 18:47:58 +0800
+Message-Id: <20210621104800.19088-5-jon.lin@rock-chips.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210621104800.19088-1-jon.lin@rock-chips.com>
 References: <20210621104800.19088-1-jon.lin@rock-chips.com>
@@ -48,8 +48,8 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The error here is to calculate the width as 8 bits. In fact, 16 bits
-should be considered.
+After ROCKCHIP_SPI_VER2_TYPE2, SR->STB is a more accurate judgment
+bit for spi slave transmition.
 
 Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
 ---
@@ -63,24 +63,71 @@ Changes in v5: None
 Changes in v4: None
 Changes in v3: None
 
- drivers/spi/spi-rockchip.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/spi/spi-rockchip.c | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index bbeed3ae4ee1..0887b19ef3ad 100644
+index 0887b19ef3ad..950d3bce443b 100644
 --- a/drivers/spi/spi-rockchip.c
 +++ b/drivers/spi/spi-rockchip.c
-@@ -540,8 +540,8 @@ static int rockchip_spi_config(struct rockchip_spi *rs,
- 	 * interrupt exactly when the fifo is full doesn't seem to work,
- 	 * so we need the strict inequality here
- 	 */
--	if (xfer->len < rs->fifo_len)
--		writel_relaxed(xfer->len - 1, rs->regs + ROCKCHIP_SPI_RXFTLR);
-+	if ((xfer->len / rs->n_bytes) < rs->fifo_len)
-+		writel_relaxed(xfer->len / rs->n_bytes - 1, rs->regs + ROCKCHIP_SPI_RXFTLR);
+@@ -116,13 +116,14 @@
+ #define BAUDR_SCKDV_MIN				2
+ #define BAUDR_SCKDV_MAX				65534
+ 
+-/* Bit fields in SR, 5bit */
+-#define SR_MASK						0x1f
++/* Bit fields in SR, 6bit */
++#define SR_MASK						0x3f
+ #define SR_BUSY						(1 << 0)
+ #define SR_TF_FULL					(1 << 1)
+ #define SR_TF_EMPTY					(1 << 2)
+ #define SR_RF_EMPTY					(1 << 3)
+ #define SR_RF_FULL					(1 << 4)
++#define SR_SLAVE_TX_BUSY				(1 << 5)
+ 
+ /* Bit fields in ISR, IMR, ISR, RISR, 5bit */
+ #define INT_MASK					0x1f
+@@ -197,13 +198,19 @@ static inline void spi_enable_chip(struct rockchip_spi *rs, bool enable)
+ 	writel_relaxed((enable ? 1U : 0U), rs->regs + ROCKCHIP_SPI_SSIENR);
+ }
+ 
+-static inline void wait_for_idle(struct rockchip_spi *rs)
++static inline void wait_for_tx_idle(struct rockchip_spi *rs, bool slave_mode)
+ {
+ 	unsigned long timeout = jiffies + msecs_to_jiffies(5);
+ 
+ 	do {
+-		if (!(readl_relaxed(rs->regs + ROCKCHIP_SPI_SR) & SR_BUSY))
+-			return;
++		if (slave_mode) {
++			if (!(readl_relaxed(rs->regs + ROCKCHIP_SPI_SR) & SR_SLAVE_TX_BUSY) &&
++			    !((readl_relaxed(rs->regs + ROCKCHIP_SPI_SR) & SR_BUSY)))
++				return;
++		} else {
++			if (!(readl_relaxed(rs->regs + ROCKCHIP_SPI_SR) & SR_BUSY))
++				return;
++		}
+ 	} while (!time_after(jiffies, timeout));
+ 
+ 	dev_warn(rs->dev, "spi controller is in busy state!\n");
+@@ -383,7 +390,7 @@ static void rockchip_spi_dma_txcb(void *data)
+ 		return;
+ 
+ 	/* Wait until the FIFO data completely. */
+-	wait_for_idle(rs);
++	wait_for_tx_idle(rs, ctlr->slave);
+ 
+ 	spi_enable_chip(rs, false);
+ 	spi_finalize_current_transfer(ctlr);
+@@ -545,7 +552,7 @@ static int rockchip_spi_config(struct rockchip_spi *rs,
  	else
  		writel_relaxed(rs->fifo_len / 2 - 1, rs->regs + ROCKCHIP_SPI_RXFTLR);
  
+-	writel_relaxed(rs->fifo_len / 2, rs->regs + ROCKCHIP_SPI_DMATDLR);
++	writel_relaxed(rs->fifo_len / 2 - 1, rs->regs + ROCKCHIP_SPI_DMATDLR);
+ 	writel_relaxed(rockchip_spi_calc_burst_size(xfer->len / rs->n_bytes) - 1,
+ 		       rs->regs + ROCKCHIP_SPI_DMARDLR);
+ 	writel_relaxed(dmacr, rs->regs + ROCKCHIP_SPI_DMACR);
 -- 
 2.17.1
 
