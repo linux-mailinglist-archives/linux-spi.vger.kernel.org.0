@@ -2,85 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A693AE771
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Jun 2021 12:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8943AE78A
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Jun 2021 12:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbhFUKqd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Jun 2021 06:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbhFUKqd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Jun 2021 06:46:33 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F372C061574;
-        Mon, 21 Jun 2021 03:44:18 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id g4so9738631pjk.0;
-        Mon, 21 Jun 2021 03:44:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DzKcTgIKNYDuFjG2WDdnfH4KwIP/17p6jNsN/iYSEK4=;
-        b=MsDvwPLle7M86KT1QJMKorhLgd2F+5wzMd5P3z4kpa8BZQ248ySkw/KI4HwQ8W/Ien
-         HST3rGJjp8wcgWVbSV7nRDWAmxu8RxnrJM8CnD5jHGkTjBy2oUifJSDhx0ckw5JInOpO
-         lKQTEeH37h4pGOFwUeTXUNWfVLrOcHVNYVC0i181IXA0HOT5enF0LmhJD47w1gG3HwdC
-         os4icNUius93nBMMsl+NeTQBwkSw/BCH/nUrKTv/dyqcXNw9TkYdgIZXRAs0ff2G4uJz
-         r8EIc3dDPmk2n6reaCDBRoz61K7uYrVa7vvIpG5fgBTr9fkQ1aeSJ4QSKQgzTJYS0bDu
-         lxlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DzKcTgIKNYDuFjG2WDdnfH4KwIP/17p6jNsN/iYSEK4=;
-        b=ZfTot3NI5pWjW0KDz5Sk/ndcxxHas6RgJNjm8ZLDwofAxakXDMmBM+ew8KePI0PakI
-         QujX9YGtvIJtj4wuEZc50qm+1ZdmdwsibQSJrV1DV1AhqupvtZdsLl7OJ4h3E0aL/Ulw
-         iv9LbkcZsh4gDiSQYh2jbdqSCPtCyXGTtG6qMIQ/T2IIjZgjzz8xixbPo1Iu2mF/ACNz
-         pmUCf8+HGQSk3Ks0CB5UK01HLn59JVZ7GERxbPTj/Ug+QzxU9lWH9R1gKmLUgsfrUUa4
-         va4P9piaUTmb8XdqC8CvGIYLWANt3sdqMATyrvu9n/Gancy+XMcYlmSajLGzyGoCsxgd
-         8guQ==
-X-Gm-Message-State: AOAM532KleSTjTZ0XSQifODiZowctU/ThYGF8MQnnl43Vd/oCjfXZ3Yf
-        /HazYvQ6gMfK8v64SWdpXY8F1EwAVA3BGcTQxAH7L9orjNk=
-X-Google-Smtp-Source: ABdhPJzOETVZ8l9h+Rjexf6EiUmrD7OBpYfQCs542VHR2ifwcaetCafsV7QYZhowUA4W3oo2kjGu7cYc1c+DwzpyekQ=
-X-Received: by 2002:a17:90a:17ad:: with SMTP id q42mr38209920pja.181.1624272257803;
- Mon, 21 Jun 2021 03:44:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210619111526.27776-1-andriy.shevchenko@linux.intel.com> <20210621103923.GA4094@sirena.org.uk>
-In-Reply-To: <20210621103923.GA4094@sirena.org.uk>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 21 Jun 2021 13:43:41 +0300
-Message-ID: <CAHp75Vc8CDRBKMiJNehsU2CUc4VVrWL9fHZO1rr7V7pZDg_QaQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] spi: Remove unneeded parentheses in spi_map_buf()
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S230047AbhFUKuX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 21 Jun 2021 06:50:23 -0400
+Received: from lucky1.263xmail.com ([211.157.147.135]:55118 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229651AbhFUKuX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Jun 2021 06:50:23 -0400
+Received: from localhost (unknown [192.168.167.16])
+        by lucky1.263xmail.com (Postfix) with ESMTP id C0A92AD5FD;
+        Mon, 21 Jun 2021 18:48:05 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-SKE-CHECKED: 1
+X-ANTISPAM-LEVEL: 2
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P24132T140365807994624S1624272484357256_;
+        Mon, 21 Jun 2021 18:48:05 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <10292b0ec8847d933dbe4f72212f2387>
+X-RL-SENDER: jon.lin@rock-chips.com
+X-SENDER: jon.lin@rock-chips.com
+X-LOGIN-NAME: jon.lin@rock-chips.com
+X-FST-TO: broonie@kernel.org
+X-RCPT-COUNT: 9
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+From:   Jon Lin <jon.lin@rock-chips.com>
+To:     broonie@kernel.org
+Cc:     jon.lin@rock-chips.com, heiko@sntech.de, robh+dt@kernel.org,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v10 0/6] Support ROCKCHIP SPI new feature
+Date:   Mon, 21 Jun 2021 18:47:54 +0800
+Message-Id: <20210621104800.19088-1-jon.lin@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Jun 21, 2021 at 1:40 PM Mark Brown <broonie@kernel.org> wrote:
->
-> On Sat, Jun 19, 2021 at 02:15:26PM +0300, Andy Shevchenko wrote:
-> > The boolean expression to get kmap_buf is hard to read due to
-> > too many unneeded parentheses. Remove them for good.
->
-> > -     const bool kmap_buf = ((unsigned long)buf >= PKMAP_BASE &&
-> > -                             (unsigned long)buf < (PKMAP_BASE +
-> > -                                     (LAST_PKMAP * PAGE_SIZE)));
-> > +     const bool kmap_buf = (unsigned long)buf >= PKMAP_BASE &&
-> > +                           (unsigned long)buf < (PKMAP_BASE + LAST_PKMAP * PAGE_SIZE);
->
-> No, I think this makes things worse - to the extent there's an issue
-> here it's not excessive brackets.
-
-How? I can't see any issues here and dropping excessive brackets helps
-to read it better. For example, the exterior brackets do nothing
-except making it harder to read, i.e. the expression inside them is
-already type of boolean and I have no clue what they are for.
 
 
+Changes in v10:
+- The internal CS inactive function is only supported after VER 0x00110002
+
+Changes in v9:
+- Conver to use CS GPIO description
+
+Changes in v8:
+- There is a problem with the version 7 mail format. resend it
+
+Changes in v7:
+- Fall back "rockchip,rv1126-spi" to "rockchip,rk3066-spi"
+
+Changes in v6:
+- Consider to compatibility, the "rockchip,rk3568-spi" is removed in
+  Series-changes v5, so the commit massage should also remove the
+  corresponding information
+
+Changes in v5:
+- Change to leave one compatible id rv1126, and rk3568 is compatible
+  with rv1126
+
+Changes in v4:
+- Adjust the order patches
+- Simply commit massage like redundancy "application" content
+
+Changes in v3:
+- Fix compile error which is find by Sascha in [v2,2/8]
+
+Jon Lin (6):
+  dt-bindings: spi: spi-rockchip: add description for rv1126
+  spi: rockchip: add compatible string for rv1126
+  spi: rockchip: Set rx_fifo interrupt waterline base on transfer item
+  spi: rockchip: Wait for STB status in slave mode tx_xfer
+  spi: rockchip: Support cs-gpio
+  spi: rockchip: Support SPI_CS_HIGH
+
+ .../devicetree/bindings/spi/spi-rockchip.yaml |  1 +
+ drivers/spi/spi-rockchip.c                    | 55 ++++++++++++++-----
+ 2 files changed, 41 insertions(+), 15 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.17.1
+
+
+
