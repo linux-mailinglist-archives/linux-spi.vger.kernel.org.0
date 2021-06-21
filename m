@@ -2,93 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 066CF3AE55E
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Jun 2021 10:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 607F63AE56B
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Jun 2021 10:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbhFUI5v (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Jun 2021 04:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbhFUI5u (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Jun 2021 04:57:50 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7FBC06175F
-        for <linux-spi@vger.kernel.org>; Mon, 21 Jun 2021 01:55:35 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id f15so3245921wro.8
-        for <linux-spi@vger.kernel.org>; Mon, 21 Jun 2021 01:55:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=NguFbkcyh6ap+qxMe2TBXIujUmNeh2JBMoEY6ERT5kg=;
-        b=At0qaUQVH4DX05KxGmf4JuLo8ZCE/RWxYbU73JVhH4W1/aNwfazsccTWlbK0dzytfE
-         DJ1+1mPH99sXv8NeTnlpX/+rdDXQBKhmmgt+z4S3DpdQuAYkEKzWNaG7+uwjsKInSHkr
-         YVSC++sV/6g86vOTu7Bnc1pjiAte5Uvk2FXx1F2JtxBOpsM1WIyFzUO2/tlHYtDyLgmF
-         CNQNuYM5rL3wSXIoxbYtpG9eflWvQo8+WUYxAuT7vV4qmroLG4CN6TEyvsTv1En3AmZn
-         25Kgz7SLkEvrQYQ+F7k97WOqxTqJrleWZ8nJlhRxd9SjtVA0hD4wFLzSukp1x0SWwtXH
-         9sjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=NguFbkcyh6ap+qxMe2TBXIujUmNeh2JBMoEY6ERT5kg=;
-        b=sw/ZsENz2IPyrs5eRN22jMk3hgxd3gYshqTyulUEXkVhn9tYmC3FseB9opSbEM/+Eg
-         HV65Qrg3CVrDgoGIb8jDFlDG78up0HlBIpb5n2nAohX3oBjyJOUGZ59c05xq5btJxssj
-         347dq0Pbq5+qhpfwQK4s9+0PknMgkHTcLERcnzmP+IvR6Of0z0ICDOBRPyZBgyHaMf4P
-         q8ONC1wlrydxfByeprNZUMR5wE7EXh4fyrhyDn6uhF9yW4e7cr+2y4NMUEG6N4pSGRCV
-         LF1bDBkZ+/pFn66xjoCFzl7cO1CR2Lt+iGJ05b3h7bB3GIi5KmVZ6AtxWCyN/Juq32fp
-         Zmzg==
-X-Gm-Message-State: AOAM530hU1rphx0Bf3Q+320fY2AzoDsT/RHXpYadlbAazWePm5ObVuB1
-        9bEzkEcidWOGYmzF1ZffOL8V3A==
-X-Google-Smtp-Source: ABdhPJxrbBQ8yZEjLN57gMoGFn9sOMWgiBeIR/XtRqnrqtXr7WcbMKAPpKYiDkWybmNdn8jedNDg4w==
-X-Received: by 2002:a5d:6d87:: with SMTP id l7mr26850975wrs.287.1624265734393;
-        Mon, 21 Jun 2021 01:55:34 -0700 (PDT)
-Received: from dell ([91.110.221.210])
-        by smtp.gmail.com with ESMTPSA id y20sm3558216wmi.25.2021.06.21.01.55.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jun 2021 01:55:33 -0700 (PDT)
-Date:   Mon, 21 Jun 2021 09:55:31 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>
-Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Brown <broonie@kernel.org>,
-        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@geanix.com>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 4/4] hwmon: intel-m10-bmc: add sensor support for Silicom
- N5010 card
-Message-ID: <YNBUA8qsfl9QejhP@dell>
-References: <20210621070621.431482-1-mhu@silicom.dk>
- <20210621070621.431482-5-mhu@silicom.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210621070621.431482-5-mhu@silicom.dk>
+        id S230316AbhFUJAw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 21 Jun 2021 05:00:52 -0400
+Received: from lucky1.263xmail.com ([211.157.147.131]:45062 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230102AbhFUJAv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Jun 2021 05:00:51 -0400
+Received: from localhost (unknown [192.168.167.235])
+        by lucky1.263xmail.com (Postfix) with ESMTP id B2A80BD161;
+        Mon, 21 Jun 2021 16:58:30 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-SKE-CHECKED: 1
+X-ANTISPAM-LEVEL: 2
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P23590T139719874688768S1624265906651790_;
+        Mon, 21 Jun 2021 16:58:28 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <e2de2f217429aed61d5ffef89dbc5fbb>
+X-RL-SENDER: jon.lin@rock-chips.com
+X-SENDER: jon.lin@rock-chips.com
+X-LOGIN-NAME: jon.lin@rock-chips.com
+X-FST-TO: broonie@kernel.org
+X-RCPT-COUNT: 9
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+From:   Jon Lin <jon.lin@rock-chips.com>
+To:     broonie@kernel.org
+Cc:     jon.lin@rock-chips.com, heiko@sntech.de, robh+dt@kernel.org,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v9 0/6] Support ROCKCHIP SPI new feature
+Date:   Mon, 21 Jun 2021 16:58:18 +0800
+Message-Id: <20210621085824.10081-1-jon.lin@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 21 Jun 2021, Martin Hundebøll wrote:
 
-> The Silicom N5010 PAC is similar to Intel N3000 and D5005. Enable
-> monitoring of its sensors like it is done for the two Intel cards.
-> 
-> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
-> ---
->  drivers/hwmon/intel-m10-bmc-hwmon.c | 116 ++++++++++++++++++++++++++++
->  drivers/mfd/intel-m10-bmc.c         |  12 ++-
 
-Please split out the MFD part into a different patch.
+Changes in v9:
+- Conver to use CS GPIO description
 
->  2 files changed, 127 insertions(+), 1 deletion(-)
+Changes in v8:
+- There is a problem with the version 7 mail format. resend it
+
+Changes in v7:
+- Fall back "rockchip,rv1126-spi" to "rockchip,rk3066-spi"
+
+Changes in v6:
+- Consider to compatibility, the "rockchip,rk3568-spi" is removed in
+  Series-changes v5, so the commit massage should also remove the
+  corresponding information
+
+Changes in v5:
+- Change to leave one compatible id rv1126, and rk3568 is compatible
+  with rv1126
+
+Changes in v4:
+- Adjust the order patches
+- Simply commit massage like redundancy "application" content
+
+Changes in v3:
+- Fix compile error which is find by Sascha in [v2,2/8]
+
+Jon Lin (6):
+  dt-bindings: spi: spi-rockchip: add description for rv1126
+  spi: rockchip: add compatible string for rv1126
+  spi: rockchip: Set rx_fifo interrupt waterline base on transfer item
+  spi: rockchip: Wait for STB status in slave mode tx_xfer
+  spi: rockchip: Support cs-gpio
+  spi: rockchip: Support SPI_CS_HIGH
+
+ .../devicetree/bindings/spi/spi-rockchip.yaml |  1 +
+ drivers/spi/spi-rockchip.c                    | 49 +++++++++++++------
+ 2 files changed, 34 insertions(+), 16 deletions(-)
 
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.17.1
+
+
+
