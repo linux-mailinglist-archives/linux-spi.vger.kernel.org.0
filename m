@@ -2,168 +2,267 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3CC3AFF02
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Jun 2021 10:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 684113B048F
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Jun 2021 14:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbhFVIUF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 22 Jun 2021 04:20:05 -0400
-Received: from mail-vs1-f54.google.com ([209.85.217.54]:46782 "EHLO
-        mail-vs1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbhFVIT7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Jun 2021 04:19:59 -0400
-Received: by mail-vs1-f54.google.com with SMTP id z15so10758892vsn.13;
-        Tue, 22 Jun 2021 01:17:41 -0700 (PDT)
+        id S231750AbhFVMeY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Jun 2021 08:34:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51056 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231959AbhFVMeT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Jun 2021 08:34:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1624365122;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vP7JF6KY1/ahu18Tz6/GObDLrGSrV/SofAI1KrpMPF4=;
+        b=AA+F5ILI95fQR5WCMROFXT3L+UISvkKHtqoShKsHXj89miH6K6NJLwtyu8ZGhbA3YfOBI8
+        nAOqoiVMMUtZv8GJMa7ohZn8EhVaFtqPfKVW7ep2Am0kwaC7L5+hk+X8WPwnn0GAabqO6W
+        G8GYT/D8rv1X2A8Liev11ZnJHSGAz0o=
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
+ [209.85.210.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-154-3FstR5i0O2S89RvWkpM4CQ-1; Tue, 22 Jun 2021 08:32:01 -0400
+X-MC-Unique: 3FstR5i0O2S89RvWkpM4CQ-1
+Received: by mail-ot1-f72.google.com with SMTP id e16-20020a0568302010b02903feaaa5cf10so11040420otp.8
+        for <linux-spi@vger.kernel.org>; Tue, 22 Jun 2021 05:32:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s0hVMlLFV5eIwzuXXBEJWEV7FxMfuDBGtQwv1PuAfDc=;
-        b=Yc8JShUBMH1dnjUYyQ4i3CS2+y2GF6q1YtRwv/bRUTq4JGwOzFH8jz0/QYnr8ZuDpr
-         HcEesiBUGFsp/umSzAQ1ucxKn54tANWqVfYyhNDVX62VWxoC03W6vKFzSWDS1INIUujo
-         EfpD0ZvANCW00iJ41ZnsyYqUYQ7WKnBJFLN0taGCgErNoNfbEbrJRexR6AwIwIKT2Knb
-         /0emor8cfQJbNOnIXhfpVS1iQMsX9FEwTZTkt2w2NsDGz2POO5RqhJxIgP7TG7ACSbj/
-         GkkcJgg3HdSB+eNLe7DKVV3GNyEiHob+PVe9RVIKAdqt1PMr45YhOFebl4O9XRmtiOlY
-         SQDQ==
-X-Gm-Message-State: AOAM530BLNzCLpsQ3ZsdxG/iSlElsnvEgk5f19JQOeLC0TziQs7pI7vp
-        kFMx7YZsKONrP5YDTSXRni3TndxcwI12ri99DDk=
-X-Google-Smtp-Source: ABdhPJz3clw2O8tsVFk5F4OGcaBfo9Z8eHqvoF8LwYXAPGollSTCOREHx1S0f08A9nsiznMjaM5G5srL4UVXlJSotsU=
-X-Received: by 2002:a05:6102:2011:: with SMTP id p17mr21421376vsr.40.1624349860512;
- Tue, 22 Jun 2021 01:17:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210615191543.1043414-1-robh@kernel.org>
-In-Reply-To: <20210615191543.1043414-1-robh@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 22 Jun 2021 10:17:28 +0200
-Message-ID: <CAMuHMdUGXu8yj3JWKwM8mt7axkrzGMiowC1t0PHrbpxRCBME3w@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
-To:     Rob Herring <robh@kernel.org>
-Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-ide@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-iio@vger.kernel.org,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, linux-can@vger.kernel.org,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-phy@lists.infradead.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-rtc@vger.kernel.org,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=vP7JF6KY1/ahu18Tz6/GObDLrGSrV/SofAI1KrpMPF4=;
+        b=M/+1sFMutv2yjp3SNbU1+amEDibsWY1J0Ek61Gjpz6CIRYZHoU2WpgXx4vjxvMhblq
+         ibEhutVyswQx2n5hRO8YIaKCrnkEZ6otz8X9+/WxD4aqckZoAdVVw3zqRSY3YaKmoAhm
+         Jef8zmziDH7HrflvbuQ9Pp31k4rwe7lx8utpPSkMXz9hM7y4tFEb2SaXuo2t8UoNKD6p
+         2pyKY1EhrtanSUlL/z0+qQoyNw6kT4jgD6uciYjG2YmDtsH7csw1+/kECvtw2eESl/9v
+         eYlMRIejmIAVaT2LNG/TuaiyIQpfF4zHZEwKAIoL00kehqCjY1L02kD/bgh8+0/HjVJ0
+         epJw==
+X-Gm-Message-State: AOAM530jsnrHX1p9ZRpbbdoDmmcrH2yVDkaDUcZuu9KgQ0i9JsiWmzF6
+        rn6oUIX7R0zcTRjlCEMwsPjzTlsw9KUhBnELdtrjcHvpHh/NncAK+t7xmvhFX80iKWGS2o5EFhi
+        aJD9F9eU7PxoiNY0JgJri
+X-Received: by 2002:a54:4694:: with SMTP id k20mr3030296oic.134.1624365120365;
+        Tue, 22 Jun 2021 05:32:00 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx8IUtPHHs01259DCSqd8l9v2KUFLEpzLtTrLK2iyrtXZYfJpqcLl9xh2coGZ1Y7YXxQNxOVQ==
+X-Received: by 2002:a54:4694:: with SMTP id k20mr3030276oic.134.1624365120167;
+        Tue, 22 Jun 2021 05:32:00 -0700 (PDT)
+Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id b2sm2613572oic.56.2021.06.22.05.31.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Jun 2021 05:31:59 -0700 (PDT)
+Subject: Re: [PATCH 2/4] fpga: dfl: Move DFH header register macros to
+ linux/dfl.h
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@silicom.dk>,
+        Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
         Mark Brown <broonie@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+        =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@geanix.com>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org,
+        Debarati Biswas <debaratix.biswas@intel.com>,
+        Russ Weight <russell.h.weight@intel.com>
+References: <20210621070621.431482-1-mhu@silicom.dk>
+ <20210621070621.431482-3-mhu@silicom.dk>
+ <81975a85-e9d6-bd4b-7666-56d1d1d581bc@redhat.com>
+ <20210622045613.GA27046@yilunxu-OptiPlex-7050>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <d74f6e17-0fe2-bd18-de53-18181424db82@redhat.com>
+Date:   Tue, 22 Jun 2021 05:31:57 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <20210622045613.GA27046@yilunxu-OptiPlex-7050>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rob,
 
-On Tue, Jun 15, 2021 at 9:16 PM Rob Herring <robh@kernel.org> wrote:
-> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
-> same size as the list is redundant and can be dropped. Note that is DT
-> schema specific behavior and not standard json-schema behavior. The tooling
-> will fixup the final schema adding any unspecified minItems/maxItems.
+On 6/21/21 9:56 PM, Xu Yilun wrote:
+> On Mon, Jun 21, 2021 at 06:56:28AM -0700, Tom Rix wrote:
+>> On 6/21/21 12:06 AM, Martin Hundebøll wrote:
+>>> From: Debarati Biswas <debaratix.biswas@intel.com>
+>>>
+>>> Device Feature List (DFL) drivers may be defined in subdirectories other
+>>> than drivers/fpga, and each DFL driver should have access to the Device
+>>> Feature Header (DFH) register, which contains revision and type
+>>> information. This change moves the macros specific to the DFH register
+>>> from drivers/fpga/dfl.h to include/linux/dfl.h.
+>>>
+>>> Signed-off-by: Debarati Biswas <debaratix.biswas@intel.com>
+>>> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+>>> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
+>>> ---
+>>>    drivers/fpga/dfl.h  | 48 +----------------------------------------
+>>>    include/linux/dfl.h | 52 +++++++++++++++++++++++++++++++++++++++++++++
+>>>    2 files changed, 53 insertions(+), 47 deletions(-)
+>>>
+>>> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+>>> index 2b82c96ba56c..6ed0353e9a99 100644
+>>> --- a/drivers/fpga/dfl.h
+>>> +++ b/drivers/fpga/dfl.h
+>>> @@ -17,6 +17,7 @@
+>>>    #include <linux/bitfield.h>
+>> bitfield.h was added to linux/dfl.h
+>>
+>> Likely both aren't needed, try removing this one.
+> The DFL register definitions are in dfl.h, and Source files which include
+> dfl.h are likely to use bitfield ops for DFL register access, so could we
+> keep it here?
+
+Not sure which dfl.h you mean.
+
+It looks like you are copying header includes in both files and 
+including the one file in the other.
+
+So it is likely you are including headers you don't need.
+
+Tom
+
 >
-> This condition is partially checked with the meta-schema already, but
-> only if both 'minItems' and 'maxItems' are equal to the 'items' length.
-> An improved meta-schema is pending.
-
-> Signed-off-by: Rob Herring <robh@kernel.org>
-
-> --- a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-> +++ b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-> @@ -46,7 +46,6 @@ properties:
+> Thanks,
+> Yilun
 >
->    clocks:
->      minItems: 3
-> -    maxItems: 5
->      items:
->        - description: GMAC main clock
->        - description: MAC TX clock
+>> Tom
+>>
+>>>    #include <linux/cdev.h>
+>>>    #include <linux/delay.h>
+>>> +#include <linux/dfl.h>
+>>>    #include <linux/eventfd.h>
+>>>    #include <linux/fs.h>
+>>>    #include <linux/interrupt.h>
+>>> @@ -53,32 +54,6 @@
+>>>    #define PORT_FEATURE_ID_UINT		0x12
+>>>    #define PORT_FEATURE_ID_STP		0x13
+>>> -/*
+>>> - * Device Feature Header Register Set
+>>> - *
+>>> - * For FIUs, they all have DFH + GUID + NEXT_AFU as common header registers.
+>>> - * For AFUs, they have DFH + GUID as common header registers.
+>>> - * For private features, they only have DFH register as common header.
+>>> - */
+>>> -#define DFH			0x0
+>>> -#define GUID_L			0x8
+>>> -#define GUID_H			0x10
+>>> -#define NEXT_AFU		0x18
+>>> -
+>>> -#define DFH_SIZE		0x8
+>>> -
+>>> -/* Device Feature Header Register Bitfield */
+>>> -#define DFH_ID			GENMASK_ULL(11, 0)	/* Feature ID */
+>>> -#define DFH_ID_FIU_FME		0
+>>> -#define DFH_ID_FIU_PORT		1
+>>> -#define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
+>>> -#define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
+>>> -#define DFH_EOL			BIT_ULL(40)		/* End of list */
+>>> -#define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
+>>> -#define DFH_TYPE_AFU		1
+>>> -#define DFH_TYPE_PRIVATE	3
+>>> -#define DFH_TYPE_FIU		4
+>>> -
+>>>    /* Next AFU Register Bitfield */
+>>>    #define NEXT_AFU_NEXT_DFH_OFST	GENMASK_ULL(23, 0)	/* Offset to next AFU */
+>>> @@ -403,27 +378,6 @@ struct device *dfl_fpga_pdata_to_parent(struct dfl_feature_platform_data *pdata)
+>>>    	return pdata->dev->dev.parent->parent;
+>>>    }
+>>> -static inline bool dfl_feature_is_fme(void __iomem *base)
+>>> -{
+>>> -	u64 v = readq(base + DFH);
+>>> -
+>>> -	return (FIELD_GET(DFH_TYPE, v) == DFH_TYPE_FIU) &&
+>>> -		(FIELD_GET(DFH_ID, v) == DFH_ID_FIU_FME);
+>>> -}
+>>> -
+>>> -static inline bool dfl_feature_is_port(void __iomem *base)
+>>> -{
+>>> -	u64 v = readq(base + DFH);
+>>> -
+>>> -	return (FIELD_GET(DFH_TYPE, v) == DFH_TYPE_FIU) &&
+>>> -		(FIELD_GET(DFH_ID, v) == DFH_ID_FIU_PORT);
+>>> -}
+>>> -
+>>> -static inline u8 dfl_feature_revision(void __iomem *base)
+>>> -{
+>>> -	return (u8)FIELD_GET(DFH_REVISION, readq(base + DFH));
+>>> -}
+>>> -
+>>>    /**
+>>>     * struct dfl_fpga_enum_info - DFL FPGA enumeration information
+>>>     *
+>>> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
+>>> index 6cc10982351a..1cd86b2e7cb1 100644
+>>> --- a/include/linux/dfl.h
+>>> +++ b/include/linux/dfl.h
+>>> @@ -8,7 +8,9 @@
+>>>    #ifndef __LINUX_DFL_H
+>>>    #define __LINUX_DFL_H
+>>> +#include <linux/bitfield.h>
+>>>    #include <linux/device.h>
+>>> +#include <linux/io.h>
+>>>    #include <linux/mod_devicetable.h>
+>>>    /**
+>>> @@ -83,4 +85,54 @@ void dfl_driver_unregister(struct dfl_driver *dfl_drv);
+>>>    	module_driver(__dfl_driver, dfl_driver_register, \
+>>>    		      dfl_driver_unregister)
+>>> +/*
+>>> + * Device Feature Header Register Set
+>>> + *
+>>> + * For FIUs, they all have DFH + GUID + NEXT_AFU as common header registers.
+>>> + * For AFUs, they have DFH + GUID as common header registers.
+>>> + * For private features, they only have DFH register as common header.
+>>> + */
+>>> +#define DFH                     0x0
+>>> +#define GUID_L                  0x8
+>>> +#define GUID_H                  0x10
+>>> +#define NEXT_AFU                0x18
+>>> +
+>>> +#define DFH_SIZE                0x8
+>>> +
+>>> +/* Device Feature Header Register Bitfield */
+>>> +#define DFH_ID                  GENMASK_ULL(11, 0)      /* Feature ID */
+>>> +#define DFH_ID_FIU_FME          0
+>>> +#define DFH_ID_FIU_PORT         1
+>>> +#define DFH_REVISION            GENMASK_ULL(15, 12)
+>>> +#define DFH_NEXT_HDR_OFST       GENMASK_ULL(39, 16)     /* Offset to next DFH */
+>>> +#define DFH_EOL                 BIT_ULL(40)             /* End of list */
+>>> +#define DFH_TYPE                GENMASK_ULL(63, 60)     /* Feature type */
+>>> +#define DFH_TYPE_AFU            1
+>>> +#define DFH_TYPE_PRIVATE        3
+>>> +#define DFH_TYPE_FIU            4
+>>> +
+>>> +/* Function to read from DFH and check if the Feature type is FME */
+>>> +static inline bool dfl_feature_is_fme(void __iomem *base)
+>>> +{
+>>> +	u64 v = readq(base + DFH);
+>>> +
+>>> +	return (FIELD_GET(DFH_TYPE, v) == DFH_TYPE_FIU) &&
+>>> +		(FIELD_GET(DFH_ID, v) == DFH_ID_FIU_FME);
+>>> +}
+>>> +
+>>> +/* Function to read from DFH and check if the Feature type is port*/
+>>> +static inline bool dfl_feature_is_port(void __iomem *base)
+>>> +{
+>>> +	u64 v = readq(base + DFH);
+>>> +
+>>> +	return (FIELD_GET(DFH_TYPE, v) == DFH_TYPE_FIU) &&
+>>> +		 (FIELD_GET(DFH_ID, v) == DFH_ID_FIU_PORT);
+>>> +}
+>>> +
+>>> +/* Function to read feature revision from DFH */
+>>> +static inline u8 dfl_feature_revision(void __iomem *base)
+>>> +{
+>>> +	return (u8)FIELD_GET(DFH_REVISION, readq(base + DFH));
+>>> +}
+>>> +
+>>>    #endif /* __LINUX_DFL_H */
 
-While resolving the conflict with commit fea99822914039c6
-("dt-bindings: net: document ptp_ref clk in dwmac") in soc/for-next,
-I noticed the following construct for clock-names:
-
-  clock-names:
-    minItems: 3
-    maxItems: 6
-    contains:
-      enum:
-        - stmmaceth
-        - mac-clk-tx
-        - mac-clk-rx
-        - ethstp
-        - eth-ck
-        - ptp_ref
-
-Should this use items instead of enum, and drop maxItems, or is this
-a valid construct to support specifying the clocks in random order?
-If the latter, it does mean that the order of clock-names may not
-match the order of the clock descriptions.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
