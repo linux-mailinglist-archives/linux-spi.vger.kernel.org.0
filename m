@@ -2,82 +2,63 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D683B1E4F
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Jun 2021 18:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5317C3B1F36
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Jun 2021 19:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbhFWQLs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 23 Jun 2021 12:11:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50630 "EHLO mail.kernel.org"
+        id S229755AbhFWRIF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 23 Jun 2021 13:08:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47950 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229913AbhFWQLq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 23 Jun 2021 12:11:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3F8016128D;
-        Wed, 23 Jun 2021 16:09:28 +0000 (UTC)
+        id S229688AbhFWRIF (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 23 Jun 2021 13:08:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 50531611AC;
+        Wed, 23 Jun 2021 17:05:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624464568;
-        bh=kYat1lDcdPalxoyEdVzJzS8BZA5l+ubFAD8SJB7kRZs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DvV/5OyvJHxWST+toyxpna2dJTYbAWR3k21l1PTEi0vXnH++6SbvGvvkT22ICt539
-         AxcIw7Bw0QlUVebTEbqNCQ2vqpwReVfMp147PnO2aqtjCmtHpzb4kWpAaiXmIU80Aw
-         cF3L7RXcO2Fu0kgE2NGPmzmzOd2QmPYUqSfMLb1mWazxesMxXPB82cqHmcUtJLXK18
-         g+c8AkSkLUqiPV/BuLEEDIuL4x5m7jFCFMJG63NTnCMlLouNuYkr4WKQtHXD/4mcZy
-         zP8xjXOzuaELxGQsK0Jkf9Zy6O8yECMe2vFj+BDAip4hrgfRZ23AIwVj9M5Mu4TPA/
-         Ga8e3Efqc4HKg==
+        s=k20201202; t=1624467947;
+        bh=p2cOw9iOxNby1j1UpRU+HVQ3uwvo4XbPaZB9GXC2nE4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Bdt3aDkGHFUIxxk7JRVAQzq6kOm/BBHJqBdwQaVPzQLmJdBJ7a0MceiJRWnfgVDMg
+         ZXvIF4psuiKmzSJYro3fmHia5Pkw9X3fPXZBGfXMou9F5k2ef23Duz/fyevcwxylBg
+         zYdf2kUETyyFMIM6uScMERFk0qK6xecASeydLVEnwIYx0Lrksvelca0uBD0zQL2eUI
+         Z+pdBAGXtDYUA9AyxcBq8oRJEEhE1jwLmLCyR0wMpWrwqSnFMbXhCdm9dCso8CXwfZ
+         9TRtbLUd1wAhYKTZChnWEp4Cv+5BNZZJ6E4MrNRvZ3iGXwEKnbg+DGboJxr8Sl4bVU
+         vlRhBgKoWthXA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-mmc@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 0/2] spi: use proper DMAENGINE API for termination
-Date:   Wed, 23 Jun 2021 17:08:51 +0100
-Message-Id: <162446446390.55587.10222548953553641662.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210623095843.3228-1-wsa+renesas@sang-engineering.com>
-References: <20210623095843.3228-1-wsa+renesas@sang-engineering.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v5.13-rc7
+Date:   Wed, 23 Jun 2021 18:05:18 +0100
+Message-Id: <20210623170547.50531611AC@mail.kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 23 Jun 2021 11:58:41 +0200, Wolfram Sang wrote:
-> dmaengine_terminate_all() is deprecated in favor of explicitly saying if
-> it should be sync or async. Update the drivers I audited.
-> 
-> 
-> Wolfram Sang (2):
->   spi: spi-rspi: : use proper DMAENGINE API for termination
->   spi: spi-sh-msiof: : use proper DMAENGINE API for termination
-> 
-> [...]
+The following changes since commit d38fa9a155b2829b7e2cfcf8a4171b6dd3672808:
 
-Applied to
+  spi: stm32-qspi: Always wait BUSY bit to be cleared in stm32_qspi_wait_cmd() (2021-06-03 13:55:36 +0100)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+are available in the Git repository at:
 
-Thanks!
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.13-rc7
 
-[1/2] spi: spi-rspi: : use proper DMAENGINE API for termination
-      commit: 29176edd6e7ad7333d0bb19a309b2104fa4f4341
-[2/2] spi: spi-sh-msiof: : use proper DMAENGINE API for termination
-      commit: a26dee29ec04a3f6779684852c36a2a71fd68fd8
+for you to fetch changes up to f422316c8e9d3c4aff3c56549dfb44a677d02f14:
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+  spi: spi-nxp-fspi: move the register operation after the clock enable (2021-06-14 15:02:01 +0100)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+----------------------------------------------------------------
+spi: Fixes for v5.13
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+A couple of small, driver specific fixes that arrived in the past few
+weeks.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+----------------------------------------------------------------
+Haibo Chen (1):
+      spi: spi-nxp-fspi: move the register operation after the clock enable
 
-Thanks,
-Mark
+Jon Hunter (1):
+      spi: tegra20-slink: Ensure SPI controller reset is deasserted
+
+ drivers/spi/spi-nxp-fspi.c      | 11 +++++------
+ drivers/spi/spi-tegra20-slink.c |  5 +++++
+ 2 files changed, 10 insertions(+), 6 deletions(-)
