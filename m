@@ -2,66 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 185F93B1E1B
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Jun 2021 17:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A813B1E36
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Jun 2021 18:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbhFWP5A convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Wed, 23 Jun 2021 11:57:00 -0400
-Received: from [183.90.58.236] ([183.90.58.236]:51766 "EHLO ns1.zackeruz.tk"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231524AbhFWP5A (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 23 Jun 2021 11:57:00 -0400
-Received: from johnlewis.com (unknown [192.168.20.1])
-        by ns1.zackeruz.tk (Postfix) with ESMTPSA id 064B584632A
-        for <linux-spi@vger.kernel.org>; Wed, 23 Jun 2021 23:54:40 +0800 (+08)
-Reply-To: robert_turner@johnlewis-trading.com,
-          pippawicks.sales@johnlewis-trading.com
-From:   John Lewis & Partnersip <robert.turner107@johnlewis.com>
-To:     linux-spi@vger.kernel.org
-Subject: 6/23/2021 Product Inquiry 
-Date:   23 Jun 2021 15:54:40 +0000
-Message-ID: <20210623094114.D077AAACB8E60E22@johnlewis.com>
+        id S231531AbhFWQC1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 23 Jun 2021 12:02:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48266 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231476AbhFWQC0 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 23 Jun 2021 12:02:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 35F73611C1;
+        Wed, 23 Jun 2021 16:00:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624464009;
+        bh=SjgvgGvoEwf8mdM55ZXmWIeKZJwv2F9gwPx4SGJClaw=;
+        h=Subject:From:Date:To:From;
+        b=gA+l8jp/G1sIs09Jqrp9aBlVPFQR3qXE9sW7RiOU/8bWS9rKRMi4TBEV5Jba0LgKy
+         4m6mVrxmMWtm09Q6ThWvfFyaAM7Q2yCRN6pX4c7+HNvPfnpIKaepAHio+/L8XecnF1
+         4IjnMARMIlwpY8MA3R4/2UngbLesB3ha/z4jedUJXmyI9EwY3jrfuOCsxJ14UO9lOf
+         zWV35panm8YXGX0yZ3paa9Gtl3bqpAvECWSsuleJhpGunkhWpbFgo3a8AXS6z17uAZ
+         fv28GZzkjPhZiksVLYPrcvTDlKpokOn6NRu+UihOIFmqV7FkM4yw9AiZ14VeyRoGSY
+         auQF7xxvNS/Kg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 20B5E6094F;
+        Wed, 23 Jun 2021 16:00:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <162446400906.32151.1333873954843584643.git-patchwork-summary@kernel.org>
+Date:   Wed, 23 Jun 2021 16:00:09 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Dear linux-spi
+Hello:
 
-The famous brand John Lewis Partnership, is UK's largest multi-
-channel retailer with over 126 shops and multiple expansion in 
-Africa furnished by European/Asian/American products. We are 
-sourcing new products to attract new customers and also retain 
-our existing ones, create new partnerships with companies dealing 
-with different kinds of goods globally.
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (refs/heads/for-next):
 
-Your company's products are of interest to our market as we have 
-an amazing market for your products.
+Patch: [1/1] spi-sun6i: Fix chipselect/clock bug
+  Submitter: Ralf Schlatterbeck <rsc@runtux.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=486737
+  Lore link: https://lore.kernel.org/r/20210521201913.2gapcmrzynxekro7@runtux.com
+Patch: [v2,1/1] spi: spi-sun6i: Fix chipselect/clock bug
+  Submitter: Ralf Schlatterbeck <rsc@runtux.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=499971
+  Lore link: https://lore.kernel.org/r/20210614144507.y3udezjfbko7eavv@runtux.com
+Series: Support ROCKCHIP SPI new feature
+  Submitter: Jon Lin <jon.lin@rock-chips.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=504289
+  Lore link: https://lore.kernel.org/r/20210621104800.19088-1-jon.lin@rock-chips.com
+    Patches: [v10,1/6] dt-bindings: spi: spi-rockchip: add description for rv1126
+             [v10,2/6] spi: rockchip: add compatible string for rv1126
+             [v10,3/6] spi: rockchip: Set rx_fifo interrupt waterline base on transfer item
+             [v10,4/6] spi: rockchip: Wait for STB status in slave mode tx_xfer
+             [v10,5/6] spi: rockchip: Support cs-gpio
+             [v10,6/6] spi: rockchip: Support SPI_CS_HIGH
 
-Provide us your current catalog through email to review more. We 
-hope to be able to order with you and start a long-term friendly,
-respectable and solid business partnership. Please we would 
-appreciate it if you could send us your stock availability via 
-email if any.
+Total patches: 8
 
-Our payment terms are 15 days net in Europe, 30 days Net in UK 
-and 30 days net in Asia/USA as we operate with over 5297 
-suppliers around the globe for the past 50 years now. For 
-immediate response Send your reply to robert_turner@johnlewis-
-trading.com for us to be able to 
-treat with care and urgency.
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Best Regards
-
-Rob Turner
-Head Of Procurement Operations
-John Lewis & Partners.
-robert_turner@johnlewis-trading.com
-Tel: +44-7451-274090
-WhatsApp: +447497483925
-www.johnlewis.com
-REGISTERED OFFICE: 171 VICTORIA STREET, LONDON SW1E 5NN 
