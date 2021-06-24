@@ -2,69 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EED23B37CD
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Jun 2021 22:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6911C3B3810
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Jun 2021 22:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232460AbhFXUaX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Jun 2021 16:30:23 -0400
-Received: from mail-io1-f42.google.com ([209.85.166.42]:38768 "EHLO
-        mail-io1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbhFXUaW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Jun 2021 16:30:22 -0400
-Received: by mail-io1-f42.google.com with SMTP id k11so9886799ioa.5;
-        Thu, 24 Jun 2021 13:28:03 -0700 (PDT)
+        id S229525AbhFXUqc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 24 Jun 2021 16:46:32 -0400
+Received: from mail-io1-f53.google.com ([209.85.166.53]:40576 "EHLO
+        mail-io1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230116AbhFXUqc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Jun 2021 16:46:32 -0400
+Received: by mail-io1-f53.google.com with SMTP id r12so9926084ioa.7;
+        Thu, 24 Jun 2021 13:44:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=yT5uzxIGnFP5VZf20UNWQIt+98NYYNNQY54nzUDWUYw=;
-        b=NYRDS8qfWOTlEh5N7mOugBA8mQHHWTPXqChiJC4/uK1zSDTLW+QUN4MokHdEkxgnRg
-         oZ4elRJT6ft2/sDFfQjua+hxTI2yjt0SYUpXv1k2bhhpP/pzLcRAilhR+KzYfDC3MDOr
-         qXTN80JN5cni60uU4B5rCl2xw2bmWfLoVLpqVPZ5rEPOLmUbiAOMnCfcoPFCK7wXw8kt
-         wmSspm7aW6rk3Y097H7GtH+oVfvTpgxfrqthI/jeh4djpxhlNkjDo01Sx0Z5E35JByX+
-         CbM18YD3zKtiEWLRLF0xMS8JhgOanwjVrNTdWuwJxizA7l3K935w0kKu9IOwhcVhw+jB
-         ctlw==
-X-Gm-Message-State: AOAM531mO+IQXcjG4wn4TRoZnK8l6jIGpXeGZ4pQXSoyqOuVySkoscxR
-        cYKg2EHYApzA/xZQ7KR0ZA==
-X-Google-Smtp-Source: ABdhPJx4UX0nDQ6JgXzaRAmpINTOK+KHNgOmbLY28VavvrlWiZnbdnHHhgJs8HXeXZh/T98Bl7OhuQ==
-X-Received: by 2002:a05:6638:3594:: with SMTP id v20mr6186139jal.25.1624566483218;
-        Thu, 24 Jun 2021 13:28:03 -0700 (PDT)
+        bh=Jb61FtgXv62RyoPttvhABXLLkGLociNax0eiMMTdeoE=;
+        b=V1sfiGoyavLl05DN8KYhJW/XqQpLqHebVkabWwxEWQx3Bn67XpKXtI1/SXBZlBE9uE
+         DcdwZFuHyJB5l0YgydEWtUSs+u/YA8aT2KCXGp0LfHkh3aI7kBUw2iSus7LS8QvlrQNw
+         xiaHsqdHSUrjY+LWy28oajCWROc5roPACVj8QORKRQDsus+AYMyTAbycavKJ6D9BeL2/
+         jNc2Ka3YD3j9F9Eh+P0bTnHUnbnESp7L22/cJfi1TzPd2XAQ/x2uVOBApJ04KPBC2RJT
+         F3AyGBE5L4uGiLEEgV9NoJ3W9KdSWQYuUyB6kMjnl4w6FlWWNiWP7pjRMN8THrA1vjP2
+         meDw==
+X-Gm-Message-State: AOAM532AmHtnnMKFitW/o+/Qx6+W03NRHyNvL6+9t6DXB94OTUmOaY4q
+        M3pk15oYgGC01adZbR5G2w==
+X-Google-Smtp-Source: ABdhPJwDbvlT7rWgdyoBcZio9FNtPl/yvT7KQ36PlsskLaNPsJwYVXasDTbSOux0xym+jdlTH05d5Q==
+X-Received: by 2002:a02:8246:: with SMTP id q6mr6390809jag.130.1624567451624;
+        Thu, 24 Jun 2021 13:44:11 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id w7sm2499383ilu.74.2021.06.24.13.28.01
+        by smtp.gmail.com with ESMTPSA id j18sm2014229ila.9.2021.06.24.13.44.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jun 2021 13:28:02 -0700 (PDT)
-Received: (nullmailer pid 1934646 invoked by uid 1000);
-        Thu, 24 Jun 2021 20:27:59 -0000
-Date:   Thu, 24 Jun 2021 14:27:59 -0600
+        Thu, 24 Jun 2021 13:44:10 -0700 (PDT)
+Received: (nullmailer pid 1957082 invoked by uid 1000);
+        Thu, 24 Jun 2021 20:44:05 -0000
+Date:   Thu, 24 Jun 2021 14:44:05 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-spi@vger.kernel.org, robh+dt@kernel.org, broonie@kernel.org,
-        michal.simek@xilinx.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: spi: convert Xilinx Zynq UltraScale+ MPSoC
- GQSPI bindings to YAML
-Message-ID: <20210624202759.GA1934589@robh.at.kernel.org>
-References: <20210613214317.296667-1-iwamatsu@nigauri.org>
+To:     Mason Zhang <mason.zhang@mediatek.com>
+Cc:     wsd_upstream@mediatek.com,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        hanks.chen@mediatek.com, linux-kernel@vger.kernel.org,
+        Mason Zhang <Mason.Zhang@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH 2/2] dt-binding: mediatek: mt6779: update spi document
+Message-ID: <20210624204405.GA1956999@robh.at.kernel.org>
+References: <1623721803.24597.9.camel@mbjsdccf07>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210613214317.296667-1-iwamatsu@nigauri.org>
+In-Reply-To: <1623721803.24597.9.camel@mbjsdccf07>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 14 Jun 2021 06:43:17 +0900, Nobuhiro Iwamatsu wrote:
-> Convert spi for Xilinx Zynq UltraScale+ MPSoC GQSPI bindings
-> documentation to YAML.
+On Tue, 15 Jun 2021 09:50:03 +0800, Mason Zhang wrote:
 > 
-> Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+> this patch update spi document for MT6779 SOC.
+> 
+> Signed-off-by: Mason Zhang <Mason.Zhang@mediatek.com>
 > ---
->  .../bindings/spi/spi-zynqmp-qspi.txt          | 25 ---------
->  .../bindings/spi/spi-zynqmp-qspi.yaml         | 51 +++++++++++++++++++
->  2 files changed, 51 insertions(+), 25 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.txt
->  create mode 100644 Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
+>  Documentation/devicetree/bindings/spi/spi-mt65xx.txt | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
