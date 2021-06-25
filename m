@@ -2,187 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0713B438E
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Jun 2021 14:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 442273B445E
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Jun 2021 15:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbhFYMs6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Jun 2021 08:48:58 -0400
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:33560 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229470AbhFYMs5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Jun 2021 08:48:57 -0400
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15PCjwxx009152;
-        Fri, 25 Jun 2021 12:46:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type : in-reply-to;
- s=corp-2020-01-29; bh=OZcLDZpJSbiJrxXQXQGe20xrTG0YjwZ5YOFjZSQ+y00=;
- b=0DkYahLH+dNK9senydET2YjIKDDzdaeri/SVKtM9OEHVUO8XrphI47bcYwQRT7NOrNW4
- NkGQJDoJ23p09UT6h7tL+blhp7layTNImofGxvPsmH+9bmRk5rMVT3Vslf2ZP3wAIz6c
- GDsSPPsZjhKEyCdqdwkvXp4jUaaRPwb02pz4qMNg0duVIToSnQYYOcL/H42nVXatqbOn
- KZmfxISvygsRZuqPuxZrJyHGUh5+FsNbXQgtA3RE2EjWUILU4JSWcMFnBv89AKZlEmpS
- 1rizS78pD/9KzgnkwW8AmiKuIbls7yURevgKDXpi6Xaq/XGfGWY0glJTuDc0GEQmDNQH 3A== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 39d2kxs7p2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Jun 2021 12:46:29 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 15PCjPX6165774;
-        Fri, 25 Jun 2021 12:46:28 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3020.oracle.com with ESMTP id 39dbb1baby-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Jun 2021 12:46:28 +0000
-Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 15PCkRRM169327;
-        Fri, 25 Jun 2021 12:46:27 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 39dbb1babb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Jun 2021 12:46:27 +0000
-Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
-        by aserv0121.oracle.com (8.14.4/8.14.4) with ESMTP id 15PCkOWU010483;
-        Fri, 25 Jun 2021 12:46:24 GMT
-Received: from kadam (/102.222.70.252)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 25 Jun 2021 05:46:23 -0700
-Date:   Fri, 25 Jun 2021 15:46:15 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     kbuild@lists.01.org, lijian_8010a29@163.com, broonie@kernel.org
-Cc:     lkp@intel.com, kbuild-all@lists.01.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lijian <lijian@yulong.com>
-Subject: Re: [PATCH] spi: spi-topcliff-pch: Fixed the possible null pointer
- exception issue
-Message-ID: <202106250844.rdb0bMCH-lkp@intel.com>
+        id S231690AbhFYN1n (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Jun 2021 09:27:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37356 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229934AbhFYN1m (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 25 Jun 2021 09:27:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 81FD66197B;
+        Fri, 25 Jun 2021 13:25:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624627522;
+        bh=2jRgXYYh1suuTSb/ARhd+TKxo/8YGzp2hFUNykuCvxI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XyQD4b6VgjtIRSy8BYEXVl3AatJZYBtublHC/DMNIEuu1jDlBuMjRd+JfxD7TEif/
+         qC4C7vNKSKFhbZzNqg4x5XaR2d+/CyRa47SbRI8BRcJUTL8hyqqKCBSj+x3vYY1tpX
+         mr69oSFD1LhJIvvn1FOlYqTlPFbfjD0unS75dqeZQcIPv/0XkRJH5TWhdXOka+8FZH
+         uIvaqHWaglDI2bj8+YHKi6Nn/qJWqsdWkjCuRHazLVuHlHEPnKrbBvGy8HTnDegskX
+         dsB97Sm/204SFNoARe79rEQvQ3SOYKsIAoqeTJKHQSbXSgyQx8XG8y4gkHSgGJTm/y
+         RAh6W+7sAJPzw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Wolfram Sang <wsa@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>, linux-i2c@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-spi@vger.kernel.org, Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: (subset) [PATCH v3 0/5] Add and enable GPI DMA users
+Date:   Fri, 25 Jun 2021 14:24:54 +0100
+Message-Id: <162462715508.45765.4709893375922153018.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210625052213.32260-1-vkoul@kernel.org>
+References: <20210625052213.32260-1-vkoul@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210624105056.167233-1-lijian_8010a29@163.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-GUID: 99jWMH0Qo0iXqKpAx99mbHlqXqwXUamX
-X-Proofpoint-ORIG-GUID: 99jWMH0Qo0iXqKpAx99mbHlqXqwXUamX
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+On Fri, 25 Jun 2021 10:52:08 +0530, Vinod Koul wrote:
+> This series adds the GPI DMA in qcom geni spi and i2c drivers.
+> 
+> For this we first need to move GENI_IF_DISABLE_RO to common
+> headers and then add support for gpi dma in geni drivers.
+> 
+> Also, to reuse the dma-mapping in spi, we add a new field dma_map_dev to
+> allow controllers to pass a specific device for dma-mapping
+> 
+> [...]
 
-url:    https://github.com/0day-ci/linux/commits/lijian_8010a29-163-com/spi-spi-topcliff-pch-Fixed-the-possible-null-pointer-exception-issue/20210624-185333
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-config: i386-randconfig-m021-20210622 (attached as .config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+Applied to
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-New smatch warnings:
-drivers/spi/spi-topcliff-pch.c:632 pch_spi_set_tx() error: uninitialized symbol 'j'.
+Thanks!
 
-Old smatch warnings:
-drivers/spi/spi-topcliff-pch.c:1253 pch_spi_process_messages() warn: variable dereferenced before check 'data->cur_trans' (see line 1201)
+[3/5] spi: core: add dma_map_dev for dma device
+      commit: b470e10eb43f19e08245cd87dd3192a8141cfbb5
 
-vim +/j +632 drivers/spi/spi-topcliff-pch.c
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-c37f3c2749b5322 drivers/spi/spi-topcliff-pch.c Tomoya MORINAGA 2011-06-07  544  static void pch_spi_set_tx(struct pch_spi_data *data, int *bpw)
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  545  {
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  546  	int size;
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  547  	u32 n_writes;
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  548  	int j;
-cd8d984f0def2a8 drivers/spi/spi-topcliff-pch.c Wei Yongjun     2013-04-27  549  	struct spi_message *pmsg, *tmp;
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  550  	const u8 *tx_buf;
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  551  	const u16 *tx_sbuf;
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  552  
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  553  	/* set baud rate if needed */
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  554  	if (data->cur_trans->speed_hz) {
-65308c46b760bb2 drivers/spi/spi_topcliff_pch.c Grant Likely    2010-09-29  555  		dev_dbg(&data->master->dev, "%s:setting baud rate\n", __func__);
-65308c46b760bb2 drivers/spi/spi_topcliff_pch.c Grant Likely    2010-09-29  556  		pch_spi_set_baud_rate(data->master, data->cur_trans->speed_hz);
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  557  	}
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  558  
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  559  	/* set bits per word if needed */
-65308c46b760bb2 drivers/spi/spi_topcliff_pch.c Grant Likely    2010-09-29  560  	if (data->cur_trans->bits_per_word &&
-65308c46b760bb2 drivers/spi/spi_topcliff_pch.c Grant Likely    2010-09-29  561  	    (data->current_msg->spi->bits_per_word != data->cur_trans->bits_per_word)) {
-65308c46b760bb2 drivers/spi/spi_topcliff_pch.c Grant Likely    2010-09-29  562  		dev_dbg(&data->master->dev, "%s:set bits per word\n", __func__);
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  563  		pch_spi_set_bits_per_word(data->master,
-65308c46b760bb2 drivers/spi/spi_topcliff_pch.c Grant Likely    2010-09-29  564  					  data->cur_trans->bits_per_word);
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  565  		*bpw = data->cur_trans->bits_per_word;
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  566  	} else {
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  567  		*bpw = data->current_msg->spi->bits_per_word;
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  568  	}
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  569  
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  570  	/* reset Tx/Rx index */
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  571  	data->tx_index = 0;
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  572  	data->rx_index = 0;
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  573  
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  574  	data->bpw_len = data->cur_trans->len / (*bpw / 8);
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  575  
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  576  	/* find alloc size */
-65308c46b760bb2 drivers/spi/spi_topcliff_pch.c Grant Likely    2010-09-29  577  	size = data->cur_trans->len * sizeof(*data->pkt_tx_buff);
-65308c46b760bb2 drivers/spi/spi_topcliff_pch.c Grant Likely    2010-09-29  578  
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  579  	/* allocate memory for pkt_tx_buff & pkt_rx_buffer */
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  580  	data->pkt_tx_buff = kzalloc(size, GFP_KERNEL);
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  581  	if (data->pkt_tx_buff != NULL) {
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  582  		data->pkt_rx_buff = kzalloc(size, GFP_KERNEL);
-026a1dc1af52742 drivers/spi/spi-topcliff-pch.c Jay Fang        2021-05-06  583  		if (!data->pkt_rx_buff) {
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  584  			kfree(data->pkt_tx_buff);
-026a1dc1af52742 drivers/spi/spi-topcliff-pch.c Jay Fang        2021-05-06  585  			data->pkt_tx_buff = NULL;
-026a1dc1af52742 drivers/spi/spi-topcliff-pch.c Jay Fang        2021-05-06  586  		}
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  587  	}
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  588  
-65308c46b760bb2 drivers/spi/spi_topcliff_pch.c Grant Likely    2010-09-29  589  	if (!data->pkt_rx_buff) {
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  590  		/* flush queue and set status of all transfers to -ENOMEM */
-cd8d984f0def2a8 drivers/spi/spi-topcliff-pch.c Wei Yongjun     2013-04-27  591  		list_for_each_entry_safe(pmsg, tmp, data->queue.next, queue) {
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  592  			pmsg->status = -ENOMEM;
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  593  
-f5d8ee3f15dd718 drivers/spi/spi-topcliff-pch.c Sachin Kamat    2013-05-31  594  			if (pmsg->complete)
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  595  				pmsg->complete(pmsg->context);
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  596  
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  597  			/* delete from queue */
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  598  			list_del_init(&pmsg->queue);
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  599  		}
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  600  		return;
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  601  	}
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  602  
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  603  	/* copy Tx Data */
-393b49835a2b7cf drivers/spi/spi-topcliff-pch.c lijian          2021-06-24  604  	if ((data->cur_trans->tx_buf != NULL) && (data->pkt_tx_buff != NULL)) {
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  605  		if (*bpw == 8) {
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  606  			tx_buf = data->cur_trans->tx_buf;
-65308c46b760bb2 drivers/spi/spi_topcliff_pch.c Grant Likely    2010-09-29  607  			for (j = 0; j < data->bpw_len; j++)
-65308c46b760bb2 drivers/spi/spi_topcliff_pch.c Grant Likely    2010-09-29  608  				data->pkt_tx_buff[j] = *tx_buf++;
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  609  		} else {
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  610  			tx_sbuf = data->cur_trans->tx_buf;
-65308c46b760bb2 drivers/spi/spi_topcliff_pch.c Grant Likely    2010-09-29  611  			for (j = 0; j < data->bpw_len; j++)
-65308c46b760bb2 drivers/spi/spi_topcliff_pch.c Grant Likely    2010-09-29  612  				data->pkt_tx_buff[j] = *tx_sbuf++;
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  613  		}
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  614  	}
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  615  
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  616  	/* if len greater than PCH_MAX_FIFO_DEPTH, write 16,else len bytes */
-65308c46b760bb2 drivers/spi/spi_topcliff_pch.c Grant Likely    2010-09-29  617  	n_writes = data->bpw_len;
-65308c46b760bb2 drivers/spi/spi_topcliff_pch.c Grant Likely    2010-09-29  618  	if (n_writes > PCH_MAX_FIFO_DEPTH)
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  619  		n_writes = PCH_MAX_FIFO_DEPTH;
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  620  
-b996356d305fd31 drivers/spi/spi-topcliff-pch.c Markus Elfring  2017-01-13  621  	dev_dbg(&data->master->dev,
-b996356d305fd31 drivers/spi/spi-topcliff-pch.c Markus Elfring  2017-01-13  622  		"\n%s:Pulling down SSN low - writing 0x2 to SSNXCR\n",
-b996356d305fd31 drivers/spi/spi-topcliff-pch.c Markus Elfring  2017-01-13  623  		__func__);
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  624  	pch_spi_writereg(data->master, PCH_SSNXCR, SSN_LOW);
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  625  
-393b49835a2b7cf drivers/spi/spi-topcliff-pch.c lijian          2021-06-24  626  	if (data->pkt_tx_buff != NULL) {
-65308c46b760bb2 drivers/spi/spi_topcliff_pch.c Grant Likely    2010-09-29  627  		for (j = 0; j < n_writes; j++)
-65308c46b760bb2 drivers/spi/spi_topcliff_pch.c Grant Likely    2010-09-29  628  			pch_spi_writereg(data->master, PCH_SPDWR, data->pkt_tx_buff[j]);
-393b49835a2b7cf drivers/spi/spi-topcliff-pch.c lijian          2021-06-24  629  	}
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-"j" not initialized on else path.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  630  
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  631  	/* update tx_index */
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08 @632  	data->tx_index = j;
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  633  
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  634  	/* reset transfer complete flag */
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  635  	data->transfer_complete = false;
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  636  	data->transfer_active = true;
-e8b17b5b3f30252 drivers/spi/spi_topcliff_pch.c Masayuki Ohtake 2010-10-08  637  }
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-
+Thanks,
+Mark
