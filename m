@@ -2,28 +2,28 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC163B3F9C
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Jun 2021 10:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28BFB3B3FA3
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Jun 2021 10:41:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbhFYIn3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Jun 2021 04:43:29 -0400
-Received: from lucky1.263xmail.com ([211.157.147.131]:58604 "EHLO
+        id S231194AbhFYIny (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Jun 2021 04:43:54 -0400
+Received: from lucky1.263xmail.com ([211.157.147.132]:34624 "EHLO
         lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbhFYIn2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Jun 2021 04:43:28 -0400
-Received: from localhost (unknown [192.168.167.235])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 663D1C170F;
-        Fri, 25 Jun 2021 16:41:06 +0800 (CST)
+        with ESMTP id S231143AbhFYInu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Jun 2021 04:43:50 -0400
+Received: from localhost (unknown [192.168.167.16])
+        by lucky1.263xmail.com (Postfix) with ESMTP id A8BDCFB012;
+        Fri, 25 Jun 2021 16:41:28 +0800 (CST)
 X-MAIL-GRAY: 0
 X-MAIL-DELIVERY: 1
 X-ADDR-CHECKED4: 1
 X-SKE-CHECKED: 1
 X-ANTISPAM-LEVEL: 2
 Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P5175T139828543985408S1624610437940294_;
-        Fri, 25 Jun 2021 16:41:06 +0800 (CST)
+        by smtp.263.net (postfix) whith ESMTP id P12363T139709942576896S1624610487434219_;
+        Fri, 25 Jun 2021 16:41:29 +0800 (CST)
 X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <86998c0b8fa6e4abb9fc5b90eacaef75>
+X-UNIQUE-TAG: <b971f916b4950e33201b82d57e8aa80f>
 X-RL-SENDER: jon.lin@rock-chips.com
 X-SENDER: jon.lin@rock-chips.com
 X-LOGIN-NAME: jon.lin@rock-chips.com
@@ -42,20 +42,22 @@ Cc:     jon.lin@rock-chips.com, broonie@kernel.org, robh+dt@kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         mturquette@baylibre.com, sboyd@kernel.org,
         linux-clk@vger.kernel.org, Chris Morgan <macromorgan@hotmail.com>
-Subject: [RFC PATCH v9 09/10] arm64: dts: rockchip: Add SFC to RK3308
-Date:   Fri, 25 Jun 2021 16:40:35 +0800
-Message-Id: <20210625084036.13464-5-jon.lin@rock-chips.com>
+Subject: [RFC PATCH v9 10/10] arm64: dts: rockchip: Enable SFC for Odroid Go Advance
+Date:   Fri, 25 Jun 2021 16:41:25 +0800
+Message-Id: <20210625084125.13685-1-jon.lin@rock-chips.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210625084036.13464-1-jon.lin@rock-chips.com>
-References: <20210625084000.13192-1-jon.lin@rock-chips.com>
- <20210625084036.13464-1-jon.lin@rock-chips.com>
+References: <20210625084036.13464-1-jon.lin@rock-chips.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Chris Morgan <macromorgan@hotmail.com>
 
-Add a devicetree entry for the Rockchip SFC for the RK3308 SOC.
+This enables the Rockchip Serial Flash Controller for the Odroid Go
+Advance. Note that while the attached SPI NOR flash and the controller
+both support quad read mode, only 2 of the required 4 pins are present.
+The rx and tx bus width is set to 2 for this reason.
 
 Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
 Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
@@ -71,64 +73,36 @@ Changes in v3: None
 Changes in v2: None
 Changes in v1: None
 
- arch/arm64/boot/dts/rockchip/rk3308.dtsi | 37 ++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ .../boot/dts/rockchip/rk3326-odroid-go2.dts      | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3308.dtsi b/arch/arm64/boot/dts/rockchip/rk3308.dtsi
-index 0c5fa9801e6f..cb8d96235986 100644
---- a/arch/arm64/boot/dts/rockchip/rk3308.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3308.dtsi
-@@ -637,6 +637,17 @@
- 		status = "disabled";
- 	};
+diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
+index 49c97f76df77..f78e11dd8447 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
+@@ -484,6 +484,22 @@
+ 	status = "okay";
+ };
  
-+	sfc: spi@ff4c0000 {
-+		compatible = "rockchip,sfc";
-+		reg = <0x0 0xff4c0000 0x0 0x4000>;
-+		interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru SCLK_SFC>, <&cru HCLK_SFC>;
-+		clock-names = "clk_sfc", "hclk_sfc";
-+		pinctrl-0 = <&sfc_clk &sfc_cs0 &sfc_bus4>;
-+		pinctrl-names = "default";
-+		status = "disabled";
++&sfc {
++	pinctrl-0 = <&sfc_clk &sfc_cs0 &sfc_bus2>;
++	pinctrl-names = "default";
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++	flash@0 {
++		compatible = "jedec,spi-nor";
++		reg = <0>;
++		spi-max-frequency = <108000000>;
++		spi-rx-bus-width = <2>;
++		spi-tx-bus-width = <2>;
 +	};
++};
 +
- 	cru: clock-controller@ff500000 {
- 		compatible = "rockchip,rk3308-cru";
- 		reg = <0x0 0xff500000 0x0 0x1000>;
-@@ -910,6 +921,32 @@
- 			};
- 		};
- 
-+		sfc {
-+			sfc_bus4: sfc-bus4 {
-+				rockchip,pins =
-+					<3 RK_PA0 3 &pcfg_pull_none>,
-+					<3 RK_PA1 3 &pcfg_pull_none>,
-+					<3 RK_PA2 3 &pcfg_pull_none>,
-+					<3 RK_PA3 3 &pcfg_pull_none>;
-+			};
-+
-+			sfc_bus2: sfc-bus2 {
-+				rockchip,pins =
-+					<3 RK_PA0 3 &pcfg_pull_none>,
-+					<3 RK_PA1 3 &pcfg_pull_none>;
-+			};
-+
-+			sfc_cs0: sfc-cs0 {
-+				rockchip,pins =
-+					<3 RK_PA4 3 &pcfg_pull_none>;
-+			};
-+
-+			sfc_clk: sfc-clk {
-+				rockchip,pins =
-+					<3 RK_PA5 3 &pcfg_pull_none>;
-+			};
-+		};
-+
- 		gmac {
- 			rmii_pins: rmii-pins {
- 				rockchip,pins =
+ &tsadc {
+ 	status = "okay";
+ };
 -- 
 2.17.1
 
