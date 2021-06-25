@@ -2,455 +2,172 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A20F73B3C2E
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Jun 2021 07:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2183B3D0B
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Jun 2021 09:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233195AbhFYFZM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Jun 2021 01:25:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46436 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233181AbhFYFZJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 25 Jun 2021 01:25:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A942E61421;
-        Fri, 25 Jun 2021 05:22:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624598569;
-        bh=8Wcq/ry0jthB/53LTJCYPtzMhVIL/Gc7Ld88MISTXf0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SoFREMkKVI5ZHbVYDVr0n4VC4nqdK0donk/am01UvBRXqV6itpfwKLmBSy3dVWuBV
-         yz9cUV68+5RKMy+zIBHlW+9ygDExUQoJQsuK6t4I87lBfJUoquWl3M94etpURJAZ84
-         NXQG991BQqkeEtwSMRr6IyeiaEthx9UzARE7LZlj2GezQk52EnxONwjBnlWpUL8xr8
-         16gzsbGmJyLWmHEEuPHFsyjTAcQ/YITqZZeMInMUVPq7PHbbbLvUs4t/eLyLvl/Qhe
-         PIcOxXwAGCvVkgrcUxpTRdc1GS4lGMvDAOjylQ6cdbt/U+sbPh8yx3hdsr6tZUztm5
-         IpMcmF6jwv5CQ==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/5] i2c: qcom-geni: Add support for GPI DMA
-Date:   Fri, 25 Jun 2021 10:52:13 +0530
-Message-Id: <20210625052213.32260-6-vkoul@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210625052213.32260-1-vkoul@kernel.org>
-References: <20210625052213.32260-1-vkoul@kernel.org>
-MIME-Version: 1.0
+        id S229741AbhFYHOY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Jun 2021 03:14:24 -0400
+Received: from mail-eopbgr140107.outbound.protection.outlook.com ([40.107.14.107]:37349
+        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229437AbhFYHOX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 25 Jun 2021 03:14:23 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oa3Uwch4k/HCj0R2Yo0Weaw+zS45pDDcZQJovUAJO6YKFJmo4QGJnnH5VXNtV+1WsPf8NM/KISQQgyHxZr+OTNNYBXJYTsFJ3iFXi61oilCWw9noPPn/35uIFIcGsci3yLSs8GaS7zJx9Kzw4BL6fbZ2p4715GJ8N24NbBzbNZ5j6P5HR+hsQi/rX0d0e0TCuZ/nK4T3KV3xJOOBBue6QsxcTbnUXatKUtS7acSsAhtM33rWd+Lb4YfkkGIeMYtoZqObNBCknvsrDz1kk1q3g6oc7p6ItMjgwpM1chngEvGBMMzRAE9c/waHG6rpLNSGPxwTovQ4OJTXJva8pK3ygQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eIP2tlR8+uGiubpTNefYfrnLQZQAmFeDUegixDfiJ5I=;
+ b=NIuyWGfaJgQDjSuUc1mzThdPucMuHummfVNi7uCuroWQyUgauVYp8ilFrSnvIUhoP6+89WAa0ou8kCgnSeQDyv8d55LYYSeIC3yNeV5EAJxWpkdppQAUf6PmaZnGfRqeVyarnGHz21thm6nVIFs0phgRScpOPvQzhRNCOCy0GTFEfjZwuRSn8oYU8uUTp/ny8LvtcIatSw7TvVTMlLi/L8AH51S8mzt3gtgrNMQ+GmYFW/xpyLKN/u/o5/GwKbs0oQlSIdnHa8IZchmOc5zYtLRXzR3zYL3HbofpxE2sha0Kv0j2E8U+eBxYkiPel6Z7EATVFYXORDi83oENxSlNrg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=silicom.dk; dmarc=pass action=none header.from=silicom.dk;
+ dkim=pass header.d=silicom.dk; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=SILICOMLTD.onmicrosoft.com; s=selector2-SILICOMLTD-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eIP2tlR8+uGiubpTNefYfrnLQZQAmFeDUegixDfiJ5I=;
+ b=ZjV+01rt9AZkSrGJxCcmBuyJ94zzn6EgH36j3Rsvr2jr2fBgYt6JaQzI7eUXLnxM7S646mLXOkW8ZhbSfpheMMqhdJqdB3k/YEpJh1vu8LhEEREyDSP+oFCruo5Zuutx5hPGt0uk+V6HuhoVSFF9My2y1y6uv0PA4XAEskecfns=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=silicom.dk;
+Received: from AM0PR0402MB3426.eurprd04.prod.outlook.com
+ (2603:10a6:208:22::15) by AM0PR04MB7028.eurprd04.prod.outlook.com
+ (2603:10a6:208:19a::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4264.22; Fri, 25 Jun
+ 2021 07:11:59 +0000
+Received: from AM0PR0402MB3426.eurprd04.prod.outlook.com
+ ([fe80::50fd:f133:3592:292e]) by AM0PR0402MB3426.eurprd04.prod.outlook.com
+ ([fe80::50fd:f133:3592:292e%7]) with mapi id 15.20.4242.025; Fri, 25 Jun 2021
+ 07:11:59 +0000
+Subject: Re: [PATCH 0/4] fpga/mfd/hwmon: Initial support for Silicom N5010 PAC
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-spi@vger.kernel.org
+References: <20210621070621.431482-1-mhu@silicom.dk>
+ <20210621083856.GA24178@yilunxu-OptiPlex-7050>
+From:   =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@silicom.dk>
+Message-ID: <fad06784-45b1-e139-4f93-b7d2777c3e07@silicom.dk>
+Date:   Fri, 25 Jun 2021 09:11:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+In-Reply-To: <20210621083856.GA24178@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US-large
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [85.184.138.169]
+X-ClientProxiedBy: AM6PR05CA0030.eurprd05.prod.outlook.com
+ (2603:10a6:20b:2e::43) To AM0PR0402MB3426.eurprd04.prod.outlook.com
+ (2603:10a6:208:22::15)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [192.168.8.20] (85.184.138.169) by AM6PR05CA0030.eurprd05.prod.outlook.com (2603:10a6:20b:2e::43) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4264.18 via Frontend Transport; Fri, 25 Jun 2021 07:11:59 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0bad1540-43a3-4524-8165-08d937a88630
+X-MS-TrafficTypeDiagnostic: AM0PR04MB7028:
+X-Microsoft-Antispam-PRVS: <AM0PR04MB7028E49F09D78CA312A61FFBD5069@AM0PR04MB7028.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VbiJi6Va6VLNqKNVG52asmWbOhbAEqEXQGk20wUs/LrS29qlW8mDJbC2d3d9QWfin4WxXzS5b4Ull5lwln1tjnPQByzK1ztHRo2sSKF6y+GZIxfMFRbOnZ30Nf4ey83qWHJL1Y1zybJvzPuEJNZrsLhmwhw4m7VabWLvUjDEnrntNowwbgnUXmvWMFuU38IlAfrO4scsYgt1oCnzkdPHDhTJU15geHKXsJtcDvxQaX9YjAlN4dtxW1ZDKUN9PcO7i6P85YWsCvyeMIg9G6OTWs8Pgnb/cKq/wNssNtmLHwUUXYbEIWKENzIkMeMSJIpAUfwLHlqGEf49snAdWiK5scULX9UChc8tQthhKqEouHGfHGautDLU2F1dkdqkivNAIcrvLsizBnYH/sfGdL6kAHJVuXAx8LJEzwzJSaJ/ncSqlnWppzNW4BAdNjdBt6wpIwakLfO8tfD580D9dBJpnFMfWOzw4QtiAZcCcIFYP8kodAoO4wzlRBNPFRXqYXW9RDilwITFh7ONWjaC7zDGLw7X/HTFJ4SU4dGpJB0OCAhoI9GQSkT9+OrXYomzlEf8+40vc+hZtniPdKkQXQ6dEuos+QuOCS9lJiIy1Pe7xq7DGq5RAYoHDxaRc5ES/dRi7O+IozSleof3H0GXLf6qnrOT0vVIzxtRifUJ0rIXAAdeAevzxooZFs7HBavMUVZDkSFjqT2lmUFr7Oo7z+WjuJrMnbO/1n1pjy4ypH6tubA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3426.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(366004)(396003)(39840400004)(346002)(6916009)(26005)(38100700002)(31696002)(7416002)(66574015)(86362001)(8976002)(83380400001)(8936002)(2906002)(5660300002)(66946007)(8676002)(66476007)(66556008)(16526019)(186003)(6486002)(316002)(36756003)(478600001)(54906003)(2616005)(4326008)(16576012)(31686004)(956004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c3p0UmNCTUVUL0hLeFpjS1UyTUFxTjg3aXJGOWdIR2owRWxrRDRoQThEamRJ?=
+ =?utf-8?B?dTI1NkQ2RHo5c1VUMllSZzBaT3VXWWhIbTJaTzc3RHc3bVl1RlBUKzJiM1E3?=
+ =?utf-8?B?clZSL0pEQWxlU0ZzbDJWWERNQmt3cnlKOWlPUERoa2x0NFpGVmUwUlM1azRj?=
+ =?utf-8?B?U1d6VnFNdDlkT2JDaW1JdjA3TExsVDhHUFFack5XbnpBNnRDMkxjamdpdDJD?=
+ =?utf-8?B?alNBL2wrMElKV0lxd0YwWDdQVUsvN2E5ZVQvR0tZdXFDSGFFKzlKMlR0amVs?=
+ =?utf-8?B?cmFwNTFINndvbFkzYksraHZYMWF2TzF0SW9WbXcxbTZ5VnlKRzRMUTYxdVVT?=
+ =?utf-8?B?UVRWZWtWTnFPazQrWXRUcVgybVQxamtqS3JCbjM3Zzg0N1lXWXo2amR6dlND?=
+ =?utf-8?B?aVNPWTN5Q1Y3SHFOUFM0dnhveDhVeFJkRXNmaCt2ZlBKRVk2YnBHRFNKeXNJ?=
+ =?utf-8?B?c2gveWhFVWNaQ1ZJaFNKQWZCdmxqVDBtN0NwK0tQcXM5OVZ1VFN5S0xNeDJH?=
+ =?utf-8?B?dmtTamhiQjVOaXp5WkRzWUFMbVJ1eXdJYkVqQXdWSmZkWFlTSENBaVJxUHdj?=
+ =?utf-8?B?YzBWeVg4QVpjeEcwR2crY1U4KzJHSzRoaml3YzBvZ3dSQlhzdm5NV2hhdDFr?=
+ =?utf-8?B?bnBKNGZCanZHYTFVd21QaDFFanBWNDczS0cxYk1hZFo3TXJqVkdaOW1jRVBI?=
+ =?utf-8?B?U3pFRGtEYkNBQmhGOTc2VTA2Q0VCVTB2Y1JnUDhJZ3hVRXZQNE04aGpPSXlo?=
+ =?utf-8?B?WWo5ZXh4ajltZDRZY1VXOW1FU0pEVlRWUmxqUTF2L2t1YmNUYU5vTk1LWGVy?=
+ =?utf-8?B?ZVYrVFdkTEhONnZXQjlSQ0F0RHdEa24rRHJvMFJHUmFSWlY5VGx5U1NMaFlV?=
+ =?utf-8?B?bjVubHM0dEJ4YjR1RDc0bUw3R0h2ckhQSU43aHJFbDlHbFk0TUgvNXdxSnZy?=
+ =?utf-8?B?b2FuU1E0UlQ5NVBPVGFZL0dUQWN4dzhmK3dWVHFieklMV0Ztem9zeStWRkxJ?=
+ =?utf-8?B?RUhuQ1dUa1BRZ3VWS2tSUVh1R0ErNEhBdno4cWQwcHk1S0t0dExuN2p2ZFMx?=
+ =?utf-8?B?QkdWS1pSV2VSWEN3RjRsR0dqUUdVdzNEQWdNMjdIL3dEaHFJZ01OdnJvZ3pD?=
+ =?utf-8?B?V3lZNDJNckhnZ0lJc3ZuWElUZjR2Vy96Mk1XeWJ6MTNXVWd3ai9HZy95alpl?=
+ =?utf-8?B?cnBKUzJZQjZwT29GU1ZJeGw3ZU9EVW1BUkFzMWtOQWJtazVBQUZpc0FwYUFR?=
+ =?utf-8?B?ZDlDY1RYdnJoQytkbEhKbm1hSjkyQzYxMjM1SUU2S01OQUZDUnFJTUxQeW5N?=
+ =?utf-8?B?SWdFWE90dVNqaVFuR09IdDlHV0dISld0eGh2M1NOWTE4Q3AzOWxnT0dJWk90?=
+ =?utf-8?B?cnJ0d2huenAvS01pcnpIbUxsTGZTdHR6MVFjamh6ajFLa0d2cmFPMzVZeXlh?=
+ =?utf-8?B?Z0ozdmwvK2NxWGppY3l0NVV4S0g5SEFsMEx6RXQwTEQvb3FGY2lPMldJR3M5?=
+ =?utf-8?B?YkgvakNiMm42NjdiTmorWjRLbGxnTDVOcDFTakNmSWczR2tMMFp6VFFJUmli?=
+ =?utf-8?B?Qk1pQjI3N3dFUThpQVZtbVNzZWdwUjNzd1dEWC9wVGdRSWVReXo1TTFsOThI?=
+ =?utf-8?B?MGlzM3ZVUTRMUG5FTm16enFwYzAxNEY2MzA3V3NVcmtXdnNvVytnbjNMTG5h?=
+ =?utf-8?B?TlBUeSs4Z1BtanhDSFJNTFEwNTNNQzlBOWl2bGd5R3hYdFJHMXNWNHNYMjdh?=
+ =?utf-8?Q?MhVY10nilllANJO0Et7dkIri/7TmgDJ1iYfahlq?=
+X-OriginatorOrg: silicom.dk
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0bad1540-43a3-4524-8165-08d937a88630
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3426.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jun 2021 07:11:59.6154
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: c9e326d8-ce47-4930-8612-cc99d3c87ad1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4TmLoyHAIJpTUlGNc8mUAgVPGQrtUtQbuC8cZDFEtYl7+BVMIDi/41ya+kZkSFax
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7028
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This adds capability to use GSI DMA for I2C transfers
+Hi Yilun,
 
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
----
- drivers/i2c/busses/i2c-qcom-geni.c | 309 ++++++++++++++++++++++++++++-
- 1 file changed, 301 insertions(+), 8 deletions(-)
+On 21/06/2021 10.38, Xu Yilun wrote:
+> On Mon, Jun 21, 2021 at 09:06:17AM +0200, Martin Hundebøll wrote:
+>> From: Martin Hundebøll <mhu@geanix.com>
+>>
+>> This is an initial set of patches for the Silciom N5010 programmable
+>> accelerated card adding support for reading out sensors.
+> 
+> Seems the card is a variant of d5005, just changes the layout of the
+> sensors in BMC. It may not worth a dedicated PCI DID, and pass
+> down the info all the way from
+>    pcie -> dfl -> spi-altera -> m10bmc -> m10bmc-hwmon
+> 
+> Is it possible we just have some version check in m10bmc?
 
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-index 07b710a774df..839802f04b75 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -3,7 +3,9 @@
- 
- #include <linux/acpi.h>
- #include <linux/clk.h>
-+#include <linux/dmaengine.h>
- #include <linux/dma-mapping.h>
-+#include <linux/dma/qcom-gpi-dma.h>
- #include <linux/err.h>
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
-@@ -48,6 +50,8 @@
- #define LOW_COUNTER_SHFT	10
- #define CYCLE_COUNTER_MSK	GENMASK(9, 0)
- 
-+#define I2C_PACK_EN		(BIT(0) | BIT(1))
-+
- enum geni_i2c_err_code {
- 	GP_IRQ0,
- 	NACK,
-@@ -72,6 +76,11 @@ enum geni_i2c_err_code {
- #define XFER_TIMEOUT		HZ
- #define RST_TIMEOUT		HZ
- 
-+enum i2c_se_mode {
-+	I2C_FIFO_SE_DMA,
-+	I2C_GPI_DMA,
-+};
-+
- struct geni_i2c_dev {
- 	struct geni_se se;
- 	u32 tx_wm;
-@@ -89,6 +98,17 @@ struct geni_i2c_dev {
- 	void *dma_buf;
- 	size_t xfer_len;
- 	dma_addr_t dma_addr;
-+	struct dma_chan *tx_c;
-+	struct dma_chan *rx_c;
-+	dma_cookie_t rx_cookie, tx_cookie;
-+	dma_addr_t tx_addr;
-+	dma_addr_t rx_addr;
-+	bool cfg_sent;
-+	struct dma_async_tx_descriptor *tx_desc;
-+	struct dma_async_tx_descriptor *rx_desc;
-+	void *tx_buf;
-+	void *rx_buf;
-+	enum i2c_se_mode se_mode;
- };
- 
- struct geni_i2c_err_log {
-@@ -456,6 +476,213 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
- 	return gi2c->err;
- }
- 
-+static void i2c_gsi_cb_result(void *cb, const struct dmaengine_result *result)
-+{
-+	struct geni_i2c_dev *gi2c = cb;
-+
-+	if (result->result != DMA_TRANS_NOERROR) {
-+		dev_err(gi2c->se.dev, "DMA txn failed:%d\n", result->result);
-+		return;
-+	}
-+
-+	if (result->residue)
-+		dev_dbg(gi2c->se.dev, "DMA xfer has pending: %d\n", result->residue);
-+
-+	complete(&gi2c->done);
-+}
-+
-+static void geni_i2c_gpi_unmap(struct geni_i2c_dev *gi2c, struct i2c_msg *msg)
-+{
-+	if (gi2c->tx_buf) {
-+		dma_unmap_single(gi2c->se.dev->parent, gi2c->tx_addr, msg->len, DMA_TO_DEVICE);
-+		i2c_put_dma_safe_msg_buf(gi2c->tx_buf, msg, false);
-+		gi2c->tx_buf = NULL;
-+	}
-+
-+	if (gi2c->rx_buf) {
-+		dma_unmap_single(gi2c->se.dev->parent, gi2c->rx_addr, msg->len, DMA_FROM_DEVICE);
-+		i2c_put_dma_safe_msg_buf(gi2c->rx_buf, msg, false);
-+		gi2c->rx_buf = NULL;
-+	}
-+}
-+
-+static int geni_i2c_gpi_rx(struct geni_i2c_dev *gi2c,
-+			   struct i2c_msg *msg, struct dma_slave_config *config)
-+{
-+	struct gpi_i2c_config *peripheral;
-+	unsigned int flags;
-+	void *dma_buf;
-+	int ret;
-+
-+	peripheral = config->peripheral_config;
-+
-+	dma_buf = i2c_get_dma_safe_msg_buf(msg, 1);
-+	if (!dma_buf)
-+		return -ENOMEM;
-+
-+	gi2c->rx_addr = dma_map_single(gi2c->se.dev->parent, dma_buf, msg->len, DMA_FROM_DEVICE);
-+	if (dma_mapping_error(gi2c->se.dev->parent, gi2c->rx_addr)) {
-+		i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
-+		return -ENOMEM;
-+	}
-+
-+	peripheral->rx_len = msg->len;
-+	peripheral->op = I2C_READ;
-+
-+	ret = dmaengine_slave_config(gi2c->rx_c, config);
-+	if (ret) {
-+		dev_err(gi2c->se.dev, "rx dma config error:%d\n", ret);
-+		goto err_config;
-+	}
-+
-+	peripheral->set_config =  false;
-+	peripheral->multi_msg = true;
-+	flags = DMA_PREP_INTERRUPT | DMA_CTRL_ACK;
-+
-+	gi2c->rx_desc = dmaengine_prep_slave_single(gi2c->rx_c, gi2c->rx_addr,
-+						    msg->len, DMA_DEV_TO_MEM, flags);
-+	if (!gi2c->rx_desc) {
-+		dev_err(gi2c->se.dev, "prep_slave_sg for rx failed\n");
-+		ret = -EIO;
-+		goto err_config;
-+	}
-+
-+	gi2c->rx_desc->callback_result = i2c_gsi_cb_result;
-+	gi2c->rx_desc->callback_param = gi2c;
-+	gi2c->rx_buf = dma_buf;
-+
-+	return 0;
-+
-+err_config:
-+	dma_unmap_single(gi2c->se.dev->parent, gi2c->rx_addr, msg->len, DMA_FROM_DEVICE);
-+	i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
-+	return ret;
-+}
-+
-+static int geni_i2c_gpi_tx(struct geni_i2c_dev *gi2c,
-+			   struct i2c_msg *msg, struct dma_slave_config *config)
-+{
-+	struct gpi_i2c_config *peripheral;
-+	unsigned int flags;
-+	void *dma_buf;
-+	int ret;
-+
-+	peripheral = config->peripheral_config;
-+
-+	dma_buf = i2c_get_dma_safe_msg_buf(msg, 1);
-+	if (!dma_buf)
-+		return -ENOMEM;
-+
-+	gi2c->tx_addr = dma_map_single(gi2c->se.dev->parent, dma_buf, msg->len, DMA_TO_DEVICE);
-+	if (dma_mapping_error(gi2c->se.dev->parent, gi2c->tx_addr)) {
-+		i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
-+		return -ENOMEM;
-+	}
-+
-+	peripheral->op = I2C_WRITE;
-+
-+	ret = dmaengine_slave_config(gi2c->tx_c, config);
-+	if (ret) {
-+		dev_err(gi2c->se.dev, "tx dma config error:%d\n", ret);
-+		goto err_config;
-+	}
-+
-+	peripheral->set_config =  false;
-+	peripheral->multi_msg = true;
-+	flags = DMA_PREP_INTERRUPT | DMA_CTRL_ACK;
-+
-+	gi2c->tx_desc = dmaengine_prep_slave_single(gi2c->tx_c, gi2c->tx_addr,
-+						    msg->len, DMA_MEM_TO_DEV, flags);
-+	if (!gi2c->tx_desc) {
-+		dev_err(gi2c->se.dev, "prep_slave_sg for tx failed\n");
-+		ret = -EIO;
-+		goto err_config;
-+	}
-+
-+	gi2c->tx_desc->callback_result = i2c_gsi_cb_result;
-+	gi2c->tx_desc->callback_param = gi2c;
-+	gi2c->tx_buf = dma_buf;
-+
-+	return 0;
-+
-+err_config:
-+	dma_unmap_single(gi2c->se.dev->parent, gi2c->tx_addr, msg->len, DMA_FROM_DEVICE);
-+	i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
-+	return ret;
-+}
-+
-+static int geni_i2c_gsi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], int num)
-+{
-+	struct dma_slave_config config = {};
-+	struct gpi_i2c_config peripheral = {};
-+	int i, ret = 0, timeout, stretch;
-+
-+	config.peripheral_config = &peripheral;
-+	config.peripheral_size = sizeof(peripheral);
-+
-+	if (!gi2c->cfg_sent) {
-+		const struct geni_i2c_clk_fld *itr = gi2c->clk_fld;
-+
-+		gi2c->cfg_sent = true;
-+		peripheral.pack_enable = I2C_PACK_EN;
-+		peripheral.cycle_count = itr->t_cycle_cnt;
-+		peripheral.high_count = itr->t_high_cnt;
-+		peripheral.low_count = itr->t_low_cnt;
-+		peripheral.clk_div = itr->clk_div;
-+		peripheral.set_config =  true;
-+	}
-+	peripheral.multi_msg = false;
-+
-+	for (i = 0; i < num; i++) {
-+		gi2c->cur = &msgs[i];
-+		dev_dbg(gi2c->se.dev, "msg[%d].len:%d\n", i, gi2c->cur->len);
-+
-+		stretch = (i < (num - 1));
-+		peripheral.addr = msgs[i].addr;
-+		peripheral.stretch = stretch;
-+
-+		if (msgs[i].flags & I2C_M_RD) {
-+			ret =  geni_i2c_gpi_rx(gi2c, &msgs[i], &config);
-+			if (ret) {
-+				dev_err(gi2c->se.dev, "Rx txn setting failed: %d\n", ret);
-+				goto err;
-+			}
-+
-+			/* Issue RX */
-+			gi2c->rx_cookie = dmaengine_submit(gi2c->rx_desc);
-+			dma_async_issue_pending(gi2c->rx_c);
-+		}
-+
-+		ret =  geni_i2c_gpi_tx(gi2c, &msgs[i], &config);
-+		if (ret) {
-+			dev_err(gi2c->se.dev, "Tx txn setting failed: %d\n", ret);
-+			goto err;
-+		}
-+
-+		/* Issue TX */
-+		gi2c->tx_cookie = dmaengine_submit(gi2c->tx_desc);
-+		dma_async_issue_pending(gi2c->tx_c);
-+
-+		timeout = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
-+		if (!timeout) {
-+			dev_err(gi2c->se.dev, "I2C timeout gsi flags:%d addr:0x%x\n",
-+				gi2c->cur->flags, gi2c->cur->addr);
-+			gi2c->err = -ETIMEDOUT;
-+			goto err;
-+		}
-+
-+		geni_i2c_gpi_unmap(gi2c, &msgs[i]);
-+	}
-+
-+	return 0;
-+
-+err:
-+	dmaengine_terminate_sync(gi2c->rx_c);
-+	dmaengine_terminate_sync(gi2c->tx_c);
-+	geni_i2c_gpi_unmap(gi2c, &msgs[i]);
-+	return ret;
-+}
-+
- static int geni_i2c_xfer(struct i2c_adapter *adap,
- 			 struct i2c_msg msgs[],
- 			 int num)
-@@ -475,6 +702,12 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
- 	}
- 
- 	qcom_geni_i2c_conf(gi2c);
-+
-+	if (gi2c->se_mode == I2C_GPI_DMA) {
-+		ret = geni_i2c_gsi_xfer(gi2c, msgs, num);
-+		goto geni_i2c_txn_ret;
-+	}
-+
- 	for (i = 0; i < num; i++) {
- 		u32 m_param = i < (num - 1) ? STOP_STRETCH : 0;
- 
-@@ -489,6 +722,7 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
- 		if (ret)
- 			break;
- 	}
-+geni_i2c_txn_ret:
- 	if (ret == 0)
- 		ret = num;
- 
-@@ -517,11 +751,44 @@ static const struct acpi_device_id geni_i2c_acpi_match[] = {
- MODULE_DEVICE_TABLE(acpi, geni_i2c_acpi_match);
- #endif
- 
-+static void release_gpi_dma(struct geni_i2c_dev *gi2c)
-+{
-+	if (gi2c->rx_c) {
-+		dma_release_channel(gi2c->rx_c);
-+		gi2c->rx_c = NULL;
-+	}
-+	if (gi2c->tx_c) {
-+		dma_release_channel(gi2c->tx_c);
-+		gi2c->tx_c = NULL;
-+	}
-+}
-+
-+static int setup_gpi_dma(struct geni_i2c_dev *gi2c)
-+{
-+	geni_se_select_mode(&gi2c->se, GENI_GPI_DMA);
-+	gi2c->tx_c = dma_request_chan(gi2c->se.dev, "tx");
-+	if (IS_ERR_OR_NULL(gi2c->tx_c)) {
-+		dev_err(gi2c->se.dev, "TX dma_request_slave_channel fail\n");
-+		return PTR_ERR(gi2c->tx_c);
-+	}
-+
-+	gi2c->rx_c = dma_request_chan(gi2c->se.dev, "rx");
-+	if (IS_ERR_OR_NULL(gi2c->rx_c)) {
-+		dev_err(gi2c->se.dev, "RX dma_request_slave_channel fail\n");
-+		dma_release_channel(gi2c->tx_c);
-+		gi2c->tx_c = NULL;
-+		return PTR_ERR(gi2c->rx_c);
-+	}
-+
-+	dev_dbg(gi2c->se.dev, "Grabbed GPI dma channels\n");
-+	return 0;
-+}
-+
- static int geni_i2c_probe(struct platform_device *pdev)
- {
- 	struct geni_i2c_dev *gi2c;
- 	struct resource *res;
--	u32 proto, tx_depth;
-+	u32 proto, tx_depth, fifo_disable;
- 	int ret;
- 	struct device *dev = &pdev->dev;
- 
-@@ -601,16 +868,43 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 	proto = geni_se_read_proto(&gi2c->se);
--	tx_depth = geni_se_get_tx_fifo_depth(&gi2c->se);
- 	if (proto != GENI_SE_I2C) {
- 		dev_err(dev, "Invalid proto %d\n", proto);
- 		geni_se_resources_off(&gi2c->se);
- 		return -ENXIO;
- 	}
--	gi2c->tx_wm = tx_depth - 1;
--	geni_se_init(&gi2c->se, gi2c->tx_wm, tx_depth);
--	geni_se_config_packing(&gi2c->se, BITS_PER_BYTE, PACKING_BYTES_PW,
--							true, true, true);
-+
-+	fifo_disable = readl_relaxed(gi2c->se.base + GENI_IF_DISABLE_RO) & FIFO_IF_DISABLE;
-+
-+	switch (fifo_disable) {
-+	case 1:
-+		ret = setup_gpi_dma(gi2c);
-+		if (!ret) { /* success case */
-+			gi2c->se_mode = I2C_GPI_DMA;
-+			geni_se_select_mode(&gi2c->se, GENI_GPI_DMA);
-+			dev_dbg(dev, "Using GPI DMA mode for I2C\n");
-+			break;
-+		}
-+		/*
-+		 * in case of failure to get dma channel, we can till do the
-+		 * FIFO mode, so fallthrough
-+		 */
-+		dev_warn(dev, "FIFO mode disabled, but couldn't get DMA, fall back to FIFO mode\n");
-+		fallthrough;
-+
-+	case 0:
-+		gi2c->se_mode = I2C_FIFO_SE_DMA;
-+		tx_depth = geni_se_get_tx_fifo_depth(&gi2c->se);
-+		gi2c->tx_wm = tx_depth - 1;
-+		geni_se_init(&gi2c->se, gi2c->tx_wm, tx_depth);
-+		geni_se_config_packing(&gi2c->se, BITS_PER_BYTE,
-+				       PACKING_BYTES_PW, true, true, true);
-+
-+		dev_dbg(dev, "i2c fifo/se-dma mode. fifo depth:%d\n", tx_depth);
-+
-+		break;
-+	}
-+
- 	ret = geni_se_resources_off(&gi2c->se);
- 	if (ret) {
- 		dev_err(dev, "Error turning off resources %d\n", ret);
-@@ -621,8 +915,6 @@ static int geni_i2c_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	dev_dbg(dev, "i2c fifo/se-dma mode. fifo depth:%d\n", tx_depth);
--
- 	gi2c->suspended = 1;
- 	pm_runtime_set_suspended(gi2c->se.dev);
- 	pm_runtime_set_autosuspend_delay(gi2c->se.dev, I2C_AUTO_SUSPEND_DELAY);
-@@ -645,6 +937,7 @@ static int geni_i2c_remove(struct platform_device *pdev)
- {
- 	struct geni_i2c_dev *gi2c = platform_get_drvdata(pdev);
- 
-+	release_gpi_dma(gi2c);
- 	i2c_del_adapter(&gi2c->adap);
- 	pm_runtime_disable(gi2c->se.dev);
- 	return 0;
--- 
-2.31.1
+I think not.
 
+The n501x is a Silicom card, and d5005 is from Intel. The Max10 based BMC
+is quite similar, which is why we use a feature revision to differentiate,
+but the main FPGA register layout is a different story.
+
+// Martin
+
+>>
+>> I'm not really sure if these should be taken through each of the
+>> affected trees separately, or just by fpga collectively?
+>>
+>> Based on current master.
+>>
+>> // Martin
+>>
+>> Debarati Biswas (1):
+>>    fpga: dfl: Move DFH header register macros to linux/dfl.h
+>>
+>> Martin Hundebøll (3):
+>>    fpga: dfl: pci: add device IDs for Silicom N501x PAC cards
+>>    spi: spi-altera-dfl: support n5010 feature revision
+>>    hwmon: intel-m10-bmc: add sensor support for Silicom N5010 card
+>>
+>>   drivers/fpga/dfl-pci.c              |   5 ++
+>>   drivers/fpga/dfl.h                  |  48 +-----------
+>>   drivers/hwmon/intel-m10-bmc-hwmon.c | 116 ++++++++++++++++++++++++++++
+>>   drivers/mfd/intel-m10-bmc.c         |  12 ++-
+>>   drivers/spi/spi-altera-dfl.c        |  15 +++-
+>>   include/linux/dfl.h                 |  52 +++++++++++++
+>>   6 files changed, 198 insertions(+), 50 deletions(-)
+>>
+>> -- 
+>> 2.31.0
