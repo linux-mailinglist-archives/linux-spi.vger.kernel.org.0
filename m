@@ -2,18 +2,18 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9F03B3F2C
+	by mail.lfdr.de (Postfix) with ESMTP id 9192D3B3F29
 	for <lists+linux-spi@lfdr.de>; Fri, 25 Jun 2021 10:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbhFYI3e (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Jun 2021 04:29:34 -0400
-Received: from lucky1.263xmail.com ([211.157.147.134]:57976 "EHLO
+        id S230318AbhFYI3b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Jun 2021 04:29:31 -0400
+Received: from lucky1.263xmail.com ([211.157.147.131]:39680 "EHLO
         lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbhFYI3d (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Jun 2021 04:29:33 -0400
+        with ESMTP id S229864AbhFYI3b (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Jun 2021 04:29:31 -0400
 Received: from localhost (unknown [192.168.167.16])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 43C1ACF1B1;
-        Fri, 25 Jun 2021 16:27:11 +0800 (CST)
+        by lucky1.263xmail.com (Postfix) with ESMTP id 50797C1386;
+        Fri, 25 Jun 2021 16:27:09 +0800 (CST)
 X-MAIL-GRAY: 0
 X-MAIL-DELIVERY: 1
 X-ADDR-CHECKED4: 1
@@ -21,9 +21,9 @@ X-SKE-CHECKED: 1
 X-ANTISPAM-LEVEL: 2
 Received: from localhost.localdomain (unknown [58.22.7.114])
         by smtp.263.net (postfix) whith ESMTP id P12363T139709984536320S1624609601822117_;
-        Fri, 25 Jun 2021 16:27:07 +0800 (CST)
+        Fri, 25 Jun 2021 16:27:08 +0800 (CST)
 X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <da9954a073a573b4c53805c522ddc0cb>
+X-UNIQUE-TAG: <7d3e101473ba0edd5597ceec9030d8b7>
 X-RL-SENDER: jon.lin@rock-chips.com
 X-SENDER: jon.lin@rock-chips.com
 X-LOGIN-NAME: jon.lin@rock-chips.com
@@ -41,10 +41,10 @@ Cc:     jon.lin@rock-chips.com, broonie@kernel.org, robh+dt@kernel.org,
         p.yadav@ti.com, macroalpha82@gmail.com, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         mturquette@baylibre.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org, Chris Morgan <macromorgan@hotmail.com>
-Subject: [RFC PATCH v9 03/10] arm64: dts: rockchip: Add SFC to PX30
-Date:   Fri, 25 Jun 2021 16:26:32 +0800
-Message-Id: <20210625082639.32688-4-jon.lin@rock-chips.com>
+        linux-clk@vger.kernel.org, Elaine Zhang <zhangqing@rock-chips.com>
+Subject: [RFC PATCH v9 04/10] clk: rockchip: rk3036: fix up the sclk_sfc parent error
+Date:   Fri, 25 Jun 2021 16:26:33 +0800
+Message-Id: <20210625082639.32688-5-jon.lin@rock-chips.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210625082639.32688-1-jon.lin@rock-chips.com>
 References: <20210625082639.32688-1-jon.lin@rock-chips.com>
@@ -52,15 +52,15 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Chris Morgan <macromorgan@hotmail.com>
+Choose the correct pll
 
-Add a devicetree entry for the Rockchip SFC for the PX30 SOC.
-
-Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
 Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
 ---
 
-Changes in v9: None
+Changes in v9:
+- Seperate FDT binding docs and includes from rk3036 sfc_hclk patch
+
 Changes in v8: None
 Changes in v7: None
 Changes in v6: None
@@ -70,65 +70,30 @@ Changes in v3: None
 Changes in v2: None
 Changes in v1: None
 
- arch/arm64/boot/dts/rockchip/px30.dtsi | 38 ++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ drivers/clk/rockchip/clk-rk3036.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/px30.dtsi b/arch/arm64/boot/dts/rockchip/px30.dtsi
-index 09baa8a167ce..d854f2577067 100644
---- a/arch/arm64/boot/dts/rockchip/px30.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/px30.dtsi
-@@ -966,6 +966,18 @@
- 		status = "disabled";
- 	};
+diff --git a/drivers/clk/rockchip/clk-rk3036.c b/drivers/clk/rockchip/clk-rk3036.c
+index 91d56ad45817..1986856d94b2 100644
+--- a/drivers/clk/rockchip/clk-rk3036.c
++++ b/drivers/clk/rockchip/clk-rk3036.c
+@@ -121,6 +121,7 @@ PNAME(mux_pll_src_3plls_p)	= { "apll", "dpll", "gpll" };
+ PNAME(mux_timer_p)		= { "xin24m", "pclk_peri_src" };
  
-+	sfc: spi@ff3a0000 {
-+		compatible = "rockchip,sfc";
-+		reg = <0x0 0xff3a0000 0x0 0x4000>;
-+		interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru SCLK_SFC>, <&cru HCLK_SFC>;
-+		clock-names = "clk_sfc", "hclk_sfc";
-+		pinctrl-0 = <&sfc_clk &sfc_cs0 &sfc_bus4>;
-+		pinctrl-names = "default";
-+		power-domains = <&power PX30_PD_MMC_NAND>;
-+		status = "disabled";
-+	};
-+
- 	nfc: nand-controller@ff3b0000 {
- 		compatible = "rockchip,px30-nfc";
- 		reg = <0x0 0xff3b0000 0x0 0x4000>;
-@@ -1967,6 +1979,32 @@
- 			};
- 		};
+ PNAME(mux_pll_src_apll_dpll_gpll_usb480m_p)	= { "apll", "dpll", "gpll", "usb480m" };
++PNAME(mux_pll_src_dmyapll_dpll_gpll_xin24_p)   = { "dummy_apll", "dpll", "gpll", "xin24m" };
  
-+		sfc {
-+			sfc_bus4: sfc-bus4 {
-+				rockchip,pins =
-+					<1 RK_PA0 3 &pcfg_pull_none>,
-+					<1 RK_PA1 3 &pcfg_pull_none>,
-+					<1 RK_PA2 3 &pcfg_pull_none>,
-+					<1 RK_PA3 3 &pcfg_pull_none>;
-+			};
-+
-+			sfc_bus2: sfc-bus2 {
-+				rockchip,pins =
-+					<1 RK_PA0 3 &pcfg_pull_none>,
-+					<1 RK_PA1 3 &pcfg_pull_none>;
-+			};
-+
-+			sfc_cs0: sfc-cs0 {
-+				rockchip,pins =
-+					<1 RK_PA4 3 &pcfg_pull_none>;
-+			};
-+
-+			sfc_clk: sfc-clk {
-+				rockchip,pins =
-+					<1 RK_PB1 3 &pcfg_pull_none>;
-+			};
-+		};
-+
- 		lcdc {
- 			lcdc_rgb_dclk_pin: lcdc-rgb-dclk-pin {
- 				rockchip,pins =
+ PNAME(mux_mmc_src_p)	= { "apll", "dpll", "gpll", "xin24m" };
+ PNAME(mux_i2s_pre_p)	= { "i2s_src", "i2s_frac", "ext_i2s", "xin12m" };
+@@ -340,7 +341,7 @@ static struct rockchip_clk_branch rk3036_clk_branches[] __initdata = {
+ 			RK2928_CLKSEL_CON(16), 8, 2, MFLAGS, 10, 5, DFLAGS,
+ 			RK2928_CLKGATE_CON(10), 4, GFLAGS),
+ 
+-	COMPOSITE(SCLK_SFC, "sclk_sfc", mux_pll_src_apll_dpll_gpll_usb480m_p, 0,
++	COMPOSITE(SCLK_SFC, "sclk_sfc", mux_pll_src_dmyapll_dpll_gpll_xin24_p, 0,
+ 			RK2928_CLKSEL_CON(16), 0, 2, MFLAGS, 2, 5, DFLAGS,
+ 			RK2928_CLKGATE_CON(10), 5, GFLAGS),
+ 
 -- 
 2.17.1
 
