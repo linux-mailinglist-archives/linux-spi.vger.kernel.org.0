@@ -2,109 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1AE3B3D43
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Jun 2021 09:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9551D3B3DBF
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Jun 2021 09:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbhFYHV4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Jun 2021 03:21:56 -0400
-Received: from lucky1.263xmail.com ([211.157.147.134]:48194 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbhFYHVy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Jun 2021 03:21:54 -0400
-Received: from localhost (unknown [192.168.167.16])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 17BF2CF051;
-        Fri, 25 Jun 2021 15:19:32 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-SKE-CHECKED: 1
-X-ANTISPAM-LEVEL: 2
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P12363T139710624155392S1624605571233266_;
-        Fri, 25 Jun 2021 15:19:32 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <3bef0b5452491ff7d13213441ac6be68>
-X-RL-SENDER: jon.lin@rock-chips.com
-X-SENDER: jon.lin@rock-chips.com
-X-LOGIN-NAME: jon.lin@rock-chips.com
-X-FST-TO: linux-spi@vger.kernel.org
-X-RCPT-COUNT: 20
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-From:   Jon Lin <jon.lin@rock-chips.com>
-To:     linux-spi@vger.kernel.org
-Cc:     jon.lin@rock-chips.com, broonie@kernel.org, robh+dt@kernel.org,
-        heiko@sntech.de, jbx6244@gmail.com, hjc@rock-chips.com,
-        yifeng.zhao@rock-chips.com, sugar.zhang@rock-chips.com,
-        linux-rockchip@lists.infradead.org, linux-mtd@lists.infradead.org,
-        p.yadav@ti.com, macroalpha82@gmail.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org, Chris Morgan <macromorgan@hotmail.com>
-Subject: [PATCH v9 10/10] arm64: dts: rockchip: Enable SFC for Odroid Go Advance
-Date:   Fri, 25 Jun 2021 15:19:23 +0800
-Message-Id: <20210625071923.11042-1-jon.lin@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210625071748.10718-1-jon.lin@rock-chips.com>
-References: <20210625071748.10718-1-jon.lin@rock-chips.com>
+        id S229721AbhFYHpH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Jun 2021 03:45:07 -0400
+Received: from first.geanix.com ([116.203.34.67]:34880 "EHLO first.geanix.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229474AbhFYHpH (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 25 Jun 2021 03:45:07 -0400
+Received: from zen.. (unknown [185.17.218.86])
+        by first.geanix.com (Postfix) with ESMTPSA id 0B3A54C41AF;
+        Fri, 25 Jun 2021 07:42:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1624606964; bh=gSgxnotvFWjxmyiWvry2LQo2dRMw5YZN5NOHhaPPBNU=;
+        h=From:To:Cc:Subject:Date;
+        b=I+IjEbkVotK4Ajs5M1I1HGy9ivLYPeI6QWBwGXnmyp+tyfZRI0kmPgfk176Td9s18
+         91Ns3gL0+bPFck2NTadAFdGN7QvK86qZq7HjPvfzDAjOq3s8iVDo7dhH2+47XzVHPx
+         fEkGYZFSZ/2omytzd5OJ8L30zsrMV/S9yQWUgPIpyzaldyNnNZqVO/Afl+TL8lyJaq
+         FXpj6toam+VpEl22QWZIDjXdAkczNzGQW78pI8i3ImdKi3ibwg2QJk7+p6uUobl47a
+         7nly2FKLJ3epopbiMmyGuEkpYQJoVxPhWrNwVxfxoQ/X9Axh2c1Q8w585Tc00RnqJa
+         87WiLWoOMdkzw==
+From:   =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
+To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <mhu@silicom.dk>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: [PATCH v2 0/5] fpga/mfd/hwmon: Initial support for Silicom N5010 PAC
+Date:   Fri, 25 Jun 2021 09:42:08 +0200
+Message-Id: <20210625074213.654274-1-martin@geanix.com>
+X-Mailer: git-send-email 2.31.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on 93bd6fdb21b5
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Chris Morgan <macromorgan@hotmail.com>
+From: Martin Hundebøll <mhu@silicom.dk>
 
-This enables the Rockchip Serial Flash Controller for the Odroid Go
-Advance. Note that while the attached SPI NOR flash and the controller
-both support quad read mode, only 2 of the required 4 pins are present.
-The rx and tx bus width is set to 2 for this reason.
+This is an initial set of patches for the Silciom N5010 programmable
+accelerated card adding support for reading out sensors.
 
-Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
----
+Based on v5.13-rc7
 
-Changes in v9: None
-Changes in v8: None
-Changes in v7: None
-Changes in v6: None
-Changes in v5: None
-Changes in v4: None
-Changes in v3: None
-Changes in v2: None
-Changes in v1: None
+Changes since v1:
+ * Commit message in patch 1 is updated with card description
+ * Added Hao's Acked-by to patch 1
+ * Patch 2 is replaced with a new patch to carry feature revision info
+   in struct dfl_device
+ * Patch 3 is updated to use feature revision from struct dfl_device
+ * Patch 4 from v0 is split into separate patches for hwmon and mfd
 
- .../boot/dts/rockchip/rk3326-odroid-go2.dts      | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+Martin Hundebøll (5):
+  fpga: dfl: pci: add device IDs for Silicom N501x PAC cards
+  fpga: dfl: expose feature revision from struct dfl_device
+  spi: spi-altera-dfl: support n5010 feature revision
+  mfd: intel-m10-bmc: add n5010 variant
+  hwmon: intel-m10-bmc-hwmon: add n5010 sensors
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-index 49c97f76df77..f78e11dd8447 100644
---- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-@@ -484,6 +484,22 @@
- 	status = "okay";
- };
- 
-+&sfc {
-+	pinctrl-0 = <&sfc_clk &sfc_cs0 &sfc_bus2>;
-+	pinctrl-names = "default";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	status = "okay";
-+
-+	flash@0 {
-+		compatible = "jedec,spi-nor";
-+		reg = <0>;
-+		spi-max-frequency = <108000000>;
-+		spi-rx-bus-width = <2>;
-+		spi-tx-bus-width = <2>;
-+	};
-+};
-+
- &tsadc {
- 	status = "okay";
- };
+ drivers/fpga/dfl-pci.c              |   5 ++
+ drivers/fpga/dfl.c                  |  27 ++++---
+ drivers/fpga/dfl.h                  |   1 +
+ drivers/hwmon/intel-m10-bmc-hwmon.c | 116 ++++++++++++++++++++++++++++
+ drivers/mfd/intel-m10-bmc.c         |  12 ++-
+ drivers/spi/spi-altera-dfl.c        |  15 +++-
+ include/linux/dfl.h                 |   1 +
+ 7 files changed, 164 insertions(+), 13 deletions(-)
+
 -- 
-2.17.1
-
-
+2.31.0
 
