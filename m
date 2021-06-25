@@ -2,42 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 442273B445E
+	by mail.lfdr.de (Postfix) with ESMTP id F3C283B4462
 	for <lists+linux-spi@lfdr.de>; Fri, 25 Jun 2021 15:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbhFYN1n (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Jun 2021 09:27:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37356 "EHLO mail.kernel.org"
+        id S231708AbhFYN1p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Jun 2021 09:27:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37658 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229934AbhFYN1m (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 25 Jun 2021 09:27:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 81FD66197B;
-        Fri, 25 Jun 2021 13:25:21 +0000 (UTC)
+        id S231715AbhFYN1p (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 25 Jun 2021 09:27:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1BC5361628;
+        Fri, 25 Jun 2021 13:25:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624627522;
-        bh=2jRgXYYh1suuTSb/ARhd+TKxo/8YGzp2hFUNykuCvxI=;
+        s=k20201202; t=1624627524;
+        bh=WxIJxli4AY2OzgvglrYAP6hXNTuIEOF4dbQeg0FimR4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XyQD4b6VgjtIRSy8BYEXVl3AatJZYBtublHC/DMNIEuu1jDlBuMjRd+JfxD7TEif/
-         qC4C7vNKSKFhbZzNqg4x5XaR2d+/CyRa47SbRI8BRcJUTL8hyqqKCBSj+x3vYY1tpX
-         mr69oSFD1LhJIvvn1FOlYqTlPFbfjD0unS75dqeZQcIPv/0XkRJH5TWhdXOka+8FZH
-         uIvaqHWaglDI2bj8+YHKi6Nn/qJWqsdWkjCuRHazLVuHlHEPnKrbBvGy8HTnDegskX
-         dsB97Sm/204SFNoARe79rEQvQ3SOYKsIAoqeTJKHQSbXSgyQx8XG8y4gkHSgGJTm/y
-         RAh6W+7sAJPzw==
+        b=s+SSMk/z2ZALvfqSOWl2NL3wHZTHkA7rCxXmHTqgmccZuc+Ntdm4uSCtIlk035EBc
+         QsM5ld/mMaJcRK+3Ax9sWvOL1d41jo+P+ybEpH2P3d3Y9xYyVcaWF+FVAZkLOAx8Ge
+         dyZeNDNao/gvReHdYAhPCdOTqmw/frR3dU1nhQhio5bmEgVaHOsub9QAqgvS6RYUft
+         F89MMcOdZcwlUye5bduiNkdLO2sKHxz7JRSivkU/lTmWcXsPfC4j1Aew0+rR0Wn8Bu
+         Sfs6gMDuNuUwaMRFtlYg9UM8EcqXYK9hR/HwsRwREY91DwRWO/Y0hlT1ulfk9ardYk
+         XVns8hK7uK7hg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Wolfram Sang <wsa@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>, linux-i2c@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-spi@vger.kernel.org, Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: (subset) [PATCH v3 0/5] Add and enable GPI DMA users
-Date:   Fri, 25 Jun 2021 14:24:54 +0100
-Message-Id: <162462715508.45765.4709893375922153018.b4-ty@kernel.org>
+To:     linux-spi@vger.kernel.org, Colin King <colin.king@canonical.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH][next] spi: Fix self assignment issue with ancillary->mode
+Date:   Fri, 25 Jun 2021 14:24:55 +0100
+Message-Id: <162462715507.45765.15783651843423653220.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210625052213.32260-1-vkoul@kernel.org>
-References: <20210625052213.32260-1-vkoul@kernel.org>
+In-Reply-To: <20210623172300.161484-1-colin.king@canonical.com>
+References: <20210623172300.161484-1-colin.king@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -45,16 +40,12 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 25 Jun 2021 10:52:08 +0530, Vinod Koul wrote:
-> This series adds the GPI DMA in qcom geni spi and i2c drivers.
-> 
-> For this we first need to move GENI_IF_DISABLE_RO to common
-> headers and then add support for gpi dma in geni drivers.
-> 
-> Also, to reuse the dma-mapping in spi, we add a new field dma_map_dev to
-> allow controllers to pass a specific device for dma-mapping
-> 
-> [...]
+On Wed, 23 Jun 2021 18:23:00 +0100, Colin King wrote:
+> There is an assignment of ancillary->mode to itself which looks
+> dubious since the proceeding comment states that the speed and
+> mode is taken over from the SPI main device, indicating that
+> ancillary->mode should assigned using the value spi->mode.
+> Fix this.
 
 Applied to
 
@@ -62,8 +53,8 @@ Applied to
 
 Thanks!
 
-[3/5] spi: core: add dma_map_dev for dma device
-      commit: b470e10eb43f19e08245cd87dd3192a8141cfbb5
+[1/1] spi: Fix self assignment issue with ancillary->mode
+      commit: b01d550663fa5fd40a1785b0f1211fb657892edf
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
