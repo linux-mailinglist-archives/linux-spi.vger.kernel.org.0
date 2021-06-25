@@ -2,18 +2,18 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7473B3F3A
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Jun 2021 10:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 849E53B3F3E
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Jun 2021 10:28:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbhFYIaJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Jun 2021 04:30:09 -0400
-Received: from lucky1.263xmail.com ([211.157.147.135]:58134 "EHLO
+        id S230523AbhFYIaM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Jun 2021 04:30:12 -0400
+Received: from lucky1.263xmail.com ([211.157.147.132]:56702 "EHLO
         lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbhFYIaJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Jun 2021 04:30:09 -0400
+        with ESMTP id S230496AbhFYIaL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Jun 2021 04:30:11 -0400
 Received: from localhost (unknown [192.168.167.16])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 5D936B1678;
-        Fri, 25 Jun 2021 16:27:46 +0800 (CST)
+        by lucky1.263xmail.com (Postfix) with ESMTP id C6F83FB1CE;
+        Fri, 25 Jun 2021 16:27:48 +0800 (CST)
 X-MAIL-GRAY: 0
 X-MAIL-DELIVERY: 1
 X-ADDR-CHECKED4: 1
@@ -21,9 +21,9 @@ X-SKE-CHECKED: 1
 X-ANTISPAM-LEVEL: 2
 Received: from localhost.localdomain (unknown [58.22.7.114])
         by smtp.263.net (postfix) whith ESMTP id P12363T139709684631296S1624609657045376_;
-        Fri, 25 Jun 2021 16:27:47 +0800 (CST)
+        Fri, 25 Jun 2021 16:27:49 +0800 (CST)
 X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <390bb4e83ab1ec253a816f0ad0a268f1>
+X-UNIQUE-TAG: <30e6dfc1088ab16369971c13f59799f2>
 X-RL-SENDER: jon.lin@rock-chips.com
 X-SENDER: jon.lin@rock-chips.com
 X-LOGIN-NAME: jon.lin@rock-chips.com
@@ -42,9 +42,9 @@ Cc:     jon.lin@rock-chips.com, broonie@kernel.org, robh+dt@kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         mturquette@baylibre.com, sboyd@kernel.org,
         linux-clk@vger.kernel.org, Chris Morgan <macromorgan@hotmail.com>
-Subject: [RFC PATCH v9 07/10] arm: dts: rockchip: Add SFC to RK3036
-Date:   Fri, 25 Jun 2021 16:27:32 +0800
-Message-Id: <20210625082735.562-3-jon.lin@rock-chips.com>
+Subject: [RFC PATCH v9 08/10] arm: dts: rockchip: Add SFC to RV1108
+Date:   Fri, 25 Jun 2021 16:27:33 +0800
+Message-Id: <20210625082735.562-4-jon.lin@rock-chips.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210625082735.562-1-jon.lin@rock-chips.com>
 References: <20210625082639.32688-1-jon.lin@rock-chips.com>
@@ -55,7 +55,7 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Chris Morgan <macromorgan@hotmail.com>
 
-Add a devicetree entry for the Rockchip SFC for the RK3036 SOC.
+Add a devicetree entry for the Rockchip SFC for the RV1108 SOC.
 
 Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
 Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
@@ -71,21 +71,21 @@ Changes in v3: None
 Changes in v2: None
 Changes in v1: None
 
- arch/arm/boot/dts/rk3036.dtsi | 42 +++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ arch/arm/boot/dts/rv1108.dtsi | 37 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/arch/arm/boot/dts/rk3036.dtsi b/arch/arm/boot/dts/rk3036.dtsi
-index e24230d50a78..06e37be81393 100644
---- a/arch/arm/boot/dts/rk3036.dtsi
-+++ b/arch/arm/boot/dts/rk3036.dtsi
-@@ -206,6 +206,17 @@
+diff --git a/arch/arm/boot/dts/rv1108.dtsi b/arch/arm/boot/dts/rv1108.dtsi
+index 884872ca5207..6d4f289aff53 100644
+--- a/arch/arm/boot/dts/rv1108.dtsi
++++ b/arch/arm/boot/dts/rv1108.dtsi
+@@ -536,6 +536,17 @@
  		status = "disabled";
  	};
  
-+	sfc: spi@10208000 {
++	sfc: spi@301c0000 {
 +		compatible = "rockchip,sfc";
-+		reg = <0x10208000 0x4000>;
-+		interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
++		reg = <0x301c0000 0x4000>;
++		interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_HIGH>;
 +		clocks = <&cru SCLK_SFC>, <&cru HCLK_SFC>;
 +		clock-names = "clk_sfc", "hclk_sfc";
 +		pinctrl-0 = <&sfc_clk &sfc_cs0 &sfc_bus4>;
@@ -93,47 +93,42 @@ index e24230d50a78..06e37be81393 100644
 +		status = "disabled";
 +	};
 +
- 	sdmmc: mmc@10214000 {
- 		compatible = "rockchip,rk3036-dw-mshc", "rockchip,rk3288-dw-mshc";
- 		reg = <0x10214000 0x4000>;
-@@ -684,6 +695,37 @@
+ 	gmac: eth@30200000 {
+ 		compatible = "rockchip,rv1108-gmac";
+ 		reg = <0x30200000 0x10000>;
+@@ -704,6 +715,32 @@
  			};
  		};
  
 +		sfc {
 +			sfc_bus4: sfc-bus4 {
 +				rockchip,pins =
-+					<1 RK_PD0 3 &pcfg_pull_none>,
-+					<1 RK_PD1 3 &pcfg_pull_none>,
-+					<1 RK_PD2 3 &pcfg_pull_none>,
-+					<1 RK_PD3 3 &pcfg_pull_none>;
++					<2 RK_PA0 3 &pcfg_pull_none>,
++					<2 RK_PA1 3 &pcfg_pull_none>,
++					<2 RK_PA2 3 &pcfg_pull_none>,
++					<2 RK_PA3 3 &pcfg_pull_none>;
 +			};
 +
 +			sfc_bus2: sfc-bus2 {
 +				rockchip,pins =
-+					<1 RK_PD0 3 &pcfg_pull_none>,
-+					<1 RK_PD1 3 &pcfg_pull_none>;
++					<2 RK_PA0 3 &pcfg_pull_none>,
++					<2 RK_PA1 3 &pcfg_pull_none>;
 +			};
 +
 +			sfc_cs0: sfc-cs0 {
 +				rockchip,pins =
-+					<2 RK_PA2 3 &pcfg_pull_none>;
-+			};
-+
-+			sfc_cs1: sfc-cs1 {
-+				rockchip,pins =
-+					<2 RK_PA3 3 &pcfg_pull_none>;
++					<2 RK_PB4 3 &pcfg_pull_none>;
 +			};
 +
 +			sfc_clk: sfc-clk {
 +				rockchip,pins =
-+					<2 RK_PA4 3 &pcfg_pull_none>;
++					<2 RK_PB7 2 &pcfg_pull_none>;
 +			};
 +		};
 +
- 		emac {
- 			emac_xfer: emac-xfer {
- 				rockchip,pins = <2 RK_PB2 1 &pcfg_pull_default>, /* crs_dvalid */
+ 		gmac {
+ 			rmii_pins: rmii-pins {
+ 				rockchip,pins =	<1 RK_PC5 2 &pcfg_pull_none>,
 -- 
 2.17.1
 
