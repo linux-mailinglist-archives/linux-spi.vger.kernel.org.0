@@ -2,75 +2,152 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F68F3B4467
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Jun 2021 15:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 918D73B4811
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Jun 2021 19:14:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbhFYN1s (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Jun 2021 09:27:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37908 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231723AbhFYN1s (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 25 Jun 2021 09:27:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CBF7E61962;
-        Fri, 25 Jun 2021 13:25:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624627527;
-        bh=qcpAWsaKBKP2cYE/QTJytbAgd5/dYyX6bEO/6RAQR9k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YgwWd1Z97gDsr2HOEBIE+YINKAIbCMOFDyRb8UcIHURTdp5iA/NuJOQqcBVIrSD8u
-         ka0BIiOCmjPs2I71RhIWRHS9W2K0RAmlcKcpypmWq8clarwhZreZGM44Zg8HfbIv6M
-         3Soz11sUS7jpNdoeKaEO4WX5JXE/GCpk84Ram8keWaG3MnX1MIRgXADQRKtlsBhlU/
-         y6mFJTMkPKXiqwRBeoILLQElg0bMoOSxVP77YDNXfTmKSVCR2ZvFYhaZrNsoRwtyyl
-         qB3zW3XPcjl287YmzemkJk/LKJ5PT6TWYNDwQ4WSxkzxiso4UfZEjnUDRBqMFtWPq/
-         ooQPEck09apSA==
-From:   Mark Brown <broonie@kernel.org>
-To:     michal.simek@xilinx.com, robh+dt@kernel.org,
-        Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: spi: convert Xilinx Zynq UltraScale+ MPSoC GQSPI bindings to YAML
-Date:   Fri, 25 Jun 2021 14:24:56 +0100
-Message-Id: <162462715508.45765.10141179560885768264.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210613214317.296667-1-iwamatsu@nigauri.org>
-References: <20210613214317.296667-1-iwamatsu@nigauri.org>
+        id S229738AbhFYRRS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Jun 2021 13:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229630AbhFYRRS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Jun 2021 13:17:18 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604EBC061574
+        for <linux-spi@vger.kernel.org>; Fri, 25 Jun 2021 10:14:57 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lwpPZ-0002EO-Ed; Fri, 25 Jun 2021 19:14:37 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lwpPW-0005JJ-9a; Fri, 25 Jun 2021 19:14:34 +0200
+Date:   Fri, 25 Jun 2021 19:14:34 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-rtc@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        linux-spi@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Lee Jones <lee.jones@linaro.org>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PULL] Add variants of devm_clk_get for prepared and enabled
+ clocks enabled clocks
+Message-ID: <20210625171434.3xusxpxjprcdqa47@pengutronix.de>
+References: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
+ <20210609202123.u5rmw7al4x3rrvun@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yt4c5ea6o5vvs7cu"
+Content-Disposition: inline
+In-Reply-To: <20210609202123.u5rmw7al4x3rrvun@pengutronix.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 14 Jun 2021 06:43:17 +0900, Nobuhiro Iwamatsu wrote:
-> Convert spi for Xilinx Zynq UltraScale+ MPSoC GQSPI bindings
-> documentation to YAML.
 
-Applied to
+--yt4c5ea6o5vvs7cu
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Hello Stephen,
 
-Thanks!
+On Wed, Jun 09, 2021 at 10:21:23PM +0200, Uwe Kleine-K=F6nig wrote:
+> given that I don't succeed in getting any feedback for my patch set, I'm
+> trying with a pull request today. It would be really great if this pull
+> request made it finally in for the next merge window.
 
-[1/1] dt-bindings: spi: convert Xilinx Zynq UltraScale+ MPSoC GQSPI bindings to YAML
-      commit: c58db2abb19fd2bf23fb25bb3630a9f540df6042
+It seems sending a pull request didn't help either :-\
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+I'm waiting since October for feedback, several people expressed to like
+this series and I want to make use of it to simplify a few drivers. I'm
+quite annoyed that your missing feedback blocks me from further
+improving stuff.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+> The changes are not as bad or complex as the diffstat suggests. The
+> first patch contains all the complexity and only has
+>  1 file changed, 50 insertions(+), 17 deletions(-)
+> . The second patch makes use of this and just adds kernel-doc, four
+> functions that are one-line wrappers around the newly introduced
+> __devm_clk_get() function in the first patch and dummy implementations
+> for the !CONFIG_HAVE_CLK case.
+>=20
+> The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627=
+b5:
+>=20
+>   Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
+>=20
+> are available in the Git repository at:
+>=20
+>   https://git.pengutronix.de/git/ukl/linux tags/devm-clk-get-enabled
+>=20
+> for you to fetch changes up to fec74d434d6f6016b6b2d5ab13aa28a0c657f5fb:
+>=20
+>   clk: Provide new devm_clk_helpers for prepared and enabled clocks (2021=
+-05-11 14:20:13 +0200)
+>=20
+> ----------------------------------------------------------------
+> New variants of devm_clk_get() for prepared and enabled clocks
+>=20
+> These two patches create a set of new devm helpers that return clocks
+> already prepared or prepared-and-enabled. The automatic cleanup cares
+> for unpreparing and disabling+unpreparing respectively.
+>=20
+> This allows to simplify various drivers as was demonstrated with
+> additional patches sent with the various revisions of this patch set.
+> See
+> https://lore.kernel.org/r/20210510174142.986250-1-u.kleine-koenig@pengutr=
+onix.de
+> for the last submission round. This pull request doesn't contain these
+> patches though.
+>=20
+> ----------------------------------------------------------------
+> Uwe Kleine-K=F6nig (2):
+>       clk: generalize devm_clk_get() a bit
+>       clk: Provide new devm_clk_helpers for prepared and enabled clocks
+>=20
+>  drivers/clk/clk-devres.c | 96 ++++++++++++++++++++++++++++++++++++++++--=
+------
+>  include/linux/clk.h      | 90 ++++++++++++++++++++++++++++++++++++++++++=
+++-
+>  2 files changed, 169 insertions(+), 17 deletions(-)
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Best regards
+Uwe
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-Thanks,
-Mark
+--yt4c5ea6o5vvs7cu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmDWDvYACgkQwfwUeK3K
+7AlVZgf+IaVy0jXvnrb1R7iOX2vSxmgWoXuGFE87xgMQhGK4KsqAx+hbgk8lGxx9
+RgQSXmBFj6mxdQVbzCIRiYtN73AeUixQvZwc3pIPMRfYFDrrx+N5XvUkTWyvp3kj
+PKTkVEeVYXFZi48twlb9N/wqs8DIdDGNSR1Me1w6FIcASw2c9NfzF9+XJ/Eosi8F
+hDqlDlbcyXThL2rAvmckHnSKjY+8VUDGgPrQwipWqjM5GJeD0SH/zW5Dv42pUsop
+lduvdTFCazmNoDIuSwf/bHJs+RcWsVpHUMgghIAY2xCYvxf9Livj22/iHBdR80Zl
+O9XSiJAcEiz5iXzqI8k/9/JzM1CEXw==
+=UnMp
+-----END PGP SIGNATURE-----
+
+--yt4c5ea6o5vvs7cu--
