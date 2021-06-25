@@ -2,70 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6911C3B3810
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Jun 2021 22:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB833B3C1A
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Jun 2021 07:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbhFXUqc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Jun 2021 16:46:32 -0400
-Received: from mail-io1-f53.google.com ([209.85.166.53]:40576 "EHLO
-        mail-io1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbhFXUqc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Jun 2021 16:46:32 -0400
-Received: by mail-io1-f53.google.com with SMTP id r12so9926084ioa.7;
-        Thu, 24 Jun 2021 13:44:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Jb61FtgXv62RyoPttvhABXLLkGLociNax0eiMMTdeoE=;
-        b=V1sfiGoyavLl05DN8KYhJW/XqQpLqHebVkabWwxEWQx3Bn67XpKXtI1/SXBZlBE9uE
-         DcdwZFuHyJB5l0YgydEWtUSs+u/YA8aT2KCXGp0LfHkh3aI7kBUw2iSus7LS8QvlrQNw
-         xiaHsqdHSUrjY+LWy28oajCWROc5roPACVj8QORKRQDsus+AYMyTAbycavKJ6D9BeL2/
-         jNc2Ka3YD3j9F9Eh+P0bTnHUnbnESp7L22/cJfi1TzPd2XAQ/x2uVOBApJ04KPBC2RJT
-         F3AyGBE5L4uGiLEEgV9NoJ3W9KdSWQYuUyB6kMjnl4w6FlWWNiWP7pjRMN8THrA1vjP2
-         meDw==
-X-Gm-Message-State: AOAM532AmHtnnMKFitW/o+/Qx6+W03NRHyNvL6+9t6DXB94OTUmOaY4q
-        M3pk15oYgGC01adZbR5G2w==
-X-Google-Smtp-Source: ABdhPJwDbvlT7rWgdyoBcZio9FNtPl/yvT7KQ36PlsskLaNPsJwYVXasDTbSOux0xym+jdlTH05d5Q==
-X-Received: by 2002:a02:8246:: with SMTP id q6mr6390809jag.130.1624567451624;
-        Thu, 24 Jun 2021 13:44:11 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id j18sm2014229ila.9.2021.06.24.13.44.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jun 2021 13:44:10 -0700 (PDT)
-Received: (nullmailer pid 1957082 invoked by uid 1000);
-        Thu, 24 Jun 2021 20:44:05 -0000
-Date:   Thu, 24 Jun 2021 14:44:05 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Mason Zhang <mason.zhang@mediatek.com>
-Cc:     wsd_upstream@mediatek.com,
-        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        hanks.chen@mediatek.com, linux-kernel@vger.kernel.org,
-        Mason Zhang <Mason.Zhang@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH 2/2] dt-binding: mediatek: mt6779: update spi document
-Message-ID: <20210624204405.GA1956999@robh.at.kernel.org>
-References: <1623721803.24597.9.camel@mbjsdccf07>
+        id S231406AbhFYFYs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Jun 2021 01:24:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46076 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230097AbhFYFYr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 25 Jun 2021 01:24:47 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 738BA6140B;
+        Fri, 25 Jun 2021 05:22:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624598547;
+        bh=NA/PKUB9sUEfGTtChxFr08NQkrRdfdT5k6WfEW3Pdjo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bdLdzKfVYFs0zfV/gIIrjH4LZvgya9n1yUGJaXJzynTfse/2SqmIDSyCbsVIPoVZE
+         KdjQb4aNgO3wHN9C8qnp9K2thYqIpIEFCTE5jpcRDY0cOxLRB8/WVBgzhZ8D/IyvmP
+         hBuRFk1klXFadPlb3LLUvaKMnPNXhOro1Wqc8D4BtsUGT2A4z06KN0Txtvs1IodRZi
+         HSxHq9KQGxQnRzor1/v8i9SLpO/TMSfNeAKICNiRpv6lGamQbhZgsdqLzG0iEPJ0SW
+         RSqFKUVe893fKv5lNRUFjFgCsWLHswrAB8GIxtocIAtIroW7R47qemlPtv17KtBFEy
+         05qvKkXbYuU7A==
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/5] Add and enable GPI DMA users
+Date:   Fri, 25 Jun 2021 10:52:08 +0530
+Message-Id: <20210625052213.32260-1-vkoul@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1623721803.24597.9.camel@mbjsdccf07>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 15 Jun 2021 09:50:03 +0800, Mason Zhang wrote:
-> 
-> this patch update spi document for MT6779 SOC.
-> 
-> Signed-off-by: Mason Zhang <Mason.Zhang@mediatek.com>
-> ---
->  Documentation/devicetree/bindings/spi/spi-mt65xx.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Hello,
 
-Acked-by: Rob Herring <robh@kernel.org>
+This series adds the GPI DMA in qcom geni spi and i2c drivers.
+
+For this we first need to move GENI_IF_DISABLE_RO to common
+headers and then add support for gpi dma in geni drivers.
+
+Also, to reuse the dma-mapping in spi, we add a new field dma_map_dev to
+allow controllers to pass a specific device for dma-mapping
+
+Then, we add spi and i2c geni driver changes to support this DMA.
+
+Changes since v2:
+- Add core spi patch for dma_map_dev addition
+- rework the logic for getting and releasing channels in both driver, also
+  ensure proper cleanup
+- Fix the comments recieved from Doug and Bjorn
+- Add kernel-doc changes for enum geni_se_xfer_mode
+
+Changes since v1:
+ - add r-b from Bjorn on patch 1
+ - add more details in log for patch 2
+ - Fix the comments from Doug and Bjorn for patch3, notable use read, modify
+   update for irq registers, use geni_se_irq_clear() for irq, dont update
+   single bit registers, add a bit more description for gpi dma etc
+
+Vinod Koul (5):
+  soc: qcom: geni: move GENI_IF_DISABLE_RO to common header
+  soc: qcom: geni: Add support for gpi dma
+  spi: core: add dma_map_dev for dma device
+  spi: spi-geni-qcom: Add support for GPI dma
+  i2c: qcom-geni: Add support for GPI DMA
+
+ drivers/i2c/busses/i2c-qcom-geni.c | 309 ++++++++++++++++++++++++++-
+ drivers/soc/qcom/qcom-geni-se.c    |  30 ++-
+ drivers/spi/spi-geni-qcom.c        | 329 +++++++++++++++++++++++++++--
+ drivers/spi/spi.c                  |   4 +
+ include/linux/qcom-geni-se.h       |  19 +-
+ include/linux/spi/spi.h            |   1 +
+ 6 files changed, 667 insertions(+), 25 deletions(-)
+
+-- 
+2.31.1
+
