@@ -2,61 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7AE53B6B75
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Jun 2021 01:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E61B3B6B7C
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Jun 2021 01:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235685AbhF1Xkt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Jun 2021 19:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
+        id S233087AbhF1XlG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Jun 2021 19:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235595AbhF1Xkk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Jun 2021 19:40:40 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12031C061760
-        for <linux-spi@vger.kernel.org>; Mon, 28 Jun 2021 16:38:14 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id d9so14841437qtx.8
-        for <linux-spi@vger.kernel.org>; Mon, 28 Jun 2021 16:38:14 -0700 (PDT)
+        with ESMTP id S233089AbhF1Xkw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Jun 2021 19:40:52 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA09C061787
+        for <linux-spi@vger.kernel.org>; Mon, 28 Jun 2021 16:38:25 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id g19so10166641qvx.12
+        for <linux-spi@vger.kernel.org>; Mon, 28 Jun 2021 16:38:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=miYY2dmUa8aOm4aFUUNNkSxFLOIn70qDkiO0NjVvZko=;
-        b=nV8UvqlMp80EZh03fJr7ThFcbJyzi6eYcMjOZYU/YWtPbhj0fi2Bc/uhP5P/k9heDu
-         V7/GzY+XyI83HS9tzCN6IN3uhhp/AqVgWd1JH+pTpQmRpEZb5+izLOpQESgRoZXGYEF4
-         07PiqC06/UlBCuh87w2WO52BugnaUrs3/WxS8=
+        bh=24QEkp0ruWhDlT9VQmxg2IKCctjJ1YCdLUMV4LRFyKE=;
+        b=n26F1lBmm4to9yGPrWtcwiSQlCE8KWJY8cbH7iQ4rk1IYXPxPFs2M6rM8hmszNUgqL
+         hZf4vIMkv9rQ8DcEDy+TH2m7mmH6Z0/QKLcNLz/OUc6Ck2sn0ncFULz1+CMCYw+x9Mv+
+         mdFa22ui/u+464tf4K7a8BDoPKWzQ75CHlRjc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=miYY2dmUa8aOm4aFUUNNkSxFLOIn70qDkiO0NjVvZko=;
-        b=H7OfQur/QH6nHGq8Q4V0TdmaUS5LoDNAGbnBPdUqK4tmeZoX3/FKO0dow/qGu1omX6
-         5tucie/6+wUVgwSb8QrexUBCnZAcwmbZVdthR1NR7IocrvK2nAXGpYBAdOrf8Qm4wqrB
-         ciPSG7UU/Gg9kszsBDRHVa5XhdVotguzx/CkE7TVRxhXW7rsAiHRGR4xs5gBAyTIu4Ii
-         ZQTfUZeWh/6HP1RibD2wQoysoRwlFEVYuMmiqVuJu6vNshi9Jt94zHGcQApnVqPM6GcR
-         06US1ViwpG2ktbySkFMNnnqQE98u6dSPndGuj+HI0o7Mxv72c/VFjlyhCEm95MTP7buL
-         FU8A==
-X-Gm-Message-State: AOAM533obKdGRRts8X9NND1wySi1PnoFgmFOhjxlwFQBQbDJoR9FJYxw
-        eBITOlLW9WGGIykJfPhwB57WnefS9s+qYQ==
-X-Google-Smtp-Source: ABdhPJzgauUhs87AfLOpgtKexkHxmEEmcmqTXRLVwGtKrXpHLaSfXRDOPH9tiYKaxkLcxmtWGsYeXg==
-X-Received: by 2002:ac8:4618:: with SMTP id p24mr14922628qtn.324.1624923492887;
-        Mon, 28 Jun 2021 16:38:12 -0700 (PDT)
+        bh=24QEkp0ruWhDlT9VQmxg2IKCctjJ1YCdLUMV4LRFyKE=;
+        b=n4AmpwS8WTGGo8DRZP3L+7WMbjH/ta0MjccGAiX2EkGCmiiLkDuxD5WEJoAGKsSlWK
+         a4ToPK+0RHkUFDbR4uTqIWnJW5BRHK5Y5tZ2+G24TlITPm0P3f7+WgwjpfIE51JfWwog
+         bDnxSg3wKKzkvGJjsk9WP+6YrO2rbN3cu9syl0r/5WY4+E+VO8WFujss4Hg9vAVlJNTu
+         eVVUSlXPBiZ9EWiQu7dI5sQveaUwWaTAXN9FnUbsMe2zJYI8xH9MC5WdHy03U5sI6uCx
+         TTpvvq7RRyoNqAp729QaRg7Rk9nxtkS4fZA9VnqGdFHVBPJmfw30PpqXUA/SAlczQggw
+         c1bw==
+X-Gm-Message-State: AOAM532K6MKFX5Hw+7/DHyhVkujuAwgX6NZzqEVfQwz+Km5TfF33vzI+
+        zlDtF2hXa9ta/xYhlNMi1BErPJW+Y+x+nA==
+X-Google-Smtp-Source: ABdhPJxGzcZH/6VQUMzj/vgmPXxOk6coKlfBfjusbBn27478jZsehPTJ075KL5tLpaLTnj4vVvJ8ug==
+X-Received: by 2002:a05:6214:1185:: with SMTP id t5mr27878607qvv.7.1624923504385;
+        Mon, 28 Jun 2021 16:38:24 -0700 (PDT)
 Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id d76sm5872143qkc.54.2021.06.28.16.38.11
+        by smtp.gmail.com with ESMTPSA id e6sm6425014qkg.12.2021.06.28.16.38.23
         for <linux-spi@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Jun 2021 16:38:11 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id c8so21414632ybq.1
-        for <linux-spi@vger.kernel.org>; Mon, 28 Jun 2021 16:38:11 -0700 (PDT)
-X-Received: by 2002:a25:dc50:: with SMTP id y77mr18847228ybe.405.1624923491186;
- Mon, 28 Jun 2021 16:38:11 -0700 (PDT)
+        Mon, 28 Jun 2021 16:38:23 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id m9so21331009ybo.5
+        for <linux-spi@vger.kernel.org>; Mon, 28 Jun 2021 16:38:23 -0700 (PDT)
+X-Received: by 2002:a25:6088:: with SMTP id u130mr35812620ybb.257.1624923502959;
+ Mon, 28 Jun 2021 16:38:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210625052213.32260-1-vkoul@kernel.org> <20210625052213.32260-2-vkoul@kernel.org>
-In-Reply-To: <20210625052213.32260-2-vkoul@kernel.org>
+References: <20210625052213.32260-1-vkoul@kernel.org> <20210625052213.32260-3-vkoul@kernel.org>
+In-Reply-To: <20210625052213.32260-3-vkoul@kernel.org>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 28 Jun 2021 16:37:58 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XsUbyB4enDobda3eDoTpCqdgVogyC3YWGe9rsjgR1REw@mail.gmail.com>
-Message-ID: <CAD=FV=XsUbyB4enDobda3eDoTpCqdgVogyC3YWGe9rsjgR1REw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] soc: qcom: geni: move GENI_IF_DISABLE_RO to common header
+Date:   Mon, 28 Jun 2021 16:38:10 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=ULVo=vz2Vww6_bcfrhosy0GRC2oVEcXt6zw8n4C2MiuQ@mail.gmail.com>
+Message-ID: <CAD=FV=ULVo=vz2Vww6_bcfrhosy0GRC2oVEcXt6zw8n4C2MiuQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/5] soc: qcom: geni: Add support for gpi dma
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>,
@@ -76,14 +76,39 @@ Hi,
 
 On Thu, Jun 24, 2021 at 10:22 PM Vinod Koul <vkoul@kernel.org> wrote:
 >
-> GENI_IF_DISABLE_RO is used by geni spi driver as well to check the
-> status if GENI, so move this to common header qcom-geni-se.h
->
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->  drivers/soc/qcom/qcom-geni-se.c | 1 -
->  include/linux/qcom-geni-se.h    | 4 ++++
->  2 files changed, 4 insertions(+), 1 deletion(-)
+> +static void geni_se_select_gpi_mode(struct geni_se *se)
+> +{
+> +       u32 val;
+> +
+> +       geni_se_irq_clear(se);
+> +
+> +       writel(0, se->base + SE_IRQ_EN);
+> +
+> +       val = readl(se->base + SE_GENI_S_IRQ_EN);
+> +       val &= ~S_CMD_DONE_EN;
+> +       writel(val, se->base + SE_GENI_S_IRQ_EN);
+> +
+> +       val = readl(se->base + SE_GENI_M_IRQ_EN);
+> +       val &= ~(M_CMD_DONE_EN | M_TX_FIFO_WATERMARK_EN |
+> +                M_RX_FIFO_WATERMARK_EN | M_RX_FIFO_LAST_EN);
+> +       writel(val, se->base + SE_GENI_M_IRQ_EN);
+> +
+> +       writel(GENI_DMA_MODE_EN, se->base + SE_GENI_DMA_MODE_EN);
+> +
+> +       val = readl(se->base + SE_GSI_EVENT_EN);
+> +       val |= (DMA_RX_EVENT_EN | DMA_TX_EVENT_EN | GENI_M_EVENT_EN | GENI_S_EVENT_EN);
+
+nit: the above has some extra parenthesis that aren't needed.
+
+I will continue to assert that all of the "set mode" stuff doesn't
+really belong here and should be managed by individual drivers [1].
+I'll accept that it doesn't have to block forward progress, though I'm
+at least a bit disappointed that we asked Qualcomm to do this over 8
+months ago and no action was taken. :(
+
+In any case, this looks OK to me:
 
 Reviewed-by: Douglas Anderson <dianders@chromium.org>
+
+
+[1] https://lore.kernel.org/r/CAD=FV=VWPqswOXJejyXjYT_Yspdu75ELq42cffN87FrpTwPUQg@mail.gmail.com/
