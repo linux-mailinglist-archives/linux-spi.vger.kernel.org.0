@@ -2,60 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F36413B6830
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Jun 2021 20:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C1F3B69FA
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Jun 2021 23:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234972AbhF1STt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Jun 2021 14:19:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59516 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234917AbhF1STr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 28 Jun 2021 14:19:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id CB06F61C3D;
-        Mon, 28 Jun 2021 18:17:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624904241;
-        bh=JIdfbQtvWQVbPgNSZpv8Fly1at/KjppDU8fR1h/qC9Q=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Bi1nKZ0kki3lujzbnCHDNovmZarMuqhiW5JSjKxHRteC+QrApYSxlqeyktg8fJiqQ
-         xaWVbHGsbFQ1RRUpqk9W6D54X+pWDcappoTZFSOLaPDI03OrWn8iI8oaOwU5nJOpAx
-         h0jIJXqWLoGhAx3GJSEl1LsuCT+xa9LZES7B3RxZiio2by9gjKORUVJ6P6TVZYeTJf
-         eiFkXLXHWxd1GivNkP1L+tRzATj2GD94Igg33j7B/Tu23mPKY2nO8qHRTCJJGa39LJ
-         snIc+rXqj4dMdNKwSgqJT2JjabO8jhaNfhoiDANwiyZmuMXGn+Tp1gV1PNRIqF8DHl
-         7G3A08K7r5KGA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C3CA460A71;
-        Mon, 28 Jun 2021 18:17:21 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI updates for v5.14
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20210628145522.BE31F61353@mail.kernel.org>
-References: <20210628145522.BE31F61353@mail.kernel.org>
-X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20210628145522.BE31F61353@mail.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v5.14
-X-PR-Tracked-Commit-Id: 1bee1ecf232cd90ad112d78ab5124850b4e5ea09
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 69609a91ac1d82f9c958a762614edfe0ac8498e3
-Message-Id: <162490424179.3852.15619770622263280854.pr-tracker-bot@kernel.org>
-Date:   Mon, 28 Jun 2021 18:17:21 +0000
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
+        id S236810AbhF1VHw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Jun 2021 17:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40450 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236768AbhF1VHu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Jun 2021 17:07:50 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84116C061574;
+        Mon, 28 Jun 2021 14:05:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=uVkWJJEgVMmv/VM+/tI0X/gn1Id+AayZLOfLG6sl0S4=; b=CDP8AVKZWHj5qu1qJuoZQy6xvf
+        E/ETdygnAZKz9/ak8vzKNKy3dWD60Vy9xb1d61vJcF61s/m0+L0wuehv6QKQq99zxvuR5Kev4LJYv
+        OaFjTdOdgmugsZKKANSwqs3ocRK9nImAYuy6W9EPLIcCviLNqj3Kyhmq1R2/WMkadG+vR7BsOmmQm
+        PeJPc/RGtuf0kpQ8mr8x+4ShABS0rRIv1KdeNUuk/20oDOQhkgJ4vU2/lilA+3gaRKHb+RsokJhJk
+        d0MlEuskP7VzHcQzqIKjwcil+qzjTUvN2p33TxivyTVlEWnvTvZiMqHTPgPlvL/mbP0JztnlMmgeK
+        S3POwxhw==;
+Received: from [2601:1c0:6280:3f0::aefb] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1lxyRV-009Boc-Ps; Mon, 28 Jun 2021 21:05:21 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        "William A . Kennington III" <wak@google.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>
+Subject: [PATCH v2] spi: <linux/spi/spi.h>: add missing struct kernel-doc entry
+Date:   Mon, 28 Jun 2021 14:05:20 -0700
+Message-Id: <20210628210520.5712-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The pull request you sent on Mon, 28 Jun 2021 15:54:43 +0100:
+Fix kernel-doc warning in spi.h by adding the missing kernel-doc entry
+and also correct the original comment so that they both indicate the
+correct polarity of the flag.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v5.14
+../include/linux/spi/spi.h:673: warning: Function parameter or member 'devm_allocated' not described in 'spi_controller'
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/69609a91ac1d82f9c958a762614edfe0ac8498e3
+Fixes: 794aaf01444d ("spi: Fix use-after-free with devm_spi_alloc_*")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: William A. Kennington III <wak@google.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org
+Cc: Lukas Wunner <lukas@wunner.de>
+---
+v2: correct both comments for @devm_allocated to indicate the correct polarity
+    (thanks, Lukas)
 
-Thank you!
+ include/linux/spi/spi.h |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+--- linux-next-20210628.orig/include/linux/spi/spi.h
++++ linux-next-20210628/include/linux/spi/spi.h
+@@ -339,6 +339,7 @@ extern struct spi_device *spi_new_ancill
+  * @max_speed_hz: Highest supported transfer speed
+  * @flags: other constraints relevant to this driver
+  * @slave: indicates that this is an SPI slave controller
++ * @devm_allocated: whether the allocation of this struct is devres-managed
+  * @max_transfer_size: function that returns the max transfer size for
+  *	a &spi_device; may be %NULL, so the default %SIZE_MAX will be used.
+  * @max_message_size: function that returns the max message size for
+@@ -511,7 +512,7 @@ struct spi_controller {
+ 
+ #define SPI_MASTER_GPIO_SS		BIT(5)	/* GPIO CS must select slave */
+ 
+-	/* flag indicating this is a non-devres managed controller */
++	/* flag indicating if the allocation of this struct is devres-managed */
+ 	bool			devm_allocated;
+ 
+ 	/* flag indicating this is an SPI slave controller */
