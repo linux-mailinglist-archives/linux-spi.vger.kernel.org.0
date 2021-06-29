@@ -2,96 +2,171 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F32413B7021
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Jun 2021 11:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 119573B7086
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Jun 2021 12:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232814AbhF2JgL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 29 Jun 2021 05:36:11 -0400
-Received: from twhmllg4.macronix.com ([122.147.135.202]:60307 "EHLO
-        TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232614AbhF2JgL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Jun 2021 05:36:11 -0400
-Received: from twhfm1p2.macronix.com (twhfmlp2.macronix.com [172.17.20.92])
-        by TWHMLLG4.macronix.com with ESMTP id 15T9XGuc013926;
-        Tue, 29 Jun 2021 17:33:16 +0800 (GMT-8)
-        (envelope-from zhengxunli@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.mxic.com.tw [172.17.14.55])
-        by Forcepoint Email with ESMTP id 55299B94918F0AE99BFE;
-        Tue, 29 Jun 2021 17:33:17 +0800 (CST)
-In-Reply-To: <59855ba0-31d8-25b4-3000-ca493a83fe00@microchip.com>
-References: <1621232088-12567-1-git-send-email-zhengxunli@mxic.com.tw> <1621232088-12567-2-git-send-email-zhengxunli@mxic.com.tw> <59855ba0-31d8-25b4-3000-ca493a83fe00@microchip.com>
-To:     <Tudor.Ambarus@microchip.com>
-Cc:     broonie@kernel.org, jaimeliao@mxic.com.tw,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        miquel.raynal@bootlin.com, p.yadav@ti.com
-Subject: Re: [PATCH v5 1/2] mtd: spi-nor: macronix: add support for Macronix
- octaflash
+        id S232804AbhF2K0y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 29 Jun 2021 06:26:54 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:60413 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232692AbhF2K0y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Jun 2021 06:26:54 -0400
+X-UUID: 1a86f1fa32a54a9d8a2b7c36e418078d-20210629
+X-UUID: 1a86f1fa32a54a9d8a2b7c36e418078d-20210629
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <mason.zhang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 568761973; Tue, 29 Jun 2021 18:24:23 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 29 Jun 2021 18:24:21 +0800
+Received: from localhost.localdomain (10.15.20.246) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 29 Jun 2021 18:24:20 +0800
+From:   Mason Zhang <mason.zhang@mediatek.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <leilk.liu@mediatek.com>,
+        <wsd_upstream@mediatek.com>, Mason Zhang <Mason.Zhang@mediatek.com>
+Subject: [PATCH 1/2] spi: mediatek: add no_need_unprepare support
+Date:   Tue, 29 Jun 2021 18:08:15 +0800
+Message-ID: <20210629100814.21402-1-mason.zhang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-X-KeepSent: 0F03D74E:5813696B-48258703:003378F0;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3FP6 SHF907 April 26, 2018
-Message-ID: <OF0F03D74E.5813696B-ON48258703.003378F0-48258703.00347C73@mxic.com.tw>
-From:   zhengxunli@mxic.com.tw
-Date:   Tue, 29 Jun 2021 17:33:17 +0800
-X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2021/06/29 PM 05:33:17,
-        Serialize complete at 2021/06/29 PM 05:33:17
-Content-Type: text/plain; charset="Big5"
-Content-Transfer-Encoding: base64
-X-MAIL: TWHMLLG4.macronix.com 15T9XGuc013926
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Mason Zhang <Mason.Zhang@mediatek.com>
 
-SGkgVHVkb3IsDQoNCjxUdWRvci5BbWJhcnVzQG1pY3JvY2hpcC5jb20+IHdyb3RlIG9uIDIwMjEv
-MDYvMjkgpFWkyCAwMjozNzowMToNCg0KPiA8VHVkb3IuQW1iYXJ1c0BtaWNyb2NoaXAuY29tPiAN
-Cj4gMjAyMS8wNi8yOSCkVaTIIDAyOjM3DQo+IA0KPiBUbw0KPiANCj4gPHpoZW5neHVubGlAbXhp
-Yy5jb20udHc+LCA8bGludXgtbXRkQGxpc3RzLmluZnJhZGVhZC5vcmc+LCA8bGludXgtDQo+IHNw
-aUB2Z2VyLmtlcm5lbC5vcmc+LCANCj4gDQo+IGNjDQo+IA0KPiA8cC55YWRhdkB0aS5jb20+LCA8
-bWlxdWVsLnJheW5hbEBib290bGluLmNvbT4sIDxicm9vbmllQGtlcm5lbC5vcmc+LA0KPiA8amFp
-bWVsaWFvQG14aWMuY29tLnR3Pg0KPiANCj4gU3ViamVjdA0KPiANCj4gUmU6IFtQQVRDSCB2NSAx
-LzJdIG10ZDogc3BpLW5vcjogbWFjcm9uaXg6IGFkZCBzdXBwb3J0IGZvciBNYWNyb25peCANCm9j
-dGFmbGFzaA0KPiANCj4gT24gNS8xNy8yMSA5OjE0IEFNLCBaaGVuZ3h1biBMaSB3cm90ZToNCj4g
-PiArICAgICAgIHsgIm14NjZsbTFnNDVnIiwgSU5GTygweGMyODUzYiwgMCwgMzIgKiAxMDI0LCA0
-MDk2LA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFNFQ1RfNEsgfCBTUElfTk9S
-X09DVEFMX0RUUl9SRUFEIHwNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTUElf
-Tk9SX09DVEFMX0RUUl9QUCB8IA0KU1BJX05PUl80Ql9PUENPREVTKQ0KPiA+ICsgICAgICAgICAg
-ICAgICAuZml4dXBzID0gJm9jdGFmbGFzaF9maXh1cHMgfSwNCj4gDQo+IEkgaGF2ZSBhIG14NjZs
-bTFnNDVnIHdoaWNoIGRvZXMgbm90IGRlZmluZSBTRkRQIHRhYmxlcywgaG93IHlvdSdsbCANCj4g
-ZGlmZmVyZW50aWF0ZQ0KPiBiZXR3ZWVuIHRoZSB0d28/IA0KPiBNaW5lIHdpbGwgZmFpbCBhZnRl
-ciByZXNldC4gSSdtIHdvcmtpbmcgdG8gYWRkcmVzcyANCj4gdGhlIGZsYXNoIElEDQo+IGNvbGxp
-c2lvbnMsIHdpbGwgc2VuZCBwYXRjaGVzIHNvb24uIEkgd29uJ3QgcXVldWUgYW55IG5ldyBmbGFz
-aCANCj4gYWRkaXRpb25zIHVudGlsDQo+IHdlJ2xsIHNvbHZlIHRoZSBJRCBjb2xsaXNpb25zIHBy
-b2JsZW0uDQoNClNvcnJ5IGZvciB0aGUgaW5jb252ZW5pZW5jZS4gSSB3aWxsIGRpc2N1c3Mgd2l0
-aCBvdXIgZmxhc2ggdGVhbSBhcyBzb29uIGFzIA0KcG9zc2libGUuDQoNClRoYW5rcywNClpoZW5n
-eHVuDQoNCg0KDQoNCkNPTkZJREVOVElBTElUWSBOT1RFOg0KDQpUaGlzIGUtbWFpbCBhbmQgYW55
-IGF0dGFjaG1lbnRzIG1heSBjb250YWluIGNvbmZpZGVudGlhbCBpbmZvcm1hdGlvbiANCmFuZC9v
-ciBwZXJzb25hbCBkYXRhLCB3aGljaCBpcyBwcm90ZWN0ZWQgYnkgYXBwbGljYWJsZSBsYXdzLiBQ
-bGVhc2UgYmUgDQpyZW1pbmRlZCB0aGF0IGR1cGxpY2F0aW9uLCBkaXNjbG9zdXJlLCBkaXN0cmli
-dXRpb24sIG9yIHVzZSBvZiB0aGlzIGUtbWFpbCANCihhbmQvb3IgaXRzIGF0dGFjaG1lbnRzKSBv
-ciBhbnkgcGFydCB0aGVyZW9mIGlzIHByb2hpYml0ZWQuIElmIHlvdSByZWNlaXZlIA0KdGhpcyBl
-LW1haWwgaW4gZXJyb3IsIHBsZWFzZSBub3RpZnkgdXMgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSB0
-aGlzIG1haWwgYXMgDQp3ZWxsIGFzIGl0cyBhdHRhY2htZW50KHMpIGZyb20geW91ciBzeXN0ZW0u
-IEluIGFkZGl0aW9uLCBwbGVhc2UgYmUgDQppbmZvcm1lZCB0aGF0IGNvbGxlY3Rpb24sIHByb2Nl
-c3NpbmcsIGFuZC9vciB1c2Ugb2YgcGVyc29uYWwgZGF0YSBpcyANCnByb2hpYml0ZWQgdW5sZXNz
-IGV4cHJlc3NseSBwZXJtaXR0ZWQgYnkgcGVyc29uYWwgZGF0YSBwcm90ZWN0aW9uIGxhd3MuIA0K
-VGhhbmsgeW91IGZvciB5b3VyIGF0dGVudGlvbiBhbmQgY29vcGVyYXRpb24uDQoNCk1hY3Jvbml4
-IEludGVybmF0aW9uYWwgQ28uLCBMdGQuDQoNCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KDQoNCg0KPT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PQ0KDQpDT05GSURFTlRJQUxJVFkgTk9URToNCg0KVGhpcyBlLW1haWwgYW5kIGFu
-eSBhdHRhY2htZW50cyBtYXkgY29udGFpbiBjb25maWRlbnRpYWwgaW5mb3JtYXRpb24gYW5kL29y
-IHBlcnNvbmFsIGRhdGEsIHdoaWNoIGlzIHByb3RlY3RlZCBieSBhcHBsaWNhYmxlIGxhd3MuIFBs
-ZWFzZSBiZSByZW1pbmRlZCB0aGF0IGR1cGxpY2F0aW9uLCBkaXNjbG9zdXJlLCBkaXN0cmlidXRp
-b24sIG9yIHVzZSBvZiB0aGlzIGUtbWFpbCAoYW5kL29yIGl0cyBhdHRhY2htZW50cykgb3IgYW55
-IHBhcnQgdGhlcmVvZiBpcyBwcm9oaWJpdGVkLiBJZiB5b3UgcmVjZWl2ZSB0aGlzIGUtbWFpbCBp
-biBlcnJvciwgcGxlYXNlIG5vdGlmeSB1cyBpbW1lZGlhdGVseSBhbmQgZGVsZXRlIHRoaXMgbWFp
-bCBhcyB3ZWxsIGFzIGl0cyBhdHRhY2htZW50KHMpIGZyb20geW91ciBzeXN0ZW0uIEluIGFkZGl0
-aW9uLCBwbGVhc2UgYmUgaW5mb3JtZWQgdGhhdCBjb2xsZWN0aW9uLCBwcm9jZXNzaW5nLCBhbmQv
-b3IgdXNlIG9mIHBlcnNvbmFsIGRhdGEgaXMgcHJvaGliaXRlZCB1bmxlc3MgZXhwcmVzc2x5IHBl
-cm1pdHRlZCBieSBwZXJzb25hbCBkYXRhIHByb3RlY3Rpb24gbGF3cy4gVGhhbmsgeW91IGZvciB5
-b3VyIGF0dGVudGlvbiBhbmQgY29vcGVyYXRpb24uDQoNCk1hY3Jvbml4IEludGVybmF0aW9uYWwg
-Q28uLCBMdGQuDQoNCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PQ0K
+This patch add no_need_unprepare support for spi, if spi src clk is
+MAIN PLL, it can keep the clk_prepare and will not cause low power
+issue. So we no need do clk_prepare/clk_unprepare in runtime pm,
+and it will get better performance, because clk_prepare has called
+mutex lock.
+In the same way,
+clk_get_rate also has called mutex lock, so we moved it to spi_probe.
+
+Signed-off-by: Mason Zhang <Mason.Zhang@mediatek.com>
+---
+ drivers/spi/spi-mt65xx.c | 41 +++++++++++++++++++++++++++++++++-------
+ 1 file changed, 34 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+index 976f73b9e299..097625d7915e 100644
+--- a/drivers/spi/spi-mt65xx.c
++++ b/drivers/spi/spi-mt65xx.c
+@@ -90,6 +90,8 @@ struct mtk_spi_compatible {
+ 	bool enhance_timing;
+ 	/* some IC support DMA addr extension */
+ 	bool dma_ext;
++	/* some IC no need unprepare SPI clk */
++	bool no_need_unprepare;
+ };
+ 
+ struct mtk_spi {
+@@ -104,6 +106,7 @@ struct mtk_spi {
+ 	struct scatterlist *tx_sgl, *rx_sgl;
+ 	u32 tx_sgl_len, rx_sgl_len;
+ 	const struct mtk_spi_compatible *dev_comp;
++	u32 spi_clk_hz;
+ };
+ 
+ static const struct mtk_spi_compatible mtk_common_compat;
+@@ -135,6 +138,14 @@ static const struct mtk_spi_compatible mt8183_compat = {
+ 	.enhance_timing = true,
+ };
+ 
++static const struct mtk_spi_compatible mt6893_compat = {
++	.need_pad_sel = true,
++	.must_tx = true,
++	.enhance_timing = true,
++	.dma_ext = true,
++	.no_need_unprepare = true,
++};
++
+ /*
+  * A piece of default chip info unless the platform
+  * supplies it.
+@@ -174,6 +185,9 @@ static const struct of_device_id mtk_spi_of_match[] = {
+ 	{ .compatible = "mediatek,mt8192-spi",
+ 		.data = (void *)&mt6765_compat,
+ 	},
++	{ .compatible = "mediatek,mt6893-spi",
++		.data = (void *)&mt6893_compat,
++	},
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, mtk_spi_of_match);
+@@ -287,12 +301,11 @@ static void mtk_spi_set_cs(struct spi_device *spi, bool enable)
+ static void mtk_spi_prepare_transfer(struct spi_master *master,
+ 				     struct spi_transfer *xfer)
+ {
+-	u32 spi_clk_hz, div, sck_time, reg_val;
++	u32 div, sck_time, reg_val;
+ 	struct mtk_spi *mdata = spi_master_get_devdata(master);
+ 
+-	spi_clk_hz = clk_get_rate(mdata->spi_clk);
+-	if (xfer->speed_hz < spi_clk_hz / 2)
+-		div = DIV_ROUND_UP(spi_clk_hz, xfer->speed_hz);
++	if (xfer->speed_hz < mdata->spi_clk_hz / 2)
++		div = DIV_ROUND_UP(mdata->spi_clk_hz, xfer->speed_hz);
+ 	else
+ 		div = 1;
+ 
+@@ -789,7 +802,12 @@ static int mtk_spi_probe(struct platform_device *pdev)
+ 		goto err_put_master;
+ 	}
+ 
+-	clk_disable_unprepare(mdata->spi_clk);
++	mdata->spi_clk_hz = clk_get_rate(mdata->spi_clk);
++
++	if (mdata->dev_comp->no_need_unprepare)
++		clk_disable(mdata->spi_clk);
++	else
++		clk_disable_unprepare(mdata->spi_clk);
+ 
+ 	pm_runtime_enable(&pdev->dev);
+ 
+@@ -857,6 +875,9 @@ static int mtk_spi_remove(struct platform_device *pdev)
+ 
+ 	mtk_spi_reset(mdata);
+ 
++	if (mdata->dev_comp->no_need_unprepare)
++		clk_unprepare(mdata->spi_clk);
++
+ 	return 0;
+ }
+ 
+@@ -905,7 +926,10 @@ static int mtk_spi_runtime_suspend(struct device *dev)
+ 	struct spi_master *master = dev_get_drvdata(dev);
+ 	struct mtk_spi *mdata = spi_master_get_devdata(master);
+ 
+-	clk_disable_unprepare(mdata->spi_clk);
++	if (mdata->dev_comp->no_need_unprepare)
++		clk_disable(mdata->spi_clk);
++	else
++		clk_disable_unprepare(mdata->spi_clk);
+ 
+ 	return 0;
+ }
+@@ -916,7 +940,10 @@ static int mtk_spi_runtime_resume(struct device *dev)
+ 	struct mtk_spi *mdata = spi_master_get_devdata(master);
+ 	int ret;
+ 
+-	ret = clk_prepare_enable(mdata->spi_clk);
++	if (mdata->dev_comp->no_need_unprepare)
++		ret = clk_enable(mdata->spi_clk);
++	else
++		ret = clk_prepare_enable(mdata->spi_clk);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
+ 		return ret;
+-- 
+2.18.0
 
