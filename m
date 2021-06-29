@@ -2,53 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0063B72AA
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Jun 2021 14:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3358E3B72B9
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Jun 2021 14:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233482AbhF2M51 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Tue, 29 Jun 2021 08:57:27 -0400
-Received: from [218.75.92.58] ([218.75.92.58]:65522 "EHLO WIN-VTPUBHNS72V"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233027AbhF2M51 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 29 Jun 2021 08:57:27 -0400
-Received: from [192.168.43.47] (Unknown [197.210.79.43])
-        by WIN-VTPUBHNS72V with ESMTPA
-        ; Thu, 24 Jun 2021 20:47:06 +0800
-Message-ID: <0CD05BAA-C453-48F2-B5DD-28E649637835@WIN-VTPUBHNS72V>
-Content-Type: text/plain; charset="iso-8859-1"
+        id S233730AbhF2M7O (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 29 Jun 2021 08:59:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47282 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234028AbhF2M7M (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 29 Jun 2021 08:59:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 13AB461D1C;
+        Tue, 29 Jun 2021 12:56:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624971405;
+        bh=TM30FmUYPGU5GECNncnaUo8Qqr6Yh5mcrutSD7qBJr8=;
+        h=Subject:From:Date:To:From;
+        b=Wry7xUQyxJFe0cxftzZBfJl2Ax2EuXxBwFDVV5Qeo1Wm2calR7hMMAOtq5WY2OiuG
+         jsezkXJESqeuDaNYclv8WzyjQh/0nrHhesMDb4TMvGhDlR5OzUUWIwOWIe2Rm6ckxj
+         IT2S50eFDPfulUHxZaFtbhG0LAyypCH3LS8+GnuxM6nmU6mCrwvjkr3nCu7AzO+NCp
+         n7hDwDWYztqC+OCYQGOPgk+qHnLRQudhWGbEw+bc2utja8G/AOck0WOQ00Z0rGaISZ
+         BBrR2BljInrfAQLNlHO8XYOQyA6TUmSCEg59O5kifRuVfh1Y/yU7TLEBu9IIU+UblD
+         Kq33hiJoRqa+Q==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 069F0609A3;
+        Tue, 29 Jun 2021 12:56:45 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: URGENT ATTENTION
-To:     Recipients <wjjt@wjjt.cn>
-From:   "Andres Auchincloss" <wjjt@wjjt.cn>
-Date:   Thu, 24 Jun 2021 14:46:38 +0200
-Reply-To: andresauchincloss926@gmail.com
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <162497140501.8694.10918913408825667640.git-patchwork-housekeeping@kernel.org>
+Date:   Tue, 29 Jun 2021 12:56:45 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
-
-I will like to use this opportunity to wish you a productive time in 2021 and also confide in you to finalize this transaction of mutual benefits. It may seem strange to you, but it is real. This is a transaction that has no risk at all, due process shall be followed and it shall be carried out under the ambit of the financial laws. Being the Chief Financial Officer, BP Plc. I want to trust and put in your care Eighteen Million British Pounds Sterling, The funds were acquired from an over-invoiced payment from a past contract executed in one of my departments.
-
-I can't successfully achieve this transaction without presenting you as foreign contractor who will provide a bank account to receive the funds.
-
-Documentation for the claim of the funds will be legally processed and documented, so I will need your full cooperation on this matter for our mutual benefits. We will discuss details if you are interested to work with me to secure this funds. I will appreciate your prompt response in every bit of our communication. Stay Blessed and Stay Safe.
-
-
-
-Best Regards
+Latest series: [v3] fpga/mfd/hwmon: Initial support for Silicom N5010 PAC (2021-06-29T12:12:10)
+  Superseding: [v2] fpga/mfd/hwmon: Initial support for Silicom N5010 PAC (2021-06-25T07:42:08):
+    [v2,1/5] fpga: dfl: pci: add device IDs for Silicom N501x PAC cards
+    [v2,2/5] fpga: dfl: expose feature revision from struct dfl_device
+    [v2,3/5] spi: spi-altera-dfl: support n5010 feature revision
+    [v2,4/5] mfd: intel-m10-bmc: add n5010 variant
+    [v2,5/5] hwmon: intel-m10-bmc-hwmon: add n5010 sensors
 
 
-
-
-Tel: +1 (587) 770-0485
-Andres .B. Auchincloss
-Chief financial officerBP Petroleum p.l.c.
-
-
-
-
-                                  Copyright ©? 1996-2021
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
