@@ -2,67 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25FCE3B70B1
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Jun 2021 12:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E464D3B715D
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Jun 2021 13:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbhF2KbD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 29 Jun 2021 06:31:03 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:57078 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233037AbhF2Ka7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Jun 2021 06:30:59 -0400
-X-UUID: adbf36f0a30f46abbb8005e04b6c183d-20210629
-X-UUID: adbf36f0a30f46abbb8005e04b6c183d-20210629
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <mason.zhang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 707843883; Tue, 29 Jun 2021 18:28:26 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 29 Jun 2021 18:28:25 +0800
-Received: from localhost.localdomain (10.15.20.246) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 29 Jun 2021 18:28:24 +0800
-From:   Mason Zhang <mason.zhang@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>
-CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <leilk.liu@mediatek.com>,
-        <wsd_upstream@mediatek.com>, Mason Zhang <Mason.Zhang@mediatek.com>
-Subject: [PATCH 2/2] spi: mediatek: update spi master bingdings for MT6893 SOC
-Date:   Tue, 29 Jun 2021 18:13:11 +0800
-Message-ID: <20210629101310.21045-1-mason.zhang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        id S233488AbhF2Li3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 29 Jun 2021 07:38:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33110 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233465AbhF2Li2 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 29 Jun 2021 07:38:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 81A5761DC0;
+        Tue, 29 Jun 2021 11:36:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624966561;
+        bh=pYliXn2M4VfrJX8TzwqqkNaDbTWyLeW26vN692MeXFs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JB41puISmEDTBggcW/EYaznSop6rFYX2iLsu8IUr4Ib1HOx7mcN/kow8Ne2CpoPcc
+         LKfikAk8ni6eiIS4p3lmSxFeyD60q0BqG0S4JSJySkh+Z0/GfbtAzDIt0b5Oe82mK8
+         4/tFYGv8W2xerL90zBreG6phNFPT8o2y6SZh3cuKXg3QnAWDjAJb5V+JsISGWpi/oz
+         v3PKi9+Zs0z0F4YSE6ZSmulEELDL7kErk0HxD9E619m4z4owRFzSUDK2GR7YMSRIAx
+         otRJYxDE+Pzj/CUjq3I/jkD0n1f/nvcyOusrutZ6dWj06AfZ16DWb1H88OJ/1/GCX0
+         ZzBmdxGOl1hcw==
+Date:   Tue, 29 Jun 2021 12:35:33 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Moritz Fischer <mdf@kernel.org>
+Cc:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] spi: spi-altera-dfl: support n5010 feature
+ revision
+Message-ID: <20210629113533.GA4613@sirena.org.uk>
+References: <20210625074213.654274-1-martin@geanix.com>
+ <20210625074213.654274-4-martin@geanix.com>
+ <YNoJSxnm4g1vufbB@epycbox.lan>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="liOOAslEiF7prFVr"
+Content-Disposition: inline
+In-Reply-To: <YNoJSxnm4g1vufbB@epycbox.lan>
+X-Cookie: Use extra care when cleaning on stairs.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Mason Zhang <Mason.Zhang@mediatek.com>
 
-this patch update spi master bingdings for MT6893 SOC.
+--liOOAslEiF7prFVr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Change-Id: Iaa2840f7e89db83f9505302b50b449f8885a14c1
-Signed-off-by: Mason Zhang <Mason.Zhang@mediatek.com>
----
- Documentation/devicetree/bindings/spi/spi-mt65xx.txt | 1 +
- 1 file changed, 1 insertion(+)
+On Mon, Jun 28, 2021 at 10:39:23AM -0700, Moritz Fischer wrote:
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-mt65xx.txt b/Documentation/devicetree/bindings/spi/spi-mt65xx.txt
-index 4d0e4c15c4ea..2a24969159cc 100644
---- a/Documentation/devicetree/bindings/spi/spi-mt65xx.txt
-+++ b/Documentation/devicetree/bindings/spi/spi-mt65xx.txt
-@@ -11,6 +11,7 @@ Required properties:
-     - mediatek,mt8135-spi: for mt8135 platforms
-     - mediatek,mt8173-spi: for mt8173 platforms
-     - mediatek,mt8183-spi: for mt8183 platforms
-+    - mediatek,mt6893-spi: for mt6893 platforms
-     - "mediatek,mt8192-spi", "mediatek,mt6765-spi": for mt8192 platforms
-     - "mediatek,mt8195-spi", "mediatek,mt6765-spi": for mt8195 platforms
-     - "mediatek,mt8516-spi", "mediatek,mt2712-spi": for mt8516 platforms
--- 
-2.18.0
+> Since this depends on the previous patch: Mark do you want to take both
+> patches once they're reviewed? From what I can tell the BMC and HWMON
+> don't directly depend on it, so taking them through SPI tree might be
+> easiest.
 
+> Alternatively I can provide a tag for the DFL change for you to pull.
+
+Sure, I can do whichever - I guess me applying both is probably
+simplest?
+
+--liOOAslEiF7prFVr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmDbBYQACgkQJNaLcl1U
+h9BVYQf+JHlDZbFReYVDmGaonZ6Kw48CZV8LHo+jLUaByBMUiETh7/O8ynfZXJEK
+/Hh2rsQls2ie/mwegg7Zp6cyMfCprAeM5b7hNAx1T9fKC0Q8SixDqadBX5mhuFXy
+S/cjjvc11+oBy/qpiguv9cKOb3uxs7dkCTYyHrUqPAWraCUw5U1NktIKSY+mALsz
+X44jgAhHhklyPeoqSWtgszclt6W3I9+337q80QasWuxVLeYoujWd4M0j+5ClLzv1
+ccYKrOOKOUmu7ilTzPZoGC9qlPNg16Nefo3BsGiK6ZUniWiQspHCpSbwBQzy5Yvl
+jL9yactFQlx5XCt8wSetmfJFw6ynMA==
+=4W2f
+-----END PGP SIGNATURE-----
+
+--liOOAslEiF7prFVr--
