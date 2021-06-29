@@ -2,127 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A993B6CA5
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Jun 2021 04:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B42FC3B6D09
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Jun 2021 05:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231802AbhF2CwC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Jun 2021 22:52:02 -0400
-Received: from twhmllg4.macronix.com ([122.147.135.202]:26396 "EHLO
-        TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbhF2CwC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Jun 2021 22:52:02 -0400
-X-Greylist: delayed 2552 seconds by postgrey-1.27 at vger.kernel.org; Mon, 28 Jun 2021 22:52:01 EDT
-Received: from TWHMLLG4.macronix.com (localhost [127.0.0.2] (may be forged))
-        by TWHMLLG4.macronix.com with ESMTP id 15T273X8090542
-        for <linux-spi@vger.kernel.org>; Tue, 29 Jun 2021 10:07:03 +0800 (GMT-8)
-        (envelope-from zhengxunli@mxic.com.tw)
-Received: from twhfm1p2.macronix.com (twhfmlp2.macronix.com [172.17.20.92])
-        by TWHMLLG4.macronix.com with ESMTP id 15T26MCa090185;
-        Tue, 29 Jun 2021 10:06:22 +0800 (GMT-8)
-        (envelope-from zhengxunli@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.mxic.com.tw [172.17.14.55])
-        by Forcepoint Email with ESMTP id 71EC4CEFBD923918DB20;
-        Tue, 29 Jun 2021 10:06:22 +0800 (CST)
-In-Reply-To: <20210517073304.sldl5eybdkd6owvl@ti.com>
-References: <1621232088-12567-1-git-send-email-zhengxunli@mxic.com.tw> <1621232088-12567-2-git-send-email-zhengxunli@mxic.com.tw> <20210517073304.sldl5eybdkd6owvl@ti.com>
-To:     tudor.ambarus@microchip.com, vigneshr@ti.com
-Cc:     broonie@kernel.org, linux-mtd@lists.infradead.org,
-        linux-spi@vger.kernel.org, miquel.raynal@bootlin.com
-Subject: Re: [PATCH v5 1/2] mtd: spi-nor: macronix: add support for Macronix
- octaflash
+        id S231810AbhF2DkH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Jun 2021 23:40:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42698 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231741AbhF2DkG (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 28 Jun 2021 23:40:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6442561D38;
+        Tue, 29 Jun 2021 03:37:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624937859;
+        bh=wvinFt0qcp97HAcqwxqlfrjB2zJAOfcgDtrhX0/nJus=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jhGlkF14cvJcmHhIFuloHFwYL4Wx1SyKAMrqA1zLfRSl3/5l12d5nvvZiRn2TKdcW
+         eoePSsj9I6PM4ugrq+mvkwHfz9BBxtR/zxkrlyJItvRlF6rrxY2ybi4ivcXXVdjF0m
+         xDJxv5g21kdxmwrDhifiRMLsAPQ55KJaFZPVBr/WWKwG2u9lwgwLePwLaT76/6p80X
+         1ny7s0KtI8cIbiQnmkSoEoLJ7+v8NXdDZLkekkkjvzTsyJXhQjmaPO8i0P/sA/sVZa
+         bmcC5DGIHYBQpU6LvOffiM8qA8Tewt0mws+MZIj00AplWkAQ/Qc+hieiJLnsj/N9xF
+         wRtvsb5G//inQ==
+Date:   Tue, 29 Jun 2021 09:07:36 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/5] soc: qcom: geni: Add support for gpi dma
+Message-ID: <YNqVgESqehz27knL@matsya>
+References: <20210625052213.32260-1-vkoul@kernel.org>
+ <20210625052213.32260-3-vkoul@kernel.org>
+ <CAD=FV=ULVo=vz2Vww6_bcfrhosy0GRC2oVEcXt6zw8n4C2MiuQ@mail.gmail.com>
 MIME-Version: 1.0
-X-KeepSent: 446B46CD:368B90EA-48258703:000A8FB2;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3FP6 SHF907 April 26, 2018
-Message-ID: <OF446B46CD.368B90EA-ON48258703.000A8FB2-48258703.000B91E3@mxic.com.tw>
-From:   zhengxunli@mxic.com.tw
-Date:   Tue, 29 Jun 2021 10:06:22 +0800
-X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2021/06/29 AM 10:06:22,
-        Serialize complete at 2021/06/29 AM 10:06:22
-Content-Type: text/plain; charset="Big5"
-Content-Transfer-Encoding: base64
-X-MAIL: TWHMLLG4.macronix.com 15T26MCa090185
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=ULVo=vz2Vww6_bcfrhosy0GRC2oVEcXt6zw8n4C2MiuQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Doug,
 
-SGkgVHVkb3IsICBWaWduZXNociwNCg0KSG9wZSB5b3WhpnJlIGhhdmluZyBhIGdyZWF0IGRheSEN
-Cg0KV291bGQgeW91IGhlbHAgdG8gcmV2aWV3IHRoaXMgc2VyaWVzPw0KDQoiUHJhdHl1c2ggWWFk
-YXYiIDxwLnlhZGF2QHRpLmNvbT4gd3JvdGUgb24gMjAyMS8wNS8xNyCkVaTIIDAzOjMzOjA2Og0K
-DQo+ICJQcmF0eXVzaCBZYWRhdiIgPHAueWFkYXZAdGkuY29tPiANCj4gMjAyMS8wNS8xNyCkVaTI
-IDAzOjMzDQo+IA0KPiBUbw0KPiANCj4gIlpoZW5neHVuIExpIiA8emhlbmd4dW5saUBteGljLmNv
-bS50dz4sIA0KPiANCj4gY2MNCj4gDQo+IDxsaW51eC1tdGRAbGlzdHMuaW5mcmFkZWFkLm9yZz4s
-IDxsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnPiwgDQo+IDx0dWRvci5hbWJhcnVzQG1pY3JvY2hp
-cC5jb20+LCA8bWlxdWVsLnJheW5hbEBib290bGluLmNvbT4sIA0KPiA8YnJvb25pZUBrZXJuZWwu
-b3JnPiwgPGphaW1lbGlhb0BteGljLmNvbS50dz4NCj4gDQo+IFN1YmplY3QNCj4gDQo+IFJlOiBb
-UEFUQ0ggdjUgMS8yXSBtdGQ6IHNwaS1ub3I6IG1hY3Jvbml4OiBhZGQgc3VwcG9ydCBmb3IgTWFj
-cm9uaXggDQpvY3RhZmxhc2gNCj4gDQo+IE9uIDE3LzA1LzIxIDAyOjE0UE0sIFpoZW5neHVuIExp
-IHdyb3RlOg0KPiA+IFRoZSBvY3RhZmxhc2ggaXMgYW4geFNQSSBjb21wbGlhbnQgb2N0YWwgRFRS
-IGZsYXNoLiBBZGQgc3VwcG9ydA0KPiA+IGZvciB1c2luZyBpdCBpbiBvY3RhbCBEVFIgbW9kZS4N
-Cj4gPiANCj4gPiBUcnkgdG8gdmVyaWZ5IHRoZSBmbGFzaCBJRCB0byBjaGVjayB3aGV0aGVyIHRo
-ZSBmbGFzaCBtZW1vcnkgaW4gb2N0YWwNCj4gPiBEVFIgbW9kZSBhbmQgU1BJIG1vZGUgYXJlIGNv
-cnJlY3QuIFdoZW4gcmVhZGluZyBJRCBpbiBPQ1RBTCBEVFIgbW9kZSwNCj4gPiBJRCB3aWxsIGFw
-cGVhciBpbiBhIHJlcGVhdGVkIG1hbm5lci4gZXg6IElEWzBdID0gMHhjMiwgSURbMV0gPSAweGMy
-LA0KPiA+IElEWzJdID0gMHg5NCwgSURbM10gPSAweDk0Li4uIFJlYXJyYW5nZSB0aGUgb3JkZXIg
-c28gdGhhdCB0aGUgSUQgY2FuIA0KcGFzcy4NCj4gPiANCj4gPiBUaGUgb2N0YWZsYXNoIHNlcmll
-cyBjYW4gYmUgZGl2aWRlZCBpbnRvIHRoZSBmb2xsb3dpbmcgdHlwZXM6DQo+ID4gDQo+ID4gTVgy
-NSBzZXJpZXMgOiBTZXJpYWwgTk9SIEZsYXNoLg0KPiA+IE1YNjYgc2VyaWVzIDogU2VyaWFsIE5P
-UiBGbGFzaCB3aXRoIHN0YWNrZWQgZGllLihTaXplIGxhcmdlciB0aGFuIDFHYikNCj4gPiBMTS9V
-TSBzZXJpZXMgOiBVcCB0byAyNTBNSHogY2xvY2sgZnJlcXVlbmN5IHdpdGggYm90aCBEVFIvU1RS
-IA0Kb3BlcmF0aW9uLg0KPiA+IExXL1VXIHNlcmllcyA6IFN1cHBvcnQgc2ltdWx0YW5lb3VzIFJl
-YWQtd2hpbGUtV3JpdGUgb3BlcmF0aW9uIGluIA0KbXVsdGlwbGUNCj4gPiAgICAgICAgICAgYmFu
-ayBhcmNoaXRlY3R1cmUuIFJlYWQtd2hpbGUtd3JpdGUgZmVhdHVyZSB3aGljaCBtZWFucyByZWFk
-DQo+ID4gICAgICAgICAgIGRhdGEgb25lIGJhbmsgd2hpbGUgYW5vdGhlciBiYW5rIGlzIHByb2dy
-YW1pbmcgb3IgZXJhc2luZy4NCj4gPiANCj4gPiBNWDI1TE0gOiAzLjBWIE9jdGFsIEkvTw0KPiA+
-ICAtaHR0cHM6Ly93d3cubXhpYy5jb20udHcvTGlzdHMvRGF0YXNoZWV0L0F0dGFjaG1lbnRzLzc4
-NDEvDQo+IE1YMjVMTTUxMjQ1RywlMjAzViwlMjA1MTJNYiwlMjB2MS4xLnBkZg0KPiA+IA0KPiA+
-IE1YMjVVTSA6IDEuOFYgT2N0YWwgSS9PDQo+ID4gIC1odHRwczovL3d3dy5teGljLmNvbS50dy9M
-aXN0cy9EYXRhc2hlZXQvQXR0YWNobWVudHMvNzUyNS8NCj4gTVgyNVVNNTEyNDVHJTIwRXh0cmVt
-ZSUyMFNwZWVkLCUyMDEuOFYsJTIwNTEyTWIsJTIwdjEuMC5wZGYNCj4gPiANCj4gPiBNWDY2TE0g
-OiAzLjBWIE9jdGFsIEkvTyB3aXRoIHN0YWNrZWQgZGllDQo+ID4gIC1odHRwczovL3d3dy5teGlj
-LmNvbS50dy9MaXN0cy9EYXRhc2hlZXQvQXR0YWNobWVudHMvNzkyOS8NCj4gTVg2NkxNMUc0NUcs
-JTIwM1YsJTIwMUdiLCUyMHYxLjEucGRmDQo+ID4gDQo+ID4gTVg2NlVNIDogMS44ViBPY3RhbCBJ
-L08gd2l0aCBzdGFja2VkIGRpZQ0KPiA+ICAtaHR0cHM6Ly93d3cubXhpYy5jb20udHcvTGlzdHMv
-RGF0YXNoZWV0L0F0dGFjaG1lbnRzLzc3MjEvDQo+IE1YNjZVTTFHNDVHLCUyMDEuOFYsJTIwMUdi
-LCUyMHYxLjEucGRmDQo+ID4gDQo+ID4gTVgyNUxXIDogMy4wViBPY3RhbCBJL08gd2l0aCBSZWFk
-LXdoaWxlLVdyaXRlDQo+ID4gTVgyNVVXIDogMS44ViBPY3RhbCBJL08gd2l0aCBSZWFkLXdoaWxl
-LVdyaXRlDQo+ID4gTVg2NkxXIDogMy4wViBPY3RhbCBJL08gd2l0aCBSZWFkLXdoaWxlLVdyaXRl
-IGFuZCBzdGFjayBkaWUNCj4gPiBNWDY2VVcgOiAxLjhWIE9jdGFsIEkvTyB3aXRoIFJlYWQtd2hp
-bGUtV3JpdGUgYW5kIHN0YWNrIGRpZQ0KPiA+IA0KPiA+IEFib3V0IExXL1VXIHNlcmllcywgcGxl
-YXNlIGNvbnRhY3QgdXMgZnJlZWx5IGlmIHlvdSBoYXZlIGFueQ0KPiA+IHF1ZXN0aW9ucy4gRm9y
-IGFkZGluZyBPY3RhbCBOT1IgRmxhc2ggSURzLCB3ZSBoYXZlIHZhbGlkYXRlZA0KPiA+IGVhY2gg
-Rmxhc2ggb24gcGxhdGVmb3JtIHp5bnEtcGljb3plZC4NCj4gPiANCj4gPiBTaWduZWQtb2ZmLWJ5
-OiBaaGVuZ3h1biBMaSA8emhlbmd4dW5saUBteGljLmNvbS50dz4NCj4gDQo+IFJldmlld2VkLWJ5
-OiBQcmF0eXVzaCBZYWRhdiA8cC55YWRhdkB0aS5jb20+DQoNClRoYW5rcywNClpoZW5neHVuDQoN
-Cg0KDQpDT05GSURFTlRJQUxJVFkgTk9URToNCg0KVGhpcyBlLW1haWwgYW5kIGFueSBhdHRhY2ht
-ZW50cyBtYXkgY29udGFpbiBjb25maWRlbnRpYWwgaW5mb3JtYXRpb24gDQphbmQvb3IgcGVyc29u
-YWwgZGF0YSwgd2hpY2ggaXMgcHJvdGVjdGVkIGJ5IGFwcGxpY2FibGUgbGF3cy4gUGxlYXNlIGJl
-IA0KcmVtaW5kZWQgdGhhdCBkdXBsaWNhdGlvbiwgZGlzY2xvc3VyZSwgZGlzdHJpYnV0aW9uLCBv
-ciB1c2Ugb2YgdGhpcyBlLW1haWwgDQooYW5kL29yIGl0cyBhdHRhY2htZW50cykgb3IgYW55IHBh
-cnQgdGhlcmVvZiBpcyBwcm9oaWJpdGVkLiBJZiB5b3UgcmVjZWl2ZSANCnRoaXMgZS1tYWlsIGlu
-IGVycm9yLCBwbGVhc2Ugbm90aWZ5IHVzIGltbWVkaWF0ZWx5IGFuZCBkZWxldGUgdGhpcyBtYWls
-IGFzIA0Kd2VsbCBhcyBpdHMgYXR0YWNobWVudChzKSBmcm9tIHlvdXIgc3lzdGVtLiBJbiBhZGRp
-dGlvbiwgcGxlYXNlIGJlIA0KaW5mb3JtZWQgdGhhdCBjb2xsZWN0aW9uLCBwcm9jZXNzaW5nLCBh
-bmQvb3IgdXNlIG9mIHBlcnNvbmFsIGRhdGEgaXMgDQpwcm9oaWJpdGVkIHVubGVzcyBleHByZXNz
-bHkgcGVybWl0dGVkIGJ5IHBlcnNvbmFsIGRhdGEgcHJvdGVjdGlvbiBsYXdzLiANClRoYW5rIHlv
-dSBmb3IgeW91ciBhdHRlbnRpb24gYW5kIGNvb3BlcmF0aW9uLg0KDQpNYWNyb25peCBJbnRlcm5h
-dGlvbmFsIENvLiwgTHRkLg0KDQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCg0KDQoNCj09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT0NCg0KQ09ORklERU5USUFMSVRZIE5PVEU6DQoNClRoaXMgZS1tYWlsIGFuZCBhbnkgYXR0YWNo
-bWVudHMgbWF5IGNvbnRhaW4gY29uZmlkZW50aWFsIGluZm9ybWF0aW9uIGFuZC9vciBwZXJzb25h
-bCBkYXRhLCB3aGljaCBpcyBwcm90ZWN0ZWQgYnkgYXBwbGljYWJsZSBsYXdzLiBQbGVhc2UgYmUg
-cmVtaW5kZWQgdGhhdCBkdXBsaWNhdGlvbiwgZGlzY2xvc3VyZSwgZGlzdHJpYnV0aW9uLCBvciB1
-c2Ugb2YgdGhpcyBlLW1haWwgKGFuZC9vciBpdHMgYXR0YWNobWVudHMpIG9yIGFueSBwYXJ0IHRo
-ZXJlb2YgaXMgcHJvaGliaXRlZC4gSWYgeW91IHJlY2VpdmUgdGhpcyBlLW1haWwgaW4gZXJyb3Is
-IHBsZWFzZSBub3RpZnkgdXMgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSB0aGlzIG1haWwgYXMgd2Vs
-bCBhcyBpdHMgYXR0YWNobWVudChzKSBmcm9tIHlvdXIgc3lzdGVtLiBJbiBhZGRpdGlvbiwgcGxl
-YXNlIGJlIGluZm9ybWVkIHRoYXQgY29sbGVjdGlvbiwgcHJvY2Vzc2luZywgYW5kL29yIHVzZSBv
-ZiBwZXJzb25hbCBkYXRhIGlzIHByb2hpYml0ZWQgdW5sZXNzIGV4cHJlc3NseSBwZXJtaXR0ZWQg
-YnkgcGVyc29uYWwgZGF0YSBwcm90ZWN0aW9uIGxhd3MuIFRoYW5rIHlvdSBmb3IgeW91ciBhdHRl
-bnRpb24gYW5kIGNvb3BlcmF0aW9uLg0KDQpNYWNyb25peCBJbnRlcm5hdGlvbmFsIENvLiwgTHRk
-Lg0KDQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT0NCg==
+On 28-06-21, 16:38, Doug Anderson wrote:
+> Hi,
+> 
+> On Thu, Jun 24, 2021 at 10:22 PM Vinod Koul <vkoul@kernel.org> wrote:
+> >
+> > +static void geni_se_select_gpi_mode(struct geni_se *se)
+> > +{
+> > +       u32 val;
+> > +
+> > +       geni_se_irq_clear(se);
+> > +
+> > +       writel(0, se->base + SE_IRQ_EN);
+> > +
+> > +       val = readl(se->base + SE_GENI_S_IRQ_EN);
+> > +       val &= ~S_CMD_DONE_EN;
+> > +       writel(val, se->base + SE_GENI_S_IRQ_EN);
+> > +
+> > +       val = readl(se->base + SE_GENI_M_IRQ_EN);
+> > +       val &= ~(M_CMD_DONE_EN | M_TX_FIFO_WATERMARK_EN |
+> > +                M_RX_FIFO_WATERMARK_EN | M_RX_FIFO_LAST_EN);
+> > +       writel(val, se->base + SE_GENI_M_IRQ_EN);
+> > +
+> > +       writel(GENI_DMA_MODE_EN, se->base + SE_GENI_DMA_MODE_EN);
+> > +
+> > +       val = readl(se->base + SE_GSI_EVENT_EN);
+> > +       val |= (DMA_RX_EVENT_EN | DMA_TX_EVENT_EN | GENI_M_EVENT_EN | GENI_S_EVENT_EN);
+> 
+> nit: the above has some extra parenthesis that aren't needed.
+> 
+> I will continue to assert that all of the "set mode" stuff doesn't
+> really belong here and should be managed by individual drivers [1].
+> I'll accept that it doesn't have to block forward progress, though I'm
+> at least a bit disappointed that we asked Qualcomm to do this over 8
+> months ago and no action was taken. :(
+> 
+> In any case, this looks OK to me:
+> 
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
+Thanks for the review.
+
+> 
+> [1] https://lore.kernel.org/r/CAD=FV=VWPqswOXJejyXjYT_Yspdu75ELq42cffN87FrpTwPUQg@mail.gmail.com/
+
+I agree we should do something, will discuss with Bjorn and try to help
+here.
+
+Regards
+-- 
+~Vinod
