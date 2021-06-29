@@ -2,113 +2,117 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E61B3B6B7C
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Jun 2021 01:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE0E3B6C1D
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Jun 2021 03:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233087AbhF1XlG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Jun 2021 19:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbhF1Xkw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Jun 2021 19:40:52 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA09C061787
-        for <linux-spi@vger.kernel.org>; Mon, 28 Jun 2021 16:38:25 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id g19so10166641qvx.12
-        for <linux-spi@vger.kernel.org>; Mon, 28 Jun 2021 16:38:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=24QEkp0ruWhDlT9VQmxg2IKCctjJ1YCdLUMV4LRFyKE=;
-        b=n26F1lBmm4to9yGPrWtcwiSQlCE8KWJY8cbH7iQ4rk1IYXPxPFs2M6rM8hmszNUgqL
-         hZf4vIMkv9rQ8DcEDy+TH2m7mmH6Z0/QKLcNLz/OUc6Ck2sn0ncFULz1+CMCYw+x9Mv+
-         mdFa22ui/u+464tf4K7a8BDoPKWzQ75CHlRjc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=24QEkp0ruWhDlT9VQmxg2IKCctjJ1YCdLUMV4LRFyKE=;
-        b=n4AmpwS8WTGGo8DRZP3L+7WMbjH/ta0MjccGAiX2EkGCmiiLkDuxD5WEJoAGKsSlWK
-         a4ToPK+0RHkUFDbR4uTqIWnJW5BRHK5Y5tZ2+G24TlITPm0P3f7+WgwjpfIE51JfWwog
-         bDnxSg3wKKzkvGJjsk9WP+6YrO2rbN3cu9syl0r/5WY4+E+VO8WFujss4Hg9vAVlJNTu
-         eVVUSlXPBiZ9EWiQu7dI5sQveaUwWaTAXN9FnUbsMe2zJYI8xH9MC5WdHy03U5sI6uCx
-         TTpvvq7RRyoNqAp729QaRg7Rk9nxtkS4fZA9VnqGdFHVBPJmfw30PpqXUA/SAlczQggw
-         c1bw==
-X-Gm-Message-State: AOAM532K6MKFX5Hw+7/DHyhVkujuAwgX6NZzqEVfQwz+Km5TfF33vzI+
-        zlDtF2hXa9ta/xYhlNMi1BErPJW+Y+x+nA==
-X-Google-Smtp-Source: ABdhPJxGzcZH/6VQUMzj/vgmPXxOk6coKlfBfjusbBn27478jZsehPTJ075KL5tLpaLTnj4vVvJ8ug==
-X-Received: by 2002:a05:6214:1185:: with SMTP id t5mr27878607qvv.7.1624923504385;
-        Mon, 28 Jun 2021 16:38:24 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id e6sm6425014qkg.12.2021.06.28.16.38.23
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Jun 2021 16:38:23 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id m9so21331009ybo.5
-        for <linux-spi@vger.kernel.org>; Mon, 28 Jun 2021 16:38:23 -0700 (PDT)
-X-Received: by 2002:a25:6088:: with SMTP id u130mr35812620ybb.257.1624923502959;
- Mon, 28 Jun 2021 16:38:22 -0700 (PDT)
+        id S230008AbhF2Brr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Jun 2021 21:47:47 -0400
+Received: from mga11.intel.com ([192.55.52.93]:18888 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229933AbhF2Brq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 28 Jun 2021 21:47:46 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10029"; a="205059164"
+X-IronPort-AV: E=Sophos;i="5.83,307,1616482800"; 
+   d="scan'208";a="205059164"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2021 18:45:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,307,1616482800"; 
+   d="scan'208";a="456583567"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.162])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Jun 2021 18:45:17 -0700
+Date:   Tue, 29 Jun 2021 09:39:58 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Moritz Fischer <mdf@kernel.org>
+Cc:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v2 4/5] mfd: intel-m10-bmc: add n5010 variant
+Message-ID: <20210629013958.GA85916@yilunxu-OptiPlex-7050>
+References: <20210625074213.654274-1-martin@geanix.com>
+ <20210625074213.654274-5-martin@geanix.com>
+ <YNYkXVgS4YBgahjw@epycbox.lan>
 MIME-Version: 1.0
-References: <20210625052213.32260-1-vkoul@kernel.org> <20210625052213.32260-3-vkoul@kernel.org>
-In-Reply-To: <20210625052213.32260-3-vkoul@kernel.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 28 Jun 2021 16:38:10 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=ULVo=vz2Vww6_bcfrhosy0GRC2oVEcXt6zw8n4C2MiuQ@mail.gmail.com>
-Message-ID: <CAD=FV=ULVo=vz2Vww6_bcfrhosy0GRC2oVEcXt6zw8n4C2MiuQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] soc: qcom: geni: Add support for gpi dma
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YNYkXVgS4YBgahjw@epycbox.lan>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+On Fri, Jun 25, 2021 at 11:45:49AM -0700, Moritz Fischer wrote:
+> On Fri, Jun 25, 2021 at 09:42:12AM +0200, Martin Hundebøll wrote:
+> > From: Martin Hundebøll <mhu@silicom.dk>
+> > 
+> >  The m10-bmc is used on the Silicom N5010 PAC too, so add it to list of
+> >  m10bmc types.
+> > 
+> > Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
+> Acked-by: Moritz Fischer <mdf@kernel.org>
+Reviewed-by: Xu Yilun <yilun.xu@intel.com>
 
-On Thu, Jun 24, 2021 at 10:22 PM Vinod Koul <vkoul@kernel.org> wrote:
->
-> +static void geni_se_select_gpi_mode(struct geni_se *se)
-> +{
-> +       u32 val;
-> +
-> +       geni_se_irq_clear(se);
-> +
-> +       writel(0, se->base + SE_IRQ_EN);
-> +
-> +       val = readl(se->base + SE_GENI_S_IRQ_EN);
-> +       val &= ~S_CMD_DONE_EN;
-> +       writel(val, se->base + SE_GENI_S_IRQ_EN);
-> +
-> +       val = readl(se->base + SE_GENI_M_IRQ_EN);
-> +       val &= ~(M_CMD_DONE_EN | M_TX_FIFO_WATERMARK_EN |
-> +                M_RX_FIFO_WATERMARK_EN | M_RX_FIFO_LAST_EN);
-> +       writel(val, se->base + SE_GENI_M_IRQ_EN);
-> +
-> +       writel(GENI_DMA_MODE_EN, se->base + SE_GENI_DMA_MODE_EN);
-> +
-> +       val = readl(se->base + SE_GSI_EVENT_EN);
-> +       val |= (DMA_RX_EVENT_EN | DMA_TX_EVENT_EN | GENI_M_EVENT_EN | GENI_S_EVENT_EN);
+Thanks,
+Yilun
 
-nit: the above has some extra parenthesis that aren't needed.
-
-I will continue to assert that all of the "set mode" stuff doesn't
-really belong here and should be managed by individual drivers [1].
-I'll accept that it doesn't have to block forward progress, though I'm
-at least a bit disappointed that we asked Qualcomm to do this over 8
-months ago and no action was taken. :(
-
-In any case, this looks OK to me:
-
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-
-
-[1] https://lore.kernel.org/r/CAD=FV=VWPqswOXJejyXjYT_Yspdu75ELq42cffN87FrpTwPUQg@mail.gmail.com/
+> > ---
+> > 
+> > Changes since v1:
+> >  * Patch split out to separate mfd changes
+> > 
+> >  drivers/mfd/intel-m10-bmc.c | 12 +++++++++++-
+> >  1 file changed, 11 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
+> > index 1a9bfb7f48cd..8db3bcf5fccc 100644
+> > --- a/drivers/mfd/intel-m10-bmc.c
+> > +++ b/drivers/mfd/intel-m10-bmc.c
+> > @@ -15,7 +15,8 @@
+> >  
+> >  enum m10bmc_type {
+> >  	M10_N3000,
+> > -	M10_D5005
+> > +	M10_D5005,
+> > +	M10_N5010,
+> >  };
+> >  
+> >  static struct mfd_cell m10bmc_d5005_subdevs[] = {
+> > @@ -28,6 +29,10 @@ static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
+> >  	{ .name = "n3000bmc-secure" },
+> >  };
+> >  
+> > +static struct mfd_cell m10bmc_n5010_subdevs[] = {
+> > +	{ .name = "n5010bmc-hwmon" },
+> > +};
+> > +
+> >  static const struct regmap_range m10bmc_regmap_range[] = {
+> >  	regmap_reg_range(M10BMC_LEGACY_BUILD_VER, M10BMC_LEGACY_BUILD_VER),
+> >  	regmap_reg_range(M10BMC_SYS_BASE, M10BMC_SYS_END),
+> > @@ -192,6 +197,10 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> >  		cells = m10bmc_d5005_subdevs;
+> >  		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
+> >  		break;
+> > +	case M10_N5010:
+> > +		cells = m10bmc_n5010_subdevs;
+> > +		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
+> > +		break;
+> >  	default:
+> >  		return -ENODEV;
+> >  	}
+> > @@ -207,6 +216,7 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> >  static const struct spi_device_id m10bmc_spi_id[] = {
+> >  	{ "m10-n3000", M10_N3000 },
+> >  	{ "m10-d5005", M10_D5005 },
+> > +	{ "m10-n5010", M10_N5010 },
+> >  	{ }
+> >  };
+> >  MODULE_DEVICE_TABLE(spi, m10bmc_spi_id);
+> > -- 
+> > 2.31.0
+> > 
