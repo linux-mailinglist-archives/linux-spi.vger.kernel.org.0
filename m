@@ -2,203 +2,121 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C8F3B7796
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Jun 2021 20:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9307A3B7886
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Jun 2021 21:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232584AbhF2SIh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 29 Jun 2021 14:08:37 -0400
-Received: from mga07.intel.com ([134.134.136.100]:40295 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231856AbhF2SIg (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 29 Jun 2021 14:08:36 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10030"; a="272060875"
+        id S233670AbhF2TYx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 29 Jun 2021 15:24:53 -0400
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:18093 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233375AbhF2TYx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Jun 2021 15:24:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1624994545; x=1656530545;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=011jMQzbysLea9YNOltRP7IGOoLMvt8FHdPjNFU4fE0=;
+  b=necM85yp3rmGOTd8H9XWSZQlhlnhZ4ipQMmb3LckBqBxBoFIr1wY3sIg
+   ETAYIKb4HoNGOkDbd8W8QamfVPysr8+4+pa1/gkVsjudDg46Xg4YOWBwS
+   OX57VBe8SigqL0F5Og0YIFUxTtUdywFG3+4fgH0mbKZK0Nd612m0d8ic9
+   x6LBCBYiKpY+X1EQN6MMPHwAac6kJqt7mJ+cJzxHWdhA8IFYCMf7yD0UT
+   gvrPjXEkXWFxcWgzSL8qRJwFznfAw9WGT+/RH2B6Y5xf/OtKh3MMmAxMO
+   DHe7K0vWkXINjTcDsDgS+ZMOjNth3V70HjvCJREi/UhKjIdIX/+UaMIAl
+   g==;
+IronPort-SDR: DBOpz7FXL6edMGxWnX9XPIlSA9yx5+/DHh0kcAZIAHgUW2vl9Z4Uh/gArsTQn3sV/iiFIhCvEF
+ fIWiElgi/o9WDLusI+OJI6IHr6nYtj8C4zXfHh8iLunuSc8Jhzq5+HPjnyuT4MElGdpJVKllz/
+ tXZKmcVDfo6Ea/21d3bP9zSIXfYo9G1HyMo5TuhztsGmGeHWTDaZmTCJGByyIyoOWh80QkQOqa
+ A8TNgjsfzCT0P+sx8H/lmI6dT4JdJiEMPm2GQSoQQX8z1B4kWuD2d1w8Ur1xbVQyr81BjzrQR3
+ Ors=
 X-IronPort-AV: E=Sophos;i="5.83,309,1616482800"; 
-   d="scan'208";a="272060875"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2021 11:06:07 -0700
-X-IronPort-AV: E=Sophos;i="5.83,309,1616482800"; 
-   d="scan'208";a="419694967"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.42])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2021 11:06:06 -0700
-Date:   Tue, 29 Jun 2021 11:04:22 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     =?ISO-8859-15?Q?Martin_Hundeb=F8ll?= <martin@geanix.com>
-cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        =?ISO-8859-15?Q?Martin_Hundeb=F8ll?= <mhu@silicom.dk>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] fpga: dfl: expose feature revision from struct
- dfl_device
-In-Reply-To: <20210629121214.988036-2-martin@geanix.com>
-Message-ID: <alpine.DEB.2.22.394.2106291103430.1279832@rhweight-WRK1>
-References: <20210629121214.988036-1-martin@geanix.com> <20210629121214.988036-2-martin@geanix.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+   d="scan'208";a="133971297"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Jun 2021 12:22:24 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 29 Jun 2021 12:22:24 -0700
+Received: from dan-linux.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Tue, 29 Jun 2021 12:22:24 -0700
+From:   Dan Sneddon <dan.sneddon@microchip.com>
+To:     Dan Sneddon <dan.sneddon@microchip.com>,
+        Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>
+Subject: [PATCH v2] spi: atmel: Fix CS and initialization bug
+Date:   Tue, 29 Jun 2021 12:22:18 -0700
+Message-ID: <20210629192218.32125-1-dan.sneddon@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-431308998-1624990064=:1279832"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Commit 5fa5e6dec762 ("spi: atmel: Switch to transfer_one transfer
+method") switched to using transfer_one and set_cs.  The
+core doesn't call set_cs when the chip select lines are gpios.  Add the
+SPI_MASTER_GPIO_SS flag to the driver to ensure the calls to set_cs
+happen since the driver programs configuration registers there.
 
---8323328-431308998-1624990064=:1279832
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
+Fixes: 5fa5e6dec762 ("spi: atmel: Switch to transfer_one transfer method")
 
+Signed-off-by: Dan Sneddon <dan.sneddon@microchip.com>
+---
 
+Changes in v2:
+- Updated commit message
+- Dropped unnecessary change to enable variable in set_cs
 
-On Tue, 29 Jun 2021, Martin Hundebøll wrote:
+ drivers/spi/spi-atmel.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-> From: Martin Hundebøll <mhu@silicom.dk>
->
-> DFL device drivers have a common need for checking feature revision
-> information from the DFL header, as well as other common DFL information
-> like the already exposed feature id and type.
->
-> This patch exposes the feature revision information directly via the DFL
-> device data structure.
->
-> Since the DFL core code has already read the DFL header, this this patch
-> saves additional mmio reads from DFL device drivers too.
->
-> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
-Acked-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
->
-> Changes since v2:
-> * Reworded commit message as per Hao's suggestion
->
-> Changes since v1:
-> * This patch replaces the previous patch 2 and exposes the feature
->   revision through struct dfl_device instead of a helper reading from
->   io-mem
->
-> drivers/fpga/dfl.c  | 27 +++++++++++++++++----------
-> drivers/fpga/dfl.h  |  1 +
-> include/linux/dfl.h |  1 +
-> 3 files changed, 19 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> index 511b20ff35a3..9381c579d1cd 100644
-> --- a/drivers/fpga/dfl.c
-> +++ b/drivers/fpga/dfl.c
-> @@ -381,6 +381,7 @@ dfl_dev_add(struct dfl_feature_platform_data *pdata,
->
-> 	ddev->type = feature_dev_id_type(pdev);
-> 	ddev->feature_id = feature->id;
-> +	ddev->revision = feature->revision;
-> 	ddev->cdev = pdata->dfl_cdev;
->
-> 	/* add mmio resource */
-> @@ -717,6 +718,7 @@ struct build_feature_devs_info {
->  */
-> struct dfl_feature_info {
-> 	u16 fid;
-> +	u8 rev;
-> 	struct resource mmio_res;
-> 	void __iomem *ioaddr;
-> 	struct list_head node;
-> @@ -796,6 +798,7 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
-> 		/* save resource information for each feature */
-> 		feature->dev = fdev;
-> 		feature->id = finfo->fid;
-> +		feature->revision = finfo->rev;
->
-> 		/*
-> 		 * the FIU header feature has some fundamental functions (sriov
-> @@ -910,19 +913,17 @@ static void build_info_free(struct build_feature_devs_info *binfo)
-> 	devm_kfree(binfo->dev, binfo);
-> }
->
-> -static inline u32 feature_size(void __iomem *start)
-> +static inline u32 feature_size(u64 value)
-> {
-> -	u64 v = readq(start + DFH);
-> -	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, v);
-> +	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, value);
-> 	/* workaround for private features with invalid size, use 4K instead */
-> 	return ofst ? ofst : 4096;
-> }
->
-> -static u16 feature_id(void __iomem *start)
-> +static u16 feature_id(u64 value)
-> {
-> -	u64 v = readq(start + DFH);
-> -	u16 id = FIELD_GET(DFH_ID, v);
-> -	u8 type = FIELD_GET(DFH_TYPE, v);
-> +	u16 id = FIELD_GET(DFH_ID, value);
-> +	u8 type = FIELD_GET(DFH_TYPE, value);
->
-> 	if (type == DFH_TYPE_FIU)
-> 		return FEATURE_ID_FIU_HEADER;
-> @@ -1021,10 +1022,15 @@ create_feature_instance(struct build_feature_devs_info *binfo,
-> 	unsigned int irq_base, nr_irqs;
-> 	struct dfl_feature_info *finfo;
-> 	int ret;
-> +	u8 rev;
-> +	u64 v;
-> +
-> +	v = readq(binfo->ioaddr + ofst);
-> +	rev = FIELD_GET(DFH_REVISION, v);
->
-> 	/* read feature size and id if inputs are invalid */
-> -	size = size ? size : feature_size(binfo->ioaddr + ofst);
-> -	fid = fid ? fid : feature_id(binfo->ioaddr + ofst);
-> +	size = size ? size : feature_size(v);
-> +	fid = fid ? fid : feature_id(v);
->
-> 	if (binfo->len - ofst < size)
-> 		return -EINVAL;
-> @@ -1038,6 +1044,7 @@ create_feature_instance(struct build_feature_devs_info *binfo,
-> 		return -ENOMEM;
->
-> 	finfo->fid = fid;
-> +	finfo->rev = rev;
-> 	finfo->mmio_res.start = binfo->start + ofst;
-> 	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
-> 	finfo->mmio_res.flags = IORESOURCE_MEM;
-> @@ -1166,7 +1173,7 @@ static int parse_feature_private(struct build_feature_devs_info *binfo,
-> {
-> 	if (!is_feature_dev_detected(binfo)) {
-> 		dev_err(binfo->dev, "the private feature 0x%x does not belong to any AFU.\n",
-> -			feature_id(binfo->ioaddr + ofst));
-> +			feature_id(readq(binfo->ioaddr + ofst)));
-> 		return -EINVAL;
-> 	}
->
-> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> index 2b82c96ba56c..422157cfd742 100644
-> --- a/drivers/fpga/dfl.h
-> +++ b/drivers/fpga/dfl.h
-> @@ -243,6 +243,7 @@ struct dfl_feature_irq_ctx {
-> struct dfl_feature {
-> 	struct platform_device *dev;
-> 	u16 id;
-> +	u8 revision;
-> 	int resource_index;
-> 	void __iomem *ioaddr;
-> 	struct dfl_feature_irq_ctx *irq_ctx;
-> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
-> index 6cc10982351a..431636a0dc78 100644
-> --- a/include/linux/dfl.h
-> +++ b/include/linux/dfl.h
-> @@ -38,6 +38,7 @@ struct dfl_device {
-> 	int id;
-> 	u16 type;
-> 	u16 feature_id;
-> +	u8 revision;
-> 	struct resource mmio_res;
-> 	int *irqs;
-> 	unsigned int num_irqs;
-> -- 
-> 2.31.0
->
->
---8323328-431308998-1624990064=:1279832--
+diff --git a/drivers/spi/spi-atmel.c b/drivers/spi/spi-atmel.c
+index 2ef74885ffa2..788dcdf25f00 100644
+--- a/drivers/spi/spi-atmel.c
++++ b/drivers/spi/spi-atmel.c
+@@ -352,8 +352,6 @@ static void cs_activate(struct atmel_spi *as, struct spi_device *spi)
+ 		}
+ 
+ 		mr = spi_readl(as, MR);
+-		if (spi->cs_gpiod)
+-			gpiod_set_value(spi->cs_gpiod, 1);
+ 	} else {
+ 		u32 cpol = (spi->mode & SPI_CPOL) ? SPI_BIT(CPOL) : 0;
+ 		int i;
+@@ -369,8 +367,6 @@ static void cs_activate(struct atmel_spi *as, struct spi_device *spi)
+ 
+ 		mr = spi_readl(as, MR);
+ 		mr = SPI_BFINS(PCS, ~(1 << chip_select), mr);
+-		if (spi->cs_gpiod)
+-			gpiod_set_value(spi->cs_gpiod, 1);
+ 		spi_writel(as, MR, mr);
+ 	}
+ 
+@@ -400,8 +396,6 @@ static void cs_deactivate(struct atmel_spi *as, struct spi_device *spi)
+ 
+ 	if (!spi->cs_gpiod)
+ 		spi_writel(as, CR, SPI_BIT(LASTXFER));
+-	else
+-		gpiod_set_value(spi->cs_gpiod, 0);
+ }
+ 
+ static void atmel_spi_lock(struct atmel_spi *as) __acquires(&as->lock)
+@@ -1483,7 +1477,8 @@ static int atmel_spi_probe(struct platform_device *pdev)
+ 	master->bus_num = pdev->id;
+ 	master->num_chipselect = 4;
+ 	master->setup = atmel_spi_setup;
+-	master->flags = (SPI_MASTER_MUST_RX | SPI_MASTER_MUST_TX);
++	master->flags = (SPI_MASTER_MUST_RX | SPI_MASTER_MUST_TX |
++			SPI_MASTER_GPIO_SS);
+ 	master->transfer_one = atmel_spi_one_transfer;
+ 	master->set_cs = atmel_spi_set_cs;
+ 	master->cleanup = atmel_spi_cleanup;
+-- 
+2.17.1
+
