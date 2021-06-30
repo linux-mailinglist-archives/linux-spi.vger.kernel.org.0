@@ -2,87 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5773B86D7
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Jun 2021 18:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 561CC3B87D2
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Jun 2021 19:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbhF3QNb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 30 Jun 2021 12:13:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35070 "EHLO mail.kernel.org"
+        id S229991AbhF3RnT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 30 Jun 2021 13:43:19 -0400
+Received: from mga04.intel.com ([192.55.52.120]:54695 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229510AbhF3QNb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 30 Jun 2021 12:13:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 84CE661456;
-        Wed, 30 Jun 2021 16:11:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625069462;
-        bh=Mn6BvXNRp0phAqi6zTdlYuSEGtWIvr3Z3ZC/zZJaBEA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gLwnimKq6hyYCW3BqM/23ionIcvsfNBkyoMyHgU6iSp0WZLTbGdggsInvc8h+FuOe
-         3iGMY/PoI4WTYi38sKKhiRmbVjWM3eVIGyQXRgEiLQ1PHyh1ZuPJvdtJEVleNyPcok
-         r3dwu6rey7IERKoRrDWAn8GxR1d3P5D8JouEJ0PjtWGcIJwB74BLBbkdNg2A7vvzcg
-         +M+UzKQKvOiIhmlZReIl4DYBlfNXmRRaEgZl4MLszvikVmbj7G8ZLE2Aa34kS5Vi7v
-         XJ3VS4kHXwM/QR1MG+Ld9PCBsXc8oEaOTWtNX0LQI+4msrfaKjPekp9V19suP89V9Y
-         qRLv+zdKwPzTQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Alain Volmat <alain.volmat@foss.st.com>,
-        amelie.delaunay@foss.st.com
-Cc:     Mark Brown <broonie@kernel.org>, alexandre.torgue@foss.st.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        fabrice.gasnier@foss.st.com, mcoquelin.stm32@gmail.com,
-        linux-spi@vger.kernel.org
-Subject: Re: (subset) [PATCH 0/6] spi: stm32: various fixes & cleanup
-Date:   Wed, 30 Jun 2021 17:10:30 +0100
-Message-Id: <162506903591.43818.15164606693002988349.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <1625042723-661-1-git-send-email-alain.volmat@foss.st.com>
-References: <1625042723-661-1-git-send-email-alain.volmat@foss.st.com>
+        id S229852AbhF3RnS (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 30 Jun 2021 13:43:18 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10031"; a="206575955"
+X-IronPort-AV: E=Sophos;i="5.83,312,1616482800"; 
+   d="scan'208";a="206575955"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2021 10:40:48 -0700
+X-IronPort-AV: E=Sophos;i="5.83,312,1616482800"; 
+   d="scan'208";a="457343141"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.42])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2021 10:40:47 -0700
+Date:   Wed, 30 Jun 2021 10:42:18 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     =?ISO-8859-15?Q?Martin_Hundeb=F8ll?= <martin@geanix.com>
+cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        =?ISO-8859-15?Q?Martin_Hundeb=F8ll?= <mhu@silicom.dk>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] mfd: intel-m10-bmc: add n5010 variant
+In-Reply-To: <20210629121214.988036-4-martin@geanix.com>
+Message-ID: <alpine.DEB.2.22.394.2106301042030.1372882@rhweight-WRK1>
+References: <20210629121214.988036-1-martin@geanix.com> <20210629121214.988036-4-martin@geanix.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="8323328-2141539894-1625074945=:1372882"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 30 Jun 2021 10:45:17 +0200, Alain Volmat wrote:
-> This series contains fixes & cleanup mainly regarding fifo
-> and the way end of transfer triggered, when used with or
-> without DMA.
-> An additional patch cleans up the pm_runtime calls.
-> 
-> Alain Volmat (5):
->   spi: stm32: fixes pm_runtime calls in probe/remove
->   spi: stm32h7: fix full duplex irq handler handling
->   Revert "spi: stm32: properly handle 0 byte transfer"
->   spi: stm32h7: don't wait for EOT and flush fifo on disable
->   spi: stm32: finalize message either on dma callback or EOT
-> 
-> [...]
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Applied to
+--8323328-2141539894-1625074945=:1372882
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Thanks!
 
-[2/6] spi: stm32h7: fix full duplex irq handler handling
-      commit: e4a5c19888a5f8a9390860ca493e643be58c8791
+On Tue, 29 Jun 2021, Martin Hundebøll wrote:
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+> From: Martin Hundebøll <mhu@silicom.dk>
+>
+> The m10-bmc is used on the Silicom N5010 PAC too, so add it to list of
+> m10bmc types.
+>
+> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
+> Acked-by: Moritz Fischer <mdf@kernel.org>
+> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> ---
+>
+> Changes since v2:
+> * Added Yilun's Reviewed-by
+> * Added Moritz' Acked-by
+>
+> Changes since v1:
+> * Patch split out to separate mfd changes
+>
+> drivers/mfd/intel-m10-bmc.c | 12 +++++++++++-
+> 1 file changed, 11 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
+> index 1a9bfb7f48cd..8db3bcf5fccc 100644
+> --- a/drivers/mfd/intel-m10-bmc.c
+> +++ b/drivers/mfd/intel-m10-bmc.c
+> @@ -15,7 +15,8 @@
+>
+> enum m10bmc_type {
+> 	M10_N3000,
+> -	M10_D5005
+> +	M10_D5005,
+> +	M10_N5010,
+> };
+>
+> static struct mfd_cell m10bmc_d5005_subdevs[] = {
+> @@ -28,6 +29,10 @@ static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
+> 	{ .name = "n3000bmc-secure" },
+> };
+>
+> +static struct mfd_cell m10bmc_n5010_subdevs[] = {
+> +	{ .name = "n5010bmc-hwmon" },
+> +};
+> +
+> static const struct regmap_range m10bmc_regmap_range[] = {
+> 	regmap_reg_range(M10BMC_LEGACY_BUILD_VER, M10BMC_LEGACY_BUILD_VER),
+> 	regmap_reg_range(M10BMC_SYS_BASE, M10BMC_SYS_END),
+> @@ -192,6 +197,10 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> 		cells = m10bmc_d5005_subdevs;
+> 		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
+> 		break;
+> +	case M10_N5010:
+> +		cells = m10bmc_n5010_subdevs;
+> +		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
+> +		break;
+> 	default:
+> 		return -ENODEV;
+> 	}
+> @@ -207,6 +216,7 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> static const struct spi_device_id m10bmc_spi_id[] = {
+> 	{ "m10-n3000", M10_N3000 },
+> 	{ "m10-d5005", M10_D5005 },
+> +	{ "m10-n5010", M10_N5010 },
+> 	{ }
+> };
+> MODULE_DEVICE_TABLE(spi, m10bmc_spi_id);
+> -- 
+> 2.31.0
+>
+>
+--8323328-2141539894-1625074945=:1372882--
