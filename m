@@ -2,82 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EBFF3B86A5
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Jun 2021 17:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5773B86D7
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Jun 2021 18:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235962AbhF3QBO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 30 Jun 2021 12:01:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32886 "EHLO mail.kernel.org"
+        id S229529AbhF3QNb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 30 Jun 2021 12:13:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35070 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235852AbhF3QAf (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 30 Jun 2021 12:00:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 23641611CA;
-        Wed, 30 Jun 2021 15:58:05 +0000 (UTC)
+        id S229510AbhF3QNb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 30 Jun 2021 12:13:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 84CE661456;
+        Wed, 30 Jun 2021 16:11:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625068686;
-        bh=tiIJ5PyZJqrBsKRFL2EaUdVihpfRGtwSSFpuetSCRSU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T0zcfVfn5zWcpmi15GyUfV3llnKCjuPRnDd4vb3+YoeuyY2hslQDlPrOIr7wE/XWL
-         87zc6vwCk+Np3nMCdVte7vVnhIElyE9uHeH6JP+pX/eSmMidSxNUm47AJvC8+WUXun
-         jRKbrC7Ej3aUqA62CAYJZ50TpKU5FmQp54PiLmWP4XyP47XCo4gcyvzbS1l1VKZ7G6
-         2MrTqlTh2a3nkn1fvi6XYrWxK/krOdFYSZ24AxLshAcdweKGd6AHOWCjSyW5+8/FRg
-         xzHTAfhoUMCBJiOsFiq9c20NXfJWigrTGnFxAiVAlpHpY+Rb4vBf23z+0Bns+ef6wL
-         UWiX+hQVfWPyA==
-Date:   Wed, 30 Jun 2021 16:57:38 +0100
+        s=k20201202; t=1625069462;
+        bh=Mn6BvXNRp0phAqi6zTdlYuSEGtWIvr3Z3ZC/zZJaBEA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gLwnimKq6hyYCW3BqM/23ionIcvsfNBkyoMyHgU6iSp0WZLTbGdggsInvc8h+FuOe
+         3iGMY/PoI4WTYi38sKKhiRmbVjWM3eVIGyQXRgEiLQ1PHyh1ZuPJvdtJEVleNyPcok
+         r3dwu6rey7IERKoRrDWAn8GxR1d3P5D8JouEJ0PjtWGcIJwB74BLBbkdNg2A7vvzcg
+         +M+UzKQKvOiIhmlZReIl4DYBlfNXmRRaEgZl4MLszvikVmbj7G8ZLE2Aa34kS5Vi7v
+         XJ3VS4kHXwM/QR1MG+Ld9PCBsXc8oEaOTWtNX0LQI+4msrfaKjPekp9V19suP89V9Y
+         qRLv+zdKwPzTQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Liang Liang <liang.liang@amd.com>
-Subject: Re: [PATCH v3 3/3] spi:amd:Fix for compilation error for non X86
- platforms.
-Message-ID: <20210630155738.GH5106@sirena.org.uk>
-References: <20210630120425.606957-1-Nehal-Bakulchandra.shah@amd.com>
- <20210630120425.606957-4-Nehal-Bakulchandra.shah@amd.com>
- <20210630124717.GE5106@sirena.org.uk>
- <fc174349-d2f6-6721-51e4-a23ae5a8262f@amd.com>
+To:     Alain Volmat <alain.volmat@foss.st.com>,
+        amelie.delaunay@foss.st.com
+Cc:     Mark Brown <broonie@kernel.org>, alexandre.torgue@foss.st.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        fabrice.gasnier@foss.st.com, mcoquelin.stm32@gmail.com,
+        linux-spi@vger.kernel.org
+Subject: Re: (subset) [PATCH 0/6] spi: stm32: various fixes & cleanup
+Date:   Wed, 30 Jun 2021 17:10:30 +0100
+Message-Id: <162506903591.43818.15164606693002988349.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <1625042723-661-1-git-send-email-alain.volmat@foss.st.com>
+References: <1625042723-661-1-git-send-email-alain.volmat@foss.st.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GdbWtwDHkcXqP16f"
-Content-Disposition: inline
-In-Reply-To: <fc174349-d2f6-6721-51e4-a23ae5a8262f@amd.com>
-X-Cookie: Use at own risk.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, 30 Jun 2021 10:45:17 +0200, Alain Volmat wrote:
+> This series contains fixes & cleanup mainly regarding fifo
+> and the way end of transfer triggered, when used with or
+> without DMA.
+> An additional patch cleans up the pm_runtime calls.
+> 
+> Alain Volmat (5):
+>   spi: stm32: fixes pm_runtime calls in probe/remove
+>   spi: stm32h7: fix full duplex irq handler handling
+>   Revert "spi: stm32: properly handle 0 byte transfer"
+>   spi: stm32h7: don't wait for EOT and flush fifo on disable
+>   spi: stm32: finalize message either on dma callback or EOT
+> 
+> [...]
 
---GdbWtwDHkcXqP16f
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Wed, Jun 30, 2021 at 08:14:12PM +0530, Shah, Nehal-bakulchandra wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > everything.  I don't recall anything from 0day that looked like it was
-> > anything to do with dependencies though.
+Thanks!
 
-> so now should i RESEND this patch with suggested changes,i.e removing ACPI
-> depedency
-> change and removing COMPILE_TEST?
+[2/6] spi: stm32h7: fix full duplex irq handler handling
+      commit: e4a5c19888a5f8a9390860ca493e643be58c8791
 
-No, you should fix the actual problem - like I say it looked like just a
-regular coding error, not something due to an actual dependency.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---GdbWtwDHkcXqP16f
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmDclHEACgkQJNaLcl1U
-h9BbmggAhkXcLrofo+SltejCho6YL7RWBUdPM/e6k1au2ymIfkEBxcbZDz2LJPRC
-xbRIyYQ6BVbqoSqn7lQzGlP3l+4X6N/yWV2hbUIGQ2CfMLI+2d+zWwZm6shiAGa+
-lfc9wKUff9w/xx/rE5mATmIv+Yu72nAHCNRsbJalmdN52ROR6L6B0yE6yEXJLcTx
-HQRW1CrGGfsHUteFXWx14eQdCDbl/FLqxgllWG5+vdxmMsSiS0HGFILCKkiku46h
-MdL/eqmzbCqW8bmYTU7zLi/jAQb20MpualjAAsIENz0zu9hQgTHncG1rkWcMS2Ti
-s5+paovfq6ogD26PfM0c64P1tNCqqQ==
-=Hwda
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---GdbWtwDHkcXqP16f--
+Thanks,
+Mark
