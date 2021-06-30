@@ -2,18 +2,18 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 989273B8371
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Jun 2021 15:47:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DDDF3B8379
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Jun 2021 15:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235005AbhF3Ntn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 30 Jun 2021 09:49:43 -0400
-Received: from lucky1.263xmail.com ([211.157.147.130]:42590 "EHLO
+        id S235055AbhF3Ntp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 30 Jun 2021 09:49:45 -0400
+Received: from lucky1.263xmail.com ([211.157.147.133]:47846 "EHLO
         lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234877AbhF3Ntn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Jun 2021 09:49:43 -0400
+        with ESMTP id S234768AbhF3Ntp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Jun 2021 09:49:45 -0400
 Received: from localhost (unknown [192.168.167.16])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 03F47D571C;
-        Wed, 30 Jun 2021 21:47:05 +0800 (CST)
+        by lucky1.263xmail.com (Postfix) with ESMTP id 73827D5782;
+        Wed, 30 Jun 2021 21:47:09 +0800 (CST)
 X-MAIL-GRAY: 0
 X-MAIL-DELIVERY: 1
 X-ADDR-CHECKED4: 1
@@ -21,14 +21,14 @@ X-SKE-CHECKED: 1
 X-ANTISPAM-LEVEL: 2
 Received: from localhost.localdomain (unknown [58.22.7.114])
         by smtp.263.net (postfix) whith ESMTP id P12363T139710748759808S1625060824073628_;
-        Wed, 30 Jun 2021 21:47:05 +0800 (CST)
+        Wed, 30 Jun 2021 21:47:07 +0800 (CST)
 X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <ea7ca8950ca7772010bb3d276c05e736>
+X-UNIQUE-TAG: <e3d4488db0417f1de930b584c7e26e23>
 X-RL-SENDER: jon.lin@rock-chips.com
 X-SENDER: jon.lin@rock-chips.com
 X-LOGIN-NAME: jon.lin@rock-chips.com
 X-FST-TO: linux-spi@vger.kernel.org
-X-RCPT-COUNT: 19
+X-RCPT-COUNT: 20
 X-SENDER-IP: 58.22.7.114
 X-ATTACHMENT-NUM: 0
 X-System-Flag: 0
@@ -41,28 +41,28 @@ Cc:     jon.lin@rock-chips.com, broonie@kernel.org, robh+dt@kernel.org,
         p.yadav@ti.com, macroalpha82@gmail.com, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         mturquette@baylibre.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org
-Subject: [PATCH v10 00/10] Add Rockchip SFC(serial flash controller) support
-Date:   Wed, 30 Jun 2021 21:46:52 +0800
-Message-Id: <20210630134702.7346-1-jon.lin@rock-chips.com>
+        linux-clk@vger.kernel.org, Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH v10 01/10] dt-bindings: rockchip-sfc: Bindings for Rockchip serial flash controller
+Date:   Wed, 30 Jun 2021 21:46:53 +0800
+Message-Id: <20210630134702.7346-2-jon.lin@rock-chips.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210630134702.7346-1-jon.lin@rock-chips.com>
+References: <20210630134702.7346-1-jon.lin@rock-chips.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Chris Morgan <macromorgan@hotmail.com>
 
+Add bindings for the Rockchip serial flash controller. New device
+specific parameter of rockchip,sfc-no-dma included in documentation.
 
-Changes in v10:
-- Fix dma transfer logic
+Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
+---
 
-Changes in v9:
-- Separate DMA IRQ setting and wait_completion from DMA fifo transfer
-  function to make dma_status_poll be possible(Which I will implement
-  in u-boot)
-- Add SFC Kconfig detail comment
-- Separate FDT binding docs and includes from rk3036 sfc_hclk patch
-- Separate FDT binding docs and includes from rk3036 sfc_hclk patch
-
+Changes in v10: None
+Changes in v9: None
 Changes in v8:
 - Fix indent 4 to 2 in yaml
 
@@ -145,36 +145,104 @@ hanges made in this new series versus the v8 of the old series:
   dma_set_mask_and_coherent.
 - Changed name of get_if_type to rockchip_sfc_get_if_type.
 
-Chris Morgan (8):
-  dt-bindings: rockchip-sfc: Bindings for Rockchip serial flash
-    controller
-  spi: rockchip-sfc: add rockchip serial flash controller
-  arm64: dts: rockchip: Add SFC to PX30
-  clk: rockchip:  add dt-binding for hclk_sfc on rk3036
-  arm: dts: rockchip: Add SFC to RK3036
-  arm: dts: rockchip: Add SFC to RV1108
-  arm64: dts: rockchip: Add SFC to RK3308
-  arm64: dts: rockchip: Enable SFC for Odroid Go Advance
-
-Jon Lin (2):
-  clk: rockchip: rk3036: fix up the sclk_sfc parent error
-  clk: rockchip: Add support for hclk_sfc on rk3036
-
- .../devicetree/bindings/spi/rockchip-sfc.yaml |  88 +++
- arch/arm/boot/dts/rk3036.dtsi                 |  42 ++
- arch/arm/boot/dts/rv1108.dtsi                 |  37 +
- arch/arm64/boot/dts/rockchip/px30.dtsi        |  38 +
- arch/arm64/boot/dts/rockchip/rk3308.dtsi      |  37 +
- .../boot/dts/rockchip/rk3326-odroid-go2.dts   |  16 +
- drivers/clk/rockchip/clk-rk3036.c             |   5 +-
- drivers/spi/Kconfig                           |  12 +
- drivers/spi/Makefile                          |   1 +
- drivers/spi/spi-rockchip-sfc.c                | 681 ++++++++++++++++++
- include/dt-bindings/clock/rk3036-cru.h        |   1 +
- 11 files changed, 956 insertions(+), 2 deletions(-)
+ .../devicetree/bindings/spi/rockchip-sfc.yaml | 88 +++++++++++++++++++
+ 1 file changed, 88 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/spi/rockchip-sfc.yaml
- create mode 100644 drivers/spi/spi-rockchip-sfc.c
 
+diff --git a/Documentation/devicetree/bindings/spi/rockchip-sfc.yaml b/Documentation/devicetree/bindings/spi/rockchip-sfc.yaml
+new file mode 100644
+index 000000000000..162993a97290
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/rockchip-sfc.yaml
+@@ -0,0 +1,88 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/rockchip-sfc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Rockchip Serial Flash Controller (SFC)
++
++maintainers:
++  - Heiko Stuebner <heiko@sntech.de>
++  - Chris Morgan <macromorgan@hotmail.com>
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - const: rockchip,sfc
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Bus Clock
++      - description: Module Clock
++
++  clock-names:
++    items:
++      - const: clk_sfc
++      - const: hclk_sfc
++
++  power-domains:
++    maxItems: 1
++
++  rockchip,sfc-no-dma:
++    description: Disable DMA and utilize FIFO mode only
++    type: boolean
++
++patternProperties:
++  "^flash@[0-3]$":
++    type: object
++    properties:
++      reg:
++        minimum: 0
++        maximum: 3
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/px30-cru.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/power/px30-power.h>
++
++    sfc: spi@ff3a0000 {
++        compatible = "rockchip,sfc";
++        reg = <0xff3a0000 0x4000>;
++        interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&cru SCLK_SFC>, <&cru HCLK_SFC>;
++        clock-names = "clk_sfc", "hclk_sfc";
++        pinctrl-0 = <&sfc_clk &sfc_cs &sfc_bus2>;
++        pinctrl-names = "default";
++        power-domains = <&power PX30_PD_MMC_NAND>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        flash@0 {
++            compatible = "jedec,spi-nor";
++            reg = <0>;
++            spi-max-frequency = <108000000>;
++            spi-rx-bus-width = <2>;
++            spi-tx-bus-width = <2>;
++        };
++    };
++
++...
 -- 
 2.17.1
 
