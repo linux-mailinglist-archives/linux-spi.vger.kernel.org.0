@@ -2,134 +2,138 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3199B3B88B4
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Jun 2021 20:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A11573BA6B1
+	for <lists+linux-spi@lfdr.de>; Sat,  3 Jul 2021 04:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234373AbhF3SvB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 30 Jun 2021 14:51:01 -0400
-Received: from mail-pj1-f52.google.com ([209.85.216.52]:39711 "EHLO
-        mail-pj1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234335AbhF3SvA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Jun 2021 14:51:00 -0400
-Received: by mail-pj1-f52.google.com with SMTP id in17-20020a17090b4391b0290170ba0ec7fcso4651167pjb.4;
-        Wed, 30 Jun 2021 11:48:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=T5FvTKnWrIZyrzZ/uljUOZIdvOGQzvp6CeuTnf1Jtn0=;
-        b=dGi6gOIqM/yjRxOfLvvdtXzni+bkPsDVhISNHIImj2AV60YlxYbvMbCff0LaSxlQYc
-         Z5DXLYNCgThqUzNWEfPuLBJfiJOlA26TyHBLsCoPOa75uCH9UwCVnsE71QCq/kjJhaEF
-         qVt9g0/boso3Tu9aRcaQeAZPhOyv447CI/+dT7PLMUH9BYdfyckLgo+rmBM7u2RJQcAs
-         myKx+JVvAXgoa1GItMh4wIt5WYq9LRE3OfoppsQ/3OKZrQb2/HqNhMm6eIg8pCobHVUR
-         doSyxXG8ZR1sDvzLuMkCinIbVyzMSJhHmxKinF4Y7O7cWzATycoZ0vtpe+SBdSwUTXNG
-         rOoA==
-X-Gm-Message-State: AOAM5324JVLj58BWvZ/Ya7dSBWjputw3Lw9L+WpTL8a/UBY8JrdAVgBm
-        zPccsZY8r4EzRZaKaNTDSTM=
-X-Google-Smtp-Source: ABdhPJzsVxMWPeRCTW7bLT3tT6tlo7q7w2i/wL52syQFL3P0aNQayL8hZz4/OWDGX0dv8dj7qdUqXg==
-X-Received: by 2002:a17:902:8308:b029:129:220a:c455 with SMTP id bd8-20020a1709028308b0290129220ac455mr2102791plb.74.1625078910184;
-        Wed, 30 Jun 2021 11:48:30 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id t17sm7270035pji.34.2021.06.30.11.48.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Jun 2021 11:48:29 -0700 (PDT)
-Date:   Wed, 30 Jun 2021 11:48:28 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>
-Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] spi: spi-altera-dfl: support n5010 feature
- revision
-Message-ID: <YNy8fG5ojNHo2DGY@epycbox.lan>
-References: <20210629121214.988036-1-martin@geanix.com>
- <20210629121214.988036-3-martin@geanix.com>
+        id S230124AbhGCCZt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 2 Jul 2021 22:25:49 -0400
+Received: from phobos.denx.de ([85.214.62.61]:37324 "EHLO phobos.denx.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230051AbhGCCZs (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 2 Jul 2021 22:25:48 -0400
+Received: from tr.lan (ip-89-176-112-137.net.upcbroadband.cz [89.176.112.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 58FB9800BF;
+        Sat,  3 Jul 2021 04:23:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1625278994;
+        bh=6AaGcBREHILhesjSditkRBcx0BAPIZA5AC0VESrVGEo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=R/pOos5r84vAPv1i2SvVZ/hlaJnkFour2kGUGxK+tMy+EMfBecivfc7IVpATHcgrk
+         tagYW/oiVQ8Fcv68FJyS5BhfwEIKLnW1dusHxYuIxUGn2fxKz1GBJGoXo7RmmMcN/x
+         ZExcYZE5uD+s2TmaPnPK22uY3o29hR0/ajMAg74H5mMdnb5pQz53uLJu7H9B0fbodJ
+         tRPwTktfHshHWc6b1SznDsUcxtZ8Y1Ss7OocaV8H+qp1pjkcXG6iATNAv803863m4d
+         j8pcNzkrqTPVGvlm/Qd4eYrS4wof4OnlJzhpcdsUNWtM5K8ZqlVIAfy+CZFzM90kT2
+         jNcpF3PyqRiHg==
+From:   Marek Vasut <marex@denx.de>
+To:     linux-spi@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>
+Subject: [PATCH] spi: imx: mx51-ecspi: Reinstate low-speed CONFIGREG delay
+Date:   Sat,  3 Jul 2021 04:23:00 +0200
+Message-Id: <20210703022300.296114-1-marex@denx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210629121214.988036-3-martin@geanix.com>
+X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Jun 29, 2021 at 02:12:12PM +0200, Martin Hundebøll wrote:
-> From: Martin Hundebøll <mhu@silicom.dk>
-> 
-> The Max10 BMC on the Silicom n5010 PAC is slightly different than the
-> existing BMC's, so use a dedicated feature revision detect it.
-Nit: BMCs not BMC's
-> 
-> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
-Reviewed-by: Moritz Fischer <mdf@kernel.org>
-> ---
-> 
-> Changes since v2:
->  * None
-> 
-> Changes since v1:
->  * use feature revision from struct dfl_device instead of reading it
->    from io-mem
-> 
->  drivers/spi/spi-altera-dfl.c | 15 +++++++++++++--
->  1 file changed, 13 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-altera-dfl.c b/drivers/spi/spi-altera-dfl.c
-> index 3e32e4fe5895..f6cf7c8d9dac 100644
-> --- a/drivers/spi/spi-altera-dfl.c
-> +++ b/drivers/spi/spi-altera-dfl.c
-> @@ -111,6 +111,13 @@ static struct spi_board_info m10_bmc_info = {
->  	.chip_select = 0,
->  };
->  
-> +static struct spi_board_info m10_n5010_bmc_info = {
-> +	.modalias = "m10-n5010",
-> +	.max_speed_hz = 12500000,
-> +	.bus_num = 0,
-> +	.chip_select = 0,
-> +};
-> +
->  static void config_spi_master(void __iomem *base, struct spi_master *master)
->  {
->  	u64 v;
-> @@ -130,6 +137,7 @@ static void config_spi_master(void __iomem *base, struct spi_master *master)
->  
->  static int dfl_spi_altera_probe(struct dfl_device *dfl_dev)
->  {
-> +	struct spi_board_info *board_info = &m10_bmc_info;
->  	struct device *dev = &dfl_dev->dev;
->  	struct spi_master *master;
->  	struct altera_spi *hw;
-> @@ -172,9 +180,12 @@ static int dfl_spi_altera_probe(struct dfl_device *dfl_dev)
->  		goto exit;
->  	}
->  
-> -	if (!spi_new_device(master,  &m10_bmc_info)) {
-> +	if (dfl_dev->revision == FME_FEATURE_REV_MAX10_SPI_N5010)
-> +		board_info = &m10_n5010_bmc_info;
-> +
-> +	if (!spi_new_device(master, board_info)) {
->  		dev_err(dev, "%s failed to create SPI device: %s\n",
-> -			__func__, m10_bmc_info.modalias);
-> +			__func__, board_info->modalias);
->  	}
->  
->  	return 0;
-> -- 
-> 2.31.0
-> 
+Since 00b80ac935539 ("spi: imx: mx51-ecspi: Move some initialisation to
+prepare_message hook."), the MX51_ECSPI_CONFIG write no longer happens
+in prepare_transfer hook, but rather in prepare_message hook, however
+the MX51_ECSPI_CONFIG delay is still left in prepare_transfer hook and
+thus has no effect. This leads to low bus frequency operation problems
+described in 6fd8b8503a0dc ("spi: spi-imx: Fix out-of-order CS/SCLK
+operation at low speeds") again.
 
-Mark, if you're ok with this can you pick up patches 1/4 ("fpga: dfl:
-expose feature revision from struct dfl_device") and this one?
+Move the MX51_ECSPI_CONFIG write delay into the prepare_message hook
+as well, thus reinstating the low bus frequency fix.
 
-The MFD and HWMON ones can go through the respective trees.
+Fixes: 00b80ac935539 ("spi: imx: mx51-ecspi: Move some initialisation to prepare_message hook.")
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de>
+Cc: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-imx.c | 38 +++++++++++++++++++-------------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
 
-Thanks,
-Moritz
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index 39dc02e366f4b..4aee3db6d6df0 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -506,7 +506,7 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
+ {
+ 	struct spi_device *spi = msg->spi;
+ 	u32 ctrl = MX51_ECSPI_CTRL_ENABLE;
+-	u32 testreg;
++	u32 testreg, delay;
+ 	u32 cfg = readl(spi_imx->base + MX51_ECSPI_CONFIG);
+ 
+ 	/* set Master or Slave mode */
+@@ -567,6 +567,23 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
+ 
+ 	writel(cfg, spi_imx->base + MX51_ECSPI_CONFIG);
+ 
++	/*
++	 * Wait until the changes in the configuration register CONFIGREG
++	 * propagate into the hardware. It takes exactly one tick of the
++	 * SCLK clock, but we will wait two SCLK clock just to be sure. The
++	 * effect of the delay it takes for the hardware to apply changes
++	 * is noticable if the SCLK clock run very slow. In such a case, if
++	 * the polarity of SCLK should be inverted, the GPIO ChipSelect might
++	 * be asserted before the SCLK polarity changes, which would disrupt
++	 * the SPI communication as the device on the other end would consider
++	 * the change of SCLK polarity as a clock tick already.
++	 */
++	delay = (2 * 1000000) / spi_imx->spi_bus_clk;
++	if (likely(delay < 10))	/* SCLK is faster than 100 kHz */
++		udelay(delay);
++	else			/* SCLK is _very_ slow */
++		usleep_range(delay, delay + 10);
++
+ 	return 0;
+ }
+ 
+@@ -574,7 +591,7 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
+ 				       struct spi_device *spi)
+ {
+ 	u32 ctrl = readl(spi_imx->base + MX51_ECSPI_CTRL);
+-	u32 clk, delay;
++	u32 clk;
+ 
+ 	/* Clear BL field and set the right value */
+ 	ctrl &= ~MX51_ECSPI_CTRL_BL_MASK;
+@@ -596,23 +613,6 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
+ 
+ 	writel(ctrl, spi_imx->base + MX51_ECSPI_CTRL);
+ 
+-	/*
+-	 * Wait until the changes in the configuration register CONFIGREG
+-	 * propagate into the hardware. It takes exactly one tick of the
+-	 * SCLK clock, but we will wait two SCLK clock just to be sure. The
+-	 * effect of the delay it takes for the hardware to apply changes
+-	 * is noticable if the SCLK clock run very slow. In such a case, if
+-	 * the polarity of SCLK should be inverted, the GPIO ChipSelect might
+-	 * be asserted before the SCLK polarity changes, which would disrupt
+-	 * the SPI communication as the device on the other end would consider
+-	 * the change of SCLK polarity as a clock tick already.
+-	 */
+-	delay = (2 * 1000000) / clk;
+-	if (likely(delay < 10))	/* SCLK is faster than 100 kHz */
+-		udelay(delay);
+-	else			/* SCLK is _very_ slow */
+-		usleep_range(delay, delay + 10);
+-
+ 	return 0;
+ }
+ 
+-- 
+2.30.2
+
