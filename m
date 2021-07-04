@@ -2,34 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F253BB1BC
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Jul 2021 01:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 406E03BB36D
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Jul 2021 01:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbhGDXMz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 4 Jul 2021 19:12:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49050 "EHLO mail.kernel.org"
+        id S232519AbhGDXSG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 4 Jul 2021 19:18:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50862 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232702AbhGDXLp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sun, 4 Jul 2021 19:11:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D249661963;
-        Sun,  4 Jul 2021 23:08:25 +0000 (UTC)
+        id S232681AbhGDXNQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sun, 4 Jul 2021 19:13:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E5F256196A;
+        Sun,  4 Jul 2021 23:09:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625440106;
-        bh=D1SZFDaMxPzzvYQFmKOyEyui/MyeIasJrxDmGU7ek9o=;
+        s=k20201202; t=1625440148;
+        bh=svsv6M47GusGxdoHHlZTnG/iyReb7Lr39eIxDeEHyp8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AyIa7d+4YavUOjK/aROMH7JMeYTCbWT8MquIT5bzWLiZP8bvM8V2/3sIl9dSTc3et
-         c5+5hVPBfzImTYehip8C0sAoKKHBXmMr4pczJliDg/kedlP9miTLcORGDctCjvhPEf
-         dpuiMBC6ifP1MtaGHGb2bWw8a4qPT3tEBl6oMdb7uMShStgtW1IPOv33sBdu+swTBd
-         xfU45lS8Ty83vd0/APADSF4LunapjMd8R3K6mMWhjNBCT/TwG8Tghf1kShQv2/7uWM
-         9e/VH4yXOyLKcDoUPG9iFTumHQeoyfUtFrHV5nWu5xWFDFtKOXX7bPhysKPnsNOpNJ
-         uI+YvWl9NMsvw==
+        b=bgslcqF+5yt8m8DFjeOzpLvLL8HUITx98FtEjnlmUzBaoT5+IERoXgND+t+wWkIzj
+         EHWDHBwsTsnHDB4sj4GygZhRo/+oePfmQ5DGMTnHGGDrT8coHWbiN1sayFReJHxMzi
+         K2xaxanNU4HKTWb/rXbodAU4YCI1B7Xl60tPem+cEhVzDqYQCr3vOdVk7g/FvQBsla
+         FUXXisLeM74Sq8d7cIAL6vu5fEIqYuMCIuFPjmDSIVbtt2/KDoRH1GNlu5muomuxFM
+         Ao5K8ALEFIx8EJWkgrWkWLjVq0lSk5kcYBjRuQ9ZDtA03I4zJXphgUzxOpJz8kguny
+         y9S1hFcBFauOw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tian Tao <tiantao6@hisilicon.com>, Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 17/70] spi: omap-100k: Fix the length judgment problem
-Date:   Sun,  4 Jul 2021 19:07:10 -0400
-Message-Id: <20210704230804.1490078-17-sashal@kernel.org>
+Cc:     zpershuai <zpershuai@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.10 48/70] spi: meson-spicc: fix a wrong goto jump for avoiding memory leak.
+Date:   Sun,  4 Jul 2021 19:07:41 -0400
+Message-Id: <20210704230804.1490078-48-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210704230804.1490078-1-sashal@kernel.org>
 References: <20210704230804.1490078-1-sashal@kernel.org>
@@ -41,33 +45,47 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Tian Tao <tiantao6@hisilicon.com>
+From: zpershuai <zpershuai@gmail.com>
 
-[ Upstream commit e7a1a3abea373e41ba7dfe0fbc93cb79b6a3a529 ]
+[ Upstream commit 95730d5eb73170a6d225a9998c478be273598634 ]
 
-word_len should be checked in the omap1_spi100k_setup_transfer
-function to see if it exceeds 32.
+In meson_spifc_probe function, when enable the device pclk clock is
+error, it should use clk_disable_unprepare to release the core clock.
 
-Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
-Link: https://lore.kernel.org/r/1619695248-39045-1-git-send-email-tiantao6@hisilicon.com
+Signed-off-by: zpershuai <zpershuai@gmail.com>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/1623562172-22056-1-git-send-email-zpershuai@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-omap-100k.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-meson-spicc.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-omap-100k.c b/drivers/spi/spi-omap-100k.c
-index ccd817ee4917..0d0cd061d356 100644
---- a/drivers/spi/spi-omap-100k.c
-+++ b/drivers/spi/spi-omap-100k.c
-@@ -241,7 +241,7 @@ static int omap1_spi100k_setup_transfer(struct spi_device *spi,
- 	else
- 		word_len = spi->bits_per_word;
+diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
+index ecba6b4a5d85..51aef2c6e966 100644
+--- a/drivers/spi/spi-meson-spicc.c
++++ b/drivers/spi/spi-meson-spicc.c
+@@ -725,7 +725,7 @@ static int meson_spicc_probe(struct platform_device *pdev)
+ 	ret = clk_prepare_enable(spicc->pclk);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "pclk clock enable failed\n");
+-		goto out_master;
++		goto out_core_clk;
+ 	}
  
--	if (spi->bits_per_word > 32)
-+	if (word_len > 32)
- 		return -EINVAL;
- 	cs->word_len = word_len;
+ 	device_reset_optional(&pdev->dev);
+@@ -764,9 +764,11 @@ static int meson_spicc_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ out_clk:
+-	clk_disable_unprepare(spicc->core);
+ 	clk_disable_unprepare(spicc->pclk);
+ 
++out_core_clk:
++	clk_disable_unprepare(spicc->core);
++
+ out_master:
+ 	spi_master_put(master);
  
 -- 
 2.30.2
