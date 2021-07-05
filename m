@@ -2,114 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0238A3BB887
-	for <lists+linux-spi@lfdr.de>; Mon,  5 Jul 2021 10:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4D03BBB05
+	for <lists+linux-spi@lfdr.de>; Mon,  5 Jul 2021 12:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbhGEIEd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 5 Jul 2021 04:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50044 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbhGEIEd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 5 Jul 2021 04:04:33 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB278C061574
-        for <linux-spi@vger.kernel.org>; Mon,  5 Jul 2021 01:01:56 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1m0JY4-0000hQ-TF; Mon, 05 Jul 2021 10:01:48 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1m0JY1-0000t7-0J; Mon, 05 Jul 2021 10:01:45 +0200
-Date:   Mon, 5 Jul 2021 10:01:44 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-rtc@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        linux-spi@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        kernel@pengutronix.de,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        id S230438AbhGEKTk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 5 Jul 2021 06:19:40 -0400
+Received: from first.geanix.com ([116.203.34.67]:59018 "EHLO first.geanix.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230355AbhGEKTj (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 5 Jul 2021 06:19:39 -0400
+Received: from zen.. (unknown [185.17.218.86])
+        by first.geanix.com (Postfix) with ESMTPSA id ACAD64C5381;
+        Mon,  5 Jul 2021 10:16:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1625480219; bh=rvFgEeXnI9vkm2Fu4+wIha0lvYvPjxqtonLZHLSIF8g=;
+        h=From:To:Cc:Subject:Date;
+        b=Tdwqs3LNrodRopK8al7EB4SDJIjHtHQKf4vY5C2JFCpEaGlXPnlfQxCz718xWmN3Y
+         3t22ZFvtUfI0Nvze24gxQwQ6huARXx7Tou/BwaREFcWRk/6z9H6nEIniHyjuL7SzAV
+         HqS/vXzutGVgFACuBBJs2pE8D8GxZyrq51LPiXe1/6MvgAvcA27dWZSoD478a/Hk8d
+         j86wWZeC8Hb4tcVSWuchWHuXZwPEBDK0D2XVsAFY4/+aUACMQcRV3KwkkCEUCJbah3
+         43HUi/voSZk4Rc8+4vWEVBo/LE6mriSSKupFfw7wrQSKl6Jr6UDXpIMz3s0vLsg7eK
+         KHIWmM1nkwjBQ==
+From:   =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
+To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Lee Jones <lee.jones@linaro.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PULL] Add variants of devm_clk_get for prepared and enabled
- clocks enabled clocks
-Message-ID: <20210705080144.zfbzkm7l3gmnh6st@pengutronix.de>
-References: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
- <20210609202123.u5rmw7al4x3rrvun@pengutronix.de>
- <20210625171434.3xusxpxjprcdqa47@pengutronix.de>
+        Mark Brown <broonie@kernel.org>
+Cc:     =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <mhu@silicom.dk>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: [PATCH v4 0/4] fpga/mfd/hwmon: Initial support for Silicom N5010 PAC
+Date:   Mon,  5 Jul 2021 12:16:41 +0200
+Message-Id: <20210705101645.2040106-1-martin@geanix.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zkue7xi2s6vksapu"
-Content-Disposition: inline
-In-Reply-To: <20210625171434.3xusxpxjprcdqa47@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on 93bd6fdb21b5
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Martin Hundebøll <mhu@silicom.dk>
 
---zkue7xi2s6vksapu
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is an initial set of patches for the Silciom N5010 programmable
+accelerated card adding support for reading out sensors.
 
-Hello Stephen,
+Based on v5.13
 
-On Fri, Jun 25, 2021 at 07:14:34PM +0200, Uwe Kleine-K=F6nig wrote:
-> On Wed, Jun 09, 2021 at 10:21:23PM +0200, Uwe Kleine-K=F6nig wrote:
-> > given that I don't succeed in getting any feedback for my patch set, I'm
-> > trying with a pull request today. It would be really great if this pull
-> > request made it finally in for the next merge window.
->=20
-> It seems sending a pull request didn't help either :-\
->=20
-> I'm waiting since October for feedback, several people expressed to like
-> this series and I want to make use of it to simplify a few drivers. I'm
-> quite annoyed that your missing feedback blocks me from further
-> improving stuff.
+Changes since v3:
+ * Added Hao's Acked-by to patch 1/4
+ * Added Matthew's Acked-by to patch 1/4
+ * Changed "BMC's" to "BMCs" in patch 2/4
+ * Added Moritz' Reviewed-by to patch 2/4
+ * Added Matthew's Reviewed-by to patch 3/4
+ * Added Lee's Acked-for-MFD-by to patch 3/4
 
-There is still no feedback, not even something like: "I saw your
-nagging, sorry. I'm drown in other missions, please have some more
-patience."
+Changes since v2:
+ * Removed patch 1/5 from v2 already in fpga/for-next
+ * Reworded commit message in patch 1/4 as per Hao's suggestion
+ * Added Yilun's Reviewed-by to patch 3/4 and 4/4
+ * Added Moritz' Acked-by to patch 3/4
+ * Added Moritz' Reviewed-by to patch 4/4
+ * Added Guenter's Reviewed-by to patch 4/4
 
-I assume it's not to much to expect at least such a reply after more
-than 8 months?
+Changes since v1:
+ * Commit message in patch 1 is updated with card description
+ * Added Hao's Acked-by to patch 1
+ * Patch 2 is replaced with a new patch to carry feature revision info
+   in struct dfl_device
+ * Patch 3 is updated to use feature revision from struct dfl_device
+ * Patch 4 from v0 is split into separate patches for hwmon and mfd
 
-Best regards
-Uwe
+Martin Hundebøll (4):
+  fpga: dfl: expose feature revision from struct dfl_device
+  spi: spi-altera-dfl: support n5010 feature revision
+  mfd: intel-m10-bmc: add n5010 variant
+  hwmon: intel-m10-bmc-hwmon: add n5010 sensors
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+ drivers/fpga/dfl.c                  |  27 ++++---
+ drivers/fpga/dfl.h                  |   1 +
+ drivers/hwmon/intel-m10-bmc-hwmon.c | 116 ++++++++++++++++++++++++++++
+ drivers/mfd/intel-m10-bmc.c         |  12 ++-
+ drivers/spi/spi-altera-dfl.c        |  15 +++-
+ include/linux/dfl.h                 |   1 +
+ 6 files changed, 159 insertions(+), 13 deletions(-)
 
---zkue7xi2s6vksapu
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.31.0
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmDivGUACgkQwfwUeK3K
-7AkjnAf/a6JWigt/E4r2Q+YarOahwo6FeKczLbaLzTCJNlhBmRV/Meyb3zKO0C/f
-tejQizaLLLrHlhP/iSjItUpzMJ0PxECM/xWhaAuAq5Bir9J5EjBj1ryFdYB/Styv
-Bv4gAmoEbjPAaoOimPt0eZaoe1vXJ+KhtGyYV89a77GZLPOjZvAugKbdxU5TU46i
-oLbAQEjgroBM93AMRc/BiakWh6OAnLb1lu69Z3Vc7GbZPeSDoEkZBjqFi3Q+EAA8
-UbvamISvheZ8ZHvjuxRxCGv7IQv4ZmBrRiLJePrboNTKGhUMktt4Zc7Ye0rMoNTc
-6iDHWYLtjng09CMf01KEsc39jpmN5g==
-=A+R2
------END PGP SIGNATURE-----
-
---zkue7xi2s6vksapu--
