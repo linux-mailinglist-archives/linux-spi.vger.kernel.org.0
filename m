@@ -2,99 +2,247 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 224F23BD6B5
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Jul 2021 14:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 605873BD88E
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Jul 2021 16:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233796AbhGFMnh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 6 Jul 2021 08:43:37 -0400
-Received: from mxwww.masterlogin.de ([95.129.51.170]:36070 "EHLO
-        mxwww.masterlogin.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242175AbhGFMdL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Jul 2021 08:33:11 -0400
-X-Greylist: delayed 619 seconds by postgrey-1.27 at vger.kernel.org; Tue, 06 Jul 2021 08:33:11 EDT
-Received: from mxout2.routing.net (unknown [192.168.10.82])
-        by backup.mxwww.masterlogin.de (Postfix) with ESMTPS id 054512C56A;
-        Tue,  6 Jul 2021 12:16:40 +0000 (UTC)
-Received: from mxbox3.masterlogin.de (unknown [192.168.10.78])
-        by mxout2.routing.net (Postfix) with ESMTP id D2F385FD7A;
-        Tue,  6 Jul 2021 12:16:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1625573790;
+        id S232261AbhGFOnS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 6 Jul 2021 10:43:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:28466 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232638AbhGFOnN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 6 Jul 2021 10:43:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1625582434;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=w+0SBSUfYC3IZ2toT3plFnDlL4t7/7g6JGGmovdpmIo=;
-        b=Eg1vBxqzviKvZ8o78u+KviTUpdj5DILeTvZUPkhqOl/TSu+GiJs+yZcJcqtedFvY3I8h+5
-        h63IZSMGSRVAtks99stKZfrkHjuCV2kDuHwIRjN88rhDqaoOYq3RlsHx2fmOiSurcbnHgq
-        BOArSBgvtxmnQm+Q30dKHvOJ6ZU3VxU=
-Received: from localhost.localdomain (fttx-pool-80.245.79.159.bambit.de [80.245.79.159])
-        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id 1121C360303;
-        Tue,  6 Jul 2021 12:16:29 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Peter Hess <peter.hess@ph-home.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Leilk Liu <leilk.liu@mediatek.com>, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Frank Wunderlich <frank-w@public-files.de>
-Subject: [PATCH] spi: mediatek: fix fifo rx mode
-Date:   Tue,  6 Jul 2021 14:16:09 +0200
-Message-Id: <20210706121609.680534-1-linux@fw-web.de>
-X-Mailer: git-send-email 2.25.1
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NHx89jgg+s1tGwoFUM1nmd6dYpOTFpPK4p0VQ+8MqkM=;
+        b=RwXqnYt15F/GAhocoXVF+k8KvBQQ/cgJyn3Kyr1at91Fg2QK/o71OAdJTv7FBbigxYoQgB
+        T+FduNmQoGvdUO1lwtm8KLPdwB3xj/gugL3hSNqI0Tbf2aV17x3w/UASf9LwF1nGrNhi0K
+        MOwya1ZWODBriw8jddwDfP7BjJkY5ZM=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-446-cdKYXthNPJq8hiht0RcqjA-1; Tue, 06 Jul 2021 10:10:24 -0400
+X-MC-Unique: cdKYXthNPJq8hiht0RcqjA-1
+Received: by mail-oi1-f197.google.com with SMTP id w2-20020aca62020000b029024073490067so8249886oib.21
+        for <linux-spi@vger.kernel.org>; Tue, 06 Jul 2021 07:10:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=NHx89jgg+s1tGwoFUM1nmd6dYpOTFpPK4p0VQ+8MqkM=;
+        b=PWF+z4lm+S11PqjtKhDHdVlNzKCNw7S3x+HD23ZVFwgPl0zYCRO7pii757IExDwUmO
+         oNAUwzqfBBajRHTNQSycOKQ1UeIe9IhOZTMfqivbAWG/c7h7uyuupDhWWRWlDI6Fwn6F
+         IssAPZMsiiazpOtt0zBFqSXd6Au4ABOHUjmB5xzafKMFnm315EelksDS1SA/GZjlgw8t
+         cF+YCcfXYt3D9vAQ2y80t633EX6j7hTfJAAiFaxv1KL78kiowUOXFZnLJKayYoGr3DT7
+         Dqsblf4ntQT9DUor8vBo8HDFotnLUYFzItzXvZ85AuBpHYRAE8QuBBtbf0PASUAI8+Bv
+         fPvA==
+X-Gm-Message-State: AOAM531nce7Z4zoNCDaZG/+zzeDH8ssxsPr5NsjECarvX3bOW8yALwmT
+        D80E7Wysppa7X0HnADoOYuqfAiRQ+xQbITmQgTLG8fTB6OI0U021IJAXX5S3fe7niqbrLm5JKrJ
+        86Ma/cI86jC0H+HZbqLKc
+X-Received: by 2002:aca:d9d7:: with SMTP id q206mr8464519oig.93.1625580624131;
+        Tue, 06 Jul 2021 07:10:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJydwYnoxxkt+tI3dKHZhxx+PKB9tAQtQwvI7A11IgHI60BOdfFuzpvLSzk2QkjyMCcJT8KvOQ==
+X-Received: by 2002:aca:d9d7:: with SMTP id q206mr8464502oig.93.1625580623944;
+        Tue, 06 Jul 2021 07:10:23 -0700 (PDT)
+Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id x29sm2811045ooj.10.2021.07.06.07.10.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jul 2021 07:10:23 -0700 (PDT)
+Subject: Re: [PATCH v4 1/4] fpga: dfl: expose feature revision from struct
+ dfl_device
+To:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>,
+        Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@silicom.dk>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+References: <20210705101645.2040106-1-martin@geanix.com>
+ <20210705101645.2040106-2-martin@geanix.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <93a8e949-ec25-d00d-4740-72d9e18ebb68@redhat.com>
+Date:   Tue, 6 Jul 2021 07:10:21 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <20210705101645.2040106-2-martin@geanix.com>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Mail-ID: a6ee19e1-dfe1-4f41-9d14-ba7ac2cd4326
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Peter Hess <peter.hess@ph-home.de>
 
-In FIFO mode were two problems:
-- RX mode was never handled and
-- in this case the tx_buf pointer was NULL and caused an exception
+On 7/5/21 3:16 AM, Martin Hundebøll wrote:
+> From: Martin Hundebøll <mhu@silicom.dk>
+>
+> DFL device drivers have a common need for checking feature revision
+> information from the DFL header, as well as other common DFL information
+> like the already exposed feature id and type.
+>
+> This patch exposes the feature revision information directly via the DFL
+> device data structure.
+>
+> Since the DFL core code has already read the DFL header, this this patch
+> saves additional mmio reads from DFL device drivers too.
+>
+> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
+> Acked-by: Wu Hao <hao.wu@intel.com>
+> Acked-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> ---
+>
+> Changes since v3:
+>   * Added Hao's Acked-by
+>   * Added Matthew's Acked-by
+>
+> Changes since v2:
+>   * Reworded commit message as per Hao's suggestion
+>
+> Changes since v1:
+>   * This patch replaces the previous patch 2 and exposes the feature
+>     revision through struct dfl_device instead of a helper reading from
+>     io-mem
+>
+>   drivers/fpga/dfl.c  | 27 +++++++++++++++++----------
+>   drivers/fpga/dfl.h  |  1 +
+>   include/linux/dfl.h |  1 +
+>   3 files changed, 19 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
+> index 511b20ff35a3..9381c579d1cd 100644
+> --- a/drivers/fpga/dfl.c
+> +++ b/drivers/fpga/dfl.c
+> @@ -381,6 +381,7 @@ dfl_dev_add(struct dfl_feature_platform_data *pdata,
+>   
+>   	ddev->type = feature_dev_id_type(pdev);
+>   	ddev->feature_id = feature->id;
+> +	ddev->revision = feature->revision;
+>   	ddev->cdev = pdata->dfl_cdev;
+>   
+>   	/* add mmio resource */
+> @@ -717,6 +718,7 @@ struct build_feature_devs_info {
+>    */
+>   struct dfl_feature_info {
+>   	u16 fid;
+> +	u8 rev;
 
-fix this by handling RX mode in mtk_spi_fifo_transfer
+In other places 'revision' is the element name.
 
-Fixes: a568231f4632 ("spi: mediatek: Add spi bus for Mediatek MT8173")
-Signed-off-by: Peter Hess <peter.hess@ph-home.de>
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
----
- drivers/spi/spi-mt65xx.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+For consistency, change rev to revision
 
-diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-index 976f73b9e299..8d5fa7f1e506 100644
---- a/drivers/spi/spi-mt65xx.c
-+++ b/drivers/spi/spi-mt65xx.c
-@@ -427,13 +427,23 @@ static int mtk_spi_fifo_transfer(struct spi_master *master,
- 	mtk_spi_setup_packet(master);
- 
- 	cnt = xfer->len / 4;
--	iowrite32_rep(mdata->base + SPI_TX_DATA_REG, xfer->tx_buf, cnt);
-+	if (xfer->tx_buf)
-+		iowrite32_rep(mdata->base + SPI_TX_DATA_REG, xfer->tx_buf, cnt);
-+
-+	if (xfer->rx_buf)
-+		ioread32_rep(mdata->base + SPI_RX_DATA_REG, xfer->rx_buf, cnt);
- 
- 	remainder = xfer->len % 4;
- 	if (remainder > 0) {
- 		reg_val = 0;
--		memcpy(&reg_val, xfer->tx_buf + (cnt * 4), remainder);
--		writel(reg_val, mdata->base + SPI_TX_DATA_REG);
-+		if (xfer->tx_buf) {
-+			memcpy(&reg_val, xfer->tx_buf + (cnt * 4), remainder);
-+			writel(reg_val, mdata->base + SPI_TX_DATA_REG);
-+		}
-+		if (xfer->rx_buf) {
-+			reg_val = readl(mdata->base + SPI_RX_DATA_REG);
-+			memcpy(xfer->rx_buf + (cnt * 4), &reg_val, remainder);
-+		}
- 	}
- 
- 	mtk_spi_enable_transfer(master);
--- 
-2.25.1
+>   	struct resource mmio_res;
+>   	void __iomem *ioaddr;
+>   	struct list_head node;
+> @@ -796,6 +798,7 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
+>   		/* save resource information for each feature */
+>   		feature->dev = fdev;
+>   		feature->id = finfo->fid;
+> +		feature->revision = finfo->rev;
+>   
+>   		/*
+>   		 * the FIU header feature has some fundamental functions (sriov
+> @@ -910,19 +913,17 @@ static void build_info_free(struct build_feature_devs_info *binfo)
+>   	devm_kfree(binfo->dev, binfo);
+>   }
+>   
+> -static inline u32 feature_size(void __iomem *start)
+> +static inline u32 feature_size(u64 value)
+
+The return type should match its use in create_feature_instance 
+'resource_size_t'
+
+change u32 to resource_size_t
+
+Tom
+
+>   {
+> -	u64 v = readq(start + DFH);
+> -	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, v);
+> +	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, value);
+>   	/* workaround for private features with invalid size, use 4K instead */
+>   	return ofst ? ofst : 4096;
+>   }
+>   
+> -static u16 feature_id(void __iomem *start)
+> +static u16 feature_id(u64 value)
+>   {
+> -	u64 v = readq(start + DFH);
+> -	u16 id = FIELD_GET(DFH_ID, v);
+> -	u8 type = FIELD_GET(DFH_TYPE, v);
+> +	u16 id = FIELD_GET(DFH_ID, value);
+> +	u8 type = FIELD_GET(DFH_TYPE, value);
+>   
+>   	if (type == DFH_TYPE_FIU)
+>   		return FEATURE_ID_FIU_HEADER;
+> @@ -1021,10 +1022,15 @@ create_feature_instance(struct build_feature_devs_info *binfo,
+>   	unsigned int irq_base, nr_irqs;
+>   	struct dfl_feature_info *finfo;
+>   	int ret;
+> +	u8 rev;
+> +	u64 v;
+> +
+> +	v = readq(binfo->ioaddr + ofst);
+> +	rev = FIELD_GET(DFH_REVISION, v);
+>   
+>   	/* read feature size and id if inputs are invalid */
+> -	size = size ? size : feature_size(binfo->ioaddr + ofst);
+> -	fid = fid ? fid : feature_id(binfo->ioaddr + ofst);
+> +	size = size ? size : feature_size(v);
+> +	fid = fid ? fid : feature_id(v);
+>   
+>   	if (binfo->len - ofst < size)
+>   		return -EINVAL;
+> @@ -1038,6 +1044,7 @@ create_feature_instance(struct build_feature_devs_info *binfo,
+>   		return -ENOMEM;
+>   
+>   	finfo->fid = fid;
+> +	finfo->rev = rev;
+>   	finfo->mmio_res.start = binfo->start + ofst;
+>   	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
+>   	finfo->mmio_res.flags = IORESOURCE_MEM;
+> @@ -1166,7 +1173,7 @@ static int parse_feature_private(struct build_feature_devs_info *binfo,
+>   {
+>   	if (!is_feature_dev_detected(binfo)) {
+>   		dev_err(binfo->dev, "the private feature 0x%x does not belong to any AFU.\n",
+> -			feature_id(binfo->ioaddr + ofst));
+> +			feature_id(readq(binfo->ioaddr + ofst)));
+>   		return -EINVAL;
+>   	}
+>   
+> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+> index 2b82c96ba56c..422157cfd742 100644
+> --- a/drivers/fpga/dfl.h
+> +++ b/drivers/fpga/dfl.h
+> @@ -243,6 +243,7 @@ struct dfl_feature_irq_ctx {
+>   struct dfl_feature {
+>   	struct platform_device *dev;
+>   	u16 id;
+> +	u8 revision;
+>   	int resource_index;
+>   	void __iomem *ioaddr;
+>   	struct dfl_feature_irq_ctx *irq_ctx;
+> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
+> index 6cc10982351a..431636a0dc78 100644
+> --- a/include/linux/dfl.h
+> +++ b/include/linux/dfl.h
+> @@ -38,6 +38,7 @@ struct dfl_device {
+>   	int id;
+>   	u16 type;
+>   	u16 feature_id;
+> +	u8 revision;
+>   	struct resource mmio_res;
+>   	int *irqs;
+>   	unsigned int num_irqs;
 
