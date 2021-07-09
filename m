@@ -2,26 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4983C21C2
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Jul 2021 11:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD4193C21F3
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Jul 2021 11:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231966AbhGIJrw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 9 Jul 2021 05:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
+        id S232032AbhGIJ6D (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 9 Jul 2021 05:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbhGIJrv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Jul 2021 05:47:51 -0400
+        with ESMTP id S232016AbhGIJ6C (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 9 Jul 2021 05:58:02 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1913C0613DD
-        for <linux-spi@vger.kernel.org>; Fri,  9 Jul 2021 02:45:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E0FC0613DD
+        for <linux-spi@vger.kernel.org>; Fri,  9 Jul 2021 02:55:19 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <l.stach@pengutronix.de>)
-        id 1m1n43-0000Qj-5u; Fri, 09 Jul 2021 11:44:55 +0200
-Message-ID: <3ade0741d94e53eb2bca86743ad11e55899381d7.camel@pengutronix.de>
-Subject: Re: [PATCH v14 09/12] dmaengine: imx-sdma: remove ERR009165 on
- i.mx6ul
+        id 1m1nDu-0001Ye-4D; Fri, 09 Jul 2021 11:55:06 +0200
+Message-ID: <b0e381cb536dceeda2f0ac9ee3dcd16ddeb0c961.camel@pengutronix.de>
+Subject: Re: [PATCH v14 11/12] dmaengine: imx-sdma: add uart rom script
 From:   Lucas Stach <l.stach@pengutronix.de>
 To:     Robin Gong <yibin.gong@nxp.com>, vkoul@kernel.org,
         mark.rutland@arm.com, broonie@kernel.org, robh+dt@kernel.org,
@@ -35,10 +34,10 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-imx@nxp.com,
         kernel@pengutronix.de, dmaengine@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Date:   Fri, 09 Jul 2021 11:44:53 +0200
-In-Reply-To: <1617809456-17693-10-git-send-email-yibin.gong@nxp.com>
+Date:   Fri, 09 Jul 2021 11:55:03 +0200
+In-Reply-To: <1617809456-17693-12-git-send-email-yibin.gong@nxp.com>
 References: <1617809456-17693-1-git-send-email-yibin.gong@nxp.com>
-         <1617809456-17693-10-git-send-email-yibin.gong@nxp.com>
+         <1617809456-17693-12-git-send-email-yibin.gong@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.40.1 (3.40.1-1.fc34) 
 MIME-Version: 1.0
@@ -52,81 +51,99 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 Am Mittwoch, dem 07.04.2021 um 23:30 +0800 schrieb Robin Gong:
-> ECSPI issue fixed from i.mx6ul at hardware level, no need
-> ERR009165 anymore on those chips such as i.mx8mq.
+> For the compatibility of NXP internal legacy kernel before 4.19 which
+> is based on uart ram script and upstreaming kernel based on uart rom
+> script, add both uart ram/rom script in latest sdma firmware. By default
+> uart rom script used.
+> Besides, add two multi-fifo scripts for SAI/PDM on i.mx8m/8mm and add
+> back qspi script miss for v4(i.mx7d/8m/8mm family, but v3 is for i.mx6).
+> 
+> rom script:
+>         uart_2_mcu_addr
+> 	uartsh_2_mcu_addr /* through spba bus */
+> am script:
+> 	uart_2_mcu_ram_addr
+> 	uartsh_2_mcu_ram_addr /* through spba bus */
+> 
+> Please get latest sdma firmware from the below and put them into the path
+> (/lib/firmware/imx/sdma/):
+> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+> /tree/imx/sdma
 > 
 > Signed-off-by: Robin Gong <yibin.gong@nxp.com>
 > Acked-by: Vinod Koul <vkoul@kernel.org>
+
+Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+
 > ---
->  drivers/dma/imx-sdma.c | 26 +++++++++++++++++++++++++-
->  1 file changed, 25 insertions(+), 1 deletion(-)
+>  drivers/dma/imx-sdma.c                     | 17 +++++++++++++++--
+>  include/linux/platform_data/dma-imx-sdma.h |  8 ++++++--
+>  2 files changed, 21 insertions(+), 4 deletions(-)
 > 
 > diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
-> index 86bd383..af85116 100644
+> index af85116..9519b41 100644
 > --- a/drivers/dma/imx-sdma.c
 > +++ b/drivers/dma/imx-sdma.c
-> @@ -422,6 +422,13 @@ struct sdma_driver_data {
->  	int num_events;
->  	struct sdma_script_start_addrs	*script_addrs;
->  	bool check_ratio;
-> +	/*
-> +	 * ecspi ERR009165 fixed should be done in sdma script
-> +	 * and it has been fixed in soc from i.mx6ul.
-> +	 * please get more information from the below link:
-> +	 * https://www.nxp.com/docs/en/errata/IMX6DQCE.pdf
-> +	 */
-> +	bool ecspi_fixed;
->  };
+> @@ -1696,8 +1696,8 @@ static void sdma_issue_pending(struct dma_chan *chan)
 >  
->  struct sdma_engine {
-> @@ -542,6 +549,13 @@ static struct sdma_driver_data sdma_imx6q = {
->  	.script_addrs = &sdma_script_imx6q,
->  };
+>  #define SDMA_SCRIPT_ADDRS_ARRAY_SIZE_V1	34
+>  #define SDMA_SCRIPT_ADDRS_ARRAY_SIZE_V2	38
+> -#define SDMA_SCRIPT_ADDRS_ARRAY_SIZE_V3	41
+> -#define SDMA_SCRIPT_ADDRS_ARRAY_SIZE_V4	42
+> +#define SDMA_SCRIPT_ADDRS_ARRAY_SIZE_V3	45
+> +#define SDMA_SCRIPT_ADDRS_ARRAY_SIZE_V4	46
 >  
-> +static struct sdma_driver_data sdma_imx6ul = {
-> +	.chnenbl0 = SDMA_CHNENBL0_IMX35,
-> +	.num_events = 48,
-> +	.script_addrs = &sdma_script_imx6q,
-> +	.ecspi_fixed = true,
-> +};
+>  static void sdma_add_scripts(struct sdma_engine *sdma,
+>  		const struct sdma_script_start_addrs *addr)
+> @@ -1721,6 +1721,19 @@ static void sdma_add_scripts(struct sdma_engine *sdma,
+>  	for (i = 0; i < sdma->script_number; i++)
+>  		if (addr_arr[i] > 0)
+>  			saddr_arr[i] = addr_arr[i];
 > +
->  static struct sdma_script_start_addrs sdma_script_imx7d = {
->  	.ap_2_ap_addr = 644,
->  	.uart_2_mcu_addr = 819,
-> @@ -575,6 +589,7 @@ static const struct of_device_id sdma_dt_ids[] = {
->  	{ .compatible = "fsl,imx31-sdma", .data = &sdma_imx31, },
->  	{ .compatible = "fsl,imx25-sdma", .data = &sdma_imx25, },
->  	{ .compatible = "fsl,imx7d-sdma", .data = &sdma_imx7d, },
-> +	{ .compatible = "fsl,imx6ul-sdma", .data = &sdma_imx6ul, },
->  	{ .compatible = "fsl,imx8mq-sdma", .data = &sdma_imx8mq, },
->  	{ /* sentinel */ }
->  };
-> @@ -1144,8 +1159,17 @@ static int sdma_config_channel(struct dma_chan *chan)
->  			if (sdmac->peripheral_type == IMX_DMATYPE_ASRC_SP ||
->  			    sdmac->peripheral_type == IMX_DMATYPE_ASRC)
->  				sdma_set_watermarklevel_for_p2p(sdmac);
-> -		} else
-> +		} else {
-> +			/*
-> +			 * ERR009165 fixed from i.mx6ul, no errata need,
-> +			 * set bit31 to let sdma script skip the errata.
-> +			 */
-> +			if (sdmac->peripheral_type == IMX_DMATYPE_CSPI &&
-> +			    sdmac->direction == DMA_MEM_TO_DEV &&
-> +			    sdmac->sdma->drvdata->ecspi_fixed)
-> +				__set_bit(31, &sdmac->watermark_level);
-
-Hm, I don't care much either way, but couldn't we just return the
-regular mcu_2_app script in sdma_get_pc when ecspi_fixed == true? Seems
-like this would be a simpler and more targeted code change.
-
-Regards,
-Lucas
-
->  			__set_bit(sdmac->event_id0, sdmac->event_mask);
-> +		}
+> +	/*
+> +	 * get uart_2_mcu_addr/uartsh_2_mcu_addr rom script specially because
+> +	 * they are now replaced by uart_2_mcu_ram_addr/uartsh_2_mcu_ram_addr
+> +	 * to be compatible with legacy freescale/nxp sdma firmware, and they
+> +	 * are located in the bottom part of sdma_script_start_addrs which are
+> +	 * beyond the SDMA_SCRIPT_ADDRS_ARRAY_SIZE_V1.
+> +	 */
+> +	if (addr->uart_2_mcu_addr)
+> +		sdma->script_addrs->uart_2_mcu_addr = addr->uart_2_mcu_addr;
+> +	if (addr->uartsh_2_mcu_addr)
+> +		sdma->script_addrs->uartsh_2_mcu_addr = addr->uartsh_2_mcu_addr;
+> +
+>  }
 >  
->  		/* Address */
->  		sdmac->shp_addr = sdmac->per_address;
+>  static void sdma_load_firmware(const struct firmware *fw, void *context)
+> diff --git a/include/linux/platform_data/dma-imx-sdma.h b/include/linux/platform_data/dma-imx-sdma.h
+> index 725602d..91dac29 100644
+> --- a/include/linux/platform_data/dma-imx-sdma.h
+> +++ b/include/linux/platform_data/dma-imx-sdma.h
+> @@ -20,12 +20,12 @@ struct sdma_script_start_addrs {
+>  	s32 per_2_firi_addr;
+>  	s32 mcu_2_firi_addr;
+>  	s32 uart_2_per_addr;
+> -	s32 uart_2_mcu_addr;
+> +	s32 uart_2_mcu_ram_addr;
+>  	s32 per_2_app_addr;
+>  	s32 mcu_2_app_addr;
+>  	s32 per_2_per_addr;
+>  	s32 uartsh_2_per_addr;
+> -	s32 uartsh_2_mcu_addr;
+> +	s32 uartsh_2_mcu_ram_addr;
+>  	s32 per_2_shp_addr;
+>  	s32 mcu_2_shp_addr;
+>  	s32 ata_2_mcu_addr;
+> @@ -52,6 +52,10 @@ struct sdma_script_start_addrs {
+>  	s32 zcanfd_2_mcu_addr;
+>  	s32 zqspi_2_mcu_addr;
+>  	s32 mcu_2_ecspi_addr;
+> +	s32 mcu_2_sai_addr;
+> +	s32 sai_2_mcu_addr;
+> +	s32 uart_2_mcu_addr;
+> +	s32 uartsh_2_mcu_addr;
+>  	/* End of v3 array */
+>  	s32 mcu_2_zqspi_addr;
+>  	/* End of v4 array */
 
 
