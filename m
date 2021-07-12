@@ -2,92 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46A793C5BC3
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Jul 2021 14:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 401963C5EBC
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Jul 2021 17:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbhGLLwd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 12 Jul 2021 07:52:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60450 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229594AbhGLLwc (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 12 Jul 2021 07:52:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 16E6F61006;
-        Mon, 12 Jul 2021 11:49:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626090584;
-        bh=SC+5U01yNpUqqr/bBeY1eDompES0pbDuc98+NKWl3bQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SyKs1JWoVFAo8D/LVvz0Lo2KGUCuYMZ5gS7UXcXscTkQKOYGkkzss2j/bbyYcIzZ8
-         WYkn6mxukLM6Fjnlnui991+qn187DSsSw1Oq/pyuzWkogK/m5I0e8NqevuGDmtrT+k
-         VqHKonrVHn6iuKYimDj1++fbyafU7O2ujDOBIcbdw4tlshlgKkqDMtXmcUtSxk5m5O
-         W37ESN+6txUXz17t+b6ca8GthW0ipbICcKRxHFymePzizad7H3oVKU8/45ZJz8WZ1C
-         egQJjHD//wHEtYVI95e4ZbkCm+mqOEXJnf/LCC+FASW4RjS4Yda7QEcg2cQO1b612e
-         zvjtrhm3FPGdg==
-Date:   Mon, 12 Jul 2021 12:49:09 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     David Lechner <david@lechnology.com>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] iio: adc: ti-ads7950: Ensure CS is deasserted after
- reading channels
-Message-ID: <20210712114909.GA4435@sirena.org.uk>
-References: <20210709101110.1814294-1-u.kleine-koenig@pengutronix.de>
- <00b3dd46-48ba-3d40-36dd-79372a956085@lechnology.com>
- <20210710121815.yxaylkhessvjbtkf@pengutronix.de>
- <d98603e7-3336-617a-0e2f-e964eb3c894c@lechnology.com>
+        id S235318AbhGLPFh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 12 Jul 2021 11:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35840 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232254AbhGLPFg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 12 Jul 2021 11:05:36 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33ED5C0613E5;
+        Mon, 12 Jul 2021 08:02:48 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 77B9A1F425BC
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id 404164800C6; Mon, 12 Jul 2021 17:02:44 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>, Ian Ray <ian.ray@ge.com>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, kernel@collabora.com,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCHv6 0/3] GE Healthcare PPD firmware upgrade driver for ACHC
+Date:   Mon, 12 Jul 2021 17:02:39 +0200
+Message-Id: <20210712150242.146545-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zhXaljGHf11kAtnf"
-Content-Disposition: inline
-In-Reply-To: <d98603e7-3336-617a-0e2f-e964eb3c894c@lechnology.com>
-X-Cookie: Hailing frequencies open, Captain.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi,
 
---zhXaljGHf11kAtnf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The PPD has a secondary processor (NXP Kinetis K20), which can be
+programmed from the main system. It is connected to the main processor
+by having it's EzPort interface connected to the SPI bus. Currently
+both (normal and EzPort) interfaces are simply exposed to userspace.
+This does not work for the EzPort, since EzPort usage requires a device
+reset. The proper solution is to do the flashing from kernel space
+with properly timed toggling of EzPort chip-select and reset line. In
+PATCHv2 it was suggested, that this should happen via an SPI ancillary
+device, so this is how it has been implemented now. The SPI core
+changes have been applied in PATCHv5 and are part of v5.14-rc1.
 
-On Sat, Jul 10, 2021 at 10:32:46AM -0500, David Lechner wrote:
-> On 7/10/21 7:18 AM, Uwe Kleine-K=F6nig wrote:
+Changes since PATCHv5:
+ * https://lore.kernel.org/lkml/20210621175359.126729-1-sebastian.reichel@collabora.com/
+ * Rebased to v5.14-rc1
+ * Fixed compilation as module
+ * Dropped no longer needed module.h include from ezport code
 
-> > If it's not broken for you without my patch, your spi bus driver doesn't
-> > honor .cs_change in the last transfer. Out of interest: Which bus are
-> > you using? I wonder if the driver should refuse the request if it cannot
-> > honer .cs_change?! (spi-imx does honor it only if gpios are used as chip
-> > select, the native chip selects cannot do that.)
+Changes since PATCHv4:
+ * https://lore.kernel.org/lkml/20210609151235.48964-1-sebastian.reichel@collabora.com/
+ * Add Rob's Acked-by to ge-achc binding update
+ * Don't use of_property_read_u32_index() in of_spi_parse_dt()
+ * Don't build separate module for EzPort code
+ * Use GPL2-only for the header
+ * ACHC_MAX_FREQ -> ACHC_MAX_FREQ_HZ
+ * Only accept '1' for the sysfs files, not any data
+ * Update sysfs file documentation
+ * Rebased to spi-next tree (b8f9dce0f4eb)
 
-> I'm using spi-davinci. It uses the standard spi_transfer_one_message()
-> which handles cs_change. But I suspect when the SPI_CS_WORD flag is set,
-> and the message is big enough to use DMA, the hardware is probably
-> automatically toggling CS after the last transfer before the cs_change
-> logic asserts it again.
+Changes since PATCHv3:
+ * https://lore.kernel.org/lkml/20210528113346.37137-1-sebastian.reichel@collabora.com/
+ * Add Rob's Acked-by to 2nd patch
+ * use GPL-2-only instead of GPL-2+
+ * use %zu for printing a size_t
+ * use driver's .dev_groups to register sysfs group
+ * Add sysfs property documentation
+ * split EzPort and ACHC drivers into separate patches
+ * drop minItems/maxItems from achc binding, which seems to fix the problems
+   reported by dt_binding_check. The information of two items being required
+   is implied by the explicit item list.
+ * drop spidev functionality for the main SPI interface. The current firmware
+   communicates via UART and adding spidev support is complex. If future firmware
+   releases start using it, spidev support for the main interface can be added
+   later.
 
-> So unless there is a valid use case where we need both SPI_CS_WORD
-> and cs_change, I don't think we need to fix spi-davinci.
+Changes since PATCHv2:
+ * https://lore.kernel.org/lkml/20180327135259.30890-1-sebastian.reichel@collabora.co.uk/
+ * add SPI core support for ancillary devices
+ * modify ACHC binding to make use of ancillary device
+ * rewrite driver to use ancillary device
+ * rebased to 5.13-rc1
 
-In theory it does mean something, in practice the number of controllers
-that can implement it must be approaching zero.
+Changes since PATCHv1:
+ * https://lore.kernel.org/lkml/20180320172201.2065-1-sebastian.reichel@collabora.co.uk/
+ * split DT binding update into its own patch
+ * add sysfs attribute documentation
+ * fix problem reported by kbuild test robot
 
---zhXaljGHf11kAtnf
-Content-Type: application/pgp-signature; name="signature.asc"
+-- Sebastian
 
------BEGIN PGP SIGNATURE-----
+Sebastian Reichel (3):
+  dt-bindings: misc: ge-achc: Convert to DT schema format
+  ARM: dts: imx53-ppd: Fix ACHC entry
+  misc: gehc-achc: new driver
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmDsLDQACgkQJNaLcl1U
-h9DQkwf/VeDCJNOHpII7ppALVNCndIap+Yelbu7GPBCzi5wpEblkdV9//Bua/GJP
-sOd72Q2UBXQOJegEmekU2/oux1jpyIRCvuWjcobixB9lqahDNzw5o/ivCbj6hgB0
-7ajpdo6kTy30SybHjPxJn3wcEOPdblKgwOdEewIqSlmFLyK/pPu87iFtIc92LZtl
-uV15eteYwYuSte7IuCPD50wJiqK5BBZv3gCvf2FD196hBfwMJk9cRQcUPXs8uw1F
-NOoih6VPHOYb2yqwyF5djqqI165GW0ooEswE23L0uq7xFhu1Qvb5d30EI/VRA4Ei
-cgiHVqLeLpNNg5qKHc2r9shqDUeDZg==
-=eYWi
------END PGP SIGNATURE-----
+ .../ABI/testing/sysfs-driver-ge-achc          |  14 +
+ .../devicetree/bindings/misc/ge-achc.txt      |  26 -
+ .../devicetree/bindings/misc/ge-achc.yaml     |  65 +++
+ arch/arm/boot/dts/imx53-ppd.dts               |  23 +-
+ drivers/misc/Kconfig                          |  11 +
+ drivers/misc/Makefile                         |   2 +
+ drivers/misc/gehc-achc.c                      | 136 +++++
+ drivers/misc/nxp-ezport.c                     | 468 ++++++++++++++++++
+ drivers/misc/nxp-ezport.h                     |   9 +
+ drivers/spi/spidev.c                          |   1 -
+ 10 files changed, 718 insertions(+), 37 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-ge-achc
+ delete mode 100644 Documentation/devicetree/bindings/misc/ge-achc.txt
+ create mode 100644 Documentation/devicetree/bindings/misc/ge-achc.yaml
+ create mode 100644 drivers/misc/gehc-achc.c
+ create mode 100644 drivers/misc/nxp-ezport.c
+ create mode 100644 drivers/misc/nxp-ezport.h
 
---zhXaljGHf11kAtnf--
+-- 
+2.30.2
+
