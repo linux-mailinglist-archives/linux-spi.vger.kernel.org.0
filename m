@@ -2,38 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A66123C5AE9
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Jul 2021 13:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 424D63C5AEB
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Jul 2021 13:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233909AbhGLKtg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 12 Jul 2021 06:49:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34716 "EHLO mail.kernel.org"
+        id S234088AbhGLKtl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 12 Jul 2021 06:49:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34746 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233095AbhGLKtf (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 12 Jul 2021 06:49:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DB2F260FF4;
-        Mon, 12 Jul 2021 10:46:46 +0000 (UTC)
+        id S234047AbhGLKti (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 12 Jul 2021 06:49:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F400C610FA;
+        Mon, 12 Jul 2021 10:46:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626086807;
-        bh=4hxoHQk9VGPSDfRrvIYdu/uB+u362R250JFmE8dm8P8=;
+        s=k20201202; t=1626086810;
+        bh=5gadTNE2SjLldmP0GxQKzQmCe9E+I0kzV7crHNIpCOk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HaYdxr8dt+3xBpmPfDNesLY+2M1ZHuT4e4RnC8hCJexQ35PQyjr/1s/YnTn3we8tR
-         DYSjMg8gzokzNePjUFD07xdamKf+ytZl9kRLmYLjFJT2Xv9o5GLhu/2bjYjcvw/LJC
-         Ik9ooyVCJZsZOhOLay9MZ2bL/0iP/3OtHCqYwFZQRDHXwOtdwwIGkJeIKEkkGMGJ9H
-         Jj13kJxRxdA1zVHUW06VVKKDnE8Qtpl3MvjpTLa5Q1fgtQFNPAguqeVRcCBsDDnIYa
-         YWapDZRNdldytL6oqYTkwo+K6GdSTSgwP/JdLsWxyoncEAO2biswr+RbBrZf+BgHZL
-         Lb7z/3RyLFGCg==
+        b=hkPxDfq42yEWwO9crtsgAMIv3EkIenFUxkPQS3oAB+kD0YH5RGVzqnDa0FlXeuUsj
+         9wSb7JdYjT+XEMCu0sNTmPX3ayVLJ3bb6aGXbcviinA0ANGlEVMoTRCX37RXse6+YL
+         uJ3utMTfKb81BXy8EbkH9tSFj6ib699spWC5hEDcsmUGAN9Jfq8XYhLQQVZxyjBeiT
+         LmTlpsLX99Sr/A4zMrxpsr5x2JAQazLiOupcXGBqRRszkCiMpTb3beoaSvp6TWM1+T
+         1VsAxUwbw/vEnEMh2m2s5Akp4e6HflasmUBM1gp7pQ0zET3JGn46mlY1TrHKmRbZ2g
+         bzM1ubTC1TyxA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+To:     amelie.delaunay@foss.st.com,
+        Alain Volmat <alain.volmat@foss.st.com>
 Cc:     Mark Brown <broonie@kernel.org>,
-        "William A . Kennington III" <wak@google.com>,
-        linux-spi@vger.kernel.org, Lukas Wunner <lukas@wunner.de>
-Subject: Re: [PATCH v2] spi: <linux/spi/spi.h>: add missing struct kernel-doc entry
-Date:   Mon, 12 Jul 2021 11:45:38 +0100
-Message-Id: <162608669455.4543.4279353560890809082.b4-ty@kernel.org>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alexandre.torgue@foss.st.com, mcoquelin.stm32@gmail.com,
+        fabrice.gasnier@foss.st.com
+Subject: Re: (subset) [PATCH v2 0/7] spi: stm32: various fixes & cleanup
+Date:   Mon, 12 Jul 2021 11:45:39 +0100
+Message-Id: <162608669456.4543.12090183716809322116.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210628210520.5712-1-rdunlap@infradead.org>
-References: <20210628210520.5712-1-rdunlap@infradead.org>
+In-Reply-To: <1625646426-5826-1-git-send-email-alain.volmat@foss.st.com>
+References: <1625646426-5826-1-git-send-email-alain.volmat@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -41,12 +45,17 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 28 Jun 2021 14:05:20 -0700, Randy Dunlap wrote:
-> Fix kernel-doc warning in spi.h by adding the missing kernel-doc entry
-> and also correct the original comment so that they both indicate the
-> correct polarity of the flag.
+On Wed, 7 Jul 2021 10:26:59 +0200, Alain Volmat wrote:
+> This series contains fixes & cleanup mainly regarding fifo
+> and the way end of transfer triggered, when used with or
+> without DMA.
+> An additional patch cleans up the pm_runtime calls and another
+> one enables the autosuspend.
 > 
-> ../include/linux/spi/spi.h:673: warning: Function parameter or member 'devm_allocated' not described in 'spi_controller'
+> v2: - split pm_runtime fix patch into two
+>     - correct revert commit subject line
+> 
+> [...]
 
 Applied to
 
@@ -54,8 +63,18 @@ Applied to
 
 Thanks!
 
-[1/1] spi: <linux/spi/spi.h>: add missing struct kernel-doc entry
-      commit: 8dd591ad0104593f315b6b2ab636a18c002f7d86
+[2/7] spi: stm32: enable pm_runtime autosuspend
+      commit: 9d5354145104cf392568a948c5ce2cb97f373fd7
+[3/7] spi: stm32h7: fix full duplex irq handler handling
+      (no commit info)
+[4/7] spi: stm32: Revert "properly handle 0 byte transfer"
+      commit: 70526e0b7601792bf546044fff92c368112f1d3f
+[5/7] spi: stm32h7: rework rx fifo read function
+      commit: d87a5d64b5037cfedd7eb47d785b5c159ace8d9b
+[6/7] spi: stm32h7: don't wait for EOT and flush fifo on disable
+      commit: dc6620c31326bc50fa22fd8900a9f995d0a04bc1
+[7/7] spi: stm32: finalize message either on dma callback or EOT
+      commit: 7ceb0b8a3ceddc36ae4ef1cba6c25a0e28ed65fc
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
