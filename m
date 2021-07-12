@@ -2,44 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A1B33C5AEE
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Jul 2021 13:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6BC3C5AF0
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Jul 2021 13:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234153AbhGLKts (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 12 Jul 2021 06:49:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34806 "EHLO mail.kernel.org"
+        id S234175AbhGLKtv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 12 Jul 2021 06:49:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34886 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234055AbhGLKtn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 12 Jul 2021 06:49:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 32F7661106;
-        Mon, 12 Jul 2021 10:46:55 +0000 (UTC)
+        id S234144AbhGLKtq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 12 Jul 2021 06:49:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B9BB0610CD;
+        Mon, 12 Jul 2021 10:46:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626086815;
-        bh=s+olitVcChZMJGcS+kpqQWJ7gxyw/XxMyh2v/cXCmg8=;
+        s=k20201202; t=1626086818;
+        bh=QnOSbClophtpi3Z4SUtpJN9si6VKstW5mU2tbr2eog8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eMH9edpbkpi1nI/fSamz9TwXwBOsZIGevcHb0hhOp2eVJeNptfX151q00O/PDAZJt
-         p2wthnmzwnE9cbIwTRXzn9++jj+Kc5iH+Esv9LSkGghHqkv+0CmOqbt14+C8+0a7Ak
-         5OJE/q+iZ5L8UNSn3fvzh31PG3LspVdTNtRKCb/U+SnQMsmHmeky6CCWZoW1tBIO2+
-         wN5PgdBuFKIsevEaaheaZWNeyDV/EENeg4ShTLhGbiYR5yLoJF7+Xve1GwpacbNvkJ
-         8kf0quxY0wLuQRmickbowGeMY1whS0QnQWbPzkfFaIA7cMqIBbHSnu+ps5zZwhurC8
-         6vBGrIAqTNasQ==
+        b=EyqHWXyUma1sEpuzng/VqVYmcJSeuaWCL4P7E94Q93+m6wpoD7rRqOiuha8aCEcKZ
+         6zcuhfgCnMFkUFc23IkPUgyCysWE885ywgyLE1VyIQn969as6LSs54Ty5/HCD7Z7k6
+         XPrKP7UsKAELHUur2NE+ZBaiE5W/D+1m7yuNQtZfWO1+RxBQwQKMGNmMiqB5P6CJva
+         7PY1lp3zA+5CcuQpBBCEAZ8Zj1uxJVe4v7cLa2xvRIF3mf0POyVKIF059JZfmBm5s9
+         X6NYX7U5CUkmOThYS3/XkcNyG9E5BA+Tr6pXvDO0HDPXisXoH8Y09HSfwM2+hSuYq4
+         Dwr5tits4+w4w==
 From:   Mark Brown <broonie@kernel.org>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Leilk Liu <leilk.liu@mediatek.com>,
+To:     linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Hess <peter.hess@ph-home.de>,
-        linux-mediatek@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: mediatek: fix fifo rx mode
-Date:   Mon, 12 Jul 2021 11:45:41 +0100
-Message-Id: <162608669457.4543.2374973099687363958.b4-ty@kernel.org>
+        Dan Sneddon <dan.sneddon@microchip.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [PATCH v2] spi: atmel: Fix CS and initialization bug
+Date:   Mon, 12 Jul 2021 11:45:42 +0100
+Message-Id: <162608669456.4543.2373510962331003503.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210706121609.680534-1-linux@fw-web.de>
-References: <20210706121609.680534-1-linux@fw-web.de>
+In-Reply-To: <20210629192218.32125-1-dan.sneddon@microchip.com>
+References: <20210629192218.32125-1-dan.sneddon@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -47,12 +45,14 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 6 Jul 2021 14:16:09 +0200, Frank Wunderlich wrote:
-> In FIFO mode were two problems:
-> - RX mode was never handled and
-> - in this case the tx_buf pointer was NULL and caused an exception
+On Tue, 29 Jun 2021 12:22:18 -0700, Dan Sneddon wrote:
+> Commit 5fa5e6dec762 ("spi: atmel: Switch to transfer_one transfer
+> method") switched to using transfer_one and set_cs.  The
+> core doesn't call set_cs when the chip select lines are gpios.  Add the
+> SPI_MASTER_GPIO_SS flag to the driver to ensure the calls to set_cs
+> happen since the driver programs configuration registers there.
 > 
-> fix this by handling RX mode in mtk_spi_fifo_transfer
+> Fixes: 5fa5e6dec762 ("spi: atmel: Switch to transfer_one transfer method")
 
 Applied to
 
@@ -60,8 +60,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: mediatek: fix fifo rx mode
-      commit: 3a70dd2d050331ee4cf5ad9d5c0a32d83ead9a43
+[1/1] spi: atmel: Fix CS and initialization bug
+      commit: 69e1818ad27bae167eeaaf6829d4a08900ef5153
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
