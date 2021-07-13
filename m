@@ -2,132 +2,192 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8A03C6D7B
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Jul 2021 11:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A03F3C6E09
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Jul 2021 11:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235304AbhGMJdM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Jul 2021 05:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235293AbhGMJdJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Jul 2021 05:33:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888F8C0613EE
-        for <linux-spi@vger.kernel.org>; Tue, 13 Jul 2021 02:30:19 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1m3Ejr-0000rp-Gk; Tue, 13 Jul 2021 11:30:03 +0200
-Message-ID: <695d47eb5dad9292d8f87e69ad1bccaa2e132a66.camel@pengutronix.de>
-Subject: Re: [PATCH v14 08/12] spi: imx: remove ERR009165 workaround on
- i.mx6ul
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Robin Gong <yibin.gong@nxp.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will.deacon@arm.com" <will.deacon@arm.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "martin.fuzzey@flowbird.group" <martin.fuzzey@flowbird.group>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "matthias.schiffer@ew.tq-group.com" 
-        <matthias.schiffer@ew.tq-group.com>,
-        "frieder.schrempf@kontron.de" <frieder.schrempf@kontron.de>,
-        "m.felsch@pengutronix.de" <m.felsch@pengutronix.de>,
-        Clark Wang <xiaoning.wang@nxp.com>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Tue, 13 Jul 2021 11:30:01 +0200
-In-Reply-To: <VE1PR04MB66889D0BC546DE2580BF614089149@VE1PR04MB6688.eurprd04.prod.outlook.com>
-References: <1617809456-17693-1-git-send-email-yibin.gong@nxp.com>
-         <1617809456-17693-9-git-send-email-yibin.gong@nxp.com>
-         <dfa12f89f112966197518aa8df25cb47d69b30f7.camel@pengutronix.de>
-         <VE1PR04MB668852203A2920C6C9E9E3CF89159@VE1PR04MB6688.eurprd04.prod.outlook.com>
-         <7ca4554c58908618705768e01239409d19f83d17.camel@pengutronix.de>
-         <VE1PR04MB66889D0BC546DE2580BF614089149@VE1PR04MB6688.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.1 (3.40.1-1.fc34) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+        id S235658AbhGMJ6y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Jul 2021 05:58:54 -0400
+Received: from lucky1.263xmail.com ([211.157.147.133]:39072 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235262AbhGMJ6y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Jul 2021 05:58:54 -0400
+Received: from localhost (unknown [192.168.167.235])
+        by lucky1.263xmail.com (Postfix) with ESMTP id 7D70DD5922;
+        Tue, 13 Jul 2021 17:56:01 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-SKE-CHECKED: 1
+X-ANTISPAM-LEVEL: 2
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P5175T139828399277824S1626169498245605_;
+        Tue, 13 Jul 2021 17:45:02 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <d061d9a40845f9d12767ecb241b51c06>
+X-RL-SENDER: jon.lin@rock-chips.com
+X-SENDER: jon.lin@rock-chips.com
+X-LOGIN-NAME: jon.lin@rock-chips.com
+X-FST-TO: linux-spi@vger.kernel.org
+X-RCPT-COUNT: 19
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+From:   Jon Lin <jon.lin@rock-chips.com>
+To:     linux-spi@vger.kernel.org
+Cc:     jon.lin@rock-chips.com, broonie@kernel.org, robh+dt@kernel.org,
+        heiko@sntech.de, jbx6244@gmail.com, hjc@rock-chips.com,
+        yifeng.zhao@rock-chips.com, sugar.zhang@rock-chips.com,
+        linux-rockchip@lists.infradead.org, linux-mtd@lists.infradead.org,
+        p.yadav@ti.com, macroalpha82@gmail.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH v12 00/10] Add Rockchip SFC(serial flash controller) support
+Date:   Tue, 13 Jul 2021 17:44:46 +0800
+Message-Id: <20210713094456.23288-1-jon.lin@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Am Dienstag, dem 13.07.2021 um 09:12 +0000 schrieb Robin Gong:
-> On 12/07/21 17:31 Lucas Stach <l.stach@pengutronix.de> wrote: 
-> > Am Montag, dem 12.07.2021 um 03:48 +0000 schrieb Robin Gong:
-> > > On 09/07/21 17:42 Lucas Stach <l.stach@pengutronix.de> wrote:
-> > > > Am Mittwoch, dem 07.04.2021 um 23:30 +0800 schrieb Robin Gong:
-> > > > > ERR009165 fixed on i.mx6ul/6ull/6sll. All other i.mx6/7 and
-> > > > > i.mx8m/8mm still need this errata. Please refer to nxp official
-> > > > > errata document from
-> > > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fww
-> > > > w.n
-> > xp.com%2F&amp;data=04%7C01%7Cyibin.gong%40nxp.com%7C48156bc93d
-> > > > 
-> > c84ac26e9d08d942bdc0ac%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%
-> > > > 
-> > 7C1%7C637614205017900475%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4
-> > > > 
-> > wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&a
-> > > > 
-> > mp;sdata=keYQubzt1jWrKhaxXr40RL41vzFuIn7x1Sasa3p%2F9Xo%3D&amp;res
-> > > > erved=0 .
-> > > > > 
-> > > > > For removing workaround on those chips. Add new i.mx6ul type.
-> > > > > 
-> > > > > Signed-off-by: Robin Gong <yibin.gong@nxp.com>
-> > > > > Acked-by: Mark Brown <broonie@kernel.org>
-> > > > > ---
-> > > > >  drivers/spi/spi-imx.c | 47
-> > > > > +++++++++++++++++++++++++++++++++++++++++++----
-> > > > >  1 file changed, 43 insertions(+), 4 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c index
-> > > > > cf235b9..d18ee25 100644
-> > > > > --- a/drivers/spi/spi-imx.c
-> > > > > +++ b/drivers/spi/spi-imx.c
-> > > > > @@ -59,6 +59,7 @@ enum spi_imx_devtype {
-> > > > >  	IMX35_CSPI,	/* CSPI on all i.mx except above */
-> > > > >  	IMX51_ECSPI,	/* ECSPI on i.mx51 */
-> > > > >  	IMX53_ECSPI,	/* ECSPI on i.mx53 and later */
-> > > > > +	IMX6UL_ECSPI,	/* ERR009165 fix from i.mx6ul */
-> > > > 
-> > > > This patch could be a lot smaller if you didn't introduce a new
-> > > > devtype. You could just use the IMX51_ECSPI in
-> > > > imx6ul_ecspi_devtype_data, as all you care about as a relevant
-> > > > difference is the tx_glitch_fixed property, which isn't tied to the devtype.
-> > > I knew tx_glitch_fixed was enough but I still prefer to add new
-> > > 'IMX6UL_ECSPI' because we can clearly choose the right IP which has
-> > > fix the issue while legacy IMX51 if it's not fixed by dts.
-> > > 
-> > Sorry, I don't follow this reasoning. You are not using the new IMX6UL_ECSPI
-> > devtype in any way in this patch, other than a single location, where you just
-> > handle it the same as the IMX51_ECSPI devtype.
-> Okay, will reuse IMX51_ECSPI as devtype, but will still keep "fsl,imx6ul-ecspi".
-> 
-That's exactly what I meant: have a "fsl,imx6ul-ecspi" compatible with
-it's own imx6ul_ecspi_devtype_data, but reuse the IMX51_ECSPI devtype.
 
-Glad we are on the same page now.
 
-Regards,
-Lucas
+Changes in v12:
+- Remove useless oneOf lable
+- Add sfc controller discription
+- Remove the limitation of SFC_MIN_SPEED_HZ
+- Add IRQ_NONE method for irq handler
+- Add SPI_MASTER_HALF_DUPLEX flags
+- Add sfc interrupt mask bits and status register initial progress
+
+Changes in v11:
+- The tx is set to 1 for Odroid Go Advance device
+
+Changes in v10:
+- Fix dma transfer logic
+
+Changes in v9:
+- Separate DMA IRQ setting and wait_completion from DMA fifo transfer
+  function to make dma_status_poll be possible(Which I will implement
+  in u-boot)
+- Add SFC Kconfig detail comment
+- Separate FDT binding docs and includes from rk3036 sfc_hclk patch
+- Separate FDT binding docs and includes from rk3036 sfc_hclk patch
+
+Changes in v8:
+- Fix indent 4 to 2 in yaml
+
+Changes in v7:
+- Fix up the sclk_sfc parent error in rk3036
+- Unify to "rockchip,sfc" compatible id because all the feature update
+  will have a new IP version, so the driver is used for the SFC IP in
+  all SoCs
+- Change to use node "sfc" to name the SFC pinctrl group
+- Add subnode reg property check
+- Add rockchip_sfc_adjust_op_size to workaround in CMD + DUMMY case
+- Limit max_iosize to 32KB
+
+Changes in v6:
+- Add support in device trees for rv1126(Declared in series 5 but not
+  submitted)
+- Change to use "clk_sfc" "hclk_sfc" as clock lable, since it does not
+  affect interpretation and has been widely used
+- Support sfc tx_dual, tx_quad(Declared in series 5 but not submitted)
+- Simplify the code, such as remove "rockchip_sfc_register_all"(Declared
+  in series 5 but not submitted)
+- Support SFC ver4 ver5(Declared in series 5 but not submitted)
+- Add author Chris Morgan and Jon Lin to spi-rockchip-sfc.c
+- Change to use devm_spi_alloc_master and spi_unregister_master
+
+Changes in v5:
+- Add support in device trees for rv1126
+- Support sfc tx_dual, tx_quad
+- Simplify the code, such as remove "rockchip_sfc_register_all"
+- Support SFC ver4 ver5
+
+Changes in v4:
+- Changing patch back to an "RFC". An engineer from Rockchip
+  reached out to me to let me know they are working on this patch for
+  upstream, I am submitting this v4 for the community to see however
+  I expect Jon Lin (jon.lin@rock-chips.com) will submit new patches
+  soon and these are the ones we should pursue for mainlining. Jon's
+  patch series should include support for more hardware than this
+  series.
+- Clean up documentation more and ensure it is correct per
+  make dt_binding_check.
+- Add support in device trees for rk3036, rk3308, and rv1108.
+- Add ahb clock (hclk_sfc) support for rk3036.
+- Change rockchip_sfc_wait_fifo_ready() to use a switch statement.
+- Change IRQ code to only mark IRQ as handled if it handles the
+  specific IRQ (DMA transfer finish) it is supposed to handle.
+
+Changes in v3:
+- Changed the name of the clocks to sfc/ahb (from clk-sfc/clk-hsfc).
+- Changed the compatible string from rockchip,sfc to
+  rockchip,rk3036-sfc. A quick glance at the datasheets suggests this
+  driver should work for the PX30, RK180x, RK3036, RK312x, RK3308 and
+  RV1108 SoCs, and possibly more. However, I am currently only able
+  to test this on a PX30 (an RK3326). The technical reference manuals
+  appear to list the same registers for each device.
+- Corrected devicetree documentation for formatting and to note these
+  changes.
+- Replaced the maintainer with Heiko Stuebner and myself, as we will
+  take ownership of this going forward.
+- Noted that the device (per the reference manual) supports 4 CS, but
+  I am only able to test a single CS (CS 0).
+- Reordered patches to comply with upstream rules.
+
+Changes in v2:
+- Reimplemented driver using spi-mem subsystem.
+- Removed power management code as I couldn't get it working properly.
+- Added device tree bindings for Odroid Go Advance.
+
+Changes in v1:
+hanges made in this new series versus the v8 of the old series:
+- Added function to read spi-rx-bus-width from device tree, in the
+  event that the SPI chip supports 4x mode but only has 2 pins
+  wired (such as the Odroid Go Advance).
+- Changed device tree documentation from txt to yaml format.
+- Made "reset" message a dev_dbg from a dev_info.
+- Changed read and write fifo functions to remove redundant checks.
+- Changed the write and read from relaxed to non-relaxed when
+  starting the DMA transfer or reading the DMA IRQ.
+- Changed from dma_coerce_mask_and_coherent to just
+  dma_set_mask_and_coherent.
+- Changed name of get_if_type to rockchip_sfc_get_if_type.
+
+Chris Morgan (8):
+  dt-bindings: rockchip-sfc: Bindings for Rockchip serial flash
+    controller
+  spi: rockchip-sfc: add rockchip serial flash controller
+  arm64: dts: rockchip: Add SFC to PX30
+  clk: rockchip:  add dt-binding for hclk_sfc on rk3036
+  arm: dts: rockchip: Add SFC to RK3036
+  arm: dts: rockchip: Add SFC to RV1108
+  arm64: dts: rockchip: Add SFC to RK3308
+  arm64: dts: rockchip: Enable SFC for Odroid Go Advance
+
+Jon Lin (2):
+  clk: rockchip: rk3036: fix up the sclk_sfc parent error
+  clk: rockchip: Add support for hclk_sfc on rk3036
+
+ .../devicetree/bindings/spi/rockchip-sfc.yaml |  91 +++
+ arch/arm/boot/dts/rk3036.dtsi                 |  42 ++
+ arch/arm/boot/dts/rv1108.dtsi                 |  37 +
+ arch/arm64/boot/dts/rockchip/px30.dtsi        |  38 +
+ arch/arm64/boot/dts/rockchip/rk3308.dtsi      |  37 +
+ .../boot/dts/rockchip/rk3326-odroid-go2.dts   |  16 +
+ drivers/clk/rockchip/clk-rk3036.c             |   5 +-
+ drivers/spi/Kconfig                           |  12 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-rockchip-sfc.c                | 682 ++++++++++++++++++
+ include/dt-bindings/clock/rk3036-cru.h        |   1 +
+ 11 files changed, 960 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/rockchip-sfc.yaml
+ create mode 100644 drivers/spi/spi-rockchip-sfc.c
+
+-- 
+2.17.1
+
 
 
