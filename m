@@ -2,99 +2,105 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC863C6F07
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Jul 2021 12:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C2A3C700D
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Jul 2021 13:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235572AbhGMK7g (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Jul 2021 06:59:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44448 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235508AbhGMK7e (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 13 Jul 2021 06:59:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 864666127C;
-        Tue, 13 Jul 2021 10:56:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626173805;
-        bh=CUz5DNHYp7J2Qi4kShmm8q0o4eae/stvnRk/KeoGgd8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X2g8iUO2SdpRvF+7XcoZeodN1uD/DGbSvIZCBZ3/PIeX7UEFhAXoM75bDR2IFYbGV
-         gkfE37qOel6g+2CxBLKDLqHGu6gcGWEHq8dLpo7fgRPShZfFUiI1pvwPMy22N1LVLa
-         bVWRlGdFxmR7Qy4j08trX7JsaoJbMg7RWM66gEL0=
-Date:   Tue, 13 Jul 2021 12:56:41 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>, Ian Ray <ian.ray@ge.com>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCHv6 3/3] misc: gehc-achc: new driver
-Message-ID: <YO1xaUAgO2LnXLva@kroah.com>
-References: <20210712150242.146545-1-sebastian.reichel@collabora.com>
- <20210712150242.146545-4-sebastian.reichel@collabora.com>
- <YOx/3YaIg24Tx+OQ@kroah.com>
- <20210712232016.feixz7mqingdc7ck@earth.universe>
- <YO0nn5iX2835Zta9@kroah.com>
- <20210713104600.gbhixaf7r4cukg6i@earth.universe>
+        id S235983AbhGMMAr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Jul 2021 08:00:47 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:38742 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S235797AbhGMMAr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Jul 2021 08:00:47 -0400
+X-UUID: 902a55c266aa41bd95fdcbfd5356fe29-20210713
+X-UUID: 902a55c266aa41bd95fdcbfd5356fe29-20210713
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <mason.zhang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1492047116; Tue, 13 Jul 2021 19:57:54 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 13 Jul 2021 19:57:52 +0800
+Received: from localhost.localdomain (10.15.20.246) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 13 Jul 2021 19:57:52 +0800
+From:   Mason Zhang <mason.zhang@mediatek.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <leilk.liu@mediatek.com>,
+        <wsd_upstream@mediatek.com>, Mason Zhang <Mason.Zhang@mediatek.com>
+Subject: [PATCH 1/2] spi: mediatek: add tick_delay support
+Date:   Tue, 13 Jul 2021 19:40:49 +0800
+Message-ID: <20210713114048.29509-1-mason.zhang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210713104600.gbhixaf7r4cukg6i@earth.universe>
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Jul 13, 2021 at 12:46:00PM +0200, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Tue, Jul 13, 2021 at 07:41:51AM +0200, Greg Kroah-Hartman wrote:
-> > On Tue, Jul 13, 2021 at 01:20:16AM +0200, Sebastian Reichel wrote:
-> > > On Mon, Jul 12, 2021 at 07:46:05PM +0200, Greg Kroah-Hartman wrote:
-> > > > On Mon, Jul 12, 2021 at 05:02:42PM +0200, Sebastian Reichel wrote:
-> > > > > General Electric Healthcare's PPD has a secondary processor from
-> > > > > NXP's Kinetis K20 series. That device has two SPI chip selects:
-> > > > > 
-> > > > > The main interface's behaviour depends on the loaded firmware
-> > > > > and is currently unused.
-> > > > > 
-> > > > > The secondary interface can be used to update the firmware using
-> > > > > EzPort protocol. This is implemented by this driver using the
-> > > > > kernel's firmware API. It's not done during probe time, since
-> > > > > the device has non-volatile memory and flashing lasts almost 3
-> > > > > minutes.
-> > > > 
-> > > > In thinking about this some more, why does it matter?  Spin up a
-> > > > workqueue when probing and do the firmware loading then. That way you
-> > > > do not end up creating yet another custom user/kernel api just to do
-> > > > something as trivial as loading the firmware for a device.
-> > > > 
-> > > > And I think the firmware loader even handles async loading, or at least
-> > > > it used to, maybe not anymore, it's a complex api, I recommend reading
-> > > > the docs...
-> > > 
-> > > Flashing the firmware during boot instead of on-demand is not
-> > > a good idea for two reasons:
-> > > 
-> > > 1. This will wear the flash memory of the microcontroller for no
-> > >    good reason.
-> > 
-> > Why would you boot with this hardware and not want the firmware
-> > loaded?
-> 
-> As written in the commit message this code is updateing the firmware
-> in non-volatile memory, so the previously flashed FW will be used
-> until a new one is flashed.
-> 
-> The datasheet for the memory being programmed states, that it has a
-> guaranteed programming endurance of 10.000 times. So programming it
-> at every boot instead of manually when a new FW should be flashed
-> (i.e. once every few years) shortens the device life time considerably.
+From: Mason Zhang <Mason.Zhang@mediatek.com>
 
-Ah, ok, that was not obvious at all.  This is much more like a "BIOS
-update" in that it is infrequent.  You might want to document the heck
-out of this so others are not confused like me.
+This patch support tick_delay setting, some users need use
+high-speed spi speed, which can use tick_delay to tuning spi clk timing.
 
-thanks,
+Signed-off-by: Mason Zhang <Mason.Zhang@mediatek.com>
+---
+ drivers/spi/spi-mt65xx.c                 | 11 ++++++++++-
+ include/linux/platform_data/spi-mt65xx.h |  1 +
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-greg k-h
+diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+index 097625d7915e..b34fbc913fd6 100644
+--- a/drivers/spi/spi-mt65xx.c
++++ b/drivers/spi/spi-mt65xx.c
+@@ -42,8 +42,9 @@
+ #define SPI_CFG1_CS_IDLE_OFFSET           0
+ #define SPI_CFG1_PACKET_LOOP_OFFSET       8
+ #define SPI_CFG1_PACKET_LENGTH_OFFSET     16
+-#define SPI_CFG1_GET_TICK_DLY_OFFSET      30
++#define SPI_CFG1_GET_TICK_DLY_OFFSET      29
+ 
++#define SPI_CFG1_GET_TICK_DLY_MASK        0xe0000000
+ #define SPI_CFG1_CS_IDLE_MASK             0xff
+ #define SPI_CFG1_PACKET_LOOP_MASK         0xff00
+ #define SPI_CFG1_PACKET_LENGTH_MASK       0x3ff0000
+@@ -152,6 +153,7 @@ static const struct mtk_spi_compatible mt6893_compat = {
+  */
+ static const struct mtk_chip_config mtk_default_chip_info = {
+ 	.sample_sel = 0,
++	.tick_delay = 0,
+ };
+ 
+ static const struct of_device_id mtk_spi_of_match[] = {
+@@ -275,6 +277,13 @@ static int mtk_spi_prepare_message(struct spi_master *master,
+ 		writel(mdata->pad_sel[spi->chip_select],
+ 		       mdata->base + SPI_PAD_SEL_REG);
+ 
++	/* tick delay */
++	reg_val = readl(mdata->base + SPI_CFG1_REG);
++	reg_val &= ~SPI_CFG1_GET_TICK_DLY_MASK;
++	reg_val |= ((chip_config->tick_delay & 0x7)
++		<< SPI_CFG1_GET_TICK_DLY_OFFSET);
++	writel(reg_val, mdata->base + SPI_CFG1_REG);
++
+ 	return 0;
+ }
+ 
+diff --git a/include/linux/platform_data/spi-mt65xx.h b/include/linux/platform_data/spi-mt65xx.h
+index 65fd5ffd257c..f0db674f07b8 100644
+--- a/include/linux/platform_data/spi-mt65xx.h
++++ b/include/linux/platform_data/spi-mt65xx.h
+@@ -12,5 +12,6 @@
+ /* Board specific platform_data */
+ struct mtk_chip_config {
+ 	u32 sample_sel;
++	u32 tick_delay;
+ };
+ #endif
+-- 
+2.18.0
+
