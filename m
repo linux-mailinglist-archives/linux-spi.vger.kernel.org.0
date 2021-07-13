@@ -2,27 +2,27 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C2A3C700D
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Jul 2021 13:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D413C700F
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Jul 2021 13:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235983AbhGMMAr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Jul 2021 08:00:47 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:38742 "EHLO
+        id S235919AbhGMMC2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Jul 2021 08:02:28 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:41054 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235797AbhGMMAr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Jul 2021 08:00:47 -0400
-X-UUID: 902a55c266aa41bd95fdcbfd5356fe29-20210713
-X-UUID: 902a55c266aa41bd95fdcbfd5356fe29-20210713
+        with ESMTP id S235797AbhGMMC2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Jul 2021 08:02:28 -0400
+X-UUID: bc9aa24003bc4abbbcb5e7b476c21f65-20210713
+X-UUID: bc9aa24003bc4abbbcb5e7b476c21f65-20210713
 Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
         (envelope-from <mason.zhang@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1492047116; Tue, 13 Jul 2021 19:57:54 +0800
+        with ESMTP id 748022706; Tue, 13 Jul 2021 19:59:34 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
  mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 13 Jul 2021 19:57:52 +0800
+ 15.0.1497.2; Tue, 13 Jul 2021 19:59:22 +0800
 Received: from localhost.localdomain (10.15.20.246) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 13 Jul 2021 19:57:52 +0800
+ Transport; Tue, 13 Jul 2021 19:59:21 +0800
 From:   Mason Zhang <mason.zhang@mediatek.com>
 To:     Mark Brown <broonie@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>
@@ -31,9 +31,9 @@ CC:     <linux-spi@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <leilk.liu@mediatek.com>,
         <wsd_upstream@mediatek.com>, Mason Zhang <Mason.Zhang@mediatek.com>
-Subject: [PATCH 1/2] spi: mediatek: add tick_delay support
-Date:   Tue, 13 Jul 2021 19:40:49 +0800
-Message-ID: <20210713114048.29509-1-mason.zhang@mediatek.com>
+Subject: [PATCH 2/2] spi: mediatek: move devm_spi_register_master position
+Date:   Tue, 13 Jul 2021 19:42:48 +0800
+Message-ID: <20210713114247.1536-1-mason.zhang@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -44,63 +44,44 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Mason Zhang <Mason.Zhang@mediatek.com>
 
-This patch support tick_delay setting, some users need use
-high-speed spi speed, which can use tick_delay to tuning spi clk timing.
+This patch move devm_spi_register_master to the end of mtk_spi_probe.
+If slaves call spi_sync in there probe function, master should have probe done.
 
 Signed-off-by: Mason Zhang <Mason.Zhang@mediatek.com>
 ---
- drivers/spi/spi-mt65xx.c                 | 11 ++++++++++-
- include/linux/platform_data/spi-mt65xx.h |  1 +
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ drivers/spi/spi-mt65xx.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-index 097625d7915e..b34fbc913fd6 100644
+index b34fbc913fd6..6f2925118b98 100644
 --- a/drivers/spi/spi-mt65xx.c
 +++ b/drivers/spi/spi-mt65xx.c
-@@ -42,8 +42,9 @@
- #define SPI_CFG1_CS_IDLE_OFFSET           0
- #define SPI_CFG1_PACKET_LOOP_OFFSET       8
- #define SPI_CFG1_PACKET_LENGTH_OFFSET     16
--#define SPI_CFG1_GET_TICK_DLY_OFFSET      30
-+#define SPI_CFG1_GET_TICK_DLY_OFFSET      29
+@@ -820,12 +820,6 @@ static int mtk_spi_probe(struct platform_device *pdev)
  
-+#define SPI_CFG1_GET_TICK_DLY_MASK        0xe0000000
- #define SPI_CFG1_CS_IDLE_MASK             0xff
- #define SPI_CFG1_PACKET_LOOP_MASK         0xff00
- #define SPI_CFG1_PACKET_LENGTH_MASK       0x3ff0000
-@@ -152,6 +153,7 @@ static const struct mtk_spi_compatible mt6893_compat = {
-  */
- static const struct mtk_chip_config mtk_default_chip_info = {
- 	.sample_sel = 0,
-+	.tick_delay = 0,
- };
+ 	pm_runtime_enable(&pdev->dev);
  
- static const struct of_device_id mtk_spi_of_match[] = {
-@@ -275,6 +277,13 @@ static int mtk_spi_prepare_message(struct spi_master *master,
- 		writel(mdata->pad_sel[spi->chip_select],
- 		       mdata->base + SPI_PAD_SEL_REG);
+-	ret = devm_spi_register_master(&pdev->dev, master);
+-	if (ret) {
+-		dev_err(&pdev->dev, "failed to register master (%d)\n", ret);
+-		goto err_disable_runtime_pm;
+-	}
+-
+ 	if (mdata->dev_comp->need_pad_sel) {
+ 		if (mdata->pad_num != master->num_chipselect) {
+ 			dev_err(&pdev->dev,
+@@ -865,6 +859,12 @@ static int mtk_spi_probe(struct platform_device *pdev)
+ 		dev_notice(&pdev->dev, "SPI dma_set_mask(%d) failed, ret:%d\n",
+ 			   addr_bits, ret);
  
-+	/* tick delay */
-+	reg_val = readl(mdata->base + SPI_CFG1_REG);
-+	reg_val &= ~SPI_CFG1_GET_TICK_DLY_MASK;
-+	reg_val |= ((chip_config->tick_delay & 0x7)
-+		<< SPI_CFG1_GET_TICK_DLY_OFFSET);
-+	writel(reg_val, mdata->base + SPI_CFG1_REG);
++	ret = devm_spi_register_master(&pdev->dev, master);
++	if (ret) {
++		dev_err(&pdev->dev, "failed to register master (%d)\n", ret);
++		goto err_disable_runtime_pm;
++	}
 +
  	return 0;
- }
  
-diff --git a/include/linux/platform_data/spi-mt65xx.h b/include/linux/platform_data/spi-mt65xx.h
-index 65fd5ffd257c..f0db674f07b8 100644
---- a/include/linux/platform_data/spi-mt65xx.h
-+++ b/include/linux/platform_data/spi-mt65xx.h
-@@ -12,5 +12,6 @@
- /* Board specific platform_data */
- struct mtk_chip_config {
- 	u32 sample_sel;
-+	u32 tick_delay;
- };
- #endif
+ err_disable_runtime_pm:
 -- 
 2.18.0
 
