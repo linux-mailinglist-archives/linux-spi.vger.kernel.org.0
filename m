@@ -2,287 +2,329 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 290F83C7709
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Jul 2021 21:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A873C774C
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Jul 2021 21:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234586AbhGMTiK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Jul 2021 15:38:10 -0400
-Received: from mail-io1-f53.google.com ([209.85.166.53]:45902 "EHLO
-        mail-io1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbhGMTiJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Jul 2021 15:38:09 -0400
-Received: by mail-io1-f53.google.com with SMTP id y16so5586142iol.12;
-        Tue, 13 Jul 2021 12:35:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uTODzrzCCYkqmU43lyE/fyW+NoXwq5Q/GjDtygunFEc=;
-        b=iO4BUZUJLFNvKPuiI4UIbbTtndp02DH32Yp6aWMZ4IlVuuENjfPRBUhhZU/unQczXW
-         L6dFNbxfgD2ICbhZJfBpqHYTSpLTspmq3ySBcqGkuc0cXTYf1PqnqRmcM8hI3xx/sMlB
-         PNgjNJd9gqUN6ZN+uRrC63WlxpqSezTgJwU/7k/2h26y4iehZx50Ko22exX8i8NEE6h0
-         80RBT1q//aapr11m3Aqja4SudjuqG7IvQpYmvUWWrp33nYMQ6KUkhh/ExL+u4faokJrL
-         yk1Ew4rhOdVVlSaaMOI+luwfItLLwcOpj07+V10Qme8rufcdOmwIdytxdH3k0eWJl9Bz
-         gOjg==
-X-Gm-Message-State: AOAM532a9w4d1/n1UGaqv17ivr0i3bnddsxYvyir+8lAhsan6oXWOjSb
-        R3JpT2pYAqFThSV2/zjTvoUM4gB8zw==
-X-Google-Smtp-Source: ABdhPJy4/+C32k6S27yxBU2pwjcIfGXKihXQFOQZytH7CySUiWd9fjMmFBmQ8QxsNTWxPOytTbn37Q==
-X-Received: by 2002:a6b:f813:: with SMTP id o19mr4273065ioh.49.1626204917690;
-        Tue, 13 Jul 2021 12:35:17 -0700 (PDT)
-Received: from xps15.herring.priv ([64.188.179.248])
-        by smtp.googlemail.com with ESMTPSA id b2sm7219964ioj.19.2021.07.13.12.35.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jul 2021 12:35:17 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        id S235397AbhGMTjv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Jul 2021 15:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58558 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235408AbhGMTji (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Jul 2021 15:39:38 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BEDC06178A
+        for <linux-spi@vger.kernel.org>; Tue, 13 Jul 2021 12:36:48 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m3OBr-0001GT-RJ; Tue, 13 Jul 2021 21:35:35 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m3OBi-0006p7-4I; Tue, 13 Jul 2021 21:35:26 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m3OBh-0002bU-W6; Tue, 13 Jul 2021 21:35:25 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kernel@pengutronix.de,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alexandre Bounine <alex.bou9@gmail.com>,
+        Alex Dubov <oakad@yahoo.com>, Alex Elder <elder@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Allen Hubbe <allenbh@gmail.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Andy Gross <agross@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bodo Stroesser <bostroesser@gmail.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Dexuan Cui <decui@microsoft.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Farman <farman@linux.ibm.com>,
+        Finn Thain <fthain@linux-m68k.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frank Li <lznuaa@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Geoff Levand <geoff@infradead.org>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>, Ira Weiny <ira.weiny@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jason Wang <jasowang@redhat.com>,
+        Jens Taprogge <jens.taprogge@taprogge.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Joey Pabalan <jpabalanb@gmail.com>,
+        Johan Hovold <johan@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Johannes Thumshirn <morbidrsa@gmail.com>,
+        Jon Mason <jdmason@kudzu.us>, Juergen Gross <jgross@suse.com>,
+        Julien Grall <jgrall@amazon.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
         Kishon Vijay Abraham I <kishon@ti.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>, Len Brown <lenb@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Martyn Welch <martyn@welchs.me.uk>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Maxim Levitsky <maximlevitsky@gmail.com>,
+        Michael Buesch <m@bues.ch>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Jamet <michael.jamet@intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+        Rich Felker <dalias@libc.org>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Samuel Holland <samuel@sholland.org>,
+        Samuel Iglesias Gonsalvez <siglesias@igalia.com>,
+        SeongJae Park <sjpark@amazon.de>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Sven Van Asbroeck <TheSven73@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thorsten Scherer <t.scherer@eckelmann.de>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Tom Rix <trix@redhat.com>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
         Vinod Koul <vkoul@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Troy Kisky <troy.kisky@boundarydevices.com>,
-        linux-hwmon@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-spi@vger.kernel.org
-Subject: [PATCH] dt-bindings: Move fixed string 'patternProperties' to 'properties'
-Date:   Tue, 13 Jul 2021 13:35:14 -0600
-Message-Id: <20210713193514.690894-1-robh@kernel.org>
-X-Mailer: git-send-email 2.27.0
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Yufen Yu <yuyufen@huawei.com>, alsa-devel@alsa-project.org,
+        dmaengine@vger.kernel.org, greybus-dev@lists.linaro.org,
+        industrypack-devel@lists.sourceforge.net, kvm@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-i3c@lists.infradead.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-media@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-ntb@googlegroups.com, linux-parisc@vger.kernel.org,
+        linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-sunxi@lists.linux.dev,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, nvdimm@lists.linux.dev,
+        platform-driver-x86@vger.kernel.org, sparclinux@vger.kernel.org,
+        target-devel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org
+Subject: [PATCH v4 0/5] bus: Make remove callback return void
+Date:   Tue, 13 Jul 2021 21:35:17 +0200
+Message-Id: <20210713193522.1770306-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-There's no need for fixed strings to be under 'patternProperties', so move
-them under 'properties' instead.
+Hello,
 
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Kishon Vijay Abraham I <kishon@ti.com>
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: Saravanan Sekar <sravanhome@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Jagan Teki <jagan@amarulasolutions.com>
-Cc: Troy Kisky <troy.kisky@boundarydevices.com>
-Cc: linux-hwmon@vger.kernel.org
-Cc: linux-phy@lists.infradead.org
-Cc: linux-spi@vger.kernel.org
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../devicetree/bindings/hwmon/adt7475.yaml    | 22 ++++----
- .../bindings/phy/ti,phy-j721e-wiz.yaml        | 56 +++++++++----------
- .../bindings/regulator/mps,mpq7920.yaml       |  6 +-
- .../regulator/nxp,pf8x00-regulator.yaml       |  3 +-
- .../bindings/spi/spi-controller.yaml          | 32 +++++------
- 5 files changed, 60 insertions(+), 59 deletions(-)
+this is v4 of the final patch set for my effort to make struct
+bus_type::remove return void.
 
-diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-index ad0ec9f35bd8..7d9c083632b9 100644
---- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-@@ -39,17 +39,7 @@ properties:
-   reg:
-     maxItems: 1
- 
--patternProperties:
--  "^adi,bypass-attenuator-in[0-4]$":
--    description: |
--      Configures bypassing the individual voltage input attenuator. If
--      set to 1 the attenuator is bypassed if set to 0 the attenuator is
--      not bypassed. If the property is absent then the attenuator
--      retains it's configuration from the bios/bootloader.
--    $ref: /schemas/types.yaml#/definitions/uint32
--    enum: [0, 1]
--
--  "^adi,pwm-active-state$":
-+  adi,pwm-active-state:
-     description: |
-       Integer array, represents the active state of the pwm outputs If set to 0
-       the pwm uses a logic low output for 100% duty cycle. If set to 1 the pwm
-@@ -61,6 +51,16 @@ patternProperties:
-       enum: [0, 1]
-       default: 1
- 
-+patternProperties:
-+  "^adi,bypass-attenuator-in[0-4]$":
-+    description: |
-+      Configures bypassing the individual voltage input attenuator. If
-+      set to 1 the attenuator is bypassed if set to 0 the attenuator is
-+      not bypassed. If the property is absent then the attenuator
-+      retains it's configuration from the bios/bootloader.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [0, 1]
-+
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/phy/ti,phy-j721e-wiz.yaml b/Documentation/devicetree/bindings/phy/ti,phy-j721e-wiz.yaml
-index 5272b6f284ba..dcd63908aeae 100644
---- a/Documentation/devicetree/bindings/phy/ti,phy-j721e-wiz.yaml
-+++ b/Documentation/devicetree/bindings/phy/ti,phy-j721e-wiz.yaml
-@@ -77,6 +77,34 @@ properties:
-       Type-C spec states minimum CC pin debounce of 100 ms and maximum
-       of 200 ms. However, some solutions might need more than 200 ms.
- 
-+  refclk-dig:
-+    type: object
-+    description: |
-+      WIZ node should have subnode for refclk_dig to select the reference
-+      clock source for the reference clock used in the PHY and PMA digital
-+      logic.
-+    properties:
-+      clocks:
-+        minItems: 2
-+        maxItems: 4
-+        description: Phandle to two (Torrent) or four (Sierra) clock nodes representing
-+          the inputs to refclk_dig
-+
-+      "#clock-cells":
-+        const: 0
-+
-+      assigned-clocks:
-+        maxItems: 1
-+
-+      assigned-clock-parents:
-+        maxItems: 1
-+
-+    required:
-+      - clocks
-+      - "#clock-cells"
-+      - assigned-clocks
-+      - assigned-clock-parents
-+
- patternProperties:
-   "^pll[0|1]-refclk$":
-     type: object
-@@ -121,34 +149,6 @@ patternProperties:
-       - clocks
-       - "#clock-cells"
- 
--  "^refclk-dig$":
--    type: object
--    description: |
--      WIZ node should have subnode for refclk_dig to select the reference
--      clock source for the reference clock used in the PHY and PMA digital
--      logic.
--    properties:
--      clocks:
--        minItems: 2
--        maxItems: 4
--        description: Phandle to two (Torrent) or four (Sierra) clock nodes representing
--          the inputs to refclk_dig
--
--      "#clock-cells":
--        const: 0
--
--      assigned-clocks:
--        maxItems: 1
--
--      assigned-clock-parents:
--        maxItems: 1
--
--    required:
--      - clocks
--      - "#clock-cells"
--      - assigned-clocks
--      - assigned-clock-parents
--
-   "^serdes@[0-9a-f]+$":
-     type: object
-     description: |
-diff --git a/Documentation/devicetree/bindings/regulator/mps,mpq7920.yaml b/Documentation/devicetree/bindings/regulator/mps,mpq7920.yaml
-index 12b8963615c3..c2e8c54e5311 100644
---- a/Documentation/devicetree/bindings/regulator/mps,mpq7920.yaml
-+++ b/Documentation/devicetree/bindings/regulator/mps,mpq7920.yaml
-@@ -36,12 +36,12 @@ properties:
-           switching frequency must be one of following corresponding value
-           1.1MHz, 1.65MHz, 2.2MHz, 2.75MHz
- 
--    patternProperties:
--      "^ldo[1-4]$":
-+      ldortc:
-         type: object
-         $ref: regulator.yaml#
- 
--      "^ldortc$":
-+    patternProperties:
-+      "^ldo[1-4]$":
-         type: object
-         $ref: regulator.yaml#
- 
-diff --git a/Documentation/devicetree/bindings/regulator/nxp,pf8x00-regulator.yaml b/Documentation/devicetree/bindings/regulator/nxp,pf8x00-regulator.yaml
-index 8761437ed8ad..aabf50f5b39e 100644
---- a/Documentation/devicetree/bindings/regulator/nxp,pf8x00-regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/nxp,pf8x00-regulator.yaml
-@@ -83,7 +83,8 @@ properties:
- 
-         unevaluatedProperties: false
- 
--      "^vsnvs$":
-+    properties:
-+      vsnvs:
-         type: object
-         $ref: regulator.yaml#
-         description:
-diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-index faef4f6f55b8..8246891602e7 100644
---- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-@@ -79,22 +79,7 @@ properties:
-     description:
-       The SPI controller acts as a slave, instead of a master.
- 
--allOf:
--  - if:
--      not:
--        required:
--          - spi-slave
--    then:
--      properties:
--        "#address-cells":
--          const: 1
--    else:
--      properties:
--        "#address-cells":
--          const: 0
--
--patternProperties:
--  "^slave$":
-+  slave:
-     type: object
- 
-     properties:
-@@ -105,6 +90,7 @@ patternProperties:
-     required:
-       - compatible
- 
-+patternProperties:
-   "^.*@[0-9a-f]+$":
-     type: object
- 
-@@ -180,6 +166,20 @@ patternProperties:
-       - compatible
-       - reg
- 
-+allOf:
-+  - if:
-+      not:
-+        required:
-+          - spi-slave
-+    then:
-+      properties:
-+        "#address-cells":
-+          const: 1
-+    else:
-+      properties:
-+        "#address-cells":
-+          const: 0
-+
- additionalProperties: true
- 
- examples:
+The first four patches contain cleanups that make some of these
+callbacks (more obviously) always return 0. They are acked by the
+respective maintainers. Bjorn Helgaas explicitly asked to include the
+pci patch (#1) into this series, so Greg taking this is fine. I assume
+the s390 people are fine with Greg taking patches #2 to #4, too, they
+didn't explicitly said so though.
+
+The last patch actually changes the prototype and so touches quite some
+drivers and has the potential to conflict with future developments, so I
+consider it beneficial to put these patches into next soon. I expect
+that it will be Greg who takes the complete series, he already confirmed
+via irc (for v2) to look into this series.
+
+The only change compared to v3 is in the fourth patch where I modified a
+few more drivers to fix build failures. Some of them were found by build
+bots (thanks!), some of them I found myself using a regular expression
+search. The newly modified files are:
+
+ arch/sparc/kernel/vio.c
+ drivers/nubus/bus.c
+ drivers/sh/superhyway/superhyway.c
+ drivers/vlynq/vlynq.c
+ drivers/zorro/zorro-driver.c
+ sound/ac97/bus.c
+
+Best regards
+Uwe
+
+Uwe Kleine-König (5):
+  PCI: endpoint: Make struct pci_epf_driver::remove return void
+  s390/cio: Make struct css_driver::remove return void
+  s390/ccwgroup: Drop if with an always false condition
+  s390/scm: Make struct scm_driver::remove return void
+  bus: Make remove callback return void
+
+ arch/arm/common/locomo.c                  | 3 +--
+ arch/arm/common/sa1111.c                  | 4 +---
+ arch/arm/mach-rpc/ecard.c                 | 4 +---
+ arch/mips/sgi-ip22/ip22-gio.c             | 3 +--
+ arch/parisc/kernel/drivers.c              | 5 ++---
+ arch/powerpc/platforms/ps3/system-bus.c   | 3 +--
+ arch/powerpc/platforms/pseries/ibmebus.c  | 3 +--
+ arch/powerpc/platforms/pseries/vio.c      | 3 +--
+ arch/s390/include/asm/eadm.h              | 2 +-
+ arch/sparc/kernel/vio.c                   | 4 +---
+ drivers/acpi/bus.c                        | 3 +--
+ drivers/amba/bus.c                        | 4 +---
+ drivers/base/auxiliary.c                  | 4 +---
+ drivers/base/isa.c                        | 4 +---
+ drivers/base/platform.c                   | 4 +---
+ drivers/bcma/main.c                       | 6 ++----
+ drivers/bus/sunxi-rsb.c                   | 4 +---
+ drivers/cxl/core.c                        | 3 +--
+ drivers/dax/bus.c                         | 4 +---
+ drivers/dma/idxd/sysfs.c                  | 4 +---
+ drivers/firewire/core-device.c            | 4 +---
+ drivers/firmware/arm_scmi/bus.c           | 4 +---
+ drivers/firmware/google/coreboot_table.c  | 4 +---
+ drivers/fpga/dfl.c                        | 4 +---
+ drivers/hid/hid-core.c                    | 4 +---
+ drivers/hid/intel-ish-hid/ishtp/bus.c     | 4 +---
+ drivers/hv/vmbus_drv.c                    | 5 +----
+ drivers/hwtracing/intel_th/core.c         | 4 +---
+ drivers/i2c/i2c-core-base.c               | 5 +----
+ drivers/i3c/master.c                      | 4 +---
+ drivers/input/gameport/gameport.c         | 3 +--
+ drivers/input/serio/serio.c               | 3 +--
+ drivers/ipack/ipack.c                     | 4 +---
+ drivers/macintosh/macio_asic.c            | 4 +---
+ drivers/mcb/mcb-core.c                    | 4 +---
+ drivers/media/pci/bt8xx/bttv-gpio.c       | 3 +--
+ drivers/memstick/core/memstick.c          | 3 +--
+ drivers/mfd/mcp-core.c                    | 3 +--
+ drivers/misc/mei/bus.c                    | 4 +---
+ drivers/misc/tifm_core.c                  | 3 +--
+ drivers/mmc/core/bus.c                    | 4 +---
+ drivers/mmc/core/sdio_bus.c               | 4 +---
+ drivers/net/netdevsim/bus.c               | 3 +--
+ drivers/ntb/core.c                        | 4 +---
+ drivers/ntb/ntb_transport.c               | 4 +---
+ drivers/nubus/bus.c                       | 6 ++----
+ drivers/nvdimm/bus.c                      | 3 +--
+ drivers/pci/endpoint/pci-epf-core.c       | 7 ++-----
+ drivers/pci/pci-driver.c                  | 3 +--
+ drivers/pcmcia/ds.c                       | 4 +---
+ drivers/platform/surface/aggregator/bus.c | 4 +---
+ drivers/platform/x86/wmi.c                | 4 +---
+ drivers/pnp/driver.c                      | 3 +--
+ drivers/rapidio/rio-driver.c              | 4 +---
+ drivers/rpmsg/rpmsg_core.c                | 7 ++-----
+ drivers/s390/block/scm_drv.c              | 4 +---
+ drivers/s390/cio/ccwgroup.c               | 6 +-----
+ drivers/s390/cio/chsc_sch.c               | 3 +--
+ drivers/s390/cio/css.c                    | 7 +++----
+ drivers/s390/cio/css.h                    | 2 +-
+ drivers/s390/cio/device.c                 | 9 +++------
+ drivers/s390/cio/eadm_sch.c               | 4 +---
+ drivers/s390/cio/scm.c                    | 5 +++--
+ drivers/s390/cio/vfio_ccw_drv.c           | 3 +--
+ drivers/s390/crypto/ap_bus.c              | 4 +---
+ drivers/scsi/scsi_debug.c                 | 3 +--
+ drivers/sh/superhyway/superhyway.c        | 8 ++------
+ drivers/siox/siox-core.c                  | 4 +---
+ drivers/slimbus/core.c                    | 4 +---
+ drivers/soc/qcom/apr.c                    | 4 +---
+ drivers/spi/spi.c                         | 4 +---
+ drivers/spmi/spmi.c                       | 3 +--
+ drivers/ssb/main.c                        | 4 +---
+ drivers/staging/fieldbus/anybuss/host.c   | 4 +---
+ drivers/staging/greybus/gbphy.c           | 4 +---
+ drivers/target/loopback/tcm_loop.c        | 5 ++---
+ drivers/thunderbolt/domain.c              | 4 +---
+ drivers/tty/serdev/core.c                 | 4 +---
+ drivers/usb/common/ulpi.c                 | 4 +---
+ drivers/usb/serial/bus.c                  | 4 +---
+ drivers/usb/typec/bus.c                   | 4 +---
+ drivers/vdpa/vdpa.c                       | 4 +---
+ drivers/vfio/mdev/mdev_driver.c           | 4 +---
+ drivers/virtio/virtio.c                   | 3 +--
+ drivers/vlynq/vlynq.c                     | 4 +---
+ drivers/vme/vme.c                         | 4 +---
+ drivers/xen/xenbus/xenbus.h               | 2 +-
+ drivers/xen/xenbus/xenbus_probe.c         | 4 +---
+ drivers/zorro/zorro-driver.c              | 3 +--
+ include/linux/device/bus.h                | 2 +-
+ include/linux/pci-epf.h                   | 2 +-
+ sound/ac97/bus.c                          | 6 ++----
+ sound/aoa/soundbus/core.c                 | 4 +---
+ 93 files changed, 107 insertions(+), 263 deletions(-)
+
+
+base-commit: e73f0f0ee7541171d89f2e2491130c7771ba58d3
 -- 
-2.27.0
+2.30.2
 
