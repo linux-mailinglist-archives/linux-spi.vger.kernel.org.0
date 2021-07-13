@@ -2,48 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E30D3C70C8
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Jul 2021 14:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11AAC3C70C9
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Jul 2021 14:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236414AbhGMNAo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 13 Jul 2021 09:00:44 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:49664 "EHLO
+        id S236444AbhGMNAp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 13 Jul 2021 09:00:45 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:49672 "EHLO
         fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236258AbhGMNAn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Jul 2021 09:00:43 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 16DCvpQ7069668;
-        Tue, 13 Jul 2021 07:57:51 -0500
+        with ESMTP id S236420AbhGMNAp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 13 Jul 2021 09:00:45 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 16DCvsmG069678;
+        Tue, 13 Jul 2021 07:57:54 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1626181071;
-        bh=8+U3+hf/RxO832fzd5pE5Pkprza+cUV+ZZiHMspwBxg=;
+        s=ti-com-17Q1; t=1626181074;
+        bh=Ui/KPZbAU38b0wA6rcSDGQuKj8dI11hQRsYTACt6x30=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=IqvM2GHeSqVbT72HbgkhLv6PkdsZrqxVwiH9YhgpS+eI/sgejYXuanNOdtZfLLT1G
-         TqaH8hO+Aa+ScZ4Ru38BG4W687E3ecBNqzPd4Vw+OTzuM9G4CsFMGkd/yYLV1KX5jz
-         woLfJ/r/h59RmjoHYymT+stJVqt9FCeIKz6/ZEA0=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 16DCvpOL088289
+        b=DJtEsKQdwsMI4Ws50N2qSqcZ1WqNQTh4N4A/W7Sekse5w40EyeRRH1zE5ALSfkstc
+         l/gOKpIzWnLdNxdeWgSxRLT2wy5TIWqw9zCqhp65cwVpmvyDQ5y+ixrqvU6UTkGWoP
+         4GvLvljWW3T0ACNpChA6iYgQSGnjZdo7411Yn0xY=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 16DCvse1074049
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 13 Jul 2021 07:57:51 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 13 Jul 2021 07:57:54 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Tue, 13
- Jul 2021 07:57:51 -0500
+ Jul 2021 07:57:54 -0500
 Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE104.ent.ti.com
  (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Tue, 13 Jul 2021 07:57:51 -0500
+ Frontend Transport; Tue, 13 Jul 2021 07:57:54 -0500
 Received: from LT5CD112GSQZ.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 16DCvh0W067892;
-        Tue, 13 Jul 2021 07:57:48 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 16DCvh0X067892;
+        Tue, 13 Jul 2021 07:57:51 -0500
 From:   Apurva Nandan <a-nandan@ti.com>
 To:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     Apurva Nandan <a-nandan@ti.com>, Pratyush Yadav <p.yadav@ti.com>,
         Vignesh Raghavendra <vigneshr@ti.com>
-Subject: [PATCH 1/2] spi: cadence-quadspi: Disable Auto-HW polling
-Date:   Tue, 13 Jul 2021 12:57:41 +0000
-Message-ID: <20210713125743.1540-2-a-nandan@ti.com>
+Subject: [PATCH 2/2] spi: cadence-quadspi: Fix check condition for DTR ops
+Date:   Tue, 13 Jul 2021 12:57:42 +0000
+Message-ID: <20210713125743.1540-3-a-nandan@ti.com>
 X-Mailer: git-send-email 2.31.1.windows.1
 In-Reply-To: <20210713125743.1540-1-a-nandan@ti.com>
 References: <20210713125743.1540-1-a-nandan@ti.com>
@@ -55,65 +55,50 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-cadence-quadspi has a builtin Auto-HW polling funtionality using which
-it keep tracks of completion of write operations. When Auto-HW polling
-is enabled, it automatically initiates status register read operation,
-until the flash clears its busy bit.
+buswidth and dtr fields in spi_mem_op are only valid when the
+corresponding spi_mem_op phase has a non-zero length. For example,
+SPI NAND core doesn't set buswidth when using SPI_MEM_OP_NO_ADDR
+phase.
 
-cadence-quadspi controller doesn't allow an address phase when
-auto-polling the busy bit on the status register. Unlike SPI NOR
-flashes, SPI NAND flashes do require the address of status register
-when polling the busy bit using the read register operation. As
-Auto-HW polling is enabled by default, cadence-quadspi returns a
-timeout for every write operation after an indefinite amount of
-polling on SPI NAND flashes.
-
-Disable Auto-HW polling completely as the spi-nor core, spinand core,
-etc. take care of polling the busy bit on their own.
+Fix the dtr checks in set_protocol() and suppports_mem_op() to
+ignore empty spi_mem_op phases, as checking for dtr field in
+empty phase will result in false negatives.
 
 Signed-off-by: Apurva Nandan <a-nandan@ti.com>
 ---
- drivers/spi/spi-cadence-quadspi.c | 27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
+ drivers/spi/spi-cadence-quadspi.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 7a00346ff9b9..a2e1f4ce8b3e 100644
+index a2e1f4ce8b3e..a884678e8dff 100644
 --- a/drivers/spi/spi-cadence-quadspi.c
 +++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -797,19 +797,20 @@ static int cqspi_write_setup(struct cqspi_flash_pdata *f_pdata,
- 	reg = cqspi_calc_rdreg(f_pdata);
- 	writel(reg, reg_base + CQSPI_REG_RD_INSTR);
+@@ -322,7 +322,9 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
+ 	f_pdata->inst_width = CQSPI_INST_TYPE_SINGLE;
+ 	f_pdata->addr_width = CQSPI_INST_TYPE_SINGLE;
+ 	f_pdata->data_width = CQSPI_INST_TYPE_SINGLE;
+-	f_pdata->dtr = op->data.dtr && op->cmd.dtr && op->addr.dtr;
++	f_pdata->dtr = op->cmd.dtr &&
++		       (op->addr.dtr || !op->addr.nbytes) &&
++		       (op->data.dtr || !op->data.nbytes);
  
--	if (f_pdata->dtr) {
--		/*
--		 * Some flashes like the cypress Semper flash expect a 4-byte
--		 * dummy address with the Read SR command in DTR mode, but this
--		 * controller does not support sending address with the Read SR
--		 * command. So, disable write completion polling on the
--		 * controller's side. spi-nor will take care of polling the
--		 * status register.
--		 */
--		reg = readl(reg_base + CQSPI_REG_WR_COMPLETION_CTRL);
--		reg |= CQSPI_REG_WR_DISABLE_AUTO_POLL;
--		writel(reg, reg_base + CQSPI_REG_WR_COMPLETION_CTRL);
--	}
-+	/*
-+	 * SPI NAND flashes require the address of the status register to be
-+	 * passed in the Read SR command. Also, some SPI NOR flashes like the
-+	 * cypress Semper flash expect a 4-byte dummy address in the Read SR
-+	 * command in DTR mode.
-+	 *
-+	 * But this controller does not support address phase in the Read SR
-+	 * command when doing auto-HW polling. So, disable write completion
-+	 * polling on the controller's side. spinand and spi-nor will take
-+	 * care of polling the status register.
-+	 */
-+	reg = readl(reg_base + CQSPI_REG_WR_COMPLETION_CTRL);
-+	reg |= CQSPI_REG_WR_DISABLE_AUTO_POLL;
-+	writel(reg, reg_base + CQSPI_REG_WR_COMPLETION_CTRL);
+ 	switch (op->data.buswidth) {
+ 	case 0:
+@@ -1225,8 +1227,12 @@ static bool cqspi_supports_mem_op(struct spi_mem *mem,
+ {
+ 	bool all_true, all_false;
  
- 	reg = readl(reg_base + CQSPI_REG_SIZE);
- 	reg &= ~CQSPI_REG_SIZE_ADDRESS_MASK;
+-	all_true = op->cmd.dtr && op->addr.dtr && op->dummy.dtr &&
+-		   op->data.dtr;
++	/* op->dummy.dtr is checked when converting nbytes into ncycles.*/
++	all_true = op->cmd.dtr &&
++		   (op->addr.dtr || !op->addr.nbytes) &&
++		   (op->dummy.dtr || !op->dummy.nbytes) &&
++		   (op->data.dtr || !op->data.nbytes);
++
+ 	all_false = !op->cmd.dtr && !op->addr.dtr && !op->dummy.dtr &&
+ 		    !op->data.dtr;
+ 
 -- 
 2.17.1
 
