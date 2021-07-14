@@ -2,79 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A50503C838A
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Jul 2021 13:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B9E3C83E2
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Jul 2021 13:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239090AbhGNLSV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 14 Jul 2021 07:18:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44048 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239078AbhGNLSV (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 14 Jul 2021 07:18:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A72A8613B2;
-        Wed, 14 Jul 2021 11:15:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626261330;
-        bh=gln4o9RYzRUbHOmzZqjlvV9yan+8+ZdEpUYMAg5gL/o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oKMWmnZStjX2CGk2zjgDWd8X8ttujb7VrM/P4zovZfZH35IfrCIvb91yoG84Wx2aW
-         MgKYD8aBlwy0J/5fxgNEQqLUSC/McZ265/AOgb64FzufAe1o6PeeawnZFcI+cIVzyY
-         saubQqi4nY2uFzaCX3mrKcbrFYYMOKIkYFkORC+hvXhmHhf/FvpqAHNlB60tBsjat5
-         8KpvKz8V/B0TAUPxFDcg667k9h5U5EZO6OOtOUxiqSr4iCjJO6SkKO1EWfVu7EO9Q0
-         hRj2eie/pM4Zc28xgIlhj6Fda21Dep2ZcCfRv4xCjdPsL/cojUselnyrXbXK7eC5UT
-         KDG1DMBkciKOQ==
-Date:   Wed, 14 Jul 2021 12:14:53 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Troy Kisky <troy.kisky@boundarydevices.com>,
-        linux-hwmon@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Move fixed string 'patternProperties' to
- 'properties'
-Message-ID: <20210714111453.GA4719@sirena.org.uk>
-References: <20210713193514.690894-1-robh@kernel.org>
+        id S230509AbhGNLdK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 14 Jul 2021 07:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48488 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238362AbhGNLdI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 14 Jul 2021 07:33:08 -0400
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7E9C061764
+        for <linux-spi@vger.kernel.org>; Wed, 14 Jul 2021 04:30:17 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:39cc:190a:2775:cfe7])
+        by laurent.telenet-ops.be with bizsmtp
+        id UzWF2500Q1ccfby01zWF5D; Wed, 14 Jul 2021 13:30:15 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1m3d5j-0017bO-1o; Wed, 14 Jul 2021 13:30:15 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1m3d5i-00A9SG-Bi; Wed, 14 Jul 2021 13:30:14 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] dt-bindings: memory: renesas,rpc-if: Miscellaneous improvements
+Date:   Wed, 14 Jul 2021 13:30:13 +0200
+Message-Id: <d430f9c06d6691fe8a98f923cdb7ca13772834b1.1626262043.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Kj7319i9nmIyA2yE"
-Content-Disposition: inline
-In-Reply-To: <20210713193514.690894-1-robh@kernel.org>
-X-Cookie: C for yourself.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+  - Add missing "#{address,size}-cells",
+  - Fix rejection of legitimate flash subnodes containing multiple
+    compatible values,
+  - Add missing list of required properties.
 
---Kj7319i9nmIyA2yE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ .../memory-controllers/renesas,rpc-if.yaml    | 23 ++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
-On Tue, Jul 13, 2021 at 01:35:14PM -0600, Rob Herring wrote:
-> There's no need for fixed strings to be under 'patternProperties', so move
-> them under 'properties' instead.
+diff --git a/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml b/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
+index 990489fdd2ac33fe..c0d899a2305361b1 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
+@@ -56,17 +56,34 @@ properties:
+   resets:
+     maxItems: 1
+ 
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
+ patternProperties:
+   "flash@[0-9a-f]+$":
+     type: object
+     properties:
+       compatible:
+-        enum:
+-          - cfi-flash
+-          - jedec,spi-nor
++        contains:
++          enum:
++            - cfi-flash
++            - jedec,spi-nor
+ 
+ unevaluatedProperties: false
+ 
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++  - power-domains
++  - resets
++  - '#address-cells'
++  - '#size-cells'
++
+ examples:
+   - |
+     #include <dt-bindings/clock/renesas-cpg-mssr.h>
+-- 
+2.25.1
 
-Acked-by: Mark Brown <broonie@kernel.org>
-
---Kj7319i9nmIyA2yE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmDuxywACgkQJNaLcl1U
-h9Bc7wf/VFIPyyWWMsNINwBGSVPcM1hXRLA6fZcXy+7sLbycWy8SufjBoG59RLn/
-C4HNt7T8YDEdRgHUu7T0wfXxdfObm8W2RleX8FPEZ7IjD1e7/tY1+cNBBOQNdTdT
-T4s9TLh4c0aVjTXwB6TGAANL9kk7kS/bNwpxtnpb1P1rHAvcGyk/vkYNPs9m97MO
-KKkpVAzJoJpX9nQxUq+u/xdXkLawzGwA4lv+2Y2XPC0DwWLVGNB6al6tiU/sPlry
-pJ+ndFbDfT0lFWG8ZQbnpNW7aDy+ez12Lz6Fksi6s1eEKTCkmNd8FElGbJyAwiIR
-m6LUlCuJM3gflOnm28ExPSQjRXv9Qg==
-=583K
------END PGP SIGNATURE-----
-
---Kj7319i9nmIyA2yE--
