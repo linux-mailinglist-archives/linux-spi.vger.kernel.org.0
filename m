@@ -2,78 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E12893C8953
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Jul 2021 19:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4953C8A34
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Jul 2021 19:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbhGNRJa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 14 Jul 2021 13:09:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54418 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229591AbhGNRJa (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 14 Jul 2021 13:09:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 091C760698;
-        Wed, 14 Jul 2021 17:06:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626282398;
-        bh=jNlgPMgZN4EpeXdbNIPWr2KBnHm3nge8Gn/GKjF3UcM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ILSC5K0tDOrDr4SlSUXGH6bqhvwLgftnZt5TJjGqh2as10U6G16uGvu7X/IsbyXpz
-         tlmngxBsxhiLjdEjrgqvGNC8lgMNrIT6J+B3EizyztvYsVj/3s+RiGnL7Zf3GabA5L
-         k7uhx6G6WxD5HkgrFX6ZQcZuSkiw3yav0ww78VaondYtDEXQQGN35lI06p+785kN2X
-         IYwwdQTF/d5ijNVY5FsUm6WCYtvAavJ0NvsGYErZU2zXEiNq5wT5SgMAnsC/obX+F/
-         CJwbDpN2GfkYJOpvS+si33nSTNIYe6+pZ/1fD6nbrgUJ8JTVDN56jDLZluXx7YZ8q4
-         rW7/LCxlqcW+A==
-Date:   Wed, 14 Jul 2021 18:06:01 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Apurva Nandan <a-nandan@ti.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Pratyush Yadav <p.yadav@ti.com>
-Subject: Re: [PATCH 01/13] spi: spi-mem: Add DTR templates for cmd, address,
- dummy and data phase
-Message-ID: <20210714170601.GH4719@sirena.org.uk>
-References: <20210713130538.646-1-a-nandan@ti.com>
- <20210713130538.646-2-a-nandan@ti.com>
+        id S230189AbhGNRy6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 14 Jul 2021 13:54:58 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:50116 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230126AbhGNRy6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 14 Jul 2021 13:54:58 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 16EHq5G6082091;
+        Wed, 14 Jul 2021 12:52:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1626285125;
+        bh=JziqwQOA18s/BhyA6d+1O9yvyc7NI67Qf+66o6UqUpQ=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=Rn8SOkQ9N8AwxZ0/ShnJqcNoW7Ma/wJjTO1MTND6MnlCU2mRBwjxBUNAEtUkmxtxb
+         5Xr2TEl36nvRVnyYxecYMPO54JvqN0g1mDLQ9f024RAyxdQSQjUrpjUNH5RJ0t79jQ
+         0zU6oePpTwLTuacacU9hqsg5YSeV12Fy9qYKyx2g=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 16EHq5ts079532
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 14 Jul 2021 12:52:05 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Wed, 14
+ Jul 2021 12:52:05 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Wed, 14 Jul 2021 12:52:04 -0500
+Received: from [10.250.234.142] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 16EHq0es100061;
+        Wed, 14 Jul 2021 12:52:01 -0500
+Subject: Re: [PATCH 1/2] spi: cadence-quadspi: Disable Auto-HW polling
+To:     Mark Brown <broonie@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+References: <20210713125743.1540-1-a-nandan@ti.com>
+ <20210713125743.1540-2-a-nandan@ti.com> <20210713182550.GG4098@sirena.org.uk>
+ <f1947183-81d2-3519-d25f-71d93f59e434@ti.com>
+ <20210714162805.GE4719@sirena.org.uk>
+From:   Apurva Nandan <a-nandan@ti.com>
+Message-ID: <dfa38823-b63f-1807-6141-682930de2f3a@ti.com>
+Date:   Wed, 14 Jul 2021 23:21:59 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MP5ln1Rcf9Bvi+ZW"
-Content-Disposition: inline
-In-Reply-To: <20210713130538.646-2-a-nandan@ti.com>
-X-Cookie: C for yourself.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210714162805.GE4719@sirena.org.uk>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---MP5ln1Rcf9Bvi+ZW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Tue, Jul 13, 2021 at 01:05:26PM +0000, Apurva Nandan wrote:
-> Setting dtr field of spi_mem_op is useful when creating templates
-> for DTR ops in spinand.h. Also, 2 bytes cmd phases are required when
-> operating in Octal DTR SPI mode.
+On 14-Jul-21 9:58 PM, Mark Brown wrote:
+> On Wed, Jul 14, 2021 at 06:52:12PM +0530, Nandan, Apurva wrote:
+>> On 13-Jul-21 11:55 PM, Mark Brown wrote:
+>>> On Tue, Jul 13, 2021 at 12:57:41PM +0000, Apurva Nandan wrote:
+> 
+>>>> cadence-quadspi controller doesn't allow an address phase when
+>>>> auto-polling the busy bit on the status register. Unlike SPI NOR
+> 
+>>> Would it not be better to only disable this on NAND rather than
+>>> disabling it completely?
+> 
+>> I am not sure how it is possible currently in the controller, could you
+>> please suggest a way? Also, should we have this logic of checking flash
+>> device type in the cadence-quadspi controller? SPI controller should be
+>> generic to all flash cores right?
+> 
+> Surely the controller can tell if an address phase (or other unsupported
+> feature) is present?
+> 
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Yeah sure, understood.
 
---MP5ln1Rcf9Bvi+ZW
-Content-Type: application/pgp-signature; name="signature.asc"
+>> In my opinion, it shouldn't harm as spi-nor core doesn't depend on HW
+>> polling anyways and auto-HW polling is a minor overhead.
+> 
+> Flash stuff seems to quite often end up happening when the system is
+> heavily loaded for other reasons, it's much more of an issue with things
+> that are done more with PIO but still seems useful to avoid having to
+> poll in software, either it'll reduce CPU load or reduce latency and
+> increase throughput.
+> 
 
------BEGIN PGP SIGNATURE-----
+Yes, got the point. Will amend it.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmDvGXgACgkQJNaLcl1U
-h9CuOgf+OZwzBjuqfvGXu9HhhtOFIDOriNVdP8bqqDTVfmTIZw5qLXv2KsASJQbR
-67Y0bQeUvlIfaOboTjdE5OWWKavRE+3VASCjAShLl4QrYigm6RKXfK8YEAWIg2Ia
-sJhBSQGr+wCNcRyT1OF8p1QNW5rQanlqTS54Vuyy9PISDO2YCmMnngOLe/0LrKaB
-AATXpiINw2//4wZQz5PFSZYNRp4BarGHps9ZpcV1SSApVTD9sOpCPd1lkTXRWP/4
-72P+tfVCerB3REvELGRMbVs7Gg21xfwWC2S67QzprmQ/1jYSRGd7DV25i74tZIEw
-A189cTmusslEmBTPQnZVvNaakXWlzg==
-=RuqX
------END PGP SIGNATURE-----
-
---MP5ln1Rcf9Bvi+ZW--
+Thanks,
+Apurva Nandan
