@@ -2,48 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2D03CA36C
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jul 2021 18:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBBF23CA42B
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jul 2021 19:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbhGOQ7b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 15 Jul 2021 12:59:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49218 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229553AbhGOQ7b (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 15 Jul 2021 12:59:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 184AE613EB;
-        Thu, 15 Jul 2021 16:56:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626368198;
-        bh=5ij3ir22ruZbsESJNNPKbLskGS0aSb3MrxsOeIo1JWo=;
-        h=Subject:From:Date:To:From;
-        b=piiahMscsY1tl/PVOkD5FvmwUVSy2mCbTl8DnKHggO527in7TQi52EYrsEWeHXGz3
-         FtVA2yNWQa6MiL8nT35VsEILx0Ss7iRs38EW2vmForviQrin8R9/qtHOhgZQUplLas
-         gpeezBMszu7d0DHcC5+o772WPd7WbKut7sKPumohe4QQdh1+ZFOoz+SjaAq1Yxeat1
-         MRXE663ruVvu3pCGOhHyeVRek3v0DR9AlAzMClT5KRUg9ZRojM7+MqLNFTI0R8NAj1
-         iwIOWb9qTQ1zYz63zgTEEzA37YTGoKDcl7rekZ8RriBvlQOJ9naRTsHsUO16G9HWnu
-         EeiJkSGVGmGOA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 07CC1609B8;
-        Thu, 15 Jul 2021 16:56:38 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S231783AbhGOR20 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 15 Jul 2021 13:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234448AbhGOR20 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 15 Jul 2021 13:28:26 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C3EC061762
+        for <linux-spi@vger.kernel.org>; Thu, 15 Jul 2021 10:25:32 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id g12so5093837qtb.2
+        for <linux-spi@vger.kernel.org>; Thu, 15 Jul 2021 10:25:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
+        b=VEbievBeLXzXz2IFTCJlfsSW3SGnPx5BRLHAunZVXukgfJX3HSSAUxCtdiKf61hv/8
+         dEjk1vTJjxHihT0WA1OL/uEOLbisu+eOZ9QBM+pSgOr0g3iviST/L7UaXer3M8NeFmjI
+         cUcDXANijM5RzePSgHNEUg4tiAZJvw7xY2717+o5bCXGYbN3j0in5RSdJSiv5QmZpfXV
+         xJwXiiE0C1Gs4ldNfG+SItE+RoyPJtAgR4hB34JMXRrPZxzy82ifiVVChBVQnRUKYafC
+         pLvyRURLCMNCEs5zTTafGrQe1zI12ARsnWy7gNJNMcFCKTa1+89JJPFI0mohmLMeae0x
+         ASdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
+        b=BCqO/fCWX2moSg/mQ0MqoERBYrxF7okRkJbFIJkDVoSAXQFakwp6fxB3koeCcKb0ju
+         mgqyupTJBDRWg25n8qRu28vk6o/7WHuraHaRCcVc2JJff4HNH+4vSahRoWLilhw/EMnE
+         76szrukebjXeV37OTuu9l88NvhNJUWrDagnZJS8hZYgV34m5f/aclwrfuBLYDj51qQ3M
+         SCW4c1py+8ilptgtsVNn/Rz+2Y9wfHtICKTRHEVxPlikje8gQCx+HnYWkk+7wJFVIvyg
+         bqovtdKES+vR5YEmJMzAxS7CURf5hA0ZGrs5ONnOmlOFsho6LxDMCJXE8iruT/o7JDYr
+         37Cg==
+X-Gm-Message-State: AOAM530+0uWAxJRvpcQOSlVTC+X3L1/XPPjjIRf0IcjetofYcz3ucevp
+        4M+Goqb9oTT08uAn/aPqmSKQDv7K9RvOzw9gn3B/A9pJFdFWgu/q
+X-Google-Smtp-Source: ABdhPJyVA6gR/njuabWs2C2fW8gelCsYJFEl6/1qckwAKb5sFvak5SWUy5PHC6/Yk0GlmffBpcH6FQwcd62hdQoqBbA=
+X-Received: by 2002:a37:9947:: with SMTP id b68mr5263725qke.56.1626369920992;
+ Thu, 15 Jul 2021 10:25:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <162636819797.9816.15792144254497261518.git-patchwork-housekeeping@kernel.org>
-Date:   Thu, 15 Jul 2021 16:56:37 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Received: by 2002:a0c:e502:0:0:0:0:0 with HTTP; Thu, 15 Jul 2021 10:25:20
+ -0700 (PDT)
+Reply-To: faty.muhamad@gmail.com
+From:   Ms Fatima Muhammad <steveokoh.fedexdeliveryagent@gmail.com>
+Date:   Thu, 15 Jul 2021 17:25:20 +0000
+Message-ID: <CAFKwDuBfMzCdHqoenSL2rqjnW5tE27dPjiWKbgxM_hjsa-G7pg@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v3] spi: spi-cadence-quadspi: Fix division by zero warning (2021-07-15T16:21:32)
-  Superseding: [v2] spi: spi-cadence-quadspi: Fix division by zero warning (2021-07-15T00:46:30):
-    [v2] spi: spi-cadence-quadspi: Fix division by zero warning
+Hello Dear,
 
+My name is Ms.Fatima Muhammad., Please forgive me for stressing you
+with my predicaments and I sorry to approach you through this media
+because is serves the fastest means of  my communication right now,
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I came across your Email from my personal search and I decided to
+contact you believing you will be honest to fulfill my business
+proposal which I believe that will be a very good opportunity for both
+of us. Please it is my pleasure to contact you today for a business
+partnership investments projects worth $4.6 million USD which I intend
+to establish in your country..
 
+Pls If this business proposal offends your moral and ethic values do
+accept my apology. therefore kindly contact me immediately if you are
+interested for more details.
+
+Thank you for your wiliness to help me
+Yours Sincerely Fatima Muhammad
