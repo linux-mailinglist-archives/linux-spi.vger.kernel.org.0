@@ -2,240 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3FED3CBDFF
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Jul 2021 22:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1233CBE11
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Jul 2021 22:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234530AbhGPUtw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Jul 2021 16:49:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:28083 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233227AbhGPUtw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Jul 2021 16:49:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1626468416;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y//emM5RtevFVuv02pvQEtLcPSNBoyUazVRqH8qhJrg=;
-        b=JIGPzBStEUzIsIAT7q+65zdNEzZQRL10MHn+SMKp4mQcR6PGC1lJwqSB53xH6RE91bptRh
-        zs44b8BTQ7TdzbttKGd+hnPDYwGO6gpcA7oA/QxTqBF24GHRme6kuqSgLAsjzaB+IPNsEg
-        kVqXUqzE0bKCYQf7o7tuKXucE1/0/X4=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-375-8wdhQ_g8PLOrx8KSqB-QzQ-1; Fri, 16 Jul 2021 16:46:55 -0400
-X-MC-Unique: 8wdhQ_g8PLOrx8KSqB-QzQ-1
-Received: by mail-qv1-f69.google.com with SMTP id bk10-20020a05621406eab02902d1aac9c421so7551755qvb.1
-        for <linux-spi@vger.kernel.org>; Fri, 16 Jul 2021 13:46:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=Y//emM5RtevFVuv02pvQEtLcPSNBoyUazVRqH8qhJrg=;
-        b=NrDPDIs6lVGhAzDNEwKFzA3BeophhIGwtlXXoFdMaWhrFQ6hy9nAQ5YRuoAnyFioX+
-         i+XtUnzA99NwH53/o8OMIbDGrzgvsBJN4ObP36a/k8MzezFyXZXM1O7d4rcqeocX5LMC
-         n25oh0XFTK6JDKsvKJMfvOhr2iUqabOzMIh1WBm1m4+ore47WXmeDqUIl0Hwkwh10eQ4
-         j4hsxajqu4F8Hthq4Q501wCR1vpbnwaGUV70GVEfXa22RCUkX8grP2TUm1N/HMigOrx+
-         MaWOsfhQta+OycPy8fiAxtLi9oujSNHJeg8waZiwG1PgT4SrcvuoDU7LGr7ZbRMqVyUb
-         Tuqw==
-X-Gm-Message-State: AOAM533h0G9qxlb/BiKf5JE/y9V0FQC4WkyhfoAMWYgLYGiY7UKq+qfZ
-        wESQLEqGA+zyoWZZtLKE/wXavfW1ryI9E9d/nMMRamCTDmo8bSNSXoAyQ1VNLZzLbP/RNJX3OvY
-        +hcRgocjASzz6G82nVUHo
-X-Received: by 2002:a37:411:: with SMTP id 17mr11848155qke.225.1626468415472;
-        Fri, 16 Jul 2021 13:46:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxwaeuIafGpIFBrSp6F2jqOQPtMysFqiFmqK2xpgV89hJlVXNri8ZgeOTcNwPS7r3jsl2qkvw==
-X-Received: by 2002:a37:411:: with SMTP id 17mr11848137qke.225.1626468415270;
-        Fri, 16 Jul 2021 13:46:55 -0700 (PDT)
-Received: from localhost.localdomain (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id k6sm3609100qtg.78.2021.07.16.13.46.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jul 2021 13:46:54 -0700 (PDT)
-Subject: Re: [PATCH v5 1/3] fpga: dfl: expose feature revision from struct
- dfl_device
-To:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>,
-        Wu Hao <hao.wu@intel.com>, Moritz Fischer <mdf@kernel.org>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Brown <broonie@kernel.org>
-Cc:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <mhu@silicom.dk>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>
-References: <20210716135441.3235863-1-martin@geanix.com>
- <20210716135441.3235863-2-martin@geanix.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <ec0f22f3-c7e5-baaf-c60c-77ecc4cb9e86@redhat.com>
-Date:   Fri, 16 Jul 2021 13:46:52 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S231462AbhGPU51 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Jul 2021 16:57:27 -0400
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:4776 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230415AbhGPU51 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Jul 2021 16:57:27 -0400
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16GKeMbw010026;
+        Fri, 16 Jul 2021 16:54:28 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com with ESMTP id 39tw63kv3b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Jul 2021 16:54:28 -0400
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 16GKsQit026940
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 16 Jul 2021 16:54:26 -0400
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.858.5;
+ Fri, 16 Jul 2021 16:54:26 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.858.5;
+ Fri, 16 Jul 2021 16:54:25 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.858.5 via Frontend Transport;
+ Fri, 16 Jul 2021 16:54:25 -0400
+Received: from localhost.localdomain ([10.48.65.12])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 16GKsNDS003387;
+        Fri, 16 Jul 2021 16:54:23 -0400
+From:   <alexandru.tachici@analog.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <broonie@kernel.org>
+CC:     <nuno.sa@analog.com>, <bootc@bootc.net>, <swarren@wwwdotorg.org>,
+        <bcm-kernel-feedback-list@broadcom.com>, <rjui@broadcom.com>,
+        <f.fainelli@gmail.com>, <nsaenz@kernel.org>,
+        Alexandru Tachici <alexandru.tachici@analog.com>
+Subject: [PATCH 0/1] spi: spi-bcm2835: Fix deadlock
+Date:   Sat, 17 Jul 2021 00:02:44 +0300
+Message-ID: <20210716210245.13240-1-alexandru.tachici@analog.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20210716135441.3235863-2-martin@geanix.com>
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=trix@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: jlKMay9owrbYfMeweS0lhRrhn6FYSULv
+X-Proofpoint-ORIG-GUID: jlKMay9owrbYfMeweS0lhRrhn6FYSULv
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-16_09:2021-07-16,2021-07-16 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ impostorscore=0 mlxlogscore=999 spamscore=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1011 phishscore=0 priorityscore=1501 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2107160131
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+From: Alexandru Tachici <alexandru.tachici@analog.com>
 
-On 7/16/21 6:54 AM, Martin Hundebøll wrote:
-> From: Martin Hundebøll <mhu@silicom.dk>
->
-> DFL device drivers have a common need for checking feature revision
-> information from the DFL header, as well as other common DFL information
-> like the already exposed feature id and type.
->
-> This patch exposes the feature revision information directly via the DFL
-> device data structure.
->
-> Since the DFL core code has already read the DFL header, this this patch
-> saves additional mmio reads from DFL device drivers too.
->
-> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
-> Acked-by: Wu Hao <hao.wu@intel.com>
-> Acked-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> ---
->
-> Changes since v4:
->   * Renamed 'rev' to 'revision' as per Tom's suggestion
->
-> Changes since v3:
->   * Added Hao's Acked-by
->   * Added Matthew's Acked-by
->
-> Changes since v2:
->   * Reworded commit message as per Hao's suggestion
->
-> Changes since v1:
->   * This patch replaces the previous patch 2 and exposes the feature
->     revision through struct dfl_device instead of a helper reading from
->     io-mem
->
->   drivers/fpga/dfl.c  | 27 +++++++++++++++++----------
->   drivers/fpga/dfl.h  |  1 +
->   include/linux/dfl.h |  1 +
->   3 files changed, 19 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-> index 511b20ff35a3..e73a70053906 100644
-> --- a/drivers/fpga/dfl.c
-> +++ b/drivers/fpga/dfl.c
-> @@ -381,6 +381,7 @@ dfl_dev_add(struct dfl_feature_platform_data *pdata,
->   
->   	ddev->type = feature_dev_id_type(pdev);
->   	ddev->feature_id = feature->id;
-> +	ddev->revision = feature->revision;
->   	ddev->cdev = pdata->dfl_cdev;
->   
->   	/* add mmio resource */
-> @@ -717,6 +718,7 @@ struct build_feature_devs_info {
->    */
->   struct dfl_feature_info {
->   	u16 fid;
-> +	u8 revision;
->   	struct resource mmio_res;
->   	void __iomem *ioaddr;
->   	struct list_head node;
-> @@ -796,6 +798,7 @@ static int build_info_commit_dev(struct build_feature_devs_info *binfo)
->   		/* save resource information for each feature */
->   		feature->dev = fdev;
->   		feature->id = finfo->fid;
-> +		feature->revision = finfo->revision;
->   
->   		/*
->   		 * the FIU header feature has some fundamental functions (sriov
-> @@ -910,19 +913,17 @@ static void build_info_free(struct build_feature_devs_info *binfo)
->   	devm_kfree(binfo->dev, binfo);
->   }
->   
-> -static inline u32 feature_size(void __iomem *start)
-> +static inline u32 feature_size(u64 value)
->   {
-> -	u64 v = readq(start + DFH);
-> -	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, v);
-> +	u32 ofst = FIELD_GET(DFH_NEXT_HDR_OFST, value);
->   	/* workaround for private features with invalid size, use 4K instead */
->   	return ofst ? ofst : 4096;
->   }
->   
-> -static u16 feature_id(void __iomem *start)
-> +static u16 feature_id(u64 value)
->   {
-> -	u64 v = readq(start + DFH);
-> -	u16 id = FIELD_GET(DFH_ID, v);
-> -	u8 type = FIELD_GET(DFH_TYPE, v);
-> +	u16 id = FIELD_GET(DFH_ID, value);
-> +	u8 type = FIELD_GET(DFH_TYPE, value);
->   
->   	if (type == DFH_TYPE_FIU)
->   		return FEATURE_ID_FIU_HEADER;
-> @@ -1021,10 +1022,15 @@ create_feature_instance(struct build_feature_devs_info *binfo,
->   	unsigned int irq_base, nr_irqs;
->   	struct dfl_feature_info *finfo;
->   	int ret;
-> +	u8 revision;
-> +	u64 v;
-> +
-> +	v = readq(binfo->ioaddr + ofst);
-> +	revision = FIELD_GET(DFH_REVISION, v);
->   
->   	/* read feature size and id if inputs are invalid */
-> -	size = size ? size : feature_size(binfo->ioaddr + ofst);
-> -	fid = fid ? fid : feature_id(binfo->ioaddr + ofst);
-> +	size = size ? size : feature_size(v);
-> +	fid = fid ? fid : feature_id(v);
->   
->   	if (binfo->len - ofst < size)
->   		return -EINVAL;
-> @@ -1038,6 +1044,7 @@ create_feature_instance(struct build_feature_devs_info *binfo,
->   		return -ENOMEM;
->   
->   	finfo->fid = fid;
-> +	finfo->revision = revision;
->   	finfo->mmio_res.start = binfo->start + ofst;
->   	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
->   	finfo->mmio_res.flags = IORESOURCE_MEM;
-> @@ -1166,7 +1173,7 @@ static int parse_feature_private(struct build_feature_devs_info *binfo,
->   {
->   	if (!is_feature_dev_detected(binfo)) {
->   		dev_err(binfo->dev, "the private feature 0x%x does not belong to any AFU.\n",
-> -			feature_id(binfo->ioaddr + ofst));
-> +			feature_id(readq(binfo->ioaddr + ofst)));
->   		return -EINVAL;
->   	}
->   
-> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> index 2b82c96ba56c..422157cfd742 100644
-> --- a/drivers/fpga/dfl.h
-> +++ b/drivers/fpga/dfl.h
-> @@ -243,6 +243,7 @@ struct dfl_feature_irq_ctx {
->   struct dfl_feature {
->   	struct platform_device *dev;
->   	u16 id;
-> +	u8 revision;
->   	int resource_index;
->   	void __iomem *ioaddr;
->   	struct dfl_feature_irq_ctx *irq_ctx;
-> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
-> index 6cc10982351a..431636a0dc78 100644
-> --- a/include/linux/dfl.h
-> +++ b/include/linux/dfl.h
-> @@ -38,6 +38,7 @@ struct dfl_device {
->   	int id;
->   	u16 type;
->   	u16 feature_id;
-> +	u8 revision;
->   	struct resource mmio_res;
->   	int *irqs;
->   	unsigned int num_irqs;
+The bcm2835_spi_transfer_one function can create a deadlock
+if it is called while another thread already has the
+CCF lock.
 
-Looks good to me.
+This behavior was observed at boot and when trying to
+print the clk_summary debugfs. I had registered
+at the time multiple clocks of AD9545 through the CCF.
+Tested this using an RPi 4 connected to AD9545 through SPI.
 
-Reviewed-by: Tom Rix <trix@redhat.com>
+See upstream attempt here:
+https://lore.kernel.org/lkml/20210614070718.78041-3-alexandru.tachici@analog.com/T/
 
+This can happen to any other clock that needs to read
+the rate/phase from hardware using the SPI. Because
+when issuing a clk_get_rate/phase, the requesting thread
+already holds the CCF lock. If another thread, in this case
+the one that does the spi transfer tries the same, it will cause
+a deadlock. This happens by chance because not always
+every spi request gets deferred to a khthread.
+
+Alexandru Tachici (1):
+  spi: spi-bcm2835: Fix deadlock
+
+ drivers/spi/spi-bcm2835.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+--
+2.25.1
