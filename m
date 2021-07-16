@@ -2,85 +2,80 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 460F93CBB35
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Jul 2021 19:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7F13CBB3C
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Jul 2021 19:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbhGPRfF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Jul 2021 13:35:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59974 "EHLO mail.kernel.org"
+        id S230270AbhGPRgd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Jul 2021 13:36:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60288 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229803AbhGPRfF (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 16 Jul 2021 13:35:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 96DA2613F7;
-        Fri, 16 Jul 2021 17:32:09 +0000 (UTC)
+        id S229803AbhGPRgd (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 16 Jul 2021 13:36:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B3381613FB;
+        Fri, 16 Jul 2021 17:33:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626456730;
-        bh=vDZVWlfbmxiRjGKfummSrKLwVkUlIL6GveWMuV3leqI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VRHA4iUbUIUNCoDLgcGmVH9ZgJQZB6iKUM6otb8VtftisJKew3G61IScku20zgNmd
-         B3u3ssL917Yj3oq5Mp8CFd8XUlaz92k0MRgtR9gQn6XT5///i4QPWuWjJAIR43Ym7b
-         sXq2HStTrOkGhQFDe8xEt2cCk7WmWLavrdt90mk5h1zEZx4fF57mTmQqH/jqiOyTYS
-         LknuJnhFg349/0WZap4XGmknP28L9NYhD4IoY+Z3kwMPB+8Pjv2PWsqQzpyS9/Pfm/
-         CBP8FP1NGeeVzZjxDymR3L638TVCFKZIZBjKE1fINt9dtrT3QHbSc+HjMwDEUAahsh
-         7MKJKCcwc1oGQ==
+        s=k20201202; t=1626456818;
+        bh=cf8WxUiyJPqIMeZaZvs8bmw2NGyFNYO33dlQ1WqpQrQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QhDbbSYvSCyTW3hYRZhJQb/Q8R13s9FjRMH/XFprr/6AMpWEjgsCoXhgZOxuhHzon
+         hyLnOsdx8fmBUHnicBp4dlktJuQnUaBO4BFl8A1bzRv9LcjNyXkwablWOj5cHuXNgf
+         tBxbbNQ893BphhUEtEZO8l8IgHosM9sRvKqey02Vp9zso+WmZPqsZejVl4epuEdM3y
+         aOoF/QPqXBHVZj/KCuUCv5z2WgMCPGepGSNZqBVkXPz2vVDLUpLRuq8hAlUElxyvXI
+         TSIlSSMACzMcU1SQWiIu2xPfhGR31fBDbzTaQDXcCDjnWTmTcUCB1vXTDDT8WbJ+IF
+         rUk+zSj4f5dFA==
+Date:   Fri, 16 Jul 2021 18:33:35 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Yoshitaka Ikeda <ikeda@nskint.co.jp>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Masahiro Mizutani <m.mizutani@nskint.co.jp>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-spi@vger.kernel.org, Ken Kurematsu <k.kurematsu@nskint.co.jp>
-Subject: Re: [PATCH v5 0/2] spi: spi-cadence-quadspi: Fix division by zero warning
-Date:   Fri, 16 Jul 2021 18:32:06 +0100
-Message-Id: <162645612392.26766.7752507436545897343.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <bd921311-5896-b228-ea6c-20e11dfe62e3@nskint.co.jp>
-References: <bd921311-5896-b228-ea6c-20e11dfe62e3@nskint.co.jp>
+To:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>
+Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] spi: spi-altera-dfl: support n5010 feature
+ revision
+Message-ID: <20210716173335.GC4137@sirena.org.uk>
+References: <20210716135441.3235863-1-martin@geanix.com>
+ <20210716135441.3235863-3-martin@geanix.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="raC6veAxrt5nqIoY"
+Content-Disposition: inline
+In-Reply-To: <20210716135441.3235863-3-martin@geanix.com>
+X-Cookie: do {
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 16 Jul 2021 14:31:24 +0000, Yoshitaka Ikeda wrote:
-> v5:
-> - Added Signed-off-by and Reviewed-by.
-> 
-> v4:
-> - Changed to better code.
-> 
-> v3:
-> - repost.
-> 
-> [...]
 
-Applied to
+--raC6veAxrt5nqIoY
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+On Fri, Jul 16, 2021 at 03:54:40PM +0200, Martin Hundeb=F8ll wrote:
+> From: Martin Hundeb=F8ll <mhu@silicom.dk>
+>=20
+> The Max10 BMC on the Silicom n5010 PAC is slightly different than the
+> existing BMCs, so use a dedicated feature revision detect it.
 
-Thanks!
+Acked-by: Mark Brown <broonie@kernel.org>
 
-[1/2] spi: spi-cadence-quadspi: Revert "Fix division by zero warning"
-      commit: 0ccfd1ba84a4503b509250941af149e9ebd605ca
-[2/2] spi: spi-cadence-quadspi: Fix division by zero warning
-      commit: 0e85ee897858b1c7a5de53f496d016899d9639c5
+--raC6veAxrt5nqIoY
+Content-Type: application/pgp-signature; name="signature.asc"
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-----BEGIN PGP SIGNATURE-----
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmDxwu4ACgkQJNaLcl1U
+h9DndAf+IqeWflVSPxKlrQ2Z+7ext9oSMMuq5l/EIJZmwdXPKSImWc8J0uocAxHw
++eWOQoyg6h96X3SyocivzrmsrVMUMmRvUZqT3tLIBqN4ihciC2HMCloVXpZpO8f5
+N5Rg6IMsYqpV03IaRERfLtVt/jmXNF7SVL+1H/wdCFYJVywJDcG8XYF/Z3dtmvhW
+kmOmGYimOAejLycEEZARLBD/zrRgOJ4fxgVAlHLEdT1gzYUJRhC6mpokpxtpH3fg
+QJpNf9HNKF7r7E2jGAsC5CUjWE0KwPR9OI9E9+R2A8hEk2Nqdon+hfieZyYyhCiJ
+w7oP4OEHfZEiPJZ46zTnkN4KhHyX5A==
+=1O5g
+-----END PGP SIGNATURE-----
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+--raC6veAxrt5nqIoY--
