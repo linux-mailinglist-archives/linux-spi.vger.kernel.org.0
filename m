@@ -2,101 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0763CB33B
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Jul 2021 09:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8394A3CB3AC
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Jul 2021 09:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235671AbhGPHav (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Jul 2021 03:30:51 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:33858 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbhGPHav (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Jul 2021 03:30:51 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 16G7RlHg060486;
-        Fri, 16 Jul 2021 02:27:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1626420467;
-        bh=RNfr0OhMRKLvkLe8LwsQdRr+TSvGCqTg4hp48Xk/1fc=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=iANpHh+DUfRO+EXdykNfsAyVzOU2j37rRlYA2E16goPkhV4vjdKp+1VEAhEHmLVEf
-         it+rYobOTnkh80c7sRwFXkqfOzxX78rv1al0ybYdK5v2NxmALJaRIKG9Zh66cI+9ED
-         kOh91udlycEbHnxSzqwNXUkqGTsBBH7Ill8i2wh4=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 16G7RlMM009432
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 16 Jul 2021 02:27:47 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 16
- Jul 2021 02:27:47 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Fri, 16 Jul 2021 02:27:47 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 16G7Rkam012643;
-        Fri, 16 Jul 2021 02:27:46 -0500
-Date:   Fri, 16 Jul 2021 12:57:45 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Yoshitaka Ikeda <ikeda@nskint.co.jp>
-CC:     Mark Brown <broonie@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        Masahiro Mizutani <m.mizutani@nskint.co.jp>,
-        Ken Kurematsu <k.kurematsu@nskint.co.jp>
-Subject: Re: [PATCH v4 1/2] spi: spi-cadence-quadspi: Revert "Fix division by
- zero warning"
-Message-ID: <20210716072743.5fvcw4d52cvnqo2i@ti.com>
-References: <d3deb78b-fb30-ff37-bc9c-2ba7b8b40c36@nskint.co.jp>
- <760be709-74d1-14cc-fecf-433786e123aa@nskint.co.jp>
+        id S236943AbhGPH7Z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Jul 2021 03:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237089AbhGPH7T (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Jul 2021 03:59:19 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C180C061764
+        for <linux-spi@vger.kernel.org>; Fri, 16 Jul 2021 00:56:21 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id v5so11028746wrt.3
+        for <linux-spi@vger.kernel.org>; Fri, 16 Jul 2021 00:56:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=uVR/Jck5v49z+8mpV1Vad40sYJAyKAQCRBapDHKnLq0=;
+        b=b173FmM3z/kDXtJkwwpSOdu/0g6cpW7zpOvbLBco/CZeWD6AqepnPtzBG5gG4+c9Qq
+         7Qu0jnHuDXsn7aK/PyTqTx+kh/VdIahhyG/JjJtmllOMoH8P3CmptiIdCpyh1r5vELO6
+         W+D8QXvBv+5RigjXbKPMIbGHopL7HSUMSVFNb/dE4bevZ9kvndHTUzo05SIkwQyKBOlB
+         n8JEzsW5eVebvHJLz9ducXQnO0SMZHZUplG/Q0/+eLlmTl4ZWnWAP+j23t7SEKiS/8o0
+         JIFCYcljOpw++5nx/W6NaWMzqTHB+YPkCNttLeOoO+pl9NJ25Vkl0jwzkY0RL/ci12xo
+         w4ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=uVR/Jck5v49z+8mpV1Vad40sYJAyKAQCRBapDHKnLq0=;
+        b=OTvIbwlAttwt4uYlVsjlWNPT16pfgdGoVX91jr1fA3bNtRpqwNDgiszsHBZptI6Upy
+         g1OFkigPTJ/TOelh1CJuVpD2rh5t/ZoRaumUjxe4+OMOLL27IYejYo61WYKHHI8xEo2l
+         hR3UuhKdehA32LCoR8jwXPZ7JNkRDd8+t/UiZrFcWXaAha2mT54RHGvJX7/Xrl75YpRh
+         6vWAbyFgoieq7WV2yzOl5ZMMg9HNpwXpSVHdp5mfu6u5O9W4FWGAZEE3LgQoSgR/UcRD
+         MxyhxDED36kY3FWYYBGu/Og64OKV2Bi9Xy6NeObhV1n6rO2Yuk8SkjhmZJIxqdOUxAh3
+         tmoQ==
+X-Gm-Message-State: AOAM533jL/tIr/rlPnqFbq+ZWrVJmHzM4HrEdIIFM0On5lQZwvb6RqeU
+        l3ws0sr6/OqB14zg+z5Xixap/g==
+X-Google-Smtp-Source: ABdhPJzASykD3R2CXs24CTU0MqQNY5E8qoccE8Z0FhyLoh+efaGHiDUdNcuDK6UwFWGbWEMK/4M3bg==
+X-Received: by 2002:a5d:46cc:: with SMTP id g12mr10357001wrs.136.1626422179823;
+        Fri, 16 Jul 2021 00:56:19 -0700 (PDT)
+Received: from google.com ([31.124.24.141])
+        by smtp.gmail.com with ESMTPSA id l14sm8810302wrs.22.2021.07.16.00.56.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jul 2021 00:56:19 -0700 (PDT)
+Date:   Fri, 16 Jul 2021 08:56:17 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>
+Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Brown <broonie@kernel.org>,
+        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] mfd: intel-m10-bmc: add n5010 variant
+Message-ID: <YPE7oUflWYJt1IoD@google.com>
+References: <20210629121214.988036-1-martin@geanix.com>
+ <20210629121214.988036-4-martin@geanix.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <760be709-74d1-14cc-fecf-433786e123aa@nskint.co.jp>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210629121214.988036-4-martin@geanix.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 16/07/21 03:07AM, Yoshitaka Ikeda wrote:
-> Revert to change to a better code.
+On Tue, 29 Jun 2021, Martin Hundebøll wrote:
+
+> From: Martin Hundebøll <mhu@silicom.dk>
 > 
-> This reverts commit 55cef88bbf12f3bfbe5c2379a8868a034707e755.
+>  The m10-bmc is used on the Silicom N5010 PAC too, so add it to list of
+>  m10bmc types.
 
-I don't think this is needed since your earlier version was not applied 
-to the SPI tree in the first place. Patch 2 alone should be enough.
+Please refrain from padding out the commit message in future.
 
+> Signed-off-by: Martin Hundebøll <mhu@silicom.dk>
+> Acked-by: Moritz Fischer <mdf@kernel.org>
+> Reviewed-by: Xu Yilun <yilun.xu@intel.com>
 > ---
->  drivers/spi/spi-cadence-quadspi.c | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-> index 13d1f0ce618e..7a00346ff9b9 100644
-> --- a/drivers/spi/spi-cadence-quadspi.c
-> +++ b/drivers/spi/spi-cadence-quadspi.c
-> @@ -307,13 +307,11 @@ static unsigned int cqspi_calc_rdreg(struct cqspi_flash_pdata *f_pdata)
->  
->  static unsigned int cqspi_calc_dummy(const struct spi_mem_op *op, bool dtr)
->  {
-> -	unsigned int dummy_clk = 0;
-> +	unsigned int dummy_clk;
->  
-> -	if (op->dummy.buswidth && op->dummy.nbytes) {
-> -		dummy_clk = op->dummy.nbytes * (8 / op->dummy.buswidth);
-> -		if (dtr)
-> -			dummy_clk /= 2;
-> -	}
-> +	dummy_clk = op->dummy.nbytes * (8 / op->dummy.buswidth);
-> +	if (dtr)
-> +		dummy_clk /= 2;
->  
->  	return dummy_clk;
->  }
-> -- 
-> 2.32.0
+> Changes since v2:
+>  * Added Yilun's Reviewed-by
+>  * Added Moritz' Acked-by
+> 
+> Changes since v1:
+>  * Patch split out to separate mfd changes
+> 
+>  drivers/mfd/intel-m10-bmc.c | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+
+Applied, thanks.
 
 -- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
