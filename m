@@ -2,123 +2,116 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 884263CBB50
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Jul 2021 19:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1933CBB97
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Jul 2021 20:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbhGPRmj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Jul 2021 13:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57290 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbhGPRmi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Jul 2021 13:42:38 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACED1C06175F
-        for <linux-spi@vger.kernel.org>; Fri, 16 Jul 2021 10:39:42 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1m4RoH-0002Nt-8e; Fri, 16 Jul 2021 19:39:37 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1m4RoF-0000TI-6X; Fri, 16 Jul 2021 19:39:35 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1m4RoF-0001ZW-5S; Fri, 16 Jul 2021 19:39:35 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] spi: imx: Simplify logic in spi_imx_push()
-Date:   Fri, 16 Jul 2021 19:39:27 +0200
-Message-Id: <20210716173927.2050620-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        id S231778AbhGPSFw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Jul 2021 14:05:52 -0400
+Received: from mail-io1-f43.google.com ([209.85.166.43]:43602 "EHLO
+        mail-io1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231664AbhGPSFv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Jul 2021 14:05:51 -0400
+Received: by mail-io1-f43.google.com with SMTP id k16so11584314ios.10;
+        Fri, 16 Jul 2021 11:02:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=o8ZKFwDkRHkveLaudUDVhxvrMvahOTC+Q27T5GsqDWc=;
+        b=AHYxJL5iPqVs2dwYwP7G3iMWZoJFF7chUZeFJveV39g/ZsXnNhEAmu0UiO8gDk/maA
+         /G6clO+Td98dcoB7G0JJMPaaSS2b+elidsYQVI0rgq3NR8+6eq8DjbW2Mgi9BwDcsICI
+         /XzhXpdo/VKmgQWb2MkEWCiiBwHk7fhLyHAuHNDlCXU6OpPYqHd+GJTIKWihqnuaPk9r
+         x5xofzZO5wXDQQ/gFnVp2yFJxK2C9hVXTTheHOgsgbG9ZEOHUXRG+fdR/gRh6ldTfjyR
+         PlQ8XVABkdmBJ/ggvrsgakUqJvRybyWtYxlRKsabxX5NYtkSjyAEmJve79JcYzOe5/cy
+         sYYA==
+X-Gm-Message-State: AOAM531py0ExmivzH84WIM6SZ7G8Vw7zj3aYyXgSD2/rRlTo8XMj5o+r
+        0EtCEfmJ2VYh0vGmEDvysw==
+X-Google-Smtp-Source: ABdhPJxh7jTPpNQyp+Byi/egf6lVzgVhWXlz6KVf1X2/P0wH39CqS6+wkKXzdyM7NVt0sfMNR6fLKA==
+X-Received: by 2002:a02:c9c2:: with SMTP id c2mr9890706jap.98.1626458576094;
+        Fri, 16 Jul 2021 11:02:56 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id o12sm5104314ilg.10.2021.07.16.11.02.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jul 2021 11:02:55 -0700 (PDT)
+Received: (nullmailer pid 3687147 invoked by uid 1000);
+        Fri, 16 Jul 2021 18:02:53 -0000
+Date:   Fri, 16 Jul 2021 12:02:53 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: memory: renesas,rpc-if: Miscellaneous
+ improvements
+Message-ID: <20210716180253.GA3684196@robh.at.kernel.org>
+References: <d430f9c06d6691fe8a98f923cdb7ca13772834b1.1626262043.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Patch-Hashes: v=1; h=sha256; i=mbrmtykSJpXNlW/9qZDduLMIcAv8JdqYsOoLB4AYFWg=; m=59nJEohcM75f+Fb76f1O4u/kImGNUs8q+ffQ4kVfihs=; p=T/dybc7RTkYg1WN1YITBe00xuxiGgmSfzxnWd8JhOdA=; g=0f05cbaedc3a5c414b9ddd6f4032287b1be62159
-X-Patch-Sig: m=pgp; i=uwe@kleine-koenig.org; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmDxxAUACgkQwfwUeK3K7AlIEAf5AfV q7kjMUYKS9BTdn9ugM9AmIqLJRTvwrAOE+jzTdPQRrXVjEPHdrzmoY/OvNuTboKfeE7D2EiAiE5F+ MjHdp5oQTUxnqsftIenIAihKbQtB6tZxY6ri3e8CaMyLLqddjyNeQzHTHMkF5m2UWOL7tdOUrFmGE jIYSXrMcECeJ64ZPvMc5TKORQ/2erFzQ3ns0X4Vo+o4iHkYmJm6eNNZjpjAIidMNUuYqjLwMufAFU UI13kWVVZKjnKWezS9jc2oqk80cvql4QmGDoBwkVeueyxNdxJdOXmR9u/jy4rb7wG3kPX8/Mm2IG3 tAqYHvvRCMBaV4me7zc8DeS8SeHBKeA==
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d430f9c06d6691fe8a98f923cdb7ca13772834b1.1626262043.git.geert+renesas@glider.be>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-For each usage of fifo_words it is clear if ->dynamic_burst is true or
-not. This can be used to simplify the function a bit.
+On Wed, Jul 14, 2021 at 01:30:13PM +0200, Geert Uytterhoeven wrote:
+>   - Add missing "#{address,size}-cells",
+>   - Fix rejection of legitimate flash subnodes containing multiple
+>     compatible values,
+>   - Add missing list of required properties.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  .../memory-controllers/renesas,rpc-if.yaml    | 23 ++++++++++++++++---
+>  1 file changed, 20 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml b/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
+> index 990489fdd2ac33fe..c0d899a2305361b1 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
+> +++ b/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
+> @@ -56,17 +56,34 @@ properties:
+>    resets:
+>      maxItems: 1
+>  
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/spi/spi-imx.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+spi-controller.yaml already defines this.
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 39dc02e366f4..c171765d05b1 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -1032,52 +1032,47 @@ static void spi_imx_set_burst_len(struct spi_imx_data *spi_imx, int n_bits)
- 
- 	ctrl = readl(spi_imx->base + MX51_ECSPI_CTRL);
- 	ctrl &= ~MX51_ECSPI_CTRL_BL_MASK;
- 	ctrl |= ((n_bits - 1) << MX51_ECSPI_CTRL_BL_OFFSET);
- 	writel(ctrl, spi_imx->base + MX51_ECSPI_CTRL);
- }
- 
- static void spi_imx_push(struct spi_imx_data *spi_imx)
- {
--	unsigned int burst_len, fifo_words;
-+	unsigned int burst_len;
- 
--	if (spi_imx->dynamic_burst)
--		fifo_words = 4;
--	else
--		fifo_words = spi_imx_bytes_per_word(spi_imx->bits_per_word);
- 	/*
- 	 * Reload the FIFO when the remaining bytes to be transferred in the
- 	 * current burst is 0. This only applies when bits_per_word is a
- 	 * multiple of 8.
- 	 */
- 	if (!spi_imx->remainder) {
- 		if (spi_imx->dynamic_burst) {
- 
- 			/* We need to deal unaligned data first */
- 			burst_len = spi_imx->count % MX51_ECSPI_CTRL_MAX_BURST;
- 
- 			if (!burst_len)
- 				burst_len = MX51_ECSPI_CTRL_MAX_BURST;
- 
- 			spi_imx_set_burst_len(spi_imx, burst_len * 8);
- 
- 			spi_imx->remainder = burst_len;
- 		} else {
--			spi_imx->remainder = fifo_words;
-+			spi_imx->remainder = spi_imx_bytes_per_word(spi_imx->bits_per_word);
- 		}
- 	}
- 
- 	while (spi_imx->txfifo < spi_imx->devtype_data->fifo_size) {
- 		if (!spi_imx->count)
- 			break;
- 		if (spi_imx->dynamic_burst &&
--		    spi_imx->txfifo >= DIV_ROUND_UP(spi_imx->remainder,
--						     fifo_words))
-+		    spi_imx->txfifo >= DIV_ROUND_UP(spi_imx->remainder, 4))
- 			break;
- 		spi_imx->tx(spi_imx);
- 		spi_imx->txfifo++;
- 	}
- 
- 	if (!spi_imx->slave_mode)
- 		spi_imx->devtype_data->trigger(spi_imx);
- }
- 
--- 
-2.30.2
-
+>  patternProperties:
+>    "flash@[0-9a-f]+$":
+>      type: object
+>      properties:
+>        compatible:
+> -        enum:
+> -          - cfi-flash
+> -          - jedec,spi-nor
+> +        contains:
+> +          enum:
+> +            - cfi-flash
+> +            - jedec,spi-nor
+>  
+>  unevaluatedProperties: false
+>  
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - clocks
+> +  - power-domains
+> +  - resets
+> +  - '#address-cells'
+> +  - '#size-cells'
+> +
+>  examples:
+>    - |
+>      #include <dt-bindings/clock/renesas-cpg-mssr.h>
+> -- 
+> 2.25.1
+> 
+> 
