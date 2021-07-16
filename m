@@ -2,79 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E41C73CBBE1
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Jul 2021 20:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C09503CBBE9
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Jul 2021 20:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbhGPSeb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 16 Jul 2021 14:34:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51118 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229534AbhGPSe3 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 16 Jul 2021 14:34:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 362B4613EE;
-        Fri, 16 Jul 2021 18:31:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626460294;
-        bh=ub2x6wlhuTK6D3r3/YbLRI32086jnWnfond4dVYaPLo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ptnJ0WnOcuasYt9tAQrPgglhARHMCVqW14ATko70BLtT6Qvq4WMgqHvdic+rwXxsc
-         IwP3hNIpESpljw8pwY13v6UPI98q4DTHUfyKlGt/a60qWM09jjQMrTDxJK/hn9ZsVb
-         kZH0HaRuLCN6i8mpL8qrRjamer6nnNAyd7BuCW2SBvSYswyCLUqj7KeuW9W6Cu4oqi
-         Ixp1hC2s8iX0Mk/PTwYn7otViHkVgSTTMJqdB0f3Ao8XUzDkv8rBC/jP3YeD1nRkmM
-         7Tn8Z327evJ0Xpgy+VXusqThWXE1SelJJ+slumZF3lib3LkjPFUTvu9xts/qF+tAQU
-         VaCjXSMDbJSnA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Apurva Nandan <a-nandan@ti.com>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>, Pratyush Yadav <p.yadav@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Subject: Re: (subset) [PATCH 0/2] spi: cadence-quadspi: Fix DTR op checks and timeout in SPI NAND write operations
-Date:   Fri, 16 Jul 2021 19:31:30 +0100
-Message-Id: <162646021665.47820.5826789747346391444.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210713125743.1540-1-a-nandan@ti.com>
-References: <20210713125743.1540-1-a-nandan@ti.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        id S231835AbhGPSk3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 16 Jul 2021 14:40:29 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46396 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229462AbhGPSk3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 16 Jul 2021 14:40:29 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16GIbH6D165233;
+        Fri, 16 Jul 2021 14:37:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=7tyfq1wQ5MtvqKTDdde+7cQd7ahohQH+0eK0ivktzt0=;
+ b=P0ov+RaF4asrEqtHx+LK0kSQyB/lbsxOt58Kdh2hVBjuMbsmRotj/P18JpbNelc5LveS
+ g7p/OqMeb95a7fktLD0ihJWVNe7vf7l9pR18agcq6UK/5p8arD/v8imiIGEWC6wekZqI
+ 0gm9brMh1o6ZM/fOJHVNrWhgyKnCKRyEOllPKnRIa6BbSI3US8HF5+3zicaV+fqk7qZ0
+ lazCNhL2QHNoLggcY1+Glkn4VAzFOgNrKGi9SIufVRqY0RfbWw4Xa6CoN8/MYeeabTD8
+ iz8ozczwzpl9iZayfszj9uHB7HvLHRuodxchjKBtez8hbm5UsljfDDgC0/JSvFGiQhuY gw== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39udw6jn23-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Jul 2021 14:37:28 -0400
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16GIGlcf024783;
+        Fri, 16 Jul 2021 18:34:41 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma04dal.us.ibm.com with ESMTP id 39q36fqbhw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Jul 2021 18:34:41 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16GIYf4s53543206
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 16 Jul 2021 18:34:41 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 14440AE05F;
+        Fri, 16 Jul 2021 18:34:41 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5D514AE063;
+        Fri, 16 Jul 2021 18:34:39 +0000 (GMT)
+Received: from v0005c16 (unknown [9.211.92.96])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 16 Jul 2021 18:34:39 +0000 (GMT)
+Message-ID: <81a40f8690d297ebfb6697dbea63279bcf2f24fa.camel@linux.ibm.com>
+Subject: Re: [PATCH 1/2] spi: fsi: Reduce max transfer size to 8 bytes
+From:   Eddie James <eajames@linux.ibm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        robh+dt@kernel.org
+Date:   Fri, 16 Jul 2021 13:34:38 -0500
+In-Reply-To: <20210716171936.GB4137@sirena.org.uk>
+References: <20210716133915.14697-1-eajames@linux.ibm.com>
+         <20210716133915.14697-2-eajames@linux.ibm.com>
+         <20210716171936.GB4137@sirena.org.uk>
+Organization: IBM
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 13Nj9UHN-n_4bSFB_bWzSidggUk0HrnQ
+X-Proofpoint-ORIG-GUID: 13Nj9UHN-n_4bSFB_bWzSidggUk0HrnQ
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-16_06:2021-07-16,2021-07-16 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=904
+ spamscore=0 priorityscore=1501 suspectscore=0 clxscore=1015 malwarescore=0
+ bulkscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
+ definitions=main-2107160113
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 13 Jul 2021 12:57:40 +0000, Apurva Nandan wrote:
-> This series proposes fixes for cadence-quadspi controller for the
-> following issues with SPI NAND flashes:
-> 
-> - Due to auto-HW polling without address phase, the cadence-quadspi
->   controller timeouts when performing any write operation on SPI NAND
->   flash.
-> 
-> [...]
+On Fri, 2021-07-16 at 18:19 +0100, Mark Brown wrote:
+> On Fri, Jul 16, 2021 at 08:39:14AM -0500, Eddie James wrote:
+> > Security changes have forced the SPI controllers to be limited to
+> > 8 byte reads. Refactor the sequencing to just handle 8 bytes at a
+> > time.
 
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/2] spi: cadence-quadspi: Disable Auto-HW polling
-      commit: 9cb2ff11171264d10be7ea9e31d9ee5d49ba84a5
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Security changes in the SPI controller - in the device microcode. I can
+reword the commit if you like.
 
 Thanks,
-Mark
+Eddie
+
+> 
+> Which security changes where - somewhere else in Linux?
+
