@@ -2,75 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 139403CC6F7
-	for <lists+linux-spi@lfdr.de>; Sun, 18 Jul 2021 01:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D70D3CC960
+	for <lists+linux-spi@lfdr.de>; Sun, 18 Jul 2021 15:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbhGQX7E (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 17 Jul 2021 19:59:04 -0400
-Received: from mail-pg1-f182.google.com ([209.85.215.182]:46799 "EHLO
-        mail-pg1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbhGQX7E (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 17 Jul 2021 19:59:04 -0400
-Received: by mail-pg1-f182.google.com with SMTP id w15so14672658pgk.13;
-        Sat, 17 Jul 2021 16:56:07 -0700 (PDT)
+        id S233759AbhGRNoA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 18 Jul 2021 09:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233673AbhGRNoA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 18 Jul 2021 09:44:00 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E41C061762
+        for <linux-spi@vger.kernel.org>; Sun, 18 Jul 2021 06:41:02 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id d17so1534335ljq.12
+        for <linux-spi@vger.kernel.org>; Sun, 18 Jul 2021 06:41:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=OSD+ubn4urjcKC3A+mOlRpEXYnkHBpCPeW5HCq6aML0=;
+        b=ioMEUVEEIn2aDdSo+Q4YBlBQNX+x4BxJrBP4SwLWXjjRrqcwVr7kz7ZygrMzk8kziX
+         j3Riua8iFnm+OtENdm8lIIl8/tMytVU72gMl+6OuGWCC8VCmLMFl4bysH980rktYd4x3
+         ux/K1hyHMJ5vHxoGZI93QbK2m2CHVOydIwoJZAJx3cczeNOL6LtdiP47ek0PycPg43qY
+         1UUVDTYKdzDdpq27o3ieCN/odbtmaeLn20jZYAsqsUkcKR2fiACmrjIg5LloN0Pyvo8W
+         gVh1mfgu1fEsCFQSRySNQVxwBuvlgjBOp2i5aAwlLRGIqsCD8lQXzPhmaaUUZyhEhGnP
+         zBLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=QBPwPehfJNZ2LsnsANIrsrlPDWfZeZDsGvfQK0F94As=;
-        b=S0PaLnwSYGufGz78bspThIaR3flxvTT42VFinQ5EJQ5XcUW1Je8N5l1jVDKgFHHOpr
-         F/m5Ty5TXlEDRXa9FOkSURjDiH6oe0AznJVyx1YuFTaZx7onP5LTcqKcrAmu4YBPP9aF
-         9z72Qlnrl/NddYsoY0dB66OOteQVd1Rd3B5n9+8VVtZW4BEnXURLSiqf8cRT7IIf1/SY
-         zFZwWFkg/TltI9JY/Gn4bGjoA1uGHFNhOuqDlM+GRoD+aVDKjwHYrqMR5A+FUFfwMnsa
-         EZw7LIXSF/dD5n5YZCyzvLBer6xTWpOxOgQsBdCDMehX1CCjWNU08E+SSYzuJAE9PZ2z
-         dwwA==
-X-Gm-Message-State: AOAM530qiMOHE1IsAKb/EdmgRjEc3UYSffllLXk7c1SlOlNX13/6hWZU
-        trsbsCK3FOxfg+DIZy1LVG8=
-X-Google-Smtp-Source: ABdhPJyCGy2eEB94sfSOMS2sxY2uL1l2UjzA/JuHNafcDXLUC8Tuce2jhHchh+W2EkQMQWbo+UKyjA==
-X-Received: by 2002:a65:6248:: with SMTP id q8mr17609947pgv.279.1626566166808;
-        Sat, 17 Jul 2021 16:56:06 -0700 (PDT)
-Received: from localhost ([24.4.24.239])
-        by smtp.gmail.com with ESMTPSA id h5sm14030558pfv.145.2021.07.17.16.56.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jul 2021 16:56:06 -0700 (PDT)
-Date:   Sat, 17 Jul 2021 16:56:05 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Martin =?iso-8859-1?Q?Hundeb=F8ll?= <mhu@silicom.dk>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v5 2/3] spi: spi-altera-dfl: support n5010 feature
- revision
-Message-ID: <YPNuFX4ZfwJoOlMk@epycbox.lan>
-References: <20210716135441.3235863-1-martin@geanix.com>
- <20210716135441.3235863-3-martin@geanix.com>
- <20210716173335.GC4137@sirena.org.uk>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OSD+ubn4urjcKC3A+mOlRpEXYnkHBpCPeW5HCq6aML0=;
+        b=T1tpbN8QxXkMl6vw5bimS7dISAVgyaNxQrA4WuUwBBSvZ7izPjx8hAQDyezxR8rrP6
+         730id0L8EOOQRMRUhZIvWtJzgKU9XTX5xGzVhwlMWsGyULG3ZCkl7hbRTxzRskHKKnwR
+         Nz17zhZKxbnho33ncDKEXQQ9CyeKOqObtBh7wCXrPMfbcBeGm7q7GCR8cP40tf/GIogk
+         oMgHfg06xzGzucQJmTW70Ds3tYB81f4an3G6JPRXpzaDkgF914f+Oh5DMfHskejrEPpD
+         TyyoMcoWvAerOW3W3oI3Hq17yT7LcctU+H6E5CpcIy01Bc95le6/B7eP8GBLfpuhZT+y
+         x3Dg==
+X-Gm-Message-State: AOAM533wbM8DEGUPSalwWWKQp7f+jlGyE09QV8Vsy+lTs626xNCleGo8
+        m/+HlGDBnADnS5YqsVJ7/qtMNAJwpjzHCOYQNaU=
+X-Google-Smtp-Source: ABdhPJw4X4EJLARn4NmPgqWzOJctMntqy2kmGeFHuMolOf5O1G/u54N0yV/++KC4XP8sOSb/7XIKSSUW3GCDcVRxvgk=
+X-Received: by 2002:a2e:a164:: with SMTP id u4mr17959995ljl.121.1626615660501;
+ Sun, 18 Jul 2021 06:41:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210716173335.GC4137@sirena.org.uk>
+References: <20210716173927.2050620-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20210716173927.2050620-1-u.kleine-koenig@pengutronix.de>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Sun, 18 Jul 2021 10:40:49 -0300
+Message-ID: <CAOMZO5A_cXAZafm5VELmFxpX+SQj8kDYuJyrawrqwnmSzMYN+A@mail.gmail.com>
+Subject: Re: [PATCH] spi: imx: Simplify logic in spi_imx_push()
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jul 16, 2021 at 06:33:35PM +0100, Mark Brown wrote:
-> On Fri, Jul 16, 2021 at 03:54:40PM +0200, Martin Hundebøll wrote:
-> > From: Martin Hundebøll <mhu@silicom.dk>
-> > 
-> > The Max10 BMC on the Silicom n5010 PAC is slightly different than the
-> > existing BMCs, so use a dedicated feature revision detect it.
-> 
-> Acked-by: Mark Brown <broonie@kernel.org>
+Hi Uwe,
 
-Mark do you want me to provide a tag for this and the previous commit to
-avoid conflicts for other FPGA changes or do you think it's easier to
-just pick both of them up through FPGA or SPI tree?
+On Fri, Jul 16, 2021 at 2:39 PM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> For each usage of fifo_words it is clear if ->dynamic_burst is true or
+> not. This can be used to simplify the function a bit.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-- Moritz
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
