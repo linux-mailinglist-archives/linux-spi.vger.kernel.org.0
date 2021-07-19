@@ -2,186 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D64D53CD0F7
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Jul 2021 11:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEF53CD5B6
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Jul 2021 15:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236054AbhGSIwu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 19 Jul 2021 04:52:50 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:51032 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235963AbhGSIws (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Jul 2021 04:52:48 -0400
-X-UUID: 99e2966c8f2a4c629b1003e16592dc69-20210719
-X-UUID: 99e2966c8f2a4c629b1003e16592dc69-20210719
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <mason.zhang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1241152251; Mon, 19 Jul 2021 17:33:26 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 19 Jul 2021 17:33:24 +0800
-Received: from localhost.localdomain (10.15.20.246) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 19 Jul 2021 17:33:24 +0800
-From:   Mason Zhang <mason.zhang@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <leilk.liu@mediatek.com>,
-        <wsd_upstream@mediatek.com>, Mason Zhang <Mason.Zhang@mediatek.com>
-Subject: [PATCH 3/3] spi: mediatek: modify set_cs_timing callback
-Date:   Mon, 19 Jul 2021 17:17:08 +0800
-Message-ID: <20210719091707.31664-1-mason.zhang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        id S238309AbhGSMuZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 19 Jul 2021 08:50:25 -0400
+Received: from phobos.denx.de ([85.214.62.61]:44646 "EHLO phobos.denx.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238305AbhGSMuY (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 19 Jul 2021 08:50:24 -0400
+Received: from [IPv6:::1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 80B1481E3D;
+        Mon, 19 Jul 2021 15:31:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1626701462;
+        bh=RPJbJ7lluc78597HtyICWkv0xVh/6rs1Nt4dPAn6N3o=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=YimiuicKmhT+kJSaDxYL+j8hl0C8uRt1Jtb9rg31HcR3N+kn7prpyIZkb47U08MGB
+         JM8HxM2DebuGkTx9rvbr9ZXzTz1BJRQXe98kT8ObdEQRwDK8gdAUBYzlCcPBsw9Hea
+         zkKvHHWV2UYUqB0r2lLiSLNvFrQX0CfXrNar4uwWox8FFBdPMX2NibmnHBu/UPVLZn
+         yyZ+iC6PoWs+hk+w0a2mZ4uomDTZurr/cZ6Nc8ZAcuQVcXhHkiR6ujDK8TUBFoYylX
+         TEewD9CHaSYoau8H81QXd7kDyFbf0SoLJxGbxwyjBbOp/P34orsssqTKh/JD/klFOJ
+         oG455EQdshZvQ==
+Subject: Re: [PATCH] spi: cadence: Correct initialisation of runtime PM again
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
+References: <20210716182133.218640-1-marex@denx.de>
+ <20210719090124.GI9223@ediswmail.ad.cirrus.com>
+From:   Marek Vasut <marex@denx.de>
+Message-ID: <1381361a-8a0f-e164-ad16-9ea6b423d047@denx.de>
+Date:   Mon, 19 Jul 2021 15:31:02 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+In-Reply-To: <20210719090124.GI9223@ediswmail.ad.cirrus.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Mason Zhang <Mason.Zhang@mediatek.com>
+On 7/19/21 11:01 AM, Charles Keepax wrote:
+> On Fri, Jul 16, 2021 at 08:21:33PM +0200, Marek Vasut wrote:
+>> The original implementation of RPM handling in probe() was mostly
+>> correct, except it failed to call pm_runtime_get_*() to activate the
+>> hardware. The subsequent fix, 734882a8bf98 ("spi: cadence: Correct
+>> initialisation of runtime PM"), breaks the implementation further,
+>> to the point where the system using this hard IP on ZynqMP hangs on
+>> boot, because it accesses hardware which is gated off.
+>>
+>> Undo 734882a8bf98 ("spi: cadence: Correct initialisation of runtime
+>> PM") and instead add missing pm_runtime_get_noresume() and move the
+>> RPM disabling all the way to the end of probe(). That makes ZynqMP
+>> not hang on boot yet again.
+>>
+>> Fixes: 734882a8bf98 ("spi: cadence: Correct initialisation of runtime PM")
+>> Signed-off-by: Marek Vasut <marex@denx.de>
+>> Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
+>> Cc: Mark Brown <broonie@kernel.org>
+>> ---
+> 
+> For my own edification do you know exactly what the problem was
+> on your system here? I am assuming my mistake was that without the
+> pm_runtime reference being taken, some required parent doesn't get
+> enabled, which is convienently fine on my Zynq but not your ZynqMP?
 
-This patch modified set_cs_timing callback:
-1. support spi_device set cs_timing in their driver;
-2. support set absolute time but no clk count, because;
-clk src will change in different platform;
-3. call this function in prepare_message but not in other API.
+Yes, the hardware got suspended a bit too early.
 
-Signed-off-by: Mason Zhang <Mason.Zhang@mediatek.com>
----
- drivers/spi/spi-mt65xx.c | 102 +++++++++++++++++++++------------------
- 1 file changed, 56 insertions(+), 46 deletions(-)
+> The inclusion of the IRQ stuff in the pm_runtime block makes me a
+> little nervous as if the problem is that your hardware generates
+> a spurious IRQ on boot and that is where the bad access comes from
+> this code feels racy. The original code did the put before the IRQ
+> registers as well.
 
-diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-index 6f2925118b98..7a34f5b1201d 100644
---- a/drivers/spi/spi-mt65xx.c
-+++ b/drivers/spi/spi-mt65xx.c
-@@ -208,6 +208,60 @@ static void mtk_spi_reset(struct mtk_spi *mdata)
- 	writel(reg_val, mdata->base + SPI_CMD_REG);
- }
- 
-+static int mtk_spi_set_hw_cs_timing(struct spi_device *spi)
-+{
-+	struct mtk_spi *mdata = spi_master_get_devdata(spi->master);
-+	struct spi_delay *cs_setup = &spi->cs_setup;
-+	struct spi_delay *cs_hold = &spi->cs_hold;
-+	struct spi_delay *cs_inactive = &spi->cs_inactive;
-+	u16 setup, hold, inactive;
-+	u32 reg_val;
-+	int delay;
-+
-+	delay = spi_delay_to_ns(cs_setup, NULL);
-+	if (delay < 0)
-+		return delay;
-+	setup = (delay / 1000) * DIV_ROUND_UP(mdata->spi_clk_hz, 1000000);
-+
-+	delay = spi_delay_to_ns(cs_hold, NULL);
-+	if (delay < 0)
-+		return delay;
-+	hold = (delay / 1000) * DIV_ROUND_UP(mdata->spi_clk_hz, 1000000);
-+
-+	delay = spi_delay_to_ns(cs_inactive, NULL);
-+	if (delay < 0)
-+		return delay;
-+	inactive = (delay / 1000) * DIV_ROUND_UP(mdata->spi_clk_hz, 1000000);
-+
-+	setup    = setup ? setup : 1;
-+	hold     = hold ? hold : 1;
-+	inactive = inactive ? inactive : 1;
-+
-+	reg_val = readl(mdata->base + SPI_CFG0_REG);
-+	if (mdata->dev_comp->enhance_timing) {
-+		reg_val &= ~(0xffff << SPI_ADJUST_CFG0_CS_HOLD_OFFSET);
-+		reg_val |= (((hold - 1) & 0xffff)
-+			   << SPI_ADJUST_CFG0_CS_HOLD_OFFSET);
-+		reg_val &= ~(0xffff << SPI_ADJUST_CFG0_CS_SETUP_OFFSET);
-+		reg_val |= (((setup - 1) & 0xffff)
-+			   << SPI_ADJUST_CFG0_CS_SETUP_OFFSET);
-+	} else {
-+		reg_val &= ~(0xff << SPI_CFG0_CS_HOLD_OFFSET);
-+		reg_val |= (((hold - 1) & 0xff) << SPI_CFG0_CS_HOLD_OFFSET);
-+		reg_val &= ~(0xff << SPI_CFG0_CS_SETUP_OFFSET);
-+		reg_val |= (((setup - 1) & 0xff)
-+			    << SPI_CFG0_CS_SETUP_OFFSET);
-+	}
-+	writel(reg_val, mdata->base + SPI_CFG0_REG);
-+
-+	reg_val = readl(mdata->base + SPI_CFG1_REG);
-+	reg_val &= ~SPI_CFG1_CS_IDLE_MASK;
-+	reg_val |= (((inactive - 1) & 0xff) << SPI_CFG1_CS_IDLE_OFFSET);
-+	writel(reg_val, mdata->base + SPI_CFG1_REG);
-+
-+	return 0;
-+}
-+
- static int mtk_spi_prepare_message(struct spi_master *master,
- 				   struct spi_message *msg)
- {
-@@ -284,6 +338,8 @@ static int mtk_spi_prepare_message(struct spi_master *master,
- 		<< SPI_CFG1_GET_TICK_DLY_OFFSET);
- 	writel(reg_val, mdata->base + SPI_CFG1_REG);
- 
-+	/* set hw cs timing */
-+	mtk_spi_set_hw_cs_timing(spi);
- 	return 0;
- }
- 
-@@ -528,52 +584,6 @@ static bool mtk_spi_can_dma(struct spi_master *master,
- 		(unsigned long)xfer->rx_buf % 4 == 0);
- }
- 
--static int mtk_spi_set_hw_cs_timing(struct spi_device *spi,
--				    struct spi_delay *setup,
--				    struct spi_delay *hold,
--				    struct spi_delay *inactive)
--{
--	struct mtk_spi *mdata = spi_master_get_devdata(spi->master);
--	u16 setup_dly, hold_dly, inactive_dly;
--	u32 reg_val;
--
--	if ((setup && setup->unit != SPI_DELAY_UNIT_SCK) ||
--	    (hold && hold->unit != SPI_DELAY_UNIT_SCK) ||
--	    (inactive && inactive->unit != SPI_DELAY_UNIT_SCK)) {
--		dev_err(&spi->dev,
--			"Invalid delay unit, should be SPI_DELAY_UNIT_SCK\n");
--		return -EINVAL;
--	}
--
--	setup_dly = setup ? setup->value : 1;
--	hold_dly = hold ? hold->value : 1;
--	inactive_dly = inactive ? inactive->value : 1;
--
--	reg_val = readl(mdata->base + SPI_CFG0_REG);
--	if (mdata->dev_comp->enhance_timing) {
--		reg_val &= ~(0xffff << SPI_ADJUST_CFG0_CS_HOLD_OFFSET);
--		reg_val |= (((hold_dly - 1) & 0xffff)
--			   << SPI_ADJUST_CFG0_CS_HOLD_OFFSET);
--		reg_val &= ~(0xffff << SPI_ADJUST_CFG0_CS_SETUP_OFFSET);
--		reg_val |= (((setup_dly - 1) & 0xffff)
--			   << SPI_ADJUST_CFG0_CS_SETUP_OFFSET);
--	} else {
--		reg_val &= ~(0xff << SPI_CFG0_CS_HOLD_OFFSET);
--		reg_val |= (((hold_dly - 1) & 0xff) << SPI_CFG0_CS_HOLD_OFFSET);
--		reg_val &= ~(0xff << SPI_CFG0_CS_SETUP_OFFSET);
--		reg_val |= (((setup_dly - 1) & 0xff)
--			    << SPI_CFG0_CS_SETUP_OFFSET);
--	}
--	writel(reg_val, mdata->base + SPI_CFG0_REG);
--
--	reg_val = readl(mdata->base + SPI_CFG1_REG);
--	reg_val &= ~SPI_CFG1_CS_IDLE_MASK;
--	reg_val |= (((inactive_dly - 1) & 0xff) << SPI_CFG1_CS_IDLE_OFFSET);
--	writel(reg_val, mdata->base + SPI_CFG1_REG);
--
--	return 0;
--}
--
- static int mtk_spi_setup(struct spi_device *spi)
- {
- 	struct mtk_spi *mdata = spi_master_get_devdata(spi->master);
--- 
-2.18.0
+You could get an interrupt indeed, but that's not the case here.
 
+> All that said, works on my Zynq:
+> 
+> Tested-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+
+Thanks !
