@@ -2,144 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3F23CCFAF
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Jul 2021 11:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9033CCFD0
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Jul 2021 11:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235705AbhGSITP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 19 Jul 2021 04:19:15 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:47861 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235286AbhGSITM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Jul 2021 04:19:12 -0400
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1m5OVc-0008U8-OD; Mon, 19 Jul 2021 10:20:16 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1m5OVb-0001mx-WD; Mon, 19 Jul 2021 10:20:16 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1m5OVb-0007XW-V1; Mon, 19 Jul 2021 10:20:15 +0200
-Date:   Mon, 19 Jul 2021 10:20:15 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+        id S235315AbhGSIU4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 19 Jul 2021 04:20:56 -0400
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:35674 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S235646AbhGSIUw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Jul 2021 04:20:52 -0400
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 16J6UDsr031145;
+        Mon, 19 Jul 2021 04:01:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=rnbfIW071Bte8vBBd+4i4gohnxa1lDyV8t94p2R8Y5U=;
+ b=X7eWghu4BT0X7EFlyAu7EXiqF6VmOHHFIdFRnvEt8wx12ZczgF+zLL+aP3kLIoAJJDFv
+ SotgxCrfBqUSmru9adGSigRw29Rio+T0ztJs9Y4zWOHHnWOMDctIuJboWmS03z98j0gV
+ 1eRfNmEr9SP3ptyZsPY4qiJ6cpBsATu4OUcovwBF+OJSg9PEE4Yn3Pc+u97Tlr4LgyWg
+ GzrP6xAVTan6U+cUYRkdnm9Sd92uPI6ZFfNDbT6A0+HHK0AAQjnQpBITxF339mm6GpeV
+ 2Z1KYhQZr3GQWUdu6SP5tfHvuW05n7Nf6Ktq988DnQdRxQ7lRCOjK845+eZW/z1JUKXY Kg== 
+Received: from ediex01.ad.cirrus.com ([87.246.76.36])
+        by mx0a-001ae601.pphosted.com with ESMTP id 39vwa5rdrd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 19 Jul 2021 04:01:26 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Mon, 19 Jul
+ 2021 10:01:24 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2242.4 via Frontend
+ Transport; Mon, 19 Jul 2021 10:01:24 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D76082BA;
+        Mon, 19 Jul 2021 09:01:24 +0000 (UTC)
+Date:   Mon, 19 Jul 2021 09:01:24 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
 To:     Marek Vasut <marex@denx.de>
-Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH] spi: imx: mx51-ecspi: Fix low-speed CONFIGREG delay
- calculation
-Message-ID: <20210719082015.ud43iwg5rfdomlqi@pengutronix.de>
-References: <20210718211143.143557-1-marex@denx.de>
+CC:     <linux-spi@vger.kernel.org>, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH] spi: cadence: Correct initialisation of runtime PM again
+Message-ID: <20210719090124.GI9223@ediswmail.ad.cirrus.com>
+References: <20210716182133.218640-1-marex@denx.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zpchixjek4djffbp"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20210718211143.143557-1-marex@denx.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+In-Reply-To: <20210716182133.218640-1-marex@denx.de>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: Csvwm-m-TMmE7ZrGGawLoRmp4ycnkSFY
+X-Proofpoint-GUID: Csvwm-m-TMmE7ZrGGawLoRmp4ycnkSFY
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 clxscore=1011
+ lowpriorityscore=0 adultscore=0 impostorscore=0 bulkscore=0
+ mlxlogscore=999 mlxscore=0 phishscore=0 malwarescore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2107190050
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
---zpchixjek4djffbp
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sun, Jul 18, 2021 at 11:11:43PM +0200, Marek Vasut wrote:
-> The spi_imx->spi_bus_clk may be uninitialized and thus also zero in
-> mx51_ecspi_prepare_message(), which would lead to division by zero
-> in kernel. Since bitbang .setup_transfer callback which initializes
-> the spi_imx->spi_bus_clk is called after bitbang prepare_message
-> callback, iterate over all the transfers in spi_message, find the
-> one with lowest bus frequency, and use that bus frequency for the
-> delay calculation.
->=20
-> Note that it is not possible to move this CONFIGREG delay back into
-> the .setup_transfer callback, because that is invoked too late, after
-> the GPIO chipselects were already configured.
->=20
-> Fixes: 135cbd378eab ("spi: imx: mx51-ecspi: Reinstate low-speed CONFIGREG=
- delay")
+On Fri, Jul 16, 2021 at 08:21:33PM +0200, Marek Vasut wrote:
+> The original implementation of RPM handling in probe() was mostly
+> correct, except it failed to call pm_runtime_get_*() to activate the
+> hardware. The subsequent fix, 734882a8bf98 ("spi: cadence: Correct
+> initialisation of runtime PM"), breaks the implementation further,
+> to the point where the system using this hard IP on ZynqMP hangs on
+> boot, because it accesses hardware which is gated off.
+> 
+> Undo 734882a8bf98 ("spi: cadence: Correct initialisation of runtime
+> PM") and instead add missing pm_runtime_get_noresume() and move the
+> RPM disabling all the way to the end of probe(). That makes ZynqMP
+> not hang on boot yet again.
+> 
+> Fixes: 734882a8bf98 ("spi: cadence: Correct initialisation of runtime PM")
 > Signed-off-by: Marek Vasut <marex@denx.de>
-> Cc: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
 > Cc: Mark Brown <broonie@kernel.org>
 > ---
-> Sigh ...
-> ---
->  drivers/spi/spi-imx.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-> index 4aee3db6d6df..e18338fc3108 100644
-> --- a/drivers/spi/spi-imx.c
-> +++ b/drivers/spi/spi-imx.c
-> @@ -505,7 +505,9 @@ static int mx51_ecspi_prepare_message(struct spi_imx_=
-data *spi_imx,
->  				      struct spi_message *msg)
->  {
->  	struct spi_device *spi =3D msg->spi;
-> +	struct spi_transfer *xfer;
->  	u32 ctrl =3D MX51_ECSPI_CTRL_ENABLE;
-> +	u32 min_speed_hz =3D ~0U;
->  	u32 testreg, delay;
->  	u32 cfg =3D readl(spi_imx->base + MX51_ECSPI_CONFIG);
-> =20
-> @@ -578,7 +580,13 @@ static int mx51_ecspi_prepare_message(struct spi_imx=
-_data *spi_imx,
->  	 * the SPI communication as the device on the other end would consider
->  	 * the change of SCLK polarity as a clock tick already.
->  	 */
-> -	delay =3D (2 * 1000000) / spi_imx->spi_bus_clk;
-> +	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
-> +		if (!xfer->speed_hz)
-> +			continue;
-> +		min_speed_hz =3D min(xfer->speed_hz, min_speed_hz);
-> +	}
 
-Can it happen that all transfer's spped_hz are zero?
+For my own edification do you know exactly what the problem was
+on your system here? I am assuming my mistake was that without the
+pm_runtime reference being taken, some required parent doesn't get
+enabled, which is convienently fine on my Zynq but not your ZynqMP?
 
-> +
-> +	delay =3D (2 * 1000000) / min_speed_hz;
+The inclusion of the IRQ stuff in the pm_runtime block makes me a
+little nervous as if the problem is that your hardware generates
+a spurious IRQ on boot and that is where the bad access comes from
+this code feels racy. The original code did the put before the IRQ
+registers as well.
 
-Orthogonal to your change: I wonder if we need to round up the division
-here.
+All that said, works on my Zynq:
 
->  	if (likely(delay < 10))	/* SCLK is faster than 100 kHz */
->  		udelay(delay);
->  	else			/* SCLK is _very_ slow */
+Tested-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-Also the comments are wrong here. Is SCLK is 150 kHz we have
-min_speed_hz =3D 150000, right? Then delay becomes 13 and the slow freq
-path is entered. The right comment (when keeping delay =3D (2 * 1000000) /
-min_speed_hz) would be
-
-	if (likely(delay < 10)) /* SCLK is faster than 181.818 kHz */
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---zpchixjek4djffbp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmD1NbwACgkQwfwUeK3K
-7AlJOgf+PVkTxSAnKDBnXbOhYjjhUgcRWwrMBBpwNeUjN7BW3HazhiPVYdWWmfdi
-1Dk4l3cWcKjxHp2dBOaCZO2vR8uqXEKZgsDopQQwh68hzA8P8CAJqxLBF1MeE9lE
-lXWYoOK9QA9BobhK6tPtxu969LRNeVLY54H6JHd7hnrxqMI9wxEGLu7sWpFWrXok
-WPckoeV2OQlOvWgCwblRQ0cUlxkXdRIEmsYWtivYnzieFlE0ZuxrGDa0plDLbIuo
-w0LKX4C00ZiMst0MQIjxSP36T7MNXYgf+rNh3RWaasFT5+9EjICHGUQhzbfgTiq3
-y0LyCXmppLEomh4lRaOD0v9OjtcW8w==
-=SrzY
------END PGP SIGNATURE-----
-
---zpchixjek4djffbp--
+Thanks,
+Charles
