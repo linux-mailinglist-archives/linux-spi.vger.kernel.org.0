@@ -2,97 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9033CCFD0
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Jul 2021 11:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D3A3CD0E5
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Jul 2021 11:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235315AbhGSIU4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 19 Jul 2021 04:20:56 -0400
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:35674 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235646AbhGSIUw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Jul 2021 04:20:52 -0400
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 16J6UDsr031145;
-        Mon, 19 Jul 2021 04:01:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=rnbfIW071Bte8vBBd+4i4gohnxa1lDyV8t94p2R8Y5U=;
- b=X7eWghu4BT0X7EFlyAu7EXiqF6VmOHHFIdFRnvEt8wx12ZczgF+zLL+aP3kLIoAJJDFv
- SotgxCrfBqUSmru9adGSigRw29Rio+T0ztJs9Y4zWOHHnWOMDctIuJboWmS03z98j0gV
- 1eRfNmEr9SP3ptyZsPY4qiJ6cpBsATu4OUcovwBF+OJSg9PEE4Yn3Pc+u97Tlr4LgyWg
- GzrP6xAVTan6U+cUYRkdnm9Sd92uPI6ZFfNDbT6A0+HHK0AAQjnQpBITxF339mm6GpeV
- 2Z1KYhQZr3GQWUdu6SP5tfHvuW05n7Nf6Ktq988DnQdRxQ7lRCOjK845+eZW/z1JUKXY Kg== 
-Received: from ediex01.ad.cirrus.com ([87.246.76.36])
-        by mx0a-001ae601.pphosted.com with ESMTP id 39vwa5rdrd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 19 Jul 2021 04:01:26 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Mon, 19 Jul
- 2021 10:01:24 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2242.4 via Frontend
- Transport; Mon, 19 Jul 2021 10:01:24 +0100
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D76082BA;
-        Mon, 19 Jul 2021 09:01:24 +0000 (UTC)
-Date:   Mon, 19 Jul 2021 09:01:24 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Marek Vasut <marex@denx.de>
-CC:     <linux-spi@vger.kernel.org>, Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH] spi: cadence: Correct initialisation of runtime PM again
-Message-ID: <20210719090124.GI9223@ediswmail.ad.cirrus.com>
-References: <20210716182133.218640-1-marex@denx.de>
+        id S235052AbhGSIvJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 19 Jul 2021 04:51:09 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:48534 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S235034AbhGSIvI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Jul 2021 04:51:08 -0400
+X-UUID: 3fdce7f326874a4bbde4557511350698-20210719
+X-UUID: 3fdce7f326874a4bbde4557511350698-20210719
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <mason.zhang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 637131729; Mon, 19 Jul 2021 17:31:45 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 19 Jul 2021 17:31:44 +0800
+Received: from localhost.localdomain (10.15.20.246) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 19 Jul 2021 17:31:43 +0800
+From:   Mason Zhang <mason.zhang@mediatek.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <leilk.liu@mediatek.com>,
+        <wsd_upstream@mediatek.com>, Mason Zhang <Mason.Zhang@mediatek.com>
+Subject: [PATCH 0/3] *** spi cs_timing restructure ***
+Date:   Mon, 19 Jul 2021 17:15:26 +0800
+Message-ID: <20210719091525.1453-1-mason.zhang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20210716182133.218640-1-marex@denx.de>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-ORIG-GUID: Csvwm-m-TMmE7ZrGGawLoRmp4ycnkSFY
-X-Proofpoint-GUID: Csvwm-m-TMmE7ZrGGawLoRmp4ycnkSFY
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 clxscore=1011
- lowpriorityscore=0 adultscore=0 impostorscore=0 bulkscore=0
- mlxlogscore=999 mlxscore=0 phishscore=0 malwarescore=0 spamscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2107190050
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jul 16, 2021 at 08:21:33PM +0200, Marek Vasut wrote:
-> The original implementation of RPM handling in probe() was mostly
-> correct, except it failed to call pm_runtime_get_*() to activate the
-> hardware. The subsequent fix, 734882a8bf98 ("spi: cadence: Correct
-> initialisation of runtime PM"), breaks the implementation further,
-> to the point where the system using this hard IP on ZynqMP hangs on
-> boot, because it accesses hardware which is gated off.
-> 
-> Undo 734882a8bf98 ("spi: cadence: Correct initialisation of runtime
-> PM") and instead add missing pm_runtime_get_noresume() and move the
-> RPM disabling all the way to the end of probe(). That makes ZynqMP
-> not hang on boot yet again.
-> 
-> Fixes: 734882a8bf98 ("spi: cadence: Correct initialisation of runtime PM")
-> Signed-off-by: Marek Vasut <marex@denx.de>
-> Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> ---
+From: Mason Zhang <Mason.Zhang@mediatek.com>
 
-For my own edification do you know exactly what the problem was
-on your system here? I am assuming my mistake was that without the
-pm_runtime reference being taken, some required parent doesn't get
-enabled, which is convienently fine on my Zynq but not your ZynqMP?
+Hello,
+This patchset has restructure spi cs_timing, as we know spi core has
+removed spi_set_cs_timing() API, it is a correct decision because it
+asked spi devices to call it in one more time.
+so we need find another way to support user set cs_timing. Actually,
+spi_device set spi_delay for cs_timing is enough, and about how to
+set cs_timing, just put it one the master driver.
+We have test this patch in mediatek platform, it can compeletly meets
+our needs.
 
-The inclusion of the IRQ stuff in the pm_runtime block makes me a
-little nervous as if the problem is that your hardware generates
-a spurious IRQ on boot and that is where the bad access comes from
-this code feels racy. The original code did the put before the IRQ
-registers as well.
+Mason Zhang (3):
+  spi: move cs spi_delay to spi_device
+  spi: modify set_cs_timing parameter
+  spi: mediatek: modify set_cs_timing callback
 
-All that said, works on my Zynq:
+ drivers/spi/spi-mt65xx.c | 102 +++++++++++++++++++++------------------
+ drivers/spi/spi.c        |   6 +--
+ include/linux/spi/spi.h  |  23 ++++-----
+ 3 files changed, 69 insertions(+), 62 deletions(-)
 
-Tested-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+-- 
+2.18.0
 
-Thanks,
-Charles
