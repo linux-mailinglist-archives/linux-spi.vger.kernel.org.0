@@ -2,90 +2,144 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 026483CCED2
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Jul 2021 09:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3F23CCFAF
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Jul 2021 11:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235115AbhGSHve (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 19 Jul 2021 03:51:34 -0400
-Received: from mga09.intel.com ([134.134.136.24]:1357 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234895AbhGSHva (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 19 Jul 2021 03:51:30 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10049"; a="211006924"
-X-IronPort-AV: E=Sophos;i="5.84,251,1620716400"; 
-   d="scan'208";a="211006924"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2021 00:48:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,251,1620716400"; 
-   d="scan'208";a="499800520"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 19 Jul 2021 00:48:20 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 408BF24D; Mon, 19 Jul 2021 10:48:47 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: [PATCH v1 3/3] spi: pxa2xx: Reuse int_stop_and_reset() in couple of places
-Date:   Mon, 19 Jul 2021 10:48:42 +0300
-Message-Id: <20210719074842.36060-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210719074842.36060-1-andriy.shevchenko@linux.intel.com>
-References: <20210719074842.36060-1-andriy.shevchenko@linux.intel.com>
+        id S235705AbhGSITP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 19 Jul 2021 04:19:15 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:47861 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235286AbhGSITM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 19 Jul 2021 04:19:12 -0400
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m5OVc-0008U8-OD; Mon, 19 Jul 2021 10:20:16 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m5OVb-0001mx-WD; Mon, 19 Jul 2021 10:20:16 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m5OVb-0007XW-V1; Mon, 19 Jul 2021 10:20:15 +0200
+Date:   Mon, 19 Jul 2021 10:20:15 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Marek Vasut <marex@denx.de>
+Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH] spi: imx: mx51-ecspi: Fix low-speed CONFIGREG delay
+ calculation
+Message-ID: <20210719082015.ud43iwg5rfdomlqi@pengutronix.de>
+References: <20210718211143.143557-1-marex@denx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zpchixjek4djffbp"
+Content-Disposition: inline
+In-Reply-To: <20210718211143.143557-1-marex@denx.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Reuse int_stop_and_reset() in couple of places.
 
-While at it, change the order of the int_stop_and_reset() and pxa2xx_spi_off()
-to be in align with the similar flow in int_error_stop().
+--zpchixjek4djffbp
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi-pxa2xx.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+On Sun, Jul 18, 2021 at 11:11:43PM +0200, Marek Vasut wrote:
+> The spi_imx->spi_bus_clk may be uninitialized and thus also zero in
+> mx51_ecspi_prepare_message(), which would lead to division by zero
+> in kernel. Since bitbang .setup_transfer callback which initializes
+> the spi_imx->spi_bus_clk is called after bitbang prepare_message
+> callback, iterate over all the transfers in spi_message, find the
+> one with lowest bus frequency, and use that bus frequency for the
+> delay calculation.
+>=20
+> Note that it is not possible to move this CONFIGREG delay back into
+> the .setup_transfer callback, because that is invoked too late, after
+> the GPIO chipselects were already configured.
+>=20
+> Fixes: 135cbd378eab ("spi: imx: mx51-ecspi: Reinstate low-speed CONFIGREG=
+ delay")
+> Signed-off-by: Marek Vasut <marex@denx.de>
+> Cc: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> Cc: Mark Brown <broonie@kernel.org>
+> ---
+> Sigh ...
+> ---
+>  drivers/spi/spi-imx.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+> index 4aee3db6d6df..e18338fc3108 100644
+> --- a/drivers/spi/spi-imx.c
+> +++ b/drivers/spi/spi-imx.c
+> @@ -505,7 +505,9 @@ static int mx51_ecspi_prepare_message(struct spi_imx_=
+data *spi_imx,
+>  				      struct spi_message *msg)
+>  {
+>  	struct spi_device *spi =3D msg->spi;
+> +	struct spi_transfer *xfer;
+>  	u32 ctrl =3D MX51_ECSPI_CTRL_ENABLE;
+> +	u32 min_speed_hz =3D ~0U;
+>  	u32 testreg, delay;
+>  	u32 cfg =3D readl(spi_imx->base + MX51_ECSPI_CONFIG);
+> =20
+> @@ -578,7 +580,13 @@ static int mx51_ecspi_prepare_message(struct spi_imx=
+_data *spi_imx,
+>  	 * the SPI communication as the device on the other end would consider
+>  	 * the change of SCLK polarity as a clock tick already.
+>  	 */
+> -	delay =3D (2 * 1000000) / spi_imx->spi_bus_clk;
+> +	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+> +		if (!xfer->speed_hz)
+> +			continue;
+> +		min_speed_hz =3D min(xfer->speed_hz, min_speed_hz);
+> +	}
 
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index 833eb52ed305..19a2d1ea7d42 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -722,11 +722,8 @@ static irqreturn_t interrupt_transfer(struct driver_data *drv_data)
- 
- static void handle_bad_msg(struct driver_data *drv_data)
- {
-+	int_stop_and_reset(drv_data);
- 	pxa2xx_spi_off(drv_data);
--	clear_SSCR1_bits(drv_data, drv_data->int_cr1);
--	if (!pxa25x_ssp_comp(drv_data))
--		pxa2xx_spi_write(drv_data, SSTO, 0);
--	write_SSSR_CS(drv_data, drv_data->clear_sr);
- 
- 	dev_err(drv_data->ssp->dev, "bad message state in interrupt handler\n");
- }
-@@ -1154,13 +1151,10 @@ static void pxa2xx_spi_handle_err(struct spi_controller *controller,
- {
- 	struct driver_data *drv_data = spi_controller_get_devdata(controller);
- 
-+	int_stop_and_reset(drv_data);
-+
- 	/* Disable the SSP */
- 	pxa2xx_spi_off(drv_data);
--	/* Clear and disable interrupts and service requests */
--	write_SSSR_CS(drv_data, drv_data->clear_sr);
--	clear_SSCR1_bits(drv_data, drv_data->int_cr1 | drv_data->dma_cr1);
--	if (!pxa25x_ssp_comp(drv_data))
--		pxa2xx_spi_write(drv_data, SSTO, 0);
- 
- 	/*
- 	 * Stop the DMA if running. Note DMA callback handler may have unset
--- 
-2.30.2
+Can it happen that all transfer's spped_hz are zero?
 
+> +
+> +	delay =3D (2 * 1000000) / min_speed_hz;
+
+Orthogonal to your change: I wonder if we need to round up the division
+here.
+
+>  	if (likely(delay < 10))	/* SCLK is faster than 100 kHz */
+>  		udelay(delay);
+>  	else			/* SCLK is _very_ slow */
+
+Also the comments are wrong here. Is SCLK is 150 kHz we have
+min_speed_hz =3D 150000, right? Then delay becomes 13 and the slow freq
+path is entered. The right comment (when keeping delay =3D (2 * 1000000) /
+min_speed_hz) would be
+
+	if (likely(delay < 10)) /* SCLK is faster than 181.818 kHz */
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--zpchixjek4djffbp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmD1NbwACgkQwfwUeK3K
+7AlJOgf+PVkTxSAnKDBnXbOhYjjhUgcRWwrMBBpwNeUjN7BW3HazhiPVYdWWmfdi
+1Dk4l3cWcKjxHp2dBOaCZO2vR8uqXEKZgsDopQQwh68hzA8P8CAJqxLBF1MeE9lE
+lXWYoOK9QA9BobhK6tPtxu969LRNeVLY54H6JHd7hnrxqMI9wxEGLu7sWpFWrXok
+WPckoeV2OQlOvWgCwblRQ0cUlxkXdRIEmsYWtivYnzieFlE0ZuxrGDa0plDLbIuo
+w0LKX4C00ZiMst0MQIjxSP36T7MNXYgf+rNh3RWaasFT5+9EjICHGUQhzbfgTiq3
+y0LyCXmppLEomh4lRaOD0v9OjtcW8w==
+=SrzY
+-----END PGP SIGNATURE-----
+
+--zpchixjek4djffbp--
