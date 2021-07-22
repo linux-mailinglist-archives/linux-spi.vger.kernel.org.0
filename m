@@ -2,83 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1513D2AD0
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Jul 2021 19:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D6413D2AEA
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Jul 2021 19:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbhGVQ04 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 22 Jul 2021 12:26:56 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:51290 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbhGVQ04 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Jul 2021 12:26:56 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id C66F0203E2;
-        Thu, 22 Jul 2021 17:07:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1626973649; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=x3k96SXurbZA48P/lkQgfDs83i+1PSmUbdDIzs21Buk=;
-        b=SbrGRviqO/5Rbp6K6cW4TA4BOuFqZUqU8rWIiMYYycR2iXits2kTms76YBo9n7WU47uvr1
-        UDKv8X0LWrhcgnal7Cpi+aLnmtmuivyFnOrai2egjZ6a5anQYv1qQZiFtuEsuyDhx8Gd6W
-        reD6EpOUpU3IocwbHjN8iG92uw47lNU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1626973649;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=x3k96SXurbZA48P/lkQgfDs83i+1PSmUbdDIzs21Buk=;
-        b=amAkSiUfcYAycWF5BcYuEPpJ/kUI4vnWa4L1wh1fSNqJJQJUKdD7cVsootjQyRsasadl2L
-        SgFbzdwy2TvoxKCw==
-Received: from hawking.suse.de (hawking.suse.de [10.160.4.0])
-        by relay2.suse.de (Postfix) with ESMTP id BF7E5ADCDC;
-        Thu, 22 Jul 2021 17:07:29 +0000 (UTC)
-Received: by hawking.suse.de (Postfix, from userid 17005)
-        id B24D1445C89; Thu, 22 Jul 2021 19:07:29 +0200 (CEST)
-From:   Andreas Schwab <schwab@suse.de>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: update modalias_show after of_device_uevent_modalias
- support
-X-Yow:  ..  Do you like ``TENDER VITTLES?''?
-Date:   Thu, 22 Jul 2021 19:07:29 +0200
-Message-ID: <mvmsg0646r2.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S230045AbhGVQ3h (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Jul 2021 12:29:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50584 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229969AbhGVQ3g (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 22 Jul 2021 12:29:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2ADBC6101E;
+        Thu, 22 Jul 2021 17:10:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626973811;
+        bh=J0y6xbtbantf/kVCKwtKZmfOdcq8bh6lH6sDWC8Jwtg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AnORno1TQEJYgUmFKzK5sD7vJCkC6g0UGItAXfwC6uhYqPj3XVTbCBMYEBjIqxZm0
+         JKEgcPHbYUOFfcM95ZiGouMZaBRmVYEN9zIb3qv9xYlkw5b/Tq1sUz/N1R9ANv0mfL
+         IE16fPgw2NXbyeQfw1E3K9yoR9FYvXfOBQaEw0mCZbQWSNiWzHJ29y+AKfikCNhSpM
+         v24/lrxjrSvlsmFy9qiHeGpSuPIuH77zTSqBr1Rx1gmCw/GBHxB0jMMWE+fJGq4P4w
+         R514HxFJc5vmSHZ1/LJzyxevXpSA/+xaMS9Qzd6ulhfue6PjdTH3gwAEsvtPGcQaPJ
+         ikggngRYOwndA==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>
+Subject: Re: [PATCH v1 1/1] spi: pxa2xx: Adapt reset_sccr1() to the case when no message available
+Date:   Thu, 22 Jul 2021 18:09:55 +0100
+Message-Id: <162697114030.3066.8933370918694661458.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210721121520.62605-1-andriy.shevchenko@linux.intel.com>
+References: <20210721121520.62605-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Commit 3ce6c9e2617e ("spi: add of_device_uevent_modalias support") is
-incomplete, as it didn't update the modalias_show function to generate the
-of: modalias string if available.
+On Wed, 21 Jul 2021 15:15:20 +0300, Andy Shevchenko wrote:
+> In some cases reset_sccr1() can be called when no message available.
+> This means that there is no associated chip to receive that message
+> and hence no threshold needs to be set. Adapt the function to such
+> cases.
 
-Fixes: 3ce6c9e2617e ("spi: add of_device_uevent_modalias support")
-Signed-off-by: Andreas Schwab <schwab@suse.de>
----
- drivers/spi/spi.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Applied to
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index c99181165321..e4dc593b1f32 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -58,6 +58,10 @@ modalias_show(struct device *dev, struct device_attribute *a, char *buf)
- 	const struct spi_device	*spi = to_spi_device(dev);
- 	int len;
- 
-+	len = of_device_modalias(dev, buf, PAGE_SIZE);
-+	if (len != -ENODEV)
-+		return len;
-+
- 	len = acpi_device_modalias(dev, buf, PAGE_SIZE - 1);
- 	if (len != -ENODEV)
- 		return len;
--- 
-2.32.0
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
 
--- 
-Andreas Schwab, SUSE Labs, schwab@suse.de
-GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
-"And now for something completely different."
+[1/1] spi: pxa2xx: Adapt reset_sccr1() to the case when no message available
+      commit: e3aa9acc71778266cc4743217ff1a1a53caf15d6
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
