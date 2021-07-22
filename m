@@ -2,109 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A29D03D2ACD
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Jul 2021 19:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1513D2AD0
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Jul 2021 19:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbhGVQ0d (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 22 Jul 2021 12:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54264 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbhGVQ0d (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Jul 2021 12:26:33 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068AAC061575;
-        Thu, 22 Jul 2021 10:07:08 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id j1so8210030ljo.10;
-        Thu, 22 Jul 2021 10:07:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=mTMaumPRkIaZLa/2lxM5xjyGM2rdgCcCIjsVEWllSbo=;
-        b=gOaYBO643OGCAnzVHor6K/I7Sh4j1P/tY241g/QjDF42EE9UIEzdJryXQWAUdKgERr
-         AP2JFTDmoU+Ei5T8Vr6TBAXqGukdtiVXwp8N/bF5iXcYzjZ6sDbZgWbQkogWd1e2EXIx
-         pXDIf6eRYw4+9QAIiHFGY1b1r/xTL9uSoYgX1ZuSSMxUK06b39YXfT+YL3/2EhTLIj4l
-         UEsDfITGaUAQ/SvOXjnJ0CRwy5Mb6rN+/W3NppwRwzeXS22jz0UZweM113QOWw22o7/8
-         jXMU1HUgsOm1Pii6XQc4f0v8fVYB+ynxm6nxkZP+IOlT+k3iW0s74N78foAE9PKVWXaz
-         Coag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=mTMaumPRkIaZLa/2lxM5xjyGM2rdgCcCIjsVEWllSbo=;
-        b=SCSg9UnWjZUQwEH3+O2M6POh1b6etmp53xY74j+dxuwKWgqceD/AgCbRA+qHNQcixN
-         aOXaZ9o22WlFbYDBOyFvdBJLoJdEBHOzfkw/HMVeEG5zZdQRZg5uDzYnA7iza4VEI4JQ
-         ES1BGEY/YrrKdz8ilHDBGArAKb67l4lbdA67qCYAPLJH+BqhFPYPrRQG4BDZisJ3z20D
-         y9uj/KgZH1EVp/yZO6jkQoxzF4UFMY9ExFpus2BeG7c34cflb/WWTJ+bNogY3LaMu3y8
-         lB3CsiMMJlhEB5uj8+PhMNyCsTnkffVwpQ744iRgZVuooVKax2FPhPmCCvh8KuehbxAv
-         uR3g==
-X-Gm-Message-State: AOAM532LGRd66rIL51JSmREYGtQEE/HU5362tdJYkUr/1LZXaQYEG8ot
-        fff0kldA0bI5hVaf7yM380s=
-X-Google-Smtp-Source: ABdhPJwJUTGY5I6rTKsMTrjPyl+3UE0wJTITWZ6PHA8CDZMJKxkwka+8f7LgGy5kgnijyiPv1WGoYA==
-X-Received: by 2002:a05:651c:12c5:: with SMTP id 5mr710306lje.478.1626973626369;
-        Thu, 22 Jul 2021 10:07:06 -0700 (PDT)
-Received: from mobilestation ([95.79.127.110])
-        by smtp.gmail.com with ESMTPSA id a16sm2021088lfs.281.2021.07.22.10.07.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jul 2021 10:07:06 -0700 (PDT)
-Date:   Thu, 22 Jul 2021 20:07:03 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     nandhini.srikandan@intel.com
-Cc:     broonie@kernel.org, robh+dt@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        mgross@linux.intel.com, kris.pan@intel.com,
-        kenchappa.demakkanavar@intel.com, furong.zhou@intel.com,
-        mallikarjunappa.sangannavar@intel.com, mahesh.r.vaidya@intel.com,
-        rashmi.a@intel.com
-Subject: Re: =?utf-8?B?W+KAnFBBVENI?= =?utf-8?B?4oCd?= 0/2] Add support for
- Intel Thunder Bay SPI
-Message-ID: <20210722170703.m377feh3xdya76so@mobilestation>
-References: <20210722053358.29682-1-nandhini.srikandan@intel.com>
+        id S229928AbhGVQ04 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Jul 2021 12:26:56 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:51290 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229982AbhGVQ04 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Jul 2021 12:26:56 -0400
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id C66F0203E2;
+        Thu, 22 Jul 2021 17:07:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1626973649; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=x3k96SXurbZA48P/lkQgfDs83i+1PSmUbdDIzs21Buk=;
+        b=SbrGRviqO/5Rbp6K6cW4TA4BOuFqZUqU8rWIiMYYycR2iXits2kTms76YBo9n7WU47uvr1
+        UDKv8X0LWrhcgnal7Cpi+aLnmtmuivyFnOrai2egjZ6a5anQYv1qQZiFtuEsuyDhx8Gd6W
+        reD6EpOUpU3IocwbHjN8iG92uw47lNU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1626973649;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=x3k96SXurbZA48P/lkQgfDs83i+1PSmUbdDIzs21Buk=;
+        b=amAkSiUfcYAycWF5BcYuEPpJ/kUI4vnWa4L1wh1fSNqJJQJUKdD7cVsootjQyRsasadl2L
+        SgFbzdwy2TvoxKCw==
+Received: from hawking.suse.de (hawking.suse.de [10.160.4.0])
+        by relay2.suse.de (Postfix) with ESMTP id BF7E5ADCDC;
+        Thu, 22 Jul 2021 17:07:29 +0000 (UTC)
+Received: by hawking.suse.de (Postfix, from userid 17005)
+        id B24D1445C89; Thu, 22 Jul 2021 19:07:29 +0200 (CEST)
+From:   Andreas Schwab <schwab@suse.de>
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: update modalias_show after of_device_uevent_modalias
+ support
+X-Yow:  ..  Do you like ``TENDER VITTLES?''?
+Date:   Thu, 22 Jul 2021 19:07:29 +0200
+Message-ID: <mvmsg0646r2.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210722053358.29682-1-nandhini.srikandan@intel.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-BTW it's a first time I've met quotes around the PATCH word in the
-subject:
-[“PATCH” 0/2] Add support for Intel Thunder Bay SPI
- ^     ^
+Commit 3ce6c9e2617e ("spi: add of_device_uevent_modalias support") is
+incomplete, as it didn't update the modalias_show function to generate the
+of: modalias string if available.
 
-could you drop them?
+Fixes: 3ce6c9e2617e ("spi: add of_device_uevent_modalias support")
+Signed-off-by: Andreas Schwab <schwab@suse.de>
+---
+ drivers/spi/spi.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Regards,
--Serge
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index c99181165321..e4dc593b1f32 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -58,6 +58,10 @@ modalias_show(struct device *dev, struct device_attribute *a, char *buf)
+ 	const struct spi_device	*spi = to_spi_device(dev);
+ 	int len;
+ 
++	len = of_device_modalias(dev, buf, PAGE_SIZE);
++	if (len != -ENODEV)
++		return len;
++
+ 	len = acpi_device_modalias(dev, buf, PAGE_SIZE - 1);
+ 	if (len != -ENODEV)
+ 		return len;
+-- 
+2.32.0
 
-On Thu, Jul 22, 2021 at 01:33:56PM +0800, nandhini.srikandan@intel.com wrote:
-> From: Nandhini Srikandan <nandhini.srikandan@intel.com>
-> 
-> Hi,
-> 
-> This patch set enables the support for Designware SPI on the Intel Thunder Bay SoC.
-> 
-> Patch 1: SPI DT bindings for Intel Thunder Bay SoC
-> Patch 2: Adds support for Designware SPI on Intel Thunderbay SoC
-> 
-> Please help to review this patch set.
-> 
-> Thanks & Regards,
-> Nandhini
-> 
-> Nandhini Srikandan (2):
->   dt-bindings: spi: Add bindings for Intel Thunder Bay SoC
->   spi: dw: Add support for Intel Thunder Bay SPI
-> 
->  .../bindings/spi/snps,dw-apb-ssi.yaml         |  2 ++
->  drivers/spi/spi-dw-core.c                     |  6 ++++++
->  drivers/spi/spi-dw-mmio.c                     | 20 +++++++++++++++++++
->  drivers/spi/spi-dw.h                          | 15 ++++++++++++++
->  4 files changed, 43 insertions(+)
-> 
-> -- 
-> 2.17.1
-> 
+
+-- 
+Andreas Schwab, SUSE Labs, schwab@suse.de
+GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
+"And now for something completely different."
