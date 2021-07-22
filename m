@@ -2,42 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6413D2AEA
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Jul 2021 19:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 564D13D2AED
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Jul 2021 19:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbhGVQ3h (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 22 Jul 2021 12:29:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50584 "EHLO mail.kernel.org"
+        id S233637AbhGVQ3k (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Jul 2021 12:29:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50634 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229969AbhGVQ3g (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 22 Jul 2021 12:29:36 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2ADBC6101E;
-        Thu, 22 Jul 2021 17:10:10 +0000 (UTC)
+        id S233430AbhGVQ3j (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 22 Jul 2021 12:29:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CEC44610CC;
+        Thu, 22 Jul 2021 17:10:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626973811;
-        bh=J0y6xbtbantf/kVCKwtKZmfOdcq8bh6lH6sDWC8Jwtg=;
+        s=k20201202; t=1626973814;
+        bh=CICPC0K7i8ZnmYxOvNvLJEa361LHxHiMVcLPXgxl+nY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AnORno1TQEJYgUmFKzK5sD7vJCkC6g0UGItAXfwC6uhYqPj3XVTbCBMYEBjIqxZm0
-         JKEgcPHbYUOFfcM95ZiGouMZaBRmVYEN9zIb3qv9xYlkw5b/Tq1sUz/N1R9ANv0mfL
-         IE16fPgw2NXbyeQfw1E3K9yoR9FYvXfOBQaEw0mCZbQWSNiWzHJ29y+AKfikCNhSpM
-         v24/lrxjrSvlsmFy9qiHeGpSuPIuH77zTSqBr1Rx1gmCw/GBHxB0jMMWE+fJGq4P4w
-         R514HxFJc5vmSHZ1/LJzyxevXpSA/+xaMS9Qzd6ulhfue6PjdTH3gwAEsvtPGcQaPJ
-         ikggngRYOwndA==
+        b=Npgpt349pM2AdqnJEJHirXHAxtFWzJuUKnkFFF9HqMwv9e1C7VwKtOf9Pzh7riHTy
+         YD6WZreDg8owbB8IRAwLyrT/OZJ8UHyN3y552xfW5jDnBE9G0uuXk1m8hM3iaGNEXv
+         3MAem+MrgwJ20GL2Cacm6m3OX39zyUmjbQr2NEN1VRc14PxHIMQoH7lThUH1Vs06Bx
+         KW68ip4ZsEhCuFJLu+evI/ldM5AcxQanL0x3lUx0RibBPFIo+lnxsR5rh6TzGgRJap
+         +YSAhc6K6Xg49Af+zqgmdZSSwv/VTT8nl2IwW49sPcAHR4CbYAnfAjjRgFaSYgF8P+
+         SRssuV7YF02iQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>
-Subject: Re: [PATCH v1 1/1] spi: pxa2xx: Adapt reset_sccr1() to the case when no message available
-Date:   Thu, 22 Jul 2021 18:09:55 +0100
-Message-Id: <162697114030.3066.8933370918694661458.b4-ty@kernel.org>
+To:     Marco Felsch <m.felsch@pengutronix.de>,
+        Andreas Schwab <schwab@suse.de>
+Cc:     Mark Brown <broonie@kernel.org>, kernel@pengutronix.de,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: update modalias_show after of_device_uevent_modalias support
+Date:   Thu, 22 Jul 2021 18:09:56 +0100
+Message-Id: <162697114030.3066.1118388104811208682.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210721121520.62605-1-andriy.shevchenko@linux.intel.com>
-References: <20210721121520.62605-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <mvmwnpi4fya.fsf@suse.de>
+References: <20210525091003.18228-1-m.felsch@pengutronix.de> <mvmwnpi4fya.fsf@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -45,11 +41,10 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 21 Jul 2021 15:15:20 +0300, Andy Shevchenko wrote:
-> In some cases reset_sccr1() can be called when no message available.
-> This means that there is no associated chip to receive that message
-> and hence no threshold needs to be set. Adapt the function to such
-> cases.
+On Thu, 22 Jul 2021 15:48:45 +0200, Andreas Schwab wrote:
+> Commit 3ce6c9e2617e ("spi: add of_device_uevent_modalias support") is
+> incomplete, as it didn't update the modalias_show function to generate the
+> of: modalias string if available.
 
 Applied to
 
@@ -57,8 +52,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: pxa2xx: Adapt reset_sccr1() to the case when no message available
-      commit: e3aa9acc71778266cc4743217ff1a1a53caf15d6
+[1/1] spi: update modalias_show after of_device_uevent_modalias support
+      commit: e09f2ab8eecc6dcbd7013a1303cbe56b00dc9fb0
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
