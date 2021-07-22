@@ -2,164 +2,129 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5903D1D76
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Jul 2021 07:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F38033D1DFE
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Jul 2021 08:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbhGVEyK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 22 Jul 2021 00:54:10 -0400
-Received: from mga05.intel.com ([192.55.52.43]:49349 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230306AbhGVEyI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 22 Jul 2021 00:54:08 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10052"; a="297132160"
-X-IronPort-AV: E=Sophos;i="5.84,260,1620716400"; 
-   d="scan'208";a="297132160"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2021 22:34:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,260,1620716400"; 
-   d="scan'208";a="632868491"
-Received: from ubuntu18.png.intel.com ([10.88.229.69])
-  by orsmga005.jf.intel.com with ESMTP; 21 Jul 2021 22:34:40 -0700
-From:   nandhini.srikandan@intel.com
-To:     fancer.lancer@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, mgross@linux.intel.com,
-        kris.pan@intel.com, kenchappa.demakkanavar@intel.com,
-        furong.zhou@intel.com, mallikarjunappa.sangannavar@intel.com,
-        mahesh.r.vaidya@intel.com, nandhini.srikandan@intel.com,
-        rashmi.a@intel.com
-Subject: =?utf-8?q?=5B=E2=80=9CPATCH=E2=80=9D=202/2=5D=20spi=3A=20dw=3A=20Add=20support=20for=20Intel=20Thunder=20Bay=20SPI?=
-Date:   Thu, 22 Jul 2021 13:33:58 +0800
-Message-Id: <20210722053358.29682-3-nandhini.srikandan@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210722053358.29682-1-nandhini.srikandan@intel.com>
-References: <20210722053358.29682-1-nandhini.srikandan@intel.com>
+        id S230288AbhGVF0m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Jul 2021 01:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43678 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230261AbhGVF0m (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Jul 2021 01:26:42 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22E7C061575
+        for <linux-spi@vger.kernel.org>; Wed, 21 Jul 2021 23:07:17 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m6RrI-0002e6-Hf; Thu, 22 Jul 2021 08:07:00 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m6RrF-0001Zj-AS; Thu, 22 Jul 2021 08:06:57 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m6RrF-0002kg-8x; Thu, 22 Jul 2021 08:06:57 +0200
+Date:   Thu, 22 Jul 2021 08:06:54 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-rtc@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        linux-spi@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Lee Jones <lee.jones@linaro.org>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PULL] Add variants of devm_clk_get for prepared and enabled
+ clocks enabled clocks
+Message-ID: <20210722060654.nudpdtemosi64nlb@pengutronix.de>
+References: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
+ <20210609202123.u5rmw7al4x3rrvun@pengutronix.de>
+ <20210625171434.3xusxpxjprcdqa47@pengutronix.de>
+ <20210705080144.zfbzkm7l3gmnh6st@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="r2k53gnwa3ltya4v"
+Content-Disposition: inline
+In-Reply-To: <20210705080144.zfbzkm7l3gmnh6st@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Nandhini Srikandan <nandhini.srikandan@intel.com>
 
-Add support for Intel Thunder Bay SPI controller, which uses DesignWare
-DWC_ssi core.
-Bit 31 of CTRLR0 register is added for Thunder Bay, to
-configure the device as a master or as a slave serial peripheral.
-Bit 14(SSTE) of CTRLR0 register should be set(1) for Thunder Bay.
-Added reset of SPI controller required for Thunder Bay.
+--r2k53gnwa3ltya4v
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Nandhini Srikandan <nandhini.srikandan@intel.com>
----
- drivers/spi/spi-dw-core.c |  6 ++++++
- drivers/spi/spi-dw-mmio.c | 20 ++++++++++++++++++++
- drivers/spi/spi-dw.h      | 15 +++++++++++++++
- 3 files changed, 41 insertions(+)
+Hello Stephen,
 
-diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-index a305074c482e..eecf8dcd0677 100644
---- a/drivers/spi/spi-dw-core.c
-+++ b/drivers/spi/spi-dw-core.c
-@@ -302,6 +302,12 @@ static u32 dw_spi_prepare_cr0(struct dw_spi *dws, struct spi_device *spi)
- 
- 		if (dws->caps & DW_SPI_CAP_KEEMBAY_MST)
- 			cr0 |= DWC_SSI_CTRLR0_KEEMBAY_MST;
-+
-+		if (dws->caps & DW_SPI_CAP_THUNDERBAY_MST)
-+			cr0 |= DWC_SSI_CTRLR0_THUNDERBAY_MST;
-+
-+		if (dws->caps & DW_SPI_CAP_THUNDERBAY_SSTE)
-+			cr0 |= DWC_SSI_CTRLR0_THUNDERBAY_SSTE;
- 	}
- 
- 	return cr0;
-diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-index 3379720cfcb8..ca9aad078752 100644
---- a/drivers/spi/spi-dw-mmio.c
-+++ b/drivers/spi/spi-dw-mmio.c
-@@ -222,6 +222,15 @@ static int dw_spi_keembay_init(struct platform_device *pdev,
- 	return 0;
- }
- 
-+static int dw_spi_thunderbay_init(struct platform_device *pdev,
-+				  struct dw_spi_mmio *dwsmmio)
-+{
-+	dwsmmio->dws.caps = DW_SPI_CAP_THUNDERBAY_MST | DW_SPI_CAP_THUNDERBAY_RST |
-+			    DW_SPI_CAP_THUNDERBAY_SSTE | DW_SPI_CAP_DWC_SSI;
-+
-+	return 0;
-+}
-+
- static int dw_spi_canaan_k210_init(struct platform_device *pdev,
- 				   struct dw_spi_mmio *dwsmmio)
- {
-@@ -243,6 +252,7 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
- 			 struct dw_spi_mmio *dwsmmio);
- 	struct dw_spi_mmio *dwsmmio;
- 	struct resource *mem;
-+	struct reset_control *rst;
- 	struct dw_spi *dws;
- 	int ret;
- 	int num_cs;
-@@ -309,6 +319,15 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
- 			goto out;
- 	}
- 
-+	if (dws->caps & DW_SPI_CAP_THUNDERBAY_RST) {
-+		rst = devm_reset_control_get_exclusive(&pdev->dev, NULL);
-+		if (!IS_ERR(rst)) {
-+			reset_control_assert(rst);
-+			udelay(2);
-+			reset_control_deassert(rst);
-+		}
-+	}
-+
- 	pm_runtime_enable(&pdev->dev);
- 
- 	ret = dw_spi_add_host(&pdev->dev, dws);
-@@ -349,6 +368,7 @@ static const struct of_device_id dw_spi_mmio_of_match[] = {
- 	{ .compatible = "renesas,rzn1-spi", .data = dw_spi_dw_apb_init},
- 	{ .compatible = "snps,dwc-ssi-1.01a", .data = dw_spi_dwc_ssi_init},
- 	{ .compatible = "intel,keembay-ssi", .data = dw_spi_keembay_init},
-+	{ .compatible = "intel,thunderbay-ssi", .data = dw_spi_thunderbay_init},
- 	{ .compatible = "microchip,sparx5-spi", dw_spi_mscc_sparx5_init},
- 	{ .compatible = "canaan,k210-spi", dw_spi_canaan_k210_init},
- 	{ /* end of table */}
-diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-index b665e040862c..bfe1d5edc25a 100644
---- a/drivers/spi/spi-dw.h
-+++ b/drivers/spi/spi-dw.h
-@@ -82,6 +82,18 @@
-  */
- #define DWC_SSI_CTRLR0_KEEMBAY_MST	BIT(31)
- 
-+/*
-+ * For Thunder Bay, CTRLR0[14] should be set to 1.
-+ */
-+#define DWC_SSI_CTRLR0_THUNDERBAY_SSTE	BIT(14)
-+
-+/*
-+ * For Thunder Bay, CTRLR0[31] is used to select controller mode.
-+ * 0: SSI is slave
-+ * 1: SSI is master
-+ */
-+#define DWC_SSI_CTRLR0_THUNDERBAY_MST	BIT(31)
-+
- /* Bit fields in CTRLR1 */
- #define SPI_NDF_MASK			GENMASK(15, 0)
- 
-@@ -125,6 +137,9 @@ enum dw_ssi_type {
- #define DW_SPI_CAP_KEEMBAY_MST		BIT(1)
- #define DW_SPI_CAP_DWC_SSI		BIT(2)
- #define DW_SPI_CAP_DFS32		BIT(3)
-+#define DW_SPI_CAP_THUNDERBAY_MST	BIT(4)
-+#define DW_SPI_CAP_THUNDERBAY_RST	BIT(5)
-+#define DW_SPI_CAP_THUNDERBAY_SSTE	BIT(6)
- 
- /* Slave spi_transfer/spi_mem_op related */
- struct dw_spi_cfg {
--- 
-2.17.1
+On Mon, Jul 05, 2021 at 10:01:44AM +0200, Uwe Kleine-K=F6nig wrote:
+> On Fri, Jun 25, 2021 at 07:14:34PM +0200, Uwe Kleine-K=F6nig wrote:
+> > On Wed, Jun 09, 2021 at 10:21:23PM +0200, Uwe Kleine-K=F6nig wrote:
+> > > given that I don't succeed in getting any feedback for my patch set, =
+I'm
+> > > trying with a pull request today. It would be really great if this pu=
+ll
+> > > request made it finally in for the next merge window.
+> >=20
+> > It seems sending a pull request didn't help either :-\
+> >=20
+> > I'm waiting since October for feedback, several people expressed to like
+> > this series and I want to make use of it to simplify a few drivers. I'm
+> > quite annoyed that your missing feedback blocks me from further
+> > improving stuff.
+>=20
+> There is still no feedback, not even something like: "I saw your
+> nagging, sorry. I'm drown in other missions, please have some more
+> patience."
+>=20
+> I assume it's not to much to expect at least such a reply after more
+> than 8 months?
 
+The next merge window is over now. The pull request still merges fine
+into v5.14-rc2. I'm still convinced it adds some benefit and I want to
+use it to simplify a bunch of drivers. But I cannot without this being
+merged.
+
+Do I have to consider creating these functions in the pwm namespace to
+continue here? This cannot be the right thing to do?!
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--r2k53gnwa3ltya4v
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmD5CvsACgkQwfwUeK3K
+7AmOhAf+KEi6OI5+iu0T3ce0P5fYpVgvH17BQ2OQgNAk+G/pekmQPaYq3wekL2lt
+3tSmhkWJ+jaLx3CFlFx5h8eXQXo3Kln2w7UXpi+2RbkLx6tNWrLzlFn1pImvkJZx
+smHBjVsy91SbUbyfxsShxn1/p2VRyd/zpnuCw8X0igvBl7k621aAKBhSwB7SgowB
+a0vzrD3Rj1NL5/nly7UQyWHbGZ3zXqSjkfbWLiR74Yu0UpiU0XdM3SWMsCPW7Bc2
+QGRQyEw2izrhp+YKuqba9EyfHTNjMyd8yRS+6wCKa3ch1VO40uUujegbb9vIez8k
+/uxpB1ndq3h7j+TfBHIHLLSe0L1Uvw==
+=OlkQ
+-----END PGP SIGNATURE-----
+
+--r2k53gnwa3ltya4v--
