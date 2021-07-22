@@ -2,71 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C66AF3D17F3
-	for <lists+linux-spi@lfdr.de>; Wed, 21 Jul 2021 22:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB8B3D1D70
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Jul 2021 07:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234872AbhGUTiB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 21 Jul 2021 15:38:01 -0400
-Received: from phobos.denx.de ([85.214.62.61]:34052 "EHLO phobos.denx.de"
+        id S229609AbhGVEyE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Jul 2021 00:54:04 -0400
+Received: from mga05.intel.com ([192.55.52.43]:49349 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232808AbhGUTiB (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 21 Jul 2021 15:38:01 -0400
-Received: from [IPv6:::1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id D643F8164D;
-        Wed, 21 Jul 2021 22:18:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1626898716;
-        bh=nNNRf+OmgsFB3RAgbEKJM50FASZmcgjDzTFB0wDcc+Y=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=U+lybguxWWOXnAZMwduMIs8BiRj3DRpgT/lSRwXpc4QnojrxTniI6d/z3T5QKlvG0
-         1nT26dGn2ANoBGNG7MFu8JqmX1Zxi8Z0ss6VrO3IrEDY3sxfIyxeIvaxgczyOrvr/a
-         9AGf7mhVngE+aOnJk97Kpv/TOz5cdGcD3MezVZne0uEm9Y1vaWr5bWApREbmsLHyG1
-         2WWmhAH3iQql4E+8BGiWFyc37W+/3X5tWlqbWoG6uYvyIckXQmwdSnmFBCHmxyeCpE
-         9G/ypwZHJ5aPWA4hLSLi3+isGr/xoyQJdYYqI813nfEAoKitqSvkVRinCJuktK1LOK
-         gVbbLXY4W55kg==
-Subject: Re: [PATCH] spi: imx: mx51-ecspi: Fix low-speed CONFIGREG delay
- calculation
-To:     Mark Brown <broonie@kernel.org>
-Cc:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-spi@vger.kernel.org
-References: <20210718211143.143557-1-marex@denx.de>
- <20210719082015.ud43iwg5rfdomlqi@pengutronix.de>
- <17bf62a4-af57-1706-f20a-35f9d6cbf9d0@denx.de>
- <20210719211221.GA35544@sirena.org.uk>
-From:   Marek Vasut <marex@denx.de>
-Message-ID: <37b0f7eb-39fd-9e15-20e3-becfcfd4b5f4@denx.de>
-Date:   Wed, 21 Jul 2021 22:18:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S229529AbhGVEyB (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 22 Jul 2021 00:54:01 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10052"; a="297132153"
+X-IronPort-AV: E=Sophos;i="5.84,260,1620716400"; 
+   d="scan'208";a="297132153"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2021 22:34:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,260,1620716400"; 
+   d="scan'208";a="632868433"
+Received: from ubuntu18.png.intel.com ([10.88.229.69])
+  by orsmga005.jf.intel.com with ESMTP; 21 Jul 2021 22:34:33 -0700
+From:   nandhini.srikandan@intel.com
+To:     fancer.lancer@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, mgross@linux.intel.com,
+        kris.pan@intel.com, kenchappa.demakkanavar@intel.com,
+        furong.zhou@intel.com, mallikarjunappa.sangannavar@intel.com,
+        mahesh.r.vaidya@intel.com, nandhini.srikandan@intel.com,
+        rashmi.a@intel.com
+Subject: =?utf-8?q?=5B=E2=80=9CPATCH=E2=80=9D=200/2=5D=20Add=20support=20for=20Intel=20Thunder=20Bay=20SPI?=
+Date:   Thu, 22 Jul 2021 13:33:56 +0800
+Message-Id: <20210722053358.29682-1-nandhini.srikandan@intel.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20210719211221.GA35544@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
-X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 7/19/21 11:12 PM, Mark Brown wrote:
-> On Mon, Jul 19, 2021 at 03:38:55PM +0200, Marek Vasut wrote:
->> On 7/19/21 10:20 AM, Uwe Kleine-König wrote:
-> 
->>> Can it happen that all transfer's spped_hz are zero?
-> 
->> I don't think so, what kind of spi_message would that be ?
-> 
->> And even if it was zero, the delay would be 2000000/~0U , so zero as well,
->> which I suppose is the best we can do in such a case.
-> 
-> I can see that happening for a controller that didn't set any speed
-> information with a driver that also didn't set any speed information,
-> everything is just hoping that the default is fine but only the hardware
-> is actually setting something.  I've not gone and checked if anything
-> ever insists there absolutely must be something specified in software.
+From: Nandhini Srikandan <nandhini.srikandan@intel.com>
 
-So, should I send a V2 here with any changes or is this one OK as-is ?
+Hi,
+
+This patch set enables the support for Designware SPI on the Intel Thunder Bay SoC.
+
+Patch 1: SPI DT bindings for Intel Thunder Bay SoC
+Patch 2: Adds support for Designware SPI on Intel Thunderbay SoC
+
+Please help to review this patch set.
+
+Thanks & Regards,
+Nandhini
+
+Nandhini Srikandan (2):
+  dt-bindings: spi: Add bindings for Intel Thunder Bay SoC
+  spi: dw: Add support for Intel Thunder Bay SPI
+
+ .../bindings/spi/snps,dw-apb-ssi.yaml         |  2 ++
+ drivers/spi/spi-dw-core.c                     |  6 ++++++
+ drivers/spi/spi-dw-mmio.c                     | 20 +++++++++++++++++++
+ drivers/spi/spi-dw.h                          | 15 ++++++++++++++
+ 4 files changed, 43 insertions(+)
+
+-- 
+2.17.1
+
