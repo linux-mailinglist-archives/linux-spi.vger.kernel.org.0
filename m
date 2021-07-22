@@ -2,78 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1833D2AF0
-	for <lists+linux-spi@lfdr.de>; Thu, 22 Jul 2021 19:18:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF513D2AF5
+	for <lists+linux-spi@lfdr.de>; Thu, 22 Jul 2021 19:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233764AbhGVQ3s (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 22 Jul 2021 12:29:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50784 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233717AbhGVQ3o (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 22 Jul 2021 12:29:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1AADA61183;
-        Thu, 22 Jul 2021 17:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626973819;
-        bh=6tXsqxQclTT6KIHVXllKY41+MDNoERgynR2skjDE3sY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bFfHL+A8EXu7CYstSQ+1IjYoikwZaKgrPiwMvO91klckkR1wPj3SEexReAnIpYE7w
-         SG5j7JiQ3veVXAqajXljEB0aT27fGq2Jw2t90a0aMwEHvYYL8WO4t7nNuzrr9R5Bec
-         zqKqPCeL+0sj94ieU8iXm3iqK8G7rBqtxLc20Llp/C4KAF3mlg5dg8Ubyh8BjXvQ0w
-         Pg7FBVyqjfQQzi1d0xjcL4Zvg2JEXTZn3BLwk1kBMxdYn+ynNrXnuMUFWB36IOxWHh
-         FMvktb/YdWSeu2FNYkuXn4z35oz+m/c6F8qPSBtTstDvgS7fWZ6GD+C2H6yrNtjxgA
-         X862uJ2jIDUPQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org
-Subject: Re: [PATCH] spi: meson-spicc: fix memory leak in meson_spicc_remove
-Date:   Thu, 22 Jul 2021 18:09:58 +0100
-Message-Id: <162697114030.3066.15287754008678432008.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210720100116.1438974-1-mudongliangabcd@gmail.com>
-References: <20210720100116.1438974-1-mudongliangabcd@gmail.com>
+        id S230323AbhGVQbV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 22 Jul 2021 12:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230434AbhGVQbV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 22 Jul 2021 12:31:21 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30C6C061575;
+        Thu, 22 Jul 2021 10:11:55 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id b16so7003360ljq.9;
+        Thu, 22 Jul 2021 10:11:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kW0eXva7xVNT5G9+x5mEsNAXW41r17zcwLN4lzd0IxQ=;
+        b=Vm6PLOPVETZO6N0X9Ba7B3KUZ7fxh0X83imeI35Xv/IdXsZIxFBMUHvgjbbLkFn2pC
+         vaD2gg+JavZWm28ryNIAwFRunEiCjdFjenIvEGbkdCjk+mU5UZvPM6omIEEJQnHY3MmR
+         ig1+495y4kS3cxP/D4MnopnK9t6z1PvLy2rjjkoKDIVzE24OIw4DIHhN4coRCEN14Xri
+         5YOleXTNLlWSMhJ+GdKjG+bEXHeOZhLgQ2LOLqdatADW8qfDMA9H/s8DaI3Y+91Ei2gS
+         Prj2NshJJ5AIdW6aqykduhEe7Frlb6ua1BQCiK+O1NlC3DjYEw8a7Rd49UmE/uaBTV4n
+         Xk+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kW0eXva7xVNT5G9+x5mEsNAXW41r17zcwLN4lzd0IxQ=;
+        b=Mcm9lBx/grEE77Ob9xFCWBWvyJypd7ZGfpIZH9RaDRWLVJ3jt8HdwSWqPaEvOu1myd
+         46/J5sGAhzzVX+TnAKLkn7juWTHe0c20CZPOTUAad6s+kc+kf+8+zlUundAn2azvKrXD
+         6zvyvKQsXfAPL3EIB3ikba+IGzSP1p+5CyjTYAz9kmZgHgCyurgVvqZbINDJosZjxDhB
+         f4diD9L7dNcijkUggiyb2ytY9IV/3An7TRBkXGsfakE3Tm1lbDJ1LLDs+8+7F8K5ZmvW
+         DLSTbDqIi49VWxA9xCwlyF5v9BFZkY7G8wCsezldYuZEcILuVHgCoZOJrBse3q28Blng
+         BryQ==
+X-Gm-Message-State: AOAM532YPhxUA2sVtBzr5rRVn7d3LaEmW7pQ1fwpdJ9lLZvDTGvQO3fx
+        xcMUQ4QvHzDeyH0rxke5mYc=
+X-Google-Smtp-Source: ABdhPJy87VsWPSRFkTl8PqSOtY3yxklXiYjLxBBJDaptvPUR/kvJ/ObPLSC1877ss4SnHSGbKv0WKg==
+X-Received: by 2002:a2e:9794:: with SMTP id y20mr645880lji.417.1626973909136;
+        Thu, 22 Jul 2021 10:11:49 -0700 (PDT)
+Received: from mobilestation ([95.79.127.110])
+        by smtp.gmail.com with ESMTPSA id j26sm1386101lfh.71.2021.07.22.10.11.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jul 2021 10:11:48 -0700 (PDT)
+Date:   Thu, 22 Jul 2021 20:11:46 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     nandhini.srikandan@intel.com
+Cc:     broonie@kernel.org, robh+dt@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        mgross@linux.intel.com, kris.pan@intel.com,
+        kenchappa.demakkanavar@intel.com, furong.zhou@intel.com,
+        mallikarjunappa.sangannavar@intel.com, mahesh.r.vaidya@intel.com,
+        rashmi.a@intel.com
+Subject: Re: =?utf-8?B?W+KAnFBBVENI4oCdIDEvMg==?= =?utf-8?Q?=5D?=
+ dt-bindings: spi: Add bindings for Intel Thunder Bay SoC
+Message-ID: <20210722171146.fux2nkoz3gz5ck2p@mobilestation>
+References: <20210722053358.29682-1-nandhini.srikandan@intel.com>
+ <20210722053358.29682-2-nandhini.srikandan@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210722053358.29682-2-nandhini.srikandan@intel.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 20 Jul 2021 18:01:16 +0800, Dongliang Mu wrote:
-> In meson_spicc_probe, the error handling code needs to clean up master
-> by calling spi_master_put, but the remove function does not have this
-> function call. This will lead to memory leak of spicc->master.
+On Thu, Jul 22, 2021 at 01:33:57PM +0800, nandhini.srikandan@intel.com wrote:
+> From: Nandhini Srikandan <nandhini.srikandan@intel.com>
+> 
 
-Applied to
+> Add documentation for SPI controller in Intel Thunder Bay SoC.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+In the driver-part of the patchset you said that the reset control
+is required for this controller. Then the bindings file needs to be
+accordingly altered. See the way it's done in the "allOf:" block here.
 
-Thanks!
+If it isn't required then this part looks ok to me.
 
-[1/1] spi: meson-spicc: fix memory leak in meson_spicc_remove
-      commit: 8311ee2164c5cd1b63a601ea366f540eae89f10e
+Regards,
+-Sergey
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+> 
+> Signed-off-by: Nandhini Srikandan <nandhini.srikandan@intel.com>
+> ---
+>  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> index ca91201a9926..88532bf8ba85 100644
+> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> @@ -61,6 +61,8 @@ properties:
+>            - const: snps,dw-apb-ssi
+>        - description: Intel Keem Bay SPI Controller
+>          const: intel,keembay-ssi
+> +      - description: Intel Thunder Bay SPI Controller
+> +        const: intel,thunderbay-ssi
+>        - description: Baikal-T1 SPI Controller
+>          const: baikal,bt1-ssi
+>        - description: Baikal-T1 System Boot SPI Controller
+> -- 
+> 2.17.1
+> 
