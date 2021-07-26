@@ -2,115 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C26C3D56E5
-	for <lists+linux-spi@lfdr.de>; Mon, 26 Jul 2021 11:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E625C3D56F3
+	for <lists+linux-spi@lfdr.de>; Mon, 26 Jul 2021 12:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbhGZJPe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 26 Jul 2021 05:15:34 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:10988 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232156AbhGZJPe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 26 Jul 2021 05:15:34 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16Q9prAE015362;
-        Mon, 26 Jul 2021 11:55:43 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=selector1; bh=giOM4HnaEqC2qcIT64URAdWvI8eeLWVeP5WNigHDj+4=;
- b=dSdmwFVs84e6GxHJeBNTvVS7ETgvRQw8DrKUPur4dm0nZHPY4gYTCDyxmO6Eo/RNcwHP
- 8hVgCORnJYPtPCyKs2OWmvR8pByM4fi2jBIWdeAqWwfzaEo8+d5TfAp0sis7N2oAo9YB
- 6MDt6uAMJ+PisQSa2LCmrdP3KqiD/y+p+3XAKZNSYqCtCn0eSgUkF0fILnEwyU6NeE5y
- TdbwXdJzhuyzsIMozagigFS2zztNaRJ6pt08iXDeqTm5ZmZWN95qn93OFsym7AxpIVDk
- FS0G40gghTNLJwhqQlCMeNJy1csf6rY3ogqlNWxm74jw440tUErMOL5rzuW/3ETCzsj7 /w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 3a1swgrbqs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Jul 2021 11:55:43 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id AB6A310002A;
-        Mon, 26 Jul 2021 11:55:40 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9599F21B539;
-        Mon, 26 Jul 2021 11:55:40 +0200 (CEST)
-Received: from gnbcxd0016.gnb.st.com (10.75.127.48) by SFHDAG2NODE3.st.com
- (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 26 Jul
- 2021 11:55:40 +0200
-Date:   Mon, 26 Jul 2021 11:55:32 +0200
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     kernel test robot <lkp@intel.com>
-CC:     <kbuild-all@lists.01.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] spi: stm32: fix excluded_middle.cocci warnings
-Message-ID: <20210726095532.GA11839@gnbcxd0016.gnb.st.com>
-Mail-Followup-To: kernel test robot <lkp@intel.com>,
-        kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <202107140345.xyOobAtH-lkp@intel.com>
- <20210713191004.GA14729@5eb5c2cbef84>
+        id S232938AbhGZJUq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 26 Jul 2021 05:20:46 -0400
+Received: from phobos.denx.de ([85.214.62.61]:53070 "EHLO phobos.denx.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232617AbhGZJUq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 26 Jul 2021 05:20:46 -0400
+Received: from tr.lan (ip-89-176-112-137.net.upcbroadband.cz [89.176.112.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 530B58329C;
+        Mon, 26 Jul 2021 12:01:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1627293674;
+        bh=xHCkLeepfSgbrEg/FwcqFIdBqcCvYwWJuVz3ZerCnRo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gRT4DM2wqW4iQtI8bF9RCfPsohEKJb7MAVtL6yLf75FgxeE6dfN/VtNhaOz3G6iwj
+         X4IBBwlMpU6W4UyRazEzSCF4W+xGu9pf1FFYjSJ0ueDzMWDnnUxtloynNNuphshzIm
+         +liVHeYpoLKQzGPd53qnIaspYnl11RkU2if8ZUeYI7QF9mI3289+O9ok4s2jrgwKjt
+         AqdOBIGrVPiYXvmlEyj/dsVwRsPODS4EpWUpd2j8rYTXROh+hlecT/RB5HjTS7WB0g
+         03UVnesrk9rqRfXaHbBVeqIyasnzQHUl70tzjrjtZvSlnkdqBUMt77cosEtMsPFe3P
+         E9CEvuNz6r3Hg==
+From:   Marek Vasut <marex@denx.de>
+To:     linux-spi@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>
+Subject: [PATCH V2] spi: imx: mx51-ecspi: Fix low-speed CONFIGREG delay calculation
+Date:   Mon, 26 Jul 2021 12:01:02 +0200
+Message-Id: <20210726100102.5188-1-marex@denx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20210713191004.GA14729@5eb5c2cbef84>
-X-Disclaimer: ce message est personnel / this message is private
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-26_05:2021-07-26,2021-07-26 signatures=0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Thanks.
+The spi_imx->spi_bus_clk may be uninitialized and thus also zero in
+mx51_ecspi_prepare_message(), which would lead to division by zero
+in kernel. Since bitbang .setup_transfer callback which initializes
+the spi_imx->spi_bus_clk is called after bitbang prepare_message
+callback, iterate over all the transfers in spi_message, find the
+one with lowest bus frequency, and use that bus frequency for the
+delay calculation.
 
-Reviewed-by: Alain Volmat <alain.volmat@foss.st.com>
+Note that it is not possible to move this CONFIGREG delay back into
+the .setup_transfer callback, because that is invoked too late, after
+the GPIO chipselects were already configured.
 
-On Wed, Jul 14, 2021 at 03:10:04AM +0800, kernel test robot wrote:
-> From: kernel test robot <lkp@intel.com>
-> 
-> drivers/spi/spi-stm32.c:915:23-25: WARNING !A || A && B is equivalent to !A || B
-> 
-> 
->  Condition !A || A && B is equivalent to !A || B.
-> 
-> Generated by: scripts/coccinelle/misc/excluded_middle.cocci
-> 
-> Fixes: 7ceb0b8a3ced ("spi: stm32: finalize message either on dma callback or EOT")
-> CC: Alain Volmat <alain.volmat@foss.st.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: kernel test robot <lkp@intel.com>
-> ---
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   8f0df15bafc1e1c92b6d96bf8ef24dd8be3aec7b
-> commit: 7ceb0b8a3ceddc36ae4ef1cba6c25a0e28ed65fc [1012/1340] spi: stm32: finalize message either on dma callback or EOT
-> :::::: branch date: 11 hours ago
-> :::::: commit date: 2 days ago
-> 
->  spi-stm32.c |    3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> --- a/drivers/spi/spi-stm32.c
-> +++ b/drivers/spi/spi-stm32.c
-> @@ -912,8 +912,7 @@ static irqreturn_t stm32h7_spi_irq_threa
->  		if (!spi->cur_usedma && (spi->rx_buf && (spi->rx_len > 0)))
->  			stm32h7_spi_read_rxfifo(spi);
->  		if (!spi->cur_usedma ||
-> -		    (spi->cur_usedma && (spi->cur_comm == SPI_SIMPLEX_TX ||
-> -		     spi->cur_comm == SPI_3WIRE_TX)))
-> +		    (spi->cur_comm == SPI_SIMPLEX_TX || spi->cur_comm == SPI_3WIRE_TX))
->  			end = true;
->  	}
->  
+Fixes: 135cbd378eab ("spi: imx: mx51-ecspi: Reinstate low-speed CONFIGREG delay")
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Cc: Mark Brown <broonie@kernel.org>
+---
+V2: Add comment regarding all zero-frequency transfers
+---
+ drivers/spi/spi-imx.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index 593b63be73de8..cb9f7261c4385 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -505,7 +505,9 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
+ 				      struct spi_message *msg)
+ {
+ 	struct spi_device *spi = msg->spi;
++	struct spi_transfer *xfer;
+ 	u32 ctrl = MX51_ECSPI_CTRL_ENABLE;
++	u32 min_speed_hz = ~0U;
+ 	u32 testreg, delay;
+ 	u32 cfg = readl(spi_imx->base + MX51_ECSPI_CONFIG);
+ 
+@@ -577,8 +579,20 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
+ 	 * be asserted before the SCLK polarity changes, which would disrupt
+ 	 * the SPI communication as the device on the other end would consider
+ 	 * the change of SCLK polarity as a clock tick already.
++	 *
++	 * Because spi_imx->spi_bus_clk is only set in bitbang prepare_message
++	 * callback, iterate over all the transfers in spi_message, find the
++	 * one with lowest bus frequency, and use that bus frequency for the
++	 * delay calculation. In case all transfers have speed_hz == 0, then
++	 * min_speed_hz is ~0 and the resulting delay is zero.
+ 	 */
+-	delay = (2 * 1000000) / spi_imx->spi_bus_clk;
++	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
++		if (!xfer->speed_hz)
++			continue;
++		min_speed_hz = min(xfer->speed_hz, min_speed_hz);
++	}
++
++	delay = (2 * 1000000) / min_speed_hz;
+ 	if (likely(delay < 10))	/* SCLK is faster than 100 kHz */
+ 		udelay(delay);
+ 	else			/* SCLK is _very_ slow */
+-- 
+2.30.2
+
