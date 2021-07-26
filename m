@@ -2,75 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5A43D511F
-	for <lists+linux-spi@lfdr.de>; Mon, 26 Jul 2021 03:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0253D531E
+	for <lists+linux-spi@lfdr.de>; Mon, 26 Jul 2021 08:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbhGZBFs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 25 Jul 2021 21:05:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44578 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229728AbhGZBFs (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sun, 25 Jul 2021 21:05:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B3FFC606A5;
-        Mon, 26 Jul 2021 01:46:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627263976;
-        bh=a+SMCLQBpjXHMSlRlAC01wFsW07UnLLea7FcOBYtqLY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dzODPsO+w30uqXtu/f64UODsgJtrMWXRWHENSuqG/b+kk1ykc6HoZDrg1E/9+Z4lX
-         UfNrzRgGLTBQjQy+x1FZFYpztKO6Y1nigKlS0DDhVvy+idlvnP+bLi2T/+5OJ2Rpdm
-         i268yTD+OhsjnhpL3/Dyg4gvBJOiBdIQRx+3MIl/ON83MgMlDRyUY6YfHDRBo9a9pp
-         ZD/MKlDQTzTG+1DZS0aBeMl+FRebBLBhIr3DzngzKnj4EGjktJe5ERVCj3Mvf3iOuP
-         Te28JGnXL1KxSED2E+HZ+tYg2AhLcyNRJTo+MoYUur/QYwkpYnb0Fs0lMSgnKU93QF
-         9CXQD+iBtesLQ==
-Date:   Mon, 26 Jul 2021 02:46:06 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Marek Vasut <marex@denx.de>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org
+        id S231575AbhGZFoo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 26 Jul 2021 01:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229658AbhGZFom (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 26 Jul 2021 01:44:42 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EDEC061757
+        for <linux-spi@vger.kernel.org>; Sun, 25 Jul 2021 23:25:10 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m7u32-00086h-2r; Mon, 26 Jul 2021 08:25:08 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m7u31-0003Bw-HK; Mon, 26 Jul 2021 08:25:07 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m7u31-0000QZ-GX; Mon, 26 Jul 2021 08:25:07 +0200
+Date:   Mon, 26 Jul 2021 08:25:04 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Marek Vasut <marex@denx.de>, linux-spi@vger.kernel.org
 Subject: Re: [PATCH] spi: imx: mx51-ecspi: Fix low-speed CONFIGREG delay
  calculation
-Message-ID: <20210726014606.GB4670@sirena.org.uk>
+Message-ID: <20210726062504.4353stzjqrqhsqwy@pengutronix.de>
 References: <20210718211143.143557-1-marex@denx.de>
  <20210719082015.ud43iwg5rfdomlqi@pengutronix.de>
  <17bf62a4-af57-1706-f20a-35f9d6cbf9d0@denx.de>
  <20210719211221.GA35544@sirena.org.uk>
  <37b0f7eb-39fd-9e15-20e3-becfcfd4b5f4@denx.de>
+ <20210726014606.GB4670@sirena.org.uk>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9zSXsLTf0vkW971A"
+        protocol="application/pgp-signature"; boundary="hp26ifqb3wb42qug"
 Content-Disposition: inline
-In-Reply-To: <37b0f7eb-39fd-9e15-20e3-becfcfd4b5f4@denx.de>
-X-Cookie: Vini, vidi, Linux!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210726014606.GB4670@sirena.org.uk>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---9zSXsLTf0vkW971A
-Content-Type: text/plain; charset=us-ascii
+--hp26ifqb3wb42qug
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 21, 2021 at 10:18:35PM +0200, Marek Vasut wrote:
+On Mon, Jul 26, 2021 at 02:46:06AM +0100, Mark Brown wrote:
+> On Wed, Jul 21, 2021 at 10:18:35PM +0200, Marek Vasut wrote:
+>=20
+> > So, should I send a V2 here with any changes or is this one OK as-is ?
+>=20
+> It wasn't clear that Uwe was OK with the current version, I don't mind.
 
-> So, should I send a V2 here with any changes or is this one OK as-is ?
+My concerns were mostly orthogonal to Marek's patch. The only (little
+critical) thing is: Can it happen that all transfer's speed_hz are zero?
+What happens with the code change is ok, when reading the code this
+looks this is by chance howver. So I would have added a comment
+describing that.
 
-It wasn't clear that Uwe was OK with the current version, I don't mind.
+But all in all I'm convinced that the change is an improvement, so no
+further concerns from my side.
 
---9zSXsLTf0vkW971A
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--hp26ifqb3wb42qug
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmD+E90ACgkQJNaLcl1U
-h9DBNQf/WiTPeXzTsOPWCqFXAGYLEBBfyMAINnMB3xkFL7Hs6D3xq7BtTA45gYOw
-l/qvQNrtE9sdoo9y5yQRyjkLnIpxL9j/r8RdL5E8mWnlFROQZ2ZmNYfcefWl1uVj
-QBmrAi2xxqsnIO6ghBgyUSe4TUB8d84MLASxigU9DLHtgkTiolXmXyeTzKvOHJWz
-omzdm0/4wTVGcmPa7KM8m7bQGBQB2wsa8jQ6dnRqQHH/7BWrwxpLnKkuFyyxUJfI
-EYtLwX0j1QS58pXZaNXq9gX5Qk02wo9dnlR9Y0klECDXHWYKjnvZTBOEnebTU3tF
-YRm2Y+wjmkJcQ9CLcRqy3OvytUALXw==
-=Zhxj
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmD+VT4ACgkQwfwUeK3K
+7AlGiAf+LE3N5hOgpdMb8mRcm9Ii9kYIurIZASUWmQdLRL28ReRko3D6BUwwGEG7
+EEh9x7JeMQZu1K+5ErqRW4BR4KZd4x4x9/gDsVWZu7QHpG/NEA5pJ3pLpRL370KV
+k+lpxJDScOBH+TYcROCqgfSsxrQxsngfgE9dUMZ16xBvRIDE/OAnSpchkdsde++T
+xsNE6eLxJG2Z/FjNT3HdozTqi3C6AeCNsDcLr0LecwI8usesXBKctkH4gCKxT7Wq
+S7pBoswHLjPrRDxwYnmjo77dM0Gq1QerptSv1nGZ/ozCmRMveVHUttEo1D3lKYT4
+5vz0Cx9ZLnLARvmBNe0QSVdud1n2mw==
+=HCHA
 -----END PGP SIGNATURE-----
 
---9zSXsLTf0vkW971A--
+--hp26ifqb3wb42qug--
