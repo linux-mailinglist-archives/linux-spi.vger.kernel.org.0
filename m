@@ -2,94 +2,141 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD4813D64DF
-	for <lists+linux-spi@lfdr.de>; Mon, 26 Jul 2021 18:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1543D65F2
+	for <lists+linux-spi@lfdr.de>; Mon, 26 Jul 2021 19:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234905AbhGZQMu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 26 Jul 2021 12:12:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48322 "EHLO mail.kernel.org"
+        id S231993AbhGZRA0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 26 Jul 2021 13:00:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35704 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235294AbhGZQKq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 26 Jul 2021 12:10:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C9C8C6056B;
-        Mon, 26 Jul 2021 16:51:13 +0000 (UTC)
+        id S229646AbhGZRA0 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 26 Jul 2021 13:00:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E71F660F6C;
+        Mon, 26 Jul 2021 17:40:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627318274;
-        bh=rtjZmAIsiO+xusbSMqln3gdu7hyuZHUnli/ersUfVzs=;
+        s=k20201202; t=1627321254;
+        bh=r4zehfT85ltEor5F3Dr98zoMp3ICL3Y2HydcZKQboLk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bvQGd1zdDYrwQQyASqLkoQgjYo7DwYQtN36rY7c8u25N442ry1IFwHXQI7sOcTKZx
-         AWk7v0QOPHnT5QI61+CHjVpuDDZBVpYtgvSSG4o5oHXSnnO/ND9qnfNHedYl6/oyF0
-         VGWnH7n/rqwBaLW9RL6WasTBF9mqvo5ac5xCSR+nET8GBs/f1uwIbz4PIPzwxqQDqv
-         r0Slq7AYDpeh/Br6NsIQsEM13vU9zm3PJN4W3UQ+D1AFWvz5G/cSTn9hx790SaCtcm
-         c1r6BohxVbbNgVEqLwwKlAP2NI+3fPPjwPemOeRsviVMAZ/3nMJk3YON3yAEBfYtmn
-         h3pyPxDJiVZLg==
-Date:   Mon, 26 Jul 2021 17:51:05 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/8] spi: spi-ep93xx: Prepare clock before using it
-Message-ID: <20210726165105.GI4670@sirena.org.uk>
-References: <20210726115058.23729-1-nikita.shubin@maquefel.me>
- <20210726140001.24820-1-nikita.shubin@maquefel.me>
- <20210726140001.24820-3-nikita.shubin@maquefel.me>
+        b=uTLvus1ceKZtOlE+govp/T6+S9F8lO7yoRwSpZ1JnxIJr/C5XxRvZa+Aa5a8vBEMY
+         ALlTvi7y/pyGO7FGkTYEtcRtmcVHXXppkq5TPAW6GC93uSv17e0CVS2uKxICNv7/Pb
+         ATQHy5O5MPtDfquDdje85rmcGU6bBJTq4t1NKeooNt6ooWynRK2FUMsPApSLRGMKMy
+         0YaNQy0cCsWK+rcOazZHb3ndqLDrYO7L06puZML/pzuU+biNQf9T782/CQQHE44Pvr
+         dtSdVscpabIPfUeh44Uz+lcQop+9/zb5+uqsqY6NAdp7+Ny8CNfN/n1a/EGLpcZ3zA
+         Iff3vU4eI7iGA==
+Date:   Mon, 26 Jul 2021 19:40:47 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Claudiu Beznea <Claudiu.Beznea@microchip.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Stephen Boyd <sboyd@kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>, linux-pwm@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nicolas Ferre <Nicolas.Ferre@microchip.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Ludovic Desroches <Ludovic.Desroches@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PULL] Add variants of devm_clk_get for prepared and enabled
+ clocks enabled clocks
+Message-ID: <YP7zn8n8wpSW4Gek@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Claudiu Beznea <Claudiu.Beznea@microchip.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>,
+        linux-pwm@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nicolas Ferre <Nicolas.Ferre@microchip.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Ludovic Desroches <Ludovic.Desroches@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20210722060654.nudpdtemosi64nlb@pengutronix.de>
+ <YPkg0wtYIoHKpTUW@kunai>
+ <20210722081817.2tsjzof4gvldq6ka@pengutronix.de>
+ <YPlfcbkxiBmB+vw1@kunai>
+ <CAHp75VfC=s12Unw3+Cn0ag71mM5i90=Jbwj4nYwB5cPKiUTRSA@mail.gmail.com>
+ <20210723091331.wl33wtcvvnejuhau@pengutronix.de>
+ <06e799be-b7c0-5b93-8586-678a449d2239@microchip.com>
+ <CAHp75VeFXJ-0ak7=a0QCtKNdFpu98W6iJ2YuR4MpNx+U4rHe2A@mail.gmail.com>
+ <YP6rdmi31FFrBMzE@ninjato>
+ <CAHp75VeT-EX6U3+Y7dxoWWRZ7NqAEiNgPGW8YGVmWTuZKB4j+Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0XMZdl/q8hSSmFeD"
+        protocol="application/pgp-signature"; boundary="/Ub7HcA0kcaU5RAp"
 Content-Disposition: inline
-In-Reply-To: <20210726140001.24820-3-nikita.shubin@maquefel.me>
-X-Cookie: Vini, vidi, Linux!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAHp75VeT-EX6U3+Y7dxoWWRZ7NqAEiNgPGW8YGVmWTuZKB4j+Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---0XMZdl/q8hSSmFeD
-Content-Type: text/plain; charset=us-ascii
+--/Ub7HcA0kcaU5RAp
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 26, 2021 at 04:59:50PM +0300, Nikita Shubin wrote:
-> From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
->=20
-> Use clk_prepare_enable()/clk_disable_unprepare() in preparation for switch
-> to Common Clock Framework, otherwise the following is visible:
 
-Acked-by: Mark Brown <broonie@kernel.org>
+> AFAICT in practice it's a mandatory requirement in I=C2=B2C subsys (in the
+> past you hadn't accepted a patch from us without a tag from the
+> maintainer) which makes it equal to sending PR by a maintainer. PR
 
->=20
-> WARNING: CPU: 0 PID: 1 at drivers/clk/clk.c:1011 clk_core_enable+0x9c/0xbc
-> Enabling unprepared ep93xx-spi.0
-> ...
-> Hardware name: Cirrus Logic EDB9302 Evaluation Board
-> ...
-> clk_core_enable
-> clk_core_enable_lock
-> ep93xx_spi_prepare_hardware
+Right. I require a tag from the driver maintainer.
 
-Please think hard before including complete backtraces in upstream
-reports, they are very large and contain almost no useful information
-relative to their size so often obscure the relevant content in your
-message. If part of the backtrace is usefully illustrative (it often is
-for search engines if nothing else) then it's usually better to pull out
-the relevant sections.
+> makes less burden since subsys maintainer don't need to run many tools
+> or a tool many times to get the pile of patches.
 
---0XMZdl/q8hSSmFeD
+I had driver maintainers who found it difficult to have a public tree to
+pull from or forgot how to send properly prepared pull requests. They
+were happy to send Rev-by, though. And I am happy with that, too. At
+least in I2C, picking up patches is small work compared to the actual
+review.
+
+
+--/Ub7HcA0kcaU5RAp
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmD+5/gACgkQJNaLcl1U
-h9CLkgf+PCrxrgszMSg8zSGETrG5R+2/GTI9H+kiyWWwN/Z5dnK79YEIhNHb/reU
-Uk0SBYAxpkyaTAxkLQc2tGjJG/WuMrBw2XrM9ZEzfeqJIJsHLictGL28SEfSx9hz
-G3fdg2WUEwq+tN1TX3uPoJB1imJLh56yXKDp5xh/nKLqLSN6LtaQmQo+/EYAAn7V
-fFK8De6o5C2Uchn4BCd2QkTSsWlE2CH4GtDXatb/TvUCDcZ13B8WiT3gSZPAO21/
-7T+D5C7Lf7Db1WSv/9ZGUpGwDd+g1qG+Y72Ky/7JmUs4am8nw3G8+j0bX08f61dZ
-rGvUeRUvJK7xn21RoTNqofUOb9MrJg==
-=37Fd
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmD+85sACgkQFA3kzBSg
+KbYMFRAAoWozaOVEHjIi+cCiXLD3YtgYnrrT8mNSlpf11k8gAkfEERXC9nIXKJyG
+uAv36d98/mKGGJemeqDXKuPii7VOqx3FeIgsmpa41N++qUEvXrjKXwCnq85+x/B/
+eZxsJv82F0sxidnvujOrMDhitRMZNKQzZCmPaqhmnGRIWvaAwePF2ioMCEi+QxbN
+HqJTNL+7G48hoGZq9WG8EW73gMkn2SDqiJJdwGSQbPMJ0Jqt4oAclkWfeqLP4Rou
+StO5Pe1OSowMkIZJEOZAQvJwpcI3qruOxp9P2QYsm/7pYJrqMqGZCv/UD7uFb0UO
+G8M6t8RNXfDOqGCwkCHeskTDixT/74pcvzIPB5C17n4xAgt3P5XuwH0+Sg+D3fqW
+4Z2ig1HHc7dlTUYkTnRwECAkv1r7o98hpk3U0OT3FHJjsDpOuo0HUnH93HHI6spU
+KgwVO4EaGIhExfl25ryyzKnanlchfN1s5nzEIxSj1YwrWbgZqtUEeXuS17zQebQ/
+WA7uyvtGMkatdsFsYNdXT/U6aNbSSwz8Rnj8Ipz+FwpAqrr8rrLPcHD8hwEDnvtv
+/LpAc5ANbmxmlHZb/WAdjxf1LlJiamhr0lnnSfYVqnw2jWpxFy4hdaJP6/HG1N80
+e+jQNCQdbUPYUU2q53ZBj5SjHjAgTetpC3znuCYAAS7lY1Kk6iM=
+=42tk
 -----END PGP SIGNATURE-----
 
---0XMZdl/q8hSSmFeD--
+--/Ub7HcA0kcaU5RAp--
