@@ -2,88 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 153623D3B6B
-	for <lists+linux-spi@lfdr.de>; Fri, 23 Jul 2021 15:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5A43D511F
+	for <lists+linux-spi@lfdr.de>; Mon, 26 Jul 2021 03:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233610AbhGWNLe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 23 Jul 2021 09:11:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58940 "EHLO mail.kernel.org"
+        id S230152AbhGZBFs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 25 Jul 2021 21:05:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44578 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233552AbhGWNLe (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 23 Jul 2021 09:11:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 535F260EE2;
-        Fri, 23 Jul 2021 13:52:07 +0000 (UTC)
+        id S229728AbhGZBFs (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sun, 25 Jul 2021 21:05:48 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B3FFC606A5;
+        Mon, 26 Jul 2021 01:46:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627048327;
-        bh=jFk+0LMES7S6Ja8o2wsbPLKGH7j8TpUeerYAYihrE5g=;
+        s=k20201202; t=1627263976;
+        bh=a+SMCLQBpjXHMSlRlAC01wFsW07UnLLea7FcOBYtqLY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fAgesXjxnCrHQFC63+0zu1QAnLMUb/krMXzvhoUXFpw/hG/JnsJBmsrsYBv15zVWw
-         lDw+h+lom1f7KghsRfKm1UaoKqdoDOzwtMQypaJO+wfyrt62D+4kFST1838j47HWZx
-         qOITCI0JMt9qS35PfGfGKGQbs2lBYRHjzC5W5Rdc23BJmLBub8UXazhRhUCQrsXkuF
-         MPsNW10Xvax40ERdt4FFhEeeubP+z3DlE3d+7dEYnll8ftGeI5qVRj0X64d5soll5u
-         euA+ofLq32pIPgsslGmcK7NRJUP28V+rvZX/Gs7E6CUk8Fq3ZWo0IfXflyC5xNLHFN
-         iGnih1/AzMueQ==
-Date:   Fri, 23 Jul 2021 14:52:01 +0100
+        b=dzODPsO+w30uqXtu/f64UODsgJtrMWXRWHENSuqG/b+kk1ykc6HoZDrg1E/9+Z4lX
+         UfNrzRgGLTBQjQy+x1FZFYpztKO6Y1nigKlS0DDhVvy+idlvnP+bLi2T/+5OJ2Rpdm
+         i268yTD+OhsjnhpL3/Dyg4gvBJOiBdIQRx+3MIl/ON83MgMlDRyUY6YfHDRBo9a9pp
+         ZD/MKlDQTzTG+1DZS0aBeMl+FRebBLBhIr3DzngzKnj4EGjktJe5ERVCj3Mvf3iOuP
+         Te28JGnXL1KxSED2E+HZ+tYg2AhLcyNRJTo+MoYUur/QYwkpYnb0Fs0lMSgnKU93QF
+         9CXQD+iBtesLQ==
+Date:   Mon, 26 Jul 2021 02:46:06 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     linux-mediatek@lists.infradead.org,
-        Frank Wunderlich <linux@fw-web.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Leilk Liu <leilk.liu@mediatek.com>,
-        linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peter Hess <peter.hess@ph-home.de>, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: mediatek: fix fifo rx mode
-Message-ID: <20210723135201.GC5221@sirena.org.uk>
-References: <20210706121609.680534-1-linux@fw-web.de>
- <162608669457.4543.2374973099687363958.b4-ty@kernel.org>
- <363C87CD-F0C6-4A46-877C-86E07D14787D@public-files.de>
+To:     Marek Vasut <marex@denx.de>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spi: imx: mx51-ecspi: Fix low-speed CONFIGREG delay
+ calculation
+Message-ID: <20210726014606.GB4670@sirena.org.uk>
+References: <20210718211143.143557-1-marex@denx.de>
+ <20210719082015.ud43iwg5rfdomlqi@pengutronix.de>
+ <17bf62a4-af57-1706-f20a-35f9d6cbf9d0@denx.de>
+ <20210719211221.GA35544@sirena.org.uk>
+ <37b0f7eb-39fd-9e15-20e3-becfcfd4b5f4@denx.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2JFBq9zoW8cOFH7v"
+        protocol="application/pgp-signature"; boundary="9zSXsLTf0vkW971A"
 Content-Disposition: inline
-In-Reply-To: <363C87CD-F0C6-4A46-877C-86E07D14787D@public-files.de>
-X-Cookie: Integrity has no need for rules.
+In-Reply-To: <37b0f7eb-39fd-9e15-20e3-becfcfd4b5f4@denx.de>
+X-Cookie: Vini, vidi, Linux!
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---2JFBq9zoW8cOFH7v
+--9zSXsLTf0vkW971A
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Fri, Jul 23, 2021 at 03:46:02PM +0200, Frank Wunderlich wrote:
+On Wed, Jul 21, 2021 at 10:18:35PM +0200, Marek Vasut wrote:
 
-> Can we add stable-tag i've missed to fix older kernel versions or
-> inform greg to add patch to at least 5.4/5.10?
+> So, should I send a V2 here with any changes or is this one OK as-is ?
 
-Let the stable people know once it's in mainline (IIRC it is already) -
-there's a good chance they'll pick it up anyway based on the commit log.
+It wasn't clear that Uwe was OK with the current version, I don't mind.
 
-Please don't top post, reply in line with needed context.  This allows
-readers to readily follow the flow of conversation and understand what
-you are talking about and also helps ensure that everything in the
-discussion is being addressed.
-
-Please fix your mail client to word wrap within paragraphs at something
-substantially less than 80 columns.  Doing this makes your messages much
-easier to read and reply to.
-
---2JFBq9zoW8cOFH7v
+--9zSXsLTf0vkW971A
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmD6yYAACgkQJNaLcl1U
-h9BS2wf9EAlL6oZ0DzmB1nfQW4jRM0cEjg0EP36GEgjC8qJ2a8SfLfNK5I4foIKf
-NHqPAvnsWm1hNqFqT717/B3qkrIGD2xhp6RAkzb94IKJID4WA5KCazzjUr/AYHz5
-rv2aaM/2qwq0F0vZAPP5d9Q7UqYmqceX9D9T/PBmVSwq6uyhd1lWngh+QR70HYB1
-n6XFqMkkujk/fXP5iWD9OUbI6EKaC4tclkJ/W8k/UvsffcKXM6NUzukrf4Mhl+uu
-kTYYkuwsNymyAySnUmze07H0P4aLCYefYMtIpXW2fp7GkioLH0smBUL7GKLV43Eo
-VSKbXqA+zjeKCooVhDXA+wlFBzOrCA==
-=oWDi
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmD+E90ACgkQJNaLcl1U
+h9DBNQf/WiTPeXzTsOPWCqFXAGYLEBBfyMAINnMB3xkFL7Hs6D3xq7BtTA45gYOw
+l/qvQNrtE9sdoo9y5yQRyjkLnIpxL9j/r8RdL5E8mWnlFROQZ2ZmNYfcefWl1uVj
+QBmrAi2xxqsnIO6ghBgyUSe4TUB8d84MLASxigU9DLHtgkTiolXmXyeTzKvOHJWz
+omzdm0/4wTVGcmPa7KM8m7bQGBQB2wsa8jQ6dnRqQHH/7BWrwxpLnKkuFyyxUJfI
+EYtLwX0j1QS58pXZaNXq9gX5Qk02wo9dnlR9Y0klECDXHWYKjnvZTBOEnebTU3tF
+YRm2Y+wjmkJcQ9CLcRqy3OvytUALXw==
+=Zhxj
 -----END PGP SIGNATURE-----
 
---2JFBq9zoW8cOFH7v--
+--9zSXsLTf0vkW971A--
