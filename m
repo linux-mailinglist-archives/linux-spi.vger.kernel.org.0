@@ -2,99 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7593D7683
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Jul 2021 15:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F783D7A36
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Jul 2021 17:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236774AbhG0N35 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Jul 2021 09:29:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57238 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236945AbhG0NU3 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 27 Jul 2021 09:20:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5F53F61AF0;
-        Tue, 27 Jul 2021 13:20:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627392005;
-        bh=ZrM7mpef1J97AF2lCJYTrQjbSs1wkpfGPP0dtCY0iiA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C28G0BfjRuBrQLNqvShvZPl28TlgjhMaUvvimZwAUxdyEuxSAbw9izZIJC0j+WZkD
-         fJ81EmGBKL7jmBnImf5H/+VTYH1TOyLVu+XgONinmXXoHQdXqQZBPKpHKdAr2vnKjO
-         1ClSWTZsmslyPWQZjA4OqgXvn3Ly7tsH0S3cuNarjoPj36P1M6+naJnG3yU51WOGhJ
-         oz/zgee8Ryg6sH8Xiu+gigzvt7hnBsonHLetiBcYUD/GEbvMNZeefXPXLnnEzaT+iG
-         ANeJynTnI5DZTQ2KL52YaCQOlgDLNJlMrBkVNSo/h+ONg6iSmTIOsBlIXXesOA5FgD
-         5WOdViSgGQKCQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alain Volmat <alain.volmat@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 2/9] spi: stm32h7: fix full duplex irq handler handling
-Date:   Tue, 27 Jul 2021 09:19:54 -0400
-Message-Id: <20210727132002.835130-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210727132002.835130-1-sashal@kernel.org>
-References: <20210727132002.835130-1-sashal@kernel.org>
+        id S229660AbhG0PwX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 27 Jul 2021 11:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39276 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229537AbhG0PwX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Jul 2021 11:52:23 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38032C061757
+        for <linux-spi@vger.kernel.org>; Tue, 27 Jul 2021 08:52:23 -0700 (PDT)
+Received: from [IPv6:::1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id C1B8E83171;
+        Tue, 27 Jul 2021 17:52:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1627401140;
+        bh=CxQwCSD35Rc5C6i8m6biH0BzwhuGcdgheiWV4dDu8zA=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=QFTUiOPdk2TItmKVOz97oImyg+q5/YddrjHfdenjf76XpXvfQ7SyPsXQr8brdqxOA
+         rM9GWTRDUU+N6k138D2t4K+GpeDde93gN1DgzIhJeNN+wAvfMjr8OtOBvolFnDI6gS
+         YTzRSK/2RKck97B2jEBGhuGlFuuJRtCJ4QVsifGd+HYLdLqXKOftbvlW1MLSv/jbqF
+         8/VgOElrAGai7V4LtWaGuAhESSKYNQHK7lxFEveGfhm9eZESM3+W8Am00FRXlUQlK/
+         w0ew24ojTlbN6aqucr7Tg05I8wzWKYFELOGDj9hosBvDi9/vriOj3FAZRTo4vyPSI8
+         sOeWYCO2KbAdA==
+Subject: Re: [PATCH] spi: imx: mx51-ecspi: Fix CONFIGREG delay comment
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
+References: <20210726101502.6803-1-marex@denx.de>
+ <20210727130110.dm5wa6hwrrftwt6g@pengutronix.de>
+From:   Marek Vasut <marex@denx.de>
+Message-ID: <cc72105b-ccfe-2e1c-4c3c-226f6e3f169c@denx.de>
+Date:   Tue, 27 Jul 2021 17:52:19 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+In-Reply-To: <20210727130110.dm5wa6hwrrftwt6g@pengutronix.de>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Alain Volmat <alain.volmat@foss.st.com>
+On 7/27/21 3:01 PM, Uwe Kleine-König wrote:
+> On Mon, Jul 26, 2021 at 12:15:02PM +0200, Marek Vasut wrote:
+>> For (2 * 1000000) / min_speed_hz < 10 to be true in naturals with zero,
+>> the min_speed_hz must above 222222. Update the comment. No functional
+>> change.
+> 
+> With integer division delay is < 10 if min_speed_hz >= 200001.
 
-[ Upstream commit e4a5c19888a5f8a9390860ca493e643be58c8791 ]
-
-In case of Full-Duplex mode, DXP flag is set when RXP and TXP flags are
-set. But to avoid 2 different handlings, just add TXP and RXP flag in
-the mask instead of DXP, and then keep the initial handling of TXP and
-RXP events.
-Also rephrase comment about EOTIE which is one of the interrupt enable
-bits. It is not triggered by any event.
-
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-Reviewed-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-Link: https://lore.kernel.org/r/1625042723-661-3-git-send-email-alain.volmat@foss.st.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi-stm32.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 3af6a5a3a4b2..92bf667951b0 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -913,15 +913,18 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
- 	ier = readl_relaxed(spi->base + STM32H7_SPI_IER);
- 
- 	mask = ier;
--	/* EOTIE is triggered on EOT, SUSP and TXC events. */
-+	/*
-+	 * EOTIE enables irq from EOT, SUSP and TXC events. We need to set
-+	 * SUSP to acknowledge it later. TXC is automatically cleared
-+	 */
-+
- 	mask |= STM32H7_SPI_SR_SUSP;
- 	/*
--	 * When TXTF is set, DXPIE and TXPIE are cleared. So in case of
--	 * Full-Duplex, need to poll RXP event to know if there are remaining
--	 * data, before disabling SPI.
-+	 * DXPIE is set in Full-Duplex, one IT will be raised if TXP and RXP
-+	 * are set. So in case of Full-Duplex, need to poll TXP and RXP event.
- 	 */
--	if (spi->rx_buf && !spi->cur_usedma)
--		mask |= STM32H7_SPI_SR_RXP;
-+	if ((spi->cur_comm == SPI_FULL_DUPLEX) && !spi->cur_usedma)
-+		mask |= STM32H7_SPI_SR_TXP | STM32H7_SPI_SR_RXP;
- 
- 	if (!(sr & mask)) {
- 		dev_warn(spi->dev, "spurious IT (sr=0x%08x, ier=0x%08x)\n",
--- 
-2.30.2
-
+Right, it's not 181, 100 or 222. I'll send a V2 and clarify this.
