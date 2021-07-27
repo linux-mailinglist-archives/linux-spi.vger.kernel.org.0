@@ -2,75 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A80B3D7A51
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Jul 2021 17:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B733D7A61
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Jul 2021 18:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237130AbhG0P6y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Jul 2021 11:58:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54606 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232549AbhG0P6y (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 27 Jul 2021 11:58:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6922D61B74;
-        Tue, 27 Jul 2021 15:58:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627401533;
-        bh=EPnm63BpuveC4otRjkPA+pNO+gJv9OB2xbmdo8NVYII=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Yv8ZHR1c/zX+PuXzMUzZJFl7/804OcnCWU9ugxa5/SorZGK9a5PWMIj1Mu7pl994L
-         VSgA+x67FZjubCmPdDqPSf7Hh59+Lq3IEVfMYnBa4FG8JTMEpTWN82EBC7thhDukvG
-         ZgmvWXoyU8AYkvHff1lu8pFVY0scjzbnb07P7Jh8/hVG7icbuQMndpVfdLzAFyy8R4
-         k8br+kR6fQRBdctiyDqYgzNY43jmLMc6FP9kuNFjgSnGR0pGHj/5OkS61NiELDhv0l
-         kXv7CTbnNr4zx+G6h7o8m7ryTj8Za1HhD1OpTUhvk5R4J9OlYbuUTw9K1ON3dQRkb+
-         Vo6+5hHHCBQOQ==
-Date:   Tue, 27 Jul 2021 16:58:44 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Marek Vasut <marex@denx.de>
-Cc:     linux-spi@vger.kernel.org,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH] spi: imx: mx51-ecspi: Fix CONFIGREG delay comment
-Message-ID: <20210727155844.GW4670@sirena.org.uk>
-References: <20210726101502.6803-1-marex@denx.de>
- <20210727121554.GA42404@sirena.org.uk>
- <1bba632f-3558-7ded-393d-a054a26ce7ef@denx.de>
+        id S237104AbhG0QBM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 27 Jul 2021 12:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237062AbhG0QBL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 27 Jul 2021 12:01:11 -0400
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7D7C061757
+        for <linux-spi@vger.kernel.org>; Tue, 27 Jul 2021 09:01:10 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:b0a9:7e88:5ca4:551a])
+        by michel.telenet-ops.be with bizsmtp
+        id aG172500F1fSPfK06G177b; Tue, 27 Jul 2021 18:01:09 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1m8PVz-001RuT-4K; Tue, 27 Jul 2021 18:01:07 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1m8PVy-00Fqnr-Ml; Tue, 27 Jul 2021 18:01:06 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v2] dt-bindings: memory: renesas,rpc-if: Miscellaneous improvements
+Date:   Tue, 27 Jul 2021 18:01:05 +0200
+Message-Id: <d81b59a513c2a5204c8378b4a89cd07f97c46797.1627401508.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+rRWuC8ZLvVekNoN"
-Content-Disposition: inline
-In-Reply-To: <1bba632f-3558-7ded-393d-a054a26ce7ef@denx.de>
-X-Cookie: Vini, vidi, Linux!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+  - Fix rejection of legitimate flash subnodes containing multiple
+    compatible values,
+  - Add missing list of required properties.
 
---+rRWuC8ZLvVekNoN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+v2:
+  - Drop #{address,size}-cells.
+---
+ .../memory-controllers/renesas,rpc-if.yaml      | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-On Tue, Jul 27, 2021 at 05:55:26PM +0200, Marek Vasut wrote:
+diff --git a/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml b/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
+index 990489fdd2ac33fe..d25072c414e45326 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
+@@ -61,12 +61,23 @@ patternProperties:
+     type: object
+     properties:
+       compatible:
+-        enum:
+-          - cfi-flash
+-          - jedec,spi-nor
++        contains:
++          enum:
++            - cfi-flash
++            - jedec,spi-nor
+ 
+ unevaluatedProperties: false
+ 
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++  - power-domains
++  - resets
++  - '#address-cells'
++  - '#size-cells'
++
+ examples:
+   - |
+     #include <dt-bindings/clock/renesas-cpg-mssr.h>
+-- 
+2.25.1
 
-> So maybe I'll wait until this one gets applied and picked by stable, and
-> then I'll send the comment fix ? That should make things easier.
-
-Sure.  No need to wait for stable I guess, once it's applied everything
-should be fine.
-
---+rRWuC8ZLvVekNoN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmEALTMACgkQJNaLcl1U
-h9CbtQf/ZPe+fDI1PLaHxG42WDDwCZBvvxvyjMFpWYkPugP58Q+aX/yTK4AjZDUe
-XJXYnU305oucCGXgX45OwoMdAUWE1z9IMIxdQVU9B9kFxWiIB1vcoGw8eZ9SllCA
-rAF+6kYBBaRFgeyVOIoprllVn1PHlpIqivJwvlmTsXYdP8BAlbxYd9FAe1iMfDgM
-zyW0Al9h+2nKylstTickUkd67mrlbDUsfhqd9RH7Lc6AFwWR8p2djcGAVmrA3rAr
-+/IKRtHdg+vRE7avwXs3CL6LdS4VDQayDVRyiFL0UtZHoOvTAn5AKxTyLbwkxVIC
-1/lGxPh5ICxhIa/qNZ1T6y2ekXE9HQ==
-=DxrV
------END PGP SIGNATURE-----
-
---+rRWuC8ZLvVekNoN--
