@@ -2,27 +2,27 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4A03D7678
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Jul 2021 15:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7593D7683
+	for <lists+linux-spi@lfdr.de>; Tue, 27 Jul 2021 15:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236712AbhG0N34 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Jul 2021 09:29:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56496 "EHLO mail.kernel.org"
+        id S236774AbhG0N35 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 27 Jul 2021 09:29:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57238 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236856AbhG0NUR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 27 Jul 2021 09:20:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0D58261ABD;
-        Tue, 27 Jul 2021 13:19:41 +0000 (UTC)
+        id S236945AbhG0NU3 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 27 Jul 2021 09:20:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5F53F61AF0;
+        Tue, 27 Jul 2021 13:20:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627391983;
-        bh=V+7xNq7+gPU2NOZVEY9BOCfMq/nNLrnWILtJ9O8Ro7A=;
+        s=k20201202; t=1627392005;
+        bh=ZrM7mpef1J97AF2lCJYTrQjbSs1wkpfGPP0dtCY0iiA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QLB+7+IVp+74oXCir3IEK/nSwTXzj2dMkbuNN1bldTkQw3kyCZHqC41ogIxKnKEAy
-         3kctVRM+JlYNTjYbGmlHNVL2/cHFYRJOojSOOmVI3+Oho5bZdat6kzKUDyfnZesfDy
-         sUCvgOWrhPCIaitJyqAPB2M90KyP0PaCRAfU/CWy2nJFw3VocnOlTxjpEjOUw5avp9
-         UF+1AF3Tcwtg7qdMGNn4GkNvxfcvZGCSHEy1NTa14+adqqUkXc14rneYCjeOy7Pkcj
-         Cg+oUJyD8Q+NNQVMRr9DDHFtK1YSew9+5n9nCo1dGvQR2HCGENeK0eR8pzW341fYui
-         FA7hRI3bLnIvg==
+        b=C28G0BfjRuBrQLNqvShvZPl28TlgjhMaUvvimZwAUxdyEuxSAbw9izZIJC0j+WZkD
+         fJ81EmGBKL7jmBnImf5H/+VTYH1TOyLVu+XgONinmXXoHQdXqQZBPKpHKdAr2vnKjO
+         1ClSWTZsmslyPWQZjA4OqgXvn3Ly7tsH0S3cuNarjoPj36P1M6+naJnG3yU51WOGhJ
+         oz/zgee8Ryg6sH8Xiu+gigzvt7hnBsonHLetiBcYUD/GEbvMNZeefXPXLnnEzaT+iG
+         ANeJynTnI5DZTQ2KL52YaCQOlgDLNJlMrBkVNSo/h+ONg6iSmTIOsBlIXXesOA5FgD
+         5WOdViSgGQKCQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Alain Volmat <alain.volmat@foss.st.com>,
@@ -31,12 +31,12 @@ Cc:     Alain Volmat <alain.volmat@foss.st.com>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.10 03/17] spi: stm32h7: fix full duplex irq handler handling
-Date:   Tue, 27 Jul 2021 09:19:24 -0400
-Message-Id: <20210727131938.834920-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 2/9] spi: stm32h7: fix full duplex irq handler handling
+Date:   Tue, 27 Jul 2021 09:19:54 -0400
+Message-Id: <20210727132002.835130-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210727131938.834920-1-sashal@kernel.org>
-References: <20210727131938.834920-1-sashal@kernel.org>
+In-Reply-To: <20210727132002.835130-1-sashal@kernel.org>
+References: <20210727132002.835130-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -67,10 +67,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 0318f02d6212..f8ab58003e76 100644
+index 3af6a5a3a4b2..92bf667951b0 100644
 --- a/drivers/spi/spi-stm32.c
 +++ b/drivers/spi/spi-stm32.c
-@@ -917,15 +917,18 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
+@@ -913,15 +913,18 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
  	ier = readl_relaxed(spi->base + STM32H7_SPI_IER);
  
  	mask = ier;
