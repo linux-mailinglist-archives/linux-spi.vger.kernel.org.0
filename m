@@ -2,52 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A523D7B70
-	for <lists+linux-spi@lfdr.de>; Tue, 27 Jul 2021 18:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E3F3D89DD
+	for <lists+linux-spi@lfdr.de>; Wed, 28 Jul 2021 10:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbhG0Q4n (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 27 Jul 2021 12:56:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50584 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229453AbhG0Q4n (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 27 Jul 2021 12:56:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id CCE8660E09;
-        Tue, 27 Jul 2021 16:56:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627405002;
-        bh=lpx6e7GjcTkMvlWPNBtRyNpprwhasxzKOHCugUZFNkI=;
-        h=Subject:From:Date:To:From;
-        b=kMxrOe4hYHcuiH4s6hl5oyrPNm5lBLHKMQPfyCFjvkq5R9VhnZKL9IbDrmCoQR8Lm
-         roMu7KvstljuRC9poPCPBstLL0NQg/3PMji1q0kp56Ssdo8Mpw0fMnzLD9cG3HhgKa
-         0fuiTv10KjoCpTJGp0YCKEvjrZYkqMLb2rcLPkzpsvJHJcP/k3DKNP8jVqfAu88pcD
-         BbGi70a++PIBN8FRn7xiUUPjzZWsXbxFAgqN1e416uOW3H6JdMyvcBxzHBjT/b50+S
-         KdnT5nnArcDHQ0y7jszFt+9dAmI20efF2tMtSJT5QVQtEmWG41VwwDhiIg1ZLnAvXC
-         9uWOEdK8Kbq1A==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C1AEE609CC;
-        Tue, 27 Jul 2021 16:56:42 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S234413AbhG1Ihd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 28 Jul 2021 04:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230501AbhG1Ihc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 28 Jul 2021 04:37:32 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D72C061757
+        for <linux-spi@vger.kernel.org>; Wed, 28 Jul 2021 01:37:31 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m8f4D-0006Xu-Nc; Wed, 28 Jul 2021 10:37:29 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m8f4D-0008M7-6H; Wed, 28 Jul 2021 10:37:29 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m8f4D-0007q6-5Y; Wed, 28 Jul 2021 10:37:29 +0200
+Date:   Wed, 28 Jul 2021 10:37:29 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Marek Vasut <marex@denx.de>
+Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH V2] spi: imx: mx51-ecspi: Fix CONFIGREG delay comment
+Message-ID: <20210728083729.uadiamed6rhszedd@pengutronix.de>
+References: <20210727160428.7673-1-marex@denx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <162740500278.29392.9903331906346823246.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 27 Jul 2021 16:56:42 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="w7e5e2qpbmwyq3rh"
+Content-Disposition: inline
+In-Reply-To: <20210727160428.7673-1-marex@denx.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] dt-bindings: memory: renesas,rpc-if: Miscellaneous improvements (2021-07-27T16:01:05)
-  Superseding: [v1] dt-bindings: memory: renesas,rpc-if: Miscellaneous improvements (2021-07-14T11:30:13):
-    dt-bindings: memory: renesas,rpc-if: Miscellaneous improvements
 
-Latest series: [v2] spi: imx: mx51-ecspi: Fix CONFIGREG delay comment (2021-07-27T16:04:28)
-  Superseding: [v1] spi: imx: mx51-ecspi: Fix CONFIGREG delay comment (2021-07-26T10:15:02):
-    spi: imx: mx51-ecspi: Fix CONFIGREG delay comment
+--w7e5e2qpbmwyq3rh
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Jul 27, 2021 at 06:04:28PM +0200, Marek Vasut wrote:
+> For (2 * 1000000) / min_speed_hz < 10 to be true in naturals with zero,
+> the min_speed_hz must be above 200000 (i.e. 200001 rounds down to 9, so
+> the condition triggers). Update the comment. No functional change.
+>=20
+> Fixes: 6fd8b8503a0dc ("spi: spi-imx: Fix out-of-order CS/SCLK operation a=
+t low speeds")
+> Signed-off-by: Marek Vasut <marex@denx.de>
+> Cc: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> Cc: Mark Brown <broonie@kernel.org>
+> ---
+> V2: It is not 100 kHz, 181 kHz, 222 kHz, it is 200 kHz. Make it so.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+:-)
 
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+Thanks for addressing my comments.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--w7e5e2qpbmwyq3rh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmEBF0YACgkQwfwUeK3K
+7AlUWwgAnQ5uGPwm+LYP8Z674Ht7JFRsnM+qjixDWPE3Xloh4GniS2i8PjBZEWAL
+S8nzM8QvfUsCbM4Mk4mVFeiVdi/+SII4QdU+Cj8FxONsVAmoLtSIOIoXrlOQC5Fp
+kMwPh4y1Fd5Scvwtqd9VOPI5dB9/I4SV6285YpKjNOcV2/mFD5bjtoUXKDsQzgeo
+wWz/j3mUHbg8XNQXAgCUbfVEantfJz6fy5OYOStO3m5mOp92Uo8pFVpxITDnm/UL
+x8rFdR/36iY6dHPcAyrTvqDht7OcJYqIJCxrw0x7AKhZhNKTIV+UMlUTGpAs+ebW
+SWFBO+uPz6ZCfyEHtqwRfUNyuC/mwg==
+=8/Ym
+-----END PGP SIGNATURE-----
+
+--w7e5e2qpbmwyq3rh--
