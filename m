@@ -2,87 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7683D96E9
-	for <lists+linux-spi@lfdr.de>; Wed, 28 Jul 2021 22:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41653D9963
+	for <lists+linux-spi@lfdr.de>; Thu, 29 Jul 2021 01:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbhG1Ukv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 28 Jul 2021 16:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbhG1Ukv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 28 Jul 2021 16:40:51 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0E2C061757;
-        Wed, 28 Jul 2021 13:40:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=3C4ckl4hBFKuszgFWuJ5cYd/cB9Dk9csJZ3u87C62W4=; b=M/eFAK97k7Nkw7itXgaJLcSJR
-        J25DTtE/gEYgmIpDIeF+wOccrGjrlAjZYHjVZmlxSZPoHIAiuOLK+4ayJ19RMTPWDxlA8TrAbRl8C
-        kj4ZsXqHS0AJS/J/YIReMy0To2AGo/QEAHiMeHjydd9ANr2thbrZXOAB1ZQaE9pSetedNsl6Ptm8o
-        tRNqqze9tqkKKsmlFxFz5HQxgLWBAsmM5UiWdl9yZRlQU6LqJI4C3dwDz0N/D215D8ASdUkOdBCsn
-        jp124LaZmNrlFEXYSgDwwTZ3CFTX5syOebGZ6akdED7dBcN0rBgXS82CHxM1R3FH8WlB0bwu0fApZ
-        suXcK4fzw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46706)
-        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1m8qM3-0008Ta-3T; Wed, 28 Jul 2021 21:40:39 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1m8qLy-0006rx-7Y; Wed, 28 Jul 2021 21:40:34 +0100
-Date:   Wed, 28 Jul 2021 21:40:34 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        id S232116AbhG1X2K (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 28 Jul 2021 19:28:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49472 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232105AbhG1X2K (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 28 Jul 2021 19:28:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 96DCA60E9B;
+        Wed, 28 Jul 2021 23:28:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627514888;
+        bh=4zRkPw86lvSt/UuJL0q/2Fk79VClXXHqjS/jH3XIJzo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=cdRWNOGlC3TDIhYQoJi2yhiqWRe/lsZw0GIrE9dSZgMv4vjx/cNg/P2/BDCU3jW2u
+         7L+5eyG097KYeVb7gL6JKwLw09u8nPC3WaIeZvXjcF3EeBYw7Ej9Uwv2auLrfIyqkw
+         n1Ihhl2i5zLLeI5JAylzUCT4HvE3PxZI/6Y1wjzpPsWOwaZqOlju5Ct/wVTi4vvaxd
+         Hueg8OLtZG7vYw0kSGsJ7wlRfryS0GyHz/tOMVBAgyrpTu+0+1eGjWVJxNA7IRJoOP
+         RHAvnVTo6qaXk1GmVxF63w9RuaLknIzmgiTS6GAVUDjWFNJkDZdrSJVr77cgHBcdqM
+         zqu4pr4+A6OUA==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org, Marek Vasut <marex@denx.de>
+Cc:     Mark Brown <broonie@kernel.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Claudiu.Beznea@microchip.com, alexandre.belloni@bootlin.com,
-        linux-kernel@vger.kernel.org, thierry.reding@gmail.com,
-        lee.jones@linaro.org, linux-clk@vger.kernel.org,
-        linux-rtc@vger.kernel.org, Ludovic.Desroches@microchip.com,
-        o.rempel@pengutronix.de, andy.shevchenko@gmail.com,
-        aardelean@deviqon.com, linux-pwm@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, broonie@kernel.org,
-        Jonathan.Cameron@huawei.com, linux-arm-kernel@lists.infradead.org,
-        a.zummo@towertech.it, linux-spi@vger.kernel.org, wsa@kernel.org,
-        kernel@pengutronix.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org
-Subject: Re: About clk maintainership [Was: Re: [PULL] Add variants of
- devm_clk_get for prepared and enabled clocks enabled clocks]
-Message-ID: <20210728204033.GF22278@shell.armlinux.org.uk>
-References: <20210625171434.3xusxpxjprcdqa47@pengutronix.de>
- <20210705080144.zfbzkm7l3gmnh6st@pengutronix.de>
- <20210722060654.nudpdtemosi64nlb@pengutronix.de>
- <YPkg0wtYIoHKpTUW@kunai>
- <20210722081817.2tsjzof4gvldq6ka@pengutronix.de>
- <YPlfcbkxiBmB+vw1@kunai>
- <CAHp75VfC=s12Unw3+Cn0ag71mM5i90=Jbwj4nYwB5cPKiUTRSA@mail.gmail.com>
- <20210723091331.wl33wtcvvnejuhau@pengutronix.de>
- <06e799be-b7c0-5b93-8586-678a449d2239@microchip.com>
- <20210728202547.7uvfwflpruku7yps@pengutronix.de>
+Subject: Re: [PATCH V2] spi: imx: mx51-ecspi: Fix CONFIGREG delay comment
+Date:   Thu, 29 Jul 2021 00:27:51 +0100
+Message-Id: <162751436509.10613.6487263379205830431.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210727160428.7673-1-marex@denx.de>
+References: <20210727160428.7673-1-marex@denx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210728202547.7uvfwflpruku7yps@pengutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Jul 28, 2021 at 10:25:47PM +0200, Uwe Kleine-König wrote:
-> I adapted the Subject in the hope to catch Stephen's and Michael's
-> attention. My impression is that this thread isn't on their radar yet,
-> but the topic here seems important enough to get a matching Subject.
+On Tue, 27 Jul 2021 18:04:28 +0200, Marek Vasut wrote:
+> For (2 * 1000000) / min_speed_hz < 10 to be true in naturals with zero,
+> the min_speed_hz must be above 200000 (i.e. 200001 rounds down to 9, so
+> the condition triggers). Update the comment. No functional change.
 
-Have you thought about sending your pull request to the clk API
-maintainer (iow, me) ?
+Applied to
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: imx: mx51-ecspi: Fix CONFIGREG delay comment
+      commit: 36c2530ea963884eeb0097169f853fdc36f16ad7
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
