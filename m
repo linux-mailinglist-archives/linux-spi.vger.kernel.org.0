@@ -2,125 +2,146 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5DF3DDE41
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Aug 2021 19:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A41E33DDE65
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Aug 2021 19:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbhHBRN4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 2 Aug 2021 13:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
+        id S230362AbhHBRXZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 2 Aug 2021 13:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbhHBRNz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 2 Aug 2021 13:13:55 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35962C06175F;
-        Mon,  2 Aug 2021 10:13:46 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id m10-20020a17090a34cab0290176b52c60ddso918153pjf.4;
-        Mon, 02 Aug 2021 10:13:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=DsrhQp/km3AN3/nCdXzxLh4fYNOYR+90bwDH6yArIzw=;
-        b=LLoLo79j5gKbVjYyumPfqd8k2EvfByskVN/mylgwfFPReilrjWca0h5TBvIfJCDdfl
-         2zIGt7WZV35tZMJt/IAZdVyiR52+3ZBNfH5xiHgVnvEMuFvLJz1iIogrnR1Ivwq2TjSE
-         qyLItKXQ3zNFIOA+sMmEqqyFRn5BFQMwBDZ2ygWI0gNlLanC77pCxeZPVjbMFggnWZvx
-         +0OjCKyFGmd8NSyV4tHRb/LcYH4M+AmwBz6dJ2uFuH8dU5t+oi+Fx2KZk+nmDTDldBTc
-         pF42/DPbjvs7QJw7qOO2FdoPYSKy8E4p1BQld6tr9Jt4Mj3q0Wh77HlK+2w8IxSYIhx7
-         Rt+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=DsrhQp/km3AN3/nCdXzxLh4fYNOYR+90bwDH6yArIzw=;
-        b=fivqjxIZt8QoS/+tRVHuUVdjLNdEZdRrsLvE4zlqT/faWYQTNwAFf3pOwDc7/G2Pb5
-         NgYYQFuppzRXpTf99Lf6f+RGhFX9D1HqW5ag/yDjqOC41STw+x5ewFAa2bd1Gs6vs2+G
-         Qvvj4d5d4o7ImkMdhHR7f5OTwdYKRxi29hQY52+lIBFqqZIRM14WgCXvCGSJ0ed7u1wo
-         SeK8gJP7zy3gq4aixN13Nn3mx09DUM6ijGiJBEjOwJ8DVCnUQcaxPnVvpbvYEkt+EuXO
-         dey9djw2MYgzcqbQ9l5jjLIHCjtlnBmv4rHgJxJdfJ+SbCTbYHPGLr9T2Mcx1rDyn/bt
-         UIXA==
-X-Gm-Message-State: AOAM531KUWVzI8v1UrW6hotoQP6S2L2WRDPNrWc6duBK8OFKBKCspP5O
-        MKPG+BSa1mE6BsuFAY6B/iOQv3n0DEGUGlnubVU=
-X-Google-Smtp-Source: ABdhPJweUosf0ntXfg8F9h9vRNrNHxM5yHY1ehTtGvwGd7VLgJy3fO+s26kJwFxctl4nX18uDgzE3HlPXdBmU9REuUE=
-X-Received: by 2002:a63:5a5b:: with SMTP id k27mr2335806pgm.74.1627924425668;
- Mon, 02 Aug 2021 10:13:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <YPlfcbkxiBmB+vw1@kunai> <CAHp75VfC=s12Unw3+Cn0ag71mM5i90=Jbwj4nYwB5cPKiUTRSA@mail.gmail.com>
- <20210723091331.wl33wtcvvnejuhau@pengutronix.de> <06e799be-b7c0-5b93-8586-678a449d2239@microchip.com>
- <20210728202547.7uvfwflpruku7yps@pengutronix.de> <20210728204033.GF22278@shell.armlinux.org.uk>
- <162771727997.714452.2303764341103276867@swboyd.mtv.corp.google.com>
- <20210731120004.i3affxw7upl5y4c5@pengutronix.de> <20210802094810.GJ22278@shell.armlinux.org.uk>
- <20210802152755.ibisunvibmwhiyry@pengutronix.de> <20210802163824.GK22278@shell.armlinux.org.uk>
-In-Reply-To: <20210802163824.GK22278@shell.armlinux.org.uk>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 2 Aug 2021 20:13:05 +0300
-Message-ID: <CAHp75VcpA0vOwN8gBj2iikXW2dw+KCgZEM=QJ5Jx6UWqww=iCw@mail.gmail.com>
-Subject: Re: About clk maintainership [Was: Re: [PULL] Add variants of
- devm_clk_get for prepared and enabled clocks enabled clocks]
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        Ludovic Desroches <Ludovic.Desroches@microchip.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        linux-pwm@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
+        with ESMTP id S230027AbhHBRXY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 2 Aug 2021 13:23:24 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D37C06175F;
+        Mon,  2 Aug 2021 10:23:14 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 1B3901F42BC0
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id E0ADE4800BA; Mon,  2 Aug 2021 19:23:10 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <kernel@pengutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Claudiu Beznea <Claudiu.Beznea@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Fabio Estevam <festevam@gmail.com>, Ian Ray <ian.ray@ge.com>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, kernel@collabora.com,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCHv8 0/3] GE Healthcare PPD firmware upgrade driver for ACHC
+Date:   Mon,  2 Aug 2021 19:23:06 +0200
+Message-Id: <20210802172309.164365-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Aug 2, 2021 at 7:38 PM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
-> On Mon, Aug 02, 2021 at 05:27:55PM +0200, Uwe Kleine-K=C3=B6nig wrote:
-> > Hello Russell,
-> > On Mon, Aug 02, 2021 at 10:48:10AM +0100, Russell King (Oracle) wrote:
+Hi,
 
-...
+The PPD has a secondary processor (NXP Kinetis K20), which can be
+programmed from the main system. It is connected to the main processor
+by having it's EzPort interface connected to the SPI bus. Currently
+both (normal and EzPort) interfaces are simply exposed to userspace.
+This does not work for the EzPort, since EzPort usage requires a device
+reset. The proper solution is to do the flashing from kernel space
+with properly timed toggling of EzPort chip-select and reset line. In
+PATCHv2 it was suggested, that this should happen via an SPI ancillary
+device, so this is how it has been implemented now. The SPI core
+changes have been applied in PATCHv5 and are part of v5.14-rc1.
 
-> > > There have been several different approaches to wrapping things up,
-> > > but here's a question: should we make it easier to do the lazy thing
-> > > (get+enable) or should we make it easier to be power efficient?
-> > > Shouldn't we be encouraging people to write power efficient drivers?
-> >
-> > Yeah, sounds compelling, but I wonder if that's of practical importance=
-.
-> > How many driver authors do you expect to lure into making a better
-> > driver just because devm_clk_get_prepared() doesn't exist? In contrast:
-> > How many drivers become simpler with devm_clk_get_prepared() and so
-> > it becomes easier to maintain them and easier to spot bugs?
-> > In the absence of devm_clk_get_prepared(), is it better that several
-> > frameworks (or drivers) open code it?
->
-> It probably depends on where you stand on power management and power
-> efficiency issues. Personally, I would like to see more effort put
-> into drivers to make them more power efficient, and I believe in the
-> coming years, power efficiency is going to become a big issue.
+Changes since PATCHv7:
+ * https://lore.kernel.org/lkml/20210713163528.119185-1-sebastian.reichel@collabora.com/
+ * fix warning when being compiled for 64bit reported by Greg
+   (which only makes sense for compile testing and if the driver is adapted
+   to other platforms in the future, since the PPD's i.MX53 processor is a
+   32bit processor)
+ * add SOC_IMX53 || COMPILE_TEST Kconfig dependency, so that most people
+   are not needlessly bothered with a platform specific driver
+ * just pass-through direct reset control, which allows userspace to
+   powerdown the controller, synchronous startup and is also more
+   intuitive.
+ * fix very slow flashing due to incorrectly handling ret=0 in
+   ezport_wait_write() loop.
+ * make code upload verification code work for firmwares putting the
+   microcontroller into secure mode by doing the verification before
+   the reset
+ * improve verification speed by increasing the FAST_READ bus spee
 
-While in the ideal world I 100% agree with the approach, IRL we have
-to deal with constantly degrading quality of the code and instead of
-thinking about power management and efficiency the absence of APIs
-such as discussed provokes not only creating the power management
-inefficient code, but also memory leaks here and there.
+Changes since PATCHv6:
+ * https://lore.kernel.org/lkml/20210712150242.146545-1-sebastian.reichel@collabora.com/
+ * use kstrtoul() in sysfs store routines
+ * merge nxp-ezport.c into gehc-achc.c
+ * reword commit message
 
---=20
-With Best Regards,
-Andy Shevchenko
+Changes since PATCHv5:
+ * https://lore.kernel.org/lkml/20210621175359.126729-1-sebastian.reichel@collabora.com/
+ * Rebased to v5.14-rc1
+ * Fixed compilation as module
+ * Dropped no longer needed module.h include from ezport code
+
+Changes since PATCHv4:
+ * https://lore.kernel.org/lkml/20210609151235.48964-1-sebastian.reichel@collabora.com/
+ * Add Rob's Acked-by to ge-achc binding update
+ * Don't use of_property_read_u32_index() in of_spi_parse_dt()
+ * Don't build separate module for EzPort code
+ * Use GPL2-only for the header
+ * ACHC_MAX_FREQ -> ACHC_MAX_FREQ_HZ
+ * Only accept '1' for the sysfs files, not any data
+ * Update sysfs file documentation
+ * Rebased to spi-next tree (b8f9dce0f4eb)
+
+Changes since PATCHv3:
+ * https://lore.kernel.org/lkml/20210528113346.37137-1-sebastian.reichel@collabora.com/
+ * Add Rob's Acked-by to 2nd patch
+ * use GPL-2-only instead of GPL-2+
+ * use %zu for printing a size_t
+ * use driver's .dev_groups to register sysfs group
+ * Add sysfs property documentation
+ * split EzPort and ACHC drivers into separate patches
+ * drop minItems/maxItems from achc binding, which seems to fix the problems
+   reported by dt_binding_check. The information of two items being required
+   is implied by the explicit item list.
+ * drop spidev functionality for the main SPI interface. The current firmware
+   communicates via UART and adding spidev support is complex. If future firmware
+   releases start using it, spidev support for the main interface can be added
+   later.
+
+Changes since PATCHv2:
+ * https://lore.kernel.org/lkml/20180327135259.30890-1-sebastian.reichel@collabora.co.uk/
+ * add SPI core support for ancillary devices
+ * modify ACHC binding to make use of ancillary device
+ * rewrite driver to use ancillary device
+ * rebased to 5.13-rc1
+
+Changes since PATCHv1:
+ * https://lore.kernel.org/lkml/20180320172201.2065-1-sebastian.reichel@collabora.co.uk/
+ * split DT binding update into its own patch
+ * add sysfs attribute documentation
+ * fix problem reported by kbuild test robot
+
+-- Sebastian
+
+Sebastian Reichel (3):
+  dt-bindings: misc: ge-achc: Convert to DT schema format
+  ARM: dts: imx53-ppd: Fix ACHC entry
+  misc: gehc-achc: new driver
+
+ .../ABI/testing/sysfs-driver-ge-achc          |  15 +
+ .../devicetree/bindings/misc/ge-achc.txt      |  26 -
+ .../devicetree/bindings/misc/ge-achc.yaml     |  65 ++
+ arch/arm/boot/dts/imx53-ppd.dts               |  23 +-
+ drivers/misc/Kconfig                          |  12 +
+ drivers/misc/Makefile                         |   1 +
+ drivers/misc/gehc-achc.c                      | 565 ++++++++++++++++++
+ drivers/spi/spidev.c                          |   1 -
+ 8 files changed, 671 insertions(+), 37 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-ge-achc
+ delete mode 100644 Documentation/devicetree/bindings/misc/ge-achc.txt
+ create mode 100644 Documentation/devicetree/bindings/misc/ge-achc.yaml
+ create mode 100644 drivers/misc/gehc-achc.c
+
+-- 
+2.30.2
+
