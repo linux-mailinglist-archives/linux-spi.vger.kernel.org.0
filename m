@@ -2,121 +2,128 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8801D3DC887
-	for <lists+linux-spi@lfdr.de>; Sun,  1 Aug 2021 00:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D473DCED4
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Aug 2021 05:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbhGaWFV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 31 Jul 2021 18:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35076 "EHLO
+        id S229915AbhHBDAh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 1 Aug 2021 23:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231559AbhGaWFU (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 31 Jul 2021 18:05:20 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CAAC0613D3
-        for <linux-spi@vger.kernel.org>; Sat, 31 Jul 2021 15:05:12 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id r23so18335888lji.3
-        for <linux-spi@vger.kernel.org>; Sat, 31 Jul 2021 15:05:12 -0700 (PDT)
+        with ESMTP id S229908AbhHBDAg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 1 Aug 2021 23:00:36 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECAAC06175F;
+        Sun,  1 Aug 2021 20:00:26 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id z6-20020a9d24860000b02904d14e47202cso7538604ota.4;
+        Sun, 01 Aug 2021 20:00:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eavS7+nVlKa3pE/nMERuVdSNOcLN0CSyw0CYPXJs2RE=;
-        b=oxTawDKtE7gUMCEZTGVhmlVv2Y3WYDP+FS3lOaHPAgoD7WcgQjYd0RzzaaCmE3977P
-         y2AZlp+prHKgerutQ7jx1R/cVL6lbK+WzauqEJucT+Izj+ziz0I0tc0O+XwvtPwksIj1
-         ukvPhZPy1rocK17IvtjWMFHZ1JmoIIqK4FLNFIt716WQ3Pie0UvlUCbiTbUjKG2RTcHV
-         7aLptfufBWxUeUNmjY6/SgCFLiwOzAyRIGpCOm9JFIGiWEdzkbX1t7kvgcWoJlruvGQV
-         TNKC7K+DYoXaKkZDcceTWufkpcffdIMAe8eG+6751qHasEPk6w4m+/EI6Gd9NCUzZuvT
-         oxzQ==
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l3jwA3sv7LfeA88bUhgOgpW0zu8BYSUhLdnLV59eV+k=;
+        b=nN+LqWCqdJi31kINH3VCdWbNQxabUcc6kCWZM/JDlZGdJS3mNFTdb5GfvIgONTNa0Z
+         O6jGoRTIdJGUOfTBi0Fev2GSzQq9XD2Hxd2bVFvGctcmz0bMext+57L+gJyk6PyYW8p7
+         PVZOhhANlRCccizrYkr1uBsM4Sj5+mIT0x6yNEf/Lk1u8mTyByJOsJRtQtY+m/OtlU5z
+         qvNcIO1MX0VPp29isyXQu8ZstXCqBpTWcR45/Lwkkkh8hcsytZ/vZuL15og1wIlbRlgh
+         zV5bgBigCb4Wz6Z+OjO/mOJwT6Ws11MUXhhb2q3LZq3fpA/tRZCYqjrrQFq4i/s+Kg1c
+         ryZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eavS7+nVlKa3pE/nMERuVdSNOcLN0CSyw0CYPXJs2RE=;
-        b=tauPTHYxLHCfszxM39QFGiL/ghchYuxV3drSZCMyMUCA0jeIzoNeZUiyyp+qhNPDOv
-         5FfvfF36Rkl3rU6J8cS6dG4IkCFtAPhoiaBIMj7H+Iv44GHYgy7iGh7OOO7uWk+bZJqk
-         T81ybYdRlxm7tCnCI3+FqMQ9+4yL+5L4jsh+aeRG0cvf9hohx6JaZ5OXgwnuaTG87AZY
-         ciWMc+SnNWfJVjVwg+xbbyWfFRFD1XGMo3utrZ6GYj9HDTfqVo+cRUIvlTYsKoHyGLY6
-         tAYFgMDi1fpePPHvlMFnrHkwWZIkmnsJ8lfFNfF4XL9x5TLIc5jYDR179ixwRx/Yid8u
-         d/cg==
-X-Gm-Message-State: AOAM532P64qGk2oeW5RlPeh1eJb00CbNBwqE6Xfo4kx4TEfuouT01aRI
-        lPNcRLV7cu7d12lj+r7XONC3E6rITVjv1QDy4zqsZQ==
-X-Google-Smtp-Source: ABdhPJwTjpbUeZT+xrHLeSR/vD0UodSpw43lXDmx8pJiyALETra8HqJRQTMUGT7mTfcqIT7xDGsd2Eo06KRRqoQp1Bw=
-X-Received: by 2002:a2e:bc14:: with SMTP id b20mr6401323ljf.200.1627769110442;
- Sat, 31 Jul 2021 15:05:10 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=l3jwA3sv7LfeA88bUhgOgpW0zu8BYSUhLdnLV59eV+k=;
+        b=q5+WUfuMMD+u5PjxKkoGbfXt2SzmU6izHivvV3oVCzGpT6H/5ZcK0CgG5AXZ1AwK6R
+         +dg1yq3T44/Ju0ttkbeM76OrNX7eFHJAtXjfNCl604L1m9Cs+okDm9FzwNbe35+J0ruH
+         ncM18TB4ae0iSNVFwknWlN/B/ABLT4vwB07kXbV4n4j8e9xqRWoSJmiBPgu1wur/Cpvl
+         RMOjG6UIXs+DXNNmtzUVhO/nrvWVK60+kgqIFEER34jZuPLy3m5QMfYvTOXKug1Sa96B
+         /POfGP025/xDgrmq/7WbfMJbQ5y5uMNgnq+0nnfhWGqljlrhB13TTD1P0/9noM381Ndc
+         M9dg==
+X-Gm-Message-State: AOAM532o9/LOvYZTYhOJQlsjLedGX3lDBSL0QVC6+2NDeTGC/qlBTkK9
+        10zrWqhWRqXYOS4HxSRd3U0=
+X-Google-Smtp-Source: ABdhPJzuuKDnVe+pBy7XiqDsOeM4T7BN4LlDQWdk+BDgTjDdIAj9y5QYr6zeVZxiH9PNnZNAcQFH7A==
+X-Received: by 2002:a05:6830:2696:: with SMTP id l22mr10773429otu.286.1627873226329;
+        Sun, 01 Aug 2021 20:00:26 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m35sm40242ooi.38.2021.08.01.20.00.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Aug 2021 20:00:25 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Peter Hess <peter.hess@ph-home.de>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Hsin-Yi Wang <hsinyi@google.com>
+Subject: [PATCH] spi: mediatek: Fix fifo transfer
+Date:   Sun,  1 Aug 2021 20:00:23 -0700
+Message-Id: <20210802030023.1748777-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20210726115058.23729-1-nikita.shubin@maquefel.me>
-In-Reply-To: <20210726115058.23729-1-nikita.shubin@maquefel.me>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 1 Aug 2021 00:04:59 +0200
-Message-ID: <CACRpkdYeqJFFwkc6pfSrz3-gaN_PjjV52jstqzR2sMa+bxbMuQ@mail.gmail.com>
-Subject: Re: [PATCH 0/8] arm: ep93xx: CCF conversion
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
-        <alsa-devel@alsa-project.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "open list:DMA GENERIC OFFLOAD ENGINE SUBSYSTEM" 
-        <dmaengine@vger.kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "open list:FRAMEBUFFER LAYER" <dri-devel@lists.freedesktop.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        "open list:INPUT (KEYBOARD, MOUSE, JOYSTICK, TOUCHSCREEN)..." 
-        <linux-input@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
-        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, YiFei Zhu <yifeifz2@illinois.edu>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Jul 26, 2021 at 1:51 PM Nikita Shubin <nikita.shubin@maquefel.me> wrote:
+Commit 3a70dd2d0503 ("spi: mediatek: fix fifo rx mode") claims that
+fifo RX mode was never handled, and adds the presumably missing code
+to the FIFO transfer function. However, the claim that receive data
+was not handled is incorrect. It was handled as part of interrupt
+handling after the transfer was complete. The code added with the above
+mentioned commit reads data from the receive FIFO before the transfer
+is started, which is wrong. This results in an actual transfer error
+on a Hayato Chromebook.
 
-> This series series of patches converts ep93xx to Common Clock Framework.
->
-> It consists of preparation patches to use clk_prepare_enable where it is
-> needed, instead of clk_enable used in ep93xx drivers prior to CCF and
-> a patch converting mach-ep93xx/clock.c to CCF.
->
-> Link: https://lore.kernel.org/patchwork/cover/1445563/
-> Link: https://lore.kernel.org/patchwork/patch/1435884/
->
-> Alexander Sverdlin (7):
->   iio: ep93xx: Prepare clock before using it
->   spi: spi-ep93xx: Prepare clock before using it
->   Input: ep93xx_keypad: Prepare clock before using it
->   video: ep93xx: Prepare clock before using it
->   dmaengine: ep93xx: Prepare clock before using it
->   ASoC: cirrus: i2s: Prepare clock before using it
->   pwm: ep93xx: Prepare clock before using it
->
-> Nikita Shubin (1):
->   ep93xx: clock: convert in-place to COMMON_CLK
+Remove the code trying to handle receive data before the transfer is
+started to fix the problem.
 
-This series is looking very good.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Fixes: 3a70dd2d0503 ("spi: mediatek: fix fifo rx mode")
+Cc: Peter Hess <peter.hess@ph-home.de>
+Cc: Frank Wunderlich <frank-w@public-files.de>
+Cc: Tzung-Bi Shih <tzungbi@google.com>
+Cc: Hsin-Yi Wang <hsinyi@google.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/spi/spi-mt65xx.c | 19 +++++--------------
+ 1 file changed, 5 insertions(+), 14 deletions(-)
 
-I suppose the per-subsystem patches can be picked up by
-each subsystem maintainer and then you can send the "big patch"
-to the SoC tree.
+diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+index 68dca8ceb3ad..7914255521c3 100644
+--- a/drivers/spi/spi-mt65xx.c
++++ b/drivers/spi/spi-mt65xx.c
+@@ -426,24 +426,15 @@ static int mtk_spi_fifo_transfer(struct spi_master *master,
+ 	mtk_spi_prepare_transfer(master, xfer);
+ 	mtk_spi_setup_packet(master);
+ 
+-	cnt = xfer->len / 4;
+-	if (xfer->tx_buf)
++	if (xfer->tx_buf) {
++		cnt = xfer->len / 4;
+ 		iowrite32_rep(mdata->base + SPI_TX_DATA_REG, xfer->tx_buf, cnt);
+-
+-	if (xfer->rx_buf)
+-		ioread32_rep(mdata->base + SPI_RX_DATA_REG, xfer->rx_buf, cnt);
+-
+-	remainder = xfer->len % 4;
+-	if (remainder > 0) {
+-		reg_val = 0;
+-		if (xfer->tx_buf) {
++		remainder = xfer->len % 4;
++		if (remainder > 0) {
++			reg_val = 0;
+ 			memcpy(&reg_val, xfer->tx_buf + (cnt * 4), remainder);
+ 			writel(reg_val, mdata->base + SPI_TX_DATA_REG);
+ 		}
+-		if (xfer->rx_buf) {
+-			reg_val = readl(mdata->base + SPI_RX_DATA_REG);
+-			memcpy(xfer->rx_buf + (cnt * 4), &reg_val, remainder);
+-		}
+ 	}
+ 
+ 	mtk_spi_enable_transfer(master);
+-- 
+2.25.1
 
-Yours,
-Linus Walleij
