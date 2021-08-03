@@ -2,82 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 269E73DF5B5
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Aug 2021 21:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9233DF7E0
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Aug 2021 00:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239569AbhHCTbQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 3 Aug 2021 15:31:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39934 "EHLO mail.kernel.org"
+        id S232644AbhHCWgI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 3 Aug 2021 18:36:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53168 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239395AbhHCTbQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 3 Aug 2021 15:31:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 36EC2603E7;
-        Tue,  3 Aug 2021 19:31:04 +0000 (UTC)
+        id S231770AbhHCWgI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 3 Aug 2021 18:36:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E241601FD;
+        Tue,  3 Aug 2021 22:35:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628019064;
-        bh=QY2GEHpzXPPU0n5auFTFTfMaTFjPa4x8HiZo7mTWQgE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nLiKixCz8EnFb9V5uP5sl2zskq4skQRGJDWsaHY+BjhKr6Vl/zauwb4+7GEMHEU2t
-         nMSXVjmqUsApK2A+HzwrWQ3HxtMgiWvhP2a9pJNFeLgGVo1hM9/A8/Xw64V7CMjQTV
-         vXFIVSILYauP+bOsMEYUTco7ZNI3ona3u7GJ2sUtXSOzBjU2ay/EWb3qvxEYDCspHc
-         H7UH7ykNGZfycktslFB0KNDzdaxhQipIYUCAehTwlDN1IV3cJCl1NiL0t7HoSyhOGA
-         Dm25+oiXlRm7TU8thaVxRAE76DCalCv28td2CmW0TtnT+mwUR8q7mk+BSwNH+D1xah
-         akfxiBDhQao8A==
-Date:   Tue, 3 Aug 2021 20:30:49 +0100
+        s=k20201202; t=1628030156;
+        bh=JG9m2MSBIzYBZolTfpn9n8Dn4NcI+G/B3R/BgSHZWF0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=En27IaiQYBwRJ9qUvaNiy2pMitswO/5cjIzYjb681mGQjm2nR7zhcU0m3Afn5xJwh
+         gYwiGdIqpW4HNcLt4X+a30U9azmT6z2QvynD0cyiMJ0h1q4s8V1kIM/NCToNRNbW8Q
+         bIq+hibTxV+x7EslKTsuy562Ei+jT6Au7FrHBdTgdDPtIMvZZaQfwBw8oh8Nhh5Y68
+         lO+n1ksi2+q44NiKOe6MdE0wcqextHamDfBRSj9JaX0lRhKmcz3G7pqzxklUo8eg4m
+         5E1yIQiG8Lxl+V9eKhNGIYZlmaQY4Tj/L1HmYD4vSGsY+xhXTLf2kcIJui+NUt3AjG
+         NAMrLjh7kgN+A==
 From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Mason Zhang <Mason.Zhang@mediatek.com>,
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Peter Hess <peter.hess@ph-home.de>,
+        Hsin-Yi Wang <hsinyi@google.com>,
+        linux-arm-kernel@lists.infradead.org,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>
-Subject: Re: [PATCH v2 3/4] spi: mediatek: modify set_cs_timing callback
-Message-ID: <20210803193049.GQ4668@sirena.org.uk>
-References: <20210803102428.6476-1-Mason.Zhang@mediatek.com>
- <CAHp75VcPhBB+21wVErWRq+mSDaCkpQBovn+xvMbXyfENnuu40Q@mail.gmail.com>
+        Frank Wunderlich <frank-w@public-files.de>
+Subject: Re: [PATCH] spi: mediatek: Fix fifo transfer
+Date:   Tue,  3 Aug 2021 23:35:29 +0100
+Message-Id: <162803013702.42391.66595124838577926.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210802030023.1748777-1-linux@roeck-us.net>
+References: <20210802030023.1748777-1-linux@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="z87VqPJ/HsYrR2WM"
-Content-Disposition: inline
-In-Reply-To: <CAHp75VcPhBB+21wVErWRq+mSDaCkpQBovn+xvMbXyfENnuu40Q@mail.gmail.com>
-X-Cookie: There's only one everything.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Sun, 1 Aug 2021 20:00:23 -0700, Guenter Roeck wrote:
+> Commit 3a70dd2d0503 ("spi: mediatek: fix fifo rx mode") claims that
+> fifo RX mode was never handled, and adds the presumably missing code
+> to the FIFO transfer function. However, the claim that receive data
+> was not handled is incorrect. It was handled as part of interrupt
+> handling after the transfer was complete. The code added with the above
+> mentioned commit reads data from the receive FIFO before the transfer
+> is started, which is wrong. This results in an actual transfer error
+> on a Hayato Chromebook.
+> 
+> [...]
 
---z87VqPJ/HsYrR2WM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Tue, Aug 03, 2021 at 09:20:19PM +0300, Andy Shevchenko wrote:
-> On Tue, Aug 3, 2021 at 1:42 PM Mason Zhang <Mason.Zhang@mediatek.com> wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > +       inactive = inactive ? inactive : 1;
+Thanks!
 
-> All of these can be simplified by using ?: (short ternary) form.
+[1/1] spi: mediatek: Fix fifo transfer
+      commit: 0d5c3954b35eddff0da0436c31e8d721eceb7dc2
 
-Please don't, if anything just don't use the ternery operator at all for
-things like this - it doesn't help with legibility.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---z87VqPJ/HsYrR2WM
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmEJmWIACgkQJNaLcl1U
-h9DkVgf/Rv7cu2sTnh6I4OzeDeohVJspONWje3p7I9opiL1FrbONWkc1yKFmhBay
-7aUfYhbl9Z+VXUyWmuBCe668PGRT/j0a/9uVsQaKER1xNaW3BaWH5Av99TSZsyB+
-J90YRP+TqT9G60dD5jgHodAJ3jEJePoU+7CXCuR4OvhBqdn7SVLD0BMBiwH90cOg
-CeyEHO/go1UN/B+CZbKds2d1/uYPh2wmH2JHsmxoYFIRxLKdQkEVpRgTy13dnzy2
-p2doLPsVrdHI04N2O4yZKEZrmi5YEtReig8tyGRjMYdP1bC//tLdw21Fy49CsFxD
-e8hBwYgr3MfOaL/EW96PbEdXWRGaKw==
-=HNVE
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---z87VqPJ/HsYrR2WM--
+Thanks,
+Mark
