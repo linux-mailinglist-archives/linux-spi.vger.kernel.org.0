@@ -2,68 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 132C53DF7E8
+	by mail.lfdr.de (Postfix) with ESMTP id C84A63DF7EA
 	for <lists+linux-spi@lfdr.de>; Wed,  4 Aug 2021 00:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233248AbhHCWgM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 3 Aug 2021 18:36:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53212 "EHLO mail.kernel.org"
+        id S233221AbhHCWgP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 3 Aug 2021 18:36:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53350 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231770AbhHCWgL (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 3 Aug 2021 18:36:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D3C4560525;
-        Tue,  3 Aug 2021 22:35:58 +0000 (UTC)
+        id S231770AbhHCWgP (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 3 Aug 2021 18:36:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 63A5360F02;
+        Tue,  3 Aug 2021 22:36:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628030159;
-        bh=VLQDPuYtppmqHTWikIAl/LlTeEVdU62YKptNtZBvwDM=;
+        s=k20201202; t=1628030161;
+        bh=Smw4ShGSYQR1ubaPrFN09PPGlpmvwH+pcd2WaGVRics=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XiC4OcyA9vPRScT+26U/MPHk/PLw7cfWKDzQmhm7L/2ifrhJ/zeydraOBFfSielel
-         C9CoTPz9m8g5nHPqw5lV3cach9MFKoQo7P1BIrAUEWxt2n34NVbQ8Vq9y9Bk17olEn
-         YwLObrlxabk//+7InLHI/JB3MrRVuc6CLmVXUNAItfsddCLQfVMIBm5OTMNUIr0d2j
-         6rr6MddHbqKXUpTXihj8VOyu+VpdlXivyHd+uCltwAZVIFEkOJPzox3KYwl2CflZxe
-         PtulX27cIMv06Ar6mdPJO8Z5O1byM1L5d1FcFiP35VJWL3P8a4KAnMf4Mgm9Rzd4KU
-         G6lou/vcPBEZA==
+        b=TYK2FWUrR9CTsWSm61JemTXZrJ8TPqbrjYPB2nAkFFKUco9Q94HHHbGPMa7udbCzO
+         GUfwXxuqSCzFhsmWk1dGliCikYEQ7Ca5c7sUqwaMz9dxqdtAtuFHpzHKyEq8oiVWeB
+         8qvuCFDuhQf2M8SkHCjsxwiciX5iZ7uvZfCmdLxW0PCLexSjD4qWjt7P/n2IbMcHAV
+         8UkTbhrPDm8HfXCDw0XaFFXV4reRnEzasPk6cGaEZOstPAt8JFAVrYpPb3hBc95Q+M
+         v1qTY2JhAAsuTROUars/SuFnXy7ISHWvxCR7/03B9yTztcT7DrW6Cf16w/vJ5nN9Uo
+         AfRFjOAspQ3eA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Mark Brown <broonie@kernel.org>,
-        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
-        <alsa-devel@alsa-project.org>,
-        "open list:INPUT KEYBOARD, MOUSE, JOYSTICK , TOUCHSCREEN..." 
-        <linux-input@vger.kernel.org>, YiFei Zhu <yifeifz2@illinois.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        "open list:FRAMEBUFFER LAYER" <dri-devel@lists.freedesktop.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        "open list:DMA GENERIC OFFLOAD ENGINE SUBSYSTEM" 
-        <dmaengine@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>
-Subject: Re: (subset) [PATCH v2 0/8] arm: ep93xx: CCF conversion
-Date:   Tue,  3 Aug 2021 23:35:30 +0100
-Message-Id: <162803013703.42391.16928190328940334025.b4-ty@kernel.org>
+To:     nsaenz@kernel.org, Jason Wang <wangborong@cdjrlc.com>
+Cc:     Mark Brown <broonie@kernel.org>, rjui@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, sbranden@broadcom.com,
+        linux-arm-kernel@lists.infradead.org, f.fainelli@gmail.com,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spi: bcm2835aux: use 'unsigned int' instead of 'unsigned'
+Date:   Tue,  3 Aug 2021 23:35:31 +0100
+Message-Id: <162803013702.42391.3293196498865210081.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210726140001.24820-1-nikita.shubin@maquefel.me>
-References: <20210726115058.23729-1-nikita.shubin@maquefel.me> <20210726140001.24820-1-nikita.shubin@maquefel.me>
+In-Reply-To: <20210731133342.432575-1-wangborong@cdjrlc.com>
+References: <20210731133342.432575-1-wangborong@cdjrlc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -71,17 +43,8 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 26 Jul 2021 16:59:48 +0300, Nikita Shubin wrote:
-> This series series of patches converts ep93xx to Common Clock Framework.
-> 
-> It consists of preparation patches to use clk_prepare_enable where it is
-> needed, instead of clk_enable used in ep93xx drivers prior to CCF and
-> a patch converting mach-ep93xx/clock.c to CCF.
-> 
-> Link: https://lore.kernel.org/patchwork/cover/1445563/
-> Link: https://lore.kernel.org/patchwork/patch/1435884/
-> 
-> [...]
+On Sat, 31 Jul 2021 21:33:42 +0800, Jason Wang wrote:
+> Prefer 'unsigned int' to bare use of 'unsigned'.
 
 Applied to
 
@@ -89,8 +52,8 @@ Applied to
 
 Thanks!
 
-[2/8] spi: spi-ep93xx: Prepare clock before using it
-      commit: 7c72dc56a631b87043e3c5838f5094db30d8c58d
+[1/1] spi: bcm2835aux: use 'unsigned int' instead of 'unsigned'
+      commit: b09bff2676be3ae286e6161a1a581a40c53a3c62
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
