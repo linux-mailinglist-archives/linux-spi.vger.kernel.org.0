@@ -2,56 +2,31 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 446FF3DF498
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Aug 2021 20:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 269E73DF5B5
+	for <lists+linux-spi@lfdr.de>; Tue,  3 Aug 2021 21:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239099AbhHCSVQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 3 Aug 2021 14:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60616 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239097AbhHCSVL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 Aug 2021 14:21:11 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E49C06175F;
-        Tue,  3 Aug 2021 11:20:59 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id dw2-20020a17090b0942b0290177cb475142so5104969pjb.2;
-        Tue, 03 Aug 2021 11:20:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7wjJjxr5NY0mlwpeyO/0mlW4pSwnhPT8csogJcd6W20=;
-        b=oTWlF+ytCtIPrUcUvp8jE0sc3VSofJeRtWtO50ijRo8f4zlLr1u+0xzEwZr5wKCb3S
-         kafEZY+V7A1q1MGb7sfDAAg9/QhwYKV2pK0upfGL3mTUpGB/TEo+ymwfJd9bsRt18yoY
-         57JKveqpiuCBW7pDdTBcPeGR3cioqGdDn7F/I9DvN283Sm6U8H5ar9nLcYP3JNeopFVx
-         /Amsh+qQ6e5PC2cDVkSDGuak4hOLwgmk2n0d9L/gzCKK7l2MTSNLFcXskIvxqTCHY/bJ
-         r2VLi3663hCYx2AtShEcDY3J0kbhIiiuNiiLUJj6Z/POYZNte3GmzrOWeDdWywb6rhRG
-         4kwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7wjJjxr5NY0mlwpeyO/0mlW4pSwnhPT8csogJcd6W20=;
-        b=lVZEkzAYJiphTWazviuC4+ByFfw98E6KB4n/XteRTX4JPDMhhf4hp/XG+6Q0xTXSXd
-         OcyIiXdXat08kzTHQqbJeJmgBAxI/5Au66ad6WQn6rT3Eod2QS8aHH+4O+cXb++8sYqz
-         uaxFGagtY9sAVVDPtYFjiTm8BWoutsv488GCL8AvEC7+/ROtAmDrNV1BIBJfarrS7JPo
-         H0EbXh7voA76aTIpAasw4QmG4ujsGk2a46sb+aovpad0RXgbS2nw83jNyLPZw27i5JbL
-         2uDhRdNyhuLr81NQMfSrtEYpueWj+KkFXpXtOEaZqLdeMapfdk2zh3iGu0V2N7s1X36m
-         rf/g==
-X-Gm-Message-State: AOAM531GpjCD0Qsq11LIjBYaVi90xeGazVg0QzEH+glN0D9vNCogwxSx
-        ytPST3m5JXbmIZ32cG/GL6NNGVW14Oy+WzmZRoI=
-X-Google-Smtp-Source: ABdhPJzZT0+vtNBMGVaB8Nb80jJILp9VjVeN4ZHUp/Ifl25xewd/m4FajCdsFVO6zIQQgTLr+fZlDuaC9zZgdT9ply8=
-X-Received: by 2002:a17:90a:b10b:: with SMTP id z11mr5690793pjq.181.1628014858846;
- Tue, 03 Aug 2021 11:20:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210803102428.6476-1-Mason.Zhang@mediatek.com>
-In-Reply-To: <20210803102428.6476-1-Mason.Zhang@mediatek.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 3 Aug 2021 21:20:19 +0300
-Message-ID: <CAHp75VcPhBB+21wVErWRq+mSDaCkpQBovn+xvMbXyfENnuu40Q@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] spi: mediatek: modify set_cs_timing callback
-To:     Mason Zhang <Mason.Zhang@mediatek.com>
-Cc:     Mark Brown <broonie@kernel.org>,
+        id S239569AbhHCTbQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 3 Aug 2021 15:31:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39934 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239395AbhHCTbQ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 3 Aug 2021 15:31:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 36EC2603E7;
+        Tue,  3 Aug 2021 19:31:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628019064;
+        bh=QY2GEHpzXPPU0n5auFTFTfMaTFjPa4x8HiZo7mTWQgE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nLiKixCz8EnFb9V5uP5sl2zskq4skQRGJDWsaHY+BjhKr6Vl/zauwb4+7GEMHEU2t
+         nMSXVjmqUsApK2A+HzwrWQ3HxtMgiWvhP2a9pJNFeLgGVo1hM9/A8/Xw64V7CMjQTV
+         vXFIVSILYauP+bOsMEYUTco7ZNI3ona3u7GJ2sUtXSOzBjU2ay/EWb3qvxEYDCspHc
+         H7UH7ykNGZfycktslFB0KNDzdaxhQipIYUCAehTwlDN1IV3cJCl1NiL0t7HoSyhOGA
+         Dm25+oiXlRm7TU8thaVxRAE76DCalCv28td2CmW0TtnT+mwUR8q7mk+BSwNH+D1xah
+         akfxiBDhQao8A==
+Date:   Tue, 3 Aug 2021 20:30:49 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Mason Zhang <Mason.Zhang@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
         linux-spi <linux-spi@vger.kernel.org>,
@@ -60,81 +35,49 @@ Cc:     Mark Brown <broonie@kernel.org>,
         "moderated list:ARM/Mediatek SoC support" 
         <linux-mediatek@lists.infradead.org>,
         Mediatek WSD Upstream <wsd_upstream@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v2 3/4] spi: mediatek: modify set_cs_timing callback
+Message-ID: <20210803193049.GQ4668@sirena.org.uk>
+References: <20210803102428.6476-1-Mason.Zhang@mediatek.com>
+ <CAHp75VcPhBB+21wVErWRq+mSDaCkpQBovn+xvMbXyfENnuu40Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="z87VqPJ/HsYrR2WM"
+Content-Disposition: inline
+In-Reply-To: <CAHp75VcPhBB+21wVErWRq+mSDaCkpQBovn+xvMbXyfENnuu40Q@mail.gmail.com>
+X-Cookie: There's only one everything.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Aug 3, 2021 at 1:42 PM Mason Zhang <Mason.Zhang@mediatek.com> wrote:
->
-> This patch modified set_cs_timing callback:
->   1 support spi_device set cs_timing in their driver;
->   2 support set absolute time but no clk count, because;
->     clk src will change in different platform;
->   3 call this function in prepare_message but not in other API.
 
-Perhaps it should be 3 patches?
+--z87VqPJ/HsYrR2WM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-...
+On Tue, Aug 03, 2021 at 09:20:19PM +0300, Andy Shevchenko wrote:
+> On Tue, Aug 3, 2021 at 1:42 PM Mason Zhang <Mason.Zhang@mediatek.com> wrote:
 
-> +static int mtk_spi_set_hw_cs_timing(struct spi_device *spi)
-> +{
-> +       struct mtk_spi *mdata = spi_master_get_devdata(spi->master);
-> +       struct spi_delay *cs_setup = &spi->cs_setup;
-> +       struct spi_delay *cs_hold = &spi->cs_hold;
-> +       struct spi_delay *cs_inactive = &spi->cs_inactive;
-> +       u16 setup, hold, inactive;
-> +       u32 reg_val;
-> +       int delay;
-> +
-> +       delay = spi_delay_to_ns(cs_setup, NULL);
-> +       if (delay < 0)
-> +               return delay;
-> +       setup = (delay / 1000) * DIV_ROUND_UP(mdata->spi_clk_hz, 1000000);
+> > +       inactive = inactive ? inactive : 1;
 
-1000 is NSEC_PER_USEC (here and below)?
+> All of these can be simplified by using ?: (short ternary) form.
 
-> +       delay = spi_delay_to_ns(cs_hold, NULL);
-> +       if (delay < 0)
-> +               return delay;
-> +       hold = (delay / 1000) * DIV_ROUND_UP(mdata->spi_clk_hz, 1000000);
-> +
-> +       delay = spi_delay_to_ns(cs_inactive, NULL);
-> +       if (delay < 0)
-> +               return delay;
-> +       inactive = (delay / 1000) * DIV_ROUND_UP(mdata->spi_clk_hz, 1000000);
+Please don't, if anything just don't use the ternery operator at all for
+things like this - it doesn't help with legibility.
 
-> +       setup    = setup ? setup : 1;
-> +       hold     = hold ? hold : 1;
-> +       inactive = inactive ? inactive : 1;
+--z87VqPJ/HsYrR2WM
+Content-Type: application/pgp-signature; name="signature.asc"
 
-All of these can be simplified by using ?: (short ternary) form.
+-----BEGIN PGP SIGNATURE-----
 
-> +       reg_val = readl(mdata->base + SPI_CFG0_REG);
-> +       if (mdata->dev_comp->enhance_timing) {
-> +               reg_val &= ~(0xffff << SPI_ADJUST_CFG0_CS_HOLD_OFFSET);
-> +               reg_val |= (((hold - 1) & 0xffff)
-> +                          << SPI_ADJUST_CFG0_CS_HOLD_OFFSET);
-> +               reg_val &= ~(0xffff << SPI_ADJUST_CFG0_CS_SETUP_OFFSET);
-> +               reg_val |= (((setup - 1) & 0xffff)
-> +                          << SPI_ADJUST_CFG0_CS_SETUP_OFFSET);
-> +       } else {
-> +               reg_val &= ~(0xff << SPI_CFG0_CS_HOLD_OFFSET);
-> +               reg_val |= (((hold - 1) & 0xff) << SPI_CFG0_CS_HOLD_OFFSET);
-> +               reg_val &= ~(0xff << SPI_CFG0_CS_SETUP_OFFSET);
-> +               reg_val |= (((setup - 1) & 0xff)
-> +                           << SPI_CFG0_CS_SETUP_OFFSET);
-> +       }
-> +       writel(reg_val, mdata->base + SPI_CFG0_REG);
-> +
-> +       reg_val = readl(mdata->base + SPI_CFG1_REG);
-> +       reg_val &= ~SPI_CFG1_CS_IDLE_MASK;
-> +       reg_val |= (((inactive - 1) & 0xff) << SPI_CFG1_CS_IDLE_OFFSET);
-> +       writel(reg_val, mdata->base + SPI_CFG1_REG);
-> +
-> +       return 0;
-> +}
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmEJmWIACgkQJNaLcl1U
+h9DkVgf/Rv7cu2sTnh6I4OzeDeohVJspONWje3p7I9opiL1FrbONWkc1yKFmhBay
+7aUfYhbl9Z+VXUyWmuBCe668PGRT/j0a/9uVsQaKER1xNaW3BaWH5Av99TSZsyB+
+J90YRP+TqT9G60dD5jgHodAJ3jEJePoU+7CXCuR4OvhBqdn7SVLD0BMBiwH90cOg
+CeyEHO/go1UN/B+CZbKds2d1/uYPh2wmH2JHsmxoYFIRxLKdQkEVpRgTy13dnzy2
+p2doLPsVrdHI04N2O4yZKEZrmi5YEtReig8tyGRjMYdP1bC//tLdw21Fy49CsFxD
+e8hBwYgr3MfOaL/EW96PbEdXWRGaKw==
+=HNVE
+-----END PGP SIGNATURE-----
 
--- 
-With Best Regards,
-Andy Shevchenko
+--z87VqPJ/HsYrR2WM--
