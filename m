@@ -2,77 +2,155 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0193DF7EB
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Aug 2021 00:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE7F23DFB46
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Aug 2021 07:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233293AbhHCWgQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 3 Aug 2021 18:36:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53446 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233273AbhHCWgP (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 3 Aug 2021 18:36:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E2EA360F0F;
-        Tue,  3 Aug 2021 22:36:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628030164;
-        bh=M8Yp9DwOjs9wg1bcoU70ceYBfFNn2hATYIOUwiuL0b0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HW//43zbinu5KbJyFHeoqnLDC0A7/E1i0vHpwsfGxq0i67eLT7XssCOhysMgwPxhM
-         FD4eEkduny3fCMfZxm+1EXVcHmVhkPhBw7vm3nckb6yF+CANMLkfBg7Fo1SNT7kKMs
-         mqaTR+wF8NdXhXmewuXe9jz+48XKAgXA9r2qQUIAPVGDO8QJEMwqWnqDlxFyStXmP6
-         IG4Ez8UCOmXZcHATSVzcmc6vxgbL5uCM0+aHw8CfhOkqWTyZcqmT2cY/WpZPQ73kxM
-         uMwF5wE7dPf9rcJ2/TnK3Xch1L2dj6Izsldet77wox3J7Wfj03xs6YsMZZdKzcqZQN
-         EJK8MgQXJDEIA==
-From:   Mark Brown <broonie@kernel.org>
-To:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: imx: Implement support for CS_WORD
-Date:   Tue,  3 Aug 2021 23:35:32 +0100
-Message-Id: <162803013700.42391.3354054402447618822.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210727124226.5571-1-u.kleine-koenig@pengutronix.de>
-References: <20210727124226.5571-1-u.kleine-koenig@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        id S235472AbhHDFxH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 Aug 2021 01:53:07 -0400
+Received: from twhmllg3.macronix.com ([211.75.127.131]:25572 "EHLO
+        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231138AbhHDFxF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 Aug 2021 01:53:05 -0400
+X-Greylist: delayed 1388 seconds by postgrey-1.27 at vger.kernel.org; Wed, 04 Aug 2021 01:53:05 EDT
+Received: from TWHMLLG3.macronix.com (localhost [127.0.0.2] (may be forged))
+        by TWHMLLG3.macronix.com with ESMTP id 1745TjeU038424
+        for <linux-spi@vger.kernel.org>; Wed, 4 Aug 2021 13:29:45 +0800 (GMT-8)
+        (envelope-from zhengxunli@mxic.com.tw)
+Received: from localhost.localdomain ([172.17.195.94])
+        by TWHMLLG3.macronix.com with ESMTP id 1745TWSg038339;
+        Wed, 4 Aug 2021 13:29:32 +0800 (GMT-8)
+        (envelope-from zhengxunli@mxic.com.tw)
+From:   Zhengxun Li <zhengxunli@mxic.com.tw>
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Cc:     Zhengxun Li <zhengxunli@mxic.com.tw>
+Subject: [PATCH v6] spi: mxic: patch for octal DTR mode support
+Date:   Wed,  4 Aug 2021 13:27:07 +0800
+Message-Id: <1628054827-458-1-git-send-email-zhengxunli@mxic.com.tw>
+X-Mailer: git-send-email 1.9.1
+X-MAIL: TWHMLLG3.macronix.com 1745TWSg038339
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 27 Jul 2021 14:42:26 +0200, Uwe Kleine-König wrote:
-> This only works when the native chipselect is in use. On a board with a
-> Ti ADS7950 8 channel ADC. This patch reduces the time to read out all
-> channels once from 280 us to 20 us.
+Driver patch for octal DTR mode support.
 
-Applied to
+Owing to the spi_mem_default_supports_op() is not support dtr
+operation. Based on commit <539cf68cd51b> (spi: spi-mem: add
+spi_mem_dtr_supports_op()) add spi_mem_dtr_supports_op()
+to support dtr and keep checking the buswidth and command bytes.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Changes in v6:
+- Rebase on top of spi-next and modify comments.
+- Separate from the "Add octal DTR support for Macronix flash" series
 
-Thanks!
+Signed-off-by: Zhengxun Li <zhengxunli@mxic.com.tw>
+Acked-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-mxic.c | 41 ++++++++++++++++++++++++++++++-----------
+ 1 file changed, 30 insertions(+), 11 deletions(-)
 
-[1/1] spi: imx: Implement support for CS_WORD
-      commit: 6e95b23a5b2d1fcbe5a84a362170a4871a3d5731
+diff --git a/drivers/spi/spi-mxic.c b/drivers/spi/spi-mxic.c
+index 96b4182..32e757a 100644
+--- a/drivers/spi/spi-mxic.c
++++ b/drivers/spi/spi-mxic.c
+@@ -335,8 +335,10 @@ static int mxic_spi_data_xfer(struct mxic_spi *mxic, const void *txbuf,
+ static bool mxic_spi_mem_supports_op(struct spi_mem *mem,
+ 				     const struct spi_mem_op *op)
+ {
+-	if (op->data.buswidth > 4 || op->addr.buswidth > 4 ||
+-	    op->dummy.buswidth > 4 || op->cmd.buswidth > 4)
++	bool all_false;
++
++	if (op->data.buswidth > 8 || op->addr.buswidth > 8 ||
++	    op->dummy.buswidth > 8 || op->cmd.buswidth > 8)
+ 		return false;
+ 
+ 	if (op->data.nbytes && op->dummy.nbytes &&
+@@ -346,7 +348,13 @@ static bool mxic_spi_mem_supports_op(struct spi_mem *mem,
+ 	if (op->addr.nbytes > 7)
+ 		return false;
+ 
+-	return spi_mem_default_supports_op(mem, op);
++	all_false = !op->cmd.dtr && !op->addr.dtr && !op->dummy.dtr &&
++		    !op->data.dtr;
++
++	if (all_false)
++		return spi_mem_default_supports_op(mem, op);
++	else
++		return spi_mem_dtr_supports_op(mem, op);
+ }
+ 
+ static int mxic_spi_mem_exec_op(struct spi_mem *mem,
+@@ -355,14 +363,15 @@ static int mxic_spi_mem_exec_op(struct spi_mem *mem,
+ 	struct mxic_spi *mxic = spi_master_get_devdata(mem->spi->master);
+ 	int nio = 1, i, ret;
+ 	u32 ss_ctrl;
+-	u8 addr[8];
+-	u8 opcode = op->cmd.opcode;
++	u8 addr[8], cmd[2];
+ 
+ 	ret = mxic_spi_set_freq(mxic, mem->spi->max_speed_hz);
+ 	if (ret)
+ 		return ret;
+ 
+-	if (mem->spi->mode & (SPI_TX_QUAD | SPI_RX_QUAD))
++	if (mem->spi->mode & (SPI_TX_OCTAL | SPI_RX_OCTAL))
++		nio = 8;
++	else if (mem->spi->mode & (SPI_TX_QUAD | SPI_RX_QUAD))
+ 		nio = 4;
+ 	else if (mem->spi->mode & (SPI_TX_DUAL | SPI_RX_DUAL))
+ 		nio = 2;
+@@ -374,19 +383,25 @@ static int mxic_spi_mem_exec_op(struct spi_mem *mem,
+ 	       mxic->regs + HC_CFG);
+ 	writel(HC_EN_BIT, mxic->regs + HC_EN);
+ 
+-	ss_ctrl = OP_CMD_BYTES(1) | OP_CMD_BUSW(fls(op->cmd.buswidth) - 1);
++	ss_ctrl = OP_CMD_BYTES(op->cmd.nbytes) |
++		  OP_CMD_BUSW(fls(op->cmd.buswidth) - 1) |
++		  (op->cmd.dtr ? OP_CMD_DDR : 0);
+ 
+ 	if (op->addr.nbytes)
+ 		ss_ctrl |= OP_ADDR_BYTES(op->addr.nbytes) |
+-			   OP_ADDR_BUSW(fls(op->addr.buswidth) - 1);
++			   OP_ADDR_BUSW(fls(op->addr.buswidth) - 1) |
++			   (op->addr.dtr ? OP_ADDR_DDR : 0);
+ 
+ 	if (op->dummy.nbytes)
+ 		ss_ctrl |= OP_DUMMY_CYC(op->dummy.nbytes);
+ 
+ 	if (op->data.nbytes) {
+-		ss_ctrl |= OP_DATA_BUSW(fls(op->data.buswidth) - 1);
++		ss_ctrl |= OP_DATA_BUSW(fls(op->data.buswidth) - 1) |
++			   (op->data.dtr ? OP_DATA_DDR : 0);
+ 		if (op->data.dir == SPI_MEM_DATA_IN)
+ 			ss_ctrl |= OP_READ;
++			if (op->data.dtr)
++				ss_ctrl |= OP_DQS_EN;
+ 	}
+ 
+ 	writel(ss_ctrl, mxic->regs + SS_CTRL(mem->spi->chip_select));
+@@ -394,7 +409,10 @@ static int mxic_spi_mem_exec_op(struct spi_mem *mem,
+ 	writel(readl(mxic->regs + HC_CFG) | HC_CFG_MAN_CS_ASSERT,
+ 	       mxic->regs + HC_CFG);
+ 
+-	ret = mxic_spi_data_xfer(mxic, &opcode, NULL, 1);
++	for (i = 0; i < op->cmd.nbytes; i++)
++		cmd[i] = op->cmd.opcode >> (8 * (op->cmd.nbytes - i - 1));
++
++	ret = mxic_spi_data_xfer(mxic, cmd, NULL, op->cmd.nbytes);
+ 	if (ret)
+ 		goto out;
+ 
+@@ -567,7 +585,8 @@ static int mxic_spi_probe(struct platform_device *pdev)
+ 	master->bits_per_word_mask = SPI_BPW_MASK(8);
+ 	master->mode_bits = SPI_CPOL | SPI_CPHA |
+ 			SPI_RX_DUAL | SPI_TX_DUAL |
+-			SPI_RX_QUAD | SPI_TX_QUAD;
++			SPI_RX_QUAD | SPI_TX_QUAD |
++			SPI_RX_OCTAL | SPI_TX_OCTAL;
+ 
+ 	mxic_spi_hw_init(mxic);
+ 
+-- 
+1.9.1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
