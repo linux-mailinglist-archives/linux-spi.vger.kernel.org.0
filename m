@@ -2,70 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BAD63E0DD2
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Aug 2021 07:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA18D3E1230
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Aug 2021 12:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbhHEFkL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 5 Aug 2021 01:40:11 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:35018 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230405AbhHEFkL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 5 Aug 2021 01:40:11 -0400
-X-UUID: ae6d84afd5b1433a97fad107c3f1d3ee-20210805
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=iysGRkBA3I1DDFi54oZ4OInQV+8ljw933mvUY9ZHSjA=;
-        b=rEuPM1rXzgqeYNRkc9KC5gHv+tEjH1uLvB5IUVR4YUxNvSJFzCWuTsxe/2sU/FqsNv9pyjBgWtBvkmXAQKKNdwo95pp/uDn4JRKNok0eTjKz/oq71JRoEUeBcgYONvUluX89C6zJLbx6Cfms6nXBgO5LipUG4pF/9GPKv3zK2eE=;
-X-UUID: ae6d84afd5b1433a97fad107c3f1d3ee-20210805
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
-        (envelope-from <mason.zhang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 823788249; Thu, 05 Aug 2021 13:39:53 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 5 Aug 2021 13:39:52 +0800
-Received: from [10.15.20.246] (10.15.20.246) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 5 Aug 2021 13:39:51 +0800
-Message-ID: <1628140993.20108.4.camel@mbjsdccf07>
-Subject: Re: [PATCH v2 4/4] spi: tegra114: Fix set_cs_timing param
-From:   Mason Zhang <mason.zhang@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <wsd_upstream@mediatek.com>,
-        <mason.zhang@mediatek.com>
-Date:   Thu, 5 Aug 2021 13:23:13 +0800
-In-Reply-To: <20210803141045.GN4668@sirena.org.uk>
-References: <20210803102517.20944-1-Mason.Zhang@mediatek.com>
-         <20210803141045.GN4668@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S240055AbhHEKJw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 5 Aug 2021 06:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240216AbhHEKJw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 5 Aug 2021 06:09:52 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEA3C0613C1
+        for <linux-spi@vger.kernel.org>; Thu,  5 Aug 2021 03:09:37 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id hs10so8742832ejc.0
+        for <linux-spi@vger.kernel.org>; Thu, 05 Aug 2021 03:09:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=J67+rxbQxfS8kPDQ/50P30WNOuT2eFzd+bURjICaS/k=;
+        b=bxsB6HH26RK/Ko1f9b2hetsmzUkGCx/K+vnYt3Yi7TEElx1odF2/leLL6jCgGsnbeB
+         wAciSB89cllvHm80WJk/ObOo5pTLIOgcu31Qv37uc4xQpurPJmJnHz/EAxGq3G7LTex5
+         cVfGWWJNCF2kUhPwP6k6jeZ+mtCEI4SwVfmZatXiPOIxxapV3x8C38NvJGWtnHb+RFZH
+         7/XG41hP2Tqh/gCjA6vpMHi2IZNb2o6C8S7RBmIyu/ujr1vD9Y9AHHtGra2Zn7DRY49y
+         yuatH7zgTJYAd/ZXFCM5WL+CnkMlkNVqc+5ncPxXxbk9jjknIF7/waS1anu3PnE+RIqT
+         DkMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=J67+rxbQxfS8kPDQ/50P30WNOuT2eFzd+bURjICaS/k=;
+        b=aCDf6o72+L0B4vWHe9douIh/lwuHsK6jN/c64n/wsNnbiJdewaVBOmhKHFgEMpVZag
+         xmgjdp3+0W0r43MAFMa98JmCj6YCsElYDcp03/XTJuie0d75z3CqbYSejrD/tXkjvIFg
+         34qBWAD2NPWey9+T9Ka5O0dVcchqP5EWz2aJPiiXDccAOrVumqubo9OXkpNicSNzYcC8
+         PGN4GqvQw0Ojv0Zh3/bP1MfQbOWqdS568Rj4FVCHOJbm5sR+nt25lzFmS65vyTM5jam5
+         ji+y2/O41EyZ84pIXAdJTx738+z38SQj0SJMU8QgMkER3MvwFUgO34Quvd4GN/A8gmJ1
+         Aa9A==
+X-Gm-Message-State: AOAM5311oQS7QeqvH6MHKice3aXEyAdv10fMDfOY5VJPcDjMGKfpBN9P
+        5aA6OfHmC6o5mOXLfchU0aZn9Cq6XoIhLcpKLQY=
+X-Google-Smtp-Source: ABdhPJxiaAVioJUlp5i2yEvYbEMN5UG995OXa+toYxSoqdsH8N3U/jRI2ujwrO1is93C8E6zG/SQhsuhTjGcTfTaRLs=
+X-Received: by 2002:a17:906:3048:: with SMTP id d8mr4050997ejd.534.1628158175955;
+ Thu, 05 Aug 2021 03:09:35 -0700 (PDT)
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Received: by 2002:a05:6408:258c:b029:e3:fe5c:5c2d with HTTP; Thu, 5 Aug 2021
+ 03:09:34 -0700 (PDT)
+Reply-To: theresabangurah3333@yahoo.com
+From:   Theresa Bangurah <mariamabah77879@gmail.com>
+Date:   Thu, 5 Aug 2021 11:09:34 +0100
+Message-ID: <CAAi==jra9dzZD-8arqFOfoM1dQhhjjvfCuqwYnixkX24CXtbcw@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-T24gVHVlLCAyMDIxLTA4LTAzIGF0IDE1OjEwICswMTAwLCBNYXJrIEJyb3duIHdyb3RlOg0KPiBP
-biBUdWUsIEF1ZyAwMywgMjAyMSBhdCAwNjoyNToxOFBNICswODAwLCBNYXNvbiBaaGFuZyB3cm90
-ZToNCj4gPiBUaGlzIHBhdGNoIGZpeGVkIHNldF9jc190aW1pbmcgcGFyYW0sIGJlY2F1c2UgY3Mg
-dGltaW5nIGRlbGF5IGhhcw0KPiA+IGJlZW4gbW92ZWQgdG8gc3BpX2RldmljZS4NCj4gPiANCj4g
-PiBTaWduZWQtb2ZmLWJ5OiBNYXNvbiBaaGFuZyA8TWFzb24uWmhhbmdAbWVkaWF0ZWsuY29tPg0K
-PiA+IC0tLQ0KPiA+ICBkcml2ZXJzL3NwaS9zcGktdGVncmExMTQuYyB8IDggKysrKy0tLS0NCj4g
-PiAgMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkNCj4gDQo+
-IEVhY2ggaW5kaXZpZHVhbCBwYXRjaCBpbiB0aGUgc2VyaWVzIG5lZWRzIHRvIGJlIGJ1aWxkYWJs
-ZSBieSBpdHNlbGYsIGlmDQo+IGFuIGVhcmxpZXIgY29tbWl0IGluIHRoZSBzZXJpZXMgY2F1c2Vz
-IHRoaW5ncyB0byBmYWlsIHRvIGJ1aWxkIHRoZW4gdGhhdA0KPiBjb21taXQgbmVlZHMgdG8gYmUg
-aW1wcm92ZWQgc28gdGhhdCB0aGlzIGRvZXNuJ3QgaGFwcGVuLiAgVGhpcyBzdXBwb3J0cw0KPiB0
-aGluZ3MgbGlrZSBiaXNlY3Rpb24uDQo+IA0KPiBQbGVhc2UgYWxzbyBsb29rIGludG8gaG93IHlv
-dSdyZSBzZW5kaW5nIHNlcmllc2VzLCB0aGVzZSBwYXRjaGVzIGFyZW4ndA0KPiB0aHJlYWRlZCB0
-b2dldGhlciBhcyBub3JtYWwgYW5kIHRoZXJlJ3MgYSB3ZWlyZCAiKioqIiBpbiB0aGUgc3ViamVj
-dCBvZg0KPiB0aGUgZmlyc3QgcGF0Y2guDQoNCg0KRGVhciBNYXJrOg0KDQoJVGhhbmtzIGZvciB5
-b3VyIHN1Z2dlc3Rpb25zLCBJIGhhdmUgbWVyZ2VkIHBhdGNoIDIvMy80IGluIG9uZSBwYXRjaCB0
-bw0KZW5zdXJlIGl0IGNhbiBiZSBidWlsdCBieSBpdHNlbGYuDQoJQW5kIEkgaGF2ZSB1cGRhdGVk
-IHRoZSBwYXRjaCB2MywgYW5kIHJlbW92ZWQgdGhlICoqKiBpbnQgdGhlIGZpcnN0DQpwYXRjaC4N
-Cg0KDQpUaGFua3MNCk1hc29uDQo=
-
+-- 
+My name is Mrs.Theresa Bangurah,i am American citizen i have something
+important to tell you.Reply me immediately you get this message.God
+bless you.
