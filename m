@@ -2,70 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F29723E2CD2
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Aug 2021 16:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB3C3E2CFF
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Aug 2021 16:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240933AbhHFOmK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 6 Aug 2021 10:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239371AbhHFOmK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Aug 2021 10:42:10 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6F0C06179F
-        for <linux-spi@vger.kernel.org>; Fri,  6 Aug 2021 07:41:54 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id u3so15446781ejz.1
-        for <linux-spi@vger.kernel.org>; Fri, 06 Aug 2021 07:41:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/oMubRmlLM5EZ/UdY6Fj3wsfS2kyoMzN9ASXgZ3xneY=;
-        b=Bwoup+8csuZ0aplYDrhW1xTORktIbRO14S6hXUsMZ9qnVQK/Wen6vIADpq80JjLLvK
-         2pA4sCb9U7+sKuLkDvBPL+7glCU3yWZXzZXfnOqNPlpUMIi37fJjkb1OyWFGaXbn+7qJ
-         ZgpNgioUv5oIUkujl6qgAeZCEY+5dL8nHoDIeUBJmbLeQbGLl8RMPfl5e1I7TVQtz72M
-         YgCtE5Ps5pu1XK1Wap/uxFRItrSEKSh9T9SE6S/+fyFaZRR8rqClRcvW6amRZLYFOpTd
-         W9AfLqI29XcgUqeuC8OIG9xIi1Y7WAzEvjmjWDuPPWYUqQ4diYsAuxjLzXbMOPuFHMkS
-         MwFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/oMubRmlLM5EZ/UdY6Fj3wsfS2kyoMzN9ASXgZ3xneY=;
-        b=io3sRIewsHBy0/CoBoDwP0kGOPe+6wlIojtuqE+pY3+QpNdDaU2Ia5qdt2oWaOf1Nj
-         0kcDrUyAAA57VOqY5nRPD0kKAKk352R8mvbv+758wnYth7ciwpSjelO+Lt+ZYnnYtDzM
-         Mk5dwHk4G+DaetlzveG4zI3kPHEg7kGesbWEoEGT13GMDpSBZDUJZKt5b0TFgD/NDcEq
-         J9+p0KFWPnQT99i+jB0SD0v356bH0rWYGXA1u4BIOkFjs7eqm+25eduG4UP3CY8rxOmh
-         6Qr2r/a6SyaCDksaZiJOXYCFvVMZEHKpj/eeXo6Z5ZGL8V5Rd44OsQb2iu66ZYIZNEr4
-         I24g==
-X-Gm-Message-State: AOAM531Dgy45GATgox/82jpuzTnGRNkYGEiOMEozgjfSfEuRtSBAtvNx
-        QY7F04CpwGLD3SOogjg5hcB934RbHnbXddvWGMk=
-X-Google-Smtp-Source: ABdhPJzhoMwSsDxi4S8EoWL0J76UmqUWdvA8vv3/aAh6CaNxty+Qan2PxETx4EBDoNgIDXjmLPth7CopVqd9zmwjhmA=
-X-Received: by 2002:a17:906:648f:: with SMTP id e15mr10312451ejm.451.1628260912483;
- Fri, 06 Aug 2021 07:41:52 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:ab4:a729:0:0:0:0:0 with HTTP; Fri, 6 Aug 2021 07:41:51 -0700 (PDT)
-Reply-To: mrmaxwellwatford@gmail.com
-From:   Maxwell Watford <kazahalima@gmail.com>
-Date:   Fri, 6 Aug 2021 14:41:51 +0000
-Message-ID: <CAA3roWncDd30x6RhoupgCfnn44FVPeEfYLaNFmHeDGvKLtq7EQ@mail.gmail.com>
-Subject: i need your reply
-To:     kazahalima@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+        id S232302AbhHFO4H (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 6 Aug 2021 10:56:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33800 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232178AbhHFO4H (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 6 Aug 2021 10:56:07 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 243236105A;
+        Fri,  6 Aug 2021 14:55:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628261751;
+        bh=S+TZfXj0n4NYdVUzQNuVBdQ9fbkUOCu9yibxXu4Rgi4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dP+VngRhOPcMJKKLByh1YHKiBkOAqAziDkkcxHHt+Z637NNzSsuZ7jsrywgKv8Yn4
+         9/RvQ3KAxJRWM8/+q+LaqLMNjZTDlqEsTmjqgcvklUnbxIw65kCJ5PFoD6cMv+iA/A
+         trv76fcgMZC/4KG+Q5h34t3NIl9lhpBgIkSTtpSXT6KQBrzhHQipIAhWcgPlK6IZh4
+         Md21gSphO9L2uCa81/fR6P+czu1Md5DNd7Y41Pe2lk83xLFzBatue/S+AHohnkUsFI
+         wKj4+IHJW6wqEEslKtR/fL8eLZbYybZGn4RaI9L+jkdVo1ujUwBnhxYiCtu2AJTPsA
+         gQlmMXbKB8FRw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v5.14-rc4
+Date:   Fri, 06 Aug 2021 15:55:19 +0100
+Message-Id: <20210806145551.243236105A@mail.kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Greetings,
+The following changes since commit c45c1e82bba130db4f19d9dbc1deefcf4ea994ed:
 
-We are writing to you from Ecowas Finance Controller Office Lome Togo,
-because we have received a file from the Ministry of Finance Lome-
-Togo, concerning an Inherited Fund bearing your name on it, And after
-our verifications, we found out that the funds belong to you.
+  spi: spi-bcm2835: Fix deadlock (2021-07-20 13:34:05 +0100)
 
-It has been awarded and I will like to guide you to claim the funds.
-Please contact me at my private email address
-(mrmaxwellwatford@gmail.com) for more information and directive
+are available in the Git repository at:
 
-I am looking forward to your urgent reply,
-Best regards
-Mr Maxwell Watford
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.14-rc4
+
+for you to fetch changes up to 0395be967b067d99494113d78470574e86a02ed4:
+
+  spi: cadence-quadspi: Fix check condition for DTR ops (2021-08-05 20:18:10 +0100)
+
+----------------------------------------------------------------
+spi: Fixes for v5.14
+
+A small collection of fixes for SPI, small mostly driver specific things
+plus a fix for module autoloading which hadn't been working properly for
+DT systems.
+
+----------------------------------------------------------------
+Andreas Schwab (1):
+      spi: update modalias_show after of_device_uevent_modalias support
+
+Apurva Nandan (1):
+      spi: cadence-quadspi: Fix check condition for DTR ops
+
+Dongliang Mu (1):
+      spi: meson-spicc: fix memory leak in meson_spicc_remove
+
+Guenter Roeck (1):
+      spi: mediatek: Fix fifo transfer
+
+Marek Vasut (2):
+      spi: imx: mx51-ecspi: Fix low-speed CONFIGREG delay calculation
+      spi: imx: mx51-ecspi: Fix CONFIGREG delay comment
+
+Uwe Kleine-König (1):
+      spi: spi-mux: Add module info needed for autoloading
+
+ drivers/spi/spi-cadence-quadspi.c | 21 ++++++++++++++++++---
+ drivers/spi/spi-imx.c             | 18 ++++++++++++++++--
+ drivers/spi/spi-meson-spicc.c     |  2 ++
+ drivers/spi/spi-mt65xx.c          | 19 +++++--------------
+ drivers/spi/spi-mux.c             |  8 ++++++++
+ drivers/spi/spi.c                 |  4 ++++
+ 6 files changed, 53 insertions(+), 19 deletions(-)
