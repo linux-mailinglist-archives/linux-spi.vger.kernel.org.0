@@ -2,83 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC973E2AB9
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Aug 2021 14:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F29723E2CD2
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Aug 2021 16:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343709AbhHFMkV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 6 Aug 2021 08:40:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54860 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243783AbhHFMkU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 6 Aug 2021 08:40:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 641B161158;
-        Fri,  6 Aug 2021 12:40:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628253604;
-        bh=j6/zqyqykfTitJrzHg8qsQd96giVc/fOyETPbHK6xW0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r8NoQvg0GR60dYDI/2IFc3dXD/4NC3aulhC3wAaBk10x1pVUFZy6M/hXO9jiV3KsX
-         B25wTjxYrgyspl+BNsWu0HVrvL8G9RljuotyYzzvGoe6qPKR6CGgupoX5DuxMxDk+s
-         b6yDn02sPlpwLH7zAlChJenGR6ZJB5b7ibIlNKY6liOzmRsCR2geuleJGiL8fBQiYd
-         mPivcppAbxbFyn3puVr7ZbmnpGT1XxP/dZ47prdtZqzD9vmVeseMHPZj1lSY1vFS89
-         hyDxLllkNQ+agqBOJqeZmYjK+YVex6yaWRo9btY0EPaep/qbql7Rhl5/beIFKyBgmc
-         lud3L75OMEdtA==
-Date:   Fri, 6 Aug 2021 13:39:48 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Zhengxun Li <zhengxunli@mxic.com.tw>
-Cc:     linux-spi@vger.kernel.org
-Subject: Re: [PATCH v6] spi: mxic: patch for octal DTR mode support
-Message-ID: <20210806123948.GZ26252@sirena.org.uk>
-References: <1628054827-458-1-git-send-email-zhengxunli@mxic.com.tw>
+        id S240933AbhHFOmK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 6 Aug 2021 10:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239371AbhHFOmK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Aug 2021 10:42:10 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6F0C06179F
+        for <linux-spi@vger.kernel.org>; Fri,  6 Aug 2021 07:41:54 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id u3so15446781ejz.1
+        for <linux-spi@vger.kernel.org>; Fri, 06 Aug 2021 07:41:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/oMubRmlLM5EZ/UdY6Fj3wsfS2kyoMzN9ASXgZ3xneY=;
+        b=Bwoup+8csuZ0aplYDrhW1xTORktIbRO14S6hXUsMZ9qnVQK/Wen6vIADpq80JjLLvK
+         2pA4sCb9U7+sKuLkDvBPL+7glCU3yWZXzZXfnOqNPlpUMIi37fJjkb1OyWFGaXbn+7qJ
+         ZgpNgioUv5oIUkujl6qgAeZCEY+5dL8nHoDIeUBJmbLeQbGLl8RMPfl5e1I7TVQtz72M
+         YgCtE5Ps5pu1XK1Wap/uxFRItrSEKSh9T9SE6S/+fyFaZRR8rqClRcvW6amRZLYFOpTd
+         W9AfLqI29XcgUqeuC8OIG9xIi1Y7WAzEvjmjWDuPPWYUqQ4diYsAuxjLzXbMOPuFHMkS
+         MwFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/oMubRmlLM5EZ/UdY6Fj3wsfS2kyoMzN9ASXgZ3xneY=;
+        b=io3sRIewsHBy0/CoBoDwP0kGOPe+6wlIojtuqE+pY3+QpNdDaU2Ia5qdt2oWaOf1Nj
+         0kcDrUyAAA57VOqY5nRPD0kKAKk352R8mvbv+758wnYth7ciwpSjelO+Lt+ZYnnYtDzM
+         Mk5dwHk4G+DaetlzveG4zI3kPHEg7kGesbWEoEGT13GMDpSBZDUJZKt5b0TFgD/NDcEq
+         J9+p0KFWPnQT99i+jB0SD0v356bH0rWYGXA1u4BIOkFjs7eqm+25eduG4UP3CY8rxOmh
+         6Qr2r/a6SyaCDksaZiJOXYCFvVMZEHKpj/eeXo6Z5ZGL8V5Rd44OsQb2iu66ZYIZNEr4
+         I24g==
+X-Gm-Message-State: AOAM531Dgy45GATgox/82jpuzTnGRNkYGEiOMEozgjfSfEuRtSBAtvNx
+        QY7F04CpwGLD3SOogjg5hcB934RbHnbXddvWGMk=
+X-Google-Smtp-Source: ABdhPJzhoMwSsDxi4S8EoWL0J76UmqUWdvA8vv3/aAh6CaNxty+Qan2PxETx4EBDoNgIDXjmLPth7CopVqd9zmwjhmA=
+X-Received: by 2002:a17:906:648f:: with SMTP id e15mr10312451ejm.451.1628260912483;
+ Fri, 06 Aug 2021 07:41:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sF6X0tUrUrSWNIfp"
-Content-Disposition: inline
-In-Reply-To: <1628054827-458-1-git-send-email-zhengxunli@mxic.com.tw>
-X-Cookie: MOUNT TAPE U1439 ON B3, NO RING
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:ab4:a729:0:0:0:0:0 with HTTP; Fri, 6 Aug 2021 07:41:51 -0700 (PDT)
+Reply-To: mrmaxwellwatford@gmail.com
+From:   Maxwell Watford <kazahalima@gmail.com>
+Date:   Fri, 6 Aug 2021 14:41:51 +0000
+Message-ID: <CAA3roWncDd30x6RhoupgCfnn44FVPeEfYLaNFmHeDGvKLtq7EQ@mail.gmail.com>
+Subject: i need your reply
+To:     kazahalima@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Greetings,
 
---sF6X0tUrUrSWNIfp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+We are writing to you from Ecowas Finance Controller Office Lome Togo,
+because we have received a file from the Ministry of Finance Lome-
+Togo, concerning an Inherited Fund bearing your name on it, And after
+our verifications, we found out that the funds belong to you.
 
-On Wed, Aug 04, 2021 at 01:27:07PM +0800, Zhengxun Li wrote:
-> Driver patch for octal DTR mode support.
->=20
-> Owing to the spi_mem_default_supports_op() is not support dtr
-> operation. Based on commit <539cf68cd51b> (spi: spi-mem: add
-> spi_mem_dtr_supports_op()) add spi_mem_dtr_supports_op()
-> to support dtr and keep checking the buswidth and command bytes.
->=20
-> Changes in v6:
-> - Rebase on top of spi-next and modify comments.
-> - Separate from the "Add octal DTR support for Macronix flash" series
->=20
-> Signed-off-by: Zhengxun Li <zhengxunli@mxic.com.tw>
-> Acked-by: Mark Brown <broonie@kernel.org>
-> ---
+It has been awarded and I will like to guide you to claim the funds.
+Please contact me at my private email address
+(mrmaxwellwatford@gmail.com) for more information and directive
 
-As covered in submitting-patches.rst inter-version changelogs go after
-the --- so they don't end up making noise in git.
-
---sF6X0tUrUrSWNIfp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmENLZMACgkQJNaLcl1U
-h9AjjQf+M/Opts4bWCI08Tv3p4EBsyq4bPjpAtwHw3Tokq6EV1TR0xsp8SDNoaNw
-qNjJAa3hK+Y1Y1pEumhTDEy31n8r3N2Y5euh836RxZBvGcV3NbVLAX6iMingKBJD
-IQbMnMYW6n4mn00+Jy9iWEB9iBfobrbEi4fsmaN5ZTbZyUs2f4kZiciSWIJzazcD
-AM7r+FPNGpdZ365kA1KWZoLWII3IEUnIE3+/FrA6J/eZKMZal5tznDPySbe8NuYN
-Jb4GAXTi2bTziex7d4GCNz4/3Y4zkfMOSc/oy7ywqCyDPKg1U+EWT4Vk/T7epVg9
-ja6X+5t9ekzkbAPSh5Ko6x/O6jHr+g==
-=0Q/o
------END PGP SIGNATURE-----
-
---sF6X0tUrUrSWNIfp--
+I am looking forward to your urgent reply,
+Best regards
+Mr Maxwell Watford
