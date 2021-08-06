@@ -2,19 +2,19 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 793A33E2F92
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Aug 2021 20:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6A13E2F9B
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Aug 2021 21:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234135AbhHFS7F convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Fri, 6 Aug 2021 14:59:05 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:59659 "EHLO
+        id S234249AbhHFTCF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Fri, 6 Aug 2021 15:02:05 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:56483 "EHLO
         relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233266AbhHFS7E (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Aug 2021 14:59:04 -0400
+        with ESMTP id S232601AbhHFTCF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Aug 2021 15:02:05 -0400
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id B461740003;
-        Fri,  6 Aug 2021 18:58:46 +0000 (UTC)
-Date:   Fri, 6 Aug 2021 20:58:45 +0200
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 6F22E40008;
+        Fri,  6 Aug 2021 19:01:47 +0000 (UTC)
+Date:   Fri, 6 Aug 2021 21:01:46 +0200
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Apurva Nandan <a-nandan@ti.com>
 Cc:     Richard Weinberger <richard@nod.at>,
@@ -24,12 +24,12 @@ Cc:     Richard Weinberger <richard@nod.at>,
         Boris Brezillon <boris.brezillon@collabora.com>,
         <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <linux-spi@vger.kernel.org>, Pratyush Yadav <p.yadav@ti.com>
-Subject: Re: [PATCH 07/13] mtd: spinand: Allow enabling Octal DTR mode in
- the core
-Message-ID: <20210806205845.03dd97c9@xps13>
-In-Reply-To: <20210713130538.646-8-a-nandan@ti.com>
+Subject: Re: [PATCH 08/13] mtd: spinand: Reject 8D-8D-8D op_templates if
+ octal_dtr_enale() is missing in manufacturer_op
+Message-ID: <20210806210146.3358a85b@xps13>
+In-Reply-To: <20210713130538.646-9-a-nandan@ti.com>
 References: <20210713130538.646-1-a-nandan@ti.com>
-        <20210713130538.646-8-a-nandan@ti.com>
+        <20210713130538.646-9-a-nandan@ti.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
@@ -41,143 +41,62 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi Apurva,
 
-Apurva Nandan <a-nandan@ti.com> wrote on Tue, 13 Jul 2021 13:05:32
+Apurva Nandan <a-nandan@ti.com> wrote on Tue, 13 Jul 2021 13:05:33
 +0000:
 
-> Enable Octal DTR SPI mode, i.e. 8D-8D-8D mode, if the SPI NAND flash
-> device supports it. Mixed OSPI (1S-1S-8S & 1S-8S-8S), mixed DTR modes
-> (1S-1D-8D), etc. aren't supported yet.
+> The SPI NAND core doesn't know how to switch the flash to Octal DTR
+> mode (i.e. which operations to perform). If the manufacturer hasn't
+> implemented the octal_dtr_enable() manufacturer_op, the SPI NAND core
+> wouldn't be able to switch to 8D-8D-8D mode and will also not be able
+> to run in 1S-1S-1S mode due to already selected 8D-8D-8D read/write
+> cache op_templates.
 > 
-> The method to switch to Octal DTR SPI mode may vary across
-> manufacturers. For example, for Winbond, it is enabled by writing
-> values to the volatile configuration register. So, let the
-> manufacturer's code have their own implementation for switching to
-> Octal DTR SPI mode. Mixed OSPI (1S-1S-8S & 1S-8S-8S), mixed DTR modes
-> (1S-1D-8D), etc. aren't supported yet.
+> So, avoid choosing a Octal DTR SPI op_template for read_cache,
+> write_cache and update_cache operations, if the manufacturer_op
+> octal_dtr_enable() is missing.
 
-You can drop the final sentence which is a repetition of the previous
-paragraph.
-
-> Check for the SPI NAND device's support for Octal DTR mode using
-> spinand flags, and if the op_templates allow 8D-8D-8D, call
-                                         allows
-
-> octal_dtr_enable() manufacturer op. If the SPI controller doesn't
-> supports these modes, the selected op_templates would prevent switching
-
-                                                  will
-
-> to the Octal DTR mode. And finally update the spinand reg_proto
-> if success.
-
-  on
+After looking at your previous commit I don't see why this patch would
+be needed. octal_dtr_enable() only updates the mode when it succeeds so
+I don't think this patch is really needed.
 
 > 
 > Signed-off-by: Apurva Nandan <a-nandan@ti.com>
 > ---
->  drivers/mtd/nand/spi/core.c | 46 +++++++++++++++++++++++++++++++++++++
->  include/linux/mtd/spinand.h |  3 +++
->  2 files changed, 49 insertions(+)
+>  drivers/mtd/nand/spi/core.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
-> index 1e619b6d777f..19d8affac058 100644
+> index 19d8affac058..8711e887b795 100644
 > --- a/drivers/mtd/nand/spi/core.c
 > +++ b/drivers/mtd/nand/spi/core.c
-> @@ -256,6 +256,48 @@ static int spinand_init_quad_enable(struct spinand_device *spinand)
->  			       enable ? CFG_QUAD_ENABLE : 0);
->  }
+> @@ -1028,6 +1028,8 @@ static int spinand_manufacturer_match(struct spinand_device *spinand,
+>  		if (id[0] != manufacturer->id)
+>  			continue;
 >  
-> +static bool spinand_op_is_octal_dtr(const struct spi_mem_op *op)
-> +{
-> +	return  op->cmd.buswidth == 8 && op->cmd.dtr &&
-> +		op->addr.buswidth == 8 && op->addr.dtr &&
-> +		op->data.buswidth == 8 && op->data.dtr;
-> +}
+> +		spinand->manufacturer = manufacturer;
 > +
-> +static int spinand_init_octal_dtr_enable(struct spinand_device *spinand)
-> +{
-> +	struct device *dev = &spinand->spimem->spi->dev;
-> +	int ret;
-> +
-> +	if (!(spinand->flags & SPINAND_HAS_OCTAL_DTR_BIT))
-> +		return 0;
-> +
-> +	if (!(spinand_op_is_octal_dtr(spinand->op_templates.read_cache) &&
-> +	      spinand_op_is_octal_dtr(spinand->op_templates.write_cache) &&
-> +	      spinand_op_is_octal_dtr(spinand->op_templates.update_cache)))
-> +		return 0;
-> +
-> +	if (!spinand->manufacturer->ops->octal_dtr_enable) {
-> +		dev_err(dev,
-> +			"Missing ->octal_dtr_enable(), unable to switch mode\n");
-
-I don't think we want an error here. Perhaps a debug or info call, but
-no more.
-
-> +		return -EINVAL;
-> +	}
-> +
-> +	ret = spinand->manufacturer->ops->octal_dtr_enable(spinand);
-> +	if (ret) {
-> +		dev_err(dev,
-> +			"Failed to enable Octal DTR SPI mode (err = %d)\n",
-> +			ret);
-> +		return ret;
-> +	}
-> +
-> +	spinand->reg_proto = SPINAND_OCTAL_DTR;
-> +
-> +	dev_dbg(dev,
-> +		"%s SPI NAND switched to Octal DTR SPI (8D-8D-8D) mode\n",
-> +		spinand->manufacturer->name);
-> +	return 0;
-> +}
-> +
->  static int spinand_ecc_enable(struct spinand_device *spinand,
->  			      bool enable)
->  {
-> @@ -1189,6 +1231,10 @@ static int spinand_init_flash(struct spinand_device *spinand)
->  	if (ret)
->  		return ret;
+>  		ret = spinand_match_and_init(spinand,
+>  					     manufacturer->chips,
+>  					     manufacturer->nchips,
+> @@ -1035,7 +1037,6 @@ static int spinand_manufacturer_match(struct spinand_device *spinand,
+>  		if (ret < 0)
+>  			continue;
 >  
-> +	ret = spinand_init_octal_dtr_enable(spinand);
-> +	if (ret)
-> +		return ret;
+> -		spinand->manufacturer = manufacturer;
+>  		return 0;
+>  	}
+>  	return -ENOTSUPP;
+> @@ -1097,6 +1098,10 @@ spinand_select_op_variant(struct spinand_device *spinand,
+>  		unsigned int nbytes;
+>  		int ret;
+>  
+> +		if (spinand_op_is_octal_dtr(&op) &&
+> +		    !spinand->manufacturer->ops->octal_dtr_enable)
+> +			continue;
 > +
->  	ret = spinand_upd_cfg(spinand, CFG_OTP_ENABLE, 0);
->  	if (ret)
->  		return ret;
-> diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
-> index 35816b8cfe81..daa2ac5c3110 100644
-> --- a/include/linux/mtd/spinand.h
-> +++ b/include/linux/mtd/spinand.h
-> @@ -271,6 +271,7 @@ struct spinand_devid {
->   * @init: initialize a SPI NAND device
->   * @adjust_op: modify the ops for any variation in their cmd, address, dummy or
->   *	       data phase by the manufacturer
-> + * @octal_dtr_enable: switch the SPI NAND flash into Octal DTR SPI mode
->   * @cleanup: cleanup a SPI NAND device
->   *
->   * Each SPI NAND manufacturer driver should implement this interface so that
-> @@ -280,6 +281,7 @@ struct spinand_manufacturer_ops {
->  	int (*init)(struct spinand_device *spinand);
->  	void (*adjust_op)(struct spi_mem_op *op,
->  			  const enum spinand_proto reg_proto);
-> +	int (*octal_dtr_enable)(struct spinand_device *spinand);
->  	void (*cleanup)(struct spinand_device *spinand);
->  };
+>  		nbytes = nanddev_per_page_oobsize(nand) +
+>  			 nanddev_page_size(nand);
 >  
-> @@ -348,6 +350,7 @@ struct spinand_ecc_info {
->  
->  #define SPINAND_HAS_QE_BIT		BIT(0)
->  #define SPINAND_HAS_CR_FEAT_BIT		BIT(1)
-> +#define SPINAND_HAS_OCTAL_DTR_BIT	BIT(2)
->  
->  /**
->   * struct spinand_ondie_ecc_conf - private SPI-NAND on-die ECC engine structure
-
-
-
 
 Thanks,
 Miquèl
