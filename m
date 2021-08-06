@@ -2,81 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 391A43E2038
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Aug 2021 02:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3B73E202D
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Aug 2021 02:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242541AbhHFAsg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 5 Aug 2021 20:48:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51206 "EHLO mail.kernel.org"
+        id S241578AbhHFAsX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 5 Aug 2021 20:48:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50894 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242622AbhHFAse (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 5 Aug 2021 20:48:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A89EF60F14;
-        Fri,  6 Aug 2021 00:48:18 +0000 (UTC)
+        id S229735AbhHFAsW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 5 Aug 2021 20:48:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 58E4F61179;
+        Fri,  6 Aug 2021 00:48:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628210899;
-        bh=TwXuMV875p6zjhqmaCTkfv94OzqOszN/pY3u1piXC/g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W/ioGjgHMJOan4ghUNw+kqGWFNB1604iPhjPrZBQBW41RtWix85SKHVl0RTJpALMk
-         /5fz4xkKdJ4Z+JCNAFpQLP88dC9zpME/uoxHYohQ3XNqZ02Yo1ol39fOze0aMW/xgP
-         OnBjYHpnEclzjGNozDnJseEhtSwD35UfrAJy7CjjWvHHIF/3mlddwNohceG7SHfnpC
-         9hWzptLHYpPaJTmhjEjw9VjIIEc2pXYcCKR6zdjZmaxuaEqaY4abivxQqsMgxkRhmC
-         Q+oCCxUOd3hBRgnn1phR72zVwsb9ZDqTXD34RgnmbF/comVaEd/qLcP/Tn7R//8SzP
-         x+F0oSFmvBxQA==
+        s=k20201202; t=1628210887;
+        bh=EQVYbPRoxJQ4RDDnm9QlLivnidLNRB1ZkU1u4/jsb40=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uVRLF7TmG9WBy7/D1W7ZK6BhAarkTioUDyPc2Fg0Vf3OY+k/JxHfd0XBkRYQId1el
+         gn/Y2xiar/5/FvluK/+7C1Tc1l+yPxHnei2CWCIp0gLKf29ca9j/0A7bzu5D93i9HM
+         VEsGVT1+b2XUdQEhfLye6ANb+3njgeRe8RSbNii/tpq5TqUvrTL4XBQEr0zr/s/xU+
+         l4xGBJmksCVaDeil1jrNL6paz6nxDiRhoHHRbii3355dZhcHKRtm6OvuAB1etisJHm
+         xsxd0t8+rH5iP7hN+RnET/yb2dtBMc9CJ5Bp53G5gdqvA9CUKHwWCvXxMYuvgVUilH
+         xlQpTXIPYGQsQ==
+Date:   Fri, 6 Aug 2021 01:47:51 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Mason Zhang <Mason.Zhang@mediatek.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        wsd_upstream@mediatek.com, linux-arm-kernel@lists.infradead.org,
-        linux-spi@vger.kernel.org, Laxman Dewangan <ldewangan@nvidia.com>,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v3 1/2] spi: move cs spi_delay to spi_device
-Date:   Fri,  6 Aug 2021 01:47:47 +0100
-Message-Id: <162821082762.19049.10460753888752180575.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210804133716.32040-1-Mason.Zhang@mediatek.com>
-References: <20210804133716.32040-1-Mason.Zhang@mediatek.com>
+To:     "quanyang.wang" <quanyang.wang@windriver.com>
+Cc:     Michal Simek <michal.simek@xilinx.com>,
+        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: spi-zynq-qspi: use wait_for_completion_timeout to
+ make zynq_qspi_exec_mem_op not interruptible
+Message-ID: <20210806004751.GU26252@sirena.org.uk>
+References: <20210730031753.1317917-1-quanyang.wang@windriver.com>
+ <e639bfc1-ce6f-c5d3-6412-70d03706127d@windriver.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="msgLTjjeumHWYklJ"
+Content-Disposition: inline
+In-Reply-To: <e639bfc1-ce6f-c5d3-6412-70d03706127d@windriver.com>
+X-Cookie: MOUNT TAPE U1439 ON B3, NO RING
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 4 Aug 2021 21:37:17 +0800, Mason Zhang wrote:
-> As we know, spi core layer has removed spi_set_cs_timing() API.
-> So this patch moved spi_delay for cs_timing from spi_controller
-> to spi_device, because cs timing should be set by spi_device but
-> not controller.
-> 
-> 
-> 
-> [...]
 
-Applied to
+--msgLTjjeumHWYklJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+On Fri, Aug 06, 2021 at 08:41:41AM +0800, quanyang.wang wrote:
+> ping.
 
-Thanks!
+Please don't send content free pings and please allow a reasonable time
+for review.  People get busy, go on holiday, attend conferences and so=20
+on so unless there is some reason for urgency (like critical bug fixes)
+please allow at least a couple of weeks for review.  If there have been
+review comments then people may be waiting for those to be addressed.
 
-[1/2] spi: move cs spi_delay to spi_device
-      commit: 8c33ebfeeb597ea953df93f84ea25482d29c664f
+Sending content free pings adds to the mail volume (if they are seen at
+all) which is often the problem and since they can't be reviewed
+directly if something has gone wrong you'll have to resend the patches
+anyway, so sending again is generally a better approach though there are
+some other maintainers who like them - if in doubt look at how patches
+for the subsystem are normally handled.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+--msgLTjjeumHWYklJ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-----BEGIN PGP SIGNATURE-----
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmEMhrcACgkQJNaLcl1U
+h9BAkQf/XzqzDaswEkmzzfYPCGH2UHyvags44BukN9JEi3TbVUfxPl0fiGJPX3Kw
+60fLwAkhvh1q9aXtDwkb4CdUod2mXFQDIpONil6EZrTlx8TQ2WFJ/VrAnNNXAQ3I
+KiJNUlF7SIogdvLfMbAgN9F7HusIjSCL394xe2QfgvpisXSJGwRcjgXHqKFY8cEI
+33m/2bVvGqThj0YS8F87/lSFbEmnnvZE1/tcc7kS0l1y/aiZ5pKwCo570GdYSdhr
+HmPXGBSKKKCDg3VxKc2BH4zMZbbkwtR9DpvrNvr5gKFqUw/nkocgvQppu2QsJbA7
+VDcEWDEkn2ebe5v24TZFr/WNAueh8w==
+=CSVE
+-----END PGP SIGNATURE-----
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+--msgLTjjeumHWYklJ--
