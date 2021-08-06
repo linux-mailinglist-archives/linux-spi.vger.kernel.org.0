@@ -2,19 +2,19 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 501F03E2FA9
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Aug 2021 21:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CF03E2FAA
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Aug 2021 21:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240236AbhHFTGc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Fri, 6 Aug 2021 15:06:32 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:46075 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240550AbhHFTGb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Aug 2021 15:06:31 -0400
+        id S243302AbhHFTJA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Fri, 6 Aug 2021 15:09:00 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:50149 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231887AbhHFTI7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 6 Aug 2021 15:08:59 -0400
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 40AC760003;
-        Fri,  6 Aug 2021 19:06:11 +0000 (UTC)
-Date:   Fri, 6 Aug 2021 21:06:09 +0200
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 88CB9100002;
+        Fri,  6 Aug 2021 19:08:41 +0000 (UTC)
+Date:   Fri, 6 Aug 2021 21:08:40 +0200
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Apurva Nandan <a-nandan@ti.com>
 Cc:     Richard Weinberger <richard@nod.at>,
@@ -24,12 +24,12 @@ Cc:     Richard Weinberger <richard@nod.at>,
         Boris Brezillon <boris.brezillon@collabora.com>,
         <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <linux-spi@vger.kernel.org>, Pratyush Yadav <p.yadav@ti.com>
-Subject: Re: [PATCH 10/13] mtd: spinand: Add octal_dtr_enable() for Winbond
- manufacturer_ops
-Message-ID: <20210806210609.0fd94b9e@xps13>
-In-Reply-To: <20210713130538.646-11-a-nandan@ti.com>
+Subject: Re: [PATCH 11/13] mtd: spinand: Add support for Power-on-Reset
+ (PoR) instruction
+Message-ID: <20210806210840.65c06b67@xps13>
+In-Reply-To: <20210713130538.646-12-a-nandan@ti.com>
 References: <20210713130538.646-1-a-nandan@ti.com>
-        <20210713130538.646-11-a-nandan@ti.com>
+        <20210713130538.646-12-a-nandan@ti.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
@@ -41,92 +41,59 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi Apurva,
 
-Apurva Nandan <a-nandan@ti.com> wrote on Tue, 13 Jul 2021 13:05:35
+Apurva Nandan <a-nandan@ti.com> wrote on Tue, 13 Jul 2021 13:05:36
 +0000:
 
-> Add implementation of octal_dtr_enable() manufacturer_ops for Winbond.
-> To switch to Ocatl DTR mode, setting programmable dummy cycles and
-> SPI IO mode using the volatile configuration register is required. To
-> function at max 120MHz SPI clock in Octal DTR mode, 12 programmable
-> dummy clock cycle setting is required. (Default number of dummy cycle
-> are 8 clocks)
+> Manufacturers like Gigadevice and Winbond are adding Power-on-Reset
+> functionality in their SPI NAND flash chips. PoR instruction consists
+> of a 66h command followed by 99h command, and is different from the FFh
+> reset. The reset command FFh just clears the status only registers,
+> while the PoR command erases all the configurations written to the
+> flash and is equivalent to a power-down -> power-up cycle.
 > 
-> Set the programmable dummy cycle to 12 clocks, and SPI IO mode to
-> Octal DTR with Data Strobe in the VCR. Also, perform a READ ID
-> operation in Octal DTR SPI mode to ensure the switch was successful.
-
-Commit title should contain "winbond:" (same for the previous patch and
-possibly next ones as well).
-
+> Add support for the Power-on-Reset command for any flash that provides
+> this feature.
+> 
 > Datasheet: https://www.winbond.com/export/sites/winbond/datasheet/W35N01JW_Datasheet_Brief.pdf
 > 
 > Signed-off-by: Apurva Nandan <a-nandan@ti.com>
 > ---
->  drivers/mtd/nand/spi/winbond.c | 42 ++++++++++++++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
-> 
-> diff --git a/drivers/mtd/nand/spi/winbond.c b/drivers/mtd/nand/spi/winbond.c
-> index a7052a9ca171..58cda07c15a0 100644
-> --- a/drivers/mtd/nand/spi/winbond.c
-> +++ b/drivers/mtd/nand/spi/winbond.c
-> @@ -16,6 +16,14 @@
+
+[...]
+				\
+> @@ -218,6 +230,8 @@ struct spinand_device;
+>   * reading/programming/erasing when the RESET occurs. Since we always
+>   * issue a RESET when the device is IDLE, 5us is selected for both initial
+>   * and poll delay.
+> + * Power on Reset can take max upto 500 us to complete, so sleep for 1000 us
+
+s/max upto/up to/
+
+> + * to 1200 us safely.
+
+I don't really get why, if the maximum is 500, then let's wait for
+500us.
+
+>   */
+>  #define SPINAND_READ_INITIAL_DELAY_US	6
+>  #define SPINAND_READ_POLL_DELAY_US	5
+> @@ -227,6 +241,8 @@ struct spinand_device;
+>  #define SPINAND_WRITE_POLL_DELAY_US	15
+>  #define SPINAND_ERASE_INITIAL_DELAY_US	250
+>  #define SPINAND_ERASE_POLL_DELAY_US	50
+> +#define SPINAND_POR_MIN_DELAY_US	1000
+> +#define SPINAND_POR_MAX_DELAY_US	1200
 >  
->  #define WINBOND_CFG_BUF_READ		BIT(3)
+>  #define SPINAND_WAITRDY_TIMEOUT_MS	400
 >  
-> +/* Octal DTR SPI mode (8D-8D-8D) with Data Strobe output*/
-> +#define WINBOND_IO_MODE_VCR_OCTAL_DTR	0xE7
-> +#define WINBOND_IO_MODE_VCR_ADDR	0x00
-> +
-> +/* Use 12 dummy clk cycles for using Octal DTR SPI at max 120MHZ */
-> +#define WINBOND_DUMMY_CLK_COUNT		12
-> +#define WINBOND_DUMMY_CLK_VCR_ADDR	0x01
-> +
->  static SPINAND_OP_VARIANTS(read_cache_variants,
->  		SPINAND_PAGE_READ_FROM_CACHE_QUADIO_OP(0, 2, NULL, 0),
->  		SPINAND_PAGE_READ_FROM_CACHE_X4_OP(0, 1, NULL, 0),
-> @@ -142,8 +150,42 @@ static int winbond_write_vcr_op(struct spinand_device *spinand, u8 reg, u8 val)
->  	return 0;
->  }
+> @@ -351,6 +367,7 @@ struct spinand_ecc_info {
+>  #define SPINAND_HAS_QE_BIT		BIT(0)
+>  #define SPINAND_HAS_CR_FEAT_BIT		BIT(1)
+>  #define SPINAND_HAS_OCTAL_DTR_BIT	BIT(2)
+> +#define SPINAND_HAS_POR_CMD_BIT		BIT(3)
 >  
-> +static int winbond_spinand_octal_dtr_enable(struct spinand_device *spinand)
-> +{
-> +	int ret;
-> +	struct spi_mem_op op;
-> +
-> +	ret = winbond_write_vcr_op(spinand, WINBOND_DUMMY_CLK_VCR_ADDR,
-> +				   WINBOND_DUMMY_CLK_COUNT);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = winbond_write_vcr_op(spinand, WINBOND_IO_MODE_VCR_ADDR,
-> +				   WINBOND_IO_MODE_VCR_OCTAL_DTR);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Read flash ID to make sure the switch was successful. */
-> +	op = (struct spi_mem_op)
-> +		SPI_MEM_OP(SPI_MEM_OP_CMD_DTR(2, 0x9f9f, 8),
-> +			   SPI_MEM_OP_NO_ADDR,
-> +			   SPI_MEM_OP_DUMMY_DTR(16, 8),
-> +			   SPI_MEM_OP_DATA_IN_DTR(SPINAND_MAX_ID_LEN,
-> +						  spinand->scratchbuf, 8));
-> +
-> +	ret = spi_mem_exec_op(spinand->spimem, &op);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (memcmp(spinand->scratchbuf, spinand->id.data, SPINAND_MAX_ID_LEN))
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
-> +
->  static const struct spinand_manufacturer_ops winbond_spinand_manuf_ops = {
->  	.init = winbond_spinand_init,
-> +	.octal_dtr_enable = winbond_spinand_octal_dtr_enable,
->  };
->  
->  const struct spinand_manufacturer winbond_spinand_manufacturer = {
+>  /**
+>   * struct spinand_ondie_ecc_conf - private SPI-NAND on-die ECC engine structure
 
 
 
