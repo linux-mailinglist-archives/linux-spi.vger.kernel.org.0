@@ -2,40 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 134603E4614
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Aug 2021 15:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1B53E4617
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Aug 2021 15:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234821AbhHINGs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Aug 2021 09:06:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48174 "EHLO mail.kernel.org"
+        id S235133AbhHINGz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 9 Aug 2021 09:06:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48226 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234684AbhHINGs (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 9 Aug 2021 09:06:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6BDA161004;
-        Mon,  9 Aug 2021 13:06:27 +0000 (UTC)
+        id S235107AbhHINGv (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 9 Aug 2021 09:06:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3003D60F93;
+        Mon,  9 Aug 2021 13:06:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628514388;
-        bh=Iq+gT7aGbB5jwY5mIoHM84WkEfnTWJ0Yz9CFdGjS3LQ=;
+        s=k20201202; t=1628514390;
+        bh=er6P7KMpkJN4hEnMUEV9ytmn+sMhCbCLS0cRciYT8LQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j90/GNuhpO/S45HPQO5n+SrZ76G1v5D2A87vUXMDapxRzr0V+aMWqln0KfTIuo/zQ
-         KbT3LgsatHRJSHwkF19znprb6a47Ef5K7lMaLT7ddWXKOVZEF7vWClrLPOLZcy3Hxt
-         IqgJ3GVfWmSXmKNTvfJMZ4qNF1a3wALvNzy4O4yCa+0vW6LThSZWok09ZI25Ciu6lA
-         G3/uYm2/XOXBrt7339peaSQhLatuwCJA5m1jJakCxKhgnqFycGzww8hBQf6PMnEFKE
-         ETWdbyNscFuDCRyFqDo3CksWBQ3MxLU/6fKZsRbLIcQpuEPzEAhq9dKI5OI7vmpqDG
-         qd3GEXnR+kC0A==
+        b=XCR86qqZ7cNIOOzwPkGV66KKwrf4Thlw4ncEC54o9lZiu94cFwT6rdJyNM7/R2wrc
+         sR9yHFkKAEKbujkgr0ht/BX4BmBKt4p+9D+rJ6rmG1M4NHSilswcsgZDFQHZrGFMoL
+         q3QEd6VelLKNhW96A9WoyqsjIMXfYYv8183/jeceCRE3wHESXhdb7kSgU/GDpgZoQ3
+         otjuag/v5ykNEaGMeGFpjJd/k/8EmpygHVcIfP8dFo6DiAYIoX79IpzycJJuJgYMMW
+         5vfKCc2U/BwLHHnTi88XJaWq0N3lMiDK0phEWVlqwZLTbfGwEQlA0r7csUW1fUE/yp
+         lmP0RARJCxMkA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <treding@nvidia.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] spi: tegra20-slink: Improve runtime PM usage
-Date:   Mon,  9 Aug 2021 14:06:04 +0100
-Message-Id: <162851432638.51983.14201816544596196314.b4-ty@kernel.org>
+To:     zhengxunli <zhengxunli@mxic.com.tw>, linux-mtd@lists.infradead.org,
+        miquel.raynal@bootlin.com, linux-spi@vger.kernel.org,
+        vigneshr@ti.com
+Cc:     Mark Brown <broonie@kernel.org>, juliensu@mxic.com.tw,
+        ycllin@mxic.com.tw
+Subject: Re: (subset) [PATCH v2 0/2] Add octal DTR support for Macronix flash
+Date:   Mon,  9 Aug 2021 14:06:05 +0100
+Message-Id: <162851432637.51983.3793788915457019257.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210731192731.5869-1-digetx@gmail.com>
-References: <20210731192731.5869-1-digetx@gmail.com>
+In-Reply-To: <1612517808-10010-1-git-send-email-zhengxunli@mxic.com.tw>
+References: <1612517808-10010-1-git-send-email-zhengxunli@mxic.com.tw>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -43,13 +42,14 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, 31 Jul 2021 22:27:30 +0300, Dmitry Osipenko wrote:
-> The Tegra SPI driver supports runtime PM, which controls the clock
-> enable state, but the clk is also enabled separately from the RPM
-> at the driver probe time, and thus, stays always on. Fix it.
+On Fri, 5 Feb 2021 17:36:46 +0800, zhengxunli wrote:
+> This series adds support for Octal DTR for Macronix flashes. The
+> first set of patches is add Macronix octaflash series octal dtr
+> mode support. The second set of patches add the Octal DTR mode
+> support for host driver.
 > 
-> Runtime PM now is always available on Tegra, hence there is no need to
-> check the RPM presence in the driver anymore. Remove these checks.
+> Changes in v2:
+> - Define with a generic name to describe the maximum dummy cycles.
 > 
 > [...]
 
@@ -59,10 +59,8 @@ Applied to
 
 Thanks!
 
-[1/2] spi: tegra20-slink: Improve runtime PM usage
-      commit: e4bb903fda0e9bbafa1338dcd2ee5e4d3ccc50da
-[2/2] spi: tegra20-slink: Don't use resource-managed spi_register helper
-      commit: 26c863418221344b1cfb8e6c11116b2b81144281
+[2/2] spi: mxic: patch for octal DTR mode support
+      commit: d05aaa66ba3ca3fdc2b5cd774ff218deb238b352
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
