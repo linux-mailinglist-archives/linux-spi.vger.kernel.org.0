@@ -2,78 +2,63 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC9C3E59CC
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Aug 2021 14:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B813E5B27
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Aug 2021 15:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbhHJMVp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Aug 2021 08:21:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35782 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229764AbhHJMVp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 10 Aug 2021 08:21:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EAD096023F;
-        Tue, 10 Aug 2021 12:21:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628598083;
-        bh=1hsadZeitXB5CUW3Q6gu9kYoCo9loKWmN9H4lu/tj3k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oenuHDYn9Q/7zZPKhqtn+sZPEPlrIqFnpCVEIaUbt+ZGg8cMJSHdxtzsAtreqTppA
-         PC71E3OWU4SeoeO0t9XvhsyXkd/hUcP/pgBbTUKk2Nlh0KKVRIDIN5SoakXupw75eG
-         NaIS9IvW6aQrvAZE/95RQNhuj+oK3/KW4zmuGMQrH2H7D+ttWzX3utVcK8Z4ze2IWt
-         tx7DJYuzngg7JcVPg9zl81O+D1VriSU0RkEnnnfJ1LmvIkd8nj6VNiCMGCUhN+sZKn
-         C+SODvaEY05e52n9AUSMGzPJ44fsGpIKJFxsWqC3AMiQP+7Q18CQN8NZC5NkK8OYW3
-         PGgcE1N2dWHxw==
-Date:   Tue, 10 Aug 2021 13:21:04 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Zhengxun Li <zhengxunli@mxic.com.tw>
-Cc:     linux-spi@vger.kernel.org
-Subject: Re: [PATCH v8] spi: mxic: patch for octal DTR mode support
-Message-ID: <20210810122104.GB4704@sirena.org.uk>
-References: <1628584186-9266-1-git-send-email-zhengxunli@mxic.com.tw>
+        id S241220AbhHJNWj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Aug 2021 09:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241176AbhHJNWj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Aug 2021 09:22:39 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037B7C06179C
+        for <linux-spi@vger.kernel.org>; Tue, 10 Aug 2021 06:22:16 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id a8so12310977vsl.4
+        for <linux-spi@vger.kernel.org>; Tue, 10 Aug 2021 06:22:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=2tvLhkad0w+Mh63WhnFJkmRFgYsLXsJmUqGVjzUAFIo=;
+        b=J1UO03eOEZuQCAH1bWcfKEKq5BN5SPyduATu9zAtdU/RakoeJVptJM+gLsUtrEuonC
+         xdjUZ63bJi/qNQ5UDZHBQT/hmwjW1bdv9sPByvTJ8h/5L5XxMdVqy6Qo9WXsVmoqdiWQ
+         4Ftz7pewxY/KYf9xszWiqCYtsQFvCnK5UETJpndtJH0Uqw27XFp3UJ+uTNcza4QpjvGx
+         x9u8HXRO0yidD1GmT0+S3NKgMH35MGdW5mAtqxwerKT/2ehSyaHoRMhCCPfrjvO5Ca1w
+         yhKMTiwWuTIukqtW1PayeUqLVfPV0p+VQjbaWXU7mGfqRM/jI9IqwEdUk8GZdTJjxA8j
+         rWXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=2tvLhkad0w+Mh63WhnFJkmRFgYsLXsJmUqGVjzUAFIo=;
+        b=F/cMVY0ewkQwHxORJE9lgoUVxym1vlZY1I1/YtV0ebd9lkVMUeCgszc2V4wqsRLTjy
+         v1cL1KqlwIOVmmAbUySCTiY2sjagBn9jWSh/hoyrwMsUjLIQMMu8rhq321LSfBjjL7o2
+         iGTJ12noCQvoV645Fg8FS4y0TDu5ckQ1Ng4qkfMBxYfH7UNvSMkRYAeVUrXGuUH3YYPb
+         xqe3TwcMmtZbh4cRncziAJb4Le/wiF0PhofelMjkAtwbWe2deY+hQP365yEazLHKNN+h
+         2sWZPkmQHSJwy+6z2AFFXQZPXkzArO13zJg9ePdW4LNg4eQss63lSRdCqCjVCa0mDqxt
+         JhYg==
+X-Gm-Message-State: AOAM530V4m3IlIbAhCERlimfN8VuFCAXBitz1slleXmh/Tge7NHl/ZZv
+        t1chJr4xc8TrMvgMfnch08Y52afnFfa0q/pTx9M=
+X-Google-Smtp-Source: ABdhPJxGFR8diwPvQYpV37YYI8amPIHeE68wjx+g6TcpnlsWOg6QapJtOtZAzr+9JjnHmTmmodl/YrIjx7ZBaPCYCSM=
+X-Received: by 2002:a67:1c05:: with SMTP id c5mr21501896vsc.25.1628601735186;
+ Tue, 10 Aug 2021 06:22:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jq0ap7NbKX2Kqbes"
-Content-Disposition: inline
-In-Reply-To: <1628584186-9266-1-git-send-email-zhengxunli@mxic.com.tw>
-X-Cookie: Who is John Galt?
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Sender: immeublesourou@gmail.com
+Received: by 2002:ab0:3903:0:0:0:0:0 with HTTP; Tue, 10 Aug 2021 06:22:14
+ -0700 (PDT)
+From:   John Kumor <owo219901@gmail.com>
+Date:   Wed, 11 Aug 2021 01:22:14 +1200
+X-Google-Sender-Auth: GdaTxGfrES1uUqmP8dMlmdkbdyM
+Message-ID: <CAHdg_cQcGoZmM_yLB4+7UNSD_Lwo4ySucYJOuadLSmn4W2hi7g@mail.gmail.com>
+Subject: Urgent
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
---jq0ap7NbKX2Kqbes
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Aug 10, 2021 at 04:29:46PM +0800, Zhengxun Li wrote:
-> Driver patch for octal DTR mode support.
->=20
-> Owing to the spi_mem_default_supports_op() is not support dtr
-> operation. Based on commit <539cf68cd51b> (spi: spi-mem: add
-> spi_mem_dtr_supports_op()) add spi_mem_dtr_supports_op()
-> to support dtr and keep checking the buswidth and command bytes.
-
-Please do not submit new versions of already applied patches, please
-submit incremental updates to the existing code.  Modifying existing
-commits creates problems for other users building on top of those
-commits so it's best practice to only change pubished git commits if
-absolutely essential.
-
---jq0ap7NbKX2Kqbes
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmESbzAACgkQJNaLcl1U
-h9BoqQf/WiQHKK+Gskgt3bHhPJDlRl5BfajCrjP5PM/bKYSPy6YQ2kfS/Cte+gr4
-5sS9DYt/jDZgg5IH77AquwHduoJJeDP3DwpmepW/HHhyR4I8y8zY5os1FAIgwekf
-xpj48kCQ6X0dvnCBabtw7XWLcXTEUpRJEJooMUKIPq3cvf8xx8pjSw3mmR+2FMk7
-P3nrpb/qe1EpmTcmIPqfPzqULT0ubtdVuGbQiHl0dl71VWPJyuSEBxddruLbZndi
-goyR9ji5TOzZk63MeP3MTVHLcPhZucAxv/vDDe/TwEk2lXMjZrL8VP2/JzGU/u9T
-e4Bw3bY4x/9aUVcp6NA9OFl+OKsDDQ==
-=1vMU
------END PGP SIGNATURE-----
-
---jq0ap7NbKX2Kqbes--
+My dear,
+Greetings! I trust that all is well with you and your family. Did you
+receive my previous email?
+Regards
+John Kumor.
