@@ -2,92 +2,66 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA8F3E5CF9
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Aug 2021 16:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E2A3E5D48
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Aug 2021 16:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242588AbhHJOQX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Aug 2021 10:16:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53390 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242483AbhHJOQH (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 10 Aug 2021 10:16:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 566C561077;
-        Tue, 10 Aug 2021 14:15:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628604943;
-        bh=jsXSwu3e2W5/Bbh8Ni7wMfk8kDl0v6oLmGXB/izskHc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sdhgbEUHY8tIM4QexD8b4xwl4rEYgaCOjowORp4+KwEyUxd9EQmjP02YJCSqyIcY0
-         kWFFFiNHKKeKxrmQeLd3IbRGnk2M/aJ+Smmu3g0sXIXyjOWpyzWSC+DSDQjhfaznfM
-         k4L6+J1MDs2ztjDGnMTeNmwx5gmo7YTeCS9c0wQUKsiQdTID20G1J6D+rAP3Owg0zV
-         rPJ/NonlQUCDG7GZyefspwQxef4Nrmyl+Uer2TUUz7VHOQQ9nw+eAX8JEMlCu25Zlu
-         DG1Jb9pru9fVPh5Wxm2HRiM/GoycLTwFxrI04Ca9Z309tt5rpyCHRAPxJh7TvOPTvM
-         v+Cwp8zTXOHIQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 03/20] spi: spi-mux: Add module info needed for autoloading
-Date:   Tue, 10 Aug 2021 10:15:21 -0400
-Message-Id: <20210810141538.3117707-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210810141538.3117707-1-sashal@kernel.org>
-References: <20210810141538.3117707-1-sashal@kernel.org>
+        id S242747AbhHJOS3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Aug 2021 10:18:29 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:8002 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242738AbhHJOQ4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Aug 2021 10:16:56 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GkZkT2X8PzYly6;
+        Tue, 10 Aug 2021 22:16:17 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 10 Aug 2021 22:16:31 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Tue, 10 Aug
+ 2021 22:16:30 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>
+CC:     <ldewangan@nvidia.com>, <broonie@kernel.org>
+Subject: [PATCH -next] spi: tegra20-slink: remove spi_master_put() in tegra_slink_remove()
+Date:   Tue, 10 Aug 2021 22:22:30 +0800
+Message-ID: <20210810142230.2220453-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+spi_master_put() is already called in spi_unregister_master(), or it
+will lead a double decrement refcount.
 
-[ Upstream commit 1d5ccab95f06675a269f4cb223a1e3f6d1ebef42 ]
-
-With the spi device table udev can autoload the spi-mux module in
-the presence of an spi-mux device.
-
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Link: https://lore.kernel.org/r/20210721095321.2165453-1-u.kleine-koenig@pengutronix.de
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/spi/spi-mux.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/spi/spi-tegra20-slink.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/spi/spi-mux.c b/drivers/spi/spi-mux.c
-index 37dfc6e82804..9708b7827ff7 100644
---- a/drivers/spi/spi-mux.c
-+++ b/drivers/spi/spi-mux.c
-@@ -167,10 +167,17 @@ static int spi_mux_probe(struct spi_device *spi)
- 	return ret;
+diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
+index deff16ba6d58..ebd27f883033 100644
+--- a/drivers/spi/spi-tegra20-slink.c
++++ b/drivers/spi/spi-tegra20-slink.c
+@@ -1154,8 +1154,6 @@ static int tegra_slink_remove(struct platform_device *pdev)
+ 	if (tspi->rx_dma_chan)
+ 		tegra_slink_deinit_dma_param(tspi, true);
+ 
+-	spi_master_put(master);
+-
+ 	return 0;
  }
  
-+static const struct spi_device_id spi_mux_id[] = {
-+	{ "spi-mux" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(spi, spi_mux_id);
-+
- static const struct of_device_id spi_mux_of_match[] = {
- 	{ .compatible = "spi-mux" },
- 	{ }
- };
-+MODULE_DEVICE_TABLE(of, spi_mux_of_match);
- 
- static struct spi_driver spi_mux_driver = {
- 	.probe  = spi_mux_probe,
-@@ -178,6 +185,7 @@ static struct spi_driver spi_mux_driver = {
- 		.name   = "spi-mux",
- 		.of_match_table = spi_mux_of_match,
- 	},
-+	.id_table = spi_mux_id,
- };
- 
- module_spi_driver(spi_mux_driver);
 -- 
-2.30.2
+2.25.1
 
