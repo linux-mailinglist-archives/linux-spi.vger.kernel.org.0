@@ -2,78 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 236253E4848
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Aug 2021 17:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D97A3E54FB
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Aug 2021 10:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235113AbhHIPDe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 9 Aug 2021 11:03:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33608 "EHLO mail.kernel.org"
+        id S238036AbhHJIR4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Aug 2021 04:17:56 -0400
+Received: from muru.com ([72.249.23.125]:40666 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235097AbhHIPDd (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 9 Aug 2021 11:03:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CD66160EBB;
-        Mon,  9 Aug 2021 15:03:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628521393;
-        bh=OYFPvBpAz+gBYk1xqnpaZKlokxOeCKmDhJ5hGhXtecU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X1p5Bsf26lKmLIq26lrO/iZ9qZPIQzVB3m4Q/3F/kUUiKOQtV9YLB3uAU5unX8Lhk
-         KXDjd98y4rh4kp/9Q/rqyOztNIlIbCDKzisj6pnf0IW1SdgBh3sRjLMnsL3WQvqn0A
-         rv9Jq0j2IaChOT7f/FFrrc/oiSmUf41pC0H0EBqOzgCzMR8wCrKjimiUdhLEDycFdS
-         FNvVp/tdwZB0/i99UYV/XJGRsmxKNR2cc9ZtSCW2OKLtZkAPq0yxhvpw92wf9Hempe
-         bC+49TrLZwpSepdq+W0tMTxfijByb+nYbNuSw9e674K4JfmYI6SvHcpk+CozIhddPv
-         SqCGePLjy1VbQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Mason Zhang <Mason.Zhang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wsd_upstream@mediatek.com,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 1/1] spi: mediatek: fix build warnning in set cs timing
-Date:   Mon,  9 Aug 2021 16:02:54 +0100
-Message-Id: <162852121764.46095.11307268331804449714.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210809055911.17538-1-Mason.Zhang@mediatek.com>
-References: <20210809055911.17538-1-Mason.Zhang@mediatek.com>
+        id S237000AbhHJIRz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 10 Aug 2021 04:17:55 -0400
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id A529280CF;
+        Tue, 10 Aug 2021 08:17:52 +0000 (UTC)
+From:   Tony Lindgren <tony@atomide.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org,
+        Sanchayan Maity <maitysanchayan@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 1/2] spi: spi-fsl-dspi: Fix issue with uninitialized dma_slave_config
+Date:   Tue, 10 Aug 2021 11:17:26 +0300
+Message-Id: <20210810081727.19491-1-tony@atomide.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 9 Aug 2021 13:59:12 +0800, Mason Zhang wrote:
-> this patch fixed the build warnning in set cs timing.
-> 
-> 
-> 
-> 
+Depending on the DMA driver being used, the struct dma_slave_config may
+need to be initialized to zero for the unused data.
 
-Applied to
+For example, we have three DMA drivers using src_port_window_size and
+dst_port_window_size. If these are left uninitialized, it can cause DMA
+failures.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+For spi-fsl-dspi, this is probably not currently an issue but is still
+good to fix though.
 
-Thanks!
+Fixes: 90ba37033cb9 ("spi: spi-fsl-dspi: Add DMA support for Vybrid")
+Cc: Sanchayan Maity <maitysanchayan@gmail.com>
+Cc: Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+Cc: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+---
+ drivers/spi/spi-fsl-dspi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-[1/1] spi: mediatek: fix build warnning in set cs timing
-      commit: 5c842e51ac63130a1344650b0a95bdc398666947
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
+--- a/drivers/spi/spi-fsl-dspi.c
++++ b/drivers/spi/spi-fsl-dspi.c
+@@ -530,6 +530,7 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
+ 		goto err_rx_dma_buf;
+ 	}
+ 
++	memset(&cfg, 0, sizeof(cfg));
+ 	cfg.src_addr = phy_addr + SPI_POPR;
+ 	cfg.dst_addr = phy_addr + SPI_PUSHR;
+ 	cfg.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
+-- 
+2.32.0
