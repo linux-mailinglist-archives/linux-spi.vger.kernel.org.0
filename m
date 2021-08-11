@@ -2,102 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACCB3E8C51
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Aug 2021 10:47:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1AC3E9149
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Aug 2021 14:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233053AbhHKIrp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 11 Aug 2021 04:47:45 -0400
-Received: from twhmllg3.macronix.com ([211.75.127.131]:59241 "EHLO
-        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbhHKIro (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Aug 2021 04:47:44 -0400
-Received: from twhfmlp1.macronix.com (twhfmlp1.macronix.com [172.17.20.91])
-        by TWHMLLG3.macronix.com with ESMTP id 17B8l9kL074944;
-        Wed, 11 Aug 2021 16:47:09 +0800 (GMT-8)
-        (envelope-from zhengxunli@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.mxic.com.tw [172.17.14.55])
-        by Forcepoint Email with ESMTP id 49AC16D78BD6A12486AC;
-        Wed, 11 Aug 2021 16:47:10 +0800 (CST)
-In-Reply-To: <20210811080011.GA14773@kili>
-References: <20210811080011.GA14773@kili>
-To:     "Dan Carpenter" <dan.carpenter@oracle.com>
-Cc:     linux-spi@vger.kernel.org
-Subject: Re: [bug report] spi: mxic: patch for octal DTR mode support
+        id S231659AbhHKMcY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 11 Aug 2021 08:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231133AbhHKMcS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 11 Aug 2021 08:32:18 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A59C061A48
+        for <linux-spi@vger.kernel.org>; Wed, 11 Aug 2021 05:30:18 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id r17-20020a0568302371b0290504f3f418fbso3053109oth.12
+        for <linux-spi@vger.kernel.org>; Wed, 11 Aug 2021 05:30:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
+        b=JLDnRf25Eb6PKvCYA5DKs9y9j99zKAJA36bc7PJTIpXiHPDCujx3MnACbZjp6mrxrY
+         eEnZVPRoG9jdc54LvqexHB+U7VEq9IxY2QdfBq2YSFH3SOEjhlw4x/NLZYvR2HSN6BUe
+         SCcSBdPGwWVA2Zj9N4A1YQAiAQiGoiNcBA2ckslmkH2JqPbF6RIP3bps3Oc3PVj8NFaD
+         +ETGkX1KAHW7/LPI6Jo2RFOcVlRvlIzX0BMFIKtErpKFnIzBuJlBG8pa7svbB3Db2tHU
+         TBlGkxVV3m1mswxYPcuZRKFIsOvmRMoelP8xE2ArlsNG12tr0m2ogNjil1ITH7O7SKhB
+         mKgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
+        b=BRTS0TjNL7yK30o0mvPm7YWi1fbPf3yEK8ue94JLQboWPbB/DMgfu22zgDCuhKbVIb
+         nDGfpCYWxSWwIsa4xhIm0HwI/xoZx/oOuWaX2BqL6FxVpXWn3W2P0oNN9kIIB93wINo3
+         kIjId7V1ErLi9+UFRYNM+JRkGEKK4Q9rCkjyxvkQIKVOAnNo5XZkj0Wf9whwMDcv+CWj
+         F+DwJ3bEh6aye83F5GDq8Trg/JAhD8fN6v8Hyv0HvOhVNXhDEVPRXNeVImdkAl/X8fNi
+         OxqzxYL9Zb1s6ueWsygAfvxP1yFHA3KFkZjD/8bQMdH6HmSwDWxVnP4QblyA9JF4EGe/
+         mzGg==
+X-Gm-Message-State: AOAM532FnZkR68I/M0/x51SLZIdZtGUnHv0RojuVtUwM+2zBzL4BVIfg
+        OeA4ZqqDZ2Xtd2Kh3QtRlLFubov7QKvoCDEyzs8=
+X-Google-Smtp-Source: ABdhPJwdrr7XguJcPmO5+g98rSs/4n6T51gE6N2Czls1WtQylyxhyPliwkpfVE5Y3mUZMeaTO8hfijSwokFMiUVWtAk=
+X-Received: by 2002:a9d:65d0:: with SMTP id z16mr22680523oth.196.1628685017856;
+ Wed, 11 Aug 2021 05:30:17 -0700 (PDT)
 MIME-Version: 1.0
-X-KeepSent: 61F65626:279A7E5D-4825872E:002F8099;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3FP6 SHF907 April 26, 2018
-Message-ID: <OF61F65626.279A7E5D-ON4825872E.002F8099-4825872E.00304386@mxic.com.tw>
-From:   zhengxunli@mxic.com.tw
-Date:   Wed, 11 Aug 2021 16:47:10 +0800
-X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2021/08/11 PM 04:47:10,
-        Serialize complete at 2021/08/11 PM 04:47:10
-Content-Type: text/plain; charset="Big5"
-Content-Transfer-Encoding: base64
-X-MAIL: TWHMLLG3.macronix.com 17B8l9kL074944
+Received: by 2002:a05:6830:23a5:0:0:0:0 with HTTP; Wed, 11 Aug 2021 05:30:17
+ -0700 (PDT)
+Reply-To: rihabmanyang07@yahoo.com
+From:   Rihab Manyang <ndourandiogou1@gmail.com>
+Date:   Wed, 11 Aug 2021 13:30:17 +0100
+Message-ID: <CAP5_mB7uaxDVzgPo-0C2sDYvzWYre49BQzTgZym0ALZ8xnLUGg@mail.gmail.com>
+Subject: hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-SGkgRGFuLA0KDQpUaGFua3MgZm9yIHlvdXIgcmVwbHkuDQoNClRoZSAic3BpOiBteGljOiBhZGQg
-bWlzc2luZyBicmFjZXMiIGZpeGVkIHRoaXMgaXNzdWUuDQogDQoiRGFuIENhcnBlbnRlciIgPGRh
-bi5jYXJwZW50ZXJAb3JhY2xlLmNvbT4gd3JvdGUgb24gMjAyMS8wOC8xMSCkVaTIIA0KMDQ6MDA6
-MTE6DQoNCj4gIkRhbiBDYXJwZW50ZXIiIDxkYW4uY2FycGVudGVyQG9yYWNsZS5jb20+IA0KPiAy
-MDIxLzA4LzExIKRVpMggMDQ6MDANCj4gDQo+IFRvDQo+IA0KPiB6aGVuZ3h1bmxpQG14aWMuY29t
-LnR3LCANCj4gDQo+IGNjDQo+IA0KPiBsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnDQo+IA0KPiBT
-dWJqZWN0DQo+IA0KPiBbYnVnIHJlcG9ydF0gc3BpOiBteGljOiBwYXRjaCBmb3Igb2N0YWwgRFRS
-IG1vZGUgc3VwcG9ydA0KPiANCj4gSGVsbG8gWmhlbmd4dW4gTGksDQo+IA0KPiBUaGUgcGF0Y2gg
-ZDA1YWFhNjZiYTNjOiAic3BpOiBteGljOiBwYXRjaCBmb3Igb2N0YWwgRFRSIG1vZGUgc3VwcG9y
-dCINCj4gZnJvbSBBdWcgNCwgMjAyMSwgbGVhZHMgdG8gdGhlIGZvbGxvd2luZw0KPiBTbWF0Y2gg
-c3RhdGljIGNoZWNrZXIgd2FybmluZzoNCj4gDQo+ICAgIGRyaXZlcnMvc3BpL3NwaS1teGljLmM6
-NDAzIG14aWNfc3BpX21lbV9leGVjX29wKCkNCj4gICAgd2FybjogY3VybHkgYnJhY2VzIGludGVu
-ZGVkPw0KPiANCj4gZHJpdmVycy9zcGkvc3BpLW14aWMuYw0KPiAgICAgMzkwICAgIGlmIChvcC0+
-YWRkci5uYnl0ZXMpDQo+ICAgICAzOTEgICAgICAgc3NfY3RybCB8PSBPUF9BRERSX0JZVEVTKG9w
-LT5hZGRyLm5ieXRlcykgfA0KPiAgICAgMzkyICAgICAgICAgICAgIE9QX0FERFJfQlVTVyhmbHMo
-b3AtPmFkZHIuYnVzd2lkdGgpIC0gMSkgfA0KPiAgICAgMzkzICAgICAgICAgICAgIChvcC0+YWRk
-ci5kdHIgPyBPUF9BRERSX0REUiA6IDApOw0KPiAgICAgMzk0IA0KPiAgICAgMzk1ICAgIGlmIChv
-cC0+ZHVtbXkubmJ5dGVzKQ0KPiAgICAgMzk2ICAgICAgIHNzX2N0cmwgfD0gT1BfRFVNTVlfQ1lD
-KG9wLT5kdW1teS5uYnl0ZXMpOw0KPiAgICAgMzk3IA0KPiAgICAgMzk4ICAgIGlmIChvcC0+ZGF0
-YS5uYnl0ZXMpIHsNCj4gICAgIDM5OSAgICAgICBzc19jdHJsIHw9IE9QX0RBVEFfQlVTVyhmbHMo
-b3AtPmRhdGEuYnVzd2lkdGgpIC0gMSkgfA0KPiAgICAgNDAwICAgICAgICAgICAgIChvcC0+ZGF0
-YS5kdHIgPyBPUF9EQVRBX0REUiA6IDApOw0KPiAgICAgNDAxICAgICAgIGlmIChvcC0+ZGF0YS5k
-aXIgPT0gU1BJX01FTV9EQVRBX0lOKQ0KPiAgICAgNDAyICAgICAgICAgIHNzX2N0cmwgfD0gT1Bf
-UkVBRDsNCj4gLS0+IDQwMyAgICAgICAgICBpZiAob3AtPmRhdGEuZHRyKQ0KPiAgICAgNDA0ICAg
-ICAgICAgICAgIHNzX2N0cmwgfD0gT1BfRFFTX0VOOw0KPiANCj4gUHJvYmFibHkgeW91IHJlY2ll
-dmVkIG9yIGFyZSBhYm91dCB0byByZWNpZXZlIGEgYnVuYyBvZiBzdGF0aWMgY2hlY2tlcg0KPiB3
-YXJuaW5ncyBhYm91dCBjdXJseSBicmFjZXMgb3IgaW5kZW50aW5nIGhlcmUuICBJdCdzIGhhcmQg
-dG8ga25vdyB3aGF0DQo+IHdhcyBpbnRlbmRlZC4NCj4gDQo+ICAgICA0MDUgICAgfQ0KPiAgICAg
-NDA2IA0KPiAgICAgNDA3ICAgIHdyaXRlbChzc19jdHJsLCBteGljLT5yZWdzICsgU1NfQ1RSTCht
-ZW0tPnNwaS0+Y2hpcF9zZWxlY3QpKTsNCj4gICAgIDQwOCANCj4gDQo+IHJlZ2FyZHMsDQo+IGRh
-biBjYXJwZW50ZXINCg0KVGhhbmtzLA0KWmhlbmd4dW4NCg0KDQpDT05GSURFTlRJQUxJVFkgTk9U
-RToNCg0KVGhpcyBlLW1haWwgYW5kIGFueSBhdHRhY2htZW50cyBtYXkgY29udGFpbiBjb25maWRl
-bnRpYWwgaW5mb3JtYXRpb24gDQphbmQvb3IgcGVyc29uYWwgZGF0YSwgd2hpY2ggaXMgcHJvdGVj
-dGVkIGJ5IGFwcGxpY2FibGUgbGF3cy4gUGxlYXNlIGJlIA0KcmVtaW5kZWQgdGhhdCBkdXBsaWNh
-dGlvbiwgZGlzY2xvc3VyZSwgZGlzdHJpYnV0aW9uLCBvciB1c2Ugb2YgdGhpcyBlLW1haWwgDQoo
-YW5kL29yIGl0cyBhdHRhY2htZW50cykgb3IgYW55IHBhcnQgdGhlcmVvZiBpcyBwcm9oaWJpdGVk
-LiBJZiB5b3UgcmVjZWl2ZSANCnRoaXMgZS1tYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHVz
-IGltbWVkaWF0ZWx5IGFuZCBkZWxldGUgdGhpcyBtYWlsIGFzIA0Kd2VsbCBhcyBpdHMgYXR0YWNo
-bWVudChzKSBmcm9tIHlvdXIgc3lzdGVtLiBJbiBhZGRpdGlvbiwgcGxlYXNlIGJlIA0KaW5mb3Jt
-ZWQgdGhhdCBjb2xsZWN0aW9uLCBwcm9jZXNzaW5nLCBhbmQvb3IgdXNlIG9mIHBlcnNvbmFsIGRh
-dGEgaXMgDQpwcm9oaWJpdGVkIHVubGVzcyBleHByZXNzbHkgcGVybWl0dGVkIGJ5IHBlcnNvbmFs
-IGRhdGEgcHJvdGVjdGlvbiBsYXdzLiANClRoYW5rIHlvdSBmb3IgeW91ciBhdHRlbnRpb24gYW5k
-IGNvb3BlcmF0aW9uLg0KDQpNYWNyb25peCBJbnRlcm5hdGlvbmFsIENvLiwgTHRkLg0KDQo9PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT0NCg0KDQoNCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCg0KQ09ORklERU5USUFMSVRZIE5P
-VEU6DQoNClRoaXMgZS1tYWlsIGFuZCBhbnkgYXR0YWNobWVudHMgbWF5IGNvbnRhaW4gY29uZmlk
-ZW50aWFsIGluZm9ybWF0aW9uIGFuZC9vciBwZXJzb25hbCBkYXRhLCB3aGljaCBpcyBwcm90ZWN0
-ZWQgYnkgYXBwbGljYWJsZSBsYXdzLiBQbGVhc2UgYmUgcmVtaW5kZWQgdGhhdCBkdXBsaWNhdGlv
-biwgZGlzY2xvc3VyZSwgZGlzdHJpYnV0aW9uLCBvciB1c2Ugb2YgdGhpcyBlLW1haWwgKGFuZC9v
-ciBpdHMgYXR0YWNobWVudHMpIG9yIGFueSBwYXJ0IHRoZXJlb2YgaXMgcHJvaGliaXRlZC4gSWYg
-eW91IHJlY2VpdmUgdGhpcyBlLW1haWwgaW4gZXJyb3IsIHBsZWFzZSBub3RpZnkgdXMgaW1tZWRp
-YXRlbHkgYW5kIGRlbGV0ZSB0aGlzIG1haWwgYXMgd2VsbCBhcyBpdHMgYXR0YWNobWVudChzKSBm
-cm9tIHlvdXIgc3lzdGVtLiBJbiBhZGRpdGlvbiwgcGxlYXNlIGJlIGluZm9ybWVkIHRoYXQgY29s
-bGVjdGlvbiwgcHJvY2Vzc2luZywgYW5kL29yIHVzZSBvZiBwZXJzb25hbCBkYXRhIGlzIHByb2hp
-Yml0ZWQgdW5sZXNzIGV4cHJlc3NseSBwZXJtaXR0ZWQgYnkgcGVyc29uYWwgZGF0YSBwcm90ZWN0
-aW9uIGxhd3MuIFRoYW5rIHlvdSBmb3IgeW91ciBhdHRlbnRpb24gYW5kIGNvb3BlcmF0aW9uLg0K
-DQpNYWNyb25peCBJbnRlcm5hdGlvbmFsIENvLiwgTHRkLg0KDQo9PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCg==
-
+-- 
+How are you?I am miss.Rihab Manyang i will like to be your friend
+please write me back on my email for more details, Thanks.
