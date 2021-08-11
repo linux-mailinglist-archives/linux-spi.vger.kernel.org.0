@@ -2,83 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D1C3E7BFC
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Aug 2021 17:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8413E88B6
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Aug 2021 05:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242895AbhHJPUv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 10 Aug 2021 11:20:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56018 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241851AbhHJPUo (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 10 Aug 2021 11:20:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1CB7960F13;
-        Tue, 10 Aug 2021 15:20:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628608820;
-        bh=OVckzb/m+ZougMoYM30K8HbSf93MLAOD0SvTvtYFDrs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HItbALSTuVpy0rIXDmHAIugcuC14X2XIlKi0yWU2OSBX5v+onDw76B1jbMLFCGDdi
-         s/JMx7G5npjIS0BGdLBrmG6exCN8FbVykS6OgktTUGT5lAv/VYYm2enAWb0LxNSZev
-         a8Ie/tclPSjuob79EjV3wpEGpis1p2wtoCRfWt5okbVJDNiSDcHtjij6QY9GVehzD0
-         1JXlgiLprbQUFoYARMBo+VRs4d1BDHd83rjzYJOAawxVxr6ZYdF2NaOWEyVJYZbA8I
-         4FnjoCBH6oSUjFog6ZM0Onbw6IsHRiDHDxW6ueyTKrKETyC9Dxk69CZgNpKrLa5srS
-         iZkw/6i1DI5aQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Sanchayan Maity <maitysanchayan@gmail.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: Re: [PATCH 1/2] spi: spi-fsl-dspi: Fix issue with uninitialized dma_slave_config
-Date:   Tue, 10 Aug 2021 16:20:00 +0100
-Message-Id: <162860634017.6228.8342307288968790170.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210810081727.19491-1-tony@atomide.com>
-References: <20210810081727.19491-1-tony@atomide.com>
+        id S232102AbhHKDNP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 10 Aug 2021 23:13:15 -0400
+Received: from twhmllg4.macronix.com ([122.147.135.202]:14220 "EHLO
+        TWHMLLG4.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232697AbhHKDNP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 10 Aug 2021 23:13:15 -0400
+Received: from twhfm1p2.macronix.com (twhfmlp2.macronix.com [172.17.20.92])
+        by TWHMLLG4.macronix.com with ESMTP id 17B3CZnF056449;
+        Wed, 11 Aug 2021 11:12:35 +0800 (GMT-8)
+        (envelope-from zhengxunli@mxic.com.tw)
+Received: from MXML06C.mxic.com.tw (mxml06c.mxic.com.tw [172.17.14.55])
+        by Forcepoint Email with ESMTP id 1EC5346CD70567289807;
+        Wed, 11 Aug 2021 11:12:36 +0800 (CST)
+In-Reply-To: <20210810142405.2221540-1-yangyingliang@huawei.com>
+References: <20210810142405.2221540-1-yangyingliang@huawei.com>
+To:     "Yang Yingliang" <yangyingliang@huawei.com>
+Cc:     broonie@kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH -next] spi: mxic: add missing braces
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+X-KeepSent: F3887BAF:9F4586C4-4825872E:00113C05;
+ type=4; name=$KeepSent
+X-Mailer: Lotus Notes Release 8.5.3FP6 SHF907 April 26, 2018
+Message-ID: <OFF3887BAF.9F4586C4-ON4825872E.00113C05-4825872E.0011A20D@mxic.com.tw>
+From:   zhengxunli@mxic.com.tw
+Date:   Wed, 11 Aug 2021 11:12:35 +0800
+X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
+ 2021/08/11 AM 11:12:36,
+        Serialize complete at 2021/08/11 AM 11:12:36
+Content-Type: text/plain; charset="Big5"
+Content-Transfer-Encoding: base64
+X-MAIL: TWHMLLG4.macronix.com 17B3CZnF056449
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 10 Aug 2021 11:17:26 +0300, Tony Lindgren wrote:
-> Depending on the DMA driver being used, the struct dma_slave_config may
-> need to be initialized to zero for the unused data.
-> 
-> For example, we have three DMA drivers using src_port_window_size and
-> dst_port_window_size. If these are left uninitialized, it can cause DMA
-> failures.
-> 
-> [...]
 
-Applied to
+IllhbmcgWWluZ2xpYW5nIiA8eWFuZ3lpbmdsaWFuZ0BodWF3ZWkuY29tPiB3cm90ZSBvbiAyMDIx
+LzA4LzEwIKRVpMggDQoxMDoyNDowNToNCg0KPiAiWWFuZyBZaW5nbGlhbmciIDx5YW5neWluZ2xp
+YW5nQGh1YXdlaS5jb20+IA0KPiAyMDIxLzA4LzEwIKRVpMggMTA6MTgNCj4gDQo+IFRvDQo+IA0K
+PiA8bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZz4sIDxsaW51eC1zcGlAdmdlci5rZXJuZWwu
+b3JnPiwgDQo+IA0KPiBjYw0KPiANCj4gPGJyb29uaWVAa2VybmVsLm9yZz4sIDx6aGVuZ3h1bmxp
+QG14aWMuY29tLnR3Pg0KPiANCj4gU3ViamVjdA0KPiANCj4gW1BBVENIIC1uZXh0XSBzcGk6IG14
+aWM6IGFkZCBtaXNzaW5nIGJyYWNlcw0KPiANCj4gRml4IHRoZSBmb2xsb3dpbmcgd2FyaW5nOg0K
+PiANCj4gZHJpdmVycy9zcGkvc3BpLW14aWMuYzogSW4gZnVuY3Rpb24goaVteGljX3NwaV9tZW1f
+ZXhlY19vcKGmOg0KPiBkcml2ZXJzL3NwaS9zcGktbXhpYy5jOjQwMTozOiB3YXJuaW5nOiB0aGlz
+IKGlaWahpiBjbGF1c2UgZG9lcyBub3QgDQo+IGd1YXJkLi4uIFstV21pc2xlYWRpbmctaW5kZW50
+YXRpb25dDQo+ICAgIGlmIChvcC0+ZGF0YS5kaXIgPT0gU1BJX01FTV9EQVRBX0lOKQ0KPiAgICBe
+fg0KPiBkcml2ZXJzL3NwaS9zcGktbXhpYy5jOjQwMzo0OiBub3RlOiAuLi50aGlzIHN0YXRlbWVu
+dCwgYnV0IHRoZSANCj4gbGF0dGVyIGlzIG1pc2xlYWRpbmdseSBpbmRlbnRlZCBhcyBpZiBpdCB3
+ZXJlIGd1YXJkZWQgYnkgdGhlIKGlaWahpg0KPiAgICAgaWYgKG9wLT5kYXRhLmR0cikNCj4gICAg
+IF5+DQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBZYW5nIFlpbmdsaWFuZyA8eWFuZ3lpbmdsaWFuZ0Bo
+dWF3ZWkuY29tPg0KDQpSZXZpZXdlZC1ieTogWmhlbmd4dW4gTGkgPHpoZW5neHVubGlAbXhpYy5j
+b20udHc+DQoNCkNPTkZJREVOVElBTElUWSBOT1RFOg0KDQpUaGlzIGUtbWFpbCBhbmQgYW55IGF0
+dGFjaG1lbnRzIG1heSBjb250YWluIGNvbmZpZGVudGlhbCBpbmZvcm1hdGlvbiANCmFuZC9vciBw
+ZXJzb25hbCBkYXRhLCB3aGljaCBpcyBwcm90ZWN0ZWQgYnkgYXBwbGljYWJsZSBsYXdzLiBQbGVh
+c2UgYmUgDQpyZW1pbmRlZCB0aGF0IGR1cGxpY2F0aW9uLCBkaXNjbG9zdXJlLCBkaXN0cmlidXRp
+b24sIG9yIHVzZSBvZiB0aGlzIGUtbWFpbCANCihhbmQvb3IgaXRzIGF0dGFjaG1lbnRzKSBvciBh
+bnkgcGFydCB0aGVyZW9mIGlzIHByb2hpYml0ZWQuIElmIHlvdSByZWNlaXZlIA0KdGhpcyBlLW1h
+aWwgaW4gZXJyb3IsIHBsZWFzZSBub3RpZnkgdXMgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSB0aGlz
+IG1haWwgYXMgDQp3ZWxsIGFzIGl0cyBhdHRhY2htZW50KHMpIGZyb20geW91ciBzeXN0ZW0uIElu
+IGFkZGl0aW9uLCBwbGVhc2UgYmUgDQppbmZvcm1lZCB0aGF0IGNvbGxlY3Rpb24sIHByb2Nlc3Np
+bmcsIGFuZC9vciB1c2Ugb2YgcGVyc29uYWwgZGF0YSBpcyANCnByb2hpYml0ZWQgdW5sZXNzIGV4
+cHJlc3NseSBwZXJtaXR0ZWQgYnkgcGVyc29uYWwgZGF0YSBwcm90ZWN0aW9uIGxhd3MuIA0KVGhh
+bmsgeW91IGZvciB5b3VyIGF0dGVudGlvbiBhbmQgY29vcGVyYXRpb24uDQoNCk1hY3Jvbml4IElu
+dGVybmF0aW9uYWwgQ28uLCBMdGQuDQoNCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KDQoNCg0KPT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PQ0KDQpDT05GSURFTlRJQUxJVFkgTk9URToNCg0KVGhpcyBlLW1haWwgYW5kIGFueSBh
+dHRhY2htZW50cyBtYXkgY29udGFpbiBjb25maWRlbnRpYWwgaW5mb3JtYXRpb24gYW5kL29yIHBl
+cnNvbmFsIGRhdGEsIHdoaWNoIGlzIHByb3RlY3RlZCBieSBhcHBsaWNhYmxlIGxhd3MuIFBsZWFz
+ZSBiZSByZW1pbmRlZCB0aGF0IGR1cGxpY2F0aW9uLCBkaXNjbG9zdXJlLCBkaXN0cmlidXRpb24s
+IG9yIHVzZSBvZiB0aGlzIGUtbWFpbCAoYW5kL29yIGl0cyBhdHRhY2htZW50cykgb3IgYW55IHBh
+cnQgdGhlcmVvZiBpcyBwcm9oaWJpdGVkLiBJZiB5b3UgcmVjZWl2ZSB0aGlzIGUtbWFpbCBpbiBl
+cnJvciwgcGxlYXNlIG5vdGlmeSB1cyBpbW1lZGlhdGVseSBhbmQgZGVsZXRlIHRoaXMgbWFpbCBh
+cyB3ZWxsIGFzIGl0cyBhdHRhY2htZW50KHMpIGZyb20geW91ciBzeXN0ZW0uIEluIGFkZGl0aW9u
+LCBwbGVhc2UgYmUgaW5mb3JtZWQgdGhhdCBjb2xsZWN0aW9uLCBwcm9jZXNzaW5nLCBhbmQvb3Ig
+dXNlIG9mIHBlcnNvbmFsIGRhdGEgaXMgcHJvaGliaXRlZCB1bmxlc3MgZXhwcmVzc2x5IHBlcm1p
+dHRlZCBieSBwZXJzb25hbCBkYXRhIHByb3RlY3Rpb24gbGF3cy4gVGhhbmsgeW91IGZvciB5b3Vy
+IGF0dGVudGlvbiBhbmQgY29vcGVyYXRpb24uDQoNCk1hY3Jvbml4IEludGVybmF0aW9uYWwgQ28u
+LCBMdGQuDQoNCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PQ0K
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/2] spi: spi-fsl-dspi: Fix issue with uninitialized dma_slave_config
-      commit: 209ab223ad5b18e437289235e3bde12593b94ac4
-[2/2] spi: spi-pic32: Fix issue with uninitialized dma_slave_config
-      commit: 976c1de1de147bb7f4e0d87482f375221c05aeaf
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
