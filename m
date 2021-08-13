@@ -2,70 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E073EAFC5
-	for <lists+linux-spi@lfdr.de>; Fri, 13 Aug 2021 07:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF13F3EB42C
+	for <lists+linux-spi@lfdr.de>; Fri, 13 Aug 2021 12:43:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238787AbhHMFtX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 13 Aug 2021 01:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238775AbhHMFtT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 13 Aug 2021 01:49:19 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EE5C0613A4
-        for <linux-spi@vger.kernel.org>; Thu, 12 Aug 2021 22:48:53 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id db14so4627569qvb.10
-        for <linux-spi@vger.kernel.org>; Thu, 12 Aug 2021 22:48:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=Aauu7gYvMaBruI9Zt1CgTlkxSZ8evQwPBhKOMH6jf8s=;
-        b=Ew8YcVLq5FQAmQt+w/696ZQ+dYhpUxeVp3xpR9y58W5jnIJ/bTgYDm8PFeCBP622sj
-         cLmqU0dpTv7jJ7vv+0dqpqVMfCR548RHr/n9IOvWWpntc/pvMZeU97kztiTlS1UqMroS
-         7AvsbUKC8LmtNEy3lLpTegXfMuclJFIGUiMnm88TMSgDPSsduGuIz7Rs4jHlDdnV/jyy
-         MuycsqQ2AlklMjg2dTe38xZ9LN4CKYP2BqM8+zsLTDIJLQ3ekd8vd1DZlmNAu3ubFXK2
-         kB6kA1HXFh7NyhoZxhtO1P83aaPi2/9x7G2TxxsOMsEPBHbLEQLKC+0VxbOzp+LTEJom
-         P75g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=Aauu7gYvMaBruI9Zt1CgTlkxSZ8evQwPBhKOMH6jf8s=;
-        b=szY/o/vTSoXpbX1n8j7pLdjDehYVP6eL+wRZZ3zwBxVsfs5KD7XZWA8vB1SB0RBqd+
-         R7lAEX66qh8mmoIZe5l+INKBrgANVlPpS+x9sP8OQMZeLRx6rPafBr3wRYJPsUk9DSKS
-         mayjWGoLRB/y38LOpZuZvc5c+NTfB3iIan04DIw049n4oAUo53FMvW1sfyHn9c3WXYZ1
-         1e9y52UglGJ8vudg7OJT2o75By0Usq/X1TYDmn31EEGaMdmm8XQAl3tnfAmYJlPqfUOr
-         uHtAE5f1Ix5WTP6q6jJG0B2BUKHUKEQmDEr/OxUcCFeKgivkfSm1VolkZNjCPQs9nkXY
-         H7tQ==
-X-Gm-Message-State: AOAM5306+1LFBUw5i+P4BVMP0hNcpNZVimoNHEgc2iiZyNMjSH01U0oB
-        MSQE0vVwPrf/PQqIcRjb6/EFAbeXkLlyTsva7TM=
-X-Google-Smtp-Source: ABdhPJxwocZTfX7cEEFjgiizN8+XI+djFA4jETjJxLZ9caoS2q5NkJVMtxyKhuZOwamMhjB//mayuxBXZ+rk5W3vlUM=
-X-Received: by 2002:a0c:aa9b:: with SMTP id f27mr901114qvb.7.1628833732583;
- Thu, 12 Aug 2021 22:48:52 -0700 (PDT)
+        id S240175AbhHMKn1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 13 Aug 2021 06:43:27 -0400
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:47968
+        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239223AbhHMKn1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 13 Aug 2021 06:43:27 -0400
+Received: from localhost (1.general.cking.uk.vpn [10.172.193.212])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id D022F4061A;
+        Fri, 13 Aug 2021 10:42:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1628851379;
+        bh=6my1meBweLsHucmiSRvtuTv5eVAc6MQgpR5ufkNa+nQ=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
+        b=XoqV7W5jC8mUg2bkwNzNiZIK0C+xIjL0zMPY93KupTyL9vTKOXrocmJMqUiDGV0aA
+         KJRktND0f9Tn6iEpwm0hROLHRgSRQhPTlb8E2P17rBRF72DNOFIgRdmK1vQpliunls
+         W0fxXn2YqWkvDqeOWkHdnSazjaLtqqbJy1PiKZidmVO+pwy4TnQ9AmE1qaVyOoJDCj
+         fWJVg8KxfWr2bvW5E2JLPzX5q0jJcu0ExaUqdHopNaEQ+tb4NhAPsRG5UMZcnru17J
+         gUr6MTopi6JQpb7p154JBKAFQvZEO1r0hFqY4Z3NYBgeG2huupnj38tTpWQd553ewj
+         IASAGM+9r9Y3w==
+From:   Colin King <colin.king@canonical.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Zhengxun Li <zhengxunli@mxic.com.tw>, linux-spi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: mxic: Fix missing { } around an if code block
+Date:   Fri, 13 Aug 2021 11:42:59 +0100
+Message-Id: <20210813104259.17612-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Reply-To: godwinppter@gmail.com
-Sender: maxwelljohn205@gmail.com
-Received: by 2002:ac8:c0e:0:0:0:0:0 with HTTP; Thu, 12 Aug 2021 22:48:51 -0700 (PDT)
-From:   Godwin Pete <godwinnpeter@gmail.com>
-Date:   Fri, 13 Aug 2021 07:48:51 +0200
-X-Google-Sender-Auth: 8CCOlsv1ZDz9h--NQZNIL6lZQ_w
-Message-ID: <CAHiReTyMTA6+j9-AwZAJGqZjVwgWYgT+SNL+vTh=qxKYxBS5ow@mail.gmail.com>
-Subject: I need your response
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-My good friend,
+From: Colin Ian King <colin.king@canonical.com>
 
-I just want to know if you, can help me to transfer the amount of
-($6Million). After the transfer we have to share it, 50% for me, and
-50% for you. Please let me know if you can help me for more
-information in regards with the transfer. I hope you can work with me
-honestly?
+There is a code block that is missing the { } around it. Fix this
+by adding them.
 
+Fixes: d05aaa66ba3c ("spi: mxic: patch for octal DTR mode support")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ drivers/spi/spi-mxic.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thanks.
+diff --git a/drivers/spi/spi-mxic.c b/drivers/spi/spi-mxic.c
+index 32e757a04f14..45889947afed 100644
+--- a/drivers/spi/spi-mxic.c
++++ b/drivers/spi/spi-mxic.c
+@@ -398,10 +398,11 @@ static int mxic_spi_mem_exec_op(struct spi_mem *mem,
+ 	if (op->data.nbytes) {
+ 		ss_ctrl |= OP_DATA_BUSW(fls(op->data.buswidth) - 1) |
+ 			   (op->data.dtr ? OP_DATA_DDR : 0);
+-		if (op->data.dir == SPI_MEM_DATA_IN)
++		if (op->data.dir == SPI_MEM_DATA_IN) {
+ 			ss_ctrl |= OP_READ;
+ 			if (op->data.dtr)
+ 				ss_ctrl |= OP_DQS_EN;
++		}
+ 	}
+ 
+ 	writel(ss_ctrl, mxic->regs + SS_CTRL(mem->spi->chip_select));
+-- 
+2.31.1
 
-Godwin Peter,
