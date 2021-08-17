@@ -2,92 +2,137 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A590C3EEE65
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Aug 2021 16:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B723EEF81
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Aug 2021 17:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237475AbhHQOXb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Aug 2021 10:23:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51180 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230474AbhHQOXb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 17 Aug 2021 10:23:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7758260FD7;
-        Tue, 17 Aug 2021 14:22:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629210178;
-        bh=6FJLsHWGhCXNnGMIy1qZpzrJFMhBYFoGAIzuJAUWN4c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TZFC3jWYXQYZ0MkWa+cX5aDIJ/wGtkLimDf8ewNNLwjx99Ar5roxN0hls+7n2A3KZ
-         qNzQ/l6GTw8+H7I7Mw/Xvmdt9imB4HwiAoCFPxLgV3h0x80eV5OGk0duC5hk8HRSbU
-         0foyZnVTWKwTKnCsSLsbVY8Hb2v9yvXe8LGmacLAGzRIYbjRO34EE8uKwT77860FrO
-         PJOgVQw2w71NcsbETJ4K6qm3WJUQcSO0+kKpefgFC0wNXsiEy8dAnU7tadHwwv99tD
-         qb/gpm/J6n4Ko1+2ZgdMiE9ZRxK5VYrs01za8l9Umb+zoSslFzkHF5qKdrqFttlaLl
-         rabOOaFTYkusQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Jon Lin <jon.lin@rock-chips.com>, linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, sboyd@kernel.org,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        mturquette@baylibre.com, hjc@rock-chips.com,
-        linux-kernel@vger.kernel.org, jbx6244@gmail.com,
-        sugar.zhang@rock-chips.com, yifeng.zhao@rock-chips.com,
-        robh+dt@kernel.org, heiko@sntech.de, p.yadav@ti.com,
-        macroalpha82@gmail.com, linux-rockchip@lists.infradead.org
-Subject: Re: (subset) [PATCH v13 0/6] Add Rockchip SFC(serial flash controller) support
-Date:   Tue, 17 Aug 2021 15:22:32 +0100
-Message-Id: <162921014496.3711.7793277648760166515.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210812134546.31340-1-jon.lin@rock-chips.com>
-References: <20210812134546.31340-1-jon.lin@rock-chips.com>
+        id S240300AbhHQPxL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Aug 2021 11:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240410AbhHQPtk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Aug 2021 11:49:40 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56440C061764;
+        Tue, 17 Aug 2021 08:49:07 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id c24so42184417lfi.11;
+        Tue, 17 Aug 2021 08:49:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=fG8UNioj9Gykdv3jKLDDqlFZPR9Bq4ObXeUmu51BqTw=;
+        b=qCj8PB2xsh0Gwhg/Mz8T/C3RsrPHTbLP+N4lR2Yg2TB3ET2WkMAO1wgbBYR2q7lO68
+         Pc49VlqXQ3dpjJrNlM2C3tPYEqqyhTGSf8sYJWR5lp0WvXn++4GF++0cA3bUAvac9XRG
+         g9ViFPs99qgAUHDXdueeQwSgYGDFI/IeqfENUgVVD/rI4Q1ZQoN06DvNSee5A4aKmCOu
+         S+uE5zA5q9Snqs4dlpyOLydNmfB2J5W4GujW2PkG6xWyoiPHtLSNJ/LrYoAzYXP3c7VD
+         AfB16sdCF6PcILWyGV5dGRZGFQ3HUP80m2Rig47x3ImvxaecyvAZWvXPV2nsoVl7dQ3l
+         YRYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fG8UNioj9Gykdv3jKLDDqlFZPR9Bq4ObXeUmu51BqTw=;
+        b=SYtUaG6iFKawqLK6TmhuAeX53aJ1ZVkzJFP+l9dDNvucHvL5n4xUm+Aoq7YV6sTJfb
+         D0uvw5SHwZAV32fkkaXm/NN8MIARNV7EVaiuTs6Qtesf8KUumg2SvfowwZrBiMIBGfFl
+         gER0JH8Z7cJktGjDKO2OQCYG1O0Ih6VQ2p7/Oali5bUo+kfFwoFgaQp13ft5UU6Lda2N
+         kB0hhO7JUm8EP+jW5Nv27jLGtdyXGN1OGaHMBpyIKoVSACW//pzvNn2VhgyiuAZ7bNHG
+         rciqQ9xhbFvqQVi/y5b+/75YOJDzRyYhpsRZ4lVyUARqY5UIzGGXRrh4v9VQs06Hnhea
+         86rg==
+X-Gm-Message-State: AOAM533sWkDiy/YVa0Yb8xc/95xXu2CGazuPIREgUaM7ODHDU4XC7YMh
+        bdYmXDNp+INORDkz8qQsnAisvRusO1E=
+X-Google-Smtp-Source: ABdhPJxH1hLTa5AxArOQ97RRWFvJ/qFdnD++u1srz4ssoaY8ztFeO7SrfDBXxb0r5VIrFxPoMPyxwA==
+X-Received: by 2002:a19:7603:: with SMTP id c3mr2817435lff.543.1629215345270;
+        Tue, 17 Aug 2021 08:49:05 -0700 (PDT)
+Received: from [192.168.2.145] (46-138-85-91.dynamic.spd-mgts.ru. [46.138.85.91])
+        by smtp.googlemail.com with ESMTPSA id k1sm221767lfg.187.2021.08.17.08.49.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Aug 2021 08:49:04 -0700 (PDT)
+Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20210817012754.8710-1-digetx@gmail.com>
+ <20210817012754.8710-2-digetx@gmail.com>
+ <20210817075515.vyyv7z37e6jcrhsl@vireshk-i7>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <710261d9-7ae3-5155-c0a2-f8aed2408d0b@gmail.com>
+Date:   Tue, 17 Aug 2021 18:49:03 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20210817075515.vyyv7z37e6jcrhsl@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 12 Aug 2021 21:45:40 +0800, Jon Lin wrote:
-> Changes in v13:
-> - Provide independent interfaces to obtain RX TX FIFO status respectively
-> - Add more debug information
-> - Depress DMA limitation
+17.08.2021 10:55, Viresh Kumar пишет:
+...
+>> +int dev_pm_opp_sync(struct device *dev)
+>> +{
+>> +	struct opp_table *opp_table;
+>> +	struct dev_pm_opp *opp;
+>> +	int ret = 0;
+>> +
+>> +	/* Device may not have OPP table */
+>> +	opp_table = _find_opp_table(dev);
+>> +	if (IS_ERR(opp_table))
+>> +		return 0;
+>> +
+>> +	if (!_get_opp_count(opp_table))
+>> +		goto put_table;
+>> +
+>> +	opp = _find_current_opp(dev, opp_table);
+>> +	ret = _set_opp(dev, opp_table, opp, opp->rate);
 > 
-> Changes in v12:
-> - Remove useless oneOf lable
-> - Add sfc controller discription
-> - Remove the limitation of SFC_MIN_SPEED_HZ
-> - Add IRQ_NONE method for irq handler
-> - Add SPI_MASTER_HALF_DUPLEX flags
-> - Add sfc interrupt mask bits and status register initial progress
-> 
-> [...]
+> And I am not sure how this will end up working, since new OPP will be
+> equal to old one. Since I see you call this from resume() at many
+> places.
 
-Applied to
+Initially OPP table is "uninitialized" and opp_table->enabled=false,
+hence the first sync always works even if OPP is equal to old one. Once
+OPP has been synced, all further syncs are NO-OPs, hence it doesn't
+matter how many times syncing is called.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+https://elixir.bootlin.com/linux/v5.14-rc6/source/drivers/opp/core.c#L1012
 
-Thanks!
+> what exactly are you trying to do here ? Those details would be good
+> to have in commit log as well, I haven't really followed V7 of your
+> series.
 
-[1/6] dt-bindings: rockchip-sfc: Bindings for Rockchip serial flash controller
-      commit: 538d7c2ed73098850fe80be14eed2739d37e419b
-[2/6] spi: rockchip-sfc: add rockchip serial flash controller
-      commit: 0b89fc0a367edab09065af722894d186bd0ccb0d
+I'm initializing voltage/power state of OPP table in accordance to the
+clock rate, bumping voltage before clock is enabled by device driver.
+I'll improve the commit message.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+An alternative to the explicit syncing could be something like a new
+dev_pm_opp_resume/suspend helpers that will take care of
+enabling/disabling the OPP table clock/etc and syncing the OPP state
+with h/w.
