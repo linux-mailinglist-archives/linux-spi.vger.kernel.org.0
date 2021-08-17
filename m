@@ -2,256 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF673EEE01
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Aug 2021 16:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A590C3EEE65
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Aug 2021 16:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239930AbhHQODi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 17 Aug 2021 10:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbhHQODh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 17 Aug 2021 10:03:37 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADD3C061764;
-        Tue, 17 Aug 2021 07:03:03 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id k8so9836739wrn.3;
-        Tue, 17 Aug 2021 07:03:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=VVEiHKfbgxJy3Si7x9qMwuCkodu1ovrZav3yAuRw/WQ=;
-        b=NGu0DCEpleG+Ep+gjrtMwj36Cigf1Xn/FwALxpXcDjG/HheiEOcqif1j7C30iNyDoR
-         UfnkWvY654GbLJJiiHR7imSwFIKyv9XLT96K8+GsD6oCLfWY1318PUVuH4QQVpXL+5MB
-         sWXWF+45ADknPxGX3t+Xe/QTitR63+pwekLYS4LtFAdHYnksZWahfT+1GTFaodEeWnqA
-         eOx7tn6jgCs37eoODu+VwLdsRQzuUuonwBBcsUzg/5aaFUc8Y73zeAXoNTr9PLjG3bO9
-         GV9fg3sIOtBFLYnWBNiTabJSWHMGHfUzG0ouqf+ehjLzM7Ukg8pSAWhUps4ZDVmX+JZ9
-         8Aqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=VVEiHKfbgxJy3Si7x9qMwuCkodu1ovrZav3yAuRw/WQ=;
-        b=ReM7+3sfUUKSQWVP5mdazSd2AN39sOb0KmiRI07hDeQpu8VcBZ8Kssd555117FHKKc
-         pwUXumiurByshwIbtfiG67fHDI8cgSjOay1Cz3OaKIT1fm9LGzm0OSzc2Y4dnogAOHVg
-         sapWxRKnUBA69Zeva56+8JVZfGzAlcWeBjDg/6jsbsB/x5zbEqq45lt7j1okyyAtTmrW
-         LQsUsxeDUn574dIutus5OWe0D/QFUcVE4XCwoOUSNgeRL2fNJ3PurTw2h9DHwYpdNLh2
-         xeuZCetGhWXBBAv/1YBC6odVIer1hS9occ25QZE/MNf80pNehuutMwsZ3C3qhcUvaVHg
-         nkRw==
-X-Gm-Message-State: AOAM530j8f2NSQGyB7RukPTwIsKHDo+VPoy+lNZsPu8OMVV2no0/NBOi
-        oteSmjeU5JVsglI0B07KQW4=
-X-Google-Smtp-Source: ABdhPJygrj9qfA9fJB+/HxTzsq0FYpI1BCHKBArAxcgyM8xNpQ/5kTdymiAaBBuoBgqjg4SIBuMyfQ==
-X-Received: by 2002:adf:f282:: with SMTP id k2mr4338657wro.255.1629208982405;
-        Tue, 17 Aug 2021 07:03:02 -0700 (PDT)
-Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id d8sm2628053wrx.12.2021.08.17.07.03.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Aug 2021 07:03:01 -0700 (PDT)
-Date:   Tue, 17 Aug 2021 16:02:59 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v8 11/34] gpu: host1x: Add runtime PM and OPP support
-Message-ID: <YRvBkyfFCqthBIBV@orome.fritz.box>
-References: <20210817012754.8710-1-digetx@gmail.com>
- <20210817012754.8710-12-digetx@gmail.com>
- <CAPDyKFrax-EYtO03W5QWM2tcWLWeMM8hHZCRYFcsenuiP2zObQ@mail.gmail.com>
+        id S237475AbhHQOXb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 17 Aug 2021 10:23:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51180 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230474AbhHQOXb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 17 Aug 2021 10:23:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7758260FD7;
+        Tue, 17 Aug 2021 14:22:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629210178;
+        bh=6FJLsHWGhCXNnGMIy1qZpzrJFMhBYFoGAIzuJAUWN4c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=TZFC3jWYXQYZ0MkWa+cX5aDIJ/wGtkLimDf8ewNNLwjx99Ar5roxN0hls+7n2A3KZ
+         qNzQ/l6GTw8+H7I7Mw/Xvmdt9imB4HwiAoCFPxLgV3h0x80eV5OGk0duC5hk8HRSbU
+         0foyZnVTWKwTKnCsSLsbVY8Hb2v9yvXe8LGmacLAGzRIYbjRO34EE8uKwT77860FrO
+         PJOgVQw2w71NcsbETJ4K6qm3WJUQcSO0+kKpefgFC0wNXsiEy8dAnU7tadHwwv99tD
+         qb/gpm/J6n4Ko1+2ZgdMiE9ZRxK5VYrs01za8l9Umb+zoSslFzkHF5qKdrqFttlaLl
+         rabOOaFTYkusQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Jon Lin <jon.lin@rock-chips.com>, linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, sboyd@kernel.org,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        mturquette@baylibre.com, hjc@rock-chips.com,
+        linux-kernel@vger.kernel.org, jbx6244@gmail.com,
+        sugar.zhang@rock-chips.com, yifeng.zhao@rock-chips.com,
+        robh+dt@kernel.org, heiko@sntech.de, p.yadav@ti.com,
+        macroalpha82@gmail.com, linux-rockchip@lists.infradead.org
+Subject: Re: (subset) [PATCH v13 0/6] Add Rockchip SFC(serial flash controller) support
+Date:   Tue, 17 Aug 2021 15:22:32 +0100
+Message-Id: <162921014496.3711.7793277648760166515.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210812134546.31340-1-jon.lin@rock-chips.com>
+References: <20210812134546.31340-1-jon.lin@rock-chips.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="fGItigaj8JHSG5hJ"
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFrax-EYtO03W5QWM2tcWLWeMM8hHZCRYFcsenuiP2zObQ@mail.gmail.com>
-User-Agent: Mutt/2.1.1 (e2a89abc) (2021-07-12)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
---fGItigaj8JHSG5hJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Aug 17, 2021 at 02:04:38PM +0200, Ulf Hansson wrote:
-> On Tue, 17 Aug 2021 at 03:30, Dmitry Osipenko <digetx@gmail.com> wrote:
-> >
-> > Add runtime PM and OPP support to the Host1x driver. It's required for
-> > enabling system-wide DVFS and supporting dynamic power management using
-> > a generic power domain. For the starter we will keep host1x always-on
-> > because dynamic power management require a major refactoring of the dri=
-ver
-> > code since lot's of code paths will need the RPM handling and we're goi=
-ng
-> > to remove some of these paths in the future. Host1x doesn't consume much
-> > power so it is good enough, we at least need to resume Host1x in order
-> > to initialize the power state.
-> >
-> > Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
-> > Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
-> > Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
-> > Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
-> > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> > ---
->=20
+On Thu, 12 Aug 2021 21:45:40 +0800, Jon Lin wrote:
+> Changes in v13:
+> - Provide independent interfaces to obtain RX TX FIFO status respectively
+> - Add more debug information
+> - Depress DMA limitation
+> 
+> Changes in v12:
+> - Remove useless oneOf lable
+> - Add sfc controller discription
+> - Remove the limitation of SFC_MIN_SPEED_HZ
+> - Add IRQ_NONE method for irq handler
+> - Add SPI_MASTER_HALF_DUPLEX flags
+> - Add sfc interrupt mask bits and status register initial progress
+> 
 > [...]
->=20
-> > +
-> >  static int host1x_probe(struct platform_device *pdev)
-> >  {
-> >         struct host1x *host;
-> > @@ -394,6 +423,10 @@ static int host1x_probe(struct platform_device *pd=
-ev)
-> >         /* set common host1x device data */
-> >         platform_set_drvdata(pdev, host);
-> >
-> > +       err =3D devm_tegra_core_dev_init_opp_table_simple(&pdev->dev);
-> > +       if (err)
-> > +               return err;
-> > +
-> >         host->regs =3D devm_ioremap_resource(&pdev->dev, regs);
-> >         if (IS_ERR(host->regs))
-> >                 return PTR_ERR(host->regs);
-> > @@ -423,12 +456,9 @@ static int host1x_probe(struct platform_device *pd=
-ev)
-> >                 return err;
-> >         }
-> >
-> > -       host->rst =3D devm_reset_control_get(&pdev->dev, "host1x");
-> > -       if (IS_ERR(host->rst)) {
-> > -               err =3D PTR_ERR(host->rst);
-> > -               dev_err(&pdev->dev, "failed to get reset: %d\n", err);
-> > +       err =3D host1x_get_resets(host);
-> > +       if (err)
-> >                 return err;
-> > -       }
-> >
-> >         err =3D host1x_iommu_init(host);
-> >         if (err < 0) {
-> > @@ -443,22 +473,10 @@ static int host1x_probe(struct platform_device *p=
-dev)
-> >                 goto iommu_exit;
-> >         }
-> >
-> > -       err =3D clk_prepare_enable(host->clk);
-> > -       if (err < 0) {
-> > -               dev_err(&pdev->dev, "failed to enable clock\n");
-> > -               goto free_channels;
-> > -       }
-> > -
-> > -       err =3D reset_control_deassert(host->rst);
-> > -       if (err < 0) {
-> > -               dev_err(&pdev->dev, "failed to deassert reset: %d\n", e=
-rr);
-> > -               goto unprepare_disable;
-> > -       }
-> > -
->=20
-> Removing the clk_prepare_enable() and reset_control_deassert() from
-> host1x_probe(), might not be a good idea. See more about why, below.
->=20
-> >         err =3D host1x_syncpt_init(host);
-> >         if (err) {
-> >                 dev_err(&pdev->dev, "failed to initialize syncpts\n");
-> > -               goto reset_assert;
-> > +               goto free_channels;
-> >         }
-> >
-> >         err =3D host1x_intr_init(host, syncpt_irq);
-> > @@ -467,10 +485,14 @@ static int host1x_probe(struct platform_device *p=
-dev)
-> >                 goto deinit_syncpt;
-> >         }
-> >
-> > -       host1x_debug_init(host);
-> > +       pm_runtime_enable(&pdev->dev);
-> >
-> > -       if (host->info->has_hypervisor)
-> > -               host1x_setup_sid_table(host);
-> > +       /* the driver's code isn't ready yet for the dynamic RPM */
-> > +       err =3D pm_runtime_resume_and_get(&pdev->dev);
->=20
-> If the driver is being built with the CONFIG_PM Kconfig option being
-> unset, pm_runtime_resume_and_get() will return 0 to indicate success -
-> and without calling the ->runtime_resume() callback.
-> In other words, the clock will remain gated and the reset will not be
-> deasserted, likely causing the driver to be malfunctioning.
->=20
-> If the driver isn't ever being built with CONFIG_PM unset, feel free
-> to ignore my above comments.
->=20
-> Otherwise, if it needs to work both with and without CONFIG_PM being
-> set, you may use the following pattern in host1x_probe() to deploy
-> runtime PM support:
->=20
-> "Enable the needed resources to probe the device"
-> pm_runtime_get_noresume()
-> pm_runtime_set_active()
-> pm_runtime_enable()
->=20
-> "Before successfully completing probe"
-> pm_runtime_put()
 
-We made a conscious decision a few years ago to have ARCH_TEGRA select
-PM on both 32-bit and 64-bit ARM, specifically to avoid the need to do
-this dance (though there are still a few drivers left that do this, I
-think).
+Applied to
 
-So I think this should be unnecessary. Unless perhaps if the sysfs PM
-controls have any influence on this. As far as I know, as long as the
-PM kconfig option is enabled, the sysfs control only influence the
-runtime behaviour (i.e. setting the sysfs PM control to "on" is going
-to force runtime PM to be resumed) but there's no way to disable
-runtime PM altogether via sysfs that would make the above necessary.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Thierry
+Thanks!
 
---fGItigaj8JHSG5hJ
-Content-Type: application/pgp-signature; name="signature.asc"
+[1/6] dt-bindings: rockchip-sfc: Bindings for Rockchip serial flash controller
+      commit: 538d7c2ed73098850fe80be14eed2739d37e419b
+[2/6] spi: rockchip-sfc: add rockchip serial flash controller
+      commit: 0b89fc0a367edab09065af722894d186bd0ccb0d
 
------BEGIN PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmEbwZMACgkQ3SOs138+
-s6EqjxAAs5FWbje3iCJOP7sod6VEu/M7e7ZG4mEPa2/e+EajCY0rD+kJaknBVNdK
-htJY+3B3pez2I2TjXZtaFOzcXEVl0e94EIQb8bY1wZEFLg91V6DTPfnvbEPb9BN8
-kzesliKQKiVhD/gG5D/9K7TnEFThE2JTj02MDE7Q6opTEaxlKgAN8jrbkNCuAOUg
-wCrzFqRzmbVuuZrGkA/xApbfCh7lTLObvJ1enX9IB0s/WZZfej3PrylP5U379Nab
-OA1JisBmk5NHgi8djWyeN/X+urNAYDixcJIfwPqs3yqb3+piiG+X+oNX8Xz6byUt
-bZJ86CC/A4XGufnL7A0+ZKrd/UYNH3WE17R16LxFytD1chZQ82aWyVIJPGLW+42q
-k6lWheWwNsn2Gua2ZOlUfkC9fRD6Sj/fSnqRS0zgslnq/n80VGIz/35q2zCZ1tiG
-D4hRPhQukShFXdCy/HaNXbtdXfTGZH8owlNDiDArmoIclSj+828GRbMqDTJDVxUs
-RldB6jISMtRo/iBpCoj9VM1h01kedIHXimkm8zsOyVWYapi6ScKSbMqWaPS02SSe
-Fc5t4wnn/jSruWZ5HVHU+iOOmlU6Buli+4cQZQIsUOb4FD4V+BrEO3ArlYzxkzH5
-mAM+3LofUzwqGi67FOn92GGM/LJZcDAX6v5c8WjnpM1uh5VdR5g=
-=8GYQ
------END PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---fGItigaj8JHSG5hJ--
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
