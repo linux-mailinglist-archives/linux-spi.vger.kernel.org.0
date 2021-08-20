@@ -2,172 +2,195 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B130C3F2B42
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Aug 2021 13:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2076E3F2B52
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Aug 2021 13:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239573AbhHTLcl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 Aug 2021 07:32:41 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:39202 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237382AbhHTLck (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Aug 2021 07:32:40 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 17KBVjgw121818;
-        Fri, 20 Aug 2021 06:31:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1629459105;
-        bh=a7YO7oyWJKBUCpjHnpZI87hRZO+GNlybTn6+5XPpY5E=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=XG7FurTILwIMFJ5BcQ29RiBlhpZJ6C0rWtZDz5EHgDK1cHliCt8O3nCqccYGScJ9p
-         8t5sTiamcuGSbSvDLD3WaMS16rWgKzYm0uiuv0GiQP1kwxGamUMUprsER1C6mp7diU
-         1vSL0QtJW//rCn/1sCeDkV+z5KcmyZ92dnYiR64s=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 17KBVjxo105323
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 20 Aug 2021 06:31:45 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 20
- Aug 2021 06:31:45 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Fri, 20 Aug 2021 06:31:45 -0500
-Received: from [10.250.232.95] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 17KBVeI7049293;
-        Fri, 20 Aug 2021 06:31:41 -0500
-Subject: Re: [PATCH 10/13] mtd: spinand: Add octal_dtr_enable() for Winbond
- manufacturer_ops
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
+        id S240213AbhHTLgM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Aug 2021 07:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239271AbhHTLgL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Aug 2021 07:36:11 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADDEC061575;
+        Fri, 20 Aug 2021 04:35:33 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id r7so13893248wrs.0;
+        Fri, 20 Aug 2021 04:35:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=7qGosWaKh11oWOcCgshsG0Nfcb0R2B68Vc9n9Xrsm7o=;
+        b=pJjkJuRqNuBvbQzTgFslCt3bj10J1IWor4AsVtpaHryDZh2aS0KtjoeN2q3T2+IC25
+         afss3YxWjFlcGp6XVHPDhYk62bYEaRZ4E8J+/AwL8jpqTF9q4jeKk0xrbQASAZ96DQz/
+         S/8gO27exThFcPxQtb2GgaSudPkLKDYrD84z8GW7Mp1SkVvdmWft5mCcYbSQiRvusErQ
+         O4M8HCwNaG/WrT3xxYSVKrmyn8yGmsqvSW6+kUZwfH+Ouov+dsa1Fmh4TMxWwBUJB6lH
+         i+HWwBn/8gm3sqEU0a+93UZObWzbCavx0NzYXCTsKJXXY6jxZeQOfng13uaaOrgKioZZ
+         /iww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7qGosWaKh11oWOcCgshsG0Nfcb0R2B68Vc9n9Xrsm7o=;
+        b=OcoI4w7gSsaoqjULf/NwPDIKxk6mJ2hKC0AaX9M8/8OxQXANt5vdPnZ9u3OmzP/Pk+
+         /xwKL71KLePSxwHR3e2HjqxhT/i27PJWjSXYN5Cp0AUtsJqv3DAykD7TH0QN6XtX8sy0
+         olY/Iii3CeB7LXYkMqXi00YDJQzkexPTm1K4Efd8LO40omPjOyoGW4tkVUAgQ08lwin1
+         NXTNSHvf5Rxx5yGyQ5G2EY0yO0EcdB5jUlRiw2iYRH+up7TbcsMY9h04VWcA44iZL/63
+         10HwqOhiEa/KeU9JP0zbZSiBBdF3PhaSk5gaxny8JJcXLXYtrt9qYAZxtxRSTwSO7UF9
+         xedQ==
+X-Gm-Message-State: AOAM533utRjKd5OBY7ayq+d/XfiNbJj8mTKz+SkSDCWPOwyxIiOiOXiY
+        4xzRyowisjOzi6QnqiDxgJ4=
+X-Google-Smtp-Source: ABdhPJyoN3WSjSwctvMCy+aqbczA8zLxDdXIzPcCL2jhFI6NlzE0Pft0oWicQD5+trN05vwGyG8E3w==
+X-Received: by 2002:a5d:6301:: with SMTP id i1mr9302053wru.423.1629459331771;
+        Fri, 20 Aug 2021 04:35:31 -0700 (PDT)
+Received: from localhost ([217.111.27.204])
+        by smtp.gmail.com with ESMTPSA id h16sm5827669wre.52.2021.08.20.04.35.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Aug 2021 04:35:30 -0700 (PDT)
+Date:   Fri, 20 Aug 2021 13:35:29 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
         Mark Brown <broonie@kernel.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, Pratyush Yadav <p.yadav@ti.com>
-References: <20210713130538.646-1-a-nandan@ti.com>
- <20210713130538.646-11-a-nandan@ti.com> <20210806210609.0fd94b9e@xps13>
-From:   Apurva Nandan <a-nandan@ti.com>
-Message-ID: <0ac67f14-b25c-2e3b-fdd9-f5f101d9caad@ti.com>
-Date:   Fri, 20 Aug 2021 17:01:40 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Lee Jones <lee.jones@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v8 20/34] mmc: sdhci-tegra: Add runtime PM and OPP support
+Message-ID: <YR+TgfCHKOPS3Ng8@orome.fritz.box>
+References: <20210817012754.8710-1-digetx@gmail.com>
+ <20210817012754.8710-21-digetx@gmail.com>
+ <YR6O9Om+HzMMG8AR@orome.fritz.box>
+ <05b7ff28-4c01-fb56-deeb-595a5797394b@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210806210609.0fd94b9e@xps13>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="h9ktlEsLda++zsG1"
+Content-Disposition: inline
+In-Reply-To: <05b7ff28-4c01-fb56-deeb-595a5797394b@gmail.com>
+User-Agent: Mutt/2.1.1 (e2a89abc) (2021-07-12)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Miquèl,
 
-On 07/08/21 12:36 am, Miquel Raynal wrote:
-> Hi Apurva,
-> 
-> Apurva Nandan <a-nandan@ti.com> wrote on Tue, 13 Jul 2021 13:05:35
-> +0000:
-> 
->> Add implementation of octal_dtr_enable() manufacturer_ops for Winbond.
->> To switch to Ocatl DTR mode, setting programmable dummy cycles and
->> SPI IO mode using the volatile configuration register is required. To
->> function at max 120MHz SPI clock in Octal DTR mode, 12 programmable
->> dummy clock cycle setting is required. (Default number of dummy cycle
->> are 8 clocks)
->>
->> Set the programmable dummy cycle to 12 clocks, and SPI IO mode to
->> Octal DTR with Data Strobe in the VCR. Also, perform a READ ID
->> operation in Octal DTR SPI mode to ensure the switch was successful.
-> 
-> Commit title should contain "winbond:" (same for the previous patch and
-> possibly next ones as well).
-> 
+--h9ktlEsLda++zsG1
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Okay, got it!
+On Fri, Aug 20, 2021 at 01:37:13AM +0300, Dmitry Osipenko wrote:
+> 19.08.2021 20:03, Thierry Reding =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > On Tue, Aug 17, 2021 at 04:27:40AM +0300, Dmitry Osipenko wrote:
+> >> The SDHCI on Tegra belongs to the core power domain and we're going to
+> >> enable GENPD support for the core domain. Now SDHCI must be resumed us=
+ing
+> >> runtime PM API in order to initialize the SDHCI power state. The SDHCI
+> >> clock rate must be changed using OPP API that will reconfigure the pow=
+er
+> >> domain performance state in accordance to the rate. Add runtime PM and=
+ OPP
+> >> support to the SDHCI driver.
+> >>
+> >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> >> ---
+> >>  drivers/mmc/host/sdhci-tegra.c | 146 ++++++++++++++++++++++++---------
+> >>  1 file changed, 105 insertions(+), 41 deletions(-)
+> >>
+> >> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-t=
+egra.c
+> >> index 387ce9cdbd7c..a3583359c972 100644
+> >> --- a/drivers/mmc/host/sdhci-tegra.c
+> >> +++ b/drivers/mmc/host/sdhci-tegra.c
+> >> @@ -15,6 +15,8 @@
+> >>  #include <linux/of.h>
+> >>  #include <linux/of_device.h>
+> >>  #include <linux/pinctrl/consumer.h>
+> >> +#include <linux/pm_opp.h>
+> >> +#include <linux/pm_runtime.h>
+> >>  #include <linux/regulator/consumer.h>
+> >>  #include <linux/reset.h>
+> >>  #include <linux/mmc/card.h>
+> >> @@ -24,6 +26,8 @@
+> >>  #include <linux/gpio/consumer.h>
+> >>  #include <linux/ktime.h>
+> >> =20
+> >> +#include <soc/tegra/common.h>
+> >> +
+> >>  #include "sdhci-pltfm.h"
+> >>  #include "cqhci.h"
+> >> =20
+> >> @@ -123,6 +127,12 @@
+> >>  					 SDHCI_TRNS_BLK_CNT_EN | \
+> >>  					 SDHCI_TRNS_DMA)
+> >> =20
+> >> +enum {
+> >> +	TEGRA_CLK_BULK_SDHCI,
+> >> +	TEGRA_CLK_BULK_TMCLK,
+> >> +	TEGRA_CLK_BULK_NUM,
+> >> +};
+> >> +
+> >>  struct sdhci_tegra_soc_data {
+> >>  	const struct sdhci_pltfm_data *pdata;
+> >>  	u64 dma_mask;
+> >> @@ -171,6 +181,8 @@ struct sdhci_tegra {
+> >>  	bool enable_hwcq;
+> >>  	unsigned long curr_clk_rate;
+> >>  	u8 tuned_tap_delay;
+> >> +
+> >> +	struct clk_bulk_data clocks[TEGRA_CLK_BULK_NUM];
+> >=20
+> > This doesn't seem worth it to me. There's a lot of churn in this driver
+> > that's only needed to convert this to the clk_bulk API and it makes the
+> > code a lot more difficult to read, in my opinion.
+> >=20
+> > It looks like the only benefit that this gives us is that runtime
+> > suspend and resume become a few lines shorter.
+>=20
+> The driver probe code looks cleaner with that. You should be looking at
+> the final result and not at the patch to see it.
 
->> Datasheet: https://www.winbond.com/export/sites/winbond/datasheet/W35N01JW_Datasheet_Brief.pdf
->>
->> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
->> ---
->>   drivers/mtd/nand/spi/winbond.c | 42 ++++++++++++++++++++++++++++++++++
->>   1 file changed, 42 insertions(+)
->>
->> diff --git a/drivers/mtd/nand/spi/winbond.c b/drivers/mtd/nand/spi/winbond.c
->> index a7052a9ca171..58cda07c15a0 100644
->> --- a/drivers/mtd/nand/spi/winbond.c
->> +++ b/drivers/mtd/nand/spi/winbond.c
->> @@ -16,6 +16,14 @@
->>   
->>   #define WINBOND_CFG_BUF_READ		BIT(3)
->>   
->> +/* Octal DTR SPI mode (8D-8D-8D) with Data Strobe output*/
->> +#define WINBOND_IO_MODE_VCR_OCTAL_DTR	0xE7
->> +#define WINBOND_IO_MODE_VCR_ADDR	0x00
->> +
->> +/* Use 12 dummy clk cycles for using Octal DTR SPI at max 120MHZ */
->> +#define WINBOND_DUMMY_CLK_COUNT		12
->> +#define WINBOND_DUMMY_CLK_VCR_ADDR	0x01
->> +
->>   static SPINAND_OP_VARIANTS(read_cache_variants,
->>   		SPINAND_PAGE_READ_FROM_CACHE_QUADIO_OP(0, 2, NULL, 0),
->>   		SPINAND_PAGE_READ_FROM_CACHE_X4_OP(0, 1, NULL, 0),
->> @@ -142,8 +150,42 @@ static int winbond_write_vcr_op(struct spinand_device *spinand, u8 reg, u8 val)
->>   	return 0;
->>   }
->>   
->> +static int winbond_spinand_octal_dtr_enable(struct spinand_device *spinand)
->> +{
->> +	int ret;
->> +	struct spi_mem_op op;
->> +
->> +	ret = winbond_write_vcr_op(spinand, WINBOND_DUMMY_CLK_VCR_ADDR,
->> +				   WINBOND_DUMMY_CLK_COUNT);
->> +	if (ret)
->> +		return ret;
->> +
->> +	ret = winbond_write_vcr_op(spinand, WINBOND_IO_MODE_VCR_ADDR,
->> +				   WINBOND_IO_MODE_VCR_OCTAL_DTR);
->> +	if (ret)
->> +		return ret;
->> +
->> +	/* Read flash ID to make sure the switch was successful. */
->> +	op = (struct spi_mem_op)
->> +		SPI_MEM_OP(SPI_MEM_OP_CMD_DTR(2, 0x9f9f, 8),
->> +			   SPI_MEM_OP_NO_ADDR,
->> +			   SPI_MEM_OP_DUMMY_DTR(16, 8),
->> +			   SPI_MEM_OP_DATA_IN_DTR(SPINAND_MAX_ID_LEN,
->> +						  spinand->scratchbuf, 8));
->> +
->> +	ret = spi_mem_exec_op(spinand->spimem, &op);
->> +	if (ret)
->> +		return ret;
->> +
->> +	if (memcmp(spinand->scratchbuf, spinand->id.data, SPINAND_MAX_ID_LEN))
->> +		return -EINVAL;
->> +
->> +	return 0;
->> +}
->> +
->>   static const struct spinand_manufacturer_ops winbond_spinand_manuf_ops = {
->>   	.init = winbond_spinand_init,
->> +	.octal_dtr_enable = winbond_spinand_octal_dtr_enable,
->>   };
->>   
->>   const struct spinand_manufacturer winbond_spinand_manufacturer = {
-> 
-> 
-> 
-> 
-> Thanks,
-> Miquèl
-> 
-> ______________________________________________________
-> Linux MTD discussion mailing list
-> http://lists.infradead.org/mailman/listinfo/linux-mtd/
-> 
+I did look at the final result and didn't find it cleaner at all. =3D)
 
-Thanks,
-Apurva Nandan
+Thierry
+
+--h9ktlEsLda++zsG1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmEfk4EACgkQ3SOs138+
+s6F3jw//bCxA9hEPesNMHKw4DuCcMLkDCrPDepqzmAtYTxYXAZ84Ew/eL3dNAgWN
+c38Br+txYTqqwVdvXCcgbNBNlXVZNYe1sQuA5Z2QV+jV5THuPndcg9KR5YEVqXY7
+pkwghsThOI6NO0FRptkWaXygT5nY92FqrHtbNHRC6RBtHIeKFuGD8bfMbuGJ5TNA
+B4YzO+xQ466F7X8sqOBzi11Z/PtJSRWJLyX9kf7T93vLOVMmeKfFWnXsC8nWAaxV
+NOaOpqnQYhfDA/8F7a5ORuNdgs1/i/XPSysh7WwZNskzUdtD2sUKfd9CVjHFrI5F
+L5qpwssH4E0j7M0nrPK4glvergJ0TfYU65/QsNZMED9S/qqYk+1R/J3o1bzvu6Xi
+wcRoOKIC4AhCyb9Oy/A/wnf5crMWzb3lx+mLhFgjTaSRnJcnoEAeS5GM8m3KwxP4
+zViWmXApMhHLKBOatf3Qg64/IpNUTP6vPxRaLmyNbOzJGas8p37VAp+J0E3Riacr
+gDFpfs+lQMc+jJtYN/Ra2P/TXbFtM+zsf2HtmZUMWAy1LRAjkF6o7TUxmHN3YJ9H
+A15xryC+kyleZd9ejlwSDtieIKXVP23syOMcx/k5kUpGOTUth7MHJ1zFAB2fUUMv
+NwSM8zDAH6Og9fNK4dVJYj2PpNoFx7zTe2kwvkuyYsLYwehYp2c=
+=LzE6
+-----END PGP SIGNATURE-----
+
+--h9ktlEsLda++zsG1--
