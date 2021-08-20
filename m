@@ -2,115 +2,215 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD043F26D0
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Aug 2021 08:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29CA73F2817
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Aug 2021 10:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232727AbhHTGdH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 Aug 2021 02:33:07 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:49360 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232649AbhHTGdH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Aug 2021 02:33:07 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17K6QVIh021334;
-        Fri, 20 Aug 2021 08:32:10 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=selector1; bh=VlO4/Ljo2tdrHraB5iL9pG/9mCpzVfNYC9kEXsTA9pU=;
- b=M/eGuxXTBbwIB0IfxJiGgmpuJKljQ2ikzH93elP8+W0PRq+BDPar/tAGF4bGLQBY6o5R
- uXa1HllyhfLbrfGnZhsi6U1bTFIFSuRywqR+s9hqzAhYtKIAJ/uuY0yQaiyMmMiR3rUL
- NjOQC+hJGsnmtFRQj/ha2Z/ubWYek3ZBd854wOMhNdYNHjZsDzmEB4cxC5n1U3+A4Qr9
- qOX7s/3erlZnt8ydS1VUvWueARqtcNFp77YCt2WE6q9HRgLSwCtH2TpteoKc0DoGhKA8
- M/wkR2Y0XqIqCdkY81ji7yV4R/gBqeu0z+pjQHntB8+NLgFlERifHy7h6R0b9C5HGVSt Ag== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 3aj2j1sbj2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 20 Aug 2021 08:32:10 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4E2AA10002A;
-        Fri, 20 Aug 2021 08:32:08 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3BBCF20F6E2;
-        Fri, 20 Aug 2021 08:32:08 +0200 (CEST)
-Received: from gnbcxd0016.gnb.st.com (10.75.127.45) by SFHDAG2NODE3.st.com
- (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 20 Aug
- 2021 08:32:07 +0200
-Date:   Fri, 20 Aug 2021 08:32:02 +0200
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     CGEL <cgel.zte@gmail.com>
-CC:     Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        jing yangyang <jing.yangyang@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH linux-next] spi-stm32: fix Coccinelle warnings
-Message-ID: <20210820063202.GA21711@gnbcxd0016.gnb.st.com>
-Mail-Followup-To: CGEL <cgel.zte@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jing yangyang <jing.yangyang@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20210820031952.12746-1-jing.yangyang@zte.com.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20210820031952.12746-1-jing.yangyang@zte.com.cn>
-X-Disclaimer: ce message est personnel / this message is private
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-08-20_02:2021-08-20,2021-08-20 signatures=0
+        id S230019AbhHTIGx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Aug 2021 04:06:53 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:55436 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229780AbhHTIGx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 20 Aug 2021 04:06:53 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id D7E51202CB5;
+        Fri, 20 Aug 2021 10:06:14 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 6D8A1202CA9;
+        Fri, 20 Aug 2021 10:06:14 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 4757D183ACDC;
+        Fri, 20 Aug 2021 16:06:13 +0800 (+08)
+From:   haibo.chen@nxp.com
+To:     ashish.kumar@nxp.com, yogeshgaur.83@gmail.com, broonie@kernel.org
+Cc:     linux-spi@vger.kernel.org, linux-imx@nxp.com, haibo.chen@nxp.com
+Subject: [PATCH 1/4] spi: spi-nxp-fspi: enable runtime pm for fspi
+Date:   Fri, 20 Aug 2021 15:44:00 +0800
+Message-Id: <1629445443-10300-1-git-send-email-haibo.chen@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+From: Haibo Chen <haibo.chen@nxp.com>
 
-thanks for the patch. We've had this issue reported previously with a patch
-provided at
-(https://lore.kernel.org/linux-spi/20210713191004.GA14729@5eb5c2cbef84/).
-I've put my reviewed-by so it should make its way to the linux-next soon.
+Enable the runtime PM in fspi driver. Reading the power mode from the
+debug monitor, FSPI_0 was on and with the patch it is lp.
 
-Regards,
-Alain
+Signed-off-by: Han Xu <han.xu@nxp.com>
+Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+---
+ drivers/spi/spi-nxp-fspi.c | 81 +++++++++++++++++++++++++++++++-------
+ 1 file changed, 67 insertions(+), 14 deletions(-)
 
-On Thu, Aug 19, 2021 at 08:19:52PM -0700, CGEL wrote:
-> From: jing yangyang <jing.yangyang@zte.com.cn>
-> 
-> WARNING !A || A && B is equivalent to !A || B
-> 
-> This issue was detected with the help of Coccinelle.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: jing yangyang <jing.yangyang@zte.com.cn>
-> ---
->  drivers/spi/spi-stm32.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-> index 14ca7ea..cc4a731 100644
-> --- a/drivers/spi/spi-stm32.c
-> +++ b/drivers/spi/spi-stm32.c
-> @@ -912,8 +912,8 @@ static irqreturn_t stm32h7_spi_irq_thread(int irq, void *dev_id)
->  		if (!spi->cur_usedma && (spi->rx_buf && (spi->rx_len > 0)))
->  			stm32h7_spi_read_rxfifo(spi);
->  		if (!spi->cur_usedma ||
-> -		    (spi->cur_usedma && (spi->cur_comm == SPI_SIMPLEX_TX ||
-> -		     spi->cur_comm == SPI_3WIRE_TX)))
-> +			(spi->cur_comm == SPI_SIMPLEX_TX ||
-> +			spi->cur_comm == SPI_3WIRE_TX))
->  			end = true;
->  	}
->  
-> -- 
-> 1.8.3.1
-> 
-> 
+diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
+index a66fa97046ee..1eecf20f1dab 100644
+--- a/drivers/spi/spi-nxp-fspi.c
++++ b/drivers/spi/spi-nxp-fspi.c
+@@ -48,6 +48,7 @@
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
+ #include <linux/pm_qos.h>
+ #include <linux/regmap.h>
+ #include <linux/sizes.h>
+@@ -57,6 +58,8 @@
+ #include <linux/spi/spi.h>
+ #include <linux/spi/spi-mem.h>
+ 
++/* runtime pm timeout */
++#define FSPI_RPM_TIMEOUT 50	/* 50ms */
+ /*
+  * The driver only uses one single LUT entry, that is updated on
+  * each call of exec_op(). Index 0 is preset at boot with a basic
+@@ -373,6 +376,8 @@ struct nxp_fspi {
+ 	struct mutex lock;
+ 	struct pm_qos_request pm_qos_req;
+ 	int selected;
++#define FSPI_INITILIZED		(1 << 0)
++	int flags;
+ };
+ 
+ static inline int needs_ip_only(struct nxp_fspi *f)
+@@ -864,6 +869,12 @@ static int nxp_fspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 
+ 	mutex_lock(&f->lock);
+ 
++	err = pm_runtime_get_sync(f->dev);
++	if (err < 0) {
++		dev_err(f->dev, "Failed to enable clock %d\n", __LINE__);
++		goto err_mutex;
++	}
++
+ 	/* Wait for controller being ready. */
+ 	err = fspi_readl_poll_tout(f, f->iobase + FSPI_STS0,
+ 				   FSPI_STS0_ARB_IDLE, 1, POLL_TOUT, true);
+@@ -892,8 +903,14 @@ static int nxp_fspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 	/* Invalidate the data in the AHB buffer. */
+ 	nxp_fspi_invalid(f);
+ 
++	pm_runtime_mark_last_busy(f->dev);
++	pm_runtime_put_autosuspend(f->dev);
++
+ 	mutex_unlock(&f->lock);
++	return err;
+ 
++err_mutex:
++	mutex_unlock(&f->lock);
+ 	return err;
+ }
+ 
+@@ -1153,12 +1170,17 @@ static int nxp_fspi_probe(struct platform_device *pdev)
+ 			ret = PTR_ERR(f->clk);
+ 			goto err_put_ctrl;
+ 		}
++	}
+ 
+-		ret = nxp_fspi_clk_prep_enable(f);
+-		if (ret) {
+-			dev_err(dev, "can not enable the clock\n");
+-			goto err_put_ctrl;
+-		}
++	pm_runtime_enable(dev);
++	pm_runtime_set_autosuspend_delay(dev, FSPI_RPM_TIMEOUT);
++	pm_runtime_use_autosuspend(dev);
++
++	/* enable clock */
++	ret = pm_runtime_get_sync(f->dev);
++	if (ret < 0) {
++		dev_err(f->dev, "Failed to enable clock %d\n", __LINE__);
++		goto err_put_ctrl;
+ 	}
+ 
+ 	/* Clear potential interrupts */
+@@ -1192,13 +1214,19 @@ static int nxp_fspi_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err_destroy_mutex;
+ 
++	pm_runtime_mark_last_busy(f->dev);
++	pm_runtime_put_autosuspend(f->dev);
++
++	/* indicate the controller has been initialized */
++	f->flags |= FSPI_INITILIZED;
++
+ 	return 0;
+ 
+ err_destroy_mutex:
+ 	mutex_destroy(&f->lock);
+ 
+ err_disable_clk:
+-	nxp_fspi_clk_disable_unprep(f);
++	pm_runtime_disable(dev);
+ 
+ err_put_ctrl:
+ 	spi_controller_put(ctlr);
+@@ -1224,20 +1252,50 @@ static int nxp_fspi_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-static int nxp_fspi_suspend(struct device *dev)
++#ifdef CONFIG_PM
++static int nxp_fspi_initialized(struct nxp_fspi *f)
++{
++	return f->flags & FSPI_INITILIZED;
++}
++
++static int nxp_fspi_need_reinit(struct nxp_fspi *f)
++{
++	/*
++	 * we always use the controller in combination mode, so we check
++	 * this register bit to determine if the controller once lost power,
++	 * such as suspend/resume, and need to be re-init.
++	 */
++
++	return !(readl(f->iobase + FSPI_MCR0) & FSPI_MCR0_OCTCOMB_EN);
++}
++
++static int nxp_fspi_runtime_suspend(struct device *dev)
+ {
++	struct nxp_fspi *f = dev_get_drvdata(dev);
++
++	nxp_fspi_clk_disable_unprep(f);
++
+ 	return 0;
+ }
+ 
+-static int nxp_fspi_resume(struct device *dev)
++static int nxp_fspi_runtime_resume(struct device *dev)
+ {
+ 	struct nxp_fspi *f = dev_get_drvdata(dev);
+ 
+-	nxp_fspi_default_setup(f);
++	nxp_fspi_clk_prep_enable(f);
++
++	if (nxp_fspi_initialized(f) && nxp_fspi_need_reinit(f))
++		nxp_fspi_default_setup(f);
+ 
+ 	return 0;
+ }
+ 
++static const struct dev_pm_ops nxp_fspi_pm_ops = {
++	SET_RUNTIME_PM_OPS(nxp_fspi_runtime_suspend, nxp_fspi_runtime_resume, NULL)
++	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend, pm_runtime_force_resume)
++};
++#endif	/* CONFIG_PM */
++
+ static const struct of_device_id nxp_fspi_dt_ids[] = {
+ 	{ .compatible = "nxp,lx2160a-fspi", .data = (void *)&lx2160a_data, },
+ 	{ .compatible = "nxp,imx8mm-fspi", .data = (void *)&imx8mm_data, },
+@@ -1256,11 +1314,6 @@ static const struct acpi_device_id nxp_fspi_acpi_ids[] = {
+ MODULE_DEVICE_TABLE(acpi, nxp_fspi_acpi_ids);
+ #endif
+ 
+-static const struct dev_pm_ops nxp_fspi_pm_ops = {
+-	.suspend	= nxp_fspi_suspend,
+-	.resume		= nxp_fspi_resume,
+-};
+-
+ static struct platform_driver nxp_fspi_driver = {
+ 	.driver = {
+ 		.name	= "nxp-fspi",
+-- 
+2.17.1
+
