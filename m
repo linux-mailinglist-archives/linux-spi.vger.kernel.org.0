@@ -2,42 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 667F23F2A28
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Aug 2021 12:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1943B3F2A38
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Aug 2021 12:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237148AbhHTKgY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 Aug 2021 06:36:24 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:57274 "EHLO
+        id S239093AbhHTKmD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Aug 2021 06:42:03 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:57898 "EHLO
         fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239083AbhHTKgX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Aug 2021 06:36:23 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 17KAZX6w104323;
-        Fri, 20 Aug 2021 05:35:33 -0500
+        with ESMTP id S237925AbhHTKmD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Aug 2021 06:42:03 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 17KAfCEr105704;
+        Fri, 20 Aug 2021 05:41:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1629455733;
-        bh=kDWvlbjEYm+ZPP7kxDBAMIyz5QxNzRAE46pJTRwzxAs=;
+        s=ti-com-17Q1; t=1629456072;
+        bh=7MXaO4GKe/fPH6zc16itUHi0h/KHPxryWe1gFsakmI8=;
         h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=HMlE6qvQFDOCM27LSlRTWFn7N2sfgD69kACQ2vWG1jQcxgg1t2reyADYQ7lN0QBHm
-         QdWoQX1E8jNkH8kQXMhKed4Qe2cBM/EY6yQEZ5aEgNAkirRKPLZzf583vKOgDZKyyC
-         oELIBRjThei7qH/OfuNeJXh1Vg/OmEO0Zqm7tmGM=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 17KAZXHp007024
+        b=XfnMLdRCROtMcwxUefpXWNewRQIbwey1QekMuLbZH9zOoa3fcl7OgpB6+lzUK+l96
+         OiEUx+jgi2nu5tbr/NXTnycRc5bYASkeJrCdr0xDMFAyKVt+aHKz3d3b9lN0Jdhu6y
+         E+JJ/9mtoWvsvZtr1g4IaTVqghhJoskSFKC6W1gQ=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 17KAfCt8055052
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 20 Aug 2021 05:35:33 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 20 Aug 2021 05:41:12 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 20
- Aug 2021 05:35:32 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ Aug 2021 05:41:11 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Fri, 20 Aug 2021 05:35:32 -0500
+ Frontend Transport; Fri, 20 Aug 2021 05:41:11 -0500
 Received: from [10.250.232.95] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 17KAZSkE049156;
-        Fri, 20 Aug 2021 05:35:29 -0500
-Subject: Re: [PATCH 06/13] mtd: spinand: Add macros for Octal DTR page read
- and write operations
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 17KAf6Th096048;
+        Fri, 20 Aug 2021 05:41:07 -0500
+Subject: Re: [PATCH 07/13] mtd: spinand: Allow enabling Octal DTR mode in the
+ core
 To:     Miquel Raynal <miquel.raynal@bootlin.com>
 CC:     Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
@@ -47,14 +47,14 @@ CC:     Richard Weinberger <richard@nod.at>,
         <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <linux-spi@vger.kernel.org>, Pratyush Yadav <p.yadav@ti.com>
 References: <20210713130538.646-1-a-nandan@ti.com>
- <20210713130538.646-7-a-nandan@ti.com> <20210806205424.51511388@xps13>
+ <20210713130538.646-8-a-nandan@ti.com> <20210806205845.03dd97c9@xps13>
 From:   Apurva Nandan <a-nandan@ti.com>
-Message-ID: <88915cc5-a2b7-4971-f9a1-a98bd944d5e7@ti.com>
-Date:   Fri, 20 Aug 2021 16:05:27 +0530
+Message-ID: <c3e52b84-7ffc-8e48-d0c7-f17fa0b71f6b@ti.com>
+Date:   Fri, 20 Aug 2021 16:11:05 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210806205424.51511388@xps13>
+In-Reply-To: <20210806205845.03dd97c9@xps13>
 Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -65,60 +65,155 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi Miquèl,
 
-On 07/08/21 12:24 am, Miquel Raynal wrote:
+On 07/08/21 12:28 am, Miquel Raynal wrote:
 > Hi Apurva,
 > 
-> Apurva Nandan <a-nandan@ti.com> wrote on Tue, 13 Jul 2021 13:05:31
+> Apurva Nandan <a-nandan@ti.com> wrote on Tue, 13 Jul 2021 13:05:32
 > +0000:
 > 
->> Define new PAGE_READ_FROM_CACHE and PROG_LOAD op templates for Octal
->> DTR SPI mode. These templates would used in op_variants and
-> 
->                                  will be
-> 
-
-Yeah, ok!
-
->> op_templates for defining Octal DTR read from cache and write to
->> cache operations.
+>> Enable Octal DTR SPI mode, i.e. 8D-8D-8D mode, if the SPI NAND flash
+>> device supports it. Mixed OSPI (1S-1S-8S & 1S-8S-8S), mixed DTR modes
+>> (1S-1D-8D), etc. aren't supported yet.
 >>
->> Datasheet: https://www.winbond.com/export/sites/winbond/datasheet/W35N01JW_Datasheet_Brief.pdf
+>> The method to switch to Octal DTR SPI mode may vary across
+>> manufacturers. For example, for Winbond, it is enabled by writing
+>> values to the volatile configuration register. So, let the
+>> manufacturer's code have their own implementation for switching to
+>> Octal DTR SPI mode. Mixed OSPI (1S-1S-8S & 1S-8S-8S), mixed DTR modes
+>> (1S-1D-8D), etc. aren't supported yet.
+> 
+> You can drop the final sentence which is a repetition of the previous
+> paragraph.
+> 
+
+Yes right!
+
+>> Check for the SPI NAND device's support for Octal DTR mode using
+>> spinand flags, and if the op_templates allow 8D-8D-8D, call
+>                                           allows
+> 
+>> octal_dtr_enable() manufacturer op. If the SPI controller doesn't
+>> supports these modes, the selected op_templates would prevent switching
+> 
+>                                                    will
+> 
+>> to the Octal DTR mode. And finally update the spinand reg_proto
+>> if success.
+> 
+>    on
+> 
+
+Okay, will correct all!
+
 >>
 >> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
 >> ---
->>   include/linux/mtd/spinand.h | 12 ++++++++++++
->>   1 file changed, 12 insertions(+)
+>>   drivers/mtd/nand/spi/core.c | 46 +++++++++++++++++++++++++++++++++++++
+>>   include/linux/mtd/spinand.h |  3 +++
+>>   2 files changed, 49 insertions(+)
 >>
+>> diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
+>> index 1e619b6d777f..19d8affac058 100644
+>> --- a/drivers/mtd/nand/spi/core.c
+>> +++ b/drivers/mtd/nand/spi/core.c
+>> @@ -256,6 +256,48 @@ static int spinand_init_quad_enable(struct spinand_device *spinand)
+>>   			       enable ? CFG_QUAD_ENABLE : 0);
+>>   }
+>>   
+>> +static bool spinand_op_is_octal_dtr(const struct spi_mem_op *op)
+>> +{
+>> +	return  op->cmd.buswidth == 8 && op->cmd.dtr &&
+>> +		op->addr.buswidth == 8 && op->addr.dtr &&
+>> +		op->data.buswidth == 8 && op->data.dtr;
+>> +}
+>> +
+>> +static int spinand_init_octal_dtr_enable(struct spinand_device *spinand)
+>> +{
+>> +	struct device *dev = &spinand->spimem->spi->dev;
+>> +	int ret;
+>> +
+>> +	if (!(spinand->flags & SPINAND_HAS_OCTAL_DTR_BIT))
+>> +		return 0;
+>> +
+>> +	if (!(spinand_op_is_octal_dtr(spinand->op_templates.read_cache) &&
+>> +	      spinand_op_is_octal_dtr(spinand->op_templates.write_cache) &&
+>> +	      spinand_op_is_octal_dtr(spinand->op_templates.update_cache)))
+>> +		return 0;
+>> +
+>> +	if (!spinand->manufacturer->ops->octal_dtr_enable) {
+>> +		dev_err(dev,
+>> +			"Missing ->octal_dtr_enable(), unable to switch mode\n");
+> 
+> I don't think we want an error here. Perhaps a debug or info call, but
+> no more.
+> 
+
+Agree!
+
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	ret = spinand->manufacturer->ops->octal_dtr_enable(spinand);
+>> +	if (ret) {
+>> +		dev_err(dev,
+>> +			"Failed to enable Octal DTR SPI mode (err = %d)\n",
+>> +			ret);
+>> +		return ret;
+>> +	}
+>> +
+>> +	spinand->reg_proto = SPINAND_OCTAL_DTR;
+>> +
+>> +	dev_dbg(dev,
+>> +		"%s SPI NAND switched to Octal DTR SPI (8D-8D-8D) mode\n",
+>> +		spinand->manufacturer->name);
+>> +	return 0;
+>> +}
+>> +
+>>   static int spinand_ecc_enable(struct spinand_device *spinand,
+>>   			      bool enable)
+>>   {
+>> @@ -1189,6 +1231,10 @@ static int spinand_init_flash(struct spinand_device *spinand)
+>>   	if (ret)
+>>   		return ret;
+>>   
+>> +	ret = spinand_init_octal_dtr_enable(spinand);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>>   	ret = spinand_upd_cfg(spinand, CFG_OTP_ENABLE, 0);
+>>   	if (ret)
+>>   		return ret;
 >> diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
->> index ebb19b2cec84..35816b8cfe81 100644
+>> index 35816b8cfe81..daa2ac5c3110 100644
 >> --- a/include/linux/mtd/spinand.h
 >> +++ b/include/linux/mtd/spinand.h
->> @@ -122,6 +122,12 @@
->>   		   SPI_MEM_OP_DUMMY(ndummy, 4),				\
->>   		   SPI_MEM_OP_DATA_IN(len, buf, 4))
+>> @@ -271,6 +271,7 @@ struct spinand_devid {
+>>    * @init: initialize a SPI NAND device
+>>    * @adjust_op: modify the ops for any variation in their cmd, address, dummy or
+>>    *	       data phase by the manufacturer
+>> + * @octal_dtr_enable: switch the SPI NAND flash into Octal DTR SPI mode
+>>    * @cleanup: cleanup a SPI NAND device
+>>    *
+>>    * Each SPI NAND manufacturer driver should implement this interface so that
+>> @@ -280,6 +281,7 @@ struct spinand_manufacturer_ops {
+>>   	int (*init)(struct spinand_device *spinand);
+>>   	void (*adjust_op)(struct spi_mem_op *op,
+>>   			  const enum spinand_proto reg_proto);
+>> +	int (*octal_dtr_enable)(struct spinand_device *spinand);
+>>   	void (*cleanup)(struct spinand_device *spinand);
+>>   };
 >>   
->> +#define SPINAND_PAGE_READ_FROM_CACHE_OCTALIO_DTR_OP(addr, ndummy, buf, len) \
->> +	SPI_MEM_OP(SPI_MEM_OP_CMD_DTR(2, 0x9d9d, 8),			\
->> +		   SPI_MEM_OP_ADDR_DTR(2, addr, 8),			\
->> +		   SPI_MEM_OP_DUMMY_DTR(ndummy, 8),			\
->> +		   SPI_MEM_OP_DATA_IN_DTR(len, buf, 8))
->> +
->>   #define SPINAND_PROG_EXEC_OP(addr)					\
->>   	SPI_MEM_OP(SPI_MEM_OP_CMD(0x10, 1),				\
->>   		   SPI_MEM_OP_ADDR(3, addr, 1),				\
->> @@ -140,6 +146,12 @@
->>   		   SPI_MEM_OP_NO_DUMMY,					\
->>   		   SPI_MEM_OP_DATA_OUT(len, buf, 4))
+>> @@ -348,6 +350,7 @@ struct spinand_ecc_info {
 >>   
->> +#define SPINAND_PROG_LOAD_OCTALIO_DTR(reset, addr, buf, len)		\
->> +	SPI_MEM_OP(SPI_MEM_OP_CMD_DTR(2, reset ? 0x0202 : 0x8484, 8),	\
->> +		   SPI_MEM_OP_ADDR_DTR(2, addr, 8),			\
->> +		   SPI_MEM_OP_NO_DUMMY,					\
->> +		   SPI_MEM_OP_DATA_OUT_DTR(len, buf, 8))
->> +
->>   #define SPINAND_PROTO_BUSWIDTH_MASK	GENMASK(6, 0)
->>   #define SPINAND_PROTO_DTR_BIT		BIT(7)
+>>   #define SPINAND_HAS_QE_BIT		BIT(0)
+>>   #define SPINAND_HAS_CR_FEAT_BIT		BIT(1)
+>> +#define SPINAND_HAS_OCTAL_DTR_BIT	BIT(2)
 >>   
+>>   /**
+>>    * struct spinand_ondie_ecc_conf - private SPI-NAND on-die ECC engine structure
+> 
+> 
+> 
 > 
 > Thanks,
 > Miquèl
