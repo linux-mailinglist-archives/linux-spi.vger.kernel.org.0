@@ -2,42 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 660703F2A1E
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Aug 2021 12:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 667F23F2A28
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Aug 2021 12:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239086AbhHTK2g (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 Aug 2021 06:28:36 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:55238 "EHLO
+        id S237148AbhHTKgY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Aug 2021 06:36:24 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:57274 "EHLO
         fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239035AbhHTK2f (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Aug 2021 06:28:35 -0400
+        with ESMTP id S239083AbhHTKgX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Aug 2021 06:36:23 -0400
 Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 17KARfjF101380;
-        Fri, 20 Aug 2021 05:27:41 -0500
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 17KAZX6w104323;
+        Fri, 20 Aug 2021 05:35:33 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1629455261;
-        bh=LFbDbUX2EaSwpbZwr8w88r0d5hrA4CmOyZDN3ofcqD4=;
+        s=ti-com-17Q1; t=1629455733;
+        bh=kDWvlbjEYm+ZPP7kxDBAMIyz5QxNzRAE46pJTRwzxAs=;
         h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=sXTdtAjGEX8oHbDmZvRWhyJnom6E5959SlOtdb3NmYFbMF5iZupF5jpq4EHqzgTUw
-         D4+VYaKaVooqWgFEbx1V54vtVAscY3bHJtzIwBB4U5wCYL+9krp7URFm3X+fr59KaW
-         2kxA1qfCSytB1ln/L5lSFL/0ao/FNfiNYKsYRTug=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 17KARf8V126926
+        b=HMlE6qvQFDOCM27LSlRTWFn7N2sfgD69kACQ2vWG1jQcxgg1t2reyADYQ7lN0QBHm
+         QdWoQX1E8jNkH8kQXMhKed4Qe2cBM/EY6yQEZ5aEgNAkirRKPLZzf583vKOgDZKyyC
+         oELIBRjThei7qH/OfuNeJXh1Vg/OmEO0Zqm7tmGM=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 17KAZXHp007024
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 20 Aug 2021 05:27:41 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 20 Aug 2021 05:35:33 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 20
- Aug 2021 05:27:41 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ Aug 2021 05:35:32 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Fri, 20 Aug 2021 05:27:41 -0500
+ Frontend Transport; Fri, 20 Aug 2021 05:35:32 -0500
 Received: from [10.250.232.95] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 17KARa1C072931;
-        Fri, 20 Aug 2021 05:27:37 -0500
-Subject: Re: [PATCH 04/13] mtd: spinand: Fix odd byte addr and data phase in
- read/write reg op and write VCR op for Octal DTR mode
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 17KAZSkE049156;
+        Fri, 20 Aug 2021 05:35:29 -0500
+Subject: Re: [PATCH 06/13] mtd: spinand: Add macros for Octal DTR page read
+ and write operations
 To:     Miquel Raynal <miquel.raynal@bootlin.com>
 CC:     Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
@@ -47,14 +47,14 @@ CC:     Richard Weinberger <richard@nod.at>,
         <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <linux-spi@vger.kernel.org>, Pratyush Yadav <p.yadav@ti.com>
 References: <20210713130538.646-1-a-nandan@ti.com>
- <20210713130538.646-5-a-nandan@ti.com> <20210806204334.5fedea42@xps13>
+ <20210713130538.646-7-a-nandan@ti.com> <20210806205424.51511388@xps13>
 From:   Apurva Nandan <a-nandan@ti.com>
-Message-ID: <a0decde4-c68e-9494-9ce5-97d60916f9ad@ti.com>
-Date:   Fri, 20 Aug 2021 15:57:36 +0530
+Message-ID: <88915cc5-a2b7-4971-f9a1-a98bd944d5e7@ti.com>
+Date:   Fri, 20 Aug 2021 16:05:27 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210806204334.5fedea42@xps13>
+In-Reply-To: <20210806205424.51511388@xps13>
 Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -65,140 +65,60 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi Miquèl,
 
-On 07/08/21 12:13 am, Miquel Raynal wrote:
+On 07/08/21 12:24 am, Miquel Raynal wrote:
 > Hi Apurva,
 > 
-> Apurva Nandan <a-nandan@ti.com> wrote on Tue, 13 Jul 2021 13:05:29
+> Apurva Nandan <a-nandan@ti.com> wrote on Tue, 13 Jul 2021 13:05:31
 > +0000:
 > 
->> In Octal DTR SPI mode, 2 bytes of data gets transmitted over one clock
->> cycle, and half-cycle instruction phases aren't supported yet. So,
->> every DTR spi_mem_op needs to have even nbytes in all phases for
->> non-erratic behaviour from the SPI controller.
+>> Define new PAGE_READ_FROM_CACHE and PROG_LOAD op templates for Octal
+>> DTR SPI mode. These templates would used in op_variants and
+> 
+>                                  will be
+> 
+
+Yeah, ok!
+
+>> op_templates for defining Octal DTR read from cache and write to
+>> cache operations.
 >>
->> The odd length cmd and dummy phases get handled by spimem_setup_op()
->> but the odd length address and data phases need to be handled according
->> to the use case. For example in Octal DTR mode, read register operation
->> has one byte long address and data phase. So it needs to extend it
->> by adding a suitable extra byte in addr and reading 2 bytes of data,
->> discarding the second byte.
->>
->> Handle address and data phases for Octal DTR mode in read/write
->> register and write volatile configuration register operations
->> by adding a suitable extra byte in the address and data phase.
->>
->> Create spimem_setup_reg_op() helper function to ease setting up
->> read/write register operations in other functions, e.g. wait().
+>> Datasheet: https://www.winbond.com/export/sites/winbond/datasheet/W35N01JW_Datasheet_Brief.pdf
 >>
 >> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
 >> ---
->>   drivers/mtd/nand/spi/core.c | 26 +++++++++++++++++++++-----
->>   1 file changed, 21 insertions(+), 5 deletions(-)
+>>   include/linux/mtd/spinand.h | 12 ++++++++++++
+>>   1 file changed, 12 insertions(+)
 >>
->> diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
->> index 2e59faecc8f5..a5334ad34f96 100644
->> --- a/drivers/mtd/nand/spi/core.c
->> +++ b/drivers/mtd/nand/spi/core.c
->> @@ -65,12 +65,27 @@ static void spinand_setup_op(const struct spinand_device *spinand,
->>   	}
->>   }
+>> diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
+>> index ebb19b2cec84..35816b8cfe81 100644
+>> --- a/include/linux/mtd/spinand.h
+>> +++ b/include/linux/mtd/spinand.h
+>> @@ -122,6 +122,12 @@
+>>   		   SPI_MEM_OP_DUMMY(ndummy, 4),				\
+>>   		   SPI_MEM_OP_DATA_IN(len, buf, 4))
 >>   
->> +static void spinand_setup_reg_op(const struct spinand_device *spinand,
->> +				 struct spi_mem_op *op)
-> 
-> Same remark about the naming. In fact I believe we could have this
-> logic in _setup_op() (or whatever its name) and add a specific
-> parameter for it?
-> 
-
-Okay, I will add a parameter in argument and include this logic in 
-_setup_op().
-
->> +{
->> +	if (spinand->reg_proto == SPINAND_OCTAL_DTR) {
->> +		/*
->> +		 * Assigning same first and second byte will result in constant
->> +		 * bits on ths SPI bus between positive and negative clock edges
-> 
->                             the
-> 
-
-Ok.
-
->> +		 */
->> +		op->addr.val = (op->addr.val << 8) | op->addr.val;
-> 
-> I am not sure to understand what you do here?
-> 
-
-In Octal DTR mode, 2 bytes of data are sent in a clock cycle. So, we 
-need to append one extra byte when sending a single byte. This extra 
-byte would be sent on the negative edge.
-
-It will make sense to keep both the bytes same, as when it will be set 
-on the SPI pins, the bits on the SPI IO ports will remain constant 
-between the positive and negative edges (as 1 complete byte is set in 
-one clock edge in MSB order). There are no restrictions by the 
-manufacturers on this, the relevant address byte needs to be on positive 
-edge and second byte on negative edge is don't care.
-
->> +		op->addr.nbytes = 2;
->> +		op->data.nbytes = 2;
->> +	}
-> 
-> Space
-> 
-
-Ok.
-
->> +	spinand_setup_op(spinand, op);
->> +}
+>> +#define SPINAND_PAGE_READ_FROM_CACHE_OCTALIO_DTR_OP(addr, ndummy, buf, len) \
+>> +	SPI_MEM_OP(SPI_MEM_OP_CMD_DTR(2, 0x9d9d, 8),			\
+>> +		   SPI_MEM_OP_ADDR_DTR(2, addr, 8),			\
+>> +		   SPI_MEM_OP_DUMMY_DTR(ndummy, 8),			\
+>> +		   SPI_MEM_OP_DATA_IN_DTR(len, buf, 8))
 >> +
->>   static int spinand_read_reg_op(struct spinand_device *spinand, u8 reg, u8 *val)
->>   {
->> -	struct spi_mem_op op = SPINAND_GET_FEATURE_OP(reg,
->> -						      spinand->scratchbuf);
->> +	struct spi_mem_op op = SPINAND_GET_FEATURE_OP(reg, spinand->scratchbuf);
-> 
-> You can do this, but in a different commit.
-> 
-
-Got it.
-
->>   	int ret;
+>>   #define SPINAND_PROG_EXEC_OP(addr)					\
+>>   	SPI_MEM_OP(SPI_MEM_OP_CMD(0x10, 1),				\
+>>   		   SPI_MEM_OP_ADDR(3, addr, 1),				\
+>> @@ -140,6 +146,12 @@
+>>   		   SPI_MEM_OP_NO_DUMMY,					\
+>>   		   SPI_MEM_OP_DATA_OUT(len, buf, 4))
 >>   
->> +	spinand_setup_reg_op(spinand, &op);
->>   	ret = spi_mem_exec_op(spinand->spimem, &op);
->>   	if (ret)
->>   		return ret;
->> @@ -81,10 +96,10 @@ static int spinand_read_reg_op(struct spinand_device *spinand, u8 reg, u8 *val)
+>> +#define SPINAND_PROG_LOAD_OCTALIO_DTR(reset, addr, buf, len)		\
+>> +	SPI_MEM_OP(SPI_MEM_OP_CMD_DTR(2, reset ? 0x0202 : 0x8484, 8),	\
+>> +		   SPI_MEM_OP_ADDR_DTR(2, addr, 8),			\
+>> +		   SPI_MEM_OP_NO_DUMMY,					\
+>> +		   SPI_MEM_OP_DATA_OUT_DTR(len, buf, 8))
+>> +
+>>   #define SPINAND_PROTO_BUSWIDTH_MASK	GENMASK(6, 0)
+>>   #define SPINAND_PROTO_DTR_BIT		BIT(7)
 >>   
->>   static int spinand_write_reg_op(struct spinand_device *spinand, u8 reg, u8 val)
->>   {
->> -	struct spi_mem_op op = SPINAND_SET_FEATURE_OP(reg,
->> -						      spinand->scratchbuf);
->> +	struct spi_mem_op op = SPINAND_SET_FEATURE_OP(reg, spinand->scratchbuf);
-> 
-> Same here.
-> 
-
-Yes!
-
->>   
->> -	*spinand->scratchbuf = val;
->> +	spinand_setup_reg_op(spinand, &op);
->> +	memset(spinand->scratchbuf, val, op.data.nbytes);
->>   	return spi_mem_exec_op(spinand->spimem, &op);
->>   }
->>   
->> @@ -547,6 +562,7 @@ static int spinand_wait(struct spinand_device *spinand,
->>   	u8 status;
->>   	int ret;
->>   
->> +	spinand_setup_reg_op(spinand, &op);
->>   	ret = spi_mem_poll_status(spinand->spimem, &op, STATUS_BUSY, 0,
->>   				  initial_delay_us,
->>   				  poll_delay_us,
 > 
 > Thanks,
 > Miquèl
