@@ -2,42 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A4103F2D4E
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Aug 2021 15:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A423F2D78
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Aug 2021 15:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240759AbhHTNm7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 Aug 2021 09:42:59 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:38070 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240760AbhHTNm6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Aug 2021 09:42:58 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 17KDg3iJ037556;
-        Fri, 20 Aug 2021 08:42:03 -0500
+        id S240794AbhHTNzf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Aug 2021 09:55:35 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:55826 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240679AbhHTNze (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Aug 2021 09:55:34 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 17KDseA2093976;
+        Fri, 20 Aug 2021 08:54:40 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1629466923;
-        bh=l6lfOIIzUGkJ1AiwUMjQziIUZErEf/aO/EeX73Fg1/U=;
+        s=ti-com-17Q1; t=1629467680;
+        bh=ZTEkCbfVveh63g8MrqRX7KoRq3oOMeKH00MGady+1Fw=;
         h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=a517rtmjB9n/uhgSEd89trKRErN9NV/CIVoV4CiZRqgi57Rmj5t94VX5CWjvdCLgf
-         YtUoz99UlTgyF76h+dl4bZnaN67hqf8yymqmPCQmW8Lq7KH97ssSoVETiynqdwm3sO
-         0Aae5A4FAd2McMtWPCchuNMVSA+phL1+UDZWHL6E=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 17KDg2KI047132
+        b=UJituv4+gXNZfvuhyeVDflXh9Es++8u2u/iAOP2v4gU8hcz7tRVUtjCFP284vErRZ
+         CqEj1NUuymJZeMpc3+00jVdoJ8ZumNVvPHNQ5QV80OX+8lfz3HqjbyfNpNXuqrDHml
+         gkPK8oYKNgmDfdRIUxj6/LcDcPAM+agDWtNmtkZs=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 17KDse6A049821
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 20 Aug 2021 08:42:03 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 20 Aug 2021 08:54:40 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 20
- Aug 2021 08:42:03 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ Aug 2021 08:54:40 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Fri, 20 Aug 2021 08:42:03 -0500
+ Frontend Transport; Fri, 20 Aug 2021 08:54:39 -0500
 Received: from [10.250.232.95] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 17KDfwM4100508;
-        Fri, 20 Aug 2021 08:41:59 -0500
-Subject: Re: [PATCH 11/13] mtd: spinand: Add support for Power-on-Reset (PoR)
- instruction
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 17KDsZ50130304;
+        Fri, 20 Aug 2021 08:54:36 -0500
+Subject: Re: [PATCH 08/13] mtd: spinand: Reject 8D-8D-8D op_templates if
+ octal_dtr_enale() is missing in manufacturer_op
 To:     Miquel Raynal <miquel.raynal@bootlin.com>
 CC:     Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
@@ -47,15 +47,15 @@ CC:     Richard Weinberger <richard@nod.at>,
         <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <linux-spi@vger.kernel.org>, Pratyush Yadav <p.yadav@ti.com>
 References: <20210713130538.646-1-a-nandan@ti.com>
- <20210713130538.646-12-a-nandan@ti.com> <20210806210840.65c06b67@xps13>
- <403a2b26-fd95-31ab-8992-a6e6862249e6@ti.com> <20210820141822.03d658b8@xps13>
+ <20210713130538.646-9-a-nandan@ti.com> <20210806210146.3358a85b@xps13>
+ <4d428465-59d7-6771-8344-c5090add2a06@ti.com> <20210820141413.6c519255@xps13>
 From:   Apurva Nandan <a-nandan@ti.com>
-Message-ID: <c4a1eae9-7c0b-62c8-f10a-000e65c94f1b@ti.com>
-Date:   Fri, 20 Aug 2021 19:11:58 +0530
+Message-ID: <11d173f2-2011-d029-e905-a10fdd0f2b85@ti.com>
+Date:   Fri, 20 Aug 2021 19:24:34 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210820141822.03d658b8@xps13>
+In-Reply-To: <20210820141413.6c519255@xps13>
 Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -66,98 +66,93 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi Miquèl,
 
-On 20/08/21 5:48 pm, Miquel Raynal wrote:
+On 20/08/21 5:44 pm, Miquel Raynal wrote:
 > Hi Apurva,
 > 
-> Apurva Nandan <a-nandan@ti.com> wrote on Fri, 20 Aug 2021 17:09:07
+> Apurva Nandan <a-nandan@ti.com> wrote on Fri, 20 Aug 2021 16:56:50
 > +0530:
 > 
->> Hi Miquèl,
->>
->> On 07/08/21 12:38 am, Miquel Raynal wrote:
+>> On 07/08/21 12:31 am, Miquel Raynal wrote:
 >>> Hi Apurva,
 >>>
->>> Apurva Nandan <a-nandan@ti.com> wrote on Tue, 13 Jul 2021 13:05:36
+>>> Apurva Nandan <a-nandan@ti.com> wrote on Tue, 13 Jul 2021 13:05:33
 >>> +0000:
 >>>    
->>>> Manufacturers like Gigadevice and Winbond are adding Power-on-Reset
->>>> functionality in their SPI NAND flash chips. PoR instruction consists
->>>> of a 66h command followed by 99h command, and is different from the FFh
->>>> reset. The reset command FFh just clears the status only registers,
->>>> while the PoR command erases all the configurations written to the
->>>> flash and is equivalent to a power-down -> power-up cycle.
+>>>> The SPI NAND core doesn't know how to switch the flash to Octal DTR
+>>>> mode (i.e. which operations to perform). If the manufacturer hasn't
+>>>> implemented the octal_dtr_enable() manufacturer_op, the SPI NAND core
+>>>> wouldn't be able to switch to 8D-8D-8D mode and will also not be able
+>>>> to run in 1S-1S-1S mode due to already selected 8D-8D-8D read/write
+>>>> cache op_templates.
 >>>>
->>>> Add support for the Power-on-Reset command for any flash that provides
->>>> this feature.
->>>>
->>>> Datasheet: https://www.winbond.com/export/sites/winbond/datasheet/W35N01JW_Datasheet_Brief.pdf
+>>>> So, avoid choosing a Octal DTR SPI op_template for read_cache,
+>>>> write_cache and update_cache operations, if the manufacturer_op
+>>>> octal_dtr_enable() is missing.
+>>>
+>>> After looking at your previous commit I don't see why this patch would
+>>> be needed. octal_dtr_enable() only updates the mode when it succeeds so
+>>> I don't think this patch is really needed.
+>>>    
+>>
+>> I added it to prevent any errors happening dues to a missing implementation of octal_dtr_enable() from manufacturer driver side.
+>> So, if the manufacturers skips the octal_dtr_enable() implementation, we want the spinand core to run in 1s-1s-1s mode.
+> 
+> I still don't get the point: you fail the probe if the octal bit is
+> enabled but the manufacturer did not implement octal_dtr_enable(), so
+> how could we have issues? Maybe I am overlooking something though, but
+> this seemed completely redundant to my eyes so far.
+> 
+
+Okay, I feel this may be redundant. This is for the case when the 
+manufacturer has added Octal DTR read/write/update cache variants but 
+hasn't implemented the octal_dtr_enable() method.
+
+Without this patch, the probe would fail, if the manufacturer did not 
+implement octal_dtr_enable(). But after using this patch, spinand can 
+still use the chip in 1s-1s-1s mode in that case and just skip the Octal 
+DTR op variants during the selection. And also the probe would succeed.
+
+>>
+>> Read/write/update op variant selection happens in select_op_variant(), much before octal_dtr_enable(). So just check if there is a definition of octal_dtr_enable in manufacturer ops and then only use 8D op variants.
+>>
+>> Removing this wouldn't break anything in the current implementation.
+>> Do you think we should drop this?
+>>
 >>>>
 >>>> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
 >>>> ---
->>>
->>> [...]
->>> 				\
->>>> @@ -218,6 +230,8 @@ struct spinand_device;
->>>>     * reading/programming/erasing when the RESET occurs. Since we always
->>>>     * issue a RESET when the device is IDLE, 5us is selected for both initial
->>>>     * and poll delay.
->>>> + * Power on Reset can take max upto 500 us to complete, so sleep for 1000 us
->>>
->>> s/max upto/up to/
->>>    
->>
->> Okay!
->>
->>>> + * to 1200 us safely.
->>>
->>> I don't really get why, if the maximum is 500, then let's wait for
->>> 500us.
->>>    
->>
->> Generally we keep some margin from the maximum time, no?
-> 
-> Well, yes and no.
-> 
-> If you know that an operation will last Xms and have nothing else to
-> do, then you can take some margin if you are in a probe (called once)
-> but definitely not if you are in a fast path.
-> 
-
-I think as PoR reset would be called at every mtd_suspend() call, so we 
-can reduce the delay. And we would be expecting some time gap before the 
-next mtd_resume() call.
-
-> Otherwise the best is to have some kind of signaling but I'm not sure
-> you'll have one for the reset op...
-> 
-
-According to public datasheet, it doesn't set the busy bit during reset.
-
-So do you suggest in the favor of removing the delay margin?
-
->>
->>>>     */
->>>>    #define SPINAND_READ_INITIAL_DELAY_US	6
->>>>    #define SPINAND_READ_POLL_DELAY_US	5
->>>> @@ -227,6 +241,8 @@ struct spinand_device;
->>>>    #define SPINAND_WRITE_POLL_DELAY_US	15
->>>>    #define SPINAND_ERASE_INITIAL_DELAY_US	250
->>>>    #define SPINAND_ERASE_POLL_DELAY_US	50
->>>> +#define SPINAND_POR_MIN_DELAY_US	1000
->>>> +#define SPINAND_POR_MAX_DELAY_US	1200
->>>>    >>   #define SPINAND_WAITRDY_TIMEOUT_MS	400
->>>>    >> @@ -351,6 +367,7 @@ struct spinand_ecc_info {
->>>>    #define SPINAND_HAS_QE_BIT		BIT(0)
->>>>    #define SPINAND_HAS_CR_FEAT_BIT		BIT(1)
->>>>    #define SPINAND_HAS_OCTAL_DTR_BIT	BIT(2)
->>>> +#define SPINAND_HAS_POR_CMD_BIT		BIT(3)
->>>>    >>   /**
->>>>     * struct spinand_ondie_ecc_conf - private SPI-NAND on-die ECC engine structure
->>>
->>>
->>>
->>>
->>> Thanks,
+>>>>    drivers/mtd/nand/spi/core.c | 7 ++++++-
+>>>>    1 file changed, 6 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
+>>>> index 19d8affac058..8711e887b795 100644
+>>>> --- a/drivers/mtd/nand/spi/core.c
+>>>> +++ b/drivers/mtd/nand/spi/core.c
+>>>> @@ -1028,6 +1028,8 @@ static int spinand_manufacturer_match(struct spinand_device *spinand,
+>>>>    		if (id[0] != manufacturer->id)
+>>>>    			continue;
+>>>>    >> +		spinand->manufacturer = manufacturer;
+>>>> +
+>>>>    		ret = spinand_match_and_init(spinand,
+>>>>    					     manufacturer->chips,
+>>>>    					     manufacturer->nchips,
+>>>> @@ -1035,7 +1037,6 @@ static int spinand_manufacturer_match(struct spinand_device *spinand,
+>>>>    		if (ret < 0)
+>>>>    			continue;
+>>>>    >> -		spinand->manufacturer = manufacturer;
+>>>>    		return 0;
+>>>>    	}
+>>>>    	return -ENOTSUPP;
+>>>> @@ -1097,6 +1098,10 @@ spinand_select_op_variant(struct spinand_device *spinand,
+>>>>    		unsigned int nbytes;
+>>>>    		int ret;
+>>>>    >> +		if (spinand_op_is_octal_dtr(&op) &&
+>>>> +		    !spinand->manufacturer->ops->octal_dtr_enable)
+>>>> +			continue;
+>>>> +
+>>>>    		nbytes = nanddev_per_page_oobsize(nand) +
+>>>>    			 nanddev_page_size(nand);
+>>>>    > > Thanks,
 >>> Miquèl
 >>>
 >>> ______________________________________________________
@@ -167,6 +162,9 @@ So do you suggest in the favor of removing the delay margin?
 >>
 >> Thanks,
 >> Apurva Nandan
+> 
+> 
+> 
 > 
 > Thanks,
 > Miquèl
