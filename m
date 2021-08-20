@@ -2,42 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 767BD3F3033
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Aug 2021 17:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BFAE3F305A
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Aug 2021 17:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240952AbhHTPy2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 20 Aug 2021 11:54:28 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:59444 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238296AbhHTPy1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Aug 2021 11:54:27 -0400
+        id S241289AbhHTP5M (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 20 Aug 2021 11:57:12 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:45614 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241379AbhHTP5M (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Aug 2021 11:57:12 -0400
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 17KFrV6X013962;
-        Fri, 20 Aug 2021 10:53:31 -0500
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 17KFuJPN094234;
+        Fri, 20 Aug 2021 10:56:19 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1629474811;
-        bh=J/vo8B832cJn3Xv3wVaMKao5wbidMkr/qtLCpo6Q50Y=;
+        s=ti-com-17Q1; t=1629474979;
+        bh=lAyyVBpfElD6cu6xrM/uJCISbQOywOKtDruM38jJLB8=;
         h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=QVYif6d1Mo5bFWQg+KYT7rSwP1/aIJ2Jvatme+F76Na7N6mD12Eht0N7jOh/2HEyl
-         3/7iASVRwUng3O3G92L5zdPT3xz/yjvGiyBQ/c598VNu1mgxtSI2JcbH81r6UpX5Xw
-         woAaV35e5r7vnHlUIBYL3hpndsHfGUU4qHFeDyx4=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 17KFrVi7076792
+        b=RUpQdG961E5zH+t7IjdUw5YnEQbuXn+z/MtkEjymx2F7PIZZPpktSTRQ4mzglUxWe
+         DjnvjxyYcQURkfcYAlGSyN+z1BlhoN8SDHVlLCYItZ8KWE7L0AlUdYrx4DClfwXs4d
+         CXb5KPCw4yHwFiAVpM/1hhKGqby0WMot+UM498Os=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 17KFuJwr080577
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 20 Aug 2021 10:53:31 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 20 Aug 2021 10:56:19 -0500
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 20
- Aug 2021 10:53:30 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ Aug 2021 10:56:18 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Fri, 20 Aug 2021 10:53:30 -0500
+ Frontend Transport; Fri, 20 Aug 2021 10:56:18 -0500
 Received: from [10.250.232.95] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 17KFrQdP081560;
-        Fri, 20 Aug 2021 10:53:27 -0500
-Subject: Re: [PATCH 08/13] mtd: spinand: Reject 8D-8D-8D op_templates if
- octal_dtr_enale() is missing in manufacturer_op
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 17KFuElV051653;
+        Fri, 20 Aug 2021 10:56:15 -0500
+Subject: Re: [PATCH 11/13] mtd: spinand: Add support for Power-on-Reset (PoR)
+ instruction
 To:     Miquel Raynal <miquel.raynal@bootlin.com>
 CC:     Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
@@ -47,16 +47,16 @@ CC:     Richard Weinberger <richard@nod.at>,
         <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <linux-spi@vger.kernel.org>, Pratyush Yadav <p.yadav@ti.com>
 References: <20210713130538.646-1-a-nandan@ti.com>
- <20210713130538.646-9-a-nandan@ti.com> <20210806210146.3358a85b@xps13>
- <4d428465-59d7-6771-8344-c5090add2a06@ti.com> <20210820141413.6c519255@xps13>
- <11d173f2-2011-d029-e905-a10fdd0f2b85@ti.com> <20210820163802.529482dd@xps13>
+ <20210713130538.646-12-a-nandan@ti.com> <20210806210840.65c06b67@xps13>
+ <403a2b26-fd95-31ab-8992-a6e6862249e6@ti.com> <20210820141822.03d658b8@xps13>
+ <c4a1eae9-7c0b-62c8-f10a-000e65c94f1b@ti.com> <20210820161744.148b3003@xps13>
 From:   Apurva Nandan <a-nandan@ti.com>
-Message-ID: <68eb2817-1df8-464b-aef8-15e9c9adfead@ti.com>
-Date:   Fri, 20 Aug 2021 21:23:25 +0530
+Message-ID: <a8fb82f1-e671-aed1-a2d1-39b974d53fee@ti.com>
+Date:   Fri, 20 Aug 2021 21:26:13 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210820163802.529482dd@xps13>
+In-Reply-To: <20210820161744.148b3003@xps13>
 Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -67,118 +67,108 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi Miquèl,
 
-On 20/08/21 8:08 pm, Miquel Raynal wrote:
+On 20/08/21 7:47 pm, Miquel Raynal wrote:
 > Hi Apurva,
 > 
-> Apurva Nandan <a-nandan@ti.com> wrote on Fri, 20 Aug 2021 19:24:34
+> Apurva Nandan <a-nandan@ti.com> wrote on Fri, 20 Aug 2021 19:11:58
 > +0530:
 > 
 >> Hi Miquèl,
 >>
->> On 20/08/21 5:44 pm, Miquel Raynal wrote:
+>> On 20/08/21 5:48 pm, Miquel Raynal wrote:
 >>> Hi Apurva,
 >>>
->>> Apurva Nandan <a-nandan@ti.com> wrote on Fri, 20 Aug 2021 16:56:50
+>>> Apurva Nandan <a-nandan@ti.com> wrote on Fri, 20 Aug 2021 17:09:07
 >>> +0530:
 >>>    
->>>> On 07/08/21 12:31 am, Miquel Raynal wrote:
+>>>> Hi Miquèl,
+>>>>
+>>>> On 07/08/21 12:38 am, Miquel Raynal wrote:
 >>>>> Hi Apurva,
 >>>>>
->>>>> Apurva Nandan <a-nandan@ti.com> wrote on Tue, 13 Jul 2021 13:05:33
+>>>>> Apurva Nandan <a-nandan@ti.com> wrote on Tue, 13 Jul 2021 13:05:36
 >>>>> +0000:
->>>>>     >>>> The SPI NAND core doesn't know how to switch the flash to Octal DTR
->>>>>> mode (i.e. which operations to perform). If the manufacturer hasn't
->>>>>> implemented the octal_dtr_enable() manufacturer_op, the SPI NAND core
->>>>>> wouldn't be able to switch to 8D-8D-8D mode and will also not be able
->>>>>> to run in 1S-1S-1S mode due to already selected 8D-8D-8D read/write
->>>>>> cache op_templates.
+>>>>>     >>>> Manufacturers like Gigadevice and Winbond are adding Power-on-Reset
+>>>>>> functionality in their SPI NAND flash chips. PoR instruction consists
+>>>>>> of a 66h command followed by 99h command, and is different from the FFh
+>>>>>> reset. The reset command FFh just clears the status only registers,
+>>>>>> while the PoR command erases all the configurations written to the
+>>>>>> flash and is equivalent to a power-down -> power-up cycle.
 >>>>>>
->>>>>> So, avoid choosing a Octal DTR SPI op_template for read_cache,
->>>>>> write_cache and update_cache operations, if the manufacturer_op
->>>>>> octal_dtr_enable() is missing.
->>>>>
->>>>> After looking at your previous commit I don't see why this patch would
->>>>> be needed. octal_dtr_enable() only updates the mode when it succeeds so
->>>>> I don't think this patch is really needed.
->>>>>     >>
->>>> I added it to prevent any errors happening dues to a missing implementation of octal_dtr_enable() from manufacturer driver side.
->>>> So, if the manufacturers skips the octal_dtr_enable() implementation, we want the spinand core to run in 1s-1s-1s mode.
->>>
->>> I still don't get the point: you fail the probe if the octal bit is
->>> enabled but the manufacturer did not implement octal_dtr_enable(), so
->>> how could we have issues? Maybe I am overlooking something though, but
->>> this seemed completely redundant to my eyes so far.
->>>    
->>
->> Okay, I feel this may be redundant. This is for the case when the manufacturer has added Octal DTR read/write/update cache variants but hasn't implemented the octal_dtr_enable() method.
->>
->> Without this patch, the probe would fail, if the manufacturer did not implement octal_dtr_enable(). But after using this patch, spinand can still use the chip in 1s-1s-1s mode in that case and just skip the Octal DTR op variants during the selection. And also the probe would succeed.
-> 
-> Unless I am overlooking something with this series applied
-> (with or without this patch) the possibilities are:
-> - no octal bit -> continue as before
-> - octal bit and vendor callback -> uses octal mode
-> - octal bit and no vendor callback -> will return an error from
-> spinand_init_octal_dtr_enable() which will fail the probe (patch 7)
-> 
-> Anyway we have a choice:
-> - Either we consider the tables describing chips as pure descriptions
->    and we can support these chips in mode 1-1-1 (will require changes in
->    your series as this is not what you support as far as I understand
->    the code)
-> - Or we consider these tables as "what is currently supported" and in
->    this case we just fail if one adds the octal bit without any callback
->    implementation.
-> 
-> I think the latter is better for now. We can update this choice later
-> if needed anyway.
-> 
-
-Yes, I fully agree with the latter. I will drop this patch in the v2. 
-Thanks!
-
->>
->>>>
->>>> Read/write/update op variant selection happens in select_op_variant(), much before octal_dtr_enable(). So just check if there is a definition of octal_dtr_enable in manufacturer ops and then only use 8D op variants.
->>>>
->>>> Removing this wouldn't break anything in the current implementation.
->>>> Do you think we should drop this?
->>>>   
+>>>>>> Add support for the Power-on-Reset command for any flash that provides
+>>>>>> this feature.
+>>>>>>
+>>>>>> Datasheet: https://www.winbond.com/export/sites/winbond/datasheet/W35N01JW_Datasheet_Brief.pdf
 >>>>>>
 >>>>>> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
 >>>>>> ---
->>>>>>     drivers/mtd/nand/spi/core.c | 7 ++++++-
->>>>>>     1 file changed, 6 insertions(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
->>>>>> index 19d8affac058..8711e887b795 100644
->>>>>> --- a/drivers/mtd/nand/spi/core.c
->>>>>> +++ b/drivers/mtd/nand/spi/core.c
->>>>>> @@ -1028,6 +1028,8 @@ static int spinand_manufacturer_match(struct spinand_device *spinand,
->>>>>>     		if (id[0] != manufacturer->id)
->>>>>>     			continue;
->>>>>>     >> +		spinand->manufacturer = manufacturer;
->>>>>> +
->>>>>>     		ret = spinand_match_and_init(spinand,
->>>>>>     					     manufacturer->chips,
->>>>>>     					     manufacturer->nchips,
->>>>>> @@ -1035,7 +1037,6 @@ static int spinand_manufacturer_match(struct spinand_device *spinand,
->>>>>>     		if (ret < 0)
->>>>>>     			continue;
->>>>>>     >> -		spinand->manufacturer = manufacturer;
->>>>>>     		return 0;
->>>>>>     	}
->>>>>>     	return -ENOTSUPP;
->>>>>> @@ -1097,6 +1098,10 @@ spinand_select_op_variant(struct spinand_device *spinand,
->>>>>>     		unsigned int nbytes;
->>>>>>     		int ret;
->>>>>>     >> +		if (spinand_op_is_octal_dtr(&op) &&
->>>>>> +		    !spinand->manufacturer->ops->octal_dtr_enable)
->>>>>> +			continue;
->>>>>> +
->>>>>>     		nbytes = nanddev_per_page_oobsize(nand) +
->>>>>>     			 nanddev_page_size(nand);
->>>>>>     > > Thanks,
+>>>>>
+>>>>> [...]
+>>>>> 				\
+>>>>>> @@ -218,6 +230,8 @@ struct spinand_device;
+>>>>>>      * reading/programming/erasing when the RESET occurs. Since we always
+>>>>>>      * issue a RESET when the device is IDLE, 5us is selected for both initial
+>>>>>>      * and poll delay.
+>>>>>> + * Power on Reset can take max upto 500 us to complete, so sleep for 1000 us
+>>>>>
+>>>>> s/max upto/up to/
+>>>>>     >>
+>>>> Okay!
+>>>>   
+>>>>>> + * to 1200 us safely.
+>>>>>
+>>>>> I don't really get why, if the maximum is 500, then let's wait for
+>>>>> 500us.
+>>>>>     >>
+>>>> Generally we keep some margin from the maximum time, no?
+>>>
+>>> Well, yes and no.
+>>>
+>>> If you know that an operation will last Xms and have nothing else to
+>>> do, then you can take some margin if you are in a probe (called once)
+>>> but definitely not if you are in a fast path.
+>>>    
+>>
+>> I think as PoR reset would be called at every mtd_suspend() call, so we can reduce the delay. And we would be expecting some time gap before the next mtd_resume() call.
+>>
+>>> Otherwise the best is to have some kind of signaling but I'm not sure
+>>> you'll have one for the reset op...
+>>>    
+>>
+>> According to public datasheet, it doesn't set the busy bit during reset.
+>>
+>> So do you suggest in the favor of removing the delay margin?
+> 
+> Well, it's microseconds, maybe you can reduce it a little bit but that
+> will be ok.
+> 
+
+Yes, I got it. Will improve this in v2. Thanks!
+
+>>
+>>>>   
+>>>>>>      */
+>>>>>>     #define SPINAND_READ_INITIAL_DELAY_US	6
+>>>>>>     #define SPINAND_READ_POLL_DELAY_US	5
+>>>>>> @@ -227,6 +241,8 @@ struct spinand_device;
+>>>>>>     #define SPINAND_WRITE_POLL_DELAY_US	15
+>>>>>>     #define SPINAND_ERASE_INITIAL_DELAY_US	250
+>>>>>>     #define SPINAND_ERASE_POLL_DELAY_US	50
+>>>>>> +#define SPINAND_POR_MIN_DELAY_US	1000
+>>>>>> +#define SPINAND_POR_MAX_DELAY_US	1200
+>>>>>>     >>   #define SPINAND_WAITRDY_TIMEOUT_MS	400
+>>>>>>     >> @@ -351,6 +367,7 @@ struct spinand_ecc_info {
+>>>>>>     #define SPINAND_HAS_QE_BIT		BIT(0)
+>>>>>>     #define SPINAND_HAS_CR_FEAT_BIT		BIT(1)
+>>>>>>     #define SPINAND_HAS_OCTAL_DTR_BIT	BIT(2)
+>>>>>> +#define SPINAND_HAS_POR_CMD_BIT		BIT(3)
+>>>>>>     >>   /**
+>>>>>>      * struct spinand_ondie_ecc_conf - private SPI-NAND on-die ECC engine structure
+>>>>>
+>>>>>
+>>>>>
+>>>>>
+>>>>> Thanks,
 >>>>> Miquèl
 >>>>>
 >>>>> ______________________________________________________
@@ -187,9 +177,6 @@ Thanks!
 >>>>>     >>
 >>>> Thanks,
 >>>> Apurva Nandan
->>>
->>>
->>>
 >>>
 >>> Thanks,
 >>> Miquèl
