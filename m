@@ -2,19 +2,19 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E29E43F2BB7
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Aug 2021 14:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B8C3F2BBB
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Aug 2021 14:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238215AbhHTMHh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Fri, 20 Aug 2021 08:07:37 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:48089 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237764AbhHTMHh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Aug 2021 08:07:37 -0400
+        id S229873AbhHTMJW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Fri, 20 Aug 2021 08:09:22 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:61121 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232694AbhHTMJV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 20 Aug 2021 08:09:21 -0400
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 9DFEF1BF207;
-        Fri, 20 Aug 2021 12:06:57 +0000 (UTC)
-Date:   Fri, 20 Aug 2021 14:06:56 +0200
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 3587A240007;
+        Fri, 20 Aug 2021 12:08:40 +0000 (UTC)
+Date:   Fri, 20 Aug 2021 14:08:40 +0200
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Apurva Nandan <a-nandan@ti.com>
 Cc:     Richard Weinberger <richard@nod.at>,
@@ -24,14 +24,14 @@ Cc:     Richard Weinberger <richard@nod.at>,
         Boris Brezillon <boris.brezillon@collabora.com>,
         <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <linux-spi@vger.kernel.org>, Pratyush Yadav <p.yadav@ti.com>
-Subject: Re: [PATCH 04/13] mtd: spinand: Fix odd byte addr and data phase in
- read/write reg op and write VCR op for Octal DTR mode
-Message-ID: <20210820140656.72819d90@xps13>
-In-Reply-To: <a0decde4-c68e-9494-9ce5-97d60916f9ad@ti.com>
+Subject: Re: [PATCH 03/13] mtd: spinand: Setup spi_mem_op for the SPI IO
+ protocol using reg_proto
+Message-ID: <20210820140840.4bbcac7e@xps13>
+In-Reply-To: <3de32033-2a6e-bc46-a65a-4027ce78c6d6@ti.com>
 References: <20210713130538.646-1-a-nandan@ti.com>
-        <20210713130538.646-5-a-nandan@ti.com>
-        <20210806204334.5fedea42@xps13>
-        <a0decde4-c68e-9494-9ce5-97d60916f9ad@ti.com>
+        <20210713130538.646-4-a-nandan@ti.com>
+        <20210806203013.30a41fd5@xps13>
+        <3de32033-2a6e-bc46-a65a-4027ce78c6d6@ti.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
@@ -43,84 +43,63 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi Apurva,
 
-Apurva Nandan <a-nandan@ti.com> wrote on Fri, 20 Aug 2021 15:57:36
+Boris, you might have a good idea for the naming discussed below?
+
+Apurva Nandan <a-nandan@ti.com> wrote on Fri, 20 Aug 2021 15:22:54
 +0530:
 
 > Hi Miquèl,
 > 
-> On 07/08/21 12:13 am, Miquel Raynal wrote:
+> On 07/08/21 12:00 am, Miquel Raynal wrote:
 > > Hi Apurva,
 > > 
-> > Apurva Nandan <a-nandan@ti.com> wrote on Tue, 13 Jul 2021 13:05:29
+> > Apurva Nandan <a-nandan@ti.com> wrote on Tue, 13 Jul 2021 13:05:28
 > > +0000:
 > >   
-> >> In Octal DTR SPI mode, 2 bytes of data gets transmitted over one clock
-> >> cycle, and half-cycle instruction phases aren't supported yet. So,
-> >> every DTR spi_mem_op needs to have even nbytes in all phases for
-> >> non-erratic behaviour from the SPI controller.
+> >> Currently, the op macros in spinand.h don't give the option to setup
+> >> any non-array access instructions for Dual/Quad/Octal DTR SPI bus.
+> >> Having a function that setups the op based on reg_proto would be
+> >> better than trying to write all the setup logic in op macros.
 > >>
-> >> The odd length cmd and dummy phases get handled by spimem_setup_op()
-> >> but the odd length address and data phases need to be handled according
-> >> to the use case. For example in Octal DTR mode, read register operation
-> >> has one byte long address and data phase. So it needs to extend it
-> >> by adding a suitable extra byte in addr and reading 2 bytes of data,
-> >> discarding the second byte.
+> >> Create a spimem_setup_op() that would setup cmd, addr, dummy and data
+> >> phase of the spi_mem op, for the given spinand->reg_proto. And hence,
+> >> call the spimem_setup_op() before executing any spi_mem op.
 > >>
-> >> Handle address and data phases for Octal DTR mode in read/write
-> >> register and write volatile configuration register operations
-> >> by adding a suitable extra byte in the address and data phase.
-> >>
-> >> Create spimem_setup_reg_op() helper function to ease setting up
-> >> read/write register operations in other functions, e.g. wait().
-> >>
-> >> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
-> >> ---
-> >>   drivers/mtd/nand/spi/core.c | 26 +++++++++++++++++++++-----
-> >>   1 file changed, 21 insertions(+), 5 deletions(-)
-> >>
-> >> diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
-> >> index 2e59faecc8f5..a5334ad34f96 100644
-> >> --- a/drivers/mtd/nand/spi/core.c
-> >> +++ b/drivers/mtd/nand/spi/core.c
-> >> @@ -65,12 +65,27 @@ static void spinand_setup_op(const struct spinand_device *spinand,
-> >>   	}
-> >>   }  
-> >>   >> +static void spinand_setup_reg_op(const struct spinand_device *spinand,  
-> >> +				 struct spi_mem_op *op)  
+> >> Note: In this commit, spimem_setup_op() isn't called in the
+> >> read_reg_op(), write_reg_op() and wait() functions, as they need
+> >> modifications in address value and data nbytes when in Octal DTR mode.
+> >> This will be fixed in a later commit.  
 > > 
-> > Same remark about the naming. In fact I believe we could have this
-> > logic in _setup_op() (or whatever its name) and add a specific
-> > parameter for it?
+> > Thanks for this series!
+> > 
+> > So far I am fine with your changes, but I don't like the setup_op()
+> > naming much. I don't yet have a better idea, could you propose
+> > something more meaningful?
 > >   
 > 
-> Okay, I will add a parameter in argument and include this logic in _setup_op().
+> I made this similar to the spi_nor_spimem_setup_op(), which essentially does the same task as this in the spi-nor core.
 > 
-> >> +{
-> >> +	if (spinand->reg_proto == SPINAND_OCTAL_DTR) {
-> >> +		/*
-> >> +		 * Assigning same first and second byte will result in constant
-> >> +		 * bits on ths SPI bus between positive and negative clock edges  
+> Other names that I can think of are:
+> 
+> - config_op(), adjust_op(), amend_op(), patch_op()
+> 
+> or
+> 
+> - handle_op_variations(), apply_op_variations()
+> 
+> What do you suggest?
+> 
+> >> Signed-off-by: Apurva Nandan <a-nandan@ti.com>  
 > > 
-> >                             the
-> >   
-> 
-> Ok.
-> 
-> >> +		 */
-> >> +		op->addr.val = (op->addr.val << 8) | op->addr.val;  
+> > Thanks,
+> > Miquèl
 > > 
-> > I am not sure to understand what you do here?
+> > ______________________________________________________
+> > Linux MTD discussion mailing list
+> > http://lists.infradead.org/mailman/listinfo/linux-mtd/
 > >   
-> 
-> In Octal DTR mode, 2 bytes of data are sent in a clock cycle. So, we need to append one extra byte when sending a single byte. This extra byte would be sent on the negative edge.
-> 
-> It will make sense to keep both the bytes same, as when it will be set on the SPI pins, the bits on the SPI IO ports will remain constant between the positive and negative edges (as 1 complete byte is set in one clock edge in MSB order). There are no restrictions by the manufacturers on this, the relevant address byte needs to be on positive edge and second byte on negative edge is don't care.
-
-I was bothered by the shift but actually my head was mixing with the
-raw NAND core where these addresses are in an array but here it is a
-u64 which is then fine.
-
-(I will continue answering probably next week)
+> Thanks,
+> Apurva Nandan
 
 Thanks,
 Miquèl
