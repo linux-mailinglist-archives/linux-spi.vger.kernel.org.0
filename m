@@ -2,161 +2,212 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C51F43F42DC
-	for <lists+linux-spi@lfdr.de>; Mon, 23 Aug 2021 03:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 229DD3F42E5
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Aug 2021 03:17:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234497AbhHWBOo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 22 Aug 2021 21:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
+        id S234383AbhHWBSB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 22 Aug 2021 21:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234383AbhHWBOo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 22 Aug 2021 21:14:44 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D129C061757
-        for <linux-spi@vger.kernel.org>; Sun, 22 Aug 2021 18:14:02 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id lc21so1030826ejc.7
-        for <linux-spi@vger.kernel.org>; Sun, 22 Aug 2021 18:14:02 -0700 (PDT)
+        with ESMTP id S231841AbhHWBR7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 22 Aug 2021 21:17:59 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C052C061575
+        for <linux-spi@vger.kernel.org>; Sun, 22 Aug 2021 18:17:17 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a25so6768156ejv.6
+        for <linux-spi@vger.kernel.org>; Sun, 22 Aug 2021 18:17:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pensando.io; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=L2x6wvetmC+m3UtkL6g+zeogyV7VcFydZqaTYT0Kj0E=;
-        b=f6WZ0aMYqLMnLSFNcuxgKdLhyI7/W0P27ao7SR9Kc+qqodcoakQ85WKGOafWNzUXMd
-         h2WG+KWDZ0UHdOmJAhErULZrM5xIKaRGgqGDeEuAF+40+yVN7wbf84SQzPf+zgjoV/k+
-         bkTvLJD2KnYD7sGZmfRxYe+iiq93N0cL8DFnhLLjWpmfslVf0Mhae59Dwnanex0R2wiv
-         EbkGZ9pgt5zl8JjmkCLuJEVGLU1eb9VsjwXg1vwTIxZkZsX6ZBolUVi+bT3jUYAupleK
-         ur5PBioCl8pOrWnNJ8cRo3cHYOcxgj6ytr8C2kVuxdkAR0gxsQyV9X7H3KnBYVcsRvbN
-         wpNg==
+        bh=z58f0xxvO1Pfo9/llvNA4Dw8WM6p4HqmKCC8GfOFT/M=;
+        b=m57Ig7lGhtDyazhBZdX4GJ4aBOQYyQruJ4RB8qUQ5CnSoFOxCsJy5mPDclspcjCyfN
+         8OUXaefFyYn6gPrs19RmW4lpdGuAlvCS6LclgnKZbrfAh9fp7QY6TzBJ2j45VGjJnKy+
+         kMo0HSjXf+HkqAFzG0SRozVLJK2b0+opaG8d9fR1+tE+XadcunKRD//rdOxCHBahL9Dn
+         kH8KHoGJ7PdO2/VSCNyvvFQ6nGBo+ptzsPU9kO5sVR8/p8sKjlKtEsVSdV20L4Z7wBTI
+         Rhm2yqsS4yV/XfFNbWPXBhKudy1azZui+cjfCocFjXhALRCuwlsSodv7S15G8r5VSrSL
+         jQOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=L2x6wvetmC+m3UtkL6g+zeogyV7VcFydZqaTYT0Kj0E=;
-        b=kszBYeVNvrvNIQecpgQ/VQLstf75MRZ0Upfn1C3hWHSrNAsinZfUslpKq42wJQe654
-         a1MZAgVIiKL2b5ajYubPANL1CvBbrkHkiI0tEjGE+Y0Umt1RiNr0JPB5l1+T4UvOQJ2M
-         QuCJeH9h5LhOvVowKxDXEAv2Q2LF0QIbHniNEnJSZsP29T6vBkuCfSp/8UAxc/hAuxji
-         qDxcJnipbVEi9xzw6UPggYb4cwFT3kwuqT6FzcfdvVFTsfSUWoIQsa4zoLG7Eaclzj3R
-         lXwDzGBjGjxN/ppPegG4knXYxRg9stpWSmxZrTQliPuYW6es63glAX8bc8OPXaH0We7X
-         AgkA==
-X-Gm-Message-State: AOAM533J21UJ/bY6ZEvbl9nA9N0ajPE+KxzZiazA7TxWxQ8Z1DtBRFSq
-        rK7CwQdtWh3f0F73oNa+YBX+8wc6e9d8aBZGhl6RNQ==
-X-Google-Smtp-Source: ABdhPJx/ilGFoEBONN+wOqzr/Rs2Jbpamch8GsxeU1GPLtfMrCOMPkXfFgX7Vkr74BvouHL25Sh1oxDmLMtRialHZx4=
-X-Received: by 2002:a17:906:38c8:: with SMTP id r8mr33459917ejd.172.1629681240780;
- Sun, 22 Aug 2021 18:14:00 -0700 (PDT)
+        bh=z58f0xxvO1Pfo9/llvNA4Dw8WM6p4HqmKCC8GfOFT/M=;
+        b=XVdgioIQEzOCzxqhGASHQuomcLNFIApWINmLaUgh4ebidCJIFy2sGiN88lRPxdB/AF
+         WiO1wYrCXvY3JM1VbvASPUWmnettaWroIqNGRCwtXhn4ByZ9Uf90XmY4XdIdtqPRfA9g
+         M8b2PWAQkjKr0O3nCnYO7CsxJnQVGHreWPhTzqngyI2faQEJefMN67dx5crcg/QFC7mi
+         1CNmxkgHhdBMWb/L2+5lvv36N3hJDGshgupekpqhmAgbxOKgwBQU6q7eJXyFWxYbVqXS
+         vTceoEzUsgdIMHlwzPZ53OYCLtRuG6ldsMEyVlnbv2tenEQT+Cj2J22VMEGs/wtO/X0B
+         Dt/Q==
+X-Gm-Message-State: AOAM531vmzn20G6+6CwN6mNlcSRQkMpYM+hqDHSdO485AZ3fUwkr6NQD
+        KIQP/WkpCO9xX3UIzlqmYX3BWuUAcrve4aXhvm/vnA==
+X-Google-Smtp-Source: ABdhPJwGXQDHCIGSv1vSbsDcO+GKBOiAyoIJAys43KI2ddwJjURCNVz7GDU5oAD5XHCyg8K863gI3BJDeu1ARrmXiOA=
+X-Received: by 2002:a17:906:2305:: with SMTP id l5mr33432324eja.72.1629681435742;
+ Sun, 22 Aug 2021 18:17:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210304034141.7062-1-brad@pensando.io> <20210304034141.7062-2-brad@pensando.io>
- <CAHp75VcG9KajNpDbewDq7QzotB6t7MfwiGk15FaobX+cmMVSzg@mail.gmail.com>
- <CAK9rFnwrA=W2Vk5yFwG4N_WS=eBXXnhtexA+tqgAYb6xOAO4oQ@mail.gmail.com> <CAHp75VdfrJ3JV_gL3xCLHOiw6Tj-5Ep7z5JKWUFKFbUt8gobcw@mail.gmail.com>
-In-Reply-To: <CAHp75VdfrJ3JV_gL3xCLHOiw6Tj-5Ep7z5JKWUFKFbUt8gobcw@mail.gmail.com>
+References: <20210304034141.7062-1-brad@pensando.io> <20210304034141.7062-4-brad@pensando.io>
+ <20210304064433.vqyqg3byedvc4quz@mobilestation>
+In-Reply-To: <20210304064433.vqyqg3byedvc4quz@mobilestation>
 From:   Brad Larson <brad@pensando.io>
-Date:   Sun, 22 Aug 2021 18:13:50 -0700
-Message-ID: <CAK9rFnx--z_pr_yR6CqGsH04ddwUtx4rxc7MxNNmy7ZSF86+Mg@mail.gmail.com>
-Subject: Re: [PATCH 1/8] gpio: Add Elba SoC gpio driver for spi cs control
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+Date:   Sun, 22 Aug 2021 18:17:05 -0700
+Message-ID: <CAK9rFnzwtxhg9DBW7=s9FaOwWNCstfRW5T_MjQiM51GxiM6ZyA@mail.gmail.com>
+Subject: Re: [PATCH 3/8] spi: dw: Add support for Pensando Elba SoC SPI
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Olof Johansson <olof@lixom.net>,
         "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         linux-spi <linux-spi@vger.kernel.org>,
         linux-mmc <linux-mmc@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Andy,
+Hi Sergey,
 
-On Mon, Mar 29, 2021 at 3:40 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Mon, Mar 29, 2021 at 4:19 AM Brad Larson <brad@pensando.io> wrote:
-> > On Sun, Mar 7, 2021 at 11:21 AM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
-> > > On Thu, Mar 4, 2021 at 4:40 PM Brad Larson <brad@pensando.io> wrote:
->
-> ...
->
-> > > > +config GPIO_ELBA_SPICS
-> > > > +       bool "Pensando Elba SPI chip-select"
-> > >
-> > > Can't it be a module? Why?
-> >
-> > All Elba SoC based platforms require this driver to be built-in to boot and
-> > removing the module would result in a variety of exceptions/errors.
->
-> Needs to be at least in the commit message.
->
->
->
-> > > > +       depends on ARCH_PENSANDO_ELBA_SOC
-> > > > +       help
-> > > > +         Say yes here to support the Pensndo Elba SoC SPI chip-select driver
-> > >
-> > > Please give more explanation what it is and why users might need it,
-> > > and also tell users how the module will be named (if there is no
-> > > strong argument why it can't be a  module).
-> > >
-> > Fixed the typo.
->
-> Yeah, according to the above, you better elaborate what this module is
-> and why people would need it.
-> Also can be a good hint to add
-> default ARCH_MY_COOL_PLATFORM
+Thanks again for the reviews.  I've been able to work on this recently
+and test the changes using 5.10.28 on a production server.  I'm going
+back to the beginning to reply to each comment and work towards
+closure of open issues before preparing patchset v3 which will need to
+be re-done against the latest linux-next.
 
-Regarding the above module question and Kconfig definition, since I
-first looked at this and reviewed the comments I realized I should be
-using builtin.  The file gpio/Kconfig is currently this
-
-config GPIO_ELBA_SPICS
-        def_bool y
-        depends on ARCH_PENSANDO_ELBA_SOC || COMPILE_TEST
-
-> ...
+On Wed, Mar 3, 2021 at 10:44 PM Serge Semin <fancer.lancer@gmail.com> wrote:
 >
-> > > > +#include <linux/of.h>
-> > >
-> > > It's not used here, but you missed mod_devicetable.h.
-> >
-> > Removed <linux/of.h>.  There is no dependency on mod_devicetable.h.
+> Hello Brad.
+> Thanks for the patch. See my comments below.
 >
-> What do you mean? You don't use data structures from that?
-> of_device_id or other ID structures are defined there. Your module
-> works without them?
+> On Wed, Mar 03, 2021 at 07:41:36PM -0800, Brad Larson wrote:
+> > The Pensando Elba SoC uses a GPIO based chip select
+> > for two DW SPI busses with each bus having two
+> > chip selects.
 >
-I typed the wrong filename.  I do still have <linux/of.h>
+> I see a contradiction here. Normally GPIO-based chip-select is a
+> property of a platform, but not a SoC/CPU/MCU/etc. Most of the time
+> SoC SPI interfaces still get to have native CS pins, while at some
+> platform configurations (like in case of DW APB SPI, which doesn't
+> provide a way to directly toggle its native CSs) it's easier or even
+> safer to use GPIOs as CS signals. Of course theoretically a SoC could
+> be synthesized so it doesn't have native CS output pins, but only some
+> virtual internal CS flags, but I've never seen such. Anyway according
+> to the custom CS method below it's not your case because you still
+> provide support for SPI-devices handled by native CS (else branch in
+> the if (spi->cs_gpiod) {} else {} statement).
 
-> > > > +       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > > > +       p->base = devm_ioremap_resource(&pdev->dev, res);
-> > >
-> > > p->base = devm_platform_ioremap_resource(pdev, 0);
-> >
-> > Implementation follows devm_ioremap_resource() example in lib/devres.c.
+The native DW CS is not supported, that code is removed which caused
+the confusion.  The existing dw_spi_set_cs() works fine with the
+updated version of this function being
+
+/*
+ * Using a GPIO-based chip-select, the DW SPI controller still needs
+ * its own CS bit selected to start the serial engine.  On Elba the
+ * specific CS doesn't matter, so use CS0.
+ */
+static void dw_spi_elba_set_cs(struct spi_device *spi, bool enable)
+{
+        spi->chip_select = 0;
+        dw_spi_set_cs(spi, enable);
+}
+
+which is much better than the original version shown below
+
+> > +static void dw_spi_elba_set_cs(struct spi_device *spi, bool enable)
+> > +{
+> > +     struct dw_spi *dws = spi_master_get_devdata(spi->master);
+> > +
+> > +     if (!enable) {
+> > +             if (spi->cs_gpiod) {
+> > +                     /*
+> > +                      * Using a GPIO-based chip-select, the DW SPI
+> > +                      * controller still needs its own CS bit selected
+> > +                      * to start the serial engine.  On Elba the specific
+> > +                      * CS doesn't matter, so use CS0.
+> > +                      */
+> > +                     dw_writel(dws, DW_SPI_SER, BIT(0));
+> > +             } else {
+> > +                     /*
+> > +                      * Using the intrinsic DW chip-select; set the
+> > +                      * appropriate CS.
+> > +                      */
+> > +                     dw_writel(dws, DW_SPI_SER, BIT(spi->chip_select));
+> > +             }
+> > -     } else
+>   +     } else {
+> > +             dw_writel(dws, DW_SPI_SER, 0);
+>   +     } /* See [1] */
+> > +}
 >
-> So? How does this make it impossible to address my comment?
+> The custom CS-method above doesn't look much different from the
+> dw_spi_set_cs() method defined in the spi-dw-core.o driver, except
+> having at least two problems:
+> 1) It assumes that "enable" argument means the CS-enabling flag, while
+> in fact it's the CS-level which depending on the SPI_CS_HIGH flag
+> set/cleared will be 1/0 respectively if CS is supposed to be enabled.
+> That aspect has already been fixed in the dw_spi_set_cs() method.
+> 2) The method enables CS[0] if GPIO-CS is used for a particular SPI
+> device. That will cause problems for a GPIO/native CS intermixed case
+> of having for instance one SPI-device connected to native CS[0] and
+> another one - to a GPIO. So trying to communicate with the second SPI
+> device you'll end up having the native CS[0] activated too thus
+> having an SPI transfer sent to two SPI-device at the same time.
+> Of course that's not what you'd want.
+>
+> Anyway I don't really see why you even need a custom CS method here. A
+> generic method dw_spi_set_cs() shall work for your SPI interface.
+> If I am wrong, please explain why. Did you try the generic CS method
+> on your platform?
+>
+> [1] Placing Braces and Spaces. Chapter 3). Documentation/process/coding-style.rst
 
-I was simply stating that I followed the recommended API per the
-source code although I don't recall if I was looking at 4.14, 5.10 or
-linux-next at the time.  Changed to using
-devm_platform_ioremap_resource().
+Yes, exactly.  The generic method dw_spi_set_cs() works ok and
+correctly handles active high/low.
 
-> > > > +       if (IS_ERR(p->base)) {
-> > >
-> > > > +               dev_err(&pdev->dev, "failed to remap I/O memory\n");
-> > >
-> > > Duplicate noisy message.
-> > >
-> > > > +               return PTR_ERR(p->base);
-> > > > +       }
+> > +static int dw_spi_elba_init(struct platform_device *pdev,
+> > +                         struct dw_spi_mmio *dwsmmio)
+> > +{
+> > +     dwsmmio->dws.set_cs = dw_spi_elba_set_cs;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  static int dw_spi_mmio_probe(struct platform_device *pdev)
+> >  {
+> >       int (*init_func)(struct platform_device *pdev,
+> > @@ -351,6 +383,7 @@ static const struct of_device_id dw_spi_mmio_of_match[] = {
+> >       { .compatible = "intel,keembay-ssi", .data = dw_spi_keembay_init},
+> >       { .compatible = "microchip,sparx5-spi", dw_spi_mscc_sparx5_init},
+> >       { .compatible = "canaan,k210-spi", dw_spi_canaan_k210_init},
+>
+> > +     { .compatible = "pensando,elba-spi", .data = dw_spi_elba_init },
+>
+> If you agree with me and remove the custom CS-method defined above in
+> this patch, then all you'll need is just to add "pensando,elba-spi" here
+> with generic init-callback set - dw_spi_dw_apb_init.
 
-Yep, I've removed the extraneous log message.
+The existing dw_spi_set_cs() is now being used.  Using
+dw_spi_dw_apb_init results in every spi transfer failing which is why
+dw_spi_elba_init() is still proposed which results in set_cs calling
+dw_spi_elba_set_cs().
+
+> Finally defining new compatible string requires the bindings update.
+> In the framework of DW APB SPI interface they are defined in:
+> Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> So you need to have that DT-schema accordingly altered.
+>
+> The bindings note concerns the rest of the updates in your patchset too.
+>
+> -Sergey
+
+Patchset v2 separated out the bindings updates.  There will be more
+bindings needed for v3 of the patchset.  I won't be sending v3 until
+all discussions are resolved.
 
 Regards,
 Brad
