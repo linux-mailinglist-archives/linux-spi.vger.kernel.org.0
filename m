@@ -2,61 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EDCB3F42AD
-	for <lists+linux-spi@lfdr.de>; Mon, 23 Aug 2021 02:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC433F42BA
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Aug 2021 03:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234377AbhHWAzE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 22 Aug 2021 20:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
+        id S233963AbhHWBF7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 22 Aug 2021 21:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233168AbhHWAzE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 22 Aug 2021 20:55:04 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723DBC06175F
-        for <linux-spi@vger.kernel.org>; Sun, 22 Aug 2021 17:54:22 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id mf2so14845034ejb.9
-        for <linux-spi@vger.kernel.org>; Sun, 22 Aug 2021 17:54:22 -0700 (PDT)
+        with ESMTP id S230120AbhHWBF6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 22 Aug 2021 21:05:58 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD7AC061575
+        for <linux-spi@vger.kernel.org>; Sun, 22 Aug 2021 18:05:17 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id d6so23669128edt.7
+        for <linux-spi@vger.kernel.org>; Sun, 22 Aug 2021 18:05:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pensando.io; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=tCfKmnJmqqI7jJQlcyiuI5mMfUQXjNPCJKCttWb1qt8=;
-        b=A4h2GLHXtRVS9vQdzorylmvzR7vxvIcjGZ0eFMklc7Fc4BUBoXPk3oB0cRyz8oceV9
-         6SaGpAVvzJpYyTJe7GTd5+2E67N5vJm+hJZetckGUfODc6bXQMAyXh7545E49TqVJ0uR
-         2ngVNAsQus/k2BhAQUJ9n3AJxb00EQobu/cpC+s4hucFhEN6oN+f+UZeEUADR1rMwCHz
-         8+L+dFKH6a8y8qVp1hrDW+wzXXrmQSqIaiUKEDuiwumaHKPdZhVqBhD+ZaHlOGnEjPfF
-         irEyg+erpbbo63ClBkNBsKeau1qqea+NBhQ5ZbgNxf4NGGlpqbW5ei9HyZM1kc4W7tKk
-         mPgw==
+        bh=9I+jvIuGkrYC7w12Jy77CUvwauedMrIdRwXtD/swi0U=;
+        b=PJ2lRFHHDJGTdGZgqkx8nm0C86/LsPvaA1plQiLWFsazUABz8Yc1GKrNB1BQebP/Rm
+         PZOTpqcjJA3c63TrlvEaSd9Nl4IAAmXXx22NUFr+a1YUH4v/xU8kJS3YhojZFgciqq6c
+         3pF3A5e3/flNGz5+xe0wFzOD8qTt9bGjHTA5wa1Fvx0NjEcMhjV1lOqg+y5AZpMs8uRO
+         UL8MO/ANO9YNVs/zhJP5dQVnCSFKf/lKw7h+zDwmT/AUdweiArEVhlAbseZHAVwKbAqR
+         Gxm//N0qMKiEZdmqBeDtkOLbvh1vfHMW8t3PCN9jiSrZYrm7JleLO/JDGMNpXYlaCBj2
+         WZ7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tCfKmnJmqqI7jJQlcyiuI5mMfUQXjNPCJKCttWb1qt8=;
-        b=o+YW75a8rFyBN5JnPwc65VxPpoTbKYTuw/EjYMgPrJdeLhfabwFIyAqR22z65z6gK8
-         w3qam7MTvYPUTdwBWJ8iTKZ0giEcpdojcVQNZEWxxoag53VWn1CdUAe4NknOVF6GBCj8
-         QNDOsCHEU1uSKu1QflPCrX/RThEmJamvfwzwI6zejpboeehuaNYmuoKhCaYepYA4idu5
-         fVPLr9d3r8hsJlgZjEccJ0j9zfwloQdcyey0gA/DnwAJrp7riVxw7aCXjMOjWRBsMNy9
-         jCDMwr1dpmWvRJXtgcGDVM+HeQlhdCFAE+Y95Qv7g8YEdrxjHYZUlUXH3q9kJg8Pa7wA
-         vYnA==
-X-Gm-Message-State: AOAM530yYwVhG6/u3EJO0Le1Zi2zRvCXrLpmN/2R9YKaqaBlGclrthAe
-        iANewhVFkbDYCORbT331OFJwoJvrB7LUhIgA0+wAxw==
-X-Google-Smtp-Source: ABdhPJyr6R4LC87uphsxySvEXCIWhOfzIxR0G9gDmPD+Fl8kr+9oUkEZA1IOgIEGr6eAgBrQ72fwayTcK8phJKWSOcU=
-X-Received: by 2002:a17:906:3bc1:: with SMTP id v1mr4525657ejf.182.1629680060829;
- Sun, 22 Aug 2021 17:54:20 -0700 (PDT)
+        bh=9I+jvIuGkrYC7w12Jy77CUvwauedMrIdRwXtD/swi0U=;
+        b=cU8epw55FT7n9egiLvnfJBBXDtccYQ7AsL10hwaR7gYW3H/ME9fAmSRf24MA634NRF
+         lbbiu5Tl1WDK+5tqUpQb4oZ5b9pbJVckCQp2jjEBY8GeUpxSyW+Lv4O3xH/NBUamRKg6
+         DbUXTH39/3rMC2MTYgMY/d684Y69feOVPQhOLKsS0yBry8AXuCMFTkznSEwasGHPOr4M
+         D6zGnXiATyJmtHUAANS1/7DjF0p86qSmY3cP/5C4COgmpeJki/edizCGnV5zBKlHX58y
+         gkjtNw1AX3TQRvy/vdnz6tzK7KVmJWMo1OtyzmB4AmQ79XPCkcotzuN0nqmkWaSv0JN4
+         0cyw==
+X-Gm-Message-State: AOAM5307b+exvI0QbyBEixsW4LeYBW6gyCcRwKeXrMM20rY6N6m4/Ji0
+        0Jj8+S8GEnDojnAuId/MSWfzy3Fd5p8DYzURJcRDBA==
+X-Google-Smtp-Source: ABdhPJykJY1zWrWHmNv1qhh0XGc9mZHysTgRPPx0BaMujb9Mx9dYhMjPxl8GGwLIWVx58MUoIp0bAc7SpECJwSg9rjk=
+X-Received: by 2002:aa7:c894:: with SMTP id p20mr34410895eds.42.1629680715488;
+ Sun, 22 Aug 2021 18:05:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210304034141.7062-1-brad@pensando.io> <20210304034141.7062-8-brad@pensando.io>
- <20210304080355.cc37g7jagswro3dg@mobilestation>
-In-Reply-To: <20210304080355.cc37g7jagswro3dg@mobilestation>
+References: <20210304034141.7062-1-brad@pensando.io> <20210304034141.7062-2-brad@pensando.io>
+ <CACRpkdbQD6p7fbGtuu1c92uXfSFDCTwqjqsXHpgnD5Lg4v0Okw@mail.gmail.com>
+In-Reply-To: <CACRpkdbQD6p7fbGtuu1c92uXfSFDCTwqjqsXHpgnD5Lg4v0Okw@mail.gmail.com>
 From:   Brad Larson <brad@pensando.io>
-Date:   Sun, 22 Aug 2021 17:54:10 -0700
-Message-ID: <CAK9rFnzBNjiUARvAe6k9DnDV-RCG9L0ARaiFVPQbUhv1UqTDRA@mail.gmail.com>
-Subject: Re: [PATCH 7/8] arm64: dts: Add Pensando Elba SoC support
-To:     Serge Semin <fancer.lancer@gmail.com>
+Date:   Sun, 22 Aug 2021 18:05:04 -0700
+Message-ID: <CAK9rFnyf3WLSPe8A=WWCBUqs3htkAmhDQq0ftcEOq_fnenWQPA@mail.gmail.com>
+Subject: Re: [PATCH 1/8] gpio: Add Elba SoC gpio driver for spi cs control
+To:     Linus Walleij <linus.walleij@linaro.org>
 Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Olof Johansson <olof@lixom.net>,
@@ -65,214 +65,74 @@ Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         linux-mmc <linux-mmc@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Sergey,
+Hi Linus,
 
-On Thu, Mar 4, 2021 at 12:03 AM Serge Semin <fancer.lancer@gmail.com> wrote:
+On Thu, Mar 4, 2021 at 12:29 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> On Thu, Mar 4, 2021 at 4:42 AM Brad Larson <brad@pensando.io> wrote:
 >
-> On Wed, Mar 03, 2021 at 07:41:40PM -0800, Brad Larson wrote:
-> > Add Pensando common and Elba SoC specific device nodes
-> > and corresponding binding documentation.
+> > This GPIO driver is for the Pensando Elba SoC which
+> > provides control of four chip selects on two SPI busses.
+[...]
+> > +#include <linux/gpio.h>
 >
-> This also needs to be split up into sub-patches seeing these are
-> unrelated changes like device bindings update, new platform DT file.
->
-> Note text-based bindings are deprecated in favor of the DT schemas.
-> Also note dts needs to pass dtbs_check validation. So all new HW/DT
-> nodes need to be reflected in the DT-schemas. See [1] for details.
->
-> [1] Documentation/devicetree/writing-schema.rst
+> Use this in new drivers:
+> #include <linux/gpio/driver.h>
 
-Yes, patchset v2 was a first cut at organizing into sub-patches and in
-v2 I used DT schemas for new files.  I will need to add additional new
-sub-patches per review comments for v3 of the patchset.
+The updated patchset will use linux/gpio/driver.h
 
-> > diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> > index af7442f73881..645ae696ba24 100644
-> > --- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> > +++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> > @@ -122,7 +122,7 @@ unevaluatedProperties: false
-> >  examples:
-> >    - |
-> >      emmc: mmc@5a000000 {
+> > + * pin:             3            2        |       1            0
+> > + * bit:         7------6------5------4----|---3------2------1------0
+> > + *     cs1  cs1_ovr  cs0  cs0_ovr |  cs1  cs1_ovr  cs0  cs0_ovr
+> > + *                ssi1            |             ssi0
+> > + */
+> > +#define SPICS_PIN_SHIFT(pin)   (2 * (pin))
+> > +#define SPICS_MASK(pin)                (0x3 << SPICS_PIN_SHIFT(pin))
+> > +#define SPICS_SET(pin, val)    ((((val) << 1) | 0x1) << SPICS_PIN_SHIFT(pin))
 >
-> > -        compatible = "socionext,uniphier-sd4hc", "cdns,sd4hc";
-> > +        compatible = "socionext,uniphier-sd4hc", "cdns,sd4hc", "pensando,elba-emmc";
+> So 2 bits per GPIO line in one register? (Nice doc!)
 >
-> Alas it's not enough. New HW compatible strings shall be defined in the
-> binding schema.
-
-Based upon the next-20210818 version of cdns,sdhci.yaml below is the
-proposed change.  In terms of defining new HW compatible strings is an
-added example sufficient for pensando,elba-emmc?  There is no
-additional definition for socionext,uniphier-sd4hc other than the
-example in this file.
-
---- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-+++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-@@ -15,9 +15,12 @@ allOf:
- properties:
-   compatible:
--    items:
--      - enum:
--          - socionext,uniphier-sd4hc
-+    oneOf:
-+      - items:
-+          - enum:
-+              - socionext,uniphier-sd4hc
-+              - pensando,elba-emmc
-+          - const: cdns,sd4hc
-       - const: cdns,sd4hc
-
-   reg:
-@@ -132,3 +135,17 @@ examples:
-         mmc-hs400-1_8v;
-         cdns,phy-dll-delay-sdclk = <0>;
-     };
-+  - |
-+    emmc: mmc@30440000 {
-+        compatible = "pensando,elba-emmc", "cdns,sd4hc";
-+        clocks = <&emmc_clk>;
-+        interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
-+        reg = <0x0 0x30440000 0x0 0x10000
-+               0x0 0x30480044 0x0 0x4>;
-+        cdns,phy-input-delay-sd-highspeed = <0x4>;
-+        cdns,phy-input-delay-legacy = <0x4>;
-+        cdns,phy-input-delay-sd-uhs-sdr50 = <0x6>;
-+        cdns,phy-input-delay-sd-uhs-ddr50 = <0x16>;
-+        cdns,mmc-ddr-1_8v;
-+    };
-
-> > diff --git a/Documentation/devicetree/bindings/spi/cadence-quadspi.txt b/Documentation/devicetree/bindings/spi/cadence-quadspi.txt
-> > index 8ace832a2d80..dbb346b2b1d7 100644
-> > --- a/Documentation/devicetree/bindings/spi/cadence-quadspi.txt
-> > +++ b/Documentation/devicetree/bindings/spi/cadence-quadspi.txt
-> > @@ -6,6 +6,7 @@ Required properties:
-> >       For TI 66AK2G SoC - "ti,k2g-qspi", "cdns,qspi-nor".
-> >       For TI AM654 SoC  - "ti,am654-ospi", "cdns,qspi-nor".
-> >       For Intel LGM SoC - "intel,lgm-qspi", "cdns,qspi-nor".
+> > +struct elba_spics_priv {
+> > +       void __iomem *base;
+> > +       spinlock_t lock;
+> > +       struct gpio_chip chip;
+> > +};
+> > +
+> > +static int elba_spics_get_value(struct gpio_chip *chip, unsigned int pin)
+> > +{
+> > +       return -ENXIO;
+> > +}
 >
-> > +     For Pensando SoC - "pensando,cdns-qspi".
->
-> What about converting this file to DT-schema and adding new HW
-> bindings in there?
+> Write a comment that the chip only supports output mode,
+> because it repurposes SPI CS pins as generic GPIO out,
+> maybe at the top of the file?
 
-The file cadence-quadspi.txt has been converted to cdns,qspi-nor.yaml
-in next-20210818.  This would be the updated change where
-pensando,cdns-qspi is now pensando,elba-qspi to be more specific.
+The top of the file will look like this in the updated patchset.
 
---- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-+++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-@@ -20,6 +20,7 @@ properties:
-               - ti,k2g-qspi
-               - ti,am654-ospi
-               - intel,lgm-qspi
-+              - pensando,elba-qspi
-           - const: cdns,qspi-nor
-       - const: cdns,qspi-nor
+ * Pensando Elba ASIC SPI chip select driver.  The SoC supports output
+ * direction only as it uses a generic GPIO pin for SPI CS.
 
-> > +     chosen {
->
-> > +             stdout-path = "serial0:19200n8";
->
-> Baudrate of 19200? So sad.(
+> I suppose these systems also actually (ab)use the SPI cs
+> for things that are not really SPI CS? Because otherwise
+> this could just be part of the SPI driver (native chip select).
 
-The default baudrate for patchset v3 will be 115200  :-)
+The SPI cs are not used for any other purpose, we needed four chip
+selects and native DW supports two.
 
-> > +&spi0 {
-> > +     num-cs = <4>;
+> > +static const struct of_device_id ebla_spics_of_match[] = {
+> > +       { .compatible = "pensando,elba-spics" },
 >
-> > +     cs-gpios = <&spics 0 0>, <&spics 1 0>, <&porta 1 0>, <&porta 7 0>;
->
-> Oh, you've got four peripheral SPI devices connected with only two native CS
-> available. Hmm, then I don't really know a better way, but just to forget about
-> the native DW APB CS functionality and activate the direct driving of
-> all the CS-pins at the moment of the DW APB SPI controller probe
-> procedure. Then indeed you'll need a custom CS function defined in the DW APB
-> SPI driver to handle that.
+> Have you documented this?
 
-Right, confusion was created by leaving in code implying that the two
-native CS are supported.  CS0 is used just to start the serial engine.
-The existing dw_spi_set_cs() function works fine resulting in this
-implementation.
-
-static void dw_spi_elba_set_cs(struct spi_device *spi, bool enable)
-{
-        spi->chip_select = 0;
-        dw_spi_set_cs(spi, enable);
-}
-
-> > +             spics: spics@307c2468 {
-> > +                     compatible = "pensando,elba-spics";
-> > +                     reg = <0x0 0x307c2468 0x0 0x4>;
-> > +                     gpio-controller;
-> > +                     #gpio-cells = <2>;
-> > +             };
->
-> So that GPIO-controller is just a single register which provides a way
-> to toggle the DW APB SPI CS-mode together with their output value.
-> If so and seeing there are a few more tiny spaces of config
-> registers added to eMMC, PCI, etc DT node, I suppose all of them
-> belong to some bigger config space of the SoC. Thus I'd suggest to at
-> least implement them as part of a System Controller DT node. Then use
-> that device service to switch on/off corresponding functionality.
-> See [2] and the rest of added to the kernel DTS files with
-> syscon-nodes for example.
->
-> [2] Documentation/devicetree/bindings/mfd/syscon.yaml
->
-> -Sergey
->
-
-I've looked at the syscon documentation, other drivers that use it and
-tried the below proposed example with variations.  The result is Elba
-works ok for its four SPI devices but the host has a machine check
-which must be due to a pcie access error.  From another thread on this
-topic here is the recommended change to using syscon.
-
-> Rob, please see here having a small sized reg-space one more time.
-> Having so many small-sized registers scattered around the dts file
-> makes me thinking that most of them likely belong to some bigger
-> block like "System Controller". If so then there must be a main node
-> compatible with "syscon" device, which phandle would be referenced in
-> the particular device nodes. Like this:
->
-> \ {
->         soc {
->                 syscon: syscon@307c0000 {
->                         compatible = "pensando,elba-sys-con", "syscon", "simple-mfd";
->                         reg = <0x0 0x307c0000 0x0 0x10000>;
->
->                         spics: spics@307c2468 {
->                                 compatible = "pensando,elba-spics";
->                                 gpio-controller;
->                                 #gpio-cells = <2>;
->                         };
->                 };
->                 pcie@307c2480 {
->                         compatible = "pensando,pcie";
->                         reg = <0x0 0x20000000 0x0 0x00380000>; /* PXB Base */
->
->                         syscon = <&syscon>;
->                 };
->
->                 /* etc */
->         };
-> };
-
-The current pcie node is
-
->         pcie@307c2480 {
->                 compatible = "pensando,pcie";
->                 reg = <0x0 0x307c2480 0x0 0x4           /* MS CFG_WDT */
->                        0x0 0x1400 0x0 0x10              /* WDT0 */
->                        0x0 0x20000000 0x0 0x380000>;    /* PXB Base */
->         };
+Yes as part of patchset v2: [PATCH v2 11/13] dt-bindings: gpio: Add
+Pensando Elba SoC support
+which documents "pensando,elba-spics" in new file
+bindings/gpio/pensando,elba-spics.yaml.
 
 Regards,
 Brad
