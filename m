@@ -2,61 +2,62 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC433F42BA
-	for <lists+linux-spi@lfdr.de>; Mon, 23 Aug 2021 03:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 764213F42C3
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Aug 2021 03:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233963AbhHWBF7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 22 Aug 2021 21:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44334 "EHLO
+        id S234407AbhHWBGq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 22 Aug 2021 21:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbhHWBF6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 22 Aug 2021 21:05:58 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD7AC061575
-        for <linux-spi@vger.kernel.org>; Sun, 22 Aug 2021 18:05:17 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id d6so23669128edt.7
-        for <linux-spi@vger.kernel.org>; Sun, 22 Aug 2021 18:05:16 -0700 (PDT)
+        with ESMTP id S232261AbhHWBGq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 22 Aug 2021 21:06:46 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653AEC06175F
+        for <linux-spi@vger.kernel.org>; Sun, 22 Aug 2021 18:06:04 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id u3so33446373ejz.1
+        for <linux-spi@vger.kernel.org>; Sun, 22 Aug 2021 18:06:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pensando.io; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=9I+jvIuGkrYC7w12Jy77CUvwauedMrIdRwXtD/swi0U=;
-        b=PJ2lRFHHDJGTdGZgqkx8nm0C86/LsPvaA1plQiLWFsazUABz8Yc1GKrNB1BQebP/Rm
-         PZOTpqcjJA3c63TrlvEaSd9Nl4IAAmXXx22NUFr+a1YUH4v/xU8kJS3YhojZFgciqq6c
-         3pF3A5e3/flNGz5+xe0wFzOD8qTt9bGjHTA5wa1Fvx0NjEcMhjV1lOqg+y5AZpMs8uRO
-         UL8MO/ANO9YNVs/zhJP5dQVnCSFKf/lKw7h+zDwmT/AUdweiArEVhlAbseZHAVwKbAqR
-         Gxm//N0qMKiEZdmqBeDtkOLbvh1vfHMW8t3PCN9jiSrZYrm7JleLO/JDGMNpXYlaCBj2
-         WZ7w==
+        bh=DiGtvvH8NkIVd4hqCUiszMleyUhfYfWw1b6ZDZbLUkE=;
+        b=uhWvv9wnJvdEuINozK+RdVuTibj+UvYVWqnvk3DidpO+D6vtOAXbizZtIoU+1RzTmr
+         neD6qgJ86ggq3V1tinDW/48juLqA91oBDkn/NB65JOJLHe8ghFOwkQ1zgaxlQMH9WODi
+         rt9SNazJrbwjf3VFwt6U5hKEGhpmSs7w4dXX8sSJt472vdiwC3vAF5s/p3iinYjxtwBl
+         a9cj3j653TZKo2jXSHjebMJ7KoKkwr3MDOz9cwalouCmaCPDQmETbtb4GGf4v7OOCExP
+         B2zmwqQPZYp77TN2JzvGf7JzCIuJYxdNvTcTfjBdZOlLi5LS1YiO9oc0f/v1VUpM86FM
+         Bj+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9I+jvIuGkrYC7w12Jy77CUvwauedMrIdRwXtD/swi0U=;
-        b=cU8epw55FT7n9egiLvnfJBBXDtccYQ7AsL10hwaR7gYW3H/ME9fAmSRf24MA634NRF
-         lbbiu5Tl1WDK+5tqUpQb4oZ5b9pbJVckCQp2jjEBY8GeUpxSyW+Lv4O3xH/NBUamRKg6
-         DbUXTH39/3rMC2MTYgMY/d684Y69feOVPQhOLKsS0yBry8AXuCMFTkznSEwasGHPOr4M
-         D6zGnXiATyJmtHUAANS1/7DjF0p86qSmY3cP/5C4COgmpeJki/edizCGnV5zBKlHX58y
-         gkjtNw1AX3TQRvy/vdnz6tzK7KVmJWMo1OtyzmB4AmQ79XPCkcotzuN0nqmkWaSv0JN4
-         0cyw==
-X-Gm-Message-State: AOAM5307b+exvI0QbyBEixsW4LeYBW6gyCcRwKeXrMM20rY6N6m4/Ji0
-        0Jj8+S8GEnDojnAuId/MSWfzy3Fd5p8DYzURJcRDBA==
-X-Google-Smtp-Source: ABdhPJykJY1zWrWHmNv1qhh0XGc9mZHysTgRPPx0BaMujb9Mx9dYhMjPxl8GGwLIWVx58MUoIp0bAc7SpECJwSg9rjk=
-X-Received: by 2002:aa7:c894:: with SMTP id p20mr34410895eds.42.1629680715488;
- Sun, 22 Aug 2021 18:05:15 -0700 (PDT)
+        bh=DiGtvvH8NkIVd4hqCUiszMleyUhfYfWw1b6ZDZbLUkE=;
+        b=N7EJXCRZenHBh6PhD0xKfFKyWvyJd/bS4jlFQ5TsCJzEdsQKoeI4nlDY90UVjR7Pmy
+         nI8f17vir9HaAsIxZhcmdRMnT/war2v569pzuiHb6QeI0YVqziZhayCzpYXpSWkNMQkj
+         7f6a9VgVerVhXL6BLAto6phAl3JDxNurO0G0VB81xnz2HkZeHkTnuCvPwhN4kAGMWmgM
+         XABpBvKhRRCwY1OarnLndVRLQyGlZTz2mlv3TWwh5R1vFNNc1HkTXfY1nkbQZBBOc+4I
+         Ie5Pe0goFLB3cC7zdLSK5Lq8E2VpKVS2nHKSnsGrStXu3G4MdFLzbRfeGVXyh9cp5vhQ
+         nRTQ==
+X-Gm-Message-State: AOAM533E50c9MDLkOH7JLMIEbqSvKu2o0XuYrHNGEs2oQii4LmMcpfnC
+        A7Lw/6/S4HHP7tJe8CmOspRu8kO4rWgc68xiiq6+ug==
+X-Google-Smtp-Source: ABdhPJw9eEJEPtVIYbe2803vRNA11NSXlz157yzpl7w09FqgV8tkGsFwFNzMcmgt5u7Zt114aJklS9Z5BHq/3A2TpJA=
+X-Received: by 2002:a17:906:2f15:: with SMTP id v21mr21088372eji.444.1629680763004;
+ Sun, 22 Aug 2021 18:06:03 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210304034141.7062-1-brad@pensando.io> <20210304034141.7062-2-brad@pensando.io>
  <CACRpkdbQD6p7fbGtuu1c92uXfSFDCTwqjqsXHpgnD5Lg4v0Okw@mail.gmail.com>
-In-Reply-To: <CACRpkdbQD6p7fbGtuu1c92uXfSFDCTwqjqsXHpgnD5Lg4v0Okw@mail.gmail.com>
+ <20210304091025.ny52qjm7wbfvmjgl@mobilestation> <CACRpkdZroi+_oHqipS71MAGif190y7jWU5Myf55vz=_um4w5cQ@mail.gmail.com>
+In-Reply-To: <CACRpkdZroi+_oHqipS71MAGif190y7jWU5Myf55vz=_um4w5cQ@mail.gmail.com>
 From:   Brad Larson <brad@pensando.io>
-Date:   Sun, 22 Aug 2021 18:05:04 -0700
-Message-ID: <CAK9rFnyf3WLSPe8A=WWCBUqs3htkAmhDQq0ftcEOq_fnenWQPA@mail.gmail.com>
+Date:   Sun, 22 Aug 2021 18:05:52 -0700
+Message-ID: <CAK9rFnzDZ4MNm68AJ75g7zegLD-7UMHyoVR-4ssitYTTEeQm5g@mail.gmail.com>
 Subject: Re: [PATCH 1/8] gpio: Add Elba SoC gpio driver for spi cs control
 To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Olof Johansson <olof@lixom.net>,
@@ -73,66 +74,45 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi Linus,
 
-On Thu, Mar 4, 2021 at 12:29 AM Linus Walleij <linus.walleij@linaro.org> wrote:
-> On Thu, Mar 4, 2021 at 4:42 AM Brad Larson <brad@pensando.io> wrote:
+On Thu, Mar 4, 2021 at 5:38 AM Linus Walleij <linus.walleij@linaro.org> wrote:
 >
-> > This GPIO driver is for the Pensando Elba SoC which
-> > provides control of four chip selects on two SPI busses.
-[...]
-> > +#include <linux/gpio.h>
+> On Thu, Mar 4, 2021 at 10:10 AM Serge Semin <fancer.lancer@gmail.com> wrote:
+> > On Thu, Mar 04, 2021 at 09:29:33AM +0100, Linus Walleij wrote:
 >
-> Use this in new drivers:
-> #include <linux/gpio/driver.h>
-
-The updated patchset will use linux/gpio/driver.h
-
-> > + * pin:             3            2        |       1            0
-> > + * bit:         7------6------5------4----|---3------2------1------0
-> > + *     cs1  cs1_ovr  cs0  cs0_ovr |  cs1  cs1_ovr  cs0  cs0_ovr
-> > + *                ssi1            |             ssi0
-> > + */
-> > +#define SPICS_PIN_SHIFT(pin)   (2 * (pin))
-> > +#define SPICS_MASK(pin)                (0x3 << SPICS_PIN_SHIFT(pin))
-> > +#define SPICS_SET(pin, val)    ((((val) << 1) | 0x1) << SPICS_PIN_SHIFT(pin))
+> > > > + * pin:             3            2        |       1            0
+> > > > + * bit:         7------6------5------4----|---3------2------1------0
+> > > > + *             cs1  cs1_ovr  cs0  cs0_ovr |  cs1  cs1_ovr  cs0  cs0_ovr
+> > > > + *                        ssi1            |             ssi0
+> > > > + */
+> > > > +#define SPICS_PIN_SHIFT(pin)   (2 * (pin))
+> > > > +#define SPICS_MASK(pin)                (0x3 << SPICS_PIN_SHIFT(pin))
+> > > > +#define SPICS_SET(pin, val)    ((((val) << 1) | 0x1) << SPICS_PIN_SHIFT(pin))
+> > >
+> >
+> > > So 2 bits per GPIO line in one register? (Nice doc!)
+> >
+> > I suppose the first bit is the CS-pin-override flag. So when it's set
+> > the output is directly driven by the second bit, otherwise the
+> > corresponding DW APB SPI controller drives it. That's how the
+> > multiplexing is implemented here.
 >
-> So 2 bits per GPIO line in one register? (Nice doc!)
+> If these output lines are so tightly coupled to the SPI block
+> and will not be used for any other GPO (general purpose output)
+> I think it makes more sense to bundle the handling into the
+> DW SPI driver, and activate it based on the Elba compatible
+> string (if of_is_compatible(...)).
 >
-> > +struct elba_spics_priv {
-> > +       void __iomem *base;
-> > +       spinlock_t lock;
-> > +       struct gpio_chip chip;
-> > +};
-> > +
-> > +static int elba_spics_get_value(struct gpio_chip *chip, unsigned int pin)
-> > +{
-> > +       return -ENXIO;
-> > +}
->
-> Write a comment that the chip only supports output mode,
-> because it repurposes SPI CS pins as generic GPIO out,
-> maybe at the top of the file?
+> I am a bit cautious because it has happened in the past that
+> people repurpose CS lines who were originally for SPI CS
+> to all kind of other purposes, such as a power-on LED and
+> in that case it needs to be a separate GPIO driver. So the
+> author needs to have a good idea about what is a realistic
+> use case here.
 
-The top of the file will look like this in the updated patchset.
-
- * Pensando Elba ASIC SPI chip select driver.  The SoC supports output
- * direction only as it uses a generic GPIO pin for SPI CS.
-
-> I suppose these systems also actually (ab)use the SPI cs
-> for things that are not really SPI CS? Because otherwise
-> this could just be part of the SPI driver (native chip select).
-
-The SPI cs are not used for any other purpose, we needed four chip
-selects and native DW supports two.
-
-> > +static const struct of_device_id ebla_spics_of_match[] = {
-> > +       { .compatible = "pensando,elba-spics" },
->
-> Have you documented this?
-
-Yes as part of patchset v2: [PATCH v2 11/13] dt-bindings: gpio: Add
-Pensando Elba SoC support
-which documents "pensando,elba-spics" in new file
-bindings/gpio/pensando,elba-spics.yaml.
+The gpio pins being used for the Elba SoC SPI CS are dedicated to this
+function.  Are you recommending that the code in
+drivers/gpio/gpio-elba-spics.c be integrated into
+drivers/spi/spi-dw-mmio.c?
 
 Regards,
 Brad
