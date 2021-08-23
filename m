@@ -2,112 +2,163 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5233F51BA
-	for <lists+linux-spi@lfdr.de>; Mon, 23 Aug 2021 22:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 054203F5201
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Aug 2021 22:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232016AbhHWUMX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 23 Aug 2021 16:12:23 -0400
-Received: from mail-ua1-f48.google.com ([209.85.222.48]:41889 "EHLO
-        mail-ua1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbhHWUMW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 23 Aug 2021 16:12:22 -0400
-Received: by mail-ua1-f48.google.com with SMTP id 75so8628582uav.8;
-        Mon, 23 Aug 2021 13:11:39 -0700 (PDT)
+        id S232307AbhHWUYv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 23 Aug 2021 16:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55894 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231773AbhHWUYt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 23 Aug 2021 16:24:49 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D14C061575;
+        Mon, 23 Aug 2021 13:24:06 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id l18so26085801lji.12;
+        Mon, 23 Aug 2021 13:24:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=J41x529VlTspZMrpThFHJLBr2g65jbs1WO5P40LCen4=;
+        b=okYdM6r/OEM+GpVMmndUDSUnFuATe7k+UqV9Xd6SnEB6FCQnedxeMEPVsABonqs4N4
+         bW0CUVBYgP/wVgNhvKRjjJZHkQWqjAfdAXHaWOprlSkmDVUGTjWH0QHqHe/JDzPhBYMW
+         VS78dI9TbqWyfxbPdEd9M68PCp/85z5U4mMqUTiCNVQcQnpHeloJ5A8DDCAgG+UndNk2
+         4AMRro0QimKicKoXkXK7fx6Xlty7DPO0Rz/T7e7AYrMNjr1lsW8oLXtit6l5wdRItw9Y
+         0sCrelfgm2KgdesCrJhygLOJ6k4XDHAPdBtXpSk4O9XXGH416S+WsJAn5UMZlTogyo6e
+         LVmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AUpBckzMvXVbMxlgD0BPIwC+4lv7J+IVl66jvYDUuHo=;
-        b=b/b73x2JZ4KjhsEwbh5qDWlakyitUjKztvAIJ2rAAS4I4bNKH+9KGyptdIZoxFWiDs
-         xQ/JCbD6F/C+01FIMrGXBChGCGpFU8WOaTevRNKmehs/N1R1QuDMmDQvQqtFoAwFSQcS
-         nHwi55DtxdZh7Ti9Vvjqwh4TOGEq2ZccpGCkDiiZkl34QyVdGaOzdAB3dNugpW6ItK2A
-         i8FNJobWm6h2P6tNbJEbh6zdm7bko7rp/n+06ZbOqLaDwOEihCYapfnXO/SnHl4Fo8Yz
-         KxTOcqZkMrBKZWH06K0/wurAt6tuwMu9t36vhdnGK3T8mYFytmwnNVfALqScEc4hMqkC
-         Ydjw==
-X-Gm-Message-State: AOAM530bdWMhqCjhvhTk+pTYI9PsLqsxz4jvhMEzCNeWqOd3888NK55r
-        UarhKBuKCqKEwMvXHvR/MjVBdfIeBkGr1IokwoA=
-X-Google-Smtp-Source: ABdhPJwDCxee7jV2n8a1Svw2CcluiW33jrACAl+tVwINni9XvoTwC+e80Xv1R19D9/bVXLChNcBX2LeY5QOT0/9jxzU=
-X-Received: by 2002:a67:c789:: with SMTP id t9mr25809822vsk.60.1629749499174;
- Mon, 23 Aug 2021 13:11:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210304034141.7062-1-brad@pensando.io> <20210304034141.7062-2-brad@pensando.io>
- <CAHp75VcG9KajNpDbewDq7QzotB6t7MfwiGk15FaobX+cmMVSzg@mail.gmail.com>
- <CAK9rFnwrA=W2Vk5yFwG4N_WS=eBXXnhtexA+tqgAYb6xOAO4oQ@mail.gmail.com>
- <CAHp75VdfrJ3JV_gL3xCLHOiw6Tj-5Ep7z5JKWUFKFbUt8gobcw@mail.gmail.com>
- <CAK9rFnx--z_pr_yR6CqGsH04ddwUtx4rxc7MxNNmy7ZSF86+Mg@mail.gmail.com>
- <CAMuHMdUz4vUQzXBHA9AiT3w6L20yBpgd0emVZJb=v_qw70qiJQ@mail.gmail.com> <CAK9rFnw-j8whcsK-NQ4w4+sCdrumCk7Bb=J+KfsF9ZO2Tf5r5g@mail.gmail.com>
-In-Reply-To: <CAK9rFnw-j8whcsK-NQ4w4+sCdrumCk7Bb=J+KfsF9ZO2Tf5r5g@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 23 Aug 2021 22:11:27 +0200
-Message-ID: <CAMuHMdW0s=x+DBZffeuEcyifDRfy8YM3c_wEAZscO7twR2wj3Q@mail.gmail.com>
-Subject: Re: [PATCH 1/8] gpio: Add Elba SoC gpio driver for spi cs control
-To:     Brad Larson <brad@pensando.io>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=J41x529VlTspZMrpThFHJLBr2g65jbs1WO5P40LCen4=;
+        b=c+Ki09WAWpKNHn30pEOohRcuBryKZ0oCZWnRlMYsf/BXv1d1PQ7vY5h1oBC5GOEkx1
+         +LcEp8GxfNVQvcGut3e77LMHJE703NvsNAc7n7308uonXnsMrGbcsyp+GVVDjoumUtzJ
+         UeBb12Zviuj0fEt1oY9K635IndZgO/Alj/sfjZ+ogj4P5koJvkfFttQT1SN2/ppjU2lB
+         i9fJz1FrDzvxU3FxVE5V0imh8JlsFHX24toC2WdyeHg/mGPDn+XuKkeEe79B+CIf5cKI
+         OypbQ7a6cyk5mNg/8e0NueNILDiJVq0f2S46SuwL/Tr5qKWScbeKvG7D7uJdFH/YWPiw
+         ZwCA==
+X-Gm-Message-State: AOAM532YQShkJEaZg1Jyr68J2f0ggt4AyDAnUDX7sD222MIs27Y8LN4S
+        EXWB12X/GIhvyqCFa1uXdmNNgp+ym84=
+X-Google-Smtp-Source: ABdhPJwqnW4H12JkFByYZki5F25wX7CFl/4OxdrLQBKSJLK7Hp+HrjfGNLOpxwFObeZey6c6a7G84A==
+X-Received: by 2002:a2e:a4db:: with SMTP id p27mr29314648ljm.161.1629750244353;
+        Mon, 23 Aug 2021 13:24:04 -0700 (PDT)
+Received: from [192.168.2.145] (46-138-120-72.dynamic.spd-mgts.ru. [46.138.120.72])
+        by smtp.googlemail.com with ESMTPSA id r2sm854722ljj.14.2021.08.23.13.24.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Aug 2021 13:24:03 -0700 (PDT)
+Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
         Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
         Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
         linux-mmc <linux-mmc@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+References: <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
+ <20210818055849.ybfajzu75ecpdrbn@vireshk-i7>
+ <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
+ <20210818062723.dqamssfkf7lf7cf7@vireshk-i7>
+ <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
+ <20210818091417.dvlnsxlgybdsn76x@vireshk-i7>
+ <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
+ <f1314a47-9e8b-58e1-7c3f-0afb1ec8e70a@gmail.com>
+ <20210819061617.r4kuqxafjstrv3kt@vireshk-i7>
+ <CAPDyKFpg8ixT4AEjzVLTwQR7Nn9CctjnLCDS5GwkOrAERquyxw@mail.gmail.com>
+ <20210820051843.5mueqpnjbqt3zdzc@vireshk-i7>
+ <CAPDyKFo0rzHT4AhueWjyz9k2ZqUy8N6Od5pbr8sL_m0Jf2AwUg@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <085d1a2e-57b0-222e-c569-12f3c6bc8161@gmail.com>
+Date:   Mon, 23 Aug 2021 23:24:02 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <CAPDyKFo0rzHT4AhueWjyz9k2ZqUy8N6Od5pbr8sL_m0Jf2AwUg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Brad,
+20.08.2021 15:57, Ulf Hansson пишет:
+...
+>> We already have similar APIs, so that won't be a problem. We also have
+>> a mechanism inside the OPP core, frequency based, which is used to
+>> guess the current OPP. Maybe we can enhance and use that directly
+>> here.
+> 
+> After reading the last reply from Dmitry, I am starting to think that
+> the problem he is facing can be described and solved in a much easier
+> way.
+> 
+> If I am correct, it looks like we don't need to add APIs to get OPPs
+> for a clock rate or set initial performance state values according to
+> the HW in genpd.
+> 
+> See my other response to Dmitry, let's see where that leads us.
 
-On Mon, Aug 23, 2021 at 6:31 PM Brad Larson <brad@pensando.io> wrote:
-> On Mon, Aug 23, 2021 at 12:50 AM Geert Uytterhoeven
-> <geert@linux-m68k.org> wrote:
-> > On Mon, Aug 23, 2021 at 3:14 AM Brad Larson <brad@pensando.io> wrote:
-> > > On Mon, Mar 29, 2021 at 3:40 AM Andy Shevchenko
-> [...]
-> > > Regarding the above module question and Kconfig definition, since I
-> > > first looked at this and reviewed the comments I realized I should be
-> > > using builtin.  The file gpio/Kconfig is currently this
-> > >
-> > > config GPIO_ELBA_SPICS
-> > >         def_bool y
-> > >         depends on ARCH_PENSANDO_ELBA_SOC || COMPILE_TEST
-> >
-> > That means the driver will default to yes by merely enabling
-> > COMPILE_TEST, which is a no-go.
-> >
-> >     config GPIO_ELBA_SPICS
-> >             bool "one-line summary"
-> >             depends on ARCH_PENSANDO_ELBA_SOC || COMPILE_TEST
-> >             default y if ARCH_PENSANDO_ELBA_SOC
->
-> Thanks Geert, changed to this
->
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -241,8 +241,9 @@ config GPIO_EIC_SPRD
->           Say yes here to support Spreadtrum EIC device.
->
->  config GPIO_ELBA_SPICS
-> +       bool "Pensando Elba SoC SPI Chip Select as GPIO support"
-> +       depends on ARCH_PENSANDO_ELBA_SOC
->         def_bool y
-> -       depends on ARCH_PENSANDO_ELBA_SOC || COMPILE_TEST
+I'm going to start preparing v9 with GENPD performance state syncing moved into driver's probe where appropriate.
 
-So we're losing the COMPILE_TEST ability again?
+It's not clear to me whether it will be okay to add a generic OPP syncing by clock rate or should it be a Tegra-specific helper. Viresh, what do you think about this generic OPP helper:
 
-Gr{oetje,eeting}s,
+/**
+ * dev_pm_opp_sync_with_clk_rate() - Sync OPP state with clock rate
+ * @dev:	device for which we do this operation
+ *
+ * Sync OPP table state with the current clock rate of device.
+ *
+ * Return: 0 on success or a negative error value.
+ */
+int dev_pm_opp_sync_with_clk_rate(struct device *dev)
+{
+	struct opp_table *opp_table;
+	int ret = 0;
 
-                        Geert
+	/* Device may not have OPP table */
+	opp_table = _find_opp_table(dev);
+	if (IS_ERR(opp_table))
+		return 0;
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+	/* Device may not use clock */
+	if (IS_ERR(opp_table->clk))
+		goto put_table;
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+	/* Device may have empty OPP table */
+	if (!_get_opp_count(opp_table))
+		goto put_table;
+
+	ret = dev_pm_opp_set_rate(dev, clk_get_rate(opp_table->clk));
+put_table:
+	/* Drop reference taken by _find_opp_table() */
+	dev_pm_opp_put_opp_table(opp_table);
+
+	return ret;
+}
+EXPORT_SYMBOL_GPL(dev_pm_opp_sync_with_clk_rate);
