@@ -2,380 +2,277 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DFB43F40E0
-	for <lists+linux-spi@lfdr.de>; Sun, 22 Aug 2021 20:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EDCB3F42AD
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Aug 2021 02:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232246AbhHVSgX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 22 Aug 2021 14:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
+        id S234377AbhHWAzE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 22 Aug 2021 20:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbhHVSgV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 22 Aug 2021 14:36:21 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5207FC061756;
-        Sun, 22 Aug 2021 11:35:40 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id x27so32986850lfu.5;
-        Sun, 22 Aug 2021 11:35:40 -0700 (PDT)
+        with ESMTP id S233168AbhHWAzE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 22 Aug 2021 20:55:04 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723DBC06175F
+        for <linux-spi@vger.kernel.org>; Sun, 22 Aug 2021 17:54:22 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id mf2so14845034ejb.9
+        for <linux-spi@vger.kernel.org>; Sun, 22 Aug 2021 17:54:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=llXGzOlVfQ1z+fZShplnuKhCoBoaDlqiYpJmC9GU0+A=;
-        b=pUd9pFzrQoz3MNBZyhe492j7Qpwx+o85iQRD6cvmN/8plmaCSQzruh0RLDBLu8kjbl
-         TH2YjBmZbqDFv62c43rrm+RSWCswEPx259Y0lUalUz7YpM8zV3SoOyvmYKqbVGEh6DVy
-         rniJPhXV2GJnOp3rJirXiqPIfyPVSXebHcrNvf4rhd1A6hnKj1F21t4SULzx78RQFoSZ
-         4NCdZ2we55lY8RlkJy5ZNHKATACU0drXFlBD/8zAouMBw5X7N8H5OzPaiNUpTvt7Ps7a
-         dj4vDtsop6JYSgrAGC0sGSlmLTOoLXQ2XsB7rZBKZmLc5jalVGskLtiCPRnUqfBevgil
-         IVLA==
+        d=pensando.io; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tCfKmnJmqqI7jJQlcyiuI5mMfUQXjNPCJKCttWb1qt8=;
+        b=A4h2GLHXtRVS9vQdzorylmvzR7vxvIcjGZ0eFMklc7Fc4BUBoXPk3oB0cRyz8oceV9
+         6SaGpAVvzJpYyTJe7GTd5+2E67N5vJm+hJZetckGUfODc6bXQMAyXh7545E49TqVJ0uR
+         2ngVNAsQus/k2BhAQUJ9n3AJxb00EQobu/cpC+s4hucFhEN6oN+f+UZeEUADR1rMwCHz
+         8+L+dFKH6a8y8qVp1hrDW+wzXXrmQSqIaiUKEDuiwumaHKPdZhVqBhD+ZaHlOGnEjPfF
+         irEyg+erpbbo63ClBkNBsKeau1qqea+NBhQ5ZbgNxf4NGGlpqbW5ei9HyZM1kc4W7tKk
+         mPgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=llXGzOlVfQ1z+fZShplnuKhCoBoaDlqiYpJmC9GU0+A=;
-        b=nSA2sgzX16KsgCKBdEuj/L8Wa1IkynuUBYZZKRI8AybbHuoqMrC62dJZp385Rx4x6S
-         tLLmCJwje+3Mmvy41d3KYPjZCFU1WoInHVaE6TQqrEdZChseRb2Za7ZE6dzLDj/lALp3
-         1wcLyZHlsEGl6MuYV9pwacEh9S333nd/LQYU24Pp+5RfPabplTVXqynph9UW/kVygh4m
-         nYjA5JsVLBEtdSXWDkC8xbUjiNv6LO3ekzqqr2ex8JQuSEjAaTMfAWvhy+qn4Pcv9zuE
-         3AMIWa0MwVVVmmzvpL1vhdpepdXW5O0VtLlCUYnnw9eDN90VGOPhf2P9p/wDIflyiE77
-         w8BA==
-X-Gm-Message-State: AOAM532EU0S7Ndma4PYUEdssBupO7kD2p6tzSW6JyBesddwHxoiqEqFV
-        Lw6ypHG0rjZXeEpYqS3N2MiWmAu0wWs=
-X-Google-Smtp-Source: ABdhPJxSIOhcKe6yMzphYPwAYvHArYXqPo3XV3R2pB+pvoKJx2vc7UTHUQczHFEp2jjlznO4dsdqvg==
-X-Received: by 2002:ac2:5fa8:: with SMTP id s8mr23353475lfe.514.1629657338302;
-        Sun, 22 Aug 2021 11:35:38 -0700 (PDT)
-Received: from [192.168.2.145] (46-138-120-72.dynamic.spd-mgts.ru. [46.138.120.72])
-        by smtp.googlemail.com with ESMTPSA id i12sm226942ljm.116.2021.08.22.11.35.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Aug 2021 11:35:37 -0700 (PDT)
-Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-References: <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
- <20210818055849.ybfajzu75ecpdrbn@vireshk-i7>
- <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
- <20210818062723.dqamssfkf7lf7cf7@vireshk-i7>
- <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
- <20210818091417.dvlnsxlgybdsn76x@vireshk-i7>
- <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
- <f1314a47-9e8b-58e1-7c3f-0afb1ec8e70a@gmail.com>
- <20210819061617.r4kuqxafjstrv3kt@vireshk-i7>
- <CAPDyKFpg8ixT4AEjzVLTwQR7Nn9CctjnLCDS5GwkOrAERquyxw@mail.gmail.com>
- <20210820051843.5mueqpnjbqt3zdzc@vireshk-i7>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <b887de8c-a40b-a62e-8abf-698e67cdb70c@gmail.com>
-Date:   Sun, 22 Aug 2021 21:35:36 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tCfKmnJmqqI7jJQlcyiuI5mMfUQXjNPCJKCttWb1qt8=;
+        b=o+YW75a8rFyBN5JnPwc65VxPpoTbKYTuw/EjYMgPrJdeLhfabwFIyAqR22z65z6gK8
+         w3qam7MTvYPUTdwBWJ8iTKZ0giEcpdojcVQNZEWxxoag53VWn1CdUAe4NknOVF6GBCj8
+         QNDOsCHEU1uSKu1QflPCrX/RThEmJamvfwzwI6zejpboeehuaNYmuoKhCaYepYA4idu5
+         fVPLr9d3r8hsJlgZjEccJ0j9zfwloQdcyey0gA/DnwAJrp7riVxw7aCXjMOjWRBsMNy9
+         jCDMwr1dpmWvRJXtgcGDVM+HeQlhdCFAE+Y95Qv7g8YEdrxjHYZUlUXH3q9kJg8Pa7wA
+         vYnA==
+X-Gm-Message-State: AOAM530yYwVhG6/u3EJO0Le1Zi2zRvCXrLpmN/2R9YKaqaBlGclrthAe
+        iANewhVFkbDYCORbT331OFJwoJvrB7LUhIgA0+wAxw==
+X-Google-Smtp-Source: ABdhPJyr6R4LC87uphsxySvEXCIWhOfzIxR0G9gDmPD+Fl8kr+9oUkEZA1IOgIEGr6eAgBrQ72fwayTcK8phJKWSOcU=
+X-Received: by 2002:a17:906:3bc1:: with SMTP id v1mr4525657ejf.182.1629680060829;
+ Sun, 22 Aug 2021 17:54:20 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210820051843.5mueqpnjbqt3zdzc@vireshk-i7>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210304034141.7062-1-brad@pensando.io> <20210304034141.7062-8-brad@pensando.io>
+ <20210304080355.cc37g7jagswro3dg@mobilestation>
+In-Reply-To: <20210304080355.cc37g7jagswro3dg@mobilestation>
+From:   Brad Larson <brad@pensando.io>
+Date:   Sun, 22 Aug 2021 17:54:10 -0700
+Message-ID: <CAK9rFnzBNjiUARvAe6k9DnDV-RCG9L0ARaiFVPQbUhv1UqTDRA@mail.gmail.com>
+Subject: Re: [PATCH 7/8] arm64: dts: Add Pensando Elba SoC support
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Olof Johansson <olof@lixom.net>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-20.08.2021 08:18, Viresh Kumar пишет:
-> On 19-08-21, 16:55, Ulf Hansson wrote:
->> Right, that sounds reasonable.
->>
->> We already have pm_genpd_opp_to_performance_state() which translates
->> an OPP to a performance state. This function invokes the
->> ->opp_to_performance_state() for a genpd. Maybe we need to allow a
->> genpd to not have ->opp_to_performance_state() callback assigned
->> though, but continue up in the hierarchy to see if the parent has the
->> callback assigned, to make this work for Tegra?
->>
->> Perhaps we should add an API dev_pm_genpd_opp_to_performance_state(),
->> allowing us to pass the device instead of the genpd. But that's a
->> minor thing.
-> 
-> I am not concerned a lot about how it gets implemented, and am not
-> sure as well, as I haven't looked into these details since sometime.
-> Any reasonable thing will be accepted, as simple as that.
-> 
->> Finally, the precondition to use the above, is to first get a handle
->> to an OPP table. This is where I am struggling to find a generic
->> solution, because I guess that would be platform or even consumer
->> driver specific for how to do this. And at what point should we do
->> this?
+Hi Sergey,
 
-GENPD core can't get OPP table handle, setting up OPP table is a platform/driver specific operation.
+On Thu, Mar 4, 2021 at 12:03 AM Serge Semin <fancer.lancer@gmail.com> wrote:
+>
+> On Wed, Mar 03, 2021 at 07:41:40PM -0800, Brad Larson wrote:
+> > Add Pensando common and Elba SoC specific device nodes
+> > and corresponding binding documentation.
+>
+> This also needs to be split up into sub-patches seeing these are
+> unrelated changes like device bindings update, new platform DT file.
+>
+> Note text-based bindings are deprecated in favor of the DT schemas.
+> Also note dts needs to pass dtbs_check validation. So all new HW/DT
+> nodes need to be reflected in the DT-schemas. See [1] for details.
+>
+> [1] Documentation/devicetree/writing-schema.rst
 
-> Hmm, I am not very clear with the whole picture at this point of time.
-> 
-> Dmitry, can you try to frame a sequence of events/calls/etc that will
-> define what kind of devices we are looking at here, and how this can
-> be made to work ?
+Yes, patchset v2 was a first cut at organizing into sub-patches and in
+v2 I used DT schemas for new files.  I will need to add additional new
+sub-patches per review comments for v3 of the patchset.
 
-Could you please clarify what do you mean by a "kind of devices"?
+> > diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> > index af7442f73881..645ae696ba24 100644
+> > --- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> > +++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> > @@ -122,7 +122,7 @@ unevaluatedProperties: false
+> >  examples:
+> >    - |
+> >      emmc: mmc@5a000000 {
+>
+> > -        compatible = "socionext,uniphier-sd4hc", "cdns,sd4hc";
+> > +        compatible = "socionext,uniphier-sd4hc", "cdns,sd4hc", "pensando,elba-emmc";
+>
+> Alas it's not enough. New HW compatible strings shall be defined in the
+> binding schema.
 
-I made hack based on the recent discussions and it partially works. Getting clock rate involves resuming device which backs the clock and it also may use GENPD, so lockings are becoming complicated. It doesn't work at all if device uses multiple domains because virtual domain device doesn't have OPP table.
+Based upon the next-20210818 version of cdns,sdhci.yaml below is the
+proposed change.  In terms of defining new HW compatible strings is an
+added example sufficient for pensando,elba-emmc?  There is no
+additional definition for socionext,uniphier-sd4hc other than the
+example in this file.
 
-Setting up the performance state from a consumer driver is a cleaner variant so far. 
+--- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
++++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+@@ -15,9 +15,12 @@ allOf:
+ properties:
+   compatible:
+-    items:
+-      - enum:
+-          - socionext,uniphier-sd4hc
++    oneOf:
++      - items:
++          - enum:
++              - socionext,uniphier-sd4hc
++              - pensando,elba-emmc
++          - const: cdns,sd4hc
+       - const: cdns,sd4hc
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index e1c8994ae225..faa0bbe99c98 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -410,11 +410,16 @@ static int genpd_drop_performance_state(struct device *dev)
- 	return 0;
- }
- 
--static void genpd_restore_performance_state(struct device *dev,
--					    unsigned int state)
-+static int genpd_restore_performance_state(struct generic_pm_domain *genpd,
-+					   struct device *dev,
-+					   unsigned int state)
- {
-+	int ret = 0;
-+
- 	if (state)
--		genpd_set_performance_state(dev, state);
-+		ret = genpd_set_performance_state(dev, state);
-+
-+	return ret;
- }
- 
- /**
-@@ -435,7 +440,7 @@ static void genpd_restore_performance_state(struct device *dev,
- int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
- {
- 	struct generic_pm_domain *genpd;
--	int ret;
-+	int ret = 0;
- 
- 	genpd = dev_to_genpd_safe(dev);
- 	if (!genpd)
-@@ -446,7 +451,10 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
- 		return -EINVAL;
- 
- 	genpd_lock(genpd);
--	ret = genpd_set_performance_state(dev, state);
-+	if (pm_runtime_suspended(dev))
-+		dev_gpd_data(dev)->rpm_pstate = state;
-+	else
-+		ret = genpd_set_performance_state(dev, state);
- 	genpd_unlock(genpd);
- 
- 	return ret;
-@@ -959,10 +967,25 @@ static int genpd_runtime_resume(struct device *dev)
- 		goto out;
- 	}
- 
-+	if (genpd->get_performance_state) {
-+		ret = genpd->get_performance_state(genpd, dev);
-+		if (ret < 0)
-+			return ret;
-+
-+		if (ret > 0)
-+			gpd_data->rpm_pstate = ret;
-+	}
-+
- 	genpd_lock(genpd);
- 	ret = genpd_power_on(genpd, 0);
--	if (!ret)
--		genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
-+	if (!ret) {
-+		ret = genpd_restore_performance_state(genpd, dev,
-+						      gpd_data->rpm_pstate);
-+		if (ret)
-+			genpd_power_off(genpd, true, 0);
-+		else
-+			gpd_data->rpm_pstate = 0;
-+	}
- 	genpd_unlock(genpd);
- 
- 	if (ret)
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 18016e49605f..982be2dba21e 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -2967,3 +2967,33 @@ int dev_pm_opp_sync(struct device *dev)
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_sync);
-+
-+/**
-+ * dev_pm_opp_from_clk_rate() - Get OPP from current clock rate
-+ * @dev:	device for which we do this operation
-+ *
-+ * Get OPP which corresponds to the current clock rate of a device.
-+ *
-+ * Return: pointer to 'struct dev_pm_opp' on success and errorno otherwise.
-+ */
-+struct dev_pm_opp *dev_pm_opp_from_clk_rate(struct device *dev)
-+{
-+	struct dev_pm_opp *opp = ERR_PTR(-ENODEV);
-+	struct opp_table *opp_table;
-+	unsigned long freq;
-+
-+	opp_table = _find_opp_table(dev);
-+	if (IS_ERR(opp_table))
-+		return ERR_CAST(opp_table);
-+
-+	if (!IS_ERR(opp_table->clk)) {
-+		freq = clk_get_rate(opp_table->clk);
-+		opp = _find_freq_ceil(opp_table, &freq);
-+	}
-+
-+	/* Drop reference taken by _find_opp_table() */
-+	dev_pm_opp_put_opp_table(opp_table);
-+
-+	return opp;
-+}
-+EXPORT_SYMBOL_GPL(dev_pm_opp_from_clk_rate);
-diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
-index 7c9bc93147f1..03bad16e5318 100644
---- a/drivers/soc/tegra/pmc.c
-+++ b/drivers/soc/tegra/pmc.c
-@@ -506,6 +506,63 @@ static void tegra_pmc_scratch_writel(struct tegra_pmc *pmc, u32 value,
- 		writel(value, pmc->scratch + offset);
- }
- 
-+static const char * const tegra_skip_compats[] = {
-+	"nvidia,tegra20-sclk",
-+	"nvidia,tegra30-sclk",
-+	"nvidia,tegra30-pllc",
-+	"nvidia,tegra30-plle",
-+	"nvidia,tegra30-pllm",
-+	"nvidia,tegra20-dc",
-+	"nvidia,tegra30-dc",
-+	"nvidia,tegra20-emc",
-+	"nvidia,tegra30-emc",
-+	NULL,
-+};
-+
-+static int tegra_pmc_pd_get_performance_state(struct generic_pm_domain *genpd,
-+					      struct device *dev)
-+{
-+	struct dev_pm_opp *opp;
-+	int ret;
-+
-+	/*
-+	 * Tegra114+ SocS don't support OPP yet.  But if they will get OPP
-+	 * support, then we want to skip OPP for older kernels to preserve
-+	 * compatibility of newer DTBs with older kernels.
-+	 */
-+	if (!pmc->soc->supports_core_domain)
-+		return 0;
-+
-+	/*
-+	 * The EMC devices are a special case because we have a protection
-+	 * from non-EMC drivers getting clock handle before EMC driver is
-+	 * fully initialized.  The goal of the protection is to prevent
-+	 * devfreq driver from getting failures if it will try to change
-+	 * EMC clock rate until clock is fully initialized.  The EMC drivers
-+	 * will initialize the performance state by themselves.
-+	 *
-+	 * Display controller also is a special case because only controller
-+	 * driver could get the clock rate based on configuration of internal
-+	 * divider.
-+	 *
-+	 * Clock driver uses its own state syncing.
-+	 */
-+	if (of_device_compatible_match(dev->of_node, tegra_skip_compats))
-+		return 0;
-+
-+	opp = dev_pm_opp_from_clk_rate(dev);
-+	if (IS_ERR(opp)) {
-+		dev_err(&genpd->dev, "failed to get current OPP for %s: %pe\n",
-+			dev_name(dev), opp);
-+		ret = PTR_ERR(opp);
-+	} else {
-+		ret = dev_pm_opp_get_required_pstate(opp, 0);
-+		dev_pm_opp_put(opp);
-+	}
-+
-+	return ret;
-+}
-+
- /*
-  * TODO Figure out a way to call this with the struct tegra_pmc * passed in.
-  * This currently doesn't work because readx_poll_timeout() can only operate
-@@ -1238,6 +1295,7 @@ static int tegra_powergate_add(struct tegra_pmc *pmc, struct device_node *np)
- 
- 	pg->id = id;
- 	pg->genpd.name = np->name;
-+	pg->genpd.get_performance_state = tegra_pmc_pd_get_performance_state;
- 	pg->genpd.power_off = tegra_genpd_power_off;
- 	pg->genpd.power_on = tegra_genpd_power_on;
- 	pg->pmc = pmc;
-@@ -1354,6 +1412,7 @@ static int tegra_pmc_core_pd_add(struct tegra_pmc *pmc, struct device_node *np)
- 		return -ENOMEM;
- 
- 	genpd->name = "core";
-+	genpd->get_performance_state = tegra_pmc_pd_get_performance_state;
- 	genpd->set_performance_state = tegra_pmc_core_pd_set_performance_state;
- 	genpd->opp_to_performance_state = tegra_pmc_core_pd_opp_to_performance_state;
- 
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index 67017c9390c8..abe33be9828f 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -133,6 +133,8 @@ struct generic_pm_domain {
- 						 struct dev_pm_opp *opp);
- 	int (*set_performance_state)(struct generic_pm_domain *genpd,
- 				     unsigned int state);
-+	int (*get_performance_state)(struct generic_pm_domain *genpd,
-+				     struct device *dev);
- 	struct gpd_dev_ops dev_ops;
- 	s64 max_off_time_ns;	/* Maximum allowed "suspended" time. */
- 	ktime_t next_wakeup;	/* Maintained by the domain governor */
-diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-index 686122b59935..e7fd0dd493ca 100644
---- a/include/linux/pm_opp.h
-+++ b/include/linux/pm_opp.h
-@@ -169,6 +169,7 @@ void dev_pm_opp_remove_table(struct device *dev);
- void dev_pm_opp_cpumask_remove_table(const struct cpumask *cpumask);
- int dev_pm_opp_sync_regulators(struct device *dev);
- int dev_pm_opp_sync(struct device *dev);
-+struct dev_pm_opp *dev_pm_opp_from_clk_rate(struct device *dev);
- #else
- static inline struct opp_table *dev_pm_opp_get_opp_table(struct device *dev)
- {
-@@ -440,6 +441,11 @@ static inline int dev_pm_opp_sync(struct device *dev)
- 	return -EOPNOTSUPP;
- }
- 
-+static struct inline dev_pm_opp *dev_pm_opp_from_clk_rate(struct device *dev)
-+{
-+	return ERR_PTR(-EOPNOTSUPP);
-+}
-+
- #endif		/* CONFIG_PM_OPP */
- 
- #if defined(CONFIG_PM_OPP) && defined(CONFIG_OF)
--- 
+   reg:
+@@ -132,3 +135,17 @@ examples:
+         mmc-hs400-1_8v;
+         cdns,phy-dll-delay-sdclk = <0>;
+     };
++  - |
++    emmc: mmc@30440000 {
++        compatible = "pensando,elba-emmc", "cdns,sd4hc";
++        clocks = <&emmc_clk>;
++        interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
++        reg = <0x0 0x30440000 0x0 0x10000
++               0x0 0x30480044 0x0 0x4>;
++        cdns,phy-input-delay-sd-highspeed = <0x4>;
++        cdns,phy-input-delay-legacy = <0x4>;
++        cdns,phy-input-delay-sd-uhs-sdr50 = <0x6>;
++        cdns,phy-input-delay-sd-uhs-ddr50 = <0x16>;
++        cdns,mmc-ddr-1_8v;
++    };
 
+> > diff --git a/Documentation/devicetree/bindings/spi/cadence-quadspi.txt b/Documentation/devicetree/bindings/spi/cadence-quadspi.txt
+> > index 8ace832a2d80..dbb346b2b1d7 100644
+> > --- a/Documentation/devicetree/bindings/spi/cadence-quadspi.txt
+> > +++ b/Documentation/devicetree/bindings/spi/cadence-quadspi.txt
+> > @@ -6,6 +6,7 @@ Required properties:
+> >       For TI 66AK2G SoC - "ti,k2g-qspi", "cdns,qspi-nor".
+> >       For TI AM654 SoC  - "ti,am654-ospi", "cdns,qspi-nor".
+> >       For Intel LGM SoC - "intel,lgm-qspi", "cdns,qspi-nor".
+>
+> > +     For Pensando SoC - "pensando,cdns-qspi".
+>
+> What about converting this file to DT-schema and adding new HW
+> bindings in there?
+
+The file cadence-quadspi.txt has been converted to cdns,qspi-nor.yaml
+in next-20210818.  This would be the updated change where
+pensando,cdns-qspi is now pensando,elba-qspi to be more specific.
+
+--- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
++++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+@@ -20,6 +20,7 @@ properties:
+               - ti,k2g-qspi
+               - ti,am654-ospi
+               - intel,lgm-qspi
++              - pensando,elba-qspi
+           - const: cdns,qspi-nor
+       - const: cdns,qspi-nor
+
+> > +     chosen {
+>
+> > +             stdout-path = "serial0:19200n8";
+>
+> Baudrate of 19200? So sad.(
+
+The default baudrate for patchset v3 will be 115200  :-)
+
+> > +&spi0 {
+> > +     num-cs = <4>;
+>
+> > +     cs-gpios = <&spics 0 0>, <&spics 1 0>, <&porta 1 0>, <&porta 7 0>;
+>
+> Oh, you've got four peripheral SPI devices connected with only two native CS
+> available. Hmm, then I don't really know a better way, but just to forget about
+> the native DW APB CS functionality and activate the direct driving of
+> all the CS-pins at the moment of the DW APB SPI controller probe
+> procedure. Then indeed you'll need a custom CS function defined in the DW APB
+> SPI driver to handle that.
+
+Right, confusion was created by leaving in code implying that the two
+native CS are supported.  CS0 is used just to start the serial engine.
+The existing dw_spi_set_cs() function works fine resulting in this
+implementation.
+
+static void dw_spi_elba_set_cs(struct spi_device *spi, bool enable)
+{
+        spi->chip_select = 0;
+        dw_spi_set_cs(spi, enable);
+}
+
+> > +             spics: spics@307c2468 {
+> > +                     compatible = "pensando,elba-spics";
+> > +                     reg = <0x0 0x307c2468 0x0 0x4>;
+> > +                     gpio-controller;
+> > +                     #gpio-cells = <2>;
+> > +             };
+>
+> So that GPIO-controller is just a single register which provides a way
+> to toggle the DW APB SPI CS-mode together with their output value.
+> If so and seeing there are a few more tiny spaces of config
+> registers added to eMMC, PCI, etc DT node, I suppose all of them
+> belong to some bigger config space of the SoC. Thus I'd suggest to at
+> least implement them as part of a System Controller DT node. Then use
+> that device service to switch on/off corresponding functionality.
+> See [2] and the rest of added to the kernel DTS files with
+> syscon-nodes for example.
+>
+> [2] Documentation/devicetree/bindings/mfd/syscon.yaml
+>
+> -Sergey
+>
+
+I've looked at the syscon documentation, other drivers that use it and
+tried the below proposed example with variations.  The result is Elba
+works ok for its four SPI devices but the host has a machine check
+which must be due to a pcie access error.  From another thread on this
+topic here is the recommended change to using syscon.
+
+> Rob, please see here having a small sized reg-space one more time.
+> Having so many small-sized registers scattered around the dts file
+> makes me thinking that most of them likely belong to some bigger
+> block like "System Controller". If so then there must be a main node
+> compatible with "syscon" device, which phandle would be referenced in
+> the particular device nodes. Like this:
+>
+> \ {
+>         soc {
+>                 syscon: syscon@307c0000 {
+>                         compatible = "pensando,elba-sys-con", "syscon", "simple-mfd";
+>                         reg = <0x0 0x307c0000 0x0 0x10000>;
+>
+>                         spics: spics@307c2468 {
+>                                 compatible = "pensando,elba-spics";
+>                                 gpio-controller;
+>                                 #gpio-cells = <2>;
+>                         };
+>                 };
+>                 pcie@307c2480 {
+>                         compatible = "pensando,pcie";
+>                         reg = <0x0 0x20000000 0x0 0x00380000>; /* PXB Base */
+>
+>                         syscon = <&syscon>;
+>                 };
+>
+>                 /* etc */
+>         };
+> };
+
+The current pcie node is
+
+>         pcie@307c2480 {
+>                 compatible = "pensando,pcie";
+>                 reg = <0x0 0x307c2480 0x0 0x4           /* MS CFG_WDT */
+>                        0x0 0x1400 0x0 0x10              /* WDT0 */
+>                        0x0 0x20000000 0x0 0x380000>;    /* PXB Base */
+>         };
+
+Regards,
+Brad
