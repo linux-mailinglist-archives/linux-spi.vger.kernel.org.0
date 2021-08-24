@@ -2,40 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3047E3F5C49
+	by mail.lfdr.de (Postfix) with ESMTP id 991F23F5C4A
 	for <lists+linux-spi@lfdr.de>; Tue, 24 Aug 2021 12:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236455AbhHXKlx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 24 Aug 2021 06:41:53 -0400
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:23220 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S236398AbhHXKlu (ORCPT
+        id S236488AbhHXKlz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 24 Aug 2021 06:41:55 -0400
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:45066 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236350AbhHXKlu (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Aug 2021 06:41:50 -0400
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 17OA050T016652;
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 17O9oMhW012561;
         Tue, 24 Aug 2021 05:41:03 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=bXPtQd8HEeyWR8X7GQzCqp25D8O8/msbik0SSpewS80=;
- b=eGSahquyMF4truea7sizxDcPXaCHGOTalqZxVraZgk8XwkpB7Sa8NFw09KmxP6QHA8lr
- UKZEwjfDltbBLTQznW5UH6TWSvxmJNLSHluxnrfVNU8DhfCl9I0LZpF7ZqefyJqv5fXW
- BTnekxDkJ2RvJ8jd17qcvXyenWTLiAjgSHgByEeeOhfqsMIiuFNvg4QioTT5U0NvBADX
- Zs7uOzrMJdcd9NoqWzJaxvYhRfe5hATFca8qZvumX33QCidvhXMWlQvyHmhTm38rxKbc
- 0Cn/inLB7FVC5F3ObFrzSg9PwK05ycJ7+WgjbFNkQDsbSCSNQdSZEKcF1iM6wrQk3Umm cw== 
-Received: from ediex01.ad.cirrus.com ([87.246.76.36])
-        by mx0a-001ae601.pphosted.com with ESMTP id 3amjmq8wmh-3
+ bh=2wUntjv+cBhYZZorzhH9FjfWoIl23/Y/M9545kBYFLc=;
+ b=Uxee53KxMnf/SJghkIkhhHIEip7Ww+G9o0rpWqqg4N3QU/vNuaHkM76fFWzl8jOrnM8P
+ SgJFHhEb9ERDK8AJUhG3LcB5EiFwIwK3v7l51E9ljz3BfuR+iYuPoCyxNTNRdw/UwPo+
+ 4GQVhYlY9eW0txDJ+EnpZ+NMcnBnqDsXAR9FBVnb8vy1qEC9vDo79koZKzcKta1CYkfO
+ 2Fc/THEyPeFxiVWVz+2d3dy7fYK9JGRXTXfDTqtx21LX+rNA2+mJLKgIX0b7MBXYBdAX
+ UuglWKmaLyI11OP/x/xWM6N+PwrIWvSdZRrlG4mb6VQxT41u/yvtrRbphaPBYJyTVWMq 1w== 
+Received: from ediex02.ad.cirrus.com ([87.246.76.36])
+        by mx0b-001ae601.pphosted.com with ESMTP id 3amxg601k1-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 24 Aug 2021 05:41:03 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 24 Aug 2021 05:41:02 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.12; Tue, 24 Aug
- 2021 11:41:00 +0100
+ 2021 11:41:01 +0100
 Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.2242.12 via Frontend
- Transport; Tue, 24 Aug 2021 11:41:00 +0100
+ Transport; Tue, 24 Aug 2021 11:41:01 +0100
 Received: from aryzen.ad.cirrus.com (unknown [198.61.65.58])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id A5E262A9;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id E8D692BA;
         Tue, 24 Aug 2021 10:41:00 +0000 (UTC)
 From:   Lucas Tanure <tanureal@opensource.cirrus.com>
 To:     Mark Brown <broonie@kernel.org>,
@@ -46,294 +46,295 @@ To:     Mark Brown <broonie@kernel.org>,
 CC:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <patches@opensource.cirrus.com>,
         Lucas Tanure <tanureal@opensource.cirrus.com>
-Subject: [PATCH 8/9] spi: amd: Refactor to overcome 70 bytes per CS limitation
-Date:   Tue, 24 Aug 2021 11:40:40 +0100
-Message-ID: <20210824104041.708945-9-tanureal@opensource.cirrus.com>
+Subject: [PATCH 9/9] spi: amd: Add support for latest platform
+Date:   Tue, 24 Aug 2021 11:40:41 +0100
+Message-ID: <20210824104041.708945-10-tanureal@opensource.cirrus.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210824104041.708945-1-tanureal@opensource.cirrus.com>
 References: <20210824104041.708945-1-tanureal@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: epGmpNXcnVKqNZ3X9hehhtdArML38hDr
-X-Proofpoint-GUID: epGmpNXcnVKqNZ3X9hehhtdArML38hDr
+X-Proofpoint-GUID: TtRVHzYK-d7bQ5uej-E_zrG7FGf4nHJP
+X-Proofpoint-ORIG-GUID: TtRVHzYK-d7bQ5uej-E_zrG7FGf4nHJP
 X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-AMD SPI controller has 70 bytes for its FIFO and it has an
-automatic way of controlling it`s internal CS, which can
-only be activated during the time that the FIFO is being
-transfered.
+Add support for AMDI0062 controllers
 
-SPI_MASTER_HALF_DUPLEX here means that it can only read
-RX bytes after TX bytes were written, and RX+TX must be
-less than 70. If you write 4 bytes the first byte of read
-is in position 5 of the FIFO.
-
-All of that means that for devices that require an address
-for reads and writes, the 2 transfers must be put in the same
-FIFO so the CS can be hold for address and data, otherwise
-the data would lose it`s meaning.
-
+Signed-off-by: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
 Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
 ---
- drivers/spi/spi-amd.c | 208 ++++++++++++++++++++++++++++--------------
- 1 file changed, 140 insertions(+), 68 deletions(-)
+ drivers/spi/spi-amd.c | 127 +++++++++++++++++++++++++++++++++---------
+ 1 file changed, 100 insertions(+), 27 deletions(-)
 
 diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
-index 75390fcb0481..b6308733265e 100644
+index b6308733265e..cd0b38ead150 100644
 --- a/drivers/spi/spi-amd.c
 +++ b/drivers/spi/spi-amd.c
-@@ -4,7 +4,8 @@
+@@ -2,9 +2,10 @@
  //
- // Copyright (c) 2020, Advanced Micro Devices, Inc.
+ // AMD SPI controller driver
  //
--// Author: Sanjay R Mehta <sanju.mehta@amd.com>
-+// Authors: Sanjay R Mehta <sanju.mehta@amd.com>
-+//          Lucas Tanure <tanureal@opensource.cirrus.com>
+-// Copyright (c) 2020, Advanced Micro Devices, Inc.
++// Copyright (c) 2020-2021, Advanced Micro Devices, Inc.
+ //
+ // Authors: Sanjay R Mehta <sanju.mehta@amd.com>
++//          Nehal Bakulchandra Shah <nehal-bakulchandra.shah@amd.com>
+ //          Lucas Tanure <tanureal@opensource.cirrus.com>
  
  #include <linux/acpi.h>
- #include <linux/init.h>
-@@ -29,6 +30,7 @@
- #define AMD_SPI_RX_COUNT_REG	0x4B
- #define AMD_SPI_STATUS_REG	0x4C
+@@ -15,32 +16,46 @@
+ #include <linux/spi/spi.h>
+ #include <linux/iopoll.h>
  
-+#define AMD_SPI_FIFO_SIZE	70
- #define AMD_SPI_MEM_SIZE	200
+-#define AMD_SPI_CTRL0_REG	0x00
+-#define AMD_SPI_EXEC_CMD	BIT(16)
+-#define AMD_SPI_FIFO_CLEAR	BIT(20)
+-#define AMD_SPI_BUSY		BIT(31)
++#define AMD_SPI_CTRL0_REG		0x00
++#define AMD_SPI_EXEC_CMD		BIT(16)
++#define AMD_SPI_FIFO_CLEAR		BIT(20)
++#define AMD_SPI_BUSY			BIT(31)
++#define AMD_SPI_ENABLE_REG		0x20
+ 
+-#define AMD_SPI_OPCODE_MASK	0xFF
++#define AMD_SPI_DUMMY_CYCL_REG		0x32
++#define AMD_SPI_OPCODE_REG		0x45
++#define AMD_SPI_CMD_TRIGGER_REG		0x47
++#define AMD_SPI_TRIGGER_CMD		BIT(7)
++#define AMD_SPI_OPCODE_MASK		0xFF
+ 
+-#define AMD_SPI_ALT_CS_REG	0x1D
+-#define AMD_SPI_ALT_CS_MASK	0x3
++#define AMD_SPI_ALT_CS_REG		0x1D
++#define AMD_SPI_ALT_CS_MASK		GENMASK(1, 0)
+ 
+-#define AMD_SPI_FIFO_BASE	0x80
+-#define AMD_SPI_TX_COUNT_REG	0x48
+-#define AMD_SPI_RX_COUNT_REG	0x4B
+-#define AMD_SPI_STATUS_REG	0x4C
++#define AMD_SPI_FIFO_BASE		0x80
++#define AMD_SPI_TX_COUNT_REG		0x48
++#define AMD_SPI_RX_COUNT_REG		0x4B
++#define AMD_SPI_STATUS_REG		0x4C
+ 
+-#define AMD_SPI_FIFO_SIZE	70
+-#define AMD_SPI_MEM_SIZE	200
++#define AMD_SPI_FIFO_SIZE		70
++#define AMD_SPI_MEM_SIZE		200
  
  /* M_CMD OP codes for SPI */
-@@ -132,83 +134,152 @@ static int amd_spi_master_setup(struct spi_device *spi)
- 	return 0;
+-#define AMD_SPI_XFER_TX		1
+-#define AMD_SPI_XFER_RX		2
++#define AMD_SPI_XFER_TX			1
++#define AMD_SPI_XFER_RX			2
+ 
+ struct amd_spi {
+ 	void __iomem *io_remap_addr;
+ 	unsigned long io_base_addr;
+ 	u32 rom_addr;
++	const struct amd_spi_devtype_data *devtype_data;
++	struct spi_device *spi_dev;
++	struct spi_master *master;
++};
++
++struct amd_spi_devtype_data {
++	u8 version;
++	int (*exec_op)(struct amd_spi *amd_spi);
++	void (*set_op)(struct amd_spi *amd_spi, u8 cmd_opcode);
+ };
+ 
+ static inline u8 amd_spi_readreg8(struct amd_spi *amd_spi, int idx)
+@@ -84,16 +99,26 @@ static void amd_spi_select_chip(struct amd_spi *amd_spi, u8 cs)
+ 	amd_spi_setclear_reg8(amd_spi, AMD_SPI_ALT_CS_REG, cs, AMD_SPI_ALT_CS_MASK);
  }
  
--static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
--				    struct spi_master *master,
--				    struct spi_message *message)
-+static int amd_spi_double_write(struct spi_master *mst, u8 *tx1_buf, u8 tx1_len, u8 *tx2_buf,
-+				u8 tx2_len)
++static inline void amd_spi_clear_chip(struct amd_spi *amd_spi, u8 chip_select)
++{
++	amd_spi_writereg8(amd_spi, AMD_SPI_ALT_CS_REG, chip_select & ~AMD_SPI_ALT_CS_MASK);
++}
++
+ static void amd_spi_clear_fifo_ptr(struct amd_spi *amd_spi)
  {
--	struct spi_transfer *xfer = NULL;
--	u8 cmd_opcode;
--	u8 *buf = NULL;
--	u32 m_cmd = 0;
--	u32 i = 0;
--	u32 tx_len = 0, rx_len = 0;
--
--	list_for_each_entry(xfer, &message->transfers,
--			    transfer_list) {
--		if (xfer->rx_buf)
--			m_cmd = AMD_SPI_XFER_RX;
--		if (xfer->tx_buf)
--			m_cmd = AMD_SPI_XFER_TX;
--
--		if (m_cmd & AMD_SPI_XFER_TX) {
--			buf = (u8 *)xfer->tx_buf;
--			tx_len = xfer->len - 1;
--			cmd_opcode = *(u8 *)xfer->tx_buf;
--			buf++;
--			amd_spi_set_opcode(amd_spi, cmd_opcode);
--
--			/* Write data into the FIFO. */
--			for (i = 0; i < tx_len; i++) {
--				iowrite8(buf[i], ((u8 __iomem *)amd_spi->io_remap_addr +
--					 AMD_SPI_FIFO_BASE + i));
--			}
-+	struct amd_spi *amd_spi = spi_master_get_devdata(mst);
-+	int i, ret;
- 
--			amd_spi_set_tx_count(amd_spi, tx_len);
--			amd_spi_clear_fifo_ptr(amd_spi);
--			/* Execute command */
--			amd_spi_execute_opcode(amd_spi);
--		}
--		if (m_cmd & AMD_SPI_XFER_RX) {
--			/*
--			 * Store no. of bytes to be received from
--			 * FIFO
--			 */
--			rx_len = xfer->len;
--			buf = (u8 *)xfer->rx_buf;
--			amd_spi_set_rx_count(amd_spi, rx_len);
--			amd_spi_clear_fifo_ptr(amd_spi);
--			/* Execute command */
--			amd_spi_execute_opcode(amd_spi);
--			/* Read data from FIFO to receive buffer  */
--			for (i = 0; i < rx_len; i++)
--				buf[i] = amd_spi_readreg8(amd_spi, AMD_SPI_FIFO_BASE + tx_len + i);
--		}
--	}
-+	if (tx1_len + tx2_len > AMD_SPI_FIFO_SIZE)
-+		return -EINVAL;
- 
--	/* Update statistics */
--	message->actual_length = tx_len + rx_len + 1;
--	/* complete the transaction */
--	message->status = 0;
--	spi_finalize_current_message(master);
-+	amd_spi_clear_fifo_ptr(amd_spi);
-+	amd_spi_set_rx_count(amd_spi, 0);
- 
--	return 0;
-+	amd_spi_set_opcode(amd_spi, tx1_buf[0]);
-+	tx1_len--;
-+	tx1_buf++;
-+
-+	for (i = 0; i < tx1_len; i++)
-+		amd_spi_writereg8(amd_spi, (u8)(AMD_SPI_FIFO_BASE + i), tx1_buf[i]);
-+
-+	for (i = 0; i < tx2_len; i++)
-+		amd_spi_writereg8(amd_spi, (u8)(AMD_SPI_FIFO_BASE + tx1_len + i), tx2_buf[i]);
-+
-+	amd_spi_set_tx_count(amd_spi, tx1_len + tx2_len);
-+	ret = amd_spi_execute_opcode(amd_spi);
-+
-+	return ret ? ret : tx1_len + 1 + tx2_len;
+ 	amd_spi_setclear_reg32(amd_spi, AMD_SPI_CTRL0_REG, AMD_SPI_FIFO_CLEAR, AMD_SPI_FIFO_CLEAR);
  }
  
--static int amd_spi_master_transfer(struct spi_master *master,
--				   struct spi_message *msg)
-+static int amd_spi_write_read(struct spi_master *mst, u8 *tx_buf, u8 tx_len, u8 *rx_buf, u8 rx_len)
+-static void amd_spi_set_opcode(struct amd_spi *amd_spi, u8 cmd_opcode)
++static void amd_spi_set_opcode_v1(struct amd_spi *amd_spi, u8 cmd_opcode)
  {
--	struct amd_spi *amd_spi = spi_master_get_devdata(master);
--	struct spi_device *spi = msg->spi;
-+	struct amd_spi *amd_spi = spi_master_get_devdata(mst);
-+	int i, ret;
-+
-+	if (tx_len + rx_len > AMD_SPI_FIFO_SIZE)
-+		return -EINVAL;
-+
-+	amd_spi_clear_fifo_ptr(amd_spi);
-+
-+	if (tx_buf) {
-+		/* Take the first byte to be written and set as opcode */
-+		amd_spi_set_opcode(amd_spi, tx_buf[0]);
-+		/* Set TX count as the number of bytes to be written less one (opcode byte) */
-+		tx_len--;
-+		tx_buf++;
+ 	amd_spi_setclear_reg32(amd_spi, AMD_SPI_CTRL0_REG, cmd_opcode, AMD_SPI_OPCODE_MASK);
+ }
  
--	amd_spi_select_chip(amd_spi, spi->chip_select);
-+		/* Copy to the FIFO the remaining bytes */
-+		for (i = 0; i < tx_len; i++)
-+			amd_spi_writereg8(amd_spi, (AMD_SPI_FIFO_BASE + i), tx_buf[i]);
++static void amd_spi_set_opcode_v2(struct amd_spi *amd_spi, u8 cmd_opcode)
++{
++	amd_spi_writereg8(amd_spi, AMD_SPI_OPCODE_REG, cmd_opcode);
++}
++
+ static inline void amd_spi_set_rx_count(struct amd_spi *amd_spi, u8 rx_count)
+ {
+ 	amd_spi_setclear_reg8(amd_spi, AMD_SPI_RX_COUNT_REG, rx_count, 0xff);
+@@ -104,7 +129,7 @@ static inline void amd_spi_set_tx_count(struct amd_spi *amd_spi, u8 tx_count)
+ 	amd_spi_setclear_reg8(amd_spi, AMD_SPI_TX_COUNT_REG, tx_count, 0xff);
+ }
  
--	/*
--	 * Extract spi_transfers from the spi message and
--	 * program the controller.
-+		amd_spi_set_tx_count(amd_spi, tx_len);
-+	}
-+	/* Set RX count as the number of bytes that will be read AFTER the TX bytes are sent
-+	 * Or set to zero to avoid extra bytes after the write cycle
- 	 */
--	amd_spi_fifo_xfer(amd_spi, master, msg);
-+	amd_spi_set_rx_count(amd_spi, rx_buf ? rx_len : 0);
+-static int amd_spi_busy_wait(struct amd_spi *amd_spi)
++static int amd_spi_busy_wait_v1(struct amd_spi *amd_spi)
+ {
+ 	u32 val;
  
--	return 0;
-+	/* Trigger the transfer by executing the opcode */
-+	ret = amd_spi_execute_opcode(amd_spi);
+@@ -112,17 +137,39 @@ static int amd_spi_busy_wait(struct amd_spi *amd_spi)
+ 				 !(val & AMD_SPI_BUSY), 10, 100000);
+ }
+ 
+-static int amd_spi_execute_opcode(struct amd_spi *amd_spi)
++static int amd_spi_execute_opcode_v1(struct amd_spi *amd_spi)
+ {
+-	int ret = amd_spi_busy_wait(amd_spi);
++	int ret;
+ 
++	ret = amd_spi_busy_wait_v1(amd_spi);
+ 	if (ret)
+ 		return ret;
+ 
+-	/* Set ExecuteOpCode bit in the CTRL0 register */
+ 	amd_spi_setclear_reg32(amd_spi, AMD_SPI_CTRL0_REG, AMD_SPI_EXEC_CMD, AMD_SPI_EXEC_CMD);
+ 
+-	return amd_spi_busy_wait(amd_spi);
++	return amd_spi_busy_wait_v1(amd_spi);
++}
++
++static int amd_spi_busy_wait_v2(struct amd_spi *amd_spi)
++{
++	u32 val;
++
++	return readl_poll_timeout(amd_spi->io_remap_addr + AMD_SPI_STATUS_REG, val,
++				 !(val & AMD_SPI_BUSY), 10, 1000);
++}
++
++static int amd_spi_execute_opcode_v2(struct amd_spi *amd_spi)
++{
++	int ret;
++
++	ret = amd_spi_busy_wait_v2(amd_spi);
 +	if (ret)
 +		return ret;
 +
-+	/* Wait for the SPI bus to be idle and copy the RX bytes from the FIFO from the starting
-+	 * position of TX bytes
-+	 */
-+	if (rx_buf) {
-+		for (i = 0; i < rx_len; i++)
-+			rx_buf[i] = amd_spi_readreg8(amd_spi, AMD_SPI_FIFO_BASE + tx_len + i);
-+	}
++	amd_spi_setclear_reg8(amd_spi, AMD_SPI_CMD_TRIGGER_REG, AMD_SPI_TRIGGER_CMD,
++			      AMD_SPI_TRIGGER_CMD);
 +
-+	return tx_len + 1 + rx_len;
-+}
-+
-+/* amd_spi_master_transfer expects a spi_message with one or two transfers only
-+ * Where a message with one transfer is a single write or read to a device
-+ * And a message with two transfer is an address write followed by a read or
-+ * write data into that address
-+ */
-+static int amd_spi_master_transfer(struct spi_master *mst, struct spi_message *msg)
-+{
-+	struct amd_spi *amd_spi = spi_master_get_devdata(mst);
-+	struct spi_transfer *xfer, *xfer_n;
-+	struct list_head *pos;
-+	int ret, count = 0;
-+
-+	list_for_each(pos, &msg->transfers)
-+		count++;
-+
-+	amd_spi_select_chip(amd_spi, msg->spi->chip_select);
-+
-+	xfer = list_first_entry(&msg->transfers, struct spi_transfer, transfer_list);
-+	switch (count) {
-+	case 1:
-+		/* This controller can't write and read simultaneously
-+		 * It can only write data first and read afterwards
-+		 */
-+		if (xfer->tx_buf && xfer->rx_buf) {
-+			ret = -EINVAL;
-+			dev_err(&mst->dev, "Error. Can't write and read simultaneously\n");
-+			goto complete;
-+		}
-+
-+		ret = amd_spi_write_read(mst, (u8 *)xfer->tx_buf, xfer->len,
-+					      (u8 *)xfer->rx_buf, xfer->len);
-+		if (ret < 0)
-+			goto complete;
-+		break;
-+	case 2:
-+		xfer_n = list_last_entry(&msg->transfers, struct spi_transfer, transfer_list);
-+		if (xfer->tx_buf && !xfer->rx_buf) {
-+			if (xfer_n->rx_buf && !xfer_n->tx_buf) {
-+				ret = amd_spi_write_read(mst, (u8 *)xfer->tx_buf, xfer->len,
-+							      (u8 *)xfer_n->rx_buf, xfer_n->len);
-+				if (ret < 0)
-+					goto complete;
-+				break;
-+			} else if (xfer_n->tx_buf && !xfer_n->rx_buf) {
-+				ret = amd_spi_double_write(mst, (u8 *)xfer->tx_buf, xfer->len,
-+								(u8 *)xfer_n->tx_buf, xfer_n->len);
-+				if (ret < 0)
-+					goto complete;
-+				break;
-+			}
-+		}
-+		ret = -EINVAL;
-+		dev_err(&mst->dev, "Error. Message not supported\n");
-+		goto complete;
-+	default:
-+		ret = -EINVAL;
-+		dev_err(&mst->dev, "Message with %d transfers is not supported\n", count);
-+		goto complete;
-+	}
-+
-+	msg->actual_length += ret;
-+	ret = 0;
-+
-+complete:
-+	/* complete the transaction */
-+	msg->status = ret;
-+	spi_finalize_current_message(mst);
-+
-+	return ret;
-+}
-+
-+static size_t amd_spi_max_transfer_size(struct spi_device *spi)
-+{
-+	return AMD_SPI_FIFO_SIZE;
++	return amd_spi_busy_wait_v2(amd_spi);
  }
  
- static int amd_spi_probe(struct platform_device *pdev)
-@@ -238,8 +309,9 @@ static int amd_spi_probe(struct platform_device *pdev)
+ static int amd_spi_master_setup(struct spi_device *spi)
+@@ -138,6 +185,7 @@ static int amd_spi_double_write(struct spi_master *mst, u8 *tx1_buf, u8 tx1_len,
+ 				u8 tx2_len)
+ {
+ 	struct amd_spi *amd_spi = spi_master_get_devdata(mst);
++	const struct amd_spi_devtype_data *priv = amd_spi->devtype_data;
+ 	int i, ret;
+ 
+ 	if (tx1_len + tx2_len > AMD_SPI_FIFO_SIZE)
+@@ -146,7 +194,7 @@ static int amd_spi_double_write(struct spi_master *mst, u8 *tx1_buf, u8 tx1_len,
+ 	amd_spi_clear_fifo_ptr(amd_spi);
+ 	amd_spi_set_rx_count(amd_spi, 0);
+ 
+-	amd_spi_set_opcode(amd_spi, tx1_buf[0]);
++	priv->set_op(amd_spi, tx1_buf[0]);
+ 	tx1_len--;
+ 	tx1_buf++;
+ 
+@@ -157,7 +205,7 @@ static int amd_spi_double_write(struct spi_master *mst, u8 *tx1_buf, u8 tx1_len,
+ 		amd_spi_writereg8(amd_spi, (u8)(AMD_SPI_FIFO_BASE + tx1_len + i), tx2_buf[i]);
+ 
+ 	amd_spi_set_tx_count(amd_spi, tx1_len + tx2_len);
+-	ret = amd_spi_execute_opcode(amd_spi);
++	ret = priv->exec_op(amd_spi);
+ 
+ 	return ret ? ret : tx1_len + 1 + tx2_len;
+ }
+@@ -165,6 +213,7 @@ static int amd_spi_double_write(struct spi_master *mst, u8 *tx1_buf, u8 tx1_len,
+ static int amd_spi_write_read(struct spi_master *mst, u8 *tx_buf, u8 tx_len, u8 *rx_buf, u8 rx_len)
+ {
+ 	struct amd_spi *amd_spi = spi_master_get_devdata(mst);
++	const struct amd_spi_devtype_data *priv = amd_spi->devtype_data;
+ 	int i, ret;
+ 
+ 	if (tx_len + rx_len > AMD_SPI_FIFO_SIZE)
+@@ -174,7 +223,7 @@ static int amd_spi_write_read(struct spi_master *mst, u8 *tx_buf, u8 tx_len, u8
+ 
+ 	if (tx_buf) {
+ 		/* Take the first byte to be written and set as opcode */
+-		amd_spi_set_opcode(amd_spi, tx_buf[0]);
++		priv->set_op(amd_spi, tx_buf[0]);
+ 		/* Set TX count as the number of bytes to be written less one (opcode byte) */
+ 		tx_len--;
+ 		tx_buf++;
+@@ -191,7 +240,7 @@ static int amd_spi_write_read(struct spi_master *mst, u8 *tx_buf, u8 tx_len, u8
+ 	amd_spi_set_rx_count(amd_spi, rx_buf ? rx_len : 0);
+ 
+ 	/* Trigger the transfer by executing the opcode */
+-	ret = amd_spi_execute_opcode(amd_spi);
++	ret = priv->exec_op(amd_spi);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -274,6 +323,9 @@ static int amd_spi_master_transfer(struct spi_master *mst, struct spi_message *m
+ 	msg->status = ret;
+ 	spi_finalize_current_message(mst);
+ 
++	if (amd_spi->devtype_data->version)
++		amd_spi_clear_chip(amd_spi, msg->spi->chip_select);
++
+ 	return ret;
+ }
+ 
+@@ -305,6 +357,12 @@ static int amd_spi_probe(struct platform_device *pdev)
+ 	}
+ 	dev_dbg(dev, "io_remap_address: %p\n", amd_spi->io_remap_addr);
+ 
++	amd_spi->devtype_data = device_get_match_data(dev);
++	if (!amd_spi->devtype_data) {
++		err = -ENODEV;
++		goto err_free_master;
++	}
++
+ 	/* Initialize the spi_master fields */
  	master->bus_num = 0;
  	master->num_chipselect = 4;
- 	master->mode_bits = 0;
--	master->flags = SPI_MASTER_HALF_DUPLEX;
-+	master->flags = SPI_MASTER_HALF_DUPLEX | SPI_CONTROLLER_CS_PER_TRANSFER;
- 	master->setup = amd_spi_master_setup;
-+	master->max_transfer_size = amd_spi_max_transfer_size;
- 	master->transfer_one_message = amd_spi_master_transfer;
+@@ -329,9 +387,23 @@ static int amd_spi_probe(struct platform_device *pdev)
+ 	return err;
+ }
  
- 	/* Register the controller with SPI framework */
++static const struct amd_spi_devtype_data spi_v1 = {
++	.exec_op	= amd_spi_execute_opcode_v1,
++	.set_op		= amd_spi_set_opcode_v1,
++};
++
++static const struct amd_spi_devtype_data spi_v2 = {
++	.version	= 1,
++	.exec_op	= amd_spi_execute_opcode_v2,
++	.set_op		= amd_spi_set_opcode_v2,
++};
++
+ #ifdef CONFIG_ACPI
+ static const struct acpi_device_id spi_acpi_match[] = {
+-	{ "AMDI0061", 0 },
++	{ "AMDI0061",
++	.driver_data = (kernel_ulong_t)&spi_v1 },
++	{ "AMDI0062",
++	.driver_data = (kernel_ulong_t)&spi_v2 },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(acpi, spi_acpi_match);
+@@ -349,4 +421,5 @@ module_platform_driver(amd_spi_driver);
+ 
+ MODULE_LICENSE("Dual BSD/GPL");
+ MODULE_AUTHOR("Sanjay Mehta <sanju.mehta@amd.com>");
++MODULE_AUTHOR("Nehal Bakulchandra Shah <nehal-bakulchandra.shah@amd.com>");
+ MODULE_DESCRIPTION("AMD SPI Master Controller Driver");
 -- 
 2.33.0
 
