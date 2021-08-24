@@ -2,159 +2,472 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5683F6A1D
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Aug 2021 21:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6757D3F6A58
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Aug 2021 22:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbhHXTuo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 24 Aug 2021 15:50:44 -0400
-Received: from mail-eopbgr60113.outbound.protection.outlook.com ([40.107.6.113]:4065
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231294AbhHXTuo (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 24 Aug 2021 15:50:44 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=et+UQ5wTcHK0H8TQxrsSnr2YdyJz91JIaru42ZseSulLavqzyGJUQ6a+VGEFAa0PV0r+5M4YzV7XpZ7EcOHdctgRYck1XFMMoP79xS4HrWzFiWH5nZhgdGX05NSKVaWNQc31bilWFmxeeH3EPmx9VNi1R4O0AWWR37CT1U9PSU7YjBkXX/ZzCl9z015oXwZCi8MAghgf9AVlOQJkzwUr6xXcTrgoX5DTtRhYUOLUGvIPcNYAjtMfZhFb01CYvobtjdhtnfuT47+yn8bMssiIy4MkBF7FXl7cBmTOEUte2Kf7OlhSedYdJFmRijdSscHiI5eopON4i59RNbD6Pf96uw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lx0mi1QpV3Izm7gDag154mmXAaH6kdGgOiXdj0TknUo=;
- b=dZj6lEwCtRHnknAwtIvlbUSoeATX/i+Diye+vK4PE+/OO+DdkYFiLX7lIpL62i6RCo+z2kTXRBRXoBEF7WEihyvfcoi6vZdw1QDIcR2veLoi/VxdaAoF/ZWozig9Qa2CGzdDYqNUGOXwdnr5UzzsunHIVuz0jNYNm8xXR1VptA7tK+vNfe7mmGqgk1Tc5bZsolO0VTEzggBIBZjRFYbhTKNK9+Nr7CeahXJTVLcYwhPMXDTCsFHJVoaF7VZJLNCAhrUgkiv7AoxgTv5IugGzePCiGcxBaO+KTfB04YVlhYiR8eXTSdQEPjTq/lyj00k7s7gn2fzTpA2FZ9Ri4Xu+EQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lx0mi1QpV3Izm7gDag154mmXAaH6kdGgOiXdj0TknUo=;
- b=u1s6dtT8y1Kyq/4wHIro1CLnNSZwHvrZaWYV071U9Yev0oUTcGKsWy1WjfaNzelTsUjX7SLHjCBbe8Sh8aUSLhkq/zQR71+gpXF+lVQgqk5lrWgQvQqC5jecSpAtxoI/V7Mdk1OqS37hVVbtp6IGUN/0g7Bgqoqc2BTuEyYs6sU=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=nokia.com;
-Received: from AM0PR07MB4531.eurprd07.prod.outlook.com (2603:10a6:208:6e::15)
- by AM0PR07MB4353.eurprd07.prod.outlook.com (2603:10a6:208:bb::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.8; Tue, 24 Aug
- 2021 19:49:58 +0000
-Received: from AM0PR07MB4531.eurprd07.prod.outlook.com
- ([fe80::1547:7c34:364e:39a1]) by AM0PR07MB4531.eurprd07.prod.outlook.com
- ([fe80::1547:7c34:364e:39a1%6]) with mapi id 15.20.4457.014; Tue, 24 Aug 2021
- 19:49:57 +0000
-Subject: Re: [PATCH] spi: davinci: invoke chipselect callback
-To:     Matija Glavinic Pecotic <matija.glavinic-pecotic.ext@nokia.com>,
-        broonie@kernel.org, linux-spi@vger.kernel.org
-References: <735fb7b0-82aa-5b9b-85e4-53f0c348cc0e@nokia.com>
-From:   Alexander Sverdlin <alexander.sverdlin@nokia.com>
-Message-ID: <cf9df6a3-e6b2-4e18-5ac1-d5e8959d9fc5@nokia.com>
-Date:   Tue, 24 Aug 2021 21:49:54 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-In-Reply-To: <735fb7b0-82aa-5b9b-85e4-53f0c348cc0e@nokia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PR3P192CA0007.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:102:56::12) To AM0PR07MB4531.eurprd07.prod.outlook.com
- (2603:10a6:208:6e::15)
+        id S235006AbhHXUVD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 24 Aug 2021 16:21:03 -0400
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:41658 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229514AbhHXUVC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Aug 2021 16:21:02 -0400
+Received: by mail-ot1-f43.google.com with SMTP id o16-20020a9d2210000000b0051b1e56c98fso34570762ota.8;
+        Tue, 24 Aug 2021 13:20:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XGOKN6mGxhbzHX6KGLM07SrG99SjeiH8yw3t71J8Izs=;
+        b=biM8640T7a8wqUrJzY+WI2/BQ9U8XlyImlRA5gHZtpN6K2AYQ/P729WabmoEB1CaK5
+         rwE+BhZ1jcGdBcp7+hipwEzCQx/vpKBT9tllEi7AMjcHRHUgFMk+vppBKsRZT3TegXex
+         XucL7BPg9xbIW3NBdAW5UI+SDimbOPUR7aPRPcZlaE3g/pvbvCDnU+SW8eYbvdLkC0fr
+         ES9CRZ1lusN2e9L1sAzvOemVwhtB+M5BFOoeSh1CLVWFcTrUX6OzG7RCF8p/5FmzbTZk
+         4iTGfz2XBsJ/nTcrhhlyNbEmdvLpKX4R7R0VeLEoFm4nACkhhP2iI5yUtVrqa5YsHoph
+         0GGQ==
+X-Gm-Message-State: AOAM53043bj3WkgtXznEoubri3kQ0rO7qJ0glV5VyHKGkzokkYNxDVLf
+        MCfPnhBSd8oG264QkHEIY7j37n418Q==
+X-Google-Smtp-Source: ABdhPJw3e++rFJpQspnKwHqFcPLi3Yo+Es3bmpPs1nlv0eJUlxfR2mBSgz2g8EfK28QcsnnNwzNS0w==
+X-Received: by 2002:a05:6808:54f:: with SMTP id i15mr4278045oig.121.1629836416392;
+        Tue, 24 Aug 2021 13:20:16 -0700 (PDT)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id h14sm4810168otm.5.2021.08.24.13.20.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Aug 2021 13:20:15 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Vignesh R <vigneshr@ti.com>, Marc Zyngier <maz@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org
+Subject: [PATCH] dt-bindings: Use 'enum' instead of 'oneOf' plus 'const' entries
+Date:   Tue, 24 Aug 2021 15:20:14 -0500
+Message-Id: <20210824202014.978922-1-robh@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Received: from ulegcpsvhp1.emea.nsn-net.net (131.228.32.167) by PR3P192CA0007.EURP192.PROD.OUTLOOK.COM (2603:10a6:102:56::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.19 via Frontend Transport; Tue, 24 Aug 2021 19:49:57 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4dd4ff76-836c-4a9d-cf47-08d967385a20
-X-MS-TrafficTypeDiagnostic: AM0PR07MB4353:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM0PR07MB4353549B059717E7B58859F688C59@AM0PR07MB4353.eurprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Zw0pV+/lPyV7j4764Ke5fwUcdWN4ec6RW8G7l0y/4SnHOW5Mq07pWA56551GJE4XxnQfNijD93TNlk11rzMHiZoC4mjY7kWCp8ZhU/uNwpk9e/EZHqLKdreo1WF7GdwRM4Knpm+6toWziKRok3wBnUq0uXTF3Zd+sYeL5D6gVQBQAi00NA95ptfKT1jJxzaA7tw6P0nq3xgBL+DgoG2qzZ5r1OySBAFnU+Bblsvjzu8DBfNesGSqRKrHx0QShb1j3Xnnikvx2/iUMiz3l1XDMOJoRow81lvRp7gEUoMfKqRafEYyeZkTktGJH1eHKBWV/IfpnksJ/aT1Vc6bn+et0K0l6XF7d2k7B9t2kLIzqlkQThMQ+3g0Rcr37IsO9+kEw2A7P+a3X8bZMKZZ4f6zqEZwcdmMT5M+QpRXdhcNoPETYoVHl9WU1ZkO+mUJkwiTcKz/5JJtw4txTd6ql2DUPK5r4Qj/oFvThxvs7Ur/UBIW9+NDrC8rwBl8vmktwkZY2yPedmJAiQLJUhCdpXIXdgnAmrONR6CeZNTOWUwqZUIz3wu2gGWj3bpICUgo1+evStrXH+zsLb/aENGPtsjPepc7HCXhwh5M+tCeTsRxTFL+qXTv/KBm8/jNurNHcLy70lWS8qFingNAae5mJHjcmamIFKzmGCoFfkU89YGHQKgky8ShpxGDAF7TEnCkeIfrFmco7flYY+usMln3BO0RIoBj1CfcXWHLWL7s+gPLIcL88x2Aw8a64PBBBSsHph5Vjftqy45XKJkNq94ZBl0oFg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR07MB4531.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(366004)(136003)(376002)(346002)(396003)(52116002)(6666004)(316002)(44832011)(83380400001)(478600001)(38100700002)(2906002)(6512007)(8676002)(53546011)(6506007)(66476007)(5660300002)(8936002)(36756003)(31696002)(31686004)(86362001)(26005)(2616005)(956004)(6486002)(186003)(66556008)(38350700002)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SDFuM29pSXBvc3VzNWJueURBeUFkMGJYd2gvbktGVnltSUxIMlhLMHJDQVlK?=
- =?utf-8?B?dDErN2svdWk5dzZFMlJ3SGc4MmNGaXR2aXFxSGQ5K3YwaFhqZHR4aVc0aXRF?=
- =?utf-8?B?T2ozelVnSHJRNDNROTJ0VXlSWXY4Zlp2dFJ0S1JFVVFXRW01YWxCWDNsM1FM?=
- =?utf-8?B?RWM2azU4c3FRWnNYS1lQTTZQR1JTSGlDNEJtN3lmeFJuS3lSYjJKb1Rmc3ZS?=
- =?utf-8?B?cW9wejNlM2o5bDNBSlMvRHNCSVVYV1NTei9rN1A2THB1cnVGL2VpaUVQMS9V?=
- =?utf-8?B?MXRQT1ErMXdMZkRFU3pwWTJ2QUJqc3M1MFJ4cmJIcmhlNkcxY0pOTlh4U0Fz?=
- =?utf-8?B?WVhBT1VqcGNvQkFIYXM0dTU0L3M3R1RhSHNqMVhtNzYxeGpOeE41Sm03dXVP?=
- =?utf-8?B?c1Q1VGNKTjJvV2ZqWUIyd1ZXcUQ3OTNSQUlNZWNsQnU4ZWVQbjRIYkVvQk53?=
- =?utf-8?B?U05aY3RuUUVnSklCdEZVRWNKM0NodXZqWFRMME8wcDZhY0ViOE1nZG50V1Ru?=
- =?utf-8?B?VWJYY1Yxc1Z6dCsvbmZGRUcwSC9VbHAvWTcrVGVibmZrSE9ObjdRNXZJTnB4?=
- =?utf-8?B?TmJoc1p3aHYvUjFIUnQycmtpTFl2TTB4ankzQmR4TWErQWdIMFJvdDhjRGlY?=
- =?utf-8?B?b3lHelZXb0JPVktSdk8yZmRpZzR2UXpDbDRPVVNHYUVodldpODFpWUs4cThE?=
- =?utf-8?B?eU9oV21iaGpLQlAvbFFENzB6KzE2eHVGb2lNY05ML0hydnpOUHFUTTdnSHYr?=
- =?utf-8?B?WkwzSFNjc3JRaVYybmdvejJ6eTZ1c2RIWU9tUXZiWTZnK2hWWU50RVV2VlYx?=
- =?utf-8?B?TmNrYjRvRGMwME10ZzZwa1BuVU1CeDBpZjVqSklTTW5OY29rclJHUzVMRHda?=
- =?utf-8?B?QmxDSHNpVlh5UzQ1aDVQSG5xdko0T3ZrT2kxZEMvYkpzcGwrU2xqVFJBaWNI?=
- =?utf-8?B?eE9udEdPUzI3VHZydHpwdmxBN3l3cnhRSnhoNEk4MWhnVGxvQ284YU92K0FH?=
- =?utf-8?B?VXZzZzVYTTZZcWlDczY2YTd4VlV3OW5lTk5XcW5UTkFFWlNjNS94bjh3Yytq?=
- =?utf-8?B?ZHB1N2FFdnBJSUVEaVVoMDRZNmxFcnR4bEtHT0MyeGZ5QkhkcjhJUmtHTFF0?=
- =?utf-8?B?NURTZ0gzcEJnSDFvTDRRTXd4OU1PbjBIWWw4VjM2TjRBOWM5Qk83aVFvWXNz?=
- =?utf-8?B?REZVNnlxdVZPYm1ibnZ0Z045ZkszSlBnWG1SeXhkT1dpUjNDcFMxdlpVY2lG?=
- =?utf-8?B?ZHZ3WHQvMVphN1JCdGVZdWVINkFMbXJzd1FDeXJiRHlxdkRQS2d4cURMRG9y?=
- =?utf-8?B?ZmFhcUpkbXlBdmVmSEpjRDl1a0c5cUNoVy9xaWdpSzM0UllobEpTMkd2ZW0z?=
- =?utf-8?B?OU5uRTF1RXN5cm8wMm1SMzBtaWV6aCtVSGdNM1JXWFYrazR6MW5ZNUxEM2lk?=
- =?utf-8?B?UzR6N3hhbmJoMVB4Wk9XVDZvaUEwSGNpKzkxSGxxL2xpQ1FIdVB2L3dCUmYy?=
- =?utf-8?B?RlV5VlRvL2xtU09nR2JWN3VrQWpMcHZiN2NFY3NJUEdsUHpQc1FGeDk3MTQv?=
- =?utf-8?B?bEM3NWxWbFF1dXo4QTl2VU5SYzhkUEl1RnRUZHR0ekRicWI2ZzhyYkNibnNV?=
- =?utf-8?B?S2x5N0NvSFdoWEcxZWI1NjUvN2QyVmRsYlhQUGtuS3BkeCtVSHRaQUpPMVBm?=
- =?utf-8?B?cTBJbGRJTW9sUjBRVDltMFprWGl5aUJHdXNuZGl0bXBqdmltVllEOHJsZmlV?=
- =?utf-8?Q?RoSkaoXQV3uzjBMrYBUEoWvQuGzaCKErkIzfieU?=
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4dd4ff76-836c-4a9d-cf47-08d967385a20
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR07MB4531.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2021 19:49:57.8934
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Z+cy7tqteIkISDjEVS4zC8iLjIgi1CwFMCv/M5gix49qe5GE5pUPrahRNCphJCGL7tgdivGOFz+Bgq3aW/OZF9zrGwx7nz2iDVg3oiihwiw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR07MB4353
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi!
+'enum' is equivalent to 'oneOf' with a list of 'const' entries, but 'enum'
+is more concise and yields better error messages.
 
-On 24/08/2021 11:25, Matija Glavinic Pecotic wrote:
-> Davinci needs to configure chipselect on transfer.
-> 
-> Fixes: 4a07b8bcd503 ("spi: bitbang: Make chipselect callback optional")
-> 
-> Signed-off-by: Matija Glavinic Pecotic <matija.glavinic-pecotic.ext@nokia.com>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Vignesh R <vigneshr@ti.com>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Kishon Vijay Abraham I <kishon@ti.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: dmaengine@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org
+Cc: linux-media@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-pci@vger.kernel.org
+Cc: linux-phy@lists.infradead.org
+Cc: linux-serial@vger.kernel.org
+Cc: alsa-devel@alsa-project.org
+Cc: linux-spi@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/display/msm/dsi-phy-10nm.yaml           |  6 +++---
+ .../bindings/display/msm/dsi-phy-14nm.yaml           |  6 +++---
+ .../bindings/display/msm/dsi-phy-28nm.yaml           |  8 ++++----
+ .../bindings/dma/allwinner,sun6i-a31-dma.yaml        | 12 ++++++------
+ .../devicetree/bindings/firmware/arm,scpi.yaml       |  6 +++---
+ .../devicetree/bindings/i2c/ti,omap4-i2c.yaml        | 10 +++++-----
+ .../interrupt-controller/loongson,liointc.yaml       |  8 ++++----
+ .../devicetree/bindings/media/i2c/mipi-ccs.yaml      |  8 ++++----
+ .../devicetree/bindings/mfd/ti,lp87565-q1.yaml       |  6 +++---
+ .../devicetree/bindings/net/realtek-bluetooth.yaml   |  8 ++++----
+ .../bindings/net/ti,k3-am654-cpsw-nuss.yaml          |  8 ++++----
+ .../devicetree/bindings/net/ti,k3-am654-cpts.yaml    |  6 +++---
+ Documentation/devicetree/bindings/pci/loongson.yaml  |  8 ++++----
+ .../devicetree/bindings/phy/intel,lgm-emmc-phy.yaml  |  6 +++---
+ .../devicetree/bindings/serial/8250_omap.yaml        |  9 +++++----
+ .../devicetree/bindings/sound/qcom,sm8250.yaml       |  6 +++---
+ .../devicetree/bindings/sound/tlv320adcx140.yaml     |  8 ++++----
+ .../devicetree/bindings/spi/realtek,rtl-spi.yaml     | 12 ++++++------
+ .../devicetree/bindings/timer/arm,sp804.yaml         |  6 +++---
+ 19 files changed, 74 insertions(+), 73 deletions(-)
 
-Reviewed-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
-
-> ---
->  drivers/spi/spi-davinci.c | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-davinci.c b/drivers/spi/spi-davinci.c
-> index f71c497393a6..c3974d996cb8 100644
-> --- a/drivers/spi/spi-davinci.c
-> +++ b/drivers/spi/spi-davinci.c
-> @@ -213,12 +213,6 @@ static void davinci_spi_chipselect(struct spi_device *spi, int value)
->  	 * line for the controller
->  	 */
->  	if (spi->cs_gpiod) {
-> -		/*
-> -		 * FIXME: is this code ever executed? This host does not
-> -		 * set SPI_MASTER_GPIO_SS so this chipselect callback should
-> -		 * not get called from the SPI core when we are using
-> -		 * GPIOs for chip select.
-> -		 */
->  		if (value == BITBANG_CS_ACTIVE)
->  			gpiod_set_value(spi->cs_gpiod, 1);
->  		else
-> @@ -950,7 +944,7 @@ static int davinci_spi_probe(struct platform_device *pdev)
->  	master->bus_num = pdev->id;
->  	master->num_chipselect = pdata->num_chipselect;
->  	master->bits_per_word_mask = SPI_BPW_RANGE_MASK(2, 16);
-> -	master->flags = SPI_MASTER_MUST_RX;
-> +	master->flags = SPI_MASTER_MUST_RX | SPI_MASTER_GPIO_SS;
->  	master->setup = davinci_spi_setup;
->  	master->cleanup = davinci_spi_cleanup;
->  	master->can_dma = davinci_spi_can_dma;
-
+diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
+index 4a26bef19360..4399715953e1 100644
+--- a/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
+@@ -14,9 +14,9 @@ allOf:
+ 
+ properties:
+   compatible:
+-    oneOf:
+-      - const: qcom,dsi-phy-10nm
+-      - const: qcom,dsi-phy-10nm-8998
++    enum:
++      - qcom,dsi-phy-10nm
++      - qcom,dsi-phy-10nm-8998
+ 
+   reg:
+     items:
+diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml
+index 72a00cce0147..064df50e21a5 100644
+--- a/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml
+@@ -14,9 +14,9 @@ allOf:
+ 
+ properties:
+   compatible:
+-    oneOf:
+-      - const: qcom,dsi-phy-14nm
+-      - const: qcom,dsi-phy-14nm-660
++    enum:
++      - qcom,dsi-phy-14nm
++      - qcom,dsi-phy-14nm-660
+ 
+   reg:
+     items:
+diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-28nm.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-28nm.yaml
+index b106007116b4..69eecaa64b18 100644
+--- a/Documentation/devicetree/bindings/display/msm/dsi-phy-28nm.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-28nm.yaml
+@@ -14,10 +14,10 @@ allOf:
+ 
+ properties:
+   compatible:
+-    oneOf:
+-      - const: qcom,dsi-phy-28nm-hpm
+-      - const: qcom,dsi-phy-28nm-lp
+-      - const: qcom,dsi-phy-28nm-8960
++    enum:
++      - qcom,dsi-phy-28nm-hpm
++      - qcom,dsi-phy-28nm-lp
++      - qcom,dsi-phy-28nm-8960
+ 
+   reg:
+     items:
+diff --git a/Documentation/devicetree/bindings/dma/allwinner,sun6i-a31-dma.yaml b/Documentation/devicetree/bindings/dma/allwinner,sun6i-a31-dma.yaml
+index c1676b96daac..a6df6f8b54db 100644
+--- a/Documentation/devicetree/bindings/dma/allwinner,sun6i-a31-dma.yaml
++++ b/Documentation/devicetree/bindings/dma/allwinner,sun6i-a31-dma.yaml
+@@ -19,12 +19,12 @@ properties:
+     description: The cell is the request line number.
+ 
+   compatible:
+-    oneOf:
+-      - const: allwinner,sun6i-a31-dma
+-      - const: allwinner,sun8i-a23-dma
+-      - const: allwinner,sun8i-a83t-dma
+-      - const: allwinner,sun8i-h3-dma
+-      - const: allwinner,sun8i-v3s-dma
++    enum:
++      - allwinner,sun6i-a31-dma
++      - allwinner,sun8i-a23-dma
++      - allwinner,sun8i-a83t-dma
++      - allwinner,sun8i-h3-dma
++      - allwinner,sun8i-v3s-dma
+ 
+   reg:
+     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/firmware/arm,scpi.yaml b/Documentation/devicetree/bindings/firmware/arm,scpi.yaml
+index d7113b06454b..23b346bd1252 100644
+--- a/Documentation/devicetree/bindings/firmware/arm,scpi.yaml
++++ b/Documentation/devicetree/bindings/firmware/arm,scpi.yaml
+@@ -131,9 +131,9 @@ properties:
+ 
+         properties:
+           compatible:
+-            oneOf:
+-              - const: arm,scpi-dvfs-clocks
+-              - const: arm,scpi-variable-clocks
++            enum:
++              - arm,scpi-dvfs-clocks
++              - arm,scpi-variable-clocks
+ 
+           '#clock-cells':
+             const: 1
+diff --git a/Documentation/devicetree/bindings/i2c/ti,omap4-i2c.yaml b/Documentation/devicetree/bindings/i2c/ti,omap4-i2c.yaml
+index ff165ad1bee8..db0843be91c5 100644
+--- a/Documentation/devicetree/bindings/i2c/ti,omap4-i2c.yaml
++++ b/Documentation/devicetree/bindings/i2c/ti,omap4-i2c.yaml
+@@ -72,11 +72,11 @@ additionalProperties: false
+ if:
+   properties:
+     compatible:
+-      oneOf:
+-        - const: ti,omap2420-i2c
+-        - const: ti,omap2430-i2c
+-        - const: ti,omap3-i2c
+-        - const: ti,omap4-i2c
++      enum:
++        - ti,omap2420-i2c
++        - ti,omap2430-i2c
++        - ti,omap3-i2c
++        - ti,omap4-i2c
+ 
+ then:
+   properties:
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
+index edf26452dc72..750cc44628e9 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,liointc.yaml
+@@ -19,10 +19,10 @@ allOf:
+ 
+ properties:
+   compatible:
+-    oneOf:
+-      - const: loongson,liointc-1.0
+-      - const: loongson,liointc-1.0a
+-      - const: loongson,liointc-2.0
++    enum:
++      - loongson,liointc-1.0
++      - loongson,liointc-1.0a
++      - loongson,liointc-2.0
+ 
+   reg:
+     minItems: 1
+diff --git a/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml b/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
+index 701f4e0d138f..39395ea8c318 100644
+--- a/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml
+@@ -83,10 +83,10 @@ properties:
+           link-frequencies: true
+           data-lanes: true
+           bus-type:
+-            oneOf:
+-              - const: 1 # CSI-2 C-PHY
+-              - const: 3 # CCP2
+-              - const: 4 # CSI-2 D-PHY
++            enum:
++              - 1 # CSI-2 C-PHY
++              - 3 # CCP2
++              - 4 # CSI-2 D-PHY
+ 
+         required:
+           - link-frequencies
+diff --git a/Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml b/Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml
+index 48d4d53c25f9..012d25111054 100644
+--- a/Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml
++++ b/Documentation/devicetree/bindings/mfd/ti,lp87565-q1.yaml
+@@ -11,9 +11,9 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    oneOf:
+-      - const: ti,lp87565
+-      - const: ti,lp87565-q1
++    enum:
++      - ti,lp87565
++      - ti,lp87565-q1
+ 
+   reg:
+     description: I2C slave address
+diff --git a/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml b/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml
+index 4f485df69ac3..0634e69dd9a6 100644
+--- a/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml
++++ b/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml
+@@ -17,10 +17,10 @@ description:
+ 
+ properties:
+   compatible:
+-    oneOf:
+-      - const: "realtek,rtl8723bs-bt"
+-      - const: "realtek,rtl8723cs-bt"
+-      - const: "realtek,rtl8822cs-bt"
++    enum:
++      - realtek,rtl8723bs-bt
++      - realtek,rtl8723cs-bt
++      - realtek,rtl8822cs-bt
+ 
+   device-wake-gpios:
+     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+index 783b9e32cf66..4b97a0f1175b 100644
+--- a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
++++ b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+@@ -53,10 +53,10 @@ properties:
+   "#size-cells": true
+ 
+   compatible:
+-    oneOf:
+-      - const: ti,am654-cpsw-nuss
+-      - const: ti,j721e-cpsw-nuss
+-      - const: ti,am642-cpsw-nuss
++    enum:
++      - ti,am654-cpsw-nuss
++      - ti,j721e-cpsw-nuss
++      - ti,am642-cpsw-nuss
+ 
+   reg:
+     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/net/ti,k3-am654-cpts.yaml b/Documentation/devicetree/bindings/net/ti,k3-am654-cpts.yaml
+index 4317eba503ca..1a81bf70c88c 100644
+--- a/Documentation/devicetree/bindings/net/ti,k3-am654-cpts.yaml
++++ b/Documentation/devicetree/bindings/net/ti,k3-am654-cpts.yaml
+@@ -45,9 +45,9 @@ properties:
+     pattern: "^cpts@[0-9a-f]+$"
+ 
+   compatible:
+-    oneOf:
+-      - const: ti,am65-cpts
+-      - const: ti,j721e-cpts
++    enum:
++      - ti,am65-cpts
++      - ti,j721e-cpts
+ 
+   reg:
+     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/pci/loongson.yaml b/Documentation/devicetree/bindings/pci/loongson.yaml
+index 82bc6c486ca3..a8324a9bd002 100644
+--- a/Documentation/devicetree/bindings/pci/loongson.yaml
++++ b/Documentation/devicetree/bindings/pci/loongson.yaml
+@@ -17,10 +17,10 @@ allOf:
+ 
+ properties:
+   compatible:
+-    oneOf:
+-      - const: loongson,ls2k-pci
+-      - const: loongson,ls7a-pci
+-      - const: loongson,rs780e-pci
++    enum:
++      - loongson,ls2k-pci
++      - loongson,ls7a-pci
++      - loongson,rs780e-pci
+ 
+   reg:
+     minItems: 1
+diff --git a/Documentation/devicetree/bindings/phy/intel,lgm-emmc-phy.yaml b/Documentation/devicetree/bindings/phy/intel,lgm-emmc-phy.yaml
+index edd9d70a672a..954e67571dfd 100644
+--- a/Documentation/devicetree/bindings/phy/intel,lgm-emmc-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/intel,lgm-emmc-phy.yaml
+@@ -23,9 +23,9 @@ description: |+
+ 
+ properties:
+   compatible:
+-    oneOf:
+-      - const: intel,lgm-emmc-phy
+-      - const: intel,keembay-emmc-phy
++    enum:
++      - intel,lgm-emmc-phy
++      - intel,keembay-emmc-phy
+ 
+   "#phy-cells":
+     const: 0
+diff --git a/Documentation/devicetree/bindings/serial/8250_omap.yaml b/Documentation/devicetree/bindings/serial/8250_omap.yaml
+index 1c826fcf5828..c987fb648c3c 100644
+--- a/Documentation/devicetree/bindings/serial/8250_omap.yaml
++++ b/Documentation/devicetree/bindings/serial/8250_omap.yaml
+@@ -90,10 +90,11 @@ additionalProperties: false
+ if:
+   properties:
+     compatible:
+-      oneOf:
+-        - const: ti,omap2-uart
+-        - const: ti,omap3-uart
+-        - const: ti,omap4-uart
++      contains:
++        enum:
++          - ti,omap2-uart
++          - ti,omap3-uart
++          - ti,omap4-uart
+ 
+ then:
+   properties:
+diff --git a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
+index 72ad9ab91832..7d57eb91657a 100644
+--- a/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
++++ b/Documentation/devicetree/bindings/sound/qcom,sm8250.yaml
+@@ -15,9 +15,9 @@ description:
+ 
+ properties:
+   compatible:
+-    oneOf:
+-      - const: qcom,sm8250-sndcard
+-      - const: qcom,qrb5165-rb5-sndcard
++    enum:
++      - qcom,sm8250-sndcard
++      - qcom,qrb5165-rb5-sndcard
+ 
+   audio-routing:
+     $ref: /schemas/types.yaml#/definitions/non-unique-string-array
+diff --git a/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml b/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
+index 54d64785aad2..d77c8283526d 100644
+--- a/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
++++ b/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
+@@ -24,10 +24,10 @@ description: |
+ 
+ properties:
+   compatible:
+-    oneOf:
+-      - const: ti,tlv320adc3140
+-      - const: ti,tlv320adc5140
+-      - const: ti,tlv320adc6140
++    enum:
++      - ti,tlv320adc3140
++      - ti,tlv320adc5140
++      - ti,tlv320adc6140
+ 
+   reg:
+     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/spi/realtek,rtl-spi.yaml b/Documentation/devicetree/bindings/spi/realtek,rtl-spi.yaml
+index 30a62a211984..2f938c293f70 100644
+--- a/Documentation/devicetree/bindings/spi/realtek,rtl-spi.yaml
++++ b/Documentation/devicetree/bindings/spi/realtek,rtl-spi.yaml
+@@ -15,12 +15,12 @@ allOf:
+ 
+ properties:
+   compatible:
+-    oneOf:
+-      - const: realtek,rtl8380-spi
+-      - const: realtek,rtl8382-spi
+-      - const: realtek,rtl8391-spi
+-      - const: realtek,rtl8392-spi
+-      - const: realtek,rtl8393-spi
++    enum:
++      - realtek,rtl8380-spi
++      - realtek,rtl8382-spi
++      - realtek,rtl8391-spi
++      - realtek,rtl8392-spi
++      - realtek,rtl8393-spi
+ 
+   reg:
+     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/timer/arm,sp804.yaml b/Documentation/devicetree/bindings/timer/arm,sp804.yaml
+index 960e2bd66a97..41be7cdab2ec 100644
+--- a/Documentation/devicetree/bindings/timer/arm,sp804.yaml
++++ b/Documentation/devicetree/bindings/timer/arm,sp804.yaml
+@@ -23,9 +23,9 @@ select:
+   properties:
+     compatible:
+       contains:
+-        oneOf:
+-          - const: arm,sp804
+-          - const: hisilicon,sp804
++        enum:
++          - arm,sp804
++          - hisilicon,sp804
+   required:
+     - compatible
+ 
 -- 
-Best regards,
-Alexander Sverdlin.
+2.30.2
+
