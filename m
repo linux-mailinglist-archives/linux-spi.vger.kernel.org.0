@@ -2,45 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9602E3F6221
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Aug 2021 17:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F333A3F62CC
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Aug 2021 18:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238524AbhHXP7f (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 24 Aug 2021 11:59:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48760 "EHLO mail.kernel.org"
+        id S231177AbhHXQid (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 24 Aug 2021 12:38:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59088 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236565AbhHXP7e (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 24 Aug 2021 11:59:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1FF07600D1;
-        Tue, 24 Aug 2021 15:58:49 +0000 (UTC)
+        id S229569AbhHXQic (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 24 Aug 2021 12:38:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CD97B61183;
+        Tue, 24 Aug 2021 16:37:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629820730;
-        bh=U8+RW0mVTPZE39+nt5vVJlMy+0Wop2n2o4Ei54ETabg=;
+        s=k20201202; t=1629823068;
+        bh=RC5JfSL5nOcZNqkGzTnMKeVLN4ZfQfb/8m/ZftZEAeg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QE/aBwWkLg4RPWAgV/v8ivnPelaFvUpa4y/Auz4C9JCzXSWkVJBdPx80MCpiHMFwX
-         gRgnxwIVpcx2IP52qk9lOd+SDLy00qNlahEXjflKxZdPfddSt6dMrzZmyuz/8lEjx7
-         qQzL29rI3D9jVDQeQqWuQfODupcu33rDf9wTMoi2r6cDXBD7tySa04wUVjuKpRCmsC
-         dc2RFZD8ZcTgswno6qgdav9yvh+24cbQ2NvP9QHL43U7Q9zU8Gxo1CfaKiieeW/pdb
-         nXawyPqadKfKEOLKHk9EvgNZcxU513SiMK4DqI1qs0Fig1YGYLJAljp7HM7Om4QkUA
-         zUxWtE41hGTfA==
-Date:   Tue, 24 Aug 2021 16:58:23 +0100
+        b=dgaYFHAAOn4KvajCOfDinC/dLSfIbKvQYbY1iCzRWEOLXJSMSSzr5Ng2BfTym9d70
+         f+Cm02NDC4Js53Hf1kHmLMR4EYDv4/XCSM/WOWRUVXyqpbTCQskqGOiqTh/hshDff6
+         Y2dMOeoqU6i1ChGLu2NXpTvyyZoJLLlT+hRS+HKRlh+4cUrRpXsjE9jKIyZGfDdecu
+         h2WHaZQSzLwYn4P+Pr5j5TihClzDvyQYNirc2KUrdb56APS9xTZUDxUxVaZItYQHtm
+         VryUkpEw/EPqV9r7eMinxEFWrVzMtW7RsnUk5slELgxoY0l1CkgkknfjIujkJYGDr0
+         3r3ZqEntVbQGQ==
+Date:   Tue, 24 Aug 2021 17:37:21 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Chunyan Zhang <zhang.lyra@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, Baolin Wang <baolin.wang7@gmail.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Luting Guo <luting.guo@unisoc.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/3] dt-bindings: spi: Convert sprd ADI bindings to yaml
-Message-ID: <20210824155823.GE4393@sirena.org.uk>
-References: <20210824092745.2093640-1-zhang.lyra@gmail.com>
- <20210824092745.2093640-3-zhang.lyra@gmail.com>
+To:     Lucas Tanure <tanureal@opensource.cirrus.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Sanjay R Mehta <sanju.mehta@amd.com>,
+        Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        patches@opensource.cirrus.com
+Subject: Re: [PATCH 3/9] regmap: spi: SPI_CONTROLLER_CS_PER_TRANSFER affects
+ max read/write
+Message-ID: <20210824163721.GF4393@sirena.org.uk>
+References: <20210824104041.708945-1-tanureal@opensource.cirrus.com>
+ <20210824104041.708945-4-tanureal@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="19uQFt6ulqmgNgg1"
+        protocol="application/pgp-signature"; boundary="4VrXvz3cwkc87Wze"
 Content-Disposition: inline
-In-Reply-To: <20210824092745.2093640-3-zhang.lyra@gmail.com>
+In-Reply-To: <20210824104041.708945-4-tanureal@opensource.cirrus.com>
 X-Cookie: Sentient plasmoids are a gas.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
@@ -48,34 +49,37 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---19uQFt6ulqmgNgg1
+--4VrXvz3cwkc87Wze
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 24, 2021 at 05:27:44PM +0800, Chunyan Zhang wrote:
-> From: Chunyan Zhang <chunyan.zhang@unisoc.com>
->=20
-> Convert spi-sprd-adi.txt to yaml.
+On Tue, Aug 24, 2021 at 11:40:35AM +0100, Lucas Tanure wrote:
+> regmap-spi will split data and address between two transfers in the
+> same message so use addr_affects_max_raw_rw to flag that the number
+> bytes to read or write should be a little less (address + padding size),
+> so that the SPI controller can merge the entire message into a single
+> CS period
 
-It's better to put DT binding conversion patches as the last patch in a
-series, there's often a bit of a backlog on reviews for them so putting
-them after other changes means that the other changes can proceed while
-waiting for the review of the YAML conversion.
+This should be handled by the SPI core, it's already relying on being
+able to do multiple transfers to handle message size limits and in any
+case this is a super standard thing to do so many clients would require
+special code.  The core should transparently coalesce things where it
+can, or error out if it can't, like it currently does when splitting
+transfers up.
 
---19uQFt6ulqmgNgg1
+--4VrXvz3cwkc87Wze
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmElFx4ACgkQJNaLcl1U
-h9DbtQf/Vh+leO67pIQqyyEidCXPZ+NLNuwZ+JzRnL2325ufCbh60R9OII20CSgp
-AWQOkldMweKQ6kPAe6dTOuEjFfWj0u5EsLLn5gq0grGTs//EWu/v7h6GFPaaNs/z
-E6jU+Slqf79MBF6QAd+/GaLImwoGQlIYHqBBLDU4sBIpxa3F1Mx2CJZAmwrsUkCn
-5qfe08n5kTcP6/9Ow1Xb65kk9x0fiQM0d4/ucJ3+FD8KB6mZ6yCUXLtuDxd2xOEX
-F9zBEhwDm9kUM6NC37uhUCvSld75PITssAY0dPdabn7ah6JbsgiT+u4OwlbgI17y
-oM0bJCvTEXOlanADynzvkFsr3irJnw==
-=QanL
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmElIEAACgkQJNaLcl1U
+h9DTPQf8CYdydZ7wzOHjzlarw1sdpufTuPBx4Cmf0C6wRjay69Kxu6Qyrv82biVt
+9zfAm3OJ3LqAwJcEJw1BsynYYr9Le0HZb4FtI7vzfyA5/4sXt7MBl5nK/bgYRfNB
+03VPoEaROX3LedGvbjkeiFoA0v3HM7/B17G9naKDRhTkgI8nDUu9EqEUJd1EinoQ
+hgGEPCmNiISoOdXBAHEDAb4ZXzfme3wvoZndbQyO2YEHoUhAhZnENmeetp9j8LN2
+C6A+lTTjjKtiHWYJ0rKQdBB47e+T8c4/Pll4UFIIxToajFOsWarIjWBgQ/iG4jGz
+dXoiodfXn4y9+vbfYRrM6S3tlPzghg==
+=ERg9
 -----END PGP SIGNATURE-----
 
---19uQFt6ulqmgNgg1--
+--4VrXvz3cwkc87Wze--
