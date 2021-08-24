@@ -2,51 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED273F58A2
+	by mail.lfdr.de (Postfix) with ESMTP id 710873F58A3
 	for <lists+linux-spi@lfdr.de>; Tue, 24 Aug 2021 09:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbhHXHDP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 24 Aug 2021 03:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57376 "EHLO
+        id S234634AbhHXHDQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 24 Aug 2021 03:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234633AbhHXHDK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Aug 2021 03:03:10 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0202AC06175F;
-        Tue, 24 Aug 2021 00:02:27 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id c4so11657901plh.7;
-        Tue, 24 Aug 2021 00:02:26 -0700 (PDT)
+        with ESMTP id S234664AbhHXHDP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 24 Aug 2021 03:03:15 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34837C061760;
+        Tue, 24 Aug 2021 00:02:31 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id fz10so2199917pjb.0;
+        Tue, 24 Aug 2021 00:02:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=pAVLriOKMyhaOJWbZj70EKxm3Jc9VNASO2rIE5jIqK0=;
-        b=Ovpxm5p1tZOzii+C82+4S/b4ersXONHVVAvszzU0r7KEDcV0xv3wBjXI3aLjODkVIo
-         YYpPenN6KD2MdOesfoom+EIoDZMRD4hzLX2qqh0FAZNNbeBRzQ2p8EP1mHFDqMpjCBRL
-         qDzcSHnDvlEHFZLhqvBwJ5oSxKWbd+FbLrOugySgwGW4DT+YdmgOBNFHzw37c6Tqhg6M
-         uS8+sR1W54yxhHRwu1thgiTP/fGWtipLgNU5B1vWYKvgdeBEiWlqIo4/NGo/CVFpIzpk
-         HgWNHZduH15b6719qx6k/9kEzk2H63yTZz6GGLH2oKIpKi6dFZrB/rD0+1KjRJlZezAJ
-         iDtw==
+        bh=oBX4YIAIW1Lbo+DKwuinsj3XFa4b7I197fWtFrroOkw=;
+        b=Iz1l+BKZmk6rvR1qvQTI85Ev1PiVlrZf1SE+mkwOi1sUT8BNYOib3RU2srJLPcwBdn
+         14+j4oKjZB09b6avirzYaM9tnM2QgDj3vBgry2ie9GVFkxLpOplcXXbplnkb0AUvGOvk
+         N1RR8+rfdTHnoGBMjcwiVGyGxPKfuRTUZRQ2gfHfeD9R9FcjWH+ozhWF14b8yaZimM/n
+         omSRz6CJFSaBs0XHj6t1Z6gCDuS5kjS9Osg1jNUCm+CskQFCydCofbhySdOvAPP4Rf4j
+         aOGum/iDWCLy5zxfqPc0GPf6LVcN1UE6ZVXsxRv9OBNWPRmn32Zt4xnF0p8o0wcqkOFu
+         8T8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=pAVLriOKMyhaOJWbZj70EKxm3Jc9VNASO2rIE5jIqK0=;
-        b=k4nDxhogxErQIkKK3nBcTaDIpdo8j5Y+lKBq3zMa1wZVI/6dDztqM+NjYJPU+Ga8mX
-         zctfVzaVUWjHX+PkkJt9muyQ+zEmCh3FmIrEt4l9tW0UJJmDLAD/OmACIR/vm7KxontO
-         kSki0kmT8tj5UcU3mRmuKvR1ijc+qibDhiIBwVFwR43wiYXzdTBCfAYO5tksHh0j4MKx
-         5cpWRethXU8w9iMu9yvEvakoN0jzanvNqZFB3g/vKpCdSnUTZLR7zkRUD4pNE617xsF+
-         cnuK20RknD3vxuv+WooDf12O3zJblgvLeOUYNm5jwroT8pxr5Awg0HqqpKpv//ZkdYjV
-         SCNg==
-X-Gm-Message-State: AOAM531mO8kkQ4EUOajec7U5E35rZSLbM3sNU3zSPbnPBioz3M9MFn8k
-        EAJeHQfIYATA2o12Hm1yqtI=
-X-Google-Smtp-Source: ABdhPJwvhYZ9OXJgmIjktoUAeG4hP/upTvabgf9DqDZ6PndwnvE7chDSvWwEF9AcGrC6+jTIS1S2Fw==
-X-Received: by 2002:a17:902:bcc6:b0:12d:bd30:bc4d with SMTP id o6-20020a170902bcc600b0012dbd30bc4dmr31891845pls.18.1629788546570;
-        Tue, 24 Aug 2021 00:02:26 -0700 (PDT)
+        bh=oBX4YIAIW1Lbo+DKwuinsj3XFa4b7I197fWtFrroOkw=;
+        b=htj97ijesXGiK8z/hz/JR6dq5hBiW5er5Quvb34hu0fmVoYdB8SyHYlEqvmWdmrF6o
+         bEzK0FYhzzbFEaxHTAcEJoQzFhgYCbPDICcBqhGD09lnh2t043i7i04GkFZFMcxj4pCV
+         0sorE4RM9Jk+bNbXiN6YvSDkkpxY0WIleJJ6c4BqeDN5bNWCdG4UfW2WOEB3tUG5WqxA
+         ZpoNIBG+Irr0LhIJnXmSTDkNz1p7DpVAg/r7a1IHqfEuo2ooGIterD0O2nO42UGDW4IF
+         74uUzrep8JE9E6AyFLNi/8oIqrXXBJNkLQxmZYJPP1sfaSXngE3seeRwL3oyoFfVaKEe
+         pnwA==
+X-Gm-Message-State: AOAM531cT5f+mC+Vo8w8WBV259eypqH4LktBpltUeNFPkcPDGD3bC5YQ
+        V/dJ3VTq24jIYvY5nZn2dU8=
+X-Google-Smtp-Source: ABdhPJwjl2rOeOrASOTBv/k9TzyFpyQfE0/4jDUWDQXS1mVDn1bFA8mRNVVhpWP8U2vixbNKhL+R+g==
+X-Received: by 2002:a17:90b:3608:: with SMTP id ml8mr2921425pjb.22.1629788550803;
+        Tue, 24 Aug 2021 00:02:30 -0700 (PDT)
 Received: from ubt.spreadtrum.com ([117.18.48.102])
-        by smtp.gmail.com with ESMTPSA id b17sm20365340pgl.61.2021.08.24.00.02.22
+        by smtp.gmail.com with ESMTPSA id b17sm20365340pgl.61.2021.08.24.00.02.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Aug 2021 00:02:26 -0700 (PDT)
+        Tue, 24 Aug 2021 00:02:30 -0700 (PDT)
 From:   Chunyan Zhang <zhang.lyra@gmail.com>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     linux-spi@vger.kernel.org, Baolin Wang <baolin.wang7@gmail.com>,
@@ -55,9 +55,9 @@ Cc:     linux-spi@vger.kernel.org, Baolin Wang <baolin.wang7@gmail.com>,
         Chunyan Zhang <chunyan.zhang@unisoc.com>,
         Luting Guo <luting.guo@unisoc.com>,
         LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/3] spi: sprd: Make sure offset not equal to slave address size
-Date:   Tue, 24 Aug 2021 15:02:11 +0800
-Message-Id: <20210824070212.2089255-2-zhang.lyra@gmail.com>
+Subject: [PATCH 3/3] spi: sprd: fill offset only to RD_CMD register for reading from slave device
+Date:   Tue, 24 Aug 2021 15:02:12 +0800
+Message-Id: <20210824070212.2089255-3-zhang.lyra@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210824070212.2089255-1-zhang.lyra@gmail.com>
 References: <20210824070212.2089255-1-zhang.lyra@gmail.com>
@@ -69,27 +69,53 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 
-The slave register offset shouldn't equal to the max slave address
-which ADI can support to access.
+RD_CMD can accept slave address offset only, higher bits are reserved.
+Writing the whole slave address including slave base seems unnecessary.
 
 Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
 ---
- drivers/spi/spi-sprd-adi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-sprd-adi.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/spi/spi-sprd-adi.c b/drivers/spi/spi-sprd-adi.c
-index abdad1ea7b38..06af519c0b21 100644
+index 06af519c0b21..07f11b17bf20 100644
 --- a/drivers/spi/spi-sprd-adi.c
 +++ b/drivers/spi/spi-sprd-adi.c
-@@ -119,7 +119,7 @@ struct sprd_adi {
- 
- static int sprd_adi_check_addr(struct sprd_adi *sadi, u32 reg)
+@@ -159,7 +159,7 @@ static int sprd_adi_read(struct sprd_adi *sadi, u32 reg, u32 *read_val)
  {
--	if (reg > ADI_SLAVE_ADDR_SIZE) {
-+	if (reg >= ADI_SLAVE_ADDR_SIZE) {
- 		dev_err(sadi->dev,
- 			"slave address offset is incorrect, reg = 0x%x\n",
- 			reg);
+ 	int read_timeout = ADI_READ_TIMEOUT;
+ 	unsigned long flags;
+-	u32 val, rd_addr, paddr;
++	u32 val, rd_addr;
+ 	int ret = 0;
+ 
+ 	if (sadi->hwlock) {
+@@ -177,11 +177,10 @@ static int sprd_adi_read(struct sprd_adi *sadi, u32 reg, u32 *read_val)
+ 		goto out;
+ 
+ 	/*
+-	 * Set the physical register address need to read into RD_CMD register,
++	 * Set the slave address offset need to read into RD_CMD register,
+ 	 * then ADI controller will start to transfer automatically.
+ 	 */
+-	paddr = sadi->slave_pbase + reg;
+-	writel_relaxed(paddr, sadi->base + REG_ADI_RD_CMD);
++	writel_relaxed(reg, sadi->base + REG_ADI_RD_CMD);
+ 
+ 	/*
+ 	 * Wait read operation complete, the BIT_RD_CMD_BUSY will be set
+@@ -211,9 +210,9 @@ static int sprd_adi_read(struct sprd_adi *sadi, u32 reg, u32 *read_val)
+ 	 */
+ 	rd_addr = (val & RD_ADDR_MASK) >> RD_ADDR_SHIFT;
+ 
+-	if (rd_addr != (paddr & REG_ADDR_LOW_MASK)) {
++	if (rd_addr != (reg & REG_ADDR_LOW_MASK)) {
+ 		dev_err(sadi->dev, "read error, reg addr = 0x%x, val = 0x%x\n",
+-			paddr, val);
++			reg, val);
+ 		ret = -EIO;
+ 		goto out;
+ 	}
 -- 
 2.25.1
 
