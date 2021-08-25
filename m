@@ -2,103 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 214F53F7B48
-	for <lists+linux-spi@lfdr.de>; Wed, 25 Aug 2021 19:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBFE83F7B78
+	for <lists+linux-spi@lfdr.de>; Wed, 25 Aug 2021 19:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235694AbhHYRNx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 25 Aug 2021 13:13:53 -0400
-Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:2116 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229540AbhHYRNx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 Aug 2021 13:13:53 -0400
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 17P9iXw3031375;
-        Wed, 25 Aug 2021 12:13:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=llkaasdAN1hOhFdw2pARFyPRCn0QPaBxbtHFpjeUiPw=;
- b=gqQg93O1f4Iw7nlEQyVs9SYtzrbr+gro/7f1AFvLAtBUvHkhgI/VUV364D1DxwxG/Wsy
- ryQEbKFf3v0kNtxXMRdzR/TIIEe28+EURU7jGuBZqVeeIaiekxDBigGaEV0WFOvYQehb
- dGnxjIUOqj9efikf4LYJszh96GGcwPN/w71xu7jB3zyqHYHPS0+A66zvCOYMolEwPk54
- yTJoJ/0FZxWrOs2j9nsfmTTRKyIlLVqBKpYWjgF5RifU8iHP83tTiZAhvKQvb75aT+fD
- 2n0acSSwIZtpen7V7+BENNRsBKQubqqgaJqay1nRdnEqOI2M1uFVqebYiYaXiMlk3uTI dA== 
-Received: from ediex02.ad.cirrus.com ([87.246.76.36])
-        by mx0b-001ae601.pphosted.com with ESMTP id 3ankg98knh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 25 Aug 2021 12:13:03 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.12; Wed, 25 Aug
- 2021 18:13:01 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2242.12 via Frontend
- Transport; Wed, 25 Aug 2021 18:13:01 +0100
-Received: from [198.61.65.58] (unknown [198.61.65.58])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 7849B2BA;
-        Wed, 25 Aug 2021 17:13:01 +0000 (UTC)
-Subject: Re: [PATCH 3/9] regmap: spi: SPI_CONTROLLER_CS_PER_TRANSFER affects
- max read/write
-To:     Mark Brown <broonie@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S242288AbhHYRWj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 25 Aug 2021 13:22:39 -0400
+Received: from foss.arm.com ([217.140.110.172]:56624 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233276AbhHYRWi (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 25 Aug 2021 13:22:38 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 845F4D6E;
+        Wed, 25 Aug 2021 10:21:52 -0700 (PDT)
+Received: from localhost (unknown [10.37.6.16])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 136633F66F;
+        Wed, 25 Aug 2021 10:21:51 -0700 (PDT)
+Date:   Wed, 25 Aug 2021 18:21:25 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lucas tanure <tanureal@opensource.cirrus.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
         Sanjay R Mehta <sanju.mehta@amd.com>,
         Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        patches@opensource.cirrus.com
+Subject: Re: [PATCH 3/9] regmap: spi: SPI_CONTROLLER_CS_PER_TRANSFER affects
+ max read/write
+Message-ID: <20210825172125.GN5186@sirena.org.uk>
 References: <20210824104041.708945-1-tanureal@opensource.cirrus.com>
  <20210824104041.708945-4-tanureal@opensource.cirrus.com>
  <20210824163721.GF4393@sirena.org.uk>
-From:   Lucas tanure <tanureal@opensource.cirrus.com>
-Message-ID: <4c604d13-f177-ff75-d21f-27613e1b763f@opensource.cirrus.com>
-Date:   Wed, 25 Aug 2021 18:13:01 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+ <4c604d13-f177-ff75-d21f-27613e1b763f@opensource.cirrus.com>
 MIME-Version: 1.0
-In-Reply-To: <20210824163721.GF4393@sirena.org.uk>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: nJe50VVKS_yd58r8vr9qjluG_Q2aoqNE
-X-Proofpoint-ORIG-GUID: nJe50VVKS_yd58r8vr9qjluG_Q2aoqNE
-X-Proofpoint-Spam-Reason: safe
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="v541l457l4DThMFo"
+Content-Disposition: inline
+In-Reply-To: <4c604d13-f177-ff75-d21f-27613e1b763f@opensource.cirrus.com>
+X-Cookie: MY income is ALL disposable!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 8/24/21 5:37 PM, Mark Brown wrote:
-> On Tue, Aug 24, 2021 at 11:40:35AM +0100, Lucas Tanure wrote:
->> regmap-spi will split data and address between two transfers in the
->> same message so use addr_affects_max_raw_rw to flag that the number
->> bytes to read or write should be a little less (address + padding size),
->> so that the SPI controller can merge the entire message into a single
->> CS period
-> 
-> This should be handled by the SPI core, it's already relying on being
-> able to do multiple transfers to handle message size limits and in any
-> case this is a super standard thing to do so many clients would require
-> special code.  The core should transparently coalesce things where it
-> can, or error out if it can't, like it currently does when splitting
-> transfers up.
-> 
-__spi_validate seems a good candidate, but I don't think spi have enough
-information to merge two transfers into a single one.
 
-For a message with N transfers how can spi core decide what to merge or 
-what not merge. If mergers everything and is less than max_transfer_size 
-success, but if bigger will need to stop merging and add an address in 
-front of the next not merged transfer, but spi core is not aware of 
-addresses
-And in the case of multiple addresses and data transfers, how it will 
-know doesn't need to be merged?
+--v541l457l4DThMFo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-For me seems more reasonable for the regmap-spi stop splitting address
-and data. Or at least if the controller has some flag change the bus for
-one where it uses different functions for gather_write, async_write etc
+On Wed, Aug 25, 2021 at 06:13:01PM +0100, Lucas tanure wrote:
+> On 8/24/21 5:37 PM, Mark Brown wrote:
 
-Can you point which way you think the code should go? Investigate more 
-spi core to coalesce transfers or change regmap-spi to not split address 
-and data anymore?
+> > This should be handled by the SPI core, it's already relying on being
+> > able to do multiple transfers to handle message size limits and in any
+> > case this is a super standard thing to do so many clients would require
 
-Thanks
-Lucas
+> For a message with N transfers how can spi core decide what to merge or w=
+hat
+> not merge. If mergers everything and is less than max_transfer_size succe=
+ss,
+
+In the same way it does for transfers that are too long.  If the
+controller has a property saying that it can't handle more than one
+transfer then the core needs to either combine multiple transfers in a
+single message into a single transfer or return an error to the caller
+(modulo handling of cs_change).  If the controller can handle the
+message it should just get passed straight through.
+
+> but if bigger will need to stop merging and add an address in front of the
+> next not merged transfer, but spi core is not aware of addresses
+> And in the case of multiple addresses and data transfers, how it will know
+> doesn't need to be merged?
+
+The spi_message says what the message should look like on the bus.  The
+semantics of what's in the message don't matter. =20
+
+> For me seems more reasonable for the regmap-spi stop splitting address
+> and data. Or at least if the controller has some flag change the bus for
+> one where it uses different functions for gather_write, async_write etc
+
+This would force us to marshall the data in memory prior to sending
+which adds overhead.
+
+> Can you point which way you think the code should go? Investigate more spi
+> core to coalesce transfers or change regmap-spi to not split address and
+> data anymore?
+
+Like I said in reply to your driver patch it looks like this
+fundamentally doesn't do what you want in the first place.
+
+--v541l457l4DThMFo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmEmfBUACgkQJNaLcl1U
+h9DVJgf+IQ1XLd/vG5JtVaMz0sv8hXhBJriORMUmROPFdsV7bG/6T/CVq33T5J9g
+YTs2aPbOB/P0TByQ94cnSF9ctQcRUBJ60Qx8jFF6pA0YBgLKfWun0kN7jWxAqC0M
+thjuAyHb6hdEenVzrimZ8AM/wc9tXk/PBdY98QxKCWCnEH/47wOUU4sGS+s8cr6o
+2kpJ45vpNspbfHlbjCJj3U9gCVzoE5k5Ov7PBRS/A7Q4QVysYlLQanw02SiclbIh
+hI+MJF/nnIBKV82JISZUx2fjb4CrnxkS8ujLyfXP9tNturvVrcU2tX/MZQFS/bQh
+IpJYIxM3LsJz3sUGjjJA+YlAewREvA==
+=IHSR
+-----END PGP SIGNATURE-----
+
+--v541l457l4DThMFo--
