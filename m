@@ -2,86 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 783663F72E4
-	for <lists+linux-spi@lfdr.de>; Wed, 25 Aug 2021 12:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BEDB3F733A
+	for <lists+linux-spi@lfdr.de>; Wed, 25 Aug 2021 12:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237516AbhHYKX7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 25 Aug 2021 06:23:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37064 "EHLO mail.kernel.org"
+        id S240154AbhHYK2a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 25 Aug 2021 06:28:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39992 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237180AbhHYKX4 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 25 Aug 2021 06:23:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1226E61212;
-        Wed, 25 Aug 2021 10:23:09 +0000 (UTC)
+        id S240167AbhHYK2P (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 25 Aug 2021 06:28:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 14E3161212;
+        Wed, 25 Aug 2021 10:27:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629886990;
-        bh=b86R3glVuehPSGIAqorJ6zxBkwSAg6T+BgqVduzfR0M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ou+byWjuwVLazkRMsIMTDmFoPs+jHYuoG4b9Yr9eB+6Dt9hXFZaFup+oaYp5jzfw9
-         5ww4OypWXyvdeJlMmrT1p/V9KNoYl/6yfBni0zXiXJwZmICGrDknnxjAn2NlenBq42
-         Tu6YjEfKlPmOld1UJkGMykscZhgEX/BXk5P9BD0YX8E2DQw1/MryoNKVvTMr/b6XvL
-         zOUhWzp/Hl32VSZUTquuXT3uPjiLOh7i4p5RL57gYR4XN1dxfT4NCtbTSW/QdETOWT
-         GQblx1pAtggD0wFTGXB+hTAVRfA6i72gEYsYaBpSqW5EPKOHGpL2atsDEh0upzJBb1
-         3n0ivpJp6JUZg==
+        s=k20201202; t=1629887249;
+        bh=/dGcdnDJQSuikSxYpLybghGo6DeDQ9TcuR3g7ByXcx8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YzQfIITYt+EvmJkw15OcJ5ISgWzmfAAa9l1OY26UMXJYFyuibz1c+h+8Mk1FZCuHQ
+         kAJTQSl0ONbTNT/9lrv6hzN6QhLVWUwE815h7VOrCdY8YvCWgS3u1bctTLujiM8iyu
+         M2sRBLq78Vru85NB9m3LEF3gSubrENg5UHN8Qhq244f/WJpBeL5APGDRjTizsqga+P
+         R+am+zkLRFhNBWRZjsjF1VkOahqzMZZHXYrgTUgbynHQ0MUTdn3jtNfP6dJ5fNKPOR
+         2OS8+sxjO8jOeELe4bpM0maGGU4KaC22/bulQY5Ka345TX0/+psJIL/4XIVTsRsbp1
+         lpZrdGca7ZZAQ==
+Date:   Wed, 25 Aug 2021 11:27:01 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Chunyan Zhang <zhang.lyra@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        linux-spi@vger.kernel.org, Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Luting Guo <luting.guo@unisoc.com>
-Subject: Re: [PATCH 1/3] spi: sprd: Pass offset instead of physical address to adi_read/_write()
-Date:   Wed, 25 Aug 2021 11:22:37 +0100
-Message-Id: <162988541636.8193.7086076559922137758.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210824070212.2089255-1-zhang.lyra@gmail.com>
-References: <20210824070212.2089255-1-zhang.lyra@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Vignesh R <vigneshr@ti.com>, Marc Zyngier <maz@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Use 'enum' instead of 'oneOf' plus 'const'
+ entries
+Message-ID: <20210825102701.GB5186@sirena.org.uk>
+References: <20210824202014.978922-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7ZAtKRhVyVSsbBD2"
+Content-Disposition: inline
+In-Reply-To: <20210824202014.978922-1-robh@kernel.org>
+X-Cookie: MY income is ALL disposable!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 24 Aug 2021 15:02:10 +0800, Chunyan Zhang wrote:
-> From: Chunyan Zhang <chunyan.zhang@unisoc.com>
-> 
-> The register offset would be added a physical address base and then pass to
-> the function sprd_adt_read()/_write() each time before calling them. So we
-> can do that within these two functions instead, that would make the code
-> more clear.
-> 
-> [...]
 
-Applied to
+--7ZAtKRhVyVSsbBD2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+On Tue, Aug 24, 2021 at 03:20:14PM -0500, Rob Herring wrote:
 
-Thanks!
+> 'enum' is equivalent to 'oneOf' with a list of 'const' entries, but 'enum'
+> is more concise and yields better error messages.
 
-[1/3] spi: sprd: Pass offset instead of physical address to adi_read/_write()
-      commit: 5dc349ec131c6d40aeb2545064e285f0025fbb39
-[2/3] spi: sprd: Make sure offset not equal to slave address size
-      commit: 2b961c51f4d35c45116b21936b563cbb78fba540
-[3/3] spi: sprd: fill offset only to RD_CMD register for reading from slave device
-      commit: f674aacd5005184acf3cf7b851a299573d64fdd6
+Acked-by: Mark Brown <broonie@kernel.org>
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+--7ZAtKRhVyVSsbBD2
+Content-Type: application/pgp-signature; name="signature.asc"
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-----BEGIN PGP SIGNATURE-----
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmEmGvUACgkQJNaLcl1U
+h9AfCwf/TPAwmd3i8vLyV5kU4MWAOn8zovhbZ+gXG2hJek5nLRjdW7eTl2yXz1gx
+xdOp2MMA5ldnXUjncRKHMJYykdL7ZtEsOUWT44WgHT0h1WEQzTHSnoVgkt/DDbsP
+tuovH5NV986VPCJXIC+mBkt5a4MPzdD1nYVmPss+8R+HXfTRZauTlZefXvwCzNDT
+Md/IxPvIbcqw5Ks12P4kdojbEGB92MONTO3vRYkzCeY1toRL9fOY3DJE30Kd6o3+
+hzCYzeRkTgoibpK8oG+ZqMOJ38/shj8Wiyfovdhd7LOj9orgkbGdGRi10R1997IR
+tDWFSsOVWZ8p+r2ZuI06T7GlVjygag==
+=GpUP
+-----END PGP SIGNATURE-----
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+--7ZAtKRhVyVSsbBD2--
