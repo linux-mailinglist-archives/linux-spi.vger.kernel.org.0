@@ -2,81 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 666683F6F18
-	for <lists+linux-spi@lfdr.de>; Wed, 25 Aug 2021 07:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BCFB3F6FE7
+	for <lists+linux-spi@lfdr.de>; Wed, 25 Aug 2021 08:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237993AbhHYF6u (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 25 Aug 2021 01:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
+        id S238342AbhHYHA3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 25 Aug 2021 03:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232480AbhHYF6u (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 Aug 2021 01:58:50 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF626C061757;
-        Tue, 24 Aug 2021 22:58:04 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id x12so34547709wrr.11;
-        Tue, 24 Aug 2021 22:58:04 -0700 (PDT)
+        with ESMTP id S232273AbhHYHA2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 25 Aug 2021 03:00:28 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75557C061757;
+        Tue, 24 Aug 2021 23:59:43 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id j4-20020a17090a734400b0018f6dd1ec97so4050673pjs.3;
+        Tue, 24 Aug 2021 23:59:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=06re+8WkU5VebI6jGZJpR94faNEVrf1aGvqVrEKuNZ8=;
-        b=pQ5mfYQkyicvUv+HmDsuJldwQaLH4mo5OLOFTL+ou3qR9/qkYRqQLEtalhbzKA7Hvk
-         zkdUJORyKDHVh/pN1pAl8Tes20DF9t/fkmvrffnEDNMj3UZupTHh5hugmCC9nvwd9J6M
-         o7zg83Ev+48a43qas7JNev+EclyLIPQqMMS6g7fYQjUOZiidfnwDXz/OvTzI197RwSSb
-         0ByJH/Upur4ciZ7OVuIhFSb0cNmK87NyAqf51QEirytBxNM9NeG7PFXtyZq9qCfTZOoQ
-         kOfCGspePDSdNqOWrL06N0sOcU6pDkYs3QUenSMtBuQXTPWygircD58JyJz1EQkXg52N
-         Gx2A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+EUcLGmwSrg5CUVW3cqmxP8IfXwkpbSUpFunpQ1DtuQ=;
+        b=V0lsWCCAyNxu/GvucVEHeGUtPCj/C2fggn06fuN6e1BRCZ0B7jgSZUsnib26Hnt1YF
+         maUxEqnfccrj3WgkebyFm2gMxo2WpqYIG+abFWBH96UG4LhX3lq6m+GTk4mYeVdsQ5+3
+         EdoQ9+WlqgJJHMX06O5sSD3RllcmZhtU3gK/fJ+WRz6q5bZSM7lnhIyD1a3UVw4EbmIz
+         otws2JNdJ0nIDd7ByqBel+pyUZlT2flnQ2SKnpCtsZX1Bzy3nbIWiOXJ7frO0vRqj6TM
+         O7yrd6I2V9uAM+W1aJoE6bjQt1icM5ADeu5vzLbdyLigagBGcKl0s/MM5ualE7JkIpZ3
+         zkqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=06re+8WkU5VebI6jGZJpR94faNEVrf1aGvqVrEKuNZ8=;
-        b=lKevcdkc2o3/tLZbp0bJESIonaA4cCne1AickdO8UqZKA2WTedIs5v5DaoYHfSpXWA
-         zF4rIpvJrfNycZMQJPNrjOAxqoq35yyMiBZWxIv81fYUQKxI5L+Lv1t4M7j+WTmskDCe
-         zuk0WLSV3gDzMt6Wm7SOE5DE58CDBqoFdWl03J8qtR+R/8hy6HIbuh87JyYRQ9syeH1J
-         6uJuZJwi9YZmftiBmNdMV4UP2VgUtzKQkC/+RNzQ2pXn9Tf+PPsnIxjzMLA0lUBq8m5T
-         9ukr/rD9r3Y4prb/p8WuwGa2erLSAG6ttrfNHfloCSzyIxdIOuEisbx3fgYzirxf61x1
-         YVfA==
-X-Gm-Message-State: AOAM532PTFUoY75c9xFWqeFgk8VqcWWNFHVNjxdHejm7jE2kF+u73l05
-        v4ciIHGnpTrgmjtJ9ser+cVpiv9XXEbRXootIt8=
-X-Google-Smtp-Source: ABdhPJzwzxF8orbHe3jSD7Uncwqg+1GJSzVyQKn+14id/SsYjNHfF5dA6n7ltPp7GgPDmJqj53j5yWUhmkjN8MIsKpw=
-X-Received: by 2002:adf:e6c5:: with SMTP id y5mr18746301wrm.198.1629871083425;
- Tue, 24 Aug 2021 22:58:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210824092745.2093640-1-zhang.lyra@gmail.com>
- <20210824092745.2093640-3-zhang.lyra@gmail.com> <20210824155823.GE4393@sirena.org.uk>
-In-Reply-To: <20210824155823.GE4393@sirena.org.uk>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+EUcLGmwSrg5CUVW3cqmxP8IfXwkpbSUpFunpQ1DtuQ=;
+        b=VIzrgNQGLdEoa3eGTAwBIZ/HD65zKA4r/EgY/Ce5sk/kxun9OxWqQsL9+t7ZqlnGAS
+         6SkH8jBdcByAI49mLVbBnxxBkhgIWPAnRHlisGltmKbmqTbZqR9MSXbDTdFtmEUGoAMa
+         SfQx8eSLOq2cU28Q1m5ehkh2kXShdktUnKaFfAI5HZ6aUb3mx9czC/B6UOFEZNsx8Vh/
+         K+R+Doi21Li0X1TasSsQLxMOAGLLHqTULKtttW0y7fyEaU5YAu8JlAY13ZMoba3wARN8
+         Ft2itFX/QQwGWpAg6+NXbXBPkxikkBpJc8YFENiZLbMeG4PzRecu7BPddVWWIEgp4vFE
+         Zd+Q==
+X-Gm-Message-State: AOAM532BVedx5B3cRsOsnwrgAg/bTQfKBcPcEP18/ms3NLAzbkMge8Nj
+        pPUwSb9aywVKhIEyBd6GQas=
+X-Google-Smtp-Source: ABdhPJzejSoaekb3fb6cFFIcZhHJLMkWmrmn9/7N8LwK6O5yQq6vSUSsax80msUXQga+XL2fD05Efg==
+X-Received: by 2002:a17:902:ab4e:b0:134:fd88:725d with SMTP id ij14-20020a170902ab4e00b00134fd88725dmr10912843plb.46.1629874782668;
+        Tue, 24 Aug 2021 23:59:42 -0700 (PDT)
+Received: from ubt.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id q102sm4443109pjq.54.2021.08.24.23.59.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Aug 2021 23:59:41 -0700 (PDT)
 From:   Chunyan Zhang <zhang.lyra@gmail.com>
-Date:   Wed, 25 Aug 2021 13:57:09 +0800
-Message-ID: <CAAfSe-v3uJRu2qZ_zNeR-WRdy2U-BBtOdznHfL8k0QqGuXHscQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] dt-bindings: spi: Convert sprd ADI bindings to yaml
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-spi@vger.kernel.org,
-        DTML <devicetree@vger.kernel.org>,
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         Baolin Wang <baolin.wang7@gmail.com>,
         Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
         Chunyan Zhang <chunyan.zhang@unisoc.com>,
         Luting Guo <luting.guo@unisoc.com>,
         LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH V2 0/3] Add sprd ADI r3 support
+Date:   Wed, 25 Aug 2021 14:59:28 +0800
+Message-Id: <20210825065931.2111159-1-zhang.lyra@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
+From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 
-On Tue, 24 Aug 2021 at 23:58, Mark Brown <broonie@kernel.org> wrote:
->
-> On Tue, Aug 24, 2021 at 05:27:44PM +0800, Chunyan Zhang wrote:
-> > From: Chunyan Zhang <chunyan.zhang@unisoc.com>
-> >
-> > Convert spi-sprd-adi.txt to yaml.
->
-> It's better to put DT binding conversion patches as the last patch in a
-> series, there's often a bit of a backlog on reviews for them so putting
-> them after other changes means that the other changes can proceed while
-> waiting for the review of the YAML conversion.
+This patchset adds new ADI version (r3) support which used on sc9863 and
+some other Unisoc's SoCs.
 
-Yes, the last two patches are DT bindings, the last one is based on this.
-Thanks for telling me, I didn't notice this indeed :)
+since v1:
+* Address comments from Rob.
+- Rewrote schema for 'sprd,hw-channels' and hwlocks.
+
+Chunyan Zhang (3):
+  spi: sprd: Add ADI r3 support
+  dt-bindings: spi: Convert sprd ADI bindings to yaml
+  dt-bindings: spi: add sprd ADI for sc9863 and ums512
+
+ .../devicetree/bindings/spi/spi-sprd-adi.txt  |  63 -----
+ .../devicetree/bindings/spi/sprd,spi-adi.yaml | 104 +++++++++
+ drivers/spi/spi-sprd-adi.c                    | 218 ++++++++++++++----
+ 3 files changed, 271 insertions(+), 114 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-sprd-adi.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/sprd,spi-adi.yaml
+
+-- 
+2.25.1
+
