@@ -2,50 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3193F70C0
-	for <lists+linux-spi@lfdr.de>; Wed, 25 Aug 2021 09:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC773F70FE
+	for <lists+linux-spi@lfdr.de>; Wed, 25 Aug 2021 10:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbhHYH5q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 25 Aug 2021 03:57:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42902 "EHLO mail.kernel.org"
+        id S239335AbhHYISt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 25 Aug 2021 04:18:49 -0400
+Received: from mga07.intel.com ([134.134.136.100]:11522 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230104AbhHYH5q (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 25 Aug 2021 03:57:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 29D1961214;
-        Wed, 25 Aug 2021 07:57:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629878221;
-        bh=uWM0Pf7qqAtfBLtvccpCBmBePKTySlx0bSxxeJ0LD2I=;
-        h=Subject:From:Date:To:From;
-        b=GNpa+BCRdvG+Z3/gilr0QHTHtrNXa9+c6LkEVj9bI+TGIfJ2m0+ZBFV7myeYPN1x/
-         DP7fSIXJI/jeYxvg7G+/Sy7l0RCWwtTuQqVuLtTWLRRlFqghWVn1Br2ItrCbpK7tcm
-         mKT0MbeJ563admfOMfR2KcVtS3FTptuH1xu51es5NkdKNh71wXGtrmHq/gN8vZ9oYw
-         YdOy771cY/sTzp5y1cPSCaVnb0U/3NXi5I8ea16MnhPzCy0ntOvtHNWfJVd02mVyPo
-         jF1n5w7GSjuQ5UT0ih8W0rW+Ifz4rMa/UZn2ozdIxyqYVhDfRZrF7SYUzSQoODHTYv
-         2i/CmMxAcu2lw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 2231260A02;
-        Wed, 25 Aug 2021 07:57:01 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S238764AbhHYISr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 25 Aug 2021 04:18:47 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10086"; a="281193905"
+X-IronPort-AV: E=Sophos;i="5.84,349,1620716400"; 
+   d="scan'208";a="281193905"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2021 01:17:56 -0700
+X-IronPort-AV: E=Sophos;i="5.84,349,1620716400"; 
+   d="scan'208";a="597975808"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2021 01:17:50 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 08532201ED;
+        Wed, 25 Aug 2021 11:17:48 +0300 (EEST)
+Date:   Wed, 25 Aug 2021 11:17:47 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Vignesh R <vigneshr@ti.com>, Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Use 'enum' instead of 'oneOf' plus 'const'
+ entries
+Message-ID: <20210825081747.GO3@paasikivi.fi.intel.com>
+References: <20210824202014.978922-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <162987822113.22150.1310197057735425699.git-patchwork-housekeeping@kernel.org>
-Date:   Wed, 25 Aug 2021 07:57:01 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210824202014.978922-1-robh@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] Add sprd ADI r3 support (2021-08-25T06:59:28)
-  Superseding: [v1] Add sprd ADI r3 support (2021-08-24T09:27:42):
-    [1/3] spi: sprd: Add ADI r3 support
-    [2/3] dt-bindings: spi: Convert sprd ADI bindings to yaml
-    [3/3] dt-bindings: spi: add sprd ADI for sc9863 and ums512
+Hi Rob,
 
+Thanks for the patch.
+
+On Tue, Aug 24, 2021 at 03:20:14PM -0500, Rob Herring wrote:
+> 'enum' is equivalent to 'oneOf' with a list of 'const' entries, but 'enum'
+> is more concise and yields better error messages.
+> 
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Vignesh R <vigneshr@ti.com>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: dmaengine@vger.kernel.org
+> Cc: linux-i2c@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-pci@vger.kernel.org
+> Cc: linux-phy@lists.infradead.org
+> Cc: linux-serial@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-spi@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com> (mipi-ccs)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Sakari Ailus
