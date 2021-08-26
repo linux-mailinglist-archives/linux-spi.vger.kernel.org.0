@@ -2,51 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6856A3F844F
-	for <lists+linux-spi@lfdr.de>; Thu, 26 Aug 2021 11:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9540C3F8454
+	for <lists+linux-spi@lfdr.de>; Thu, 26 Aug 2021 11:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240915AbhHZJRK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 26 Aug 2021 05:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42998 "EHLO
+        id S241013AbhHZJRT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 26 Aug 2021 05:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240937AbhHZJRK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Aug 2021 05:17:10 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8A0C0613C1;
-        Thu, 26 Aug 2021 02:16:23 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id 7so2209746pfl.10;
-        Thu, 26 Aug 2021 02:16:23 -0700 (PDT)
+        with ESMTP id S241016AbhHZJRO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 26 Aug 2021 05:17:14 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54123C0617A8;
+        Thu, 26 Aug 2021 02:16:27 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id z24-20020a17090acb1800b0018e87a24300so1949568pjt.0;
+        Thu, 26 Aug 2021 02:16:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=FeBrrxCtDZh/PSk1wkIv1ytATD4fCbUQXYUtjouigOg=;
-        b=UX0gzBUB9U2FGfvm4o8aAFNlISdtZm3GHPwpMsZ4LuoItp/azQsomDtt7pQ95zXbk9
-         2N2rZMg8PjVfMeJOGgWKKnC0uJvHDn2gpQbcUK0LuamLxwC/N0B/bUu22mbwrqMjw9Ws
-         2cVI0QVSN1zJVvWJucUc45SUY3geuXxgFGsTEiC0SyAr91PzYaAPJZiUwDfPMHY593Ej
-         FGEqnUTPFcKPGBEPSOpn9uosIQjwVmxkquTCV8QbOVcTi2uxvMEqoLLoBNP2EGMD0QZc
-         q8IB59iBR1HvEEHqIRML5s4kO3LipRVLuhrIdG7oyt/Ay6a91zbdMSegogmc1ON9TP0p
-         virg==
+        bh=L3k81M1U8IPFSz98hjzAzxK/MacZrQJoEq89TXnAhpU=;
+        b=nL3j1OKocvOFpouDzx/sgrajh3gvc+583g/kg/hV4LF4OxNxXHwef59efhudULAfUp
+         3b+0ZlveJNZtcG6GXaddd+5quMbS84RCyk9KBIkrc7dRxonld+WRPpqfQ3Mu4DkN3TeA
+         c3litQMHg3e+30zuLv3rFZ+nEHNLjO90n0NFwen7lDSjr3CgxS9YKb95Hj/dvsjak/9V
+         Ky3TsjBCXR/WzBF+IgJO3AC6SvfYoXALsDtTnJ6RJU/E/zOO/rW601jmPQpiejCu9YgR
+         0/AhSW+iEvuXC2zdh0GbsymB45wuzviv5/faFBuodV5yiU8q6JUlwKMWjD9ctU8Nrsyw
+         HBJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FeBrrxCtDZh/PSk1wkIv1ytATD4fCbUQXYUtjouigOg=;
-        b=C9HwTn05reVQHsE3BKmXryKNUi4xVfDNETttnbma/Td2vBtMjEMlX3/V5MyipxKOpS
-         cac4sA2+FnbImETMPMs0vd11cmU0RivQB5b1G+pq/r2/NwL/KbDr/68nGhhHo4K3mGtI
-         l33Zhr/oO4wOpQn4RNYd4e2BgL2kg1fM059woAWBvTfD/K9HtMFCcrN59qmm3/kTtqvR
-         uf3DshrLeZXtBKxJScTVDS+OsxbPh1o6M1/+lESnSn2o2tsC3MpOm1KROY65t2l8yRPS
-         jykQ68GiIvsO5cRBMpk5E0Yp6uIf8Tf09IPonvX0hr/2HUlFNQXxTpbja7XbV3tc2GHP
-         RSSQ==
-X-Gm-Message-State: AOAM532tshF1x6X2sK9l1DgURKG3MDWSWM3uykB9nwT+56TxBEwZk6Nx
-        /DHeNJoRQlCQukpD+cLdDV0=
-X-Google-Smtp-Source: ABdhPJxz/EddYYdUuequ8g0FjULGoWSrx0zOZPnfIypVYWxaBtzMrhHwg7gbCDWKuSiOTmPC7KQKJw==
-X-Received: by 2002:a62:878a:0:b029:3e0:7810:ec36 with SMTP id i132-20020a62878a0000b02903e07810ec36mr2725592pfe.4.1629969382917;
-        Thu, 26 Aug 2021 02:16:22 -0700 (PDT)
+        bh=L3k81M1U8IPFSz98hjzAzxK/MacZrQJoEq89TXnAhpU=;
+        b=WiVibrUxCDJjcBlk4Ufm/oPcb4GbW9v2i9dBqe27U9DItURZildf5bgdJ68N8BEb9h
+         ouar6yOCNzs6kYTBJsaAg65RpK7VPMZltd+hVZQuNprPsWOQ43zqjV6WVuaEVsrnaQF4
+         p5NLGblcLz7RwDW8+Mb5a8JdFO8qyx7yMUL76vK7yxFHLqIVpGN8YuQnV/8hxqmanHHp
+         J7U427b3IRC1mLxYoehFU5YIpGoVtyvpXav6+9NvqKvYaa63hs4G9xBkfe+Kae05vX0o
+         tKH3yMRwP43cfrN4fe3BxDJZM/FWK1O1tTkje72bBA046P8qd7dxgMOZeVPyEaCdJ7yS
+         xcmw==
+X-Gm-Message-State: AOAM531oPW1Oz06Vvu1PFG3SGmmMPOzx2fPkdlUWpG1SVb45sH2+hZg9
+        aTRhihIHVf/Pi49jlLiDwofx+jhL/Yw=
+X-Google-Smtp-Source: ABdhPJzEc1OjEcm3ev5ych4oDsTQNWyOv6H1KlqiBq+Yf7weQoDYQ6nOSvh6Vqgz+KfCXvdo77/jzQ==
+X-Received: by 2002:a17:902:7d90:b0:134:d977:22de with SMTP id a16-20020a1709027d9000b00134d97722demr2834377plm.30.1629969386840;
+        Thu, 26 Aug 2021 02:16:26 -0700 (PDT)
 Received: from ubt.spreadtrum.com ([117.18.48.102])
-        by smtp.gmail.com with ESMTPSA id j20sm2777569pgb.2.2021.08.26.02.16.19
+        by smtp.gmail.com with ESMTPSA id j20sm2777569pgb.2.2021.08.26.02.16.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Aug 2021 02:16:22 -0700 (PDT)
+        Thu, 26 Aug 2021 02:16:26 -0700 (PDT)
 From:   Chunyan Zhang <zhang.lyra@gmail.com>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     linux-spi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
@@ -56,9 +56,9 @@ Cc:     linux-spi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Chunyan Zhang <chunyan.zhang@unisoc.com>,
         Luting Guo <luting.guo@unisoc.com>,
         LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH V3 2/4] spi: sprd: Add ADI r3 support
-Date:   Thu, 26 Aug 2021 17:15:47 +0800
-Message-Id: <20210826091549.2138125-3-zhang.lyra@gmail.com>
+Subject: [PATCH V3 3/4] dt-bindings: spi: Convert sprd ADI bindings to yaml
+Date:   Thu, 26 Aug 2021 17:15:48 +0800
+Message-Id: <20210826091549.2138125-4-zhang.lyra@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210826091549.2138125-1-zhang.lyra@gmail.com>
 References: <20210826091549.2138125-1-zhang.lyra@gmail.com>
@@ -70,398 +70,194 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 
-ADI r3p0 is used on SC9863 and UMS512 SoCs.
+Convert spi-sprd-adi.txt to yaml.
 
 Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
-Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- drivers/spi/spi-sprd-adi.c | 215 ++++++++++++++++++++++++++++---------
- 1 file changed, 165 insertions(+), 50 deletions(-)
+ .../devicetree/bindings/spi/spi-sprd-adi.txt  |  63 -----------
+ .../devicetree/bindings/spi/sprd,spi-adi.yaml | 102 ++++++++++++++++++
+ 2 files changed, 102 insertions(+), 63 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-sprd-adi.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/sprd,spi-adi.yaml
 
-diff --git a/drivers/spi/spi-sprd-adi.c b/drivers/spi/spi-sprd-adi.c
-index d392dc6db927..1edbf44c05a7 100644
---- a/drivers/spi/spi-sprd-adi.c
-+++ b/drivers/spi/spi-sprd-adi.c
-@@ -52,10 +52,20 @@
- 
- /*
-  * ADI slave devices include RTC, ADC, regulator, charger, thermal and so on.
-- * The slave devices address offset is always 0x8000 and size is 4K.
-+ * ADI supports 12/14bit address for r2p0, and additional 17bit for r3p0 or
-+ * later versions. Since bit[1:0] are zero, so the spec describe them as
-+ * 10/12/15bit address mode.
-+ * The 10bit mode supports sigle slave, 12/15bit mode supports 3 slave, the
-+ * high two bits is slave_id.
-+ * The slave devices address offset is 0x8000 for 10/12bit address mode,
-+ * and 0x20000 for 15bit mode.
-  */
--#define ADI_SLAVE_ADDR_SIZE		SZ_4K
--#define ADI_SLAVE_OFFSET		0x8000
-+#define ADI_10BIT_SLAVE_ADDR_SIZE	SZ_4K
-+#define ADI_10BIT_SLAVE_OFFSET		0x8000
-+#define ADI_12BIT_SLAVE_ADDR_SIZE	SZ_16K
-+#define ADI_12BIT_SLAVE_OFFSET		0x8000
-+#define ADI_15BIT_SLAVE_ADDR_SIZE	SZ_128K
-+#define ADI_15BIT_SLAVE_OFFSET		0x20000
- 
- /* Timeout (ms) for the trylock of hardware spinlocks */
- #define ADI_HWSPINLOCK_TIMEOUT		5000
-@@ -67,24 +77,35 @@
- 
- #define ADI_FIFO_DRAIN_TIMEOUT		1000
- #define ADI_READ_TIMEOUT		2000
--#define REG_ADDR_LOW_MASK		GENMASK(11, 0)
-+
-+/*
-+ * Read back address from REG_ADI_RD_DATA bit[30:16] which maps to:
-+ * REG_ADI_RD_CMD bit[14:0] for r2p0
-+ * REG_ADI_RD_CMD bit[16:2] for r3p0
-+ */
-+#define RDBACK_ADDR_MASK_R2		GENMASK(14, 0)
-+#define RDBACK_ADDR_MASK_R3		GENMASK(16, 2)
-+#define RDBACK_ADDR_SHIFT_R3		2
- 
- /* Registers definitions for PMIC watchdog controller */
--#define REG_WDG_LOAD_LOW		0x80
--#define REG_WDG_LOAD_HIGH		0x84
--#define REG_WDG_CTRL			0x88
--#define REG_WDG_LOCK			0xa0
-+#define REG_WDG_LOAD_LOW		0x0
-+#define REG_WDG_LOAD_HIGH		0x4
-+#define REG_WDG_CTRL			0x8
-+#define REG_WDG_LOCK			0x20
- 
- /* Bits definitions for register REG_WDG_CTRL */
- #define BIT_WDG_RUN			BIT(1)
- #define BIT_WDG_NEW			BIT(2)
- #define BIT_WDG_RST			BIT(3)
- 
-+/* Bits definitions for register REG_MODULE_EN */
-+#define BIT_WDG_EN			BIT(2)
-+
- /* Registers definitions for PMIC */
- #define PMIC_RST_STATUS			0xee8
- #define PMIC_MODULE_EN			0xc08
- #define PMIC_CLK_EN			0xc18
--#define BIT_WDG_EN			BIT(2)
-+#define PMIC_WDG_BASE			0x80
- 
- /* Definition of PMIC reset status register */
- #define HWRST_STATUS_SECURITY		0x02
-@@ -107,6 +128,22 @@
- #define WDG_LOAD_MASK			GENMASK(15, 0)
- #define WDG_UNLOCK_KEY			0xe551
- 
-+struct sprd_adi_wdg {
-+	u32 base;
-+	u32 rst_sts;
-+	u32 wdg_en;
-+	u32 wdg_clk;
-+};
-+
-+struct sprd_adi_data {
-+	u32 slave_offset;
-+	u32 slave_addr_size;
-+	int (*read_check)(u32 val, u32 reg);
-+	int (*restart)(struct notifier_block *this,
-+		       unsigned long mode, void *cmd);
-+	void (*wdg_rst)(void *p);
-+};
-+
- struct sprd_adi {
- 	struct spi_controller	*ctlr;
- 	struct device		*dev;
-@@ -115,11 +152,12 @@ struct sprd_adi {
- 	unsigned long		slave_vbase;
- 	unsigned long		slave_pbase;
- 	struct notifier_block	restart_handler;
-+	const struct sprd_adi_data *data;
- };
- 
- static int sprd_adi_check_addr(struct sprd_adi *sadi, u32 reg)
- {
--	if (reg >= ADI_SLAVE_ADDR_SIZE) {
-+	if (reg >= sadi->data->slave_addr_size) {
- 		dev_err(sadi->dev,
- 			"slave address offset is incorrect, reg = 0x%x\n",
- 			reg);
-@@ -155,11 +193,35 @@ static int sprd_adi_fifo_is_full(struct sprd_adi *sadi)
- 	return readl_relaxed(sadi->base + REG_ADI_ARM_FIFO_STS) & BIT_FIFO_FULL;
- }
- 
-+static int sprd_adi_read_check(u32 val, u32 addr)
-+{
-+	u32 rd_addr;
-+
-+	rd_addr = (val & RD_ADDR_MASK) >> RD_ADDR_SHIFT;
-+
-+	if (rd_addr != addr) {
-+		pr_err("ADI read error, addr = 0x%x, val = 0x%x\n", addr, val);
-+		return -EIO;
-+	}
-+
-+	return 0;
-+}
-+
-+static int sprd_adi_read_check_r2(u32 val, u32 reg)
-+{
-+	return sprd_adi_read_check(val, reg & RDBACK_ADDR_MASK_R2);
-+}
-+
-+static int sprd_adi_read_check_r3(u32 val, u32 reg)
-+{
-+	return sprd_adi_read_check(val, (reg & RDBACK_ADDR_MASK_R3) >> RDBACK_ADDR_SHIFT_R3);
-+}
-+
- static int sprd_adi_read(struct sprd_adi *sadi, u32 reg, u32 *read_val)
- {
- 	int read_timeout = ADI_READ_TIMEOUT;
- 	unsigned long flags;
--	u32 val, rd_addr;
-+	u32 val;
- 	int ret = 0;
- 
- 	if (sadi->hwlock) {
-@@ -203,18 +265,15 @@ static int sprd_adi_read(struct sprd_adi *sadi, u32 reg, u32 *read_val)
- 	}
- 
- 	/*
--	 * The return value includes data and read register address, from bit 0
--	 * to bit 15 are data, and from bit 16 to bit 30 are read register
--	 * address. Then we can check the returned register address to validate
--	 * data.
-+	 * The return value before adi r5p0 includes data and read register
-+	 * address, from bit 0to bit 15 are data, and from bit 16 to bit 30
-+	 * are read register address. Then we can check the returned register
-+	 * address to validate data.
- 	 */
--	rd_addr = (val & RD_ADDR_MASK) >> RD_ADDR_SHIFT;
+diff --git a/Documentation/devicetree/bindings/spi/spi-sprd-adi.txt b/Documentation/devicetree/bindings/spi/spi-sprd-adi.txt
+deleted file mode 100644
+index 2567c829e2dc..000000000000
+--- a/Documentation/devicetree/bindings/spi/spi-sprd-adi.txt
++++ /dev/null
+@@ -1,63 +0,0 @@
+-Spreadtrum ADI controller
 -
--	if (rd_addr != (reg & REG_ADDR_LOW_MASK)) {
--		dev_err(sadi->dev, "read error, reg addr = 0x%x, val = 0x%x\n",
--			reg, val);
--		ret = -EIO;
--		goto out;
-+	if (sadi->data->read_check) {
-+		ret = sadi->data->read_check(val, reg);
-+		if (ret < 0)
-+			goto out;
- 	}
- 
- 	*read_val = val & RD_VALUE_MASK;
-@@ -299,20 +358,21 @@ static int sprd_adi_transfer_one(struct spi_controller *ctlr,
- 	return ret;
- }
- 
--static void sprd_adi_set_wdt_rst_mode(struct sprd_adi *sadi)
-+static void sprd_adi_set_wdt_rst_mode(void *p)
- {
- #if IS_ENABLED(CONFIG_SPRD_WATCHDOG)
- 	u32 val;
-+	struct sprd_adi *sadi = (struct sprd_adi *)p;
- 
--	/* Set default watchdog reboot mode */
-+	/* Init watchdog reset mode */
- 	sprd_adi_read(sadi, PMIC_RST_STATUS, &val);
- 	val |= HWRST_STATUS_WATCHDOG;
- 	sprd_adi_write(sadi, PMIC_RST_STATUS, val);
- #endif
- }
- 
--static int sprd_adi_restart_handler(struct notifier_block *this,
--				    unsigned long mode, void *cmd)
-+static int sprd_adi_restart(struct notifier_block *this, unsigned long mode,
-+				  void *cmd, struct sprd_adi_wdg *wdg)
- {
- 	struct sprd_adi *sadi = container_of(this, struct sprd_adi,
- 					     restart_handler);
-@@ -348,40 +408,40 @@ static int sprd_adi_restart_handler(struct notifier_block *this,
- 		reboot_mode = HWRST_STATUS_NORMAL;
- 
- 	/* Record the reboot mode */
--	sprd_adi_read(sadi, PMIC_RST_STATUS, &val);
-+	sprd_adi_read(sadi, wdg->rst_sts, &val);
- 	val &= ~HWRST_STATUS_WATCHDOG;
- 	val |= reboot_mode;
--	sprd_adi_write(sadi, PMIC_RST_STATUS, val);
-+	sprd_adi_write(sadi, wdg->rst_sts, val);
- 
- 	/* Enable the interface clock of the watchdog */
--	sprd_adi_read(sadi, PMIC_MODULE_EN, &val);
-+	sprd_adi_read(sadi, wdg->wdg_en, &val);
- 	val |= BIT_WDG_EN;
--	sprd_adi_write(sadi, PMIC_MODULE_EN, val);
-+	sprd_adi_write(sadi, wdg->wdg_en, val);
- 
- 	/* Enable the work clock of the watchdog */
--	sprd_adi_read(sadi, PMIC_CLK_EN, &val);
-+	sprd_adi_read(sadi, wdg->wdg_clk, &val);
- 	val |= BIT_WDG_EN;
--	sprd_adi_write(sadi, PMIC_CLK_EN, val);
-+	sprd_adi_write(sadi, wdg->wdg_clk, val);
- 
- 	/* Unlock the watchdog */
--	sprd_adi_write(sadi, REG_WDG_LOCK, WDG_UNLOCK_KEY);
-+	sprd_adi_write(sadi, wdg->base + REG_WDG_LOCK, WDG_UNLOCK_KEY);
- 
--	sprd_adi_read(sadi, REG_WDG_CTRL, &val);
-+	sprd_adi_read(sadi, wdg->base + REG_WDG_CTRL, &val);
- 	val |= BIT_WDG_NEW;
--	sprd_adi_write(sadi, REG_WDG_CTRL, val);
-+	sprd_adi_write(sadi, wdg->base + REG_WDG_CTRL, val);
- 
- 	/* Load the watchdog timeout value, 50ms is always enough. */
--	sprd_adi_write(sadi, REG_WDG_LOAD_HIGH, 0);
--	sprd_adi_write(sadi, REG_WDG_LOAD_LOW,
-+	sprd_adi_write(sadi, wdg->base + REG_WDG_LOAD_HIGH, 0);
-+	sprd_adi_write(sadi, wdg->base + REG_WDG_LOAD_LOW,
- 		       WDG_LOAD_VAL & WDG_LOAD_MASK);
- 
- 	/* Start the watchdog to reset system */
--	sprd_adi_read(sadi, REG_WDG_CTRL, &val);
-+	sprd_adi_read(sadi, wdg->base + REG_WDG_CTRL, &val);
- 	val |= BIT_WDG_RUN | BIT_WDG_RST;
--	sprd_adi_write(sadi, REG_WDG_CTRL, val);
-+	sprd_adi_write(sadi, wdg->base + REG_WDG_CTRL, val);
- 
- 	/* Lock the watchdog */
--	sprd_adi_write(sadi, REG_WDG_LOCK, ~WDG_UNLOCK_KEY);
-+	sprd_adi_write(sadi, wdg->base + REG_WDG_LOCK, ~WDG_UNLOCK_KEY);
- 
- 	mdelay(1000);
- 
-@@ -389,6 +449,19 @@ static int sprd_adi_restart_handler(struct notifier_block *this,
- 	return NOTIFY_DONE;
- }
- 
-+static int sprd_adi_restart_sc9860(struct notifier_block *this,
-+					   unsigned long mode, void *cmd)
-+{
-+	struct sprd_adi_wdg wdg = {
-+		.base = PMIC_WDG_BASE,
-+		.rst_sts = PMIC_RST_STATUS,
-+		.wdg_en = PMIC_MODULE_EN,
-+		.wdg_clk = PMIC_CLK_EN,
-+	};
+-ADI is the abbreviation of Anolog-Digital interface, which is used to access
+-analog chip (such as PMIC) from digital chip. ADI controller follows the SPI
+-framework for its hardware implementation is alike to SPI bus and its timing
+-is compatile to SPI timing.
+-
+-ADI controller has 50 channels including 2 software read/write channels and
+-48 hardware channels to access analog chip. For 2 software read/write channels,
+-users should set ADI registers to access analog chip. For hardware channels,
+-we can configure them to allow other hardware components to use it independently,
+-which means we can just link one analog chip address to one hardware channel,
+-then users can access the mapped analog chip address by this hardware channel
+-triggered by hardware components instead of ADI software channels.
+-
+-Thus we introduce one property named "sprd,hw-channels" to configure hardware
+-channels, the first value specifies the hardware channel id which is used to
+-transfer data triggered by hardware automatically, and the second value specifies
+-the analog chip address where user want to access by hardware components.
+-
+-Since we have multi-subsystems will use unique ADI to access analog chip, when
+-one system is reading/writing data by ADI software channels, that should be under
+-one hardware spinlock protection to prevent other systems from reading/writing
+-data by ADI software channels at the same time, or two parallel routine of setting
+-ADI registers will make ADI controller registers chaos to lead incorrect results.
+-Then we need one hardware spinlock to synchronize between the multiple subsystems.
+-
+-The new version ADI controller supplies multiple master channels for different
+-subsystem accessing, that means no need to add hardware spinlock to synchronize,
+-thus change the hardware spinlock support to be optional to keep backward
+-compatibility.
+-
+-Required properties:
+-- compatible: Should be "sprd,sc9860-adi".
+-- reg: Offset and length of ADI-SPI controller register space.
+-- #address-cells: Number of cells required to define a chip select address
+-	on the ADI-SPI bus. Should be set to 1.
+-- #size-cells: Size of cells required to define a chip select address size
+-	on the ADI-SPI bus. Should be set to 0.
+-
+-Optional properties:
+-- hwlocks: Reference to a phandle of a hwlock provider node.
+-- hwlock-names: Reference to hwlock name strings defined in the same order
+-	as the hwlocks, should be "adi".
+-- sprd,hw-channels: This is an array of channel values up to 49 channels.
+-	The first value specifies the hardware channel id which is used to
+-	transfer data triggered by hardware automatically, and the second
+-	value specifies the analog chip address where user want to access
+-	by hardware components.
+-
+-SPI slave nodes must be children of the SPI controller node and can contain
+-properties described in Documentation/devicetree/bindings/spi/spi-bus.txt.
+-
+-Example:
+-	adi_bus: spi@40030000 {
+-		compatible = "sprd,sc9860-adi";
+-		reg = <0 0x40030000 0 0x10000>;
+-		hwlocks = <&hwlock1 0>;
+-		hwlock-names = "adi";
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		sprd,hw-channels = <30 0x8c20>;
+-	};
+diff --git a/Documentation/devicetree/bindings/spi/sprd,spi-adi.yaml b/Documentation/devicetree/bindings/spi/sprd,spi-adi.yaml
+new file mode 100644
+index 000000000000..3e399d31168b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/sprd,spi-adi.yaml
+@@ -0,0 +1,102 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 +
-+	return sprd_adi_restart(this, mode, cmd, &wdg);
-+}
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/spi/sprd,spi-adi.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
- static void sprd_adi_hw_init(struct sprd_adi *sadi)
- {
- 	struct device_node *np = sadi->dev->of_node;
-@@ -440,10 +513,11 @@ static void sprd_adi_hw_init(struct sprd_adi *sadi)
- static int sprd_adi_probe(struct platform_device *pdev)
- {
- 	struct device_node *np = pdev->dev.of_node;
-+	const struct sprd_adi_data *data;
- 	struct spi_controller *ctlr;
- 	struct sprd_adi *sadi;
- 	struct resource *res;
--	u32 num_chipselect;
-+	u16 num_chipselect;
- 	int ret;
- 
- 	if (!np) {
-@@ -451,6 +525,12 @@ static int sprd_adi_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
-+	data = of_device_get_match_data(&pdev->dev);
-+	if (!data) {
-+		dev_err(&pdev->dev, "no matching driver data found\n");
-+		return -EINVAL;
-+	}
++title: Spreadtrum ADI controller
 +
- 	pdev->id = of_alias_get_id(np, "spi");
- 	num_chipselect = of_get_child_count(np);
- 
-@@ -468,10 +548,12 @@ static int sprd_adi_probe(struct platform_device *pdev)
- 		goto put_ctlr;
- 	}
- 
--	sadi->slave_vbase = (unsigned long)sadi->base + ADI_SLAVE_OFFSET;
--	sadi->slave_pbase = res->start + ADI_SLAVE_OFFSET;
-+	sadi->slave_vbase = (unsigned long)sadi->base +
-+			    data->slave_offset;
-+	sadi->slave_pbase = res->start + data->slave_offset;
- 	sadi->ctlr = ctlr;
- 	sadi->dev = &pdev->dev;
-+	sadi->data = data;
- 	ret = of_hwspin_lock_get_id(np, 0);
- 	if (ret > 0 || (IS_ENABLED(CONFIG_HWSPINLOCK) && ret == 0)) {
- 		sadi->hwlock =
-@@ -492,7 +574,9 @@ static int sprd_adi_probe(struct platform_device *pdev)
- 	}
- 
- 	sprd_adi_hw_init(sadi);
--	sprd_adi_set_wdt_rst_mode(sadi);
++maintainers:
++  - Orson Zhai <orsonzhai@gmail.com>
++  - Baolin Wang <baolin.wang7@gmail.com>
++  - Chunyan Zhang <zhang.lyra@gmail.com>
 +
-+	if (sadi->data->wdg_rst)
-+		sadi->data->wdg_rst(sadi);
- 
- 	ctlr->dev.of_node = pdev->dev.of_node;
- 	ctlr->bus_num = pdev->id;
-@@ -507,12 +591,14 @@ static int sprd_adi_probe(struct platform_device *pdev)
- 		goto put_ctlr;
- 	}
- 
--	sadi->restart_handler.notifier_call = sprd_adi_restart_handler;
--	sadi->restart_handler.priority = 128;
--	ret = register_restart_handler(&sadi->restart_handler);
--	if (ret) {
--		dev_err(&pdev->dev, "can not register restart handler\n");
--		goto put_ctlr;
-+	if (sadi->data->restart) {
-+		sadi->restart_handler.notifier_call = sadi->data->restart;
-+		sadi->restart_handler.priority = 128;
-+		ret = register_restart_handler(&sadi->restart_handler);
-+		if (ret) {
-+			dev_err(&pdev->dev, "can not register restart handler\n");
-+			goto put_ctlr;
-+		}
- 	}
- 
- 	return 0;
-@@ -531,9 +617,38 @@ static int sprd_adi_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static struct sprd_adi_data sc9860_data = {
-+	.slave_offset = ADI_10BIT_SLAVE_OFFSET,
-+	.slave_addr_size = ADI_10BIT_SLAVE_ADDR_SIZE,
-+	.read_check = sprd_adi_read_check_r2,
-+	.restart = sprd_adi_restart_sc9860,
-+	.wdg_rst = sprd_adi_set_wdt_rst_mode,
-+};
++description: |
++  ADI is the abbreviation of Anolog-Digital interface, which is used to access
++  analog chip (such as PMIC) from digital chip. ADI controller follows the SPI
++  framework for its hardware implementation is alike to SPI bus and its timing
++  is compatile to SPI timing.
 +
-+static struct sprd_adi_data sc9863_data = {
-+	.slave_offset = ADI_12BIT_SLAVE_OFFSET,
-+	.slave_addr_size = ADI_12BIT_SLAVE_ADDR_SIZE,
-+	.read_check = sprd_adi_read_check_r3,
-+};
++  ADI controller has 50 channels including 2 software read/write channels and
++  48 hardware channels to access analog chip. For 2 software read/write channels,
++  users should set ADI registers to access analog chip. For hardware channels,
++  we can configure them to allow other hardware components to use it independently,
++  which means we can just link one analog chip address to one hardware channel,
++  then users can access the mapped analog chip address by this hardware channel
++  triggered by hardware components instead of ADI software channels.
 +
-+static struct sprd_adi_data ums512_data = {
-+	.slave_offset = ADI_15BIT_SLAVE_OFFSET,
-+	.slave_addr_size = ADI_15BIT_SLAVE_ADDR_SIZE,
-+	.read_check = sprd_adi_read_check_r3,
-+};
++  Thus we introduce one property named "sprd,hw-channels" to configure hardware
++  channels, the first value specifies the hardware channel id which is used to
++  transfer data triggered by hardware automatically, and the second value specifies
++  the analog chip address where user want to access by hardware components.
 +
- static const struct of_device_id sprd_adi_of_match[] = {
- 	{
- 		.compatible = "sprd,sc9860-adi",
-+		.data = &sc9860_data,
-+	},
-+	{
-+		.compatible = "sprd,sc9863-adi",
-+		.data = &sc9863_data,
-+	},
-+	{
-+		.compatible = "sprd,ums512-adi",
-+		.data = &ums512_data,
- 	},
- 	{ },
- };
++  Since we have multi-subsystems will use unique ADI to access analog chip, when
++  one system is reading/writing data by ADI software channels, that should be under
++  one hardware spinlock protection to prevent other systems from reading/writing
++  data by ADI software channels at the same time, or two parallel routine of setting
++  ADI registers will make ADI controller registers chaos to lead incorrect results.
++  Then we need one hardware spinlock to synchronize between the multiple subsystems.
++
++  The new version ADI controller supplies multiple master channels for different
++  subsystem accessing, that means no need to add hardware spinlock to synchronize,
++  thus change the hardware spinlock support to be optional to keep backward
++  compatibility.
++
++allOf:
++  - $ref: /spi/spi-controller.yaml#
++
++properties:
++  compatible:
++    enum:
++      - sprd,sc9860-adi
++
++  reg:
++    maxItems: 1
++
++  hwlocks:
++    maxItems: 1
++
++  hwlock-names:
++    const: adi
++
++  sprd,hw-channels:
++    $ref: /schemas/types.yaml#/definitions/uint32-matrix
++    description: A list of hardware channels
++    minItems: 1
++    maxItems: 48
++    items:
++      items:
++        - description: The hardware channel id which is used to transfer data
++            triggered by hardware automatically, channel id 0-1 are for software
++            use, 2-49 are hardware channels.
++          minimum: 2
++          maximum: 49
++        - description: The analog chip address where user want to access by
++            hardware components.
++
++required:
++  - compatible
++  - reg
++  - '#address-cells'
++  - '#size-cells'
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    aon {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        adi_bus: spi@40030000 {
++            compatible = "sprd,sc9860-adi";
++            reg = <0 0x40030000 0 0x10000>;
++            hwlocks = <&hwlock1 0>;
++            hwlock-names = "adi";
++            #address-cells = <1>;
++            #size-cells = <0>;
++            sprd,hw-channels = <30 0x8c20>;
++        };
++    };
++...
 -- 
 2.25.1
 
