@@ -2,50 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 733A13F84E3
-	for <lists+linux-spi@lfdr.de>; Thu, 26 Aug 2021 11:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2823F3F86D3
+	for <lists+linux-spi@lfdr.de>; Thu, 26 Aug 2021 13:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240937AbhHZJ5d (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 26 Aug 2021 05:57:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58702 "EHLO mail.kernel.org"
+        id S242411AbhHZL6i (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 26 Aug 2021 07:58:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44448 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234666AbhHZJ5d (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 26 Aug 2021 05:57:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 11BBB61058;
-        Thu, 26 Aug 2021 09:56:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629971806;
-        bh=JQAcq2pO/0yQ7aKKxTRgnsT81ju4B9iJDPP5P904D6U=;
-        h=Subject:From:Date:To:From;
-        b=oE1zTIwG57UEBxtCizpZIilnWxD05Piuesjamdy4l+fF8UdXl59Y4zlgfSbXUl65+
-         JQIYMxscaqcQUkr1YkveL1Fptuf8RsoRbqazEOBSQVi06BCeb0rrvzKbshktIuR3D/
-         LTgsjwkJ1qcPXEkZ9iFbqQ6b3fiqVh0UmJj2Lg83qA1Vkraw5lBOl5JmDlumNbV/jn
-         nxMg1RztCM0WFQGqQy5TcLhf5QNZ4/Qc9GmIcd4ktYzxSeI5n0nCpr8rq6fsAlKwUQ
-         9cIMHLfIZ8heMKbWQJhDbBkX3xCXFEiFoROU6ym92TgA4jURCQi/0ZbQjp4VmHuLyF
-         D53WR8onKsafw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id F293960A12;
-        Thu, 26 Aug 2021 09:56:45 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S242307AbhHZL6f (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 26 Aug 2021 07:58:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B82B6102A;
+        Thu, 26 Aug 2021 11:57:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1629979068;
+        bh=VqrmZfvdySGGpRkZfJ9sTmMn3wWb3fwMDv/A6XRJ5g0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lzvupKGm6DHeJEI0TqRmS03OkixQqyNvn5fHICulBulOAdMBqEccYq8nc5D2E6XhM
+         gWy/yQjptw7v0BYdQVMP3sXyUlMzJb2TDV9Ccg4Kg4G1aHaVRKNtLVfFwr83vd5wme
+         FgPiaOq7JB0o7euja3GB3WosZG/JyuK67iUcwAk8=
+Date:   Thu, 26 Aug 2021 13:57:44 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Vignesh R <vigneshr@ti.com>, Marc Zyngier <maz@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Use 'enum' instead of 'oneOf' plus 'const'
+ entries
+Message-ID: <YSeBuMtUa77AR7Tn@kroah.com>
+References: <20210824202014.978922-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <162997180598.9037.5092109747467040303.git-patchwork-housekeeping@kernel.org>
-Date:   Thu, 26 Aug 2021 09:56:45 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210824202014.978922-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v3] Add sprd ADI r3 support (2021-08-26T09:15:45)
-  Superseding: [v2] Add sprd ADI r3 support (2021-08-25T06:59:28):
-    [V2,1/3] spi: sprd: Add ADI r3 support
-    [V2,2/3] dt-bindings: spi: Convert sprd ADI bindings to yaml
-    [V2,3/3] dt-bindings: spi: add sprd ADI for sc9863 and ums512
+On Tue, Aug 24, 2021 at 03:20:14PM -0500, Rob Herring wrote:
+> 'enum' is equivalent to 'oneOf' with a list of 'const' entries, but 'enum'
+> is more concise and yields better error messages.
+> 
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Vignesh R <vigneshr@ti.com>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: dmaengine@vger.kernel.org
+> Cc: linux-i2c@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-pci@vger.kernel.org
+> Cc: linux-phy@lists.infradead.org
+> Cc: linux-serial@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-spi@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
