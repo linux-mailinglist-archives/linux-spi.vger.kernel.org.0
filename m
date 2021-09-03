@@ -2,93 +2,80 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C3D3FFF1B
-	for <lists+linux-spi@lfdr.de>; Fri,  3 Sep 2021 13:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DB84001E2
+	for <lists+linux-spi@lfdr.de>; Fri,  3 Sep 2021 17:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348763AbhICLZh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 3 Sep 2021 07:25:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38460 "EHLO mail.kernel.org"
+        id S1349613AbhICPUT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 3 Sep 2021 11:20:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47200 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348457AbhICLZh (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 3 Sep 2021 07:25:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 37A966108E;
-        Fri,  3 Sep 2021 11:24:37 +0000 (UTC)
+        id S1349579AbhICPUS (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 3 Sep 2021 11:20:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3A61D610CC;
+        Fri,  3 Sep 2021 15:19:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1630668277;
-        bh=FldLdOOii3TaES/s3G6Az9sltzzQVKuDfUEUq49AxMQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GBM4aePsqZz3pwEdpWsZFuxd8z9DgQ+mbZt7aBK42sXdVLBMNAh5ag5aycTxZ78FB
-         uq156f9R+yW1OsEgNDl0a8nDrKRJQWVTnvos0K34299w2hifqP5dMh51w7Qzq/caue
-         ZIWH7iZ7VdVBlESuoEt+YV4ilUueoWCGz254CfGRwNx8XVtFo/FJkghTYEPG5K6LYW
-         MtddIYqn2kSs6G3dT5OWOpGbv2mCNS9R1M+4ok9TKhcnFfgGDMQXRL97OYI+Oquhpq
-         I4vsYoRBR4+O/GYXrS5oCJDzmXK0rAf3Ixcl6vIg3mhf622wcuLjCCCb2toG6sklIj
-         szhJfOaHgijIg==
-Date:   Fri, 3 Sep 2021 12:24:03 +0100
+        s=k20201202; t=1630682358;
+        bh=8G+tliPfC8rLYs7/1T2ci0+LLiBWSR8H0X7JG/QzYpE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=aCdyvXI1ACl55zc4Rn+SQ5lST/UT+pwcavYtiotJDJqEkp/OyunApyBwNOPyKNebg
+         5jPc8snRshnRCybDInizByx2aVMzfKqlxdXYNgmj5yWr4NDb/n8cX2SKbRyKgjs9oU
+         U6Fxjbz4g4pYoW96rgxsbJIugXHe3bCggBgAjEsd9lMT/Z6qfqiTesQw2jnF93nIgO
+         Luqy7XJOqEybszrGHPDZAzkcYjzvBK1haiKO+mHWt7uXTd40YPcyBL7Rf8fwnZZi+w
+         NkvGhp0QCtDtWEA+l3UUoAbsmXi4/HZBFR1qLpPFip2SJ7aWMRNBN1xpXw/8/wqEAr
+         MA/kaeLKk6Z0Q==
 From:   Mark Brown <broonie@kernel.org>
-To:     Parshuram Raju Thombare <pthombar@cadence.com>
-Cc:     "lukas@wunner.de" <lukas@wunner.de>,
-        "p.yadav@ti.com" <p.yadav@ti.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        Milind Parab <mparab@cadence.com>,
-        Konrad Kociolek <konrad@cadence.com>
-Subject: Re: [PATCH v3 2/2] spi: cadence: add support for Cadence XSPI
- controller
-Message-ID: <20210903112403.GF4932@sirena.org.uk>
-References: <1630499755-18751-1-git-send-email-pthombar@cadence.com>
- <1630499858-20456-1-git-send-email-pthombar@cadence.com>
- <20210902143947.GC11164@sirena.org.uk>
- <CY4PR07MB27577F9A6DBF3F4985B014ACC1CF9@CY4PR07MB2757.namprd07.prod.outlook.com>
- <20210903101837.GA4932@sirena.org.uk>
- <CY4PR07MB27579742A452BC2E71D9A946C1CF9@CY4PR07MB2757.namprd07.prod.outlook.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Tobias Schramm <t.schramm@manjaro.org>,
+        linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>, Heiko Stuebner <heiko@sntech.de>
+Subject: Re: [PATCH] spi: rockchip: handle zero length transfers without timing out
+Date:   Fri,  3 Sep 2021 16:18:43 +0100
+Message-Id: <163068228056.51069.15541338141615688512.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210827050357.165409-1-t.schramm@manjaro.org>
+References: <20210827050357.165409-1-t.schramm@manjaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cpvLTH7QU4gwfq3S"
-Content-Disposition: inline
-In-Reply-To: <CY4PR07MB27579742A452BC2E71D9A946C1CF9@CY4PR07MB2757.namprd07.prod.outlook.com>
-X-Cookie: Darth Vader sleeps with a Teddywookie.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, 27 Aug 2021 07:03:57 +0200, Tobias Schramm wrote:
+> Previously zero length transfers submitted to the Rokchip SPI driver would
+> time out in the SPI layer. This happens because the SPI peripheral does
+> not trigger a transfer completion interrupt for zero length transfers.
+> 
+> Fix that by completing zero length transfers immediately at start of
+> transfer.
+> 
+> [...]
 
---cpvLTH7QU4gwfq3S
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Fri, Sep 03, 2021 at 10:47:50AM +0000, Parshuram Raju Thombare wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> Oh, ok.  That is done at power on reset by the controller in 2 ways.
-> 1. Using device discovery module, controller try to auto detect the valid=
- protocol
->     mode by trying to read SFDP signature in various modes.
-> 2. Particular protocol mode can be selected using bootstrap signals.
+Thanks!
 
-> I think mode_bits need to include protocol mode which is auto detected or
-> set using bootstrap signals. I will make that change in next version.=20
+[1/1] spi: rockchip: handle zero length transfers without timing out
+      commit: 5457773ef99f25fcc4b238ac76b68e28273250f4
 
-Yes, that sounds better.  I guess at least in the case of autodetection
-the mode can be overridden by software later, but that can always be
-added later if someone actually needs the feature.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---cpvLTH7QU4gwfq3S
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmEyBdMACgkQJNaLcl1U
-h9DuYQgAgSZTn04sUnbkUr72r8XjZjqJ1gGhXu7jKUXv6eu9XulkgnAncKPgNvmQ
-q8s7wmn6pG/TVNjw91m8DbjQm/FSrzCecyhAWS19kO/86ntl5Ugc2iHD19SXsIhd
-UqIGaPRsKhTZLa7AtrSm61GkAKU4CbFXZNsFgoD/fsvS7JU4c7vzHhcNP8MJy8cW
-5MxdC/qlbY2FapN+lNZfVmraTQeLWy8+XyDZ2LCZQKfNjQS1FWUwBJaH39KcDvsK
-mgshERQiC+LNAlGfkF35V5QE4ooT57HO5052xbV9noySZoHcGTwCxteXi1wuGYku
-PhKN5FMFmLCHDyXpqmxzzpQG1wHrwg==
-=6PJJ
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---cpvLTH7QU4gwfq3S--
+Thanks,
+Mark
