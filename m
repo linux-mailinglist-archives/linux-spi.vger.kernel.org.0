@@ -2,106 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0649A4019F2
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Sep 2021 12:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A86C2401A97
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Sep 2021 13:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241892AbhIFKlX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Sep 2021 06:41:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48310 "EHLO mail.kernel.org"
+        id S240963AbhIFLb5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Sep 2021 07:31:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52932 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229913AbhIFKlX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 6 Sep 2021 06:41:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1920B60EBA;
-        Mon,  6 Sep 2021 10:40:13 +0000 (UTC)
+        id S240647AbhIFLbx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 6 Sep 2021 07:31:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BF0FD61004;
+        Mon,  6 Sep 2021 11:30:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1630924818;
-        bh=DDPfs7HWdQxUNn6g1tSkQLKbmCHfs6sAw/+UHBIdi/M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Th9BCpYBnVmKPtw+yozEi03DflXbpHZnsOAy4Jc0WTQbi+twSgb1XrzHHguyEtFuD
-         unLwYfRWOgpMIlwzUdVta6PvLtBhb/hhKQ5qEENKV7U9Q2LFFvwWeMqWPPk6Ap99ke
-         t2pEWUD6KxAncNF8dArN3EdFE4wFqS1pAblmOOdgP+5BvHtbm3NKW50g544B2Y1M7A
-         0XwU7gfX6Z1zYK/ZPcefKlnE2u5JqlMtdYXMpq/QSt/s/+ZJTfO/4ugaIfwejhWnlB
-         f5vXatWtRfzOn3a/PJ5ZMIbaUJ+VquKa0OnNdFXWmQbxRvwTPgstQShQxiAmi1QiQD
-         A+2M66YfjlnIQ==
-Date:   Mon, 6 Sep 2021 12:40:11 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Vignesh R <vigneshr@ti.com>, Marc Zyngier <maz@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Use 'enum' instead of 'oneOf' plus 'const'
- entries
-Message-ID: <20210906124011.66b8e9f3@coco.lan>
-In-Reply-To: <20210824202014.978922-1-robh@kernel.org>
-References: <20210824202014.978922-1-robh@kernel.org>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+        s=k20201202; t=1630927849;
+        bh=lQTbuZrQB/v9HsiFC3NABiHeRxn1QPmWdrk3cP93ln0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sGPev+o7Ecl6g1vmSH/rVEKB2cvd+1/RpguH/deVOwaBWUgsvDcmQ28TIX6p716S5
+         CtqaEhW/axlRh8j+FVe86vM11y0LwXkPw9sqdVGODfPQMmx9VJF7w1LyulqrUx7+1s
+         2G/W7CjYhCqGisScK7ALSj3aeNTcUQItA6BvqhKXgdo9uMh2+THwjJyngIZvJr0Qg8
+         /RT2ambfU3/JD1wSiIlbk2qyL4qW9mnw7cMmI+JmrcbKRp1YPbRojayGyvfmcmFNUQ
+         J+UrmkFtZJbJaeWG3N2sCUQkGPTHry8j7FEXCR2XXwi6lEpp7T4L+ecBZnaq0vyz24
+         kstdOka9/P/hQ==
+Date:   Mon, 6 Sep 2021 12:30:12 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-spi@vger.kernel.org, vladimir.oltean@nxp.com
+Subject: Re: [PATCH] ptp: don't include ptp_clock_kernel.h in spi.h
+Message-ID: <20210906113012.GA4309@sirena.org.uk>
+References: <20210904013140.2377609-1-kuba@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="huq684BweRXVnRxX"
+Content-Disposition: inline
+In-Reply-To: <20210904013140.2377609-1-kuba@kernel.org>
+X-Cookie: I smell a RANCID CORN DOG!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Em Tue, 24 Aug 2021 15:20:14 -0500
-Rob Herring <robh@kernel.org> escreveu:
 
-> 'enum' is equivalent to 'oneOf' with a list of 'const' entries, but 'enum'
-> is more concise and yields better error messages.
-> 
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Vignesh R <vigneshr@ti.com>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: dmaengine@vger.kernel.org
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-pci@vger.kernel.org
-> Cc: linux-phy@lists.infradead.org
-> Cc: linux-serial@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-spi@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/display/msm/dsi-phy-10nm.yaml           |  6 +++---
->  .../bindings/display/msm/dsi-phy-14nm.yaml           |  6 +++---
->  .../bindings/display/msm/dsi-phy-28nm.yaml           |  8 ++++----
->  .../bindings/dma/allwinner,sun6i-a31-dma.yaml        | 12 ++++++------
->  .../devicetree/bindings/firmware/arm,scpi.yaml       |  6 +++---
->  .../devicetree/bindings/i2c/ti,omap4-i2c.yaml        | 10 +++++-----
->  .../interrupt-controller/loongson,liointc.yaml       |  8 ++++----
+--huq684BweRXVnRxX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Fri, Sep 03, 2021 at 06:31:40PM -0700, Jakub Kicinski wrote:
+> Commit b42faeee718c ("spi: Add a PTP system timestamp
+> to the transfer structure") added an include of ptp_clock_kernel.h
 
->  .../devicetree/bindings/media/i2c/mipi-ccs.yaml      |  8 ++++----
+Please submit patches using subject lines reflecting the style for the
+subsystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and
+make sure your subject lines visually resemble what they're doing.
+There's no need to resubmit to fix this alone.
 
-For media:
+--huq684BweRXVnRxX
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Acked-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Mauro
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmE1+8QACgkQJNaLcl1U
+h9Bojwf+Kqmanc6s6IAH0+XB1OkQd31oy8XKnN/AaYuG443EW99nBrNI2UYBaiUu
+n9dQHZUOY1L6SJZdgKA8yuN+aHA7xDsvwWyKj1MCrfruLq0Rkt1agUHBMtar30Oh
++NgxpTLRspF5cPvm8hAC3nkheQ5yELH5JMzvs+BmBEWtuSgMEz6BS5wJ1tg3X2z0
+p49Hf9uvZbqckH4hoScI7X7IIzreFGkBTDnpaXZnjZf8kp6YRnXmInDiEGkv60BA
+XvRk8f80OGou9up74wuF9gPwZeXSeMN3iON53mypkm9btn7jyFsvhqERmN7CE2j/
+ZhFUMrZqD4k6nbstH4Fib55YFoIxLg==
+=xCqQ
+-----END PGP SIGNATURE-----
+
+--huq684BweRXVnRxX--
