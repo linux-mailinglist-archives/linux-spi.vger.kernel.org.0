@@ -2,131 +2,142 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4A4401086
-	for <lists+linux-spi@lfdr.de>; Sun,  5 Sep 2021 17:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E074018F1
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Sep 2021 11:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234859AbhIEPU1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 5 Sep 2021 11:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
+        id S239548AbhIFJgO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Sep 2021 05:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232764AbhIEPU1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 5 Sep 2021 11:20:27 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD581C061575;
-        Sun,  5 Sep 2021 08:19:23 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id l18so6795524lji.12;
-        Sun, 05 Sep 2021 08:19:23 -0700 (PDT)
+        with ESMTP id S241498AbhIFJes (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Sep 2021 05:34:48 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6A3C061757
+        for <linux-spi@vger.kernel.org>; Mon,  6 Sep 2021 02:33:44 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id b6so8859718wrh.10
+        for <linux-spi@vger.kernel.org>; Mon, 06 Sep 2021 02:33:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4q769ttMr72WDXmPnXR8+wSwY2ZYZkFr5o8TURYWeMk=;
-        b=jDPHkoG2sZv1ra0Hfdz7nuwbfLrrVlNSSeoqLTGAHfFtQelH5sDkS8NnZVUrqM2oAZ
-         a0kAPAsSfMDOFYcL+X3RCmiDQbmy18aysZEVvdyuiAJSBYSENsAe33i/LX3oR6g+kRkg
-         9YxrMY6Ju/B+RY6Jz1UdGz2nwLFuOHheCa2uc2e0RE2q4ReWaNHYd+I1HqIY9IV3Al57
-         UmsZC6PEbvCZj43sjnKDMcu15M9y7QNOTdvbqpg5MCyJEf5P3lJDQ8bPyMDbnmmO26/X
-         wcvlfUDKfaKTc/Przd+flwPjF/z6NB6cEEEBS1P8qw1XB1fiX/HSohmaNkRDh5gjTrbS
-         GXcQ==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=i2+NvsBgnBTOZ+uAcUxvlIaM13WedkLbcL6bup+H1UM=;
+        b=q9eDwDZxue+JjKYKIP+w/ygZ5RrOIy/6a/V0xWsuwzRdA+DY9pSefRgNpnnYpm5BQZ
+         jcdsEFl+fmxv1rv5K31l4dvYsDgRRwrUDRSzPK+5TxnLrRKkeZrRIMX8t00nTTDrCsNi
+         uf638hMv8OsnzcALsgDmG4mf5Gq7vuKLtqqOIWfbZSTBJC9+5AAZImMHCH6jbKGweNZY
+         0rFAtFa8MeWkgidZTVKx5NAsJxCv7TwpC8fsiZdr5uQa0ixm8d4bVKAPP52HXRvZ99cf
+         Q+yyT+iPmmajoU/79Hm6iTVhB2TuOulKMfd2QGm1q9pIns3NH7VucMIJue0cMY68rhls
+         XvRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4q769ttMr72WDXmPnXR8+wSwY2ZYZkFr5o8TURYWeMk=;
-        b=k3uKiyg9f1H19POY6f1p/VfAsfV0bUl9LC1mseQ0IpVAGPF9dd6sXLCpjPGZdMN624
-         /evDEhwZo64eF05uBBbv5dTJXH+3zJITL/8VIX+1fPI/zB599OK3D0VeLuYbOfHjQk1g
-         ZJhmU22zSmIXn0YrRW4rOJdjkrmgJqeJXPxv6BVA2y7iZCPRgdKPyckcVSnjkD1dHXt3
-         MBOjl23zm8yTlc5qrrh1uDboR35js36k/FpObQREUu/uC2jINaGlIha+j0lBHvwEbfWS
-         W0Hf9Zd7UsxWSam/zV3wbtZQ5TvarBOcEmy8Dgxb7Ucv6qnJMKY2DmkWOxevzoeD4c7P
-         919g==
-X-Gm-Message-State: AOAM531KCX0nuyxq/nIy6LZsWFaYtN+OXpGdnk/+BEOd5lPSXdZl7chm
-        h3LRwRYjH72RTfP040SRJ1s=
-X-Google-Smtp-Source: ABdhPJx0zFAmBYZmPFGcyEGHSPJuJaTYTT/7Py8bqorlNEraTIeptEr1EyxWjszRfsWNijA9eJGQIA==
-X-Received: by 2002:a05:651c:1190:: with SMTP id w16mr7015249ljo.327.1630855161981;
-        Sun, 05 Sep 2021 08:19:21 -0700 (PDT)
-Received: from mobilestation ([95.79.127.110])
-        by smtp.gmail.com with ESMTPSA id c19sm680045ljn.75.2021.09.05.08.19.20
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=i2+NvsBgnBTOZ+uAcUxvlIaM13WedkLbcL6bup+H1UM=;
+        b=RnQDfayTJbXnf149xT0xSvZUeBY4B3y/jyrPsNy6e+8eo1qFD4qgFBIm65sZKoKVIZ
+         cIMclPUjd8NfZiRj0g5N65OaSJJVj2ztUywaOB9Q+P3TDmWO4IDIe+ufHoHCN7mWiS6f
+         AxQ1Ss4ix9gbxyI9Pp9kgeDuxjqzFEoVH7BZduhb5STz3UDxbMLJXQjPggwrkafdosoA
+         Hy8HLheQVhaz3u9pA0F3tIeLOFS6tZxFCNbnntB+HWH8CwwGKROgGhZgV847zwUEoPhF
+         nucQBItV5cdV782TtOn9H7nUIgJlGPW4e8rHceXcz16Uqo7Mlr1CEPfyGzlWKqbHatnb
+         qK4g==
+X-Gm-Message-State: AOAM5309MXSbuYLsesrKzp1gTz94x8sZyD1mVVK7EvX7kr63Y6EYoKDB
+        Vonn/B/CG2/HWVREtJI4kgCOXg==
+X-Google-Smtp-Source: ABdhPJzzIakAt8tQ+64AcWO9lDYlr4Dh32B1+kDEcgR0qe3zm7ry+opFn+4PQ93e0dV7eey6Ev0dkg==
+X-Received: by 2002:adf:8006:: with SMTP id 6mr12342436wrk.38.1630920822630;
+        Mon, 06 Sep 2021 02:33:42 -0700 (PDT)
+Received: from google.com ([31.124.24.187])
+        by smtp.gmail.com with ESMTPSA id i21sm7106080wrb.62.2021.09.06.02.33.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Sep 2021 08:19:21 -0700 (PDT)
-Date:   Sun, 5 Sep 2021 18:19:19 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     mahesh.r.vaidya@intel.com
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        broonie@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mgross@linux.intel.com,
-        kris.pan@intel.com, furong.zhou@intel.com,
-        mallikarjunappa.sangannavar@intel.com,
-        lakshmi.bai.raja.subramanian@intel.com
-Subject: Re: [PATCH v1] spi: dw: Enable Autosuspend delay for SPI DesignWare
-Message-ID: <20210905151919.znaftqnzsuqd4n5f@mobilestation>
-References: <20210903212758.22038-1-mahesh.r.vaidya@intel.com>
+        Mon, 06 Sep 2021 02:33:42 -0700 (PDT)
+Date:   Mon, 6 Sep 2021 10:33:39 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Vignesh R <vigneshr@ti.com>, Marc Zyngier <maz@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Use 'enum' instead of 'oneOf' plus 'const'
+ entries
+Message-ID: <YTXgc/GhZVKzJR9H@google.com>
+References: <20210824202014.978922-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210903212758.22038-1-mahesh.r.vaidya@intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210824202014.978922-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, Sep 04, 2021 at 05:27:58AM +0800, mahesh.r.vaidya@intel.com wrote:
-> From: Mahesh R Vaidya <mahesh.r.vaidya@intel.com>
+On Tue, 24 Aug 2021, Rob Herring wrote:
+
+> 'enum' is equivalent to 'oneOf' with a list of 'const' entries, but 'enum'
+> is more concise and yields better error messages.
 > 
-> Enable and set Autosuspend delay for SPI DesignWare driver.
-> The number 1000 ms for the autosuspend delay was picked a bit
-> arbitrarily, so if someone has measurements showing a better
-> value we could easily change this.
-> 
-> Signed-off-by: Mahesh R Vaidya <mahesh.r.vaidya@intel.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Vignesh R <vigneshr@ti.com>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: dmaengine@vger.kernel.org
+> Cc: linux-i2c@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-pci@vger.kernel.org
+> Cc: linux-phy@lists.infradead.org
+> Cc: linux-serial@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-spi@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  drivers/spi/spi-dw-mmio.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-> index 3379720cfcb8..8b588ce9c16b 100644
-> --- a/drivers/spi/spi-dw-mmio.c
-> +++ b/drivers/spi/spi-dw-mmio.c
-> @@ -33,6 +33,8 @@ struct dw_spi_mmio {
->  	struct reset_control *rstc;
->  };
-> 
-> +#define SPI_DW_DEFAULT_AUTOSUSP_VAL		1000
-> +
->  #define MSCC_CPU_SYSTEM_CTRL_GENERAL_CTRL	0x24
->  #define OCELOT_IF_SI_OWNER_OFFSET		4
->  #define JAGUAR2_IF_SI_OWNER_OFFSET		6
-> @@ -309,6 +311,10 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
->  			goto out;
->  	}
-> 
+>  .../bindings/display/msm/dsi-phy-10nm.yaml           |  6 +++---
+>  .../bindings/display/msm/dsi-phy-14nm.yaml           |  6 +++---
+>  .../bindings/display/msm/dsi-phy-28nm.yaml           |  8 ++++----
+>  .../bindings/dma/allwinner,sun6i-a31-dma.yaml        | 12 ++++++------
+>  .../devicetree/bindings/firmware/arm,scpi.yaml       |  6 +++---
+>  .../devicetree/bindings/i2c/ti,omap4-i2c.yaml        | 10 +++++-----
+>  .../interrupt-controller/loongson,liointc.yaml       |  8 ++++----
+>  .../devicetree/bindings/media/i2c/mipi-ccs.yaml      |  8 ++++----
+>  .../devicetree/bindings/mfd/ti,lp87565-q1.yaml       |  6 +++---
 
-> +	/* Set initial autosuspend default delay value and enable */
-> +	pm_runtime_set_autosuspend_delay(&pdev->dev, SPI_DW_DEFAULT_AUTOSUSP_VAL);
-> +	pm_runtime_use_autosuspend(&pdev->dev);
-> +	pm_runtime_set_active(&pdev->dev);
+Acked-by: Lee Jones <lee.jones@linaro.org>
 
-Seems reasonable, but doesn't it need to be reverted in the remove
-callback? Like it's done in the spi-imx.c driver for instance by
-calling the pm_runtime_dont_use_autosuspend() method.
+>  .../devicetree/bindings/net/realtek-bluetooth.yaml   |  8 ++++----
+>  .../bindings/net/ti,k3-am654-cpsw-nuss.yaml          |  8 ++++----
+>  .../devicetree/bindings/net/ti,k3-am654-cpts.yaml    |  6 +++---
+>  Documentation/devicetree/bindings/pci/loongson.yaml  |  8 ++++----
+>  .../devicetree/bindings/phy/intel,lgm-emmc-phy.yaml  |  6 +++---
+>  .../devicetree/bindings/serial/8250_omap.yaml        |  9 +++++----
+>  .../devicetree/bindings/sound/qcom,sm8250.yaml       |  6 +++---
+>  .../devicetree/bindings/sound/tlv320adcx140.yaml     |  8 ++++----
+>  .../devicetree/bindings/spi/realtek,rtl-spi.yaml     | 12 ++++++------
+>  .../devicetree/bindings/timer/arm,sp804.yaml         |  6 +++---
+>  19 files changed, 74 insertions(+), 73 deletions(-)
 
->  	pm_runtime_enable(&pdev->dev);
-> 
->  	ret = dw_spi_add_host(&pdev->dev, dws);
-> @@ -319,6 +325,7 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
->  	return 0;
-> 
->  out:
-
-> +	pm_runtime_put_noidle(&pdev->dev);
-
-This doesn't seem like related to the subject, thus needs to be
-submitted as a separate patch with fixes tag if it fixes some another
-problem. Additionally it isn't balanced with the pm_runtime_get*()
-method invocation. Am I missing something?
-
--Sergey
-
->  	pm_runtime_disable(&pdev->dev);
->  	clk_disable_unprepare(dwsmmio->pclk);
->  out_clk:
-> --
-> 2.17.1
-> 
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
