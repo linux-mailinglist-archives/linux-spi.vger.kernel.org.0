@@ -2,68 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA98401EF9
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Sep 2021 19:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D394022ED
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Sep 2021 07:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243812AbhIFRLd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Sep 2021 13:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
+        id S229800AbhIGEzH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Sep 2021 00:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243742AbhIFRLc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Sep 2021 13:11:32 -0400
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859FCC0617A8
-        for <linux-spi@vger.kernel.org>; Mon,  6 Sep 2021 10:10:26 -0700 (PDT)
-Received: by mail-vs1-xe42.google.com with SMTP id s25so6083029vsa.9
-        for <linux-spi@vger.kernel.org>; Mon, 06 Sep 2021 10:10:26 -0700 (PDT)
+        with ESMTP id S229502AbhIGEzH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Sep 2021 00:55:07 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7C4C061575;
+        Mon,  6 Sep 2021 21:54:01 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id c19-20020a9d6153000000b0051829acbfc7so11268070otk.9;
+        Mon, 06 Sep 2021 21:54:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=gPWXiaNTPVTv8v8NJ16SYW6dYjSrDpzV61pQz3V3yPU=;
-        b=E3Vj8tFM3oaNkSxAciwWF7bviT0F6jf5FgCaeSSSEFUulwczVgWSChEiBzxUXWRkLz
-         DOJT2xrMKHse+pHjrAC1N+EhDprz2mU5Wiw6FgvBv3Jzyh+GDZY6kcSVoKm5qoxsf1oE
-         cHmAKkSITVkS1h+63G86K0bztxNW6BIvxE/n8YNaR9g+GpPqeod+YXE6Rs4n5e83s4Ke
-         4/kHz1kT6y2SlkidSPfwj5KyAiT15o9nwGInEmmj6n/y90zwfI4UlxZfKGjJjo4zmYRs
-         +SzQH+Y5kOKcchRHvyrJHQYIPiHbBS8uEg2OSXkYZ8j8pAANxnZIjQwY2at4acXOmcVr
-         FpMQ==
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HwvMp5IA0hnYzD/MgD58P5n8j2xNmred2ctzvwoT1CU=;
+        b=cZYwdPnb1b3umP57IStOfOejXuTnIqns8GGgRWhneEd4+B5/jxMyHZJubUZyE72LFw
+         uHkv/zN0F8S3uhGH4GNKleFqIFy56ci7X3xQQ5UoXYGnFy6jsBlwIK9o5AkyTHTe+tmO
+         Sy0NTdA0jIRt23iAdTM7/bELUq/rwxsurybr1xD4EG/kyu6Sxjd+Mx5A6fRtNRxP0Dmj
+         1wLoO3KtCCMC9cKO7smVlqVgzrFFdAcuNbDlcaza89ceWVHqa5jmpapX06F/LCcOSOZx
+         z65qw/LoR0J2rDs+XlxpMvAvr8eQ/L8Rlex6txLMzFJvbRH8zGLWi6CtTYs5zcVYET3/
+         6IoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=gPWXiaNTPVTv8v8NJ16SYW6dYjSrDpzV61pQz3V3yPU=;
-        b=mpStWPYQ9LNrk9d56qfAaZfTwZOmwzrQ01dXVj3qrGL+B3fgMT1lb8YCn4fDW9vGeb
-         1gt6ctsursG4+/ai0Y7T3yBS0mXdzJeYsELv5UqIXOpRuU0u99/bM0XKR16r2CcFsMsi
-         ysY2gr7PpsmkcY0ktjO2poX3DXj0qyzclgpJoPK0Aar9H9XZvF8VdMck76pgtNKZjdMe
-         bgIygvtnZFkeJC4IyqqPGA8v8R3XuQrz/tjlymjFjX/eMN0I8DmevQzCD5wbuzFSLPoG
-         bIdDh4YUL6U/DgdqYQLhb/uWmyM1t3hUbO8pcmOO/9WInjczkAFN7GJaqxaeBVPPvNSU
-         WBjg==
-X-Gm-Message-State: AOAM533pTe+W74qs8ZVOaqyoD4A2lYwY7J13GK2Pc35ISQIAW00FkkBk
-        IWXCqgtdNLOFdA+fwjBb+y8TenaPnLaqe6bJX1I=
-X-Google-Smtp-Source: ABdhPJyzHhwvF+isdxxoB8YzVq5YmZwkDWqUtavxucpZ2oHig2dHn4DOkhIve7MzsYDs7iuwcJVgXpY4aEgq/k3Ct5E=
-X-Received: by 2002:a05:6102:7a4:: with SMTP id x4mr6600372vsg.10.1630948225484;
- Mon, 06 Sep 2021 10:10:25 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=HwvMp5IA0hnYzD/MgD58P5n8j2xNmred2ctzvwoT1CU=;
+        b=gFTWvdQU7Rz+VGCo3c7vg0ObVG0dA9dr2WS7aGaLugN67Jcpr3vDXMcUQC9VeSs7rE
+         xsVeyagOWmF9KL2rCksnVR0Rs1Ksdmm+1Nswa9rYg9RFBRD5RkUCv1u47jf83xO+o3Tz
+         rmzmjRMJ07mE3Fp5ik/JX7qXGpASOu7SMOuiotq32ic7TnzO1qRrW7CLkabVH5tQg1n2
+         c2+h2AbEsKHDIwsZ42ncoyP9AKM+37gJ0XBLbdtRhYVpNktx+hYsIGN5r7U51TlA03Iy
+         n/Uf3VNgZQVn2gAFuRkC0V2xYDpWtFAmMlQ+ci688fsFzed1GigKHgJWKI+bEBMmVMY2
+         dc2w==
+X-Gm-Message-State: AOAM5323x6e0TBLQciC8x+SMOxFFdX8GN4ZnO9GeTIlbYYenrj/CFJAQ
+        zWCiGXbrj3KPYFZCGIvQuuk1fagK33M=
+X-Google-Smtp-Source: ABdhPJztUXWHe1y/MwgJ82OrG6ipdHUyLDX7LpTXBUndg5E27UkvWxbxdqpuMUdkJgllcIWIZH6siw==
+X-Received: by 2002:a9d:6c19:: with SMTP id f25mr14331759otq.192.1630990440828;
+        Mon, 06 Sep 2021 21:54:00 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v10sm2230807otp.25.2021.09.06.21.54.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Sep 2021 21:54:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Laxman Dewangan <ldewangan@nvidia.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] spi: tegra20-slink: Declare runtime suspend and resume functions conditionally
+Date:   Mon,  6 Sep 2021 21:53:58 -0700
+Message-Id: <20210907045358.2138282-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Received: by 2002:ab0:2a08:0:0:0:0:0 with HTTP; Mon, 6 Sep 2021 10:10:24 -0700 (PDT)
-Reply-To: geomic123@yahoo.com
-From:   George <georgefox277@gmail.com>
-Date:   Mon, 6 Sep 2021 18:10:24 +0100
-Message-ID: <CADSebuQ_1CVEomO636rbdzt99xuHSAD9XpM2Gu9UBNRxVy2OCQ@mail.gmail.com>
-Subject: Read My Mail
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The following build error is seen with CONFIG_PM=n.
+
+drivers/spi/spi-tegra20-slink.c:1188:12: error:
+	'tegra_slink_runtime_suspend' defined but not used
+drivers/spi/spi-tegra20-slink.c:1200:12: error:
+	'tegra_slink_runtime_resume' defined but not used
+
+Declare the functions only if PM is enabled. While at it, remove the
+unnecessary forward declarations.
+
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/spi/spi-tegra20-slink.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
+index ebd27f883033..8ce840c7ecc8 100644
+--- a/drivers/spi/spi-tegra20-slink.c
++++ b/drivers/spi/spi-tegra20-slink.c
+@@ -204,9 +204,6 @@ struct tegra_slink_data {
+ 	struct dma_async_tx_descriptor		*tx_dma_desc;
+ };
+ 
+-static int tegra_slink_runtime_suspend(struct device *dev);
+-static int tegra_slink_runtime_resume(struct device *dev);
+-
+ static inline u32 tegra_slink_readl(struct tegra_slink_data *tspi,
+ 		unsigned long reg)
+ {
+@@ -1185,6 +1182,7 @@ static int tegra_slink_resume(struct device *dev)
+ }
+ #endif
+ 
++#ifdef CONFIG_PM
+ static int tegra_slink_runtime_suspend(struct device *dev)
+ {
+ 	struct spi_master *master = dev_get_drvdata(dev);
+@@ -1210,6 +1208,7 @@ static int tegra_slink_runtime_resume(struct device *dev)
+ 	}
+ 	return 0;
+ }
++#endif /* CONFIG_PM */
+ 
+ static const struct dev_pm_ops slink_pm_ops = {
+ 	SET_RUNTIME_PM_OPS(tegra_slink_runtime_suspend,
 -- 
-Dear Sir/Madam
+2.33.0
 
-My name is Mr George Michael,i am the Personal Aid to former
-President Baba Yahya Abdul-Aziz Jemus Jammeh the Republic of Gambia in
-west Africa, who is currently in exile with his farmily. I have been
-trying on how to get in touch with you over an important issue
-concerning a project that will be profitable . I anticipate hearing
-from you for more details.
-
-Yours faithfully
-Mr George Michael
