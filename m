@@ -2,115 +2,112 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C06BE4038C5
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Sep 2021 13:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 139A24038D4
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Sep 2021 13:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242822AbhIHLdW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 Sep 2021 07:33:22 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:35164 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233694AbhIHLdV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Sep 2021 07:33:21 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 188BWBN8008178;
-        Wed, 8 Sep 2021 06:32:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1631100731;
-        bh=AZVddGgyrMeNCeMAdzzk6hAXy8GcpJUdmlIjzPJCxT0=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=kto+A+tye33ToZTbvTZtwDalC974GvHFFU7GfUy+d1ggAkYK/mJJKdo6c8kbgmtIl
-         PTbFqYJohfMl0PS9E1m64cksp+0rRF7vs9NjiMq3uDfqZA11y60wjLOZrRVrUvT9oa
-         oUe1f9EugMLKxv3y40lV13qUHqw3lv3oKIqKuSJc=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 188BWBwA026093
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 8 Sep 2021 06:32:11 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 8
- Sep 2021 06:32:11 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 8 Sep 2021 06:32:11 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 188BWAgw044553;
-        Wed, 8 Sep 2021 06:32:11 -0500
-Date:   Wed, 8 Sep 2021 17:02:09 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Parshuram Raju Thombare <pthombar@cadence.com>
-CC:     "broonie@kernel.org" <broonie@kernel.org>,
-        "lukas@wunner.de" <lukas@wunner.de>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        Milind Parab <mparab@cadence.com>,
-        Konrad Kociolek <konrad@cadence.com>
-Subject: Re: [PATCH v3 1/2] spi: cadence: add dt-bindings documentation for
- Cadence XSPI controller
-Message-ID: <20210908113207.6y6h6l23htngrea2@ti.com>
-References: <1630499755-18751-1-git-send-email-pthombar@cadence.com>
- <1630499829-20059-1-git-send-email-pthombar@cadence.com>
- <20210903181722.ukarfanyew2b7yoz@ti.com>
- <CY4PR07MB2757DF7EFD862D67FBF648CBC1D49@CY4PR07MB2757.namprd07.prod.outlook.com>
+        id S1349268AbhIHLgL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 Sep 2021 07:36:11 -0400
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:28200 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348491AbhIHLgG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Sep 2021 07:36:06 -0400
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18858Mnt005982;
+        Wed, 8 Sep 2021 06:34:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=hAPStDx+PJM+iDHQ4tV70Q4L3FaC3LMzBL7dtf4/SIs=;
+ b=ovLUmX4R7VT0yFHCglYU3YAbNr176DnQ/s2fPmvxkaWpvuwGS3SLLmm66+1LOR34wc0Y
+ CI035HVgAkHQBcKJQ20u0dUFaYFpAQQ/twBaISQxUWDM5W+Zt6KYQJOWnI2V11Yz4MpM
+ 9EjJZiuqhyMpHUYRYbRhFS5bc0arVAtzzP7sispbOJGMj6O2683YmcWnh9NknheVCxrl
+ mm/xx1Iiq3NbFc93HydugT/ajxRq1/z486hlgqFlnnMvmR9gqev/aGZomc+nu9KuvgIP
+ YPG+hWZRqm3RUvQ5MpRuPjVqvrYfJ9mKAkW7LQ8PBvN4BRLPdlnYXMshgjzvGHMOJg5v JQ== 
+Received: from ediex02.ad.cirrus.com ([87.246.76.36])
+        by mx0b-001ae601.pphosted.com with ESMTP id 3axcp997pf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 08 Sep 2021 06:34:55 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.12; Wed, 8 Sep
+ 2021 12:34:53 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2242.12 via Frontend
+ Transport; Wed, 8 Sep 2021 12:34:53 +0100
+Received: from aryzen.ad.cirrus.com (unknown [198.61.64.231])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 8C81DB13;
+        Wed,  8 Sep 2021 11:34:53 +0000 (UTC)
+From:   Lucas Tanure <tanureal@opensource.cirrus.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Sanjay R Mehta <sanju.mehta@amd.com>,
+        Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Subject: [PATCH v2 00/10] Improve support for AMD SPI controllers
+Date:   Wed, 8 Sep 2021 12:34:41 +0100
+Message-ID: <20210908113450.788452-1-tanureal@opensource.cirrus.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CY4PR07MB2757DF7EFD862D67FBF648CBC1D49@CY4PR07MB2757.namprd07.prod.outlook.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: EumUw9N0FWY6HpJ4y3LuNI7JT_dVk7EN
+X-Proofpoint-ORIG-GUID: EumUw9N0FWY6HpJ4y3LuNI7JT_dVk7EN
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 08/09/21 06:52AM, Parshuram Raju Thombare wrote:
-> >This needs to be a "subclass" of the spi-controller.yaml binding.
-> >
-> >allOf:
-> >  - $ref: spi-controller.yaml#
-> 
-> Isn't stating that validation need against spi-controller.yaml as well as
-> this schema sufficient ? Can you please point an example how to make
-> controller binding a "subclass" of spi-controller.yaml binding ?
+Add support for AMDI0062 and correctly fill the FIFO buffer with
+the whole message.
 
-I just showed you. You need to add the below lines:
+With a message of AMD_SPI_FIFO_SIZE bytes or less, copying all
+transfers to the FIFO guarantees that the message is sent over
+one CS. Because the controller has an automatic CS that is only
+activated during the transmission of the FIFO.
 
-allOf:
-  - $ref: spi-controller.yaml#
+And the controller is half-duplex in that it cannot read data
+while it is sending data. But the FIFO is full-duplex, the writes
+and reads must be queued and executed together, where it can only
+have one write and one read per FIFO, and the writing part is
+executed first. Therefore transfers can be put together in the
+FIFO unless there is a write after read, which will need to be
+executed in another CS.
 
-See cdns,qspi-nor.yaml or nvidia,tegra210-quad.yaml or any of the 
-multiple controller bindings we already have.
+v2 changes:
+Replace flag SPI_CONTROLLER_CS_PER_TRANSFER by checking
+spi_max_message_size
+Add flag for controllers that can't TX after RX in the same
+message
+SPI controller now expects a message that always can fit in
+FIFO
+Add a new patch for configuring the SPI speed
 
-By "subclass" I did not mean a programming construct, I just meant it 
-should logically be a subclass of the spi-controller.yaml binding, which 
-can be done by the allOf.
 
-> 
-> >Node name should be flash@0.
-> 
-> I think spi-controller.yaml uses wildcard for the name of a device node,
-> so anything in string@hexvalue: should work.
+Lucas Tanure (9):
+  regmap: spi: Set regmap max raw r/w from max_transfer_size
+  regmap: spi: Check raw_[read|write] against max message size
+  spi: Add flag for no TX after a RX in the same Chip Select
+  spi: amd: Refactor code to use less spi_master_get_devdata
+  spi: amd: Refactor amd_spi_busy_wait
+  spi: amd: Remove unneeded variable
+  spi: amd: Check for idle bus before execute opcode
+  spi: amd: Fill FIFO buffer with the whole message
+  spi: amd: Configure the SPI speed
 
-Sure, but mtd.yaml (which the SPI NOR binding depends on) requires it.
+Nehal Bakulchandra Shah (1):
+  spi: amd: Add support for latest platform
 
-> 
-> >> +            compatible = "spi-nor", "micron,mt35xu512";
-> >
-> >These compatibles are arbitrary and undocumented. You probably just need
-> >"jedec,spi-nor". If you need anything else, you need to justify why.
-> 
-> Although just "spi-nor" also works, I agree to use "jedec, spi-nor" and drop
-> device name.
+ drivers/base/regmap/regmap-spi.c |  40 ++-
+ drivers/base/regmap/regmap.c     |  15 +
+ drivers/spi/spi-amd.c            | 498 ++++++++++++++++++++++---------
+ drivers/spi/spi.c                |  11 +
+ include/linux/regmap.h           |   3 +
+ include/linux/spi/spi.h          |   1 +
+ 6 files changed, 421 insertions(+), 147 deletions(-)
 
-Does it? I see "jedec,spi-nor" compatible documented, but not just 
-"spi-nor". And I don't see "micron,mt35xu512" compatible documented 
-anywhere either.
+--
+2.33.0
 
-Anyway, please just use "jedec,spi-nor".
-
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
