@@ -2,173 +2,417 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A0E40354F
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Sep 2021 09:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF0F4036E5
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Sep 2021 11:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349021AbhIHH2x (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 8 Sep 2021 03:28:53 -0400
-Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:54062 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1348815AbhIHH2w (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Sep 2021 03:28:52 -0400
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-        by mx0a-0014ca01.pphosted.com (8.16.1.2/8.16.0.43) with SMTP id 1886dhku030393;
-        Wed, 8 Sep 2021 00:27:41 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint;
- bh=XkAQLTBCvgyxZD22HrjtKsxiMJ1cnRcTJTcDUXz/ZwE=;
- b=IsxxYCMMu+VmB78XQmqae2nYz9AaGVAD+0F7ttUL229AzS7dEmvxW/xuNVk0mCFSC09h
- bkOvt1cpCECJ9Z9jxCq6Uyc6Mckv7pPS+KU+/Fp8gViZjMQrqJbNoRRFndsvBlGr7cuX
- zx4dtZOvatU1MVdKPedwwFi27XS0bDdO8BJH5lEwRyvZpRcMX1RmdZtCmblytfEtGYKK
- m6GeFmMttl4JVij21XgmzbU2gOi3d6VTtPxzQVEMvPymrbmmP0wGtwlDuFaaZGN3zeA8
- L0JtqA2VeEzeW3D9crJ4l5F3thNE+tWdB1ufCSLSVAoyyJuYbiDycmKM2m+e/1F/Kzei hA== 
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2103.outbound.protection.outlook.com [104.47.70.103])
-        by mx0a-0014ca01.pphosted.com with ESMTP id 3axcn5a57p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Sep 2021 00:27:40 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gnRrkUfFrOw1YI5YyVcT1Gg6IcmXDxfYbB7IKZtxeCLh2HplE3o1qJx0F7LFW+qZmKdEESHUeayMIkUQSUpom1RK83PFEoXuvCtGVyty4Ovup9tJZxS7EAB9+F6Xn0OXyohqMVQo78+6+tKvxhjOLPjMXfdjO+udeP0lJ4T35fl4JC2aZ92Uu/b2gkO84rC+aBA929/QLupwGg040pCexdboZjPk5WNqB+EwKc9Usj+JkxKZ4BuYNwkx2M5gtmZWixpvdcln6/qpRPO9fqA8N7BycJmCxD3cwXTe9syx+SvqdYrZrI2q7ABQzpKxqx82i59nk92WHXalmdtLAsLDSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=XkAQLTBCvgyxZD22HrjtKsxiMJ1cnRcTJTcDUXz/ZwE=;
- b=Hze3ElEQ+t3cyCNyQosYhBwN6jlSaoGTU8TPeldNu1kE+5MZVLkDKMTAHQsSH6eHKkLPsW+f/vqbv+7ONk6n/ggM+EWxb/zLGzpifOnlY8xj03hBfCDKlPJ9wfyBb1gX6QXfcc/cYAMQupsZ5ahAgQN3JQ336wDNxctClDvj1uDh7c01YuqSNz/V6Y+oVxeoT/maRNbd4OH5pYHq5+1f+R9tAoScnSgDfK0jh6yyD0BztDVipeEhKN78un86LykO4FOtmUOJCN4aJPlupURyo0g/ikHQ75ootuVlRh+prL26KLxeKOj8GeWD29XwFL44EevQm6+hUDITl8AskwDKkg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
- dkim=pass header.d=cadence.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XkAQLTBCvgyxZD22HrjtKsxiMJ1cnRcTJTcDUXz/ZwE=;
- b=t1i1FxDFaz/LfeUUMmOe943T28AGHC4x/hPkGvnh/8FLRGMjxmI/2PirlwJj4oclCAqRsGvjX46P4gh41xnJxT0k9P9citFsxwxJpcX/+ahPX1waYI/bJOt9G93dBPd2MPk3oALOwl7kdkCbj0RA0hK1vW1gqRJVHShSVT3jfT0=
-Received: from CY4PR07MB2757.namprd07.prod.outlook.com (2603:10b6:903:22::20)
- by CY4PR0701MB3746.namprd07.prod.outlook.com (2603:10b6:910:8d::35) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.21; Wed, 8 Sep
- 2021 07:27:36 +0000
-Received: from CY4PR07MB2757.namprd07.prod.outlook.com
- ([fe80::903b:e71d:a584:9c87]) by CY4PR07MB2757.namprd07.prod.outlook.com
- ([fe80::903b:e71d:a584:9c87%3]) with mapi id 15.20.4500.014; Wed, 8 Sep 2021
- 07:27:36 +0000
-From:   Parshuram Raju Thombare <pthombar@cadence.com>
-To:     Pratyush Yadav <p.yadav@ti.com>
-CC:     "broonie@kernel.org" <broonie@kernel.org>,
-        "lukas@wunner.de" <lukas@wunner.de>,
+        id S1348774AbhIHJaF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 8 Sep 2021 05:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47390 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348527AbhIHJ3x (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 8 Sep 2021 05:29:53 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5B9C061575;
+        Wed,  8 Sep 2021 02:28:46 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id t19so3137359lfe.13;
+        Wed, 08 Sep 2021 02:28:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=n8eOf7/hVhoRuADP2UIJwuNpm4RI6xssDidC9ZyttAk=;
+        b=IM9ARzd1e6pLYA8D59AlzvpewwFFC3An4UbiLYZjnLQhlE+7/9haBEnN/usOUG2UNR
+         AU1R3GCEc1Xb/rj9mJCUU/jkyZ9ZnifnpnNJb0Gdbf4+/9Vc07B7ne9I83Q9CSz/qcF5
+         /UtG/2soac3xziZ5Wn+9YuK7/KU4Z/R+t7TRxUCALsh8+Y7TKNVaq46sQT8xc7ggO7z7
+         1qbgSWNzIS59GZG7/OmhBWizVpSuGyL8IY1VHEZQMj4Hq+KQpoQZ03lv9uIyrkqKK2U+
+         1DuQ+zHdOnrtFPNezwvDxkd0wCI/UhqJPOWKAo87oOmx+5fMVXZdNWomdRABOLRrCJnr
+         5I4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=n8eOf7/hVhoRuADP2UIJwuNpm4RI6xssDidC9ZyttAk=;
+        b=ePOEwzhYYRWkm9aovSJ97Ip3vlQKSF0XvmS1bAqbLfbBgFp/u8lXs1Wm363/qGzqrq
+         YVNrbElk9gwwtSW8iRuS5LchYCPcXc2o7RsVGVee0HeywU1M7XKpSOJibhDCqrD0VZI9
+         JPu609HdU1qFslZTjipfGY40TtZUAwNjLXDwcLcnk97TeCe46rcZQFCDrfdN2wGWDNw9
+         TeYaeBz1cXnPrZIuurdlcky5Y6RX8Ek8FTRiulDC8Fao1tsJV3v69DCgUfxpd5DEJJMq
+         r2Vvgvnk9V4Fm2ZXA0+6E+JEDyN7ghZpE/qeXXT5PyZieLRhbK/BpIjzR54quuam4aUF
+         vnEw==
+X-Gm-Message-State: AOAM530jA0CggZHWNPx06LbyvjJik3Ii6PyQisI1dcqxjRsJ8PcZ7AjJ
+        +uMPBaK5s2upqY5xGM739vgy90ON0OPaU/Qp
+X-Google-Smtp-Source: ABdhPJykGVxDDItqY/fvJtGKVQUaL8Jq1cJT7bPPcd3d2jW7MLZduZuMoP/sFsFOdqzKUMkAMIRl2A==
+X-Received: by 2002:a05:6512:114f:: with SMTP id m15mr1918092lfg.230.1631093324491;
+        Wed, 08 Sep 2021 02:28:44 -0700 (PDT)
+Received: from mobilestation (79-126-46-220.dynamic.mts-nn.ru. [79.126.46.220])
+        by smtp.gmail.com with ESMTPSA id u14sm139370lfm.241.2021.09.08.02.28.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Sep 2021 02:28:43 -0700 (PDT)
+Date:   Wed, 8 Sep 2021 12:28:39 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     "Srikandan, Nandhini" <nandhini.srikandan@intel.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        "broonie@kernel.org" <broonie@kernel.org>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        Milind Parab <mparab@cadence.com>,
-        Konrad Kociolek <konrad@cadence.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Subject: RE: [PATCH v3 2/2] spi: cadence: add support for Cadence XSPI
- controller
-Thread-Topic: [PATCH v3 2/2] spi: cadence: add support for Cadence XSPI
- controller
-Thread-Index: AQHXny4swnY6qQT3ME+XBZJfwQyv4auSrJGAgAcSyHA=
-Date:   Wed, 8 Sep 2021 07:27:35 +0000
-Message-ID: <CY4PR07MB275737A008CBB58C4B108D2FC1D49@CY4PR07MB2757.namprd07.prod.outlook.com>
-References: <1630499755-18751-1-git-send-email-pthombar@cadence.com>
- <1630499858-20456-1-git-send-email-pthombar@cadence.com>
- <20210903185653.7vrfn4qfzvuiaiq2@ti.com>
-In-Reply-To: <20210903185653.7vrfn4qfzvuiaiq2@ti.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccHRob21iYXJcYXBwZGF0YVxyb2FtaW5nXDA5ZDg0OWI2LTMyZDMtNGE0MC04NWVlLTZiODRiYTI5ZTM1Ylxtc2dzXG1zZy0zYjM1NmI2My0xMDc2LTExZWMtODYzZS0xMDY1MzBlZjIyZjVcYW1lLXRlc3RcM2IzNTZiNjQtMTA3Ni0xMWVjLTg2M2UtMTA2NTMwZWYyMmY1Ym9keS50eHQiIHN6PSIxMjA0IiB0PSIxMzI3NTU1OTY1Mzc1ODM5ODMiIGg9InBtVEZySExjZVRVMGUzY2s2YTdjTEdQWG92WT0iIGlkPSIiIGJsPSIwIiBibz0iMSIvPjwvbWV0YT4=
-x-dg-rorf: true
-authentication-results: ti.com; dkim=none (message not signed)
- header.d=none;ti.com; dmarc=none action=none header.from=cadence.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d79c267a-af7e-46d9-bb68-08d9729a219c
-x-ms-traffictypediagnostic: CY4PR0701MB3746:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <CY4PR0701MB3746C7E7950E47317737DCD3C1D49@CY4PR0701MB3746.namprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yGc8zMYXB80tfYNY8xqkr0+X3LlbJKUmdSJWNpENGVhHRSDlhOtbfsJbOWnpNGi/zVGLZFhiN36LE5APrWBpLhnJkp/avWcWlr4RrXRfcYPd2bVj34mSwoqYeu2a7mpQA7ujdjVg14VMmE1Q9X4d0/vdtAIpKlopQPNcAeqDIXYK78LKrt+gB+DagRnuNOwD5R/xpZ1TEx2VI2OkVEdl5rtP/PEf9EbNlSZVDVVkxFNQj0ZVzUSYNTZ4N93cd2CH9UVyO97mF5fdOph6+MFq7ljJvDMCaoWMapUdMlUatPzY4Z9V5g0T5f831Yreh43MN4ZPzrSTtwMNcjRYIT7VERlnEekT+jG5DqxgL8t9pcsg3SRHt9gJ4RTzJRqzDkNS5aSIHS/AeG1znhADchFZEo69lukkS60SK09D+DQbzWVo93KA6OU1RyNLZ0QA8MZzz/jwaPHqsziHNKAiIDZ641KshHEO33jbhTRrQK8jcojDTwhXk2ET4tzlojffTeZJWtQOGBknhDYVpxp5i0UfQfGeXL5uWP90vhI7vTegydBs4FG1wQIvjw+Keif5z0hZA6XE7WqK0bNX747N1FIQ3qidUGcm/cE/2yqPBOyB94uMCk3fC2OG+RUtthQybmDGye6n+/VaBqtGLGnXDYXbfS+Ejuiwota1lUSCyh1IBsiFzJqbL/nE6M1954A7sLecCb6x4rwxLH5sq7Zr6GQhL4QZJ79c4RryGrebjGTkvRr+IGcpBh4IIEnrf25//K6P
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR07MB2757.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(376002)(396003)(346002)(136003)(39860400002)(36092001)(66476007)(66556008)(66946007)(4326008)(2906002)(186003)(9686003)(38100700002)(71200400001)(26005)(33656002)(5660300002)(83380400001)(86362001)(66446008)(64756008)(6506007)(76116006)(316002)(8936002)(54906003)(7696005)(6916009)(38070700005)(55016002)(122000001)(478600001)(52536014)(8676002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?R/JG6RD1ZnMTLCcKynkrSZwjR1qBkw4wz0C9WDuo9c6DdFC1M658Ug0R90t6?=
- =?us-ascii?Q?e4086eWfruai1doGfui1TKa58K4gbaTFP72EkgO72n1yWU3a/IpdCZyIGPxw?=
- =?us-ascii?Q?S55qXDPbHguTXW9nEa4S/B0deaKvP+0qLf0k798epKsYpxNO6ovDdcipDpv2?=
- =?us-ascii?Q?OLEEsHzOpMlXKUwnAELwAmCYF6MAG64oHNi74v6yDqZDCS7bpbMRP4WPm0U4?=
- =?us-ascii?Q?P/KJ4HZI7+thW2iQErqeG79uHG8unIsEnN+twOWoE0Qbaz2o/tPElIEEOjT8?=
- =?us-ascii?Q?mTa8Jp6TRcq6ze4ItnDmt+iqEMJZ+2I81mk3nHT9LZfPbcLaE4qTvILC6bdg?=
- =?us-ascii?Q?uqWHTYYtnrbn/pzCShCDZ7QDMyNcqrIb7+OtmGS32hJ4bMEvMi7hrhopLWXq?=
- =?us-ascii?Q?0fL8axJM6YKH9BiEs3ZFcEuUISCu+J6tJ1HnaXxFcWTsruuF5DX5FtUvW8oP?=
- =?us-ascii?Q?VU0/Wiv7wMiTQtgrkZHSA+t0kRdc56seFDm8CUoTyrA62aCSv3F0wqkArhwO?=
- =?us-ascii?Q?jMfOSbP0wkLfUIJkNDYeaeFrS19zduiehuwM2WUTSrZBX+TT7sQgFVukX/yN?=
- =?us-ascii?Q?Mrv08/Yziri9D1O830R3Sqd9zTMITE4HNP+zspq4jd4spyurPaLnmY1rN5Cf?=
- =?us-ascii?Q?GY86ImDe9HD4KZPI4/Yp5IfypQrEtoW2bLgbaejzZwptJ1ixMzOfxtD39WCC?=
- =?us-ascii?Q?In0fmfXib4WHlZFaLmVN0anSxj8iip/7H3HkAj0NmAm01kLBd79qBxIQ0Xh0?=
- =?us-ascii?Q?7EVbE/PncZ02zKG9xhjX+/uo2ttH4RE23aN4YF/FRol+5hy02YFz5NjKZD4I?=
- =?us-ascii?Q?LDUzjS/PnsMqm70u6o30Auo8SJc1lwnwV4OO5Y8VMv0r6qinHCYfwW3euoz2?=
- =?us-ascii?Q?UBNbR9jG9vJw4lIegGruB2aGe8tulvynCWyBwTAVhqrhpt31PBEh2IzcPHbn?=
- =?us-ascii?Q?ZAy8PRvH/po+4vOhhoRPNTWJ1IaRwFJxJqPtkOOFAE2QE8snnyeQawzMKCqQ?=
- =?us-ascii?Q?ql3wMGY2+kPrb9CvWFHlIFkXs/zur+W4pV15AsxKkDRAOXVHGb0/lF+HQLSY?=
- =?us-ascii?Q?y5y4nKTfx16kB1nreqFMcPwZJW3aZoczV3mTPPBAEnUBgiQZczrWU5Uvrnn+?=
- =?us-ascii?Q?2EjWEFYpxoZgan2anbtdngOsSVLGJsHVVY/Fs7HRMZATPNeMVuGwXmnuCIeE?=
- =?us-ascii?Q?unW02J9+byek8RlO/HpFkQeHgaI5KZBne65aCPexGR2URyTxdCAO5kK5JuwS?=
- =?us-ascii?Q?gWjzSNlCzHUYGY5Xi47/jVe1yPN68e1ZuGRZtC+WR5FTFX6tFg62iRK3WrvA?=
- =?us-ascii?Q?IRHm3mwKWFIj46YaVE1rcjqj?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "mgross@linux.intel.com" <mgross@linux.intel.com>,
+        "Pan, Kris" <kris.pan@intel.com>,
+        "Demakkanavar, Kenchappa" <kenchappa.demakkanavar@intel.com>,
+        "Zhou, Furong" <furong.zhou@intel.com>,
+        "Sangannavar, Mallikarjunappa" 
+        <mallikarjunappa.sangannavar@intel.com>,
+        "Vaidya, Mahesh R" <mahesh.r.vaidya@intel.com>,
+        "A, Rashmi" <rashmi.a@intel.com>
+Subject: Re: [PATCH v2 2/2] spi: dw: Add support for Intel Thunder Bay SPI
+Message-ID: <20210908092839.4n4wgx4nf7m2wji2@mobilestation>
+References: <20210824085856.12714-1-nandhini.srikandan@intel.com>
+ <20210824085856.12714-3-nandhini.srikandan@intel.com>
+ <20210905143356.z2xomprpgsknz3fb@mobilestation>
+ <BN0PR11MB572717A9D159F96E276712B385D39@BN0PR11MB5727.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR07MB2757.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d79c267a-af7e-46d9-bb68-08d9729a219c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Sep 2021 07:27:35.9327
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +2M8OqlRhJVAQHpnYbYuCJEWD0BtJtC8fZ/3sfkJ0PTo0qkJKNrIlYlC9T/tY8nNiV5RJ+xsjXQQ5qNjvAyeAzcdNYFKcEQzKPEU1t/Ds5M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR0701MB3746
-X-Proofpoint-ORIG-GUID: aELDB9cBkh9D4REWkhyrd1TFsC2lZIjY
-X-Proofpoint-GUID: aELDB9cBkh9D4REWkhyrd1TFsC2lZIjY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
- definitions=2021-09-08_02,2021-09-07_02,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 suspectscore=0
- malwarescore=0 phishscore=0 mlxlogscore=852 spamscore=0 impostorscore=0
- priorityscore=1501 lowpriorityscore=0 mlxscore=0 clxscore=1011
- adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109030001 definitions=main-2109080046
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN0PR11MB572717A9D159F96E276712B385D39@BN0PR11MB5727.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
->Depends on SPI_MEM as well.
+On Tue, Sep 07, 2021 at 10:54:10AM +0000, Srikandan, Nandhini wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Serge Semin <fancer.lancer@gmail.com>
+> > Sent: Sunday, September 5, 2021 8:04 PM
+> > To: Srikandan, Nandhini <nandhini.srikandan@intel.com>
+> > Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>; broonie@kernel.org;
+> > robh+dt@kernel.org; linux-spi@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; devicetree@vger.kernel.org;
+> > mgross@linux.intel.com; Pan, Kris <kris.pan@intel.com>; Demakkanavar,
+> > Kenchappa <kenchappa.demakkanavar@intel.com>; Zhou, Furong
+> > <furong.zhou@intel.com>; Sangannavar, Mallikarjunappa
+> > <mallikarjunappa.sangannavar@intel.com>; Vaidya, Mahesh R
+> > <mahesh.r.vaidya@intel.com>; A, Rashmi <rashmi.a@intel.com>
+> > Subject: Re: [PATCH v2 2/2] spi: dw: Add support for Intel Thunder Bay SPI
+> > 
+> > Hi Nandhini
+> > 
+> > On Tue, Aug 24, 2021 at 04:58:56PM +0800, nandhini.srikandan@intel.com
+> > wrote:
+> > > From: Nandhini Srikandan <nandhini.srikandan@intel.com>
+> > >
+> > > Add support for Intel Thunder Bay SPI controller, which uses
+> > > DesignWare DWC_ssi core.
+> > > Bit 31 of CTRLR0 register is set for Thunder Bay, to configure the
+> > > device as a master or as a slave serial peripheral.
+> > > Bit 14(SSTE) of CTRLR0 register should be set(1) for Thunder Bay.
+> > 
+> > After reading your response to my v1 comments, I've got a better notion of
+> > the features you are trying to implement here. Please see my comments
+> > below.
+> > 
+> > >
+> > > Signed-off-by: Nandhini Srikandan <nandhini.srikandan@intel.com>
+> > > ---
+> > 
+> > Just to note for your future patchwork. Instead of having a single general
+> > changelog text in the cover letter it is much more convenient for reviewers to
+> > see both the summary changelog and a changelog of individual patches here
+> > under '---' delimiter.
+> Sure, I will add changelog for individual patches also.
+> 
+> > 
+> > >  drivers/spi/spi-dw-core.c |  7 +++++--  drivers/spi/spi-dw-mmio.c |
+> > > 20 +++++++++++++++++++-
+> > >  drivers/spi/spi-dw.h      | 12 +++++++++---
+> > >  3 files changed, 33 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> > > index a305074c482e..f7d45318db8a 100644
+> > > --- a/drivers/spi/spi-dw-core.c
+> > > +++ b/drivers/spi/spi-dw-core.c
+> > > @@ -300,8 +300,11 @@ static u32 dw_spi_prepare_cr0(struct dw_spi
+> > *dws, struct spi_device *spi)
+> > >  		/* CTRLR0[13] Shift Register Loop */
+> > >  		cr0 |= ((spi->mode & SPI_LOOP) ? 1 : 0) <<
+> > > DWC_SSI_CTRLR0_SRL_OFFSET;
+> > >
+> > > -		if (dws->caps & DW_SPI_CAP_KEEMBAY_MST)
+> > > -			cr0 |= DWC_SSI_CTRLR0_KEEMBAY_MST;
+> > 
+> > > +		if (dws->caps & DW_SPI_CAP_DWC_MST)
+> > > +			cr0 |= DWC_SSI_CTRLR0_MST;
+> > 
+> > Since you've used a generic suffix here, are you sure the MST/SLV feature
+> > toggled by the BIT(31) bit is generic for all DWC SSI controllers?
+> > I am asking because I don't have DWC SSI IP manual, but there is a
+> > CTRL0 register layout posted by your colleague Wan Ahmad Zainie a year
+> > ago: https://patches.linaro.org/patch/214693/ . It doesn't have that bit
+> > defined.
+> > 
+> > If you are and it's specific to all DWC SSI controllers of v1.01a and newer,
+> > then why not to implement that flag setting up in the framework of the
+> > "DW_SPI_CAP_DWC_SSI" capability? Thus we'd have all "snps,dwc-ssi-
+> > 1.01a"-compatible devices and devices with the DW_SPI_CAP_DWC_SSI flag
+> > set working well if for some reason they have got slave-mode enabled by
+> > default.
+> 
 
-Ok
+> Intel Keem Bay and Thunder Bay uses v1.02a version of DWC SSI controller. According to v1.02a, BIT31 of CTRLR0 is used for selecting Master or slave mode. In earlier versions, it was reserved. Both Keem Bay and Thunder Bay has to work in master mode, so this bit is set. The dwc_ssi controller can either function in master or slave (default) mode as per the spec. The bit31 requirement is only for Keem Bay and Thunder bay and other controllers can have a requirement to function in slave mode as well. Hence the bit is set only for Keem Bay/Thunder Bay. Please let me know if it should be set default to master mode.
+> Wan Ahmed Zainie has posted that patch based on earlier version of the controller and later up streamed the DW_SPI_CAP_KEEMBAY_MST capability flag. This will become generic now.
 
->I commented on this last time around as well. This does not look right
->at all. A SPI MEM based driver should *not* need to know anything about
->the subsystem driving it. That is the entire point of the API.
->
->The controller seems to be able to extract the read and write opcodes
->from the SFDP on its own since you don't pass in that information to
->cdns_xspi_nor_read(). It looks like it is tied very heavily to a NOR
->flash, and I am not sure if it can really be used with a NAND flash, or
->something else entirely.
->
->Which makes me wonder how we should handle controllers like these. I
->don't think they fit in very well with the SPI MEM model, since they
->can't execute arbitrary SPI MEM commands very well. At the same time we
->are trying to get rid of mtd/spi-nor/controllers. Dunno...
->
->Mark, Tudor, Vignesh, any ideas?
+I see. Thanks for clarification. IIUC BIT(31) is indeed specific to
+all DWC SSI (not only Keem/Thunder Bay SPI IPs) and indeed determines
+the Master/Slave mode of the controller. Then I don't really
+understand why Wan Ahmed didn't make it set generically in CR0 for all
+DWC SSI v1.01a instead of marking it as "intel,keembay-ssi"-specific
+seeing he provided a generic "snps,dwc-ssi-1.01a" compatible code in
+that same patchset.
 
-Ok, then for now I will drop ACMD PIO mode and use only STIG mode.
-In STIG mode driver configures bus width and clock edge mode for
-command, address and data for each operation.=20
+That decision might have been caused by having different default
+states of CTRLR0.31 bit in generic DWC SSI and Keem/Thunder Bay SSI...
+Anyway I believe it won't hurt to set that bit for each DWC SSI
+especially seeing the DW APB SSI driver doesn't support the SPI slave
+mode at the moment. So please do that in a dedicated patch by converting
+the DWC_SSI_CTRLR0_KEEMBAY_MST macro to a generic DWC_SSI_CTRLR0_MST and
+applying it for CTRLR0.31 for each DW_SPI_CAP_DWC_SSI controller.
+
+> > 
+> > > +
+> > > +		if (dws->caps & DW_SPI_CAP_DWC_SSTE)
+> > > +			cr0 |= DWC_SSI_CTRLR0_SSTE;
+> > 
+> > Regarding SSTE flag and feature implemented behind it. First of all AFAICS
+> > from the Wan Ahmad Zainie post sited above it is indeed generic for both
+> > DWC SSI and DW APB SSI IP-cores of the controllers. Thus we don't need an
+> > additional DWC SSI capability flag defined for it, but need to have it
+> > generically implemented in the DW SPI core driver.
+> > Secondly as you said it two weeks ago it defines a slave-specific protocol, the
+> > way the SSI and CLK signals are driven between consecutive
+> > frames:
+> > >> SSTE (Slave Select Toggle Enable)
+> > >> When SSTE bit is set to 1, the slave select line will toggle between
+> > >> consecutive data frames, with the serial clock being held to its
+> > >> default  value while slave select line is high.
+> > >> When SSTE bit is set to 0, slave select line will stay low and clock
+> > >> will  run continuously for the duration of the transfer.
+> > In general DWC SSI/DW APB SSI controller can be connected to slave devices
+> > with SSTE and normal communication protocol requirements at the same
+> > time by using different CS-lanes. Therefore the SSTE feature turns to be
+> > Slave/Peripheral-device specific rather than controller-specific and needs to
+> > be enabled/disabled when it's required by a slave device.
+> > 
+> > Thus here is what I'd suggest to implement the SSTE feature generically:
+> > 1) Add a new SPI-slave Synopsys-specific DT-property into the bindings file
+> > like this:
+> > --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> > +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> > @@ -143,6 +143,12 @@ patternProperties:
+> >            is an optional feature of the designware controller, and the
+> >            upper limit is also subject to controller configuration.
+> > 
+> > +      snps,sste:
+> > +        description: Slave select line will toggle between consecutive
+> > +          data frames, with the serial clock being held to its default
+> > +          value while slave select line is high.
+> > +        type: boolean
+> > +
+> >  unevaluatedProperties: false
+> > 
+> >  required:
+> > 
+> > Please do that in a separate preparation patch submitted before the
+> > "dt-bindings: spi: Add bindings for Intel Thunder Bay SoC" patch in this
+> > series.
+> Sure, will modify SSTE as DT-property and do the necessary changes in both code and in DT.
+> > 
+> > 2) Add that property support into the driver like this:
+> > diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c index
+> > a305074c482e..5caa74b9aa74 100644
+> > --- a/drivers/spi/spi-dw-core.c
+> > +++ b/drivers/spi/spi-dw-core.c
+> > @@ -27,6 +27,7 @@
+> >  struct chip_data {
+> >  	u32 cr0;
+> >  	u32 rx_sample_dly;	/* RX sample delay */
+> > +	bool sste;		/* Slave Select Toggle flag */
+> >  };
+> > 
+> >  #ifdef CONFIG_DEBUG_FS
+> > @@ -269,6 +270,7 @@ static irqreturn_t dw_spi_irq(int irq, void *dev_id)
+> > 
+> >  static u32 dw_spi_prepare_cr0(struct dw_spi *dws, struct spi_device *spi)  {
+> > +	struct chip_data *chip = spi_get_ctldata(spi);
+> >  	u32 cr0 = 0;
+> > 
+> >  	if (!(dws->caps & DW_SPI_CAP_DWC_SSI)) { @@ -285,6 +287,9 @@
+> > static u32 dw_spi_prepare_cr0(struct dw_spi *dws, struct spi_device *spi)
+> > 
+> >  		/* CTRLR0[11] Shift Register Loop */
+> >  		cr0 |= ((spi->mode & SPI_LOOP) ? 1 : 0) << SPI_SRL_OFFSET;
+> > +
+> > +		/* CTRLR0[24] Slave Select Toggle Enable */
+> > +		cr0 |= chip->sste << SPI_SSTE_OFFSET;
+> >  	} else {
+> >  		/* CTRLR0[ 7: 6] Frame Format */
+> >  		cr0 |= SSI_MOTO_SPI << DWC_SSI_CTRLR0_FRF_OFFSET; @@
+> > -300,6 +305,9 @@ static u32 dw_spi_prepare_cr0(struct dw_spi *dws, struct
+> > spi_device *spi)
+> >  		/* CTRLR0[13] Shift Register Loop */
+> >  		cr0 |= ((spi->mode & SPI_LOOP) ? 1 : 0) <<
+> > DWC_SSI_CTRLR0_SRL_OFFSET;
+> > 
+> > +		/* CTRLR0[14] Slave Select Toggle Enable */
+> > +		cr0 |= chip->sste << DWC_SSI_CTRLR0_SSTE_OFFSET;
+> > +
+> >  		if (dws->caps & DW_SPI_CAP_KEEMBAY_MST)
+> >  			cr0 |= DWC_SSI_CTRLR0_KEEMBAY_MST;
+> >  	}
+> > @@ -789,6 +797,9 @@ static int dw_spi_setup(struct spi_device *spi)
+> >  		chip->rx_sample_dly =
+> > DIV_ROUND_CLOSEST(rx_sample_dly_ns,
+> >  							NSEC_PER_SEC /
+> >  							dws->max_freq);
+> > +
+> > +		/* Get slave select toggling feature requirement */
+> > +		chip->sste = device_property_read_bool(&spi->dev,
+> > "snps,sste");
+> >  	}
+> > 
+> >  	/*
+> > diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h index
+> > b665e040862c..2ee3f839de39 100644
+> > --- a/drivers/spi/spi-dw.h
+> > +++ b/drivers/spi/spi-dw.h
+> > @@ -65,8 +65,10 @@
+> >  #define SPI_SLVOE_OFFSET		10
+> >  #define SPI_SRL_OFFSET			11
+> >  #define SPI_CFS_OFFSET			12
+> > +#define SPI_SSTE_OFFSET			24
+> > 
+> >  /* Bit fields in CTRLR0 based on DWC_ssi_databook.pdf v1.01a */
+> > +#define DWC_SSI_CTRLR0_SSTE_OFFSET	14
+> >  #define DWC_SSI_CTRLR0_SRL_OFFSET	13
+> >  #define DWC_SSI_CTRLR0_TMOD_OFFSET	10
+> >  #define DWC_SSI_CTRLR0_TMOD_MASK	GENMASK(11, 10)
+> > 
+> > Please also do that in a separate preparation patch.
+> > 
+> > 3) If MST BIT(31) feature is generic, then please discard the
+> > DW_SPI_CAP_KEEMBAY_MST capability flag and set the MST bit for each
+> > DWC SSI device with DW_SPI_CAP_DWC_SSI capability set. If it's Intel-
+> > specific, then convert the DW_SPI_CAP_KEEMBAY_MST capability macro
+> > name to DW_SPI_CAP_INTEL_MST.
+> > 
+> > Please also do that in a separate preparation patch.
+
+> The feature is for the controller version v1.02a and above. The controller can function on master or slave mode, default being slave mode. So, it is modified to master only in Keem bay and Thunder bay. 
+> The difference between v1.01a and v1.02a w.r.t CTRLR0 is BIT31 selection of master/slave mode. Though the feature is generic but BIT31 is needed to be set only for bay, I will rename the macros to a generic name. 
+
+Please, see my comment above. Let's set that bit for each DWC SSI
+controller, so to have the driver protected from having the inverted
+default state on any other vendor-specific controller.
+
+> 
+> > 
+> > 4) After all of that you can add the "Thunder Bay SPI" controller support into
+> > the DW SPI MMIO driver by placing the "intel,thunderbay-ssi" compatibility
+> > string into the OF-device table.
+> > Since both Thunder and Keembay SPIs are based on the same IP-core then
+> > you can just reuse the dw_spi_keembay_init() for both of them after
+> > renaming it to something like dw_spi_intel_init().
+> > 
+
+> Sure, will do the same.
+
+Thanks.
 
 Regards,
-Parshuram Thombare
+-Sergey
+
+> 
+> Regards,
+> Nandhini
+> > 
+> > >  	}
+> > >
+> > >  	return cr0;
+> > > diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+> > > index 3379720cfcb8..2bd1dedd90b0 100644
+> > > --- a/drivers/spi/spi-dw-mmio.c
+> > > +++ b/drivers/spi/spi-dw-mmio.c
+> > > @@ -217,7 +217,24 @@ static int dw_spi_dwc_ssi_init(struct
+> > > platform_device *pdev,  static int dw_spi_keembay_init(struct
+> > platform_device *pdev,
+> > >  			       struct dw_spi_mmio *dwsmmio)  {
+> > > -	dwsmmio->dws.caps = DW_SPI_CAP_KEEMBAY_MST |
+> > DW_SPI_CAP_DWC_SSI;
+> > > +	/*
+> > > +	 * Set MST to make keem bay SPI as master.
+> > > +	 */
+> > > +	dwsmmio->dws.caps = DW_SPI_CAP_DWC_MST |
+> > DW_SPI_CAP_DWC_SSI;
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int dw_spi_thunderbay_init(struct platform_device *pdev,
+> > > +				  struct dw_spi_mmio *dwsmmio)
+> > > +{
+> > > +	/*
+> > > +	 * Set MST to make thunder bay SPI as master.
+> > > +	 * Set SSTE to enable slave select toggle bit which is required
+> > > +	 * for the slave devices connected to the thunder bay SPI controller.
+> > > +	 */
+> > > +	dwsmmio->dws.caps = DW_SPI_CAP_DWC_MST |
+> > DW_SPI_CAP_DWC_SSTE |
+> > > +			    DW_SPI_CAP_DWC_SSI;
+> > >
+> > >  	return 0;
+> > >  }
+> > > @@ -349,6 +366,7 @@ static const struct of_device_id
+> > dw_spi_mmio_of_match[] = {
+> > >  	{ .compatible = "renesas,rzn1-spi", .data = dw_spi_dw_apb_init},
+> > >  	{ .compatible = "snps,dwc-ssi-1.01a", .data = dw_spi_dwc_ssi_init},
+> > >  	{ .compatible = "intel,keembay-ssi", .data = dw_spi_keembay_init},
+> > > +	{ .compatible = "intel,thunderbay-ssi", .data =
+> > > +dw_spi_thunderbay_init},
+> > >  	{ .compatible = "microchip,sparx5-spi", dw_spi_mscc_sparx5_init},
+> > >  	{ .compatible = "canaan,k210-spi", dw_spi_canaan_k210_init},
+> > >  	{ /* end of table */}
+> > > diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h index
+> > > b665e040862c..9fffe0a02f3a 100644
+> > > --- a/drivers/spi/spi-dw.h
+> > > +++ b/drivers/spi/spi-dw.h
+> > > @@ -76,11 +76,16 @@
+> > >  #define DWC_SSI_CTRLR0_DFS_OFFSET	0
+> > >
+> > >  /*
+> > > - * For Keem Bay, CTRLR0[31] is used to select controller mode.
+> > > + * CTRLR0[31] is used to select controller mode.
+> > >   * 0: SSI is slave
+> > >   * 1: SSI is master
+> > >   */
+> > > -#define DWC_SSI_CTRLR0_KEEMBAY_MST	BIT(31)
+> > > +#define DWC_SSI_CTRLR0_MST		BIT(31)
+> > > +
+> > > +/*
+> > > + * CTRLR0[14] is used to enable/disable Slave Select Toggle bit  */
+> > > +#define DWC_SSI_CTRLR0_SSTE		BIT(14)
+> > >
+> > >  /* Bit fields in CTRLR1 */
+> > >  #define SPI_NDF_MASK			GENMASK(15, 0)
+> > > @@ -122,9 +127,10 @@ enum dw_ssi_type {
+> > >
+> > >  /* DW SPI capabilities */
+> > >  #define DW_SPI_CAP_CS_OVERRIDE		BIT(0)
+> > > -#define DW_SPI_CAP_KEEMBAY_MST		BIT(1)
+> > > +#define DW_SPI_CAP_DWC_MST		BIT(1)
+> > >  #define DW_SPI_CAP_DWC_SSI		BIT(2)
+> > >  #define DW_SPI_CAP_DFS32		BIT(3)
+> > > +#define DW_SPI_CAP_DWC_SSTE		BIT(4)
+> > >
+> > >  /* Slave spi_transfer/spi_mem_op related */  struct dw_spi_cfg {
+> > > --
+> > > 2.17.1
+> > >
