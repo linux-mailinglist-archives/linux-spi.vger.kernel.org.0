@@ -2,97 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0194048F6
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Sep 2021 13:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE376404A36
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Sep 2021 13:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234960AbhIILLY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Sep 2021 07:11:24 -0400
-Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:19056 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234932AbhIILLX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Sep 2021 07:11:23 -0400
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1895CKhb012432;
-        Thu, 9 Sep 2021 06:10:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=b4lv3VySvMZBsmWHH8FJBjD9cy6eaPIRwRdSaXk8zrI=;
- b=RlFR1aGqYRBHyvpzBuGunFOKTjHhtVadvc3Bey6G5KENEJYKn9RTWEIz9ozNOvRZDtMa
- bO/KjGA3xXrpBoB10PboEhOhJNpiU5H7A/tdp/qB49/6zP20uaRS1jN2bSzMpoNxyggO
- avWzk+oCBmk+HbUfB6WZjKVIyj7rg9pgUCNfhCXK/SGjQcUHpCeuQiLOV52nfQSxRRT/
- Ll7iV2qeaDHuughs99Uyi/ze1Mni5VXnJPVyFigfDyWt2RUFzpZP8y5/M/xMFS/RSKaH
- NysHpnpNlc1Hq6O7FEegwse6kKn9+AwLlmtppPahkl7BhgtsVb47QKT6FSJoMSr4JpgB FQ== 
-Received: from ediex01.ad.cirrus.com ([87.246.76.36])
-        by mx0b-001ae601.pphosted.com with ESMTP id 3ay8n60e5d-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 09 Sep 2021 06:10:11 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.12; Thu, 9 Sep
- 2021 12:10:08 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2242.12 via Frontend
- Transport; Thu, 9 Sep 2021 12:10:08 +0100
-Received: from aryzen.ad.cirrus.com (unknown [198.61.64.231])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 81F93B2F;
-        Thu,  9 Sep 2021 11:10:08 +0000 (UTC)
-From:   Lucas Tanure <tanureal@opensource.cirrus.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Sanjay R Mehta <sanju.mehta@amd.com>,
-        Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>
-Subject: [PATCH 4/4] spi: amd: Check for idle bus before execute opcode
-Date:   Thu, 9 Sep 2021 12:10:05 +0100
-Message-ID: <20210909111005.304101-4-tanureal@opensource.cirrus.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210909111005.304101-1-tanureal@opensource.cirrus.com>
-References: <20210909111005.304101-1-tanureal@opensource.cirrus.com>
+        id S238973AbhIILpX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Sep 2021 07:45:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46928 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239130AbhIILoE (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 9 Sep 2021 07:44:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2419B6120F;
+        Thu,  9 Sep 2021 11:42:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631187741;
+        bh=94Sj7VYusL5dEOCcE9kh4RJYvB8fUjJ0n0fYIhyXZLI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=affzZkJdXCWVnUJXgLRL069IwE/0wnn3TTeSY3kdFVZvTRnK1r14UrMaXQingL81v
+         5XfZk8Atb3APB5jo1+LbNaerPYlJ+ZowGIMr3mufdxRdb+K1McWeIY07tLVcOMN6Yk
+         kiOGqFh2yFm3R82vTKB0V6E6vhPYm30+rx0uev9yx4wsr+b4mBQgh4DBcmucK14iOR
+         YMQ4J2IOo3yqIjhR5kfso6zR27IvitZY2YG9qUPQ+VIpwzc3MJEPhtP0hMOoFFvAvJ
+         scOR/qFHTowCTX5w+n/AP2NJYgGPsvpPQHSauEBLopXwoVPCk7L1ApxLATcHIaN8Qh
+         UtwUj+lLP3fbA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Robin Gong <yibin.gong@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.14 058/252] spi: imx: fix ERR009165
+Date:   Thu,  9 Sep 2021 07:37:52 -0400
+Message-Id: <20210909114106.141462-58-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210909114106.141462-1-sashal@kernel.org>
+References: <20210909114106.141462-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: LHnOknpLOPQwKaWdrwgOMLHszyLqAocX
-X-Proofpoint-GUID: LHnOknpLOPQwKaWdrwgOMLHszyLqAocX
-X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Check if the bus is not in use before starting the
-transfer
+From: Robin Gong <yibin.gong@nxp.com>
 
-Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+[ Upstream commit 980f884866eed4dda2a18de888c5a67dde67d640 ]
+
+Change to XCH  mode even in dma mode, please refer to the below
+errata:
+https://www.nxp.com/docs/en/errata/IMX6DQCE.pdf
+
+Signed-off-by: Robin Gong <yibin.gong@nxp.com>
+Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+Acked-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-amd.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/spi/spi-imx.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
-index 97838b57871c..99b2b0ccff08 100644
---- a/drivers/spi/spi-amd.c
-+++ b/drivers/spi/spi-amd.c
-@@ -115,11 +115,18 @@ static int amd_spi_busy_wait(struct amd_spi *amd_spi)
- 	return 0;
- }
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index fa68e9817929..d89b11205815 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -622,8 +622,8 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
+ 	ctrl |= mx51_ecspi_clkdiv(spi_imx, spi_imx->spi_bus_clk, &clk);
+ 	spi_imx->spi_bus_clk = clk;
  
--static void amd_spi_execute_opcode(struct amd_spi *amd_spi)
-+static int amd_spi_execute_opcode(struct amd_spi *amd_spi)
+-	if (spi_imx->usedma)
+-		ctrl |= MX51_ECSPI_CTRL_SMC;
++	/* ERR009165: work in XHC mode as PIO */
++	ctrl &= ~MX51_ECSPI_CTRL_SMC;
+ 
+ 	writel(ctrl, spi_imx->base + MX51_ECSPI_CTRL);
+ 
+@@ -637,7 +637,7 @@ static void mx51_setup_wml(struct spi_imx_data *spi_imx)
+ 	 * and enable DMA request.
+ 	 */
+ 	writel(MX51_ECSPI_DMA_RX_WML(spi_imx->wml - 1) |
+-		MX51_ECSPI_DMA_TX_WML(spi_imx->wml) |
++		MX51_ECSPI_DMA_TX_WML(0) |
+ 		MX51_ECSPI_DMA_RXT_WML(spi_imx->wml) |
+ 		MX51_ECSPI_DMA_TEDEN | MX51_ECSPI_DMA_RXDEN |
+ 		MX51_ECSPI_DMA_RXTDEN, spi_imx->base + MX51_ECSPI_DMA);
+@@ -1253,10 +1253,6 @@ static int spi_imx_sdma_init(struct device *dev, struct spi_imx_data *spi_imx,
  {
-+	int ret;
-+
-+	ret = amd_spi_busy_wait(amd_spi);
-+	if (ret)
-+		return ret;
-+
- 	/* Set ExecuteOpCode bit in the CTRL0 register */
- 	amd_spi_setclear_reg32(amd_spi, AMD_SPI_CTRL0_REG, AMD_SPI_EXEC_CMD, AMD_SPI_EXEC_CMD);
--	amd_spi_busy_wait(amd_spi);
-+
-+	return 0;
- }
+ 	int ret;
  
- static int amd_spi_master_setup(struct spi_device *spi)
+-	/* use pio mode for i.mx6dl chip TKT238285 */
+-	if (of_machine_is_compatible("fsl,imx6dl"))
+-		return 0;
+-
+ 	spi_imx->wml = spi_imx->devtype_data->fifo_size / 2;
+ 
+ 	/* Prepare for TX DMA: */
 -- 
-2.33.0
+2.30.2
 
