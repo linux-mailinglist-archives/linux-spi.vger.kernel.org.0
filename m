@@ -2,38 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A59ED404A40
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Sep 2021 13:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6391A404B91
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Sep 2021 13:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239765AbhIILpr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Sep 2021 07:45:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47118 "EHLO mail.kernel.org"
+        id S239730AbhIILw5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Sep 2021 07:52:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55048 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239460AbhIILoO (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 9 Sep 2021 07:44:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 87917611C3;
-        Thu,  9 Sep 2021 11:42:21 +0000 (UTC)
+        id S240935AbhIILux (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 9 Sep 2021 07:50:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 025E461269;
+        Thu,  9 Sep 2021 11:43:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631187742;
-        bh=Bvn6bDDf4+9ZzIUM7chp45+Ixzgdft8nY8rjATv1N7g=;
+        s=k20201202; t=1631187838;
+        bh=e4DRZx/VtfqC41DV1FiYS0p26W6OqaMolJo8boE3nZU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A4F+EfvzXMkaI51d44+RhrgGMCLaQ2031c4L8rx9c7Ixf0KVDuZkqPHvaJZkjNPGM
-         Jxoddp53inzMzjASWQVfvyQYP56QCGioJVKYGddMZ27FfHguDDGfcGQy/FBStfbLKa
-         jGMk36AWkQNgYHoJt7xfY/GU4Ll0UOhXjdnJ2gPmKz8kjc7W+MLkpQ45vFlZbK6xlR
-         WevcoQplBFVuj2OaypLHgdqOlGBXb9qX5wcws0QKkmqbIM7BUis8x3cEq/QnRb7jy+
-         8LKqBHvdCnA9dZuH+FM+7HMlUmTDgZJwazh1mQ6D8Krf4AJycCaDSVjc4sple1Ctlv
-         z4Q155xOSxXRw==
+        b=B8GadA162D80QEQ3n6e4wZmwjLNQQM0T8vqn+6bfpGM8baknHcL5M9xQDg2aj7LJW
+         3GzZpIupJCrGfBxae0uQuuzUN/Oc7VLe6KwhUI7xf1vPtZpeh0lDMN1fDguVqtRahz
+         uEwx6r244KlYua4px2dga4T2vLFGnrl3o2p9Gz5JZG0nLqGkG4kp59WM5P7kZfusMe
+         A85X/g0Ovh+K3Lc6CIQRqh7YEzYalOtBJV8lCGICY8yiyKao1z/ZNof7DBDoAMhGqC
+         NMJuQ8tYKJOL2B+YL8xLCD6UymylG/tMCmMnVtJfe8XnkJ43QY6VqgIXXWOfn3WdxY
+         0vy0e/g2o9uYQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Robin Gong <yibin.gong@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
         Mark Brown <broonie@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.14 059/252] spi: imx: remove ERR009165 workaround on i.mx6ul
-Date:   Thu,  9 Sep 2021 07:37:53 -0400
-Message-Id: <20210909114106.141462-59-sashal@kernel.org>
+        linux-tegra@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.14 133/252] spi: tegra20-slink: Improve runtime PM usage
+Date:   Thu,  9 Sep 2021 07:39:07 -0400
+Message-Id: <20210909114106.141462-133-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909114106.141462-1-sashal@kernel.org>
 References: <20210909114106.141462-1-sashal@kernel.org>
@@ -45,108 +43,167 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Robin Gong <yibin.gong@nxp.com>
+From: Dmitry Osipenko <digetx@gmail.com>
 
-[ Upstream commit 8eb1252bbedfb0e800bbbd3e9055a7db0ae2cac9 ]
+[ Upstream commit e4bb903fda0e9bbafa1338dcd2ee5e4d3ccc50da ]
 
-ERR009165 fixed on i.mx6ul/6ull/6sll. All other i.mx6/7 and
-i.mx8m/8mm still need this errata. Please refer to nxp official
-errata document from https://www.nxp.com/ .
+The Tegra SPI driver supports runtime PM, which controls the clock
+enable state, but the clk is also enabled separately from the RPM
+at the driver probe time, and thus, stays always on. Fix it.
 
-For removing workaround on those chips. Add new i.mx6ul type.
+Runtime PM now is always available on Tegra, hence there is no need to
+check the RPM presence in the driver anymore. Remove these checks.
 
-Signed-off-by: Robin Gong <yibin.gong@nxp.com>
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
-Acked-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+Link: https://lore.kernel.org/r/20210731192731.5869-1-digetx@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-imx.c | 39 ++++++++++++++++++++++++++++++++++++---
- 1 file changed, 36 insertions(+), 3 deletions(-)
+ drivers/spi/spi-tegra20-slink.c | 73 +++++++++++----------------------
+ 1 file changed, 25 insertions(+), 48 deletions(-)
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index d89b11205815..289ed3d4eda2 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -77,6 +77,11 @@ struct spi_imx_devtype_data {
- 	bool has_slavemode;
- 	unsigned int fifo_size;
- 	bool dynamic_burst;
-+	/*
-+	 * ERR009165 fixed or not:
-+	 * https://www.nxp.com/docs/en/errata/IMX6DQCE.pdf
-+	 */
-+	bool tx_glitch_fixed;
- 	enum spi_imx_devtype devtype;
- };
+diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
+index 6a726c95ac7a..501eca1d0f89 100644
+--- a/drivers/spi/spi-tegra20-slink.c
++++ b/drivers/spi/spi-tegra20-slink.c
+@@ -1061,33 +1061,12 @@ static int tegra_slink_probe(struct platform_device *pdev)
+ 		dev_err(&pdev->dev, "Can not get clock %d\n", ret);
+ 		goto exit_free_master;
+ 	}
+-	ret = clk_prepare(tspi->clk);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "Clock prepare failed %d\n", ret);
+-		goto exit_free_master;
+-	}
+-	ret = clk_enable(tspi->clk);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "Clock enable failed %d\n", ret);
+-		goto exit_clk_unprepare;
+-	}
+-
+-	spi_irq = platform_get_irq(pdev, 0);
+-	tspi->irq = spi_irq;
+-	ret = request_threaded_irq(tspi->irq, tegra_slink_isr,
+-			tegra_slink_isr_thread, IRQF_ONESHOT,
+-			dev_name(&pdev->dev), tspi);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "Failed to register ISR for IRQ %d\n",
+-					tspi->irq);
+-		goto exit_clk_disable;
+-	}
  
-@@ -622,8 +627,14 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
- 	ctrl |= mx51_ecspi_clkdiv(spi_imx, spi_imx->spi_bus_clk, &clk);
- 	spi_imx->spi_bus_clk = clk;
+ 	tspi->rst = devm_reset_control_get_exclusive(&pdev->dev, "spi");
+ 	if (IS_ERR(tspi->rst)) {
+ 		dev_err(&pdev->dev, "can not get reset\n");
+ 		ret = PTR_ERR(tspi->rst);
+-		goto exit_free_irq;
++		goto exit_free_master;
+ 	}
  
--	/* ERR009165: work in XHC mode as PIO */
--	ctrl &= ~MX51_ECSPI_CTRL_SMC;
-+	/*
-+	 * ERR009165: work in XHC mode instead of SMC as PIO on the chips
-+	 * before i.mx6ul.
-+	 */
-+	if (spi_imx->usedma && spi_imx->devtype_data->tx_glitch_fixed)
-+		ctrl |= MX51_ECSPI_CTRL_SMC;
-+	else
-+		ctrl &= ~MX51_ECSPI_CTRL_SMC;
+ 	tspi->max_buf_size = SLINK_FIFO_DEPTH << 2;
+@@ -1095,7 +1074,7 @@ static int tegra_slink_probe(struct platform_device *pdev)
  
- 	writel(ctrl, spi_imx->base + MX51_ECSPI_CTRL);
+ 	ret = tegra_slink_init_dma_param(tspi, true);
+ 	if (ret < 0)
+-		goto exit_free_irq;
++		goto exit_free_master;
+ 	ret = tegra_slink_init_dma_param(tspi, false);
+ 	if (ret < 0)
+ 		goto exit_rx_dma_free;
+@@ -1106,16 +1085,9 @@ static int tegra_slink_probe(struct platform_device *pdev)
+ 	init_completion(&tspi->xfer_completion);
  
-@@ -632,12 +643,16 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
+ 	pm_runtime_enable(&pdev->dev);
+-	if (!pm_runtime_enabled(&pdev->dev)) {
+-		ret = tegra_slink_runtime_resume(&pdev->dev);
+-		if (ret)
+-			goto exit_pm_disable;
+-	}
+-
+-	ret = pm_runtime_get_sync(&pdev->dev);
+-	if (ret < 0) {
++	ret = pm_runtime_resume_and_get(&pdev->dev);
++	if (ret) {
+ 		dev_err(&pdev->dev, "pm runtime get failed, e = %d\n", ret);
+-		pm_runtime_put_noidle(&pdev->dev);
+ 		goto exit_pm_disable;
+ 	}
  
- static void mx51_setup_wml(struct spi_imx_data *spi_imx)
- {
-+	u32 tx_wml = 0;
+@@ -1123,33 +1095,43 @@ static int tegra_slink_probe(struct platform_device *pdev)
+ 	udelay(2);
+ 	reset_control_deassert(tspi->rst);
+ 
++	spi_irq = platform_get_irq(pdev, 0);
++	tspi->irq = spi_irq;
++	ret = request_threaded_irq(tspi->irq, tegra_slink_isr,
++				   tegra_slink_isr_thread, IRQF_ONESHOT,
++				   dev_name(&pdev->dev), tspi);
++	if (ret < 0) {
++		dev_err(&pdev->dev, "Failed to register ISR for IRQ %d\n",
++			tspi->irq);
++		goto exit_pm_put;
++	}
 +
-+	if (spi_imx->devtype_data->tx_glitch_fixed)
-+		tx_wml = spi_imx->wml;
- 	/*
- 	 * Configure the DMA register: setup the watermark
- 	 * and enable DMA request.
- 	 */
- 	writel(MX51_ECSPI_DMA_RX_WML(spi_imx->wml - 1) |
--		MX51_ECSPI_DMA_TX_WML(0) |
-+		MX51_ECSPI_DMA_TX_WML(tx_wml) |
- 		MX51_ECSPI_DMA_RXT_WML(spi_imx->wml) |
- 		MX51_ECSPI_DMA_TEDEN | MX51_ECSPI_DMA_RXDEN |
- 		MX51_ECSPI_DMA_RXTDEN, spi_imx->base + MX51_ECSPI_DMA);
-@@ -1028,6 +1043,23 @@ static struct spi_imx_devtype_data imx53_ecspi_devtype_data = {
- 	.devtype = IMX53_ECSPI,
- };
+ 	tspi->def_command_reg  = SLINK_M_S;
+ 	tspi->def_command2_reg = SLINK_CS_ACTIVE_BETWEEN;
+ 	tegra_slink_writel(tspi, tspi->def_command_reg, SLINK_COMMAND);
+ 	tegra_slink_writel(tspi, tspi->def_command2_reg, SLINK_COMMAND2);
+-	pm_runtime_put(&pdev->dev);
  
-+static struct spi_imx_devtype_data imx6ul_ecspi_devtype_data = {
-+	.intctrl = mx51_ecspi_intctrl,
-+	.prepare_message = mx51_ecspi_prepare_message,
-+	.prepare_transfer = mx51_ecspi_prepare_transfer,
-+	.trigger = mx51_ecspi_trigger,
-+	.rx_available = mx51_ecspi_rx_available,
-+	.reset = mx51_ecspi_reset,
-+	.setup_wml = mx51_setup_wml,
-+	.fifo_size = 64,
-+	.has_dmamode = true,
-+	.dynamic_burst = true,
-+	.has_slavemode = true,
-+	.tx_glitch_fixed = true,
-+	.disable = mx51_ecspi_disable,
-+	.devtype = IMX51_ECSPI,
-+};
+ 	master->dev.of_node = pdev->dev.of_node;
+ 	ret = devm_spi_register_master(&pdev->dev, master);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "can not register to master err %d\n", ret);
+-		goto exit_pm_disable;
++		goto exit_free_irq;
+ 	}
 +
- static const struct of_device_id spi_imx_dt_ids[] = {
- 	{ .compatible = "fsl,imx1-cspi", .data = &imx1_cspi_devtype_data, },
- 	{ .compatible = "fsl,imx21-cspi", .data = &imx21_cspi_devtype_data, },
-@@ -1036,6 +1068,7 @@ static const struct of_device_id spi_imx_dt_ids[] = {
- 	{ .compatible = "fsl,imx35-cspi", .data = &imx35_cspi_devtype_data, },
- 	{ .compatible = "fsl,imx51-ecspi", .data = &imx51_ecspi_devtype_data, },
- 	{ .compatible = "fsl,imx53-ecspi", .data = &imx53_ecspi_devtype_data, },
-+	{ .compatible = "fsl,imx6ul-ecspi", .data = &imx6ul_ecspi_devtype_data, },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, spi_imx_dt_ids);
++	pm_runtime_put(&pdev->dev);
++
+ 	return ret;
+ 
++exit_free_irq:
++	free_irq(spi_irq, tspi);
++exit_pm_put:
++	pm_runtime_put(&pdev->dev);
+ exit_pm_disable:
+ 	pm_runtime_disable(&pdev->dev);
+-	if (!pm_runtime_status_suspended(&pdev->dev))
+-		tegra_slink_runtime_suspend(&pdev->dev);
++
+ 	tegra_slink_deinit_dma_param(tspi, false);
+ exit_rx_dma_free:
+ 	tegra_slink_deinit_dma_param(tspi, true);
+-exit_free_irq:
+-	free_irq(spi_irq, tspi);
+-exit_clk_disable:
+-	clk_disable(tspi->clk);
+-exit_clk_unprepare:
+-	clk_unprepare(tspi->clk);
+ exit_free_master:
+ 	spi_master_put(master);
+ 	return ret;
+@@ -1162,8 +1144,7 @@ static int tegra_slink_remove(struct platform_device *pdev)
+ 
+ 	free_irq(tspi->irq, tspi);
+ 
+-	clk_disable(tspi->clk);
+-	clk_unprepare(tspi->clk);
++	pm_runtime_disable(&pdev->dev);
+ 
+ 	if (tspi->tx_dma_chan)
+ 		tegra_slink_deinit_dma_param(tspi, false);
+@@ -1171,10 +1152,6 @@ static int tegra_slink_remove(struct platform_device *pdev)
+ 	if (tspi->rx_dma_chan)
+ 		tegra_slink_deinit_dma_param(tspi, true);
+ 
+-	pm_runtime_disable(&pdev->dev);
+-	if (!pm_runtime_status_suspended(&pdev->dev))
+-		tegra_slink_runtime_suspend(&pdev->dev);
+-
+ 	return 0;
+ }
+ 
 -- 
 2.30.2
 
