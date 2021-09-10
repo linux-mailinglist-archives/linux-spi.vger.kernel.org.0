@@ -2,41 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D0C406A97
+	by mail.lfdr.de (Postfix) with ESMTP id 67374406A98
 	for <lists+linux-spi@lfdr.de>; Fri, 10 Sep 2021 13:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232684AbhIJLQx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S232732AbhIJLQx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Fri, 10 Sep 2021 07:16:53 -0400
-Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:58734 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232513AbhIJLQw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Sep 2021 07:16:52 -0400
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18A4xLfx008537;
-        Fri, 10 Sep 2021 06:15:38 -0500
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:24514 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232537AbhIJLQx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Sep 2021 07:16:53 -0400
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18AAjKfW026567;
+        Fri, 10 Sep 2021 06:15:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=ATame/oFg5qeK4UU7xR8VPNOhBfupi2f1Oga2JRrj38=;
- b=qcYTkDx2EiE5cKYtuvikBE8omlqN7KOae60zf8EV4LgoFcy+v4dg9bcdue9CPrspBF/6
- fgptNFtfZGBv85P+e6BIFTV6rwD0TOf9pTf7DpbORMHqtJLLtiTDq4XqBpwjnF5K8Zu8
- bn9PnwIg1SkgIF2s0Qj7UG6evxxs2mz4mmlS6e01qeCHheqLvhL7Kq82Q1HRlgQFKwEX
- GQqrPiYVhd1hl2z/HlRcOTAWd7vX4C8Z5sCv6AkNmT3qmyog4DlwXyJVEg0jsVIdNfK7
- L3uXOfFy50Oz3kWnLnhYA7MGj2xfpytrqTy5kkbKwZLMn6faoe5M4Nh/+35lUMlYmQC8 2A== 
-Received: from ediex01.ad.cirrus.com ([87.246.76.36])
-        by mx0b-001ae601.pphosted.com with ESMTP id 3aytg78w7p-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=PODMain02222019;
+ bh=bVIj4GXKVthpSX7oxUMgi9cJsuplE1dKWilk/8GQ17U=;
+ b=bVtLjt+rm4sVrGcVEF/khdzdu6rdfVASMaIQ8fWjpu4xtggNSKwS9pz00h7mnHXXKHIc
+ k1Y/6xz1uC6/3c6KBkTeuHIlyzTDCqe9KCL5fneNM73G+Bm2n/GTLcurP/FRRATiVuLc
+ /Pht58Z9oBHwe7CM2s8VPdQX+xj1GbQ9rIonCodo2GogCM+D9xsT0qk0B11NV/H/hdQE
+ gosBSFfVIbXNcrXFQDsXTPmX3uqKklL13jbQ5vHwIBJL9FxIZ2zuhgvdzpjI6iBlkFfk
+ tJVpw3IFGp1N/jHNRHuQ1gKO0srfp2SwHq0qRlJlNz96j3Lvis8M38Subk/+TsqO6iTu Aw== 
+Received: from ediex02.ad.cirrus.com ([87.246.76.36])
+        by mx0a-001ae601.pphosted.com with ESMTP id 3aytvr10en-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 10 Sep 2021 06:15:38 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 10 Sep 2021 06:15:39 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.12; Fri, 10 Sep
  2021 12:15:37 +0100
 Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.2242.12 via Frontend
  Transport; Fri, 10 Sep 2021 12:15:37 +0100
 Received: from aryzen.ad.cirrus.com (unknown [198.61.64.231])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 1C7812A9;
-        Fri, 10 Sep 2021 11:15:31 +0000 (UTC)
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 1F662B2F;
+        Fri, 10 Sep 2021 11:15:37 +0000 (UTC)
 From:   Lucas Tanure <tanureal@opensource.cirrus.com>
 To:     Mark Brown <broonie@kernel.org>,
         Sanjay R Mehta <sanju.mehta@amd.com>,
@@ -45,220 +45,58 @@ CC:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <patches@opensource.cirrus.com>,
         Lucas Tanure <tanureal@opensource.cirrus.com>,
         Charles Keepax <ckeepax@opensource.cirrus.com>
-Subject: [PATCH v2 1/4] spi: amd: Refactor code to use less spi_master_get_devdata
-Date:   Fri, 10 Sep 2021 12:15:26 +0100
-Message-ID: <20210910111529.12539-1-tanureal@opensource.cirrus.com>
+Subject: [PATCH v2 2/4] spi: amd: Refactor amd_spi_busy_wait
+Date:   Fri, 10 Sep 2021 12:15:27 +0100
+Message-ID: <20210910111529.12539-2-tanureal@opensource.cirrus.com>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20210910111529.12539-1-tanureal@opensource.cirrus.com>
+References: <20210910111529.12539-1-tanureal@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: yfX1FmSKMLHFrUAxsxDuzTnvcnwo-ya3
-X-Proofpoint-ORIG-GUID: yfX1FmSKMLHFrUAxsxDuzTnvcnwo-ya3
+X-Proofpoint-GUID: XxShVLzGuMSMHScIAzmB5g70orpSvfX2
+X-Proofpoint-ORIG-GUID: XxShVLzGuMSMHScIAzmB5g70orpSvfX2
 X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Get master data in the start and then just use struct amd_spi
-as it has the needed variable
+Use amd_spi_readreg32 to read 32 bits registers
 
 Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
 Reviewed-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 ---
- drivers/spi/spi-amd.c | 94 ++++++++++++++++---------------------------
- 1 file changed, 34 insertions(+), 60 deletions(-)
+ drivers/spi/spi-amd.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
-index 3cf76096a76d..f23467cf6acd 100644
+index f23467cf6acd..f2dd8d432aff 100644
 --- a/drivers/spi/spi-amd.c
 +++ b/drivers/spi/spi-amd.c
-@@ -41,85 +41,66 @@ struct amd_spi {
- 	u8 chip_select;
- };
+@@ -103,21 +103,15 @@ static inline void amd_spi_set_tx_count(struct amd_spi *amd_spi, u8 tx_count)
+ 	amd_spi_setclear_reg8(amd_spi, AMD_SPI_TX_COUNT_REG, tx_count, 0xff);
+ }
  
--static inline u8 amd_spi_readreg8(struct spi_master *master, int idx)
-+static inline u8 amd_spi_readreg8(struct amd_spi *amd_spi, int idx)
+-static inline int amd_spi_busy_wait(struct amd_spi *amd_spi)
++static int amd_spi_busy_wait(struct amd_spi *amd_spi)
  {
--	struct amd_spi *amd_spi = spi_master_get_devdata(master);
+-	bool spi_busy;
+ 	int timeout = 100000;
+ 
+ 	/* poll for SPI bus to become idle */
+-	spi_busy = (ioread32((u8 __iomem *)amd_spi->io_remap_addr +
+-		    AMD_SPI_CTRL0_REG) & AMD_SPI_BUSY) == AMD_SPI_BUSY;
+-	while (spi_busy) {
++	while (amd_spi_readreg32(amd_spi, AMD_SPI_CTRL0_REG) & AMD_SPI_BUSY) {
+ 		usleep_range(10, 20);
+ 		if (timeout-- < 0)
+ 			return -ETIMEDOUT;
 -
- 	return ioread8((u8 __iomem *)amd_spi->io_remap_addr + idx);
- }
- 
--static inline void amd_spi_writereg8(struct spi_master *master, int idx,
--				     u8 val)
-+static inline void amd_spi_writereg8(struct amd_spi *amd_spi, int idx, u8 val)
- {
--	struct amd_spi *amd_spi = spi_master_get_devdata(master);
--
- 	iowrite8(val, ((u8 __iomem *)amd_spi->io_remap_addr + idx));
- }
- 
--static inline void amd_spi_setclear_reg8(struct spi_master *master, int idx,
--					 u8 set, u8 clear)
-+static void amd_spi_setclear_reg8(struct amd_spi *amd_spi, int idx, u8 set, u8 clear)
- {
--	u8 tmp = amd_spi_readreg8(master, idx);
-+	u8 tmp = amd_spi_readreg8(amd_spi, idx);
- 
- 	tmp = (tmp & ~clear) | set;
--	amd_spi_writereg8(master, idx, tmp);
-+	amd_spi_writereg8(amd_spi, idx, tmp);
- }
- 
--static inline u32 amd_spi_readreg32(struct spi_master *master, int idx)
-+static inline u32 amd_spi_readreg32(struct amd_spi *amd_spi, int idx)
- {
--	struct amd_spi *amd_spi = spi_master_get_devdata(master);
--
- 	return ioread32((u8 __iomem *)amd_spi->io_remap_addr + idx);
- }
- 
--static inline void amd_spi_writereg32(struct spi_master *master, int idx,
--				      u32 val)
-+static inline void amd_spi_writereg32(struct amd_spi *amd_spi, int idx, u32 val)
- {
--	struct amd_spi *amd_spi = spi_master_get_devdata(master);
--
- 	iowrite32(val, ((u8 __iomem *)amd_spi->io_remap_addr + idx));
- }
- 
--static inline void amd_spi_setclear_reg32(struct spi_master *master, int idx,
--					  u32 set, u32 clear)
-+static inline void amd_spi_setclear_reg32(struct amd_spi *amd_spi, int idx, u32 set, u32 clear)
- {
--	u32 tmp = amd_spi_readreg32(master, idx);
-+	u32 tmp = amd_spi_readreg32(amd_spi, idx);
- 
- 	tmp = (tmp & ~clear) | set;
--	amd_spi_writereg32(master, idx, tmp);
-+	amd_spi_writereg32(amd_spi, idx, tmp);
- }
- 
--static void amd_spi_select_chip(struct spi_master *master)
-+static void amd_spi_select_chip(struct amd_spi *amd_spi)
- {
--	struct amd_spi *amd_spi = spi_master_get_devdata(master);
--	u8 chip_select = amd_spi->chip_select;
--
--	amd_spi_setclear_reg8(master, AMD_SPI_ALT_CS_REG, chip_select,
-+	amd_spi_setclear_reg8(amd_spi, AMD_SPI_ALT_CS_REG, amd_spi->chip_select,
- 			      AMD_SPI_ALT_CS_MASK);
- }
- 
--static void amd_spi_clear_fifo_ptr(struct spi_master *master)
-+static void amd_spi_clear_fifo_ptr(struct amd_spi *amd_spi)
- {
--	amd_spi_setclear_reg32(master, AMD_SPI_CTRL0_REG, AMD_SPI_FIFO_CLEAR,
--			       AMD_SPI_FIFO_CLEAR);
-+	amd_spi_setclear_reg32(amd_spi, AMD_SPI_CTRL0_REG, AMD_SPI_FIFO_CLEAR, AMD_SPI_FIFO_CLEAR);
- }
- 
--static void amd_spi_set_opcode(struct spi_master *master, u8 cmd_opcode)
-+static void amd_spi_set_opcode(struct amd_spi *amd_spi, u8 cmd_opcode)
- {
--	amd_spi_setclear_reg32(master, AMD_SPI_CTRL0_REG, cmd_opcode,
--			       AMD_SPI_OPCODE_MASK);
-+	amd_spi_setclear_reg32(amd_spi, AMD_SPI_CTRL0_REG, cmd_opcode, AMD_SPI_OPCODE_MASK);
- }
- 
--static inline void amd_spi_set_rx_count(struct spi_master *master,
--					u8 rx_count)
-+static inline void amd_spi_set_rx_count(struct amd_spi *amd_spi, u8 rx_count)
- {
--	amd_spi_setclear_reg8(master, AMD_SPI_RX_COUNT_REG, rx_count, 0xff);
-+	amd_spi_setclear_reg8(amd_spi, AMD_SPI_RX_COUNT_REG, rx_count, 0xff);
- }
- 
--static inline void amd_spi_set_tx_count(struct spi_master *master,
--					u8 tx_count)
-+static inline void amd_spi_set_tx_count(struct amd_spi *amd_spi, u8 tx_count)
- {
--	amd_spi_setclear_reg8(master, AMD_SPI_TX_COUNT_REG, tx_count, 0xff);
-+	amd_spi_setclear_reg8(amd_spi, AMD_SPI_TX_COUNT_REG, tx_count, 0xff);
- }
- 
- static inline int amd_spi_busy_wait(struct amd_spi *amd_spi)
-@@ -142,22 +123,18 @@ static inline int amd_spi_busy_wait(struct amd_spi *amd_spi)
- 	return 0;
- }
- 
--static void amd_spi_execute_opcode(struct spi_master *master)
-+static void amd_spi_execute_opcode(struct amd_spi *amd_spi)
- {
--	struct amd_spi *amd_spi = spi_master_get_devdata(master);
--
- 	/* Set ExecuteOpCode bit in the CTRL0 register */
--	amd_spi_setclear_reg32(master, AMD_SPI_CTRL0_REG, AMD_SPI_EXEC_CMD,
--			       AMD_SPI_EXEC_CMD);
--
-+	amd_spi_setclear_reg32(amd_spi, AMD_SPI_CTRL0_REG, AMD_SPI_EXEC_CMD, AMD_SPI_EXEC_CMD);
- 	amd_spi_busy_wait(amd_spi);
- }
- 
- static int amd_spi_master_setup(struct spi_device *spi)
- {
--	struct spi_master *master = spi->master;
-+	struct amd_spi *amd_spi = spi_master_get_devdata(spi->master);
- 
--	amd_spi_clear_fifo_ptr(master);
-+	amd_spi_clear_fifo_ptr(amd_spi);
- 
- 	return 0;
- }
-@@ -185,19 +162,18 @@ static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
- 			tx_len = xfer->len - 1;
- 			cmd_opcode = *(u8 *)xfer->tx_buf;
- 			buf++;
--			amd_spi_set_opcode(master, cmd_opcode);
-+			amd_spi_set_opcode(amd_spi, cmd_opcode);
- 
- 			/* Write data into the FIFO. */
- 			for (i = 0; i < tx_len; i++) {
--				iowrite8(buf[i],
--					 ((u8 __iomem *)amd_spi->io_remap_addr +
-+				iowrite8(buf[i], ((u8 __iomem *)amd_spi->io_remap_addr +
- 					 AMD_SPI_FIFO_BASE + i));
- 			}
- 
--			amd_spi_set_tx_count(master, tx_len);
--			amd_spi_clear_fifo_ptr(master);
-+			amd_spi_set_tx_count(amd_spi, tx_len);
-+			amd_spi_clear_fifo_ptr(amd_spi);
- 			/* Execute command */
--			amd_spi_execute_opcode(master);
-+			amd_spi_execute_opcode(amd_spi);
- 		}
- 		if (m_cmd & AMD_SPI_XFER_RX) {
- 			/*
-@@ -206,15 +182,13 @@ static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
- 			 */
- 			rx_len = xfer->len;
- 			buf = (u8 *)xfer->rx_buf;
--			amd_spi_set_rx_count(master, rx_len);
--			amd_spi_clear_fifo_ptr(master);
-+			amd_spi_set_rx_count(amd_spi, rx_len);
-+			amd_spi_clear_fifo_ptr(amd_spi);
- 			/* Execute command */
--			amd_spi_execute_opcode(master);
-+			amd_spi_execute_opcode(amd_spi);
- 			/* Read data from FIFO to receive buffer  */
- 			for (i = 0; i < rx_len; i++)
--				buf[i] = amd_spi_readreg8(master,
--							  AMD_SPI_FIFO_BASE +
--							  tx_len + i);
-+				buf[i] = amd_spi_readreg8(amd_spi, AMD_SPI_FIFO_BASE + tx_len + i);
- 		}
+-		spi_busy = (ioread32((u8 __iomem *)amd_spi->io_remap_addr +
+-			    AMD_SPI_CTRL0_REG) & AMD_SPI_BUSY) == AMD_SPI_BUSY;
  	}
  
-@@ -234,7 +208,7 @@ static int amd_spi_master_transfer(struct spi_master *master,
- 	struct spi_device *spi = msg->spi;
- 
- 	amd_spi->chip_select = spi->chip_select;
--	amd_spi_select_chip(master);
-+	amd_spi_select_chip(amd_spi);
- 
- 	/*
- 	 * Extract spi_transfers from the spi message and
+ 	return 0;
 -- 
 2.33.0
 
