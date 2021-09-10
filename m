@@ -2,54 +2,29 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5556A40669D
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Sep 2021 07:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 534CC4067FF
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Sep 2021 09:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbhIJFFc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Sep 2021 01:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
+        id S231649AbhIJHxP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Sep 2021 03:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbhIJFFb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Sep 2021 01:05:31 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C339C061574;
-        Thu,  9 Sep 2021 22:04:21 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id w6so401664pll.3;
-        Thu, 09 Sep 2021 22:04:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=d5eOmTxE1ZD/E42iqd3uKR/Y6MHuYpwLI55f3E0La5E=;
-        b=D8jXj9DJpL/epFZdDk8+HpYXMdp57OTLkSPCkszhGUOuPyjnPP6Vbnal1jn4yQUTBT
-         9nZdTQ6d+9CcIYBiCeVdZjN/2YANVlY/9mIGI7uCjKRrTs2DdN2cauGI/GERiGfDq/Ql
-         e4XxaoCaGS7rexQA0wOf13jNJVXvJgTqxf2qwCO97lNCqpor+J36XaQNS0XUUSE5fbG7
-         zXDOhg1lhiavFfLbS/paCIECSnMhn2x2zoU+34et0ZRZrYsYluYfmrNiWS/kiSkp5iHH
-         M7anLDr4fSc0pYqtetsYftjfVdspeuxSNRjq/6pu04PJ5FnrQcl+nrc1Eb6F+40zq/Lk
-         gH7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=d5eOmTxE1ZD/E42iqd3uKR/Y6MHuYpwLI55f3E0La5E=;
-        b=jWvYP7DheRkzxx6a9fvqLPEo0pMUoIdJUOdAzfE2O5h6PBSPuGFxgxAb/qjucNw16r
-         ZzgvljNFquGjeY/Zo8aJnZDAxVZk39eUajgK3JUtaZ4XBILUzuhkYr8NwMJP9jKSctPO
-         gP9bKlT7AXYdhAzWlNzWiK5vyMFYP7QgA0421oLKgMN76/EK2x6+NnMjD1lX4QoF/Y9C
-         PPAxFga8Qq5XBTb8QQU4y0NpL3oHSp/0eRDBHSNhaETbp6oDRAZF61oMMQomwp2nWO5O
-         lQi22aU7Vzsf/GoUjTGEJSkgmPZJ5e0F+/RUhsZWzuiQg/7KSf5hM3nGkjBuY+blnWIt
-         TM+w==
-X-Gm-Message-State: AOAM533mBCDN64D1JojkZkytatr7pUScjom2vV39YY8ThF+9dDj/yz26
-        bj+PatLbs6DHONJTgCnStq4=
-X-Google-Smtp-Source: ABdhPJzHTI+b4/VBBzRYnWIhKBe6tQMwl0FszM9/LHsx0pAHwPEtWEcpLlfJ+ynZ5AoGCf0SWDW+Qw==
-X-Received: by 2002:a17:902:8648:b029:129:dda4:ddc2 with SMTP id y8-20020a1709028648b0290129dda4ddc2mr5899371plt.4.1631250260605;
-        Thu, 09 Sep 2021 22:04:20 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:acdc:1d22:e20a:2796])
-        by smtp.gmail.com with ESMTPSA id s192sm4053556pgc.23.2021.09.09.22.04.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Sep 2021 22:04:19 -0700 (PDT)
-Date:   Thu, 9 Sep 2021 22:04:16 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
+        with ESMTP id S231561AbhIJHxP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Sep 2021 03:53:15 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15D4C061574
+        for <linux-spi@vger.kernel.org>; Fri, 10 Sep 2021 00:52:04 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mObKG-0008TF-04; Fri, 10 Sep 2021 09:51:56 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mObKE-0003rS-CR; Fri, 10 Sep 2021 09:51:54 +0200
+Date:   Fri, 10 Sep 2021 09:51:54 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
         Mark Brown <broonie@kernel.org>,
         kernel test robot <lkp@intel.com>, kernel@pengutronix.de,
@@ -57,48 +32,69 @@ Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
         linux-spi@vger.kernel.org, David Jander <david@protonic.nl>
 Subject: Re: [PATCH v1] Input: ads7846: ads7846_get_value - fix unaligned
  pointer value warning
-Message-ID: <YTrnUFI53iwvwxrj@google.com>
+Message-ID: <20210910075154.GF26100@pengutronix.de>
 References: <20210707124115.20028-1-o.rempel@pengutronix.de>
+ <YTrnUFI53iwvwxrj@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210707124115.20028-1-o.rempel@pengutronix.de>
+In-Reply-To: <YTrnUFI53iwvwxrj@google.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 09:49:56 up 204 days, 11:13, 101 users,  load average: 0.19, 0.16,
+ 0.15
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Oleksij,
+Hi Dmitry,
 
-On Wed, Jul 07, 2021 at 02:41:15PM +0200, Oleksij Rempel wrote:
-> Fix warning reported by the kernel test robot:
-> drivers/input/touchscreen/ads7846.c:705:24: warning: taking address
-> of packed member 'data' of class or structure 'ads7846_buf' may result
-> in an unaligned pointer value [-Waddress-of-packed-member]
+On Thu, Sep 09, 2021 at 10:04:16PM -0700, Dmitry Torokhov wrote:
+> Hi Oleksij,
 > 
-> Fixes: 6965eece2a89 ("Input: ads7846 - convert to one message")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  drivers/input/touchscreen/ads7846.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On Wed, Jul 07, 2021 at 02:41:15PM +0200, Oleksij Rempel wrote:
+> > Fix warning reported by the kernel test robot:
+> > drivers/input/touchscreen/ads7846.c:705:24: warning: taking address
+> > of packed member 'data' of class or structure 'ads7846_buf' may result
+> > in an unaligned pointer value [-Waddress-of-packed-member]
+> > 
+> > Fixes: 6965eece2a89 ("Input: ads7846 - convert to one message")
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > ---
+> >  drivers/input/touchscreen/ads7846.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
+> > index adb4c2230c31..1987dedac94f 100644
+> > --- a/drivers/input/touchscreen/ads7846.c
+> > +++ b/drivers/input/touchscreen/ads7846.c
+> > @@ -702,7 +702,7 @@ static int ads7846_get_value(struct ads7846_buf *buf)
+> >  {
+> >  	int value;
+> >  
+> > -	value = be16_to_cpup(&buf->data);
+> > +	value = get_unaligned_be16(&buf->data);
 > 
-> diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
-> index adb4c2230c31..1987dedac94f 100644
-> --- a/drivers/input/touchscreen/ads7846.c
-> +++ b/drivers/input/touchscreen/ads7846.c
-> @@ -702,7 +702,7 @@ static int ads7846_get_value(struct ads7846_buf *buf)
->  {
->  	int value;
->  
-> -	value = be16_to_cpup(&buf->data);
-> +	value = get_unaligned_be16(&buf->data);
+> ds7846_buf is declared as packed so I believe using be16_to_cpu(buf->data)
+> will suffice.
 
-ds7846_buf is declared as packed so I believe using be16_to_cpu(buf->data)
-will suffice.
+The pointer to the data is is off by 8 bits, so it is not naturally
+aligned. This is why we need to use function which is dealing with
+unaligned pointers. 
 
-I can adjust on my side if you agree.
-
-Thanks.
-
+Regards,
+Oleksij
 -- 
-Dmitry
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
