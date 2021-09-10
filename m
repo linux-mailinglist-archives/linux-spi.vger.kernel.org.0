@@ -2,80 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64000407009
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Sep 2021 18:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B40640701F
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Sep 2021 18:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbhIJQ4m (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Sep 2021 12:56:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60942 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229466AbhIJQ4l (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 10 Sep 2021 12:56:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2BCBB60295;
-        Fri, 10 Sep 2021 16:55:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631292930;
-        bh=U+sZ6nVPSNJ9MS3GXenkUY7bzKhjXvmMIhpRXmmrLgk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o/pwgWMSgenytzhnrdMbPEMISfwbvVHTOqYThFhxyQpynEdnoBkZq2rXtxa+EjUo+
-         pbMCppirDEyEWW/HY+HlFJY/lV9Vkl11wV008oDXrJVWLT8X/tvlQZkVIisg9gmK0b
-         U0nOukSEckI9fOVCPfWOYRlnawe1vCJGixH4NsIPP8xD50gj1bybku1fjxn16RoqPE
-         TiySjwARsx3S341bHwaRlHjBEFFLG93CKFnr3eazA3eeqYcqtdJy7AB6m5Xg8BnN9y
-         KtnFCY0uMmYs3tBXJfwOeohMsurvvKFRVRnBF/NwpiFlKKZslOCTd9fVH0KgF4WgYb
-         TGfWF8b6ABTBg==
-Date:   Fri, 10 Sep 2021 17:54:53 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: More use 'enum' instead of 'oneOf' plus
- 'const' entries
-Message-ID: <20210910165453.GF4474@sirena.org.uk>
-References: <20210910165153.2843871-1-robh@kernel.org>
+        id S231219AbhIJRBB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Sep 2021 13:01:01 -0400
+Received: from mail-oo1-f51.google.com ([209.85.161.51]:35659 "EHLO
+        mail-oo1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230286AbhIJRA6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Sep 2021 13:00:58 -0400
+Received: by mail-oo1-f51.google.com with SMTP id y3-20020a4ab403000000b00290e2a52c71so817988oon.2;
+        Fri, 10 Sep 2021 09:59:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OxJt6NlBRoIU5qhF/LpwW5GzFZKmCRaUN2HoDgoBYA4=;
+        b=HtEEltfn+kOiKXXMFMQFJ5ospb2cL6fOkzOgNebBoXP/1LqYiCRD6xwwHSGS7gu88N
+         g65szAWoumbA/VtXWmZKxvPBbj5faHCLicE/DJswdUM1Ce5i9bUmcbtwe6ShyyRUBwT8
+         HqMtyXres9ELkZDBOK8yXnbzjRTSNw1XFg30Lnp0kxxHg9VY2klvX2IEL/350SSOSBDA
+         oDyGyhShcSIGQpxTFfpZpDVnIWUA2PoTq1+56+0u7NVGGlDKFlJr5R4HeBvrsbek9Fmh
+         PYIH2zXz3iAYejwJgVcXQtOMp5O2YUzka7lvxsQGGrL4mVGDXb0rD4rjzBxm7hL+hJgH
+         JeGw==
+X-Gm-Message-State: AOAM530pfDptkb3fAVxep0Bn68TEJqmuAfrZAESCTEIdTEwZen6fPrNY
+        lArnlaFSfIvhrWtgvdcoAg==
+X-Google-Smtp-Source: ABdhPJzntCjNiJylxJsfk6Q+QwTwN6J9HrP/4EyEdhxln//eo6jZs+fDU3O9+4kn3XX6jl1vQ/2ZuQ==
+X-Received: by 2002:a4a:d48c:: with SMTP id o12mr5227910oos.55.1631293187104;
+        Fri, 10 Sep 2021 09:59:47 -0700 (PDT)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id i27sm1354435ots.12.2021.09.10.09.59.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Sep 2021 09:59:46 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     devicetree@vger.kernel.org, Michal Simek <michal.simek@xilinx.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] spi: dt-bindings: xilinx: Drop type reference on *-bits properties
+Date:   Fri, 10 Sep 2021 11:59:45 -0500
+Message-Id: <20210910165945.2852999-1-robh@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SxgehGEc6vB0cZwN"
-Content-Disposition: inline
-In-Reply-To: <20210910165153.2843871-1-robh@kernel.org>
-X-Cookie: You are standing on my toes.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Properties with standard unit suffixes such as '-bits' don't need a
+type.
 
---SxgehGEc6vB0cZwN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Michal Simek <michal.simek@xilinx.com>
+Cc: linux-spi@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+Mark, Please ack and I will send to Linus for rc1. After this, I can 
+enable checking these automatically.
 
-On Fri, Sep 10, 2021 at 11:51:53AM -0500, Rob Herring wrote:
+ Documentation/devicetree/bindings/spi/spi-xilinx.yaml | 2 --
+ 1 file changed, 2 deletions(-)
 
-> 'enum' is equivalent to 'oneOf' with a list of 'const' entries, but 'enum'
-> is more concise and yields better error messages.
+diff --git a/Documentation/devicetree/bindings/spi/spi-xilinx.yaml b/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
+index 593f7693bace..03e5dca7e933 100644
+--- a/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
+@@ -27,13 +27,11 @@ properties:
+ 
+   xlnx,num-ss-bits:
+     description: Number of chip selects used.
+-    $ref: /schemas/types.yaml#/definitions/uint32
+     minimum: 1
+     maximum: 32
+ 
+   xlnx,num-transfer-bits:
+     description: Number of bits per transfer. This will be 8 if not specified.
+-    $ref: /schemas/types.yaml#/definitions/uint32
+     enum: [8, 16, 32]
+     default: 8
+ 
+-- 
+2.30.2
 
-Acked-by: Mark Brown <broonie@kernel.org>
-
---SxgehGEc6vB0cZwN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmE7jdwACgkQJNaLcl1U
-h9CHLAf/ce1bTYSeCkAdzRg3md0W2wpv1rXAh9bxgQH9A915d4ZJQWmJSEbZ7tl7
-41CCMQMRuDFAtTcI55NtNY/gt4vvetWJsFWw1ynNSsDm2FD0M10RluMLiC+AuUXB
-XkTyvl21NhRJvWEazXKnG34R6EkFBKIoHY8xEDE7mgfPVrJG+vLp4fkxzpgIAMWH
-evEppWB/IamjiDxVrSZqYYz3fpBfSp6OVOC9TwMMiKoPsUd+2CaJM7/UN+ws/wJh
-xWw7TC2Y/Fif1De47ztTg7KybIQoxLaNU1ZwV6BTj2Wq787hOpbC1ec2hZJBtgIr
-svGZRyp2dBXL0vaksYgJd2wOThdTJg==
-=U85h
------END PGP SIGNATURE-----
-
---SxgehGEc6vB0cZwN--
