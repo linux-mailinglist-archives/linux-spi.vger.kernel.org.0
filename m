@@ -2,106 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB2D406D55
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Sep 2021 16:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8D3406DB9
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Sep 2021 16:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233706AbhIJOMh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Sep 2021 10:12:37 -0400
-Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:8624 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233702AbhIJOMg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Sep 2021 10:12:36 -0400
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18A6UI7r018935;
-        Fri, 10 Sep 2021 09:11:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=Tjo1b/f4UDI2qPHaSD4AUkLYHrkga4Eyry3mj3JPrr4=;
- b=LO8UDqCqzmj47Y30yfZYSPBJX3E8lmiEJaSmJg8p1p+v7r3CGhpwANLwIPPLHCVllAL2
- 4NAdhfUZX08BXBLHVnnUCCb1KuHwp4FE8pc1NsfHjhaND8MySnAfufP6gl3pHQQY5pc+
- nXJh5XN9NITrHtBNK6S2+HgLrltUhBkwLja0ID3brnOlyNWlHaDtmyP188Bxga1Flx4D
- 5dGMOEjzBE39BkqKNvkC7lsSdgtKaoZaD+Iyg8KwXpS+kbSLAtyZBaiKx7DdVEnmlTjj
- /vzpPErwJaOIPCrHz8dw9fINIxSXOZqUAciMzf1H9b11WV8YZS81AbWIEFFeJ4Kc6++K 4Q== 
-Received: from ediex02.ad.cirrus.com ([87.246.76.36])
-        by mx0b-001ae601.pphosted.com with ESMTP id 3aytg7926j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 10 Sep 2021 09:11:20 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.12; Fri, 10 Sep
- 2021 15:11:13 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2242.12 via Frontend
- Transport; Fri, 10 Sep 2021 15:11:13 +0100
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D8A3DB10;
-        Fri, 10 Sep 2021 14:11:12 +0000 (UTC)
-Date:   Fri, 10 Sep 2021 14:11:12 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+        id S229749AbhIJOqc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Sep 2021 10:46:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39412 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233128AbhIJOqb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 10 Sep 2021 10:46:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CD2C0611CB;
+        Fri, 10 Sep 2021 14:45:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631285120;
+        bh=Wc9uNNc6NEx+AyIpNzRW4FvMaS9VoFEvCpU39lxJ3k8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HnsNUElUTF+UpCYjgy98q30nsuLIbW1Xy1xVeOC7KMnfERwaCWwni9PwBBp1aZ7sw
+         QQ0XxaLxeVdFgvqyTWAirVIuw6RmgNwt5gHweFXLF0x0iIYtlZDXOtmFQwVDiwvSag
+         lOMWC6GbCFm4BByfNwRu88vLw28T1GXZ9JNPlUU7jlgzVZG5FaXLjzhKFczskGjSZt
+         EkkLZxP1Tx9RhB/m5xeZK7JyBpGxtIOrVhNZGEZynA3Pge+yL0qOrg6kMXoW3DcOJO
+         mRn6d4rN5QxBRLil2rY5MWaQio4AEscCVdinFI+YYjxIRC+NLm4/kTmTWtbUE1mMP1
+         Zi6Nqlyz1lSEw==
+Date:   Fri, 10 Sep 2021 15:44:42 +0100
+From:   Mark Brown <broonie@kernel.org>
 To:     Lucas tanure <tanureal@opensource.cirrus.com>
-CC:     Mark Brown <broonie@kernel.org>,
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
         Sanjay R Mehta <sanju.mehta@amd.com>,
         Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-Subject: Re: [PATCH v2 4/4] spi: amd: Don't wait for a write-only transfer to
- finish
-Message-ID: <20210910141112.GZ9223@ediswmail.ad.cirrus.com>
-References: <20210910111529.12539-1-tanureal@opensource.cirrus.com>
- <20210910111529.12539-4-tanureal@opensource.cirrus.com>
- <20210910124223.GY9223@ediswmail.ad.cirrus.com>
- <790250e3-a928-57d4-1378-bc8923163452@opensource.cirrus.com>
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        patches@opensource.cirrus.com
+Subject: Re: [PATCH 03/10] spi: Add flag for no TX after a RX in the same
+ Chip Select
+Message-ID: <20210910144442.GD4474@sirena.org.uk>
+References: <20210908113450.788452-1-tanureal@opensource.cirrus.com>
+ <20210908113450.788452-4-tanureal@opensource.cirrus.com>
+ <20210908123734.GF4112@sirena.org.uk>
+ <7dc20785-95da-6599-49dc-8e5f805d6a14@opensource.cirrus.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fOHHtNG4YXGJ0yqR"
 Content-Disposition: inline
-In-Reply-To: <790250e3-a928-57d4-1378-bc8923163452@opensource.cirrus.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: EWhzBsSsU4K3t9naDZjM4lvSNVFx_5_Q
-X-Proofpoint-ORIG-GUID: EWhzBsSsU4K3t9naDZjM4lvSNVFx_5_Q
-X-Proofpoint-Spam-Reason: safe
+In-Reply-To: <7dc20785-95da-6599-49dc-8e5f805d6a14@opensource.cirrus.com>
+X-Cookie: You are standing on my toes.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Sep 10, 2021 at 02:47:32PM +0100, Lucas tanure wrote:
-> On 9/10/21 1:42 PM, Charles Keepax wrote:
-> >On Fri, Sep 10, 2021 at 12:15:29PM +0100, Lucas Tanure wrote:
-> >>Return from a write-only transfer without waiting for
-> >>it to finish
-> >>But wait before a new transfer as the previous may
-> >>still happening and also wait before reading the data
-> >>from the FIFO
-> >>
-> >>Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
-> >>---
-> >>  static int amd_spi_master_setup(struct spi_device *spi)
-> >>@@ -178,6 +185,7 @@ static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
-> >>  			amd_spi_clear_fifo_ptr(amd_spi);
-> >>  			/* Execute command */
-> >>  			amd_spi_execute_opcode(amd_spi);
-> >>+			amd_spi_busy_wait(amd_spi);
-> >
-> >Surely the previous transfer can't still be happening if this if
-> >unconditional? Should this not be gated on rx_len?
-> >
-> >Thanks,
-> >Charles
-> >
-> >>  			/* Read data from FIFO to receive buffer  */
-> >>  			for (i = 0; i < rx_len; i++)
-> >>  				buf[i] = amd_spi_readreg8(amd_spi, AMD_SPI_FIFO_BASE + tx_len + i);
-> >>-- 
-> >>2.33.0
-> >>
-> This is executed inside an xfer->rx_buf not null if, so it`s gated
-> in a read transfer and not for a write transfer only
-> 
 
-And so it is, sorry should have looked at more than just the git
-context there.
+--fOHHtNG4YXGJ0yqR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reviewed-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+On Thu, Sep 09, 2021 at 11:51:21AM +0100, Lucas tanure wrote:
+> On 9/8/21 1:37 PM, Mark Brown wrote:
+> > On Wed, Sep 08, 2021 at 12:34:44PM +0100, Lucas Tanure wrote:
+> > > Some controllers can't write to the bus after a read without
+> > > releasing the chip select, so add flag and a check in spi core
 
-Thanks,
-Charles
+> > Nothing you've added ever reads this flag and I'm not sure what anything
+> > would be able to constructively do with it so why add the flag?  I don't
+> > understand what the use case is.
+
+> __spi_validate checks this flag and makes sure the message can be received
+> by the controller.
+> __spi_validate can't fix the message, so it only rejects the message.
+
+Given that this is hardware that can't possibly work how useful is that
+validation?  It's a fairly unusual thing for devices to do in the first
+place, only applies if using the native chip select (which your patch
+doesn't check for) and I am not sure that this is a general enough
+pattern in controllers to have generic support for.  I suspect that a
+lot of controllers with similar restrictions will be even more limited
+than this, for example only supporting one or two transfers with limits
+on the data, so it's not clear to me how useful this capability would
+be.
+
+--fOHHtNG4YXGJ0yqR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmE7b1oACgkQJNaLcl1U
+h9DXGwf+NsQSSeNthNc4XvpJJN66EDXpfaBT1ScTmJnD8QVkQ+UvQljH7GTtifpI
+Kf0BUk0eqjnfQGH71oS3r+FsaX6vtY6CJ33LjEunROl/wXvR4t799e7Ei/SOdTPe
+zjAJsFtMob2hXToXGztubOvxIC4HnGUC7SrshUtO2dF4GG5ypAEsNBposfCbHcms
+XtJaHpR4ULFC35BcSNNf4T4rEpXd71j+bqy5qX13uHc5xtK7BsyCvIY3Ys3HEaOJ
+lHDHG9znRZAdQ3UcWDQV1rTVB/+2wpQwtlq+CvfrqCTpNnK2hbVN81gOW8fFx9jq
+tZbGgYIJ8sCUHDR3FmF9I6Jli+/c2g==
+=0dk3
+-----END PGP SIGNATURE-----
+
+--fOHHtNG4YXGJ0yqR--
