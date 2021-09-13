@@ -2,227 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17CE940892C
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Sep 2021 12:38:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A7740896D
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Sep 2021 12:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239185AbhIMKjM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 Sep 2021 06:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239033AbhIMKjK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Sep 2021 06:39:10 -0400
-Received: from lb2-smtp-cloud7.xs4all.net (lb2-smtp-cloud7.xs4all.net [IPv6:2001:888:0:108::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8310C061574;
-        Mon, 13 Sep 2021 03:37:52 -0700 (PDT)
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id PjLTmYAZ2pQdWPjLUm2WW1; Mon, 13 Sep 2021 12:37:52 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1631529472; bh=HwcwZOckR6uo2ELf6S9P6ET08CoHQZG30MzfynjPP1Y=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=MCo+PzmKRi0SRrGtOM416IzQJO6AITQ9txiJczYZUT2j1PLalRU5sK8brIPH68/BR
-         B3lcGsKHyhVPUUqtDzn17BIpuZKLYersfu6bK+ej4ovGjl5ezSmiN7ZRhCy46TAkJV
-         RKkBNmtqCBhL/53Xyhi6PBCAAw2Nx/ZNiPdnyCLll9Zce0gKMhDyxm4ktoP3m04jbC
-         03y6FOJQJwSWHwtax2zsZOz/Vft7XxEbjTc5n23eR13MHr7YH7kNrbK76lhbF8QW3p
-         9Xm4EWH0dpVZE6WlSc6DMQmOibPuklbGJ+jHvg+newaIYoFnFcJLSPOqfxVEnhkG9A
-         lvwHvL3X9CS1Q==
-Subject: Re: [PATCH v11 24/34] media: staging: tegra-vde: Support generic
- power domain
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20210912200832.12312-1-digetx@gmail.com>
- <20210912200832.12312-25-digetx@gmail.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <77d205ef-469d-cfa3-f742-b009b2b05992@xs4all.nl>
-Date:   Mon, 13 Sep 2021 12:37:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S238690AbhIMKzb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 Sep 2021 06:55:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51122 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238223AbhIMKz3 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 13 Sep 2021 06:55:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 01F5561004;
+        Mon, 13 Sep 2021 10:54:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631530453;
+        bh=dIYTnI73qGqPtN3DyGN5x/Fohi8Aer6EGEqC7QYbie4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=IOjTgIvXuEcBrCPuWNBh66nE/mt9TBtE2qUR3Zpgnrc7aewO/PK2aYsI9BfYgIOnM
+         qHeLe3Mxn4Dexha3ygrptmFjir7HyGUJWMfwpulk7ZUBgd1GtjZVLrFJrpiIFXflbR
+         s3u/OSeTQN9DzS20vx38h0tZHvHctaLV8OfLasuCAzGrOkXxdZlCy+m22kDJt/6rb1
+         KLXTfgY3WC5C/ED8adEYJD+Pcpm5MlGVier3WvVjiTXl79H7zx0S6UNFCRbR9GXHd6
+         HaE1RuWgBKGLxPIpkULValX2xPEpfewRGbsVT5f1qnxjG3zfAFX5LqMR2tFtHZkd3+
+         xiRquiG6lm2zQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Sanjay R Mehta <sanju.mehta@amd.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+Subject: Re: [PATCH 1/4] spi: amd: Refactor code to use less spi_master_get_devdata
+Date:   Mon, 13 Sep 2021 11:53:06 +0100
+Message-Id: <163153017122.45927.15918447354098819726.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210909111005.304101-1-tanureal@opensource.cirrus.com>
+References: <20210909111005.304101-1-tanureal@opensource.cirrus.com>
 MIME-Version: 1.0
-In-Reply-To: <20210912200832.12312-25-digetx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfC0UR8EPsGu9scFXo/XyGQ+zclz4oYZK7ebAu7LkFSvn1ZSZql+X7aMfNk2HSIv/6FmtrmYKiCEiTasQtOArrwJIB9K/cvmo41OrNVaccz9t4pz4xFSP
- j4RW9XR1UXUNkZjiB50fmOTEVHWZQEEL0LCboGmfgPr5tPA1jHo+Fuobmb+0K/MLvwhlRfiHLXPOigMyMug4DAUy9DCMyYAMmHUGJHv08xsy7IjWw38ZjMxo
- aw3wUIyWLem1d/zZmaf0LubaeQEZUwSFtGIFmi2F++I5O/GnY6GkKzmSCgXAmFtLzjbSwYUQcEkSadgl1N7ZZVdyjkKvJJ0aYYeoMQSEFJa2Ep+OIUZDntf6
- P0TpfOPh+oHT4OaPgd5wX0Ui1jmXaNQKW7aiar3zaCLkiYfmnX+F0vULqbIoZ6Ijdo2bKxDHce1DUd2BDXddvwEDjjcvmwNJfaoskXKVJRBqdLmaxUjUx/V/
- 09sbugSxdQhoVzwFzLT3DKHkZy+ewtdafWnzzxHv+4stixNxPyyAI2h9as2uXoPgPxclbWBSsYP7l1szZCwtKGYT00s5EQOcBeWGELKehjEPZU7UIzo4bx5t
- XspkFLAEM2gYpZFyIvFS0wY3UCtb68z5Upk6evtPpZgIKEGtBIR0GgSrn7PajKK7ZSa59x+FBQCKHR7D/w+1WFcdtzWbiWZOPpgBrSmqc5/wwoyS/xNwqSXF
- BHINYcJu8Lxzm6X6B3Wp4XpYRHwQpR9JFJbMR3ymDzApxAEXHL9uemBkl0o1h+BGgsC5F6aokDy9tX4L8IDLFBHNYT2Pwvd9HUCEeoNPS5jx3YXabGxXfyrQ
- 3lGRLo/HkRWNr7PLHtJZ77cSpQDrR1R8NmTfiJxEgg6UzcAvgVLxfI1g38BX4vUe9ce3WZipyz82IsYvAd0E8qEeYNBf9cQqiSeduAEs0J8jFmDQMF/bnM8z
- oWi6YfJ+OqDe8iZ4iXmiBCynBsD9Pj/M4Dr61pK7Za58Lls8qeutMD/e4s56bLQcns/C35b1daKF009MnInB6c47cKlaoofOh8sc48nwDtnjAt+BGY6mbExF
- IL2eHWyz5KtrWh9bHowFYh63JcVKotwFmpQvQS5tfc/TOmUHpsuFEof+PXhXy3lLgluHHHaxnVE4rlKDqdQrJ7o8l2UjrEt9sudgUNRzDBKqKaIFDZUhe1R9
- Vhd0WP8g6IGkYe28njn8Mx/bA9RWRZFruTXvFVTegHNR4Ei/fa7tFwYD0ocofy0eAHQz5WooS/WLrsh/CJH+pSHt5I98Ogi2Ahridm3lxQF/JsQi+G8N54Cd
- hQtFam3Yh78FeXR5vuY6rDO4iey1wjaobPOJepuclTuligKEfwZaFmsF1+QE5Dg/h7h6wtbe1VhmaUAmLnObMknumKX2VDfPdRJIBlr8yRolNNpw2M8qIZi9
- 0DND+x88qIRDteuXO11Vz6gw6Zo8nTyoyKWBuw==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 12/09/2021 22:08, Dmitry Osipenko wrote:
-> Currently driver supports legacy power domain API, this patch adds generic
-> power domain support. This allows us to utilize a modern GENPD API for
-> newer device-trees.
+On Thu, 9 Sep 2021 12:10:02 +0100, Lucas Tanure wrote:
+> Get master data in the start and then just use struct amd_spi
+> as it has the needed variable
 > 
-> Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
-> Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
-> Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
-> Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-
-Regards,
-
-	Hans
-
-> ---
->  drivers/staging/media/tegra-vde/vde.c | 57 +++++++++++++++++++++------
->  1 file changed, 46 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/staging/media/tegra-vde/vde.c b/drivers/staging/media/tegra-vde/vde.c
-> index ed4c1250b303..bb3079a2c0b5 100644
-> --- a/drivers/staging/media/tegra-vde/vde.c
-> +++ b/drivers/staging/media/tegra-vde/vde.c
-> @@ -20,6 +20,7 @@
->  #include <linux/slab.h>
->  #include <linux/uaccess.h>
->  
-> +#include <soc/tegra/common.h>
->  #include <soc/tegra/pmc.h>
->  
->  #include "uapi.h"
-> @@ -920,13 +921,17 @@ static __maybe_unused int tegra_vde_runtime_suspend(struct device *dev)
->  	struct tegra_vde *vde = dev_get_drvdata(dev);
->  	int err;
->  
-> -	err = tegra_powergate_power_off(TEGRA_POWERGATE_VDEC);
-> -	if (err) {
-> -		dev_err(dev, "Failed to power down HW: %d\n", err);
-> -		return err;
-> +	if (!dev->pm_domain) {
-> +		err = tegra_powergate_power_off(TEGRA_POWERGATE_VDEC);
-> +		if (err) {
-> +			dev_err(dev, "Failed to power down HW: %d\n", err);
-> +			return err;
-> +		}
->  	}
->  
->  	clk_disable_unprepare(vde->clk);
-> +	reset_control_release(vde->rst);
-> +	reset_control_release(vde->rst_mc);
->  
->  	return 0;
->  }
-> @@ -936,14 +941,41 @@ static __maybe_unused int tegra_vde_runtime_resume(struct device *dev)
->  	struct tegra_vde *vde = dev_get_drvdata(dev);
->  	int err;
->  
-> -	err = tegra_powergate_sequence_power_up(TEGRA_POWERGATE_VDEC,
-> -						vde->clk, vde->rst);
-> +	err = reset_control_acquire(vde->rst_mc);
->  	if (err) {
-> -		dev_err(dev, "Failed to power up HW : %d\n", err);
-> +		dev_err(dev, "Failed to acquire mc reset: %d\n", err);
->  		return err;
->  	}
->  
-> +	err = reset_control_acquire(vde->rst);
-> +	if (err) {
-> +		dev_err(dev, "Failed to acquire reset: %d\n", err);
-> +		goto release_mc_reset;
-> +	}
-> +
-> +	if (!dev->pm_domain) {
-> +		err = tegra_powergate_sequence_power_up(TEGRA_POWERGATE_VDEC,
-> +							vde->clk, vde->rst);
-> +		if (err) {
-> +			dev_err(dev, "Failed to power up HW : %d\n", err);
-> +			goto release_reset;
-> +		}
-> +	}
-> +
-> +	err = clk_prepare_enable(vde->clk);
-> +	if (err) {
-> +		dev_err(dev, "Failed to enable clock: %d\n", err);
-> +		goto release_reset;
-> +	}
-> +
->  	return 0;
-> +
-> +release_reset:
-> +	reset_control_release(vde->rst);
-> +release_mc_reset:
-> +	reset_control_release(vde->rst_mc);
-> +
-> +	return err;
->  }
->  
->  static int tegra_vde_probe(struct platform_device *pdev)
-> @@ -1001,14 +1033,14 @@ static int tegra_vde_probe(struct platform_device *pdev)
->  		return err;
->  	}
->  
-> -	vde->rst = devm_reset_control_get(dev, NULL);
-> +	vde->rst = devm_reset_control_get_exclusive_released(dev, NULL);
->  	if (IS_ERR(vde->rst)) {
->  		err = PTR_ERR(vde->rst);
->  		dev_err(dev, "Could not get VDE reset %d\n", err);
->  		return err;
->  	}
->  
-> -	vde->rst_mc = devm_reset_control_get_optional(dev, "mc");
-> +	vde->rst_mc = devm_reset_control_get_optional_exclusive_released(dev, "mc");
->  	if (IS_ERR(vde->rst_mc)) {
->  		err = PTR_ERR(vde->rst_mc);
->  		dev_err(dev, "Could not get MC reset %d\n", err);
-> @@ -1066,6 +1098,10 @@ static int tegra_vde_probe(struct platform_device *pdev)
->  	pm_runtime_use_autosuspend(dev);
->  	pm_runtime_set_autosuspend_delay(dev, 300);
->  
-> +	err = devm_tegra_core_dev_init_opp_table_common(dev);
-> +	if (err)
-> +		goto err_pm_runtime;
-> +
->  	/*
->  	 * VDE partition may be left ON after bootloader, hence let's
->  	 * power-cycle it in order to put hardware into a predictable lower
-> @@ -1133,8 +1169,7 @@ static void tegra_vde_shutdown(struct platform_device *pdev)
->  	 * On some devices bootloader isn't ready to a power-gated VDE on
->  	 * a warm-reboot, machine will hang in that case.
->  	 */
-> -	if (pm_runtime_status_suspended(&pdev->dev))
-> -		tegra_vde_runtime_resume(&pdev->dev);
-> +	pm_runtime_get_sync(&pdev->dev);
->  }
->  
->  static __maybe_unused int tegra_vde_pm_suspend(struct device *dev)
 > 
 
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/4] spi: amd: Refactor code to use less spi_master_get_devdata
+      commit: ca8e8a18272e7b57b62db5db8fcf1f5218b89a98
+[2/4] spi: amd: Refactor amd_spi_busy_wait
+      commit: 356b02f9ec3a7304d6c54c4df20cd37b0a22021e
+[3/4] spi: amd: Remove unneeded variable
+      commit: 3b02d2890bc5eb974346cc287e1732f62a096598
+[4/4] spi: amd: Check for idle bus before execute opcode
+      (no commit info)
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
