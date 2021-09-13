@@ -2,87 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E003E408AAE
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Sep 2021 14:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 356BD408AB6
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Sep 2021 14:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239813AbhIMMG2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 Sep 2021 08:06:28 -0400
-Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:33230 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236405AbhIMMGX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Sep 2021 08:06:23 -0400
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-        by mx0a-0014ca01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18D9wFvA028735;
-        Mon, 13 Sep 2021 05:05:05 -0700
+        id S236695AbhIMMIA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 Sep 2021 08:08:00 -0400
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:60214 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S235453AbhIMMIA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Sep 2021 08:08:00 -0400
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18DBr5xP031375;
+        Mon, 13 Sep 2021 05:06:40 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=proofpoint;
- bh=A7HG93yzh5ciNOR7CTZmj6Ndd9NcyfozcOdYROabXPo=;
- b=tP5RI35vX8osk5IFIqnPaggp7Yx5WA92+FkJMVYXHnla9n/yMCZ8clM30YES55pWWSgT
- N3jw/Lf0INyMdApiEl+XXNENKIkE9g12JSXV082C9kJ4XDoKFBNbmljfPKF/YYMMGhFC
- jBQVLALl6T8GNhe+j5z7lANdkUTZDNsxTnSYgkusM/7aTL3zRnR0YTaz9tHkh3fmmo4f
- YlKPi8qC5C5D1ze0GzJJfowVJAlGARUn7RjVos8qMdx2Tpbyi+kfcFzYXJNs9ltvKt8W
- OMK+P3V4KmLuzTfOczMyfcJ6YB0UkcGyAEk8AxTsucmrYkTBf+mwus54ZhnMUZeeO5EV jg== 
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2106.outbound.protection.outlook.com [104.47.58.106])
-        by mx0a-0014ca01.pphosted.com with ESMTP id 3b1hnetd7q-1
+ bh=QY5AHULZ6WWerrOsMtykYCc+sYA0QZDAqiuKTOOAHjE=;
+ b=U9oxjGazNQDUnqB5iSNvZ3a7OzZFJdqlz7PFsr57jKoE2fESo8qnofP9TCVCKKtXLDUh
+ c8HKebSR7Ll5G62uNgHaWMEJC7IApZvSKf4Scmwco7+wdlRXsiswTLX3bRYf+djVzRL2
+ eNqvDUvSDNIJ3MP/8vNQx3Ct+vc6twfl+W/Z0SCd9PlDbJa3o2E6Qkc3Jv0kKTBdRVkn
+ Wy0tZr9Rz+OEn2n+Y0c3qHSkh5RCGrSX2w7NWcU1r+lF6WC3BxLkqOG4jTY7Mh/cqMpl
+ byzIoVPUZ95DXlOQFpOwx9NDX15UoEWUepRwzOjWj5lVrKVAwk4tRmS7vLw2FzGFXExK Og== 
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2103.outbound.protection.outlook.com [104.47.58.103])
+        by mx0b-0014ca01.pphosted.com with ESMTP id 3b1mqft4nu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Sep 2021 05:05:04 -0700
+        Mon, 13 Sep 2021 05:06:40 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PmxnYvDEdKlQ/Wh0cQhUpbWHLPJxMylcYyJzOhFQ5d0ZK6fux1W//t7LrX6o0ObgImgTNQ7HjTy3ljqkEnXffi82C64YWkXKbUEIqIsicyXQRMsmuN08Jzu1niw0vFPEtlW0MZBvfDxgcnhnU8Kd6YGEgqMRbGHE4uqtZprQv8HSlQEDLRVzCwvjewdA/E3DUq+y1d2t7QlMeKN20MZ0QKq2141eNuKCOjVtXwNtvEG7I3cUSiVZTNMQfwipBLEHhohCAvuK+NbacYVP92o4YrghafkPy4UjR16hcrrxtuYeiAi/9kF+dgUQdiIoy24qLV7zSYZXGS/LM6Uskq2WSg==
+ b=SoE3Gh/EISechFcJN/s8/nm+jEOWuT70JaGudpMR17pRiml38H2Cqr7693VIfj+YYYQYTYELxYjFjUTBO6NTT5OkY1SXynmHvHaKgEGrlq5s0TNxxrXk0hUkFuacAC11FCBF6Yloxo5/1MWTlo/oSJqA/3ia60pMufMkgFq/xAqaLR/9VmwIDQiZrj4OQyBt90PrD91CHMhBS65Je3N7VeiuZqtp8lWngOmk9K6ku3J3WI3Hj+hgvb8lP9z1O828MF81fL6wZuWk7gtUcXLhAa5uQTa7c5wl1h0omadjs4dXbljeb1xwC+mBg5fju+uu4Gjcn8CRhmslIJptIoyu9w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=A7HG93yzh5ciNOR7CTZmj6Ndd9NcyfozcOdYROabXPo=;
- b=C2PYr6uCkAgu+j0HwtO7FmUZem5nvxIfB1z1fwFWMaD9B/InnUI9/ad3MksXo5+QLKnsum+7wnkWHOD+7DyEXJXlLUfY3TzfD+1BHbe6ApX7IBHTUttkfgPD7hf17RLCvABOocAi50T2TQaztw9D3wnOG+tncqFGHmfu5NBqxzzqUwe0lohRXECzoQxEFjTynHyBOk02+9c+RpdPZvg02rySMjT6PsdxzFy6D7y2gKPJ7uxH6emDZ//9Ekrzhs9FP5QtvP7udPn3OR/M+DP80GDODGmjuTnN7O7RvgFg0Vjpz0jv0E4/7IzXCPG7/fFilc8J4CMe5ua3qmz8WinMDg==
+ bh=QY5AHULZ6WWerrOsMtykYCc+sYA0QZDAqiuKTOOAHjE=;
+ b=bANqHTGhqAFj/CfpEhaLDVtJ5t17MTYg0oGBF/s7iKiUQtOE4YahFUS6st2e9MbwDMFo64/cGbuWIDbak8+uBUPksYKivXh2kXGdkdl2Cj19Fxvm29FR8tIdTxiD/5xysga52kf1E8DM3Qc7yXWiRG/IFVp0GH3wZkMfPmKwdgAzevdf9nB3lnxVbEVLMHvia7NuHTXoy06IgJ3VfCzzcd93nWiMmKB0w5qr77IPVz7NMEMCjtamV81VRUEEhgoUa7bc5LgnkJJJgyRTakCxZf0NfWR64+SwU/Y0/u/zVdlVOoXhXeWbWlggAb0IxAY8aiCTn2p/Qlk2CeI4+PXweQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 199.43.4.23) smtp.rcpttodomain=ti.com smtp.mailfrom=cadence.com; dmarc=pass
+ 158.140.1.147) smtp.rcpttodomain=ti.com smtp.mailfrom=cadence.com; dmarc=pass
  (p=none sp=none pct=100) action=none header.from=cadence.com; dkim=none
  (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A7HG93yzh5ciNOR7CTZmj6Ndd9NcyfozcOdYROabXPo=;
- b=mRZrAyvsEQoTMlKghLoR1mPhRyP3KtYx2tbh2FCgppOCXfpdwdWkhckuRUSbHQ5jZjYl2HB8QkyRP4Ow/gfLkBujxKs6k16tkml9PqEEpIC71hk9CwBqbBQlNBTVhqBDb60V7yPZOMVtPGf3Yo6eax177ieCKIuzGCxVapzjzmI=
-Received: from CO2PR04CA0123.namprd04.prod.outlook.com (2603:10b6:104:7::25)
- by MN2PR07MB6927.namprd07.prod.outlook.com (2603:10b6:208:1a9::10) with
+ bh=QY5AHULZ6WWerrOsMtykYCc+sYA0QZDAqiuKTOOAHjE=;
+ b=KyOkxS7FKC8Onw+iyaaGtQ+gFwBciBNB7LbKOlB1UzH9Bm1zYsd+u5JixD72GKFTTPFc0dy/Tw5WPZhE5+dmVuAzJPTSSuOzEUFRIDOi3v1Tk0cGjXjCt0EjaUeqmLqlbD+1W1//qQEYkawy0olxDK4X01DGriFDqNeztSBjo2E=
+Received: from MW4PR04CA0233.namprd04.prod.outlook.com (2603:10b6:303:87::28)
+ by SN6PR07MB4576.namprd07.prod.outlook.com (2603:10b6:805:5f::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.17; Mon, 13 Sep
- 2021 12:05:01 +0000
-Received: from MW2NAM12FT045.eop-nam12.prod.protection.outlook.com
- (2603:10b6:104:7:cafe::7e) by CO2PR04CA0123.outlook.office365.com
- (2603:10b6:104:7::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14; Mon, 13 Sep
+ 2021 12:06:37 +0000
+Received: from MW2NAM12FT040.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:303:87:cafe::f) by MW4PR04CA0233.outlook.office365.com
+ (2603:10b6:303:87::28) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14 via Frontend
- Transport; Mon, 13 Sep 2021 12:05:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 199.43.4.23)
+ Transport; Mon, 13 Sep 2021 12:06:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.147)
  smtp.mailfrom=cadence.com; ti.com; dkim=none (message not signed)
  header.d=none;ti.com; dmarc=pass action=none header.from=cadence.com;
 Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 199.43.4.23 as permitted sender) receiver=protection.outlook.com;
- client-ip=199.43.4.23; helo=rmmaillnx1.cadence.com;
-Received: from rmmaillnx1.cadence.com (199.43.4.23) by
- MW2NAM12FT045.mail.protection.outlook.com (10.13.181.12) with Microsoft SMTP
+ 158.140.1.147 as permitted sender) receiver=protection.outlook.com;
+ client-ip=158.140.1.147; helo=sjmaillnx1.cadence.com;
+Received: from sjmaillnx1.cadence.com (158.140.1.147) by
+ MW2NAM12FT040.mail.protection.outlook.com (10.13.180.228) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4523.8 via Frontend Transport; Mon, 13 Sep 2021 12:05:01 +0000
+ 15.20.4523.8 via Frontend Transport; Mon, 13 Sep 2021 12:06:36 +0000
 Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
-        by rmmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 18DC4wA9006934
+        by sjmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 18DC6Y3F024649
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Sep 2021 08:04:59 -0400
+        Mon, 13 Sep 2021 05:06:35 -0700
 X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
-Received: from maileu5.global.cadence.com (10.160.110.202) by
+Received: from maileu4.global.cadence.com (10.160.110.201) by
  maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 13 Sep 2021 14:04:58 +0200
+ 15.0.1497.2; Mon, 13 Sep 2021 14:06:21 +0200
 Received: from maileu3.global.cadence.com (10.160.88.99) by
- maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
+ maileu4.global.cadence.com (10.160.110.201) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2176.2; Mon, 13 Sep 2021 14:04:45 +0200
+ 15.1.2176.2; Mon, 13 Sep 2021 14:06:21 +0200
 Received: from vleu-orange.cadence.com (10.160.88.83) by
  maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Mon, 13 Sep 2021 14:04:45 +0200
+ 15.0.1497.2 via Frontend Transport; Mon, 13 Sep 2021 14:06:21 +0200
 Received: from vleu-orange.cadence.com (localhost.localdomain [127.0.0.1])
-        by vleu-orange.cadence.com (8.14.4/8.14.4) with ESMTP id 18DC4j9L008309;
-        Mon, 13 Sep 2021 14:04:45 +0200
+        by vleu-orange.cadence.com (8.14.4/8.14.4) with ESMTP id 18DC6Lra008408;
+        Mon, 13 Sep 2021 14:06:21 +0200
 Received: (from pthombar@localhost)
-        by vleu-orange.cadence.com (8.14.4/8.14.4/Submit) id 18DC4jcL008308;
-        Mon, 13 Sep 2021 14:04:45 +0200
+        by vleu-orange.cadence.com (8.14.4/8.14.4/Submit) id 18DC6KjV008407;
+        Mon, 13 Sep 2021 14:06:20 +0200
 From:   Parshuram Thombare <pthombar@cadence.com>
 To:     <broonie@kernel.org>, <lukas@wunner.de>, <p.yadav@ti.com>,
         <robh+dt@kernel.org>
@@ -90,9 +90,9 @@ CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <jpawar@cadence.com>,
         <mparab@cadence.com>, Parshuram Thombare <pthombar@cadence.com>,
         Konrad Kociolek <konrad@cadence.com>
-Subject: [PATCH v4 1/2] spi: cadence: add dt-bindings documentation for Cadence XSPI controller
-Date:   Mon, 13 Sep 2021 14:04:44 +0200
-Message-ID: <1631534684-8273-1-git-send-email-pthombar@cadence.com>
+Subject: [PATCH v4 2/2] spi: cadence: add support for Cadence XSPI controller
+Date:   Mon, 13 Sep 2021 14:06:19 +0200
+Message-ID: <1631534779-8371-1-git-send-email-pthombar@cadence.com>
 X-Mailer: git-send-email 2.2.2
 In-Reply-To: <1631534558-8102-1-git-send-email-pthombar@cadence.com>
 References: <1631534558-8102-1-git-send-email-pthombar@cadence.com>
@@ -101,132 +101,742 @@ Content-Type: text/plain
 X-OrganizationHeadersPreserved: maileu3.global.cadence.com
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c71bceb7-ffd3-46a1-51fd-08d976aeb6ce
-X-MS-TrafficTypeDiagnostic: MN2PR07MB6927:
-X-Microsoft-Antispam-PRVS: <MN2PR07MB6927E4AD7EE1AE9D7233ABB7C1D99@MN2PR07MB6927.namprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-MS-Office365-Filtering-Correlation-Id: 8756068a-7fb1-46ff-1a62-08d976aeefcb
+X-MS-TrafficTypeDiagnostic: SN6PR07MB4576:
+X-Microsoft-Antispam-PRVS: <SN6PR07MB45767BAEB0EAEF469722953DC1D99@SN6PR07MB4576.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6eQeLR39fmYUx6D0z4oHqSBkBqnglByM6DKrvHmtGoxObLXNeoJfJ8okykwNxQtLX2eJsQO7jWah0jbPH8BMyuc6R69zR5shfxP/SEGhlaPcwg0AkNNbzgJcNsW+f0SwJGRYkhR3FKwyRqSjVlFp48GKeN06BBS1HrCgNbDwvFabGA1xK7V2Nlc9wuoGiGYNSvNjqPa+vvh9KbeJoJsFThTuFvDOYQmawOP1NVBDU2+b0jYkA0RcsZ+J6yJZC1q/Mi5MSjKaBCZodKh1OAhU6vV+u2IDH3G0e4qotjJK6pLOxJYOGb/ntnMrVMXHkMLPUJBl/p9Pb3yKFiT26DzVjcyzEaQ56PHdag2RsXgIxTSYgJwiEAK5n26xF1bI9XxqptPC0VO5F6/3+eNMI/kY/IzdBHpaTLoFQS+Fmw7rF8MGszl4kAj9nOjZZQYBdncb4VCkLpDCuFSAhZ1QJ3poIE+Mx0/ChQBvi/u4esdg6RsWoutylhW9YM7Us7z/tQ0HwNuyvec09fj5V0H/NJ0PPB4pa66Et//pHcv8+IkkkGbd24dVyRH0iU1peD8l54ShO0kwYpnSXpMB5waCS2RpazYaKnskfcz0KvfqVhyPXIr2lJQvApPjxv5t05SzNKUewufzuPYccNoie8bpyH/kLStcLnG04HpxlhIVGcZSn0LxI6Q6q1wTkNXR+MJ9FExs2eUOWf43qCdBpJ+VXZO2N5Kyv6jR6bL5pBy5VNe3eRpgEfiKUfLMxfUC2D7viNzDAJ3U+6nZhwM/Yxbbt4PjBXUw0Gmcdihq8GP51lvvJPbfwuONhpnX/RdSmTsLS5kJMPa8UqpkSlOhS4P/tlFvNvpzuNVla22pNMHNDdTfsc8=
-X-Forefront-Antispam-Report: CIP:199.43.4.23;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:rmmaillnx1.cadence.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(39860400002)(136003)(376002)(396003)(346002)(36092001)(46966006)(36840700001)(70206006)(316002)(54906003)(70586007)(5660300002)(336012)(36906005)(36860700001)(81166007)(426003)(42186006)(2906002)(4326008)(356005)(82740400003)(2616005)(82310400003)(86362001)(36756003)(47076005)(107886003)(26005)(8676002)(83380400001)(186003)(8936002)(110136005)(478600001)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: AikHDYw/t5PFitejDSn3MV6qxD6iUiqBmNDSrb/P+2S5MvaHkDYo0ZmGxoTJ2nSLwHxNnIAaxgeYEF4rkNp0khWnJS9S/MmtuI57YJX7olxFByQEVPvPMMaQd7hPGVwPwBt/XJ/ykkLVA4X5ARa2Y67EZnf2Ysh89c/ldjgZjFFB0lBHyyctWn44Oftm01FbL62j8mxvkXqOYTLMhb0565lkvzTX+I7El8ogek94spJ0kjfsT2TWiT8f4kCgLEwRymghhcAjbYMQ7OpaQuQATIJ7YXkQXF43igQHmovbpymfcfDH6bWQuGlm+Ys2OEFXzM1CICht4nJ6OJyDYhuwJ6Yi7XzA7L/Q8KUUeAHlX3azRe2ZmfoAyOJheOCv6pKQ3Hz9o+3BdOz1S7q+IruuvXLv8ZyP6uqIMnAgQhlaaY2Ci3tUjGerfPk1vwfaobvUcHF1k9Oixmd3WbcsmsqFQXk0AlQe49JQUWqkT2iCbZQiUrUYscjh064T/GH5lFBNHXARPzVw02OjxllNl6YQuWDy0TTKMB9idc61RHdz+ivEH66grUAr/mYv33r2D17InVz2nClwgQ3hnozLxLSDp2IJcDEZi3I5k56ZyuQIzzzopgAwA5tsRJ+KLhwCj0ThVxg0WakdMumTjEahFtqsfUV8Al1Kh9dcyGjAzNRDSiJ/kvn94QuBoS4YMIP44Vlg/j0uLDuhm0bVynPhBe1rf7axsKzMSIAexrY4qVPIG0Y=
+X-Forefront-Antispam-Report: CIP:158.140.1.147;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx1.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(4636009)(36092001)(46966006)(36840700001)(186003)(36906005)(26005)(70586007)(8936002)(30864003)(356005)(82310400003)(110136005)(7636003)(42186006)(316002)(36860700001)(8676002)(36756003)(47076005)(54906003)(70206006)(4326008)(2906002)(107886003)(83380400001)(5660300002)(426003)(336012)(86362001)(508600001)(2616005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2021 12:05:01.1528
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2021 12:06:36.8274
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c71bceb7-ffd3-46a1-51fd-08d976aeb6ce
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8756068a-7fb1-46ff-1a62-08d976aeefcb
 X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[199.43.4.23];Helo=[rmmaillnx1.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: MW2NAM12FT045.eop-nam12.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.147];Helo=[sjmaillnx1.cadence.com]
+X-MS-Exchange-CrossTenant-AuthSource: MW2NAM12FT040.eop-nam12.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR07MB6927
-X-Proofpoint-GUID: Hw89rjU1IQl6seV8DIR1cybwy6ByR16h
-X-Proofpoint-ORIG-GUID: Hw89rjU1IQl6seV8DIR1cybwy6ByR16h
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR07MB4576
+X-Proofpoint-ORIG-GUID: TYOiXPQ6TCgFW2bcN27GRZbZCdDFvhQy
+X-Proofpoint-GUID: TYOiXPQ6TCgFW2bcN27GRZbZCdDFvhQy
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-13_04,2021-09-09_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 clxscore=1015
- mlxscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 mlxlogscore=984 phishscore=0 suspectscore=0 spamscore=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 malwarescore=0
+ suspectscore=0 phishscore=0 spamscore=0 clxscore=1015 priorityscore=1501
+ mlxscore=0 mlxlogscore=999 impostorscore=0 lowpriorityscore=0 bulkscore=0
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2109030001 definitions=main-2109130081
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add DT binding for Cadence's XSPI controller driver.
+This patch adds driver for Cadence's XSPI controller.
+It supports 3 work modes.
+1. ACMD (auto command) work mode
+    ACMD name is because it uses auto command engine in the controller.
+    It further has 2 modes PIO and CDMA (command DMA).
+    The CDMA work mode is dedicated for high-performance application
+    where very low software overhead is required. In this mode the
+    Command Engine is programmed by the series of linked descriptors
+    stored in system memory. These descriptors provide commands to execute
+    and store status information for finished commands.
+    The PIO mode work mode is dedicated for single operation where
+    constructing a linked list of descriptors would require too
+    much effort.
+2. STIG (Software Triggered Instruction Generator) work mode
+    In STIG mode, controller sends low-level instructions to memory.
+    Each instruction is 128-bit width. There is special instruction
+    DataSequence which carries information about data phase.
+    Driver uses Slave DMA interface to transfer data as only this
+    interface can be used in STIG work mode.
+3. Direct work mode
+    This work mode allows sending data without invoking any command through
+    the slave interface.
+Currently only STIG work mode is enabled, remaining work modes will
+be added later.
 
 Signed-off-by: Konrad Kociolek <konrad@cadence.com>
 Signed-off-by: Jayshri Pawar <jpawar@cadence.com>
 Signed-off-by: Parshuram Thombare <pthombar@cadence.com>
 ---
- .../devicetree/bindings/spi/cdns,xspi.yaml         | 77 ++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/spi/cdns,xspi.yaml
+ drivers/spi/Kconfig            |  12 +
+ drivers/spi/Makefile           |   1 +
+ drivers/spi/spi-cadence-xspi.c | 627 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 640 insertions(+)
+ create mode 100644 drivers/spi/spi-cadence-xspi.c
 
-diff --git a/Documentation/devicetree/bindings/spi/cdns,xspi.yaml b/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index e71a4c5..9374639 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -228,6 +228,18 @@ config SPI_CADENCE_QUADSPI
+ 	  device with a Cadence QSPI controller and want to access the
+ 	  Flash as an MTD device.
+ 
++config SPI_CADENCE_XSPI
++	tristate "Cadence XSPI controller"
++	depends on (OF || COMPILE_TEST) && HAS_IOMEM
++	depends on SPI_MEM
++	help
++	  Enable support for the Cadence XSPI Flash controller.
++
++	  Cadence XSPI is a specialized controller for connecting an SPI
++	  Flash over upto 8bit wide bus. Enable this option if you have a
++	  device with a Cadence XSPI controller and want to access the
++	  Flash as an MTD device.
++
+ config SPI_CLPS711X
+ 	tristate "CLPS711X host SPI controller"
+ 	depends on ARCH_CLPS711X || COMPILE_TEST
+diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+index 13e54c4..93229a8 100644
+--- a/drivers/spi/Makefile
++++ b/drivers/spi/Makefile
+@@ -21,6 +21,7 @@ obj-$(CONFIG_SPI_AR934X)		+= spi-ar934x.o
+ obj-$(CONFIG_SPI_ARMADA_3700)		+= spi-armada-3700.o
+ obj-$(CONFIG_SPI_ATMEL)			+= spi-atmel.o
+ obj-$(CONFIG_SPI_ATMEL_QUADSPI)		+= atmel-quadspi.o
++obj-$(CONFIG_SPI_CADENCE_XSPI)		+= spi-cadence-xspi.o
+ obj-$(CONFIG_SPI_AT91_USART)		+= spi-at91-usart.o
+ obj-$(CONFIG_SPI_ATH79)			+= spi-ath79.o
+ obj-$(CONFIG_SPI_AU1550)		+= spi-au1550.o
+diff --git a/drivers/spi/spi-cadence-xspi.c b/drivers/spi/spi-cadence-xspi.c
 new file mode 100644
-index 0000000..5ebede1
+index 0000000..3bc3018
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
-@@ -0,0 +1,77 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright 2020-21 Cadence
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/spi/cdns,xspi.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++++ b/drivers/spi/spi-cadence-xspi.c
+@@ -0,0 +1,627 @@
++// SPDX-License-Identifier: GPL-2.0+
++// Cadence XSPI flash controller driver
++// Copyright (C) 2020-21 Cadence
 +
-+title: Cadence XSPI Controller
++#include <linux/completion.h>
++#include <linux/delay.h>
++#include <linux/err.h>
++#include <linux/errno.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/iopoll.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
++#include <linux/spi/spi.h>
++#include <linux/spi/spi-mem.h>
++#include <linux/bitfield.h>
++#include <linux/limits.h>
++#include <linux/log2.h>
 +
-+maintainers:
-+  - Parshuram Thombare <pthombar@cadence.com>
++#define CDNS_XSPI_MAGIC_NUM_VALUE	0x6522
++#define CDNS_XSPI_MAX_BANKS		8
++#define CDNS_XSPI_NAME			"cadence-xspi"
 +
-+description: |
-+  The XSPI controller allows SPI protocol communication in
-+  single, dual, quad or octal wire transmission modes for
-+  read/write access to slaves such as SPI-NOR flash.
++/*
++ * Note: below are additional auxiliary registers to
++ * configure XSPI controller pin-strap settings
++ */
 +
-+allOf:
-+  - $ref: "spi-controller.yaml#"
++/* PHY DQ timing register */
++#define CDNS_XSPI_CCP_PHY_DQ_TIMING		0x0000
 +
-+properties:
-+  compatible:
-+    const: cdns,xspi-nor
++/* PHY DQS timing register */
++#define CDNS_XSPI_CCP_PHY_DQS_TIMING		0x0004
 +
-+  reg:
-+    items:
-+      - description: address and length of the controller register set
-+      - description: address and length of the Slave DMA data port
-+      - description: address and length of the auxiliary registers
++/* PHY gate loopback control register */
++#define CDNS_XSPI_CCP_PHY_GATE_LPBCK_CTRL	0x0008
 +
-+  reg-names:
-+    items:
-+      - const: xspi-iobase
-+      - const: xspi-sdmabase
-+      - const: xspi-auxbase
++/* PHY DLL slave control register */
++#define CDNS_XSPI_CCP_PHY_DLL_SLAVE_CTRL	0x0010
 +
-+  interrupts:
-+    maxItems: 1
++/* DLL PHY control register */
++#define CDNS_XSPI_DLL_PHY_CTRL			0x1034
 +
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
++/* Command registers */
++#define CDNS_XSPI_CMD_REG_0			0x0000
++#define CDNS_XSPI_CMD_REG_1			0x0004
++#define CDNS_XSPI_CMD_REG_2			0x0008
++#define CDNS_XSPI_CMD_REG_3			0x000C
++#define CDNS_XSPI_CMD_REG_4			0x0010
++#define CDNS_XSPI_CMD_REG_5			0x0014
 +
-+unevaluatedProperties: false
++/* Command status registers */
++#define CDNS_XSPI_CMD_STATUS_REG		0x0044
 +
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    bus {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
++/* Controller status register */
++#define CDNS_XSPI_CTRL_STATUS_REG		0x0100
++#define CDNS_XSPI_INIT_COMPLETED		BIT(16)
++#define CDNS_XSPI_INIT_LEGACY			BIT(9)
++#define CDNS_XSPI_INIT_FAIL			BIT(8)
++#define CDNS_XSPI_CTRL_BUSY			BIT(7)
 +
-+        xspi: spi@a0010000 {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+            compatible = "cdns,xspi-nor";
-+            reg = <0x0 0xa0010000 0x0 0x10000>,
-+                  <0x0 0xb0000000 0x0 0x10000>,
-+                  <0x0 0xa0020000 0x0 0x10000>;
-+            reg-names = "xspi-iobase", "xspi-sdmabase", "xspi-auxbase";
-+            interrupts = <0 90 IRQ_TYPE_LEVEL_HIGH>;
-+            interrupt-parent = <&gic>;
++/* Controller interrupt status register */
++#define CDNS_XSPI_INTR_STATUS_REG		0x0110
++#define CDNS_XSPI_STIG_DONE			BIT(23)
++#define CDNS_XSPI_SDMA_ERROR			BIT(22)
++#define CDNS_XSPI_SDMA_TRIGGER			BIT(21)
++#define CDNS_XSPI_CMD_IGNRD_EN			BIT(20)
++#define CDNS_XSPI_DDMA_TERR_EN			BIT(18)
++#define CDNS_XSPI_CDMA_TREE_EN			BIT(17)
++#define CDNS_XSPI_CTRL_IDLE_EN			BIT(16)
 +
-+            flash@0 {
-+                compatible = "jedec,spi-nor";
-+                spi-max-frequency = <75000000>;
-+                reg = <0>;
-+            };
++#define CDNS_XSPI_TRD_COMP_INTR_STATUS		0x0120
++#define CDNS_XSPI_TRD_ERR_INTR_STATUS		0x0130
++#define CDNS_XSPI_TRD_ERR_INTR_EN		0x0134
 +
-+            flash@1 {
-+                compatible = "jedec,spi-nor";
-+                spi-max-frequency = <75000000>;
-+                reg = <1>;
-+            };
-+        };
-+    };
++/* Controller interrupt enable register */
++#define CDNS_XSPI_INTR_ENABLE_REG		0x0114
++#define CDNS_XSPI_INTR_EN			BIT(31)
++#define CDNS_XSPI_STIG_DONE_EN			BIT(23)
++#define CDNS_XSPI_SDMA_ERROR_EN			BIT(22)
++#define CDNS_XSPI_SDMA_TRIGGER_EN		BIT(21)
++
++#define CDNS_XSPI_INTR_MASK (CDNS_XSPI_INTR_EN | \
++	CDNS_XSPI_STIG_DONE_EN  | \
++	CDNS_XSPI_SDMA_ERROR_EN | \
++	CDNS_XSPI_SDMA_TRIGGER_EN)
++
++/* Controller config register */
++#define CDNS_XSPI_CTRL_CONFIG_REG		0x0230
++#define CDNS_XSPI_CTRL_WORK_MODE		GENMASK(6, 5)
++
++#define CDNS_XSPI_WORK_MODE_DIRECT		0
++#define CDNS_XSPI_WORK_MODE_STIG		1
++#define CDNS_XSPI_WORK_MODE_ACMD		3
++
++/* SDMA trigger transaction registers */
++#define CDNS_XSPI_SDMA_SIZE_REG			0x0240
++#define CDNS_XSPI_SDMA_TRD_INFO_REG		0x0244
++#define CDNS_XSPI_SDMA_DIR			BIT(8)
++
++/* Controller features register */
++#define CDNS_XSPI_CTRL_FEATURES_REG		0x0F04
++#define CDNS_XSPI_NUM_BANKS			GENMASK(25, 24)
++#define CDNS_XSPI_DMA_DATA_WIDTH		BIT(21)
++#define CDNS_XSPI_NUM_THREADS			GENMASK(3, 0)
++
++/* Controller version register */
++#define CDNS_XSPI_CTRL_VERSION_REG		0x0F00
++#define CDNS_XSPI_MAGIC_NUM			GENMASK(31, 16)
++#define CDNS_XSPI_CTRL_REV			GENMASK(7, 0)
++
++/* STIG Profile 1.0 instruction fields (split into registers) */
++#define CDNS_XSPI_CMD_INSTR_TYPE		GENMASK(6, 0)
++#define CDNS_XSPI_CMD_P1_R1_ADDR0		GENMASK(31, 24)
++#define CDNS_XSPI_CMD_P1_R2_ADDR1		GENMASK(7, 0)
++#define CDNS_XSPI_CMD_P1_R2_ADDR2		GENMASK(15, 8)
++#define CDNS_XSPI_CMD_P1_R2_ADDR3		GENMASK(23, 16)
++#define CDNS_XSPI_CMD_P1_R2_ADDR4		GENMASK(31, 24)
++#define CDNS_XSPI_CMD_P1_R3_ADDR5		GENMASK(7, 0)
++#define CDNS_XSPI_CMD_P1_R3_CMD			GENMASK(23, 16)
++#define CDNS_XSPI_CMD_P1_R3_NUM_ADDR_BYTES	GENMASK(30, 28)
++#define CDNS_XSPI_CMD_P1_R4_ADDR_IOS		GENMASK(1, 0)
++#define CDNS_XSPI_CMD_P1_R4_CMD_IOS		GENMASK(9, 8)
++#define CDNS_XSPI_CMD_P1_R4_BANK		GENMASK(14, 12)
++
++/* STIG data sequence instruction fields (split into registers) */
++#define CDNS_XSPI_CMD_DSEQ_R2_DCNT_L		GENMASK(31, 16)
++#define CDNS_XSPI_CMD_DSEQ_R3_DCNT_H		GENMASK(15, 0)
++#define CDNS_XSPI_CMD_DSEQ_R3_NUM_OF_DUMMY	GENMASK(25, 20)
++#define CDNS_XSPI_CMD_DSEQ_R4_BANK		GENMASK(14, 12)
++#define CDNS_XSPI_CMD_DSEQ_R4_DATA_IOS		GENMASK(9, 8)
++#define CDNS_XSPI_CMD_DSEQ_R4_DIR		BIT(4)
++
++/* STIG command status fields */
++#define CDNS_XSPI_CMD_STATUS_COMPLETED		BIT(15)
++#define CDNS_XSPI_CMD_STATUS_FAILED		BIT(14)
++#define CDNS_XSPI_CMD_STATUS_DQS_ERROR		BIT(3)
++#define CDNS_XSPI_CMD_STATUS_CRC_ERROR		BIT(2)
++#define CDNS_XSPI_CMD_STATUS_BUS_ERROR		BIT(1)
++#define CDNS_XSPI_CMD_STATUS_INV_SEQ_ERROR	BIT(0)
++
++#define CDNS_XSPI_STIG_DONE_FLAG		BIT(0)
++#define CDNS_XSPI_TRD_STATUS			0x0104
++
++/* Helper macros for filling command registers */
++#define CDNS_XSPI_CMD_FLD_P1_INSTR_CMD_1(op, data_phase) ( \
++	FIELD_PREP(CDNS_XSPI_CMD_INSTR_TYPE, (data_phase) ? \
++		CDNS_XSPI_STIG_INSTR_TYPE_1 : CDNS_XSPI_STIG_INSTR_TYPE_0) | \
++	FIELD_PREP(CDNS_XSPI_CMD_P1_R1_ADDR0, (op)->addr.val & 0xff))
++
++#define CDNS_XSPI_CMD_FLD_P1_INSTR_CMD_2(op) ( \
++	FIELD_PREP(CDNS_XSPI_CMD_P1_R2_ADDR1, ((op)->addr.val >> 8)  & 0xFF) | \
++	FIELD_PREP(CDNS_XSPI_CMD_P1_R2_ADDR2, ((op)->addr.val >> 16) & 0xFF) | \
++	FIELD_PREP(CDNS_XSPI_CMD_P1_R2_ADDR3, ((op)->addr.val >> 24) & 0xFF) | \
++	FIELD_PREP(CDNS_XSPI_CMD_P1_R2_ADDR4, ((op)->addr.val >> 32) & 0xFF))
++
++#define CDNS_XSPI_CMD_FLD_P1_INSTR_CMD_3(op) ( \
++	FIELD_PREP(CDNS_XSPI_CMD_P1_R3_ADDR5, ((op)->addr.val >> 40) & 0xFF) | \
++	FIELD_PREP(CDNS_XSPI_CMD_P1_R3_CMD, (op)->cmd.opcode) | \
++	FIELD_PREP(CDNS_XSPI_CMD_P1_R3_NUM_ADDR_BYTES, (op)->addr.nbytes))
++
++#define CDNS_XSPI_CMD_FLD_P1_INSTR_CMD_4(op, chipsel) ( \
++	FIELD_PREP(CDNS_XSPI_CMD_P1_R4_ADDR_IOS, ilog2((op)->addr.buswidth)) | \
++	FIELD_PREP(CDNS_XSPI_CMD_P1_R4_CMD_IOS, ilog2((op)->cmd.buswidth)) | \
++	FIELD_PREP(CDNS_XSPI_CMD_P1_R4_BANK, chipsel))
++
++#define CDNS_XSPI_CMD_FLD_DSEQ_CMD_1(op) \
++	FIELD_PREP(CDNS_XSPI_CMD_INSTR_TYPE, CDNS_XSPI_STIG_INSTR_TYPE_DATA_SEQ)
++
++#define CDNS_XSPI_CMD_FLD_DSEQ_CMD_2(op) \
++	FIELD_PREP(CDNS_XSPI_CMD_DSEQ_R2_DCNT_L, (op)->data.nbytes & 0xFFFF)
++
++#define CDNS_XSPI_CMD_FLD_DSEQ_CMD_3(op) ( \
++	FIELD_PREP(CDNS_XSPI_CMD_DSEQ_R3_DCNT_H, \
++		((op)->data.nbytes >> 16) & 0xffff) | \
++	FIELD_PREP(CDNS_XSPI_CMD_DSEQ_R3_NUM_OF_DUMMY, (op)->dummy.nbytes * 8))
++
++#define CDNS_XSPI_CMD_FLD_DSEQ_CMD_4(op, chipsel) ( \
++	FIELD_PREP(CDNS_XSPI_CMD_DSEQ_R4_BANK, chipsel) | \
++	FIELD_PREP(CDNS_XSPI_CMD_DSEQ_R4_DATA_IOS, ilog2((op)->data.buswidth)) | \
++	FIELD_PREP(CDNS_XSPI_CMD_DSEQ_R4_DIR, \
++		((op)->data.dir == SPI_MEM_DATA_IN) ? \
++		CDNS_XSPI_STIG_CMD_DIR_READ : CDNS_XSPI_STIG_CMD_DIR_WRITE))
++
++enum cdns_xspi_stig_instr_type {
++	CDNS_XSPI_STIG_INSTR_TYPE_0,
++	CDNS_XSPI_STIG_INSTR_TYPE_1,
++	CDNS_XSPI_STIG_INSTR_TYPE_DATA_SEQ = 127,
++};
++
++enum cdns_xspi_sdma_dir {
++	CDNS_XSPI_SDMA_DIR_READ,
++	CDNS_XSPI_SDMA_DIR_WRITE,
++};
++
++enum cdns_xspi_stig_cmd_dir {
++	CDNS_XSPI_STIG_CMD_DIR_READ,
++	CDNS_XSPI_STIG_CMD_DIR_WRITE,
++};
++
++struct cdns_xspi_dev {
++	struct platform_device *pdev;
++	struct device *dev;
++
++	void __iomem *iobase;
++	void __iomem *auxbase;
++	void __iomem *sdmabase;
++
++	int irq;
++	int cur_cs;
++
++	struct completion cmd_complete;
++	struct completion auto_cmd_complete;
++	struct completion sdma_complete;
++	bool sdma_error;
++
++	void *in_buffer;
++	const void *out_buffer;
++
++	u8 hw_num_banks;
++};
++
++static int cdns_xspi_wait_for_controller_idle(struct cdns_xspi_dev *cdns_xspi)
++{
++	u32 ctrl_stat;
++
++	return readl_relaxed_poll_timeout(cdns_xspi->iobase +
++					  CDNS_XSPI_CTRL_STATUS_REG,
++					  ctrl_stat,
++					  ((ctrl_stat &
++					    CDNS_XSPI_CTRL_BUSY) == 0),
++					  100, 1000);
++}
++
++static void cdns_xspi_trigger_command(struct cdns_xspi_dev *cdns_xspi,
++				      u32 cmd_regs[5])
++{
++	writel(cmd_regs[5], cdns_xspi->iobase + CDNS_XSPI_CMD_REG_5);
++	writel(cmd_regs[4], cdns_xspi->iobase + CDNS_XSPI_CMD_REG_4);
++	writel(cmd_regs[3], cdns_xspi->iobase + CDNS_XSPI_CMD_REG_3);
++	writel(cmd_regs[2], cdns_xspi->iobase + CDNS_XSPI_CMD_REG_2);
++	writel(cmd_regs[1], cdns_xspi->iobase + CDNS_XSPI_CMD_REG_1);
++	writel(cmd_regs[0], cdns_xspi->iobase + CDNS_XSPI_CMD_REG_0);
++}
++
++static int cdns_xspi_check_command_status(struct cdns_xspi_dev *cdns_xspi)
++{
++	int ret = 0;
++	u32 cmd_status = readl(cdns_xspi->iobase + CDNS_XSPI_CMD_STATUS_REG);
++
++	if (cmd_status & CDNS_XSPI_CMD_STATUS_COMPLETED) {
++		if ((cmd_status & CDNS_XSPI_CMD_STATUS_FAILED) != 0) {
++			if (cmd_status & CDNS_XSPI_CMD_STATUS_DQS_ERROR) {
++				dev_err(cdns_xspi->dev,
++					"Incorrect DQS pulses detected\n");
++				ret = -EPROTO;
++			}
++			if (cmd_status & CDNS_XSPI_CMD_STATUS_CRC_ERROR) {
++				dev_err(cdns_xspi->dev,
++					"CRC error received\n");
++				ret = -EPROTO;
++			}
++			if (cmd_status & CDNS_XSPI_CMD_STATUS_BUS_ERROR) {
++				dev_err(cdns_xspi->dev,
++					"Error resp on system DMA interface\n");
++				ret = -EPROTO;
++			}
++			if (cmd_status & CDNS_XSPI_CMD_STATUS_INV_SEQ_ERROR) {
++				dev_err(cdns_xspi->dev,
++					"Invalid command sequence detected\n");
++				ret = -EPROTO;
++			}
++		}
++	} else {
++		dev_err(cdns_xspi->dev, "Fatal err - command not completed\n");
++		ret = -EPROTO;
++	}
++
++	return ret;
++}
++
++static void cdns_xspi_set_interrupts(struct cdns_xspi_dev *cdns_xspi,
++				     bool enabled)
++{
++	u32 intr_enable;
++
++	intr_enable = readl(cdns_xspi->iobase + CDNS_XSPI_INTR_ENABLE_REG);
++	if (enabled)
++		intr_enable |= CDNS_XSPI_INTR_MASK;
++	else
++		intr_enable &= ~CDNS_XSPI_INTR_MASK;
++	writel(intr_enable, cdns_xspi->iobase + CDNS_XSPI_INTR_ENABLE_REG);
++}
++
++static int cdns_xspi_controller_init(struct cdns_xspi_dev *cdns_xspi)
++{
++	u32 ctrl_ver;
++	u32 ctrl_features;
++	u16 hw_magic_num;
++
++	ctrl_ver = readl(cdns_xspi->iobase + CDNS_XSPI_CTRL_VERSION_REG);
++	hw_magic_num = FIELD_GET(CDNS_XSPI_MAGIC_NUM, ctrl_ver);
++	if (hw_magic_num != CDNS_XSPI_MAGIC_NUM_VALUE) {
++		dev_err(cdns_xspi->dev,
++			"Incorrect XSPI magic nunber: %x, expected: %x\n",
++			hw_magic_num, CDNS_XSPI_MAGIC_NUM_VALUE);
++		return -EIO;
++	}
++
++	ctrl_features = readl(cdns_xspi->iobase + CDNS_XSPI_CTRL_FEATURES_REG);
++	cdns_xspi->hw_num_banks = FIELD_GET(CDNS_XSPI_NUM_BANKS, ctrl_features);
++	cdns_xspi_set_interrupts(cdns_xspi, false);
++
++	return 0;
++}
++
++static void cdns_xspi_sdma_handle(struct cdns_xspi_dev *cdns_xspi)
++{
++	u32 sdma_size, sdma_trd_info;
++	u8 sdma_dir;
++
++	sdma_size = readl(cdns_xspi->iobase + CDNS_XSPI_SDMA_SIZE_REG);
++	sdma_trd_info = readl(cdns_xspi->iobase + CDNS_XSPI_SDMA_TRD_INFO_REG);
++	sdma_dir = FIELD_GET(CDNS_XSPI_SDMA_DIR, sdma_trd_info);
++
++	switch (sdma_dir) {
++	case CDNS_XSPI_SDMA_DIR_READ:
++		ioread8_rep(cdns_xspi->sdmabase,
++			    cdns_xspi->in_buffer, sdma_size);
++		break;
++
++	case CDNS_XSPI_SDMA_DIR_WRITE:
++		iowrite8_rep(cdns_xspi->sdmabase,
++			     cdns_xspi->out_buffer, sdma_size);
++		break;
++	}
++}
++
++static int cdns_xspi_send_stig_command(struct cdns_xspi_dev *cdns_xspi,
++				       const struct spi_mem_op *op,
++				       bool data_phase)
++{
++	u32 cmd_regs[5];
++	u32 cmd_status;
++	int ret;
++
++	ret = cdns_xspi_wait_for_controller_idle(cdns_xspi);
++	if (ret < 0)
++		return -EIO;
++
++	writel(FIELD_PREP(CDNS_XSPI_CTRL_WORK_MODE, CDNS_XSPI_WORK_MODE_STIG),
++	       cdns_xspi->iobase + CDNS_XSPI_CTRL_CONFIG_REG);
++
++	cdns_xspi_set_interrupts(cdns_xspi, true);
++	cdns_xspi->sdma_error = false;
++
++	memset(cmd_regs, 0, sizeof(cmd_regs));
++	cmd_regs[1] = CDNS_XSPI_CMD_FLD_P1_INSTR_CMD_1(op, data_phase);
++	cmd_regs[2] = CDNS_XSPI_CMD_FLD_P1_INSTR_CMD_2(op);
++	cmd_regs[3] = CDNS_XSPI_CMD_FLD_P1_INSTR_CMD_3(op);
++	cmd_regs[4] = CDNS_XSPI_CMD_FLD_P1_INSTR_CMD_4(op,
++						       cdns_xspi->cur_cs);
++
++	cdns_xspi_trigger_command(cdns_xspi, cmd_regs);
++
++	if (data_phase) {
++		cmd_regs[0] = CDNS_XSPI_STIG_DONE_FLAG;
++		cmd_regs[1] = CDNS_XSPI_CMD_FLD_DSEQ_CMD_1(op);
++		cmd_regs[2] = CDNS_XSPI_CMD_FLD_DSEQ_CMD_2(op);
++		cmd_regs[3] = CDNS_XSPI_CMD_FLD_DSEQ_CMD_3(op);
++		cmd_regs[4] = CDNS_XSPI_CMD_FLD_DSEQ_CMD_4(op,
++							   cdns_xspi->cur_cs);
++
++		cdns_xspi->in_buffer = op->data.buf.in;
++		cdns_xspi->out_buffer = op->data.buf.out;
++
++		cdns_xspi_trigger_command(cdns_xspi, cmd_regs);
++
++		wait_for_completion(&cdns_xspi->sdma_complete);
++		if (cdns_xspi->sdma_error) {
++			cdns_xspi_set_interrupts(cdns_xspi, false);
++			return -EIO;
++		}
++		cdns_xspi_sdma_handle(cdns_xspi);
++	}
++
++	wait_for_completion(&cdns_xspi->cmd_complete);
++	cdns_xspi_set_interrupts(cdns_xspi, false);
++
++	cmd_status = cdns_xspi_check_command_status(cdns_xspi);
++	if (cmd_status)
++		return -EPROTO;
++
++	return 0;
++}
++
++static int cdns_xspi_mem_op(struct cdns_xspi_dev *cdns_xspi,
++			    struct spi_mem *mem,
++			    const struct spi_mem_op *op)
++{
++	enum spi_mem_data_dir dir = op->data.dir;
++
++	if (cdns_xspi->cur_cs != mem->spi->chip_select)
++		cdns_xspi->cur_cs = mem->spi->chip_select;
++
++	return cdns_xspi_send_stig_command(cdns_xspi, op,
++					   (dir != SPI_MEM_NO_DATA));
++}
++
++static int cdns_xspi_mem_op_execute(struct spi_mem *mem,
++				    const struct spi_mem_op *op)
++{
++	struct cdns_xspi_dev *cdns_xspi =
++		spi_master_get_devdata(mem->spi->master);
++	int ret = 0;
++
++	ret = cdns_xspi_mem_op(cdns_xspi, mem, op);
++
++	return ret;
++}
++
++static const struct spi_controller_mem_ops cadence_xspi_mem_ops = {
++	.exec_op = cdns_xspi_mem_op_execute,
++};
++
++static irqreturn_t cdns_xspi_irq_handler(int this_irq, void *dev)
++{
++	struct cdns_xspi_dev *cdns_xspi = dev;
++	u32 irq_status;
++	irqreturn_t result = IRQ_NONE;
++
++	irq_status = readl(cdns_xspi->iobase + CDNS_XSPI_INTR_STATUS_REG);
++	writel(irq_status, cdns_xspi->iobase + CDNS_XSPI_INTR_STATUS_REG);
++
++	if (irq_status &
++	    (CDNS_XSPI_SDMA_ERROR | CDNS_XSPI_SDMA_TRIGGER | CDNS_XSPI_STIG_DONE)) {
++
++		if (irq_status & CDNS_XSPI_SDMA_ERROR) {
++			dev_err(cdns_xspi->dev,
++				"Slave DMA transaction error\n");
++			cdns_xspi->sdma_error = true;
++			complete(&cdns_xspi->sdma_complete);
++		}
++
++		if (irq_status & CDNS_XSPI_SDMA_TRIGGER)
++			complete(&cdns_xspi->sdma_complete);
++
++		if (irq_status & CDNS_XSPI_STIG_DONE)
++			complete(&cdns_xspi->cmd_complete);
++
++		result = IRQ_HANDLED;
++	}
++
++	irq_status = readl(cdns_xspi->iobase + CDNS_XSPI_TRD_COMP_INTR_STATUS);
++	if (irq_status) {
++		writel(irq_status,
++		       cdns_xspi->iobase + CDNS_XSPI_TRD_COMP_INTR_STATUS);
++
++		complete(&cdns_xspi->auto_cmd_complete);
++
++		result = IRQ_HANDLED;
++	}
++
++	return result;
++}
++
++static int cdns_xspi_of_get_plat_data(struct platform_device *pdev)
++{
++	struct device_node *node_prop = pdev->dev.of_node;
++	struct device_node *node_child;
++	unsigned int cs;
++
++	for_each_child_of_node(node_prop, node_child) {
++		if (!of_device_is_available(node_child))
++			continue;
++
++		if (of_property_read_u32(node_child, "reg", &cs)) {
++			dev_err(&pdev->dev, "Couldn't get memory chip select\n");
++			return -ENXIO;
++		} else if (cs >= CDNS_XSPI_MAX_BANKS) {
++			dev_err(&pdev->dev, "reg (cs) parameter value too large\n");
++			return -ENXIO;
++		}
++	}
++
++	return 0;
++}
++
++static void cdns_xspi_print_phy_config(struct cdns_xspi_dev *cdns_xspi)
++{
++	struct device *dev = cdns_xspi->dev;
++
++	dev_info(dev, "PHY configuration\n");
++	dev_info(dev, "   * xspi_dll_phy_ctrl: %08x\n",
++		 readl(cdns_xspi->iobase + CDNS_XSPI_DLL_PHY_CTRL));
++	dev_info(dev, "   * phy_dq_timing: %08x\n",
++		 readl(cdns_xspi->auxbase + CDNS_XSPI_CCP_PHY_DQ_TIMING));
++	dev_info(dev, "   * phy_dqs_timing: %08x\n",
++		 readl(cdns_xspi->auxbase + CDNS_XSPI_CCP_PHY_DQS_TIMING));
++	dev_info(dev, "   * phy_gate_loopback_ctrl: %08x\n",
++		 readl(cdns_xspi->auxbase + CDNS_XSPI_CCP_PHY_GATE_LPBCK_CTRL));
++	dev_info(dev, "   * phy_dll_slave_ctrl: %08x\n",
++		 readl(cdns_xspi->auxbase + CDNS_XSPI_CCP_PHY_DLL_SLAVE_CTRL));
++}
++
++static int cdns_xspi_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct spi_master *master = NULL;
++	struct cdns_xspi_dev *cdns_xspi = NULL;
++	int ret;
++
++	master = devm_spi_alloc_master(dev, sizeof(*cdns_xspi));
++	if (!master)
++		return -ENOMEM;
++
++	master->mode_bits = SPI_3WIRE | SPI_TX_DUAL  | SPI_TX_QUAD  |
++		SPI_RX_DUAL | SPI_RX_QUAD | SPI_TX_OCTAL | SPI_RX_OCTAL |
++		SPI_MODE_0  | SPI_MODE_3;
++
++	master->mem_ops = &cadence_xspi_mem_ops;
++	master->dev.of_node = pdev->dev.of_node;
++	master->bus_num = -1;
++
++	platform_set_drvdata(pdev, master);
++
++	cdns_xspi = spi_master_get_devdata(master);
++	cdns_xspi->pdev = pdev;
++	cdns_xspi->dev = &pdev->dev;
++	cdns_xspi->cur_cs = 0;
++
++	init_completion(&cdns_xspi->cmd_complete);
++	init_completion(&cdns_xspi->auto_cmd_complete);
++	init_completion(&cdns_xspi->sdma_complete);
++
++	ret = cdns_xspi_of_get_plat_data(pdev);
++	if (ret)
++		return -ENODEV;
++
++	cdns_xspi->iobase = devm_platform_ioremap_resource_byname(pdev,
++								  "xspi-iobase");
++	if (IS_ERR(cdns_xspi->iobase)) {
++		dev_err(dev, "Failed to remap controller base address\n");
++		return PTR_ERR(cdns_xspi->iobase);
++	}
++
++	cdns_xspi->sdmabase = devm_platform_ioremap_resource_byname(pdev,
++								    "xspi-sdmabase");
++	if (IS_ERR(cdns_xspi->sdmabase)) {
++		dev_err(dev, "Failed to remap SDMA address\n");
++		return PTR_ERR(cdns_xspi->sdmabase);
++	}
++
++	cdns_xspi->auxbase = devm_platform_ioremap_resource_byname(pdev,
++								   "xspi-auxbase");
++	if (IS_ERR(cdns_xspi->auxbase)) {
++		dev_err(dev, "Failed to remap AUX address\n");
++		return PTR_ERR(cdns_xspi->auxbase);
++	}
++
++	cdns_xspi->irq = platform_get_irq(pdev, 0);
++	if (cdns_xspi->irq < 0) {
++		dev_err(dev, "Failed to get IRQ\n");
++		return -ENXIO;
++	}
++
++	ret = devm_request_irq(dev, cdns_xspi->irq, cdns_xspi_irq_handler,
++			       IRQF_SHARED, pdev->name, cdns_xspi);
++	if (ret) {
++		dev_err(dev, "Failed to request IRQ: %d\n", cdns_xspi->irq);
++		return ret;
++	}
++
++	cdns_xspi_print_phy_config(cdns_xspi);
++
++	ret = cdns_xspi_controller_init(cdns_xspi);
++	if (ret) {
++		dev_err(dev, "Failed to initialize controller\n");
++		return ret;
++	}
++
++	master->num_chipselect = 1 << cdns_xspi->hw_num_banks;
++
++	ret = devm_spi_register_master(dev, master);
++	if (ret) {
++		dev_err(dev, "Failed to register SPI master\n");
++		return ret;
++	}
++
++	dev_info(dev, "Successfully registered SPI master\n");
++
++	return 0;
++}
++
++#ifdef CONFIG_OF
++static const struct of_device_id cdns_xspi_of_match[] = {
++	{
++		.compatible = "cdns,xspi-nor",
++	},
++	{ /* end of table */}
++};
++MODULE_DEVICE_TABLE(of, cdns_xspi_of_match);
++#else
++#define cdns_xspi_of_match NULL
++#endif /* CONFIG_OF */
++
++static struct platform_driver cdns_xspi_platform_driver = {
++	.probe          = cdns_xspi_probe,
++	.remove         = NULL,
++	.driver = {
++		.name = CDNS_XSPI_NAME,
++		.of_match_table = cdns_xspi_of_match,
++	},
++};
++
++module_platform_driver(cdns_xspi_platform_driver);
++
++MODULE_DESCRIPTION("Cadence XSPI Controller Driver");
++MODULE_LICENSE("GPL v2");
++MODULE_ALIAS("platform:" CDNS_XSPI_NAME);
++MODULE_AUTHOR("Konrad Kociolek <konrad@cadence.com>");
++MODULE_AUTHOR("Jayshri Pawar <jpawar@cadence.com>");
++MODULE_AUTHOR("Parshuram Thombare <pthombar@cadence.com>");
 -- 
 2.7.4
 
