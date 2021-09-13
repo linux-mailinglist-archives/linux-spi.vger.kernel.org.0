@@ -2,42 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCD1E40896E
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Sep 2021 12:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA132408973
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Sep 2021 12:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239208AbhIMKzc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 Sep 2021 06:55:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51150 "EHLO mail.kernel.org"
+        id S239234AbhIMKzf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 Sep 2021 06:55:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51196 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238681AbhIMKzb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 13 Sep 2021 06:55:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A1CE6103B;
-        Mon, 13 Sep 2021 10:54:15 +0000 (UTC)
+        id S239227AbhIMKze (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 13 Sep 2021 06:55:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 17D5861004;
+        Mon, 13 Sep 2021 10:54:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631530456;
-        bh=3SRhzTBiqP3IIrmIEDH1+61sWzXII/5uXbVi3rCBjN0=;
+        s=k20201202; t=1631530458;
+        bh=gytxiplUW9FSk4LWVCI2P+9l37LUjmf5IMH0ahG2m+s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CBD90Xf9ehAWWcgw2ujqPuwldG7ZtQe2ChCYey8K4Yrpdt71xUyogfzhFXu8RfMGl
-         aS1IFPzUR2q2fjVe9MfOtnip2AE7WWISVY06NqXDR8DxgcMP8U7qHJPJwjQrLr4MNJ
-         pYD6jrZjRft61Hq51iXcR+p1+IJLiR/Ho8dhFgE0392axlZGZK0IQHHnMjH5hzgE/F
-         dsicF8XxY79QiunsWufOgJVgvfkfVJrmV9UnOTvbVA5RhU3jPz1s+mpOAHzn21Vc0J
-         5R8+G3GVLods03LmnR4bdM7CQ94qIoa9VoNWMFBAYzW+ztbGxSH2FEZyGLEc3dBdlG
-         QnRJ3BEcK/x9g==
+        b=BhGe7UaCBEnD2shSR8Q9KfdwznmRX2iPfrqOUVs5bokbWiH75mzKy8FicTxhZiQgb
+         iuxOMOV/7KzjWzadmTf3THbaizz4+VU0nSg2dHqBCon4uAV4T9nbGtcyuqCDhtKuIh
+         iTrFRRhdmY5iMN2Hz/5uL0YeFchyG6lThx+1nflf1En944yirkXYuu8/S5lJweJ83A
+         pAenSGhIjTrcuzZeNypl8xGyL5/AWw8GdZc+bZhLHlMrk0T6G3Fw5/RWLYiB74C/3/
+         FvBqmuRKjqTPio50hX5mMGJW29yi8sSjtSelc06yIq2rKJNzuqkNt7Y/vFyNahQV0t
+         /NQh8NOUiEgkA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Pavel Nadein <pavelnadein@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-spi@vger.kernel.org, Pavel Nadein <pasha-net@narod.ru>
-Subject: Re: [5.16][PATCH 0/3] Support for Ingenic JZ47xx SPI controller
-Date:   Mon, 13 Sep 2021 11:53:07 +0100
-Message-Id: <163153017121.45927.12831297849596169623.b4-ty@kernel.org>
+To:     Sanjay R Mehta <sanju.mehta@amd.com>,
+        Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
+        Charles Keepax <ckeepax@opensource.cirrus.com>
+Subject: Re: [PATCH v2 1/4] spi: amd: Refactor code to use less spi_master_get_devdata
+Date:   Mon, 13 Sep 2021 11:53:08 +0100
+Message-Id: <163153017122.45927.4388352721413778030.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210830230139.21476-1-contact@artur-rojek.eu>
-References: <20210830230139.21476-1-contact@artur-rojek.eu>
+In-Reply-To: <20210910111529.12539-1-tanureal@opensource.cirrus.com>
+References: <20210910111529.12539-1-tanureal@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -45,17 +43,11 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 31 Aug 2021 01:01:36 +0200, Artur Rojek wrote:
-> This patchset introduces support for SPI controllers found in the
-> Ingenic JZ47xx family of SoCs. Of particular note, this allows to
-> replace GPIO backed SPI on the MIPS Creator CI20 board.
+On Fri, 10 Sep 2021 12:15:26 +0100, Lucas Tanure wrote:
+> Get master data in the start and then just use struct amd_spi
+> as it has the needed variable
 > 
-> Mark:
-> Checkpatch generates a `need consistent spacing around '*'` error on
-> this patchset, however I believe this is a false positive due to it
-> confusing a pointer with multiplication operator inside a macro.
 > 
-> [...]
 
 Applied to
 
@@ -63,12 +55,14 @@ Applied to
 
 Thanks!
 
-[1/3] dt-bindings: spi: Document Ingenic SPI controller bindings
-      commit: ff4daa7dd7e624a989dc882f7dcce6d8818b1036
-[2/3] SPI: add Ingenic JZ47xx driver.
-      commit: ae5f94cc00a7fdce830fd4bfe7a8c77ae7704666
-[3/3] MIPS: JZ4780: CI20: DTS: add SPI controller config
-      commit: 7b3fd8109b5d343b535e796328223b4f1c4aff5c
+[1/4] spi: amd: Refactor code to use less spi_master_get_devdata
+      commit: ca8e8a18272e7b57b62db5db8fcf1f5218b89a98
+[2/4] spi: amd: Refactor amd_spi_busy_wait
+      commit: 356b02f9ec3a7304d6c54c4df20cd37b0a22021e
+[3/4] spi: amd: Remove unneeded variable
+      commit: 3b02d2890bc5eb974346cc287e1732f62a096598
+[4/4] spi: amd: Don't wait for a write-only transfer to finish
+      commit: 777a2cbbaf1c6685ace7e2ce846796e9425ab320
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
