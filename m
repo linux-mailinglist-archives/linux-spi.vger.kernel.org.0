@@ -2,82 +2,177 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F3640ABC5
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Sep 2021 12:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9085F40AED6
+	for <lists+linux-spi@lfdr.de>; Tue, 14 Sep 2021 15:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231352AbhINKeP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 Sep 2021 06:34:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37186 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231774AbhINKeJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 14 Sep 2021 06:34:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 12EF560F21;
-        Tue, 14 Sep 2021 10:32:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631615572;
-        bh=l2tHl1GYMK0OnFn5+OkiiJz5Ebqa6wLvnbCBc9xbL1M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Bx6ZmlMHw/PzhyvI95fbwSUEDRQxGuqfAmaWyMi3niFZT7Rw/N8RkthdW2JlRe933
-         mFxJm5TipxZFMijdO9k2EUgKJml6/BjpE1TesCuGeFd3mG/yAAj6Z7PRai23zScwax
-         jhZQlazZiP3K1++YVO7S9ntsbHvS54+qGrwzt5gyFjFZ3dczg0iM/ERE2sw7/jPjS8
-         ly3wYIMdDYsLXXFFhexvj6lBqUh8vjsLrYLVByrW4MRaey7k7nIv/fp/f3+dEA2Udf
-         tLiTEe/rOuRpUqtabXa4Z8ZJDYh3VavKI+0Ez2UNpVnPujMwt4g7uCYNVd4sfP+Slm
-         4/3wR1UCePzWA==
-Date:   Tue, 14 Sep 2021 11:32:12 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Cc:     Nikita Shubin <nikita.shubin@maquefel.me>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/8] spi: spi-ep93xx: Prepare clock before using it
-Message-ID: <20210914103212.GB4434@sirena.org.uk>
-References: <20210726115058.23729-1-nikita.shubin@maquefel.me>
- <20210726140001.24820-1-nikita.shubin@maquefel.me>
- <20210726140001.24820-3-nikita.shubin@maquefel.me>
- <20210726165105.GI4670@sirena.org.uk>
- <b8ddca2452bddaa89875a66e658c882f4d0641ae.camel@gmail.com>
+        id S232682AbhINNYe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 14 Sep 2021 09:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50842 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233145AbhINNYe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Sep 2021 09:24:34 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91B9C061574
+        for <linux-spi@vger.kernel.org>; Tue, 14 Sep 2021 06:23:16 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mQ8Or-0007cz-Dv; Tue, 14 Sep 2021 15:23:01 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mQ8Oo-0006RL-Ia; Tue, 14 Sep 2021 15:22:58 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mQ8Oo-00077e-GZ; Tue, 14 Sep 2021 15:22:58 +0200
+Date:   Tue, 14 Sep 2021 15:22:56 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     alexandre.belloni@bootlin.com,
+        Michael Turquette <mturquette@baylibre.com>,
+        Ludovic.Desroches@microchip.com, lee.jones@linaro.org,
+        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>, o.rempel@pengutronix.de,
+        andy.shevchenko@gmail.com, aardelean@deviqon.com,
+        linux-pwm@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        broonie@kernel.org, Jonathan.Cameron@huawei.com,
+        linux-arm-kernel@lists.infradead.org, a.zummo@towertech.it,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        wsa@kernel.org, thierry.reding@gmail.com, kernel@pengutronix.de,
+        akpm@linux-foundation.org, torvalds@linux-foundation.org,
+        Claudiu.Beznea@microchip.com
+Subject: Re: About clk maintainership [Was: Re: [PULL] Add variants of
+ devm_clk_get for prepared and enabled clocks enabled clocks]
+Message-ID: <20210914132256.5ucytcfmk3sjn2vi@pengutronix.de>
+References: <20210728202547.7uvfwflpruku7yps@pengutronix.de>
+ <20210728204033.GF22278@shell.armlinux.org.uk>
+ <162771727997.714452.2303764341103276867@swboyd.mtv.corp.google.com>
+ <20210731120004.i3affxw7upl5y4c5@pengutronix.de>
+ <20210802094810.GJ22278@shell.armlinux.org.uk>
+ <20210802152755.ibisunvibmwhiyry@pengutronix.de>
+ <20210802163824.GK22278@shell.armlinux.org.uk>
+ <162797831443.714452.3551045763456936564@swboyd.mtv.corp.google.com>
+ <20210803104012.wf2buscbukxufesl@pengutronix.de>
+ <162820957661.19113.17221558053361108175@swboyd.mtv.corp.google.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cvVnyQ+4j833TQvp"
+        protocol="application/pgp-signature"; boundary="mggb23vxwlpcjl6t"
 Content-Disposition: inline
-In-Reply-To: <b8ddca2452bddaa89875a66e658c882f4d0641ae.camel@gmail.com>
-X-Cookie: This space intentionally left blank.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <162820957661.19113.17221558053361108175@swboyd.mtv.corp.google.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---cvVnyQ+4j833TQvp
-Content-Type: text/plain; charset=us-ascii
+--mggb23vxwlpcjl6t
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 13, 2021 at 11:36:30PM +0200, Alexander Sverdlin wrote:
-> On Mon, 2021-07-26 at 17:51 +0100, Mark Brown wrote:
+On Thu, Aug 05, 2021 at 05:26:16PM -0700, Stephen Boyd wrote:
+> Quoting Uwe Kleine-K=F6nig (2021-08-03 03:40:12)
+> > On Tue, Aug 03, 2021 at 01:11:54AM -0700, Stephen Boyd wrote:
+> > >=20
+> > > Maybe this series would be more compelling if those various drivers t=
+hat
+> > > are hand rolling the devm action were converted to the consolidated
+> > > official devm function. The truth is it's already happening in various
+> > > subsystems so consolidating that logic into one place would be a win
+> > > code size wise and very hard to ignore.
+> > >=20
+> > > Doing
+> > >=20
+> > >  $ git grep devm_add_action | grep clk
+> > >=20
+> > > seems to catch quite a few of them.
 
-> > > Use clk_prepare_enable()/clk_disable_unprepare() in preparation for switch
-> > > to Common Clock Framework, otherwise the following is visible:
+Will do.
+=20
+> > Another upside is that grepping for these drivers with a potential for
+> > further improvement become easier to grep for as
+> > devm_clk_get_{prepared,enabled} is a much better hint :-)
+>=20
+> Sorry, but that's a pretty weak argument. I'd think grepping for the
+> absence of pm_ops in drivers would be the same hint.
 
-> > Acked-by: Mark Brown <broonie@kernel.org>
+To be honest: Yes, it's a weak argument, but grepping for drivers
+without pm_ops is a tad more complicated and yields a different set of
+drivers. For example take the i2c-imx driver
+(drivers/i2c/busses/i2c-imx.c) which has a pm_ops but still can make use
+of devm_clk_get_enabled.
 
-> would you take the patch to a tree of yours, please?
+> > The changes to these drivers probably won't go through a clk tree, so
+> > adding these patches before adding devm_clk_get_enabled() would only
+> > help for the warm and cozy feeling that it is right to do so, correct?
+>=20
+> It isn't to feel warm and cozy. It's to demonstrate the need for
+> consolidating code. Converting the i2c and spi drivers to use this is
+> actively damaging the cause though. Those driver frameworks are more
+> likely to encourage proper power management around bus transfers, so
+> converting them to use the devm API moves them away from power
+> management, not closer to it.
 
-What's the story with the dependencies?
+Well I think one could disagree here. Today these drivers are not power
+efficient as they just enable the clock in their probe routine and keep
+it on even though it might not be needed.
 
---cvVnyQ+4j833TQvp
+My patch still is beneficial as it simplifies the drivers without making
+them worse. Agreed, this isn't the best optimisation to the drivers
+(assuming it is possible to disable the clocks while the device isn't in
+use).
+
+> This proves why this topic is always contentious. It's too easy to
+> blindly convert drivers to get the clk and leave it enabled forever and
+> then they never use power management. The janitors win and nobody else.
+
+If the janitors win and nobody else looses anything, this is fine for
+me. And if in the future someone turns up who cares enough to improve
+the converted drivers to a more efficient clock usage, they will
+probably not stop their efforts just because then the driver uses
+devm_clk_get_enabled.
+
+> Is there some way to avoid that trap? Maybe through some combination of
+> a device PM function that indicates the driver has no runtime PM
+> callbacks (pm_runtime_no_callbacks() perhaps?) and
+> devm_clk_get_enabled() checking for that and returning the clk only when
+> that call has been made (i.e. pm_runtime_has_no_callbacks())? This
+> approach would fail to catch the case where system wide suspend/resume
+> could turn the clk off but the driver doesn't do it. I'm not sure how
+> much we care about that case though.
+>=20
+> > As my focus is limited to (mostly) drivers/pwm and I already have quite
+> > some other patch quests on my list:
+>=20
+> Don't we all? :)
+
+Might be. The patches in your queue are however not a reason to drop my
+efforts to make my queue shorter :-P
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--mggb23vxwlpcjl6t
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFAeisACgkQJNaLcl1U
-h9DMxgf+KPL8iTvOv+yHqCe299GLMTbMsyYoPHPC4CuSAKiN043k33knHmA19wtm
-XmzT2N8jPIuvQ+vYhgcRv/b8/okSA8jzWUKIWo9dpuPo+7yAbJv21ZKSne2CY8EG
-fDI58F+MgkJFU9j6uZRZip/qmVaVGAJdbBP4A47UDYox66VFFy4eL0efidjzciWA
-7a4G4DXyewSKLeVKomL2nYp8mXcRzv/vOy6HXlWmH1zBYjdOG5+/NvcbXs9nhrXd
-8cUkucyW06fYKK5wAzONgLVnmfD9S9JpKq4AHyIJdCtcJjBiwrSDkvPiq6gwf+cl
-uKTUn+8W3vs/9pnsOv/Uwtb9vYip5w==
-=IpQG
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFAoiwACgkQwfwUeK3K
+7An7Fgf+Ia8CaycjOR7ZZLxYVuGNx+XLrBQeXwl1H3567k8tcNg55hObDzgVPo1w
+cB9RPS5f36SEEa4ixbzMsRINVfkngTTL2zyTKgniKoy4eD0Nb0qYNKuAxRmb87yt
+bURm19Q+4J/gdUkTzEVqYIYcXPQJlWzEPKaGHBNlZ55stXnT1IUf5FmoPWK7FWxM
+1FTzxg3khSQXc/UosMbVBY9slM4JAskBAfXk7oRasoVbuaEJldG+Gr4jDn78Cras
+mJHAT/hsDtRmum9dl8U2NdLXtHoEy3xg6MARQO/K50Kqixg8dIdOpajV8ynvsJFj
+3RYCJRrVGp7yeeS9SRw1w6IdNbkBHg==
+=z44f
 -----END PGP SIGNATURE-----
 
---cvVnyQ+4j833TQvp--
+--mggb23vxwlpcjl6t--
