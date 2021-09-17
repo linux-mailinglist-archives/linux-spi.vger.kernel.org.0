@@ -2,48 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 865CA40F14B
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Sep 2021 06:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ECD340F35E
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Sep 2021 09:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244523AbhIQE2L convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Fri, 17 Sep 2021 00:28:11 -0400
-Received: from gw.math.univ-paris13.fr ([194.254.165.1]:5973 "EHLO
-        obelix.math.univ-paris13.fr" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S244266AbhIQE2J (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Sep 2021 00:28:09 -0400
-Received: from DESKTOP-AH5A7AN.home (unknown [45.135.187.135])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: landoulsi)
-        by obelix.math.univ-paris13.fr (Postfix) with ESMTPSA id 1B62F351E4;
-        Fri, 17 Sep 2021 02:34:12 +0200 (CEST)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S241262AbhIQHit (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Sep 2021 03:38:49 -0400
+Received: from mail.bytesnap.co.uk ([94.198.185.106]:44380 "EHLO
+        mail.bytesnap.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241219AbhIQHis (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Sep 2021 03:38:48 -0400
+Received: from exch2016.ByteSnap.local (10.0.28.253) by
+ exch2016.ByteSnap.local (10.0.28.253) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Fri, 17 Sep 2021 08:37:24 +0100
+Received: from exch2016.ByteSnap.local ([fe80::fccc:6d14:b55e:d5a0]) by
+ exch2016.ByteSnap.local ([fe80::fccc:6d14:b55e:d5a0%8]) with mapi id
+ 15.01.2308.014; Fri, 17 Sep 2021 08:37:24 +0100
+From:   Ville Baillie <VilleB@bytesnap.co.uk>
+To:     "Dan.Sneddon@microchip.com" <Dan.Sneddon@microchip.com>,
+        "Tudor.Ambarus@microchip.com" <Tudor.Ambarus@microchip.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "Nicolas.Ferre@microchip.com" <Nicolas.Ferre@microchip.com>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "Ludovic.Desroches@microchip.com" <Ludovic.Desroches@microchip.com>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] spi: atmel: Fix PDC transfer setup bug
+Thread-Topic: [PATCH] spi: atmel: Fix PDC transfer setup bug
+Thread-Index: AderDWrzqf5xpvNgRsOaMaLInBknhQADbUMAAB7deyA=
+Date:   Fri, 17 Sep 2021 07:37:24 +0000
+Message-ID: <1129421de3174d00a5b03af00fbdd9cb@bytesnap.co.uk>
+References: <3804cb61226e433fb1f7cde911a2785a@bytesnap.co.uk>
+ <748547ec-43bc-a6a1-f5fa-d717e7637ce1@microchip.com>
+In-Reply-To: <748547ec-43bc-a6a1-f5fa-d717e7637ce1@microchip.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.0.27.202]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Re: Partnerskab
-To:     Recipients <assistant.sec@math.univ-paris13.fr>
-From:   "Dave Ramsden" <assistant.sec@math.univ-paris13.fr>
-Date:   Fri, 17 Sep 2021 01:34:08 +0100
-Reply-To: davdr1964@aol.com
-Message-Id: <20210917003412.1B62F351E4@obelix.math.univ-paris13.fr>
-X-LAGA-MailScanner-Information: Please contact the ISP for more information
-X-LAGA-MailScanner-ID: 1B62F351E4.A3663
-X-LAGA-MailScanner: Found to be clean
-X-LAGA-MailScanner-From: assistant.sec@math.univ-paris13.fr
-X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-16. september 2021.
- 
-Er du åben for en forretningsouverture, der er et betydeligt beløb værd? Efter modtagelse af din bekræftelse til denne mail, vil jeg afsløre detaljer om min hensigt i min næste side mail.
- 
-Angiv din interesse for engelsk, hvis det er muligt, for bedre kommunikation.
- 
-Venlig hilsen,
-Dave Ramsden
-E-mail: davdr1964@aol.com
-__________________________
-Sekretær: Rose Anderson
+Pkxvb2tzIGxpa2UgdGhlIHNhbWUgY2hhbmdlIHNob3VsZCBiZSBtYWRlIGF0IHRoZSBlbmQgb2Yg
+dGhhdCBzYW1lIGZ1bmN0aW9uIHdoZXJlIHRoZSBjYWxsIHRvIGF0bWVsX3NwaV9kbWFfdW5tYXBf
+eGZlciBpcyBtYWRlLg0KDQpUaGFua3MgRGFuLCBJIHRoaW5rIHlvdSBhcmUgY29ycmVjdC4gSSB3
+aWxsIHVwZGF0ZSB0aGUgcGF0Y2ggYW5kIHNlbmQgaXQgb3V0IGFzIFYyLg0KDQpDaGVlcnMNClZp
+bGxlDQo=
