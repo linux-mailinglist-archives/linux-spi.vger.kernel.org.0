@@ -2,194 +2,231 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 952D1410AAF
-	for <lists+linux-spi@lfdr.de>; Sun, 19 Sep 2021 10:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74931410AB2
+	for <lists+linux-spi@lfdr.de>; Sun, 19 Sep 2021 10:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236595AbhISIGb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 19 Sep 2021 04:06:31 -0400
-Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:30750 "EHLO
+        id S236920AbhISIGk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 19 Sep 2021 04:06:40 -0400
+Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:14472 "EHLO
         mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236395AbhISIGa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 19 Sep 2021 04:06:30 -0400
+        by vger.kernel.org with ESMTP id S236395AbhISIGk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 19 Sep 2021 04:06:40 -0400
 Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-        by mx0a-0014ca01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18J0wSck013151;
-        Sun, 19 Sep 2021 01:05:02 -0700
+        by mx0a-0014ca01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18INCawF032616;
+        Sun, 19 Sep 2021 01:05:14 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=proofpoint;
- bh=TWkffLm+DZNuHXiSk+CCbXbc47Y7JX4KIImKpLmPuPc=;
- b=JziOco09Q3ZAQrpKOdGwMmL9cE7QhyS7EPwUbMuHio4CQn+dqfT+miJnoMKBB2ceDuOK
- dLD+iHTaoKOos/9pKbUVaX5nRjhM8yTc+VsMgeOrSBBTl7qJ5eCW7MT7EljuGWskevNl
- rjIAkD4mmDIi0r3IXo7x8DBPQ4SR/f2Wa9LdsFgNiyZPuV7kseqdVs8eOzBa6DxR3ofj
- VEq4LtkQrMtcgHfx9jcycGB4hiBluKVhwebmCYglEhXz+IiRoS1rAb0BkXMZ+lA9IM1g
- A8uJj9jTfgVOx2X2xQi3bQOYIZvZRg4H1U/ZIpU5G1NYkGV4PWkX4iuj3Ja8W+bGTKGY ww== 
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2175.outbound.protection.outlook.com [104.47.56.175])
-        by mx0a-0014ca01.pphosted.com with ESMTP id 3b5cnwa2pa-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=proofpoint;
+ bh=slmNvgiaHcMEMxZbaIQ/eWgQQd2XptqGXZiAW53C5rc=;
+ b=Yo1v/s28qmaRrtkHovjS190wEc+MP3rK4AUyTjlgx6Hvb35nYGD79jFB+D3BEKJHvByO
+ fUCOWOMrplY6yPGZbjRmsFtjiJJdWgHPtG4jmayrjrfYIp/VMsVvo63nIlZNF8bTu+/R
+ T9yV24f7SAMxR7xuRMsh94bkBAjAJfnF6gr+coaI/5wCNNk2zzTrr0QXQo7MU5KWQZs4
+ d8IJ7NNKkpcf79MCp0L+dSxwE9f5YFhfW9l88vNV/WlChScRijqYGpVzg/baYPisNprh
+ jiK3EH0B2zIOfrtIxmSL8W/4sWD6FWAeOLsgQZ9XngeAw1QwklD2E91TJlq6V/IRh2FF +g== 
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2170.outbound.protection.outlook.com [104.47.73.170])
+        by mx0a-0014ca01.pphosted.com with ESMTP id 3b5cnwa2ph-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 19 Sep 2021 01:05:02 -0700
+        Sun, 19 Sep 2021 01:05:14 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q8ZSP9AHE9133JX3EevACz9QANzp5NDagcHdZ2dA1ZvbugKja7mfuNUwmLjcZzrtDxecvj0G+27mBGlvjBgHvl+zCRqRT7kuIJIzOIY0q3EFTCl2WsjmHwc0XmB15HYeY/f5LVvzzNFx6mWo2rpoldLkmQxylZQjIoehWJa5Kex6mP0q+Q7Z44cMsLAEWzVzfAt4Whx4VtTn2/EjUthB1flLyte5Y8MWQh5M+ZQUIlnEmzekcRIuy5R+32B1zF6UOKvI3c8nriN8L3r6zEZcjcIf/TgBJasTRpRAxfLSW7lu5c33Nuhf0c5ZLwP1h5WjQJjSzwDn6w6ZyvSwZ+c9HQ==
+ b=Ra24dH9dRHko69VZEI8gKlUApxZuLM4brJbaYCKtq466JXTxfGezlWxmX5N0KMiFqtubtAdpr94jAiouDtm025wJR47bUZ+0wuI0foyaMQc+kO0o69MvBSZVUuwopSu9PAoF+/MJLW4Lxpfeg83/9Konto9x/AvTrVyr6XFLyrQuhlm6XivzijBNQ+fZmrU0RqT25t65Hku/xJRp5fl0kXa6t6RTlJEtc1w0QPoFd4TnJUFWt9j+i/UekRKGyNW6B29BNo0wsoo4WvFwtCEGK0FlQnpESwqGeXP+l/j/SFVVOrv3NMS3pHI65AhYekqKX7c334oYNKgiDhdpbJP4cg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=TWkffLm+DZNuHXiSk+CCbXbc47Y7JX4KIImKpLmPuPc=;
- b=QvgCZR3BO6+d1H/3AO16GmJtQLYnZaYT/Iwuk6NMZlD38A4e17xli7l58ePhUigByS8+XFIX+5Yhcw1+3DKbH1Zj7niJnFUsQ9Bo9P8UEn30kSRILyji0DVVIg8hqmlcLTR+shlr32+KaTRPwGdzay2EVLphX5338Ce0cDqxuG4GSExNR+pT68WP3MUM+CcwbkQYG6ECHBOpTfoKnxE5MLHUiV4OPMCP01M3FD05dk1UioQM17OUm+RHrQcIvBJO9dY4nCIITMNZEofmgMwfIQOmSZJ+m+OphX/Gr/6PW+f194p+QmxVy0WC5rWaLt2mDyndi91OOo5gB/X4e7k+NA==
+ bh=slmNvgiaHcMEMxZbaIQ/eWgQQd2XptqGXZiAW53C5rc=;
+ b=cpdAqlTm+Td5LQrfavnYNJhub5KmPUtwrtlv2xcreC2eaJBy4z4ab9xIgxc7r8DSvVAT+xm/jujisa/dRcc3HFFHOS2OYbTk4mt074S5GT7WihhD35rUSiaRHvJRIRApF72GJ7MNyAgiq9MsDIqI7OyyuRtMhXApP7R8EOuIzo3sl89q4yyYTXgdtBmTuPgtPyhDge19wcUwxE46ar2ksPnYvfAlj3c8SjGvT9OvDqrbKof3Xh7vkyFqxOMM87tIcP47r/tynGvQ/UEYfMuhwOVc10atLhnIgM/MQ2c3O7JOAyfnejkqA508L6xHVw8nGHfwNSfO+zz2iYZAcgJjmA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 64.207.220.244) smtp.rcpttodomain=ti.com smtp.mailfrom=cadence.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
- dkim=none (message not signed); arc=none
+ 199.43.4.23) smtp.rcpttodomain=ti.com smtp.mailfrom=cadence.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=cadence.com; dkim=none
+ (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TWkffLm+DZNuHXiSk+CCbXbc47Y7JX4KIImKpLmPuPc=;
- b=Tl9fb9Kq2wTGt0RehR7S4kl1QxRtbiRzrwX1uPXOUMNsk1Mm/ol0T7794BioBhk0eZVbClW5fanScUTZO+6wjQ350/rqd+KztBuKAte3SuFXDYedKc23Gd/fa7IVGNkiMZBl04DQ6uK3ISU1JCk1UcrziO7AcSdrW+Fygk8B4NY=
-Received: from MW4P221CA0012.NAMP221.PROD.OUTLOOK.COM (2603:10b6:303:8b::17)
- by CH0PR07MB8842.namprd07.prod.outlook.com (2603:10b6:610:102::12) with
+ bh=slmNvgiaHcMEMxZbaIQ/eWgQQd2XptqGXZiAW53C5rc=;
+ b=P3cnaLmF80E1rLo8IOESsL1e48CqxiDtf4bDiTFxgiGoiY65idO6tXfb9t25y5hPEEgewwRMwqUhgc2W1mO0r/2msSHjRR0Oh/PUyVNsJxAzc24SerEZ4g1Uje3qdKeV2FXzZu7gKgrm4JCnKKd4kRybFRwxmI4oLKY6Np5GZCI=
+Received: from DM5PR13CA0051.namprd13.prod.outlook.com (2603:10b6:3:117::13)
+ by SN6PR07MB5038.namprd07.prod.outlook.com (2603:10b6:805:ad::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14; Sun, 19 Sep
- 2021 08:05:00 +0000
-Received: from MW2NAM12FT051.eop-nam12.prod.protection.outlook.com
- (2603:10b6:303:8b:cafe::7a) by MW4P221CA0012.outlook.office365.com
- (2603:10b6:303:8b::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14 via Frontend
- Transport; Sun, 19 Sep 2021 08:04:59 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 64.207.220.244)
+ 2021 08:05:10 +0000
+Received: from DM6NAM12FT044.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:3:117:cafe::84) by DM5PR13CA0051.outlook.office365.com
+ (2603:10b6:3:117::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.6 via Frontend
+ Transport; Sun, 19 Sep 2021 08:05:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 199.43.4.23)
  smtp.mailfrom=cadence.com; ti.com; dkim=none (message not signed)
  header.d=none;ti.com; dmarc=pass action=none header.from=cadence.com;
 Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 64.207.220.244 as permitted sender) receiver=protection.outlook.com;
- client-ip=64.207.220.244; helo=wcmailrelayl01.cadence.com;
-Received: from wcmailrelayl01.cadence.com (64.207.220.244) by
- MW2NAM12FT051.mail.protection.outlook.com (10.13.181.74) with Microsoft SMTP
+ 199.43.4.23 as permitted sender) receiver=protection.outlook.com;
+ client-ip=199.43.4.23; helo=rmmaillnx1.cadence.com;
+Received: from rmmaillnx1.cadence.com (199.43.4.23) by
+ DM6NAM12FT044.mail.protection.outlook.com (10.13.178.204) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4544.6 via Frontend Transport; Sun, 19 Sep 2021 08:04:58 +0000
+ 15.20.4544.6 via Frontend Transport; Sun, 19 Sep 2021 08:05:09 +0000
 Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
-        by wcmailrelayl01.cadence.com (8.14.7/8.14.4) with ESMTP id 18J84uOT067819
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=OK);
-        Sun, 19 Sep 2021 01:04:57 -0700
+        by rmmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 18J857J9003927
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 19 Sep 2021 04:05:08 -0400
 X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
 Received: from maileu4.global.cadence.com (10.160.110.201) by
  maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sun, 19 Sep 2021 10:04:49 +0200
+ 15.0.1497.2; Sun, 19 Sep 2021 10:05:07 +0200
 Received: from maileu3.global.cadence.com (10.160.88.99) by
  maileu4.global.cadence.com (10.160.110.201) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2176.2; Sun, 19 Sep 2021 10:04:37 +0200
+ 15.1.2176.2; Sun, 19 Sep 2021 10:05:06 +0200
 Received: from vleu-orange.cadence.com (10.160.88.83) by
  maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Sun, 19 Sep 2021 10:04:31 +0200
+ 15.0.1497.2 via Frontend Transport; Sun, 19 Sep 2021 10:05:06 +0200
 Received: from vleu-orange.cadence.com (localhost.localdomain [127.0.0.1])
-        by vleu-orange.cadence.com (8.14.4/8.14.4) with ESMTP id 18J84URB023792;
-        Sun, 19 Sep 2021 10:04:30 +0200
+        by vleu-orange.cadence.com (8.14.4/8.14.4) with ESMTP id 18J8560A023842;
+        Sun, 19 Sep 2021 10:05:06 +0200
 Received: (from pthombar@localhost)
-        by vleu-orange.cadence.com (8.14.4/8.14.4/Submit) id 18J84Uxt023791;
-        Sun, 19 Sep 2021 10:04:30 +0200
+        by vleu-orange.cadence.com (8.14.4/8.14.4/Submit) id 18J8565v023841;
+        Sun, 19 Sep 2021 10:05:06 +0200
 From:   Parshuram Thombare <pthombar@cadence.com>
 To:     <broonie@kernel.org>, <lukas@wunner.de>, <p.yadav@ti.com>,
         <robh+dt@kernel.org>
 CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <jpawar@cadence.com>,
-        <mparab@cadence.com>, Parshuram Thombare <pthombar@cadence.com>
-Subject: [PATCH v6 0/2] add support for Cadence's XSPI controller
-Date:   Sun, 19 Sep 2021 10:04:28 +0200
-Message-ID: <1632038668-23756-1-git-send-email-pthombar@cadence.com>
+        <mparab@cadence.com>, Parshuram Thombare <pthombar@cadence.com>,
+        Konrad Kociolek <konrad@cadence.com>
+Subject: [PATCH v6 1/2] spi: cadence: add dt-bindings documentation for Cadence XSPI controller
+Date:   Sun, 19 Sep 2021 10:05:05 +0200
+Message-ID: <1632038705-23805-1-git-send-email-pthombar@cadence.com>
 X-Mailer: git-send-email 2.2.2
+In-Reply-To: <1632038668-23756-1-git-send-email-pthombar@cadence.com>
+References: <1632038668-23756-1-git-send-email-pthombar@cadence.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-OrganizationHeadersPreserved: maileu3.global.cadence.com
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 16161bfc-4eca-4fd2-533c-08d97b442c72
-X-MS-TrafficTypeDiagnostic: CH0PR07MB8842:
-X-Microsoft-Antispam-PRVS: <CH0PR07MB8842F0223D308DA122CF5AF9C1DF9@CH0PR07MB8842.namprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Office365-Filtering-Correlation-Id: f0995ac8-c5c7-4249-2b11-08d97b44334e
+X-MS-TrafficTypeDiagnostic: SN6PR07MB5038:
+X-Microsoft-Antispam-PRVS: <SN6PR07MB5038F20BBB7FF5B09861F7DDC1DF9@SN6PR07MB5038.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: E77hn1aE0Ut6FiK3zfzRudGj0Vm26LhpUSV0U3k+3RlXQu2xI8ALbenaZ9a5cTRpbmFf2dVXikLfANA/1B/rP5pnaiYMbekFFUpeQw7r3EDvlj3fO7XXVwDhmPj10WhwUnRupHeKFOPisIlnV5laPCxTvt+mwAqaOxrCXqRlkw1/GfQAXn2GDA+qHORWd8SMkQ56pIhviy4JW0RIZh30e3P7ooETDZV+b3u0n+na/9e7CCxQix1jfSnMEptE1eYaIYRYMUQwXVLJqvpS8Jgi0THGZPV9F64yF1AOgYtFEh+ckpXym5Z8fIh+8NIB3C1mztB9Covaan0f9q8WmjeEvL8RxukyToC9oYsygfClXLxSZI7d9yrktV7lc/6GSJU0LQaP7160V8y0Mf26L5bj+MH/D3wrwyp/RTZBofd2q9qUwwZ1beWAzNyIsNUN3qgPEToUyU0cgrQrBbRPRpGKxVAzoEJK3C1Pl826EmgSxxaXSLZsLRb226uRCYMJ9Y5/cdyP5RuSn8ggFkTjmCMcab6tJTdJ9UNCaF6dq2TlXql2UttQ6eHi0+bfE0c7Inw8pKAL+wC87wXDiDROvS1k0Kc08OuHac6MSHxSBDMvnPXXu6RI9+NIrtQ8HJUeFw8Y40v28AKlUUKsqBf5RObpgJy+HnYFveDdRXNGZSr6yyGdfDPgAtfucVj9Y3yuV63XZdsXlC0wDdkNKWD2J31WPZtQuvmNRIHQGnZKdmJuzbpur+mJV0+zWKSiXMUEBi20Dd6deF38di4b07fw9wYc/w==
-X-Forefront-Antispam-Report: CIP:64.207.220.244;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:wcmailrelayl01.cadence.com;PTR:ErrorRetry;CAT:NONE;SFS:(4636009)(36092001)(36840700001)(46966006)(110136005)(54906003)(36756003)(316002)(42186006)(36860700001)(508600001)(70586007)(2616005)(82310400003)(8936002)(86362001)(8676002)(4326008)(336012)(2906002)(5660300002)(107886003)(356005)(26005)(83380400001)(81166007)(70206006)(426003)(186003)(47076005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: XnLBSSnMSv3VdqBf6kFhwNVheGNICJXoEEpLhe2OSbtlbyn7eL29hte0tRo3qJcwom4uyxq9A09DGniyKb3CyMMkJXQs7mB3SmZhroWedzmjjy8dP9tonbJ38WvrnxplCIUhVWr3ZS4KWxcywPSIwmIF3SRXMTi4LiT9SFVq+ZKExiH0v7UFsdaUjlSZPc8S8KIAurVqw4d4mx7lPsU5K+bz0eEVy0xceuJJ80pUfGsYs98lChG6ovYXlSIFS93VYomoIE8YICXF1iZapFRg9b/87YfsFz/zNF5N4LX4m/DZvMeANoXVK867teh3anOTZRkBsEdAydEE7aQVVWzS6q4OQaZ9B/LHHIm8A+boVPooyAvAaZ5CAwnWBEkoVUsuNoavsChIivjfJQdQwNBU69G+hWlE4z0apJGm7UBgMVD+yd24POXFWEItoC1tu32jd3bQemp6YOYZxNi1o3do6vy9XIcZDqQ7vFzmx/Clz2YbO0YzTwIpCdzR7WuuhIxRYGXQ5XIWm/zihx3A+a4nJ9Md4PeVIBR9p9dxK2gXGprIQ1X/Fbp/9juABygtQ9EtFf7snZhfU4gwLUmKML0VW2RVgPJ9i/wUClzWpp8fT6vi/S+OYJa59PhBP9w2FiWNXsEKG6b8IfrKG+ps5L07KugJ9J0yQDni/YCVqZLwDZqBfUFMG5laF3MzQgnh4bHifIZqHcWMcpTvvx26m6yucqTzxSzuHeFPokobt7xA8dIOzIN5w5ZurWov4sma0ASRjnKnXfs36gNbPQzVKBBbJ/5NYql/Z+hifh3dR+uCVKR4/YfVW1NYrLSwJ+iGUQAxtbPGO27ks3+qj/wE357KsK+eM882AIzbqLEXNiWzJz5/7nFe551CTGbIQ4W62XZyC8YtXgYgoMOnbx1l3O/Ukg==
+X-Forefront-Antispam-Report: CIP:199.43.4.23;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:rmmaillnx1.cadence.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36092001)(36840700001)(46966006)(8936002)(426003)(83380400001)(336012)(8676002)(26005)(42186006)(86362001)(316002)(47076005)(508600001)(5660300002)(36756003)(186003)(110136005)(82310400003)(81166007)(4326008)(107886003)(36860700001)(54906003)(2616005)(356005)(2906002)(70206006)(70586007)(36906005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2021 08:04:58.2788
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2021 08:05:09.7629
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 16161bfc-4eca-4fd2-533c-08d97b442c72
+X-MS-Exchange-CrossTenant-Network-Message-Id: f0995ac8-c5c7-4249-2b11-08d97b44334e
 X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[64.207.220.244];Helo=[wcmailrelayl01.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: MW2NAM12FT051.eop-nam12.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[199.43.4.23];Helo=[rmmaillnx1.cadence.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM12FT044.eop-nam12.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR07MB8842
-X-Proofpoint-GUID: B0mnF2xGb4UYwUhBFxBy1qAZw6RrAikU
-X-Proofpoint-ORIG-GUID: B0mnF2xGb4UYwUhBFxBy1qAZw6RrAikU
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR07MB5038
+X-Proofpoint-GUID: SyVc3XKh_0Evn2LrnTDgKQfis-ZqJ5mG
+X-Proofpoint-ORIG-GUID: SyVc3XKh_0Evn2LrnTDgKQfis-ZqJ5mG
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-19_02,2021-09-17_02,2020-04-07_01
 X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
  priorityscore=1501 phishscore=0 adultscore=0 clxscore=1015 mlxscore=0
  impostorscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0 spamscore=0
- mlxlogscore=653 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=995 suspectscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2109030001 definitions=main-2109190057
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This patch series adds support for Cadence's XSPI controller.
-It supports 3 work modes.
-1. ACMD (auto command) work mode
-    ACMD name is because it uses auto command engine in the controller.
-    It further has 2 modes PIO and CDMA (command DMA).
-    The CDMA work mode is dedicated for high-performance application
-    where very low software overhead is required. In this mode the
-    Command Engine is programmed by the series of linked descriptors
-    stored in system memory. These descriptors provide commands to execute
-    and store status information for finished commands.
-    The PIO mode work mode is dedicated for single operation where
-    constructing a linked list of descriptors would require too
-    much effort.
-2. STIG (Software Triggered Instruction Generator) work mode
-    In STIG mode, controller sends low-level instructions to memory.
-    Each instruction is 128-bit width. There is special instruction
-    DataSequence which carries information about data phase.
-    Driver uses Slave DMA interface to transfer data as only this
-    interface can be used in STIG work mode.
-3. Direct work mode
-    This work mode allows sending data without invoking any command through
-    the slave interface.
-Currently only STIG work mode is enabled, remaining work modes will
-be added later.
+Add DT binding for Cadence's XSPI controller driver.
 
-Changes since v5:
-1. Added adjust_op_size to adjust op size according to sdma size.
-
-Changes since v4:
-1. Changed reg region names and lengths as suggested by Rob.
-
-Changes since v3:
-1. Removed ACMD PIO mode.
-2. Return IRQ_HANDLED only for handled interrupts.
-3. DT binding changes.
-
-Changes since v2:
-1. Removed extra lock around exec_op.
-2. Removed PHY parameters setting from the driver, those will be
-   handled by bootstrap pins available in the controller.
-
-Changes since v1:
-1. Use ACMD PIO work mode for NOR read, program and erase operations,
-   for everything else use STIG(Software Triggered Instruction
-   Generator) work mode.
-2. Changes suggested by Lukas.
-
-Parshuram Thombare (2):
-  spi: cadence: add dt-bindings documentation for Cadence XSPI
-    controller
-  spi: cadence: add support for Cadence XSPI controller
-
- .../devicetree/bindings/spi/cdns,xspi.yaml         |  77 +++
- drivers/spi/Kconfig                                |  12 +
- drivers/spi/Makefile                               |   1 +
- drivers/spi/spi-cadence-xspi.c                     | 640 +++++++++++++++++++++
- 4 files changed, 730 insertions(+)
+Signed-off-by: Konrad Kociolek <konrad@cadence.com>
+Signed-off-by: Jayshri Pawar <jpawar@cadence.com>
+Signed-off-by: Parshuram Thombare <pthombar@cadence.com>
+---
+ .../devicetree/bindings/spi/cdns,xspi.yaml         | 77 ++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/spi/cdns,xspi.yaml
- create mode 100644 drivers/spi/spi-cadence-xspi.c
 
+diff --git a/Documentation/devicetree/bindings/spi/cdns,xspi.yaml b/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
+new file mode 100644
+index 0000000..b8bb8a3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/cdns,xspi.yaml
+@@ -0,0 +1,77 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright 2020-21 Cadence
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/spi/cdns,xspi.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Cadence XSPI Controller
++
++maintainers:
++  - Parshuram Thombare <pthombar@cadence.com>
++
++description: |
++  The XSPI controller allows SPI protocol communication in
++  single, dual, quad or octal wire transmission modes for
++  read/write access to slaves such as SPI-NOR flash.
++
++allOf:
++  - $ref: "spi-controller.yaml#"
++
++properties:
++  compatible:
++    const: cdns,xspi-nor
++
++  reg:
++    items:
++      - description: address and length of the controller register set
++      - description: address and length of the Slave DMA data port
++      - description: address and length of the auxiliary registers
++
++  reg-names:
++    items:
++      - const: io
++      - const: sdma
++      - const: aux
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    bus {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        xspi: spi@a0010000 {
++            #address-cells = <1>;
++            #size-cells = <0>;
++            compatible = "cdns,xspi-nor";
++            reg = <0x0 0xa0010000 0x0 0x1040>,
++                  <0x0 0xb0000000 0x0 0x1000>,
++                  <0x0 0xa0020000 0x0 0x100>;
++            reg-names = "io", "sdma", "aux";
++            interrupts = <0 90 IRQ_TYPE_LEVEL_HIGH>;
++            interrupt-parent = <&gic>;
++
++            flash@0 {
++                compatible = "jedec,spi-nor";
++                spi-max-frequency = <75000000>;
++                reg = <0>;
++            };
++
++            flash@1 {
++                compatible = "jedec,spi-nor";
++                spi-max-frequency = <75000000>;
++                reg = <1>;
++            };
++        };
++    };
 -- 
 2.7.4
 
