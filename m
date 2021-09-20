@@ -2,89 +2,112 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91842412A83
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Sep 2021 03:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E779C412BAD
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Sep 2021 04:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234079AbhIUBm6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 20 Sep 2021 21:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
+        id S1348623AbhIUCX4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 20 Sep 2021 22:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232291AbhIUBj0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Sep 2021 21:39:26 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8DF7C0430C0
-        for <linux-spi@vger.kernel.org>; Mon, 20 Sep 2021 12:49:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=/6c42fYE/7lG3/aFbd19OPysq1saJXw7nUgcW7B0RDU=; b=sjCOkjPZGIuvzzAlsoD/ELiIXJ
-        Hx7ykvm4FEeByip3j14PT3TbflLSI9T9UGXFJRh8KRvTA9gO+A3IN3VxWhXiRMCOThJ30arFtYE2x
-        Rxq1oj3Gs2zMH0sPZGBRFTzRflRVbHfX+4exUfDn2y9Oue4jmWNwnJgKbrwPISXnJWQFz/BM61uBM
-        FhZvJhYfwKN69yK6vBfDCHYqWJUrkC3aT2jPee5Htmxdnctuq7JDaeseWU5ws82f8lIH15cdQeFX9
-        7nIcLhiA/5++X1AuwV041BaiK6KEZ4+Rl5h9xC48KiioD1LzN84/qQrTVFv0qCliN+ctOZEbGHxz4
-        hVqM9gcw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:54682)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1mSPI2-00020K-Rm; Mon, 20 Sep 2021 20:49:23 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1mSPI1-0002Xw-WD; Mon, 20 Sep 2021 20:49:22 +0100
-Date:   Mon, 20 Sep 2021 20:49:21 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Andreas Schwab <schwab@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     broonie@kernel.org, Marco Felsch <m.felsch@pengutronix.de>,
-        linux-spi@vger.kernel.org, kernel@pengutronix.de
+        with ESMTP id S236609AbhIUBvJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Sep 2021 21:51:09 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00191C08C5CD
+        for <linux-spi@vger.kernel.org>; Mon, 20 Sep 2021 15:25:41 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id x27so73710176lfu.5
+        for <linux-spi@vger.kernel.org>; Mon, 20 Sep 2021 15:25:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=cUu9VGMYIviHDNWMaTxRPftrEu1m5ny0sN1YPzgobHQ=;
+        b=PHlOnMK4h+zWE9JtbKEGLgb0bKwd52eH9oG5WEiTQnvqfHnkIl0XWwCwlk73+boP53
+         w19A4bqTnRug92cETmx1GqXXoxpR9rjGNNWqi5Jm9ws7e8OwcDCxfkid6KhaTPKyyKTG
+         UhBm4KcEePhVtbbiuECkqP5KgfPqR2BJWvNEE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=cUu9VGMYIviHDNWMaTxRPftrEu1m5ny0sN1YPzgobHQ=;
+        b=vHcEc+jFcZhuGUK5hANd4O57Fai95haPtmV9FXcSVME5wkStyOshXSglAXEEn+3kaV
+         MT/WmvUJkgoWVzSf86akyx7PJo8QWPSZJl2MOksnxpmwCNU7cAMBOzycApF0qm3V/M0H
+         fIp1Ysfya7PtS/hYK/D83BLbokExV1wf3Xp12vqS9z7WqO9jESlqgCTAP4npbKanJbfk
+         akKccYAfZZ/7Y1A1EMaXIkLGEiGRPgk1CQNvXuP5ePw3EPaZf0c2IO7spMutL+Ehb+3q
+         vvARUY/LRSNkgqXLf+nkBR8bGmVhA9/x+mFuXQNnyhhHCsgXsWlxRyTGmBDvwnwqvLco
+         xLiw==
+X-Gm-Message-State: AOAM5338PP7+3pUI/Fu/851R6NZxZLOd5NXKt+u7aGJQBvYqlWDRjeIr
+        9Tbre+VdwQ5Yw0/BaF3ITyimiHtilJvRl27WNrA=
+X-Google-Smtp-Source: ABdhPJxUsYERS1I3f9JetZPvbH+85jECX2Y5JmVgq+o+w64u+HqlxSE24Upm8/0mUM0HWwS0YfN8+A==
+X-Received: by 2002:a2e:99d3:: with SMTP id l19mr12829051ljj.184.1632176739736;
+        Mon, 20 Sep 2021 15:25:39 -0700 (PDT)
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
+        by smtp.gmail.com with ESMTPSA id v1sm1901727lja.134.2021.09.20.15.25.38
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Sep 2021 15:25:38 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id b20so15048052lfv.3
+        for <linux-spi@vger.kernel.org>; Mon, 20 Sep 2021 15:25:38 -0700 (PDT)
+X-Received: by 2002:a2e:5815:: with SMTP id m21mr17078215ljb.95.1632176737881;
+ Mon, 20 Sep 2021 15:25:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <YUhgbW8CiYI/rm+y@shell.armlinux.org.uk> <871r5j6nlw.fsf@igel.home>
+ <YUjlwaRdmFMZHJYO@shell.armlinux.org.uk> <87wnna6hdc.fsf@igel.home>
+In-Reply-To: <87wnna6hdc.fsf@igel.home>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 20 Sep 2021 15:25:21 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi7DB2SJ-wngVvsJ7Ak2cM556Q8437sOXo4EJt2BWPdEg@mail.gmail.com>
+Message-ID: <CAHk-=wi7DB2SJ-wngVvsJ7Ak2cM556Q8437sOXo4EJt2BWPdEg@mail.gmail.com>
 Subject: Re: REGRESSION: "spi: add of_device_uevent_modalias support" and
  following "fix" breaks Macchiatobin
-Message-ID: <YUjlwaRdmFMZHJYO@shell.armlinux.org.uk>
-References: <YUhgbW8CiYI/rm+y@shell.armlinux.org.uk>
- <871r5j6nlw.fsf@igel.home>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <871r5j6nlw.fsf@igel.home>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+To:     Andreas Schwab <schwab@suse.de>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Mark Brown <broonie@kernel.org>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        linux-spi@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Sep 20, 2021 at 09:41:47PM +0200, Andreas Schwab wrote:
+On Mon, Sep 20, 2021 at 2:56 PM Andreas Schwab <schwab@suse.de> wrote:
+>
 > On Sep 20 2021, Russell King (Oracle) wrote:
-> 
-> > Therefore, this change breaks module autoloading.
-> 
-> Reverting this change breaks module autoloading.
+> >
+> > Module autoloading worked before.
+>
+> Nope.
 
-No.
+It clearly did, Andreas. At least on Macchiatobin.
 
-Module autoloading worked before. Then someone probably noticed a
-problem, and thought they'd fix it by changing how the module alias
-strings SPI provides are produced. In fixing it, they broke existing
-setups that have worked for years.
+Maybe it didn't work for some other cases, but the point of
+regressions is that they are things that broke that _used_ to work.
 
-If you think it's acceptable to break existing setups to fix a bug
-you need to be reminded of Linus' rant:
+Other cases - that never worked - are not regressions if they continue
+to not work.
 
-  https://lkml.org/lkml/2018/8/3/621
+And the thing that makes regressions special is that back when I
+wasn't so strict about these things, we'd end up in endless "seesaw
+situations" where somebody would fix something, it would break
+something else, then that something else would break, and it would
+never actually converge on anything reliable at all.
 
-"  Bugs happen. That's a fact of life. Arguing that "we had to break
-   something because we were fixing a bug" is completely insane. We fix
-   tens of bugs every single day, thinking that "fixing a bug" means
-   that we can break something is simply NOT TRUE."
+That is why the regression rule exists. It is NOT ACCEPTABLE to fix
+one thing, and break another. That's not a fix at all. That's a
+regression, and no amount of "but but but it fixes something else" is
+valid.
 
-It seems that is exactly what has happened here: a change was
-introduced to fix an apparently module autoloading bug that has
-caused _another_ module autoloading bug that wasn't originally
-there.
+So don't make completely garbage arguments. Russell reported a
+regression. Denying regressions is not an option.
 
-That is not fixing a bug at all.
+Yes, we have situations where even regressions don't matter - like
+major security issues that simply cannot be fixed other ways, because
+the regression _was_ the security hole.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+(Or, actually, more commonly, the "nobody noticed" hole: a regression
+is a bit like Schr=C3=B6dinger's cat - if nobody is around to notice it and
+it doesn't actually affect any real workload, then you can treat the
+regression as if it doesn't exist),
+
+            Linus
