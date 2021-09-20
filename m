@@ -2,68 +2,68 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 017914126E1
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Sep 2021 21:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E460C4126E5
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Sep 2021 21:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347106AbhITTaZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 20 Sep 2021 15:30:25 -0400
-Received: from mail-oo1-f53.google.com ([209.85.161.53]:37567 "EHLO
-        mail-oo1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245515AbhITT2Y (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Sep 2021 15:28:24 -0400
-Received: by mail-oo1-f53.google.com with SMTP id h11-20020a4aa74b000000b002a933d156cbso2210712oom.4;
-        Mon, 20 Sep 2021 12:26:57 -0700 (PDT)
+        id S1348014AbhITTa2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 20 Sep 2021 15:30:28 -0400
+Received: from mail-oi1-f178.google.com ([209.85.167.178]:42594 "EHLO
+        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346623AbhITT20 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Sep 2021 15:28:26 -0400
+Received: by mail-oi1-f178.google.com with SMTP id x124so2652064oix.9;
+        Mon, 20 Sep 2021 12:26:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=8RDZosyarrVHJMRIOrOYWRs07UC95UsBIK16bZM00bU=;
-        b=yBncfJSMrMGyW1lY0gWYCKnaxRMCcfsQvSlY4wkggkntOS6IBplpKy5ZcI8fSCysqr
-         MEANr3cv4zk9pfSkGevVPEquMJl5jp9CQg9tfcUPxtYM+9WULU3Ui3z79poxpN8zqY2e
-         xx+byLgTp46MC1DGIOcJjX+f07WYdNYh7VRUv+UQ4jcAMKsmlFPCL1zKABcUt6+6MUgz
-         LwsqYrfTBy+Wb2Q/W89cpFseqx5NSkPMh+ZWIxKFKC9eXcya376GWQTD1mvVZ0+uYlBH
-         G2oP3bvRjzZvPhDkf7yCw+MzVbM7SqhR7XR3LC0rejiyIxDNWu11LuNnXPcAjS6vUYpz
-         fq5A==
-X-Gm-Message-State: AOAM531aYlOWCXo/TDSzv+SwNytnDfeu8taSGB42qNhs9AjbGGOmPRsL
-        PxPVss+Cmo2+rgyXQVP/YQ==
-X-Google-Smtp-Source: ABdhPJxUCxd0cnnhBxoTHwKVzXGKJSzPZe/6gN7UIs+ewnpW2DHKak1OfYaEYrgDm+4SjMcJ3aAkMw==
-X-Received: by 2002:a4a:6412:: with SMTP id o18mr13727649ooc.79.1632166017034;
-        Mon, 20 Sep 2021 12:26:57 -0700 (PDT)
+        bh=Ltg68ai17ryA61wLEpw2gWNDTuZWgZYYvpF3Lm1beig=;
+        b=k3YnuI5huJKCUin9mRb4ys9aJqP51LkqiUs+iGLoXDOcVRMaOwEax+JsOgmeQ90LGD
+         CJ1yk/gWTEqGNNLe5zXlQTRib5Bh43dc8XaDoEf6b09/oFWpWLW8j7Ud5bKtBO32ibc6
+         RR1H7fKaRgACN14a+znCTahDCaOmoSsp0CI9/nnEmOgEXgQfhFlQIUOI+Og4PmnD42e6
+         Y2yQNLRAAo1RIyZm1JobSDeqgRWs2Fjyz/YC+UMaC4QnkWXHbLiMIoL1tXktS64dwTI2
+         mPsfYg3myw9vsGrqC8z7jZs2KuFPyCv0SH7AP9WbqoPhz+eHy9WepDVv4ez9u4cuYmSr
+         b6oQ==
+X-Gm-Message-State: AOAM5318CHZCNrZ8CYXoyENdJLy2OMM1myUw4mcFJX/bJQEKyDnGMfP8
+        Bym8CoBTmkc5dXFoTvrXCA==
+X-Google-Smtp-Source: ABdhPJz0ghhIQUq0/xBQQZcGfNHP33ZoBoPP4+VhuvRF80iBYfK9SyWhV3s1G7XFCiXra9a7WP+VNQ==
+X-Received: by 2002:a05:6808:2191:: with SMTP id be17mr574215oib.30.1632166019071;
+        Mon, 20 Sep 2021 12:26:59 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bj27sm3222072oib.58.2021.09.20.12.26.55
+        by smtp.gmail.com with ESMTPSA id bg38sm3452836oib.26.2021.09.20.12.26.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Sep 2021 12:26:56 -0700 (PDT)
-Received: (nullmailer pid 586175 invoked by uid 1000);
+        Mon, 20 Sep 2021 12:26:58 -0700 (PDT)
+Received: (nullmailer pid 586178 invoked by uid 1000);
         Mon, 20 Sep 2021 19:26:55 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     Apurva Nandan <a-nandan@ti.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc:     Serge Semin <fancer.lancer@gmail.com>, devicetree@vger.kernel.org,
+        linux-spi@vger.kernel.org, michael@walle.cc,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
         Rob Herring <robh+dt@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        linux-mtd@lists.infradead.org, michael@walle.cc,
-        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-In-Reply-To: <20210920142713.129295-2-a-nandan@ti.com>
-References: <20210920142713.129295-1-a-nandan@ti.com> <20210920142713.129295-2-a-nandan@ti.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: mtd: spi-nand: Convert to DT schema format
+        Richard Weinberger <richard@nod.at>,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        Mark Brown <broonie@kernel.org>
+In-Reply-To: <20210920142713.129295-3-a-nandan@ti.com>
+References: <20210920142713.129295-1-a-nandan@ti.com> <20210920142713.129295-3-a-nandan@ti.com>
+Subject: Re: [PATCH v2 2/2] dt-bindings: snps,dw-apb-ssi: Use 'flash' node name instead of 'spi-flash' in example
 Date:   Mon, 20 Sep 2021 14:26:55 -0500
-Message-Id: <1632166015.061759.586174.nullmailer@robh.at.kernel.org>
+Message-Id: <1632166015.080380.586177.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 20 Sep 2021 19:57:12 +0530, Apurva Nandan wrote:
-> Convert spi-nand.txt binding to YAML format with an added example.
+On Mon, 20 Sep 2021 19:57:13 +0530, Apurva Nandan wrote:
+> Change the nodename in the example with spi-nand from 'spi-flash@1'
+> to 'flash@1' to make the schema uniform with both spi-nand and spi-nor
+> flashes. jedec,spi-nor.yaml uses 'flash@' nodename for spi-nor flashes,
+> so make the spi-nand examples in dt-bindings use it too for uniformity.
 > 
 > Signed-off-by: Apurva Nandan <a-nandan@ti.com>
 > ---
->  .../devicetree/bindings/mtd/spi-nand.txt      |  5 --
->  .../devicetree/bindings/mtd/spi-nand.yaml     | 62 +++++++++++++++++++
->  2 files changed, 62 insertions(+), 5 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mtd/spi-nand.txt
->  create mode 100644 Documentation/devicetree/bindings/mtd/spi-nand.yaml
+>  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -72,12 +72,11 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.example.dt.yaml: spi-flash@1: $nodename:0: 'spi-flash@1' does not match '^flash(@.*)?$'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/spi-nand.yaml
+Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.example.dt.yaml:0:0: /example-0/spi@fff00000/flash@1: failed to match any schema with compatible: ['spi-nand']
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1530166
+See https://patchwork.ozlabs.org/patch/1530168
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.
