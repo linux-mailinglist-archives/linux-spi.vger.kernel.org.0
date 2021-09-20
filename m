@@ -2,60 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B1941273B
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Sep 2021 22:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F384241278C
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Sep 2021 22:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbhITUY3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 20 Sep 2021 16:24:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46964 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229697AbhITUW2 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 20 Sep 2021 16:22:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id AD50B610A0;
-        Mon, 20 Sep 2021 20:21:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632169261;
-        bh=V3FbEQEbaxJ61sesodmpgYfnNBZ7ltWCBfJ9pDXsH0Y=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=gNUWWWmC+Qty7M1xaetf7M0bNcRQ1Rgwh2au8EQq0FvxPrwR6t3ncZjQRubBCIfP0
-         28eKWcpotCpmtCVDhpA6qXJU1FCQim6Bf9jSIh6HiSs5fmIf2z/d4JSSZF1bw1JyQS
-         WmHO3pzZOvkFpNePdDVxNUS8oaM3P+cf8TyPwBNsm25qGTOEKEJ68jQSwdczODWkF4
-         pHSfYywpLUQOBPUaT1QxIZxaZLaV7G8oLO+SGVcrR78GlhNl7J3MkCx8lAO/vmc5IU
-         6y1tanfGV6f1QgGuRRilzyeywv5j6p1bbd7TzXU+t+z7Skfo9xnfG/kF4zRdH1PbYW
-         ULHClsT0C52cA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 98A4C60A2A;
-        Mon, 20 Sep 2021 20:21:01 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v5.15-rc2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20210920122004.843A86109D@mail.kernel.org>
-References: <20210920122004.843A86109D@mail.kernel.org>
-X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20210920122004.843A86109D@mail.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.15-rc2
-X-PR-Tracked-Commit-Id: 2bab94090b01bc593d8bc25f68df41f198721173
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4c17ca27923c16fd73bbb9ad033c7d749c3bcfcc
-Message-Id: <163216926156.8691.7592003093574442163.pr-tracker-bot@kernel.org>
-Date:   Mon, 20 Sep 2021 20:21:01 +0000
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
+        id S229503AbhITU4a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 20 Sep 2021 16:56:30 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:48600 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236551AbhITUya (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Sep 2021 16:54:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ydCuwsv2pg7ealIoHUJECPrmEEmgCX1L67j51xBqnoA=; b=JollxnLLHFJ5lC8sEM5JtRNisE
+        +W5dnkLNXhDHEkOsRldxF4S4eHmXE5YHBJ1wLCZiNDswP5K4J9J31D1uSCKBhSUFJ5qZ+lsYjWi0v
+        En+Q9kkQhDcdV/k6NowI/tmcjWLnpEU0Q9+6nUFtbppbh8+vdkRgvpfBfufR2Wy3Zv0g=;
+Received: from cpc102334-sgyl38-2-0-cust884.18-2.cable.virginm.net ([92.233.91.117] helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1mSQHV-000eI1-RW; Mon, 20 Sep 2021 20:52:55 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id 43751D0E9AC; Mon, 20 Sep 2021 21:52:54 +0100 (BST)
+Date:   Mon, 20 Sep 2021 21:52:54 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Andreas Schwab <schwab@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        linux-spi@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: REGRESSION: "spi: add of_device_uevent_modalias support" and
+ following "fix" breaks Macchiatobin
+Message-ID: <YUj0pkhrR6kzPstv@sirena.org.uk>
+References: <YUhgbW8CiYI/rm+y@shell.armlinux.org.uk>
+ <871r5j6nlw.fsf@igel.home>
+ <YUjlwaRdmFMZHJYO@shell.armlinux.org.uk>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Aplk1EN5iLWn29n7"
+Content-Disposition: inline
+In-Reply-To: <YUjlwaRdmFMZHJYO@shell.armlinux.org.uk>
+X-Cookie: lisp, v.:
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The pull request you sent on Mon, 20 Sep 2021 13:19:02 +0100:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.15-rc2
+--Aplk1EN5iLWn29n7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4c17ca27923c16fd73bbb9ad033c7d749c3bcfcc
+On Mon, Sep 20, 2021 at 08:49:21PM +0100, Russell King (Oracle) wrote:
+> On Mon, Sep 20, 2021 at 09:41:47PM +0200, Andreas Schwab wrote:
+> > On Sep 20 2021, Russell King (Oracle) wrote:
 
-Thank you!
+> > > Therefore, this change breaks module autoloading.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> > Reverting this change breaks module autoloading.
+
+> No.
+
+> Module autoloading worked before. Then someone probably noticed a
+> problem, and thought they'd fix it by changing how the module alias
+> strings SPI provides are produced. In fixing it, they broke existing
+> setups that have worked for years.
+
+To be clear Russell is absolutely right here.  These changes have
+broken module autoloading for spi-nor on device tree based
+systems which don't list the jedec,spi-nor fallback compatible,
+and quite likely for some other drivers/systems that were also
+relying on the fallback compatible mechanism in a similar way.
+They will also have fixed systems where we weren't autoloading
+based on DT compatibles but the broken systems are still broken
+and regardless of the quality of the DTs that those systems have
+DT is an ABI so they have to continue to work.
+
+Ideally we'll be able to keep both sets of drivers working (and
+I think we probably should just get all the compatibles listed in
+the spi-nor driver for the sake of robustness if nothing else),
+unfortunately this wasn't noticed until after v5.14 was released
+so we might now have systems relying on the new behaviour too
+which complicates things a bit.  Still, if we can't get it fixed
+reasonably promptly (this week say, for the next -rc) I expect
+I'll revert as Russell has suggested.
+
+--Aplk1EN5iLWn29n7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFI9KMACgkQJNaLcl1U
+h9DZgQf/dwpjkRgf7we00U7q36ZVZI+T0vTskjcTRsDJOPJLfOLVdXxRQopWnIwA
+UmKfSthKAZyMmugabGwJ9ubh9WWQS+M21e4XAg3zyjrRFuodwrFjcj70d5O+gxQo
+VaBcu/UP0okXFlcxMgUK1IhFMH6Ohe6BCtYqbrKgPRel7c3NnIxzT92bT0KejbHJ
+dkXO/p4FOs/rdnDfjFLtLmfsjeYwXUmr3rkJqjjINwSD99Z35zWpaMlrA220aElu
+lDr1jGT68ah00V+Kyds6hcl79/Kfc/h7vpY+WZkWnZ1HRTi2TAd+6KDvLMEYjc09
+AmOyM7Zswz10vNZWNUyB1DUGYEQEuA==
+=cpDL
+-----END PGP SIGNATURE-----
+
+--Aplk1EN5iLWn29n7--
