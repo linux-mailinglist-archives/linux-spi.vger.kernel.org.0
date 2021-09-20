@@ -2,88 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8524116E6
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Sep 2021 16:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E89A8411717
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Sep 2021 16:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240306AbhITO3Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 20 Sep 2021 10:29:16 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:38144 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240160AbhITO3O (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Sep 2021 10:29:14 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 18KERW4a015725;
-        Mon, 20 Sep 2021 09:27:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1632148052;
-        bh=5hWRp8SQ/F6dA2b0wXfuXXIFLTZSU7wZCK+QJTioq9U=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=OsMEr8gVfIuD5DEBJClcQxXNGhaZarK7/obCy+xm8ZIj5WS/R6TXqYcnsqNAEn1LP
-         0TMaFu58z7V1dlNRKzCJDfrTkuxJbOA4PRy3GUtzs+V1p0T6psHcOsnlcy51AxZk06
-         uTewsMvDULfiHTPZ7fCNefw3+oIr2fUj9jYwak90=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 18KERWBG026216
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Sep 2021 09:27:32 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 20
- Sep 2021 09:27:31 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 20 Sep 2021 09:27:31 -0500
-Received: from LT5CD112GSQZ.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 18KERE44100694;
-        Mon, 20 Sep 2021 09:27:27 -0500
-From:   Apurva Nandan <a-nandan@ti.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Apurva Nandan <a-nandan@ti.com>,
-        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>
-CC:     <michael@walle.cc>
-Subject: [PATCH v2 2/2] dt-bindings: snps,dw-apb-ssi: Use 'flash' node name instead of 'spi-flash' in example
-Date:   Mon, 20 Sep 2021 19:57:13 +0530
-Message-ID: <20210920142713.129295-3-a-nandan@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210920142713.129295-1-a-nandan@ti.com>
-References: <20210920142713.129295-1-a-nandan@ti.com>
+        id S232023AbhITOdN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Mon, 20 Sep 2021 10:33:13 -0400
+Received: from mail.bytesnap.co.uk ([94.198.185.106]:45047 "EHLO
+        mail.bytesnap.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230214AbhITOdN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Sep 2021 10:33:13 -0400
+Received: from exch2016.ByteSnap.local (10.0.28.253) by
+ exch2016.ByteSnap.local (10.0.28.253) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Mon, 20 Sep 2021 15:31:44 +0100
+Received: from exch2016.ByteSnap.local ([fe80::fccc:6d14:b55e:d5a0]) by
+ exch2016.ByteSnap.local ([fe80::fccc:6d14:b55e:d5a0%8]) with mapi id
+ 15.01.2308.014; Mon, 20 Sep 2021 15:31:44 +0100
+From:   Ville Baillie <VilleB@bytesnap.co.uk>
+To:     "tudor.ambarus@microchip.com" <tudor.ambarus@microchip.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "ludovic.desroches@microchip.com" <ludovic.desroches@microchip.com>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dan.sneddon@microchip.com" <dan.sneddon@microchip.com>,
+        Ville Baillie <VilleB@bytesnap.co.uk>
+Subject: RE: [PATCH v3] spi: atmel: Fix PDC transfer setup bug
+Thread-Topic: [PATCH v3] spi: atmel: Fix PDC transfer setup bug
+Thread-Index: AdeuLBk8YnhgPjL7Rzy2vzFY84KgkA==
+Date:   Mon, 20 Sep 2021 14:31:44 +0000
+Message-ID: <60f0c65bbd52479cb83683b8475af435@bytesnap.co.uk>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.0.27.202]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Change the nodename in the example with spi-nand from 'spi-flash@1'
-to 'flash@1' to make the schema uniform with both spi-nand and spi-nor
-flashes. jedec,spi-nor.yaml uses 'flash@' nodename for spi-nor flashes,
-so make the spi-nand examples in dt-bindings use it too for uniformity.
+From 626b32a8db5b1904b0f0f7781e2375b2fd17a497 Mon Sep 17 00:00:00 2001
+From: Ville Baillie <villeb@bytesnap.co.uk>
+Date: Thu, 16 Sep 2021 14:16:46 +0000
+Subject: [PATCH v3] spi: atmel: Fix PDC transfer setup bug
 
-Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+Commit 5fa5e6dec762 ("spi: atmel: Switch to transfer_one transfer
+method") refactored the code and changed a conditional causing
+atmel_spi_dma_map_xfer to never be called in PDC mode. This causes the
+driver to silently fail.
+
+This patch changes the conditional to match the behaviour of the
+previous commit before the refactor.
+
+Signed-off-by: Ville Baillie <villeb@bytesnap.co.uk>
 ---
- Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-atmel.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-index ca91201a9926..d7e08b03e204 100644
---- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-+++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-@@ -171,7 +171,7 @@ examples:
-       cs-gpios = <&gpio0 13 0>,
-                  <&gpio0 14 0>;
-       rx-sample-delay-ns = <3>;
--      spi-flash@1 {
-+      flash@1 {
-         compatible = "spi-nand";
-         reg = <1>;
-         rx-sample-delay-ns = <7>;
--- 
-2.25.1
+diff --git a/drivers/spi/spi-atmel.c b/drivers/spi/spi-atmel.c
+index 788dcdf25f00..f872cf196c2f 100644
+--- a/drivers/spi/spi-atmel.c
++++ b/drivers/spi/spi-atmel.c
+@@ -1301,7 +1301,7 @@ static int atmel_spi_one_transfer(struct spi_master *master,
+         * DMA map early, for performance (empties dcache ASAP) and
+         * better fault reporting.
+         */
+-       if ((!master->cur_msg_mapped)
++       if ((!master->cur_msg->is_dma_mapped)
+                && as->use_pdc) {
+                if (atmel_spi_dma_map_xfer(as, xfer) < 0)
+                        return -ENOMEM;
+@@ -1381,7 +1381,7 @@ static int atmel_spi_one_transfer(struct spi_master *master,
+                }
+        }
 
+-       if (!master->cur_msg_mapped
++       if (!master->cur_msg->is_dma_mapped
+                && as->use_pdc)
+                atmel_spi_dma_unmap_xfer(master, xfer);
+
+--
+2.17.1
