@@ -2,106 +2,164 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F384241278C
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Sep 2021 22:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4FB4127D5
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Sep 2021 23:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbhITU4a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 20 Sep 2021 16:56:30 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:48600 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236551AbhITUya (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Sep 2021 16:54:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ydCuwsv2pg7ealIoHUJECPrmEEmgCX1L67j51xBqnoA=; b=JollxnLLHFJ5lC8sEM5JtRNisE
-        +W5dnkLNXhDHEkOsRldxF4S4eHmXE5YHBJ1wLCZiNDswP5K4J9J31D1uSCKBhSUFJ5qZ+lsYjWi0v
-        En+Q9kkQhDcdV/k6NowI/tmcjWLnpEU0Q9+6nUFtbppbh8+vdkRgvpfBfufR2Wy3Zv0g=;
-Received: from cpc102334-sgyl38-2-0-cust884.18-2.cable.virginm.net ([92.233.91.117] helo=fitzroy.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1mSQHV-000eI1-RW; Mon, 20 Sep 2021 20:52:55 +0000
-Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id 43751D0E9AC; Mon, 20 Sep 2021 21:52:54 +0100 (BST)
-Date:   Mon, 20 Sep 2021 21:52:54 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andreas Schwab <schwab@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        linux-spi@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: REGRESSION: "spi: add of_device_uevent_modalias support" and
- following "fix" breaks Macchiatobin
-Message-ID: <YUj0pkhrR6kzPstv@sirena.org.uk>
-References: <YUhgbW8CiYI/rm+y@shell.armlinux.org.uk>
- <871r5j6nlw.fsf@igel.home>
- <YUjlwaRdmFMZHJYO@shell.armlinux.org.uk>
+        id S232148AbhITVUY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 20 Sep 2021 17:20:24 -0400
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:34308 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231784AbhITVSX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Sep 2021 17:18:23 -0400
+Received: by mail-ot1-f41.google.com with SMTP id k12-20020a056830150c00b0051abe7f680bso25500499otp.1;
+        Mon, 20 Sep 2021 14:16:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pDoO1eNc1NTHogLdYUD9nVb5nV1LrqSfsmfysobQaT4=;
+        b=Iv428HhpJDMmj3LfSp/1fS2CPygLPuJkNRE19p7Sgmbey5XgcjevwnXnQ47F0i9dS4
+         bjOtpVJI6LsCg6fUm1AhiZT2wUqhs+TahuWsiOlV3HdDKJ1USSLLc27UrhxKuOqQZBcM
+         /tyz2WbTjo6SkM6pDBjEjCvmU2859+U8IqR7bYFs4nzy9mZwrpND7NhfuG+AFefqux5r
+         Iu2ypeyrG9dZisYmmozw3LffDfkPhcmD8SZPeOdwZMxdoZ+mqPMw8cxf2T8ZuMDL3CDn
+         dPYYIpUMrezbkQYo0Mx0eEkLsHxyYDFJq58QCi2Jt1ka2OLIiXOPSAehz0QGT6tswhba
+         X7sw==
+X-Gm-Message-State: AOAM533pE+XU57WUGWg35Xo2H5AMtMSv7Lqzj11Mnhh/Z/xSZcUZDDiJ
+        oYGLygxQ7UK3KyRrRjyCRg==
+X-Google-Smtp-Source: ABdhPJwgM1Zno5vb1ov2P0RomgoqPf3fWk0ZwdFXPRmp8uvBGNSDGDoqkdBmCWe15JjdW2tDaLW4zA==
+X-Received: by 2002:a9d:719e:: with SMTP id o30mr22262620otj.20.1632172615469;
+        Mon, 20 Sep 2021 14:16:55 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id c37sm3611930otu.60.2021.09.20.14.16.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Sep 2021 14:16:54 -0700 (PDT)
+Received: (nullmailer pid 781168 invoked by uid 1000);
+        Mon, 20 Sep 2021 21:16:53 -0000
+Date:   Mon, 20 Sep 2021 16:16:53 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Apurva Nandan <a-nandan@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Brown <broonie@kernel.org>, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, michael@walle.cc
+Subject: Re: [PATCH v2 1/2] dt-bindings: mtd: spi-nand: Convert to DT schema
+ format
+Message-ID: <YUj6RUNYDoWA30Ln@robh.at.kernel.org>
+References: <20210920142713.129295-1-a-nandan@ti.com>
+ <20210920142713.129295-2-a-nandan@ti.com>
+ <20210920150651.vvdhennblwhdi3jw@mobilestation>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Aplk1EN5iLWn29n7"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YUjlwaRdmFMZHJYO@shell.armlinux.org.uk>
-X-Cookie: lisp, v.:
+In-Reply-To: <20210920150651.vvdhennblwhdi3jw@mobilestation>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, Sep 20, 2021 at 06:06:51PM +0300, Serge Semin wrote:
+> Hello Apurva
+> 
+> On Mon, Sep 20, 2021 at 07:57:12PM +0530, Apurva Nandan wrote:
+> > Convert spi-nand.txt binding to YAML format with an added example.
+> > 
+> > Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+> > ---
+> >  .../devicetree/bindings/mtd/spi-nand.txt      |  5 --
+> >  .../devicetree/bindings/mtd/spi-nand.yaml     | 62 +++++++++++++++++++
+> >  2 files changed, 62 insertions(+), 5 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/mtd/spi-nand.txt
+> >  create mode 100644 Documentation/devicetree/bindings/mtd/spi-nand.yaml
+> 
+> Thanks for the bindings conversion patch. There are several comments
+> below. But before addressing them it would be better to also get a
+> response from Rob.
+> 
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mtd/spi-nand.txt b/Documentation/devicetree/bindings/mtd/spi-nand.txt
+> > deleted file mode 100644
+> > index 8b51f3b6d55c..000000000000
+> > --- a/Documentation/devicetree/bindings/mtd/spi-nand.txt
+> > +++ /dev/null
+> > @@ -1,5 +0,0 @@
+> > -SPI NAND flash
+> > -
+> > -Required properties:
+> > -- compatible: should be "spi-nand"
+> > -- reg: should encode the chip-select line used to access the NAND chip
+> > diff --git a/Documentation/devicetree/bindings/mtd/spi-nand.yaml b/Documentation/devicetree/bindings/mtd/spi-nand.yaml
+> > new file mode 100644
+> > index 000000000000..601beba8d971
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/mtd/spi-nand.yaml
+> > @@ -0,0 +1,62 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/mtd/spi-nand.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: SPI NAND flash
+> > +
+> > +maintainers:
+> > +  - Apurva Nandan <a-nandan@ti.com>
+> > +
+> > +allOf:
+> > +  - $ref: "mtd.yaml#"
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: spi-nand
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> 
+> > +  spi-max-frequency: true
+> > +  spi-rx-bus-width: true
+> > +  spi-tx-bus-width: true
+> > +  rx-sample-delay-ns: true
+> 
+> Since it's an SPI-client device there are more than these properties
+> could be set for it. See the SPI-controller bindings schema:
+> Documentation/devicetree/bindings/spi/spi-controller.yaml
+> So there is two possible ways to make it more generic:
+> 1) Detach the spi-client part from the spi-controller.yaml bindings
+> into a dedicated DT-schema file and refer to that new scheme from
+> here.
 
---Aplk1EN5iLWn29n7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Yes, as mentioned there's patches doing this. But the above is fine. 
+There's some value in defining here which properties are valid.
 
-On Mon, Sep 20, 2021 at 08:49:21PM +0100, Russell King (Oracle) wrote:
-> On Mon, Sep 20, 2021 at 09:41:47PM +0200, Andreas Schwab wrote:
-> > On Sep 20 2021, Russell King (Oracle) wrote:
+> 2) Forget about these controller-specific properties and let the
+> parental SPI-controller bindings parsing them. Of course there must be
+> at least one of the next properties declared for it to work:
+> {unevaluatedProperties, additionalProperties}.
+> 
+> It's up to Rob to decided which approach is better though...
+> 
+> > +
+> > +  '#address-cells': true
+> > +  '#size-cells': true
+> 
+> Aren't they always equal to 1?
 
-> > > Therefore, this change breaks module autoloading.
+No SPI nand devices >4GB?
 
-> > Reverting this change breaks module autoloading.
+> 
+> > +
+> > +additionalProperties:
+> > +  type: object
+> 
+> I'd suggest to elaborate the way the partition sub-nodes looks
+> like, for instance, the node names, supported compatible names,
+> labels, etc.
 
-> No.
+That should probably all be in mtd.yaml. The question here is whether 
+partitions are always under a 'partitions' node. Maybe this is new 
+enough that only the new way has to be supported. Though if mtd.yaml 
+supported both forms, allowing both all the time is okay IMO.
 
-> Module autoloading worked before. Then someone probably noticed a
-> problem, and thought they'd fix it by changing how the module alias
-> strings SPI provides are produced. In fixing it, they broke existing
-> setups that have worked for years.
-
-To be clear Russell is absolutely right here.  These changes have
-broken module autoloading for spi-nor on device tree based
-systems which don't list the jedec,spi-nor fallback compatible,
-and quite likely for some other drivers/systems that were also
-relying on the fallback compatible mechanism in a similar way.
-They will also have fixed systems where we weren't autoloading
-based on DT compatibles but the broken systems are still broken
-and regardless of the quality of the DTs that those systems have
-DT is an ABI so they have to continue to work.
-
-Ideally we'll be able to keep both sets of drivers working (and
-I think we probably should just get all the compatibles listed in
-the spi-nor driver for the sake of robustness if nothing else),
-unfortunately this wasn't noticed until after v5.14 was released
-so we might now have systems relying on the new behaviour too
-which complicates things a bit.  Still, if we can't get it fixed
-reasonably promptly (this week say, for the next -rc) I expect
-I'll revert as Russell has suggested.
-
---Aplk1EN5iLWn29n7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFI9KMACgkQJNaLcl1U
-h9DZgQf/dwpjkRgf7we00U7q36ZVZI+T0vTskjcTRsDJOPJLfOLVdXxRQopWnIwA
-UmKfSthKAZyMmugabGwJ9ubh9WWQS+M21e4XAg3zyjrRFuodwrFjcj70d5O+gxQo
-VaBcu/UP0okXFlcxMgUK1IhFMH6Ohe6BCtYqbrKgPRel7c3NnIxzT92bT0KejbHJ
-dkXO/p4FOs/rdnDfjFLtLmfsjeYwXUmr3rkJqjjINwSD99Z35zWpaMlrA220aElu
-lDr1jGT68ah00V+Kyds6hcl79/Kfc/h7vpY+WZkWnZ1HRTi2TAd+6KDvLMEYjc09
-AmOyM7Zswz10vNZWNUyB1DUGYEQEuA==
-=cpDL
------END PGP SIGNATURE-----
-
---Aplk1EN5iLWn29n7--
+Rob
