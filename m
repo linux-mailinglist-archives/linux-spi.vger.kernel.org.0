@@ -2,172 +2,156 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A23A412801
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Sep 2021 23:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C343141285D
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Sep 2021 23:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239074AbhITV3E (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 20 Sep 2021 17:29:04 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:48602 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240980AbhITV1E (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Sep 2021 17:27:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=+ysRS6BwtFliwWWXdpLn+rK5xPMPu+YNVJtZA6I0SgA=; b=u9uNsElK1Nquc6T+r2HCw8VELh
-        LeHK07wIeRkD6cOUV6jMRo7Pzto2RFWSbfkbUrt1R6bUTa16bUhiZEVKQjzbQ7/zyD1QTWk8Y2QO1
-        6q0xX8KzurZ9t6PrYMXee71o9MnpdXb0UCNfjOt5Fo69C0qlP0lmCdSicgoPJVjqXeQY=;
-Received: from cpc102334-sgyl38-2-0-cust884.18-2.cable.virginm.net ([92.233.91.117] helo=fitzroy.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1mSQn5-000eUM-1F; Mon, 20 Sep 2021 21:25:32 +0000
-Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id 797FED0E9AC; Mon, 20 Sep 2021 22:25:31 +0100 (BST)
-Date:   Mon, 20 Sep 2021 22:25:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Marco Felsch <m.felsch@pengutronix.de>,
-        Andreas Schwab <schwab@suse.de>, linux-spi@vger.kernel.org,
-        kernel@pengutronix.de, robh@kernel.org
-Subject: Re: REGRESSION: "spi: add of_device_uevent_modalias support" and
- following "fix" breaks Macchiatobin
-Message-ID: <YUj8S5XIR5+EAk7e@sirena.org.uk>
-References: <YUhgbW8CiYI/rm+y@shell.armlinux.org.uk>
- <20210920183327.GO4192@sirena.org.uk>
- <YUji89/msWkijl+9@shell.armlinux.org.uk>
+        id S233821AbhITVqN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 20 Sep 2021 17:46:13 -0400
+Received: from mail-eopbgr150080.outbound.protection.outlook.com ([40.107.15.80]:61831
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S240143AbhITVoM (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 20 Sep 2021 17:44:12 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C8VDwP4lal5bN9vvOR92cqgqW91d5MNrl1QietVQ0mt8WdZIX7Y7mFvVu0d2jwVYq0iyPsIq/aTlKaMdyB2N0r3cCALVkeEcHioNiMLsTlT8CaWNLDXXPSDU8PeD4ew6dqrRqLhNMR99fpnxkUISVo2bybgncxweePi8CtP6al0FlfYdOccCJZalcQVAXFc4m12sWnVMS6YOuqChfkcxYFqBxikD0zMGSlf2jGDa629e3i9zvRp5qUjCWpmT7VWdYkxRASOdqg4/CKgmrNHyARHj+3mmM831koQ67MUa+FqD6wKIlDIV6QdDAvNav7YnD4uuPf12ELDWkZ6CV+8+gw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=5rgNvva/MKeQs/T5q40/IqFG/xnDq4OuF/YrJDoWqhs=;
+ b=cAnzZb2FQ/pUAms4Wwuc7VnE62TiRciRbEBdNc5mixkL1INL4ndA2EiIuXB7B3mqUY7WKm2+H95RqNouhAHt699OtRmNSTNHqoA+43NCrSskMRQiDzlbgeInpYaU1GSYx93DFYnM0uyM2Tn/SO0tNel+nCu5BEdBTukWx6gJKsChDwR5efGPOtrDW3IHL33RDMgEV9eeXLtnuN6kLkKG9vPpbKmoQWVII0N99/wvNuWHJYBG4RakUmAkSvki8PzQEpdifcOGmixHDapJn/k1wS2rxCuC39r/Vko26TVqKcFloqdv3M2+DPg3oN+CVLsxyEOCsTWjrVLca0R4GYBOcQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5rgNvva/MKeQs/T5q40/IqFG/xnDq4OuF/YrJDoWqhs=;
+ b=WFX79GwxlHVlDHZivE22QUWNGyJM355i01ZoEqr9i6I599Tg/zqhs4d6mfql4Io1LMvg1ILc7uJ2rzR2XkpDwXpYagVHNjNgPN6mY6iwgTjzvvx4Vq9vNVtyXu/4xqpleOKjshzqTvJEDY04AErWw9vDDrv4kCWUsdcyNhWOucg=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by VI1PR04MB3198.eurprd04.prod.outlook.com (2603:10a6:802:9::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14; Mon, 20 Sep
+ 2021 21:42:39 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::e157:3280:7bc3:18c4]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::e157:3280:7bc3:18c4%5]) with mapi id 15.20.4523.018; Mon, 20 Sep 2021
+ 21:42:39 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     netdev@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Subject: [PATCH net 0/2] Fix mdiobus users with devres
+Date:   Tue, 21 Sep 2021 00:42:07 +0300
+Message-Id: <20210920214209.1733768-1-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM0PR04CA0092.eurprd04.prod.outlook.com
+ (2603:10a6:208:be::33) To VI1PR04MB5136.eurprd04.prod.outlook.com
+ (2603:10a6:803:55::19)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gGoaXWZrWVSRZdmh"
-Content-Disposition: inline
-In-Reply-To: <YUji89/msWkijl+9@shell.armlinux.org.uk>
-X-Cookie: lisp, v.:
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (82.78.148.104) by AM0PR04CA0092.eurprd04.prod.outlook.com (2603:10a6:208:be::33) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.16 via Frontend Transport; Mon, 20 Sep 2021 21:42:38 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2a6495ca-6f64-4246-acd4-08d97c7f9186
+X-MS-TrafficTypeDiagnostic: VI1PR04MB3198:
+X-Microsoft-Antispam-PRVS: <VI1PR04MB3198B437DC37D502F68BB904E0A09@VI1PR04MB3198.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1227;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yaN5KlOrrTfB/2ARcudtkk+CdWm1u2kmyYfemccVYyt4IkYjHWZRBs7MAu/6+xjDph0p9VFEZOkMjhGvYB5SSfKPje0hXJcnfNCoqEUK66P1rtv/5cf5xF64hr4BCb4zCmfSmf3SPyPpsaPhAQEd19ZcMjqTT5YL9u7eIGyCwoBuHSe3OkL5Kx8QF5x9tntvYr6kESr49dAsNKMTBUbAP2CEnNZHrp+vhJ8qNF32Ore6Oitmq4lmPgPq16HJTiG2go2PN8KyiGYwABAhwiqNi/72uMMVGn7op6UdoTwzH2EiPM9XLzKthP0MhNEvpIOqltsoKkn9GvLWNAAsW052t5FE2M1WakSASzZl6kr4DzuUSlzwmgvIHylk4v0yxXyybPjCnvM5e603ByhlB6OvMBAAQ9E/TkloyMiSuJMH4IlTaZrIHjjCCDRbM8vkCW8eiZON3zT+cUc97HWccdPw3MWDwBR/dd/7h9UUSCxQj+DrHjxxyasxSJOXc/1VK/Ki1E07GN7DAAKupxfzoGwWVkHEYN8D61E0BCvu8do4Y3LorbDnUKtbSHg9pUwbEp+I8xxPg2qyunbTRmz3Fn7uOKjrxyS1NDpDGV0MuTLMh5f/J6bs7+wO4DDZ0ruugJSX+28j6iROZxXGPfbAzf9o7LoPNIUXt/f27/ndK64wL8Jwkv5wzqbZncqZxhuOjoxmlZVTR0GGeyD6WlfsDqo//g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(366004)(396003)(376002)(39860400002)(136003)(52116002)(38100700002)(38350700002)(4326008)(1076003)(44832011)(7416002)(83380400001)(66946007)(26005)(6486002)(8936002)(2616005)(8676002)(6512007)(6916009)(956004)(2906002)(478600001)(66476007)(66556008)(316002)(54906003)(36756003)(186003)(86362001)(6506007)(5660300002)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?djVHRUI0YmdnSmJ6U1lsMW91NlptTThyZ3FSUTVGY2dMa0FqQVF0WS8xVW1p?=
+ =?utf-8?B?TWdKajhWZ0JkbTdtYkcwZmhoSWZETVVPMFNRZXQ2VERxd0dqdVN4dEpDQ0hx?=
+ =?utf-8?B?ZlBQbHlUT3VMU0VGTG9ZUUdWT0wxNDlnaUVEMExjeXdWSmxuZDlwTDdrSHlw?=
+ =?utf-8?B?TUx1UnBjdEEwaThuU1ZkeUlYWnpqRktoQm5OQmV6azRzNnVaNGY3NHZqak5D?=
+ =?utf-8?B?UFJHM01nSnhORlgwWlNDSEFWOHIrT0hDU1FGRDF3NHlnRG0xK2N5elJnREx6?=
+ =?utf-8?B?Mmw0ZDl1cG93VXZvUXRJbHVxajd5ZDZVdnI0WHFMcWJEQUpGVnI3S25WOGw4?=
+ =?utf-8?B?M3FrNWt5TUFBeEhYbVFsWXF4OGNvV1ZjcnlEdlR6UFFlK296UXpMZkRpclFl?=
+ =?utf-8?B?bW9TUUJGNk4vZ242K2ZpbEpyTUNBNHZvZ0xoRXJJNEE0Y1FkVHQyQU9tRGdz?=
+ =?utf-8?B?UDV0UmFuZUdDWG55K0lPM0dJNVI2NG10ZkZHazJvNjVlZS85RDlXZXJHYUR6?=
+ =?utf-8?B?WEdmUURoalR5elh6R0V6c0dQZTFSek9MZnVRQWhIZmJEYlhhOW9kS3UvQkpE?=
+ =?utf-8?B?UnRTUnZkWEpPT1UzdVVVRUFkN2xJeVkxSGc2U1hsS2l3emZVOVhFSXZXcXBE?=
+ =?utf-8?B?aWorWU4zaE01MjErMGxPZWM1TGFGd3YybDlYZWtRQmhHT29tOFBoVzZaYXNu?=
+ =?utf-8?B?dFpOalVjeDdmeVB6UjZDYWtJMTd5OVZDMWlRNFRKaVNKYitkUUpzRzArVkEx?=
+ =?utf-8?B?QmVOdHNXY0M0RytCSHorc0NnY1VRc3R1blNmd0l4eUROb0tKMnpOQlNpL1do?=
+ =?utf-8?B?THpZWS9aekRlOEhsTWIwVFJrYlBPUDlNYS9VcTVOQlpTRlFuUW01VlZvWVJx?=
+ =?utf-8?B?VWV6L3kydXdoMmYzTGl1eiszVU9oZDlZa0dFdEk5SWNhakFxdHZ6bmtSQVAw?=
+ =?utf-8?B?cWxVMTcyVnIrVlpsajFsS2RmckpocUpRNTZOdUM2SE9aOHJDRUFvMnYvdCtJ?=
+ =?utf-8?B?RGZIcEdTTWx5U2ZTemdVSis4b1lIaXN4ZEorWmFTRTVkRXVNbWorbjduTERW?=
+ =?utf-8?B?bXVUZEpMcHRrZG83YWdtRlF5N2F4WWpvYlBMN0RVdkR0QVVOd3Q4QzFGakhl?=
+ =?utf-8?B?UXQvQ1ZaV1VlWWM5ZzNjWnlpZm40MEwrbGYreU1kaVJkQk0vTFhsUjlybFlj?=
+ =?utf-8?B?bUJZOG1vb1N3OXRlWVJ0c0Z3ZVRHbHh6WFIvRVBOUkdGZDZtazZ6WFVLbnFZ?=
+ =?utf-8?B?WlpDaE1XT3FnZkF5Y3VRNkxLb25DQXpuUzdyOFJTV2pPcW5EeHN1cDIzMSt0?=
+ =?utf-8?B?QWdiOVNPQzlUYk9DbXU1TURaT2I3aWJ5b2xLck9UNjVzV0ZEbmI3ZFNrQ3Fz?=
+ =?utf-8?B?TFZnYnQvUFhudHhGcVBkaWoxaEN1RnNMZlkvWHo5SGJNM0RKVkR5UmtyakJE?=
+ =?utf-8?B?UlF0Q05wZ0RUOS9LYkZrRGRhZ3NBTW5zelJ4L0M3eVhUZG9xWWVMdHpDTUND?=
+ =?utf-8?B?b2FYNWdLcEhTbi9QOGNFM2dJbVlBRmFtc2s0NXd2cFdXUXhTRUxiRUVDdEll?=
+ =?utf-8?B?bEY5aGpNMTk2SUNtR1FKMnl1QnRyc1lzd1h5V3JtV1hMdkJBMTdqZjJneGRr?=
+ =?utf-8?B?U3dLc2kraVV1RmFpbjVSTUZnT3BsRGQyU0xmR1hvRjZoRXdlc0VuZmFaNVZU?=
+ =?utf-8?B?N1NEZldjb1RyTnN0S3Z4a1FmRElSRUVFMis4WFM5MnN5UERxSEFlR2VIMWg5?=
+ =?utf-8?Q?E10FHiN9nPRpjvL5Gz6x64UPrU4ngP4cNivhER1?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a6495ca-6f64-4246-acd4-08d97c7f9186
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2021 21:42:39.5707
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: q2ISgDibuRUFWa08UjJiu1lGjFgGnIeK0SlwpcAY2HfF/xe4qOZ7cPbsGduML7nTAXCyARO49aozlA92rgQzpg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3198
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Commit ac3a68d56651 ("net: phy: don't abuse devres in
+devm_mdiobus_register()") by Bartosz Golaszewski has introduced two
+classes of potential bugs by making the devres callback of
+devm_mdiobus_alloc stop calling mdiobus_unregister.
 
---gGoaXWZrWVSRZdmh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The exact buggy circumstances are presented in the individual commit
+messages. I have searched the tree for other occurrences, but at the
+moment:
 
-On Mon, Sep 20, 2021 at 08:37:23PM +0100, Russell King (Oracle) wrote:
-> On Mon, Sep 20, 2021 at 07:33:27PM +0100, Mark Brown wrote:
-> > On Mon, Sep 20, 2021 at 11:20:29AM +0100, Russell King (Oracle) wrote:
+- for issue (a) I have no concrete proof that other buses except SPI and
+  I2C suffer from it, and the only SPI or I2C device drivers that call
+  of_mdiobus_alloc are the DSA drivers that leave a NULL
+  ds->slave_mii_bus and a non-NULL ds->ops->phy_read, aka ksz9477,
+  ksz8795, lan9303_i2c, vsc73xx-spi.
 
-> > Are you sure?  Looking at the binding document it appears that the
-> > fallback to jedec,spi-nor is mandatory in all cases - it's either one of
-> > the two items: cases both of which are lists with jedec,spi-nor in them
-> > or just the plain jedec,spi-nor fallback.  It kind of doesn't matter
-> > given that we weren't enforcing it in the past but still.
+- for issue (b), all drivers which call of_mdiobus_alloc either use
+  of_mdiobus_register too, or call mdiobus_unregister sometime within
+  the ->remove path.
 
-> We aren't even enforcing it today either - running the DT checker is
-> entirely optional, and it's not even carried by distros, so across
-> distro upgrades it breaks. I'd also suggest that almost no one bothers
-> to run it either, looking at the almost 6700 lines of output it
-> produces for my build - the chances of spotting anything relevant in
-> that are practically zero.
+Although at this point I've seen enough strangeness caused by this
+"device_del during ->shutdown" that I'm just going to copy the SPI and
+I2C subsystem maintainers to this patch series, to get their feedback
+whether they've had reports about things like this before. I don't think
+other buses behave in this way, it forces SPI and I2C devices to have to
+protect themselves from a really strange set of issues.
 
-Right, good - my read of the DT binding document was correct at
-least.  Like we're both saying it doesn't really matter what was
-documented, what we were accepting is what matters.
+Vladimir Oltean (2):
+  net: dsa: don't allocate the slave_mii_bus using devres
+  net: dsa: realtek: register the MDIO bus under devres
 
-> because, although the driver accepts devices of type "w25q32", it
-> isn't listed in the DT schema. However, the driver code itself
-> accepts that "w25q32" is used in DT - so the schema is out of step
-> with the driver and has been for ages.
+ drivers/net/dsa/realtek-smi-core.c |  2 +-
+ net/dsa/dsa2.c                     | 12 +++++++++---
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
-Looks like it's trying to list it but not quite managing.
-Another thing to fix...
+-- 
+2.25.1
 
-> > This then causes issues for anything trying to bind based with DT
-> > aliases AIUI so it's just pushing the problems around to different
-> > devices.  I think ideally we should be including the fallback compat IDs
-> > that could also be matched along with the OF aliases.
-
-> I have a different view. These patches have fixed one problem by
-> creating another problem - they have _changed_ the module alias
-> that SPI creates for DT.
-
-> Originally, the module alias was created via of_modalias_node()
-> in of_register_spi_device():
-
->         /* Select device driver */
->         rc =3D of_modalias_node(nc, spi->modalias,
->                                 sizeof(spi->modalias));
->         if (rc < 0) {
->                 dev_err(&ctlr->dev, "cannot find modalias for %pOF\n", nc=
-);
->                 goto err_out;
->         }
-
-> However, as a result of the above two commits, the modalias that
-> is now given to userspace has changed from whatever
-> of_modalias_node() produced to whatever of_device_modalias() and
-> of_device_uevent_modalias() produces - which is something quite
-> different.
-
-> So, IMHO the change in these two patches was _wrong_ and always
-> was wrong, and was always going to lead to this problem. Randomly
-> deciding to have a different modalias policy is always going to
-> lead to problems like this.
-
-Hrm, right - I hadn't really registered that we were generating
-compat modaliases in quite that way (and hadn't had the bandwidth
-to dig into that properly today, should do tomorrow).  First pass
-I'd think that either SPI or probably of_device_uevent_modalias()
-ought to be generating both formats (assuming we can list
-multiple modaliases which I'm not sure on) but like I say I've
-really not dug into this properly yet at this point.
-
-I'm reasonably sure we should be continuing to generate the old
-style modalises like a revert would, my main questions are if we
-can arrange to provide both types so that anything that won't
-match on the compat type can also work, and if there's any
-fallout that needs fixing up if we can't and end up doing the
-revert.
-
-> > That doesn't seem particularly hard TBH, and if we're going to be
-> > listing any compatibles we really ought to be including them all rather
-> > than just a random one.
->=20
-> Looking at the shere number of combinations given the regexp in
-> the DT binding document, I think someone would need to script its
-> generation - expanding just the first set leads to:
-
-=2E..
-
-> And then you have a similar set for n25q*. Once all of that regexp
-> has been expanded, one then needs to add the list for "backward
-> compatibility" with all the different manufacturer prefixes that
-> of_modalias_node() stripped off.
-
-> Are you really sure this is a solution you wish to require?
-
-It's true that the manufacturer prefixes blow stuff up for this
-particular driver especially badly without wildcards which gets
-messy...  the interaction between generic parts like flash and
-the DT aliases definitely isn't at all nice at the minute, the
-compat stuff is doing a good job of sidestepping some of the
-explosion in compatibles.
-
---gGoaXWZrWVSRZdmh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFI/EoACgkQJNaLcl1U
-h9BpxQf/f+rBiqBAbnxs3U4zAm/4shjcla/3qK1IrpdNs4zGcRwXVuIrRGi22Y85
-jvFGshExkFoQ7Q+E7amlw+pn9FibHiRq4GMM+9eUIfhFwLNX+REMNxq0ZXYwBhWW
-PYEPgVf8wTU8s0/z/8V6s3NrAguTB1CZuYrETo0RtXJC6aWRVcKgwgWu6GaQ5NAF
-ekuFkzvOimvUb+BV/2IUImNjT/epPWCio9ypGm9XkzDXBJz/IG4JJ/e+A/Axrvwk
-CmpqXGzcthZOVfWoNCqnQrkJdpvfCjCPelvCRApXnC4PoJbCyydzqfGcjxFCNVTy
-2IbZKabOIQ3CHbu5kRROqtHVX784RQ==
-=NvxZ
------END PGP SIGNATURE-----
-
---gGoaXWZrWVSRZdmh--
