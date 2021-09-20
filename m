@@ -2,73 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D188441146D
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Sep 2021 14:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D34E4116E3
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Sep 2021 16:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238031AbhITMat (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 20 Sep 2021 08:30:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53940 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238218AbhITMaq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 20 Sep 2021 08:30:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3134860F58;
-        Mon, 20 Sep 2021 12:29:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632140959;
-        bh=ObHHjmqefZdehr9608wgJPUdpSprqKXrlBTDgkQ0lFA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=m5Vv39YegcE7ASDxn33u4mLdfpSt74DhMNuh8W5bEFLJWj6Thf0eZhRlpsV50BNrN
-         7+IDGF+ANYyNjgQtjZmQ54n4hHORuYGFC5e4R1SqB6mKwaKGvW4mGnM1jfxiCeo2vm
-         B/evKl5N6Z/7KcscCwQNanzt15hhg4hRc5A3pe3Ov5XCaRDulM5jgx+8kd+JqDv4Oj
-         KrhiJfxxNrhEgnyUXBXBpwg3m7u3B8MtIfxeCQuVqPVb8tvnK7tx7WZMn1xXtWGMGS
-         LHkYPrll53byN0rvYU9c4ZIwhTBZiyxElVZarJ5pfKVInnPCGQAdUAFWNryA5Y32Xy
-         4TNJouyoSqhwg==
-Date:   Mon, 20 Sep 2021 13:28:36 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Ville Baillie <villeb@bytesnap.co.uk>
-Cc:     linux-spi@vger.kernel.org, Dan Sneddon <dan.sneddon@microchip.com>
-Subject: Re: [PATCH v2] spi: atmel: Fix PDC transfer setup bug
-Message-ID: <20210920122836.GA13727@sirena.org.uk>
+        id S240043AbhITO3M (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 20 Sep 2021 10:29:12 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:59928 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237881AbhITO3K (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Sep 2021 10:29:10 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 18KERKTl105711;
+        Mon, 20 Sep 2021 09:27:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1632148040;
+        bh=Y7l7RaNnp7XledpwNXnncmI84XTK+TQrRyIYiiow6jY=;
+        h=From:To:CC:Subject:Date;
+        b=iVj8t8mzZOzjB+LSPSNKaxSFv43hNK0hKIkYx4eGnA+GMm9cXZUYLhB+HMs29Bzvk
+         C4abHK9XR5zIl4HYnH/N4/EwPYuLIipL3SsphEtVw/WchKhqUCwbR3uNwPH8ZS2qPj
+         KcgzlyNXel64RMJ1OKIhmQixUUuw/pfyhS3c88Ks=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 18KERKjv044860
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 20 Sep 2021 09:27:20 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 20
+ Sep 2021 09:27:20 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 20 Sep 2021 09:27:20 -0500
+Received: from LT5CD112GSQZ.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 18KERE42100694;
+        Mon, 20 Sep 2021 09:27:15 -0500
+From:   Apurva Nandan <a-nandan@ti.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Apurva Nandan <a-nandan@ti.com>,
+        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>
+CC:     <michael@walle.cc>
+Subject: [PATCH v2 0/2] dt-bindings: mtd: spi-nand: Convert to DT schema
+Date:   Mon, 20 Sep 2021 19:57:11 +0530
+Message-ID: <20210920142713.129295-1-a-nandan@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="a8Wt8u1KmwUX3Y2C"
-Content-Disposition: inline
-X-Cookie: Loose bits sink chips.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Series to convert spi-nand.txt binding to YAML format and also fix up
+snps-dw-apb-ssi for related dt_schema errors.
 
---a8Wt8u1KmwUX3Y2C
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Changes in v2:
+- Fixed dtschema erros in snps-dw-apb-ssi.
+- Improved additionalProperties, reg, and compatible fields in
+  spi-nand.yaml.
 
-On Thu, Sep 16, 2021 at 02:16:46PM +0000, Ville Baillie wrote:
-> Commit 5fa5e6dec762 ("spi: atmel: Switch to transfer_one transfer
-> method") refactored the code and changed a conditional causing
-> atmel_spi_dma_map_xfer to never be called in PDC mode. This causes the
-> driver to silently fail.
->=20
-> This patch changes the conditional to match the behaviour of the
-> previous commit before the refactor.
+Apurva Nandan (2):
+  dt-bindings: mtd: spi-nand: Convert to DT schema format
+  dt-bindings: snps,dw-apb-ssi: Use 'flash' node name instead of
+    'spi-flash' in example
 
-This doesn't apply against current code, please check and resend.
+ .../devicetree/bindings/mtd/spi-nand.txt      |  5 --
+ .../devicetree/bindings/mtd/spi-nand.yaml     | 62 +++++++++++++++++++
+ .../bindings/spi/snps,dw-apb-ssi.yaml         |  2 +-
+ 3 files changed, 63 insertions(+), 6 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mtd/spi-nand.txt
+ create mode 100644 Documentation/devicetree/bindings/mtd/spi-nand.yaml
 
---a8Wt8u1KmwUX3Y2C
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.25.1
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFIfnMACgkQJNaLcl1U
-h9BB0Af+KvGDtKGHY4b+3drLmFV5i9cpXRPX3w6fLWUNNkMh/gLR93L8i6kkdwny
-0wfzt5TvGsK4YIL+3kKBAHp+Xc72MLrOeUq4XGWZNf1ngQyZzLjZb7qajS2aF6EJ
-wFGZtmU27vVdfLY8HFDg2O2B8+ctZZldtOegm6L+QHlTDWZ/nwZ9aitoAgqZURMA
-aDCJhArWrZPNQPucjAFFaej5Cjxhc4GIyfOUiBpA4dbe8LMKbK3OLJ2MpGIyt0cT
-TDqvlbuoeGuyqvAXXyGYBFGux/s1ztrvo32L0akCS3+MC9by6PI3mfXzNvJKXpee
-dXiDPDzJYLoWf+sSLJ2NvERnaoPr1A==
-=4Wap
------END PGP SIGNATURE-----
-
---a8Wt8u1KmwUX3Y2C--
