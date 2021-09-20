@@ -2,104 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C27411762
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Sep 2021 16:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 846C041175D
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Sep 2021 16:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236955AbhITOqr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 20 Sep 2021 10:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236917AbhITOqr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Sep 2021 10:46:47 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B3FC061574;
-        Mon, 20 Sep 2021 07:45:20 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id b15so50440996lfe.7;
-        Mon, 20 Sep 2021 07:45:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tuWyQBqXiUuLdjTaM4+1NWtk+RRPTol/u+OTKXZEEAY=;
-        b=oitbjIV4r+cBWkH8uYuxmdfenP8UlTJpPo0TfTMbhgJdYc2TbwElWgAbosJI4TXzjY
-         i6DaUpIqI0dSJD2+65Tpvvho3zD4Q4X0XnfqzbSOLgzuvZDHDaAgLVgGBLZ0pMCefTgZ
-         Cvw6uOXrAvAfJXoxiPLvtbTfH2xrisGIA6Eh6yc393WWrwU55BPP1T2IsTGRj1opgGlA
-         lEb0S2ONSc09GTiiqqCx3JPGraOGycK/D8eFVgFdiroBgBbLG9pG/sGmucWLwSFBpGTg
-         HECYyVroTzhNrxzfb/poWpH1+6atchPDdA1zjySS3ohE9H8hhEAyoi7kbUrL2C4QIXjS
-         9mBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tuWyQBqXiUuLdjTaM4+1NWtk+RRPTol/u+OTKXZEEAY=;
-        b=I7avxgW1/wKXW6Yd4zY+vUjLcnwsf+g1rSYcT2FtEAHkSh98T7QrTI0r40aSRyyvqE
-         owlRGcqnvnazqFnFPGz4eJvX1ntjLmY2VFBO4ugTqPxILURSX1wUhNOMLdry81tC758E
-         oogjcgnkb6YYG5ZCYVVdKEvPkcRSv+HedtTkwGMajk7Z0N0UVQobGqfacp2/OAHBuo4R
-         FTmFepXyEmkSXqOqhfW+Dz/d0voArHuzru+ErvG43sR4xx0YYVbHy631qnRx9zrOGq0I
-         vv1VzbCahG9IfkkmjWbo0RrdFdQbl5E/C2zbmbvc9C83RXbyst80tnieQgSWFNA/1JYw
-         Zshg==
-X-Gm-Message-State: AOAM532KHN7/1TQB0Zxf2UwqV0EqRWt6hkgQKIRE6ylSUSL1G3sqW3zf
-        b6uAAjhR4FQN5Gs/+uNAUds=
-X-Google-Smtp-Source: ABdhPJwK0I9hP+SKpzutXB8R+blwaxUiqjIYiFSudus+Eh+S13Gs3cj38UFOVT0hJkL6cK5oZ4MuKg==
-X-Received: by 2002:ac2:4c81:: with SMTP id d1mr19042396lfl.340.1632149047925;
-        Mon, 20 Sep 2021 07:44:07 -0700 (PDT)
-Received: from mobilestation ([95.79.127.110])
-        by smtp.gmail.com with ESMTPSA id y17sm1286651lfh.73.2021.09.20.07.44.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Sep 2021 07:44:07 -0700 (PDT)
-Date:   Mon, 20 Sep 2021 17:44:04 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
+        id S237807AbhITOq3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 20 Sep 2021 10:46:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39144 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237708AbhITOq2 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 20 Sep 2021 10:46:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 83BC760F6B;
+        Mon, 20 Sep 2021 14:45:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632149102;
+        bh=7cDcGS8H3dVH16lHnrmM5SjCWdPr+91GxGQ+fdE0o4o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H4pyCnG33eGm6pwYU4CfGQyxRPxkIWjJD/Hl4BrjL+/FG3RuRGoXE3Vc4LmzOClR2
+         nZrdyOSYKZecUwPaJNfYA62XbP8KTgeNulG6YZwtCTeoYX490WAyUPt5dyolG4ShXF
+         UcYgwJRwcQUqqQGc4arypKSeP9MblRKHv+hBJaPZVEZA9sL8cUct0l6uYBIJ6O7oMW
+         fq1l7GzJnQoZ9rHzG1J3hK2CMSuMvgkZHTS4NnlxcXCSxffnMrifZ9jA1Cv5ohJUd9
+         EbYCMmd2fVmWsEycF5XI9bDl0xaNrqruag0dRfxYYwgkuvfdxy91Uf3lesM+sLK17k
+         Zj6909SBS+dBA==
+Date:   Mon, 20 Sep 2021 15:44:18 +0100
+From:   Mark Brown <broonie@kernel.org>
 To:     Apurva Nandan <a-nandan@ti.com>
 Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, michael@walle.cc
+        Serge Semin <fancer.lancer@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        michael@walle.cc
 Subject: Re: [PATCH v2 2/2] dt-bindings: snps,dw-apb-ssi: Use 'flash' node
  name instead of 'spi-flash' in example
-Message-ID: <20210920144404.5vhynfdfukabxgav@mobilestation>
+Message-ID: <20210920144418.GI4192@sirena.org.uk>
 References: <20210920142713.129295-1-a-nandan@ti.com>
  <20210920142713.129295-3-a-nandan@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lrvsYIebpInmECXG"
 Content-Disposition: inline
 In-Reply-To: <20210920142713.129295-3-a-nandan@ti.com>
+X-Cookie: diplomacy, n:
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
+
+
+--lrvsYIebpInmECXG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 On Mon, Sep 20, 2021 at 07:57:13PM +0530, Apurva Nandan wrote:
 > Change the nodename in the example with spi-nand from 'spi-flash@1'
 > to 'flash@1' to make the schema uniform with both spi-nand and spi-nor
 > flashes. jedec,spi-nor.yaml uses 'flash@' nodename for spi-nor flashes,
 > so make the spi-nand examples in dt-bindings use it too for uniformity.
-> 
-> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
-> ---
->  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Seems reasonable.
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+Please submit patches using subject lines reflecting the style for the
+subsystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and
+make sure your subject lines visually resemble what they're doing.
+There's no need to resubmit to fix this alone.
 
--Sergey
+--lrvsYIebpInmECXG
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> index ca91201a9926..d7e08b03e204 100644
-> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> @@ -171,7 +171,7 @@ examples:
->        cs-gpios = <&gpio0 13 0>,
->                   <&gpio0 14 0>;
->        rx-sample-delay-ns = <3>;
-> -      spi-flash@1 {
-> +      flash@1 {
->          compatible = "spi-nand";
->          reg = <1>;
->          rx-sample-delay-ns = <7>;
-> -- 
-> 2.25.1
-> 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFInkEACgkQJNaLcl1U
+h9B3kgf8C0+e9onyf5hzlsH/Wy+bz8cm0v2pE7e7Jmbmb9T+l6SG5uVDV5XFg+hT
+TRA+OdGbxzmVJmozgcBeJW3rZHyfcv38uWuAJp7iQx6HjtOB5zRskChX76HvZUHE
+IlFilNB2KEW33E3eC+vBV8fzzwoG2Uu22OAHLAEIwZJmb+GdeQ5xPeGMuzjhdfva
+QCTEAOSopxfcphryTUeWGGLl5roXvR/8QCuySX/SOD7/5IIPmPnNo2mxmc+AdlfL
+rMAVTMBlzNvxY7MU2/zv75OEp2dgAixWaw+BhNKA5ns2HaNNTxGpJ1t3/oY0+3H7
+VXHvTG5vturPUxiDm/v7b9D5RDzHrw==
+=4fpd
+-----END PGP SIGNATURE-----
+
+--lrvsYIebpInmECXG--
