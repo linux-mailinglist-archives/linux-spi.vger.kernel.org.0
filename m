@@ -2,227 +2,188 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A746B412BAE
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Sep 2021 04:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E23412D60
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Sep 2021 05:24:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348624AbhIUCYG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 20 Sep 2021 22:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
+        id S232178AbhIUD0I (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 20 Sep 2021 23:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236815AbhIUBvb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Sep 2021 21:51:31 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E882C0617A6
-        for <linux-spi@vger.kernel.org>; Mon, 20 Sep 2021 15:43:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=TxZ+p8dDMCIXX4/MPBAkMyFUf/CibyaKNW8qQSHI3m0=; b=EJ1SQMzJE7KAgmIo8sUiK/9JlL
-        si7z/s1hsk6bhWbCBAPn8ADSeb//tztEzDCgU9BZOexxXFe2vfJAOgMuXOPeqE6YVXs9QGzatbOwf
-        xfLE9b8gX9Ah7MZbGIdyIA1Y3Xm61DHFAfg71C+GdQwv8UQn6+WB+xgjmgIBpx3bdWv/5Oq8KNo9h
-        vBKcWrjc7bYryUmrrfqqPr8NkGRLS7MWVnxx2W8igOASPLnZaT1eocbPdJJK37Sfp5k6hoIx54rDd
-        a18RqfYDr928jdu2GGI+cRJ+U1rUqFSCt+VVASsKKYLg7UbMkBIdwhyaZY7HhxR6MSLbKYofh+Qb0
-        tzWXlUdQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:54688)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1mSS07-00025m-JK; Mon, 20 Sep 2021 23:43:03 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1mSS06-0002f1-KV; Mon, 20 Sep 2021 23:43:02 +0100
-Date:   Mon, 20 Sep 2021 23:43:02 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Andreas Schwab <schwab@suse.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>, broonie@kernel.org,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        linux-spi@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: REGRESSION: "spi: add of_device_uevent_modalias support" and
- following "fix" breaks Macchiatobin
-Message-ID: <YUkOdoqccsbEh08C@shell.armlinux.org.uk>
-References: <YUhgbW8CiYI/rm+y@shell.armlinux.org.uk>
- <871r5j6nlw.fsf@igel.home>
- <YUjlwaRdmFMZHJYO@shell.armlinux.org.uk>
- <87wnna6hdc.fsf@igel.home>
+        with ESMTP id S1351595AbhIUCkE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Sep 2021 22:40:04 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A501C08E935;
+        Mon, 20 Sep 2021 19:16:25 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id r2so19283507pgl.10;
+        Mon, 20 Sep 2021 19:16:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gEQUmF5qAOUpNTdIXxk8/9tLYK1uPImf5fKr1IDf3wE=;
+        b=dH71tSrltEBunSDXVlVaU3sPJQ4lHi6n+2yF3QjOwBDKUzoF7Jx6HB4peLJNylBGZ4
+         6fwkElgfomgWmhSd48/TOlahdYZND3eC9W3qEko1I55O9Xc0Mh9bCBGyus6Rgon4TEFI
+         cPC+JJlQgpe7uaow4flJcD0FcyPRngvJMjF07a2VShhdRmbsBqZosVzDhjWweBpTbcJz
+         TuAM802/bo5an0K6xx6KKjwnjW5bMwJC7oinbh0Xanq/HRYJSTRJA6diz+kF1QkcSGU5
+         bSE+UdOkrOir2Nc+lgKyZ7B0/iK2L7mZnaQpS6FlO2fSk/5g8X33iVlHdtNtvwPsPOiv
+         WQdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gEQUmF5qAOUpNTdIXxk8/9tLYK1uPImf5fKr1IDf3wE=;
+        b=OJHBRr6JLXh+38fosNShgZPtJGjZ6gPO0mHZOCaaItJw7D3c04m4SaoFiqXTHbwwH9
+         4PgXYNYO3u6DKkGxmTkJKbOrpEn56XaW3iN/mTMEIbldcMA4fdd3HAVeRjojTVvCQPfO
+         Cl6y3waad+j2k/rYP1iJUS5vVPv7GW9zKTP9K0P7YyvDETOxkORfoGWSdotff2RxqrqL
+         G6DHsrCBWqxFO9zh/jkONb7Ngv0UX5uofBr2me25bkfUYSH36vNu35Ky3xyv8fVJgjtP
+         vfAy2salKo3PAlhe6ZKi413NCslLQm10hfSmXxyPATDVvakEV6UakhdJPHKqPsX6cKCQ
+         mT2w==
+X-Gm-Message-State: AOAM531HmyGRqAelcVyT2THggiAZz3d9BBJvOW+kW0WRe66Zj6kZBRKV
+        HCEU4V5p3X+U1g9mK45hzYo=
+X-Google-Smtp-Source: ABdhPJwnjvH24pjyfzqJg0BEyKsBsGTpNfTMz2JSfhhUmz9D38nJnvCvThJdrs3xEgf+qu1l5tIDBQ==
+X-Received: by 2002:a63:2047:: with SMTP id r7mr25616446pgm.398.1632190584450;
+        Mon, 20 Sep 2021 19:16:24 -0700 (PDT)
+Received: from [192.168.1.121] (99-44-17-11.lightspeed.irvnca.sbcglobal.net. [99.44.17.11])
+        by smtp.gmail.com with ESMTPSA id n15sm624615pjj.36.2021.09.20.19.16.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Sep 2021 19:16:23 -0700 (PDT)
+Message-ID: <4c552594-5923-ba55-af2f-8a0f86936fca@gmail.com>
+Date:   Mon, 20 Sep 2021 19:16:15 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87wnna6hdc.fsf@igel.home>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.1
+Subject: Re: [PATCH net 1/2] net: dsa: don't allocate the slave_mii_bus using
+ devres
+Content-Language: en-US
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>
+References: <20210920214209.1733768-1-vladimir.oltean@nxp.com>
+ <20210920214209.1733768-2-vladimir.oltean@nxp.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20210920214209.1733768-2-vladimir.oltean@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Sep 20, 2021 at 11:56:31PM +0200, Andreas Schwab wrote:
-> On Sep 20 2021, Russell King (Oracle) wrote:
+
+
+On 9/20/2021 2:42 PM, Vladimir Oltean wrote:
+> The Linux device model permits both the ->shutdown and ->remove driver
+> methods to get called during a shutdown procedure. Example: a DSA switch
+> which sits on an SPI bus, and the SPI bus driver calls this on its
+> ->shutdown method:
 > 
-> > On Mon, Sep 20, 2021 at 09:41:47PM +0200, Andreas Schwab wrote:
-> >> On Sep 20 2021, Russell King (Oracle) wrote:
-> >> 
-> >> > Therefore, this change breaks module autoloading.
-> >> 
-> >> Reverting this change breaks module autoloading.
-> >
-> > No.
-> >
-> > Module autoloading worked before.
+> spi_unregister_controller
+> -> device_for_each_child(&ctlr->dev, NULL, __unregister);
+>     -> spi_unregister_device(to_spi_device(dev));
+>        -> device_del(&spi->dev);
 > 
-> Nope.
+> So this is a simple pattern which can theoretically appear on any bus,
+> although the only other buses on which I've been able to find it are
+> I2C:
+> 
+> i2c_del_adapter
+> -> device_for_each_child(&adap->dev, NULL, __unregister_client);
+>     -> i2c_unregister_device(client);
+>        -> device_unregister(&client->dev);
+> 
+> The implication of this pattern is that devices on these buses can be
+> unregistered after having been shut down. The drivers for these devices
+> might choose to return early either from ->remove or ->shutdown if the
+> other callback has already run once, and they might choose that the
+> ->shutdown method should only perform a subset of the teardown done by
+> ->remove (to avoid unnecessary delays when rebooting).
+> 
+> So in other words, the device driver may choose on ->remove to not
+> do anything (therefore to not unregister an MDIO bus it has registered
+> on ->probe), because this ->remove is actually triggered by the
+> device_shutdown path, and its ->shutdown method has already run and done
+> the minimally required cleanup.
+> 
+> This used to be fine until the blamed commit, but now, the following
+> BUG_ON triggers:
+> 
+> void mdiobus_free(struct mii_bus *bus)
+> {
+> 	/* For compatibility with error handling in drivers. */
+> 	if (bus->state == MDIOBUS_ALLOCATED) {
+> 		kfree(bus);
+> 		return;
+> 	}
+> 
+> 	BUG_ON(bus->state != MDIOBUS_UNREGISTERED);
+> 	bus->state = MDIOBUS_RELEASED;
+> 
+> 	put_device(&bus->dev);
+> }
+> 
+> In other words, there is an attempt to free an MDIO bus which was not
+> unregistered. The attempt to free it comes from the devres release
+> callbacks of the SPI device, which are executed after the device is
+> unregistered.
+> 
+> I'm not saying that the fact that MDIO buses allocated using devres
+> would automatically get unregistered wasn't strange. I'm just saying
+> that the commit didn't care about auditing existing call paths in the
+> kernel, and now, the following code sequences are potentially buggy:
+> 
+> (a) devm_mdiobus_alloc followed by plain mdiobus_register, for a device
+>      located on a bus that unregisters its children on shutdown. After
+>      the blamed patch, either both the alloc and the register should use
+>      devres, or none should.
+> 
+> (b) devm_mdiobus_alloc followed by plain mdiobus_register, and then no
+>      mdiobus_unregister at all in the remove path. After the blamed
+>      patch, nobody unregisters the MDIO bus anymore, so this is even more
+>      buggy than the previous case which needs a specific bus
+>      configuration to be seen, this one is an unconditional bug.
+> 
+> In this case, DSA falls into category (a), it tries to be helpful and
+> registers an MDIO bus on behalf of the switch, which might be on such a
+> bus. I've no idea why it does it under devres.
+> 
+> It does this on probe:
+> 
+> 	if (!ds->slave_mii_bus && ds->ops->phy_read)
+> 		alloc and register mdio bus
+> 
+> and this on remove:
+> 
+> 	if (ds->slave_mii_bus && ds->ops->phy_read)
+> 		unregister mdio bus
+> 
+> I _could_ imagine using devres because the condition used on remove is
+> different than the condition used on probe. So strictly speaking, DSA
+> cannot determine whether the ds->slave_mii_bus it sees on remove is the
+> ds->slave_mii_bus that _it_ has allocated on probe. Using devres would
+> have solved that problem. But nonetheless, the existing code already
+> proceeds to unregister the MDIO bus, even though it might be
+> unregistering an MDIO bus it has never registered. So I can only guess
+> that no driver that implements ds->ops->phy_read also allocates and
+> registers ds->slave_mii_bus itself.
+> 
+> So in that case, if unregistering is fine, freeing must be fine too.
+> 
+> Stop using devres and free the MDIO bus manually. This will make devres
+> stop attempting to free a still registered MDIO bus on ->shutdown.
+> 
+> Fixes: ac3a68d56651 ("net: phy: don't abuse devres in devm_mdiobus_register()")
+> Reported-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Sorry, but you are wrong. Let me take a random built kernel I have
-laying around. 5.4.0+:
-
--rw-r--r-- 1 rmk rmk 17164877 Jan 26  2020 /home/rmk/systems/juno-host-5.4.0+.tar.bz2
-
-and throw it onto the Macchiatobin:
-
-[  OK  ] Finished Suspend/Resume Running libvirt Guests.
-[  OK  ] Started LSB: exim Mail Transport Agent.
-[  OK  ] Started Samba SMB Daemon.
-[  OK  ] Reached target Multi-User System.
-[  OK  ] Reached target Graphical Interface.
-         Starting Update UTMP about System Runlevel Changes...
-[  OK  ] Finished Update UTMP about System Runlevel Changes.
-
-Debian GNU/Linux 11 mcbin-ss ttyS2
-
-mcbin-ss login: root
-Password:
-Linux mcbin-ss 5.4.0+ #608 SMP PREEMPT Sun Jan 26 15:44:51 GMT 2020 aarch64
-
-The programs included with the Debian GNU/Linux system are free software;
-the exact distribution terms for each program are described in the
-individual files in /usr/share/doc/*/copyright.
-
-Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
-permitted by applicable law.
-Last login: Mon Sep 20 22:17:58 BST 2021 on ttyS2
-root@mcbin-ss:~# lsmod
-Module                  Size  Used by
-nfnetlink              16384  0
-8021q                  36864  0
-garp                   16384  1 8021q
-mrp                    20480  1 8021q
-crct10dif_ce           16384  1
-spi_nor                49152  0
-armada_thermal         16384  0
-sbsa_gwdt              16384  0
-ip_tables              32768  0
-x_tables               45056  1 ip_tables
-root@mcbin-ss:~#
-
-That's strange, spi_nor has been _autoloaded_ under 5.4.0+. If I boot
-exactly the same userspace with 5.13.0+, it gets _autoloaded_:
-
-[  OK  ] Finished Suspend/Resume Running libvirt Guests.
-[  OK  ] Started Samba SMB Daemon.P■ower device driver controller.
-[  OK  ] Started LSB: exim Mail Transport Agent.tails.
-[  OK  ] Reached target Multi-User System.
-[  OK  ] Reached target Graphical Interface.ring sensors.
-         Starting Update UTMP about System Runlevel Changes...
-[  OK  ] Finished Update UTMP about System Runlevel Changes.rvice.
-[  OK  ] Started LSB: rng-tools (Debian variant).
-
-Debian GNU/Linux 11 mcbin-ss ttyS2
-
-mcbin-ss login: root
-Password:
-Linux mcbin-ss 5.13.0+ #958 SMP PREEMPT Tue Sep 14 16:17:44 BST 2021 aarch64
-
-The programs included with the Debian GNU/Linux system are free software;
-the exact distribution terms for each program are described in the
-individual files in /usr/share/doc/*/copyright.
-
-Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
-permitted by applicable law.
-Last login: Mon Sep 20 23:19:05 BST 2021 on ttyS2
-root@mcbin-ss:~# lsmod
-Module                  Size  Used by
-nfnetlink              20480  0
-8021q                  36864  0
-garp                   16384  1 8021q
-mrp                    20480  1 8021q
-crct10dif_ce           20480  1
-spi_nor                73728  0
-leds_gpio              16384  0
-pwm_fan                20480  0
-armada_thermal         16384  0
-sbsa_gwdt              20480  0
-ip_tables              32768  0
-x_tables               45056  1 ip_tables
-
-I'll prove it by moving the modules so they can't be loaded by the
-normal system boot, and then trigger udev:
-
-root@mcbin-ss:~# uname -a
-Linux mcbin-ss 5.13.0+ #958 SMP PREEMPT Tue Sep 14 16:17:44 BST 2021 aarch64 GNU/Linux
-root@mcbin-ss:~# lsmod
-Module                  Size  Used by
-root@mcbin-ss:~# mv 5.13.0+ /lib/modules
-root@mcbin-ss:~# udevadm trigger --action=add
-root@mcbin-ss:~# sbsa-gwdt f0610000.watchdog: Initialized with 10s timeout @ 25000000 Hz, action=0.
-spi-nor spi4.0: w25q32 (4096 Kbytes)
-lsmod
-Module                  Size  Used by
-crct10dif_ce           20480  1
-pwm_fan                20480  0
-spi_nor                73728  0
-leds_gpio              16384  0
-armada_thermal         16384  0
-sbsa_gwdt              20480  0
-
-Why does this happen?
-
-root@mcbin-ss:~# cat /sys/bus/spi/devices/spi4.0/modalias
-spi:w25q32
-root@mcbin-ss:~# cat /sys/bus/spi/devices/spi4.0/uevent
-DRIVER=spi-nor
-OF_NAME=spi-flash
-OF_FULLNAME=/cp1/config-space@f4000000/spi@700680/spi-flash@0
-OF_COMPATIBLE_0=st,w25q32
-OF_COMPATIBLE_N=1
-MODALIAS=spi:w25q32
-root@mcbin-ss:~# modinfo spi-nor
-filename:       /lib/modules/5.13.0+/kernel/drivers/mtd/spi-nor/spi-nor.ko
-description:    framework for SPI NOR
-author:         Mike Lavender
-author:         Huang Shijie <shijie8@gmail.com>
-license:        GPL v2
-alias:          of:N*T*Cjedec,spi-norC*
-alias:          of:N*T*Cjedec,spi-nor
-alias:          spi:mr25h40
-...
-alias:          spi:w25q32		<=======================
-...
-alias:          spi:spi-nor
-depends:
-intree:         Y
-name:           spi_nor
-vermagic:       5.13.0+ SMP preempt mod_unload aarch64
-
-If I boot the exact same userspace with 5.14.0+, it does _not_ get
-autoloaded, because the modinfo and uevent files contain different
-contents that the spi-nor module does not have an alias for.
-
-Yet you say without your change module autoloading doesn't work - that
-may be true for you, but the point here is that:
-
-   Your change plus another during the 5.14 cycle broke previously
-   working module autoloading. It broke a previously working setup.
-   This is a _regression_.
-
-Maybe you could explain why you think otherwise - and possibly accept
-that it _did_ used to work for others.
-
-Yes, I get it that _your_ patch (which is the later one of the two
-that I mentioned) was merely bringing the modalias file into line with
-the uevent file - but that doesn't change the fact that 5.13 and
-earlier kernels worked, 5.14 does not.
-
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Florian
