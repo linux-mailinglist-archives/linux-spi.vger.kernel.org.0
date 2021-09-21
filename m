@@ -2,120 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D23D412F83
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Sep 2021 09:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2DE412F87
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Sep 2021 09:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbhIUHe3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Sep 2021 03:34:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbhIUHe2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Sep 2021 03:34:28 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C7DC061575
-        for <linux-spi@vger.kernel.org>; Tue, 21 Sep 2021 00:33:00 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id 194so26657950qkj.11
-        for <linux-spi@vger.kernel.org>; Tue, 21 Sep 2021 00:33:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7ovs5q83bHL+D1OJfxB5RAczSsIYkfuAAEVFKvsO42U=;
-        b=cuCR7qRr0UBrou/aPWxf7z7Nm3Gx73Nq70Hi36sXogbO3ONtBDWza1iKxi8SsGxhuE
-         n5luR2YP462Gm8/Gf/WK0x6dN7xiRWWiGz1F8n9ggZmDuxf7YgVb+DppOzf/gJSLT5yE
-         RJW1OBBwmNmROBQnSVFAEztAhy7IddAPB1ABbdbb8KjRdLqPJed7qdwVvDaS5JCKrMG2
-         +oKQLILgsiq6c5HQ+Ym/W5GiNEW/Kj5PPa5Uk+kj5SY7u74ENmiD7yTX5+dfM+Y4Vnx9
-         PBdWDC/X1L7o8mxP9WhqORmFcUYpKUUtMLD0uX4yocvZQgg0GNJH3pYajHmwdlPyxE+B
-         4huw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7ovs5q83bHL+D1OJfxB5RAczSsIYkfuAAEVFKvsO42U=;
-        b=1R2nVyodu9wNx/ALx3Kqa3qRCdNdAii/XHl6iTgU89cJczt6+BFLKzhHkwhAwZwb2W
-         001ZRrVxXq0yWtfqBgBvTv/FT5LODrcUUHciRiT7nb8mdpxyXGiRBs+xbame8PLSjgGU
-         bFLI01w/yTU82pC4680Kfe5RkUd7FB784tfWTth9b6tzu1UFNlSZsiY9OTPQ9Pte4/xT
-         +iN40+IORs//uDQKdWEfyyhtQjxvv2FlaH1rD0wrdoLtdLBgQAJHeIL0N1Vc/m6WiFZ8
-         AbGcF04qVGsplP7X3yXWBaozp56xeN9mrkTLWmwSrIKBP1ENZimks/TDW+AD4euRJaLJ
-         dcvA==
-X-Gm-Message-State: AOAM530F7y8wxLd7tua+SzspdIGLuSVnMCHnEgCsBW+P61xDlDa7oBRI
-        rLue9exhoygxqeqgbfk3o7Nt28XaZEKnGVmCjQ7rB/s9bkySCA==
-X-Google-Smtp-Source: ABdhPJx2q/tUhc/xmqcgLTQSgzZXpL+WcqW2qwjZJtMbpIdND15bFTIJD7WtOI7xYdOJI1BZ1hAOjIYWISulXpqFmFA=
-X-Received: by 2002:a25:12c4:: with SMTP id 187mr341743ybs.312.1632209580008;
- Tue, 21 Sep 2021 00:33:00 -0700 (PDT)
+        id S230208AbhIUHfl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Sep 2021 03:35:41 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:53424 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230071AbhIUHfk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Sep 2021 03:35:40 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 40C631FEA3;
+        Tue, 21 Sep 2021 07:34:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1632209652; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=miN0rmZnYmhXdF8+vHO3OiIeCYH8jWQmr3BsvKFUnjY=;
+        b=s6AtVW+ZLxvrHrUMVH3ZjBtFlpDM1J6nAMojUw3Mw1FQt0+wbHv1GFBfPApxL32LLXPyvt
+        tgwCRWVHuCDbAwYZz8rlnspk5Gfj/a94lX6YmPGpUIETigas33ghHbNKwLQKK6iTE3/em/
+        EjDRpxcH9OmeilemRVL3vqyraWuQi6c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1632209652;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=miN0rmZnYmhXdF8+vHO3OiIeCYH8jWQmr3BsvKFUnjY=;
+        b=pef4Vsbppi2ke6WXsRkA62SzWbywDyooyNmubP76fR7HlrQ6DkYKUej5D0nYp40Ro5uBip
+        b7aCyagpKtg0k5Dg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E97C313B0A;
+        Tue, 21 Sep 2021 07:34:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NjYPN/OKSWEmCgAAMHmgww
+        (envelope-from <schwab@suse.de>); Tue, 21 Sep 2021 07:34:11 +0000
+From:   Andreas Schwab <schwab@suse.de>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>, broonie@kernel.org,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        linux-spi@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: REGRESSION: "spi: add of_device_uevent_modalias support" and
+ following "fix" breaks Macchiatobin
+References: <YUhgbW8CiYI/rm+y@shell.armlinux.org.uk>
+        <871r5j6nlw.fsf@igel.home> <YUjlwaRdmFMZHJYO@shell.armlinux.org.uk>
+        <87wnna6hdc.fsf@igel.home> <YUkOdoqccsbEh08C@shell.armlinux.org.uk>
+X-Yow:  Yow!  We're going to a new disco!
+Date:   Tue, 21 Sep 2021 09:34:11 +0200
+In-Reply-To: <YUkOdoqccsbEh08C@shell.armlinux.org.uk> (Russell King's message
+        of "Mon, 20 Sep 2021 23:43:02 +0100")
+Message-ID: <87sfxyfklo.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-References: <20210920214209.1733768-1-vladimir.oltean@nxp.com>
-In-Reply-To: <20210920214209.1733768-1-vladimir.oltean@nxp.com>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Tue, 21 Sep 2021 09:32:49 +0200
-Message-ID: <CAMpxmJUxw+9=JqJwDUDZaEVHkd4pr824j2Gq=-ci4PtoH9A=jA@mail.gmail.com>
-Subject: Re: [PATCH net 0/2] Fix mdiobus users with devres
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev <netdev@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Sep 20, 2021 at 11:42 PM Vladimir Oltean
-<vladimir.oltean@nxp.com> wrote:
->
-> Commit ac3a68d56651 ("net: phy: don't abuse devres in
-> devm_mdiobus_register()") by Bartosz Golaszewski has introduced two
-> classes of potential bugs by making the devres callback of
-> devm_mdiobus_alloc stop calling mdiobus_unregister.
->
-> The exact buggy circumstances are presented in the individual commit
-> messages. I have searched the tree for other occurrences, but at the
-> moment:
->
-> - for issue (a) I have no concrete proof that other buses except SPI and
->   I2C suffer from it, and the only SPI or I2C device drivers that call
->   of_mdiobus_alloc are the DSA drivers that leave a NULL
->   ds->slave_mii_bus and a non-NULL ds->ops->phy_read, aka ksz9477,
->   ksz8795, lan9303_i2c, vsc73xx-spi.
->
-> - for issue (b), all drivers which call of_mdiobus_alloc either use
->   of_mdiobus_register too, or call mdiobus_unregister sometime within
->   the ->remove path.
->
-> Although at this point I've seen enough strangeness caused by this
-> "device_del during ->shutdown" that I'm just going to copy the SPI and
-> I2C subsystem maintainers to this patch series, to get their feedback
-> whether they've had reports about things like this before. I don't think
-> other buses behave in this way, it forces SPI and I2C devices to have to
-> protect themselves from a really strange set of issues.
->
-> Vladimir Oltean (2):
->   net: dsa: don't allocate the slave_mii_bus using devres
->   net: dsa: realtek: register the MDIO bus under devres
->
->  drivers/net/dsa/realtek-smi-core.c |  2 +-
->  net/dsa/dsa2.c                     | 12 +++++++++---
->  2 files changed, 10 insertions(+), 4 deletions(-)
->
-> --
-> 2.25.1
->
+On Sep 20 2021, Russell King (Oracle) wrote:
 
-Hi Vladimir,
+> Yet you say without your change module autoloading doesn't work - that
+> may be true for you, but the point here is that:
+>
+>    Your change plus another during the 5.14 cycle broke previously
+>    working module autoloading. It broke a previously working setup.
+>    This is a _regression_.
+>
+> Maybe you could explain why you think otherwise - and possibly accept
+> that it _did_ used to work for others.
 
-Thanks for the detailed description and sorry for the trouble this
-caused. I will revisit this and go through the drivers using those
-functions again and possibly come up with some improvement.
+Reverting them will break module autoloading that previously worked.
+This is a _regression_.
 
-Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Andreas.
 
-Bartosz
+-- 
+Andreas Schwab, SUSE Labs, schwab@suse.de
+GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
+"And now for something completely different."
