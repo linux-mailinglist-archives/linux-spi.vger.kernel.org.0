@@ -2,250 +2,216 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB4941313F
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Sep 2021 12:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A2C413200
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Sep 2021 12:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231524AbhIUKJ3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Sep 2021 06:09:29 -0400
-Received: from mout.gmx.net ([212.227.17.21]:56905 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229833AbhIUKJ1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 21 Sep 2021 06:09:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1632218864;
-        bh=QZxXmLWDDXyrpBcPm6Htc27LFauCgm5JyGZwbhwuKDY=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=FCD9yQ4BTL6mepYHdacT2VlA/5kBUUKLyuVturdfmPvNT3nXLEdEsse4d75oMyZOI
-         dehNl25vd25vDV5beifzSb9U4f/dSDYtSFFGL6pgiNmyIuoDH7oXZTcooS1yOX8Zm2
-         W1E7JCS6HQjb2+3OjbuNjC/E1qT7r5t1MhieIRwM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.178.51] ([46.223.119.124]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M59C8-1mTicO0244-001BKO; Tue, 21
- Sep 2021 12:07:44 +0200
-Subject: Re: [PATCH net 1/2] net: dsa: don't allocate the slave_mii_bus using
- devres
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>
-References: <20210920214209.1733768-1-vladimir.oltean@nxp.com>
- <20210920214209.1733768-2-vladimir.oltean@nxp.com>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <95836a0f-a2fd-f557-d8e6-aea044552be4@gmx.de>
-Date:   Tue, 21 Sep 2021 12:07:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S232168AbhIUK5Y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Sep 2021 06:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232025AbhIUK5Y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Sep 2021 06:57:24 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E10C061574
+        for <linux-spi@vger.kernel.org>; Tue, 21 Sep 2021 03:55:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=jW86SWYqpqUR7ChJG//j3LlKbbXi/0l9O5p16hAbQ00=; b=F8kQi5NsEDEdaGkbwkYZZwt2SM
+        puLXeyh8iwZoMdcD05/JmbWeHWnfeZwEO++wqebUrLPRLQkZOct3Ho/9Oi23lzW2l6hfIlZ0umtfk
+        Y5RiS050uuERi4/NLT1iPfWkkUa0bzCxHhE1AA393P0j9bHlYLrzUCALcyGvP0VowrsNIfmX4JIWu
+        y1+/PQuWT6yP82m+rPt7b4JkGirN7EtwwzRYrdPlhc/4fHbjjtOtlxCmWyQdpqo3pUB1GoIcXp7A5
+        va7g1tJJIV1mimpf8hK454TJuVt7KOYKvuTqii4lcE+RHar1nrAWPbL/yZvhgl4sSecty6ObiaWk9
+        ka2t42hg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:54700)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1mSdRJ-0002Xy-58; Tue, 21 Sep 2021 11:55:53 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1mSdRI-0003C9-Cb; Tue, 21 Sep 2021 11:55:52 +0100
+Date:   Tue, 21 Sep 2021 11:55:52 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Marco Felsch <m.felsch@pengutronix.de>,
+        Andreas Schwab <schwab@suse.de>, linux-spi@vger.kernel.org,
+        kernel@pengutronix.de, robh@kernel.org
+Subject: Re: REGRESSION: "spi: add of_device_uevent_modalias support" and
+ following "fix" breaks Macchiatobin
+Message-ID: <YUm6OI7RJ1vRSmYA@shell.armlinux.org.uk>
+References: <YUhgbW8CiYI/rm+y@shell.armlinux.org.uk>
+ <20210920183327.GO4192@sirena.org.uk>
+ <YUji89/msWkijl+9@shell.armlinux.org.uk>
+ <YUj8S5XIR5+EAk7e@sirena.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <20210920214209.1733768-2-vladimir.oltean@nxp.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:NkAVTnEyhm2vdK9QUdzen/J3N5gtCaSWa0P6AkNwoCQ0amYDijW
- 2C1tZ+WS+V+PC7elFG6xVPcQn4/VOVUQxxIoECBqIj/dKmXuSMT2u6X2vMqdyIMOwyGfsfh
- Ck/NQshr7dgzFY2L8PYZjc9rQiWyvJMUF2P9r1gwY/ssmcNrGSGjIg3XEg+EYDPkv9DZYjY
- iFuvlYBrNmjOEk8VSEOPw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wtBxQQDx5hM=:z9y8MdAg8U14iyTYDVsdSn
- 7Y1aSWwowYcW3BPzr0PRkRJH8zfeETUccrA9VisCuOcmTau1S3W73G7lhWdu3lbNDQwv8gX7P
- chBFy4F4u9vCtaizSfEE4Cjk0s88xqyj1ObLfh7NtNqvLXu+/x3W7WlxUbgveJGME+ibp+P6O
- rXxNZBY31znaqvW8+VGKDRGy/22HvzbXpojHbKSy5z5+mQBHUBaS1lpEHSvdnEOus0OswNeNm
- 5JIvT2H1+tYHl0qUjlotuovfWiAqGrdkKjWK7yCf1+fIoS2cDUaLL4V9X59/NIiQCJwyxUpH+
- 6xUI/aCRliQjfRPpdxCtKa30J9c6fsYjGion43e36AU0kdq1nDqkyDdlaAIJl+tGK7jDXzgo1
- 5H+OFTFGhdh8T/UEAyRfi+aHsYc8B4S+EkE3p/LpGbVFc2BQCJEjFPkPLyyHrwzDV8ESe12KX
- yC/Z+ptwwf3l9EhpJ+VQeE/zQoL+IHJH+2hOpoJoGFjbFgzf3GaO0skz8L8VWqrnWD/ozDW/k
- Krtvr4oLuKGn/YV5N7esNyR847uMob7hZX2x+na2+tgJvjWwyUFUL70lnswiqghfvfXN+VfSs
- 69PDfqHIEyLobBaRNK2UHEclVMa/sSH8xp/iGGzPwSdtuMSU5pPiP1JHmSs5GtrmW7e/ZX8zT
- AXt1cuNy6YRiw3SDPltsVlBsKNvn7u1Aw2gSQLwr9XShlzD0Bv4Q2TrV9MUgt3zbNq1at94gi
- 88UVJXSKb32yYn8mtGmZND5CV1tbnY25QNfAi/bXlrRgKfEA4l5Hvf3SgAJQw7USYSYSXI3rK
- NI+UTPjScU6q3OmPcnRynr6n0qnqa6CHc02pIbBHu37PPFQyb0HqErs6joCNOJXwRr0PS5qwl
- Nw8lk/FxF3R8OG7msImlKMt/rV07S4lXo3LZi2tO6MJFWFp5C+ORdof6qJ/+zo/VFtKhiZhVP
- AwnwDYku2HASuQNyyG2+FX/g5Q96qP/UhJZ+eQRjUUYnI0sbucMNAEnH7Zvr4KAHvXIxly8V5
- /johf6CeL1h6H3HsTmiXUWycQcT5EMpHqycsfqH8wxq9nAZQWR9bxJPp/tkHbu5z0HAz2H9ac
- tWp6fMfIaIJkf0=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YUj8S5XIR5+EAk7e@sirena.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, Sep 20, 2021 at 10:25:31PM +0100, Mark Brown wrote:
+> On Mon, Sep 20, 2021 at 08:37:23PM +0100, Russell King (Oracle) wrote:
+> > On Mon, Sep 20, 2021 at 07:33:27PM +0100, Mark Brown wrote:
+> > > On Mon, Sep 20, 2021 at 11:20:29AM +0100, Russell King (Oracle) wrote:
+> 
+> > > Are you sure?  Looking at the binding document it appears that the
+> > > fallback to jedec,spi-nor is mandatory in all cases - it's either one of
+> > > the two items: cases both of which are lists with jedec,spi-nor in them
+> > > or just the plain jedec,spi-nor fallback.  It kind of doesn't matter
+> > > given that we weren't enforcing it in the past but still.
+> 
+> > We aren't even enforcing it today either - running the DT checker is
+> > entirely optional, and it's not even carried by distros, so across
+> > distro upgrades it breaks. I'd also suggest that almost no one bothers
+> > to run it either, looking at the almost 6700 lines of output it
+> > produces for my build - the chances of spotting anything relevant in
+> > that are practically zero.
+> 
+> Right, good - my read of the DT binding document was correct at
+> least.  Like we're both saying it doesn't really matter what was
+> documented, what we were accepting is what matters.
 
-Hi Vladimir,
+Indeed - today's reading of the DT binding document, but that misses
+the history.  See commit:
 
-On 20.09.21 at 23:42, Vladimir Oltean wrote:
-> The Linux device model permits both the ->shutdown and ->remove driver
-> methods to get called during a shutdown procedure. Example: a DSA switch
-> which sits on an SPI bus, and the SPI bus driver calls this on its
-> ->shutdown method:
->
-> spi_unregister_controller
-> -> device_for_each_child(&ctlr->dev, NULL, __unregister);
->    -> spi_unregister_device(to_spi_device(dev));
->       -> device_del(&spi->dev);
->
-> So this is a simple pattern which can theoretically appear on any bus,
-> although the only other buses on which I've been able to find it are
-> I2C:
->
-> i2c_del_adapter
-> -> device_for_each_child(&adap->dev, NULL, __unregister_client);
->    -> i2c_unregister_device(client);
->       -> device_unregister(&client->dev);
->
-> The implication of this pattern is that devices on these buses can be
-> unregistered after having been shut down. The drivers for these devices
-> might choose to return early either from ->remove or ->shutdown if the
-> other callback has already run once, and they might choose that the
-> ->shutdown method should only perform a subset of the teardown done by
-> ->remove (to avoid unnecessary delays when rebooting).
->
-> So in other words, the device driver may choose on ->remove to not
-> do anything (therefore to not unregister an MDIO bus it has registered
-> on ->probe), because this ->remove is actually triggered by the
-> device_shutdown path, and its ->shutdown method has already run and done
-> the minimally required cleanup.
->
-> This used to be fine until the blamed commit, but now, the following
-> BUG_ON triggers:
->
-> void mdiobus_free(struct mii_bus *bus)
-> {
-> 	/* For compatibility with error handling in drivers. */
-> 	if (bus->state =3D=3D MDIOBUS_ALLOCATED) {
-> 		kfree(bus);
-> 		return;
-> 	}
->
-> 	BUG_ON(bus->state !=3D MDIOBUS_UNREGISTERED);
-> 	bus->state =3D MDIOBUS_RELEASED;
->
-> 	put_device(&bus->dev);
-> }
->
-> In other words, there is an attempt to free an MDIO bus which was not
-> unregistered. The attempt to free it comes from the devres release
-> callbacks of the SPI device, which are executed after the device is
-> unregistered.
->
-> I'm not saying that the fact that MDIO buses allocated using devres
-> would automatically get unregistered wasn't strange. I'm just saying
-> that the commit didn't care about auditing existing call paths in the
-> kernel, and now, the following code sequences are potentially buggy:
->
-> (a) devm_mdiobus_alloc followed by plain mdiobus_register, for a device
->     located on a bus that unregisters its children on shutdown. After
->     the blamed patch, either both the alloc and the register should use
->     devres, or none should.
->
-> (b) devm_mdiobus_alloc followed by plain mdiobus_register, and then no
->     mdiobus_unregister at all in the remove path. After the blamed
->     patch, nobody unregisters the MDIO bus anymore, so this is even more
->     buggy than the previous case which needs a specific bus
->     configuration to be seen, this one is an unconditional bug.
->
-> In this case, DSA falls into category (a), it tries to be helpful and
-> registers an MDIO bus on behalf of the switch, which might be on such a
-> bus. I've no idea why it does it under devres.
->
-> It does this on probe:
->
-> 	if (!ds->slave_mii_bus && ds->ops->phy_read)
-> 		alloc and register mdio bus
->
-> and this on remove:
->
-> 	if (ds->slave_mii_bus && ds->ops->phy_read)
-> 		unregister mdio bus
->
-> I _could_ imagine using devres because the condition used on remove is
-> different than the condition used on probe. So strictly speaking, DSA
-> cannot determine whether the ds->slave_mii_bus it sees on remove is the
-> ds->slave_mii_bus that _it_ has allocated on probe. Using devres would
-> have solved that problem. But nonetheless, the existing code already
-> proceeds to unregister the MDIO bus, even though it might be
-> unregistering an MDIO bus it has never registered. So I can only guess
-> that no driver that implements ds->ops->phy_read also allocates and
-> registers ds->slave_mii_bus itself.
->
-> So in that case, if unregistering is fine, freeing must be fine too.
->
-> Stop using devres and free the MDIO bus manually. This will make devres
-> stop attempting to free a still registered MDIO bus on ->shutdown.
->
-> Fixes: ac3a68d56651 ("net: phy: don't abuse devres in devm_mdiobus_regis=
-ter()")
-> Reported-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> ---
->  net/dsa/dsa2.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
->
-> diff --git a/net/dsa/dsa2.c b/net/dsa/dsa2.c
-> index f14897d9b31d..274018e9171c 100644
-> --- a/net/dsa/dsa2.c
-> +++ b/net/dsa/dsa2.c
-> @@ -880,7 +880,7 @@ static int dsa_switch_setup(struct dsa_switch *ds)
->  	devlink_params_publish(ds->devlink);
->
->  	if (!ds->slave_mii_bus && ds->ops->phy_read) {
-> -		ds->slave_mii_bus =3D devm_mdiobus_alloc(ds->dev);
-> +		ds->slave_mii_bus =3D mdiobus_alloc();
->  		if (!ds->slave_mii_bus) {
->  			err =3D -ENOMEM;
->  			goto teardown;
-> @@ -890,13 +890,16 @@ static int dsa_switch_setup(struct dsa_switch *ds)
->
->  		err =3D mdiobus_register(ds->slave_mii_bus);
->  		if (err < 0)
-> -			goto teardown;
-> +			goto free_slave_mii_bus;
->  	}
->
->  	ds->setup =3D true;
->
->  	return 0;
->
-> +free_slave_mii_bus:
-> +	if (ds->slave_mii_bus && ds->ops->phy_read)
-> +		mdiobus_free(ds->slave_mii_bus);
->  teardown:
->  	if (ds->ops->teardown)
->  		ds->ops->teardown(ds);
-> @@ -921,8 +924,11 @@ static void dsa_switch_teardown(struct dsa_switch *=
-ds)
->  	if (!ds->setup)
->  		return;
->
-> -	if (ds->slave_mii_bus && ds->ops->phy_read)
-> +	if (ds->slave_mii_bus && ds->ops->phy_read) {
->  		mdiobus_unregister(ds->slave_mii_bus);
-> +		mdiobus_free(ds->slave_mii_bus);
-> +		ds->slave_mii_bus =3D NULL;
-> +	}
->
->  	dsa_switch_unregister_notifier(ds);
->
->
+8ff16cf77ce3 ("Documentation: devicetree: m25p80: add "nor-jedec"
+binding")
 
-I applied this patch on top of your series "Make DSA switch drivers compat=
-ible with
-masters which unregister on shutdown" and now the shutdown works as expect=
-ed (i.e.
-no hang as without your patches and no kernel BUG as with only the above m=
-entioned
-series applied).
+Originally, this driver _only_ accepted a specific device name in the
+compatible. This commit added "nor-jedec". This introduced the
+requirement in March 2015 for this property to be present.
 
-Great job, thanks a lot!
+8947e396a829 ("Documentation: dt: mtd: replace "nor-jedec" binding with
+"jedec, spi-nor"")
 
-FWIW:
-Tested-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+In May 2015, this converted commit "nor-jedec" to the "jedec,spi-nor"
+we have today, and renamed the binding file from m25p80.txt to
+jedec,spi-nor.txt.
 
-Best Regards,
-Lino
+So, I don't think we can hold any DTS file to conform to the binding
+document given that:
+(a) the binding document originally allowed it,
+(b) that the driver doesn't warn that the "jedec,spi-nor" is missing,
+(c) checking of the dts files for correctness to the binding
+    documentation has historically been very poor.
+(d) DT is an interface we should avoid regressions, just like the
+    kernel to userspace interface.
 
+> > because, although the driver accepts devices of type "w25q32", it
+> > isn't listed in the DT schema. However, the driver code itself
+> > accepts that "w25q32" is used in DT - so the schema is out of step
+> > with the driver and has been for ages.
+> 
+> Looks like it's trying to list it but not quite managing.
+> Another thing to fix...
 
+Indeed. :(
+
+> > > This then causes issues for anything trying to bind based with DT
+> > > aliases AIUI so it's just pushing the problems around to different
+> > > devices.  I think ideally we should be including the fallback compat IDs
+> > > that could also be matched along with the OF aliases.
+> 
+> > I have a different view. These patches have fixed one problem by
+> > creating another problem - they have _changed_ the module alias
+> > that SPI creates for DT.
+> 
+> > Originally, the module alias was created via of_modalias_node()
+> > in of_register_spi_device():
+> 
+> >         /* Select device driver */
+> >         rc = of_modalias_node(nc, spi->modalias,
+> >                                 sizeof(spi->modalias));
+> >         if (rc < 0) {
+> >                 dev_err(&ctlr->dev, "cannot find modalias for %pOF\n", nc);
+> >                 goto err_out;
+> >         }
+> 
+> > However, as a result of the above two commits, the modalias that
+> > is now given to userspace has changed from whatever
+> > of_modalias_node() produced to whatever of_device_modalias() and
+> > of_device_uevent_modalias() produces - which is something quite
+> > different.
+> 
+> > So, IMHO the change in these two patches was _wrong_ and always
+> > was wrong, and was always going to lead to this problem. Randomly
+> > deciding to have a different modalias policy is always going to
+> > lead to problems like this.
+> 
+> Hrm, right - I hadn't really registered that we were generating
+> compat modaliases in quite that way (and hadn't had the bandwidth
+> to dig into that properly today, should do tomorrow).  First pass
+> I'd think that either SPI or probably of_device_uevent_modalias()
+> ought to be generating both formats (assuming we can list
+> multiple modaliases which I'm not sure on) but like I say I've
+> really not dug into this properly yet at this point.
+> 
+> I'm reasonably sure we should be continuing to generate the old
+> style modalises like a revert would, my main questions are if we
+> can arrange to provide both types so that anything that won't
+> match on the compat type can also work, and if there's any
+> fallout that needs fixing up if we can't and end up doing the
+> revert.
+
+Initially, I thought we could possibly export two modaliases, since
+it works for DT...
+
+/sys/bus/platform/devices/f0400000.xor/uevent
+OF_NAME=xor
+OF_FULLNAME=/ap806/config-space@f0000000/xor@400000
+OF_COMPATIBLE_0=marvell,armada-7k-xor
+OF_COMPATIBLE_1=marvell,xor-v2
+OF_COMPATIBLE_N=2
+MODALIAS=of:NxorT(null)Cmarvell,armada-7k-xorCmarvell,xor-v2
+
+/sys/bus/platform/devices/f0400000.xor/modalias
+of:NxorT(null)Cmarvell,armada-7k-xorCmarvell,xor-v2
+
+So, I wondered whether we combine the of: and spi: forms like this:
+
+of:...spi:...
+
+However, it seems we can't do that - Debian Bullseye modprobe:
+root@mcbin-ss:~# modprobe -R "of:NfooTbarCatmel,24c2048"
+at24
+root@mcbin-ss:~# modprobe -R "spi:fooof:NfooTbarCatmel,24c2048"
+modprobe: FATAL: Module spi:fooof:NfooTbarCatmel,24c2048 not found in directory /lib/modules/5.14.0+
+
+So it looks like we're stuck with having exactly one modalias string
+exported, which we can't sanely change once we've settled on one
+scheme for modaliases for a bus type and firmware combination.
+
+> It's true that the manufacturer prefixes blow stuff up for this
+> particular driver especially badly without wildcards which gets
+> messy...  the interaction between generic parts like flash and
+> the DT aliases definitely isn't at all nice at the minute, the
+> compat stuff is doing a good job of sidestepping some of the
+> explosion in compatibles.
+
+Yes, certainly true... and then there's typos as well:
+
+arch/arm/boot/dts/keystone-k2hk-evm.dts:                compatible = "Micron,n25q128a11";
+arch/arm/boot/dts/keystone-k2e-evm.dts:         compatible = "Micron,n25q128a11";
+
+where "Micron," should of course be "micron,". The prefix is irrelevant
+because that part gets discarded by of_modalias_node() in
+of_register_spi_device() when generating the modalias.
+
+Going through the list in spi-nor/core.c and checking the DTS files,
+it's random what you find. Sometimes they have a valid manufacturer
+prefix, sometimes they don't. Sometimes they have "jedec,spi-nor",
+sometimes they don't. Sometimes they only list "jedec,spi-nor".
+
+I haven't been through them all - I stopped at n25q064, so there are
+probably more gems such as the above to be found.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
