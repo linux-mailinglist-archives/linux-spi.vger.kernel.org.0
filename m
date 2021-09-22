@@ -2,118 +2,177 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73032413AAB
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Sep 2021 21:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 509254143D7
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Sep 2021 10:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232129AbhIUTYJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Sep 2021 15:24:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41026 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229915AbhIUTYJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 21 Sep 2021 15:24:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 59CF560F4C;
-        Tue, 21 Sep 2021 19:22:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632252160;
-        bh=k2BOiXUcyi4f5zH7w1DVfqqJ3fX5DMrj6qVL21Cxa2w=;
-        h=From:To:Cc:Subject:Date:From;
-        b=L9jquIG7jvdoQzjxQT3P7DSZByWBK21UW2jCUlBk7lc7q2S30JWFxUBOHMrCzX3V5
-         EcD+GL2u9yPnFayH9kunvNOtGFnntLVojMHCdESgWtQWtx9++1p3orP1Xa5Wqwyx61
-         5EUwFWRwGeY2vnCg1aCt+pzpz78DnYr5W62TsQkJjUUGRqyJ9iT0lLbO7LGV6P5ioS
-         BUSsAnpakMDrXLMzaq5pX7IaodaSNVgIMUyeE3oQFwLJ4nf5Q/19NVsn1Iji+JvOOa
-         wr8XZuKx246QiYCVMMoM0GHKQpU6JdRNZtDH5jJYMIJMCId/CSBMcX6CvENQ4UCmik
-         +MWNVIpG9vKkA==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>
-Subject: [PATCH] spi: Check we have a spi_device_id for each DT compatible
-Date:   Tue, 21 Sep 2021 20:21:49 +0100
-Message-Id: <20210921192149.50740-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        id S233932AbhIVIeZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Wed, 22 Sep 2021 04:34:25 -0400
+Received: from mslow1.mail.gandi.net ([217.70.178.240]:60021 "EHLO
+        mslow1.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233437AbhIVIeZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Sep 2021 04:34:25 -0400
+Received: from relay6-d.mail.gandi.net (unknown [217.70.183.198])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 15586D3CB6;
+        Wed, 22 Sep 2021 08:31:46 +0000 (UTC)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id E243EC0004;
+        Wed, 22 Sep 2021 08:31:21 +0000 (UTC)
+Date:   Wed, 22 Sep 2021 10:31:21 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Apurva Nandan <a-nandan@ti.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH v2 1/2] dt-bindings: mtd: spi-nand: Convert to DT schema
+ format
+Message-ID: <20210922103121.28d489ef@xps13>
+In-Reply-To: <CAL_Jsq+sg7f4pJGBhU48a4=uR7cYQmXsoSjbrktovV94m3+qFw@mail.gmail.com>
+References: <20210920142713.129295-1-a-nandan@ti.com>
+        <20210920142713.129295-2-a-nandan@ti.com>
+        <20210920150651.vvdhennblwhdi3jw@mobilestation>
+        <YUj6RUNYDoWA30Ln@robh.at.kernel.org>
+        <3c03fcdd-b015-8fda-eadc-e1b6d24ba88d@ti.com>
+        <CAL_Jsq+sg7f4pJGBhU48a4=uR7cYQmXsoSjbrktovV94m3+qFw@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2761; h=from:subject; bh=k2BOiXUcyi4f5zH7w1DVfqqJ3fX5DMrj6qVL21Cxa2w=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhSjCjkYxKoeEPRgn4D6V0M59l/4qysuidp0cIn/mv ny8JCf6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYUowowAKCRAk1otyXVSH0CsLB/ 96EDkHOgH+C4pOt0vc67xO9rXcOZi37mdDSaO/qUWIjkNOFjmyRUz/rojBEQxmKOvMsPzmcBOLdPYG qS/lw9ifnIkOVY/LyoRDp1nGwIJWPKbXPid8hltYZCAvZGOpD/D+0ZWyRt8XQXDfLs6dugQsWXAweR 5t1gXjFdyKkHuKdEmUn1xRyrK4dQutzngOvESfh9hYLffh3fMlLMjFmoHv5/5KZtpuTsR4CX6TEuUA 3FF4taJ6S6nE2TWRpejm6DRRcfRR9nFcsl9yQBALTEBKZ6jJEyP9Ss56EkZA3CY1oA5PArbdfCkX5V EA9wcHvpdXLZKlTAVikmm1wHPF7+m0
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Currently for SPI devices we use the spi_device_id for module autoloading
-even on systems using device tree, meaning that listing a compatible string
-in the of_match_table isn't enough to have the module for a SPI driver
-autoloaded.
+Hello Rob, Mark,
 
-We attempted to fix this by generating OF based modaliases for devices
-instantiated from DT in 3ce6c9e2617e ("spi: add of_device_uevent_modalias
-support") but this meant we no longer reported spi_device_id based aliases
-which broke drivers such as spi-nor which don't list all the compatible
-strings they support directly for DT, and in at least that case it's not
-super practical to do so given the very large number of compatibles
-needed, much larger than the number spi_device_ids due to vendor strings.
-As a result fell back to using spi_device_id based modalises.
+robh@kernel.org wrote on Tue, 21 Sep 2021 14:16:02 -0500:
 
-Try to close the gap by printing a warning when a SPI driver has a DT
-compatible that won't be matched as a SPI device ID with the goal of having
-drivers provide both. Given fallback compatibles this check is going to be
-excessive but it should be robust which is probably more important here.
+> On Tue, Sep 21, 2021 at 8:43 AM Apurva Nandan <a-nandan@ti.com> wrote:
+> >
+> > Hi Rob,
+> >
+> > On 21/09/21 2:46 am, Rob Herring wrote:  
+> > > On Mon, Sep 20, 2021 at 06:06:51PM +0300, Serge Semin wrote:  
+> > >> Hello Apurva
+> > >>
+> > >> On Mon, Sep 20, 2021 at 07:57:12PM +0530, Apurva Nandan wrote:  
+> > >>> Convert spi-nand.txt binding to YAML format with an added example.
+> > >>>
+> > >>> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+> > >>> ---
+> > >>>   .../devicetree/bindings/mtd/spi-nand.txt      |  5 --
+> > >>>   .../devicetree/bindings/mtd/spi-nand.yaml     | 62 +++++++++++++++++++
+> > >>>   2 files changed, 62 insertions(+), 5 deletions(-)
+> > >>>   delete mode 100644 Documentation/devicetree/bindings/mtd/spi-nand.txt
+> > >>>   create mode 100644 Documentation/devicetree/bindings/mtd/spi-nand.yaml  
+> > >> Thanks for the bindings conversion patch. There are several comments
+> > >> below. But before addressing them it would be better to also get a
+> > >> response from Rob.
+> > >>  
+> > >>> diff --git a/Documentation/devicetree/bindings/mtd/spi-nand.txt b/Documentation/devicetree/bindings/mtd/spi-nand.txt
+> > >>> deleted file mode 100644
+> > >>> index 8b51f3b6d55c..000000000000
+> > >>> --- a/Documentation/devicetree/bindings/mtd/spi-nand.txt
+> > >>> +++ /dev/null
+> > >>> @@ -1,5 +0,0 @@
+> > >>> -SPI NAND flash
+> > >>> -
+> > >>> -Required properties:
+> > >>> -- compatible: should be "spi-nand"
+> > >>> -- reg: should encode the chip-select line used to access the NAND chip
+> > >>> diff --git a/Documentation/devicetree/bindings/mtd/spi-nand.yaml b/Documentation/devicetree/bindings/mtd/spi-nand.yaml
+> > >>> new file mode 100644
+> > >>> index 000000000000..601beba8d971
+> > >>> --- /dev/null
+> > >>> +++ b/Documentation/devicetree/bindings/mtd/spi-nand.yaml
+> > >>> @@ -0,0 +1,62 @@
+> > >>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > >>> +%YAML 1.2
+> > >>> +---
+> > >>> +$id: http://devicetree.org/schemas/mtd/spi-nand.yaml#
+> > >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > >>> +
+> > >>> +title: SPI NAND flash
+> > >>> +
+> > >>> +maintainers:
+> > >>> +  - Apurva Nandan <a-nandan@ti.com>
+> > >>> +
+> > >>> +allOf:
+> > >>> +  - $ref: "mtd.yaml#"
+> > >>> +
+> > >>> +properties:
+> > >>> +  compatible:
+> > >>> +    const: spi-nand
+> > >>> +
+> > >>> +  reg:
+> > >>> +    maxItems: 1
+> > >>> +
+> > >>> +  spi-max-frequency: true
+> > >>> +  spi-rx-bus-width: true
+> > >>> +  spi-tx-bus-width: true
+> > >>> +  rx-sample-delay-ns: true  
+> > >> Since it's an SPI-client device there are more than these properties
+> > >> could be set for it. See the SPI-controller bindings schema:
+> > >> Documentation/devicetree/bindings/spi/spi-controller.yaml
+> > >> So there is two possible ways to make it more generic:
+> > >> 1) Detach the spi-client part from the spi-controller.yaml bindings
+> > >> into a dedicated DT-schema file and refer to that new scheme from
+> > >> here.  
+> > > Yes, as mentioned there's patches doing this. But the above is fine.
+> > > There's some value in defining here which properties are valid.  
+> > Yeah right  
+> > >> 2) Forget about these controller-specific properties and let the
+> > >> parental SPI-controller bindings parsing them. Of course there must be
+> > >> at least one of the next properties declared for it to work:
+> > >> {unevaluatedProperties, additionalProperties}.
+> > >>
+> > >> It's up to Rob to decided which approach is better though...
+> > >>  
+> > >>> +
+> > >>> +  '#address-cells': true
+> > >>> +  '#size-cells': true  
+> > >> Aren't they always equal to 1?  
+> > > No SPI nand devices >4GB?  
+> > Yeah, we have SPI NANDs >4GB, and "'#address-cells': true" allows those
+> > sizes.  
+> > >  
+> > >>> +
+> > >>> +additionalProperties:
+> > >>> +  type: object  
+> > >> I'd suggest to elaborate the way the partition sub-nodes looks
+> > >> like, for instance, the node names, supported compatible names,
+> > >> labels, etc.  
+> > > That should probably all be in mtd.yaml. The question here is whether
+> > > partitions are always under a 'partitions' node. Maybe this is new
+> > > enough that only the new way has to be supported. Though if mtd.yaml
+> > > supported both forms, allowing both all the time is okay IMO.
+> > >
+> > > Rob  
+> >
+> > I had added the "partition" node properties in the v1 patch, but as per
+> > the reviews I removed it.
+> > I think we can prefer having them in mtd.yaml if needed, in a separate
+> > patch series.
+> > Do you prefer the mtd.yaml changes as a part of this series or as a
+> > separate patch?
+> >
+> > Other than that, I don't find any need for a v3 patch re-roll, do you agree?  
+> 
+> Yeah, I suppose not.
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> 
+> And actually, it's Miquel that should apply these 2 rather than Mark.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/spi.c | 41 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+Yeah, but that's fine for this one, I don't expect conflicts anyway.
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 57e2499ec1ed..2c7f420b9f73 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -459,6 +459,47 @@ int __spi_register_driver(struct module *owner, struct spi_driver *sdrv)
- {
- 	sdrv->driver.owner = owner;
- 	sdrv->driver.bus = &spi_bus_type;
-+
-+	/*
-+	 * For Really Good Reasons we use spi: modaliases not of:
-+	 * modaliases for DT so module autoloading won't work if we
-+	 * don't have a spi_device_id as well as a compatible string.
-+	 */
-+	if (sdrv->driver.of_match_table) {
-+		const struct of_device_id *of_id;
-+
-+		for (of_id = sdrv->driver.of_match_table; of_id->compatible[0];
-+		     of_id++) {
-+			const char *of_name;
-+
-+			/* Strip off any vendor prefix */
-+			of_name = strnchr(of_id->compatible,
-+					  sizeof(of_id->compatible), ',');
-+			if (of_name)
-+				of_name++;
-+			else
-+				of_name = of_id->compatible;
-+
-+			if (sdrv->id_table) {
-+				const struct spi_device_id *spi_id;
-+
-+				for (spi_id = sdrv->id_table; spi_id->name[0];
-+				     spi_id++)
-+					if (strcmp(spi_id->name, of_name) == 0)
-+						break;
-+
-+				if (spi_id->name[0])
-+					continue;
-+			} else {
-+				if (strcmp(sdrv->driver.name, of_name) == 0)
-+					continue;
-+			}
-+
-+			pr_warn("SPI driver %s has no spi_device_id for %s\n",
-+				sdrv->driver.name, of_id->compatible);
-+		}
-+	}
-+
- 	return driver_register(&sdrv->driver);
- }
- EXPORT_SYMBOL_GPL(__spi_register_driver);
--- 
-2.20.1
+Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
+Thanks,
+Miquèl
