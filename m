@@ -2,27 +2,27 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B62554156DC
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Sep 2021 05:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C739C415707
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Sep 2021 05:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239694AbhIWDo1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 Sep 2021 23:44:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42840 "EHLO mail.kernel.org"
+        id S239083AbhIWDp3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 Sep 2021 23:45:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41558 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239338AbhIWDmX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 22 Sep 2021 23:42:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E102361359;
-        Thu, 23 Sep 2021 03:40:25 +0000 (UTC)
+        id S239610AbhIWDng (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 22 Sep 2021 23:43:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2DA576128A;
+        Thu, 23 Sep 2021 03:40:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632368427;
-        bh=vmtrla0I7Di8t/J0196rjte2fQ758ZYmt2OZOD/uXOI=;
+        s=k20201202; t=1632368453;
+        bh=uyIjuT+4JR6/En6HSFZak4qsxmwjzchBwls2cvImhoY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YCTzW61skOgKN6k9oJICOpo6s42BWDADJslTpQXk8jhZmFUDKrb/Vf9L9mF+LnkcR
-         2lask78VChT6TBqOSqYWoJ7CRK0CDiI6i8DwHpWJ2R63Hw/Ecjzm19ToNiLw7sStNg
-         IU+sxaQkfoxKYGp9JVAh6KDeX62l1rnFby/XX2xmkefm9N38imRm/U33Cr5/Ld1Mcz
-         NxbQ9o1e0Z3p/goV2MGdZQ5qtdAMcpBA8ySe/mOmDUaaVQ+MINYTBF3+bj+RKyybPl
-         7djIvXZWnDsYYIBB/J213HslIzU7VpmO4op81PZ9Mp7LPLo4mLCV8lLvzpIOtE/9hl
-         sSdGS9LpFE3JA==
+        b=p/B4hWPn1AHD3qOgI0uPXxAVWqzuPLjlYLzTSMBX+SA3cqYi/rGPDeCVAJ3/+xJ2Z
+         r++bk2UZmK6OEnXekZhdn5dc26x1Ve7zfuqY9HZFQxwM6tuCtrdRwJ6L0NiOAnLm/q
+         qv2uYWdKEx0H2rvaKNGdAh20mm7QSkKlCdvQfnM5WxXX9leJwq7gX1NthiobSszMfq
+         9MHDrrlX36pyHHI2JmEMs1iEXUo1ECyq7FOh7Bej5l3LP8/onEf5I4UuDKOfTOYXnW
+         +YwtAN5dqLPSt3hgzdW8aScjCELx1URSnL9FX9pd2oaTrSK6fInNo8mr/Tr3bEjxUn
+         JcjX7uS2iga0A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -30,12 +30,12 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>, ldewangan@nvidia.com,
         broonie@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
         linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 13/13] spi: Fix tegra20 build with CONFIG_PM=n
-Date:   Wed, 22 Sep 2021 23:39:59 -0400
-Message-Id: <20210923033959.1421662-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 11/11] spi: Fix tegra20 build with CONFIG_PM=n
+Date:   Wed, 22 Sep 2021 23:40:27 -0400
+Message-Id: <20210923034028.1421876-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210923033959.1421662-1-sashal@kernel.org>
-References: <20210923033959.1421662-1-sashal@kernel.org>
+In-Reply-To: <20210923034028.1421876-1-sashal@kernel.org>
+References: <20210923034028.1421876-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -72,7 +72,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
-index c39bfcbda5f2..1548f7b738c1 100644
+index 9f14560686b6..88bfe7682a9e 100644
 --- a/drivers/spi/spi-tegra20-slink.c
 +++ b/drivers/spi/spi-tegra20-slink.c
 @@ -1210,7 +1210,7 @@ static int tegra_slink_resume(struct device *dev)
