@@ -2,97 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A026415724
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Sep 2021 05:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E68EA415E8C
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Sep 2021 14:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239752AbhIWDqe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 Sep 2021 23:46:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42924 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239741AbhIWDoa (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 22 Sep 2021 23:44:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 148626135A;
-        Thu, 23 Sep 2021 03:41:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632368475;
-        bh=uyIjuT+4JR6/En6HSFZak4qsxmwjzchBwls2cvImhoY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BxbEyPZRlkeLaApBUXeYiyVrJ+9PRUeZUh0+Zb/X+kcqAX+/8c+Ej+jm4x9rs+bzE
-         bbh5EMDI1dtjHz9kNb8Zvu+27SqOWa53GB8lFURZWmcGNUsPB135v8pI3TpdHVyZG4
-         03jUSLPEMnHA+DO3ESYH6Eecg0lIJpCT6zUT24SkixVVO59m84Ym5Q4fAz5/rnXa6J
-         N51l5CRhy8a8n1QsFS2zvjp5d7luI8u5GqM49RKJJ8S01O/FhEFCBqxVQHEyyYZqCq
-         MW18/+v5/oWkqoWfsRl+1BjuAIR2PpKUQKwLXiKSWwrb32aSB8OJAy4bcufk3ocVYR
-         5KZ/IdLEU4aqQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>, ldewangan@nvidia.com,
-        broonie@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 10/10] spi: Fix tegra20 build with CONFIG_PM=n
-Date:   Wed, 22 Sep 2021 23:40:53 -0400
-Message-Id: <20210923034055.1422059-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210923034055.1422059-1-sashal@kernel.org>
-References: <20210923034055.1422059-1-sashal@kernel.org>
+        id S241088AbhIWMmT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Sep 2021 08:42:19 -0400
+Received: from mail-oi1-f178.google.com ([209.85.167.178]:33433 "EHLO
+        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241138AbhIWMlj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Sep 2021 08:41:39 -0400
+Received: by mail-oi1-f178.google.com with SMTP id 24so9549729oix.0;
+        Thu, 23 Sep 2021 05:40:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WYkrVIwTVfi0B/G+QlIDJ19fU254VtZt4fJs98aiwMk=;
+        b=UcCeFH3kukwvGMNgyMbDQXRI/C+hy9obhaVjv5xFtHmBNfo1NyRFeJjOv0N6hyc5ZK
+         Q3u+gNtEPECX9fcfy4LAEEKsbHi9RjEaJI3ZaOK49y7eCOgfZ4XJ1lZgV/USzdP8eT9Q
+         vKkdJB3Q0BLEkL0M1Z9So89hKwveytwRxZPa+ivlQT4ocYW1VjHK7N+4oYROH174ah8N
+         rVi2IPUWgnmML72Wo20UCwNdm90WFoIZ0NGmO0k/PnWb4ezb7P0ALIfdbRPvlaO2WHJU
+         aTJPg1Xd/gPePvZVOsh8GkmRp7VKw9tuxGOqUYSWiHuO+boxy8+8nmn1uTSCIbPO2sfE
+         c/pA==
+X-Gm-Message-State: AOAM530ii/+VMj8SK3eAialicSnskyVapTrc2e+Nv9v4ScX88EY5Rr2F
+        2TufGyV9kVTZE1MS2c1gyMgbt5yAQg==
+X-Google-Smtp-Source: ABdhPJzCbTvqWS/umEcE/Qmf3EqDkOoOWsc61D+8vG4fpK4P3YOBwib0gVA3vwjTgMEp3J3d8sZwxg==
+X-Received: by 2002:a54:4489:: with SMTP id v9mr12255483oiv.148.1632400807398;
+        Thu, 23 Sep 2021 05:40:07 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id i25sm1291459otf.31.2021.09.23.05.40.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Sep 2021 05:40:06 -0700 (PDT)
+Received: (nullmailer pid 2814913 invoked by uid 1000);
+        Thu, 23 Sep 2021 12:40:04 -0000
+Date:   Thu, 23 Sep 2021 07:40:04 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Parshuram Thombare <pthombar@cadence.com>
+Cc:     broonie@kernel.org, lukas@wunner.de, linux-spi@vger.kernel.org,
+        jpawar@cadence.com, robh+dt@kernel.org,
+        Konrad Kociolek <konrad@cadence.com>,
+        linux-kernel@vger.kernel.org, mparab@cadence.com, p.yadav@ti.com,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 1/2] spi: cadence: add dt-bindings documentation for
+ Cadence XSPI controller
+Message-ID: <YUx1pLA/QZ6VrD0c@robh.at.kernel.org>
+References: <1632038668-23756-1-git-send-email-pthombar@cadence.com>
+ <1632038705-23805-1-git-send-email-pthombar@cadence.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1632038705-23805-1-git-send-email-pthombar@cadence.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+On Sun, 19 Sep 2021 10:05:05 +0200, Parshuram Thombare wrote:
+> Add DT binding for Cadence's XSPI controller driver.
+> 
+> Signed-off-by: Konrad Kociolek <konrad@cadence.com>
+> Signed-off-by: Jayshri Pawar <jpawar@cadence.com>
+> Signed-off-by: Parshuram Thombare <pthombar@cadence.com>
+> ---
+>  .../devicetree/bindings/spi/cdns,xspi.yaml         | 77 ++++++++++++++++++++++
+>  1 file changed, 77 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/cdns,xspi.yaml
+> 
 
-[ Upstream commit efafec27c5658ed987e720130772f8933c685e87 ]
-
-Without CONFIG_PM enabled, the SET_RUNTIME_PM_OPS() macro ends up being
-empty, and the only use of tegra_slink_runtime_{resume,suspend} goes
-away, resulting in
-
-  drivers/spi/spi-tegra20-slink.c:1200:12: error: ‘tegra_slink_runtime_resume’ defined but not used [-Werror=unused-function]
-   1200 | static int tegra_slink_runtime_resume(struct device *dev)
-        |            ^~~~~~~~~~~~~~~~~~~~~~~~~~
-  drivers/spi/spi-tegra20-slink.c:1188:12: error: ‘tegra_slink_runtime_suspend’ defined but not used [-Werror=unused-function]
-   1188 | static int tegra_slink_runtime_suspend(struct device *dev)
-        |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-mark the functions __maybe_unused to make the build happy.
-
-This hits the alpha allmodconfig build (and others).
-
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi-tegra20-slink.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
-index 9f14560686b6..88bfe7682a9e 100644
---- a/drivers/spi/spi-tegra20-slink.c
-+++ b/drivers/spi/spi-tegra20-slink.c
-@@ -1210,7 +1210,7 @@ static int tegra_slink_resume(struct device *dev)
- }
- #endif
- 
--static int tegra_slink_runtime_suspend(struct device *dev)
-+static int __maybe_unused tegra_slink_runtime_suspend(struct device *dev)
- {
- 	struct spi_master *master = dev_get_drvdata(dev);
- 	struct tegra_slink_data *tspi = spi_master_get_devdata(master);
-@@ -1222,7 +1222,7 @@ static int tegra_slink_runtime_suspend(struct device *dev)
- 	return 0;
- }
- 
--static int tegra_slink_runtime_resume(struct device *dev)
-+static int __maybe_unused tegra_slink_runtime_resume(struct device *dev)
- {
- 	struct spi_master *master = dev_get_drvdata(dev);
- 	struct tegra_slink_data *tspi = spi_master_get_devdata(master);
--- 
-2.30.2
-
+Reviewed-by: Rob Herring <robh@kernel.org>
