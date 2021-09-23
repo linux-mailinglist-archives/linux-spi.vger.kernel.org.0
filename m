@@ -2,27 +2,27 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C739C415707
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Sep 2021 05:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A026415724
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Sep 2021 05:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239083AbhIWDp3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 Sep 2021 23:45:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41558 "EHLO mail.kernel.org"
+        id S239752AbhIWDqe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 Sep 2021 23:46:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42924 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239610AbhIWDng (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 22 Sep 2021 23:43:36 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2DA576128A;
-        Thu, 23 Sep 2021 03:40:52 +0000 (UTC)
+        id S239741AbhIWDoa (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 22 Sep 2021 23:44:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 148626135A;
+        Thu, 23 Sep 2021 03:41:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632368453;
+        s=k20201202; t=1632368475;
         bh=uyIjuT+4JR6/En6HSFZak4qsxmwjzchBwls2cvImhoY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p/B4hWPn1AHD3qOgI0uPXxAVWqzuPLjlYLzTSMBX+SA3cqYi/rGPDeCVAJ3/+xJ2Z
-         r++bk2UZmK6OEnXekZhdn5dc26x1Ve7zfuqY9HZFQxwM6tuCtrdRwJ6L0NiOAnLm/q
-         qv2uYWdKEx0H2rvaKNGdAh20mm7QSkKlCdvQfnM5WxXX9leJwq7gX1NthiobSszMfq
-         9MHDrrlX36pyHHI2JmEMs1iEXUo1ECyq7FOh7Bej5l3LP8/onEf5I4UuDKOfTOYXnW
-         +YwtAN5dqLPSt3hgzdW8aScjCELx1URSnL9FX9pd2oaTrSK6fInNo8mr/Tr3bEjxUn
-         JcjX7uS2iga0A==
+        b=BxbEyPZRlkeLaApBUXeYiyVrJ+9PRUeZUh0+Zb/X+kcqAX+/8c+Ej+jm4x9rs+bzE
+         bbh5EMDI1dtjHz9kNb8Zvu+27SqOWa53GB8lFURZWmcGNUsPB135v8pI3TpdHVyZG4
+         03jUSLPEMnHA+DO3ESYH6Eecg0lIJpCT6zUT24SkixVVO59m84Ym5Q4fAz5/rnXa6J
+         N51l5CRhy8a8n1QsFS2zvjp5d7luI8u5GqM49RKJJ8S01O/FhEFCBqxVQHEyyYZqCq
+         MW18/+v5/oWkqoWfsRl+1BjuAIR2PpKUQKwLXiKSWwrb32aSB8OJAy4bcufk3ocVYR
+         5KZ/IdLEU4aqQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -30,12 +30,12 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>, ldewangan@nvidia.com,
         broonie@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
         linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 11/11] spi: Fix tegra20 build with CONFIG_PM=n
-Date:   Wed, 22 Sep 2021 23:40:27 -0400
-Message-Id: <20210923034028.1421876-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 10/10] spi: Fix tegra20 build with CONFIG_PM=n
+Date:   Wed, 22 Sep 2021 23:40:53 -0400
+Message-Id: <20210923034055.1422059-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210923034028.1421876-1-sashal@kernel.org>
-References: <20210923034028.1421876-1-sashal@kernel.org>
+In-Reply-To: <20210923034055.1422059-1-sashal@kernel.org>
+References: <20210923034055.1422059-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
