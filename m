@@ -2,71 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F6B4151D2
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Sep 2021 22:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D05415692
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Sep 2021 05:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237831AbhIVU4f (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 Sep 2021 16:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237811AbhIVU4e (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Sep 2021 16:56:34 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A49BC0613D9
-        for <linux-spi@vger.kernel.org>; Wed, 22 Sep 2021 13:55:03 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id 138so14163490qko.10
-        for <linux-spi@vger.kernel.org>; Wed, 22 Sep 2021 13:55:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
-        b=KdXnhe/3zkHeZgixn9BpXiRXniwMgDmhauf6YTuxP0wgB5yzxGI3euReyxhx9TVrxq
-         3Od5gARvk08SiaQHEdbK80uTPJiKvZD1mvaXmFEi2OlRGGLVxi9qjTdQEJHDNx6GrhQf
-         +YDVSfcVXX6hJ9tzkOuxVlwY0IK/v4ECFsMgPN0YbEUFjdWw7wtLO6HU7k0GlwYOwBU7
-         g0u5ZrnjkFj9bDNBfxTJ+EZszn5R+MIWkE1noseX+tMOjLt3VKfnAtHOf7zGnzUi7/Ss
-         4zORj2FhCL6VBd/6ui6VhZsTJDlTQFr3MO12bpjTdn18irITsVHBfbJQd5ezVh5SqLsC
-         4EBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
-        b=inJkHLQhBaZ5lb0A+v3DqwI5hkE88arXmhqJLIVRhHLKcWCtXn1t3qPquMuunFFtZN
-         rWYg9B0Wn7gAiGpvJUDVNzFSDicbTP4Naz2Fwm3xtGM2p/dgp9cHxfEtVKox3tgXSBx3
-         ayK11ggtv1d1MeZKMY8Yrfg08GXyImJPOYIUMufBFOqK2zMG0M45pFUt12ktki2EGQln
-         HcvIjUry4snuhlKHFMgQFXAunXrHy7VwwZ8QUHdiYOXh2Q28jHgcshMIqmO0RGrbk5GY
-         qj+DKG1lzZL8aT1Rgt8S2pPBTaScFKrW67DtxsVAJjt9IJ0WFkgIXVYdqnilwKcDWgkb
-         H2WA==
-X-Gm-Message-State: AOAM533Z6MG1b0h201N4NprSxOF73tm7TbleT0pahETAJwg9UgLDgEA5
-        AnlbHZKsqlkPPEv6+OHI7zTb3BL5USHbZjz3SUQ=
-X-Google-Smtp-Source: ABdhPJwsLqRgkk9jb+wC1ECBTFJXrEEB4mmlIo/Kaul20LfIYdlAYLv9tmwaB5Pxv0AmysZSk6ZePRs2dvYCH/qVqH0=
-X-Received: by 2002:a05:6902:150a:: with SMTP id q10mr1344586ybu.515.1632344102557;
- Wed, 22 Sep 2021 13:55:02 -0700 (PDT)
+        id S239386AbhIWDmD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 Sep 2021 23:42:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42268 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239445AbhIWDlA (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 22 Sep 2021 23:41:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1325E6113E;
+        Thu, 23 Sep 2021 03:39:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632368369;
+        bh=bEO/CpEwVfE84XS0eaEnlSOmcAdIuv1jyb+dJToDzpk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ttXb5xcHiMsh3rEzrCZ41P+c5+7VobQdMWIx44PvbTtkZmgoTlffyRqXB3O2QBH/g
+         NLDoTqQeG0Rsw4FrJ7aMOMdltl9WeDsmUas/8KPeajvRp2TwTGmBsKEZJ+V9NgXCdz
+         HI5vn/oNXC8vT0Q+dDp5d+8Vvwjb6rFIYNpuZK4st8unfpwLqioo3TXvuwW9Job8Kz
+         /beN7na0WYagC0ZjDwqNXtFUzw/c7PFquRw7mv71fteLo4A5aF8tPZZ0/Nc7bQeK6f
+         OdCajR3owJIyLP2s47fuCGKEH1wziGc9i9Bo2jJG970mMsX6SFo19lwdbho4u73fDq
+         DL6P5qPKob+3A==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>, ldewangan@nvidia.com,
+        broonie@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 19/19] spi: Fix tegra20 build with CONFIG_PM=n
+Date:   Wed, 22 Sep 2021 23:38:53 -0400
+Message-Id: <20210923033853.1421193-19-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210923033853.1421193-1-sashal@kernel.org>
+References: <20210923033853.1421193-1-sashal@kernel.org>
 MIME-Version: 1.0
-Sender: pablogboy98@gmail.com
-Received: by 2002:a05:7000:1903:0:0:0:0 with HTTP; Wed, 22 Sep 2021 13:55:02
- -0700 (PDT)
-From:   Aisha Al-Qaddafi <aisha.gdaffi24@gmail.com>
-Date:   Wed, 22 Sep 2021 21:55:02 +0100
-X-Google-Sender-Auth: EgWN-7KeHIzBWxs5WISil-9jI9s
-Message-ID: <CAFZ0LQG=HorOEh0B82pMRaOtrfukA2tHOBoX92F9fX48+pG2cA@mail.gmail.com>
-Subject: My Dear Friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Assalamu alaikum,
-I came across your e-mail contact prior to a private search while in
-need of your assistance. I am Aisha Al-Qaddafi, the only biological,
-Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
-single Mother and a Widow with three Children. I have investment funds
-worth Twenty Seven Million Five Hundred Thousand United State Dollar
-($27.500.000.00 ) and i need a trusted  investment Manager/Partner
-because of my current refugee status, however, I am interested in you
-for investment project assistance in your country. If you are willing
-to handle this project on my behalf kindly reply urgently to enable me
-to provide you more information about the investment
-funds.
-Best Regards
+From: Linus Torvalds <torvalds@linux-foundation.org>
+
+[ Upstream commit efafec27c5658ed987e720130772f8933c685e87 ]
+
+Without CONFIG_PM enabled, the SET_RUNTIME_PM_OPS() macro ends up being
+empty, and the only use of tegra_slink_runtime_{resume,suspend} goes
+away, resulting in
+
+  drivers/spi/spi-tegra20-slink.c:1200:12: error: ‘tegra_slink_runtime_resume’ defined but not used [-Werror=unused-function]
+   1200 | static int tegra_slink_runtime_resume(struct device *dev)
+        |            ^~~~~~~~~~~~~~~~~~~~~~~~~~
+  drivers/spi/spi-tegra20-slink.c:1188:12: error: ‘tegra_slink_runtime_suspend’ defined but not used [-Werror=unused-function]
+   1188 | static int tegra_slink_runtime_suspend(struct device *dev)
+        |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+mark the functions __maybe_unused to make the build happy.
+
+This hits the alpha allmodconfig build (and others).
+
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/spi/spi-tegra20-slink.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
+index 2a1905c43a0b..9b59539c8735 100644
+--- a/drivers/spi/spi-tegra20-slink.c
++++ b/drivers/spi/spi-tegra20-slink.c
+@@ -1205,7 +1205,7 @@ static int tegra_slink_resume(struct device *dev)
+ }
+ #endif
+ 
+-static int tegra_slink_runtime_suspend(struct device *dev)
++static int __maybe_unused tegra_slink_runtime_suspend(struct device *dev)
+ {
+ 	struct spi_master *master = dev_get_drvdata(dev);
+ 	struct tegra_slink_data *tspi = spi_master_get_devdata(master);
+@@ -1217,7 +1217,7 @@ static int tegra_slink_runtime_suspend(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int tegra_slink_runtime_resume(struct device *dev)
++static int __maybe_unused tegra_slink_runtime_resume(struct device *dev)
+ {
+ 	struct spi_master *master = dev_get_drvdata(dev);
+ 	struct tegra_slink_data *tspi = spi_master_get_devdata(master);
+-- 
+2.30.2
+
