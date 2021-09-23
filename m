@@ -2,70 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E68EA415E8C
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Sep 2021 14:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1EBE4163C7
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Sep 2021 19:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241088AbhIWMmT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 Sep 2021 08:42:19 -0400
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:33433 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241138AbhIWMlj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Sep 2021 08:41:39 -0400
-Received: by mail-oi1-f178.google.com with SMTP id 24so9549729oix.0;
-        Thu, 23 Sep 2021 05:40:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WYkrVIwTVfi0B/G+QlIDJ19fU254VtZt4fJs98aiwMk=;
-        b=UcCeFH3kukwvGMNgyMbDQXRI/C+hy9obhaVjv5xFtHmBNfo1NyRFeJjOv0N6hyc5ZK
-         Q3u+gNtEPECX9fcfy4LAEEKsbHi9RjEaJI3ZaOK49y7eCOgfZ4XJ1lZgV/USzdP8eT9Q
-         vKkdJB3Q0BLEkL0M1Z9So89hKwveytwRxZPa+ivlQT4ocYW1VjHK7N+4oYROH174ah8N
-         rVi2IPUWgnmML72Wo20UCwNdm90WFoIZ0NGmO0k/PnWb4ezb7P0ALIfdbRPvlaO2WHJU
-         aTJPg1Xd/gPePvZVOsh8GkmRp7VKw9tuxGOqUYSWiHuO+boxy8+8nmn1uTSCIbPO2sfE
-         c/pA==
-X-Gm-Message-State: AOAM530ii/+VMj8SK3eAialicSnskyVapTrc2e+Nv9v4ScX88EY5Rr2F
-        2TufGyV9kVTZE1MS2c1gyMgbt5yAQg==
-X-Google-Smtp-Source: ABdhPJzCbTvqWS/umEcE/Qmf3EqDkOoOWsc61D+8vG4fpK4P3YOBwib0gVA3vwjTgMEp3J3d8sZwxg==
-X-Received: by 2002:a54:4489:: with SMTP id v9mr12255483oiv.148.1632400807398;
-        Thu, 23 Sep 2021 05:40:07 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id i25sm1291459otf.31.2021.09.23.05.40.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Sep 2021 05:40:06 -0700 (PDT)
-Received: (nullmailer pid 2814913 invoked by uid 1000);
-        Thu, 23 Sep 2021 12:40:04 -0000
-Date:   Thu, 23 Sep 2021 07:40:04 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Parshuram Thombare <pthombar@cadence.com>
-Cc:     broonie@kernel.org, lukas@wunner.de, linux-spi@vger.kernel.org,
-        jpawar@cadence.com, robh+dt@kernel.org,
-        Konrad Kociolek <konrad@cadence.com>,
-        linux-kernel@vger.kernel.org, mparab@cadence.com, p.yadav@ti.com,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 1/2] spi: cadence: add dt-bindings documentation for
- Cadence XSPI controller
-Message-ID: <YUx1pLA/QZ6VrD0c@robh.at.kernel.org>
-References: <1632038668-23756-1-git-send-email-pthombar@cadence.com>
- <1632038705-23805-1-git-send-email-pthombar@cadence.com>
+        id S233396AbhIWRCm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Sep 2021 13:02:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39016 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238281AbhIWRCl (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 23 Sep 2021 13:02:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9242961090;
+        Thu, 23 Sep 2021 17:01:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632416470;
+        bh=Gz2IEtNQRa4ifNPpLyMX2FJc7Zul20qJymz0QcFJg58=;
+        h=From:To:Cc:Subject:Date:From;
+        b=R10LQqEaLZaSLuC53lQWi4MVjwjqOaPZupWT83krKvHTTtujQd8lpTlKQ7EFtQ2eO
+         o6KTGmzvKShAPo62b0t7wylFFXyGKlRf+yNTHrpfW4WLd9Zsdm/JCg2AtwP0nzo7Bd
+         7iD/OS7iGLYXB2Q3Kpvrfclbin44SJYm7RLya7ddmbTEilj8QTBzKNKij9sp2RxQaE
+         NguFteyqbCbp5Mg/P42Dw1Bd4enlwOaQ0Ll6gtOgtsqI2x/sGlsN0QYuZURC+mEgUc
+         /gSoMDEgze3XD59Gl9xPkXggahfv6819sx7sT88Bt3zj5Yq4Im1RdZ1CzXpt3+CKzP
+         iREAD0K0IZ5tA==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>, patches@opensource.cirrus.com
+Subject: [PATCH] spi: spidev: Add SPI ID table
+Date:   Thu, 23 Sep 2021 18:00:23 +0100
+Message-Id: <20210923170023.1683-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1632038705-23805-1-git-send-email-pthombar@cadence.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1554; h=from:subject; bh=Gz2IEtNQRa4ifNPpLyMX2FJc7Zul20qJymz0QcFJg58=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhTLKYNCCkgntivleIv3cugP/IW3J6YiRsKyB+wm6W 0OR9vfiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYUyymAAKCRAk1otyXVSH0ELRB/ oDYYYguXJ0W+7BbGGL3SI1i7K57mbDV1I2LXxBsN5I5yGgI1+TlQpOqyyKNCIKr8ZSFH8G7aAFJ5Lu 5eQLUnYHuxG7S4LyxAmOp1MdG8TTQhPMAi4VyzE4SCZ2Ef02Z101c8O/dXlIrVK9x2k0gYKpIWBk8w 2s6Ky25WiTQY/6p+TcVDKno/XQZ221m/2oGWRg09wl9Qa0QHwsUJKMrEDG1BgEsCBB11Vk6DNGy3Fa 1d+487iZ/9WbMY/9W/nVuWpXU8J/Ln9+kxPH2Va9N/Qh7EVqA8/HtmRMImmUqi10RFPkA5mJvdKFNB YgzgoYMwqqSLr9Adk53RzXtsp9120P
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, 19 Sep 2021 10:05:05 +0200, Parshuram Thombare wrote:
-> Add DT binding for Cadence's XSPI controller driver.
-> 
-> Signed-off-by: Konrad Kociolek <konrad@cadence.com>
-> Signed-off-by: Jayshri Pawar <jpawar@cadence.com>
-> Signed-off-by: Parshuram Thombare <pthombar@cadence.com>
-> ---
->  .../devicetree/bindings/spi/cdns,xspi.yaml         | 77 ++++++++++++++++++++++
->  1 file changed, 77 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/cdns,xspi.yaml
-> 
+Currently autoloading for SPI devices does not use the DT ID table, it uses
+SPI modalises. Supporting OF modalises is going to be difficult if not
+impractical, an attempt was made but has been reverted, so ensure that
+module autoloading works for this driver by adding an id_table listing the
+SPI IDs for everything.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Fixes: 96c8395e2166 ("spi: Revert modalias changes")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: patches@opensource.cirrus.com
+---
+ drivers/spi/spidev.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+index 6dc29ce3b4bf..79c22fc8b0a4 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -673,6 +673,19 @@ static const struct file_operations spidev_fops = {
+ 
+ static struct class *spidev_class;
+ 
++static const struct spi_device_id spidev_spi_ids[] = {
++	{ .name = "dh2228fv" },
++	{ .name = "ltc2488" },
++	{ .name = "sx1301" },
++	{ .name = "bk4" },
++	{ .name = "dhcom-board" },
++	{ .name = "m53cpld" },
++	{ .name = "spi-petra" },
++	{ .name = "spi-authenta" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, spidev_dt_ids);
++
+ #ifdef CONFIG_OF
+ static const struct of_device_id spidev_dt_ids[] = {
+ 	{ .compatible = "rohm,dh2228fv" },
+@@ -818,6 +831,7 @@ static struct spi_driver spidev_spi_driver = {
+ 	},
+ 	.probe =	spidev_probe,
+ 	.remove =	spidev_remove,
++	.id_table =	spidev_spi_ids,
+ 
+ 	/* NOTE:  suspend/resume methods are not necessary here.
+ 	 * We don't do anything except pass the requests to/from
+-- 
+2.20.1
+
