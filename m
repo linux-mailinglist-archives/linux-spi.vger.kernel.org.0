@@ -2,156 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 402434171B4
-	for <lists+linux-spi@lfdr.de>; Fri, 24 Sep 2021 14:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5D241724C
+	for <lists+linux-spi@lfdr.de>; Fri, 24 Sep 2021 14:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244404AbhIXMXp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 24 Sep 2021 08:23:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59662 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245667AbhIXMXn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 24 Sep 2021 08:23:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 15B5560EC0;
-        Fri, 24 Sep 2021 12:22:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1632486129;
-        bh=yaIuJc4fCylLr72PbMyGEkx+lSAK/GgR3Rnq7A0ONwE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ew/Ic64IxETANxezYJgvb0WPOB0R7NVVOY+gwPWSpMloYwI9Jd7URrC3EEr+sFou4
-         ZVBGmm9SCXcYtc4GZ1hZqBzrD//IqQQEwDycRttj13UZIE1IbugFO0Q+hlNSSx+rEP
-         0aaQsqu9Fg1Jmasp9jxTHlcqeNmImsdlknAvfTEQ=
-Date:   Fri, 24 Sep 2021 14:22:07 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Michal Simek <michal.simek@xilinx.com>
-Cc:     Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
+        id S1343726AbhIXMrd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 24 Sep 2021 08:47:33 -0400
+Received: from mail-ot1-f47.google.com ([209.85.210.47]:34791 "EHLO
+        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343842AbhIXMqh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 24 Sep 2021 08:46:37 -0400
+Received: by mail-ot1-f47.google.com with SMTP id g62-20020a9d2dc4000000b0054752cfbc59so7269105otb.1;
+        Fri, 24 Sep 2021 05:45:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=qWRR6olfhGyBIP6MfENCx20He3bFcFpbGbZko4baIE4=;
+        b=AzjUktlpDAkufHFFtnGUydGpmMGgSSOlMNbFkRnBD2Yt8vPQBItHOVgGxeWeX5lCLP
+         b4qj4yztCb03xNamVAZAsUYbqfW0unlfSspl3c85qBRRFUlSt09mN04WFPBsPLrnGoat
+         1RcCj9cSvAJo8xxu19ZH/JGo3ZPP9JhYlh7xmvAR17ApQT5Is1dnYKiN7luxkBrpUfMP
+         pIbssRaZCqG3/2CqyhaApbBERQk94v0krDzPKwHnBl7B+9KcElVd5H9KmvJqoT1CwxK2
+         bVXA/W7tW3usJm4FrSMcg5UO4nmRrHyEwzag/mn9ynJ652dVyscUz6tt9sQLILDINfAe
+         xOaQ==
+X-Gm-Message-State: AOAM532ov5SY3hZmq2/j8Lc1JW7uLvayIomO1BspQVHg17rnktV+jSiM
+        EZAqgzV1p1LwlDSt98jDNw==
+X-Google-Smtp-Source: ABdhPJzuzQOPMh0EHvhUTX3zyU25CBBrxWSe3IyNUcob3PgvabF0qljAM3wFwAP/hZs0NdQMMvsiCA==
+X-Received: by 2002:a9d:4101:: with SMTP id o1mr3818138ote.377.1632487503944;
+        Fri, 24 Sep 2021 05:45:03 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id f13sm2076127oto.49.2021.09.24.05.45.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Sep 2021 05:45:03 -0700 (PDT)
+Received: (nullmailer pid 1091572 invoked by uid 1000);
+        Fri, 24 Sep 2021 12:45:00 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Pratyush Yadav <p.yadav@ti.com>,
+        saikrishna12468@gmail.com, git@xilinx.com,
+        Nobuhiro Iwamatsu <iwamatsu@nigauri.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Michal Simek <michal.simek@xilinx.com>,
         Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        git@xilinx.com, saikrishna12468@gmail.com,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Subject: Re: [PATCH 1/4] firmware: xilinx: Add OSPI Mux selection support
-Message-ID: <YU3C7y833i9f0+yB@kroah.com>
-References: <1632478031-12242-1-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
- <1632478031-12242-2-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
- <YU24KEoXQOw/1uZV@kroah.com>
- <c588c9c4-df4b-a617-35d1-23c32654d5ff@xilinx.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c588c9c4-df4b-a617-35d1-23c32654d5ff@xilinx.com>
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+In-Reply-To: <1632478031-12242-3-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
+References: <1632478031-12242-1-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com> <1632478031-12242-3-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
+Subject: Re: [PATCH 2/4] dt-bindings: spi: cadence-quadspi: Add support for Xilinx Versal OSPI
+Date:   Fri, 24 Sep 2021 07:45:00 -0500
+Message-Id: <1632487500.121231.1091571.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Sep 24, 2021 at 02:12:55PM +0200, Michal Simek wrote:
+On Fri, 24 Sep 2021 15:37:09 +0530, Sai Krishna Potthuri wrote:
+> Add new compatible to support Cadence Octal SPI(OSPI) controller on
+> Xilinx Versal SoCs, also add power-domains property to the properties
+> list and marked as required for Xilinx Versal OSPI compatible.
 > 
+> Signed-off-by: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
+> ---
+>  .../devicetree/bindings/spi/cdns,qspi-nor.yaml       | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
-> On 9/24/21 1:36 PM, Greg Kroah-Hartman wrote:
-> > On Fri, Sep 24, 2021 at 03:37:08PM +0530, Sai Krishna Potthuri wrote:
-> >> Add OSPI Mux selection API support to select the AXI interface to OSPI.
-> >>
-> >> Signed-off-by: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
-> >> ---
-> >>  drivers/firmware/xilinx/zynqmp.c     | 17 +++++++++++++++++
-> >>  include/linux/firmware/xlnx-zynqmp.h | 12 ++++++++++++
-> >>  2 files changed, 29 insertions(+)
-> >>
-> >> diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
-> >> index 15b138326ecc..43c3b5a9eef7 100644
-> >> --- a/drivers/firmware/xilinx/zynqmp.c
-> >> +++ b/drivers/firmware/xilinx/zynqmp.c
-> >> @@ -647,6 +647,23 @@ int zynqmp_pm_sd_dll_reset(u32 node_id, u32 type)
-> >>  }
-> >>  EXPORT_SYMBOL_GPL(zynqmp_pm_sd_dll_reset);
-> >>  
-> >> +/**
-> >> + * zynqmp_pm_ospi_mux_select() - OSPI Mux selection
-> >> + *
-> >> + * @dev_id:	Device Id of the OSPI device.
-> >> + * @select:	OSPI Mux select value.
-> >> + *
-> >> + * This function select the OSPI Mux.
-> >> + *
-> >> + * Return:	Returns status, either success or error+reason
-> >> + */
-> >> +int zynqmp_pm_ospi_mux_select(u32 dev_id, u32 select)
-> >> +{
-> >> +	return zynqmp_pm_invoke_fn(PM_IOCTL, dev_id, IOCTL_OSPI_MUX_SELECT,
-> >> +				   select, 0, NULL);
-> >> +}
-> >> +EXPORT_SYMBOL_GPL(zynqmp_pm_ospi_mux_select);
-> >> +
-> >>  /**
-> >>   * zynqmp_pm_write_ggs() - PM API for writing global general storage (ggs)
-> >>   * @index:	GGS register index
-> >> diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
-> >> index 9d1a5c175065..6979a79f553a 100644
-> >> --- a/include/linux/firmware/xlnx-zynqmp.h
-> >> +++ b/include/linux/firmware/xlnx-zynqmp.h
-> >> @@ -119,6 +119,7 @@ enum pm_ioctl_id {
-> >>  	IOCTL_READ_PGGS = 15,
-> >>  	/* Set healthy bit value */
-> >>  	IOCTL_SET_BOOT_HEALTH_STATUS = 17,
-> >> +	IOCTL_OSPI_MUX_SELECT = 21,
-> > 
-> > Why the gap?  What are the commands in the middle for?
-> 
-> Below is the full list. Not everything has been upstream yet. There was
-> an attempt on AFI which one colleague is working on and should send new
-> version soon. I don't think anybody has started with upstreaming probe
-> counters.
-> Every part has different owner with unfortunately own upstreaming plan.
-> 
-> Thanks,
-> Michal
-> 
-> enum pm_ioctl_id {
-> 	IOCTL_GET_RPU_OPER_MODE = 0,
-> 	IOCTL_SET_RPU_OPER_MODE = 1,
-> 	IOCTL_RPU_BOOT_ADDR_CONFIG = 2,
-> 	IOCTL_TCM_COMB_CONFIG = 3,
-> 	IOCTL_SET_TAPDELAY_BYPASS = 4,
-> 	IOCTL_SET_SGMII_MODE = 5,
-> 	IOCTL_SD_DLL_RESET = 6,
-> 	IOCTL_SET_SD_TAPDELAY = 7,
-> 	IOCTL_SET_PLL_FRAC_MODE = 8,
-> 	IOCTL_GET_PLL_FRAC_MODE = 9,
-> 	IOCTL_SET_PLL_FRAC_DATA = 10,
-> 	IOCTL_GET_PLL_FRAC_DATA = 11,
-> 	IOCTL_WRITE_GGS = 12,
-> 	IOCTL_READ_GGS = 13,
-> 	IOCTL_WRITE_PGGS = 14,
-> 	IOCTL_READ_PGGS = 15,
-> 	/* IOCTL for ULPI reset */
-> 	IOCTL_ULPI_RESET = 16,
-> 	/* Set healthy bit value */
-> 	IOCTL_SET_BOOT_HEALTH_STATUS = 17,
-> 	IOCTL_AFI = 18,
-> 	/* Probe counter read/write */
-> 	IOCTL_PROBE_COUNTER_READ = 19,
-> 	IOCTL_PROBE_COUNTER_WRITE = 20,
-> 	IOCTL_OSPI_MUX_SELECT = 21,
-> 	/* IOCTL for USB power request */
-> 	IOCTL_USB_SET_STATE = 22,
-> 	/* IOCTL to get last reset reason */
-> 	IOCTL_GET_LAST_RESET_REASON = 23,
-> 	/* AI engine NPI ISR clear */
-> 	IOCTL_AIE_ISR_CLEAR = 24,
-> 	/* Register SGI to ATF */
-> 	IOCTL_REGISTER_SGI = 25,
-> 	/* Runtime feature configuration */
-> 	IOCTL_SET_FEATURE_CONFIG = 26,
-> 	IOCTL_GET_FEATURE_CONFIG = 27,
-> };
 
-Odd mix of comments and no comments...
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-Anyway, that's fine, just curious as to why there was a gap.  No real
-reason why you can't just add them all now right?
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-thanks,
+Full log is available here: https://patchwork.ozlabs.org/patch/1532183
 
-greg k-h
+
+spi@ff705000: resets: [[6, 37]] is too short
+	arch/arm/boot/dts/socfpga_arria5_socdk.dt.yaml
+	arch/arm/boot/dts/socfpga_cyclone5_chameleon96.dt.yaml
+	arch/arm/boot/dts/socfpga_cyclone5_de0_nano_soc.dt.yaml
+	arch/arm/boot/dts/socfpga_cyclone5_mcvevk.dt.yaml
+	arch/arm/boot/dts/socfpga_cyclone5_socdk.dt.yaml
+	arch/arm/boot/dts/socfpga_cyclone5_sockit.dt.yaml
+	arch/arm/boot/dts/socfpga_cyclone5_socrates.dt.yaml
+	arch/arm/boot/dts/socfpga_cyclone5_sodia.dt.yaml
+	arch/arm/boot/dts/socfpga_cyclone5_vining_fpga.dt.yaml
+	arch/arm/boot/dts/socfpga_vt.dt.yaml
+
