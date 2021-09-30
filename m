@@ -2,154 +2,150 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD1041DCF0
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Sep 2021 17:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F9941DF4B
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Sep 2021 18:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238353AbhI3PFS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 30 Sep 2021 11:05:18 -0400
-Received: from mail-eopbgr00121.outbound.protection.outlook.com ([40.107.0.121]:35814
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233612AbhI3PFR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 30 Sep 2021 11:05:17 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QUJnv7b9DNXn3sxdFOE3kPldGymWkMv/tTkn4qkqlQ+hIKrLIIJzwEPHRhBLKe7WgdBSVMCy9mNhtGqAdYTUlTHvh/P/jJUvFz/wjtv1uEnL1XKKZtvl4nOfLWI/pugs0TbVNQN4gxWAcLipi9QGdFo8ylGxIkI5WTG6SwAHjUb2L5b1Bg4wpzXW5AOZ3XTYOWo4z02PEASjMXGN2qPLbSh69cMgjAcjm743myqaFlNZWn86zrzdSuwEyrSwiudTtSC0TDoQ84ARS85Jiou01eXmEyRTKF26bVqPqngbjZt7LwEG0nmZ+dGRfG1l1fw01r+5JRU+fMUPpABp9OP2ZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=24T86wJKP3dsgtlJGPmzYBc8nJpUby8Uv0ARQV06gWI=;
- b=jDp/koR0cwTllBBl5KpbreGEeM5b+VIYmNs6Dn/SCAnxmRZI4bHR4/2bS2CnHouVq+mHYHIzi+JV5CL2/JswDQRES59zFJ6+387+6sP3JxW3blmjEHVImcJTwlLjF0WbTFL7wBY7d/LYGsH+wbJmLxQKSv/BKbSBuPW2FzZ7T5WCJCvvc7iqF8q8rGtu53ccapYLcpqY7ukT3KhPmX+trgPHjOn0A6EfbW9Zdq2tx9zyYWPaRgylh0xw9RoOqJtesoB+gQABXJ8GiDVLJ5cT98vVwomivJYLNnIrAqryXBVCCTENDWqxycmbSDehs0j2sDpSsJPsu0N4soJc83vriQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=24T86wJKP3dsgtlJGPmzYBc8nJpUby8Uv0ARQV06gWI=;
- b=WGKn2H4vkUGEV7HkI4mRqgVgLKtJEZsS2aIsoxEf5mGStuq6QMx7137aI7RvHEpMDTh7jiWycvslIXiJ7OrkxD4obhR3kkD3WL5Kf7loPJARs6evVkUoj0JCJh0/ZeNkICPR0JpENEh0/BEGngH0DyzBbvSFLms6HofFhNj9/ak=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=nokia.com;
-Received: from AM0PR07MB4531.eurprd07.prod.outlook.com (2603:10a6:208:6e::15)
- by AM0PR07MB4036.eurprd07.prod.outlook.com (2603:10a6:208:50::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.10; Thu, 30 Sep
- 2021 15:03:33 +0000
-Received: from AM0PR07MB4531.eurprd07.prod.outlook.com
- ([fe80::91aa:4873:6782:4917]) by AM0PR07MB4531.eurprd07.prod.outlook.com
- ([fe80::91aa:4873:6782:4917%7]) with mapi id 15.20.4587.007; Thu, 30 Sep 2021
- 15:03:33 +0000
-Subject: Re: [PATCH 3/3] Documentation / MTD: Rename the intel-spi driver
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Lee Jones <lee.jones@linaro.org>, Michael Walle <michael@walle.cc>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Lima <mauro.lima@eclypsium.com>,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
-References: <20210930100719.2176-1-mika.westerberg@linux.intel.com>
- <20210930100719.2176-4-mika.westerberg@linux.intel.com>
-From:   Alexander Sverdlin <alexander.sverdlin@nokia.com>
-Message-ID: <7e898647-852d-e5f3-bda0-94fbcff88f40@nokia.com>
-Date:   Thu, 30 Sep 2021 17:03:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-In-Reply-To: <20210930100719.2176-4-mika.westerberg@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS8PR04CA0027.eurprd04.prod.outlook.com
- (2603:10a6:20b:310::32) To AM0PR07MB4531.eurprd07.prod.outlook.com
- (2603:10a6:208:6e::15)
+        id S236437AbhI3Qml (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 30 Sep 2021 12:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352189AbhI3Qmk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 30 Sep 2021 12:42:40 -0400
+Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0884C061772
+        for <linux-spi@vger.kernel.org>; Thu, 30 Sep 2021 09:40:56 -0700 (PDT)
+Received: by mail-vs1-xe44.google.com with SMTP id z22so6466063vsp.1
+        for <linux-spi@vger.kernel.org>; Thu, 30 Sep 2021 09:40:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
+        b=FV+sR2jqeq3a30q0fwwes6WIJUL0Aly1jHDpEuRKN4E5hFr75A8Lw1Hf7FsKbd3IgX
+         Y0NETW3LIdrr+GfiFqDiRliDmaT3s6ks2SCzQ8xKiQWqtfryMEQxZRm/Ehnv8sx9IvZA
+         muPVzb5TbIR8gh03qrKvvPLKt+CWDdsXkBUBiZw2JG/VPZRXtjF2vQGNdWqMtE0+KYCn
+         puyxTyxmsl+RwXB2mIAoqF5n+/rz1oAVYvnPo9p/4N+LHs01uAkZKBx+0yd7aFh3bUHG
+         h/EeRqLYRyFYlkHNLt6EEQaizEMQ1XNxoB1ZM7qr+/WnP5xBCG7P4Ey4iY0NmkRmr8S1
+         mh4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
+        b=f74txPKBFljn/ypsyB2yj8We0s6LrzohfY8rTVPEGgen9wOFH8VwnXWhLgGhDnuyga
+         CIQYf9lzD8vprvdh6pumC2UFiL7981edW8XFhEzGEPxE3LVcdWYqN08QmqDPJuP2Rl+3
+         ZLx1B3oB/EvlGpkgZnu51GOGA4F2P83VUKyQZyAkPdo+dxEvVRh6DhH1Y//sIZnJWHQB
+         ZhMescfhC5IJ1NULCbxKvD6d2Wq/mywOqPxfB8K9X4PsAIlRawwDlf84BwaQWRJg+aed
+         W+OPIPpxDYxH2sFCOEeNYWebzrQoGHTAeTyYvto0rScS6eHEPEL/8WISPZsKVas8N9Pg
+         Xw1w==
+X-Gm-Message-State: AOAM5323Z0eRsCQAAL1K0dgZlHmBuFwyCGZEu4NU1cEycXbBia0+n4+l
+        w9AWlNnsyM6mFMkd6DtokK1sG2b3KY/4BzK+MKM=
+X-Google-Smtp-Source: ABdhPJyrlzTC2MbiFYv9Onunj6ymT4OoDGeF1Rs8K96BASDJdMf5G8ZjaV568mQ5Ecmy8bt02e07EU6x/22RNi/kmb0=
+X-Received: by 2002:a67:ce14:: with SMTP id s20mr148117vsl.34.1633020056080;
+ Thu, 30 Sep 2021 09:40:56 -0700 (PDT)
 MIME-Version: 1.0
-Received: from ulegcpsvhp1.emea.nsn-net.net (131.228.32.168) by AS8PR04CA0027.eurprd04.prod.outlook.com (2603:10a6:20b:310::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.15 via Frontend Transport; Thu, 30 Sep 2021 15:03:31 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9a1fb229-43a2-4900-fca6-08d98423785d
-X-MS-TrafficTypeDiagnostic: AM0PR07MB4036:
-X-Microsoft-Antispam-PRVS: <AM0PR07MB4036149E6611D6F27E23C98988AA9@AM0PR07MB4036.eurprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1751;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GVmOxA+kugpSXl+YGNXDIsmpbGHm5HM8DMvXEqX1o+5SBYCPjd1Bf37DCvzJpBjIxywIJmE+22ynik8Ie1i46FJXY0BJ0LTjf0f5BZX3kUWoMpLXpRc/RnDHANEo44igZz3+Q5ZR1DSVtNydhjV7v16qxSg8wLh2l6OpNSK8KnqpDHYbEoDWi8iUyNicGCX0OREfDcxxWqblr37BM77Xa8gXatiffohsEp7RV2b89JUYzJMJg9DCbWHEOntGQxElXpOTGpyh8MfCoXQoWG0cvxuIRz26H3XGMajFWFIczL6gnF22sDaY/tDvdTkwrdNJWgvZTjxXB7e+pC6yvsjGtmWgjUBC4zwsVlB3fAjOkuw8arl82x+q3MUaXtjQuLGaW/HBOoS4SlpCt6TGiBH+OJG1WHD5kZUm//Ybvp3dbhUYNWQHqzmwpFLqFBcKgB574r9ZBxksv9vAJ+97d6i47UdI2ixsiNGLc1Szr8B5DwtH1pfBcG1Hht2/dwBlpZbjYic2k36ztG3IICOY/vysCZJ/wo6Igsvgr4vyd47B3fMKJXZya7dtciR/9jwgf0KeDhyyY0J5CG2Uj2sPRFNyzUssP+taYlXJjhRcuf4WnWGXN/LIYhiSkDeqZXJImRg2r48xmn05IjsN05QzryjvKSZo+k8a3cOvFHWt1NTiBgPB9lQAv+vK6XOwKuUooh2VghA4tVdGjVjAs/pQ9UGGPiSI8Ddy5YpMfmTHnrgmEyQ2apk6Up9YQPP8LXaLykSkysW61p0XIQW/ukkcbOA/2w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR07MB4531.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66556008)(6486002)(6512007)(110136005)(83380400001)(6666004)(2906002)(31696002)(8936002)(186003)(54906003)(31686004)(6506007)(53546011)(66476007)(52116002)(508600001)(8676002)(4744005)(26005)(38100700002)(38350700002)(4326008)(44832011)(316002)(5660300002)(36756003)(66946007)(2616005)(86362001)(7416002)(956004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NHlhU0xCaS84VW1GK0ZqeWdWOWhvTzFnbk0zQzVMR1JWbThxQU9sempJM0Zu?=
- =?utf-8?B?SDBGRGRVYzVxVFdHNCtSNGFUY1poRnJFVjk2N0ovaFBDbzROKzk0Rk5oNUNi?=
- =?utf-8?B?dStNSDgyZFVTYjgvTEtIZ1VGWnJpTC9xQXJzRDJEb3VKUkVZQmtDUFZjRUlW?=
- =?utf-8?B?LzA4aHhFWGF3NURJVDd0RGZvL21KZy80UWpJM1pLRy8xZVNDQVdQanR0eTB1?=
- =?utf-8?B?MTE2am5pTjZQZi9wY1FONFhuTi9hUWpVNjdCck8wY0cwdzAxNVJRMHZTLytw?=
- =?utf-8?B?aDNOZ1lYenp6Y2xSd0NodUlRMWxkbEQzanVvZktaOWJEMWVhRFdRRTdGWktY?=
- =?utf-8?B?OTQ3VUtVUWRudlJ0Wm1XSWE1SDhXTjNwR05TazlaVHdKRFdzVVJHOCtWUjBN?=
- =?utf-8?B?WmZXV2lSUUQvQnB1dnVrcXBCZDh2azR1Z0RNcGlwQVBrWnJqdFJqK1MyMGtO?=
- =?utf-8?B?NFgzcjdMMHJwdHgxMWhLUGpPNFNuaDdJRURCRGxyY1ZhWUhnMFBTdGNieEds?=
- =?utf-8?B?b3FxL2RxUFM0bWxkM1A4SnRNa0pxenZwWjc1UnR4TU1uSHhDWVN2M1UxalRT?=
- =?utf-8?B?NDE3SGg3TGcvSE1NQ0NkT090NnhieStiNmNBNkhXSXYwajU4bTJnRURXcWMr?=
- =?utf-8?B?eVM5VElaS3dwVmc5UHJCYitvS0tMUlFxSDJncWVHVFoxbDFaVnVYNlpwN1B0?=
- =?utf-8?B?Q0orK25zc3poVmIvbGhYbzBHNk4yZjVLRmdDRCsrekRYdTRTZ3RVckJwNmg5?=
- =?utf-8?B?S0pGd1dEam52SHdvZi9udXl3WmFIcTdENzlZYTdmeCtvN2x2RjVtbnpXV3J4?=
- =?utf-8?B?QU91YmNJQytvM1VWQndqUW9tZmpyUmc5ZzV0Y3cwbURvTVJuTTVNLzNhZkxB?=
- =?utf-8?B?ODN6RElPcFI5ZlBxU0Y3bkhDbWNXRXRvVzBZS1RHeWtsQmZLdUlFMEI1S3pM?=
- =?utf-8?B?WWV0YUhTUWs4T2JCeitxN2NETzVXTHVkUGUwczBtL0o5ei8yOVhMSEZBeThD?=
- =?utf-8?B?dkc3ZVRHN3NFQzc1VmhvNytXOHd0alNBeU1ZQTV3Ulcvc05OUlV6bktzZzZh?=
- =?utf-8?B?aS9oNGt2aXhOL2EwRjlhd0t2UW91c1JkTTBsekMxTGg2aGIvd3E3UFlIYlZm?=
- =?utf-8?B?aTF5ZFBiWGZMakJUS0JreERTMERaeXJaY01UbHRCU1ZodUthV2twR0luQzhM?=
- =?utf-8?B?QlIrV1I2R1d4OE95U1c5dFlGSXlBUVQ1QVdxNUU0RzR5THFnNi9aeFJIekp2?=
- =?utf-8?B?eE9iclBmbWk1TFFUakdlRTlxOHNtNjNRblQxNjhtRGR2RWNFMnZHbnhEYkRW?=
- =?utf-8?B?VjJYZnZXdVFTVWticFVrV09GUlZLa0FSUDI2SUoyRWFoam1qUjhRSUJIWTdo?=
- =?utf-8?B?c0MrdGNEMjNPbE9MWWE1ZGREUFNuU3RYNmd0Ym9XTnUyYVpFdDZMODBaSGNh?=
- =?utf-8?B?cG16U0dXaHdFbDdhcEwyS3JLajRjVVlzeFJqdFpYdmx4UWZSeGMrbSsxVU5F?=
- =?utf-8?B?czU2TWlzSldRUzZNVElwT000T3BCR1NjRUhVR0xCYzlsVzZnMll4eTJ4VUU0?=
- =?utf-8?B?V3F6U1FvZThiaWlraEJSK1pMSGo2SXhNSE9STitqeVpvTlJMeVk2eTZMQjV6?=
- =?utf-8?B?TDNaUVlwaG1HaGk1VDFGSXBYL2tMbkpLbFpaUDdRcGY4NS9hNXhIdEgvdTdY?=
- =?utf-8?B?aURCc2VQZGp6Qzc2QVlFY0Myb2RjdGRsOXdCRWVZS0tsUk9Hcithd2lTb3By?=
- =?utf-8?Q?0YGbkrq2we4Mu45o69W9QTd5Qxqnl09G4gEgvtW?=
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a1fb229-43a2-4900-fca6-08d98423785d
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR07MB4531.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2021 15:03:32.9382
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bSLUnALXYCFB35vNHnz63khvKZiKPwtAVKyTOwCz3369xK6X84fsc0jZuWqIbnfL2h0sorCE1AWZfyM1n8mQMJi7q23OZ7dWE0IiCuzWZ8w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR07MB4036
+Received: by 2002:a59:ab2e:0:b0:22d:7f44:603a with HTTP; Thu, 30 Sep 2021
+ 09:40:55 -0700 (PDT)
+Reply-To: irenezakari24@gmail.com
+From:   Irene zakari <irenezakari88@gmail.com>
+Date:   Thu, 30 Sep 2021 09:40:55 -0700
+Message-ID: <CAFT8PFEuTDyM7AWv4-LAqHpR0VFES6VrRn3W0Yw7s4vRmk+-jg@mail.gmail.com>
+Subject: PLEASE I NEED YOUR HELP
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi!
+Hello   ..
 
-On 30/09/2021 12:07, Mika Westerberg wrote:
-> Since the driver is renamed (and moved) update the BIOS upgrade guide
-> accordingly from intel-spi to intel-spi. Keep the guide under MTD
-                   ^^^^^^^^^^^^^^^^^^^^^^
-Copy-paste error.
+How do you do over there? I hope you are doing well?
 
-> documentation because this is pretty much still about MTD and SPI-NOR.
-> 
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> ---
->  Documentation/driver-api/mtd/index.rst                    | 2 +-
->  .../driver-api/mtd/{intel-spi.rst => spi-intel.rst}       | 8 ++++----
->  2 files changed, 5 insertions(+), 5 deletions(-)
->  rename Documentation/driver-api/mtd/{intel-spi.rst => spi-intel.rst} (94%)
-> 
-> diff --git a/Documentation/driver-api/mtd/index.rst b/Documentation/driver-api/mtd/index.rst
-> index 436ba5a851d7..6a4278f409d7 100644
-> --- a/Documentation/driver-api/mtd/index.rst
-> +++ b/Documentation/driver-api/mtd/index.rst
-> @@ -7,6 +7,6 @@ Memory Technology Device (MTD)
->  .. toctree::
->     :maxdepth: 1
->  
-> -   intel-spi
-> +   spi-intel
+My name is Irene. (24 years), i am single, from Gambia, the only child
+of late Eng. Bernard Bakary Zakaria. the Director of Bajam Enterprise
+(Building Construction Company in The Gambia) also the CEO of Bernard
+Import and Export (GAMBIA).
 
--- 
-Best regards,
-Alexander Sverdlin.
+As a matter of fact my mother died when i was barely 4 years old
+according to my late father and because of the type of love he had for
+my mother made him to remain UN-married till he left the ghost..
+
+So after the death of my father as a result of assassinate, his brother (My
+Uncle) who is the purchasing and marketing sale manager of my late
+fathers company named (Mr. James Tokunbo Oriade Zakaria) wanted to
+convert all the properties and resources of my late father into his
+which i quarreled with him and it made him to lay his anger on me to
+the extent of hiring an assassins to kill me but to God be the glory i
+succeeded by making a way to Burkina faso for my dear life.
+Honestly i do live a fearful life even here in Burkina faso because of
+those Assassins coming after me .
+
+I would want to live and study in your country for my better future.
+because my father same blood brother wanted to force me into undecided
+marriage, just for me to leave my father home and went and live with
+another man I never know as he want to occupied all my father home
+and maybe to sold it as my father no longer alive, I'm the only child
+daughter my father born, '' but he don't know that i am not
+interesting in any of my father properties or early marriage for now,
+because i still have future to think about and to focus on my studies
+first as i was doing my first year in the University before the death
+of my father.
+
+Actually what I want to discuss with you is about my personal issue
+concern funds my late father deposited in a bank outside my country,
+worth $4.5 million united state dollars. i need your assistance to
+receive and invest this funds in your country.
+
+Please help me, I am sincere to you and I want to be member of your
+family as well if you wouldn't mind to accept me and lead me to better
+future in your country.
+
+All the documents the bank issue to my father during time of deposit
+is with me now.
+I already notify the bank on phone about the death of my father and
+they are surprise for the news and accept that my father is their good
+customer.
+I will be happy if this money can be invested in any business of your
+choice and it will be under your control till i finished my education,
+also I'm assuring you good relationship and I am ready to discuss the
+amount of money to give you from this money for your help.
+
+Therefore, I shall give you the bank contact and other necessary
+information in my next email if you will only promise me that you will
+not/never betray and disclosed this matter to anybody, because, this
+money is the only hope i have for survival on earth since I have lost
+my parents.
+
+Moreover I have the FUND PLACEMENT CERTIFICATE and the DEATH
+CERTIFICATE here with me, but before I give you further information, i
+will like to know your full data
+
+1. Full Name: ........................
+2. Address: ..................
+3. Nationality: ........... Sex................
+4. Age:........... Date of Birth:................
+5. Occupation:...................
+.....
+6. Phone: ........... Fax:.........................
+7. State of Origin: .......Country:..............
+8. Occupation:...................
+................
+9. Marital status........... E-mail address's: ............
+10. Scan copy of your ID card or Driving License/Photo:............
+DECLARATION:
+
+so that i will be fully sure that i am not trusting the wrong person.
+and it will also give me the mind to send you the bank contact for you
+to communicate with them for more verification about this money. and
+to know you more better.
+
+Meanwhile, you can reach me through my pastor,his name is Pastor Paul
+any time you call, tell him that you want to speak with me because
+right now i am living in the church here in Burkina faso and i don't
+want to stay here any longer,
+send for me to speak with you his phone number is this(+226 75213646)
+
+I will stop here and i will be waiting for your reply and feel free
+ask any thing you want to know about me.
+Please help me, I would be highly appreciated
+Have nice day.
+From Irene
