@@ -2,25 +2,25 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4C441DB43
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Sep 2021 15:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5492C41DB4A
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Sep 2021 15:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351301AbhI3Nk4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 30 Sep 2021 09:40:56 -0400
-Received: from www.zeus03.de ([194.117.254.33]:55630 "EHLO mail.zeus03.de"
+        id S1351719AbhI3Nnm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 30 Sep 2021 09:43:42 -0400
+Received: from www.zeus03.de ([194.117.254.33]:56822 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351387AbhI3Nkz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 30 Sep 2021 09:40:55 -0400
+        id S1351691AbhI3Nnl (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 30 Sep 2021 09:43:41 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=yYGRL5IIN4QUzqrtcpKYkK1W8kRr
-        W8asPlA4c59DDlA=; b=RZLx2txP8BU71m8ccD7oTRxGHRp0/gA7NEJ4GNkS7hBB
-        E+Rh2YpVCGpv7aUmC8qkrud7wXVpZculG6H54KanhUpMLGaeuYhBR1vUgtVuF/65
-        RZo8kDQs85CfIMyRhVRv2PNGxAt/4nlRIT9Gzzcwf3jQdQP7j6l7ZHqd9srJpBA=
-Received: (qmail 2093872 invoked from network); 30 Sep 2021 15:39:06 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 30 Sep 2021 15:39:06 +0200
-X-UD-Smtp-Session: l3s3148p1@KRfmkTbNyIQgARa4RV6LAWawlO8I9jL3
-Date:   Thu, 30 Sep 2021 15:39:02 +0200
+        :content-type:in-reply-to; s=k1; bh=rpIWuAp9ZNmG25KjbAPLOGuH7M0l
+        sNvKK6EG741biUk=; b=f1XyGz7oEPJZaD/2Xu6LZDdIa1ofgTsSXFo4+3x0R5w+
+        5mEK69p3J8zOK4+JqRmH9yB1WX4n2xNhpaz5jSY0QeVKLoYAonDpc23dPYGqA2yX
+        opCkuDukYdsFdQ+9iwai1b6sVe4Yudg/7lRHH3HbyCGivgq9G8uyIVnkhE8JVHg=
+Received: (qmail 2094768 invoked from network); 30 Sep 2021 15:41:57 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 30 Sep 2021 15:41:57 +0200
+X-UD-Smtp-Session: l3s3148p1@2cs+nDbN0oQgARa4RV6LAWawlO8I9jL3
+Date:   Thu, 30 Sep 2021 15:41:56 +0200
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
@@ -37,9 +37,9 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         linux-renesas-soc@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH 2/6] dt-bindings: memory: renesas,rpc-if: Add optional
- interrupts property
-Message-ID: <YVW99ticP5scIWHZ@shikoro>
+Subject: Re: [PATCH 3/6] spi: spi-rpc-if: Check return value of
+ rpcif_sw_init()
+Message-ID: <YVW+pLtnipm0/q9o@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
@@ -57,49 +57,53 @@ Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>
 References: <20210928140721.8805-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20210928140721.8805-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20210928140721.8805-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pbwG+L1mKyN7j93+"
+        protocol="application/pgp-signature"; boundary="fmwXyugRvFzLlAzO"
 Content-Disposition: inline
-In-Reply-To: <20210928140721.8805-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20210928140721.8805-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---pbwG+L1mKyN7j93+
+--fmwXyugRvFzLlAzO
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 28, 2021 at 03:07:17PM +0100, Lad Prabhakar wrote:
-> For completeness add optional interrupts property.
+On Tue, Sep 28, 2021 at 03:07:18PM +0100, Lad Prabhakar wrote:
+> rpcif_sw_init() can fail so make sure we check the return value
+> of it and on error exit rpcif_spi_probe() callback with error code.
 >=20
+> Fixes: eb8d6d464a27 ("spi: add Renesas RPC-IF driver")
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+
+If it fails, we should really bail out.
 
 Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
---pbwG+L1mKyN7j93+
+--fmwXyugRvFzLlAzO
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFVvfIACgkQFA3kzBSg
-KbZcEA/8DC+4Sfb4u+PPrWzR+e018I2qQPkGfH9kMwfBCx3LodnuGf6de22Ny77Y
-cqAaS1tILf2ZxCs895Pc01WETkqxpK4hGLfYfvZh8x3WPXhVZTwtnAbbBqXimty3
-TvYp5Wh8ASIi+EirBaZ4Ji6pE2x/fPTGz6FFODOVoPTzgUIDTZay3lkuTdqhqiBA
-u2obEJD1paLNlval0kXKuOhONyILRucb5WhtlIdUMo1ILTURMt/7ueQ4kl3TL8T4
-phrfuIxkwyrZzhdGmumrPxyn12ixoNUGurA/RltLp3cF474vHfY4OnFZsAE1lQEf
-RsVBuQTbIT/kTp9YCxu9tqmLilF4vgzRPfM/EnbdFiUv4ysQ3W79RdIz9fovo3kO
-6hcCsgaQyCT8VPpoG8IfO1wKwI6c+DVMdH+yJcwD7hE3aJw19gr7bho8V+NEoA0Q
-MDz9co6oLqjFq+AkzGSPsbLzbF9HCWby9Mhd5sSrIok/k6/BYHYM2mfOxYUoP82G
-SICnTVltyR/btOke+v/WfP/jswdCYB/dDXOM+9Pxf0PCM82gRuCDOvDZdC+Xry2v
-wcKvHu5Kq7V1veohoSL9JdAQLdqrVrXHrvxuFB+oK9Cij8Rp7d7FegC/jVUYFCFH
-4tQpW1SG5KvIk7vjSnEz3G+NHu9uCVToaRZCoMQvcPtHy4e1R1A=
-=EJF1
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFVvqQACgkQFA3kzBSg
+Kbby2hAAqjZsRM4m18UG6QCICxShrPpcJzI1sH6ogMykOFUrDeZK/bHfa6DgEwfW
+U4Z9iGiHB2jyR2VhWzw3QXvvTirVy8oLS4g7H3oz9FnJHWcPFrxCFs/rby/PyiOk
+WG0sYm7Xbui6A7Qto4z5ua3K/ea8UEMSoTaf9Je+fb0YXLnvh2b6k7APv/qC9xBK
+vYhRy6qDB6VcxZKTlYIZotL58s4oxHNb6Pe9idPiA6U1pRKOSYzB1ecUctiRAtW2
+f0CJ05OSrwr7S5XUnJUL0oLFS4m96ICebUyMicn7b4z1k5qg+O2UabDVwFa5zpiv
+pAhIor0d6vncJ9HI/k1PdTFB0AkHkYnu32NIhGXVn4c6SD/sIYQxCKGALo5P0XIQ
+nKfVxzopvMYLfsPt2bFIcRx6ngjhxHQj51lVBpQw0KH0odvkoKqGcrixpKnmQ6us
+9q2b302MA63zw3qpfQW/wb4JZFVR4s92pqi+rFeAb4+QbfibCr99MhKXKOpRn5bS
+lwedVUBYqXCzAwDVS2MhFaPPP+Q8UsqhHDo//I9W/WdZF6GPB3PBCnKUI18wtPCP
+F8GMd3b+wEe28sZFFD/BZjZ7/Cqctv29FCxRlx+xy0fWgOf+HU0eUKuBE88D1Eku
+NGqjtFvCob7wd/UHTFRurE//SkA3TaolkY8r5KL4h6QwezGE1ZQ=
+=jzQb
 -----END PGP SIGNATURE-----
 
---pbwG+L1mKyN7j93+--
+--fmwXyugRvFzLlAzO--
