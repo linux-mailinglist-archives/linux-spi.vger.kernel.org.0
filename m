@@ -2,108 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EBEB41DB57
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Sep 2021 15:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A3141DB51
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Sep 2021 15:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351586AbhI3No4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 30 Sep 2021 09:44:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47726 "EHLO mail.kernel.org"
+        id S1351747AbhI3Non (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 30 Sep 2021 09:44:43 -0400
+Received: from www.zeus03.de ([194.117.254.33]:57276 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351414AbhI3Nox (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 30 Sep 2021 09:44:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8DEA861211;
-        Thu, 30 Sep 2021 13:43:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633009391;
-        bh=Ipx8IDO4kCqX8IkrH3s5LY+e6LHzDltWwtgallL5o8o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y6hGwT3q0LAQFScM7gMsY8r+D7IMvf/gmTOFHOqRpQOATFGKDDNFxUJP4vIvIzPu+
-         pGrTzj2EayoM9brB3TAWb91OUlKulaJDesFYmoPI9lWq6Q+14LVWNjhxiGvtd9wycf
-         JyJSB0NYj3cShK30KMYXOooUyw52+25WABrPsfxuJpLPiGD+MY3rqVy/7R7WcQE6Bw
-         qzngf4bsALEGhofwWt7gGWlhAiV+9dzZyXiQ2p3rBajOavbwnujBjoQhnv9rQjPNup
-         +J1w3dfDWOuJFD58iuFEJlcsHQukOCxU62WGKUJKo6ZLSd8CTPOEZG0HuHrclo9cuV
-         JJx5IpVsHvsqw==
-Date:   Thu, 30 Sep 2021 14:42:20 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Cc:     kernel@collabora.com, linux-spi@vger.kernel.org,
-        enric.balletbo@collabora.com, dafna3@gmail.com,
-        Mason Zhang <Mason.Zhang@mediatek.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, wsd_upstream@mediatek.com,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH] Revert "spi: modify set_cs_timing parameter"
-Message-ID: <20210930134220.GZ4199@sirena.org.uk>
-References: <20210930120700.2564-1-dafna.hirschfeld@collabora.com>
- <20210930122513.GX4199@sirena.org.uk>
- <28f8af42-4535-ef9f-e521-712d37e2cb72@collabora.com>
- <20210930124630.GY4199@sirena.org.uk>
- <bce800ff-9b3e-500b-6a42-9a60d3a0c590@collabora.com>
+        id S1350042AbhI3Non (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 30 Sep 2021 09:44:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=enjVHhjyJZgjd0uz2ZMCGxCdBS+f
+        mbNWBXj4KgCu+/g=; b=Vq4frCFv5u/OJhnwA+2jw2Zo3C8qPCWnb8BlITwGu6W2
+        F3Ba0Jot9YgQactoV/1PgzGVxftoTEzEYX6eKWjWBrPZxkb5fNVjqntHammaEn/p
+        0WVvfEdoIOWiPs1K+noRZDFS67NKKd1xx2//p8fbxw95ZZwnEuWR6tyimZEMtTw=
+Received: (qmail 2095125 invoked from network); 30 Sep 2021 15:42:57 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 30 Sep 2021 15:42:57 +0200
+X-UD-Smtp-Session: l3s3148p1@ZcTdnzbN1IQgARa4RV6LAWawlO8I9jL3
+Date:   Thu, 30 Sep 2021 15:42:57 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mark Brown <broonie@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH 4/6] mtd: hyperbus: rpc-if: Check return value of
+ rpcif_sw_init()
+Message-ID: <YVW+4fueYq0qwpZz@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mark Brown <broonie@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20210928140721.8805-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20210928140721.8805-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vM12nk/63StVgfqY"
+        protocol="application/pgp-signature"; boundary="UH/3+F32BIFpPcH9"
 Content-Disposition: inline
-In-Reply-To: <bce800ff-9b3e-500b-6a42-9a60d3a0c590@collabora.com>
-X-Cookie: 98% lean.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210928140721.8805-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---vM12nk/63StVgfqY
+--UH/3+F32BIFpPcH9
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 30, 2021 at 03:06:52PM +0200, Dafna Hirschfeld wrote:
-> On 30.09.21 14:46, Mark Brown wrote:
-> > On Thu, Sep 30, 2021 at 02:36:01PM +0200, Dafna Hirschfeld wrote:
+On Tue, Sep 28, 2021 at 03:07:19PM +0100, Lad Prabhakar wrote:
+> rpcif_sw_init() can fail so make sure we check the return value
+> of it and on error exit rpcif_hb_probe() callback with error code.
+>=20
+> Fixes: 5de15b610f78 ("mtd: hyperbus: add Renesas RPC-IF driver")
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-> > > Actually the original commit not only change that callback 'set_cs_timing' but it also
-> > > calls 'mtk_spi_set_hw_cs_timing' directly from the function "mtk_spi_prepare_message".
-> > > So this actually influences all devices bound to this driver (in upstream)
-> > > I did some printing and it does change values that are written to registers.
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-> > OK, so that's something that should have been in the commit log,
-> > preferrably in a more detailed form that identifies what the change is.
-> > However changing the values written out is clearly not the intent of the
-> > patch and it is a substantially better API so can we not just fix things
-> > so that the old values are written out?  Why are we jumping straight to
-> > a revert here?
 
-> It could be that the values written to the register in the new version of "mtk_spi_set_hw_cs_timing" are the same
-> as with the previous version. I didn't check that. The difference is that before that patch
-> the function was not called so it was a dead code. Now it is called and causes erros.
-
-> Without the datasheet it is hard to know how to fix it. I responded to that patch two days ago explaining
-> that but Mason Zhang didn't respond yet.
-
-The hardware supports register readback (it's doing a read/modify/write
-to set the new values) so it should be possible to look at what the
-default values that get written out are and work out what the default
-parameters should be set to to give the same effect (instead of 1 which
-is what's currently used).  I would say just skip the delays if they are
-zero but that means that if only one device on a bus has a delay
-configured there'd be problems.
-
-Please fix your mail client to word wrap within paragraphs at something
-substantially less than 80 columns.  Doing this makes your messages much
-easier to read and reply to.
-
---vM12nk/63StVgfqY
+--UH/3+F32BIFpPcH9
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFVvrsACgkQJNaLcl1U
-h9Dvgwf8D/QgRgGL7+atgjRw9nrUP2dqOjbRukvgflD12pYe5ijMEvL6BFICSt4L
-T1sOe/K5W6GTKGOKlEZXqHZOtyYSvZfeOkIj/NhvmQzxfwLoDO20UuK/5nILt7Xb
-h5qP9YOjJHOfWUlZCg/r07K7V5r3CyIwjRbayLxAdC1kpaihkQH1Z5js5q2Is4w/
-SAamMil0l6tzMEXEorBK4fT3KJfA4rtIMe1u/npdwXw+50dO/zPEWWtTFyHIGzuJ
-O0oG+4pAEF9brMYzPTnq+c6AHGRQdCoD/nEoGrVHm8IBkqxnq7FM10/NjBH2RVPc
-pwUyQs1Cn163hgBK2eh8xWk9oMJy9g==
-=XIiO
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFVvuEACgkQFA3kzBSg
+KbaFOhAAkhQT+eANrESXMUmHwDoBaEftQaOhPkUb8DlXOqKGq+DAjzW+JyzW0kSL
+ESmiEdv89aufX5RfHPtGhaMpg4zw77UD3K2Lorxq/0NhbpSsw1QQPLJQ7S7opXi+
+4YbfeFnCQHfDshSl4Z72qhYIK2+hX0UxGb+Rwc4cFo+VlfSf0kwY3Fou40hyfvuc
+1QX32jsF4nIx8n0aRlChTwOkiDozSFhYsF6hyaHkujln6Tl3/XkhFJnVMx28Rx9D
+intGfPYb140kKY42sOSYyVIvU5NEOA20uptacBGyHjD08JMoUqngNFTrB9QSD7Qn
+UXyNSm8hCR2O4jXwqyaq+NkB38/KjGiA0KhqLe7VfIJF2kpIhD7A0byOuXeJN5NJ
+mzx8B1Je7st8S2+8tsB8+QXx4LhaxUwgOE6AuW4egwuh75VrXmKlOZpz7p7ScGga
+51om9XkoqZKZ8y/OYjlLs0PTnILm3FSC3kMG13bJEaKh7xDXujRTMHYhCLAeR+kP
+cnxNI6KR8+t/y8WgTukfo7z8uaC29WJ83cE4Nyl549lub9Y6s0mJJPmIW19xVxzY
+7kyjUj+BkBWsr96db+5f1hQJWxoJ55o7dhtmEscLa6Ka06uW5/fL6YLZQ3u0Cccs
+wshCtE1z4f40IvhH1w10UaNvmL4CXvI0tKQ6EgcoUQtp5p21m7M=
+=KpqM
 -----END PGP SIGNATURE-----
 
---vM12nk/63StVgfqY--
+--UH/3+F32BIFpPcH9--
