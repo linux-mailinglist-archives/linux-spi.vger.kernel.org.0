@@ -2,380 +2,177 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A179C41F644
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Oct 2021 22:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B6E41F6B3
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Oct 2021 23:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355180AbhJAUZV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 1 Oct 2021 16:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355132AbhJAUZT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Oct 2021 16:25:19 -0400
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA93CC061775
-        for <linux-spi@vger.kernel.org>; Fri,  1 Oct 2021 13:23:34 -0700 (PDT)
-Received: by mail-vk1-xa34.google.com with SMTP id o204so4951196vko.9
-        for <linux-spi@vger.kernel.org>; Fri, 01 Oct 2021 13:23:34 -0700 (PDT)
+        id S1354645AbhJAVOe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 1 Oct 2021 17:14:34 -0400
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:26056 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354551AbhJAVOe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Oct 2021 17:14:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1633122769; x=1664658769;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=baPzjLn3o/ZPvaMIWQey6kKMbrjrEsSZXuuq5YdE6nw=;
+  b=yL6CxNDwkAl6NVD8YmXhM/8JDjLYYIMuQiFYS+Q8wpXHUANYwlaJXqm9
+   qnnJNhAfDjj9/J/4DaiIosrKsvc9pfdogXab35VypyzKTSubGTMkDX1l/
+   dpM4CJZroqSddf9tmFsKm9RG4PAGuQzC2bAmHHCPlbTF8GqzhWMQ4+0y9
+   npj6o+6e9v9Al+/cV83Os940FnTyB48LqA0Ye/3vLhS5klVSeXSU+Irk1
+   uQA6BFQ2sisBEZfgKL9WZVK+yrw5LU1z2vV+stlzkRWiuay3JF0QP4kFV
+   fW18/6rF0W3qIF6607oau0F30NFiwZlAVywo2CYp0DP2unz+rNphQ6BHi
+   A==;
+IronPort-SDR: CU4v01gb1pcEgU6CX6PdIi67aZJSMrUc45Y5IKkn8kAbTqlnZgAhuuJEvRzLOjq14xNxHsjnia
+ gxOXHmV3ShCRN5SRlwFsnrdkcoiyGrFwxDYPD/Z5cpRzolK0wPnaa7Bs5gpAn/UvsgrXBSVgRp
+ SLwWuCH7Z29mMHhr+RC08OFlwxCcclz4fpgx7wLY+oE5gcHYUo+o9Junsh7kVWme9W7i35+9U5
+ cb2OkZPUkAu0Foar7Wop8sdY/Ja9r4TTrFo3J9eR0oZNcmW3GlkMCYj5XcKrH6q3ClewnmCUtH
+ bU/sBQAWVq7/EW7HlvgGQ312
+X-IronPort-AV: E=Sophos;i="5.85,340,1624345200"; 
+   d="scan'208";a="71426743"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Oct 2021 14:12:48 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Fri, 1 Oct 2021 14:12:47 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14 via Frontend Transport; Fri, 1 Oct 2021 14:12:47 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ko2XiWEMucA6uFKkNbBVKjascRbRpxg02YmR9c5LlOPGW+n/7AGOJ6377w20ZceTWOJmSi/lRrbLKvIy5/iJWAbpa3LmWPEnx1JUPXZPmHBG75JIgaW0WngwuklDXb4c6S2VYauW2tNFmFNBC2me/gx2aRrievn0WLK7cB1JuaOsiJgqRVuuog/09FJdQwkyGzHL8AxFTsBGFpGiIe4bn5nKauEMLfGDx+2djxq/2xlEMRhSFO80wrBSBCWk6NTTSrgaMlRFjPdA07nrAc5IPF81Uo5xYIWfiqOJ/jgVPB2iTkBAitosm+VWS+MfVJ403zyx2mhmPu0npsMJSKYkMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=baPzjLn3o/ZPvaMIWQey6kKMbrjrEsSZXuuq5YdE6nw=;
+ b=aF/jRJAqP+fNSeem9vjvYDwu++rEKZHeK90fIYycA/zPU8tysFexiiOyYiV1oQ6U9ZgIwd+2oSu+gwDGttOxd5FKyPY2UV7QnWopDxcT8tyGMCfZCrq/X8wCk2HgIE0is5+VGX5Id8N71faJbIvPECn8pHJ3bWeeCxKea79jt1Hu/czBaF/sPqz2hMzZRMCvt6qeRwoChAmd36+PsO7KyIaPAQ8QeaovOc0NMnx2BOIqHyvFPEvv/E6afSrmFIUHSavDHy/kCYNMBLugzz8Aig3XUQBmNsXANoSHzXWqSZYHCACG80UK4blDSTVvpOUv2Uju7HG1RwVPwLvu0ZbWHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eclypsium.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NZyfSj26zhlNfFmaF+ZI8mVejq4JTtk49u5U8nv0hrk=;
-        b=LynUK/I+FKuarITgIzqFdhtuAtunkZYrEtXlsmFwhB1OvW08yt3y2a2bSVSpWSOd8m
-         ozfqoa1FHA5FwJjJpD8uXnZa2rKQyTq3SbGxJE+NF9HNDuxxfwVdm6xDOIVJgxOyBy3V
-         aGfMJyge/O5ruWwkxzrqlmirrcYcIhwkINuZW2lYEdgHolhRXz5UZrEX2syfL+4761/z
-         JT8dwmqGiy0739mw/Y8LzOvn0lyITR7W5cjuj1MYglNBTcjnyn8ChCatmfRczhIize7o
-         6SCYmu95LUz3lwmv60MyxqJk6YQfg6TzA4EBlRdS/BZ4A4PjtbbOUkKX47iDQRfsA27E
-         zcvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NZyfSj26zhlNfFmaF+ZI8mVejq4JTtk49u5U8nv0hrk=;
-        b=aVlE6JZBcoAJMbbVsCVU3N6uHygzsG53io293VWMyIR5Rwiz+6bV5cAMjXOhj31Nw9
-         uulx6gpsaewfv4u8O4WaPHn/ddxIUqkyEuzHcQvKVKW5yhE+B/gRyrX8Z9raomCTY0Ri
-         LZxPgM8ZhO8a5hWK6syM668oINKjGLexgqqeEz7zEvG6oPLYR8qQv4lz0FZGiuMK2v3O
-         OZs/9ICinIjTPSgYGo1ErYtUz6vttXT2OUMHqWccH6iof9OtsCqrU0JFqGss60SaiuU7
-         MvucyLbSbRm4f2pSEppFk1f8lJRHQ3CF6aOTIxFcOQ9HRVldGoXBX9wpuIrsmYInSqrI
-         by9Q==
-X-Gm-Message-State: AOAM5302J6dEBvWKQkNV656TfoQ/P2A1uICrWVk3L7QGMDXvODUdKTj1
-        FtbEnSddzkGfztSimPfz7x5YqEgKkt13/8DVfdQFZQ==
-X-Google-Smtp-Source: ABdhPJzAVLEyQLInGCso7fmDfQbVcvKzjritzwamKIEKuOzOMV/T9OeVTA7uJ4ibyJne2+fPrX4GwNhsfAEJYHESCHM=
-X-Received: by 2002:a05:6122:e71:: with SMTP id bj49mr7958101vkb.7.1633119813926;
- Fri, 01 Oct 2021 13:23:33 -0700 (PDT)
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=baPzjLn3o/ZPvaMIWQey6kKMbrjrEsSZXuuq5YdE6nw=;
+ b=nlzsj0c+CxVGDV8+KtyUZskzz8deANiDdZnmfVJVnNZRfyp8TeXj3lU1rbaHa6jj0Nfr42318Uf2v6peXyGpbZcbPJV4FnNgr+w7KdECmX6PJGvO1dZ62UIxZx5NFMcCmKj//cIK1qponhbhSlPYwRzq8f6lBGFJ3pASaMgH3dw=
+Received: from BY5PR11MB4007.namprd11.prod.outlook.com (2603:10b6:a03:189::28)
+ by BY5PR11MB3896.namprd11.prod.outlook.com (2603:10b6:a03:187::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.19; Fri, 1 Oct
+ 2021 21:12:46 +0000
+Received: from BY5PR11MB4007.namprd11.prod.outlook.com
+ ([fe80::2116:bc0c:4699:a641]) by BY5PR11MB4007.namprd11.prod.outlook.com
+ ([fe80::2116:bc0c:4699:a641%5]) with mapi id 15.20.4544.025; Fri, 1 Oct 2021
+ 21:12:45 +0000
+From:   <Dan.Sneddon@microchip.com>
+To:     <villeb@bytesnap.co.uk>, <Tudor.Ambarus@microchip.com>,
+        <broonie@kernel.org>, <Nicolas.Ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <Ludovic.Desroches@microchip.com>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4] spi: atmel: Fix PDC transfer setup bug
+Thread-Topic: [PATCH v4] spi: atmel: Fix PDC transfer setup bug
+Thread-Index: AQHXtwkUNSlsEXmDvE65QnZT5HX4kg==
+Date:   Fri, 1 Oct 2021 21:12:45 +0000
+Message-ID: <e151c019-269a-8dbb-610b-2a57cc855e1b@microchip.com>
+References: <20210921072132.21831-1-villeb@bytesnap.co.uk>
+In-Reply-To: <20210921072132.21831-1-villeb@bytesnap.co.uk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+authentication-results: bytesnap.co.uk; dkim=none (message not signed)
+ header.d=none;bytesnap.co.uk; dmarc=none action=none
+ header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 92b1afa9-3ee8-4017-026c-08d98520371e
+x-ms-traffictypediagnostic: BY5PR11MB3896:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BY5PR11MB3896A32D8A66C2AF4A2F8993E1AB9@BY5PR11MB3896.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:327;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: OlT/N8a3wXLEo+Tduob0/n889/j8ZVJ5noIFjKawLl4JDWnX+EbEM7t91qYL50jKY7osBctliRbSFc8DwNO3v1g/lWxPCm1dOr73C43MJOTfwlvFQOUHqguUb0jz4cjUyHY58YWwRaFCoL2VG2yeXEAS5lPZYxUM8Zr1CV2ZgZFK8VwZ83jKkFhLWI6OZB/9PmV8nItXgK56+oy2U+G5sSUJcYoS5dCQ/9CYhH4LyZhjDON1DkTVzmJ0PFK//tyNm/MGA/jZmTobg7XrP2xiaUzPDNniVjJwhYHNmlBNplzUjL9moBbsdpUJEydm804XUvOesENr5LxDrh5CyhIjX9/wn1JZ50ApZLeMGOrwMr1sFKCKwR7Zs5tWpee8NDm04UoI0ySDWPMM82gUpzoEVn77eU5rmWM2rjQY/79zWgaz6myaeDByDwMAomd+FAUm1yFFqL9xglGCesu9ExCHqTU1QZ6nweDIghML5UF2fi4Ppwq/8vN05XUTzDbFWlcN8ikQzLvP/XRPpRcwOYypBSHd0fNR1R97mMu7bTpDRi93D3/204wTIruegrweXhmjuz8l7sBJsLUkd+uid3RvftewGV5j+BKBmlBnpcTLd9jOlcMiayeTWnksGX+0jCulj6CD2shac4QcSEm5Bn2qHrGSnTAJobpA51sHeEw3Lju0yvjJcw/aMliQYCIVTilfvMrF0HR0kU+UCZ1FvAH+OjEY6YKP87V+cj0c5vITJDQJlFnuFbNBhQDF3pRmWm0y/jMcDa6778wf3r8uTX1FJA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR11MB4007.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(122000001)(2906002)(38070700005)(38100700002)(5660300002)(31696002)(8676002)(2616005)(54906003)(86362001)(83380400001)(91956017)(71200400001)(316002)(110136005)(4326008)(8936002)(31686004)(66476007)(6512007)(66446008)(76116006)(53546011)(26005)(186003)(66556008)(64756008)(36756003)(508600001)(6486002)(6506007)(66946007)(6636002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dUdsZEdjd2xneG5Yakp4UEd2VmMrWFN4V0pOenY5NkhIUHhEbUk4NytHaFQv?=
+ =?utf-8?B?dEprOTlrV252c2Q2VDdnenc5MWFQM2ZFUTRDRUh5Y1pJSThIQmZvRUlqTUhF?=
+ =?utf-8?B?ZCtTM2tFYno0RDRVb2pIZWNhcEY0UktyN0haUUNXdi9RbkpJMzBWZnc1a3hV?=
+ =?utf-8?B?ayt0VzN5Z04zazZKQXFxZkFIVjRpL0tZMVl3Z2gzSzdCM0kvZ3Z2eXJBQWZP?=
+ =?utf-8?B?NHJndVRieXp0MlFIMU9wckV1Q2pZM2hPbFdOZytIbVdCVGJNZkxoMFlOQ2Ny?=
+ =?utf-8?B?dlRiUlk0SWVTNHAwQUEwYVZxMjkrcnNxRC9wSGR5STBnTXlXNnRZbjMwZ0ZS?=
+ =?utf-8?B?UjM5YTNxTG93MVZacERJL01JS3VGUVZOZjBqZ0o4LzZPaUR0OXJYQ2RlZlRC?=
+ =?utf-8?B?VGhYbTdxTE9UVUNIT2R1M2R3VXlrcDVWZ0VTUS9uUGF3b2pKRklVSElrR1RD?=
+ =?utf-8?B?T2h6d3ZITUl3dDUzRjdGbEhpdDBlZitJMWZyUHMzTTJJMkpSNFdTRWpVTE5B?=
+ =?utf-8?B?N3hDRnU3VXI4cWI4bVFjVzJNYm9ZallTQVdac1B5UWNQRVhCTjkwREd1UkR3?=
+ =?utf-8?B?R2hueG5ueVd0cVdwckMxT3JLNVorYlU1S3JsVWxtUWpCVHc1ZndEU0lsZUl1?=
+ =?utf-8?B?dkYyYUJHOTRRTnIyNXVhbjBFYWlRNStjM1NqWjZ0VFBpRlVoa0hpRXp4Q3Jv?=
+ =?utf-8?B?VWJiaFVoaDV0MS9LMC9uNlNDZlhQeTFCZWlNU3VNcFpud1kwY2NDRm0wdElh?=
+ =?utf-8?B?WTF0K0piUTJJeDgwaEV3ZXVkb0NkczU2bTY3QUx5SFZHVkF3VHVKSXhsV2kv?=
+ =?utf-8?B?ZkFPV0VLaTFaaW1zbUFxN2pZcDRKMHdhakU4dUVKVVRhdG8rcURONndrSDlB?=
+ =?utf-8?B?RUxHOGJMY3pBOUs1SnQxZlcvYzRCU3NHN3JoZmRscjFWVkNaN0N3dkRFaUx1?=
+ =?utf-8?B?cHFrbWdISW1JWTJRZUZyREd2OXFHbDNLSjU4WldXY292SXZWRTBGYlY1cXBs?=
+ =?utf-8?B?SVJYYWYwbUlUYnY4ZWNFbDdkbWJiQi9wOU93OEJhbmc2S2JwWDRKcGlzOEd5?=
+ =?utf-8?B?alU2SXJtTWZPUC9BbjVSQWV0UEo0V0RITGRjMVFrd0FBeGxuMVNkMGd1QnY1?=
+ =?utf-8?B?R005UzJXenc4NHFZcWsxTXlQS3FxZHRnN3NEckk1R2pnUHdvWitrV3BnbDRG?=
+ =?utf-8?B?NGtFb2N1MXMzTmp0UGhCUmNQNURocmNDdTBqSFZPekZQY1RYdUtaeUFnYzda?=
+ =?utf-8?B?VXEyNkRPdmRVRXRRdEdyazJtQ1k5WWFpRDUxQ3RyWU1xcWJpYlJINDNiL3dM?=
+ =?utf-8?B?RnQrY1RuQXcxZlRvUkJXTENUbnlOd2ZGbXI5WEsvNU13VUc1TFQxTjdkSGpZ?=
+ =?utf-8?B?TVhKWUs0cS93eDRJeE5sZXJjaXh4U1dkbXNQcVFLbndER2NzbFpGeWtzaTVn?=
+ =?utf-8?B?cGNzU2ZaZ3RTakVBVE5EU1pUVXFvVnU4dUU3SFMwM1VGUVR0Ky9lTFI2d1JY?=
+ =?utf-8?B?ZXJ2TjdWdkxsVXdBcjVvODk4dVJSdlZ1dHZZcGhORzRLc1FpejF0UDBlM3M3?=
+ =?utf-8?B?VmEzUjV3UVRTWU9ZVk5CckNEVzNKZHc1elBEMFBadFNkbTFPNi94dUFYWTFm?=
+ =?utf-8?B?VERtdGRIa0RHd0IrTFFxb3lzTzFBd1pwMEtsY21oSW1lbEtwNGRjQ3hPTld1?=
+ =?utf-8?B?WG1RT2xmSUNWRjVEcmQrQmpnUWx2bUh6aXR4OEdZUVlrWWZmcTNJZFkzZ01G?=
+ =?utf-8?Q?1hxpGkBbXHFtAsd5KMhD5Xi90Xz4TSbHTzABvvy?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <2D680A81C7C98C488B1BBF1E297F78CB@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20210930100719.2176-1-mika.westerberg@linux.intel.com> <20210930100719.2176-2-mika.westerberg@linux.intel.com>
-In-Reply-To: <20210930100719.2176-2-mika.westerberg@linux.intel.com>
-From:   Mauro Lima <mauro.lima@eclypsium.com>
-Date:   Fri, 1 Oct 2021 17:23:23 -0300
-Message-ID: <CAArk9MPWh4f1E=ecKBHy8PFzvU_y_ROgDyUU_O3ZQ0FuMhkj5Q@mail.gmail.com>
-Subject: Re: [PATCH 1/3] mtd: spi-nor: intel-spi: Disable write protection
- only if asked
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Michael Walle <michael@walle.cc>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR11MB4007.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92b1afa9-3ee8-4017-026c-08d98520371e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Oct 2021 21:12:45.8277
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4T2tOV+L8eBbBjvF+LfIdQ/88Ly26Gr9KH8A6qVagsTMyFGcxUUhzXJyQqy+TOt1CqLfoY+HUphOikMix5yHZ9+YDIPGhdJT7bwM9J6GHuY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB3896
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi all!
-
-On Thu, Sep 30, 2021 at 7:07 AM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> Currently the driver tries to disable the BIOS write protection
-> automatically even if this is not what the user wants. For this reason
-> modify the driver so that by default it does not touch the write
-> protection. Only if specifically asked by the user (setting writeable=1
-> command line parameter) the driver tries to disable the BIOS write
-> protection.
->
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> ---
->  drivers/mfd/lpc_ich.c                         | 59 +++++++++++++++++--
->  .../mtd/spi-nor/controllers/intel-spi-pci.c   | 29 +++++----
->  drivers/mtd/spi-nor/controllers/intel-spi.c   | 41 ++++++-------
->  include/linux/platform_data/x86/intel-spi.h   |  6 +-
->  4 files changed, 96 insertions(+), 39 deletions(-)
->
-> diff --git a/drivers/mfd/lpc_ich.c b/drivers/mfd/lpc_ich.c
-> index f10e53187f67..9ffab9aafd81 100644
-> --- a/drivers/mfd/lpc_ich.c
-> +++ b/drivers/mfd/lpc_ich.c
-> @@ -63,6 +63,8 @@
->  #define SPIBASE_BYT            0x54
->  #define SPIBASE_BYT_SZ         512
->  #define SPIBASE_BYT_EN         BIT(1)
-> +#define BYT_BCR                        0xfc
-> +#define BYT_BCR_WPD            BIT(0)
->
->  #define SPIBASE_LPT            0x3800
->  #define SPIBASE_LPT_SZ         512
-> @@ -1084,12 +1086,57 @@ static int lpc_ich_init_wdt(struct pci_dev *dev)
->         return ret;
->  }
->
-> +static bool lpc_ich_byt_set_writeable(void __iomem *base, void *data)
-> +{
-> +       u32 val;
-> +
-> +       val = readl(base + BYT_BCR);
-> +       if (!(val & BYT_BCR_WPD)) {
-> +               val |= BYT_BCR_WPD;
-> +               writel(val, base + BYT_BCR);
-> +               val = readl(base + BYT_BCR);
-> +       }
-> +
-> +       return val & BYT_BCR_WPD;
-> +}
-> +
-> +static bool lpc_ich_lpt_set_writeable(void __iomem *base, void *data)
-> +{
-> +       struct pci_dev *pdev = data;
-> +       u32 bcr;
-> +
-> +       pci_read_config_dword(pdev, BCR, &bcr);
-> +       if (!(bcr & BCR_WPD)) {
-> +               bcr |= BCR_WPD;
-> +               pci_write_config_dword(pdev, BCR, bcr);
-> +               pci_read_config_dword(pdev, BCR, &bcr);
-> +       }
-> +
-> +       return bcr & BCR_WPD;
-> +}
-> +
-> +static bool lpc_ich_bxt_set_writeable(void __iomem *base, void *data)
-> +{
-> +       unsigned int spi = PCI_DEVFN(13, 2);
-> +       struct pci_bus *bus = data;
-> +       u32 bcr;
-> +
-> +       pci_bus_read_config_dword(bus, spi, BCR, &bcr);
-> +       if (!(bcr & BCR_WPD)) {
-> +               bcr |= BCR_WPD;
-> +               pci_bus_write_config_dword(bus, spi, BCR, bcr);
-> +               pci_bus_read_config_dword(bus, spi, BCR, &bcr);
-> +       }
-> +
-> +       return bcr & BCR_WPD;
-> +}
-> +
->  static int lpc_ich_init_spi(struct pci_dev *dev)
->  {
->         struct lpc_ich_priv *priv = pci_get_drvdata(dev);
->         struct resource *res = &intel_spi_res[0];
->         struct intel_spi_boardinfo *info;
-> -       u32 spi_base, rcba, bcr;
-> +       u32 spi_base, rcba;
->
->         info = devm_kzalloc(&dev->dev, sizeof(*info), GFP_KERNEL);
->         if (!info)
-> @@ -1103,6 +1150,8 @@ static int lpc_ich_init_spi(struct pci_dev *dev)
->                 if (spi_base & SPIBASE_BYT_EN) {
->                         res->start = spi_base & ~(SPIBASE_BYT_SZ - 1);
->                         res->end = res->start + SPIBASE_BYT_SZ - 1;
-> +
-> +                       info->set_writeable = lpc_ich_byt_set_writeable;
->                 }
->                 break;
->
-> @@ -1113,8 +1162,8 @@ static int lpc_ich_init_spi(struct pci_dev *dev)
->                         res->start = spi_base + SPIBASE_LPT;
->                         res->end = res->start + SPIBASE_LPT_SZ - 1;
->
-> -                       pci_read_config_dword(dev, BCR, &bcr);
-> -                       info->writeable = !!(bcr & BCR_WPD);
-> +                       info->set_writeable = lpc_ich_lpt_set_writeable;
-> +                       info->data = dev;
->                 }
->                 break;
->
-> @@ -1135,8 +1184,8 @@ static int lpc_ich_init_spi(struct pci_dev *dev)
->                         res->start = spi_base & 0xfffffff0;
->                         res->end = res->start + SPIBASE_APL_SZ - 1;
->
-> -                       pci_bus_read_config_dword(bus, spi, BCR, &bcr);
-> -                       info->writeable = !!(bcr & BCR_WPD);
-> +                       info->set_writeable = lpc_ich_bxt_set_writeable;
-> +                       info->data = bus;
->                 }
->
->                 pci_bus_write_config_byte(bus, p2sb, 0xe1, 0x1);
-> diff --git a/drivers/mtd/spi-nor/controllers/intel-spi-pci.c b/drivers/mtd/spi-nor/controllers/intel-spi-pci.c
-> index 1bc53b8bb88a..508f7ca098ef 100644
-> --- a/drivers/mtd/spi-nor/controllers/intel-spi-pci.c
-> +++ b/drivers/mtd/spi-nor/controllers/intel-spi-pci.c
-> @@ -16,12 +16,30 @@
->  #define BCR            0xdc
->  #define BCR_WPD                BIT(0)
->
-> +static bool intel_spi_pci_set_writeable(void __iomem *base, void *data)
-> +{
-> +       struct pci_dev *pdev = data;
-> +       u32 bcr;
-> +
-> +       /* Try to make the chip read/write */
-> +       pci_read_config_dword(pdev, BCR, &bcr);
-> +       if (!(bcr & BCR_WPD)) {
-> +               bcr |= BCR_WPD;
-> +               pci_write_config_dword(pdev, BCR, bcr);
-> +               pci_read_config_dword(pdev, BCR, &bcr);
-> +       }
-> +
-> +       return bcr & BCR_WPD;
-> +}
-> +
->  static const struct intel_spi_boardinfo bxt_info = {
->         .type = INTEL_SPI_BXT,
-> +       .set_writeable = intel_spi_pci_set_writeable,
->  };
->
->  static const struct intel_spi_boardinfo cnl_info = {
->         .type = INTEL_SPI_CNL,
-> +       .set_writeable = intel_spi_pci_set_writeable,
->  };
->
->  static int intel_spi_pci_probe(struct pci_dev *pdev,
-> @@ -29,7 +47,6 @@ static int intel_spi_pci_probe(struct pci_dev *pdev,
->  {
->         struct intel_spi_boardinfo *info;
->         struct intel_spi *ispi;
-> -       u32 bcr;
->         int ret;
->
->         ret = pcim_enable_device(pdev);
-> @@ -41,15 +58,7 @@ static int intel_spi_pci_probe(struct pci_dev *pdev,
->         if (!info)
->                 return -ENOMEM;
->
-> -       /* Try to make the chip read/write */
-> -       pci_read_config_dword(pdev, BCR, &bcr);
-> -       if (!(bcr & BCR_WPD)) {
-> -               bcr |= BCR_WPD;
-> -               pci_write_config_dword(pdev, BCR, bcr);
-> -               pci_read_config_dword(pdev, BCR, &bcr);
-> -       }
-> -       info->writeable = !!(bcr & BCR_WPD);
-> -
-> +       info->data = pdev;
->         ispi = intel_spi_probe(&pdev->dev, &pdev->resource[0], info);
->         if (IS_ERR(ispi))
->                 return PTR_ERR(ispi);
-> diff --git a/drivers/mtd/spi-nor/controllers/intel-spi.c b/drivers/mtd/spi-nor/controllers/intel-spi.c
-> index a413892ff449..f35597cbea0c 100644
-> --- a/drivers/mtd/spi-nor/controllers/intel-spi.c
-> +++ b/drivers/mtd/spi-nor/controllers/intel-spi.c
-> @@ -131,7 +131,6 @@
->   * @sregs: Start of software sequencer registers
->   * @nregions: Maximum number of regions
->   * @pr_num: Maximum number of protected range registers
-> - * @writeable: Is the chip writeable
->   * @locked: Is SPI setting locked
->   * @swseq_reg: Use SW sequencer in register reads/writes
->   * @swseq_erase: Use SW sequencer in erase operation
-> @@ -149,7 +148,6 @@ struct intel_spi {
->         void __iomem *sregs;
->         size_t nregions;
->         size_t pr_num;
-> -       bool writeable;
->         bool locked;
->         bool swseq_reg;
->         bool swseq_erase;
-> @@ -304,6 +302,14 @@ static int intel_spi_wait_sw_busy(struct intel_spi *ispi)
->                                   INTEL_SPI_TIMEOUT * 1000);
->  }
->
-> +static bool intel_spi_set_writeable(struct intel_spi *ispi)
-> +{
-> +       if (!ispi->info->set_writeable)
-> +               return false;
-> +
-> +       return ispi->info->set_writeable(ispi->base, ispi->info->data);
-> +}
-> +
->  static int intel_spi_init(struct intel_spi *ispi)
->  {
->         u32 opmenu0, opmenu1, lvscc, uvscc, val;
-> @@ -316,19 +322,6 @@ static int intel_spi_init(struct intel_spi *ispi)
->                 ispi->nregions = BYT_FREG_NUM;
->                 ispi->pr_num = BYT_PR_NUM;
->                 ispi->swseq_reg = true;
-> -
-> -               if (writeable) {
-> -                       /* Disable write protection */
-> -                       val = readl(ispi->base + BYT_BCR);
-> -                       if (!(val & BYT_BCR_WPD)) {
-> -                               val |= BYT_BCR_WPD;
-> -                               writel(val, ispi->base + BYT_BCR);
-> -                               val = readl(ispi->base + BYT_BCR);
-> -                       }
-> -
-> -                       ispi->writeable = !!(val & BYT_BCR_WPD);
-> -               }
-> -
->                 break;
->
->         case INTEL_SPI_LPT:
-> @@ -358,6 +351,12 @@ static int intel_spi_init(struct intel_spi *ispi)
->                 return -EINVAL;
->         }
->
-> +       /* Try to disable write protection if user asked to do so */
-> +       if (writeable && !intel_spi_set_writeable(ispi)) {
-> +               dev_warn(ispi->dev, "can't disable chip write protection\n");
-> +               writeable = false;
-> +       }
-> +
->         /* Disable #SMI generation from HW sequencer */
->         val = readl(ispi->base + HSFSTS_CTL);
->         val &= ~HSFSTS_CTL_FSMIE;
-> @@ -884,9 +883,12 @@ static void intel_spi_fill_partition(struct intel_spi *ispi,
->                 /*
->                  * If any of the regions have protection bits set, make the
->                  * whole partition read-only to be on the safe side.
-> +                *
-> +                * Also if the user did not ask the chip to be writeable
-> +                * mask the bit too.
->                  */
-> -               if (intel_spi_is_protected(ispi, base, limit))
-> -                       ispi->writeable = false;
-> +               if (!writeable || intel_spi_is_protected(ispi, base, limit))
-> +                       part->mask_flags |= MTD_WRITEABLE;
->
->                 end = (limit << 12) + 4096;
->                 if (end > part->size)
-> @@ -927,7 +929,6 @@ struct intel_spi *intel_spi_probe(struct device *dev,
->
->         ispi->dev = dev;
->         ispi->info = info;
-> -       ispi->writeable = info->writeable;
->
->         ret = intel_spi_init(ispi);
->         if (ret)
-> @@ -945,10 +946,6 @@ struct intel_spi *intel_spi_probe(struct device *dev,
->
->         intel_spi_fill_partition(ispi, &part);
->
-> -       /* Prevent writes if not explicitly enabled */
-> -       if (!ispi->writeable || !writeable)
-> -               ispi->nor.mtd.flags &= ~MTD_WRITEABLE;
-> -
->         ret = mtd_device_register(&ispi->nor.mtd, &part, 1);
->         if (ret)
->                 return ERR_PTR(ret);
-> diff --git a/include/linux/platform_data/x86/intel-spi.h b/include/linux/platform_data/x86/intel-spi.h
-> index 7f53a5c6f35e..7dda3f690465 100644
-> --- a/include/linux/platform_data/x86/intel-spi.h
-> +++ b/include/linux/platform_data/x86/intel-spi.h
-> @@ -19,11 +19,13 @@ enum intel_spi_type {
->  /**
->   * struct intel_spi_boardinfo - Board specific data for Intel SPI driver
->   * @type: Type which this controller is compatible with
-> - * @writeable: The chip is writeable
-> + * @set_writeable: Try to make the chip writeable (optional)
-> + * @data: Data to be passed to @set_writeable can be %NULL
->   */
->  struct intel_spi_boardinfo {
->         enum intel_spi_type type;
-> -       bool writeable;
-> +       bool (*set_writeable)(void __iomem *base, void *data);
-> +       void *data;
->  };
->
->  #endif /* INTEL_SPI_PDATA_H */
-> --
-> 2.33.0
->
-Question for maintainers: With these changes is it safe to remove the
-*(DANGEROUS)* tag from menuconfig?
-Thanks, Mauro.
+SGkgVmlsbGUsDQoNCk9uIDkvMjEvMjEgMTI6MjEgQU0sIFZpbGxlIEJhaWxsaWUgd3JvdGU6DQo+
+IENvbW1pdCA1ZmE1ZTZkZWM3NjIgKCJzcGk6IGF0bWVsOiBTd2l0Y2ggdG8gdHJhbnNmZXJfb25l
+IHRyYW5zZmVyDQo+IG1ldGhvZCIpIHJlZmFjdG9yZWQgdGhlIGNvZGUgYW5kIGNoYW5nZWQgYSBj
+b25kaXRpb25hbCBjYXVzaW5nDQo+IGF0bWVsX3NwaV9kbWFfbWFwX3hmZXIgdG8gbmV2ZXIgYmUg
+Y2FsbGVkIGluIFBEQyBtb2RlLiBUaGlzIGNhdXNlcyB0aGUNCj4gZHJpdmVyIHRvIHNpbGVudGx5
+IGZhaWwuDQo+IA0KPiBUaGlzIHBhdGNoIGNoYW5nZXMgdGhlIGNvbmRpdGlvbmFsIHRvIG1hdGNo
+IHRoZSBiZWhhdmlvdXIgb2YgdGhlDQo+IHByZXZpb3VzIGNvbW1pdCBiZWZvcmUgdGhlIHJlZmFj
+dG9yLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogVmlsbGUgQmFpbGxpZSA8dmlsbGViQGJ5dGVzbmFw
+LmNvLnVrPg0KU2hvdWxkbid0IHRoaXMgaGF2ZSBhIEZJWEVTIHRhZz8NCj4gLS0tDQo+ICAgZHJp
+dmVycy9zcGkvc3BpLWF0bWVsLmMgfCA0ICsrLS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNl
+cnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvc3Bp
+L3NwaS1hdG1lbC5jIGIvZHJpdmVycy9zcGkvc3BpLWF0bWVsLmMNCj4gaW5kZXggNzg4ZGNkZjI1
+ZjAwLi5mODcyY2YxOTZjMmYgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvc3BpL3NwaS1hdG1lbC5j
+DQo+ICsrKyBiL2RyaXZlcnMvc3BpL3NwaS1hdG1lbC5jDQo+IEBAIC0xMzAxLDcgKzEzMDEsNyBA
+QCBzdGF0aWMgaW50IGF0bWVsX3NwaV9vbmVfdHJhbnNmZXIoc3RydWN0IHNwaV9tYXN0ZXIgKm1h
+c3RlciwNCj4gICAJICogRE1BIG1hcCBlYXJseSwgZm9yIHBlcmZvcm1hbmNlIChlbXB0aWVzIGRj
+YWNoZSBBU0FQKSBhbmQNCj4gICAJICogYmV0dGVyIGZhdWx0IHJlcG9ydGluZy4NCj4gICAJICov
+DQo+IC0JaWYgKCghbWFzdGVyLT5jdXJfbXNnX21hcHBlZCkNCj4gKwlpZiAoKCFtYXN0ZXItPmN1
+cl9tc2ctPmlzX2RtYV9tYXBwZWQpDQo+ICAgCQkmJiBhcy0+dXNlX3BkYykgew0KPiAgIAkJaWYg
+KGF0bWVsX3NwaV9kbWFfbWFwX3hmZXIoYXMsIHhmZXIpIDwgMCkNCj4gICAJCQlyZXR1cm4gLUVO
+T01FTTsNCj4gQEAgLTEzODEsNyArMTM4MSw3IEBAIHN0YXRpYyBpbnQgYXRtZWxfc3BpX29uZV90
+cmFuc2ZlcihzdHJ1Y3Qgc3BpX21hc3RlciAqbWFzdGVyLA0KPiAgIAkJfQ0KPiAgIAl9DQo+ICAg
+DQo+IC0JaWYgKCFtYXN0ZXItPmN1cl9tc2dfbWFwcGVkDQo+ICsJaWYgKCFtYXN0ZXItPmN1cl9t
+c2ctPmlzX2RtYV9tYXBwZWQNCj4gICAJCSYmIGFzLT51c2VfcGRjKQ0KPiAgIAkJYXRtZWxfc3Bp
+X2RtYV91bm1hcF94ZmVyKG1hc3RlciwgeGZlcik7DQo+ICAgDQo+IA0KDQpSZWdhcmRzLA0KRGFu
+DQo=
