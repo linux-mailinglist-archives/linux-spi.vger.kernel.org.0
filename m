@@ -2,54 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AECF41E8A2
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Oct 2021 10:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9C741E8A7
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Oct 2021 10:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352630AbhJAIF0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 1 Oct 2021 04:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
+        id S1352655AbhJAIGC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 1 Oct 2021 04:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352629AbhJAIEZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Oct 2021 04:04:25 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8681AC06177C;
-        Fri,  1 Oct 2021 01:02:33 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id u32so18718998ybd.9;
-        Fri, 01 Oct 2021 01:02:33 -0700 (PDT)
+        with ESMTP id S1352638AbhJAIGB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Oct 2021 04:06:01 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19800C06177E;
+        Fri,  1 Oct 2021 01:04:02 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id s64so15739451yba.11;
+        Fri, 01 Oct 2021 01:04:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=iXAtNm3MaeSAViv8FbXNKxnICMX5iqycQz5HxnThtRI=;
-        b=Zk4T+m66GYQ1CRsRurqkFu7lkvaEmg1wDknACxkzpMicIYhX8i/CoTUjX7i5OYVxIB
-         w8EM/pxHtXo81HWPjtvFAYK/qZ0cQ9ZTrrRZKK+d/cHAU2DPADLk3ns30aTr2YdOqVsm
-         8dJCyAzTiMiPixhJKgscB9X533yKU2N828H6y3Z9H/copWhcODhuNi3fEnRx+3xkLBiF
-         I0fGnsZSZ46fXTv7ClN53r1InJ7+gDLKhbEOXK0r5hbvSf9kWX4X7V3tyoGfkUgoPrgG
-         fub6hD7pc2wWHZuWQIHPU1a45EFCgV1nb9X3EPCKoby4nxmrAR2RdsEMwc9xPvSqn4xF
-         si1Q==
+        bh=UkTV/Hx+0kC37e1L6jOI1Y69QnSHLaF5uOLMErL9pfc=;
+        b=GS/7MMG8VG3EwqT0c2Lm/gYv66cowtYEkkkYVz/u6kPeC85dCTVJAaINucv6NV4anJ
+         WURJMEJYRdpMlrz5j94NWwQ9/h9EsNPPOMQvJYZ/h/FlUfACMlzAtPB4tr9KyJt3RlFC
+         YvVoNPusNVvTpMoSapP6s7iwHvUzyQSBmWCLJCOgbXBSkgiBw2X63DYEPPypHsNUc5ZQ
+         9uz4yJSK5+fgUrG+aCQhPejDp4ryP21GSG7OvVhTHXA/AGGZog8GcSnuFzwzgdNQ5XOt
+         Ba7c5OqWgWTBtS6Z0zPcD6WMIiAxOhuNYRCFLz40gs0oMj90477929zEcOZ01xc04Mqz
+         s0vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to;
-        bh=iXAtNm3MaeSAViv8FbXNKxnICMX5iqycQz5HxnThtRI=;
-        b=l5bEC9yL1Lbxh5L03gEF41lL/bIqTaQltKIMcoXzN1LppJNUIkYGkp15l81PT8hqt/
-         lYXGqSr9uM3FwXxzZqpO7+yb5CzYKq427zmWzVImyfrf3eJxdE3R3p/FvqRUJ68td+LS
-         2JMplwSkrp+hSphKRk9o4kyYeo7fB3j4iC5WWmys0OMfGvt6VwWrGALIVU/EwcVzhHj/
-         oZmSfQZK33crMnTABIKxkNNs4L1B0AAlAEU8qMzZlg5SmPzSFEkgkJ2HUxE5QZoDwg0W
-         yrkiqclxTJJHMH/r6p4hhPo8wkVt2QOGn9AcfI3cVYMqGtJojc8wL8xrE1SAyibdrzbN
-         PsJg==
-X-Gm-Message-State: AOAM533vkNDtsjiB1B3d9QWFMEMfy0Ez5aL5vbGlzgy5VM6DLlf2eA8F
-        x8O6ogdbud+fF5Dri8bhvXBb9yJsizewEWVF73k=
-X-Google-Smtp-Source: ABdhPJyg5/kS7DOVYejKI/QD6YDrZTyTm0+TOQS+y7BnCHJaDMliZlHOtX/hL7s9U8TTquH5K2BwEkP86jcm3348YNo=
-X-Received: by 2002:a25:e044:: with SMTP id x65mr4446608ybg.131.1633075352741;
- Fri, 01 Oct 2021 01:02:32 -0700 (PDT)
+        bh=UkTV/Hx+0kC37e1L6jOI1Y69QnSHLaF5uOLMErL9pfc=;
+        b=SP3sgJa7laiLqbGRcm+9VYW2E739i2VWUZ+gMv8ak6kGbEFt1KguzNTTzu8bWcLvZj
+         5JxoUEelvzmE0icslGFVLe4cTkNMxFwhjCJh8XQZOelIhzDfRdfkcp5erRBh05TbyFFm
+         Gtf2CjPJzHmB3Iy4QBlgeLCoTq6+jnu7Uj729L074piqR+CLx0Qvof/Px0G+w4O6jFjj
+         at68RtzSFC7LBRUvpeTiNEiM/Q9Lw65bh6P61j0GBZQipIdzFga3zjX+zyqvAwFdNLX+
+         iQI9n/DRx+DQkWt9v0y8+IKR7cg+htGR6YWUqow65fwE/NdINRMVs5T2Z/mcJJq8CkAA
+         +vCA==
+X-Gm-Message-State: AOAM5331lOGkyMCLoR3vJNOE8MK5BDo8hY8nBQV2/n2krq02WF5dxKyL
+        oE6go1byJOFyYE5EFefZ5ON9H+nZ+/3zKm8W/do=
+X-Google-Smtp-Source: ABdhPJy4j6EHmIy0MQOCvwAUhMRlGC9OoRrjR5IIMh88aRHWKguGjBgt+bJrkUsVhzvBNTkQVHOU9teoh/blCdQzwzE=
+X-Received: by 2002:a25:b7c6:: with SMTP id u6mr4323825ybj.16.1633075441369;
+ Fri, 01 Oct 2021 01:04:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210928140721.8805-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20210928140721.8805-7-prabhakar.mahadev-lad.rj@bp.renesas.com> <YVXMc1A4D/y4kjim@shikoro>
-In-Reply-To: <YVXMc1A4D/y4kjim@shikoro>
+References: <20210928140721.8805-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <YVXRZNxrgmfROlJy@shikoro>
+In-Reply-To: <YVXRZNxrgmfROlJy@shikoro>
 From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Fri, 1 Oct 2021 09:02:06 +0100
-Message-ID: <CA+V-a8sDSsyTGfTeQfG_ZhfrJHCm+2kBTEDWaoFMTgsMOmxEgQ@mail.gmail.com>
-Subject: Re: [PATCH 6/6] memory: renesas-rpc-if: Add support for RZ/G2L
+Date:   Fri, 1 Oct 2021 09:03:35 +0100
+Message-ID: <CA+V-a8vKogydunptYaWVBq_UUQ98UUTp-n2-T+WH8thTRL8M4Q@mail.gmail.com>
+Subject: Re: [PATCH 0/6] Add SPI Multi I/O Bus Controller support for RZ/G2L
 To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
@@ -75,98 +74,21 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi Wolfram,
 
-Thank you for the review.
-
-On Thu, Sep 30, 2021 at 3:40 PM Wolfram Sang
+On Thu, Sep 30, 2021 at 4:01 PM Wolfram Sang
 <wsa+renesas@sang-engineering.com> wrote:
 >
-> Hi,
 >
-> >  #define RPCIF_CMNCR_IO3FV(val)       (((val) & 0x3) << 14) /* undocumented */
-> >  #define RPCIF_CMNCR_IO2FV(val)       (((val) & 0x3) << 12) /* undocumented */
-> >  #define RPCIF_CMNCR_IO0FV(val)       (((val) & 0x3) << 8)
-> > -#define RPCIF_CMNCR_IOFV_HIZ (RPCIF_CMNCR_IO0FV(3) | RPCIF_CMNCR_IO2FV(3) | \
-> > -                              RPCIF_CMNCR_IO3FV(3))
-> > +#define RPCIF_CMNCR_IOFV_HIZ(val) (RPCIF_CMNCR_IO0FV(val) | RPCIF_CMNCR_IO2FV(val) | \
-> > +                              RPCIF_CMNCR_IO3FV(val))
+> > This patch series adds a couple of fixes for rpc-if driver and
+> > adds support for RZ/G2L SoC, where the SPI Multi I/O Bus Controller
+> > is identical to the RPC-IF block found on R-Car Gen3 SoC's.
 >
-> Is RPCIF_CMNCR_IO3FV and RPCIF_CMNCR_IO2FV actually documented in your
-> datasheets? I am asking because I have a patch pending to remove writing
-> to undocumented locations. So, I was aboout to remove the IO3FV and
-> IO2FV macros.
+> I did some basic testing on the Falcon board with a Renesas R-Car V3U
+> SoC and did not find a regression, so:
 >
-Yes they are documented, you should be able to download the HW manual from [1]
-
-> > +#define RPCIF_PHYADJ1                0x0070  /* R/W */
-> > +#define RPCIF_PHYADJ2                0x0074  /* R/W */
+> Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 >
-> Those are named 'PHYADD' and 'PHYWR' in the Gen3 documentation. They are
-> only available on a few of the Gen3 SoCs. I think the Gen3 namings make
-> more sense because then it becomes easily understandable that the
-> registers are used to write something to the PHY.
->
-Agreed, will re-name it as per Gen3.
-
-> > +#define RPCIF_PHYCNT_CKSEL(v)        (((v) & 0x3) << 16)
->
-> We should add a comment here that these bits are only valid for G2L...
->
-Will do.
-
-> >  #define RPCIF_PHYCNT_STRTIM(v)       (((v) & 0x7) << 15)
->
-> and these only for Gen3.
->
-ditto.
-
->
-> > +static void rpcif_timing_adjust_sdr(struct rpcif *rpc)
-> > +{
-> > +     u32 data;
-> > +
-> > +     regmap_write(rpc->regmap, RPCIF_PHYADJ2, 0xA5390000);
-> > +     regmap_write(rpc->regmap, RPCIF_PHYADJ1, 0x80000000);
-> > +     regmap_write(rpc->regmap, RPCIF_PHYADJ2, 0x00008080);
-> > +     regmap_write(rpc->regmap, RPCIF_PHYADJ1, 0x80000022);
-> > +     regmap_write(rpc->regmap, RPCIF_PHYADJ2, 0x00008080);
-> > +     regmap_write(rpc->regmap, RPCIF_PHYADJ1, 0x80000024);
->
-> Can't we have defines for these magic values? At least in my latest Gen3
-> documentation, these values are explained.
->
-RZ/G2L manual doesn't explain these bits. Let me refer to R-Car Gen3
-and define them as macros.
-
-> > +
-> > +     regmap_read(rpc->regmap, RPCIF_PHYCNT, &data);
-> > +     regmap_write(rpc->regmap, RPCIF_PHYCNT, data | RPCIF_PHYCNT_CKSEL(3));
->
-> regmap_update_bits?
->
-will do.
-
-> > +     if (rpc->type == RPCIF_RCAR_GEN3) {
-> > +             regmap_write(rpc->regmap, RPCIF_PHYCNT, RPCIF_PHYCNT_STRTIM(7) |
-> > +                          RPCIF_PHYCNT_PHYMEM(hyperflash ? 3 : 0) | 0x260);
-> > +     } else {
-> > +             regmap_read(rpc->regmap, RPCIF_PHYCNT, &dummy);
-> > +             dummy &= ~RPCIF_PHYCNT_PHYMEM_MASK;
-> > +             dummy |= RPCIF_PHYCNT_PHYMEM(hyperflash ? 3 : 0) | 0x260;
-> > +             regmap_write(rpc->regmap, RPCIF_PHYCNT, dummy);
->
-> regmap_update_bits?
->
-Im a bit hesitant to use regmap_update_bits() here as some of the bits
-are not documented.
-
-[1] https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-arm-based-high-end-32-64-bit-mpus/rzg2l-general-purpose-microprocessors-dual-core-arm-cortex-a55-12-ghz-cpus-3d-graphics-and-video-codec
+Thank you for testing this, I will include the Tested-by tag along
+with the RB tags.
 
 Cheers,
 Prabhakar
-
-> Rest looks good.
->
-> Thanks and happy hacking!
->
->    Wolfram
->
