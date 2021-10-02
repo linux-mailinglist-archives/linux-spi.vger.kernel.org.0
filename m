@@ -2,85 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A41C41F89A
-	for <lists+linux-spi@lfdr.de>; Sat,  2 Oct 2021 02:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57EAC41F92E
+	for <lists+linux-spi@lfdr.de>; Sat,  2 Oct 2021 03:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbhJBASc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 1 Oct 2021 20:18:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56060 "EHLO mail.kernel.org"
+        id S232276AbhJBBbw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 1 Oct 2021 21:31:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50688 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232263AbhJBASb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 1 Oct 2021 20:18:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A9C6161A02;
-        Sat,  2 Oct 2021 00:16:45 +0000 (UTC)
+        id S230255AbhJBBbw (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 1 Oct 2021 21:31:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 20D8661AFA;
+        Sat,  2 Oct 2021 01:30:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633133806;
-        bh=mmDjWWi+TkT/WSERjV05zbbQ8vJ54Y+MPbjST5V3/bo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ESapNYJo380amxE8fyDJ8oeFNL1ir6rqc9SXrv7VFTnOYqVbGuu4rVWiMLKDKIpnX
-         meCnvTayveV2a/d6gy+GR47kgaxVrtKVMS5BRmUfgyWklVNeCg2zCpyOPo0DtS0J78
-         GAYPI0Pxa6as7ipcqI92XM+TGIaIexofEpMmQeFpCqN1i6TtNjqaplhitLtGgWrg3z
-         WuzQ4YnwnNKnWJ9xodRPo2eLUzDYk6lM7J/Abf+JjE60MiRRyKPJJB+2keFtoqzPFO
-         tjLnFE/7Oh9uEUnJNCLm06dcNIYdKiVW0dioq/8CIZENVAd4uVSwT4mdX//WKS74gV
-         0Z09qqnTWRScQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     tudor.ambarus@microchip.com, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com,
-        Ville Baillie <VilleB@bytesnap.co.uk>,
-        ludovic.desroches@microchip.com
-Cc:     Mark Brown <broonie@kernel.org>, dan.sneddon@microchip.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH v2] spi: atmel: Fix PDC transfer setup bug
-Date:   Sat,  2 Oct 2021 01:16:25 +0100
-Message-Id: <163313375301.13893.52482775381403027.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <a86bf8dcf3154f6bbf7e1ae21c073ea1@bytesnap.co.uk>
-References: <a86bf8dcf3154f6bbf7e1ae21c073ea1@bytesnap.co.uk>
-MIME-Version: 1.0
+        s=k20201202; t=1633138207;
+        bh=DF4SsL70Lab7ieeIjNwJweCH/2jQxE+V+haotr1TEJ8=;
+        h=Subject:From:Date:To:From;
+        b=h5doG1qe/L2hx2k9PQLqxui4QH/zmc4pCTyJh16Fmua7+Y+gZjA8rZX5Eoz8dgwQT
+         GezOQv+EhYQdfTXbb2Hu+DohbMIeI+qPDTsXIFZi8C7vgWvZiHhIqx3rNsR0TFabFS
+         H4yle8AHF7x6qPGL2djzezH62Thch32wJv2sfGOrmzkG78M4ky7oYTGhrnkVRHDEEg
+         VBM73gDaacupqPeLkM7tuvBR5u26HVT3XnGqTy5hZ9yivzXAmgs81nkDAFfoZbFDsU
+         aaUqoWmAywDKcMpTEwlxKP8BvGtbf9tOJtjU6ZE9s6bizCq+0UXEguU0MeBXDIWn/q
+         cMjeRHe2brn0g==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 0C35E60A69;
+        Sat,  2 Oct 2021 01:30:07 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <163313820699.19894.16343687163085064327.git-patchwork-summary@kernel.org>
+Date:   Sat, 02 Oct 2021 01:30:06 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 17 Sep 2021 07:46:11 +0000, Ville Baillie wrote:
-> From 7f796c2004407f848f9ed97f406e24b9eadd74be Mon Sep 17 00:00:00 2001
-> From: Ville Baillie <villeb@bytesnap.co.uk>
-> Date: Thu, 16 Sep 2021 14:16:46 +0000
-> Subject: [PATCH v2] spi: atmel: Fix PDC transfer setup bug
-> 
-> Commit 5fa5e6dec762 ("spi: atmel: Switch to transfer_one transfer
-> method") refactored the code and changed a conditional causing
-> atmel_spi_dma_map_xfer to never be called in PDC mode. This causes the
-> driver to silently fail.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (refs/heads/for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: spi-nxp-fspi: don't depend on a specific node name erratum workaround
+  Submitter: Michael Walle <michael@walle.cc>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=556523
+  Lore link: https://lore.kernel.org/r/20211001212726.159437-1-michael@walle.cc
 
-Thanks!
+Total patches: 1
 
-[1/1] spi: atmel: Fix PDC transfer setup bug
-      commit: 75e33c55ae8fb4a177fe07c284665e1d61b02560
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
