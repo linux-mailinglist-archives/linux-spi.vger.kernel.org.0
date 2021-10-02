@@ -2,56 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57EAC41F92E
-	for <lists+linux-spi@lfdr.de>; Sat,  2 Oct 2021 03:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DECCB41F932
+	for <lists+linux-spi@lfdr.de>; Sat,  2 Oct 2021 03:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232276AbhJBBbw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 1 Oct 2021 21:31:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50688 "EHLO mail.kernel.org"
+        id S232304AbhJBBiz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 1 Oct 2021 21:38:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53604 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230255AbhJBBbw (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 1 Oct 2021 21:31:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 20D8661AFA;
-        Sat,  2 Oct 2021 01:30:07 +0000 (UTC)
+        id S230255AbhJBBiy (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 1 Oct 2021 21:38:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 18C24619F7;
+        Sat,  2 Oct 2021 01:37:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633138207;
-        bh=DF4SsL70Lab7ieeIjNwJweCH/2jQxE+V+haotr1TEJ8=;
-        h=Subject:From:Date:To:From;
-        b=h5doG1qe/L2hx2k9PQLqxui4QH/zmc4pCTyJh16Fmua7+Y+gZjA8rZX5Eoz8dgwQT
-         GezOQv+EhYQdfTXbb2Hu+DohbMIeI+qPDTsXIFZi8C7vgWvZiHhIqx3rNsR0TFabFS
-         H4yle8AHF7x6qPGL2djzezH62Thch32wJv2sfGOrmzkG78M4ky7oYTGhrnkVRHDEEg
-         VBM73gDaacupqPeLkM7tuvBR5u26HVT3XnGqTy5hZ9yivzXAmgs81nkDAFfoZbFDsU
-         aaUqoWmAywDKcMpTEwlxKP8BvGtbf9tOJtjU6ZE9s6bizCq+0UXEguU0MeBXDIWn/q
-         cMjeRHe2brn0g==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 0C35E60A69;
-        Sat,  2 Oct 2021 01:30:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1633138629;
+        bh=UO2tDW4yPvWgZoOwW8X9BhGvR9C/h3wSZ+rWGPfWzWc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XmMhvot0L0Pf3VCX3qb3L1T9UvpXxXZXIEpKSG6+taJHa32CkNopSbkP59ZTF24Sh
+         jygcuP9NOnQ96KNwpa17xW481dacG5ZR1MBaHhcqi9DqlQ+0ZJycqd4E0OHpWtUWEc
+         jVWdM8s3YLUj5mcN5fmq1WH4TF3isqTmgiRuSbGH8VpbaSBEDGxrSa48BHRJzUbbI2
+         u14lqxXwqMfKASppc3TwIaPW9HJDxKEerJYavKiinrua2tF/LOzIjZWWxPR7+/QMC0
+         a6cHPE6XEpM4go55h3CPVYSw/zb3TrwNYhmys1iv7qC4OiZXfP903A93PRU16yQpf0
+         nfTtQ7N1ZBNzw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Michael Walle <michael@walle.cc>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Yogesh Gaur <yogeshgaur.83@gmail.com>,
+        Kuldeep Singh <kuldeep.singh@nxp.com>,
+        Ashish Kumar <ashish.kumar@nxp.com>
+Subject: Re: [PATCH] spi: spi-nxp-fspi: don't depend on a specific node name erratum workaround
+Date:   Sat,  2 Oct 2021 02:37:05 +0100
+Message-Id: <163313862170.2275998.17835551600191166035.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211001212726.159437-1-michael@walle.cc>
+References: <20211001212726.159437-1-michael@walle.cc>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <163313820699.19894.16343687163085064327.git-patchwork-summary@kernel.org>
-Date:   Sat, 02 Oct 2021 01:30:06 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+On Fri, 1 Oct 2021 23:27:26 +0200, Michael Walle wrote:
+> In commit 7e71b85473f8 ("arm64: dts: ls1028a: fix node name for the
+> sysclk") the sysclk node name was renamed and broke the erratum
+> workaround because it tries to fetch a device tree node by its name,
+> which is very fragile in general. We don't even need the sysclk node
+> because the only possible sysclk frequency input is 100MHz. In fact, the
+> erratum says it applies if SYS_PLL_RAT is 3, not that the platform clock
+> is 300 MHz. Make the workaround more reliable and just drop the unneeded
+> sysclk lookup.
+> 
+> [...]
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (refs/heads/for-next):
+Applied to
 
-Patch: spi: spi-nxp-fspi: don't depend on a specific node name erratum workaround
-  Submitter: Michael Walle <michael@walle.cc>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=556523
-  Lore link: https://lore.kernel.org/r/20211001212726.159437-1-michael@walle.cc
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Total patches: 1
+Thanks!
 
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+[1/1] spi: spi-nxp-fspi: don't depend on a specific node name erratum workaround
+      commit: 67a12ae52599c9f2f24ef14adb43fc3b164792b5
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
