@@ -2,102 +2,220 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E78421111
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Oct 2021 16:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E16421164
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Oct 2021 16:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233366AbhJDOOM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Oct 2021 10:14:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44922 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233188AbhJDOOL (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 4 Oct 2021 10:14:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 42D0F61354;
-        Mon,  4 Oct 2021 14:12:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633356742;
-        bh=8C70wqLG2kw6y622LgfXYt7HTq8THcyBWE+2lsIEJnQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i16hIkQvFR9+0QnWNgtrxQXynBVcw7MTqsN/lomrM4Xv0IHDDXIbfbY+vXWmQLORl
-         Rpi5wOu4YkBGEf0r7GlQ9viZo9+FTuFx3X6dM5GruG/oUsN/4Nq/5vC9oth/eSi9lV
-         18Leo1JskxjEWyLZUJc96etV/3U2ZNB9A5X+zC1N3oaEAeACStCqyvpXe9Dxgy1Kk7
-         npT06ZcHDdYyw2aWa6YUEw1YOsjz+OwEV5DmOvJ6M6WHS1Xtopz9mOO1Cps6w45Gg8
-         uYTCUO9e8tIFn2qm7UePSC9ZIeaj47fAxFvhfsLT4tLMVCSqx6N7fZv3jgk4gjFTY6
-         N8OsW2BRG9lTA==
-Date:   Mon, 4 Oct 2021 15:12:20 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, f.fainelli@gmail.com,
-        rjui@broadcom.com, sbranden@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, nsaenz@kernel.org,
-        linux-spi@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        p.rosenberger@kunbus.com, linux-integrity@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] spi: bcm2835: do not unregister controller in shutdown
- handler
-Message-ID: <YVsLxHMCdXf4vS+i@sirena.org.uk>
-References: <20210928195657.5573-1-LinoSanfilippo@gmx.de>
- <20211001175422.GA53652@sirena.org.uk>
- <2c4d7115-7a02-f79e-c91b-3c2dd54051b2@gmx.de>
- <YVr4USeiIoQJ0Pqh@sirena.org.uk>
- <20211004131756.GW3544071@ziepe.ca>
+        id S234317AbhJDOdm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Oct 2021 10:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49742 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234218AbhJDOdl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Oct 2021 10:33:41 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55DB5C061745
+        for <linux-spi@vger.kernel.org>; Mon,  4 Oct 2021 07:31:52 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id v18so64570310edc.11
+        for <linux-spi@vger.kernel.org>; Mon, 04 Oct 2021 07:31:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vZuUk2iu5vHcMhoBaZr8flTV9KKhRBTDDf88OfAd1bQ=;
+        b=hcseAkgo8Fs/UKNurZ/HjOn337SWuxoZle/5s2FKM//51k9M24jWvZZPDoKpuXJiHT
+         DoSp8kDCxl49ACyPlhcukNkilsGYyb60QabmKfGpnQ+NGNx76NSO0pn8BKRJSq/1kNnw
+         ZRaGw/gdJtZADTU2vhQT5diiYiSrqPghbGYGBdIXDuuqvsIXb9IhO7OzdT7Dr80frjfS
+         euVwrBpLHkcYVIiQSGAYZxj+9FXt7NqRW5An2Cbfda+EIu9nCtJOtjHpOX1ihMJSBoGs
+         9b4ZxDnFuimiqx7kXno3u/tRsNN7PXx8tl12CKZ1nmDCO7CZFu1AY4irD+oL7g3/B4m9
+         LXVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vZuUk2iu5vHcMhoBaZr8flTV9KKhRBTDDf88OfAd1bQ=;
+        b=BD6l+dMZ9vFKvmhTfBYZOkBUpkWyJYdrhzYdYs3HgaykKV4T1+ZtOkCs9+8dGbQ9K0
+         rV/U8pAUJLhmUy/GHSqRP8eXI7+FxhKemXAgNv9qJ9/Oc3H7bwy9/jLMQ1f7/QNKCWYv
+         t0qiPYKmiQz71Hx3RPLQqYHc3qE5i0XcQtxWl0OBWxv8DSvl3lZjOeyCBdc+6FOjzqc6
+         CXS1EdZR6N0h2bJMNAX+rHyLsDc8sELIlYrve8Zvnq9R/Ibq/kbp0/FzSBfP8GiOfT7w
+         xBwWDc3bdisad3t/6+cQAqE9nBeYsA8c4mdLgd3kQXRbj+P/SV0fRe4WzazNARw3sNzw
+         79+w==
+X-Gm-Message-State: AOAM533MUdt7ZiF5kUjNTVfShDbambPRK4FTiRot9vvd+4RjiDiS9EWV
+        VZt+/p3zd10Io1m+EUfGSEqpguq6QIeEffPKWaw=
+X-Google-Smtp-Source: ABdhPJzozW2lp8HI17qauDAxWFN5XLE/VahlI/0T8huV8hDx4D44743HHJgPMc8S0aGca96NXIfEgutghG41+/OiKpc=
+X-Received: by 2002:a17:907:7601:: with SMTP id jx1mr17716073ejc.69.1633357824072;
+ Mon, 04 Oct 2021 07:30:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="d4pFysLjW10458eo"
-Content-Disposition: inline
-In-Reply-To: <20211004131756.GW3544071@ziepe.ca>
-X-Cookie: If it heals good, say it.
+References: <20210930100719.2176-1-mika.westerberg@linux.intel.com> <20210930100719.2176-3-mika.westerberg@linux.intel.com>
+In-Reply-To: <20210930100719.2176-3-mika.westerberg@linux.intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 4 Oct 2021 17:29:47 +0300
+Message-ID: <CAHp75VdtOHn4ED-ixdDngBQw10OnKmbtTv=ydLs6dYbkjyqW4Q@mail.gmail.com>
+Subject: Re: [PATCH 2/3] mtd: spi-nor: intel-spi: Convert to SPI MEM
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Michael Walle <michael@walle.cc>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Lima <mauro.lima@eclypsium.com>,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, Sep 30, 2021 at 1:08 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> The preferred way to implement SPI-NOR controller drivers is through SPI
+> subsubsystem utilizing the SPI MEM core functions. This converts the
+> Intel SPI flash controller driver over the SPI MEM by moving the driver
+> from SPI-NOR subsystem to SPI subsystem and in one go make it use the
+> SPI MEM functions. The driver name will be changed from intel-spi to
+> spi-intel to match the convention used in the SPI subsystem.
 
---d4pFysLjW10458eo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-On Mon, Oct 04, 2021 at 10:17:56AM -0300, Jason Gunthorpe wrote:
+> +config SPI_INTEL_PCI
+> +       tristate "Intel PCH/PCU SPI flash PCI driver (DANGEROUS)"
+> +       depends on PCI && (X86 || COMPILE_TEST)
 
-> Shutdown is supposed to quiet the HW so it is not doing DMAs any
-> more. This is basically an 'emergency' kind of path, the HW should be
-> violently stopped if available - ie clearing the bus master bits on
-> PCI, for instance.
+Perhaps two entries, one of which will be the same as for platform case?
 
-> When something like kexec happens we need the machine to be in a state
-> where random DMA's are not corrupting memory.
+> +       depends on SPI_MEM
+> +       select SPI_INTEL
+> +       help
+> +         This enables PCI support for the Intel PCH/PCU SPI controller in
+> +         master mode. This controller is present in modern Intel hardware
+> +         and is used to hold BIOS and other persistent settings. Using
+> +         this driver it is possible to upgrade BIOS directly from Linux.
+> +
+> +         Say N here unless you know what you are doing. Overwriting the
+> +         SPI flash may render the system unbootable.
+> +
+> +         To compile this driver as a module, choose M here: the module
+> +         will be called spi-intel-pci.
+> +
+> +config SPI_INTEL_PLATFORM
+> +       tristate "Intel PCH/PCU SPI flash platform driver (DANGEROUS)"
+> +       depends on X86 || COMPILE_TEST
+> +       depends on SPI_MEM
+> +       select SPI_INTEL
+> +       help
+> +         This enables platform support for the Intel PCH/PCU SPI
+> +         controller in master mode. This controller is present in modern
+> +         Intel hardware and is used to hold BIOS and other persistent
+> +         settings. Using this driver it is possible to upgrade BIOS
+> +         directly from Linux.
+> +
+> +         Say N here unless you know what you are doing. Overwriting the
+> +         SPI flash may render the system unbootable.
+> +
+> +         To compile this driver as a module, choose M here: the module
+> +         will be called spi-intel-platform.
 
-That's all well and good but there's no point in implementing something
-half baked that's opening up a whole bunch of opportunities to crash the
-system if more work comes in after it's half broken the device setup. =20
+...
 
-> Due to the emergency sort of nature it is not appropriate to do
-> locking complicated sorts of things like struct device unregistrations
-> here.
++ Blank line ?
 
-That's just not what's actually implemented in a bunch of places, nor
-something one would infer from the documentation ("Called at shut-down
-to quiesce the device", no mention of emergency cases which I'd guess
-would just be kdump) - there's a bunch of locks in shutdown paths, and
-drivers on sleeping buses with shutdown callbacks.  Never mind the few
-of them that use a shutdown callback to power the system down, though
-that's a different thing and definitely abusing the API.  I would guess
-that a good proportion of people implementing it are more worried about
-clean system shutdown than they are about kdump.
+>  #include <linux/mtd/partitions.h>
+>  #include <linux/mtd/spi-nor.h>
 
---d4pFysLjW10458eo
-Content-Type: application/pgp-signature; name="signature.asc"
++ Blank line?
 
------BEGIN PGP SIGNATURE-----
+> +#include <linux/spi/flash.h>
+> +#include <linux/spi/spi.h>
+> +#include <linux/spi/spi-mem.h>
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFbC8MACgkQJNaLcl1U
-h9A9ZQf9H8HngYbz4lcBHU1c64oQ/goR+5zcEkFnEgDZ36zSAaLm0y97biTrlmqv
-qB9KRporje388T9XAfOsyt02dXnMdt0sqrg5C/dUfO554axWtv27CgzPR2MReklb
-KUYGA65DtHm57pyAJYpQ2LyaWHGHmGaJfa8cfxsA7cZd92LfL+89teR7DlU8nrnw
-mgnuECKes199R6AZfrj2Iva3m7bbtYrh52uMIyWTWIi26rv3LJvu2RNINOrdf4c8
-QTYHiztY7h+oxW9iz/704UcnU30lWzoEy6WkazOUC8WAYmNfQyOlMF8dL6AVBqqV
-uGYmfraX2n5BpPf2ZE+wkpRGjlpBVQ==
-=PKtu
------END PGP SIGNATURE-----
+The rationale is to show that we use two sub(sub)sytems here.
 
---d4pFysLjW10458eo--
+...
+
+> -                       dev_err(ispi->dev, "read error: %llx: %#x\n", from,
+> +                       dev_err(ispi->dev, "read error: %x: %#x\n", from,
+>                                 status);
+
+Now one line?
+
+...
+
+> -                       dev_err(ispi->dev, "write error: %llx: %#x\n", to,
+> +                       dev_err(ispi->dev, "write error: %x: %#x\n", to,
+>                                 status);
+
+Ditto.
+
+...
+
+> +               ret = intel_spi_sw_cycle(ispi, opcode, 0,
+> +                                        OPTYPE_WRITE_WITH_ADDR);
+> +               return ret ? ret : 0;
+
+Why not simply return intel_spi_dw_cycle(...); ?
+
+...
+
+> +       val = readl(ispi->base + HSFSTS_CTL);
+> +       val &= ~(HSFSTS_CTL_FDBC_MASK | HSFSTS_CTL_FCYCLE_MASK);
+> +       val |= HSFSTS_CTL_AEL | HSFSTS_CTL_FCERR | HSFSTS_CTL_FDONE;
+
+> +       val |= cmd;
+> +       val |= HSFSTS_CTL_FGO;
+
+Maybe swap these lines to group constants?
+
+...
+
+> +       status = readl(ispi->base + HSFSTS_CTL);
+> +       if (status & HSFSTS_CTL_FCERR)
+> +               return -EIO;
+
+> +       else if (status & HSFSTS_CTL_AEL)
+
+Redundant 'else'
+
+> +               return -EACCES;
+
+...
+
+> +static int intel_spi_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
+> +{
+> +       struct intel_spi *ispi = spi_master_get_devdata(mem->spi->master);
+> +       size_t nbytes = op->data.nbytes;
+> +       u8 opcode = op->cmd.opcode;
+> +
+> +       if (op->addr.nbytes) {
+> +               if  (op->data.dir == SPI_MEM_DATA_IN)
+> +                       return intel_spi_read(ispi, op->addr.val, nbytes,
+> +                                             op->data.buf.in);
+
+> +               else if (op->data.dir == SPI_MEM_DATA_OUT)
+
+Redundant 'else' here and nearby.
+
+> +                       return intel_spi_write(ispi, op->addr.val, nbytes,
+> +                                              op->data.buf.out);
+> +               else if (op->data.dir == SPI_MEM_NO_DATA)
+> +                       return intel_spi_erase(ispi, opcode, op->addr.val);
+> +       } else {
+> +               if  (op->data.dir == SPI_MEM_DATA_IN)
+> +                       return intel_spi_read_reg(ispi, opcode, op->data.buf.in,
+> +                                                 nbytes);
+> +               else if (op->data.dir == SPI_MEM_DATA_OUT)
+> +                       return intel_spi_write_reg(ispi, opcode, op->data.buf.out,
+> +                                                  nbytes);
+> +               else if (op->data.dir == SPI_MEM_NO_DATA)
+> +                       return intel_spi_write_reg(ispi, opcode, NULL, 0);
+>         }
+
+> +       return -EINVAL;
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko
