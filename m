@@ -2,102 +2,134 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD8F4214C5
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Oct 2021 19:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13AAB4214DD
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Oct 2021 19:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238105AbhJDRHS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Oct 2021 13:07:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44136 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233646AbhJDRHS (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 4 Oct 2021 13:07:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 493E761381;
-        Mon,  4 Oct 2021 17:05:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633367128;
-        bh=G5hoHCsSs0ocXoe0zEsFa7YLsrviOjikiHQe2cZPcIE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aL9kWvE1Mens/W4k9TQo8SiASeBohIf/YABW8S9d2KgBDnq2gn7OsqcPipRjhsCTS
-         2VkaeQQ3TaUsRuhV/2uAEYKWHUFYowik4xbwsa1/MQ9L5ddqVp7dl246dlBnkkR1jt
-         W1FLyxpyIZsgrbCMr6824mGbbOhW2dII3LNfzAa1Y4DpztRwVOK5QF1iFZKZOy8f6g
-         58MI61+D5CTGmMGg0pNyui91yfmHRJAIbhvuLn1gdJChc72MEI2u2W3f0dqsX/dxqa
-         zny2xK7iCM1GM59RD7PsTs/GvptLm8lNvz3ogKlFhTnB2TagMzmyGzmgQ5g1KhLERB
-         AlaRsf1xeVdAA==
-Date:   Mon, 4 Oct 2021 18:05:26 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>, rjui@broadcom.com,
-        sbranden@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        nsaenz@kernel.org, linux-spi@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        p.rosenberger@kunbus.com, linux-integrity@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] spi: bcm2835: do not unregister controller in shutdown
- handler
-Message-ID: <YVs0Vk9TJqHt8R4K@sirena.org.uk>
-References: <20210928195657.5573-1-LinoSanfilippo@gmx.de>
- <20211001175422.GA53652@sirena.org.uk>
- <2c4d7115-7a02-f79e-c91b-3c2dd54051b2@gmx.de>
- <YVr4USeiIoQJ0Pqh@sirena.org.uk>
- <20211004131756.GW3544071@ziepe.ca>
- <YVsLxHMCdXf4vS+i@sirena.org.uk>
- <20211004154436.GY3544071@ziepe.ca>
- <YVssWYaxuQDi8jI5@sirena.org.uk>
- <e68b04ab-831b-0ed5-074a-0879194569f9@gmail.com>
- <20211004165127.GZ3544071@ziepe.ca>
+        id S233723AbhJDRLm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Oct 2021 13:11:42 -0400
+Received: from mail-oi1-f179.google.com ([209.85.167.179]:36683 "EHLO
+        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233108AbhJDRLm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Oct 2021 13:11:42 -0400
+Received: by mail-oi1-f179.google.com with SMTP id y201so22516384oie.3;
+        Mon, 04 Oct 2021 10:09:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1KLq9MkcpxBGVB7sgiyeCQaUXR/d16n3LEbxVLt/cqg=;
+        b=kChq6Lz06yp2ddKLDr3yxU9ZS6r0fx8VSwFKuh0XWy9AJpeptxbBhWj76Ce4ZADGV/
+         25trhaCd02OV4x3WS46oUGURpPCc850doSfoxwy4Rva+otCLJFcIHBVk9MFogbDh4M2E
+         O8aJfTa3UHa1QU97K+2FEsQ4N9qC5KvqsGLaaYuKKxwEKj3W6D7zl03B5QecMXxX9nwk
+         ozYlS25XTj+cCLM0ES8LTQFt+0Djw1rL6OE3lxyqoagarSd9YY3z9Aulrrkfj4wDRDGx
+         IE8cGcpQzA7nTlLGlzWXcHZ7u3y9rpKrZ/ow1WG9L9m5SEh+LQTwQslNtqEUdkxEJgVn
+         n64g==
+X-Gm-Message-State: AOAM5306DShRPCKK1i5B6ithfHdR7OACYq8mKsMQBZQgb2+veXWPdG52
+        3f0aPv0/Y5GFE08AF2+Aww==
+X-Google-Smtp-Source: ABdhPJwpGLcCHuQ/ilTbzTySohMcTJl/JUKbz4U1S+2nZLmVieFfoTMv2OP5e4KmB3Dqpn/bYl08mg==
+X-Received: by 2002:a05:6808:57d:: with SMTP id j29mr15099829oig.80.1633367392344;
+        Mon, 04 Oct 2021 10:09:52 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id f61sm2998816otf.73.2021.10.04.10.09.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Oct 2021 10:09:50 -0700 (PDT)
+Received: (nullmailer pid 1488976 invoked by uid 1000);
+        Mon, 04 Oct 2021 17:09:49 -0000
+Date:   Mon, 4 Oct 2021 12:09:49 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Apurva Nandan <a-nandan@ti.com>, Nishanth Menon <nm@ti.com>,
+        linux-spi@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v1] dt-bindings: mtd: spi-nor: use unevaluatedProperties:
+ false
+Message-ID: <YVs1XZmeIdix1m1V@robh.at.kernel.org>
+References: <20210924180705.14021-1-p.yadav@ti.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="omXKEcphJO0A+Ruq"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211004165127.GZ3544071@ziepe.ca>
-X-Cookie: If it heals good, say it.
+In-Reply-To: <20210924180705.14021-1-p.yadav@ti.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, Sep 24, 2021 at 11:37:05PM +0530, Pratyush Yadav wrote:
+> Many SPI controllers need to add properties to slave devices. This could
+> be the delay in clock or data lines, etc. These properties are
+> controller specific but need to be defined in the slave node because
+> they are per-slave and there can be multiple slaves attached to a
+> controller.
+> 
+> If these properties are not added to the slave binding, then the dtbs
+> check emits a warning. But these properties do not make much sense in
+> the slave binding because they are controller-specific and they will
+> just pollute every slave binding.
+> 
+> One option is to add a separate schema that collects all such properties
+> from all such controllers. Slave bindings can simply refer to this
+> binding and they should be rid of the warnings.
+> 
+> There are some limitations with this approach:
+> 
+> 1. There is no way to specify required properties. The schema would
+> contain properties for all controllers and there would be no way to know
+> which controller is being used.
+> 
+> 2. There would be no way to restrict additional properties. Since this
+> schema will be used with an allOf operator, additionalProperties would
+> need to be true. In addition, the slave schema will have to set
+> unevaluatedProperties: false.
 
---omXKEcphJO0A+Ruq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I don't see what is the problem. If there's a $ref, then 
+unevaluatedProperties is what should be used.
 
-On Mon, Oct 04, 2021 at 01:51:27PM -0300, Jason Gunthorpe wrote:
-> On Mon, Oct 04, 2021 at 09:36:37AM -0700, Florian Fainelli wrote:
+> 
+> A much simpler option would be to make controller schemas specify those
+> properties in patternProperties and set unevaluatedProperties to false
+> on slave schemas, which is done in the previous approach anyway. This
+> approach would have the same limitations as the 2nd limitation in the
+> previous approach. But it does not have the 1st limitation since the
+> properties of all controllers are not collected in a single schema, but
+> instead reside in the same schema as the controller. It also has the
+> added benefit of being much simpler.
+> 
+> The SPI NOR binding is taken as the first one to follow this. Other
+> bindings like SPI NAND can follow in later patches.
+> 
+> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+> 
+> ---
+> I sent the first approach mentioned in the commit message some time ago
+> [0]. When re-rolling this series I realized that if we are going to use
+> unevaluatedProperties: false, then it would be much simpler to just keep
+> everything else as-is. This has clear positives with no negatives
+> relative to [0], as explained in the commit message.
+> 
+> [0] https://lore.kernel.org/all/20210609111707.9555-1-p.yadav@ti.com/T/#u
+> 
+>  Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+> index ed590d7c6e37..81be0620b264 100644
+> --- a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+> +++ b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+> @@ -88,7 +88,7 @@ patternProperties:
+>    "^otp(-[0-9]+)?$":
+>      type: object
+> 
+> -additionalProperties: false
+> +unevaluatedProperties: false
 
-> > No please don't, I should have arguably justified the reasons why
-> > better, but the main reason is that one of the platforms on which this
-> > driver is used has received extensive power management analysis and
-> > changes, and shutting down every bit of hardware, including something as
-> > small as a SPI controller, and its clock (and its PLL) helped meet
-> > stringent power targets.
+This only works until unevaluatedProperties support is actually 
+implemented. Then it's back to the same warnings. In the mean time, we'd 
+be allowing any extra random properties to be added for everyone.
 
-> Huh? for device shutdown? What would this matter if the next step is
-> reboot or power off?
-
-On some embedded systems, especially ultra low cost ones, the system
-power off state might not actually involve removing all the physical
-power supplies for the all the chips in the system so any residual
-leakages or active functions will continue to consume power.
-
-Ideally the system power on/off will be triggered by a PMIC which is
-able to physically remove power to most other parts of the system which
-avoids this issue (much like the PSU in a server) but that's not always
-the case.
-
---omXKEcphJO0A+Ruq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFbNFUACgkQJNaLcl1U
-h9Dx9Af8DCQRph1eyeLpiMS1kEOVvwEqf8tRrtBApuuXS5tWm7zMTg5AE2lDlds0
-RTtPA3rlUwtFQ81V1DRG7dRsogvl+OVWoHNa+UCqj2U4sovq6zEVKhMmerSCZhBN
-hfZZ80XagCRjQWzpMciVWGE5tzgVPF1Z9hkM/jYc7x1WrHa5q0CWjfu/uWSuYQWw
-KNyIdjh0Xgf0sMxWZLJt5mrcsYfb8wMWn+0XQy7ZXaUIC7NAKZxwmxb1LtUN5KQQ
-nsQJ/lUeKzEcOW0tLmXy2EU7AqlLe2L+iDbezKDjKz8UvOAvmZRuWUKmzChRUZtl
-DRB0HyviDdShhrRF/2ViT9Moqu5uaw==
-=WGIQ
------END PGP SIGNATURE-----
-
---omXKEcphJO0A+Ruq--
+Rob
