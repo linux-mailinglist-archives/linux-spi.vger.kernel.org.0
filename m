@@ -2,88 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E854215A4
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Oct 2021 19:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1A2421683
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Oct 2021 20:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234025AbhJDR54 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Oct 2021 13:57:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35598 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229635AbhJDR54 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 4 Oct 2021 13:57:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3F5F761207;
-        Mon,  4 Oct 2021 17:56:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633370166;
-        bh=iihWtpxgSsYd4yX5WcJ7ebWvE0XP2NH1ko0MEkDEqI4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QxeiIafKt8gaBHAQ5/ukADuqigQu0UGFqrzNQh2bxpXyDJ+O1T3tpxgEIpqDc7or1
-         fZXJjmvKTB5KCXNNeVwnctypruPuQsTKOPVh53mC1EGOGq8gSrBT39JIhRbEGQ4P8l
-         ZRNDkjKMlKsmyehoFJdnZllqYKlfkqdK+juxkuoh4y3ECNyLvNYbEfFqDq6Nzi46iF
-         9hmBp3/mt5KdKiGo4sI453c9w4VO9Fn+qWj43TY1KDQ65Oew46MqBfZDSxeHMXudjs
-         0KJlToErN3yp8IUNvrEFSk7r3wb7HPnX4HeDRIVWbOuJnuN8Y38SCpye1SecygvhMb
-         ICOT+2tg2IT7A==
-Date:   Mon, 4 Oct 2021 18:56:04 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>, rjui@broadcom.com,
-        sbranden@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        nsaenz@kernel.org, linux-spi@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        p.rosenberger@kunbus.com, linux-integrity@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] spi: bcm2835: do not unregister controller in shutdown
- handler
-Message-ID: <YVtANKEp3DVZPgsp@sirena.org.uk>
-References: <20211004131756.GW3544071@ziepe.ca>
- <YVsLxHMCdXf4vS+i@sirena.org.uk>
- <20211004154436.GY3544071@ziepe.ca>
- <YVssWYaxuQDi8jI5@sirena.org.uk>
- <e68b04ab-831b-0ed5-074a-0879194569f9@gmail.com>
- <20211004165127.GZ3544071@ziepe.ca>
- <f481f7cc-6734-59b3-6432-5c2049cd87ea@gmail.com>
- <20211004171301.GA3544071@ziepe.ca>
- <YVs5gT1rj9HiAW5p@sirena.org.uk>
- <8513334a-1de4-bc9c-0157-e792e8ff4871@gmail.com>
+        id S238696AbhJDScN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Oct 2021 14:32:13 -0400
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:39922 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238688AbhJDScN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Oct 2021 14:32:13 -0400
+Received: by mail-ot1-f41.google.com with SMTP id j11-20020a9d190b000000b00546fac94456so22782575ota.6;
+        Mon, 04 Oct 2021 11:30:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+Hga8p58pr2bFvROm6q0SXOaz+V7BKKQwphrn3bK5nQ=;
+        b=Rj8Z/qcqD5FVcgQh+wFGmMDZFS0d8OOSjCu9i12RTR2Q1kQygctSzZ49lV8MEujaGX
+         yQK8840SUU1iisJSl1ONFwMEABSX0RcOVXfz0aXJJ5wrHOJioRJH9iEC0ujS6MiWKt9a
+         CjpbQQWw5tMnaQe2anF6GWdn+9je19iGaEwX7KcFon6s60Ms5zJAyi9UUbUVb9cIUpGu
+         Z/ekEGobVhE6Mvj8QJyXsS9wC/TM9SBvr6CsP0DZnpVp4tUEXvq07bMPSsjKIFFgEgnw
+         c7N+CDCszWF7as9hVOndWU5ACemU4BonEU4NNTDv+qbCvu184tfrFRzYSGOr28O6JG0+
+         zl8w==
+X-Gm-Message-State: AOAM532o1O5NP6gC/+hF3NjWhE4mRoegtNmrbwPyduRHxfZ5GZG7AnGp
+        uqK3vb1IrHGJQroi7dYDfw==
+X-Google-Smtp-Source: ABdhPJwwbNKoiwstW+77MUhfqKv75Q2Zy4WCYXvf8PuP96jj8q/xMG8t7An/cJMI3Fhl9mh1pIsSNg==
+X-Received: by 2002:a05:6830:40b0:: with SMTP id x48mr10673721ott.246.1633372223776;
+        Mon, 04 Oct 2021 11:30:23 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id 17sm2814736ois.45.2021.10.04.11.30.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Oct 2021 11:30:23 -0700 (PDT)
+Received: (nullmailer pid 1615342 invoked by uid 1000);
+        Mon, 04 Oct 2021 18:30:22 -0000
+Date:   Mon, 4 Oct 2021 13:30:22 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-spi@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        linux-mtd@lists.infradead.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Richard Weinberger <richard@nod.at>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH 1/6] dt-bindings: memory: renesas,rpc-if: Add support for
+ the R9A07G044
+Message-ID: <YVtIPqHyi/z03yxS@robh.at.kernel.org>
+References: <20210928140721.8805-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20210928140721.8805-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tDeEGRM3Etvfc3kD"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8513334a-1de4-bc9c-0157-e792e8ff4871@gmail.com>
-X-Cookie: If it heals good, say it.
+In-Reply-To: <20210928140721.8805-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, 28 Sep 2021 15:07:16 +0100, Lad Prabhakar wrote:
+> SPI Multi I/O Bus Controller on RZ/G2L SoC is almost identical to
+> the RPC-IF interface found on R-Car Gen3 SoC's.
+> 
+> This patch adds a new compatible string to identify the RZ/G2L family
+> so that the timing values on RZ/G2L can be adjusted.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+>  .../memory-controllers/renesas,rpc-if.yaml    | 51 ++++++++++++++-----
+>  1 file changed, 37 insertions(+), 14 deletions(-)
+> 
 
---tDeEGRM3Etvfc3kD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Mon, Oct 04, 2021 at 10:44:34AM -0700, Florian Fainelli wrote:
-
-> Anyway, we are divergin slightly here, how do we go about fixing
-> .shutdown here?
-
-Implement something in the core which will stop any new operations being
-requested and flush existing ones then update the driver to just do
-whatever is needed to turn off the hardware.
-
---tDeEGRM3Etvfc3kD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFbQDMACgkQJNaLcl1U
-h9B02gf8DMJ9GV0eTB6jdz3mzbfIDKFWtRDU0DAiDmtHoX71kYjzVqPBjrSgej+h
-FePNNGAjbv3Vw5i/aPtJjdScC0CcsDDqdYqjRD3hALn2RmnKdHfzIc4TbAfH0Bhy
-DtobtvArYdFNdP5lG/SHmHi7b8+ObIfV/bj1SsyxmrPd9xTY17smH7WYgKCeTZRC
-XLldyg+mn+wV0fGrSOCwpAAoEifV2mq1stJTg9TLI7nNbXEGqBJlMfVEdhlrSix6
-j1yoSqXz3FdLyHySBogmAuPcREHpPkUh601cCiK3lqlFy7O3lCckyt4VCruNaZCB
-dTPjFsh5QBjcK9BZU4cX5gG9WnFifA==
-=9ZgA
------END PGP SIGNATURE-----
-
---tDeEGRM3Etvfc3kD--
+Reviewed-by: Rob Herring <robh@kernel.org>
