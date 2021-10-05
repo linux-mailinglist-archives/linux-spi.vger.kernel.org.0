@@ -2,44 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01199422C05
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Oct 2021 17:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02EBD422C74
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Oct 2021 17:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235335AbhJEPN6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Oct 2021 11:13:58 -0400
-Received: from mail-vs1-f53.google.com ([209.85.217.53]:34602 "EHLO
-        mail-vs1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235810AbhJEPNz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Oct 2021 11:13:55 -0400
-Received: by mail-vs1-f53.google.com with SMTP id d18so1453207vsh.1;
-        Tue, 05 Oct 2021 08:12:05 -0700 (PDT)
+        id S236066AbhJEP1z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Oct 2021 11:27:55 -0400
+Received: from mail-vs1-f48.google.com ([209.85.217.48]:36837 "EHLO
+        mail-vs1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234440AbhJEP1y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Oct 2021 11:27:54 -0400
+Received: by mail-vs1-f48.google.com with SMTP id y28so10321393vsd.3;
+        Tue, 05 Oct 2021 08:26:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gf17DwZloYrFgqlw64n/3dkqUKbD656uIR22G5R4yNA=;
-        b=WYWH8uTxSMJq76TgA2ObpZPhrPwf5t4TEhKPIinSCwhxIUYEW17aRT2z7Ec5V2w1OF
-         fXJqV2fGKZPpZsJBLjsm257C0WpKeLnWGDnnUdaV2GgUhQOFFuYksbEinRMK0YLArKTu
-         bNrJ3gw1Mcar1W2RfltrYcKIhuoEPPqPDqo53y02iALamMZC/XrLOMEhkVPTVpmy1WMG
-         kM1TyEs4QVPdBcPBWLzRbeilnYXx6NLB1yH1g5j5qquX+SvgmCg01zCxrHf8Jyzs0fbj
-         jZLNFTyLbrv9c3/BOjdgTTtNU1Bp/3vJsStxL7BhN/ZZP0pgsIN8Tlldc6eoNQS37833
-         N/9Q==
-X-Gm-Message-State: AOAM531G7wM3MG0hgkBNVs2MKk1aim1WUNOmDg4yUvy5GDnohnB/vwbp
-        Gag/x74BaU+b4rij5+ibXPIz7p+e0ir+okDwxkM=
-X-Google-Smtp-Source: ABdhPJyixGIKxdVKLR+jX0yGSnIsxa6UT2MwKmvFfDtbnIxso2yONZOkM11x61wzCO95nrP8oCxmehr97uuO6qk3ado=
-X-Received: by 2002:a67:f147:: with SMTP id t7mr18978451vsm.41.1633446724666;
- Tue, 05 Oct 2021 08:12:04 -0700 (PDT)
+        bh=KSfoUs1RyncvnmPC5NiMdbUYy+WE1in92GvUJZla4GY=;
+        b=lTYDrruJNj2CHAgNSR5f7poVvASO1+IMQuNLlZDtGzJHapP4cRLXvs0YD6dbwBNP6G
+         cf5aP9QC10xADxXjShVKnJ3K3bZ1w2H4YUNIO/y02uBlnDJMzUKJS4Z55Hb50fvy14NX
+         O6IzaorxbulQxi1jw+fYE93JyBZ1/I0qo7Of3tCq45pyKVPLuHoye84T8aNEsfT5p0QL
+         NtN22psd8zSsHQKQVUC0ObZvRni78xK9ycPaIiZ5+KBdnweHwjm8zbrGtNvLg3cSyHI8
+         O7z1MnLjS0DFSQXnS6Wg56/esPcQFLhQgWaucTNbcZZZ+6lAFVF7p69VTZnx8ch/care
+         31Dg==
+X-Gm-Message-State: AOAM531qmkE4Vdy9paW2+NTvG4l6KxBO2T/unSKvL/mQbnleLZqvN0S0
+        bFpXnUsGhiHat70DWweAPiwxq2Jc5cDXhBB7tDM=
+X-Google-Smtp-Source: ABdhPJywGwfpRqbIeYpGX+HZ2UWKkSYVpZ/hXxSNrmGd7JFi4IsId+z/R5soZJYSH3hdG3qWIJpUMzGfVNXr0Jb1zLM=
+X-Received: by 2002:a67:c295:: with SMTP id k21mr16616682vsj.37.1633447562966;
+ Tue, 05 Oct 2021 08:26:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210928140721.8805-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20210928140721.8805-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20210928140721.8805-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20210928140721.8805-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20210928140721.8805-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20210928140721.8805-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 5 Oct 2021 17:11:53 +0200
-Message-ID: <CAMuHMdWSsrV-9Kxz=zS3CVKSbo2OkwyaVK2Jx-+X68W-cqAdvQ@mail.gmail.com>
-Subject: Re: [PATCH 2/6] dt-bindings: memory: renesas,rpc-if: Add optional
- interrupts property
+Date:   Tue, 5 Oct 2021 17:25:51 +0200
+Message-ID: <CAMuHMdXVxOtvXu_DM5FjFzNcPbLtrRJ9W2R6CHmCc0ZJg9JJYw@mail.gmail.com>
+Subject: Re: [PATCH 3/6] spi: spi-rpc-if: Check return value of rpcif_sw_init()
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
@@ -60,10 +60,20 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Prabhakar,
+
+Thanks for your patch!
+
 On Tue, Sep 28, 2021 at 4:07 PM Lad Prabhakar
 <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> For completeness add optional interrupts property.
->
+> rpcif_sw_init() can fail so make sure we check the return value
+> of it and on error exit rpcif_spi_probe() callback with error code.
+
+Indeed, it will now fail earlier if CONFIG_RESET_CONTROLLER=n
+Patch sent
+https://lore.kernel.org/all/d4383bd1a97c0490c0bdc9dae5695f4230d4a420.1633447185.git.geert+renesas@glider.be
+
+> Fixes: eb8d6d464a27 ("spi: add Renesas RPC-IF driver")
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
