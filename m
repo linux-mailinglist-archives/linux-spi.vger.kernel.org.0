@@ -2,224 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 257CC422286
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Oct 2021 11:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB40B422611
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Oct 2021 14:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232723AbhJEJni (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Oct 2021 05:43:38 -0400
-Received: from mga06.intel.com ([134.134.136.31]:40560 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232658AbhJEJng (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 5 Oct 2021 05:43:36 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10127"; a="286576438"
-X-IronPort-AV: E=Sophos;i="5.85,348,1624345200"; 
-   d="scan'208";a="286576438"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2021 02:41:46 -0700
-X-IronPort-AV: E=Sophos;i="5.85,348,1624345200"; 
-   d="scan'208";a="438633858"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2021 02:41:42 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 05 Oct 2021 12:41:39 +0300
-Date:   Tue, 5 Oct 2021 12:41:39 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Michael Walle <michael@walle.cc>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Lima <mauro.lima@eclypsium.com>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
-        linux-spi <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH 2/3] mtd: spi-nor: intel-spi: Convert to SPI MEM
-Message-ID: <YVwd09KZwOQVvh4g@lahna>
-References: <20210930100719.2176-1-mika.westerberg@linux.intel.com>
- <20210930100719.2176-3-mika.westerberg@linux.intel.com>
- <CAHp75VdtOHn4ED-ixdDngBQw10OnKmbtTv=ydLs6dYbkjyqW4Q@mail.gmail.com>
+        id S234526AbhJEMQ5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Oct 2021 08:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233808AbhJEMQ4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Oct 2021 08:16:56 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B291C06174E
+        for <linux-spi@vger.kernel.org>; Tue,  5 Oct 2021 05:15:06 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id d8so1574183qtd.5
+        for <linux-spi@vger.kernel.org>; Tue, 05 Oct 2021 05:15:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=LKMdW8eXJJQoIzur5jtUB7TYD/pVRqgw99BRVM74YbM=;
+        b=SXacsgbsgGa8gf0YYP+KuzoIAmpkL1NLnIlgbvFWD8pHiE/DHk446N7yqS/kjUKJ7Y
+         Xv5wsuKPWoieh2L+/IJul9v7wOr9t4BHth+wbXOOPSRWPusRqk+1GaAPHpsbmluCqDVd
+         TM51lfGwbwaf88fMOGA3RQC6Sea6xhTqw/C7l9tnyA84BXCKINkc4EBQ72u6uUZgAOHY
+         lTfzau4vj/3rQfBhTec8asxUsrE8XyNJhWmZa+pysZ23rqExAmnjTd/Q4CfgIjqt0CW0
+         jVwf+Mz+5QBjGs+6f1d0T/lgmA4P/wFxMXDc2TVQaKZ/av/44MFNXxdHHduyf1htQsgB
+         Z8nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=LKMdW8eXJJQoIzur5jtUB7TYD/pVRqgw99BRVM74YbM=;
+        b=uLf+leOizQjlyddvDNc7Q2o4/e/UVdbHjsIF3KWvcZgkyyTSMnwR9nMGJQ0QpWLzEP
+         75Aa9HI4yi7ELrTyGCWbJLUS+UkbH7Y3njpWs/dPk3s8wb1oXLGY95nZCXm2U1eFrQ3c
+         xD6xymc256l/+VMsBvnBkoVI/w5Wib1YxJoaXlkcMCseVj+B+8sTCnUEKHkfN7rEksQI
+         aBgJXjBsgziXVlAiS0Ffxa4TYGBo8NYd+kywiJUJqUC6/R9Tqsfi1x6+Wh2TswcehXPk
+         hG1D6ISRLSsBZt/Iy4FTHFDwme6BbhZaAS7TgpZZv+9xFclG2R4d9tGfBSbPOShA4/wm
+         onVg==
+X-Gm-Message-State: AOAM533BfwsNrCjF3pG2KxFeLZaZqfsZV79ktAdGRKWPZc1UQm4hZjf1
+        WXMbs2yOTBYmC7AD8BATDoeQtniAe1Q6fBoFtQY=
+X-Google-Smtp-Source: ABdhPJztKeiwv6Tl2E3x+7rkv+uAdRewSqVBwuoVxWTVGfXrat/En27ObEeG5TMHxXUEur5sLUyzlFDcy/oyLIa8h9I=
+X-Received: by 2002:ac8:7cba:: with SMTP id z26mr18622845qtv.11.1633436105479;
+ Tue, 05 Oct 2021 05:15:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75VdtOHn4ED-ixdDngBQw10OnKmbtTv=ydLs6dYbkjyqW4Q@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Received: by 2002:a05:6214:43:0:0:0:0 with HTTP; Tue, 5 Oct 2021 05:15:03
+ -0700 (PDT)
+Reply-To: lydiawright836@gmail.com
+From:   LYDIA WRIGHT <jacobbarney60@gmail.com>
+Date:   Tue, 5 Oct 2021 15:15:03 +0300
+Message-ID: <CACY7RPX=-W7pvBqbNZnsJw1S3NkZG+on8we2oU8fLiE1pe+iaw@mail.gmail.com>
+Subject: Greetings to You
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Andy,
+Greetings dear,
 
-On Mon, Oct 04, 2021 at 05:29:47PM +0300, Andy Shevchenko wrote:
-> On Thu, Sep 30, 2021 at 1:08 PM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > The preferred way to implement SPI-NOR controller drivers is through SPI
-> > subsubsystem utilizing the SPI MEM core functions. This converts the
-> > Intel SPI flash controller driver over the SPI MEM by moving the driver
-> > from SPI-NOR subsystem to SPI subsystem and in one go make it use the
-> > SPI MEM functions. The driver name will be changed from intel-spi to
-> > spi-intel to match the convention used in the SPI subsystem.
-> 
-> ...
-> 
-> > +config SPI_INTEL_PCI
-> > +       tristate "Intel PCH/PCU SPI flash PCI driver (DANGEROUS)"
-> > +       depends on PCI && (X86 || COMPILE_TEST)
-> 
-> Perhaps two entries, one of which will be the same as for platform case?
+My name is Lydia A. Wright, and I'm from Akron, Ohio. The U.S.A, This
+message will most likely surprise you. I'm dying of cancer, which I
+was diagnosed with around two years ago, and I'm recovering from a
+stroke that has made walking difficult.
+Mr. L=C3=A9vi Wright, my husband, passed away in mid-March 2011 from a
+heart attack. I'll be having surgery soon.  I only have a few years
+left in this world, my late spouse has  $10.5 million as a family
+valuable , which I intend to gift to charity.
 
-Sure will do that in v2.
+For more information, please contact me at (lydiawright836@gmail.com)
+. Thank you sincerely!
 
-> > +       depends on SPI_MEM
-> > +       select SPI_INTEL
-> > +       help
-> > +         This enables PCI support for the Intel PCH/PCU SPI controller in
-> > +         master mode. This controller is present in modern Intel hardware
-> > +         and is used to hold BIOS and other persistent settings. Using
-> > +         this driver it is possible to upgrade BIOS directly from Linux.
-> > +
-> > +         Say N here unless you know what you are doing. Overwriting the
-> > +         SPI flash may render the system unbootable.
-> > +
-> > +         To compile this driver as a module, choose M here: the module
-> > +         will be called spi-intel-pci.
-> > +
-> > +config SPI_INTEL_PLATFORM
-> > +       tristate "Intel PCH/PCU SPI flash platform driver (DANGEROUS)"
-> > +       depends on X86 || COMPILE_TEST
-> > +       depends on SPI_MEM
-> > +       select SPI_INTEL
-> > +       help
-> > +         This enables platform support for the Intel PCH/PCU SPI
-> > +         controller in master mode. This controller is present in modern
-> > +         Intel hardware and is used to hold BIOS and other persistent
-> > +         settings. Using this driver it is possible to upgrade BIOS
-> > +         directly from Linux.
-> > +
-> > +         Say N here unless you know what you are doing. Overwriting the
-> > +         SPI flash may render the system unbootable.
-> > +
-> > +         To compile this driver as a module, choose M here: the module
-> > +         will be called spi-intel-platform.
-> 
-> ...
-> 
-> + Blank line ?
-
-OK
-
-> 
-> >  #include <linux/mtd/partitions.h>
-> >  #include <linux/mtd/spi-nor.h>
-> 
-> + Blank line?
-
-OK
-
-> > +#include <linux/spi/flash.h>
-> > +#include <linux/spi/spi.h>
-> > +#include <linux/spi/spi-mem.h>
-> 
-> The rationale is to show that we use two sub(sub)sytems here.
-
-Yup, got it.
-
-> ...
-> 
-> > -                       dev_err(ispi->dev, "read error: %llx: %#x\n", from,
-> > +                       dev_err(ispi->dev, "read error: %x: %#x\n", from,
-> >                                 status);
-> 
-> Now one line?
-> 
-> ...
-> 
-> > -                       dev_err(ispi->dev, "write error: %llx: %#x\n", to,
-> > +                       dev_err(ispi->dev, "write error: %x: %#x\n", to,
-> >                                 status);
-> 
-> Ditto.
-
-Sure for both.
-> 
-> ...
-> 
-> > +               ret = intel_spi_sw_cycle(ispi, opcode, 0,
-> > +                                        OPTYPE_WRITE_WITH_ADDR);
-> > +               return ret ? ret : 0;
-> 
-> Why not simply return intel_spi_dw_cycle(...); ?
-
-Good point. Will fix that.
-
-> ...
-> 
-> > +       val = readl(ispi->base + HSFSTS_CTL);
-> > +       val &= ~(HSFSTS_CTL_FDBC_MASK | HSFSTS_CTL_FCYCLE_MASK);
-> > +       val |= HSFSTS_CTL_AEL | HSFSTS_CTL_FCERR | HSFSTS_CTL_FDONE;
-> 
-> > +       val |= cmd;
-> > +       val |= HSFSTS_CTL_FGO;
-> 
-> Maybe swap these lines to group constants?
-
-OK
-
-> ...
-> 
-> > +       status = readl(ispi->base + HSFSTS_CTL);
-> > +       if (status & HSFSTS_CTL_FCERR)
-> > +               return -EIO;
-> 
-> > +       else if (status & HSFSTS_CTL_AEL)
-> 
-> Redundant 'else'
-
-Right.
-
-> > +               return -EACCES;
-> 
-> ...
-> 
-> > +static int intel_spi_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
-> > +{
-> > +       struct intel_spi *ispi = spi_master_get_devdata(mem->spi->master);
-> > +       size_t nbytes = op->data.nbytes;
-> > +       u8 opcode = op->cmd.opcode;
-> > +
-> > +       if (op->addr.nbytes) {
-> > +               if  (op->data.dir == SPI_MEM_DATA_IN)
-> > +                       return intel_spi_read(ispi, op->addr.val, nbytes,
-> > +                                             op->data.buf.in);
-> 
-> > +               else if (op->data.dir == SPI_MEM_DATA_OUT)
-> 
-> Redundant 'else' here and nearby.
-
-Right. I'll fix these in v2.
-
-> > +                       return intel_spi_write(ispi, op->addr.val, nbytes,
-> > +                                              op->data.buf.out);
-> > +               else if (op->data.dir == SPI_MEM_NO_DATA)
-> > +                       return intel_spi_erase(ispi, opcode, op->addr.val);
-> > +       } else {
-> > +               if  (op->data.dir == SPI_MEM_DATA_IN)
-> > +                       return intel_spi_read_reg(ispi, opcode, op->data.buf.in,
-> > +                                                 nbytes);
-> > +               else if (op->data.dir == SPI_MEM_DATA_OUT)
-> > +                       return intel_spi_write_reg(ispi, opcode, op->data.buf.out,
-> > +                                                  nbytes);
-> > +               else if (op->data.dir == SPI_MEM_NO_DATA)
-> > +                       return intel_spi_write_reg(ispi, opcode, NULL, 0);
-> >         }
-> 
-> > +       return -EINVAL;
-> > +}
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+Mrs. Lydia A. Wright
+Rosalind Ct, Akron, Ohio , U.S.A
