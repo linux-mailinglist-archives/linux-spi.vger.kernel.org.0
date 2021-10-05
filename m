@@ -2,56 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60563422C85
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Oct 2021 17:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DDCE422CA4
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Oct 2021 17:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbhJEPcA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Oct 2021 11:32:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42006 "EHLO mail.kernel.org"
+        id S233975AbhJEPjj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Oct 2021 11:39:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43194 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229626AbhJEPcA (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 5 Oct 2021 11:32:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id E7B566115A;
-        Tue,  5 Oct 2021 15:30:09 +0000 (UTC)
+        id S235588AbhJEPjj (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 5 Oct 2021 11:39:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E62D360F9D;
+        Tue,  5 Oct 2021 15:37:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633447809;
-        bh=Km4qxscA0QAM67IoKpryWzrTUv2mwXhV9SWYCrsB6bY=;
-        h=Subject:From:Date:To:From;
-        b=B5XV9pVhlsHVxuugJ1yn3AGjqDKOx8ZI7uBgEGUkICXtJ59hLjzvus4swg9RPLms/
-         cTul/E/g/M8Yz2sPhy5Wegq7hyEnw1Vr5sQ8m19PYeLGQSYG/H3N0Ylp1Hi6yYzRHb
-         HvMZSlvOwG0NfnQIY5W4UBO2CRpJ81QXH0th22+Apy0nv+xATvdsrMkfiVU1xekZob
-         1o22YbuBUXpkRa7M8lXVJAYCopyH3fLDJPCZOIeVpSnFiGWa5ESWiyDkJdUsnv5KjF
-         mMgYycHBszESrGP9peuppqULyo9KkdlF5O6YuRY1p+FWh6ckXg2nv7VhEWGtWYL/MC
-         ucwNxwQhy6Xcg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D5E4060971;
-        Tue,  5 Oct 2021 15:30:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1633448268;
+        bh=VNMwv22FvVJr37/utthyswV8Kmqu6h+cvM+d5Cilb8U=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GZ/ikPyX6aEgzTkFrv0zdwmzrCGDU2gTAp4/NE+9fgLBoe7iS7J0PyPd1emkBNnXj
+         /xjwTh7aqHb0MUomUuoZLFlwj72MbShSMQshd2mifsHbGYDx+rBqVWO6w0lVw9p4bK
+         Edo72759r38JyFMSsNWTlFfzwEDefkhX+bYkMJoDvaqj02gVKZ7aOtcY57jbETe8wO
+         LL1KeeN0xX5ZR765cF3nEDo+5nRvC9p2BGrHSRcMcVlo8b4b8E9E8xJ1DWZeRaXimp
+         /vq3Z2zTQP/ZO8ALlbTAvmkQt5e7LXL4V49ivYC8V2zSSOofXfv7SEUpBh37bIDmtV
+         wstVlx7XH4NRA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: fsi: Print status on error
+Date:   Tue,  5 Oct 2021 16:37:39 +0100
+Message-Id: <163344813900.1141585.10210629516525058717.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211004195149.29759-1-eajames@linux.ibm.com>
+References: <20211004195149.29759-1-eajames@linux.ibm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <163344780982.17305.5086888871037948924.git-patchwork-summary@kernel.org>
-Date:   Tue, 05 Oct 2021 15:30:09 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+On Mon, 4 Oct 2021 14:51:49 -0500, Eddie James wrote:
+> Print the SPI engine status register when an error is detected. This
+> will aid tremendously in debugging failed transactions.
+> 
+> 
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (refs/heads/for-next):
+Applied to
 
-Patch: spi: fsi: Print status on error
-  Submitter: Eddie James <eajames@linux.ibm.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=557341
-  Lore link: https://lore.kernel.org/r/20211004195149.29759-1-eajames@linux.ibm.com
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Total patches: 1
+Thanks!
 
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+[1/1] spi: fsi: Print status on error
+      commit: 48a78c66ad5d9d4f918182335d6e5726e7008085
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
