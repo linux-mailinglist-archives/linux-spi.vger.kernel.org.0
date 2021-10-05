@@ -2,75 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB40B422611
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Oct 2021 14:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A63422B6C
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Oct 2021 16:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234526AbhJEMQ5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Oct 2021 08:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233808AbhJEMQ4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Oct 2021 08:16:56 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B291C06174E
-        for <linux-spi@vger.kernel.org>; Tue,  5 Oct 2021 05:15:06 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id d8so1574183qtd.5
-        for <linux-spi@vger.kernel.org>; Tue, 05 Oct 2021 05:15:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=LKMdW8eXJJQoIzur5jtUB7TYD/pVRqgw99BRVM74YbM=;
-        b=SXacsgbsgGa8gf0YYP+KuzoIAmpkL1NLnIlgbvFWD8pHiE/DHk446N7yqS/kjUKJ7Y
-         Xv5wsuKPWoieh2L+/IJul9v7wOr9t4BHth+wbXOOPSRWPusRqk+1GaAPHpsbmluCqDVd
-         TM51lfGwbwaf88fMOGA3RQC6Sea6xhTqw/C7l9tnyA84BXCKINkc4EBQ72u6uUZgAOHY
-         lTfzau4vj/3rQfBhTec8asxUsrE8XyNJhWmZa+pysZ23rqExAmnjTd/Q4CfgIjqt0CW0
-         jVwf+Mz+5QBjGs+6f1d0T/lgmA4P/wFxMXDc2TVQaKZ/av/44MFNXxdHHduyf1htQsgB
-         Z8nQ==
+        id S235265AbhJEOsm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Oct 2021 10:48:42 -0400
+Received: from mail-vs1-f51.google.com ([209.85.217.51]:42963 "EHLO
+        mail-vs1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233705AbhJEOsj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Oct 2021 10:48:39 -0400
+Received: by mail-vs1-f51.google.com with SMTP id y14so10027862vsm.9;
+        Tue, 05 Oct 2021 07:46:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=LKMdW8eXJJQoIzur5jtUB7TYD/pVRqgw99BRVM74YbM=;
-        b=uLf+leOizQjlyddvDNc7Q2o4/e/UVdbHjsIF3KWvcZgkyyTSMnwR9nMGJQ0QpWLzEP
-         75Aa9HI4yi7ELrTyGCWbJLUS+UkbH7Y3njpWs/dPk3s8wb1oXLGY95nZCXm2U1eFrQ3c
-         xD6xymc256l/+VMsBvnBkoVI/w5Wib1YxJoaXlkcMCseVj+B+8sTCnUEKHkfN7rEksQI
-         aBgJXjBsgziXVlAiS0Ffxa4TYGBo8NYd+kywiJUJqUC6/R9Tqsfi1x6+Wh2TswcehXPk
-         hG1D6ISRLSsBZt/Iy4FTHFDwme6BbhZaAS7TgpZZv+9xFclG2R4d9tGfBSbPOShA4/wm
-         onVg==
-X-Gm-Message-State: AOAM533BfwsNrCjF3pG2KxFeLZaZqfsZV79ktAdGRKWPZc1UQm4hZjf1
-        WXMbs2yOTBYmC7AD8BATDoeQtniAe1Q6fBoFtQY=
-X-Google-Smtp-Source: ABdhPJztKeiwv6Tl2E3x+7rkv+uAdRewSqVBwuoVxWTVGfXrat/En27ObEeG5TMHxXUEur5sLUyzlFDcy/oyLIa8h9I=
-X-Received: by 2002:ac8:7cba:: with SMTP id z26mr18622845qtv.11.1633436105479;
- Tue, 05 Oct 2021 05:15:05 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Khxc7wZumOtpS5mwACBEuWfNWBNzntWbNHisFSzTh08=;
+        b=5nvLDLj6NOtMwszfcD/jyNwDxMjdK25XmS6Jru/upYZt9VORevIgBKswKydErTOnZ6
+         ZkNUT2oyNgOSJioCRH7y67ZPfGT/qpyUzMk8rdKE2VsEgcawqXKB53YoXlG2qWYcNLXk
+         cekHvdQZ4cuRXjZQkL/yAuq9z1Pi6vTK2p/6w928HGAal1/+FIZOeTZlC2nGzeuDYEMa
+         EiMgaawSuqYKXT4E0DjcUYlD26v8ioZ7YveZpSbGvSngKGf4RezyMJPTlo9uZZ2wItCU
+         ZkCFzV6znHrg0BwPTYs1jpUIX23vpfJUGgB0MVccubA+JJf6tcX/6CVzZzt9J7xmYz0c
+         TLeA==
+X-Gm-Message-State: AOAM533fhUG8oI1XtmPTcJgy7yeIMoENPqniLk/1dc1F4eq1ntowQT3x
+        eKC6zUg9M4EN1JdUSrFU/fjlNMAc/KMO3078DqM=
+X-Google-Smtp-Source: ABdhPJxIHGhZacfkPIP0QwC6n8pXB9a9H3QfA2yMDeJQ7gBJ7CYF5IWxa2O5+r8IhAP9kqfW3mmB/ggpMuuDqe6hnpk=
+X-Received: by 2002:a67:c295:: with SMTP id k21mr16360605vsj.37.1633445208279;
+ Tue, 05 Oct 2021 07:46:48 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6214:43:0:0:0:0 with HTTP; Tue, 5 Oct 2021 05:15:03
- -0700 (PDT)
-Reply-To: lydiawright836@gmail.com
-From:   LYDIA WRIGHT <jacobbarney60@gmail.com>
-Date:   Tue, 5 Oct 2021 15:15:03 +0300
-Message-ID: <CACY7RPX=-W7pvBqbNZnsJw1S3NkZG+on8we2oU8fLiE1pe+iaw@mail.gmail.com>
-Subject: Greetings to You
-To:     undisclosed-recipients:;
+References: <20210928140721.8805-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20210928140721.8805-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20210928140721.8805-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 5 Oct 2021 16:46:37 +0200
+Message-ID: <CAMuHMdVy7RxUSWQOUDKB3-8igjYGBXO4ZYy=DamgQPqknXaUkw@mail.gmail.com>
+Subject: Re: [PATCH 1/6] dt-bindings: memory: renesas,rpc-if: Add support for
+ the R9A07G044
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mark Brown <broonie@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Greetings dear,
+On Tue, Sep 28, 2021 at 4:07 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> SPI Multi I/O Bus Controller on RZ/G2L SoC is almost identical to
+> the RPC-IF interface found on R-Car Gen3 SoC's.
+>
+> This patch adds a new compatible string to identify the RZ/G2L family
+> so that the timing values on RZ/G2L can be adjusted.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-My name is Lydia A. Wright, and I'm from Akron, Ohio. The U.S.A, This
-message will most likely surprise you. I'm dying of cancer, which I
-was diagnosed with around two years ago, and I'm recovering from a
-stroke that has made walking difficult.
-Mr. L=C3=A9vi Wright, my husband, passed away in mid-March 2011 from a
-heart attack. I'll be having surgery soon.  I only have a few years
-left in this world, my late spouse has  $10.5 million as a family
-valuable , which I intend to gift to charity.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-For more information, please contact me at (lydiawright836@gmail.com)
-. Thank you sincerely!
+Gr{oetje,eeting}s,
 
-Mrs. Lydia A. Wright
-Rosalind Ct, Akron, Ohio , U.S.A
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
