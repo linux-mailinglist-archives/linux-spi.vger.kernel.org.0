@@ -2,134 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5D9425A32
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Oct 2021 20:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76427425F32
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Oct 2021 23:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242977AbhJGSC5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Oct 2021 14:02:57 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:44326 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243414AbhJGSC4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Oct 2021 14:02:56 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 197I0XlV078054;
-        Thu, 7 Oct 2021 13:00:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1633629633;
-        bh=/8/LqfY1tsSG2Hqa/h7+PWJukVboKDUGqRlimlBGYmQ=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=eVgJ5Ltygg4xtGOFaunX4itmtAmNJqi1oqkhQP0jl9zaxHrN2KRfEohG1nUceeUbT
-         JvHjTmLDRJNFkzr64FzjhcUcBlbNnK8PjEvLYpCqhfAFmhMV1rPhIVv2+5yZQqpBYU
-         s98tiODOWvuB0oOQNKhLTuVXEP5nP2rGbRJ4poaM=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 197I0Xj6061903
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 7 Oct 2021 13:00:33 -0500
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 7
- Oct 2021 13:00:33 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 7 Oct 2021 13:00:33 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 197I0WKx055285;
-        Thu, 7 Oct 2021 13:00:33 -0500
-Date:   Thu, 7 Oct 2021 23:30:31 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Lima <mauro.lima@eclypsium.com>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH 2/3] mtd: spi-nor: intel-spi: Convert to SPI MEM
-Message-ID: <20211007180029.6agt43vyiwpcgmjz@ti.com>
-References: <20210930100719.2176-1-mika.westerberg@linux.intel.com>
- <20210930100719.2176-3-mika.westerberg@linux.intel.com>
- <20211004095239.dyowgkyq5lnfdag2@ti.com>
- <YVrSbyEsSLMOu1bU@lahna>
- <20211007123621.ld4aqasr3hlwq2c7@ti.com>
- <YV8kVKiMShWp4g7a@lahna>
+        id S230120AbhJGVjb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Oct 2021 17:39:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51114 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234032AbhJGVjb (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 7 Oct 2021 17:39:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6302B610C8;
+        Thu,  7 Oct 2021 21:37:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633642656;
+        bh=jLuZvpJmYjG6xaNeAv3qn+YTOybD2FBU6G7FRPWTbZM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YThNxDZN9TwSmCfSXfKy6QXkWItJSjPONp2aEy/nEXVUpiTImPd50xTc+dEB3P+OK
+         Pq9UfekfsXHDwW33KwpAcPV2kl0pi67/tGcuYUfmjkyGYJo7VohrNnQoCeH6SkkQj2
+         dbB4KrQ2VoYekkoBJLTTvmlFUekX3j32dpxLiMux9U7slrUNNq7LR1PaMbbDq42OZB
+         mOyBVLvKsWX3ZIyhvDpKacjohpxroQteiKTJCxjss/ktQpGb25i2paCI0rrBjQ8u8U
+         4Buu42L4ltm6sZGu4GwrO8Wf3IyUICRy5SAdA+tBtXk7AET1H5dq9HaYCACEbMdUwm
+         lAAtE85Z3or6g==
+From:   Mark Brown <broonie@kernel.org>
+To:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 0/4] spi: Various Cleanups
+Date:   Thu,  7 Oct 2021 22:37:21 +0100
+Message-Id: <163364264937.649954.11489762989707343828.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211007121415.2401638-1-u.kleine-koenig@pengutronix.de>
+References: <20211007121415.2401638-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YV8kVKiMShWp4g7a@lahna>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 07/10/21 07:46PM, Mika Westerberg wrote:
-> Hi,
+On Thu, 7 Oct 2021 14:14:11 +0200, Uwe Kleine-König wrote:
+> while trying to understand how the spi framework makes use of the core
+> device driver stuff (to fix a deadlock) I found these simplifications
+> and improvements.
 > 
-> On Thu, Oct 07, 2021 at 06:06:23PM +0530, Pratyush Yadav wrote:
-> > > Unfortunately there is no way to tell the controller any of these. It
-> > > simply does "read" or "write" (as we command it) and internally then
-> > > uses whatever it got from the SFDP tables of the flash chip. That's why
-> > > we just claim to support all these operations and let the controller do
-> > > its thing (whatever it is).
-> > 
-> > That is not ideal. SPI NOR uses this to negotiate the best available 
-> > protocol with the controller. Say you have a flash that is capable of 
-> > octal mode but the controller can only support quad mode. Your driver 
-> > will happily tell SPI NOR that it can support octal mode. I think you 
-> > should check the SPI mode bits to make sure the protocol bus width is 
-> > supported at least (see spi_check_buswidth_req() in spi-mem.c).
+> They are build-tested with allmodconfig on arm64, m68k, powerpc, riscv,
+> s390, sparc64 and x86_64.
 > 
-> Okay, I'll see if I can add that check somewhere.
-> 
-> > As for opcodes, is there no way to find out what opcodes the controller 
-> > discovered via SFDP? Maybe we can't change them, but can we at least 
-> > take a peek at them?
-> 
-> AFAICT no. The controller only allows "higher" level commands like read,
-> write, erase but does not expose any of that to software. You can see
-> yourself if you want, the spec is here:
->  
->   https://cdrdv2.intel.com/v1/dl/getContent/636174
-> 
-> Page 403 has the control register.
+> [...]
 
-I do see 4k and 64k erase opcode fields on the BIOS_SFDP1_VSSC1 register 
-(page 428), but I am not sure what exactly it is for. Anyway, that 
-doesn't really do much for us I think.
+Applied to
 
-> 
-> > I think this has problems similar to the Cadence xSPI controller [0].
-> 
-> Probably but I would not call these "problems" - it is how the
-> controller is designed. This one is meant only for SPI-NOR flash access,
-> typically used by the BIOS. It is by no means general purpose SPI
-> controller (as you can see from the datasheet). The BIOS does need the
-> full SPI stack, it just issues these simple commands and let's the
-> controller figure out what actually needs to be done.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-The problem is not the controller itself. It is perfectly fine piece to 
-have a controller like this IMO. The problem is how do we make it fit 
-into the SPI MEM model, which seems to be designed for general purpose 
-controllers only. This problem is shared with this and the Cadence xSPI 
-controller.
+Thanks!
 
-> 
-> > Sorry I only replied to this after you posted a new version. It got lost 
-> > in the heap of emails in my inbox :-(
-> 
-> No worries :)
-> 
-> ______________________________________________________
-> Linux MTD discussion mailing list
-> http://lists.infradead.org/mailman/listinfo/linux-mtd/
+[1/4] spi: Move comment about chipselect check to the right place
+      commit: 6bfb15f34dd8c8a073e03a31c485ef5774b127df
+[2/4] spi: Remove unused function spi_busnum_to_master()
+      commit: bdc7ca008e1f5539e891187032cb2cbbc3decb5e
+[3/4] spi: Reorder functions to simplify the next commit
+      commit: fb51601bdf3a761ccd3f3d9dc6c03064f10f23aa
+[4/4] spi: Make several public functions private to spi.c
+      commit: da21fde0fdb393c2fbe0ae0735cc826cd55fd46f
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
