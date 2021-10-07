@@ -2,95 +2,105 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60125425849
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Oct 2021 18:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 647DF425876
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Oct 2021 18:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242822AbhJGQtK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Oct 2021 12:49:10 -0400
-Received: from mga18.intel.com ([134.134.136.126]:12181 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242790AbhJGQtJ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 7 Oct 2021 12:49:09 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10130"; a="213254728"
-X-IronPort-AV: E=Sophos;i="5.85,355,1624345200"; 
-   d="scan'208";a="213254728"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 09:46:19 -0700
-X-IronPort-AV: E=Sophos;i="5.85,355,1624345200"; 
-   d="scan'208";a="522666265"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2021 09:46:15 -0700
-Received: by lahna (sSMTP sendmail emulation); Thu, 07 Oct 2021 19:46:12 +0300
-Date:   Thu, 7 Oct 2021 19:46:12 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Pratyush Yadav <p.yadav@ti.com>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Lima <mauro.lima@eclypsium.com>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 2/3] mtd: spi-nor: intel-spi: Convert to SPI MEM
-Message-ID: <YV8kVKiMShWp4g7a@lahna>
-References: <20210930100719.2176-1-mika.westerberg@linux.intel.com>
- <20210930100719.2176-3-mika.westerberg@linux.intel.com>
- <20211004095239.dyowgkyq5lnfdag2@ti.com>
- <YVrSbyEsSLMOu1bU@lahna>
- <20211007123621.ld4aqasr3hlwq2c7@ti.com>
+        id S231594AbhJGQyN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Oct 2021 12:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229810AbhJGQyM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Oct 2021 12:54:12 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC57C061570
+        for <linux-spi@vger.kernel.org>; Thu,  7 Oct 2021 09:52:18 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mYWcy-0006YG-Qo; Thu, 07 Oct 2021 18:52:16 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mYWcw-0006J4-Py; Thu, 07 Oct 2021 18:52:14 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mYWcw-0007bI-OK; Thu, 07 Oct 2021 18:52:14 +0200
+Date:   Thu, 7 Oct 2021 18:52:14 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@intel.com>
+Subject: Re: Deadlock in spi_add_device() -- device core problem
+Message-ID: <20211007165214.r5h7x3evdqbwxmma@pengutronix.de>
+References: <20211007160524.qhjtcwtto2ftsmhe@pengutronix.de>
+ <YV8eIoxIxQLC5x5N@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nf6oy76gyvmiqlf3"
 Content-Disposition: inline
-In-Reply-To: <20211007123621.ld4aqasr3hlwq2c7@ti.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <YV8eIoxIxQLC5x5N@kroah.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
 
-On Thu, Oct 07, 2021 at 06:06:23PM +0530, Pratyush Yadav wrote:
-> > Unfortunately there is no way to tell the controller any of these. It
-> > simply does "read" or "write" (as we command it) and internally then
-> > uses whatever it got from the SFDP tables of the flash chip. That's why
-> > we just claim to support all these operations and let the controller do
-> > its thing (whatever it is).
-> 
-> That is not ideal. SPI NOR uses this to negotiate the best available 
-> protocol with the controller. Say you have a flash that is capable of 
-> octal mode but the controller can only support quad mode. Your driver 
-> will happily tell SPI NOR that it can support octal mode. I think you 
-> should check the SPI mode bits to make sure the protocol bus width is 
-> supported at least (see spi_check_buswidth_req() in spi-mem.c).
+--nf6oy76gyvmiqlf3
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Okay, I'll see if I can add that check somewhere.
+On Thu, Oct 07, 2021 at 06:19:46PM +0200, Greg Kroah-Hartman wrote:
+> On Thu, Oct 07, 2021 at 06:05:24PM +0200, Uwe Kleine-K=F6nig wrote:
+> > On an ARM board with an spi-mux I observe a deadlock during boot. This
+> > happens because spi_add_device() (in drivers/spi/spi.c) for the spi-mux
+> > device calls device_add() while holding &spi_add_lock. The spi-mux
+> > driver's probe routine than creates another controller and for the
+> > devices on that bus spi_add_device() is called again, trying to grab
+> > &spi_add_lock again.
+> >=20
+> > The easy workaround would be to replace &spi_add_lock with a
+> > per-controller lock, but I have the expectation that it should be
+> > possible to not hold a lock while calling device_add().
+>=20
+> No, busses should not be adding new devices to the same bus from within
+> a probe function.
+>=20
+> Drivers for a bus bind to the bus, they should not be creating new
+> devices for that same bus, as that does not seem correct.
 
-> As for opcodes, is there no way to find out what opcodes the controller 
-> discovered via SFDP? Maybe we can't change them, but can we at least 
-> take a peek at them?
+That's not the culprit here. We have a spi-device (spi-mux) that is a
+bus device on the SoC's bus and a bus master for it's own bus. And
+spi_add_device for the spi-mux device triggers the probe function for
+the spi-mux driver which creates a new bus controller which triggers
+spi_add_device() for the devices on the inner bus.
 
-AFAICT no. The controller only allows "higher" level commands like read,
-write, erase but does not expose any of that to software. You can see
-yourself if you want, the spec is here:
- 
-  https://cdrdv2.intel.com/v1/dl/getContent/636174
+Best regards
+Uwe
 
-Page 403 has the control register.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-> I think this has problems similar to the Cadence xSPI controller [0].
+--nf6oy76gyvmiqlf3
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Probably but I would not call these "problems" - it is how the
-controller is designed. This one is meant only for SPI-NOR flash access,
-typically used by the BIOS. It is by no means general purpose SPI
-controller (as you can see from the datasheet). The BIOS does need the
-full SPI stack, it just issues these simple commands and let's the
-controller figure out what actually needs to be done.
+-----BEGIN PGP SIGNATURE-----
 
-> Sorry I only replied to this after you posted a new version. It got lost 
-> in the heap of emails in my inbox :-(
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFfJbYACgkQwfwUeK3K
+7AnLLwf/evU/hSuDWDD1dvmhul5a1DqLO/8qnHcwW9coepd+qIWzkM8LGVSQGzQb
+w6VaxVEmS4leMJlpu4njMXHlw6y+XNf4NkELFso/JWjQANOW61/Yt0af8qU8PhWV
+6P1SCCEyB5G1/FELAVxdrjw3TifyBITuGrHd4KtJVtJ6YlT4rJHFGS9mfOdXXvX4
+L7oiqahvMZbcT/nNZKopAgxmbJ9prbhUI0302QTXz4uPOS+oEe0OrS5UU2aa4whg
+UAJDoyo/6fkA8IBdVhCmgFjwKpal1uWNKUrI4JCenMgJlT8EqnoiywGjrRp6f+XA
+PSNWJjMNbQtbrmsJMqYNARj/cfTZuQ==
+=VwwO
+-----END PGP SIGNATURE-----
 
-No worries :)
+--nf6oy76gyvmiqlf3--
