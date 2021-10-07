@@ -2,344 +2,179 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 393E34252CC
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Oct 2021 14:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1281425330
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Oct 2021 14:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241217AbhJGMQT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Oct 2021 08:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241239AbhJGMQR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Oct 2021 08:16:17 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D84C061762
-        for <linux-spi@vger.kernel.org>; Thu,  7 Oct 2021 05:14:23 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mYSI2-0007I9-56; Thu, 07 Oct 2021 14:14:22 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mYSI1-000622-JE; Thu, 07 Oct 2021 14:14:21 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mYSI1-0006pr-IU; Thu, 07 Oct 2021 14:14:21 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 4/4] spi: Make several public functions private to spi.c
-Date:   Thu,  7 Oct 2021 14:14:15 +0200
-Message-Id: <20211007121415.2401638-5-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211007121415.2401638-1-u.kleine-koenig@pengutronix.de>
-References: <20211007121415.2401638-1-u.kleine-koenig@pengutronix.de>
+        id S241451AbhJGMjB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Oct 2021 08:39:01 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:51412 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241434AbhJGMi7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Oct 2021 08:38:59 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 197CaODu102544;
+        Thu, 7 Oct 2021 07:36:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1633610184;
+        bh=pzh+3XNNgPH1GP/1wHzKrd+ZroKZVBls9gsJCZis+JU=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=cjn3129sBIlzuiO/8ycZtPgG8ryjyYackfj93aA4F8Z6SzcNWqzEtYy9TNF5lRmXn
+         LRwLr5+PVbiV6z40GiKc7d/bE7VDbA2J6XA4qUd0Uh/qu3EH2R+1/BZPIUYeEBOvgB
+         ALbS99WeVpJ2swDcgvau3jR5sUjWnUpasgfWPNRA=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 197CaOPs078494
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 7 Oct 2021 07:36:24 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 7
+ Oct 2021 07:36:24 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 7 Oct 2021 07:36:24 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 197CaNgM012093;
+        Thu, 7 Oct 2021 07:36:24 -0500
+Date:   Thu, 7 Oct 2021 18:06:23 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Lima <mauro.lima@eclypsium.com>,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>
+Subject: Re: [PATCH 2/3] mtd: spi-nor: intel-spi: Convert to SPI MEM
+Message-ID: <20211007123621.ld4aqasr3hlwq2c7@ti.com>
+References: <20210930100719.2176-1-mika.westerberg@linux.intel.com>
+ <20210930100719.2176-3-mika.westerberg@linux.intel.com>
+ <20211004095239.dyowgkyq5lnfdag2@ti.com>
+ <YVrSbyEsSLMOu1bU@lahna>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Patch-Hashes: v=1; h=sha256; i=JEKl68owTMEBj9pnQgUuZJxriBLZWXwTXHCXjAAt/OI=; m=upl22FB7NRzz0n3cW/ZPLOOBu7ujVYXVmWGcoEp85rY=; p=X9dJM14862NnjFeL6srqHWFhH4GeFqys6hZhVOft8tI=; g=ab1cac0fcc87971faac0ffc2928c6091ef79f5a1
-X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFe5JQACgkQwfwUeK3K7AmF5Af/Rtn BbAEXDxsg8vur0BMcIEorBsEsbR18Si2kfI4cL7swonp6AWxGm0IMuUnAFbsYuenpkAKFdHK3In57 Z7bUtjaQpKK/jOZJxQjaIhpysraVoge1YVxzvt6a3LT1cM/FmgeGtzIxug7Ew3Dx5u7VxNUCXR7z9 Goarch6PUwmTNl9CxLdBWsvojD6bmx9hvpujKrK1d7GNM8nV1khb3DvbZJpfDeLlW1aNFYE+7MAX3 tPF7zK6M6qLG/oHvDGiGtSjyMRIijW7VXDyioIBLRWITa6JRkdymoDMBoPuqYR6Gn+4j4IcpDyx92 N3bOfaZJTKCRZPgEh7ajBIpR4kMEbxg==
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YVrSbyEsSLMOu1bU@lahna>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-All these functions have no callers apart from drivers/spi/spi.c. So
-drop their declarations in include/linux/spi/spi.h and don't export
-them.
+On 04/10/21 01:07PM, Mika Westerberg wrote:
+> Hi,
+> 
+> On Mon, Oct 04, 2021 at 03:22:41PM +0530, Pratyush Yadav wrote:
+> > On 30/09/21 01:07PM, Mika Westerberg wrote:
+> > > The preferred way to implement SPI-NOR controller drivers is through SPI
+> > > subsubsystem utilizing the SPI MEM core functions. This converts the
+> > > Intel SPI flash controller driver over the SPI MEM by moving the driver
+> > > from SPI-NOR subsystem to SPI subsystem and in one go make it use the
+> > > SPI MEM functions. The driver name will be changed from intel-spi to
+> > > spi-intel to match the convention used in the SPI subsystem.
+> > > 
+> > > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > > ---
+> > >  drivers/mtd/spi-nor/controllers/Kconfig       |  36 ---
+> > >  drivers/mtd/spi-nor/controllers/Makefile      |   3 -
+> > >  drivers/mtd/spi-nor/controllers/intel-spi.h   |  21 --
+> > >  drivers/spi/Kconfig                           |  38 +++
+> > >  drivers/spi/Makefile                          |   3 +
+> > >  .../intel-spi-pci.c => spi/spi-intel-pci.c}   |  20 +-
+> > >  .../spi-intel-platform.c}                     |  21 +-
+> > >  .../intel-spi.c => spi/spi-intel.c}           | 300 +++++++++++-------
+> > >  drivers/spi/spi-intel.h                       |  19 ++
+> > >  include/linux/mfd/lpc_ich.h                   |   2 +-
+> > >  .../x86/{intel-spi.h => spi-intel.h}          |   6 +-
+> > >  11 files changed, 252 insertions(+), 217 deletions(-)
+> > >  delete mode 100644 drivers/mtd/spi-nor/controllers/intel-spi.h
+> > >  rename drivers/{mtd/spi-nor/controllers/intel-spi-pci.c => spi/spi-intel-pci.c} (86%)
+> > >  rename drivers/{mtd/spi-nor/controllers/intel-spi-platform.c => spi/spi-intel-platform.c} (65%)
+> > >  rename drivers/{mtd/spi-nor/controllers/intel-spi.c => spi/spi-intel.c} (80%)
+> > >  create mode 100644 drivers/spi/spi-intel.h
+> > >  rename include/linux/platform_data/x86/{intel-spi.h => spi-intel.h} (89%)
+> > > 
+> > [...]
+> > > +static bool intel_spi_supports_mem_op(struct spi_mem *mem,
+> > > +				      const struct spi_mem_op *op)
+> > > +{
+> > > +	struct intel_spi *ispi = spi_master_get_devdata(mem->spi->master);
+> > >  
+> > > -			offs += erase_size;
+> > > -			len -= erase_size;
+> > > +	if (op->cmd.dtr)
+> > > +		return false;
+> > > +
+> > > +	if (ispi->swseq_reg && ispi->locked) {
+> > > +		int i;
+> > > +
+> > > +		for (i = 0; i < ARRAY_SIZE(ispi->opcodes); i++) {
+> > > +			if (ispi->opcodes[i] == op->cmd.opcode)
+> > > +				return true;
+> > >  		}
+> > >  
+> > > -		return 0;
+> > > +		return false;
+> > >  	}
+> > >  
+> > > -	/* Not needed with HW sequencer erase, make sure it is cleared */
+> > > -	ispi->atomic_preopcode = 0;
+> > > +	switch (op->cmd.opcode) {
+> > > +	case SPINOR_OP_RDID:
+> > > +	case SPINOR_OP_RDSR:
+> > > +	case SPINOR_OP_WRSR:
+> > > +		return true;
+> > >  
+> > > -	while (len > 0) {
+> > > -		writel(offs, ispi->base + FADDR);
+> > > +	case SPINOR_OP_READ:
+> > > +	case SPINOR_OP_READ_FAST:
+> > > +	case SPINOR_OP_READ_4B:
+> > > +	case SPINOR_OP_READ_FAST_4B:
+> > > +		return true;
+> > 
+> > I think the checks need to be stricter here. For example, I don't see 
+> > you pass in protocol width (dual, quad, octal, etc.) to intel_spi_read() 
+> > so I assume it can only do a certain protocol. You need to make sure 
+> > that other protocols are rejected here.
+> > 
+> > Similarly, you also don't pass in dummy cycles to intel_spi_read(), so I 
+> > assume it can only do a fix number of dummy cycles. Need to make sure 
+> > you reject unsupported ones. Same for other opcodes/cases.
+> 
+> Unfortunately there is no way to tell the controller any of these. It
+> simply does "read" or "write" (as we command it) and internally then
+> uses whatever it got from the SFDP tables of the flash chip. That's why
+> we just claim to support all these operations and let the controller do
+> its thing (whatever it is).
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/spi/spi.c       | 41 +++++++++++--------------------
- include/linux/spi/spi.h | 53 -----------------------------------------
- 2 files changed, 14 insertions(+), 80 deletions(-)
+That is not ideal. SPI NOR uses this to negotiate the best available 
+protocol with the controller. Say you have a flash that is capable of 
+octal mode but the controller can only support quad mode. Your driver 
+will happily tell SPI NOR that it can support octal mode. I think you 
+should check the SPI mode bits to make sure the protocol bus width is 
+supported at least (see spi_check_buswidth_req() in spi-mem.c).
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 397643104576..50591de16e0f 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -285,9 +285,9 @@ static const struct attribute_group *spi_master_groups[] = {
- 	NULL,
- };
- 
--void spi_statistics_add_transfer_stats(struct spi_statistics *stats,
--				       struct spi_transfer *xfer,
--				       struct spi_controller *ctlr)
-+static void spi_statistics_add_transfer_stats(struct spi_statistics *stats,
-+					      struct spi_transfer *xfer,
-+					      struct spi_controller *ctlr)
- {
- 	unsigned long flags;
- 	int l2len = min(fls(xfer->len), SPI_STATISTICS_HISTO_SIZE) - 1;
-@@ -310,7 +310,6 @@ void spi_statistics_add_transfer_stats(struct spi_statistics *stats,
- 
- 	spin_unlock_irqrestore(&stats->lock, flags);
- }
--EXPORT_SYMBOL_GPL(spi_statistics_add_transfer_stats);
- 
- /* modalias support makes "modprobe $MODALIAS" new-style hotplug work,
-  * and the sysfs version makes coldplug work too.
-@@ -501,7 +500,7 @@ static DEFINE_MUTEX(spi_add_lock);
-  *
-  * Return: a pointer to the new device, or NULL.
-  */
--struct spi_device *spi_alloc_device(struct spi_controller *ctlr)
-+static struct spi_device *spi_alloc_device(struct spi_controller *ctlr)
- {
- 	struct spi_device	*spi;
- 
-@@ -526,7 +525,6 @@ struct spi_device *spi_alloc_device(struct spi_controller *ctlr)
- 	device_initialize(&spi->dev);
- 	return spi;
- }
--EXPORT_SYMBOL_GPL(spi_alloc_device);
- 
- static void spi_dev_set_name(struct spi_device *spi)
- {
-@@ -621,7 +619,7 @@ static int __spi_add_device(struct spi_device *spi)
-  *
-  * Return: 0 on success; negative errno on failure
-  */
--int spi_add_device(struct spi_device *spi)
-+static int spi_add_device(struct spi_device *spi)
- {
- 	struct spi_controller *ctlr = spi->controller;
- 	struct device *dev = ctlr->dev.parent;
-@@ -642,7 +640,6 @@ int spi_add_device(struct spi_device *spi)
- 	mutex_unlock(&spi_add_lock);
- 	return status;
- }
--EXPORT_SYMBOL_GPL(spi_add_device);
- 
- static int spi_add_device_locked(struct spi_device *spi)
- {
-@@ -833,9 +830,8 @@ int spi_register_board_info(struct spi_board_info const *info, unsigned n)
-  * This may get enhanced in the future to allocate from a memory pool
-  * of the @spi_device or @spi_controller to avoid repeated allocations.
-  */
--void *spi_res_alloc(struct spi_device *spi,
--		    spi_res_release_t release,
--		    size_t size, gfp_t gfp)
-+static void *spi_res_alloc(struct spi_device *spi, spi_res_release_t release,
-+			   size_t size, gfp_t gfp)
- {
- 	struct spi_res *sres;
- 
-@@ -848,14 +844,13 @@ void *spi_res_alloc(struct spi_device *spi,
- 
- 	return sres->data;
- }
--EXPORT_SYMBOL_GPL(spi_res_alloc);
- 
- /**
-  * spi_res_free - free an spi resource
-  * @res: pointer to the custom data of a resource
-  *
-  */
--void spi_res_free(void *res)
-+static void spi_res_free(void *res)
- {
- 	struct spi_res *sres = container_of(res, struct spi_res, data);
- 
-@@ -865,28 +860,26 @@ void spi_res_free(void *res)
- 	WARN_ON(!list_empty(&sres->entry));
- 	kfree(sres);
- }
--EXPORT_SYMBOL_GPL(spi_res_free);
- 
- /**
-  * spi_res_add - add a spi_res to the spi_message
-  * @message: the spi message
-  * @res:     the spi_resource
-  */
--void spi_res_add(struct spi_message *message, void *res)
-+static void spi_res_add(struct spi_message *message, void *res)
- {
- 	struct spi_res *sres = container_of(res, struct spi_res, data);
- 
- 	WARN_ON(!list_empty(&sres->entry));
- 	list_add_tail(&sres->entry, &message->resources);
- }
--EXPORT_SYMBOL_GPL(spi_res_add);
- 
- /**
-  * spi_res_release - release all spi resources for this message
-  * @ctlr:  the @spi_controller
-  * @message: the @spi_message
-  */
--void spi_res_release(struct spi_controller *ctlr, struct spi_message *message)
-+static void spi_res_release(struct spi_controller *ctlr, struct spi_message *message)
- {
- 	struct spi_res *res, *tmp;
- 
-@@ -899,7 +892,6 @@ void spi_res_release(struct spi_controller *ctlr, struct spi_message *message)
- 		kfree(res);
- 	}
- }
--EXPORT_SYMBOL_GPL(spi_res_release);
- 
- /*-------------------------------------------------------------------------*/
- 
-@@ -3157,7 +3149,7 @@ static void __spi_replace_transfers_release(struct spi_controller *ctlr,
-  * Returns: pointer to @spi_replaced_transfers,
-  *          PTR_ERR(...) in case of errors.
-  */
--struct spi_replaced_transfers *spi_replace_transfers(
-+static struct spi_replaced_transfers *spi_replace_transfers(
- 	struct spi_message *msg,
- 	struct spi_transfer *xfer_first,
- 	size_t remove,
-@@ -3249,7 +3241,6 @@ struct spi_replaced_transfers *spi_replace_transfers(
- 
- 	return rxfer;
- }
--EXPORT_SYMBOL_GPL(spi_replace_transfers);
- 
- static int __spi_split_transfer_maxsize(struct spi_controller *ctlr,
- 					struct spi_message *msg,
-@@ -3799,7 +3790,7 @@ EXPORT_SYMBOL_GPL(spi_async);
-  *
-  * Return: zero on success, else a negative error code.
-  */
--int spi_async_locked(struct spi_device *spi, struct spi_message *message)
-+static int spi_async_locked(struct spi_device *spi, struct spi_message *message)
- {
- 	struct spi_controller *ctlr = spi->controller;
- 	int ret;
-@@ -3818,7 +3809,6 @@ int spi_async_locked(struct spi_device *spi, struct spi_message *message)
- 	return ret;
- 
- }
--EXPORT_SYMBOL_GPL(spi_async_locked);
- 
- /*-------------------------------------------------------------------------*/
- 
-@@ -4076,18 +4066,15 @@ EXPORT_SYMBOL_GPL(spi_write_then_read);
- 
- /*-------------------------------------------------------------------------*/
- 
--#if IS_ENABLED(CONFIG_OF)
-+#if IS_ENABLED(CONFIG_OF_DYNAMIC)
- /* must call put_device() when done with returned spi_device device */
--struct spi_device *of_find_spi_device_by_node(struct device_node *node)
-+static struct spi_device *of_find_spi_device_by_node(struct device_node *node)
- {
- 	struct device *dev = bus_find_device_by_of_node(&spi_bus_type, node);
- 
- 	return dev ? to_spi_device(dev) : NULL;
- }
--EXPORT_SYMBOL_GPL(of_find_spi_device_by_node);
--#endif /* IS_ENABLED(CONFIG_OF) */
- 
--#if IS_ENABLED(CONFIG_OF_DYNAMIC)
- /* the spi controllers are not using spi_bus, so we find it with another way */
- static struct spi_controller *of_find_spi_controller_by_node(struct device_node *node)
- {
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index f8e322a46616..29e21d49aafc 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -78,10 +78,6 @@ struct spi_statistics {
- 	unsigned long transfers_split_maxsize;
- };
- 
--void spi_statistics_add_transfer_stats(struct spi_statistics *stats,
--				       struct spi_transfer *xfer,
--				       struct spi_controller *ctlr);
--
- #define SPI_STATISTICS_ADD_TO_FIELD(stats, field, count)	\
- 	do {							\
- 		unsigned long flags;				\
-@@ -783,15 +779,6 @@ struct spi_res {
- 	unsigned long long      data[]; /* guarantee ull alignment */
- };
- 
--extern void *spi_res_alloc(struct spi_device *spi,
--			   spi_res_release_t release,
--			   size_t size, gfp_t gfp);
--extern void spi_res_add(struct spi_message *message, void *res);
--extern void spi_res_free(void *res);
--
--extern void spi_res_release(struct spi_controller *ctlr,
--			    struct spi_message *message);
--
- /*---------------------------------------------------------------------------*/
- 
- /*
-@@ -1109,8 +1096,6 @@ static inline void spi_message_free(struct spi_message *m)
- 
- extern int spi_setup(struct spi_device *spi);
- extern int spi_async(struct spi_device *spi, struct spi_message *message);
--extern int spi_async_locked(struct spi_device *spi,
--			    struct spi_message *message);
- extern int spi_slave_abort(struct spi_device *spi);
- 
- static inline size_t
-@@ -1193,15 +1178,6 @@ struct spi_replaced_transfers {
- 	struct spi_transfer inserted_transfers[];
- };
- 
--extern struct spi_replaced_transfers *spi_replace_transfers(
--	struct spi_message *msg,
--	struct spi_transfer *xfer_first,
--	size_t remove,
--	size_t insert,
--	spi_replaced_release_t release,
--	size_t extradatasize,
--	gfp_t gfp);
--
- /*---------------------------------------------------------------------------*/
- 
- /* SPI transfer transformation methods */
-@@ -1473,19 +1449,7 @@ spi_register_board_info(struct spi_board_info const *info, unsigned n)
-  * use spi_new_device() to describe each device.  You can also call
-  * spi_unregister_device() to start making that device vanish, but
-  * normally that would be handled by spi_unregister_controller().
-- *
-- * You can also use spi_alloc_device() and spi_add_device() to use a two
-- * stage registration sequence for each spi_device.  This gives the caller
-- * some more control over the spi_device structure before it is registered,
-- * but requires that caller to initialize fields that would otherwise
-- * be defined using the board info.
-  */
--extern struct spi_device *
--spi_alloc_device(struct spi_controller *ctlr);
--
--extern int
--spi_add_device(struct spi_device *spi);
--
- extern struct spi_device *
- spi_new_device(struct spi_controller *, struct spi_board_info *);
- 
-@@ -1500,23 +1464,6 @@ spi_transfer_is_last(struct spi_controller *ctlr, struct spi_transfer *xfer)
- 	return list_is_last(&xfer->transfer_list, &ctlr->cur_msg->transfers);
- }
- 
--/* OF support code */
--#if IS_ENABLED(CONFIG_OF)
--
--/* must call put_device() when done with returned spi_device device */
--extern struct spi_device *
--of_find_spi_device_by_node(struct device_node *node);
--
--#else
--
--static inline struct spi_device *
--of_find_spi_device_by_node(struct device_node *node)
--{
--	return NULL;
--}
--
--#endif /* IS_ENABLED(CONFIG_OF) */
--
- /* Compatibility layer */
- #define spi_master			spi_controller
- 
+As for opcodes, is there no way to find out what opcodes the controller 
+discovered via SFDP? Maybe we can't change them, but can we at least 
+take a peek at them?
+
+I think this has problems similar to the Cadence xSPI controller [0].
+
+Sorry I only replied to this after you posted a new version. It got lost 
+in the heap of emails in my inbox :-(
+
+[0] https://patchwork.kernel.org/project/spi-devel-general/patch/1630499858-20456-1-git-send-email-pthombar@cadence.com/
+
+> 
+> Hope this clarifies.
+
 -- 
-2.30.2
-
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
