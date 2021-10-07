@@ -2,179 +2,171 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1281425330
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Oct 2021 14:37:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C83D42575D
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Oct 2021 18:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241451AbhJGMjB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Oct 2021 08:39:01 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:51412 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241434AbhJGMi7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Oct 2021 08:38:59 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 197CaODu102544;
-        Thu, 7 Oct 2021 07:36:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1633610184;
-        bh=pzh+3XNNgPH1GP/1wHzKrd+ZroKZVBls9gsJCZis+JU=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=cjn3129sBIlzuiO/8ycZtPgG8ryjyYackfj93aA4F8Z6SzcNWqzEtYy9TNF5lRmXn
-         LRwLr5+PVbiV6z40GiKc7d/bE7VDbA2J6XA4qUd0Uh/qu3EH2R+1/BZPIUYeEBOvgB
-         ALbS99WeVpJ2swDcgvau3jR5sUjWnUpasgfWPNRA=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 197CaOPs078494
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 7 Oct 2021 07:36:24 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 7
- Oct 2021 07:36:24 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 7 Oct 2021 07:36:24 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 197CaNgM012093;
-        Thu, 7 Oct 2021 07:36:24 -0500
-Date:   Thu, 7 Oct 2021 18:06:23 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Lima <mauro.lima@eclypsium.com>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH 2/3] mtd: spi-nor: intel-spi: Convert to SPI MEM
-Message-ID: <20211007123621.ld4aqasr3hlwq2c7@ti.com>
-References: <20210930100719.2176-1-mika.westerberg@linux.intel.com>
- <20210930100719.2176-3-mika.westerberg@linux.intel.com>
- <20211004095239.dyowgkyq5lnfdag2@ti.com>
- <YVrSbyEsSLMOu1bU@lahna>
+        id S233479AbhJGQHV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Oct 2021 12:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233060AbhJGQHV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Oct 2021 12:07:21 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E18C061570
+        for <linux-spi@vger.kernel.org>; Thu,  7 Oct 2021 09:05:27 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mYVtd-0001M5-C9; Thu, 07 Oct 2021 18:05:25 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mYVtc-0006IE-Bj; Thu, 07 Oct 2021 18:05:24 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mYVtc-0007Vs-An; Thu, 07 Oct 2021 18:05:24 +0200
+Date:   Thu, 7 Oct 2021 18:05:24 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-spi@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@intel.com>
+Subject: Deadlock in spi_add_device() -- device core problem
+Message-ID: <20211007160524.qhjtcwtto2ftsmhe@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wmdllupxtv6jffp5"
 Content-Disposition: inline
-In-Reply-To: <YVrSbyEsSLMOu1bU@lahna>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 04/10/21 01:07PM, Mika Westerberg wrote:
-> Hi,
-> 
-> On Mon, Oct 04, 2021 at 03:22:41PM +0530, Pratyush Yadav wrote:
-> > On 30/09/21 01:07PM, Mika Westerberg wrote:
-> > > The preferred way to implement SPI-NOR controller drivers is through SPI
-> > > subsubsystem utilizing the SPI MEM core functions. This converts the
-> > > Intel SPI flash controller driver over the SPI MEM by moving the driver
-> > > from SPI-NOR subsystem to SPI subsystem and in one go make it use the
-> > > SPI MEM functions. The driver name will be changed from intel-spi to
-> > > spi-intel to match the convention used in the SPI subsystem.
-> > > 
-> > > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > > ---
-> > >  drivers/mtd/spi-nor/controllers/Kconfig       |  36 ---
-> > >  drivers/mtd/spi-nor/controllers/Makefile      |   3 -
-> > >  drivers/mtd/spi-nor/controllers/intel-spi.h   |  21 --
-> > >  drivers/spi/Kconfig                           |  38 +++
-> > >  drivers/spi/Makefile                          |   3 +
-> > >  .../intel-spi-pci.c => spi/spi-intel-pci.c}   |  20 +-
-> > >  .../spi-intel-platform.c}                     |  21 +-
-> > >  .../intel-spi.c => spi/spi-intel.c}           | 300 +++++++++++-------
-> > >  drivers/spi/spi-intel.h                       |  19 ++
-> > >  include/linux/mfd/lpc_ich.h                   |   2 +-
-> > >  .../x86/{intel-spi.h => spi-intel.h}          |   6 +-
-> > >  11 files changed, 252 insertions(+), 217 deletions(-)
-> > >  delete mode 100644 drivers/mtd/spi-nor/controllers/intel-spi.h
-> > >  rename drivers/{mtd/spi-nor/controllers/intel-spi-pci.c => spi/spi-intel-pci.c} (86%)
-> > >  rename drivers/{mtd/spi-nor/controllers/intel-spi-platform.c => spi/spi-intel-platform.c} (65%)
-> > >  rename drivers/{mtd/spi-nor/controllers/intel-spi.c => spi/spi-intel.c} (80%)
-> > >  create mode 100644 drivers/spi/spi-intel.h
-> > >  rename include/linux/platform_data/x86/{intel-spi.h => spi-intel.h} (89%)
-> > > 
-> > [...]
-> > > +static bool intel_spi_supports_mem_op(struct spi_mem *mem,
-> > > +				      const struct spi_mem_op *op)
-> > > +{
-> > > +	struct intel_spi *ispi = spi_master_get_devdata(mem->spi->master);
-> > >  
-> > > -			offs += erase_size;
-> > > -			len -= erase_size;
-> > > +	if (op->cmd.dtr)
-> > > +		return false;
-> > > +
-> > > +	if (ispi->swseq_reg && ispi->locked) {
-> > > +		int i;
-> > > +
-> > > +		for (i = 0; i < ARRAY_SIZE(ispi->opcodes); i++) {
-> > > +			if (ispi->opcodes[i] == op->cmd.opcode)
-> > > +				return true;
-> > >  		}
-> > >  
-> > > -		return 0;
-> > > +		return false;
-> > >  	}
-> > >  
-> > > -	/* Not needed with HW sequencer erase, make sure it is cleared */
-> > > -	ispi->atomic_preopcode = 0;
-> > > +	switch (op->cmd.opcode) {
-> > > +	case SPINOR_OP_RDID:
-> > > +	case SPINOR_OP_RDSR:
-> > > +	case SPINOR_OP_WRSR:
-> > > +		return true;
-> > >  
-> > > -	while (len > 0) {
-> > > -		writel(offs, ispi->base + FADDR);
-> > > +	case SPINOR_OP_READ:
-> > > +	case SPINOR_OP_READ_FAST:
-> > > +	case SPINOR_OP_READ_4B:
-> > > +	case SPINOR_OP_READ_FAST_4B:
-> > > +		return true;
-> > 
-> > I think the checks need to be stricter here. For example, I don't see 
-> > you pass in protocol width (dual, quad, octal, etc.) to intel_spi_read() 
-> > so I assume it can only do a certain protocol. You need to make sure 
-> > that other protocols are rejected here.
-> > 
-> > Similarly, you also don't pass in dummy cycles to intel_spi_read(), so I 
-> > assume it can only do a fix number of dummy cycles. Need to make sure 
-> > you reject unsupported ones. Same for other opcodes/cases.
-> 
-> Unfortunately there is no way to tell the controller any of these. It
-> simply does "read" or "write" (as we command it) and internally then
-> uses whatever it got from the SFDP tables of the flash chip. That's why
-> we just claim to support all these operations and let the controller do
-> its thing (whatever it is).
 
-That is not ideal. SPI NOR uses this to negotiate the best available 
-protocol with the controller. Say you have a flash that is capable of 
-octal mode but the controller can only support quad mode. Your driver 
-will happily tell SPI NOR that it can support octal mode. I think you 
-should check the SPI mode bits to make sure the protocol bus width is 
-supported at least (see spi_check_buswidth_req() in spi-mem.c).
+--wmdllupxtv6jffp5
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-As for opcodes, is there no way to find out what opcodes the controller 
-discovered via SFDP? Maybe we can't change them, but can we at least 
-take a peek at them?
+Hello,
 
-I think this has problems similar to the Cadence xSPI controller [0].
+On an ARM board with an spi-mux I observe a deadlock during boot. This
+happens because spi_add_device() (in drivers/spi/spi.c) for the spi-mux
+device calls device_add() while holding &spi_add_lock. The spi-mux
+driver's probe routine than creates another controller and for the
+devices on that bus spi_add_device() is called again, trying to grab
+&spi_add_lock again.
 
-Sorry I only replied to this after you posted a new version. It got lost 
-in the heap of emails in my inbox :-(
+The easy workaround would be to replace &spi_add_lock with a
+per-controller lock, but I have the expectation that it should be
+possible to not hold a lock while calling device_add().
 
-[0] https://patchwork.kernel.org/project/spi-devel-general/patch/1630499858-20456-1-git-send-email-pthombar@cadence.com/
+The difficulty (and the reason that this lock exists) is that it should
+be prevented that more than one device is added for a any chipselect.
+My first guess was, this check isn't necessary, because the devices are
+called $busname.$chipselect and a second device on the same bus with the
+same chipselect would fail when device_add() tries to create the
+duplicate name. However for devices instanciated by ACPI the naming is
+different (see spi_dev_set_name(), and commit b6fb8d3a1f15). Also there
+is a comment "We need to make sure there's no other device with this
+chipselect **BEFORE** we call setup(), else we'll trash its
+configuration." A problem there might be that spi_setup() might toggle
+the chipselect line (which is a problem if the chipselect polarity
+isn't the same for the two devices, or the earlier device is currently
+busy). Anything else?
 
-> 
-> Hope this clarifies.
+There is also a check:
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+	if (IS_ENABLED(CONFIG_SPI_DYNAMIC) &&
+	    !device_is_registered(&ctlr->dev)) {
+		return -NODEV;
+	}
+
+which catches the race that the controller (which is also the device's
+parent) is about to go while we try to add a new device to it. Is this a
+real problem? (The spi_unregister_controller() function unregisters all
+children which might race with adding a new child without locking. This
+check was implemented by Lukas Wunner (on Cc:) in commit ddf75be47ca7.)
+Doesn't all children of a given device are unregistered automatically by
+the device core somehow when said device is unregistered? (I checked,
+but didn't find anything.)
+
+Does this all sound about right? Greg, do you have a recommendation how
+to properly fix this problem?
+
+Best regards
+Uwe
+
+PS: For now the workaround is to have the spi-mux driver as a module.
+This way device_add() for the spi-mux device doesn't bind the driver and
+the function returns (but triggers a module load which then can bind the
+spi-mux device and create the new controller without a locking issue).
+
+For the record, the relevant device-tree snippet looks as follows:
+
+/ {
+	...
+        spimux: mux-controller {
+                compatible =3D "gpio-mux";
+                pinctrl-names =3D "default";
+                pinctrl-0 =3D <&pinctrl_spimux>;
+                #mux-control-cells =3D <0>;
+                mux-gpios =3D <&gpio3 19 GPIO_ACTIVE_HIGH>;
+        };
+};
+
+&ecspi2 {
+        pinctrl-names =3D "default";
+        pinctrl-0 =3D <&pinctrl_ecspi2>;
+        status =3D "okay";
+        #address-cells =3D <1>;
+        #size-cells =3D <0>;
+
+        spi@0 {
+                compatible =3D "spi-mux";
+                reg =3D <0>;
+                #address-cells =3D <1>;
+                #size-cells =3D <0>;
+                spi-max-frequency =3D <100000000>;
+                mux-controls =3D <&spimux>;
+
+                adc@0 {
+                        compatible =3D "ti,ads7953";
+                        reg =3D <0>;
+                        spi-max-frequency =3D <10000000>;
+                };
+
+                adc@1 {
+                        compatible =3D "ti,ads7953";
+                        reg =3D <1>;
+                        spi-max-frequency =3D <10000000>;
+                };
+        };
+};
+
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--wmdllupxtv6jffp5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFfGsAACgkQwfwUeK3K
+7Akfkgf+M5FY71vsc138Sj0jU9oIUq1bbKoT+7e+UBXWCU3eDzwWg4rZCDRVA3Kd
+vvaIOnxO6LBxLkmy9f42aCL8jpQ5jBpKsVH6DcX+n2AsKwkt88rLBcZCr1nn34R+
+2kTrtzET5wgAC1DB2Q0CNoEa0fDnmPhrwUubeZjxUmB7RMvUrJugpIfd1Q0itC3J
+Yc4zwoqjAPctimK/rsV9DIzAsmLF2YSCs7LOCG7BlLdotSrGf9ZiCNhVkpvsWP2U
+NbQJt5YGMFdNmK1dYsT6LpAz5oTqIQlmFe2GLFOf+oIB1dDt89UfxX3wNOrxzwQ1
+VWwhJPL+jjR6n2x1WONjc6Dl6bjJxg==
+=1+Ec
+-----END PGP SIGNATURE-----
+
+--wmdllupxtv6jffp5--
