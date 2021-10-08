@@ -2,93 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2548C427189
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Oct 2021 21:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B50427260
+	for <lists+linux-spi@lfdr.de>; Fri,  8 Oct 2021 22:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241539AbhJHTvB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 Oct 2021 15:51:01 -0400
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:38668 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241337AbhJHTu7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Oct 2021 15:50:59 -0400
-Received: by mail-ot1-f42.google.com with SMTP id w10-20020a056830280a00b0054e4e6c85a6so3957104otu.5;
-        Fri, 08 Oct 2021 12:49:04 -0700 (PDT)
+        id S242193AbhJHUiH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 8 Oct 2021 16:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231684AbhJHUiE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Oct 2021 16:38:04 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BD3C061570;
+        Fri,  8 Oct 2021 13:36:09 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id r201so4186561pgr.4;
+        Fri, 08 Oct 2021 13:36:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=eKNj33ROPAiiz6HEb1YbJ/psL1Dxl8l7bxVvQctQgPA=;
+        b=limhVz1+VVawgNLASfhlTm+35N+voLYk3l8qQns9SRaJ0Uvo2n2Qy2q4zezA19GPwY
+         DIr3lzFHajXy6tTHHDxrEkRdplYYciKTR7KvlIvKy4ALx43qYxnbHVpjc/8NzH71dUwY
+         DuemGhHyVvmVaLw/c7hleZ2X2x4cQYStNlPWi6+rrMnwAabN8bzYiNpyKQ9JdqQWGSdC
+         yM3hE/z4iqBaM/IcVfZIsAV7TuaknieOipv53RILqIrrTSJl0EaUyNINXWXj+FVtQdUd
+         y5rcSquxKEA6HHUZm9W1fgp6+1i0jAbdur2R0YOimgwz2VNRa64coNLvFzJbDNwDXYzl
+         HSdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=TCu09rsdz9qaZNlW814ROPgBIe73GMu1odd3xsCgFZE=;
-        b=VcYYbtWAqaNCDh0qkoFH/5sywPVtYzckZbRNKNV4iJ/jkLgmPVdTkvz72gQK38ABa4
-         cBJsXB/Ps5bzIK7ih1RSF/5kURU4u+Xvmp5qN7GtJhJE2fKysjMm3q191DsEg6K1AiTP
-         zZGNVtB3TUrJImR3PofQ3b5dFOzuc0t9CwtDgTM5g+63MM2EyLrvNX5nge/7GOIh3AqX
-         HV6zA+HoX7+ZCFGjXbyUqTmeE2+Rzncb4JB0iLNRBm9XXDRIjEKawSm6iGqgmsj81RMq
-         NnB98+REd7c42ls+z6Df/5Qqvk/8CBhKlUCa44v2vOK1845MuzZfiLR2Je6CxB8IlcrY
-         hwSg==
-X-Gm-Message-State: AOAM531YxOKU7AhxcoTIyvxk+/GOJB7go0kHitTGtY2YubpXu3hkhehX
-        yesDGfDKV7Rv9zzHKCs72HRKuAigVw==
-X-Google-Smtp-Source: ABdhPJyooYbBa5WC5aVtNl1rU8mTcfgxB8u7iK9YF1J28Lc/pabtIK+ms2WbyxzEMrlWnTKOqLWGGQ==
-X-Received: by 2002:a9d:3b2:: with SMTP id f47mr10405415otf.253.1633722543650;
-        Fri, 08 Oct 2021 12:49:03 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id b19sm57350otk.75.2021.10.08.12.49.02
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=eKNj33ROPAiiz6HEb1YbJ/psL1Dxl8l7bxVvQctQgPA=;
+        b=pckmTDaJtH58zpBiQ4W5ZRMewcdttoDEUjXA8OfHP3vTtt8qgL/tclVBHOXgP50JHs
+         ml2CP7ZGb2Y4zeEW+sSO5PyyXelFC0OfzPsP1gx+NO9W6SBEhtkTWMlYeo1POWPvVxss
+         I9HwcrN3s/IguwkX/ohl00Do4Q+nKxMf9hb9JPBqT2Hxz+OHgI0hE33fwbJ9gKFzUuGr
+         F3L5/AmhEoKyTVUxR8HZtMf/jpakZjxnj6HmQZOSfsh0PDKEXpIbQR5Fz1BXqgCoeUfC
+         yGAbRHEdxlw+Na48liDoJjVyqgRwRejSZAoIx+yI5nc3PQWCtwOLCE5LhsnKyaWK6eIP
+         z6jg==
+X-Gm-Message-State: AOAM533tSE3LyoPS8NR3sdu/+2GPHHu9g+aNtCzaRRdN73doSjg0OptU
+        DI5JIBub4RdqaQr7uQh/QUE=
+X-Google-Smtp-Source: ABdhPJw0/Y+yqIdnZvvAAvO/mtivKW7bElITB5mgrMqwNTzNeU8/gtcJ457vpkHJH8+B1sg5pV9XQg==
+X-Received: by 2002:a62:6541:0:b0:44c:2988:7d9d with SMTP id z62-20020a626541000000b0044c29887d9dmr12070013pfb.50.1633725368615;
+        Fri, 08 Oct 2021 13:36:08 -0700 (PDT)
+Received: from mail.broadcom.net ([192.19.231.250])
+        by smtp.gmail.com with ESMTPSA id q6sm117615pjd.26.2021.10.08.13.36.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Oct 2021 12:49:03 -0700 (PDT)
-Received: (nullmailer pid 3211955 invoked by uid 1000);
-        Fri, 08 Oct 2021 19:48:56 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        linux-spi@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        jaimeliao@mxic.com.tw, Rob Herring <robh+dt@kernel.org>,
-        juliensu@mxic.com.tw, Xiangsheng Hou <Xiangsheng.Hou@mediatek.com>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Boris Brezillon <bbrezillon@kernel.org>
-In-Reply-To: <20211008162228.1753083-5-miquel.raynal@bootlin.com>
-References: <20211008162228.1753083-1-miquel.raynal@bootlin.com> <20211008162228.1753083-5-miquel.raynal@bootlin.com>
-Subject: Re: [RFC PATCH 04/10] dt-bindings: mtd: Describe Macronix NAND ECC engine
-Date:   Fri, 08 Oct 2021 14:48:56 -0500
-Message-Id: <1633722536.880854.3211954.nullmailer@robh.at.kernel.org>
+        Fri, 08 Oct 2021 13:36:08 -0700 (PDT)
+From:   Kamal Dasu <kdasu.kdev@gmail.com>
+To:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        yendapally.reddy@broadcom.com, Kamal Dasu <kdasu.kdev@gmail.com>
+Subject: [PATCH 0/3] spi-bcm-qspi spcr3 enahancements
+Date:   Fri,  8 Oct 2021 16:36:00 -0400
+Message-Id: <20211008203603.40915-1-kdasu.kdev@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 08 Oct 2021 18:22:22 +0200, Miquel Raynal wrote:
-> Describe Macronix NAND ECC engine. This engine may be used as an
-> external engine or pipelined, both ways are shown in the examples.
-> 
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
->  .../bindings/mtd/mxic,nand-ecc-engine.yaml    | 78 +++++++++++++++++++
->  1 file changed, 78 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mtd/mxic,nand-ecc-engine.yaml
-> 
+This change set feature enahancements for spcr3 transfer modes as well as
+adds support for half-duplex 3-wire mode transfer. 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Kamal Dasu (3):
+  spi: bcm-qspi: Add mspi spcr3 32/64-bits xfer mode
+  spi: bcm-qspi: clear MSPI spifie interrupt during probe
+  spi: bcm-qspi: add support for 3-wire mode for half duplex transfer
 
-yamllint warnings/errors:
+ drivers/spi/spi-bcm-qspi.c | 262 +++++++++++++++++++++++++++++--------
+ 1 file changed, 208 insertions(+), 54 deletions(-)
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/mtd/mxic,nand-ecc-engine.example.dt.yaml:0:0: /example-0/spi@43c30000: failed to match any schema with compatible: ['mxicy,mx25f0a-spi']
-Documentation/devicetree/bindings/mtd/mxic,nand-ecc-engine.example.dt.yaml:0:0: /example-0/spi@43c30000/flash@0: failed to match any schema with compatible: ['spi-nand']
-Documentation/devicetree/bindings/mtd/mxic,nand-ecc-engine.example.dt.yaml:0:0: /example-1/spi@43c30000: failed to match any schema with compatible: ['mxicy,mx25f0a-spi']
-Documentation/devicetree/bindings/mtd/mxic,nand-ecc-engine.example.dt.yaml:0:0: /example-1/spi@43c30000/flash@0: failed to match any schema with compatible: ['spi-nand']
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1538445
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+-- 
+2.17.1
 
