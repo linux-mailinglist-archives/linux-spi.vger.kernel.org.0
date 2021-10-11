@@ -2,47 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5EA8428DDB
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Oct 2021 15:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A68428DCC
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Oct 2021 15:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236920AbhJKNaP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 11 Oct 2021 09:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57914 "EHLO
+        id S236883AbhJKNaL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 Oct 2021 09:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236909AbhJKNaN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Oct 2021 09:30:13 -0400
+        with ESMTP id S235427AbhJKNaK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Oct 2021 09:30:10 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2826AC061570
-        for <linux-spi@vger.kernel.org>; Mon, 11 Oct 2021 06:28:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBD3C061570
+        for <linux-spi@vger.kernel.org>; Mon, 11 Oct 2021 06:28:10 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1mZvLZ-0006fk-Rm; Mon, 11 Oct 2021 15:28:05 +0200
+        id 1mZvLZ-0006fl-Rm; Mon, 11 Oct 2021 15:28:05 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1mZvLV-0003nj-Jv; Mon, 11 Oct 2021 15:28:01 +0200
+        id 1mZvLV-0003nm-Pk; Mon, 11 Oct 2021 15:28:01 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1mZvLV-0000SM-IV; Mon, 11 Oct 2021 15:28:01 +0200
+        id 1mZvLV-0000SY-Or; Mon, 11 Oct 2021 15:28:01 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Michael Hennerich <michael.hennerich@analog.com>
 Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        kernel@pengutronix.de, linux-hwmon@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH 02/13] hwmon: adt7x10: Make adt7x10_remove() return void
-Date:   Mon, 11 Oct 2021 15:27:43 +0200
-Message-Id: <20211011132754.2479853-3-u.kleine-koenig@pengutronix.de>
+        kernel@pengutronix.de, linux-input@vger.kernel.org
+Subject: [PATCH 03/13] hwmon: max31722: Warn about failure to put device in stand-by in .remove()
+Date:   Mon, 11 Oct 2021 15:27:44 +0200
+Message-Id: <20211011132754.2479853-4-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
 References: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Patch-Hashes: v=1; h=sha256; i=9He6IzxzqlwCNrbyaU2x86Wz9NsT7rj1rB/U0CelTbM=; m=sqMkzU6U6DMEQr1FURiCM0wFSKVmXZBD0WH+KO+1n50=; p=rpCXoueXF+/6M5DW7UDuOw4hNFSeIvhyHopZtckbJ3w=; g=2d545779f4e06d7b6e6fcd09bcf283a1e608db9e
-X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFkO2QACgkQwfwUeK3K7AkjnQgAk4b 1Rvls6cwIr+4vW5HtNajvUcDh6lULZQr6IxuFUnLBPRRn1QJTVfZ2ewagA+CZrkJ4IKVmtrbgmyYP c/nbeI7q+g3rwO5zz8bGfVuapP0XDyphhZbYzrPVeRM6LUV5eMjRapmn7oQ6e1liFg7HKwRavTu8E o1dOzdvbynwLKR0JOfqMe+P6UAWz/wqodCr2KYVkwV9lAAYjk1j3Ec8oQSpWtJrsN08alEgOd2Ur2 BkmUvURPWU4JrEx/+s3SdNcdXYC4uNieVSXLY86kQGOqtZuVA4mVniONSeBxEQ03PjwNUy/vTh986 KWM+uKI6ffi0jPn1+VNcnFSUhjsEMpQ==
+X-Patch-Hashes: v=1; h=sha256; i=VzmQt12yOkne619FyHfm2Mxhtg4zmARLaeg/MgRfc80=; m=aWXlVn4zGl3/VNxE8xQ1auTXzJiWk3xyQCYCHspYcNI=; p=bBkC2gJ5XT8B1VAvVS6dFZGhwZYy9lCY9z6NFqcALPQ=; g=d02ecae4dfa3faae03d9f4b8b4e5ec93f10e7ffd
+X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFkO2cACgkQwfwUeK3K7AkJkQf/d8U yHMvMyz0ffMQjQqW0ADJLpB09mX0yAHgIaaD4LM5FukQm4eIXs4cEegpUVbDEmv6gkX46ywqsYIyL 7ViGaPQvWOoKtazVkw/TURoUQQtyA5BCMEkbt/EiODDmVjFv2cWZ1cVEJrixcM+HRJKX8ItVBps9N 7DylYuo97rM8xeiO9WKhUNQWgMdhO6HFknydofJzV23cwjwdTbmdRgcsiy+3sNQb7CwN7WfsPKlQM gygO4cB2Snbqpo/rHigiIFO9u2MwgghN/F/IhsonfsaLPNpb3XVet7SuKygejaa0J2nvOHRC0MKD7 wEbm9VTQ9Q3ZmabMsuc4hHyv+VrzIWQ==
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ukl@pengutronix.de
@@ -52,82 +51,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Up to now adt7x10_remove() returns zero unconditionally. Make it return
-void instead which makes it easier to see in the callers that there is
-no error to handle.
-
-Also the return value of i2c and spi remove callbacks is ignored anyway.
+When an spi driver's remove function returns a non-zero error code
+nothing happens apart from emitting a generic error message. Make this
+error message more device specific and return zero instead.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/hwmon/adt7310.c | 3 ++-
- drivers/hwmon/adt7410.c | 3 ++-
- drivers/hwmon/adt7x10.c | 3 +--
- drivers/hwmon/adt7x10.h | 2 +-
- 4 files changed, 6 insertions(+), 5 deletions(-)
+ drivers/hwmon/max31722.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/adt7310.c b/drivers/hwmon/adt7310.c
-index 9fad01191620..c40cac16af68 100644
---- a/drivers/hwmon/adt7310.c
-+++ b/drivers/hwmon/adt7310.c
-@@ -90,7 +90,8 @@ static int adt7310_spi_probe(struct spi_device *spi)
- 
- static int adt7310_spi_remove(struct spi_device *spi)
+diff --git a/drivers/hwmon/max31722.c b/drivers/hwmon/max31722.c
+index 613338cbcb17..4cf4fe6809a3 100644
+--- a/drivers/hwmon/max31722.c
++++ b/drivers/hwmon/max31722.c
+@@ -103,10 +103,16 @@ static int max31722_probe(struct spi_device *spi)
+ static int max31722_remove(struct spi_device *spi)
  {
--	return adt7x10_remove(&spi->dev, spi->irq);
-+	adt7x10_remove(&spi->dev, spi->irq);
+ 	struct max31722_data *data = spi_get_drvdata(spi);
++	int ret;
+ 
+ 	hwmon_device_unregister(data->hwmon_dev);
+ 
+-	return max31722_set_mode(data, MAX31722_MODE_STANDBY);
++	ret = max31722_set_mode(data, MAX31722_MODE_STANDBY);
++	if (ret)
++		/* There is nothing we can do about this ... */
++		dev_warn(&spi->dev, "Failed to put device in stand-by mode\n");
++
 +	return 0;
  }
  
- static const struct spi_device_id adt7310_id[] = {
-diff --git a/drivers/hwmon/adt7410.c b/drivers/hwmon/adt7410.c
-index 9d80895d0266..973db057427b 100644
---- a/drivers/hwmon/adt7410.c
-+++ b/drivers/hwmon/adt7410.c
-@@ -50,7 +50,8 @@ static int adt7410_i2c_probe(struct i2c_client *client)
- 
- static int adt7410_i2c_remove(struct i2c_client *client)
- {
--	return adt7x10_remove(&client->dev, client->irq);
-+	adt7x10_remove(&client->dev, client->irq);
-+	return 0;
- }
- 
- static const struct i2c_device_id adt7410_ids[] = {
-diff --git a/drivers/hwmon/adt7x10.c b/drivers/hwmon/adt7x10.c
-index 3f03b4cf5858..e9d33aa78a19 100644
---- a/drivers/hwmon/adt7x10.c
-+++ b/drivers/hwmon/adt7x10.c
-@@ -444,7 +444,7 @@ int adt7x10_probe(struct device *dev, const char *name, int irq,
- }
- EXPORT_SYMBOL_GPL(adt7x10_probe);
- 
--int adt7x10_remove(struct device *dev, int irq)
-+void adt7x10_remove(struct device *dev, int irq)
- {
- 	struct adt7x10_data *data = dev_get_drvdata(dev);
- 
-@@ -457,7 +457,6 @@ int adt7x10_remove(struct device *dev, int irq)
- 	sysfs_remove_group(&dev->kobj, &adt7x10_group);
- 	if (data->oldconfig != data->config)
- 		adt7x10_write_byte(dev, ADT7X10_CONFIG, data->oldconfig);
--	return 0;
- }
- EXPORT_SYMBOL_GPL(adt7x10_remove);
- 
-diff --git a/drivers/hwmon/adt7x10.h b/drivers/hwmon/adt7x10.h
-index 21ad15ce3163..a1ae682eb32e 100644
---- a/drivers/hwmon/adt7x10.h
-+++ b/drivers/hwmon/adt7x10.h
-@@ -26,7 +26,7 @@ struct adt7x10_ops {
- 
- int adt7x10_probe(struct device *dev, const char *name, int irq,
- 	const struct adt7x10_ops *ops);
--int adt7x10_remove(struct device *dev, int irq);
-+void adt7x10_remove(struct device *dev, int irq);
- 
- #ifdef CONFIG_PM_SLEEP
- extern const struct dev_pm_ops adt7x10_dev_pm_ops;
+ static int __maybe_unused max31722_suspend(struct device *dev)
 -- 
 2.30.2
 
