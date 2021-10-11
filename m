@@ -2,85 +2,148 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6EAE42950F
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Oct 2021 19:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739C2429840
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Oct 2021 22:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232098AbhJKRDs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 11 Oct 2021 13:03:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46108 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231646AbhJKRDs (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 11 Oct 2021 13:03:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 65D1D60F3A;
-        Mon, 11 Oct 2021 17:01:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633971707;
-        bh=trunSQKQ2GIzOU7WZWO6vf/702Eas0ZSDgsLldNfWME=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Un+XWCdt8ORuG5rRWlbwLJYki3/NppsyktKShn1HHWT4O/1HiOxRtQIo2RP5TsoBo
-         X4gDpM/LxeaKuUJcy4wmXksc4baiXB4dPamcE6/vFEQEcgD2NA1tUsfwFlKiPQUlSB
-         s0p44T+GmDfvrArFDo9C/E526zwuGKwQJaEMebVpOg1Ytc/C98cwpEQ9wm8ngc+j9o
-         IposvsmSNYYJto56ZsAdbUBLfc0VJ7nbvhB0HwOPgC9R4FJd5Qj+sCEKzdV6rEfBQw
-         WIVQOWLooIjQhyN7Y51rt9D38/FZ3VL9paSDh6UBaa9GZrjFmVsHFM1ja/ye0dkxAM
-         ifWdpo2+DV9uQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        yendapally.reddy@broadcom.com, f.fainelli@gmail.com
-Subject: Re: [PATCH 0/3] spi-bcm-qspi spcr3 enahancements
-Date:   Mon, 11 Oct 2021 18:01:38 +0100
-Message-Id: <163397094904.6819.8623150916603608652.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211008203603.40915-1-kdasu.kdev@gmail.com>
-References: <20211008203603.40915-1-kdasu.kdev@gmail.com>
+        id S234524AbhJKUor (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 Oct 2021 16:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45594 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229627AbhJKUoq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Oct 2021 16:44:46 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10723C061570
+        for <linux-spi@vger.kernel.org>; Mon, 11 Oct 2021 13:42:46 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ma27j-0006Dn-4t; Mon, 11 Oct 2021 22:42:15 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ma27c-0003x4-Pt; Mon, 11 Oct 2021 22:42:08 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ma27c-0001bN-Nd; Mon, 11 Oct 2021 22:42:08 +0200
+Date:   Mon, 11 Oct 2021 22:42:07 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-serial@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-spi@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>,
+        "Jason Gunthorpe linux-integrity @ vger . kernel . org" 
+        <jgg@ziepe.ca>, Mark Brown <broonie@kernel.org>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        linux-input@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH 00/13] Make some spi device drivers return zero in
+ .remove()
+Message-ID: <20211011204207.zfmofwf4d6ga45ao@pengutronix.de>
+References: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4crg6rmgkslx3kie"
+Content-Disposition: inline
+In-Reply-To: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 8 Oct 2021 16:36:00 -0400, Kamal Dasu wrote:
-> This change set feature enahancements for spcr3 transfer modes as well as
-> adds support for half-duplex 3-wire mode transfer.
-> 
-> Kamal Dasu (3):
->   spi: bcm-qspi: Add mspi spcr3 32/64-bits xfer mode
->   spi: bcm-qspi: clear MSPI spifie interrupt during probe
->   spi: bcm-qspi: add support for 3-wire mode for half duplex transfer
-> 
-> [...]
 
-Applied to
+--4crg6rmgkslx3kie
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Hello,
 
-Thanks!
+On Mon, Oct 11, 2021 at 03:27:41PM +0200, Uwe Kleine-K=F6nig wrote:
+> this series is part of my new quest to make spi remove callbacks return
+> void. Today they return an int, but the only result of returning a
+> non-zero value is a warning message. So it's a bad idea to return an
+> error code in the expectation that not freeing some resources is ok
+> then. The same holds true for i2c and platform devices which benefit en
+> passant for a few drivers.
+>=20
+> The patches in this series address some of the spi drivers that might
+> return non-zero and adapt them accordingly to return zero instead. For
+> most drivers it's just about not hiding the fact that they already
+> return zero.
+>=20
+> Given that there are quite some more patches of this type to create
+> before I can change the spi remove callback, I suggest the respecive
+> subsystem maintainers pick up these patches. There are no
+> interdependencies in this series.
+>=20
+> Uwe Kleine-K=F6nig (13):
+>   drm/panel: s6e63m0: Make s6e63m0_remove() return void
+>   hwmon: adt7x10: Make adt7x10_remove() return void
+>   hwmon: max31722: Warn about failure to put device in stand-by in
+>     .remove()
+>   input: adxl34xx: Make adxl34x_remove() return void
+>   input: touchscreen: tsc200x: Make tsc200x_remove() return void
+>   media: cxd2880: Eliminate dead code
+>   mfd: mc13xxx: Make mc13xxx_common_exit() return void
+>   mfd: stmpe: Make stmpe_remove() return void
+>   mfd: tps65912: Make tps65912_device_exit() return void
+>   serial: max310x: Make max310x_remove() return void
+>   serial: sc16is7xx: Make sc16is7xx_remove() return void
+>   staging: fbtft: Make fbtft_remove_common() return void
+>   tpm: st33zp24: Make st33zp24_remove() return void
 
-[1/3] spi: bcm-qspi: Add mspi spcr3 32/64-bits xfer mode
-      commit: ee4d62c47326c69e57180da53c057e55f0e73e35
-[2/3] spi: bcm-qspi: clear MSPI spifie interrupt during probe
-      commit: 75b3cb97eb1f05042745c0655a7145b0262d4c5c
-[3/3] spi: bcm-qspi: add support for 3-wire mode for half duplex transfer
-      commit: e81cd07dcf50ef4811f6667dba89c5614278cbdd
+I thought I would be a good enough programmer to not need build tests.
+Obviously I was wrong and introduced build problems with the following
+patches:
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+	input: touchscreen: tsc200x: Make tsc200x_remove() return void
+	mfd: mc13xxx: Make mc13xxx_common_exit() return void
+	serial: max310x: Make max310x_remove() return void
+	serial: sc16is7xx: Make sc16is7xx_remove() return void
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Please don't apply these (unless you also fix the trivial problems in
+them). I will prepare a v2 soon.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Best regards and sorry for the inconvenience,
+Uwe
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-Thanks,
-Mark
+--4crg6rmgkslx3kie
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFkoZsACgkQwfwUeK3K
+7AkTugf9FW8u+Q+uOdqyv/dig5mZMoKZ01YqhMcNB1hLm+NpjtUVPs0yR3CgUTq2
+lhQH+cy+0zeuFQEuyDRBXSLYHuSJJKVES8CBrpN960wFh6WaLLKLet8ri0sBJRe3
+gakaZ/TcwPP4RwY/f1V4w/APWuU3or8dviF7hasfFR+D8tIMK+Wgi0LbdWMQIRHf
+P9T60rK5sOnHH33Kksf5stqLxdk06MBHzwJV15PhzWc0TUQAmO+oG0FDfxq+C8tQ
+8lXq6dtxtEMlzLhtLsBBHoUegGR/XbnKUmxT6kC0nO+G88xCYTO+BBjIGacAxhmQ
+2mK/fRgMytsTSX41qXejUgp6TuoW+Q==
+=mP11
+-----END PGP SIGNATURE-----
+
+--4crg6rmgkslx3kie--
