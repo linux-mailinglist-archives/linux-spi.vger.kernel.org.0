@@ -2,148 +2,132 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 739C2429840
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Oct 2021 22:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C79429854
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Oct 2021 22:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234524AbhJKUor (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 11 Oct 2021 16:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45594 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbhJKUoq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Oct 2021 16:44:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10723C061570
-        for <linux-spi@vger.kernel.org>; Mon, 11 Oct 2021 13:42:46 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ma27j-0006Dn-4t; Mon, 11 Oct 2021 22:42:15 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ma27c-0003x4-Pt; Mon, 11 Oct 2021 22:42:08 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ma27c-0001bN-Nd; Mon, 11 Oct 2021 22:42:08 +0200
-Date:   Mon, 11 Oct 2021 22:42:07 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-serial@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-spi@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>,
-        "Jason Gunthorpe linux-integrity @ vger . kernel . org" 
-        <jgg@ziepe.ca>, Mark Brown <broonie@kernel.org>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        linux-input@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH 00/13] Make some spi device drivers return zero in
- .remove()
-Message-ID: <20211011204207.zfmofwf4d6ga45ao@pengutronix.de>
-References: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
+        id S234979AbhJKUsr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 Oct 2021 16:48:47 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:51000 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234918AbhJKUsq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Oct 2021 16:48:46 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 19BKkRYX058438;
+        Mon, 11 Oct 2021 15:46:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1633985187;
+        bh=aREyONMOYnqRN8v42O2++VQ4QoXlpiSb4xj0cGMxL0U=;
+        h=From:To:CC:Subject:Date;
+        b=XzwSqtA7XhUvLhbISa+tUaTG5Ll0BqlsAkgQzJibz7r4dM5tYKnptnHcTBfB1XpQd
+         ihj8nNbkPCiCx633voyYjudC1q3sg6QHuLh7tuK4U3wg1GAHWl72yKZ25VfNmoHLV8
+         fs0M/5ILEQaf8WZarUu17WCHa3sAsLXe22MIf+F4=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 19BKkRbK104929
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 11 Oct 2021 15:46:27 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 11
+ Oct 2021 15:46:26 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 11 Oct 2021 15:46:26 -0500
+Received: from LT5CD112GSQZ.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 19BKkKEe069811;
+        Mon, 11 Oct 2021 15:46:21 -0500
+From:   Apurva Nandan <a-nandan@ti.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        Apurva Nandan <a-nandan@ti.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>
+CC:     <p.yadav@ti.com>
+Subject: [PATCH v2 00/14] mtd: spinand: Add Octal DTR SPI (8D-8D-8D) mode support
+Date:   Tue, 12 Oct 2021 02:16:05 +0530
+Message-ID: <20211011204619.81893-1-a-nandan@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4crg6rmgkslx3kie"
-Content-Disposition: inline
-In-Reply-To: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi,
+This series proposes patches for adding the following functionality
+in SPI NAND core:
 
---4crg6rmgkslx3kie
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+- Octal DTR SPI (8D-8D-8D) mode support
 
-Hello,
+- Winbond W35N01JW SPI NAND chip support
 
-On Mon, Oct 11, 2021 at 03:27:41PM +0200, Uwe Kleine-K=F6nig wrote:
-> this series is part of my new quest to make spi remove callbacks return
-> void. Today they return an int, but the only result of returning a
-> non-zero value is a warning message. So it's a bad idea to return an
-> error code in the expectation that not freeing some resources is ok
-> then. The same holds true for i2c and platform devices which benefit en
-> passant for a few drivers.
->=20
-> The patches in this series address some of the spi drivers that might
-> return non-zero and adapt them accordingly to return zero instead. For
-> most drivers it's just about not hiding the fact that they already
-> return zero.
->=20
-> Given that there are quite some more patches of this type to create
-> before I can change the spi remove callback, I suggest the respecive
-> subsystem maintainers pick up these patches. There are no
-> interdependencies in this series.
->=20
-> Uwe Kleine-K=F6nig (13):
->   drm/panel: s6e63m0: Make s6e63m0_remove() return void
->   hwmon: adt7x10: Make adt7x10_remove() return void
->   hwmon: max31722: Warn about failure to put device in stand-by in
->     .remove()
->   input: adxl34xx: Make adxl34x_remove() return void
->   input: touchscreen: tsc200x: Make tsc200x_remove() return void
->   media: cxd2880: Eliminate dead code
->   mfd: mc13xxx: Make mc13xxx_common_exit() return void
->   mfd: stmpe: Make stmpe_remove() return void
->   mfd: tps65912: Make tps65912_device_exit() return void
->   serial: max310x: Make max310x_remove() return void
->   serial: sc16is7xx: Make sc16is7xx_remove() return void
->   staging: fbtft: Make fbtft_remove_common() return void
->   tpm: st33zp24: Make st33zp24_remove() return void
+- Power-on-Reset instruction support
 
-I thought I would be a good enough programmer to not need build tests.
-Obviously I was wrong and introduced build problems with the following
-patches:
+This series has been tested on TI J721e EVM with the Winbond W35N01JW
+flash with following test utilities:
 
-	input: touchscreen: tsc200x: Make tsc200x_remove() return void
-	mfd: mc13xxx: Make mc13xxx_common_exit() return void
-	serial: max310x: Make max310x_remove() return void
-	serial: sc16is7xx: Make sc16is7xx_remove() return void
+- nandtest
+  Test log: https://textbin.net/raw/fhypoz63f9
 
-Please don't apply these (unless you also fix the trivial problems in
-them). I will prepare a v2 soon.
+- mtd_stresstest
+  Test log: https://textbin.net/raw/0xqjmqntj7
 
-Best regards and sorry for the inconvenience,
-Uwe
+- UBIFS LTP stress test (NAND_XL_STRESS_DD_RW_UBIFS).
+  Test log: https://textbin.net/raw/pyokws7wku
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Datasheet: https://www.winbond.com/export/sites/winbond/datasheet/W35N01JW_Datasheet_Brief.pdf
 
---4crg6rmgkslx3kie
-Content-Type: application/pgp-signature; name="signature.asc"
+---
+Changes in v2:
 
------BEGIN PGP SIGNATURE-----
+- Removed *_ALL_ARGS() macros from spi-mem.h, and redefined DTR macros.
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFkoZsACgkQwfwUeK3K
-7AkTugf9FW8u+Q+uOdqyv/dig5mZMoKZ01YqhMcNB1hLm+NpjtUVPs0yR3CgUTq2
-lhQH+cy+0zeuFQEuyDRBXSLYHuSJJKVES8CBrpN960wFh6WaLLKLet8ri0sBJRe3
-gakaZ/TcwPP4RwY/f1V4w/APWuU3or8dviF7hasfFR+D8tIMK+Wgi0LbdWMQIRHf
-P9T60rK5sOnHH33Kksf5stqLxdk06MBHzwJV15PhzWc0TUQAmO+oG0FDfxq+C8tQ
-8lXq6dtxtEMlzLhtLsBBHoUegGR/XbnKUmxT6kC0nO+G88xCYTO+BBjIGacAxhmQ
-2mK/fRgMytsTSX41qXejUgp6TuoW+Q==
-=mP11
------END PGP SIGNATURE-----
+- Renamed spinand_setup_op() to spinand_patch_op(). Reduced one
+  conditional check from this function. Had to keep tweaking in hot-path
+  to avoid complicated implementation "hacks".
 
---4crg6rmgkslx3kie--
+- Changes in commit messages and added comments.
+
+- Dropped "Reject 8D-8D-8D op_templates if octal_dtr_enale() is
+  missing in manufacturer_op" patch.
+
+- Reduced PoR reset delay.
+
+- Splitted "mtd: spinand: Add support for Winbond W35N01JW SPI NAND
+  flash" into 3 independent patches.
+
+Apurva Nandan (14):
+  spi: spi-mem: Add DTR templates for cmd, address, dummy and data phase
+  mtd: spinand: Add enum spinand_proto to indicate current SPI IO mode
+  mtd: spinand: Patch spi_mem_op for the SPI IO protocol using reg_proto
+  mtd: spinand: Fix odd byte addr and data phase in read and write reg
+    op for Octal DTR mode
+  mtd: spinand: Add adjust_op() in manufacturer_ops to modify the ops
+    for manufacturer specific changes
+  mtd: spinand: Add macros for Octal DTR page read and write operations
+  mtd: spinand: Allow enabling Octal DTR mode in the core
+  mtd: spinand: winbond: Add support for write volatile configuration
+    register op
+  mtd: spinand: winbond: Add octal_dtr_enable() for manufacturer_ops
+  mtd: spinand: Add support for Power-on-Reset (PoR) instruction
+  mtd: spinand: Perform Power-on-Reset on the flash in mtd_suspend()
+  mtd: spinand: Add adjust_op() in Winbond manufacturer_ops
+  mtd: spinand: winbond: Rename cache op_variants struct variable
+  mtd: spinand: winbond: Add support for Winbond W35N01JW SPI NAND flash
+
+ drivers/mtd/nand/spi/core.c    | 187 +++++++++++++++++++++++++++++-
+ drivers/mtd/nand/spi/winbond.c | 200 +++++++++++++++++++++++++++++++--
+ include/linux/mtd/spinand.h    |  67 +++++++++++
+ include/linux/spi/spi-mem.h    |  41 +++++++
+ 4 files changed, 484 insertions(+), 11 deletions(-)
+
+-- 
+2.25.1
+
