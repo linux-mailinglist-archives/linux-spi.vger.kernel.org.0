@@ -2,105 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E621242732F
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Oct 2021 23:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46FF3428555
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Oct 2021 04:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243501AbhJHVt4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 Oct 2021 17:49:56 -0400
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:40786 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243487AbhJHVt4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Oct 2021 17:49:56 -0400
-Received: by mail-oi1-f175.google.com with SMTP id n63so15456961oif.7;
-        Fri, 08 Oct 2021 14:48:00 -0700 (PDT)
+        id S233264AbhJKCz4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 10 Oct 2021 22:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230273AbhJKCz4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 10 Oct 2021 22:55:56 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3165C061570;
+        Sun, 10 Oct 2021 19:53:56 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id w8so6005076qts.4;
+        Sun, 10 Oct 2021 19:53:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=pj5HBnFcZA/xKYVwuzYYzAMrAn6DXpDKGRmEk0FzL1U=;
+        b=bV7R/FZZMk8LUf2D8rP78AkNTQu1a/LWKbg9vfghopUxI3yg8aVKImXkbK5dDfWy2Q
+         ek5KHRhrhGYWYv2Ht/lTyklsdu3XjX7OxOeQD4VUUMIvoGhlvsVABSLIxr+NyMT3jLjx
+         oz1USrrNURY5v4jQCqR0mjVLNZS05MEhDnNlrOErPGEzgyBIL+WNX4F90vUINTWzOFJC
+         Y+AnQsSmd+4Ub/UY9FTOIzszFuS+s9VhEOm8eF0IgiMI/OoGv4VqI6FKI9yt5HnLrjFX
+         BlHIknSOSqeJv5SLN4LeWgLa5UYmpH3p63d1L0/iukIpfFyrthDQgR3T8/iiovtx/Boj
+         nPAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Z6zpljNARaGHtMTY8U/C/Gg2k98fznp34I6cu4S6oKY=;
-        b=fa5pgzT6MimRwjW0ngUewAKXLq9/49Tfls4rVy+ZKLUxBeN3BypiSsgDQ8DzefFemT
-         WLKkzYdg/YREWlMzImMnPg8qGzN0IpIMeQLhwLzXFCgC0rlW51AjV/wygCrZWJVqch8M
-         DIF7j08MSAsC3ncdCMeFgYu2Txyo3l1xYXr1lieWpkVheJ317NS1yzpGAjgfnrrbNGIi
-         zyAuCwtdoWG323C8LHw+6u19vlCDqVSGmKSOjGOFU7I0EtY5PG9lPGNRD/b0FAm1El+z
-         ipZPX7ab18ip3hIpD/04SJbThFe2vxXU0J9/o0lCjVZIMkIUEcQJ836xilPKUHUwPVVX
-         MOSA==
-X-Gm-Message-State: AOAM532wmMgWtcUtopE1sYf1O63djBATt/oqPku+R0adKgvJ/DPQqgYF
-        sta7H46GGbv6Q31PYcz/mQ==
-X-Google-Smtp-Source: ABdhPJwN6oUmR44GNmTiOfpQO6Lr/nsoWADh8JwxBTNvETEEo6KpwBwFga3dvo/t5qqpV60sNu7g0A==
-X-Received: by 2002:a05:6808:bc5:: with SMTP id o5mr7019964oik.129.1633729679930;
-        Fri, 08 Oct 2021 14:47:59 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id a13sm141625oiy.9.2021.10.08.14.47.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Oct 2021 14:47:59 -0700 (PDT)
-Received: (nullmailer pid 3372749 invoked by uid 1000);
-        Fri, 08 Oct 2021 21:47:58 -0000
-Date:   Fri, 8 Oct 2021 16:47:58 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        linux-mtd@lists.infradead.org, Mark Brown <broonie@kernel.org>,
-        Xiangsheng Hou <Xiangsheng.Hou@mediatek.com>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jaimeliao@mxic.com.tw,
-        juliensu@mxic.com.tw,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [RFC PATCH 03/10] dt-bindings: vendor-prefixes: Update Macronix
- prefix
-Message-ID: <YWC8jgI74FgTudSD@robh.at.kernel.org>
-References: <20211008162228.1753083-1-miquel.raynal@bootlin.com>
- <20211008162228.1753083-4-miquel.raynal@bootlin.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pj5HBnFcZA/xKYVwuzYYzAMrAn6DXpDKGRmEk0FzL1U=;
+        b=ETE8GZFifC6MgM+UlqFuik29CZiMVz1QaOaLWiY9QLQfE9TrPmLF8L2sYKTgITxm4u
+         qjShXiAnRdgPlC9Hc5sumBWxgQalfzcHQ0mQYAbOpPgBBxSIrrew5XyiVrdoWJZu6xAe
+         wTGjEfaH++RC5K78Bjb0PqvLwNNMeeGdAIiN9M80sDRzjH36afCcF/xLc2HjkM10HR/i
+         zH3PDGk6PECNINnoes68MvV5wy+bpViPVu5Cerr92vEXec/HyCqQPrtBBRqUxc80oRl5
+         T4XOp1lA55053OLjxxmBwe1YWkZ26o1bnxwR8qhDKs/THuWOF03opyOkFl8+DQe5E5OS
+         zLHQ==
+X-Gm-Message-State: AOAM533+TDk67eU9rthuxqFp6CFNb8/huscMXl6b+A4IoLsN/Wfw7JBn
+        LXKzbOZVlhsJmywzwm1YGcU=
+X-Google-Smtp-Source: ABdhPJz9gWjjSosA1E6itNJyRfy/OP60vz/3OT8MJ7aO5iw9jl226ZqvVvbhOpaM4H1DNFK+B/jFdg==
+X-Received: by 2002:a05:622a:1a8c:: with SMTP id s12mr2074128qtc.303.1633920835944;
+        Sun, 10 Oct 2021 19:53:55 -0700 (PDT)
+Received: from ?IPV6:2600:1700:dfe0:49f0:3cb6:937e:609b:a590? ([2600:1700:dfe0:49f0:3cb6:937e:609b:a590])
+        by smtp.gmail.com with ESMTPSA id z186sm3610855qke.59.2021.10.10.19.53.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 10 Oct 2021 19:53:55 -0700 (PDT)
+Message-ID: <6a9a6467-f9a3-1412-8063-e51d0e2c0e43@gmail.com>
+Date:   Sun, 10 Oct 2021 19:53:52 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211008162228.1753083-4-miquel.raynal@bootlin.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.2
+Subject: Re: [PATCH 2/3] spi: bcm-qspi: clear MSPI spifie interrupt during
+ probe
+Content-Language: en-US
+To:     Kamal Dasu <kdasu.kdev@gmail.com>, broonie@kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        yendapally.reddy@broadcom.com, Kamal Dasu <kdasu@broadcom.com>
+References: <20211008203603.40915-1-kdasu.kdev@gmail.com>
+ <20211008203603.40915-3-kdasu.kdev@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20211008203603.40915-3-kdasu.kdev@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Oct 08, 2021 at 06:22:21PM +0200, Miquel Raynal wrote:
-> When looking at compatible prefixes, Macronix is sometimes referred as
-> mxicy:
-> - mxicy,mx25r1635f
-> - mxicy,mx25u6435f
-> - mxicy,mx25v8035f
-> - mxicy,mx25f0a-spi
-> and sometimes as mxic:
-> - mxic,multi-itfc-v009-nand-controller
-> - mxic,enable-randomizer-otp
-> 
-> It looks like the more up-to-date way is mxic so declare this prefix and
-> mark the other one as deprecated.
 
-mxicy is more widely used with flash parts. There's not a single dts 
-file with 'mxic' which only seems to be some nand controller.
 
+On 10/8/2021 1:36 PM, Kamal Dasu wrote:
+> From: Kamal Dasu <kdasu@broadcom.com>
 > 
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+> Intermittent Kernel crash has been observed on probe in
+> bcm_qspi_mspi_l2_isr() handler when the MSPI spifie interrupt bit
+> has not been cleared before registering for interrupts.
+> Fix the driver to move SoC specific custom interrupt handling code
+> before we register IRQ in probe. Also clear MSPI interrupt status
+> resgiter prior to registering IRQ handlers.
 > 
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> index b868cefc7c55..013a87850cd5 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -758,8 +758,11 @@ patternProperties:
->      description: Mundo Reader S.L.
->    "^murata,.*":
->      description: Murata Manufacturing Co., Ltd.
-> +  "^mxic,.*":
-> +    description: Macronix International Co., Ltd.
->    "^mxicy,.*":
->      description: Macronix International Co., Ltd.
-> +    deprecated: true
->    "^myir,.*":
->      description: MYIR Tech Limited
->    "^national,.*":
-> -- 
-> 2.27.0
-> 
-> 
+> Fixes: cc20a38612db ("spi: iproc-qspi: Add Broadcom iProc SoCs support")
+> Signed-off-by: Kamal Dasu <kdasu@broadcom.com>
+
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
