@@ -2,40 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C79429854
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Oct 2021 22:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49C142990D
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Oct 2021 23:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234979AbhJKUsr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 11 Oct 2021 16:48:47 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:51000 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234918AbhJKUsq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Oct 2021 16:48:46 -0400
+        id S229641AbhJKVmn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 Oct 2021 17:42:43 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:52728 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235293AbhJKVmm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Oct 2021 17:42:42 -0400
+X-Greylist: delayed 3227 seconds by postgrey-1.27 at vger.kernel.org; Mon, 11 Oct 2021 17:42:41 EDT
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 19BKkRYX058438;
-        Mon, 11 Oct 2021 15:46:27 -0500
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 19BKkW0m070905;
+        Mon, 11 Oct 2021 15:46:32 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1633985187;
-        bh=aREyONMOYnqRN8v42O2++VQ4QoXlpiSb4xj0cGMxL0U=;
-        h=From:To:CC:Subject:Date;
-        b=XzwSqtA7XhUvLhbISa+tUaTG5Ll0BqlsAkgQzJibz7r4dM5tYKnptnHcTBfB1XpQd
-         ihj8nNbkPCiCx633voyYjudC1q3sg6QHuLh7tuK4U3wg1GAHWl72yKZ25VfNmoHLV8
-         fs0M/5ILEQaf8WZarUu17WCHa3sAsLXe22MIf+F4=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 19BKkRbK104929
+        s=ti-com-17Q1; t=1633985192;
+        bh=mqz2lz88cZxIXXKJa69T+JAfW3Se31KHQgsxwq0MR14=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=i/RHTVViOUe5kHGTH96/fPfBsPvSKzrYa27+hwWI6XNv4aJUBy35AjRigSF3k5rAG
+         hNIsVnd+g/Iau46dSfoEpsv/c0riP2i5Amj7UxFweFEo6WlM6iShl4ahBMiqr6pDve
+         +v0zD0GOh05Umgbsbdt8r3RPDTI79io/lHuLNztA=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 19BKkWat105012
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 11 Oct 2021 15:46:27 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 11 Oct 2021 15:46:32 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 11
- Oct 2021 15:46:26 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ Oct 2021 15:46:31 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 11 Oct 2021 15:46:26 -0500
+ Frontend Transport; Mon, 11 Oct 2021 15:46:31 -0500
 Received: from LT5CD112GSQZ.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 19BKkKEe069811;
-        Mon, 11 Oct 2021 15:46:21 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 19BKkKEf069811;
+        Mon, 11 Oct 2021 15:46:27 -0500
 From:   Apurva Nandan <a-nandan@ti.com>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
@@ -48,10 +49,12 @@ To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <linux-spi@vger.kernel.org>
 CC:     <p.yadav@ti.com>
-Subject: [PATCH v2 00/14] mtd: spinand: Add Octal DTR SPI (8D-8D-8D) mode support
-Date:   Tue, 12 Oct 2021 02:16:05 +0530
-Message-ID: <20211011204619.81893-1-a-nandan@ti.com>
+Subject: [PATCH v2 01/14] spi: spi-mem: Add DTR templates for cmd, address, dummy and data phase
+Date:   Tue, 12 Oct 2021 02:16:06 +0530
+Message-ID: <20211011204619.81893-2-a-nandan@ti.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211011204619.81893-1-a-nandan@ti.com>
+References: <20211011204619.81893-1-a-nandan@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -60,74 +63,99 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
-This series proposes patches for adding the following functionality
-in SPI NAND core:
+Setting dtr field of spi_mem_op is useful when creating templates
+for DTR ops in spinand.h. Also, 2 bytes cmd phases are required when
+operating in Octal DTR SPI mode.
 
-- Octal DTR SPI (8D-8D-8D) mode support
+Create new templates for dtr mode cmd, address, dummy and data phase
+in spi_mem_op, which set the dtr field to 1 and also allow passing
+the nbytes for the cmd phase.
 
-- Winbond W35N01JW SPI NAND chip support
-
-- Power-on-Reset instruction support
-
-This series has been tested on TI J721e EVM with the Winbond W35N01JW
-flash with following test utilities:
-
-- nandtest
-  Test log: https://textbin.net/raw/fhypoz63f9
-
-- mtd_stresstest
-  Test log: https://textbin.net/raw/0xqjmqntj7
-
-- UBIFS LTP stress test (NAND_XL_STRESS_DD_RW_UBIFS).
-  Test log: https://textbin.net/raw/pyokws7wku
-
-Datasheet: https://www.winbond.com/export/sites/winbond/datasheet/W35N01JW_Datasheet_Brief.pdf
-
+Signed-off-by: Apurva Nandan <a-nandan@ti.com>
 ---
-Changes in v2:
+ include/linux/spi/spi-mem.h | 41 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-- Removed *_ALL_ARGS() macros from spi-mem.h, and redefined DTR macros.
-
-- Renamed spinand_setup_op() to spinand_patch_op(). Reduced one
-  conditional check from this function. Had to keep tweaking in hot-path
-  to avoid complicated implementation "hacks".
-
-- Changes in commit messages and added comments.
-
-- Dropped "Reject 8D-8D-8D op_templates if octal_dtr_enale() is
-  missing in manufacturer_op" patch.
-
-- Reduced PoR reset delay.
-
-- Splitted "mtd: spinand: Add support for Winbond W35N01JW SPI NAND
-  flash" into 3 independent patches.
-
-Apurva Nandan (14):
-  spi: spi-mem: Add DTR templates for cmd, address, dummy and data phase
-  mtd: spinand: Add enum spinand_proto to indicate current SPI IO mode
-  mtd: spinand: Patch spi_mem_op for the SPI IO protocol using reg_proto
-  mtd: spinand: Fix odd byte addr and data phase in read and write reg
-    op for Octal DTR mode
-  mtd: spinand: Add adjust_op() in manufacturer_ops to modify the ops
-    for manufacturer specific changes
-  mtd: spinand: Add macros for Octal DTR page read and write operations
-  mtd: spinand: Allow enabling Octal DTR mode in the core
-  mtd: spinand: winbond: Add support for write volatile configuration
-    register op
-  mtd: spinand: winbond: Add octal_dtr_enable() for manufacturer_ops
-  mtd: spinand: Add support for Power-on-Reset (PoR) instruction
-  mtd: spinand: Perform Power-on-Reset on the flash in mtd_suspend()
-  mtd: spinand: Add adjust_op() in Winbond manufacturer_ops
-  mtd: spinand: winbond: Rename cache op_variants struct variable
-  mtd: spinand: winbond: Add support for Winbond W35N01JW SPI NAND flash
-
- drivers/mtd/nand/spi/core.c    | 187 +++++++++++++++++++++++++++++-
- drivers/mtd/nand/spi/winbond.c | 200 +++++++++++++++++++++++++++++++--
- include/linux/mtd/spinand.h    |  67 +++++++++++
- include/linux/spi/spi-mem.h    |  41 +++++++
- 4 files changed, 484 insertions(+), 11 deletions(-)
-
+diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
+index 85e2ff7b840d..4a99e26aa0b6 100644
+--- a/include/linux/spi/spi-mem.h
++++ b/include/linux/spi/spi-mem.h
+@@ -20,6 +20,14 @@
+ 		.nbytes = 1,					\
+ 	}
+ 
++#define SPI_MEM_OP_CMD_DTR(__nbytes, __opcode, __buswidth)	\
++	{							\
++		.buswidth = __buswidth,				\
++		.opcode = __opcode,				\
++		.nbytes = __nbytes,				\
++		.dtr = 1,					\
++	}
++
+ #define SPI_MEM_OP_ADDR(__nbytes, __val, __buswidth)		\
+ 	{							\
+ 		.nbytes = __nbytes,				\
+@@ -27,6 +35,14 @@
+ 		.buswidth = __buswidth,				\
+ 	}
+ 
++#define SPI_MEM_OP_ADDR_DTR(__nbytes, __val, __buswidth)	\
++	{							\
++		.nbytes = __nbytes,				\
++		.val = __val,					\
++		.buswidth = __buswidth,				\
++		.dtr = 1,					\
++	}
++
+ #define SPI_MEM_OP_NO_ADDR	{ }
+ 
+ #define SPI_MEM_OP_DUMMY(__nbytes, __buswidth)			\
+@@ -35,6 +51,13 @@
+ 		.buswidth = __buswidth,				\
+ 	}
+ 
++#define SPI_MEM_OP_DUMMY_DTR(__nbytes, __buswidth)		\
++	{							\
++		.nbytes = __nbytes,				\
++		.buswidth = __buswidth,				\
++		.dtr = 1,					\
++	}
++
+ #define SPI_MEM_OP_NO_DUMMY	{ }
+ 
+ #define SPI_MEM_OP_DATA_IN(__nbytes, __buf, __buswidth)		\
+@@ -45,6 +68,15 @@
+ 		.buswidth = __buswidth,				\
+ 	}
+ 
++#define SPI_MEM_OP_DATA_IN_DTR(__nbytes, __buf, __buswidth)	\
++	{							\
++		.dir = SPI_MEM_DATA_IN,				\
++		.nbytes = __nbytes,				\
++		.buf.in = __buf,				\
++		.buswidth = __buswidth,				\
++		.dtr = 1,					\
++	}
++
+ #define SPI_MEM_OP_DATA_OUT(__nbytes, __buf, __buswidth)	\
+ 	{							\
+ 		.dir = SPI_MEM_DATA_OUT,			\
+@@ -53,6 +85,15 @@
+ 		.buswidth = __buswidth,				\
+ 	}
+ 
++#define SPI_MEM_OP_DATA_OUT_DTR(__nbytes, __buf, __buswidth)	\
++	{							\
++		.dir = SPI_MEM_DATA_OUT,			\
++		.nbytes = __nbytes,				\
++		.buf.out = __buf,				\
++		.buswidth = __buswidth,				\
++		.dtr = 1,					\
++	}
++
+ #define SPI_MEM_OP_NO_DATA	{ }
+ 
+ /**
 -- 
 2.25.1
 
