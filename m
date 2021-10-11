@@ -2,40 +2,41 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 276C9429856
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Oct 2021 22:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4919429914
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Oct 2021 23:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235041AbhJKUsu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 11 Oct 2021 16:48:50 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:43992 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235039AbhJKUsu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Oct 2021 16:48:50 -0400
+        id S235353AbhJKVmr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 Oct 2021 17:42:47 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:52728 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235380AbhJKVmq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Oct 2021 17:42:46 -0400
+X-Greylist: delayed 3227 seconds by postgrey-1.27 at vger.kernel.org; Mon, 11 Oct 2021 17:42:41 EDT
 Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 19BKkbx6120461;
-        Mon, 11 Oct 2021 15:46:37 -0500
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 19BKkhNc070935;
+        Mon, 11 Oct 2021 15:46:43 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1633985197;
-        bh=Xs0Y2QJh7ZkmtdvZp9Ye38YnqCIgeiTXXKjusd+pz1s=;
+        s=ti-com-17Q1; t=1633985203;
+        bh=CASUc+JvQlKfMHsjOUu+uMJGKuCWgnI+FiOL7ZWrJQo=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=lqakOCvuQbU6OPltcqNu8j+F/1m4SYtPY4lLXk5PoTl7PaAmG6OxGsBrucq6N2laM
-         K2btrN5FyYnW0dJHQpmQW5rCAVnZyCMJlY4mlfianMEkD7HcZtizR26sSdYtUJyCnr
-         hvmD0K9t7N5+8+y7lsmTI3namhZAGn7BZ5ClKMCg=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 19BKkbpB055156
+        b=bU+vpQKS461/fk50n4GpL/J16aZYZ+9aHDE6pwvpsSuPxG+D/cN4xnSHUoNmOuUYF
+         TcC6q+NjzlIXSuw9ZW3iYrkK2j8pJZ8xcHlmp4dqOZojnGzVmrb/kkwq7/KhM6VhQp
+         7BTzltvEiBwmytCaxkTdI1WXgM0ZgGPbO2AFGnwg=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 19BKkhdE055206
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 11 Oct 2021 15:46:37 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 11 Oct 2021 15:46:43 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 11
- Oct 2021 15:46:37 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ Oct 2021 15:46:43 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 11 Oct 2021 15:46:37 -0500
+ Frontend Transport; Mon, 11 Oct 2021 15:46:43 -0500
 Received: from LT5CD112GSQZ.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 19BKkKEg069811;
-        Mon, 11 Oct 2021 15:46:32 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 19BKkKEh069811;
+        Mon, 11 Oct 2021 15:46:38 -0500
 From:   Apurva Nandan <a-nandan@ti.com>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
@@ -48,9 +49,9 @@ To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <linux-spi@vger.kernel.org>
 CC:     <p.yadav@ti.com>
-Subject: [PATCH v2 02/14] mtd: spinand: Add enum spinand_proto to indicate current SPI IO mode
-Date:   Tue, 12 Oct 2021 02:16:07 +0530
-Message-ID: <20211011204619.81893-3-a-nandan@ti.com>
+Subject: [PATCH v2 03/14] mtd: spinand: Patch spi_mem_op for the SPI IO protocol using reg_proto
+Date:   Tue, 12 Oct 2021 02:16:08 +0530
+Message-ID: <20211011204619.81893-4-a-nandan@ti.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211011204619.81893-1-a-nandan@ti.com>
 References: <20211011204619.81893-1-a-nandan@ti.com>
@@ -62,99 +63,127 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Unlike Dual and Quad SPI modes flashes, Octal DTR SPI NAND flashes
-require all instructions to be made in 8D-8D-8D protocol when the
-flash is in Octal DTR mode. Hence, storing the current SPI IO mode
-becomes necessary for correctly generating non-array access operations.
+Currently, the op macros in spinand.h don't give the option to setup
+any non-array access instructions for Dual/Quad/Octal DTR SPI bus.
+Having a function that patches the op based on reg_proto would be
+better than trying to write all the setup logic in op macros.
 
-Store the current SPI IO mode in the spinand struct using a reg_proto
-enum. This would act as a flag, denoting that the core should use
-the given SPI protocol for non-page access operations.
+Create a spimem_patch_op() that would patch cmd, addr, dummy and data
+phase of the spi_mem op, for the given spinand->reg_proto. And hence,
+call the spimem_patch_op() before executing any spi_mem op.
 
-Also provide basic macros for extracting buswidth and dtr mode
-information from the spinand_proto enum.
+Note: In this commit, spimem_patch_op() isn't called in the
+read_reg_op(), write_reg_op() and wait() functions, as they need
+modifications in address value and data nbytes when in Octal DTR mode.
+This will be fixed in a later commit.
 
 Signed-off-by: Apurva Nandan <a-nandan@ti.com>
 ---
- drivers/mtd/nand/spi/core.c |  2 ++
- include/linux/mtd/spinand.h | 30 ++++++++++++++++++++++++++++++
- 2 files changed, 32 insertions(+)
+ drivers/mtd/nand/spi/core.c | 49 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
 diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
-index 2c8685f1f2fa..d82a3e6d9bb5 100644
+index d82a3e6d9bb5..11746d858f87 100644
 --- a/drivers/mtd/nand/spi/core.c
 +++ b/drivers/mtd/nand/spi/core.c
-@@ -1155,6 +1155,7 @@ static void spinand_mtd_resume(struct mtd_info *mtd)
- 	struct spinand_device *spinand = mtd_to_spinand(mtd);
+@@ -20,6 +20,49 @@
+ #include <linux/spi/spi.h>
+ #include <linux/spi/spi-mem.h>
+ 
++/**
++ * spinand_patch_op() - Helper function to patch the spi_mem op based on the
++ *			spinand->reg_proto
++ * @spinand: the spinand device
++ * @op: the spi_mem op to patch
++ *
++ * Set up buswidth and dtr fields for cmd, addr, dummy and data phase. Also
++ * adjust cmd opcode and dummy nbytes. This function doesn't make any changes
++ * to addr val or data buf.
++ */
++static void spinand_patch_op(const struct spinand_device *spinand,
++			     struct spi_mem_op *op)
++{
++	u8 op_buswidth = SPINAND_PROTO_BUSWIDTH(spinand->reg_proto);
++	u8 op_is_dtr = SPINAND_PROTO_IS_DTR(spinand->reg_proto);
++
++	if (spinand->reg_proto == SPINAND_SINGLE_STR)
++		return;
++
++	op->cmd.buswidth = op_buswidth;
++	op->cmd.dtr = op_is_dtr;
++	if (spinand->reg_proto == SPINAND_OCTAL_DTR) {
++		op->cmd.opcode = (op->cmd.opcode << 8) | op->cmd.opcode;
++		op->cmd.nbytes = 2;
++	}
++
++	if (op->addr.nbytes) {
++		op->addr.buswidth = op_buswidth;
++		op->addr.dtr = op_is_dtr;
++	}
++
++	if (op->dummy.nbytes) {
++		op->dummy.buswidth = op_buswidth;
++		op->dummy.dtr = op_is_dtr;
++		op->dummy.nbytes <<= op_is_dtr;
++	}
++
++	if (op->data.nbytes) {
++		op->data.buswidth = op_buswidth;
++		op->data.dtr = op_is_dtr;
++	}
++}
++
+ static int spinand_read_reg_op(struct spinand_device *spinand, u8 reg, u8 *val)
+ {
+ 	struct spi_mem_op op = SPINAND_GET_FEATURE_OP(reg,
+@@ -343,6 +386,7 @@ static int spinand_write_enable_op(struct spinand_device *spinand)
+ {
+ 	struct spi_mem_op op = SPINAND_WR_EN_DIS_OP(true);
+ 
++	spinand_patch_op(spinand, &op);
+ 	return spi_mem_exec_op(spinand->spimem, &op);
+ }
+ 
+@@ -353,6 +397,7 @@ static int spinand_load_page_op(struct spinand_device *spinand,
+ 	unsigned int row = nanddev_pos_to_row(nand, &req->pos);
+ 	struct spi_mem_op op = SPINAND_PAGE_READ_OP(row);
+ 
++	spinand_patch_op(spinand, &op);
+ 	return spi_mem_exec_op(spinand->spimem, &op);
+ }
+ 
+@@ -477,6 +522,7 @@ static int spinand_program_op(struct spinand_device *spinand,
+ 	unsigned int row = nanddev_pos_to_row(nand, &req->pos);
+ 	struct spi_mem_op op = SPINAND_PROG_EXEC_OP(row);
+ 
++	spinand_patch_op(spinand, &op);
+ 	return spi_mem_exec_op(spinand->spimem, &op);
+ }
+ 
+@@ -487,6 +533,7 @@ static int spinand_erase_op(struct spinand_device *spinand,
+ 	unsigned int row = nanddev_pos_to_row(nand, pos);
+ 	struct spi_mem_op op = SPINAND_BLK_ERASE_OP(row);
+ 
++	spinand_patch_op(spinand, &op);
+ 	return spi_mem_exec_op(spinand->spimem, &op);
+ }
+ 
+@@ -533,6 +580,7 @@ static int spinand_read_id_op(struct spinand_device *spinand, u8 naddr,
+ 		naddr, ndummy, spinand->scratchbuf, SPINAND_MAX_ID_LEN);
  	int ret;
  
-+	spinand->reg_proto = SPINAND_SINGLE_STR;
- 	ret = spinand_reset_op(spinand);
++	spinand_patch_op(spinand, &op);
+ 	ret = spi_mem_exec_op(spinand->spimem, &op);
+ 	if (!ret)
+ 		memcpy(buf, spinand->scratchbuf, SPINAND_MAX_ID_LEN);
+@@ -545,6 +593,7 @@ static int spinand_reset_op(struct spinand_device *spinand)
+ 	struct spi_mem_op op = SPINAND_RESET_OP;
+ 	int ret;
+ 
++	spinand_patch_op(spinand, &op);
+ 	ret = spi_mem_exec_op(spinand->spimem, &op);
  	if (ret)
- 		return;
-@@ -1181,6 +1182,7 @@ static int spinand_init(struct spinand_device *spinand)
- 	if (!spinand->scratchbuf)
- 		return -ENOMEM;
- 
-+	spinand->reg_proto = SPINAND_SINGLE_STR;
- 	ret = spinand_detect(spinand);
- 	if (ret)
- 		goto err_free_bufs;
-diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
-index 6988956b8492..f6093cd98d7b 100644
---- a/include/linux/mtd/spinand.h
-+++ b/include/linux/mtd/spinand.h
-@@ -140,6 +140,31 @@
- 		   SPI_MEM_OP_NO_DUMMY,					\
- 		   SPI_MEM_OP_DATA_OUT(len, buf, 4))
- 
-+#define SPINAND_PROTO_BUSWIDTH_MASK	GENMASK(6, 0)
-+#define SPINAND_PROTO_DTR_BIT		BIT(7)
-+
-+#define SPINAND_PROTO_STR(__buswidth)	\
-+	((u8)(((__buswidth) - 1) & SPINAND_PROTO_BUSWIDTH_MASK))
-+#define SPINAND_PROTO_DTR(__buswidth)	\
-+	(SPINAND_PROTO_DTR_BIT | SPINAND_PROTO_STR(__buswidth))
-+
-+#define SPINAND_PROTO_BUSWIDTH(__proto)	\
-+	((u8)(((__proto) & SPINAND_PROTO_BUSWIDTH_MASK) + 1))
-+#define SPINAND_PROTO_IS_DTR(__proto)	(!!((__proto) & SPINAND_PROTO_DTR_BIT))
-+
-+/**
-+ * enum spinand_proto - List allowable SPI protocol variants for read reg,
-+ *			write reg, blk erase, write enable/disable, page read
-+ *			and program exec operations.
-+ */
-+enum spinand_proto {
-+	SPINAND_SINGLE_STR = SPINAND_PROTO_STR(1),
-+	SPINAND_DUAL_STR = SPINAND_PROTO_STR(2),
-+	SPINAND_QUAD_STR = SPINAND_PROTO_STR(4),
-+	SPINAND_OCTAL_STR = SPINAND_PROTO_STR(8),
-+	SPINAND_OCTAL_DTR = SPINAND_PROTO_DTR(8),
-+};
-+
- /**
-  * Standard SPI NAND flash commands
-  */
-@@ -407,6 +432,9 @@ struct spinand_dirmap {
-  *		   this die. Only required if your chip exposes several dies
-  * @cur_target: currently selected target/die
-  * @eccinfo: on-die ECC information
-+ * @reg_proto: select a variant of SPI IO protocol (single, quad, octal or
-+ *	       octal DTR) for read_reg/write_reg/erase operations. Update on
-+ *	       successful transition into a different SPI IO protocol.
-  * @cfg_cache: config register cache. One entry per die
-  * @databuf: bounce buffer for data
-  * @oobbuf: bounce buffer for OOB data
-@@ -438,6 +466,8 @@ struct spinand_device {
- 
- 	struct spinand_ecc_info eccinfo;
- 
-+	enum spinand_proto reg_proto;
-+
- 	u8 *cfg_cache;
- 	u8 *databuf;
- 	u8 *oobbuf;
+ 		return ret;
 -- 
 2.25.1
 
