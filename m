@@ -2,47 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF569428DCA
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Oct 2021 15:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B006B428DD6
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Oct 2021 15:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235421AbhJKNaI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 11 Oct 2021 09:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57876 "EHLO
+        id S236917AbhJKNaO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 Oct 2021 09:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235197AbhJKNaH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Oct 2021 09:30:07 -0400
+        with ESMTP id S236910AbhJKNaN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Oct 2021 09:30:13 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63A7C061570
-        for <linux-spi@vger.kernel.org>; Mon, 11 Oct 2021 06:28:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432C5C061745
+        for <linux-spi@vger.kernel.org>; Mon, 11 Oct 2021 06:28:13 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1mZvLZ-0006g4-Rm; Mon, 11 Oct 2021 15:28:05 +0200
+        id 1mZvLb-0006hT-FC; Mon, 11 Oct 2021 15:28:07 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1mZvLY-0003ny-EI; Mon, 11 Oct 2021 15:28:04 +0200
+        id 1mZvLa-0003pW-K2; Mon, 11 Oct 2021 15:28:06 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1mZvLX-0000TQ-Cg; Mon, 11 Oct 2021 15:28:03 +0200
+        id 1mZvLX-0000TT-I2; Mon, 11 Oct 2021 15:28:03 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>
 Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        kernel@pengutronix.de, dri-devel@lists.freedesktop.org,
-        linux-staging@lists.linux.dev,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH 12/13] staging: fbtft: Make fbtft_remove_common() return void
-Date:   Mon, 11 Oct 2021 15:27:53 +0200
-Message-Id: <20211011132754.2479853-13-u.kleine-koenig@pengutronix.de>
+        Jason Gunthorpe <jgg@ziepe.ca>, kernel@pengutronix.de,
+        linux-integrity@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH 13/13] tpm: st33zp24: Make st33zp24_remove() return void
+Date:   Mon, 11 Oct 2021 15:27:54 +0200
+Message-Id: <20211011132754.2479853-14-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
 References: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Patch-Hashes: v=1; h=sha256; i=/RLR4bDyADQRwzANF6ER5sKrX+JFDYSh90Q0J5N84UY=; m=6FiNYI6au9uFB2IoKzr/cKU1LkGxlwoXSYCPM/+GX+Y=; p=19a0XOl3ZNoBogBHt63wtoEAqL9C5QZcMx0lWBBcXvs=; g=3740c58a50a748d6ac2559b325ee4fcd79372ba0
-X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFkO4IACgkQwfwUeK3K7AmPFAgAi2j +ekzLBUvvkSW1V7aAZ7NxSqFgWZ8q7dgSdTwOKmsCZCyNbQsT02lQhdQnxam0NAMjaxhPzaEVAUf9 cjqtzjNApl7RfLYR7nGLh2XuJ4EqX7uUlOzAdeoEe3r1T4eqGrWC+7AfBINYA992Q6zFAZRqNXZrY PBfjEYtKmJ0IAO/Qx4tDgVISz0GQsn+8JJ01P4udY1sud6QjhaO+87wCpCXT7qwQa9q8WN+fIsSYs 0Ut+4ptQh7WDuG+Qb09CIIf4Bk9nAi/X3gofxHs97omC6x3ldQlraHCrNuUHUe77brVawa8/TR38j SEFRvmVk4U0dYlvaiuLXguJP8IRqcVA==
+X-Patch-Hashes: v=1; h=sha256; i=2RfjlQngpYVdDmF7/sh7VSPt9aAaxh1F9oCTWbtcFaI=; m=YmvLiK47JXRlSzLFzxqwlRAcg9TrPiYd49fSIG4963c=; p=J4sUOjxlatUSZp6KZXQHP7X5Nt2PutSw8I364wwqzYo=; g=fcea7ec8c956ac6a1c9afce0aa9705bb0fa52453
+X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFkO4UACgkQwfwUeK3K7AlUIwf/atw 1vHUc2x10B24gV5mm7WzFEHz2GSF02GivDWJEaPLAPuONjpAXLnN8SZno3395W48ObCVk0L24PP+Y 1HJu2qPsQJOLqU69z94vZm1JfSwVfaUZ0Wl7NGyCrWNotVqEr1d9jl0pPuIUmvr/d3K6qALqc2fQG pMbeTEvlPbzecrx/JwsHWlrFVD5FB6gWRkME3DlN9johP7hRAdfA52dp7giA6XwulZO/j5zeoCufw DfXTedCXk0QSmxGfB1Dp3Ot1ZIEce09+NzggcU1DQ5ROqsC6ReAp48jTNE69bgZfl124AMva3/b4E 1nnBMR8oHlb/dlM0gf7+96cJk176haQ==
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ukl@pengutronix.de
@@ -52,74 +53,81 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-fbtft_remove_common() is only called with a non-NULL fb_info. (All
-callers are in remove callbacks and the matching probe callbacks set
-driver data accordingly.) So fbtft_remove_common() always returns zero.
-Make it return void instead which makes it easier to see in the callers
-that there is no error to handle.
+Up to now st33zp24_remove() returns zero unconditionally. Make it return
+void instead which makes it easier to see in the callers that there is
+no error to handle.
 
-Also the return value of platform and spi remove callbacks is ignored
-anyway and not freeing resources in .remove() is a bad idea.
+Also the return value of i2c and spi remove callbacks is ignored anyway.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/staging/fbtft/fbtft-core.c | 8 +-------
- drivers/staging/fbtft/fbtft.h      | 6 ++++--
- 2 files changed, 5 insertions(+), 9 deletions(-)
+ drivers/char/tpm/st33zp24/i2c.c      | 5 +----
+ drivers/char/tpm/st33zp24/spi.c      | 5 +----
+ drivers/char/tpm/st33zp24/st33zp24.c | 3 +--
+ drivers/char/tpm/st33zp24/st33zp24.h | 2 +-
+ 4 files changed, 4 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/staging/fbtft/fbtft-core.c b/drivers/staging/fbtft/fbtft-core.c
-index ed992ca605eb..9c9eab1182a6 100644
---- a/drivers/staging/fbtft/fbtft-core.c
-+++ b/drivers/staging/fbtft/fbtft-core.c
-@@ -1318,23 +1318,17 @@ EXPORT_SYMBOL(fbtft_probe_common);
-  * @info: Framebuffer
-  *
-  * Unregisters and releases the framebuffer
-- *
-- * Return: 0 if successful, negative if error
-  */
--int fbtft_remove_common(struct device *dev, struct fb_info *info)
-+void fbtft_remove_common(struct device *dev, struct fb_info *info)
+diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
+index 7c617edff4ca..3170d59d660c 100644
+--- a/drivers/char/tpm/st33zp24/i2c.c
++++ b/drivers/char/tpm/st33zp24/i2c.c
+@@ -267,11 +267,8 @@ static int st33zp24_i2c_probe(struct i2c_client *client,
+ static int st33zp24_i2c_remove(struct i2c_client *client)
  {
- 	struct fbtft_par *par;
+ 	struct tpm_chip *chip = i2c_get_clientdata(client);
+-	int ret;
  
--	if (!info)
--		return -EINVAL;
- 	par = info->par;
- 	if (par)
- 		fbtft_par_dbg(DEBUG_DRIVER_INIT_FUNCTIONS, par,
- 			      "%s()\n", __func__);
- 	fbtft_unregister_framebuffer(info);
- 	fbtft_framebuffer_release(info);
--
+-	ret = st33zp24_remove(chip);
+-	if (ret)
+-		return ret;
++	st33zp24_remove(chip);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
+index a75dafd39445..ccd9e42b8eab 100644
+--- a/drivers/char/tpm/st33zp24/spi.c
++++ b/drivers/char/tpm/st33zp24/spi.c
+@@ -384,11 +384,8 @@ static int st33zp24_spi_probe(struct spi_device *dev)
+ static int st33zp24_spi_remove(struct spi_device *dev)
+ {
+ 	struct tpm_chip *chip = spi_get_drvdata(dev);
+-	int ret;
+ 
+-	ret = st33zp24_remove(chip);
+-	if (ret)
+-		return ret;
++	st33zp24_remove(chip);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/char/tpm/st33zp24/st33zp24.c b/drivers/char/tpm/st33zp24/st33zp24.c
+index 4ec10ab5e576..2b63654c38d6 100644
+--- a/drivers/char/tpm/st33zp24/st33zp24.c
++++ b/drivers/char/tpm/st33zp24/st33zp24.c
+@@ -588,10 +588,9 @@ EXPORT_SYMBOL(st33zp24_probe);
+  * @param: tpm_data, the tpm phy.
+  * @return: 0 in case of success.
+  */
+-int st33zp24_remove(struct tpm_chip *chip)
++void st33zp24_remove(struct tpm_chip *chip)
+ {
+ 	tpm_chip_unregister(chip);
 -	return 0;
  }
- EXPORT_SYMBOL(fbtft_remove_common);
+ EXPORT_SYMBOL(st33zp24_remove);
  
-diff --git a/drivers/staging/fbtft/fbtft.h b/drivers/staging/fbtft/fbtft.h
-index 76f8c090a837..68eba6c71b0f 100644
---- a/drivers/staging/fbtft/fbtft.h
-+++ b/drivers/staging/fbtft/fbtft.h
-@@ -283,7 +283,8 @@ static int fbtft_driver_remove_spi(struct spi_device *spi)                 \
- {                                                                          \
- 	struct fb_info *info = spi_get_drvdata(spi);                       \
- 									   \
--	return fbtft_remove_common(&spi->dev, info);                       \
-+	fbtft_remove_common(&spi->dev, info);                              \
-+	return 0;                                                          \
- }                                                                          \
- 									   \
- static int fbtft_driver_probe_pdev(struct platform_device *pdev)           \
-@@ -295,7 +296,8 @@ static int fbtft_driver_remove_pdev(struct platform_device *pdev)          \
- {                                                                          \
- 	struct fb_info *info = platform_get_drvdata(pdev);                 \
- 									   \
--	return fbtft_remove_common(&pdev->dev, info);                      \
-+	fbtft_remove_common(&pdev->dev, info);                             \
-+	return 0;                                                          \
- }                                                                          \
- 									   \
- static const struct of_device_id dt_ids[] = {                              \
+diff --git a/drivers/char/tpm/st33zp24/st33zp24.h b/drivers/char/tpm/st33zp24/st33zp24.h
+index 6747be1e2502..b387a476c555 100644
+--- a/drivers/char/tpm/st33zp24/st33zp24.h
++++ b/drivers/char/tpm/st33zp24/st33zp24.h
+@@ -34,5 +34,5 @@ int st33zp24_pm_resume(struct device *dev);
+ 
+ int st33zp24_probe(void *phy_id, const struct st33zp24_phy_ops *ops,
+ 		   struct device *dev, int irq, int io_lpcpd);
+-int st33zp24_remove(struct tpm_chip *chip);
++void st33zp24_remove(struct tpm_chip *chip);
+ #endif /* __LOCAL_ST33ZP24_H__ */
 -- 
 2.30.2
 
