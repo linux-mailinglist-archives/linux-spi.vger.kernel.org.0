@@ -2,45 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0384942A871
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Oct 2021 17:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA18842A887
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Oct 2021 17:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237484AbhJLPl6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Oct 2021 11:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47580 "EHLO
+        id S237419AbhJLPmM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Oct 2021 11:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237462AbhJLPl5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Oct 2021 11:41:57 -0400
+        with ESMTP id S237521AbhJLPmI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Oct 2021 11:42:08 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237A9C061745
-        for <linux-spi@vger.kernel.org>; Tue, 12 Oct 2021 08:39:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F5BC061767
+        for <linux-spi@vger.kernel.org>; Tue, 12 Oct 2021 08:40:02 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1maJsd-0008NS-Up; Tue, 12 Oct 2021 17:39:52 +0200
+        id 1maJsj-0000I1-Qq; Tue, 12 Oct 2021 17:39:57 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1maJsc-0004ih-1B; Tue, 12 Oct 2021 17:39:50 +0200
+        id 1maJsj-0004kB-9q; Tue, 12 Oct 2021 17:39:57 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1maJsc-0004Y8-0I; Tue, 12 Oct 2021 17:39:50 +0200
+        id 1maJsc-0004YH-6D; Tue, 12 Oct 2021 17:39:50 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>
 Cc:     Mark Brown <broonie@kernel.org>, kernel@pengutronix.de,
-        linux-input@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH v2 06/20] input: touchscreen: tsc200x: Make tsc200x_remove() return void
-Date:   Tue, 12 Oct 2021 17:39:31 +0200
-Message-Id: <20211012153945.2651412-7-u.kleine-koenig@pengutronix.de>
+        linux-media@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: [PATCH v2 07/20] media: cxd2880: Eliminate dead code
+Date:   Tue, 12 Oct 2021 17:39:32 +0200
+Message-Id: <20211012153945.2651412-8-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211012153945.2651412-1-u.kleine-koenig@pengutronix.de>
 References: <20211012153945.2651412-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Patch-Hashes: v=1; h=sha256; i=94oorPupYOLS40HYKqyvmBk6HGvbhR+NJnei2QkNFGk=; m=Bsn3NLP3I1exqSpvJBONKOIhA7oOcADEshibx4agNIQ=; p=XrMASlvC85yGCSzZ81aLygEbijEM+OrmhchqNjTkj3k=; g=d5cc911828fc149b672baef67a39ff26315a5a39
-X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFlrAoACgkQwfwUeK3K7AkMDAf/TYq JLQRB8P0IbWTquAN/H8sAzdf2o7/37Hhn/ane5ZSaO1+1/tPr9idW9Jdu9J1G45oPlCB9cmkBVUWM ljZEbyPT8JAxVBKgaabtLTnLwLBSQXLlxOegQTbocsY2uN1FLEyJoRbsbBz1Uyi2n6ftrq/CGK++D TZZL7XLBRkf9s4Z9kAjF0byjb1QHhzBkCU63HYB8d+xH8iMeOYvTcoYsNd9esukKNLksnAQVTe9V7 rA1zX7t3Cd5WhtUWPU8lFkRmdfng6PrlONTSaVojdFEb4uLdyJaLKZiMvR/xnknm1MC1QjhO4DSeK O2DFaY/OtnJUGBcFUVePzu0iK9u0wDg==
+X-Patch-Hashes: v=1; h=sha256; i=i/V0IwiXrJHb2puTsy4r3UAQrVBpJK4uRHfeGK5dIi4=; m=6Brp6ipiIrN4N0gba2jlJ7ZY/JS2k/XshUNdN7/roa8=; p=8ZiFid/gojahfXRtSIUMwOZadkeWb7YdowfHaijfOII=; g=d6494736086a7092e3c965bf6057c1246baeecdc
+X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFlrA0ACgkQwfwUeK3K7AmsNgf7BfZ I7zwHdHpHgVO+f3PbnRyDrjG6tyn0xgkcl2ZNNWmkO0e3wtFAGep6OmlaRjEFEb7uz6XTIDdQZds0 K2cFwH5xSVJF+C9Y95vGqz7sr81H0imQJ908h3lpoqVZzdzNaxm2jFV/CTUZB/h/rE1e/ymSnFY6M 7KSC2dCwKbohf/IWACgBCc4BTxjQqcJA/YpTYzqoFJVANDpLF/fA3N3pihjeXB1aBaDu8tfPp4Fhz tTIUTOiFAQ60Oh3ihxCRB7IpjD68df45f3+J1qfuWhZBoN0S4bl0sA+fZWx5B7zAP343Cij38bDH6 jy3bUzJWLhv1g4KA2UzL1A4oSoxmfEA==
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ukl@pengutronix.de
@@ -50,83 +51,44 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Up to now tsc200x_remove() returns zero unconditionally. Make it return
-void instead which makes it easier to see in the callers that there is
-no error to handle.
+An spi remove callback is never called with an spi_device pointer that
+is NULL. Also it is only called for devices that probed successfully. As
+cxd2880_spi_probe() always sets driver data, spi_get_drvdata() cannot be
+NULL.
 
-Also the return value of i2c and spi remove callbacks is ignored anyway.
+Also the return value of spi remove callbacks is ignored anyway and not
+freeing resources in .remove() is a bad idea.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/input/touchscreen/tsc2004.c      | 4 +++-
- drivers/input/touchscreen/tsc2005.c      | 4 +++-
- drivers/input/touchscreen/tsc200x-core.c | 4 +---
- drivers/input/touchscreen/tsc200x-core.h | 2 +-
- 4 files changed, 8 insertions(+), 6 deletions(-)
+ drivers/media/spi/cxd2880-spi.c | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
-diff --git a/drivers/input/touchscreen/tsc2004.c b/drivers/input/touchscreen/tsc2004.c
-index 0272cedcc726..9fdd870c4c0b 100644
---- a/drivers/input/touchscreen/tsc2004.c
-+++ b/drivers/input/touchscreen/tsc2004.c
-@@ -45,7 +45,9 @@ static int tsc2004_probe(struct i2c_client *i2c,
- 
- static int tsc2004_remove(struct i2c_client *i2c)
+diff --git a/drivers/media/spi/cxd2880-spi.c b/drivers/media/spi/cxd2880-spi.c
+index b91a1e845b97..67cacf29a61e 100644
+--- a/drivers/media/spi/cxd2880-spi.c
++++ b/drivers/media/spi/cxd2880-spi.c
+@@ -628,19 +628,8 @@ cxd2880_spi_probe(struct spi_device *spi)
+ static int
+ cxd2880_spi_remove(struct spi_device *spi)
  {
--	return tsc200x_remove(&i2c->dev);
-+	tsc200x_remove(&i2c->dev);
-+
-+	return 0;
- }
+-	struct cxd2880_dvb_spi *dvb_spi;
++	struct cxd2880_dvb_spi *dvb_spi = spi_get_drvdata(spi);
  
- static const struct i2c_device_id tsc2004_idtable[] = {
-diff --git a/drivers/input/touchscreen/tsc2005.c b/drivers/input/touchscreen/tsc2005.c
-index 923496bbb368..a2f55920b9b2 100644
---- a/drivers/input/touchscreen/tsc2005.c
-+++ b/drivers/input/touchscreen/tsc2005.c
-@@ -66,7 +66,9 @@ static int tsc2005_probe(struct spi_device *spi)
- 
- static int tsc2005_remove(struct spi_device *spi)
- {
--	return tsc200x_remove(&spi->dev);
-+	tsc200x_remove(&spi->dev);
-+
-+	return 0;
- }
- 
- #ifdef CONFIG_OF
-diff --git a/drivers/input/touchscreen/tsc200x-core.c b/drivers/input/touchscreen/tsc200x-core.c
-index b8d720d52013..27810f6c69f6 100644
---- a/drivers/input/touchscreen/tsc200x-core.c
-+++ b/drivers/input/touchscreen/tsc200x-core.c
-@@ -577,15 +577,13 @@ int tsc200x_probe(struct device *dev, int irq, const struct input_id *tsc_id,
- }
- EXPORT_SYMBOL_GPL(tsc200x_probe);
- 
--int tsc200x_remove(struct device *dev)
-+void tsc200x_remove(struct device *dev)
- {
- 	struct tsc200x *ts = dev_get_drvdata(dev);
- 
- 	sysfs_remove_group(&dev->kobj, &tsc200x_attr_group);
- 
- 	regulator_disable(ts->vio);
+-	if (!spi) {
+-		pr_err("invalid arg\n");
+-		return -EINVAL;
+-	}
 -
--	return 0;
- }
- EXPORT_SYMBOL_GPL(tsc200x_remove);
- 
-diff --git a/drivers/input/touchscreen/tsc200x-core.h b/drivers/input/touchscreen/tsc200x-core.h
-index a43c08ccfd3d..4ded34425b21 100644
---- a/drivers/input/touchscreen/tsc200x-core.h
-+++ b/drivers/input/touchscreen/tsc200x-core.h
-@@ -74,6 +74,6 @@ extern const struct dev_pm_ops tsc200x_pm_ops;
- int tsc200x_probe(struct device *dev, int irq, const struct input_id *tsc_id,
- 		  struct regmap *regmap,
- 		  int (*tsc200x_cmd)(struct device *dev, u8 cmd));
--int tsc200x_remove(struct device *dev);
-+void tsc200x_remove(struct device *dev);
- 
- #endif
+-	dvb_spi = spi_get_drvdata(spi);
+-
+-	if (!dvb_spi) {
+-		pr_err("failed\n");
+-		return -EINVAL;
+-	}
+ 	dvb_spi->demux.dmx.remove_frontend(&dvb_spi->demux.dmx,
+ 					   &dvb_spi->dmx_fe);
+ 	dvb_dmxdev_release(&dvb_spi->dmxdev);
 -- 
 2.30.2
 
