@@ -2,127 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EED42AD4C
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Oct 2021 21:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C72D142B09F
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Oct 2021 01:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbhJLTcO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Oct 2021 15:32:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
+        id S236268AbhJLXyQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Oct 2021 19:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232851AbhJLTcM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Oct 2021 15:32:12 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0F6C061570
-        for <linux-spi@vger.kernel.org>; Tue, 12 Oct 2021 12:30:10 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1maNTU-0008Gn-Ai; Tue, 12 Oct 2021 21:30:08 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1maNTR-0004qT-No; Tue, 12 Oct 2021 21:30:05 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1maNTR-000545-KZ; Tue, 12 Oct 2021 21:30:05 +0200
-Date:   Tue, 12 Oct 2021 21:30:05 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-spi@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@intel.com>
-Subject: Re: Deadlock in spi_add_device() -- device core problem
-Message-ID: <20211012193005.lxqzbsdeh4k7nxe2@pengutronix.de>
-References: <20211007160524.qhjtcwtto2ftsmhe@pengutronix.de>
- <YV8eIoxIxQLC5x5N@kroah.com>
- <20211007165214.r5h7x3evdqbwxmma@pengutronix.de>
- <YWBITX2Wbfx/QHCE@sirena.org.uk>
+        with ESMTP id S236254AbhJLXyP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Oct 2021 19:54:15 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4511C061753
+        for <linux-spi@vger.kernel.org>; Tue, 12 Oct 2021 16:52:10 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id p13so2804183edw.0
+        for <linux-spi@vger.kernel.org>; Tue, 12 Oct 2021 16:52:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cbR0fYQwEzzPnCNSZ2ICWQZko1+pYoFdiGN6U0UHQwc=;
+        b=xGQWQl+Rhu5wc1pookDpIpkj5pCLuttrBc/yXvjFsnnJT7q4Pc+AqreFLXb9frSAtV
+         g+m12d9PJuw5aFPIVGI1DH3Z/LxUFCP3JDOhQ/QMnVhKm8pCSzj7dSa9J5HfXtCpDLBn
+         Oax0yqSgmK1iXRZgCqNT0gYq7qRSJkpv4RIiM2uqoNpUdNvIq1cnGVA6Jiu4U21TgAjM
+         WG9OZYzMwG9I6pRNj+8+O4a1xZ5PczLu/bmxs0yciQhettLEZgYHloJ9EwZZ+Hq9w52W
+         snn15hSloMgqG14PY/X5UtPVikd3uCCsHKQAT0RWNxa8rzpnTFc6kTGuJPdmbm+d+/8t
+         pe7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cbR0fYQwEzzPnCNSZ2ICWQZko1+pYoFdiGN6U0UHQwc=;
+        b=lxFb6HL9zwMDVSfB1Hi715DmZwCZ7jrDQKVSyPD7IfNDgV/TrgAtVm8bLlYOWQfqaU
+         9IWRg6eF35E4p6OQgJ8H2rcfQgQ5mk3j3Qv6SuNplNVehwSvTWVLKOXyYwuOMtHs9PmV
+         tfZdc/n59QLJseC9bcFpPzG0mk9D4+x43N1AQvdDqmzXqsvG/o2PLmUeL+RDqliOuerH
+         xRVQXZAYojI6XMWksbJbVyBFDiPmV2tOKGW2ZV88TkLPvqDmtZrEeeYznMYpW9CiXpqT
+         /8GPVno7dk3ZcRMuZBoGnS0I2rF8bYZzWvW8aGLEf36X/+obbAaTkk24f0OzU3uebtHc
+         MwZg==
+X-Gm-Message-State: AOAM533u8ajyI5zBIw0XoIwO8nbpX1wq8kFw7IJD8QYV5lnth3D2BBvY
+        f53IW/nQKk/1LvC4nBSU2okbOer1X7HfaUjFM0eO7w==
+X-Google-Smtp-Source: ABdhPJxMAqC/9xf+4Ig3GYpEod8yl4nK4RsazuqtIkK0qfl4kAfDsXmJeks3/H6i+HVOnzNz5Q2XqvqQamIzMGXchIc=
+X-Received: by 2002:a17:907:2156:: with SMTP id rk22mr36680106ejb.64.1634082729262;
+ Tue, 12 Oct 2021 16:52:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uhajcyzcuy4uhus2"
-Content-Disposition: inline
-In-Reply-To: <YWBITX2Wbfx/QHCE@sirena.org.uk>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+References: <20210304034141.7062-1-brad@pensando.io> <20210304034141.7062-2-brad@pensando.io>
+ <CACRpkdbQD6p7fbGtuu1c92uXfSFDCTwqjqsXHpgnD5Lg4v0Okw@mail.gmail.com>
+ <20210304091025.ny52qjm7wbfvmjgl@mobilestation> <CACRpkdZroi+_oHqipS71MAGif190y7jWU5Myf55vz=_um4w5cQ@mail.gmail.com>
+ <CAK9rFnzDZ4MNm68AJ75g7zegLD-7UMHyoVR-4ssitYTTEeQm5g@mail.gmail.com>
+ <CACRpkdZEURRTe15HGf93SvyHej=_6qhfP9KWPSQbCM=SLUVKmA@mail.gmail.com> <CAK9rFnxuiAX2-5TFhfyTdpaY3BRysX_Q2sJkca4LhOLzapB83Q@mail.gmail.com>
+In-Reply-To: <CAK9rFnxuiAX2-5TFhfyTdpaY3BRysX_Q2sJkca4LhOLzapB83Q@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 13 Oct 2021 01:51:58 +0200
+Message-ID: <CACRpkdbF3oXec-8Z-1fNVL47mfYo2TW8WTDxzpwaR2YqLaTdAQ@mail.gmail.com>
+Subject: Re: [PATCH 1/8] gpio: Add Elba SoC gpio driver for spi cs control
+To:     Brad Larson <brad@pensando.io>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Olof Johansson <olof@lixom.net>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, Oct 4, 2021 at 6:46 PM Brad Larson <brad@pensando.io> wrote:
 
---uhajcyzcuy4uhus2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Yes that works, please see the diff below where the file
+> gpio-elba-spics.c goes away.  The original implementation was
+> motivated by gpio-spear-spics.c.
 
-Hi Mark,
+This looks good to me :)
 
-On Fri, Oct 08, 2021 at 02:31:57PM +0100, Mark Brown wrote:
-> On Thu, Oct 07, 2021 at 06:52:14PM +0200, Uwe Kleine-K=F6nig wrote:
-> > On Thu, Oct 07, 2021 at 06:19:46PM +0200, Greg Kroah-Hartman wrote:
-> > > On Thu, Oct 07, 2021 at 06:05:24PM +0200, Uwe Kleine-K=F6nig wrote:
->=20
-> > > Drivers for a bus bind to the bus, they should not be creating new
-> > > devices for that same bus, as that does not seem correct.
->=20
-> > That's not the culprit here. We have a spi-device (spi-mux) that is a
-> > bus device on the SoC's bus and a bus master for it's own bus. And
-> > spi_add_device for the spi-mux device triggers the probe function for
-> > the spi-mux driver which creates a new bus controller which triggers
-> > spi_add_device() for the devices on the inner bus.
->=20
-> I think we need to be arranging for spi_add_lock to be per bus
-> rather than global - putting it into the controller ought to do
-> the trick.
-
-Yeah, that's what I consider the second best option that I already
-mentioned in the initial mail of this thread.
-
-@Greg: Would you expect that it should be possible (and benificial) to
-rework the code to not hold a lock at all during device_add()?
-
-This would then need something like:
-
-	lock() # either per controller or global
-	if bus already has a device for the same chipselect:
-	    error out;
-	register chipselect as busy
-	unlock();
-
-	ret =3D device_add(...)
-
-	if ret:
-	    lock()
-	    unregister chipselect
-	    unlock()
-
-Is this worth the effort?
-
-Anyhow, will try the suggested patch next.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---uhajcyzcuy4uhus2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFl4joACgkQwfwUeK3K
-7Amr7ggAmv3EAWA7U5pSeEB2W8H6tMwNNw36IYt9cm2kCNsTvxKf2chT/ke3wOIu
-2mP1AEE1eaRfBXcjw3tPfLMdrK0mJxVPGhYqSgbc4BI9/Rzt0QSDZ8vRsMBwmvue
-NkbQmqROGbpsG14T5XUs3NZwJu7t+X/KEKkR61k9jGthw7BMLk6NRjxM3ggWU6W2
-0w6c3toOveOV6tXnZY4YB9USMD+HEe/P2vlVFCtf1nJiTyHLxI+Qqf2Fh0ByiNCh
-pOL07xUTwGbfblISCQvZVdqU8hLu6jOWmaJ1amufKqg+Qs+Rq33CSitin2eEvaeZ
-kXTsYCcFiRbvyqYJodjNAd11oQBR9A==
-=PT5L
------END PGP SIGNATURE-----
-
---uhajcyzcuy4uhus2--
+Yours,
+Linus Walleij
