@@ -2,69 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F4342AB14
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Oct 2021 19:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0AC42AC81
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Oct 2021 20:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231902AbhJLRsr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Oct 2021 13:48:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58230 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229810AbhJLRsr (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 12 Oct 2021 13:48:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A4AA5610E8;
-        Tue, 12 Oct 2021 17:46:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634060805;
-        bh=SX30PB/37UEj9DmN7hV9YAGVbYiavCZLJBE9PCjMqSs=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=VMKrPC9dh0bBS+06VUqPX61SBc98Mk8aBw85mQM8cHulrjXBQ7NMCu0Skj1mx8Xn/
-         nl6bUPbZd0ijiZvG4wkm7A3m6v8WKIk4fhBMiLouomNKQPiF/Q77Ns7MgjOU07wP/N
-         Ni3Xr3HeuJPs30wlu6gUAzTsz3Gk9izxlHFfkpx7jRfEByGA0e5/JOy6df26GXftF8
-         s0astotFqaKDAjx4JvYEkCAIfkZSDtt9K3KbFlDeK7yFqajs+/X4UG7Ox6lyNS5jhM
-         ia7hBBqRdsAX8/mMGYRVygxUVpVQO4XJBZil/1mygKxGoDQeYt0/KrkludPCvOliC4
-         quvUrg2PsJAkg==
-Message-ID: <4e0b7850e901864632c22551ecd7f137530c9770.camel@kernel.org>
-Subject: Re: [PATCH 13/13] tpm: st33zp24: Make st33zp24_remove() return void
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, linux-spi@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Mark Brown <broonie@kernel.org>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de, linux-integrity@vger.kernel.org
-Date:   Tue, 12 Oct 2021 20:46:42 +0300
-In-Reply-To: <20211012174052.iekzt22ojilca5lc@pengutronix.de>
-References: <20211011132754.2479853-1-u.kleine-koenig@pengutronix.de>
-         <20211011132754.2479853-14-u.kleine-koenig@pengutronix.de>
-         <4c6974280020118735644679f8498fe86748e648.camel@kernel.org>
-         <20211012174052.iekzt22ojilca5lc@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.40.0-1 
+        id S234289AbhJLSvt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Oct 2021 14:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235168AbhJLSvi (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Oct 2021 14:51:38 -0400
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFE2C06176A
+        for <linux-spi@vger.kernel.org>; Tue, 12 Oct 2021 11:49:34 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id f4so538280uad.4
+        for <linux-spi@vger.kernel.org>; Tue, 12 Oct 2021 11:49:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eclypsium.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4kUtfp3H5GSUAINL9ZlTXdmm6nQlA3alJD1HkhEN17Y=;
+        b=BE9TkAn9CWkILNMSxRZNrL3BucUaTmKja+sHQ6rTl7VvCv7FS9cbOSYE6f3P7uSGcu
+         yG39yakmvYSkDoQtQNnLcuHY6bX2aEDXsrW8GF4OeM7IIOdA2J3yPcEwM+zI143xNuTo
+         kLeEYDFaWFLj4ujpxYnc9altRsZWN2EZDOXN0M2Fr7ZYEFbXOBUwthx7OBlnzG+9wcMV
+         /wWj/AoS5nc7dxR2+3MbvGSwMeAhBxqlYV0T2g99TftJN30wXmLu8lzng2X1tSL2vYJQ
+         bPmSGHIpR+zek9qqvXjeV5mZe3/wZFpACrCbEPKa55PznZa6KZFsaW1PiThR2fEOfbxc
+         bYGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4kUtfp3H5GSUAINL9ZlTXdmm6nQlA3alJD1HkhEN17Y=;
+        b=xaweYdINpNDdRaLOY87phg2OCQeBPHXzG3YbqOgMpoX1r5c76fQUnE2CVzaGEbNxBU
+         /57ro+lR1dw5V+MUyoEFtE0EMVsif4ABukxsokXunBBkk0qpEHpqphCI1FkMPLg1jj26
+         H2T19BKtEBgnxRJ4mD+V3ClD1xPyV5vt0lfueFKAYiW0AntIMDa9Lx3fM9N7hGh3jY5o
+         63LgvIXB6+vQSTFNjA6IE5CHts+fPylNDuCedVi1JQ2j3waGIdB1jqKWyYSCXlEdawLY
+         oRCPkJdFJeT5sL34Ddze/qIhWQ639sC2iTUukV4+4Ql7xfisoRziebNxscgw0NB2EUNe
+         UBXA==
+X-Gm-Message-State: AOAM532qvdXJXcUDMryY6BEHFAnJI2Z6mCDBvFYyoC33gXkFLFJ+Bm5/
+        Zb86WhoDdIzTemcY3RgIJppqsZFcAhDMqeSMEJ9MHg==
+X-Google-Smtp-Source: ABdhPJxP6PaDnpfe1GV2kJAHss8zrzOzBgcuTdv/5lJXJJnABkEoHAt2AvoHY8ikK5qYw27oeMpZvAAlX4n70PaT46c=
+X-Received: by 2002:a67:f74f:: with SMTP id w15mr32770975vso.61.1634064573327;
+ Tue, 12 Oct 2021 11:49:33 -0700 (PDT)
 MIME-Version: 1.0
+References: <20210930100719.2176-1-mika.westerberg@linux.intel.com>
+ <20210930100719.2176-2-mika.westerberg@linux.intel.com> <CAArk9MPWh4f1E=ecKBHy8PFzvU_y_ROgDyUU_O3ZQ0FuMhkj5Q@mail.gmail.com>
+ <YVqOjF/xjqFV+Dl3@lahna>
+In-Reply-To: <YVqOjF/xjqFV+Dl3@lahna>
+From:   Mauro Lima <mauro.lima@eclypsium.com>
+Date:   Tue, 12 Oct 2021 15:49:22 -0300
+Message-ID: <CAArk9MPY+rCQse+JXtvb4KqunN9FZ=toK_v=PV-ro4cO6=5s7Q@mail.gmail.com>
+Subject: Re: [PATCH 1/3] mtd: spi-nor: intel-spi: Disable write protection
+ only if asked
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Michael Walle <michael@walle.cc>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 2021-10-12 at 19:40 +0200, Uwe Kleine-K=C3=B6nig wrote:
-> On Tue, Oct 12, 2021 at 07:47:22PM +0300, Jarkko Sakkinen wrote:
-> > On Mon, 2021-10-11 at 15:27 +0200, Uwe Kleine-K=C3=B6nig wrote:
-> > > Up to now st33zp24_remove() returns zero unconditionally. Make it ret=
-urn
-> > > void instead which makes it easier to see in the callers that there i=
-s
-> > > no error to handle.
-> >=20
-> > So, void is not a return value.
->=20
-> Hmm, would you be more happy with "Make it return no value"? I think
-> this is less understandable than "Make it return void". Do you have a
-> constructive suggestion how to formulate.
+Hi Mika
 
-I think it is semantically more correct to say that it does not return
-any value, given that it does not do that :-) You can just state e.g.
-"Make st33zp24_remove() a void function.", it is semantically sound and
-not really that confusing.
-
-/Jarkko
-
+On Mon, Oct 4, 2021 at 2:18 AM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> Hi,
+>
+> On Fri, Oct 01, 2021 at 05:23:23PM -0300, Mauro Lima wrote:
+> > Question for maintainers: With these changes is it safe to remove the
+> > *(DANGEROUS)* tag from menuconfig?
+>
+> I don't think we want to remove that. This driver is not for regular
+> users, at least in its current form.
+Do we know why this is still dangerous for the user?
+My plan is to make a sys/class driver to query write protection status
+of the SPI, this will be
+used by fwupd to gather information about vendors, also should be easy
+for the user to use
+'cat' and see the information from userspace. For this to be possible
+we need kernel engineers
+to compile the kernel with this driver enabled, but the (DANGEROUS)
+tag is a no go for most
+of them.
+Is there anything I can do to make this possible?
+Thanks
