@@ -2,46 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D19842A880
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Oct 2021 17:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2178042A88E
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Oct 2021 17:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237569AbhJLPmI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Oct 2021 11:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
+        id S237612AbhJLPmQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Oct 2021 11:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237516AbhJLPmC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Oct 2021 11:42:02 -0400
+        with ESMTP id S237589AbhJLPmJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Oct 2021 11:42:09 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F96BC061749
-        for <linux-spi@vger.kernel.org>; Tue, 12 Oct 2021 08:40:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9119DC061772
+        for <linux-spi@vger.kernel.org>; Tue, 12 Oct 2021 08:40:05 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1maJsi-0000Af-3J; Tue, 12 Oct 2021 17:39:56 +0200
+        id 1maJsn-0000Nb-27; Tue, 12 Oct 2021 17:40:01 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1maJsh-0004jq-GW; Tue, 12 Oct 2021 17:39:55 +0200
+        id 1maJsl-0004mD-Rx; Tue, 12 Oct 2021 17:39:59 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1maJse-0004Z0-EV; Tue, 12 Oct 2021 17:39:52 +0200
+        id 1maJse-0004Z3-JJ; Tue, 12 Oct 2021 17:39:52 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>
 Cc:     Mark Brown <broonie@kernel.org>, kernel@pengutronix.de,
         linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH v2 17/20] serial: max310x: Make max310x_remove() return void
-Date:   Tue, 12 Oct 2021 17:39:42 +0200
-Message-Id: <20211012153945.2651412-18-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH v2 18/20] serial: sc16is7xx: Make sc16is7xx_remove() return void
+Date:   Tue, 12 Oct 2021 17:39:43 +0200
+Message-Id: <20211012153945.2651412-19-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211012153945.2651412-1-u.kleine-koenig@pengutronix.de>
 References: <20211012153945.2651412-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Patch-Hashes: v=1; h=sha256; i=X+8kXHVoMLlUbvR5fe1/gT2QigYKhx+Pwe/X6mIJSOE=; m=dpk5iT4UJQeM0ZBMzrFgdHLqDzvAfkfqyfi4buOfFCI=; p=jl7BJx7UNvJ6kdZKTi6IywhHgXu7PYGvkRZwcI69alQ=; g=2d5080d5848c1455a8b7930e10f4aa7e2d5d4674
-X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFlrCwACgkQwfwUeK3K7AnvBQf/Tgu FBpEIBn09cjtcI2Mbyuj3PtePB60usUV774JUBckB/pk27+HIZnAHQeZWarD5TFcTBX4hbeIDAJlp Ck/7mokoMRtq7xGlJW87yRAcS47NQORh9EdDQNR0/CXoBHk6gcBj0Of+jEI4nxw6nRKdConVB7ovo JRnI3LG7sUD/ZakPby+W8zedld/x/46WA/6V0rjHtEdql77QsoBrIA2UW2fIwJwXz40QiHw4WxdA5 VDNZMsvzoUsksqFSDDQB1V8T2oeE77eI4TnaboNCwrG5FxKRUuw/G7ib5s0b50Z+xseWDyQgk0VCT +XVbEQUTa2EqcWeB/KyVwgt6LMSl2/A==
+X-Patch-Hashes: v=1; h=sha256; i=4Pou8jXQbhOkXAt6/muRjkP0OfJUPHt75pctr7W+qqQ=; m=FIxK0yiWgNMRKKImS8BCXtEUBZW2wFh2le6TX2NO04A=; p=Y2/spG10FZuOVKKCfBzsrca0ACgAG7pF66CtGegD8JQ=; g=4125ad5aa361e24225170e3f9083b1a39652127c
+X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFlrC8ACgkQwfwUeK3K7AkSPAf+LMT SgAFO3tZNZZ1LDwGN+CELqcna7S0o6KZVS00mDiv8s1CojK3MIWyqch1Qt1dv03uGl6MUqIMNknYN CPS/0qOSDITDrdtaCQmyXaL03YjZcVdj7nH7PscGQfpvE2CgllPJZG5GJ4HRjN88uucr3iwtd6kId 4b4VXSYei502hNrn8MxaAtbyNbLEjbc6iSH+Bs6QEVHSG6a5tcwkgsH+VIuGhPXCepjei/FeW6gI/ utPuAxfrrEDaubt+MG6Go7cq34GUyVHjOLC5xSZU1sqYrP6qAMUCyJrLyfDqXXC5KSpZtrXm3ZJ2D YwkzB3dbDGyCUsp01wa3Mtbz7LNTamQ==
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ukl@pengutronix.de
@@ -51,49 +51,61 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Up to now max310x_remove() returns zero unconditionally. Make it return
-void instead which makes it easier to see in the callers that there is
-no error to handle.
+Up to now sc16is7xx_remove() returns zero unconditionally. Make it
+return void instead which makes it easier to see in the callers that
+there is no error to handle.
 
 Also the return value of spi remove callbacks is ignored anyway.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/tty/serial/max310x.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/tty/serial/sc16is7xx.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
-index 3df0788ddeb0..dde0824b2fa5 100644
---- a/drivers/tty/serial/max310x.c
-+++ b/drivers/tty/serial/max310x.c
-@@ -1426,7 +1426,7 @@ static int max310x_probe(struct device *dev, const struct max310x_devtype *devty
+diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
+index acbb615dd28f..64e7e6c8145f 100644
+--- a/drivers/tty/serial/sc16is7xx.c
++++ b/drivers/tty/serial/sc16is7xx.c
+@@ -1365,7 +1365,7 @@ static int sc16is7xx_probe(struct device *dev,
  	return ret;
  }
  
--static int max310x_remove(struct device *dev)
-+static void max310x_remove(struct device *dev)
+-static int sc16is7xx_remove(struct device *dev)
++static void sc16is7xx_remove(struct device *dev)
  {
- 	struct max310x_port *s = dev_get_drvdata(dev);
+ 	struct sc16is7xx_port *s = dev_get_drvdata(dev);
  	int i;
-@@ -1441,8 +1441,6 @@ static int max310x_remove(struct device *dev)
- 	}
+@@ -1385,8 +1385,6 @@ static int sc16is7xx_remove(struct device *dev)
+ 	kthread_stop(s->kworker_task);
  
  	clk_disable_unprepare(s->clk);
 -
 -	return 0;
  }
  
- static const struct of_device_id __maybe_unused max310x_dt_ids[] = {
-@@ -1491,7 +1489,8 @@ static int max310x_spi_probe(struct spi_device *spi)
+ static const struct of_device_id __maybe_unused sc16is7xx_dt_ids[] = {
+@@ -1444,7 +1442,9 @@ static int sc16is7xx_spi_probe(struct spi_device *spi)
  
- static int max310x_spi_remove(struct spi_device *spi)
+ static int sc16is7xx_spi_remove(struct spi_device *spi)
  {
--	return max310x_remove(&spi->dev);
-+	max310x_remove(&spi->dev);
+-	return sc16is7xx_remove(&spi->dev);
++	sc16is7xx_remove(&spi->dev);
++
 +	return 0;
  }
  
- static const struct spi_device_id max310x_id_table[] = {
+ static const struct spi_device_id sc16is7xx_spi_id_table[] = {
+@@ -1497,7 +1497,9 @@ static int sc16is7xx_i2c_probe(struct i2c_client *i2c,
+ 
+ static int sc16is7xx_i2c_remove(struct i2c_client *client)
+ {
+-	return sc16is7xx_remove(&client->dev);
++	sc16is7xx_remove(&client->dev);
++
++	return 0;
+ }
+ 
+ static const struct i2c_device_id sc16is7xx_i2c_id_table[] = {
 -- 
 2.30.2
 
