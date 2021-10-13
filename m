@@ -2,107 +2,165 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6E642B989
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Oct 2021 09:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4CDB42B929
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Oct 2021 09:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238670AbhJMHvs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Oct 2021 03:51:48 -0400
-Received: from twhmllg3.macronix.com ([122.147.135.201]:59884 "EHLO
-        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238634AbhJMHvr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Oct 2021 03:51:47 -0400
-Received: from TWHMLLG3.macronix.com (localhost [127.0.0.2] (may be forged))
-        by TWHMLLG3.macronix.com with ESMTP id 19D7OIYj019580;
-        Wed, 13 Oct 2021 15:24:18 +0800 (GMT-8)
-        (envelope-from zhengxunli@mxic.com.tw)
-Received: from twhfmlp1.macronix.com (twhfmlp1.macronix.com [172.17.20.91])
-        by TWHMLLG3.macronix.com with ESMTP id 19D7NkaN019186;
-        Wed, 13 Oct 2021 15:23:46 +0800 (GMT-8)
-        (envelope-from zhengxunli@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
-        by Forcepoint Email with ESMTP id 4B960207F6AF699EF3AD;
-        Wed, 13 Oct 2021 15:23:47 +0800 (CST)
-In-Reply-To: <OF86339F0C.88E145E3-ON4825876D.002567AA-4825876D.002569D9@LocalDomain>
-References: <20211008162228.1753083-1-miquel.raynal@bootlin.com> <20211008162228.1753083-10-miquel.raynal@bootlin.com> <OF86339F0C.88E145E3-ON4825876D.002567AA-4825876D.002569D9@LocalDomain>
-To:     "Miquel Raynal" <miquel.raynal@bootlin.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        <linux-mtd@lists.infradead.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Mark Brown" <broonie@kernel.org>,
-        "Xiangsheng Hou" <Xiangsheng.Hou@mediatek.com>,
-        "Boris Brezillon" <bbrezillon@kernel.org>,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jaimeliao@mxic.com.tw,
-        juliensu@mxic.com.tw,
-        "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
-        "Miquel Raynal" <miquel.raynal@bootlin.com>
-Subject: =?Big5?B?UmU6IKZeq0g6IFtSRkMgUEFUQ0ggMDkvMTBdIHNwaTogbXhpYzogQWRk?=
- =?Big5?B?IHN1cHBvcnQgZm9yIGRpcmVjdCBtYXBwaW5n?=
+        id S229490AbhJMHf4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Oct 2021 03:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238405AbhJMHfz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Oct 2021 03:35:55 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76F4C061714
+        for <linux-spi@vger.kernel.org>; Wed, 13 Oct 2021 00:33:52 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1maYlq-0005PA-QU; Wed, 13 Oct 2021 09:33:50 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1maYlo-0005GT-0p; Wed, 13 Oct 2021 09:33:48 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1maYln-0006mV-Vm; Wed, 13 Oct 2021 09:33:47 +0200
+Date:   Wed, 13 Oct 2021 09:33:45 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@intel.com>
+Subject: Re: Deadlock in spi_add_device() -- device core problem
+Message-ID: <20211013073345.tineupm3unuyjzxk@pengutronix.de>
+References: <20211007160524.qhjtcwtto2ftsmhe@pengutronix.de>
+ <YV8eIoxIxQLC5x5N@kroah.com>
+ <20211007165214.r5h7x3evdqbwxmma@pengutronix.de>
+ <YWBITX2Wbfx/QHCE@sirena.org.uk>
+ <20211012193005.lxqzbsdeh4k7nxe2@pengutronix.de>
+ <YWaCMwt+2QVRfCKY@kroah.com>
 MIME-Version: 1.0
-X-KeepSent: 2120B7BA:FA9EA9F2-4825876D:002705BD;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3FP6 SHF907 April 26, 2018
-Message-ID: <OF2120B7BA.FA9EA9F2-ON4825876D.002705BD-4825876D.0028A142@mxic.com.tw>
-From:   zhengxunli@mxic.com.tw
-Date:   Wed, 13 Oct 2021 15:23:47 +0800
-X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2021/10/13 PM 03:23:47,
-        Serialize complete at 2021/10/13 PM 03:23:47
-Content-Type: text/plain; charset="US-ASCII"
-X-MAIL: TWHMLLG3.macronix.com 19D7NkaN019186
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kmrcrxhpjwp2yhq5"
+Content-Disposition: inline
+In-Reply-To: <YWaCMwt+2QVRfCKY@kroah.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-> Implement the ->dirmap_create() and ->dirmap_read/write() hooks to
-> provide a fast path for read and write accesses.
-> 
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
->  drivers/spi/spi-mxic.c | 171 ++++++++++++++++++++++++++++++++++-------
->  1 file changed, 144 insertions(+), 27 deletions(-)
+--kmrcrxhpjwp2yhq5
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hi Miquel,
+On Wed, Oct 13, 2021 at 08:52:35AM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Oct 12, 2021 at 09:30:05PM +0200, Uwe Kleine-K=F6nig wrote:
+> > Hi Mark,
+> >=20
+> > On Fri, Oct 08, 2021 at 02:31:57PM +0100, Mark Brown wrote:
+> > > On Thu, Oct 07, 2021 at 06:52:14PM +0200, Uwe Kleine-K=F6nig wrote:
+> > > > On Thu, Oct 07, 2021 at 06:19:46PM +0200, Greg Kroah-Hartman wrote:
+> > > > > On Thu, Oct 07, 2021 at 06:05:24PM +0200, Uwe Kleine-K=F6nig wrot=
+e:
+> > >=20
+> > > > > Drivers for a bus bind to the bus, they should not be creating new
+> > > > > devices for that same bus, as that does not seem correct.
+> > >=20
+> > > > That's not the culprit here. We have a spi-device (spi-mux) that is=
+ a
+> > > > bus device on the SoC's bus and a bus master for it's own bus. And
+> > > > spi_add_device for the spi-mux device triggers the probe function f=
+or
+> > > > the spi-mux driver which creates a new bus controller which triggers
+> > > > spi_add_device() for the devices on the inner bus.
+> > >=20
+> > > I think we need to be arranging for spi_add_lock to be per bus
+> > > rather than global - putting it into the controller ought to do
+> > > the trick.
+> >=20
+> > Yeah, that's what I consider the second best option that I already
+> > mentioned in the initial mail of this thread.
 
-I verified it by reading, writing, and erasing through normal and quad 
-modes
-on the Xilinx Zynq PicoZed FPGA board. Except for the need to update the 
-SPI
-MXIC driver version, it looks good.
+I tested that a bit, I'll have to address an lockdep splat for it
+(because the lock is used in a nested way), otherwise it at least fixes
+the deadlock.
 
-Tested-by: Zhengxun Li <zhengxunli@mxic.com.tw>
-Reviewed-by: Zhengxun Li <zhengxunli@mxic.com.tw>
+> > @Greg: Would you expect that it should be possible (and benificial) to
+> > rework the code to not hold a lock at all during device_add()?
+>=20
+> rework the driver core or the spi code?
+>=20
+> /me is confused...
 
+I expect the driver core to be fine. I meant the spi core. i.e. is it
+bad enough that the spi core holds a lock during device_add() to
+justify some effort to fix that; and is such a fix even possible?
 
+> > This would then need something like:
+> >=20
+> > 	lock() # either per controller or global
+> > 	if bus already has a device for the same chipselect:
+> > 	    error out;
+> > 	register chipselect as busy
+> > 	unlock();
+> >=20
+> > 	ret =3D device_add(...)
+> >=20
+> > 	if ret:
+> > 	    lock()
+> > 	    unregister chipselect
+> > 	    unlock()
+> >=20
+> > Is this worth the effort?
+>=20
+> Watch out that you do not have probe() calls racing each other, we have
+> guaranteed that they will be called serially in the past.
 
-CONFIDENTIALITY NOTE:
+That won't happen because if there are really two devices to be
+registered on the same CS line, only for one of them device_add() is
+called. Ah, there is an ambiguity in my pseudo code, I guess this one is
+better:
 
-This e-mail and any attachments may contain confidential information 
-and/or personal data, which is protected by applicable laws. Please be 
-reminded that duplication, disclosure, distribution, or use of this e-mail 
-(and/or its attachments) or any part thereof is prohibited. If you receive 
-this e-mail in error, please notify us immediately and delete this mail as 
-well as its attachment(s) from your system. In addition, please be 
-informed that collection, processing, and/or use of personal data is 
-prohibited unless expressly permitted by personal data protection laws. 
-Thank you for your attention and cooperation.
+ 	lock() # either per controller or global
+ 	if bus already has the CS marked as busy:
+ 	    error out;
+ 	mark chipselect as busy
+ 	unlock();
+=20
+ 	ret =3D device_add(...)
+=20
+ 	if ret:
+ 	    lock()
+ 	    mark chipselect as free
+ 	    unlock()
 
-Macronix International Co., Ltd.
+Best regards
+Uwe
 
-=====================================================================
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
+--kmrcrxhpjwp2yhq5
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-============================================================================
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFmi9YACgkQwfwUeK3K
+7AlM8wgAluKaTeOwjdu+d2QQPSQSvWmgFJLw9yCiLRBXO4fSF6SI4enOUy9QD2sx
+rSyBP810UHavBm7HeFTbTehVb2t+IvY/0es7/a+UebLjwELueTsrxCGitxV1SRaH
+gSMfpk+LNvsMfoeLXb8rOocuAFCAXla+OLa1KqApYYdkEcfsAOadxzKh7etuvJj8
+NPBM1E6acGC4T9J7EmBpp9BbNO+pXChkUkhbISVnL94Fgc1gl0rt4J2NG5sO8pbf
+jL2NKu20eirfQl+L5iUmMl5IagGrkIotqlCpPwlp5qGpUliQqlSifBGkfNNDnsms
+BB38/p7b1BpFpbYlqDNNhs6PXc8QAg==
+=BI0f
+-----END PGP SIGNATURE-----
 
-CONFIDENTIALITY NOTE:
-
-This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
-
-Macronix International Co., Ltd.
-
-=====================================================================
-
+--kmrcrxhpjwp2yhq5--
