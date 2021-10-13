@@ -2,126 +2,194 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20EB942C05E
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Oct 2021 14:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1973242C0D9
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Oct 2021 15:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233690AbhJMMqg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Wed, 13 Oct 2021 08:46:36 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:58993 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbhJMMqg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Oct 2021 08:46:36 -0400
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 361E160015;
-        Wed, 13 Oct 2021 12:44:30 +0000 (UTC)
-Date:   Wed, 13 Oct 2021 14:44:29 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        kernel@pengutronix.de, linux-mtd@lists.infradead.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH v2 13/20] mtd: dataflash: Warn about failure to
- unregister mtd device
-Message-ID: <20211013144429.65b294e5@xps13>
-In-Reply-To: <20211012153945.2651412-14-u.kleine-koenig@pengutronix.de>
-References: <20211012153945.2651412-1-u.kleine-koenig@pengutronix.de>
-        <20211012153945.2651412-14-u.kleine-koenig@pengutronix.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S234043AbhJMNCL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Oct 2021 09:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233368AbhJMNCK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Oct 2021 09:02:10 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CACC061570
+        for <linux-spi@vger.kernel.org>; Wed, 13 Oct 2021 06:00:07 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1madra-0004lV-7R; Wed, 13 Oct 2021 15:00:06 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1madrZ-0005bR-MH; Wed, 13 Oct 2021 15:00:05 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1madrZ-0007Yh-Lb; Wed, 13 Oct 2021 15:00:05 +0200
+Date:   Wed, 13 Oct 2021 15:00:05 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spi: Fix deadlock when adding SPI controllers on SPI
+ buses
+Message-ID: <20211013130005.shbj4cupoumse2vc@pengutronix.de>
+References: <20211013122628.1369702-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jm2w7mdf3xllugfr"
+Content-Disposition: inline
+In-Reply-To: <20211013122628.1369702-1-broonie@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Uwe,
 
-u.kleine-koenig@pengutronix.de wrote on Tue, 12 Oct 2021 17:39:38 +0200:
+--jm2w7mdf3xllugfr
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> When an spi driver's remove function returns a non-zero error code
-
-Should we s/an spi/a SPI/?
-
-> nothing happens apart from emitting a generic error message. Make this
-> error message more device specific and return zero instead.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+On Wed, Oct 13, 2021 at 01:26:28PM +0100, Mark Brown wrote:
+> Currently we have a global spi_add_lock which we take when adding new
+> devices so that we can check that we're not trying to reuse a chip
+> select that's already controlled.  This means that if the SPI device is
+> itself a SPI controller and triggers the instantiation of further SPI
+> devices we trigger a deadlock as we try to register and instantiate
+> those devices while in the process of doing so for the parent controller
+> and hence already holding the global spi_add_lock.  Since we only care
+> about concurrency within a single SPI bus move the lock to be per
+> controller, avoiding the deadlock.
+>=20
+> This can be easily triggered in the case of spi-mux.
+>=20
+> Reported-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->  drivers/mtd/devices/mtd_dataflash.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mtd/devices/mtd_dataflash.c b/drivers/mtd/devices/mtd_dataflash.c
-> index 9802e265fca8..2691b6b79df8 100644
-> --- a/drivers/mtd/devices/mtd_dataflash.c
-> +++ b/drivers/mtd/devices/mtd_dataflash.c
-> @@ -919,7 +919,10 @@ static int dataflash_remove(struct spi_device *spi)
->  	status = mtd_device_unregister(&flash->mtd);
->  	if (status == 0)
->  		kfree(flash);
-> -	return status;
-> +	else
-> +		dev_warn(&spi->dev, "Failed to unregister mtd device (%pe)\n",
-> +			 ERR_PTR(status));
-> +	return 0;
+>  drivers/spi/spi.c       | 21 ++++++++++-----------
+>  include/linux/spi/spi.h |  3 +++
+>  2 files changed, 13 insertions(+), 11 deletions(-)
+>=20
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> index 401f62f6f5b5..71d061132ada 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -518,12 +518,6 @@ static LIST_HEAD(spi_controller_list);
+>   */
+>  static DEFINE_MUTEX(board_lock);
+> =20
+> -/*
+> - * Prevents addition of devices with same chip select and
+> - * addition of devices below an unregistering controller.
+> - */
+> -static DEFINE_MUTEX(spi_add_lock);
+> -
+>  /**
+>   * spi_alloc_device - Allocate a new SPI device
+>   * @ctlr: Controller to which device is connected
+> @@ -676,9 +670,13 @@ static int spi_add_device(struct spi_device *spi)
+>  	/* Set the bus ID string */
+>  	spi_dev_set_name(spi);
+> =20
+> -	mutex_lock(&spi_add_lock);
+> +	/* We need to make sure there's no other device with this
+> +	 * chipselect **BEFORE** we call setup(), else we'll trash
+> +	 * its configuration.  Lock against concurrent add() calls.
+> +	 */
 
-As part of a recent NAND cleanup series we ended up adding WARN_ON() [1]
-to make it very clear that if this happens, it's not expected at all (it
-was Boris' advice).
+This comment is already there, it seems you duplicated it with your
+patch? Maybe a merge issue with
+6bfb15f34dd8c8a073e03a31c485ef5774b127df?
 
-I don't think there is only one good solution but perhaps its best to
-keep it sync'ed with the other drivers in MTD?
+> +	mutex_lock(&ctlr->add_lock);
+>  	status =3D __spi_add_device(spi);
+> -	mutex_unlock(&spi_add_lock);
+> +	mutex_unlock(&ctlr->add_lock);
+>  	return status;
+>  }
+> =20
+> @@ -697,7 +695,7 @@ static int spi_add_device_locked(struct spi_device *s=
+pi)
+>  	/* Set the bus ID string */
+>  	spi_dev_set_name(spi);
+> =20
+> -	WARN_ON(!mutex_is_locked(&spi_add_lock));
+> +	WARN_ON(!mutex_is_locked(&ctlr->add_lock));
+>  	return __spi_add_device(spi);
+>  }
+> =20
+> @@ -2950,6 +2948,7 @@ int spi_register_controller(struct spi_controller *=
+ctlr)
+>  	spin_lock_init(&ctlr->bus_lock_spinlock);
+>  	mutex_init(&ctlr->bus_lock_mutex);
+>  	mutex_init(&ctlr->io_mutex);
+> +	mutex_init(&ctlr->add_lock);
+>  	ctlr->bus_lock_flag =3D 0;
+>  	init_completion(&ctlr->xfer_completion);
+>  	if (!ctlr->max_dma_len)
+> @@ -3086,7 +3085,7 @@ void spi_unregister_controller(struct spi_controlle=
+r *ctlr)
+> =20
+>  	/* Prevent addition of new devices, unregister existing ones */
+>  	if (IS_ENABLED(CONFIG_SPI_DYNAMIC))
+> -		mutex_lock(&spi_add_lock);
+> +		mutex_lock(&ctlr->add_lock);
+> =20
+>  	device_for_each_child(&ctlr->dev, NULL, __unregister);
+> =20
+> @@ -3117,7 +3116,7 @@ void spi_unregister_controller(struct spi_controlle=
+r *ctlr)
+>  	mutex_unlock(&board_lock);
+> =20
+>  	if (IS_ENABLED(CONFIG_SPI_DYNAMIC))
+> -		mutex_unlock(&spi_add_lock);
+> +		mutex_unlock(&ctlr->add_lock);
+>  }
+>  EXPORT_SYMBOL_GPL(spi_unregister_controller);
+> =20
+> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+> index 29e21d49aafc..eb7ac8a1e03c 100644
+> --- a/include/linux/spi/spi.h
+> +++ b/include/linux/spi/spi.h
+> @@ -527,6 +527,9 @@ struct spi_controller {
+>  	/* I/O mutex */
+>  	struct mutex		io_mutex;
+> =20
+> +	/* Used to avoid adding the same CS twice */
+> +	struct mutex		add_lock;
+> +
 
-Thanks,
-Miquèl
+Kernel-doc is missing for that one.
 
-[1]
-d6e4fd522461 mtd: rawnand: nandsim: Stop using nand_release()
-9fdd78f7bcda mtd: rawnand: xway: Stop using nand_release()
-d9f2a1af817d mtd: rawnand: vf610: Stop using nand_release()
-f6fc75978d88 mtd: rawnand: txx9ndfmc: Stop using nand_release()
-f3e169f44bdb mtd: rawnand: tmio: Stop using nand_release()
-ab135c51bb81 mtd: rawnand: tango: Stop using nand_release()
-068d86ecd9d9 mtd: rawnand: sunxi: Stop using nand_release()
-24acc3fa8b36 mtd: rawnand: stm32_fmc2: Stop using nand_release()
-c121cb980c09 mtd: rawnand: socrates: Stop using nand_release()
-35a37f9198e5 mtd: rawnand: sharpsl: Stop using nand_release()
-50abacbb621f mtd: rawnand: sh_flctl: Stop using nand_release()
-9748110bd22c mtd: rawnand: s3c2410: Stop using nand_release()
-10b87750ae17 mtd: rawnand: r852: Stop using nand_release()
-0a2bc9919cf7 mtd: rawnand: qcom: Stop using nand_release()
-d1aae005a00e mtd: rawnand: plat_nand: Stop using nand_release()
-23cf34615010 mtd: rawnand: pasemi: Stop using nand_release()
-2d9cf6f129f8 mtd: rawnand: oxnas: Stop using nand_release()
-f342df67b19a mtd: rawnand: orion: Stop using nand_release()
-b4533679c958 mtd: rawnand: omap2: Stop using nand_release()
-a9384f95fe77 mtd: rawnand: ndfc: Stop using nand_release()
-8fd507bb4210 mtd: rawnand: mxic: Stop using nand_release()
-c6dc082793d2 mtd: rawnand: mxc: Stop using nand_release()
-1fec333aadc2 mtd: rawnand: mtk: Stop using nand_release()
-1a36a7f78898 mtd: rawnand: mpc5121: Stop using nand_release()
-5ecbba617446 mtd: rawnand: marvell: Stop using nand_release()
-21b758277724 mtd: rawnand: lpc32xx_slc: Stop using nand_release()
-5f3bce3a5275 mtd: rawnand: lpc32xx_mlc: Stop using nand_release()
-28dcc4e8a831 mtd: rawnand: ingenic: Stop using nand_release()
-71a4917b4d4b mtd: rawnand: hisi504: Stop using nand_release()
-194f6c48cdd8 mtd: rawnand: gpmi: Stop using nand_release()
-dbe0241570ed mtd: rawnand: gpio: Stop using nand_release()
-9cc02f4c0a87 mtd: rawnand: fsmc: Stop using nand_release()
-f6c4e661491a mtd: rawnand: fsl_upm: Stop using nand_release()
-e9f2f5a80754 mtd: rawnand: fsl_ifc: Stop using nand_release()
-128bbbf0ac4d mtd: rawnand: fsl_elbc: Stop using nand_release()
-63a1460768a1 mtd: rawnand: diskonchip: Stop using nand_release()
-009e2e1d8318 mtd: rawnand: denali: Stop using nand_release()
-a9575c48e520 mtd: rawnand: davinci: Stop using nand_release()
-970024f031ae mtd: rawnand: cs553x: Stop using nand_release()
-544bac8999a6 mtd: rawnand: cafe: Stop using nand_release()
-8b88f4e0a88b mtd: rawnand: cadence: Stop using nand_release()
-937d039dfdcf mtd: rawnand: brcmnand: Stop using nand_release()
-936904305928 mtd: rawnand: bcm47xx: Stop using nand_release()
-4a3d21bc25c1 mtd: rawnand: au1550nd: Stop using nand_release()
-08f25cd767e1 mtd: rawnand: ams-delta: Stop using nand_release()
+(In the local patch I have for testing here, I wrote:
+
+	* @add_lock: mutex to avoid adding two devices on the same CS
+
+=2E)
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--jm2w7mdf3xllugfr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFm2FIACgkQwfwUeK3K
+7Aktrgf9Eia44haJLYxBdIUQHBgaZEUuv1eMN79qjtG7gpTi62hPO/QuMtybcR45
+bvF/cL5hAOhQSLIiaaKgQZ0fEV9wTDtyZTLdRyJG0YjxU1VM6gq/4q77p2Pxe+Nw
+NDQ87irZncfyZIahk7yaVMS+aDiAEcJOPdAbHBa6o5qZMsH96/lO1+GGSw5O9rKQ
+S9pUF6wzdfKCJgvQm4kj7mjIXSJkqIRUb+NeGBOkLHBQgS7Y28uNsCsRGzb7kRCH
+TvkJhSVBGUNzOVTc/8uBRf00eU0V+8wQi7HECJ5NBXzZD4oqNllyDa9PgovJ1PKo
+mifrbwsITFJo3lpCwXm9eWyHC4TuPQ==
+=FgvX
+-----END PGP SIGNATURE-----
+
+--jm2w7mdf3xllugfr--
