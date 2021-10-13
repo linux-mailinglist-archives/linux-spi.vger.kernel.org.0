@@ -2,68 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C80842BB08
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Oct 2021 11:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E8D42BB0F
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Oct 2021 11:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234523AbhJMJD7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Oct 2021 05:03:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35480 "EHLO mail.kernel.org"
+        id S232460AbhJMJGD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Oct 2021 05:06:03 -0400
+Received: from mga07.intel.com ([134.134.136.100]:48029 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229987AbhJMJD6 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 13 Oct 2021 05:03:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 78EFA610A1;
-        Wed, 13 Oct 2021 09:01:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1634115715;
-        bh=jN/4FAaN7crTTlDuot+9D29of9NN4is61FaPC7nYdAc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L5Gn6sSPZHVB588QFAb+aGM67vjlUeequD5fC5h/Fs6v6wdKC/kTv7i3IGPeRtKr2
-         aGu86AWA424KGny9HsUqy4omNpd3CFLdwfl450O3W0Tz42aNFl65DHtLfFtGHD9kM5
-         rbtJCG0xpY3dhsyaLdlB0lVR4CbWXjBkRkmhlf54=
-Date:   Wed, 13 Oct 2021 11:01:53 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Arnd Bergmann <arnd@arndb.de>,
-        Eric Piel <eric.piel@tremplin-utc.net>,
-        Mark Gross <mgross@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>, kernel@pengutronix.de,
-        linux-spi@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v2 12/20] misc: lis3lv02d: Make lis3lv02d_remove_fs()
- return void
-Message-ID: <YWaggVCzL/CoVLa6@kroah.com>
-References: <20211012153945.2651412-1-u.kleine-koenig@pengutronix.de>
- <20211012153945.2651412-13-u.kleine-koenig@pengutronix.de>
- <bc739810-abb4-d7bc-e901-227b43bc5a71@redhat.com>
+        id S234117AbhJMJGD (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 13 Oct 2021 05:06:03 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10135"; a="290876540"
+X-IronPort-AV: E=Sophos;i="5.85,370,1624345200"; 
+   d="scan'208";a="290876540"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2021 02:04:00 -0700
+X-IronPort-AV: E=Sophos;i="5.85,370,1624345200"; 
+   d="scan'208";a="441574840"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2021 02:03:56 -0700
+Received: by lahna (sSMTP sendmail emulation); Wed, 13 Oct 2021 12:03:53 +0300
+Date:   Wed, 13 Oct 2021 12:03:53 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mauro Lima <mauro.lima@eclypsium.com>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Michael Walle <michael@walle.cc>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH 1/3] mtd: spi-nor: intel-spi: Disable write protection
+ only if asked
+Message-ID: <YWag+RpkujjggPsW@lahna>
+References: <20210930100719.2176-1-mika.westerberg@linux.intel.com>
+ <20210930100719.2176-2-mika.westerberg@linux.intel.com>
+ <CAArk9MPWh4f1E=ecKBHy8PFzvU_y_ROgDyUU_O3ZQ0FuMhkj5Q@mail.gmail.com>
+ <YVqOjF/xjqFV+Dl3@lahna>
+ <CAArk9MPY+rCQse+JXtvb4KqunN9FZ=toK_v=PV-ro4cO6=5s7Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bc739810-abb4-d7bc-e901-227b43bc5a71@redhat.com>
+In-Reply-To: <CAArk9MPY+rCQse+JXtvb4KqunN9FZ=toK_v=PV-ro4cO6=5s7Q@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Oct 12, 2021 at 05:54:46PM +0200, Hans de Goede wrote:
-> Hi,
-> 
-> On 10/12/21 5:39 PM, Uwe Kleine-König wrote:
-> > Up to now lis3lv02d_remove_fs() returns zero unconditionally. Make it return
-> > void instead which makes it easier to see in the callers that there is
-> > no error to handle.
-> > 
-> > Also the return value of i2c and spi remove callbacks is ignored anyway.
-> > 
-> > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> 
-> Thanks, patch looks good to me:
-> 
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> 
-> Also please consider this as my ack for merging the
-> drivers/platform/x86/ part of this through whatever
-> tree is convenient.
+Hi,
 
-Thanks, I'll take it!
+On Tue, Oct 12, 2021 at 03:49:22PM -0300, Mauro Lima wrote:
+> Hi Mika
+> 
+> On Mon, Oct 4, 2021 at 2:18 AM Mika Westerberg
+> <mika.westerberg@linux.intel.com> wrote:
+> >
+> > Hi,
+> >
+> > On Fri, Oct 01, 2021 at 05:23:23PM -0300, Mauro Lima wrote:
+> > > Question for maintainers: With these changes is it safe to remove the
+> > > *(DANGEROUS)* tag from menuconfig?
+> >
+> > I don't think we want to remove that. This driver is not for regular
+> > users, at least in its current form.
+> Do we know why this is still dangerous for the user?
 
-greg k-h
+There was a bug in the driver in the past (that was already fixed but it
+did not yet reach the stable trees or something like that). At this
+unfortunate time there was no DANGEROUS in the name so Ubuntu kernel
+went and enabled it. Combined with the bug certain Lenovo laptops BIOS
+turned into read-only which prevented booting from non-default devices.
+
+This happened even when the driver did not do any "write" or "erase"
+operations, just clearing the status register or so.
+
+We don't want that to happen again.
+
+> My plan is to make a sys/class driver to query write protection status
+> of the SPI, this will be
+> used by fwupd to gather information about vendors, also should be easy
+> for the user to use
+> 'cat' and see the information from userspace. For this to be possible
+> we need kernel engineers
+> to compile the kernel with this driver enabled, but the (DANGEROUS)
+> tag is a no go for most
+> of them.
+> Is there anything I can do to make this possible?
+
+IMHO we can make certain parts of the driver, that are known not to
+cause any issues available without the DANGEROUS. I mean the controller
+exposes some information that I think you are intersted in and that does
+not cause anything to be sent to the flash chip itself.
