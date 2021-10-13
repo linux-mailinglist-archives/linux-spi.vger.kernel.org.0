@@ -2,80 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF6442C781
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Oct 2021 19:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D11942C815
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Oct 2021 19:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbhJMRYY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Oct 2021 13:24:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36390 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230225AbhJMRYY (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 13 Oct 2021 13:24:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1C28E61040;
-        Wed, 13 Oct 2021 17:22:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634145740;
-        bh=nG2EoRRdJa5eBOPONd3hnjhh/SBbCXGjbTtICsGwx4I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=px6o+DSCIdrfu20p2jXsmCTFORME13kwcDshmld9ZVqfwe4SJDFWnOHI2u2wNB+F4
-         Jpmhc5lXyLIasmt8DoyZ5+PoEdHy+X7lPBx4geN9CfJqmpXPJm6yChgxXww8Yp0a+2
-         51Ero/IJbnaMsO5i9wpxa7xc8tBebj9MP6l1foftAbNuRwmFbBWce8QIdsj9oVhzXm
-         DWpqH3fb4IENAg0WcKUFTKWSdZdAYhNUcg3QwvWItNro6V88TafHM2y8zGSATNVwnU
-         zuEAkWqktutcoveqy1zVK/+ILf0sAKdKFm/JUVCjImQBACsIYMUJrWxYRg98Rw0vZu
-         PtOm1zkghcyqA==
-Date:   Wed, 13 Oct 2021 18:22:17 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     kernel@pengutronix.de, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 1/2] spi: Make spi_add_lock a per-controller lock
-Message-ID: <YWcVyaw6YN3bRfcq@sirena.org.uk>
-References: <20211013133710.2679703-1-u.kleine-koenig@pengutronix.de>
- <YWb5gUxgdiczqV5Q@sirena.org.uk>
- <20211013161033.yrquwcgwzqxwfszo@pengutronix.de>
+        id S229714AbhJMRzc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Oct 2021 13:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229814AbhJMRza (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Oct 2021 13:55:30 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735E4C061746
+        for <linux-spi@vger.kernel.org>; Wed, 13 Oct 2021 10:53:26 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id p13so13891799edw.0
+        for <linux-spi@vger.kernel.org>; Wed, 13 Oct 2021 10:53:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Y88NO31n5zZQladVHGT0A7AV0jELq4UAK9M51NO2UeE=;
+        b=w1IGNF93XVj3d6vSv41EXHaCmxNzDxXdWwt8nhqaMSJGhuXjRTL+sywPi/wkXjhdiW
+         /AXVkKr4nhytkS6XPceL5qgwFYfze+E8eecmNwkq9g8AM9h2V4O9O64VtNXm6TJccFbj
+         dxsCvWAdpZZjaaXxuzLL7q3KAjo6wb5hopEuzQ9llDbGWVoMFlZIcGCDFThBa96ymvu0
+         wpDACie3VYnNC2RLh/3tOvCBYAIHYZ6Hv+ifv7/4GHYXo9omAckGf2gKBx4DhvvGE9Uz
+         NWmiqBlVD+58L1fMUWDa4AxdnbHwAQTdwE/PHsQDz+a+5pB+2B8psOdxAgQXN7hFg7Ho
+         JRuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Y88NO31n5zZQladVHGT0A7AV0jELq4UAK9M51NO2UeE=;
+        b=WZCflLCYrvMRfun2xC9ut0JoEx6Yvqu9hZ5qTzWzcCf7skZXSxPhBTthkUS6RclMpr
+         /Z+LuKLTcQiXQXA2j6gxil9Jnf0w9aNBxZHJ6ac4byfXAsseyzRugNkgGmJRckAjLv3+
+         N0b5EECBJvxz8ODlPvdezi91KDiuxA5YJOv6+x9+QUadX777V5+I250Lv+82mVcohhAx
+         Qt3MjzcCXbEcIf+NbrdW1vJweR3e3bq4nXhwZ5ZktemQwOIRe1NLGGfaQXNrlCy1eRxl
+         SevKAkz/xm5hpuzTcpRgF8YTaT32adUNUqpB05kpJ5PBbvhcpEt6SEJBEouJ5FBmtZpt
+         lOsQ==
+X-Gm-Message-State: AOAM532y3FOGgsZvUwRCuyjnNHAoFh2u2v/erEcbTmDKFog7rF2SPbvD
+        6qZyJJuuRGHiv28I8XHoHaiIDINw9hxPIHJCMc8fSA==
+X-Google-Smtp-Source: ABdhPJwWSHEYE1qdximFCtCdQMTeYuMyvtTpp6Xew2luRB9ik7+nz528hEPv7ehzfXChKRNfD57kPJc8IqMJE12tkis=
+X-Received: by 2002:a17:906:5343:: with SMTP id j3mr761563ejo.538.1634147605032;
+ Wed, 13 Oct 2021 10:53:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="noiCMqsGHJTG/Zf0"
-Content-Disposition: inline
-In-Reply-To: <20211013161033.yrquwcgwzqxwfszo@pengutronix.de>
-X-Cookie: Where do you think you're going today?
+References: <20211012153945.2651412-1-u.kleine-koenig@pengutronix.de> <20211012153945.2651412-3-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20211012153945.2651412-3-u.kleine-koenig@pengutronix.de>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 13 Oct 2021 19:53:14 +0200
+Message-ID: <CAMRc=MeyHwbm24fWPqKhx7yKktSXMZNaWqm24p6MW-hGCueRfw@mail.gmail.com>
+Subject: Re: [PATCH v2 02/20] gpio: max730x: Make __max730x_remove() return void
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, Oct 12, 2021 at 5:39 PM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> An spi or i2c remove callback is only called for devices that probed
+> successfully. In this case this implies that __max730x_probe() set a
+> non-NULL driver data. So the check ts =3D=3D NULL is never true. With thi=
+s
+> check dropped, __max730x_remove() returns zero unconditionally. Make it
+> return void instead which makes it easier to see in the callers that
+> there is no error to handle.
+>
+> Also the return value of i2c and spi remove callbacks is ignored anyway.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> ---
 
---noiCMqsGHJTG/Zf0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied, thanks!
 
-On Wed, Oct 13, 2021 at 06:10:33PM +0200, Uwe Kleine-K=F6nig wrote:
-> On Wed, Oct 13, 2021 at 04:21:37PM +0100, Mark Brown wrote:
-
-> > I'll go ahead with my copy of this (partly as I've already got it
-> > ready queued).
-
-> That's what I expected, I just sent it that the base for patch 2 is
-> properly available e.g. for the autobuilders. Did you modify your patch
-> since you sent it? If you resend or apply to your tree I can rebase
-> patch 2 on top of it.
-
-It's rebased (actually the public post was rebased).  I'll let you know
-if yours fails.
-
---noiCMqsGHJTG/Zf0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFnFckACgkQJNaLcl1U
-h9AnUAf+KY+yVi/K9+3oN6pRIEzCuVGvCu0mVse8KrFYTnLFuT+3n6zAZtnU/8vL
-fg/v00bniGAfzh4xDTZjl/Prx7Yl0GJO1rvWInbD3uQECeCLDyfwSBCuH1fD2ScC
-eB2ERsBK6JtK+d7b+EcZWuFddrZHDE6spZh0FyV47BIlL0cMZMOv5K3bgoenZim8
-3uYcf8h4k8ao3koeUM059JADmKQB0uLBgldHXWJPLB74tiqxXS1H9nJh6LIAU997
-izHOLheaKzr7aVASrSpyL5GhgSN08+Ma1XNiYJ38FgmVYX/CSOqRc2BrMvQu+kie
-bA/5TlOxHGcLutPUITSixBtHvqFSbA==
-=P0RB
------END PGP SIGNATURE-----
-
---noiCMqsGHJTG/Zf0--
+Bart
