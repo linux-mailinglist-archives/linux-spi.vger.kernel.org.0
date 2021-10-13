@@ -2,79 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5D642C3D2
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Oct 2021 16:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3C642C4A1
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Oct 2021 17:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237569AbhJMOsM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Oct 2021 10:48:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52716 "EHLO mail.kernel.org"
+        id S229696AbhJMPQB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Oct 2021 11:16:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35726 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230474AbhJMOsI (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 13 Oct 2021 10:48:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C1F0A61130;
-        Wed, 13 Oct 2021 14:46:03 +0000 (UTC)
+        id S229748AbhJMPQA (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 13 Oct 2021 11:16:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 07E6E6112D;
+        Wed, 13 Oct 2021 15:13:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634136365;
-        bh=tnlyNPeaKQA137YlG0dTcTaPG0qN1bE9aYRHS7ILETY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eBF4cmnyJiOpA2Mo7Mqim5VBvj/Lp3x+c6/woJNklp1KH57CAKIoNC6MEMyf5ZPx/
-         1B0iNyRb1HUg/1JI63jkZGkn/HVGYxddNyMh5y/m7lNNcG0hGQkSEc3v6osLuIb8QM
-         cXpp8yIdKT5CV0Cl8hoUA6SFDcx46bDEphJJffkfEwsrFUCtK3d+Beftkc2WdE3GQK
-         3vTuDD5ZM4U17ZHMzpnmIXENc7FPMszrHd1w9irJGsxjTKqH/L1sxFcFhrp7Yw9iOa
-         8jPseGf2f+EI5VcX/CCXZg0I81ZK7fz+J5MYAgjYHF7CzYXrwM2DNMrJ0h4a0/jFen
-         SRc/hBN0KCH4A==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Mark Brown <broonie@kernel.org>,
-        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Pratyush Yadav <p.yadav@ti.com>,
-        Ramuthevar Vadivel Murugan 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        Yoshitaka Ikeda <ikeda@nskint.co.jp>,
-        Apurva Nandan <a-nandan@ti.com>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: cadence-quadspi: fix dma_unmap_single() call
-Date:   Wed, 13 Oct 2021 16:45:55 +0200
-Message-Id: <20211013144600.2378037-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        s=k20201202; t=1634138037;
+        bh=jXEjCQ9GP5WHEHcqrHbhspO5YUVhZplNlVhS8sy9Lzw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XpS5Xg6Vx+UP1oXKCWFL3THSryz90MTMKxTRARY6xHSmUE2locTh/5upu7UeVy3Kt
+         2SjNc2qeMXU9AvE6YzumlP/weWnKQ/fezGz90W3st9Jjm3yqkXJAPUEzCsMMyaJnD1
+         Rd2eSHP7K92OJwqUgeEBcetC/nB6X8k1zNHX8CHKbGsAmeiA2qATqqnf5bsO40NI6k
+         if2ReofH1yOFzq9SshOP0hE9Swl3uAyZKI9Oyp9MRvEBM52qFZWtv+ZlPLjqXe4nLH
+         y/LVggddGF8aU6pkCjjDlo/ojDPF7inLzCEnqrK9W6y23fhKoi1Zho3zJlieZvC6lK
+         Q3ywaYyH4dXqg==
+Date:   Wed, 13 Oct 2021 16:13:54 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Richard Weinberger <richard@nod.at>, linux-spi@vger.kernel.org,
+        linux-mtd@lists.infradead.org, kernel@pengutronix.de
+Subject: Re: [PATCH v2 13/20] mtd: dataflash: Warn about failure to
+ unregister mtd device
+Message-ID: <YWb3sjwS2FBsLHzL@sirena.org.uk>
+References: <20211012153945.2651412-1-u.kleine-koenig@pengutronix.de>
+ <20211012153945.2651412-14-u.kleine-koenig@pengutronix.de>
+ <20211013144429.65b294e5@xps13>
+ <20211013140835.olo2dxdno6zlom7n@pengutronix.de>
+ <20211013163357.41c7471d@xps13>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9MC6GlOh61zZ2aFG"
+Content-Disposition: inline
+In-Reply-To: <20211013163357.41c7471d@xps13>
+X-Cookie: Where do you think you're going today?
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
 
-There are separate constants for the dma-mapping API and the dmaengine
-API, mixing them up causes a warning in some builds:
+--9MC6GlOh61zZ2aFG
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In file included from drivers/spi/spi-cadence-quadspi.c:12:
-drivers/spi/spi-cadence-quadspi.c: In function 'cqspi_versal_indirect_read_dma':
-drivers/spi/spi-cadence-quadspi.c:950:55: error: implicit conversion from 'enum dma_transfer_direction' to 'enum dma_data_direction' [-Werror=enum-conversion]
-  950 |         dma_unmap_single(dev, dma_addr, bytes_to_dma, DMA_DEV_TO_MEM);
-      |                                                       ^~~~~~~~~~~~~~
-include/linux/dma-mapping.h:407:70: note: in definition of macro 'dma_unmap_single'
-  407 | #define dma_unmap_single(d, a, s, r) dma_unmap_single_attrs(d, a, s, r, 0)
-      |                                                                      ^
+On Wed, Oct 13, 2021 at 04:33:57PM +0200, Miquel Raynal wrote:
+> > On Wed, Oct 13, 2021 at 02:44:29PM +0200, Miquel Raynal wrote:
 
-Fixes: 1a6f854f7daa ("spi: cadence-quadspi: Add Xilinx Versal external DMA support")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/spi/spi-cadence-quadspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > My (German) knowledge about the English Grammar claims that independent
+> > of how you spell SPI, it must be "an" because when I say it, it's
+> > [=C9=9Bspi:a=C9=AA] (unless you call it [spa=C9=AA]?)
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 5bdb1bae5c99..8b3d268ac63c 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -947,7 +947,7 @@ static int cqspi_versal_indirect_read_dma(struct cqspi_flash_pdata *f_pdata,
- 	writel(CQSPI_REG_INDIRECTWR_CANCEL_MASK,
- 	       reg_base + CQSPI_REG_INDIRECTRD);
- 
--	dma_unmap_single(dev, dma_addr, bytes_to_dma, DMA_DEV_TO_MEM);
-+	dma_unmap_single(dev, dma_addr, bytes_to_dma, DMA_FROM_DEVICE);
- 
- 	reg = readl(cqspi->iobase + CQSPI_REG_CONFIG);
- 	reg &= ~CQSPI_REG_CONFIG_DMA_MASK;
--- 
-2.29.2
+> I (personally) pronounce it [spa=C9=AA] with my French background and it
+> looks wrong to my eyes to use "an" before SPI because of that, but this
+> is biased and possibly wrong as well so please keep it your way, it's
+> fine.
 
+I'd say a here too but really don't care too much, I hadn't noticed.
+
+--9MC6GlOh61zZ2aFG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFm97IACgkQJNaLcl1U
+h9D3oAf/TK7RMgsjwiupY4yI4pFAx2nOZ49AJm1rXlXuce/vB8g2nUzu/wSjiQ2P
+Sk6GO55MacBvHfV2bqAO0eC3R2u5r8lUqNaPxox8XYch1g7fCSr96ctl3IudvQvU
+tq6VirXogCT6DOY6/iHdXR0+zZpcoh0pDvhbpDxnk8VpKFl0Z9VgP/OLPnkriGQW
+mNolEk2UP/n1ZWQj9NY4jnZQRWSBorT3hrKbINLMG4DkFqUlNqU3rh0o22aB5cpB
+cZn3ncZmj7sBrsg4vXIzdacClRgt6Kh2PXbO1AzF0WAePF5AZ0nmSOIBg7KONbHz
+zpLVgnpm8xD/bEOHSo3A9WvppUYAKA==
+=ngOE
+-----END PGP SIGNATURE-----
+
+--9MC6GlOh61zZ2aFG--
