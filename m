@@ -2,124 +2,80 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C630C42B982
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Oct 2021 09:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6E642B989
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Oct 2021 09:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238629AbhJMHvd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Oct 2021 03:51:33 -0400
-Received: from twhmllg3.macronix.com ([122.147.135.201]:59865 "EHLO
+        id S238670AbhJMHvs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Oct 2021 03:51:48 -0400
+Received: from twhmllg3.macronix.com ([122.147.135.201]:59884 "EHLO
         TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238653AbhJMHvd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Oct 2021 03:51:33 -0400
-X-Greylist: delayed 1787 seconds by postgrey-1.27 at vger.kernel.org; Wed, 13 Oct 2021 03:51:33 EDT
+        with ESMTP id S238634AbhJMHvr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Oct 2021 03:51:47 -0400
 Received: from TWHMLLG3.macronix.com (localhost [127.0.0.2] (may be forged))
-        by TWHMLLG3.macronix.com with ESMTP id 19D74Pbh001134
-        for <linux-spi@vger.kernel.org>; Wed, 13 Oct 2021 15:04:25 +0800 (GMT-8)
+        by TWHMLLG3.macronix.com with ESMTP id 19D7OIYj019580;
+        Wed, 13 Oct 2021 15:24:18 +0800 (GMT-8)
         (envelope-from zhengxunli@mxic.com.tw)
 Received: from twhfmlp1.macronix.com (twhfmlp1.macronix.com [172.17.20.91])
-        by TWHMLLG3.macronix.com with ESMTP id 19D74Egk001058;
-        Wed, 13 Oct 2021 15:04:14 +0800 (GMT-8)
+        by TWHMLLG3.macronix.com with ESMTP id 19D7NkaN019186;
+        Wed, 13 Oct 2021 15:23:46 +0800 (GMT-8)
         (envelope-from zhengxunli@mxic.com.tw)
 Received: from MXML06C.mxic.com.tw (mxml06c.macronix.com [172.17.14.55])
-        by Forcepoint Email with ESMTP id 4A9624BE66CA0D66112B;
-        Wed, 13 Oct 2021 15:04:15 +0800 (CST)
-In-Reply-To: <OF11A0CCB6.4C81ABAD-ON4825876D.00256D6A-4825876D.00256F7A@LocalDomain>
-References: <20211008162228.1753083-1-miquel.raynal@bootlin.com> <20211008162228.1753083-9-miquel.raynal@bootlin.com> <OF11A0CCB6.4C81ABAD-ON4825876D.00256D6A-4825876D.00256F7A@LocalDomain>
+        by Forcepoint Email with ESMTP id 4B960207F6AF699EF3AD;
+        Wed, 13 Oct 2021 15:23:47 +0800 (CST)
+In-Reply-To: <OF86339F0C.88E145E3-ON4825876D.002567AA-4825876D.002569D9@LocalDomain>
+References: <20211008162228.1753083-1-miquel.raynal@bootlin.com> <20211008162228.1753083-10-miquel.raynal@bootlin.com> <OF86339F0C.88E145E3-ON4825876D.002567AA-4825876D.002569D9@LocalDomain>
 To:     "Miquel Raynal" <miquel.raynal@bootlin.com>
-Cc:     "Rob Herring" <robh+dt@kernel.org>,
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        <linux-mtd@lists.infradead.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
         "Mark Brown" <broonie@kernel.org>,
         "Xiangsheng Hou" <Xiangsheng.Hou@mediatek.com>,
         "Boris Brezillon" <bbrezillon@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jaimeliao@mxic.com.tw, juliensu@mxic.com.tw,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jaimeliao@mxic.com.tw,
+        juliensu@mxic.com.tw,
         "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
-        "Miquel Raynal" <miquel.raynal@bootlin.com>,
-        stable@vger.kernel.org, "Mason Yang" <masonccyang@mxic.com.tw>,
-        "Richard Weinberger" <richard@nod.at>,
-        "Vignesh Raghavendra" <vigneshr@ti.com>,
-        "Tudor Ambarus" <Tudor.Ambarus@microchip.com>,
-        <linux-mtd@lists.infradead.org>, linux-spi@vger.kernel.org
-Subject: =?Big5?B?UmU6IKZeq0g6IFtSRkMgUEFUQ0ggMDgvMTBdIHNwaTogbXhpYzogRml4IHRoZQ==?=
- =?Big5?B?IHRyYW5zbWl0IHBhdGg=?=
+        "Miquel Raynal" <miquel.raynal@bootlin.com>
+Subject: =?Big5?B?UmU6IKZeq0g6IFtSRkMgUEFUQ0ggMDkvMTBdIHNwaTogbXhpYzogQWRk?=
+ =?Big5?B?IHN1cHBvcnQgZm9yIGRpcmVjdCBtYXBwaW5n?=
 MIME-Version: 1.0
-X-KeepSent: 7B755571:931AC374-4825876D:0025ED60;
+X-KeepSent: 2120B7BA:FA9EA9F2-4825876D:002705BD;
  type=4; name=$KeepSent
 X-Mailer: Lotus Notes Release 8.5.3FP6 SHF907 April 26, 2018
-Message-ID: <OF7B755571.931AC374-ON4825876D.0025ED60-4825876D.0026D775@mxic.com.tw>
+Message-ID: <OF2120B7BA.FA9EA9F2-ON4825876D.002705BD-4825876D.0028A142@mxic.com.tw>
 From:   zhengxunli@mxic.com.tw
-Date:   Wed, 13 Oct 2021 15:04:15 +0800
+Date:   Wed, 13 Oct 2021 15:23:47 +0800
 X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2021/10/13 PM 03:04:15,
-        Serialize complete at 2021/10/13 PM 03:04:15
+ 2021/10/13 PM 03:23:47,
+        Serialize complete at 2021/10/13 PM 03:23:47
 Content-Type: text/plain; charset="US-ASCII"
-X-MAIL: TWHMLLG3.macronix.com 19D74Egk001058
+X-MAIL: TWHMLLG3.macronix.com 19D7NkaN019186
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-> By working with external hardware ECC engines, we figured out that
-> Under certain circumstances, it is needed for the SPI controller to
-> check INT_TX_EMPTY and INT_RX_NOT_EMPTY in both receive and transmit
-> path (not only in the receive path). The delay penalty being
-> negligible, move this code in the common path.
+> Implement the ->dirmap_create() and ->dirmap_read/write() hooks to
+> provide a fast path for read and write accesses.
 > 
-> Fixes: b942d80b0a39 ("spi: Add MXIC controller driver")
-> Cc: stable@vger.kernel.org
-> Suggested-by: Mason Yang <masonccyang@mxic.com.tw>
 > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 > ---
->  drivers/spi/spi-mxic.c | 28 ++++++++++++----------------
->  1 file changed, 12 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-mxic.c b/drivers/spi/spi-mxic.c
-> index 96b418293bf2..4fb19e6f94b0 100644
-> --- a/drivers/spi/spi-mxic.c
-> +++ b/drivers/spi/spi-mxic.c
-> @@ -304,25 +304,21 @@ static int mxic_spi_data_xfer(struct mxic_spi 
-> *mxic, const void *txbuf,
-> 
->        writel(data, mxic->regs + TXD(nbytes % 4));
-> 
-> +      ret = readl_poll_timeout(mxic->regs + INT_STS, sts,
-> +                sts & INT_TX_EMPTY, 0, USEC_PER_SEC);
-> +      if (ret)
-> +         return ret;
-> +
-> +      ret = readl_poll_timeout(mxic->regs + INT_STS, sts,
-> +                sts & INT_RX_NOT_EMPTY, 0,
-> +                USEC_PER_SEC);
-> +      if (ret)
-> +         return ret;
-> +
-> +      data = readl(mxic->regs + RXD);
->        if (rxbuf) {
-> -         ret = readl_poll_timeout(mxic->regs + INT_STS, sts,
-> -                   sts & INT_TX_EMPTY, 0,
-> -                   USEC_PER_SEC);
-> -         if (ret)
-> -            return ret;
-> -
-> -         ret = readl_poll_timeout(mxic->regs + INT_STS, sts,
-> -                   sts & INT_RX_NOT_EMPTY, 0,
-> -                   USEC_PER_SEC);
-> -         if (ret)
-> -            return ret;
-> -
-> -         data = readl(mxic->regs + RXD);
->           data >>= (8 * (4 - nbytes));
->           memcpy(rxbuf + pos, &data, nbytes);
-> -         WARN_ON(readl(mxic->regs + INT_STS) & INT_RX_NOT_EMPTY);
-> -      } else {
-> -         readl(mxic->regs + RXD);
->        }
->        WARN_ON(readl(mxic->regs + INT_STS) & INT_RX_NOT_EMPTY);
-> 
-> -- 
-> 2.27.0
-> 
+>  drivers/spi/spi-mxic.c | 171 ++++++++++++++++++++++++++++++++++-------
+>  1 file changed, 144 insertions(+), 27 deletions(-)
 
+Hi Miquel,
+
+I verified it by reading, writing, and erasing through normal and quad 
+modes
+on the Xilinx Zynq PicoZed FPGA board. Except for the need to update the 
+SPI
+MXIC driver version, it looks good.
+
+Tested-by: Zhengxun Li <zhengxunli@mxic.com.tw>
 Reviewed-by: Zhengxun Li <zhengxunli@mxic.com.tw>
+
 
 
 CONFIDENTIALITY NOTE:
