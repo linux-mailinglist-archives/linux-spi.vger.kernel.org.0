@@ -2,81 +2,118 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4577342C4B6
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Oct 2021 17:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E42342C509
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Oct 2021 17:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbhJMPXo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Oct 2021 11:23:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37732 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229514AbhJMPXn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 13 Oct 2021 11:23:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CB8B56113D;
-        Wed, 13 Oct 2021 15:21:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634138500;
-        bh=t5e10G65gjp3B3qar5cAgb4SCPB6qq1fHssfgl10Nj0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nlvH/X2dFOznl8z7Q0go5UOxuCyl/P6orsyzoeAowrhefyh9c5aFxDNXey1JWQ0pg
-         1Sesh1ZzA6La0+v+/Pnv6QYJHoylIGUgYbJPOuZGv+4whym/1B/zkdl90ihlpvpTg1
-         pkVLzMbROqmswiJD38aWlhnyLmmxx6gmV+BYvTyTZG6SJa/D8PEcSXCecdWSAD/55t
-         SiRZpCdHzGkP0o2MXvF4LOLpv2zQfPLlx6ZgjnPkhQWXWNcuwv7Cv7T1takX4c9jPF
-         r/K/WkiiMnOrT3GUU30VDJDzwxvQD/asVJlXn7/C1lEeKkEUY/41HF2TuFnkQCOH2O
-         a197IxJCAnHKg==
-Date:   Wed, 13 Oct 2021 16:21:37 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     kernel@pengutronix.de, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 1/2] spi: Make spi_add_lock a per-controller lock
-Message-ID: <YWb5gUxgdiczqV5Q@sirena.org.uk>
-References: <20211013133710.2679703-1-u.kleine-koenig@pengutronix.de>
+        id S235119AbhJMPou (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Oct 2021 11:44:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235709AbhJMPos (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Oct 2021 11:44:48 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAE8C061764;
+        Wed, 13 Oct 2021 08:42:44 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id g62-20020a9d2dc4000000b0054752cfbc59so4253110otb.1;
+        Wed, 13 Oct 2021 08:42:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=37hVPOd3BIfvxpW5fFUuBklEo2czP1RmXoKx7X0bcv4=;
+        b=Jy5gzAES3gON/iVMPdegqj9JaQV3sbgnGhyzHkKRxU2R6RcDOP4hpvJ62nEH81JBhP
+         DLK3ZMeVFdbUBRtwrNO85/FN4x66+MfZLLjWENuYUiM+sV5MEPJlboN2gUTLDArMpIxq
+         KCNB62r6K42znXk5MppJnepvkqedLl/lrfIzikyG2J70nwRyW1XNYstnur9BIfpk7WfT
+         qiUCZI+FkWxaw3uYfIlM9nD+D6j1QaIAjsNeBy2qadxlbQLYWEqTK6W9zSCeAOb7WK+P
+         /gXXwsNeaRQU7VC1qfqQ9cBNNHPEGOhMGZHOZl8zjUgdz1iaYWqwunpcexCWzRVgGdW+
+         aAdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=37hVPOd3BIfvxpW5fFUuBklEo2czP1RmXoKx7X0bcv4=;
+        b=IxyefYZYPMgJd0NsdHcnBHG3+iDAuTUCnIS7WfmS1F3ytGDDzV0u4vWRuaEuwVYytg
+         cC+LJnkcJJwgTThWPdV43hjkVR8KmOmGKZ9TbVwj8jLLJbY5y4FVbmBQ5HbDlCIA1686
+         0xav/bZN5vEyjQ+C7xYQLbuzm129q6unKAxBaAGOC1QQPT6KI2YP3O3HMdljbd2+yloR
+         3Wn48cmge5hGEUuToGLPdyrOqZxa805GZVIpfmvtrq805v+L9bmAOWnpu6a8SfMwxXd4
+         xdyAWiFPhs4uIWwmpzZy/X2Yvacqo04ivCfC5epxtG8yL78sMH2OPXQ51xnsRicjTyRW
+         poKQ==
+X-Gm-Message-State: AOAM5317zg00j34aje+6scEEyHnJHQbSCOvUnkpIgwpkcRH7BRfXwbBP
+        vZYK/cfr063+MGUnkyG6DdQ=
+X-Google-Smtp-Source: ABdhPJyLua6LzSe9PuJTTcxWZIrYhD4BTtmKXiQnqFeOYdIcgOpJS7+rWZst0dWr4lw08IIH6Mx1pQ==
+X-Received: by 2002:a9d:750d:: with SMTP id r13mr31862806otk.264.1634139764172;
+        Wed, 13 Oct 2021 08:42:44 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e28sm3228070oth.40.2021.10.13.08.42.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Oct 2021 08:42:43 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 13 Oct 2021 08:42:41 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Laxman Dewangan <ldewangan@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: tegra20: fix build with CONFIG_PM_SLEEP=n
+Message-ID: <20211013154241.GA2356944@roeck-us.net>
+References: <20211013144538.2346533-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gGe1FY2Lb9AR1aQZ"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211013133710.2679703-1-u.kleine-koenig@pengutronix.de>
-X-Cookie: Where do you think you're going today?
+In-Reply-To: <20211013144538.2346533-1-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, Oct 13, 2021 at 04:45:23PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> There is another one of these warnings:
+> 
+> drivers/spi/spi-tegra20-slink.c:1197:12: error: 'tegra_slink_runtime_resume' defined but not used [-Werror=unused-function]
+>  1197 | static int tegra_slink_runtime_resume(struct device *dev)
+>       |            ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Give it the same treatment as the other functions in this file.
+> 
+> Fixes: efafec27c565 ("spi: Fix tegra20 build with CONFIG_PM=n")
+> Fixes: 2bab94090b01 ("spi: tegra20-slink: Declare runtime suspend and resume functions conditionally")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/spi/spi-tegra20-slink.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
+> index 713292b0c71e..33302f6b42d7 100644
+> --- a/drivers/spi/spi-tegra20-slink.c
+> +++ b/drivers/spi/spi-tegra20-slink.c
+> @@ -1194,7 +1194,7 @@ static int __maybe_unused tegra_slink_runtime_suspend(struct device *dev)
+>  	return 0;
+>  }
+>  
+> -static int tegra_slink_runtime_resume(struct device *dev)
+> +static __maybe_unused int tegra_slink_runtime_resume(struct device *dev)
 
---gGe1FY2Lb9AR1aQZ
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That was actually done in efafec27c565. The error is the result of a bad
+conflict resolution against 2bab94090b01, not a result of any of the
+two patches listed in the Fixes: tags. So, yes, either this patch needs
+to be applied in -next or the conflict resolution needs to be fixed.
 
-On Wed, Oct 13, 2021 at 03:37:09PM +0200, Uwe Kleine-K=F6nig wrote:
-> The spi_add_lock that is removed with this change was held when
-> spi_add_device() called device_add() (via __spi_add_device()).
->=20
-> In the case where the added device is an spi-mux calling device_add()
-> might result in calling the spi-mux's probe function which adds another
-> controller and for that spi_add_device() might be called. This results
-> in a dead-lock.
->=20
-> To circumvent this deadlock replace the global spi_add_lock with a lock
-> per controller.
->=20
-> The biggest part of this patch was authored by Mark Brown.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-I'll go ahead with my copy of this (partly as I've already got it
-ready queued).
+Guenter
 
---gGe1FY2Lb9AR1aQZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFm+YAACgkQJNaLcl1U
-h9DNEAf/RKHJSjMNiPJHZ8/hQjzV3mnp+TH3DoT8TAkD9h+6giyDE0Z/O97xF4dA
-MwVlzv+Q4rV5BUwRTjIaMqs1gvSx000Xc3VQsEFWnF7s9KmWfzSwqP2csPAyTObx
-1aSY2kA3usfmp2btk2OS3Cot6j98/GeHejCGZxuM1QC4XM5qAiu/BOfSeS+UF4FM
-mqdPHXLk6I0KyW5viuuCbd21LkEYxdOo8N+Prg0C6EeR1nyJjcZv1M/txILBsfbD
-7kEG6HZs/H+Ht5x2MMLWkFnkKcyO3JmfQzc8Xp9bSu+cI+yn6dD8IULrcDsKMoOw
-tpAqRIeokiZoV8T9JhzFy4BH8XPKZA==
-=KqJE
------END PGP SIGNATURE-----
-
---gGe1FY2Lb9AR1aQZ--
+>  {
+>  	struct spi_master *master = dev_get_drvdata(dev);
+>  	struct tegra_slink_data *tspi = spi_master_get_devdata(master);
+> -- 
+> 2.29.2
+> 
