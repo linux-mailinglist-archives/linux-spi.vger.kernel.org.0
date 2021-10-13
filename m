@@ -2,89 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74FC142CA81
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Oct 2021 22:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 091B342CA87
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Oct 2021 22:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238804AbhJMUCE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Oct 2021 16:02:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40504 "EHLO mail.kernel.org"
+        id S239083AbhJMUCP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Oct 2021 16:02:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40784 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229529AbhJMUCD (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 13 Oct 2021 16:02:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A2A46611CB;
-        Wed, 13 Oct 2021 19:59:59 +0000 (UTC)
+        id S239040AbhJMUCM (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 13 Oct 2021 16:02:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id BC9C1611CE;
+        Wed, 13 Oct 2021 20:00:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634155200;
-        bh=6Hj2eq97BsNNooolzlk+mY7C6SePzVG3vta8/MmHnsk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oD43fy94RenROW6C1AdKw2ivCRXcc7ChE0rsS6VQROgadsZz67fR0M4gXsWxuIKFC
-         1o7vwbE7EvjMLzQjqxxR8Cw2xxHeJNL6gTY0hhOW5wgPvw8eT9zYX6w8ThoNkQVOWr
-         eZTMqcpZj3nbSoTNGvt62elRm1GdVvPsKGWwTs/irwXfxQYK63bTp/zAdahb/gLeUv
-         33YZWRHahVvKnvSZhOrCCEoqldy6L4ijpfeB03j+h3ruf19Hn0fORgJo46EmijUxUe
-         1qBEVXxWuoxcWgG9fzVDtTau5It31/n3/rbOe4D+oKtT3F5FHktzvLcMMSpOdKs/nk
-         tTx4XuQvDLqAQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH] spi: tegra20: fix build with CONFIG_PM_SLEEP=n
-Date:   Wed, 13 Oct 2021 20:59:46 +0100
-Message-Id: <163415517425.1358430.17611745343501937698.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211013144538.2346533-1-arnd@kernel.org>
-References: <20211013144538.2346533-1-arnd@kernel.org>
-MIME-Version: 1.0
+        s=k20201202; t=1634155208;
+        bh=0MM43aPJMIZmxM/jSmU9Z6uxfzbeNPh4uiEhCjcPZBE=;
+        h=Subject:From:Date:To:From;
+        b=N2Yu5WTFLJz4nqdOWD/CD07a6H2nCXmFzkvS5Z4aNDqbF2yftIL8ZLUCcwZKGwV5A
+         CFMYMUHqMlgGX8hW4s7n7eplt9ipNAcC1RWM0ppgpIIPcppBv5jaG2b3YCASUxbW5L
+         XBVR483TVHFTXdlpw7FKCqT9ZAhurOZp0vb42evguguQrv1ZqIUA/doshXQRjDHhng
+         arUGmGOto8Tz95w0QExTXLro9RFowzkaw8zHiUXWYK3xGiNJZ3s4qAgCjSWBkOHzqU
+         RyYEs45qW+lP/H1AgrpIqwHHjnE/7rK9u7mCQK7ON/lC8GVBfIg/oKbSUtme5UCtU2
+         9qxeEdonY12cg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id ACEB460173;
+        Wed, 13 Oct 2021 20:00:08 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <163415520865.18235.2062383921390854696.git-patchwork-summary@kernel.org>
+Date:   Wed, 13 Oct 2021 20:00:08 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 13 Oct 2021 16:45:23 +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> There is another one of these warnings:
-> 
-> drivers/spi/spi-tegra20-slink.c:1197:12: error: 'tegra_slink_runtime_resume' defined but not used [-Werror=unused-function]
->  1197 | static int tegra_slink_runtime_resume(struct device *dev)
->       |            ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: tegra20: fix build with CONFIG_PM_SLEEP=n
+  Submitter: Arnd Bergmann <arnd@kernel.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=562791
+  Lore link: https://lore.kernel.org/r/20211013144538.2346533-1-arnd@kernel.org
 
-Thanks!
+Patch: spi: cadence-quadspi: fix dma_unmap_single() call
+  Submitter: Arnd Bergmann <arnd@kernel.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=562793
+  Lore link: https://lore.kernel.org/r/20211013144600.2378037-1-arnd@kernel.org
 
-[1/1] spi: tegra20: fix build with CONFIG_PM_SLEEP=n
-      commit: 7dc9b9562740d858332894447c9779b146559239
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Total patches: 2
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
