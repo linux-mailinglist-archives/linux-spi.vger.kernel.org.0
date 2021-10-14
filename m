@@ -2,131 +2,182 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5776B42CB07
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Oct 2021 22:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 549D442D3FF
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Oct 2021 09:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbhJMUeu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Oct 2021 16:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
+        id S230072AbhJNHrx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 14 Oct 2021 03:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbhJMUer (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Oct 2021 16:34:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D7DC061760
-        for <linux-spi@vger.kernel.org>; Wed, 13 Oct 2021 13:32:43 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1makvT-0007Fh-C2; Wed, 13 Oct 2021 22:32:35 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1makvS-0005nk-Qg; Wed, 13 Oct 2021 22:32:34 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1makvS-0000R1-Pi; Wed, 13 Oct 2021 22:32:34 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        with ESMTP id S229551AbhJNHrw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 14 Oct 2021 03:47:52 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85ADFC061570;
+        Thu, 14 Oct 2021 00:45:48 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id q19so4729484pfl.4;
+        Thu, 14 Oct 2021 00:45:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=DcXKeOiPK/TqCrywwCmtfnGhLeBfTnMPdENutpzgrTg=;
+        b=EiayJxizZENFuIX9UCjMw238QCpSIM6k0bapXOhvKk7ePwbV646PgPB7jefgzBaYlj
+         oENJ3B1nDxXa6CFv1atAjKaZo3PBklBNJpQOwFTYfPjKJfOfxXPIhedzwJ1magnNp87p
+         ES+aKh+er2qdVU5wZo2RNNVJSbzVM1iKDgTHLcQWe3XOwRmTBe8aHgLxNywpX6D76Ri8
+         B2bQyAoEGK+uh9hTOiY0CCvMYi7jGuT1Rq6whB5MOu17cdMnYe/GbBnhxikdHgd51Ggo
+         a3Jw2H0VDD1TES9v/is2naHIIH0Voqbyq+igMMjMO6Q6dymG8ibqex+wdwAJeW7qydOn
+         xfig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=DcXKeOiPK/TqCrywwCmtfnGhLeBfTnMPdENutpzgrTg=;
+        b=xVGAQc9is3YZkNevUK4Y6ZLPMwthAgzC5CVNhHufC2ZswlDylADxJ0mpw37Kf596QL
+         fKm25ZwyXEzZCzmBXodGXExQapi2y3rExTv9olbi7hW7M3TPq6TUizAdu2CTbtAODoJm
+         fbfp3+T07BIDLGdtGK+/F85pXZR8r4tZ4s3VmK9pb4AAEJfrsc+80Ca91kcY8yKhIXsc
+         iVQwKFisyIatD30lSq0lmqLwaAukB/xHkry46ZZ6R28sEqBr/Eio1is/S4NoX3Vxs3d9
+         q74zUo6L3LLE9C6vjrL0KOjUURbeXUsUD+HvUqSlLQqOqaV+vkUaSYlEeUSccOkY5l3N
+         7ABg==
+X-Gm-Message-State: AOAM532dtEjwovDDXHcHt4mTZdqP4hJTSydmL28L5tMVw6TFGpKkYZ6O
+        lMQAsGY3PuHJjCBEVXmK0BHgc7uc3zOqvbQ+Q7U=
+X-Google-Smtp-Source: ABdhPJwpjRD8gYfgE5UvB+QLImJJii/oMq2pkY+9IXVGa5nzgvvV87KC7SuczSUPD1YMfrvP03R65ZnWS2kzqvVBUuM=
+X-Received: by 2002:a62:148f:0:b0:44c:dfb5:4b82 with SMTP id
+ 137-20020a62148f000000b0044cdfb54b82mr3949049pfu.55.1634197547887; Thu, 14
+ Oct 2021 00:45:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <20211013203223.2694577-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20211013203223.2694577-1-u.kleine-koenig@pengutronix.de>
+From:   Alexandru Ardelean <ardeleanalex@gmail.com>
+Date:   Thu, 14 Oct 2021 10:45:36 +0300
+Message-ID: <CA+U=DspB=++La907hoL8Uzf89uZzoC1rz=vXPX6FQ-voDPBROQ@mail.gmail.com>
+Subject: Re: [PATCH 00/15] iio: let spi drivers return 0 in .remove()
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+Cc:     Dan Robertson <dan@dlrobertson.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
         Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>,
         kernel@pengutronix.de, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH 15/15] iio: pressure: ms5611: Make ms5611_remove() return void
-Date:   Wed, 13 Oct 2021 22:32:23 +0200
-Message-Id: <20211013203223.2694577-16-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211013203223.2694577-1-u.kleine-koenig@pengutronix.de>
-References: <20211013203223.2694577-1-u.kleine-koenig@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Patch-Hashes: v=1; h=sha256; i=/VRI7wZRmFcSbOjCVUYLGjkMVb4qhYVytXhgnxhlT8M=; m=lxKoKlZVQowk7xdd1hVtcDO/bwfnAO7kAD40An36nNI=; p=ju0qK/fA1FRs/jFLg2Wz1o5GOd25Mp81ZaVaWpejtdo=; g=cc7f8a2b89009abb1f248faa74e93d27afb4a720
-X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFnQhcACgkQwfwUeK3K7AkB0Qf/Qnu zJOfEoVx0mmr8M5D+IKq90Afb8WftaM2TnvMcCq0DP1+mV31i8ctCJxCHUTV1csXD49ykUl9M1DLa 0qJLRJuKYpbv01y5ST+i5eG1sdgd93qw01tUSM5L1GTYWkOMN2ZIcF77asKFlJdg3XnOj+qjW8K7z DZyxLyxJr4coCbhkGsK/OiCCBwN5LqXK0cAU3mOu+V6214WjyCHBke0eoNpD8gI7Czgv8lKqbfMik HW9kimL/VCYmS6P6GI+B4qQWDKZe4oA4Av1Sn4C36DMn5lQ3nXW32Ta1UfkxS53P0prdE10TT8yi4 nd43pzSCzoSGcVJ+/f5D3B69RGykE4Q==
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+        linux-iio <linux-iio@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Up to now ms5611_remove() returns zero unconditionally. Make it return
-void instead which makes it easier to see in the callers that there is
-no error to handle.
+On Wed, Oct 13, 2021 at 11:33 PM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> Hello,
+>
+> this series is part of my quest to change the return type of the spi
+> driver .remove() callback to void. In this first stage I fix all drivers
+> to return 0 to be able to mechanically change all drivers in the final
+> step.
+>
+> Returning an error code (which actually very few drivers do) doesn't
+> make much sense, because the only effect is that the spi core emits an
+> error message.
+>
+> The same holds try for i2c drivers, some of them are fixed en passant.
+>
+> There are no interdependencies in this series, and there is some more
+> work to do for the final conversion, so apply the patches from this
+> series at will :-)
+>
 
-Also the return value of i2c and spi remove callbacks is ignored anyway.
+Series looks good.
+However this set also makes a case for doing more conversions to devm_
+usage in probe.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/iio/pressure/ms5611.h      | 2 +-
- drivers/iio/pressure/ms5611_core.c | 4 +---
- drivers/iio/pressure/ms5611_i2c.c  | 4 +++-
- drivers/iio/pressure/ms5611_spi.c  | 4 +++-
- 4 files changed, 8 insertions(+), 6 deletions(-)
+With devm_ , we get slightly less code, with some mirrored unwinding
+in error and remove paths.
+There are currently ~170 places (not necessarily the same amount of
+drivers), where devm_ can be used.
 
-diff --git a/drivers/iio/pressure/ms5611.h b/drivers/iio/pressure/ms5611.h
-index bc06271fa38b..86b1c4b1820d 100644
---- a/drivers/iio/pressure/ms5611.h
-+++ b/drivers/iio/pressure/ms5611.h
-@@ -61,6 +61,6 @@ struct ms5611_state {
- 
- int ms5611_probe(struct iio_dev *indio_dev, struct device *dev,
- 		 const char *name, int type);
--int ms5611_remove(struct iio_dev *indio_dev);
-+void ms5611_remove(struct iio_dev *indio_dev);
- 
- #endif /* _MS5611_H */
-diff --git a/drivers/iio/pressure/ms5611_core.c b/drivers/iio/pressure/ms5611_core.c
-index 214b0d25f598..ee75f08655c9 100644
---- a/drivers/iio/pressure/ms5611_core.c
-+++ b/drivers/iio/pressure/ms5611_core.c
-@@ -474,13 +474,11 @@ int ms5611_probe(struct iio_dev *indio_dev, struct device *dev,
- }
- EXPORT_SYMBOL(ms5611_probe);
- 
--int ms5611_remove(struct iio_dev *indio_dev)
-+void ms5611_remove(struct iio_dev *indio_dev)
- {
- 	iio_device_unregister(indio_dev);
- 	iio_triggered_buffer_cleanup(indio_dev);
- 	ms5611_fini(indio_dev);
--
--	return 0;
- }
- EXPORT_SYMBOL(ms5611_remove);
- 
-diff --git a/drivers/iio/pressure/ms5611_i2c.c b/drivers/iio/pressure/ms5611_i2c.c
-index 7c04f730430c..5c82d80f85b6 100644
---- a/drivers/iio/pressure/ms5611_i2c.c
-+++ b/drivers/iio/pressure/ms5611_i2c.c
-@@ -110,7 +110,9 @@ static int ms5611_i2c_probe(struct i2c_client *client,
- 
- static int ms5611_i2c_remove(struct i2c_client *client)
- {
--	return ms5611_remove(i2c_get_clientdata(client));
-+	ms5611_remove(i2c_get_clientdata(client));
-+
-+	return 0;
- }
- 
- static const struct of_device_id ms5611_i2c_matches[] = {
-diff --git a/drivers/iio/pressure/ms5611_spi.c b/drivers/iio/pressure/ms5611_spi.c
-index 45d3a7d5be8e..79bed64c9b68 100644
---- a/drivers/iio/pressure/ms5611_spi.c
-+++ b/drivers/iio/pressure/ms5611_spi.c
-@@ -112,7 +112,9 @@ static int ms5611_spi_probe(struct spi_device *spi)
- 
- static int ms5611_spi_remove(struct spi_device *spi)
- {
--	return ms5611_remove(spi_get_drvdata(spi));
-+	ms5611_remove(spi_get_drvdata(spi));
-+
-+	return 0;
- }
- 
- static const struct of_device_id ms5611_spi_matches[] = {
--- 
-2.30.2
+What I typically do is run this command in a kernel tree:  "git grep
+-w iio_device_unregister | wc -l"
+When I run it without "wc -l", I will pick a file and take a look
+inside it and check it's convertibility to using
+devm_iio_device_unregister()
+The rationale is, that for IIO drivers, if you get
+devm_iio_device_unregister() (properly) called last, then it's fully
+converted to devm_ functions.
 
+For this series particularly:
+
+Reviewed-by: Alexandru Ardelean <ardeleanalex@gmail.com>
+
+> Best regards
+> Uwe
+>
+> Uwe Kleine-K=C3=B6nig (15):
+>   iio: accel: bma400: Make bma400_remove() return void
+>   iio: accel: bmc150: Make bmc150_accel_core_remove() return void
+>   iio: accel: bmi088: Make bmi088_accel_core_remove() return void
+>   iio: accel: kxsd9: Make kxsd9_common_remove() return void
+>   iio: accel: mma7455: Make mma7455_core_remove() return void
+>   iio: accel: ad5064: Make ad5064_core_remove() return void
+>   iio: dac: ad5380: Make ad5380_remove() return void
+>   iio: dac: ad5446: Make ad5446_remove() return void
+>   iio: dac: ad5592r: Make ad5592r_remove() return void
+>   iio: dac: ad5686: Make ad5686_remove() return void
+>   iio: health: afe4403: Don't return an error in .remove()
+>   iio: imu: st_lsm9ds0: Make st_lsm9ds0_remove() return void
+>   iio: magn: hmc5843: Make hmc5843_common_remove() return void
+>   iio: potentiometer: max5487: Don't return an error in .remove()
+>   iio: pressure: ms5611: Make ms5611_remove() return void
+>
+>  drivers/iio/accel/bma400.h                   |  2 +-
+>  drivers/iio/accel/bma400_core.c              |  7 ++++---
+>  drivers/iio/accel/bma400_i2c.c               |  4 +++-
+>  drivers/iio/accel/bma400_spi.c               |  4 +++-
+>  drivers/iio/accel/bmc150-accel-core.c        |  4 +---
+>  drivers/iio/accel/bmc150-accel-i2c.c         |  4 +++-
+>  drivers/iio/accel/bmc150-accel-spi.c         |  4 +++-
+>  drivers/iio/accel/bmc150-accel.h             |  2 +-
+>  drivers/iio/accel/bmi088-accel-core.c        |  4 +---
+>  drivers/iio/accel/bmi088-accel-spi.c         |  4 +++-
+>  drivers/iio/accel/bmi088-accel.h             |  2 +-
+>  drivers/iio/accel/kxsd9-i2c.c                |  4 +++-
+>  drivers/iio/accel/kxsd9-spi.c                |  4 +++-
+>  drivers/iio/accel/kxsd9.c                    |  4 +---
+>  drivers/iio/accel/kxsd9.h                    |  2 +-
+>  drivers/iio/accel/mma7455.h                  |  2 +-
+>  drivers/iio/accel/mma7455_core.c             |  4 +---
+>  drivers/iio/accel/mma7455_i2c.c              |  4 +++-
+>  drivers/iio/accel/mma7455_spi.c              |  4 +++-
+>  drivers/iio/dac/ad5064.c                     | 12 +++++++-----
+>  drivers/iio/dac/ad5380.c                     | 15 ++++++++-------
+>  drivers/iio/dac/ad5446.c                     | 12 +++++++-----
+>  drivers/iio/dac/ad5592r-base.c               |  4 +---
+>  drivers/iio/dac/ad5592r-base.h               |  2 +-
+>  drivers/iio/dac/ad5592r.c                    |  4 +++-
+>  drivers/iio/dac/ad5593r.c                    |  4 +++-
+>  drivers/iio/dac/ad5686-spi.c                 |  4 +++-
+>  drivers/iio/dac/ad5686.c                     |  4 +---
+>  drivers/iio/dac/ad5686.h                     |  2 +-
+>  drivers/iio/dac/ad5696-i2c.c                 |  4 +++-
+>  drivers/iio/health/afe4403.c                 |  6 ++----
+>  drivers/iio/imu/st_lsm9ds0/st_lsm9ds0.h      |  2 +-
+>  drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_core.c |  4 +---
+>  drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c  |  4 +++-
+>  drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_spi.c  |  4 +++-
+>  drivers/iio/magnetometer/hmc5843.h           |  2 +-
+>  drivers/iio/magnetometer/hmc5843_core.c      |  4 +---
+>  drivers/iio/magnetometer/hmc5843_i2c.c       |  4 +++-
+>  drivers/iio/magnetometer/hmc5843_spi.c       |  4 +++-
+>  drivers/iio/potentiometer/max5487.c          |  7 ++++++-
+>  drivers/iio/pressure/ms5611.h                |  2 +-
+>  drivers/iio/pressure/ms5611_core.c           |  4 +---
+>  drivers/iio/pressure/ms5611_i2c.c            |  4 +++-
+>  drivers/iio/pressure/ms5611_spi.c            |  4 +++-
+>  44 files changed, 110 insertions(+), 81 deletions(-)
+>
+>
+> base-commit: 9e1ff307c779ce1f0f810c7ecce3d95bbae40896
+> --
+> 2.30.2
+>
