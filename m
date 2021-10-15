@@ -2,131 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4535942E9B8
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Oct 2021 09:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA0E42EAC4
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Oct 2021 09:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235889AbhJOHNh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 15 Oct 2021 03:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234232AbhJOHNh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 Oct 2021 03:13:37 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64895C061753
-        for <linux-spi@vger.kernel.org>; Fri, 15 Oct 2021 00:11:31 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mbHNA-0006an-26; Fri, 15 Oct 2021 09:11:20 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mbHN7-0000Fg-Uy; Fri, 15 Oct 2021 09:11:17 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mbHN7-0006wZ-Tp; Fri, 15 Oct 2021 09:11:17 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, kernel@pengutronix.de,
-        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH] sound: soc: tlv320aic32x4: Make aic32x4_remove() return void
-Date:   Fri, 15 Oct 2021 09:11:13 +0200
-Message-Id: <20211015071113.2795767-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        id S236434AbhJOH7B (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 15 Oct 2021 03:59:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58196 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236397AbhJOH7B (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 15 Oct 2021 03:59:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id E8E8A60BD3;
+        Fri, 15 Oct 2021 07:56:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634284614;
+        bh=zhLXD2TrgdHkgkmigmJ/QdvW/5MgixcGAteUwoLAfM0=;
+        h=Subject:From:Date:To:From;
+        b=Nxv/SAi0pAAQPaVcQLeRVCFWAckv4BRX7FRInithli9nCq0bzD3kiI94cok8nbjfx
+         l1chUqXNmEnm55ap+G3QA2uT2tKjKP2DkpUAa19VRS8m+0VuuC6l/+oGmHOt+Ea+vv
+         m8FM158XzC/sIMYHrNJ0Up1ncaawVtq97LDWyliDmYvjLXJbK0Lf8bGFIcoAx30hpT
+         H8eFKNdldFj41hTCXWrBxhWa2GdNFnMq/1DM2HucugQjsb+kuyQQhjtzlvCrS168A5
+         F9NwMSHBvPKjtBEQBNj+FFTvTFeVIBKPNeu61dx7BaeVFcsGnElukfGlcm3RZlkK7j
+         JaiiA+PBLo4BA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id DD42B60A4D;
+        Fri, 15 Oct 2021 07:56:54 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Patch-Hashes: v=1; h=sha256; i=nRNU/h5dN0hs6QQdYrn9XplF1ZR0nboidS4cpkp3qDI=; m=2e5HCshqMt6dybePlB07FsppmCU/zxeR26wervi3tws=; p=ET5WVtEOuO659Yg8+YuLjG7ttyClm3n+0otQ9SrIUgA=; g=9c9909311a8b559b124f8407491711be13fdf2b5
-X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFpKYgACgkQwfwUeK3K7AlALAf/RUg 6zfanHCHtHIXVMCCP0xByiI/Q2w5shLXJXILQQTO6MjzI1K9ILBJjpvMP0NB7sMmrjVNE7L/SoAq3 xHHgPA2lNbxmyuJ6RgD5WY0oxXOjRXnNpYZPiRb2SiNVd2aroa4shXCm9bGnhvXXNiqUHCwcThOJ/ XJpBGRwYkQvKo7VJT7iV9VuYNcaAoorEjIQDnnG4toBcW+CyN3j+MGHzsWQcZEPd2oKMwhZgeKAts iQ9itaLhW0jZQ2tCwufeoZuo12k/L3CXMQpPZrGT5U/JlwzXCgWHi1USqZlBXwX0erIZ2kesGY3Ta W2BdNlZkb2QDSWBiv/O2CJsHaxtKcIA==
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <163428461490.9855.4569687416413631563.git-patchwork-housekeeping@kernel.org>
+Date:   Fri, 15 Oct 2021 07:56:54 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Up to now aic32x4_remove() returns zero unconditionally. Make it return
-void instead which makes it easier to see in the callers that there is
-no error to handle.
+Latest series: [v2] Let spi drivers return 0 in .remove() (2021-10-15T06:56:15)
+  Superseding: [v1] Let spi drivers return 0 in .remove() (2021-10-14T14:13:40):
+    [1/2] net: ks8851: Make ks8851_remove_common() return void
+    [2/2] net: w5100: Make w5100_remove() return void
 
-Also the return value of i2c and spi remove callbacks is ignored anyway.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- sound/soc/codecs/tlv320aic32x4-i2c.c | 4 +++-
- sound/soc/codecs/tlv320aic32x4-spi.c | 4 +++-
- sound/soc/codecs/tlv320aic32x4.c     | 4 +---
- sound/soc/codecs/tlv320aic32x4.h     | 2 +-
- 4 files changed, 8 insertions(+), 6 deletions(-)
-
-diff --git a/sound/soc/codecs/tlv320aic32x4-i2c.c b/sound/soc/codecs/tlv320aic32x4-i2c.c
-index 04ad38311360..ed70e3d9baf2 100644
---- a/sound/soc/codecs/tlv320aic32x4-i2c.c
-+++ b/sound/soc/codecs/tlv320aic32x4-i2c.c
-@@ -44,7 +44,9 @@ static int aic32x4_i2c_probe(struct i2c_client *i2c,
- 
- static int aic32x4_i2c_remove(struct i2c_client *i2c)
- {
--	return aic32x4_remove(&i2c->dev);
-+	aic32x4_remove(&i2c->dev);
-+
-+	return 0;
- }
- 
- static const struct i2c_device_id aic32x4_i2c_id[] = {
-diff --git a/sound/soc/codecs/tlv320aic32x4-spi.c b/sound/soc/codecs/tlv320aic32x4-spi.c
-index e81c72958a82..a8958cd1c692 100644
---- a/sound/soc/codecs/tlv320aic32x4-spi.c
-+++ b/sound/soc/codecs/tlv320aic32x4-spi.c
-@@ -48,7 +48,9 @@ static int aic32x4_spi_probe(struct spi_device *spi)
- 
- static int aic32x4_spi_remove(struct spi_device *spi)
- {
--	return aic32x4_remove(&spi->dev);
-+	aic32x4_remove(&spi->dev);
-+
-+	return 0;
- }
- 
- static const struct spi_device_id aic32x4_spi_id[] = {
-diff --git a/sound/soc/codecs/tlv320aic32x4.c b/sound/soc/codecs/tlv320aic32x4.c
-index d39c7d52ecfd..8f42fd7bc053 100644
---- a/sound/soc/codecs/tlv320aic32x4.c
-+++ b/sound/soc/codecs/tlv320aic32x4.c
-@@ -1418,13 +1418,11 @@ int aic32x4_probe(struct device *dev, struct regmap *regmap)
- }
- EXPORT_SYMBOL(aic32x4_probe);
- 
--int aic32x4_remove(struct device *dev)
-+void aic32x4_remove(struct device *dev)
- {
- 	struct aic32x4_priv *aic32x4 = dev_get_drvdata(dev);
- 
- 	aic32x4_disable_regulators(aic32x4);
--
--	return 0;
- }
- EXPORT_SYMBOL(aic32x4_remove);
- 
-diff --git a/sound/soc/codecs/tlv320aic32x4.h b/sound/soc/codecs/tlv320aic32x4.h
-index e9fd2e55d6c3..4de5bd9e8cc5 100644
---- a/sound/soc/codecs/tlv320aic32x4.h
-+++ b/sound/soc/codecs/tlv320aic32x4.h
-@@ -18,7 +18,7 @@ enum aic32x4_type {
- 
- extern const struct regmap_config aic32x4_regmap_config;
- int aic32x4_probe(struct device *dev, struct regmap *regmap);
--int aic32x4_remove(struct device *dev);
-+void aic32x4_remove(struct device *dev);
- int aic32x4_register_clocks(struct device *dev, const char *mclk_name);
- 
- /* tlv320aic32x4 register space (in decimal to match datasheet) */
 -- 
-2.30.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
