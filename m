@@ -2,71 +2,139 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3384430B51
-	for <lists+linux-spi@lfdr.de>; Sun, 17 Oct 2021 19:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C01A430DAB
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Oct 2021 03:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241448AbhJQRz5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 17 Oct 2021 13:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55632 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237841AbhJQRz4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 17 Oct 2021 13:55:56 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AADAC06176A
-        for <linux-spi@vger.kernel.org>; Sun, 17 Oct 2021 10:53:46 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id z40so13397215qko.7
-        for <linux-spi@vger.kernel.org>; Sun, 17 Oct 2021 10:53:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=fWbRtmwSvpw1bfC84j16Ls4FeCWDLyhXIFPNaloLQIk=;
-        b=Xg4B6OmLjSlQEg6NcRNZlWH20DlOOKx6JihSJ1qJj8dlCVGCA5H9rUkGWn4f1Ds7Pz
-         c663Y8NkZumHkC9pee4GSaaJ7BH13UyDMPEO+dMUPxGZ5ZA7vSteEmOk0wQvoCJrHyGx
-         KETPJDbGaHV40sIg//1v4GXHvi3Mp9tCcYDSfm9eKRwb0WERXGmEf5nK21CX4Nq+kGww
-         I72ahlIOM1mAdARjbVtSUCjFZajicSmFYHHKBykD2po8NXW8bUEuossQ4D8S55T/4CNf
-         e+omQUwozYW7C5BK9pl+dpJ8GAzsqltB+qfjls2S9+7Rrs76wBMyNVul8aI2Cl6kBI2H
-         kd+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=fWbRtmwSvpw1bfC84j16Ls4FeCWDLyhXIFPNaloLQIk=;
-        b=30zKsyPam1p9BO9cdufyogLoKMyQHkxxBUk/P0RflJrPGFx9KKVw4RgiC1t86+PdD0
-         6mX5zMn6Xi4LEJT5Z82ERWF0n+saOITMUtUCPbmH8KMxIm8dqeaCDWCx35n8eu/zSd63
-         mIMaoCnoYtAcAaO8rdmUfnUMSEgb1iTNqdN5Um3BGnBUsV6q2JvF4b7k2YToRXc8VCj0
-         oJh+iPC8TQak9R1rKOI90TpnnIpusQPS2XvfgRBUW2MRHwH0cbbI2ryo+DTl4UHycK5q
-         njoz9hxM7lAYGgGb0c8bMNa0Dl1++PBbfrM+Mqf/4mVxXqFA6CtYTTcfLav08MQUJAgU
-         AvEw==
-X-Gm-Message-State: AOAM531cBxNLVNbBul7qjU+y/woJ/6tXd0K2HrqdPp8zDSje7nah8Qi+
-        EYpFwNkwQcTXF6EipYvangI/TYhQ7qRV/cFmcEA=
-X-Google-Smtp-Source: ABdhPJzHXLyJhVZSvpBhAesFHMD4XP/bNMDBO2B5FuZTaRJuSifsnbifmprH/g9irf7TlzjnBR9OexrgTWXseMG4N8o=
-X-Received: by 2002:a37:9781:: with SMTP id z123mr19073106qkd.140.1634493225664;
- Sun, 17 Oct 2021 10:53:45 -0700 (PDT)
+        id S238617AbhJRBpn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 17 Oct 2021 21:45:43 -0400
+Received: from twhmllg3.macronix.com ([211.75.127.131]:11089 "EHLO
+        TWHMLLG3.macronix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235368AbhJRBpn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 17 Oct 2021 21:45:43 -0400
+Received: from twhfmlp1.macronix.com (twhfmlp1.macronix.com [172.17.20.91])
+        by TWHMLLG3.macronix.com with ESMTP id 19I1gdGm015281;
+        Mon, 18 Oct 2021 09:42:39 +0800 (GMT-8)
+        (envelope-from jaimeliao@mxic.com.tw)
+Received: from MXML06C.mxic.com.tw (mxml06c.mxic.com.tw [172.17.14.55])
+        by Forcepoint Email with ESMTP id D550E851C17E8086009A;
+        Mon, 18 Oct 2021 09:42:39 +0800 (CST)
+In-Reply-To: <YWC8jgI74FgTudSD@robh.at.kernel.org>
+References: <20211008162228.1753083-1-miquel.raynal@bootlin.com> <20211008162228.1753083-4-miquel.raynal@bootlin.com> <YWC8jgI74FgTudSD@robh.at.kernel.org>
+To:     "Rob Herring" <robh@kernel.org>
+Cc:     "Boris Brezillon" <bbrezillon@kernel.org>,
+        "Mark Brown" <broonie@kernel.org>, devicetree@vger.kernel.org,
+        juliensu@mxic.com.tw, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        "Richard Weinberger" <richard@nod.at>,
+        "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
+        "Tudor Ambarus" <Tudor.Ambarus@microchip.com>,
+        "Vignesh Raghavendra" <vigneshr@ti.com>,
+        "Xiangsheng Hou" <Xiangsheng.Hou@mediatek.com>
+Subject: =?Big5?B?pl6rSDogUmU6IFtSRkMgUEFUQ0ggMDMvMTBdIGR0LWJpbmRpbmdzOiB2ZW5kb3It?=
+ =?Big5?B?cHJlZml4ZXM6IFVwZGF0ZSBNYWNyb25peCBwcmVmaXg=?=
 MIME-Version: 1.0
-Received: by 2002:a0c:ef82:0:0:0:0:0 with HTTP; Sun, 17 Oct 2021 10:53:45
- -0700 (PDT)
-Reply-To: mariehamidou0@gmail.com
-From:   MARIE Hamidou <koumbousilatifa@gmail.com>
-Date:   Sun, 17 Oct 2021 19:53:45 +0200
-Message-ID: <CAMp7NG0cWFrkVX2sgzLX4jNwsfm7K6OyD3zqHQa6nshPg-aTdg@mail.gmail.com>
-Subject: Urgent,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-KeepSent: 9A15BF2B:E4A73AE9-48258772:00093984;
+ type=4; name=$KeepSent
+X-Mailer: Lotus Notes Release 8.5.3FP6 SHF907 April 26, 2018
+Message-ID: <OF9A15BF2B.E4A73AE9-ON48258772.00093984-48258772.00096628@mxic.com.tw>
+From:   jaimeliao@mxic.com.tw
+Date:   Mon, 18 Oct 2021 09:42:39 +0800
+X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
+ 2021/10/18 AM 09:42:39,
+        Serialize complete at 2021/10/18 AM 09:42:39
+Content-Type: text/plain; charset="US-ASCII"
+X-MAIL: TWHMLLG3.macronix.com 19I1gdGm015281
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Urgent,
 
-I need your assistance to validate your name in our Bank System to
-enable the Bank transfer the sum of $ 3.5 million Dollars, into your
-nominated bank account to your account for onward investment,
+Hi Rob
 
-or any profitable business in your country and you will take 50% of
-the total  fund , for your assistance.To commence this transaction,  I
-require you to immediately indicate your interest by a return mail for
-more details,
+> 
+> Re: [RFC PATCH 03/10] dt-bindings: vendor-prefixes: Update Macronix 
+prefix
+> 
+> On Fri, Oct 08, 2021 at 06:22:21PM +0200, Miquel Raynal wrote:
+> > When looking at compatible prefixes, Macronix is sometimes referred as
+> > mxicy:
+> > - mxicy,mx25r1635f
+> > - mxicy,mx25u6435f
+> > - mxicy,mx25v8035f
+> > - mxicy,mx25f0a-spi
+> > and sometimes as mxic:
+> > - mxic,multi-itfc-v009-nand-controller
+> > - mxic,enable-randomizer-otp
+> > 
+> > It looks like the more up-to-date way is mxic so declare this prefix 
+and
+> > mark the other one as deprecated.
+> 
+> mxicy is more widely used with flash parts. There's not a single dts 
+> file with 'mxic' which only seems to be some nand controller.
+Yes, you are right.
 
-Thanks for your anticipated co-operation.
-Best regards.
-Ms.MARIE Hamidou
+Hi Miquel
+
+Please keep using "mxicy,*" consistently for the compatible property, 
+thanks.
+
+> 
+> > 
+> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> > ---
+> >  Documentation/devicetree/bindings/vendor-prefixes.yaml | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/vendor-
+> prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > index b868cefc7c55..013a87850cd5 100644
+> > --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > @@ -758,8 +758,11 @@ patternProperties:
+> >      description: Mundo Reader S.L.
+> >    "^murata,.*":
+> >      description: Murata Manufacturing Co., Ltd.
+> > +  "^mxic,.*":
+> > +    description: Macronix International Co., Ltd.
+> >    "^mxicy,.*":
+> >      description: Macronix International Co., Ltd.
+> > +    deprecated: true
+> >    "^myir,.*":
+> >      description: MYIR Tech Limited
+> >    "^national,.*":
+> > -- 
+> > 2.27.0
+> > 
+> > 
+
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information 
+and/or personal data, which is protected by applicable laws. Please be 
+reminded that duplication, disclosure, distribution, or use of this e-mail 
+(and/or its attachments) or any part thereof is prohibited. If you receive 
+this e-mail in error, please notify us immediately and delete this mail as 
+well as its attachment(s) from your system. In addition, please be 
+informed that collection, processing, and/or use of personal data is 
+prohibited unless expressly permitted by personal data protection laws. 
+Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
+
+
+
+============================================================================
+
+CONFIDENTIALITY NOTE:
+
+This e-mail and any attachments may contain confidential information and/or personal data, which is protected by applicable laws. Please be reminded that duplication, disclosure, distribution, or use of this e-mail (and/or its attachments) or any part thereof is prohibited. If you receive this e-mail in error, please notify us immediately and delete this mail as well as its attachment(s) from your system. In addition, please be informed that collection, processing, and/or use of personal data is prohibited unless expressly permitted by personal data protection laws. Thank you for your attention and cooperation.
+
+Macronix International Co., Ltd.
+
+=====================================================================
+
