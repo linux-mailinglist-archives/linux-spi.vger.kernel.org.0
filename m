@@ -2,84 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80292431161
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Oct 2021 09:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C72F1431885
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Oct 2021 14:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbhJRH2x (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 18 Oct 2021 03:28:53 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:24354 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbhJRH2x (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 Oct 2021 03:28:53 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4HXpGn178Zzbd56;
-        Mon, 18 Oct 2021 15:22:09 +0800 (CST)
-Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.15; Mon, 18 Oct 2021 15:26:41 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
- (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.15; Mon, 18 Oct
- 2021 15:26:40 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>
-CC:     <broonie@kernel.org>, <bcm-kernel-feedback-list@broadcom.com>,
-        <kdasu.kdev@gmail.com>
-Subject: [PATCH -next] spi: bcm-qspi: Fix missing clk_disable_unprepare() on error in bcm_qspi_probe()
-Date:   Mon, 18 Oct 2021 15:34:13 +0800
-Message-ID: <20211018073413.2029081-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        id S231229AbhJRMMW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 18 Oct 2021 08:12:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58972 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229870AbhJRMMW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 18 Oct 2021 08:12:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 4C661610C7;
+        Mon, 18 Oct 2021 12:10:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634559011;
+        bh=cmd+syFuvJM5JGm9Kxyf5/gg+02J31vZi2XeonvAT3s=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=TDra0Z9q40GEPUminf2pe/75CV9+QKGPOCLKWmPidXgyBM2CFTZeXtw6wgN6ct6DT
+         +gh/2YCDpqvNuh0M++MARCrlNEHatLJUo9ntwFzAi83HzfISLnvHQgAEJ7YSgzlLik
+         PopdE+LI6sDJj5Kj1nWx5jti4WdZwi5CbhB2cf7yXHRZroYCDsFqS+GZk8bkxlFCAr
+         ZXVLUdGEu/gJSkReJjNak76ajU9dC/Bu7L+s+c0rHsgKy86ZHK0NLEl069UCI/XF84
+         jmSCsHekdodrjaMMKH5zuqfx9Wwqf3VrkUzAEBpzjI6tdLwn+oYPDSxC7KRPyhSYsS
+         ScYLCCa+1NXKw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 407A460A2E;
+        Mon, 18 Oct 2021 12:10:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500017.china.huawei.com (7.185.36.243)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 0/2 net-next] Let spi drivers return 0 in .remove()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163455901125.7340.7337638653547301526.git-patchwork-notify@kernel.org>
+Date:   Mon, 18 Oct 2021 12:10:11 +0000
+References: <20211015065615.2795190-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20211015065615.2795190-1-u.kleine-koenig@pengutronix.de>
+To:     =?utf-8?q?Uwe_Kleine-K=C3=B6nig_=3Cu=2Ekleine-koenig=40pengutronix=2Ede=3E?=@ci.codeaurora.org
+Cc:     davem@davemloft.net, kuba@kernel.org, andrew@lunn.ch,
+        arnd@arndb.de, marex@denx.de, broonie@kernel.org, michael@walle.cc,
+        nathan@kernel.org, trix@redhat.com, yangyingliang@huawei.com,
+        zhengyongjun3@huawei.com, kernel@pengutronix.de,
+        linux-spi@vger.kernel.org, netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Fix the missing clk_disable_unprepare() before return
-from bcm_qspi_probe() in the error handling case.
+Hello:
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/spi/spi-bcm-qspi.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
-index 6cf7cff5edee..f3de3305d0f5 100644
---- a/drivers/spi/spi-bcm-qspi.c
-+++ b/drivers/spi/spi-bcm-qspi.c
-@@ -1602,7 +1602,7 @@ int bcm_qspi_probe(struct platform_device *pdev,
- 					       &qspi->dev_ids[val]);
- 			if (ret < 0) {
- 				dev_err(&pdev->dev, "IRQ %s not found\n", name);
--				goto qspi_probe_err;
-+				goto qspi_unprepare_err;
- 			}
- 
- 			qspi->dev_ids[val].dev = qspi;
-@@ -1617,7 +1617,7 @@ int bcm_qspi_probe(struct platform_device *pdev,
- 	if (!num_ints) {
- 		dev_err(&pdev->dev, "no IRQs registered, cannot init driver\n");
- 		ret = -EINVAL;
--		goto qspi_probe_err;
-+		goto qspi_unprepare_err;
- 	}
- 
- 	bcm_qspi_hw_init(qspi);
-@@ -1641,6 +1641,7 @@ int bcm_qspi_probe(struct platform_device *pdev,
- 
- qspi_reg_err:
- 	bcm_qspi_hw_uninit(qspi);
-+qspi_unprepare_err:
- 	clk_disable_unprepare(qspi->clk);
- qspi_probe_err:
- 	kfree(qspi->dev_ids);
--- 
-2.25.1
+On Fri, 15 Oct 2021 08:56:13 +0200 you wrote:
+> Hello,
+> 
+> this series is part of my quest to change the return type of the spi
+> driver .remove() callback to void. In this first stage I fix all drivers
+> to return 0 to be able to mechanically change all drivers in the final
+> step. Here the two spi drivers in net are fixed to obviously return 0.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2,1/2] net: ks8851: Make ks8851_remove_common() return void
+    https://git.kernel.org/netdev/net-next/c/2841bfd10aa7
+  - [v2,2/2] net: w5100: Make w5100_remove() return void
+    https://git.kernel.org/netdev/net-next/c/d40dfa0cebd8
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
