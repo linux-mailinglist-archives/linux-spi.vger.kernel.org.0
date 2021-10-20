@@ -2,18 +2,18 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7120E434D9F
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Oct 2021 16:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B84434DA3
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Oct 2021 16:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbhJTOai (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 Oct 2021 10:30:38 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:54041 "EHLO
+        id S230205AbhJTOaj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 Oct 2021 10:30:39 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:56825 "EHLO
         relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbhJTOac (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Oct 2021 10:30:32 -0400
+        with ESMTP id S230267AbhJTOae (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Oct 2021 10:30:34 -0400
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 8E5DC20011;
-        Wed, 20 Oct 2021 14:28:16 +0000 (UTC)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id E5BCB20016;
+        Wed, 20 Oct 2021 14:28:17 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
@@ -28,9 +28,9 @@ Cc:     <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>,
         Boris Brezillon <boris.brezillon@collabora.com>,
         Xiangsheng Hou <Xiangsheng.Hou@mediatek.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 04/18] dt-bindings: mtd: spi-nand: Convert spi-nand description file to yaml
-Date:   Wed, 20 Oct 2021 16:27:55 +0200
-Message-Id: <20211020142809.349347-5-miquel.raynal@bootlin.com>
+Subject: [PATCH 05/18] dt-bindings: vendor-prefixes: Clarify Macronix prefix
+Date:   Wed, 20 Oct 2021 16:27:56 +0200
+Message-Id: <20211020142809.349347-6-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20211020142809.349347-1-miquel.raynal@bootlin.com>
 References: <20211020142809.349347-1-miquel.raynal@bootlin.com>
@@ -41,62 +41,38 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Let's get rid of spi-nand.txt by converting it to yaml schema. While at
-converting this file, let's actually pull all the generic properties
-from nand-chip.yaml which might apply to a SPI-NAND chip.
+When looking at compatible prefixes, Macronix is sometimes referred as
+"mxicy":
+- mxicy,mx25r1635f
+- mxicy,mx25u6435f
+- mxicy,mx25v8035f
+- mxicy,mx25f0a-spi
+and sometimes as "mxic":
+- mxic,multi-itfc-v009-nand-controller
+- mxic,enable-randomizer-otp
+
+The oldest prefix that is also the one preferred by Macronix engineers
+is "mxicy", so document the other one and mark it deprecated.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- .../devicetree/bindings/mtd/spi-nand.txt      |  5 ----
- .../devicetree/bindings/mtd/spi-nand.yaml     | 27 +++++++++++++++++++
- 2 files changed, 27 insertions(+), 5 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/mtd/spi-nand.txt
- create mode 100644 Documentation/devicetree/bindings/mtd/spi-nand.yaml
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mtd/spi-nand.txt b/Documentation/devicetree/bindings/mtd/spi-nand.txt
-deleted file mode 100644
-index 8b51f3b6d55c..000000000000
---- a/Documentation/devicetree/bindings/mtd/spi-nand.txt
-+++ /dev/null
-@@ -1,5 +0,0 @@
--SPI NAND flash
--
--Required properties:
--- compatible: should be "spi-nand"
--- reg: should encode the chip-select line used to access the NAND chip
-diff --git a/Documentation/devicetree/bindings/mtd/spi-nand.yaml b/Documentation/devicetree/bindings/mtd/spi-nand.yaml
-new file mode 100644
-index 000000000000..19ac57dcffc3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mtd/spi-nand.yaml
-@@ -0,0 +1,27 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mtd/spi-nand.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: SPI-NAND flash device tree bindings
-+
-+maintainers:
-+  - Miquel Raynal <miquel.raynal@bootlin.com>
-+
-+allOf:
-+  - $ref: "nand-chip.yaml#"
-+
-+properties:
-+  compatible:
-+    const: spi-nand
-+
-+  reg:
-+    maxItems: 1
-+    description: Encode the chip-select line on the SPI bus
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index a867f7102c35..93d65dc3746c 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -774,6 +774,9 @@ patternProperties:
+     description: Mundo Reader S.L.
+   "^murata,.*":
+     description: Murata Manufacturing Co., Ltd.
++  "^mxic,.*":
++    description: Macronix International Co., Ltd.
++    deprecated: true
+   "^mxicy,.*":
+     description: Macronix International Co., Ltd.
+   "^myir,.*":
 -- 
 2.27.0
 
