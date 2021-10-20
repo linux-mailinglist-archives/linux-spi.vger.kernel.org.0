@@ -2,33 +2,27 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B482434AF1
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Oct 2021 14:14:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84535434B0B
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Oct 2021 14:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbhJTMQS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 Oct 2021 08:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbhJTMQR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Oct 2021 08:16:17 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3AAC06161C
-        for <linux-spi@vger.kernel.org>; Wed, 20 Oct 2021 05:14:03 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 305651F440BF;
-        Wed, 20 Oct 2021 13:14:01 +0100 (BST)
-Date:   Wed, 20 Oct 2021 14:13:57 +0200
-From:   Boris Brezillon <boris.brezillon@collabora.com>
+        id S230111AbhJTMVZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Wed, 20 Oct 2021 08:21:25 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:39503 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230233AbhJTMVU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Oct 2021 08:21:20 -0400
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 6C1CD100005;
+        Wed, 20 Oct 2021 12:18:56 +0000 (UTC)
+Date:   Wed, 20 Oct 2021 14:18:55 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Pratyush Yadav <p.yadav@ti.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+Cc:     Boris Brezillon <boris.brezillon@collabora.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Tudor Ambarus <tudor.ambarus@microchip.com>,
         Mark Brown <broonie@kernel.org>,
         Lee Jones <lee.jones@linaro.org>,
         Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -37,23 +31,24 @@ Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>
 Subject: Re: [PATCH v3 2/3] mtd: spi-nor: intel-spi: Convert to SPI MEM
-Message-ID: <20211020141357.3559ca95@collabora.com>
+Message-ID: <20211020141855.75f0314d@xps13>
 In-Reply-To: <20211020115913.uzo3ogkmrltnb26y@ti.com>
 References: <20211013114432.31352-1-mika.westerberg@linux.intel.com>
         <20211013114432.31352-3-mika.westerberg@linux.intel.com>
         <20211020114153.0f99c5df@collabora.com>
         <20211020115913.uzo3ogkmrltnb26y@ti.com>
-Organization: Collabora
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 20 Oct 2021 17:29:15 +0530
-Pratyush Yadav <p.yadav@ti.com> wrote:
+Hi Pratyush,
+
+p.yadav@ti.com wrote on Wed, 20 Oct 2021 17:29:15 +0530:
 
 > On 20/10/21 11:41AM, Boris Brezillon wrote:
 > > On Wed, 13 Oct 2021 14:44:31 +0300
@@ -84,17 +79,16 @@ Pratyush Yadav <p.yadav@ti.com> wrote:
 > I am curious about how we can solve this. Any pointers to 
 > functions/drivers in raw NAND framework that follow this model?
 
-It's not quite what you'd need, but nand_op_parser_pattern follows the
-same philosophy: describe a pattern and attach a hook to be executed
-when this pattern is found. Then you pass this pattern table to a helper
-that tries to match the operation against the supported patterns. If it
-finds one that matches, the operation is reported as supported and/or
-executed, otherwise it's rejected.
+->exec_op() should be implemented by controller drivers, there is a
+check_only flag to verify that the operation is supported by the
+controller, the entire operation is provided so that the controller
+driver knows exactly where we are going and does not try to guess
+anything. There is also a parser in the core that allows
+"complicated"/"constrained" drivers to just give a number of patterns
+they support and the parser will do the job of finding how the
+operation should be split.
 
-In this particular case, the pattern must be very specific:
+I believe this was what Boris referred to. If not, please correct me.
 
-* matching opcode
-* matching direction
-* matching number of address cycles
-* matching number of dummy cycles?
-* max/min number of data cycles?
+Thanks,
+Miquèl
