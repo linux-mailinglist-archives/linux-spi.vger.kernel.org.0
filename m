@@ -2,131 +2,150 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C997443551F
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Oct 2021 23:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1801435709
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Oct 2021 02:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbhJTVRE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 Oct 2021 17:17:04 -0400
-Received: from mail-ot1-f54.google.com ([209.85.210.54]:45623 "EHLO
-        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbhJTVRE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Oct 2021 17:17:04 -0400
-Received: by mail-ot1-f54.google.com with SMTP id l16-20020a9d6a90000000b0054e7ab56f27so9804655otq.12;
-        Wed, 20 Oct 2021 14:14:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=FqHQxiZxwpwoHOeUejJBI/puDRrvMLtd3ZP39nADFy4=;
-        b=HHGqxD4xPEGY/gTrMB4OMyE5Xmg6jSdD/3kEFeKLzhNEddKWTsLQZfGXYdv1BLh2le
-         ABpNUTgQevw6CVD+sfZ2ir8LvZ1b8VFJXaFl0ahrCTg3BWq73ZqvCDXfh8ZqsPp49xbS
-         bUOH1TiTi/L9ygDwgpVRZW77Q9iP9l6wJ2qPf65Htm/9sDcrvdmXZVVlfjyW2b848f80
-         gWi1PuBKtn83a+x3WsXxGJ8Ukl5X7V2qHaalTTpVxnVw5yRjfj3BW+KsAyblhCM2rs0N
-         dX0QNFt+K80Mcmr4cQBjctjbUbi1b3qTcMAvYT4ye/FrCw6alQr736/NWbv+MuMYWv2A
-         3iJg==
-X-Gm-Message-State: AOAM533Ag0IloWqFl33xq3FwLsuITad2m2lxjF3pjtr+0ikLBQgt3aBH
-        EKadf7tuIb6Vt4zGBoCWHqrV383qpw==
-X-Google-Smtp-Source: ABdhPJydY4OKhyFAzzRNT+vCw1CPPIY1+7r+oim4QB91AmD3aJAyBsk5LyoVHeAHr7EjFFgg3a4JKg==
-X-Received: by 2002:a9d:7283:: with SMTP id t3mr1383112otj.268.1634764489116;
-        Wed, 20 Oct 2021 14:14:49 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id h91sm658707otb.38.2021.10.20.14.14.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Oct 2021 14:14:48 -0700 (PDT)
-Received: (nullmailer pid 2962584 invoked by uid 1000);
-        Wed, 20 Oct 2021 21:14:47 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        Richard Weinberger <richard@nod.at>,
-        Julien Su <juliensu@mxic.com.tw>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Mark Brown <broonie@kernel.org>,
-        Xiangsheng Hou <Xiangsheng.Hou@mediatek.com>,
-        devicetree@vger.kernel.org, Jaime Liao <jaimeliao@mxic.com.tw>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
-In-Reply-To: <20211020142809.349347-4-miquel.raynal@bootlin.com>
-References: <20211020142809.349347-1-miquel.raynal@bootlin.com> <20211020142809.349347-4-miquel.raynal@bootlin.com>
-Subject: Re: [PATCH 03/18] dt-bindings: mtd: nand-chip: Create a NAND chip description
-Date:   Wed, 20 Oct 2021 16:14:47 -0500
-Message-Id: <1634764487.024191.2962583.nullmailer@robh.at.kernel.org>
+        id S231911AbhJUAYH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 Oct 2021 20:24:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42628 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231540AbhJUAXu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 20 Oct 2021 20:23:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1D41B613A4;
+        Thu, 21 Oct 2021 00:21:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634775695;
+        bh=WZWeuxSRxl5SZVNa+xq55nivzTLb8h/2BA88j/0BeOc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rrHy45QQMUHx73DZTVWBiVJwMRPAbe0H2hHzwnZSHr5zW5lkmSIzyWOL1nJEcxuDw
+         qq+Uz2n5ESFhVbjWsLuSfijzOwOFW6yTtK28BY3e23qSOyXRZoH8YI9FUyxWtdXQA3
+         t26o8RUNJGyI5EMQ7io9VViORcSWo6vsAXdCBiZOlzYiUkktJ+wk/SEa0lIB0UYLlt
+         aC7a5Z0v1OXnhFefCue+HHuA1IEFsTj8jzFkwnJn3T33jk17Dtc5juuWWP4YhZ02Zy
+         e0S/V6z75wSAXVfFH30lHQtHdjn0QSgYcMsgxYoKMGMNOXqm1wPYnUcWAdsUpp18oq
+         mVUilMFU5p7Tg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Sasha Levin <sashal@kernel.org>,
+        linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.14 20/26] spi: Fix deadlock when adding SPI controllers on SPI buses
+Date:   Wed, 20 Oct 2021 20:20:17 -0400
+Message-Id: <20211021002023.1128949-20-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211021002023.1128949-1-sashal@kernel.org>
+References: <20211021002023.1128949-1-sashal@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 20 Oct 2021 16:27:54 +0200, Miquel Raynal wrote:
-> Move the NAND chip description out of the NAND controller file. Indeed,
-> a subsequent part of the properties supported by a raw NAND chip are
-> also supported by SPI-NAND chips. So let's create a generic NAND chip
-> description which will be pulled by nand-controller.yaml and later by
-> spi-nand.yaml as well.
-> 
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
->  .../devicetree/bindings/mtd/nand-chip.yaml    | 71 +++++++++++++++++++
->  .../bindings/mtd/nand-controller.yaml         | 53 ++------------
->  2 files changed, 75 insertions(+), 49 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mtd/nand-chip.yaml
-> 
+From: Mark Brown <broonie@kernel.org>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+[ Upstream commit 6098475d4cb48d821bdf453c61118c56e26294f0 ]
 
-yamllint warnings/errors:
+Currently we have a global spi_add_lock which we take when adding new
+devices so that we can check that we're not trying to reuse a chip
+select that's already controlled.  This means that if the SPI device is
+itself a SPI controller and triggers the instantiation of further SPI
+devices we trigger a deadlock as we try to register and instantiate
+those devices while in the process of doing so for the parent controller
+and hence already holding the global spi_add_lock.  Since we only care
+about concurrency within a single SPI bus move the lock to be per
+controller, avoiding the deadlock.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/brcm,brcmnand.example.dt.yaml: nand-controller@f0442800: nand@1: '#address-cells', '#size-cells', 'compatible', 'nand-on-flash-bbt' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/brcm,brcmnand.example.dt.yaml: nand-controller@f0442800: nand@1: '#address-cells', '#size-cells', 'compatible', 'nand-on-flash-bbt' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/brcm,brcmnand.example.dt.yaml: nand-controller@10000200: nand@0: '#address-cells', '#size-cells', 'compatible', 'nand-on-flash-bbt' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/brcm,brcmnand.example.dt.yaml: nand-controller@10000200: nand@0: '#address-cells', '#size-cells', 'compatible', 'nand-on-flash-bbt' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/ingenic,nand.example.dt.yaml: nand-controller@1: nand@1: 'nand-ecc-mode', 'nand-on-flash-bbt', 'partitions' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/ingenic,nand.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/ingenic,nand.example.dt.yaml: nand-controller@1: nand@1: 'nand-ecc-mode', 'nand-on-flash-bbt', 'partitions' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/rockchip,nand-controller.example.dt.yaml: nand-controller@ff4b0000: nand@0: 'label', 'nand-bus-width', 'nand-ecc-mode', 'nand-is-boot-medium', 'rockchip,boot-blks', 'rockchip,boot-ecc-strength' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/rockchip,nand-controller.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/rockchip,nand-controller.example.dt.yaml: nand-controller@ff4b0000: nand@0: 'label', 'nand-bus-width', 'nand-ecc-mode', 'nand-is-boot-medium', 'rockchip,boot-blks', 'rockchip,boot-ecc-strength' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/st,stm32-fmc2-nand.example.dt.yaml: nand-controller@58002000: nand@0: '#address-cells', '#size-cells', 'nand-on-flash-bbt' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/st,stm32-fmc2-nand.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/st,stm32-fmc2-nand.example.dt.yaml: nand-controller@58002000: nand@0: '#address-cells', '#size-cells', 'nand-on-flash-bbt' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/intel,lgm-nand.example.dt.yaml: nand-controller@e0f00000: nand@0: 'nand-ecc-mode' does not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/intel,lgm-nand.example.dt.yaml: nand-controller@e0f00000: nand@0: 'nand-ecc-mode' does not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/qcom,nandc.example.dt.yaml: nand-controller@1ac00000: nand@0: 'nand-bus-width', 'partitions' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/qcom,nandc.example.dt.yaml: nand-controller@1ac00000: nand@0: 'nand-bus-width', 'partitions' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/qcom,nandc.example.dt.yaml: nand-controller@79b0000: nand@0: 'nand-bus-width', 'partitions' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/nand-controller.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/qcom,nandc.example.dt.yaml: nand-controller@79b0000: nand@0: 'nand-bus-width', 'partitions' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.example.dt.yaml: nand-controller@4,0: nand@0: '#address-cells', '#size-cells', 'nand-on-flash-bbt' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/st,stm32-fmc2-nand.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.example.dt.yaml: nand-controller@4,0: nand@0: '#address-cells', '#size-cells', 'nand-on-flash-bbt' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+This can be easily triggered in the case of spi-mux.
 
-doc reference errors (make refcheckdocs):
+Reported-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/spi/spi.c       | 17 ++++++-----------
+ include/linux/spi/spi.h |  3 +++
+ 2 files changed, 9 insertions(+), 11 deletions(-)
 
-See https://patchwork.ozlabs.org/patch/1543921
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index f95f7666cb5b..2c342bded058 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -480,12 +480,6 @@ static LIST_HEAD(spi_controller_list);
+  */
+ static DEFINE_MUTEX(board_lock);
+ 
+-/*
+- * Prevents addition of devices with same chip select and
+- * addition of devices below an unregistering controller.
+- */
+-static DEFINE_MUTEX(spi_add_lock);
+-
+ /**
+  * spi_alloc_device - Allocate a new SPI device
+  * @ctlr: Controller to which device is connected
+@@ -638,9 +632,9 @@ int spi_add_device(struct spi_device *spi)
+ 	 * chipselect **BEFORE** we call setup(), else we'll trash
+ 	 * its configuration.  Lock against concurrent add() calls.
+ 	 */
+-	mutex_lock(&spi_add_lock);
++	mutex_lock(&ctlr->add_lock);
+ 	status = __spi_add_device(spi);
+-	mutex_unlock(&spi_add_lock);
++	mutex_unlock(&ctlr->add_lock);
+ 	return status;
+ }
+ EXPORT_SYMBOL_GPL(spi_add_device);
+@@ -660,7 +654,7 @@ static int spi_add_device_locked(struct spi_device *spi)
+ 	/* Set the bus ID string */
+ 	spi_dev_set_name(spi);
+ 
+-	WARN_ON(!mutex_is_locked(&spi_add_lock));
++	WARN_ON(!mutex_is_locked(&ctlr->add_lock));
+ 	return __spi_add_device(spi);
+ }
+ 
+@@ -2832,6 +2826,7 @@ int spi_register_controller(struct spi_controller *ctlr)
+ 	spin_lock_init(&ctlr->bus_lock_spinlock);
+ 	mutex_init(&ctlr->bus_lock_mutex);
+ 	mutex_init(&ctlr->io_mutex);
++	mutex_init(&ctlr->add_lock);
+ 	ctlr->bus_lock_flag = 0;
+ 	init_completion(&ctlr->xfer_completion);
+ 	if (!ctlr->max_dma_len)
+@@ -2968,7 +2963,7 @@ void spi_unregister_controller(struct spi_controller *ctlr)
+ 
+ 	/* Prevent addition of new devices, unregister existing ones */
+ 	if (IS_ENABLED(CONFIG_SPI_DYNAMIC))
+-		mutex_lock(&spi_add_lock);
++		mutex_lock(&ctlr->add_lock);
+ 
+ 	device_for_each_child(&ctlr->dev, NULL, __unregister);
+ 
+@@ -2999,7 +2994,7 @@ void spi_unregister_controller(struct spi_controller *ctlr)
+ 	mutex_unlock(&board_lock);
+ 
+ 	if (IS_ENABLED(CONFIG_SPI_DYNAMIC))
+-		mutex_unlock(&spi_add_lock);
++		mutex_unlock(&ctlr->add_lock);
+ }
+ EXPORT_SYMBOL_GPL(spi_unregister_controller);
+ 
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 97b8d12b5f2b..5d80c6fd2a22 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -527,6 +527,9 @@ struct spi_controller {
+ 	/* I/O mutex */
+ 	struct mutex		io_mutex;
+ 
++	/* Used to avoid adding the same CS twice */
++	struct mutex		add_lock;
++
+ 	/* lock and mutex for SPI bus locking */
+ 	spinlock_t		bus_lock_spinlock;
+ 	struct mutex		bus_lock_mutex;
+-- 
+2.33.0
 
