@@ -2,38 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B76438376
-	for <lists+linux-spi@lfdr.de>; Sat, 23 Oct 2021 13:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE77E438514
+	for <lists+linux-spi@lfdr.de>; Sat, 23 Oct 2021 21:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbhJWLfF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 23 Oct 2021 07:35:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42186 "EHLO mail.kernel.org"
+        id S230361AbhJWUAa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 23 Oct 2021 16:00:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34000 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229778AbhJWLfE (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 23 Oct 2021 07:35:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 47A6560F70;
-        Sat, 23 Oct 2021 11:32:45 +0000 (UTC)
+        id S230230AbhJWUAa (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 23 Oct 2021 16:00:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6D80B60F46;
+        Sat, 23 Oct 2021 19:58:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634988765;
-        bh=SBP7/+VsPi2zy67Uxc6FSjUy/Hx+Zxd170hX0qozMNc=;
+        s=k20201202; t=1635019090;
+        bh=COjl22/rY2BQ/OgeeXf9s3EB7nrpB6IfxOTmSZf301M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pIQhwT7RU1N7YmhKX5F4asZp8XijLsb1vqqupF5Vgc1Ws0k9571QB0D/YkTQYsrfv
-         bt7aenUva/+XcSIA5aT/8Zz0nu/BmdLNoHVTS7axDTPtwsiafQtErp1ku7qTPqRGU5
-         +QHGnazDkuBkHz1N9GnXg1V6HgY5uTBFqC6aY8qWS+gefx0IYpGPQvYOrSQc6pS7xD
-         IfcfZG1mHJ8+XR3lqaZKp/CrxPI2Mh/iSc0Q+BqJY6wWWBRMbiUeGINiXQGN3bOXby
-         2jrsPUzyUwYNlJxiALAsUnNEuRz38uAU2G10zLU8ABMeuOqrFK5cipCpK5inJAhMN7
-         QryyXma0IXUPA==
+        b=QyXTM5RLL/ZvlgR/gvrmchnEeG8NoGFEolfIWQYLMSGR6+qBJPLn4lUM5vv6MvbuH
+         oK/RcoNYnh3aDf/KxcI5dERWgrdoWOlSscPUeInsFFHARpW9he4GFtaLr+1yxWOrit
+         zlayhLnclawo7aVoeZPwsUlnirMWB7imxuYmJLUm76aTEfFQayWa9xCrVkmRlNsXuT
+         qUPnYa0/lk7MaOS77HPy+vxUfuHCUzE1m5vCddxE9hfXSFPNdJFJVcOa5/ZVmce/ds
+         4NBZpL8MYLxjlzNmn3V6/Tg/so/kLDfMCqPkvFZD2kEQvay1Yt/21rTst9FEvU/qMG
+         PINDK2vc12RHQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Thomas Perrot <thomas.perrot@bootlin.com>,
-        linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>, stable@vger.kernel.org,
-        linus.walleij@linaro.org
-Subject: Re: [PATCH] spi: spl022: fix Microwire full duplex mode
-Date:   Sat, 23 Oct 2021 12:32:42 +0100
-Message-Id: <163498875634.38380.8059992136982566473.b4-ty@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Yang Yingliang <yangyingliang@huawei.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, kdasu.kdev@gmail.com
+Subject: Re: [PATCH -next] spi: bcm-qspi: Fix missing clk_disable_unprepare() on error in bcm_qspi_probe()
+Date:   Sat, 23 Oct 2021 20:58:01 +0100
+Message-Id: <163501903283.919250.3449151714260187451.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211022142104.1386379-1-thomas.perrot@bootlin.com>
-References: <20211022142104.1386379-1-thomas.perrot@bootlin.com>
+In-Reply-To: <20211018073413.2029081-1-yangyingliang@huawei.com>
+References: <20211018073413.2029081-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -41,21 +41,20 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 22 Oct 2021 16:21:04 +0200, Thomas Perrot wrote:
-> There are missing braces in the function that verify controller parameters,
-> then an error is always returned when the parameter to select Microwire
-> frames operation is used on devices allowing it.
+On Mon, 18 Oct 2021 15:34:13 +0800, Yang Yingliang wrote:
+> Fix the missing clk_disable_unprepare() before return
+> from bcm_qspi_probe() in the error handling case.
 > 
 > 
 
 Applied to
 
-   broonie/spi.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/1] spi: spl022: fix Microwire full duplex mode
-      commit: 992ed0c72eb9c459c402205ce274904ea789a780
+[1/1] spi: bcm-qspi: Fix missing clk_disable_unprepare() on error in bcm_qspi_probe()
+      commit: 0204bdeb3df79a5c78d9e76119a7f04e3dcb1258
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
