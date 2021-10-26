@@ -2,101 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD4943B914
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Oct 2021 20:10:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D115143BA55
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Oct 2021 21:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236588AbhJZSNW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 26 Oct 2021 14:13:22 -0400
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:40503 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235040AbhJZSNW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 26 Oct 2021 14:13:22 -0400
-Received: by mail-oi1-f178.google.com with SMTP id n63so21836213oif.7;
-        Tue, 26 Oct 2021 11:10:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LwN+X4PEi3Ouq9X6OKykFlJGA9GO8zaZsDpJ3nIh2IU=;
-        b=Qi/2+Pr5/cT8G69/r6fgXaQN/XXtP1TrdIN6IQGPhoSsiS2aUmlAOuR6BQbvIueYNY
-         IXFpVqC0HZhbJJis2BO3gj2H9aZNVhD/OckUuuGQQlpDrWvdhuZjVwaClt/UgOayoAee
-         8gVA7HTI2OnDgG7BOXyAvb2/oucX9caWAgAJAroS+RYYs7AnEABzgYTbyQ0/LE1ou72y
-         Y/d1XElEPyTXbCDxBKau0Pbnk10zFVRSRfFylAzQqNsss8JjiqIx2pqzYbyCkouA0ezp
-         wRgrn27qpW4lYLFEcNL1RUN+v99v8LeGQEa6uVv6HmbEFwEOqqEgwz+QFxAI/bIiY0hp
-         4DDg==
-X-Gm-Message-State: AOAM533lapW0SyullYYVKPtb5hgsczF2oMRMpLI0ES1L+zNxuX4pSy8Z
-        cKMYxgXzcTkNDAJ5CwIvvg==
-X-Google-Smtp-Source: ABdhPJxO0G7gdDH3/w0eJlvozSh7pEFCagRG5POucla9GUeZ9R93VkMIf59HbJp1MZLXLSpbSBydTQ==
-X-Received: by 2002:aca:240e:: with SMTP id n14mr239723oic.52.1635271857578;
-        Tue, 26 Oct 2021 11:10:57 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bk8sm5045827oib.57.2021.10.26.11.10.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Oct 2021 11:10:56 -0700 (PDT)
-Received: (nullmailer pid 2952060 invoked by uid 1000);
-        Tue, 26 Oct 2021 18:10:54 -0000
-Date:   Tue, 26 Oct 2021 13:10:54 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Brad Larson <brad@pensando.io>
-Cc:     linux-arm-kernel@lists.infradead.org, arnd@arndb.de,
-        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        broonie@kernel.org, fancer.lancer@gmail.com,
-        adrian.hunter@intel.com, ulf.hansson@linaro.org, olof@lixom.net,
-        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 03/11] dt-bindings: mmc: Add Pensando Elba SoC binding
-Message-ID: <YXhErvvSfKIBvHae@robh.at.kernel.org>
-References: <20211025015156.33133-1-brad@pensando.io>
- <20211025015156.33133-4-brad@pensando.io>
+        id S238570AbhJZTJb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 26 Oct 2021 15:09:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45208 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238524AbhJZTJa (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 26 Oct 2021 15:09:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7F3B96109D;
+        Tue, 26 Oct 2021 19:07:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635275226;
+        bh=vZTpReTVu8G45pFyoSoR2KCp22nstJkeL/RzTNGG1Ik=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=qfK6NGcvyLii2uJZpeLvlkpovnVBvdFnxiETaIMv5jgznWWBvGi3iGMk9wfBugUWi
+         Bw0kGMWlWGy/qDI08yvmRfJcGG2gLTBzqPuyAtxOVvSutZxXy4g29u+THRUIgNEmqc
+         hoA1uH3iZwd/prK5FGNI+JheGBgdDXRlFCPS25nQg6/jtPJ0Cq9yb/BzLewUZh/d+n
+         QdM11okNuFf8cWp3V3SsOi0w/XWgf/z+rJiG//PEhrfp2SU+rtIveOtHKB2VXjuYqZ
+         O3O/RLiKiuszRSuR0FV4TfPmZuFd46pVg/9cJuSXR877e2xn0h9DzXjcs+qkXCoHse
+         rAGrt2zPLX/Kg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+In-Reply-To: <20211025205631.21151-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20211025205631.21151-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: (subset) [PATCH v2 0/7] Add SPI Multi I/O Bus Controller support for RZ/G2L
+Message-Id: <163527522326.2033998.11228661564873952732.b4-ty@kernel.org>
+Date:   Tue, 26 Oct 2021 20:07:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211025015156.33133-4-brad@pensando.io>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Oct 24, 2021 at 06:51:48PM -0700, Brad Larson wrote:
-> Pensando Elba ARM 64-bit SoC is integrated with this IP and
-> explicitly controls byte-lane enables resulting in an additional
-> reg property resource.
+On Mon, 25 Oct 2021 21:56:24 +0100, Lad Prabhakar wrote:
+> This patch series adds a couple of fixes for rpc-if driver and
+> adds support for RZ/G2L SoC, where the SPI Multi I/O Bus Controller
+> is identical to the RPC-IF block found on R-Car Gen3 SoC's.
 > 
-> Signed-off-by: Brad Larson <brad@pensando.io>
-> ---
->  .../devicetree/bindings/mmc/cdns,sdhci.yaml         | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
+> Cheers,
+> Prabhakar
 > 
-> diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> index af7442f73881..6c68b7b5abec 100644
-> --- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> @@ -15,13 +15,16 @@ allOf:
->  
->  properties:
->    compatible:
-> -    items:
-> -      - enum:
-> -          - socionext,uniphier-sd4hc
-> -      - const: cdns,sd4hc
-> +    oneOf:
-> +      - items:
-> +        - enum:
-> +            - socionext,uniphier-sd4hc
-> +            - pensando,elba-emmc
-> +        - const: cdns,sd4hc
->  
->    reg:
-> -    maxItems: 1
-> +    minItems: 1
-> +    maxItems: 2
+> [...]
 
-If there is more than 1, then you need to describe what each entry is.
+Applied to
 
->  
->    interrupts:
->      maxItems: 1
-> -- 
-> 2.17.1
-> 
-> 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[3/7] spi: spi-rpc-if: Check return value of rpcif_sw_init()
+      commit: 0b0a281ed7001d4c4f4c47bdc84680c4997761ca
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
