@@ -2,51 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C50743C3C3
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Oct 2021 09:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89DFC43C3CA
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Oct 2021 09:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240469AbhJ0HYE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 Oct 2021 03:24:04 -0400
-Received: from mail-ua1-f47.google.com ([209.85.222.47]:36846 "EHLO
-        mail-ua1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240471AbhJ0HYD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Oct 2021 03:24:03 -0400
-Received: by mail-ua1-f47.google.com with SMTP id e10so3175095uab.3;
-        Wed, 27 Oct 2021 00:21:38 -0700 (PDT)
+        id S238612AbhJ0HYv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 Oct 2021 03:24:51 -0400
+Received: from mail-vk1-f170.google.com ([209.85.221.170]:33315 "EHLO
+        mail-vk1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231641AbhJ0HYu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Oct 2021 03:24:50 -0400
+Received: by mail-vk1-f170.google.com with SMTP id d130so950480vke.0;
+        Wed, 27 Oct 2021 00:22:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=XEkFa+Ku/oXy3Y71Wa/RXXm6+I0giMexz18AaglX7hA=;
-        b=250+CIzlUU/59Sd+f3UO1OhOlITbP+7hy0Qhi8HsOyTbfPDvrzRublON81n1DVl5O5
-         l0t6VErruzxoQnNpoyUx9m3UByOgIyhGfIpqxpPuvhFIOb3y8posdsosa7DC3f1loxVn
-         9SZ38pDMvGJ0ZFEqrFN7jyPwHy/hlnWdMg6OeAcVe5LthZOLCOFp/lo16s8mmyhQwqVj
-         7u58eAPxQsJXonwjo5fnEx+dR9KwrZGPerDI0C/oy6vvF7VnCKJFVmKC3zX1wzRdV+pD
-         c5qIee0Vc54TdwehRMKOnY0Q69nyJJKk+BWN1yqHOLaICAOA9HQYLGvZm0hj+UQyPn/m
-         af4w==
-X-Gm-Message-State: AOAM53347eBIECn7xtVyEgz1kKJbQyzt3VTPZi8fEvY4fEQMLYEIo5sZ
-        XnHd6Q6qKIozzlE3hCv7X6ACTtD7Cxum7w==
-X-Google-Smtp-Source: ABdhPJw6IL68kkowHN7Yu0essb69SRPCBVccgeJ+WNljMxXXHKCcC5zM0h3UsdoOsuhcE8Y+eldzBw==
-X-Received: by 2002:a05:6102:cd2:: with SMTP id g18mr28671857vst.25.1635319297590;
-        Wed, 27 Oct 2021 00:21:37 -0700 (PDT)
-Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
-        by smtp.gmail.com with ESMTPSA id m34sm10655938uad.5.2021.10.27.00.21.36
+        bh=/iJZSwBfMB4rhQgp9Yn6aeYD+316WLPLDz4u9JiASsw=;
+        b=NYPsxVcRSyoO3cSk8zEzhSDP3YqdFO9u1nzM+WKOOqEtXJjkU3MSVreLE2GYBUdf43
+         U4NnhvdbkNmP+ABcGBJJY4RD7M7RGFQCYoiLEvebSxoB3Z6r1XyEgH6ZbZExAYTL3dGv
+         DdOVskVV5l4bhtRh/bowgYszZw0E4P7HG4UGY/ebjZvNTy5Ye+DPMwsZjXFxjygylqra
+         V5wxy07mgRIzovHLfn9AEr+oz1hQNMD4k7RqVysDTY3SwykJoQlj5zcggYOwyNXNmED/
+         1Wk2JWhCMS5JK0sOWdbWI/yVcV9/BYvWES5R+ycadUvlMudtPMc+dCPlQBNuDYlVArOL
+         BAuQ==
+X-Gm-Message-State: AOAM533zGhH09HrITRWZNVszz7cAAkD8YJYEGjefKm2mTB2ElzBpDQq4
+        GnnHkjpUB5MlVf62V5XuNSQlGLz+/x07Cw==
+X-Google-Smtp-Source: ABdhPJzZoW6F2xjCoU7CkCRXuAbqAgc1ek/bC0U9grdO+Os1sNB3b8HCbsmxb2oM4L2u9dg8lAkk2w==
+X-Received: by 2002:a1f:f20f:: with SMTP id q15mr13637378vkh.3.1635319344845;
+        Wed, 27 Oct 2021 00:22:24 -0700 (PDT)
+Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
+        by smtp.gmail.com with ESMTPSA id c12sm223539vkn.2.2021.10.27.00.22.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Oct 2021 00:21:36 -0700 (PDT)
-Received: by mail-ua1-f44.google.com with SMTP id ba32so3138073uab.6;
-        Wed, 27 Oct 2021 00:21:36 -0700 (PDT)
-X-Received: by 2002:a05:6102:3a0e:: with SMTP id b14mr747714vsu.41.1635319295910;
- Wed, 27 Oct 2021 00:21:35 -0700 (PDT)
+        Wed, 27 Oct 2021 00:22:24 -0700 (PDT)
+Received: by mail-ua1-f45.google.com with SMTP id v20so3109351uaj.9;
+        Wed, 27 Oct 2021 00:22:23 -0700 (PDT)
+X-Received: by 2002:a67:f4c9:: with SMTP id s9mr18113716vsn.35.1635319343494;
+ Wed, 27 Oct 2021 00:22:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211025205631.21151-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211025205631.21151-6-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdUjsVRwB0_TH5HD8CrPsM15K1RLatP_ABODMe2bQ4C2ow@mail.gmail.com>
-In-Reply-To: <CAMuHMdUjsVRwB0_TH5HD8CrPsM15K1RLatP_ABODMe2bQ4C2ow@mail.gmail.com>
+References: <20211025205631.21151-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211025205631.21151-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20211025205631.21151-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 27 Oct 2021 09:21:24 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX4HfLUfDk2eZkBugP_ysL3w+qvZqKSR3e47HG4RTggXw@mail.gmail.com>
-Message-ID: <CAMuHMdX4HfLUfDk2eZkBugP_ysL3w+qvZqKSR3e47HG4RTggXw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/7] memory: renesas-rpc-if: Return error in case
- devm_ioremap_resource() fails
+Date:   Wed, 27 Oct 2021 09:22:12 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVt0o++AiP=A0jsZPUAfvWgn1V8ZwtGT2ha-v1zw1cY_Q@mail.gmail.com>
+Message-ID: <CAMuHMdVt0o++AiP=A0jsZPUAfvWgn1V8ZwtGT2ha-v1zw1cY_Q@mail.gmail.com>
+Subject: Re: [PATCH v2 6/7] memory: renesas-rpc-if: Drop usage of
+ RPCIF_DIRMAP_SIZE macro
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -55,6 +54,7 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Richard Weinberger <richard@nod.at>,
         Mark Brown <broonie@kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Sergei Shtylyov <sergei.shtylyov@gmail.com>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
@@ -64,50 +64,23 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         linux-spi <linux-spi@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Chris Brandt <Chris.Brandt@renesas.com>
+        Biju Das <biju.das.jz@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 9:17 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Mon, Oct 25, 2021 at 10:57 PM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > Make sure we return error in case devm_ioremap_resource() fails for dirmap
-> > resource.
-> >
-> > Fixes: ca7d8b980b67 ("memory: add Renesas RPC-IF driver")
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-> > Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On Mon, Oct 25, 2021 at 10:57 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> RPCIF_DIRMAP_SIZE may differ on various SoC's. Instead of using
+> RPCIF_DIRMAP_SIZE macro use resource size to get dirmap size
+> which is already part of struct rpcif.
 >
-> Thanks for your patch!
->
-> > --- a/drivers/memory/renesas-rpc-if.c
-> > +++ b/drivers/memory/renesas-rpc-if.c
-> > @@ -243,7 +243,7 @@ int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
-> >         res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dirmap");
-> >         rpc->dirmap = devm_ioremap_resource(&pdev->dev, res);
-> >         if (IS_ERR(rpc->dirmap))
-> > -               rpc->dirmap = NULL;
-> > +               return PTR_ERR(rpc->dirmap);
->
-> IIRC, it was intentional to make the dirmap optional (because the
-> device can be used without and/or because some variants on other SoCs
-> lack it?).  Unfortunately this is not reflected in the DT bindings
-> (yet?).  All code using the dirmap does check if rpc->dirmap is
-> valid first.
->
-> >         rpc->size = resource_size(res);
-
-Of course this will crash if the dirmap is not present, so for now it's better
-to just bail out.
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-> >
-> >         rpc->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
 
 Gr{oetje,eeting}s,
 
