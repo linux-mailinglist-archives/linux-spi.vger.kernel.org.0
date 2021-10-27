@@ -2,48 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2788243C3A8
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Oct 2021 09:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C50743C3C3
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Oct 2021 09:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240392AbhJ0HUR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 Oct 2021 03:20:17 -0400
-Received: from mail-ua1-f48.google.com ([209.85.222.48]:41823 "EHLO
-        mail-ua1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbhJ0HUQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Oct 2021 03:20:16 -0400
-Received: by mail-ua1-f48.google.com with SMTP id u9so3100168uac.8;
-        Wed, 27 Oct 2021 00:17:51 -0700 (PDT)
+        id S240469AbhJ0HYE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 Oct 2021 03:24:04 -0400
+Received: from mail-ua1-f47.google.com ([209.85.222.47]:36846 "EHLO
+        mail-ua1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240471AbhJ0HYD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Oct 2021 03:24:03 -0400
+Received: by mail-ua1-f47.google.com with SMTP id e10so3175095uab.3;
+        Wed, 27 Oct 2021 00:21:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=m3UqDuembNDHkRgC1yENIlEFdMz5fJYXnnqTuaz01pQ=;
-        b=Wz7OBPIouhRZzQ2GKTK1agYLnGk0NhUfBgdsBA0KNFfW5gxim0kDurwG68h8ZKT5P5
-         UZcdS0vfzpUgMwBiS6h+wdpD697RN0jgFaYjYFBUTDlrHf6BFqmdrvI8S3HWMjspXG5V
-         QZMLc4Emx+1uWdbP4VxrTARWliTIDlY24MXJqOWjjfMP8VOgXELVC85xa55OsbyODFtm
-         kWLLfXaGs9ZXVW2ZVAFSGt5sRTAJW2anShmY1N0nmO6CYKa1F9KySV0WWYI4zdDs9Vtz
-         bYKxhkAkNrJ0GipikAl3kuMPp5b5W+vYoXVein0EgkGP08D5A0TZSDdFI+chR0rnL1Z/
-         HHpA==
-X-Gm-Message-State: AOAM531PUmtZ3J1aJFUs5XhLwDsmuupezsRGBf+/vubpODXwjY6fLcfn
-        Aa4nZ2n4vh/h+VHMP8S+AZR7ml1DbZUFGw==
-X-Google-Smtp-Source: ABdhPJyXQJdKzdA6pE6T2riiHeRD1tpKlZjleDt8fkSWERnm/vm593TcW76jCD6hmNQP1Vh+uNbOSg==
-X-Received: by 2002:ab0:812:: with SMTP id a18mr27790678uaf.33.1635319071093;
-        Wed, 27 Oct 2021 00:17:51 -0700 (PDT)
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com. [209.85.221.181])
-        by smtp.gmail.com with ESMTPSA id n14sm4422861vkc.49.2021.10.27.00.17.50
+        bh=XEkFa+Ku/oXy3Y71Wa/RXXm6+I0giMexz18AaglX7hA=;
+        b=250+CIzlUU/59Sd+f3UO1OhOlITbP+7hy0Qhi8HsOyTbfPDvrzRublON81n1DVl5O5
+         l0t6VErruzxoQnNpoyUx9m3UByOgIyhGfIpqxpPuvhFIOb3y8posdsosa7DC3f1loxVn
+         9SZ38pDMvGJ0ZFEqrFN7jyPwHy/hlnWdMg6OeAcVe5LthZOLCOFp/lo16s8mmyhQwqVj
+         7u58eAPxQsJXonwjo5fnEx+dR9KwrZGPerDI0C/oy6vvF7VnCKJFVmKC3zX1wzRdV+pD
+         c5qIee0Vc54TdwehRMKOnY0Q69nyJJKk+BWN1yqHOLaICAOA9HQYLGvZm0hj+UQyPn/m
+         af4w==
+X-Gm-Message-State: AOAM53347eBIECn7xtVyEgz1kKJbQyzt3VTPZi8fEvY4fEQMLYEIo5sZ
+        XnHd6Q6qKIozzlE3hCv7X6ACTtD7Cxum7w==
+X-Google-Smtp-Source: ABdhPJw6IL68kkowHN7Yu0essb69SRPCBVccgeJ+WNljMxXXHKCcC5zM0h3UsdoOsuhcE8Y+eldzBw==
+X-Received: by 2002:a05:6102:cd2:: with SMTP id g18mr28671857vst.25.1635319297590;
+        Wed, 27 Oct 2021 00:21:37 -0700 (PDT)
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
+        by smtp.gmail.com with ESMTPSA id m34sm10655938uad.5.2021.10.27.00.21.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Oct 2021 00:17:50 -0700 (PDT)
-Received: by mail-vk1-f181.google.com with SMTP id s201so910382vke.6;
-        Wed, 27 Oct 2021 00:17:50 -0700 (PDT)
-X-Received: by 2002:a1f:1841:: with SMTP id 62mr27839915vky.26.1635319070166;
- Wed, 27 Oct 2021 00:17:50 -0700 (PDT)
+        Wed, 27 Oct 2021 00:21:36 -0700 (PDT)
+Received: by mail-ua1-f44.google.com with SMTP id ba32so3138073uab.6;
+        Wed, 27 Oct 2021 00:21:36 -0700 (PDT)
+X-Received: by 2002:a05:6102:3a0e:: with SMTP id b14mr747714vsu.41.1635319295910;
+ Wed, 27 Oct 2021 00:21:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211025205631.21151-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211025205631.21151-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20211025205631.21151-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20211025205631.21151-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211025205631.21151-6-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdUjsVRwB0_TH5HD8CrPsM15K1RLatP_ABODMe2bQ4C2ow@mail.gmail.com>
+In-Reply-To: <CAMuHMdUjsVRwB0_TH5HD8CrPsM15K1RLatP_ABODMe2bQ4C2ow@mail.gmail.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 27 Oct 2021 09:17:39 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUjsVRwB0_TH5HD8CrPsM15K1RLatP_ABODMe2bQ4C2ow@mail.gmail.com>
-Message-ID: <CAMuHMdUjsVRwB0_TH5HD8CrPsM15K1RLatP_ABODMe2bQ4C2ow@mail.gmail.com>
+Date:   Wed, 27 Oct 2021 09:21:24 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX4HfLUfDk2eZkBugP_ysL3w+qvZqKSR3e47HG4RTggXw@mail.gmail.com>
+Message-ID: <CAMuHMdX4HfLUfDk2eZkBugP_ysL3w+qvZqKSR3e47HG4RTggXw@mail.gmail.com>
 Subject: Re: [PATCH v2 5/7] memory: renesas-rpc-if: Return error in case
  devm_ioremap_resource() fails
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -70,40 +71,43 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Prabhakar,
-
-CC seebe
-
-On Mon, Oct 25, 2021 at 10:57 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Make sure we return error in case devm_ioremap_resource() fails for dirmap
-> resource.
+On Wed, Oct 27, 2021 at 9:17 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Mon, Oct 25, 2021 at 10:57 PM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > Make sure we return error in case devm_ioremap_resource() fails for dirmap
+> > resource.
+> >
+> > Fixes: ca7d8b980b67 ("memory: add Renesas RPC-IF driver")
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> > Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 >
-> Fixes: ca7d8b980b67 ("memory: add Renesas RPC-IF driver")
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Thanks for your patch!
-
-> --- a/drivers/memory/renesas-rpc-if.c
-> +++ b/drivers/memory/renesas-rpc-if.c
-> @@ -243,7 +243,7 @@ int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
->         res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dirmap");
->         rpc->dirmap = devm_ioremap_resource(&pdev->dev, res);
->         if (IS_ERR(rpc->dirmap))
-> -               rpc->dirmap = NULL;
-> +               return PTR_ERR(rpc->dirmap);
-
-IIRC, it was intentional to make the dirmap optional (because the
-device can be used without and/or because some variants on other SoCs
-lack it?).  Unfortunately this is not reflected in the DT bindings
-(yet?).  All code using the dirmap does check if rpc->dirmap is
-valid first.
-
->         rpc->size = resource_size(res);
+> Thanks for your patch!
 >
->         rpc->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+> > --- a/drivers/memory/renesas-rpc-if.c
+> > +++ b/drivers/memory/renesas-rpc-if.c
+> > @@ -243,7 +243,7 @@ int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
+> >         res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dirmap");
+> >         rpc->dirmap = devm_ioremap_resource(&pdev->dev, res);
+> >         if (IS_ERR(rpc->dirmap))
+> > -               rpc->dirmap = NULL;
+> > +               return PTR_ERR(rpc->dirmap);
+>
+> IIRC, it was intentional to make the dirmap optional (because the
+> device can be used without and/or because some variants on other SoCs
+> lack it?).  Unfortunately this is not reflected in the DT bindings
+> (yet?).  All code using the dirmap does check if rpc->dirmap is
+> valid first.
+>
+> >         rpc->size = resource_size(res);
+
+Of course this will crash if the dirmap is not present, so for now it's better
+to just bail out.
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+> >
+> >         rpc->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
 
 Gr{oetje,eeting}s,
 
