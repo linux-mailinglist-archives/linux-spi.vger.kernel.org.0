@@ -2,206 +2,292 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74F6D43CB4B
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Oct 2021 15:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9080D43CE88
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Oct 2021 18:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242323AbhJ0N7v (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 Oct 2021 09:59:51 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:36496 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231838AbhJ0N7p (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Oct 2021 09:59:45 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19RD9TUg016081;
-        Wed, 27 Oct 2021 15:56:41 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : from : to
- : cc : references : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=SonikwPLivf5Wf37m9QGw9Dbl0nfvPwQE843HNWkcTc=;
- b=WzTh3e1T+lbbR0asJHNFou5wy8ymDy2S+R6rPJyrqAzstKAMap8J47xdHxMl2RgiS0FA
- GmPrGi2x3OeVUYtOCqe6mJeZ8Qnqgr3AqxOk450p67gxTAT52rOaRO+ShqQ7sCyKWJnI
- akk/0WBtQxfWvGvmNBBFHNJxGj2edblZplh16L99+Icve2UKQ3u0Y7rBt6zEBSDWSZG4
- hjGa2jeJcZtnU6/w30poOeFwKUFpEn8VYHXLg/vCxFZY0lY9ng2HR45n3c8vhiJwnllz
- Jwmg2Jsob0VeZLHlpEugPKm678F0Rb6n0r6pPAbgzUx5bSgYL/7OoJXo5clDxcl3kg2U lg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 3by38r22bq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 27 Oct 2021 15:56:41 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5734910002A;
-        Wed, 27 Oct 2021 15:56:39 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3742D22D168;
-        Wed, 27 Oct 2021 15:56:39 +0200 (CEST)
-Received: from lmecxl0573.lme.st.com (10.75.127.50) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 27 Oct
- 2021 15:56:35 +0200
-Subject: Re: dt-bindings: treewide: Update @st.com email address to
- @foss.st.com
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-To:     Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        <joe@perches.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        maxime coquelin <mcoquelin.stm32@gmail.com>,
-        alexandre torgue <alexandre.torgue@foss.st.com>,
-        michael turquette <mturquette@baylibre.com>,
-        stephen boyd <sboyd@kernel.org>,
-        herbert xu <herbert@gondor.apana.org.au>,
-        "david s . miller" <davem@davemloft.net>,
-        david airlie <airlied@linux.ie>,
-        daniel vetter <daniel@ffwll.ch>,
-        thierry reding <thierry.reding@gmail.com>,
-        sam ravnborg <sam@ravnborg.org>,
-        yannick fertre <yannick.fertre@foss.st.com>,
-        "philippe cornu" <philippe.cornu@foss.st.com>,
-        benjamin gaignard <benjamin.gaignard@linaro.org>,
-        vinod koul <vkoul@kernel.org>,
-        ohad ben-cohen <ohad@wizery.com>,
-        bjorn andersson <bjorn.andersson@linaro.org>,
-        baolin wang <baolin.wang7@gmail.com>,
-        jonathan cameron <jic23@kernel.org>,
-        "lars-peter clausen" <lars@metafoo.de>,
-        olivier moysan <olivier.moysan@foss.st.com>,
-        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        "Richard Weinberger" <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matt Mackall <mpm@selenic.com>,
-        "Alessandro Zummo" <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Ahmad Fatoum" <a.fatoum@pengutronix.de>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        dillon min <dillon.minfei@gmail.com>,
-        Marek Vasut <marex@denx.de>,
-        "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
-        Lionel Debieve <lionel.debieve@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        pascal Paillet <p.paillet@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        "Jose Abreu" <joabreu@synopsys.com>,
-        Le Ray <erwan.leray@foss.st.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <dmaengine@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-iio@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-media@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <netdev@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-gpio@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>
-References: <20211020065000.21312-1-patrice.chotard@foss.st.com>
- <22fb6f19-21eb-dcb5-fa31-bb243d4a7eaf@canonical.com>
- <878ryoc4dc.wl-maz@kernel.org>
- <82492eb2-5a5e-39a2-a058-5e2ba75323e0@foss.st.com>
-Message-ID: <865a4055-5c2f-0793-bdce-9f04eac167d2@foss.st.com>
-Date:   Wed, 27 Oct 2021 15:56:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S238182AbhJ0QTq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 Oct 2021 12:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41068 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232053AbhJ0QTq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Oct 2021 12:19:46 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF72C061570;
+        Wed, 27 Oct 2021 09:17:20 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id v64so1221999ybi.5;
+        Wed, 27 Oct 2021 09:17:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c0NYR0kLEjfc5N0ORTYdWPC/foh9nh5Icj3EAFpS6Bo=;
+        b=VG5zPN/tGx1CqpKnEDAAMN7juwfvgsqYtApvFaex9Wmdd+jRafNDdh6O90sjO0oYkF
+         KygURBRTay2uvh9Ca/2kYcGiyFqLcCq8BP+WjG4GpCRBek7bfCf0+CPN9+qKjJsjeOvC
+         MJSgMw8i4vG+OGZ63eQGEKUKSpRNgOuL9cIMgyYRDxOxQKImnZwSfd4HIvu+SJcgCy/Z
+         dS/AHTdbg9wpnEYh91S+JDqFrQHLgHX7m052ILN0edQ7JOFLsH7f8USMwSTSBf4f04iZ
+         +NhQke+ILy/pgbsqVB8Gq/Ugu2ZziyYVW194S6jS2y8S0a/InxjgtUy3/xSPEDe999OQ
+         jy+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c0NYR0kLEjfc5N0ORTYdWPC/foh9nh5Icj3EAFpS6Bo=;
+        b=7dIQ4VrLlWxUyfbLMaxPZ3Bx6I+DRZdknI3927X/+Nn4P2ePWnNXT66UR591EkW4pZ
+         OjlLmc4mjhs+y0jzi6EFwZ2XIt0qkxDvrbgCg8JjUQeDTCjxTVMspIxBh3RYngi2Dxis
+         moaMS+uTna9om3jlKnJb0da7XFyvC3sKzB3Up59YXrWSJSOipZLe0aM9EhAY6T5662/5
+         uOPhDjFrYtEq8Orz+WXAdU5E25lobjtwdDQUf7ODwt7xtCyoiGZt343drI1P9xeV9ZhZ
+         w6HgneKSG3TME8a56Qzn1suznaQCqc63bZMgtrg6kP8ZpJVbm6KxRM2ndP081UzoJpQm
+         r7cw==
+X-Gm-Message-State: AOAM5329Wk4tUCaL0TJD/sI6bSwrR+WkvOwfpZqnPKgviHPg6KQEGArT
+        xEJ/ZQTnhYHoKsQuGrw+YZGRCWhR+QwKDaGPTa0=
+X-Google-Smtp-Source: ABdhPJw88bg60vtfPAuUoTx9q9NFfLF7ehLb97ABYlXeWT4Fh8ewINCIOmKYIBROI+6iNwBjNP9fqxUrSTkNr6f1Qo0=
+X-Received: by 2002:a5b:783:: with SMTP id b3mr30504481ybq.328.1635351439577;
+ Wed, 27 Oct 2021 09:17:19 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <82492eb2-5a5e-39a2-a058-5e2ba75323e0@foss.st.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-10-27_04,2021-10-26_01,2020-04-07_01
+References: <20211025205631.21151-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20211025205631.21151-8-prabhakar.mahadev-lad.rj@bp.renesas.com> <3739744b-0a10-6d6b-8d1c-9c82b6afe0b3@canonical.com>
+In-Reply-To: <3739744b-0a10-6d6b-8d1c-9c82b6afe0b3@canonical.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 27 Oct 2021 17:16:53 +0100
+Message-ID: <CA+V-a8u16Xu6Ygn5m0cgKB7qtwrco7AW=7QnTODP4gcZWve8Ew@mail.gmail.com>
+Subject: Re: [PATCH v2 7/7] memory: renesas-rpc-if: Add support for RZ/G2L
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mark Brown <broonie@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        linux-mtd@lists.infradead.org,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Marc
+Hi Krzysztof,
 
-+Joe Perches
+Thank you for the review.
 
-On 10/27/21 8:11 AM, Patrice CHOTARD wrote:
-> Hi Marc
-> 
-> On 10/20/21 1:39 PM, Marc Zyngier wrote:
->> On Wed, 20 Oct 2021 08:45:02 +0100,
->> Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
->>>
->>> On 20/10/2021 08:50, patrice.chotard@foss.st.com wrote:
->>>> From: Patrice Chotard <patrice.chotard@foss.st.com>
->>>>
->>>> Not all @st.com email address are concerned, only people who have
->>>> a specific @foss.st.com email will see their entry updated.
->>>> For some people, who left the company, remove their email.
->>>>
->>>
->>> Please split simple address change from maintainer updates (removal,
->>> addition).
->>>
->>> Also would be nice to see here explained *why* are you doing this.
->>
->> And why this can't be done with a single update to .mailmap, like
->> anyone else does.
-> 
-> Thanks for the tips, yes, it will be simpler.
-> 
-> Thanks
-> Patrice
-> 
->>
->> 	M.
->>
 
-I made a try by updating .mailmap with adding a new entry with my @foss.st.com email :
+On Tue, Oct 26, 2021 at 3:47 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> On 25/10/2021 22:56, Lad Prabhakar wrote:
+> > SPI Multi I/O Bus Controller on RZ/G2L SoC is almost identical to
+> > the RPC-IF interface found on R-Car Gen3 SoC's.
+> >
+> > This patch adds a new compatible string for the RZ/G2L family so
+> > that the timing values on RZ/G2L can be adjusted.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> > ---
+> > v1->v2:
+> >  * Updated macros as suggested by Wolfram
+> > ---
+> >  drivers/memory/renesas-rpc-if.c | 72 ++++++++++++++++++++++++++++-----
+> >  drivers/mtd/hyperbus/rpc-if.c   |  4 +-
+> >  drivers/spi/spi-rpc-if.c        |  4 +-
+> >  include/memory/renesas-rpc-if.h |  8 +++-
+> >  4 files changed, 75 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
+> > index 0c56decc91f2..8c51145c0f5c 100644
+> > --- a/drivers/memory/renesas-rpc-if.c
+> > +++ b/drivers/memory/renesas-rpc-if.c
+> > @@ -12,6 +12,7 @@
+> >  #include <linux/module.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/of.h>
+> > +#include <linux/of_device.h>
+> >  #include <linux/regmap.h>
+> >  #include <linux/reset.h>
+> >
+> > @@ -27,8 +28,8 @@
+> >  #define RPCIF_CMNCR_MOIIO_HIZ        (RPCIF_CMNCR_MOIIO0(3) | \
+> >                                RPCIF_CMNCR_MOIIO1(3) | \
+> >                                RPCIF_CMNCR_MOIIO2(3) | RPCIF_CMNCR_MOIIO3(3))
+> > -#define RPCIF_CMNCR_IO3FV(val)       (((val) & 0x3) << 14) /* undocumented */
+> > -#define RPCIF_CMNCR_IO2FV(val)       (((val) & 0x3) << 12) /* undocumented */
+> > +#define RPCIF_CMNCR_IO3FV(val)       (((val) & 0x3) << 14) /* documented for RZ/G2L */
+> > +#define RPCIF_CMNCR_IO2FV(val)       (((val) & 0x3) << 12) /* documented for RZ/G2L */
+> >  #define RPCIF_CMNCR_IO0FV(val)       (((val) & 0x3) << 8)
+> >  #define RPCIF_CMNCR_IOFV_HIZ (RPCIF_CMNCR_IO0FV(3) | RPCIF_CMNCR_IO2FV(3) | \
+> >                                RPCIF_CMNCR_IO3FV(3))
+> > @@ -126,6 +127,9 @@
+> >  #define RPCIF_SMDRENR_OPDRE  BIT(4)
+> >  #define RPCIF_SMDRENR_SPIDRE BIT(0)
+> >
+> > +#define RPCIF_PHYADD         0x0070  /* R/W available on R-Car E3/D3/V3M and RZ/G2{E,L} */
+> > +#define RPCIF_PHYWR          0x0074  /* R/W available on R-Car E3/D3/V3M and RZ/G2{E,L} */
+> > +
+> >  #define RPCIF_PHYCNT         0x007C  /* R/W */
+> >  #define RPCIF_PHYCNT_CAL     BIT(31)
+> >  #define RPCIF_PHYCNT_OCTA(v) (((v) & 0x3) << 22)
+> > @@ -133,10 +137,12 @@
+> >  #define RPCIF_PHYCNT_OCT     BIT(20)
+> >  #define RPCIF_PHYCNT_DDRCAL  BIT(19)
+> >  #define RPCIF_PHYCNT_HS              BIT(18)
+> > -#define RPCIF_PHYCNT_STRTIM(v)       (((v) & 0x7) << 15)
+> > +#define RPCIF_PHYCNT_CKSEL(v)        (((v) & 0x3) << 16) /* valid only for RZ/G2L */
+> > +#define RPCIF_PHYCNT_STRTIM(v)       (((v) & 0x7) << 15) /* valid for R-Car and RZ/G2{E,H,M,N} */
+> >  #define RPCIF_PHYCNT_WBUF2   BIT(4)
+> >  #define RPCIF_PHYCNT_WBUF    BIT(2)
+> >  #define RPCIF_PHYCNT_PHYMEM(v)       (((v) & 0x3) << 0)
+> > +#define RPCIF_PHYCNT_PHYMEM_MASK GENMASK(1, 0)
+> >
+> >  #define RPCIF_PHYOFFSET1     0x0080  /* R/W */
+> >  #define RPCIF_PHYOFFSET1_DDRTMG(v) (((v) & 0x3) << 28)
+> > @@ -244,18 +250,46 @@ int rpcif_sw_init(struct rpcif *rpc, struct device *dev)
+> >               return PTR_ERR(rpc->dirmap);
+> >       rpc->size = resource_size(res);
+> >
+> > +     rpc->type = (enum rpcif_type)of_device_get_match_data(dev);
+> >       rpc->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+> >
+> >       return PTR_ERR_OR_ZERO(rpc->rstc);
+> >  }
+> >  EXPORT_SYMBOL(rpcif_sw_init);
+> >
+> > -void rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
+> > +static void rpcif_rzg2l_timing_adjust_sdr(struct rpcif *rpc)
+> > +{
+> > +     u32 data;
+> > +
+> > +     regmap_write(rpc->regmap, RPCIF_PHYWR, 0xa5390000);
+> > +     regmap_write(rpc->regmap, RPCIF_PHYADD, 0x80000000);
+> > +     regmap_write(rpc->regmap, RPCIF_PHYWR, 0x00008080);
+> > +     regmap_write(rpc->regmap, RPCIF_PHYADD, 0x80000022);
+> > +     regmap_write(rpc->regmap, RPCIF_PHYWR, 0x00008080);
+> > +     regmap_write(rpc->regmap, RPCIF_PHYADD, 0x80000024);
+> > +
+> > +     regmap_read(rpc->regmap, RPCIF_PHYCNT, &data);
+> > +     regmap_write(rpc->regmap, RPCIF_PHYCNT, data | RPCIF_PHYCNT_CKSEL(3));
+> > +     regmap_write(rpc->regmap, RPCIF_PHYWR, 0x00000030);
+> > +     regmap_write(rpc->regmap, RPCIF_PHYADD, 0x80000032);
+> > +}
+> > +
+> > +int rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
+> >  {
+> >       u32 dummy;
+> >
+> >       pm_runtime_get_sync(rpc->dev);
+> >
+> > +     if (rpc->type == RPCIF_RZ_G2L) {
+> > +             int ret;
+> > +
+> > +             ret = reset_control_reset(rpc->rstc);
+> > +             if (ret)
+> > +                     return ret;
+> > +             usleep_range(200, 300);
+> > +             rpcif_rzg2l_timing_adjust_sdr(rpc);
+> > +     }
+> > +
+> >       /*
+> >        * NOTE: The 0x260 are undocumented bits, but they must be set.
+> >        *       RPCIF_PHYCNT_STRTIM is strobe timing adjustment bits,
+> > @@ -264,8 +298,15 @@ void rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
+> >        *       On H3 ES1.x, the value should be 0, while on others,
+> >        *       the value should be 7.
+> >        */
+> > -     regmap_write(rpc->regmap, RPCIF_PHYCNT, RPCIF_PHYCNT_STRTIM(7) |
+> > -                  RPCIF_PHYCNT_PHYMEM(hyperflash ? 3 : 0) | 0x260);
+> > +     if (rpc->type == RPCIF_RCAR_GEN3) {
+> > +             regmap_write(rpc->regmap, RPCIF_PHYCNT, RPCIF_PHYCNT_STRTIM(7) |
+> > +                          RPCIF_PHYCNT_PHYMEM(hyperflash ? 3 : 0) | 0x260);
+> > +     } else {
+> > +             regmap_read(rpc->regmap, RPCIF_PHYCNT, &dummy);
+> > +             dummy &= ~RPCIF_PHYCNT_PHYMEM_MASK;
+> > +             dummy |= RPCIF_PHYCNT_PHYMEM(hyperflash ? 3 : 0) | 0x260;
+> > +             regmap_write(rpc->regmap, RPCIF_PHYCNT, dummy);
+> > +     }
+> >
+> >       /*
+> >        * NOTE: The 0x1511144 are undocumented bits, but they must be set
+> > @@ -282,9 +323,17 @@ void rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
+> >               regmap_update_bits(rpc->regmap, RPCIF_PHYINT,
+> >                                  RPCIF_PHYINT_WPVAL, 0);
+> >
+> > -     regmap_write(rpc->regmap, RPCIF_CMNCR, RPCIF_CMNCR_SFDE |
+> > -                  RPCIF_CMNCR_MOIIO_HIZ | RPCIF_CMNCR_IOFV_HIZ |
+> > -                  RPCIF_CMNCR_BSZ(hyperflash ? 1 : 0));
+> > +     if (rpc->type == RPCIF_RCAR_GEN3)
+> > +             regmap_write(rpc->regmap, RPCIF_CMNCR, RPCIF_CMNCR_SFDE |
+> > +                          RPCIF_CMNCR_MOIIO_HIZ | RPCIF_CMNCR_IOFV_HIZ |
+> > +                          RPCIF_CMNCR_BSZ(hyperflash ? 1 : 0));
+> > +     else
+> > +             regmap_write(rpc->regmap, RPCIF_CMNCR, RPCIF_CMNCR_SFDE |
+> > +                          RPCIF_CMNCR_MOIIO3(1) | RPCIF_CMNCR_MOIIO2(1) |
+> > +                          RPCIF_CMNCR_MOIIO1(1) | RPCIF_CMNCR_MOIIO0(1) |
+> > +                          RPCIF_CMNCR_IO3FV(2) | RPCIF_CMNCR_IO2FV(2) |
+> > +                          RPCIF_CMNCR_IO0FV(2) | RPCIF_CMNCR_BSZ(hyperflash ? 1 : 0));
+> > +
+> >       /* Set RCF after BSZ update */
+> >       regmap_write(rpc->regmap, RPCIF_DRCR, RPCIF_DRCR_RCF);
+> >       /* Dummy read according to spec */
+> > @@ -295,6 +344,8 @@ void rpcif_hw_init(struct rpcif *rpc, bool hyperflash)
+> >       pm_runtime_put(rpc->dev);
+> >
+> >       rpc->bus_size = hyperflash ? 2 : 1;
+> > +
+> > +     return 0;
+> >  }
+> >  EXPORT_SYMBOL(rpcif_hw_init);
+> >
+> > @@ -657,7 +708,8 @@ static int rpcif_remove(struct platform_device *pdev)
+> >  }
+> >
+> >  static const struct of_device_id rpcif_of_match[] = {
+> > -     { .compatible = "renesas,rcar-gen3-rpc-if", },
+> > +     { .compatible = "renesas,rcar-gen3-rpc-if", .data = (void *)RPCIF_RCAR_GEN3 },
+> > +     { .compatible = "renesas,rzg2l-rpc-if", .data = (void *)RPCIF_RZ_G2L },
+> >       {},
+> >  };
+> >  MODULE_DEVICE_TABLE(of, rpcif_of_match);
+> > diff --git a/drivers/mtd/hyperbus/rpc-if.c b/drivers/mtd/hyperbus/rpc-if.c
+> > index 367b0d72bf62..40bca89268c3 100644
+> > --- a/drivers/mtd/hyperbus/rpc-if.c
+> > +++ b/drivers/mtd/hyperbus/rpc-if.c
+> > @@ -132,7 +132,9 @@ static int rpcif_hb_probe(struct platform_device *pdev)
+> >
+> >       rpcif_enable_rpm(&hyperbus->rpc);
+> >
+> > -     rpcif_hw_init(&hyperbus->rpc, true);
+> > +     error = rpcif_hw_init(&hyperbus->rpc, true);
+> > +     if (error)
+> > +             return error;
+> >
+>
+> Not related to this patch, but the concept used here looks fragile. The
+> child driver calls also rpcif_sw_init() and ignores the error code. What
+> happens in case of rpcif_sw_init() failure or child probe deferral?
+> Since the SW and HW init is called in context of child device, the
+> parent won't do anything. Then, second bind of child device (manual or
+> because of deferral) will fail on devm_reset_control_get_exclusive()
+> with -EBUSY.
+>
+> Initializing parent's resources should be rather done from parent's
+> context (so renesas-rpc-if.c) to handle properly deferred probe and
+> other failures. Doing it from a child, breaks encapsulation and
+> separation of devices.
+>
+Agree with the above.
 
- Pali Rohár <pali@kernel.org> <pali.rohar@gmail.com>
- Paolo 'Blaisorblade' Giarrusso <blaisorblade@yahoo.it>
-+Patrice Chotard <patrice.chotard@foss.st.com> <patrice.chotard@st.com>
- Patrick Mochel <mochel@digitalimplant.org>
- Paul Burton <paulburton@kernel.org> <paul.burton@imgtec.com>
+> Is there any reason why memory/renesas-rpc-if.c cannot do SW and HW init?
+>
+I'll investigate this to avoid the above issues.
 
-But when running ./scripts/get_maintainer.pl Documentation/devicetree/bindings/arm/sti.yaml, by old email is still displayed
+Cheers,
+Prabhakar
 
-Rob Herring <robh+dt@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-Patrice Chotard <patrice.chotard@st.com> (in file)
-devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-linux-kernel@vger.kernel.org (open list)
-
-By default, the get_maintainer.pl script is using .mailmap file ($email_use_mailmap = 1).
-
-It seems there is an issue with get_maintainer.pl and maintainer name/e-mail found in yaml file ?
-
-Thanks
-Patrice
+> Best regards,
+> Krzysztof
