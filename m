@@ -2,77 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B87D43F1DB
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Oct 2021 23:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE2F43F1F3
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Oct 2021 23:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbhJ1Vhn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 28 Oct 2021 17:37:43 -0400
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:40716 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbhJ1Vhn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 Oct 2021 17:37:43 -0400
-Received: by mail-ot1-f41.google.com with SMTP id 71-20020a9d034d000000b00553e24ce2b8so5899759otv.7;
-        Thu, 28 Oct 2021 14:35:15 -0700 (PDT)
+        id S230522AbhJ1VlM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 28 Oct 2021 17:41:12 -0400
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:38599 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230476AbhJ1VlM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 Oct 2021 17:41:12 -0400
+Received: by mail-oi1-f180.google.com with SMTP id t4so10284361oie.5;
+        Thu, 28 Oct 2021 14:38:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=uVpB6t/XH+sh2qfT1aM2PNoYeGU85zqXSS4jjTp9y90=;
-        b=gHcqszkMaz/nLF2AgrI4x7Mi1egg36gbX7eursb5z9uODRspSFhoix3Yu2gUIxM9V+
-         j3Kt/im/uAMwGGqcb3COImI+OiM9E5suZA0jgbO2PLhsr1HZ+mwwTuDf5j+IwHl9Yoeo
-         tGNESkwp/uCHMYxfTYl5bYTO1Z+20MXwtGCOUqz9ok+i/JMygImYaoByKh2pmwvxE2xo
-         4fktRrDIW+fSwLdMj8WToJBDiL/apdmOoK9U0Hytl70OxTkUcLm+nN8sxiVvCXmtE1RL
-         z9ZcttrAyFBvgP8ZAtnn+alF2KRPbDnVcWNa/fda691r8CJ/n8ywN89z9DUi6DAOtzvC
-         ezag==
-X-Gm-Message-State: AOAM533BxXPGEz4ZdcgQAEpop8tVQUo6R8LQcKpRTZ0E3TfCTTJAj1gr
-        j10NVGuPVHwRyx14npAsJF5lKk/pWg==
-X-Google-Smtp-Source: ABdhPJy03vHBCBw25GpIZT2cQy06T0I69YsG5Io9Nkfdi9p8Jll53OaZVmFHQAoQgzXTLljfZbxSqQ==
-X-Received: by 2002:a05:6830:40b0:: with SMTP id x48mr5379834ott.89.1635456915421;
-        Thu, 28 Oct 2021 14:35:15 -0700 (PDT)
+        bh=6OiNYLAxsFXPFjL0FqyFvTnwfqy6iGdQjj9Dv8HGhtw=;
+        b=oOC/gyb3JyCuNjj/TY0e/9L5hdBXLUKgFJ4ghshcwfLujt4grw2abN1eZsZ+rsgv8O
+         KOQO18xBxtcIA6wMsh24snpNXjWA2rARZ4CneMi7xODS1teK4BWsWYAwMjMwsWnZeSL3
+         DRrOxQrvfyLaRZsbnRCqfLbxWYZSUHCPQR5hmlw8d9y0Xd0n75vrFAROmCUCiKIHnz30
+         8ywMhslP/DFAuA5yAkfANmoPS9vtzIWo/jvCotoOG01X58ZFNU7kdaCv+y0LKnex7J7V
+         avJzWicwTkFQh0lWs+ZqUr8Cmu0pWUP52QPHg6QSaRkFIHX9viXIEIak5FXlGxzQsO25
+         Eqow==
+X-Gm-Message-State: AOAM53399kMhWoAJqz1f3j6p1XetoLIZWgifWRIG0g8PKneu0/r7Y8Ih
+        MpjHqBmPkXidSHF8YGgw/w==
+X-Google-Smtp-Source: ABdhPJxutP3x4GwMxsrgkPLF2C0wZhHfpPHmdB7Z+SB06+/wmcoJve0rxdzTGctUMhJZaHnPWesQ7A==
+X-Received: by 2002:a05:6808:1898:: with SMTP id bi24mr5172217oib.3.1635457124640;
+        Thu, 28 Oct 2021 14:38:44 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id r22sm1352984otq.5.2021.10.28.14.35.14
+        by smtp.gmail.com with ESMTPSA id q15sm1381169otm.15.2021.10.28.14.38.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Oct 2021 14:35:14 -0700 (PDT)
-Received: (nullmailer pid 627527 invoked by uid 1000);
-        Thu, 28 Oct 2021 21:35:13 -0000
-Date:   Thu, 28 Oct 2021 16:35:13 -0500
+        Thu, 28 Oct 2021 14:38:44 -0700 (PDT)
+Received: (nullmailer pid 632711 invoked by uid 1000);
+        Thu, 28 Oct 2021 21:38:43 -0000
+Date:   Thu, 28 Oct 2021 16:38:43 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Xiangsheng Hou <Xiangsheng.Hou@mediatek.com>,
-        Richard Weinberger <richard@nod.at>,
-        Mark Brown <broonie@kernel.org>,
+Cc:     Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
         Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Mark Brown <broonie@kernel.org>, linux-mtd@lists.infradead.org,
         linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        Julien Su <juliensu@mxic.com.tw>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linux-kernel@vger.kernel.org, Julien Su <juliensu@mxic.com.tw>,
         Jaime Liao <jaimeliao@mxic.com.tw>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 08/18] dt-bindings: mtd: Describe Macronix NAND ECC engine
-Message-ID: <YXsXkfGNtMFLPMA2@robh.at.kernel.org>
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Xiangsheng Hou <Xiangsheng.Hou@mediatek.com>
+Subject: Re: [PATCH 09/18] dt-bindings: spi: mxic: Document the
+ nand-ecc-engine property
+Message-ID: <YXsYY6JaglRjan+L@robh.at.kernel.org>
 References: <20211020142809.349347-1-miquel.raynal@bootlin.com>
- <20211020142809.349347-9-miquel.raynal@bootlin.com>
+ <20211020142809.349347-10-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211020142809.349347-9-miquel.raynal@bootlin.com>
+In-Reply-To: <20211020142809.349347-10-miquel.raynal@bootlin.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 20 Oct 2021 16:27:59 +0200, Miquel Raynal wrote:
-> Describe Macronix NAND ECC engine. This engine may be used as an
-> external engine or can be pipelined with either a raw NAND controller or
-> a SPI controller. Both hardware designs with a SPI controller are shown
-> in the examples.
+On Wed, Oct 20, 2021 at 04:28:00PM +0200, Miquel Raynal wrote:
+> This SPI controller supports interacting with an external ECC
+> engine. The nand-ecc-engine property already exist in the NAND world but
+> also applies to SPI controller nodes which have external correction
+> capabilities like Macronix's.
 > 
 > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 > ---
->  .../bindings/mtd/mxicy,nand-ecc-engine.yaml   | 77 +++++++++++++++++++
->  1 file changed, 77 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mtd/mxicy,nand-ecc-engine.yaml
-> 
+>  .../devicetree/bindings/spi/mxicy,mx25f0a-spi.yaml          | 6 ++++++
+>  1 file changed, 6 insertions(+)
+
+This should come before patch 8. The example would fail if 
+'unevaluatedProperties' did anything.
 
 Reviewed-by: Rob Herring <robh@kernel.org>
+
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/mxicy,mx25f0a-spi.yaml b/Documentation/devicetree/bindings/spi/mxicy,mx25f0a-spi.yaml
+> index 4036c14fc533..01618a77627d 100644
+> --- a/Documentation/devicetree/bindings/spi/mxicy,mx25f0a-spi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/mxicy,mx25f0a-spi.yaml
+> @@ -43,6 +43,12 @@ properties:
+>    "#size-cells":
+>      const: 0
+>  
+> +  nand-ecc-engine:
+> +    allOf:
+> +      - $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: NAND ECC engine used by the SPI controller in order to perform
+> +      on-the-fly correction when using a SPI-NAND memory.
+> +
+>  required:
+>    - compatible
+>    - reg
+> -- 
+> 2.27.0
+> 
+> 
