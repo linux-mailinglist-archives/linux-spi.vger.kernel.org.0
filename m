@@ -2,89 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 249E843DF76
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Oct 2021 12:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8479E43E0DC
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Oct 2021 14:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbhJ1Ky5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 28 Oct 2021 06:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37574 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbhJ1Kyu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 Oct 2021 06:54:50 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E53C06118B
-        for <linux-spi@vger.kernel.org>; Thu, 28 Oct 2021 03:52:22 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id z20so23224456edc.13
-        for <linux-spi@vger.kernel.org>; Thu, 28 Oct 2021 03:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
-        b=MqgQiMnth4O6zLvpsYbAhVLW1BorpgoCleWwfkY0/i+i6OSDuXRZO1jIKzpTTrmehO
-         XtsLWdXiTcL+XCe4naFtf2tTUJnbwwmDpuUkpvRhLd+LEnuxY7nNr11hmTRUVX1WOHsO
-         bN0u1arCg4gm9LHdXRMZFcXOD22U5gDGuBOuhPo6qvWbt6nA2j/p/5IZ88XFHrEsiSW3
-         12hentYJMlWeUfa2lUQkLm+5/fvMSizrI7wGoF2taOa3dgGUV5HKZWb0yAAH7nAXVevJ
-         tDC/xbHNLzSn310XeD3Gkoobjl6MPBQzT5DSLzerNBdTKOdmyp3xvfvOyo80qVUTZIED
-         gaRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
-        b=dvRsTQNnIck6+ok1wi18dI6bC6btNjg+gp14h0kI7RNlle+/bfoxIJJ8Xhnk1wLSRM
-         eXPTTHAP7NJvtai9trwI8FX+8rnUKSZbzxXZirEeX5+gEMkAoFmyLgFSaefD5Cza3H+H
-         Je3KDA9XjV9prY3UGlkJF8MbpF3BDhtMHSIjnmtavQmHpwP9P+MsUC6xtQYaruDwkYM8
-         AA+jWnJ/WNggFSl6XMC+Mz/Kaubg5l5U23B9MSD4NtNPACuBMPAxydscUGz/z5c/uX3t
-         2Bfb492BX2kYfPDfCa2Ggmlid6pnzkNwjYsGfL65yc1xnumqNqWr0v/lWPalR8AVAxgT
-         H8XA==
-X-Gm-Message-State: AOAM532wFV19a8wgqH5UTPnZbvK+IIALD30cRU3AHvM6yyY5GAPqmc4R
-        7i5G/HQEOiuvAVZoz2H/45hCPG1Cx+nmrpiW1gfHvINS9sfK320Z
-X-Google-Smtp-Source: ABdhPJw39EF9dJlXS9lAFrZ3adXxB8DVzXcygVzA3uRLiZxWlggxaB9ElCxkEB0P82xisoA6G442GD5iqMe2hCgLIt8=
-X-Received: by 2002:a2e:9a83:: with SMTP id p3mr3750290lji.145.1635418330269;
- Thu, 28 Oct 2021 03:52:10 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:ab3:6f89:0:0:0:0:0 with HTTP; Thu, 28 Oct 2021 03:52:09
- -0700 (PDT)
-Reply-To: aabdulwalialhashmi@gmail.com
-From:   Abdulwali Alhashmi <husamalsayed.hs@gmail.com>
-Date:   Thu, 28 Oct 2021 03:52:09 -0700
-Message-ID: <CAF6yYCeS=rm8=_71-kMjVo4oaVK57w9X52R_yv1HDrBe7vh-sA@mail.gmail.com>
-Subject: PLEASE GET BACK TO ME IF I CAN I TRUST YOU
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S230401AbhJ1M0b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 28 Oct 2021 08:26:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52596 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229998AbhJ1M0b (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 28 Oct 2021 08:26:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 031DD610C8;
+        Thu, 28 Oct 2021 12:24:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635423844;
+        bh=FhsU/JUmjM3yQSaI1P6ZyROxrwHmJWAWlY7zoKGNVdM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MCDP17rEWu69wuqgoV/MeWPuFeRsu7yM5CCSspO5ekm1+x18CfQ8ALE4/3W0DUJn5
+         JV63dFwziZouKaPdktNYUnZQK+C/4EHmX/FUJHXq2dlTpunamZacqfkwHRr8zmvlQi
+         cSDmuMrfgmJ7mfcySTgOOkSenWsMk/FFuiZI0cU768un21KuFZYjHBIXiYhy4JUTbs
+         hQVEMD0+w1rcWXCcl8cqu8+x9g5Yzxm4IKcEKpVXuBP4D8I63S98MLU9o8R7wsyb7d
+         vB9jqiB1NdOCxDCHRjl86cHkevkJHDgJepZaMkzvRUsz1wXGgmcBN71VMlYkbJeZCT
+         KcKR6bTmFhO1g==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v5.15-rc7
+Date:   Thu, 28 Oct 2021 13:23:47 +0100
+Message-Id: <20211028122404.031DD610C8@mail.kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
--- 
-Greetings,
+The following changes since commit 16a8e2fbb2d49111004efc1c7342e083eafabeb0:
 
-Firstly, I apologize for encroaching into your privacy in this manner
-as it may seem unethical though it is a matter of great importance.
+  spi-mux: Fix false-positive lockdep splats (2021-10-14 13:32:19 +0100)
 
-I am Abdulwali Alhashmi, I work with Cayman National Bank (Cayman Islands).
+are available in the Git repository at:
 
-I am contacting you because my status would not permit me to do this
-alone as it is concerning our customer and an investment placed under
-our bank's management over 5 years ago.
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.15-rc7
 
-I have a proposal I would love to discuss with you which will be very
-beneficial to both of us. It's regarding my late client who has a huge
-deposit with my bank.
+for you to fetch changes up to d81d0e41ed5fe7229a2c9a29d13bad288c7cf2d2:
 
-He is from your country and shares the same last name with you.
+  spi: spl022: fix Microwire full duplex mode (2021-10-26 11:53:57 +0100)
 
-I want to seek your consent to present you as the next of kin to my
-late client who died and left a huge deposit with my bank.
+----------------------------------------------------------------
+spi: Fixes for v5.15
 
-I would respectfully request that you keep the contents of this mail
-confidential and respect the integrity of the information you come by
-as a result of this mail.
+A couple of final driver specific fixes for v5.15, one fixing potential
+ID collisions between two instances of the Altera driver and one making
+Microwire full duplex mode actually work on pl022.
 
-Please kindly get back to me for more details if I can TRUST YOU.{
-aabdulwalialhashmi@gmail.com }
+----------------------------------------------------------------
+Russ Weight (1):
+      spi: altera: Change to dynamic allocation of spi id
 
-Regards
-Abdulwali Alhashmi
-Treasury and Deposit Management,
-Cayman National Bank Cayman Islands
+Thomas Perrot (1):
+      spi: spl022: fix Microwire full duplex mode
+
+ drivers/spi/spi-altera-dfl.c      | 2 +-
+ drivers/spi/spi-altera-platform.c | 2 +-
+ drivers/spi/spi-pl022.c           | 5 +++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
