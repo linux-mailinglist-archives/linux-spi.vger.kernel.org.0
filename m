@@ -2,77 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A080643F1A0
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Oct 2021 23:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6863D43F1A8
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Oct 2021 23:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbhJ1V2s (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 28 Oct 2021 17:28:48 -0400
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:38540 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbhJ1V2q (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 Oct 2021 17:28:46 -0400
-Received: by mail-ot1-f41.google.com with SMTP id l10-20020a056830154a00b00552b74d629aso10567761otp.5;
-        Thu, 28 Oct 2021 14:26:19 -0700 (PDT)
+        id S230495AbhJ1VbC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 28 Oct 2021 17:31:02 -0400
+Received: from mail-oi1-f182.google.com ([209.85.167.182]:46716 "EHLO
+        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230476AbhJ1VbA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 28 Oct 2021 17:31:00 -0400
+Received: by mail-oi1-f182.google.com with SMTP id m11so5467653oif.13;
+        Thu, 28 Oct 2021 14:28:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=dshGJTXKhxAlRxDf0FyX5GlWtlY3Ecc9O706tlW+d0s=;
-        b=Jrvo6AyO0xAxRXcuENKeQqAObaW1jYHFpAQo74wVgm2az4o99xY6+bBs10i3++naMb
-         nqQ59lg3RltIqSCdtmhR0PflEcPgvWFolkEiulktgxDvXKvPXpoPgwTEN+lFvNuMknuw
-         MHBNsQ3Lfid5H1USCUw99xBMgzPmvnzFDY7E7uJQY2v/XWxvEpkVGeunjSuLPtYHUd/H
-         gof7TObPd3puOyfuoxwOUzxcLezVm952xIHtRe+bXlpXo4qjXha1kutwMh8Y8DysQ9Cr
-         PtGz38FIq26tJJ5uQ2oEa1jPJH5fj9u4zW5ijThSRPL+1Ld3+M6y8uuvDuFD4WnMovn+
-         3/Vg==
-X-Gm-Message-State: AOAM530XqNMGfNtBLTlOLsG2Cs9m/Nva5/oP9wPBvTn7qfBQTRKK80TQ
-        lodzDeL72JxBhIs98YZRiQ==
-X-Google-Smtp-Source: ABdhPJy3nAR6IwXfr5ce0NJ1RbxUXtRHrIb5BQhVH6kbqcnF6WXBWOQHEeB1ZutHwDV4jQn45hpiTQ==
-X-Received: by 2002:a9d:1c8f:: with SMTP id l15mr5525992ota.337.1635456379145;
-        Thu, 28 Oct 2021 14:26:19 -0700 (PDT)
+        bh=UbQ3X7BD6qpgtn540MLFzrLrimBO17bm2/cyxoaaA+k=;
+        b=tZgBGmFvfUFJ3if1guKwoyCEM6IXcdOaPc856L6LvLqrk+S0U0/VPfkBIQnSMoTWi4
+         9tB2qoZesqfoLFnioj2vS4H8DtKNzjzy2yl2BNOmdUBKgOe5PhP+sDZzPE80bgSCaxox
+         az3pV81unYiPd3ERYGY2JKGZ0LZ3EEDB4kxktM/oVVTjxRvgA+w6VmiDTxO9hL6LJ7tA
+         zfe403v19eDE4m3AIYLS2JYY2NE1SlqAD0OPJvZ3TRl46TsI+99yGmzVJhEC6QZpbZ+p
+         4CG07hGhRi099GiYoyteZpsj09PLKyQWfUhLZygzh12MbJeJah+RpTtWmy5Pik78W4WJ
+         eq8w==
+X-Gm-Message-State: AOAM532r5lg3mq7XOagJQmKMZd5az+tg/nE/FhN/kofNTZOcJoBRaKFc
+        pdWGA+qlHttQQCvaDzoWbw==
+X-Google-Smtp-Source: ABdhPJyGQdpbdp9+nSux0RGdftKN1RUp3rufQfJSKzdQIJX4Kd5pHVOiVZw6cP3YM+RToI8p67J7VQ==
+X-Received: by 2002:aca:280c:: with SMTP id 12mr10593329oix.93.1635456511984;
+        Thu, 28 Oct 2021 14:28:31 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id i13sm1345977oik.6.2021.10.28.14.26.17
+        by smtp.gmail.com with ESMTPSA id r44sm1512242otv.39.2021.10.28.14.28.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Oct 2021 14:26:18 -0700 (PDT)
-Received: (nullmailer pid 614889 invoked by uid 1000);
-        Thu, 28 Oct 2021 21:26:17 -0000
-Date:   Thu, 28 Oct 2021 16:26:17 -0500
+        Thu, 28 Oct 2021 14:28:31 -0700 (PDT)
+Received: (nullmailer pid 617930 invoked by uid 1000);
+        Thu, 28 Oct 2021 21:28:30 -0000
+Date:   Thu, 28 Oct 2021 16:28:30 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     linux-mtd@lists.infradead.org,
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Mark Brown <broonie@kernel.org>, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Julien Su <juliensu@mxic.com.tw>,
+        Jaime Liao <jaimeliao@mxic.com.tw>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Boris Brezillon <boris.brezillon@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, Julien Su <juliensu@mxic.com.tw>,
-        Xiangsheng Hou <Xiangsheng.Hou@mediatek.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jaime Liao <jaimeliao@mxic.com.tw>,
-        Rob Herring <robh+dt@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH 02/18] dt-bindings: mtd: nand-controller: Fix a comment
- in the examples
-Message-ID: <YXsVeTmJBWnrWysb@robh.at.kernel.org>
+        Xiangsheng Hou <Xiangsheng.Hou@mediatek.com>
+Subject: Re: [PATCH 04/18] dt-bindings: mtd: spi-nand: Convert spi-nand
+ description file to yaml
+Message-ID: <YXsV/l+/vU1fBanY@robh.at.kernel.org>
 References: <20211020142809.349347-1-miquel.raynal@bootlin.com>
- <20211020142809.349347-3-miquel.raynal@bootlin.com>
+ <20211020142809.349347-5-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211020142809.349347-3-miquel.raynal@bootlin.com>
+In-Reply-To: <20211020142809.349347-5-miquel.raynal@bootlin.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 20 Oct 2021 16:27:53 +0200, Miquel Raynal wrote:
-> The controller properties should be in the controller 'parent' node,
-> while properties in the children nodes are specific to the NAND
-> *chip*. This error was already present during the yaml conversion.
+On Wed, Oct 20, 2021 at 04:27:55PM +0200, Miquel Raynal wrote:
+> Let's get rid of spi-nand.txt by converting it to yaml schema. While at
+> converting this file, let's actually pull all the generic properties
+> from nand-chip.yaml which might apply to a SPI-NAND chip.
 > 
-> Fixes: 2d472aba15ff ("mtd: nand: document the NAND controller/NAND chip DT representation")
 > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 > ---
->  Documentation/devicetree/bindings/mtd/nand-controller.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+>  .../devicetree/bindings/mtd/spi-nand.txt      |  5 ----
+>  .../devicetree/bindings/mtd/spi-nand.yaml     | 27 +++++++++++++++++++
+>  2 files changed, 27 insertions(+), 5 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mtd/spi-nand.txt
+>  create mode 100644 Documentation/devicetree/bindings/mtd/spi-nand.yaml
 
-Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
