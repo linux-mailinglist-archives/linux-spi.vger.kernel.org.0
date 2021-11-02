@@ -2,127 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4251F442D17
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Nov 2021 12:48:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5AAC44306E
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Nov 2021 15:31:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbhKBLur (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 2 Nov 2021 07:50:47 -0400
-Received: from www.zeus03.de ([194.117.254.33]:54568 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229810AbhKBLur (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 2 Nov 2021 07:50:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=dN9MYJ4hkMa2VeKQrok5+AhQyNq+
-        WxeIgQN6Qx6FS+Y=; b=V6tP6HsdN3Xj6iLwUvhxiY4tcwSh5biRiwe4NwNydSem
-        OSUAKddVbsfz9ExrsubzphmbNQ4SuIbUDhG3GWyVCxcfCUPoGqZoFd8pTEqtgAZN
-        eO+o7DQebaG8rWHzEe+5zfLTtVGzQ/rjIuIMp0B/KJD1YdwS4p8YJmZlA/Gy23s=
-Received: (qmail 3432356 invoked from network); 2 Nov 2021 12:48:09 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 2 Nov 2021 12:48:09 +0100
-X-UD-Smtp-Session: l3s3148p1@6ngQ3szPvrEgAQnoAGZOAQNlyaw0xFC0
-Date:   Tue, 2 Nov 2021 12:48:09 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Mark Brown <broonie@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH v2 7/7] memory: renesas-rpc-if: Add support for RZ/G2L
-Message-ID: <YYElefbpP4pwfmUl@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Mark Brown <broonie@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-References: <20211025205631.21151-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211025205631.21151-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S230518AbhKBOdx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Tue, 2 Nov 2021 10:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42278 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230175AbhKBOdv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 2 Nov 2021 10:33:51 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B23CC061714
+        for <linux-spi@vger.kernel.org>; Tue,  2 Nov 2021 07:31:16 -0700 (PDT)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1mhuoi-0006Af-GS; Tue, 02 Nov 2021 15:31:12 +0100
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1mhuof-004FRU-PC; Tue, 02 Nov 2021 15:31:09 +0100
+Message-ID: <96ea286255e411c194eadd418bd82336830557c8.camel@pengutronix.de>
+Subject: Re: [PATCH 1/2] SPI: Add SPI driver for Sunplus SP7021
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     "LH.Kuo" <lhjeff911@gmail.com>, broonie@kernel.org,
+        robh+dt@kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     dvorkin@tibbo.com, qinjian@cqplus1.com, wells.lu@sunplus.com,
+        "LH.Kuo" <lh.kuo@sunplus.com>
+Date:   Tue, 02 Nov 2021 15:31:09 +0100
+In-Reply-To: <1635747525-31243-2-git-send-email-lh.kuo@sunplus.com>
+References: <1635747525-31243-1-git-send-email-lh.kuo@sunplus.com>
+         <1635747525-31243-2-git-send-email-lh.kuo@sunplus.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Xw48OLVEQGVpdzaE"
-Content-Disposition: inline
-In-Reply-To: <20211025205631.21151-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
---Xw48OLVEQGVpdzaE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hi Prabhakar,
-
-> +#define RPCIF_PHYADD		0x0070	/* R/W available on R-Car E3/D3/V3M and RZ/G2{E,L} */
-> +#define RPCIF_PHYWR		0x0074	/* R/W available on R-Car E3/D3/V3M and RZ/G2{E,L} */
-
-Nice detailed research, thanks! Minor nit: Keep the sorting
-alphabetical: D3, E3, V3M.
-
-> +static void rpcif_rzg2l_timing_adjust_sdr(struct rpcif *rpc)
+On Mon, 2021-11-01 at 14:18 +0800, LH.Kuo wrote:
+[...]
+> +static int pentagram_spi_controller_probe(struct platform_device *pdev)
 > +{
-> +	u32 data;
+> +	struct resource *res;
+> +	int ret;
+> +	int mode;
+> +	unsigned int max_freq;
+> +	struct spi_controller *ctlr;
+> +	struct pentagram_spi_master *pspim;
 > +
-> +	regmap_write(rpc->regmap, RPCIF_PHYWR, 0xa5390000);
-> +	regmap_write(rpc->regmap, RPCIF_PHYADD, 0x80000000);
-> +	regmap_write(rpc->regmap, RPCIF_PHYWR, 0x00008080);
-> +	regmap_write(rpc->regmap, RPCIF_PHYADD, 0x80000022);
-> +	regmap_write(rpc->regmap, RPCIF_PHYWR, 0x00008080);
-> +	regmap_write(rpc->regmap, RPCIF_PHYADD, 0x80000024);
+> +	FUNC_DBG();
+
+Drop these.
+
+[...]
+> +	/* clk*/
+> +	pspim->spi_clk = devm_clk_get(&pdev->dev, NULL);
+> +	if (IS_ERR(pspim->spi_clk)) {
+> +		dev_err(&pdev->dev, "devm_clk_get fail\n");
+> +		goto free_alloc;
+> +	}
+> +	ret = clk_prepare_enable(pspim->spi_clk);
+
+Move this and reset_control_deassert() as far back as possible.
+
+> +	if (ret)
+> +		goto free_alloc;
 > +
-> +	regmap_read(rpc->regmap, RPCIF_PHYCNT, &data);
-> +	regmap_write(rpc->regmap, RPCIF_PHYCNT, data | RPCIF_PHYCNT_CKSEL(3));
-> +	regmap_write(rpc->regmap, RPCIF_PHYWR, 0x00000030);
-> +	regmap_write(rpc->regmap, RPCIF_PHYADD, 0x80000032);
-> +}
+> +	/* reset*/
+> +	pspim->rstc = devm_reset_control_get(&pdev->dev, NULL);
 
-Still magic values here. Don't you have them explained in your Gen3
-documentation? It is tables 62.16 and 62.17 in my versions.
+Use devm_reset_control_get_exclusive() instead.
+This should be done before clk_prepare_enable().
 
-Other than these, looks good.
+> +	dev_dbg(&pdev->dev, "pspim->rstc : 0x%x\n", (unsigned int)pspim->rstc);
+> +	if (IS_ERR(pspim->rstc)) {
+> +		ret = PTR_ERR(pspim->rstc);
+> +		dev_err(&pdev->dev, "SPI failed to retrieve reset controller: %d\n", ret);
+> +		goto free_clk;
+> +	}
+> +	ret = reset_control_deassert(pspim->rstc);
 
-Thanks,
+Same as the clock, I'd move this after the dma allocations.
 
-   Wolfram
+> +	if (ret)
+> +		goto free_clk;
+> +
+> +	/* dma alloc*/
+> +	pspim->tx_dma_vir_base = dma_alloc_coherent(&pdev->dev, bufsiz,
+> +					&pspim->tx_dma_phy_base, GFP_ATOMIC);
 
---Xw48OLVEQGVpdzaE
-Content-Type: application/pgp-signature; name="signature.asc"
+Consider using dmam_alloc_coherent, same for rx_dma_vir_base.
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGBJXkACgkQFA3kzBSg
-Kbai5w//U9777KhbnAVOH5ipoN2F3nwqrx58di9AO1NxfqlO2pTx9hlFix1jbQ3m
-BMbw0km4viA9iT8XWRI1GsI3EkxIP2HKQJKIww4vxziDvwmT5KtUWzFcvqc6/SE0
-Z8i1j9swoSfgJo0ZFeAhPjNl4YYtsf2ESUl1Wx1xFQc3oGDzsRHUULw5SugbX79H
-qgER7VTWeZhL4eQ1rBUCVVY3G2JPtsLhYZ2jf72jUDBIRS39/BlyaCrSETwzYVcH
-HRGodyfWogpB7t36UdbxesdWM+OMnKM0JCKZEf30sQeFp5YaTqcLYBoVvwg+tePC
-y25zwria2RbGl5FplptuDnj7cg1Khpz/n7uXCmeaOejk8yYF8DR6g1NET4Neo1Rz
-lXlukauT07VLU47RuuQqlg/4z39ai3DphF4ew2qMTSh4Sz11sAn9F3+OEPUuMUiG
-JIvu9CVrie13frUtSd7Xc2M897hyJMP7lKiUP2jrw5klHFPZH7yryCMvKeXEOALX
-rv0Jp10phC2oBtO6HjPlXIQUCcVnHe2BUXAISMDN6l1McnR16SoDi0F00d6Z9YB2
-G3Svf/sfaN+As5bNqkywaalSVfvt8IfqxqXtYRfLyKzwJCUY+f8JhF75sgX4HbGr
-eDYheRfVDVZHewRUDRkdYXtyBlczYwo3q6pgYOCW3gOJ9k12g2E=
-=45MZ
------END PGP SIGNATURE-----
-
---Xw48OLVEQGVpdzaE--
+regards
+Philipp
