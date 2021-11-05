@@ -2,57 +2,31 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22DE0445CF8
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Nov 2021 01:16:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 286744462CD
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Nov 2021 12:35:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232532AbhKEAT1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 4 Nov 2021 20:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232184AbhKEAT0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 4 Nov 2021 20:19:26 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5006C061714
-        for <linux-spi@vger.kernel.org>; Thu,  4 Nov 2021 17:16:47 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id g14so26685452edz.2
-        for <linux-spi@vger.kernel.org>; Thu, 04 Nov 2021 17:16:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pensando.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hW9j4fRXjsypK2LBZZotu05pU22OkQcuc/ncvw3x6RI=;
-        b=pbIJjLoXkL+canYdkoXsZCKefEFoq5u/2hu4PbFu0Z9ulwm6TbIKZS+7llSC6UkqPT
-         fAGdAVF6yuqhnjlUtumqpTgwaLZ05FTlUmuly04laT8N6TIDlkZocXSWC4iP4AqRF/Uf
-         lMagwJa1i/DnzdIoXkkVKMX1YN1vJN27FrebxqykazSNJm3hWbKtB1eHHDaRnM/BH/1Z
-         VK7oMhV4/NQCNjWyrLI8AXwH/Ye8iY2RHuyCrVreO6oFFozIGopvZgvGTGYi5zg/RNDz
-         731xqF16tC5AT8TzfC2lxTEjpWPd72lIWjIpTY9j/JbD6ttGUyne/jfGQrHTlhITQujj
-         31aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hW9j4fRXjsypK2LBZZotu05pU22OkQcuc/ncvw3x6RI=;
-        b=ybxFEaS2fP97yqf7AFD2lRPNpv0KM3QCKC8peu5E2xiUKGzfoUcT+8nhb8+cwhByLp
-         P6ZkapPm5grJhEKfkIudvyji9zThOExMRkMyGOTaFW5t0iZb6ye0VVTT8lNGk2nBKUfF
-         KODm3KYoK3yFr5dke5MMMCMpQ+gdxmKQOE6Ag+XvHRvoKnSixHgtjmNIm/2NHDuGk/Nu
-         WF+WpCRqsTlfB7sU4vBkXqciwji1H+Z6jPlbRlu29/mgcv5o7TxC9l6wwwvot9ealOr4
-         AOWd5heKPmnD2g33os8f6sY5MkXVMZgrAXdqUI4sxaKN+M0LVwbSpJdLJysmZivn7fCr
-         Dt1w==
-X-Gm-Message-State: AOAM5321BHQ1g44NDOkdyyCEoOqDGDjzBq1hGPaQkhpdEFpZf51FrYH+
-        eZ/IUrh0NCP49DvEQya6i/OXmlaPkY/P0uq4GJQaVw==
-X-Google-Smtp-Source: ABdhPJz8yDJeZ8Q0sgfBTWu3SvmDy7lzOQpVKbpjk+LSezMt+JHLrZz0I/msEWacixVpHsKXSMOg6bcbbeR3bcnzBbw=
-X-Received: by 2002:a17:906:a3c4:: with SMTP id ca4mr64932317ejb.529.1636071406508;
- Thu, 04 Nov 2021 17:16:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211025015156.33133-1-brad@pensando.io> <20211025015156.33133-3-brad@pensando.io>
- <YXnG10suyQYqYv5T@robh.at.kernel.org>
-In-Reply-To: <YXnG10suyQYqYv5T@robh.at.kernel.org>
-From:   Brad Larson <brad@pensando.io>
-Date:   Thu, 4 Nov 2021 17:16:35 -0700
-Message-ID: <CAK9rFny1wHxuRa0uZkmsSoNncYV4V-6wsHdo10QXZnrYYmGtUQ@mail.gmail.com>
-Subject: Re: [PATCH v3 02/11] dt-bindings: Add vendor prefix for Pensando Systems
-To:     Rob Herring <robh@kernel.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        id S232590AbhKELi2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 5 Nov 2021 07:38:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42354 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232477AbhKELi2 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 5 Nov 2021 07:38:28 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EDD23601FA;
+        Fri,  5 Nov 2021 11:35:48 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mixVa-003e0A-O6; Fri, 05 Nov 2021 11:35:46 +0000
+Date:   Fri, 05 Nov 2021 11:35:46 +0000
+Message-ID: <87zgqi96nh.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Brad Larson <brad@pensando.io>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
@@ -67,19 +41,130 @@ Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v3 11/11] arm64: dts: Add Pensando Elba SoC support
+In-Reply-To: <CAK9rFnxH=DtC9vEJJCXkGEWjvg2E8vHPUcRy9rJpo34Furtmvw@mail.gmail.com>
+References: <20211025015156.33133-1-brad@pensando.io>
+        <20211025015156.33133-12-brad@pensando.io>
+        <20211025091731.GA2001@C02TD0UTHF1T.local>
+        <a20805de16e1196c2ed46dd949473c9a@kernel.org>
+        <CAK9rFnxH=DtC9vEJJCXkGEWjvg2E8vHPUcRy9rJpo34Furtmvw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: brad@pensando.io, mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org, arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com, broonie@kernel.org, fancer.lancer@gmail.com, adrian.hunter@intel.com, ulf.hansson@linaro.org, olof@lixom.net, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, linux-mmc@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 2:38 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Sun, Oct 24, 2021 at 06:51:47PM -0700, Brad Larson wrote:
-> > Add vendor prefix for Pensando Systems: https://pensando.io
->
-> This should be before patch 1.
+Brad,
 
-ack, will order this way for re-spin of the patch set.
+On Fri, 05 Nov 2021 00:02:04 +0000,
+Brad Larson <brad@pensando.io> wrote:
+> 
+> Hi Marc,
+> 
+> On Mon, Oct 25, 2021 at 4:15 AM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On 2021-10-25 10:17, Mark Rutland wrote:
+> > > Hi,
+> > >
+> > > On Sun, Oct 24, 2021 at 06:51:56PM -0700, Brad Larson wrote:
+> > >> Add Pensando common and Elba SoC specific device nodes
+> > >>
+> > >> Signed-off-by: Brad Larson <brad@pensando.io>
+> > >
+> > > [...]
+> > >> +            gic: interrupt-controller@800000 {
+> > >> +                    compatible = "arm,gic-v3";
+> > >> +                    #interrupt-cells = <3>;
+> > >> +                    #address-cells = <2>;
+> > >> +                    #size-cells = <2>;
+> > >> +                    ranges;
+> > >> +                    interrupt-controller;
+> > >> +                    reg = <0x0 0x800000 0x0 0x200000>,      /* GICD */
+> > >> +                          <0x0 0xa00000 0x0 0x200000>;      /* GICR */
+> >
+> > This is missing the GICv2 compat regions that the CPUs implement.
+> 
+> Is this what is described as optional in the GIC architecture specification
+> where a GICv3 system can run restricted GICv2 code?
 
-Thanks
-Brad
+Yup, that. It is actually implemented by the CPU.
+
+> Can you point me in the right direction in the spec and example dts
+> node if needed.
+
+The Cortex-A72 TRM has everything you need [1]. And since you used the
+Synquacer as the model for this, you will see that it has the missing
+regions. Alternatively, rk3399.dtsi is a good example.
+
+
+> > >> +                    interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+> > >> +
+> > >> +                    gic_its: msi-controller@820000 {
+> > >> +                            compatible = "arm,gic-v3-its";
+> > >> +                            msi-controller;
+> > >> +                            #msi-cells = <1>;
+> > >> +                            reg = <0x0 0x820000 0x0 0x10000>;
+> > >> +                            socionext,synquacer-pre-its =
+> > >> +                                                    <0xc00000 0x1000000>;
+> > >> +                    };
+> > >> +            };
+> > >
+> > > Is there any shared lineage with Synquacer? The commit message didn't
+> > > describe this quirk.
+> >
+> > Funny, it looks like there is a sudden outburst of stupid copy/paste
+> > among HW designers. TI did the exact same thing recently.
+> >
+> > This totally negates all the advantages of having an ITS and makes
+> > sure that you have all the overhead. Facepalm...
+> 
+> Some background may help explain.  To generate an LPI a peripheral must
+> write to the GITS_TRANSLATER (a specific address). For the ITS to know
+> which translations apply to the generated interrupts, it must know which
+> peripheral performed the write. The ID of the peripheral is known as its
+> DeviceID, which is often carried along with the write as an AXI sideband
+> signal.
+
+Yes, I happen to be vaguely familiar with the GIC architecture.
+
+> The Elba SoC doesn't carry the DeviceID, so we have to conjure one up
+> between the peripheral and the ITS.  Instead of telling a peripheral to target
+> the GITS_TRANSLATER directly, we instead direct it to a specific offset
+> within a pre-ITS address range (our own IP block).  For writes that land in
+> that memory range, we derive the DeviceID from (offset >> 2).  The pre-ITS
+> block then sends (DeviceID, data) to the GITS_TRANSLATER.
+> 
+> The hardware designer came up with the Pre-ITS mechanism in Feb 2018.
+> When we looked at the upstream kernel later (we developed on 4.14)
+> we found that not only did it support something similar, it supported the
+> exact scheme we are using.
+
+And this scheme is totally wrong. It breaks interrupt isolation.
+
+Instead of having a single doorbell and getting the ITS to segregate
+between devices itself, you end-up with multiple ones, allowing a
+rogue device to impersonate another one by targeting another doorbell.
+You can't even use an SMMU to preserve some isolation, because all the
+doorbells are in the *same page*. Unmitigated disaster.
+
+At this stage, why did you bother having an ITS at all? You get none
+of the security features. Only the excess area, memory allocation,
+additional latency and complexity. All you get is a larger INTID
+space.
+
+This only shows that the hardware designer didn't understand the ITS
+at all. Which seems a common pattern, unfortunately.
+
+	M.
+
+[1] https://developer.arm.com/documentation/100095/0003/Generic-Interrupt-Controller-CPU-Interface/GIC-functional-description/GIC-memory-map?lang=en#way1382452674438__CHDEBJAJ
+
+-- 
+Without deviation from the norm, progress is not possible.
