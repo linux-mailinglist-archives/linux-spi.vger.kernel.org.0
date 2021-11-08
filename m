@@ -2,112 +2,97 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31663447DE9
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Nov 2021 11:26:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B49449742
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Nov 2021 15:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237427AbhKHK3K (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Nov 2021 05:29:10 -0500
-Received: from foss.arm.com ([217.140.110.172]:48408 "EHLO foss.arm.com"
+        id S240679AbhKHO6Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Nov 2021 09:58:16 -0500
+Received: from mx1.tq-group.com ([93.104.207.81]:3655 "EHLO mx1.tq-group.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237572AbhKHK2s (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 8 Nov 2021 05:28:48 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 257AB1FB;
-        Mon,  8 Nov 2021 02:26:01 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.58.140])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C89913F800;
-        Mon,  8 Nov 2021 02:25:58 -0800 (PST)
-Date:   Mon, 8 Nov 2021 10:25:52 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Brad Larson <brad@pensando.io>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 11/11] arm64: dts: Add Pensando Elba SoC support
-Message-ID: <YYj7MA4D1zCF39lh@FVFF77S0Q05N>
-References: <20211025015156.33133-1-brad@pensando.io>
- <20211025015156.33133-12-brad@pensando.io>
- <20211025091731.GA2001@C02TD0UTHF1T.local>
- <CAK9rFnx7DgS3TYMmu5NBacV_6WC_UwJ=u7n3e_fGd0RpEcg3kA@mail.gmail.com>
+        id S236884AbhKHO6N (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 8 Nov 2021 09:58:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1636383329; x=1667919329;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=l4uhQVrWdxivqDNc2kLDMQcewIewAn6eyYqgva/TcFg=;
+  b=b25tKls4Wx92IuWEz+R+CWt5eZHEuU6mmUC3R13aVfYST9r8QWU93IJI
+   ah5LJ2QKSJ0SwChxHdATCCGAeLnJUIlTcqeu9bkTIVhrdXGN6iuHEdfZd
+   bn5WYu0fF2NxS29RiIR7uoUUodvQG0Ppxo/qhPa3mckbbP4WYtmVM8qBv
+   lyF0KvkEFJviTzgrRO6nHHwqgSKXlyW4hwDppXRY5fBlJ69QjRZt4IBkv
+   rNLerVe954TabsAPlXT2Rw4dE5F67Q7zSnFv5ERKRMS8M2VKTkwzXTFgD
+   1zjk8a6A1raC7TUBQHT/SPAdGgV4/WQe7LwpayKk6My1X7RxUb0cZsV4w
+   w==;
+X-IronPort-AV: E=Sophos;i="5.87,218,1631570400"; 
+   d="scan'208";a="20378568"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 08 Nov 2021 15:55:27 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 08 Nov 2021 15:55:27 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 08 Nov 2021 15:55:27 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1636383327; x=1667919327;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=l4uhQVrWdxivqDNc2kLDMQcewIewAn6eyYqgva/TcFg=;
+  b=XNVFBDp+ZtrH2El+k0uJObLkeUlEmm5W8TGd+jthXpEbkua30TrshJ7p
+   ShRzmAubFkgwexQ8xZOdHCbX9p6HrylHT2D/liALCJiq92ZW//feej1bn
+   ktvqTsdw+GjBLHlEvRJBBEJGTfbzfb3kw1IgS1etkxn+Xzox+SJekX5aj
+   oa3nIh8wctT7v9GZdiumGF0XLYQyy/4kHlQITkWyKY4R2D5X+vbU5tzOv
+   lK65fj4Ml25svizENsOUNJSRMUjkTYXLk0RG3+SIs7BDNyB+oNFAEzofZ
+   8gqOpE5bOp0urNDQ3yCyxy22sOix+9Kvt8MXujS2aPFuZzO2WYNtoX0Y5
+   w==;
+X-IronPort-AV: E=Sophos;i="5.87,218,1631570400"; 
+   d="scan'208";a="20378567"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 08 Nov 2021 15:55:27 +0100
+Received: from steina-w.tq-net.de (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id B5E88280065;
+        Mon,  8 Nov 2021 15:55:27 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-spi@vger.kernel.org
+Subject: [PATCH 1/1] spi: lpspi: Silence error message upon deferred probe
+Date:   Mon,  8 Nov 2021 15:55:23 +0100
+Message-Id: <20211108145523.1797609-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK9rFnx7DgS3TYMmu5NBacV_6WC_UwJ=u7n3e_fGd0RpEcg3kA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Nov 04, 2021 at 03:53:13PM -0700, Brad Larson wrote:
-> On Mon, Oct 25, 2021 at 2:17 AM Mark Rutland <mark.rutland@arm.com> wrote:
-> > On Sun, Oct 24, 2021 at 06:51:56PM -0700, Brad Larson wrote:
-> > > +     timer {
-> > > +             compatible = "arm,armv8-timer";
-> > > +             interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(1) |
-> > > +                                     IRQ_TYPE_LEVEL_LOW)>,
-> > > +                          <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(1) |
-> > > +                                     IRQ_TYPE_LEVEL_LOW)>,
-> > > +                          <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(1) |
-> > > +                                     IRQ_TYPE_LEVEL_LOW)>,
-> > > +                          <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(1) |
-> > > +                                     IRQ_TYPE_LEVEL_LOW)>;
-> > > +     };
-> >
-> > The GIC_CPU_MASK_SIMPLE() stuff is meant for GICv2, but as below you
-> > have GICv3, where this is not valid, so this should go.
-> >
-> > Also, beware that GIC_CPU_MASK_SIMPLE(1) means a single CPU, which
-> > doesn't mak sense for the 16 CPUs you have.
-> >
-> 
-> Thanks for pointing this out.  Elba SoC is a GICv3 implementation and looking
-> at other device tree files we should be using this:
-> 
->         timer {
->                 compatible = "arm,armv8-timer";
->                 interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(16) |
->                                         IRQ_TYPE_LEVEL_LOW)>,
->                              <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(16) |
->                                         IRQ_TYPE_LEVEL_LOW)>,
->                              <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(16) |
->                                         IRQ_TYPE_LEVEL_LOW)>,
->                              <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(16) |
->                                         IRQ_TYPE_LEVEL_LOW)>;
->         };
+Do not print error messages with error code -517. Silences the following
+errors upon on imx8qm:
+fsl_lpspi 5a000000.spi: spi_register_controller error: -517
+fsl_lpspi 5a010000.spi: spi_register_controller error: -517
+fsl_lpspi 5a020000.spi: spi_register_controller error: -517
 
-No; as above, you should *not* use GIC_CPU_MASK_SIMPLE() at all for GICv3. i.e.
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+ drivers/spi/spi-fsl-lpspi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->         timer {
->                 compatible = "arm,armv8-timer";
->                 interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
->                              <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
->                              <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
->                              <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
->         };
+diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
+index 5d98611dd999..c72e501c270f 100644
+--- a/drivers/spi/spi-fsl-lpspi.c
++++ b/drivers/spi/spi-fsl-lpspi.c
+@@ -912,7 +912,7 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
+ 
+ 	ret = devm_spi_register_controller(&pdev->dev, controller);
+ 	if (ret < 0) {
+-		dev_err(&pdev->dev, "spi_register_controller error.\n");
++		dev_err_probe(&pdev->dev, ret, "spi_register_controller error: %i\n", ret);
+ 		goto out_pm_get;
+ 	}
+ 
+-- 
+2.25.1
 
-Please see the GICv3 binding documentation:
-
-  Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
-
-... and note that it does not have the cpumask field as use by the binding for
-prior generations of GIC:
-
-  Documentation/devicetree/bindings/interrupt-controller/arm,gic.yaml
-
-
-If you've seen other dts files using GIC_CPU_MASK_SIMPLE() with GICv3, those
-are incorrect, and need to be fixed.
-
-Thanks,
-Mark.
