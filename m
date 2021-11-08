@@ -2,97 +2,136 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B49449742
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Nov 2021 15:55:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04FD5449769
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Nov 2021 16:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240679AbhKHO6Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Nov 2021 09:58:16 -0500
-Received: from mx1.tq-group.com ([93.104.207.81]:3655 "EHLO mx1.tq-group.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236884AbhKHO6N (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 8 Nov 2021 09:58:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1636383329; x=1667919329;
+        id S238832AbhKHPJO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Nov 2021 10:09:14 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:41805 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236457AbhKHPJM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Nov 2021 10:09:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1636383987; x=1667919987;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=l4uhQVrWdxivqDNc2kLDMQcewIewAn6eyYqgva/TcFg=;
-  b=b25tKls4Wx92IuWEz+R+CWt5eZHEuU6mmUC3R13aVfYST9r8QWU93IJI
-   ah5LJ2QKSJ0SwChxHdATCCGAeLnJUIlTcqeu9bkTIVhrdXGN6iuHEdfZd
-   bn5WYu0fF2NxS29RiIR7uoUUodvQG0Ppxo/qhPa3mckbbP4WYtmVM8qBv
-   lyF0KvkEFJviTzgrRO6nHHwqgSKXlyW4hwDppXRY5fBlJ69QjRZt4IBkv
-   rNLerVe954TabsAPlXT2Rw4dE5F67Q7zSnFv5ERKRMS8M2VKTkwzXTFgD
-   1zjk8a6A1raC7TUBQHT/SPAdGgV4/WQe7LwpayKk6My1X7RxUb0cZsV4w
-   w==;
-X-IronPort-AV: E=Sophos;i="5.87,218,1631570400"; 
-   d="scan'208";a="20378568"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 08 Nov 2021 15:55:27 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Mon, 08 Nov 2021 15:55:27 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Mon, 08 Nov 2021 15:55:27 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1636383327; x=1667919327;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=l4uhQVrWdxivqDNc2kLDMQcewIewAn6eyYqgva/TcFg=;
-  b=XNVFBDp+ZtrH2El+k0uJObLkeUlEmm5W8TGd+jthXpEbkua30TrshJ7p
-   ShRzmAubFkgwexQ8xZOdHCbX9p6HrylHT2D/liALCJiq92ZW//feej1bn
-   ktvqTsdw+GjBLHlEvRJBBEJGTfbzfb3kw1IgS1etkxn+Xzox+SJekX5aj
-   oa3nIh8wctT7v9GZdiumGF0XLYQyy/4kHlQITkWyKY4R2D5X+vbU5tzOv
-   lK65fj4Ml25svizENsOUNJSRMUjkTYXLk0RG3+SIs7BDNyB+oNFAEzofZ
-   8gqOpE5bOp0urNDQ3yCyxy22sOix+9Kvt8MXujS2aPFuZzO2WYNtoX0Y5
-   w==;
-X-IronPort-AV: E=Sophos;i="5.87,218,1631570400"; 
-   d="scan'208";a="20378567"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 08 Nov 2021 15:55:27 +0100
-Received: from steina-w.tq-net.de (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id B5E88280065;
-        Mon,  8 Nov 2021 15:55:27 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-spi@vger.kernel.org
-Subject: [PATCH 1/1] spi: lpspi: Silence error message upon deferred probe
-Date:   Mon,  8 Nov 2021 15:55:23 +0100
-Message-Id: <20211108145523.1797609-1-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.25.1
+  bh=8SrEU9XI/OEo5uTJNfmiDpAr5AwL1FBJ0ig/W9RdeJY=;
+  b=uVT1wnJxxS7GgFyYEjB0ZVgGtyFscrseVnsFUZmcirIQOfYoCvUbPApg
+   KMNCD6wdpcdlFnsFP3mS/aK6ibYOkTR2zcFi6VIeKndP+uuRfHZK79MZw
+   +EOcxvgoZNcb6oeAOjuBHTSdud7HlDe90ddKHoE5CZLWJD3j++hlsZPTV
+   ce5AbYUdtwUKmsgaq+qjqx5sjUKhucm/7/EdcL/yQiN1oA4/y75+uP6BT
+   iDRJLIL4P+E5uGyjiopt6dyPJG1vW9JaCVyA0XT28aUh5DuWf2YquWqRm
+   wi1eghMc78q7cMeFmCM6zNcFNECREpLi0BXXJjf8IDnaaZ2lnqW4YN4ri
+   A==;
+IronPort-SDR: rKaUUnhxQEuffL258X7HEch2+KTgcTsz45WpCwjQFqdvi8jf1EDK/efkqY6IZ8ZUpCzJsKfE4K
+ fgxIdeqoyQBgLCKd+c5YqltwAtfrElduaVhZivZVIyZNykcinto/2oJdjfbZVi8qpomr8qiY+5
+ xvIo0j6fITV7ox+ZkTGm3VHcDlg3p/F8tKywsi/ROTKcRlaZHem9FmP1RYErwPj0c0fq/yJExn
+ Ge+EtfgudJp/+8PUoXcjGOeNR++YFCHA8AGfjsFN/WY8+sr7YVPwvi8LXrQVx/OEJV9KmkbI0f
+ 1vRBKjAwQ16j2JOLIbTgLjaZ
+X-IronPort-AV: E=Sophos;i="5.87,218,1631602800"; 
+   d="scan'208";a="135847455"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Nov 2021 08:06:22 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Mon, 8 Nov 2021 08:06:19 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Mon, 8 Nov 2021 08:06:15 -0700
+From:   <conor.dooley@microchip.com>
+To:     <linus.walleij@linaro.org>, <bgolaszewski@baylibre.com>,
+        <robh+dt@kernel.org>, <jassisinghbrar@gmail.com>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <broonie@kernel.org>,
+        <gregkh@linuxfoundation.org>, <lewis.hanly@microchip.com>,
+        <conor.dooley@microchip.com>, <daire.mcnamara@microchip.com>,
+        <atish.patra@wdc.com>, <ivan.griffin@microchip.com>,
+        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-crypto@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+CC:     <krzysztof.kozlowski@canonical.com>, <geert@linux-m68k.org>,
+        <bin.meng@windriver.com>
+Subject: [PATCH 00/13]Update the icicle kit device tree
+Date:   Mon, 8 Nov 2021 15:05:41 +0000
+Message-ID: <20211108150554.4457-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Do not print error messages with error code -517. Silences the following
-errors upon on imx8qm:
-fsl_lpspi 5a000000.spi: spi_register_controller error: -517
-fsl_lpspi 5a010000.spi: spi_register_controller error: -517
-fsl_lpspi 5a020000.spi: spi_register_controller error: -517
+From: Conor Dooley <conor.dooley@microchip.com>
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
- drivers/spi/spi-fsl-lpspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This series updates the microchip icicle kit device tree by adding a host
+of peripherals, and some updates to the memory map. In addition, the device
+tree has been split into a third part, which contains "soft" peripherals 
+that are in the fpga fabric.
 
-diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-index 5d98611dd999..c72e501c270f 100644
---- a/drivers/spi/spi-fsl-lpspi.c
-+++ b/drivers/spi/spi-fsl-lpspi.c
-@@ -912,7 +912,7 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
- 
- 	ret = devm_spi_register_controller(&pdev->dev, controller);
- 	if (ret < 0) {
--		dev_err(&pdev->dev, "spi_register_controller error.\n");
-+		dev_err_probe(&pdev->dev, ret, "spi_register_controller error: %i\n", ret);
- 		goto out_pm_get;
- 	}
- 
+Several of the entries are for peripherals that have not get had their drivers
+upstreamed, so in those cases the dt bindings are included where appropriate
+in order to avoid as many "DT compatible string <x> appears un-documented" 
+errors as possible.
+
+Depends on mpfs clock driver series [1] to provide:
+dt-bindings/clock/microchip,mpfs-clock.h
+and on the other changes to the icicle/mpfs device tree
+that are already in linux/riscv/for-next.
+
+[1] https://lore.kernel.org/linux-clk/20210818141102.36655-2-daire.mcnamara@microchip.com/
+
+Conor Dooley (11):
+  dt-bindings: soc/microchip: update sys ctrlr compat string
+  dt-bindings: riscv: update microchip polarfire binds
+  dt-bindings: i2c: add bindings for microchip mpfs i2c
+  dt-bindings: rng: add bindings for microchip mpfs rng
+  dt-bindings: rtc: add bindings for microchip mpfs rtc
+  dt-bindings: soc/microchip: add bindings for mpfs system services
+  dt-bindings: gpio: add bindings for microchip mpfs gpio
+  dt-bindings: spi: add bindings for microchip mpfs spi
+  dt-bindings: usb: add bindings for microchip mpfs musb
+  riscv: icicle-kit: update microchip icicle kit device tree
+  MAINTAINERS: update riscv/microchip entry
+
+Ivan Griffin (2):
+  dt-bindings: interrupt-controller: add defines for riscv-hart
+  dt-bindings: interrupt-controller: add defines for mpfs-plic
+
+ .../bindings/gpio/microchip,mpfs-gpio.yaml    | 108 ++++++
+ .../bindings/i2c/microchip,mpfs-i2c.yaml      |  74 ++++
+ .../microchip,polarfire-soc-mailbox.yaml      |   4 +-
+ .../devicetree/bindings/riscv/microchip.yaml  |   1 +
+ .../bindings/rng/microchip,mpfs-rng.yaml      |  31 ++
+ .../bindings/rtc/microchip,mfps-rtc.yaml      |  61 ++++
+ .../microchip,mpfs-generic-service.yaml       |  31 ++
+ ...icrochip,polarfire-soc-sys-controller.yaml |   4 +-
+ .../bindings/spi/microchip,mpfs-spi.yaml      |  72 ++++
+ .../bindings/usb/microchip,mpfs-usb-host.yaml |  70 ++++
+ MAINTAINERS                                   |   2 +
+ .../dts/microchip/microchip-mpfs-fabric.dtsi  |  21 ++
+ .../microchip/microchip-mpfs-icicle-kit.dts   | 159 +++++++--
+ .../boot/dts/microchip/microchip-mpfs.dtsi    | 333 ++++++++++++++----
+ drivers/mailbox/mailbox-mpfs.c                |   1 +
+ .../microchip,mpfs-plic.h                     | 199 +++++++++++
+ .../interrupt-controller/riscv-hart.h         |  19 +
+ 17 files changed, 1103 insertions(+), 87 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
+ create mode 100644 Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
+ create mode 100644 Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
+ create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-generic-service.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/microchip,mpfs-usb-host.yaml
+ create mode 100644 arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
+ create mode 100644 include/dt-bindings/interrupt-controller/microchip,mpfs-plic.h
+ create mode 100644 include/dt-bindings/interrupt-controller/riscv-hart.h
+
 -- 
-2.25.1
+2.33.1
 
