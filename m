@@ -2,120 +2,131 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7800B449CD3
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Nov 2021 21:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DAD7449CE1
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Nov 2021 21:09:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238254AbhKHUEe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Nov 2021 15:04:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236851AbhKHUEc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Nov 2021 15:04:32 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAACC061766
-        for <linux-spi@vger.kernel.org>; Mon,  8 Nov 2021 12:01:47 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id w1so67673666edd.10
-        for <linux-spi@vger.kernel.org>; Mon, 08 Nov 2021 12:01:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pensando.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rC7iBqJW1E9TnpQ1uBnuIKH8XymcaerC1Chr1eaKswE=;
-        b=MR2b77pFp/RULoljKlfL/ze9zs5V8AoGkmeOg8+PgzqIEv54cJigFrDiwibz/Hr0BL
-         5WBc4qstuKm2ba4nG8H1dzRzHc75XZ18ZL9SwUdwnzYRukHTQrMiaUk4m8GDMUmN5biZ
-         ZFE/esjMojBXcmoqJUixJU962e8ZfyNCQQ+3pOASDqmC3ChoWDkFREGrBtV90FpIv03v
-         aGMWIoxZkKWl7Borb/a1DuG6y3iz/sHW2gJbohrXNUnYedOBAN2Q+dVx33DtopzCE6UN
-         yhcAXvbW49/lfVVzk8sUi8ziShDrg8XeFY6Siq1H1zfHFDzIxdCOR3rQn0InQKTQV4zN
-         8n3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rC7iBqJW1E9TnpQ1uBnuIKH8XymcaerC1Chr1eaKswE=;
-        b=jjsml74th6agvmeG2HoiNeMETpy6Q5sxKstLivJS7S5xlHaaR0IoCTtl+1Gn+44bZl
-         hnVCQQ6T6OeXFYPpFXzNwCp3MvadLsxcTZ84ryD3TOOoYkKo3IiBgsVLuLaWJmY31dX8
-         dvJS2CUTRkbv+DYy1j3WvLVtqZ7IcgGHX7jScK5GZL9VbNm9k+lfXK0FuesrLMj69wbh
-         aTxP0myWn6Ds2FPCJOG4BkN9YBwkcuBwl0wbRFBXYRgooIuGh8+j6+KozQYv4/QE3mBU
-         0qBGN1s2yXgxPNK5zBKmYhMu/DEbY+v0aS4z29D4an9o5j1JHEBI3StpUAt1UXNoJG9o
-         xa1g==
-X-Gm-Message-State: AOAM530mjbNwmxTZ45rXEg1qqTRwks+gn5dxG6AlzzE3AhuqxGOxmlAe
-        Slego3I3Tu1+R2P7L1kmV34gFbG9JRja0x3zjjGQsg==
-X-Google-Smtp-Source: ABdhPJziBcog/9TPjwbG/ZnN+mAUxWZYVP+3hLOcUxtkIOopkTmFCKpeALN2UTcbadopRFqsjTQx7nNu5czXA7KfX7w=
-X-Received: by 2002:a05:6402:3488:: with SMTP id v8mr2295916edc.170.1636401706425;
- Mon, 08 Nov 2021 12:01:46 -0800 (PST)
+        id S238263AbhKHULw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Nov 2021 15:11:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34592 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234723AbhKHULv (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 8 Nov 2021 15:11:51 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F19DA60234;
+        Mon,  8 Nov 2021 20:09:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636402146;
+        bh=k86+JyVs3h0yvS2kIAvv8hKAIORmA1OywHMPzN/pC8w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bb6jQLepV1ZMIOKS3/Bcm6Dz/H0XcSUuSwwTu6635bUgZu2jvKLg47O70bQ+00NPL
+         CltxlDr4vNAbRaSAhYoCxWK9NxBAAzaQTFgGNEKfYDp/WDj7kbe0+ZaFFR8qD2wHYE
+         XKhlZYB0Ml+ndBGemuowBUqYOlcpKb6G/OKn7UVVQ8DJC4vVHPxDTOppJbQrJra8/7
+         KerArhBEpeszyCDmZgfc1QKxa/K5YdJ/Htc3EBif8rvr0/VEXr19vXk09tMbwAme44
+         lFhTTp9eA4fyAQ9shD/kVVMbl2XHkMtZ99HZ10LmfUztW/9W+vW87Kggyi0iDM8f4L
+         wZ9YVPQcAg8Zg==
+From:   Dinh Nguyen <dinguyen@kernel.org>
+To:     broonie@kernel.org
+Cc:     dinguyen@kernel.org, a-nandan@ti.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: cadence-quadspi: fix write completion support
+Date:   Mon,  8 Nov 2021 14:08:54 -0600
+Message-Id: <20211108200854.3616121-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211025015156.33133-1-brad@pensando.io> <20211025015156.33133-12-brad@pensando.io>
- <20211025091731.GA2001@C02TD0UTHF1T.local> <a20805de16e1196c2ed46dd949473c9a@kernel.org>
- <CAK9rFnxH=DtC9vEJJCXkGEWjvg2E8vHPUcRy9rJpo34Furtmvw@mail.gmail.com>
- <87zgqi96nh.wl-maz@kernel.org> <CAK9rFnz6X3wR6bMPkVicGoqj+prm5OmY3y3B_8Fc+WGJxcVsXA@mail.gmail.com>
- <87lf1ye84p.wl-maz@kernel.org>
-In-Reply-To: <87lf1ye84p.wl-maz@kernel.org>
-From:   Brad Larson <brad@pensando.io>
-Date:   Mon, 8 Nov 2021 12:01:35 -0800
-Message-ID: <CAK9rFnxYH2V5K8xKLAExJA7CFip8p6shsdDHa4SrnRo5Y9-CJA@mail.gmail.com>
-Subject: Re: [PATCH v3 11/11] arm64: dts: Add Pensando Elba SoC support
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Nov 8, 2021 at 11:54 AM Marc Zyngier <maz@kernel.org> wrote:
-> >
-> > The Elba SoC is an embedded chip and not intended as a SBSA-compliant
-> > general platform.
->
-> This has nothing to do with following a standard. It has to do with
-> following the intended use of the architecture. What you have here is
-> the system architecture equivalent of trusting userspace to build the
-> kernel page tables. It can work in limited cases. But would you want
-> to deploy such construct at scale? Probably not.
->
-> > In this implementation the ITS is used to provide message-based
-> > interrupts for our (potentially large set) of hardware based
-> > platform device instances.  Virtualization is not a consideration.
-> > We don't have a SMMU.  Interrupt isolation isn't a practical
-> > consideration for this product.
->
-> Because you have foreseen all use cases for this HW ahead of time, and
-> can already tell how SW is going to make use of it? Oh well...
->
-> > Propose adding a comment to the dts.
-> >
-> > +                       /*
-> > +                        * Elba SoC implemented a pre-ITS that happened to
-> > +                        * be the same implementation as synquacer.
-> > +                        */
->
-> Which contains zero information. What you really want is: "We have
-> decided to ignore the system architecture, good luck".
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
+Some versions of the Cadence QSPI controller does not have the write
+completion register implemented(CQSPI_REG_WR_COMPLETION_CTRL). On the
+Intel SoCFPGA platform the CQSPI_REG_WR_COMPLETION_CTRL register is
+not configured.
 
-On the contrary, the confusion of using the existing driver match
-"socionext,synquacer-pre-its" is answered, why add new code.
-Looks like we are deviating from the norm ;-).  I'm not seeing how
-this conversation is a productive use of time for a platform in
-production.
+Add a quirk to not write to the CQSPI_REG_WR_COMPLETION_CTRL register.
 
-Thanks,
-Brad
+Fixes: 9cb2ff111712 ("spi: cadence-quadspi: Disable Auto-HW polling)
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+---
+ drivers/spi/spi-cadence-quadspi.c | 24 +++++++++++++++++++++---
+ 1 file changed, 21 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 8b3d268ac63c..b808c94641fa 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -37,6 +37,7 @@
+ #define CQSPI_NEEDS_WR_DELAY		BIT(0)
+ #define CQSPI_DISABLE_DAC_MODE		BIT(1)
+ #define CQSPI_SUPPORT_EXTERNAL_DMA	BIT(2)
++#define CQSPI_NO_SUPPORT_WR_COMPLETION	BIT(3)
+ 
+ /* Capabilities */
+ #define CQSPI_SUPPORTS_OCTAL		BIT(0)
+@@ -86,6 +87,7 @@ struct cqspi_st {
+ 	struct cqspi_flash_pdata f_pdata[CQSPI_MAX_CHIPSELECT];
+ 	bool			use_dma_read;
+ 	u32			pd_dev_id;
++	bool			wr_completion;
+ };
+ 
+ struct cqspi_driver_platdata {
+@@ -996,9 +998,11 @@ static int cqspi_write_setup(struct cqspi_flash_pdata *f_pdata,
+ 	 * polling on the controller's side. spinand and spi-nor will take
+ 	 * care of polling the status register.
+ 	 */
+-	reg = readl(reg_base + CQSPI_REG_WR_COMPLETION_CTRL);
+-	reg |= CQSPI_REG_WR_DISABLE_AUTO_POLL;
+-	writel(reg, reg_base + CQSPI_REG_WR_COMPLETION_CTRL);
++	if (cqspi->wr_completion) {
++		reg = readl(reg_base + CQSPI_REG_WR_COMPLETION_CTRL);
++		reg |= CQSPI_REG_WR_DISABLE_AUTO_POLL;
++		writel(reg, reg_base + CQSPI_REG_WR_COMPLETION_CTRL);
++	}
+ 
+ 	reg = readl(reg_base + CQSPI_REG_SIZE);
+ 	reg &= ~CQSPI_REG_SIZE_ADDRESS_MASK;
+@@ -1736,6 +1740,10 @@ static int cqspi_probe(struct platform_device *pdev)
+ 
+ 	cqspi->master_ref_clk_hz = clk_get_rate(cqspi->clk);
+ 	master->max_speed_hz = cqspi->master_ref_clk_hz;
++
++	/* write completion is supported by default */
++	cqspi->wr_completion = true;
++
+ 	ddata  = of_device_get_match_data(dev);
+ 	if (ddata) {
+ 		if (ddata->quirks & CQSPI_NEEDS_WR_DELAY)
+@@ -1747,6 +1755,8 @@ static int cqspi_probe(struct platform_device *pdev)
+ 			cqspi->use_direct_mode = true;
+ 		if (ddata->quirks & CQSPI_SUPPORT_EXTERNAL_DMA)
+ 			cqspi->use_dma_read = true;
++		if (ddata->quirks & CQSPI_NO_SUPPORT_WR_COMPLETION)
++			cqspi->wr_completion = false;
+ 
+ 		if (of_device_is_compatible(pdev->dev.of_node,
+ 					    "xlnx,versal-ospi-1.0"))
+@@ -1859,6 +1869,10 @@ static const struct cqspi_driver_platdata intel_lgm_qspi = {
+ 	.quirks = CQSPI_DISABLE_DAC_MODE,
+ };
+ 
++static const struct cqspi_driver_platdata socfpga_qspi = {
++	.quirks = CQSPI_NO_SUPPORT_WR_COMPLETION,
++};
++
+ static const struct cqspi_driver_platdata versal_ospi = {
+ 	.hwcaps_mask = CQSPI_SUPPORTS_OCTAL,
+ 	.quirks = CQSPI_DISABLE_DAC_MODE | CQSPI_SUPPORT_EXTERNAL_DMA,
+@@ -1887,6 +1901,10 @@ static const struct of_device_id cqspi_dt_ids[] = {
+ 		.compatible = "xlnx,versal-ospi-1.0",
+ 		.data = (void *)&versal_ospi,
+ 	},
++	{
++		.compatible = "intel,socfpga-qspi",
++		.data = (void *)&socfpga_qspi,
++	},
+ 	{ /* end of table */ }
+ };
+ 
+-- 
+2.25.1
+
