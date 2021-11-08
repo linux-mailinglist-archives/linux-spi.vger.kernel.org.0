@@ -2,30 +2,30 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A8D447CDE
+	by mail.lfdr.de (Postfix) with ESMTP id 486BC447CDD
 	for <lists+linux-spi@lfdr.de>; Mon,  8 Nov 2021 10:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238442AbhKHJex (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S238427AbhKHJex (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Mon, 8 Nov 2021 04:34:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57620 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238445AbhKHJex (ORCPT
+        with ESMTP id S238443AbhKHJex (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Nov 2021 04:34:53 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B460C061570
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35151C061746
         for <linux-spi@vger.kernel.org>; Mon,  8 Nov 2021 01:32:09 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1mk10S-0007gO-Q1; Mon, 08 Nov 2021 10:32:00 +0100
+        id 1mk10S-0007gP-Q1; Mon, 08 Nov 2021 10:32:00 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1mk10Q-0005Ze-S4; Mon, 08 Nov 2021 10:31:58 +0100
+        id 1mk10R-0005Zh-0a; Mon, 08 Nov 2021 10:31:59 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1mk10Q-0001EO-Ql; Mon, 08 Nov 2021 10:31:58 +0100
+        id 1mk10Q-0001EZ-Vh; Mon, 08 Nov 2021 10:31:58 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -33,16 +33,16 @@ To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Vignesh Raghavendra <vigneshr@ti.com>
 Cc:     Mark Brown <broonie@kernel.org>, linux-mtd@lists.infradead.org,
         kernel@pengutronix.de, linux-spi@vger.kernel.org
-Subject: [PATCH 3/4] mtd: mchp48l640: Warn about failure to unregister mtd device
-Date:   Mon,  8 Nov 2021 10:31:51 +0100
-Message-Id: <20211108093153.63792-3-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 4/4] mtd: sst25l: Warn about failure to unregister mtd device
+Date:   Mon,  8 Nov 2021 10:31:52 +0100
+Message-Id: <20211108093153.63792-4-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211108093153.63792-1-u.kleine-koenig@pengutronix.de>
 References: <20211108093153.63792-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Patch-Hashes: v=1; h=sha256; i=KPueYbzN9LsEzHTCniRvcOu6N1K1tzW4s5WqwnR8va8=; m=7KSLr5cayipWkedCHz7+d6af4pRbjwTwvLxY0jhuRso=; p=hGZdSTOrMcSxD0z98kFDa/PL7nWvDIhwAQlm55SyVEI=; g=055d2b75ea63c5577b57932fc070711b7ba69e95
-X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmGI7oEACgkQwfwUeK3K7AnCygf8Dvv 9ndtG9tZ7CfbWkaaldDLo9S8zeI9cjSH1ILmHhH5XoB1+01J+bSPIA2T4VVrhjTKn0ze+QygwTjxy Z/c7rsPvfJQqA7q7eBJqvcH0R5k3nK7VR42MKtLVLmE0NyyBtwfH5TawTRFEMsWULtj080rK3hZjz B+Zc2qMFm45vTEd0x+WDVru3VuPHOodiNfy7J2UGOg6J53v8Tz6wm3WjWqoeX2bmLjUR9Z4J8LQyD ACxuGKYP5vANDkeRdlZRkFJxu0X9YzCuRqwOz1AveL2jSLIvJo34PW20xiMPZqrAXiqMT9+vE4OFk 3cZaItlaSbGQ7D6cVimnFy/lvux7l7A==
+X-Patch-Hashes: v=1; h=sha256; i=chTrsNwtyvGFDidu8JfqkR8D1NeBCtiv8G0Xdn/Msdg=; m=7KSLr5cayipWkedCHz7+d6af4pRbjwTwvLxY0jhuRso=; p=GyFyjTLYPEwkTCbq/a6e00IrkhK4nCV0ABnVgGp+m+w=; g=6b042ce343cc284fe221ab7a9db5771a78afa793
+X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmGI7oUACgkQwfwUeK3K7AlbVAf+JKt +Jh1O3wHjvHkmmzbNPD9RLyL8VD2Uw0RBt7eWa80liNL4AYJP8MxcmZ7GmECL0UGgDKh/1aEOKvhj ywLbU0w6kaploF2/XU4WuYQUqWjRfm0cnihU6+dNz5x8zTbj18/YVwjOSb92eutPYg3SbgjlSdeqt qbf8XN6vitfl2utFti32McIfA4bRwZkGu2tzbVeF2ZJ5iz5cednguwT0O2MHBn4e1H2rhWJ2QfCno DcCffcYS2f6M2o+rVoLHcpxiMYw/eLTuprG9JFIP1oLEg+GaPoy7lUaSFPlnKLDaXK12JGkGXyHwd HzV6nXRbijB639b4mLtWy0/pR2Nl37Q==
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ukl@pengutronix.de
@@ -62,16 +62,16 @@ spi framework (and nothing else) is suppressed.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/mtd/devices/mchp48l640.c | 4 +++-
+ drivers/mtd/devices/sst25l.c | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/devices/mchp48l640.c b/drivers/mtd/devices/mchp48l640.c
-index 99400d0fb8c1..231a10790196 100644
---- a/drivers/mtd/devices/mchp48l640.c
-+++ b/drivers/mtd/devices/mchp48l640.c
-@@ -345,7 +345,9 @@ static int mchp48l640_remove(struct spi_device *spi)
+diff --git a/drivers/mtd/devices/sst25l.c b/drivers/mtd/devices/sst25l.c
+index b81c3f0b85f9..7f124c1bfa40 100644
+--- a/drivers/mtd/devices/sst25l.c
++++ b/drivers/mtd/devices/sst25l.c
+@@ -402,7 +402,9 @@ static int sst25l_remove(struct spi_device *spi)
  {
- 	struct mchp48l640_flash *flash = spi_get_drvdata(spi);
+ 	struct sst25l_flash *flash = spi_get_drvdata(spi);
  
 -	return mtd_device_unregister(&flash->mtd);
 +	WARN_ON(mtd_device_unregister(&flash->mtd));
@@ -79,7 +79,7 @@ index 99400d0fb8c1..231a10790196 100644
 +	return 0;
  }
  
- static const struct of_device_id mchp48l640_of_table[] = {
+ static struct spi_driver sst25l_driver = {
 -- 
 2.30.2
 
