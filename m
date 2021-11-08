@@ -2,65 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55445449E17
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Nov 2021 22:24:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17918449E2C
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Nov 2021 22:27:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240169AbhKHV1Z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Nov 2021 16:27:25 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:43456
+        id S240284AbhKHVaf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Nov 2021 16:30:35 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:43650
         "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235325AbhKHV1Y (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Nov 2021 16:27:24 -0500
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
+        by vger.kernel.org with ESMTP id S237107AbhKHVae (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Nov 2021 16:30:34 -0500
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A2BAA3F1B5
-        for <linux-spi@vger.kernel.org>; Mon,  8 Nov 2021 21:24:36 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 1B5543F1C0
+        for <linux-spi@vger.kernel.org>; Mon,  8 Nov 2021 21:27:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1636406676;
-        bh=Y7JJc0+U6kzwEplSgJC6wiEdfYBfG1W5BL/0YdrFKfc=;
+        s=20210705; t=1636406869;
+        bh=gsSzukojkEIKbZ4C7biaTDNc7cqvWWRMW5pLSQwL88I=;
         h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
          In-Reply-To:Content-Type;
-        b=IPyHyKu/TksEly4ChURG+oaV5cd5yCxaXtdDn1oido7oVDsLRwNHRvXf5A0YucwVd
-         G4F7xtgdwCbWNXmz5K5h8PEk1uY1CH4h9J5s2bh79V+wbPXtcGBrKHYSJfiptepYd0
-         x9+YJHLeLq9nytnfAYbzusqqjuOSksoB7KybBPDmmDXBmrrgblvtEauQW4wXhthV+0
-         nHqxABSZ41QmONC77PiJ6fjL+d2yjuyMzGF61kCH5qersE3ftN3PGLaOVia1t+e+h8
-         EaDG1P2i5OiKwxgjtBL2Qi8q5T7dL1NZz12DcOwOPsgrFOyxMlUbF7/CX9R+Ky0lOb
-         neQSDE54nwBwQ==
-Received: by mail-lf1-f70.google.com with SMTP id y40-20020a0565123f2800b003fded085638so7007999lfa.0
-        for <linux-spi@vger.kernel.org>; Mon, 08 Nov 2021 13:24:36 -0800 (PST)
+        b=WLY22wkB6Qh7pFDcVSNKt3fE7eL66md+gA3+UTqYzfrr4Hv6egNuxFub1g+5+TvcT
+         Al92fMPWU5OuuAHtVbdICt86yE7Pm544eyfTgXi0Y7GELbpTAdeSP0AN2ZEAc31KhC
+         kGKgo8fM8+TW7GQQThkrw/HnVocPLpZ90rib06jh5TRxyKJ8QQZp5eSJ2xiD5ChE4E
+         WcNM3jFFhF6Kbqbi9ODXZHf88IlCDnIh7NjCT9VT5IerSXC5fHeVmyK0suJjY/7A+q
+         As3fjdVxmddyToXLTJDFttQC5yDQ+1fJw/OXUlKlj05liihjxc/wSJXx7xuTuinpoD
+         /5Udp49G+YNUg==
+Received: by mail-lf1-f71.google.com with SMTP id i34-20020a0565123e2200b0040019ae61d5so6956479lfv.20
+        for <linux-spi@vger.kernel.org>; Mon, 08 Nov 2021 13:27:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Y7JJc0+U6kzwEplSgJC6wiEdfYBfG1W5BL/0YdrFKfc=;
-        b=Wx31nsh6ZDtjsKJJx4wyzr7BhZC8dTcQGHHotvMSdZuFMtMo8qwghg6gNh0p5NtGtz
-         bdBKxhAyh74wJxOWEFdrYPXotRiokAzGO2ATzG0kv6yO/Sdb0xTOs1d3aMS2NQ9EMz/G
-         0KJ7TgKdn1AHAzIBDJAAzkMkfknh9TbmkUtZE2HPONlEP330blZt+PTiT3ywsTKTmvJY
-         +eK8uMbL8M8bo2sOkBn6YXgOmovQF6eZrEtlr9W3eRivsn5bCRIspuEXwO9cyOCu+U6k
-         GONFy91Kyjai6BRfM6mrnOGXWscVYXtRw1vOkBY3UKVQD8YRZccd9VIpjkrpuAY5Xs2i
-         Y0CQ==
-X-Gm-Message-State: AOAM533/QQoPun6lGEiUosc8B7xw8/K8p2l1Pur24STFELbeRM0J/im7
-        5Xe2QnyIswAxaVQO4XvD4LTxg/yxFpEVlXr1glwzbrfFXqmdF1VuzeHvaXdXeprmICh7i8sopND
-        QvR2wmjAM0R81eJ6ZVBvaGdKJdC0z17op0nvp1A==
-X-Received: by 2002:a2e:9e9a:: with SMTP id f26mr2148907ljk.5.1636406674805;
-        Mon, 08 Nov 2021 13:24:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJylgOK2qEDLO2VW2NKAsbccQAr7SqWFQnW99//GKd70QgQ9o3EaaIBtTJ90jG68v573qQR4Pw==
-X-Received: by 2002:a2e:9e9a:: with SMTP id f26mr2148868ljk.5.1636406674591;
-        Mon, 08 Nov 2021 13:24:34 -0800 (PST)
+        bh=gsSzukojkEIKbZ4C7biaTDNc7cqvWWRMW5pLSQwL88I=;
+        b=5Cb5SmP5i6LYXHwG3ABOPfhBTzw91mQxGxJoE8ZJy9Fcft/XggIfZPy1qQ+N3acCf7
+         mcIR+3KKLrwh37ni1dtf3iw1p4Tr0zUtfXKYGSdUjzdMRktnvVRaII9/rE7bXflCqH6t
+         83emWtbq5P2s/wtN0F4vaSMbJCpFGb71k60iDaucMDWPFiX3Z7HgLrMqbg8IsvJUmn+6
+         aNHKtecuDdST1JI1UaKDNS58Bzxc5tzZJtswpa7Z/ogaVKYWFQxXNsxaY66RSpX+4fmt
+         /wZgPGZX6QrGA+KXJPRFGBmTAkUtzwUTvgruUX4eS7TUyxrp8Bcqg425kr6KmccGn/PT
+         Vbmg==
+X-Gm-Message-State: AOAM530gZN1VjliEnAOJFW3de+f0uvKQTgcZIo8Uc2UbB5IJKmVHrnfj
+        XN+y8Rd9a/O8zCbqCnhzJC96yBjt6LyoAATf+p2kIQpg5kBiHjtYau8YAbTyfqUeDWoLZ9V7T4v
+        Ukg1V0yASduOudfL5Z9RZuEd8FfrQmM6+YU2GCw==
+X-Received: by 2002:a05:6512:10c5:: with SMTP id k5mr2126556lfg.677.1636406863681;
+        Mon, 08 Nov 2021 13:27:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyGKgvZJkQA/4SyxVeMlcPDkjIat9cPad52UQIcFQ9i8k9Fl9QQidq5il9q/ZKjlaYE9irTVQ==
+X-Received: by 2002:a05:6512:10c5:: with SMTP id k5mr2126517lfg.677.1636406863498;
+        Mon, 08 Nov 2021 13:27:43 -0800 (PST)
 Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id t12sm1930697lfc.55.2021.11.08.13.24.33
+        by smtp.gmail.com with ESMTPSA id o10sm1060383ljd.30.2021.11.08.13.27.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Nov 2021 13:24:34 -0800 (PST)
-Message-ID: <1a5cdfe4-cb7c-502e-1810-8c47cb2f6282@canonical.com>
-Date:   Mon, 8 Nov 2021 22:24:32 +0100
+        Mon, 08 Nov 2021 13:27:43 -0800 (PST)
+Message-ID: <6e8065cc-5688-b820-0bdd-6fb887ae3261@canonical.com>
+Date:   Mon, 8 Nov 2021 22:27:41 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.1
-Subject: Re: [PATCH 10/13] dt-bindings: spi: add bindings for microchip mpfs
- spi
+Subject: Re: [PATCH 11/13] dt-bindings: usb: add bindings for microchip mpfs
+ musb
 Content-Language: en-US
 To:     conor.dooley@microchip.com, linus.walleij@linaro.org,
         bgolaszewski@baylibre.com, robh+dt@kernel.org,
@@ -76,9 +76,9 @@ To:     conor.dooley@microchip.com, linus.walleij@linaro.org,
         linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
 Cc:     geert@linux-m68k.org, bin.meng@windriver.com
 References: <20211108150554.4457-1-conor.dooley@microchip.com>
- <20211108150554.4457-11-conor.dooley@microchip.com>
+ <20211108150554.4457-12-conor.dooley@microchip.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211108150554.4457-11-conor.dooley@microchip.com>
+In-Reply-To: <20211108150554.4457-12-conor.dooley@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -88,48 +88,39 @@ X-Mailing-List: linux-spi@vger.kernel.org
 On 08/11/2021 16:05, conor.dooley@microchip.com wrote:
 > From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Add device tree bindings for the {q,}spi controller on
+> Add device tree bindings for the usb controller on
 > the Microchip PolarFire SoC.
 > 
 > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
->  .../bindings/spi/microchip,mpfs-spi.yaml      | 72 +++++++++++++++++++
->  1 file changed, 72 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+>  .../bindings/usb/microchip,mpfs-usb-host.yaml | 70 +++++++++++++++++++
+>  1 file changed, 70 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/microchip,mpfs-usb-host.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+> diff --git a/Documentation/devicetree/bindings/usb/microchip,mpfs-usb-host.yaml b/Documentation/devicetree/bindings/usb/microchip,mpfs-usb-host.yaml
 > new file mode 100644
-> index 000000000000..efed145ad029
+> index 000000000000..b867f49e7d70
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
-> @@ -0,0 +1,72 @@
+> +++ b/Documentation/devicetree/bindings/usb/microchip,mpfs-usb-host.yaml
+> @@ -0,0 +1,70 @@
 > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/spi/microchip,mpfs-spi.yaml#
+> +$id: http://devicetree.org/schemas/usb/microchip,mpfs-usb-host.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Microchip MPFS {Q,}SPI Controller Device Tree Bindings
+> +title: Microchip MPFS USB Controller Device Tree Bindings
 > +
 > +maintainers:
 > +  - Conor Dooley <conor.dooley@microchip.com>
 > +
 > +description: |
-> +  This {Q,}SPI controller is found on the Microchip PolarFire SoC.
-> +
-> +allOf:
-> +  - $ref: "spi-controller.yaml#"
-
-No need for quotes.
-
+> +  This USB controller is found on the Microchip PolarFire SoC.
 > +
 > +properties:
 > +  compatible:
 > +    enum:
-> +      - microchip,mpfs-spi
-> +      - microsemi,ms-pf-mss-spi
-> +      - microchip,mpfs-qspi
-> +      - microsemi,ms-pf-mss-qspi
+> +      - microchip,mpfs-usb-host
 > +
 > +  reg:
 > +    maxItems: 1
@@ -137,31 +128,33 @@ No need for quotes.
 > +  interrupts:
 > +    maxItems: 1
 > +
-> +  clock-names:
-> +    maxItems: 1
+> +  interrupt-names:
+> +    minItems: 2
+
+minItems should not be needed because you define all expected items below.
+
+> +    items:
+> +      - const: dma
+> +      - const: mc
 > +
 > +  clocks:
-> +    maxItems: 2
-
-This does not match clock-names. Describe clocks instead. Are you really
-sure your hardware can have an optional second clock?
-
+> +    maxItems: 1
 > +
-> +  num-cs:
-> +    description: |
-> +      Number of chip selects used.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 1
-> +    maximum: 8
-> +    default: 8
+> +  dr_mode:
+> +    enum:
+> +      - host
+> +      - otg
+> +      - peripheral
 > +
 > +required:
 > +  - compatible
 > +  - reg
 > +  - interrupts
+> +  - interrupt-names
 > +  - clocks
+> +  - dr_mode
 > +
-> +unevaluatedProperties: false
+> +additionalProperties: false
 > +
 > +examples:
 > +  - |
@@ -170,17 +163,21 @@ sure your hardware can have an optional second clock?
 > +    soc {
 > +      #address-cells = <2>;
 > +      #size-cells = <2>;
-> +      spi0: spi@20108000 {
-> +        compatible = "microchip,mpfs-spi";
-> +        reg = <0x0 0x20108000 0x0 0x1000>;
-> +        clocks = <&clkcfg CLK_SPI0>;
+> +      usb: usb@20201000 {
+> +        compatible = "microchip,mpfs-usb-host";
+> +        reg = <0x0 0x20201000 0x0 0x1000>;
+> +        clocks = <&clkcfg CLK_USB>;
 > +        interrupt-parent = <&plic>;
-> +        interrupts = <PLIC_INT_SPI0>;
-> +        spi-max-frequency = <25000000>;
-> +        num-cs = <8>;
+> +        interrupts = <PLIC_INT_USB_DMA PLIC_INT_USB_MC>;
+> +        interrupt-names = "dma","mc";
+> +        dr_mode = "host";
 > +        status = "disabled";
+
+Skip disabled in example.
+
 > +      };
 > +    };
+> +
 > +...
 > 
 
