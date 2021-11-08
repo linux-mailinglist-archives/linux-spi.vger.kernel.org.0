@@ -2,313 +2,128 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83208449E5B
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Nov 2021 22:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77CD944A06F
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Nov 2021 02:01:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240512AbhKHVnB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Nov 2021 16:43:01 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:44022
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240502AbhKHVnB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Nov 2021 16:43:01 -0500
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 88E553F1B8
-        for <linux-spi@vger.kernel.org>; Mon,  8 Nov 2021 21:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1636407615;
-        bh=xMlhz60Y7Re9w6VZ4mCdMM9k1oT7By2/e2a+Ful96Aw=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=Cw9hrTQ1a+rGSjBzygkb1SCOuG11ula+F4jiTytQ7sYVe5i/by0pMxkJVTyew54ik
-         ZaQhKyCLLYHw5ih1rgyxu90rFvqA+sonFrGLxQ3PeXcuS6RxH/24vJwAHKsHqSC1S1
-         xsAozsFZQr3oOHnC3+ATycz+NUJEe2KeB99iT8Vts3RdAiLHah3dpJqDqi3DtGu6vI
-         dCD4HpGABkhfvweG5lqaLpFIUNykd/XLND4tIoI8fqlT/tfEuyKADHkvYbJzrQHSCU
-         aS4EaC/uK2+tgUEmXufYPqcBtoR1pBDRuWF+cZ+7vLqu1O0eh/AMF/Cp5LAkXH2KDF
-         Xp7YR5RHs4IgA==
-Received: by mail-lf1-f70.google.com with SMTP id h40-20020a0565123ca800b00402514d959fso5622727lfv.7
-        for <linux-spi@vger.kernel.org>; Mon, 08 Nov 2021 13:40:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xMlhz60Y7Re9w6VZ4mCdMM9k1oT7By2/e2a+Ful96Aw=;
-        b=4v37q4c9dqo5YnjVKETw7edOtFGQScp68/AysZ/4QVARUDRuxXQFFeQo+9ZWs5Euo0
-         vH6BoL9g9pB4vLUMT1oiJizJibTBZanTTIntm4lBI5GDKa4b7lYzGR067z1jNgxQpTOa
-         9ZMXM6JSTi21GZCpPAvRSKf0Q3K/2ep2mpfQNLlKvSnZZjB5q+uiw2J5q4kXyRg68xGA
-         w4j0hw7xa+zrX1acgRLq8jDDAdQ1CN2xqUPI5O+B3zutItOIMxjCUwml8mCJsjlQOuY7
-         TJsrCwlriEDZoAyGUvU890lyfX37qu+Z7TpasXFjOOIyBk+0aKw6TF5jvF+O5CtrCBxa
-         lvJw==
-X-Gm-Message-State: AOAM53337KOUFtuF+iGYsOwky1EHJCDId/GUM9ZJKClN210jPImX59tv
-        Kra6xduRE+mnOS8Lo4d29OaF/9eFCyvmQhUE+nJmKB7vrM6notNiSjP40ymvkfTIHv2sgOacj/S
-        W7Au+f5npxzgVHYSJZ0y79P1sQ1l2UHCdP+Np9g==
-X-Received: by 2002:ac2:4bc2:: with SMTP id o2mr2168828lfq.307.1636407614498;
-        Mon, 08 Nov 2021 13:40:14 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJym1HJFJOCiKpshotep+fEMHGVvuCHCUht7Znnr1Fptl/CMGw7zMKN16qBDQpX9jY7h2z+d7w==
-X-Received: by 2002:ac2:4bc2:: with SMTP id o2mr2168813lfq.307.1636407614293;
-        Mon, 08 Nov 2021 13:40:14 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id h18sm295563ljh.133.2021.11.08.13.40.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Nov 2021 13:40:13 -0800 (PST)
-Message-ID: <01fdf2cf-26ae-b062-178b-4b9a23cd5803@canonical.com>
-Date:   Mon, 8 Nov 2021 22:40:12 +0100
+        id S237783AbhKIBDe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Nov 2021 20:03:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59858 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237344AbhKIBDW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 8 Nov 2021 20:03:22 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4FFC361215;
+        Tue,  9 Nov 2021 01:00:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636419636;
+        bh=Yg6485zONVOhKeEM60PrE9n4QDWxXd0O/gKALd726mU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SVOfo+20AKFdtFZ+0CpRZkDHt0tqlRIGj0q6lqUkM+zOqa3+HAMhlylf3TCnRxAk+
+         yg5j79I/1/AI/CFQb+6pBj5QxH6VhYP5viQto/3NZ5h+QXeJxL/q6ilt9zOfhA1G+O
+         gFnvqC0Dsri5uOkP18XCSyIjP0YI6zokSqZLO9khmKlrY/nLJqsrPM9MWXZ8Zr8Y+R
+         jhgGKjo5sIQUBsP2B0BpxsTVUqhwoTNYJyiyti4GnDmFX3l1mab4fAEwmYU49JZ+4n
+         R7Fy+N1LqH3ZAfyxmbHVBjHTH7uG6xulXWXsnnD7g2pHY6oufpWzOOOKJYMkJ1Z8HB
+         ChnmzzGZGUT5Q==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 026/146] spi: Check we have a spi_device_id for each DT compatible
+Date:   Mon,  8 Nov 2021 12:42:53 -0500
+Message-Id: <20211108174453.1187052-26-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211108174453.1187052-1-sashal@kernel.org>
+References: <20211108174453.1187052-1-sashal@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH 12/13] riscv: icicle-kit: update microchip icicle kit
- device tree
-Content-Language: en-US
-To:     conor.dooley@microchip.com, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, robh+dt@kernel.org,
-        jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, broonie@kernel.org,
-        gregkh@linuxfoundation.org, lewis.hanly@microchip.com,
-        daire.mcnamara@microchip.com, atish.patra@wdc.com,
-        ivan.griffin@microchip.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     geert@linux-m68k.org, bin.meng@windriver.com
-References: <20211108150554.4457-1-conor.dooley@microchip.com>
- <20211108150554.4457-13-conor.dooley@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211108150554.4457-13-conor.dooley@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 08/11/2021 16:05, conor.dooley@microchip.com wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Update the device tree for the icicle kit by splitting it into a third part,
-> which contains peripherals in the fpga fabric, add new peripherals
-> (spi, qspi, gpio, rtc, pcie, system services, i2c), update parts of the memory
-> map which have been changed.
+From: Mark Brown <broonie@kernel.org>
 
-This should be multiple commits because you mix up refactoring (split)
-and adding new features. The patch is really, really difficult to
-review. I gave up in the middle.
+[ Upstream commit 5fa6863ba69265cb7e45567d12614790ff26bd56 ]
 
-> 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  .../dts/microchip/microchip-mpfs-fabric.dtsi  |  21 ++
->  .../microchip/microchip-mpfs-icicle-kit.dts   | 159 +++++++--
->  .../boot/dts/microchip/microchip-mpfs.dtsi    | 333 ++++++++++++++----
->  3 files changed, 428 insertions(+), 85 deletions(-)
->  create mode 100644 arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
-> 
-> diff --git a/arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi b/arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
-> new file mode 100644
-> index 000000000000..8fa3356494f1
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
-> @@ -0,0 +1,21 @@
-> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> +/* Copyright (c) 2020-2021 Microchip Technology Inc */
-> +
-> +/ {
-> +	fpgadma: fpgadma@60020000 {
-> +		compatible = "microchip,mpfs-fpga-dma-uio";
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +		reg = <0x0 0x60020000 0x0 0x1000>;
-> +		interrupt-parent = <&plic>;
-> +		interrupts = <PLIC_INT_FABRIC_F2H_2>;
-> +		status = "okay";
-> +	};
-> +
-> +	fpgalsram: fpga_lsram@61000000 {
+Currently for SPI devices we use the spi_device_id for module autoloading
+even on systems using device tree, meaning that listing a compatible string
+in the of_match_table isn't enough to have the module for a SPI driver
+autoloaded.
 
-Node names go with hyphen, but actually you should not need it, because
-the name should be generic, e.g. "uio".
+We attempted to fix this by generating OF based modaliases for devices
+instantiated from DT in 3ce6c9e2617e ("spi: add of_device_uevent_modalias
+support") but this meant we no longer reported spi_device_id based aliases
+which broke drivers such as spi-nor which don't list all the compatible
+strings they support directly for DT, and in at least that case it's not
+super practical to do so given the very large number of compatibles
+needed, much larger than the number spi_device_ids due to vendor strings.
+As a result fell back to using spi_device_id based modalises.
 
-However there is no such compatible and checkpatch should complain about it.
+Try to close the gap by printing a warning when a SPI driver has a DT
+compatible that won't be matched as a SPI device ID with the goal of having
+drivers provide both. Given fallback compatibles this check is going to be
+excessive but it should be robust which is probably more important here.
 
-> +		compatible = "generic-uio";
-> +		reg = <0x0 0x61000000 0x0 0x0001000
-> +			0x14 0x00000000 0x0 0x00010000>;
-> +		status = "okay";
-> +	};
-> +};
-> diff --git a/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts b/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
-> index fc1e5869df1b..4212129fcdf1 100644
-> --- a/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
-> +++ b/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
-> @@ -1,5 +1,5 @@
->  // SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> -/* Copyright (c) 2020 Microchip Technology Inc */
-> +/* Copyright (c) 2020-2021 Microchip Technology Inc */
->  
->  /dts-v1/;
->  
-> @@ -13,72 +13,187 @@ / {
->  	compatible = "microchip,mpfs-icicle-kit", "microchip,mpfs";
->  
->  	aliases {
-> -		ethernet0 = &emac1;
-> -		serial0 = &serial0;
-> -		serial1 = &serial1;
-> -		serial2 = &serial2;
-> -		serial3 = &serial3;> +		mmuart0 = &mmuart0;
-> +		mmuart1 = &mmuart1;
-> +		mmuart2 = &mmuart2;
-> +		mmuart3 = &mmuart3;
-> +		mmuart4 = &mmuart4;
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20210921192149.50740-1-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/spi/spi.c | 41 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-Why? Commit msg does not explain it.
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 926b68aa45d3e..2a2f41b6df685 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -451,6 +451,47 @@ int __spi_register_driver(struct module *owner, struct spi_driver *sdrv)
+ {
+ 	sdrv->driver.owner = owner;
+ 	sdrv->driver.bus = &spi_bus_type;
++
++	/*
++	 * For Really Good Reasons we use spi: modaliases not of:
++	 * modaliases for DT so module autoloading won't work if we
++	 * don't have a spi_device_id as well as a compatible string.
++	 */
++	if (sdrv->driver.of_match_table) {
++		const struct of_device_id *of_id;
++
++		for (of_id = sdrv->driver.of_match_table; of_id->compatible[0];
++		     of_id++) {
++			const char *of_name;
++
++			/* Strip off any vendor prefix */
++			of_name = strnchr(of_id->compatible,
++					  sizeof(of_id->compatible), ',');
++			if (of_name)
++				of_name++;
++			else
++				of_name = of_id->compatible;
++
++			if (sdrv->id_table) {
++				const struct spi_device_id *spi_id;
++
++				for (spi_id = sdrv->id_table; spi_id->name[0];
++				     spi_id++)
++					if (strcmp(spi_id->name, of_name) == 0)
++						break;
++
++				if (spi_id->name[0])
++					continue;
++			} else {
++				if (strcmp(sdrv->driver.name, of_name) == 0)
++					continue;
++			}
++
++			pr_warn("SPI driver %s has no spi_device_id for %s\n",
++				sdrv->driver.name, of_id->compatible);
++		}
++	}
++
+ 	return driver_register(&sdrv->driver);
+ }
+ EXPORT_SYMBOL_GPL(__spi_register_driver);
+-- 
+2.33.0
 
->  	};
->  
->  	chosen {
-> -		stdout-path = "serial0:115200n8";
-> +		stdout-path = "mmuart1:115200n8";
->  	};
->  
->  	cpus {
->  		timebase-frequency = <RTCCLK_FREQ>;
->  	};
->  
-> -	memory@80000000 {
-> +	ddrc_cache_lo: memory@80000000 {
->  		device_type = "memory";
-> -		reg = <0x0 0x80000000 0x0 0x40000000>;
-> -		clocks = <&clkcfg 26>;
-> +		reg = <0x0 0x80000000 0x0 0x2e000000>;
-> +		clocks = <&clkcfg CLK_DDRC>;
-> +		status = "okay";
-> +	};
-> +
-> +	ddrc_cache_hi: memory@1000000000 {
-> +		device_type = "memory";
-> +		reg = <0x10 0x0 0x0 0x40000000>;
-> +		clocks = <&clkcfg CLK_DDRC>;
-> +		status = "okay";
->  	};
->  };
->  
-> -&serial0 {
-> +&mmuart1 {
->  	status = "okay";
->  };
->  
-> -&serial1 {
-> +&mmuart2 {
->  	status = "okay";
->  };
->  
-> -&serial2 {
-> +&mmuart3 {
->  	status = "okay";
->  };
->  
-> -&serial3 {
-> +&mmuart4 {
->  	status = "okay";
->  };
->  
->  &mmc {
->  	status = "okay";
-> -
->  	bus-width = <4>;
->  	disable-wp;
->  	cap-sd-highspeed;
-> +	cap-mmc-highspeed;
->  	card-detect-delay = <200>;
-> +	mmc-ddr-1_8v;
-> +	mmc-hs200-1_8v;
->  	sd-uhs-sdr12;
->  	sd-uhs-sdr25;
->  	sd-uhs-sdr50;
->  	sd-uhs-sdr104;
->  };
->  
-> -&emac0 {
-> +&spi0 {
-> +	status = "okay";
-> +	spidev@0 {
-> +		compatible = "spidev";
-
-1. There is no such compatible,
-2. You should have big fat warning when booting, so such DT cannot be
-accepted.
-
-> +		reg = <0>; /* CS 0 */
-> +		spi-max-frequency = <10000000>;
-> +		status = "okay";
-> +	};
-> +};
-> +
-> +&spi1 {
-> +	status = "okay";
-> +};
-> +
-> +&qspi {
-> +	status = "okay";
-> +};
-> +
-> +&i2c0 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c1 {
-> +	status = "okay";
-> +	pac193x: pac193x@10 {
-
-Generic node name. Looks like compatible is not documented, so first
-bindings.
-
-
-> +		compatible = "microchip,pac1934";
-> +		reg = <0x10>;
-> +		samp-rate = <64>;
-> +		status = "okay";
-> +		ch0: channel0 {
-> +			uohms-shunt-res = <10000>;
-> +			rail-name = "VDDREG";
-> +			channel_enabled;
-> +		};
-> +		ch1: channel1 {
-> +			uohms-shunt-res = <10000>;
-> +			rail-name = "VDDA25";
-> +			channel_enabled;
-> +		};
-> +		ch2: channel2 {
-> +			uohms-shunt-res = <10000>;
-> +			rail-name = "VDD25";
-> +			channel_enabled;
-> +		};
-> +		ch3: channel3 {
-> +			uohms-shunt-res = <10000>;
-> +			rail-name = "VDDA_REG";
-> +			channel_enabled;
-> +		};
-> +	};
-> +};
-> +
-> +&mac0 {
-> +	status = "okay";
->  	phy-mode = "sgmii";
->  	phy-handle = <&phy0>;
-> -	phy0: ethernet-phy@8 {
-> -		reg = <8>;
-> -		ti,fifo-depth = <0x01>;
-> -	};
->  };
->  
-> -&emac1 {
-> +&mac1 {
-
-I gave up here, it's not easy to find what is effect of refactoring,
-what is a new node.
-
-Best regards,
-Krzysztof
