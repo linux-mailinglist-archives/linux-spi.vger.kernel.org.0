@@ -2,70 +2,120 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E8F449B91
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Nov 2021 19:21:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BE60449C21
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Nov 2021 20:02:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235395AbhKHSYO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Nov 2021 13:24:14 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:39692 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235228AbhKHSYO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Nov 2021 13:24:14 -0500
-Received: by mail-ot1-f43.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso5558667ots.6;
-        Mon, 08 Nov 2021 10:21:29 -0800 (PST)
+        id S231641AbhKHTFD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Nov 2021 14:05:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47040 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236468AbhKHTFC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Nov 2021 14:05:02 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F45C061766
+        for <linux-spi@vger.kernel.org>; Mon,  8 Nov 2021 11:02:18 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id z21so21366031edb.5
+        for <linux-spi@vger.kernel.org>; Mon, 08 Nov 2021 11:02:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pensando.io; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VD+leqfaw7cvxdr0hdFUU2DCytmZoC8d64RVpkQq7Mc=;
+        b=QZxWU12BBlyzV83NZ0nj9FJqE578Gabv8/gbF+d7mLGZ5cQX8AgfwZMd/klbb4Q7nC
+         PAFQCWFzxcoO/K4BCuUpp+PjpDMIElcMArXLIRhJcmba/ZnjBsX1DS17Q26OAo2maj+U
+         Ppdz+/ge3amaVKLu8Ik9xygjmi+PArEtI3PJbN0TLKBEqgZKrxvWTBHohz5qteRRIRKi
+         kMJa4u2ZWtDi4J6FsvAneMAo1DhkXbiNqXeGa8O9eyAvgrcteZ+Ftr3FEUB/ufGHmurG
+         xto0fd8hVfFGFGn5C47G6yTijEG16i4Mi4jKLSQh/zc13i5aIjodWmKJN/z85gHv+eNw
+         JLkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rCISeuysZKbDMgJjuEiNIJE7YuKQ2TJrqtX7kNAW6+k=;
-        b=GrFweR8To4SppYhNoO1nDbVnP9/j5IZsBOuI2vhf3tqKLfv5wnssYjq+P9mo7pFBlr
-         XWfXlNc1HYE+cbWkbm4cp3LVRUv20r+Ddk3c+Boycvq069nEIcJZS6deHW15qHBkuMzJ
-         inHem2q/34lp1emn5QWrRqttURG4aPP8x6QZWEBmg/COn+tgio7s0oGY7ewAa5KJe60Q
-         R/033q6+a+SxDAQG/0JFqWad4K1FsfKf4xriEyZ5nYaHXl8iRWniRC/YkX9KYSdoYHC8
-         +/fI36exHI7uwWtFRM6qJjTNG4JbSRAyz7uesV3gtp2aNvFjP1/nhMARC5geg3CazQDW
-         IchA==
-X-Gm-Message-State: AOAM530mGAa+xmlCpVoAZaA6/ZQKeygDZ+h4gdu8tRMA+S+pdWWT0BH7
-        N7lU4i+QLwxbEeABaMm6aA==
-X-Google-Smtp-Source: ABdhPJy3zcQSwD3T164usGwB1k3ii5fGInofXXVdg+wtGM5mrZAOChqIQOn0tJZy8lyRAtiuoMCJAA==
-X-Received: by 2002:a05:6830:1014:: with SMTP id a20mr836094otp.63.1636395689139;
-        Mon, 08 Nov 2021 10:21:29 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id c8sm3671908ooq.43.2021.11.08.10.21.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Nov 2021 10:21:28 -0800 (PST)
-Received: (nullmailer pid 3969396 invoked by uid 1000);
-        Mon, 08 Nov 2021 18:21:27 -0000
-Date:   Mon, 8 Nov 2021 12:21:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Pratyush Yadav <p.yadav@ti.com>
-Cc:     Mark Brown <broonie@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] spi: dt-bindings: add schema listing
- slave-specific properties
-Message-ID: <YYlqp7+vYd4X0Kyi@robh.at.kernel.org>
-References: <20211028124518.17370-1-p.yadav@ti.com>
- <20211028124518.17370-2-p.yadav@ti.com>
- <YYlmx3QyI9zxuO9N@robh.at.kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VD+leqfaw7cvxdr0hdFUU2DCytmZoC8d64RVpkQq7Mc=;
+        b=C18WDpe0IIwiBr5IWWQ2+DCQOIoFI1z5XaHMln43GfRG37G8DcdfQ+z9c8bojlyW7O
+         7pR/cYN7bHcEfjvpC70G2Tuooq9EXUtqx/JWJJTNTzTx4j+bNT13zwxg6VaxFoBKbalm
+         prPU/u7RHjh0F+llabyOdqsW6P8x0/Vgnb9KlHWYRwNIwJWtsLGJL8HDGkKgqJ1joqU4
+         RQnhoeP/kNNyJqNbHXhCllqTPMhCZIEkyjNMkBRZl7wR2j3qEFo9nuiMzAuk6myTSra1
+         P6Y4eHq1CbjDeWHyk6JnjR3cEIWBqo5G9QxFNCcp4GwS0PmSKvNGROlsW8p6PlxIAEvF
+         zwCQ==
+X-Gm-Message-State: AOAM5315/ScAy+h8vlh7qByCOm1bBvP5bqal1aRWl7S+xmp3SumuVQIO
+        lH9CCAs4mvgpwNLdvP5UR2enqezZHhgefO34yPE5rQ==
+X-Google-Smtp-Source: ABdhPJzMqefrKaXcq09jbz4WokOBxPmGYf48od5DTPAH1Xprc6tdW5gTGoen6SETdNxoSREsXucD53VYWn7EbFB3k7w=
+X-Received: by 2002:a17:907:d89:: with SMTP id go9mr1896295ejc.330.1636398136568;
+ Mon, 08 Nov 2021 11:02:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YYlmx3QyI9zxuO9N@robh.at.kernel.org>
+References: <20211025015156.33133-1-brad@pensando.io> <20211025015156.33133-12-brad@pensando.io>
+ <20211025091731.GA2001@C02TD0UTHF1T.local> <CAK9rFnx7DgS3TYMmu5NBacV_6WC_UwJ=u7n3e_fGd0RpEcg3kA@mail.gmail.com>
+ <YYj7MA4D1zCF39lh@FVFF77S0Q05N>
+In-Reply-To: <YYj7MA4D1zCF39lh@FVFF77S0Q05N>
+From:   Brad Larson <brad@pensando.io>
+Date:   Mon, 8 Nov 2021 11:02:05 -0800
+Message-ID: <CAK9rFnxzZJyVOtG7kkWkHiOD6_bcZqDp3SXYMiHeCY4RDAsKLA@mail.gmail.com>
+Subject: Re: [PATCH v3 11/11] arm64: dts: Add Pensando Elba SoC support
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Olof Johansson <olof@lixom.net>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Nov 08, 2021 at 12:04:55PM -0600, Rob Herring wrote:
-> On Thu, Oct 28, 2021 at 06:15:16PM +0530, Pratyush Yadav wrote:
-> > Many SPI controllers need to add properties to slave devices. This could
-> 
-> Probably should replace 'slave' with 'peripheral' throughout[1]. 
+Hi Mark,
 
-Forgot the link:
+On Mon, Nov 8, 2021 at 2:26 AM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> No; as above, you should *not* use GIC_CPU_MASK_SIMPLE() at all for GICv3. i.e.
+>
+> >         timer {
+> >                 compatible = "arm,armv8-timer";
+> >                 interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
+> >                              <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
+> >                              <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
+> >                              <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
+> >         };
+>
+> Please see the GICv3 binding documentation:
+>
+>   Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
+>
+> ... and note that it does not have the cpumask field as use by the binding for
+> prior generations of GIC:
+>
+>   Documentation/devicetree/bindings/interrupt-controller/arm,gic.yaml
+>
+>
+> If you've seen other dts files using GIC_CPU_MASK_SIMPLE() with GICv3, those
+> are incorrect, and need to be fixed.
+>
+> Thanks,
+> Mark.
 
-https://www.oshwa.org/a-resolution-to-redefine-spi-signal-names/
+I'll use the bindings documentation as the primary reference.  The use of
+GIC_CPU_MASK_SIMPLE() is removed and tests ok.  These arm64 dts files in
+linux-next are gic-v3 and use GIC_CPU_MASK_SIMPLE(1, 2, 4, 8)
+
+./nvidia/tegra234.dtsi
+./renesas/r9a07g044.dtsi
+./renesas/r8a779a0.dtsi
+./qcom/sm8350.dtsi
+./qcom/sm8250.dtsi
+./freescale/fsl-ls1028a.dtsi
+./freescale/imx8mp.dtsi
+./freescale/imx8mn.dtsi
+./freescale/imx8mm.dtsi
+
+Thanks,
+Brad
