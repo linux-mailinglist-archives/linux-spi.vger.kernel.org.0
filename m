@@ -2,27 +2,27 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F6C44A2DE
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Nov 2021 02:23:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1DF044A382
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Nov 2021 02:25:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242035AbhKIBW2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Nov 2021 20:22:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46240 "EHLO mail.kernel.org"
+        id S242248AbhKIB1X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 8 Nov 2021 20:27:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50424 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242240AbhKIBTg (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 8 Nov 2021 20:19:36 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B3E6361A61;
-        Tue,  9 Nov 2021 01:07:57 +0000 (UTC)
+        id S243604AbhKIBX1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 8 Nov 2021 20:23:27 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 13746613B3;
+        Tue,  9 Nov 2021 01:09:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636420078;
-        bh=DBYqDsEuPR5l4aROrVAQvL1/upaFZgZnYxxv5zi1E2U=;
+        s=k20201202; t=1636420150;
+        bh=i0jV/KhtSx0BQq0o+enM7ZIbvtFGSUk3n/q7u2joUbI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FtKuwsQZo/yRNmkYvVUn91JzWRslWnSJK6r+WzfjfIfuFP2YBhJYvXun6ZI7dTFf+
-         +r7dIWTG3OlbYUlVYysBaSlrdULDaILhVsr8MzCef12d2SsezYjXz1mgIjCZYPYG+a
-         tjT10Nd+Iu5KbaTNI62/bqg69l5+UJLTGQJd2A1UtnKC4q6NQaXwDoGjhtCDhQAKWc
-         LFYkUTpsaiWSsIgNXzYZe2YW2SGbnczMJgJonWU/QHEvq5i40Li4e/mM0bHyqNufo2
-         Mx0b1GatEI5CZB3EPF9XRWLGMxXxlfjehsMH0GmOyhl75zCIvW6Doo83KNB6vE31fw
-         NiMeE8ZaWbXoA==
+        b=eGjsop9NB6eEPWtLiFocHvewQqN08fkxVmNCWNEObDAsVtqwOTQadccPSNr/GeVFd
+         jJriKbaY9N4Rul3c793dLceqUe+b8FNGEY2w+ElJ0j7FDJUGUt5me/tSwacVWc7o3e
+         zficRV+w1Jkg4dj9B5NID5ZJ0MBM7GJnBkvr+MaMwsPsR4Fhq/dRKta6+qBAidGeCG
+         dtMXRDx8zFJ5dHM38X1hAx04q2EIPwRAPL/gzKouS3e5rdvXZgc0Yj2WoVj0DTwGwg
+         JkxRSgQ0kqaP+vkdQF+ZcYhAbtkU9pmYDVkTJJX4r/qz6pcLxRdSf+bOD7FPOJBef2
+         98j8G99Gg98YA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yang Yingliang <yangyingliang@huawei.com>,
@@ -30,12 +30,12 @@ Cc:     Yang Yingliang <yangyingliang@huawei.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, kdasu.kdev@gmail.com,
         bcm-kernel-feedback-list@broadcom.com, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 36/39] spi: bcm-qspi: Fix missing clk_disable_unprepare() on error in bcm_qspi_probe()
-Date:   Mon,  8 Nov 2021 20:06:46 -0500
-Message-Id: <20211109010649.1191041-36-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 31/33] spi: bcm-qspi: Fix missing clk_disable_unprepare() on error in bcm_qspi_probe()
+Date:   Mon,  8 Nov 2021 20:08:05 -0500
+Message-Id: <20211109010807.1191567-31-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211109010649.1191041-1-sashal@kernel.org>
-References: <20211109010649.1191041-1-sashal@kernel.org>
+In-Reply-To: <20211109010807.1191567-1-sashal@kernel.org>
+References: <20211109010807.1191567-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,10 +61,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
-index 11adc2c13a74c..298b1dd463800 100644
+index 5453910d8abc3..d521adf6ac245 100644
 --- a/drivers/spi/spi-bcm-qspi.c
 +++ b/drivers/spi/spi-bcm-qspi.c
-@@ -1301,7 +1301,7 @@ int bcm_qspi_probe(struct platform_device *pdev,
+@@ -1266,7 +1266,7 @@ int bcm_qspi_probe(struct platform_device *pdev,
  					       &qspi->dev_ids[val]);
  			if (ret < 0) {
  				dev_err(&pdev->dev, "IRQ %s not found\n", name);
@@ -73,7 +73,7 @@ index 11adc2c13a74c..298b1dd463800 100644
  			}
  
  			qspi->dev_ids[val].dev = qspi;
-@@ -1316,7 +1316,7 @@ int bcm_qspi_probe(struct platform_device *pdev,
+@@ -1281,7 +1281,7 @@ int bcm_qspi_probe(struct platform_device *pdev,
  	if (!num_ints) {
  		dev_err(&pdev->dev, "no IRQs registered, cannot init driver\n");
  		ret = -EINVAL;
@@ -82,7 +82,7 @@ index 11adc2c13a74c..298b1dd463800 100644
  	}
  
  	/*
-@@ -1367,6 +1367,7 @@ int bcm_qspi_probe(struct platform_device *pdev,
+@@ -1332,6 +1332,7 @@ int bcm_qspi_probe(struct platform_device *pdev,
  
  qspi_reg_err:
  	bcm_qspi_hw_uninit(qspi);
