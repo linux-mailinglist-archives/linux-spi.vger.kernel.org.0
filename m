@@ -2,80 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF6C44B119
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Nov 2021 17:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED9B44B195
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Nov 2021 17:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239545AbhKIQ11 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 9 Nov 2021 11:27:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52378 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238397AbhKIQ1Z (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 9 Nov 2021 11:27:25 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F014A60FD8;
-        Tue,  9 Nov 2021 16:24:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636475079;
-        bh=S02AWkEYJNSoTOH6r1bp7lYVkK/1pCY/xooUDR9Z8YY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D29EStRlaFZuXf/ZKsGy2wvtW2tv3OQ6X9FxyEWxTolayz//ngdUFuGwGl7TaQC0S
-         F5pmBZNrzYlp1m/LUnrah3cILrV0JrFgZQIJnVzQbPfaJUncjTTPwVu/49ozn89NgF
-         vuNLw6gZ2TLf94CRDtpejr2z5/eegrZGe0jkewVBQt1ySWS16pNeT1/cSWsEqN2a0L
-         oYplSFy9K+eCRzCswU+cj8AafEefqlzGBQL5Q7BUWchbLGooxSFfjaJ369gcoCYSJ3
-         LPRNA+R+j/iqUdcseKQ5Jt+8cDeK9aVH7OdtmrV4rQrT+gzkEUf6ewYAjwi7VXob2G
-         ImBxYhg1VLmcA==
-Date:   Tue, 9 Nov 2021 16:24:33 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        George Cherian <gcherian@marvell.com>,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Remove Netlogic bindings
-Message-ID: <YYqgwQVgjOwoaZZg@sirena.org.uk>
-References: <20211109161707.2209170-1-robh@kernel.org>
+        id S240591AbhKIQ60 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 9 Nov 2021 11:58:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240354AbhKIQ6Z (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 Nov 2021 11:58:25 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1234::107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BA2C061764;
+        Tue,  9 Nov 2021 08:55:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=/LP3FeLpReckN2Ti3pmtMSKae4B2ROfz/QTjyFEgT8g=; b=UUbPzHamBevNC7YhZAa/Mt6Xth
+        fs7WalY/LpPoaemtx+DheoGFE7fewrGZLsvgyp7Xx9Hwcm8pxpgv0QwGHLLo+ykEeMjOFI43uFHlX
+        fHYjcJtFZ5/jFMFhyxQOV/UtZqtGI71sXfSWlVHCRZFKiMbYudxhgYUNblKFvAzD2wG3/A3Y7K0po
+        F6qoBbkiv6zYkmyR+iwyHfqgC8z0kV41GpVqGprGXeOz0IEGwvKw9HWojHprSBTI+ykfaMn8BO+5j
+        ls0cKgjfPDZQzVL2ipL4BGi6O5svTiVZpOT+Kr424G21/jEqMWDRt+VtCcuxzfrjWYtawwY7gIyPn
+        z18v8zqg==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by merlin.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mkUP3-008oAQ-KD; Tue, 09 Nov 2021 16:55:22 +0000
+Subject: Re: [PATCH v2 1/2] SPI: Add SPI driver for Sunplus SP7021
+To:     "LH.Kuo" <lhjeff911@gmail.com>, p.zabel@pengutronix.de,
+        broonie@kernel.org, robh+dt@kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     dvorkin@tibbo.com, qinjian@cqplus1.com, wells.lu@sunplus.com,
+        "LH.Kuo" <lh.kuo@sunplus.com>
+References: <1635747525-31243-1-git-send-email-lh.kuo@sunplus.com>
+ <1636448488-14158-1-git-send-email-lh.kuo@sunplus.com>
+ <1636448488-14158-2-git-send-email-lh.kuo@sunplus.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <1b034b0b-d1ac-5bbe-4384-d0be9bd47710@infradead.org>
+Date:   Tue, 9 Nov 2021 08:55:15 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2FnwxKPLYbn/7HKW"
-Content-Disposition: inline
-In-Reply-To: <20211109161707.2209170-1-robh@kernel.org>
-X-Cookie: Elevators smell different to midgets.
+In-Reply-To: <1636448488-14158-2-git-send-email-lh.kuo@sunplus.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 11/9/21 1:01 AM, LH.Kuo wrote:
+> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+> index 596705d..30ce0ed 100644
+> --- a/drivers/spi/Kconfig
+> +++ b/drivers/spi/Kconfig
+> @@ -866,6 +866,17 @@ config SPI_SUN6I
+>   	help
+>   	  This enables using the SPI controller on the Allwinner A31 SoCs.
+>   
+> +config SPI_SUNPLUS_SP7021
+> +	tristate "Sunplus SP7021 SPI controller"
+> +	depends on SOC_SP7021
+> +	help
+> +	  This enable Sunplus SP7021 spi controller driver on the SP7021 SoCs.
 
---2FnwxKPLYbn/7HKW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+	       enables the Sunplus SP021 SPI
 
-On Tue, Nov 09, 2021 at 10:17:07AM -0600, Rob Herring wrote:
-> Support for Netlogic was removed in commit 95b8a5e0111a ("MIPS: Remove
-> NETLOGIC support"). Remove the now unused bindings.
->=20
-> The GPIO binding also includes "brcm,vulcan-gpio", but it appears to be
-> unused as well as Broadcom Vulkan became Cavium ThunderX2 which is ACPI
-> based.
+> +	  This driver can also be built as a module. If so, the module will be
+> +	  called as spi-sunplus-sp7021.
+> +
+> +	  If you have a  Sunplus SP7021 platform say Y here.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+	         have a Sunplus
+(i.e., drop one space)
 
---2FnwxKPLYbn/7HKW
-Content-Type: application/pgp-signature; name="signature.asc"
+> +	  If unsure, say N.
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGKoMAACgkQJNaLcl1U
-h9AoiAf/ekVKGxswprkfhL2xFb59W4S9TiOQAYT6SnP7lu202u3QcBy7W8oX4OjT
-dr8uo6NQ6jHwai3ZiP85QrmuN4sweJG8JDzh6ArgtWgRHcYknDH/RjYhDYoo3P8O
-S2fc1NtMu5mVXAMxJWjEuQKhoKkStNMMZOJCQh9SbXOUaF53JH4h92p4BOUSDoBh
-7EJ0JvqWX1tGTxi3TEKb8e+9JoamQpZaMp4NhMlXKjsOEan/8CJ+n0n6E+TzUwqn
-N+/sZ3uiuWQnrtsTBHPJ31T/iWMYt5ZpVhWN0kXRu1cKg0Xcs6zE4dsfjUnaRDP3
-EifXkzdJvgUNnGsl7M5QG6MHyFmMAw==
-=l4BV
------END PGP SIGNATURE-----
-
---2FnwxKPLYbn/7HKW--
+-- 
+~Randy
