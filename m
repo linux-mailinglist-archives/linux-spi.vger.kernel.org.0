@@ -2,103 +2,113 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C1144A590
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Nov 2021 05:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC1B44A96A
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Nov 2021 09:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242652AbhKIEJb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 8 Nov 2021 23:09:31 -0500
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:42971 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241057AbhKIEJY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 8 Nov 2021 23:09:24 -0500
-Received: by mail-ot1-f53.google.com with SMTP id g91-20020a9d12e4000000b0055ae68cfc3dso26239734otg.9;
-        Mon, 08 Nov 2021 20:06:38 -0800 (PST)
+        id S244372AbhKIIoN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 9 Nov 2021 03:44:13 -0500
+Received: from mail-pl1-f173.google.com ([209.85.214.173]:39674 "EHLO
+        mail-pl1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244402AbhKIInQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 Nov 2021 03:43:16 -0500
+Received: by mail-pl1-f173.google.com with SMTP id t21so19642292plr.6;
+        Tue, 09 Nov 2021 00:40:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=srBAEqiQv7t2TUoCMiKomnj9CXcpM/RXP2/IhsCEUt4=;
-        b=Id4oeY1Rtgk4Uzmq8cFQvIB4rz9CZZF3nRO/yMvW1puv3a0mGe9tsq36IT9wgM2d/e
-         YXD7myHXbp0pHhX5Xzppy5SefrREgoXVbF4mjY6JlZHit2wBlsYN63ON2/85qGFxpgDA
-         g6pz4UCNKiUNQQa3zAzdrzycX2hZnI15b3E3J8+dhnokJuJK5WQ6EmcgEPiOG1ZS16dO
-         W1v+e1Le4Nl4lRIojouEMPemswYAMi34lQdhAM9aryBnkudKmsH1VxJyUokmIUuVcKIJ
-         FetH+npSVCLbRDJW1SEBdVqqiCRJVq4PQEM/Gha6tSYm/Pplc6LoUuDH9V9WHIfnzUPK
-         UtKA==
-X-Gm-Message-State: AOAM533WytWd4uf3bvMfqzL1VaEhfMNq/kfLVE7cE/sRAQ53Jxnc6E8b
-        hzQ+3sKjnPEJ40O9VvHYzw==
-X-Google-Smtp-Source: ABdhPJxAD8OzRK/Sli7Q+xp3mQUCmoiHP7RN7OOEEvobUZ0MlWRieiCoDJdFa0SI20BV1G+hYm0D6w==
-X-Received: by 2002:a9d:76d1:: with SMTP id p17mr3474638otl.328.1636430798093;
-        Mon, 08 Nov 2021 20:06:38 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id q81sm6985766oib.47.2021.11.08.20.06.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Nov 2021 20:06:37 -0800 (PST)
-Received: (nullmailer pid 743039 invoked by uid 1000);
-        Tue, 09 Nov 2021 04:06:29 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     conor.dooley@microchip.com
-Cc:     linux-spi@vger.kernel.org, linus.walleij@linaro.org,
-        lewis.hanly@microchip.com, ivan.griffin@microchip.com,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-crypto@vger.kernel.org, paul.walmsley@sifive.com,
-        broonie@kernel.org, robh+dt@kernel.org, atish.patra@wdc.com,
-        linux-kernel@vger.kernel.org, daire.mcnamara@microchip.com,
-        alexandre.belloni@bootlin.com, krzysztof.kozlowski@canonical.com,
-        bin.meng@windriver.com, linux-gpio@vger.kernel.org,
-        bgolaszewski@baylibre.com, a.zummo@towertech.it,
-        aou@eecs.berkeley.edu, palmer@dabbelt.com, geert@linux-m68k.org,
-        linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        jassisinghbrar@gmail.com, linux-rtc@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-In-Reply-To: <20211108150554.4457-8-conor.dooley@microchip.com>
-References: <20211108150554.4457-1-conor.dooley@microchip.com> <20211108150554.4457-8-conor.dooley@microchip.com>
-Subject: Re: [PATCH 07/13] dt-bindings: rtc: add bindings for microchip mpfs rtc
-Date:   Mon, 08 Nov 2021 22:06:29 -0600
-Message-Id: <1636430789.913081.743038.nullmailer@robh.at.kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gSLDpPNAPTFpdKJNeNQhMNDuIXO+IuEe87YK9rCw7Wk=;
+        b=bkicM4NptlSvs00dBmXJ8TA9DlC4vSJ2JXtFGNClf/JdgY4gMyYyDkSYfwVpSzaTnz
+         X/9Wi4YkrynGP0SbMT9EbYhwepz+NrK9oERNaggxMkpCgX+anSzKxtgAOIKj4IYigEg0
+         9ziUGP3BHi4ZZk6si4bLc9OwHusH/W4uqufNQGUc7GWsZYNR/2ugLGrYPK2Y/IuTbNWx
+         ocF8GDLevXNUHUAP+S9RN7O/NISFiLxrDiEy4+ZZ/7GaeGMzoIQvLQUzjhwcMEb6xQjS
+         GFVmaUA4Tuo/vGfkt0fsCpn5T74w77WAPuCupdrAq5wpzcctY8fN/XoXodE/YsvedD0a
+         0v6A==
+X-Gm-Message-State: AOAM532+o1o3PB0qgfdwg60wYvQCsPagQHqel0K7+/32C8gpUGzkhywD
+        d8m7o/BRi10LzU2X5WI1pTtuoRpciUOYTtil
+X-Google-Smtp-Source: ABdhPJwtNor6FrZO+2M63XnKFgzRT/k6VXW3jhwqnHCDRjPu1KybXzCzjDFd1YQD8ThE7ACLxJkvoA==
+X-Received: by 2002:a17:90a:134f:: with SMTP id y15mr5317434pjf.158.1636447230229;
+        Tue, 09 Nov 2021 00:40:30 -0800 (PST)
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com. [209.85.210.181])
+        by smtp.gmail.com with ESMTPSA id a13sm1962640pfv.99.2021.11.09.00.40.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Nov 2021 00:40:30 -0800 (PST)
+Received: by mail-pf1-f181.google.com with SMTP id o4so4771059pfp.13;
+        Tue, 09 Nov 2021 00:40:29 -0800 (PST)
+X-Received: by 2002:a05:6102:e82:: with SMTP id l2mr9441005vst.37.1636446824427;
+ Tue, 09 Nov 2021 00:33:44 -0800 (PST)
+MIME-Version: 1.0
+References: <20211108150554.4457-1-conor.dooley@microchip.com> <20211108150554.4457-4-conor.dooley@microchip.com>
+In-Reply-To: <20211108150554.4457-4-conor.dooley@microchip.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 9 Nov 2021 09:33:33 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVx9BgCYHX5-Bwx1TzQzNK1+7cUWoWnOdMX31SJ22sMzg@mail.gmail.com>
+Message-ID: <CAMuHMdVx9BgCYHX5-Bwx1TzQzNK1+7cUWoWnOdMX31SJ22sMzg@mail.gmail.com>
+Subject: Re: [PATCH 03/13] dt-bindings: soc/microchip: update sys ctrlr compat string
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Lewis Hanly <lewis.hanly@microchip.com>,
+        daire.mcnamara@microchip.com, Atish Patra <atish.patra@wdc.com>,
+        ivan.griffin@microchip.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bin Meng <bin.meng@windriver.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 08 Nov 2021 15:05:48 +0000, conor.dooley@microchip.com wrote:
+Hi Conor,
+
+On Mon, Nov 8, 2021 at 4:06 PM <conor.dooley@microchip.com> wrote:
 > From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Add device tree bindings for the real time clock on
-> the Microchip PolarFire SoC.
-> 
+>
+> Update 'compatible' strings for system controller drivers to the
+> approved Microchip name.
+>
 > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
-> ---
->  .../bindings/rtc/microchip,mfps-rtc.yaml      | 61 +++++++++++++++++++
->  1 file changed, 61 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
-> 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Thanks for your patch!
 
-yamllint warnings/errors:
+> --- a/Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml
+> +++ b/Documentation/devicetree/bindings/mailbox/microchip,polarfire-soc-mailbox.yaml
+> @@ -11,7 +11,9 @@ maintainers:
+>
+>  properties:
+>    compatible:
+> -    const: microchip,polarfire-soc-mailbox
+> +    enum:
+> +      - microchip,polarfire-soc-mailbox
+> +      - microchip,mpfs-mailbox
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.example.dts:19:18: fatal error: dt-bindings/clock/microchip,mpfs-clock.h: No such file or directory
-   19 |         #include <dt-bindings/clock/microchip,mpfs-clock.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:385: Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1441: dt_binding_check] Error 2
+Is there any point in keeping the old compatible value?
+Are there any real users? Most of the MPFS upstream DT is still in flux.
 
-doc reference errors (make refcheckdocs):
+Gr{oetje,eeting}s,
 
-See https://patchwork.ozlabs.org/patch/1552374
+                        Geert
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
