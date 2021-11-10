@@ -2,120 +2,127 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1932D44B927
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Nov 2021 23:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19BC544BB58
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Nov 2021 06:42:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241024AbhKIXCR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 9 Nov 2021 18:02:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26335 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241461AbhKIXCQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 9 Nov 2021 18:02:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1636498767;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=HsorBG3OhmC1gdGD3R/J+05rQPjLba58q4aGElHCbkY=;
-        b=DIumA0qt90LUpq8v1w6ZQd2AimOgdcN9PQUZYJ8I3iBoOhx9LhAFCqfcETQaQG9qWpIDLl
-        OARsu4B5qAODcu77jw2CWZYR+uw+ACAH1FGSd+CqRYxXfkOFHy7pqshgOIrCJ8ZE46qOgO
-        8y/6ZFJFl4ZANqYvQeqF83SIITRMyO0=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-40-2jgqt4KoPVCzCc8UAzOh9A-1; Tue, 09 Nov 2021 17:59:26 -0500
-X-MC-Unique: 2jgqt4KoPVCzCc8UAzOh9A-1
-Received: by mail-wm1-f70.google.com with SMTP id b133-20020a1c808b000000b0032cdd691994so2118165wmd.1
-        for <linux-spi@vger.kernel.org>; Tue, 09 Nov 2021 14:59:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HsorBG3OhmC1gdGD3R/J+05rQPjLba58q4aGElHCbkY=;
-        b=OIn2LdAy6tTBsIEoKT7RSlObcEEmrA+aDEjyhmsRAOAq5JF8B15tHdQ+nO/rse691I
-         lZg9jcvgbxoP/lyQLqvIBPnle3HntrmquVIW5kBIv0Yfl0Q+ZeQU8EBW2LYSAr5uWPgO
-         fxlyV2r8vU7VsVWjKYxMhltaiNG0w7RG8TmGZX9vTO6pHyzLNKvnUnL2Z7EWHtYJ6k8X
-         jnLsXAkWN89F4Jrn3vNlHlTV7MMuTgHkI8XfxR1yPb8LXrGxPdsFjTOmYcipKsZL3pDp
-         4YikDXioU3FdJwAIX4R2dyBAe/34jFhSILoXS8xH7FY+pZ/gIiec4Juu7of6UYB9GedC
-         x9aw==
-X-Gm-Message-State: AOAM531NyWoMR0wecBkqp880JugQbTaF5MqiMq2ORpGXp+KnbOsGHpP2
-        4afTABqTPlfYZvQ1m76c8Vaf0LVnZWBPhG84XPB16SV8F7dCSJdRlzR4mHaBQadAm2cHRYjxSOA
-        mQKcgQyORV3VzQWODP80t
-X-Received: by 2002:adf:d84c:: with SMTP id k12mr14014121wrl.24.1636498765563;
-        Tue, 09 Nov 2021 14:59:25 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzEHX/T5zHdYk+ugheuyRiCbyChIuGARQoiUGw6w0JBvfOLdEYpkxN9RISrWa+2z4RDPRVKCw==
-X-Received: by 2002:adf:d84c:: with SMTP id k12mr14014098wrl.24.1636498765414;
-        Tue, 09 Nov 2021 14:59:25 -0800 (PST)
-Received: from minerva.home ([92.176.231.106])
-        by smtp.gmail.com with ESMTPSA id i17sm3926884wmq.48.2021.11.09.14.59.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Nov 2021 14:59:25 -0800 (PST)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-spi@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>
-Subject: [PATCH] spidev: Make probe to fail early if a spidev compatible is used
-Date:   Tue,  9 Nov 2021 23:59:20 +0100
-Message-Id: <20211109225920.1158920-1-javierm@redhat.com>
-X-Mailer: git-send-email 2.33.1
+        id S229765AbhKJFpB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 10 Nov 2021 00:45:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35038 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229717AbhKJFpA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 Nov 2021 00:45:00 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5C4C061764;
+        Tue,  9 Nov 2021 21:42:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=3M/NTBsu5GaPZueRkc8Z3raX6bV5w4MFW1rB64CQo9Q=; b=lB0EnMOxp8TS2snuwi0FdWZB/H
+        1A2BQO8DTRZ7uc8PfgEnPgaeLiKm0sw27IKGTeEJek33ZD9l3L48ykVZTTfrmDSaM5DyGNyFhe/PP
+        nz3wL8IT1dY6SaA4MK2Qd9yMEFMsXgm+4/9oEI5hwe5C/JJEOn9wD+H2eJ+AhRAMHMLuOGk2Ouhhz
+        YqK9296TRlAkVqeQagvZqOaO7CnhlBk9q85xgkZ53etqJ4XI7YRQOlWAo56ByN3CRaDCymepDXjtb
+        zZ+AoDWQXsO+HyFQcy1Yx/Q91U1xb6rjtFxo5WdOVxz0bOWFvEKA3OJjq4Ye9QNnmbr28i+5orzKh
+        J9ubqSPw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mkgN0-004VON-Oi; Wed, 10 Nov 2021 05:42:02 +0000
+Subject: Re: [PATCH v2 1/2] SPI: Add SPI driver for Sunplus SP7021
+To:     =?UTF-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>,
+        "LH.Kuo" <lhjeff911@gmail.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "dvorkin@tibbo.com" <dvorkin@tibbo.com>,
+        "qinjian@cqplus1.com" <qinjian@cqplus1.com>,
+        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+References: <1635747525-31243-1-git-send-email-lh.kuo@sunplus.com>
+ <1636448488-14158-1-git-send-email-lh.kuo@sunplus.com>
+ <1636448488-14158-2-git-send-email-lh.kuo@sunplus.com>
+ <1b034b0b-d1ac-5bbe-4384-d0be9bd47710@infradead.org>
+ <de7535b134fb4247b5275c04fa21debf@sphcmbx02.sunplus.com.tw>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <952720eb-e302-8a9e-a8ae-1ca7c3dd7e1c@infradead.org>
+Date:   Tue, 9 Nov 2021 21:41:38 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=javierm@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <de7535b134fb4247b5275c04fa21debf@sphcmbx02.sunplus.com.tw>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Some Device Trees don't use a real device name in the compatible string
-for SPI devices nodes, abusing the fact that the spidev driver name is
-used to match as a fallback when a SPI device ID table is not defined.
+On 11/9/21 9:39 PM, Lh Kuo 郭力豪 wrote:
+> Hi
+> 
+>> -----Original Message-----
+>> From: Randy Dunlap <rdunlap@infradead.org>
+>> Sent: Wednesday, November 10, 2021 12:55 AM
+>> To: LH.Kuo <lhjeff911@gmail.com>; p.zabel@pengutronix.de;
+>> broonie@kernel.org; robh+dt@kernel.org; linux-spi@vger.kernel.org;
+>> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org
+>> Cc: dvorkin@tibbo.com; qinjian@cqplus1.com; Wells Lu 呂芳騰
+>> <wells.lu@sunplus.com>; Lh Kuo 郭力豪 <lh.Kuo@sunplus.com>
+>> Subject: Re: [PATCH v2 1/2] SPI: Add SPI driver for Sunplus SP7021
+>>
+>> On 11/9/21 1:01 AM, LH.Kuo wrote:
+>>> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig index
+>>> 596705d..30ce0ed 100644
+>>> --- a/drivers/spi/Kconfig
+>>> +++ b/drivers/spi/Kconfig
+>>> @@ -866,6 +866,17 @@ config SPI_SUN6I
+>>>    	help
+>>>    	  This enables using the SPI controller on the Allwinner A31 SoCs.
+>>>
+>>> +config SPI_SUNPLUS_SP7021
+>>> +	tristate "Sunplus SP7021 SPI controller"
+>>> +	depends on SOC_SP7021
+>>> +	help
+>>> +	  This enable Sunplus SP7021 spi controller driver on the SP7021 SoCs.
+>>
+>> 	       enables the Sunplus SP021 SPI
+>>
+>>> +	  This driver can also be built as a module. If so, the module will be
+>>> +	  called as spi-sunplus-sp7021.
+>>> +
+>>> +	  If you have a  Sunplus SP7021 platform say Y here.
+>>
+>> 	         have a Sunplus
+>> (i.e., drop one space)
+>>
+>>> +	  If unsure, say N.
+>>
+>>
+> 
+> I will make change as below  is it OK ?
+> 
+> config SPI_SUNPLUS_SP7021
+> 	tristate "Sunplus SP7021 SPI controller"
+> 	depends on SOC_SP7021
+> 	help
+> 	  This enable Sunplus SP7021 spi controller driver on the SP7021 SoCs.
 
-But since commit 6840615f85f6 ("spi: spidev: Add SPI ID table") a table
-for SPI device IDs was added to the driver breaking the assumption that
-these DTs were relying on.
+	       enables               SPI
 
-There has been a warning message for some time since commit 956b200a846e
-("spi: spidev: Warn loudly if instantiated from DT as "spidev""), making
-quite clear that this case is not really supported by the spidev driver.
+> 	  This driver can also be built as a module. If so, the module will be
+> 	  called as spi-sunplus-sp7021.
+> 
+> 	  If you have a  Sunplus SP7021 platform say Y here.
 
-Since these devices won't match anyways after the mentioned commit, there
-is no point to continue if an spidev compatible is used. Let's just make
-the driver probe to fail early.
+drop one space:       a Sunplus
 
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
+> 
+> 	  If unsure, say N.
+> 
+>> --
+>> ~Randy
 
-This patch has only been built tested. I'm posting after a conversation
-with Mark and Uwe on IRC.
 
-Best regards,
-Javier
-
- drivers/spi/spidev.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git drivers/spi/spidev.c drivers/spi/spidev.c
-index 1bd73e322b7b..4cfa250f16d8 100644
---- drivers/spi/spidev.c
-+++ drivers/spi/spidev.c
-@@ -751,9 +751,10 @@ static int spidev_probe(struct spi_device *spi)
- 	 * compatible string, it is a Linux implementation thing
- 	 * rather than a description of the hardware.
- 	 */
--	WARN(spi->dev.of_node &&
--	     of_device_is_compatible(spi->dev.of_node, "spidev"),
--	     "%pOF: buggy DT: spidev listed directly in DT\n", spi->dev.of_node);
-+	if (spi->dev.of_node && of_device_is_compatible(spi->dev.of_node, "spidev")) {
-+		dev_err(&spi->dev, "spidev listed directly in DT is not supported\n");
-+		return -EINVAL;
-+	}
- 
- 	spidev_probe_acpi(spi);
- 
 -- 
-2.33.1
-
+~Randy
