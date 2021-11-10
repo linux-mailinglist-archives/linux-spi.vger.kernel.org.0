@@ -2,163 +2,146 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B667044C6DC
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Nov 2021 19:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EABEE44C973
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Nov 2021 20:49:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbhKJSpi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 10 Nov 2021 13:45:38 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:50912 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbhKJSph (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 Nov 2021 13:45:37 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1AAIgmSt010504;
-        Wed, 10 Nov 2021 12:42:48 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1636569768;
-        bh=20xiynZ1X3msxg/XvoGGOO3+AYxPfmrR9XazGsyvlR0=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=IJB4q1oCSJgkAVNnpIM0spujLm+M1z0cMUpuAqyh/BcrL+M8XiLZS8yf0h9XFemPG
-         ZxHZcwFXPwsC5NGM8ujtHavijLIBl44wDzf4Y14BRWd/0CyH5TGfy1d+NvpeCR7vMw
-         6eIfZrkKNoT4HH/mEABhTNfEh/3fHw/oubv0Te/Y=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1AAIgm26020127
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 10 Nov 2021 12:42:48 -0600
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 10
- Nov 2021 12:42:48 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 10 Nov 2021 12:42:48 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1AAIglmW084083;
-        Wed, 10 Nov 2021 12:42:47 -0600
-Date:   Thu, 11 Nov 2021 00:12:46 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-CC:     <broonie@kernel.org>, <a-nandan@ti.com>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] spi: cadence-quadspi: fix write completion support
-Message-ID: <20211110184246.zermc35sgyzpjedd@ti.com>
-References: <20211108200854.3616121-1-dinguyen@kernel.org>
+        id S231716AbhKJTwk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 10 Nov 2021 14:52:40 -0500
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:39884 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230171AbhKJTwh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 10 Nov 2021 14:52:37 -0500
+Received: by mail-ot1-f54.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso5545847ots.6;
+        Wed, 10 Nov 2021 11:49:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Jffv+4OBBpjkkC43YZCngYWCvEJMwZVhqAxEmFK8L/I=;
+        b=MQxfkCCi2v2hsTKxKKuRvH/yTYF6TvDBR2IkrVLa3FgtYNkKDKAvhOX7hlWsN/EjhA
+         6++46uomlk3KOlLKNE7k9u0dvTqAYLBDLBZHQ6HZ0YNytxlA4y10ptz371mCGPzRsGCh
+         h/a/SsGW1e01hZkI9vuDR0obEq//YfAcPrQcEkR3WlwdocoMFfFIa0rrHuQ05Dj1v7Bs
+         82C3y+q4e6XXDZhAOfJPbSFyCn79J9t2hGE0w/Ewrs5NUPg4+q8n4DYanW8Ynzb/VWIy
+         6f8vx0BJyPV++gOnPVlNcixBtHRHKxqWz9RYhzjUgosiC3OOv6ZFWvz8ZIdnRilx7ChI
+         4D/w==
+X-Gm-Message-State: AOAM531HkJ2fCFC3fCq5mihHJeLsLKt6n9DZ2HfLf+TVea7JNQpnA2PV
+        +2/L2NW0LazGv+oEF/CAnQ==
+X-Google-Smtp-Source: ABdhPJyfVpmfG+ubS7aEU1ww03RUaTffAeDZHobEFdd7aYoPfW2ZAH5HMpiQ+tL5kGtHFO9Urrh52g==
+X-Received: by 2002:a9d:67c1:: with SMTP id c1mr1412382otn.299.1636573788340;
+        Wed, 10 Nov 2021 11:49:48 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id p14sm130082oov.0.2021.11.10.11.49.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Nov 2021 11:49:47 -0800 (PST)
+Received: (nullmailer pid 1843729 invoked by uid 1000);
+        Wed, 10 Nov 2021 19:49:44 -0000
+Date:   Wed, 10 Nov 2021 13:49:44 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     patrice.chotard@foss.st.com
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        thierry reding <thierry.reding@gmail.com>,
+        linux-iio@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        herbert xu <herbert@gondor.apana.org.au>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mtd@lists.infradead.org,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        "david s . miller" <davem@davemloft.net>,
+        olivier moysan <olivier.moysan@foss.st.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-clk@vger.kernel.org,
+        michael turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>, netdev@vger.kernel.org,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-stm32@st-md-mailman.stormreply.com, linux-pm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>, dmaengine@vger.kernel.org,
+        linux-usb@vger.kernel.org, dillon min <dillon.minfei@gmail.com>,
+        yannick fertre <yannick.fertre@foss.st.com>,
+        linux-watchdog@vger.kernel.org, ohad ben-cohen <ohad@wizery.com>,
+        Le Ray <erwan.leray@foss.st.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        devicetree@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-spi@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        bjorn andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-i2c@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        benjamin gaignard <benjamin.gaignard@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        david airlie <airlied@linux.ie>, alsa-devel@alsa-project.org,
+        baolin wang <baolin.wang7@gmail.com>,
+        philippe cornu <philippe.cornu@foss.st.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        daniel vetter <daniel@ffwll.ch>, linux-media@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        maxime coquelin <mcoquelin.stm32@gmail.com>,
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        linux-crypto@vger.kernel.org, Jose Abreu <joabreu@synopsys.com>,
+        linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Zhang Rui <rui.zhang@intel.com>,
+        jonathan cameron <jic23@kernel.org>,
+        Matt Mackall <mpm@selenic.com>,
+        alexandre torgue <alexandre.torgue@foss.st.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        sam ravnborg <sam@ravnborg.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marek Vasut <marex@denx.de>, linux-phy@lists.infradead.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Richard Weinberger <richard@nod.at>,
+        Lionel Debieve <lionel.debieve@foss.st.com>,
+        vinod koul <vkoul@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        lars-peter clausen <lars@metafoo.de>,
+        linux-serial@vger.kernel.org,
+        pascal Paillet <p.paillet@foss.st.com>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        stephen boyd <sboyd@kernel.org>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 1/5] dt-bindings: timer: Update maintainers for
+ st,stm32-timer
+Message-ID: <YYwiWGn0ehnD4nDZ@robh.at.kernel.org>
+References: <20211110150144.18272-1-patrice.chotard@foss.st.com>
+ <20211110150144.18272-2-patrice.chotard@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211108200854.3616121-1-dinguyen@kernel.org>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <20211110150144.18272-2-patrice.chotard@foss.st.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 08/11/21 02:08PM, Dinh Nguyen wrote:
-> Some versions of the Cadence QSPI controller does not have the write
-> completion register implemented(CQSPI_REG_WR_COMPLETION_CTRL). On the
-> Intel SoCFPGA platform the CQSPI_REG_WR_COMPLETION_CTRL register is
-> not configured.
+On Wed, 10 Nov 2021 16:01:40 +0100, patrice.chotard@foss.st.com wrote:
+> From: Patrice Chotard <patrice.chotard@foss.st.com>
 > 
-> Add a quirk to not write to the CQSPI_REG_WR_COMPLETION_CTRL register.
+> Benjamin has left the company, add Fabrice and myself as maintainers.
 > 
-> Fixes: 9cb2ff111712 ("spi: cadence-quadspi: Disable Auto-HW polling)
-> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
 > ---
->  drivers/spi/spi-cadence-quadspi.c | 24 +++++++++++++++++++++---
->  1 file changed, 21 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-> index 8b3d268ac63c..b808c94641fa 100644
-> --- a/drivers/spi/spi-cadence-quadspi.c
-> +++ b/drivers/spi/spi-cadence-quadspi.c
-> @@ -37,6 +37,7 @@
->  #define CQSPI_NEEDS_WR_DELAY		BIT(0)
->  #define CQSPI_DISABLE_DAC_MODE		BIT(1)
->  #define CQSPI_SUPPORT_EXTERNAL_DMA	BIT(2)
-> +#define CQSPI_NO_SUPPORT_WR_COMPLETION	BIT(3)
->  
->  /* Capabilities */
->  #define CQSPI_SUPPORTS_OCTAL		BIT(0)
-> @@ -86,6 +87,7 @@ struct cqspi_st {
->  	struct cqspi_flash_pdata f_pdata[CQSPI_MAX_CHIPSELECT];
->  	bool			use_dma_read;
->  	u32			pd_dev_id;
-> +	bool			wr_completion;
-
-We have a bunch of bools lying around in this struct: is_decoded_cs, 
-rclk_en, use_direct_mode, use_dma_read, and now wr_completion. It is 
-probably worth it to use bitfields and save some memory.
-
-Anyway, I don't consider this a blocker. So either way,
-
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
-
->  };
->  
->  struct cqspi_driver_platdata {
-> @@ -996,9 +998,11 @@ static int cqspi_write_setup(struct cqspi_flash_pdata *f_pdata,
->  	 * polling on the controller's side. spinand and spi-nor will take
->  	 * care of polling the status register.
->  	 */
-> -	reg = readl(reg_base + CQSPI_REG_WR_COMPLETION_CTRL);
-> -	reg |= CQSPI_REG_WR_DISABLE_AUTO_POLL;
-> -	writel(reg, reg_base + CQSPI_REG_WR_COMPLETION_CTRL);
-> +	if (cqspi->wr_completion) {
-> +		reg = readl(reg_base + CQSPI_REG_WR_COMPLETION_CTRL);
-> +		reg |= CQSPI_REG_WR_DISABLE_AUTO_POLL;
-> +		writel(reg, reg_base + CQSPI_REG_WR_COMPLETION_CTRL);
-> +	}
->  
->  	reg = readl(reg_base + CQSPI_REG_SIZE);
->  	reg &= ~CQSPI_REG_SIZE_ADDRESS_MASK;
-> @@ -1736,6 +1740,10 @@ static int cqspi_probe(struct platform_device *pdev)
->  
->  	cqspi->master_ref_clk_hz = clk_get_rate(cqspi->clk);
->  	master->max_speed_hz = cqspi->master_ref_clk_hz;
-> +
-> +	/* write completion is supported by default */
-> +	cqspi->wr_completion = true;
-> +
->  	ddata  = of_device_get_match_data(dev);
->  	if (ddata) {
->  		if (ddata->quirks & CQSPI_NEEDS_WR_DELAY)
-> @@ -1747,6 +1755,8 @@ static int cqspi_probe(struct platform_device *pdev)
->  			cqspi->use_direct_mode = true;
->  		if (ddata->quirks & CQSPI_SUPPORT_EXTERNAL_DMA)
->  			cqspi->use_dma_read = true;
-> +		if (ddata->quirks & CQSPI_NO_SUPPORT_WR_COMPLETION)
-> +			cqspi->wr_completion = false;
->  
->  		if (of_device_is_compatible(pdev->dev.of_node,
->  					    "xlnx,versal-ospi-1.0"))
-> @@ -1859,6 +1869,10 @@ static const struct cqspi_driver_platdata intel_lgm_qspi = {
->  	.quirks = CQSPI_DISABLE_DAC_MODE,
->  };
->  
-> +static const struct cqspi_driver_platdata socfpga_qspi = {
-> +	.quirks = CQSPI_NO_SUPPORT_WR_COMPLETION,
-> +};
-> +
->  static const struct cqspi_driver_platdata versal_ospi = {
->  	.hwcaps_mask = CQSPI_SUPPORTS_OCTAL,
->  	.quirks = CQSPI_DISABLE_DAC_MODE | CQSPI_SUPPORT_EXTERNAL_DMA,
-> @@ -1887,6 +1901,10 @@ static const struct of_device_id cqspi_dt_ids[] = {
->  		.compatible = "xlnx,versal-ospi-1.0",
->  		.data = (void *)&versal_ospi,
->  	},
-> +	{
-> +		.compatible = "intel,socfpga-qspi",
-> +		.data = (void *)&socfpga_qspi,
-> +	},
->  	{ /* end of table */ }
->  };
->  
-> -- 
-> 2.25.1
+>  Documentation/devicetree/bindings/timer/st,stm32-timer.yaml | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+Applied, thanks!
