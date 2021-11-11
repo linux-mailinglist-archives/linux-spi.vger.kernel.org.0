@@ -2,94 +2,123 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 289FF44D810
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Nov 2021 15:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A59C44D84C
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Nov 2021 15:31:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233854AbhKKOT2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 Nov 2021 09:19:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
+        id S233669AbhKKOeI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 11 Nov 2021 09:34:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233851AbhKKOT2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 Nov 2021 09:19:28 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364F7C061766;
-        Thu, 11 Nov 2021 06:16:39 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id f18so14539178lfv.6;
-        Thu, 11 Nov 2021 06:16:39 -0800 (PST)
+        with ESMTP id S233729AbhKKOeC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 Nov 2021 09:34:02 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506D5C061203;
+        Thu, 11 Nov 2021 06:31:13 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id y26so14561863lfa.11;
+        Thu, 11 Nov 2021 06:31:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=vvvg5goyxnNtBDDyL+5XBTEueO5Upm10tDntI2rRZdc=;
-        b=qOMXdKbQJVPhsFQ5qipUZll2T6Qv7Y6RQTnQ+m+ZtJY1UQkHADy0QlvZiEncrMmJYk
-         qZIIn6aIoBFKRRgur/ZtPALZaf2fE93yJVElc31QhtQkKx7ktzRA9HN2cO1mGGMalsG0
-         BmhJMofSdWpgEHZpghjM5/LGNVA+5eZ19bfGUXRX3sZ7nVKx7vBkPyYfz+uZdgjf88Wu
-         06rpt9es97TZ9+IowvFHCZPSgMwt9YssdKMfMAKI2PvTZsHG10oV3G3MlHVzIJFmrSQC
-         kq7gI7jwftRR9BW7AG1IMj0bgnmkIJBeG+CcVMIPMaagaZMHtQjKzrraRqRCOiyP5jvI
-         h8Yw==
+        bh=AW42d9vntwUuzupFqiI2Bns0JY8PI9k2Wa9xi//eMBI=;
+        b=bZcJGgUdY6Fm+ERsHGGETjEBIe2GcRXutGt0DvLcjhRrR+msAten9K+hdlRLSOkwCy
+         KeFhENCzEHXYKdEnsB2K0GH6gg1y+bs/G++RLOazwViRyFBP+m05FC0j0+RHkyAjJUut
+         9LNyovEUU4Y0HD1T1naArSIumvgw6w1ZkhZSxtwOPoK8PLz0zpA12lyLbXC4klqxZR7e
+         fjIiBFRRG8nHNRLIgdtSlR+hrkUfcYo0RHnKJuxj/dUeldz7NZ0+uIj3lKo2BNaRhXo0
+         GNdeZ73I1DiElIrE9gAyoOlTM4srIupr7RRck7tLD8uva8mU8e9rWjQuNF63DFb9kI49
+         hTiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=vvvg5goyxnNtBDDyL+5XBTEueO5Upm10tDntI2rRZdc=;
-        b=TaSUewuj27dyVSeU2LCPIaQ0vN+jNpn+/2jLBFss8sZikHTX2e8kM4MP6Gz/kpmUHo
-         49tY1RicsbpM4+lIyD2YPZfX1Ix/ElF/afWh8LWoE/rh0vEyQ+/dPgiPPaZg7EGRDs2N
-         Cet4kfZFIOtCLxbSnocKHtYAOeEXDRg3risFmgBup56jeyZKQfscznafLoEDPe442l/b
-         xcEgHS62BM/1SvaXL3WcrdHNzqloqv3neyiUcydYY6EcmjJmKOTpNvBd1JVFrsZEc+Jg
-         3eGSt7cXoOy3jPlNZqOxO6ThlqLmxbdBAeEi6rpSJjsYEhsTkC9oizPBFqu9HtM+8Q9f
-         2d4g==
-X-Gm-Message-State: AOAM531GK9yLA128lTEsua1g+dlODCRqE4RETTyOsvTU3KhoD9vjvyym
-        E8jaK4BmwV35xvvxYkNBjxE=
-X-Google-Smtp-Source: ABdhPJwOxa8XwL6nFJlBHrZ0DFadmhJopWDpAOoYS1UDp12vKAegHyBhDOlZ6kY5fYVGWdy9KWEsKg==
-X-Received: by 2002:a05:6512:2314:: with SMTP id o20mr6770526lfu.51.1636640196918;
-        Thu, 11 Nov 2021 06:16:36 -0800 (PST)
+        bh=AW42d9vntwUuzupFqiI2Bns0JY8PI9k2Wa9xi//eMBI=;
+        b=HorAPTpUyKdaZp716bgz+LMj1NFfEHcZLofMQiHqptzNHfavJYFweAH57e2QXSsxJS
+         j3yLQTCtBri7GGB1n099OySpbk3HQjWA3TU+MqJvuY5PbQIdfY7XAKXFcvya0Fstcq18
+         4JbR+AFTom9vsoOZjeMwxdYAY78/taic7Lq0/oTj98/n3u8Jyjlh2PJ/KbLPlBwWfJKl
+         3Rh5wGMQW1zY5pE/K2Et0cghAokGFaR0D6f7wFXZgDCl8Jec7jMPoSAC85PYVtINXezA
+         qlyY/ZtnIQJiVQ3gK4vOCpo+b3a4KgyAdpMRDyhzY4LzmmYUTzsiVHI/Ymk0qnY9oO6v
+         WNmw==
+X-Gm-Message-State: AOAM531rTCFxpdrMMUYi818mqolxmRQ0ho25Xm+RobsCfBJwKNXjqlG8
+        k+BwB16XcZKPDX0lvNpMotM=
+X-Google-Smtp-Source: ABdhPJysT58YQnIwuZnJm2iCHkbs1ihbTuzjlyHQPA2hitYk/yoV+g3qEojPDClg20dYVPQGTMdh2A==
+X-Received: by 2002:a05:6512:31d:: with SMTP id t29mr6992891lfp.331.1636641071586;
+        Thu, 11 Nov 2021 06:31:11 -0800 (PST)
 Received: from mobilestation ([95.79.188.236])
-        by smtp.gmail.com with ESMTPSA id y15sm283960ljy.10.2021.11.11.06.16.35
+        by smtp.gmail.com with ESMTPSA id a18sm298011lfj.191.2021.11.11.06.31.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Nov 2021 06:16:36 -0800 (PST)
-Date:   Thu, 11 Nov 2021 17:16:34 +0300
+        Thu, 11 Nov 2021 06:31:11 -0800 (PST)
+Date:   Thu, 11 Nov 2021 17:31:08 +0300
 From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Mark Brown <broonie@kernel.org>
+To:     nandhini.srikandan@intel.com, broonie@kernel.org
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        nandhini.srikandan@intel.com, robh+dt@kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, mgross@linux.intel.com,
-        kris.pan@intel.com, kenchappa.demakkanavar@intel.com,
-        furong.zhou@intel.com, mallikarjunappa.sangannavar@intel.com,
-        mahesh.r.vaidya@intel.com, rashmi.a@intel.com
-Subject: Re: [PATCH v3 2/5] spi: dw: Add SSTE support for DWC SSI controller
-Message-ID: <20211111141634.je2lppv5yjhsannb@mobilestation>
+        robh+dt@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        mgross@linux.intel.com, kris.pan@intel.com,
+        kenchappa.demakkanavar@intel.com, furong.zhou@intel.com,
+        mallikarjunappa.sangannavar@intel.com, mahesh.r.vaidya@intel.com,
+        rashmi.a@intel.com
+Subject: Re: [PATCH v3 1/5] dt-bindings: spi: Add SSTE support for DWC SSI
+ controller
+Message-ID: <20211111143108.pxovseqvm2ywmoc2@mobilestation>
 References: <20211111065201.10249-1-nandhini.srikandan@intel.com>
- <20211111065201.10249-3-nandhini.srikandan@intel.com>
- <YY0hFOr0SnDDDuSf@sirena.org.uk>
+ <20211111065201.10249-2-nandhini.srikandan@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YY0hFOr0SnDDDuSf@sirena.org.uk>
+In-Reply-To: <20211111065201.10249-2-nandhini.srikandan@intel.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Nov 11, 2021 at 01:56:36PM +0000, Mark Brown wrote:
-> On Thu, Nov 11, 2021 at 02:51:58PM +0800, nandhini.srikandan@intel.com wrote:
-> > From: Nandhini Srikandan <nandhini.srikandan@intel.com>
-> > 
-> > Add support for Slave Select Toggle Enable (SSTE) in DWC SSI controller
-> > via DTS. The slave select line will toggle between consecutive data frames,
-> > with the serial clock being held to its default value while slave
-> > select line is high.
+Hello Nandhini, Mark
+
+On Thu, Nov 11, 2021 at 02:51:57PM +0800, nandhini.srikandan@intel.com wrote:
+> From: Nandhini Srikandan <nandhini.srikandan@intel.com>
 > 
 
-> This should be controlled by SPI_CS_WORD.
+> Add Slave Select Toggle Enable(SSTE) support for DWC SSI controller.
 
-Oh, yeah. I've absolutely forgotten about that flag. Indeed then there
-is no need in implementing a separate DT-property. In this case the
-patchset will need to be fixed a bit: remove the DT-part of the
-sste-feature and alter the dw_spi_setup() method so to take the
-SPI_CS_WORD flag into account.
+Nandhini, as Mark said this is no need in this new property since that
+feature is supposed to be enabled by the client drivers by means of
+setting the SPI_CS_WORD flag in the spi_device->mode field. (See its
+usage for reference.)
 
-Nandhini, sorry about a wrong advice on v2. It seems v4 will be
-required...
+BTW Mark, why not to have a generic DT-property which would set that
+flag automatically by the SPI-core subsystem seeing it's indeed a
+client device-property? For instance there can be some property like
+"spi-cs-toggle" DT-property which when specified for the particular
+SPI-client DT-node will make the SPI-core subsystem to set the
+SPI_CS_WORD flag of the device mode? Like it has already been done for
+"spi-cs-high"/"spi-lsb-first"/etc.
+In this case Nandhini would need to just convert this patch a bit so
+to be fixing the Documentation/devicetree/bindings/spi/spi-controller.yaml
+bindings instead.
 
 -Sergey
 
+> 
+> Signed-off-by: Nandhini Srikandan <nandhini.srikandan@intel.com>
+> ---
+>  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> index ca91201a9926..866416d01e94 100644
+> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> @@ -149,6 +149,12 @@ patternProperties:
+>            is an optional feature of the designware controller, and the
+>            upper limit is also subject to controller configuration.
+>  
+> +      snps,sste:
+> +        description: Slave select line will toggle between consecutive
+> +          data frames, with the serial clock being held to its default
+> +          value while slave select line is high.
+> +        type: boolean
+> +
+>  unevaluatedProperties: false
+>  
+>  required:
+> -- 
+> 2.17.1
+> 
