@@ -2,83 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8695A44D783
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Nov 2021 14:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 822DF44D798
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Nov 2021 14:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233488AbhKKNuK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 Nov 2021 08:50:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46432 "EHLO mail.kernel.org"
+        id S233381AbhKKN4N (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 11 Nov 2021 08:56:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47524 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232699AbhKKNuK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 11 Nov 2021 08:50:10 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EEB9460F4A;
-        Thu, 11 Nov 2021 13:47:19 +0000 (UTC)
+        id S232630AbhKKN4M (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 11 Nov 2021 08:56:12 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6093561078;
+        Thu, 11 Nov 2021 13:53:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636638441;
-        bh=9TFTxcUEdEwhp48u9fNkDL4nwF4RxAlnd8sjIj3YoQc=;
+        s=k20201202; t=1636638803;
+        bh=PC3AED/wdcnjt5pabpXHnmNl8TCQOHZSTsClFTB2r/k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XXnI40erBUzui9bY1inM9UXZaj7r75cqdyYeqmZfqzBxLwvou3n+G5QQ5oZZu5Vzd
-         4CuKdyCkEifiATxnu+Ibg2qaYnvK8KNZnsvuA6tapAQRozlRKhx1IqIVG3G0v5nLb4
-         MnyUgYpskTg+mwNRN6ENI2vDagxPkK5nw0Y82c0g5phFIcsKgUd6fSsg+266SfeHyE
-         Daoqmm9aDauY88oN2sBogs/ZRCymaek9QOQBvrYVfuWeQEBXR8nmztWQwv13pDxtdD
-         9/8zU45xWKxfS/Odm07owHwhWrGFxmn7VCF/NApS9zyPtXdrV6dQiyl69E8GaQfoaq
-         Z4QtCy92Rmdww==
-Date:   Thu, 11 Nov 2021 13:47:16 +0000
+        b=FqFFiWklf43ktDgHLedObvQNaRHF2KZvKKLHhhlJQwlOYYqnm9nhHt7lXebOp4XSu
+         P846cwdwvcqfvVzfsjTuppWppYR5qO1qVVeC4QRp+bpdEUySSxQaUpj+QSgSvU7jlp
+         xqtzjaQmwQS4loJzmNTSuTFFmEETO5MlnXGa8kLRJvJIQ+O2PVC8VIeMEaW8L+IjOo
+         6H6yaCYbOM/Z1VJUH1l0RUkPcrwkuACdHtOKzn8wupmm2jKUu3/whnp/XG480BqX2T
+         sfDp9ZbHmt6Po+zwINsBMp2hP/QmaYnbm3496ANe/1cX5hjGvDGT6sWLF+613IDvrk
+         jlFOk8WuDx5Ng==
+Date:   Thu, 11 Nov 2021 13:53:18 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lukas Wunner <lukas@wunner.de>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] spi: fix use-after-free of the add_lock mutex
-Message-ID: <YY0e5GFrdgNde3m4@sirena.org.uk>
-References: <20211111083713.3335171-1-michael@walle.cc>
- <YY0Oe9NjhfUvq0J+@sirena.org.uk>
- <20cde88dd11fde7f6847506ffcaa67ed@walle.cc>
+To:     nandhini.srikandan@intel.com
+Cc:     fancer.lancer@gmail.com, robh+dt@kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, mgross@linux.intel.com,
+        kris.pan@intel.com, kenchappa.demakkanavar@intel.com,
+        furong.zhou@intel.com, mallikarjunappa.sangannavar@intel.com,
+        mahesh.r.vaidya@intel.com, rashmi.a@intel.com
+Subject: Re: [PATCH v3 1/5] dt-bindings: spi: Add SSTE support for DWC SSI
+ controller
+Message-ID: <YY0gTnvyzdMkCPQa@sirena.org.uk>
+References: <20211111065201.10249-1-nandhini.srikandan@intel.com>
+ <20211111065201.10249-2-nandhini.srikandan@intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ser8Hc8y7Eyt67W5"
+        protocol="application/pgp-signature"; boundary="RoXBPVi3d1kCLI/p"
 Content-Disposition: inline
-In-Reply-To: <20cde88dd11fde7f6847506ffcaa67ed@walle.cc>
+In-Reply-To: <20211111065201.10249-2-nandhini.srikandan@intel.com>
 X-Cookie: Teutonic:
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---Ser8Hc8y7Eyt67W5
+--RoXBPVi3d1kCLI/p
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Thu, Nov 11, 2021 at 01:46:01PM +0100, Michael Walle wrote:
-> Am 2021-11-11 13:37, schrieb Mark Brown:
+On Thu, Nov 11, 2021 at 02:51:57PM +0800, nandhini.srikandan@intel.com wrote:
 
-> > If you are sending a new version of something please flag that in the
-> > commit message, this helps both people and automated systems identify
-> > that this is a new version of the same thing.
+> +      snps,sste:
+> +        description: Slave select line will toggle between consecutive
+> +          data frames, with the serial clock being held to its default
+> +          value while slave select line is high.
+> +        type: boolean
 
-> Are RFC patches eligible to be picked up? I wasn't sure if I had to
-> resend it at all. But since there was a mistake in the commit message
-> anyway, I went ahead and the the first "real" version. How would
-> you flag that? Isn't changing the subject from "[PATCH RFC]" (ok it
-> was "RFC PATCH", my bad) to "[PATCH]" enough?
+This is not something that should be configured in the DT, it needs to
+be controlled by the client driver.  Changing this without involving the
+client driver will lead to data corruption.
 
-No, both people and machines are going to get confused.
-
---Ser8Hc8y7Eyt67W5
+--RoXBPVi3d1kCLI/p
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGNHuQACgkQJNaLcl1U
-h9C2Ugf+PquYMxxYsWbB/sZkRXTWaLfsSZc9dPdO82Cc4RXf0ckpdjZA+uHhbles
-A1xhgfsUNvv9UekloIvZzc61NkcgM8r4GWFFI4skv7fvWxowYtn6iF/g2APvzmvw
-18v3TU+IIa4gKXHrYT96Iooo0gi6LmLbHQCI60ggDmMouurmGGLPYJovxJvQmuSs
-L+tx9obJQrxF3sGG8auD74u165362wU93weIHuN7UCUF0rGWosvopt4C1ekkT1UA
-cmyV/iSai8oXA2HUERoD21cZEceiWAUgK64v5dOGIRWAU4ne2p6LkTIccdFd0tje
-qpsy/E+oG8IEsQ2+ta2aE6pcVbyvHQ==
-=mcCk
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGNIE0ACgkQJNaLcl1U
+h9A1Rgf+NOYvhLV6S/alRWbYsG9Pzw9bVn6Bb7rGS1sYtYZy8CtTGTTbx1bLmVQz
+pEANxG15iPKdhzLRbIsh/AMKFXyalptkQYnHvHqLJaKL6AkiOSrkabgyn+1ODp/6
+XqkbVvLD2OyUd7PStloxw5TNWLB6dgmvYS5sdYnuniS9qQIEdd7H04HBADcmci4X
+ZHc7KsiaHCMIKS8jYvRcYpLJJgXdnEQmJCht53sMqBx0KfygOoUuMti8XzQIdos6
+zHrT9A5qxTq8RYukHfmWlo+iLg5/ANXbQ81YoM6NzbOfenqr653avEKoGFXigTMO
+4/AB4GtXyZTtS34wOvaAx4btTh4f+Q==
+=n+TN
 -----END PGP SIGNATURE-----
 
---Ser8Hc8y7Eyt67W5--
+--RoXBPVi3d1kCLI/p--
