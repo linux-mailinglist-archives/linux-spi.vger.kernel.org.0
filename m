@@ -2,32 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6AB44D8CD
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Nov 2021 16:01:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 597C044D8DF
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Nov 2021 16:06:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbhKKPEI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 Nov 2021 10:04:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41050 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230177AbhKKPEH (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 11 Nov 2021 10:04:07 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0CBC1610A2;
-        Thu, 11 Nov 2021 15:01:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636642878;
-        bh=uS7AjnXMAtTTLK2QXT7jX014gaj/3UVYVDR6aRPON98=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W5ovTJil3ubv82wwqLB2yw9MZ3IehldRT16BUotCXwAerMxBegV1j1cFwKBho2lVP
-         QdNvgIHtBd4JA1W+FZ8Po7F1yz0RNmx8WSxykS6/IMoiBl6boZWXC/wqqntQ5Om+z8
-         jsmQ0wzQbVdcMRKNF+jiN8oewSCzSZCJ1c7W1E14RaLbYZZBTWMf3SL1lydAG3e1Bb
-         w9OZPkxydOKU94CwSJ7XS2JmheEy1iFBGnWFk3XdSh280A1kghB7IqeLMbtuDCuqhC
-         WdaTF28E5D2F7mjlpkYZY5qflopmvCXXmGcS/m2keY+DZQJik8/DkKbuhQv0CKU3yK
-         TI+/qiMTAku5g==
-Date:   Thu, 11 Nov 2021 15:01:12 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     nandhini.srikandan@intel.com,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        id S233813AbhKKPJm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 11 Nov 2021 10:09:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36758 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233798AbhKKPJj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 Nov 2021 10:09:39 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5194EC061767;
+        Thu, 11 Nov 2021 07:06:50 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id 1so12548066ljv.2;
+        Thu, 11 Nov 2021 07:06:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=atEvBZS6JbH/fBakpxl0ydNMlsxU8a3CAtxPkHgUBao=;
+        b=LbEOQHk3kfHEAj//dva6jU1GJiv3HQ0rVQnV+XhhrL2EQeC2olmucVRAU9Cj7ghLva
+         yOx3bDdeVY4nZ4+l37woZHhXAmw8QmhhGSNO77e4WNFz+kM38flm75wNmQ8zS6YgV6Vp
+         q/HSCKUlDf8JNPyHo2Or8qCncVvI/1kM5VMI69bnSu6aodrjQZZypdRqTBcFwBPJATaa
+         kc3ogUpC6cPbMb50hOATzFHke/z9Cs4xRF6TDvon25eE9cgmnABeErPskpSX87lEuYsI
+         5C2rH26s+SoDXiPpxXMuNGPQ8JI52eEq81gsDAer0MpRr3E5Db1+rVC07agGEf/SSEbN
+         qajg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=atEvBZS6JbH/fBakpxl0ydNMlsxU8a3CAtxPkHgUBao=;
+        b=AQCWzvNlC8YIWanwW08iEHs244c7KC3DKnz2JaUYxWo10Y0zej7PT10gO3St/FAWX6
+         /SVxsRez76BWkShSIe5E7Vu/z3SQWuvLrLftAqgDgygtVm9h57kMPAUTFw4O5ciEfXkZ
+         x9AMcsVCNUi6un+IjpIAM8xF+gCuvNZcNHi2o/iqxnNIvqxyrnkMHbbGdJbobmyky9Wa
+         fl3Ft0tIo7g4h0rI2Jc/CMiSQTm8uakxtcnYqXQlNU0itGI5q7PlR7rBnKzkmsj4sUH6
+         ny4aBlbwxxRAWhxEagae9oBay+Qcs6yRlplffO2qhx00O94eT/lNKBl8rzh4XVD94e7y
+         8gZA==
+X-Gm-Message-State: AOAM532s1XgxCI+zcYK4FtHxNL3rHc624cDRRSkcYVa7fyce20bZsCCt
+        yQTARhhmZUXKmTk5WyGJOfs=
+X-Google-Smtp-Source: ABdhPJzTWLuwNN9l+pwtH1zTo7roHWjcBfwY6YyodN5aV17cRAD0iKv9VEGBAwG05nQOrFA/uILl5w==
+X-Received: by 2002:a2e:bd09:: with SMTP id n9mr7788404ljq.40.1636643208712;
+        Thu, 11 Nov 2021 07:06:48 -0800 (PST)
+Received: from mobilestation ([95.79.188.236])
+        by smtp.gmail.com with ESMTPSA id u3sm306633lft.215.2021.11.11.07.06.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Nov 2021 07:06:48 -0800 (PST)
+Date:   Thu, 11 Nov 2021 18:06:45 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Mark Brown <broonie@kernel.org>, nandhini.srikandan@intel.com
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         robh+dt@kernel.org, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         mgross@linux.intel.com, kris.pan@intel.com,
@@ -36,61 +59,47 @@ Cc:     nandhini.srikandan@intel.com,
         rashmi.a@intel.com
 Subject: Re: [PATCH v3 1/5] dt-bindings: spi: Add SSTE support for DWC SSI
  controller
-Message-ID: <YY0wOBoT7X//GfQ8@sirena.org.uk>
+Message-ID: <20211111150645.f6qmnzy6hcoiatun@mobilestation>
 References: <20211111065201.10249-1-nandhini.srikandan@intel.com>
  <20211111065201.10249-2-nandhini.srikandan@intel.com>
  <20211111143108.pxovseqvm2ywmoc2@mobilestation>
+ <YY0wOBoT7X//GfQ8@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="msY2aCMFe/FNn5o4"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211111143108.pxovseqvm2ywmoc2@mobilestation>
-X-Cookie: Teutonic:
+In-Reply-To: <YY0wOBoT7X//GfQ8@sirena.org.uk>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, Nov 11, 2021 at 03:01:12PM +0000, Mark Brown wrote:
+> On Thu, Nov 11, 2021 at 05:31:08PM +0300, Serge Semin wrote:
+> 
+> > BTW Mark, why not to have a generic DT-property which would set that
+> > flag automatically by the SPI-core subsystem seeing it's indeed a
+> > client device-property? For instance there can be some property like
+> > "spi-cs-toggle" DT-property which when specified for the particular
+> > SPI-client DT-node will make the SPI-core subsystem to set the
+> 
+> Anything like this is fundamentally part of the wire protocol for the
+> device, there's no need for an extra property on top of the compatible
+> for the device and the driver really, really needs to know what's going
+> on to avoid data corruption.  You could also use this feature together
+> with varying the word size as an optimisation at runtime (eg, do long
+> sequences of register writes in a single hardware operation by setting
+> an appropriate word length to cause the controller to bounce chip
+> select between writes).
+> 
+> > SPI_CS_WORD flag of the device mode? Like it has already been done for
+> > "spi-cs-high"/"spi-lsb-first"/etc.
+> 
+> I don't think either of those properties was a good idea, there's a
+> bunch of stuff in the older SPI bindings that don't make much sense.
 
---msY2aCMFe/FNn5o4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ok. Thanks for clarification. No new DT-property then.
 
-On Thu, Nov 11, 2021 at 05:31:08PM +0300, Serge Semin wrote:
+Nandhini, could you please drop this patch in v4? One more time I'm sorry
+for misleading you on v2.
 
-> BTW Mark, why not to have a generic DT-property which would set that
-> flag automatically by the SPI-core subsystem seeing it's indeed a
-> client device-property? For instance there can be some property like
-> "spi-cs-toggle" DT-property which when specified for the particular
-> SPI-client DT-node will make the SPI-core subsystem to set the
+-Sergey
 
-Anything like this is fundamentally part of the wire protocol for the
-device, there's no need for an extra property on top of the compatible
-for the device and the driver really, really needs to know what's going
-on to avoid data corruption.  You could also use this feature together
-with varying the word size as an optimisation at runtime (eg, do long
-sequences of register writes in a single hardware operation by setting
-an appropriate word length to cause the controller to bounce chip
-select between writes).
-
-> SPI_CS_WORD flag of the device mode? Like it has already been done for
-> "spi-cs-high"/"spi-lsb-first"/etc.
-
-I don't think either of those properties was a good idea, there's a
-bunch of stuff in the older SPI bindings that don't make much sense.
-
---msY2aCMFe/FNn5o4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGNMDgACgkQJNaLcl1U
-h9A69wf8DefUDl1wuH91X13IzD3bwWUOzWSPEV4LGsq2YCdUNo9VfRJ9L7e+J4Br
-/1tkwFSlJhOVlrRAp66Ov/kVhM+Br8h+yCrLNuOHrBqDZFPIh2N5j6MSn0+QjZNB
-SN2WX7vH2FErJLjvb4iMu+6cvYKes1K9X2yXWrHvdhvQ27EgOp+BcmrF14MtDh2Y
-Y/zsuW/fYHAXqeRWPSghPLiU/mLM8Rk2Uy4nlmOPm3OB34otL2OCvo2n5hZlKr8b
-VQVxRlA3iDMNi5dyaqKXWgupLo0CiVbY6FsdBM3DXm121jLoYFOoqbm46EEBbunq
-MjOILfeaeIW0pK9oK3KIaiwhMFmyLA==
-=kf7P
------END PGP SIGNATURE-----
-
---msY2aCMFe/FNn5o4--
