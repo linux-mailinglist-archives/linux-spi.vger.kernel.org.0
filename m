@@ -2,82 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C7044D225
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Nov 2021 07:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E07844D343
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Nov 2021 09:37:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbhKKG5d (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 Nov 2021 01:57:33 -0500
-Received: from mga11.intel.com ([192.55.52.93]:34073 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231730AbhKKG53 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 11 Nov 2021 01:57:29 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10164"; a="230324766"
-X-IronPort-AV: E=Sophos;i="5.87,225,1631602800"; 
-   d="scan'208";a="230324766"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2021 22:54:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,225,1631602800"; 
-   d="scan'208";a="642864959"
-Received: from ubuntu18.png.intel.com ([10.88.229.69])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Nov 2021 22:54:38 -0800
-From:   nandhini.srikandan@intel.com
-To:     fancer.lancer@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, mgross@linux.intel.com,
-        kris.pan@intel.com, kenchappa.demakkanavar@intel.com,
-        furong.zhou@intel.com, mallikarjunappa.sangannavar@intel.com,
-        mahesh.r.vaidya@intel.com, nandhini.srikandan@intel.com,
-        rashmi.a@intel.com
-Subject: [PATCH v3 5/5] spi: dw: Add support for Intel Thunder Bay SPI controller
-Date:   Thu, 11 Nov 2021 14:52:01 +0800
-Message-Id: <20211111065201.10249-6-nandhini.srikandan@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211111065201.10249-1-nandhini.srikandan@intel.com>
-References: <20211111065201.10249-1-nandhini.srikandan@intel.com>
+        id S232112AbhKKIkm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 11 Nov 2021 03:40:42 -0500
+Received: from ssl.serverraum.org ([176.9.125.105]:33933 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229674AbhKKIkm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 11 Nov 2021 03:40:42 -0500
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 5DC6E22247;
+        Thu, 11 Nov 2021 09:37:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1636619868;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=QQI7x+XgqHwEkx4/5d9UjlzYDztSEMInJWg1DOUwNqk=;
+        b=wA+n6bz/9MpligwWUj6hol/eJXgKOvHdQsoV2lkQiVs3yRXwbZxxhzLMXDLvFdqyiFC4+n
+        xm+B3OMolZPPwh1SE07NuwptgykHISCsktQAPgQ2dAj6r992eepQGo6Ukzppa6DmSgdMd7
+        DAmJMRf4ZOYKolSpywnnmdNK2TPYg9o=
+From:   Michael Walle <michael@walle.cc>
+To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Michael Walle <michael@walle.cc>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lukas Wunner <lukas@wunner.de>,
+        stable@vger.kernel.org
+Subject: [PATCH] spi: fix use-after-free of the add_lock mutex
+Date:   Thu, 11 Nov 2021 09:37:13 +0100
+Message-Id: <20211111083713.3335171-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Nandhini Srikandan <nandhini.srikandan@intel.com>
+Commit 6098475d4cb4 ("spi: Fix deadlock when adding SPI controllers on
+SPI buses") introduced a per-controller mutex. But mutex_unlock() of
+said lock is called after the controller is already freed:
 
-Add support for Intel Thunder Bay SPI controller, which uses DesignWare
-DWC_ssi core and also add common init function for both Keem Bay and
-Thunder Bay.
+  spi_unregister_controller(ctlr)
+  -> put_device(&ctlr->dev)
+    -> spi_controller_release(dev)
+  -> mutex_unlock(&ctrl->add_lock)
 
-Signed-off-by: Nandhini Srikandan <nandhini.srikandan@intel.com>
+Move the put_device() after the mutex_unlock().
+
+Fixes: 6098475d4cb4 ("spi: Fix deadlock when adding SPI controllers on SPI buses")
+Signed-off-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Reviewed-by: Lukas Wunner <lukas@wunner.de>
+Cc: stable@vger.kernel.org # v5.15
 ---
- drivers/spi/spi-dw-mmio.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+changes since RFC:
+ - fix call graph indendation in commit message
 
-diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-index 3379720cfcb8..c357680f4aa3 100644
---- a/drivers/spi/spi-dw-mmio.c
-+++ b/drivers/spi/spi-dw-mmio.c
-@@ -214,10 +214,10 @@ static int dw_spi_dwc_ssi_init(struct platform_device *pdev,
- 	return 0;
- }
+ drivers/spi/spi.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index b23e675953e1..fdd530b150a7 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -3099,12 +3099,6 @@ void spi_unregister_controller(struct spi_controller *ctlr)
  
--static int dw_spi_keembay_init(struct platform_device *pdev,
--			       struct dw_spi_mmio *dwsmmio)
-+static int dw_spi_intel_init(struct platform_device *pdev,
-+			     struct dw_spi_mmio *dwsmmio)
- {
--	dwsmmio->dws.caps = DW_SPI_CAP_KEEMBAY_MST | DW_SPI_CAP_DWC_SSI;
-+	dwsmmio->dws.caps = DW_SPI_CAP_DWC_SSI;
+ 	device_del(&ctlr->dev);
  
- 	return 0;
+-	/* Release the last reference on the controller if its driver
+-	 * has not yet been converted to devm_spi_alloc_master/slave().
+-	 */
+-	if (!ctlr->devm_allocated)
+-		put_device(&ctlr->dev);
+-
+ 	/* free bus id */
+ 	mutex_lock(&board_lock);
+ 	if (found == ctlr)
+@@ -3113,6 +3107,12 @@ void spi_unregister_controller(struct spi_controller *ctlr)
+ 
+ 	if (IS_ENABLED(CONFIG_SPI_DYNAMIC))
+ 		mutex_unlock(&ctlr->add_lock);
++
++	/* Release the last reference on the controller if its driver
++	 * has not yet been converted to devm_spi_alloc_master/slave().
++	 */
++	if (!ctlr->devm_allocated)
++		put_device(&ctlr->dev);
  }
-@@ -348,7 +348,8 @@ static const struct of_device_id dw_spi_mmio_of_match[] = {
- 	{ .compatible = "amazon,alpine-dw-apb-ssi", .data = dw_spi_alpine_init},
- 	{ .compatible = "renesas,rzn1-spi", .data = dw_spi_dw_apb_init},
- 	{ .compatible = "snps,dwc-ssi-1.01a", .data = dw_spi_dwc_ssi_init},
--	{ .compatible = "intel,keembay-ssi", .data = dw_spi_keembay_init},
-+	{ .compatible = "intel,keembay-ssi", .data = dw_spi_intel_init},
-+	{ .compatible = "intel,thunderbay-ssi", .data = dw_spi_intel_init},
- 	{ .compatible = "microchip,sparx5-spi", dw_spi_mscc_sparx5_init},
- 	{ .compatible = "canaan,k210-spi", dw_spi_canaan_k210_init},
- 	{ /* end of table */}
+ EXPORT_SYMBOL_GPL(spi_unregister_controller);
+ 
 -- 
-2.17.1
+2.30.2
 
