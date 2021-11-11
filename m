@@ -2,138 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B2F44D766
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Nov 2021 14:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8695A44D783
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Nov 2021 14:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233423AbhKKNog (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 Nov 2021 08:44:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45532 "EHLO mail.kernel.org"
+        id S233488AbhKKNuK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 11 Nov 2021 08:50:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46432 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230177AbhKKNoe (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 11 Nov 2021 08:44:34 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A778F60E54;
-        Thu, 11 Nov 2021 13:41:42 +0000 (UTC)
+        id S232699AbhKKNuK (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 11 Nov 2021 08:50:10 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EEB9460F4A;
+        Thu, 11 Nov 2021 13:47:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636638104;
-        bh=sqkxx2F9izR8cpE/fARCX9a3Bd3IAf/rb6U8tEEs7R4=;
+        s=k20201202; t=1636638441;
+        bh=9TFTxcUEdEwhp48u9fNkDL4nwF4RxAlnd8sjIj3YoQc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gWmidjO+J9YVN/ig0b4/bbh69v3Lt8yZDLo2mPxWIZn9sGWaazAs5E/2dMc0EYZN2
-         ADgVLu2r8KXXXm0Uza0aOtDIU0y+Que57a+u6VOqk0bp3OmZFAT9snQ5BJGVq4pssV
-         kSxybjNXfPL5zx7YzPmnmSDUedhdW6GR1TKINMrymJjWGHqmMjLyXT21B0N8U0MlKS
-         vGcM3cM6HpnEH4zVVGce4aqaOu7ubEZSYuGtbNS68sVQUyA4W4v3zKy0ohKs/UyLst
-         oaXhE0x6iQ+fVdbeHcjljAMhX1maCbmc//0SNeB7bul3Hoje5MqRg6YhfRtDFiSxOw
-         qzoW5lQbt9/Ug==
-Date:   Thu, 11 Nov 2021 13:41:39 +0000
+        b=XXnI40erBUzui9bY1inM9UXZaj7r75cqdyYeqmZfqzBxLwvou3n+G5QQ5oZZu5Vzd
+         4CuKdyCkEifiATxnu+Ibg2qaYnvK8KNZnsvuA6tapAQRozlRKhx1IqIVG3G0v5nLb4
+         MnyUgYpskTg+mwNRN6ENI2vDagxPkK5nw0Y82c0g5phFIcsKgUd6fSsg+266SfeHyE
+         Daoqmm9aDauY88oN2sBogs/ZRCymaek9QOQBvrYVfuWeQEBXR8nmztWQwv13pDxtdD
+         9/8zU45xWKxfS/Odm07owHwhWrGFxmn7VCF/NApS9zyPtXdrV6dQiyl69E8GaQfoaq
+         Z4QtCy92Rmdww==
+Date:   Thu, 11 Nov 2021 13:47:16 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Lh Kuo =?utf-8?B?6YOt5Yqb6LGq?= <lh.Kuo@sunplus.com>
-Cc:     "LH.Kuo" <lhjeff911@gmail.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dvorkin@tibbo.com" <dvorkin@tibbo.com>,
-        "qinjian@cqplus1.com" <qinjian@cqplus1.com>,
-        Wells Lu =?utf-8?B?5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Subject: Re: [PATCH v2 1/2] SPI: Add SPI driver for Sunplus SP7021
-Message-ID: <YY0dk26NqoOi2QEH@sirena.org.uk>
-References: <1635747525-31243-1-git-send-email-lh.kuo@sunplus.com>
- <1636448488-14158-1-git-send-email-lh.kuo@sunplus.com>
- <1636448488-14158-2-git-send-email-lh.kuo@sunplus.com>
- <YYqMLPB6VX9k5LUK@sirena.org.uk>
- <f98b5548cf564093af1d10ba1239507d@sphcmbx02.sunplus.com.tw>
- <YYvx4LtKiSPBIgCN@sirena.org.uk>
- <70a9c10ef34e46c2a51f134829abdd08@sphcmbx02.sunplus.com.tw>
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lukas Wunner <lukas@wunner.de>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] spi: fix use-after-free of the add_lock mutex
+Message-ID: <YY0e5GFrdgNde3m4@sirena.org.uk>
+References: <20211111083713.3335171-1-michael@walle.cc>
+ <YY0Oe9NjhfUvq0J+@sirena.org.uk>
+ <20cde88dd11fde7f6847506ffcaa67ed@walle.cc>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pck+/FIWitogOn/m"
+        protocol="application/pgp-signature"; boundary="Ser8Hc8y7Eyt67W5"
 Content-Disposition: inline
-In-Reply-To: <70a9c10ef34e46c2a51f134829abdd08@sphcmbx02.sunplus.com.tw>
+In-Reply-To: <20cde88dd11fde7f6847506ffcaa67ed@walle.cc>
 X-Cookie: Teutonic:
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---pck+/FIWitogOn/m
-Content-Type: text/plain; charset=utf-8
+--Ser8Hc8y7Eyt67W5
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 11, 2021 at 08:32:39AM +0000, Lh Kuo =E9=83=AD=E5=8A=9B=E8=B1=
-=AA wrote:
+On Thu, Nov 11, 2021 at 01:46:01PM +0100, Michael Walle wrote:
+> Am 2021-11-11 13:37, schrieb Mark Brown:
 
-Please fix your mail client to word wrap within paragraphs at something
-substantially less than 80 columns.  Doing this makes your messages much
-easier to read and reply to.
+> > If you are sending a new version of something please flag that in the
+> > commit message, this helps both people and automated systems identify
+> > that this is a new version of the same thing.
 
-> #define SPI_CS_HIGH   0x04 /* chipselect active high? */
-> Is it mean?
-> CASE1 : standby, CS high =3D> start transfer CS become low =3D> transfer =
-end CS become high and standby
-> CASE2 : standby, CS low =3D> start transfer CS become high =3D> transfer =
-end CS become low and standby
+> Are RFC patches eligible to be picked up? I wasn't sure if I had to
+> resend it at all. But since there was a mistake in the commit message
+> anyway, I went ahead and the the first "real" version. How would
+> you flag that? Isn't changing the subject from "[PATCH RFC]" (ok it
+> was "RFC PATCH", my bad) to "[PATCH]" enough?
 
-> I think SPI_CS_HIGH means CASE2, But it is strange that more chipset work=
- in CASE1 but drivers set SPI_CS_HIGH as defined.
+No, both people and machines are going to get confused.
 
-SPI_CS_HIGH is case 2.
-
-> 2. And in the CASE1 I should set=20
-> cs_gpios =3D 	<gpio 3 2 GPIO_ACTIVE_LOW>,
-> or
-> cs_gpios =3D 	<gpio 3 2 GPIO_ACTIVE_HIGH>,
-
-_ACTIVE_HIGH if _CS_HIGH is specified, though the binding will try to
-sort things out either way.
-
-> 3. If I did not set the max_transfer_size of spi_control
-> And use transfer_one set max_transfer_size and use_gpio_descriptors
-> Can it transmit data that exceeds FIFO max bytes (even exceed HW's one-ti=
-me transfer) in one transmission activity?
-
-Yes, if you don't set a maximum transfer size the driver might get any
-transfer size.  If you set a maximum transfer size then the driver will
-not see any transfers that exceed the maximum transfer size.
-
-> This is my concern, so I use Transfer_One_message
-
-I can't understand how that would follow on.  If there's a limit on the
-size of an individual transfer then tell the framework about that limit,
-that's all that needs doing.  Why would it be preferable to not tell the
-core about the limit and instead open code things?
-
-*Please* think about the lengthy explanation I provided in my last
-message about putting things that are not device specific in the
-framework not the driver.
-
-> Ex : Need to transmit 4000 bytes.=20
->   Then I set Ctlr->transfer_one and use_gpio_descriptors
->     ctlr->max_transfer_size =3D 255;
->     The CS of device is low active
-
->    When the transmission starts, I can see the signal gpio-CS changes fro=
-m high to low
-> Ctlr->transfer_one will be triggered to execute 16 times, and transfer en=
-d gpio-CS changes from low to high.
-
-This is exactly what will happen if you do as has been repeatedly
-suggested.  Set a maximum *transfer* (not message) size, let the core
-handle the chip select GPIO and implement transfer_one().
-
---pck+/FIWitogOn/m
+--Ser8Hc8y7Eyt67W5
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGNHZIACgkQJNaLcl1U
-h9BhxQf/dNb3QGDghgy0gCEBIz77vsh2QBE4ak32dP/7LIaFPqHKjg8F5QSrVhKM
-gBdHwkLceWkCRzOFDiWGZmHBPaD3502B5XwsrErdMrkIGRRTDTOhbRniCPa2s5Ts
-EKpT8RWNmKGNzMqywvGTgRREknWidEGRjURTGJOO1L57L+qoosr55b2aJQRbSUUC
-sD9XtWVYOj//TBB4msjA56nZMo9y/YMC99dokmeWG5OaU3nlvDyWB2AONG1CndF4
-uzFIF9ByZgh03G/byuluOWpBqFNaIReVZC+lDi3DsEKtZQIhh2Q2OPsXOm8/iaEg
-gA+vmVbkTK75FlpLsHJnpO7qT42D+A==
-=6rJr
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGNHuQACgkQJNaLcl1U
+h9C2Ugf+PquYMxxYsWbB/sZkRXTWaLfsSZc9dPdO82Cc4RXf0ckpdjZA+uHhbles
+A1xhgfsUNvv9UekloIvZzc61NkcgM8r4GWFFI4skv7fvWxowYtn6iF/g2APvzmvw
+18v3TU+IIa4gKXHrYT96Iooo0gi6LmLbHQCI60ggDmMouurmGGLPYJovxJvQmuSs
+L+tx9obJQrxF3sGG8auD74u165362wU93weIHuN7UCUF0rGWosvopt4C1ekkT1UA
+cmyV/iSai8oXA2HUERoD21cZEceiWAUgK64v5dOGIRWAU4ne2p6LkTIccdFd0tje
+qpsy/E+oG8IEsQ2+ta2aE6pcVbyvHQ==
+=mcCk
 -----END PGP SIGNATURE-----
 
---pck+/FIWitogOn/m--
+--Ser8Hc8y7Eyt67W5--
