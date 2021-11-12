@@ -2,69 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B11A044EC82
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Nov 2021 19:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5463B44ED8F
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Nov 2021 20:52:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235552AbhKLSUj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 12 Nov 2021 13:20:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53938 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235265AbhKLSUj (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 12 Nov 2021 13:20:39 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6528260F41;
-        Fri, 12 Nov 2021 18:17:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636741068;
-        bh=MDRYkTIa+OsXDBQGmlQUZAcG4lkASJfrWxpxjW0ebe0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o++CeXK6lR+2w5APKJ2Zos6qg+iUpamU92e4IaRzNrngbUFWgS/NR9hWgM5DH0+81
-         irPCmGGpd+m9WGpg2+7LkF3oKBC7D3W9VyxI8rh7oQLrfS49cR44bN2T3IgVhAUSZX
-         5Onub7XXWIbiTjYOCHQP0HEpvo786PcfEy4B0DDyIyYdgoFvrHup7c71JeOK9LVeIX
-         eDLpBQwYQM6nS7db3j74ql5QsaZUljXGmaAs08nKGvzJqUXVgYsk7JTIhP4/V2myy5
-         0luQyT7nDwPknTrcBbBHZBTzHJqKqznBUjadVuEWhrJKkBBLUiR8yZJ2sSmPcCAwvY
-         ZQkKQAgAQ9vxA==
-Date:   Fri, 12 Nov 2021 18:17:44 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     linux-spi@vger.kernel.org
-Subject: Re: [PATCH 1/1] spi: lpspi: release requested DMA channels
-Message-ID: <YY6vyLt6lhUp8xXW@sirena.org.uk>
-References: <20211109103134.184216-1-alexander.stein@ew.tq-group.com>
+        id S235472AbhKLTyt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 12 Nov 2021 14:54:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235256AbhKLTyt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 Nov 2021 14:54:49 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C80C061766
+        for <linux-spi@vger.kernel.org>; Fri, 12 Nov 2021 11:51:58 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id p19so9503323qtw.12
+        for <linux-spi@vger.kernel.org>; Fri, 12 Nov 2021 11:51:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=sbMEA9n9Pj/HfzsuX4iVianfftPXl0x7Eo0HpPDJsqs=;
+        b=Yw+p9Uo+5KQGoccvBks5Ci8+ZDlSvu7l93VGRCY8ZYQsu1lz4knSEy8/eb+Lm1NrTH
+         GzipEoLboD7DWs9KzyvxslfEQnOs47b4R+Mj3XTWdKpp9XbQbKGtQ5YEG4ijUfu4jtFE
+         /W10fgxlqEe+6aRVIUBq8hjn0WDG4ehNda55kNT8iGXmOlSHaRwW1cWqtcqPo7/8IsYv
+         ++i9VPM2+sDvzFA/3oGv0pgZ14q/FD3/XGYca2kZucVBmfHmPufcVhCxgT6+p0hlokNp
+         mczuTft5lmdIQk+wmMyhToWgPsUVVogCgYAJYJiCefNKNr/IESGhoapdVJe5hEI4CWJ5
+         GL1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=sbMEA9n9Pj/HfzsuX4iVianfftPXl0x7Eo0HpPDJsqs=;
+        b=mrLO0zumMqmNM2ln66bJ/Ztjiw+3LvL89sqSlxIdX92YVd/pFQ1HDJeydLBEqt0m2u
+         Ju67T8fGSOwgRVO4eCIs/tDkwQ+Hr6Enffo60hix2ebkT3W3aJV+OtCngyNMeEq92Hrs
+         TaTVPEsOiD6CDck1kErNAxgFrTsJ7gFLgYqREf57kxTeJ6rBUF1OMi9pr3OZKSjmjscU
+         g4synA36veTcPfhb5gBYbcx3kA9YqnZbS8TIhpoeOGUAeqdiF5DS2psT2Gz19nxGbHlN
+         NuMDkZ3Q5MO2OxX/9jXSOYKYB2KtgTGCTFj8Hp2+bv/9pHSZIDKygVqc97iybCZs+1NY
+         SGLw==
+X-Gm-Message-State: AOAM53059ULbkASQrqAYrVcIsLRQ5jLL0iw+7fSbmsqTq3MqrvYA3J7V
+        ++eeqr+yqgIu6uM4ULVSAawRr00PDdoaauhdYPw=
+X-Google-Smtp-Source: ABdhPJzgXRGarOjDsfXSyoLLQhf4PuMveqEb8UybTzsWaDF3my0/TZkv9ycoscWO5tfBf/dcGT3T28QHSdbjOxuqecM=
+X-Received: by 2002:ac8:74c7:: with SMTP id j7mr18777867qtr.118.1636746717505;
+ Fri, 12 Nov 2021 11:51:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="PqO5UuyQuufaVqM3"
-Content-Disposition: inline
-In-Reply-To: <20211109103134.184216-1-alexander.stein@ew.tq-group.com>
-X-Cookie: Ring around the collar.
+Received: by 2002:ac8:5a03:0:0:0:0:0 with HTTP; Fri, 12 Nov 2021 11:51:56
+ -0800 (PST)
+Reply-To: wmchfa@gmail.com
+From:   William Chalmers <pv.wcha@gmail.com>
+Date:   Fri, 12 Nov 2021 20:51:56 +0100
+Message-ID: <CAO9cJj-OSU5qoJZ85Ow=KAGpF82M3g_cF3aScOinyZwY3Tj3mw@mail.gmail.com>
+Subject: URGENT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+ATTENTION,
+        Sir/Madam.
 
---PqO5UuyQuufaVqM3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Greetings to you, I am contacting you after going through your
+interesting profile. I am Mr.William Chalmers. I am from London, United
+Kingdom, If this message successfully gets to you, I will like to
+discuss business with you, which you will have an immense benefit from
+if we can work together with, The Group Finance Director of Lloyds
+Banking Group United Kingdom.
 
-On Tue, Nov 09, 2021 at 11:31:34AM +0100, Alexander Stein wrote:
-> The requested DMA channels are never released. Do this in .remove as well
-> as in .probe. spi_register_controller() can return -EPROBE_DEFER if
-> cs-gpios are not probed yet.
+I am contacting you for a legitimate business transaction strictly for
+you and me alone. I personally discovered a dormant account with a
+total sum of =C2=A3 1,35,000.000.00 - [One-hundred Thirty-Five Million GBP
+Only] here in our bank. The owner of this dormant account died on 4th
+Jan 2012. Since his death, nobody has operated in his account because
+the account has NO BENEFICIARY attached to it. I wish to present you
+as the next of kin to the bank.
 
-This doesn't apply against current code, please check and resend.
+Kindly get back to me as soon as possible for more details on how to
+proceed further. I look forward to hearing from you soon.
 
---PqO5UuyQuufaVqM3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGOr8cACgkQJNaLcl1U
-h9CEWAgAgY/GfU8BXFYGIRsRJvI1cWat2E8FDdx6w4hGOXZu1PkCE/clQw49sl8s
-TtkBnnWdHaqEdTMjxGuYfuBjeCJ+wRX04gs4rrlyFX3kUYQ7/Aw6f/kUAn7UkFJX
-Fd4529ooHiVRGzoyP3qWfGIgM9fnA/j34lptaIkUmzun0eA4pQQkmHfGb7QPfS3k
-sRS71vw6B/OsKm4pDHqE+Y70xSYP0wxVzNb9m/3Jg8Uc/jV4OVKGmUKbKZ5YaN97
-Mh74Ggiymg0INA68ejMHTrqZZHuSinNv6gE0Z9oWpDfuF9pSpGQxJQIh2nLD3DEc
-oAQPEIK/FZq0tcc1VpkSKhqqcF+g2Q==
-=Ur35
------END PGP SIGNATURE-----
-
---PqO5UuyQuufaVqM3--
+Regards,
+Mr.William Chalmers.
