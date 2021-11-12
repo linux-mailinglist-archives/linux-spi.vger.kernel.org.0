@@ -2,109 +2,176 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A255B44DA4D
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Nov 2021 17:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1600144E27A
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Nov 2021 08:42:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234143AbhKKQ15 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 11 Nov 2021 11:27:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44146 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234057AbhKKQ15 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 11 Nov 2021 11:27:57 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 34D576124D;
-        Thu, 11 Nov 2021 16:25:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636647907;
-        bh=Kj16yNfhHFJEjceu4fTIk5nXb1yz+0FTGUj0PCGsGpU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QgDELcQiyFQGct7OCeQWJwo0JTdz2AwmZJgokLph7qrR1xUzQiy+SIPr3J9FArQJC
-         1Iy6RyIClYYQW0pNt6w248QP7WN48xT6oJ82723z/FI2iqV1zYExZuOSjylgNDZMp8
-         ruC8/yk2PotT7ESyaF3m/hMKAtiAe3gvyVf4K5Vl1FP9Tzh4+pQzvQx1jp+a4nOaCZ
-         uxcT0w1KbhksH8d7KB7oKm/FnEbApF53D+6CjrcabMBLmfoLB2blXHqyKCVnlayTBi
-         v5x2OzVuEPbrHWg+UhEhNFTWcfnT3qCXurrTzDS+Voj0RTXO00GqDBLoQYkhE0+uZw
-         MJ/BsVAqhwWhQ==
-Date:   Thu, 11 Nov 2021 16:25:02 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        nandhini.srikandan@intel.com, robh+dt@kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, mgross@linux.intel.com,
-        kris.pan@intel.com, kenchappa.demakkanavar@intel.com,
-        furong.zhou@intel.com, mallikarjunappa.sangannavar@intel.com,
-        mahesh.r.vaidya@intel.com, rashmi.a@intel.com
-Subject: Re: [PATCH v3 3/5] spi: dw: Add support for master mode selection
- for DWC SSI controller
-Message-ID: <YY1D3tM4fg8h6mmj@sirena.org.uk>
-References: <20211111065201.10249-1-nandhini.srikandan@intel.com>
- <20211111065201.10249-4-nandhini.srikandan@intel.com>
- <YY0lpZkIsJih+g2o@sirena.org.uk>
- <20211111145246.dj4gogl4rlbem6qc@mobilestation>
- <YY0zUjjVobtg85o6@sirena.org.uk>
- <20211111160627.fcgrvj2k7x3lwtkp@mobilestation>
+        id S233914AbhKLHpd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 12 Nov 2021 02:45:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230464AbhKLHpd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 Nov 2021 02:45:33 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEE1C061767
+        for <linux-spi@vger.kernel.org>; Thu, 11 Nov 2021 23:42:42 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id y84-20020a1c7d57000000b00330cb84834fso9166670wmc.2
+        for <linux-spi@vger.kernel.org>; Thu, 11 Nov 2021 23:42:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=d4YpBbYWP9wG3LFBKWknnju7IW21BdQrAXLAFoUfJjk=;
+        b=L0G7vqzIu4OmVtWPcfcfA5NzLtPk2i0H7s2BzObNlHQTFEkm03sqk/2QHQ4kjpk9BH
+         XMXouE5QpmwrxFfo6B5ZLvuccwWWhT/w9Ko9Yi7L+7BfDDnicqyRLnT+TM8ck5H5bQEY
+         cyD6P6qfh9iWldNqTQR7o5UJ+sXkSMXyDzLNU6kkBq7ka/+ZuUqEk/qcSbQ3GxXC7kiU
+         cm9dyledHK9n0gr3crraQGaAfhd3vfTQwfXVu/kwmwojjE1dRCSgNEVgeiJJB70r7ke9
+         OYePQHHEPa/usZJXytv516/nCeAGVXFsmZBOHnIcNaOTOhsULeXowN7ikvsxKqOo/gxw
+         3O2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=d4YpBbYWP9wG3LFBKWknnju7IW21BdQrAXLAFoUfJjk=;
+        b=4rc7Qe0/bMx3VeIVA2lNherwkxAvjBQXkiuVIz1HNmBvsK7/8uh0rAVvyneMf1ktel
+         kcyoP9qhVDxxbHtQb131g8Hpqe/pv6Ar/cwAmNY4ijWmfnjR1UEa5V3dyFJu3l4Cfoq9
+         vKgWAA8Ey4JSsAgf9X8xdHU4qyC7wQT+3XD44DLyZYpeqTPlul8ekoaTT4GQO2uAcp2x
+         3vcEgh7TxHBeWzwcyGp3R2a9EtyTx18ot6aqYXlodan+hm5qaBUqixxZl7cbq5TNvee2
+         IECApPkwfO5xpHxkQlQBptP4Uqi69nndWqqW+9QMw8dvI20v5ubC3e+CZM6lM8Lcam1p
+         KKHA==
+X-Gm-Message-State: AOAM531ooVmQsB7J1YDrnPy5YpFe4C8wMBduSmw22quJRQZWe3knqQ46
+        YLisaoE00zQ6wthGAS8U/CBqYg==
+X-Google-Smtp-Source: ABdhPJyYtg+MHn61GMl0MRFqSO/sm1wnHgrm7yORmq7WT7ihtvN7d0mp317CBhRDaom5mAlXGDszmg==
+X-Received: by 2002:a05:600c:2107:: with SMTP id u7mr32377342wml.82.1636702961238;
+        Thu, 11 Nov 2021 23:42:41 -0800 (PST)
+Received: from google.com ([95.148.6.174])
+        by smtp.gmail.com with ESMTPSA id q8sm4978469wrx.71.2021.11.11.23.42.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Nov 2021 23:42:40 -0800 (PST)
+Date:   Fri, 12 Nov 2021 07:42:37 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     patrice.chotard@foss.st.com, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        alexandre torgue <alexandre.torgue@foss.st.com>,
+        jonathan cameron <jic23@kernel.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        olivier moysan <olivier.moysan@foss.st.com>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        linux-mtd@lists.infradead.org, linux-watchdog@vger.kernel.org,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        maxime coquelin <mcoquelin.stm32@gmail.com>,
+        Matt Mackall <mpm@selenic.com>, vinod koul <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        baolin wang <baolin.wang7@gmail.com>,
+        linux-spi@vger.kernel.org, david airlie <airlied@linux.ie>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        netdev@vger.kernel.org,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        ohad ben-cohen <ohad@wizery.com>, linux-gpio@vger.kernel.org,
+        Jose Abreu <joabreu@synopsys.com>,
+        Le Ray <erwan.leray@foss.st.com>,
+        herbert xu <herbert@gondor.apana.org.au>,
+        michael turquette <mturquette@baylibre.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        linux-serial@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        "david s . miller" <davem@davemloft.net>,
+        Lionel Debieve <lionel.debieve@foss.st.com>,
+        linux-i2c@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        thierry reding <thierry.reding@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        philippe cornu <philippe.cornu@foss.st.com>,
+        linux-rtc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        alsa-devel@alsa-project.org, Zhang Rui <rui.zhang@intel.com>,
+        linux-crypto@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-iio@vger.kernel.org, pascal Paillet <p.paillet@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        linux-pm@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        stephen boyd <sboyd@kernel.org>,
+        dillon min <dillon.minfei@gmail.com>,
+        devicetree@vger.kernel.org,
+        yannick fertre <yannick.fertre@foss.st.com>,
+        linux-kernel@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        linux-phy@lists.infradead.org,
+        benjamin gaignard <benjamin.gaignard@linaro.org>,
+        sam ravnborg <sam@ravnborg.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-clk@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Richard Weinberger <richard@nod.at>,
+        Rob Herring <robh+dt@kernel.org>, Marek Vasut <marex@denx.de>,
+        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        dmaengine@vger.kernel.org, linux-media@vger.kernel.org,
+        daniel vetter <daniel@ffwll.ch>, Marc Zyngier <maz@kernel.org>,
+        bjorn andersson <bjorn.andersson@linaro.org>,
+        lars-peter clausen <lars@metafoo.de>
+Subject: Re: [PATCH v3 2/5] dt-bindings: mfd: timers: Update maintainers for
+ st,stm32-timers
+Message-ID: <YY4a7ZxzhNq6Or+t@google.com>
+References: <20211110150144.18272-1-patrice.chotard@foss.st.com>
+ <20211110150144.18272-3-patrice.chotard@foss.st.com>
+ <YYwjPAoCtuM6iycz@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="AV3LzPoSWuGFOXTP"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211111160627.fcgrvj2k7x3lwtkp@mobilestation>
-X-Cookie: Teutonic:
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YYwjPAoCtuM6iycz@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, 10 Nov 2021, Rob Herring wrote:
 
---AV3LzPoSWuGFOXTP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> On Wed, 10 Nov 2021 16:01:41 +0100, patrice.chotard@foss.st.com wrote:
+> > From: Patrice Chotard <patrice.chotard@foss.st.com>
+> > 
+> > Benjamin has left the company, remove his name from maintainers.
+> > 
+> > Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+> > ---
+> >  Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml | 1 -
+> >  1 file changed, 1 deletion(-)
+> > 
+> 
+> Lee indicated he was going to pick this one up, so:
+> 
+> Acked-by: Rob Herring <robh@kernel.org>
 
-On Thu, Nov 11, 2021 at 07:06:27PM +0300, Serge Semin wrote:
-> On Thu, Nov 11, 2021 at 03:14:26PM +0000, Mark Brown wrote:
+Since you already merged the treewide patch, you may as well take
+this too.  We'll work through any conflicts that may occur as a
+result.
 
-> > Given that people seem to frequently customise these IPs when
-> > integrating them I wouldn't trust people not to have added some other
-> > control into that reserved bit doing some magic stuff that's useful in
-> > their system.
+Acked-by: Lee Jones <lee.jones@linaro.org>
 
-> In that case the corresponding platform code would have needed to have
-> that peculiarity properly handled and not to use a generic compatibles
-> like "snps,dwc-ssi-1.01a" or "snps,dw-apb-ssi", which are supposed to
-> be utilized for the default IP-core configs only. For the sake of the
-> code simplification I'd stick to setting that flag for each generic
-> DWC SSI-compatible device. That will be also helpful for DWC SSIs
-> which for some reason have the slave-mode enabled by default.
-
-That's easier right up until the point where it explodes - I'd prefer to
-be more conservative here.  Fixing things up after the fact gets painful
-when people end up only finding the bug in released kernels, especially
-if it's distro end users or similar rather than developers.
-
-> Alternatively the driver could read the IP-core version from the
-> DW_SPI_VERSION register, parse it (since it's in ASCII) and then use
-> it in the conditional Master mode activation here. But that could have
-> been a better solution in case if the older IP-cores would have used
-> that bit for something special, while Nandhini claims it was reserved.
-> So in this case I would stick with a simpler approach until we get to
-> face any problem in this matter, especially seeing we already pocking
-> the reserved bits of the CTRL0 register in this driver in the
-> spi_hw_init() method when it comes to the DFS field width detection.
-
-If the device has a version register checking that seems ideal - the
-infrastructure will most likely be useful in future anyway.  A bit of a
-shame that it's an ASCII string though.
-
---AV3LzPoSWuGFOXTP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGNQ90ACgkQJNaLcl1U
-h9DmvQf5AY9PFw5IVy4WN+B9MYaHh4+rlQJibwn43uFWSZkDXlGWhPWyp2OB5SmH
-N00SM+7kz5/+XubpqnvpAPrEduhm6a4ZdoeOXn9rC31KBBthI07PbTTD8KUkE444
-WpBFlimRio+bQSDe2yqf7J4d7UJbJqeVc4cfE3sEqP6xsyAP7LgMR2Q4WeM1xm8o
-ht3tDasCB8vfRoKSFmPSn9vYMoq5WdOHgUYSihuQuHfAPnCUojBw/8HkhWHInK7h
-q7Q1fHcGAiLvgzYkSUJzYIzNzT+Hpsif2StoxU25hfLalo9mPzF5YsuHI7qLiVDx
-DwgFdiZ4ZQaBk6tQNaknZHEyOFLOtQ==
-=EjKm
------END PGP SIGNATURE-----
-
---AV3LzPoSWuGFOXTP--
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
