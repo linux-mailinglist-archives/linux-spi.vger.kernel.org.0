@@ -2,176 +2,174 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1600144E27A
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Nov 2021 08:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5163044E2FF
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Nov 2021 09:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233914AbhKLHpd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 12 Nov 2021 02:45:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33156 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbhKLHpd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 Nov 2021 02:45:33 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEE1C061767
-        for <linux-spi@vger.kernel.org>; Thu, 11 Nov 2021 23:42:42 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id y84-20020a1c7d57000000b00330cb84834fso9166670wmc.2
-        for <linux-spi@vger.kernel.org>; Thu, 11 Nov 2021 23:42:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=d4YpBbYWP9wG3LFBKWknnju7IW21BdQrAXLAFoUfJjk=;
-        b=L0G7vqzIu4OmVtWPcfcfA5NzLtPk2i0H7s2BzObNlHQTFEkm03sqk/2QHQ4kjpk9BH
-         XMXouE5QpmwrxFfo6B5ZLvuccwWWhT/w9Ko9Yi7L+7BfDDnicqyRLnT+TM8ck5H5bQEY
-         cyD6P6qfh9iWldNqTQR7o5UJ+sXkSMXyDzLNU6kkBq7ka/+ZuUqEk/qcSbQ3GxXC7kiU
-         cm9dyledHK9n0gr3crraQGaAfhd3vfTQwfXVu/kwmwojjE1dRCSgNEVgeiJJB70r7ke9
-         OYePQHHEPa/usZJXytv516/nCeAGVXFsmZBOHnIcNaOTOhsULeXowN7ikvsxKqOo/gxw
-         3O2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=d4YpBbYWP9wG3LFBKWknnju7IW21BdQrAXLAFoUfJjk=;
-        b=4rc7Qe0/bMx3VeIVA2lNherwkxAvjBQXkiuVIz1HNmBvsK7/8uh0rAVvyneMf1ktel
-         kcyoP9qhVDxxbHtQb131g8Hpqe/pv6Ar/cwAmNY4ijWmfnjR1UEa5V3dyFJu3l4Cfoq9
-         vKgWAA8Ey4JSsAgf9X8xdHU4qyC7wQT+3XD44DLyZYpeqTPlul8ekoaTT4GQO2uAcp2x
-         3vcEgh7TxHBeWzwcyGp3R2a9EtyTx18ot6aqYXlodan+hm5qaBUqixxZl7cbq5TNvee2
-         IECApPkwfO5xpHxkQlQBptP4Uqi69nndWqqW+9QMw8dvI20v5ubC3e+CZM6lM8Lcam1p
-         KKHA==
-X-Gm-Message-State: AOAM531ooVmQsB7J1YDrnPy5YpFe4C8wMBduSmw22quJRQZWe3knqQ46
-        YLisaoE00zQ6wthGAS8U/CBqYg==
-X-Google-Smtp-Source: ABdhPJyYtg+MHn61GMl0MRFqSO/sm1wnHgrm7yORmq7WT7ihtvN7d0mp317CBhRDaom5mAlXGDszmg==
-X-Received: by 2002:a05:600c:2107:: with SMTP id u7mr32377342wml.82.1636702961238;
-        Thu, 11 Nov 2021 23:42:41 -0800 (PST)
-Received: from google.com ([95.148.6.174])
-        by smtp.gmail.com with ESMTPSA id q8sm4978469wrx.71.2021.11.11.23.42.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Nov 2021 23:42:40 -0800 (PST)
-Date:   Fri, 12 Nov 2021 07:42:37 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     patrice.chotard@foss.st.com, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        alexandre torgue <alexandre.torgue@foss.st.com>,
-        jonathan cameron <jic23@kernel.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        olivier moysan <olivier.moysan@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        linux-mtd@lists.infradead.org, linux-watchdog@vger.kernel.org,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        maxime coquelin <mcoquelin.stm32@gmail.com>,
-        Matt Mackall <mpm@selenic.com>, vinod koul <vkoul@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        baolin wang <baolin.wang7@gmail.com>,
-        linux-spi@vger.kernel.org, david airlie <airlied@linux.ie>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        netdev@vger.kernel.org,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        ohad ben-cohen <ohad@wizery.com>, linux-gpio@vger.kernel.org,
-        Jose Abreu <joabreu@synopsys.com>,
-        Le Ray <erwan.leray@foss.st.com>,
-        herbert xu <herbert@gondor.apana.org.au>,
-        michael turquette <mturquette@baylibre.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        linux-serial@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        "david s . miller" <davem@davemloft.net>,
-        Lionel Debieve <lionel.debieve@foss.st.com>,
-        linux-i2c@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        thierry reding <thierry.reding@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        philippe cornu <philippe.cornu@foss.st.com>,
-        linux-rtc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        alsa-devel@alsa-project.org, Zhang Rui <rui.zhang@intel.com>,
-        linux-crypto@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-iio@vger.kernel.org, pascal Paillet <p.paillet@foss.st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        linux-pm@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        stephen boyd <sboyd@kernel.org>,
-        dillon min <dillon.minfei@gmail.com>,
-        devicetree@vger.kernel.org,
-        yannick fertre <yannick.fertre@foss.st.com>,
-        linux-kernel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        linux-phy@lists.infradead.org,
-        benjamin gaignard <benjamin.gaignard@linaro.org>,
-        sam ravnborg <sam@ravnborg.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-clk@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Richard Weinberger <richard@nod.at>,
-        Rob Herring <robh+dt@kernel.org>, Marek Vasut <marex@denx.de>,
-        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        dmaengine@vger.kernel.org, linux-media@vger.kernel.org,
-        daniel vetter <daniel@ffwll.ch>, Marc Zyngier <maz@kernel.org>,
-        bjorn andersson <bjorn.andersson@linaro.org>,
-        lars-peter clausen <lars@metafoo.de>
-Subject: Re: [PATCH v3 2/5] dt-bindings: mfd: timers: Update maintainers for
- st,stm32-timers
-Message-ID: <YY4a7ZxzhNq6Or+t@google.com>
-References: <20211110150144.18272-1-patrice.chotard@foss.st.com>
- <20211110150144.18272-3-patrice.chotard@foss.st.com>
- <YYwjPAoCtuM6iycz@robh.at.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        id S234002AbhKLIdT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 12 Nov 2021 03:33:19 -0500
+Received: from mail-eopbgr80074.outbound.protection.outlook.com ([40.107.8.74]:20870
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231173AbhKLIdR (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 12 Nov 2021 03:33:17 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kjz8tB9x+b9GSEZZlsRNPHyt2nMz7bWkTe7Qer8oS+L2ota2R6UlNm7R6y+pSn4Uspp357bL9ZHq4PVeAzNHWI5J400aiosDPu+IkRZUqa1JcVCsAx5WcFh28LRxx2epqpRelfrLHabCW81cmKux8ANmIb18jcNQukFbfO5enWcL6h/TT3XrxQZ5WXsWwt4YsR2SW5+TYI0crAB98/CM00ggU6VOmnYHV6jX5TpCV5C2W525C4u4snuJBw/fEHeWezJgMo6uSluDECeJq7stHOZ17RAhLVqgCvmSYSoYDJfPIRGyf7RnNWfHfRgNtXNxpverwhPE2vQGhzTFXfqc5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pffnFuTCnDkzFj8mDogdDwzIibO3fDM/yd7MSvmkjMc=;
+ b=dgzUqEJgZlxjVTDxgUHIlvr0c568tapbXzE/eH1hUVBTpYkXTXS/8Wkpj7xI5JALi6AVjPStMPuvJbK2TLrX7gYHTPZPzg4bIU+OM2TXa1IaGRXsWe5lLL3ixRYKpecENU9GqVsnq4ZzWm/rkvXY3naFkDcDhqZoA3D0Q8bRAC13LfVq4KySmhcpfNpQsi2C7N+TMqRZyQVyQDyCHJWq390pkLDh46Sou0LRr7/T5Nheu2UY6I6QoN4WURpzQwokRLOFrpOJJ+QC44Cf0H1rD4vvKelHeNL9QFZEEt5FBZh1XAAHwTCkaTJnhzaRNp62RsDIWmpEQCzeEMS25RxEZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pffnFuTCnDkzFj8mDogdDwzIibO3fDM/yd7MSvmkjMc=;
+ b=fdCBBL4KeEi2HCaVVAwhjvSF9VI0A9h+CHYW1J0o1KAQuVwJL2ebiATjD1GJxMJxPWwdV4T4O0l8RXUewqhdRGCHTMBDSs0yfYtcKQeH3SUccflmnubUbEgQ3wWMRcXngeXH/5aUr6OztLF5LjlH5GlRA/L2uhGHd2KwVkMmrW4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DB9PR04MB8493.eurprd04.prod.outlook.com (2603:10a6:10:2c5::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.16; Fri, 12 Nov
+ 2021 08:30:23 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::82e:6ad2:dd1d:df43]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::82e:6ad2:dd1d:df43%9]) with mapi id 15.20.4669.016; Fri, 12 Nov 2021
+ 08:30:23 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     robh+dt@kernel.org, aisheng.dong@nxp.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, ulf.hansson@linaro.org, broonie@kernel.org,
+        linux@roeck-us.net, wim@linux-watchdog.org, linux@rempel-privat.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V4 0/9] dt-bindinds/dts: support i.MX8ULP
+Date:   Fri, 12 Nov 2021 16:29:21 +0800
+Message-Id: <20211112082930.3809351-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YYwjPAoCtuM6iycz@robh.at.kernel.org>
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR01CA0013.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:191::9) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (119.31.174.66) by SI2PR01CA0013.apcprd01.prod.exchangelabs.com (2603:1096:4:191::9) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.15 via Frontend Transport; Fri, 12 Nov 2021 08:30:17 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6988502a-040b-4525-6f5e-08d9a5b6ab4d
+X-MS-TrafficTypeDiagnostic: DB9PR04MB8493:
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-Microsoft-Antispam-PRVS: <DB9PR04MB8493BF5A1DD13FBE3FF5D89AC9959@DB9PR04MB8493.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wEsKwwiBaN9C/xmdC3SFz6pWbqHaBCA85xlJv11Tz6amUtXky67+7IUAMRCiJGZHzqCsgRmuSOhs+AH7xggKqvfbN+a1kRtegi6cJ54ldtncbr2znRK6iSL+OklwCPAEyDORWaJSPqM6rbXRAFZX7zxBeKqRpJlTCTooUaSLdu4PU/jmXdE4+qqSe0ZEufnQ3b8ZEg9U8Z51WxQ/4vSOZPOF7Vza3RZBa16pkjkoWeiyk7EcXJfDx1unGC24Ch9Z7WgdLxDWEMT2UOlHDgLLaMk5kurDwsIxWr8TcCcBXp5X6zq5M4xIZBIk4kgPNgWWgxI+dR5EbliBW61yy2IXKL4DP2E/4L4gGbkZEAxbkCwLS091wIV3imwoIWijH2tCbw9gZwsCBPX+I1GWw/Wgzvu0VYspMWza2V8/gsnvr++pZEpVfwlWKB1TIX4Dvf9+hs+qJf9eP/Tnm8f+jd+0qnZsHBGaauJAPCWAHBdF4DleeqPefASbv1k6FfyTRMWWdG7dZGcJgXqNTofqg2RpUQkLd0VezeUZLEVTfCNFQwsTjU1Od9yq1Ai6xHh0b7p8bstsFX1KcyZdXXjsHo2kKpU0Ado89z+E4+gNQ9yaa5O6PVGJFc8GgiCuGstc1YlXgkud6HUD3pd4vjtRK32s2G4q3V7ZG9E/JFw77lry0LHxf8KOood9ecSnnE6eDkiTupNaSPaBRc3IVHcp3OKc+5XUvq6vfped/MO0NGxAgIl60NAyEn265df0pJ1+KMPb5oDRiQoRs9VaP7beBgq3ul/sHf3BQW5N5aLAWc4c15Y=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(26005)(8676002)(966005)(508600001)(186003)(6506007)(1076003)(7416002)(956004)(86362001)(6486002)(2906002)(316002)(6512007)(4326008)(5660300002)(6666004)(66556008)(38350700002)(83380400001)(2616005)(52116002)(66946007)(66476007)(38100700002)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d++VYwgTX7AOGWN701mkSz+PGU/k5r709qfcQjjejJvjfzu8xy6ncoa3PS6r?=
+ =?us-ascii?Q?QbmHrs4Md8DLzuUpDkxM4S4DC5z9hQKfmxxp8jYZRJaOwx3JqJblZCPX4tIp?=
+ =?us-ascii?Q?bnt1+lDOmTflr+uMyI0WUCUyR87NpeQXkIPETFpYFh8IPu9uLKOoYAt8mSqs?=
+ =?us-ascii?Q?lYdn67+1YMPAMimfzLj5Yw4hV5wLOTgIa5z5L3sdjPNmKc7IkemxEv6wysT6?=
+ =?us-ascii?Q?dj3s7XWRW66UQefWLJ7KEMxciFoZnbIx+l03OWcLYIXCVT22g3Mlb4hnk0Id?=
+ =?us-ascii?Q?QjZAsli3mYaXOueQxwRAV7cheG66TQ2CinEafVr7MMg7lW11cLL79pdJ5oQX?=
+ =?us-ascii?Q?WJVkF5H7gXU076xnEWdvWoos20RHpAS6k+01trGdBubyjtSamcJjTTnehdDu?=
+ =?us-ascii?Q?tUNjGeq9Y30UITzbVEyVwr7cYFtXRCShZjJBkldCRK50f/QrCpeEv14y8KPm?=
+ =?us-ascii?Q?uMtA6Kt9E/eS3pawIuQ9h7gpPGd6d/GSzVrZ8cbTjUkTqm0jVEiniKCMSxYe?=
+ =?us-ascii?Q?OdVWdvmBMYw7kAX7eqXHwa8RNYJEL3Ypv7maZXhz377Op7K43xZrEYTXIEe2?=
+ =?us-ascii?Q?yE71uVO3vbGpoGGS3C3gL4ldBFgyupQIRYxuxnR+AE2Hqec+GRi+5whGLfoO?=
+ =?us-ascii?Q?3zzVqCMHM/Q9az1m4+gsV90hCcQzw6u0m84UjfL4iLayY2wvhHq6JOxjpPEk?=
+ =?us-ascii?Q?HcL/RpZSd53y2T9YXOr5gB9sh7aGs1kSksER4/hBnO3JhGmKZGCu8oV/si95?=
+ =?us-ascii?Q?hEFbuKu2aVqCJOzvVia5xu9myfgsvkheHJL11lfVCv4+rjhglGSUPANMLwsg?=
+ =?us-ascii?Q?e6yeVSqnd85vQBOF6q72fS+h/T8rDpAiq5FMCpCdKlS0cl7+Wo8Tjd+HrW1n?=
+ =?us-ascii?Q?s3gSff7MlQoYHwTKcDSh6MCvLg9baflZgfG5/ZOGNOrUXjppjSlAhjgQnc3y?=
+ =?us-ascii?Q?oy60+ClSujaHR/WyAZRBcTfg66v6ZhyQ+3uANrN14edyYpxG5iZnrR3OHfYG?=
+ =?us-ascii?Q?gd30t/Vy8WfGzb9xpXCRUSY9AXtjThD3hormM6A9LEpPedFl7NSwiT9GHo2k?=
+ =?us-ascii?Q?Gm6E2ddzACjG5FNjO7zQSj1FShom2hFFSdebZXe5MgIkLnmSpT3Gke3cpXe6?=
+ =?us-ascii?Q?LNElK7ZBbMy4toInsNUQB2Q0S7do49OiDS5JQzWsWpBSQOeVep2gGnbm4+32?=
+ =?us-ascii?Q?2bS7ZoWKaokex9CEpoIWkTAMAn3qg0kU1jJjkpM7kbouqSPv45aR+QBkNMjK?=
+ =?us-ascii?Q?59/qsNNm9o8bU3WOToKnDdZ/AYPDl33KEMcYpg/pRYpk5k4ADLuEJHrn+Enn?=
+ =?us-ascii?Q?zerfcSY4r1KBBXzpAg1F1IjJn764iZCmW9v74wq4+8MTYtxei8VJ/UE0p0+m?=
+ =?us-ascii?Q?8qHHGZH2OG52Nn66LUZ6G4YEJfx9SVKog5CnfIDH8+J6r03BrOHryJYW7SIT?=
+ =?us-ascii?Q?R9+zEZwJqaveW88yAeDNnCei+tmv5t39TY2DvHA8ykqX/Vmoo8Jw8xY0voey?=
+ =?us-ascii?Q?NVrhUZWem9wzma6CozycacPyeZgsRtuk/eRCg9pvEy6kUgwD/j2sKRFKllY6?=
+ =?us-ascii?Q?nEoEMSPBDb/aChWwLTwxSnmZvZOYdiN5ZguovyYbpEv33jvWMem/hFdm4KUk?=
+ =?us-ascii?Q?l53kMkPYBvM+QK0K1viiLR8=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6988502a-040b-4525-6f5e-08d9a5b6ab4d
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2021 08:30:22.9242
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: R5PdS0IN7PW4SXgA8FFnk6mE5jfSvTYHwkG9E0+FWyFOk3XpbPuLaI7y+Qh60rBcXv/wxZTccxoCsBfnVQTLQg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8493
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 10 Nov 2021, Rob Herring wrote:
+From: Peng Fan <peng.fan@nxp.com>
 
-> On Wed, 10 Nov 2021 16:01:41 +0100, patrice.chotard@foss.st.com wrote:
-> > From: Patrice Chotard <patrice.chotard@foss.st.com>
-> > 
-> > Benjamin has left the company, remove his name from maintainers.
-> > 
-> > Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-> > ---
-> >  Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml | 1 -
-> >  1 file changed, 1 deletion(-)
-> > 
-> 
-> Lee indicated he was going to pick this one up, so:
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
+I just pick-up Jacky's work, rebase and send out V4 based on
+Jacky's V3 patchset.
 
-Since you already merged the treewide patch, you may as well take
-this too.  We'll work through any conflicts that may occur as a
-result.
+If you prefer to split the patchset and send single patches, I could
+resend one by one.
 
-Acked-by: Lee Jones <lee.jones@linaro.org>
+Note: the V3 has a gpio bindings patch, it has been seperated and
+sent to gpio list in a single one per Linus requested.
+
+This patchset is to add i.MX8ULP in dt-bindings, introduce
+basic i.MX8ULP dtsi and basic evk board support.
+
+The detailed version changes are in each patch.
+
+There is checkpatch error in patch 8, but that is for device tree macro
+and we could use use "(xx)".
+
+In V4, the changes are in patch 8, 9 when rebasing to linux-next/master
+,fix build errors after the clk driver in tree and drop a few nodes
+that not have bindings.
+
+Tested with CONFIG_CLK_IMX8ULP and CONFIG_PINCTRL_IMX8ULP enabled.
+
+V3:
+ https://lore.kernel.org/linux-arm-kernel/20210625011355.3468586-6-ping.bai@nxp.com/T/
+
+Jacky Bai (9):
+  dt-bindings: i2c: imx-lpi2c: Add imx8ulp compatible string
+  dt-bindings: mmc: imx-esdhc: Add imx8ulp compatible string
+  dt-bindings: serial: fsl-lpuart: Add imx8ulp compatible string
+  dt-bindings: spi: fsl-lpspi: Add imx8ulp compatible string
+  dt-bindings: timer: tpm-timer: Add imx8ulp compatible string
+  dt-bindings: watchdog: imx7ulp-wdt: Add imx8ulp compatible string
+  dt-bindings: arm: fsl: Add binding for imx8ulp evk
+  arm64: dts: imx8ulp: Add the basic dtsi file for imx8ulp
+  arm64: dts: imx8ulp: Add the basic dts for imx8ulp evk board
+
+ .../devicetree/bindings/arm/fsl.yaml          |   6 +
+ .../bindings/i2c/i2c-imx-lpi2c.yaml           |   4 +-
+ .../bindings/mmc/fsl-imx-esdhc.yaml           |   4 +
+ .../bindings/serial/fsl-lpuart.yaml           |   4 +-
+ .../bindings/spi/spi-fsl-lpspi.yaml           |  11 +-
+ .../bindings/timer/nxp,tpm-timer.yaml         |   6 +-
+ .../bindings/watchdog/fsl-imx7ulp-wdt.yaml    |   7 +-
+ arch/arm64/boot/dts/freescale/Makefile        |   1 +
+ arch/arm64/boot/dts/freescale/imx8ulp-evk.dts | 148 +++
+ .../boot/dts/freescale/imx8ulp-pinfunc.h      | 978 ++++++++++++++++++
+ arch/arm64/boot/dts/freescale/imx8ulp.dtsi    | 469 +++++++++
+ 11 files changed, 1629 insertions(+), 9 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8ulp-evk.dts
+ create mode 100755 arch/arm64/boot/dts/freescale/imx8ulp-pinfunc.h
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8ulp.dtsi
 
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.25.1
+
