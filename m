@@ -2,82 +2,78 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5463B44ED8F
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Nov 2021 20:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A839244EE2C
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Nov 2021 21:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235472AbhKLTyt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 12 Nov 2021 14:54:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235256AbhKLTyt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 Nov 2021 14:54:49 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C80C061766
-        for <linux-spi@vger.kernel.org>; Fri, 12 Nov 2021 11:51:58 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id p19so9503323qtw.12
-        for <linux-spi@vger.kernel.org>; Fri, 12 Nov 2021 11:51:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=sbMEA9n9Pj/HfzsuX4iVianfftPXl0x7Eo0HpPDJsqs=;
-        b=Yw+p9Uo+5KQGoccvBks5Ci8+ZDlSvu7l93VGRCY8ZYQsu1lz4knSEy8/eb+Lm1NrTH
-         GzipEoLboD7DWs9KzyvxslfEQnOs47b4R+Mj3XTWdKpp9XbQbKGtQ5YEG4ijUfu4jtFE
-         /W10fgxlqEe+6aRVIUBq8hjn0WDG4ehNda55kNT8iGXmOlSHaRwW1cWqtcqPo7/8IsYv
-         ++i9VPM2+sDvzFA/3oGv0pgZ14q/FD3/XGYca2kZucVBmfHmPufcVhCxgT6+p0hlokNp
-         mczuTft5lmdIQk+wmMyhToWgPsUVVogCgYAJYJiCefNKNr/IESGhoapdVJe5hEI4CWJ5
-         GL1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=sbMEA9n9Pj/HfzsuX4iVianfftPXl0x7Eo0HpPDJsqs=;
-        b=mrLO0zumMqmNM2ln66bJ/Ztjiw+3LvL89sqSlxIdX92YVd/pFQ1HDJeydLBEqt0m2u
-         Ju67T8fGSOwgRVO4eCIs/tDkwQ+Hr6Enffo60hix2ebkT3W3aJV+OtCngyNMeEq92Hrs
-         TaTVPEsOiD6CDck1kErNAxgFrTsJ7gFLgYqREf57kxTeJ6rBUF1OMi9pr3OZKSjmjscU
-         g4synA36veTcPfhb5gBYbcx3kA9YqnZbS8TIhpoeOGUAeqdiF5DS2psT2Gz19nxGbHlN
-         NuMDkZ3Q5MO2OxX/9jXSOYKYB2KtgTGCTFj8Hp2+bv/9pHSZIDKygVqc97iybCZs+1NY
-         SGLw==
-X-Gm-Message-State: AOAM53059ULbkASQrqAYrVcIsLRQ5jLL0iw+7fSbmsqTq3MqrvYA3J7V
-        ++eeqr+yqgIu6uM4ULVSAawRr00PDdoaauhdYPw=
-X-Google-Smtp-Source: ABdhPJzgXRGarOjDsfXSyoLLQhf4PuMveqEb8UybTzsWaDF3my0/TZkv9ycoscWO5tfBf/dcGT3T28QHSdbjOxuqecM=
-X-Received: by 2002:ac8:74c7:: with SMTP id j7mr18777867qtr.118.1636746717505;
- Fri, 12 Nov 2021 11:51:57 -0800 (PST)
+        id S235712AbhKLU6M (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 12 Nov 2021 15:58:12 -0500
+Received: from mail.baikalelectronics.com ([87.245.175.226]:58664 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235619AbhKLU6L (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 12 Nov 2021 15:58:11 -0500
+X-Greylist: delayed 324 seconds by postgrey-1.27 at vger.kernel.org; Fri, 12 Nov 2021 15:58:11 EST
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Authentication-Results: mail.baikalelectronics.ru; dkim=permerror (bad message/signature format)
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Nandhini Srikandan <nandhini.srikandan@intel.com>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/4] spi: dw: Cleanup macros/funcs naming and add IP-core version support
+Date:   Fri, 12 Nov 2021 23:49:23 +0300
+Message-ID: <20211112204927.8830-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Received: by 2002:ac8:5a03:0:0:0:0:0 with HTTP; Fri, 12 Nov 2021 11:51:56
- -0800 (PST)
-Reply-To: wmchfa@gmail.com
-From:   William Chalmers <pv.wcha@gmail.com>
-Date:   Fri, 12 Nov 2021 20:51:56 +0100
-Message-ID: <CAO9cJj-OSU5qoJZ85Ow=KAGpF82M3g_cF3aScOinyZwY3Tj3mw@mail.gmail.com>
-Subject: URGENT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-ATTENTION,
-        Sir/Madam.
+This patchset consists of the changes which I was going to introduce for a
+long time, but due to lack of free time couldn't make it so far.
+Nandhini's series [1] made me to proceed with this task so mate would
+finally have his patchset accepted and merged into the mainline kernel.
 
-Greetings to you, I am contacting you after going through your
-interesting profile. I am Mr.William Chalmers. I am from London, United
-Kingdom, If this message successfully gets to you, I will like to
-discuss business with you, which you will have an immense benefit from
-if we can work together with, The Group Finance Director of Lloyds
-Banking Group United Kingdom.
+There are three cleanup patches here and one feature patch. In framework
+of the former patches we suggest to better organize the code. In
+particular they concern the methods and macros naming unification (using a
+unified prefixes of the code object names) and CSR fields macro
+implementation using the bitfield helpers available in the kernel. The
+later patch introduces the Synopsys Component Version register parsing
+procedure so the corresponding data could be used for a version-specific
+features implementation.  Nandhini will be mostly interested in the later
+patch in the framework of his series [1].
 
-I am contacting you for a legitimate business transaction strictly for
-you and me alone. I personally discovered a dormant account with a
-total sum of =C2=A3 1,35,000.000.00 - [One-hundred Thirty-Five Million GBP
-Only] here in our bank. The owner of this dormant account died on 4th
-Jan 2012. Since his death, nobody has operated in his account because
-the account has NO BENEFICIARY attached to it. I wish to present you
-as the next of kin to the bank.
+Nandhini, could you please test the patchset out on your DWC SSI hardware?
+After it's merged into the spi/for-next branch of the Mark' repository you
+will be able to rebase your series on top of it and use the last patch
+functionality for your benefit.
 
-Kindly get back to me as soon as possible for more details on how to
-proceed further. I look forward to hearing from you soon.
+[1] https://lore.kernel.org/linux-spi/20211111065201.10249-4-nandhini.srikandan@intel.com/
 
-Regards,
-Mr.William Chalmers.
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Andy Shevchenko <andy@kernel.org>
+Cc: linux-spi@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (4):
+  spi: dw: Discard redundant DW SSI Frame Formats enumeration
+  spi: dw: Put the driver entities naming in order
+  spi: dw: Convert to using the Bitfield access macros
+  spi: dw: Add Synopsys Component version reading and parsing
+
+ drivers/spi/spi-dw-bt1.c  |   8 +-
+ drivers/spi/spi-dw-core.c | 165 ++++++++++++++++++++++----------------
+ drivers/spi/spi-dw-dma.c  |  50 ++++++------
+ drivers/spi/spi-dw-mmio.c |  20 ++---
+ drivers/spi/spi-dw-pci.c  |  59 +++++++-------
+ drivers/spi/spi-dw.h      | 150 +++++++++++++++++-----------------
+ 6 files changed, 236 insertions(+), 216 deletions(-)
+
+-- 
+2.33.0
+
