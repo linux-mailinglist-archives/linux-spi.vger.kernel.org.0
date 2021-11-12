@@ -2,35 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C372544EE94
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Nov 2021 22:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C22144EE95
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Nov 2021 22:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235752AbhKLVaY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 12 Nov 2021 16:30:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33196 "EHLO mail.kernel.org"
+        id S235772AbhKLVa0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 12 Nov 2021 16:30:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33218 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235702AbhKLVaY (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 12 Nov 2021 16:30:24 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9C3CB610A5;
-        Fri, 12 Nov 2021 21:27:32 +0000 (UTC)
+        id S235768AbhKLVaZ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 12 Nov 2021 16:30:25 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 83F8960F51;
+        Fri, 12 Nov 2021 21:27:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636752453;
-        bh=Am8xQUVhrZY6N9HRLIaVipelEZ0XaNdb9r7nw3erB3Y=;
+        s=k20201202; t=1636752454;
+        bh=Ecwkgb9e14C6Kune5wLkv+S7iKP60oFn4zyvFneEyQ0=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=ZpP1JrunVK5ypshsJM7wImi7IJjfmgcW/ckYmvq0J0pMpy96wfpH9YcACh0AXaA45
-         F5ihCal9wOd9XFIhbQI/vDTek13HCxf+hL5VzhcKtpOscPsrcQ3t47J/bXbdS3SnMs
-         8VxHfs4bkiWB8dk3T/PRCVvkVONUg+Y+Si2me6EFENabrz1H/dCPEVLj8/tklGfF7t
-         /HbOy7z1WjzGo7vdeYXUFA2DseTGjLsaT3v3DRqwj54WsqIGpTd8bCDjwcAEj3cvzk
-         6HYe3VNC69EgQ6uypDm1FUQJ1UbQPcPl8JXp7autrce1TeX1u+StPH6guVY/fwWmMs
-         MA8C1UFHQLXbw==
+        b=O9WlAVYFLSiIb7njnNns+4Doo7GH3SvUfdVdtp19eck61kYCDRwtcqkAPg3hiQKmC
+         paa4cvvK9WdEnUkqd6FXe7T5TIvH4zKwKZVwdB8evaElSrJCubjKODE6iysQcofR32
+         ARRMJrAqoeRSThUaosXN8hDLGwuerEp43m+KZU6XEuv2ch6xh6xOyb4GC7wQsSO5/f
+         h+km3TPyGESimpViSN9XbNHqCfOqOFVXq5yOV6Hk2EJz/fx7SZPuyKBKxY24mmzs31
+         oi8tx9rZ1SflG3fE+sCfVJoKnQ38yOA0LqHP/X5+R3Thd7HxaEajAU4SHDhd9rSbd3
+         /y64BJvXcAksw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     linux-spi@vger.kernel.org
-In-Reply-To: <20211108145523.1797609-1-alexander.stein@ew.tq-group.com>
-References: <20211108145523.1797609-1-alexander.stein@ew.tq-group.com>
-Subject: Re: [PATCH 1/1] spi: lpspi: Silence error message upon deferred probe
-Message-Id: <163675245237.742446.12570457338547822169.b4-ty@kernel.org>
-Date:   Fri, 12 Nov 2021 21:27:32 +0000
+To:     Andy Gross <agross@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     kernel-janitors@vger.kernel.org, linux-spi@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+In-Reply-To: <20211110073935.GA5176@kili>
+References: <20211110073935.GA5176@kili>
+Subject: Re: [PATCH] spi: spi-geni-qcom: fix error handling in spi_geni_grab_gpi_chan()
+Message-Id: <163675245327.742446.568186014319841579.b4-ty@kernel.org>
+Date:   Fri, 12 Nov 2021 21:27:33 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -38,13 +41,13 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 8 Nov 2021 15:55:23 +0100, Alexander Stein wrote:
-> Do not print error messages with error code -517. Silences the following
-> errors upon on imx8qm:
-> fsl_lpspi 5a000000.spi: spi_register_controller error: -517
-> fsl_lpspi 5a010000.spi: spi_register_controller error: -517
-> fsl_lpspi 5a020000.spi: spi_register_controller error: -517
-> 
+On Wed, 10 Nov 2021 10:39:35 +0300, Dan Carpenter wrote:
+> This code has several issues:
+> 1) It passes IS_ERR() to dev_err_probe() instead of PTR_ERR().
+> 2) It always prints an error message, even when it succeeds.
+> 3) The "if (ret < 0) {" conditions are never true.
+> 4) If requesting "mas->tx" fails then it sets "mas->rx" to NULL but the
+>    intention was to set "mas->tx" to NULL.
 > 
 > [...]
 
@@ -54,8 +57,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: lpspi: Silence error message upon deferred probe
-      commit: 12f62a857c83b2efcbf8d9961aacd352bf81ad3d
+[1/1] spi: spi-geni-qcom: fix error handling in spi_geni_grab_gpi_chan()
+      commit: 6532582c353f4c83e3ccdd7255020ab852b90b0b
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
