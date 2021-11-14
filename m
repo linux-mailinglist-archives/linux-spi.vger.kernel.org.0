@@ -2,131 +2,157 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C80E44F7B1
-	for <lists+linux-spi@lfdr.de>; Sun, 14 Nov 2021 12:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B96B644F8C7
+	for <lists+linux-spi@lfdr.de>; Sun, 14 Nov 2021 16:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbhKNL4j (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 14 Nov 2021 06:56:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41966 "EHLO
+        id S229725AbhKNPrj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 14 Nov 2021 10:47:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231147AbhKNL4j (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 14 Nov 2021 06:56:39 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A53EC061746
-        for <linux-spi@vger.kernel.org>; Sun, 14 Nov 2021 03:53:44 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id g17so37649120ybe.13
-        for <linux-spi@vger.kernel.org>; Sun, 14 Nov 2021 03:53:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=l2AjIcA200luhAvIV6Y4Gf8Evv6mr+gMr0zSOMeBGF0=;
-        b=NIccaHcX3tvhp2OaMXWmcLKTG/ymsADT6mkP7BUHnzI+/PrEz/Gxb5JXa5KZfTFWsX
-         Zi79ZBs7j8ByA/qG3q3Xx3xrtNwIIXmaBp63K/zFuUbYPy2K7ByPT3kSf7uHc54LmCqw
-         7G45N8UwhuafOuwgfn0oBfflJdxEUhG8t+KGhqvzNHrQm24Qn5u+knjOhasV5NqEnoHr
-         Ct2ZfSU9NTqZ0GuXrnYFVpJ041T7rNfytha9VAdHAw5VbgNpquKzChRWYMijSFou/3wc
-         63KtkjsGu/Reu+gY6qsXeieM++jE7uNmefB189pE/5+99hEUNw0UXlXMdym0XzQWN1kn
-         A91Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=l2AjIcA200luhAvIV6Y4Gf8Evv6mr+gMr0zSOMeBGF0=;
-        b=zzARcTTD1tfHnSL4ptrqfTYyr7sOiT+BT0zBFLPgDzwdmNCnI9JhLhU+LckRHRpOmP
-         Zz6UlYopqUAuCQO74F1XwWymJo3cCP/sbXRdCM0H2EDXlPA9OnYA9s/wzGvvqM87sVfo
-         cLS6n/jW/llV9JxkEfTU1G/HpK5YdglIb0aJ7JBZwCrCjl0BJLcNxqELB6HABWfwNviT
-         mkLyjJXesyd7LT3F+aaGVN3TjGgLlrOBJzTl/ulSXW6zP4A+WNYi/KukQs5nZSIQM+By
-         Lt7sehVtkMdzAxh5EUYHYAYyuUkqqgOriZbZ4FhMcs56HuqZgtXiytn3ov6F2C3K1m0p
-         gbyw==
-X-Gm-Message-State: AOAM533xD0WHY8pS11a1jDD7CJaV/SOGlVYrrwK1ReqmcExfGfxzFaF0
-        VhUMWnYZIXodmYHcbvj55k4Hh/QwQuDFExlnTMSXk+x2e+8=
-X-Google-Smtp-Source: ABdhPJzfJy86v1LT9T9PbceGaJSdGiJzJxjTp4ZpZ3xskUoALrFNydaLEg1SS75REKrgTUuFEzaZClYi47zRER8lv+c=
-X-Received: by 2002:a25:69c3:: with SMTP id e186mr725094ybc.249.1636890823604;
- Sun, 14 Nov 2021 03:53:43 -0800 (PST)
+        with ESMTP id S230490AbhKNPrX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 14 Nov 2021 10:47:23 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75DAC061746;
+        Sun, 14 Nov 2021 07:44:22 -0800 (PST)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 2456C22234;
+        Sun, 14 Nov 2021 16:44:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1636904659;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fO/0Zxv6yZSCtbzAWraXzJrioMAawPciLz//4U5rTVc=;
+        b=aVrvmIRrpTWMvXpr5ZnUQSAn1V0QChAflw5ptlDKxMy0hwNX49gaelk9gz9VKMLnjrd7Ba
+        wt0AV5QYGSg+ofOf+iF4YUGZcwh8hgifFRYykj5qKgfu9kLNySNFKDgg0KqP52BxkTmT0Y
+        kb+MRq0RKeHIw8x+VO0RGlIlLr+AXQw=
 MIME-Version: 1.0
-From:   Turritopsis Dohrnii Teo En Ming <ceo.teo.en.ming@gmail.com>
-Date:   Sun, 14 Nov 2021 19:53:40 +0800
-Message-ID: <CAMEJMGHcCL=pCw43GBkqzp-DGxe2B0JW8cog-daUyOHes+U8uA@mail.gmail.com>
-Subject: I discovered that Aruba Instant On 1930 24G 4SFP/SFP+ JL682A Switch
- is Running an Operating System with Linux Kernel 4.4.120!
-To:     linux-spi@vger.kernel.org
-Cc:     ceo@teo-en-ming-corp.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Sun, 14 Nov 2021 16:44:18 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH] spi: fsl-dspi: use devm_spi_alloc_master()
+In-Reply-To: <20211113180642.7doe6dc5iotw5yez@skbuf>
+References: <20211110161754.3312805-1-michael@walle.cc>
+ <20211113180642.7doe6dc5iotw5yez@skbuf>
+User-Agent: Roundcube Webmail/1.4.11
+Message-ID: <cd4b16c6fb46cbb9670b5a9551bc46be@walle.cc>
+X-Sender: michael@walle.cc
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Subject: I discovered that Aruba Instant On 1930 24G 4SFP/SFP+ JL682A
-Switch is Running an Operating System with Linux Kernel 4.4.120!
+Am 2021-11-13 19:06, schrieb Vladimir Oltean:
+> On Wed, Nov 10, 2021 at 05:17:54PM +0100, Michael Walle wrote:
+>> Commit 530b5affc675 ("spi: fsl-dspi: fix use-after-free in remove 
+>> path")
+>> fixed the use-after-free by manually allocating memory. Nowadays, 
+>> since
+>> commit 5e844cc37a5c ("spi: Introduce device-managed SPI controller
+>> allocation"), there is a devres version of spi_alloc_master() for 
+>> exactly
+>> this purpose. Revert the commit which introduced the manual allocation
+>> and use the new devm_spi_alloc_master().
+>> 
+>> Signed-off-by: Michael Walle <michael@walle.cc>
+>> ---
+>> Btw, using the devm_ version of spi_controller_register() doesn't seem 
+>> to
+> 
+> you mean spi_register_controller.
+> 
+>> be a good idea, see commit 8d559a64f00b ("spi: stm32: drop devres 
+>> version
+>> of spi_register_master").
+> 
+> And you mention this because?
 
-Good day from Singapore,
+just in case someone thinks it is a good idea to convert the
+spi_register_controller() call.
 
-I discovered that Aruba Instant On 1930 24G 4SFP/SFP+ JL682A Switch is
-Running an Operating System with Linux Kernel 4.4.120!
+> The dspi driver doesn't use
+> devm_spi_register_controller(). In fact, if it could be made to not use
+> devres at all, I couldn't be happier. At this stage, the devres 
+> wrappers
+> for SPI are doing more harm than good.
+> 
+>>  drivers/spi/spi-fsl-dspi.c | 15 ++++++---------
+>>  1 file changed, 6 insertions(+), 9 deletions(-)
+>> 
+>> diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
+>> index fd004c9db9dc..29f8a596c8ee 100644
+>> --- a/drivers/spi/spi-fsl-dspi.c
+>> +++ b/drivers/spi/spi-fsl-dspi.c
+>> @@ -1227,17 +1227,11 @@ static int dspi_probe(struct platform_device 
+>> *pdev)
+>>  	void __iomem *base;
+>>  	bool big_endian;
+>> 
+>> -	dspi = devm_kzalloc(&pdev->dev, sizeof(*dspi), GFP_KERNEL);
+>> -	if (!dspi)
+>> -		return -ENOMEM;
+>> -
+>> -	ctlr = spi_alloc_master(&pdev->dev, 0);
+>> +	ctlr = devm_spi_alloc_master(&pdev->dev, sizeof(struct fsl_dspi));
+>>  	if (!ctlr)
+>>  		return -ENOMEM;
+>> 
+>> -	spi_controller_set_devdata(ctlr, dspi);
+>> -	platform_set_drvdata(pdev, dspi);
+>> -
+>> +	dspi = spi_controller_get_devdata(ctlr);
+>>  	dspi->pdev = pdev;
+>>  	dspi->ctlr = ctlr;
+>> 
+>> @@ -1373,6 +1367,8 @@ static int dspi_probe(struct platform_device 
+>> *pdev)
+>>  	if (dspi->devtype_data->trans_mode != DSPI_DMA_MODE)
+>>  		ctlr->ptp_sts_supported = true;
+>> 
+>> +	platform_set_drvdata(pdev, ctlr);
+>> +
+> 
+> Why do you feel a need to change the drvdata from "dspi" to "ctrl"?
 
-INTRODUCTION
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+It was just a revert and that was the way it was done before
+the patch mentioned above. You're right, dspi is better
+here and then the hunk below will be superfluous.
 
-My name is Mr. Turritopsis Dohrnii Teo En Ming, 43 years old as of 14
-Nov 2021. I live in Singapore. Presently I am an IT Consultant with a
-Systems Integrator (SI)/computer firm in Singapore. I am also a Linux
-and open source software and information technology enthusiast.
+Let me know if I should respin the patch or if you like to
+keep the devm_kzalloc() as it is now, because you've mentioned
+you don't like the spi devres mappers. During earlier debugging
+I just noticed the following comment in drivers/spi/spi.c and
+noticed that this driver isn't converted:
 
-You can read my autobiography on my redundant blogs. The title of my
-autobiography is:
+/* Release the last reference on the controller if its driver
+  * has not yet been converted to devm_spi_alloc_master/slave().
+  */
 
-=E2=80=9CAutobiography of Singaporean Targeted Individual Mr. Turritopsis
-Dohrnii Teo En Ming (Very First Draft, Lots More to Add in Future)=E2=80=9D
+-michael
 
-Links to my redundant blogs (Blogger and WordPress) can be found in my
-email signature below. These are my main blogs.
-
-I have three other redundant blogs, namely:
-
-https://teo-en-ming.tumblr.com/
-
-https://teo-en-ming.medium.com/
-
-https://teo-en-ming.livejournal.com/
-
-Future/subsequent versions of my autobiography will be published on my
-redundant blogs.
-
-My Blog Books (in PDF format) are also available for download on my
-redundant blogs.
-
-Over the years, I have published many guides, howtos, tutorials, and
-information technology articles on my redundant blogs. I hope that
-they are of use to information technology professionals.
-
-Thank you very much.
-
-
-
-
------BEGIN EMAIL SIGNATURE-----
-
-The Gospel for all Targeted Individuals (TIs):
-
-[The New York Times] Microwave Weapons Are Prime Suspect in Ills of
-U.S. Embassy Workers
-
-Link:
-https://www.nytimes.com/2018/09/01/science/sonic-attack-cuba-microwave.html
-
-***************************************************************************=
-*****************
-
-Singaporean Targeted Individual Mr. Turritopsis Dohrnii Teo En Ming's
-Academic Qualifications as at 14 Feb 2019 and refugee seeking attempts
-at the United Nations Refugee Agency Bangkok (21 Mar 2017), in Taiwan
-(5 Aug 2019) and Australia (25 Dec 2019 to 9 Jan 2020):
-
-[1] https://tdtemcerts.wordpress.com/
-
-[2] https://tdtemcerts.blogspot.sg/
-
-[3] https://www.scribd.com/user/270125049/Teo-En-Ming
-
------END EMAIL SIGNATURE-----
+> 
+>>  	ret = spi_register_controller(ctlr);
+>>  	if (ret != 0) {
+>>  		dev_err(&pdev->dev, "Problem registering DSPI ctlr\n");
+>> @@ -1396,7 +1392,8 @@ static int dspi_probe(struct platform_device 
+>> *pdev)
+>> 
+>>  static int dspi_remove(struct platform_device *pdev)
+>>  {
+>> -	struct fsl_dspi *dspi = platform_get_drvdata(pdev);
+>> +	struct spi_controller *ctlr = platform_get_drvdata(pdev);
+>> +	struct fsl_dspi *dspi = spi_controller_get_devdata(ctlr);
+>> 
+>>  	/* Disconnect from the SPI framework */
+>>  	spi_unregister_controller(dspi->ctlr);
+>> --
+>> 2.30.2
+>> 
