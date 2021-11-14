@@ -2,15 +2,15 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B2E44FC3D
-	for <lists+linux-spi@lfdr.de>; Sun, 14 Nov 2021 23:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A2144FC40
+	for <lists+linux-spi@lfdr.de>; Sun, 14 Nov 2021 23:30:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbhKNWdi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 14 Nov 2021 17:33:38 -0500
-Received: from mail.baikalelectronics.com ([87.245.175.226]:35928 "EHLO
+        id S234985AbhKNWdm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 14 Nov 2021 17:33:42 -0500
+Received: from mail.baikalelectronics.com ([87.245.175.226]:35962 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231877AbhKNWdh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 14 Nov 2021 17:33:37 -0500
+        with ESMTP id S233593AbhKNWdj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 14 Nov 2021 17:33:39 -0500
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Authentication-Results: mail.baikalelectronics.ru; dkim=permerror (bad message/signature format)
 To:     Serge Semin <fancer.lancer@gmail.com>,
@@ -21,9 +21,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Andy Shevchenko <andy@kernel.org>, <linux-spi@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 4/6] spi: dw: Convert to using the Bitfield access macros
-Date:   Mon, 15 Nov 2021 01:30:24 +0300
-Message-ID: <20211114223026.13359-5-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v2 5/6] spi: dw: Introduce Synopsys IP-core versions interface
+Date:   Mon, 15 Nov 2021 01:30:25 +0300
+Message-ID: <20211114223026.13359-6-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20211114223026.13359-1-Sergey.Semin@baikalelectronics.ru>
 References: <20211114223026.13359-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -34,220 +34,151 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The driver has been using the offset/bitwise-shift-based approach for the
-CSR fields R/W operations since it was merged into the kernel. It can be
-simplified by using the macros defined in the linux/bitfield.h and
-linux/bit.h header files like BIT(), GENMASK(), FIELD_PREP(), FIELD_GET(),
-etc where it is required, for instance in the cached cr0 preparation
-method. Thus in order to have the FIELD_*()-macros utilized we just need
-to convert the macros with the CSR-fields offsets to the masks with the
-corresponding registers fields definition. That's where the GENMASK() and
-BIT() macros come in handy. After that the masks can be used in the
-FIELD_*()-macros where it's appropriate.
+The driver currently supports two IP-core versions. It's DW APB SSI which
+is older version of the controller with APB system bus interface, and DW
+SSI controller with AHB bus interface. The later one is supposed to be a
+new generation high-speed SSI. Even though both of these IP-cores have got
+an almost identical registers space there are some differences. The driver
+differentiates these distinctions by the DW_SPI_CAP_DWC_HSSI capability
+flag. In addition to that each DW SSI IP-core is equipped with a Synopsys
+Component version register, which encodes the IP-core release ID the has
+been synthesized from. Seeing we are going to need the later one to
+differentiate some controller peculiarities it would be better to have a
+unified interface for both IP-core line and release versions instead of
+using each of them separately.
 
-We also need to convert the macros with the CRS-bit flags using the manual
-bitwise shift operations (x << y) to using the BIT() macro. Thus we'll
-have a more coherent set of the CSR-related macros.
+Introduced here IP-core versioning interface consists of two parts:
+1) IDs of the IP-core (virtual) and component versions.
+2) a set of macro helpers to identify current IP-core and component
+versions.
+
+So the platform code is supposed to assign a proper IP-core version based
+on it's platform -knowledge. The main driver initialization method reads
+the IP-core release ID from the SSI component version register. That data
+is used by the helpers to distinguish one IP-core release from another.
+Thus the rest of the driver can use these macros to implement the
+conditional code execution based on the specified IP-core and version IDs.
+
+Collect the IP-core versions interface and the defined capabilities at the
+top of the header file since they represent a common device description
+data and so to immediately available for the driver hackers.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
 ---
- drivers/spi/spi-dw-core.c | 31 +++++++++++--------
- drivers/spi/spi-dw.h      | 64 +++++++++++++++++++--------------------
- 2 files changed, 50 insertions(+), 45 deletions(-)
+
+Note I intentionally haven't used the "%p4cc" format specifier due to
+three reasons. First the component version 4cc string is preserved in the
+little endian format in the DW SSI register thus having '*' in the least
+significant byte.  Such representation do look well when you print it in
+hex, but that's not what the 4cc format print implementation expects
+(fourcc_string() wants to see a most-significant char at the lowest byte).
+Second the 4cc format also prints some pixel-format specific info like
+endiannes, which is irrelevant to the synopsys component version. Finally
+a string in the "v%c.%c%c" format represents the component version better.
+
+Changelog v2:
+- Replace the ASCII-to-integer conversion with a unified IP-core versions
+  interface.
+---
+ drivers/spi/spi-dw-core.c | 14 ++++++++++++++
+ drivers/spi/spi-dw.h      | 36 ++++++++++++++++++++++++++++--------
+ 2 files changed, 42 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-index 57bbffe6d6f9..b9f809989fda 100644
+index b9f809989fda..42536b448ddd 100644
 --- a/drivers/spi/spi-dw-core.c
 +++ b/drivers/spi/spi-dw-core.c
-@@ -5,6 +5,7 @@
-  * Copyright (c) 2009, Intel Corporation.
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/dma-mapping.h>
- #include <linux/interrupt.h>
- #include <linux/module.h>
-@@ -254,7 +255,7 @@ static irqreturn_t dw_spi_irq(int irq, void *dev_id)
+@@ -823,6 +823,20 @@ static void dw_spi_hw_init(struct device *dev, struct dw_spi *dws)
  {
- 	struct spi_controller *master = dev_id;
- 	struct dw_spi *dws = spi_controller_get_devdata(master);
--	u16 irq_status = dw_readl(dws, DW_SPI_ISR) & 0x3f;
-+	u16 irq_status = dw_readl(dws, DW_SPI_ISR) & DW_SPI_INT_MASK;
+ 	dw_spi_reset_chip(dws);
  
- 	if (!irq_status)
- 		return IRQ_NONE;
-@@ -273,32 +274,38 @@ static u32 dw_spi_prepare_cr0(struct dw_spi *dws, struct spi_device *spi)
- 
- 	if (!(dws->caps & DW_SPI_CAP_DWC_HSSI)) {
- 		/* CTRLR0[ 5: 4] Frame Format */
--		cr0 |= DW_SPI_CTRLR0_FRF_MOTO_SPI << DW_PSSI_CTRLR0_FRF_OFFSET;
-+		cr0 |= FIELD_PREP(DW_PSSI_CTRLR0_FRF_MASK, DW_SPI_CTRLR0_FRF_MOTO_SPI);
- 
- 		/*
- 		 * SPI mode (SCPOL|SCPH)
- 		 * CTRLR0[ 6] Serial Clock Phase
- 		 * CTRLR0[ 7] Serial Clock Polarity
- 		 */
--		cr0 |= ((spi->mode & SPI_CPOL) ? 1 : 0) << DW_PSSI_CTRLR0_SCOL_OFFSET;
--		cr0 |= ((spi->mode & SPI_CPHA) ? 1 : 0) << DW_PSSI_CTRLR0_SCPH_OFFSET;
-+		if (spi->mode & SPI_CPOL)
-+			cr0 |= DW_PSSI_CTRLR0_SCPOL;
-+		if (spi->mode & SPI_CPHA)
-+			cr0 |= DW_PSSI_CTRLR0_SCPHA;
- 
- 		/* CTRLR0[11] Shift Register Loop */
--		cr0 |= ((spi->mode & SPI_LOOP) ? 1 : 0) << DW_PSSI_CTRLR0_SRL_OFFSET;
-+		if (spi->mode & SPI_LOOP)
-+			cr0 |= DW_PSSI_CTRLR0_SRL;
- 	} else {
- 		/* CTRLR0[ 7: 6] Frame Format */
--		cr0 |= DW_SPI_CTRLR0_FRF_MOTO_SPI << DW_HSSI_CTRLR0_FRF_OFFSET;
-+		cr0 |= FIELD_PREP(DW_HSSI_CTRLR0_FRF_MASK, DW_SPI_CTRLR0_FRF_MOTO_SPI);
- 
- 		/*
- 		 * SPI mode (SCPOL|SCPH)
- 		 * CTRLR0[ 8] Serial Clock Phase
- 		 * CTRLR0[ 9] Serial Clock Polarity
- 		 */
--		cr0 |= ((spi->mode & SPI_CPOL) ? 1 : 0) << DW_HSSI_CTRLR0_SCPOL_OFFSET;
--		cr0 |= ((spi->mode & SPI_CPHA) ? 1 : 0) << DW_HSSI_CTRLR0_SCPH_OFFSET;
-+		if (spi->mode & SPI_CPOL)
-+			cr0 |= DW_HSSI_CTRLR0_SCPOL;
-+		if (spi->mode & SPI_CPHA)
-+			cr0 |= DW_HSSI_CTRLR0_SCPHA;
- 
- 		/* CTRLR0[13] Shift Register Loop */
--		cr0 |= ((spi->mode & SPI_LOOP) ? 1 : 0) << DW_HSSI_CTRLR0_SRL_OFFSET;
-+		if (spi->mode & SPI_LOOP)
-+			cr0 |= DW_HSSI_CTRLR0_SRL;
- 
- 		if (dws->caps & DW_SPI_CAP_KEEMBAY_MST)
- 			cr0 |= DW_HSSI_CTRLR0_KEEMBAY_MST;
-@@ -320,10 +327,10 @@ void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
- 
- 	if (!(dws->caps & DW_SPI_CAP_DWC_HSSI))
- 		/* CTRLR0[ 9:8] Transfer Mode */
--		cr0 |= cfg->tmode << DW_PSSI_CTRLR0_TMOD_OFFSET;
-+		cr0 |= FIELD_PREP(DW_PSSI_CTRLR0_TMOD_MASK, cfg->tmode);
- 	else
- 		/* CTRLR0[11:10] Transfer Mode */
--		cr0 |= cfg->tmode << DW_HSSI_CTRLR0_TMOD_OFFSET;
-+		cr0 |= FIELD_PREP(DW_HSSI_CTRLR0_TMOD_MASK, cfg->tmode);
- 
- 	dw_writel(dws, DW_SPI_CTRLR0, cr0);
- 
-@@ -850,7 +857,7 @@ static void dw_spi_hw_init(struct device *dev, struct dw_spi *dws)
- 
- 		if (!(cr0 & DW_PSSI_CTRLR0_DFS_MASK)) {
- 			dws->caps |= DW_SPI_CAP_DFS32;
--			dws->dfs_offset = DW_PSSI_CTRLR0_DFS32_OFFSET;
-+			dws->dfs_offset = __bf_shf(DW_PSSI_CTRLR0_DFS32_MASK);
- 			dev_dbg(dev, "Detected 32-bits max data frame size\n");
- 		}
- 	} else {
++	/*
++	 * Retrieve the Synopsys component version if it hasn't been specified
++	 * by the platform. CoreKit version ID is encoded as a 3-chars ASCII
++	 * code enclosed with '*' (typical for the most of Synopsys IP-cores).
++	 */
++	if (!dws->ver) {
++		dws->ver = dw_readl(dws, DW_SPI_VERSION);
++
++		dev_dbg(dev, "Synopsys DWC%sSSI v%c.%c%c\n",
++			(dws->caps & DW_SPI_CAP_DWC_HSSI) ? " " : " APB ",
++			DW_SPI_GET_BYTE(dws->ver, 3), DW_SPI_GET_BYTE(dws->ver, 2),
++			DW_SPI_GET_BYTE(dws->ver, 1));
++	}
++
+ 	/*
+ 	 * Try to detect the FIFO depth if not set by interface driver,
+ 	 * the depth could be from 2 to 256 from HW spec
 diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-index 893b78c43a50..634085eadad1 100644
+index 634085eadad1..2f7d77024b48 100644
 --- a/drivers/spi/spi-dw.h
 +++ b/drivers/spi/spi-dw.h
-@@ -41,39 +41,36 @@
- #define DW_SPI_CS_OVERRIDE		0xf4
+@@ -11,6 +11,30 @@
+ #include <linux/spi/spi-mem.h>
+ #include <linux/bitfield.h>
  
- /* Bit fields in CTRLR0 (DWC APB SSI) */
--#define DW_PSSI_CTRLR0_DFS_OFFSET		0
- #define DW_PSSI_CTRLR0_DFS_MASK			GENMASK(3, 0)
--#define DW_PSSI_CTRLR0_DFS32_OFFSET		16
-+#define DW_PSSI_CTRLR0_DFS32_MASK		GENMASK(20, 16)
++/* Synopsys DW SSI IP-core virtual IDs */
++#define DW_PSSI_ID			0
++#define DW_HSSI_ID			1
++
++/* Synopsys DW SSI component versions (FourCC sequence) */
++#define DW_HSSI_102A			0x3130322a
++
++/* DW SSI IP-core ID and version check helpers */
++#define dw_spi_ip_is(_dws, _ip) \
++	((_dws)->ip == DW_ ## _ip ## _ID)
++
++#define __dw_spi_ver_cmp(_dws, _ip, _ver, _op) \
++	(dw_spi_ip_is(_dws, _ip) && (_dws)->ver _op DW_ ## _ip ## _ver)
++
++#define dw_spi_ver_is(_dws, _ip, _ver) __dw_spi_ver_cmp(_dws, _ip, _ver, ==)
++
++#define dw_spi_ver_is_ge(_dws, _ip, _ver) __dw_spi_ver_cmp(_dws, _ip, _ver, >=)
++
++/* DW SPI controller capabilities */
++#define DW_SPI_CAP_CS_OVERRIDE		BIT(0)
++#define DW_SPI_CAP_KEEMBAY_MST		BIT(1)
++#define DW_SPI_CAP_DWC_HSSI		BIT(2)
++#define DW_SPI_CAP_DFS32		BIT(3)
++
+ /* Register offsets (Generic for both DWC APB SSI and DWC SSI IP-cores) */
+ #define DW_SPI_CTRLR0			0x00
+ #define DW_SPI_CTRLR1			0x04
+@@ -113,12 +137,6 @@
+ #define DW_SPI_GET_BYTE(_val, _idx) \
+ 	((_val) >> (BITS_PER_BYTE * (_idx)) & 0xff)
  
--#define DW_PSSI_CTRLR0_FRF_OFFSET		4
-+#define DW_PSSI_CTRLR0_FRF_MASK			GENMASK(5, 4)
- #define DW_SPI_CTRLR0_FRF_MOTO_SPI		0x0
- #define DW_SPI_CTRLR0_FRF_TI_SSP		0x1
- #define DW_SPI_CTRLR0_FRF_NS_MICROWIRE		0x2
- #define DW_SPI_CTRLR0_FRF_RESV			0x3
+-/* DW SPI capabilities */
+-#define DW_SPI_CAP_CS_OVERRIDE		BIT(0)
+-#define DW_SPI_CAP_KEEMBAY_MST		BIT(1)
+-#define DW_SPI_CAP_DWC_HSSI		BIT(2)
+-#define DW_SPI_CAP_DFS32		BIT(3)
+-
+ /* Slave spi_transfer/spi_mem_op related */
+ struct dw_spi_cfg {
+ 	u8 tmode;
+@@ -141,6 +159,10 @@ struct dw_spi_dma_ops {
+ struct dw_spi {
+ 	struct spi_controller	*master;
  
--#define DW_PSSI_CTRLR0_MODE_OFFSET		6
--#define DW_PSSI_CTRLR0_SCPH_OFFSET		6
--#define DW_PSSI_CTRLR0_SCOL_OFFSET		7
-+#define DW_PSSI_CTRLR0_MODE_MASK		GENMASK(7, 6)
-+#define DW_PSSI_CTRLR0_SCPHA			BIT(6)
-+#define DW_PSSI_CTRLR0_SCPOL			BIT(7)
++	u32			ip;		/* Synopsys DW SSI IP-core ID */
++	u32			ver;		/* Synopsys component version */
++	u32			caps;		/* DW SPI capabilities */
++
+ 	void __iomem		*regs;
+ 	unsigned long		paddr;
+ 	int			irq;
+@@ -149,8 +171,6 @@ struct dw_spi {
+ 	u32			max_mem_freq;	/* max mem-ops bus freq */
+ 	u32			max_freq;	/* max bus freq supported */
  
--#define DW_PSSI_CTRLR0_TMOD_OFFSET		8
--#define DW_PSSI_CTRLR0_TMOD_MASK		(0x3 << DW_PSSI_CTRLR0_TMOD_OFFSET)
-+#define DW_PSSI_CTRLR0_TMOD_MASK		GENMASK(9, 8)
- #define DW_SPI_CTRLR0_TMOD_TR			0x0	/* xmit & recv */
- #define DW_SPI_CTRLR0_TMOD_TO			0x1	/* xmit only */
- #define DW_SPI_CTRLR0_TMOD_RO			0x2	/* recv only */
- #define DW_SPI_CTRLR0_TMOD_EPROMREAD		0x3	/* eeprom read mode */
- 
--#define DW_PSSI_CTRLR0_SLVOE_OFFSET		10
--#define DW_PSSI_CTRLR0_SRL_OFFSET		11
--#define DW_PSSI_CTRLR0_CFS_OFFSET		12
-+#define DW_PSSI_CTRLR0_SLV_OE			BIT(10)
-+#define DW_PSSI_CTRLR0_SRL			BIT(11)
-+#define DW_PSSI_CTRLR0_CFS			BIT(12)
- 
- /* Bit fields in CTRLR0 (DWC SSI with AHB interface) */
--#define DW_HSSI_CTRLR0_SRL_OFFSET		13
--#define DW_HSSI_CTRLR0_TMOD_OFFSET		10
-+#define DW_HSSI_CTRLR0_DFS_MASK			GENMASK(4, 0)
-+#define DW_HSSI_CTRLR0_FRF_MASK			GENMASK(7, 6)
-+#define DW_HSSI_CTRLR0_SCPHA			BIT(8)
-+#define DW_HSSI_CTRLR0_SCPOL			BIT(9)
- #define DW_HSSI_CTRLR0_TMOD_MASK		GENMASK(11, 10)
--#define DW_HSSI_CTRLR0_SCPOL_OFFSET		9
--#define DW_HSSI_CTRLR0_SCPH_OFFSET		8
--#define DW_HSSI_CTRLR0_FRF_OFFSET		6
--#define DW_HSSI_CTRLR0_DFS_OFFSET		0
-+#define DW_HSSI_CTRLR0_SRL			BIT(13)
- 
- /*
-  * For Keem Bay, CTRLR0[31] is used to select controller mode.
-@@ -86,26 +83,27 @@
- #define DW_SPI_NDF_MASK				GENMASK(15, 0)
- 
- /* Bit fields in SR, 7 bits */
--#define DW_SPI_SR_MASK				0x7f	/* cover 7 bits */
--#define DW_SPI_SR_BUSY				(1 << 0)
--#define DW_SPI_SR_TF_NOT_FULL			(1 << 1)
--#define DW_SPI_SR_TF_EMPT			(1 << 2)
--#define DW_SPI_SR_RF_NOT_EMPT			(1 << 3)
--#define DW_SPI_SR_RF_FULL			(1 << 4)
--#define DW_SPI_SR_TX_ERR			(1 << 5)
--#define DW_SPI_SR_DCOL				(1 << 6)
-+#define DW_SPI_SR_MASK				GENMASK(6, 0)
-+#define DW_SPI_SR_BUSY				BIT(0)
-+#define DW_SPI_SR_TF_NOT_FULL			BIT(1)
-+#define DW_SPI_SR_TF_EMPT			BIT(2)
-+#define DW_SPI_SR_RF_NOT_EMPT			BIT(3)
-+#define DW_SPI_SR_RF_FULL			BIT(4)
-+#define DW_SPI_SR_TX_ERR			BIT(5)
-+#define DW_SPI_SR_DCOL				BIT(6)
- 
- /* Bit fields in ISR, IMR, RISR, 7 bits */
--#define DW_SPI_INT_TXEI				(1 << 0)
--#define DW_SPI_INT_TXOI				(1 << 1)
--#define DW_SPI_INT_RXUI				(1 << 2)
--#define DW_SPI_INT_RXOI				(1 << 3)
--#define DW_SPI_INT_RXFI				(1 << 4)
--#define DW_SPI_INT_MSTI				(1 << 5)
-+#define DW_SPI_INT_MASK				GENMASK(5, 0)
-+#define DW_SPI_INT_TXEI				BIT(0)
-+#define DW_SPI_INT_TXOI				BIT(1)
-+#define DW_SPI_INT_RXUI				BIT(2)
-+#define DW_SPI_INT_RXOI				BIT(3)
-+#define DW_SPI_INT_RXFI				BIT(4)
-+#define DW_SPI_INT_MSTI				BIT(5)
- 
- /* Bit fields in DMACR */
--#define DW_SPI_DMACR_RDMAE			(1 << 0)
--#define DW_SPI_DMACR_TDMAE			(1 << 1)
-+#define DW_SPI_DMACR_RDMAE			BIT(0)
-+#define DW_SPI_DMACR_TDMAE			BIT(1)
- 
- /* Mem/DMA operations helpers */
- #define DW_SPI_WAIT_RETRIES			5
+-	u32			caps;		/* DW SPI capabilities */
+-
+ 	u32			reg_io_width;	/* DR I/O width in bytes */
+ 	u16			bus_num;
+ 	u16			num_cs;		/* supported slave numbers */
 -- 
 2.33.0
 
