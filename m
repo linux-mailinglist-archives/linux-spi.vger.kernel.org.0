@@ -2,104 +2,118 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 630444508FC
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Nov 2021 16:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 839AA450918
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Nov 2021 16:59:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236552AbhKOP5G (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Nov 2021 10:57:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47244 "EHLO
+        id S232362AbhKOQCi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Nov 2021 11:02:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236615AbhKOP5C (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Nov 2021 10:57:02 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F4AC0613B9
-        for <linux-spi@vger.kernel.org>; Mon, 15 Nov 2021 07:53:55 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id p37so34173758uae.8
-        for <linux-spi@vger.kernel.org>; Mon, 15 Nov 2021 07:53:55 -0800 (PST)
+        with ESMTP id S231562AbhKOQCi (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Nov 2021 11:02:38 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE49C061714;
+        Mon, 15 Nov 2021 07:59:41 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id e7so22018995ljq.12;
+        Mon, 15 Nov 2021 07:59:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=aEbkD0MZHqHf+9rUBNePxHoQt3EslhmQ3qory9m4aBw=;
-        b=E7rBax8labyklrw9VhcUbmFHxnpO3O8QEFRsWBHgfc57M3AeLCa8782v0bv0Jr4gq9
-         CLvZx25oPmvQN9fuB4sVJxT9vgDlvVr6SyZ/Os4VZRLuhGx/IIXr8O0f67oILXtwd2wq
-         UUTcE+0bpEWwlyQCg+q/3PHPtTctBmAGftknE/lgWm9HjcRWhnOscjdn2FVyr7pHjvPd
-         JBS8eeanIOClck7JT0ZBMvWXMmPbNMjTE5OGUl1aGutxhBJVuGdnHIdi+0FfBkkvqVsX
-         wCFIcopU3a6iZfbLGEMHO75S8YS+t3i+i3YvPea4yXEl1Z1j8vdxxq00h0NLzrcvKkiX
-         hS+A==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QzUIYcTDeu7AABPbQcjXh6JIQXphQGEMy7nbkxcrjJA=;
+        b=KbSslb+9UE5qfEOdmCWAMaI5UlDWuLQ78L/FXMwh3HEqZA3TWV7Ko7DuD8+0+bHdbZ
+         gv1cFNK7XgaOaV8Ed4+y1avedzPv/WbT/ktEtuFDAkjk4UDtr3hMe+lZ4qlWTjopHw09
+         qDt+iy/mi3fmfQNGNHpGK4WJZ1zm2AHfXVIhMMLdNsfUbNAyGaehm/pSW5aMO172ZDcq
+         NCpM3NJAA8EwpeKtMC26cRRL6FKU5VlMqX+D1dh3/Wp4G1YxlGW95Ah67ebPs9azrY96
+         AiYwE6HulCWPTLJkFtx+3PlU5WONEbzKRPBceMfnpSaPwrV3nA4etTZUhKfmCZ53Zmb7
+         R3Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=aEbkD0MZHqHf+9rUBNePxHoQt3EslhmQ3qory9m4aBw=;
-        b=h3roC5qOI5v+G3nE2Z/orANHBlcQ/LXT2/KZMEyoirKJhLuUpxurKPC33R8dLRi50S
-         Pf7nZvnO5fNnKHbme40KDsJiMnzCHdv0vJoH2kmIPTIg7Cesoq1RIdxY+GRy4JJJQAGr
-         5xgABAA+GjR/bkZKhb7Kz1AIJIK3vo7wJsroafESe8WHXvGxW7uXe6V7YA04uvc+MpE4
-         g6Y/KSBmOHwKW5NBKr2z3b4vDnxADVWpshRJHPRVARC3bPA8yeKi03afzq7AJrrvIkyP
-         H32FgIiKObIFai9oLQ6gCxK/dxaCPWF8VOEUgVA6AzwG7GjfKsQ5gbEbwTzrABM7vDHR
-         NpFQ==
-X-Gm-Message-State: AOAM533weSitvoZoUCThPDtZRWzUdPK1BdXfa3poolbttL7dXsu8pKaZ
-        Fa6Jr1Qp8yQZXM+Mug3IkXZ4K6kuKHdt/WGNYSc=
-X-Google-Smtp-Source: ABdhPJxURdO8f+60HnJy0kPpGz3jy0J9cc2WRT16RVVAhwaLiCF/+y2eo9Dip3KDc5GDSfsyindK0tF2AX2hN8TtN/0=
-X-Received: by 2002:a05:6102:3708:: with SMTP id s8mr43676318vst.45.1636991634051;
- Mon, 15 Nov 2021 07:53:54 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QzUIYcTDeu7AABPbQcjXh6JIQXphQGEMy7nbkxcrjJA=;
+        b=g6iCQEv++0w24LCUl1PKjHc19pYaLdkzICeQBM6M+nfyme4M8qoPIlmbtDgcd2ocOK
+         qhGeH8BL779IX3dVi1CX8iY2TU7fS1vej0T7eZewOszJxUTwf6y4hjI+jAGsC4pP+5vj
+         2REc2wQrM88U8GfCv29X3GLn3Rr5i7YLInfF05UtnWe1uXXJjcSoVgMM+iBEhHyX0zs8
+         Xd8PUQP4WnU9eD9r1tevurNdFwFnNVlQ4R4x39cJf1YzSRo4ATsy3alkezUONmH47LJP
+         d4ockVH1woLxcws3BtXXLT7+O6fiT23o5iMdoOgoYIDoASZNfNmDghRtSxNdphBBNtVk
+         PBuA==
+X-Gm-Message-State: AOAM530To9fLGuHFEpL1L2LSxVuF1IsetegWYjSoGzeulrw/V/imonZo
+        gcmKk5kgiLxFzFgjGaZ0hIA=
+X-Google-Smtp-Source: ABdhPJzdlK9tvsO7ov7NVTwvGE2wpeq1+BGMgQHa6DQaiLwmVBMweiq1NqUrBTigvjHxfnscsctkAA==
+X-Received: by 2002:a05:651c:2123:: with SMTP id a35mr40416450ljq.285.1636991980338;
+        Mon, 15 Nov 2021 07:59:40 -0800 (PST)
+Received: from mobilestation ([95.79.188.236])
+        by smtp.gmail.com with ESMTPSA id t1sm1527341ljd.43.2021.11.15.07.59.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Nov 2021 07:59:39 -0800 (PST)
+Date:   Mon, 15 Nov 2021 18:59:38 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Mark Brown <broonie@kernel.org>,
+        Nandhini Srikandan <nandhini.srikandan@intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 6/6] spi: dw: Replace DWC_HSSI capability with IP-core
+ version checker
+Message-ID: <20211115155938.xicjyjxmy4hfk2xf@mobilestation>
+References: <20211114223026.13359-1-Sergey.Semin@baikalelectronics.ru>
+ <20211114223026.13359-7-Sergey.Semin@baikalelectronics.ru>
+ <YZJwTgAPZYVvzGpi@smile.fi.intel.com>
+ <20211115150856.ma2wjg2ev5wylspg@mobilestation>
+ <CAHp75VdsAzpUiM7U+f69PguGAa4QV+izM0p5DNNWp=d9yNT0eA@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6130:395:0:0:0:0 with HTTP; Mon, 15 Nov 2021 07:53:53
- -0800 (PST)
-Reply-To: liampayen50@gmail.com
-From:   liam payen <io452404@gmail.com>
-Date:   Mon, 15 Nov 2021 07:53:53 -0800
-Message-ID: <CAA+kqzy1Cusup5u=AF4mHzppxLJ1qoXcipsz75MFOM5CaXX8eQ@mail.gmail.com>
-Subject: =?UTF-8?B?5oiR6ZyA6KaB5L2g55qE5biu5Yqp?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75VdsAzpUiM7U+f69PguGAa4QV+izM0p5DNNWp=d9yNT0eA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-5oiR5piv5Yip5Lqa5aeGwrfkvanmgankuK3lo6vlpKvkurrjgIINCg0K5Zyo576O5Zu96ZmG5Yab
-55qE5Yab5LqL6YOo6Zeo44CC576O5Zu977yM5LiA5ZCN5Lit5aOr77yMMzIg5bKB77yM5oiR5Y2V
-6Lqr77yM5p2l6Ieq576O5Zu955Sw57qz6KW/5bee5YWL5Yip5aSr5YWw77yM55uu5YmN6am75omO
-5Zyo5Y+Z5Yip5Lqa77yM5LiO5oGQ5oCW5Li75LmJ5L2c5oiY44CC5oiR55qE5Y2V5L2N5piv56ys
-NOaKpOeQhumYn+esrDc4MuaXheaUr+aPtOiQpeOAgg0KDQrmiJHmmK/kuIDkuKrlhYXmu6HniLHl
-v4PjgIHor5rlrp7lkozmt7Hmg4XnmoTkurrvvIzlhbfmnInoia/lpb3nmoTlub3pu5jmhJ/vvIzm
-iJHllpzmrKLnu5Por4bmlrDmnIvlj4vlubbkuobop6Pku5bku6znmoTnlJ/mtLvmlrnlvI/vvIzm
-iJHllpzmrKLnnIvliLDlpKfmtbfnmoTms6LmtarlkozlsbHohInnmoTnvo7kuL3ku6Xlj4rlpKfo
-h6rnhLbmiYDmi6XmnInnmoTkuIDliIfmj5DkvpvjgILlvojpq5jlhbTog73mm7TlpJrlnLDkuobo
-p6PmgqjvvIzmiJHorqTkuLrmiJHku6zlj6/ku6Xlu7rnq4voia/lpb3nmoTllYbkuJrlj4vosIrj
-gIINCg0K5oiR5LiA55u05b6I5LiN5byA5b+D77yM5Zug5Li66L+Z5Lqb5bm05p2l55Sf5rS75a+5
-5oiR5LiN5YWs5bmz77yb5oiR5aSx5Y675LqG54i25q+N77yM6YKj5bm05oiRIDIxDQrlsoHjgILm
-iJHniLbkurLlj6vkuZTlsJTCt+S9qeaBqe+8jOavjeS6suWPq+eOm+S4vcK35L2p5oGp44CC5rKh
-5pyJ5Lq65biu5Yqp5oiR77yM5L2G5b6I6auY5YW05oiR57uI5LqO5Zyo576O5Yab5Lit5om+5Yiw
-5LqG6Ieq5bex44CCDQoNCuaIkee7k+WpmueUn+S6huWtqeWtkO+8jOS9huS7luatu+S6hu+8jOS4
-jeS5heaIkeS4iOWkq+W8gOWni+asuumql+aIke+8jOaJgOS7peaIkeS4jeW+l+S4jeaUvuW8g+Wp
-muWnu+OAgg0KDQrlnKjmiJHnmoTlm73lrrbjgIHnvo7lm73lkozlj5nliKnkuprov5nph4zvvIzm
-iJHkuZ/lvojlubjov5DvvIzmi6XmnInmiJHnlJ/mtLvkuK3miYDpnIDnmoTkuIDliIfvvIzkvYbm
-sqHmnInkurrnu5nmiJHlu7rorq7jgILmiJHpnIDopoHkuIDkuKror5rlrp7nmoTkurrmnaXkv6Hk
-u7vvvIzku5bkuZ/kvJrlsLHlpoLkvZXmipXotYTmiJHnmoTpkrHmj5Dkvpvlu7rorq7jgILlm6Dk
-uLrmiJHmmK/miJHniLbmr43lnKjku5bku6zljrvkuJbliY3nlJ/kuIvnmoTllK/kuIDkuIDkuKrl
-pbPlranjgIINCg0K5oiR5LiN6K6k6K+G5L2g5pys5Lq677yM5L2G5oiR6K6k5Li65pyJ5LiA5Liq
-5YC85b6X5L+h6LWW55qE5aW95Lq677yM5LuW5Y+v5Lul5bu656uL55yf5q2j55qE5L+h5Lu75ZKM
-6Imv5aW955qE5ZWG5Lia5Y+L6LCK77yM5aaC5p6c5L2g55yf55qE5pyJ5LiA5Liq6K+a5a6e55qE
-5ZCN5a2X77yM5oiR5Lmf5pyJ5LiA5Lqb5Lic6KW/6KaB5ZKM5L2g5YiG5Lqr55u45L+h44CC5Zyo
-5L2g6Lqr5LiK77yM5Zug5Li65oiR6ZyA6KaB5L2g55qE5biu5Yqp44CC5oiR5oul5pyJ5oiR5Zyo
-5Y+Z5Yip5Lqa6L+Z6YeM6LWa5Yiw55qE5oC76aKd77yIMjUwDQrkuIfnvo7lhYPvvInjgILmiJHk
-vJrlnKjkuIvkuIDlsIHnlLXlrZDpgq7ku7bkuK3lkYror4nkvaDmiJHmmK/lpoLkvZXlgZrliLDn
-moTvvIzkuI3opoHmg4rmhYzvvIzku5bku6zmsqHmnInpo47pmanvvIzogIzkuJTmiJHov5jlnKjk
-uI4gUmVkDQrmnInogZTns7vnmoTkurrpgZPkuLvkuYnljLvnlJ/nmoTluK7liqnkuIvlsIbov5nn
-rJTpkrHlrZjlhaXkuobpk7booYzjgILmiJHluIzmnJvmgqjlsIboh6rlt7HkvZzkuLrmiJHnmoTl
-j5fnm4rkurrmnaXmjqXmlLbln7rph5HlubblnKjmiJHlnKjov5nph4zlrozmiJDlkI7noa7kv53l
-roPnmoTlronlhajlubbojrflvpfmiJHnmoTlhpvkuovpgJrooYzor4Hku6XlnKjmgqjnmoTlm73l
-rrbkuI7mgqjkvJrpnaLvvJvkuI3opoHlrrPmgJXpk7booYzkvJrlsIbotYTph5HlrZjlgqjlnKgN
-CkFUTSBWSVNBIOWNoeS4re+8jOi/meWvueaIkeS7rOadpeivtOaYr+WuieWFqOS4lOW/q+aNt+ea
-hOOAgg0KDQrnrJTorrA75oiR5LiN55+l6YGT5oiR5Lus6KaB5Zyo6L+Z6YeM5ZGG5aSa5LmF77yM
-5oiR55qE5ZG96L+Q77yM5Zug5Li65oiR5Zyo6L+Z6YeM5Lik5qyh54K45by56KKt5Ye75Lit5bm4
-5a2Y5LiL5p2l77yM6L+Z5L+D5L2/5oiR5a+75om+5LiA5Liq5YC85b6X5L+h6LWW55qE5Lq65p2l
-5biu5Yqp5oiR5o6l5pS25ZKM5oqV6LWE5Z+66YeR77yM5Zug5Li65oiR5bCG5p2l5Yiw5L2g5Lus
-55qE5Zu95a625Ye66Lqr5oqV6LWE77yM5byA5aeL5paw55Sf5rS777yM5LiN5YaN5b2T5YW144CC
-DQoNCuWmguaenOaCqOaEv+aEj+iwqOaFjuWkhOeQhu+8jOivt+WbnuWkjeaIkeOAguaIkeS8muWR
-iuivieS9oOS4i+S4gOatpeeahOa1geeoi++8jOW5tuWPkemAgeabtOWkmuWFs+S6juWfuumHkeWt
-mOWFpemTtuihjOeahOS/oeaBr+OAguS7peWPiumTtuihjOWwhuWmguS9leW4ruWKqeaIkeS7rOmA
-mui/hyBBVE0gVklTQQ0KQ0FSRCDlsIbotYTph5Hovaznp7vliLDmgqjnmoTlm73lrrYv5Zyw5Yy6
-44CC5aaC5p6c5L2g5pyJ5YW06Laj77yM6K+35LiO5oiR6IGU57O744CCDQo=
+On Mon, Nov 15, 2021 at 05:19:28PM +0200, Andy Shevchenko wrote:
+> On Mon, Nov 15, 2021 at 5:08 PM Serge Semin <fancer.lancer@gmail.com> wrote:
+> > On Mon, Nov 15, 2021 at 04:35:58PM +0200, Andy Shevchenko wrote:
+> > > On Mon, Nov 15, 2021 at 01:30:26AM +0300, Serge Semin wrote:
+> 
+> ...
+> 
+> > > >  /* DW SPI controller capabilities */
+> > > >  #define DW_SPI_CAP_CS_OVERRIDE             BIT(0)
+> > > >  #define DW_SPI_CAP_KEEMBAY_MST             BIT(1)
+> > > > -#define DW_SPI_CAP_DWC_HSSI                BIT(2)
+> > > > -#define DW_SPI_CAP_DFS32           BIT(3)
+> > > > +#define DW_SPI_CAP_DFS32           BIT(2)
+> >
+> > > In one patch you move this in the file upper.
+> > > Here you reshuffling it due to dropping one bit.
+> > >
+> > > Now I'm wondering if you may split these two into a separate patch, which
+> > > brings us to simple
+> > >
+> > > -#define DW_SPI_CAP_DWC_HSSI          BIT(3)
+> > >
+> > > here.
+> >
+> > I can change the bit-numbers assignment in the previous patch, which
+> > moves this block of macros up to the top of the file. Thus we'll
+> > have just a single
+> > -#define DW_SPI_CAP_DWC_HSSI            BIT(3)
+> > here. What do you think? Is that what you meant?
+> 
+> I think that reassignment doesn't fit the previous patch per se, hence
+> I proposed to have yet another one,
+
+> But in any case it's a minor
+> thingy.
+
+Since I have to resend the series one more time I'll do as you
+suggested and unpin the bit numbering change into a separate patch.
+
+-Sergey
+
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
