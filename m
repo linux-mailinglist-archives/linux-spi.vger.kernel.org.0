@@ -2,164 +2,145 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 816D6450729
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Nov 2021 15:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0B9450773
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Nov 2021 15:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234939AbhKOOjX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Nov 2021 09:39:23 -0500
-Received: from mga01.intel.com ([192.55.52.88]:21564 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236278AbhKOOjH (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 15 Nov 2021 09:39:07 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10168"; a="257198994"
-X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
-   d="scan'208";a="257198994"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 06:36:09 -0800
-X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
-   d="scan'208";a="453833971"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 06:36:07 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1mmd5S-0077Pv-Hd;
-        Mon, 15 Nov 2021 16:35:58 +0200
-Date:   Mon, 15 Nov 2021 16:35:58 +0200
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        id S231669AbhKOOt2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Nov 2021 09:49:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231716AbhKOOt0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Nov 2021 09:49:26 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2C4C061570;
+        Mon, 15 Nov 2021 06:46:26 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id e7so21503997ljq.12;
+        Mon, 15 Nov 2021 06:46:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=f9990VLRY1mM2sii4oucAgZqtJr4f6UTn2nlUsBeiyA=;
+        b=MKv4lJzovSleVVtb8Uez4QS8nWVoyslVc4dAhZ3Ja9hcfOWhdQeyMWw6FHhrLjYpMe
+         nYJhoHPJHieO78N1tejBSn1JjrO7HehrBzOD6p80ebHQ/GkZbHzj+oDCc5U4EAGGyBKV
+         xbJLawSqjqY4fBNx9jKlTQhw4P401MYqth7VhZkzSxvdhwOw2g0BxwUpHsNeyVoCEXwg
+         AneGSb38fLLRS0lfd/WXUhHjDQTfopD289+UYtNAyG6eoU7lhx2ZHI9h8rOgSDINeyOy
+         BSHVlS4ECWcjRF5ej1E2mdUBpiNe11q16/40ayNE4SINNFWYIMy3ZhzwXNTN4fPHDK38
+         wMxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=f9990VLRY1mM2sii4oucAgZqtJr4f6UTn2nlUsBeiyA=;
+        b=EGI7XTEKJK30mo06GtmmCuEk6hAAOu9Yoxxp4a0yCLbpDki9eXCf2fLD8+ZgaaQEnz
+         D4uS5FKI/LMTrRXO0cARBLFSb8UxXQ+9oztDgOT0ABbf+fHheeVa4Ip9Ao1qQ2ldGwDU
+         ekAK0eEcTu88DHjCV2x74+5djr/DMg3Ot5dU9pq56dKnIESEIbCaFpeaqS3fAwlcpofO
+         +AI+p/8zDM/suBSPRgwaJGimczRrtcIssTNGH7KPAKHS2PdVcBFRP/pIK04bLsoXuqUg
+         byPg7NEoTGslz5DIlP1sjJdwOFK6nJu9UnUxEFORzAUV7LZ0yIA0ecdUVSqqRnU6bqRY
+         wgAg==
+X-Gm-Message-State: AOAM531cafvAaf8LoAF0dWMQIDv6JNYs4Ql34l+Y4ELMjvW5g3eFIgOi
+        u681M/SmTf3rZocMn3kEQCbiRi5SWbU=
+X-Google-Smtp-Source: ABdhPJyGzX+uJoClUoX59O9YRdwTgWzR3XA1e/9PtaHs0iyNVaYjGst0rpo/clkWJ4amyTD6J2hiFA==
+X-Received: by 2002:a2e:b711:: with SMTP id j17mr29887114ljo.39.1636987584324;
+        Mon, 15 Nov 2021 06:46:24 -0800 (PST)
+Received: from [192.168.2.145] (46-138-46-211.dynamic.spd-mgts.ru. [46.138.46.211])
+        by smtp.googlemail.com with ESMTPSA id j2sm1445777lfr.109.2021.11.15.06.46.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Nov 2021 06:46:24 -0800 (PST)
+Subject: Re: [PATCH 01/11] ASoC: dai_dma: remove slave_id field
+To:     Lars-Peter Clausen <lars@metafoo.de>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Andy Gross <agross@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hyun Kwon <hyun.kwon@xilinx.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
         Mark Brown <broonie@kernel.org>,
-        Nandhini Srikandan <nandhini.srikandan@intel.com>,
-        Andy Shevchenko <andy@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] spi: dw: Replace DWC_HSSI capability with IP-core
- version checker
-Message-ID: <YZJwTgAPZYVvzGpi@smile.fi.intel.com>
-References: <20211114223026.13359-1-Sergey.Semin@baikalelectronics.ru>
- <20211114223026.13359-7-Sergey.Semin@baikalelectronics.ru>
+        Michal Simek <michal.simek@xilinx.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Scott Branden <sbranden@broadcom.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        dmaengine@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-staging@lists.linux.dev,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
+References: <20211115085403.360194-1-arnd@kernel.org>
+ <20211115085403.360194-2-arnd@kernel.org>
+ <647b842d-76a1-7a96-3ea7-8a37b62bc18e@metafoo.de>
+ <CAK8P3a2EVseM4t=e982fFhzBGSZxZ2_V-FHwr-fQPd-bkAKaJg@mail.gmail.com>
+ <d2dd42fc-e58a-0c06-7f7e-a6a2161c368d@metafoo.de>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <5737810c-420a-2f8d-99bf-24a2558d5855@gmail.com>
+Date:   Mon, 15 Nov 2021 17:46:22 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211114223026.13359-7-Sergey.Semin@baikalelectronics.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <d2dd42fc-e58a-0c06-7f7e-a6a2161c368d@metafoo.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 01:30:26AM +0300, Serge Semin wrote:
-> Since there is a common IP-core and component versions interface available
-> we can use it to differentiate the DW HSSI device features in the code.
-> Let's remove the corresponding DWC_HSSI capability flag then and use the
-> dw_spi_ip_is() macro instead.
-
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-But see below.
-
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+15.11.2021 14:53, Lars-Peter Clausen пишет:
+> On 11/15/21 11:42 AM, Arnd Bergmann wrote:
+>> On Mon, Nov 15, 2021 at 11:14 AM Lars-Peter Clausen <lars@metafoo.de>
+>> wrote:
+>>> On 11/15/21 9:53 AM, Arnd Bergmann wrote:
+>>>> From: Arnd Bergmann <arnd@arndb.de>
+>>>>
+>>>> This field is never set, and serves no purpose, so remove it.
+>>> I agree that we should remove it. Its been legacy support code for a
+>>> while, but the description that there is no user is not right.
+>>>
+>>> The tegra20_spdif driver obviously uses it and that user is removed in
+>>> this patch. I think it makes sense to split that out into a separate
+>>> patch with a description why the driver will still work even with
+>>> slave_id removed. Maybe the best is to remove the whole tegra20_spdif
+>>> driver.
+>> Ok, I'll split out the tegra patch and try to come up with a better
+>> description for it. What I saw in that driver is it just passes down the
+>> slave_id number from a 'struct resource', but there is nothing in
+>> the kernel that sets up this resource.
+>>
+>> Do you or someone else have more information on the state of this
+>> driver? I can see that it does not contain any of_device_id based
+>> probing, so it seems that this is either dead code, the platform_device
+>> gets created by some other code that is no longer compatible with
+>> this driver.
 > 
-> ---
-> 
-> Changelog v2:
-> - This is a new patch created as a logical result of a new DW SSI IP-core
->   versions internal interface introduced in the previous patch.
-> ---
->  drivers/spi/spi-dw-core.c | 8 ++++----
->  drivers/spi/spi-dw-mmio.c | 5 +++--
->  drivers/spi/spi-dw.h      | 3 +--
->  3 files changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index 42536b448ddd..934cc7a922e8 100644
-> --- a/drivers/spi/spi-dw-core.c
-> +++ b/drivers/spi/spi-dw-core.c
-> @@ -272,7 +272,7 @@ static u32 dw_spi_prepare_cr0(struct dw_spi *dws, struct spi_device *spi)
->  {
->  	u32 cr0 = 0;
->  
-> -	if (!(dws->caps & DW_SPI_CAP_DWC_HSSI)) {
-> +	if (dw_spi_ip_is(dws, PSSI)) {
->  		/* CTRLR0[ 5: 4] Frame Format */
->  		cr0 |= FIELD_PREP(DW_PSSI_CTRLR0_FRF_MASK, DW_SPI_CTRLR0_FRF_MOTO_SPI);
->  
-> @@ -325,7 +325,7 @@ void dw_spi_update_config(struct dw_spi *dws, struct spi_device *spi,
->  	/* CTRLR0[ 4/3: 0] or CTRLR0[ 20: 16] Data Frame Size */
->  	cr0 |= (cfg->dfs - 1) << dws->dfs_offset;
->  
-> -	if (!(dws->caps & DW_SPI_CAP_DWC_HSSI))
-> +	if (dw_spi_ip_is(dws, PSSI))
->  		/* CTRLR0[ 9:8] Transfer Mode */
->  		cr0 |= FIELD_PREP(DW_PSSI_CTRLR0_TMOD_MASK, cfg->tmode);
->  	else
-> @@ -832,7 +832,7 @@ static void dw_spi_hw_init(struct device *dev, struct dw_spi *dws)
->  		dws->ver = dw_readl(dws, DW_SPI_VERSION);
->  
->  		dev_dbg(dev, "Synopsys DWC%sSSI v%c.%c%c\n",
-> -			(dws->caps & DW_SPI_CAP_DWC_HSSI) ? " " : " APB ",
-> +			dw_spi_ip_is(dws, PSSI) ? " APB " : " ",
->  			DW_SPI_GET_BYTE(dws->ver, 3), DW_SPI_GET_BYTE(dws->ver, 2),
->  			DW_SPI_GET_BYTE(dws->ver, 1));
->  	}
-> @@ -860,7 +860,7 @@ static void dw_spi_hw_init(struct device *dev, struct dw_spi *dws)
->  	 * writability. Note DWC SSI controller also has the extended DFS, but
->  	 * with zero offset.
->  	 */
-> -	if (!(dws->caps & DW_SPI_CAP_DWC_HSSI)) {
-> +	if (dw_spi_ip_is(dws, PSSI)) {
->  		u32 cr0, tmp = dw_readl(dws, DW_SPI_CTRLR0);
->  
->  		dw_spi_enable_chip(dws, 0);
-> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-> index 0b37bd32b041..c0e5bb6add0a 100644
-> --- a/drivers/spi/spi-dw-mmio.c
-> +++ b/drivers/spi/spi-dw-mmio.c
-> @@ -207,7 +207,7 @@ static int dw_spi_pssi_init(struct platform_device *pdev,
->  static int dw_spi_hssi_init(struct platform_device *pdev,
->  			    struct dw_spi_mmio *dwsmmio)
->  {
-> -	dwsmmio->dws.caps = DW_SPI_CAP_DWC_HSSI;
-> +	dwsmmio->dws.ip = DW_HSSI_ID;
->  
->  	dw_spi_dma_setup_generic(&dwsmmio->dws);
->  
-> @@ -217,7 +217,8 @@ static int dw_spi_hssi_init(struct platform_device *pdev,
->  static int dw_spi_keembay_init(struct platform_device *pdev,
->  			       struct dw_spi_mmio *dwsmmio)
->  {
-> -	dwsmmio->dws.caps = DW_SPI_CAP_KEEMBAY_MST | DW_SPI_CAP_DWC_HSSI;
-> +	dwsmmio->dws.ip = DW_HSSI_ID;
-> +	dwsmmio->dws.caps = DW_SPI_CAP_KEEMBAY_MST;
->  
->  	return 0;
->  }
-> diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-> index 2f7d77024b48..d5ee5130601e 100644
-> --- a/drivers/spi/spi-dw.h
-> +++ b/drivers/spi/spi-dw.h
-> @@ -32,8 +32,7 @@
->  /* DW SPI controller capabilities */
->  #define DW_SPI_CAP_CS_OVERRIDE		BIT(0)
->  #define DW_SPI_CAP_KEEMBAY_MST		BIT(1)
-> -#define DW_SPI_CAP_DWC_HSSI		BIT(2)
-> -#define DW_SPI_CAP_DFS32		BIT(3)
-> +#define DW_SPI_CAP_DFS32		BIT(2)
+> I've looked into this a while back, when I tried to remove slave_id. And
+> as far as I can tell there were never any in-tree users of this driver,
+> even back when we used platform board files. Maybe somebody from Nvidia
+> knows if there are out-of-tree users.
 
-In one patch you move this in the file upper.
-Here you reshuffling it due to dropping one bit.
+That Tegra SPDIF driver was never used. Still there is a growing
+interest nowadays in making it alive by implementing HDMI audio support
+for Tegra20 SoC. It was on my todo list for a long time, I'll try to
+prioritize that work 5.17, it shouldn't take much effort.
 
-Now I'm wondering if you may split these two into a separate patch, which
-brings us to simple
-
--#define DW_SPI_CAP_DWC_HSSI		BIT(3)
-
-here.
-
->  
->  /* Register offsets (Generic for both DWC APB SSI and DWC SSI IP-cores) */
->  #define DW_SPI_CTRLR0			0x00
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+The slave_id should be removed anyways, it won't be needed.
