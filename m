@@ -2,35 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D48B6451DC5
+	by mail.lfdr.de (Postfix) with ESMTP id 16500451DC3
 	for <lists+linux-spi@lfdr.de>; Tue, 16 Nov 2021 01:31:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345228AbhKPAeG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Nov 2021 19:34:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45400 "EHLO mail.kernel.org"
+        id S1344514AbhKPAeF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Nov 2021 19:34:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45402 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345114AbhKOT0e (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        id S1345113AbhKOT0e (ORCPT <rfc822;linux-spi@vger.kernel.org>);
         Mon, 15 Nov 2021 14:26:34 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9DAB4603E9;
-        Mon, 15 Nov 2021 19:21:08 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 060A1604D1;
+        Mon, 15 Nov 2021 19:21:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637004069;
-        bh=n4RSNS1q7HCJvn1KQvDmyb9KjGebaLgi1rOppNq++UU=;
+        s=k20201202; t=1637004071;
+        bh=+MNd2K34GfmPk64cwTdXCuxqzUoEccPFFBMKwNKvMlY=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=SBG6SDGc4iPsi5ym3hlNu6MyXK/NRrPT8cY9Da1LLIhvc9SxlebJq1UwquTW/ptd4
-         b+HOAf8ZUy5pgGPGI5SjOzCmQdfaBj5O1VYAX3IZyrB4gb0SpCSVy29eDUKFVrEmFj
-         KparZuwHl+iR2jzL/uCnJ2L7M4J/Ba87Ngbqw7Oj29qeaDQxmcfM1Yu0l+Nnu6thnS
-         gwIO9CQZTYNDMJXUJuLgJTybBQB4igZqmc89UNJzlTCJApn8lpiLvIY8yeVQtX5Qa4
-         t9HjC975WYCOEmN2ManStcwHxwliyt2QRjRj2H6X9TM7jY/jQ/ZegV9u7lqsm936Lw
-         oKbolq7eEfedA==
+        b=rYDbvjRnpUBy99XFwq8T0C8FdyrqdFFRTvl0+bPODoPb72QoZdZT1rGPnahDbG4b7
+         Vpb/EI78RhMYhh0CJCeyBvE2G++Y7efSzM3s8kp2/pe7vqB4Mn1Rl75IZJ0jQH/TaY
+         zVLLqzH6KbVOWyjAFnVojh2CbQCskQVVbn8hNNIfN4rA+NS+Zy82khnWVI01S/o858
+         wAAU4T+MiPwOVLtZj+dYG6SXuXSHY1gBDdtdH7LYLqtEwXFdZwFcTPpfFtn72+lquw
+         h69Nvqtf4CLThu7dx0dkj+JenXb/CvYD7wBZc/WPqLPrQU3XPJNADSKz+0Gaz0avHg
+         BINpWGs4EUVGg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     linux-spi@vger.kernel.org
-In-Reply-To: <20211109103134.184216-1-alexander.stein@ew.tq-group.com>
-References: <20211109103134.184216-1-alexander.stein@ew.tq-group.com>
-Subject: Re: [PATCH 1/1] spi: lpspi: release requested DMA channels
-Message-Id: <163700406833.683472.6864557606413819705.b4-ty@kernel.org>
-Date:   Mon, 15 Nov 2021 19:21:08 +0000
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20211109161325.2203564-1-robh@kernel.org>
+References: <20211109161325.2203564-1-robh@kernel.org>
+Subject: Re: [PATCH] spi: xlp: Remove Netlogic XLP variants
+Message-Id: <163700406969.683472.16319570545022971002.b4-ty@kernel.org>
+Date:   Mon, 15 Nov 2021 19:21:09 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -38,12 +40,15 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 9 Nov 2021 11:31:34 +0100, Alexander Stein wrote:
-> The requested DMA channels are never released. Do this in .remove as well
-> as in .probe. spi_register_controller() can return -EPROBE_DEFER if
-> cs-gpios are not probed yet.
+On Tue, 9 Nov 2021 10:13:25 -0600, Rob Herring wrote:
+> Netlogic XLP was removed in commit 95b8a5e0111a ("MIPS: Remove NETLOGIC
+> support"). With those gone, the single platform left to support is
+> Cavium ThunderX2. Remove the Netlogic variant and DT support.
+> 
+> For simplicity, the existing kconfig name is retained.
 > 
 > 
+> [...]
 
 Applied to
 
@@ -51,8 +56,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: lpspi: release requested DMA channels
-      commit: f02bff30114f385d53ae3e45141db602923bca5d
+[1/1] spi: xlp: Remove Netlogic XLP variants
+      commit: f7d344f2188c9f16e434cadf2a954b5d40365c14
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
