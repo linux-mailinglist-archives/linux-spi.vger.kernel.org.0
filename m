@@ -2,78 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16500451DC3
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Nov 2021 01:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D223F451D77
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Nov 2021 01:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344514AbhKPAeF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Nov 2021 19:34:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45402 "EHLO mail.kernel.org"
+        id S245495AbhKPA3v (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Nov 2021 19:29:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52572 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345113AbhKOT0e (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 15 Nov 2021 14:26:34 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 060A1604D1;
-        Mon, 15 Nov 2021 19:21:09 +0000 (UTC)
+        id S1346238AbhKOTck (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 15 Nov 2021 14:32:40 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id EEEB760D07;
+        Mon, 15 Nov 2021 19:28:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637004071;
-        bh=+MNd2K34GfmPk64cwTdXCuxqzUoEccPFFBMKwNKvMlY=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=rYDbvjRnpUBy99XFwq8T0C8FdyrqdFFRTvl0+bPODoPb72QoZdZT1rGPnahDbG4b7
-         Vpb/EI78RhMYhh0CJCeyBvE2G++Y7efSzM3s8kp2/pe7vqB4Mn1Rl75IZJ0jQH/TaY
-         zVLLqzH6KbVOWyjAFnVojh2CbQCskQVVbn8hNNIfN4rA+NS+Zy82khnWVI01S/o858
-         wAAU4T+MiPwOVLtZj+dYG6SXuXSHY1gBDdtdH7LYLqtEwXFdZwFcTPpfFtn72+lquw
-         h69Nvqtf4CLThu7dx0dkj+JenXb/CvYD7wBZc/WPqLPrQU3XPJNADSKz+0Gaz0avHg
-         BINpWGs4EUVGg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20211109161325.2203564-1-robh@kernel.org>
-References: <20211109161325.2203564-1-robh@kernel.org>
-Subject: Re: [PATCH] spi: xlp: Remove Netlogic XLP variants
-Message-Id: <163700406969.683472.16319570545022971002.b4-ty@kernel.org>
-Date:   Mon, 15 Nov 2021 19:21:09 +0000
-MIME-Version: 1.0
+        s=k20201202; t=1637004538;
+        bh=dkAsoUbKIRtS4MmVjVP44vQyVQnf2q568P/Gy+8iwBA=;
+        h=Subject:From:Date:To:From;
+        b=FqbzqZh65qvHW4r5+lJEygKooI2FOpwyYRG3qTcjP39I3JVytl1oBf07byO4HxAU6
+         BrpOYhnUXu/q75PbHdXXTIn68DBqfK6moGotSv0Xa3QGE3rRAGvRKKX5/BDng1gMcZ
+         sErhydPxAilpDVyu0fH1KEqMeXR7rxCF45kYvx+zB1uZTazd7iU5ElclFJ+ElUOtXa
+         XRdjWqhg+sreV1jyfUPOzYx9aQArjTxspikF7xmDhiugXzmnjqav3mBdcADqxrUFGh
+         hxPwLFGXCFd/XViULV0Tr1vLWeyjTzVSq19N+jRU7DcLzShT9kUeXDzZaurFwqhtSB
+         pboVWtdOC2Ltw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D994860A3B;
+        Mon, 15 Nov 2021 19:28:57 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <163700453783.7365.1188536705997411882.git-patchwork-summary@kernel.org>
+Date:   Mon, 15 Nov 2021 19:28:57 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 9 Nov 2021 10:13:25 -0600, Rob Herring wrote:
-> Netlogic XLP was removed in commit 95b8a5e0111a ("MIPS: Remove NETLOGIC
-> support"). With those gone, the single platform left to support is
-> Cavium ThunderX2. Remove the Netlogic variant and DT support.
-> 
-> For simplicity, the existing kconfig name is retained.
-> 
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: sound: soc: tlv320aic32x4: Make aic32x4_remove() return void
+  Submitter: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=563951
+  Lore link: https://lore.kernel.org/r/20211015071113.2795767-1-u.kleine-koenig@pengutronix.de
 
-Thanks!
+Patch: spi: Check we have a spi_device_id for each DT compatible
+  Submitter: Mark Brown <broonie@kernel.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=550541
+  Lore link: https://lore.kernel.org/r/20210921192149.50740-1-broonie@kernel.org
 
-[1/1] spi: xlp: Remove Netlogic XLP variants
-      commit: f7d344f2188c9f16e434cadf2a954b5d40365c14
+Series: Update STMicroelectronics maintainers email
+  Submitter: Patrice CHOTARD <patrice.chotard@foss.st.com>
+  Committer: Rob Herring <robh@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=578111
+  Lore link: https://lore.kernel.org/r/20211110150144.18272-1-patrice.chotard@foss.st.com
+    Patches: [v3,1/5] dt-bindings: timer: Update maintainers for st,stm32-timer
+             [v3,2/5] dt-bindings: mfd: timers: Update maintainers for st,stm32-timers
+             [v3,3/5] dt-bindings: media: Update maintainers for st,stm32-cec.yaml
+             [v3,4/5] dt-bindings: media: Update maintainers for st,stm32-hwspinlock.yaml
+             [v3,5/5] dt-bindings: treewide: Update @st.com email address to @foss.st.com
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Patch: sound: soc: tlv320aic3x: Make aic3x_remove() return void
+  Submitter: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=566055
+  Lore link: https://lore.kernel.org/r/20211019074125.3812513-1-u.kleine-koenig@pengutronix.de
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Series: Let spi drivers return 0 in .remove()
+  Submitter: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+  Committer: David S. Miller <davem@davemloft.net>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=563939
+  Lore link: https://lore.kernel.org/r/20211015065615.2795190-1-u.kleine-koenig@pengutronix.de
+    Patches: [v2,1/2] net: ks8851: Make ks8851_remove_common() return void
+             [v2,2/2] net: w5100: Make w5100_remove() return void
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Patch: dt-bindings: Remove Netlogic bindings
+  Submitter: Rob Herring <robh@kernel.org>
+  Committer: Rob Herring <robh@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=577559
+  Lore link: https://lore.kernel.org/r/20211109161707.2209170-1-robh@kernel.org
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
 
-Thanks,
-Mark
+Total patches: 11
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
