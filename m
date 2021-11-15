@@ -2,56 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1381B45081A
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Nov 2021 16:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE6E4450820
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Nov 2021 16:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236268AbhKOPVJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Nov 2021 10:21:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38854 "EHLO
+        id S231987AbhKOPXJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Nov 2021 10:23:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232251AbhKOPVE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Nov 2021 10:21:04 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E030C061714;
-        Mon, 15 Nov 2021 07:18:06 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id r11so9692621edd.9;
-        Mon, 15 Nov 2021 07:18:06 -0800 (PST)
+        with ESMTP id S231819AbhKOPXI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Nov 2021 10:23:08 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56DAC061570;
+        Mon, 15 Nov 2021 07:20:11 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id m20so27702508edc.5;
+        Mon, 15 Nov 2021 07:20:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uEGCaYW7o8CiYJ7dj7CTIBNrCzFV6AyEo6CAbFbpu88=;
-        b=YKw8y5EYY7p6pKycrl5yK1BBcR1pB/C1Ju10tlj7vuetwWTISeAb/K2QVULPlWoWgw
-         nc0AGh688R+/wpZdDLC4Yqkb22kyy91jdjemMfpOi+nDcksnfpcrUsbOHZmeVFTOd5NQ
-         eBX00sAN2JQuotwiBfTGcM8lyaTbNYeckjWy3eviq21hWJwRETLekb3Zf/YRHS9tkDg2
-         /yCtNMum0nAoDaXeY9ZnOGmrAYadSZSTx9ZvZv8ZNdM0Fyo7f/ml7Bxcy8HP785At4vc
-         5zUu7skBvWyQRbGL/4+tOMNt5OKPrhjskKBDhavztjUr3gwSyQoZqO4MvIh40CapoyRl
-         0f9g==
+        bh=WOYdJpMpXy3DnmNfQTnpkndW2MOealtUhKN8wP1v95E=;
+        b=CAu2a4oNDZbbP1pXzOx/lOgpWOmaJSQhdhxk+BiJfc3E78YGv+/QkQYm3N0CwD2FW4
+         n11GfjkCysN+cbpMvenLPKXgySoyn5tp8IsaBfwUtCYLol+A63v4Yx++5KpePsVr768R
+         G9hEAS7Q7KpuWbTnynpdnggVmiQsgbwBnjpM64Oj1o2IdcY+BCfFHXuzK7XFYhQ7F6cP
+         Y0rvd+SH0ZCYhZNf590iSlgvhii/kosz3bzCweyRaSWhhkTMvxCRFNAKVgfyYG+M7K34
+         sQeq3tbZrtVhPSeNRMXkXFosYEFnod//IK344jbUmdqL6HJ3dmI4tUO8zbY9y3wEXi1r
+         qMOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uEGCaYW7o8CiYJ7dj7CTIBNrCzFV6AyEo6CAbFbpu88=;
-        b=bSPHoJFGaB/Z7Kp5nmqu1OYCuTpjwf+wOAJ9fVOUAzNJVzuv3PyLexZnFBMgTWMMCw
-         +JbNOcmVOKr3qu4kQjTl/hacyPTCcrmBWg9GvYO4SHuaBYBCpA/HllaKp2Q0DeT2U23R
-         quaods8H9mpcnhcGAZNPK671auPGTiAhpTY6WCAt1X3G9cZhdpLHGHIeKTneVZLIBjSg
-         AG5PBvYawudNFrzMsm8IW4NxFS0CYFutH6kEuG7HddKz/FfK1nKZPcmiz8ERcfDAIKEQ
-         3H9yQ7klfERDbG+Ez9ZAelAIoC7aBq0KxEOT9tu5Zp6H/8U1pShFkUejB/ci0g+DjI2p
-         USGQ==
-X-Gm-Message-State: AOAM530yReJU7OGv9t/2eExbn3KR8C1rJ5iU2IbPrfhJrv0nZWaJW6wv
-        45hStQaF2GuD51Aff6Jdp8WlXbsIPoFoNd7hneM=
-X-Google-Smtp-Source: ABdhPJySPHMrm6R7Dz1CZDCOgkUPCgVBFP/QfHuCM72KLM8yQJWZVtCECTL2TJ249KlmZ5aZjoQHUPmz7/MiUg5YufQ=
-X-Received: by 2002:a17:907:9196:: with SMTP id bp22mr25589481ejb.69.1636989484880;
- Mon, 15 Nov 2021 07:18:04 -0800 (PST)
+        bh=WOYdJpMpXy3DnmNfQTnpkndW2MOealtUhKN8wP1v95E=;
+        b=T6WFW68VRY5Bhs2pgm//a8bx2GohIv+djx1j+9zTSwvHfY7BIlduro7H5HVK+CI3Iz
+         dAylkAR4DAru3k2VaFl21LEXDrIyWQ4iFiWRAXD4sTScTGEJdghKNaT4XpnTG06pDsUk
+         CPuh++1CzQUL2aRieIBVZtcGKPdGohq8FYkwIbsnqn9swBocGDxoGizoD0JLNFSEu09Q
+         G0MmSFtO9Z7vdMHXtPH9i3Brx1kE1YQgf2bRyoHxKKgR9JhWYugiU4RUi/LB5/jKK0pA
+         B6k7HDfxLSGIvMugQQf4p6KEsx63HNJ2DeLCidGCvocasTRlkIqB/mLw+inxEh2NKw7Y
+         ftew==
+X-Gm-Message-State: AOAM531+h6Y5x9AhNZZd76gZfKK+JxpYMctSueuzMbupULIvfn4gQ4EP
+        VcBsiDtVtIhwtVNvJXts5bvwvWYRL0lGnO3K7Pg=
+X-Google-Smtp-Source: ABdhPJx2gD54wqAIqJ+c+IUxDANSOcQ7zKseUyGrPfMPv8SCKBk5l+XB15nH516cssOUY0hinrpXQd302salKjxuS9w=
+X-Received: by 2002:a05:6402:84b:: with SMTP id b11mr27510759edz.107.1636989610439;
+ Mon, 15 Nov 2021 07:20:10 -0800 (PST)
 MIME-Version: 1.0
 References: <20211114223026.13359-1-Sergey.Semin@baikalelectronics.ru>
- <20211114223026.13359-2-Sergey.Semin@baikalelectronics.ru>
- <YZJuPrnhupbnPxGt@smile.fi.intel.com> <20211115150344.sgrqqnl7nudntrqx@mobilestation>
-In-Reply-To: <20211115150344.sgrqqnl7nudntrqx@mobilestation>
+ <20211114223026.13359-7-Sergey.Semin@baikalelectronics.ru>
+ <YZJwTgAPZYVvzGpi@smile.fi.intel.com> <20211115150856.ma2wjg2ev5wylspg@mobilestation>
+In-Reply-To: <20211115150856.ma2wjg2ev5wylspg@mobilestation>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 15 Nov 2021 17:17:23 +0200
-Message-ID: <CAHp75VfndC2Ht78Zi_DHCEKgnsBanmXW0i7YSQt1eQSSghTfxw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] spi: dw: Add a symbols namespace for the core module
+Date:   Mon, 15 Nov 2021 17:19:28 +0200
+Message-ID: <CAHp75VdsAzpUiM7U+f69PguGAa4QV+izM0p5DNNWp=d9yNT0eA@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] spi: dw: Replace DWC_HSSI capability with IP-core
+ version checker
 To:     Serge Semin <fancer.lancer@gmail.com>
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Mark Brown <broonie@kernel.org>,
@@ -64,27 +65,38 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 5:03 PM Serge Semin <fancer.lancer@gmail.com> wrote:
-> On Mon, Nov 15, 2021 at 04:27:10PM +0200, Andy Shevchenko wrote:
-> > On Mon, Nov 15, 2021 at 01:30:21AM +0300, Serge Semin wrote:
+On Mon, Nov 15, 2021 at 5:08 PM Serge Semin <fancer.lancer@gmail.com> wrote:
+> On Mon, Nov 15, 2021 at 04:35:58PM +0200, Andy Shevchenko wrote:
+> > On Mon, Nov 15, 2021 at 01:30:26AM +0300, Serge Semin wrote:
 
 ...
 
-> > > +MODULE_IMPORT_NS(SPI_DW_CORE);
+> > >  /* DW SPI controller capabilities */
+> > >  #define DW_SPI_CAP_CS_OVERRIDE             BIT(0)
+> > >  #define DW_SPI_CAP_KEEMBAY_MST             BIT(1)
+> > > -#define DW_SPI_CAP_DWC_HSSI                BIT(2)
+> > > -#define DW_SPI_CAP_DFS32           BIT(3)
+> > > +#define DW_SPI_CAP_DFS32           BIT(2)
+>
+> > In one patch you move this in the file upper.
+> > Here you reshuffling it due to dropping one bit.
 > >
-> > I would rather see this at the end of file, but it should work either way.
+> > Now I'm wondering if you may split these two into a separate patch, which
+> > brings us to simple
+> >
+> > -#define DW_SPI_CAP_DWC_HSSI          BIT(3)
+> >
+> > here.
 >
-> I've just realized it, do I really need the
-> namespace imported in this object at all?.. It's linked into the
-> spi-dw-core.ko. See drivers/spi/Makefile:
-> obj-$(CONFIG_SPI_DESIGNWARE)            += spi-dw.o
-> spi-dw-y                                := spi-dw-core.o
-> spi-dw-$(CONFIG_SPI_DW_DMA)             += spi-dw-dma.o
-> so the object must have got the same namespace.
->
-> Yeah, most likely I shouldn't have used the MODULE_IMPORT_NS() here...
+> I can change the bit-numbers assignment in the previous patch, which
+> moves this block of macros up to the top of the file. Thus we'll
+> have just a single
+> -#define DW_SPI_CAP_DWC_HSSI            BIT(3)
+> here. What do you think? Is that what you meant?
 
-Indeed.
+I think that reassignment doesn't fit the previous patch per se, hence
+I proposed to have yet another one, But in any case it's a minor
+thingy.
 
 -- 
 With Best Regards,
