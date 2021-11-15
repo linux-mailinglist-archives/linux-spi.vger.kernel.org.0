@@ -2,112 +2,160 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B593B4504E6
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Nov 2021 14:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 430CD4504F4
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Nov 2021 14:07:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbhKONGx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 15 Nov 2021 08:06:53 -0500
-Received: from www.zeus03.de ([194.117.254.33]:45370 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230232AbhKONGt (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 15 Nov 2021 08:06:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=OLQihzRKyh2y1tQZCycpI3W9roJE
-        NIrd1K7JiBrcKzw=; b=e3Bu02K7i7uyvNYMDoFHa46HUAPsXRIPSBTVuOHM4mR/
-        vrYNlMettOwqW611Y6BjqKTTJzT2FGszgkpJme9B3HYLTrfcCET06f9hgR/7WSXY
-        8l/kPvJQrXup+4Myb+hu4+4gmiBxQ4m2sErKCtDDPnUsCwNHfRw+js+cxSlSvus=
-Received: (qmail 2337764 invoked from network); 15 Nov 2021 14:03:50 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Nov 2021 14:03:50 +0100
-X-UD-Smtp-Session: l3s3148p1@2jancNPQvrYgAwDPXwfBADNdh3YJLcIx
-Date:   Mon, 15 Nov 2021 14:03:50 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
+        id S231557AbhKONJi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 15 Nov 2021 08:09:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231449AbhKONJN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 15 Nov 2021 08:09:13 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8889BC061714;
+        Mon, 15 Nov 2021 05:06:15 -0800 (PST)
+Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1142FD3E;
+        Mon, 15 Nov 2021 14:06:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1636981573;
+        bh=S400eBbi5TVNWpj2Sq2il82O7vrNbB0L6EDIkwL9CvE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LuJFczqyURd3bNnnE6zXNftSaB5jKtcwJnjQTyM3WJG89V2u+Roo+NiwAr/RUngIA
+         E2c1ezIwcRsLVNxRRAuadHct1K/oTpdoEKIdJ5k7m96EiJ+UGAbd4M/hv76UAtnoqx
+         GP2lyD8TkFiLO/jC+DLqQVsUesrxNYWsEhNFrXjc=
+Date:   Mon, 15 Nov 2021 15:05:50 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Andy Gross <agross@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hyun Kwon <hyun.kwon@xilinx.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
         Mark Brown <broonie@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH v2 7/7] memory: renesas-rpc-if: Add support for RZ/G2L
-Message-ID: <YZJatk2Xs6bYdCyB@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Mark Brown <broonie@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-References: <20211025205631.21151-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211025205631.21151-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Michal Simek <michal.simek@xilinx.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Scott Branden <sbranden@broadcom.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        dmaengine@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-staging@lists.linux.dev,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH 08/11] dmaengine: xilinx_dpdma: stop using slave_id field
+Message-ID: <YZJbLol1llm+puDT@pendragon.ideasonboard.com>
+References: <20211115085403.360194-1-arnd@kernel.org>
+ <20211115085403.360194-9-arnd@kernel.org>
+ <YZIk6cVb7XibrMjf@pendragon.ideasonboard.com>
+ <CAK8P3a1Fu11-e0CK2of8u3ebdjom84UKuXhBKi5FUs5ZPPdOVA@mail.gmail.com>
+ <YZJJVA/92KYH8hQL@pendragon.ideasonboard.com>
+ <CAK8P3a27rPBVbU-PrYR0BE4KV2DyJk7FoXaeDS=FU1=_RSwoQQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ih87i6XTGwSWpEQ3"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211025205631.21151-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <CAK8P3a27rPBVbU-PrYR0BE4KV2DyJk7FoXaeDS=FU1=_RSwoQQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Arnd,
 
---ih87i6XTGwSWpEQ3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, Nov 15, 2021 at 01:38:07PM +0100, Arnd Bergmann wrote:
+> On Mon, Nov 15, 2021 at 12:49 PM Laurent Pinchart wrote:
+> > On Mon, Nov 15, 2021 at 11:21:30AM +0100, Arnd Bergmann wrote:
+> > > On Mon, Nov 15, 2021 at 10:14 AM Laurent Pinchart wrote:
+> > > > On Mon, Nov 15, 2021 at 09:54:00AM +0100, Arnd Bergmann wrote:
+> > > > > @@ -1285,11 +1287,13 @@ static int xilinx_dpdma_config(struct dma_chan *dchan,
+> > > > >       spin_lock_irqsave(&chan->lock, flags);
+> > > > >
+> > > > >       /*
+> > > > > -      * Abuse the slave_id to indicate that the channel is part of a video
+> > > > > -      * group.
+> > > > > +      * Abuse the peripheral_config to indicate that the channel is part
+> > > >
+> > > > Is it still an abuse, or is this now the right way to pass custom data
+> > > > to the DMA engine driver ?
+> > >
+> > > It doesn't make the driver any more portable, but it's now being
+> > > more explicit about it. As far as I can tell, this is the best way
+> > > to pass data that cannot be expressed through the regular interfaces
+> > > in DT and the dmaengine API.
+> > >
+> > > Ideally there would be a generic way to pass this flag, but I couldn't
+> > > figure out what this is actually doing, or whether there is a better
+> > > way. Maybe Vinod has an idea.
+> >
+> > I don't think we need a generic API in this case. The DMA engine is
+> > specific to the display device, I don't foresee a need to mix-n-match.
+> 
+> Right. I wonder if there is even a point in using the dmaengine API
+> in that case, I think for other single-purpose drivers we tend to just
+> integrate the functionality in the client driver. No point changing this
+> now of course, but it does feel odd.
 
-On Mon, Oct 25, 2021 at 09:56:31PM +0100, Lad Prabhakar wrote:
-> SPI Multi I/O Bus Controller on RZ/G2L SoC is almost identical to
-> the RPC-IF interface found on R-Car Gen3 SoC's.
->=20
-> This patch adds a new compatible string for the RZ/G2L family so
-> that the timing values on RZ/G2L can be adjusted.
->=20
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+I agree, and that's what I would have done as well, if it wasn't for the
+fact that the DMA engine also supports a second client for audio. This
+isn't supported in upstream yet. We could still have created an ad-hoc
+solution, possibly based on the components framework, but the DMA engine
+subsystem wasn't a bad fit.
 
-After some internal investigations we found out that we have to live
-with these magic numbers. We shouldn't mix documentation there. So, this
-patch is fine as is. The minor nit I will fix incrementally because I
-will work on this file soon as well.
+> From my earlier reading of the driver, my impression was that this
+> is just a memory-to-memory device, so it could be used that way
+> as well, but does need a flag when working on the video memory.
+> I couldn't quite make sense of that though.
 
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+It's only memory-to-device (video and audio). See figures 33-1 and 33-16
+in https://www.xilinx.com/support/documentation/user_guides/ug1085-zynq-ultrascale-trm.pdf
 
+> > >         /*
+> > >          * Use the peripheral_config to indicate that the channel is part
+> > >          * of a video group. This requires matching use of the custom
+> > >          * structure in each driver.
+> > >          */
+> > >         pconfig = config->peripheral_config;
+> > >         if (WARN_ON(config->peripheral_size != 0 &&
+> > >                     config->peripheral_size != sizeof(*pconfig)))
+> > >                 return -EINVAL;
+> >
+> > How about
+> >
+> >         if (WARN_ON(config->peripheral_config &&
+> >                     config->peripheral_size != sizeof(*pconfig)))
+> >
+> > >
+> > >         spin_lock_irqsave(&chan->lock, flags);
+> > >         if (chan->id <= ZYNQMP_DPDMA_VIDEO2 &&
+> > >             config->peripheral_size == sizeof(*pconfig))
+> >
+> > And here you can test pconfig != NULL.
+> 
+> Good idea. Changed now, using 'if (pconfig)' without the '!= NULL'
+> in both expressions.
 
---ih87i6XTGwSWpEQ3
-Content-Type: application/pgp-signature; name="signature.asc"
+Sounds good to me.
 
------BEGIN PGP SIGNATURE-----
+-- 
+Regards,
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGSWrUACgkQFA3kzBSg
-KbZACQ//QW6h49hTvyDnW3FXxCnOu8Fjy4Du93vzYyiffKiu1rT1kWz/eCxEDYIe
-nAjwuUERonPPxtlnfyH7b1ZvC4wAde8dskw01huc7sJT/gNFHNp5t20B9Aj1R/eP
-yMNoG5cEtDcYNUvjTQkfLZ9XQvH8m7KWVQUOcVx9IgCnCL9QGzOe6lGVADhTf5gX
-orNojeAF09rUS/VkjzEbvcsx/8l4zKHQYmYWEIb9Q3nPvrv3UtT0DZeK7S9r1LMi
-NsCrQCTKQQ4F31Vl3VQQMF+WhO3hGHXpzQKWK6MjccNGA/HgccptkYmgx7MECgrX
-+k5deLVADSt18C+1ExdaODcD056JYw39cqOZL3Ig1K+9YVeWDFXXIcfFGoSUwFNR
-eCn6Z+ps5LWaVqRIUkLHjo6X80IXoK3Z8GX2R518BLxc+tLRZbC0LObGPmIr3T+l
-U0AE2NjVxscEFB/CFHRx4JR0W1ywyD6ZwbIoZVo2Mf5kdvjzJGajGRrGQLbPzLkO
-9K8as9oOsjHwDhMKTJ4a8/9qTzWgsmzz5x9hZB+30g8JJm9l18+s0EKHFwmt0kR/
-Ly0L8nVSI3C4NSTf+i02jsxC5wXoUXUZzAJc57XdME5SQEGxEbDJNbNvhstKsyZh
-je4ZKZtMQKci6ngq+QhKF/eODcypttoHlG886SPcmoH5W+U6cKA=
-=JiqE
------END PGP SIGNATURE-----
-
---ih87i6XTGwSWpEQ3--
+Laurent Pinchart
