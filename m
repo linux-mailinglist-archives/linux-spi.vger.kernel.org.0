@@ -2,135 +2,179 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3504539EE
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Nov 2021 20:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B97E453C97
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Nov 2021 00:13:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234739AbhKPTSs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 Nov 2021 14:18:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
+        id S232246AbhKPXPE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 16 Nov 2021 18:15:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbhKPTSp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 Nov 2021 14:18:45 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CAAC061570;
-        Tue, 16 Nov 2021 11:15:47 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id u3so291210lfl.2;
-        Tue, 16 Nov 2021 11:15:47 -0800 (PST)
+        with ESMTP id S232240AbhKPXPE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 Nov 2021 18:15:04 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609C4C061767
+        for <linux-spi@vger.kernel.org>; Tue, 16 Nov 2021 15:12:06 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id r11so1956885edd.9
+        for <linux-spi@vger.kernel.org>; Tue, 16 Nov 2021 15:12:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iJ4UbTyx0xYSrKsT+KZw01D3yr4wr+sTORIlc74dG70=;
-        b=ja1oJQhqa5HUt1YVG8UHgCiHcm4d5EFjjWyeL7uQgxXe1YDxtRqhZH6QKja9YG2Eym
-         CysYq8oh1qOI1rDy7F7m9qxFN+1Xkzg4/lqwk44bm2X4uzoLScRiaQhSNV8e4THA8Q26
-         j4usJhgmSAc6/agSiN4nQxWCGWX6+jditUjlJ26O1mcomHTRysG63avm5wYsKTlI/UtU
-         jt/3vFFEf2KVxLR5MMU+4lGHbGAtFVwUI0cQ0wraZkEIckzg4EXxuP3N0fJGB1ri2FmU
-         dZqCLJZPPxrxNkHFs3RheiR/5Zoxfu/9Zzye6sz5bUmFDRfNsSvW4H1QyVEfNCHmAGMQ
-         JWhw==
+        d=pensando.io; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+FOQ/sRLLKL2n8D67xhtne1+6QjN4MmxkGWuAPYSYFU=;
+        b=ZSbtVfyHFNCPojkasx6Tp7Wo3H/ofQiL38o5dRfRNGrRB1kyRN8Vd7Z83qaN7FH/n8
+         bL58fwkkH7Ol/VPda6afFVS6M5W80Ga4tJ6MVNCCRr1z2uSibF/FMjiyBj363LW0HgOi
+         DfWaTzKB2Yt7wlaRD5m4LhklSnIP7m7DxMx2dD4CivyXH2Sz9JBJg0T3NyJwBnNdmUJg
+         2nQYNZjx4m8pXYfv5GNtLbh5MjGgVMxRAHdIu2yQYUuB2Jol1gI5NY5PkcI/o3bJAHKV
+         YuFk6Be73lvUEGF3MW1uFaVnPdcgqMPa+KWvSTe7G7zC+HKhrmce4UG2YeON3EfGaewi
+         GZAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iJ4UbTyx0xYSrKsT+KZw01D3yr4wr+sTORIlc74dG70=;
-        b=NGkpoI5qtf6R4lXiM9H1MUfNTalKiTcjtG/qpbwAVJnZmj6EZMoUGZcAyXESQUwS3K
-         AWShdOxWgo9NBsamTEtIQ4f9hxSmAz7ICE+yuTVM8ZkzE1bc/UuYSwhDNXwe+dAi3T/k
-         HQQTwXU12wCBsYhPSWtifU2BDbokqOHzwxT9QgQy+X/9EGp064sFJSx81Mvb/zAaKG9u
-         rutieRpdezrkdEIvTyj2hWyQnvNN43eUx2omNQ+Ss6YpAdY+6Yg8uwUbWNNWHZgWdOgw
-         JYwDz14rqDH5HrT0Olf/er+9MA12i1H1fEKfvMMquEGBPzuna1CnLCbKNzpFyWETaYPP
-         U8nA==
-X-Gm-Message-State: AOAM532I5SPwUEhnewt93nxY6UFLv7I7fQ3IiudsKM6xRDVrXxiplF7z
-        jHTr7XRjM6yjvtjSqAs7YjHsJ3PlCymiaw==
-X-Google-Smtp-Source: ABdhPJxa5RKZ5XwYDB5GwzjUJhlvOMfUgZb5AjfmGpIEAgIILxJAfOIDxpYXKsecBXtc0Aq7HGp9LA==
-X-Received: by 2002:a05:6512:1382:: with SMTP id p2mr1943501lfa.403.1637090145862;
-        Tue, 16 Nov 2021 11:15:45 -0800 (PST)
-Received: from mobilestation ([95.79.188.236])
-        by smtp.gmail.com with ESMTPSA id q6sm1928399ljh.1.2021.11.16.11.15.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Nov 2021 11:15:45 -0800 (PST)
-Date:   Tue, 16 Nov 2021 22:15:42 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Mark Brown <broonie@kernel.org>, nandhini.srikandan@intel.com
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        robh+dt@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        mgross@linux.intel.com, kris.pan@intel.com,
-        kenchappa.demakkanavar@intel.com, furong.zhou@intel.com,
-        mallikarjunappa.sangannavar@intel.com, mahesh.r.vaidya@intel.com,
-        rashmi.a@intel.com
-Subject: Re: [PATCH v3 3/5] spi: dw: Add support for master mode selection
- for DWC SSI controller
-Message-ID: <20211116191542.vc42cxvflzn66ien@mobilestation>
-References: <20211111065201.10249-1-nandhini.srikandan@intel.com>
- <20211111065201.10249-4-nandhini.srikandan@intel.com>
- <YY0lpZkIsJih+g2o@sirena.org.uk>
- <20211111145246.dj4gogl4rlbem6qc@mobilestation>
- <YY0zUjjVobtg85o6@sirena.org.uk>
- <20211111160627.fcgrvj2k7x3lwtkp@mobilestation>
- <YY1D3tM4fg8h6mmj@sirena.org.uk>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+FOQ/sRLLKL2n8D67xhtne1+6QjN4MmxkGWuAPYSYFU=;
+        b=F6cADtEa8xw4jwMxhqsIgQQg/1GlQLWxNFsHQ593HbjfHWwK9y5lfTjrBNJcOtkZ3c
+         N9OZ7oGiTpybin3D4jy8xI2mft5PnkjYTZAlY5vYHxCQ4685hdlHm6vdcbTn9zLNZ+zO
+         JvL5IU2Y++ngNw9GUZT1cDtpcTbl8l1h1hTryeI3U/Evh0SQaIBkeY+6/QT45lXrplsJ
+         prKYRF6kPTSHpt6I1Tfilm4KzbbGgEQjPWmG69ouFZbe7s0Zc2sOoEX0KpcZ6aYf2nfc
+         Lq8ZTu2nI7K5T0jA2d9z25jvd4JQhzZ4DvKf572CHIcNkF6d4KbqqY9xHOw2jxp6juPW
+         O65w==
+X-Gm-Message-State: AOAM532yQwpkJGoCzd6Oe4NIYpbt6o/tmJMvzZViOyBXu7GE++4jeil4
+        gXCGT1qW32ZClf4DuRMh57Sbo8BqnaFM95/HA75ilg==
+X-Google-Smtp-Source: ABdhPJz2wF5JF1ydPJjyqPEwYlCjMltAxHidsQ4cfpYNY8KosRGi6/KK+aEQfERtYk3HS3Fkv18BPluzzYQrew/QaNI=
+X-Received: by 2002:a17:907:2d20:: with SMTP id gs32mr14959055ejc.270.1637104324599;
+ Tue, 16 Nov 2021 15:12:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YY1D3tM4fg8h6mmj@sirena.org.uk>
+References: <20211025015156.33133-1-brad@pensando.io> <20211025015156.33133-6-brad@pensando.io>
+ <20211028074945.rv2j5kgzk7yc2srr@mobilestation> <CAK9rFnw396xK+u3qUpgbnGNw7WDJPJm0L3o4nPAcFeqQjBDbXg@mail.gmail.com>
+ <20211116112907.lbwdcz5pmgxqzv55@mobilestation>
+In-Reply-To: <20211116112907.lbwdcz5pmgxqzv55@mobilestation>
+From:   Brad Larson <brad@pensando.io>
+Date:   Tue, 16 Nov 2021 15:11:53 -0800
+Message-ID: <CAK9rFny7zQRpvGOVK0+01hKQNu7XCMOz8vTfbHPs6gMR10muDw@mail.gmail.com>
+Subject: Re: [PATCH v3 05/11] spi: dw: Add Pensando Elba SoC SPI Controller bindings
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Olof Johansson <olof@lixom.net>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Nov 11, 2021 at 04:25:02PM +0000, Mark Brown wrote:
-> On Thu, Nov 11, 2021 at 07:06:27PM +0300, Serge Semin wrote:
-> > On Thu, Nov 11, 2021 at 03:14:26PM +0000, Mark Brown wrote:
-> 
-> > > Given that people seem to frequently customise these IPs when
-> > > integrating them I wouldn't trust people not to have added some other
-> > > control into that reserved bit doing some magic stuff that's useful in
-> > > their system.
-> 
-> > In that case the corresponding platform code would have needed to have
-> > that peculiarity properly handled and not to use a generic compatibles
-> > like "snps,dwc-ssi-1.01a" or "snps,dw-apb-ssi", which are supposed to
-> > be utilized for the default IP-core configs only. For the sake of the
-> > code simplification I'd stick to setting that flag for each generic
-> > DWC SSI-compatible device. That will be also helpful for DWC SSIs
-> > which for some reason have the slave-mode enabled by default.
-> 
+Hi Sergey,
 
-> That's easier right up until the point where it explodes - I'd prefer to
-> be more conservative here.  Fixing things up after the fact gets painful
-> when people end up only finding the bug in released kernels, especially
-> if it's distro end users or similar rather than developers.
+On Tue, Nov 16, 2021 at 3:29 AM Serge Semin <fancer.lancer@gmail.com> wrote:
+>
+> > > AFAICS from the driver-part of the patchset it's not enough. You've
+> > > also got the syscon phandle, which needs to be reflected in the
+> > > bindings. That also makes me thinking that you didn't perform the
+> > > "dtbs_check" on the dts-files you were going to submit, but for some
+> > > reason discarded from this series (btw why?). If you did you would
+> > > have got an error of an unevaluated property detection.
+> >
+> > I ran the checks below and didn't get errors.  Rob provided some info
+> > and I found the server did not have yamllint installed (not flagged by
+> > tool).  Also dt-schema was not the latest.  I'm re-doing this and
+> > including "DT_CHECKER_FLAGS=-m" as that is new with v5.13.
+> >
+>
+> > make ARCH=arm64 dtbs_check
+> > DT_SCHEMA_FILES=Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> > make ARCH=arm64 dtbs_check
+> > DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> > make ARCH=arm64 dtbs_check
+> > DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> > make ARCH=arm64 dtbs_check
+> > DT_SCHEMA_FILES=Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > make ARCH=arm64 dtbs_check
+> > DT_SCHEMA_FILES=Documentation/devicetree/bindings/arm/pensando,elba.yaml
+>
+> Hmm, that's weird. Rob, does dtschema tool have the
+> "unevaluatedProperties" property support?
+>
+> Brad, anyway you still need to add the syscon-property (pensando,*spics)
+> requirement in the snps,dw-apb-ssi.yaml schema. See the way it's done there
+> for instance for "baikal,bt1-sys-ssi" when it comes to the
+> vendor-specific properties definition in the allOf composition block.
+> You'll need to define a custom phandle property there in case if a
+> DT-node is compatible with you SPI controller.
 
-Since IP-core and components versions is now supported that will easy
-to implement. Thanks for merging the corresponding series in BTW.
+Updating and adding only this bindings update to file
+snps,dw-apb-ssi.yaml in 5.16.0-rc1 (next-20211116):
 
-> 
-> > Alternatively the driver could read the IP-core version from the
-> > DW_SPI_VERSION register, parse it (since it's in ASCII) and then use
-> > it in the conditional Master mode activation here. But that could have
-> > been a better solution in case if the older IP-cores would have used
-> > that bit for something special, while Nandhini claims it was reserved.
-> > So in this case I would stick with a simpler approach until we get to
-> > face any problem in this matter, especially seeing we already pocking
-> > the reserved bits of the CTRL0 register in this driver in the
-> > spi_hw_init() method when it comes to the DFS field width detection.
-> 
-> If the device has a version register checking that seems ideal - the
-> infrastructure will most likely be useful in future anyway.  A bit of a
-> shame that it's an ASCII string though.
+diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+index d7e08b03e204..99deb587a47b 100644
+--- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
++++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+@@ -37,6 +37,21 @@ allOf:
+     else:
+       required:
+         - interrupts
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - pensando,elba-spics
++    then:
++      properties:
++        pensando,spics:
++          $ref: /schemas/types.yaml#/definitions/phandle
++          description:
++            Phandle to the system control device node which provides access to
++            the spics control register
++      required:
++        - pensando,spics
 
-That's what the patchset has been implemented for in the first place
-https://lore.kernel.org/linux-spi/20211115181917.7521-1-Sergey.Semin@baikalelectronics.ru/
+ properties:
+   compatible:
+@@ -73,6 +88,8 @@ properties:
+               - renesas,r9a06g032-spi # RZ/N1D
+               - renesas,r9a06g033-spi # RZ/N1S
+           - const: renesas,rzn1-spi   # RZ/N1
++      - description: Pensando Elba SoC SPI Controller
++        const: pensando,elba-spics
 
-Nandhini, Mark has just merged in the series that adds the IP-core
-versions infrastructure support to the DW SSI driver.  So now you can
-easily convert this patch to be using that new interface like this:
--               if (dws->caps & DW_SPI_CAP_KEEMBAY_MST)
--                       cr0 |= DWC_SSI_CTRLR0_KEEMBAY_MST;
-+               /* CTRLR0[31] MST */
-+		if (dw_spi_ver_is_ge(dws, HSSI, 102A))
-+       	        cr0 |= DWC_HSSI_CTRLR0_MST;
+   reg:
+     minItems: 1
 
-Please don't forget to convert the DWC_SSI_CTRLR0_KEEMBAY_MST name to
-something like DWC_HSSI_CTRLR0_MST and place it at the top of the DWC
-HSSI CTRLR0 register macros list.
+$ make ARCH=arm64 defconfig
+...
 
--Sergey
+$ make DT_CHECKER_FLAGS=-m dt_binding_check
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+...
+  DTEX    Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.example.dts
+  DTC     Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.example.dt.yaml
+  CHECK   Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.example.dt.yaml
+Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.example.dt.yaml:0:0:
+/example-0/spi@fff00000/flash@1: failed to match any schema with
+compatible: ['spi-nand']
 
+The spi-nand schema match failure happens before I make any change.
+The tool also throws errors for these files which are unrelated
+
+Documentation/devicetree/bindings/net/qcom,ipa.yaml: ignoring, error
+in schema: properties: qcom,smem-state-names
+Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml:
+ignoring, error in schema: patternProperties: ^filter@[0-9]+$:
+properties: st,adc-channel-names
+Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml:
+ignoring, error in schema: properties: qcom,bcm-voter-names
+
+Thanks,
+Brad
