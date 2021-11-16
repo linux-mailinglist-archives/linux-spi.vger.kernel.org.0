@@ -2,165 +2,120 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B354530A4
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Nov 2021 12:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E24FF4530E4
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Nov 2021 12:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235115AbhKPLcf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 16 Nov 2021 06:32:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
+        id S235088AbhKPLjI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 16 Nov 2021 06:39:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235089AbhKPLcK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 Nov 2021 06:32:10 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F914C061202;
-        Tue, 16 Nov 2021 03:29:12 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id d11so42529578ljg.8;
-        Tue, 16 Nov 2021 03:29:12 -0800 (PST)
+        with ESMTP id S235379AbhKPLho (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 16 Nov 2021 06:37:44 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8983AC061198;
+        Tue, 16 Nov 2021 03:32:13 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id c32so52344876lfv.4;
+        Tue, 16 Nov 2021 03:32:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=KgH8hxHm/FrDWe8yu/KtutrLYb/eHAySYSG7tABVZD8=;
-        b=WQXwJtlQVd+47QBnnFnwMnHb+unQnWJRVp8wa0AAzlb+m5V+4E+gTCt24sAj6B+xxt
-         0rlCxO8r9bnoJFqpL0pyGjT8MmhgYrolx5H6mBWDWMYoneuhLPnvtMUzQlkuEy6Qfb+K
-         aMoyWbKCGA03sRWgwyTm+66RhHAlpLbu3ZzjG3MUverXK1LlZ70OPYkvA7uxllqr5EdW
-         Ynee/tWnWOjd3LKBwmADf1dGMGAQfiMm/9ZJT/tthXNR1a8Xv+W8g5T4EYW20We6a8Oo
-         6pmb1HVHbsushdwxfYUN+yWOeoYhokFpirI0P5DGS9lAiJ2fLv9X6CdCKuFRio9gHv2y
-         QMNg==
+        bh=0wHfYNBbY8FMdZUkxBiBczwR2At84lrdrMa7+k/uGck=;
+        b=auVex1g5JoqReaZ8JAUPU+QM5e9X+3RnRs59GB02CYvHTyNj+hB8jus9eFhGF2Ogxu
+         q05TZMZ4rTE4AdEml28q6tpAJRWbI+vB+H0fbazMmUoCUqe64K0E682cTMm6clSCbpLW
+         J5w7m9U0j2H5x2Yl+wi7qbtJ0x/M9uc6myC0t0XBq0sZKnVJnBjuP30Dad1itTUSSs8w
+         rfl+5fMZtmSh4QY3LzrTHO9PW+mIIJWKWL+cWjRuFwiDdpNW/a3ytxWgC8EFumjVoH2N
+         sjbEkMVPgDbbEhMOuP2ruhvEMewF1qVYG8+TcTUCyrGFCtJAU2AGVUuSGu4kp2t05uQp
+         Pskg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=KgH8hxHm/FrDWe8yu/KtutrLYb/eHAySYSG7tABVZD8=;
-        b=BAVTJJCLBlWwbJcX9jRs1T30Dy0FlTrC+mVmtlw0ENIrB6y/ewwK6ZgDIrj1cnQlm1
-         5dwpm5fq6e998gWyzJBtIw0bsBHFQE3LEmp7frWjcvMjURNY1dsNr336KqHGG5wHVGrI
-         p+ev45DZSr7Nfb4KRyxGFI+18rUvw3TB+Nxr5Ly2xMeu7ES4xMkKPmP3WkSlYu42a9jc
-         AtXiIkiUFS0DIJl4TYn1uw1U1SOBNPLPxkEvSLssO1BieyHeMCChjuLWvYfRoUaFprkN
-         vXDKMQlfDn9lRn+fTu17fvAbzN4eQ/BTQKJ+sdO1/5JXjOf2AfRxuo5Ms6Z4+qfqkm2R
-         KaJA==
-X-Gm-Message-State: AOAM532sTcyhqNRZlThacGkcxooVYlLOb+JIj2umCasL5BV686x3rsnP
-        JZAnhii7Uk0uijUZIWVr1ws=
-X-Google-Smtp-Source: ABdhPJwT05xYGdFvFfnRIzfOHSrJKu1dUYSKUfjYX/R14U1ARea6ixOoVJqMNgE6F5QYwh5yfRZxWQ==
-X-Received: by 2002:a2e:7807:: with SMTP id t7mr6110206ljc.426.1637062150438;
-        Tue, 16 Nov 2021 03:29:10 -0800 (PST)
+        bh=0wHfYNBbY8FMdZUkxBiBczwR2At84lrdrMa7+k/uGck=;
+        b=4FYs2RJzzYh+m1fJJMF6C1rw/msaIqVuZRJA7AQahKHLN2924OnLwW5MHN3D+3QpFu
+         xrD3/WLbqGAF8qBdfnKrv0o/3tF7QcN3jJNuxVQR1PwKqaNTUSzu9OkB9oZ2QztLgENK
+         Ve5mNkDjvPZUBtjmZ2gUU7hIzlyxvJnASDDwkYrTuyX6C8bnTa7H5A4XV6xqP45AFLrj
+         9SUQQIqMoCAcU/tsy2IVneO2uIwgayblYhVlmgWtYYfOnmu1HaTvpxDEE8Z3W5Q6ottG
+         OJOoLwk5/EQ5bvXb8AZGyEj13PHE2s5xmzVr6+OiI8Au95o5v5849MQLFUG4aPrGAdru
+         2pGg==
+X-Gm-Message-State: AOAM532Prp3Fjngto0yH5zHedW+dCnDkLxTEQOeY83Qwl5W8TSqEjSI+
+        ipgPrHdX6vWwC7igJt4wHJA=
+X-Google-Smtp-Source: ABdhPJwp4ntrXwEtL8pC4eKsuqTGCFz0FKTnz4Mju7GtHehKLTBxsfvLtIWU8o7nFk5VTBaRaXeTdg==
+X-Received: by 2002:a05:6512:3f8b:: with SMTP id x11mr5750586lfa.486.1637062331999;
+        Tue, 16 Nov 2021 03:32:11 -0800 (PST)
 Received: from mobilestation ([95.79.188.236])
-        by smtp.gmail.com with ESMTPSA id m16sm1485527lfj.59.2021.11.16.03.29.09
+        by smtp.gmail.com with ESMTPSA id m20sm1726896lfu.241.2021.11.16.03.32.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Nov 2021 03:29:10 -0800 (PST)
-Date:   Tue, 16 Nov 2021 14:29:07 +0300
+        Tue, 16 Nov 2021 03:32:11 -0800 (PST)
+Date:   Tue, 16 Nov 2021 14:32:09 +0300
 From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Brad Larson <brad@pensando.io>, Rob Herring <robh@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Mark Brown <broonie@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 05/11] spi: dw: Add Pensando Elba SoC SPI Controller
- bindings
-Message-ID: <20211116112907.lbwdcz5pmgxqzv55@mobilestation>
-References: <20211025015156.33133-1-brad@pensando.io>
- <20211025015156.33133-6-brad@pensando.io>
- <20211028074945.rv2j5kgzk7yc2srr@mobilestation>
- <CAK9rFnw396xK+u3qUpgbnGNw7WDJPJm0L3o4nPAcFeqQjBDbXg@mail.gmail.com>
+        Nandhini Srikandan <nandhini.srikandan@intel.com>,
+        Andy Shevchenko <andy@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 7/7] spi: dw: Define the capabilities in a continuous
+ bit-flags set
+Message-ID: <20211116113209.n5njzklgh3fmbwwe@mobilestation>
+References: <20211115181917.7521-1-Sergey.Semin@baikalelectronics.ru>
+ <20211115181917.7521-8-Sergey.Semin@baikalelectronics.ru>
+ <YZOEM591s7iulPH1@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK9rFnw396xK+u3qUpgbnGNw7WDJPJm0L3o4nPAcFeqQjBDbXg@mail.gmail.com>
+In-Reply-To: <YZOEM591s7iulPH1@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 02:24:40PM -0800, Brad Larson wrote:
-> Hi Sergey,
-> 
-> On Thu, Oct 28, 2021 at 12:49 AM Serge Semin <fancer.lancer@gmail.com> wrote:
-> >
-> > On Sun, Oct 24, 2021 at 06:51:50PM -0700, Brad Larson wrote:
-> > > The Pensando Elba SoC has integrated the DW APB SPI Controller
-> >
-> > Please add the "dt-bindings: " prefix to the patch name and discard
-> > the word "bindings" from the title as the submitting DT-patches
-> > requires:
-> > Documentation/devicetree/bindings/submitting-patches.rst
-> 
-> I'll add that.  I recall looking at the recent git log for similar
-> changes to the file as the current recommended approach.
-> 
-> > >
-> > > Signed-off-by: Brad Larson <brad@pensando.io>
-> > > ---
-> > >  Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> > > index d7e08b03e204..0b5ebb2ae6e7 100644
-> > > --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> > > +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> > > @@ -73,6 +73,8 @@ properties:
-> > >                - renesas,r9a06g032-spi # RZ/N1D
-> > >                - renesas,r9a06g033-spi # RZ/N1S
-> > >            - const: renesas,rzn1-spi   # RZ/N1
-> >
-> > > +      - description: Pensando Elba SoC SPI Controller
-> > > +        const: pensando,elba-spi
-> >
-> > AFAICS from the driver-part of the patchset it's not enough. You've
-> > also got the syscon phandle, which needs to be reflected in the
-> > bindings. That also makes me thinking that you didn't perform the
-> > "dtbs_check" on the dts-files you were going to submit, but for some
-> > reason discarded from this series (btw why?). If you did you would
-> > have got an error of an unevaluated property detection.
-> 
-> I ran the checks below and didn't get errors.  Rob provided some info
-> and I found the server did not have yamllint installed (not flagged by
-> tool).  Also dt-schema was not the latest.  I'm re-doing this and
-> including "DT_CHECKER_FLAGS=-m" as that is new with v5.13.
+On Tue, Nov 16, 2021 at 12:13:07PM +0200, Andy Shevchenko wrote:
+> On Mon, Nov 15, 2021 at 09:19:17PM +0300, Serge Semin wrote:
+> > Since the DW_SPI_CAP_DWC_HSSI capability has just been replaced with using
+> > the DW SSI IP-core versions interface, the DW SPI capability flags are now
+> > represented with a gap. Let's fix it by redefining the DW_SPI_CAP_DFS32
+> > macro to setting BIT(2) of the capabilities field.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 > 
 
-> make ARCH=arm64 dtbs_check
-> DT_SCHEMA_FILES=Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> make ARCH=arm64 dtbs_check
-> DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> make ARCH=arm64 dtbs_check
-> DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> make ARCH=arm64 dtbs_check
-> DT_SCHEMA_FILES=Documentation/devicetree/bindings/vendor-prefixes.yaml
-> make ARCH=arm64 dtbs_check
-> DT_SCHEMA_FILES=Documentation/devicetree/bindings/arm/pensando,elba.yaml
+> Fine with me, thanks!
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-Hmm, that's weird. Rob, does dtschema tool have the
-"unevaluatedProperties" property support?
-
-Brad, anyway you still need to add the syscon-property (pensando,*spics)
-requirement in the snps,dw-apb-ssi.yaml schema. See the way it's done there
-for instance for "baikal,bt1-sys-ssi" when it comes to the
-vendor-specific properties definition in the allOf composition block.
-You'll need to define a custom phandle property there in case if a
-DT-node is compatible with you SPI controller.
+Great! Thanks to you too for very fast responses and thorough review.
 
 -Sergey
 
 > 
-> make dt_binding_check
-> DT_SCHEMA_FILES=Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> make dt_binding_check
-> DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> make dt_binding_check
-> DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> make dt_binding_check
-> DT_SCHEMA_FILES=Documentation/devicetree/bindings/vendor-prefixes.yaml
-> make dt_binding_check
-> DT_SCHEMA_FILES=Documentation/devicetree/bindings/arm/pensando,elba.yaml
+> > ---
+> > 
+> > Changelog v3:
+> > - This is a new patch unpinned from the previous one as of Andy
+> >   suggested.
+> > ---
+> >  drivers/spi/spi-dw.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
+> > index 8334e6b35f89..d5ee5130601e 100644
+> > --- a/drivers/spi/spi-dw.h
+> > +++ b/drivers/spi/spi-dw.h
+> > @@ -32,7 +32,7 @@
+> >  /* DW SPI controller capabilities */
+> >  #define DW_SPI_CAP_CS_OVERRIDE		BIT(0)
+> >  #define DW_SPI_CAP_KEEMBAY_MST		BIT(1)
+> > -#define DW_SPI_CAP_DFS32		BIT(3)
+> > +#define DW_SPI_CAP_DFS32		BIT(2)
+> >  
+> >  /* Register offsets (Generic for both DWC APB SSI and DWC SSI IP-cores) */
+> >  #define DW_SPI_CTRLR0			0x00
+> > -- 
+> > 2.33.0
+> > 
 > 
-> Thanks
-> Brad
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
