@@ -2,93 +2,150 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1092A45485C
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Nov 2021 15:18:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE33454F6A
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Nov 2021 22:35:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238325AbhKQOVO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 17 Nov 2021 09:21:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
+        id S240010AbhKQVi2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 17 Nov 2021 16:38:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234203AbhKQOVN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 Nov 2021 09:21:13 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C82DC061570;
-        Wed, 17 Nov 2021 06:18:14 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id v64so8017758ybi.5;
-        Wed, 17 Nov 2021 06:18:14 -0800 (PST)
+        with ESMTP id S239951AbhKQVi1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 Nov 2021 16:38:27 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E4BC061570
+        for <linux-spi@vger.kernel.org>; Wed, 17 Nov 2021 13:35:28 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id g14so17351183edz.2
+        for <linux-spi@vger.kernel.org>; Wed, 17 Nov 2021 13:35:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=pensando.io; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=YKmu7HqClDPfAW/KPYXmYV7MKJHnHVcWDjB0/hF1xw8=;
-        b=PBeVZDrOlwkuTprP+rnTkf9goyQlSrzdgEhfE8/fqQofrGbWlExJnsG1/wvTYFsrCR
-         YtBBMFY4ezgL2Du9NufECbBuYv++ofZbTrwu5bVhCe/FgpWmYLRFkDhxUSY2VJ4j5gZP
-         kzj0Ybc4NxIYWwWJgIYOogyR7twDQlWwdduF1zNmGy8BBnrTFqr70vE+UMdshIoYo25B
-         rukBhaZYY0SySYBlK8NxcZRjrk5/7dhWeWuci7XpV1Gx39vnVMkIQ18aKFu7Wady4AQg
-         n0nYKbNsoNzBNcPIkSwdXYKNO6iQ+oi3NxW1353fVdHCM9veFWtSYR+FrwevD9c9cW2P
-         lsPA==
+        bh=oE/PpLF33Bzsi0HnoSd2D3IwGwaXk2bQ1kvpSMCx344=;
+        b=QXKVrGtTrCFY3/MBy6Ae0VTxlonw/DRAwSMtioyfsFpu2GcapCZk8ECLNgHzTseKvw
+         z4a+aYv43SjZNW9uCZfhmS17j+f8gCgthROz70Lx0hFYnFUcRSvmoInMeC07P6JZ0h3V
+         Xr+RAhPlvzJYcKexb/aQuT9t9+/L4FZKUWiptUjyDUslFUoqctzOgri6mtkQcbbZTtvA
+         npV5JkOzQTIeSfkzvp74QKTJGPdVK/AX9ysyEayMfOemtar8e6uJ3fKQWAITwhXv9fZr
+         jEHJWh4QDMrx2m8a5nMPQ7jXzh/j7+IFYmXyz3+PXKz7B21vPoOBG9YEk3lVpfjvf/z4
+         HMow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=YKmu7HqClDPfAW/KPYXmYV7MKJHnHVcWDjB0/hF1xw8=;
-        b=7KudRnuWwSegrnsuy5kLTrR8kUibtrQ5DMFnc7lYAMjszozzvK5LOAhBu2GzMYM6/n
-         vwPx15Kygz0Wkx55M0x+WYaGuAfeKL8QafNH2oWZ8EwET+aMGDfhg8pzIOgX2qIDeBCY
-         oenOoehSJBK6pO6WAuIneph0nqGTICdaD3890A2VTp0IX6SJylRKF5Or+8CfPGC+48SB
-         E4lHkySSnCGW+VclAHMzgoNSh4+hcQ8dA+nqktB0AOpovVlsnDdz5eK/5H26KFpzIzUJ
-         vZtf3EFGmQN0LMqqjpwGTT/+mii3O40Am4G+n7chU8WjmkUDe7dmVRY6SfnER4JsgRnr
-         ND3g==
-X-Gm-Message-State: AOAM532zKW/68GTPhgW1Kh6SqjhFBvMXQ55cgf/rWrAgeXjUqsidqm6C
-        gKhCLSVoMo2fnHp+TL53zXmKGGvaACuHl28KOcs=
-X-Google-Smtp-Source: ABdhPJyzrfXj737b4n0md6i/+FpCUd9X5qky5KKOjDVUy1T1FiOVGc6U7lj1/OYEg51bksg+1Qype+wmNWUV+K21wII=
-X-Received: by 2002:a25:dc4d:: with SMTP id y74mr17393513ybe.422.1637158693784;
- Wed, 17 Nov 2021 06:18:13 -0800 (PST)
+        bh=oE/PpLF33Bzsi0HnoSd2D3IwGwaXk2bQ1kvpSMCx344=;
+        b=K15wHT5uV7N2H3kuysvYCdfXI4EdZt+pMMxZD9PYPEHK4lG1ZwXP+CTA+eq7UVqSe3
+         WHOqP70wJbCYkUaKzj44+PkJwJlPNsQnyTAHSgHkvel0OgBOhlrU3F4w76LneUxX4ogO
+         HOalPP3azHJwxCqBWFjyT+qeJ9bsKQv7ItUZ6zaUoJg5SoXD/p9uUYu57rD6AhJcZYzE
+         Xsg3KVxGG6VWqFH+5QkJOSu/aw/N/LKa0YCVXEpN59Hgz4SJEpE0jsylYRNdQhrYAkVR
+         cZtBuUs0nNm1+Xm1ifNiXFfpyvmQfeGYirZynO3qN5bV9evg/oGN+4et/x3vw3J3/PAV
+         9M0Q==
+X-Gm-Message-State: AOAM533/beSDCHCYlFD6aFCLjbgLIBYJOik5jWBMDzQWFifOn2y+DcE4
+        szDVwrTwePNRHQTvNiCjKf++dtvOwbmEWr58T87iYg==
+X-Google-Smtp-Source: ABdhPJzr0FWsxLkdp+GqPycs6CHrFza83kIvQ058rw/43FF71YpE2yK7ii3nVMCgEOTvhGBAP0KBWaoOOVwD5hfSdFQ=
+X-Received: by 2002:a17:907:9487:: with SMTP id dm7mr26958236ejc.95.1637184926827;
+ Wed, 17 Nov 2021 13:35:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20211117010527.27365-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211117010527.27365-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <YZT7suWucdD+FU6k@sirena.org.uk>
-In-Reply-To: <YZT7suWucdD+FU6k@sirena.org.uk>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 17 Nov 2021 14:17:47 +0000
-Message-ID: <CA+V-a8u1xb2A3RZX2-VCM10m3htpzzyDzhoLX1dkFnjFFGMVhA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: spi: renesas,rspi: Document RZ/G2L SoC
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-spi <linux-spi@vger.kernel.org>,
+References: <20211025015156.33133-1-brad@pensando.io> <20211025015156.33133-6-brad@pensando.io>
+ <20211028074945.rv2j5kgzk7yc2srr@mobilestation> <CAK9rFnw396xK+u3qUpgbnGNw7WDJPJm0L3o4nPAcFeqQjBDbXg@mail.gmail.com>
+ <20211116112907.lbwdcz5pmgxqzv55@mobilestation> <CAK9rFny7zQRpvGOVK0+01hKQNu7XCMOz8vTfbHPs6gMR10muDw@mail.gmail.com>
+ <20211117081922.nnqsr5zzzydurq5t@mobilestation>
+In-Reply-To: <20211117081922.nnqsr5zzzydurq5t@mobilestation>
+From:   Brad Larson <brad@pensando.io>
+Date:   Wed, 17 Nov 2021 13:35:15 -0800
+Message-ID: <CAK9rFnzJ4scTXF7pVGDuerp873K+qN_2D9C3X6pdo_TzhyE=ZQ@mail.gmail.com>
+Subject: Re: [PATCH v3 05/11] spi: dw: Add Pensando Elba SoC SPI Controller bindings
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Olof Johansson <olof@lixom.net>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
+Hi Sergey,
 
-Thank you for the review.
-
-On Wed, Nov 17, 2021 at 12:55 PM Mark Brown <broonie@kernel.org> wrote:
+On Wed, Nov 17, 2021 at 12:19 AM Serge Semin <fancer.lancer@gmail.com> wrote:
 >
-> On Wed, Nov 17, 2021 at 01:05:25AM +0000, Lad Prabhakar wrote:
-> > Add RSPI binding documentation for Renesas RZ/G2L SoC.
-> >
-> > RSPI block is identical to one found on RZ/A, so no driver changes are
-> > required the fallback compatible string "renesas,rspi-rz" will be used
-> > on RZ/G2L
+> I was wrong using that construction here (fixup patch would be very
+> welcome) seeing the "snps,dw-apb-ssi" doesn't permit having a generic
+> "snps,dw*" compatible string. So just const-compatible property should
+> be enough:
 >
-> Please submit patches using subject lines reflecting the style for the
-> subsystem, this makes it easier for people to identify relevant patches.
-> Look at what existing commits in the area you're changing are doing and
-> make sure your subject lines visually resemble what they're doing.
-> There's no need to resubmit to fix this alone.
+> +        compatible:
+> +          const: pensando,elba-spics
+>
+>
+> > +    then:
+> > +      properties:
+> > +        pensando,spics:
+> > +          $ref: /schemas/types.yaml#/definitions/phandle
+> > +          description:
+> > +            Phandle to the system control device node which provides access to
+> > +            the spics control register
+> > +      required:
+>
+> > +        - pensando,spics
+>
+> Please note, I've asked to be more specific in this property naming.
+> Something like this should be fine
+> "pensando,elba-syscon-spics"/"pensando,syscon-spics".
 
-My bad will update it to "spi: dt-bindings: renesas,rspi: Document
-RZ/G2L SoC" and re-send a v2 along with the review commented by Geert.
+I would have avoided a typo in the last reply if the spics property
+was more specific.  Based on needed construction like this?
 
-Cheers,
-Prabhakar
+DT:
+                spi0: spi@2800 {
+                        compatible = "pensando,elba-spi";
+                        reg = <0x0 0x2800 0x0 0x100>;
+                        pensando,elba-syscon-spics = <&mssoc 0x2468>;
+                        clocks = <&ahb_clk>;
+                        interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+                        #address-cells = <1>;
+                        #size-cells = <0>;
+                        num-cs = <2>;
+                        status = "disabled";
+                };
+
+Binding:
+--- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
++++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+@@ -37,6 +37,15 @@ allOf:
+     else:
+       required:
+         - interrupts
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - pensando,elba-spi
++    then:
++      required:
++        - pensando,elba-syscon-spics
+
+ properties:
+   compatible:
+@@ -73,6 +82,8 @@ properties:
+               - renesas,r9a06g032-spi # RZ/N1D
+               - renesas,r9a06g033-spi # RZ/N1S
+           - const: renesas,rzn1-spi   # RZ/N1
++      - description: Pensando Elba SoC SPI Controller
++        const: pensando,elba-spi
+
+   reg:
+     minItems: 1
+
+Thanks,
+Brad
