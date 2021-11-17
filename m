@@ -2,49 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5DC454312
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Nov 2021 09:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A201C45431D
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Nov 2021 09:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234729AbhKQI7F (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 17 Nov 2021 03:59:05 -0500
-Received: from mail-ua1-f50.google.com ([209.85.222.50]:44595 "EHLO
-        mail-ua1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234722AbhKQI6m (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 Nov 2021 03:58:42 -0500
-Received: by mail-ua1-f50.google.com with SMTP id p2so4209506uad.11;
-        Wed, 17 Nov 2021 00:55:44 -0800 (PST)
+        id S234730AbhKQJAQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Wed, 17 Nov 2021 04:00:16 -0500
+Received: from mail-ua1-f53.google.com ([209.85.222.53]:34569 "EHLO
+        mail-ua1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233065AbhKQJAP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 17 Nov 2021 04:00:15 -0500
+Received: by mail-ua1-f53.google.com with SMTP id n6so4358251uak.1;
+        Wed, 17 Nov 2021 00:57:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sW49Xr+1bOjDY12omUEsih/dwouIC8EM4gaLxaa8Zd4=;
-        b=aX44Aq9zh6MZlNHWKQTujDEsbqxvJE83QUva+jIqI+awNHS5WyLTkx37oLRB8x9+z0
-         VpGAmWaMw365lusquN5LxjxxRId1yoKs04U0nbDqVsTWeYSZlnmwJFSwl855vWq8AwfI
-         N9KOg5csKiaw+sSEyo+VgA0BhX5m/u4qDSJPKxdC3jOx/edBN5Gs6tc+bVYvmMhGCSWg
-         Vb5iwraj6BXgnLOGI9Bgdng2AWgVLTcMA2di7YIP90Vbq3begDt/dFbrgsAV2NRh5vkI
-         Ba23kZ2NRPyh0Uyu5eXZHzMkcbv8RCqHRReNm7ASwJEj3eCGaaXhU4EJyYGrYQGN3YX+
-         tWXQ==
-X-Gm-Message-State: AOAM531PUSnRtxiG+85YWrmNudL6j+BVRi6twp+fosDN+sgNvAraZ41I
-        9VazASocAHcPWOT+6Ju4UOnB+XudYle7zg==
-X-Google-Smtp-Source: ABdhPJzEESxBNj9TsDxlC2s7TdE2CvCu3VT2w+erwjKi1xgg1OnDDysmrodk3XhwvUbk8/1tMvI5LQ==
-X-Received: by 2002:a05:6102:6d6:: with SMTP id m22mr68523953vsg.30.1637139343578;
-        Wed, 17 Nov 2021 00:55:43 -0800 (PST)
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
-        by smtp.gmail.com with ESMTPSA id u14sm12669762vsi.2.2021.11.17.00.55.42
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=6vy1KPRa1ED8PcCzhlgYzLQmc74SyldWRjucvNisZ48=;
+        b=XdSsg3+JV6r+Pw2+dD036iRl+2+XXInUXFNSyOUQJVZ0fg4K2okQRuw0FUFynw93Mo
+         iodNwd8jO3cUV2hYmpihkPtZCbhVMI7/yfHKUnUJF1jdYzXi53SWugYXtaaTo52RlMNT
+         620eARaWWKEWENVRL0NVDE3OVdhihCuEgpQJYHA9Q23D8ACxztGc84uHejRW0lfBSxnl
+         SXtEHHTeAR1z6TK+ukT/+A0a14EPBcj0bjFQ8AsLDAAq79Get/vluO+ETTxyCrFGOUnI
+         9mIlj/TlZEDAQHZIDuVHyuPtcYzH2KEzCfXGGmxMllCMdFJdkvF7ZUMi6IqlEbguOFtP
+         O5dg==
+X-Gm-Message-State: AOAM533kor7RDjXKJdjL7vLRDiZUxHPFpWcGq1WJdeAxTiUhkF88vtH1
+        lZM/kv0JYTpskOVDD0gu4jKA7GZjnk8L5w==
+X-Google-Smtp-Source: ABdhPJxl0L+fqu9OcYS/AnAptmk/iHyRsce6Mtf5vRHBYSdMopNjdCacBmHsR8nCi5la0n4LJWsGbA==
+X-Received: by 2002:a05:6102:10c:: with SMTP id z12mr64182681vsq.45.1637139436926;
+        Wed, 17 Nov 2021 00:57:16 -0800 (PST)
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
+        by smtp.gmail.com with ESMTPSA id j31sm13223511uag.4.2021.11.17.00.57.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Nov 2021 00:55:43 -0800 (PST)
-Received: by mail-ua1-f43.google.com with SMTP id v3so4226800uam.10;
-        Wed, 17 Nov 2021 00:55:42 -0800 (PST)
-X-Received: by 2002:a67:af0a:: with SMTP id v10mr65640282vsl.35.1637139342767;
- Wed, 17 Nov 2021 00:55:42 -0800 (PST)
+        Wed, 17 Nov 2021 00:57:16 -0800 (PST)
+Received: by mail-ua1-f52.google.com with SMTP id r15so4332794uao.3;
+        Wed, 17 Nov 2021 00:57:16 -0800 (PST)
+X-Received: by 2002:ab0:15a1:: with SMTP id i30mr21216242uae.122.1637139436148;
+ Wed, 17 Nov 2021 00:57:16 -0800 (PST)
 MIME-Version: 1.0
-References: <20211117010527.27365-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211117010527.27365-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20211117010527.27365-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20211117010527.27365-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20211117010527.27365-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20211117010527.27365-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 17 Nov 2021 09:55:31 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUPuHQEEyyDC9iR1hePPs7ZexRJ_Vf=rZDN=CiTSLZtnQ@mail.gmail.com>
-Message-ID: <CAMuHMdUPuHQEEyyDC9iR1hePPs7ZexRJ_Vf=rZDN=CiTSLZtnQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] spi: spi-rspi: Add support to deassert/assert reset line
+Date:   Wed, 17 Nov 2021 09:57:05 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWkeXUzgoPCzxTSv65EGLyQTi_R8WnqOLievLrW9K7kFQ@mail.gmail.com>
+Message-ID: <CAMuHMdWkeXUzgoPCzxTSv65EGLyQTi_R8WnqOLievLrW9K7kFQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] spi: spi-rspi: Drop redeclaring ret variable in qspi_transfer_in()
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -57,21 +57,26 @@ Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On Wed, Nov 17, 2021 at 2:05 AM Lad Prabhakar
 <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> On RZ/G2L SoC we need to explicitly deassert the reset line
-> for the device to work, use this opportunity to deassert/assert
-> reset line in spi-rspi driver.
+> "ret" variable is already declared in qspi_transfer_in() at the
+> beginning of function, drop redeclaring ret in the if block, fixing
+> below:
 >
-> This patch adds support to read the "resets" property (if available)
-> from DT and perform deassert/assert when required.
+> spi-rspi.c: In function ‘qspi_transfer_in’:
+> spi-rspi.c:838:7: warning: declaration of ‘ret’ shadows a previous local
+>   838 |   int ret = rspi_dma_transfer(rspi, NULL, &xfer->rx_sg);
+>       |       ^~~
+> spi-rspi.c:835:6: note: shadowed declaration is here
+>   835 |  int ret;
 >
+> Fixes: db30083813b55 ("spi: rspi: avoid uninitialized variable access")
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
