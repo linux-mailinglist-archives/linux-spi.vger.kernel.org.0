@@ -2,84 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 279524546B7
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Nov 2021 13:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3EC345473A
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Nov 2021 14:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235743AbhKQM6S (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 17 Nov 2021 07:58:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58436 "EHLO mail.kernel.org"
+        id S232261AbhKQNeT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 17 Nov 2021 08:34:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46838 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235135AbhKQM6S (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 17 Nov 2021 07:58:18 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7575861B7D;
-        Wed, 17 Nov 2021 12:55:17 +0000 (UTC)
+        id S231977AbhKQNeT (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 17 Nov 2021 08:34:19 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BC8C761B1E;
+        Wed, 17 Nov 2021 13:31:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637153719;
-        bh=8JLZmI9VYjUjkTwlKzaUB2jGVugQsQHRSvVyCU0a5gw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RxmGFuA1QFLoIvddFpnX7yipA/mGAdKzmsjvyEiKjXm9AlhP4Jm40fSsDB+C58J0f
-         JSpE3v1vBgdfgxtHUCajhN+2uejc0wKibHMeQ+lTiuC0l11SrnZZ8BKyMFMifU9Xw2
-         2T9z9eYkgX7r1uBoZz3vGLdqjOMZ8ZIrFdl7BuG8jyow1HHIwPrjJRsMJ3un3FGmJt
-         IsWaY5AkeCZAhOyaKAtSTsOjDfonpHAHi9/yOTRhX/rAcNPs3D0vgrH3nlD1SUUEor
-         3n4hTvksnXK6NwvrJQM+KrXq6CrFzZrzhzvGu00g5XTr/m5xMF2FNX2gA+2PXYoZGE
-         rEGQM9dmkvJqA==
-Date:   Wed, 17 Nov 2021 12:55:14 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-spi@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH 1/3] dt-bindings: spi: renesas,rspi: Document RZ/G2L SoC
-Message-ID: <YZT7suWucdD+FU6k@sirena.org.uk>
-References: <20211117010527.27365-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211117010527.27365-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        s=k20201202; t=1637155880;
+        bh=33bRfbMDfWohdew3q0h0oJFiJrEU9QRWSRrNJ0UHk7U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=by00Ve2WLafWkl76i97JRGysVEVEByUutTkJbGK5kgXnQRVMOrtqbX5gnFYNNZWSR
+         m/vP4hLPfwRmWcpACsDLJb30AiM069a6L3/XlQU2auwwqE30povUkBu/cWr3WK97p2
+         PjMwH1lhP5iufwvD5O+/1fzs0ZedEC8YN+iGs1jz4YyOyMJHTUCF8ArwAYPL7Q3P2a
+         7B2UocvJ3NaRfDtOuIBHtw0kL0huB1k+EqLaY7Zv+3xC1Po49URDyqd9TMSF60A045
+         2REBASspxknEXGFUjTJ71JH5WcOXVDJrYJcDkhKRIzwF4PWbXXc7/yU+DfxMqh7rJn
+         iDEY1DCA8LgRA==
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] spi: qcom: geni: remove unused defines
+Date:   Wed, 17 Nov 2021 19:01:08 +0530
+Message-Id: <20211117133110.2682631-1-vkoul@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dTY+a439r+UjD8cz"
-Content-Disposition: inline
-In-Reply-To: <20211117010527.27365-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Cookie: One Bell System - it sometimes works.
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Commit b59c122484ec ("spi: spi-geni-qcom: Add support for GPI dma")
+added GPI support but also added unused defines, so remove them
 
---dTY+a439r+UjD8cz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+---
+ drivers/spi/spi-geni-qcom.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-On Wed, Nov 17, 2021 at 01:05:25AM +0000, Lad Prabhakar wrote:
-> Add RSPI binding documentation for Renesas RZ/G2L SoC.
->=20
-> RSPI block is identical to one found on RZ/A, so no driver changes are
-> required the fallback compatible string "renesas,rspi-rz" will be used
-> on RZ/G2L
+diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+index e2affaee4e76..413fa1a7a936 100644
+--- a/drivers/spi/spi-geni-qcom.c
++++ b/drivers/spi/spi-geni-qcom.c
+@@ -71,10 +71,6 @@
+ #define GSI_CPHA		BIT(4)
+ #define GSI_CPOL		BIT(5)
+ 
+-#define MAX_TX_SG		3
+-#define NUM_SPI_XFER		8
+-#define SPI_XFER_TIMEOUT_MS	250
+-
+ struct spi_geni_master {
+ 	struct geni_se se;
+ 	struct device *dev;
+-- 
+2.31.1
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
-
---dTY+a439r+UjD8cz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGU+7EACgkQJNaLcl1U
-h9BdtAf/VmkMMGhu3XIzeaXgRoqE0g29SY/hGvaybxu0nXF+m0MZrbbpS83fNEe6
-EffVbR0u5hsbdNCQtvOE4mf/saXqtnKMNetoxmYYZZMB5Lc1aPkk/pT2I1GtMd1Y
-P2qI2S9PxpJfHQhe22ziN9N14ZBONPWoX50YojMVbOGpbxUTjctDZca6h++8hNcZ
-xe2Z55pKMTWGalEMeoXpVLPIXxh+53wnr1r/bgFxtO2xPwYMPv9QhZIz9XPSLdHV
-kmq/QavqBPe+baiwog+QzaFx44hf8Kgz2ynAA7km6aMwXXtxsE6xWwObNdVz+gTx
-eKPdt55LNZaxQDJhWsSVyq3uUNQx1g==
-=IzaT
------END PGP SIGNATURE-----
-
---dTY+a439r+UjD8cz--
