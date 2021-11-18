@@ -2,141 +2,109 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2016F456510
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Nov 2021 22:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D9F45658B
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Nov 2021 23:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbhKRVfB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 18 Nov 2021 16:35:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36460 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229795AbhKRVe7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 Nov 2021 16:34:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637271118;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=25DzKyi07nBwZwK9LVCZrjG6wh3BTTtMjwyVPHAQSG8=;
-        b=WG1O3CDDLW0s82cxQ8WsWFN/R6UU6WaGJXMoHS3T+XM1SdbydpA2v40dRq19g+CmjHN/uM
-        aj2WOxuKwQGVGEVqGwbiCOH5F8bowbM+uFkv0xPRUv7yt/F/wV2at3c1dRd/unEfoNZOgA
-        vGEq4jPhtSWnZ2yq1MMB4CmECdpWWRw=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-581-__bzpaUAPKqFa8ZPKTatGA-1; Thu, 18 Nov 2021 16:31:57 -0500
-X-MC-Unique: __bzpaUAPKqFa8ZPKTatGA-1
-Received: by mail-wm1-f69.google.com with SMTP id ay34-20020a05600c1e2200b00337fd217772so3765964wmb.4
-        for <linux-spi@vger.kernel.org>; Thu, 18 Nov 2021 13:31:57 -0800 (PST)
+        id S230020AbhKRW0X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 18 Nov 2021 17:26:23 -0500
+Received: from mail-oi1-f170.google.com ([209.85.167.170]:44636 "EHLO
+        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229600AbhKRW0X (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 Nov 2021 17:26:23 -0500
+Received: by mail-oi1-f170.google.com with SMTP id be32so17444063oib.11;
+        Thu, 18 Nov 2021 14:23:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=25DzKyi07nBwZwK9LVCZrjG6wh3BTTtMjwyVPHAQSG8=;
-        b=6j04mMFk05+VXWEEKjvCKx7b0eGVxqI9QCTlwmtYIj+pUGwIPsp0PxzvG5IOssHvcQ
-         1jA5lunpS0QNYEyH6Ydc2B4N5iSTPyYRlWz3//HWYSYZtIHuXmpDPVWJlpRzhsPZVvfL
-         1V9JHBjshpMUGUzXblIcXP8hik4/WkEZn2osH5sp/yeYN3x9Kz6n16AWuIB88KucNU/Q
-         H508dmzaMMkhSNRQKwCobYGfqpAcQ6ee4pmU0/7ZhtJebqgkC71tVADwgjBokNFAianN
-         2aTlQYh7F7BE0NPxBbelpQ7PVZ/azP4lan3NJ139fRPGu/UGYmT74khSnMwhmYRijxd7
-         bzrw==
-X-Gm-Message-State: AOAM533UC3MKJzOe5WIoPXYBVOAB4OTOTYFCRGmivvUxrztR0+4SjOY2
-        Md9L5iCUzdaOaLvVqGu8An1J9cPfSGcF6FWJzzrxOQ3ecR72+KSCOThm0aBngKHG6UMBu+eJGW9
-        zTe8x9Ox64MXaUrMXSKSE
-X-Received: by 2002:a7b:c1cb:: with SMTP id a11mr351626wmj.30.1637271116111;
-        Thu, 18 Nov 2021 13:31:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwETgrT9BbFta3TwOfEknxoqtR++U7e85LkpGZXwgIG7y31mDTm+UZnOgdcK7w7nztesDRrkA==
-X-Received: by 2002:a7b:c1cb:: with SMTP id a11mr351589wmj.30.1637271115872;
-        Thu, 18 Nov 2021 13:31:55 -0800 (PST)
-Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id g13sm766870wmk.37.2021.11.18.13.31.55
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OsaV9L6ypm1eFtYxy97Ih2+Ie2rmYMcatbNwYzIQHN8=;
+        b=SveFt6O2rDkSpFtfDeYeJL7zuKq/U4RMcoPX+tVsOgREaZo/ZIg4odKlNkxY3SLGpx
+         Mk1XFvuc0qnlh91osM2hjrZDWebVs2j59I0VikboN+w5DQrgy7vOXXTV8bnrCgMh1LZf
+         3IcqgeZ7vSNtOZgJbJTSSUBOof2ylsEzQF6luhOw6tWUx3hBDSc/V/RLgWC1DItv6qVU
+         qvPfqCP0RxPaDAMgdG8vjpgocOo49AWJHXeakS8Dj35II9rlAeIQOKDfk8PrvB3pfPKs
+         DcCk3srCp4et5ynkAUXHU19MHilEqPB71LXtMPQNYiVorGpjHrL2uPzUH8kA337S/Dfc
+         UZbg==
+X-Gm-Message-State: AOAM530UVg65CxBasEC056sEsWQTy4YeU6DEV++TjvotsoMty+MzXwug
+        zZFKGXSVEkLwI5tpliL4lw==
+X-Google-Smtp-Source: ABdhPJwQaIQluWZ/UijkBOhentEr+irUw5GrTqdmEFrli8Wr1pQp9SGbS6LlABDbK/j6nU86G/VHdw==
+X-Received: by 2002:a05:6808:9ae:: with SMTP id e14mr445604oig.68.1637274201868;
+        Thu, 18 Nov 2021 14:23:21 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id n23sm244380oic.26.2021.11.18.14.23.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Nov 2021 13:31:55 -0800 (PST)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-spi@vger.kernel.org,
-        Ralph Siemsen <ralph.siemsen@linaro.org>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Subject: [PATCH] spi: docs: improve the SPI userspace API documentation
-Date:   Thu, 18 Nov 2021 22:31:43 +0100
-Message-Id: <20211118213143.2345041-1-javierm@redhat.com>
-X-Mailer: git-send-email 2.33.1
+        Thu, 18 Nov 2021 14:23:21 -0800 (PST)
+Received: (nullmailer pid 1864118 invoked by uid 1000);
+        Thu, 18 Nov 2021 22:23:20 -0000
+Date:   Thu, 18 Nov 2021 16:23:20 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Mark Brown <broonie@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] spi: dt-bindings: add schema listing
+ peripheral-specific properties
+Message-ID: <YZbSWA5kSfORSzky@robh.at.kernel.org>
+References: <20211109181911.2251-1-p.yadav@ti.com>
+ <20211109181911.2251-2-p.yadav@ti.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=javierm@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211109181911.2251-2-p.yadav@ti.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This doc is fairly outdated and only uses legacy device instantiation
-terminology. Let us update it and also mention the OF and ACPI device
-tables, to make easier for users to figure out how should be defined.
+On Tue, Nov 09, 2021 at 11:49:09PM +0530, Pratyush Yadav wrote:
+> Many SPI controllers need to add properties to peripheral devices. This
+> could be the delay in clock or data lines, etc. These properties are
+> controller specific but need to be defined in the peripheral node
+> because they are per-peripheral and there can be multiple peripherals
+> attached to a controller.
+> 
+> If these properties are not added to the peripheral binding, then the
+> dtbs check emits a warning. But these properties do not make much sense
+> in the peripheral binding because they are controller-specific and they
+> will just pollute every peripheral binding. So this binding is added to
+> collect all such properties from all such controllers. Peripheral
+> bindings should simply refer to this binding and they should be rid of
+> the warnings.
+> 
+> There are some limitations with this approach. Firstly, there is no way
+> to specify required properties. The schema contains properties for all
+> controllers and there is no way to know which controller is being used.
+> Secondly, there is no way to restrict additional properties. Since this
+> schema will be used with an allOf operator, additionalProperties needs
+> to be true. In addition, the peripheral schema will have to set
+> unevaluatedProperties: false.
+> 
+> Despite these limitations, this appears to be the best solution to this
+> problem that doesn't involve modifying existing tools or schema specs.
+> 
+> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+> 
+> ---
+> 
+> Changes in v3:
+> - s/slave/peripheral/g
+> - Drop the | on description.
+> - Drop the compatible property.
+> 
+> Changes in v2:
+> - Move other subnode properties listed in spi-controller.yaml to
+>   spi-slave-props.yaml
+> - Move the Cadence controller-specific properties out of
+>   spi-slave-props.yaml. They will be added in a separate file.
+> - Add a reference to spi-slave-props.yaml in spi-controller.yaml.
+> - Update description.
+> 
+>  .../bindings/spi/spi-controller.yaml          | 69 +--------------
+>  .../bindings/spi/spi-peripheral-props.yaml    | 87 +++++++++++++++++++
+>  2 files changed, 89 insertions(+), 67 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
 
-Also, mention that devices bind could be done in user-space now using
-the "driver_override" sysfs entry.
-
-Suggested-by: Ralph Siemsen <ralph.siemsen@linaro.org>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
-
- Documentation/spi/spidev.rst | 34 +++++++++++++++++++++++++++++-----
- 1 file changed, 29 insertions(+), 5 deletions(-)
-
-diff --git a/Documentation/spi/spidev.rst b/Documentation/spi/spidev.rst
-index f05dbc5ccdbc..ec0986ae6170 100644
---- a/Documentation/spi/spidev.rst
-+++ b/Documentation/spi/spidev.rst
-@@ -29,15 +29,39 @@ of the driver stack) that are not accessible to userspace.
- 
- DEVICE CREATION, DRIVER BINDING
- ===============================
--The simplest way to arrange to use this driver is to just list it in the
--spi_board_info for a device as the driver it should use:  the "modalias"
--entry is "spidev", matching the name of the driver exposing this API.
-+
-+The spidev driver contains lists of SPI devices that are supported for
-+the different hardware topology representations.
-+
-+The following are the SPI device tables supported by the spidev driver:
-+
-+    - struct spi_device_id spidev_spi_ids[]: list of devices that can be
-+      bound when these are defined using a struct spi_board_info with a
-+      .modalias field matching one of the entries in the table.
-+
-+    - struct of_device_id spidev_dt_ids[]: list of devices that can be
-+      bound when these are defined using a Device Tree node that has a
-+      compatible string matching one of the entries in the table.
-+
-+    - struct acpi_device_id spidev_acpi_ids[]: list of devices that can
-+      be bound when these are defined using a ACPI device object with a
-+      _HID matching one of the entries in the table.
-+
-+NOTE: it used to be supported to define an SPI device using the "spidev"
-+      name.  For example as .modalias = "spidev" or compatible = "spidev".
-+      But this is no longer supported by the Linux kernel and instead a
-+      real SPI device name as listed in one of the tables should be used.
-+
- Set up the other device characteristics (bits per word, SPI clocking,
- chipselect polarity, etc) as usual, so you won't always need to override
- them later.
- 
--(Sysfs also supports userspace driven binding/unbinding of drivers to
--devices.  That mechanism might be supported here in the future.)
-+Sysfs also supports userspace driven binding/unbinding of drivers to
-+devices.  The mechanism works by writing to the device "driver_overrride"
-+entry.  For example:
-+
-+    echo spidev > /sys/bus/spi/devices/spiX.Y/driver_override
-+    echo spiB.C > /sys/bus/spi/drivers/spidev/bind
- 
- When you do that, the sysfs node for the SPI device will include a child
- device node with a "dev" attribute that will be understood by udev or mdev.
--- 
-2.33.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>
