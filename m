@@ -2,119 +2,109 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51BF0455C43
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Nov 2021 14:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31472455CD8
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Nov 2021 14:38:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbhKRNJW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 18 Nov 2021 08:09:22 -0500
-Received: from mga01.intel.com ([192.55.52.88]:49544 "EHLO mga01.intel.com"
+        id S231260AbhKRNl2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 18 Nov 2021 08:41:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33496 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233335AbhKRNIq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 18 Nov 2021 08:08:46 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10171"; a="257961291"
-X-IronPort-AV: E=Sophos;i="5.87,244,1631602800"; 
-   d="scan'208";a="257961291"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2021 05:05:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,244,1631602800"; 
-   d="scan'208";a="473141954"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 18 Nov 2021 05:05:40 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 169CD5B2; Thu, 18 Nov 2021 15:05:44 +0200 (EET)
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Michael Walle <michael@walle.cc>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Lima <mauro.lima@eclypsium.com>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans-Gert Dahmen <hans-gert.dahmen@immu.ne>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
-Subject: [PATCH v4 3/3] Documentation / MTD: Rename the intel-spi driver
-Date:   Thu, 18 Nov 2021 16:05:43 +0300
-Message-Id: <20211118130543.11179-4-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211118130543.11179-1-mika.westerberg@linux.intel.com>
-References: <20211118130543.11179-1-mika.westerberg@linux.intel.com>
+        id S230501AbhKRNl1 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 18 Nov 2021 08:41:27 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 90673617E5;
+        Thu, 18 Nov 2021 13:38:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637242707;
+        bh=hLl7IjdRvqKdkE+mSKKqxPbm1kSkIRvdG0UJzw4TKwA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jePfkbfF3EH7tLYMgp9uodBG445aeIc+BhDplVOr3iHfnGjN8+TgWg3FCiJ/SwRZH
+         nsvn1DjOtfOoCm2WsufUZ7oxQ2YX/nqZXJ1c1IfVbMflOtEebjjAWcyv9kZjmzuJhi
+         lLofh00MJGlYKM6YGmGfoKYOnNpOuoeqtC9xAdYdPcH4mIIIEFR4bK+MunSuHmplEH
+         MAQxMEbKQ0sHaKmSppYnVx7pMptZFE6+LHL7pCKe4DDVXWk4Y5yGb4sAHLVShZJG9i
+         hytUzKK4mHJDWpNWB5j5XoGsAfMDm/fQwOqxEL5xvAFlorJeidUsrTuQ3NtYnbtnoL
+         u0cA9HdFALpJA==
+Date:   Thu, 18 Nov 2021 13:38:22 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Lh Kuo =?utf-8?B?6YOt5Yqb6LGq?= <lh.Kuo@sunplus.com>
+Cc:     "LH.Kuo" <lhjeff911@gmail.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dvorkin@tibbo.com" <dvorkin@tibbo.com>,
+        "qinjian@cqplus1.com" <qinjian@cqplus1.com>,
+        Wells Lu =?utf-8?B?5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Subject: Re: [PATCH v2 1/2] SPI: Add SPI driver for Sunplus SP7021
+Message-ID: <YZZXTokMn6+p7C3H@sirena.org.uk>
+References: <1635747525-31243-1-git-send-email-lh.kuo@sunplus.com>
+ <1636448488-14158-1-git-send-email-lh.kuo@sunplus.com>
+ <1636448488-14158-2-git-send-email-lh.kuo@sunplus.com>
+ <YYqMLPB6VX9k5LUK@sirena.org.uk>
+ <f98b5548cf564093af1d10ba1239507d@sphcmbx02.sunplus.com.tw>
+ <YYvx4LtKiSPBIgCN@sirena.org.uk>
+ <70a9c10ef34e46c2a51f134829abdd08@sphcmbx02.sunplus.com.tw>
+ <YY0dk26NqoOi2QEH@sirena.org.uk>
+ <083dc70e20964ec8b74f71f6817be55e@sphcmbx02.sunplus.com.tw>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tplQcX+QKV56luWj"
+Content-Disposition: inline
+In-Reply-To: <083dc70e20964ec8b74f71f6817be55e@sphcmbx02.sunplus.com.tw>
+X-Cookie: People respond to people who respond.
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Since the driver is renamed (and moved) update the BIOS upgrade guide
-accordingly from intel-spi to spi-intel. Keep the guide under MTD
-documentation because this is pretty much still about MTD and SPI-NOR.
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Mauro Lima <mauro.lima@eclypsium.com>
----
- Documentation/driver-api/mtd/index.rst                    | 2 +-
- .../driver-api/mtd/{intel-spi.rst => spi-intel.rst}       | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
- rename Documentation/driver-api/mtd/{intel-spi.rst => spi-intel.rst} (94%)
+--tplQcX+QKV56luWj
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/driver-api/mtd/index.rst b/Documentation/driver-api/mtd/index.rst
-index 436ba5a851d7..6a4278f409d7 100644
---- a/Documentation/driver-api/mtd/index.rst
-+++ b/Documentation/driver-api/mtd/index.rst
-@@ -7,6 +7,6 @@ Memory Technology Device (MTD)
- .. toctree::
-    :maxdepth: 1
- 
--   intel-spi
-+   spi-intel
-    nand_ecc
-    spi-nor
-diff --git a/Documentation/driver-api/mtd/intel-spi.rst b/Documentation/driver-api/mtd/spi-intel.rst
-similarity index 94%
-rename from Documentation/driver-api/mtd/intel-spi.rst
-rename to Documentation/driver-api/mtd/spi-intel.rst
-index 0465f6879262..df854f20ead1 100644
---- a/Documentation/driver-api/mtd/intel-spi.rst
-+++ b/Documentation/driver-api/mtd/spi-intel.rst
-@@ -1,5 +1,5 @@
- ==============================
--Upgrading BIOS using intel-spi
-+Upgrading BIOS using spi-intel
- ==============================
- 
- Many Intel CPUs like Baytrail and Braswell include SPI serial flash host
-@@ -11,12 +11,12 @@ avoid accidental (or on purpose) overwrite of the content.
- Not all manufacturers protect the SPI serial flash, mainly because it
- allows upgrading the BIOS image directly from an OS.
- 
--The intel-spi driver makes it possible to read and write the SPI serial
-+The spi-intel driver makes it possible to read and write the SPI serial
- flash, if certain protection bits are not set and locked. If it finds
- any of them set, the whole MTD device is made read-only to prevent
- partial overwrites. By default the driver exposes SPI serial flash
- contents as read-only but it can be changed from kernel command line,
--passing "intel-spi.writeable=1".
-+passing "spi_intel.writeable=1".
- 
- Please keep in mind that overwriting the BIOS image on SPI serial flash
- might render the machine unbootable and requires special equipment like
-@@ -32,7 +32,7 @@ Linux.
-     serial flash. Distros like Debian and Fedora have this prepackaged with
-     name "mtd-utils".
- 
-- 3) Add "intel-spi.writeable=1" to the kernel command line and reboot
-+ 3) Add "spi_intel.writeable=1" to the kernel command line and reboot
-     the board (you can also reload the driver passing "writeable=1" as
-     module parameter to modprobe).
- 
--- 
-2.33.0
+On Wed, Nov 17, 2021 at 09:11:08AM +0000, Lh Kuo =E9=83=AD=E5=8A=9B=E8=B1=
+=AA wrote:
 
+> The main function are as follows
+>=20
+> The sp7021_spi_mas_transfer_one is replace the transfer_one_message funct=
+ion.
+>=20
+> static int sp7021_spi_mas_transfer_one(struct spi_controller *ctlr,
+> 		struct spi_device *spi, struct spi_transfer *xfer)
+> {
+> 	struct sp7021_spi_ctlr *pspim =3D spi_master_get_devdata(ctlr);
+> 	u32 reg_temp =3D 0;
+> 	unsigned long timeout =3D msecs_to_jiffies(1000);
+
+I'm still not clear why this needs to be transfer_one_message() and not
+just transfer_one()?  The whole thing with copying everything into a
+buffer is a bit confusing to me.
+
+> The probe function is as follows.
+>=20
+> static int sp7021_spi_controller_probe(struct platform_device *pdev)
+> {
+> 	int ret;
+> 	int mode;
+> 	struct spi_controller *ctlr;
+> 	struct sp7021_spi_ctlr *pspim;
+
+This looks fine.
+
+--tplQcX+QKV56luWj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGWV00ACgkQJNaLcl1U
+h9ACYAf/WN2ye9DzTP1BTyDED8vTdgtzpXVIRx5bvw8xz9/l8mluwdplMlwXRle+
+zFLDiAqiRG9kysYPdE02/BewqGMPwTwgfT+3KwIbL7BQYXzI803MQuE4KJD3VQNL
+BLnxmEgAhR1PWDIfBX1THd6E1Eccn9Wz6TJ2k39QB59C0amAw3earHEGFAkVG5aM
+7MpC4A/PBwtsh2XGeEwDIJSNwnkYbE1vgmJjqvZuTgOoTT88g1hELG675UYQPfO3
+3zdsLjHMNminXqFzIa3Rri9E8EkLJMjfGsOrstHKgyT9P/cft+MFMKwhSJNAUtPs
+1Oh7gawY7IV3wyNBbZWTrzwQtBWEiQ==
+=KTHo
+-----END PGP SIGNATURE-----
+
+--tplQcX+QKV56luWj--
