@@ -2,100 +2,137 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 371B3456711
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Nov 2021 01:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F4155456B03
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Nov 2021 08:41:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233802AbhKSA5k (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 18 Nov 2021 19:57:40 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:43749 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbhKSA5i (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 18 Nov 2021 19:57:38 -0500
-Received: by mail-oi1-f169.google.com with SMTP id o4so18266035oia.10;
-        Thu, 18 Nov 2021 16:54:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NJ9HnG2UMCEE4biBm5ej/tJE9ReBS+RZcFUyPPeYoTY=;
-        b=eRGN8v9Q14nixr42468lPZ9n9Pdf2iWXsyWhoo1gmVFuSoMdED3Weu4fMLwTiR0R9t
-         zUk9aS/JN3Cb05bsjwjggeMY7pCBM8OVqH7bDoc8qApSk//I1a2Ss8k1+V8fK/xAyUUW
-         wQSFtr5fqnm0PKZLG9pblriVBR7KzEEmOr+Z0VfUTqhqN9PkqMKioFVXL2bjyRQyAZzp
-         8FPg+OEds/EhvE/mvEopEhC798aktxuhnY586oU+uxv7sLrFhzQcMMMWfgjK3UumCAga
-         IVYDDUY7ghoC1RJt4x3iXpUQiG4i29L7kR2wdN+cG362Snn1S8AhWG6yK5ayOGGP5Od0
-         GFCg==
-X-Gm-Message-State: AOAM531h8DE4EL8XIbVAc7JgFjfBwbl5utWlPIkA65SnJpLMGnHREf4M
-        1tAkD81xHYwtrJRvLDWeDA==
-X-Google-Smtp-Source: ABdhPJxY4T9LF2F11iACJ3TIzLy6vgQ/UROqzyeIhb7PVJmARYDeMS8HZCif76ujP4ztygxu18BiBw==
-X-Received: by 2002:a05:6808:11c8:: with SMTP id p8mr1273757oiv.72.1637283277541;
-        Thu, 18 Nov 2021 16:54:37 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id b26sm256384oti.56.2021.11.18.16.54.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Nov 2021 16:54:36 -0800 (PST)
-Received: (nullmailer pid 2126530 invoked by uid 1000);
-        Fri, 19 Nov 2021 00:54:35 -0000
-Date:   Thu, 18 Nov 2021 18:54:35 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     linux-i2c@vger.kernel.org, linux-imx@nxp.com,
-        linux-watchdog@vger.kernel.org, linux@rempel-privat.de,
-        linux-kernel@vger.kernel.org, aisheng.dong@nxp.com,
-        linux-spi@vger.kernel.org, kernel@pengutronix.de,
-        linux-serial@vger.kernel.org, robh+dt@kernel.org,
-        linux-mmc@vger.kernel.org, festevam@gmail.com, shawnguo@kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux@roeck-us.net, ulf.hansson@linaro.org,
-        daniel.lezcano@linaro.org, Peng Fan <peng.fan@nxp.com>,
-        wim@linux-watchdog.org, Jacky Bai <ping.bai@nxp.com>,
-        s.hauer@pengutronix.de, broonie@kernel.org
-Subject: Re: [PATCH V5 8/9] arm64: dts: imx8ulp: Add the basic dtsi file for
- imx8ulp
-Message-ID: <YZb1y5GpI7XPb/Ji@robh.at.kernel.org>
-References: <20211112082930.3809351-1-peng.fan@oss.nxp.com>
- <20211112082930.3809351-9-peng.fan@oss.nxp.com>
+        id S232005AbhKSHnX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 19 Nov 2021 02:43:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231828AbhKSHnX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 19 Nov 2021 02:43:23 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BB6C061574
+        for <linux-spi@vger.kernel.org>; Thu, 18 Nov 2021 23:40:21 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mnyVN-0008G7-B4; Fri, 19 Nov 2021 08:40:17 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mnyVM-000QqF-TV; Fri, 19 Nov 2021 08:40:16 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mnyVL-0004bf-R5; Fri, 19 Nov 2021 08:40:15 +0100
+Date:   Fri, 19 Nov 2021 08:40:15 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spidev: Make probe to fail early if a spidev compatible
+ is used
+Message-ID: <20211119074015.kji2hzarevxgfl5l@pengutronix.de>
+References: <20211109225920.1158920-1-javierm@redhat.com>
+ <20211110074247.g7eaq2z27bwdt4m5@pengutronix.de>
+ <YZaZpx7cudaAEGIP@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="i6lcaidjqepiuwke"
 Content-Disposition: inline
-In-Reply-To: <20211112082930.3809351-9-peng.fan@oss.nxp.com>
+In-Reply-To: <YZaZpx7cudaAEGIP@sirena.org.uk>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 12 Nov 2021 16:29:29 +0800, Peng Fan (OSS) wrote:
-> From: Jacky Bai <ping.bai@nxp.com>
-> 
-> Add the basic dtsi support for i.MX8ULP.
-> 
-> i.MX 8ULP is part of the ULP family with emphasis on extreme
-> low-power techniques using the 28 nm fully depleted silicon on
-> insulator process. Like i.MX 7ULP, i.MX 8ULP continues to be
-> based on asymmetric architecture, however will add a third DSP
-> domain for advanced voice/audio capability and a Graphics domain
-> where it is possible to access graphics resources from the
-> application side or the realtime side.
-> 
-> Reviewed-by: Dong Aisheng <aisheng.dong@nxp.com>
-> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
-> 
->   - v4
->    Fix build error after rebase
->    Drop usb nodes and alias, drop fec node
-> 
->   - v3 changes:
->     no
-> 
->   - v2 changes:
->     update the license
->     update the compatible property for usb related node
-> 
->  .../boot/dts/freescale/imx8ulp-pinfunc.h      | 978 ++++++++++++++++++
->  arch/arm64/boot/dts/freescale/imx8ulp.dtsi    | 396 +++++++
->  2 files changed, 1374 insertions(+)
->  create mode 100755 arch/arm64/boot/dts/freescale/imx8ulp-pinfunc.h
->  create mode 100644 arch/arm64/boot/dts/freescale/imx8ulp.dtsi
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+--i6lcaidjqepiuwke
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Nov 18, 2021 at 06:21:27PM +0000, Mark Brown wrote:
+> On Wed, Nov 10, 2021 at 08:42:47AM +0100, Uwe Kleine-K=F6nig wrote:
+>=20
+> > Up to 6840615f85f6 the choices you had to use the spidev driver were
+> > (assuing a dt machine):
+>=20
+> >  a) Use compatible =3D "spidev" and ignore the warning
+> >  b) Use compatible =3D $chipname and add $chipname to the list of
+> >     supported devices for the spidev driver. (e.g. "rohm,dh2228fv")
+> >  c) Use compatible =3D $chipname and force binding the spidev driver us=
+ing
+> >=20
+> >    	echo spidev > /sys/bus/spi/devices/spiX.Y/driver_override
+> > 	echo spiX.Y > /sys/bus/spi/drivers/spidev/bind
+>=20
+> > Commit 6840615f85f6 changed that in situation a) you had to switch to c)
+> > (well, or b) adding "spidev" to the spi id list).
+>=20
+> > With the change introduced by this patch, you make it impossible to bind
+> > the spidev driver to such a device (without kernel source changes) even
+> > using approach c). I wonder if this is too harsh given that changing the
+> > dtb is difficult on some machines.
+>=20
+> Following up from discussion on IRC: it's not clear to me how option c
+> is affected?  The change only causes an error if of_device_is_compatible()
+> is true and driver_override works with spi_device_id not compatibles (I
+> didn't actually test, in the middle of some other stuff right now).
+
+It affects c) only if the device tree has a device with compatible =3D
+"spidev". For such a device the history is:
+
+  - Before 956b200a846e ("spi: spidev: Warn loudly if instantiated from
+    DT as "spidev"") in v4.1-rc1:
+    Just bound silently
+
+  - After 956b200a846e up to 6840615f85f6 ("spi: spidev: Add SPI ID
+    table") in v5.15-rc6:
+    The device was automatically bound with a warning
+
+  - After 6840615f85f6:
+    The device doesn't bind automatically, when using driver_override
+    you get a warning.
+
+  - With the proposed patch:
+    The device cannot be bound even using driver_override
+
+Not this affects also devices that use
+
+	compatible =3D "myvender,devicename", "spidev";
+
+=2E
+
+Best regards
+Uwe
+
+
+
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--i6lcaidjqepiuwke
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmGXVNsACgkQwfwUeK3K
+7Al4vQf/ZXk+F0vl3KPL2XIcQv4fz7LHzx+yHfaExJZkVMrTqBlCRkJ2vkwvLKb6
+sRR1GSVc45N6ABPmvagTxfrpj0SMO/ZMedaDmLHkVMobNvld/MpoKyj34IH+V+BP
+px6rxgxiev7keWE1bpDiRjl5q2Go8KqsexisqItvpZ34R1UYd1fhIUjCq4Tyh4VP
+Y9RGeKgEMdi45kCzwGyVYPJ0/oAnmHnfrlvqHKd1FuucjUimbbWpoeZMh3EGa9fq
+9uligrgiYiZz00areB65OguPOXe4CdEypCMW0bq0bERipeKo1lXULuwd2TPSXazQ
+co2/mEL5lVlzOWrpaqBWJrmDdluc4g==
+=sVbv
+-----END PGP SIGNATURE-----
+
+--i6lcaidjqepiuwke--
