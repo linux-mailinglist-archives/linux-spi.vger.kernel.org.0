@@ -2,130 +2,121 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE032456B6E
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Nov 2021 09:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25729456B81
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Nov 2021 09:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234097AbhKSIR5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 19 Nov 2021 03:17:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33391 "EHLO
+        id S234230AbhKSITS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 19 Nov 2021 03:19:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24554 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233858AbhKSIRz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 19 Nov 2021 03:17:55 -0500
+        by vger.kernel.org with ESMTP id S234193AbhKSITR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 19 Nov 2021 03:19:17 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637309693;
+        s=mimecast20190719; t=1637309776;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7JV1cZENXMXZyinTiwhaccj/QSmI5uZhTY4+XUIIsZA=;
-        b=Rimm5xwVW3n2icdkUxwVVzZxSywxWsP4V1YyUAcjFvmDANLY2we9iZ9p6DvUixLCQq3+wB
-        5rrw07EswitGEtL8r9zOaHR1rTrFE9c8aYdFS4sFy//F42BF8yncSXJFDzj0OsR5JzZUDo
-        CTPzjZ0zkGU+j46eyauBZmKebHMGppI=
+        bh=dGVjhUmhSKpRkRZVK2VPpn5nare3klvTCl9Wthr4AVc=;
+        b=MiHd7+lGzhCgJ3GTTapSCmRP/J2REX/E5/nJcjIaCdy5P44GOdpsF1i6gEZGPB34spdwm2
+        L36FEB73NB2kNtI0HEFzZSYfBEQUqf3gUmlJEeVTfGMxYaTplc1WCOr94wY3xgK4nNpwDr
+        Fx0V8zG7zIOFEEABvGPi6tASM0+C6Wo=
 Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
  [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-197-l0Q3aS06N2qzxyWUNHrWZw-1; Fri, 19 Nov 2021 03:14:50 -0500
-X-MC-Unique: l0Q3aS06N2qzxyWUNHrWZw-1
-Received: by mail-wm1-f70.google.com with SMTP id 138-20020a1c0090000000b00338bb803204so2952778wma.1
-        for <linux-spi@vger.kernel.org>; Fri, 19 Nov 2021 00:14:49 -0800 (PST)
+ us-mta-372-hCAKVu9jNQSsAaSD0fzgBA-1; Fri, 19 Nov 2021 03:16:14 -0500
+X-MC-Unique: hCAKVu9jNQSsAaSD0fzgBA-1
+Received: by mail-wm1-f70.google.com with SMTP id m18-20020a05600c3b1200b0033283ea5facso2740457wms.1
+        for <linux-spi@vger.kernel.org>; Fri, 19 Nov 2021 00:16:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=7JV1cZENXMXZyinTiwhaccj/QSmI5uZhTY4+XUIIsZA=;
-        b=DM8pdWLl/HCxyZcVBGJ/uLU6fCOZKJrbaFvk3qCBSsg3KcFglnwlM67Jp+a3XFDwNi
-         gbDqnyEZEn2rYGSpEBDCHVW3ah6dsH/YywDjNaPFnSGbDD6evGxA8yPtvJMXgCu4GKYJ
-         D+LeJVpXMcusQNicwrG5s1c9TB9trnBoM68g9HtX/xH0ZuPJ2qYByMwQV2HBIQTtqPX8
-         NfVtn5uqO/SXkKGNBmZ9bGuy6BAqkq98vDKhe0rSO9FQcrnGBTUPssfSWOr+RbJCzmfq
-         iXeKOIozwwfTljAvbRXdkeEQlOZi99pkKoQidI+mg2uLTXRcaRby+Efx0UHDQxP56TbT
-         yqIA==
-X-Gm-Message-State: AOAM533p5MOJ2JLtR0C1yD+2xLLmxmuoRPWvRjVTua+VD530dPELaxdd
-        wFTkpBibBbwjKPB+Zp8hJHtsLvwy3idHbTWJJnaI16G7TNNXs3/KZINX+ivA/+AG286si2zzSvi
-        A2sE9ylhKcGXG3SHIHDNI
-X-Received: by 2002:a1c:21d7:: with SMTP id h206mr4450013wmh.60.1637309688856;
-        Fri, 19 Nov 2021 00:14:48 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzBlU4knLHloWUN5sSN3Ii1JoA342TzkqpYsfz9O9L8KdAkj6d0ZgiszUYl8BUt84AvBN/z1w==
-X-Received: by 2002:a1c:21d7:: with SMTP id h206mr4449995wmh.60.1637309688629;
-        Fri, 19 Nov 2021 00:14:48 -0800 (PST)
+        bh=dGVjhUmhSKpRkRZVK2VPpn5nare3klvTCl9Wthr4AVc=;
+        b=IXonSJ7C5zI8Pf8y5OcIX1JqVXvPKpEP4D7MfliL12kSLggDWlURfRvuUDBN2yNFoC
+         Ud4TNtRmofaNeWwsLxRCOpAPZ9gIF6Vrd4HvUqPDkpXnsOrPC7dX0jMGgYrqtFfHPQv0
+         S6KYbpFMvIjKOFfPD337HGuZYpGD0TUuesWOj/7jHDFQfFx8lVSPcsahB/Z0Yf8Hkz93
+         LTl6U4ObKqdAJxLZSOlNra7d2jJAssIrbukUXTsg+x5guVtiu0pVQcNJi12gQ9W2nzZ9
+         4YGiP/2khAiVO/p2/TkilWpY2heFm33Hu5UBT7vHXIWOGZy3ynTmxhLYy9bbKuA0UqRk
+         XMtg==
+X-Gm-Message-State: AOAM532AQu4mQIHHSQnN3dGJgQUc44/S9WVTjvzODzVUfhjlK5R0p0Qd
+        Pn8c+Njhr6zb1q8S6M6uXU06HccKUsCigfHtZHek7lAHg3hQZwKv3GcK8QMS+5Ki+foS3x1tiWT
+        qD1Jq2hlEya18an3YwQVY
+X-Received: by 2002:a05:600c:3586:: with SMTP id p6mr4637185wmq.34.1637309772927;
+        Fri, 19 Nov 2021 00:16:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyo2XV6Pk/Nz3kbl16d6jJTW64ufiC5kUvq5J0K8M6i2zYcLcY8P63mDySius51uUm3JP3QaA==
+X-Received: by 2002:a05:600c:3586:: with SMTP id p6mr4637150wmq.34.1637309772703;
+        Fri, 19 Nov 2021 00:16:12 -0800 (PST)
 Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id bg14sm2669635wmb.5.2021.11.19.00.14.47
+        by smtp.gmail.com with ESMTPSA id z6sm2858429wmp.1.2021.11.19.00.16.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Nov 2021 00:14:48 -0800 (PST)
-Message-ID: <f6349482-2f65-277d-afa7-9fb47e89221b@redhat.com>
-Date:   Fri, 19 Nov 2021 09:14:45 +0100
+        Fri, 19 Nov 2021 00:16:12 -0800 (PST)
+Message-ID: <84b28138-8f10-f3a3-cbe8-878635b4f0d0@redhat.com>
+Date:   Fri, 19 Nov 2021 09:16:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
 Subject: Re: [PATCH] spi: docs: improve the SPI userspace API documentation
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-spi@vger.kernel.org, Ralph Siemsen <ralph.siemsen@linaro.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Ralph Siemsen <ralph.siemsen@linaro.org>
 References: <20211118213143.2345041-1-javierm@redhat.com>
- <20211119074529.cvi5zldkuofl4nl5@pengutronix.de>
+ <CAMuHMdVcsfE6TZbu8SJZP7CNKyjwBZdBiN0nDRQCibaGgpLF0g@mail.gmail.com>
 From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20211119074529.cvi5zldkuofl4nl5@pengutronix.de>
+In-Reply-To: <CAMuHMdVcsfE6TZbu8SJZP7CNKyjwBZdBiN0nDRQCibaGgpLF0g@mail.gmail.com>
 Authentication-Results: relay.mimecast.com;
         auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=javierm@redhat.com
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Uwe,
+Hello Geert
 
-Thanks for your feedback.
+On 11/19/21 09:10, Geert Uytterhoeven wrote:
+> Hi Javier,
+> 
+> On Thu, Nov 18, 2021 at 10:32 PM Javier Martinez Canillas
+> <javierm@redhat.com> wrote:
+>> This doc is fairly outdated and only uses legacy device instantiation
+>> terminology. Let us update it and also mention the OF and ACPI device
+>> tables, to make easier for users to figure out how should be defined.
+>>
+>> Also, mention that devices bind could be done in user-space now using
+>> the "driver_override" sysfs entry.
+>>
+>> Suggested-by: Ralph Siemsen <ralph.siemsen@linaro.org>
+>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> 
+> Thanks for your patch!
+>
 
-On 11/19/21 08:45, Uwe Kleine-König wrote:
-> On Thu, Nov 18, 2021 at 10:31:43PM +0100, Javier Martinez Canillas wrote:
-
+You are welcome!
+ 
 [snip]
 
 >> +
->>  Set up the other device characteristics (bits per word, SPI clocking,
->>  chipselect polarity, etc) as usual, so you won't always need to override
->>  them later.
->>  
->> -(Sysfs also supports userspace driven binding/unbinding of drivers to
->> -devices.  That mechanism might be supported here in the future.)
->> +Sysfs also supports userspace driven binding/unbinding of drivers to
->> +devices.  The mechanism works by writing to the device "driver_overrride"
->> +entry.  For example:
+>> +NOTE: it used to be supported to define an SPI device using the "spidev"
+>> +      name.  For example as .modalias = "spidev" or compatible = "spidev".
+>> +      But this is no longer supported by the Linux kernel and instead a
+>> +      real SPI device name as listed in one of the tables should be used.
 > 
-> I'd write here:
+> This reads as the tables are fixed.
+> Perhaps add
 > 
-> 	Sysfs also supports userspace driven binding/unbinding of
-> 	drivers to devices that don't bind automatically using one of
-> 	the tables above. To make the spidev driver bind to such a
-> 	device, use:
+>     You are encouraged to add an entry for your SPI device name to
+>      one of the tables.
 >
 
-Agreed, that looks much nicer.
- 
->> +
->> +    echo spidev > /sys/bus/spi/devices/spiX.Y/driver_override
->> +    echo spiB.C > /sys/bus/spi/drivers/spidev/bind
->>  
->>  When you do that, the sysfs node for the SPI device will include a child
->>  device node with a "dev" attribute that will be understood by udev or mdev.
-> 
-> What is "that" here? (Maybe this refers to "Set up the other device
-> characteristics [...] as usual"? Is the effect still accurate?
->
-
-My understanding is that "that" refers to: define an register a spi_board_info
-with .modalias = "$chipname" to bind the device with the spidev driver.
-
-Since the "dev" attribute will AFAIK contain the MAJOR:MINOR numbers for the
-character device in /dev. This is the reason why I left this paragraph after
-the explanation of the device <--> driver binding logic.
-
-But probably while being there I should make that paragraph more clear too ?
+Indeed, you are correct. I'll add that too in v2.
 
 Best regards,
 -- 
