@@ -2,121 +2,131 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25729456B81
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Nov 2021 09:16:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEFF3456BB5
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Nov 2021 09:33:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234230AbhKSITS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 19 Nov 2021 03:19:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24554 "EHLO
+        id S234453AbhKSIfl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 19 Nov 2021 03:35:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56732 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234193AbhKSITR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 19 Nov 2021 03:19:17 -0500
+        by vger.kernel.org with ESMTP id S234448AbhKSIfj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 19 Nov 2021 03:35:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637309776;
+        s=mimecast20190719; t=1637310758;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dGVjhUmhSKpRkRZVK2VPpn5nare3klvTCl9Wthr4AVc=;
-        b=MiHd7+lGzhCgJ3GTTapSCmRP/J2REX/E5/nJcjIaCdy5P44GOdpsF1i6gEZGPB34spdwm2
-        L36FEB73NB2kNtI0HEFzZSYfBEQUqf3gUmlJEeVTfGMxYaTplc1WCOr94wY3xgK4nNpwDr
-        Fx0V8zG7zIOFEEABvGPi6tASM0+C6Wo=
+        bh=tUuoKjixLQkWOo6/knJS/yxc8h9J4lm72RKU4yaFvIo=;
+        b=Xabz9mgqvP74P493gyQgW2rKc/kINxkVhNIfRQGaV78KLGI/7bcoSsET2CjEdO/lSGax6T
+        zJ9zQORSoGy9Mq/PRfyStKrc92uYJvGZ+3V4MVgHI/+2s/wZozMYt07GXTDxH/2GBPmLel
+        +pVntc1BryEHM46pPSOjxZVKQEI2FI4=
 Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
  [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-372-hCAKVu9jNQSsAaSD0fzgBA-1; Fri, 19 Nov 2021 03:16:14 -0500
-X-MC-Unique: hCAKVu9jNQSsAaSD0fzgBA-1
-Received: by mail-wm1-f70.google.com with SMTP id m18-20020a05600c3b1200b0033283ea5facso2740457wms.1
-        for <linux-spi@vger.kernel.org>; Fri, 19 Nov 2021 00:16:13 -0800 (PST)
+ us-mta-42-_XiPLJkROeKXl0kSD_lq4w-1; Fri, 19 Nov 2021 03:32:35 -0500
+X-MC-Unique: _XiPLJkROeKXl0kSD_lq4w-1
+Received: by mail-wm1-f70.google.com with SMTP id l4-20020a05600c1d0400b00332f47a0fa3so4372072wms.8
+        for <linux-spi@vger.kernel.org>; Fri, 19 Nov 2021 00:32:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=dGVjhUmhSKpRkRZVK2VPpn5nare3klvTCl9Wthr4AVc=;
-        b=IXonSJ7C5zI8Pf8y5OcIX1JqVXvPKpEP4D7MfliL12kSLggDWlURfRvuUDBN2yNFoC
-         Ud4TNtRmofaNeWwsLxRCOpAPZ9gIF6Vrd4HvUqPDkpXnsOrPC7dX0jMGgYrqtFfHPQv0
-         S6KYbpFMvIjKOFfPD337HGuZYpGD0TUuesWOj/7jHDFQfFx8lVSPcsahB/Z0Yf8Hkz93
-         LTl6U4ObKqdAJxLZSOlNra7d2jJAssIrbukUXTsg+x5guVtiu0pVQcNJi12gQ9W2nzZ9
-         4YGiP/2khAiVO/p2/TkilWpY2heFm33Hu5UBT7vHXIWOGZy3ynTmxhLYy9bbKuA0UqRk
-         XMtg==
-X-Gm-Message-State: AOAM532AQu4mQIHHSQnN3dGJgQUc44/S9WVTjvzODzVUfhjlK5R0p0Qd
-        Pn8c+Njhr6zb1q8S6M6uXU06HccKUsCigfHtZHek7lAHg3hQZwKv3GcK8QMS+5Ki+foS3x1tiWT
-        qD1Jq2hlEya18an3YwQVY
-X-Received: by 2002:a05:600c:3586:: with SMTP id p6mr4637185wmq.34.1637309772927;
-        Fri, 19 Nov 2021 00:16:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyo2XV6Pk/Nz3kbl16d6jJTW64ufiC5kUvq5J0K8M6i2zYcLcY8P63mDySius51uUm3JP3QaA==
-X-Received: by 2002:a05:600c:3586:: with SMTP id p6mr4637150wmq.34.1637309772703;
-        Fri, 19 Nov 2021 00:16:12 -0800 (PST)
+        bh=tUuoKjixLQkWOo6/knJS/yxc8h9J4lm72RKU4yaFvIo=;
+        b=2DN9J46qJHYuvYA8rrwDUj8FxnkXjuTOzZkCjZU442dKOarQZZJ1hX2boCQqVVCqlR
+         sGKZTZ9GnCQkejV/coAC6J6XnqZWkG+ZErFVd96sG/a36FDA8F9n6Y2BKC6G1wNGrwlG
+         wewO2TLoH47+9ILUHw2Xa2Q+wGxfSGLXzVNmyysIWdSDdVBNfQBIzxBnvSY33WzGNImf
+         rnjq8VUuQuU+E1zaEohAZ6nsZpaIwtuQVpLEE7oUlGZav48v9MB5zMInbXu1xRHWHHWs
+         ksS8mSiClknTsaSI/qodLkYpSGcRrifvttgVjs50PIC+YU1bGHf9q9LdHSNaenxMaX7u
+         N0xQ==
+X-Gm-Message-State: AOAM531Kdp5yOL6XFMlflV0cENYZqnAH3mr+vVylh5onZBrEGm7QSvQY
+        1Gk67EwFsl0Kpsyuem8gYYlr6mz4e+vLFIxa16Uylzftpz2WrAZ/YbvbYMzrICwwZmQRCpiZeZu
+        xBM209tEveXBp1fKddLXv
+X-Received: by 2002:a05:600c:2156:: with SMTP id v22mr4877446wml.159.1637310753860;
+        Fri, 19 Nov 2021 00:32:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx+6a7rxjlIR8+FNOMhZH5MUe8GhJzMMes1/fzoti38R1czb1GyITps3evRL1yExeB1HLGWNA==
+X-Received: by 2002:a05:600c:2156:: with SMTP id v22mr4877410wml.159.1637310753625;
+        Fri, 19 Nov 2021 00:32:33 -0800 (PST)
 Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id z6sm2858429wmp.1.2021.11.19.00.16.12
+        by smtp.gmail.com with ESMTPSA id n184sm10977123wme.2.2021.11.19.00.32.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Nov 2021 00:16:12 -0800 (PST)
-Message-ID: <84b28138-8f10-f3a3-cbe8-878635b4f0d0@redhat.com>
-Date:   Fri, 19 Nov 2021 09:16:11 +0100
+        Fri, 19 Nov 2021 00:32:33 -0800 (PST)
+Message-ID: <9b41eb05-a095-39af-8b76-a73fa2532e92@redhat.com>
+Date:   Fri, 19 Nov 2021 09:32:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
-Subject: Re: [PATCH] spi: docs: improve the SPI userspace API documentation
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Ralph Siemsen <ralph.siemsen@linaro.org>
-References: <20211118213143.2345041-1-javierm@redhat.com>
- <CAMuHMdVcsfE6TZbu8SJZP7CNKyjwBZdBiN0nDRQCibaGgpLF0g@mail.gmail.com>
+Subject: Re: [PATCH] spidev: Make probe to fail early if a spidev compatible
+ is used
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org
+References: <20211109225920.1158920-1-javierm@redhat.com>
+ <20211110074247.g7eaq2z27bwdt4m5@pengutronix.de>
+ <YZaZpx7cudaAEGIP@sirena.org.uk>
+ <20211119074015.kji2hzarevxgfl5l@pengutronix.de>
 From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <CAMuHMdVcsfE6TZbu8SJZP7CNKyjwBZdBiN0nDRQCibaGgpLF0g@mail.gmail.com>
+In-Reply-To: <20211119074015.kji2hzarevxgfl5l@pengutronix.de>
 Authentication-Results: relay.mimecast.com;
         auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=javierm@redhat.com
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Geert
+Hello Uwe,
 
-On 11/19/21 09:10, Geert Uytterhoeven wrote:
-> Hi Javier,
-> 
-> On Thu, Nov 18, 2021 at 10:32 PM Javier Martinez Canillas
-> <javierm@redhat.com> wrote:
->> This doc is fairly outdated and only uses legacy device instantiation
->> terminology. Let us update it and also mention the OF and ACPI device
->> tables, to make easier for users to figure out how should be defined.
->>
->> Also, mention that devices bind could be done in user-space now using
->> the "driver_override" sysfs entry.
->>
->> Suggested-by: Ralph Siemsen <ralph.siemsen@linaro.org>
->> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> 
-> Thanks for your patch!
->
+On 11/19/21 08:40, Uwe Kleine-König wrote:
 
-You are welcome!
- 
 [snip]
 
->> +
->> +NOTE: it used to be supported to define an SPI device using the "spidev"
->> +      name.  For example as .modalias = "spidev" or compatible = "spidev".
->> +      But this is no longer supported by the Linux kernel and instead a
->> +      real SPI device name as listed in one of the tables should be used.
 > 
-> This reads as the tables are fixed.
-> Perhaps add
+> It affects c) only if the device tree has a device with compatible =
+> "spidev". For such a device the history is:
+>
+>   - Before 956b200a846e ("spi: spidev: Warn loudly if instantiated from
+>     DT as "spidev"") in v4.1-rc1:
+>     Just bound silently
 > 
->     You are encouraged to add an entry for your SPI device name to
->      one of the tables.
+>   - After 956b200a846e up to 6840615f85f6 ("spi: spidev: Add SPI ID
+>     table") in v5.15-rc6:
+>     The device was automatically bound with a warning
+> 
+>   - After 6840615f85f6:
+>     The device doesn't bind automatically, when using driver_override
+>     you get a warning.
+> 
+>   - With the proposed patch:
+>     The device cannot be bound even using driver_override
 >
 
-Indeed, you are correct. I'll add that too in v2.
+My understanding is that there's an agreement that using "spidev" as the
+specific compatible string is something that should not be supported.
+ 
+> Not this affects also devices that use
+> 
+> 	compatible = "myvender,devicename", "spidev";
+> 
+
+This is indeed a corner case and I'm less sure what the kernel should do
+about it. I just learned now that of_device_is_compatible() return value
+is not a boolean but instead a "score":
+
+https://elixir.bootlin.com/linux/latest/source/drivers/of/base.c#L455
+
+I wonder if we could add another helper that returns the index instead,
+and do: of_device_is_compatible_index(spi->dev.of_node, "spidev") == 0
+
+Another option is to add an of_device_is_compatible_specific() helper.
+
+Or just consider DT nodes with a general "spidev" compatible string to
+also not be valid. I would lean towards this one I think.
 
 Best regards,
 -- 
