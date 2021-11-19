@@ -2,89 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28847456F4D
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Nov 2021 14:06:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F316A45724E
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Nov 2021 17:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235227AbhKSNJd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 19 Nov 2021 08:09:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47136 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234542AbhKSNJd (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Fri, 19 Nov 2021 08:09:33 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 02AEB61A38;
-        Fri, 19 Nov 2021 13:06:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637327191;
-        bh=VH1vfNNbOjINaFz/r+kl03In+zpRGb/Yee4RQaf89bE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ieL3d8V7q8RySK8AlZiceaoG3q3SbZEimpU2xiT6iCW0wgK45DGDDQdur6T0xK+mE
-         HO+0BlmZQXmXAfRBVg+EGej4RctMbjv9xHASdrDqrq0wB1/o1U/r5P+xdRHzL9tRCh
-         JmgqlYs5kFYeslXBwFhOB/m3XSqYJ/XVf3SbPbRxjQcj2AvJ+0uHB8NrdLXxh3ilsg
-         EuwxSlUV82niF4hwbDVvVB5r1IbDdDEogxG7XdFYecpaoXELdGyuLFL394eqLyCSG4
-         i2uWxkbOlzR6JcoxCeC4ZajMYkObtJpVRr6XFfT0IewoHgJxyPOlqbnLZ2CVlZohck
-         vCE2QkEAF7PSw==
-Date:   Fri, 19 Nov 2021 13:06:30 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Lh Kuo =?utf-8?B?6YOt5Yqb6LGq?= <lh.Kuo@sunplus.com>
-Cc:     "LH.Kuo" <lhjeff911@gmail.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dvorkin@tibbo.com" <dvorkin@tibbo.com>,
-        "qinjian@cqplus1.com" <qinjian@cqplus1.com>,
-        Wells Lu =?utf-8?B?5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Subject: Re: [PATCH v2 1/2] SPI: Add SPI driver for Sunplus SP7021
-Message-ID: <YZehVn9WTqbznMrV@sirena.org.uk>
-References: <1636448488-14158-1-git-send-email-lh.kuo@sunplus.com>
- <1636448488-14158-2-git-send-email-lh.kuo@sunplus.com>
- <YYqMLPB6VX9k5LUK@sirena.org.uk>
- <f98b5548cf564093af1d10ba1239507d@sphcmbx02.sunplus.com.tw>
- <YYvx4LtKiSPBIgCN@sirena.org.uk>
- <70a9c10ef34e46c2a51f134829abdd08@sphcmbx02.sunplus.com.tw>
- <YY0dk26NqoOi2QEH@sirena.org.uk>
- <083dc70e20964ec8b74f71f6817be55e@sphcmbx02.sunplus.com.tw>
- <YZZXTokMn6+p7C3H@sirena.org.uk>
- <e98c0bc4dc99415099197688a8dd3ef5@sphcmbx02.sunplus.com.tw>
+        id S236163AbhKSQGa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 19 Nov 2021 11:06:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52934 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234970AbhKSQG3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 19 Nov 2021 11:06:29 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3380C06173E
+        for <linux-spi@vger.kernel.org>; Fri, 19 Nov 2021 08:03:27 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id f9so13230208ioo.11
+        for <linux-spi@vger.kernel.org>; Fri, 19 Nov 2021 08:03:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aRUizR/SQ3aER24HlrQ8e7XvTXAi4MwCK2pl0JDXiP8=;
+        b=VoMZ0mJkG43tbEre0wd4u0+XMHFAoG+1NuvCHKZrw3p5GcnYdvzK+V8q0NHHKEVBRk
+         KBz7jXriBnCj8sd1G91+BPH2dGXGjwcM84nni7j5QaFJqwVQCEiDSJ4nTOXGKT+Cuyl3
+         J4XyDgt4em9+BVZLup9Sg3AvAdNRCGVQ07ytJRzjjY39s3eKlh3pCuwRzGQxu4Ge7Kg5
+         YaCmV1eAGK7YrY9iw95RlrINaTQpvJ9vI99p5HQt7GS4pfTx3WmXy3mHB/Q15EPIaiVi
+         GkxGqlzxFcX4xvklzByAj+eI7dCnsdvA82JxQ/crXR/m0D1FLlUOICwuBO10U/jJ0AFk
+         9/sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aRUizR/SQ3aER24HlrQ8e7XvTXAi4MwCK2pl0JDXiP8=;
+        b=TCdFQ4FtW3CJJBQESFNRGAP8P/hRNDaAUlWWs81am39bfj/b9mBXXPl+739vmSmL8B
+         8qmfVo/lWwEMAheQncX9XkNtKDhGt2Te9lkvrirOtTvHI4B6/Ob6zh030ZSrlB3V+rLc
+         iQ5D1+S9TZlt0jFSvwHpKSMPWixz00eo/2+CQwv/lt3zqyYkDfvhsIwChaCuwQ4BoAu+
+         uLaIJMWSC9qxETfokj73nEofXzPzpw8WXb5OD2YVGSM9W//uMG4s8SNzf91+P4Yv+kWF
+         r8YTEMMDJSm2l8t1jiA1B42OUSYs8yYIwmjRJQhRKQDW8WzYiTlt5RWSnknBhyy2zTzQ
+         WVYQ==
+X-Gm-Message-State: AOAM532Mw91j0PvpDQPoxcdafjwHC5M2svIS8h/fj2t9ZJLtxPpKusZQ
+        U2KcBEE23JVeQ7A/0cbkzF48FE/7UYBVVQ==
+X-Google-Smtp-Source: ABdhPJxRlagOU0TteSIxHa68NlISJ71ARnIqqiul2RQQkUSUGJjDWVfK+aGSQ4hr1fLhvK7pEroLpg==
+X-Received: by 2002:a05:6602:27ce:: with SMTP id l14mr6063997ios.193.1637337806919;
+        Fri, 19 Nov 2021 08:03:26 -0800 (PST)
+Received: from localhost (rfs.netwinder.org. [206.248.184.2])
+        by smtp.gmail.com with ESMTPSA id t2sm88695iob.1.2021.11.19.08.03.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Nov 2021 08:03:26 -0800 (PST)
+Date:   Fri, 19 Nov 2021 11:03:25 -0500
+From:   Ralph Siemsen <ralph.siemsen@linaro.org>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spi: docs: improve the SPI userspace API documentation
+Message-ID: <20211119160325.GA1591448@maple.netwinder.org>
+References: <20211118213143.2345041-1-javierm@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="PTHkGAXZ/U+oJFgq"
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <e98c0bc4dc99415099197688a8dd3ef5@sphcmbx02.sunplus.com.tw>
-X-Cookie: fortune: not found
+In-Reply-To: <20211118213143.2345041-1-javierm@redhat.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Javier,
 
---PTHkGAXZ/U+oJFgq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Nov 18, 2021 at 10:31:43PM +0100, Javier Martinez Canillas 
+wrote:
+>This doc is fairly outdated and only uses legacy device instantiation
+>terminology. Let us update it and also mention the OF and ACPI device
+>tables, to make easier for users to figure out how should be defined.
 
-On Fri, Nov 19, 2021 at 01:51:15AM +0000, Lh Kuo =E9=83=AD=E5=8A=9B=E8=B1=
-=AA wrote:
+Thanks for putting this together! Overall it is a definite improvement.
 
->    The driver made a lot of changes. Which function do you want to check =
-first, or can i make a new patch ? And we can review on this basis.
+>+NOTE: it used to be supported to define an SPI device using the "spidev"
+>+      name.  For example as .modalias = "spidev" or compatible = "spidev".
+>+      But this is no longer supported by the Linux kernel and instead a
+>+      real SPI device name as listed in one of the tables should be used.
 
-It will be easiest to send a new patch.  The bits you included
-here looked fine at first glance.
+This note is factually correct, but it might be a little too terse for 
+folks who are not full-time kernel developers. I'd suggest making it a 
+bit more prescriptive. As well, the focus can probably be on the case of 
+device tree, since that is the one that generates the warning (and with 
+your patch, causes the driver to fail to load).
 
---PTHkGAXZ/U+oJFgq
-Content-Type: application/pgp-signature; name="signature.asc"
+I've struggled to put it into the right words, so the following is just 
+an idea. I've intentionally included the exact wording of the warn/err 
+to improve google-ability. As well, it is interesting to do a google 
+search for the message, and see what kinds of advice is offered. A few 
+that came up for me include:
+https://community.nxp.com/t5/i-MX-Processors/spidev-spidev-listed-directly-in-DT/m-p/426381/highlight/true#M64609
+https://yurovsky.github.io/2016/10/07/spidev-linux-devices.html
 
------BEGIN PGP SIGNATURE-----
+Anyhow, here is a possible addition to the NOTE in your patch.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGXoVIACgkQJNaLcl1U
-h9AeIAf/WGvVna7zhCF/f7uqUEpyQFGYONEw+hyn+uze1kJByv69NpXFOd+U4lGZ
-0Y6iSTu5nHlBtDdB7A+w6KXQLR+ff4oJM1eYOhT+tJ9ViFcR5AGXo6w9iU03aaCP
-cH5pS054w45hdHNXxN7jetRgsVVazRU2llh4RtZWlNun1x7MmcxMUipenv1MYbGA
-jLn3MYQ1j0lbjWh+w9CdCYw1JYXGvK5sjd3VfFwdTADXOsyfKy0/T/1JgUYto7qT
-8gM6uvUKcnXo64BzUN/Nc3PaAsYaO+Jg9MMUp7GDQu8sxJ0lQhfWNbXkaNplAJ5B
-8PptE0Bzf1ZikEPUhFPQmV6c6Qnx4g==
-=5cPZ
------END PGP SIGNATURE-----
+spidev listed directly in DT is not supported
+=============================================
 
---PTHkGAXZ/U+oJFgq--
+Spidev devices are typically declared in the device tree, see
+Documentation/devicetree/bindings/spi/spi-controller.yaml
+
+spi@0 {
+	compatible = "vendor,device";
+	reg = <0>;
+	spi-max-frequency = <10000000>;
+}
+
+In the past, it was common to use compatible = "spidev" rather than
+a more descriptive and device-specific name. For some time this has
+been deprecated, and as of kernel version X.Y it is no longer allowed.
+
+The preferred way to fix this is to use a device-specific name. This
+means picking a name, usually in the format "vendor,device". This name 
+must then be specified in:
+- the device tree for your board (instead of compatible = "spidev")
+- the spidev_dt_ids[] table in drivers/spi/spidev.c
+
+Regards,
+Ralph
