@@ -2,91 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7BD457A63
-	for <lists+linux-spi@lfdr.de>; Sat, 20 Nov 2021 02:19:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E76457C78
+	for <lists+linux-spi@lfdr.de>; Sat, 20 Nov 2021 09:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235217AbhKTBWd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 19 Nov 2021 20:22:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
+        id S229693AbhKTIHs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 20 Nov 2021 03:07:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235814AbhKTBWW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 19 Nov 2021 20:22:22 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BBFC061574
-        for <linux-spi@vger.kernel.org>; Fri, 19 Nov 2021 17:19:19 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id z34so51123911lfu.8
-        for <linux-spi@vger.kernel.org>; Fri, 19 Nov 2021 17:19:19 -0800 (PST)
+        with ESMTP id S229592AbhKTIHs (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 20 Nov 2021 03:07:48 -0500
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27008C061574
+        for <linux-spi@vger.kernel.org>; Sat, 20 Nov 2021 00:04:45 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id g191-20020a1c9dc8000000b0032fbf912885so9229280wme.4
+        for <linux-spi@vger.kernel.org>; Sat, 20 Nov 2021 00:04:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=TdQF9dwZk29V6xP1ZPUoOlKX4v8TPwGPHVAe2c4y5XY=;
-        b=NYzFXqouKWnuxasaE+bE2hoSdipl8XAgX5+aHCOd5rx/DbgIZVEN1JwGJaMUQBD+WV
-         gxhUxWf7MHi/ZVWLL+n+9Nh+NsokfBEMBzZnubbIW+FLePtOZG0DooSKuFaLQnXzJvzN
-         O8R6gjG/oWmXjawd7XjBnb8FmA0YXb8XKKHitIlpSAMjNKiBM4DBITpCC2PMS95Y5dTR
-         K0zmGPsrtG8sWD/cmNSkgNK0CFxNGGUMDaUXH62ZLGhjmD9idZqVDWH3CQYJbVJ6b2Vg
-         Kyo8K6SYfidehyaNMAVt+3y3q4FX9CLVEIRa7RU3WnfM1uAcosGj1qqK0PO7IyJ9vXXG
-         aXcg==
+        bh=vvC9ByVJGlgvAhABkby6MG4yPbU617Js94fp2P4ooak=;
+        b=keMg5kuloDIUEtDs9NHEPmPPVeC5WSjhHYy9BI4j9cYGwu55P7VezS29ebXmQMyPPZ
+         o6KRqGac6nP0iNJwcRc8Yqrueb54dL+X9Ooy51bWuc3WgzR/D+WMfbfwYrfoF6qzzSto
+         vVpcZCoWWyM3T7fByWf+gIfCLDPRzsDYk4ginluTq3KPee+rb5i4bsglhEYSRI53cu8a
+         5fbQWyOaLmkpZShvxyfXFeureHpRGKyw22mRBWE6s3HGCUY89+KzI3IzMQE8g5GRo5zN
+         z4jzzvRhjt+IdFxz1EzO8aUkgBK4Et/pXVuhH3udVBRSFhjQig6NNI+5LJvueAsGxFdZ
+         ZBZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TdQF9dwZk29V6xP1ZPUoOlKX4v8TPwGPHVAe2c4y5XY=;
-        b=OkokA3BFYu0UWwkDNuedBEVUYryS03U/P//cr9CVEm+HJZ7YEjaES674HKhTxeTa4y
-         ydw3tK0gy9UI//FrejPZEGLkCQev4+H7V8I+onRFgbl5omC8OMMA+YJmsVurBfCWsobw
-         a6co/OmP1hfb937S4mu26IS40p82b/rqYR0Zs/iWncHQa3g0NrXOlivoBqCcRDrEP9GR
-         YTOtp6dJF9RzEYrCURbHf8PLSabw36W2DxZApsGNbRCQazRdQRKLrN50CE0mExxFgNN0
-         qLP5wbRrxwQauBLDL0lM9+yhiXo+cclHJSiI0M3OW1dICW05mbeDpD2H9KfUmylgiRaB
-         vwrA==
-X-Gm-Message-State: AOAM533aMT4IWIfu/qFRwc6reAG0q/GkUh/GPulk00WA/V47EbghM/pV
-        ILY0YmOVKfvY1FKJlBl7aipCgA==
-X-Google-Smtp-Source: ABdhPJxhHd0ZZNhsrdBojJthpcVB3w2toAGRdWFRrbP6Tzl3L0k0RaNWgY+jVDBltYY1/gyiVQCrhg==
-X-Received: by 2002:a05:6512:c01:: with SMTP id z1mr37968117lfu.136.1637371158197;
-        Fri, 19 Nov 2021 17:19:18 -0800 (PST)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id o19sm168770lfk.280.2021.11.19.17.19.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Nov 2021 17:19:17 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: [PATCH] dt-bindings: spi: Add resets to the PL022 bindings
-Date:   Sat, 20 Nov 2021 02:17:15 +0100
-Message-Id: <20211120011715.2630873-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.31.1
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=vvC9ByVJGlgvAhABkby6MG4yPbU617Js94fp2P4ooak=;
+        b=TReWXX29DQgwPx1yj0waqfnlgn2UGCqP9jluBIc0pl4ZU8dBg9BcuOqjA2upzRfxpM
+         mA7ReUfOAO84rBc9Ns9aGvC/um1aP8etyWOJ59JaNAM3WWP4JmiWX4z4pUx52flN9mps
+         XrYntVxShsI/1TAK6kOFMyeyavmL4Efolc3+Fu3A090lIwZ0g85X5uW0KvS9b69laYlW
+         nobu5YbiIMXt9EsurInsIWUBnSxYlgBGdCoQf8qUiQjXGVqtvKvGw6bOjQ8cV4QOyKdh
+         Cb7asiFlPzG1HeP1PEmkqu0tw1sZQRQccou+4BdkhmWdtI4yNxk+bV9UXaBIMMNia0m5
+         aeeg==
+X-Gm-Message-State: AOAM532qgmCfqurbgr/Jrmd9dyXRKF292vqJ+qTKZnQ15B2152ysXM9G
+        JJcVwQTQnnAvFfDW8plit40hVRhDhdQxiBg4dZU=
+X-Google-Smtp-Source: ABdhPJzUd6hb7pVe2g2D1hKMLK2pDCWLY3ehIDXvE5wRzBpZPQaBtSfpobynTNnCiTc0eMOcXRfSrZ0iMdY55EYA5KA=
+X-Received: by 2002:a7b:ce01:: with SMTP id m1mr8034657wmc.187.1637395483520;
+ Sat, 20 Nov 2021 00:04:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Sender: mcinnesdonna05@gmail.com
+Received: by 2002:a7b:cd17:0:0:0:0:0 with HTTP; Sat, 20 Nov 2021 00:04:43
+ -0800 (PST)
+From:   Jackie Fowler <jackiefowler597@gmail.com>
+Date:   Sat, 20 Nov 2021 08:04:43 +0000
+X-Google-Sender-Auth: _dWbDp5rc5-WrqpKxutNHT1HI9k
+Message-ID: <CAK+X-7XNXQuoJ3WO=iLOPH0fJ3vEXhDKFZwVp+xzmGmdS11Hgg@mail.gmail.com>
+Subject: Good Day My beloved,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Some PL022 implementations provide a reset line to the silicon
-IP block, add a device tree property for this.
+Gooday my beloved,
 
-Cc: devicetree@vger.kernel.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-Probably it's easiest to apply this to the DT tree.
----
- Documentation/devicetree/bindings/spi/spi-pl022.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ I sent this mail praying it will get to you in a good condition of
+health, since I myself are in a very critical health condition in
+which I sleep every night without knowing if I may be alive to see the
+next day. I bring peace and love to you. It is by the grace of God, I
+had no choice than to do what is lawful and right in the sight of God
+for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
+y
+and glory upon my life. I am Mrs.Jackie.Fowler.a widow and citizen of
+Canada. I am suffering from a long time brain tumor, It has defiled
+all forms of medical treatment, and right now I have about a few
+months to leave, according to medical experts.
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-pl022.yaml b/Documentation/devicetree/bindings/spi/spi-pl022.yaml
-index a91d868e40c5..6d633728fc2b 100644
---- a/Documentation/devicetree/bindings/spi/spi-pl022.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-pl022.yaml
-@@ -72,6 +72,9 @@ properties:
-       - const: rx
-       - const: tx
- 
-+  resets:
-+    maxItems: 1
-+
- patternProperties:
-   "^[a-zA-Z][a-zA-Z0-9,+\\-._]{0,63}@[0-9a-f]+$":
-     type: object
--- 
-2.31.1
+ The situation has gotten complicated recently with my inability to
+hear proper, am communicating with you with the help of the chief
+nurse herein the hospital, from all indication my conditions is really
+deteriorating and it is quite obvious that, according to my doctors
+they have advised me that I may not live too long, Because this
+illness has gotten to a very bad stage. I plead that you will not
+expose or betray this trust and confidence that I am about to repose
+on you for the mutual benefit of the orphans and the less privilege. I
+have some funds I inherited from my late husband, the sum of ($
+12,500,000.00 Dollars).Having known my condition, I decided to donate
+this fund to you believing that you will utilize it the way i am going
+to instruct herein.
 
+ I need you to assist me and reclaim this money and use it for Charity
+works, for orphanages and gives justice and help to the poor, needy
+and widows says The Lord." Jeremiah 22:15-16.=E2=80=9C and also build schoo=
+ls
+for less privilege that will be named after my late husband if
+possible and to promote the word of God and the effort that the house
+of God is maintained. I do not want a situation where this money will
+be used in an ungodly manner. That's why I'm taking this decision. I'm
+not afraid of death, so I know where I'm going.
+
+ I accept this decision because I do not have any child who will
+inherit this money after I die. Please I want your sincerely and
+urgent answer to know if you will be able to execute this project for
+the glory of God, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of God be with you and all those that you
+love and care for.
+I'm waiting for your immediate reply.
+May God Bless you,
+Respectfully.
+Mrs.Jackie.Fowler
