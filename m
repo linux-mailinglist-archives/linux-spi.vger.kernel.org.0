@@ -2,59 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0964045865C
-	for <lists+linux-spi@lfdr.de>; Sun, 21 Nov 2021 21:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F6D4586CE
+	for <lists+linux-spi@lfdr.de>; Sun, 21 Nov 2021 23:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbhKUUry (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 21 Nov 2021 15:47:54 -0500
-Received: from mx07-00227901.pphosted.com ([185.132.182.185]:50190 "EHLO
-        mx08-00227901.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230421AbhKUUry (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 21 Nov 2021 15:47:54 -0500
-X-Greylist: delayed 31417 seconds by postgrey-1.27 at vger.kernel.org; Sun, 21 Nov 2021 15:47:52 EST
-Received: from pps.filterd (m0097675.ppops.net [127.0.0.1])
-        by mx07-.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AJ7xOI5005994;
-        Fri, 19 Nov 2021 10:27:14 +0100
-Received: from zbw2k16ex01.bardusch.net ([185.80.186.174])
-        by mx07-.pphosted.com (PPS) with ESMTPS id 3cdjtyh6e0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Fri, 19 Nov 2021 10:27:14 +0100
-Received: from ZBW2K16EX01.bardusch.net (172.25.1.1) by
- ZBW2K16EX01.bardusch.net (172.25.1.1) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.2308.20;
- Fri, 19 Nov 2021 10:27:13 +0100
-Received: from User (172.25.1.131) by ZBW2K16EX01.bardusch.net (172.25.1.1)
- with Microsoft SMTP Server id 15.1.2308.20 via Frontend Transport; Fri, 19
- Nov 2021 10:27:03 +0100
-Reply-To: <josechoondak@gmail.com>
-From:   Joseph Choondak <info@ndd.co.mz>
-Subject: I hope this email finds you well.
-Date:   Fri, 19 Nov 2021 01:27:17 -0800
+        id S235187AbhKUWyH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 21 Nov 2021 17:54:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235047AbhKUWyG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 21 Nov 2021 17:54:06 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44539C061748
+        for <linux-spi@vger.kernel.org>; Sun, 21 Nov 2021 14:51:01 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so26064406otl.3
+        for <linux-spi@vger.kernel.org>; Sun, 21 Nov 2021 14:51:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GPWdnLAG4F0+O/cKfXO41ARuBr52660bNdQdvywOP4Y=;
+        b=KOB6vV4KS8hxKMpT0VDKo61v+J3w0emW1YgL/HvpwnQlY7FZUmFVBcVfteUKoNkqYG
+         X1RQyE5cKCrlbMC//GYbSdEe4DjunnFt5bFqFb/T/aB9hljIjiijGW9OxbXqMpVkm/sE
+         n52BhCrngNN3aBfsfRDEm/QnCaPRDekq5hRqU/dAu+3tPlns3KgqmWIl7LZffCZZPVgQ
+         8TCNkX/L56KJhckqSfPijLbXvBG0ug4DMQtFWpWkIsj/r1UYMbFwQdD6/CHvSe+7ZTY1
+         SreqClOPDK1m1bwZl74XjBrgSbNYnDQoYz7y5QAO2x5yhUFOyOQV7e4Cr5/gyYiKCKVx
+         3m5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GPWdnLAG4F0+O/cKfXO41ARuBr52660bNdQdvywOP4Y=;
+        b=OdhsbkXR8kRsSrK8YzvC4Q5HxHssBvK6CGA6pFdH8qHqH0rblsYpscbSBjgQ2twybf
+         a+JxuDuxunKo6VewA+cwdPXUr8K06/jVtJzfv7JzXI/TzWBaxDpNSnq8W9NNpdu3ypU7
+         DTKK7ZGAYncPv5rGtWLiZFL3/LaxvLfO/bgLTGBd5TIeRFVC1cGlK3PY6vQB1h63HmfJ
+         IsrqigWbWNs9aYsOIo7LQgCDN90AU3+/Dy++xOH+MjnMdVxoz4oUOW+pNBNzMw14liGD
+         vUwB8eiMqN5jKSOli5vPiDsF/nUC2gtsfhAWyrCzLoUwFfTqp0X1Qnmdfm7Nc/NiYhnm
+         lNuQ==
+X-Gm-Message-State: AOAM532eeTxss03lHBdHdfSGkts+n+ddngqgtXEAmyWb4iekWA7XNLqU
+        KwdissFN6MS0pzonrOdCswjLWu4eSRy6FWjQK5X7YQ==
+X-Google-Smtp-Source: ABdhPJw+IURZg7LAXOySyG68vfWW1OBtjBY5hqcbBojTczIDo4sqsxNk20a2JBnKqNRdEf8UrKSDBSMPsc577lx54AI=
+X-Received: by 2002:a9d:ed6:: with SMTP id 80mr20420713otj.35.1637535060584;
+ Sun, 21 Nov 2021 14:51:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <df3f24ed-6571-4db0-afaf-2f1171b46248@ZBW2K16EX01.bardusch.net>
-To:     Undisclosed recipients:;
-X-Proofpoint-ORIG-GUID: 64rehLaKfzm2AOk5eUTzKrlN8apD89hM
-X-Proofpoint-GUID: 64rehLaKfzm2AOk5eUTzKrlN8apD89hM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-19_08,2021-11-17_01,2020-04-07_01
-X-Proofpoint-Spam-Reason: orgsafe
+References: <20211109161707.2209170-1-robh@kernel.org>
+In-Reply-To: <20211109161707.2209170-1-robh@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 21 Nov 2021 23:50:49 +0100
+Message-ID: <CACRpkdZdZH9e5fHaFArcRxBcdEdfWDmxmDkTwL9EwchkTceCHg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Remove Netlogic bindings
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        George Cherian <gcherian@marvell.com>,
+        Mark Brown <broonie@kernel.org>, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-May I please ask with considerable urgency for your kind assistance with the following matter.
-I'm a financial person, I think  I have something huge you might be interested in.
+On Tue, Nov 9, 2021 at 5:17 PM Rob Herring <robh@kernel.org> wrote:
 
-Looking forward to hearing from you.
+> Support for Netlogic was removed in commit 95b8a5e0111a ("MIPS: Remove
+> NETLOGIC support"). Remove the now unused bindings.
+>
+> The GPIO binding also includes "brcm,vulcan-gpio", but it appears to be
+> unused as well as Broadcom Vulkan became Cavium ThunderX2 which is ACPI
+> based.
+>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: George Cherian <gcherian@marvell.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-i2c@vger.kernel.org
+> Cc: linux-spi@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-Respectfully!!
-Joseph Choondak
-Account Executive.
+Yours,
+Linus Walleij
