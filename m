@@ -2,103 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1444589F9
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Nov 2021 08:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D2B458A51
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Nov 2021 09:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238835AbhKVHoj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 22 Nov 2021 02:44:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35090 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232870AbhKVHoe (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 22 Nov 2021 02:44:34 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E74860E96;
-        Mon, 22 Nov 2021 07:41:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637566877;
-        bh=LvPHFzOeLqsay8wVm6ou1s6YcS6M7oKO3oa1ezBZ9Hw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BpPhTRNJGw5EhiVUs0VvbvRSCr6LAzptLuoEGjdmAtJjcGLERdZGV4lEFc9233pO+
-         jaQh8df6wlqSU4A0CL30h6VXZ5sD4HujS12DGol7cnqXaeDHPerKQvUAvhg/tq7IKo
-         0j9pIS4VX3iSPWi3Y3kJZr9BPJ28CQ328MRnvPwMl6k7QPW24NbjtQ9FHcm8dzGcMn
-         vSVkHLwo+VCUTayw5kfMIejTwtWma+95RjQSkyo8ohI65MsxsxxpzBLWgXnDLs1iZI
-         RAqxWQyYEb8Ji62l68y9/pT+ki9o3r2f38n+eS2pnJv8VhxmLPAHbvXUsjo8ntXkd2
-         s5bygdWGABXwA==
-Date:   Mon, 22 Nov 2021 08:41:13 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        George Cherian <gcherian@marvell.com>,
-        Mark Brown <broonie@kernel.org>, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Remove Netlogic bindings
-Message-ID: <YZtJme/3TEOxBVl3@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        George Cherian <gcherian@marvell.com>,
-        Mark Brown <broonie@kernel.org>, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org
-References: <20211109161707.2209170-1-robh@kernel.org>
+        id S238876AbhKVIL7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 22 Nov 2021 03:11:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238735AbhKVIL6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 22 Nov 2021 03:11:58 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20407C061574
+        for <linux-spi@vger.kernel.org>; Mon, 22 Nov 2021 00:08:52 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mp4Nc-0003FA-Ry; Mon, 22 Nov 2021 09:08:48 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mp4Nc-000YKa-JV; Mon, 22 Nov 2021 09:08:47 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mp4Nb-0002m8-IH; Mon, 22 Nov 2021 09:08:47 +0100
+Date:   Mon, 22 Nov 2021 09:08:44 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Ralph Siemsen <ralph.siemsen@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v2] spi: docs: improve the SPI userspace API documentation
+Message-ID: <20211122080844.ivweo7je2l57btam@pengutronix.de>
+References: <20211119121139.2412761-1-javierm@redhat.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="XZBCKHgU11ItvwWY"
+        protocol="application/pgp-signature"; boundary="3y6lhn7agpqntgmo"
 Content-Disposition: inline
-In-Reply-To: <20211109161707.2209170-1-robh@kernel.org>
+In-Reply-To: <20211119121139.2412761-1-javierm@redhat.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---XZBCKHgU11ItvwWY
-Content-Type: text/plain; charset=us-ascii
+--3y6lhn7agpqntgmo
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 09, 2021 at 10:17:07AM -0600, Rob Herring wrote:
-> Support for Netlogic was removed in commit 95b8a5e0111a ("MIPS: Remove
-> NETLOGIC support"). Remove the now unused bindings.
+On Fri, Nov 19, 2021 at 01:11:39PM +0100, Javier Martinez Canillas wrote:
+> This doc is fairly outdated and only uses legacy device instantiation
+> terminology. Let us update it and also mention the OF and ACPI device
+> tables, to make easier for users to figure out how should be defined.
 >=20
-> The GPIO binding also includes "brcm,vulcan-gpio", but it appears to be
-> unused as well as Broadcom Vulkan became Cavium ThunderX2 which is ACPI
-> based.
+> Also, mention that devices bind could be done in user-space now using
+> the "driver_override" sysfs entry.
 >=20
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: George Cherian <gcherian@marvell.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-spi@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Suggested-by: Ralph Siemsen <ralph.siemsen@linaro.org>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
-Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
+Thanks for you effort here, that's a nice improvement
 
---XZBCKHgU11ItvwWY
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--3y6lhn7agpqntgmo
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGbSZkACgkQFA3kzBSg
-KbbFTQ//WZUp3eYt6NdLKHHEYSr3OSZTJUWKoTi9oPPq2qjKowqcKE8I3bNPqdq+
-OEXvxEQKCe008GcFByplZitwmV/zGJSJBgjUgnnEfwo+QTPcYEzb7waEJgEur4wu
-xUni8WlOkzxpfq7c6pgQN5h2VgzOz+Fe1uLVcoyZzlm4Jdwo7HlOsNLpysuQaeyg
-xp5LYHGHTjlCgt6XCtJnpGTpsiITQMY7aH+lU+yFDUdhIpsEq95kIbR4+OsTlodS
-BQvz/q5bl4GS6g/SalnAkWNrz+dr0VVT9M0J18o7LNsJTXb2cByYBWuLDmHyfi1i
-X2vB2mdn865u/3GAi67wpGXxZ1ZVS79UesPsfvzVBWPrp2hUp7cztV3PQhFGPfGw
-EzfbzldiUyS43IRdhUwbScz5DentHg5UnPwHtcEU/Usvojy8D5O2h7Pai8heI5F/
-9Jig2zKzHRQsaOItyea2eVQZlSAUxSIm0YY8B91LPCcrGF5fvNbx6tT4JDf+1W5I
-q3cY1dUTIBbrCCu1to/UAqsDRMwUEdoJanfILL2r9pLThKr9xS5nSF2qQmDx5gwB
-DgLg9R9AQ/zKTV9HW9MbNA6hKM8ECiiNdGEbH2eQlSLN84dAEJj1SO7jCJqc62DG
-nn5fNwuw1veaFttwNuvhfJFSRHrGfAlyQTZhQmcx9ofaWOFXm38=
-=Rl8m
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmGbUAkACgkQwfwUeK3K
+7AkViggAm9jSNCNwKa4Wgj9ovX7tpAz/V2wlwnUMMcLtPbCarRZWND9b4fDFAFlx
+0h/Sp2OuSlrILVs7CChrUTHGVzEj3isTAWzZFNW/VcBI8P08/zpTafdQ+bzj+TZC
+R8ZsRu15Tj2vxxgmouIc1Xm5yfLqX7vUrDhCg4QNmU8OCF+8mbXisF4YIqZiNy5s
+gxJjvdy/DHgdsHu1cWuLTX45HiaxRMPeAS8fzUvp/q5/nU26tAVjiARQD1G3L5bE
+sl0Cxl2S6H6DKy5TGa5UVaGC6+1c4D09ZwmP4DrPJpq0JWDnZ2j8mv350f3jxsSC
+uJX7W9Pjob2FWTFKkW7LEOIyDyDhrQ==
+=18nE
 -----END PGP SIGNATURE-----
 
---XZBCKHgU11ItvwWY--
+--3y6lhn7agpqntgmo--
