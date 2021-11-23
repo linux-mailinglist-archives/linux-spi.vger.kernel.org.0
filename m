@@ -2,81 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34BC845A967
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Nov 2021 17:57:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A730D45A97F
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Nov 2021 18:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236142AbhKWRA7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 23 Nov 2021 12:00:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52676 "EHLO mail.kernel.org"
+        id S236958AbhKWRDr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 23 Nov 2021 12:03:47 -0500
+Received: from mga04.intel.com ([192.55.52.120]:50938 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236377AbhKWRA6 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 23 Nov 2021 12:00:58 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 93F9C60F9B;
-        Tue, 23 Nov 2021 16:57:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637686669;
-        bh=IU/wLx+M6k0m/XPOQix1mz1gNY2YVAwPH01ZGzG35Is=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=CPyDYDXGMZoxaQ8IIUIR+HjMb0EUFSWwbSMWolzQJ/Vzgg3Zo+VjfYGngDGE3qGu+
-         xNX7MtNsswApXwnnVq13V4b6Un8pOPQdMOElsMwLNLXLNARMEPFGEM6SHoj5OGQX+K
-         SIXyhbWCQsaa3fPqw+P7WI72+q82oUrsrRpNmwUFsMo41qWLe207YG8OEOqWjtymlr
-         L6S7abwbihMbCUgCDmxPavCYNO1hlcKUJ8faqq8xsPk316GzY3HSHPdvfg3P9OLPhI
-         2taRKgyU3LSOaZyyQgMRH2gmcH6BBxUm44GOdLiyU3mmzRBWsufcYDyKwLFe6pvoop
-         xx6T4ipcvtg7w==
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>
-In-Reply-To: <20211122200622.43305-1-andriy.shevchenko@linux.intel.com>
-References: <20211122200622.43305-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] spi: pxa2xx: Remove redundant ->read() and ->write() in struct chip_data
-Message-Id: <163768666834.1388476.6693782453089642459.b4-ty@kernel.org>
-Date:   Tue, 23 Nov 2021 16:57:48 +0000
+        id S237871AbhKWRDq (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 23 Nov 2021 12:03:46 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10177"; a="233783122"
+X-IronPort-AV: E=Sophos;i="5.87,258,1631602800"; 
+   d="scan'208";a="233783122"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 09:00:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,258,1631602800"; 
+   d="scan'208";a="591257201"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Nov 2021 09:00:33 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 301331AD; Tue, 23 Nov 2021 19:00:36 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jon Hunter <jonathanh@nvidia.com>
+Subject: [PATCH v3 1/3] spi: Fix condition in the __spi_register_driver()
+Date:   Tue, 23 Nov 2021 19:00:32 +0200
+Message-Id: <20211123170034.41253-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 22 Nov 2021 22:06:22 +0200, Andy Shevchenko wrote:
-> Since the commit 196b0e2cf237 ("spi: pxa2xx: Remove if statement
-> that is always true in pump_transfers()") the ->read() and ->write()
-> methods in the struct driver_data are reconfigured for each transfer.
-> Hence no need to keep the intermediate state in the struct chip_data.
-> 
-> The same applies to n_bytes member of the same data structure.
-> Get rid of unneeded storage for good.
-> 
-> [...]
+The recent commit 3f07657506df ("spi: deduplicate spi_match_id()
+in __spi_register_driver()") inadvertently inverted a condition
+that provokes a (harmless) warning:
 
-Applied to
+  WARNING KERN SPI driver mtd_dataflash has no spi_device_id for atmel,at45
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Restore logic to avoid such warning to be issued.
 
-Thanks!
+Fixes: 3f07657506df ("spi: deduplicate spi_match_id() in __spi_register_driver()")
+Reported-by: Jon Hunter <jonathanh@nvidia.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v3: a fix-patch instead of previously applied one (Jon)
+ drivers/spi/spi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[1/1] spi: pxa2xx: Remove redundant ->read() and ->write() in struct chip_data
-      commit: 44ec41b7f7831f91c79a06de5e45f2d7ce6e4fbd
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 9d19d9bae253..15688acc952c 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -474,7 +474,7 @@ int __spi_register_driver(struct module *owner, struct spi_driver *sdrv)
+ 				const struct spi_device_id *spi_id;
+ 
+ 				spi_id = spi_match_id(sdrv->id_table, of_name);
+-				if (!spi_id)
++				if (spi_id)
+ 					continue;
+ 			} else {
+ 				if (strcmp(sdrv->driver.name, of_name) == 0)
+-- 
+2.33.0
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
