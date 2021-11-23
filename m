@@ -2,36 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD6E4598C5
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Nov 2021 01:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A0384598D5
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Nov 2021 01:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232820AbhKWADr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 22 Nov 2021 19:03:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44196 "EHLO mail.kernel.org"
+        id S233090AbhKWAD5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 22 Nov 2021 19:03:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44224 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232696AbhKWADh (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 22 Nov 2021 19:03:37 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5CADC6103C;
-        Tue, 23 Nov 2021 00:00:29 +0000 (UTC)
+        id S232678AbhKWADo (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 22 Nov 2021 19:03:44 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CF3DB61027;
+        Tue, 23 Nov 2021 00:00:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637625630;
-        bh=ZTgLdC0htMeZLvdhWulKKU+v1OiwqkMI47G8i1tGfhc=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=FxMmpAUDhgIRoFU6rwazTFtLVu5TVb59KZ8YLpH88X10KEJ7AWw3FGiD5blK9OApz
-         poZ7ssNcn8qpJSgidgP/B4sFG6I8y9LTx1ArfNHv0wlw8lGZH9Sbo9GO045mrSvzhl
-         BoFte7RhxZ0oFNlBTC08sdxXbe95BP2id8M0g9AQzKmPNfONbzPleIkU4DohOroTEi
-         uLk9uDSJijALRfq6/KIoPZyn6tSU682F9+yfTb+ge4cZllwxEQ19stn0JEItpF+KM7
-         ueAmJ1SHSEAvkW1KzhI1KKKv1W5LNbVijCWGQ0U2o4VjDozY+kdKQQ+TWJaMwFuldm
-         2AmuKXgyAqfvw==
+        s=k20201202; t=1637625635;
+        bh=01cYwVbEdh0X7Ig5gVg6S/mgZIzXX2UFJSaD0Nf/IgU=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=U1nmBoWjhnKgcYW1P9S5O0K0Rs11K/69Wj8qIMIwjMYyqTSq9SSAFIvwKX46MCafv
+         bzKXJmvlxQfZ96AyBeB+jN1NZHMYBe1gJ7eNUTWvU7RFnJQFeQsHUNTWr2I2h6zLDs
+         gH6aaEAr75ufBXmH79TfSd8EAGD3NX716TmMcNtk8csTCVWeFZkWmIzJBBp9k7ASdG
+         K2PuMIsmI99E0MK1tlq8fKQ5hQrpmALZjV5BmVplWZXNKDZaIKvK4uNe8TxtotADZv
+         H2Sln2ND0ACs8GbYP6iiLLWccxe9xFzttrBoEXugXv3gYH6EuehNCPKvRhbOQeOHqf
+         Uta6pbTYeOIbA==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+To:     robh+dt@kernel.org, aisheng.dong@nxp.com, shawnguo@kernel.org,
+        wim@linux-watchdog.org, s.hauer@pengutronix.de,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, ulf.hansson@linaro.org,
+        linux@rempel-privat.de, linux@roeck-us.net
+Cc:     kernel@pengutronix.de, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, daniel.lezcano@linaro.org,
+        linux-imx@nxp.com, devicetree@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        festevam@gmail.com, Peng Fan <peng.fan@nxp.com>,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211119173718.52938-1-andriy.shevchenko@linux.intel.com>
-References: <20211119173718.52938-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/2] spi: deduplicate spi_match_id() in __spi_register_driver()
-Message-Id: <163762562904.2472045.10269153902428824704.b4-ty@kernel.org>
-Date:   Tue, 23 Nov 2021 00:00:29 +0000
+In-Reply-To: <20211120113454.785997-1-peng.fan@oss.nxp.com>
+References: <20211120113454.785997-1-peng.fan@oss.nxp.com>
+Subject: Re: (subset) [PATCH V5 0/8] dt-bindinds/dts: support i.MX8ULP
+Message-Id: <163762563048.2472045.8052329194047350725.b4-ty@kernel.org>
+Date:   Tue, 23 Nov 2021 00:00:30 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -39,12 +47,18 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 19 Nov 2021 19:37:17 +0200, Andy Shevchenko wrote:
-> The same logic is used in spi_match_id() and in the __spi_register_driver().
-> By switching the former from taking struct spi_device * to const char * as
-> the second parameter we may deduplicate the code.
+On Sat, 20 Nov 2021 19:34:46 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
 > 
+> V5:
+>  only fix patch 8/8 "arm64: dts: imx8ulp: Add the basic dts for imx8ulp evk board"
+>   - Correct bus-width to 8 for eMMC
+>   - Drop pinctrl enet which no user
+>  Drop patch 1/9 in V4, since in merged in linux-next
+>  Add A-b/R-b tag
+> 
+> [...]
 
 Applied to
 
@@ -52,10 +66,8 @@ Applied to
 
 Thanks!
 
-[1/2] spi: deduplicate spi_match_id() in __spi_register_driver()
-      commit: 3f07657506df363709a37f99db04e9e0d0b1bce7
-[2/2] spi: Fix multi-line comment style
-      (no commit info)
+[3/8] dt-bindings: spi: fsl-lpspi: Add imx8ulp compatible string
+      commit: 49cd1eb37b487036f51bd57b591f7b5760a10e02
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
