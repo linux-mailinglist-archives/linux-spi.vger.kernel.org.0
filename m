@@ -2,88 +2,105 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A0384598D5
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Nov 2021 01:01:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF96945A0F6
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Nov 2021 12:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233090AbhKWAD5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 22 Nov 2021 19:03:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44224 "EHLO mail.kernel.org"
+        id S234876AbhKWLLV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 23 Nov 2021 06:11:21 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:51856 "EHLO gloria.sntech.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232678AbhKWADo (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 22 Nov 2021 19:03:44 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CF3DB61027;
-        Tue, 23 Nov 2021 00:00:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637625635;
-        bh=01cYwVbEdh0X7Ig5gVg6S/mgZIzXX2UFJSaD0Nf/IgU=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=U1nmBoWjhnKgcYW1P9S5O0K0Rs11K/69Wj8qIMIwjMYyqTSq9SSAFIvwKX46MCafv
-         bzKXJmvlxQfZ96AyBeB+jN1NZHMYBe1gJ7eNUTWvU7RFnJQFeQsHUNTWr2I2h6zLDs
-         gH6aaEAr75ufBXmH79TfSd8EAGD3NX716TmMcNtk8csTCVWeFZkWmIzJBBp9k7ASdG
-         K2PuMIsmI99E0MK1tlq8fKQ5hQrpmALZjV5BmVplWZXNKDZaIKvK4uNe8TxtotADZv
-         H2Sln2ND0ACs8GbYP6iiLLWccxe9xFzttrBoEXugXv3gYH6EuehNCPKvRhbOQeOHqf
-         Uta6pbTYeOIbA==
-From:   Mark Brown <broonie@kernel.org>
-To:     robh+dt@kernel.org, aisheng.dong@nxp.com, shawnguo@kernel.org,
-        wim@linux-watchdog.org, s.hauer@pengutronix.de,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, ulf.hansson@linaro.org,
-        linux@rempel-privat.de, linux@roeck-us.net
-Cc:     kernel@pengutronix.de, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, daniel.lezcano@linaro.org,
-        linux-imx@nxp.com, devicetree@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        festevam@gmail.com, Peng Fan <peng.fan@nxp.com>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20211120113454.785997-1-peng.fan@oss.nxp.com>
-References: <20211120113454.785997-1-peng.fan@oss.nxp.com>
-Subject: Re: (subset) [PATCH V5 0/8] dt-bindinds/dts: support i.MX8ULP
-Message-Id: <163762563048.2472045.8052329194047350725.b4-ty@kernel.org>
-Date:   Tue, 23 Nov 2021 00:00:30 +0000
+        id S230471AbhKWLLU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 23 Nov 2021 06:11:20 -0500
+Received: from ip5f5b2004.dynamic.kabel-deutschland.de ([95.91.32.4] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1mpTeV-00086y-0h; Tue, 23 Nov 2021 12:07:55 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        robh+dt@kernel.org, jassisinghbrar@gmail.com,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lewis.hanly@microchip.com,
+        conor.dooley@microchip.com, daire.mcnamara@microchip.com,
+        atish.patra@wdc.com, ivan.griffin@microchip.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     krzysztof.kozlowski@canonical.com, geert@linux-m68k.org,
+        bin.meng@windriver.com, conor.dooley@microchip.com
+Subject: Re: [PATCH 01/13] dt-bindings: interrupt-controller: create a header for RISC-V interrupts
+Date:   Tue, 23 Nov 2021 12:07:52 +0100
+Message-ID: <272946671.hFph3VMliC@diego>
+In-Reply-To: <20211108150554.4457-2-conor.dooley@microchip.com>
+References: <20211108150554.4457-1-conor.dooley@microchip.com> <20211108150554.4457-2-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, 20 Nov 2021 19:34:46 +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+Am Montag, 8. November 2021, 16:05:42 CET schrieb conor.dooley@microchip.com:
+> From: Ivan Griffin <ivan.griffin@microchip.com>
 > 
+> Provide named identifiers for device tree for RISC-V interrupts.
 > 
-> V5:
->  only fix patch 8/8 "arm64: dts: imx8ulp: Add the basic dts for imx8ulp evk board"
->   - Correct bus-width to 8 for eMMC
->   - Drop pinctrl enet which no user
->  Drop patch 1/9 in V4, since in merged in linux-next
->  Add A-b/R-b tag
+> Licensed under GPL and MIT, as this file may be useful to any OS that
+> uses device tree.
 > 
-> [...]
+> Signed-off-by: Ivan Griffin <ivan.griffin@microchip.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../interrupt-controller/riscv-hart.h         | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+>  create mode 100644 include/dt-bindings/interrupt-controller/riscv-hart.h
+> 
+> diff --git a/include/dt-bindings/interrupt-controller/riscv-hart.h b/include/dt-bindings/interrupt-controller/riscv-hart.h
+> new file mode 100644
+> index 000000000000..e1c32f6090ac
+> --- /dev/null
+> +++ b/include/dt-bindings/interrupt-controller/riscv-hart.h
+> @@ -0,0 +1,19 @@
+> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
+> +/*
+> + * Copyright (C) 2021 Microchip Technology Inc.  All rights reserved.
+> + */
+> +
+> +#ifndef _DT_BINDINGS_INTERRUPT_CONTROLLER_RISCV_HART_H
+> +#define _DT_BINDINGS_INTERRUPT_CONTROLLER_RISCV_HART_H
+> +
+> +#define HART_INT_U_SOFT   0
+> +#define HART_INT_S_SOFT   1
+> +#define HART_INT_M_SOFT   3
+> +#define HART_INT_U_TIMER  4
+> +#define HART_INT_S_TIMER  5
+> +#define HART_INT_M_TIMER  7
+> +#define HART_INT_U_EXT    8
+> +#define HART_INT_S_EXT    9
+> +#define HART_INT_M_EXT    11
 
-Applied to
+(1) From checking clic doc [0] I see an additional
+	12   CLIC software interrupt
+defined.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+(2) The doc states that the ordering is a recommendation and
+	"not mandatory in all incarnations of the CLIC"
+Is that clarified somewhere else that this more than recommended?
 
-Thanks!
+Thanks
+Heiko
 
-[3/8] dt-bindings: spi: fsl-lpspi: Add imx8ulp compatible string
-      commit: 49cd1eb37b487036f51bd57b591f7b5760a10e02
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+[0] https://github.com/riscv/riscv-fast-interrupt/blob/master/clic.adoc
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+> +
+> +#endif /* _DT_BINDINGS_INTERRUPT_CONTROLLER_RISCV_HART_H */
+> 
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
 
-Thanks,
-Mark
+
