@@ -2,71 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F85345A945
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Nov 2021 17:52:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9486045A964
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Nov 2021 17:57:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231986AbhKWQzN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 23 Nov 2021 11:55:13 -0500
-Received: from mga01.intel.com ([192.55.52.88]:21246 "EHLO mga01.intel.com"
+        id S236152AbhKWRA4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 23 Nov 2021 12:00:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52654 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230510AbhKWQzM (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 23 Nov 2021 11:55:12 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10177"; a="258933897"
-X-IronPort-AV: E=Sophos;i="5.87,258,1631602800"; 
-   d="scan'208";a="258933897"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 08:51:59 -0800
-X-IronPort-AV: E=Sophos;i="5.87,258,1631602800"; 
-   d="scan'208";a="456750297"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2021 08:51:57 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mpZ1O-009qLj-6M;
-        Tue, 23 Nov 2021 18:51:54 +0200
-Date:   Tue, 23 Nov 2021 18:51:53 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH v1 1/2] spi: deduplicate spi_match_id() in
- __spi_register_driver()
-Message-ID: <YZ0cKQiMS/E8z7Jh@smile.fi.intel.com>
-References: <20211119173718.52938-1-andriy.shevchenko@linux.intel.com>
- <1572a2ff-dcfb-422f-c4c3-5a454a36d31d@nvidia.com>
+        id S236212AbhKWRAz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 23 Nov 2021 12:00:55 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 704EA60FF2;
+        Tue, 23 Nov 2021 16:57:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637686667;
+        bh=xfL2L7E562FF3x3+N2H7tyXnKr6qVxl9+6ayKn54S50=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=ElpECrGV629wUJ1TguarRHdDlDnVP8iX0Wp1qpV2DxEyqP3azKfuzQNVzDKhFTvH/
+         +GLP55j0lH+0WkPNJJzCGWs7RLBEH3lV5glMVvIAnle3ZeAJcsiD+KIlagzuzB22oj
+         aWC+PN6bBB7/GWofsdXXrm79elZm53Wo7F7JcTWwWwfcrFgKYnEf7dPQZA1VVH7EuU
+         jD+mPgfAF/7KGzlGEJ1P1/cw6GEaOLnEfWZqsVYqtN1toDWPNv5OI2pyMHja9+BfSw
+         WYH1/D1yrlp+19J2OSkmBqbwx8PMFdRjy9JFVsn3F88/o3MbHT8M3m/ElWSLm7Et7d
+         tdieiBL6DRknw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20211122171721.61553-1-andriy.shevchenko@linux.intel.com>
+References: <20211122171721.61553-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2 1/3] spi: Deduplicate spi_match_id() in __spi_register_driver()
+Message-Id: <163768666616.1388476.14364872187119342177.b4-ty@kernel.org>
+Date:   Tue, 23 Nov 2021 16:57:46 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1572a2ff-dcfb-422f-c4c3-5a454a36d31d@nvidia.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 03:22:38PM +0000, Jon Hunter wrote:
-> On 19/11/2021 17:37, Andy Shevchenko wrote:
-
-> Following this change I am seeing the following warnings again although most
-> of these have now been fixed ...
+On Mon, 22 Nov 2021 19:17:19 +0200, Andy Shevchenko wrote:
+> The same logic is used in spi_match_id() and in the __spi_register_driver().
+> By switching the former from taking struct spi_device * to const char * as
+> the second parameter we may deduplicate the code.
 > 
->  WARNING KERN SPI driver mtd_dataflash has no spi_device_id for atmel,at45
->  WARNING KERN SPI driver mtd_dataflash has no spi_device_id for
-> atmel,dataflash
->  WARNING KERN SPI driver spi-nor has no spi_device_id for jedec,spi-nor
->  WARNING KERN SPI driver mmc_spi has no spi_device_id for mmc-spi-slot
->  WARNING KERN SPI driver cros-ec-spi has no spi_device_id for
-> google,cros-ec-spi
+> 
 
-> I have not looked any further yet, but this appears to cause the SPI ID
-> match to fail.
+Applied to
 
-Looking into the code it should be harmless warning. I.o.w. it shouldn't
-prevent driver registration. In any case I'm about to send a fix, thanks
-for the report!
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks!
 
+[1/3] spi: Deduplicate spi_match_id() in __spi_register_driver()
+      (no commit info)
+[2/3] spi: Replace memset() with __GFP_ZERO
+      commit: b00bab9d48bbb6446a5cf366f5f8e501a16031a1
+[3/3] spi: Fix multi-line comment style
+      commit: 350de7ce26caba5c7ec0dd4ef1802c9a50a5d85d
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
