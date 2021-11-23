@@ -2,37 +2,36 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD5B14598C2
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Nov 2021 01:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD6E4598C5
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Nov 2021 01:00:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232759AbhKWADi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 22 Nov 2021 19:03:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44192 "EHLO mail.kernel.org"
+        id S232820AbhKWADr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 22 Nov 2021 19:03:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44196 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232677AbhKWADg (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 22 Nov 2021 19:03:36 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B9C696101A;
-        Tue, 23 Nov 2021 00:00:27 +0000 (UTC)
+        id S232696AbhKWADh (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 22 Nov 2021 19:03:37 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5CADC6103C;
+        Tue, 23 Nov 2021 00:00:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637625628;
-        bh=ARZtdnYVkDDzWubL/eOjshZWqCo06As9GZuYBFAAzv4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=GVwpYyozHvEFXNb9Yv4RmHp+WxcZwz0xorHsxblUK25gZ1cdMaeZOq9DZ+XBRQxBl
-         NnNQ8ijIqBZGUBqH1NYorolgpCxkQsCg50JwsHGzzyxb2Eswf6nEK538YiuEGbxwKn
-         rlC//oY5m/4xX9DfhD7DI3Lk0u4d4z0QUHx+Ds9ie8f4Bo5EnVtYGIy3masSyWmso8
-         OZeW3HxK0iG2Do5MZ6lOwPbSel/7Ln/uSOGq184iJ1+CVubWoBdhLCtqY5JwtMwKvA
-         q85GdMANA38HcYgnhte6p9jB5Jvi6osXpo6miDj9cUvOdgVkFcCYqrnUvpgTcvMGJa
-         EIsvwsrcAD3zQ==
+        s=k20201202; t=1637625630;
+        bh=ZTgLdC0htMeZLvdhWulKKU+v1OiwqkMI47G8i1tGfhc=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=FxMmpAUDhgIRoFU6rwazTFtLVu5TVb59KZ8YLpH88X10KEJ7AWw3FGiD5blK9OApz
+         poZ7ssNcn8qpJSgidgP/B4sFG6I8y9LTx1ArfNHv0wlw8lGZH9Sbo9GO045mrSvzhl
+         BoFte7RhxZ0oFNlBTC08sdxXbe95BP2id8M0g9AQzKmPNfONbzPleIkU4DohOroTEi
+         uLk9uDSJijALRfq6/KIoPZyn6tSU682F9+yfTb+ge4cZllwxEQ19stn0JEItpF+KM7
+         ueAmJ1SHSEAvkW1KzhI1KKKv1W5LNbVijCWGQ0U2o4VjDozY+kdKQQ+TWJaMwFuldm
+         2AmuKXgyAqfvw==
 From:   Mark Brown <broonie@kernel.org>
 To:     linux-spi@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org
-In-Reply-To: <20211120011715.2630873-1-linus.walleij@linaro.org>
-References: <20211120011715.2630873-1-linus.walleij@linaro.org>
-Subject: Re: [PATCH] dt-bindings: spi: Add resets to the PL022 bindings
-Message-Id: <163762562745.2472045.372621212417525202.b4-ty@kernel.org>
-Date:   Tue, 23 Nov 2021 00:00:27 +0000
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211119173718.52938-1-andriy.shevchenko@linux.intel.com>
+References: <20211119173718.52938-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/2] spi: deduplicate spi_match_id() in __spi_register_driver()
+Message-Id: <163762562904.2472045.10269153902428824704.b4-ty@kernel.org>
+Date:   Tue, 23 Nov 2021 00:00:29 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -40,9 +39,10 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, 20 Nov 2021 02:17:15 +0100, Linus Walleij wrote:
-> Some PL022 implementations provide a reset line to the silicon
-> IP block, add a device tree property for this.
+On Fri, 19 Nov 2021 19:37:17 +0200, Andy Shevchenko wrote:
+> The same logic is used in spi_match_id() and in the __spi_register_driver().
+> By switching the former from taking struct spi_device * to const char * as
+> the second parameter we may deduplicate the code.
 > 
 > 
 
@@ -52,8 +52,10 @@ Applied to
 
 Thanks!
 
-[1/1] dt-bindings: spi: Add resets to the PL022 bindings
-      commit: d94758b344e3b6f16d31cb5b51b93e3e5a4c3567
+[1/2] spi: deduplicate spi_match_id() in __spi_register_driver()
+      commit: 3f07657506df363709a37f99db04e9e0d0b1bce7
+[2/2] spi: Fix multi-line comment style
+      (no commit info)
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
