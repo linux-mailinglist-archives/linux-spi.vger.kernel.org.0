@@ -2,35 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9A145A965
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Nov 2021 17:57:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34BC845A967
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Nov 2021 17:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236713AbhKWRA5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 23 Nov 2021 12:00:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52662 "EHLO mail.kernel.org"
+        id S236142AbhKWRA7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 23 Nov 2021 12:00:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52676 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236033AbhKWRA4 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 23 Nov 2021 12:00:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 81A9960F5D;
-        Tue, 23 Nov 2021 16:57:47 +0000 (UTC)
+        id S236377AbhKWRA6 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 23 Nov 2021 12:00:58 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 93F9C60F9B;
+        Tue, 23 Nov 2021 16:57:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637686668;
-        bh=kXAjFuAp9qJUggReislth4p5ggBo1MTMJtfc4aFMfGk=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=hwGK/spAy3vbhpXke8g24gcAQHfTg2w7+SQxrhWqDtlJcHTAjlCJGXYeidkGfkOep
-         5UUDfL+Gso1J5YPQQqYMVl4XbwYUcgI7+9VjG6ohrZheB60unkypsJD+EhhvNsaWyy
-         9yoo9y+v6qPTJSRHBhRShsPydn27mz3GklH+SO31Sto5VwuKpiLtjwFwGWaCapEe9T
-         JOVTQTAFufYKy2AC/x3qmWVzM5BIEpUwECAI3qjHCV4nhOraHEWkof/NWzpxr+ahpm
-         5t7SkxC+pR3DzjIOgJ17BmODdLX4ZAmgRg4rLhHTqFsHCuAV4MQ2x8+NvWC8wo67H1
-         ewgq7+7ckE7UA==
+        s=k20201202; t=1637686669;
+        bh=IU/wLx+M6k0m/XPOQix1mz1gNY2YVAwPH01ZGzG35Is=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=CPyDYDXGMZoxaQ8IIUIR+HjMb0EUFSWwbSMWolzQJ/Vzgg3Zo+VjfYGngDGE3qGu+
+         xNX7MtNsswApXwnnVq13V4b6Un8pOPQdMOElsMwLNLXLNARMEPFGEM6SHoj5OGQX+K
+         SIXyhbWCQsaa3fPqw+P7WI72+q82oUrsrRpNmwUFsMo41qWLe207YG8OEOqWjtymlr
+         L6S7abwbihMbCUgCDmxPavCYNO1hlcKUJ8faqq8xsPk316GzY3HSHPdvfg3P9OLPhI
+         2taRKgyU3LSOaZyyQgMRH2gmcH6BBxUm44GOdLiyU3mmzRBWsufcYDyKwLFe6pvoop
+         xx6T4ipcvtg7w==
 From:   Mark Brown <broonie@kernel.org>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20211122175245.84691-1-andriy.shevchenko@linux.intel.com>
-References: <20211122175245.84691-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] spi: spidev: Use SPI_MODE_USER_MASK instead of casting
-Message-Id: <163768666726.1388476.11718279194714572718.b4-ty@kernel.org>
-Date:   Tue, 23 Nov 2021 16:57:47 +0000
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>
+In-Reply-To: <20211122200622.43305-1-andriy.shevchenko@linux.intel.com>
+References: <20211122200622.43305-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] spi: pxa2xx: Remove redundant ->read() and ->write() in struct chip_data
+Message-Id: <163768666834.1388476.6693782453089642459.b4-ty@kernel.org>
+Date:   Tue, 23 Nov 2021 16:57:48 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -38,13 +42,16 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 22 Nov 2021 19:52:45 +0200, Andy Shevchenko wrote:
-> Currently the 16-bit mode is what being used in user space.
-> However assuming that is not fully correct. Instead we should
-> use the respective mask, i.e. SPI_MODE_USER_MASK, which
-> precisely defines what bits are available for user space apps.
+On Mon, 22 Nov 2021 22:06:22 +0200, Andy Shevchenko wrote:
+> Since the commit 196b0e2cf237 ("spi: pxa2xx: Remove if statement
+> that is always true in pump_transfers()") the ->read() and ->write()
+> methods in the struct driver_data are reconfigured for each transfer.
+> Hence no need to keep the intermediate state in the struct chip_data.
 > 
+> The same applies to n_bytes member of the same data structure.
+> Get rid of unneeded storage for good.
 > 
+> [...]
 
 Applied to
 
@@ -52,8 +59,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spidev: Use SPI_MODE_USER_MASK instead of casting
-      commit: dd06a0c6b6f64f6610c0bb8f7651df3ebfb0f990
+[1/1] spi: pxa2xx: Remove redundant ->read() and ->write() in struct chip_data
+      commit: 44ec41b7f7831f91c79a06de5e45f2d7ce6e4fbd
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
