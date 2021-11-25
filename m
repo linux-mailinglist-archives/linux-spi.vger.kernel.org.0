@@ -2,81 +2,116 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A18A45DB50
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Nov 2021 14:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3C745E1F7
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Nov 2021 22:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355507AbhKYNmV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 25 Nov 2021 08:42:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58308 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344320AbhKYNkU (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 25 Nov 2021 08:40:20 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4A9D06108F;
-        Thu, 25 Nov 2021 13:37:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637847429;
-        bh=I+qIOYUEkCQopGYZKuKmqHVkDOBrJtNledOmZhH8c58=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=FF6FYTlG6USpz/xtiuPwj29qXim8WGbwoLHhTxlQHMjnk3OxvAFT40mqophWWaSEJ
-         j1M36lhUEsUKVRXHZWDwT8sU46mRNGiqvqn3U1VKk15wriqi62aCSVSm8pwR+q8tYB
-         kwVCU9AWNZslMtF1J8pEYV3tUc9WFaYDYW07tdw3+VHnOrcm+kdA1Q9OtzbT/fkqDs
-         KAeHHY0V3w5Ko/1B8WAKAfFlmFfZbfAU7xtOKIHg/+a/Ueg1pbt2P9vYJ9hkL0L0yc
-         2qALsBDI4o2NuY5tUliHxzdtZsPx8zusfKNWRUwo4y5eTpma7ld8OuwbEtDIUEKRO8
-         IQWoA7B1/7N0g==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
-        linux-spi@vger.kernel.org
-Cc:     bcm-kernel-feedback-list@broadcom.com, f.fainelli@gmail.com,
-        yendapally.reddy@broadcom.com
-In-Reply-To: <20211124193353.32311-1-kdasu.kdev@gmail.com>
-References: <20211124193353.32311-1-kdasu.kdev@gmail.com>
-Subject: Re: [PATCH 0/2] spi transfer paramater changes and baud rate calculation
-Message-Id: <163784742804.3102022.16557507037490210155.b4-ty@kernel.org>
-Date:   Thu, 25 Nov 2021 13:37:08 +0000
+        id S233769AbhKYVPg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 25 Nov 2021 16:15:36 -0500
+Received: from st43p00im-ztbu10063701.me.com ([17.58.63.178]:46816 "EHLO
+        st43p00im-ztbu10063701.me.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238710AbhKYVNe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 25 Nov 2021 16:13:34 -0500
+X-Greylist: delayed 347 seconds by postgrey-1.27 at vger.kernel.org; Thu, 25 Nov 2021 16:13:34 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1637874275; bh=upGKxHmahNemjwC/qgovouI7MEhaJzt9MumjoTdvl+s=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=FWy99SjW+Jr//BDAk7fn8iyqpGRZIqjJG/Xt5SdHmB5k2iYCxNHsoG1FqWjLPFgKb
+         N2mBp349OmD9TRHJlqQP8aTsA4O4HZpS/td5E/VBid82ujNtW0uzE93hRZI+68saOk
+         pwHUxBdruiXMCM+7ppSSN/rFyr0hBCuP3h4AKRhhxZh5boos9ndFFVOIVjOkSpXpSm
+         99xRme8LCaMexheHKZivOS+Q5m2dw4upSmJPmPsN8wcpvbZVCeD65+IpQzvDgFg3oq
+         jYHrcqk9d3yoIzHelzQag5lwA0tKZfgL8I8y2+WRCvAUwvwrqMhRopgohDnKuq+Yqx
+         XipP3z0E0VsCw==
+Received: from gnbcxl0045.gnb.st.com (101.220.150.77.rev.sfr.net [77.150.220.101])
+        by st43p00im-ztbu10063701.me.com (Postfix) with ESMTPSA id C62449A0695;
+        Thu, 25 Nov 2021 21:04:32 +0000 (UTC)
+Date:   Thu, 25 Nov 2021 22:04:28 +0100
+From:   Alain Volmat <avolmat@me.com>
+To:     wsa@kernel.org, broonie@kernel.org, robh+dt@kernel.org
+Cc:     linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Patrice Chotard <patrice.chotard@foss.st.com>
+Subject: [RFC] sti: Conflict in node name for an IP supporting both I2C and
+ SPI
+Message-ID: <20211125210428.GA27075@gnbcxl0045.gnb.st.com>
+Mail-Followup-To: wsa@kernel.org, broonie@kernel.org, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Patrice Chotard <patrice.chotard@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.790
+ definitions=2021-11-25_07:2021-11-25,2021-11-25 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 clxscore=1011 mlxscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-2009150000 definitions=main-2111250118
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 24 Nov 2021 14:33:51 -0500, Kamal Dasu wrote:
-> The changes picks either the 27Mhz or 108MhZ system clock for spi transfers
-> based user requested transfer speed. Also we set the master controller transfer
-> parameter only if they change.
-> 
-> Kamal Dasu (2):
->   spi: bcm-qspi: choose sysclk setting based on requested speed
->   spi: bcm-qspi: set transfer parameter only if they change
-> 
-> [...]
+Hello,
 
-Applied to
+in the STi platform [1], the I2C and SPI controllers are handled by the
+same IP, which can be configured in either one or the other mode.
+This leads to warnings during the DT build and I was wondering if you could
+give me some hints about how such situation should be handled since this
+concern DT warnings but also bindings and YAML.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+In the SoC DT (dtsi), for each IP, there are 2 entries:
 
-Thanks!
+One for the I2C mode (implemented by the driver i2c/busses/i2c-st.c)
+                i2c@9840000 {
+                        compatible = "st,comms-ssc4-i2c";
+                        interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
+                        reg = <0x9840000 0x110>;
+                        clocks = <&clk_s_c0_flexgen CLK_EXT2F_A9>;
+                        clock-names = "ssc";
+                        clock-frequency = <400000>;
+                        pinctrl-names = "default";
+                        pinctrl-0 = <&pinctrl_i2c0_default>;
+                        #address-cells = <1>;
+                        #size-cells = <0>;
 
-[1/2] spi: bcm-qspi: choose sysclk setting based on requested speed
-      commit: c74526f947ab946273939757c72499c0a5b09826
-[2/2] spi: bcm-qspi: set transfer parameter only if they change
-      commit: e10a6bb5f52de70c7798b720d16632d4042d2552
+                        status = "disabled";
+                };
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+One for the SPI mode (implemented by the driver spi/spi-st-ssc4.c)
+                spi@9840000 {
+                        compatible = "st,comms-ssc4-spi";
+                        reg = <0x9840000 0x110>;
+                        interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
+                        clocks = <&clk_s_c0_flexgen CLK_EXT2F_A9>;
+                        clock-names = "ssc";
+                        pinctrl-0 = <&pinctrl_spi0_default>;
+                        pinctrl-names = "default";
+                        #address-cells = <1>;
+                        #size-cells = <0>;
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+                        status = "disabled";
+                };
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+So basically, there are 2 nodes, one for each mode, and enabling one or the
+other mode is done within the board DT.
+Since the address is the same, this obviously leads to warning during the build
+of the DT.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+arch/arm/boot/dts/stih407-family.dtsi:363.15-376.5: Warning (unique_unit_address): /soc/i2c@9840000: duplicate unit-address (also used in node /soc/spi@9840000)
 
-Thanks,
-Mark
+In order to fix this, I could think of only having one node (for example
+I2C) in the SoC DT (dtsi) and then, within each board DT override some of the
+properties (including the compatible) to make it be a SPI node when necessary.
+However in such case I think this would leads to an issue regarding Yaml.
+The YAML for I2C controller [2] mentions that the node name pattern should
+be "^i2c(@.*)?", while in case of a SPI controller [3] it should be
+"^spi(@.*|-[0-9a-f])*$".
+For that reason, this way doesn't seem possible.
+
+What would you advice to handle such case ?
+
+Regards,
+Alain
+
+[1] arch/arm/boot/dts/stih407-family.dtsi
+[2] schemas/i2c/i2c-controller.yaml
+[3] Documentation/devicetree/bindings/spi/spi-controller.yaml
