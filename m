@@ -2,21 +2,21 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED2845ED19
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Nov 2021 12:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC30245ED16
+	for <lists+linux-spi@lfdr.de>; Fri, 26 Nov 2021 12:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346898AbhKZL7G (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S1350055AbhKZL7G (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Fri, 26 Nov 2021 06:59:06 -0500
-Received: from mslow1.mail.gandi.net ([217.70.178.240]:55539 "EHLO
+Received: from mslow1.mail.gandi.net ([217.70.178.240]:41255 "EHLO
         mslow1.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376834AbhKZL5G (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Nov 2021 06:57:06 -0500
+        with ESMTP id S1376831AbhKZL5F (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 26 Nov 2021 06:57:05 -0500
 Received: from relay9-d.mail.gandi.net (unknown [217.70.183.199])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 94F18C78E5;
-        Fri, 26 Nov 2021 11:39:59 +0000 (UTC)
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 0A774C7CA6;
+        Fri, 26 Nov 2021 11:40:00 +0000 (UTC)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 2E7D1FF814;
-        Fri, 26 Nov 2021 11:39:37 +0000 (UTC)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 87370FF81A;
+        Fri, 26 Nov 2021 11:39:38 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
@@ -33,9 +33,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 07/20] dt-bindings: spi: mxic: Convert to yaml
-Date:   Fri, 26 Nov 2021 12:39:11 +0100
-Message-Id: <20211126113924.310459-8-miquel.raynal@bootlin.com>
+Subject: [PATCH v2 08/20] dt-bindings: spi: mxic: Document the nand-ecc-engine property
+Date:   Fri, 26 Nov 2021 12:39:12 +0100
+Message-Id: <20211126113924.310459-9-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20211126113924.310459-1-miquel.raynal@bootlin.com>
 References: <20211126113924.310459-1-miquel.raynal@bootlin.com>
@@ -46,126 +46,34 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Straightforward conversion from regular text to yaml schema of the
-Macronix SPI controller DT bindings.
+This SPI controller supports interacting with an external ECC
+engine. The nand-ecc-engine property already exist in the NAND world but
+also applies to SPI controller nodes which have external correction
+capabilities like Macronix's.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../bindings/spi/mxicy,mx25f0a-spi.yaml       | 60 +++++++++++++++++++
- .../devicetree/bindings/spi/spi-mxic.txt      | 36 -----------
- 2 files changed, 60 insertions(+), 36 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/spi/mxicy,mx25f0a-spi.yaml
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-mxic.txt
+ .../devicetree/bindings/spi/mxicy,mx25f0a-spi.yaml          | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/spi/mxicy,mx25f0a-spi.yaml b/Documentation/devicetree/bindings/spi/mxicy,mx25f0a-spi.yaml
-new file mode 100644
-index 000000000000..f20d100b4a68
---- /dev/null
+index f20d100b4a68..4e8a73e00f22 100644
+--- a/Documentation/devicetree/bindings/spi/mxicy,mx25f0a-spi.yaml
 +++ b/Documentation/devicetree/bindings/spi/mxicy,mx25f0a-spi.yaml
-@@ -0,0 +1,60 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/mxicy,mx25f0a-spi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+@@ -38,6 +38,12 @@ properties:
+       - const: send_dly_clk
+       - const: ps_clk
+ 
++  nand-ecc-engine:
++    allOf:
++      - $ref: /schemas/types.yaml#/definitions/phandle
++    description: NAND ECC engine used by the SPI controller in order to perform
++      on-the-fly correction when using a SPI-NAND memory.
 +
-+title: Macronix SPI controller device tree bindings
-+
-+maintainers:
-+  - Miquel Raynal <miquel.raynal@bootlin.com>
-+
-+allOf:
-+  - $ref: "spi-controller.yaml#"
-+
-+properties:
-+  compatible:
-+    const: mxicy,mx25f0a-spi
-+
-+  reg:
-+    minItems: 2
-+    maxItems: 2
-+
-+  reg-names:
-+    items:
-+      - const: regs
-+      - const: dirmap
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 3
-+    maxItems: 3
-+
-+  clock-names:
-+    items:
-+      - const: send_clk
-+      - const: send_dly_clk
-+      - const: ps_clk
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - clocks
-+  - clock-names
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    spi@43c30000 {
-+      compatible = "mxicy,mx25f0a-spi";
-+      reg = <0x43c30000 0x10000>, <0xa0000000 0x20000000>;
-+      reg-names = "regs", "dirmap";
-+      clocks = <&clkwizard 0>, <&clkwizard 1>, <&clkc 18>;
-+      clock-names = "send_clk", "send_dly_clk", "ps_clk";
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+    };
-diff --git a/Documentation/devicetree/bindings/spi/spi-mxic.txt b/Documentation/devicetree/bindings/spi/spi-mxic.txt
-deleted file mode 100644
-index 7bcbb229b78b..000000000000
---- a/Documentation/devicetree/bindings/spi/spi-mxic.txt
-+++ /dev/null
-@@ -1,36 +0,0 @@
--Macronix SPI controller Device Tree Bindings
----------------------------------------------
--
--Required properties:
--- compatible: should be "mxicy,mx25f0a-spi"
--- #address-cells: should be 1
--- #size-cells: should be 0
--- reg: should contain 2 entries, one for the registers and one for the direct
--       mapping area
--- reg-names: should contain "regs" and "dirmap"
--- clock-names: should contain "ps_clk", "send_clk" and "send_dly_clk"
--- clocks: should contain 3 entries for the "ps_clk", "send_clk" and
--	  "send_dly_clk" clocks
--
--Optional properties:
--- interrupts: interrupt line connected to the SPI controller
--
--Example:
--
--	spi@43c30000 {
--		compatible = "mxicy,mx25f0a-spi";
--		reg = <0x43c30000 0x10000>, <0xa0000000 0x20000000>;
--		reg-names = "regs", "dirmap";
--		clocks = <&clkwizard 0>, <&clkwizard 1>, <&clkc 18>;
--		clock-names = "send_clk", "send_dly_clk", "ps_clk";
--		#address-cells = <1>;
--		#size-cells = <0>;
--
--		flash@0 {
--			compatible = "jedec,spi-nor";
--			reg = <0>;
--			spi-max-frequency = <25000000>;
--			spi-tx-bus-width = <4>;
--			spi-rx-bus-width = <4>;
--		};
--	};
+ required:
+   - compatible
+   - reg
 -- 
 2.27.0
 
