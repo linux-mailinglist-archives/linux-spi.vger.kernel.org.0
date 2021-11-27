@@ -2,71 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FC9045FD1D
-	for <lists+linux-spi@lfdr.de>; Sat, 27 Nov 2021 07:35:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 229DD45FD4D
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Nov 2021 08:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234413AbhK0GjE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 27 Nov 2021 01:39:04 -0500
-Received: from web.chinagemstonebeads.com ([162.214.67.156]:59234 "EHLO
-        web.chinagemstonebeads.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1349543AbhK0GhE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 27 Nov 2021 01:37:04 -0500
-X-Greylist: delayed 1490 seconds by postgrey-1.27 at vger.kernel.org; Sat, 27 Nov 2021 01:37:04 EST
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jdbeads.com
-        ; s=default; h=Date:Message-Id:Content-Transfer-Encoding:Content-Type:
-        MIME-Version:From:Subject:To:Sender:Reply-To:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=5nq9noi0xPAop8IFeTfi7RcFcYq1OE5GHM6QvnE6nUs=; b=dKXD4+zvvhB2O2C/PKdv0BlYIx
-        tdpv9xgugkQLLZ+276uQBpADa+AWMGs85jfw9X7GVvtfEqj9KDyJGkzWIZXM2HsGizsgoKOgPUKNR
-        ieVCfKaibMJo4JEkmCJB6orc9VZ9vhsPib7+UbqyKN0HL2MC86xYm8Q1eZd32ihykqbeu53watXdZ
-        4gcebCYkxWXWMesgAWAHxFsp5r2DI7vv2LUT2h/zc/wJLq2/inAlgSxzSU0biyHhlgYrcBLnl4wlY
-        WL40MZX/ZakwalR9EeJ+gD/iAfptPWaNts5uyuQPfrcoborTAd26CVXGC4OEiiFXDlPhR+a8JFhwZ
-        5NJKFm1g==;
-Received: from wwwjdbds by web.chinagemstonebeads.com with local (Exim 4.93)
-        (envelope-from <wwwjdbds@web.chinagemstonebeads.com>)
-        id 1mqqsb-0007xh-R5
-        for linux-spi@vger.kernel.org; Sat, 27 Nov 2021 00:08:09 -0600
-Illegal-Object: Syntax error in To: address found on vger.kernel.org:
-        To:     =?ISO-8859-1?Q?=20=22=E2=9D=A4=EF=B8=8F?= Alice sent you a hot video!Watch Here:https://bit.ly/3113Lyn?qij5l =?ISO-8859-1?Q?=20=E2=9D=A4=EF=B8=8F?=" <linux-spi@vger.kernel.org>"
-                        ^                                                                   ^                                                                              ^-missing closing '"' in token
-                |                                                                    \-missing end of address
-                \-extraneous tokens in address
-Subject: Welcoem to sign up cngemstonebeads.com Newsletter
-X-PHP-Script: www.jdbeads.com/newsletters_subscribe.php for 178.17.174.68
-X-PHP-Originating-Script: 1026:email.php
-From:   "JD Beads" <wujingmao@gmail.com>
+        id S1352618AbhK0H4B (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 27 Nov 2021 02:56:01 -0500
+Received: from mga01.intel.com ([192.55.52.88]:29208 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233469AbhK0HyB (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sat, 27 Nov 2021 02:54:01 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="259654566"
+X-IronPort-AV: E=Sophos;i="5.87,268,1631602800"; 
+   d="scan'208";a="259654566"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 23:50:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,268,1631602800"; 
+   d="scan'208";a="498676067"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 26 Nov 2021 23:50:43 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mqsTr-0009E3-7b; Sat, 27 Nov 2021 07:50:43 +0000
+Date:   Sat, 27 Nov 2021 15:49:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Michael Walle <michael@walle.cc>, linux-mtd@lists.infradead.org
+Cc:     kbuild-all@lists.01.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH v2 20/20] spi: mxic: Add support for pipelined ECC
+ operations
+Message-ID: <202111271552.AOgIHVI2-lkp@intel.com>
+References: <20211126113924.310459-21-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
-X-Mailer: osCommerce Mailer
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-Message-Id: <E1mqqsb-0007xh-R5@web.chinagemstonebeads.com>
-Date:   Sat, 27 Nov 2021 00:08:09 -0600
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - web.chinagemstonebeads.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [1026 991] / [47 12]
-X-AntiAbuse: Sender Address Domain - web.chinagemstonebeads.com
-X-Get-Message-Sender-Via: web.chinagemstonebeads.com: authenticated_id: wwwjdbds/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: web.chinagemstonebeads.com: wwwjdbds
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211126113924.310459-21-miquel.raynal@bootlin.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
-To:     unlisted-recipients:; (no To-header on input)
 
-Dear ❤️ Alice sent you a hot video! Watch Here: https://bit.ly/3113Lyn?qij5l ❤️ ,
-*** Welcome to JDBeads.com - Wholesale Beads, Jewelry & Accessories Newsletter ***
+Hi Miquel,
 
-This email confirms that your request was correctly processed and you are now registered to receive the JDBeads.com - Wholesale Beads, Jewelry & Accessories Newsletter
+I love your patch! Yet something to improve:
 
+[auto build test ERROR on mtd/nand/next]
+[also build test ERROR on broonie-spi/for-next mtd/mtd/next mtd/mtd/fixes v5.16-rc2 next-20211126]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
+url:    https://github.com/0day-ci/linux/commits/Miquel-Raynal/External-ECC-engines-Macronix-support/20211126-195956
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
+config: csky-buildonly-randconfig-r004-20211126 (https://download.01.org/0day-ci/archive/20211127/202111271552.AOgIHVI2-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/0804d6ccdf15e7a65743d048d01d876a54070b6b
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Miquel-Raynal/External-ECC-engines-Macronix-support/20211126-195956
+        git checkout 0804d6ccdf15e7a65743d048d01d876a54070b6b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash
 
-Best Regards,
-cngemstonebeads.com
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Note: This email address was entered during the registration process. If you did not signup to receive our newsletter, please contact us anytime.
+All errors (new ones prefixed by >>):
 
+   csky-linux-ld: drivers/spi/spi-mxic.o: in function `mxic_spi_remove':
+>> spi-mxic.c:(.text+0xba4): undefined reference to `nand_ecc_unregister_on_host_hw_engine'
+   csky-linux-ld: drivers/spi/spi-mxic.o: in function `mxic_ecc_put_pipelined_engine':
+   spi-mxic.c:(.text+0xbc8): undefined reference to `nand_ecc_unregister_on_host_hw_engine'
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
