@@ -2,87 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 229DD45FD4D
-	for <lists+linux-spi@lfdr.de>; Sat, 27 Nov 2021 08:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 097D545FF2A
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Nov 2021 15:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352618AbhK0H4B (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 27 Nov 2021 02:56:01 -0500
-Received: from mga01.intel.com ([192.55.52.88]:29208 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233469AbhK0HyB (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Sat, 27 Nov 2021 02:54:01 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="259654566"
-X-IronPort-AV: E=Sophos;i="5.87,268,1631602800"; 
-   d="scan'208";a="259654566"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 23:50:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,268,1631602800"; 
-   d="scan'208";a="498676067"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 26 Nov 2021 23:50:43 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mqsTr-0009E3-7b; Sat, 27 Nov 2021 07:50:43 +0000
-Date:   Sat, 27 Nov 2021 15:49:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Michael Walle <michael@walle.cc>, linux-mtd@lists.infradead.org
-Cc:     kbuild-all@lists.01.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH v2 20/20] spi: mxic: Add support for pipelined ECC
- operations
-Message-ID: <202111271552.AOgIHVI2-lkp@intel.com>
-References: <20211126113924.310459-21-miquel.raynal@bootlin.com>
+        id S235610AbhK0OZA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 27 Nov 2021 09:25:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344587AbhK0OXA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 27 Nov 2021 09:23:00 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D096C061574;
+        Sat, 27 Nov 2021 06:19:45 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id a18so25213182wrn.6;
+        Sat, 27 Nov 2021 06:19:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Rs1vltk9uRLtJlv1JN67bIfY9H+/oNUCoFzx5XImALc=;
+        b=lusi+qSAJybLG5GOHY9d+VZ66Uvb6zLa8539YNULtqXWBSuk5WXXPn3BsUdtZZGuT3
+         0CfE4T2V9zzPfDXaWMF4xzwx2vkdfajS86MxTBFBwE5Xs6X8Jx6qFsIjmNa1GUXKBK0s
+         gf4OJNhAI+zdZTKYN6oFIjbF9cqQc/oWqOwFZD9FvScBIZzgol0/bTaXy3I+m/htt+a4
+         R8qo2Ibs2xJOHaUmRmQQD3KLOquDhEEFXmrvaKfJ9K1tDQgVktlLOm5Nn1J+aFntgp32
+         6EsPcp/2/ZPKTzb7yxdJ5zoilFsU39c21Qpn8zqu5cl5yrVxptaWQ+FxpFiakUxaCFa+
+         aR9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Rs1vltk9uRLtJlv1JN67bIfY9H+/oNUCoFzx5XImALc=;
+        b=Te228p8z5eDrm3UUL8+UxSav0ZyqK8+kHY+yOkyct8CRsB5X7MBj8Eo87rkFzbpkFv
+         vFDN4vsv+0if1kB+XfbBtNpcV+/jp5CLnQFY/uRWATAhRDySQSxQhuuptBvgx0kdltPI
+         2c6MAdVW0pZ4cRWxfOnueEwVZx7kAmQuk4ieakwz9xohzHKf59IzsqeccHSyOizCh8Ej
+         qfR9PfYs5rKoDM2sY6cAEt8uO5DcS/P+nx97bwn1uM8Y/H6577kDcRH/78RBTOdLRcsL
+         BLcy4WUx4P1vijufUH/8O0PfqI72CUwNXB+4hz1Ls5XtQr6KMkmUCHryZTbyW6cNqETX
+         PINw==
+X-Gm-Message-State: AOAM5306WEaUY0FDBeuylZJpaLf9pPa76HRLoldGnFRCBtogjkGh8/Z0
+        8jl4X3dgFxinULsSN1a7ZFA=
+X-Google-Smtp-Source: ABdhPJwGX9REL4Zzk45kInjHUw2v717C7ACm/3cCxTw+9Wo5pJuqqqvZ48rpjvcXVRD0pQUq2QotKw==
+X-Received: by 2002:a5d:5151:: with SMTP id u17mr21582797wrt.126.1638022784121;
+        Sat, 27 Nov 2021 06:19:44 -0800 (PST)
+Received: from localhost.localdomain (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id o1sm8509839wrn.63.2021.11.27.06.19.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Nov 2021 06:19:43 -0800 (PST)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/3] dt-bindings: spi: spi-rockchip: Add rk3568-spi compatible
+Date:   Sat, 27 Nov 2021 15:19:07 +0100
+Message-Id: <20211127141910.12649-2-frattaroli.nicolas@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211127141910.12649-1-frattaroli.nicolas@gmail.com>
+References: <20211127141910.12649-1-frattaroli.nicolas@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211126113924.310459-21-miquel.raynal@bootlin.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Miquel,
+This adds a compatible string for the SPI controller found on
+the RK3566 and RK3568 SoCs.
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on mtd/nand/next]
-[also build test ERROR on broonie-spi/for-next mtd/mtd/next mtd/mtd/fixes v5.16-rc2 next-20211126]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Miquel-Raynal/External-ECC-engines-Macronix-support/20211126-195956
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
-config: csky-buildonly-randconfig-r004-20211126 (https://download.01.org/0day-ci/archive/20211127/202111271552.AOgIHVI2-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/0804d6ccdf15e7a65743d048d01d876a54070b6b
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Miquel-Raynal/External-ECC-engines-Macronix-support/20211126-195956
-        git checkout 0804d6ccdf15e7a65743d048d01d876a54070b6b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   csky-linux-ld: drivers/spi/spi-mxic.o: in function `mxic_spi_remove':
->> spi-mxic.c:(.text+0xba4): undefined reference to `nand_ecc_unregister_on_host_hw_engine'
-   csky-linux-ld: drivers/spi/spi-mxic.o: in function `mxic_ecc_put_pipelined_engine':
-   spi-mxic.c:(.text+0xbc8): undefined reference to `nand_ecc_unregister_on_host_hw_engine'
-
+Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ Documentation/devicetree/bindings/spi/spi-rockchip.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+index 7f987e79337c..52a78a2e362e 100644
+--- a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+@@ -33,6 +33,7 @@ properties:
+               - rockchip,rk3328-spi
+               - rockchip,rk3368-spi
+               - rockchip,rk3399-spi
++              - rockchip,rk3568-spi
+               - rockchip,rv1126-spi
+           - const: rockchip,rk3066-spi
+ 
+-- 
+2.34.1
+
