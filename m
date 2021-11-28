@@ -2,81 +2,105 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D83F24607C1
-	for <lists+linux-spi@lfdr.de>; Sun, 28 Nov 2021 17:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 989FA4607D3
+	for <lists+linux-spi@lfdr.de>; Sun, 28 Nov 2021 18:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358655AbhK1RA3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 28 Nov 2021 12:00:29 -0500
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:46040 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346208AbhK1Q62 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 28 Nov 2021 11:58:28 -0500
-Received: by mail-ot1-f42.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso22052320otf.12;
-        Sun, 28 Nov 2021 08:55:12 -0800 (PST)
+        id S1358488AbhK1RJZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 28 Nov 2021 12:09:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358489AbhK1RHY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 28 Nov 2021 12:07:24 -0500
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED66C0613F9
+        for <linux-spi@vger.kernel.org>; Sun, 28 Nov 2021 09:03:17 -0800 (PST)
+Received: by mail-vk1-xa2a.google.com with SMTP id 70so9360029vkx.7
+        for <linux-spi@vger.kernel.org>; Sun, 28 Nov 2021 09:03:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BY3oht+y8HrGDIiA0mto2rflEOHEoMX+CLpzHXZf2nA=;
+        b=isEtZ0KqXs7KwQiyrUe6920AusXIYyZ3lAycqrX8wlYMxZzrktdUryhup02VI1Fc9m
+         6RbwZfK5VEwmxi4UjWRmZWbt303aROEHrxkJJaNuODRMse9Ohe1/XfcUA2kKvpqE/UhR
+         RbvvxfS7z6qb3X5YjlkfRE/T60Xju+cO7p9YyQj6EXdMEqvWjpSSGjY7+8CraHpfL2aA
+         ffanPd/1CCgvM5Qlb7yHtQ4jsRvgFbvogD1YtoQrtwx8TwfczmVqEphgtQg/Mw4op13n
+         xhf2K4LG1zddQ8cTqaUD7GGqrYRoeY6Irx5UZc4QfFAbdWaoCrgQ8/GT2dQ3C6PBrKqL
+         g4bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1Kx4mjHYh3JbxTIKV4lb6j/qBNb/1oR0ibaR7m8wF84=;
-        b=eG62JzmFIoPSCcFSYDt4U633gGzShET9PK1+GWjUsPUj7nrJk8ANNEAg8hepgiuicj
-         SNN8tyLSiR1hQ4VtJTxyiIZwWqb7YGbOPzzrWhwXVxvKFL6oxhsF4CbIeBaNBY1mxZvy
-         yXYY1r7xwL3t2MfGI+9VzGr1RBnMFP3KbuQ7VxwS+z8UpWFWwRTEAs/EHDZLUbYA7EkQ
-         q46L6jPXHWO+i8TqEA+pXxCL/5Ly3ukgTZ4qiIAofccTzXdADx/r3xlUVL3elM1zvn1m
-         +wlw6QcfG7cuqYMKr4fAYssogp9i4mlE8PEoLxO5Ab1IMt73E6Pb6eTgOHWzvT0tvheD
-         mtkw==
-X-Gm-Message-State: AOAM530BZvFLu9eYoNLvi355PCBuEhy4DcDCvrHOLtXRCGOijj+Z9O46
-        23w2SSVQBkChgUKm6QyjJA==
-X-Google-Smtp-Source: ABdhPJzH+fMrufpgBICy1lv/D36s6g3VY8c0AiVKM2GIpW7BfPG91KQD8bigrq9CNfmGjd4PMkzL1Q==
-X-Received: by 2002:a9d:12f2:: with SMTP id g105mr39803123otg.301.1638118511627;
-        Sun, 28 Nov 2021 08:55:11 -0800 (PST)
-Received: from robh.at.kernel.org ([2607:fb90:20d6:afc8:f6e9:d57a:3e26:ee41])
-        by smtp.gmail.com with ESMTPSA id w5sm2159875otk.70.2021.11.28.08.55.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Nov 2021 08:55:10 -0800 (PST)
-Received: (nullmailer pid 2710081 invoked by uid 1000);
-        Sun, 28 Nov 2021 16:55:06 -0000
-Date:   Sun, 28 Nov 2021 10:55:06 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     linux-spi@vger.kernel.org,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
-        Michal Simek <monstr@monstr.eu>, linux-mtd@lists.infradead.org,
-        Pratyush Yadav <p.yadav@ti.com>
-Subject: Re: [PATCH v2 5/5] spi: dt-bindings: Add an example with two stacked
- flashes
-Message-ID: <YaO0ahOhM3XwLqND@robh.at.kernel.org>
-References: <20211126163450.394861-1-miquel.raynal@bootlin.com>
- <20211126163450.394861-6-miquel.raynal@bootlin.com>
- <1638054802.100671.1973542.nullmailer@robh.at.kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BY3oht+y8HrGDIiA0mto2rflEOHEoMX+CLpzHXZf2nA=;
+        b=keH8u4AWLBAqeYcYhutRCN+HTIFfByTUppMmRt2n9nEgTp4uqTO5K4+i1CrLDVeiVl
+         +Q+ns4rZb9cc2DUPWqyCPx3ijaprAx+5HGXFRyyKNpr7UkqrF1nhdF+SodWuvkmcQqq1
+         5iM/UlTPnoJTt1MCDfhI2hsY+n05HgSBc4IfHCAZ9oeTPwQzvzKbftPWaJ+Zg6Y5Cebv
+         WaKzBM8qBuDasLo2i40SbOR9OtSgCMGaFWwuHi4SNnX6qNvxZ2ODfC2jfe3jzth4fBq0
+         vvVYaNgg+jEuYilRtn/OyQJD3NrdvhEEQS6AB6XnVpkEyXHx8eAYfCZbxj16XcwEJNjR
+         1oxA==
+X-Gm-Message-State: AOAM532g3KIKy75OI7nVHwmntpqokAa41/hv7ARZupvURDYFun3SDESa
+        Du6bOXoOQveYneXGy8nDX4PafLcZGh7OmMRz4e0duA==
+X-Google-Smtp-Source: ABdhPJzWijuBwUQuP+Vndk1T+sepX2T8/WmWaWQfnWsOR0CMc9FuYs9zuujxjQxRb2Guzz9nNOvUpGArHq0GRwbXUxw=
+X-Received: by 2002:a1f:2849:: with SMTP id o70mr25716022vko.35.1638118996213;
+ Sun, 28 Nov 2021 09:03:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1638054802.100671.1973542.nullmailer@robh.at.kernel.org>
+References: <20211127223253.19098-1-semen.protsenko@linaro.org>
+ <20211127223253.19098-5-semen.protsenko@linaro.org> <YaOR+TbcR1V4ovf/@kroah.com>
+ <CAPLW+4mG8AMPCXGWYwURVJhCw0Cv=mYYzNAZf0i7akVcqc384w@mail.gmail.com>
+In-Reply-To: <CAPLW+4mG8AMPCXGWYwURVJhCw0Cv=mYYzNAZf0i7akVcqc384w@mail.gmail.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Sun, 28 Nov 2021 19:03:05 +0200
+Message-ID: <CAPLW+4k9OAdcg8XcTbazV_470mFw3x61_UakoR-qNHo5C8et_g@mail.gmail.com>
+Subject: Re: [PATCH 4/8] tty: serial: samsung: Remove USI initialization
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, Nov 27, 2021 at 04:13:22PM -0700, Rob Herring wrote:
-> On Fri, 26 Nov 2021 17:34:50 +0100, Miquel Raynal wrote:
-> > Provide an example of how to describe two flashes in eg. stacked mode.
-> > 
-> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> > ---
-> >  Documentation/devicetree/bindings/spi/spi-controller.yaml | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> > 
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/spi/spi-controller.example.dts:40.23-45.15: Warning (spi_bus_reg): /example-0/spi@80010000/flash@2,3: SPI bus unit address format error, expected "2"
+On Sun, 28 Nov 2021 at 18:26, Sam Protsenko <semen.protsenko@linaro.org> wrote:
+>
+> On Sun, 28 Nov 2021 at 16:28, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Sun, Nov 28, 2021 at 12:32:49AM +0200, Sam Protsenko wrote:
+> > > USI control is now extracted to dedicated USIv2 driver. Remove USI
+> > > related code from serial driver to avoid conflicts and code duplication.
+> >
+> > What conflicts?
+> >
+>
+> There might be possible conflicts when accessing the same USI register
+> from both serial driver and USIv2 driver. Also there will be conflicts
+> when trying to access the same I/O address space in those both
+> drivers.
+>
+> > What duplication?  All you did here was delete code.
+> >
+>
+> It's all explained in [PATCH 0/8], but long story short, I've added
+> USIv2 driver (in this series) which handles the code that's removed
+> from serial driver in this patch.
+>
 
-Unit-addresses are based on the first reg entry.
+In other words, this code is now present here: [1]. But of course
+USIv2 driver must be applied first, and then this patch (removing the
+same code from serial driver). That's why it's in the same series and
+it's placed after USIv2 driver ([PATCH 3/8]).
+
+[1] https://patchwork.kernel.org/project/linux-samsung-soc/patch/20211127223253.19098-4-semen.protsenko@linaro.org/
+
+> > confused,
+> >
+> > greg k-h
