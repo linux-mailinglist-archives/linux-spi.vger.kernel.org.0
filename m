@@ -2,56 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 989FA4607D3
-	for <lists+linux-spi@lfdr.de>; Sun, 28 Nov 2021 18:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBF4460B4A
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Nov 2021 00:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358488AbhK1RJZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 28 Nov 2021 12:09:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42236 "EHLO
+        id S1359729AbhK1X7s (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 28 Nov 2021 18:59:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358489AbhK1RHY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 28 Nov 2021 12:07:24 -0500
+        with ESMTP id S235189AbhK1X5s (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 28 Nov 2021 18:57:48 -0500
 Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED66C0613F9
-        for <linux-spi@vger.kernel.org>; Sun, 28 Nov 2021 09:03:17 -0800 (PST)
-Received: by mail-vk1-xa2a.google.com with SMTP id 70so9360029vkx.7
-        for <linux-spi@vger.kernel.org>; Sun, 28 Nov 2021 09:03:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4F6C061746
+        for <linux-spi@vger.kernel.org>; Sun, 28 Nov 2021 15:54:31 -0800 (PST)
+Received: by mail-vk1-xa2a.google.com with SMTP id b192so9793022vkf.3
+        for <linux-spi@vger.kernel.org>; Sun, 28 Nov 2021 15:54:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=BY3oht+y8HrGDIiA0mto2rflEOHEoMX+CLpzHXZf2nA=;
-        b=isEtZ0KqXs7KwQiyrUe6920AusXIYyZ3lAycqrX8wlYMxZzrktdUryhup02VI1Fc9m
-         6RbwZfK5VEwmxi4UjWRmZWbt303aROEHrxkJJaNuODRMse9Ohe1/XfcUA2kKvpqE/UhR
-         RbvvxfS7z6qb3X5YjlkfRE/T60Xju+cO7p9YyQj6EXdMEqvWjpSSGjY7+8CraHpfL2aA
-         ffanPd/1CCgvM5Qlb7yHtQ4jsRvgFbvogD1YtoQrtwx8TwfczmVqEphgtQg/Mw4op13n
-         xhf2K4LG1zddQ8cTqaUD7GGqrYRoeY6Irx5UZc4QfFAbdWaoCrgQ8/GT2dQ3C6PBrKqL
-         g4bw==
+        bh=W6GUPGDBtJn+odYJ5HX9HLZbUxWJ488arHtw5A2QE5I=;
+        b=mAP+xUXoJdAGw+3jgnscKZG1chXc/PKkk929pxX1NBvMUcqxq416PnF1Q9LV+y3IAH
+         12zWR5H/rkQUsU4Ij9XRDMWaJAXtvb8ARK8LY9wX0jSohw630SZ1bmXfflhCNq8dzyXe
+         jHyXLwDdLEFdHXLFa/Zs8bysH52SDcnXQ62X3lUeIGMr3f4NR5dmQh59b79ucjYIrz+6
+         3DOZQwQRfdgU6lZU9gGDWNWh6ssUZAIL4/qevnIc0rZSZGCLS7ePw8Y4ozoKybFD2S2I
+         zx07pvwbYJJvK9oVwWtY6Yst+A2bwCJWTn+2z6N4tfCN6ZpFbmIXWUC6R+4GXH383tS8
+         wH6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=BY3oht+y8HrGDIiA0mto2rflEOHEoMX+CLpzHXZf2nA=;
-        b=keH8u4AWLBAqeYcYhutRCN+HTIFfByTUppMmRt2n9nEgTp4uqTO5K4+i1CrLDVeiVl
-         +Q+ns4rZb9cc2DUPWqyCPx3ijaprAx+5HGXFRyyKNpr7UkqrF1nhdF+SodWuvkmcQqq1
-         5iM/UlTPnoJTt1MCDfhI2hsY+n05HgSBc4IfHCAZ9oeTPwQzvzKbftPWaJ+Zg6Y5Cebv
-         WaKzBM8qBuDasLo2i40SbOR9OtSgCMGaFWwuHi4SNnX6qNvxZ2ODfC2jfe3jzth4fBq0
-         vvVYaNgg+jEuYilRtn/OyQJD3NrdvhEEQS6AB6XnVpkEyXHx8eAYfCZbxj16XcwEJNjR
-         1oxA==
-X-Gm-Message-State: AOAM532g3KIKy75OI7nVHwmntpqokAa41/hv7ARZupvURDYFun3SDESa
-        Du6bOXoOQveYneXGy8nDX4PafLcZGh7OmMRz4e0duA==
-X-Google-Smtp-Source: ABdhPJzWijuBwUQuP+Vndk1T+sepX2T8/WmWaWQfnWsOR0CMc9FuYs9zuujxjQxRb2Guzz9nNOvUpGArHq0GRwbXUxw=
-X-Received: by 2002:a1f:2849:: with SMTP id o70mr25716022vko.35.1638118996213;
- Sun, 28 Nov 2021 09:03:16 -0800 (PST)
+        bh=W6GUPGDBtJn+odYJ5HX9HLZbUxWJ488arHtw5A2QE5I=;
+        b=HgAS/S8sCSOrhKqfU0FXPbALyWvzlmLRdpbLhYVNwcdCe6sQ0Wti9DHvhLTQ+jb0J9
+         UO9q4u63yNuD9rYS2eF16OTegz4mTj/8pcZ8d+ezv5iJC2AgiU354+pksl6ll0dJ1zLJ
+         thVt4g416smXh+VtyUFbbKlWT6lJw9c0estLBkI5bHFEb0wWrKPBpjyI+Bhs4eua8IAV
+         3p8vQmdb2eN7zuiJTQgj0Ax/Ih/1acb9Myj2lRKgf2pd3FsWXMPsLp+1tjZWPDGnGu54
+         ApHYCqawcgwhZwHe1JcIGb7JHIA4DkAKtrvtthmoh6oxrcOvQJBZioJBgQcpXDoYFu4w
+         fuFg==
+X-Gm-Message-State: AOAM530Bog6NCQSyfsHqZqIuWE2fANs/npZM9I9nqfxiEThYuCCjfy6v
+        YJqwQGJ08eSNxnplzXR0MDaZpQ0YJtXAjEURq2bxMA==
+X-Google-Smtp-Source: ABdhPJwpbsu1iP889kCFOoQxvKA0CIJwmiMq5+VFnpzr9X3v6KVdGvWK3BRzk6bWKvLGWCwFUfT3lgvPVfWQ4zhRTEY=
+X-Received: by 2002:a05:6122:2158:: with SMTP id m24mr33410783vkd.1.1638143670173;
+ Sun, 28 Nov 2021 15:54:30 -0800 (PST)
 MIME-Version: 1.0
 References: <20211127223253.19098-1-semen.protsenko@linaro.org>
- <20211127223253.19098-5-semen.protsenko@linaro.org> <YaOR+TbcR1V4ovf/@kroah.com>
- <CAPLW+4mG8AMPCXGWYwURVJhCw0Cv=mYYzNAZf0i7akVcqc384w@mail.gmail.com>
-In-Reply-To: <CAPLW+4mG8AMPCXGWYwURVJhCw0Cv=mYYzNAZf0i7akVcqc384w@mail.gmail.com>
+ <20211127223253.19098-7-semen.protsenko@linaro.org> <YaORtBO4b9AyFYyd@kroah.com>
+In-Reply-To: <YaORtBO4b9AyFYyd@kroah.com>
 From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Sun, 28 Nov 2021 19:03:05 +0200
-Message-ID: <CAPLW+4k9OAdcg8XcTbazV_470mFw3x61_UakoR-qNHo5C8et_g@mail.gmail.com>
-Subject: Re: [PATCH 4/8] tty: serial: samsung: Remove USI initialization
+Date:   Mon, 29 Nov 2021 01:54:18 +0200
+Message-ID: <CAPLW+4=mL6ZV73zY+AoF6mo8Tka0cO8pst2mBYOoEHpX4nrRbA@mail.gmail.com>
+Subject: Re: [PATCH 6/8] tty: serial: Make SERIAL_SAMSUNG=y impossible when EXYNOS_USI_V2=m
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -69,38 +68,63 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, 28 Nov 2021 at 18:26, Sam Protsenko <semen.protsenko@linaro.org> wrote:
+On Sun, 28 Nov 2021 at 16:27, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> On Sun, 28 Nov 2021 at 16:28, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
+> On Sun, Nov 28, 2021 at 12:32:51AM +0200, Sam Protsenko wrote:
+> > When UART is encapsulated in USIv2 block (e.g. in Exynos850), USIv2
+> > driver must be loaded first, as it's preparing USI hardware for
+> > particular protocol use. Make it impossible for Samsung serial driver to
+> > be built-in when USIv2 driver is built as a module, to prevent incorrect
+> > booting order for those drivers.
 > >
-> > On Sun, Nov 28, 2021 at 12:32:49AM +0200, Sam Protsenko wrote:
-> > > USI control is now extracted to dedicated USIv2 driver. Remove USI
-> > > related code from serial driver to avoid conflicts and code duplication.
+> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > ---
+> >  drivers/tty/serial/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
 > >
-> > What conflicts?
-> >
+> > diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+> > index 0e5ccb25bdb1..47bc24e74041 100644
+> > --- a/drivers/tty/serial/Kconfig
+> > +++ b/drivers/tty/serial/Kconfig
+> > @@ -237,6 +237,7 @@ config SERIAL_CLPS711X_CONSOLE
+> >  config SERIAL_SAMSUNG
+> >       tristate "Samsung SoC serial support"
+> >       depends on PLAT_SAMSUNG || ARCH_S5PV210 || ARCH_EXYNOS || ARCH_APPLE || COMPILE_TEST
+> > +     depends on EXYNOS_USI_V2 || !EXYNOS_USI_V2
 >
-> There might be possible conflicts when accessing the same USI register
-> from both serial driver and USIv2 driver. Also there will be conflicts
-> when trying to access the same I/O address space in those both
-> drivers.
+> That's odd, and is not going to help if everything is built as a module
+> and loaded that way.
 >
-> > What duplication?  All you did here was delete code.
-> >
->
-> It's all explained in [PATCH 0/8], but long story short, I've added
-> USIv2 driver (in this series) which handles the code that's removed
-> from serial driver in this patch.
+> This needs to be done properly in code to handle the issues if the
+> "wrong" code is loaded first.  Please trigger off of the hardware type
+> correctly so you don't have to worry about this at all.
 >
 
-In other words, this code is now present here: [1]. But of course
-USIv2 driver must be applied first, and then this patch (removing the
-same code from serial driver). That's why it's in the same series and
-it's placed after USIv2 driver ([PATCH 3/8]).
+You are right. The only thing that should be done is "__init" should
+be removed from s3c24xx_serial_console_setup() and
+s3c24xx_serial_get_options() functions. Because in case when USIv2
+driver instantiates the serial driver via of_platform_populate(), when
+USI_V2=m and SERIAL_SAMSUNG=y, those symbols will be thrown away
+already. And of course "[PATCH 5/8] tty: serial: samsung: Enable
+console as module" is needed as well. Correct init order (USI vs
+serial) is already ensured by embedding serial node in USI node (as a
+child node).
 
-[1] https://patchwork.kernel.org/project/linux-samsung-soc/patch/20211127223253.19098-4-semen.protsenko@linaro.org/
+We'll still have some weird init order in that case (USI_V2=m and
+SERIAL_SAMSUNG=y), like doing serial console init first (and
+earlycon), then registering USI driver as a module (reconfiguring USI
+IP-core), and then doing serial probe. But at least that doesn't crash
+and works fine (only causing some delay once, in the middle of dmesg
+output). But I guess that would be a problem of people who decided to
+go with such weird config.
 
-> > confused,
-> >
-> > greg k-h
+Bottom line is, this patch is not needed. I'll re-send v2 soon,
+excluding it from there, and will also add that mentioned "__init"
+removal.
+
+Thanks for review!
+
+> thanks,
+>
+> greg k-h
