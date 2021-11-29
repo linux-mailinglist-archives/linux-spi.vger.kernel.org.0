@@ -2,137 +2,124 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5443461452
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Nov 2021 12:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1484613E0
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Nov 2021 12:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244263AbhK2L5D (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 29 Nov 2021 06:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236673AbhK2LzD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Nov 2021 06:55:03 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D544C08ED8D
-        for <linux-spi@vger.kernel.org>; Mon, 29 Nov 2021 02:57:21 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id g17so40917604ybe.13
-        for <linux-spi@vger.kernel.org>; Mon, 29 Nov 2021 02:57:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=/N2AzXdmQhj8cnrxf6yxwa23/wIatZRqd4goM9Q+IO8=;
-        b=ErhOpdgigBGRX0iOA2ci/LrupvuM6+6c+q9rD2B6x1di+sFL9PVYGmzafYCayO999B
-         Ex51N+if313WKcW+gK1lj/OWtPvwfLDnTT20+eAv8YxxrR4g7rLnHIdzsTIvVAz0SrpQ
-         Ch6axdbEwb+a/M3Dt2tKAFVIFy0Y8iZuOwtZqXl1J60xk4GO/CqIzkuCM++XjDrDX06p
-         089vT34nfrhei7WTrhyk/M1T035mB+FNPNQ5Hd3oBtsviAPMtLS5mvE7ZDcnz+92hK94
-         07sMoak/mgTSYg0TcRsMzWsKiITVk9cvja0ME+E02kwQTfYZNPVDhNnY35dNNYcmygLp
-         iGDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=/N2AzXdmQhj8cnrxf6yxwa23/wIatZRqd4goM9Q+IO8=;
-        b=rT9uXuJrApMzErl2L5W2u6ZMPOBI91U8GEBVTNhhkXITLC2AmNRucR81bc+i+5/uMR
-         pbDS4Z016h3hBkY4q9f5Jyddesxw0l2M1X5hRH+DA5nnQKSxoNkbibNIg2yvdQI3tck3
-         D3R9WfQgBtyIG2fC1F2dPcLOjzKnrlFE68FwM+Z8PavQHNZeQAu8l/xCI/R9whzLSch5
-         D8cBwq6TQLpgWzQmzkPpfzVdh9tYHVbhjC0HthrCIZA++7v6/0fqnx7/WNoSGHPZQd/v
-         fVil0B4eiTzKCQIaYXfknF4uaAfwbWqD9B9NoSWYcb5QFUB1UWmSkwmBbyNGyCkdl5zD
-         yS8Q==
-X-Gm-Message-State: AOAM531mrC77ipIEJXQELTqBMCOxm8Cx/tXO3rgVfc2fQU4axFP+ocqw
-        MC/hRfJweWxpLGXenBb2eRqChap/RgIRsb9Wcao=
-X-Google-Smtp-Source: ABdhPJwDXAO1KxnCKDkkwiudCJqJuhpArYKiJQTg+eIzhjAbEBRvY4HWTqik/oBHDS4epB1bybFjcLt6vUq4kag2XME=
-X-Received: by 2002:a25:8052:: with SMTP id a18mr5454865ybn.634.1638183440729;
- Mon, 29 Nov 2021 02:57:20 -0800 (PST)
+        id S241037AbhK2Ldz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 29 Nov 2021 06:33:55 -0500
+Received: from st43p00im-zteg10062001.me.com ([17.58.63.166]:50895 "EHLO
+        st43p00im-zteg10062001.me.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237921AbhK2Lbs (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Nov 2021 06:31:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1638185309; bh=FO0LUT32VcGamCeUuaNkSfl73khKfpMSTlnCbYYzcRo=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=Sm+l7dOwSWblAFjEalalHCDsvEiE5jSh5mxYhcgMF9W1pENtnnB0TVxX+bCX5+aY3
+         eDsOep0NahianPdsVG0fGMG8caA8edjHtwb476z7p91Q0lZJMQLZPl1M2yqe20p6nr
+         dYzdo3/RFqIeU2hVinXnr1t+oqrT13No9TWxO/gckf6HWj3FNaPK9CW+rQJrbmgdRh
+         GR3FSsPFRVsLMxoUlyPEkVigfY0BsQo9/YcUKCcoY4eO6KXCWB+ME6JKewrgT/yX8W
+         jJGqCVF/4FupDcrySmfkQhsz+/2a0KNEJbDj0yZ0vPOxmUDQgRk8BCRfJrW5UU1Y66
+         Zu/8PFQENw5jg==
+Received: from gnbcxl0045.gnb.st.com (101.220.150.77.rev.sfr.net [77.150.220.101])
+        by st43p00im-zteg10062001.me.com (Postfix) with ESMTPSA id 1799A6C01B2;
+        Mon, 29 Nov 2021 11:28:26 +0000 (UTC)
+Date:   Mon, 29 Nov 2021 12:28:24 +0100
+From:   Alain Volmat <avolmat@me.com>
+To:     Andrew Lunn <andrew@lunn.ch>, robh+dt@kernel.org
+Cc:     wsa@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Alain Volmat <avolmat@me.com>
+Subject: Re: [RFC] sti: Conflict in node name for an IP supporting both I2C
+ and SPI
+Message-ID: <20211129112824.GA17122@gnbcxl0045.gnb.st.com>
+Mail-Followup-To: Andrew Lunn <andrew@lunn.ch>, robh+dt@kernel.org,
+        wsa@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Patrice Chotard <patrice.chotard@foss.st.com>
+References: <20211125210428.GA27075@gnbcxl0045.gnb.st.com>
+ <YaFkG85DHMMRiD7O@lunn.ch>
 MIME-Version: 1.0
-Received: by 2002:a05:7010:178c:b0:1df:8029:4655 with HTTP; Mon, 29 Nov 2021
- 02:57:20 -0800 (PST)
-Reply-To: koffiaya202100@gmail.com
-From:   Koffi Aya <jindaratdaosornprasat2014@gmail.com>
-Date:   Mon, 29 Nov 2021 10:57:20 +0000
-Message-ID: <CAEU+xUtwV2_ndBWAkwUyRuwpTUmaYNsko=VW5FhYtsUrob4E3g@mail.gmail.com>
-Subject: Von Koffi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaFkG85DHMMRiD7O@lunn.ch>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.790
+ definitions=2021-11-29_05:2021-11-28,2021-11-29 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 clxscore=1011 mlxscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-2009150000 definitions=main-2111290057
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
---=20
-Von: Koffi Aya
-Liebste,
-Guten Tag und vielen Dank f=C3=BCr Ihre Aufmerksamkeit. Bitte, ich m=C3=B6c=
-hte, dass
-Sie meine E-Mail sorgf=C3=A4ltig lesen und mir helfen, dieses Projekt zu
-bearbeiten. Ich bin Miss Koffi Aya und m=C3=B6chte Sie in aller Bescheidenh=
-eit
-um Ihre Partnerschaft und Unterst=C3=BCtzung bei der =C3=9Cbertragung und A=
-nlage
-meiner Erbschaftsgelder in H=C3=B6he von 6.500.000,00 US-Dollar (sechs Mill=
-ionen
-f=C3=BCnfhunderttausend US-Dollar) bitten, die mein verstorbener geliebter =
-Vater
-vor seinem Tod bei einer Bank hinterlegt hat.
+Hello,
 
-Ich m=C3=B6chte Ihnen versichern, dass dieser Fonds legal von meinem
-verstorbenen Vater erworben wurde und keinen kriminellen Hintergrund hat.
-Mein Vater hat diesen Fonds legal durch ein legitimes Gesch=C3=A4ft erworbe=
-n,
-bevor er w=C3=A4hrend seiner Gesch=C3=A4ftsreise zu Tode vergiftet wurde. D=
-er Tod
-meines Vaters wurde von seinen Verwandten, die ihn w=C3=A4hrend seiner
-Dienstreise begleiteten, vermutet. Denn nach 3 Monaten nach dem Tod meines
-Vaters begannen Seine Verwandten, alle Besitzt=C3=BCmer meines verstorbenen
-Vaters zu beanspruchen und zu verkaufen.
+On Fri, Nov 26, 2021 at 11:47:55PM +0100, Andrew Lunn wrote:
+> On Thu, Nov 25, 2021 at 10:04:28PM +0100, Alain Volmat wrote:
+> > Hello,
+> > 
+> > in the STi platform [1], the I2C and SPI controllers are handled by the
+> > same IP, which can be configured in either one or the other mode.
+> > This leads to warnings during the DT build and I was wondering if you could
+> > give me some hints about how such situation should be handled since this
+> > concern DT warnings but also bindings and YAML.
+> > 
+> > In the SoC DT (dtsi), for each IP, there are 2 entries:
+> > 
+> > One for the I2C mode (implemented by the driver i2c/busses/i2c-st.c)
+> >                 i2c@9840000 {
+> >                         compatible = "st,comms-ssc4-i2c";
+> >                         interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
+> >                         reg = <0x9840000 0x110>;
+> >                         clocks = <&clk_s_c0_flexgen CLK_EXT2F_A9>;
+> >                         clock-names = "ssc";
+> >                         clock-frequency = <400000>;
+> >                         pinctrl-names = "default";
+> >                         pinctrl-0 = <&pinctrl_i2c0_default>;
+> >                         #address-cells = <1>;
+> >                         #size-cells = <0>;
+> > 
+> >                         status = "disabled";
+> >                 };
+> > 
+> > One for the SPI mode (implemented by the driver spi/spi-st-ssc4.c)
+> >                 spi@9840000 {
+> >                         compatible = "st,comms-ssc4-spi";
+> >                         reg = <0x9840000 0x110>;
+> >                         interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
+> >                         clocks = <&clk_s_c0_flexgen CLK_EXT2F_A9>;
+> >                         clock-names = "ssc";
+> >                         pinctrl-0 = <&pinctrl_spi0_default>;
+> >                         pinctrl-names = "default";
+> >                         #address-cells = <1>;
+> >                         #size-cells = <0>;
+> > 
+> >                         status = "disabled";
+> >                 };
+> > 
+> > So basically, there are 2 nodes, one for each mode, and enabling one or the
+> > other mode is done within the board DT.
+> > Since the address is the same, this obviously leads to warning during the build
+> > of the DT.
+> > 
+> > arch/arm/boot/dts/stih407-family.dtsi:363.15-376.5: Warning (unique_unit_address): /soc/i2c@9840000: duplicate unit-address (also used in node /soc/spi@9840000)
+> 
+> How about making the compiler look at the status value. So long as
+> only zero or one is enabled, it should not be an issue. If you have
+> two or more nodes enabled for an address, then you want a warning or
+> error.
 
-Die Verwandten meines verstorbenen Vaters wissen nichts von den
-6.500.000,00 US-Dollar (sechs Millionen f=C3=BCnfhunderttausend US-Dollar),=
- die
-mein verstorbener Vater auf die Bank eingezahlt hat und mein verstorbener
-Vater sagte mir heimlich, bevor er starb, dass ich in jedem Land nach einem
-ausl=C3=A4ndischen Partner suchen sollte meiner Wahl, wohin ich diese Gelde=
-r f=C3=BCr
-meine eigenen Zwecke =C3=BCberweise.
+From the compiler point of view it seems this behavior is already
+possible, probably with something like:
+   -Wno-unique_unit_address -Wunique_unit_address_if_enabled
 
-Bitte helfen Sie mir, dieses Geld f=C3=BCr gesch=C3=A4ftliche Zwecke in Ihr=
-em Land
-auf Ihr Konto zu =C3=BCberweisen. Ich habe diese Entscheidung getroffen, we=
-il
-ich viele Dem=C3=BCtigungen von den Verwandten meines verstorbenen Vaters
-erlitten habe. Zur Zeit habe ich Kommunikation mit dem Direktor der Bank,
-bei der mein verstorbener Vater dieses Geld hinterlegt hat. Ich habe dem
-Direktor der Bank die Dringlichkeit erkl=C3=A4rt, sicherzustellen, dass das=
- Geld
-ins Ausland =C3=BCberwiesen wird, damit ich dieses Land zu meiner Sicherhei=
-t
-verlassen kann. Der Direktor der Bank hat mir zugesichert, dass das Geld
-=C3=BCberwiesen wird, sobald ich jemanden vorlege, der den Geldbetrag in me=
-inem
-Namen f=C3=BCr diesen Zweck ehrlich entgegennimmt.
+Rob, is current behavior (checking unique unit address even if node
+is disabled) on purpose or could this be changed to only checking if the
+node is enabled ?
 
-Seien Sie versichert, dass die Bank den Betrag auf Ihr Konto =C3=BCberweist=
- und
-es keine Probleme geben wird. Diese Transaktion ist 100% risikofrei und
-legitim. Ich bin bereit, Ihnen nach erfolgreicher =C3=9Cberweisung dieses G=
-eldes
-auf Ihr Konto 30% der Gesamtsumme als Entsch=C3=A4digung f=C3=BCr Ihren Auf=
-wand
-anzubieten. Sie werden mir auch helfen, 10% an Wohlt=C3=A4tigkeitsorganisat=
-ionen
-und Heime f=C3=BCr mutterlose Babys in Ihrem Land zu spenden.
+Alain
 
-Bitte alles, was ich m=C3=B6chte, ist, dass Sie f=C3=BCr mich als mein ausl=
-=C3=A4ndischer
-Partner auftreten, damit die Bank dieses Geld auf Ihr Konto =C3=BCberweist,
-damit ich in diesem Land leben kann. Bitte, ich brauche Ihre dringende
-Hilfe wegen meines jetzigen Zustands. Mit Ihrer vollen Zustimmung, mit mir
-zu diesem Zweck zusammenzuarbeiten, bekunden Sie bitte Ihr Interesse durch
-eine R=C3=BCckantwort an mich, damit ich Ihnen die notwendigen Informatione=
-n und
-die Details zum weiteren Vorgehen gebe. Ich werde Ihnen 30% des Geldes f=C3=
-=BCr
-Ihre Hilfe anbieten und Hilfestellung, damit umzugehen.
-
-Ihre dringende Antwort wird gesch=C3=A4tzt.
-Mit freundlichen Gr=C3=BC=C3=9Fen
-Koffi Aya
+> 
+>      Andrew
+> 
