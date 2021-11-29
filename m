@@ -2,115 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF4F2461D61
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Nov 2021 19:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 857D9462138
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Nov 2021 20:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349425AbhK2SPO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 29 Nov 2021 13:15:14 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:54720 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349813AbhK2SNN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Nov 2021 13:13:13 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1ATI9bdw085910;
-        Mon, 29 Nov 2021 12:09:37 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1638209377;
-        bh=7BzZum/wSpr+6OJerze3ARCjTNpCFGTq2Yr+iKCYVE8=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=G3U9OzgzLfAEvnAt1pP25EJH9XgDtuxUrXdMCff3ztCsgMYvYKSvtyoRevrqvGUWH
-         t6Rtyz7SXl2lrdayZk2zjMnphy7bsnNFC/ExVgLhdtdZQZTxzBi0fOoVvfY/HLZbmO
-         LtTYbOEWMqQM2VvqDHM45SGDGZtbnHtxacEHZUlA=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1ATI9bNQ113862
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 29 Nov 2021 12:09:37 -0600
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 29
- Nov 2021 12:09:36 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 29 Nov 2021 12:09:36 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1ATI9ZYm037856;
-        Mon, 29 Nov 2021 12:09:36 -0600
-Date:   Mon, 29 Nov 2021 23:39:35 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Rob Herring <robh+dt@kernel.org>
-CC:     Mark Brown <broonie@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH v3 0/3] Add bindings for peripheral-specific SPI
- controller properties
-Message-ID: <20211129180935.nmymboy336hllly7@ti.com>
-References: <20211109181911.2251-1-p.yadav@ti.com>
+        id S1344442AbhK2UBl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 29 Nov 2021 15:01:41 -0500
+Received: from mail-oi1-f170.google.com ([209.85.167.170]:45949 "EHLO
+        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235687AbhK2T7j (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Nov 2021 14:59:39 -0500
+Received: by mail-oi1-f170.google.com with SMTP id 7so36633289oip.12;
+        Mon, 29 Nov 2021 11:56:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2bv3MqtAYFd6aKtve0kHQtlsznvcV7uI6PKWd3pGaDM=;
+        b=X88vgMLAI3oyhQvhaT64JRUvMyHndg57SxwE5FMqckKihmubAmO5KwY/DZde6bTL63
+         Efy8dVhWzA4jJWnyuUuRvPuv3xLbBwznxbVUd5914elZiL8dTOfAj0YwVmuJQXDl8gVM
+         4swUONxD5xok4sGpf/ueZeFO2BxIU0PctTiMvRzbvkojvU1lxpjlAOWBMahJ3eJgOPQB
+         O1d75iwZ9G76c0bH0jnBlNSopX0UfxJ4P9/Fx8crtq3qHttKbQnyJVZCst6a5aC9jgbM
+         l78k1QMyj8w2kM7guR2FN1cWIpkyO55e8fRwuswfjE5S4gDB6au+zVT/hG8W1evSfrVi
+         H+Ag==
+X-Gm-Message-State: AOAM5332l3lfz2LIB6eyhzbp/IpUfgJ+4T2pVbpMWhOofXE/buJ6o/Tf
+        MrCwflx/iqMXowku97cYsgWr7SU28A==
+X-Google-Smtp-Source: ABdhPJzZTkmKa7Ovd7T72fND6EsSsej/FmXr489BG/R05JxgA09sAstD4jrlNB2n0QXW7mdfgksy5g==
+X-Received: by 2002:aca:4307:: with SMTP id q7mr156403oia.3.1638215780450;
+        Mon, 29 Nov 2021 11:56:20 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id w29sm2522578ooe.25.2021.11.29.11.56.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 11:56:19 -0800 (PST)
+Received: (nullmailer pid 502661 invoked by uid 1000);
+        Mon, 29 Nov 2021 19:56:18 -0000
+Date:   Mon, 29 Nov 2021 13:56:18 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     conor.dooley@microchip.com
+Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lewis.hanly@microchip.com,
+        daire.mcnamara@microchip.com, atish.patra@wdc.com,
+        ivan.griffin@microchip.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        krzysztof.kozlowski@canonical.com, geert@linux-m68k.org,
+        bin.meng@windriver.com
+Subject: Re: [PATCH 02/13] dt-bindings: interrupt-controller: add defines for
+ mpfs-plic
+Message-ID: <YaUwYkHHhTsPkAQh@robh.at.kernel.org>
+References: <20211108150554.4457-1-conor.dooley@microchip.com>
+ <20211108150554.4457-3-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211109181911.2251-1-p.yadav@ti.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <20211108150554.4457-3-conor.dooley@microchip.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rob,
+On Mon, Nov 08, 2021 at 03:05:43PM +0000, conor.dooley@microchip.com wrote:
+> From: Ivan Griffin <ivan.griffin@microchip.com>
+> 
+> Add device tree bindings for the Microchip Polarfire Soc interrupt
+> controller
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Signed-off-by: Ivan Griffin <ivan.griffin@microchip.com>
+> ---
+>  .../microchip,mpfs-plic.h                     | 199 ++++++++++++++++++
+>  1 file changed, 199 insertions(+)
+>  create mode 100644 include/dt-bindings/interrupt-controller/microchip,mpfs-plic.h
 
-On 09/11/21 11:49PM, Pratyush Yadav wrote:
-> Hi,
-> 
-> This series adds bindings for peripheral-specific SPI controller properties.
-> See patch 1 for more info on the motivations behind this.
-> 
-> This is the best approach that I came up with with my limited knowledge
-> of JSON schema. It has some limitations that are mentioned in patch 1. I
-> don't know of any better ways to model this. Suggestions are welcome!
+Notice how there are not SoC interrupt defines in this directory. That's 
+because we don't do defines for them. The 'rule' is only defines for 
+made up numbers which are not in a reference manual.
 
-Do you plan to take this series through your tree or should I poke Mark 
-about it?
-
-> 
-> Changes in v3:
-> - s/slave/peripheral/g
-> - Drop the | on description.
-> - Drop the compatible property.
-> 
-> Changes in v2:
-> - Move other subnode properties listed in spi-controller.yaml to
->   spi-slave-props.yaml
-> - Move the Cadence controller-specific properties out of
->   spi-slave-props.yaml. They will be added in a separate file.
-> - Add a reference to spi-slave-props.yaml in spi-controller.yaml.
-> - Update description.
-> 
-> Pratyush Yadav (3):
->   spi: dt-bindings: add schema listing peripheral-specific properties
->   spi: dt-bindings: cdns,qspi-nor: Move peripheral-specific properties
->     out
->   dt-bindings: mtd: spi-nor: Add a reference to
->     spi-peripheral-props.yaml
-> 
->  .../bindings/mtd/jedec,spi-nor.yaml           |  3 +-
->  .../spi/cdns,qspi-nor-peripheral-props.yaml   | 42 +++++++++
->  .../bindings/spi/cdns,qspi-nor.yaml           | 33 -------
->  .../bindings/spi/spi-controller.yaml          | 69 +-------------
->  .../bindings/spi/spi-peripheral-props.yaml    | 89 +++++++++++++++++++
->  5 files changed, 135 insertions(+), 101 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/spi/cdns,qspi-nor-peripheral-props.yaml
->  create mode 100644 Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> 
-> --
-> 2.33.1.835.ge9e5ba39a7
-> 
-
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+Rob
