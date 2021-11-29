@@ -2,177 +2,140 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA464610C4
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Nov 2021 10:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B06564610DE
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Nov 2021 10:11:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240645AbhK2JHd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 29 Nov 2021 04:07:33 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:41464
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240718AbhK2JFd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Nov 2021 04:05:33 -0500
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 383E540A00
-        for <linux-spi@vger.kernel.org>; Mon, 29 Nov 2021 09:02:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638176535;
-        bh=+klvKK+faRKLaDg9Hg7NVSa08prt4fM01iOQLi+L9zY=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=CHj5nOh2t5RO8o3EeLZ2LM0pL+xjdKU3jI1GFFDguDB5hWDxPH9dRea7jlKXStg9y
-         8YPkytFRM1be7LocQtunzqpyxIdX7cO7BoUd0qPN9XFlv4hZvAoZ8/cVPL8BjNmAzQ
-         PdgmxtGxhDrXeSFCPN+8QBCGbKzwOyutZnFedmKIQ9QylDSdDtAufGQYQcC3eam2S2
-         GSPkZ8BDCdJU347poD8kGW3QS+1lNpfTF5UexNErU9un0KmvvVsk7yCDW6EEZdCryY
-         HSqZgC+ZBPeyFvJff8EsVbfJ6XTzC5xM53kJq/Qi423dReHqGwsvj5qjl4Hh1uiKaT
-         fQEDJgZ8VLjZg==
-Received: by mail-lj1-f199.google.com with SMTP id 83-20020a2e0556000000b00218db3260bdso6539399ljf.9
-        for <linux-spi@vger.kernel.org>; Mon, 29 Nov 2021 01:02:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+klvKK+faRKLaDg9Hg7NVSa08prt4fM01iOQLi+L9zY=;
-        b=mC2AKYNbKf/0g5jqvi9cOA7WrQOakvNtCFWP0lHAf9hPwMwM60ZbxxWa4pteTIecIL
-         C/ivN15Chv/rbVVVV5giujq7viPyBgwK8br0DE6E0MaebbCDJccq/liEx04oA/Kf6ZiM
-         97/hk29skDbeSXT/2HMOV0RMTpxvwn2PuzXSvh3282ryrmFDBaATTItXXfuEmvzBiR78
-         KT1n9jAG0ATIIu8+0qCmL1d7dQzpQVWJZyAG/MHHVOPCdOvWF3gYIhW+6pOVX8BHdJYm
-         z1gRmPWNWTfUHA38PxUqz3Lm/0Q9831hO+VoTRNwmzoyStpjk1Vw1Zyk0lURx1Spy40N
-         Rwpg==
-X-Gm-Message-State: AOAM531y1QJIxtpPsrfqJNA+sOf2IXaGdeZZ3WCZR5Wl59AOTDom4ows
-        gD7iorK2G8K4UgPXWuMCz6XxkMoldO1wEbflUGUxdpAcCvDgpnOHfaDXvODQkLWoUI3iJguzDkv
-        rFXO5UUJOrj7Jt/m8Is0KOqYMKX1kcJjz9OoXFQ==
-X-Received: by 2002:a2e:9c8:: with SMTP id 191mr51057820ljj.262.1638176533964;
-        Mon, 29 Nov 2021 01:02:13 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxfGeBl6B/J9dcWZ1YaA7JAygGQ1hd6YaFyoQjt6umkddkhFy1DycoprioX3nIn6ZG+Rj4h3Q==
-X-Received: by 2002:a2e:9c8:: with SMTP id 191mr51057790ljj.262.1638176533695;
-        Mon, 29 Nov 2021 01:02:13 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id f24sm1266012lfe.247.2021.11.29.01.02.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 01:02:13 -0800 (PST)
-Message-ID: <1b55a6fb-1a23-1f50-9025-1b901ede70a8@canonical.com>
-Date:   Mon, 29 Nov 2021 10:02:12 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 0/8] soc: samsung: Add USIv2 driver
+        id S243348AbhK2JOv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 29 Nov 2021 04:14:51 -0500
+Received: from mail-mw2nam12on2046.outbound.protection.outlook.com ([40.107.244.46]:18784
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230118AbhK2JMu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 29 Nov 2021 04:12:50 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T44At1QN2MSZKWfcSU+kBMyVJ5kwL0TQy+1EBE5kfirciHLpo4fiEbFLU3WHgh5jB7Bz5rtXQxnIPO3o9o4OHURap9h2Hk9vJXiskIHgVypk5HnZwi13A4aBXVEo3tv7Q9mB63A7iZIyvWjRiTXN8coUbYniVeDr88V0B3xqt3jQPiEJkqmGFX7V39oJ6BDnUcuyrbXHISpMfwHIzETJj8YikXv6Tny68lIcOrR4a4QofPq8TTNrv6q9M+z1j0r8l7aw3TbsMIYjYoJO6E5Fc1gwOQolWLk4Jox+Vz+9hOwoC23nSvowGHNIjHM8cO8LSdnKdLo1tsAOk8zgTcozQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AYs/4+rkMd9ixBLA4OTBdbkVgFksyExD/COKhpPVagU=;
+ b=ANyjVFUqgRplZiaZicijDAuLNVTE4NlhTsQhM8KsxUJAP2smm65s2oj4uSAerIRWhJbLMWMkMyRobFbWbYa7qHz/Sqv7cFkbg/wuOxePp7GJmRpWXMnhgrcV6RqLRWka0fX2bexkp+ZL3pl7rbiAil9dbolK03zCofT4nqNKaCzBe2WAXZlojX7gzA+bCsShIKQRvW1wHHZPD0M1LsnSuaU81CJEqRHQ1Es/Nhxv2JJdmgR5GbskRcOtlK9J1iB4i27lOIM0wvNsyI8myxG/h2ImIdty1nCfBR68g50DwW1VhO4tqM7/21MYTKr/VtAa68pzwB1IoBujS+DpJPCflA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AYs/4+rkMd9ixBLA4OTBdbkVgFksyExD/COKhpPVagU=;
+ b=R0Ayp6RMqmFH36Q/HJrZTQx8N/tLZQp1kDXRucE2LSmnhlMMCuYU/10aAEmmiJW12Sr0z3KiU5Q74x1md2yK44sDlHa7zGXrwmUQiGcNTvmwbFCrqzeRgQEjRyduOLAKdVmvTtT/gcRmQhomGjGi7Ue2+ud5/ProbSDx0d/IWRqZjx9OMwZ3JobbVIm8GDDgeQWLpx30cZbJliHRhNor3tAW3UrmNY2AFfxffSU2wpDlbe3NDwCeOiqyoM29PdrhoMd6HeRYVm7N2p6DLiOq+xWV9sL/gsLj+Xli5tDG0bNJtAbP7v0vsZkUCtK/4uEzdDKHVzf0uwbvNCh+iN9lgw==
+Received: from BN6PR12MB1249.namprd12.prod.outlook.com (2603:10b6:404:1d::7)
+ by BN8PR12MB2946.namprd12.prod.outlook.com (2603:10b6:408:9d::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.20; Mon, 29 Nov
+ 2021 09:09:31 +0000
+Received: from BN6PR12MB1249.namprd12.prod.outlook.com
+ ([fe80::8cd5:b31d:e3e3:d28e]) by BN6PR12MB1249.namprd12.prod.outlook.com
+ ([fe80::8cd5:b31d:e3e3:d28e%3]) with mapi id 15.20.4734.024; Mon, 29 Nov 2021
+ 09:09:31 +0000
+From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 2/2] spi: tegra210-quad: add acpi support
+Thread-Topic: [PATCH 2/2] spi: tegra210-quad: add acpi support
+Thread-Index: AQHX4eK2PmZ2lQM7W06Rx2eVyKwOx6wUNK6AgAYJLMA=
+Date:   Mon, 29 Nov 2021 09:09:30 +0000
+Message-ID: <BN6PR12MB124973BF5CBB4AB35CC59B8AC3669@BN6PR12MB1249.namprd12.prod.outlook.com>
+References: <1637834152-32093-1-git-send-email-kyarlagadda@nvidia.com>
+ <1637834152-32093-2-git-send-email-kyarlagadda@nvidia.com>
+ <YZ+ImY1LrvB5a5iF@sirena.org.uk>
+In-Reply-To: <YZ+ImY1LrvB5a5iF@sirena.org.uk>
+Accept-Language: en-IN, en-US
 Content-Language: en-US
-To:     David Virag <virag.david003@gmail.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-References: <20211127223253.19098-1-semen.protsenko@linaro.org>
- <b9807fcc69713fb016838958a3df1c4e54309fc4.camel@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <b9807fcc69713fb016838958a3df1c4e54309fc4.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d834d946-1564-4ca0-fa92-08d9b317f42f
+x-ms-traffictypediagnostic: BN8PR12MB2946:
+x-microsoft-antispam-prvs: <BN8PR12MB2946112898E744409072C698C3669@BN8PR12MB2946.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KBRMJRna8iPiAdJN1qFDlr54vyPpGj5z5GvjTPvXFIre/NJcBrlSbM96XpWsowqou7UwRPyZXNOIVkOrgcUS0bw3XDjAbjf2s9tf6bC1b9EYPV4ifvDXPaMO61vx5jNPJLn8ElX9Pkv70Bqvu9im9PDZciVKngznMduGEvt1l6IclMROnM893djl6r4OtxRIwnyV+Py2SkXhJibmy1BfQyb5rNpb4WoZr/ZfSdoQ6K7YDhOfFruo1bpWoAOphu8L137RNhHLvv60nLpCL1LI5yJzVLRAvAq8p40dOz/MADM2utSc2Fz6yBLT0PJs9mxT5IwianoXjic089WEzsolAN1UuSp2+4yo2Wj3uxxTD/Qkxr1T3gpnAHoEDNDgO2PAwV4hmZbM/POUZG9Wn5Iuu/XMwCphtxtw0oj0/o1YeAk5DpabaQSXxL1It1cFLXTnVDElceFHUHJKL8furQqSstfVZ/HF6Zchzh/EW249m/0gzghaTRcpLpQp5LFo5V0feDE46wcUP4Hw58+u/AZvDXRaRMhY4dYsss9lSYp7dk1BmxApN9EsGlsqN5H1zKFb2Rf4FPLySIFzAR/s80lTdvXkpn0GuPNoI969igbOx2RBKSxfROCWmeZSh4r9n2GaSDHdSENtntZsjEW/tvRrkFEjRhsaV1tlaM0bidXqzckTE5cFVmNDFF5kWaEuSd/INdm5TUifm2viHY1UEATFpA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR12MB1249.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(54906003)(71200400001)(8936002)(66446008)(316002)(8676002)(64756008)(66556008)(66946007)(66476007)(6916009)(7696005)(86362001)(76116006)(52536014)(33656002)(508600001)(2906002)(83380400001)(9686003)(4744005)(26005)(38100700002)(55016003)(4326008)(38070700005)(55236004)(122000001)(53546011)(5660300002)(6506007)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wjdlKShY3hKee0JZpSy6fnkf5OE4lN4iYoIXJzHKHv6Hndifp5SIfhVVYaCQ?=
+ =?us-ascii?Q?3wQ4axmTtHZVie5PGmFjUf+Hr+8qzolcQ+KObYk9IOr+WQcWfEso7qKZI1m8?=
+ =?us-ascii?Q?RlKARnjzW8U+rmiIwipc7vYK62jmh/po9GBUl6DxZL9JM9Uy/ligRUffNUOs?=
+ =?us-ascii?Q?bm4UlvuOlVp1ZLlYo2tTucbSTnD3PAbaLwvhH29gzdkPI9JRvuU0uEiMy8ow?=
+ =?us-ascii?Q?RoaVAhSW73OU6CEap/tPRFWcw3Pvc45qumWtGZSP04zl6Ugao6oUYatYah6Y?=
+ =?us-ascii?Q?nK2KVCrGbKbk2Rw7o3Si1RIcG91pJCQKG95vRt40cbh8Jupv9jZ5SVv3WYgx?=
+ =?us-ascii?Q?2cZ3yOy31KLj/wQSqY5ewbYUBxUjCZNHNgJMcogpEDvt999+DSfJs46Pk6Yj?=
+ =?us-ascii?Q?mkt3BpQnrSGS03drowmmkt5gosJFn26+2Er8WbI5deFEuKp2zRpGjSYAtyTQ?=
+ =?us-ascii?Q?6Kc56rfoP2zeGEFs8lcDEj9l+G2rJOkF+x6ODdSxN30z5b4+KM+OC3VfUfuu?=
+ =?us-ascii?Q?R6gCNcQNYypPy+CTCuHxBR3rb5KcYuG7DC5mqD1P8NZcJSEbcBqa3p1hkOom?=
+ =?us-ascii?Q?dcQ729r0chKzKZ/nEIBPTCbSKUTWie08NPDzuDnH0XaggxCEuhEEFG/IgIrY?=
+ =?us-ascii?Q?qdc3ehiQiClEMVCmkeNtCMvM8L1Dbp6TKn9q/1Y18AP9+KjrQEcRYFOe8Uva?=
+ =?us-ascii?Q?im85MdnzAEbunnqBS2X33UbhNHms5gGWudKFHqFKfpXLyC0vNOfXLLN1gNVT?=
+ =?us-ascii?Q?j5tKUuyQFiEom/Gh0Fg/ZsCrXnlOZKi1b9YDEJKRaok4JpdFqnrd7QpyQRcf?=
+ =?us-ascii?Q?WA7Fzm6lPuPvPptXmMSqFmK+MDyTnysriBo3ptOMmGtpbQsLVl/JWqR+2pdv?=
+ =?us-ascii?Q?dqA7Qespyc8oD06f3b2IgsKQJ3TAxJLiSWrYEGdGyuOolwEAyRWDGEjFI5U0?=
+ =?us-ascii?Q?EzcvVnHrXJomh4RUs3PwRs0TTt9/px43p0Vp+WdSm9swQNbJ0LwPNKiroVLH?=
+ =?us-ascii?Q?FCJeTMx8j8Tb4UF7WPU290UfG8y+YMjUXFbbRItfVY0lqm4SjXFxXZlgYktF?=
+ =?us-ascii?Q?z+RIbF4oF00iLG67I7O5utPlYQ5FxtT0gxHj4iUb55wLuoJkZA6EyBGYplSP?=
+ =?us-ascii?Q?RnOl+x/PI79eZCi70m8tSaUZtlMgDnsh+lP+lRppFJPeFSAD7GIgheyDG7BA?=
+ =?us-ascii?Q?oPjv4RqtC+W/jdNG7qMtT5QPASd4baQfpQp94MicdcBhY7USVBuzVjApyJ17?=
+ =?us-ascii?Q?XmdvUSE0A/mV4J/dP6jG8PqnmmefD7NO4rcN9vvjvAyr91o61gacYkSae5eh?=
+ =?us-ascii?Q?I3Qz0MP6R6moaghgnRr16maea4VwSB0o7nIbhBmZ3wdZhy1YgvVgB+pDanZb?=
+ =?us-ascii?Q?lfjW3MEjWxS5yDxouEM+4zAuWmzdZssd6iw3V6LXiRUktkkyoClx/nO6xYwa?=
+ =?us-ascii?Q?WbE26AhinXMUum0Odz5i6dbV+n3LfX1mKlNFEnTVFbxCpnUdJ38isVvbxRcq?=
+ =?us-ascii?Q?sCkf2YK7cZz6Ccigj/rb8u2xfByy4jBBoHWTrwADugdw21ijnbIDaXRr6e8e?=
+ =?us-ascii?Q?l+IxB8464kUZgGTH1MgHoLftJOXsgbioTr+EOa2A6ra/WqrpDwvAYxfSAh5/?=
+ =?us-ascii?Q?bUY+SJaS0Xoux8PlpMoj11g=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR12MB1249.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d834d946-1564-4ca0-fa92-08d9b317f42f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2021 09:09:31.0801
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Ug/LbrKkwqJSxMXvR5s9x4xFP7F60Uoo0NDErJgkYeqEwdsmNX0bI/hJ+wV8wi/VnhLwdauISC/Oz7dTaPS+yw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB2946
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 28/11/2021 04:15, David Virag wrote:
-> On Sun, 2021-11-28 at 00:32 +0200, Sam Protsenko wrote:
->> USIv2 IP-core provides selectable serial protocol (UART, SPI or
->> High-Speed I2C); only one can be chosen at a time. This series
->> implements USIv2 driver, which allows one to select particular USI
->> function in device tree, and also performs USI block initialization.
->>
->> With that driver implemented, it's not needed to do USI
->> initialization
->> in protocol drivers anymore, so that code is removed from the serial
->> driver.
->>
-> 
-> I think the downstream way of doing this (USI node reg being on the
-> SW_CONF register itself rather than an offset from uart/i2c/spi, the
-> USI driver only controlling the SW_CONF, and the uart/i2c/spi drivers
-> controlling their USI_CON and USI_OPTION regs) is cleaner, better, and
-> easier to adapt to USIv1 too.
-> 
-> For example: I'm sure this is the case on USIv2 devices too, but on
-> Exynos7885, different devices have USI modes configured differently.
-> For example a Samsung Galaxy A8 (2018) has all the USI blocks
-> configured as SPI while a Samsung Galaxy M20 has the first USI
-> configured as dual HSI2C, the second as HSI2C on the first 2 pins and
-> the third as HSI2C on the last 2 pins. With this way of doing
-> everything on USIv2 we'd need 3 disabled USIv2 nodes in the SoC DTSI
-> for one USI block, each for every protocol the USI block can do, all
-> having a single child for their protocol and each referencing the same
-> sysreg (not even sure if that's even supported). Then the board DTS
-> could enable the USI node it needs.
-
-It's not supported (one cannot have three same nodes with same unit
-addresses), so this would be solved by dropping out unused interfaces,
-commenting them out or storing everything under one USI:
-
-usi@0x1abcdef0 {
-  serial@.... {
-    status = "okay";
-  }
-
-  i2c@.... {
-    status = "disabled";
-  }
-
-  spi@.... {
-    status = "disabled";
-  }
-}
-
-> 
-> With the downstream way we could have just one USI node and we could
-> add the 3 protocols it can do disabled as seperate or child nodes. This
-> way the board DTS only needs to set the appropriate mode setting and
-> enable the protocol it needs. I'd say much better than having 3 USI
-> nodes for the same USI block.
-
-Then however you need to handle probe ordering and possible probe deferrals.
-
-> 
-> Also this way is pretty USIv2 centric. Adding USIv1 support to this
-> driver is difficult this way because of the the lack of USI_CON and
-> USI_OPTION registers as a whole (so having nowhere to actually set the
-> reg of the USI node to, as the only thing USIv1 has is the SW_CONF
-> register). 
-
-How is it difficult? Not having a register is easy - noop on given platform.
-
-> In my opinion being able to use the same driver and same
-> device tree layout for USIv1 and USIv2 is a definite plus
-> 
-> The only real drawback of that way is having to add code for USIv2
-> inside the UART, HSI2C, and SPI drivers but in my opinion the benefits
-> overweigh the drawbacks greatly. We could even make the uart/spi/hsi2c
-> drivers call a helper function in the USI driver to set their USI_CON
-> and USI_OPTION registers up so that code would be shared and not
-> duplicated. Wether this patch gets applied like this is not my choice
-> though, I'll let the people responsible decide
-> :-)
-> 
-> Anyways, soon enough I can write an USIv1 driver after I submit all the
-> 7885 stuff I'm working on currently. If you want to, you can add USIv2
-> support to that driver, or if an USIv2 driver is already in upstream at
-> that point, if it is written in the downstream way I can add v1 support
-> to that, or if it's like this I'll have to make a whole seperate driver
-> with a whole seperate DT structure.
-> 
-> Best regards,
-> David
-> 
-
-
-Best regards,
-Krzysztof
+> -----Original Message-----
+> From: Mark Brown <broonie@kernel.org>
+> Sent: 25 November 2021 18:29
+> To: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+> Cc: Laxman Dewangan <ldewangan@nvidia.com>; Thierry Reding
+> <thierry.reding@gmail.com>; Jonathan Hunter <jonathanh@nvidia.com>;
+> Sowjanya Komatineni <skomatineni@nvidia.com>; Philipp Zabel
+> <p.zabel@pengutronix.de>; linux-tegra@vger.kernel.org; linux-
+> spi@vger.kernel.org; linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH 2/2] spi: tegra210-quad: add acpi support
+>=20
+> On Thu, Nov 25, 2021 at 03:25:52PM +0530, Krishna Yarlagadda wrote:
+>=20
+> > +#ifdef CONFIG_ACPI
+> > +	if (ACPI_FAILURE(acpi_evaluate_object(ACPI_HANDLE(tqspi->dev),
+> > +					      "_RST", NULL, NULL)))
+> > +		dev_err(tqspi->dev, "failed to reset device\n"); #endif
+>=20
+> What happens when this runs on a DT system?
+For a DT system reset handle would be present and this code will not run
+-KY
