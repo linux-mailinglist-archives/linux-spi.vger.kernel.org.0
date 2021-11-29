@@ -2,102 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D7B461040
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Nov 2021 09:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DDA46106E
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Nov 2021 09:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243138AbhK2Iid (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 29 Nov 2021 03:38:33 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:58386
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243591AbhK2Igc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Nov 2021 03:36:32 -0500
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        id S244324AbhK2Isp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 29 Nov 2021 03:48:45 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58096 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349934AbhK2Iql (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Nov 2021 03:46:41 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 73F283F1A9
-        for <linux-spi@vger.kernel.org>; Mon, 29 Nov 2021 08:33:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638174790;
-        bh=aCARnuWDBDtCC7T3FRwThc50ZrhDk+owTuPeR9h19HA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=k+yWRq7z6N+utbgCZ7ulmbFvqsY8Y2hN7hLe+yv85KCQOcyDYnrSBblHYVoRIdWlX
-         SThoS/yQrgthsoHyCYrn+vRP5R0h0Nj4TWIc4k18XRwCWMqqW54Rb3OMn7dVF2dNaG
-         bRSfzf/30AkBpSeGk05dU49OvMV/IcGHqwjICpK1hBafP43YBu0b7vpMAK+9VaFxkA
-         6n4VjKVp7hESZScZHvc8IotV9cTAAUrPr+wHRGpMSk7r6TYzUNk0xpHiured/JmHH3
-         xXc/3EoACu11hIuVFYQFdG2SkMJRJ69XkZ2O7bbNh5L1+nNzjgLLsTes+f+c6O45AJ
-         yNQsRrzEjUw9w==
-Received: by mail-lj1-f198.google.com with SMTP id o15-20020a2e90cf000000b00218dfebebdeso6507947ljg.13
-        for <linux-spi@vger.kernel.org>; Mon, 29 Nov 2021 00:33:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=aCARnuWDBDtCC7T3FRwThc50ZrhDk+owTuPeR9h19HA=;
-        b=fcphUg/ksS6Uo8B+LtqSYkTfcuGDKK/IEwCQ8ub9uc4idSOCllgZLzcChJ2/sJlCcT
-         hjbRpZfKlVvj/TboI4OFmKhZSHVq0rUu4qDQpfinLG6O2f3mL0jKIGWT/+mg01tNW7TK
-         tEprFcVO7oZLs3TGDiNEsYXa6o3ZgXde/kk5WEh36izmeZGxlzMSAny32iAyaUwtWk0R
-         dj76SGVPEPFkmZ5C2got2NGXP9YYPckLujHQoj3kD5++HcseJ6bTDGXJtMm16FHVLONT
-         E/4TaFnoX1X59K3LNfiXVUFGyKhjCy67veERRuLeLYop1dfa+xBii3OhUrHE+IZzupRl
-         qo3w==
-X-Gm-Message-State: AOAM532JglwuZGyD8PK0AjqUVgfm+dFbSKq2ZThVntdoAp4X+YVx37Aj
-        YtPP5Gip1hOymOgNFcuIXGX0lF5eHaa/AtKn/nxuTKlyEB0Zyj9N+u2PsodayoW/vLIoiJhC9P/
-        lCzWLovB8YIx5kHGvzJ13lEiQ/V9Ozm4sH1YSFg==
-X-Received: by 2002:a2e:b907:: with SMTP id b7mr47798051ljb.214.1638174789568;
-        Mon, 29 Nov 2021 00:33:09 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx+HqYaIWrUgOtsIwWv3NVax4MJeBvRWzGCQC326fhRonBcNHs6JMwj77zI5nkCDsHZVk4s+w==
-X-Received: by 2002:a2e:b907:: with SMTP id b7mr47798035ljb.214.1638174789408;
-        Mon, 29 Nov 2021 00:33:09 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id u2sm1268765lfi.108.2021.11.29.00.33.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 00:33:08 -0800 (PST)
-Message-ID: <b757dcc7-7262-1f17-1889-6159015f2dc6@canonical.com>
-Date:   Mon, 29 Nov 2021 09:33:07 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id D04B5B80DFF;
+        Mon, 29 Nov 2021 08:43:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADFEDC004E1;
+        Mon, 29 Nov 2021 08:43:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638175400;
+        bh=OixLDAXpSBxsXxksHXG7qO5MHN4k5qolbw7dRTlvO6U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ox5RYRKJswmVjrm6oqkS0sNRRi/xiLhfXeHIViF+l+yylNI1L/Iavs+9S7BfiOU6S
+         Sp1/BEEbT2imRngMlMTbMVrmZcXX2yY6Ut/i2Vk6gywu9+ccQQqrz1ELWH6rkmaSzt
+         anqOT7HJqDGFVQ2r+WZNwYp/IrVYiz44wmtFD9KGNIkr0avPpt+iiSf/KriygNN5Fd
+         uJM5h579F8hidbkad4Bcw8TPt3p75R7bBQ7mkGha5RlrN4sSjtFczi3JmIyRqwNTzD
+         aW6VdapvsdSqVm4r1gwHG1GdTcjjQwqibi9yxA1XJBVE9IEOaTcLy3KYugOB7p1Yzl
+         kxBUm4r6X8niQ==
+Date:   Mon, 29 Nov 2021 09:43:17 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     robh+dt@kernel.org, aisheng.dong@nxp.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, ulf.hansson@linaro.org, broonie@kernel.org,
+        linux@roeck-us.net, wim@linux-watchdog.org, linux@rempel-privat.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Jacky Bai <ping.bai@nxp.com>,
+        Rob Herring <robh@kernel.org>, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V6 1/7] dt-bindings: i2c: imx-lpi2c: Add imx8ulp
+ compatible string
+Message-ID: <YaSSpd9yENnPyxzp@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
+        aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        ulf.hansson@linaro.org, broonie@kernel.org, linux@roeck-us.net,
+        wim@linux-watchdog.org, linux@rempel-privat.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Jacky Bai <ping.bai@nxp.com>,
+        Rob Herring <robh@kernel.org>, Peng Fan <peng.fan@nxp.com>
+References: <20211126074002.1535696-1-peng.fan@oss.nxp.com>
+ <20211126074002.1535696-2-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 2/8] dt-bindings: soc: samsung: Add Exynos USIv2 bindings
- doc
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-References: <20211127223253.19098-1-semen.protsenko@linaro.org>
- <20211127223253.19098-3-semen.protsenko@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211127223253.19098-3-semen.protsenko@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4iqRmJHmds4/+yS2"
+Content-Disposition: inline
+In-Reply-To: <20211126074002.1535696-2-peng.fan@oss.nxp.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 27/11/2021 23:32, Sam Protsenko wrote:
-> Document USIv2 IP-core bindings.
-> 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
->  .../bindings/soc/samsung/exynos-usi-v2.yaml   | 124 ++++++++++++++++++
->  1 file changed, 124 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/samsung/exynos-usi-v2.yaml
-> 
 
-I propose to squash it with patch #1.
+--4iqRmJHmds4/+yS2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Rest looks good to me.
+On Fri, Nov 26, 2021 at 03:39:56PM +0800, Peng Fan (OSS) wrote:
+> From: Jacky Bai <ping.bai@nxp.com>
+>=20
+> Add the compatible for i.MX8ULP.
+>=20
+> Reviewed-by: Dong Aisheng <aisheng.dong@nxp.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+
+Applied to for-next, thanks!
 
 
-Best regards,
-Krzysztof
+--4iqRmJHmds4/+yS2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGkkqUACgkQFA3kzBSg
+KbbT3RAAikYPcjsi+jX0pSwthDtUkz0JCgBtIprTRsoQxHHMn/3MmgtvC8q3HKCu
+5C+u6I2hIZ6Fvi0rt1rH9MCvQzsE8DqQkKI58XCrNO4AbjVhwZbZRSkEsYYCm0ID
+Pqj+rkhRKtRHB9XIuuIts7F1UbmztpvLdV0EKC4ItyBzIYSRNkrbRL3zbXKyXs5U
++j6HhIL1PjmbRx1+iUX6yfa9Iz9hh41DCEYvHHIDik14VOjQiO7bUswR+mvOX97W
+k0kaulmMlQhok4sLgc2vltz2IucoWBS2jZv/OGXwXCW4X4N0Z3J3ML11JxWkY7pB
+3yhnvEnLrDoKMCMyNmXyCEtTDgDfspUX++eN/4vo3qcr7iFFUfTfOiokyJ/w/oPK
+SpdDo5IVToA8edoyDWN+NJsC0LjeGZkPVEr07xcsax9xlx5ARDGEZiYzX+Lq70Cp
+Ivq0IDQdEjEHgvvwAMUg7ZIozp9k1zB7gpqLBvF8p0liktIWVBKy5RI2fuuGlE5y
+ZREl2BW4GN3utcpER/2eB+pAdEicJMWFa80k2DJSSeWF8miB3qLMS2lM4Ms5gQix
+aowgCti5aF2oL5vvaCZoVxx3sqwKPEbAad+O2JbGpT3KH8Y+hKbx6257gA9gmEsc
+y2SJ8FbCcyY5InCbHvC8+TZ/LqORBgdaDnG/td7tYSuDoMW05JQ=
+=eonB
+-----END PGP SIGNATURE-----
+
+--4iqRmJHmds4/+yS2--
