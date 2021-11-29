@@ -2,89 +2,158 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA7D461C19
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Nov 2021 17:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E26A461CD9
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Nov 2021 18:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345997AbhK2QvU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 29 Nov 2021 11:51:20 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44784 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346054AbhK2QtT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Nov 2021 11:49:19 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1349265AbhK2RlT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 29 Nov 2021 12:41:19 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:35994
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349375AbhK2RjT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Nov 2021 12:39:19 -0500
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC2C2615B4;
-        Mon, 29 Nov 2021 16:46:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52AB5C53FAD;
-        Mon, 29 Nov 2021 16:45:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638204361;
-        bh=blHCuFSgnzoonBNL41NypLd/Bi9PMrGDZmo3EyI0HK4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=nvJwEl1kcTnyplO4R2LB8soCnO+uiVFpq2RoGIFriNAun5nipEZnQ1b8TMcCQtzYD
-         fo3tvXhD/QfsCTE23Rsh2LBxYvQHeLfIWsTJ2UhSvfuNkEVsNa5dq6a4w6etnJ/otj
-         tENadgrzxp2hPQw1j9Cun8WlCKjJoVTLUBZyi8iD62b0ceTwH48Ifz3ZRE6wAtG4jL
-         FqlPck9agpfn5q3gFnjQcCQnxjDWaNfVIO8+2C5fx/YdRMCENQi/SEB273ZcmmjLCT
-         H84h2sqj8sTSgu/IDq9ZEmM5KqCY5aHXU4m0wJbwyOFpRVjO7VD0khoD5WV8MVHdCT
-         osswrD9e2EjeQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Jonathan Cameron <jic23@cam.ac.uk>
-In-Reply-To: <20211123192723.44537-1-andriy.shevchenko@linux.intel.com>
-References: <20211123192723.44537-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/3] ARM: pxa/lubbock: Replace custom ->cs_control() by GPIO lookup table
-Message-Id: <163820435904.1716922.8146043021583191938.b4-ty@kernel.org>
-Date:   Mon, 29 Nov 2021 16:45:59 +0000
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 2AD913F1B2
+        for <linux-spi@vger.kernel.org>; Mon, 29 Nov 2021 17:35:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1638207354;
+        bh=iK3riauy7r4LiWngeJOokJxhZZPLu5etYNKqwE1epw0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=LS2LaSBCKz4bkvVqvJ8ua7GA5+5R6U4AFL6HSLOeIRXkn7OM5VZXwB+hg0HpFPqQT
+         Gw3XUSBBJ83GLJqlwtXFZzKGA6+eFRLuilhAQdoYKacUNzfa0lHl1joOvMeiB/J1ce
+         PbCLo6nhr0TwjNcyLwydZovdN8vrcAFPBVXBhukajvFwH21N8LK9hyVmSWiYnAliNq
+         tRE1JeRx0gb2o+6lQlI4VKlVCNYjoGZBWb4yEhPTEdzBxQbrGK2Hzn46ogluwDRDS6
+         qFYTraome7P99+Fw5NVX9U9nfv1aRGOBR88vNyxC7WFwfmXdPWM28TVn2E2DTGKlxH
+         f/9FgDSsluHbA==
+Received: by mail-lf1-f70.google.com with SMTP id 24-20020ac25f58000000b0041799ebf529so6343198lfz.1
+        for <linux-spi@vger.kernel.org>; Mon, 29 Nov 2021 09:35:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iK3riauy7r4LiWngeJOokJxhZZPLu5etYNKqwE1epw0=;
+        b=RbYl4zZ8b5pmXbRHBhNzggO8m3rFxaCfsLnXjC3PDGekXvOXpmh3espCr2cHUfr15a
+         xHpqaqYlAy2ElK8GN8y188kMSu3VdzexGgwDFB1lhhZqnBVaKgQbM75cOiXYT02d8mmi
+         gKhDeIOIcqPEA2BLV7aDkUaTP6bLO1bpmjWGDvRT4aoOPzdwfT1Q40Hc/vaiJH/+aque
+         HCPn6x/RRupV7xXz0aKfouCTrjAyGQKDXq3kmx6mFZaW01nLQn1mm+cInq1FxX/VV45q
+         ERoU07zsjh3puj3LAOYylv8JoQO+UOaWY3J0nl9Q4s1hzKhgApHqjdzzs4LMfYN82JPH
+         aaCQ==
+X-Gm-Message-State: AOAM532+92eIU4gA3QkQfQ7hLIP4QNmedaXQmZfGD0C3rAEWrrVe4VRN
+        azk2gX4gKJRrj1rXwhcescK3d50RP85daCb/A5xvIowTGxeowcXNaXeCO+ygAMOLlqnKgbcH+A9
+        Eipic8N5hzK0wbBMg1861c4KqJpOwIa5e5rz1ug==
+X-Received: by 2002:a05:651c:545:: with SMTP id q5mr48531721ljp.202.1638207353501;
+        Mon, 29 Nov 2021 09:35:53 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwCdgVQtvrXN9pR82hH5Jlf+5Oj6LFpV+QeH8GC4DH4X/4Agtjois4piKytzHJd5SDX416Alg==
+X-Received: by 2002:a05:651c:545:: with SMTP id q5mr48531704ljp.202.1638207353283;
+        Mon, 29 Nov 2021 09:35:53 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id w14sm1339120ljj.7.2021.11.29.09.35.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 09:35:52 -0800 (PST)
+Message-ID: <5687bb27-973e-b774-b876-46c8dffc1176@canonical.com>
+Date:   Mon, 29 Nov 2021 18:35:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 0/8] soc: samsung: Add USIv2 driver
+Content-Language: en-US
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        David Virag <virag.david003@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+References: <20211127223253.19098-1-semen.protsenko@linaro.org>
+ <b9807fcc69713fb016838958a3df1c4e54309fc4.camel@gmail.com>
+ <CAPLW+4kkVNSvEQjVnSWA2BjkWJXzV-4n1i+10a9FCNL0sD0n3A@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAPLW+4kkVNSvEQjVnSWA2BjkWJXzV-4n1i+10a9FCNL0sD0n3A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 23 Nov 2021 21:27:21 +0200, Andy Shevchenko wrote:
-> SPI PXA2xx driver supports GPIO chipselect by querying for known
-> GPIO connection ID. Replace custom ->cs_control() by GPIO table,
-> so the driver will use generic approach on this platform.
+On 29/11/2021 14:56, Sam Protsenko wrote:
+> On Sun, 28 Nov 2021 at 05:15, David Virag <virag.david003@gmail.com> wrote:
+>>
+>> Also this way is pretty USIv2 centric. Adding USIv1 support to this
+>> driver is difficult this way because of the the lack of USI_CON and
+>> USI_OPTION registers as a whole (so having nowhere to actually set the
+>> reg of the USI node to, as the only thing USIv1 has is the SW_CONF
+>> register). In my opinion being able to use the same driver and same
+>> device tree layout for USIv1 and USIv2 is a definite plus
+>>
 > 
+> Well, it's USIv2 driver after all. I never expected it can be extended
+> for USIv1 support. If you think it can be reused for USIv1, it's fine
+> by me. But we need to consider next things:
+>   - rename the driver to just "usi.c" (and also its configuration symbol)
+>   - provide different compatible for USIv1 (and maybe corresponding driver data)
+>   - rework bindings (header and doc); make sure existing bindings are
+> intact (we shouldn't change already introduced interfaces)
+>   - in case of USIv1 compatible; don't try to tinker with USIv2 registers
+>   - samsung,clkreq-on won't be available in case of USIv1 compatible
+
+I expect this driver to be in future extended for USIv1 and I do not see
+any problems in doing that for current Sam's approach. Most of our
+drivers support several devices, sometimes with differences, and we
+already have patterns solving it, e.g. ops structure or quirks bitmap.
+Driver for new USIv1 compatible would skip setting USI_CON (or any other
+unrelated register). Modification of SW_CONF could be shared or could be
+also split, depending on complexity.
+
 > 
+> Because I don't have USIv1 SoC TRM (and neither do I possess some
+> USIv1 board which I can use for test), I don't think it's my place to
+> add USIv1 support. But I think it's possible to do so, using my input
+> above.
+> 
+> I can see how it might be frustrating having to do some extra work
+> (comparing to just using the code existing in downstream). But I guess
+> that's the difference: vendor is mostly concerned about competitive
+> advantage and getting to market fast, while upstream is more concerned
+> about quality, considering all use cases, and having proper design.
+> Anyway, we can work together to make it right, and to have both
+> IP-cores support. In the worst case, if those are too different, we
+> can have two separate drivers for those.
+> 
+>> The only real drawback of that way is having to add code for USIv2
+>> inside the UART, HSI2C, and SPI drivers but in my opinion the benefits
+>> overweigh the drawbacks greatly. We could even make the uart/spi/hsi2c
+>> drivers call a helper function in the USI driver to set their USI_CON
+>> and USI_OPTION registers up so that code would be shared and not
+>> duplicated. Wether this patch gets applied like this is not my choice
+>> though, I'll let the people responsible decide
+>> :-)
+>>
+> 
+> I'd argue that there are a lot of real drawbacks of using downstream
+> driver as is. That's why I completely re-designed and re-implemented
+> it. Downstream driver can't be built and function as a module, it
+> doesn't respect System Register sharing between consumers, it leads to
+> USI reset code duplication scattered across protocol drivers (that
+> arguably shouldn't even be aware of that), it doesn't reflect HW
+> structure clearly, it's not holding clocks needed for registers access
+> (btw, sysreg clock can be provided in syscon node, exactly for that
+> reason). As Krzysztof said, it also can't handle correct probe order
+> and deferred probes. Downstream driver might work fine for some
+> particular use-cases the vendor has, but in upstream it's better to
+> cover more cases we can expect, as upstream kernel is used on more
+> platforms, with more user space variants, etc.
 
-Applied to
+Implementing USI in each of I2C/SPI/UART drivers is a big minus. Current
+approach nicely encapsulates USI in dedicated driver without polluting
+the other drivers with unrelated bus/protocol stuff.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/3] ARM: pxa/lubbock: Replace custom ->cs_control() by GPIO lookup table
-      commit: 342e3ce0f6f4691b31b1c7c9c3ae37160c4a82d2
-[2/3] spi: pxa2xx: Get rid of unused ->cs_control()
-      commit: a9c8f68ce2c37ced2f7a8667eda71b7753ede398
-[3/3] spi: pxa2xx: Get rid of unused enable_loopback member
-      commit: 8393961c53b31078cfc877bc00eb0f67e1474edd
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Best regards,
+Krzysztof
