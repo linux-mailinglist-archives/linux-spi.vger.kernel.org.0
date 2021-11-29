@@ -2,250 +2,296 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D984619DD
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Nov 2021 15:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA45A461B52
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Nov 2021 16:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378624AbhK2OmZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 29 Nov 2021 09:42:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40628 "EHLO
+        id S231245AbhK2Pwf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 29 Nov 2021 10:52:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379016AbhK2OkW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Nov 2021 09:40:22 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42640C08ED7F;
-        Mon, 29 Nov 2021 05:10:45 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id r11so71709384edd.9;
-        Mon, 29 Nov 2021 05:10:45 -0800 (PST)
+        with ESMTP id S232627AbhK2Puf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Nov 2021 10:50:35 -0500
+Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACC0C061D74
+        for <linux-spi@vger.kernel.org>; Mon, 29 Nov 2021 05:56:23 -0800 (PST)
+Received: by mail-vk1-xa2c.google.com with SMTP id h1so3911633vkh.0
+        for <linux-spi@vger.kernel.org>; Mon, 29 Nov 2021 05:56:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pY+oBIJ6nsDonvusI0wqpwLwI06OOOrdfnr9/OEWHxQ=;
-        b=MtIcIlmo4ivVnodFYETHeD3gQ54PlKGvSXomU3ABxOd5mf+0nfmhtbJ4+b2yiU6nmP
-         ADV329TLM8fb8MRst0whcjGOONwxfMpfy8oTZeQ2QALkXj8S3udnuZn4zhE5/qZkYIaQ
-         xHDPEGVdtnb2km6GrxSXJQdqL3pgcCgzeYesLVFbypiDvMY9dwjqFT6UayYLHcg9cbAD
-         C+Q8GSoeZ0bUC1WYnBXmo/dIW+k85R9X/2c4Pczk/SJUwwIRbHLlR/6lQRsVHdPv4L6Q
-         5GnCkRp8hPWzRmPZ2gkEUhIH59Dz7eJYgZQ2QtRMpCCf0Bu6UHKbjyLNcqoQ/vLVA92S
-         kKbg==
+         :cc;
+        bh=Psq6/38akb6pFI4zFrW/zy31oIimVJgvRRtPizriX/8=;
+        b=iyf2Tu45o61YhmukAkmvRRPXYCN8PD/HwC31Ug/gopXsM2RCmehIxo4Hvfchwq9TSQ
+         qbP6BU7S/J7nG+PVQmSHYE2L1/WDNq269HIOar97HUQA8KS2NZjmU8Zh7n2TOd8S+v/a
+         8RFGSA0/2BM1wgUTEa6UECCiXJC6F7EkwLbkO08oVZtPGuqWTxj9PilPzLcwRn0bUYh0
+         /YGLbscV7LKxd//FB6z+5lIpr3MCwDvGtc9JXye75J0u2tuMZUwTgaqBVIqHkSMTzxyY
+         vCo+TqQUArbWMYdf0my4u5JXp0f11fotKZjHI3k9XAlrj6Q230YroEBZMxDD0acK7YKn
+         ZF9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pY+oBIJ6nsDonvusI0wqpwLwI06OOOrdfnr9/OEWHxQ=;
-        b=kPgQPpsnayO/T9bktjq5hmBl2wW2UQHWTn/IfEqy9jk6dvs2iBYm0sHtw2yEIJBwn7
-         PDM4T7hlSlkjzVDf75aMfX4pPy91ZgeftuzENlQ0bx2XqUrHRQUhuzIT7WDeqoLCVxWB
-         FJcZY+DFoOD8aJFy9368GqddvTHWawbD9dxgxMStfRo8iYMU8+JOUDlS0tqUETMT5B3T
-         9j90QsAQUOhoqbBJmL96oBc4sgmYO21YWS25o/r9p4YMpaXgbCyXSEoG4yy6E8xprffN
-         VK2RkENn+ew/mTYvo8BDrkoNX7R5jHitqHt95NaiBIF8PftWS0VebIdwGZg7zFW8txqK
-         4o7g==
-X-Gm-Message-State: AOAM531pSIkBtobEFBlYNJ/SAzVsBHmTwKGm5R6HAtf4BLIA9HlrwUcw
-        mOjIdhjGW7j/HwI60aQN7A0BXa+3uF2elLADZK8=
-X-Google-Smtp-Source: ABdhPJxubt2PpVpW9xRww6T+5TVp5a6a6yyZmst2klLH4iVp9EsPxnQVZP+hLqyD8dnQAVbAQPIVC/xdsiIfeLnVnro=
-X-Received: by 2002:a05:6402:291:: with SMTP id l17mr75370842edv.242.1638191443745;
- Mon, 29 Nov 2021 05:10:43 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=Psq6/38akb6pFI4zFrW/zy31oIimVJgvRRtPizriX/8=;
+        b=h5vzwJ73rai43HHztWTxyEQSRQsoPUXr15lDjWIo8+mhwVQ9Zx1EYMd/DsRJiWM58r
+         55phqRBmPge//BM5MlstBsQDgeEL37Ne7MTk6FqHJOJbZ5F+4mRK8lJektBCsPc6T/ib
+         AoQ16i6MbXRyRJNO8Dty3drMSXQEaV7ZbePpJPPC8CEiDMgE1KUeKj1DXZxmMXwDwdYy
+         VBzJcDjujnysd/7KGiUj3yvYnF46DO4vi7gEvqdQyYNJvNzwDlV4bYTXCVaJTBowactB
+         lfZVC988HszRyP+j4dn0Z8d8DfB/5H5LrvyoXjQCAADjBt1GjRAnUuTbkUxxTsH/g0QF
+         OoPg==
+X-Gm-Message-State: AOAM531ZdDWENkCPSXKcZNp3snClH6DLCB6W63cvn8xoCUbAsTwGuw7K
+        VhZ38yIDtaH9kh6Ec7HPXM6t7JkVZqBvz91PpzMO9g==
+X-Google-Smtp-Source: ABdhPJz2HEiIPCArTkwOkAcHR1Mth6V7WDJcoxwiCj0f+X4ZUcus1I83945wLSi2z05M9/rSGgC4ywY2AEmYZ7h08aI=
+X-Received: by 2002:a05:6122:1306:: with SMTP id e6mr36144108vkp.13.1638194182543;
+ Mon, 29 Nov 2021 05:56:22 -0800 (PST)
 MIME-Version: 1.0
-References: <1635747525-31243-1-git-send-email-lh.kuo@sunplus.com>
- <cover.1637547799.git.lh.kuo@sunplus.com> <e5f2549224cf875d81306ef5f6e98db1cfd81c2e.1637547799.git.lh.kuo@sunplus.com>
- <CAHp75Vd2=OHbrpGtsU8AMXdtNfvSPhpc7vhzkWnahaV48XbfUQ@mail.gmail.com>
- <YZz0n6Mpjl3tKmMe@sirena.org.uk> <CAHp75Vf6+monqu4Hq-yoFSohD9tNFqZTuKjqDDKAJE3Om2BUYQ@mail.gmail.com>
- <6eb68a8153ba46c48862d00f7aa6e0fe@sphcmbx02.sunplus.com.tw>
- <CAHp75VftSORts5cbDxvfyHgqhxmb7K74BfPd=mST+75C+Ch9dQ@mail.gmail.com>
- <33d50e94059b4734939db60b5c531bc9@sphcmbx02.sunplus.com.tw>
- <63a467164c985cadce0e28e50508363a8d2f6622.camel@pengutronix.de>
- <YaDbHe+COa3pke+s@sirena.org.uk> <d33a3a4f3b8248a78fae572a7f88050a@sphcmbx02.sunplus.com.tw>
-In-Reply-To: <d33a3a4f3b8248a78fae572a7f88050a@sphcmbx02.sunplus.com.tw>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 29 Nov 2021 15:10:10 +0200
-Message-ID: <CAHp75VftWNHXG7k09qHtJNFaYe0hvSfNBnQht=D6O7UJH27a5w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] SPI: Add SPI driver for Sunplus SP7021
-To:     =?UTF-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "LH.Kuo" <lhjeff911@gmail.com>, Rob Herring <robh+dt@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "dvorkin@tibbo.com" <dvorkin@tibbo.com>,
-        "qinjian@cqplus1.com" <qinjian@cqplus1.com>,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+References: <20211127223253.19098-1-semen.protsenko@linaro.org> <b9807fcc69713fb016838958a3df1c4e54309fc4.camel@gmail.com>
+In-Reply-To: <b9807fcc69713fb016838958a3df1c4e54309fc4.camel@gmail.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Mon, 29 Nov 2021 15:56:10 +0200
+Message-ID: <CAPLW+4kkVNSvEQjVnSWA2BjkWJXzV-4n1i+10a9FCNL0sD0n3A@mail.gmail.com>
+Subject: Re: [PATCH 0/8] soc: samsung: Add USIv2 driver
+To:     David Virag <virag.david003@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 8:20 AM Lh Kuo =E9=83=AD=E5=8A=9B=E8=B1=AA <lh.Kuo@=
-sunplus.com> wrote:
-
->    Feel sorry. I haven't found any devm PM API use in the SPI driver, and=
- I didn't realize that PM function also has devm API. So I was confused bef=
-ore. I will move the pm_runtime_enable() after the devm_spi_register_contro=
-ller() . I have rewritten the Probe and Remove functions as shown below.
-
-Neither you found APIs for clock and reset, Try to grep for
-devm_add_action_or_reset().
-
-So, for PM it is probably good to leave it last, but you still have the iss=
-ue.
-
->    And sp7021_spi_controller driver is modified and the code cleaned more=
- than -50 LOCs. If the Probe and Remove functions is OK I will start next s=
-ubmission.
-
-No, it's not okay.. yet, but we are closer. See my comments above and below=
-.
-
->    Thanks for all comments
+On Sun, 28 Nov 2021 at 05:15, David Virag <virag.david003@gmail.com> wrote:
 >
-> static int sp7021_spi_controller_probe(struct platform_device *pdev)
-> {
->         struct device *dev =3D &pdev->dev;
->         struct sp7021_spi_ctlr *pspim;
->         struct spi_controller *ctlr;
->         int mode;
->         int ret;
+> On Sun, 2021-11-28 at 00:32 +0200, Sam Protsenko wrote:
+> > USIv2 IP-core provides selectable serial protocol (UART, SPI or
+> > High-Speed I2C); only one can be chosen at a time. This series
+> > implements USIv2 driver, which allows one to select particular USI
+> > function in device tree, and also performs USI block initialization.
+> >
+> > With that driver implemented, it's not needed to do USI
+> > initialization
+> > in protocol drivers anymore, so that code is removed from the serial
+> > driver.
+> >
 >
->         dev_info(dev, "sp7021_spi_controller_probe\n");
->
->         mode =3D SP7021_MASTER_MODE;
->         pdev->id =3D of_alias_get_id(pdev->dev.of_node, "sp_spi");
->
->         if (of_property_read_bool(pdev->dev.of_node, "spi-slave"))
->                 mode =3D SP7021_SLAVE_MODE;
->
->         if (mode =3D=3D SP7021_SLAVE_MODE)
->                 ctlr =3D devm_spi_alloc_slave(dev, sizeof(*pspim));
->         else
->                 ctlr =3D devm_spi_alloc_master(dev, sizeof(*pspim));
->         if (!ctlr)
->                 return -ENOMEM;
+> I think the downstream way of doing this (USI node reg being on the
+> SW_CONF register itself rather than an offset from uart/i2c/spi, the
+> USI driver only controlling the SW_CONF, and the uart/i2c/spi drivers
+> controlling their USI_CON and USI_OPTION regs) is cleaner, better, and
+> easier to adapt to USIv1 too.
 >
 
->         ctlr->dev.of_node =3D pdev->dev.of_node;
+One reason why I think it's better to provide SW_CONF register via
+syscon node, is that it helps us to avoid possible register access
+conflicts in future, and also conflicts when requesting corresponding
+resources. In other words, the System Register block can be used by
+many consumers (drivers) in future; those consumers might try to
+modify the same registers simultaneously, which might lead to race
+conditions (as RMW operation is not atomic), so some kind of
+serialization should be done (like locking in regmap), which is
+provided by syscon. Also, that wouldn't even come to that: you just
+can't request the same I/O area twice in Linux. So if SW_CONF is
+passed via "reg" property to USI driver, and then we try to map the
+whole System Register (or its portion that includes SW_CONF), that
+request would fail.
 
-device_set_node()
+Although passing one SW_CONF register via "reg" might look easier to
+implement, it might also bring us all sort of problems later on. And I
+think a good design should account for such pitfalls.
 
->         ctlr->bus_num =3D pdev->id;
->         ctlr->mode_bits =3D SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LSB_F=
-IRST;
->         ctlr->auto_runtime_pm =3D true;
->         ctlr->prepare_message =3D sp7021_spi_controller_prepare_message;
->         if (mode =3D=3D SP7021_SLAVE_MODE) {
->                 ctlr->transfer_one =3D sp7021_spi_sla_transfer_one;
->                 ctlr->slave_abort =3D sp7021_spi_sla_abort;
->                 ctlr->flags =3D SPI_CONTROLLER_HALF_DUPLEX;
->         } else {
->                 ctlr->bits_per_word_mask =3D SPI_BPW_MASK(8);
->                 ctlr->min_speed_hz =3D 40000;
->                 ctlr->max_speed_hz =3D 25000000;
->                 ctlr->use_gpio_descriptors =3D true;
->                 ctlr->flags =3D SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_M=
-UST_TX;
->                 ctlr->transfer_one =3D sp7021_spi_mas_transfer_one;
->         }
->         platform_set_drvdata(pdev, ctlr);
->         pspim =3D spi_controller_get_devdata(ctlr);
->         pspim->ctlr =3D ctlr;
->         pspim->dev =3D dev;
->         spin_lock_init(&pspim->lock);
->         mutex_init(&pspim->buf_lock);
->         init_completion(&pspim->isr_done);
->         init_completion(&pspim->sla_isr);
+As for the USI registers: I really don't think that duplicating the
+code for USI block reset across uart/i2c/spi drivers would help us to
+accomplish anything. Why those drivers should be even aware of USI
+reset? At least in USIv2 block, the USI registers and uart/i2c/spi
+registers are not mixed: they are located at different and always
+fixed addresses. We can benefit from that fact, and provide Device
+Tree structure which reflects the hardware one, separating USI control
+from actual protocol nodes.
 
->         pspim->mas_base =3D devm_platform_ioremap_resource_byname(pdev, "=
-master");
->         pspim->sla_base =3D devm_platform_ioremap_resource_byname(pdev, "=
-slave");
-
-Where are the error checks?
-
->         pspim->mas_irq =3D platform_get_irq_byname(pdev, "mas_risc");
->         if (pspim->mas_irq < 0)
->                 return pspim->mas_irq;
+> For example: I'm sure this is the case on USIv2 devices too, but on
+> Exynos7885, different devices have USI modes configured differently.
+> For example a Samsung Galaxy A8 (2018) has all the USI blocks
+> configured as SPI while a Samsung Galaxy M20 has the first USI
+> configured as dual HSI2C, the second as HSI2C on the first 2 pins and
+> the third as HSI2C on the last 2 pins. With this way of doing
+> everything on USIv2 we'd need 3 disabled USIv2 nodes in the SoC DTSI
+> for one USI block, each for every protocol the USI block can do, all
+> having a single child for their protocol and each referencing the same
+> sysreg (not even sure if that's even supported). Then the board DTS
+> could enable the USI node it needs.
 >
->         pspim->sla_irq =3D platform_get_irq_byname(pdev, "slave_risc");
->         if (pspim->sla_irq < 0)
->                 return pspim->sla_irq;
+
+If I'm following you correctly, then it's not like that. I guess
+Krzysztof already replied to that, so I'll probably just repeat his
+words. In that case you'll have something like this in your SoC dtsi
+(for your USIv1 case of course, because dual HSI2C is not present in
+USIv2):
+
+<<<<<<<<<<<<<<<<<<<<<<<<< cut here >>>>>>>>>>>>>>>>>>>>>>>
+usi1 {
+    spi1 {
+    };
+
+    hsi2c1_1 {
+    };
+
+    hsi2c1_2 {
+    };
+};
+
+usi2 {
+    spi2 {
+    };
+
+    hsi2c2_1 {
+    };
+};
+
+
+usi3 {
+    spi3 {
+    };
+
+    hsi2c2_2 {
+    };
+};
+<<<<<<<<<<<<<<<<<<<<<<<<< cut here >>>>>>>>>>>>>>>>>>>>>>>
+
+and then in your board dts you just have to enable corresponding usi's
+with proper modes, and enable chosen protocol nodes, like this:
+
+<<<<<<<<<<<<<<<<<<<<<<<<< cut here >>>>>>>>>>>>>>>>>>>>>>>
+&usi1 {
+    status = "okay"
+    samsung,mode = <USI_V1_DUAL_I2C>;
+};
+
+&hsi2c1_1 {
+    status = "okay"
+};
+
+&hsi2c1_2 {
+    status = "okay"
+};
+<<<<<<<<<<<<<<<<<<<<<<<<< cut here >>>>>>>>>>>>>>>>>>>>>>>
+
+> With the downstream way we could have just one USI node and we could
+> add the 3 protocols it can do disabled as seperate or child nodes. This
+> way the board DTS only needs to set the appropriate mode setting and
+> enable the protocol it needs. I'd say much better than having 3 USI
+> nodes for the same USI block.
 >
->         ret =3D devm_request_irq(dev, pspim->mas_irq, sp7021_spi_mas_irq,
->                                                 IRQF_TRIGGER_RISING, pdev=
-->name, pspim);
->         if (ret)
->                 return ret;
+
+Not sure if with downstream USI driver you can actually have protocols
+as sub-nodes in USI node though. It doesn't do anything like
+of_platform_populate().
+
+Also, with this USIv2 driver you can do the same thing you described:
+you can have just one USI node with 3 protocols as sub-nodes (or you
+can even have protocol nodes outside of USI node, but I'd not
+recommend that).
+
+Actually I can see that it's my fault for not describing that case in
+bindings example. I'll make sure to do that in v2. You also got me
+thinking about default mode: sometimes SW_CONF reset value chooses
+some protocol. In that case maybe it'd useful to have something like
+USI_V2_DEFAULT, to tell driver to not touch SW_CONF at all. And also I
+can add USI_V2_NONE while at it, so that driver can write 0x0 to
+SW_CONF: that way no protocol will be selected. Maybe that can be
+beneficial for PM reasons, if some board doesn't use some USI blocks
+at all. Do you think it's feasible to add those two values to
+dt-bindings header? And is it possible to do so in USIv1?
+
+> Also this way is pretty USIv2 centric. Adding USIv1 support to this
+> driver is difficult this way because of the the lack of USI_CON and
+> USI_OPTION registers as a whole (so having nowhere to actually set the
+> reg of the USI node to, as the only thing USIv1 has is the SW_CONF
+> register). In my opinion being able to use the same driver and same
+> device tree layout for USIv1 and USIv2 is a definite plus
 >
->         ret =3D devm_request_irq(dev, pspim->sla_irq, sp7021_spi_sla_irq,
->                                                 IRQF_TRIGGER_RISING, pdev=
-->name, pspim);
->         if (ret)
->                 return ret;
+
+Well, it's USIv2 driver after all. I never expected it can be extended
+for USIv1 support. If you think it can be reused for USIv1, it's fine
+by me. But we need to consider next things:
+  - rename the driver to just "usi.c" (and also its configuration symbol)
+  - provide different compatible for USIv1 (and maybe corresponding driver data)
+  - rework bindings (header and doc); make sure existing bindings are
+intact (we shouldn't change already introduced interfaces)
+  - in case of USIv1 compatible; don't try to tinker with USIv2 registers
+  - samsung,clkreq-on won't be available in case of USIv1 compatible
+
+Because I don't have USIv1 SoC TRM (and neither do I possess some
+USIv1 board which I can use for test), I don't think it's my place to
+add USIv1 support. But I think it's possible to do so, using my input
+above.
+
+I can see how it might be frustrating having to do some extra work
+(comparing to just using the code existing in downstream). But I guess
+that's the difference: vendor is mostly concerned about competitive
+advantage and getting to market fast, while upstream is more concerned
+about quality, considering all use cases, and having proper design.
+Anyway, we can work together to make it right, and to have both
+IP-cores support. In the worst case, if those are too different, we
+can have two separate drivers for those.
+
+> The only real drawback of that way is having to add code for USIv2
+> inside the UART, HSI2C, and SPI drivers but in my opinion the benefits
+> overweigh the drawbacks greatly. We could even make the uart/spi/hsi2c
+> drivers call a helper function in the USI driver to set their USI_CON
+> and USI_OPTION registers up so that code would be shared and not
+> duplicated. Wether this patch gets applied like this is not my choice
+> though, I'll let the people responsible decide
+> :-)
 >
->         pspim->spi_clk =3D devm_clk_get(dev, NULL);
->         if (IS_ERR(pspim->spi_clk))
->                 return dev_err_probe(dev, PTR_ERR(pspim->spi_clk), "clk g=
-et fail\n");
+
+I'd argue that there are a lot of real drawbacks of using downstream
+driver as is. That's why I completely re-designed and re-implemented
+it. Downstream driver can't be built and function as a module, it
+doesn't respect System Register sharing between consumers, it leads to
+USI reset code duplication scattered across protocol drivers (that
+arguably shouldn't even be aware of that), it doesn't reflect HW
+structure clearly, it's not holding clocks needed for registers access
+(btw, sysreg clock can be provided in syscon node, exactly for that
+reason). As Krzysztof said, it also can't handle correct probe order
+and deferred probes. Downstream driver might work fine for some
+particular use-cases the vendor has, but in upstream it's better to
+cover more cases we can expect, as upstream kernel is used on more
+platforms, with more user space variants, etc.
+
+I don't really think protocol drivers should be aware of USI registers
+at all, but if we they do -- we can provide some API from USIv2 driver
+later, with EXPORT_SYMBOL(), referencing corresponding USI instance by
+phandle or using some other mechanism for inter-driver communication.
+
+Of course, it's not my place to decide on patch acceptance too. But I
+was under the impression that maintainers would be ok with this course
+of actions. Also, upstream kernel seems to already follow the same
+design for some similar drivers. See for example
+drivers/soc/qcom/qcom_gsbi.c.
+
+> Anyways, soon enough I can write an USIv1 driver after I submit all the
+> 7885 stuff I'm working on currently. If you want to, you can add USIv2
+> support to that driver, or if an USIv2 driver is already in upstream at
+> that point, if it is written in the downstream way I can add v1 support
+> to that, or if it's like this I'll have to make a whole seperate driver
+> with a whole seperate DT structure.
 >
->         pspim->rstc =3D devm_reset_control_get_exclusive(dev, NULL);
->         if (IS_ERR(pspim->rstc))
->                 return dev_err_probe(dev, PTR_ERR(pspim->rstc), "rst get =
-fail\n");
 
->         ret =3D clk_prepare_enable(pspim->spi_clk);
->         if (ret)
->                 return dev_err_probe(dev, ret, "failed to enable clk\n");
->
->         ret =3D reset_control_deassert(pspim->rstc);
->         if (ret) {
->                 dev_err_probe(dev, ret, "failed to deassert reset\n");
->                 goto err_free_reset;
->         }
+If it's like you said (USIv1 only touches the SW_CONF register), I
+guess USIv2 driver can be extended for USIv1 case. I already provided
+my thoughts on such rework above. It's probably better to consult with
+Krzysztof first. I guess the only way to figure out if it's feasible
+or it's better to have separate exynos-usi-v1.c for USIv1, is to try
+and add USIv1 support into USIv2 driver and see how pretty or ugly it
+is :) Whatever the way you decide to go with, please add me to Cc list
+when sending USIv1 patches.
 
-These two need to be wrapped as I explained above.
-
->         ret =3D devm_spi_register_controller(dev, ctlr);
->         pm_runtime_enable(dev);
->         if (ret) {
-
-
->                 dev_err(dev, "spi_register_master fail\n");
->                 goto err_disable_pm_runtime;
-
-  pm_runtime_disable();
-  return dev_err_probe();
-
->         }
->
->         return ret;
->
-> err_disable_pm_runtime:
->         pm_runtime_disable(dev);
-> err_free_reset:
->         reset_control_assert(pspim->rstc);
->         clk_disable_unprepare(pspim->spi_clk);
->
->         return ret;
-> }
->
-> static int sp7021_spi_controller_remove(struct platform_device *pdev)
-> {
->         struct spi_controller *ctlr =3D dev_get_drvdata(&pdev->dev);
->         struct sp7021_spi_ctlr *pspim =3D spi_master_get_devdata(ctlr);
-
->         spi_unregister_controller(ctlr);
-
-Lukas already explained to you why this is wrong.
-
->         pm_runtime_disable(&pdev->dev);
->         pm_runtime_set_suspended(&pdev->dev);
-
->         reset_control_assert(pspim->rstc);
->         clk_disable_unprepare(pspim->spi_clk);
-
-This has the same ordering issue as already discussed.
-
->         return 0;
-> }
-
-
---=20
-With Best Regards,
-Andy Shevchenko
+> Best regards,
+> David
