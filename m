@@ -2,124 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1484613E0
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Nov 2021 12:30:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D230461612
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Nov 2021 14:17:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241037AbhK2Ldz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 29 Nov 2021 06:33:55 -0500
-Received: from st43p00im-zteg10062001.me.com ([17.58.63.166]:50895 "EHLO
-        st43p00im-zteg10062001.me.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237921AbhK2Lbs (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Nov 2021 06:31:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1638185309; bh=FO0LUT32VcGamCeUuaNkSfl73khKfpMSTlnCbYYzcRo=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=Sm+l7dOwSWblAFjEalalHCDsvEiE5jSh5mxYhcgMF9W1pENtnnB0TVxX+bCX5+aY3
-         eDsOep0NahianPdsVG0fGMG8caA8edjHtwb476z7p91Q0lZJMQLZPl1M2yqe20p6nr
-         dYzdo3/RFqIeU2hVinXnr1t+oqrT13No9TWxO/gckf6HWj3FNaPK9CW+rQJrbmgdRh
-         GR3FSsPFRVsLMxoUlyPEkVigfY0BsQo9/YcUKCcoY4eO6KXCWB+ME6JKewrgT/yX8W
-         jJGqCVF/4FupDcrySmfkQhsz+/2a0KNEJbDj0yZ0vPOxmUDQgRk8BCRfJrW5UU1Y66
-         Zu/8PFQENw5jg==
-Received: from gnbcxl0045.gnb.st.com (101.220.150.77.rev.sfr.net [77.150.220.101])
-        by st43p00im-zteg10062001.me.com (Postfix) with ESMTPSA id 1799A6C01B2;
-        Mon, 29 Nov 2021 11:28:26 +0000 (UTC)
-Date:   Mon, 29 Nov 2021 12:28:24 +0100
-From:   Alain Volmat <avolmat@me.com>
-To:     Andrew Lunn <andrew@lunn.ch>, robh+dt@kernel.org
-Cc:     wsa@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Alain Volmat <avolmat@me.com>
-Subject: Re: [RFC] sti: Conflict in node name for an IP supporting both I2C
- and SPI
-Message-ID: <20211129112824.GA17122@gnbcxl0045.gnb.st.com>
-Mail-Followup-To: Andrew Lunn <andrew@lunn.ch>, robh+dt@kernel.org,
-        wsa@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Patrice Chotard <patrice.chotard@foss.st.com>
-References: <20211125210428.GA27075@gnbcxl0045.gnb.st.com>
- <YaFkG85DHMMRiD7O@lunn.ch>
+        id S1377546AbhK2NVJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 29 Nov 2021 08:21:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230493AbhK2NTJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 29 Nov 2021 08:19:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F655C0613FC;
+        Mon, 29 Nov 2021 04:01:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6BEDB80D53;
+        Mon, 29 Nov 2021 12:01:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B05BCC004E1;
+        Mon, 29 Nov 2021 12:01:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638187280;
+        bh=vBptFj3aUeLExHyhRFb83+obbB6Bl97pRM+m9eY9FBY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q72LQRu1mTEz+Jg5z90HKLdULb2cMXdwgRTsKMz52K35+buD2YNdkVuURuvv1+md2
+         vmtq9veflhF0hJ14OpijEuNN532o/BnDXS79D+Ip58pbsHR3xWUUa7eWow7xJj1Fxq
+         8iSNk00MYyPBz3rQAC4e5sflT5h8N9QIt4hZrq+IVW0yV13KB4m0HD6Jukvx4JDNGm
+         6QqC9XTupUhvv5Zo/HlIb4nwftvwGIbvgXEOwJpSk8E9f6rMycyKvw8tI3hLaW0yFT
+         0aXohm45Fodjbeh9z2UbW6RiQrt+F7EYLT7MQ5FZRZzEKCRGXddliuaJkHclzE9gM1
+         mfVq2mU093pMw==
+Date:   Mon, 29 Nov 2021 12:01:15 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: spi: spi-rockchip: Add rk3568-spi
+ compatible
+Message-ID: <YaTBC0Gw5BzE1qq0@sirena.org.uk>
+References: <20211127141910.12649-1-frattaroli.nicolas@gmail.com>
+ <20211127141910.12649-2-frattaroli.nicolas@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="thPcABwJnBXBpjkW"
 Content-Disposition: inline
-In-Reply-To: <YaFkG85DHMMRiD7O@lunn.ch>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.790
- definitions=2021-11-29_05:2021-11-28,2021-11-29 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 clxscore=1011 mlxscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-2009150000 definitions=main-2111290057
+In-Reply-To: <20211127141910.12649-2-frattaroli.nicolas@gmail.com>
+X-Cookie: Thank god!! ... It's HENNY YOUNGMAN!!
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello,
 
-On Fri, Nov 26, 2021 at 11:47:55PM +0100, Andrew Lunn wrote:
-> On Thu, Nov 25, 2021 at 10:04:28PM +0100, Alain Volmat wrote:
-> > Hello,
-> > 
-> > in the STi platform [1], the I2C and SPI controllers are handled by the
-> > same IP, which can be configured in either one or the other mode.
-> > This leads to warnings during the DT build and I was wondering if you could
-> > give me some hints about how such situation should be handled since this
-> > concern DT warnings but also bindings and YAML.
-> > 
-> > In the SoC DT (dtsi), for each IP, there are 2 entries:
-> > 
-> > One for the I2C mode (implemented by the driver i2c/busses/i2c-st.c)
-> >                 i2c@9840000 {
-> >                         compatible = "st,comms-ssc4-i2c";
-> >                         interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
-> >                         reg = <0x9840000 0x110>;
-> >                         clocks = <&clk_s_c0_flexgen CLK_EXT2F_A9>;
-> >                         clock-names = "ssc";
-> >                         clock-frequency = <400000>;
-> >                         pinctrl-names = "default";
-> >                         pinctrl-0 = <&pinctrl_i2c0_default>;
-> >                         #address-cells = <1>;
-> >                         #size-cells = <0>;
-> > 
-> >                         status = "disabled";
-> >                 };
-> > 
-> > One for the SPI mode (implemented by the driver spi/spi-st-ssc4.c)
-> >                 spi@9840000 {
-> >                         compatible = "st,comms-ssc4-spi";
-> >                         reg = <0x9840000 0x110>;
-> >                         interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
-> >                         clocks = <&clk_s_c0_flexgen CLK_EXT2F_A9>;
-> >                         clock-names = "ssc";
-> >                         pinctrl-0 = <&pinctrl_spi0_default>;
-> >                         pinctrl-names = "default";
-> >                         #address-cells = <1>;
-> >                         #size-cells = <0>;
-> > 
-> >                         status = "disabled";
-> >                 };
-> > 
-> > So basically, there are 2 nodes, one for each mode, and enabling one or the
-> > other mode is done within the board DT.
-> > Since the address is the same, this obviously leads to warning during the build
-> > of the DT.
-> > 
-> > arch/arm/boot/dts/stih407-family.dtsi:363.15-376.5: Warning (unique_unit_address): /soc/i2c@9840000: duplicate unit-address (also used in node /soc/spi@9840000)
-> 
-> How about making the compiler look at the status value. So long as
-> only zero or one is enabled, it should not be an issue. If you have
-> two or more nodes enabled for an address, then you want a warning or
-> error.
+--thPcABwJnBXBpjkW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From the compiler point of view it seems this behavior is already
-possible, probably with something like:
-   -Wno-unique_unit_address -Wunique_unit_address_if_enabled
+On Sat, Nov 27, 2021 at 03:19:07PM +0100, Nicolas Frattaroli wrote:
+> This adds a compatible string for the SPI controller found on
+> the RK3566 and RK3568 SoCs.
 
-Rob, is current behavior (checking unique unit address even if node
-is disabled) on purpose or could this be changed to only checking if the
-node is enabled ?
+Please submit patches using subject lines reflecting the style for the
+subsystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and
+make sure your subject lines visually resemble what they're doing.
+There's no need to resubmit to fix this alone.
 
-Alain
+--thPcABwJnBXBpjkW
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
->      Andrew
-> 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGkwQoACgkQJNaLcl1U
+h9C79Af/VkQzSokkKhu4i2rEQ3wVt1TXWw6OmUYThFsujeHoBzXRo3iUqgLnvegr
+UhqQ9HI5E9eXRfd+EdYCsru73RDrXe2Jxs1/09RYMZHxb7In/FFRdyd1TUTv6PYu
+bNUqnhdpnyGV/59n4FVsyt6zcifp9NGqSZhJW5lSQF9RMagaAa1iY+GOf0OTrUoO
+Ib7evx1ALUZMtqE+CuQ5PW0EmjvqWk5hlAa63RUZUHkG3v2bE/nn79uHeWdB8mTW
+tQVlPbFsFhiBH7pmWqjpEHERfAzSUj+wEcz1WJYqZ6EG/mTJQA6lMncn2RjbAPxY
+BXDGGW3SsUs8RFRlFmBwihuE8Bh2iA==
+=onyW
+-----END PGP SIGNATURE-----
+
+--thPcABwJnBXBpjkW--
