@@ -2,123 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B771463CCB
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Nov 2021 18:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FF3463F0E
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Nov 2021 21:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238710AbhK3Rbb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 Nov 2021 12:31:31 -0500
-Received: from mta-p6.oit.umn.edu ([134.84.196.206]:36222 "EHLO
-        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244734AbhK3Rba (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Nov 2021 12:31:30 -0500
-X-Greylist: delayed 307 seconds by postgrey-1.27 at vger.kernel.org; Tue, 30 Nov 2021 12:31:30 EST
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 4J3TZJ2QxPz9xgl2
-        for <linux-spi@vger.kernel.org>; Tue, 30 Nov 2021 17:23:04 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p6.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id TaoF-QgZGtBK for <linux-spi@vger.kernel.org>;
-        Tue, 30 Nov 2021 11:23:04 -0600 (CST)
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 4J3TZJ0QN5z9xgl0
-        for <linux-spi@vger.kernel.org>; Tue, 30 Nov 2021 11:23:04 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p6.oit.umn.edu 4J3TZJ0QN5z9xgl0
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p6.oit.umn.edu 4J3TZJ0QN5z9xgl0
-Received: by mail-pj1-f71.google.com with SMTP id lt10-20020a17090b354a00b001a649326aedso11858679pjb.5
-        for <linux-spi@vger.kernel.org>; Tue, 30 Nov 2021 09:23:04 -0800 (PST)
+        id S240037AbhK3URF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 Nov 2021 15:17:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240035AbhK3URF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Nov 2021 15:17:05 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE7AC061574
+        for <linux-spi@vger.kernel.org>; Tue, 30 Nov 2021 12:13:45 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id i12so18516199wmq.4
+        for <linux-spi@vger.kernel.org>; Tue, 30 Nov 2021 12:13:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=svJ3RMCV+p4JHnfOiaFQLsj9cOauK3sHfEDzsRzk6UE=;
-        b=MKa5ESf0rJVu4B+Q4oPqAmJ0frxgN60i358zPoUfYCIVztCFvcCWBKDz3pBHBOaYOp
-         bRroQpQ1tkEWGvW76MNh7ePyn848CH5ZZIcpYWTai9RiTkbheVuqvrHqt2+5Xcxf35Yq
-         7lTBdA7EN6K5NksOc6AePjns7nMpo3YzChW7W66+WdUNxnrTtj+t6ofIyNd8u21NRvAN
-         7/bwHfBc8EfXS9bM7Ca2AEW/ZHPVljGo2r6pp7WYuRx+SLRyxC0Mg/iSAaGmbGTwFxgR
-         T1hRR5Qr5HTsPHUoUsvisJbuEHiSCNLyObIIaQzYICr/YtsqKLQxzUvpnUA55IqPK947
-         G3hQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
+         :subject:content-transfer-encoding;
+        bh=zD/t993/NyxzRnTokWaGCkfhn86ThJgcF3B9bfrki4E=;
+        b=B0nh1TjaXr264pLI7Sy3fAaey+c2/U/U6VTS0qxQj80lMsAVVrkoUNRrvC8TOHTYXr
+         4O2YbyY0JOcyIRtCXSnoqLTA9Kpv4ZuEK8E3Ec8jQyMVS2WEwHn9qNh9+0tZAH5CuI/a
+         caynIzj6obe3/eyeBjY0wGp2ZAybboq3RSAW56181dTRgRp9lmw8JAPMBscciO18NxmY
+         22lHfXvd9TuwYZJsAv5I50Y8mQuiaOk2y4LsfTTEpfh1LXvCzZLO3gHgpa1zdWvwfF8H
+         VR7yk3xwEcF3v7aAmxhh+KzJzDs3LwGRcwb75Q69cmrIxaNekf0TCU+HpBU/TbErK2C2
+         YCKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=svJ3RMCV+p4JHnfOiaFQLsj9cOauK3sHfEDzsRzk6UE=;
-        b=PoeM1W8Mwk45oJUCUzaA4L7Ohmcr8j2LYsTy7AX+41MgX+4m4fGs26C6jCYvtl3/+G
-         svu3ehFXWULSzVIKh9cA+aOGjwlowocWOfnNOEk+e+2mJJnJeOJfdT/uVmHSCXpsOyLl
-         TuNiWVG7lru+wN4j8xB6owvIYpf/0xpFY3WlVH9mRYvbHvfJ26QJADqeR9iExZ2VSl+H
-         yLRWaGuF/hglupRO3I/2oem89Rn537/ks8o/tuolZHG06e9gbLUJjFYhoWCYvaXfalkr
-         P+BnoE2o3wt5W2LM9+/gUamvNHVYx/jrrMm7dKEQ7oeqbwW3+oybMYSOHbHkEyFxxal5
-         hMKg==
-X-Gm-Message-State: AOAM533NGgns5TiaT09MVL+uP3nKT0MJY5j6NBYqW0Dp6pin2pNWNco6
-        +C6MY9zehklNQp8x1feEkdjZH4M5B8Bb/5YSBYAviEbyV5fHqxsJC5AKZf28eHJEu/rwaT+LAj5
-        E18gCMX4ikJCYAU5iANImF1hO
-X-Received: by 2002:a63:8248:: with SMTP id w69mr399692pgd.342.1638292978448;
-        Tue, 30 Nov 2021 09:22:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz4jXepohyRIJTKNCWtUtZ32KtQYupDUiKSwu+l5gDNI+QP5Mos/sA3gKYymmIvch88wAv7cA==
-X-Received: by 2002:a63:8248:: with SMTP id w69mr399668pgd.342.1638292978232;
-        Tue, 30 Nov 2021 09:22:58 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id t3sm20415817pfj.207.2021.11.30.09.22.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 09:22:57 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Mark Brown <broonie@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: spi-zynq-qspi: Fix a NULL pointer dereference in zynq_qspi_exec_mem_op()
-Date:   Wed,  1 Dec 2021 01:22:53 +0800
-Message-Id: <20211130172253.203700-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:from:subject:content-transfer-encoding;
+        bh=zD/t993/NyxzRnTokWaGCkfhn86ThJgcF3B9bfrki4E=;
+        b=SMNiexICA58+zRtX6GwW6YvdOKdy1aMYgOhN/7yrcOyHTF9zm7C/eI+dO9Ga9SD1cc
+         NSitCQViWjhXwEf/sDbOVLz5UDxL2Q3qWwCIzBNLBYqC0O/efipY1aX3ygUp8n/HJXJ7
+         swmWOPxNjl3r31yzk5ZLixJRoIklScdDIDgANSLfuseB5lZqytxfg2/Ws/ygRHcyinHa
+         j3Lb7EnXyYt9uosct14c9JnSrwwPL5mXrJE0K9bFsVWTv6oBQTbFbzRCSV1kDsJdt7zn
+         juhgGgn9WA8kNzpY0dq6SbtElG/VHcDsC8I4DLGMVFNBeLQG9IrRkNPl0vCHLYYKrXGG
+         MUOw==
+X-Gm-Message-State: AOAM530h03HZZ04G1IMOq10pctVGtyL9bKWVxzrS38xOcFvoAq1zmFdH
+        mwxLCNyBxSkadvqNjxK38aA=
+X-Google-Smtp-Source: ABdhPJykkWJmO/AmD7m8xDxXvT/Dn0fRFwF1cG/BwDGo+bULo9NERvDJkG3nABnB0iZvLAPJJrlhAw==
+X-Received: by 2002:a7b:cbd8:: with SMTP id n24mr1108817wmi.150.1638303224265;
+        Tue, 30 Nov 2021 12:13:44 -0800 (PST)
+Received: from ?IPV6:2003:ea:8f1a:f00:cdea:1258:1cb4:5e92? (p200300ea8f1a0f00cdea12581cb45e92.dip0.t-ipconnect.de. [2003:ea:8f1a:f00:cdea:1258:1cb4:5e92])
+        by smtp.googlemail.com with ESMTPSA id w4sm18078175wrs.88.2021.11.30.12.13.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 12:13:43 -0800 (PST)
+Message-ID: <44b2ad71-dc4b-801c-237f-9c233f675c0d@gmail.com>
+Date:   Tue, 30 Nov 2021 21:13:35 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH] spi: fix erroneous logic inversion in spi_match_id() usage
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-In zynq_qspi_exec_mem_op(), kzalloc() is directly used in memset(),
-which could lead to a NULL pointer dereference on failure of
-kzalloc().
+We want to continue in case of a match. Fix the erroneously inverted
+logic.
 
-Fix this bug by adding a check of tmpbuf.
-
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_SPI_ZYNQ_QSPI=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: 67dca5e580f1 ("spi: spi-mem: Add support for Zynq QSPI controller")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Fixes: 3f07657506df ("spi: deduplicate spi_match_id() in __spi_register_driver()")
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/spi/spi-zynq-qspi.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/spi/spi.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
-index cfa222c9bd5e..78f31b61a2aa 100644
---- a/drivers/spi/spi-zynq-qspi.c
-+++ b/drivers/spi/spi-zynq-qspi.c
-@@ -570,6 +570,9 @@ static int zynq_qspi_exec_mem_op(struct spi_mem *mem,
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 5bf680fcb..4578c2fb5 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -471,10 +471,7 @@ int __spi_register_driver(struct module *owner, struct spi_driver *sdrv)
+ 				of_name = of_id->compatible;
  
- 	if (op->dummy.nbytes) {
- 		tmpbuf = kzalloc(op->dummy.nbytes, GFP_KERNEL);
-+		if (!tmpbuf)
-+			return -ENOMEM;
-+
- 		memset(tmpbuf, 0xff, op->dummy.nbytes);
- 		reinit_completion(&xqspi->data_completion);
- 		xqspi->txbuf = tmpbuf;
+ 			if (sdrv->id_table) {
+-				const struct spi_device_id *spi_id;
+-
+-				spi_id = spi_match_id(sdrv->id_table, of_name);
+-				if (!spi_id)
++				if (spi_match_id(sdrv->id_table, of_name))
+ 					continue;
+ 			} else {
+ 				if (strcmp(sdrv->driver.name, of_name) == 0)
 -- 
-2.25.1
+2.34.1
 
