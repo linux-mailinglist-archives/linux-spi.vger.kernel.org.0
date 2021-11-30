@@ -2,105 +2,123 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52327463B63
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Nov 2021 17:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B771463CCB
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Nov 2021 18:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238209AbhK3QQd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 Nov 2021 11:16:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52494 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238472AbhK3QQa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Nov 2021 11:16:30 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1521C061756;
-        Tue, 30 Nov 2021 08:13:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S238710AbhK3Rbb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 Nov 2021 12:31:31 -0500
+Received: from mta-p6.oit.umn.edu ([134.84.196.206]:36222 "EHLO
+        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244734AbhK3Rba (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Nov 2021 12:31:30 -0500
+X-Greylist: delayed 307 seconds by postgrey-1.27 at vger.kernel.org; Tue, 30 Nov 2021 12:31:30 EST
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 4J3TZJ2QxPz9xgl2
+        for <linux-spi@vger.kernel.org>; Tue, 30 Nov 2021 17:23:04 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p6.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id TaoF-QgZGtBK for <linux-spi@vger.kernel.org>;
+        Tue, 30 Nov 2021 11:23:04 -0600 (CST)
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 269F5CE1A5D;
-        Tue, 30 Nov 2021 16:13:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B1D3C53FC1;
-        Tue, 30 Nov 2021 16:13:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638288787;
-        bh=RQsFpcDyHf4srgmnNCL4bgMJUInhxMAX/3HgHnGTd+I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XSex20PpNNt01eaPfXM8dzXkpkScJHf0Y0tSv7ePGBfbn580nPcFz4XTS/YW6G1qa
-         OCxj/ANAV5U0xu7RMI+HXU85KeEa5TbP9IrOPH6fA8U8K47WXMcRTFzFzE7Ft2Ry4H
-         qTWW2D/2RE7019Gp/lGjBx1KZDHcghIsQp0op/9asfRJMibVC9AYIivKC1JqnntecS
-         GNQkkQefrttsH5Lby20GJOYidVWdpWDDnuuWuR04KvVQVLycNQ0ZG3HEy+sBM69kS0
-         GaazzyuDsusKjceUZ+sMem4TfaTIfKrtHC0rtq4QHjFA8HgBls2STyZsEYtMUUTPrA
-         fE/EMrflp7QoQ==
-Date:   Tue, 30 Nov 2021 16:13:02 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] spi: tegra210-quad: add acpi support
-Message-ID: <YaZNjgnJZWdKwT+L@sirena.org.uk>
-References: <1637834152-32093-1-git-send-email-kyarlagadda@nvidia.com>
- <1637834152-32093-2-git-send-email-kyarlagadda@nvidia.com>
- <YZ+ImY1LrvB5a5iF@sirena.org.uk>
- <BN6PR12MB124973BF5CBB4AB35CC59B8AC3669@BN6PR12MB1249.namprd12.prod.outlook.com>
- <YaTHKuohUNt/hVLq@sirena.org.uk>
- <BN6PR12MB124927C4F4FAF53B59C2A23CC3679@BN6PR12MB1249.namprd12.prod.outlook.com>
- <YaYhtFnHlZob9s0J@sirena.org.uk>
- <f6c68e0a-eaa9-12a8-cc44-84b13592c1d9@gmail.com>
+        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 4J3TZJ0QN5z9xgl0
+        for <linux-spi@vger.kernel.org>; Tue, 30 Nov 2021 11:23:04 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p6.oit.umn.edu 4J3TZJ0QN5z9xgl0
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p6.oit.umn.edu 4J3TZJ0QN5z9xgl0
+Received: by mail-pj1-f71.google.com with SMTP id lt10-20020a17090b354a00b001a649326aedso11858679pjb.5
+        for <linux-spi@vger.kernel.org>; Tue, 30 Nov 2021 09:23:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=svJ3RMCV+p4JHnfOiaFQLsj9cOauK3sHfEDzsRzk6UE=;
+        b=MKa5ESf0rJVu4B+Q4oPqAmJ0frxgN60i358zPoUfYCIVztCFvcCWBKDz3pBHBOaYOp
+         bRroQpQ1tkEWGvW76MNh7ePyn848CH5ZZIcpYWTai9RiTkbheVuqvrHqt2+5Xcxf35Yq
+         7lTBdA7EN6K5NksOc6AePjns7nMpo3YzChW7W66+WdUNxnrTtj+t6ofIyNd8u21NRvAN
+         7/bwHfBc8EfXS9bM7Ca2AEW/ZHPVljGo2r6pp7WYuRx+SLRyxC0Mg/iSAaGmbGTwFxgR
+         T1hRR5Qr5HTsPHUoUsvisJbuEHiSCNLyObIIaQzYICr/YtsqKLQxzUvpnUA55IqPK947
+         G3hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=svJ3RMCV+p4JHnfOiaFQLsj9cOauK3sHfEDzsRzk6UE=;
+        b=PoeM1W8Mwk45oJUCUzaA4L7Ohmcr8j2LYsTy7AX+41MgX+4m4fGs26C6jCYvtl3/+G
+         svu3ehFXWULSzVIKh9cA+aOGjwlowocWOfnNOEk+e+2mJJnJeOJfdT/uVmHSCXpsOyLl
+         TuNiWVG7lru+wN4j8xB6owvIYpf/0xpFY3WlVH9mRYvbHvfJ26QJADqeR9iExZ2VSl+H
+         yLRWaGuF/hglupRO3I/2oem89Rn537/ks8o/tuolZHG06e9gbLUJjFYhoWCYvaXfalkr
+         P+BnoE2o3wt5W2LM9+/gUamvNHVYx/jrrMm7dKEQ7oeqbwW3+oybMYSOHbHkEyFxxal5
+         hMKg==
+X-Gm-Message-State: AOAM533NGgns5TiaT09MVL+uP3nKT0MJY5j6NBYqW0Dp6pin2pNWNco6
+        +C6MY9zehklNQp8x1feEkdjZH4M5B8Bb/5YSBYAviEbyV5fHqxsJC5AKZf28eHJEu/rwaT+LAj5
+        E18gCMX4ikJCYAU5iANImF1hO
+X-Received: by 2002:a63:8248:: with SMTP id w69mr399692pgd.342.1638292978448;
+        Tue, 30 Nov 2021 09:22:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz4jXepohyRIJTKNCWtUtZ32KtQYupDUiKSwu+l5gDNI+QP5Mos/sA3gKYymmIvch88wAv7cA==
+X-Received: by 2002:a63:8248:: with SMTP id w69mr399668pgd.342.1638292978232;
+        Tue, 30 Nov 2021 09:22:58 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.7.42.137])
+        by smtp.gmail.com with ESMTPSA id t3sm20415817pfj.207.2021.11.30.09.22.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 09:22:57 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Mark Brown <broonie@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: spi-zynq-qspi: Fix a NULL pointer dereference in zynq_qspi_exec_mem_op()
+Date:   Wed,  1 Dec 2021 01:22:53 +0800
+Message-Id: <20211130172253.203700-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tfdgiQzglU0HJMw6"
-Content-Disposition: inline
-In-Reply-To: <f6c68e0a-eaa9-12a8-cc44-84b13592c1d9@gmail.com>
-X-Cookie: Check your local listings.
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+In zynq_qspi_exec_mem_op(), kzalloc() is directly used in memset(),
+which could lead to a NULL pointer dereference on failure of
+kzalloc().
 
---tfdgiQzglU0HJMw6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Fix this bug by adding a check of tmpbuf.
 
-On Tue, Nov 30, 2021 at 05:14:07PM +0300, Dmitry Osipenko wrote:
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
 
-> The ifdefery, that this patch has, shouldn't be needed. We have a
-> similar ACPI patch for Tegra I2C [1] and it doesn't have that.
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
 
-> [1]
-> https://patchwork.ozlabs.org/project/linux-tegra/patch/1637859224-5179-1-git-send-email-akhilrajeev@nvidia.com/
+Builds with CONFIG_SPI_ZYNQ_QSPI=m show no new warnings,
+and our static analyzer no longer warns about this code.
 
-> I assume this patch could be reworked similarly to the I2C patch.
+Fixes: 67dca5e580f1 ("spi: spi-mem: Add support for Zynq QSPI controller")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+ drivers/spi/spi-zynq-qspi.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Yes, that looks much cleaner.
+diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
+index cfa222c9bd5e..78f31b61a2aa 100644
+--- a/drivers/spi/spi-zynq-qspi.c
++++ b/drivers/spi/spi-zynq-qspi.c
+@@ -570,6 +570,9 @@ static int zynq_qspi_exec_mem_op(struct spi_mem *mem,
+ 
+ 	if (op->dummy.nbytes) {
+ 		tmpbuf = kzalloc(op->dummy.nbytes, GFP_KERNEL);
++		if (!tmpbuf)
++			return -ENOMEM;
++
+ 		memset(tmpbuf, 0xff, op->dummy.nbytes);
+ 		reinit_completion(&xqspi->data_completion);
+ 		xqspi->txbuf = tmpbuf;
+-- 
+2.25.1
 
-> Agree that should be better to have a common reset driver for ACPI
-> instead of polluting each driver with a boilerplate code.
-
-Right, I think that'd be even better.  It's probably best to split
-adding reset support to the driver out from adding the ACPI ID - they
-shouldn't really have been merged in the first place TBH - and then try
-this approach first.
-
---tfdgiQzglU0HJMw6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGmTY0ACgkQJNaLcl1U
-h9BRCAf/YAUVoIhTKIfyTduGz7fcp6nmtLdKrJNwvoGaeiuGW22yH5OO9tjiuHeg
-t0kA0vf6DlVOeAh6lFmgSfpPvugvwrAZaOM5w/1FAdwtsI16LbBueHr2BoUlBxZN
-f0VSEe976TFdLqJ8Vnj7D4mp+6FKNIMf/JRqjrLlHAQNr/H3kLn3UOdgIscLEmTj
-8aju/l8h7oVdjKu5v2dBLlIreLxb96PKkhYnuOsOhLyy35oUVtLKva/l/KFzxuap
-iqQ4g2fHdQKPAJuCzuEfkV69uTfygCvfFA4UiOECqITWo24iazYJDhioquVbUHWL
-CSTSkM1rfYsfrs4rln5lMO63+cSKEw==
-=UWwB
------END PGP SIGNATURE-----
-
---tfdgiQzglU0HJMw6--
