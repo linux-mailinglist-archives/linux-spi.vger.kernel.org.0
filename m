@@ -2,85 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E9C0462FD3
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Nov 2021 10:36:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4E8463514
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Nov 2021 14:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240290AbhK3JkP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 Nov 2021 04:40:15 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:37424 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240291AbhK3JkO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Nov 2021 04:40:14 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1AU9aSvb088095;
-        Tue, 30 Nov 2021 03:36:28 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1638264988;
-        bh=N+Gbrxz85CPm2g1QNSdZgtR2Dpod+ABYilbEGbZO5Vk=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=f11y++twHtndHk25Su6Mv+3/Lu8qRYpj0fY7iIWSNqli/sTizzbV0az831WGznz0L
-         nPWDgwDhcVJo4iNGWwn8TrkREBTubVLhaCJq+9K+knxRNIPE+NJktul9fE9L2m5vd+
-         HyikD39b08tkzACMfG4bVnEBwjc4EXEzhUFZN/vA=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1AU9aS62050668
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 30 Nov 2021 03:36:28 -0600
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 30
- Nov 2021 03:36:28 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 30 Nov 2021 03:36:28 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1AU9aRFI051313;
-        Tue, 30 Nov 2021 03:36:28 -0600
-Date:   Tue, 30 Nov 2021 15:06:26 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH v3 0/3] Add bindings for peripheral-specific SPI
- controller properties
-Message-ID: <20211130093624.kc5ivrhzjwfo7rke@ti.com>
-References: <20211109181911.2251-1-p.yadav@ti.com>
- <20211129180935.nmymboy336hllly7@ti.com>
- <YaUY1gKnyoOEvo/M@sirena.org.uk>
+        id S233999AbhK3NJY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 Nov 2021 08:09:24 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51150 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230261AbhK3NJX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Nov 2021 08:09:23 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3860EB817AB;
+        Tue, 30 Nov 2021 13:06:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E948BC53FC7;
+        Tue, 30 Nov 2021 13:05:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638277561;
+        bh=4Kk+iPJ9utmQ+No40KEp/M1GCd0HkU5mgNmfY3Ue3fk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rX7nGVJBReMQH+ADECiLFvL9rGq8ZfBxRay4EgBHKZ1UMVR6r3mVVvLgY0S6hnhpq
+         a8H4etxGPgJOaWLoBfyhJ+b/3BNEOZPItzePUutGVFz0aph5rekDKr3CQKvgi7fHRt
+         D3+jPo7MOuLuFWP1jopsi7UCibTD3yL3kBngDQlYKYDDz3U2Ldj/wqzNmbJkNckvCY
+         nV1cw0IxW7JVzRrugHRn57OscU+VOKUiJcDeERLbjB9ofyipYR7jVL9J5W8eXOZc0z
+         099Xv3UmAgLHzhLXdK8TgTAPg9RgbCeM+zTVyIdtt4TFFcZVa7i2w3+AnyrRuJ8H8J
+         TWDHgxXw7mPjg==
+Date:   Tue, 30 Nov 2021 13:05:56 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] spi: tegra210-quad: add acpi support
+Message-ID: <YaYhtFnHlZob9s0J@sirena.org.uk>
+References: <1637834152-32093-1-git-send-email-kyarlagadda@nvidia.com>
+ <1637834152-32093-2-git-send-email-kyarlagadda@nvidia.com>
+ <YZ+ImY1LrvB5a5iF@sirena.org.uk>
+ <BN6PR12MB124973BF5CBB4AB35CC59B8AC3669@BN6PR12MB1249.namprd12.prod.outlook.com>
+ <YaTHKuohUNt/hVLq@sirena.org.uk>
+ <BN6PR12MB124927C4F4FAF53B59C2A23CC3679@BN6PR12MB1249.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="MHPCoeCF66a+8rsk"
 Content-Disposition: inline
-In-Reply-To: <YaUY1gKnyoOEvo/M@sirena.org.uk>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <BN6PR12MB124927C4F4FAF53B59C2A23CC3679@BN6PR12MB1249.namprd12.prod.outlook.com>
+X-Cookie: Check your local listings.
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 29/11/21 06:15PM, Mark Brown wrote:
-> On Mon, Nov 29, 2021 at 11:39:35PM +0530, Pratyush Yadav wrote:
-> > On 09/11/21 11:49PM, Pratyush Yadav wrote:
-> 
-> > > This is the best approach that I came up with with my limited knowledge
-> > > of JSON schema. It has some limitations that are mentioned in patch 1. I
-> > > don't know of any better ways to model this. Suggestions are welcome!
-> 
-> > Do you plan to take this series through your tree or should I poke Mark 
-> > about it?
-> 
-> I'd expect to take it through my tree but please allow a reasonable time
-> for reviews...
 
-Sure, thanks. I just wanted to make sure this series didn't fall through 
-the cracks if there was some confusion on who is supposed to pick it up.
+--MHPCoeCF66a+8rsk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+On Tue, Nov 30, 2021 at 01:50:07AM +0000, Krishna Yarlagadda wrote:
+
+> > That said frankly I'd expect this handling of ACPI reset to be pushed into the
+> > reset code, it's obviously not good to be open coding this in drivers when this
+> > looks like it's completely generic to any ACPI object so shouldn't be being
+> > open coded in individual driers especially with the ifdefery.  Shouldn't the
+> > reset API be able to figure out that an object with _RST has a reset control
+> > and provide access to it through the reset API?
+
+> Common reset apis are not handling _RST. Each driver is implementing
+> _RST method in ACPI and calling from drivers.
+
+I can see that.  What I'm saying is that this seems bad and we should
+instead be implementing this in common code.
+
+--MHPCoeCF66a+8rsk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGmIbQACgkQJNaLcl1U
+h9CEiAf8CRl+6hMD+/ZKTgrUelUBql3J4AbFnksldvj6F6pz5SuZ0JlM0injXeAl
+s61rifuDIJsbC37ovaG3We84Cm2a7KiCtR8itIw/oLZQWDVfUNdNaN00zc7sNCPJ
+MnHlielK85ddMbXCYOInOM+LLI8RhuwIH/a2cOfLzWWuumze06hVSCiGuYyV53Pu
+ATrbWKy+keX4pciAZDFfpS+VkNvJ9tsmrmEabkH1PXjMfc2jKqgT5GnuHs/udSk9
+DxZ7Si3T1hLPdb3Ev/z4xiFP/w+4iIE+t0S6IUZx790SoPilV1QIeFjfM3L+dIq+
+710m8ULFLcxUNBs6G3Ut/B5TAO+ArA==
+=0vRn
+-----END PGP SIGNATURE-----
+
+--MHPCoeCF66a+8rsk--
