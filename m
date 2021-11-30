@@ -2,92 +2,143 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FF3463F0E
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Nov 2021 21:13:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C79C3463F94
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Nov 2021 22:00:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240037AbhK3URF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 30 Nov 2021 15:17:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240035AbhK3URF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Nov 2021 15:17:05 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE7AC061574
-        for <linux-spi@vger.kernel.org>; Tue, 30 Nov 2021 12:13:45 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id i12so18516199wmq.4
-        for <linux-spi@vger.kernel.org>; Tue, 30 Nov 2021 12:13:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=zD/t993/NyxzRnTokWaGCkfhn86ThJgcF3B9bfrki4E=;
-        b=B0nh1TjaXr264pLI7Sy3fAaey+c2/U/U6VTS0qxQj80lMsAVVrkoUNRrvC8TOHTYXr
-         4O2YbyY0JOcyIRtCXSnoqLTA9Kpv4ZuEK8E3Ec8jQyMVS2WEwHn9qNh9+0tZAH5CuI/a
-         caynIzj6obe3/eyeBjY0wGp2ZAybboq3RSAW56181dTRgRp9lmw8JAPMBscciO18NxmY
-         22lHfXvd9TuwYZJsAv5I50Y8mQuiaOk2y4LsfTTEpfh1LXvCzZLO3gHgpa1zdWvwfF8H
-         VR7yk3xwEcF3v7aAmxhh+KzJzDs3LwGRcwb75Q69cmrIxaNekf0TCU+HpBU/TbErK2C2
-         YCKw==
+        id S1343890AbhK3VEL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 30 Nov 2021 16:04:11 -0500
+Received: from mail-ot1-f42.google.com ([209.85.210.42]:41980 "EHLO
+        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344009AbhK3VCu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 30 Nov 2021 16:02:50 -0500
+Received: by mail-ot1-f42.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so32015692otl.8;
+        Tue, 30 Nov 2021 12:59:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=zD/t993/NyxzRnTokWaGCkfhn86ThJgcF3B9bfrki4E=;
-        b=SMNiexICA58+zRtX6GwW6YvdOKdy1aMYgOhN/7yrcOyHTF9zm7C/eI+dO9Ga9SD1cc
-         NSitCQViWjhXwEf/sDbOVLz5UDxL2Q3qWwCIzBNLBYqC0O/efipY1aX3ygUp8n/HJXJ7
-         swmWOPxNjl3r31yzk5ZLixJRoIklScdDIDgANSLfuseB5lZqytxfg2/Ws/ygRHcyinHa
-         j3Lb7EnXyYt9uosct14c9JnSrwwPL5mXrJE0K9bFsVWTv6oBQTbFbzRCSV1kDsJdt7zn
-         juhgGgn9WA8kNzpY0dq6SbtElG/VHcDsC8I4DLGMVFNBeLQG9IrRkNPl0vCHLYYKrXGG
-         MUOw==
-X-Gm-Message-State: AOAM530h03HZZ04G1IMOq10pctVGtyL9bKWVxzrS38xOcFvoAq1zmFdH
-        mwxLCNyBxSkadvqNjxK38aA=
-X-Google-Smtp-Source: ABdhPJykkWJmO/AmD7m8xDxXvT/Dn0fRFwF1cG/BwDGo+bULo9NERvDJkG3nABnB0iZvLAPJJrlhAw==
-X-Received: by 2002:a7b:cbd8:: with SMTP id n24mr1108817wmi.150.1638303224265;
-        Tue, 30 Nov 2021 12:13:44 -0800 (PST)
-Received: from ?IPV6:2003:ea:8f1a:f00:cdea:1258:1cb4:5e92? (p200300ea8f1a0f00cdea12581cb45e92.dip0.t-ipconnect.de. [2003:ea:8f1a:f00:cdea:1258:1cb4:5e92])
-        by smtp.googlemail.com with ESMTPSA id w4sm18078175wrs.88.2021.11.30.12.13.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Nov 2021 12:13:43 -0800 (PST)
-Message-ID: <44b2ad71-dc4b-801c-237f-9c233f675c0d@gmail.com>
-Date:   Tue, 30 Nov 2021 21:13:35 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=svwr0vs5VT0Q8CjflnZ+WVv0gkwSlvUflUqNPItWZlI=;
+        b=gKB0VRA7pUQ7tf7h5SHvavPXrrmYqcU4+/RjVFAzmK2c+IxcLogS1KKS0MV4w7m8HG
+         gIPBadm2dMcem3GzOJp0Rlk+Z71ZeFgezpVVoI4KuM8G5g4cSie6bSbmexcYguooiQO6
+         nchi4E7xjuz/anRvR4m7jrmWlcvXsDIlLISstvkjgikcYDMgShSy2w9XYkW3ooK7Jv7i
+         AUPaCh2jtY1IChbTfwEau0XHxiX/wjjrAPMeMSdm6rDLCgGOr54wB55vW9+/MQz1Tykz
+         kfUiLMqdjmgEDTiEtyjKanuKNVWnHcczprhgaSTQRGXG2Wki1LzdmYoqpl9nx1GnwktO
+         7s/Q==
+X-Gm-Message-State: AOAM531Q6vxHQ5WwxAM/nHxlS0QF25pnKHHDEOA0bzMKXD8O2oIhVD1/
+        JroxIeJlkWzeTeLw50/k0RlBXvQJ6Q==
+X-Google-Smtp-Source: ABdhPJxoHxWUEqLpDX8XbzPAmWWaHH+g+kzebw3LdX+tSOJ6OAmyuKgSbxivNbf0gnBcww0kIxAfzQ==
+X-Received: by 2002:a05:6830:2692:: with SMTP id l18mr1549382otu.353.1638305968633;
+        Tue, 30 Nov 2021 12:59:28 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id t13sm4134963oiw.30.2021.11.30.12.59.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 12:59:28 -0800 (PST)
+Received: (nullmailer pid 3003102 invoked by uid 1000);
+        Tue, 30 Nov 2021 20:59:27 -0000
+Date:   Tue, 30 Nov 2021 14:59:27 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Dinh Nguyen <dinguyen@kernel.org>
+Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] ARM: dts: socfpga: change qspi to
+ "intel,socfpga-qspi"
+Message-ID: <YaaQr6RmTC0BMeV+@robh.at.kernel.org>
+References: <20211122160427.2808342-1-dinguyen@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH] spi: fix erroneous logic inversion in spi_match_id() usage
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211122160427.2808342-1-dinguyen@kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-We want to continue in case of a match. Fix the erroneously inverted
-logic.
+On Mon, Nov 22, 2021 at 10:04:26AM -0600, Dinh Nguyen wrote:
+> Because of commit 9cb2ff111712 ("spi: cadence-quadspi: Disable Auto-HW polling"),
+> which does a write to the CQSPI_REG_WR_COMPLETION_CTRL register
+> regardless of any condition. Well, the Cadence QuadSPI controller on
+> Intel's SoCFPGA platforms does not implement the
+> CQSPI_REG_WR_COMPLETION_CTRL register, thus a write to this register
+> results in a crash!
+> 
+> So starting with v5.16, I introduced the patch
+> 98d948eb833 ("spi: cadence-quadspi: fix write completion support"),
+> which adds the dts property "intel,socfpga-qspi" that is specific for
 
-Fixes: 3f07657506df ("spi: deduplicate spi_match_id() in __spi_register_driver()")
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
- drivers/spi/spi.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+'intel,socfpga-qspi' is not a DT property. It's a value for 
+'compatible'.
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 5bf680fcb..4578c2fb5 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -471,10 +471,7 @@ int __spi_register_driver(struct module *owner, struct spi_driver *sdrv)
- 				of_name = of_id->compatible;
- 
- 			if (sdrv->id_table) {
--				const struct spi_device_id *spi_id;
--
--				spi_id = spi_match_id(sdrv->id_table, of_name);
--				if (!spi_id)
-+				if (spi_match_id(sdrv->id_table, of_name))
- 					continue;
- 			} else {
- 				if (strcmp(sdrv->driver.name, of_name) == 0)
--- 
-2.34.1
+Is this change going to stable? That would at least fix old kernels 
+with new DT (assuming they get stable updates). But new kernels with old 
+DT are still broken. Not a great story here.
 
+> the QSPI on SoCFPGA that doesn't have the CQSPI_REG_WR_COMPLETION_CTRL
+> register implemented.
+> 
+> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+> ---
+>  arch/arm/boot/dts/socfpga.dtsi                    | 2 +-
+>  arch/arm/boot/dts/socfpga_arria10.dtsi            | 2 +-
+>  arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi | 2 +-
+>  arch/arm64/boot/dts/intel/socfpga_agilex.dtsi     | 2 +-
+>  4 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/socfpga.dtsi b/arch/arm/boot/dts/socfpga.dtsi
+> index 0b021eef0b53..108c3610bf52 100644
+> --- a/arch/arm/boot/dts/socfpga.dtsi
+> +++ b/arch/arm/boot/dts/socfpga.dtsi
+> @@ -782,7 +782,7 @@ ocram: sram@ffff0000 {
+>  		};
+>  
+>  		qspi: spi@ff705000 {
+> -			compatible = "cdns,qspi-nor";
+> +			compatible = "intel,socfpga-qpsi";
+
+Obviously not tested.
+
+
+>  			#address-cells = <1>;
+>  			#size-cells = <0>;
+>  			reg = <0xff705000 0x1000>,
+> diff --git a/arch/arm/boot/dts/socfpga_arria10.dtsi b/arch/arm/boot/dts/socfpga_arria10.dtsi
+> index a574ea91d9d3..e1a70f3a641d 100644
+> --- a/arch/arm/boot/dts/socfpga_arria10.dtsi
+> +++ b/arch/arm/boot/dts/socfpga_arria10.dtsi
+> @@ -756,7 +756,7 @@ usb0-ecc@ff8c8800 {
+>  		};
+>  
+>  		qspi: spi@ff809000 {
+> -			compatible = "cdns,qspi-nor";
+> +			compatible = "intel,socfpga-qspi";
+>  			#address-cells = <1>;
+>  			#size-cells = <0>;
+>  			reg = <0xff809000 0x100>,
+> diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
+> index d301ac0d406b..d391153c9e6d 100644
+> --- a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
+> +++ b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
+> @@ -594,7 +594,7 @@ emac0-tx-ecc@ff8c0400 {
+>  		};
+>  
+>  		qspi: spi@ff8d2000 {
+> -			compatible = "cdns,qspi-nor";
+> +			compatible = "intel,socfpga-qspi";
+>  			#address-cells = <1>;
+>  			#size-cells = <0>;
+>  			reg = <0xff8d2000 0x100>,
+> diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
+> index 163f33b46e4f..de6dd2189e74 100644
+> --- a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
+> +++ b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
+> @@ -628,7 +628,7 @@ sdmmca-ecc@ff8c8c00 {
+>  		};
+>  
+>  		qspi: spi@ff8d2000 {
+> -			compatible = "cdns,qspi-nor";
+> +			compatible = "intel,socfpga-qspi";
+>  			#address-cells = <1>;
+>  			#size-cells = <0>;
+>  			reg = <0xff8d2000 0x100>,
+> -- 
+> 2.25.1
+> 
+> 
