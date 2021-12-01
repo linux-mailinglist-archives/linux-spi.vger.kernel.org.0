@@ -2,197 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86AD846567C
-	for <lists+linux-spi@lfdr.de>; Wed,  1 Dec 2021 20:30:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC824656C5
+	for <lists+linux-spi@lfdr.de>; Wed,  1 Dec 2021 20:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234646AbhLATdZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 1 Dec 2021 14:33:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
+        id S229592AbhLAT6X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 1 Dec 2021 14:58:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245394AbhLATdJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 Dec 2021 14:33:09 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452A0C061756;
-        Wed,  1 Dec 2021 11:29:40 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id y12so106196982eda.12;
-        Wed, 01 Dec 2021 11:29:40 -0800 (PST)
+        with ESMTP id S245428AbhLAT6R (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 Dec 2021 14:58:17 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BA4C061574
+        for <linux-spi@vger.kernel.org>; Wed,  1 Dec 2021 11:54:55 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id a9so54795570wrr.8
+        for <linux-spi@vger.kernel.org>; Wed, 01 Dec 2021 11:54:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=HSA+wpNkFVTgXTMQMK9Eo4CLbDnWx6QS1vWmLRNYZ2s=;
-        b=WDfqpi5ZYEY0azY9Z4QrgVLDsvTYCM+c4/TVNNFk9gXVSDiLKUTAB9CiLatc6eaD7g
-         C34gQ6t/CEctbaDc2UUqR9c2qpdqKLT1HELMG/Yy2ol3bYLH0wC7U3TJz8YLSLr8oACG
-         XZcOij1SLUwOWKyu/UcXyown+70dn+YaxClWxzp3p58QhRt39Cxa0XI5mS7ZzwpXQhzk
-         LQQx014YSy+VXq2mwqUgdHWlHM5nX+S1oNSIHAPEpd6prgWD5MGqGmJ11DUFhBscMmxb
-         qJ2cNzyQuLwsqbEG2iwp9dI9b/5XvLj1MGeWE6leu3kUpU7pbJhId+eAUO/jce582v+S
-         yyAQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=TtPfYEGKnVBKt5IfjZCGiZy/FqKXbfwyq+NTL0AED7A=;
+        b=NYttOVjz4x97cN5DXGDyKY5oq+S6Sy6IJEgfJDIwv2pqeJnZ8EN8u0gCdPA032w9We
+         az6R8DPeYtIuE9q1D2WPulvvfTHKAnmRaQVKppGAoAFNzo+eb47v0xxMKaBgY9mACBm8
+         MaEAC7v0Q6k1REGAdpxE/ASEW068s2iFOXhaAQU2FRBhKEh4PW24rSHDf4GtmOzVh+a4
+         Uk9UdbrApXZC0Ca82TvZkouZ65Vwk8cXA1NKJpc4QcmRNjUXHSr6LsuXZuBNOzfIL612
+         A1jmiUfTNHKH0Up1Rc3k/hw//1gVD0u2RK1URIm9n5FYrKWc6jBhu8RJ/Jb60qyPQku8
+         agCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HSA+wpNkFVTgXTMQMK9Eo4CLbDnWx6QS1vWmLRNYZ2s=;
-        b=Y0HR+VB92VpNQkFHmXU8/im9OgUQtExgPV/DmrN4UmMYc5sDEfzoU7M1fXgY65t/sz
-         eQ/lMfxF9FtB1G46ul9Ajb06rQtzzSSf6ovD/ab+ql8/YhZvMT3rB5ZANAE6nqV6c5VC
-         jQbo7PhLK03ZlxZr0KKsziTJ7IRsfU+07qtQEAJ+h//CNIWoG03wiUDoC9fCjpNwMWXt
-         +TB1cZf1sms14LDtaw6seTwriqFcn+3KY+K98zJjfTiPSQUZmDyGwuXH8brlulWxGiO9
-         FaOTX/NB2+L+MtwfaZxdJqo5BY1GwjWpAkG1PPCbG+dIXux/osB/E1+hwln+KIyUEXOU
-         M2lg==
-X-Gm-Message-State: AOAM530qIWgqKx2Pri+fXOxJiCRto78YIQh1UWt0VapGiTyuumAtjgce
-        8AwTKa/+FwYjXvJUgZKiiSkdWpp6jE2HARqZJKw=
-X-Google-Smtp-Source: ABdhPJwXKA5yyhQvQ3J79nSZqcS7ZG5U+cMz1A9BLSzFUJy0AWX6+XvPhzoGcS3fDgn3Pdf/CGbfjnrnX7mrxeV3PzA=
-X-Received: by 2002:a17:906:6a0a:: with SMTP id qw10mr9874209ejc.141.1638386978775;
- Wed, 01 Dec 2021 11:29:38 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TtPfYEGKnVBKt5IfjZCGiZy/FqKXbfwyq+NTL0AED7A=;
+        b=HoPrm9QALug40fMoCi+ajnyFRBM7E1EsPvMAmqwkpseEeCrTekL5U4CagiymGEE3Qo
+         O0h9Qlt6ei/D2MdshS6zjKwH8jACIAX7/XBbYFtBi10bto+U/bNK/m4pKMXSR4YvPPv3
+         Kgmc3fLdHIbo1FcMVHXzjINg5JhmNX3tGjTbAteO3z0Y3gEfZ8HjJGBiOOnJkW5tz59R
+         GhYoZKk9LuDI8XzpnFodnMkTrcSQZng2D5QZDLWqklkRrQwnPC5FNtFcWWn5zfmvTd3G
+         xmOVNUXnAylLUYBGGoUUQxgLO9bqCU6RG3jnG8PrKc8IHgsVoHMy1JTdie5GBeasZ2P7
+         7nLg==
+X-Gm-Message-State: AOAM530+UGoXA/vMLL1PHMCQaQTlERft8QrvK+uzy4mtiMTBt+1TpObN
+        M3KOcMR7Oejrwrb1nQM7BLN4PZJKlXw=
+X-Google-Smtp-Source: ABdhPJy59vmgdXSuFrznFrje3njjtq9t6+zeJllUsDD2xM/HYY8avs3tVvwO6CNCk8R1fyGs8mi2Hg==
+X-Received: by 2002:adf:b35d:: with SMTP id k29mr8793472wrd.466.1638388494359;
+        Wed, 01 Dec 2021 11:54:54 -0800 (PST)
+Received: from ?IPV6:2003:ea:8f1a:f00:4055:a69:db9e:1280? (p200300ea8f1a0f0040550a69db9e1280.dip0.t-ipconnect.de. [2003:ea:8f1a:f00:4055:a69:db9e:1280])
+        by smtp.googlemail.com with ESMTPSA id p19sm282331wmq.4.2021.12.01.11.54.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 11:54:53 -0800 (PST)
+Message-ID: <292d9bca-f7a2-d460-a34d-48ca17c0911e@gmail.com>
+Date:   Wed, 1 Dec 2021 20:54:45 +0100
 MIME-Version: 1.0
-References: <1635747525-31243-1-git-send-email-lh.kuo@sunplus.com>
- <cover.1637547799.git.lh.kuo@sunplus.com> <e5f2549224cf875d81306ef5f6e98db1cfd81c2e.1637547799.git.lh.kuo@sunplus.com>
- <CAHp75Vd2=OHbrpGtsU8AMXdtNfvSPhpc7vhzkWnahaV48XbfUQ@mail.gmail.com>
- <YZz0n6Mpjl3tKmMe@sirena.org.uk> <CAHp75Vf6+monqu4Hq-yoFSohD9tNFqZTuKjqDDKAJE3Om2BUYQ@mail.gmail.com>
- <6eb68a8153ba46c48862d00f7aa6e0fe@sphcmbx02.sunplus.com.tw>
- <CAHp75VftSORts5cbDxvfyHgqhxmb7K74BfPd=mST+75C+Ch9dQ@mail.gmail.com>
- <33d50e94059b4734939db60b5c531bc9@sphcmbx02.sunplus.com.tw>
- <63a467164c985cadce0e28e50508363a8d2f6622.camel@pengutronix.de>
- <YaDbHe+COa3pke+s@sirena.org.uk> <d33a3a4f3b8248a78fae572a7f88050a@sphcmbx02.sunplus.com.tw>
- <CAHp75VftWNHXG7k09qHtJNFaYe0hvSfNBnQht=D6O7UJH27a5w@mail.gmail.com> <3d792085d6fc4be19253f5200c181041@sphcmbx02.sunplus.com.tw>
-In-Reply-To: <3d792085d6fc4be19253f5200c181041@sphcmbx02.sunplus.com.tw>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 1 Dec 2021 21:28:02 +0200
-Message-ID: <CAHp75VfTqWy_J6SgTPsWOuav8uJrNVV3wDzxB+Ned7LXipaiwA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] SPI: Add SPI driver for Sunplus SP7021
-To:     =?UTF-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] spi: fix erroneous logic inversion in spi_match_id()
+ usage
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Mark Brown <broonie@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "LH.Kuo" <lhjeff911@gmail.com>, Rob Herring <robh+dt@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "dvorkin@tibbo.com" <dvorkin@tibbo.com>,
-        "qinjian@cqplus1.com" <qinjian@cqplus1.com>,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
+References: <44b2ad71-dc4b-801c-237f-9c233f675c0d@gmail.com>
+ <YaeXoiFRAcxVG3I3@sirena.org.uk>
+ <043b15ea-968c-60cb-dc50-c2081105975a@gmail.com>
+ <YafKnpJxhfVLTdJW@smile.fi.intel.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+In-Reply-To: <YafKnpJxhfVLTdJW@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 10:32 AM Lh Kuo =E9=83=AD=E5=8A=9B=E8=B1=AA <lh.Kuo=
-@sunplus.com> wrote:
-
-> > >         ctlr->dev.of_node =3D pdev->dev.of_node;
-> >
-> > device_set_node()
->
-> Is this funciton set as follows?
->         device_set_node(&ctlr->dev, of_fwnode_handle(pdev->dev.fwnode));
-
-Can you please do something?
-For example, figuring out yourself (Elixir is a very good service for
-that): https://elixir.bootlin.com/linux/latest/A/ident/device_set_node
-
-...
-
-> > >         pspim->mas_base =3D devm_platform_ioremap_resource_byname(pde=
-v, "master");
-> > >         pspim->sla_base =3D devm_platform_ioremap_resource_byname(pde=
-v,
-> > > "slave");
-> >
-> > Where are the error checks?
-
-> The changes are as follows? is this correct?
-
-Almost, but not enough. Please run checkpatch.
-
->         pspim->mas_base =3D devm_platform_ioremap_resource_byname(pdev, "=
-master");
->         if (IS_ERR(pspim->mas_base)) {
->                 return dev_err_probe(dev, PTR_ERR(pspim->mas_base), "mas_=
-base get fail\n");
->         }
->
->         pspim->sla_base =3D devm_platform_ioremap_resource_byname(pdev, "=
-slave");
->         if (IS_ERR(pspim->sla_base)) {
->                 return dev_err_probe(dev, PTR_ERR(pspim->sla_base), "sla_=
-base get fail\n");
->         }
-
-...
-
-> > >         if (ret) {
-> > >                 dev_err_probe(dev, ret, "failed to deassert reset\n")=
-;
-> > >                 goto err_free_reset;
-> > >         }
-> >
-> > These two need to be wrapped as I explained above.
->
-> I think these changes are depend on remove-function.
-
-No, it's the other way around: ->remove() implementation depends on
-these changes.
-
-> These settings are as follows? is this correct?
-
-No.
-
->         pspim->spi_clk =3D devm_clk_get(dev, NULL);
->         if (IS_ERR(pspim->spi_clk))
->                 return dev_err_probe(dev, PTR_ERR(pspim->spi_clk), "clk g=
-et fail\n");
->
->         pspim->rstc =3D devm_reset_control_get_exclusive(dev, NULL);
->         if (IS_ERR(pspim->rstc))
->                 return dev_err_probe(dev, PTR_ERR(pspim->rstc), "rst get =
-fail\n");
->
->         ret =3D clk_prepare_enable(pspim->spi_clk);
->         if (ret)
->                 return dev_err_probe(dev, ret, "failed to enable clk\n");
->
->         devm_add_action_or_reset(dev, (void(*)(void *))clk_disable_unprep=
-are,
->                         pspim->spi_clk);
-
-Please, find other drivers as examples of how to do that and take care
-about possible errors.
-
->         ret =3D reset_control_deassert(pspim->rstc);
->         if (ret)
->                 return dev_err_probe(dev, ret, "failed to deassert reset\=
-n");
->
->         devm_add_action_or_reset(dev, (void(*)(void *))reset_control_asse=
-rt,
->                         pspim->rstc);
-
-Ditto.
-
->         ret =3D spi_register_controller(ctlr);
-
-Read what Lukas said.
-
->         pm_runtime_enable(dev);
->         if (ret) {
->                 pm_runtime_disable(dev);
->                 return dev_err_probe(dev, ret, "spi_register_master fail\=
-n");
->         }
->
->         return ret;
->
-> }
->
-> static int sp7021_spi_controller_remove(struct platform_device *pdev)
-> {
->         struct spi_controller *ctlr =3D dev_get_drvdata(&pdev->dev);
->
->         pm_runtime_disable(&pdev->dev);
->         pm_runtime_set_suspended(&pdev->dev);
->
->         return 0;
-> }
-
---=20
-With Best Regards,
-Andy Shevchenko
+On 01.12.2021 20:18, Andy Shevchenko wrote:
+> On Wed, Dec 01, 2021 at 07:49:19PM +0100, Heiner Kallweit wrote:
+>> On 01.12.2021 16:41, Mark Brown wrote:
+>>> On Tue, Nov 30, 2021 at 09:13:35PM +0100, Heiner Kallweit wrote:
+>>>
+>>>> We want to continue in case of a match. Fix the erroneously inverted
+>>>> logic.
+>>>
+>>> We do?  Why?  I can't tell from this changelog what the problem is or
+>>> why the patch would fix it.
+> 
+> Isn't it fixed by b79332ef9d61 ("spi: Fix condition in the
+> __spi_register_driver()")?
+> 
+> 
+Indeed, it has been fixed with this commit. I was using linux-next from
+Nov 24th that included the first change but not yet the fix.
+Sorry for the noise.
