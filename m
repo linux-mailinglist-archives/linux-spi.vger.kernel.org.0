@@ -2,90 +2,177 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC824656C5
-	for <lists+linux-spi@lfdr.de>; Wed,  1 Dec 2021 20:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C0D4659BA
+	for <lists+linux-spi@lfdr.de>; Thu,  2 Dec 2021 00:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbhLAT6X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 1 Dec 2021 14:58:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245428AbhLAT6R (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 Dec 2021 14:58:17 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BA4C061574
-        for <linux-spi@vger.kernel.org>; Wed,  1 Dec 2021 11:54:55 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id a9so54795570wrr.8
-        for <linux-spi@vger.kernel.org>; Wed, 01 Dec 2021 11:54:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TtPfYEGKnVBKt5IfjZCGiZy/FqKXbfwyq+NTL0AED7A=;
-        b=NYttOVjz4x97cN5DXGDyKY5oq+S6Sy6IJEgfJDIwv2pqeJnZ8EN8u0gCdPA032w9We
-         az6R8DPeYtIuE9q1D2WPulvvfTHKAnmRaQVKppGAoAFNzo+eb47v0xxMKaBgY9mACBm8
-         MaEAC7v0Q6k1REGAdpxE/ASEW068s2iFOXhaAQU2FRBhKEh4PW24rSHDf4GtmOzVh+a4
-         Uk9UdbrApXZC0Ca82TvZkouZ65Vwk8cXA1NKJpc4QcmRNjUXHSr6LsuXZuBNOzfIL612
-         A1jmiUfTNHKH0Up1Rc3k/hw//1gVD0u2RK1URIm9n5FYrKWc6jBhu8RJ/Jb60qyPQku8
-         agCA==
+        id S1353805AbhLAXXw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 1 Dec 2021 18:23:52 -0500
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:34340 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353839AbhLAXXo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 1 Dec 2021 18:23:44 -0500
+Received: by mail-ot1-f45.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso37520492otj.1;
+        Wed, 01 Dec 2021 15:20:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TtPfYEGKnVBKt5IfjZCGiZy/FqKXbfwyq+NTL0AED7A=;
-        b=HoPrm9QALug40fMoCi+ajnyFRBM7E1EsPvMAmqwkpseEeCrTekL5U4CagiymGEE3Qo
-         O0h9Qlt6ei/D2MdshS6zjKwH8jACIAX7/XBbYFtBi10bto+U/bNK/m4pKMXSR4YvPPv3
-         Kgmc3fLdHIbo1FcMVHXzjINg5JhmNX3tGjTbAteO3z0Y3gEfZ8HjJGBiOOnJkW5tz59R
-         GhYoZKk9LuDI8XzpnFodnMkTrcSQZng2D5QZDLWqklkRrQwnPC5FNtFcWWn5zfmvTd3G
-         xmOVNUXnAylLUYBGGoUUQxgLO9bqCU6RG3jnG8PrKc8IHgsVoHMy1JTdie5GBeasZ2P7
-         7nLg==
-X-Gm-Message-State: AOAM530+UGoXA/vMLL1PHMCQaQTlERft8QrvK+uzy4mtiMTBt+1TpObN
-        M3KOcMR7Oejrwrb1nQM7BLN4PZJKlXw=
-X-Google-Smtp-Source: ABdhPJy59vmgdXSuFrznFrje3njjtq9t6+zeJllUsDD2xM/HYY8avs3tVvwO6CNCk8R1fyGs8mi2Hg==
-X-Received: by 2002:adf:b35d:: with SMTP id k29mr8793472wrd.466.1638388494359;
-        Wed, 01 Dec 2021 11:54:54 -0800 (PST)
-Received: from ?IPV6:2003:ea:8f1a:f00:4055:a69:db9e:1280? (p200300ea8f1a0f0040550a69db9e1280.dip0.t-ipconnect.de. [2003:ea:8f1a:f00:4055:a69:db9e:1280])
-        by smtp.googlemail.com with ESMTPSA id p19sm282331wmq.4.2021.12.01.11.54.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 11:54:53 -0800 (PST)
-Message-ID: <292d9bca-f7a2-d460-a34d-48ca17c0911e@gmail.com>
-Date:   Wed, 1 Dec 2021 20:54:45 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=s3VfKp0svPniJPx3S2KRfg6+sZau5YCfKLct8VulnAI=;
+        b=dEjwfDYLp21t5uaa56TkGqiFGOskNyCF0iTUJ1gCuL2WjZnEAWYDN3Y2UnV7smi68E
+         HAzFPNs5blHtpmMMd0a6JJ4X58RDMbWWE2ehTyJ/WHKAiqonq3IQrumTAgro3aXDNmrj
+         U9UCUFF7WfohGo7lerHlJsRAAa2nVmZkTPlMH2z46Cj/64ylcx4tl7R3zH0zM9918sUy
+         CCAZQ3xV+Sm6nKysW8BnGwV6rsjBSJpiBMcdh/3WHJWCorOLQoz2XBfgpl4K9V4/I1wt
+         osKH6K2h2P8NgamYQ/+GBPFwXlpiJEJ5T0YACGvOV4wbL+3M6j12BojYXisu7tWT8hvF
+         MplA==
+X-Gm-Message-State: AOAM532m6My7Lu72OTzqpeDJpoFnXf1dqb7dBde24Z5OjIJmc7x8P5nS
+        UFL5e5tw4pEMkplS/vUOIw==
+X-Google-Smtp-Source: ABdhPJwgXa+JwMa+UIdiWdNVSPZAGFCYemTgRhJO5gLo2NywfsC7syhoN5+dj5qjTcDpaGEdqoWfUg==
+X-Received: by 2002:a05:6830:2b14:: with SMTP id l20mr8617911otv.42.1638400822290;
+        Wed, 01 Dec 2021 15:20:22 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bb8sm629332oib.9.2021.12.01.15.20.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 15:20:21 -0800 (PST)
+Received: (nullmailer pid 3150169 invoked by uid 1000);
+        Wed, 01 Dec 2021 23:20:20 -0000
+Date:   Wed, 1 Dec 2021 17:20:20 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        Xiangsheng Hou <Xiangsheng.Hou@mediatek.com>,
+        Julien Su <juliensu@mxic.com.tw>,
+        Jaime Liao <jaimeliao@mxic.com.tw>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 03/20] dt-bindings: mtd: nand-chip: Create a NAND chip
+ description
+Message-ID: <YagDNLy+gGFiH5oU@robh.at.kernel.org>
+References: <20211126113924.310459-1-miquel.raynal@bootlin.com>
+ <20211126113924.310459-4-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] spi: fix erroneous logic inversion in spi_match_id()
- usage
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-References: <44b2ad71-dc4b-801c-237f-9c233f675c0d@gmail.com>
- <YaeXoiFRAcxVG3I3@sirena.org.uk>
- <043b15ea-968c-60cb-dc50-c2081105975a@gmail.com>
- <YafKnpJxhfVLTdJW@smile.fi.intel.com>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-In-Reply-To: <YafKnpJxhfVLTdJW@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211126113924.310459-4-miquel.raynal@bootlin.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 01.12.2021 20:18, Andy Shevchenko wrote:
-> On Wed, Dec 01, 2021 at 07:49:19PM +0100, Heiner Kallweit wrote:
->> On 01.12.2021 16:41, Mark Brown wrote:
->>> On Tue, Nov 30, 2021 at 09:13:35PM +0100, Heiner Kallweit wrote:
->>>
->>>> We want to continue in case of a match. Fix the erroneously inverted
->>>> logic.
->>>
->>> We do?  Why?  I can't tell from this changelog what the problem is or
->>> why the patch would fix it.
+On Fri, Nov 26, 2021 at 12:39:07PM +0100, Miquel Raynal wrote:
+> Move the NAND chip description out of the NAND controller file. Indeed,
+> a subsequent part of the properties supported by a raw NAND chip are
+> also supported by SPI-NAND chips. So let's create a generic NAND chip
+> description which will be pulled by nand-controller.yaml and later by
+> spi-nand.yaml as well.
 > 
-> Isn't it fixed by b79332ef9d61 ("spi: Fix condition in the
-> __spi_register_driver()")?
+> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> ---
+>  .../devicetree/bindings/mtd/nand-chip.yaml    | 71 +++++++++++++++++++
+>  .../bindings/mtd/nand-controller.yaml         | 53 ++------------
+>  2 files changed, 75 insertions(+), 49 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mtd/nand-chip.yaml
 > 
-> 
-Indeed, it has been fixed with this commit. I was using linux-next from
-Nov 24th that included the first change but not yet the fix.
-Sorry for the noise.
+> diff --git a/Documentation/devicetree/bindings/mtd/nand-chip.yaml b/Documentation/devicetree/bindings/mtd/nand-chip.yaml
+> new file mode 100644
+> index 000000000000..6d13e8cdbb21
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mtd/nand-chip.yaml
+> @@ -0,0 +1,71 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mtd/nand-chip.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NAND Chip and NAND Controller Generic Binding
+> +
+> +maintainers:
+> +  - Miquel Raynal <miquel.raynal@bootlin.com>
+> +
+> +description: |
+> +  This file covers the generic description of a NAND chip. It implies that the
+> +  bus interface should not be taken into account: both raw NAND devices and
+> +  SPI-NAND devices are concerned by this description.
+> +
+> +properties:
+> +  reg:
+> +    description:
+> +      Contains the chip-select IDs.
+> +
+> +  nand-ecc-engine:
+> +    allOf:
+
+Can you drop the allOf here.
+
+> +      - $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: |
+> +      A phandle on the hardware ECC engine if any. There are
+> +      basically three possibilities:
+> +      1/ The ECC engine is part of the NAND controller, in this
+> +      case the phandle should reference the parent node.
+> +      2/ The ECC engine is part of the NAND part (on-die), in this
+> +      case the phandle should reference the node itself.
+> +      3/ The ECC engine is external, in this case the phandle should
+> +      reference the specific ECC engine node.
+> +
+> +  nand-use-soft-ecc-engine:
+> +    type: boolean
+> +    description: Use a software ECC engine.
+> +
+> +  nand-no-ecc-engine:
+> +    type: boolean
+> +    description: Do not use any ECC correction.
+> +
+> +  nand-ecc-algo:
+> +    description:
+> +      Desired ECC algorithm.
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    enum: [hamming, bch, rs]
+> +
+> +  nand-ecc-strength:
+> +    description:
+> +      Maximum number of bits that can be corrected per ECC step.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 1
+> +
+> +  nand-ecc-step-size:
+> +    description:
+> +      Number of data bytes covered by a single ECC step.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 1
+> +
+> +  secure-regions:
+> +    $ref: /schemas/types.yaml#/definitions/uint64-matrix
+> +    description:
+> +      Regions in the NAND chip which are protected using a secure element
+> +      like Trustzone. This property contains the start address and size of
+> +      the secure regions present.
+> +
+> +required:
+> +  - reg
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/mtd/nand-controller.yaml b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> index 5cd144a9ec99..44825dc95412 100644
+> --- a/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> +++ b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> @@ -52,32 +52,15 @@ properties:
+>  patternProperties:
+>    "^nand@[a-f0-9]$":
+>      type: object
+> +
+> +    allOf:
+
+Also not needed here.
+
+With that,
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+
+> +      - $ref: "nand-chip.yaml#"
+> +
