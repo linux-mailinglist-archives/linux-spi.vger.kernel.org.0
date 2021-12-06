@@ -2,18 +2,18 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A93D5469319
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Dec 2021 10:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8462146931E
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Dec 2021 10:59:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241686AbhLFKC5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 6 Dec 2021 05:02:57 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:37103 "EHLO
+        id S241690AbhLFKC6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 6 Dec 2021 05:02:58 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:34503 "EHLO
         relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbhLFKC4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Dec 2021 05:02:56 -0500
+        with ESMTP id S241681AbhLFKC6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 6 Dec 2021 05:02:58 -0500
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 7FF7324000B;
-        Mon,  6 Dec 2021 09:59:25 +0000 (UTC)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id B73FB24001E;
+        Mon,  6 Dec 2021 09:59:27 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
@@ -25,11 +25,10 @@ To:     Richard Weinberger <richard@nod.at>,
         <devicetree@vger.kernel.org>
 Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Michal Simek <monstr@monstr.eu>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 1/3] dt-bindings: mtd: spi-nor: Allow two CS per device
-Date:   Mon,  6 Dec 2021 10:59:19 +0100
-Message-Id: <20211206095921.33302-2-miquel.raynal@bootlin.com>
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH v3 2/3] spi: dt-bindings: Describe stacked/parallel memories modes
+Date:   Mon,  6 Dec 2021 10:59:20 +0100
+Message-Id: <20211206095921.33302-3-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20211206095921.33302-1-miquel.raynal@bootlin.com>
 References: <20211206095921.33302-1-miquel.raynal@bootlin.com>
@@ -40,45 +39,49 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The Xilinx QSPI controller has two advanced modes which allow the
-controller to behave differently and consider two flashes as one single
-storage.
-
-One of these two modes is quite complex to support from a binding point
-of view and is the dual parallel memories. In this mode, each byte of
-data is stored in both devices: the even bits in one, the odd bits in
-the other. The split is automatically handled by the QSPI controller and
-is transparent for the user.
-
-The other mode is simpler to support, it is called dual stacked
-memories. The controller shares the same SPI bus but each of the devices
-contain half of the data. Once in this mode, the controller does not
-follow CS requests but instead internally wires the two CS levels with
-the value of the most significant address bit.
-
-Supporting these two modes will involve core changes which include the
-possibility of providing two CS for a single SPI device
+Describe two new memories modes:
+- A stacked mode when the bus is common but the address space extended
+  with an additinals wires.
+- A parallel mode with parallel busses accessing parallel flashes where
+  the data is spread.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../bindings/spi/spi-peripheral-props.yaml    | 21 +++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
-index 39421f7233e4..4abfb4cfc157 100644
---- a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
-+++ b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
-@@ -47,7 +47,8 @@ properties:
-       identified by the JEDEC READ ID opcode (0x9F).
+diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+index 5dd209206e88..13aa6a2374c9 100644
+--- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+@@ -82,6 +82,27 @@ properties:
+     description:
+       Delay, in microseconds, after a write transfer.
  
-   reg:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 2
- 
-   spi-max-frequency: true
-   spi-rx-bus-width: true
++  stacked-memories:
++    type: boolean
++    description: Several SPI memories can be wired in stacked mode.
++      This basically means that either a device features several chip
++      selects, or that different devices must be seen as a single
++      bigger chip. This basically doubles (or more) the total address
++      space with only a single additional wire, while still needing
++      to repeat the commands when crossing a chip boundary. XIP is
++      usually not supported in this mode.
++
++  parallel-memories:
++    type: boolean
++    description: Several SPI memories can be wired in parallel mode.
++      The devices are physically on a different buses but will always
++      act synchronously as each data word is spread across the
++      different memories (eg. even bits are stored in one memory, odd
++      bits in the other). This basically doubles the address space and
++      the throughput while greatly complexifying the wiring because as
++      many busses as devices must be wired. XIP is usually not
++      supported in this mode.
++
+ # The controller specific properties go here.
+ allOf:
+   - $ref: cdns,qspi-nor-peripheral-props.yaml#
 -- 
 2.27.0
 
