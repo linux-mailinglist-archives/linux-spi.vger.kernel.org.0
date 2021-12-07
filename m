@@ -2,75 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA5446B832
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Dec 2021 10:57:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1386F46B952
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Dec 2021 11:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234565AbhLGKAr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 Dec 2021 05:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbhLGKAq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Dec 2021 05:00:46 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27DFC061574
-        for <linux-spi@vger.kernel.org>; Tue,  7 Dec 2021 01:57:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S231452AbhLGKox (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Dec 2021 05:44:53 -0500
+Received: from mx1.tq-group.com ([93.104.207.81]:18756 "EHLO mx1.tq-group.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229517AbhLGKox (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 7 Dec 2021 05:44:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1638873683; x=1670409683;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=l83DnkI4AxWxlVN1uFP/FaAtLVUiifNMjaDw15nALS8=;
+  b=BaCGLy3tq9nujXru+gE0SzLed9/8kKq8ET1WKZjuZeT4p4Tjbk1v+wBU
+   smeYwQFbjl5vNW/5s6Qd9xQXEC9D7E5QEANuE4vCLJhpAollQBd8Yqlee
+   NRTsncVFvmLQXi9dB00meuxCgSYjRu0fqyYQ/vLog20+Ui8dMnPRhrmB8
+   qtPI2BRyQy4+msYxBv4XWk1727iqYERZjYBlI4Gha+nJpek3JuMztsTgz
+   0UgO32EZZOVnMGNntsWjHZhAO5G797a347aRUEIn5wNL/oz4Me9xSFzP/
+   Z/Ist3I7FsHQ6lrA3I79Uy2Kxmi39vDr805dvioSH94wjHaUvp/fhj4lQ
+   A==;
+X-IronPort-AV: E=Sophos;i="5.87,293,1631570400"; 
+   d="scan'208";a="20894684"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 07 Dec 2021 11:41:22 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 07 Dec 2021 11:41:22 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 07 Dec 2021 11:41:22 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1638873682; x=1670409682;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=l83DnkI4AxWxlVN1uFP/FaAtLVUiifNMjaDw15nALS8=;
+  b=mWonKulqmczi1Max/uh7v7DmFnkl8RFCia5Xt3zSt5i1ZhunbfoRUkV2
+   RxU2b91hagdDKjp9Exsj6KQqdHYvVjzf/jHKBAmMx3vWbSBDSm//wy0Ky
+   8IyGojT0t+Ej9GbuQTZ6y+P47Q729JmTw0JF+PLgm5eUKOD6KRxKS8I4k
+   sbHZ3bsVRrjNPENhRcQaleE9e3HHp5HLW7OgAoxvlp0ZE+Au4PUlZ1wwW
+   hTlw019rU1dRCjd/T9Fs7LxRlptp3+2kG3rpyCrQJjAEzsJPcQOHT4nBc
+   Mvnki+ngk0JtV+27le5n5hAX3ZA2rGojgqlnazVkBb5ByW2gIpbWiAtjb
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.87,293,1631570400"; 
+   d="scan'208";a="20894683"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 07 Dec 2021 11:41:22 +0100
+Received: from steina-w.tq-net.de (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F0BA7CE1A2D
-        for <linux-spi@vger.kernel.org>; Tue,  7 Dec 2021 09:57:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 26B94C341C1;
-        Tue,  7 Dec 2021 09:57:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638871032;
-        bh=KTzPfSPf/J5ieELpcD316NwoO6q9kR15ra5UwlFcitE=;
-        h=Subject:From:Date:To:From;
-        b=dddek9rnkkWpVOxWgSauEQFPL0KL/iHEnTED1zKw9lxjQDWo48ye2IxwHDmdFVBMs
-         +6TMnd0xcvxUx++nuIjUJQ4JbxxLtyLroGcPLef/07zTLJn2ljhI0Q28glXYp8ARIi
-         mF1XrL97T6MkAJz72zHsrUmxmuCABdr10M6heLjn7+cYvw4s8mgE4hAJ/iq7fCzLb6
-         FLP5tp0IXpQO/pKG6UFOve2+MkzkmiO/LayYwWyYhJx0V8eI8Jr5FodHitN6RQKLXk
-         16UkO8SVfqysuezS2/YFIRRkuZPUkaUXwYdLkt9EAPL3ZWTBS8kI5zdCQ9CWkA9vq7
-         JCz1y3QL/DitA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id F373660973;
-        Tue,  7 Dec 2021 09:57:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 63663280065;
+        Tue,  7 Dec 2021 11:41:21 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-spi@vger.kernel.org
+Subject: [PATCH 1/1] spi: lpspi: Add support for 'num-cs' property
+Date:   Tue,  7 Dec 2021 11:41:14 +0100
+Message-Id: <20211207104114.2720764-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <163887103196.28423.18177653736620191209.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 07 Dec 2021 09:57:11 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v3] External ECC engines & Macronix support (2021-12-07T09:34:01)
-  Superseding: [v2] External ECC engines & Macronix support (2021-11-26T11:39:04):
-    [v2,01/20] dt-bindings: mtd: nand-controller: Fix the reg property description
-    [v2,02/20] dt-bindings: mtd: nand-controller: Fix a comment in the examples
-    [v2,03/20] dt-bindings: mtd: nand-chip: Create a NAND chip description
-    [v2,04/20] dt-bindings: mtd: spi-nand: Convert spi-nand description file to yaml
-    [v2,05/20] dt-bindings: vendor-prefixes: Clarify Macronix prefix
-    [v2,06/20] dt-bindings: spi: mxic: The interrupt property is not mandatory
-    [v2,07/20] dt-bindings: spi: mxic: Convert to yaml
-    [v2,08/20] dt-bindings: spi: mxic: Document the nand-ecc-engine property
-    [v2,09/20] dt-bindings: mtd: Describe Macronix NAND ECC engine
-    [v2,10/20] mtd: spinand: macronix: Use random program load
-    [v2,11/20] mtd: nand: ecc: Add infrastructure to support hardware engines
-    [v2,12/20] mtd: nand: Add a new helper to retrieve the ECC context
-    [v2,13/20] mtd: nand: mxic-ecc: Add Macronix external ECC engine support
-    [v2,14/20] mtd: nand: mxic-ecc: Support SPI pipelined mode
-    [v2,15/20] mtd: spinand: Create direct mapping descriptors for ECC operations
-    [v2,16/20] spi: mxic: Fix the transmit path
-    [v2,17/20] spi: mxic: Create a helper to configure the controller before an operation
-    [v2,18/20] spi: mxic: Create a helper to ease the start of an operation
-    [v2,19/20] spi: mxic: Add support for direct mapping
-    [v2,20/20] spi: mxic: Add support for pipelined ECC operations
+This adds support for multiple hardware chip selects. They are controlled
+in register TCR bits 24, and possibly more depending on hardware platform.
+The driver already supports multiple chip selects in fsl_lpspi_set_cmd(),
+so allow setting more than the default 1 for supported chip selects in DT.
 
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+This has been verified using a logic analyzer on a custom board on a
+i.MX8XQP with 2 chip selects connected.
 
+ drivers/spi/spi-fsl-lpspi.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
+index 4c601294f8fa..532bdfb523ea 100644
+--- a/drivers/spi/spi-fsl-lpspi.c
++++ b/drivers/spi/spi-fsl-lpspi.c
+@@ -819,6 +819,7 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
+ 	struct spi_controller *controller;
+ 	struct resource *res;
+ 	int ret, irq;
++	u32 num_cs;
+ 	u32 temp;
+ 	bool is_slave;
+ 
+@@ -835,6 +836,11 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, controller);
+ 
++	if (!device_property_read_u32(&pdev->dev, "num-cs", &num_cs))
++		controller->num_chipselect = num_cs;
++	else
++		controller->num_chipselect = 1;
++
+ 	fsl_lpspi = spi_controller_get_devdata(controller);
+ 	fsl_lpspi->dev = &pdev->dev;
+ 	fsl_lpspi->is_slave = is_slave;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.25.1
 
