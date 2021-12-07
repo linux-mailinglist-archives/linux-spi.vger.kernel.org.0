@@ -2,18 +2,18 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50EEB46B74A
+	by mail.lfdr.de (Postfix) with ESMTP id 99C1F46B74B
 	for <lists+linux-spi@lfdr.de>; Tue,  7 Dec 2021 10:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234158AbhLGJiI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 7 Dec 2021 04:38:08 -0500
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:39693 "EHLO
+        id S234111AbhLGJiJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 7 Dec 2021 04:38:09 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:38619 "EHLO
         relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234103AbhLGJiF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Dec 2021 04:38:05 -0500
+        with ESMTP id S234113AbhLGJiG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 7 Dec 2021 04:38:06 -0500
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 76E1460013;
-        Tue,  7 Dec 2021 09:34:32 +0000 (UTC)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 21E256000C;
+        Tue,  7 Dec 2021 09:34:34 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
@@ -30,9 +30,9 @@ Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Boris Brezillon <boris.brezillon@collabora.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 06/22] dt-bindings: vendor-prefixes: Clarify Macronix prefix
-Date:   Tue,  7 Dec 2021 10:34:06 +0100
-Message-Id: <20211207093422.166934-7-miquel.raynal@bootlin.com>
+Subject: [PATCH v3 07/22] dt-bindings: spi: mxic: The interrupt property is not mandatory
+Date:   Tue,  7 Dec 2021 10:34:07 +0100
+Message-Id: <20211207093422.166934-8-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20211207093422.166934-1-miquel.raynal@bootlin.com>
 References: <20211207093422.166934-1-miquel.raynal@bootlin.com>
@@ -43,39 +43,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-When looking at compatible prefixes, Macronix is sometimes referred as
-"mxicy":
-- mxicy,mx25r1635f
-- mxicy,mx25u6435f
-- mxicy,mx25v8035f
-- mxicy,mx25f0a-spi
-and sometimes as "mxic":
-- mxic,multi-itfc-v009-nand-controller
-- mxic,enable-randomizer-otp
+The interrupt property is not mandatory at all, this property should not
+be part of the required properties list, so move it into the optional
+properties list.
 
-The oldest prefix that is also the one preferred by Macronix engineers
-is "mxicy", so document the other one and mark it deprecated.
-
+Fixes: 326e5c8d4a87 ("dt-binding: spi: Document Macronix controller bindings")
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Mark Brown <broonie@kernel.org>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/devicetree/bindings/spi/spi-mxic.txt | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index a867f7102c35..93d65dc3746c 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -774,6 +774,9 @@ patternProperties:
-     description: Mundo Reader S.L.
-   "^murata,.*":
-     description: Murata Manufacturing Co., Ltd.
-+  "^mxic,.*":
-+    description: Macronix International Co., Ltd.
-+    deprecated: true
-   "^mxicy,.*":
-     description: Macronix International Co., Ltd.
-   "^myir,.*":
+diff --git a/Documentation/devicetree/bindings/spi/spi-mxic.txt b/Documentation/devicetree/bindings/spi/spi-mxic.txt
+index 529f2dab2648..7bcbb229b78b 100644
+--- a/Documentation/devicetree/bindings/spi/spi-mxic.txt
++++ b/Documentation/devicetree/bindings/spi/spi-mxic.txt
+@@ -8,11 +8,13 @@ Required properties:
+ - reg: should contain 2 entries, one for the registers and one for the direct
+        mapping area
+ - reg-names: should contain "regs" and "dirmap"
+-- interrupts: interrupt line connected to the SPI controller
+ - clock-names: should contain "ps_clk", "send_clk" and "send_dly_clk"
+ - clocks: should contain 3 entries for the "ps_clk", "send_clk" and
+ 	  "send_dly_clk" clocks
+ 
++Optional properties:
++- interrupts: interrupt line connected to the SPI controller
++
+ Example:
+ 
+ 	spi@43c30000 {
 -- 
 2.27.0
 
