@@ -2,120 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F09F46E87C
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Dec 2021 13:30:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A89946F144
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Dec 2021 18:11:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237357AbhLIMdY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Dec 2021 07:33:24 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:52831 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbhLIMdX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Dec 2021 07:33:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1639052990; x=1670588990;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=IF3u07Cvca1snD/fcDu2THtejBBY9GEcAPFTH0zMSI4=;
-  b=AJog9hB26nnZZ+c+jxV7ZO9zZmXnASLrOgK4goIfKnpy322V83XIwlrW
-   00NLRAlGJHkVWwsadJnfQC5Rgc+cw0zc6sG8YoP+nAh1XMUW6ANfY2rOX
-   r5W6Q86jpMQNpUBGcGBIKluH7Or8AHAMJULm67u5+9k1eKEfy+TgnQVD+
-   pZ1xwWAOacY+S2exVjnJBbF7JEE5Sg+g7qgxLDsqiQiCanbu/P+iuRmnw
-   YhAvkK8iWISI1QxgASJGOuRrGQ+LpcgSr96Vrtakm0s0tSvy/eAENyWMX
-   3mBD9RJkiQpVDF8o8tjUbugs8DmntojZArOZ661ShYB5YHKgWgFda4vs+
-   w==;
-IronPort-SDR: zpfq2qXK0NpfqfnHXH2olt3AIp44j/AFJp7QER9hBQdU6K+FjrGvHZ5GuxT8m0r/Orm64PiMiD
- MVz+DGcKCvFzZHNaKc2n6m4iho3RQvKMcmu/t2rOL8N/1ruJyM0mDC/zNHhY3luVnOJ53c/H4g
- /BPzFMBlwuP60/WFNEybttKAQ+vHSOW3rpAGxee4+JKubuna+h1E9u4Q3CL6bccRbqnqenNHk8
- BDNKPXIxAeGj46qY1bA6PGF9xCbBFlZs7slv7fbeWJ5wdtzguTraBhQXpS8cYLajX7worBgcqX
- RGLGyuiG57HXEKV0zrSvEDXh
-X-IronPort-AV: E=Sophos;i="5.88,192,1635231600"; 
-   d="scan'208";a="141843400"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Dec 2021 05:29:49 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 9 Dec 2021 05:29:49 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 9 Dec 2021 05:29:46 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>
-CC:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <ludovic.desroches@microchip.com>, <linux-spi@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH 2/2] dt-bindings: spi: atmel,quadspi: Define sama7g5 QSPI
-Date:   Thu, 9 Dec 2021 14:29:39 +0200
-Message-ID: <20211209122939.339810-3-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211209122939.339810-1-tudor.ambarus@microchip.com>
-References: <20211209122939.339810-1-tudor.ambarus@microchip.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+        id S242501AbhLIRO2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Dec 2021 12:14:28 -0500
+Received: from mail-oi1-f179.google.com ([209.85.167.179]:38767 "EHLO
+        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242650AbhLIROU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Dec 2021 12:14:20 -0500
+Received: by mail-oi1-f179.google.com with SMTP id r26so9568547oiw.5;
+        Thu, 09 Dec 2021 09:10:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=vDpBlTT4D85f/awNnonitBOckiP0o6Fp6s+m19mtbZM=;
+        b=jWdXzn4yM0gdTsrRXWFitdcUYPMtoVUMY6OsRtfujqxKs5e7ZKenimlQqVMZx/rmnP
+         weBzyAdah/IFlm04JLGuHAUq8c9a/VDxQkFZbtcarm3hvx2QkBD6kphbEuwI8V8WIA4U
+         ahItLwuMSaONmSlKIeqR+y2yidqopohORu81hsrbX74VEgd2CYLFqlg0eBScTTIIUBxU
+         YrCjyHtqtvpnTOZYazFtBTrHfJvO4+cMZEK6993/Il1iePR8HlLA4VS9P0x8I6W5axxF
+         86ZpYXsu0Wzs20UB96LG7tyXEsk2ub+QFCmlP0xe1DOMpC237JFSrWdP+e8QN6HdEf+a
+         s1/Q==
+X-Gm-Message-State: AOAM532FtyHDU/HWeH0OD0c5XTwtml/CeQ+vV9bo9wxfdlUF3NLeoGCn
+        sH0a61pCKH2Y1g/IjJrTxw==
+X-Google-Smtp-Source: ABdhPJw7ide+1YV2hij0cO0+JZY6WR7BBWYDbRGOdQFR+sfaZc/JLYJtsJrI1bORVDf1mb1yDZMe0g==
+X-Received: by 2002:aca:603:: with SMTP id 3mr6899169oig.98.1639069845995;
+        Thu, 09 Dec 2021 09:10:45 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id y12sm105829oiv.49.2021.12.09.09.10.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Dec 2021 09:10:45 -0800 (PST)
+Received: (nullmailer pid 3089524 invoked by uid 1000);
+        Thu, 09 Dec 2021 17:10:42 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, nicolas.ferre@microchip.com,
+        broonie@kernel.org, ludovic.desroches@microchip.com,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        alexandre.belloni@bootlin.com
+In-Reply-To: <20211209122939.339810-2-tudor.ambarus@microchip.com>
+References: <20211209122939.339810-1-tudor.ambarus@microchip.com> <20211209122939.339810-2-tudor.ambarus@microchip.com>
+Subject: Re: [PATCH 1/2] dt-bindings: spi: atmel,quadspi: Convert to json-schema
+Date:   Thu, 09 Dec 2021 11:10:42 -0600
+Message-Id: <1639069842.758236.3089523.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-sama7g5 embedds 2 instances of the QSPI controller:
-1/ One Octal Serial Peripheral Interface (QSPI0) Supporting up to
-   200 MHz DDR. Octal, TwinQuad, HyperFlash and OctaFlash Protocols
-   Supported
-2/ One Quad Serial Peripheral Interface (QSPI1) Supporting Up to
-   90 MHz DDR/133 MHz SDR
+On Thu, 09 Dec 2021 14:29:38 +0200, Tudor Ambarus wrote:
+> Convert the Atmel QuadSPI controller Device Tree binding documentation
+> to json-schema.
+> 
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> ---
+>  .../bindings/spi/atmel,quadspi.yaml           | 87 +++++++++++++++++++
+>  .../devicetree/bindings/spi/atmel-quadspi.txt | 37 --------
+>  2 files changed, 87 insertions(+), 37 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/spi/atmel-quadspi.txt
+> 
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
----
- .../devicetree/bindings/spi/atmel,quadspi.yaml   | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-diff --git a/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml b/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
-index 7d0408f53c5f..1d493add4053 100644
---- a/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
-@@ -17,6 +17,8 @@ properties:
-     enum:
-       - atmel,sama5d2-qspi
-       - microchip,sam9x60-qspi
-+      - microchip,sama7g5-qspi
-+      - microchip,sama7g5-ospi
- 
-   reg:
-     items:
-@@ -32,17 +34,27 @@ properties:
-     minItems: 1
-     items:
-       - description: peripheral clock
--      - description: system clock, if available
-+      - description: system clock or generic clock, if available
- 
-   clock-names:
-     minItems: 1
-     items:
-       - const: pclk
--      - const: qspick
-+      - enum: [ qspick, gclk ]
- 
-   interrupts:
-     maxItems: 1
- 
-+  dmas:
-+    items:
-+      - description: tx DMA channel
-+      - description: rx DMA channel
-+
-+  dma-names:
-+    items:
-+      - const: tx
-+      - const: rx
-+
-   '#address-cells':
-     const: 1
- 
--- 
-2.25.1
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
+
+Full log is available here: https://patchwork.ozlabs.org/patch/1565734
+
+
+spi@f0024000: 'clock-names' is a required property
+	arch/arm/boot/dts/at91-sama5d27_som1_ek.dt.yaml
+	arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dt.yaml
 
