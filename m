@@ -2,18 +2,18 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DB846F244
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Dec 2021 18:40:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C63E846F245
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Dec 2021 18:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233614AbhLIRo0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Dec 2021 12:44:26 -0500
-Received: from relay10.mail.gandi.net ([217.70.178.230]:51299 "EHLO
+        id S234374AbhLIRo1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Dec 2021 12:44:27 -0500
+Received: from relay10.mail.gandi.net ([217.70.178.230]:45749 "EHLO
         relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbhLIRoZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Dec 2021 12:44:25 -0500
+        with ESMTP id S232038AbhLIRo1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Dec 2021 12:44:27 -0500
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 1BE66240002;
-        Thu,  9 Dec 2021 17:40:46 +0000 (UTC)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 2105A24000E;
+        Thu,  9 Dec 2021 17:40:51 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
@@ -25,10 +25,12 @@ Cc:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
         Julien Su <juliensu@mxic.com.tw>,
         Jaime Liao <jaimeliao@mxic.com.tw>,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v4 00/12] External ECC engines & Macronix support
-Date:   Thu,  9 Dec 2021 18:40:34 +0100
-Message-Id: <20211209174046.535229-1-miquel.raynal@bootlin.com>
+Subject: [PATCH v4 01/12] mtd: nand: mxic-ecc: Support SPI pipelined mode
+Date:   Thu,  9 Dec 2021 18:40:35 +0100
+Message-Id: <20211209174046.535229-2-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20211209174046.535229-1-miquel.raynal@bootlin.com>
+References: <20211209174046.535229-1-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -36,103 +38,365 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello all,
+Introduce the support for another possible configuration: the ECC
+engine may work as DMA master (pipelined) and move itself the data
+to/from the NAND chip into the buffer, applying the necessary
+corrections/computations on the fly.
 
-This series is now stable and brings support for external/modular ECC
-engines, and let SPI controller using the ECC framework.
+This driver offers an ECC engine implementation that must be
+instatiated from a SPI controller driver.
 
-As a first example, Macronix ECC engine can be used as an
-external engine (takes the data, proceeds to the calculations, writes
-back the ECC bytes) or as a pipelined engine doing on-the-fly
-calculations (which is very common in the raw NAND world).
-
-In the device tree, the ECC engine should be described as a separated DT
-node. Then:
-* external case: the flash node should provide a nand-ecc-engine
-  property pointing to the ECC engine node.
-* pipelined case: the flash node should provide a nand-ecc-engine
-  property pointing to the SPI controller, itself with another
-  nand-ecc-engine property pointing at the ECC engine node.
-
-This series comes with a bunch of improvements on the binding side as
-well.
-
-Cheers,
-Miquèl
-
-Changes in v4:
-* The first half of the series has been left aside (all the binding
-  changes + the external mode in the Macronix driver), now let's focus
-  on the pipelined mode.
-* Added the ecc_en spi_mem_op structure parameter in a dedicated commit.
-* Introduced a new helper for supporting generically the supported ops.
-* Used this new helper in the macronix driver.
-* By default all the other drivers would refuse a spi_mem_op with ecc_en
-  enabled.
-
-Changes in v3:
-* Added Mark's R-by.
-* Added a commit changing the initialization order between the dirmaps
-  and the ECC engine so that the core might now if we are using a
-  pipelined engine or not.
-* Stopped creating additional dirmaps with ECC if the engine is not a
-  pipelined engine.
-* Solved the kernel test robot reports. In particular, I added a
-  dependency on MTD_NAND_ECC to Macronix SPI controller driver.
-* Added a patch to clean the NAND controller yaml file before moving
-  some bits to nand-chip.yaml. This addresses the comments made by Rob
-  about the useless allOf's.
-* Used platform_get_irq_byname_optional() in order to avoid useless
-  warnings when there is no IRQ.
-
-Changes in v2:
-* Fixed the bindings and added Rob's acks when relevant.
-* Added locking in the ECC engine driver.
-* Brought more changes in the core in order to bring the ECC information
-  into the spi_mem_op structure with the idea of avoiding any races
-  between parallel calls on the same engine.
-* Reorganized the ECC driver entirely in order to have a per-engine mxic
-  structure plus a per-NAND context. This lead to a number of changes
-  internally which cannot all be listed.
-
-Changes since the RFC:
-* Rebased on top of v5.15-rc1.
-* Fixed the dirmap configuration.
-* Added the various tags received.
-* Fixed the bindings as reported by the robots.
-* Fixed the return value of the helper counting bitflips.
-* Included a fix from Jaime Liao in the external pattern logic.
-* Added the yaml conversion of Macronix SPI controller description.
-* Added the yaml conversion of the SPI-NAND description.
-* Created a nand-chip.yaml file to share properties between SPI-NAND and
-  raw NAND.
-
-Miquel Raynal (12):
-  mtd: nand: mxic-ecc: Support SPI pipelined mode
-  mtd: spinand: Delay a little bit the dirmap creation
-  spi: spi-mem: Create a helper to gather all the supports_op checks
-  spi: spi-mem: Add an ecc_en parameter to the spi_mem_op structure
-  spi: spi-mem: Export the spi_mem_generic_supports_op() helper
-  mtd: spinand: Create direct mapping descriptors for ECC operations
-  spi: mxic: Fix the transmit path
-  spi: mxic: Create a helper to configure the controller before an
-    operation
-  spi: mxic: Create a helper to ease the start of an operation
-  spi: mxic: Add support for direct mapping
-  spi: mxic: Use spi_mem_generic_supports_op()
-  spi: mxic: Add support for pipelined ECC operations
-
- drivers/mtd/nand/ecc-mxic.c       | 210 ++++++++++++++++++-
- drivers/mtd/nand/spi/core.c       |  51 ++++-
- drivers/spi/Kconfig               |   2 +-
- drivers/spi/spi-mem.c             |  38 +++-
- drivers/spi/spi-mxic.c            | 337 ++++++++++++++++++++++++------
- include/linux/mtd/nand-ecc-mxic.h |  49 +++++
- include/linux/mtd/spinand.h       |   2 +
- include/linux/spi/spi-mem.h       |  16 ++
- 8 files changed, 623 insertions(+), 82 deletions(-)
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+---
+ drivers/mtd/nand/ecc-mxic.c       | 210 +++++++++++++++++++++++++++++-
+ include/linux/mtd/nand-ecc-mxic.h |  49 +++++++
+ 2 files changed, 258 insertions(+), 1 deletion(-)
  create mode 100644 include/linux/mtd/nand-ecc-mxic.h
 
+diff --git a/drivers/mtd/nand/ecc-mxic.c b/drivers/mtd/nand/ecc-mxic.c
+index ea88a411ed70..8eacddfa8ac6 100644
+--- a/drivers/mtd/nand/ecc-mxic.c
++++ b/drivers/mtd/nand/ecc-mxic.c
+@@ -16,6 +16,7 @@
+ #include <linux/module.h>
+ #include <linux/mtd/mtd.h>
+ #include <linux/mtd/nand.h>
++#include <linux/mtd/nand-ecc-mxic.h>
+ #include <linux/mutex.h>
+ #include <linux/of_device.h>
+ #include <linux/of_platform.h>
+@@ -40,7 +41,9 @@
+ #define INTRPT_SIG_EN 0x0C
+ /* Host Controller Configuration */
+ #define HC_CONFIG 0x10
++#define   DEV2MEM 0 /* TRANS_TYP_DMA in the spec */
+ #define   MEM2MEM BIT(4) /* TRANS_TYP_IO in the spec */
++#define   MAPPING BIT(5) /* TRANS_TYP_MAPPING in the spec */
+ #define   ECC_PACKED 0 /* LAYOUT_TYP_INTEGRATED in the spec */
+ #define   ECC_INTERLEAVED BIT(2) /* LAYOUT_TYP_DISTRIBUTED in the spec */
+ #define   BURST_TYP_FIXED 0
+@@ -87,6 +90,7 @@ struct mxic_ecc_engine {
+ 	int irq;
+ 	struct completion complete;
+ 	struct nand_ecc_engine external_engine;
++	struct nand_ecc_engine pipelined_engine;
+ 	struct mutex lock;
+ };
+ 
+@@ -104,6 +108,7 @@ struct mxic_ecc_ctx {
+ 	u8 *oobwithstat;
+ 	struct scatterlist sg[2];
+ 	struct nand_page_io_req *req;
++	unsigned int pageoffs;
+ };
+ 
+ static struct mxic_ecc_engine *ext_ecc_eng_to_mxic(struct nand_ecc_engine *eng)
+@@ -111,11 +116,19 @@ static struct mxic_ecc_engine *ext_ecc_eng_to_mxic(struct nand_ecc_engine *eng)
+ 	return container_of(eng, struct mxic_ecc_engine, external_engine);
+ }
+ 
++static struct mxic_ecc_engine *pip_ecc_eng_to_mxic(struct nand_ecc_engine *eng)
++{
++	return container_of(eng, struct mxic_ecc_engine, pipelined_engine);
++}
++
+ static struct mxic_ecc_engine *nand_to_mxic(struct nand_device *nand)
+ {
+ 	struct nand_ecc_engine *eng = nand->ecc.engine;
+ 
+-	return ext_ecc_eng_to_mxic(eng);
++	if (eng->integration == NAND_ECC_ENGINE_INTEGRATION_EXTERNAL)
++		return ext_ecc_eng_to_mxic(eng);
++	else
++		return pip_ecc_eng_to_mxic(eng);
+ }
+ 
+ static int mxic_ecc_ooblayout_ecc(struct mtd_info *mtd, int section,
+@@ -203,6 +216,31 @@ static irqreturn_t mxic_ecc_isr(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
+ 
++static struct device *mxic_ecc_get_engine_dev(struct device *dev)
++{
++	struct platform_device *eccpdev;
++	struct device_node *np;
++
++	/*
++	 * If the device node contains this property, it means the device does
++	 * not represent the actual ECC engine.
++	 */
++	np = of_parse_phandle(dev->of_node, "nand-ecc-engine", 0);
++	if (!np)
++		return dev;
++
++	eccpdev = of_find_device_by_node(np);
++	if (!eccpdev) {
++		of_node_put(np);
++		return NULL;
++	}
++
++	platform_device_put(eccpdev);
++	of_node_put(np);
++
++	return &eccpdev->dev;
++}
++
+ static int mxic_ecc_init_ctx(struct nand_device *nand, struct device *dev)
+ {
+ 	struct mxic_ecc_engine *mxic = nand_to_mxic(nand);
+@@ -364,6 +402,42 @@ static int mxic_ecc_init_ctx_external(struct nand_device *nand)
+ 	return 0;
+ }
+ 
++static int mxic_ecc_init_ctx_pipelined(struct nand_device *nand)
++{
++	struct mxic_ecc_engine *mxic = nand_to_mxic(nand);
++	struct mxic_ecc_ctx *ctx;
++	struct device *dev;
++	int ret;
++
++	/*
++	 * In the case of a pipelined engine, the device registering the ECC
++	 * engine is not the actual ECC engine device but the host controller.
++	 */
++	dev = mxic_ecc_get_engine_dev(nand->ecc.engine->dev);
++	if (!dev)
++		return -EINVAL;
++
++	dev_info(dev, "Macronix ECC engine in pipelined/mapping mode\n");
++
++	ret = mxic_ecc_init_ctx(nand, dev);
++	if (ret)
++		return ret;
++
++	ctx = nand_to_ecc_ctx(nand);
++
++	/* All steps should be handled in one go directly by the internal DMA */
++	writel(ctx->steps, mxic->regs + CHUNK_CNT);
++
++	/*
++	 * Interleaved ECC scheme cannot be used otherwise factory bad block
++	 * markers would be lost. A packed layout is mandatory.
++	 */
++	writel(BURST_TYP_INCREASING | ECC_PACKED | MAPPING,
++	       mxic->regs + HC_CONFIG);
++
++	return 0;
++}
++
+ static void mxic_ecc_cleanup_ctx(struct nand_device *nand)
+ {
+ 	struct mxic_ecc_ctx *ctx = nand_to_ecc_ctx(nand);
+@@ -419,6 +493,18 @@ static int mxic_ecc_process_data(struct mxic_ecc_engine *mxic,
+ 	return ret;
+ }
+ 
++int mxic_ecc_process_data_pipelined(struct nand_ecc_engine *eng,
++				    unsigned int direction, dma_addr_t dirmap)
++{
++	struct mxic_ecc_engine *mxic = pip_ecc_eng_to_mxic(eng);
++
++	if (dirmap)
++		writel(dirmap, mxic->regs + HC_SLV_ADDR);
++
++	return mxic_ecc_process_data(mxic, direction);
++}
++EXPORT_SYMBOL_GPL(mxic_ecc_process_data_pipelined);
++
+ static void mxic_ecc_extract_status_bytes(struct mxic_ecc_ctx *ctx)
+ {
+ 	u8 *buf = ctx->oobwithstat;
+@@ -598,6 +684,65 @@ static int mxic_ecc_finish_io_req_external(struct nand_device *nand,
+ 	return mxic_ecc_count_biterrs(mxic, nand);
+ }
+ 
++/* Pipelined ECC engine helpers */
++static int mxic_ecc_prepare_io_req_pipelined(struct nand_device *nand,
++					     struct nand_page_io_req *req)
++{
++	struct mxic_ecc_engine *mxic = nand_to_mxic(nand);
++	struct mxic_ecc_ctx *ctx = nand_to_ecc_ctx(nand);
++	int nents;
++
++	if (req->mode == MTD_OPS_RAW)
++		return 0;
++
++	nand_ecc_tweak_req(&ctx->req_ctx, req);
++	ctx->req = req;
++
++	/* Copy the OOB buffer and add room for the ECC engine status bytes */
++	mxic_ecc_add_room_in_oobbuf(ctx, ctx->oobwithstat, ctx->req->oobbuf.in);
++
++	sg_set_buf(&ctx->sg[0], req->databuf.in, req->datalen);
++	sg_set_buf(&ctx->sg[1], ctx->oobwithstat,
++		   req->ooblen + (ctx->steps * STAT_BYTES));
++
++	nents = dma_map_sg(mxic->dev, ctx->sg, 2, DMA_BIDIRECTIONAL);
++	if (!nents)
++		return -EINVAL;
++
++	mutex_lock(&mxic->lock);
++
++	writel(sg_dma_address(&ctx->sg[0]), mxic->regs + SDMA_MAIN_ADDR);
++	writel(sg_dma_address(&ctx->sg[1]), mxic->regs + SDMA_SPARE_ADDR);
++
++	return 0;
++}
++
++static int mxic_ecc_finish_io_req_pipelined(struct nand_device *nand,
++					    struct nand_page_io_req *req)
++{
++	struct mxic_ecc_engine *mxic = nand_to_mxic(nand);
++	struct mxic_ecc_ctx *ctx = nand_to_ecc_ctx(nand);
++	int ret = 0;
++
++	if (req->mode == MTD_OPS_RAW)
++		return 0;
++
++	mutex_unlock(&mxic->lock);
++
++	dma_unmap_sg(mxic->dev, ctx->sg, 2, DMA_BIDIRECTIONAL);
++
++	if (req->type == NAND_PAGE_READ) {
++		mxic_ecc_extract_status_bytes(ctx);
++		mxic_ecc_reconstruct_oobbuf(ctx, ctx->req->oobbuf.in,
++					    ctx->oobwithstat);
++		ret = mxic_ecc_count_biterrs(mxic, nand);
++	}
++
++	nand_ecc_restore_req(&ctx->req_ctx, req);
++
++	return ret;
++}
++
+ static struct nand_ecc_engine_ops mxic_ecc_engine_external_ops = {
+ 	.init_ctx = mxic_ecc_init_ctx_external,
+ 	.cleanup_ctx = mxic_ecc_cleanup_ctx,
+@@ -605,6 +750,69 @@ static struct nand_ecc_engine_ops mxic_ecc_engine_external_ops = {
+ 	.finish_io_req = mxic_ecc_finish_io_req_external,
+ };
+ 
++static struct nand_ecc_engine_ops mxic_ecc_engine_pipelined_ops = {
++	.init_ctx = mxic_ecc_init_ctx_pipelined,
++	.cleanup_ctx = mxic_ecc_cleanup_ctx,
++	.prepare_io_req = mxic_ecc_prepare_io_req_pipelined,
++	.finish_io_req = mxic_ecc_finish_io_req_pipelined,
++};
++
++struct nand_ecc_engine_ops *mxic_ecc_get_pipelined_ops(void)
++{
++	return &mxic_ecc_engine_pipelined_ops;
++}
++EXPORT_SYMBOL_GPL(mxic_ecc_get_pipelined_ops);
++
++static struct platform_device *
++mxic_ecc_get_pdev(struct platform_device *spi_pdev)
++{
++	struct platform_device *eng_pdev;
++	struct device_node *np;
++
++	/* Retrieve the nand-ecc-engine phandle */
++	np = of_parse_phandle(spi_pdev->dev.of_node, "nand-ecc-engine", 0);
++	if (!np)
++		return NULL;
++
++	/* Jump to the engine's device node */
++	eng_pdev = of_find_device_by_node(np);
++	of_node_put(np);
++
++	return eng_pdev;
++}
++
++void mxic_ecc_put_pipelined_engine(struct nand_ecc_engine *eng)
++{
++	struct mxic_ecc_engine *mxic = pip_ecc_eng_to_mxic(eng);
++
++	platform_device_put(to_platform_device(mxic->dev));
++}
++EXPORT_SYMBOL_GPL(mxic_ecc_put_pipelined_engine);
++
++struct nand_ecc_engine *
++mxic_ecc_get_pipelined_engine(struct platform_device *spi_pdev)
++{
++	struct platform_device *eng_pdev;
++	struct mxic_ecc_engine *mxic;
++
++	eng_pdev = mxic_ecc_get_pdev(spi_pdev);
++	if (!eng_pdev)
++		return ERR_PTR(-ENODEV);
++
++	mxic = platform_get_drvdata(eng_pdev);
++	if (!mxic) {
++		platform_device_put(eng_pdev);
++		return ERR_PTR(-EPROBE_DEFER);
++	}
++
++	return &mxic->pipelined_engine;
++}
++EXPORT_SYMBOL_GPL(mxic_ecc_get_pipelined_engine);
++
++/*
++ * Only the external ECC engine is exported as the pipelined is SoC specific, so
++ * it is registered directly by the drivers that wrap it.
++ */
+ static int mxic_ecc_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+diff --git a/include/linux/mtd/nand-ecc-mxic.h b/include/linux/mtd/nand-ecc-mxic.h
+new file mode 100644
+index 000000000000..f3aa1ac82aed
+--- /dev/null
++++ b/include/linux/mtd/nand-ecc-mxic.h
+@@ -0,0 +1,49 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright © 2019 Macronix
++ * Author: Miquèl Raynal <miquel.raynal@bootlin.com>
++ *
++ * Header for the Macronix external ECC engine.
++ */
++
++#ifndef __MTD_NAND_ECC_MXIC_H__
++#define __MTD_NAND_ECC_MXIC_H__
++
++#include <linux/platform_device.h>
++#include <linux/device.h>
++
++struct mxic_ecc_engine;
++
++#if IS_ENABLED(CONFIG_MTD_NAND_ECC_MXIC)
++
++struct nand_ecc_engine_ops *mxic_ecc_get_pipelined_ops(void);
++struct nand_ecc_engine *mxic_ecc_get_pipelined_engine(struct platform_device *spi_pdev);
++void mxic_ecc_put_pipelined_engine(struct nand_ecc_engine *eng);
++int mxic_ecc_process_data_pipelined(struct nand_ecc_engine *eng,
++				    unsigned int direction, dma_addr_t dirmap);
++
++#else /* !CONFIG_MTD_NAND_ECC_MXIC */
++
++static inline struct nand_ecc_engine_ops *mxic_ecc_get_pipelined_ops(void)
++{
++	return NULL;
++}
++
++static inline struct nand_ecc_engine *
++mxic_ecc_get_pipelined_engine(struct platform_device *spi_pdev)
++{
++	return ERR_PTR(-EOPNOTSUPP);
++}
++
++static inline void mxic_ecc_put_pipelined_engine(struct nand_ecc_engine *eng) {}
++
++static inline int mxic_ecc_process_data_pipelined(struct nand_ecc_engine *eng,
++						  unsigned int direction,
++						  dma_addr_t dirmap)
++{
++	return -EOPNOTSUPP;
++}
++
++#endif /* CONFIG_MTD_NAND_ECC_MXIC */
++
++#endif /* __MTD_NAND_ECC_MXIC_H__ */
 -- 
 2.27.0
 
