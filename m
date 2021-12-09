@@ -2,77 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CEA446F29D
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Dec 2021 18:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BEC46F578
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Dec 2021 22:00:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237632AbhLISAx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Dec 2021 13:00:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57344 "EHLO
+        id S232504AbhLIVDv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 9 Dec 2021 16:03:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237566AbhLISAw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Dec 2021 13:00:52 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2211C061746
-        for <linux-spi@vger.kernel.org>; Thu,  9 Dec 2021 09:57:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 40384CE27AA
-        for <linux-spi@vger.kernel.org>; Thu,  9 Dec 2021 17:57:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6AFB6C341C7;
-        Thu,  9 Dec 2021 17:57:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639072635;
-        bh=ByBilnVsqDHz5fgRdEgcQTJxKOXi+Kdi/Yi9rm+ANp8=;
-        h=Subject:From:Date:To:From;
-        b=hYDhXK98Z09CzaBckVyKtLqRv1ixHjvgd02P4rIAS/WbOPD724vYChiN/uBdsQEnU
-         aWK4CzYHrQhUKQct/jOYxbq0iVbVWtG/j7adOhDBcSt/6JfLD9iN/o0R/ivbhDc98L
-         9Hthf4EW8QXIo0hzFtpgUuklkpoK5SzfPWHbA+MDHdqFAJ6fvB00HUhVlRFuTt4iLr
-         EbmI0KgMBJ+e7Nq8SXCAjff8K9idhh9j6XRtYq/Ww2LF6x+MxkhyrgbRU2EaSpDn7g
-         ClOoo4VHNCRZeyP7qBIiUPodSnWL9MmCPnDfGdcaY74USDQUWSePMvCZ3nOVqmf5+0
-         c9eb0SQjz5+tQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 44A3F609B3;
-        Thu,  9 Dec 2021 17:57:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S231224AbhLIVDv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 9 Dec 2021 16:03:51 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4404C0617A2
+        for <linux-spi@vger.kernel.org>; Thu,  9 Dec 2021 13:00:17 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id g18so6529895pfk.5
+        for <linux-spi@vger.kernel.org>; Thu, 09 Dec 2021 13:00:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=BJPWo58tKlQXm4vRD5vnXhZrKIbn/SXsA1N14vuJVFE=;
+        b=jQWbkZ2Wn0DGuMmXNjQ8F02bBMlGypEanZx6SRJGq2s0IsCyss7KyEi9kTG2u5yTFd
+         PrVKAMGIaxk1X04MIILMx0o+5b4fbiYFaKVhvEciPW2qPPP2ycT4KLKDAsIO/e5asUZ0
+         +7w6TKBPbmLNUqNLPOXWyyrQv325TUdlz1gZyMZx/YjwPJp94Nl2vG8oYnWbtfDLdxpV
+         dq06/pQpQaq/729Rwj9Sag0gaKC1D9OcrEDZ/OWStfQhWuuriSQMvPt0UahmrqbyFSFA
+         4I4v3TnMDzg5uVnGG3/gUqBndb3XHQF7dviMGfOkJ4TjNAWKiZLmLWivjaKiBCYR4gR2
+         XS+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=BJPWo58tKlQXm4vRD5vnXhZrKIbn/SXsA1N14vuJVFE=;
+        b=RTHy0wORMNlCM4KxLQcfvnzjukqKdzPBcWSXEfSsQpN3c6f1FCmUyvGzxZSUnx3TMF
+         ZXu5JMOqd3nQJwYs5k95HMOzbUUEznAYxQvapzwSgeheJWykfD6lbOJqqAcdgJzGL2dr
+         n0jiJFOZFYS/66CDOVlsItadVVlitV4QTmCg+81punZ2yIFPPJbiLjw7NS6/YuzTXGah
+         Ho/ydkGRBA0hCyvYcq9S7XIYI6ma2Z3KVuySTBPx89MzX+Hlp6/4WTpgMrYlQRWWqddf
+         OwXw/xEJtQ3jsBOA5WVKEf1rpaiCtoixKRnRCmL9utT/pQxH1d5rG0+MlD6IjlixreNY
+         aBfQ==
+X-Gm-Message-State: AOAM531xmkHKCcl0O1KJ+sRR+hzfprVl7wbgDZHPrqdg9f6gqYrjDVyp
+        9Rrb/5zvwHAcQuOWgkotC9aJs0Q9r1G3V0GXvhQ=
+X-Google-Smtp-Source: ABdhPJyMkZDKuJmsQcWUoR8BtIUa4Zkw+CMwR6RtSByVUY2mK0cg1os8OY6hzm/vRkM8Hc7SH+XXiV73iFARFpu5aZU=
+X-Received: by 2002:a05:6a00:a14:b0:4a0:945:16fa with SMTP id
+ p20-20020a056a000a1400b004a0094516famr13707540pfh.9.1639083617185; Thu, 09
+ Dec 2021 13:00:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <163907263527.1657.16919189244366777128.git-patchwork-housekeeping@kernel.org>
-Date:   Thu, 09 Dec 2021 17:57:15 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Received: by 2002:a05:6a20:7d8b:b0:5d:5c22:870b with HTTP; Thu, 9 Dec 2021
+ 13:00:16 -0800 (PST)
+Reply-To: clmloans9@gmail.com
+From:   MR ANTHONY EDWARD <debraalessii@gmail.com>
+Date:   Thu, 9 Dec 2021 22:00:16 +0100
+Message-ID: <CAM30Lis5P9dFLAJZVv+OnuNM1huR68kSJzvkLivpphDKffocDA@mail.gmail.com>
+Subject: DARLEHEN ZU 2% BEANTRAGEN
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v4] External ECC engines & Macronix support (2021-12-09T17:40:34)
-  Superseding: [v3] External ECC engines & Macronix support (2021-12-07T09:34:01):
-    [v3,01/22] dt-bindings: mtd: nand-controller: Fix the reg property description
-    [v3,02/22] dt-bindings: mtd: nand-controller: Fix a comment in the examples
-    [v3,03/22] dt-bindings: mtd: nand-controller: Harmonize the property types
-    [v3,04/22] dt-bindings: mtd: nand-chip: Create a NAND chip description
-    [v3,05/22] dt-bindings: mtd: spi-nand: Convert spi-nand description file to yaml
-    [v3,06/22] dt-bindings: vendor-prefixes: Clarify Macronix prefix
-    [v3,07/22] dt-bindings: spi: mxic: The interrupt property is not mandatory
-    [v3,08/22] dt-bindings: spi: mxic: Convert to yaml
-    [v3,09/22] dt-bindings: spi: mxic: Document the nand-ecc-engine property
-    [v3,10/22] dt-bindings: mtd: Describe Macronix NAND ECC engine
-    [v3,11/22] mtd: spinand: macronix: Use random program load
-    [v3,12/22] mtd: nand: ecc: Add infrastructure to support hardware engines
-    [v3,13/22] mtd: nand: Add a new helper to retrieve the ECC context
-    [v3,14/22] mtd: nand: mxic-ecc: Add Macronix external ECC engine support
-    [v3,15/22] mtd: nand: mxic-ecc: Support SPI pipelined mode
-    [v3,16/22] mtd: spinand: Delay a little bit dirmap creation
-    [v3,17/22] mtd: spinand: Create direct mapping descriptors for ECC operations
-    [v3,18/22] spi: mxic: Fix the transmit path
-    [v3,19/22] spi: mxic: Create a helper to configure the controller before an operation
-    [v3,20/22] spi: mxic: Create a helper to ease the start of an operation
-    [v3,21/22] spi: mxic: Add support for direct mapping
-    [v3,22/22] spi: mxic: Add support for pipelined ECC operations
+--=20
+Ben=C3=B6tigen Sie einen Gesch=C3=A4ftskredit oder einen Kredit jeglicher A=
+rt?
+Wenn ja, kontaktieren Sie uns
 
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+*Vollst=C3=A4ndiger Name:
+*Ben=C3=B6tigte Menge:
+*Darlehensdauer:
+*Handy:
+*Land:
