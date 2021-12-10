@@ -2,62 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB0846F8DD
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Dec 2021 02:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A03146FD43
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Dec 2021 10:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232642AbhLJCA7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 9 Dec 2021 21:00:59 -0500
-Received: from c24.hpms1.jp ([183.90.183.30]:51046 "EHLO c24.hpms1.jp"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231374AbhLJCA7 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 9 Dec 2021 21:00:59 -0500
-X-Greylist: delayed 400 seconds by postgrey-1.27 at vger.kernel.org; Thu, 09 Dec 2021 21:00:58 EST
-Received: (qmail 970206 invoked by uid 89); 10 Dec 2021 10:50:43 +0900
-Received: from unknown (HELO www.ajiyoshiekihigashiten.com) (info@ajiyoshiekihigashiten.com@183.90.183.30)
-  by c24.hpms1.jp with SMTP; 10 Dec 2021 10:50:43 +0900
-Date:   Fri, 10 Dec 2021 01:50:43 +0000
-To:     linux-spi@vger.kernel.org
-From:   =?UTF-8?B?5ZGz5aW9IOmnheadseW6lw==?= 
-        <info@ajiyoshiekihigashiten.com>
-Reply-To: info@ajiyoshiekihigashiten.com
-Subject: =?UTF-8?B?44GK5ZWP44GE5ZCI44KP44Gb44GC44KK44GM44Go44GG44GU44GW44GE44G+?=
- =?UTF-8?B?44GX44Gf?=
-Message-ID: <322d06d7de84b3b1b09daa82bdc4226f@www.ajiyoshiekihigashiten.com>
-X-Mailer: WPMailSMTP/Mailer/smtp 2.2.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        id S236258AbhLJJGU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Dec 2021 04:06:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231148AbhLJJGT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Dec 2021 04:06:19 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328B9C061746;
+        Fri, 10 Dec 2021 01:02:45 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id m24so5831931pls.10;
+        Fri, 10 Dec 2021 01:02:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=zjGrLEJQQKxdlnPKbJJ8rsTwPtpYOohHU907jjB+Mzc=;
+        b=ZE4Fp+fTi63cl/sylsyNDEtXaauHjbcMpEoFh/4WnWdtV70Ez/pT6YdAO6TDpZk1/u
+         cYS1jS2fE8iD9M5lnzbR3vswN6cgDpmbQ6hWcTM+hPx21C2mfM7xum6iEw9w9qnZimAV
+         tJJAZ1Zhd/xi62aoBETOXioltb21rVyYBwyizKn/8UvJcBy3YGHb8u/qPgLbP4yQOS7Q
+         S9OO/DYsrdX0VBg9qekO3iHcUPElULKdIdI0eIZqg9sqdBdrhp6fu+c6an0WxaPyEjuo
+         dB0LVi1bnA4YyG2V5cZef7STnhfQcTfvSRKiu9Ey0C9V2/1DsG4aj5+nEtbH7Zasv4kR
+         6QKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=zjGrLEJQQKxdlnPKbJJ8rsTwPtpYOohHU907jjB+Mzc=;
+        b=xgfyP20aa8pY0DJYvEzG8MUw8E3vJVjUvNe9Lquyk1ptgK3FuTgduF3dYFq4oVnz8i
+         pvbjp6iQe0CV2toyZe8GQhUySm5fabNQAj70vH0X3DWHhh9Hw5wcweqqbHRN3FWIoSOG
+         X7guRfpT+vVqu4fDeyQYi0PWbHSB5xM/0QxUcPDCrFj/+Hr91DtqGuxuswe6Zucuew4x
+         eulv1SRfjhB8kbp0UQS7JevcdR0w6XYx2YlEkzbMG/c3/85VAitH5R3w+/COkY8fxeGu
+         le0HIyonszFGKmMeG3UMxZw7fIqa6XebbABjhLyJk8e2+pISq1qqFMj8z/j1ZycIpySj
+         Qf0w==
+X-Gm-Message-State: AOAM530IbeuBAUeoM0CRLIciij/pFpwzB3j42R0ecc9kZ/CKiAmdlgPA
+        cMXY3fFqPABFGiPA48mk0CY=
+X-Google-Smtp-Source: ABdhPJx1oMfzN1r5NOaYNNJNEkhs4jlLGQX5RklNyt7Nyls++EZH5cc9hJTANChqv/BpPZ7PgeyYbg==
+X-Received: by 2002:a17:90b:30c4:: with SMTP id hi4mr22435897pjb.12.1639126964605;
+        Fri, 10 Dec 2021 01:02:44 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id h15sm2540790pfc.134.2021.12.10.01.02.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 10 Dec 2021 01:02:44 -0800 (PST)
+From:   Li-hao Kuo <lhjeff911@gmail.com>
+To:     p.zabel@pengutronix.de, broonie@kernel.org,
+        andyshevchenko@gmail.com, robh+dt@kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com,
+        "Li-hao Kuo" <lhjeff911@gmail.com>
+Subject: [PATCH v4 0/2] Add SPI control driver for Sunplus SP7021 SoC
+Date:   Fri, 10 Dec 2021 17:02:46 +0800
+Message-Id: <cover.1639123362.git.lhjeff911@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-お問い合わせありがとうございました
+From: "Li-hao Kuo" <lhjeff911@gmail.com>
 
-メッセージ本文
-※こちらのメールは自動的にお送りしています。
-本メールに対して返信なさらないようにお願い致します。
+This is a patch series for SPI driver for Sunplus SP7021 SoC.
 
-❤️ Rachel is interested in your profile! Click Here: http://bit.do/fSP8o?uazy ❤️様
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control.
 
-この度はお問い合わせいただきありがとうございます。
-以下の内容にて受け付けました。
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-【お客様情報】
---------------------------------------------------------------------------
+LH.Kuo (2):
+  SPI: Add SPI driver for Sunplus SP7021
+  devicetree: bindings SPI Add bindings doc for Sunplus SP7021
 
-お名前
-❤️ Rachel is interested in your profile! Click Here: http://bit.do/fSP8o?uazy ❤️
+ .../bindings/spi/spi-sunplus-sp7021.yaml           |  81 +++
+ MAINTAINERS                                        |   7 +
+ drivers/spi/Kconfig                                |  11 +
+ drivers/spi/Makefile                               |   1 +
+ drivers/spi/spi-sunplus-sp7021.c                   | 609 +++++++++++++++++++++
+ 5 files changed, 709 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+ create mode 100644 drivers/spi/spi-sunplus-sp7021.c
 
-メールアドレス
-linux-spi@vger.kernel.org
-
-電話番号
-653368280710
-
-お問い合わせ内容
-9g8xklz5
-
-
---------------------------------------------------------------------------
-上記内容を確認後、追ってメールにてご連絡させていただきます。  
+-- 
+2.7.4
 
