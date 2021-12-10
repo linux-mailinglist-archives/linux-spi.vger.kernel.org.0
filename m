@@ -2,92 +2,140 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6994705F1
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Dec 2021 17:39:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC746470678
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Dec 2021 17:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237011AbhLJQm5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Dec 2021 11:42:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234718AbhLJQm4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Dec 2021 11:42:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD05C061746;
-        Fri, 10 Dec 2021 08:39:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53E05B828D7;
-        Fri, 10 Dec 2021 16:39:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E644C00446;
-        Fri, 10 Dec 2021 16:39:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639154359;
-        bh=32AdGksNyXfVNrp8Rvh7BE8TKQa1lauYtfnUpfoLono=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fv2Qkat3XjWJID0EjqzIlO0BfZ+E9JL3VYmE5oh4bSZ+464QnMdzQskb61QQts+vl
-         RJkK5ho2fH38e3/HCn3CPST6R6WPqjsIlJP3H3+86TXQLtv7ZK63QzH3/hF0AcQKzV
-         gyVsq4AZiKSSId4f/pXP9dfkYNee7XDsEndupMUl6slmCgvqcIOd1aNKbpG6qSB1FZ
-         EPIjGJQa2wHuxgqk2gP8i4+RMg4LwHgP6plymL6W4l/A9X131Zmwq3f6MbWDfAznTT
-         nCAx7GCMhsv5GPl0GQK49WhNgvxzMS8QUFgs2TqwdQ/w/zjKjqFScRWceOJ1DTs1BN
-         kPxEyuyMajQ/A==
-Date:   Fri, 10 Dec 2021 16:39:05 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Joey Gouly <joey.gouly@arm.com>
-Subject: Re: [PATCH] spi: Fix incorrect cs_setup delay handling
-Message-ID: <YbOCqbah03qdLQhK@sirena.org.uk>
-References: <20211210153634.171580-1-marcan@marcan.st>
- <YbN+cBQlsLprirxW@sirena.org.uk>
- <3c94fa29-6c21-9fbd-b1f5-eb6c846054bb@marcan.st>
+        id S232672AbhLJQ6P (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Dec 2021 11:58:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:31534 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241023AbhLJQ6O (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Dec 2021 11:58:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639155279;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=V020FD6A+TFMeJ1aq3+n6+89eSkCOw7jD3ULGiZQ8B8=;
+        b=Q6bUJOn5T0rbFL8L4Oj+eNSywcBLvzoG0xfUSMBjhQTgTLtB/rAooBhp5h3sk+zHRhH59m
+        hox6+cGzdnYahrPORgD3RJyhFgsNXKjNQj2smH4++DMb4ZYYi2XtWElXpCd0aSVEaqnBKy
+        R1ljlG/S2iqfjiUzX8H0KeyXqKKRBT4=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-203-vPgFyiTGMdWA-F93l129Ww-1; Fri, 10 Dec 2021 11:54:37 -0500
+X-MC-Unique: vPgFyiTGMdWA-F93l129Ww-1
+Received: by mail-wr1-f72.google.com with SMTP id v18-20020a5d5912000000b001815910d2c0so2521256wrd.1
+        for <linux-spi@vger.kernel.org>; Fri, 10 Dec 2021 08:54:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=V020FD6A+TFMeJ1aq3+n6+89eSkCOw7jD3ULGiZQ8B8=;
+        b=Ml7fFJLMODowqMsUJpxGNMK0/RNjwrXYMZnOQPWIy5Fe44H7P0P6M7zCSrWQHrKKJH
+         y1QDLA6vzc5h4Iyq9woWttsiBv2/y6IT2GtknP2uJwmCVnhRMcvMULEUdXvfgxvu9qjx
+         czMQxY+2sQ7IpDVp3SbjxB2feEpFlc5bvxQV+5UQ8qfrM58jrUSIneEozDwURtXvoux6
+         hT1PjEDxJMdJ/g8Ug/VOxGjZ/6J3MMn59VfLaBXl3fuHIISg7BFklJUR9u1E4VlrqJi5
+         pQdpyYgeilfiQYxuk8XLkVStLB0cf4wuYn5am/M/DtOtmyf7hDmNY3J8h51utp6M9RxY
+         gdSA==
+X-Gm-Message-State: AOAM5315DPy54EqzXBrV0FOcWc58k9P04jJ/mNaA8mayUWzVlgtu9k2g
+        RKef+sHQaA5a3XI/qxGrnYnUI4KxvEbwh47n9fXysyTklEYrBRHDyhaiQFXvz14Pjh15NqQvC8V
+        c3/vTpaoRY+zxWNurj6gx
+X-Received: by 2002:a05:600c:4e8f:: with SMTP id f15mr18370144wmq.76.1639155276387;
+        Fri, 10 Dec 2021 08:54:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzZuDU12I7ul5MprxalyWosHBaLLt+aIvUY7YHF9Ttkwa1eD+sivVwGWLbJCuxP5mQnHhGpfQ==
+X-Received: by 2002:a05:600c:4e8f:: with SMTP id f15mr18370113wmq.76.1639155276155;
+        Fri, 10 Dec 2021 08:54:36 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id t16sm2922983wrn.49.2021.12.10.08.54.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 08:54:35 -0800 (PST)
+Message-ID: <8160a1c8-544d-6d95-4f80-224c7a9a9d40@redhat.com>
+Date:   Fri, 10 Dec 2021 17:54:34 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="n+nKIqKK51EAnd7+"
-Content-Disposition: inline
-In-Reply-To: <3c94fa29-6c21-9fbd-b1f5-eb6c846054bb@marcan.st>
-X-Cookie: One picture is worth 128K words.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 0/6] Support Spi in i2c-multi-instantiate driver
+To:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@opensource.cirrus.com
+References: <20211210154050.3713-1-sbinding@opensource.cirrus.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20211210154050.3713-1-sbinding@opensource.cirrus.com>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=hdegoede@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Stefan,
 
---n+nKIqKK51EAnd7+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 12/10/21 16:40, Stefan Binding wrote:
+> Add support for SPI bus in the ic2-multi-instantiate driver as
+> upcoming laptops will need to multi instantiate SPI devices from
+> a single device node, which has multiple SpiSerialBus entries at
+> the ACPI table.
+> 
+> With the new SPI support, i2c-multi-instantiate becomes
+> bus-multi-instantiate and is moved to the ACPI folder.
+> 
+> The intention is to support the SPI bus by re-using the current
+> I2C multi instantiate, instead of creating a new SPI multi
+> instantiate, to make it possible for peripherals that can be
+> controlled by I2C or SPI to have the same HID at the ACPI table.
+> 
+> The new driver (Bus multi instantiate, bmi) checks for the
+> hard-coded bus type and returns -ENODEV in case of zero devices
+> found for that bus. In the case of automatic bus detection, 
+> the driver will give preference to I2C.
+> 
+> The expectation is for a device node in the ACPI table to have
+> multiple I2cSerialBus only or multiple SpiSerialBus only, not
+> a mix of both; and for the case where there are both entries in
+> one device node, only the I2C ones would be probed.
+> 
+> This new bus multi instantiate will be used in CS35L41 HDA new
+> driver, being upstreamed:
+> https://lkml.org/lkml/2021/11/23/723
 
-On Sat, Dec 11, 2021 at 01:32:06AM +0900, Hector Martin wrote:
-> On 11/12/2021 01.21, Mark Brown wrote:
+Unfortunately you never really answered my questions about v1
+of this series:
 
-> > This needs a better changelog, there's multiple delays being handled
-> > here and it's not clear from this which are affected here or what the
-> > problem is.
+https://lore.kernel.org/platform-driver-x86/a1f546c2-5c63-573a-c032-603c792f3f7c@redhat.com/
 
-> cs_setup is affected, I thought at least that was clear from the patch
-> summary :-)
+So looking at the linked CS35L41 HDA series there is a single
+ACPI device node with a HID of CLSA0100 which describes
+two CS35L41 amplifiers connected over I2C ?
 
-This should be in the commit message, the subject line of the e-mail
-isn't super visible when people are reviewing - basically, the body of
-the commit message should make sense standalone.
+I assume you are doing this work because there are also designs
+where there is a similar CLSA0100 ACPI device which also describes
+two CS35L41 amplifiers but then connected over SPI ?
 
-> If you prefer, I can resend it with a reference to the spi.h comment.
+It would really help if you can:
 
-Yes, please resend with a clear commit message.
+1. Answer my questions from v1
+2. Provide a concrete example of a device where these changes will
+be necessary to make things work, preferably with a link to an
+actual ACPI DSDT of that device.
 
---n+nKIqKK51EAnd7+
-Content-Type: application/pgp-signature; name="signature.asc"
+Until you can better clarify why this is necessary, this series
+gets a nack from me. The i2c-mult-instantiate code is a hack to
+deal with some rather sub-optimal choices made in DSDTs used on
+devices shipped with Windows and unless absolutely necessary
+I would rather not see this get expanded to SPI.
 
------BEGIN PGP SIGNATURE-----
+Regards,
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGzgqgACgkQJNaLcl1U
-h9D8NQf/RH4/0pNggDaJpqCJvUSfbIE6AlkDCulr3IsGAFEAIbhq3OzJjQr4eXLh
-qwj2n8VfvwWc5Wb7iGuS6F4JnQsC2zIpyvjGbo7XcsGTWrka1XNQ0xKzGdDtuYma
-ubLIIVE1ZlRZM2VFJ4KjOdau0LvX+BMTaMLcP4pnSRl/+bGYdiQAZV/o5cw0sNjA
-MQOX9MGy9KapSg3xxa0geijbz9sPeLv10wf2ua7uA9ml32juhcwXEpjB+K/FK+sW
-OSe4fsTZQqqlsPCO9jui470WUOv5SoFA81wZPG+7YQeByGSDbuahZpOg/JZstnsS
-P2LihXEXipvHDD1rTLTCDI2KEki0FQ==
-=9uj2
------END PGP SIGNATURE-----
+Hans
 
---n+nKIqKK51EAnd7+--
