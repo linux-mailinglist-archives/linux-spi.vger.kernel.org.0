@@ -2,94 +2,144 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7EB14707F4
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Dec 2021 18:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BD3470823
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Dec 2021 19:10:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244923AbhLJSDL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Dec 2021 13:03:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50446 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235392AbhLJSDK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Dec 2021 13:03:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB7DC061746;
-        Fri, 10 Dec 2021 09:59:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 658E6B82914;
-        Fri, 10 Dec 2021 17:59:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D356DC00446;
-        Fri, 10 Dec 2021 17:59:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639159173;
-        bh=bBSxjH8QSMhD8e8s4DODPS6gWJiodf4WX7lpdz2HSMA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OiKf/ACo3eK481gfwEHBK3uNNsW40hy0NGBNshjiFMHwPpx6FlOehXX/TgmvrkOxQ
-         K4LleamkRphnEtJgu85JApyoeL3gBO3kPypZMGPlFVGRZ2u3O4zgrJ0JW0rK8Hc/Ph
-         sMD8XqcKGiFwGjudkNh2j316R0ZU6jnaew3f+kMxV7SU75i78UA0yaH+I/YbBOk7IF
-         o+JOPtxpNDEV44KEWEOnKbq13+rCR4lrtmQf8xw73nH4i4HJ+ywvv53UaehUJaPW5n
-         bE8oHNK8yNKlbEfGUP1Ka/zsWA3r80WZNnSK08tKkPLDJpvOyPF8SjfC52RnNKCjMx
-         L5HJLmkBfYMEg==
-Date:   Fri, 10 Dec 2021 17:59:27 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Stefan Binding <sbinding@opensource.cirrus.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        patches@opensource.cirrus.com,
-        Lucas Tanure <tanureal@opensource.cirrus.com>
-Subject: Re: [PATCH v2 3/6] platform/x86: i2c-multi-instantiate: Move it to
- drivers/acpi folder
-Message-ID: <YbOVf5eGwCqJDgvv@sirena.org.uk>
-References: <20211210154050.3713-1-sbinding@opensource.cirrus.com>
- <20211210154050.3713-4-sbinding@opensource.cirrus.com>
+        id S244603AbhLJSOV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Dec 2021 13:14:21 -0500
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:18998 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230284AbhLJSOU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Dec 2021 13:14:20 -0500
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BAGl270032723;
+        Fri, 10 Dec 2021 12:10:33 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=6bLw8PV0wGdhrj9qUUUGQ/aTrVjG+S7eK4bUHn3Tqg0=;
+ b=iNezJlqF9CtY/fuTW2OpN3XeUvhQXMKZHu1LxS5F1Moh2ztfGItzh6JMJDwjzvBqvakv
+ wPMCSrjB1Rm1VUjVRiiF46yKx+HRGgrJ+8qKvYiVeCgykk4etilISlJhi1hmO4npO8YN
+ vAEypP41d+QJMHtW00e1iFsIkD8vNbJ8TRa45mclAXCtvfAfsf5k4TRT0azhfwuC3QdR
+ MLbs62CQD7zyDKrXBNE4uvg42vaKXtsdPVpBU38AF6u7V8hFBH8lgAdSTpmYDewPRM5u
+ u+sK9KoNNYlNDcdd3YXLIXyKG8N9OW+FcAhhEYsQLScy4T3qeQwxnxCnHt2Gv47M1yQv fw== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3cvaq6g39j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 10 Dec 2021 12:10:33 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Fri, 10 Dec
+ 2021 18:10:30 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 10 Dec 2021 18:10:30 +0000
+Received: from [198.61.65.77] (unknown [198.61.65.77])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 070FC7C;
+        Fri, 10 Dec 2021 18:10:29 +0000 (UTC)
+Message-ID: <85e9e11d-a4fc-44a9-55c2-3a4d2de7769d@opensource.cirrus.com>
+Date:   Fri, 10 Dec 2021 18:10:29 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qOlWQJXGoEsgX6ji"
-Content-Disposition: inline
-In-Reply-To: <20211210154050.3713-4-sbinding@opensource.cirrus.com>
-X-Cookie: One picture is worth 128K words.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 1/3] spi: Revert "spi: Remove unused function
+ spi_busnum_to_master()"
+Content-Language: en-US
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+CC:     Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+References: <20211202162421.7628-1-sbinding@opensource.cirrus.com>
+ <Yan6JVpS50keP2Pl@smile.fi.intel.com>
+ <a1f546c2-5c63-573a-c032-603c792f3f7c@redhat.com>
+From:   Lucas tanure <tanureal@opensource.cirrus.com>
+In-Reply-To: <a1f546c2-5c63-573a-c032-603c792f3f7c@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: MglfS8b3EVvK8oP7VMy3cuLPPi0eIGNG
+X-Proofpoint-GUID: MglfS8b3EVvK8oP7VMy3cuLPPi0eIGNG
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 12/3/21 11:14, Hans de Goede wrote:
+> Hi,
+> 
+> On 12/3/21 12:06, Andy Shevchenko wrote:
+>> On Thu, Dec 02, 2021 at 04:24:19PM +0000, Stefan Binding wrote:
+>>> From: Lucas Tanure <tanureal@opensource.cirrus.com>
+>>>
+>>> Revert commit bdc7ca008e1f ("spi: Remove unused function
+>>> spi_busnum_to_master()")
+>>> This function is needed for the spi version of i2c multi
+>>> instantiate driver.
+>>
+>> I understand the intention, but I have no clue from this series (it lacks of
+>> proper cover letter, it lacks of much better and justified commit message in
+>> the patch 3) what is the actual issue. Without these to be provided it's no go
+>> for the series. Please, provide much better description what is the actual
+>> issue you are trying to solve (from patch 3 my guts telling me that this can
+>> be achieved differently without this code being involved).
+> 
+> Yes I assume that eventually there will be a follow-up which will
+> actually add some new ACPI HIDs to the new bus-multi-instantiate.c file ?
+> 
+Yes, we are developing an HDA sound driver for the HID CSC3551,
+which is used for laptops that use SPI or I2C.
+And in that series is where we plan to put a patch to add that HID.
 
---qOlWQJXGoEsgX6ji
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Can we please have (some of) those patches as part of the next
+> version, so that we can see how you will actually use this?
+The series is this one https://lkml.org/lkml/2021/11/23/723, but
+the SPI HID was not ready to be sent in that version, but will be
+part of the next submission.
 
-On Fri, Dec 10, 2021 at 03:40:47PM +0000, Stefan Binding wrote:
-> From: Lucas Tanure <tanureal@opensource.cirrus.com>
->=20
-> Moving I2C multi instantiate driver to drivers/acpi folder for
-> upcoming conversion into a generic bus multi instantiate
-> driver for SPI and I2C
->=20
-> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
-> ---
+> 
+> Also I'm wondering is this actually about ACPI device's having multiple
+> SpiSerialBusV2 resources in a single _CRS resource list ?
+yes, a single _CRS with 2 or 4 SpiSerialBusV2 inside.
 
-You've not provided a Signed-off-by for this so people can't do anything
-with it, please see Documentation/process/submitting-patches.rst for
-details on what this is and why it's important.
+> 
+> Or do you plan to use this for devices with only a single
+> I2cSerialBusV2 or SpiSerialBusV2 resource to e.g. share IRQ lookup
+> code between the 2 cases ?
+No, the minimum number SpiSerialBusV2 or I2cSerialBusV2 inside the
+_CRS is two.
 
---qOlWQJXGoEsgX6ji
-Content-Type: application/pgp-signature; name="signature.asc"
+> 
+> If you plan to use this for devices with only a single
+> I2cSerialBusV2 or SpiSerialBusV2 resource, then I'm going to have to
+> nack this.
+> 
+> Each ACPI HID which needs to be handled in this code also needs an
+> entry in the i2c_multi_instantiate_ids[] list in drivers/acpi/scan.c
+> which is code which ends up loaded on every single ACPI system, so
+> we really only want to add HIDs there for the special case of having
+> multiple I2cSerialBusV2 or SpiSerialBusV2 resources in a single
+> ACPI Device / ACPI fwnode.
+> 
+> If you are looking to use this as a way to share code for other reasons
+> (which is a good goal to strive for!) please find another way, such
+> as e.g. adding some helper functions to drivers/gpio/gpiolib-acpi.c
+> (note there already are a couple of helpers there which you may use).
+No, we only want to multi instantiate SPI or I2C devices from a single _CRS.
 
------BEGIN PGP SIGNATURE-----
+> 
+> Regards,
+> 
+> Hans
+> 
+We sent a request to the laptop vendor about releasing the SPI DSDT, and 
+after that gets cleared, we will send it to you for review. That will 
+likely be next.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGzlX8ACgkQJNaLcl1U
-h9BVCgf/Q0C7sSyuSXNPjiKUn5rnye0V4Bkv3GXGXSTyI4fbTgAwNTN8b89uE+M/
-yVAyerexUJ9PbtoerGU3mfsCVeVnZCpfDExkTzTGriphmnx+X7QrwAGcWEWiKihk
-hcw1VXZzsxijPqJAPWAC7Vm22X61oB79lT33goMPNQyooklcsGqLVFKtXREx2tGw
-qCWDZEu6OSqgOqJJxX9MiBUAzfRU2s57EXyYPZya8j+vqNdI9yzKuGoUkvWiB0aH
-j1K/luBUzgmhlzj3zPkRdQs4dc8PGc8/tdYNaRaqKAqFbOoDlYO6q+CCkbJBgrNY
-Gqhn32bNKvV9KUZpYGj4IdzHB+mbAQ==
-=a2Q9
------END PGP SIGNATURE-----
+Thanks
+Lucas Tanure
 
---qOlWQJXGoEsgX6ji--
