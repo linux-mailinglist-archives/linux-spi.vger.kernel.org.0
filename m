@@ -2,18 +2,18 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB1B470B8D
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Dec 2021 21:10:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD68470B8F
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Dec 2021 21:10:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242593AbhLJUOU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 10 Dec 2021 15:14:20 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:48363 "EHLO
+        id S1344070AbhLJUOW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Dec 2021 15:14:22 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:41389 "EHLO
         relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343620AbhLJUOT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Dec 2021 15:14:19 -0500
+        with ESMTP id S1343620AbhLJUOV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Dec 2021 15:14:21 -0500
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id CCC9C240006;
-        Fri, 10 Dec 2021 20:10:41 +0000 (UTC)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 4EE0A240008;
+        Fri, 10 Dec 2021 20:10:43 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
@@ -25,11 +25,10 @@ Cc:     Michal Simek <monstr@monstr.eu>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
         Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 1/3] dt-bindings: mtd: spi-nor: Allow two CS per device
-Date:   Fri, 10 Dec 2021 21:10:37 +0100
-Message-Id: <20211210201039.729961-2-miquel.raynal@bootlin.com>
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH v4 2/3] spi: dt-bindings: Describe stacked/parallel memories modes
+Date:   Fri, 10 Dec 2021 21:10:38 +0100
+Message-Id: <20211210201039.729961-3-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20211210201039.729961-1-miquel.raynal@bootlin.com>
 References: <20211210201039.729961-1-miquel.raynal@bootlin.com>
@@ -40,45 +39,57 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The Xilinx QSPI controller has two advanced modes which allow the
-controller to behave differently and consider two flashes as one single
-storage.
-
-One of these two modes is quite complex to support from a binding point
-of view and is the dual parallel memories. In this mode, each byte of
-data is stored in both devices: the even bits in one, the odd bits in
-the other. The split is automatically handled by the QSPI controller and
-is transparent for the user.
-
-The other mode is simpler to support, it is called dual stacked
-memories. The controller shares the same SPI bus but each of the devices
-contain half of the data. Once in this mode, the controller does not
-follow CS requests but instead internally wires the two CS levels with
-the value of the most significant address bit.
-
-Supporting these two modes will involve core changes which include the
-possibility of providing two CS for a single SPI device
+Describe two new memories modes:
+- A stacked mode when the bus is common but the address space extended
+  with an additinals wires.
+- A parallel mode with parallel busses accessing parallel flashes where
+  the data is spread.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../bindings/spi/spi-peripheral-props.yaml    | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
-index 39421f7233e4..4abfb4cfc157 100644
---- a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
-+++ b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
-@@ -47,7 +47,8 @@ properties:
-       identified by the JEDEC READ ID opcode (0x9F).
+diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+index 5dd209206e88..4194fee8f556 100644
+--- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+@@ -82,6 +82,35 @@ properties:
+     description:
+       Delay, in microseconds, after a write transfer.
  
-   reg:
--    maxItems: 1
-+    minItems: 1
++  stacked-memories:
++    $ref: /schemas/types.yaml#/definitions/uint64-matrix
++    description: Several SPI memories can be wired in stacked mode.
++      This basically means that either a device features several chip
++      selects, or that different devices must be seen as a single
++      bigger chip. This basically doubles (or more) the total address
++      space with only a single additional wire, while still needing
++      to repeat the commands when crossing a chip boundary. The size of
++      each chip should be provided as members of the array.
++    minItems: 2
 +    maxItems: 2
- 
-   spi-max-frequency: true
-   spi-rx-bus-width: true
++    items:
++      maxItems: 1
++
++  parallel-memories:
++    $ref: /schemas/types.yaml#/definitions/uint64-matrix
++    description: Several SPI memories can be wired in parallel mode.
++      The devices are physically on a different buses but will always
++      act synchronously as each data word is spread across the
++      different memories (eg. even bits are stored in one memory, odd
++      bits in the other). This basically doubles the address space and
++      the throughput while greatly complexifying the wiring because as
++      many busses as devices must be wired. The size of each chip should
++      be provided as members of the array.
++    minItems: 2
++    maxItems: 2
++    items:
++      maxItems: 1
++
+ # The controller specific properties go here.
+ allOf:
+   - $ref: cdns,qspi-nor-peripheral-props.yaml#
 -- 
 2.27.0
 
