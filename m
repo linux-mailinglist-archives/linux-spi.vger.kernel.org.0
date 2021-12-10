@@ -2,68 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E6A0470B75
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Dec 2021 21:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BB8470B8B
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Dec 2021 21:10:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234470AbhLJULO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Fri, 10 Dec 2021 15:11:14 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:57891 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232906AbhLJULN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Dec 2021 15:11:13 -0500
+        id S1343630AbhLJUOT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 10 Dec 2021 15:14:19 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:49421 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234990AbhLJUOS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 10 Dec 2021 15:14:18 -0500
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 1B467200003;
-        Fri, 10 Dec 2021 20:07:31 +0000 (UTC)
-Date:   Fri, 10 Dec 2021 21:07:30 +0100
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id D297B240002;
+        Fri, 10 Dec 2021 20:10:39 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Richard Weinberger <richard@nod.at>,
+To:     Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Tudor Ambarus <Tudor.Ambarus@microchip.com>,
         Pratyush Yadav <p.yadav@ti.com>,
         Michael Walle <michael@walle.cc>,
-        linux-mtd@lists.infradead.org, Mark Brown <broonie@kernel.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        <linux-mtd@lists.infradead.org>
+Cc:     Michal Simek <monstr@monstr.eu>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Michal Simek <monstr@monstr.eu>
-Subject: Re: [PATCH v3 2/3] spi: dt-bindings: Describe stacked/parallel
- memories modes
-Message-ID: <20211210210730.07dc672d@xps13>
-In-Reply-To: <Ya5++vUkIKXtE1ja@robh.at.kernel.org>
-References: <20211206095921.33302-1-miquel.raynal@bootlin.com>
-        <20211206095921.33302-3-miquel.raynal@bootlin.com>
-        <Ya5++vUkIKXtE1ja@robh.at.kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH v4 0/3] Stacked/parallel memories bindings
+Date:   Fri, 10 Dec 2021 21:10:36 +0100
+Message-Id: <20211210201039.729961-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rob,
+Hello Rob, Mark, Tudor & Pratyush,
 
-robh@kernel.org wrote on Mon, 6 Dec 2021 15:22:02 -0600:
+Here is a fourth versions for these bindings, which applies on top of
+Pratyush's work:
+https://lore.kernel.org/all/20211109181911.2251-1-p.yadav@ti.com/
 
-> On Mon, Dec 06, 2021 at 10:59:20AM +0100, Miquel Raynal wrote:
-> > Describe two new memories modes:
-> > - A stacked mode when the bus is common but the address space extended
-> >   with an additinals wires.
-> > - A parallel mode with parallel busses accessing parallel flashes where
-> >   the data is spread.
-> > 
-> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> > ---
-> >  .../bindings/spi/spi-peripheral-props.yaml    | 21 +++++++++++++++++++
-> >  1 file changed, 21 insertions(+)  
-> 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-
-I am sending a new version of this series so that I can get feedback on
-other way of describing the flashes, so I'll drop your tag because I'll
-need you to re-check that I'm not doing anything silly (it took me a
-while to understand the array vs. matrix logic).
-
-Thanks,
+Cheers,
 Miquèl
+
+Changes in v4:
+* Changed the type of properties to uint64-arrays in order to be able to
+  describe the size of each element in the array.
+* Updated the example accordingly.
+
+Changes in v3:
+* Rebased on top of Pratyush's recent changes.
+* Dropped the commit allowing to provide two reg entries on the node
+  name.
+* Dropped the commit referencing spi-controller.yaml from
+  jedec,spi-nor.yaml, now replaced by spi-peripheral-props.yaml and
+  already done in Pratyush's series.
+* Added Rob's Ack.
+* Enhanced a commit message.
+* Moved the new properties to the new SPI peripheral binding file.
+
+Changes in v2:
+* Dropped the dtc changes for now.
+* Moved the properties in the device's nodes, not the controller's.
+* Dropped the useless #address-cells change.
+* Added a missing "minItems".
+* Moved the new properties in the spi-controller.yaml file.
+* Added an example using two stacked memories in the
+  spi-controller.yaml file.
+* Renamed the properties to drop the Xilinx prefix.
+* Added a patch to fix the spi-nor jedec yaml file.
+
+Miquel Raynal (3):
+  dt-bindings: mtd: spi-nor: Allow two CS per device
+  spi: dt-bindings: Describe stacked/parallel memories modes
+  spi: dt-bindings: Add an example with two stacked flashes
+
+ .../bindings/mtd/jedec,spi-nor.yaml           |  3 +-
+ .../bindings/spi/spi-controller.yaml          |  7 +++++
+ .../bindings/spi/spi-peripheral-props.yaml    | 29 +++++++++++++++++++
+ 3 files changed, 38 insertions(+), 1 deletion(-)
+
+-- 
+2.27.0
+
