@@ -2,42 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60B80471F98
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Dec 2021 04:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 288A8471FAD
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Dec 2021 04:50:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbhLMDdA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 12 Dec 2021 22:33:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbhLMDdA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 12 Dec 2021 22:33:00 -0500
-X-Greylist: delayed 85518 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 12 Dec 2021 19:33:00 PST
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E493C06173F;
-        Sun, 12 Dec 2021 19:33:00 -0800 (PST)
+        id S231517AbhLMDuz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 12 Dec 2021 22:50:55 -0500
+Received: from marcansoft.com ([212.63.210.85]:60178 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229724AbhLMDuz (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Sun, 12 Dec 2021 22:50:55 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id A0FF8425B1;
-        Mon, 13 Dec 2021 03:32:54 +0000 (UTC)
-To:     Sven Peter <sven@svenpeter.dev>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-References: <20211212034726.26306-1-marcan@marcan.st>
- <20211212034726.26306-4-marcan@marcan.st>
- <2f23875c-ce8e-436a-837b-b8afb6e8411b@www.fastmail.com>
-From:   Hector Martin <marcan@marcan.st>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 896F34258C;
+        Mon, 13 Dec 2021 03:50:50 +0000 (UTC)
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Sven Peter <sven@svenpeter.dev>, Rob Herring <robh+dt@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211212034726.26306-1-marcan@marcan.st>
+ <20211212034726.26306-4-marcan@marcan.st> <YbaIwa/9utI9SD1u@sirena.org.uk>
+From:   Hector Martin <marcan@marcan.st>
 Subject: Re: [PATCH 3/3] spi: apple: Add driver for Apple SPI controller
-Message-ID: <49d1deeb-6d58-b1ca-addc-2505847d602f@marcan.st>
-Date:   Mon, 13 Dec 2021 12:32:52 +0900
+Message-ID: <d566c897-ee7d-f32f-1548-57f037c69c89@marcan.st>
+Date:   Mon, 13 Dec 2021 12:50:49 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <2f23875c-ce8e-436a-837b-b8afb6e8411b@www.fastmail.com>
+In-Reply-To: <YbaIwa/9utI9SD1u@sirena.org.uk>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: es-ES
 Content-Transfer-Encoding: 8bit
@@ -47,113 +42,127 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Thanks for the review!
 
-On 12/12/2021 21.39, Sven Peter wrote:
->> +
+On 13/12/2021 08.41, Mark Brown wrote:
+> On Sun, Dec 12, 2021 at 12:47:26PM +0900, Hector Martin wrote:
 > 
-> #include <linux/bits.h> for GENMASK even though it's probably
-> pulled in by one of the #includes below
+> This looks pretty good - one small issue and several stylistic nits
+> below.
+> 
+>> @@ -0,0 +1,566 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Apple SoC SPI device driver
+>> + *
+> 
+> Please keep the entire comment a C++ one so things look more
+> intentional.
 
-Ack, fixed for v2.
+I thought this pattern was pretty much the standard style.
 
+$ grep -r -A1 "// SPDX" | grep '/\*' | wc -l
+13512
+
+$ grep -r -A1 "// SPDX" | grep -v SPDX | grep '//' | wc -l
+705
+
+>> +#define APPLE_SPI_DRIVER_NAME           "apple_spi"
+> 
+> This is referenced exactly once, just inline it.
+Done. Also changed to "apple-spi" since all the other apple drivers use 
+the dash convention.
+
+> 
 >> +	/* We will want to poll if the time we need to wait is
 >> +	 * less than the context switching time.
 >> +	 * Let's call that threshold 5us. The operation will take:
 >> +	 *    bits_per_word * fifo_threshold / hz <= 5 * 10^-6
 >> +	 *    200000 * bits_per_word * fifo_threshold <= hz
 >> +	 */
->> +	return 200000 * t->bits_per_word * APPLE_SPI_FIFO_DEPTH / 2 <=
->> t->speed_hz;
+>> +	return 200000 * t->bits_per_word * APPLE_SPI_FIFO_DEPTH / 2 <= t->speed_hz;
 > 
-> Nice :-)
+> Some brackets or an intermediate variable wouldn't hurt here, especially
+> given the line length.
 
-I stole this one from the sifive driver :-) (slightly adjusted)
+How about this?
 
->> +static int apple_spi_probe(struct platform_device *pdev)
+return (200000 * t->bits_per_word * APPLE_SPI_FIFO_DEPTH / 2) <= 
+t->speed_hz;
+
+>> +	struct apple_spi *spi = spi_controller_get_devdata(ctlr);
+>> +	bool poll = apple_spi_prep_transfer(spi, t);
+>> +	const void *tx_ptr = t->tx_buf;
+>> +	void *rx_ptr = t->rx_buf;
+>> +	unsigned int bytes_per_word = t->bits_per_word > 16 ? 4 : t->bits_per_word > 8 ? 2 : 1;
+> 
+> Please don't abuse the ternery operator like this - just write normal
+> conditional statements, they're much easier to read.  In general the
+> driver is a bit too enthusiastic about them and this one is next level.
+
+Ack, I switched it to an if chain. That does mean I had to move the 
+subsequent initializers out of the declarations section, so it's overall 
+a bit more verbose.
+
+	if (t->bits_per_word > 16)
+		bytes_per_word = 4;
+	else if (t->bits_per_word > 8)
+		bytes_per_word = 2;
+	else
+		bytes_per_word = 1;
+
+	words = t->len / bytes_per_word;
+	remaining_tx = tx_ptr ? words : 0;
+	remaining_rx = rx_ptr ? words : 0;
+
+>> +static int apple_spi_remove(struct platform_device *pdev)
 >> +{
->> +	struct apple_spi *spi;
->> +	int ret, irq;
->> +	struct spi_controller *ctlr;
+>> +	struct spi_controller *ctlr = platform_get_drvdata(pdev);
+>> +	struct apple_spi *spi = spi_controller_get_devdata(ctlr);
 >> +
->> +	ctlr = spi_alloc_master(&pdev->dev, sizeof(struct apple_spi));
+>> +	pm_runtime_disable(&pdev->dev);
+>> +
+>> +	/* Disable all the interrupts just in case */
+>> +	reg_write(spi, APPLE_SPI_IE_FIFO, 0);
+>> +	reg_write(spi, APPLE_SPI_IE_XFER, 0);
 > 
-> devm_spi_alloc_master and then you can get rid of the spi_controller_put
-> error path.
+> Since the driver registers with the SPI subsystem using devm and
+> remove() gets run before devm gets unwound we still potentially have
+> transfers running when the driver gets removed and this probably isn't
+> going to cause them to go well - obviously it's an edge case and it's
+> unclear when someone would be removing the driver but we still shouldn't
+> do this.
 
-Ack, fixed for v2. That simplifies a bunch of the error handling.
+With the other devm changes Sven suggested we don't need a remove 
+function at all, so I've just gotten rid of it wholesale.
 
+>> +static const struct of_device_id apple_spi_of_match[] = {
+>> +	{ .compatible = "apple,spi", },
+>> +	{}
+>> +};
+>> +MODULE_DEVICE_TABLE(of, apple_spi_of_match);
 > 
->> +	if (!ctlr) {
->> +		dev_err(&pdev->dev, "out of memory\n");
->> +		return -ENOMEM;
->> +	}
->> +
->> +	spi = spi_controller_get_devdata(ctlr);
->> +	init_completion(&spi->done);
->> +	platform_set_drvdata(pdev, ctlr);
->> +
->> +	spi->regs = devm_platform_ioremap_resource(pdev, 0);
->> +	if (IS_ERR(spi->regs)) {
->> +		ret = PTR_ERR(spi->regs);
->> +		goto put_ctlr;
->> +	}
->> +
->> +	spi->clk = devm_clk_get(&pdev->dev, NULL);
->> +	if (IS_ERR(spi->clk)) {
->> +		dev_err(&pdev->dev, "Unable to find bus clock\n");
->> +		ret = PTR_ERR(spi->clk);
->> +		goto put_ctlr;
->> +	}
-> 
-> dev_err_probe can be used here in case devm_clk_get returns -EPROBE_DEFER.
+> This is an awfully generic compatible.  It's common to use the SoC name
+> for the IP compatibles when they're not otherwise identified?
 
-Yup, good point. I switched most of the dev_errs to dev_err_probe.
+Apple like to keep blocks compatible across SoC generations - I think 
+this one dates, at least to some extent, to the original iPhone or 
+thereabouts. We do use per-SoC compatibles in the DTs in case we need to 
+throw in per-SoC quirks in the future ("apple,t8103-spi", "apple,spi"), 
+but for drivers like this we prefer to use generic compatibles as long 
+as backwards compatibility doesn't break. If Apple do something totally 
+incompatible (like they did with AIC2 in the latest chips), we'll bump 
+to something like apple,spi2. This happens quite rarely, so it makes 
+sense to just keep things generic except for these instances. That way 
+old kernels will happily bind to the block in newer SoCs if it is 
+compatible.
 
-> 
->> +
->> +	irq = platform_get_irq(pdev, 0);
->> +	if (irq < 0) {
->> +		ret = irq;
->> +		goto put_ctlr;
->> +	}
->> +
->> +	ret = devm_request_irq(&pdev->dev, irq, apple_spi_irq, 0,
->> +			       dev_name(&pdev->dev), spi);
->> +	if (ret) {
->> +		dev_err(&pdev->dev, "Unable to bind to interrupt\n");
->> +		goto put_ctlr;
->> +	}
->> +
->> +	ret = clk_prepare_enable(spi->clk);
->> +	if (ret) {
->> +		dev_err(&pdev->dev, "Unable to enable bus clock\n");
->> +		goto put_ctlr;
->> +	}
-> 
-> Unfortunately there's no devm_clk_prepare_enable but you could use
-> devm_add_action_or_reset like almost all watchdog drivers as well.
-
-Done.
-
->> +
->> +	ctlr->dev.of_node = pdev->dev.of_node;
->> +	ctlr->bus_num = pdev->id;
->> +	ctlr->num_chipselect = 1;
->> +	ctlr->mode_bits = SPI_CPHA | SPI_CPOL | SPI_LSB_FIRST;
->> +	ctlr->bits_per_word_mask = SPI_BPW_RANGE_MASK(1, 32);
->> +	ctlr->flags = 0;
->> +	ctlr->prepare_message = apple_spi_prepare_message;
->> +	ctlr->set_cs = apple_spi_set_cs;
->> +	ctlr->transfer_one = apple_spi_transfer_one;
->> +	ctlr->auto_runtime_pm = true;
->> +
->> +	pm_runtime_set_active(&pdev->dev);
->> +	pm_runtime_enable(&pdev->dev);
-> 
-> You could also use devm_pm_runtime_enable here and then everything
-> should be devres managed.
-
-Done, though I still need to wrap the remove remove function in 
-pm_runtime calls, since the device might be suspended when it gets called.
+If we had a detailed lineage of what SoCs used what blocks and when 
+things changed we could try something else, like using the first SoC 
+where the specific block version was introduced, but we don't... so I 
+think it makes sense to just go with generic ones where we don't think 
+things have changed much since the dark ages. FWIW, Apple calls this one 
+spi-1,spimc and claims "spi-version = 1" and the driver has Samsung in 
+the name... so the history of this block definitely goes back quite a 
+ways :-)
 
 -- 
 Hector Martin (marcan@marcan.st)
