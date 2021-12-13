@@ -2,137 +2,159 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B8E471EDA
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Dec 2021 00:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B80471F98
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Dec 2021 04:33:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbhLLXmC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 12 Dec 2021 18:42:02 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44450 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbhLLXmC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 12 Dec 2021 18:42:02 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S229694AbhLMDdA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 12 Dec 2021 22:33:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229492AbhLMDdA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 12 Dec 2021 22:33:00 -0500
+X-Greylist: delayed 85518 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 12 Dec 2021 19:33:00 PST
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E493C06173F;
+        Sun, 12 Dec 2021 19:33:00 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8BCE2B80D96;
-        Sun, 12 Dec 2021 23:42:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81EB5C341C5;
-        Sun, 12 Dec 2021 23:41:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639352519;
-        bh=lk3mH8kKukrxhG2a4RLtcMc6cr6amu36lxEwuKTR6d0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VyetZoiMYnRGGR0Pqr155Sn348ArG4QuH1FuY4QEyFeezzEz71GbNe674poyMyydG
-         ZyVFRngYZuLLsgttv3qn6XC4TjWEcqgbxx0EVaLFMGxKIrM7mYooHoVfk2Dwx0TrxE
-         0EuAv3qTMt3q94686EkGsT8MKg/Pcy9gEa0/I4uI5lmOBdO+4BMPkqM8P39I7UZJJU
-         9AcPSzwiW6gVJeOT5NETWQpuaEMykTz86TxBMmiPrjIO73bCNxxTB7MElOJaVYaC11
-         jF7tUSoBUzMxCapFSlMnZcB8WhwC+EZffH4NiquQE4TvUaTudtCDnj3N5IEUk81ERo
-         lyI1pnoKFhAJA==
-Date:   Sun, 12 Dec 2021 23:41:53 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Sven Peter <sven@svenpeter.dev>, Rob Herring <robh+dt@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id A0FF8425B1;
+        Mon, 13 Dec 2021 03:32:54 +0000 (UTC)
+To:     Sven Peter <sven@svenpeter.dev>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20211212034726.26306-1-marcan@marcan.st>
+ <20211212034726.26306-4-marcan@marcan.st>
+ <2f23875c-ce8e-436a-837b-b8afb6e8411b@www.fastmail.com>
+From:   Hector Martin <marcan@marcan.st>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 3/3] spi: apple: Add driver for Apple SPI controller
-Message-ID: <YbaIwa/9utI9SD1u@sirena.org.uk>
-References: <20211212034726.26306-1-marcan@marcan.st>
- <20211212034726.26306-4-marcan@marcan.st>
+Message-ID: <49d1deeb-6d58-b1ca-addc-2505847d602f@marcan.st>
+Date:   Mon, 13 Dec 2021 12:32:52 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fw7hCEaJSL+sKRan"
-Content-Disposition: inline
-In-Reply-To: <20211212034726.26306-4-marcan@marcan.st>
-X-Cookie: No solicitors.
+In-Reply-To: <2f23875c-ce8e-436a-837b-b8afb6e8411b@www.fastmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Thanks for the review!
 
---fw7hCEaJSL+sKRan
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 12/12/2021 21.39, Sven Peter wrote:
+>> +
+> 
+> #include <linux/bits.h> for GENMASK even though it's probably
+> pulled in by one of the #includes below
 
-On Sun, Dec 12, 2021 at 12:47:26PM +0900, Hector Martin wrote:
+Ack, fixed for v2.
 
-This looks pretty good - one small issue and several stylistic nits
-below.
+>> +	/* We will want to poll if the time we need to wait is
+>> +	 * less than the context switching time.
+>> +	 * Let's call that threshold 5us. The operation will take:
+>> +	 *    bits_per_word * fifo_threshold / hz <= 5 * 10^-6
+>> +	 *    200000 * bits_per_word * fifo_threshold <= hz
+>> +	 */
+>> +	return 200000 * t->bits_per_word * APPLE_SPI_FIFO_DEPTH / 2 <=
+>> t->speed_hz;
+> 
+> Nice :-)
 
-> @@ -0,0 +1,566 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Apple SoC SPI device driver
-> + *
+I stole this one from the sifive driver :-) (slightly adjusted)
 
-Please keep the entire comment a C++ one so things look more
-intentional.
+>> +static int apple_spi_probe(struct platform_device *pdev)
+>> +{
+>> +	struct apple_spi *spi;
+>> +	int ret, irq;
+>> +	struct spi_controller *ctlr;
+>> +
+>> +	ctlr = spi_alloc_master(&pdev->dev, sizeof(struct apple_spi));
+> 
+> devm_spi_alloc_master and then you can get rid of the spi_controller_put
+> error path.
 
-> +#define APPLE_SPI_DRIVER_NAME           "apple_spi"
+Ack, fixed for v2. That simplifies a bunch of the error handling.
 
-This is referenced exactly once, just inline it.
+> 
+>> +	if (!ctlr) {
+>> +		dev_err(&pdev->dev, "out of memory\n");
+>> +		return -ENOMEM;
+>> +	}
+>> +
+>> +	spi = spi_controller_get_devdata(ctlr);
+>> +	init_completion(&spi->done);
+>> +	platform_set_drvdata(pdev, ctlr);
+>> +
+>> +	spi->regs = devm_platform_ioremap_resource(pdev, 0);
+>> +	if (IS_ERR(spi->regs)) {
+>> +		ret = PTR_ERR(spi->regs);
+>> +		goto put_ctlr;
+>> +	}
+>> +
+>> +	spi->clk = devm_clk_get(&pdev->dev, NULL);
+>> +	if (IS_ERR(spi->clk)) {
+>> +		dev_err(&pdev->dev, "Unable to find bus clock\n");
+>> +		ret = PTR_ERR(spi->clk);
+>> +		goto put_ctlr;
+>> +	}
+> 
+> dev_err_probe can be used here in case devm_clk_get returns -EPROBE_DEFER.
 
-> +	/* We will want to poll if the time we need to wait is
-> +	 * less than the context switching time.
-> +	 * Let's call that threshold 5us. The operation will take:
-> +	 *    bits_per_word * fifo_threshold / hz <= 5 * 10^-6
-> +	 *    200000 * bits_per_word * fifo_threshold <= hz
-> +	 */
-> +	return 200000 * t->bits_per_word * APPLE_SPI_FIFO_DEPTH / 2 <= t->speed_hz;
+Yup, good point. I switched most of the dev_errs to dev_err_probe.
 
-Some brackets or an intermediate variable wouldn't hurt here, especially
-given the line length.
+> 
+>> +
+>> +	irq = platform_get_irq(pdev, 0);
+>> +	if (irq < 0) {
+>> +		ret = irq;
+>> +		goto put_ctlr;
+>> +	}
+>> +
+>> +	ret = devm_request_irq(&pdev->dev, irq, apple_spi_irq, 0,
+>> +			       dev_name(&pdev->dev), spi);
+>> +	if (ret) {
+>> +		dev_err(&pdev->dev, "Unable to bind to interrupt\n");
+>> +		goto put_ctlr;
+>> +	}
+>> +
+>> +	ret = clk_prepare_enable(spi->clk);
+>> +	if (ret) {
+>> +		dev_err(&pdev->dev, "Unable to enable bus clock\n");
+>> +		goto put_ctlr;
+>> +	}
+> 
+> Unfortunately there's no devm_clk_prepare_enable but you could use
+> devm_add_action_or_reset like almost all watchdog drivers as well.
 
-> +	struct apple_spi *spi = spi_controller_get_devdata(ctlr);
-> +	bool poll = apple_spi_prep_transfer(spi, t);
-> +	const void *tx_ptr = t->tx_buf;
-> +	void *rx_ptr = t->rx_buf;
-> +	unsigned int bytes_per_word = t->bits_per_word > 16 ? 4 : t->bits_per_word > 8 ? 2 : 1;
+Done.
 
-Please don't abuse the ternery operator like this - just write normal
-conditional statements, they're much easier to read.  In general the
-driver is a bit too enthusiastic about them and this one is next level.
+>> +
+>> +	ctlr->dev.of_node = pdev->dev.of_node;
+>> +	ctlr->bus_num = pdev->id;
+>> +	ctlr->num_chipselect = 1;
+>> +	ctlr->mode_bits = SPI_CPHA | SPI_CPOL | SPI_LSB_FIRST;
+>> +	ctlr->bits_per_word_mask = SPI_BPW_RANGE_MASK(1, 32);
+>> +	ctlr->flags = 0;
+>> +	ctlr->prepare_message = apple_spi_prepare_message;
+>> +	ctlr->set_cs = apple_spi_set_cs;
+>> +	ctlr->transfer_one = apple_spi_transfer_one;
+>> +	ctlr->auto_runtime_pm = true;
+>> +
+>> +	pm_runtime_set_active(&pdev->dev);
+>> +	pm_runtime_enable(&pdev->dev);
+> 
+> You could also use devm_pm_runtime_enable here and then everything
+> should be devres managed.
 
-> +static int apple_spi_remove(struct platform_device *pdev)
-> +{
-> +	struct spi_controller *ctlr = platform_get_drvdata(pdev);
-> +	struct apple_spi *spi = spi_controller_get_devdata(ctlr);
-> +
-> +	pm_runtime_disable(&pdev->dev);
-> +
-> +	/* Disable all the interrupts just in case */
-> +	reg_write(spi, APPLE_SPI_IE_FIFO, 0);
-> +	reg_write(spi, APPLE_SPI_IE_XFER, 0);
+Done, though I still need to wrap the remove remove function in 
+pm_runtime calls, since the device might be suspended when it gets called.
 
-Since the driver registers with the SPI subsystem using devm and
-remove() gets run before devm gets unwound we still potentially have
-transfers running when the driver gets removed and this probably isn't
-going to cause them to go well - obviously it's an edge case and it's
-unclear when someone would be removing the driver but we still shouldn't
-do this.
-
-> +static const struct of_device_id apple_spi_of_match[] = {
-> +	{ .compatible = "apple,spi", },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, apple_spi_of_match);
-
-This is an awfully generic compatible.  It's common to use the SoC name
-for the IP compatibles when they're not otherwise identified?
-
---fw7hCEaJSL+sKRan
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmG2iL4ACgkQJNaLcl1U
-h9B7KAf/dw2gSXKdNc0SFqWT4zq6Br3cGhgpr+Ql4v0TopsLRwZNYbC027D/mxt7
-7aatw+PW0ybjWhN5LrZVsrEm7eB1OJ9qCZbLAU6b3HqcYMP5gAWjaSyxUSI4BM2H
-I2qocLLnLhbFKOZXTWbux4wbvCbmq/DSmu/8EbdIgCqyEEI/duF0Fu2hpx1N0zCE
-gm5JWZc5/Ctrqe7S26zwQvhw/oVEICFYTg3Mv5rRGBrwYD+HXh+iYrezXBhqDOTL
-srLamb6c6iU2n3Q6RgCx7l90ok/eUfkeqOWXHKVvW8g8qmwHgOLugNyM/W9nOraz
-w78bBG8XuCztz8tpg9eBUMWT6WSNnQ==
-=zg23
------END PGP SIGNATURE-----
-
---fw7hCEaJSL+sKRan--
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub
