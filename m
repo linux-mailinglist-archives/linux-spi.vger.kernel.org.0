@@ -2,336 +2,145 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D62A472BAF
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Dec 2021 12:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C9A4730F7
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Dec 2021 16:56:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234927AbhLMLkn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 13 Dec 2021 06:40:43 -0500
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:33572 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231463AbhLMLkm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Dec 2021 06:40:42 -0500
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BD5StQO021923;
-        Mon, 13 Dec 2021 05:40:33 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- references : in-reply-to : subject : date : message-id : mime-version :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=AyJDsqK4TktiOaHc93I1NcIFPacc8LcRVfCNYLD2O7k=;
- b=HDfpfr0+/AVc9nGh3qru+D9pPm1nSCza8DzBZj3Zy6s7NBf3a2KI+S6YIaF+uqKcZHeb
- vI4pMLOyddWgW0QC9Be4p+RRljAGAY4iQayTJ7oMnn4Lr9JNV2e6lZm7t5jJtrqq2NdV
- XK4EC5Kx2gy3EU7dCaQZ2OOIN8qlYT75fITAng9ab4S96f+2LxH4mG+betKRMF9nWKuq
- qToVOr+O/wi/UpKo9Cx9BIdo53BXYZM+af4zF45DSX6qEmLu7hS9gQwaG1+ShUUuOYvh
- aFVqHt2e0GJ5txTyowyKecKO0Rob/K2VO0SlPD0TZYfQ4HoRutKug0cTnIFpwtrNXKW0 8g== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3cwc0bs810-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 13 Dec 2021 05:40:33 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Mon, 13 Dec
- 2021 11:40:31 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 13 Dec 2021 11:40:31 +0000
-Received: from LONN2DGDQ73 (unknown [198.90.238.114])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D027AB13;
-        Mon, 13 Dec 2021 11:40:30 +0000 (UTC)
-From:   Stefan Binding <sbinding@opensource.cirrus.com>
-To:     'Hans de Goede' <hdegoede@redhat.com>,
-        'Mark Brown' <broonie@kernel.org>,
-        "'Rafael J . Wysocki'" <rafael@kernel.org>,
-        'Len Brown' <lenb@kernel.org>,
-        'Mark Gross' <markgross@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-References: <20211210154050.3713-1-sbinding@opensource.cirrus.com> <8160a1c8-544d-6d95-4f80-224c7a9a9d40@redhat.com>
-In-Reply-To: <8160a1c8-544d-6d95-4f80-224c7a9a9d40@redhat.com>
-Subject: RE: [PATCH v2 0/6] Support Spi in i2c-multi-instantiate driver
-Date:   Mon, 13 Dec 2021 11:40:30 +0000
-Message-ID: <002401d7f016$3bb4f260$b31ed720$@opensource.cirrus.com>
+        id S237582AbhLMP4f (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 13 Dec 2021 10:56:35 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50846 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238063AbhLMP4e (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 13 Dec 2021 10:56:34 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1EE76115B;
+        Mon, 13 Dec 2021 15:56:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45393C34602;
+        Mon, 13 Dec 2021 15:56:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639410993;
+        bh=3FGWIya7q7VvGFx4Lkkcd0Ne7ihM+mYzlpUX97z0UNE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VP1+gsD0rXjVlGo5TX2Xt9z7yb/w6/tTvBPkNytu5AaJl9pqoyL+K2WPy6+WvKZ+k
+         7DENnYuGy0pIZ3Ja6/5FwPKCyyJrGGNEjV0/+VhRxjUMJv7wFLbmXRPMc4DfzTaIkl
+         3kTQ3r0muW4fAqeOzuab5VUg9lL2Xrti2TiuUZ2UeSfjC3/d+VUYPT6PRvX5QCBjAy
+         Rrbo9Bm3XNNG2PSYFASUbgV87Vqj71cXgyAH6SmrLuOabZGeX/5UGspY29seVlX31U
+         afY29edg+UhEaOqsxBj8D1u32khMKY8+MuvgJBAHnyoLM1xm1E9TDLkpRvoIYcmvB6
+         bUKf7FKr/Q6KA==
+Date:   Mon, 13 Dec 2021 15:56:28 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Sven Peter <sven@svenpeter.dev>, Rob Herring <robh+dt@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] spi: apple: Add driver for Apple SPI controller
+Message-ID: <YbdtLFSrwjYcz/zz@sirena.org.uk>
+References: <20211212034726.26306-1-marcan@marcan.st>
+ <20211212034726.26306-4-marcan@marcan.st>
+ <YbaIwa/9utI9SD1u@sirena.org.uk>
+ <d566c897-ee7d-f32f-1548-57f037c69c89@marcan.st>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-gb
-Thread-Index: AQHKVo1VqSuCeo4owGzltFIRzsdrTwLFQoXGrDVIrYA=
-X-Proofpoint-ORIG-GUID: Ap_HBtL1SbmuCLSLjWcTDUoGQGP6jXpD
-X-Proofpoint-GUID: Ap_HBtL1SbmuCLSLjWcTDUoGQGP6jXpD
-X-Proofpoint-Spam-Reason: safe
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hVycDoLG7hCwps6L"
+Content-Disposition: inline
+In-Reply-To: <d566c897-ee7d-f32f-1548-57f037c69c89@marcan.st>
+X-Cookie: No solicitors.
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
 
-> -----Original Message-----
-> From: Hans de Goede <hdegoede@redhat.com>
-> Sent: 10 December 2021 16:55
-> To: Stefan Binding <sbinding@opensource.cirrus.com>; Mark Brown
-> <broonie@kernel.org>; Rafael J . Wysocki <rafael@kernel.org>; Len =
-Brown
-> <lenb@kernel.org>; Mark Gross <markgross@kernel.org>
-> Cc: linux-kernel@vger.kernel.org; linux-spi@vger.kernel.org; linux-
-> acpi@vger.kernel.org; platform-driver-x86@vger.kernel.org;
-> patches@opensource.cirrus.com
-> Subject: Re: [PATCH v2 0/6] Support Spi in i2c-multi-instantiate =
-driver
->=20
-> Hi Stefan,
->=20
-> On 12/10/21 16:40, Stefan Binding wrote:
-> > Add support for SPI bus in the ic2-multi-instantiate driver as
-> > upcoming laptops will need to multi instantiate SPI devices from a
-> > single device node, which has multiple SpiSerialBus entries at the
-> > ACPI table.
-> >
-> > With the new SPI support, i2c-multi-instantiate becomes
-> > bus-multi-instantiate and is moved to the ACPI folder.
-> >
-> > The intention is to support the SPI bus by re-using the current I2C
-> > multi instantiate, instead of creating a new SPI multi instantiate, =
-to
-> > make it possible for peripherals that can be controlled by I2C or =
-SPI
-> > to have the same HID at the ACPI table.
-> >
-> > The new driver (Bus multi instantiate, bmi) checks for the =
-hard-coded
-> > bus type and returns -ENODEV in case of zero devices found for that
-> > bus. In the case of automatic bus detection, the driver will give
-> > preference to I2C.
-> >
-> > The expectation is for a device node in the ACPI table to have
-> > multiple I2cSerialBus only or multiple SpiSerialBus only, not a mix =
-of
-> > both; and for the case where there are both entries in one device
-> > node, only the I2C ones would be probed.
-> >
-> > This new bus multi instantiate will be used in CS35L41 HDA new =
-driver,
-> > being upstreamed:
-> > https://lkml.org/lkml/2021/11/23/723
->=20
-> Unfortunately you never really answered my questions about v1 of this
-> series:
->=20
-> https://lore.kernel.org/platform-driver-x86/a1f546c2-5c63-573a-c032-
-> 603c792f3f7c@redhat.com/
->=20
-> So looking at the linked CS35L41 HDA series there is a single ACPI =
-device node
-> with a HID of CLSA0100 which describes two CS35L41 amplifiers =
-connected
-> over I2C ?
+--hVycDoLG7hCwps6L
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Yes, the related series uses HID CLSA0100, which contains 2 I2C devices =
-inside a
-single node. This ID was mistakenly used for this laptop, and instead =
-CSC3551=20
-has been used for subsequent laptops.
+On Mon, Dec 13, 2021 at 12:50:49PM +0900, Hector Martin wrote:
+> On 13/12/2021 08.41, Mark Brown wrote:
+> > On Sun, Dec 12, 2021 at 12:47:26PM +0900, Hector Martin wrote:
 
->=20
-> I assume you are doing this work because there are also designs where =
-there
-> is a similar CLSA0100 ACPI device which also describes two CS35L41 =
-amplifiers
-> but then connected over SPI ?
+> > > @@ -0,0 +1,566 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +/*
+> > > + * Apple SoC SPI device driver
+> > > + *
 
-Yes, there are several laptop designs which use an equivalent ACPI which =
-describes
-2 or 4 CS35L41 amplifiers which are connected either via I2C or via SPI.
-Both designs use the same ACPI design and have 2-4 devices (either I2C =
-or SPI)
-defined inside a single ACPI node for HID CSC3551.
-Note that the devices inside the node can be either SPI or I2C, but =
-never SPI
-and I2C.
+> > Please keep the entire comment a C++ one so things look more
+> > intentional.
 
->=20
-> It would really help if you can:
->=20
-> 1. Answer my questions from v1
+> I thought this pattern was pretty much the standard style.
 
-I hope my colleague Lucas has answered these questions now.
+It's common, especially given all the automated conversions, but ugly.
 
-> 2. Provide a concrete example of a device where these changes will be
-> necessary to make things work, preferably with a link to an actual =
-ACPI DSDT
-> of that device.
+> > > +	/* We will want to poll if the time we need to wait is
+> > > +	 * less than the context switching time.
+> > > +	 * Let's call that threshold 5us. The operation will take:
+> > > +	 *    bits_per_word * fifo_threshold / hz <= 5 * 10^-6
+> > > +	 *    200000 * bits_per_word * fifo_threshold <= hz
+> > > +	 */
+> > > +	return 200000 * t->bits_per_word * APPLE_SPI_FIFO_DEPTH / 2 <= t->speed_hz;
 
-This is the CSC3551 node for a laptop with 4 SPI nodes, with a shared =
-IRQ:
+> > Some brackets or an intermediate variable wouldn't hurt here, especially
+> > given the line length.
 
- Scope (_SB.PC00.SPI0)
-    {
-        Device (GSPK)
-        {
-            Name (_HID, "CSC3551")  // _HID: Hardware ID
-            Method (AUID, 0, NotSerialized)
-            {
-                Return ("103C89C3")
-            }
+> How about this?
 
-            Method (_SUB, 0, NotSerialized)  // _SUB: Subsystem ID
-            {
-                Return (AUID ())
-            }
+> return (200000 * t->bits_per_word * APPLE_SPI_FIFO_DEPTH / 2) <= t->speed_hz;
 
-            Name (_UID, One)  // _UID: Unique ID
-            Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource =
-Settings
-            {
-                Name (RBUF, ResourceTemplate ()
-                {
-                    SpiSerialBusV2 (0x0000, PolarityLow, FourWireMode, =
-0x08,
-                        ControllerInitiated, 0x003D0900, =
-ClockPolarityLow,
-                        ClockPhaseFirst, "\\_SB.PC00.SPI0",
-                        0x00, ResourceConsumer, , Exclusive,
-                        )
-                    SpiSerialBusV2 (0x0001, PolarityLow, FourWireMode, =
-0x08,
-                        ControllerInitiated, 0x003D0900, =
-ClockPolarityLow,
-                        ClockPhaseFirst, "\\_SB.PC00.SPI0",
-                        0x00, ResourceConsumer, , Exclusive,
-                        )
-                    SpiSerialBusV2 (0x0002, PolarityLow, FourWireMode, =
-0x08,
-                        ControllerInitiated, 0x003D0900, =
-ClockPolarityLow,
-                        ClockPhaseFirst, "\\_SB.PC00.SPI0",
-                        0x00, ResourceConsumer, , Exclusive,
-                        )
-                    SpiSerialBusV2 (0x0003, PolarityLow, FourWireMode, =
-0x08,
-                        ControllerInitiated, 0x003D0900, =
-ClockPolarityLow,
-                        ClockPhaseFirst, "\\_SB.PC00.SPI0",
-                        0x00, ResourceConsumer, , Exclusive,
-                        )
-                    GpioIo (Exclusive, PullUp, 0x0000, 0x0000, =
-IoRestrictionOutputOnly,
-                        "\\_SB.GPI0", 0x00, ResourceConsumer, ,
-                        )
-                        {   // Pin list
-                            0x0000
-                        }
-                    GpioIo (Exclusive, PullUp, 0x0000, 0x0000, =
-IoRestrictionOutputOnly,
-                        "\\_SB.GPI0", 0x00, ResourceConsumer, ,
-                        )
-                        {   // Pin list
-                            0x0000
-                        }
-                    GpioIo (Exclusive, PullUp, 0x0000, 0x0000, =
-IoRestrictionOutputOnly,
-                        "\\_SB.GPI0", 0x00, ResourceConsumer, ,
-                        )
-                        {   // Pin list
-                            0x0000
-                        }
-                    GpioIo (Exclusive, PullDown, 0x0000, 0x0000, =
-IoRestrictionOutputOnly,
-                        "\\_SB.GPI0", 0x00, ResourceConsumer, ,
-                        )
-                        {   // Pin list
-                            0x0000
-                        }
-                    GpioIo (Shared, PullUp, 0x0064, 0x0000, =
-IoRestrictionInputOnly,
-                        "\\_SB.GPI0", 0x00, ResourceConsumer, ,
-                        )
-                        {   // Pin list
-                            0x0000
-                        }
-                    GpioInt (Edge, ActiveBoth, Shared, PullUp, 0x0064,
-                        "\\_SB.GPI0", 0x00, ResourceConsumer, ,
-                        )
-                        {   // Pin list
-                            0x0000
-                        }
-                })
-                CreateWordField (RBUF, 0xCA, ACS1)
-                CreateWordField (RBUF, 0xA7, ACS2)
-                CreateWordField (RBUF, 0xED, ACS3)
-                CreateWordField (RBUF, 0x0110, ARST)
-                CreateWordField (RBUF, 0x0133, AINT)
-                CreateWordField (RBUF, 0x0156, AIN2)
-                ACS1 =3D GNUM (0x090E0016)
-                ACS2 =3D GNUM (0x090E0017)
-                ACS3 =3D GNUM (0x090C0006)
-                ARST =3D GNUM (0x09070017)
-                AINT =3D GNUM (0x09070013)
-                AIN2 =3D GNUM (0x09070013)
-                Return (RBUF) /* \_SB_.PC00.SPI0.GSPK._CRS.RBUF */
-            }
+That's better but it's still a very long line which is half the issue.
 
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                Return (0x0F)
-            }
+> > > +static const struct of_device_id apple_spi_of_match[] = {
+> > > +	{ .compatible = "apple,spi", },
+> > > +	{}
+> > > +};
+> > > +MODULE_DEVICE_TABLE(of, apple_spi_of_match);
 
-            Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
-            {
-            }
-            Name (_DSD, Package ()  // _DSD: Device-Specific Data
-            {
-                ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301") /* =
-Device Properties for _DSD */,
-                Package ()
-                {
-                    Package () { "cirrus,dev-index", Package () { 0, 1, =
-2, 3 } },
-                    Package ()
-                    {
-                        "reset-gpios", Package ()
-                        {
-                            ^GSPK, 3, 0, 0,
-                            ^GSPK, 3, 0, 0,
-                            ^GSPK, 3, 0, 0,
-                            ^GSPK, 3, 0, 0,
-                        },
-                    },
-                    Package () { "cirrus,speaker-position",     Package =
-() { 1, 0, 1, 0 } },
-                    Package () { "cirrus,gpio1-func",           Package =
-() { 3, 3, 3, 3 } },
-                    Package () { "cirrus,gpio2-func",           Package =
-() { 2, 2, 2, 2 } },
-                    Package () { "cirrus,boost-ind-nanohenry",  Package =
-() { 1000, 1000, 1000, 1000 } },
-                    Package () { "cirrus,boost-peak-milliamp",  Package =
-() { 4500, 4500, 4500, 4500 } },
-                    Package () { "cirrus,boost-cap-microfarad", Package =
-() { 24, 24, 24, 24 } },
-                }
-            })
-        }
-    }
+> > This is an awfully generic compatible.  It's common to use the SoC name
+> > for the IP compatibles when they're not otherwise identified?
 
-This is just our node from the DSDT, we are working to obtain and share =
-the full DSDT, if still required.
+> Apple like to keep blocks compatible across SoC generations - I think this
+> one dates, at least to some extent, to the original iPhone or thereabouts.
+> We do use per-SoC compatibles in the DTs in case we need to throw in per-SoC
+> quirks in the future ("apple,t8103-spi", "apple,spi"), but for drivers like
+> this we prefer to use generic compatibles as long as backwards compatibility
+> doesn't break. If Apple do something totally incompatible (like they did
+> with AIC2 in the latest chips), we'll bump to something like apple,spi2.
+> This happens quite rarely, so it makes sense to just keep things generic
+> except for these instances. That way old kernels will happily bind to the
+> block in newer SoCs if it is compatible.
 
->=20
-> Until you can better clarify why this is necessary, this series gets a =
-nack from
-> me. The i2c-mult-instantiate code is a hack to deal with some rather =
-sub-
-> optimal choices made in DSDTs used on devices shipped with Windows and
-> unless absolutely necessary I would rather not see this get expanded =
-to SPI.
->=20
-> Regards,
->=20
-> Hans
+There's currently a bit of a fashion for people with very old SPI blocks
+to make incompatible new versions recently, a lot of it seems to be
+driven by things like flash engine support.  Sometimes these things end
+up getting instantiated together as they have different purposes and the
+incompatibilties make the IPs larger.
 
-Thanks,
+> If we had a detailed lineage of what SoCs used what blocks and when things
+> changed we could try something else, like using the first SoC where the
+> specific block version was introduced, but we don't... so I think it makes
+> sense to just go with generic ones where we don't think things have changed
+> much since the dark ages. FWIW, Apple calls this one spi-1,spimc and claims
+> "spi-version = 1" and the driver has Samsung in the name... so the history
+> of this block definitely goes back quite a ways :-)
 
-Stefan
+Have you done a contrast and compare with the Samsung driver?  Given
+both this and your comments above about this dating back to the original
+iPhone...
 
+--hVycDoLG7hCwps6L
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmG3bSsACgkQJNaLcl1U
+h9Bzdwf+PGHs9oh8m1YUtFsWJbVlGeTVE/c3v5RRT2+tdSdxxMZvly6i9WXg7HvJ
+CS/CU9DD4Eyx2uaRh8ULfNBz50PweySACW0FZhFVDlOmPTYLHSFEDcQ9yVMV+xjc
+yYW3lcovDQ0zlvtBj0BbeI9l2K9cR7Iro98W5Vaa0DjdD9NpLeTfqxR++ZbWKe2s
+DjqL0MI5ZCxplrr192B/L3IrD87J22nEO6J/VCNTRoXmkXbkQj/hjXLwE43BBg9A
+fhuJTnmffWmLZTAVWp589+Pow69vF0fDHoXgbCUJGhb7h+y+kTzShIu6/N75bI6P
+6YUOGHhSYBAQEKRWPSIEQTiVvZu9zQ==
+=mLOb
+-----END PGP SIGNATURE-----
+
+--hVycDoLG7hCwps6L--
