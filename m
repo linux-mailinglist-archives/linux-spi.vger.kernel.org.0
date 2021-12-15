@@ -2,96 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE374750AB
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Dec 2021 03:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D1B475167
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Dec 2021 04:37:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238990AbhLOCDh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 14 Dec 2021 21:03:37 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:33186 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S238932AbhLOCDg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 14 Dec 2021 21:03:36 -0500
-X-UUID: 7321fadf45f9404c9cae01c8e99ef3d5-20211215
-X-UUID: 7321fadf45f9404c9cae01c8e99ef3d5-20211215
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1772619576; Wed, 15 Dec 2021 10:03:32 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 15 Dec 2021 10:03:31 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 15 Dec 2021 10:03:31 +0800
-Message-ID: <768b202c7bf78e26102c91ae558d4d0887e11124.camel@mediatek.com>
-Subject: Re: [PATCH v6 2/4] dt-bindings: spi: add new clock name 'axi' for
- spi nor
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
-        <matthias.bgg@gmail.com>, <bgolaszewski@baylibre.com>,
-        <sean.wang@mediatek.com>, <bayi.cheng@mediatek.com>,
-        <gch981213@gmail.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        id S235634AbhLODhX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 14 Dec 2021 22:37:23 -0500
+Received: from mail5.windriver.com ([192.103.53.11]:43924 "EHLO mail5.wrs.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231547AbhLODhX (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Tue, 14 Dec 2021 22:37:23 -0500
+X-Greylist: delayed 1801 seconds by postgrey-1.27 at vger.kernel.org; Tue, 14 Dec 2021 22:37:23 EST
+Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.corp.ad.wrs.com [147.11.82.252])
+        by mail5.wrs.com (8.15.2/8.15.2) with ESMTPS id 1BF375ts005794
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 14 Dec 2021 19:07:05 -0800
+Received: from [128.224.162.192] (128.224.162.192) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Tue, 14 Dec 2021 19:07:03 -0800
+Subject: Re: [PATCH] Revert "spi: spi-zynqmp-gqspi: add mutex locking for
+ exec_op"
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>, <broonie@kernel.org>,
+        <amit.kumar-mahapatra@xilinx.com>
+CC:     <michal.simek@xilinx.com>, <linux-spi@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-spi@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 15 Dec 2021 10:03:31 +0800
-In-Reply-To: <YbdvIPq1hKPmKXXs@sirena.org.uk>
-References: <20211211204014.8014-1-tinghan.shen@mediatek.com>
-         <20211211204014.8014-3-tinghan.shen@mediatek.com>
-         <YbdvIPq1hKPmKXXs@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        <linux-kernel@vger.kernel.org>
+References: <20211214110152.48316-1-tudor.ambarus@microchip.com>
+From:   Quanyang Wang <quanyang.wang@windriver.com>
+Message-ID: <58864ce3-c925-6946-670b-60233b1653a5@windriver.com>
+Date:   Wed, 15 Dec 2021 11:06:46 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <20211214110152.48316-1-tudor.ambarus@microchip.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
+X-Originating-IP: [128.224.162.192]
+X-ClientProxiedBy: ala-exchng01.corp.ad.wrs.com (147.11.82.252) To
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
-
-Thanks for the reviews and advice.
 
 
-On Mon, 2021-12-13 at 16:04 +0000, Mark Brown wrote:
-> On Sun, Dec 12, 2021 at 04:40:12AM +0800, Tinghan Shen wrote:
+On 12/14/21 7:01 PM, Tudor Ambarus wrote:
+> This reverts commit a0f65be6e880a14d3445b75e7dc03d7d015fc922.
 > 
-> > Some mtk spi nor has dedicated dma(s) inside. Add a new clock name,
-> > axi,
-> > for spi nor dma bus clock.
-> >    clock-names:
-> > +    minItems: 2
-> >      items:
-> >        - const: spi
-> >        - const: sf
-> > +      - const: axi
+> SPIMEM uses ctlr->bus_lock_mutex to prevent concurrency on
+> ctlr->mem_ops->exec_op().
 > 
-> This will cause any existing DTs that don't have both spi and sf
-> clocks
-> defined to fail to validate which doesn't seem great.  Given that
-> your
-> commit message says this is only required for some SoCs shouldn't the
-> minimum clocks requirement depend on which particular SoC/IP version
-> is
-> being used?  Not exactly sure how one specifies that in the YAML
-> format.
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+Reviewed-by: Quanyang Wang <quanyang.wang@windriver.com>
+> ---
+>   drivers/spi/spi-zynqmp-gqspi.c | 5 -----
+>   1 file changed, 5 deletions(-)
 > 
-> Please submit patches using subject lines reflecting the style for
-> the
-> subsystem, this makes it easier for people to identify relevant
-> patches.
-> Look at what existing commits in the area you're changing are doing
-> and
-> make sure your subject lines visually resemble what they're doing.
-> There's no need to resubmit to fix this alone.
-
-I'll update the subject at next version.
-It'll be "dt-bindings: spi: mtk-spi-nor: ...".
-
-
-regards,
-TingHan
-
+> diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
+> index 328b6559bb19..189fe4eb59ad 100644
+> --- a/drivers/spi/spi-zynqmp-gqspi.c
+> +++ b/drivers/spi/spi-zynqmp-gqspi.c
+> @@ -174,7 +174,6 @@ struct zynqmp_qspi {
+>   	u32 genfifoentry;
+>   	enum mode_type mode;
+>   	struct completion data_completion;
+> -	struct mutex op_lock;
+>   };
+>   
+>   /**
+> @@ -946,7 +945,6 @@ static int zynqmp_qspi_exec_op(struct spi_mem *mem,
+>   		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
+>   		op->dummy.buswidth, op->data.buswidth);
+>   
+> -	mutex_lock(&xqspi->op_lock);
+>   	zynqmp_qspi_config_op(xqspi, mem->spi);
+>   	zynqmp_qspi_chipselect(mem->spi, false);
+>   	genfifoentry |= xqspi->genfifocs;
+> @@ -1069,7 +1067,6 @@ static int zynqmp_qspi_exec_op(struct spi_mem *mem,
+>   return_err:
+>   
+>   	zynqmp_qspi_chipselect(mem->spi, true);
+> -	mutex_unlock(&xqspi->op_lock);
+>   
+>   	return err;
+>   }
+> @@ -1143,8 +1140,6 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
+>   
+>   	init_completion(&xqspi->data_completion);
+>   
+> -	mutex_init(&xqspi->op_lock);
+> -
+>   	pm_runtime_use_autosuspend(&pdev->dev);
+>   	pm_runtime_set_autosuspend_delay(&pdev->dev, SPI_AUTOSUSPEND_TIMEOUT);
+>   	pm_runtime_set_active(&pdev->dev);
+> 
