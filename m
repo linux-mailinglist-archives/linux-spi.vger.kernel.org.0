@@ -2,71 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8BB475E28
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Dec 2021 18:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3639A475F97
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Dec 2021 18:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245132AbhLORFp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Dec 2021 12:05:45 -0500
-Received: from mail-oi1-f179.google.com ([209.85.167.179]:40777 "EHLO
-        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245123AbhLORFo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Dec 2021 12:05:44 -0500
-Received: by mail-oi1-f179.google.com with SMTP id bk14so32555716oib.7;
-        Wed, 15 Dec 2021 09:05:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nR0LhYCnvyI1jknf4KALchGxggcg5wDp4IaSeS8jbR8=;
-        b=a3F/oYel6VV9lmWecI3CCWuiQSmvQQj6uyMnOEAqt+T0+YtxrLTH+KnZ4GUp/Zyduy
-         DskTzA3Sxdv2x2c2atWul2t2/GQ2MtSDVloOFQc2bpQ4Ley271xUJiw34a2vh8gnrl1P
-         BJNEXSRQnfH6TrQLBpF9irMG0eGyYfXRqvclG56jlYp4am89oS+UnkXYMD0mcyQKzth1
-         +DbkVJLjoG7CD/rPuAkziz6boAg9m/yQtViwv2IaEqKpcbnXLb9K/M/u68xeGwpf8oFS
-         DX0uRuPrpJIjFCjcjYO5UOBtFES6WuvBD6ez/XQ+Bc2IEOWlaiombLK5Pxfenkaw8P89
-         7keg==
-X-Gm-Message-State: AOAM533xn7WYkORLLPh/NuXmneeolHl+HrjKQxb83oXlL1Loxsz2uNw+
-        8D/0Z36Rs4FwR5XZ982+TBG4Tvht7w==
-X-Google-Smtp-Source: ABdhPJxQU7ez4jkeUaQaHB9ebI4gsQglf+pR/GDhnL7RW0n9Tdoq4c1LqRxCkmcVDHsGiSC/bM6hHA==
-X-Received: by 2002:a05:6808:1a02:: with SMTP id bk2mr694199oib.52.1639587944309;
-        Wed, 15 Dec 2021 09:05:44 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id n23sm452955oig.4.2021.12.15.09.05.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 09:05:43 -0800 (PST)
-Received: (nullmailer pid 1480018 invoked by uid 1000);
-        Wed, 15 Dec 2021 17:05:42 -0000
-Date:   Wed, 15 Dec 2021 11:05:42 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc:     alexandre.belloni@bootlin.com, broonie@kernel.org,
-        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        ludovic.desroches@microchip.com, nicolas.ferre@microchip.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: spi: atmel,quadspi: Define sama7g5 QSPI
-Message-ID: <YbogZqBsR0Tfz33P@robh.at.kernel.org>
-References: <20211209122939.339810-1-tudor.ambarus@microchip.com>
- <20211209122939.339810-3-tudor.ambarus@microchip.com>
+        id S232645AbhLORod convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Wed, 15 Dec 2021 12:44:33 -0500
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:60289 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235513AbhLORod (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Dec 2021 12:44:33 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 113D61C0003;
+        Wed, 15 Dec 2021 17:44:27 +0000 (UTC)
+Date:   Wed, 15 Dec 2021 18:44:26 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        <linux-mtd@lists.infradead.org>, Mark Brown <broonie@kernel.org>,
+        <linux-spi@vger.kernel.org>, Julien Su <juliensu@mxic.com.tw>,
+        Jaime Liao <jaimeliao@mxic.com.tw>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+Subject: Re: [PATCH v5 12/13] spi: mxic: Use spi_mem_generic_supports_op()
+Message-ID: <20211215184426.67fd3912@xps13>
+In-Reply-To: <20211214172410.2b26c17e@collabora.com>
+References: <20211214114140.54629-1-miquel.raynal@bootlin.com>
+        <20211214114140.54629-13-miquel.raynal@bootlin.com>
+        <20211214172410.2b26c17e@collabora.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209122939.339810-3-tudor.ambarus@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 09 Dec 2021 14:29:39 +0200, Tudor Ambarus wrote:
-> sama7g5 embedds 2 instances of the QSPI controller:
-> 1/ One Octal Serial Peripheral Interface (QSPI0) Supporting up to
->    200 MHz DDR. Octal, TwinQuad, HyperFlash and OctaFlash Protocols
->    Supported
-> 2/ One Quad Serial Peripheral Interface (QSPI1) Supporting Up to
->    90 MHz DDR/133 MHz SDR
-> 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-> ---
->  .../devicetree/bindings/spi/atmel,quadspi.yaml   | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
-> 
+Hi Boris,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+boris.brezillon@collabora.com wrote on Tue, 14 Dec 2021 17:24:10 +0100:
+
+> On Tue, 14 Dec 2021 12:41:39 +0100
+> Miquel Raynal <miquel.raynal@bootlin.com> wrote:
+> 
+> > This driver can be simplified a little bit by using
+> > spi_mem_generic_supports_op() instead of the
+> > spi_mem_default/dtr_supports_op() couple. The all_false boolean is
+> > inverted to become a dtr boolean, which checks if at least one of the
+> > operation member uses dtr mode. The idea behind this change is to
+> > simplify the introduction of the pipelined ECC engine.
+> > 
+> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> > ---
+> >  drivers/spi/spi-mxic.c | 10 +++-------
+> >  1 file changed, 3 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/spi/spi-mxic.c b/drivers/spi/spi-mxic.c
+> > index 485a7f2afb44..5e71aa630504 100644
+> > --- a/drivers/spi/spi-mxic.c
+> > +++ b/drivers/spi/spi-mxic.c
+> > @@ -452,7 +452,7 @@ static ssize_t mxic_spi_mem_dirmap_write(struct spi_mem_dirmap_desc *desc,
+> >  static bool mxic_spi_mem_supports_op(struct spi_mem *mem,
+> >  				     const struct spi_mem_op *op)
+> >  {
+> > -	bool all_false;
+> > +	struct spi_mem_controller_caps caps = {};
+> >  
+> >  	if (op->data.buswidth > 8 || op->addr.buswidth > 8 ||
+> >  	    op->dummy.buswidth > 8 || op->cmd.buswidth > 8)
+> > @@ -465,13 +465,9 @@ static bool mxic_spi_mem_supports_op(struct spi_mem *mem,
+> >  	if (op->addr.nbytes > 7)
+> >  		return false;
+> >  
+> > -	all_false = !op->cmd.dtr && !op->addr.dtr && !op->dummy.dtr &&
+> > -		    !op->data.dtr;
+> > +	caps.dtr = op->cmd.dtr || op->addr.dtr || op->dummy.dtr || op->data.dtr;  
+> 
+> Are you sure that's what you want to do? spi_mem_controller_caps is
+> supposed to encode the controller capabilities, not whether the
+> operation contains a DTR cycle or not. I'd expect this caps object to be
+> statically defined, with possibly one instance per-compat if the caps
+> depend on the HW revision.
+
+In order to keep the series easy to review I decided to go for the
+following approach:
+* Introduce the spi_mem_generic_supports_op_helper() which takes a
+  capabilities structure. This helper gathers all the checks from
+  spi_mem_default_supports_op() and spi_mem_dtr_supports_op(). These
+  two helpers now call the new one with either a NULL pointer in the
+  former case, or a structure with the .dtr parameter set to true in
+  the latter.
+* Change the API of spi_mem_default_supports_op(), this involves
+  updating many different drivers so this change does only that in a
+  very transparent way, with no functional changes at all. All the
+  drivers provide a NULL parameter for the capabilities structure.
+* Actually make use of the new parameter of
+  spi_mem_default_supports_op() in the drivers Cadence and Macronix,
+  which do have DTR support. This kills the spi_mem_dtr_supports_op()
+  helper.
+* Kill the temporary spi_mem_generic_supports_op() helper by moving
+  all the logic back into spi_mem_default_supports_op().
+
+This approach is really straightforward and easily bisectable if
+needed. While working on this, I fixed the check we discussed on IRC
+about the command parameter when in a DTR operation. I also reverted
+the logic in the various checks, as you suggested.
+
+Thanks,
+Miquèl
