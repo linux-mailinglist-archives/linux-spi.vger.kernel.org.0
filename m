@@ -2,115 +2,135 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC20477985
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Dec 2021 17:43:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3ED477B38
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Dec 2021 19:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235307AbhLPQny (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Dec 2021 11:43:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233222AbhLPQnx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Dec 2021 11:43:53 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7D0C061574
-        for <linux-spi@vger.kernel.org>; Thu, 16 Dec 2021 08:43:53 -0800 (PST)
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id C48141F4133E;
-        Thu, 16 Dec 2021 16:43:50 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1639673031; bh=NRlWnUKSxIUgHuxirD6NYoUC5ZA2xF6iZlzklepC9FQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WOim5bl5S+nTsXk/ANhy88KBaCLLoDC3McEVMtZoPEet3N1DJQnWWKU8nvX1R0YDP
-         FDrARNXt2GOu1pZKJSJrUlrZULJwP6CpL1KYOvNwJp5F99IyeFn0n1sy7Kxn2Q1rca
-         gNRzwvNT4nzGl5dCmDHfjpVa2a1pJtkIi63y9OLQEN/r6mK2MlnjKsn0Ku8byDzvI2
-         nAwNcAapTwLAOmCC0Q2LyORL3KcSYpNxbXJ9JphQS+L3XcfHRY0X/XkxhgNx7rRlqa
-         q3KqtYEGmYDoSDmhTksA+sMxhS1kotpWQFlfVFwC3/6pwp+6HaL+QvhAk3/Nq+olFx
-         EMYH1AetY1NlA==
-Date:   Thu, 16 Dec 2021 17:43:47 +0100
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Michael Walle <michael@walle.cc>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        id S240455AbhLPSCb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Dec 2021 13:02:31 -0500
+Received: from mga18.intel.com ([134.134.136.126]:32853 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230293AbhLPSCa (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 16 Dec 2021 13:02:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639677750; x=1671213750;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=X4+NkeufLzZHDZfb2hlozCR15SgBlRSKuslkW4zon5E=;
+  b=U+DOfBjQCM+20jQWJv3Gw1cDrvpuELf5+UloD834H8cLgB8cJzwAWpXh
+   lqOwmpqhRuJoEC714OEbtvR5ISBJQlKS99f1QeqG3UE/WOi1MkIS3gTOj
+   a6qyDHEEPWzlXsibwigdMlLb3Vm1Bha43DmWfZmSKhmLXNNuTI6+a4rDe
+   qSJRVH/CINgFVM2BHAIwvXtZsGH5oWRh/XROGElXj9eYi2Q8qUQA8Tla9
+   RYkPRQ1BsWJ3G820UV6lSNhA1mbGmEB4oRgGQwVNmOWhxtmwwvl1/isrs
+   QPL48E0EuEVSpg/tvaM268Rl3bZhiq37J8+/hFhdJiUYHXGDbIzdquXM+
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="226418617"
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="226418617"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 10:01:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="662534378"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 16 Dec 2021 10:01:20 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mxv46-0003Zz-G3; Thu, 16 Dec 2021 18:01:14 +0000
+Date:   Fri, 17 Dec 2021 02:00:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Lima <mauro.lima@eclypsium.com>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans-Gert Dahmen <hans-gert.dahmen@immu.ne>,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v4 2/3] mtd: spi-nor: intel-spi: Convert to SPI MEM
-Message-ID: <20211216174347.69cf611c@collabora.com>
-In-Reply-To: <Ybtn1VTsspxdIeT8@lahna>
-References: <20211118130543.11179-1-mika.westerberg@linux.intel.com>
-        <20211118130543.11179-3-mika.westerberg@linux.intel.com>
-        <20211216115100.448351e4@collabora.com>
-        <Ybtn1VTsspxdIeT8@lahna>
-Organization: Collabora
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        linux-mtd@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Cc:     kbuild-all@lists.01.org
+Subject: Re: [PATCH v6 20/28] spi: spi-mem: Fill the spi-mem controller
+ capabilities of all the drivers
+Message-ID: <202112170120.4tAlxDnn-lkp@intel.com>
+References: <20211216111654.238086-21-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216111654.238086-21-miquel.raynal@bootlin.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 16 Dec 2021 18:22:45 +0200
-Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
+Hi Miquel,
 
-> Hi,
-> 
-> On Thu, Dec 16, 2021 at 11:51:00AM +0100, Boris Brezillon wrote:
-> > On Thu, 18 Nov 2021 16:05:42 +0300
-> > Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
-> >   
-> > > +static bool intel_spi_cmp_mem_op(const struct intel_spi_mem_op *iop,
-> > > +				 const struct spi_mem_op *op)
-> > > +{
-> > > +	if (iop->mem_op.cmd.nbytes != op->cmd.nbytes ||
-> > > +	    iop->mem_op.cmd.buswidth != op->cmd.buswidth ||
-> > > +	    iop->mem_op.cmd.dtr != op->cmd.dtr ||
-> > > +	    iop->mem_op.cmd.opcode != op->cmd.opcode)
-> > > +		return false;
-> > > +
-> > > +	if (iop->mem_op.addr.nbytes) {
-> > > +		if (iop->mem_op.addr.nbytes != op->addr.nbytes ||
-> > > +		    iop->mem_op.addr.dtr != op->addr.dtr)
-> > > +			return false;
-> > > +	}  
-> > 
-> > Hm, are you sure you want to allow op->addr.nbytes > 0 when
-> > iop->mem_op.addr.nbytes == 0? Feels like the command should be reported
-> > as unsupported in that case. Unless 0 is a wildcard meaning 'any', but
-> > that would be confusing, since operations with 0 address bytes are
-> > valid, and I actually expect the number of address cycles to be fixed 
-> > or bounded.  
-> 
-> Indeed. I will change it to:
-> 
-> 	if (iop->mem_op.addr.nbytes) {
-> 		if (iop->mem_op.addr.nbytes != op->addr.nbytes ||
-> 		    iop->mem_op.addr.dtr != op->addr.dtr)
-> 			return false;
-> 	} else if (op->addr.nbytes > 0) {
-> 		return false;
-> 	}
+I love your patch! Yet something to improve:
 
-Why no just
+[auto build test ERROR on broonie-spi/for-next]
+[also build test ERROR on mtd/nand/next mtd/mtd/next mtd/mtd/fixes v5.16-rc5 next-20211215]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-	if (iop->mem_op.addr.nbytes != op->addr.nbytes ||
-	    iop->mem_op.addr.dtr != op->addr.dtr)
-		return false;
+url:    https://github.com/0day-ci/linux/commits/Miquel-Raynal/External-ECC-engines-Macronix-support/20211216-191821
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+config: arm-buildonly-randconfig-r006-20211216 (https://download.01.org/0day-ci/archive/20211217/202112170120.4tAlxDnn-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/bf16b56f7a0cc5aa237129a6b8bd216dc2632c8b
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Miquel-Raynal/External-ECC-engines-Macronix-support/20211216-191821
+        git checkout bf16b56f7a0cc5aa237129a6b8bd216dc2632c8b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
 
-then?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> in v5 if that's what you meant.
+All errors (new ones prefixed by >>):
 
+   arm-linux-gnueabi-ld: drivers/mtd/nand/spi/gigadevice.o: in function `.LANCHOR0':
+>> gigadevice.c:(.rodata+0x464): multiple definition of `spi_mem_no_caps'; drivers/mtd/nand/spi/core.o:core.c:(.rodata+0x2e8): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/nand/spi/macronix.o: in function `.LANCHOR0':
+   macronix.c:(.rodata+0x8d4): multiple definition of `spi_mem_no_caps'; drivers/mtd/nand/spi/core.o:core.c:(.rodata+0x2e8): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/nand/spi/micron.o: in function `.LANCHOR0':
+   micron.c:(.rodata+0x4cc): multiple definition of `spi_mem_no_caps'; drivers/mtd/nand/spi/core.o:core.c:(.rodata+0x2e8): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/nand/spi/paragon.o: in function `.LANCHOR0':
+   paragon.c:(.rodata+0x144): multiple definition of `spi_mem_no_caps'; drivers/mtd/nand/spi/core.o:core.c:(.rodata+0x2e8): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/nand/spi/toshiba.o: in function `.LANCHOR0':
+   toshiba.c:(.rodata+0x664): multiple definition of `spi_mem_no_caps'; drivers/mtd/nand/spi/core.o:core.c:(.rodata+0x2e8): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/nand/spi/winbond.o:(.rodata+0x114): multiple definition of `spi_mem_no_caps'; drivers/mtd/nand/spi/core.o:core.c:(.rodata+0x2e8): first defined here
+--
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/sfdp.o: in function `.LANCHOR0':
+>> sfdp.c:(.rodata+0x278): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/swp.o: in function `.LANCHOR0':
+   swp.c:(.rodata+0x24): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/otp.o: in function `.LANCHOR0':
+   otp.c:(.rodata+0xc): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/sysfs.o:(.rodata+0x14): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/atmel.o: in function `.LANCHOR0':
+   atmel.c:(.rodata+0x3d0): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/catalyst.o:(.rodata+0x178): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/eon.o:(.rodata+0x370): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/esmt.o:(.rodata+0xe8): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/everspin.o:(.rodata+0x130): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/fujitsu.o:(.rodata+0x58): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/gigadevice.o:(.rodata+0x250): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/intel.o:(.rodata+0xe8): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/issi.o:(.rodata+0x458): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/macronix.o:(.rodata+0x800): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/micron-st.o:(.rodata+0xe88): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/spansion.o:(.rodata+0x9b0): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/sst.o: in function `.LANCHOR0':
+   sst.c:(.rodata+0x48c): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/winbond.o: in function `.LANCHOR0':
+   winbond.c:(.rodata+0x978): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/xilinx.o:(.rodata+0x188): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+   arm-linux-gnueabi-ld: drivers/mtd/spi-nor/xmc.o:(.rodata+0xa0): multiple definition of `spi_mem_no_caps'; drivers/mtd/spi-nor/core.o:core.c:(.rodata+0xfbc): first defined here
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
