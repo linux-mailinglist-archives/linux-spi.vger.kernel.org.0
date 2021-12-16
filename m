@@ -2,146 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B80C3476295
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Dec 2021 21:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 235654767DC
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Dec 2021 03:21:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbhLOUFU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 15 Dec 2021 15:05:20 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:37569 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbhLOUFT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Dec 2021 15:05:19 -0500
-Received: by mail-oi1-f169.google.com with SMTP id bj13so33240989oib.4;
-        Wed, 15 Dec 2021 12:05:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=P7RLmrfkhZVAMV4g2mcECWBH8Xjmd8dDijHOmpxejv0=;
-        b=IJyOeV3NNJJmqi7tJeszQfIBJASb36DYp5SISzkfQIeMHR+Wm8iYeKd8uxaSkUWGdd
-         RgtVYh9yVJo5Mb1WK22TRV56EkgCIY2v9INH5vidlwabb48lLnaP9Y3VEVG/12pqgZpD
-         iD9F255vE5ObCYipeeZt8atU5qppcaTiuZRsya7GRQBIq7SDw2EF6+4Dp3bYC+6l7ryd
-         d/f/sLesAXW0Q+fGmKESLULBU56rY2bMgQOcF1TS9CUeOTmd6jv6KUoEPIprYdohZHyA
-         Lm6EhXqZ1bnsBk+s03nCj/m2tBWzirEmOsWt1/GUILh1ayLnPbShyjSnxnX92LbJ8PVl
-         JOdg==
-X-Gm-Message-State: AOAM531lkkFiaWcrn8WMsG5xO3VtAm1QtiTyruaZpodDITsXp28Byqxg
-        wyWyNjkwY29bEtI6Z8cArw==
-X-Google-Smtp-Source: ABdhPJzr1nV8l3e7r6mWTVwY9sxeQwRfRrc3AiGmQ0FqmUJLAFAZkO1d2XXsQr1ITI0tl2noywGOig==
-X-Received: by 2002:a05:6808:20a5:: with SMTP id s37mr1299679oiw.127.1639598719122;
-        Wed, 15 Dec 2021 12:05:19 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id p23sm623662otf.37.2021.12.15.12.05.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 12:05:18 -0800 (PST)
-Received: (nullmailer pid 1746720 invoked by uid 1000);
-        Wed, 15 Dec 2021 20:05:17 -0000
-Date:   Wed, 15 Dec 2021 14:05:17 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Sven Peter <sven@svenpeter.dev>, Mark Brown <broonie@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: spi: apple,spi: Add binding for Apple
- SPI controllers
-Message-ID: <YbpKfWfavRtLmMne@robh.at.kernel.org>
-References: <20211212034726.26306-1-marcan@marcan.st>
- <20211212034726.26306-3-marcan@marcan.st>
+        id S229649AbhLPCVc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 15 Dec 2021 21:21:32 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50664 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230105AbhLPCV2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 15 Dec 2021 21:21:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9861761BCE;
+        Thu, 16 Dec 2021 02:21:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 340A9C36AE1;
+        Thu, 16 Dec 2021 02:21:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639621287;
+        bh=WPhsqfedMB8Cyx3EEl+Ru9ABU6XVEDXjkCEr6Qxk1qE=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=dwMhf9YTfmBY2X7bKpYFDwmtxjLed+jwXk+t6bsiutDlhSlU832xFAsxhsJvds2Qm
+         LGRLTr9C3fjkSxbA9fWJAz0NARYEu2pO6TXpudteTfFVpVrGUaWjQYQH3FNMLcm8JJ
+         zJDrG0EBsPrKJqrXLO2KWdUQ31veZHFXruTwb4hxRxfCHKpIVb4BusU1Qy03lGGI0x
+         cci1xZavagvVAU/5r+zDWUesY/jKOn0FQChHOEs4lXvxTV/fIUZjB0ZK4EoKFpwMcT
+         hpX6YYKUV8E2FXkG6C/ZOzweTbEf6Kq36eO/9/8SkLrQupDT8PxhQoFvQAJdChC+6F
+         2HVbNZcImeZEQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>, robh+dt@kernel.org
+Cc:     linux-spi@vger.kernel.org, nicolas.ferre@microchip.com,
+        ludovic.desroches@microchip.com,
+        linux-arm-kernel@lists.infradead.org,
+        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211209122939.339810-1-tudor.ambarus@microchip.com>
+References: <20211209122939.339810-1-tudor.ambarus@microchip.com>
+Subject: Re: [PATCH 0/2] dt-bindings: spi: atmel,quadspi: Define sama7g5 QSPI
+Message-Id: <163962128492.2075495.3678727080606971257.b4-ty@kernel.org>
+Date:   Thu, 16 Dec 2021 02:21:24 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211212034726.26306-3-marcan@marcan.st>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Dec 12, 2021 at 12:47:25PM +0900, Hector Martin wrote:
-> The Apple SPI controller is present in SoCs such as the M1 (t8103) and
-> M1 Pro/Max (t600x). This controller uses one IRQ and one clock, and
-> doesn't need any special properties, so the binding is trivial.
+On Thu, 9 Dec 2021 14:29:37 +0200, Tudor Ambarus wrote:
+> Convert the Atmel QuadSPI controller Device Tree binding documentation
+> to json-schema. Define sama7g5 QSPI.
 > 
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
->  .../devicetree/bindings/spi/apple,spi.yaml    | 63 +++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/apple,spi.yaml
+> After the conversion to yaml, make dtbs_check reavealed a problem
+> that was fixed with:
+> https://lore.kernel.org/lkml/20211209102542.254153-1-tudor.ambarus@microchip.com/
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/apple,spi.yaml b/Documentation/devicetree/bindings/spi/apple,spi.yaml
-> new file mode 100644
-> index 000000000000..bcbdc8943e92
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/apple,spi.yaml
-> @@ -0,0 +1,63 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/apple,spi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Apple ARM SoC SPI controller
-> +
-> +allOf:
-> +  - $ref: "spi-controller.yaml#"
-> +
-> +maintainers:
-> +  - Hector Martin <marcan@marcan.st>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - apple,t8103-spi
-> +          - apple,t6000-spi
-> +      - const: apple,spi
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - interrupts
+> [...]
 
-> +  - '#address-cells'
-> +  - '#size-cells'
+Applied to
 
-Already required by spi-controller.yaml. Otherwise,
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Thanks!
 
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/apple-aic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    soc {
-> +      #address-cells = <2>;
-> +      #size-cells = <2>;
-> +
-> +      spi: spi@39b104000 {
-> +        compatible = "apple,t6000-spi", "apple,spi";
-> +        reg = <0x3 0x9b104000 0x0 0x4000>;
-> +        interrupt-parent = <&aic>;
-> +        interrupts = <AIC_IRQ 0 1107 IRQ_TYPE_LEVEL_HIGH>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        clocks = <&clk>;
-> +      };
-> +    };
-> -- 
-> 2.33.0
-> 
-> 
+[1/2] dt-bindings: spi: atmel,quadspi: Convert to json-schema
+      commit: 001a41d2a7061694fa31accdbc2013bb5c5d83b5
+[2/2] dt-bindings: spi: atmel,quadspi: Define sama7g5 QSPI
+      commit: 77850bda360dd9b389d5064c64b79467d613c3d6
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
