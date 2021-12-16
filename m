@@ -2,31 +2,39 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6271476EFB
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Dec 2021 11:39:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8B0476F27
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Dec 2021 11:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236140AbhLPKjP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Dec 2021 05:39:15 -0500
-Received: from mga03.intel.com ([134.134.136.65]:1650 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236122AbhLPKjP (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Thu, 16 Dec 2021 05:39:15 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="239409782"
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="239409782"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 02:39:14 -0800
-X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
-   d="scan'208";a="545931922"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 02:39:09 -0800
-Received: by lahna (sSMTP sendmail emulation); Thu, 16 Dec 2021 12:39:07 +0200
-Date:   Thu, 16 Dec 2021 12:39:07 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
+        id S231593AbhLPKvG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Dec 2021 05:51:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47780 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231342AbhLPKvG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Dec 2021 05:51:06 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA52C061574
+        for <linux-spi@vger.kernel.org>; Thu, 16 Dec 2021 02:51:06 -0800 (PST)
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id C919E1F41707;
+        Thu, 16 Dec 2021 10:51:03 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1639651864; bh=Kb3GFiAP4VKs2PH1LsTH++5f7aDy8+6y6PgEMvdEjLU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jOuN7cRuBx+COn8Wk4l2LPzJvQyzgVnAP76iSjKF976ecvtHrb8TgB9XJF1VPtC/n
+         SgoqpDk39YVVRXQpyWl5QAvprAYsXWDj67HHVLa31cFpx4vaRxTKgXZK4BRJSV5eAm
+         zb4meOJnXBd5PgeXcBGbXOu2li6bVfQ6Duy9gAY4RNjHD3cNRS/BUJcAMWZMa2dlRv
+         +sSiRDIfLHqYe7xFFffDGeCLuJAJck4WcwxNrgHq1QBzLRZXqNmGHnNzXcyHpXoxae
+         OomarSwXG5N5wE888mUrdwxPRwZuTDzvm0uxr5IulVigclxe7DLJMIUGbAx2UKRZV7
+         kj+QP5KWohbAA==
+Date:   Thu, 16 Dec 2021 11:51:00 +0100
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
         Michael Walle <michael@walle.cc>,
         Pratyush Yadav <p.yadav@ti.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -38,40 +46,54 @@ Cc:     Lee Jones <lee.jones@linaro.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Hans-Gert Dahmen <hans-gert.dahmen@immu.ne>,
         linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v4 0/3] mtd: spi-nor / spi / MFD: Convert intel-spi to
- SPI MEM
-Message-ID: <YbsXS0SlrrQc0MGm@lahna>
+Subject: Re: [PATCH v4 2/3] mtd: spi-nor: intel-spi: Convert to SPI MEM
+Message-ID: <20211216115100.448351e4@collabora.com>
+In-Reply-To: <20211118130543.11179-3-mika.westerberg@linux.intel.com>
 References: <20211118130543.11179-1-mika.westerberg@linux.intel.com>
+        <20211118130543.11179-3-mika.westerberg@linux.intel.com>
+Organization: Collabora
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211118130543.11179-1-mika.westerberg@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+On Thu, 18 Nov 2021 16:05:42 +0300
+Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
 
-On Thu, Nov 18, 2021 at 04:05:40PM +0300, Mika Westerberg wrote:
-> Hi all,
-> 
-> Based on discussion on the patch I sent some time ago here:
-> 
->   http://lists.infradead.org/pipermail/linux-mtd/2021-June/086867.html
-> 
-> it turns out that the preferred way to deal with the SPI flash controller
-> drivers is through SPI MEM which is part of Linux SPI subsystem.
-> 
-> This series does that for the intel-spi driver. This also renames the
-> driver to follow the convention used in the SPI subsystem. The first patch
-> improves the write protection handling to be slightly more safer. The
-> following two patches do the conversion itself. Note the Intel SPI flash
-> controller only allows commands such as read, write and so on and it
-> internally uses whatever addressing etc. it figured from the SFDP on the
-> flash device.
+> +static bool intel_spi_cmp_mem_op(const struct intel_spi_mem_op *iop,
+> +				 const struct spi_mem_op *op)
+> +{
+> +	if (iop->mem_op.cmd.nbytes != op->cmd.nbytes ||
+> +	    iop->mem_op.cmd.buswidth != op->cmd.buswidth ||
+> +	    iop->mem_op.cmd.dtr != op->cmd.dtr ||
+> +	    iop->mem_op.cmd.opcode != op->cmd.opcode)
+> +		return false;
+> +
+> +	if (iop->mem_op.addr.nbytes) {
+> +		if (iop->mem_op.addr.nbytes != op->addr.nbytes ||
+> +		    iop->mem_op.addr.dtr != op->addr.dtr)
+> +			return false;
+> +	}
 
-Any comments on this series? If no, I would appreciate if these could be
-merged for v5.17 :)
+Hm, are you sure you want to allow op->addr.nbytes > 0 when
+iop->mem_op.addr.nbytes == 0? Feels like the command should be reported
+as unsupported in that case. Unless 0 is a wildcard meaning 'any', but
+that would be confusing, since operations with 0 address bytes are
+valid, and I actually expect the number of address cycles to be fixed 
+or bounded.
 
-Thanks!
+> +
+> +	if (iop->mem_op.data.dir != op->data.dir ||
+> +	    iop->mem_op.data.dtr != op->data.dtr)
+> +		return false;
+> +
+> +	if (iop->mem_op.data.dir != SPI_MEM_NO_DATA) {
+> +		if (iop->mem_op.data.buswidth != op->data.buswidth)
+> +			return false;
+> +	}
+> +
+> +	return true;
+> +}
