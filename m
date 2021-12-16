@@ -2,100 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F6747765E
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Dec 2021 16:52:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9D647789C
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Dec 2021 17:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232527AbhLPPwb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Thu, 16 Dec 2021 10:52:31 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:59893 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230358AbhLPPwa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Dec 2021 10:52:30 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id C46A920000C;
-        Thu, 16 Dec 2021 15:52:25 +0000 (UTC)
-Date:   Thu, 16 Dec 2021 16:52:24 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+        id S239561AbhLPQWy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Dec 2021 11:22:54 -0500
+Received: from mga17.intel.com ([192.55.52.151]:39288 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239559AbhLPQWx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Thu, 16 Dec 2021 11:22:53 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="220214111"
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="220214111"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 08:22:53 -0800
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="611522820"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 08:22:48 -0800
+Received: by lahna (sSMTP sendmail emulation); Thu, 16 Dec 2021 18:22:45 +0200
+Date:   Thu, 16 Dec 2021 18:22:45 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Michael Walle <michael@walle.cc>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Michael Walle <michael@walle.cc>,
-        <linux-mtd@lists.infradead.org>, Rob Herring <robh+dt@kernel.org>,
-        <devicetree@vger.kernel.org>
-Cc:     Julien Su <juliensu@mxic.com.tw>,
-        Jaime Liao <jaimeliao@mxic.com.tw>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-Subject: Re: [PATCH v6 20/28] spi: spi-mem: Fill the spi-mem controller
- capabilities of all the drivers
-Message-ID: <20211216165224.7d80a33c@xps13>
-In-Reply-To: <20211216111654.238086-21-miquel.raynal@bootlin.com>
-References: <20211216111654.238086-1-miquel.raynal@bootlin.com>
-        <20211216111654.238086-21-miquel.raynal@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Lima <mauro.lima@eclypsium.com>,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans-Gert Dahmen <hans-gert.dahmen@immu.ne>,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] mtd: spi-nor: intel-spi: Convert to SPI MEM
+Message-ID: <Ybtn1VTsspxdIeT8@lahna>
+References: <20211118130543.11179-1-mika.westerberg@linux.intel.com>
+ <20211118130543.11179-3-mika.westerberg@linux.intel.com>
+ <20211216115100.448351e4@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216115100.448351e4@collabora.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello all,
+Hi,
 
-> diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-> index c4da0c9b05e9..bfd5c6b2db0a 100644
-> --- a/drivers/spi/spi-mem.c
-> +++ b/drivers/spi/spi-mem.c
-> @@ -160,6 +160,9 @@ static bool spi_mem_check_buswidth(struct spi_mem *mem,
->  	return true;
->  }
->  
-> +const struct spi_controller_mem_caps spi_mem_no_caps = {};
-> +EXPORT_SYMBOL_GPL(spi_mem_no_caps);
+On Thu, Dec 16, 2021 at 11:51:00AM +0100, Boris Brezillon wrote:
+> On Thu, 18 Nov 2021 16:05:42 +0300
+> Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
+> 
+> > +static bool intel_spi_cmp_mem_op(const struct intel_spi_mem_op *iop,
+> > +				 const struct spi_mem_op *op)
+> > +{
+> > +	if (iop->mem_op.cmd.nbytes != op->cmd.nbytes ||
+> > +	    iop->mem_op.cmd.buswidth != op->cmd.buswidth ||
+> > +	    iop->mem_op.cmd.dtr != op->cmd.dtr ||
+> > +	    iop->mem_op.cmd.opcode != op->cmd.opcode)
+> > +		return false;
+> > +
+> > +	if (iop->mem_op.addr.nbytes) {
+> > +		if (iop->mem_op.addr.nbytes != op->addr.nbytes ||
+> > +		    iop->mem_op.addr.dtr != op->addr.dtr)
+> > +			return false;
+> > +	}
+> 
+> Hm, are you sure you want to allow op->addr.nbytes > 0 when
+> iop->mem_op.addr.nbytes == 0? Feels like the command should be reported
+> as unsupported in that case. Unless 0 is a wildcard meaning 'any', but
+> that would be confusing, since operations with 0 address bytes are
+> valid, and I actually expect the number of address cycles to be fixed 
+> or bounded.
 
-As suggested by Boris on IRC, we might just find a way to avoid
-defining this empty structure and requesting all drivers to provide one.
+Indeed. I will change it to:
 
-As it turns out, there is no per-controller spi-mem initialization
-where we could provide a default set of capabilities, but I believe we
-could hide the little extra complexity with something like:
+	if (iop->mem_op.addr.nbytes) {
+		if (iop->mem_op.addr.nbytes != op->addr.nbytes ||
+		    iop->mem_op.addr.dtr != op->addr.dtr)
+			return false;
+	} else if (op->addr.nbytes > 0) {
+		return false;
+	}
 
-#define spi_mem_controller_is_capable(mem, cap) \
-	((mem)->ctlr->caps && (mem)->ctrl->caps->##cap)
-
-And using the above helper in spi_mem_default_supports_op(), which
-would transparently handle the !caps situation.
-
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index 57e2499ec1ed..58c5cb985431 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -2747,6 +2747,9 @@ static int spi_controller_check_ops(struct spi_controller *ctlr)
->  	if (ctlr->mem_ops) {
->  		if (!ctlr->mem_ops->exec_op)
->  			return -EINVAL;
-> +
-> +		if (!ctlr->mem_ops->caps)
-> +			return -EINVAL;
->  	} else if (!ctlr->transfer && !ctlr->transfer_one &&
->  		   !ctlr->transfer_one_message) {
->  		return -EINVAL;
-> diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-> index 42f3850610b5..5f728f3113bd 100644
-> --- a/include/linux/spi/spi-mem.h
-> +++ b/include/linux/spi/spi-mem.h
-> @@ -366,6 +366,7 @@ bool spi_mem_dtr_supports_op(struct spi_mem *mem,
->  
->  int spi_mem_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op);
->  
-> +const struct spi_controller_mem_caps spi_mem_no_caps;
->  bool spi_mem_supports_op(struct spi_mem *mem,
->  			 const struct spi_mem_op *op);
->  
-
-
-Thanks,
-Miquèl
+in v5 if that's what you meant.
