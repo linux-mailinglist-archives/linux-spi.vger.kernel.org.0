@@ -2,98 +2,209 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8B0476F27
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Dec 2021 11:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC36B476FD9
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Dec 2021 12:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbhLPKvG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Dec 2021 05:51:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47780 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbhLPKvG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Dec 2021 05:51:06 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA52C061574
-        for <linux-spi@vger.kernel.org>; Thu, 16 Dec 2021 02:51:06 -0800 (PST)
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id C919E1F41707;
-        Thu, 16 Dec 2021 10:51:03 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1639651864; bh=Kb3GFiAP4VKs2PH1LsTH++5f7aDy8+6y6PgEMvdEjLU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jOuN7cRuBx+COn8Wk4l2LPzJvQyzgVnAP76iSjKF976ecvtHrb8TgB9XJF1VPtC/n
-         SgoqpDk39YVVRXQpyWl5QAvprAYsXWDj67HHVLa31cFpx4vaRxTKgXZK4BRJSV5eAm
-         zb4meOJnXBd5PgeXcBGbXOu2li6bVfQ6Duy9gAY4RNjHD3cNRS/BUJcAMWZMa2dlRv
-         +sSiRDIfLHqYe7xFFffDGeCLuJAJck4WcwxNrgHq1QBzLRZXqNmGHnNzXcyHpXoxae
-         OomarSwXG5N5wE888mUrdwxPRwZuTDzvm0uxr5IulVigclxe7DLJMIUGbAx2UKRZV7
-         kj+QP5KWohbAA==
-Date:   Thu, 16 Dec 2021 11:51:00 +0100
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Michael Walle <michael@walle.cc>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        id S229982AbhLPLRH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Dec 2021 06:17:07 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:38103 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231509AbhLPLQ6 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Dec 2021 06:16:58 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id ADFC5E0014;
+        Thu, 16 Dec 2021 11:16:54 +0000 (UTC)
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Lima <mauro.lima@eclypsium.com>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans-Gert Dahmen <hans-gert.dahmen@immu.ne>,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v4 2/3] mtd: spi-nor: intel-spi: Convert to SPI MEM
-Message-ID: <20211216115100.448351e4@collabora.com>
-In-Reply-To: <20211118130543.11179-3-mika.westerberg@linux.intel.com>
-References: <20211118130543.11179-1-mika.westerberg@linux.intel.com>
-        <20211118130543.11179-3-mika.westerberg@linux.intel.com>
-Organization: Collabora
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        <linux-mtd@lists.infradead.org>, Rob Herring <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>
+Cc:     Julien Su <juliensu@mxic.com.tw>,
+        Jaime Liao <jaimeliao@mxic.com.tw>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH v6 00/28] External ECC engines & Macronix support
+Date:   Thu, 16 Dec 2021 12:16:26 +0100
+Message-Id: <20211216111654.238086-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 18 Nov 2021 16:05:42 +0300
-Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
+Hello all,
 
-> +static bool intel_spi_cmp_mem_op(const struct intel_spi_mem_op *iop,
-> +				 const struct spi_mem_op *op)
-> +{
-> +	if (iop->mem_op.cmd.nbytes != op->cmd.nbytes ||
-> +	    iop->mem_op.cmd.buswidth != op->cmd.buswidth ||
-> +	    iop->mem_op.cmd.dtr != op->cmd.dtr ||
-> +	    iop->mem_op.cmd.opcode != op->cmd.opcode)
-> +		return false;
-> +
-> +	if (iop->mem_op.addr.nbytes) {
-> +		if (iop->mem_op.addr.nbytes != op->addr.nbytes ||
-> +		    iop->mem_op.addr.dtr != op->addr.dtr)
-> +			return false;
-> +	}
+Here is a new iteration for this big series, this time I am reincluding
+the initial binding changes because they changed very slightly and at
+least it gives reviewers a better understanding of the entire work
+again.
 
-Hm, are you sure you want to allow op->addr.nbytes > 0 when
-iop->mem_op.addr.nbytes == 0? Feels like the command should be reported
-as unsupported in that case. Unless 0 is a wildcard meaning 'any', but
-that would be confusing, since operations with 0 address bytes are
-valid, and I actually expect the number of address cycles to be fixed 
-or bounded.
+Once I'll get Rob's ack on the final DT change I will apply (in a topic
+branch) all the patches until "mtd: nand: ecc: Provide a helper to
+retrieve a pipelined engine device", which brings everything that is
+needed to support external engines, as well as the Macronix example.
 
-> +
-> +	if (iop->mem_op.data.dir != op->data.dir ||
-> +	    iop->mem_op.data.dtr != op->data.dtr)
-> +		return false;
-> +
-> +	if (iop->mem_op.data.dir != SPI_MEM_NO_DATA) {
-> +		if (iop->mem_op.data.buswidth != op->data.buswidth)
-> +			return false;
-> +	}
-> +
-> +	return true;
-> +}
+I will need further acknowledgments for the second half which brings
+support for pipelined engines (even though I hope we are close to an
+agreement now).
+
+Cheers,
+Miquèl
+
+Changes in v6:
+* Re-include the first patches because a few things have changed in the
+  bindings. These are only style changes as Rob asked to group every
+  property above or below the description field, which I applied to all
+  the binding commits, but without any further update.
+* Created a spi-mem capabilities structure. Put that one in the spi-mem
+  ops strucure and ensured that all the controllers provided one.
+* Created a default "no-caps" empty instance that controller drivers can
+  point to by default.
+* Dropped the spi_mem_generic_defaults_op() intermediate helper entirely
+  (not needed anymore).
+
+Changes in v5:
+* Moved a helper in the core as it seems that it will be useful for
+  other ECC engines as well (Xiangsheng Hou for Mediatek will need it).
+* Changed the parameters of the spi_mem_generic_supports_op() function
+  in order to take a structure as input instead of a list of arguments,
+  which will be much easier to complement in the future if ever needed.
+
+Changes in v4:
+* The first half of the series has been left aside (all the binding
+  changes + the external mode in the Macronix driver), now let's focus
+  on the pipelined mode.
+* Added the ecc_en spi_mem_op structure parameter in a dedicated commit.
+* Introduced a new helper for supporting generically the supported ops.
+* Used this new helper in the macronix driver.
+* By default all the other drivers would refuse a spi_mem_op with ecc_en
+  enabled.
+
+Changes in v3:
+* Added Mark's R-by.
+* Added a commit changing the initialization order between the dirmaps
+  and the ECC engine so that the core might now if we are using a
+  pipelined engine or not.
+* Stopped creating additional dirmaps with ECC if the engine is not a
+  pipelined engine.
+* Solved the kernel test robot reports. In particular, I added a
+  dependency on MTD_NAND_ECC to Macronix SPI controller driver.
+* Added a patch to clean the NAND controller yaml file before moving
+  some bits to nand-chip.yaml. This addresses the comments made by Rob
+  about the useless allOf's.
+* Used platform_get_irq_byname_optional() in order to avoid useless
+  warnings when there is no IRQ.
+
+Changes in v2:
+* Fixed the bindings and added Rob's acks when relevant.
+* Added locking in the ECC engine driver.
+* Brought more changes in the core in order to bring the ECC information
+  into the spi_mem_op structure with the idea of avoiding any races
+  between parallel calls on the same engine.
+* Reorganized the ECC driver entirely in order to have a per-engine mxic
+  structure plus a per-NAND context. This lead to a number of changes
+  internally which cannot all be listed.
+
+Changes since the RFC:
+* Rebased on top of v5.15-rc1.
+* Fixed the dirmap configuration.
+* Added the various tags received.
+* Fixed the bindings as reported by the robots.
+* Fixed the return value of the helper counting bitflips.
+* Included a fix from Jaime Liao in the external pattern logic.
+* Added the yaml conversion of Macronix SPI controller description.
+* Added the yaml conversion of the SPI-NAND description.
+* Created a nand-chip.yaml file to share properties between SPI-NAND and
+  raw NAND.
+
+Mason Yang (1):
+  mtd: spinand: macronix: Use random program load
+
+Miquel Raynal (27):
+  dt-bindings: mtd: nand-controller: Fix the reg property description
+  dt-bindings: mtd: nand-controller: Fix a comment in the examples
+  dt-bindings: mtd: nand-controller: Harmonize the property types
+  dt-bindings: mtd: nand-chip: Create a NAND chip description
+  dt-bindings: mtd: spi-nand: Convert spi-nand description file to yaml
+  dt-bindings: vendor-prefixes: Clarify Macronix prefix
+  dt-bindings: spi: mxic: The interrupt property is not mandatory
+  dt-bindings: spi: mxic: Convert to yaml
+  dt-bindings: spi: mxic: Document the nand-ecc-engine property
+  dt-bindings: mtd: Describe Macronix NAND ECC engine
+  mtd: nand: ecc: Add infrastructure to support hardware engines
+  mtd: nand: Add a new helper to retrieve the ECC context
+  mtd: nand: mxic-ecc: Add Macronix external ECC engine support
+  mtd: nand: ecc: Provide a helper to retrieve a pilelined engine device
+  mtd: nand: mxic-ecc: Support SPI pipelined mode
+  mtd: spinand: Delay a little bit the dirmap creation
+  spi: spi-mem: Fix a DTR related check in spi_mem_dtr_supports_op()
+  spi: spi-mem: Introduce a capability structure
+  spi: spi-mem: Fill the spi-mem controller capabilities of all the
+    drivers
+  spi: spi-mem: Kill the spi_mem_dtr_supports_op() helper
+  spi: spi-mem: Add an ecc_en parameter to the spi_mem_op structure
+  mtd: spinand: Create direct mapping descriptors for ECC operations
+  spi: mxic: Fix the transmit path
+  spi: mxic: Create a helper to configure the controller before an
+    operation
+  spi: mxic: Create a helper to ease the start of an operation
+  spi: mxic: Add support for direct mapping
+  spi: mxic: Add support for pipelined ECC operations
+
+ .../bindings/mtd/mxicy,nand-ecc-engine.yaml   |  77 ++
+ .../devicetree/bindings/mtd/nand-chip.yaml    |  70 ++
+ .../bindings/mtd/nand-controller.yaml         |  72 +-
+ .../devicetree/bindings/mtd/spi-nand.txt      |   5 -
+ .../devicetree/bindings/mtd/spi-nand.yaml     |  27 +
+ .../bindings/spi/mxicy,mx25f0a-spi.yaml       |  65 ++
+ .../devicetree/bindings/spi/spi-mxic.txt      |  34 -
+ .../devicetree/bindings/vendor-prefixes.yaml  |   3 +
+ drivers/mtd/nand/Kconfig                      |   6 +
+ drivers/mtd/nand/Makefile                     |   1 +
+ drivers/mtd/nand/core.c                       |  10 +-
+ drivers/mtd/nand/ecc-mxic.c                   | 871 ++++++++++++++++++
+ drivers/mtd/nand/ecc.c                        | 119 +++
+ drivers/mtd/nand/spi/core.c                   |  51 +-
+ drivers/mtd/nand/spi/macronix.c               |   2 +-
+ drivers/spi/Kconfig                           |   2 +-
+ drivers/spi/atmel-quadspi.c                   |   3 +-
+ drivers/spi/spi-bcm-qspi.c                    |   1 +
+ drivers/spi/spi-cadence-quadspi.c             |  10 +-
+ drivers/spi/spi-dw-core.c                     |   1 +
+ drivers/spi/spi-fsl-qspi.c                    |   1 +
+ drivers/spi/spi-hisi-sfc-v3xx.c               |   1 +
+ drivers/spi/spi-mem.c                         |  33 +-
+ drivers/spi/spi-mtk-nor.c                     |   3 +-
+ drivers/spi/spi-mxic.c                        | 340 +++++--
+ drivers/spi/spi-npcm-fiu.c                    |   1 +
+ drivers/spi/spi-nxp-fspi.c                    |   1 +
+ drivers/spi/spi-rockchip-sfc.c                |   1 +
+ drivers/spi/spi-rpc-if.c                      |   1 +
+ drivers/spi/spi-stm32-qspi.c                  |   1 +
+ drivers/spi/spi-ti-qspi.c                     |   1 +
+ drivers/spi/spi-zynq-qspi.c                   |   1 +
+ drivers/spi/spi-zynqmp-gqspi.c                |   1 +
+ drivers/spi/spi.c                             |   3 +
+ include/linux/mtd/nand-ecc-mxic.h             |  49 +
+ include/linux/mtd/nand.h                      |  34 +
+ include/linux/mtd/spinand.h                   |   2 +
+ include/linux/spi/spi-mem.h                   |  27 +-
+ 38 files changed, 1727 insertions(+), 204 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mtd/mxicy,nand-ecc-engine.yaml
+ create mode 100644 Documentation/devicetree/bindings/mtd/nand-chip.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mtd/spi-nand.txt
+ create mode 100644 Documentation/devicetree/bindings/mtd/spi-nand.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/mxicy,mx25f0a-spi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-mxic.txt
+ create mode 100644 drivers/mtd/nand/ecc-mxic.c
+ create mode 100644 include/linux/mtd/nand-ecc-mxic.h
+
+-- 
+2.27.0
+
