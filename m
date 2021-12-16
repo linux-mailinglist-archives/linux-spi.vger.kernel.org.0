@@ -2,18 +2,18 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0ACD476FFD
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Dec 2021 12:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36379476FFF
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Dec 2021 12:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233868AbhLPLR2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 16 Dec 2021 06:17:28 -0500
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:33615 "EHLO
+        id S233922AbhLPLRa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 16 Dec 2021 06:17:30 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:53625 "EHLO
         relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233910AbhLPLR2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Dec 2021 06:17:28 -0500
+        with ESMTP id S233906AbhLPLRa (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 16 Dec 2021 06:17:30 -0500
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 295A4E0003;
-        Thu, 16 Dec 2021 11:17:26 +0000 (UTC)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id C94E0E0010;
+        Thu, 16 Dec 2021 11:17:27 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
         Richard Weinberger <richard@nod.at>,
@@ -26,10 +26,11 @@ To:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
 Cc:     Julien Su <juliensu@mxic.com.tw>,
         Jaime Liao <jaimeliao@mxic.com.tw>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v6 17/28] mtd: spinand: Delay a little bit the dirmap creation
-Date:   Thu, 16 Dec 2021 12:16:43 +0100
-Message-Id: <20211216111654.238086-18-miquel.raynal@bootlin.com>
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+Subject: [PATCH v6 18/28] spi: spi-mem: Fix a DTR related check in spi_mem_dtr_supports_op()
+Date:   Thu, 16 Dec 2021 12:16:44 +0100
+Message-Id: <20211216111654.238086-19-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20211216111654.238086-1-miquel.raynal@bootlin.com>
 References: <20211216111654.238086-1-miquel.raynal@bootlin.com>
@@ -40,50 +41,33 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-As we will soon tweak the dirmap creation to act a little bit
-differently depending on the picked ECC engine, we need to initialize
-dirmaps after ECC engines. This should not have any effect as dirmaps
-are not yet used at this point.
+It seems that the number of command bytes must be "2" only when the
+command itself is sent in DTR mode. The current logic checks if the
+number of command bytes is "2" when any of the cycles is a DTR cycle. It
+is likely that so far no device was actually mixing DTR/non-DTR cycles
+in the same operation, explaining why this was left undetected until
+now.
 
+Fixes: 539cf68cd51b ("spi: spi-mem: add spi_mem_dtr_supports_op()")
+Suggested-by: Boris Brezillon <boris.brezillon@collabora.com>
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/mtd/nand/spi/core.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/spi/spi-mem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
-index 7027c09925e2..715cad26fdef 100644
---- a/drivers/mtd/nand/spi/core.c
-+++ b/drivers/mtd/nand/spi/core.c
-@@ -1209,14 +1209,6 @@ static int spinand_init(struct spinand_device *spinand)
- 	if (ret)
- 		goto err_free_bufs;
+diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+index 37f4443ce9a0..c4da0c9b05e9 100644
+--- a/drivers/spi/spi-mem.c
++++ b/drivers/spi/spi-mem.c
+@@ -163,7 +163,7 @@ static bool spi_mem_check_buswidth(struct spi_mem *mem,
+ bool spi_mem_dtr_supports_op(struct spi_mem *mem,
+ 			     const struct spi_mem_op *op)
+ {
+-	if (op->cmd.nbytes != 2)
++	if (op->cmd.dtr && op->cmd.nbytes != 2)
+ 		return false;
  
--	ret = spinand_create_dirmaps(spinand);
--	if (ret) {
--		dev_err(dev,
--			"Failed to create direct mappings for read/write operations (err = %d)\n",
--			ret);
--		goto err_manuf_cleanup;
--	}
--
- 	ret = nanddev_init(nand, &spinand_ops, THIS_MODULE);
- 	if (ret)
- 		goto err_manuf_cleanup;
-@@ -1251,6 +1243,14 @@ static int spinand_init(struct spinand_device *spinand)
- 	mtd->ecc_strength = nanddev_get_ecc_conf(nand)->strength;
- 	mtd->ecc_step_size = nanddev_get_ecc_conf(nand)->step_size;
- 
-+	ret = spinand_create_dirmaps(spinand);
-+	if (ret) {
-+		dev_err(dev,
-+			"Failed to create direct mappings for read/write operations (err = %d)\n",
-+			ret);
-+		goto err_cleanup_ecc_engine;
-+	}
-+
- 	return 0;
- 
- err_cleanup_ecc_engine:
+ 	return spi_mem_check_buswidth(mem, op);
 -- 
 2.27.0
 
