@@ -2,18 +2,18 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 188DE479140
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Dec 2021 17:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9C0479141
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Dec 2021 17:17:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233846AbhLQQRH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 17 Dec 2021 11:17:07 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:41493 "EHLO
+        id S233605AbhLQQRJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Dec 2021 11:17:09 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:32783 "EHLO
         relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbhLQQRH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Dec 2021 11:17:07 -0500
+        with ESMTP id S231334AbhLQQRJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Dec 2021 11:17:09 -0500
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 33AE2200016;
-        Fri, 17 Dec 2021 16:17:04 +0000 (UTC)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 7715E200008;
+        Fri, 17 Dec 2021 16:17:06 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
         Richard Weinberger <richard@nod.at>,
@@ -27,9 +27,9 @@ Cc:     Julien Su <juliensu@mxic.com.tw>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Boris Brezillon <boris.brezillon@collabora.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v7 03/14] spi: spi-mem: Check the controller extra capabilities
-Date:   Fri, 17 Dec 2021 17:16:43 +0100
-Message-Id: <20211217161654.367782-4-miquel.raynal@bootlin.com>
+Subject: [PATCH v7 04/14] spi: cadence: Provide a capability structure
+Date:   Fri, 17 Dec 2021 17:16:44 +0100
+Message-Id: <20211217161654.367782-5-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20211217161654.367782-1-miquel.raynal@bootlin.com>
 References: <20211217161654.367782-1-miquel.raynal@bootlin.com>
@@ -40,49 +40,36 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Controllers can now provide a spi-mem capabilities structure. Let's make
-use of it in spi_mem_controller_default_supports_op(). As we want to
-check for DTR operations as well as normal operations in a single
-helper, let's pull the necessary checks from spi_mem_dtr_supports_op()
-for now.
-
-However, because no controller provide these extra capabilities, this
-change has no effect so far.
+This controller has DTR support, so advertize it with a capability now
+that the spi_controller_mem_ops structure contains this new field. This
+will later be used by the core to discriminate whether an operation is
+supported or not, in a more generic way than having different helpers.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/spi/spi-mem.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ drivers/spi/spi-cadence-quadspi.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-index c4da0c9b05e9..677e54221ebc 100644
---- a/drivers/spi/spi-mem.c
-+++ b/drivers/spi/spi-mem.c
-@@ -173,11 +173,20 @@ EXPORT_SYMBOL_GPL(spi_mem_dtr_supports_op);
- bool spi_mem_default_supports_op(struct spi_mem *mem,
- 				 const struct spi_mem_op *op)
- {
--	if (op->cmd.dtr || op->addr.dtr || op->dummy.dtr || op->data.dtr)
--		return false;
-+	struct spi_controller *ctlr = mem->spi->controller;
-+	bool op_is_dtr =
-+		op->cmd.dtr || op->addr.dtr || op->dummy.dtr || op->data.dtr;
- 
--	if (op->cmd.nbytes != 1)
--		return false;
-+	if (op_is_dtr) {
-+		if (!spi_mem_controller_is_capable(ctlr, dtr))
-+			return false;
-+
-+		if (op->cmd.dtr && op->cmd.nbytes != 2)
-+			return false;
-+	} else {
-+		if (op->cmd.nbytes != 1)
-+			return false;
-+	}
- 
- 	return spi_mem_check_buswidth(mem, op);
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 101cc71bffa7..98e0cc4236e3 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -1388,10 +1388,15 @@ static const char *cqspi_get_name(struct spi_mem *mem)
+ 	return devm_kasprintf(dev, GFP_KERNEL, "%s.%d", dev_name(dev), mem->spi->chip_select);
  }
+ 
++static const struct spi_controller_mem_caps cqspi_mem_caps = {
++	.dtr = true,
++};
++
+ static const struct spi_controller_mem_ops cqspi_mem_ops = {
+ 	.exec_op = cqspi_exec_mem_op,
+ 	.get_name = cqspi_get_name,
+ 	.supports_op = cqspi_supports_mem_op,
++	.caps = &cqspi_mem_caps,
+ };
+ 
+ static int cqspi_setup_flash(struct cqspi_st *cqspi)
 -- 
 2.27.0
 
