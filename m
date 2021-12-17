@@ -2,246 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92FBF478BDE
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Dec 2021 13:58:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 807DC478C35
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Dec 2021 14:24:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232748AbhLQM6E convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Fri, 17 Dec 2021 07:58:04 -0500
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:52133 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbhLQM6E (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Dec 2021 07:58:04 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 7C8EBFF807;
-        Fri, 17 Dec 2021 12:58:01 +0000 (UTC)
-Date:   Fri, 17 Dec 2021 13:58:00 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Pratyush Yadav <p.yadav@ti.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Michael Walle <michael@walle.cc>,
-        <linux-mtd@lists.infradead.org>, Michal Simek <monstr@monstr.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH v4 2/3] spi: dt-bindings: Describe stacked/parallel
- memories modes
-Message-ID: <20211217135800.3d91d2fe@xps13>
-In-Reply-To: <20211217123908.wmki3tlnk3k4nxha@ti.com>
-References: <20211210201039.729961-1-miquel.raynal@bootlin.com>
-        <20211210201039.729961-3-miquel.raynal@bootlin.com>
-        <20211214194431.4kpwfgvju6msh5d4@ti.com>
-        <20211216172544.2005d96e@xps13>
-        <20211217123908.wmki3tlnk3k4nxha@ti.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S236711AbhLQNYY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 17 Dec 2021 08:24:24 -0500
+Received: from mail-ua1-f46.google.com ([209.85.222.46]:42996 "EHLO
+        mail-ua1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236677AbhLQNYU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 17 Dec 2021 08:24:20 -0500
+Received: by mail-ua1-f46.google.com with SMTP id t13so4242479uad.9;
+        Fri, 17 Dec 2021 05:24:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UfQoARdnbkZAiC3vtgUpOeQLmZLNRjjpwLc9s5ZyHps=;
+        b=xYfAY7J7J9QffAykFLTch2fOSSEGskXuntYtMKlCX8maAZfgRC7qaeYbEYXEhHxAm9
+         hCprSbG7+WrIa9+7lPKf2Gnwb9ioX+R+RgibIbKM6PTk7hk7TRdYnQxFfz3Uvh2fnE43
+         5ilri1hg6O+NGD3LZ8i57+iYD9+vuULAmaDkvG/pbtchDhnnqYk1RCbUErtJ4g02beJy
+         sp8C7y21ZrvyE8OZIEfB7so4is2cjz7xSFk+9nrrb4lz0DmcaKUxl2uHmi4PuAI7Pxr/
+         NBCURrxkQyH90X6VZOJjiVOG8PMzyIp3PlqIt1SOL30ZCNF2eS0j3xxbqki04ANOps2S
+         773Q==
+X-Gm-Message-State: AOAM53375W3GmNivNzBMFfaktc7PL/pTXxza/phvxW5ZI9KeTC9Zl384
+        tUf4+AIs3aie7begwtfvMGNlEkC2jYYyOg==
+X-Google-Smtp-Source: ABdhPJwf9tK4F5rXipclTN8u7WMGEQYWyCzr93mNHr/EESAQDeztbJetl2fXnXAfihpEYTm5+KvDBw==
+X-Received: by 2002:ab0:449:: with SMTP id 67mr998976uav.46.1639747459373;
+        Fri, 17 Dec 2021 05:24:19 -0800 (PST)
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
+        by smtp.gmail.com with ESMTPSA id q9sm1804818vkn.44.2021.12.17.05.24.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Dec 2021 05:24:19 -0800 (PST)
+Received: by mail-ua1-f53.google.com with SMTP id p37so4282078uae.8;
+        Fri, 17 Dec 2021 05:24:18 -0800 (PST)
+X-Received: by 2002:a67:c106:: with SMTP id d6mr960485vsj.77.1639747458226;
+ Fri, 17 Dec 2021 05:24:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+References: <20211217093325.30612-1-conor.dooley@microchip.com> <20211217093325.30612-3-conor.dooley@microchip.com>
+In-Reply-To: <20211217093325.30612-3-conor.dooley@microchip.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 17 Dec 2021 14:24:07 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXBm6PMnBTQDZY=3XkGBXsr4wXy8m+WbgHjA8SpctbVCA@mail.gmail.com>
+Message-ID: <CAMuHMdXBm6PMnBTQDZY=3XkGBXsr4wXy8m+WbgHjA8SpctbVCA@mail.gmail.com>
+Subject: Re: [PATCH v2 02/17] dt-bindings: soc/microchip: update syscontroller compatibles
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bin Meng <bin.meng@windriver.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Lewis Hanly <lewis.hanly@microchip.com>,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        Atish Patra <atish.patra@wdc.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Pratyush,
+On Fri, Dec 17, 2021 at 10:32 AM <conor.dooley@microchip.com> wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+>
+> The Polarfire SoC is currently using two different compatible string
+> prefixes. Fix this by changing "polarfire-soc-*" strings to "mpfs-*" in
+> its system controller in order to match the compatible string used in
+> the soc binding and device tree.
+>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-p.yadav@ti.com wrote on Fri, 17 Dec 2021 18:09:10 +0530:
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-> On 16/12/21 05:25PM, Miquel Raynal wrote:
-> > Hello Pratyush,
-> > 
-> > p.yadav@ti.com wrote on Wed, 15 Dec 2021 01:14:33 +0530:
-> >   
-> > > Hi Miquel,
-> > > 
-> > > On 10/12/21 09:10PM, Miquel Raynal wrote:  
-> > > > Describe two new memories modes:
-> > > > - A stacked mode when the bus is common but the address space extended
-> > > >   with an additinals wires.
-> > > > - A parallel mode with parallel busses accessing parallel flashes where
-> > > >   the data is spread.
-> > > > 
-> > > > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> > > > ---
-> > > >  .../bindings/spi/spi-peripheral-props.yaml    | 29 +++++++++++++++++++
-> > > >  1 file changed, 29 insertions(+)
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> > > > index 5dd209206e88..4194fee8f556 100644
-> > > > --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> > > > +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> > > > @@ -82,6 +82,35 @@ properties:
-> > > >      description:
-> > > >        Delay, in microseconds, after a write transfer.
-> > > >  
-> > > > +  stacked-memories:
-> > > > +    $ref: /schemas/types.yaml#/definitions/uint64-matrix    
-> > > 
-> > > Why matrix? Can't you use array here? Sorry, I am not much familiar with 
-> > > JSON schema.  
-> > 
-> > Yes, Rob also opened the discussion, I've answered there on this point,
-> > but I agree, this should be define as an array, but the current tooling
-> > refused to accept what I wanted from a dt-writing point of view. More
-> > on that on the dedicated thread.
-> >   
-> > > > +    description: Several SPI memories can be wired in stacked mode.
-> > > > +      This basically means that either a device features several chip
-> > > > +      selects, or that different devices must be seen as a single
-> > > > +      bigger chip. This basically doubles (or more) the total address
-> > > > +      space with only a single additional wire, while still needing
-> > > > +      to repeat the commands when crossing a chip boundary. The size of
-> > > > +      each chip should be provided as members of the array.
-> > > > +    minItems: 2
-> > > > +    maxItems: 2
-> > > > +    items:
-> > > > +      maxItems: 1    
-> > > 
-> > > Thanks. This looks better to me.
-> > > 
-> > > But before we go ahead, I think there has been some confusion around 
-> > > what exactly your patches intend to support. Let's clear them up first. 
-> > > What type of setup do you want to support?  
-> > 
-> > Before I try to clarify your questions below, the setup that I have is:
-> > 
-> > Xilinx ZynqMP QSPI controller + 2 flashes.
-> > 
-> > What I want to describe is the specific handling of what the Xilinx
-> > QSPI controller is able to do. This controller has two modes when wired
-> > to more than one flash:
-> > - stacked
-> > - parallel
-> > 
-> > I have not entered the documentation nor the code in details yet, but I
-> > believe that handling two flashes in the stacked configuration, besides
-> > a couple of possible optimizations that are possible by the hardware,
-> > is close to what any controller would do. Maybe there is one difference
-> > though, when in the "stacked" mode, this controller treats the two
-> > flashes as a single one, so that is why, if we want to support this
-> > "advanced" mode, we *need* a way to know that this mode should be used
-> > because the controller expects a wider range of addresses.  
-> 
-> Ok.
-> 
-> > 
-> > About the parallel configuration, there is absolutely no doubt that we
-> > have no other choice than describing how the data is spread across two
-> > devices. We don't really care about the manner, but the controller
-> > needs to know how to assert the two CS internally so this definitely
-> > something that needs to be described.  
-> 
-> Yes. And with device sizes as part of the property we should be able to 
-> do this.
-> 
-> > 
-> > Now the question you might ask is, why do we define these properties as
-> > flash properties then? And this is a real good question, I think both
-> > actually work as long as we consider that we can only have either a
-> > spi-memory or any other type of device on a single bus, but not both at
-> > the same time. In v1 I proposed a controller property. Mark proposed to
-> > switch for a device property which I did in v2 onward.  
-> 
-> I also think making it a device property makes more sense. You are 
-> describing how the flashes are laid out, which is independent of the 
-> controller. With the same SoC, I could have one board with a single 
-> flash and another with a dual-die flash.
-> 
-> >   
-> > >   1. One single flash but with multiple dies, with each die sitting on a 
-> > >      different CS.  
-> > 
-> > Yes.
-> >   
-> > >   2. Two (or more) identical but independent flash memories to be 
-> > >      treated as one.  
-> > 
-> > Yes.
-> >   
-> > >   3. Two (or more) different and independent flash memories to be 
-> > >      treated as one.  
-> > 
-> > I don't know. My first proposal excluded these, but I believe we can
-> > handle them with the change your proposed (the device size as part of
-> > the property).
-> >   
-> > > In our earlier exchanges you said you want to support 2. And when I 
-> > > wanted you to account for 3 as well you said we should use mtdconcat for 
-> > > that.  
-> > 
-> > Not that we should, but that we could because from a core perspective
-> > it's way more challenging than supporting identical devices. But the
-> > conversation drifted about the software backend that we should use
-> > rather than on the actual description, because mtdconcat is not a
-> > feature which benefits from any kind of description yet, so even if we
-> > use mtdconcat as backed, we will need some kind of description here as
-> > well. So, as I told previously, I am fine considering these setups
-> > in my proposal, that's why I updated my proposal to include the
-> > devices size, even though that is way out of scope compared to my
-> > initial target.  
-> 
-> Right, and I appreciate that :-)
-> 
-> > 
-> > But here we are talking about driver code, which has nothing to do with
-> > the bindings. If we focus on the bindings, I believe the solution with
-> > the sizes covers all cases.  
-> 
-> I think it is important to discuss _how_ we would implement this in the 
-> driver because this could help identify flaws or shortcomings in the 
-> bindings. In this case, I agree with you that the solution with sizes 
-> should cover all 3 cases and we now have lot more flexibility in how we 
-> design the driver.
-> 
-> >   
-> > > So my question is, why can't we use mtdconcat for 2 as well, since 
-> > > it is just a special case of 3? And if we are using mtdconcat, then why 
-> > > do we need this at all? Shouldn't you then choose the chip at MTD layer 
-> > > and use the respective SPI device to get the CS value, which would make 
-> > > this property useless?  
-> > 
-> > Reason 1:
-> > As depicted above, while the stacked mode might more or less
-> > fit the mtdconcat idea, it is absolutely not the case for the parallel
-> > mode.  
-> 
-> Right. My question was mostly about the stacked mode.
-> 
-> > 
-> > Reason 2:
-> > mtdconcat is a software backend. Here we are discussing bindings.
-> > No matter what backed we finally pick, there will be the need for a
-> > proper description and so far there has been no binding for mtdconcat
-> > (even though I tried to push in favor of it a while ago without
-> > success). So no matter what software solution we we adopt, we
-> > *will* need an upstream binding description at some point. But
-> > mtdconcat really means "there are two devices we want to consider as a
-> > single". While here the point is: we have two devices that get
-> > abstracted by the controller, and we still must describe that.
-> >   
-> > > I can see this making sense for case 1. For that case you said you don't 
-> > > have an existing datasheet or device to propose. And if there is no real 
-> > > device doing it I see little point in figuring out a binding for it.  
-> > 
-> > Yes, because somewhat we focused the debate over the devices, while I
-> > was initially talking about a controller abstraction. There is (at
-> > least) one controller doing such abstractions, the Xilinx ZynqMP
-> > generic QSPI controller, the spec is public (chapter 24):
-> > https://www.xilinx.com/support/documentation/user_guides/ug1085-zynq-ultrascale-trm.pdf  
-> 
-> I think this _is_ a device problem first. The controller part should be 
-> easy to do once we solve the device problem. Once we clearly describe 
-> how the devices are laid out it should be simple for the controller side 
-> to figure out what to do.
-> 
-> > 
-> > I hope all this clarifies the situation!  
-> 
-> Thanks. I am quite happy with this patch. I'll drop my R-by once you 
-> figure out what type to use with these properties in v5.
+Gr{oetje,eeting}s,
 
-Great! Thank you very much for this discussion, it forced me to clarify
-things in my head as well :-)
+                        Geert
 
-Thanks,
-Miquèl
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
