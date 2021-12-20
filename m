@@ -2,156 +2,136 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD5A47AB9D
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Dec 2021 15:38:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F05047B193
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Dec 2021 17:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234295AbhLTOh5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 20 Dec 2021 09:37:57 -0500
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:44863 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234003AbhLTOhc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Dec 2021 09:37:32 -0500
-Received: by mail-oi1-f175.google.com with SMTP id be32so16010867oib.11;
-        Mon, 20 Dec 2021 06:37:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MX2xD6NxZlK32RqDAc9k/pbvJlT/hpUSltlaWuBfZyY=;
-        b=EFHAOJhyVqLeqLC/eUZp83i4qW9h4YsxiQz2Endqotu0xrixWxvWd51u/Mqkb7sMio
-         h1Lyk7zHU/w+XXWEEgVN3nKVgjv6g+RLXclq7nzzprAVXh4W9b+Ozxm4O1+5k8KN+6xy
-         XqTGAUAk5YcfTKNpVtaCVP0Ahj97GESfyZvC+rm5DzW0nr/SXBiyg96cardibAGmTXYx
-         BaRm7Y5xBsHam/DpXYVW8zj5cr4360MEa6PZsVWOd6/6IzxloEx6JGSaTz2a1rZExP2y
-         EmyzyOLEyAkn0MqxUzZBstAbOTf9K9C8J7lupepcNiEftPFer015i4OyhcLXUFuc/ZCj
-         RsTw==
-X-Gm-Message-State: AOAM531PojBh0b0PMiH0ad3dIU3BUpU2gh04Izx25rJJo1R2ztYNFii1
-        Du0pl3Pu0uP9Z+ShpT1I/A==
-X-Google-Smtp-Source: ABdhPJwb8Epp66kgn5FAQJGNGoQLiIht6dxhdac9TXEyh6nIWNGhfonlF1xdobHH+VltWNqopZLZIQ==
-X-Received: by 2002:a05:6808:11:: with SMTP id u17mr1043535oic.88.1640011051574;
-        Mon, 20 Dec 2021 06:37:31 -0800 (PST)
-Received: from robh.at.kernel.org ([12.252.7.226])
-        by smtp.gmail.com with ESMTPSA id ay40sm3423367oib.1.2021.12.20.06.37.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 06:37:30 -0800 (PST)
-Received: (nullmailer pid 3403888 invoked by uid 1000);
-        Mon, 20 Dec 2021 14:37:28 -0000
-Date:   Mon, 20 Dec 2021 08:37:28 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     conor.dooley@microchip.com
-Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, broonie@kernel.org,
-        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        krzysztof.kozlowski@canonical.com, geert@linux-m68k.org,
-        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
-        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
-        atish.patra@wdc.com
-Subject: Re: [PATCH v2 07/17] dt-bindings: rtc: add bindings for microchip
- mpfs rtc
-Message-ID: <YcCVKFm+7aEG2FYH@robh.at.kernel.org>
-References: <20211217093325.30612-1-conor.dooley@microchip.com>
- <20211217093325.30612-8-conor.dooley@microchip.com>
+        id S237542AbhLTQqo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 20 Dec 2021 11:46:44 -0500
+Received: from mga12.intel.com ([192.55.52.136]:8381 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234391AbhLTQqn (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 20 Dec 2021 11:46:43 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10203"; a="220232535"
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="220232535"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2021 08:46:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,220,1635231600"; 
+   d="scan'208";a="484114729"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 20 Dec 2021 08:46:18 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 34F35144; Mon, 20 Dec 2021 18:46:25 +0200 (EET)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Michael Walle <michael@walle.cc>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Lima <mauro.lima@eclypsium.com>,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans-Gert Dahmen <hans-gert.dahmen@immu.ne>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
+Subject: [PATCH v5 0/3] mtd: spi-nor / spi / MFD: Convert intel-spi to SPI MEM
+Date:   Mon, 20 Dec 2021 19:46:22 +0300
+Message-Id: <20211220164625.9400-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211217093325.30612-8-conor.dooley@microchip.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 09:33:15AM +0000, conor.dooley@microchip.com wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Add device tree bindings for the real time clock on
-> the Microchip PolarFire SoC.
-> 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
-> ---
->  .../bindings/rtc/microchip,mfps-rtc.yaml      | 63 +++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml b/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
-> new file mode 100644
-> index 000000000000..d57460cbe5e3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
-> @@ -0,0 +1,63 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/microchip,mfps-rtc.yaml#
-> +
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip PolarFire Soc (MPFS) RTC Device Tree Bindings
-> +
-> +allOf:
-> +  - $ref: rtc.yaml#
-> +
-> +maintainers:
-> +  - Daire McNamara <daire.mcnamara@microchip.com>
-> +  - Lewis Hanly <lewis.hanly@microchip.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - microchip,mpfs-rtc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 2
+Hi all,
 
-Need to define what each one is.
+Based on discussion on the patch I sent some time ago here:
 
-> +
-> +  microchip,prescaler:
-> +    description: |
-> +      The prescaler divides the input frequency to create a time-based strobe (typically 1 Hz) for
-> +      the calendar counter. The Alarm and Compare Registers, in conjunction with the calendar
-> +      counter, facilitate time-matched events. To properly operate in Calendar or Binary mode,
-> +      the 26-bit prescaler must be programmed to generate a strobe to the RTC.
-> +    maxItems: 1
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: rtc
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/microchip,mpfs-clock.h>
-> +    rtc@20124000 {
-> +        compatible = "microchip,mpfs-rtc";
-> +        reg = <0x20124000 0x1000>;
-> +        clocks = <&clkcfg CLK_RTC>;
-> +        clock-names = "rtc";
-> +        interrupts = <80>, <81>;
-> +    };
-> +...
-> -- 
-> 2.33.1
-> 
-> 
+  http://lists.infradead.org/pipermail/linux-mtd/2021-June/086867.html
+
+it turns out that the preferred way to deal with the SPI flash controller
+drivers is through SPI MEM which is part of Linux SPI subsystem.
+
+This series does that for the intel-spi driver. This also renames the
+driver to follow the convention used in the SPI subsystem. The first patch
+improves the write protection handling to be slightly more safer. The
+following two patches do the conversion itself. Note the Intel SPI flash
+controller only allows commands such as read, write and so on and it
+internally uses whatever addressing etc. it figured from the SFDP on the
+flash device.
+
+Previous versions of the patch series can be found here:
+
+  v4: https://lore.kernel.org/linux-mtd/20211118130543.11179-1-mika.westerberg@linux.intel.com/
+  v3: https://lore.kernel.org/linux-mtd/20211013114432.31352-1-mika.westerberg@linux.intel.com/
+  v2: https://lore.kernel.org/linux-mtd/20211007112132.30934-1-mika.westerberg@linux.intel.com/
+  v1: https://lore.kernel.org/linux-mtd/20210930100719.2176-1-mika.westerberg@linux.intel.com/
+
+Changes from v4:
+
+  * Correct check in intel_spi_cmp_mem_op()
+  * Added tag from Boris
+
+Changes from v3:
+
+  * Create an array of supported opcodes and reject everything else.
+  * Fix checkpatch warnings reported by Mauro
+  * Added tags from Lee and Mauro
+
+Changes from v2:
+
+  * Added tag from Andy
+  * Check buswidth in intel_spi_supports_mem_op() and return false if octal
+    mode is asked. The Intel controllers support buswidths 1-4 but this is
+    not exposed to software. It figures this itself through SFDP tables.
+  * In case of software sequencer, support same opcodes than we support with
+    the hardware sequencer if found in the opcodes table.
+
+Changes from v1:
+
+  * Arrange dependencies in Kconfig entries the same way in both glue
+    drivers.
+  * Added empty lines between different subsystem includes.
+  * dev_err() to single line
+  * Return intel_spi_sw_cycle() directly in intel_spi_erase().
+  * Drop redundant elses.
+  * Fixed typo in the commit message of the patch 3/3.
+
+Mika Westerberg (3):
+  mtd: spi-nor: intel-spi: Disable write protection only if asked
+  mtd: spi-nor: intel-spi: Convert to SPI MEM
+  Documentation / MTD: Rename the intel-spi driver
+
+ Documentation/driver-api/mtd/index.rst        |   2 +-
+ .../mtd/{intel-spi.rst => spi-intel.rst}      |   8 +-
+ drivers/mfd/lpc_ich.c                         |  59 +-
+ drivers/mtd/spi-nor/controllers/Kconfig       |  36 -
+ drivers/mtd/spi-nor/controllers/Makefile      |   3 -
+ drivers/mtd/spi-nor/controllers/intel-spi.h   |  21 -
+ drivers/spi/Kconfig                           |  39 +
+ drivers/spi/Makefile                          |   3 +
+ .../intel-spi-pci.c => spi/spi-intel-pci.c}   |  49 +-
+ .../spi-intel-platform.c}                     |  21 +-
+ .../intel-spi.c => spi/spi-intel.c}           | 827 ++++++++++++------
+ drivers/spi/spi-intel.h                       |  19 +
+ include/linux/mfd/lpc_ich.h                   |   2 +-
+ .../x86/{intel-spi.h => spi-intel.h}          |  12 +-
+ 14 files changed, 699 insertions(+), 402 deletions(-)
+ rename Documentation/driver-api/mtd/{intel-spi.rst => spi-intel.rst} (94%)
+ delete mode 100644 drivers/mtd/spi-nor/controllers/intel-spi.h
+ rename drivers/{mtd/spi-nor/controllers/intel-spi-pci.c => spi/spi-intel-pci.c} (84%)
+ rename drivers/{mtd/spi-nor/controllers/intel-spi-platform.c => spi/spi-intel-platform.c} (65%)
+ rename drivers/{mtd/spi-nor/controllers/intel-spi.c => spi/spi-intel.c} (57%)
+ create mode 100644 drivers/spi/spi-intel.h
+ rename include/linux/platform_data/x86/{intel-spi.h => spi-intel.h} (64%)
+
+-- 
+2.34.1
+
