@@ -2,135 +2,85 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D8F47C51A
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Dec 2021 18:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 224EB47C546
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Dec 2021 18:47:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233723AbhLURhe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Tue, 21 Dec 2021 12:37:34 -0500
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:59525 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231610AbhLURhd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Dec 2021 12:37:33 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id C09A86000B;
-        Tue, 21 Dec 2021 17:37:29 +0000 (UTC)
-Date:   Tue, 21 Dec 2021 18:37:28 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Pratyush Yadav <p.yadav@ti.com>
-Cc:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Michael Walle <michael@walle.cc>,
-        <linux-mtd@lists.infradead.org>, Julien Su <juliensu@mxic.com.tw>,
-        Jaime Liao <jaimeliao@mxic.com.tw>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-Subject: Re: [PATCH v7 07/14] spi: spi-mem: Add an ecc_en parameter to the
- spi_mem_op structure
-Message-ID: <20211221183728.6600aae4@xps13>
-In-Reply-To: <20211220190227.oqvpcfrro32ic32b@ti.com>
-References: <20211217161654.367782-1-miquel.raynal@bootlin.com>
-        <20211217161654.367782-8-miquel.raynal@bootlin.com>
-        <20211220190227.oqvpcfrro32ic32b@ti.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S240552AbhLURrX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Dec 2021 12:47:23 -0500
+Received: from mail-qk1-f169.google.com ([209.85.222.169]:36856 "EHLO
+        mail-qk1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230248AbhLURrW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Dec 2021 12:47:22 -0500
+Received: by mail-qk1-f169.google.com with SMTP id d21so13314493qkl.3;
+        Tue, 21 Dec 2021 09:47:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=enBZKRe45Eq3IaJ4YleNfTEAHY3TWjrKA5JUyvv9lv8=;
+        b=JeClEPBJLPcofypG3IvhakzxIQWzwUo8T5nVuG+Oqz/QEi2PQZDyAKVz+YxmYn+1jH
+         eV6lkdJ1u9IMcvOHuTtqZeBnEflI5buV485I7lYR/s/A3tf6syixl6gRskqXoMEtwU6A
+         OYN3zuV26/0pjwXX3SSEdpxNA6kJ2oBdZEbFmZzZb1G0tpBCMRe8hrb4o75MPNxC4Kdk
+         VEQcVtvThWZ/dkr8f98Vwkh/Lx7fsS+0wRQB/04eKty7uWHBjPlef10ywhO9XWDHa5sV
+         lkm37g5iAwWYOAsyEENpOO0nC+KoNsS5v7DNyPbnLj+l3Y9C/Dv8RiBUs12quY3zKroK
+         MOYA==
+X-Gm-Message-State: AOAM532DXlnhyPa5dZTTH1kWcvMaDeP7Tqr+eioqJqU0jOoLhC5hy35x
+        b928/F29M8bpTaYi6qZVBA==
+X-Google-Smtp-Source: ABdhPJz3OOPp5uAFgP2bRqUduxgScmvXC/dj9htul/5dPYzu+6NqrrafVrSjfakiGVyL6R3b5cnMvw==
+X-Received: by 2002:a05:620a:1496:: with SMTP id w22mr206198qkj.463.1640108841543;
+        Tue, 21 Dec 2021 09:47:21 -0800 (PST)
+Received: from robh.at.kernel.org ([24.55.105.145])
+        by smtp.gmail.com with ESMTPSA id ay42sm13916078qkb.40.2021.12.21.09.47.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 09:47:20 -0800 (PST)
+Received: (nullmailer pid 1484960 invoked by uid 1000);
+        Tue, 21 Dec 2021 17:47:16 -0000
+Date:   Tue, 21 Dec 2021 13:47:16 -0400
+From:   Rob Herring <robh@kernel.org>
+To:     conor.dooley@microchip.com
+Cc:     lee.jones@linaro.org, devicetree@vger.kernel.org,
+        aou@eecs.berkeley.edu, atish.patra@wdc.com,
+        linux-crypto@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-gpio@vger.kernel.org, heiko@sntech.de, geert@linux-m68k.org,
+        lewis.hanly@microchip.com, daire.mcnamara@microchip.com,
+        jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
+        robh+dt@kernel.org, u.kleine-koenig@pengutronix.de,
+        linux-rtc@vger.kernel.org, linus.walleij@linaro.org,
+        linux-riscv@lists.infradead.org, krzysztof.kozlowski@canonical.com,
+        palmer@dabbelt.com, bgolaszewski@baylibre.com,
+        ivan.griffin@microchip.com, linux-kernel@vger.kernel.org,
+        broonie@kernel.org, gregkh@linuxfoundation.org,
+        linux-i2c@vger.kernel.org, thierry.reding@gmail.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-spi@vger.kernel.org, linux-pwm@vger.kernel.org,
+        bin.meng@windriver.com
+Subject: Re: [PATCH v2 01/17] dt-bindings: interrupt-controller: create a
+ header for RISC-V interrupts
+Message-ID: <YcITJFfZ/U56MxBv@robh.at.kernel.org>
+References: <20211217093325.30612-1-conor.dooley@microchip.com>
+ <20211217093325.30612-2-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211217093325.30612-2-conor.dooley@microchip.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Pratyush,
-
-p.yadav@ti.com wrote on Tue, 21 Dec 2021 00:32:29 +0530:
-
-> On 17/12/21 05:16PM, Miquel Raynal wrote:
-> > Soon the SPI-NAND core will need a way to request a SPI controller to
-> > enable ECC support for a given operation. This is because of the
-> > pipelined integration of certain ECC engines, which are directly managed
-> > by the SPI controller itself.
-> > 
-> > Introduce a spi_mem_op additional field for this purpose: ecc_en.
-> > 
-> > So far this field is left unset and checked to be false by all
-> > the SPI controller drivers in their ->supports_op() hook, as they all
-> > call spi_mem_default_supports_op().
-> > 
-> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> > ---
-> >  drivers/spi/spi-mem.c       | 5 +++++
-> >  include/linux/spi/spi-mem.h | 5 +++++
-> >  2 files changed, 10 insertions(+)
-> > 
-> > diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-> > index cfe1c99db5f3..94758e7e747d 100644
-> > --- a/drivers/spi/spi-mem.c
-> > +++ b/drivers/spi/spi-mem.c
-> > @@ -178,6 +178,11 @@ bool spi_mem_default_supports_op(struct spi_mem *mem,
-> >  			return false;
-> >  	}
-> >  
-> > +	if (op->ecc_en) {
-> > +		if (!spi_mem_controller_is_capable(ctlr, ecc))
-> > +			return false;
-> > +	}
-> > +
-> >  	return spi_mem_check_buswidth(mem, op);
-> >  }
-> >  EXPORT_SYMBOL_GPL(spi_mem_default_supports_op);
-> > diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-> > index d7787c8f3746..e9238a858109 100644
-> > --- a/include/linux/spi/spi-mem.h
-> > +++ b/include/linux/spi/spi-mem.h
-> > @@ -94,6 +94,7 @@ enum spi_mem_data_dir {
-> >   *		 operation does not involve transferring data
-> >   * @data.buf.in: input buffer (must be DMA-able)
-> >   * @data.buf.out: output buffer (must be DMA-able)
-> > + * @ecc_en: error correction is required
-> >   */
-> >  struct spi_mem_op {
-> >  	struct {
-> > @@ -126,6 +127,8 @@ struct spi_mem_op {
-> >  			const void *out;
-> >  		} buf;
-> >  	} data;
-> > +
-> > +	bool ecc_en;  
+On Fri, 17 Dec 2021 09:33:09 +0000, conor.dooley@microchip.com wrote:
+> From: Ivan Griffin <ivan.griffin@microchip.com>
 > 
-> ECC should only concern the data phase right? Would it make more sense 
-> to move this field under data?
+> Provide named identifiers for device tree for RISC-V interrupts.
 > 
-> Anyway, I don't know much about NAND or ECC so either way,
-
-I've moved the field to the data struct because it makes indeed more
-sense. I've also changed the type and name to "u8 ecc : 1;" to match
-the style used for the dtr parameter.
-
+> Licensed under GPL and MIT, as this file may be useful to any OS that
+> uses device tree.
 > 
-> Acked-by: Pratyush Yadav <p.yadav@ti.com>
-> 
-> >  };
-> >  
-> >  #define SPI_MEM_OP(__cmd, __addr, __dummy, __data)		\
-> > @@ -223,9 +226,11 @@ static inline void *spi_mem_get_drvdata(struct spi_mem *mem)
-> >  /**
-> >   * struct spi_controller_mem_caps - SPI memory controller capabilities
-> >   * @dtr: Supports DTR operations
-> > + * @ecc: Supports operations with error correction
-> >   */
-> >  struct spi_controller_mem_caps {
-> >  	bool dtr;
-> > +	bool ecc;
-> >  };
-> >  
-> >  #define spi_mem_controller_is_capable(ctlr, cap)		\
-> > -- 
-> > 2.27.0
-> >   
+> Signed-off-by: Ivan Griffin <ivan.griffin@microchip.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../interrupt-controller/riscv-hart.h         | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+>  create mode 100644 include/dt-bindings/interrupt-controller/riscv-hart.h
 > 
 
-
-Thanks,
-Miquèl
+Acked-by: Rob Herring <robh@kernel.org>
