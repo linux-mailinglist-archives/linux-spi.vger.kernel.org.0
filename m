@@ -2,268 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8390347C55D
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Dec 2021 18:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A170247C593
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Dec 2021 18:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240586AbhLURtL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Dec 2021 12:49:11 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:37071 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbhLURtL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Dec 2021 12:49:11 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 02322200003;
-        Tue, 21 Dec 2021 17:49:08 +0000 (UTC)
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Michael Walle <michael@walle.cc>,
-        <linux-mtd@lists.infradead.org>
-Cc:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        Julien Su <juliensu@mxic.com.tw>,
-        Jaime Liao <jaimeliao@mxic.com.tw>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v8 14/14] spi: mxic: Add support for pipelined ECC operations
-Date:   Tue, 21 Dec 2021 18:48:44 +0100
-Message-Id: <20211221174844.56385-15-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20211221174844.56385-1-miquel.raynal@bootlin.com>
-References: <20211221174844.56385-1-miquel.raynal@bootlin.com>
+        id S240781AbhLURzl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Dec 2021 12:55:41 -0500
+Received: from mail-qk1-f171.google.com ([209.85.222.171]:34778 "EHLO
+        mail-qk1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240752AbhLURzj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Dec 2021 12:55:39 -0500
+Received: by mail-qk1-f171.google.com with SMTP id t6so13346038qkg.1;
+        Tue, 21 Dec 2021 09:55:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4GSGA/qwtNXG0IPZ01RqeQiJyKL3VoAZk2c0sbKkobg=;
+        b=hlfjFvMtD79EiL/LGYq82Z1elOoAOubXKDaCJkEHPoftWwakQIsYns8HVhu/mnQPum
+         2k1ZiIHWFYJYRo1XuE7Ni9+1ToDmJbOMqtJ7gWazRPyS0o0OsE8mFT5ZBwB6WnAryTYt
+         0Aogzc2pbINGNJQavvaoc4eE1/WzLf4de6pG6YL8vIavMjiDgeRedqTlGlAu6zqlGrq0
+         SShn+4CUa0bAvoN/dCtNBwnxUdYSIqdBc1uEFiEuZISrUs/Py5e7HjRIDexdJxhEjwsm
+         cCDzeljhIj/Q8KnwpHOYIQeEhB1wFJx873LVBp1XCjR+mfph2ZMhX45IpiA4k23p3+Or
+         Q/Xg==
+X-Gm-Message-State: AOAM531pTbm2BROPCb0zP4FG6ljA96TPzvJtT390rerLdu1ti+w1gYAk
+        0xHaYFz1lF6FU/pEHWvjWQ==
+X-Google-Smtp-Source: ABdhPJz5vgBn1TjeZtoc2YYKvQ+HmcEPZTFsNL3qHHc8SbteC0W1UmfcNlqbGX3NnNYb5boB3sk4Pg==
+X-Received: by 2002:a05:620a:258e:: with SMTP id x14mr2824830qko.578.1640109338673;
+        Tue, 21 Dec 2021 09:55:38 -0800 (PST)
+Received: from robh.at.kernel.org ([24.55.105.145])
+        by smtp.gmail.com with ESMTPSA id bm35sm14659623qkb.86.2021.12.21.09.55.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 09:55:38 -0800 (PST)
+Received: (nullmailer pid 1495705 invoked by uid 1000);
+        Tue, 21 Dec 2021 17:55:33 -0000
+Date:   Tue, 21 Dec 2021 13:55:33 -0400
+From:   Rob Herring <robh@kernel.org>
+To:     conor.dooley@microchip.com
+Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, broonie@kernel.org,
+        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        krzysztof.kozlowski@canonical.com, geert@linux-m68k.org,
+        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        atish.patra@wdc.com
+Subject: Re: [PATCH v2 03/17] dt-bindings: soc/microchip: make
+ systemcontroller a mfd
+Message-ID: <YcIVFZSqt/JSuk3J@robh.at.kernel.org>
+References: <20211217093325.30612-1-conor.dooley@microchip.com>
+ <20211217093325.30612-4-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211217093325.30612-4-conor.dooley@microchip.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Some SPI-NAND chips do not have a proper on-die ECC engine providing
-error correction/detection. This is particularly an issue on embedded
-devices with limited resources because all the computations must
-happen in software, unless an external hardware engine is provided.
+On Fri, Dec 17, 2021 at 09:33:11AM +0000, conor.dooley@microchip.com wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Make the system controller on the Polarfire SoC
+> a "simple,mfd" so that the services can be child
+> nodes of the system controller node.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../microchip,mpfs-sys-controller.yaml        | 33 +++++++++++++++++--
+>  1 file changed, 30 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+> index f699772fedf3..014cb44b8f31 100644
+> --- a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+> +++ b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+> @@ -13,13 +13,34 @@ description: |
+>    The PolarFire SoC system controller is communicated with via a mailbox.
+>    This document describes the bindings for the client portion of that mailbox.
+>  
+> -
+>  properties:
+>    mboxes:
+>      maxItems: 1
+>  
+>    compatible:
+> -    const: microchip,mpfs-sys-controller
+> +    items:
+> +      - const: microchip,mpfs-sys-controller
+> +      - const: simple-mfd
 
-These external engines are new and can be of two categories: external
-or pipelined. Macronix is providing both, the former being already
-supported. The second, however, is very SoC implementation dependent
-and must be instantiated by the SPI host controller directly.
+'simple-mfd' means there is zero dependency on the parent for the child 
+nodes. Isn't 'mboxes' a dependency?
 
-An entire subsystem has been contributed to support these engines which
-makes the insertion into another subsystem such as SPI quite
-straightforward without the need for a lot of specific functions.
+> +
+> +  hwrandom:
+> +    type: object
+> +
+> +    properties:
+> +      compatible:
+> +        const: microchip,mpfs-rng
+> +
+> +    required:
+> +      - compatible
+> +
+> +  sysserv:
+> +    type: object
+> +
+> +    properties:
+> +      compatible:
+> +        const: microchip,mpfs-generic-service
+> +
+> +    required:
+> +      - compatible
 
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Reviewed-by: Mark Brown <broonie@kernel.org>
----
- drivers/spi/Kconfig    |   2 +-
- drivers/spi/spi-mxic.c | 113 ++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 112 insertions(+), 3 deletions(-)
+There's not really any need to have child nodes which have no resources. 
+The driver for microchip,mpfs-sys-controller can create child devices.
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 83e352b0c8f9..bff75629e872 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -856,7 +856,7 @@ config SPI_SYNQUACER
- 
- config SPI_MXIC
- 	tristate "Macronix MX25F0A SPI controller"
--	depends on SPI_MASTER
-+	depends on SPI_MASTER && MTD_NAND_ECC
- 	help
- 	  This selects the Macronix MX25F0A SPI controller driver.
- 
-diff --git a/drivers/spi/spi-mxic.c b/drivers/spi/spi-mxic.c
-index 97de058d2f80..40283126a941 100644
---- a/drivers/spi/spi-mxic.c
-+++ b/drivers/spi/spi-mxic.c
-@@ -12,6 +12,8 @@
- #include <linux/io.h>
- #include <linux/iopoll.h>
- #include <linux/module.h>
-+#include <linux/mtd/nand.h>
-+#include <linux/mtd/nand-ecc-mxic.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/spi/spi.h>
-@@ -167,6 +169,7 @@
- #define HW_TEST(x)		(0xe0 + ((x) * 4))
- 
- struct mxic_spi {
-+	struct device *dev;
- 	struct clk *ps_clk;
- 	struct clk *send_clk;
- 	struct clk *send_dly_clk;
-@@ -177,6 +180,12 @@ struct mxic_spi {
- 		dma_addr_t dma;
- 		size_t size;
- 	} linear;
-+
-+	struct {
-+		bool use_pipelined_conf;
-+		struct nand_ecc_engine *pipelined_engine;
-+		void *ctx;
-+	} ecc;
- };
- 
- static int mxic_spi_clk_enable(struct mxic_spi *mxic)
-@@ -400,7 +409,15 @@ static ssize_t mxic_spi_mem_dirmap_read(struct spi_mem_dirmap_desc *desc,
- 	       LMODE_EN,
- 	       mxic->regs + LRD_CTRL);
- 
--	memcpy_fromio(buf, mxic->linear.map, len);
-+	if (mxic->ecc.use_pipelined_conf && desc->info.op_tmpl.data.ecc) {
-+		ret = mxic_ecc_process_data_pipelined(mxic->ecc.pipelined_engine,
-+						      NAND_PAGE_READ,
-+						      mxic->linear.dma + offs);
-+		if (ret)
-+			return ret;
-+	} else {
-+		memcpy_fromio(buf, mxic->linear.map, len);
-+	}
- 
- 	writel(INT_LRD_DIS, mxic->regs + INT_STS);
- 	writel(0, mxic->regs + LRD_CTRL);
-@@ -436,7 +453,15 @@ static ssize_t mxic_spi_mem_dirmap_write(struct spi_mem_dirmap_desc *desc,
- 	       LMODE_EN,
- 	       mxic->regs + LWR_CTRL);
- 
--	memcpy_toio(mxic->linear.map, buf, len);
-+	if (mxic->ecc.use_pipelined_conf && desc->info.op_tmpl.data.ecc) {
-+		ret = mxic_ecc_process_data_pipelined(mxic->ecc.pipelined_engine,
-+						      NAND_PAGE_WRITE,
-+						      mxic->linear.dma + offs);
-+		if (ret)
-+			return ret;
-+	} else {
-+		memcpy_toio(mxic->linear.map, buf, len);
-+	}
- 
- 	writel(INT_LWR_DIS, mxic->regs + INT_STS);
- 	writel(0, mxic->regs + LWR_CTRL);
-@@ -539,6 +564,7 @@ static int mxic_spi_mem_exec_op(struct spi_mem *mem,
- 
- static const struct spi_controller_mem_caps mxic_spi_mem_caps = {
- 	.dtr = true,
-+	.ecc = true,
- };
- 
- static const struct spi_controller_mem_ops mxic_spi_mem_ops = {
-@@ -612,6 +638,80 @@ static int mxic_spi_transfer_one(struct spi_master *master,
- 	return 0;
- }
- 
-+/* ECC wrapper */
-+static int mxic_spi_mem_ecc_init_ctx(struct nand_device *nand)
-+{
-+	struct nand_ecc_engine_ops *ops = mxic_ecc_get_pipelined_ops();
-+	struct mxic_spi *mxic = nand->ecc.engine->priv;
-+
-+	mxic->ecc.use_pipelined_conf = true;
-+
-+	return ops->init_ctx(nand);
-+}
-+
-+static void mxic_spi_mem_ecc_cleanup_ctx(struct nand_device *nand)
-+{
-+	struct nand_ecc_engine_ops *ops = mxic_ecc_get_pipelined_ops();
-+	struct mxic_spi *mxic = nand->ecc.engine->priv;
-+
-+	mxic->ecc.use_pipelined_conf = false;
-+
-+	ops->cleanup_ctx(nand);
-+}
-+
-+static int mxic_spi_mem_ecc_prepare_io_req(struct nand_device *nand,
-+					   struct nand_page_io_req *req)
-+{
-+	struct nand_ecc_engine_ops *ops = mxic_ecc_get_pipelined_ops();
-+
-+	return ops->prepare_io_req(nand, req);
-+}
-+
-+static int mxic_spi_mem_ecc_finish_io_req(struct nand_device *nand,
-+					  struct nand_page_io_req *req)
-+{
-+	struct nand_ecc_engine_ops *ops = mxic_ecc_get_pipelined_ops();
-+
-+	return ops->finish_io_req(nand, req);
-+}
-+
-+static struct nand_ecc_engine_ops mxic_spi_mem_ecc_engine_pipelined_ops = {
-+	.init_ctx = mxic_spi_mem_ecc_init_ctx,
-+	.cleanup_ctx = mxic_spi_mem_ecc_cleanup_ctx,
-+	.prepare_io_req = mxic_spi_mem_ecc_prepare_io_req,
-+	.finish_io_req = mxic_spi_mem_ecc_finish_io_req,
-+};
-+
-+static void mxic_spi_mem_ecc_remove(struct mxic_spi *mxic)
-+{
-+	if (mxic->ecc.pipelined_engine) {
-+		mxic_ecc_put_pipelined_engine(mxic->ecc.pipelined_engine);
-+		nand_ecc_unregister_on_host_hw_engine(mxic->ecc.pipelined_engine);
-+	}
-+}
-+
-+static int mxic_spi_mem_ecc_probe(struct platform_device *pdev,
-+				  struct mxic_spi *mxic)
-+{
-+	struct nand_ecc_engine *eng;
-+
-+	if (!mxic_ecc_get_pipelined_ops())
-+		return -EOPNOTSUPP;
-+
-+	eng = mxic_ecc_get_pipelined_engine(pdev);
-+	if (IS_ERR(eng))
-+		return PTR_ERR(eng);
-+
-+	eng->dev = &pdev->dev;
-+	eng->integration = NAND_ECC_ENGINE_INTEGRATION_PIPELINED;
-+	eng->ops = &mxic_spi_mem_ecc_engine_pipelined_ops;
-+	eng->priv = mxic;
-+	mxic->ecc.pipelined_engine = eng;
-+	nand_ecc_register_on_host_hw_engine(eng);
-+
-+	return 0;
-+}
-+
- static int __maybe_unused mxic_spi_runtime_suspend(struct device *dev)
- {
- 	struct spi_master *master = dev_get_drvdata(dev);
-@@ -657,6 +757,7 @@ static int mxic_spi_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, master);
- 
- 	mxic = spi_master_get_devdata(master);
-+	mxic->dev = &pdev->dev;
- 
- 	master->dev.of_node = pdev->dev.of_node;
- 
-@@ -702,6 +803,12 @@ static int mxic_spi_probe(struct platform_device *pdev)
- 
- 	mxic_spi_hw_init(mxic);
- 
-+	ret = mxic_spi_mem_ecc_probe(pdev, mxic);
-+	if (ret == -EPROBE_DEFER) {
-+		pm_runtime_disable(&pdev->dev);
-+		return ret;
-+	}
-+
- 	ret = spi_register_master(master);
- 	if (ret) {
- 		dev_err(&pdev->dev, "spi_register_master failed\n");
-@@ -714,8 +821,10 @@ static int mxic_spi_probe(struct platform_device *pdev)
- static int mxic_spi_remove(struct platform_device *pdev)
- {
- 	struct spi_master *master = platform_get_drvdata(pdev);
-+	struct mxic_spi *mxic = spi_master_get_devdata(master);
- 
- 	pm_runtime_disable(&pdev->dev);
-+	mxic_spi_mem_ecc_remove(mxic);
- 	spi_unregister_master(master);
- 
- 	return 0;
--- 
-2.27.0
-
+Rob
