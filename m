@@ -2,19 +2,19 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 420C647BCF3
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Dec 2021 10:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F271947BDB9
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Dec 2021 10:51:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234513AbhLUJfi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Tue, 21 Dec 2021 04:35:38 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:41605 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233216AbhLUJfi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Dec 2021 04:35:38 -0500
+        id S229904AbhLUJvH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Tue, 21 Dec 2021 04:51:07 -0500
+Received: from relay10.mail.gandi.net ([217.70.178.230]:52561 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229441AbhLUJvH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Dec 2021 04:51:07 -0500
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 71A42240004;
-        Tue, 21 Dec 2021 09:35:33 +0000 (UTC)
-Date:   Tue, 21 Dec 2021 10:35:31 +0100
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 471A9240006;
+        Tue, 21 Dec 2021 09:51:00 +0000 (UTC)
+Date:   Tue, 21 Dec 2021 10:50:58 +0100
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Pratyush Yadav <p.yadav@ti.com>
 Cc:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
@@ -26,12 +26,13 @@ Cc:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
         Jaime Liao <jaimeliao@mxic.com.tw>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Boris Brezillon <boris.brezillon@collabora.com>
-Subject: Re: [PATCH v7 02/14] spi: spi-mem: Introduce a capability structure
-Message-ID: <20211221103531.1fc1c788@xps13>
-In-Reply-To: <20211220184323.cfbd5ypintmz2xrq@ti.com>
+Subject: Re: [PATCH v7 01/14] spi: spi-mem: Fix a DTR related check in
+ spi_mem_dtr_supports_op()
+Message-ID: <20211221105058.69822ac5@xps13>
+In-Reply-To: <20211220183917.m3mywavgxsgq7yar@ti.com>
 References: <20211217161654.367782-1-miquel.raynal@bootlin.com>
-        <20211217161654.367782-3-miquel.raynal@bootlin.com>
-        <20211220184323.cfbd5ypintmz2xrq@ti.com>
+        <20211217161654.367782-2-miquel.raynal@bootlin.com>
+        <20211220183917.m3mywavgxsgq7yar@ti.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
@@ -43,85 +44,43 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi Pratyush,
 
-p.yadav@ti.com wrote on Tue, 21 Dec 2021 00:13:25 +0530:
+p.yadav@ti.com wrote on Tue, 21 Dec 2021 00:09:19 +0530:
 
 > On 17/12/21 05:16PM, Miquel Raynal wrote:
-> > Create a spi_controller_mem_caps structure and put it within the
-> > spi_controller_mem_ops structure as these are highly related. So far the
-> > only field in this structure is the support for dtr operations, but soon
-> > we will add another parameter.
-> > 
-> > Also create a helper to parse the capabilities and check if the
-> > requested capability has been set or not.
-> > 
-> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> > ---
-> >  include/linux/spi/spi-mem.h | 13 +++++++++++++
-> >  1 file changed, 13 insertions(+)
-> > 
-> > diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-> > index 85e2ff7b840d..045ecb7c6f50 100644
-> > --- a/include/linux/spi/spi-mem.h
-> > +++ b/include/linux/spi/spi-mem.h
-> > @@ -220,6 +220,17 @@ static inline void *spi_mem_get_drvdata(struct spi_mem *mem)
-> >  	return mem->drvpriv;
-> >  }
-> >  
-> > +/**
-> > + * struct spi_controller_mem_caps - SPI memory controller capabilities
-> > + * @dtr: Supports DTR operations
-> > + */
-> > +struct spi_controller_mem_caps {
-> > +	bool dtr;  
+> > It seems that the number of command bytes must be "2" only when the
+> > command itself is sent in DTR mode. The current logic checks if the
+> > number of command bytes is "2" when any of the cycles is a DTR cycle. It
+> > is likely that so far no device was actually mixing DTR/non-DTR cycles
+> > in the same operation, explaining why this was left undetected until
+> > now.  
 > 
-> I assume this would mean DTR is supported on _all_ phases? I am not sure 
-> if we would ever need to encode DTR support per-phase, but that can 
-> probably come later. Or the controller's supports_op() hook can do those 
-> checks before calling spi_mem_default_supports_op().
+> This was intentional. spi_mem_dtr_supports_op() must only be called when 
+> the operation is DTR in all phases so I did not add any sanity checks if 
+> someone was using it for non-DTR ops.
 
-If we ever need this there is no problem: the idea here is to provide a
-default (and for this one the naming is rather good =) ) helper to do
-basic checks. A controller either supports DTR ops or not. If it does
-not support them, then this check will fail. But like the Cadence SPI
-controller driver does, if only one specific configuration is not
-supported by the driver, then the ->supports_op() hook of the driver
-should check that beforehand and return an error [1].
+Maybe that was the original intention but since then the Macronix
+driver has been merged and supports (at lest does not reject) these
+modes.
 
-
-[1] https://elixir.bootlin.com/linux/latest/source/drivers/spi/spi-cadence-quadspi.c#L1253
-
-> > +};
-> > +
-> > +#define spi_mem_controller_is_capable(ctlr, cap)		\
-> > +	((ctlr)->mem_ops->caps && (ctlr)->mem_ops->caps->cap)	\
-> > +
-> >  /**
-> >   * struct spi_controller_mem_ops - SPI memory operations
-> >   * @adjust_op_size: shrink the data xfer of an operation to match controller's
-> > @@ -253,6 +264,7 @@ static inline void *spi_mem_get_drvdata(struct spi_mem *mem)
-> >   * @poll_status: poll memory device status until (status & mask) == match or
-> >   *               when the timeout has expired. It fills the data buffer with
-> >   *               the last status value.
-> > + * @caps: controller capabilities for the handling of the above operations.
-> >   *
-> >   * This interface should be implemented by SPI controllers providing an
-> >   * high-level interface to execute SPI memory operation, which is usually the
-> > @@ -283,6 +295,7 @@ struct spi_controller_mem_ops {
-> >  			   unsigned long initial_delay_us,
-> >  			   unsigned long polling_rate_us,
-> >  			   unsigned long timeout_ms);
-> > +	const struct spi_controller_mem_caps *caps;  
+> In fact, I added on to this 
+> function in [0] to check nbytes for other phases as well. The patch fell 
+> off my radar unfortunately, and it didn't get merged.
 > 
-> I feel like this would be better passed in as an argument to the 
-> spi_mem_default_supports_op() function. But I see that Mark and you feel 
-> differently so I won't insist on it.
+> I would like to keep this as it is since we have no user of mixed 
+> DTR/non-DTR modes yet.
 
-As these properties are supposes to be more or less static over the
-lifetime of the controller we assumed there was no need for something
-more dynamic. Anyway this is a default helper, drivers are pleased to
-implement their own if needed. Plus, doing so prevents the need for
-hacking into dozens of drivers, which is certainly the reason I
-personally like the most :p 
+I don't know if the Macronix driver really supports it or if it is the
+driver that is doing the wrong checks but in appearance such mixed mode
+could be used.
+
+> But if you really want to support it, please 
+> apply my patch first to make sure we check for every phase, not just 
+> command.
+> 
+> [0] https://lore.kernel.org/all/20210531181757.19458-5-p.yadav@ti.com/
+
+Nice, I might take that as well indeed in order to make the checks a
+little bit more robust.
 
 Thanks,
 Miquèl
