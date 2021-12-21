@@ -2,18 +2,18 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1866A47C459
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Dec 2021 18:01:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5736347C45B
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Dec 2021 18:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240100AbhLURBG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Dec 2021 12:01:06 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:51509 "EHLO
+        id S240102AbhLURBI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Dec 2021 12:01:08 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:46521 "EHLO
         relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232563AbhLURBF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Dec 2021 12:01:05 -0500
+        with ESMTP id S240099AbhLURBG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Dec 2021 12:01:06 -0500
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id AC8A8240005;
-        Tue, 21 Dec 2021 17:00:59 +0000 (UTC)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 908D2240003;
+        Tue, 21 Dec 2021 17:01:03 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>
 Cc:     Michal Simek <monstr@monstr.eu>,
@@ -25,11 +25,14 @@ Cc:     Michal Simek <monstr@monstr.eu>,
         Pratyush Yadav <p.yadav@ti.com>,
         Michael Walle <michael@walle.cc>,
         <linux-mtd@lists.infradead.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v5 0/3] Stacked/parallel memories bindings
-Date:   Tue, 21 Dec 2021 18:00:55 +0100
-Message-Id: <20211221170058.18333-1-miquel.raynal@bootlin.com>
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v5 1/3] dt-bindings: mtd: spi-nor: Allow two CS per device
+Date:   Tue, 21 Dec 2021 18:00:56 +0100
+Message-Id: <20211221170058.18333-2-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20211221170058.18333-1-miquel.raynal@bootlin.com>
+References: <20211221170058.18333-1-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -37,58 +40,45 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Rob, Mark, Tudor & Pratyush,
+The Xilinx QSPI controller has two advanced modes which allow the
+controller to behave differently and consider two flashes as one single
+storage.
 
-Here is a fifth versions for these bindings, which applies on top of
-Pratyush's work:
-https://lore.kernel.org/all/20211109181911.2251-1-p.yadav@ti.com/
+One of these two modes is quite complex to support from a binding point
+of view and is the dual parallel memories. In this mode, each byte of
+data is stored in both devices: the even bits in one, the odd bits in
+the other. The split is automatically handled by the QSPI controller and
+is transparent for the user.
 
-Cheers,
-Miquèl
+The other mode is simpler to support, it is called dual stacked
+memories. The controller shares the same SPI bus but each of the devices
+contain half of the data. Once in this mode, the controller does not
+follow CS requests but instead internally wires the two CS levels with
+the value of the most significant address bit.
 
-Changes in v5:
-* Used the uint64-array instead of the matrix type.
-* Updated the example as well to use a single "/bits/ 64" cast because
-  doing it twice, despite being supported by the language itself, is not
-  yet something that we can use for describing bindings.
+Supporting these two modes will involve core changes which include the
+possibility of providing two CS for a single SPI device
 
-Changes in v4:
-* Changed the type of properties to uint64-arrays in order to be able to
-  describe the size of each element in the array.
-* Updated the example accordingly.
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Acked-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Changes in v3:
-* Rebased on top of Pratyush's recent changes.
-* Dropped the commit allowing to provide two reg entries on the node
-  name.
-* Dropped the commit referencing spi-controller.yaml from
-  jedec,spi-nor.yaml, now replaced by spi-peripheral-props.yaml and
-  already done in Pratyush's series.
-* Added Rob's Ack.
-* Enhanced a commit message.
-* Moved the new properties to the new SPI peripheral binding file.
-
-Changes in v2:
-* Dropped the dtc changes for now.
-* Moved the properties in the device's nodes, not the controller's.
-* Dropped the useless #address-cells change.
-* Added a missing "minItems".
-* Moved the new properties in the spi-controller.yaml file.
-* Added an example using two stacked memories in the
-  spi-controller.yaml file.
-* Renamed the properties to drop the Xilinx prefix.
-* Added a patch to fix the spi-nor jedec yaml file.
-
-Miquel Raynal (3):
-  dt-bindings: mtd: spi-nor: Allow two CS per device
-  spi: dt-bindings: Describe stacked/parallel memories modes
-  spi: dt-bindings: Add an example with two stacked flashes
-
- .../bindings/mtd/jedec,spi-nor.yaml           |  3 ++-
- .../bindings/spi/spi-controller.yaml          |  7 ++++++
- .../bindings/spi/spi-peripheral-props.yaml    | 25 +++++++++++++++++++
- 3 files changed, 34 insertions(+), 1 deletion(-)
-
+diff --git a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+index 39421f7233e4..4abfb4cfc157 100644
+--- a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
++++ b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+@@ -47,7 +47,8 @@ properties:
+       identified by the JEDEC READ ID opcode (0x9F).
+ 
+   reg:
+-    maxItems: 1
++    minItems: 1
++    maxItems: 2
+ 
+   spi-max-frequency: true
+   spi-rx-bus-width: true
 -- 
 2.27.0
 
