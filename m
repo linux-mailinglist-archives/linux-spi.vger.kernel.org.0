@@ -2,18 +2,18 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5736347C45B
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Dec 2021 18:01:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0251D47C45D
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Dec 2021 18:01:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240102AbhLURBI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Dec 2021 12:01:08 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:46521 "EHLO
+        id S240110AbhLURBK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Dec 2021 12:01:10 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:55447 "EHLO
         relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240099AbhLURBG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Dec 2021 12:01:06 -0500
+        with ESMTP id S240103AbhLURBI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Dec 2021 12:01:08 -0500
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 908D2240003;
-        Tue, 21 Dec 2021 17:01:03 +0000 (UTC)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 91CBB240008;
+        Tue, 21 Dec 2021 17:01:05 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>
 Cc:     Michal Simek <monstr@monstr.eu>,
@@ -25,11 +25,10 @@ Cc:     Michal Simek <monstr@monstr.eu>,
         Pratyush Yadav <p.yadav@ti.com>,
         Michael Walle <michael@walle.cc>,
         <linux-mtd@lists.infradead.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v5 1/3] dt-bindings: mtd: spi-nor: Allow two CS per device
-Date:   Tue, 21 Dec 2021 18:00:56 +0100
-Message-Id: <20211221170058.18333-2-miquel.raynal@bootlin.com>
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH v5 2/3] spi: dt-bindings: Describe stacked/parallel memories modes
+Date:   Tue, 21 Dec 2021 18:00:57 +0100
+Message-Id: <20211221170058.18333-3-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20211221170058.18333-1-miquel.raynal@bootlin.com>
 References: <20211221170058.18333-1-miquel.raynal@bootlin.com>
@@ -40,45 +39,81 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The Xilinx QSPI controller has two advanced modes which allow the
-controller to behave differently and consider two flashes as one single
-storage.
-
-One of these two modes is quite complex to support from a binding point
-of view and is the dual parallel memories. In this mode, each byte of
-data is stored in both devices: the even bits in one, the odd bits in
-the other. The split is automatically handled by the QSPI controller and
-is transparent for the user.
-
-The other mode is simpler to support, it is called dual stacked
-memories. The controller shares the same SPI bus but each of the devices
-contain half of the data. Once in this mode, the controller does not
-follow CS requests but instead internally wires the two CS levels with
-the value of the most significant address bit.
-
-Supporting these two modes will involve core changes which include the
-possibility of providing two CS for a single SPI device
+Describe two new memories modes:
+- A stacked mode when the bus is common but the address space extended
+  with an additinals wires.
+- A parallel mode with parallel busses accessing parallel flashes where
+  the data is spread.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
-index 39421f7233e4..4abfb4cfc157 100644
---- a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
-+++ b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
-@@ -47,7 +47,8 @@ properties:
-       identified by the JEDEC READ ID opcode (0x9F).
+Hello Rob,
+
+I know the below does not pass the tests (at least the example patch 3
+does not pass) but I believe the issue is probably on the tooling side
+because the exact same thing with uing32-array instead is accepted. The
+problem comes from the minItems/maxItems lines. Without them, this is
+okay. The maxItems btw matches the "good enough value for now" idea.
+
+The errors I get are:
+
+$ make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/spi-controller.yaml
+  LINT    Documentation/devicetree/bindings
+  CHKDT   Documentation/devicetree/bindings/processed-schema-examples.json
+  SCHEMA  Documentation/devicetree/bindings/processed-schema-examples.json
+  DTEX    Documentation/devicetree/bindings/spi/spi-controller.example.dts
+  DTC     Documentation/devicetree/bindings/spi/spi-controller.example.dt.yaml
+  CHECK   Documentation/devicetree/bindings/spi/spi-controller.example.dt.yaml
+/src/Documentation/devicetree/bindings/spi/spi-controller.example.dt.yaml: spi@80010000: flash@2:stacked-memories: [[268435456, 268435456]] is too short
+	From schema: /src/Documentation/devicetree/bindings/spi/spi-controller.yaml
+/src/Documentation/devicetree/bindings/spi/spi-controller.example.dt.yaml: spi@80010000: flash@2:stacked-memories: [[268435456, 268435456]] is too short
+	From schema: /src/Documentation/devicetree/bindings/spi/mxs-spi.yaml
+/src/Documentation/devicetree/bindings/spi/spi-controller.example.dt.yaml: spi@80010000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'display@0', 'sensor@1', 'flash@2' were unexpected)
+	From schema: /src/Documentation/devicetree/bindings/spi/mxs-spi.yaml
+/src/Documentation/devicetree/bindings/spi/spi-controller.example.dt.yaml: flash@2: stacked-memories: [[268435456, 268435456]] is too short
+	From schema: /src/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+
+
+ .../bindings/spi/spi-peripheral-props.yaml    | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+index 5dd209206e88..fedb7ae98ff6 100644
+--- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+@@ -82,6 +82,31 @@ properties:
+     description:
+       Delay, in microseconds, after a write transfer.
  
-   reg:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 2
- 
-   spi-max-frequency: true
-   spi-rx-bus-width: true
++  stacked-memories:
++    description: Several SPI memories can be wired in stacked mode.
++      This basically means that either a device features several chip
++      selects, or that different devices must be seen as a single
++      bigger chip. This basically doubles (or more) the total address
++      space with only a single additional wire, while still needing
++      to repeat the commands when crossing a chip boundary. The size of
++      each chip should be provided as members of the array.
++    $ref: /schemas/types.yaml#/definitions/uint64-array
++    minItems: 2
++    maxItems: 4
++
++  parallel-memories:
++    description: Several SPI memories can be wired in parallel mode.
++      The devices are physically on a different buses but will always
++      act synchronously as each data word is spread across the
++      different memories (eg. even bits are stored in one memory, odd
++      bits in the other). This basically doubles the address space and
++      the throughput while greatly complexifying the wiring because as
++      many busses as devices must be wired. The size of each chip should
++      be provided as members of the array.
++    $ref: /schemas/types.yaml#/definitions/uint64-array
++    minItems: 2
++    maxItems: 4
++
+ # The controller specific properties go here.
+ allOf:
+   - $ref: cdns,qspi-nor-peripheral-props.yaml#
 -- 
 2.27.0
 
