@@ -2,18 +2,18 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC04247C54F
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Dec 2021 18:48:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8BAA47C550
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Dec 2021 18:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240571AbhLURsw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Dec 2021 12:48:52 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:40627 "EHLO
+        id S240570AbhLURsx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 21 Dec 2021 12:48:53 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:33383 "EHLO
         relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240570AbhLURsw (ORCPT
+        with ESMTP id S230248AbhLURsw (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Dec 2021 12:48:52 -0500
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 0FC53200005;
-        Tue, 21 Dec 2021 17:48:48 +0000 (UTC)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 8305C200006;
+        Tue, 21 Dec 2021 17:48:50 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
@@ -28,9 +28,9 @@ Cc:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v8 01/14] spi: spi-mem: reject partial cycle transfers in
-Date:   Tue, 21 Dec 2021 18:48:31 +0100
-Message-Id: <20211221174844.56385-2-miquel.raynal@bootlin.com>
+Subject: [PATCH v8 02/14] spi: spi-mem: Introduce a capability structure
+Date:   Tue, 21 Dec 2021 18:48:32 +0100
+Message-Id: <20211221174844.56385-3-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20211221174844.56385-1-miquel.raynal@bootlin.com>
 References: <20211221174844.56385-1-miquel.raynal@bootlin.com>
@@ -41,42 +41,57 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Pratyush Yadav <p.yadav@ti.com>
+Create a spi_controller_mem_caps structure and put it within the
+spi_controller_mem_ops structure as these are highly related. So far the
+only field in this structure is the support for dtr operations, but soon
+we will add another parameter.
 
-In 8D-8D-8D mode two bytes are transferred per cycle. So an odd number
-of bytes cannot be transferred because it would leave a residual half
-cycle at the end. Consider such a transfer invalid and reject it.
+Also create a helper to parse the capabilities and check if the
+requested capability has been set or not.
 
-Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-Reviewed-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/spi/spi-mem.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ include/linux/spi/spi-mem.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-index 37f4443ce9a0..1dfd38d82607 100644
---- a/drivers/spi/spi-mem.c
-+++ b/drivers/spi/spi-mem.c
-@@ -163,7 +163,17 @@ static bool spi_mem_check_buswidth(struct spi_mem *mem,
- bool spi_mem_dtr_supports_op(struct spi_mem *mem,
- 			     const struct spi_mem_op *op)
- {
--	if (op->cmd.nbytes != 2)
-+	if (op->cmd.buswidth == 8 && op->cmd.nbytes % 2)
-+		return false;
-+
-+	if (op->addr.nbytes && op->addr.buswidth == 8 && op->addr.nbytes % 2)
-+		return false;
-+
-+	if (op->dummy.nbytes && op->dummy.buswidth == 8 && op->dummy.nbytes % 2)
-+		return false;
-+
-+	if (op->data.dir != SPI_MEM_NO_DATA &&
-+	    op->dummy.buswidth == 8 && op->data.nbytes % 2)
- 		return false;
+diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
+index 85e2ff7b840d..045ecb7c6f50 100644
+--- a/include/linux/spi/spi-mem.h
++++ b/include/linux/spi/spi-mem.h
+@@ -220,6 +220,17 @@ static inline void *spi_mem_get_drvdata(struct spi_mem *mem)
+ 	return mem->drvpriv;
+ }
  
- 	return spi_mem_check_buswidth(mem, op);
++/**
++ * struct spi_controller_mem_caps - SPI memory controller capabilities
++ * @dtr: Supports DTR operations
++ */
++struct spi_controller_mem_caps {
++	bool dtr;
++};
++
++#define spi_mem_controller_is_capable(ctlr, cap)		\
++	((ctlr)->mem_ops->caps && (ctlr)->mem_ops->caps->cap)	\
++
+ /**
+  * struct spi_controller_mem_ops - SPI memory operations
+  * @adjust_op_size: shrink the data xfer of an operation to match controller's
+@@ -253,6 +264,7 @@ static inline void *spi_mem_get_drvdata(struct spi_mem *mem)
+  * @poll_status: poll memory device status until (status & mask) == match or
+  *               when the timeout has expired. It fills the data buffer with
+  *               the last status value.
++ * @caps: controller capabilities for the handling of the above operations.
+  *
+  * This interface should be implemented by SPI controllers providing an
+  * high-level interface to execute SPI memory operation, which is usually the
+@@ -283,6 +295,7 @@ struct spi_controller_mem_ops {
+ 			   unsigned long initial_delay_us,
+ 			   unsigned long polling_rate_us,
+ 			   unsigned long timeout_ms);
++	const struct spi_controller_mem_caps *caps;
+ };
+ 
+ /**
 -- 
 2.27.0
 
