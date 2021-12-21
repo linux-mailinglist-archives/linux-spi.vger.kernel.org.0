@@ -2,81 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 366AC47B88C
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Dec 2021 03:51:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 420C647BCF3
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Dec 2021 10:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233927AbhLUCvH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 20 Dec 2021 21:51:07 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53044 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233891AbhLUCvG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 20 Dec 2021 21:51:06 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B9C4B8108E;
-        Tue, 21 Dec 2021 02:51:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E090C36AE8;
-        Tue, 21 Dec 2021 02:51:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640055064;
-        bh=MWsSe+f/4lMO4ek8jRQKfguvVlMxW/ReWXj6iBmyEvg=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=X/O5ikSYgLXRodJDAAnqTOhuyNlIrIuAM9T9rObSgJhXQe5hi4q16Rk8N2mHD8I46
-         4USHq6FL8+6WYdYrCJImrmzYsf6nfp5buosLqARxr2fWRfGqN5+8sjW/gF2/AOHuDN
-         Dog2B/4btB9HkKiGIiq3W51b/jXTK92gMdlnGMxwG3xz3Sh7R/CsxRkLy8+OlxdBeM
-         JRSEktZ+eF9/9Mb94GreDbTS+qVwp48oUZcHjDWOTsNiOUKMLv3XYfTO5ML+36dQTq
-         QZdMJA/LXkiKHdsQbgX9e1A4OQEsC29ny2QgaCHsod7CrF/VkaovlZG8lFE0GWPPCz
-         fHTFL8WWctCVA==
-From:   Mark Brown <broonie@kernel.org>
-To:     linus.walleij@linaro.org, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, Tinghan Shen <tinghan.shen@mediatek.com>
-Cc:     linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        bayi.cheng@mediatek.com, sean.wang@mediatek.com,
-        linux-arm-kernel@lists.infradead.org, gch981213@gmail.com,
-        bgolaszewski@baylibre.com, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-In-Reply-To: <20211220121825.6446-1-tinghan.shen@mediatek.com>
-References: <20211220121825.6446-1-tinghan.shen@mediatek.com>
-Subject: Re: (subset) [PATCH v7 0/4] Add basic SoC support for mediatek mt8195
-Message-Id: <164005506109.2648034.14953790658708739553.b4-ty@kernel.org>
-Date:   Tue, 21 Dec 2021 02:51:01 +0000
+        id S234513AbhLUJfi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Tue, 21 Dec 2021 04:35:38 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:41605 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233216AbhLUJfi (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 21 Dec 2021 04:35:38 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 71A42240004;
+        Tue, 21 Dec 2021 09:35:33 +0000 (UTC)
+Date:   Tue, 21 Dec 2021 10:35:31 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        <linux-mtd@lists.infradead.org>, Julien Su <juliensu@mxic.com.tw>,
+        Jaime Liao <jaimeliao@mxic.com.tw>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+Subject: Re: [PATCH v7 02/14] spi: spi-mem: Introduce a capability structure
+Message-ID: <20211221103531.1fc1c788@xps13>
+In-Reply-To: <20211220184323.cfbd5ypintmz2xrq@ti.com>
+References: <20211217161654.367782-1-miquel.raynal@bootlin.com>
+        <20211217161654.367782-3-miquel.raynal@bootlin.com>
+        <20211220184323.cfbd5ypintmz2xrq@ti.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 20 Dec 2021 20:18:21 +0800, Tinghan Shen wrote:
-> This series adds basic SoC support for Mediatek's SoC MT8195.
+Hi Pratyush,
+
+p.yadav@ti.com wrote on Tue, 21 Dec 2021 00:13:25 +0530:
+
+> On 17/12/21 05:16PM, Miquel Raynal wrote:
+> > Create a spi_controller_mem_caps structure and put it within the
+> > spi_controller_mem_ops structure as these are highly related. So far the
+> > only field in this structure is the support for dtr operations, but soon
+> > we will add another parameter.
+> > 
+> > Also create a helper to parse the capabilities and check if the
+> > requested capability has been set or not.
+> > 
+> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> > ---
+> >  include/linux/spi/spi-mem.h | 13 +++++++++++++
+> >  1 file changed, 13 insertions(+)
+> > 
+> > diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
+> > index 85e2ff7b840d..045ecb7c6f50 100644
+> > --- a/include/linux/spi/spi-mem.h
+> > +++ b/include/linux/spi/spi-mem.h
+> > @@ -220,6 +220,17 @@ static inline void *spi_mem_get_drvdata(struct spi_mem *mem)
+> >  	return mem->drvpriv;
+> >  }
+> >  
+> > +/**
+> > + * struct spi_controller_mem_caps - SPI memory controller capabilities
+> > + * @dtr: Supports DTR operations
+> > + */
+> > +struct spi_controller_mem_caps {
+> > +	bool dtr;  
 > 
+> I assume this would mean DTR is supported on _all_ phases? I am not sure 
+> if we would ever need to encode DTR support per-phase, but that can 
+> probably come later. Or the controller's supports_op() hook can do those 
+> checks before calling spi_mem_default_supports_op().
 
-Applied to
+If we ever need this there is no problem: the idea here is to provide a
+default (and for this one the naming is rather good =) ) helper to do
+basic checks. A controller either supports DTR ops or not. If it does
+not support them, then this check will fail. But like the Cadence SPI
+controller driver does, if only one specific configuration is not
+supported by the driver, then the ->supports_op() hook of the driver
+should check that beforehand and return an error [1].
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Thanks!
+[1] https://elixir.bootlin.com/linux/latest/source/drivers/spi/spi-cadence-quadspi.c#L1253
 
-[2/4] dt-bindings: spi: spi-mtk-nor: add new clock name 'axi' for spi nor
-      commit: 6008cb4c98d935a844edf2f3c13639104f533e30
+> > +};
+> > +
+> > +#define spi_mem_controller_is_capable(ctlr, cap)		\
+> > +	((ctlr)->mem_ops->caps && (ctlr)->mem_ops->caps->cap)	\
+> > +
+> >  /**
+> >   * struct spi_controller_mem_ops - SPI memory operations
+> >   * @adjust_op_size: shrink the data xfer of an operation to match controller's
+> > @@ -253,6 +264,7 @@ static inline void *spi_mem_get_drvdata(struct spi_mem *mem)
+> >   * @poll_status: poll memory device status until (status & mask) == match or
+> >   *               when the timeout has expired. It fills the data buffer with
+> >   *               the last status value.
+> > + * @caps: controller capabilities for the handling of the above operations.
+> >   *
+> >   * This interface should be implemented by SPI controllers providing an
+> >   * high-level interface to execute SPI memory operation, which is usually the
+> > @@ -283,6 +295,7 @@ struct spi_controller_mem_ops {
+> >  			   unsigned long initial_delay_us,
+> >  			   unsigned long polling_rate_us,
+> >  			   unsigned long timeout_ms);
+> > +	const struct spi_controller_mem_caps *caps;  
+> 
+> I feel like this would be better passed in as an argument to the 
+> spi_mem_default_supports_op() function. But I see that Mark and you feel 
+> differently so I won't insist on it.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+As these properties are supposes to be more or less static over the
+lifetime of the controller we assumed there was no need for something
+more dynamic. Anyway this is a default helper, drivers are pleased to
+implement their own if needed. Plus, doing so prevents the need for
+hacking into dozens of drivers, which is certainly the reason I
+personally like the most :p 
 
 Thanks,
-Mark
+Miquèl
