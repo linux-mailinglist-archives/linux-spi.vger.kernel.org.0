@@ -2,77 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDB147D606
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Dec 2021 18:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C8C47D629
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Dec 2021 18:57:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344409AbhLVRuT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 Dec 2021 12:50:19 -0500
-Received: from mail-qk1-f173.google.com ([209.85.222.173]:36841 "EHLO
-        mail-qk1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234375AbhLVRuS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Dec 2021 12:50:18 -0500
-Received: by mail-qk1-f173.google.com with SMTP id i130so2055397qke.3;
-        Wed, 22 Dec 2021 09:50:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=G0Bo2xi487zsjbvsxUHGM60Jt3WTXGtaD5AP/5FQrYU=;
-        b=U1DRQ1kyz3tC1gqyuCFbkXgWUH0kb8lnL9SZw0Aon7ymbzCDayP+dytcedCCW5enb1
-         93g2QNKvKmuNw7KKDqCaINW9/JRBwQma/W+r4i1q36TKmVMO51JpUGiaDLMs9hQdPv61
-         P2o1pTTCKEfkixWwQPh1hmxgxZ4MxhG1oiYxSNFXZnrF8gKaOypgLj5v7ZdvVLHpW7Xq
-         7us32IGd9iI5c0szbp5+welX1sWvshnRE/bS+XWyC3J9ScUIIY0WWekjB6QOr/QckjtY
-         5JJtrgHqO7kyUd81kGmp85Lju8P6tFE6zP1QuVIwCDdGFCKPGtzWj68+vvmhMIbKceIo
-         qWQg==
-X-Gm-Message-State: AOAM530s36eZFWgKXPkaszVP98soKAQQRrz6EqeN53Z2kReLSyy0ZKo8
-        xdfoaGa1JLXq260QgyIg9A==
-X-Google-Smtp-Source: ABdhPJyvAAEpmHO21h+BgfeOi40PfsFEpHcNduiO7Js5mzx8z/J1daeSExKuDA/ssJQ+ZFmLU9Ujqg==
-X-Received: by 2002:a05:620a:15cb:: with SMTP id o11mr2820061qkm.371.1640195417674;
-        Wed, 22 Dec 2021 09:50:17 -0800 (PST)
-Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id f18sm2518981qko.34.2021.12.22.09.50.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 09:50:16 -0800 (PST)
-Received: (nullmailer pid 2400088 invoked by uid 1000);
-        Wed, 22 Dec 2021 17:50:15 -0000
-Date:   Wed, 22 Dec 2021 13:50:15 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     Tinghan Shen <tinghan.shen@mediatek.com>
-Cc:     broonie@kernel.org, sean.wang@mediatek.com,
-        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
-        bgolaszewski@baylibre.com, linux-mediatek@lists.infradead.org,
-        bayi.cheng@mediatek.com, linux-arm-kernel@lists.infradead.org,
-        linus.walleij@linaro.org, gch981213@gmail.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 3/4] dt-bindings: pinctrl: mt8195: add wrapping node
- of pin configurations
-Message-ID: <YcNlVzSZAWCM9eKO@robh.at.kernel.org>
-References: <20211220121825.6446-1-tinghan.shen@mediatek.com>
- <20211220121825.6446-4-tinghan.shen@mediatek.com>
+        id S234161AbhLVR5A (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 Dec 2021 12:57:00 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:48430 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344434AbhLVR46 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Dec 2021 12:56:58 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C0D661BB3
+        for <linux-spi@vger.kernel.org>; Wed, 22 Dec 2021 17:56:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AAF03C36AE8;
+        Wed, 22 Dec 2021 17:56:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640195817;
+        bh=XTTG+wrzTFin2pafuxG1ZFhKGUVFnGRMUy3t98RpxwQ=;
+        h=Subject:From:Date:To:From;
+        b=AxFBnzD1XMrhEUSFleGAeGD9ETKfv15I5XojFnB4/ukfPS2pq+vfk05EJ6G+Cs6ne
+         nJz6jRxXPusMCzKSDgr8c1nX/LQjACTU+CdUKXREZnRhyBjn3deLAcRinoNd5QlGLK
+         8V1izHxlsXbB/2PLgysGFMoWaZ1o9e9LmxNBOzISSTxG6l6mHvwCmr2peio/JAasca
+         ey//z+1ORUf2cN+GP01IFdSOvxOVCaFCBOYnEFU7+VOd4tcMBHRj7xtc9Jlr6Lu/Xf
+         6jbtvtDp+JaDdHoKOFncy+dnh9XWbtCOhYs7N3dVnv4nV9BN/1zoJc5dw3VPygY+zQ
+         5jrh6hFx96X6g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 98583FE95A1;
+        Wed, 22 Dec 2021 17:56:57 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220121825.6446-4-tinghan.shen@mediatek.com>
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <164019581762.12388.12195952794313556150.git-patchwork-housekeeping@kernel.org>
+Date:   Wed, 22 Dec 2021 17:56:57 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 20 Dec 2021 20:18:24 +0800, Tinghan Shen wrote:
-> On mt8195, the pinctrl node has pinctrl groups to group pin
-> configurations by users' need. In each pinctrl group, it has
-> subnode(s) to list pins needed and pin configurations. By supporting
-> multiple subnodes, we can configure different pin characteristics
-> (driving/pull-up/pull-down/etc.) in a pinctrl group.
-> 
-> Update pinctrl-mt8195.yaml to add subnode in pinctrl groups and an
-> example to illustrate the usage.
-> 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> ---
->  .../bindings/pinctrl/pinctrl-mt8195.yaml      | 338 ++++++++++--------
->  1 file changed, 188 insertions(+), 150 deletions(-)
-> 
+Latest series: [v2] spi: dln2: Propagate firmware node (2021-12-22T15:57:39)
+  Superseding: [v1] spi: dln2: Propagate firmware node (2021-12-22T13:54:23):
+    [v1,1/3] spi: dln2: Propagate firmware node
+    [v1,2/3] spi: dw: Propagate firmware node
+    [v1,3/3] spi: pxa2xx: Propagate firmware node
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
