@@ -2,81 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB1647D35B
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Dec 2021 15:04:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7918E47D3A9
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Dec 2021 15:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245583AbhLVOE4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 Dec 2021 09:04:56 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45368 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245575AbhLVOEz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Dec 2021 09:04:55 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 841D361A51;
-        Wed, 22 Dec 2021 14:04:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AD2DC36AE5;
-        Wed, 22 Dec 2021 14:04:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640181893;
-        bh=75UqRnXbLJitl8WtJNjYmGOc6EmcXbtKbaBt7Oupp08=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=sV3YLiSjoHeqLL0ckh1isztaGLB9gKFHasRNqEwFMyg0ar9/WmJh4qkN/P5oesGUz
-         LwtnqkCfkzeJdfjeYIDrsgOyXfbE9vg+RkZo2PEOdR0fuuh/XDTIV/wdPLVt+9BsNX
-         hkUdQxXTR2CUnX4pr/1l/q5Y8RwWLdKxT6+Nbwwt/vk/mSWHmqEMvv+f0TUwQbub+G
-         U0t0p2WPdsamcDNDp0cVNWuzEfWjbBZWEojKYi+NheT0J0kajMRBgmZ+RBV4q2f67p
-         crqZtWswU61HImrZVjXYzjBmuxAz612EU5QZh68Vz1YiN4FAkDLX80mLY4jvUVHBeb
-         iCfko6J5IgJlg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Oskari Lemmela <oskari@lemmela.net>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-In-Reply-To: <20211222055958.1383233-1-oskari@lemmela.net>
+        id S239944AbhLVO1n (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 Dec 2021 09:27:43 -0500
+Received: from mail1.kuutio.org ([54.37.79.207]:42894 "EHLO mail1.kuutio.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237162AbhLVO1m (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 22 Dec 2021 09:27:42 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail1.kuutio.org (Postfix) with ESMTP id 16D5A1FE00;
+        Wed, 22 Dec 2021 15:27:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lemmela.net; h=
+        content-language:content-transfer-encoding:content-type
+        :content-type:in-reply-to:mime-version:user-agent:date:date
+        :message-id:from:from:references:subject:subject:received
+        :received; s=dkim; t=1640183258; x=1642775259; bh=xrQekw5SeZXuxH
+        AolB6PPyS1XVaI2aV1dGkHDgvq+IE=; b=Hj2Q/deTUrADEDW/bG8EcrlXd14uZs
+        8eSSm486Cc2/pa+hzzDYXSiQfdJcBSnJWLBpSwJNCNB/WHQcoO/F+DV8esCEHPJ7
+        tloOrx26hY/i/L5yEjgLEw+XAYp+bdstdXAzYm+Ej381wrhZkqvoJC/BXnC9Ctf3
+        1jrNjeKcSy/Uw8V2FD1U8xuKo0o+M+8524mW6zl5KR2/GpeP/j2NMMZUjRTevEw7
+        nnBaKcwLiKu8uiqbpSR0qDi9Y8yFR2EOQm2U6nXSVOByVqq+F9E/SzeS0OswRDp/
+        X4WXGrgbGzFTmyiokcfeoNuZhz+cY4oLn/GRqcNdJDT95SRZnX54vFCgWWt/egUU
+        BXLB1PaYdp+f8TmMHOfTgrMKfydFjh/x2slyn9QN/KPPOREMBDgcV9eXNA1eH15a
+        rZsdnJef2lLO8jwMxOUVgIQ+izMB1is07wQ+/gws3ORuBYOnygXDrZ2Bo4RvT7iX
+        cC+pSyc3UdyvOML+d84Ep/PkRXlNb6fWLiHQB1B4GpGCoUKaBDam64s6OTKOOBYR
+        0Aiubd5nM0yZx4cVlw0Ca1ZIyVG/OTmTiD5RKx8DAHAqKkoBd9gH5i1wG1xtHcDu
+        r927luAQEcDk2kuqQAysDV/+IZhDWOYg5l8acmRfXKjwQnElcFWPKxdESBYu6oeQ
+        jWUrPCkYYW8uo=
+X-Virus-Scanned: amavisd-new at kuutio.org
+Received: from mail1.kuutio.org ([127.0.0.1])
+        by localhost (mail1.kuutio.org [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id kThwQP-psZ3c; Wed, 22 Dec 2021 15:27:38 +0100 (CET)
+Received: from [IPv6:2001:998:13:e1::beee] (unknown [IPv6:2001:998:13:e1::beee])
+        by mail1.kuutio.org (Postfix) with ESMTPSA id AE65E1FD6F;
+        Wed, 22 Dec 2021 15:27:38 +0100 (CET)
+Subject: Re: [PATCH 1/2] spi: ar934x: fix transfer size
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20211222055958.1383233-1-oskari@lemmela.net>
-Subject: Re: (subset) [PATCH 0/2] spi: ar934x: fix transfer size and delays
-Message-Id: <164018189202.2906173.12739449799192637785.b4-ty@kernel.org>
-Date:   Wed, 22 Dec 2021 14:04:52 +0000
+ <20211222055958.1383233-2-oskari@lemmela.net>
+ <YcMa1TIg3x3oBKBl@sirena.org.uk>
+From:   =?UTF-8?Q?Oskari_Lemmel=c3=a4?= <oskari@lemmela.net>
+Message-ID: <98a574a2-45c3-5d7c-6405-0cd279a81816@lemmela.net>
+Date:   Wed, 22 Dec 2021 16:27:36 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YcMa1TIg3x3oBKBl@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 22 Dec 2021 07:59:56 +0200, Oskari Lemmela wrote:
-> Some of slow SPI devices can not handle 32 bits transfers or need
-> delay between words/transfers.
-> 
-> Series is tested with ATSAMD20J15 slave device which is running @8Mhz.
-> Limiting bits per word to 16 bits and adding delay between transfers,
-> gives slave device enough extra time to process reply.
-> 
-> [...]
 
-Applied to
+On 22.12.2021 14.32, Mark Brown wrote:
+> On Wed, Dec 22, 2021 at 07:59:57AM +0200, Oskari Lemmela wrote:
+>> If bits_per_word is configured, transfer only word amount
+>> of data per iteration.
+> Does this actually materially affect what the hardware does?  How much
+> data is transferred in an internal loop in the driver is completely
+> immaterial, bits per word only matters for formatting of the transferred
+> data.
+I don't have logic analyzator to verify what hardware actual does.
+I tested this with transferring 32bits to ATSAMD20J15 slave.
+Running loop in 8bits or 16bits, transfer is done correctly without
+any errors. When running loop in 24bits or 32bits directly I got
+error from spi_sync_transfer.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[2/2] spi: ar934x: fix transfer and word delays
-      commit: c70282457c380db7deb57c81a6894debc8f88efa
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Oskari
