@@ -2,75 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4093147D444
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Dec 2021 16:33:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E760647D463
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Dec 2021 16:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343714AbhLVPd2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 Dec 2021 10:33:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48510 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241495AbhLVPd2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Dec 2021 10:33:28 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3078C061401
-        for <linux-spi@vger.kernel.org>; Wed, 22 Dec 2021 07:33:27 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id g17so7682924ybe.13
-        for <linux-spi@vger.kernel.org>; Wed, 22 Dec 2021 07:33:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=hQ5DbP4MITHgtHViXOya0lanhcMqZ8b4WidUu29kIn4=;
-        b=ncjzj9RiUZpCIoC2a2VzvFA9cwMZVl00CzKdmoXMOa7+eBlS9eafPqqUH5B2gYvRvD
-         7Rw/vNWY+BwQxSR8dPqpdV0wPF4+y0gdzwmVuLqrN+5WJBBR7FjUL9v1iOQa7QJZHjDk
-         lEnVGRxKHnqgFbxIpsJT4KBawX3uAHNSjjPBz8cP2nYJGGN2xpdybiKYiKzpSGTM26rC
-         zMxgsf15kFVZ+NOcVx49u59IQ1LUYAFkMxvi7OLtnoiLitd7IyrmPkeymRTZ5f85pdG9
-         cJ9Q2ItW0O1DEbuLNvd8J5eNtZbV2rqMNow8IuhN3JBZHSWiVZ4/+rgG3HFWcdrFU/tx
-         yhZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=hQ5DbP4MITHgtHViXOya0lanhcMqZ8b4WidUu29kIn4=;
-        b=wiaFk+LI6722skEC+m84G8Lhrv+RittiNCZ4ucN62RGedzUzejsPtIYY/M+pESuTYo
-         GZQAQgnX2DvB+LNZ/1koYVQvp3EmragyBBHpkCD+d+ZbSDKDk/tSVG+oVwI+mCeLVvgO
-         SQgoDyo9H+PYvjJ59e81b1E6VIZgSQ76v0wcJKnHtWow641SfwPVoandlcn6Pa44dm/A
-         ER8F38TOnhD/1zuTQzl9XQe/Vx9BcelKm7ntiqB3wsh56mU1cE9y4p/3ZWlQqoS+pwCC
-         uKY2aqKgpy772jn9imWS4o7oWBkjufyH0GHzc8uiD3jjc+XsLQMTRub3i5DxhwDQjAj8
-         9suw==
-X-Gm-Message-State: AOAM531xdRfap+XmdqVcMBboI/G4Vq/3UFNmDIuXOSefIdEbm5UwD0CQ
-        En276MPK30KBL1PVdkiFRVftNGgzjroH3/P36mM=
-X-Google-Smtp-Source: ABdhPJzByBtW8lbt0QP0ejZPHsSeI+Qub7+VDaq+wUv4cCbYKX2dr5uWl353xvH5+Dwoe7IrOhLsNqqNhQdusDdeL5U=
-X-Received: by 2002:a25:20a:: with SMTP id 10mr5273655ybc.221.1640187207038;
- Wed, 22 Dec 2021 07:33:27 -0800 (PST)
+        id S241525AbhLVPwx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 Dec 2021 10:52:53 -0500
+Received: from mga01.intel.com ([192.55.52.88]:38092 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234501AbhLVPwx (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 22 Dec 2021 10:52:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640188373; x=1671724373;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/52NINLSBWMFVi/JeksSRB07Wwc3gFAOSE3AXFt0Qbg=;
+  b=affT4tyomab1Yd0DDdUwiKzBe/QZBSeEkAt2AyhmxLec+/h+oeORYhsx
+   ALkAIhaVMKcr+p3dTCuqa/Vu7SEqrtjg004U2AFe5+oS87eCwKrGHBIN6
+   KiIlOuCvOeInrBR38ygbB16yMePNz1EppQDHbFdtbeUddAtemLpFCQZ3j
+   pvOxOtkEgbGiJcGsT4Gd004S2RRWg/5wt4ZM/kNSQMNm+OgksLY/KLPPS
+   Zqp+XvkytXT2nyVgW03goEeYXd3I5eDU3DHTLAldFxPxjpEh5aDS309c5
+   Usk+hUvu7sub7efD/2eTfMmuHM/e3i/so+GcgiFM6Bj0VBTa0NfbjKoXu
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="264845786"
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="264845786"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 07:52:52 -0800
+X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
+   d="scan'208";a="549533334"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 07:52:50 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1n03tl-000njU-3J;
+        Wed, 22 Dec 2021 17:51:25 +0200
+Date:   Wed, 22 Dec 2021 17:51:24 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Subject: Re: [PATCH v1 1/3] spi: dln2: Propagate firmware node
+Message-ID: <YcNJfKVTrU0ZAfL5@smile.fi.intel.com>
+References: <20211222135423.62487-1-andriy.shevchenko@linux.intel.com>
+ <YcNEz2MaigJp0UAe@sirena.org.uk>
 MIME-Version: 1.0
-Received: by 2002:a05:7110:5282:b0:11b:1d37:210e with HTTP; Wed, 22 Dec 2021
- 07:33:26 -0800 (PST)
-Reply-To: mrsaishag45@gmail.com
-From:   Mrs Aisha Al-Qaddafi <whitemrshannah@gmail.com>
-Date:   Wed, 22 Dec 2021 07:33:26 -0800
-Message-ID: <CAPOLZixyz+paQ0DfZKObqmRvtHm4Ua0NBh1D-hbM7Td1Gi0b8g@mail.gmail.com>
-Subject: Dear Friend,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YcNEz2MaigJp0UAe@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Dear Friend,
+On Wed, Dec 22, 2021 at 03:31:27PM +0000, Mark Brown wrote:
+> On Wed, Dec 22, 2021 at 03:54:21PM +0200, Andy Shevchenko wrote:
+> > Propagate firmware node by using a specific API call, i.e. device_set_node().
 
-I came across your e-mail contact prior a private search while in need
-of your assistance. My name is Aisha Gaddafi a single Mother and a
-Widow with three Children. I am the only biological Daughter of late
-Libyan President (Late Colonel Muammar Gaddafi).
+> cc1: all warnings being treated as errors
 
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country, may be from there, we can build business relationship in
-the nearest future.
+Oops, I was in full impression that I have it enabled, but no, the other two
+only. I'll fix this ASAP, sorry for that, I have added the configuration
+option.
 
-I am willing to negotiate investment/business profit sharing ratio
-with you base on the future investment earning profits.
-Best Regards
-Mrs Aisha Gaddafi
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
