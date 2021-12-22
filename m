@@ -2,35 +2,38 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4835747CE5C
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Dec 2021 09:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1D547CE6B
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Dec 2021 09:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239698AbhLVIgF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Wed, 22 Dec 2021 03:36:05 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:49695 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239581AbhLVIgE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Dec 2021 03:36:04 -0500
+        id S243421AbhLVImA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Wed, 22 Dec 2021 03:42:00 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:59731 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243406AbhLVImA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Dec 2021 03:42:00 -0500
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 41A07240003;
-        Wed, 22 Dec 2021 08:35:59 +0000 (UTC)
-Date:   Wed, 22 Dec 2021 09:35:58 +0100
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id D5D68E0007;
+        Wed, 22 Dec 2021 08:41:57 +0000 (UTC)
+Date:   Wed, 22 Dec 2021 09:41:56 +0100
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     <Tudor.Ambarus@microchip.com>
-Cc:     <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <monstr@monstr.eu>, <thomas.petazzoni@bootlin.com>,
-        <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        <richard@nod.at>, <vigneshr@ti.com>, <p.yadav@ti.com>,
-        <michael@walle.cc>, <linux-mtd@lists.infradead.org>
-Subject: Re: [PATCH v5 2/3] spi: dt-bindings: Describe stacked/parallel
- memories modes
-Message-ID: <20211222093523.30f8ae7c@xps13>
-In-Reply-To: <be9d451a-6451-be58-1c2a-a9aea7f67c56@microchip.com>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        <linux-mtd@lists.infradead.org>, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v5 1/3] dt-bindings: mtd: spi-nor: Allow two CS per
+ device
+Message-ID: <20211222094156.7bfce4e4@xps13>
+In-Reply-To: <20211222092324.7ec6ec6a@xps13>
 References: <20211221170058.18333-1-miquel.raynal@bootlin.com>
-        <20211221170058.18333-3-miquel.raynal@bootlin.com>
-        <a11a0650-4624-0a9f-d0a5-c45393fead7c@microchip.com>
-        <20211222090542.43dfe12e@xps13>
-        <be9d451a-6451-be58-1c2a-a9aea7f67c56@microchip.com>
+        <20211221170058.18333-2-miquel.raynal@bootlin.com>
+        <20211221184725.46lelrdfoxeom6uc@ti.com>
+        <20211222092324.7ec6ec6a@xps13>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
@@ -40,101 +43,70 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Tudor,
 
-Tudor.Ambarus@microchip.com wrote on Wed, 22 Dec 2021 08:22:05 +0000:
-> On 12/22/21 10:05 AM, Miquel Raynal wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > Hello Tudor,  
-> 
-> Hi!
-> 
-> > 
-> > Tudor.Ambarus@microchip.com wrote on Wed, 22 Dec 2021 07:52:44 +0000:
-> >   
-> >> On 12/21/21 7:00 PM, Miquel Raynal wrote:  
-> >>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >>>
-> >>> Describe two new memories modes:
-> >>> - A stacked mode when the bus is common but the address space extended
-> >>>   with an additinals wires.
-> >>> - A parallel mode with parallel busses accessing parallel flashes where
-> >>>   the data is spread.
-> >>>
-> >>> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> >>> ---
-> >>>
-> >>> Hello Rob,
-> >>>
-> >>> I know the below does not pass the tests (at least the example patch 3
-> >>> does not pass) but I believe the issue is probably on the tooling side
-> >>> because the exact same thing with uing32-array instead is accepted. The
-> >>> problem comes from the minItems/maxItems lines. Without them, this is
-> >>> okay. The maxItems btw matches the "good enough value for now" idea.
-> >>>
-> >>> The errors I get are:
-> >>>
-> >>> $ make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/spi/spi-controller.yaml
-> >>>   LINT    Documentation/devicetree/bindings
-> >>>   CHKDT   Documentation/devicetree/bindings/processed-schema-examples.json
-> >>>   SCHEMA  Documentation/devicetree/bindings/processed-schema-examples.json
-> >>>   DTEX    Documentation/devicetree/bindings/spi/spi-controller.example.dts
-> >>>   DTC     Documentation/devicetree/bindings/spi/spi-controller.example.dt.yaml
-> >>>   CHECK   Documentation/devicetree/bindings/spi/spi-controller.example.dt.yaml
-> >>> /src/Documentation/devicetree/bindings/spi/spi-controller.example.dt.yaml: spi@80010000: flash@2:stacked-memories: [[268435456, 268435456]] is too short
-> >>>         From schema: /src/Documentation/devicetree/bindings/spi/spi-controller.yaml
-> >>> /src/Documentation/devicetree/bindings/spi/spi-controller.example.dt.yaml: spi@80010000: flash@2:stacked-memories: [[268435456, 268435456]] is too short
-> >>>         From schema: /src/Documentation/devicetree/bindings/spi/mxs-spi.yaml
-> >>> /src/Documentation/devicetree/bindings/spi/spi-controller.example.dt.yaml: spi@80010000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'display@0', 'sensor@1', 'flash@2' were unexpected)
-> >>>         From schema: /src/Documentation/devicetree/bindings/spi/mxs-spi.yaml
-> >>> /src/Documentation/devicetree/bindings/spi/spi-controller.example.dt.yaml: flash@2: stacked-memories: [[268435456, 268435456]] is too short
-> >>>         From schema: /src/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
-> >>>
-> >>>
-> >>>  .../bindings/spi/spi-peripheral-props.yaml    | 25 +++++++++++++++++++
-> >>>  1 file changed, 25 insertions(+)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> >>> index 5dd209206e88..fedb7ae98ff6 100644
-> >>> --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> >>> +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> >>> @@ -82,6 +82,31 @@ properties:
-> >>>      description:
-> >>>        Delay, in microseconds, after a write transfer.
-> >>>
-> >>> +  stacked-memories:
-> >>> +    description: Several SPI memories can be wired in stacked mode.
-> >>> +      This basically means that either a device features several chip
-> >>> +      selects, or that different devices must be seen as a single
-> >>> +      bigger chip. This basically doubles (or more) the total address
-> >>> +      space with only a single additional wire, while still needing
-> >>> +      to repeat the commands when crossing a chip boundary. The size of
-> >>> +      each chip should be provided as members of the array.
-> >>> +    $ref: /schemas/types.yaml#/definitions/uint64-array
-> >>> +    minItems: 2
-> >>> +    maxItems: 4  
-> >>
-> >> Why do we define maxItems? Can't we remove this restriction?  
-> > 
-> > Rob usually prefers to bound properties, that's why we often see "good
-> > enough values for now" in the bindings. If it's no longer the case it's  
-> 
-> right, I saw it.
-> 
-> > fine to drop the maxItems property.  
-> 
-> There's no such hardware limitation as far as I know, that's why I've
-> asked. Maybe Rob can advise.
+miquel.raynal@bootlin.com wrote on Wed, 22 Dec 2021 09:23:24 +0100:
 
-Yes, I'll follow what Rob thinks its best:
-- keeping maxItems: 4 (as it is), which is a good enough value
-- dropping the maxItems here because in the end no bounding is necessary
-- using maxItems: 2 to match the SPI CS even though in theory these two
-  numbers are not correlated (stacked-memories might very well be
-  used by other non SPI memories as well).
+> Hi Pratyush,
+> 
+> p.yadav@ti.com wrote on Wed, 22 Dec 2021 00:17:27 +0530:
+> 
+> > On 21/12/21 06:00PM, Miquel Raynal wrote:  
+> > > The Xilinx QSPI controller has two advanced modes which allow the
+> > > controller to behave differently and consider two flashes as one single
+> > > storage.
+> > > 
+> > > One of these two modes is quite complex to support from a binding point
+> > > of view and is the dual parallel memories. In this mode, each byte of
+> > > data is stored in both devices: the even bits in one, the odd bits in
+> > > the other. The split is automatically handled by the QSPI controller and
+> > > is transparent for the user.
+> > > 
+> > > The other mode is simpler to support, it is called dual stacked
+> > > memories. The controller shares the same SPI bus but each of the devices
+> > > contain half of the data. Once in this mode, the controller does not
+> > > follow CS requests but instead internally wires the two CS levels with
+> > > the value of the most significant address bit.
+> > > 
+> > > Supporting these two modes will involve core changes which include the
+> > > possibility of providing two CS for a single SPI device
+> > > 
+> > > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> > > Acked-by: Rob Herring <robh@kernel.org>
+> > > ---
+> > >  Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+> > > index 39421f7233e4..4abfb4cfc157 100644
+> > > --- a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+> > > +++ b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+> > > @@ -47,7 +47,8 @@ properties:
+> > >        identified by the JEDEC READ ID opcode (0x9F).
+> > >  
+> > >    reg:
+> > > -    maxItems: 1
+> > > +    minItems: 1
+> > > +    maxItems: 2    
+> > 
+> > You allow up to 4 items in stacked-memories but only allow up to 2 CS, 
+> > which would make the other 2 memories unusable. Should also change this 
+> > to 4.  
+> 
+> Yes, I allowed "more" theoretical devices in the
+> stacked/parallel-memories properties because there is no real
+> limitation on this side so I didn't want to constrain it too much,
+> while still keeping a maximum value, hence 4 seemed a nice guess for a
+> "maximum but can be bigger value we don't really care it's just for
+> bounding". However on the SPI side this is a big change with deep
+> consequences and I don't want to rush things so it is on purpose that I
+> kept the limitation to 2. But we can change the maxItems to 2
+> everywhere if this appears to be the thing to do.
 
-BTW if you're fine with the proposal your Ack is welcome ;)
+I forgot to mention that the stacked/parallel-memories could
+also certainly be considered "memory" properties (think about the
+generic term), not necessarily bound to SPI. We could definitely have
+the same pattern with other memory types as well and not be tight to
+the number of SPI CS.
 
 Thanks,
 Miquèl
