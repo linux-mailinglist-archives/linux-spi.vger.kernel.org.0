@@ -2,76 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3B447CC47
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Dec 2021 05:48:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DDD147CCCB
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Dec 2021 07:07:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242480AbhLVEsW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 21 Dec 2021 23:48:22 -0500
-Received: from mx.socionext.com ([202.248.49.38]:36866 "EHLO mx.socionext.com"
+        id S239092AbhLVGHu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 Dec 2021 01:07:50 -0500
+Received: from mail1.kuutio.org ([54.37.79.207]:41814 "EHLO mail1.kuutio.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235801AbhLVEsW (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Tue, 21 Dec 2021 23:48:22 -0500
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 22 Dec 2021 13:48:21 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id A37CD2059054;
-        Wed, 22 Dec 2021 13:48:21 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 22 Dec 2021 13:48:21 +0900
-Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 58EE0B568B;
-        Wed, 22 Dec 2021 13:48:21 +0900 (JST)
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+        id S230384AbhLVGHu (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Wed, 22 Dec 2021 01:07:50 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail1.kuutio.org (Postfix) with ESMTP id C481B1FE07;
+        Wed, 22 Dec 2021 07:00:11 +0100 (CET)
+Authentication-Results: mail1.kuutio.org (amavisd-new);
+        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
+        header.d=lemmela.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lemmela.net; h=
+        content-transfer-encoding:mime-version:x-mailer:message-id:date
+        :date:subject:subject:from:from:received:received; s=dkim; t=
+        1640152810; x=1642744811; bh=IZxlASaqe2+wXnziNok006bBOGqozM/mZq2
+        OuTexEi8=; b=m6OQaL5jhhYN6MxP6wjCgexp+GBaRILG4FoHHLaX3pAu5DTFUaP
+        zwUNMz0B2bdE1S7ug0psEVZ6MGHRhKlXwlGzUPORwhfP/9xAbotEVSg3sEAqB7vz
+        1xGbBvhmlZY2LgFf1sHhFbodTLWF7RJN0wFG+UV05DFpeK4Qi69JwWpDYHtKKYcZ
+        Qj/53jNsanawN1BS9iVVWgXFJtPtmLPXchIQnb58fQBLl+TKCGuv4Fw3Tql1RTkv
+        BMhJKJP2WniNKq7TQ70a4y3p4UGlD64x3zk929k2TNLWlu3F4QCp8rPWPoX3oEQM
+        8CDnlGb4CAQ7Pt55reLCOjkUp7a0Hjt3AUTh5xGfwaaldS97+DK0x/h7GTU/o+QF
+        Z4OC0mKOlWLoIkooUT+8j1QojxyjSwRGe1OPvFqFAV8BDbUh7qy4LP8YliT+3QJQ
+        2xvnOOhRVWb0sGJgPyVXabdXnGSa5lQMFztHag5FeuxltvmqnUi/Qe9nZfQGDexJ
+        /c4i+mnwdHDM8vIDMtYzWWCE5vbyxFTq4WwHpsLkbitW5XsayTrQjLImMqxXXpx7
+        qiKMtDdb7aWVguPMkVuIAwpbT4xBkTNj39Ol+B/GRBG8Z/idP8qoUUZ4fuE5u0eP
+        TwaUz5dhFH0PewCfFqLxKLK08F5rJrKEwXOw76A/80ydTQi1JThlXzY4=
+X-Virus-Scanned: amavisd-new at kuutio.org
+Received: from mail1.kuutio.org ([127.0.0.1])
+        by localhost (mail1.kuutio.org [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id vx0ZBEA8A4g8; Wed, 22 Dec 2021 07:00:10 +0100 (CET)
+Received: from build.kuutio.org (unknown [IPv6:2001:998:13:e4::69])
+        by mail1.kuutio.org (Postfix) with ESMTPSA id 53AF01FD6F;
+        Wed, 22 Dec 2021 07:00:10 +0100 (CET)
+From:   Oskari Lemmela <oskari@lemmela.net>
 To:     Mark Brown <broonie@kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Keiji Hayashibara <hayashibara.keiji@socionext.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] spi: uniphier: Fix a bug that doesn't point to private data correctly
-Date:   Wed, 22 Dec 2021 13:48:12 +0900
-Message-Id: <1640148492-32178-1-git-send-email-hayashi.kunihiko@socionext.com>
-X-Mailer: git-send-email 2.7.4
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Oskari Lemmela <oskari@lemmela.net>
+Subject: [PATCH 0/2] spi: ar934x: fix transfer size and delays
+Date:   Wed, 22 Dec 2021 07:59:56 +0200
+Message-Id: <20211222055958.1383233-1-oskari@lemmela.net>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-In uniphier_spi_remove(), there is a wrong code to get private data from
-the platform device, so the driver can't be removed properly.
+Some of slow SPI devices can not handle 32 bits transfers or need
+delay between words/transfers.
 
-The driver should get spi_master from the platform device and retrieve
-the private data from it.
+Series is tested with ATSAMD20J15 slave device which is running @8Mhz.
+Limiting bits per word to 16 bits and adding delay between transfers,
+gives slave device enough extra time to process reply.
 
-Cc: <stable@vger.kernel.org>
-Fixes: 5ba155a4d4cc ("spi: add SPI controller driver for UniPhier SoC")
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
----
- drivers/spi/spi-uniphier.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+Oskari Lemmela (2):
+  spi: ar934x: fix transfer size
+  spi: ar934x: fix transfer and word delays
 
-diff --git a/drivers/spi/spi-uniphier.c b/drivers/spi/spi-uniphier.c
-index 8900e51e1a1c..342ee8d2c476 100644
---- a/drivers/spi/spi-uniphier.c
-+++ b/drivers/spi/spi-uniphier.c
-@@ -767,12 +767,13 @@ static int uniphier_spi_probe(struct platform_device *pdev)
- 
- static int uniphier_spi_remove(struct platform_device *pdev)
- {
--	struct uniphier_spi_priv *priv = platform_get_drvdata(pdev);
-+	struct spi_master *master = platform_get_drvdata(pdev);
-+	struct uniphier_spi_priv *priv = spi_master_get_devdata(master);
- 
--	if (priv->master->dma_tx)
--		dma_release_channel(priv->master->dma_tx);
--	if (priv->master->dma_rx)
--		dma_release_channel(priv->master->dma_rx);
-+	if (master->dma_tx)
-+		dma_release_channel(master->dma_tx);
-+	if (master->dma_rx)
-+		dma_release_channel(master->dma_rx);
- 
- 	clk_disable_unprepare(priv->clk);
- 
+ drivers/spi/spi-ar934x.c | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
+
 -- 
-2.7.4
+2.25.1
 
