@@ -2,83 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BBF247D337
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Dec 2021 14:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4B547D358
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Dec 2021 15:04:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245488AbhLVNyZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 22 Dec 2021 08:54:25 -0500
-Received: from mga14.intel.com ([192.55.52.115]:16792 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234159AbhLVNyZ (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 22 Dec 2021 08:54:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640181265; x=1671717265;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dVTnm7Vj85GUu0rogxumgYtqYxX+kTZ7Uoxyo2KfUh0=;
-  b=RAdNxK8uZKBNeOEK/hKThoePw/DxDG5rsYTtGlQCyWNmcCbFhGfMbu+W
-   xGOh6Nkf6kDNvcZFG9+F2f2mkxVwqIuZUrQAHpuVRU66NbtVLXA3qGaS7
-   6WMHSzM3ML++Q426qnTRU5IuuvQNjCKc6KjhyvlJquUzBF1BFysLHP2X1
-   PeVEmGcl7Al+LJp0O1W7e7M2dR8nfzKdtuQIEiT7CVawhmhgOcmRgOIkv
-   dSWGEk561DZ2NBlEFG54XvW/Wk1I8kXc78xDsnNORJd0wXZYEJm1m2vBP
-   bQTBbxgXSzIrmK2W06H6S0y4EP8ZGS6fPBAOTCLepxQPNTsoIcfM1zVBf
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10205"; a="240845054"
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="240845054"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 05:54:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,226,1635231600"; 
-   d="scan'208";a="484761402"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 22 Dec 2021 05:54:21 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 23AD0331; Wed, 22 Dec 2021 15:54:30 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: [PATCH v1 3/3] spi: pxa2xx: Propagate firmware node
-Date:   Wed, 22 Dec 2021 15:54:23 +0200
-Message-Id: <20211222135423.62487-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211222135423.62487-1-andriy.shevchenko@linux.intel.com>
-References: <20211222135423.62487-1-andriy.shevchenko@linux.intel.com>
+        id S245578AbhLVOEy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 22 Dec 2021 09:04:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237349AbhLVOEw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 22 Dec 2021 09:04:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1465C061574;
+        Wed, 22 Dec 2021 06:04:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE38DB81CBC;
+        Wed, 22 Dec 2021 14:04:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EE26C36AE5;
+        Wed, 22 Dec 2021 14:04:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640181889;
+        bh=GpuaFsWoFLVuvfhOa8Znb8zkvhgTeFHuqoMq8n5e/SQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=d0MLLI/QtJJ+B2X932VWsR6XYGD2gMUA7IhzUovdfrHvUBvHzT8va1pyjdB5OM5kD
+         Gzm0lV0cbqLxEd7nnAfqfUelPmifBKp5jjEjFNHW29QIpABMqqVqMIxdc2tbKKxEWC
+         hYVjWbaA/rpXz+QJq5+mCIjBY/IBYnSGIxm82htQZWOra5TMwaCTlpfE4wwGbZ6zYL
+         Tl5lVjwBKsB2gfBOmrNRKSZcxJUOOfQFNSrAvp/Wv10EdPF8AvhS5fwRy7TCNCGpJi
+         epc1Dmc+LJL/1rQqZ9UyvGjfPUek5IjGz0Pao1Rtd7aP6yJ+/dn/mvyru7Cg0E/VGM
+         1DcxWCQECqwIA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     stable@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-spi@vger.kernel.org,
+        Keiji Hayashibara <hayashibara.keiji@socionext.com>
+In-Reply-To: <1640148492-32178-1-git-send-email-hayashi.kunihiko@socionext.com>
+References: <1640148492-32178-1-git-send-email-hayashi.kunihiko@socionext.com>
+Subject: Re: [PATCH] spi: uniphier: Fix a bug that doesn't point to private data correctly
+Message-Id: <164018188784.2906151.4009933677547937001.b4-ty@kernel.org>
+Date:   Wed, 22 Dec 2021 14:04:47 +0000
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Propagate firmware node by using a specific API call, i.e. device_set_node().
+On Wed, 22 Dec 2021 13:48:12 +0900, Kunihiko Hayashi wrote:
+> In uniphier_spi_remove(), there is a wrong code to get private data from
+> the platform device, so the driver can't be removed properly.
+> 
+> The driver should get spi_master from the platform device and retrieve
+> the private data from it.
+> 
+> 
+> [...]
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi-pxa2xx.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Applied to
 
-diff --git a/drivers/spi/spi-pxa2xx.c b/drivers/spi/spi-pxa2xx.c
-index b3186bd0c2a8..e88f86274eeb 100644
---- a/drivers/spi/spi-pxa2xx.c
-+++ b/drivers/spi/spi-pxa2xx.c
-@@ -1664,8 +1664,7 @@ static int pxa2xx_spi_probe(struct platform_device *pdev)
- 	drv_data->controller_info = platform_info;
- 	drv_data->ssp = ssp;
- 
--	controller->dev.of_node = dev->of_node;
--	controller->dev.fwnode = dev->fwnode;
-+	device_set_node(&controller->dev, dev_fwnode(dev));
- 
- 	/* The spi->mode bits understood by this driver: */
- 	controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_LOOP;
--- 
-2.34.1
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-linus
 
+Thanks!
+
+[1/1] spi: uniphier: Fix a bug that doesn't point to private data correctly
+      commit: 80bb73a9fbcde4ecc55e12f10c73fabbe68a24d1
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
