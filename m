@@ -2,66 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF17D47E6D7
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Dec 2021 18:20:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F1747E727
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Dec 2021 18:36:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349485AbhLWRUP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 23 Dec 2021 12:20:15 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52618 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349465AbhLWRUO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Dec 2021 12:20:14 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74F2FB81FC1
-        for <linux-spi@vger.kernel.org>; Thu, 23 Dec 2021 17:20:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2F9E7C36AE5;
-        Thu, 23 Dec 2021 17:20:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640280012;
-        bh=Xk+CQ66LikpIB4t8AUXGg74hHy4nU4+OztLXC6ZkwAY=;
-        h=Subject:From:Date:To:From;
-        b=NlmmjhG/3jCgxmIJHyFGSjmn9ViEmksACEO8tgxFQuOdzWVjVfixqAvBHZwbe+IGo
-         fPA2ZcI2hYkADN0OuYS1gBgasf7gvNF7ZA7e3in9JxWlXr6V1uwlKNiH50wQQ3zyLo
-         Xvlc21EW7p41gJK8dDogDcf+j3vttHW6RmLIipdlVpq7cQPUmFbJer2VsEd1/2JZuS
-         GXI+x0u9iDqoJ72/BA5/ukdTkkVwQYSbxGAf9sOtXp6/m/8mooXy93w4kv7JhWo8t+
-         ykbHSNRcjbZ0ia1kS1Y2RN+H4kG6z2VNPj541AQTl2H3gIEDMC/w0lnB6OQfuiRHUv
-         PvflJODMtDdxg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0F5B8EAC060;
-        Thu, 23 Dec 2021 17:20:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
+        id S240262AbhLWRgZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 23 Dec 2021 12:36:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235976AbhLWRgY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 23 Dec 2021 12:36:24 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E103C061759
+        for <linux-spi@vger.kernel.org>; Thu, 23 Dec 2021 09:36:24 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id y16-20020a17090a6c9000b001b13ffaa625so9376059pjj.2
+        for <linux-spi@vger.kernel.org>; Thu, 23 Dec 2021 09:36:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dPYUZWC+77UBrBLBUUxU9fHb6AxVTt9UdaUWIxpei+o=;
+        b=L0sjRUzYInvoF3lTrWwfgbrnXNR7T+eXsaPmPTag7OLNZPysAOAy+7D/eWdc8Y8pWa
+         ZYd8pC2fEDwzZy3dX8MHG6cokMq+LvNvhyVHt7n4Ot4zwmRwldtutxXO3oyyhccGcTGj
+         6HqoZZOHqzyqhn2YiN2yvj0pdcsduMD2RNXRxGoK6VCf9RFwFffI4Bcz668E4CDGnHCe
+         W9InkcEY0CD9FxjiRL4s4xROMFQ19FlU2EzPctV1dHFiCYC2qFsXNDzh4+eMW8ZOMg0i
+         GvYkYHgDSayVhkayneoGjmk9tIMU7TKP2/FjiXoGEbnsbQKYI7gPlGu5VC6SGmmrwTQd
+         Q6mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=dPYUZWC+77UBrBLBUUxU9fHb6AxVTt9UdaUWIxpei+o=;
+        b=Lm2WGFev/aAfRLYZQ1OgH5bzBnfoBd3oVThwjB2Q+Mc0pyTXykXSXll45uKXSwPEqj
+         oz1BEcB+PGf1n5a3PqUnCJb9cuCaZmjr2D8XexjLtHdy1QdElgq+CrpsZsMrcUoHHQNb
+         d3A6h6ygdFe57VRyTMk+L+/lxXaHkjJfWq+OtZj2s0woUTsdMOzXfBao2stbfYjumvvM
+         R4rQhouNuVyozHjaOcXlym5Xu18PH9/fV4LrEoVnyLhg82SD/LLJV31Mxkv1GBbE+lwG
+         lzie7KvMeKLEn1qUWQLtDFOO3hw1TzJ2HcWjkTp2C1neh+5dzNmBpPnkc4LkNW9n2d5h
+         lHWQ==
+X-Gm-Message-State: AOAM531rI5nS1GZbiV87dqddI2n6PtPedyDC0vpUSxRVapizveA0y8ki
+        xc6Jy8PvRjdtZd0bVh42BC3hlw==
+X-Google-Smtp-Source: ABdhPJypoRaM/7mbkBhlfvlUN6kGHVEF9KQ22b8kXscmQCQL7JNkF0LVo3y3phgMBogpBLz4jmYGaw==
+X-Received: by 2002:a17:90b:4d07:: with SMTP id mw7mr3712671pjb.69.1640280983976;
+        Thu, 23 Dec 2021 09:36:23 -0800 (PST)
+Received: from localhost ([12.163.77.120])
+        by smtp.gmail.com with ESMTPSA id g6sm7407727pfj.156.2021.12.23.09.36.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Dec 2021 09:36:23 -0800 (PST)
+Date:   Thu, 23 Dec 2021 09:36:23 -0800 (PST)
+X-Google-Original-Date: Thu, 23 Dec 2021 09:36:07 PST (-0800)
+Subject:     Re: [PATCH v2 17/17] MAINTAINERS: update riscv/microchip entry
+In-Reply-To: <05d6a273-19f6-2147-75ba-1fff726a0f70@microchip.com>
+CC:     krzysztof.kozlowski@canonical.com, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, robh+dt@kernel.org,
+        jassisinghbrar@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, broonie@kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        geert@linux-m68k.org, bin.meng@windriver.com, heiko@sntech.de,
+        Lewis.Hanly@microchip.com, Daire.McNamara@microchip.com,
+        Ivan.Griffin@microchip.com, Atish Patra <atishp@rivosinc.com>
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Conor.Dooley@microchip.com
+Message-ID: <mhng-0e4cde83-cfa1-4bf6-9f2c-611d9a4ddb5f@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <164028001199.3194.3975746030531521107.git-patchwork-summary@kernel.org>
-Date:   Thu, 23 Dec 2021 17:20:11 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+On Thu, 23 Dec 2021 06:56:45 PST (-0800), Conor.Dooley@microchip.com wrote:
+> On 17/12/2021 15:09, Krzysztof Kozlowski wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>> 
+>> On 17/12/2021 10:33, conor.dooley@microchip.com wrote:
+>>> From: Conor Dooley <conor.dooley@microchip.com>
+>>>
+>>> Update the RISC-V/Microchip entry by adding the microchip dts
+>>> directory and myself as maintainer
+>>>
+>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>>> ---
+>>>   MAINTAINERS | 2 ++
+>>>   1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>> index 7a2345ce8521..3b1d6be7bd56 100644
+>>> --- a/MAINTAINERS
+>>> +++ b/MAINTAINERS
+>>> @@ -16348,8 +16348,10 @@ K:   riscv
+>>>
+>>>   RISC-V/MICROCHIP POLARFIRE SOC SUPPORT
+>>>   M:   Lewis Hanly <lewis.hanly@microchip.com>
+>>> +M:   Conor Dooley <conor.dooley@microchip.com>
+>>>   L:   linux-riscv@lists.infradead.org
+>>>   S:   Supported
+>>> +F:   arch/riscv/boot/dts/microchip/
+>>>   F:   drivers/mailbox/mailbox-mpfs.c
+>>>   F:   drivers/soc/microchip/
+>>>   F:   include/soc/microchip/mpfs.h
+>>>
+>> 
+>> Good to have the DTS covered, so FWIW:
+>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> 
+>> You still should get Lewis' ack (unless he merges it)
+> Aye, it'll be an ack. We don't currently have a tree & would rather do 
+> this via risc-v than the at91/sam arm soc tree.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+WFM.  I'll be awaiting the ack.  I don't see any fundamental issues from 
+my end, as long is it's got all the acks/reviews then I'm generally fine 
+with this sort of stuff.  I'll take a look before merging it, I'm kind 
+of buried right now.  Sorry!
 
-Series: [v2,1/3] spi: dln2: Propagate firmware node
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=599402
-  Lore link: https://lore.kernel.org/r/20211222155739.7699-1-andriy.shevchenko@linux.intel.com
-    Patches: [v2,1/3] spi: dln2: Propagate firmware node
-             [v2,2/3] spi: dw: Propagate firmware node
-             [v2,3/3] spi: pxa2xx: Propagate firmware node
-
-
-Total patches: 3
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+>> 
+>> Best regards,
+>> Krzysztof
+>> 
+> 
