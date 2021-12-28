@@ -2,34 +2,31 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A07B4805B2
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Dec 2021 03:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFD848075C
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Dec 2021 09:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234579AbhL1CKM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 27 Dec 2021 21:10:12 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43708 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232504AbhL1CKJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 27 Dec 2021 21:10:09 -0500
+        id S235644AbhL1IVg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 28 Dec 2021 03:21:36 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36784 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235547AbhL1IVd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 28 Dec 2021 03:21:33 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B799B8117D;
-        Tue, 28 Dec 2021 02:10:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C19A8C36AEA;
-        Tue, 28 Dec 2021 02:09:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640657404;
-        bh=SWYw07zmaaDNu+bU6UjWMUGttSEKl48ssAwYr917Irk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AP7PTZtlYcp1DDFFD9oOox44rlGILxnZhjrWGoppO9nx889cG994Anev93Fi8avnE
-         QKDjPgXQd+0j5ryyJUZRF2fBwkLwO80XrnSF/7Fx+x50yneeRCMv+6NTewDTm+M3mY
-         UmjlUI3lKpBa+eY+azArRNs2im3Ff4KiJ7Zi2yf5dhhdWeFi5sankCfKs3hH/NkcWY
-         C3nDae4xyYfSY866Hl7iueZkbXg7sQjQFFHeioueEr+2zR+wkgXwGDiPuaIoio9xml
-         rwSFGRLZ2Ry45efsPcHYEzY5Wj/FdpgdsOlVeG8/L54LBpew0o0F/pJgWb5CCAbMPX
-         5d9alQgd1Ngqw==
-Date:   Tue, 28 Dec 2021 03:09:46 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 147D76118E;
+        Tue, 28 Dec 2021 08:21:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB991C36AE8;
+        Tue, 28 Dec 2021 08:21:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640679691;
+        bh=AyTvVvui2qlcHtQrKzueO2aVJtq3B/0n6NTMMAVaPv0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kH6mvQE+CbYxtdqKfYIrcnXRRkMOKzNgkkDI4Qj231PIqAVKah1gnHZGbf7pyzYif
+         5Fy29Whi1PzPFIz42NBP1CwIg6Czpkv7Hvsk4tV4vJc5VHnlaMIkb+39JrPmPYspb6
+         8Fb7cSFih5JdAhKULSvypMAJ71q6QDfYXW2GEFIA=
+Date:   Tue, 28 Dec 2021 09:21:23 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Niklas Schnelle <schnelle@linux.ibm.com>
 Cc:     Arnd Bergmann <arnd@kernel.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
@@ -50,6 +47,7 @@ Cc:     Arnd Bergmann <arnd@kernel.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Karsten Keil <isdn@linux-pingi.de>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sathya Prakash <sathya.prakash@broadcom.com>,
         Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
         Suganath Prabu Subramani 
@@ -71,7 +69,6 @@ Cc:     Arnd Bergmann <arnd@kernel.org>,
         Mark Brown <broonie@kernel.org>,
         Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
         Teddy Wang <teddy.wang@siliconmotion.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Forest Bond <forest@alittletooquiet.net>,
         Jiri Slaby <jirislaby@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -90,75 +87,43 @@ Cc:     Arnd Bergmann <arnd@kernel.org>,
         dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
         alsa-devel@alsa-project.org
 Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
-Message-ID: <20211228030946.65932d2e@coco.lan>
-In-Reply-To: <20211227164317.4146918-2-schnelle@linux.ibm.com>
+Message-ID: <YcrJAwsKIxxX18pW@kroah.com>
 References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
-        <20211227164317.4146918-2-schnelle@linux.ibm.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+ <20211227164317.4146918-2-schnelle@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211227164317.4146918-2-schnelle@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Em Mon, 27 Dec 2021 17:42:46 +0100
-Niklas Schnelle <schnelle@linux.ibm.com> escreveu:
-
-> Introduce a new LEGACY_PCI Kconfig option which gates support for legacy
-> PCI devices including those attached to a PCI-to-PCI Express bridge and
-> PCI Express devices using legacy I/O spaces. Note that this is different
-> from non PCI uses of I/O ports such as by ACPI.
-> 
-> Add dependencies on LEGACY_PCI for all PCI drivers which only target
-> legacy PCI devices and ifdef legacy PCI specific functions in ata
-> handling.
-> 
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
->  drivers/ata/Kconfig                          | 34 ++++++++--------
->  drivers/ata/ata_generic.c                    |  3 +-
->  drivers/ata/libata-sff.c                     |  2 +
->  drivers/comedi/Kconfig                       | 42 +++++++++++++++++++
->  drivers/gpio/Kconfig                         |  2 +-
->  drivers/hwmon/Kconfig                        |  6 +--
->  drivers/i2c/busses/Kconfig                   | 24 +++++------
->  drivers/input/gameport/Kconfig               |  4 +-
->  drivers/isdn/hardware/mISDN/Kconfig          | 14 +++----
-
->  drivers/media/cec/platform/Kconfig           |  2 +-
->  drivers/media/pci/dm1105/Kconfig             |  2 +-
->  drivers/media/radio/Kconfig                  |  2 +-
-
-Not sure what you meant by "legacy I/O spaces" on this patch. 
-I mean, I would expect non-PCIe devices - like bttv and other
-devices developed at the past millennium or so to be "legacy",
-but at least on media, it is touching some drivers that aren't
-that old, while keeping the really old ones untouched. Instead,
-it is touching a driver developed in 2017 plus two other ones
-that are a way newer than other drivers.
-
-The support for the Bt8xx chipset, in particular, is really 
-weird, as a sound driver for such chipset:
-
-> @@ -172,6 +177,7 @@ config SND_AZT3328
+On Mon, Dec 27, 2021 at 05:42:46PM +0100, Niklas Schnelle wrote:
+> --- a/drivers/pci/Kconfig
+> +++ b/drivers/pci/Kconfig
+> @@ -23,6 +23,17 @@ menuconfig PCI
 >  
->  config SND_BT87X
->  	tristate "Bt87x Audio Capture"
-> +	depends on LEGACY_PCI
->  	select SND_PCM
->  	help
->  	  If you want to record audio from TV cards based on
+>  if PCI
+>  
+> +config LEGACY_PCI
+> +	bool "Enable support for legacy PCI devices"
+> +	depends on HAVE_PCI
+> +	help
+> +	   This option enables support for legacy PCI devices. This includes
+> +	   PCI devices attached directly or via a bridge on a PCI Express bus.
+> +	   It also includes compatibility features on PCI Express devices which
+> +	   make use of legacy I/O spaces.
 
-was marked as dependent of LEGACY_PCI, while the DVB and V4L2 ones 
-weren't.
+All you really care about is the "legacy" I/O spaces here, this isn't
+tied to PCI specifically at all, right?
 
-Sounds confusing to me, as the PCI bridge used by a Bt87x device 
-should be the same for all three subdevices.
+So why not just have a OLD_STYLE_IO config option or something like
+that, to show that it's the i/o functions we care about here, not PCI at
+all?
 
-I'm confused...
+And maybe not call it "old" or "legacy" as time constantly goes forward,
+just describe it as it is, "DIRECT_IO"?
 
-Regards,
-Mauro
+thanks,
+
+greg k-h
