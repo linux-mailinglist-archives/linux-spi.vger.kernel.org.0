@@ -2,69 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB5E14826FF
-	for <lists+linux-spi@lfdr.de>; Sat,  1 Jan 2022 08:56:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A99BB482751
+	for <lists+linux-spi@lfdr.de>; Sat,  1 Jan 2022 11:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiAAH4U (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 1 Jan 2022 02:56:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
+        id S232254AbiAAKlJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 1 Jan 2022 05:41:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiAAH4T (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 1 Jan 2022 02:56:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADC7C061574
-        for <linux-spi@vger.kernel.org>; Fri, 31 Dec 2021 23:56:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7432960A6B
-        for <linux-spi@vger.kernel.org>; Sat,  1 Jan 2022 07:56:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CE466C36AE9;
-        Sat,  1 Jan 2022 07:56:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641023777;
-        bh=xfa0cCrIb7Akct8/XBt3JL/fkQiAJXFkd0AumIUUwxc=;
-        h=Subject:From:Date:To:From;
-        b=NwZKsuM8ECo1UsakPh91v5nDsbAtn/cSTtX84tSC5CdOvTfN9s7pmmxSU9GOs2NdK
-         7XUgJsXc2ASQIosugpRpTBr1Ou71X35w9SPvnBLj0KvElLZ/03M59Xr6w9JAPpIKep
-         5JGdwq4akDPkCUSk+mOdgpz1GXhpOWYSHqApT1JVvD5ZYfHxiDeEVo4mXIeEEnwRCt
-         zIjJ17E112gR8VyooqNpQipdi8RHmcqSiP7U0ncTCA+CD5BGl8+yCzdlbuIBxvkeVs
-         VcfycwzjK1mIkMQ9Zc1pKp18/20QaeA5bgi9VRseLw/AR0yaC2PMY2qH6fj+SSkhnE
-         HD8l+WiWLcpsA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AA921C395DE;
-        Sat,  1 Jan 2022 07:56:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229624AbiAAKlI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 1 Jan 2022 05:41:08 -0500
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1192C061574
+        for <linux-spi@vger.kernel.org>; Sat,  1 Jan 2022 02:41:08 -0800 (PST)
+Received: by mail-pl1-x641.google.com with SMTP id z3so21667654plg.8
+        for <linux-spi@vger.kernel.org>; Sat, 01 Jan 2022 02:41:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=dhFaFNGf9P/hgzfpigNOAcNefTeR7Csml9+Bh/hdy/w=;
+        b=cVAN2VewodRqympAwhyav4CZhSbxcwhCdQT2+h4bN1dtMZJHyT1KZLVN3v3bUrsjkF
+         Ej6Er8VLEEhYwSdYQnu7qb0yXUYAKY1kGnsdcGUoK9+iQ8ihRxfciW8L+8Asqnd2F+th
+         SOZIu9hRVjoZ7Xw0s556JaJvrrVTcuZ4MfrRDjyMiIyT6d6YxW6vg/mJcjnAaulvzmTg
+         3lJUaG3c5eSHZch5zR0Hd9CLDWKi4G01B1iLNu8esMvNUf0c2SzFBm296ZT1H687Mb8P
+         PNWQP+UvnsElCOmQaxujLv/3TVPxVqzxs+Xdo/QvwZDzBdVVqooWuhb8CtsYwNTiAp2Z
+         XH6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=dhFaFNGf9P/hgzfpigNOAcNefTeR7Csml9+Bh/hdy/w=;
+        b=S0Dpbz3MOc0z3Zd0AJR0F7g089za3uiczL8PtfKwz609JUuC4YHhZ6cU1AeqJz5E76
+         sTDUOZaPNw3bTIduKB7HyNPDMpKjUZ8SLo2Wk4wjhML79wcIWU4ij7r80qTNqG9bQeKy
+         QauOh/r10D6IAdXqMR+jOto4t1AKPOjHbA3d/OyAGVcDi7kWZWRyTLEo51yRnSpX+wWq
+         jOo1yhQSH42reWZqFTeIcmxxcodENlBC8bbtdPP3mZjbP2evbmJiW23JDR/MHZUYed8j
+         7zCOYBJv8efVLd+Q/YklXKEGQSOqGFRpIvrR8LYNYCK36cZHiIJmcXtu0sLtB8VXMweJ
+         dhcw==
+X-Gm-Message-State: AOAM533P6B4vTDCqzGKdu4UrFXZqIeqqpgHuUnOz1fYgklYiTjKTDj3X
+        2M96QiEyr/aR+FhjmiCwj0E=
+X-Google-Smtp-Source: ABdhPJx4p7PAuMgSxe9RSKunOUl6zoMPRBphbLSY1YBqyOtVqqGkE2hFvVOoK9h9iR3y3gDLS3S0uA==
+X-Received: by 2002:a17:90b:3e8b:: with SMTP id rj11mr47120480pjb.237.1641033668285;
+        Sat, 01 Jan 2022 02:41:08 -0800 (PST)
+Received: from [192.168.0.153] ([143.244.48.136])
+        by smtp.gmail.com with ESMTPSA id s35sm26832835pfw.193.2022.01.01.02.41.00
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Sat, 01 Jan 2022 02:41:08 -0800 (PST)
+Message-ID: <61d02fc4.1c69fb81.dee2a.a943@mx.google.com>
+From:   hyaibe56@gmail.com
+X-Google-Original-From: suport.prilend@gmail.com
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <164102377760.24187.15387842138563121611.git-patchwork-housekeeping@kernel.org>
-Date:   Sat, 01 Jan 2022 07:56:17 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: RE:
+To:     Recipients <suport.prilend@gmail.com>
+Date:   Sat, 01 Jan 2022 12:40:52 +0200
+Reply-To: andres.stemmet1@gmail.com
+X-Mailer: TurboMailer 2
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v3] mtd: spinand: Add Octal DTR SPI (8D-8D-8D) mode support (2022-01-01T07:42:34)
-  Superseding: [v2] mtd: spinand: Add Octal DTR SPI (8D-8D-8D) mode support (2021-10-11T20:46:05):
-    [v2,01/14] spi: spi-mem: Add DTR templates for cmd, address, dummy and data phase
-    [v2,02/14] mtd: spinand: Add enum spinand_proto to indicate current SPI IO mode
-    [v2,03/14] mtd: spinand: Patch spi_mem_op for the SPI IO protocol using reg_proto
-    [v2,04/14] mtd: spinand: Fix odd byte addr and data phase in read and write reg op for Octal DTR mode
-    [v2,05/14] mtd: spinand: Add adjust_op() in manufacturer_ops to modify the ops for manufacturer specific changes
-    [v2,06/14] mtd: spinand: Add macros for Octal DTR page read and write operations
-    [v2,07/14] mtd: spinand: Allow enabling Octal DTR mode in the core
-    [v2,08/14] mtd: spinand: winbond: Add support for write volatile configuration register op
-    [v2,09/14] mtd: spinand: winbond: Add octal_dtr_enable() for manufacturer_ops
-    [v2,10/14] mtd: spinand: Add support for Power-on-Reset (PoR) instruction
-    [v2,11/14] mtd: spinand: Perform Power-on-Reset on the flash in mtd_suspend()
-    [v2,12/14] mtd: spinand: Add adjust_op() in Winbond manufacturer_ops
-    [v2,13/14] mtd: spinand: winbond: Rename cache op_variants struct variable
-    [v2,14/14] mtd: spinand: winbond: Add support for Winbond W35N01JW SPI NAND flash
+I want to confide in you to finalize this transaction of mutual benefits. I=
+t may seem strange to you, but it is real. This is a transaction that has n=
+o risk at all, due process shall be followed and it shall be carried out un=
+der the ambit of the financial laws. Being the Chief Financial Officer, BP =
+Plc. I want to trust and put in your care Eighteen Million British Pounds S=
+terling, The funds were acquired from an over-invoiced payment from a past =
+contract executed in one of my departments. I can't successfully achieve th=
+is transaction without presenting you as foreign contractor who will provid=
+e a bank account to receive the funds.
+
+Documentation for the claim of the funds will be legally processed and docu=
+mented, so I will need your full cooperation on this matter for our mutual =
+benefits. We will discuss details if you are interested to work with me to =
+secure this funds. I will appreciate your prompt response in every bit of o=
+ur communication. Stay Blessed and Stay Safe.
+
+Best Regards
 
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Tel: +44 7537 185910
+Andres  Stemmet
+Email: andres.stemmet1@gmail.com  =
+
+Chief financial officer
+BP Petroleum p.l.c.
+
+                                                                           =
+                        Copyright =A9 1996-2021
 
