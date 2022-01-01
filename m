@@ -2,99 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1344481E29
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Dec 2021 17:36:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 890864826D7
+	for <lists+linux-spi@lfdr.de>; Sat,  1 Jan 2022 08:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241249AbhL3QgU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 30 Dec 2021 11:36:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
+        id S231218AbiAAHdh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 1 Jan 2022 02:33:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241266AbhL3QgT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 30 Dec 2021 11:36:19 -0500
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB730C061759
-        for <linux-spi@vger.kernel.org>; Thu, 30 Dec 2021 08:36:18 -0800 (PST)
-Received: by mail-ed1-x543.google.com with SMTP id w16so100107204edc.11
-        for <linux-spi@vger.kernel.org>; Thu, 30 Dec 2021 08:36:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=tJuk50ldQ3muMSuXbgoS9j25a+T88Kj8cRwalO+iQW8=;
-        b=Tl2guSR4m3xEw3rpULIHJ++wqFW/SYEQmQ7WMIbnHy2zYaUoARg7cK9PknZf6cN0W3
-         Peuy4aLjRGAefGaAUwuauVVgDEtZLCzlwjNxLtx80PQlCxoGSnVjxl5sdsVysUIYKcXe
-         ZHEvY5FhgjEl58lOLJ1A9t4h30umP/Ypa+sfhqsYwU7Yrt1WkeUurBVz0ENELi+zsR3u
-         BJQNY1VfxHUUaE/8TT5cdKRGj8c4KYFh+H7dGlxuQ+DG6onDg8Jr518b+Y5yocGrGcCe
-         yh+h+XVHDxXODtQ3qlmex9RXZy1vi5EDfVkrKOrMBn882gkRab822AE3oOXEEvSNp6yc
-         Cq3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=tJuk50ldQ3muMSuXbgoS9j25a+T88Kj8cRwalO+iQW8=;
-        b=PCK8BIGhs3eCqAocC7hZzCtTAlqXsUyKbs+gRi8tBnM/u+ubv3p6USAuyPGQlL23PA
-         DRtckd6c60aQtRyyIFF2gx2pgCv1/3y4lcnPsqoptDElvVp8Er5XdPDVTi7yqdqql3JS
-         oBPjkdB1xbruo0xvOhOmqi0TueNwA+fUseFu9kj+Zq/DjkSG5qQmQglVmCDv9nJdzx5b
-         NJHC+3zF7AD6YbTaUyu82OrPYyz26W9DA537A32kvXMqwSZEHy168zus2nhgLHvHVIGn
-         BxrDL9tSB7+s8LvwwMJiKyeJINqwvp6sZ6SBwBwFeKvDD1wLBLPZUw7cQTqnkkLdqNRs
-         uLnA==
-X-Gm-Message-State: AOAM532jRmRxj0qW/oS5VJ9cj+tK0uuRNUY3kD3/UqvsZZY2yJEpL17o
-        z1iDI+WtBzu2xo/wNtFVB8R0fKmWucGfuRXG0z4=
-X-Google-Smtp-Source: ABdhPJzOomp7dfsSHzp32oQmbyN2PzdvUl16PkfjdGA/zQ1JLDHrj2HPGycg1+BKCtW6WdYSjbqXMvD8Y4OnayGP3mo=
-X-Received: by 2002:a17:907:9805:: with SMTP id ji5mr25733798ejc.431.1640882176818;
- Thu, 30 Dec 2021 08:36:16 -0800 (PST)
+        with ESMTP id S231148AbiAAHdg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 1 Jan 2022 02:33:36 -0500
+X-Greylist: delayed 462 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 31 Dec 2021 23:33:36 PST
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72853C061574
+        for <linux-spi@vger.kernel.org>; Fri, 31 Dec 2021 23:33:36 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id C725E300002A0;
+        Sat,  1 Jan 2022 08:25:48 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id B966A30123; Sat,  1 Jan 2022 08:25:48 +0100 (CET)
+Date:   Sat, 1 Jan 2022 08:25:48 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Sven Peter <sven@svenpeter.dev>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] spi: apple: Add driver for Apple SPI controller
+Message-ID: <20220101072548.GA28593@wunner.de>
+References: <20211212034726.26306-1-marcan@marcan.st>
+ <20211212034726.26306-4-marcan@marcan.st>
 MIME-Version: 1.0
-Received: by 2002:a05:6402:524a:0:0:0:0 with HTTP; Thu, 30 Dec 2021 08:36:16
- -0800 (PST)
-From:   saleem norman <norsaleem74@gmail.com>
-Date:   Thu, 30 Dec 2021 08:36:16 -0800
-Message-ID: <CALzdWh_x5jjnnv1r9eGK9qr1a48HO-KCPT0FhG6Jv8RmohjA0g@mail.gmail.com>
-Subject: DEAR FRIEND CONTACTS MY SECRETARY HIS E-MAIL nelson_salah@aol.com.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211212034726.26306-4-marcan@marcan.st>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-I'M SORRY BUT HAPPY TO INFORM YOU ABOUT MY SUCCESS IN GETTING THOSE
-FUNDS TRANSFERRED UNDER THE CO-OPERATION OF A NEW PARTNER FROM
-PARAGUAY THOUGH I TRIED MY BEST TO INVOLVE YOU IN THE GOLD/DIAMOND
-BUSINESS BUT GOD DECIDED THE WHOLE SITUATIONS. PRESENTLY AM IN UNITED
-ARAB EMIRATES FOR INVESTMENT PROJECTS WITH MY OWN SHARE OF THE TOTAL
-SUM OF THE MONEY. MEANWHILE, I DIDN'T FORGET YOU=E2=80=99RE PAST EFFORTS AN=
-D
-ATTEMPTS TO ASSIST ME IN TRANSFERRING THOSE FUNDS DESPITE THAT
-EVERYTHING FAILED US SOMEHOW. NOW CONTACT MY SECRETARY IN BURKINA
-FASO. MR. NELSON SALAH BY NAME: HIS E-MAIL nelson_salah@aol.com.
+On Sun, Dec 12, 2021 at 12:47:26PM +0900, Hector Martin wrote:
+> +	ret = devm_spi_register_controller(&pdev->dev, ctlr);
+[...]
+> +static int apple_spi_remove(struct platform_device *pdev)
+> +{
+> +	struct spi_controller *ctlr = platform_get_drvdata(pdev);
+> +	struct apple_spi *spi = spi_controller_get_devdata(ctlr);
+> +
+> +	pm_runtime_disable(&pdev->dev);
+> +
+> +	/* Disable all the interrupts just in case */
+> +	reg_write(spi, APPLE_SPI_IE_FIFO, 0);
+> +	reg_write(spi, APPLE_SPI_IE_XFER, 0);
+> +
+> +	clk_disable_unprepare(spi->clk);
 
-ASK HIM TO SEND YOU THE VISA CARD TOTAL SUM OF $2.500, 000.00.USD
-WHICH I KEPT FOR YOUR COMPENSATION FOR ALL THE PAST EFFORTS AND
-ATTEMPT TO ASSIST ME IN THIS MATTER. I DEEPLY APPRECIATED YOUR EFFORTS
-AT THAT TIME VERY MUCH. SO FEEL FREE AND KEEP IN TOUCHED WITH MY
-SECRETARY; MR. NELSON SALAH AND INSTRUCT HIM WHERE TO SEND THE VISA
-CARD VALUE SUM OF $2.500, 000.00.USD TO YOU. NOW THIS AMOUNT IS ME AND
-THE NEW PARTNER CONTRIBUTE AND OFFER YOU THIS AMOUNT
-$1.500.000.00.USD. IS FROM MY OWN SHARE WHILE MY NEW PARTNER SUPPORTED
-YOU ALSO WITH SUM OF $ 1000000.USD. FROM HIS OWN SHARE ALSO BECAUSE I
-EXPLAIN THE WHOLE FACTS TO HIM THAT YOU ARE THE FIRST PERSON I
-CONTACTED THAT WANTED TO ASSIST ME WHILE YOU COULD NOT MAKE IT AND HE
-SAID OKAY THERE'S NO PROBLEM.
+You need to use spi_register_controller() in apple_spi_probe()
+(*not* the devm variant) and invoke spi_unregister_controller()
+first thing in apple_spi_remove().
 
-SO YOU HAVE TO KEEP THE WHOLE SECRET ABOUT MY SUCCESS, BECAUSE I
-BELIEVE ONLY YOU KNOW HOW I MADE THIS MONEY SO TRY TO KEEP EVERYTHING
-SECRET. I HOPE YOU UNDERSTAND THE REASON WHY THIS HUGE AMOUNT OF FUNDS
-WAS KEPT FOR YOU? PLEASE DO LET ME KNOW IMMEDIATELY YOU RECEIVE THE
-VISA CARD SO THAT WE CAN SHARE THE JOY AFTER ALL THE SUFFERINGS AT
-THAT TIME; IN THIS MOMENT OF TIME, I'M VERY BUSY HERE BECAUSE OF THE
-INVESTMENT PROJECTS WHICH MYSELF AND THE NEW PARTNER ARE HAVING AT
-HAND, FINALLY;
+Otherwise you've got an ordering issue on driver unbind:
+__device_release_driver() first calls the ->remove hook and only
+then devres_release_all().  You're disabling the clock and interrupts
+in the ->remove hook, rendering the controller unusable.  Yet the
+expectation is that until spi_unregister_controller() returns,
+the controller works and its slaves are accessible.
 
-REMEMBER THAT I HAVE ALREADY FORWARD THE INSTRUCTION TO THE SECRETARY
-ON YOUR BEHALF TO RECEIVE THAT MONEY, SO FEEL FREE TO KEEP IN TOUCH
-WITH HIM, SO THAT HE WILL SEND THE VISA CARD VALUE SUM OF
-$2.500,000.00.USD. TWO MILLION FIVE HUNDRED THOUSAND UNITED STATE
-DOLLARS TO YOU WITHOUT ANY DELAY.
+This is especially important if there are slaves attached to the
+controller which perform SPI transfers in their ->remove hooks,
+e.g. to quiesce interrupts on the slaves.  Those transfers won't
+work the way you've structured the code now.
 
-BEST REGARDS,
-MR. NORMAN SALEEM.
+spi-sifive.c, from which you've derived this, is broken.  As are
+a couple dozen other drivers.  I've fixed some of them,
+but haven't gotten around to fixing them all.  Just trying to
+prevent more brokenness from entering the codebase.
+
+Thanks,
+
+Lukas
