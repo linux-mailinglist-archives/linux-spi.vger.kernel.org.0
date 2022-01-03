@@ -2,35 +2,32 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84AB4482FD1
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Jan 2022 11:17:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34707482FE4
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Jan 2022 11:27:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbiACKRb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 3 Jan 2022 05:17:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbiACKRa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Jan 2022 05:17:30 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E73C061761;
-        Mon,  3 Jan 2022 02:17:30 -0800 (PST)
+        id S231447AbiACK1K (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 3 Jan 2022 05:27:10 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:46018 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230223AbiACK1K (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 3 Jan 2022 05:27:10 -0500
 Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id AEA5D1F41D7C;
-        Mon,  3 Jan 2022 10:17:28 +0000 (GMT)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id B56911F41E43;
+        Mon,  3 Jan 2022 10:27:08 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1641205049;
-        bh=ocbIJznQCqUQhCxdWJ6da5NCU1wQ2RLHpXKaimR61ok=;
+        s=mail; t=1641205629;
+        bh=H68nuZ/N2vdplhQxlo9BuZ7az5CyApk7/FnMc7YI5gE=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ApL3RROiIA61nFmL87rahNxhTzVwNJ0DT2FR1qj219bj/7tUqjnvi7LTQNmYKm27e
-         ip+v5Kpugmu5RNIK6uE9z4AzqdPDB4KBnZXRLRuMujtYnX1kjtE0OkmTmy2izNwc9x
-         iA0v+RDrLuJgZNSrPrUFabblu77dqk5ByeWjaqyyTUMxM22lmTKyw7gUCrakLiNfUH
-         625aeY9ymm4Ovq50bhv7FzgpuO7M1m9AoC/zn7AkI+SNe3HdYGpOI1MVWLhy++dxo/
-         fBkA+A17Q8sDytk0CIDZCg6nK4bUmXhFb4tB6uaMxpY/OnLMTDBfQHxATiwAo+Fg/K
-         aYq/0PsjiDMiw==
-Date:   Mon, 3 Jan 2022 11:17:25 +0100
+        b=NA3qLUUuy65gMCeI8yM8y82ZuLycuKCi1Y14FHpnu82hL1GkXyl9yOWBxJRNa9POc
+         CMLiCDjF22RLv2fPWP3RjOzYnQLE0q1WY1cfMMZg2g6E7UDTRRRHHFvJGdsPpX2oXI
+         BZi7onjsBZVXnnOfdu03lmXqSjj6hvoGCJq3tBJXzUqTQDY9+IW7xQNYqrcCrbnhdt
+         39+VqawxIMUwvUxIrc+ft5Ak1vqC4I3zNATExEQqFgzx7ez3dVmwxPKbbcA+6GFYi1
+         /lh7Gvk11aMdwgTOWY8j4rLgh5k0Ghq2+9u6me2RPfQSydvKU7WW3zdi7q/vLXJ7Xl
+         qKMK02jsZEWCQ==
+Date:   Mon, 3 Jan 2022 11:27:05 +0100
 From:   Boris Brezillon <boris.brezillon@collabora.com>
 To:     Apurva Nandan <a-nandan@ti.com>
 Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -43,12 +40,12 @@ Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Alexander Lobakin <alobakin@pm.me>,
         <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <linux-spi@vger.kernel.org>, <p.yadav@ti.com>
-Subject: Re: [PATCH v3 12/17] mtd: spinand: Add mtd_suspend() to disable
- Octal DTR mode at suspend
-Message-ID: <20220103111725.3e3ce291@collabora.com>
-In-Reply-To: <20220101074250.14443-13-a-nandan@ti.com>
+Subject: Re: [PATCH v3 15/17] mtd: spianand: winbond: Add change_mode()
+ manufacturer_ops
+Message-ID: <20220103112705.718c580c@collabora.com>
+In-Reply-To: <20220101074250.14443-16-a-nandan@ti.com>
 References: <20220101074250.14443-1-a-nandan@ti.com>
-        <20220101074250.14443-13-a-nandan@ti.com>
+        <20220101074250.14443-16-a-nandan@ti.com>
 Organization: Collabora
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
@@ -58,54 +55,68 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, 1 Jan 2022 13:12:45 +0530
+On Sat, 1 Jan 2022 13:12:48 +0530
 Apurva Nandan <a-nandan@ti.com> wrote:
 
-> The flash might or might not have gone a power-down during sleep.
-> Hence, its SPI IO mode is unpredictable for the core at the time of
-> resume. To ensure proper reinitialization during resume, disable the
-> Octal DTR SPI IO mode and bring the flash to 1S-1S-1S mode when
-> performing suspend using mtd_suspend().
+> Add implementation of change_mode() for Winbond's manufacturer_ops,
+> that executes octal_dtr_enable() and octal_dtr_disable() according
+> to requested protocol.
+> 
+> Datasheet: https://www.winbond.com/export/sites/winbond/datasheet/W35N01JW_Datasheet_Brief.pdf
 > 
 > Signed-off-by: Apurva Nandan <a-nandan@ti.com>
 > ---
->  drivers/mtd/nand/spi/core.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+>  drivers/mtd/nand/spi/winbond.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
 > 
-> diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
-> index 2fd08085db6f..9d1c72634e5a 100644
-> --- a/drivers/mtd/nand/spi/core.c
-> +++ b/drivers/mtd/nand/spi/core.c
-> @@ -1307,6 +1307,16 @@ static void spinand_mtd_resume(struct mtd_info *mtd)
->  	spinand_ecc_enable(spinand, false);
+> diff --git a/drivers/mtd/nand/spi/winbond.c b/drivers/mtd/nand/spi/winbond.c
+> index c7478faf6cee..d8eccb40c80f 100644
+> --- a/drivers/mtd/nand/spi/winbond.c
+> +++ b/drivers/mtd/nand/spi/winbond.c
+> @@ -242,8 +242,33 @@ static int winbond_spinand_octal_dtr_disable(struct spinand_device *spinand)
+>  	return 0;
 >  }
 >  
-> +static int spinand_mtd_suspend(struct mtd_info *mtd)
+> +static int winbond_change_spi_mode(struct spinand_device *spinand,
+> +				   const enum spinand_protocol protocol)
 > +{
-> +	struct spinand_device *spinand = mtd_to_spinand(mtd);
+> +	if (spinand->protocol == protocol)
+> +		return 0;
 > +
-> +	if (spinand->ctrl_ops->protocol == SPINAND_8D_8D_8D)
-> +		return spinand_init_octal_dtr_disable(spinand);
-
-Ok, so you're calling it here. I'd re-order commmits so that DTR
-support is added after the suspend hook is defined, even if this hook
-does nothing at first. This way you don't have an unused warning in the
-previous commit, and most importantly, you don't enter 8DTR before
-you're sure things will be set back to 1S when entering suspend.
-
+> +	switch (spinand->protocol) {
+> +	case SPINAND_1S_1S_1S:
+> +		if (protocol == SPINAND_8D_8D_8D)
+> +			return winbond_spinand_octal_dtr_enable(spinand);
+> +		break;
 > +
-> +	return 0;
+> +	case SPINAND_8D_8D_8D:
+> +		if (protocol == SPINAND_1S_1S_1S)
+> +			return winbond_spinand_octal_dtr_disable(spinand);
+> +		break;
+> +
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+
+This version is slightly more concise:
+
+	if (spinand->protocol == protocol)
+		return 0;
+	else if (spinand->protocol == SPINAND_1S && protocol ==	SPINAND_8D)
+		return winbond_spinand_octal_dtr_enable(spinand);
+	else if (spinand->protocol == SPINAND_8D && protocol ==	SPINAND_1S)
+		return winbond_spinand_octal_dtr_disable(spinand);
+
+	return -EOPNOTSUPP;
+
 > +}
 > +
->  static int spinand_init(struct spinand_device *spinand)
->  {
->  	struct device *dev = &spinand->spimem->spi->dev;
-> @@ -1381,6 +1391,7 @@ static int spinand_init(struct spinand_device *spinand)
->  	mtd->_erase = spinand_mtd_erase;
->  	mtd->_max_bad_blocks = nanddev_mtd_max_bad_blocks;
->  	mtd->_resume = spinand_mtd_resume;
-> +	mtd->_suspend = spinand_mtd_suspend;
+>  static const struct spinand_manufacturer_ops winbond_spinand_manuf_ops = {
+>  	.init = winbond_spinand_init,
+> +	.change_mode = winbond_change_spi_mode,
+>  };
 >  
->  	if (nand->ecc.engine) {
->  		ret = mtd_ooblayout_count_freebytes(mtd);
+>  const struct spinand_manufacturer winbond_spinand_manufacturer = {
 
