@@ -2,18 +2,18 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B784F483E41
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Jan 2022 09:36:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5D8483E42
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Jan 2022 09:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233820AbiADIgs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 4 Jan 2022 03:36:48 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:34779 "EHLO
+        id S233951AbiADIgu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 Jan 2022 03:36:50 -0500
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:59139 "EHLO
         relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiADIgs (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Jan 2022 03:36:48 -0500
+        with ESMTP id S229677AbiADIgt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Jan 2022 03:36:49 -0500
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id A13211C0006;
-        Tue,  4 Jan 2022 08:36:45 +0000 (UTC)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 561E81C000D;
+        Tue,  4 Jan 2022 08:36:47 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
@@ -28,9 +28,9 @@ Cc:     Julien Su <juliensu@mxic.com.tw>,
         Boris Brezillon <boris.brezillon@collabora.com>,
         Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v9 07/13] mtd: spinand: Delay a little bit the dirmap creation
-Date:   Tue,  4 Jan 2022 09:36:25 +0100
-Message-Id: <20220104083631.40776-8-miquel.raynal@bootlin.com>
+Subject: [PATCH v9 08/13] mtd: spinand: Create direct mapping descriptors for ECC operations
+Date:   Tue,  4 Jan 2022 09:36:26 +0100
+Message-Id: <20220104083631.40776-9-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220104083631.40776-1-miquel.raynal@bootlin.com>
 References: <20220104083631.40776-1-miquel.raynal@bootlin.com>
@@ -41,50 +41,99 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-As we will soon tweak the dirmap creation to act a little bit
-differently depending on the picked ECC engine, we need to initialize
-dirmaps after ECC engines. This should not have any effect as dirmaps
-are not yet used at this point.
+In order for pipelined ECC engines to be able to enable/disable the ECC
+engine only when needed and avoid races when future parallel-operations
+will be supported, we need to provide the information about the use of
+the ECC engine in the direct mapping hooks. As direct mapping
+configurations are meant to be static, it is best to create two new
+mappings: one for regular 'raw' accesses and one for accesses involving
+correction. It is up to the driver to use or not the new ECC enable
+boolean contained in the spi-mem operation.
+
+As dirmaps are not free (they consume a few pages of MMIO address space)
+and because these extra entries are only meant to be used by pipelined
+engines, let's limit their use to this specific type of engine and save
+a bit of memory with all the other setups.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/mtd/nand/spi/core.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/mtd/nand/spi/core.c | 35 +++++++++++++++++++++++++++++++++--
+ include/linux/mtd/spinand.h |  2 ++
+ 2 files changed, 35 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
-index 7027c09925e2..715cad26fdef 100644
+index 715cad26fdef..8cbbc320f004 100644
 --- a/drivers/mtd/nand/spi/core.c
 +++ b/drivers/mtd/nand/spi/core.c
-@@ -1209,14 +1209,6 @@ static int spinand_init(struct spinand_device *spinand)
- 	if (ret)
- 		goto err_free_bufs;
+@@ -381,7 +381,10 @@ static int spinand_read_from_cache_op(struct spinand_device *spinand,
+ 		}
+ 	}
  
--	ret = spinand_create_dirmaps(spinand);
--	if (ret) {
--		dev_err(dev,
--			"Failed to create direct mappings for read/write operations (err = %d)\n",
--			ret);
--		goto err_manuf_cleanup;
--	}
--
- 	ret = nanddev_init(nand, &spinand_ops, THIS_MODULE);
- 	if (ret)
- 		goto err_manuf_cleanup;
-@@ -1251,6 +1243,14 @@ static int spinand_init(struct spinand_device *spinand)
- 	mtd->ecc_strength = nanddev_get_ecc_conf(nand)->strength;
- 	mtd->ecc_step_size = nanddev_get_ecc_conf(nand)->step_size;
+-	rdesc = spinand->dirmaps[req->pos.plane].rdesc;
++	if (req->mode == MTD_OPS_RAW)
++		rdesc = spinand->dirmaps[req->pos.plane].rdesc;
++	else
++		rdesc = spinand->dirmaps[req->pos.plane].rdesc_ecc;
  
-+	ret = spinand_create_dirmaps(spinand);
-+	if (ret) {
-+		dev_err(dev,
-+			"Failed to create direct mappings for read/write operations (err = %d)\n",
-+			ret);
-+		goto err_cleanup_ecc_engine;
+ 	while (nbytes) {
+ 		ret = spi_mem_dirmap_read(rdesc, column, nbytes, buf);
+@@ -452,7 +455,10 @@ static int spinand_write_to_cache_op(struct spinand_device *spinand,
+ 			       req->ooblen);
+ 	}
+ 
+-	wdesc = spinand->dirmaps[req->pos.plane].wdesc;
++	if (req->mode == MTD_OPS_RAW)
++		wdesc = spinand->dirmaps[req->pos.plane].wdesc;
++	else
++		wdesc = spinand->dirmaps[req->pos.plane].wdesc_ecc;
+ 
+ 	while (nbytes) {
+ 		ret = spi_mem_dirmap_write(wdesc, column, nbytes, buf);
+@@ -866,6 +872,31 @@ static int spinand_create_dirmap(struct spinand_device *spinand,
+ 
+ 	spinand->dirmaps[plane].rdesc = desc;
+ 
++	if (nand->ecc.engine->integration != NAND_ECC_ENGINE_INTEGRATION_PIPELINED) {
++		spinand->dirmaps[plane].wdesc_ecc = spinand->dirmaps[plane].wdesc;
++		spinand->dirmaps[plane].rdesc_ecc = spinand->dirmaps[plane].rdesc;
++
++		return 0;
 +	}
 +
++	info.op_tmpl = *spinand->op_templates.update_cache;
++	info.op_tmpl.data.ecc = true;
++	desc = devm_spi_mem_dirmap_create(&spinand->spimem->spi->dev,
++					  spinand->spimem, &info);
++	if (IS_ERR(desc))
++		return PTR_ERR(desc);
++
++	spinand->dirmaps[plane].wdesc_ecc = desc;
++
++	info.op_tmpl = *spinand->op_templates.read_cache;
++	info.op_tmpl.data.ecc = true;
++	desc = devm_spi_mem_dirmap_create(&spinand->spimem->spi->dev,
++					  spinand->spimem, &info);
++	if (IS_ERR(desc))
++		return PTR_ERR(desc);
++
++	spinand->dirmaps[plane].rdesc_ecc = desc;
++
  	return 0;
+ }
  
- err_cleanup_ecc_engine:
+diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
+index 6988956b8492..3aa28240a77f 100644
+--- a/include/linux/mtd/spinand.h
++++ b/include/linux/mtd/spinand.h
+@@ -389,6 +389,8 @@ struct spinand_info {
+ struct spinand_dirmap {
+ 	struct spi_mem_dirmap_desc *wdesc;
+ 	struct spi_mem_dirmap_desc *rdesc;
++	struct spi_mem_dirmap_desc *wdesc_ecc;
++	struct spi_mem_dirmap_desc *rdesc_ecc;
+ };
+ 
+ /**
 -- 
 2.27.0
 
