@@ -2,153 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D88483F1B
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Jan 2022 10:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BCE4841F2
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Jan 2022 13:58:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiADJYj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Tue, 4 Jan 2022 04:24:39 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:38451 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiADJYi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Jan 2022 04:24:38 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id E0A671C0002;
-        Tue,  4 Jan 2022 09:24:34 +0000 (UTC)
-Date:   Tue, 4 Jan 2022 10:24:33 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Michael Walle <michael@walle.cc>,
-        <linux-mtd@lists.infradead.org>, Mark Brown <broonie@kernel.org>,
-        <linux-spi@vger.kernel.org>, Julien Su <juliensu@mxic.com.tw>,
-        Jaime Liao <jaimeliao@mxic.com.tw>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-Subject: Re: [PATCH v9 06/13] spi: spi-mem: Add an ecc parameter to the
- spi_mem_op structure
-Message-ID: <20220104102433.0ad3bb2c@xps13>
-In-Reply-To: <20220104100230.1076beed@collabora.com>
-References: <20220104083631.40776-1-miquel.raynal@bootlin.com>
-        <20220104083631.40776-7-miquel.raynal@bootlin.com>
-        <20220104100230.1076beed@collabora.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S233171AbiADM6X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 Jan 2022 07:58:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229543AbiADM6X (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Jan 2022 07:58:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17AFC061761;
+        Tue,  4 Jan 2022 04:58:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DFD361365;
+        Tue,  4 Jan 2022 12:58:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBF50C36AE9;
+        Tue,  4 Jan 2022 12:58:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641301101;
+        bh=LzoQO2hf4XX3/HUBnlnFiJ5QFaegJBMT/iDpIg55KLA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VKJoLHTTmEcMJnHrPW9JVsdzyu90qTRxtyNl5F/lMBQJtN8ulY4u6vIukzde79TCV
+         J4QR0S0itnKTOE1/zvGj25MnGLnaUCi3TWp+KIrFBvqGT5iHWgOWhGmIZerhmbTFbq
+         Ts5cUaMZjeymrnu55bGJICQ4IqSn8vL7z+pi9ejitXo+gr5qOgkuYY1EwyowCgfwLU
+         pw5tClChoi1X+I5VHX45+2ICt/GZ19KzSoJVTPbzVpOvTqQYJzTprF0StfN79uXokP
+         jpxMLJGrUJgOFzIMunbGk9v9eH2/rqLoRGVbrAkoV7Uh3IAm0yrY8FcnfDUG1JUg0V
+         WokZ2+skcXl3w==
+Date:   Tue, 4 Jan 2022 12:58:16 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] spi: apple: Add driver for Apple SPI controller
+Message-ID: <YdREaCo5BXHqtoex@sirena.org.uk>
+References: <20211212034726.26306-1-marcan@marcan.st>
+ <20211212034726.26306-4-marcan@marcan.st>
+ <20220101072548.GA28593@wunner.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="HcLhnphaPbaFosOE"
+Content-Disposition: inline
+In-Reply-To: <20220101072548.GA28593@wunner.de>
+X-Cookie: The horror... the horror!
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Boris,
 
-boris.brezillon@collabora.com wrote on Tue, 4 Jan 2022 10:02:30 +0100:
+--HcLhnphaPbaFosOE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> On Tue,  4 Jan 2022 09:36:24 +0100
-> Miquel Raynal <miquel.raynal@bootlin.com> wrote:
-> 
-> > Soon the SPI-NAND core will need a way to request a SPI controller to
-> > enable ECC support for a given operation. This is because of the
-> > pipelined integration of certain ECC engines, which are directly managed
-> > by the SPI controller itself.
-> > 
-> > Introduce a spi_mem_op additional field for this purpose: ecc.
-> > 
-> > So far this field is left unset and checked to be false by all
-> > the SPI controller drivers in their ->supports_op() hook, as they all
-> > call spi_mem_default_supports_op().
-> > 
-> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> > Acked-by: Pratyush Yadav <p.yadav@ti.com>
-> > ---
-> >  drivers/spi/spi-mem.c       | 5 +++++
-> >  include/linux/spi/spi-mem.h | 5 +++++
-> >  2 files changed, 10 insertions(+)
-> > 
-> > diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-> > index ed966d8129eb..f38ac31961c9 100644
-> > --- a/drivers/spi/spi-mem.c
-> > +++ b/drivers/spi/spi-mem.c
-> > @@ -178,6 +178,11 @@ bool spi_mem_default_supports_op(struct spi_mem *mem,
-> >  			return false;
-> >  	}
-> >  
-> > +	if (op->data.ecc) {
-> > +		if (!spi_mem_controller_is_capable(ctlr, ecc))
-> > +			return false;
-> > +	}  
-> 
-> Nit:
-> 
-> 	if (op->data.ecc &&
-> 	    !spi_mem_controller_is_capable(ctlr, ecc))
-> 		return false;
-> 
+On Sat, Jan 01, 2022 at 08:25:48AM +0100, Lukas Wunner wrote:
 
-Actually I wanted on purpose to distinguish the different checks:
+> This is especially important if there are slaves attached to the
+> controller which perform SPI transfers in their ->remove hooks,
+> e.g. to quiesce interrupts on the slaves.  Those transfers won't
+> work the way you've structured the code now.
 
-if (dtr) {
-	do something here;
-}
+The client drivers shouldn't notice - their remove callbacks will have
+completed before we start removing the controller.
 
-if (ecc) {
-	do something else;
-}
+--HcLhnphaPbaFosOE
+Content-Type: application/pgp-signature; name="signature.asc"
 
-return;
+-----BEGIN PGP SIGNATURE-----
 
-and in order to keep them tidy I used independent if statements within
-each of these :)
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHURGcACgkQJNaLcl1U
+h9AUEQf+Igyc/1O0NNplnnLghLj1kcy5L8WBE6CmUviTtGu0tXcIassqzUHE1j17
+m1kWJnuCXsnuxOsY20S3GMhSKe/lXFcHu6pxkvoZI3FV4P+96RQ+FtWToKarAcDe
+m7f0Ye4qN/TZiEZqtHTZDFiwiGj89YOKuW8CEoV7CVccxQHvF2YEGv5RaC0dJMT1
+rDtrtTY7A7nuBRqfYcJJ4rojwcyty6bB53vXXQvG0z6XOtc6/SnkOFM9cTIKa0Yc
+kwky409Rva0aXq7t4PK0ldoUknbewTuzjpVYkbuLl5SGl4VI41ywnWiIic2wEKNd
+XYCyDO3RXPYTpvIKhtCsejqz1JeNww==
+=jKXj
+-----END PGP SIGNATURE-----
 
-> > +
-> >  	return spi_mem_check_buswidth(mem, op);
-> >  }
-> >  EXPORT_SYMBOL_GPL(spi_mem_default_supports_op);
-> > diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-> > index 4a1bfe689872..051050b40309 100644
-> > --- a/include/linux/spi/spi-mem.h
-> > +++ b/include/linux/spi/spi-mem.h
-> > @@ -89,6 +89,7 @@ enum spi_mem_data_dir {
-> >   * @dummy.dtr: whether the dummy bytes should be sent in DTR mode or not
-> >   * @data.buswidth: number of IO lanes used to send/receive the data
-> >   * @data.dtr: whether the data should be sent in DTR mode or not
-> > + * @data.ecc: whether error correction is required or not
-> >   * @data.dir: direction of the transfer
-> >   * @data.nbytes: number of data bytes to send/receive. Can be zero if the
-> >   *		 operation does not involve transferring data
-> > @@ -119,6 +120,7 @@ struct spi_mem_op {
-> >  	struct {
-> >  		u8 buswidth;
-> >  		u8 dtr : 1;
-> > +		u8 ecc : 1;
-> >  		enum spi_mem_data_dir dir;
-> >  		unsigned int nbytes;
-> >  		union {
-> > @@ -126,6 +128,7 @@ struct spi_mem_op {
-> >  			const void *out;
-> >  		} buf;
-> >  	} data;
-> > +
-> >  };
-> >  
-> >  #define SPI_MEM_OP(__cmd, __addr, __dummy, __data)		\
-> > @@ -288,9 +291,11 @@ struct spi_controller_mem_ops {
-> >  /**
-> >   * struct spi_controller_mem_caps - SPI memory controller capabilities
-> >   * @dtr: Supports DTR operations
-> > + * @ecc: Supports operations with error correction
-> >   */
-> >  struct spi_controller_mem_caps {
-> >  	bool dtr;
-> > +	bool ecc;
-> >  };
-> >  
-> >  #define spi_mem_controller_is_capable(ctlr, cap)	\  
-> 
-
-
-Thanks,
-Miquèl
+--HcLhnphaPbaFosOE--
