@@ -2,309 +2,140 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9661C484628
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Jan 2022 17:47:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B40BC484B15
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Jan 2022 00:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235483AbiADQrE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 4 Jan 2022 11:47:04 -0500
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:41800 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235478AbiADQrE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Jan 2022 11:47:04 -0500
-Received: by mail-ot1-f42.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so7108534otl.8;
-        Tue, 04 Jan 2022 08:47:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=y7mQQJrCdEvgNbyIwr5yNwFdQG8u6m/SH9iP6BsWA2k=;
-        b=pARU8lByw8HFVOWbnBpkLDMwXrOROArCgugp0NVYSd9gUQc1p2igsV7eTSJa7bsFqd
-         v91SaktpZ3q6rdmldenv4vA7iwt1VeJ9sbfWOeN0aDnNjVWiyHyYisyV3CLx51nSZjiY
-         nSKQTASB9l9Wmb47hi324hL98dW6dUQ20inpay+PiNGq/NB1CjlNMoQAL0sKlSQyCSvs
-         CMFcQ/mWECba0c+tfM9Ca+u6jkr4Db2dJUQo94TA++3X08DCOHrUCl4BFqfDsIGp1Nro
-         Na3CWIJwn4xyb+eRPjKMZoV0F7Jfwf+8HsRiSRz1aTKLG+nK3fFPolZi2VvmgzOoyT8r
-         7Hpg==
-X-Gm-Message-State: AOAM533re9NS/ZRaBqa1TKjW0siqvDfx2t55W1Clt+zvPl5POqpvzNWG
-        S+Ft60yBJikTaico46XeWMbMt7Z0Dg==
-X-Google-Smtp-Source: ABdhPJy0PyfbMoothJN0QqxQV5E6kPSeffzh13BwOswhv+KAZppSmJI+nToDoCzSskZteZdgFbdUug==
-X-Received: by 2002:a9d:7519:: with SMTP id r25mr35850106otk.16.1641314823657;
-        Tue, 04 Jan 2022 08:47:03 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id f20sm10008819oiw.48.2022.01.04.08.47.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 08:47:02 -0800 (PST)
-Received: (nullmailer pid 996734 invoked by uid 1000);
-        Tue, 04 Jan 2022 16:47:02 -0000
-Date:   Tue, 4 Jan 2022 10:47:02 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/2] spi: dt-bindings: samsung: convert to dtschema
-Message-ID: <YdR6BsyVaBnnFz7x@robh.at.kernel.org>
-References: <20220102155807.42758-1-krzysztof.kozlowski@canonical.com>
- <20220102155807.42758-2-krzysztof.kozlowski@canonical.com>
+        id S236225AbiADXLQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 4 Jan 2022 18:11:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236232AbiADXLQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 4 Jan 2022 18:11:16 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A50C061784
+        for <linux-spi@vger.kernel.org>; Tue,  4 Jan 2022 15:11:16 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n4sxT-0002pc-Dh; Wed, 05 Jan 2022 00:11:11 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n4sxR-008UVE-Pv; Wed, 05 Jan 2022 00:11:09 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n4sxQ-0003ls-BY; Wed, 05 Jan 2022 00:11:08 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Cc:     linux-integrity@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        kernel@pengutronix.de, linux-spi@vger.kernel.org
+Subject: [PATCH v3] tpm: st33zp24: Make st33zp24_remove() a void function
+Date:   Wed,  5 Jan 2022 00:11:03 +0100
+Message-Id: <20220104231103.227924-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220102155807.42758-2-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2725; h=from:subject; bh=80KsYLOHTqSH02UuY0HZVOPoJasZOIRyvA5e9kvk04M=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBh1NPbdxXJECkrmj+EyM7A7q8i97xjl/KulqcK2QSu IW8DB9WJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYdTT2wAKCRDB/BR4rcrsCSTKCA Cg3Di+C9G2tjMrWxCU/ybNQMpUCpwK/VMsOdSR3b3K+9eOqrqBJLFbS8Vz5t4V4Ib/ZD2nSVvOoGqd i5YmmK8mgJCE5X2aWf68r8lCF8EX1+uGI+UAWE3gj+YazqlydmKOqIKMXUFTkOdlg+v1hMJ67FYFod wnrk5WXRXtNddunxy6Vq0diG99W36a7eklSwEGndjQw8gQNZK/rC9dq3R+dpGigCXeLwCqUq4EjPA6 OwBQhMQl81KB0hQ6hyEgF7TvnbPxenrD/9I/gxZ362K0VUpfNUUTS12HJeD5leARmR/ZLerfHSIhCz Dsn13JkhW0VOX7VdkDsLnKRigG4RYj
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Jan 02, 2022 at 04:58:07PM +0100, Krzysztof Kozlowski wrote:
-> Convert the Samsung SoC (S3C24xx, S3C64xx, S5Pv210, Exynos) SPI
-> controller bindings to DT schema format
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  .../devicetree/bindings/spi/samsung,spi.yaml  | 220 ++++++++++++++++++
->  .../devicetree/bindings/spi/spi-samsung.txt   | 122 ----------
->  MAINTAINERS                                   |   2 +-
->  3 files changed, 221 insertions(+), 123 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi.yaml
->  delete mode 100644 Documentation/devicetree/bindings/spi/spi-samsung.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/samsung,spi.yaml b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-> new file mode 100644
-> index 000000000000..195bfafe05fd
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-> @@ -0,0 +1,220 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/samsung,spi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Samsung S3C/S5P/Exynos SoC SPI controller
-> +
-> +maintainers:
-> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> +
-> +description:
-> +  All the SPI controller nodes should be represented in the aliases node using
-> +  the following format 'spi{n}' where n is a unique number for the alias.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - enum:
-> +          - samsung,s3c2443-spi
-> +          - samsung,s3c6410-spi
-> +          - samsung,s5pv210-spi
-> +          - samsung,exynos5433-spi
-> +      - const: samsung,exynos7-spi
-> +        deprecated: true
-> +
-> +  clocks:
-> +    minItems: 2
-> +    maxItems: 3
-> +
-> +  clock-names:
-> +    minItems: 2
-> +    maxItems: 3
-> +
-> +  cs-gpios: true
-> +
-> +  dmas:
-> +    minItems: 2
-> +    maxItems: 2
-> +
-> +  dma-names:
-> +    items:
-> +      - const: tx
-> +      - const: rx
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  no-cs-readback:
-> +    description:
-> +      The CS line is disconnected, therefore the device should not operate
-> +      based on CS signalling.
-> +    type: boolean
-> +
-> +  num-cs:
-> +    minimum: 1
-> +    maximum: 4
-> +    default: 1
-> +
-> +  samsung,spi-src-clk:
-> +    description:
-> +      If the spi controller includes a internal clock mux to select the clock
-> +      source for the spi bus clock, this property can be used to indicate the
-> +      clock to be used for driving the spi bus clock. If not specified, the
-> +      clock number 0 is used as default.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    default: 0
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +patternProperties:
-> +  "^.*@[0-9a-f]+$":
-> +    type: object
-> +
-> +    allOf:
-> +      - $ref: spi-peripheral-props.yaml
-> +
-> +    properties:
-> +      controller-data:
-> +        type: object
-> +        additionalProperties: false
-> +
-> +        properties:
-> +          samsung,spi-feedback-delay:
+Up to now st33zp24_remove() returns zero unconditionally. Make it return
+no value instead which makes it easier to see in the callers that there is
+no error to handle.
 
-All this has to go in it's own schema which then needs to be added to 
-spi-peripheral-props.yaml.
+Also the return value of i2c and spi remove callbacks is ignored anyway.
 
-> +            description: |
-> +              The sampling phase shift to be applied on the miso line (to account
-> +              for any lag in the miso line). Valid values:
-> +               - 0: No phase shift.
-> +               - 1: 90 degree phase shift sampling.
-> +               - 2: 180 degree phase shift sampling.
-> +               - 3: 270 degree phase shift sampling.
-> +            $ref: /schemas/types.yaml#/definitions/uint32
-> +            enum: [0, 1, 2, 3]
-> +
-> +        required:
-> +          - samsung,spi-feedback-delay
-> +
-> +    required:
-> +      - controller-data
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+Hello,
 
-Not really great that this is required and there's not some default that 
-works.
+changes since v2:
 
-> +
-> +    unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - clock-names
-> +  - dmas
-> +  - dma-names
-> +  - interrupts
-> +  - reg
-> +
-> +allOf:
-> +  - $ref: spi-controller.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: samsung,exynos5433-spi
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 3
-> +          maxItems: 3
-> +        clock-names:
-> +          items:
-> +            - const: spi
-> +            - enum:
-> +                - spi_busclk0
-> +                - spi_busclk1
-> +                - spi_busclk2
-> +                - spi_busclk3
-> +            - const: spi_ioclk
-> +    else:
-> +      properties:
-> +        clocks:
-> +          minItems: 2
-> +          maxItems: 2
-> +        clock-names:
-> +          items:
-> +            - const: spi
-> +            - enum:
-> +                - spi_busclk0
-> +                - spi_busclk1
-> +                - spi_busclk2
-> +                - spi_busclk3
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/exynos5433.h>
-> +    #include <dt-bindings/clock/samsung,s2mps11.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    spi@14d30000 {
-> +        compatible = "samsung,exynos5433-spi";
-> +        reg = <0x14d30000 0x100>;
-> +        interrupts = <GIC_SPI 433 IRQ_TYPE_LEVEL_HIGH>;
-> +        dmas = <&pdma0 11>, <&pdma0 10>;
-> +        dma-names = "tx", "rx";
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        clocks = <&cmu_peric CLK_PCLK_SPI1>,
-> +                 <&cmu_peric CLK_SCLK_SPI1>,
-> +                 <&cmu_peric CLK_SCLK_IOCLK_SPI1>;
-> +        clock-names = "spi",
-> +                      "spi_busclk0",
-> +                      "spi_ioclk";
-> +        samsung,spi-src-clk = <0>;
-> +        pinctrl-names = "default";
-> +        pinctrl-0 = <&spi1_bus>;
-> +        num-cs = <1>;
-> +
-> +        cs-gpios = <&gpd6 3 GPIO_ACTIVE_HIGH>;
-> +        status = "okay";
+ - reword commit log to not say "return void"
 
-Don't need 'status' in examples.
+Best regards
+Uwe
 
-> +        audio-codec@0 {
-> +            compatible = "wlf,wm5110";
-> +            reg = <0x0>;
-> +            spi-max-frequency = <20000000>;
-> +            interrupt-parent = <&gpa0>;
-> +            interrupts = <4 IRQ_TYPE_NONE>;
-> +            clocks = <&pmu_system_controller 0>,
-> +                     <&s2mps13_osc S2MPS11_CLK_BT>;
-> +            clock-names = "mclk1", "mclk2";
-> +
-> +            gpio-controller;
-> +            #gpio-cells = <2>;
-> +            interrupt-controller;
-> +            #interrupt-cells = <2>;
-> +
-> +            wlf,micd-detect-debounce = <300>;
-> +            wlf,micd-bias-start-time = <0x1>;
-> +            wlf,micd-rate = <0x7>;
-> +            wlf,micd-dbtime = <0x2>;
-> +            wlf,micd-force-micbias;
-> +            wlf,micd-configs = <0x0 1 0>;
-> +            wlf,hpdet-channel = <1>;
-> +            wlf,gpsw = <0x1>;
-> +            wlf,inmode = <2 0 2 0>;
-> +
-> +            wlf,reset = <&gpc0 7 GPIO_ACTIVE_HIGH>;
-> +            wlf,ldoena = <&gpf0 0 GPIO_ACTIVE_HIGH>;
-> +
-> +            /* core supplies */
-> +            AVDD-supply = <&ldo18_reg>;
-> +            DBVDD1-supply = <&ldo18_reg>;
-> +            CPVDD-supply = <&ldo18_reg>;
-> +            DBVDD2-supply = <&ldo18_reg>;
-> +            DBVDD3-supply = <&ldo18_reg>;
-> +            SPKVDDL-supply = <&ldo18_reg>;
-> +            SPKVDDR-supply = <&ldo18_reg>;
-> +
-> +            controller-data {
+ drivers/char/tpm/st33zp24/i2c.c      | 5 +----
+ drivers/char/tpm/st33zp24/spi.c      | 5 +----
+ drivers/char/tpm/st33zp24/st33zp24.c | 3 +--
+ drivers/char/tpm/st33zp24/st33zp24.h | 2 +-
+ 4 files changed, 4 insertions(+), 11 deletions(-)
 
-The schema didn't get checked since spi-peripheral-props.yaml isn't 
-yet in my tree, but I'd expect this to be a warning. If not its schema 
-needs to be a bit stricter. The schema for "wlf,wm5110" will need to 
-reference spi-peripheral-props.yaml. (Actually, all SPI peripheral 
-device schemas will need a reference in theory, but really we only care 
-for devices used with controllers with extra properties). 
+diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
+index 7c617edff4ca..3170d59d660c 100644
+--- a/drivers/char/tpm/st33zp24/i2c.c
++++ b/drivers/char/tpm/st33zp24/i2c.c
+@@ -267,11 +267,8 @@ static int st33zp24_i2c_probe(struct i2c_client *client,
+ static int st33zp24_i2c_remove(struct i2c_client *client)
+ {
+ 	struct tpm_chip *chip = i2c_get_clientdata(client);
+-	int ret;
+ 
+-	ret = st33zp24_remove(chip);
+-	if (ret)
+-		return ret;
++	st33zp24_remove(chip);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/char/tpm/st33zp24/spi.c b/drivers/char/tpm/st33zp24/spi.c
+index a75dafd39445..ccd9e42b8eab 100644
+--- a/drivers/char/tpm/st33zp24/spi.c
++++ b/drivers/char/tpm/st33zp24/spi.c
+@@ -384,11 +384,8 @@ static int st33zp24_spi_probe(struct spi_device *dev)
+ static int st33zp24_spi_remove(struct spi_device *dev)
+ {
+ 	struct tpm_chip *chip = spi_get_drvdata(dev);
+-	int ret;
+ 
+-	ret = st33zp24_remove(chip);
+-	if (ret)
+-		return ret;
++	st33zp24_remove(chip);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/char/tpm/st33zp24/st33zp24.c b/drivers/char/tpm/st33zp24/st33zp24.c
+index 4ec10ab5e576..2b63654c38d6 100644
+--- a/drivers/char/tpm/st33zp24/st33zp24.c
++++ b/drivers/char/tpm/st33zp24/st33zp24.c
+@@ -588,10 +588,9 @@ EXPORT_SYMBOL(st33zp24_probe);
+  * @param: tpm_data, the tpm phy.
+  * @return: 0 in case of success.
+  */
+-int st33zp24_remove(struct tpm_chip *chip)
++void st33zp24_remove(struct tpm_chip *chip)
+ {
+ 	tpm_chip_unregister(chip);
+-	return 0;
+ }
+ EXPORT_SYMBOL(st33zp24_remove);
+ 
+diff --git a/drivers/char/tpm/st33zp24/st33zp24.h b/drivers/char/tpm/st33zp24/st33zp24.h
+index 6747be1e2502..b387a476c555 100644
+--- a/drivers/char/tpm/st33zp24/st33zp24.h
++++ b/drivers/char/tpm/st33zp24/st33zp24.h
+@@ -34,5 +34,5 @@ int st33zp24_pm_resume(struct device *dev);
+ 
+ int st33zp24_probe(void *phy_id, const struct st33zp24_phy_ops *ops,
+ 		   struct device *dev, int irq, int io_lpcpd);
+-int st33zp24_remove(struct tpm_chip *chip);
++void st33zp24_remove(struct tpm_chip *chip);
+ #endif /* __LOCAL_ST33ZP24_H__ */
 
-Rob
+base-commit: c9e6606c7fe92b50a02ce51dda82586ebdf99b48
+-- 
+2.34.1
+
