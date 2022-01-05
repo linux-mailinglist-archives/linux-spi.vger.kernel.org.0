@@ -2,83 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA384484DD6
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Jan 2022 06:54:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E48D9484EC1
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Jan 2022 08:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237591AbiAEFyM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 5 Jan 2022 00:54:12 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:55162 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237593AbiAEFyK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Jan 2022 00:54:10 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2055rt6S053210;
-        Tue, 4 Jan 2022 23:53:55 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1641362035;
-        bh=M0KATbFqwN8Rpvxy7HPJvtHZ5aJs6LrewhNs1PEzVTA=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=siTc18Cbk6+9iPzqxUi7VrQo4wBbara8wnd40T4nTUtGvxKu45mtQIfNtNvyeTEcb
-         XZr652a2ZnS3Ef9XoKsiz3uYoJjPswDaR4vw3fK76UsW1X2aJtC9FmJJ4ZKXLkZ66A
-         yIiIVLA4/V2l5K2QvngVInNuOAsHjDZzewQSr/Kc=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2055rtsl061846
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 4 Jan 2022 23:53:55 -0600
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 4
- Jan 2022 23:53:55 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 4 Jan 2022 23:53:55 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2055rs6e012708;
-        Tue, 4 Jan 2022 23:53:54 -0600
-Date:   Wed, 5 Jan 2022 11:23:54 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Richard Weinberger <richard@nod.at>,
+        id S238090AbiAEHgo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 5 Jan 2022 02:36:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231343AbiAEHgn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 5 Jan 2022 02:36:43 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C375C061761;
+        Tue,  4 Jan 2022 23:36:43 -0800 (PST)
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id F38BC1F43FFC;
+        Wed,  5 Jan 2022 07:36:40 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1641368201;
+        bh=QPkvd5xczl6Z64qbpAjTBQEF06yvP1eRXJlEOKnp7wg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BiIw+6nB+qqPQ/qBtYrXS+VmqjdzQ7EMIhmhNM7fUVnsarXQtFyRjz0XNQm5YPOwI
+         rlAzEpKreHkAlXq5qstDryPmGTf0YTex2q/M8VhYNZ8c4xVUFbHPpDQBCfhXM08chG
+         9QCTE7SMYpjkFhZ4wKz0LiboypZJvdZJCC98UaahVyxpyX7lHbna85So3YJRH8a3HI
+         LxK8ibXE61RXlHR85yo2HSxiFbq4ZJPTXKyzNxWWQyqPmzhW9xXBJgkzOZ2kFpWfmC
+         KM14EZ1EwRdF8ALrUEy5lL1jLEc1EHNd1zHncaskbacCsagFGi57JD9WeEqBYVg8ME
+         lBe/8jpyu72pA==
+Date:   Wed, 5 Jan 2022 08:36:37 +0100
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Apurva Nandan <a-nandan@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Michael Walle <michael@walle.cc>,
-        <linux-mtd@lists.infradead.org>, Mark Brown <broonie@kernel.org>,
-        <linux-spi@vger.kernel.org>, Julien Su <juliensu@mxic.com.tw>,
-        Jaime Liao <jaimeliao@mxic.com.tw>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-Subject: Re: [PATCH v9 02/13] spi: spi-mem: Check the controller extra
- capabilities
-Message-ID: <20220105055351.47mpmwlko6apggcv@ti.com>
-References: <20220104083631.40776-1-miquel.raynal@bootlin.com>
- <20220104083631.40776-3-miquel.raynal@bootlin.com>
+        Mark Brown <broonie@kernel.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>
+Subject: Re: [PATCH v3 01/17] spi: spi-mem: Add DTR templates for cmd,
+ address, dummy and data phase
+Message-ID: <20220105083637.651f0d01@collabora.com>
+In-Reply-To: <20220105055053.s4yfnk7cjedwtgvn@ti.com>
+References: <20220101074250.14443-1-a-nandan@ti.com>
+        <20220101074250.14443-2-a-nandan@ti.com>
+        <20220104163100.56850d0b@collabora.com>
+        <20220105055053.s4yfnk7cjedwtgvn@ti.com>
+Organization: Collabora
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220104083631.40776-3-miquel.raynal@bootlin.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 04/01/22 09:36AM, Miquel Raynal wrote:
-> Controllers can now provide a spi-mem capabilities structure. Let's make
-> use of it in spi_mem_controller_default_supports_op(). As we want to
-> check for DTR operations as well as normal operations in a single
-> helper, let's pull the necessary checks from spi_mem_dtr_supports_op()
-> for now.
-> 
-> However, because no controller provide these extra capabilities, this
-> change has no effect so far.
-> 
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+On Wed, 5 Jan 2022 11:20:55 +0530
+Pratyush Yadav <p.yadav@ti.com> wrote:
 
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
+> On 04/01/22 04:31PM, Boris Brezillon wrote:
+> > and you get to define a DTR op like that:
+> > 
+> > 	struct spi_mem_op op =
+> > 		SPI_MEM_OP(SPI_MEM_OP_EXT_CMD(2, 0x1234, 8, SPI_MEM_OP_DTR),
+> > 			   SPI_MEM_OP_ADDR(4, 0xdeadbeef, 8, SPI_MEM_OP_DTR),
+> > 			   SPI_MEM_OP_DATA_OUT(128, buf, 8, SPI_MEM_OP_DTR));
+> > 
+> > This also means we can extend the struct without having to define new macros.  
+> 
+> I like this. It would also let us easily mix-and-match the ecc parameter 
+> that Miquel is adding.
+> 
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+In practice, I doubt you'll ever set the ecc bit when declaring the op,
+it's more a modification you do afterwards if ECC needs to be enabled,
+but who knows...
