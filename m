@@ -2,95 +2,137 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5350648658A
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Jan 2022 14:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 863FB486775
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Jan 2022 17:13:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239726AbiAFNv1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 6 Jan 2022 08:51:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48510 "EHLO
+        id S241078AbiAFQNR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 6 Jan 2022 11:13:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239719AbiAFNv0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Jan 2022 08:51:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CB6C061245;
-        Thu,  6 Jan 2022 05:51:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F8C461BB0;
-        Thu,  6 Jan 2022 13:51:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 078B3C36AE3;
-        Thu,  6 Jan 2022 13:51:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641477085;
-        bh=9rdZAeLsUyj9v9gaJNRkMhgxgzmJttu+aTeMrHIrIqU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jLt9JCgXW5yVZrGpW8qdeHdnoZug4vDwaxXo2rLkbbTGecX1QVDzlsL5raVMe1pI/
-         qeKSIc/p2/O6UUvUFuQLJEAAdG2GICmy+VR5JqzYzQ4XFsJ3bhxgYRZNQw31qta94U
-         S6dTq7oBMdU8C8Yqf8alvvjbD6tRCiv8QDrfHToXtfsgwxjjs4F8axlIsDeP/PfAsW
-         RS4k9WhF0M8aSWQtsdHlvisvlXE9gH42lKfac85H9wve76OrmOu/mBemS2GCZrKoMl
-         GU2HUCqa7bXe7b9bhmLkqJM1viK2kao+mGj6MTzHLHSdwEoiuLCnPGkaLMzafSknBE
-         kS1xxP+UBzGyg==
-Date:   Thu, 6 Jan 2022 13:51:20 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     patrice.chotard@foss.st.com
-Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        christophe.kerello@foss.st.com
-Subject: Re: spi: stm32-qspi: Update spi registering
-Message-ID: <Ydbz2JkT8jRvNBBZ@sirena.org.uk>
-References: <20220106132052.7227-1-patrice.chotard@foss.st.com>
+        with ESMTP id S241013AbiAFQNR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Jan 2022 11:13:17 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DCEC061201
+        for <linux-spi@vger.kernel.org>; Thu,  6 Jan 2022 08:13:17 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id e8so2414454ilm.13
+        for <linux-spi@vger.kernel.org>; Thu, 06 Jan 2022 08:13:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=X5QlOKATkg+9Prd2ezRheoLg8bFfRjYXz/Me8Di8F7c=;
+        b=k3wV17DuYBAKkilG5F4sMKLPdAc/udCpFB4Zg7vUaNdHN9hLlS8Y1+LLFS/kzWWNo7
+         duV9yRWDKNuuxZ1SkusEk0Bhv/5JHdNKZ3HxDCsIxAvd9u3pgSsGI/9gsKfK3GJP8Zt1
+         27kQpJbUxRuz+hcivXUoaFvU8CcUr15OTJpEY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X5QlOKATkg+9Prd2ezRheoLg8bFfRjYXz/Me8Di8F7c=;
+        b=o0FYptCaJxyVEyhwfHSVgo4vlg75uoRuIDt6qTzOcNg+W32ksKq64uUKIFllWma59F
+         zXCr1L22ELU56WkeGxRFxvkIHK6vs4l+wqHRYmzLmx1iGpFNmN7lu9r79a4sImmGRNVv
+         lwFBru6I1EZu5QUaiTin5I8q5xf5xBsq0oE515YPlE+2G6cwwYMiLVq5JsVefsCMYRKs
+         wf7a6LH7/uiMuLK4yCnbEAHQRuYg240F7fqRU0xhmeqQ+oSaEjU/e0+W++VO81X2g5x+
+         tSSLBu3bKTcaOywXl3o6B2zhTB/f3g9hLUegcTrT86Qp0lieyhYSUXv6vIY+LIiHeGv3
+         N0VA==
+X-Gm-Message-State: AOAM530ZWHPIBAMb/nigVpMifKDhSsO1+SqF3owf53YlU1K1o1/zCWWp
+        SQ50gSJu9LpsneB+vX07V0+ZCXl6+egMJg==
+X-Google-Smtp-Source: ABdhPJxNRMLp1SY8eXoHisf3moIJbwdxKq/S+BXlA2nU8QRX+cBtnXz24UmaJ3SYxxEDnm2yH76hjw==
+X-Received: by 2002:a05:6e02:174b:: with SMTP id y11mr28097629ill.293.1641485596237;
+        Thu, 06 Jan 2022 08:13:16 -0800 (PST)
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com. [209.85.166.174])
+        by smtp.gmail.com with ESMTPSA id r12sm1334701ill.58.2022.01.06.08.13.15
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jan 2022 08:13:15 -0800 (PST)
+Received: by mail-il1-f174.google.com with SMTP id m4so2498145ilf.0
+        for <linux-spi@vger.kernel.org>; Thu, 06 Jan 2022 08:13:15 -0800 (PST)
+X-Received: by 2002:a05:6e02:2187:: with SMTP id j7mr27894010ila.120.1641485595294;
+ Thu, 06 Jan 2022 08:13:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YYOP+xPh7cdL05sG"
-Content-Disposition: inline
-In-Reply-To: <20220106132052.7227-1-patrice.chotard@foss.st.com>
-X-Cookie: I think we're in trouble.
+References: <20220103071118.27220-1-vkoul@kernel.org>
+In-Reply-To: <20220103071118.27220-1-vkoul@kernel.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 6 Jan 2022 08:13:03 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=Ue9Z+NmqviCXEN2pHxWZaAcTbFzzn=xxfg8d8QzPwp4A@mail.gmail.com>
+Message-ID: <CAD=FV=Ue9Z+NmqviCXEN2pHxWZaAcTbFzzn=xxfg8d8QzPwp4A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] spi: qcom: geni: set the error code for gpi transfer
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi,
 
---YYOP+xPh7cdL05sG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sun, Jan 2, 2022 at 11:11 PM Vinod Koul <vkoul@kernel.org> wrote:
+>
+> Before we invoke spi_finalize_current_transfer() in
+> spi_gsi_callback_result() we should set the spi->cur_msg->status as
+> appropriate (0 for success, error otherwise).
+>
+> The helps to return error on transfer and not wait till it timesout on
+> error
+>
+> Fixes: b59c122484ec ("spi: spi-geni-qcom: Add support for GPI dma")
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> ---
+>
+> Changes in v2:
+>  - add missing spi_finalize_current_transfer() for dma error case
+>
+>  drivers/spi/spi-geni-qcom.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+> index 413fa1a7a936..b82f3ddff0f4 100644
+> --- a/drivers/spi/spi-geni-qcom.c
+> +++ b/drivers/spi/spi-geni-qcom.c
+> @@ -346,17 +346,21 @@ spi_gsi_callback_result(void *cb, const struct dmaengine_result *result)
+>  {
+>         struct spi_master *spi = cb;
+>
+> +       spi->cur_msg->status = -EIO;
+>         if (result->result != DMA_TRANS_NOERROR) {
+>                 dev_err(&spi->dev, "DMA txn failed: %d\n", result->result);
+> +               spi_finalize_current_transfer(spi);
+>                 return;
+>         }
+>
+>         if (!result->residue) {
+> +               spi->cur_msg->status = 0;
+>                 dev_dbg(&spi->dev, "DMA txn completed\n");
+> -               spi_finalize_current_transfer(spi);
+>         } else {
+>                 dev_err(&spi->dev, "DMA xfer has pending: %d\n", result->residue);
+>         }
+> +
+> +       spi_finalize_current_transfer(spi);
+>  }
 
-On Thu, Jan 06, 2022 at 02:20:52PM +0100, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
->=20
-> Replace devm_spi_register_master() by spi_register_master() to ensure
-> that spi sub-nodes are unregistered in the correct order when qspi driver
-> is removed.
+What you have here should work and seems fine, though it's a bit
+awkward. Every exit path now calls spi_finalize_current_transfer().
+IMO this would be slightly cleaner like this (also moving the error
+cases to both be first)
 
-This commit message doesn't describe the actual issue.  The change is
-fixing ordering within the driver itself - the driver is freeing things
-in the remove() callback which are used by the controller but thanks to
-the use of devm the controller isn't unregistered from the core until
-after the remove() callback has run so we might still have something
-running.  "Subnodes" aren't an issue here.
+if (result->result != DMA_TRANS_NOERROR) {
+  dev_err(...);
+} else if (result->residue)
+  dev_err(...);
+} else {
+  spi->cur_msg->status = 0;
+  dev_dbg(...);
+}
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
+spi_finalize_current_transfer(spi);
 
---YYOP+xPh7cdL05sG
-Content-Type: application/pgp-signature; name="signature.asc"
+I'll let Mark decide if he wants it to be respun with the above, wants
+a follow-on patch, or doesn't care either way. In any case:
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHW89cACgkQJNaLcl1U
-h9ALYgf/alknJs2Xw7QDMlNENN0v5aGZepFImNoIF+MG+Z7JBhPh+nlvN5ozU0jA
-k1OXYLsZwIlhc8OESLxTSipWlYf7N7UPJVnpkuTjLkNQHGMCQg3JEGPvZ34JG2vy
-gu6YV6voQPJJs9Lhy0DOzyT/8b0TUtv11CR6GDZGD85Amlr+7Vp3kEqslVuslvAR
-irCFPzUc4L66O6LuJwH3blcQOLh7f0gnlSv4AI/DWClT/PcvNy/I+6K0AzlbRCth
-F+1eMArVQLS7I49ldfqSfS8kuBMDtZOPcwmve1KAimPwyEsQj5BhOSQvugcVT0YP
-9cbCfaK320vSdx28c9xLZEd3zZfFAw==
-=Kk5C
------END PGP SIGNATURE-----
-
---YYOP+xPh7cdL05sG--
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
