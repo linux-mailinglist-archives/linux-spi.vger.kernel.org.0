@@ -2,84 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 216E5486B24
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Jan 2022 21:28:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99AA4486B2E
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Jan 2022 21:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243876AbiAFU2q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 6 Jan 2022 15:28:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243853AbiAFU2h (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Jan 2022 15:28:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A670C06118A;
-        Thu,  6 Jan 2022 12:28:37 -0800 (PST)
+        id S243749AbiAFUaO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 6 Jan 2022 15:30:14 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:52802 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243719AbiAFUaM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Jan 2022 15:30:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B6FB61E16;
-        Thu,  6 Jan 2022 20:28:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF730C36AE5;
-        Thu,  6 Jan 2022 20:28:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1958E61D2F
+        for <linux-spi@vger.kernel.org>; Thu,  6 Jan 2022 20:30:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 846A5C36AE5;
+        Thu,  6 Jan 2022 20:30:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641500916;
-        bh=b/lnSyPUZvmRkpkf3M9HGG79TwkLoB+cQSoOb4PH7Ec=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=qtGk2179/FtqC4QB0oJSeU9ORB8b6AkTj8Uu/cjbWBOesVnIv6M1j51qdox3CyQZU
-         yUqH/OYdl2+fLjx6Yu9iXaj/VRjvCSIMPBaXLaP0iwA2/m1JYfEBAH2QJySWNUt5Fn
-         VROc59x/OES7coCycWFV4u6KTQ8Y5JGfXeRSzwh27KOFSv/F68ITLR9hjApzvm4tfi
-         xSa966zi0N8LwR0wfDogdIzmmCMSefu3kUseKTgFyloiZJ9nPzoziOpdtt0vhGNT6p
-         0UNoq6XCW3UDcjhI+G70PmXnYbzWtzrb0OVRyrSmQb+c/h3d2ox6AUf19UZ2uhbzxe
-         TBXtK5zzFRtJA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Chuanhong Guo <gch981213@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bayi Cheng <bayi.cheng@mediatek.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-In-Reply-To: <20220106182518.1435497-9-robh@kernel.org>
-References: <20220106182518.1435497-9-robh@kernel.org>
-Subject: Re: [PATCH] spi: dt-bindings: mediatek,spi-mtk-nor: Fix example 'interrupts' property
-Message-Id: <164150091444.2243644.7719770746568612726.b4-ty@kernel.org>
-Date:   Thu, 06 Jan 2022 20:28:34 +0000
-MIME-Version: 1.0
+        s=k20201202; t=1641501011;
+        bh=tqBL+Cbnpl7H/eLlHQw2ehighWJ3EyftFStKlkhTQ2M=;
+        h=Subject:From:Date:To:From;
+        b=OPhcjQAUII37nYajgfix1+tCibLQKWkECYyPVqrCeid+TUUvDnNjzYXUdPpAOjm25
+         Y0fVXRoTjcsF/9Dw9hpRNsx+IIVdnaAvyhBxC4/mOTG2YSwygmWm109RaWlpIruXkA
+         vR0MqPEfuQNjgs2HxyOv0ioWGdAFISh1wpbRGe7Qa7ZflCepItDMQo7yYaIvRw13rG
+         lce7VjC1Vu5BczwGxGjiHDMoW/OFzhsjdYHgBgpflXfFCW2kXI/HWQZqU+W2EDrUJ3
+         Je83Ko1o9LNZCiO5YWVt9jdzYswixn2VMxGKARzlAJfVDEhZRU/iJTBtnrHvAzpvLP
+         nsPUo9O2RfF9A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 68A60F79403;
+        Thu,  6 Jan 2022 20:30:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <164150101135.19887.5342580960456475790.git-patchwork-summary@kernel.org>
+Date:   Thu, 06 Jan 2022 20:30:11 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 6 Jan 2022 12:25:17 -0600, Rob Herring wrote:
-> A phandle for 'interrupts' value is wrong and should be one or more numbers.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: [v2,1/2] spi: qcom: geni: set the error code for gpi transfer
+  Submitter: Vinod Koul <vkoul@kernel.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=602312
+  Lore link: https://lore.kernel.org/r/20220103071118.27220-1-vkoul@kernel.org
+    Patches: [v2,1/2] spi: qcom: geni: set the error code for gpi transfer
+             [v2,2/2] spi: qcom: geni: handle timeout for gpi mode
 
-Thanks!
 
-[1/1] spi: dt-bindings: mediatek,spi-mtk-nor: Fix example 'interrupts' property
-      commit: 3e718b44756e2829e7189a9504aa7a6d7f394d6c
+Total patches: 2
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
