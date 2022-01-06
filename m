@@ -2,137 +2,158 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 863FB486775
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Jan 2022 17:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8C04868D8
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Jan 2022 18:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241078AbiAFQNR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 6 Jan 2022 11:13:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241013AbiAFQNR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Jan 2022 11:13:17 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DCEC061201
-        for <linux-spi@vger.kernel.org>; Thu,  6 Jan 2022 08:13:17 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id e8so2414454ilm.13
-        for <linux-spi@vger.kernel.org>; Thu, 06 Jan 2022 08:13:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X5QlOKATkg+9Prd2ezRheoLg8bFfRjYXz/Me8Di8F7c=;
-        b=k3wV17DuYBAKkilG5F4sMKLPdAc/udCpFB4Zg7vUaNdHN9hLlS8Y1+LLFS/kzWWNo7
-         duV9yRWDKNuuxZ1SkusEk0Bhv/5JHdNKZ3HxDCsIxAvd9u3pgSsGI/9gsKfK3GJP8Zt1
-         27kQpJbUxRuz+hcivXUoaFvU8CcUr15OTJpEY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X5QlOKATkg+9Prd2ezRheoLg8bFfRjYXz/Me8Di8F7c=;
-        b=o0FYptCaJxyVEyhwfHSVgo4vlg75uoRuIDt6qTzOcNg+W32ksKq64uUKIFllWma59F
-         zXCr1L22ELU56WkeGxRFxvkIHK6vs4l+wqHRYmzLmx1iGpFNmN7lu9r79a4sImmGRNVv
-         lwFBru6I1EZu5QUaiTin5I8q5xf5xBsq0oE515YPlE+2G6cwwYMiLVq5JsVefsCMYRKs
-         wf7a6LH7/uiMuLK4yCnbEAHQRuYg240F7fqRU0xhmeqQ+oSaEjU/e0+W++VO81X2g5x+
-         tSSLBu3bKTcaOywXl3o6B2zhTB/f3g9hLUegcTrT86Qp0lieyhYSUXv6vIY+LIiHeGv3
-         N0VA==
-X-Gm-Message-State: AOAM530ZWHPIBAMb/nigVpMifKDhSsO1+SqF3owf53YlU1K1o1/zCWWp
-        SQ50gSJu9LpsneB+vX07V0+ZCXl6+egMJg==
-X-Google-Smtp-Source: ABdhPJxNRMLp1SY8eXoHisf3moIJbwdxKq/S+BXlA2nU8QRX+cBtnXz24UmaJ3SYxxEDnm2yH76hjw==
-X-Received: by 2002:a05:6e02:174b:: with SMTP id y11mr28097629ill.293.1641485596237;
-        Thu, 06 Jan 2022 08:13:16 -0800 (PST)
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com. [209.85.166.174])
-        by smtp.gmail.com with ESMTPSA id r12sm1334701ill.58.2022.01.06.08.13.15
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jan 2022 08:13:15 -0800 (PST)
-Received: by mail-il1-f174.google.com with SMTP id m4so2498145ilf.0
-        for <linux-spi@vger.kernel.org>; Thu, 06 Jan 2022 08:13:15 -0800 (PST)
-X-Received: by 2002:a05:6e02:2187:: with SMTP id j7mr27894010ila.120.1641485595294;
- Thu, 06 Jan 2022 08:13:15 -0800 (PST)
-MIME-Version: 1.0
-References: <20220103071118.27220-1-vkoul@kernel.org>
-In-Reply-To: <20220103071118.27220-1-vkoul@kernel.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 6 Jan 2022 08:13:03 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=Ue9Z+NmqviCXEN2pHxWZaAcTbFzzn=xxfg8d8QzPwp4A@mail.gmail.com>
-Message-ID: <CAD=FV=Ue9Z+NmqviCXEN2pHxWZaAcTbFzzn=xxfg8d8QzPwp4A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] spi: qcom: geni: set the error code for gpi transfer
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S242181AbiAFRl2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 6 Jan 2022 12:41:28 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4360 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241966AbiAFRlY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Jan 2022 12:41:24 -0500
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JVD6c3dG6z67wb3;
+        Fri,  7 Jan 2022 01:36:24 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 6 Jan 2022 18:41:19 +0100
+Received: from [10.47.27.56] (10.47.27.56) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 6 Jan
+ 2022 17:41:15 +0000
+Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ettore Chimenti <ek5.chimenti@gmail.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        "H Hartley Sweeten" <hsweeten@visionengravers.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        "Sathya Prakash" <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        <GR-QLogic-Storage-Upstream@marvell.com>,
         Mark Brown <broonie@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        "Teddy Wang" <teddy.wang@siliconmotion.com>,
+        Forest Bond <forest@alittletooquiet.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        "Takashi Iwai" <tiwai@suse.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-csky@vger.kernel.org>,
+        <linux-ide@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-input@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <MPT-FusionLinux.pdl@broadcom.com>,
+        <linux-scsi@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>,
+        <linux-wireless@vger.kernel.org>, <megaraidlinux.pdl@broadcom.com>,
+        <linux-spi@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-watchdog@vger.kernel.org>
+References: <20220105194748.GA215560@bhelgaas>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <74bf4fde-3972-1c36-ca04-58089da0d82b@huawei.com>
+Date:   Thu, 6 Jan 2022 17:41:00 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
+MIME-Version: 1.0
+In-Reply-To: <20220105194748.GA215560@bhelgaas>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.27.56]
+X-ClientProxiedBy: lhreml736-chm.china.huawei.com (10.201.108.87) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
+On 05/01/2022 19:47, Bjorn Helgaas wrote:
+>>>>>   ok if the PCI maintainers decide otherwise.
+>>>> I don't really like the "LEGACY_PCI" Kconfig option.  "Legacy" just
+>>>> means something old and out of favor; it doesn't say*what*  that
+>>>> something is.
+>>>>
+>>>> I think you're specifically interested in I/O port space usage, and it
+>>>> seems that you want all PCI drivers that*only*  use I/O port space to
+>>>> depend on LEGACY_PCI?  Drivers that can use either I/O or memory
+>>>> space or both would not depend on LEGACY_PCI?  This seems a little
+>>>> murky and error-prone.
+>>> I'd like to hear Arnd's opinion on this but you're the PCI maintainer
+>>> so of course your buy-in would be quite important for such an option.
+> I'd like to hear Arnd's opinion, too.  If we do add LEGACY_PCI, I
+> think we need a clear guide for when to use it, e.g., "a PCI driver
+> that uses inb() must depend on LEGACY_PCI" or whatever it is.
+> 
+> I must be missing something because I don't see what we gain from
+> this.  We have PCI drivers, e.g., megaraid [1], for devices that have
+> either MEM or I/O BARs.  I think we want to build drivers like that on
+> any arch that supports PCI.
+> 
+> If the arch doesn't support I/O port space, devices that only have I/O
+> BARs won't work, of course, and hopefully the PCI core and driver can
+> figure that out and gracefully fail the probe.
+> 
+> But that same driver should still work with devices that have MEM
+> BARs.  If inb() isn't always present, I guess we could litter these
+> drivers with #ifdefs, but that would be pretty ugly. 
 
-On Sun, Jan 2, 2022 at 11:11 PM Vinod Koul <vkoul@kernel.org> wrote:
->
-> Before we invoke spi_finalize_current_transfer() in
-> spi_gsi_callback_result() we should set the spi->cur_msg->status as
-> appropriate (0 for success, error otherwise).
->
-> The helps to return error on transfer and not wait till it timesout on
-> error
->
-> Fixes: b59c122484ec ("spi: spi-geni-qcom: Add support for GPI dma")
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->
-> Changes in v2:
->  - add missing spi_finalize_current_transfer() for dma error case
->
->  drivers/spi/spi-geni-qcom.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-> index 413fa1a7a936..b82f3ddff0f4 100644
-> --- a/drivers/spi/spi-geni-qcom.c
-> +++ b/drivers/spi/spi-geni-qcom.c
-> @@ -346,17 +346,21 @@ spi_gsi_callback_result(void *cb, const struct dmaengine_result *result)
->  {
->         struct spi_master *spi = cb;
->
-> +       spi->cur_msg->status = -EIO;
->         if (result->result != DMA_TRANS_NOERROR) {
->                 dev_err(&spi->dev, "DMA txn failed: %d\n", result->result);
-> +               spi_finalize_current_transfer(spi);
->                 return;
->         }
->
->         if (!result->residue) {
-> +               spi->cur_msg->status = 0;
->                 dev_dbg(&spi->dev, "DMA txn completed\n");
-> -               spi_finalize_current_transfer(spi);
->         } else {
->                 dev_err(&spi->dev, "DMA xfer has pending: %d\n", result->residue);
->         }
-> +
-> +       spi_finalize_current_transfer(spi);
->  }
+There were some ifdefs added to the 8250 drivers in Arnd's original 
+patch [0], but it does not seem included here.
 
-What you have here should work and seems fine, though it's a bit
-awkward. Every exit path now calls spi_finalize_current_transfer().
-IMO this would be slightly cleaner like this (also moving the error
-cases to both be first)
+Niklas, what happened to the 8250 and the other driver changes?
 
-if (result->result != DMA_TRANS_NOERROR) {
-  dev_err(...);
-} else if (result->residue)
-  dev_err(...);
-} else {
-  spi->cur_msg->status = 0;
-  dev_dbg(...);
-}
+[0] 
+https://lore.kernel.org/lkml/CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com/
 
-spi_finalize_current_transfer(spi);
+> IMO inb() should
+> be present but do something innocuous like return ~0, as it would if
+> I/O port space is supported but there's no device at that address.
+> 
+> [1]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/megaraid.c?id=v5.15#n4210
+> 
 
-I'll let Mark decide if he wants it to be respun with the above, wants
-a follow-on patch, or doesn't care either way. In any case:
+That driver would prob not be used on systems which does not support 
+PIO, and so could have a HAS_IOPORT dependency. But it is not strictly 
+necessary.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Anyway, it would be good to have an idea of how much ifdeffery is 
+required in drivers.
+
+Thanks,
+John
