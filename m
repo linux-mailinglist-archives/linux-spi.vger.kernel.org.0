@@ -2,98 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D83F4877A0
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Jan 2022 13:32:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E114878FD
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Jan 2022 15:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231847AbiAGMcc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 7 Jan 2022 07:32:32 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58102 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231770AbiAGMcb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 7 Jan 2022 07:32:31 -0500
+        id S1347808AbiAGOdX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 7 Jan 2022 09:33:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347806AbiAGOdW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 7 Jan 2022 09:33:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8794CC061574;
+        Fri,  7 Jan 2022 06:33:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7B0561E48
-        for <linux-spi@vger.kernel.org>; Fri,  7 Jan 2022 12:32:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A9B3C36AE0;
-        Fri,  7 Jan 2022 12:32:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27E7561EEC;
+        Fri,  7 Jan 2022 14:33:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F979C36AE0;
+        Fri,  7 Jan 2022 14:33:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641558750;
-        bh=kp1Fh13yuN/6oTYNzmkZT8dJSVc9lv3TzG9DOylJH9w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aFLPcdJVYPmkTg31LMlBbys2lJUzdZeQ0NK/l9+vdwvPzupDmuIDE4NZDu84XQiV1
-         xVDReaF2OlhrGSTTZeqrqGR99yHPFp/sX7zyNRYMYjeZImYL+yrb9mZtr6qg2AqA1Y
-         1DZNAGudEDBXCiwOrceCm6CHbPuyHadaxcZPrstWLtNOFD5O6MTQPGwAxe/vu9RNJW
-         lNPnsHL/MLy4QvlEvLa5RXHJTP1Sl9KdCpB7OvCr1f/64/cmXkAmKdXjgdK9hZOJ/h
-         HiJx26Dl3ceRxswCuX3F039J1Mfw7nxGGUyRUN8Q2wKyZqumL8t5IlcxrqGCvcebso
-         E2TjzjnKqa1WA==
-Date:   Fri, 7 Jan 2022 12:32:25 +0000
+        s=k20201202; t=1641566001;
+        bh=Eph8sqgV5sdpwR5dgEulgL6dC/4txofb6JyaHjVOvEE=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=hxuHQUOBXSHsYmSrM2Zjp1XQt0v9f1ayP7oAtcFi+2AI8Q+NtNJRpO8lwKP2J9D/d
+         dgcDEEA7QttrnJZxqUh9ERERdAolPRkMD4mx42Q02oIZJQ7G64U5hJyPe1jzR/ggC0
+         P9iOCAzN9UVX7bo4FbyueOaiYNKYFdWe512SuZuL0SeMvBzSQJ/yQDcSXjfpU9ogab
+         1MBuHLxVbzRnYq31zg+3FivA2Og4lDt1EFfQUZQ6+s3ee9IjM6y2843+J2kNhr4vWx
+         BTWQz2xVJsj2uGcAPi8pC8pJQZ3UrxhVokiFIqIy86DceOuxZo/J+nPyqindLUb854
+         snn4ueNAM8O6A==
 From:   Mark Brown <broonie@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-spi@vger.kernel.org, vladimir.oltean@nxp.com
-Subject: Re: [PATCH] ptp: don't include ptp_clock_kernel.h in spi.h
-Message-ID: <Ydgy2TAodUMYG2EW@sirena.org.uk>
-References: <20210904013140.2377609-1-kuba@kernel.org>
- <20210906113012.GA4309@sirena.org.uk>
- <20220106195621.0315ef77@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     linux-spi@vger.kernel.org, Beniamino Galvani <b.galvani@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220107075424.7774-1-linmq006@gmail.com>
+References: <20220107075424.7774-1-linmq006@gmail.com>
+Subject: Re: [PATCH] spi: spi-meson-spifc: Add missing pm_runtime_disable() in meson_spifc_probe
+Message-Id: <164156599935.2077509.18070348001401229585.b4-ty@kernel.org>
+Date:   Fri, 07 Jan 2022 14:33:19 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jvdtnBTiMyPX+FoW"
-Content-Disposition: inline
-In-Reply-To: <20220106195621.0315ef77@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-X-Cookie: teamwork, n.:
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Fri, 7 Jan 2022 07:54:24 +0000, Miaoqian Lin wrote:
+> If the probe fails, we should use pm_runtime_disable() to balance
+> pm_runtime_enable().
+> Add missing pm_runtime_disable() for meson_spifc_probe.
+> 
+> 
 
---jvdtnBTiMyPX+FoW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Thu, Jan 06, 2022 at 07:56:21PM -0800, Jakub Kicinski wrote:
-> On Mon, 6 Sep 2021 12:30:12 +0100 Mark Brown wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > Please submit patches using subject lines reflecting the style for the
-> > subsystem, this makes it easier for people to identify relevant patches.
-> > Look at what existing commits in the area you're changing are doing and
-> > make sure your subject lines visually resemble what they're doing.
-> > There's no need to resubmit to fix this alone.
+Thanks!
 
-> Mark, was this ever applied? I don't see it in linux-next.
+[1/1] spi: spi-meson-spifc: Add missing pm_runtime_disable() in meson_spifc_probe
+      commit: 69c1b87516e327a60b39f96b778fe683259408bf
 
-If it's not in -next it's not been applied.  This is one of the hazards
-of sending things with random subject lines, they get buried and missed
-much more easily...
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Please don't send content free pings and please allow a reasonable time
-for review.  People get busy, go on holiday, attend conferences and so=20
-on so unless there is some reason for urgency (like critical bug fixes)
-please allow at least a couple of weeks for review.  If there have been
-review comments then people may be waiting for those to be addressed.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Sending content free pings adds to the mail volume (if they are seen at
-all) which is often the problem and since they can't be reviewed
-directly if something has gone wrong you'll have to resend the patches
-anyway, so sending again is generally a better approach though there are
-some other maintainers who like them - if in doubt look at how patches
-for the subsystem are normally handled.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---jvdtnBTiMyPX+FoW
-Content-Type: application/pgp-signature; name="signature.asc"
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHYMtkACgkQJNaLcl1U
-h9BL3wf+NsnFNNZnFZwbowpWdg8LtVsPzaE/sChUfHO5woCvLGsmBsW2MU+jAhUV
-aOTA42zj4XeFAaN0tgSlC1beeW10fOJnfqU7sqfBdBZmGjwRx9IidMefLCVQgwzW
-GLB8QsEIDD8Ckha28g4Hu2iYMuIjCyY2A28ZSPzwX3pds4M14oU4dzdNSd0br00y
-LDRRrtQj4Snk2SmQYS5Q6O83+nwtLO4L3PkIZR9uD7LYvCvCRf/f30ltTkBWx3yO
-0MLyL+qg/h01BVbgCqL1g/TIufO0bGp1MwEv8VVymZ5JNmWW9ZvEGuruKKFReZyQ
-vcPQj28PsaxBiUXtkJIBXarDB3ieCA==
-=ONIx
------END PGP SIGNATURE-----
-
---jvdtnBTiMyPX+FoW--
+Thanks,
+Mark
