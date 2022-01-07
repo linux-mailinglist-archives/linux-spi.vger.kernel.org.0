@@ -2,91 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 766D34870B9
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Jan 2022 03:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD2A48718B
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Jan 2022 04:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231967AbiAGCqv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 6 Jan 2022 21:46:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56382 "EHLO
+        id S231872AbiAGD40 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 6 Jan 2022 22:56:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344895AbiAGCqv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Jan 2022 21:46:51 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2421EC061245;
-        Thu,  6 Jan 2022 18:46:51 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id t32so4237955pgm.7;
-        Thu, 06 Jan 2022 18:46:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/6dLdb4lxKOn6iI2ropCkWZMbvhcd1NSA99J+kb7KyU=;
-        b=BRknm4/L1i4HN7dGXIAt+OZgybXDYCqHX9Ot3jFAxPzMmbpr5bkeCaisaN8sIVKfH6
-         qGlcjhZZHF/BxR2sblAC5X6xxz8ChXzGqVc7hyAtsI11/lWuk41mYWy3e9wgnQxdvnum
-         vYE5TzT/ElSqm08oiVGGONg8l7TKfIIZ/G0aSbkTB6Yn0ldhp+4zx8QF4J4Yi1jLgwx6
-         S3WjH1FkrKS4JXoPsgyjWtDCfdXBJwmbkza8X1czI4j0vKKlSAVUB9QtxDh1FHJC5cUy
-         5Gg8WJ9mOzDvLwB4J+53fFaGCA8hmeYwHP4y0Nv0L93QmQvLEddyPzDFrijyzajJU/eZ
-         JnSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/6dLdb4lxKOn6iI2ropCkWZMbvhcd1NSA99J+kb7KyU=;
-        b=Lww1CchUlf8GIrDSoV276XDkFmYsK2Cg05YDL6aDzn1g31EJtHa0a18vyunJQx5Ddz
-         lER0K9IQK5M6L7xed1aS5jC+W71HkWQRGjZvPcRRPaZJ9P0hWO3kqr02mIQcBULfAEAM
-         iVSb+mFXGwmsNrv7tCDPQ5/zkVHs1tQkXLlEdj1yt/VuaUuCy7OokIIG+lmwnzEwFh9i
-         iC1mZQ5VcbY6bHZO4ehTr35vbv2iR/sGa3vx7gDzU0jJUW0RDkjvEa4VVoFcGsR9l+YI
-         XhR8fpJuTvg/+zqN2SbEIxwhC5ZmYBraPLwELozXpcwOTJAFi46tYmoR8G1/opps2XMH
-         76VA==
-X-Gm-Message-State: AOAM531ixXXa1KQDWfXq0xO3N0m42J98Mpkj5CKzWeRcrH3tya06ZQrJ
-        Tvhm0dDDxmhwQdvrfONZHcc=
-X-Google-Smtp-Source: ABdhPJzRzCyWPm+ISg39465n6AC675JbsBrFkJEZRG1n6G5kI9jWZElv8ap10Cfb1JdFZuWtEIYNgA==
-X-Received: by 2002:a63:b20f:: with SMTP id x15mr16905564pge.82.1641523610789;
-        Thu, 06 Jan 2022 18:46:50 -0800 (PST)
-Received: from localhost.localdomain ([94.177.118.38])
-        by smtp.googlemail.com with ESMTPSA id 10sm3862107pfm.56.2022.01.06.18.46.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 18:46:50 -0800 (PST)
-From:   Qinghua Jin <qhjin.dev@gmail.com>
-Cc:     Qinghua Jin <qhjin.dev@gmail.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: atmel: Fix typo
-Date:   Fri,  7 Jan 2022 10:46:31 +0800
-Message-Id: <20220107024631.396862-1-qhjin.dev@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S230175AbiAGD4Z (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 6 Jan 2022 22:56:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5660DC061245
+        for <linux-spi@vger.kernel.org>; Thu,  6 Jan 2022 19:56:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26A35B817F0
+        for <linux-spi@vger.kernel.org>; Fri,  7 Jan 2022 03:56:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2867C36AE9;
+        Fri,  7 Jan 2022 03:56:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641527782;
+        bh=j8fO3H7f5F4ggwtzYQsCQ98kUnHPgGiFqYRIpmha6sA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZJ1HvnxZPXO/jccaEaOVbosNlGsx+EHqXQxEPX1PBVzyU10C36M5Txkxyz046hz/h
+         9LrLRJMMYDj+aqW6gwiiMhO7LIdxzeniwL/Crff1inGCLowIxAM2sfzc7Q2kqMDAoI
+         +uoOSrxBVoA0TTsjRz+43OS3ZnDXhXn5cZvk5G1Xqp9a30lzcXrs2P0dvl4kN90MmD
+         RbGPaaLS8qn80wM3Sh9wUaGc2gHw2GQH61oxXqJx8YwnCAoT+1XOpH/mSJwSeyxJW0
+         AiMMOZ936KhtnjuGol6unVXenDEVRHcBRjmIyn04oUsRB1bYsAZqDtrRP9c/GVWhzu
+         6R3fzQdUt2YUQ==
+Date:   Thu, 6 Jan 2022 19:56:21 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, vladimir.oltean@nxp.com
+Subject: Re: [PATCH] ptp: don't include ptp_clock_kernel.h in spi.h
+Message-ID: <20220106195621.0315ef77@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20210906113012.GA4309@sirena.org.uk>
+References: <20210904013140.2377609-1-kuba@kernel.org>
+        <20210906113012.GA4309@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Change 'actualy' to 'actually'
+On Mon, 6 Sep 2021 12:30:12 +0100 Mark Brown wrote:
+> On Fri, Sep 03, 2021 at 06:31:40PM -0700, Jakub Kicinski wrote:
+> > Commit b42faeee718c ("spi: Add a PTP system timestamp
+> > to the transfer structure") added an include of ptp_clock_kernel.h  
+> 
+> Please submit patches using subject lines reflecting the style for the
+> subsystem, this makes it easier for people to identify relevant patches.
+> Look at what existing commits in the area you're changing are doing and
+> make sure your subject lines visually resemble what they're doing.
+> There's no need to resubmit to fix this alone.
 
-Signed-off-by: Qinghua Jin <qhjin.dev@gmail.com>
----
- drivers/spi/spi-atmel.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-atmel.c b/drivers/spi/spi-atmel.c
-index f872cf196c2f..c5e454acc22d 100644
---- a/drivers/spi/spi-atmel.c
-+++ b/drivers/spi/spi-atmel.c
-@@ -464,7 +464,7 @@ static int atmel_spi_dma_slave_config(struct atmel_spi *as,
- 	 * However, the first data has to be written into the lowest 16 bits and
- 	 * the second data into the highest 16 bits of the Transmit
- 	 * Data Register. For 8bit data (the most frequent case), it would
--	 * require to rework tx_buf so each data would actualy fit 16 bits.
-+	 * require to rework tx_buf so each data would actually fit 16 bits.
- 	 * So we'd rather write only one data at the time. Hence the transmit
- 	 * path works the same whether FIFOs are available (and enabled) or not.
- 	 */
--- 
-2.30.2
-
+Mark, was this ever applied? I don't see it in linux-next.
