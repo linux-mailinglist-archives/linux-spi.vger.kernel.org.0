@@ -2,74 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4934885AF
-	for <lists+linux-spi@lfdr.de>; Sat,  8 Jan 2022 20:48:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1617C488756
+	for <lists+linux-spi@lfdr.de>; Sun,  9 Jan 2022 02:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232538AbiAHTsX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 8 Jan 2022 14:48:23 -0500
-Received: from bmailout2.hostsharing.net ([83.223.78.240]:45233 "EHLO
-        bmailout2.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232473AbiAHTsX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 8 Jan 2022 14:48:23 -0500
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 18E122800B3D2;
-        Sat,  8 Jan 2022 20:48:19 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 090432F5D0F; Sat,  8 Jan 2022 20:48:19 +0100 (CET)
-Date:   Sat, 8 Jan 2022 20:48:19 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     patrice.chotard@foss.st.com
-Cc:     Mark Brown <broonie@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        christophe.kerello@foss.st.com
-Subject: Re: spi: stm32-qspi: Update spi registering
-Message-ID: <20220108194819.GA5467@wunner.de>
-References: <20220106132052.7227-1-patrice.chotard@foss.st.com>
+        id S235066AbiAIB7V convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Sat, 8 Jan 2022 20:59:21 -0500
+Received: from [45.5.200.6] ([45.5.200.6]:46901 "EHLO
+        srv01.rpnnetprovedor.com.br" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S233708AbiAIB7V (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 8 Jan 2022 20:59:21 -0500
+X-Greylist: delayed 1896 seconds by postgrey-1.27 at vger.kernel.org; Sat, 08 Jan 2022 20:59:21 EST
+Received: from [46.183.220.100] (helo=IP-220-100.dataclub.eu)
+        by srv01.rpnnetprovedor.com.br with esmtpa (Exim 4.92.2)
+        (envelope-from <robertsnellsonas@citromail.hu>)
+        id 1n6Mzl-0007wu-Sy
+        for linux-spi@vger.kernel.org; Sat, 08 Jan 2022 22:27:42 -0300
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220106132052.7227-1-patrice.chotard@foss.st.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Did you received my previous email? ..6
+To:     linux-spi@vger.kernel.org
+From:   "Leung Yan" <robertsnellsonas@citromail.hu>
+Date:   Sun, 09 Jan 2022 03:27:38 +0200
+Reply-To: yanfamily1940@gmail.com
+Message-Id: <E1n6Mzl-0007wu-Sy@srv01.rpnnetprovedor.com.br>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 02:20:52PM +0100, patrice.chotard@foss.st.com wrote:
-> --- a/drivers/spi/spi-stm32-qspi.c
-> +++ b/drivers/spi/spi-stm32-qspi.c
-> @@ -784,7 +784,7 @@ static int stm32_qspi_probe(struct platform_device *pdev)
->  	pm_runtime_enable(dev);
->  	pm_runtime_get_noresume(dev);
->  
-> -	ret = devm_spi_register_master(dev, ctrl);
-> +	ret = spi_register_master(ctrl);
->  	if (ret)
->  		goto err_pm_runtime_free;
->  
-> @@ -817,6 +817,7 @@ static int stm32_qspi_remove(struct platform_device *pdev)
->  	struct stm32_qspi *qspi = platform_get_drvdata(pdev);
->  
->  	pm_runtime_get_sync(qspi->dev);
-> +	spi_unregister_master(qspi->ctrl);
->  	/* disable qspi */
->  	writel_relaxed(0, qspi->io_base + QSPI_CR);
->  	stm32_qspi_dma_free(qspi);
+Hello,
 
-NAK, this introduces a use-after-free because the "qspi" allocation
-is freed by spi_unregister_master(), yet is subsequently accessed.
+Did you received my previous email?
 
-You need to convert the driver to devm_spi_alloc_master() to avoid that.
-Do it in the same patch to ease backporting.
+I am seeking for your assistance to claim and invest available fund valued $18,000,000.00 only.
 
-Please add a stable designation and a Fixes: tag.  Chances are the patch
-needs to be backported all the way back to the release when the driver
-was first introduced.
+I will be your positive response to enable me to provide you with more
+details.
 
 Thanks,
-
-Lukas
