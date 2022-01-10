@@ -2,183 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C819D489059
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Jan 2022 07:47:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D8948906E
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Jan 2022 07:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239104AbiAJGrW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 10 Jan 2022 01:47:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239102AbiAJGrS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jan 2022 01:47:18 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9059AC061756;
-        Sun,  9 Jan 2022 22:47:18 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id l8so8832211plt.6;
-        Sun, 09 Jan 2022 22:47:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=K+JqE2tyTorqvR6yS5YtYuj0Oj8mlqpF/CiPy9CvjgM=;
-        b=LSr5KBYIUOQD8ty2YNv/MUd2OZ+xWEkIBkx7F1jcFFaD58MJSBuZw1Y9VLYnWtNrFt
-         IuMb7WiF0bufl0qorzQHcAZTrUFxB/9YbsOSK8hrrYMP9Ycxs39F7Za5BLEi28upAwRb
-         ajrjqYLoN7ee1/rNWxX0xWQOn7ku5BSyvlvdvWeS76QB08+q+Qwsz8QpxVxgvzk9AP7u
-         zj7gyd01sy+ifp8nLcFKES3IZiSmrDkNMlyhAoss1Lxc075HMeVo+x+IZXxQfTPWq8MF
-         OzhwbrYwQAOnTiFWmGsibikgWs+Dt3O7Ab3X3VGpVv/XHHBJ/yphFTz/kuBCdqFioOqR
-         ba4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=K+JqE2tyTorqvR6yS5YtYuj0Oj8mlqpF/CiPy9CvjgM=;
-        b=8KVqUDjQ8oijBUbbtK6KsaesC5MopFgsEK+I2/sjw+OEF9b4io0EcUpcA0bmXxr5V/
-         6aLyF90WkvG8iGFqLpjIzkFp7oiZh3xDC5QHzdpq4M0FYIOBvTPXKXhsvAllAMFvuMEo
-         MawOF9DM/17jAiB4CtIH02WfBAY+e05Hzv579jE6RZVEKJBI70qtmIkJkxxxuLL9vyhy
-         RR4AbNmMKgFQfq93kmJsVYpTobHFLSy39qRBm4/0Tx1QYJxII5EoE5qw/BMCWuA4W9l7
-         ENKfDyElpgwdRhHV6MoFIpQA1Vskicnctv5EhHuFHK6BxtI91oIU5z40tdfmKZ+9yIN3
-         klDw==
-X-Gm-Message-State: AOAM530UbkWxVvIsjOKNPZSSsvN+EBjGPEz9JtUcy+kP5kxicMFwryWn
-        Nk3w/dcT8KiRcvjYXRQERh4=
-X-Google-Smtp-Source: ABdhPJwgSQxklCgMXo6h7bguV9tbQ+BDpS6es7UEy9b06uHhzF3WE3Ub7yXLyGPp6y+NIkO4J5sIzg==
-X-Received: by 2002:a17:90a:c24d:: with SMTP id d13mr8360036pjx.238.1641797238016;
-        Sun, 09 Jan 2022 22:47:18 -0800 (PST)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id h4sm5591031pfi.79.2022.01.09.22.47.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 09 Jan 2022 22:47:17 -0800 (PST)
-From:   Li-hao Kuo <lhjeff911@gmail.com>
-To:     p.zabel@pengutronix.de, broonie@kernel.org,
-        andyshevchenko@gmail.com, robh+dt@kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com,
-        Li-hao Kuo <lhjeff911@gmail.com>
-Subject: [PATCH v5 2/2] devicetree: bindings SPI Add bindings doc for Sunplus SP7021
-Date:   Mon, 10 Jan 2022 14:47:22 +0800
-Message-Id: <7d25d1ee004dd668bc5cc122912c5dbeb6ff245f.1641797029.git.lhjeff911@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1641797029.git.lhjeff911@gmail.com>
-References: <cover.1641797029.git.lhjeff911@gmail.com>
-In-Reply-To: <cover.1641797029.git.lhjeff911@gmail.com>
-References: <cover.1641797029.git.lhjeff911@gmail.com>
+        id S235106AbiAJG42 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 10 Jan 2022 01:56:28 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:51110 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232399AbiAJG41 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jan 2022 01:56:27 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E810061185
+        for <linux-spi@vger.kernel.org>; Mon, 10 Jan 2022 06:56:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5AF99C36AE9;
+        Mon, 10 Jan 2022 06:56:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641797786;
+        bh=Tmwe6MLKwVDBXqAmlMk/Huyq//BDJRWTf/rkkusSfxQ=;
+        h=Subject:From:Date:To:From;
+        b=pXn2idOOz64kneeXwqWnjcH/QqYUzlnqNNjaqFqTa65AJ6RllfBEzjtdEzdklTDUK
+         GVu4Si0CzlDM7pvpP9w9UxF2Aecbaw7Bg1THfzLngeRZHlnz55+SRpldszjCNb4nqs
+         6tY+zASl4zOmIbLfQa74iaAQaecuXSm2l1g17HG1qy/aQuAlFZ5Os9BGEPdAWJxK1g
+         CbHRjNTQoThg1KzKFt/yZh9Yufys2d9CQCfJk8IKFiacc0gbb7xGoHpCvrvASRYNlr
+         3aoRG3UtDczOA+OQPmdGgCRzobejeoqkNsh/Q0MmH15zhpsO/R2UA8P4WaY5R29m2W
+         LnrSkC+7gz8Tg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 42943F6078B;
+        Mon, 10 Jan 2022 06:56:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <164179778626.8023.16009066707266162155.git-patchwork-housekeeping@kernel.org>
+Date:   Mon, 10 Jan 2022 06:56:26 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add devicetree bindings SPI Add bindings doc for Sunplus SP7021
+Latest series: [v5] Add SPI control driver for Sunplus SP7021 SoC (2022-01-10T06:47:20)
+  Superseding: [v4] Add SPI control driver for Sunplus SP7021 SoC (2021-12-10T09:02:46):
+    [v4,1/2] SPI: Add SPI driver for Sunplus SP7021
+    [v4,2/2] devicetree: bindings SPI Add bindings doc for Sunplus SP7021
 
-Reviewed by Mr. Rob Herring <robh+dt@kernel.org>
-Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
----
-Changes in v5:
- - no change.
- - Reviewed by Mr. Rob Herring <robh+dt@kernel.org>
 
- .../bindings/spi/spi-sunplus-sp7021.yaml           | 81 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 82 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
-
-diff --git a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
-new file mode 100644
-index 0000000..096bfae
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
-@@ -0,0 +1,81 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (C) Sunplus Co., Ltd. 2021
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/spi-sunplus-sp7021.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Sunplus sp7021 SPI controller
-+
-+allOf:
-+  - $ref: "spi-controller.yaml"
-+
-+maintainers:
-+  - Li-hao Kuo <lhjeff911@gmail.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - sunplus,sp7021-spi
-+
-+  reg:
-+    items:
-+      - the SPI master registers
-+      - the SPI slave registers
-+
-+  reg-names:
-+    items:
-+      - const: master
-+      - const: slave
-+
-+  interrupt-names:
-+    items:
-+      - const: dma_w
-+      - const: mas_risc
-+      - const: slave_risc
-+
-+  interrupts:
-+    minItems: 3
-+
-+  clocks:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - interrupts
-+  - interrupt-names
-+  - clocks
-+  - clocks-names
-+  - resets
-+  - pinctrl-names
-+  - pinctrl-0
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/sp-sp7021.h>
-+    #include <dt-bindings/reset/sp-sp7021.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    spi@9C002D80 {
-+        compatible = "sunplus,sp7021-spi";
-+        reg = <0x9C002D80 0x80>, <0x9C002E00 0x80>;
-+        reg-names = "master", "slave";
-+        interrupt-parent = <&intc>;
-+        interrupt-names = "dma_w",
-+                          "mas_risc",
-+                          "slave_risc";
-+        interrupts = <144 IRQ_TYPE_LEVEL_HIGH>,
-+                     <146 IRQ_TYPE_LEVEL_HIGH>,
-+                     <145 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&clkc SPI_COMBO_0>;
-+        resets = <&rstc RST_SPI_COMBO_0>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&pins_spi0>;
-+    };
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1732a9e..2f487be 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18247,6 +18247,7 @@ SUNPLUS SPI CONTROLLER INTERFACE DRIVER
- M:	Li-hao Kuo <lhjeff911@gmail.com>
- L:	linux-spi@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
- F:	drivers/spi/spi-sunplus-sp7021.c
- 
- SUPERH
 -- 
-2.7.4
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
