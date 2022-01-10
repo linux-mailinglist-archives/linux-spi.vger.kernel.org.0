@@ -2,173 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE0694896E0
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Jan 2022 12:01:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E70224897B9
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Jan 2022 12:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244347AbiAJLA6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 10 Jan 2022 06:00:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244344AbiAJLAy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jan 2022 06:00:54 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189E6C06173F;
-        Mon, 10 Jan 2022 03:00:54 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id 30so50306925edv.3;
-        Mon, 10 Jan 2022 03:00:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=whE4KmnTtpH1LRN01z65fDsnjDV+xp8M0wHQj1JxF6k=;
-        b=Pt+V7HqzQeecUPMk4kRTh4zz+Gg4lC8R/dh27MRTlzULKpWIYjwnL4Bn8sJvi2BO3e
-         utmMjC84zYRzzaACJZ3F/jlTYQfniQnMnYIohuCkypRzBMKg6c2TAxt0U+qakj/JH6Iw
-         iXCGdN45gAUY/sSBk6+i0rStLY19qVvsKQYSm4oHqWOD4pWGUyRV4uSJMX5hILmGhDpw
-         1bj+5b6kfN41GnwymwZ1m4/qoDQaez8+9a69Xd0VnVjftr7PEe04YPd2LwFHqjmBJMIe
-         h8u9+d2KAV4P50WGv7HFBeko+9c7TDrtr6TCk1WNkZ+KRQpIbAcc9kbwcLlwKT2UvBJo
-         taeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=whE4KmnTtpH1LRN01z65fDsnjDV+xp8M0wHQj1JxF6k=;
-        b=z0qf9ic3Ekxb/EWt58hMkghGFliI2dULUTxEoidL1iM4RIudfwjeW017ZYtAkgx5fG
-         0QJFWw9E/5HTb1akaOFJLqoslzb+Ad/vURfei/Lrkk0DikDlxDFH8BaWeChHIZ1EkbWp
-         g44FEveHJDXF1BTfSk2Mu8lepAx651y085n+Ctie2SEyQ64t3OleHs3xZgSKYkH4mbf4
-         jdvmpc5VYOuQ9y1Tjptx+kBmWHP6FT59Gu0FYa7aqrnCSeZ7cfYmP6bKdyCVsmx7uLFM
-         V7feXyjGGNaX5V9CoohUazzRUjO279LACZAG/qNmY5MnYnNKl7TxqAM45Cz/y1VmdH3X
-         TG7g==
-X-Gm-Message-State: AOAM531f6JiUHHjF2NFolp1RIJh2YSZIVka+Ag8bTClUGMzSsE/IC2u9
-        ebLbhBLwyMmot5M4TIPH6tKi+jxTVn28MK3TkN/RvU63E2sYOw==
-X-Google-Smtp-Source: ABdhPJzuwB3FGbGu10/VJm9BYMQTIgGWTCzQTw1Yt3trPKn7q0NZoUs6mHu2rRb7qt2QmE7N/cfe/nszD1coBHK6rwA=
-X-Received: by 2002:a17:907:97cd:: with SMTP id js13mr57745851ejc.497.1641812444067;
- Mon, 10 Jan 2022 03:00:44 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1641797029.git.lhjeff911@gmail.com> <761604f7aa4d4df16637103ba10d34674faf3d9b.1641797029.git.lhjeff911@gmail.com>
-In-Reply-To: <761604f7aa4d4df16637103ba10d34674faf3d9b.1641797029.git.lhjeff911@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 10 Jan 2022 12:58:56 +0200
-Message-ID: <CAHp75VecMe_KxgV1adr5Z7_EDz0s9MWB_RNeS4nY0m6e_eZ9Yw@mail.gmail.com>
+        id S244929AbiAJLmz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 10 Jan 2022 06:42:55 -0500
+Received: from mga07.intel.com ([134.134.136.100]:47836 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244977AbiAJLlp (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Mon, 10 Jan 2022 06:41:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641814905; x=1673350905;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FmoJ3y7OcdqB18NHcTkTeuKKIfdDfKWzmCti7xacieg=;
+  b=J5YOlX5FoBGlk2f4q6FOhwHstLln+woYgH+hSjE1HgpEl2zfjRZW2oSr
+   gfwMgQNvCdZDsS2XvZMNBzbEBsU84GePZb2QZR+ej2sjlu/lGOQamGy+R
+   NtUcC5SStWdRbaI/BKu5iI+CM2jGRm3O+PTY5X+Y/kj01bFlOYArbcuBL
+   OvrTZGoqT7el2Jvy4OoDIYZZruN41qkLHYRTbOuDxj+pGqLuBtNrJEw1d
+   xVBFTp3cvrnRzw8KxsywXkGnn3fF8+LqlnWSv0t6JUJyibWL63dq28/ed
+   wNxF5PAWBcMtab1Y0HNN9WWOJ4fZncPUsp/N+KuMlBVOLvmBHRrBYUsN/
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="306563048"
+X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
+   d="scan'208";a="306563048"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2022 03:41:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
+   d="scan'208";a="690549113"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 10 Jan 2022 03:41:40 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n6t3T-00038Q-LQ; Mon, 10 Jan 2022 11:41:39 +0000
+Date:   Mon, 10 Jan 2022 19:40:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Li-hao Kuo <lhjeff911@gmail.com>, p.zabel@pengutronix.de,
+        broonie@kernel.org, andyshevchenko@gmail.com, robh+dt@kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, wells.lu@sunplus.com, lh.kuo@sunplus.com,
+        Li-hao Kuo <lhjeff911@gmail.com>
 Subject: Re: [PATCH v5 1/2] SPI: Add SPI driver for Sunplus SP7021
-To:     Li-hao Kuo <lhjeff911@gmail.com>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        "LH.Kuo" <lh.kuo@sunplus.com>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <202201101911.hSqY5DkA-lkp@intel.com>
+References: <761604f7aa4d4df16637103ba10d34674faf3d9b.1641797029.git.lhjeff911@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <761604f7aa4d4df16637103ba10d34674faf3d9b.1641797029.git.lhjeff911@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 8:47 AM Li-hao Kuo <lhjeff911@gmail.com> wrote:
->
-> Add SPI driver for Sunplus SP7021.
+Hi Li-hao,
 
-In the subject line use small letters in the prefix. Check with `git
-log -- drivers/spi` how people do.
+I love your patch! Yet something to improve:
 
-Common comment: Consider to use spi_controller_*() APIs over
-spi_master_*() ones. Also your SLA/MAS (and sla/mas) are a bit
-confusing: spell them in full and master --> controller or ctrl, slave
---> peripheral or alike.
+[auto build test ERROR on broonie-spi/for-next]
+[also build test ERROR on pza/reset/next robh/for-next linus/master v5.16]
+[cannot apply to next-20220110]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
-> ---
-> Changes in v5:
->  - Addressed comments from Mr. Mark Brown
->  - Addressed comments from Mr. Andy Shevchenko
+url:    https://github.com/0day-ci/linux/commits/Li-hao-Kuo/Add-SPI-control-driver-for-Sunplus-SP7021-SoC/20220110-144745
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220110/202201101911.hSqY5DkA-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/53da1eda2d6e7a04e09dcb37a029ec3b384b7afb
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Li-hao-Kuo/Add-SPI-control-driver-for-Sunplus-SP7021-SoC/20220110-144745
+        git checkout 53da1eda2d6e7a04e09dcb37a029ec3b384b7afb
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash
 
-You need to elaborate what exactly you addressed.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-...
+All errors (new ones prefixed by >>):
 
-> +               writel(readl(pspim->m_base + SP7021_INT_BUSY_REG)
-> +                       | SP7021_CLR_MAS_INT, pspim->m_base + SP7021_INT_BUSY_REG);
+>> make[3]: *** No rule to make target 'drivers/spi/spi-sunplus-sp7021.o', needed by 'drivers/spi/built-in.a'.
+   make[3]: Target '__build' not remade because of errors.
 
-It's better to read with temporary variable being used:
-
-             value = readl(pspim->m_base + SP7021_INT_BUSY_REG);
-             value |= SP7021_CLR_MAS_INT;
-             writel(value, pspim->m_base + SP7021_INT_BUSY_REG);
-
-...
-
-> +       writel(readl(pspim->m_base + SP7021_SPI_STATUS_REG) | SP7021_FD_SW_RST,
-> +              pspim->m_base + SP7021_SPI_STATUS_REG);
-
-Ditto. And for all other similar cases.
-
-...
-
-> +       pspim->xfer_conf |= ((clk_sel & 0xffff) << 16);
-
-Is xfer_conf bigger than 32-bit? If not, why do you need the ' & 0xffff' part?
-
-...
-
-> +               ret = 0;
-
-Is it necessary to do this under the lock?
-
-> +               if (pspim->xfer_conf & SP7021_CPOL_FD)
-> +                       writel(pspim->xfer_conf, pspim->m_base + SP7021_SPI_CONFIG_REG);
-> +
-> +               mutex_unlock(&pspim->buf_lock);
-
-...
-
-> +       if (spi_controller_is_slave(ctlr)) {
-
-Factor out this body to a function, it will increase readability.
-
-> +       }
-> +
-> +       spi_finalize_current_transfer(ctlr);
-> +       return ret;
-
-...
-
-> +       mode = SP7021_MASTER_MODE;
-
-This...
-
-> +       pdev->id = of_alias_get_id(pdev->dev.of_node, "sp_spi");
-
-> +       if (of_property_read_bool(pdev->dev.of_node, "spi-slave"))
-> +               mode = SP7021_SLAVE_MODE;
-
-...belongs to this condition, so do not interleave them.
-
-On top of that you may use device property API:
-
-    if (device_property_read_bool(&pdev->dev, "spi-slave"))
-        mode = SP7021_SLAVE_MODE;
-    else
-        mode = SP7021_MASTER_MODE;
-
-...
-
-> +       pm_runtime_enable(dev);
-> +       ret = spi_register_controller(ctlr);
-> +       if (ret) {
-> +               pm_runtime_disable(dev);
-> +               return dev_err_probe(dev, ret, "spi_register_master fail\n");
-> +       }
-> +
-> +       return ret;
-
-return 0;
-
-...
-
-> +MODULE_LICENSE("GPL v2");
-
-"GPL", the one you used is legacy.
-
--- 
-With Best Regards,
-Andy Shevchenko
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
