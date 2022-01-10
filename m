@@ -2,54 +2,177 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D8948906E
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Jan 2022 07:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C810489368
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Jan 2022 09:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235106AbiAJG42 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 10 Jan 2022 01:56:28 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:51110 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232399AbiAJG41 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jan 2022 01:56:27 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E810061185
-        for <linux-spi@vger.kernel.org>; Mon, 10 Jan 2022 06:56:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5AF99C36AE9;
-        Mon, 10 Jan 2022 06:56:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641797786;
-        bh=Tmwe6MLKwVDBXqAmlMk/Huyq//BDJRWTf/rkkusSfxQ=;
-        h=Subject:From:Date:To:From;
-        b=pXn2idOOz64kneeXwqWnjcH/QqYUzlnqNNjaqFqTa65AJ6RllfBEzjtdEzdklTDUK
-         GVu4Si0CzlDM7pvpP9w9UxF2Aecbaw7Bg1THfzLngeRZHlnz55+SRpldszjCNb4nqs
-         6tY+zASl4zOmIbLfQa74iaAQaecuXSm2l1g17HG1qy/aQuAlFZ5Os9BGEPdAWJxK1g
-         CbHRjNTQoThg1KzKFt/yZh9Yufys2d9CQCfJk8IKFiacc0gbb7xGoHpCvrvASRYNlr
-         3aoRG3UtDczOA+OQPmdGgCRzobejeoqkNsh/Q0MmH15zhpsO/R2UA8P4WaY5R29m2W
-         LnrSkC+7gz8Tg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 42943F6078B;
-        Mon, 10 Jan 2022 06:56:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S241056AbiAJIde convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Mon, 10 Jan 2022 03:33:34 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:39889 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240898AbiAJIbe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jan 2022 03:31:34 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id D2AF7200010;
+        Mon, 10 Jan 2022 08:31:29 +0000 (UTC)
+Date:   Mon, 10 Jan 2022 09:31:28 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        linux-mtd@lists.infradead.org, Michal Simek <monstr@monstr.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] spi: dt-bindings: Describe stacked/parallel
+ memories modes
+Message-ID: <20220110093128.2777152e@xps13>
+In-Reply-To: <20211216160226.4fac5ccc@xps13>
+References: <20211210201039.729961-1-miquel.raynal@bootlin.com>
+        <20211210201039.729961-3-miquel.raynal@bootlin.com>
+        <YbjVSNAC8M5Y1nHp@robh.at.kernel.org>
+        <20211216160226.4fac5ccc@xps13>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <164179778626.8023.16009066707266162155.git-patchwork-housekeeping@kernel.org>
-Date:   Mon, 10 Jan 2022 06:56:26 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v5] Add SPI control driver for Sunplus SP7021 SoC (2022-01-10T06:47:20)
-  Superseding: [v4] Add SPI control driver for Sunplus SP7021 SoC (2021-12-10T09:02:46):
-    [v4,1/2] SPI: Add SPI driver for Sunplus SP7021
-    [v4,2/2] devicetree: bindings SPI Add bindings doc for Sunplus SP7021
+Hi Rob,
 
+miquel.raynal@bootlin.com wrote on Thu, 16 Dec 2021 16:02:26 +0100:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> Hi Rob,
+> 
+> robh@kernel.org wrote on Tue, 14 Dec 2021 11:32:56 -0600:
+> 
+> > On Fri, Dec 10, 2021 at 09:10:38PM +0100, Miquel Raynal wrote:  
+> > > Describe two new memories modes:
+> > > - A stacked mode when the bus is common but the address space extended
+> > >   with an additinals wires.
+> > > - A parallel mode with parallel busses accessing parallel flashes where
+> > >   the data is spread.
+> > > 
+> > > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> > > ---
+> > >  .../bindings/spi/spi-peripheral-props.yaml    | 29 +++++++++++++++++++
+> > >  1 file changed, 29 insertions(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+> > > index 5dd209206e88..4194fee8f556 100644
+> > > --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+> > > +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+> > > @@ -82,6 +82,35 @@ properties:
+> > >      description:
+> > >        Delay, in microseconds, after a write transfer.
+> > >  
+> > > +  stacked-memories:
+> > > +    $ref: /schemas/types.yaml#/definitions/uint64-matrix    
+> > 
+> > matrix or...
+> >   
+> > > +    description: Several SPI memories can be wired in stacked mode.
+> > > +      This basically means that either a device features several chip
+> > > +      selects, or that different devices must be seen as a single
+> > > +      bigger chip. This basically doubles (or more) the total address
+> > > +      space with only a single additional wire, while still needing
+> > > +      to repeat the commands when crossing a chip boundary. The size of
+> > > +      each chip should be provided as members of the array.    
+> > 
+> > array?
+> > 
+> > Sounds like an array from the description as there is only 1 element, 
+> > the size.  
+> 
+> Well, what I expected to have was something like:
+> 
+> dt:		<property> = <uint64>, <uint64>;
+> 
+> It seemed like the only possible way (that the tooling would validate)
+> was to use:
+> 
+> bindings:	$ref: /schemas/types.yaml#/definitions/uint64-matrix
+> 
+> So I assumed I was defining a matrix of AxB elements, where A is the
+> number of devices I want to "stack" and B is the number of values
+> needed to describe its size, so 1.
+> 
+> I realized that the following example, which I was expecting to work,
+> was failing:
+> 
+> bindings:	$ref: /schemas/types.yaml#/definitions/uint64-array
+> dt:		<property> = <uint64>, <uint64>;
+> 
+> Indeed, as you propose, this actually works but describes two values
+> (tied somehow) into a single element, which is not exactly what I
+> wanted:
+> 
+> bindings: 	$ref: /schemas/types.yaml#/definitions/uint64-array
+> dt:		<property> = <uint64 uint64>;
+> 
+> But more disturbing, all the following constructions worked, when using
+> 32-bits values instead:
+> 
+> bindings: 	$ref: /schemas/types.yaml#/definitions/uint32-array
+> dt:		<property> = <uint32 uint32>;
+> 
+> bindings: 	$ref: /schemas/types.yaml#/definitions/uint32-array
+> dt:		<property> = <uint32>, <uint32>;
+> 
+> bindings: 	$ref: /schemas/types.yaml#/definitions/uint32-matrix
+> dt:		<property> = <uint32 uint32>;
+> 
+> bindings: 	$ref: /schemas/types.yaml#/definitions/uint32-matrix
+> dt:		<property> = <uint32>, <uint32>;
+> 
+> I am fine waiting a bit if you think there is a need for some tooling
+> update on your side. Otherwise, do you really think that this solution
+> is the one we should really use?
+> 
+> bindings: 	$ref: /schemas/types.yaml#/definitions/uint64-array
+> dt:		<property> = <uint64 uint64>;
+> 
+> Because from my point of view it does not match what we usually do for
+> other "types" of elements, such as:
+> 
+> dt:		<property> = <phandle1 index1>, <phandle2 index2>;
+> 
+> or
+> 
+> dt:		<property> = <small-val1>, <small-val2>;
 
+Sorry for bothering you, is this something you still have in mind? It
+seems that the tooling is the culprit here and I would highly
+appreciate your help on that point.
+
+Thanks,
+Miquèl
+
+> 
+> >   
+> > > +    minItems: 2
+> > > +    maxItems: 2
+> > > +    items:
+> > > +      maxItems: 1    
+> > 
+> > This says you can only have 2 64-bit entries. Probably not what you 
+> > want. This looks like a case for a maxItems 'should be enough for now' 
+> > type of value.  
+> 
+> Yes, that is what I wanted to describe.
+> 
+> In my recent contributions you always preferred to bound things as much
+> as possible, even though later it might become necessary to loosen the
+> constraint. Right now I see the use of these properties for 2 devices,
+> but in theory there is no limit.
+> 
+> Of course if we switch to the array representation I suppose I should
+> stick to:
+> 
+> +    minItems: 2
+> +    maxItems: 2
