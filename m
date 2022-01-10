@@ -2,97 +2,179 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC160489DD4
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Jan 2022 17:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2537489E73
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Jan 2022 18:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiAJQtE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 10 Jan 2022 11:49:04 -0500
-Received: from mail-oo1-f54.google.com ([209.85.161.54]:43992 "EHLO
-        mail-oo1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237707AbiAJQtD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jan 2022 11:49:03 -0500
-Received: by mail-oo1-f54.google.com with SMTP id z20-20020a4a3054000000b002dbfaf0b568so3698992ooz.10;
-        Mon, 10 Jan 2022 08:49:02 -0800 (PST)
+        id S238393AbiAJRf3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 10 Jan 2022 12:35:29 -0500
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:42924 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238135AbiAJRf2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 10 Jan 2022 12:35:28 -0500
+Received: by mail-ot1-f48.google.com with SMTP id s8-20020a0568301e0800b00590a1c8cc08so9867350otr.9;
+        Mon, 10 Jan 2022 09:35:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=UE8yD5Ct/F6dHlrHLAV9VNma1gP2lMc+7CQcqBSce8s=;
-        b=3Dy13qjlJ345E0CJorSgZChrd79+LrcrEHqQFt67/ViERIDxm7zggJJ9CGlp6+9J5M
-         LKWTJfKsJmUIiWMM8ruMgx1xh9D23qFHF+MRYpkXtT1GyL70dRjIsvPjkrQku16mCqfx
-         ie85B2P8c4ezv5w8Vi0j7eBduefTWdStI++OuKdsz5IfkHNY75kkzOECpw5Hk1GWwOyz
-         uDgCQTyV/wP7wPp0kzxUvQXYZHeucG3R56UHDWwGgQH3Zonjy4laIJWaqsxvG0xxZHk5
-         6v0XpGBUmShGpHhp0JU2hNfAlsc5QkAYikVD9zmXLygDTrfZbAwBx2s5mLwhX15TLFHo
-         nhgA==
-X-Gm-Message-State: AOAM533tlSUFNf/W8GFras+GA2wowePA0832bgJekYV8cj5lJw3w707Q
-        az+I9XCR/pAE1ReKZirfaA==
-X-Google-Smtp-Source: ABdhPJyAQKG9qcTs+ZJVuMZ/jvEd8orfRKAYQTVMvMNX+7d4dfJqitUbb9xMHJqKbaljkyvpyqBEgQ==
-X-Received: by 2002:a4a:51c5:: with SMTP id s188mr441999ooa.44.1641833342522;
-        Mon, 10 Jan 2022 08:49:02 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kGSDbb7AuI5t4yuB5/UTAj6awe+qRFmKCnLO1wOEEv0=;
+        b=Relv2Ng1ZW5vNu6J07hxrCBJNqIbPGRqVeuL0n1qCfIOSBl+HwJanvDSWOJLBqhpLz
+         QEh1/1d6f1JOhR1LlaS1cdL+1txyFmyXEybZn6XvbAxjOMyasfCoAFXPUS8xKzTNTWgC
+         6vg+egFH6P6v5OBZsuXQCQz5vPsmJ1p56HPL+IU/nV50SXJ1FZKdbRDL+Y1sJX5mtVuX
+         5+TbA65zajqgToHkb+x4z9MQ/I+RolK5+JCz1pKPll3kgnFgtMEuFHfxZgo2mTxeX/9E
+         nsarKf3OFObnftrbrU72mPcoa/5ihSScTnZmR8Ogf8p1oB7rRQnvp37IaP9i+/1haVyt
+         QqQQ==
+X-Gm-Message-State: AOAM532KBlSCn5oZ3wy/xrWP/eFpXX2kP1ZKuBORNVeruABNxCDQWHli
+        ZHtW5uYMoNLdm2utakxVMA==
+X-Google-Smtp-Source: ABdhPJxXuBR7XbQNEmHJiiuRBTu9ZsbHxp9B6cvGSpp8tIc37s5Gdp7fCyZN7KN54/RvOho095IumQ==
+X-Received: by 2002:a9d:5541:: with SMTP id h1mr621550oti.115.1641836128080;
+        Mon, 10 Jan 2022 09:35:28 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id v23sm1585676otn.42.2022.01.10.08.49.01
+        by smtp.gmail.com with ESMTPSA id bc7sm1471591oob.29.2022.01.10.09.35.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jan 2022 08:49:01 -0800 (PST)
-Received: (nullmailer pid 1067454 invoked by uid 1000);
-        Mon, 10 Jan 2022 16:48:59 -0000
+        Mon, 10 Jan 2022 09:35:27 -0800 (PST)
+Received: (nullmailer pid 1149470 invoked by uid 1000);
+        Mon, 10 Jan 2022 17:35:26 -0000
+Date:   Mon, 10 Jan 2022 11:35:26 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Leilk Liu <leilk.liu@mediatek.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org
-In-Reply-To: <20220110053744.30323-1-leilk.liu@mediatek.com>
-References: <20220110053744.30323-1-leilk.liu@mediatek.com>
-Subject: Re: [PATCH 1/2] dt-bindings: spi: Convert spi-mt65xx & spi-slave-mt27xx to json-schema
-Date:   Mon, 10 Jan 2022 10:48:59 -0600
-Message-Id: <1641833339.690847.1067453.nullmailer@robh.at.kernel.org>
+To:     Li-hao Kuo <lhjeff911@gmail.com>
+Cc:     p.zabel@pengutronix.de, broonie@kernel.org,
+        andyshevchenko@gmail.com, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wells.lu@sunplus.com, lh.kuo@sunplus.com
+Subject: Re: [PATCH v5 2/2] devicetree: bindings SPI Add bindings doc for
+ Sunplus SP7021
+Message-ID: <YdxuXjhzsuMbrtRF@robh.at.kernel.org>
+References: <cover.1641797029.git.lhjeff911@gmail.com>
+ <7d25d1ee004dd668bc5cc122912c5dbeb6ff245f.1641797029.git.lhjeff911@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7d25d1ee004dd668bc5cc122912c5dbeb6ff245f.1641797029.git.lhjeff911@gmail.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 10 Jan 2022 13:37:43 +0800, Leilk Liu wrote:
-> Convert Mediatek ARM SOC's SPI Master & Slave controller binding
-> to json-schema format.
+On Mon, Jan 10, 2022 at 02:47:22PM +0800, Li-hao Kuo wrote:
+> Add devicetree bindings SPI Add bindings doc for Sunplus SP7021
 > 
-> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> Reviewed by Mr. Rob Herring <robh+dt@kernel.org>
+
+Tag is wrong in multiple ways. It must be exactly what I gave:
+
+Acked-by: Rob Herring <robh@kernel.org>
+
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
 > ---
->  .../bindings/spi/mediatek,spi-mt65xx.yaml     | 96 +++++++++++++++++++
->  .../spi/mediatek,spi-slave-mt27xx.yaml        | 69 +++++++++++++
->  .../devicetree/bindings/spi/spi-mt65xx.txt    | 68 -------------
->  .../bindings/spi/spi-slave-mt27xx.txt         | 33 -------
->  4 files changed, 165 insertions(+), 101 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
->  create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml
->  delete mode 100644 Documentation/devicetree/bindings/spi/spi-mt65xx.txt
->  delete mode 100644 Documentation/devicetree/bindings/spi/spi-slave-mt27xx.txt
+> Changes in v5:
+>  - no change.
+>  - Reviewed by Mr. Rob Herring <robh+dt@kernel.org>
 > 
-
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml: properties:compatible:oneOf: [{'const': 'mediatek,mt2712-spi-slave'}, {'const': 'mediatek,mt8195-spi-slave'}] should not be valid under {'items': {'propertyNames': {'const': 'const'}, 'required': ['const']}}
-	hint: Use 'enum' rather than 'oneOf' + 'const' entries
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml: ignoring, error in schema: properties: compatible: oneOf
-Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.example.dt.yaml:0:0: /example-0/spi@10013000: failed to match any schema with compatible: ['mediatek,mt2712-spi-slave']
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1577767
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+>  .../bindings/spi/spi-sunplus-sp7021.yaml           | 81 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  1 +
+>  2 files changed, 82 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+> new file mode 100644
+> index 0000000..096bfae
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+> @@ -0,0 +1,81 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (C) Sunplus Co., Ltd. 2021
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/spi-sunplus-sp7021.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sunplus sp7021 SPI controller
+> +
+> +allOf:
+> +  - $ref: "spi-controller.yaml"
+> +
+> +maintainers:
+> +  - Li-hao Kuo <lhjeff911@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - sunplus,sp7021-spi
+> +
+> +  reg:
+> +    items:
+> +      - the SPI master registers
+> +      - the SPI slave registers
+> +
+> +  reg-names:
+> +    items:
+> +      - const: master
+> +      - const: slave
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: dma_w
+> +      - const: mas_risc
+> +      - const: slave_risc
+> +
+> +  interrupts:
+> +    minItems: 3
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - interrupts
+> +  - interrupt-names
+> +  - clocks
+> +  - clocks-names
+> +  - resets
+> +  - pinctrl-names
+> +  - pinctrl-0
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/sp-sp7021.h>
+> +    #include <dt-bindings/reset/sp-sp7021.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    spi@9C002D80 {
+> +        compatible = "sunplus,sp7021-spi";
+> +        reg = <0x9C002D80 0x80>, <0x9C002E00 0x80>;
+> +        reg-names = "master", "slave";
+> +        interrupt-parent = <&intc>;
+> +        interrupt-names = "dma_w",
+> +                          "mas_risc",
+> +                          "slave_risc";
+> +        interrupts = <144 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <146 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <145 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&clkc SPI_COMBO_0>;
+> +        resets = <&rstc RST_SPI_COMBO_0>;
+> +        pinctrl-names = "default";
+> +        pinctrl-0 = <&pins_spi0>;
+> +    };
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 1732a9e..2f487be 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18247,6 +18247,7 @@ SUNPLUS SPI CONTROLLER INTERFACE DRIVER
+>  M:	Li-hao Kuo <lhjeff911@gmail.com>
+>  L:	linux-spi@vger.kernel.org
+>  S:	Maintained
+> +F:	Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+>  F:	drivers/spi/spi-sunplus-sp7021.c
+>  
+>  SUPERH
+> -- 
+> 2.7.4
+> 
+> 
