@@ -2,291 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D04A248AA57
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Jan 2022 10:20:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23BE848AB1F
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Jan 2022 11:13:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349228AbiAKJUk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Jan 2022 04:20:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29715 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1349229AbiAKJUi (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jan 2022 04:20:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641892838;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uJ1YqPO7Xit3OrTXhT/TYDES9bJJk2fXlWiLmQ/iCOQ=;
-        b=irrRj5IBTgFCw1FGWFFAsRdn+4KcNsPgfKkekt5xbxexi2V761sdKHmFuY+wy/FynwogEg
-        LYJck1MR9YSQ4VW423NYgx4ruef5ACM76JhJVOuwnCMw5HPkvznR0Qe8yxQ/yC/Z6OFYx6
-        m/PnRIxsBWWZWc2VxYy+aEfSkZsu+NY=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-244-ovjkb7wwN9G6PPGtr-cBhQ-1; Tue, 11 Jan 2022 04:20:37 -0500
-X-MC-Unique: ovjkb7wwN9G6PPGtr-cBhQ-1
-Received: by mail-ed1-f72.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso12700057edt.20
-        for <linux-spi@vger.kernel.org>; Tue, 11 Jan 2022 01:20:36 -0800 (PST)
+        id S1348640AbiAKKNp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Jan 2022 05:13:45 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:60938
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348528AbiAKKNo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jan 2022 05:13:44 -0500
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C49433F32E
+        for <linux-spi@vger.kernel.org>; Tue, 11 Jan 2022 10:13:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1641896022;
+        bh=dor9qMPQ0mrrX4bfZ8uDHf6Jen+W2LQ6ZgWRYFeDuWA=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=fqCx88uVJx96LRKgDuB/AA+iZHJiJYt6ZnztWIgiF1+oa+vUHTNA477LkC75hkUzl
+         AnzspdRC7WqY2oHfXsT/uSzwVuTLIWskR3q7g9nzDnE3UuZ4kZcY5sSb9iWghseFHh
+         dABeDPh11dIYTG4LA9SPXYQOQEQ1FkPOVQ2u2Cr90hTGau+72CAsvX6PyscdMLA3hP
+         Ptg5Z2Hv4LegtQLV0yUP7+rfddFFqt6vD3kEZLi2wqzX7QwPuecfKk88vSbw5KQkKD
+         1LrCTdr19q3S8Xon5EHzF4D+XN/QLlwVQcC2FLZbEa1aL+FJEYBHjsewVxpXp8vOuL
+         Wwh5KXGTSfMQg==
+Received: by mail-ed1-f72.google.com with SMTP id i9-20020a05640242c900b003fe97faab62so3028996edc.9
+        for <linux-spi@vger.kernel.org>; Tue, 11 Jan 2022 02:13:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=uJ1YqPO7Xit3OrTXhT/TYDES9bJJk2fXlWiLmQ/iCOQ=;
-        b=S6RLLm+KFvdvy0SzT4tqEA9NqeLWbFXYdqjfgQZCTSlWXOQH8BRUDM5wksPjs3REA4
-         9vOPO8oYcY6rH7wYBXCRiZrJ7bZAJWsCyPtV3Y9F8YlIXlaTuJrRhcUyb2+M2KTbymkS
-         f0KWM2hvEqry+Pd0cFMKlZHxsfFFR5jzAKN5MtQuBNb4tv7ovHhtrJmMbksrLW9RRO/Y
-         wO34iv+peAP3sMph8QM4WJic2oOzXLSqHyl+LPTjtSdwbsk4tWgGAYT5YURDaCZv0c6a
-         DLXtO+rGvtxw0gJTFRgOs6vactMi6P5F6tshqe+Uo5KiWIAeijLlw/ANPEOQZY0GEGhl
-         4xMQ==
-X-Gm-Message-State: AOAM532iRPLqR/ox7u8L73DKUA/VeCZGjNVATVQTJnEt54ZcRkzeOZJ4
-        Z3go0YZxMPO2Rlmn9KcyjJ7bCjTtDtgtybyNtWJsr4oydCoJdeaFAu0dCbM4CoDRKm9FlnXvI8e
-        5VQHBZF8gS8dqc5ODRZja
-X-Received: by 2002:a17:906:4fd6:: with SMTP id i22mr2843867ejw.70.1641892835805;
-        Tue, 11 Jan 2022 01:20:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwXuRWJ4cHHSS27BhJ/iVwz/12FvR8jmZfdmnIZZPxYco9NzHX7vZnxSjKW05qyZhnGf2vOKg==
-X-Received: by 2002:a17:906:4fd6:: with SMTP id i22mr2843853ejw.70.1641892835568;
-        Tue, 11 Jan 2022 01:20:35 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id kv11sm2255731ejc.156.2022.01.11.01.20.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jan 2022 01:20:35 -0800 (PST)
-Message-ID: <a066f0bc-7b27-771c-544d-cacd15aa2374@redhat.com>
-Date:   Tue, 11 Jan 2022 10:20:34 +0100
+        bh=dor9qMPQ0mrrX4bfZ8uDHf6Jen+W2LQ6ZgWRYFeDuWA=;
+        b=Kc9Yu8d8yM1W/h+Qez+oXUJh4w+9FXXTGIfGatysi5PpjSGPpPb7tdBRpuaU/cWfOm
+         4odnZ9dVVYlch7Zh/e5AfKm1/W2tiVJcONOMChhslQSlRGP6GIoHeAq50hSE2IquXhox
+         ZNxy/XtyocXvdlvz5mJ4W8BkT8EL0adKhCY2k++heg9mqsn8KcVZM+MFRxqUeTrLlCSy
+         L49VYPcgjkBbIoknr58ZtPlKdq7o73HFQcebR0dBbV8s4XgB+V0F27SEqMY97sCCSPwg
+         usxdgy8uScA5v+o1c4s0vk4CtwFYGFCOK1A+6Zu51Z1wDSaCYIbYaya6tWEMsTizOwdr
+         fZDg==
+X-Gm-Message-State: AOAM531s+SInu9+S/aSQo91xs6sOTUkxDuX7hYn09OD3ViFr6cFR3z7J
+        ZdRs2ZnpWebFIsRu9RyoR/IKKZZziFRD00Pv9s3ycfAitlfV2j0OBgS/2XDn+SWOAnYCYS14ThP
+        SVNVaT6pfUhly/7nWbG/VbSZFf6qrKfAZc+Qm7w==
+X-Received: by 2002:a17:907:7812:: with SMTP id la18mr2985710ejc.361.1641896021570;
+        Tue, 11 Jan 2022 02:13:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzS+KRg2Po2ZmPguoYjn6vWAcaef7toI3fl6TH95T7A0/0ObQGfS0r1niugTRZEPPNRwiEOTw==
+X-Received: by 2002:a17:907:7812:: with SMTP id la18mr2985700ejc.361.1641896021430;
+        Tue, 11 Jan 2022 02:13:41 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id 26sm3431268ejk.138.2022.01.11.02.13.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 02:13:41 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>, linux-spi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Sam Protsenko <semen.protsenko@linaro.org>
+Subject: [PATCH v2 0/4] spi: dt-bindings: samsung: convert to dtschema
+Date:   Tue, 11 Jan 2022 11:13:34 +0100
+Message-Id: <20220111101338.58630-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2 6/6] ACPI: bus-multi-instantiate: Add SPI support
-To:     Stefan Binding <sbinding@opensource.cirrus.com>,
-        'Mark Brown' <broonie@kernel.org>,
-        "'Rafael J . Wysocki'" <rafael@kernel.org>,
-        'Len Brown' <lenb@kernel.org>,
-        'Mark Gross' <markgross@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        patches@opensource.cirrus.com
-References: <20211210154050.3713-1-sbinding@opensource.cirrus.com>
- <20211210154050.3713-7-sbinding@opensource.cirrus.com>
- <c311642f-38ab-4914-cf92-852e6a20cfc9@redhat.com>
- <00af01d8062f$75aed010$610c7030$@opensource.cirrus.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <00af01d8062f$75aed010$610c7030$@opensource.cirrus.com>
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=hdegoede@redhat.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi,
 
-On 1/10/22 15:36, Stefan Binding wrote:
-> Hi,
-> 
->> -----Original Message-----
->> From: Hans de Goede <hdegoede@redhat.com>
->> Sent: 21 December 2021 18:32
->> To: Stefan Binding <sbinding@opensource.cirrus.com>; Mark Brown
->> <broonie@kernel.org>; Rafael J . Wysocki <rafael@kernel.org>; Len Brown
->> <lenb@kernel.org>; Mark Gross <markgross@kernel.org>
->> Cc: linux-kernel@vger.kernel.org; linux-spi@vger.kernel.org; linux-
->> acpi@vger.kernel.org; platform-driver-x86@vger.kernel.org;
->> patches@opensource.cirrus.com
->> Subject: Re: [PATCH v2 6/6] ACPI: bus-multi-instantiate: Add SPI support
-> 
->>> +	ret = bmi_spi_count_resources(adev);
->>> +	if (ret <= 0)
->>> +		return ret;
->>> +	count = ret;
->>
->> Ok, so why not do the following here instead (and drop a whole bunch of
->> functions above):
->>
->> 	ret = acpi_dev_get_resources(adev, &r, bmi_spi_count, &count);
->> 	if (ret < 0)
->> 		return ret;
->>
->> 	if (count <= 0) {
->> 		acpi_dev_free_resource_list(&r);
->> 		return count;
->> 	}
->>
->> 	/* Note we are not freeing the resource list yet here !!! */
->>
->>> +
->>> +	bmi->spi_devs = devm_kcalloc(dev, count, sizeof(*bmi->spi_devs),
->> GFP_KERNEL);
->>> +	if (!bmi->spi_devs)
->>> +		return -ENOMEM;
->>> +
->>> +	acpi_data = bmi_spi_get_resources(dev, adev, count);
->>> +	if (!acpi_data)
->>> +		return -ENOMEM;
->>
->> Remove the bmi_spi_get_resources() call here.
->>
->>> +
->>> +	for (i = 0; i < count && inst_array[i].type; i++) {
->>
->> Write a new:
->>
->> int bmi_get_spi_resource_by_index(list_head *resource_list, struct
->> acpi_resource_spi_serialbus *sb_ret, int index)
->> {}
->>
->> Helper which walks the list and fills in *sb_ret with the Nth (matching index)
->> SpiSerialBus resource found in the
->> list.
->>
->> And then do:
->>
->> 		ret = bmi_get_spi_resource_by_index(&r, &sb, i);
->> 		if (ret)
->> 			return ret;
->>
->> 		ctrl =
->> bmi_find_spi_controller(sb.resource_source.string_ptr);
->>
->>
->>> +		ctlr = bmi_find_spi_controller(acpi_data-
->>> acpi_data[i].resource_source);
->>> +		if (!ctlr) {
->>> +			ret = -EPROBE_DEFER;
->>> +			goto error;
->>> +		}
->>> +
->>> +		spi_dev = spi_alloc_device(ctlr);
->>> +		if (!spi_dev) {
->>> +			dev_err(&ctlr->dev, "failed to allocate SPI device for
->> %s\n",
->>> +				dev_name(&adev->dev));
->>> +			ret = -ENOMEM;
->>> +			goto error;
->>> +		}
->>> +
->>> +		strscpy(spi_dev->modalias, inst_array[i].type,
->> sizeof(spi_dev->modalias));
->>> +
->>
->> And replace all the "acpi_data->acpi_data[i].sb." reference below with
->> simple "sb.".
->>
->>
->>> +		if (ctlr->fw_translate_cs) {
->>> +			ret = ctlr->fw_translate_cs(ctlr,
->>> +						    acpi_data-
->>> acpi_data[i].sb.device_selection);
->>> +			if (ret < 0) {
->>> +				spi_dev_put(spi_dev);
->>> +				goto error;
->>> +			}
->>> +			spi_dev->chip_select = ret;
->>> +		} else {
->>> +			spi_dev->chip_select = acpi_data-
->>> acpi_data[i].sb.device_selection;
->>> +		}
->>> +
->>> +		spi_dev->max_speed_hz = acpi_data-
->>> acpi_data[i].sb.connection_speed;
->>> +		spi_dev->bits_per_word = acpi_data-
->>> acpi_data[i].sb.data_bit_length;
->>> +
->>> +		if (acpi_data->acpi_data[i].sb.clock_phase ==
->> ACPI_SPI_SECOND_PHASE)
->>> +			spi_dev->mode |= SPI_CPHA;
->>> +		if (acpi_data->acpi_data[i].sb.clock_polarity ==
->> ACPI_SPI_START_HIGH)
->>> +			spi_dev->mode |= SPI_CPOL;
->>> +		if (acpi_data->acpi_data[i].sb.device_polarity ==
->> ACPI_SPI_ACTIVE_HIGH)
->>> +			spi_dev->mode |= SPI_CS_HIGH;
->>> +
->>> +		ret = bmi_get_irq(pdev, adev, &inst_array[i]);
->>> +		if (ret < 0) {
->>> +			spi_dev_put(spi_dev);
->>> +			goto error;
->>> +		}
->>> +		spi_dev->irq = ret;
->>> +
->>> +		snprintf(name, sizeof(name), "%s-%s-%s.%d",
->> dev_name(&ctlr->dev), dev_name(dev),
->>> +			 inst_array[i].type, i);
->>> +		spi_dev->dev.init_name = name;
->>> +
->>> +		ret = spi_add_device(spi_dev);
->>> +		if (ret) {
->>> +			dev_err(&ctlr->dev, "failed to add SPI device %s from
->> ACPI: %d\n",
->>> +				dev_name(&adev->dev), ret);
->>> +			spi_dev_put(spi_dev);
->>> +			goto error;
->>> +		}
->>> +
->>> +		dev_dbg(dev, "SPI device %s using chip select %u", name,
->> spi_dev->chip_select);
->>> +
->>> +		bmi->spi_devs[i] = spi_dev;
->>> +		bmi->spi_num++;
->>> +	}
->>> +
->>> +	if (bmi->spi_num < count) {
->>> +		dev_err(dev, "Error finding driver, idx %d\n", i);
->>> +		ret = -ENODEV;
->>> +		goto error;
->>> +	}
->>> +
->>> +	dev_info(dev, "Instantiate %d SPI devices.\n", bmi->spi_num);
->>
->> And here replace the bmi_spi_res_free(acpi_data); call in both exit paths
->> with:
->> acpi_dev_free_resource_list(&r); .
->>
->> To me this way, simply using the already allocated resources from the list,
->> rather then making a temp copy of them and throwing that away seems like
->> a simpler solution ?
->>
->> If you go this route, please also remove the struct bmi_spi_acpi and
->> struct bmi_spi_sb_acpi data types which you now no longer need.
->>
-> 
-> I tried to implement this idea, and reuse the resource list, but I hit an issue. 
-> The resources saved in the list are not "struct acpi_resource", but instead the 
-> generic "struct resource".
-> We need the acpi_resource structure to pull the parameters from to be able to
-> create the spi devices.
-> As far as I know there is no way to convert the "struct resource" into a
-> "struct acpi_resource". Is there another way to do this?
+Changes since v1
+================
+1. Patch 2: describe devices matching compatible, correct issues pointed out by
+   Rob, add reviewed-by tag.
+2. New patches 3 and 4.
 
-Ugh, you're right. Sorry about that. I still don't realy like the code
-from your original v2 patch for this.
+Best regards,
+Krzysztof
 
-So maybe this comment from my second reply on this patch can help
-clean things up:
+Krzysztof Kozlowski (4):
+  ARM: dts: exynos: split dmas into array of phandles in Exynos5250
+  spi: dt-bindings: samsung: convert to dtschema
+  spi: dt-bindings: samsung: allow controller-data to be optional
+  spi: s3c64xx: allow controller-data to be optional
 
-"So thinking a bit more about this, then looking up the nth SpiSerialBus
-resource, and then turning that into a spi_client is something which
-the SPI core ACPI code should already be doing for index==0. So I think
-that you should be able to modify the SPI core ACPI code to take index
-as a parameter and then have it export a helper for this which you
-can use rather then duplicate the SPI core ACPI code  ? Note this is
-also what the I2C code is already doing.
+ .../spi/samsung,spi-peripheral-props.yaml     |  36 ++++
+ .../devicetree/bindings/spi/samsung,spi.yaml  | 195 ++++++++++++++++++
+ .../bindings/spi/spi-peripheral-props.yaml    |   1 +
+ .../devicetree/bindings/spi/spi-samsung.txt   | 122 -----------
+ MAINTAINERS                                   |   2 +-
+ arch/arm/boot/dts/exynos5250.dtsi             |   9 +-
+ drivers/spi/spi-s3c64xx.c                     |  14 +-
+ 7 files changed, 242 insertions(+), 137 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/spi-samsung.txt
 
-And if you go that route you may also want to consider to add the SPI
-equivalent of the i2c_acpi_client_count() helper."
-
-Maybe that is a possible route to go to clean this up?
-
-Note there are also 2 other small remarks pending:
-
-1. My comment about adding the _t_ at the end of detect
-2. + Mark's remark about patch 3/6 missing your Signed-off-by.
-
-Regards,
-
-Hans
+-- 
+2.32.0
 
