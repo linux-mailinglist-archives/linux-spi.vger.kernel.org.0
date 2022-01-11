@@ -2,115 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F0248AB29
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Jan 2022 11:13:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5B948B8F2
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Jan 2022 21:53:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348898AbiAKKNu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Jan 2022 05:13:50 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:41894
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1348778AbiAKKNs (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jan 2022 05:13:48 -0500
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        id S244265AbiAKUx0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 11 Jan 2022 15:53:26 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38866 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244543AbiAKUxK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jan 2022 15:53:10 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 055A640048
-        for <linux-spi@vger.kernel.org>; Tue, 11 Jan 2022 10:13:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1641896027;
-        bh=vkZ3shAsrts82aZQTD9Odzm7oGr7rqF0WKQDjTKTwd8=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=AsSy6TnxbEX9P9XkYo75tUEdzUi/QNUnxZtzQQaEXG6LEu4gKkiGy4eVjmoLUcapY
-         6WhAAT6NaSssf2deKGqTP5U5jZYXk7hhw+U/cJS+iv0P+ORut60tC8iyd9b5uapSPx
-         kVWatiiAuxpf2eDOocJu1vVSgr6/QMbI4b9BkHbdOTPdWLB9QdvQR4T2ljnq+hHq9T
-         y5UOgs9lYQmmXx/3HWNlKNS6WOSjr84AFsVabhwUoHQS1AkBkX1MDXWF83j6I+e+fW
-         ocYfMXcQcrWTUjQb/Dn1WtERIg3u2lBlYQTU/ZmKWTLIy90/yagUddaoF1XJH3iLbE
-         Lt5i00s/sOUXQ==
-Received: by mail-ed1-f72.google.com with SMTP id p8-20020aa7d308000000b003fe9b0c4760so2704184edq.17
-        for <linux-spi@vger.kernel.org>; Tue, 11 Jan 2022 02:13:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vkZ3shAsrts82aZQTD9Odzm7oGr7rqF0WKQDjTKTwd8=;
-        b=6LxgOgWI8D6IFZlDwRxUL2u0QE2p1F61kSKNYyijdQjixOCztSoT2tfEdMUjjflILJ
-         ++OsCfSQbwnu4QJ5M6uwHQlOj6IcwQlWTdBhzJVqNQXxB/t1jmN/34xoxMmaTj+8pp2e
-         KwvzimK0m5OYuOFgsEjwlmxbjppdn9/1EiWOFNDJy0QZ2gTMRc7cYvmkJ2leALQRr1Gu
-         Us3ZrC2nCN6VCMyfqrqVel7EfNwiPlDpPaq6cJJpziNPCJ9smJ0+WvC/Da4gwqZAZNYM
-         HyscroBATYlBG2QfXAHsb2viJTdzkttMkp/AdDrWQKgyu5uHwAb4xU42iEYu+lGL5BvR
-         ULMw==
-X-Gm-Message-State: AOAM532560DqEW52ArLhbshlSsPlcyv87DnFFIrUaURIdJIgFlq2NMlg
-        4Z2od53zCDiNqqKfXQYzalpmUf/FFtlscCJV6ODQrZk1coBdcTV2yOGHs/UoIYG/MHFM6x2SR+S
-        ZVaY6faLCQ7dt6jLMX/BqlzcPxWrVczp4GwQGMA==
-X-Received: by 2002:a50:da48:: with SMTP id a8mr3517605edk.155.1641896026737;
-        Tue, 11 Jan 2022 02:13:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyrMWwC4F5CYCPwNtrsTc93H/KSEUuKQ3dZ2KWyqGsikQRFJIiGNhQmyHnezI5HUpc6kJMojw==
-X-Received: by 2002:a50:da48:: with SMTP id a8mr3517597edk.155.1641896026571;
-        Tue, 11 Jan 2022 02:13:46 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id 26sm3431268ejk.138.2022.01.11.02.13.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 02:13:46 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Pratyush Yadav <p.yadav@ti.com>, linux-spi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 4/4] spi: s3c64xx: allow controller-data to be optional
-Date:   Tue, 11 Jan 2022 11:13:38 +0100
-Message-Id: <20220111101338.58630-5-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220111101338.58630-1-krzysztof.kozlowski@canonical.com>
-References: <20220111101338.58630-1-krzysztof.kozlowski@canonical.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9981C61741;
+        Tue, 11 Jan 2022 20:53:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6E50DC36AEF;
+        Tue, 11 Jan 2022 20:53:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641934389;
+        bh=yec4E9e9D2fQCOAPNC1hcXVwIyBn97InYlE+1VL6qck=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=VGtB0TSSmce+369lWXSa+9CWfQxLRoKeEWJAry9Ta7e/J8CoiVVKW7UfX8osvwtnt
+         JIY6q3XVyGIQe5dQENyHRT+XhK9+jCgFCokRb6kehgqFlKO4cpcNWE4brQiQzvIXxL
+         MUJeo+ztUMICvd/tyx/+ViCaPKwdld9mM0zTyrK+p32Yllu9oKuG2XFD402pB+H6tt
+         zp7dypxrmeIrHKiGCh6Px9XlW7Rw0vvcDsHv8LEnyajyNqav9CikAhWo8uyO69gxEZ
+         eJMWDy4Jyo2X53S2yNVIi4TwhoCrCpvji5ynOTclzgvi9IDd1UTeIOvv46xdfXJl7H
+         wsg87vLPXrK2A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5ADA1F6078A;
+        Tue, 11 Jan 2022 20:53:09 +0000 (UTC)
+Subject: Re: [GIT PULL] SPI updates for v5.17
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220110132949.89A5CC36AE5@smtp.kernel.org>
+References: <20220110132949.89A5CC36AE5@smtp.kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220110132949.89A5CC36AE5@smtp.kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v5.17
+X-PR-Tracked-Commit-Id: 19629ae482f1800b50a5bdf2504ac57171d2bb82
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 282aa44c21708835517ffaa31c63ab651248cf5e
+Message-Id: <164193438936.11435.10637555412211658494.pr-tracker-bot@kernel.org>
+Date:   Tue, 11 Jan 2022 20:53:09 +0000
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The Samsung SoC SPI driver requires to provide controller-data node
-for each of SPI peripheral device nodes.  Make this controller-data node
-optional, so DTS could be simpler.
+The pull request you sent on Mon, 10 Jan 2022 13:29:35 +0000:
 
-Suggested-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- drivers/spi/spi-s3c64xx.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v5.17
 
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 8755cd85e83c..769d958a2f86 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -796,16 +796,14 @@ static struct s3c64xx_spi_csinfo *s3c64xx_get_slave_ctrldata(
- 		return ERR_PTR(-EINVAL);
- 	}
- 
--	data_np = of_get_child_by_name(slave_np, "controller-data");
--	if (!data_np) {
--		dev_err(&spi->dev, "child node 'controller-data' not found\n");
--		return ERR_PTR(-EINVAL);
--	}
--
- 	cs = kzalloc(sizeof(*cs), GFP_KERNEL);
--	if (!cs) {
--		of_node_put(data_np);
-+	if (!cs)
- 		return ERR_PTR(-ENOMEM);
-+
-+	data_np = of_get_child_by_name(slave_np, "controller-data");
-+	if (!data_np) {
-+		dev_info(&spi->dev, "child node 'controller-data' not found, using defaults\n");
-+		return cs;
- 	}
- 
- 	of_property_read_u32(data_np, "samsung,spi-feedback-delay", &fb_delay);
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/282aa44c21708835517ffaa31c63ab651248cf5e
+
+Thank you!
+
 -- 
-2.32.0
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
