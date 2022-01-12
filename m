@@ -2,73 +2,174 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 630DC48BD22
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Jan 2022 03:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E64648C001
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Jan 2022 09:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348477AbiALCZm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 11 Jan 2022 21:25:42 -0500
-Received: from mail-oi1-f181.google.com ([209.85.167.181]:38502 "EHLO
-        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236094AbiALCZl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 11 Jan 2022 21:25:41 -0500
-Received: by mail-oi1-f181.google.com with SMTP id g205so1605991oif.5;
-        Tue, 11 Jan 2022 18:25:41 -0800 (PST)
+        id S1351656AbiALIeH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Wed, 12 Jan 2022 03:34:07 -0500
+Received: from mail-ua1-f49.google.com ([209.85.222.49]:41614 "EHLO
+        mail-ua1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237928AbiALIeE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 12 Jan 2022 03:34:04 -0500
+Received: by mail-ua1-f49.google.com with SMTP id p37so3317815uae.8;
+        Wed, 12 Jan 2022 00:34:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ytmxgcvgOBYV5/XB/+SAtEOazCkov2Vt5OdiPkB8I5Y=;
-        b=CKKcynaSnXDm46nL3egBoIEQ6XO6E0F8DUk65JsYG8rAsxSpIrB5DsZlztSljOYpPf
-         9y5mr6HwxN0GtxiLdBQg9HiZxa2DvbmfDu6ieJieERyLjCaxCibQ2pft8JJkISLjuJ6w
-         J6HU6+K6JKn0CqTq1CzBzfcnqXeCEipBEXGavMCvNfkqrataxn+/eFkl4f9G4oYBwfJw
-         KndfH3zXjlmCrNBsZ0LkNe5efEgiVEV4nMN9rNofuOD3Ynw7pdKqphp8JsOEqwrvIRyf
-         KPvdp58Yz1yhLo1If/CA+1Da63KLA1P5aPGLt/1h7BeJ+cLeeLYGV+/AaYxlglQQtRHb
-         u+Uw==
-X-Gm-Message-State: AOAM532WAuAfKg57FIhst1+Jnjr1/2vPV2TD4w0qqGAbbw3NDBvV79Eo
-        ys4bCzu7Cwulscq3kzJqzKYU1S4+yw==
-X-Google-Smtp-Source: ABdhPJxASHdr8yB+bbKUJlAspuu+aUPON+33sWszhR4pyTyeomBJCphu3qL2NJ+19+hZ12S1tXAl7Q==
-X-Received: by 2002:a05:6808:1644:: with SMTP id az4mr3795968oib.18.1641954341283;
-        Tue, 11 Jan 2022 18:25:41 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id a6sm2022265oil.6.2022.01.11.18.25.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 18:25:40 -0800 (PST)
-Received: (nullmailer pid 3950141 invoked by uid 1000);
-        Wed, 12 Jan 2022 02:25:39 -0000
-Date:   Tue, 11 Jan 2022 20:25:39 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     linux-kernel@vger.kernel.org, Pratyush Yadav <p.yadav@ti.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-spi@vger.kernel.org,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andi Shyti <andi@etezian.org>,
-        linux-samsung-soc@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2 3/4] spi: dt-bindings: samsung: allow controller-data
- to be optional
-Message-ID: <Yd48I0+IfUXbJ0B8@robh.at.kernel.org>
-References: <20220111101338.58630-1-krzysztof.kozlowski@canonical.com>
- <20220111101338.58630-4-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=phWLHSZjGguJkLwzqhKqiJsmBiGXyQV/Ve2Tok5pS7g=;
+        b=xQ+L+sbnDvIN7pQZoS8oBhJ5hzOFEnlOOpe0OQGj7QGmg7rD/yK5U1MGDB+JbrfrmQ
+         Og+LufblsPcyAVbZiGFfqtw3N2LGMeLNEhUeKdnNxSYyOEPDVOTY9uaxHaH7LtUo7nUu
+         ZvT/QTfefrqC1vON97MKHf+PjxRKic3ayHsJFD6oS5cU9Z1f7gnSF2qJbpA31ujslifE
+         tDhl4Uz+JeZB66TZl0+hAwQWxum4Vlt01A1vgRSNzGq5560NZ2vCuDBsqQpogRY4cL0O
+         CcUQMHrLamCovqXDX55XYYap2uK0R+WbsTNj8+rS638rfgH4JfDPr/fLf/9RMA7JbLil
+         8mIw==
+X-Gm-Message-State: AOAM530bCf0yLZUGo4uESq65lDQwMDIPSwXAwTd0KJYxcY+rNfkltWlc
+        SMx9dbIt3QtupXLLf1ZRuArJNDEz+J0gPZMr
+X-Google-Smtp-Source: ABdhPJzhw6BMVIlG0RK3C7ZFhyThZLkewdr5PHsq29ggIRCtRT34EBNJubspsNzz4yr+xS05jmWBlw==
+X-Received: by 2002:a67:f84e:: with SMTP id b14mr3562668vsp.32.1641976442903;
+        Wed, 12 Jan 2022 00:34:02 -0800 (PST)
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
+        by smtp.gmail.com with ESMTPSA id n15sm6569086vkf.35.2022.01.12.00.34.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 00:34:00 -0800 (PST)
+Received: by mail-ua1-f52.google.com with SMTP id m90so3385529uam.2;
+        Wed, 12 Jan 2022 00:34:00 -0800 (PST)
+X-Received: by 2002:ab0:2118:: with SMTP id d24mr3735076ual.78.1641976440167;
+ Wed, 12 Jan 2022 00:34:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220111101338.58630-4-krzysztof.kozlowski@canonical.com>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru> <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <20220110201014.mtajyrfcfznfhyqm@pengutronix.de> <YdyilpjC6rtz6toJ@lunn.ch>
+In-Reply-To: <YdyilpjC6rtz6toJ@lunn.ch>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 12 Jan 2022 09:33:48 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+Message-ID: <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-phy@lists.infradead.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        kvm@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
+        John Garry <john.garry@huawei.com>,
+        Robert Richter <rric@kernel.org>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        Tony Luck <tony.luck@intel.com>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>, netdev@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 11 Jan 2022 11:13:37 +0100, Krzysztof Kozlowski wrote:
-> The Samsung SoC SPI bindings requires to provide controller-data node
-> for each of SPI peripheral device nodes.  Make this controller-data node
-> optional, so DTS could be simpler.
-> 
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  .../devicetree/bindings/spi/samsung,spi-peripheral-props.yaml  | 1 +
->  Documentation/devicetree/bindings/spi/samsung,spi.yaml         | 3 ---
->  2 files changed, 1 insertion(+), 3 deletions(-)
-> 
+Hi Andrew,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On Mon, Jan 10, 2022 at 10:20 PM Andrew Lunn <andrew@lunn.ch> wrote:
+> On Mon, Jan 10, 2022 at 09:10:14PM +0100, Uwe Kleine-König wrote:
+> > On Mon, Jan 10, 2022 at 10:54:48PM +0300, Sergey Shtylyov wrote:
+> > > This patch is based on the former Andy Shevchenko's patch:
+> > >
+> > > https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchenko@linux.intel.com/
+> > >
+> > > Currently platform_get_irq_optional() returns an error code even if IRQ
+> > > resource simply has not been found. It prevents the callers from being
+> > > error code agnostic in their error handling:
+> > >
+> > >     ret = platform_get_irq_optional(...);
+> > >     if (ret < 0 && ret != -ENXIO)
+> > >             return ret; // respect deferred probe
+> > >     if (ret > 0)
+> > >             ...we get an IRQ...
+> > >
+> > > All other *_optional() APIs seem to return 0 or NULL in case an optional
+> > > resource is not available. Let's follow this good example, so that the
+> > > callers would look like:
+> > >
+> > >     ret = platform_get_irq_optional(...);
+> > >     if (ret < 0)
+> > >             return ret;
+> > >     if (ret > 0)
+> > >             ...we get an IRQ...
+> >
+> > The difference to gpiod_get_optional (and most other *_optional) is that
+> > you can use the NULL value as if it were a valid GPIO.
+> >
+> > As this isn't given with for irqs, I don't think changing the return
+> > value has much sense.
+>
+> We actually want platform_get_irq_optional() to look different to all
+> the other _optional() methods because it is not equivalent. If it
+> looks the same, developers will assume it is the same, and get
+> themselves into trouble.
+
+Developers already assume it is the same, and thus forget they have
+to check against -ENXIO instead of zero.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
