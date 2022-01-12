@@ -2,192 +2,111 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C5948C52C
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Jan 2022 14:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 599BB48C538
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Jan 2022 14:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353728AbiALNxC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 12 Jan 2022 08:53:02 -0500
-Received: from mga02.intel.com ([134.134.136.20]:32055 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238942AbiALNw7 (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Wed, 12 Jan 2022 08:52:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641995579; x=1673531579;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6o9aGlupJ5pLyORTimcn6DvGUzsV6iRYvEXQu/xlHjg=;
-  b=nTwMvAxqsLGjEdnv1t3Ca6fu/Hq6lj112WXRizLYR4VoWx0+vkyZThTa
-   b7lBc3MGDbUX0VW1wivv7gp1TcWtTQd13V9WsPo51aZYSLSMfIoFiIxan
-   Oz6Nlo6b46aTQEG3CSrXU49Yqj0x3qEn5EJ67GitkMfqYiPTHvk49sjoX
-   EpsKnq6y3tYveqbnnT91m0RD/BBqZS9bpj8X13DwcKtJ7waSZYvu4/Z+1
-   dyL2wAgJbDA3Bqsr+qhEZvsxy96WWR5MFyfij2sHjoNvRYCI2A0y2mAwC
-   ZijHonAVaKuA2uPgMOjfIZQBp0m7sQCKbdJOPa59jC+r//7I/ycScWjpP
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10224"; a="231077537"
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="231077537"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 05:52:58 -0800
-X-IronPort-AV: E=Sophos;i="5.88,282,1635231600"; 
-   d="scan'208";a="474911438"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2022 05:52:41 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1n7e28-009hhk-Us;
-        Wed, 12 Jan 2022 15:51:24 +0200
-Date:   Wed, 12 Jan 2022 15:51:24 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        platform-driver-x86@vger.kernel.org,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Eric Auger <eric.auger@redhat.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        openipmi-developer@lists.sourceforge.net,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Richard Weinberger <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-Message-ID: <Yd7c3BTcdXcbHDUM@smile.fi.intel.com>
-References: <20220110195449.12448-1-s.shtylyov@omp.ru>
- <20220110195449.12448-2-s.shtylyov@omp.ru>
- <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
- <YdyilpjC6rtz6toJ@lunn.ch>
- <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
- <20220112085009.dbasceh3obfok5dc@pengutronix.de>
- <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
- <Yd7Z3Qwevb/lEwQZ@lunn.ch>
+        id S1353758AbiALNyW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 12 Jan 2022 08:54:22 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:55880 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1353747AbiALNyT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 12 Jan 2022 08:54:19 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20CAbtYb018364;
+        Wed, 12 Jan 2022 14:54:10 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=sdH0K0eSe3S08hG8n1xmryhD86m71VUW2ZVs/ElIu9U=;
+ b=wnGc49ldGz4lYlfm1lDeBhRGNoC7duO7H+5A3eUCocSE0ZqXhXf3wdcDs/xlUVm+fEYc
+ pgW5+z18yO1VR6NQFXKp70LEkwBofu+JxMTT4kaCB6TeSTeN5WObQNyj4b2NwduFWjNb
+ jn3Ti8EK1AItDmLdX5sLfcAQUf6+qYz3jhJcceSsmvbfubyJZ4sEFiOTagVC7gSTy1+I
+ 7fec/xjY6JVsnNmZhQ/FhTpdhj5rE5r77FlyCOPFHHfYqpk6cTNqqVXx28Tq1YcJ9Cds
+ x77boKCBbYBEkD/CjgGVIcSaz/IrVts5BFTu0kRoXn4X/kPuNxhn94467Hi6/aPGZqjx EA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dhssdtpuc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jan 2022 14:54:10 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F0E7C10002A;
+        Wed, 12 Jan 2022 14:54:09 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E42EF235F1B;
+        Wed, 12 Jan 2022 14:54:09 +0100 (CET)
+Received: from lmecxl0573.lme.st.com (10.75.127.44) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 12 Jan
+ 2022 14:54:09 +0100
+Subject: Re: spi: stm32-qspi: Update spi registering
+To:     Lukas Wunner <lukas@wunner.de>
+CC:     Mark Brown <broonie@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>
+References: <20220106132052.7227-1-patrice.chotard@foss.st.com>
+ <20220108194819.GA5467@wunner.de>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+Message-ID: <ba5de6f6-a4f0-4974-cc68-abcb62ebf96e@foss.st.com>
+Date:   Wed, 12 Jan 2022 14:54:09 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yd7Z3Qwevb/lEwQZ@lunn.ch>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20220108194819.GA5467@wunner.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-12_04,2022-01-11_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 02:38:37PM +0100, Andrew Lunn wrote:
-> > If an optional IRQ is not present, drivers either just ignore it (e.g.
-> > for devices that can have multiple interrupts or a single muxed IRQ),
-> > or they have to resort to polling. For the latter, fall-back handling
-> > is needed elsewhere in the driver.
-> > To me it sounds much more logical for the driver to check if an
-> > optional irq is non-zero (available) or zero (not available), than to
-> > sprinkle around checks for -ENXIO. In addition, you have to remember
-> > that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
-> > (or some other error code) to indicate absence. I thought not having
-> > to care about the actual error code was the main reason behind the
-> > introduction of the *_optional() APIs.
-> 
-> The *_optional() functions return an error code if there has been a
-> real error which should be reported up the call stack. This excludes
-> whatever error code indicates the requested resource does not exist,
-> which can be -ENODEV etc. If the device does not exist, a magic cookie
-> is returned which appears to be a valid resources but in fact is
-> not. So the users of these functions just need to check for an error
-> code, and fail the probe if present.
-> 
-> You seems to be suggesting in binary return value: non-zero
-> (available) or zero (not available)
+Hi Lukas
 
-
-No, what is suggested is to (besides the API changes):
-- do not treat ENXIO as something special in platform_get_irq*()
-- allow platform_get_irq*() to return other error codes
-
-> This discards the error code when something goes wrong. That is useful
-> information to have, so we should not be discarding it.
+On 1/8/22 8:48 PM, Lukas Wunner wrote:
+> On Thu, Jan 06, 2022 at 02:20:52PM +0100, patrice.chotard@foss.st.com wrote:
+>> --- a/drivers/spi/spi-stm32-qspi.c
+>> +++ b/drivers/spi/spi-stm32-qspi.c
+>> @@ -784,7 +784,7 @@ static int stm32_qspi_probe(struct platform_device *pdev)
+>>  	pm_runtime_enable(dev);
+>>  	pm_runtime_get_noresume(dev);
+>>  
+>> -	ret = devm_spi_register_master(dev, ctrl);
+>> +	ret = spi_register_master(ctrl);
+>>  	if (ret)
+>>  		goto err_pm_runtime_free;
+>>  
+>> @@ -817,6 +817,7 @@ static int stm32_qspi_remove(struct platform_device *pdev)
+>>  	struct stm32_qspi *qspi = platform_get_drvdata(pdev);
+>>  
+>>  	pm_runtime_get_sync(qspi->dev);
+>> +	spi_unregister_master(qspi->ctrl);
+>>  	/* disable qspi */
+>>  	writel_relaxed(0, qspi->io_base + QSPI_CR);
+>>  	stm32_qspi_dma_free(qspi);
 > 
-> IRQ don't currently have a magic cookie value. One option would be to
-> add such a magic cookie to the subsystem. Otherwise, since 0 is
-> invalid, return 0 to indicate the IRQ does not exist.
+> NAK, this introduces a use-after-free because the "qspi" allocation
+> is freed by spi_unregister_master(), yet is subsequently accessed.
 > 
-> The request for a script checking this then makes sense. However, i
-> don't know how well coccinelle/sparse can track values across function
-> calls. They probably can check for:
-> 
->    ret = irq_get_optional()
->    if (ret < 0)
->       return ret;
-> 
-> A missing if < 0 statement somewhere later is very likely to be an
-> error. A comparison of <= 0 is also likely to be an error. A check for
-> > 0 before calling any other IRQ functions would be good. I'm
-> surprised such a check does not already existing in the IRQ API, but
-> there are probably historical reasons for that.
-> 
->       Andrew
+> You need to convert the driver to devm_spi_alloc_master() to avoid that.
+> Do it in the same patch to ease backporting.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Ok i see, spi_unregister_controller() is releasing the controller if it wasn't
+ previously devm allocated. I will make usage of devm_spi_alloc_master as you suggested.
 
-
+> 
+> Please add a stable designation and a Fixes: tag.  Chances are the patch
+> needs to be backported all the way back to the release when the driver
+> was first introduced.
+> 
+> Thanks,
+> 
+> Lukas
+> 
+Thanks
+Patrice
