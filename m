@@ -2,158 +2,130 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C292E48D7BD
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Jan 2022 13:25:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24AF248D8DA
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Jan 2022 14:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234836AbiAMMZQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 13 Jan 2022 07:25:16 -0500
-Received: from mailout3.samsung.com ([203.254.224.33]:25420 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234674AbiAMMYm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 13 Jan 2022 07:24:42 -0500
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220113122440epoutp037e46d6b5f9148c3019a5c17ee912344b~J1AqJ9tma1485214852epoutp03U
-        for <linux-spi@vger.kernel.org>; Thu, 13 Jan 2022 12:24:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220113122440epoutp037e46d6b5f9148c3019a5c17ee912344b~J1AqJ9tma1485214852epoutp03U
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1642076680;
-        bh=VIaQqRCr+oTNVX62Of7/5Bg3BVzzJ2OXwvsaDwHJoBA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q7I1SZpy5GGBgA8DVEOoelQw7E6IMkB2DYTNAZn2hrFliMCyVJBuqjk6ypseOFC0r
-         T3xkCtE7l04S9xaJd0fR40gx/eVHeXv6idN1Ei86rZjhdRbiYmHxNN4D8yI7tSSv79
-         z1EcHxv3bBGUKxWhTIMhVEQyQlcze8SMbeXiZARM=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220113122439epcas5p1af66aa08d133203743b8852200f06b73~J1ApUOroK1969919699epcas5p1Z;
-        Thu, 13 Jan 2022 12:24:39 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.176]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4JZNsc1ydtz4x9Q2; Thu, 13 Jan
-        2022 12:24:36 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        7A.61.05590.30A10E16; Thu, 13 Jan 2022 21:24:35 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220113122435epcas5p18e6a2699f193b9e1287588278a570235~J1AlaPrsd2652426524epcas5p14;
-        Thu, 13 Jan 2022 12:24:35 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220113122435epsmtrp1762b1afe80a59972bc8af2f64525ce2e~J1AlXQ4SV1991219912epsmtrp1q;
-        Thu, 13 Jan 2022 12:24:35 +0000 (GMT)
-X-AuditID: b6c32a4b-739ff700000015d6-2b-61e01a036b7b
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6C.A8.29871.30A10E16; Thu, 13 Jan 2022 21:24:35 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-        [107.108.73.139]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220113122432epsmtip2b951016c0b47fc016c330f3f43374ced~J1AiHp_WF1131511315epsmtip2O;
-        Thu, 13 Jan 2022 12:24:32 +0000 (GMT)
-From:   Alim Akhtar <alim.akhtar@samsung.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+        id S235143AbiAMN2w (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 13 Jan 2022 08:28:52 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:56210
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235144AbiAMN2w (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 13 Jan 2022 08:28:52 -0500
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EDCA5402A8
+        for <linux-spi@vger.kernel.org>; Thu, 13 Jan 2022 13:28:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642080529;
+        bh=hznGQk19CD8NoR3VWNyd9c/wYFGozPUj+0yuhJLbQPM=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=EbB1gurRZOm19CbpS8JjEjYXqWXZ8qLp+KtXwY3G9hHrfMS/ppJam85wXR8J8qvPr
+         aAwZ2C/7JXu+tUJBHzUSbNDho9sPnBYcSRK1NJMuRqy6D5o6QJgfPzYQYKGX40+115
+         3bqwrR7IYIsT/Cu63Hw4reSe4CSQIfUULTvADyHhRwuSZgKED60f22Zdv6u4wmkbDJ
+         Oq9PVv0QC7WC/tGU6R4ZpLyscwF2JVSQcSqNCgpdj4Exjszam+uOwEYwYY7hmUu3RN
+         62tO7NLsi+lCdkUPEAjTbfGrL7i/SnW1Sr1g1t4q1o/flgJlFCncyXfdu/Spz+k58H
+         f3GlgTPVpRopA==
+Received: by mail-ed1-f69.google.com with SMTP id m16-20020a056402431000b003fb60bbe0e2so5330502edc.3
+        for <linux-spi@vger.kernel.org>; Thu, 13 Jan 2022 05:28:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hznGQk19CD8NoR3VWNyd9c/wYFGozPUj+0yuhJLbQPM=;
+        b=f/l6IuXkKhqIuYJGNSjaY+qoPoF3+jEDY/oLTD0aSOXosdWqnDJulNFuYIDAJ+RYSe
+         oMpKI7BdhtXi6+1rZmqBjIG913vcPwMh2UMAzVYxsBgL0SLrvuO9OC3yyODZC09fJnkV
+         QWdi6W5o62y2diKKeg9MIr8GmPlNq5tOgIQyA5hiFWfZvcFmNdNCwb+MJlRgEnOM8H2k
+         i2krycVAk+Dbnj9KUTFFRQeuwCOxqeYECA2OT5Rm+rxaSvNLg4O+TnkH7aLSlkrTrjEY
+         8ottLZ36wJBz9zoZW8Lf4v2f9yjvOU4bOpQsXlbe5ekpzFvRiDSDQj0Wq+NRtpXhtBEr
+         ZkSg==
+X-Gm-Message-State: AOAM5335z8HNn/wecVy0Ef1WGecdpDH8tWfVfyOPpr9eb2ox+ArqHHw2
+        /8s0vwIEZE5PkvBrN2MmaUQuIo+9Ff8ZIToxeyUHdqDymZTyi8pmm9/gHuBY2vWpJfFZLlNH4a2
+        iOZGL7w0K5nVyGyybSSb5trIVPYpL3/UgkyGsxw==
+X-Received: by 2002:a17:906:a15a:: with SMTP id bu26mr3467343ejb.335.1642080529631;
+        Thu, 13 Jan 2022 05:28:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxvQFVh8OpoiHGF8vNUoAdSJ/5cDZxtFhJSX77E0+B6EEgX3ZPEv8tzxTe5uuJkZotkBoW/eQ==
+X-Received: by 2002:a17:906:a15a:: with SMTP id bu26mr3467336ejb.335.1642080529487;
+        Thu, 13 Jan 2022 05:28:49 -0800 (PST)
+Received: from [192.168.0.30] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id c19sm1178698ede.47.2022.01.13.05.28.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jan 2022 05:28:48 -0800 (PST)
+Message-ID: <dc400642-418b-6bc3-f4f8-0770c0ed4671@canonical.com>
+Date:   Thu, 13 Jan 2022 14:28:47 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 18/23] spi: s3c64xx: Add spi port configuration for Tesla
+ FSD SoC
+Content-Language: en-US
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, olof@lixom.net,
         linus.walleij@linaro.org, catalin.marinas@arm.com,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
-        s.nawrocki@samsung.com, linux-samsung-soc@vger.kernel.org,
-        pankaj.dubey@samsung.com, Alim Akhtar <alim.akhtar@samsung.com>,
+        robh+dt@kernel.org, s.nawrocki@samsung.com,
+        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
         linux-fsd@tesla.com, broonie@kernel.org, linux-spi@vger.kernel.org,
         Aswani Reddy <aswani.reddy@samsung.com>
-Subject: [PATCH 18/23] spi: s3c64xx: Add spi port configuration for Tesla
- FSD SoC
-Date:   Thu, 13 Jan 2022 17:41:38 +0530
-Message-Id: <20220113121143.22280-19-alim.akhtar@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220113121143.22280-1-alim.akhtar@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFJsWRmVeSWpSXmKPExsWy7bCmli6z1INEg12fDSwezNvGZnFo81Z2
-        i6kPn7BZvF/Ww2gx/8g5VouNb38wWUz5s5zJYtPja6wWH3vusVo8fBVucXnXHDaLGef3MVk0
-        frzJbnHq+mc2i0Vbv7BbtO49wm5x+E07q8Xj63/YHIQ81sxbw+gxq6GXzWPTqk42jzvX9rB5
-        bF5S73HlRBOrR9+WVYwe/5rmsnt83iQXwBmVbZORmpiSWqSQmpecn5KZl26r5B0c7xxvamZg
-        qGtoaWGupJCXmJtqq+TiE6DrlpkD9I+SQlliTilQKCCxuFhJ386mKL+0JFUhI7+4xFYptSAl
-        p8CkQK84Mbe4NC9dLy+1xMrQwMDIFKgwITvj1M9NLAXzuStOTzvL1sC4mbOLkZNDQsBE4lBb
-        FwuILSSwm1Gi4U1EFyMXkP2JUWLLpz9MEM43RomPT24xwnTc//uSHSKxl1Fi4onTzBBOC5PE
-        /z/3wKrYBLQl7k7fwgRiiwi4Sdxo7AAbxSywg1ni5PUlbCAJYYFgiUNbT4EVsQioSsz6uwPM
-        5hWwlZhyt4UJYp28xOoNB4A2cHBwAsXvrsoDmSMhsIVD4tqtJ2wgcQkBF4l//50hyoUlXh3f
-        wg5hS0m87G9jhyjJlujZZQwRrpFYOu8YC4RtL3HgyhwWkBJmAU2J9bv0QcLMAnwSvb+fMEF0
-        8kp0tAlBVKtKNL+7CtUpLTGxu5sVwvaQmPDsMQskFCYwSmz/f5x1AqPsLISpCxgZVzFKphYU
-        56anFpsWGOellsOjKTk/dxMjOJFqee9gfPTgg94hRiYOxkOMEhzMSiK8/UX3E4V4UxIrq1KL
-        8uOLSnNSiw8xmgIDbCKzlGhyPjCV55XEG5pYGpiYmZmZWBqbGSqJ855K35AoJJCeWJKanZpa
-        kFoE08fEwSnVwCT5rYTh2LeWQzFnlynOUXgtNSf1eBKffOrq+kc18jbz97+01X+jevrBqXVt
-        NqK/luR/UzF4WKfJdTImdePEiMZJGuttGgtrdusFPNi54mtSvqhVQ/O/L8w5p5e8WxnW++Ng
-        OsP+VTqpd2SnbbiyKZi92blq/f6gc1OuHmp+PG/r3gbLT7Wft/5s3evZadfTKhMx333nk+dx
-        M7fonZeW0PnYdGfC4xeCj6MkY4y7FVosp16KNKxdyXamo1ZNutrP8LZKV+fdj3x1ksIOU7f6
-        yrwMalLr++ji05X42Sr1yIeYqXwGn9s9zPrX13coy0StZ/T6mfko2NrUUdxUUnYui4ToZJYz
-        nyuNFtc3NElvVmIpzkg01GIuKk4EAGhpTdAtBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrALMWRmVeSWpSXmKPExsWy7bCSvC6z1INEg39/BCwezNvGZnFo81Z2
-        i6kPn7BZvF/Ww2gx/8g5VouNb38wWUz5s5zJYtPja6wWH3vusVo8fBVucXnXHDaLGef3MVk0
-        frzJbnHq+mc2i0Vbv7BbtO49wm5x+E07q8Xj63/YHIQ81sxbw+gxq6GXzWPTqk42jzvX9rB5
-        bF5S73HlRBOrR9+WVYwe/5rmsnt83iQXwBnFZZOSmpNZllqkb5fAlXHq5yaWgvncFaennWVr
-        YNzM2cXIySEhYCJx/+9L9i5GLg4hgd2MElfPb2SFSEhLXN84gR3CFpZY+e85VFETk8SLlS1g
-        CTYBbYm707cwgdgiAh4Sbf/uMYMUMQucYpZ43dsAViQsECix49k9sKksAqoSs/7uAGvgFbCV
-        mHK3hQlig7zE6g0HgJo5ODiB4ndX5YGEhQRsJM69Ws82gZFvASPDKkbJ1ILi3PTcYsMCw7zU
-        cr3ixNzi0rx0veT83E2M4EjQ0tzBuH3VB71DjEwcjIcYJTiYlUR4+4vuJwrxpiRWVqUW5ccX
-        leakFh9ilOZgURLnvdB1Ml5IID2xJDU7NbUgtQgmy8TBKdXAtCixjOPV2+lOFV1NfzZN2rDW
-        kpWPaeETiXa/LtePN1cYpyW/WyFwRs5DmDNGOaH5bcBFATmJcD/+jxK/MmQj782sWMHfkrb3
-        kz+DdEi3YDMT7y3RYPk8tUU+H5UCNIz2882b+PvHC1leCa9vHmE3IpgbvnHcXybb0/DyJfNB
-        8WZB1+Pf7jvaOgYUVVzN8ZxstX6ruERbk9fpD+pxFS+kp7/Qm/Qh4NYLEwO9o14CLSl5Lu2R
-        ttdaOk/l3WpLXq+17rt78JQJ3S9CpHa4nnzzM/zNT2vPWo8DxVtXsq69zhv65xavgmhfuPTC
-        z22Z341kldRP8DEEhPry3ssQkFo+J2KSc37qurzyT96L/yixFGckGmoxFxUnAgDiIswg8wIA
-        AA==
-X-CMS-MailID: 20220113122435epcas5p18e6a2699f193b9e1287588278a570235
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220113122435epcas5p18e6a2699f193b9e1287588278a570235
 References: <20220113121143.22280-1-alim.akhtar@samsung.com>
-        <CGME20220113122435epcas5p18e6a2699f193b9e1287588278a570235@epcas5p1.samsung.com>
+ <CGME20220113122435epcas5p18e6a2699f193b9e1287588278a570235@epcas5p1.samsung.com>
+ <20220113121143.22280-19-alim.akhtar@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220113121143.22280-19-alim.akhtar@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This patch adds compatible and port configuration for
-spi controller for Tesla Full Self-Driving SoC.
+On 13/01/2022 13:11, Alim Akhtar wrote:
+> This patch adds compatible and port configuration for
+> spi controller for Tesla Full Self-Driving SoC.
+> 
+> Cc: linux-fsd@tesla.com
+> Cc: broonie@kernel.org
+> Cc: linux-spi@vger.kernel.org
+> Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> ---
+>  drivers/spi/spi-s3c64xx.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+> index 8755cd85e83c..8d0c1f03ab7a 100644
+> --- a/drivers/spi/spi-s3c64xx.c
+> +++ b/drivers/spi/spi-s3c64xx.c
+> @@ -1442,6 +1442,16 @@ static const struct s3c64xx_spi_port_config exynos5433_spi_port_config = {
+>  	.quirks		= S3C64XX_SPI_QUIRK_CS_AUTO,
+>  };
+>  
+> +static struct s3c64xx_spi_port_config fsd_spi_port_config = {
+> +	.fifo_lvl_mask	= { 0x7f, 0x7f, 0x7f, 0x7f, 0x7f},
+> +	.rx_lvl_offset	= 15,
+> +	.tx_st_done	= 25,
+> +	.high_speed	= true,
+> +	.clk_from_cmu	= true,
+> +	.clk_ioclk	= false,
+> +	.quirks		= S3C64XX_SPI_QUIRK_CS_AUTO,
+> +};
+> +
+>  static const struct platform_device_id s3c64xx_spi_driver_ids[] = {
+>  	{
+>  		.name		= "s3c2443-spi",
+> @@ -1472,6 +1482,9 @@ static const struct of_device_id s3c64xx_spi_dt_match[] = {
+>  	{ .compatible = "samsung,exynos5433-spi",
+>  			.data = (void *)&exynos5433_spi_port_config,
+>  	},
+> +	{ .compatible = "tesla,fsd-spi",
+> +			.data = (void *)&fsd_spi_port_config,
+> +	},
 
-Cc: linux-fsd@tesla.com
-Cc: broonie@kernel.org
-Cc: linux-spi@vger.kernel.org
-Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
-Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
----
- drivers/spi/spi-s3c64xx.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+Looks good, except the discussion about too generic compatible.
 
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 8755cd85e83c..8d0c1f03ab7a 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -1442,6 +1442,16 @@ static const struct s3c64xx_spi_port_config exynos5433_spi_port_config = {
- 	.quirks		= S3C64XX_SPI_QUIRK_CS_AUTO,
- };
- 
-+static struct s3c64xx_spi_port_config fsd_spi_port_config = {
-+	.fifo_lvl_mask	= { 0x7f, 0x7f, 0x7f, 0x7f, 0x7f},
-+	.rx_lvl_offset	= 15,
-+	.tx_st_done	= 25,
-+	.high_speed	= true,
-+	.clk_from_cmu	= true,
-+	.clk_ioclk	= false,
-+	.quirks		= S3C64XX_SPI_QUIRK_CS_AUTO,
-+};
-+
- static const struct platform_device_id s3c64xx_spi_driver_ids[] = {
- 	{
- 		.name		= "s3c2443-spi",
-@@ -1472,6 +1482,9 @@ static const struct of_device_id s3c64xx_spi_dt_match[] = {
- 	{ .compatible = "samsung,exynos5433-spi",
- 			.data = (void *)&exynos5433_spi_port_config,
- 	},
-+	{ .compatible = "tesla,fsd-spi",
-+			.data = (void *)&fsd_spi_port_config,
-+	},
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, s3c64xx_spi_dt_match);
--- 
-2.17.1
 
+Best regards,
+Krzysztof
