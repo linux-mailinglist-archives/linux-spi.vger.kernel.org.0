@@ -2,147 +2,257 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB17048E4C0
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Jan 2022 08:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE7648E780
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Jan 2022 10:27:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239415AbiANHPn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 14 Jan 2022 02:15:43 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:33765 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239295AbiANHPn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 14 Jan 2022 02:15:43 -0500
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220114071541epoutp021f99b512e0dd458e1c39da8aeaf98a2b~KEcKcwzyr2583525835epoutp02e
-        for <linux-spi@vger.kernel.org>; Fri, 14 Jan 2022 07:15:41 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220114071541epoutp021f99b512e0dd458e1c39da8aeaf98a2b~KEcKcwzyr2583525835epoutp02e
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1642144541;
-        bh=NVIomeEgODe8tegR8r2U5YGk7C+JtFjkl+aUMxD0IPI=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=Svb3zGBdMJJWis6XNif3awJC634bmQdgwqs/0Iomgecy8t99FETgAYoJTpcp4Ustk
-         qkkPFHpMhFcB1rxoGlqayEAQvEgiZ83jwU8ubAeZxu0Xm7ncB1sUxQqqV5NINjAB0P
-         WUvAmxTBmIBQmqGUOK5dyU82L5CywkpYIft+3HB0=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20220114071540epcas5p1f74592640aa5c2feb56867ece78641bd~KEcJyKq5W0987409874epcas5p1F;
-        Fri, 14 Jan 2022 07:15:40 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.177]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4JZsyd2GLzz4x9Qk; Fri, 14 Jan
-        2022 07:15:37 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B5.1D.05590.91321E16; Fri, 14 Jan 2022 16:15:37 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220114071536epcas5p454d2a70a38acfbdbce56b7370c0d9306~KEcFm6Rkg2423024230epcas5p4Y;
-        Fri, 14 Jan 2022 07:15:36 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220114071536epsmtrp1fd2041e7965000704ae2cb35818cc340~KEcFlDyW_0658106581epsmtrp17;
-        Fri, 14 Jan 2022 07:15:36 +0000 (GMT)
-X-AuditID: b6c32a4b-739ff700000015d6-81-61e12319f590
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EA.24.08738.81321E16; Fri, 14 Jan 2022 16:15:36 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220114071532epsmtip1cfbbe1a39227d40a3330e2cdb66e6641~KEcB6wyHO0309503095epsmtip1a;
-        Fri, 14 Jan 2022 07:15:32 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Mark Brown'" <broonie@kernel.org>
-Cc:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <olof@lixom.net>, <linus.walleij@linaro.org>,
-        <catalin.marinas@arm.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@canonical.com>, <s.nawrocki@samsung.com>,
-        <linux-samsung-soc@vger.kernel.org>, <pankaj.dubey@samsung.com>,
-        <linux-fsd@tesla.com>, <linux-spi@vger.kernel.org>,
-        "'Aswani Reddy'" <aswani.reddy@samsung.com>
-In-Reply-To: <YeAiIhfN216pRWhn@sirena.org.uk>
-Subject: RE: [PATCH 18/23] spi: s3c64xx: Add spi port configuration for
- Tesla FSD SoC
-Date:   Fri, 14 Jan 2022 12:45:30 +0530
-Message-ID: <078d01d80916$86a461c0$93ed2540$@samsung.com>
+        id S239985AbiANJ1G (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 14 Jan 2022 04:27:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239999AbiANJ1E (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 14 Jan 2022 04:27:04 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508A9C061751
+        for <linux-spi@vger.kernel.org>; Fri, 14 Jan 2022 01:27:02 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n8IqX-0007Po-Mn; Fri, 14 Jan 2022 10:26:09 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n8IqP-00AEBU-7g; Fri, 14 Jan 2022 10:26:00 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1n8IqN-0000tG-Uq; Fri, 14 Jan 2022 10:25:59 +0100
+Date:   Fri, 14 Jan 2022 10:25:57 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Mark Brown <broonie@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        platform-driver-x86@vger.kernel.org,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Eric Auger <eric.auger@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        openipmi-developer@lists.sourceforge.net,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        netdev@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+Message-ID: <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
+References: <20220110195449.12448-1-s.shtylyov@omp.ru>
+ <20220110195449.12448-2-s.shtylyov@omp.ru>
+ <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
+ <YdyilpjC6rtz6toJ@lunn.ch>
+ <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+ <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+ <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
+ <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQKuNmZ/+9PJHbdzezyQqzGEXzr0sgHhERMeAYIU1PAB0s92N6qMD62A
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrLJsWRmVeSWpSXmKPExsWy7bCmhq6k8sNEgwdTOC0Obd7KbjH14RM2
-        i/fLehgt5h85x2qx8e0PJospf5YzWWx6fI3V4mPPPVaLh6/CLS7vmsNmMeP8PiaLxo832S1O
-        Xf/MZrFo6xd2i9a9R9gtDr9pZ7V4fP0Pm4Ogx5p5axg9ZjX0snlsWtXJ5nHn2h42j81L6j2u
-        nGhi9ejbsorR41/TXHaPz5vkAjijsm0yUhNTUosUUvOS81My89JtlbyD453jTc0MDHUNLS3M
-        lRTyEnNTbZVcfAJ03TJzgF5RUihLzCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gqpRak5BSYFOgV
-        J+YWl+al6+WlllgZGhgYmQIVJmRnvDj/jLngCHvFysPnWRoYT7B1MXJySAiYSKy4d4Cli5GL
-        Q0hgN6PEriPzWSGcT4wS33bPYodwPjNKrDj5ngmm5eG2x1CJXYwSjbP2sIMkhAReMkr8uhMC
-        YrMJ6ErsWNwGtkNEQF3i6KaNrCA2s8BjZolbB3VAbE6gmj8zm8CGCguES/zbcIMFxGYRUJVY
-        +3AeWJxXwFLiyLo1LBC2oMTJmU9YIObIS2x/O4cZ4iAFiZ9Pl7FC7HKTWHT5HBNEjbjEy6NH
-        wA6VEPjPIXFpFswHLhKn162EBoCwxKvjW9ghbCmJl/1tQDYHkJ0t0bPLGCJcI7F03jEWCNte
-        4sCVOSwgJcwCmhLrd+lDrOKT6P39hAmik1eio00IolpVovndVahOaYmJ3d2sELaHxIRnj1km
-        MCrOQvLYLCSPzULywCyEZQsYWVYxSqYWFOempxabFhjnpZbDozs5P3cTIzida3nvYHz04IPe
-        IUYmDsZDjBIczEoivP1F9xOFeFMSK6tSi/Lji0pzUosPMZoCQ3sis5Rocj4wo+SVxBuaWBqY
-        mJmZmVgamxkqifOeSt+QKCSQnliSmp2aWpBaBNPHxMEp1cAksr77Bf/nBIZ5N7+Y5qWtcyxS
-        cszg+J3JYWIQvmNr/a6Dk1q29zHesDwTbdvy6cQL5oRL2ud28dUdXv9uM+dP5+IVajM3TXfS
-        KU35yrrs/oot6xlyzsfNmde7i+XX/OJAzvJ3LR/+Piz8t8SqO3barEcBn6rC6hwnOKiavO5X
-        1tdy4GGdzVCwdtfOVzweOczMFbnWAQ2xB2Z95X5ucE5+vvuNkMaQp39zbz0yPi5SflCOq0x1
-        J8+1M7oKYnMv+tn90ExQ6/QPTFBcz/dw9gGDudsWtf18fTNtNqd3oOqTLTqc1/5EHfva4L5g
-        hb3y0qnlUodj33Y3rxJx6T14YvbB83WNUz6cf/2isW7738fNSizFGYmGWsxFxYkAg8QWjnAE
-        AAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrOIsWRmVeSWpSXmKPExsWy7bCSnK6E8sNEgx2HhS0Obd7KbjH14RM2
-        i/fLehgt5h85x2qx8e0PJospf5YzWWx6fI3V4mPPPVaLh6/CLS7vmsNmMeP8PiaLxo832S1O
-        Xf/MZrFo6xd2i9a9R9gtDr9pZ7V4fP0Pm4Ogx5p5axg9ZjX0snlsWtXJ5nHn2h42j81L6j2u
-        nGhi9ejbsorR41/TXHaPz5vkAjijuGxSUnMyy1KL9O0SuDJenH/GXHCEvWLl4fMsDYwn2LoY
-        OTkkBEwkHm57zN7FyMUhJLCDUWLmrmdQCWmJ6xsnsEPYwhIr/z2HKnrOKLHs51wWkASbgK7E
-        jsVtYA0iAuoSRzdtZAUpYhb4yizx7O0KqI6HjBK9m2Yxg1RxAnX8mdnEBGILC4RKfPvVyghi
-        swioSqx9OA8szitgKXFk3RoWCFtQ4uTMJ0A2B9BUPYm2jWDlzALyEtvfzmGGuE5B4ufTZawQ
-        R7hJLLp8jgmiRlzi5dEj7BMYhWchmTQLYdIsJJNmIelYwMiyilEytaA4Nz232LDAKC+1XK84
-        Mbe4NC9dLzk/dxMjOK61tHYw7ln1Qe8QIxMH4yFGCQ5mJRHe/qL7iUK8KYmVValF+fFFpTmp
-        xYcYpTlYlMR5L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUwXdTlKJtzvPflvQ+Z03uPxKWfiOFV
-        uTez9eTZR8sVz3530z0RPfXTpAt9s/ZFiIfOXSNx9zbThSMuLvkf9OKmqnhdsm2VzV00gbXh
-        wqzvjtJbr6rq7J99c5b733B/3m+rBH3nX+RR8dm76evDtqPMDzirNqnXP10VFJNmJeh9dRN/
-        2fIr64V2bEwI5THVLXCI1l06L+B9x7Q9x54v7ruy2dPzWPO7k++bV9u8a0podrui/1sn/d/5
-        d9/yzLT2fDp+W/PJodOWaqJ27z333Ofg6Bf4WMkoJ2z2V0y1wZC3JGSW9zERXuXtmpukLpSe
-        kDI33Lfwgs+TbdOZ7U9ld7zycWo91j3V7cfsl89THLm8PiuxFGckGmoxFxUnAgAkZeJQWgMA
-        AA==
-X-CMS-MailID: 20220114071536epcas5p454d2a70a38acfbdbce56b7370c0d9306
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220113122435epcas5p18e6a2699f193b9e1287588278a570235
-References: <20220113121143.22280-1-alim.akhtar@samsung.com>
-        <CGME20220113122435epcas5p18e6a2699f193b9e1287588278a570235@epcas5p1.samsung.com>
-        <20220113121143.22280-19-alim.akhtar@samsung.com>
-        <YeAiIhfN216pRWhn@sirena.org.uk>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pqpclpjbrmroys3t"
+Content-Disposition: inline
+In-Reply-To: <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
+--pqpclpjbrmroys3t
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->-----Original Message-----
->From: Mark Brown [mailto:broonie@kernel.org]
->Sent: Thursday, January 13, 2022 6:29 PM
->To: Alim Akhtar <alim.akhtar@samsung.com>
->Cc: linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
->soc@kernel.org; linux-clk@vger.kernel.org; devicetree@vger.kernel.org;
->olof@lixom.net; linus.walleij@linaro.org; catalin.marinas@arm.com;
->robh+dt@kernel.org; krzysztof.kozlowski@canonical.com;
->s.nawrocki@samsung.com; linux-samsung-soc@vger.kernel.org;
->pankaj.dubey@samsung.com; linux-fsd@tesla.com; linux-
->spi@vger.kernel.org; Aswani Reddy <aswani.reddy@samsung.com>
->Subject: Re: [PATCH 18/23] spi: s3c64xx: Add spi port configuration for
-Tesla
->FSD SoC
->
->On Thu, Jan 13, 2022 at 05:41:38PM +0530, Alim Akhtar wrote:
->
->> +	{ .compatible = "tesla,fsd-spi",
->> +			.data = (void *)&fsd_spi_port_config,
->> +	},
->
->This needs a DT bindings update to match.
-Thanks for point it out, will update in v2.
+Hello Sergey,
 
+On Thu, Jan 13, 2022 at 11:35:34PM +0300, Sergey Shtylyov wrote:
+> On 1/13/22 12:45 AM, Mark Brown wrote:
+> >>> To me it sounds much more logical for the driver to check if an
+> >>> optional irq is non-zero (available) or zero (not available), than to
+> >>> sprinkle around checks for -ENXIO. In addition, you have to remember
+> >>> that this one returns -ENXIO, while other APIs use -ENOENT or -ENOSYS
+> >>> (or some other error code) to indicate absence. I thought not having
+> >>> to care about the actual error code was the main reason behind the
+> >>> introduction of the *_optional() APIs.
+> >=20
+> >> No, the main benefit of gpiod_get_optional() (and clk_get_optional()) =
+is
+> >> that you can handle an absent GPIO (or clk) as if it were available.
+>=20
+>    Hm, I've just looked at these and must note that they match 1:1 with
+> platform_get_irq_optional(). Unfortunately, we can't however behave the
+> same way in request_irq() -- because it has to support IRQ0 for the sake
+> of i8253 drivers in arch/...
+
+Let me reformulate your statement to the IMHO equivalent:
+
+	If you set aside the differences between
+	platform_get_irq_optional() and gpiod_get_optional(),
+	platform_get_irq_optional() is like gpiod_get_optional().
+
+The introduction of gpiod_get_optional() made it possible to simplify
+the following code:
+
+	reset_gpio =3D gpiod_get(...)
+	if IS_ERR(reset_gpio):
+		error =3D PTR_ERR(reset_gpio)
+		if error !=3D -ENDEV:
+			return error
+	else:
+		gpiod_set_direction(reset_gpiod, INACTIVE)
+
+to
+
+	reset_gpio =3D gpiod_get_optional(....)
+	if IS_ERR(reset_gpio):
+		return reset_gpio
+	gpiod_set_direction(reset_gpiod, INACTIVE)
+
+and I never need to actually know if the reset_gpio actually exists.
+Either the line is put into its inactive state, or it doesn't exist and
+then gpiod_set_direction is a noop. For a regulator or a clk this works
+in a similar way.
+
+However for an interupt this cannot work. You will always have to check
+if the irq is actually there or not because if it's not you cannot just
+ignore that. So there is no benefit of an optional irq.
+
+Leaving error message reporting aside, the introduction of
+platform_get_irq_optional() allows to change
+
+	irq =3D platform_get_irq(...);
+	if (irq < 0 && irq !=3D -ENXIO) {
+		return irq;
+	} else if (irq >=3D 0) {
+		... setup irq operation ...
+	} else { /* irq =3D=3D -ENXIO */
+		... setup polling ...
+	}
+
+to
+=09
+	irq =3D platform_get_irq_optional(...);
+	if (irq < 0 && irq !=3D -ENXIO) {
+		return irq;
+	} else if (irq >=3D 0) {
+		... setup irq operation ...
+	} else { /* irq =3D=3D -ENXIO */
+		... setup polling ...
+	}
+
+which isn't a win. When changing the return value as you suggest, it can
+be changed instead to:
+
+	irq =3D platform_get_irq_optional(...);
+	if (irq < 0) {
+		return irq;
+	} else if (irq > 0) {
+		... setup irq operation ...
+	} else { /* irq =3D=3D 0 */
+		... setup polling ...
+	}
+
+which is a tad nicer. If that is your goal however I ask you to also
+change the semantic of platform_get_irq() to return 0 on "not found".
+Note the win is considerably less compared to gpiod_get_optional vs
+gpiod_get however. And then it still lacks the semantic of a dummy irq
+which IMHO forfeits the right to call it ..._optional().
+
+Now I'm unwilling to continue the discussion unless there pops up a
+suggestion that results in a considerable part (say > 10%) of the
+drivers using platform_get_irq_optional not having to check if the
+return value corresponds to "not found".
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--pqpclpjbrmroys3t
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHhQaIACgkQwfwUeK3K
+7AmkQAf/d5PfPw0IAOs7Wqvc6r/p6+1tkvEg9YM43cQ03LWApgcX+mJuGNq/lpcb
+MvZUP4vJwOgXf4HlzKhY5cmrtlcjY+gTojfSCWGvV2oO7t1vx/19Mqh9zY3W297j
+f5fYMWJx8DicM/I+7Clo5cNGZiBiwEcH3eptaX6YahEQXjSg45gPcXIpGNotj8AO
+O/Xl9hviFVW48prFLlFLY+qfKNsJPVNtu/Gnl8qdD/USm6Wa7361ko6G32lHIHUf
+7NnENwu96Qw92tZN7jHMMmHbiW1xwp5Yu3yd4xf2/h/RBc3iRsgbEoSgjoUYbMgS
+v/GqERP7XEBCpDmg1fzMNr/LcXeBxQ==
+=hCsr
+-----END PGP SIGNATURE-----
+
+--pqpclpjbrmroys3t--
