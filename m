@@ -2,108 +2,69 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B6948ED5D
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Jan 2022 16:47:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 335F448ED7A
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Jan 2022 16:56:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242803AbiANPrI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 14 Jan 2022 10:47:08 -0500
-Received: from mail-ot1-f54.google.com ([209.85.210.54]:36710 "EHLO
-        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238763AbiANPrH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 14 Jan 2022 10:47:07 -0500
-Received: by mail-ot1-f54.google.com with SMTP id s21-20020a05683004d500b0058f585672efso10501389otd.3;
-        Fri, 14 Jan 2022 07:47:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5dzA66i4ivAiYOjfo8oco9UtNpMipS0k8jsB20XDEr0=;
-        b=N+I3et3MOlnEZV8DM6er7cWyvhAel8u3zbYT4IdkjRbaYJ1wSy51YtefUMNptFLOF9
-         R6xIdZ4M9SlZ4vOLF3X/HdH49K7tpIjqZgyIwVKLdlJCiAe/4dNsIY4I29Kq+ngaFho2
-         zUHeARHYuMXf3du9MTcTBvvbEtSFP8NoGK0EmHvHDz4maAxgxXP8iAZGlQaBZt/9Ppd1
-         tJTCdhIeveNUM7W3Mfsl+yPKjEVLLTQ3YH7nAtG7YRdXmHOJ5pe4g/LzAxvNL7Xpxtec
-         iK8W2lbUY8SPfArE093Pny8QKnqEkBwl4mmWbWt4wEKhtBkSgwmYndMyj+lZDHpTU646
-         DfkQ==
-X-Gm-Message-State: AOAM533ohJCVk7mYO8P/MfJ/D6UtOExSyXgOQkXJH99w1zh82P6MW0NX
-        EQ7RiiDapyRHgDKlTKX0/fn1pMhaKkm3oxF5
-X-Google-Smtp-Source: ABdhPJzpq+bIHymNtfPPEI7X6nGEw7++j4Q0gG6AcAn3BffD6q8SLt066o/eRJwcRmhe0sqCKuwePQ==
-X-Received: by 2002:a9d:6c4f:: with SMTP id g15mr6987331otq.3.1642175226110;
-        Fri, 14 Jan 2022 07:47:06 -0800 (PST)
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com. [209.85.210.47])
-        by smtp.gmail.com with ESMTPSA id 17sm1311947oij.21.2022.01.14.07.47.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jan 2022 07:47:05 -0800 (PST)
-Received: by mail-ot1-f47.google.com with SMTP id z25-20020a0568301db900b005946f536d85so1467309oti.9;
-        Fri, 14 Jan 2022 07:47:05 -0800 (PST)
-X-Received: by 2002:ab0:4d42:: with SMTP id k2mr2650964uag.78.1642174814894;
- Fri, 14 Jan 2022 07:40:14 -0800 (PST)
+        id S243013AbiANP4Y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 14 Jan 2022 10:56:24 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45432 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235921AbiANP4Y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 14 Jan 2022 10:56:24 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25727B8295C
+        for <linux-spi@vger.kernel.org>; Fri, 14 Jan 2022 15:56:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E53A1C36AE9;
+        Fri, 14 Jan 2022 15:56:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642175781;
+        bh=M6EI6UfG7a5QiV2keZeJz6GmD87KUhBqpMpAUC9i1qc=;
+        h=Subject:From:Date:To:From;
+        b=aCf7Pf+p+/ejs0o34QNc7dEaSg9wlMsajnnf0xZRBV5VyFNyKiOSolALY6+LLEUHx
+         wc0ovVFhuQBCX8XWFmaQtEwoNJhoWjvlJaeWNHBbqBQCIlnA5cCsB96kwwE7U0egCt
+         hPn09nVfOGiVKyEYpiLbvkEYIO0Tr7rzUbR25RnuToXifqmFGiMfW1gsJqPji023yn
+         87hqcby6o5przqGtNkX3p3DkAAKunOjRi3rEUIabddyRdYkvPxpGu0HSgvGkBHa+M/
+         tjkdow+CFX/MwSerszwWkzDS0W8Pdjqsw5xCvAfI7kD71clFxVNms7cY7QpJEIa1aC
+         NKwsOhydikpmg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D2B78F60797;
+        Fri, 14 Jan 2022 15:56:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220114151727.2319915-1-conor.dooley@microchip.com> <20220114151727.2319915-4-conor.dooley@microchip.com>
-In-Reply-To: <20220114151727.2319915-4-conor.dooley@microchip.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 14 Jan 2022 16:40:03 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUXD8CHqoaygXzcC0YpsbRT_KAUni1hD4sMn=k=WD+DuQ@mail.gmail.com>
-Message-ID: <CAMuHMdUXD8CHqoaygXzcC0YpsbRT_KAUni1hD4sMn=k=WD+DuQ@mail.gmail.com>
-Subject: Re: [PATCH v3 03/15] mailbox: change mailbox-mpfs compatible string
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lewis Hanly <lewis.hanly@microchip.com>,
-        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
-        Atish Patra <atishp@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <164217578185.22053.8494314086257326736.git-patchwork-housekeeping@kernel.org>
+Date:   Fri, 14 Jan 2022 15:56:21 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Conor,
+Latest series: [v3] Update the Icicle Kit device tree (2022-01-14T15:17:12)
+  Superseding: [v2] Update the Icicle Kit device tree (2021-12-17T09:33:08):
+    [v2,01/17] dt-bindings: interrupt-controller: create a header for RISC-V interrupts
+    [v2,02/17] dt-bindings: soc/microchip: update syscontroller compatibles
+    [v2,03/17] dt-bindings: soc/microchip: make systemcontroller a mfd
+    [v2,04/17] mailbox: change mailbox-mpfs compatible string
+    [v2,05/17] dt-bindings: i2c: add bindings for microchip mpfs i2c
+    [v2,06/17] dt-bindings: rng: add bindings for microchip mpfs rng
+    [v2,07/17] dt-bindings: rtc: add bindings for microchip mpfs rtc
+    [v2,08/17] dt-bindings: soc/microchip: add bindings for mpfs system services
+    [v2,09/17] dt-bindings: gpio: add bindings for microchip mpfs gpio
+    [v2,10/17] dt-bindings: spi: add bindings for microchip mpfs spi
+    [v2,11/17] dt-bindings: usb: add bindings for microchip mpfs musb
+    [v2,12/17] dt-bindings: pwm: add microchip corePWM binding
+    [v2,13/17] riscv: dts: microchip: use hart and clk defines for icicle kit
+    [v2,14/17] riscv: dts: microchip: add fpga fabric section to icicle kit
+    [v2,15/17] riscv: dts: microchip: refactor icicle kit device tree
+    [v2,16/17] riscv: dts: microchip: update peripherals in icicle kit device tree
+    [v2,17/17] MAINTAINERS: update riscv/microchip entry
 
-On Fri, Jan 14, 2022 at 4:16 PM <conor.dooley@microchip.com> wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> The Polarfire SoC is currently using two different compatible string
-> prefixes. Fix this by changing "polarfire-soc-*" strings to "mpfs-*" in
-> its system controller in order to match the compatible string used in
-> the soc binding and device tree.
->
-> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-This is already upstream, commit f10b1fc0161cd99e ("mailbox: change
-mailbox-mpfs compatible string").
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
