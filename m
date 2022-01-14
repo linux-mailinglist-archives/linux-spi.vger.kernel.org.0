@@ -2,69 +2,109 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 335F448ED7A
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Jan 2022 16:56:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC30348EDC4
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Jan 2022 17:13:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243013AbiANP4Y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 14 Jan 2022 10:56:24 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45432 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235921AbiANP4Y (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 14 Jan 2022 10:56:24 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25727B8295C
-        for <linux-spi@vger.kernel.org>; Fri, 14 Jan 2022 15:56:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E53A1C36AE9;
-        Fri, 14 Jan 2022 15:56:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642175781;
-        bh=M6EI6UfG7a5QiV2keZeJz6GmD87KUhBqpMpAUC9i1qc=;
-        h=Subject:From:Date:To:From;
-        b=aCf7Pf+p+/ejs0o34QNc7dEaSg9wlMsajnnf0xZRBV5VyFNyKiOSolALY6+LLEUHx
-         wc0ovVFhuQBCX8XWFmaQtEwoNJhoWjvlJaeWNHBbqBQCIlnA5cCsB96kwwE7U0egCt
-         hPn09nVfOGiVKyEYpiLbvkEYIO0Tr7rzUbR25RnuToXifqmFGiMfW1gsJqPji023yn
-         87hqcby6o5przqGtNkX3p3DkAAKunOjRi3rEUIabddyRdYkvPxpGu0HSgvGkBHa+M/
-         tjkdow+CFX/MwSerszwWkzDS0W8Pdjqsw5xCvAfI7kD71clFxVNms7cY7QpJEIa1aC
-         NKwsOhydikpmg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D2B78F60797;
-        Fri, 14 Jan 2022 15:56:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S243184AbiANQNt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 14 Jan 2022 11:13:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47200 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243197AbiANQNl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 14 Jan 2022 11:13:41 -0500
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1ADBC061747
+        for <linux-spi@vger.kernel.org>; Fri, 14 Jan 2022 08:13:39 -0800 (PST)
+Received: by mail-ua1-x92d.google.com with SMTP id l15so17679627uai.11
+        for <linux-spi@vger.kernel.org>; Fri, 14 Jan 2022 08:13:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Qxkpv3eNiRdJcWaLuANiCoD4pI3qvbrsDdQYc45dZk8=;
+        b=goCpoT6iIjZHX/StCqxQby/LS7loOLRpEO/Y1+Fj6M2kXs38lG7f13W8ikbjrmBMCB
+         OnFyQXUuaTcCidVWULOBJLIvx/O/tI14Z/F4AqdGWKvBoErCdpyWjtBMdyDgcX26Jfur
+         P7tevqaqFwc2lNh+GQupHifgTHk1QgJ0IulZyqJpHw93YdOpRSB30jRvKA//YtZrz3uy
+         /rLzNvL+AP0sqJ3Gw46gtEEyJHSgy+hlpmuz9XhnzfG6TSHUx8NMiint7b7kMzgahLzi
+         uyYTcPOibvNGpK23+DpgqR2j4PPmT16QhZWV9UBCLL4NKQuKJeBHXJ6hFknVvbMD9Vjx
+         Z9Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Qxkpv3eNiRdJcWaLuANiCoD4pI3qvbrsDdQYc45dZk8=;
+        b=Rg7gpksPtfYxLQ8Qn1pQgGkRB4QGkrWjbu8CUD4AOCVAG9GKEw6QMlb8AdVA9Iy2Rs
+         GYRs4UNkM37a/yKpGM3gp4zxCCxkyRwGsGYxfRwl724kVYNNVS4jrz/Xyj9wWgrGAVCc
+         MALLyxyeCofGineRZaxYKujW+fBXJ6kphgxHLK6ufd8A4nUsKlllIB67XbgiagHFlpUv
+         2Kg0o9rrQOv0EeKLJMtQcMFafq3bRBOXyFkGV8lFV9/EyfScJwEhqrtH7uBK5FZzyuFc
+         N9FGyo/VpRRoERODM4Pt7wJlIHA9fNjee5f99MLfQpuEYcHZ50ipaFX2wd2hRzagPZIx
+         W1rQ==
+X-Gm-Message-State: AOAM530tYk/pcb8hohquOtDeuRYrYZeoZoTF0botOVjiThYghZrcbexN
+        WzOHaqghDJ0f68Ao8j+Cox0if8XlEEFxVO4BgxsO2g==
+X-Google-Smtp-Source: ABdhPJzWflgFRWJp52JXGQ6mFbqqIxK3ZZYuUMkUM0idCjp2RCLsqwd6kxDjkUeOcXkWzHUSz8ObECiekIGt+opAxuw=
+X-Received: by 2002:ab0:13ee:: with SMTP id n43mr4421442uae.9.1642176818829;
+ Fri, 14 Jan 2022 08:13:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <164217578185.22053.8494314086257326736.git-patchwork-housekeeping@kernel.org>
-Date:   Fri, 14 Jan 2022 15:56:21 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+References: <20220112100046.68068-1-krzysztof.kozlowski@canonical.com> <20220112100046.68068-5-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220112100046.68068-5-krzysztof.kozlowski@canonical.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Fri, 14 Jan 2022 18:13:27 +0200
+Message-ID: <CAPLW+4mRY7diuP8Ts_pnY6M0TeK9OmxPe+fh_K0YBBzvitRNbw@mail.gmail.com>
+Subject: Re: [PATCH v3 4/4] spi: s3c64xx: allow controller-data to be optional
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>, linux-spi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v3] Update the Icicle Kit device tree (2022-01-14T15:17:12)
-  Superseding: [v2] Update the Icicle Kit device tree (2021-12-17T09:33:08):
-    [v2,01/17] dt-bindings: interrupt-controller: create a header for RISC-V interrupts
-    [v2,02/17] dt-bindings: soc/microchip: update syscontroller compatibles
-    [v2,03/17] dt-bindings: soc/microchip: make systemcontroller a mfd
-    [v2,04/17] mailbox: change mailbox-mpfs compatible string
-    [v2,05/17] dt-bindings: i2c: add bindings for microchip mpfs i2c
-    [v2,06/17] dt-bindings: rng: add bindings for microchip mpfs rng
-    [v2,07/17] dt-bindings: rtc: add bindings for microchip mpfs rtc
-    [v2,08/17] dt-bindings: soc/microchip: add bindings for mpfs system services
-    [v2,09/17] dt-bindings: gpio: add bindings for microchip mpfs gpio
-    [v2,10/17] dt-bindings: spi: add bindings for microchip mpfs spi
-    [v2,11/17] dt-bindings: usb: add bindings for microchip mpfs musb
-    [v2,12/17] dt-bindings: pwm: add microchip corePWM binding
-    [v2,13/17] riscv: dts: microchip: use hart and clk defines for icicle kit
-    [v2,14/17] riscv: dts: microchip: add fpga fabric section to icicle kit
-    [v2,15/17] riscv: dts: microchip: refactor icicle kit device tree
-    [v2,16/17] riscv: dts: microchip: update peripherals in icicle kit device tree
-    [v2,17/17] MAINTAINERS: update riscv/microchip entry
+On Wed, 12 Jan 2022 at 12:00, Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> The Samsung SoC SPI driver requires to provide controller-data node
+> for each of SPI peripheral device nodes.  Make this controller-data node
+> optional, so DTS could be simpler.
+>
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
 
+Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+>  drivers/spi/spi-s3c64xx.c | 14 ++++++--------
+>  1 file changed, 6 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+> index 8755cd85e83c..769d958a2f86 100644
+> --- a/drivers/spi/spi-s3c64xx.c
+> +++ b/drivers/spi/spi-s3c64xx.c
+> @@ -796,16 +796,14 @@ static struct s3c64xx_spi_csinfo *s3c64xx_get_slave_ctrldata(
+>                 return ERR_PTR(-EINVAL);
+>         }
+>
+> -       data_np = of_get_child_by_name(slave_np, "controller-data");
+> -       if (!data_np) {
+> -               dev_err(&spi->dev, "child node 'controller-data' not found\n");
+> -               return ERR_PTR(-EINVAL);
+> -       }
+> -
+>         cs = kzalloc(sizeof(*cs), GFP_KERNEL);
+> -       if (!cs) {
+> -               of_node_put(data_np);
+> +       if (!cs)
+>                 return ERR_PTR(-ENOMEM);
+> +
+> +       data_np = of_get_child_by_name(slave_np, "controller-data");
+> +       if (!data_np) {
+> +               dev_info(&spi->dev, "child node 'controller-data' not found, using defaults\n");
+> +               return cs;
+>         }
+>
+>         of_property_read_u32(data_np, "samsung,spi-feedback-delay", &fb_delay);
+> --
+> 2.32.0
+>
