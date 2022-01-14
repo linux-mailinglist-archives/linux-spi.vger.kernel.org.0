@@ -2,141 +2,143 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC6948E402
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Jan 2022 06:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E3848E493
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Jan 2022 07:57:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239236AbiANF56 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 14 Jan 2022 00:57:58 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:50207 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiANF56 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 14 Jan 2022 00:57:58 -0500
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220114055756epoutp021e8b5c50fa53cc65f6812c6af44a23bf~KDYRaa_SE2023320233epoutp02A
-        for <linux-spi@vger.kernel.org>; Fri, 14 Jan 2022 05:57:56 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220114055756epoutp021e8b5c50fa53cc65f6812c6af44a23bf~KDYRaa_SE2023320233epoutp02A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1642139876;
-        bh=oXZI/5pHmSIV2rnVkqX/WYgr+6bWc30NCtFRJUIazl0=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=OJLNsXR++SlHmzP1kzNzmugZ9JylVbdQMElnPkWSK9If/a23Fk1vJKvG/G+jo9neb
-         6c6DemCmvCfMndOH59wifK4RsBzO3bCyHEmDQlliMTpcJc/VP+E4vUfu5vh0y3C01r
-         Fcg9rKmq0GSJZ5wUfQh8lfLujJUg5vyWx0KA4Wlk=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20220114055755epcas2p4b205348d35d4207e815fc4c86e20c304~KDYQ7DEfi0272902729epcas2p4D;
-        Fri, 14 Jan 2022 05:57:55 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.91]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4JZrDv6GG1z4x9Pv; Fri, 14 Jan
-        2022 05:57:51 +0000 (GMT)
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        74.7E.10014.04011E16; Fri, 14 Jan 2022 14:55:12 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220114055749epcas2p45a47db370d61851761daf6103c7bcdb9~KDYLWL-dT2225622256epcas2p4S;
-        Fri, 14 Jan 2022 05:57:49 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220114055749epsmtrp1a2efe03d0dd74a6658c6441bbcf0b074~KDYLVKm2H2498824988epsmtrp1d;
-        Fri, 14 Jan 2022 05:57:49 +0000 (GMT)
-X-AuditID: b6c32a47-489ff7000000271e-53-61e11040422d
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        11.8C.08738.DD011E16; Fri, 14 Jan 2022 14:57:49 +0900 (KST)
-Received: from KORCO082417 (unknown [10.229.8.121]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220114055749epsmtip2b88ba33f957f8f72949f589f757f9189~KDYLD_lax3237232372epsmtip2g;
-        Fri, 14 Jan 2022 05:57:49 +0000 (GMT)
-From:   "Chanho Park" <chanho61.park@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
-        "'Andi Shyti'" <andi@etezian.org>,
-        "'Mark Brown'" <broonie@kernel.org>,
-        "'Rob Herring'" <robh+dt@kernel.org>,
-        "'Pratyush Yadav'" <p.yadav@ti.com>, <linux-spi@vger.kernel.org>,
-        <linux-samsung-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Cc:     "'Sam Protsenko'" <semen.protsenko@linaro.org>,
-        "'Rob Herring'" <robh@kernel.org>
-In-Reply-To: <20220112100046.68068-5-krzysztof.kozlowski@canonical.com>
-Subject: RE: [PATCH v3 4/4] spi: s3c64xx: allow controller-data to be
- optional
-Date:   Fri, 14 Jan 2022 14:57:49 +0900
-Message-ID: <00a601d8090b$a92da220$fb88e660$@samsung.com>
+        id S239435AbiANG5m convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Fri, 14 Jan 2022 01:57:42 -0500
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:48213 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229761AbiANG5i (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 14 Jan 2022 01:57:38 -0500
+Received: (Authenticated sender: peter@korsgaard.com)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 6952FFF805;
+        Fri, 14 Jan 2022 06:57:08 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.92)
+        (envelope-from <peter@korsgaard.com>)
+        id 1n8GWI-0002SW-Ku; Fri, 14 Jan 2022 07:57:06 +0100
+From:   Peter Korsgaard <peter@korsgaard.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Mark Brown <broonie@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org, Jiri Slaby <jirislaby@kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
+        "David S. Miller" <davem@davemloft.net>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list\:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        platform-driver-x86@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list\:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        linux-mediatek@lists.infradead.org,
+        Brian Norris <computersforpeace@gmail.com>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] driver core: platform: Rename platform_get_irq_optional() to platform_get_irq_silent()
+References: <20220110195449.12448-2-s.shtylyov@omp.ru>
+        <20220110201014.mtajyrfcfznfhyqm@pengutronix.de>
+        <YdyilpjC6rtz6toJ@lunn.ch>
+        <CAMuHMdWK3RKVXRzMASN4HaYfLckdS7rBvSopafq+iPADtGEUzA@mail.gmail.com>
+        <20220112085009.dbasceh3obfok5dc@pengutronix.de>
+        <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+        <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+        <Yd9L9SZ+g13iyKab@sirena.org.uk>
+        <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
+        <YeA7CjOyJFkpuhz/@sirena.org.uk>
+        <20220113194358.xnnbhsoyetihterb@pengutronix.de>
+Date:   Fri, 14 Jan 2022 07:57:06 +0100
+In-Reply-To: <20220113194358.xnnbhsoyetihterb@pengutronix.de> ("Uwe
+        =?utf-8?Q?Kleine-K=C3=B6nig=22's?= message of "Thu, 13 Jan 2022 20:43:58
+ +0100")
+Message-ID: <87ilum954t.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQLMnbI1WsUjdTWr/4z1tM/QIKR8oQM1ZV57AYRzuIOqUwzpEA==
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrFJsWRmVeSWpSXmKPExsWy7bCmha6DwMNEg/3PzS0W/3jOZDH14RM2
-        i/lHzrFabHz7g8li0+NrrBaXd81hs5hxfh+TRePHm+wWd5//YLdo3XuE3eL/nh3sFs/79jE5
-        8HjMauhl87i+5BOzx6ZVnWwed67tYfPYvKTe4/iN7UwenzfJBbBHZdtkpCampBYppOYl56dk
-        5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAB2qpFCWmFMKFApILC5W0rezKcov
-        LUlVyMgvLrFVSi1IySkwL9ArTswtLs1L18tLLbEyNDAwMgUqTMjO2PO6g7lgMkfF81lnmRsY
-        O9i7GDk5JARMJJb9fsbaxcjFISSwg1GiZ9UeJgjnE6PEqbX/2CCcz4wS75YfYYRp2XLlAguI
-        LSSwi1Fi8dNoiKIXjBJrfjewgSTYBPQlXnZsA5srItDCLPHiwwSwbmaBcIkd8/+A2ZwC7hJ/
-        7r8HmyQsECDx7PgfZhCbRUBVYnHHf7AaXgFLidPH+tghbEGJkzOfsEDMkZfY/nYOM8RFChI/
-        ny5jBbFFBJwkvnyGeI5ZQERidmcbM8gREgInOCS+nm5hhWhwkXh+eAkLhC0s8er4FmhoSEm8
-        7G9jh2joZpSY9PIuVGIGMABu5kDYxhKznrUDXccBtEFTYv0ufRBTQkBZ4sgtqNv4JDoO/2WH
-        CPNKdLQJQTSqSxzYPh1qq6xE95zPrBMYlWYh+WwWks9mIflgFsKuBYwsqxjFUguKc9NTi40K
-        jOGxnZyfu4kRnIi13Hcwznj7Qe8QIxMH4yFGCQ5mJRHe/qL7iUK8KYmVValF+fFFpTmpxYcY
-        TYFhPZFZSjQ5H5gL8kriDU0sDUzMzAzNjUwNzJXEeb1SNiQKCaQnlqRmp6YWpBbB9DFxcEo1
-        MG05LOjNe6rBN5E5lWNPVgEzl8vMsxf2eWnWCr+OCmhg2/GR0XSmzsnKcCc7Fukz/G1+74re
-        Ke6qXKXN4XJiyl6Dyoce8XHX3M7+YyxfdLr7v1bDLhWT5TPjuhcGpnaEpLNveHUvetbG+Yy7
-        ztzwe5wS7Z3HyLBglnH9M8apN2snubqZOmyLKvqodPFq0Hu1c64ejPdS80w8X+eEPTy07PKx
-        A1VHUudtOLf5ivj7i3+O+4aZrU+I/2rstSmlp1yz6kP5z+KtUUdjNzNfXrC1YdIPGZ7nX60L
-        nnyZJPr9gtDed74JjPZX630lv/JUTL7nHpZVstHJt2dW9aHnS7JXnjyjon6TP0PrZoOS4AVW
-        ayWW4oxEQy3mouJEAFTMdtxNBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGIsWRmVeSWpSXmKPExsWy7bCSvO5dgYeJBk8OKlks/vGcyWLqwyds
-        FvOPnGO12Pj2B5PFpsfXWC0u75rDZjHj/D4mi8aPN9kt7j7/wW7RuvcIu8X/PTvYLZ737WNy
-        4PGY1dDL5nF9ySdmj02rOtk87lzbw+axeUm9x/Eb25k8Pm+SC2CP4rJJSc3JLEst0rdL4MrY
-        87qDuWAyR8XzWWeZGxg72LsYOTkkBEwktly5wNLFyMUhJLCDUWLqo6OsEAlZiWfvdkAVCUvc
-        bzkCFhcSeMYo8eS8N4jNJqAv8bJjGytIs4hAD7PE5OVbmUASzALhEh+e3YCaeplRYuLnTWDd
-        nALuEn/uv2cBsYUF/CTuNGwBi7MIqEos7vjPCGLzClhKnD7Wxw5hC0qcnPmEBWKonsT69XMY
-        IWx5ie1v5zBDXKcg8fPpMrA5IgJOEl8+Q7zGLCAiMbuzjXkCo/AsJKNmIRk1C8moWUhaFjCy
-        rGKUTC0ozk3PLTYsMMpLLdcrTswtLs1L10vOz93ECI5KLa0djHtWfdA7xMjEwXiIUYKDWUmE
-        t7/ofqIQb0piZVVqUX58UWlOavEhRmkOFiVx3gtdJ+OFBNITS1KzU1MLUotgskwcnFINTKv2
-        7zSxsbxzoFEmtWtBuqunyPN454tzjolHnbrywq33mYXBXJs4hfabV8/WfhJ92iU1je/QNnnu
-        rGmWLarGzoVMejcfaRtGavt+8/miFqIQ3PPHf0vInPR+nwdHOZ9eTjnLYirFfrW0wi72fdX8
-        O8VXq+669EhMm+ufXWj172n65w4d82xbc94PWUaZZjdd0j5GyHVxcZntPHGj3vlwi1rS3+wH
-        Ux7ESzVwhSUufbDSh9vde+O03bJfY/9febNWY+NuRs5XqfH7PT+zPT+YayxXyq5ZayI9OVP2
-        162O1StN7Z7PnLJ+feKcD/ozjM/ebkvVFDi0YYa699LKDAtX9aX6PEc0C20u3V6p0i6lxFKc
-        kWioxVxUnAgAuK2ibDkDAAA=
-X-CMS-MailID: 20220114055749epcas2p45a47db370d61851761daf6103c7bcdb9
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220112100121epcas2p1ba2f59e6fa405e10e9daa80403ec17e2
-References: <20220112100046.68068-1-krzysztof.kozlowski@canonical.com>
-        <CGME20220112100121epcas2p1ba2f59e6fa405e10e9daa80403ec17e2@epcas2p1.samsung.com>
-        <20220112100046.68068-5-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-> -----Original Message-----
-> From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Sent: Wednesday, January 12, 2022 7:01 PM
-> To: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>; Andi Shyti
-> <andi@etezian.org>; Mark Brown <broonie@kernel.org>; Rob Herring
-> <robh+dt@kernel.org>; Pratyush Yadav <p.yadav@ti.com>; linux-
-> spi@vger.kernel.org; linux-samsung-soc@vger.kernel.org;
-> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-arm-
-> kernel@lists.infradead.org
-> Cc: Sam Protsenko <semen.protsenko@linaro.org>; Rob Herring
-> <robh@kernel.org>
-> Subject: [PATCH v3 4/4] spi: s3c64xx: allow controller-data to be optional
-> 
-> The Samsung SoC SPI driver requires to provide controller-data node for
-> each of SPI peripheral device nodes.  Make this controller-data node
-> optional, so DTS could be simpler.
-> 
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>>>>> "Uwe" == Uwe Kleine-König <u.kleine-koenig@pengutronix.de> writes:
 
-Reviewed-by: Chanho Park <chanho61.park@samsung.com>
+ > The subsystems regulator, clk and gpio have the concept of a dummy
+ > resource. For regulator, clk and gpio there is a semantic difference
+ > between the regular _get() function and the _get_optional() variant.
+ > (One might return the dummy resource, the other won't. Unfortunately
+ > which one implements which isn't the same for these three.) The
+ > difference between platform_get_irq() and platform_get_irq_optional() is
+ > only that the former might emit an error message and the later won't.
 
+ > To prevent people's expectations that there is a semantic difference
+ > between these too, rename platform_get_irq_optional() to
+ > platform_get_irq_silent() to make the actual difference more obvious.
+
+ > The #define for the old name can and should be removed once all patches
+ > currently in flux still relying on platform_get_irq_optional() are
+ > fixed.
+
+ > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+
+For i2c-ocores.c:
+
+Acked-by: Peter Korsgaard <peter@korsgaard.com>
+
+-- 
+Bye, Peter Korsgaard
