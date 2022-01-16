@@ -2,125 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A1C48FD68
-	for <lists+linux-spi@lfdr.de>; Sun, 16 Jan 2022 15:19:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E5D48FD9D
+	for <lists+linux-spi@lfdr.de>; Sun, 16 Jan 2022 16:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235437AbiAPOTT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 16 Jan 2022 09:19:19 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50044 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiAPOTM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 16 Jan 2022 09:19:12 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 31DF260F2E;
-        Sun, 16 Jan 2022 14:19:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D360C36AE7;
-        Sun, 16 Jan 2022 14:19:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1642342750;
-        bh=KujYZ44NbqHewC3hStYnBx16eqgxm1SsBiD7vgCzy1A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sKsNPdg/t/aehm0kbBx0+iaMt7Vs15thP7mY+lgsvv2wpHp7hhFp/CL3s/+VFunx8
-         VMGsJpG9T+206AG5qxqWiAVL+YwMP+lMdgO6G29sYG5yQOnXi5Wp9YcaTPGre6QZaH
-         1Q5W85dO5PtMcGij5VwJ57avVdKo6t7UZumaWiEk=
-Date:   Sun, 16 Jan 2022 15:19:06 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, alsa-devel@alsa-project.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-phy@lists.infradead.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        openipmi-developer@lists.sourceforge.net,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        kvm@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
-        John Garry <john.garry@huawei.com>,
-        Robert Richter <rric@kernel.org>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        Tony Luck <tony.luck@intel.com>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>, netdev@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
- (summary)
-Message-ID: <YeQpWu2sUVOSaT9I@kroah.com>
-References: <20220110195449.12448-1-s.shtylyov@omp.ru>
- <20220110195449.12448-2-s.shtylyov@omp.ru>
- <20220115183643.6zxalxqxrhkfgdfq@pengutronix.de>
+        id S233365AbiAPP2y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 16 Jan 2022 10:28:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232438AbiAPP2x (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 16 Jan 2022 10:28:53 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1323EC061574;
+        Sun, 16 Jan 2022 07:28:53 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id h23so18400182iol.11;
+        Sun, 16 Jan 2022 07:28:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4jmsYlqW4QRNe24DrELIWT82TCS9+pEr64+w9U2MhfM=;
+        b=h/bk12kTrI7HxS2LrgaWH7kBI6wsESqEFWEJaQfylFvi889gK9ditwASwcgxwJ2kSu
+         Z14MXMUnwm0vZbGB9uNsYMImPO1TDgxHYUe+DP12O7L2zdC+crtbNAkR/DpJ2Os3iRor
+         9oKI9Jt0f0gBZ7n74tbxiaJAh3vt3bT7yP2t3u93REO6PPiIUavdal3TjsW4vPwdInJi
+         +L1FqYRzYBSG2DIIFmOD/LisMhHWs6dGlBcUQvguotx8G1H5a9NJqBJYEzqlbr6D8XFd
+         Sz980wGrCMvLebdIDtUQQLShMIpIIQ0wVk7Vr+kPcIUls6HqftPH4nEG8alkgXbRtSso
+         8wMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4jmsYlqW4QRNe24DrELIWT82TCS9+pEr64+w9U2MhfM=;
+        b=vHC3umwapkMyfmVKWaylgvdRPsuraDGM8gl0MnPj2TE5j8PWAM68DULWwHp3yRf++0
+         fUtydZYtCk0zuCFyM6KDsJSi8IJdzVfxyLte62BMOe0HZT8nQa71wMXCNuDXm30nyJo9
+         IjhDlAsylu1ootXT2Zc4mBV0a7/BEa0yBKMB3MXDnT//xOHVOmyYyoPZ+WY3A43KSSNU
+         o6PjwDVD2Xgh3PTiVIct7MgaqeTMaat3SqnuT42/uKkPUvn4FJFkzxxCAHjBigVVU2Vn
+         36xo7zkEt17R3q7b/3Yc4JCmT1HIW+akk+gvbKBYJC9HlFM4D04XXmlKGipqreQmImNc
+         RTpw==
+X-Gm-Message-State: AOAM532Jd8rrNLnDCvLGbFwNa6EA1tz8jx3XYujtV6Cjct1pjQct5Vag
+        bshiHi8vU63i5SYpY4/Aoxt1Pe5He4YzuHDHdGs=
+X-Google-Smtp-Source: ABdhPJwR3VVhAB8eTh4ew3S5evJqNXrk2EmciA9Of/1B7oJmbpVTHq2nmI85mlV9VmqsRJNSFoom1AKYvtTcJv5rvIw=
+X-Received: by 2002:a5e:9613:: with SMTP id a19mr4313306ioq.159.1642346932307;
+ Sun, 16 Jan 2022 07:28:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220115183643.6zxalxqxrhkfgdfq@pengutronix.de>
+References: <20220112100046.68068-1-krzysztof.kozlowski@canonical.com> <20220112100046.68068-2-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220112100046.68068-2-krzysztof.kozlowski@canonical.com>
+From:   Alim Akhtar <alim.akhtar@gmail.com>
+Date:   Sun, 16 Jan 2022 20:58:16 +0530
+Message-ID: <CAGOxZ521MhOb+rv+NPCOJq60+CrpsmRR6boWUK5tc_H5wXDmFw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] ARM: dts: exynos: split dmas into array of
+ phandles in Exynos5250
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>, linux-spi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Sam Protsenko <semen.protsenko@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, Jan 15, 2022 at 07:36:43PM +0100, Uwe Kleine-König wrote:
-> A possible compromise: We can have both. We rename
-> platform_get_irq_optional() to platform_get_irq_silent() (or
-> platform_get_irq_silently() if this is preferred) and once all users are
-> are changed (which can be done mechanically), we reintroduce a
-> platform_get_irq_optional() with Sergey's suggested semantic (i.e.
-> return 0 on not-found, no error message printking).
+On Thu, Jan 13, 2022 at 4:19 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> "dmas" property should be rather an array of phandles, as dtschema
+> points.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Andi Shyti <andi@etezian.org>
+> ---
 
-Please do not do that as anyone trying to forward-port an old driver
-will miss the abi change of functionality and get confused.  Make
-build-breaking changes, if the way a function currently works is
-changed in order to give people a chance.
+ Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
 
-thanks,
+>  arch/arm/boot/dts/exynos5250.dtsi | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/arm/boot/dts/exynos5250.dtsi b/arch/arm/boot/dts/exynos5250.dtsi
+> index 139778928b93..102bb57bf704 100644
+> --- a/arch/arm/boot/dts/exynos5250.dtsi
+> +++ b/arch/arm/boot/dts/exynos5250.dtsi
+> @@ -496,8 +496,7 @@ spi_0: spi@12d20000 {
+>                         status = "disabled";
+>                         reg = <0x12d20000 0x100>;
+>                         interrupts = <GIC_SPI 66 IRQ_TYPE_LEVEL_HIGH>;
+> -                       dmas = <&pdma0 5
+> -                               &pdma0 4>;
+> +                       dmas = <&pdma0 5>, <&pdma0 4>;
+>                         dma-names = "tx", "rx";
+>                         #address-cells = <1>;
+>                         #size-cells = <0>;
+> @@ -512,8 +511,7 @@ spi_1: spi@12d30000 {
+>                         status = "disabled";
+>                         reg = <0x12d30000 0x100>;
+>                         interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>;
+> -                       dmas = <&pdma1 5
+> -                               &pdma1 4>;
+> +                       dmas = <&pdma1 5>, <&pdma1 4>;
+>                         dma-names = "tx", "rx";
+>                         #address-cells = <1>;
+>                         #size-cells = <0>;
+> @@ -528,8 +526,7 @@ spi_2: spi@12d40000 {
+>                         status = "disabled";
+>                         reg = <0x12d40000 0x100>;
+>                         interrupts = <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>;
+> -                       dmas = <&pdma0 7
+> -                               &pdma0 6>;
+> +                       dmas = <&pdma0 7>, <&pdma0 6>;
+>                         dma-names = "tx", "rx";
+>                         #address-cells = <1>;
+>                         #size-cells = <0>;
+> --
+> 2.32.0
+>
 
-greg k-h
+
+-- 
+Regards,
+Alim
