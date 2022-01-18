@@ -2,502 +2,501 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A836490F20
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Jan 2022 18:16:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 095D3491976
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jan 2022 03:54:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242295AbiAQRQI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 17 Jan 2022 12:16:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47242 "EHLO
+        id S242836AbiARCyJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 17 Jan 2022 21:54:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244147AbiAQROj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Jan 2022 12:14:39 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5ACC0612A0
-        for <linux-spi@vger.kernel.org>; Mon, 17 Jan 2022 09:08:31 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n9VSt-0007f8-E9; Mon, 17 Jan 2022 18:06:43 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n9VSk-00Ar9W-EE; Mon, 17 Jan 2022 18:06:33 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1n9VSj-0002dO-9e; Mon, 17 Jan 2022 18:06:33 +0100
-Date:   Mon, 17 Jan 2022 18:06:09 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        platform-driver-x86@vger.kernel.org,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>, Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        openipmi-developer@lists.sourceforge.net,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-Message-ID: <20220117170609.yxaamvqdkivs56ju@pengutronix.de>
-References: <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru>
- <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
- <61b80939-357d-14f5-df99-b8d102a4e1a1@omp.ru>
- <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
- <c9026f17-2b3f-ee94-0ea3-5630f981fbc1@omp.ru>
- <CAMuHMdXVbRudGs69f9ZzaP1PXhteDNZiXA658eMFAwP4nr9r3w@mail.gmail.com>
- <20220117092444.opoedfcf5k5u6otq@pengutronix.de>
- <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
- <20220117114923.d5vajgitxneec7j7@pengutronix.de>
- <CAMuHMdWCKERO20R2iVHq8P=BaoauoBAtiampWzfMRYihi3Sb0g@mail.gmail.com>
+        with ESMTP id S1345311AbiARCim (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 17 Jan 2022 21:38:42 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A923C061778
+        for <linux-spi@vger.kernel.org>; Mon, 17 Jan 2022 18:35:11 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id b14so46411789lff.3
+        for <linux-spi@vger.kernel.org>; Mon, 17 Jan 2022 18:35:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9NY6N7G1IuqvhT8lNA29Gyx0ppaKBFNdVc52hk5T3xo=;
+        b=SMAy+Tp3CGjtqzH5gAATsxQr1D2GQDcx8jMZpPpLBWTuDfYL7blVFBQd0opFgwIkId
+         vj32eWMi+kRWtu3LtOwqaygpBFa6uDqO3M29wXBheEdISRGLnX5aN7AdtcECfhYew5jZ
+         DfX/5aMW5vzIBDE/fGD/W0oRow5IwoDnbHr2wVBE6QakMPpbZIFJsn9H04TU+ywtypPw
+         KsjOIeW2gd9Z+QOB04Kfcw4mjDB2DbwGvLd+XmLLLOBJHahdn9VQ5Q1RnL/w+Powvo99
+         Gle2OlD+YKMnpOAsgePMvi+E7gVgHlHD5DZU3xCfrbvrYbCFIhX+r2h5+tHzqM4VHKuE
+         Ny3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9NY6N7G1IuqvhT8lNA29Gyx0ppaKBFNdVc52hk5T3xo=;
+        b=7S3e0WPPLECY4fdXkMtLGJh+TOybUbliwmo08/o7+ArJJ4AHxgLgpL1xTEgafx2TUG
+         0BeRee7300it2Bmn+5UlKrz3yJL9YR4t0WDGggOWZ1draVpFBnu29IuCYDw05pL6Tqvr
+         eK35GbhxLa2M8pIpICCYXWldgJWctwTgc0nWwFq0NR0mxRXBLjUkq0pjklogDC0iJUkz
+         KlHuaDw6D0rFWEFeZ/3UU6GGboMaDTcQqRWbAqCbq1bfeqZW1XZVnWfA+vdYJtZw7E0b
+         iyYwQwO/2h0iOx0iRBsk2zDs0us33EFmv1uOglwiADMbFrFt0rLNZ1vesXnfrbHOlpU6
+         JehA==
+X-Gm-Message-State: AOAM533izPK+e+nPGBbIaKwX6PuuHHWidiZ6fzJkoXH0gCS4fg+IcuJh
+        4Z+VxCL20KBBHpX3ELh+Tw4Mag==
+X-Google-Smtp-Source: ABdhPJwyliVhj5NDncxJX9H2FjKLo2EkRGUAonKMQ/S317sG6c6NYS2sN+NpaG37iNLfBPvwRKMhqw==
+X-Received: by 2002:a2e:a913:: with SMTP id j19mr19311821ljq.412.1642473309564;
+        Mon, 17 Jan 2022 18:35:09 -0800 (PST)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id bp19sm1540707lfb.279.2022.01.17.18.35.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jan 2022 18:35:08 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>
+Subject: [PATCH] spi: s3c64xx: Convert to use GPIO descriptors
+Date:   Tue, 18 Jan 2022 03:33:03 +0100
+Message-Id: <20220118023303.104419-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="aw3dtkiiyid6id5x"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdWCKERO20R2iVHq8P=BaoauoBAtiampWzfMRYihi3Sb0g@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Convert the S3C64xx SPI host to use GPIO descriptors.
 
---aw3dtkiiyid6id5x
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In the process we tear out some unused code in the machine,
+such as the unused config options for SPI controller 1 and
+2. New systems should use the device tree boot to enable these
+SPI hosts.
 
-On Mon, Jan 17, 2022 at 02:08:19PM +0100, Geert Uytterhoeven wrote:
-> Hi Uwe,
->=20
-> On Mon, Jan 17, 2022 at 12:49 PM Uwe Kleine-K=F6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
-> > On Mon, Jan 17, 2022 at 11:35:52AM +0100, Geert Uytterhoeven wrote:
-> > > On Mon, Jan 17, 2022 at 10:24 AM Uwe Kleine-K=F6nig
-> > > <u.kleine-koenig@pengutronix.de> wrote:
-> > > > On Mon, Jan 17, 2022 at 09:41:42AM +0100, Geert Uytterhoeven wrote:
-> > > > > On Sat, Jan 15, 2022 at 9:22 PM Sergey Shtylyov <s.shtylyov@omp.r=
-u> wrote:
-> > > > > > On 1/14/22 11:22 PM, Uwe Kleine-K=F6nig wrote:
-> > > > > > > You have to understand that for clk (and regulator and gpiod)=
- NULL is a
-> > > > > > > valid descriptor that can actually be used, it just has no ef=
-fect. So
-> > > > > > > this is a convenience value for the case "If the clk/regulato=
-r/gpiod in
-> > > > > > > question isn't available, there is nothing to do". This is wh=
-at makes
-> > > > > > > clk_get_optional() and the others really useful and justifies=
- their
-> > > > > > > existence. This doesn't apply to platform_get_irq_optional().
-> > > > > >
-> > > > > >    I do understand that. However, IRQs are a different beast wi=
-th their
-> > > > > > own justifications...
-> > > > >
-> > > > > > > clk_get_optional() is sane and sensible for cases where the c=
-lk might be
-> > > > > > > absent and it helps you because you don't have to differentia=
-te between
-> > > > > > > "not found" and "there is an actual resource".
-> > > > > > >
-> > > > > > > The reason for platform_get_irq_optional()'s existence is jus=
-t that
-> > > > > > > platform_get_irq() emits an error message which is wrong or s=
-uboptimal
-> > > > > >
-> > > > > >    I think you are very wrong here. The real reason is to simpl=
-ify the
-> > > > > > callers.
-> > > > >
-> > > > > Indeed.
-> > > >
-> > > > The commit that introduced platform_get_irq_optional() said:
-> > > >
-> > > >         Introduce a new platform_get_irq_optional() that works much=
- like
-> > > >         platform_get_irq() but does not output an error on failure =
-to
-> > > >         find the interrupt.
-> > > >
-> > > > So the author of 8973ea47901c81a1912bd05f1577bed9b5b52506 failed to
-> > > > mention the real reason? Or look at
-> > > > 31a8d8fa84c51d3ab00bf059158d5de6178cf890:
-> > > >
-> > > >         [...] use platform_get_irq_optional() to get second/third I=
-RQ
-> > > >         which are optional to avoid below error message during prob=
-e:
-> > > >         [...]
-> > > >
-> > > > Look through the output of
-> > > >
-> > > >         git log -Splatform_get_irq_optional
-> > > >
-> > > > to find several more of these.
-> > >
-> > > Commit 8973ea47901c81a1 ("driver core: platform: Introduce
-> > > platform_get_irq_optional()") and the various fixups fixed the ugly
-> > > printing of error messages that were not applicable.
-> > > In hindsight, probably commit 7723f4c5ecdb8d83 ("driver core:
-> > > platform: Add an error message to platform_get_irq*()") should have
-> > > been reverted instead, until a platform_get_irq_optional() with proper
-> > > semantics was introduced.
-> >
-> > ack.
-> >
-> > > But as we were all in a hurry to kill the non-applicable error
-> > > message, we went for the quick and dirty fix.
-> > >
-> > > > Also I fail to see how a caller of (today's) platform_get_irq_optio=
-nal()
-> > > > is simpler than a caller of platform_get_irq() given that there is =
-no
-> > > > semantic difference between the two. Please show me a single
-> > > > conversion from platform_get_irq to platform_get_irq_optional that
-> > > > yielded a simplification.
-> > >
-> > > That's exactly why we want to change the latter to return 0 ;-)
-> >
-> > OK. So you agree to my statement "The reason for
-> > platform_get_irq_optional()'s existence is just that platform_get_irq()
-> > emits an error message [...]". Actually you don't want to oppose but
-> > say: It's unfortunate that the silent variant of platform_get_irq() took
-> > the obvious name of a function that could have an improved return code
-> > semantic.
-> >
-> > So my suggestion to rename todays platform_get_irq_optional() to
-> > platform_get_irq_silently() and then introducing
-> > platform_get_irq_optional() with your suggested semantic seems
-> > intriguing and straigt forward to me.
->=20
-> I don't really see the point of needing platform_get_irq_silently(),
-> unless as an intermediary step, where it's going to be removed again
-> once the conversion has completed.
+We drop the ability to pass a custom pin config function
+to the device while registering since nothing was using this.
 
-We agree that one of the two functions is enough, just differ in which
-of the two we want to have. :-)
+Provide GPIO descriptor tables for the one user with CS
+0 and 1.
 
-If you think platform_get_irq_silently() is a good intermediate step for
-your goal, then we agree to rename platform_get_irq_optional(). So I
-suggest you ack my patch.
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc: Sylwester Nawrocki <snawrocki@kernel.org>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ arch/arm/mach-s3c/Kconfig                 | 12 ----
+ arch/arm/mach-s3c/devs.c                  | 77 +----------------------
+ arch/arm/mach-s3c/mach-crag6410-module.c  | 13 ----
+ arch/arm/mach-s3c/mach-crag6410.c         | 13 +++-
+ arch/arm/mach-s3c/setup-spi-s3c64xx.c     |  9 ---
+ arch/arm/mach-s3c/spi-core-s3c24xx.h      |  6 --
+ drivers/spi/spi-s3c64xx.c                 | 50 ++++-----------
+ include/linux/platform_data/spi-s3c64xx.h | 16 +----
+ 8 files changed, 27 insertions(+), 169 deletions(-)
 
-> Still, the rename would touch all users at once anyway.
+diff --git a/arch/arm/mach-s3c/Kconfig b/arch/arm/mach-s3c/Kconfig
+index 25606e668cf9..1899fc3f44fd 100644
+--- a/arch/arm/mach-s3c/Kconfig
++++ b/arch/arm/mach-s3c/Kconfig
+@@ -191,18 +191,6 @@ config S3C64XX_DEV_SPI0
+ 	  Compile in platform device definitions for S3C64XX's type
+ 	  SPI controller 0
+ 
+-config S3C64XX_DEV_SPI1
+-	bool
+-	help
+-	  Compile in platform device definitions for S3C64XX's type
+-	  SPI controller 1
+-
+-config S3C64XX_DEV_SPI2
+-	bool
+-	help
+-	  Compile in platform device definitions for S3C64XX's type
+-	  SPI controller 2
+-
+ config SAMSUNG_DEV_TS
+ 	bool
+ 	help
+diff --git a/arch/arm/mach-s3c/devs.c b/arch/arm/mach-s3c/devs.c
+index 06dec64848f9..1e266fc24f9b 100644
+--- a/arch/arm/mach-s3c/devs.c
++++ b/arch/arm/mach-s3c/devs.c
+@@ -1107,8 +1107,7 @@ struct platform_device s3c64xx_device_spi0 = {
+ 	},
+ };
+ 
+-void __init s3c64xx_spi0_set_platdata(int (*cfg_gpio)(void), int src_clk_nr,
+-						int num_cs)
++void __init s3c64xx_spi0_set_platdata(int src_clk_nr, int num_cs)
+ {
+ 	struct s3c64xx_spi_info pd;
+ 
+@@ -1120,80 +1119,8 @@ void __init s3c64xx_spi0_set_platdata(int (*cfg_gpio)(void), int src_clk_nr,
+ 
+ 	pd.num_cs = num_cs;
+ 	pd.src_clk_nr = src_clk_nr;
+-	pd.cfg_gpio = (cfg_gpio) ? cfg_gpio : s3c64xx_spi0_cfg_gpio;
++	pd.cfg_gpio = s3c64xx_spi0_cfg_gpio;
+ 
+ 	s3c_set_platdata(&pd, sizeof(pd), &s3c64xx_device_spi0);
+ }
+ #endif /* CONFIG_S3C64XX_DEV_SPI0 */
+-
+-#ifdef CONFIG_S3C64XX_DEV_SPI1
+-static struct resource s3c64xx_spi1_resource[] = {
+-	[0] = DEFINE_RES_MEM(S3C_PA_SPI1, SZ_256),
+-	[1] = DEFINE_RES_IRQ(IRQ_SPI1),
+-};
+-
+-struct platform_device s3c64xx_device_spi1 = {
+-	.name		= "s3c6410-spi",
+-	.id		= 1,
+-	.num_resources	= ARRAY_SIZE(s3c64xx_spi1_resource),
+-	.resource	= s3c64xx_spi1_resource,
+-	.dev = {
+-		.dma_mask		= &samsung_device_dma_mask,
+-		.coherent_dma_mask	= DMA_BIT_MASK(32),
+-	},
+-};
+-
+-void __init s3c64xx_spi1_set_platdata(int (*cfg_gpio)(void), int src_clk_nr,
+-						int num_cs)
+-{
+-	struct s3c64xx_spi_info pd;
+-
+-	/* Reject invalid configuration */
+-	if (!num_cs || src_clk_nr < 0) {
+-		pr_err("%s: Invalid SPI configuration\n", __func__);
+-		return;
+-	}
+-
+-	pd.num_cs = num_cs;
+-	pd.src_clk_nr = src_clk_nr;
+-	pd.cfg_gpio = (cfg_gpio) ? cfg_gpio : s3c64xx_spi1_cfg_gpio;
+-
+-	s3c_set_platdata(&pd, sizeof(pd), &s3c64xx_device_spi1);
+-}
+-#endif /* CONFIG_S3C64XX_DEV_SPI1 */
+-
+-#ifdef CONFIG_S3C64XX_DEV_SPI2
+-static struct resource s3c64xx_spi2_resource[] = {
+-	[0] = DEFINE_RES_MEM(S3C_PA_SPI2, SZ_256),
+-	[1] = DEFINE_RES_IRQ(IRQ_SPI2),
+-};
+-
+-struct platform_device s3c64xx_device_spi2 = {
+-	.name		= "s3c6410-spi",
+-	.id		= 2,
+-	.num_resources	= ARRAY_SIZE(s3c64xx_spi2_resource),
+-	.resource	= s3c64xx_spi2_resource,
+-	.dev = {
+-		.dma_mask		= &samsung_device_dma_mask,
+-		.coherent_dma_mask	= DMA_BIT_MASK(32),
+-	},
+-};
+-
+-void __init s3c64xx_spi2_set_platdata(int (*cfg_gpio)(void), int src_clk_nr,
+-						int num_cs)
+-{
+-	struct s3c64xx_spi_info pd;
+-
+-	/* Reject invalid configuration */
+-	if (!num_cs || src_clk_nr < 0) {
+-		pr_err("%s: Invalid SPI configuration\n", __func__);
+-		return;
+-	}
+-
+-	pd.num_cs = num_cs;
+-	pd.src_clk_nr = src_clk_nr;
+-	pd.cfg_gpio = (cfg_gpio) ? cfg_gpio : s3c64xx_spi2_cfg_gpio;
+-
+-	s3c_set_platdata(&pd, sizeof(pd), &s3c64xx_device_spi2);
+-}
+-#endif /* CONFIG_S3C64XX_DEV_SPI2 */
+diff --git a/arch/arm/mach-s3c/mach-crag6410-module.c b/arch/arm/mach-s3c/mach-crag6410-module.c
+index 407ad493493e..5d1d4b67a4b7 100644
+--- a/arch/arm/mach-s3c/mach-crag6410-module.c
++++ b/arch/arm/mach-s3c/mach-crag6410-module.c
+@@ -32,10 +32,6 @@
+ 
+ #include "crag6410.h"
+ 
+-static struct s3c64xx_spi_csinfo wm0010_spi_csinfo = {
+-	.line = S3C64XX_GPC(3),
+-};
+-
+ static struct wm0010_pdata wm0010_pdata = {
+ 	.gpio_reset = S3C64XX_GPN(6),
+ 	.reset_active_high = 1, /* Active high for Glenfarclas Rev 2 */
+@@ -49,7 +45,6 @@ static struct spi_board_info wm1253_devs[] = {
+ 		.chip_select	= 0,
+ 		.mode		= SPI_MODE_0,
+ 		.irq		= S3C_EINT(4),
+-		.controller_data = &wm0010_spi_csinfo,
+ 		.platform_data = &wm0010_pdata,
+ 	},
+ };
+@@ -62,7 +57,6 @@ static struct spi_board_info balblair_devs[] = {
+ 		.chip_select	= 0,
+ 		.mode		= SPI_MODE_0,
+ 		.irq		= S3C_EINT(4),
+-		.controller_data = &wm0010_spi_csinfo,
+ 		.platform_data = &wm0010_pdata,
+ 	},
+ };
+@@ -229,10 +223,6 @@ static struct arizona_pdata wm5102_reva_pdata = {
+ 	},
+ };
+ 
+-static struct s3c64xx_spi_csinfo codec_spi_csinfo = {
+-	.line = S3C64XX_GPN(5),
+-};
+-
+ static struct spi_board_info wm5102_reva_spi_devs[] = {
+ 	[0] = {
+ 		.modalias	= "wm5102",
+@@ -242,7 +232,6 @@ static struct spi_board_info wm5102_reva_spi_devs[] = {
+ 		.mode		= SPI_MODE_0,
+ 		.irq		= GLENFARCLAS_PMIC_IRQ_BASE +
+ 				  WM831X_IRQ_GPIO_2,
+-		.controller_data = &codec_spi_csinfo,
+ 		.platform_data = &wm5102_reva_pdata,
+ 	},
+ };
+@@ -275,7 +264,6 @@ static struct spi_board_info wm5102_spi_devs[] = {
+ 		.mode		= SPI_MODE_0,
+ 		.irq		= GLENFARCLAS_PMIC_IRQ_BASE +
+ 				  WM831X_IRQ_GPIO_2,
+-		.controller_data = &codec_spi_csinfo,
+ 		.platform_data = &wm5102_pdata,
+ 	},
+ };
+@@ -298,7 +286,6 @@ static struct spi_board_info wm5110_spi_devs[] = {
+ 		.mode		= SPI_MODE_0,
+ 		.irq		= GLENFARCLAS_PMIC_IRQ_BASE +
+ 				  WM831X_IRQ_GPIO_2,
+-		.controller_data = &codec_spi_csinfo,
+ 		.platform_data = &wm5102_reva_pdata,
+ 	},
+ };
+diff --git a/arch/arm/mach-s3c/mach-crag6410.c b/arch/arm/mach-s3c/mach-crag6410.c
+index 4a12c75d407f..e3e0fe897bcc 100644
+--- a/arch/arm/mach-s3c/mach-crag6410.c
++++ b/arch/arm/mach-s3c/mach-crag6410.c
+@@ -825,6 +825,15 @@ static const struct gpio_led_platform_data gpio_leds_pdata = {
+ 
+ static struct dwc2_hsotg_plat crag6410_hsotg_pdata;
+ 
++static struct gpiod_lookup_table crag_spi0_gpiod_table = {
++	.dev_id = "s3c6410-spi.0",
++	.table = {
++		GPIO_LOOKUP_IDX("GPIOC", 3, "cs", 0, GPIO_ACTIVE_LOW),
++		GPIO_LOOKUP_IDX("GPION", 5, "cs", 1, GPIO_ACTIVE_LOW),
++		{ },
++	},
++};
++
+ static void __init crag6410_machine_init(void)
+ {
+ 	/* Open drain IRQs need pullups */
+@@ -856,7 +865,9 @@ static void __init crag6410_machine_init(void)
+ 	i2c_register_board_info(1, i2c_devs1, ARRAY_SIZE(i2c_devs1));
+ 
+ 	samsung_keypad_set_platdata(&crag6410_keypad_data);
+-	s3c64xx_spi0_set_platdata(NULL, 0, 2);
++
++	gpiod_add_lookup_table(&crag_spi0_gpiod_table);
++	s3c64xx_spi0_set_platdata(0, 2);
+ 
+ 	pwm_add_table(crag6410_pwm_lookup, ARRAY_SIZE(crag6410_pwm_lookup));
+ 	platform_add_devices(crag6410_devices, ARRAY_SIZE(crag6410_devices));
+diff --git a/arch/arm/mach-s3c/setup-spi-s3c64xx.c b/arch/arm/mach-s3c/setup-spi-s3c64xx.c
+index efcf78d41585..497aff71c29c 100644
+--- a/arch/arm/mach-s3c/setup-spi-s3c64xx.c
++++ b/arch/arm/mach-s3c/setup-spi-s3c64xx.c
+@@ -16,12 +16,3 @@ int s3c64xx_spi0_cfg_gpio(void)
+ 	return 0;
+ }
+ #endif
+-
+-#ifdef CONFIG_S3C64XX_DEV_SPI1
+-int s3c64xx_spi1_cfg_gpio(void)
+-{
+-	s3c_gpio_cfgall_range(S3C64XX_GPC(4), 3,
+-				S3C_GPIO_SFN(2), S3C_GPIO_PULL_UP);
+-	return 0;
+-}
+-#endif
+diff --git a/arch/arm/mach-s3c/spi-core-s3c24xx.h b/arch/arm/mach-s3c/spi-core-s3c24xx.h
+index 057667469cc3..919c5fd0c9af 100644
+--- a/arch/arm/mach-s3c/spi-core-s3c24xx.h
++++ b/arch/arm/mach-s3c/spi-core-s3c24xx.h
+@@ -16,12 +16,6 @@ static inline void s3c24xx_spi_setname(char *name)
+ #ifdef CONFIG_S3C64XX_DEV_SPI0
+ 	s3c64xx_device_spi0.name = name;
+ #endif
+-#ifdef CONFIG_S3C64XX_DEV_SPI1
+-	s3c64xx_device_spi1.name = name;
+-#endif
+-#ifdef CONFIG_S3C64XX_DEV_SPI2
+-	s3c64xx_device_spi2.name = name;
+-#endif
+ }
+ 
+ #endif /* __PLAT_S3C_SPI_CORE_S3C24XX_H */
+diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+index 8755cd85e83c..5e03c9144bfe 100644
+--- a/drivers/spi/spi-s3c64xx.c
++++ b/drivers/spi/spi-s3c64xx.c
+@@ -13,10 +13,8 @@
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/spi/spi.h>
+-#include <linux/gpio.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+-#include <linux/of_gpio.h>
+ 
+ #include <linux/platform_data/spi-s3c64xx.h>
+ 
+@@ -655,6 +653,9 @@ static int s3c64xx_spi_prepare_message(struct spi_master *master,
+ 	struct spi_device *spi = msg->spi;
+ 	struct s3c64xx_spi_csinfo *cs = spi->controller_data;
+ 
++	if (!cs)
++		return 0;
++
+ 	/* Configure feedback delay */
+ 	writel(cs->fb_delay & 0x3, sdd->regs + S3C64XX_SPI_FB_CLK);
+ 
+@@ -830,34 +831,16 @@ static int s3c64xx_spi_setup(struct spi_device *spi)
+ 	if (spi->dev.of_node) {
+ 		cs = s3c64xx_get_slave_ctrldata(spi);
+ 		spi->controller_data = cs;
+-	} else if (cs) {
+-		/* On non-DT platforms the SPI core will set spi->cs_gpio
+-		 * to -ENOENT. The GPIO pin used to drive the chip select
+-		 * is defined by using platform data so spi->cs_gpio value
+-		 * has to be override to have the proper GPIO pin number.
+-		 */
+-		spi->cs_gpio = cs->line;
+ 	}
+ 
+-	if (IS_ERR_OR_NULL(cs)) {
++	/* NULL is fine, we just avoid using the FB delay (=0) */
++	if (IS_ERR(cs)) {
+ 		dev_err(&spi->dev, "No CS for SPI(%d)\n", spi->chip_select);
+ 		return -ENODEV;
+ 	}
+ 
+-	if (!spi_get_ctldata(spi)) {
+-		if (gpio_is_valid(spi->cs_gpio)) {
+-			err = gpio_request_one(spi->cs_gpio, GPIOF_OUT_INIT_HIGH,
+-					       dev_name(&spi->dev));
+-			if (err) {
+-				dev_err(&spi->dev,
+-					"Failed to get /CS gpio [%d]: %d\n",
+-					spi->cs_gpio, err);
+-				goto err_gpio_req;
+-			}
+-		}
+-
++	if (!spi_get_ctldata(spi))
+ 		spi_set_ctldata(spi, cs);
+-	}
+ 
+ 	pm_runtime_get_sync(&sdd->pdev->dev);
+ 
+@@ -909,11 +892,9 @@ static int s3c64xx_spi_setup(struct spi_device *spi)
+ 	/* setup() returns with device de-selected */
+ 	s3c64xx_spi_set_cs(spi, false);
+ 
+-	if (gpio_is_valid(spi->cs_gpio))
+-		gpio_free(spi->cs_gpio);
+ 	spi_set_ctldata(spi, NULL);
+ 
+-err_gpio_req:
++	/* This was dynamically allocated on the DT path */
+ 	if (spi->dev.of_node)
+ 		kfree(cs);
+ 
+@@ -924,19 +905,9 @@ static void s3c64xx_spi_cleanup(struct spi_device *spi)
+ {
+ 	struct s3c64xx_spi_csinfo *cs = spi_get_ctldata(spi);
+ 
+-	if (gpio_is_valid(spi->cs_gpio)) {
+-		gpio_free(spi->cs_gpio);
+-		if (spi->dev.of_node)
+-			kfree(cs);
+-		else {
+-			/* On non-DT platforms, the SPI core sets
+-			 * spi->cs_gpio to -ENOENT and .setup()
+-			 * overrides it with the GPIO pin value
+-			 * passed using platform data.
+-			 */
+-			spi->cs_gpio = -ENOENT;
+-		}
+-	}
++	/* This was dynamically allocated on the DT path */
++	if (spi->dev.of_node)
++		kfree(cs);
+ 
+ 	spi_set_ctldata(spi, NULL);
+ }
+@@ -1131,6 +1102,7 @@ static int s3c64xx_spi_probe(struct platform_device *pdev)
+ 	master->prepare_message = s3c64xx_spi_prepare_message;
+ 	master->transfer_one = s3c64xx_spi_transfer_one;
+ 	master->num_chipselect = sci->num_cs;
++	master->use_gpio_descriptors = true;
+ 	master->dma_alignment = 8;
+ 	master->bits_per_word_mask = SPI_BPW_MASK(32) | SPI_BPW_MASK(16) |
+ 					SPI_BPW_MASK(8);
+diff --git a/include/linux/platform_data/spi-s3c64xx.h b/include/linux/platform_data/spi-s3c64xx.h
+index 773daf7915a3..391f4dc68742 100644
+--- a/include/linux/platform_data/spi-s3c64xx.h
++++ b/include/linux/platform_data/spi-s3c64xx.h
+@@ -16,15 +16,13 @@ struct platform_device;
+  * struct s3c64xx_spi_csinfo - ChipSelect description
+  * @fb_delay: Slave specific feedback delay.
+  *            Refer to FB_CLK_SEL register definition in SPI chapter.
+- * @line: Custom 'identity' of the CS line.
+  *
+- * This is per SPI-Slave Chipselect information.
++ * This is per SPI-Slave FB delay information.
+  * Allocate and initialize one in machine init code and make the
+  * spi_board_info.controller_data point to it.
+  */
+ struct s3c64xx_spi_csinfo {
+ 	u8 fb_delay;
+-	unsigned line;
+ };
+ 
+ /**
+@@ -43,26 +41,16 @@ struct s3c64xx_spi_info {
+ /**
+  * s3c64xx_spi_set_platdata - SPI Controller configure callback by the board
+  *				initialization code.
+- * @cfg_gpio: Pointer to gpio setup function.
+  * @src_clk_nr: Clock the SPI controller is to use to generate SPI clocks.
+  * @num_cs: Number of elements in the 'cs' array.
+  *
+  * Call this from machine init code for each SPI Controller that
+  * has some chips attached to it.
+  */
+-extern void s3c64xx_spi0_set_platdata(int (*cfg_gpio)(void), int src_clk_nr,
+-						int num_cs);
+-extern void s3c64xx_spi1_set_platdata(int (*cfg_gpio)(void), int src_clk_nr,
+-						int num_cs);
+-extern void s3c64xx_spi2_set_platdata(int (*cfg_gpio)(void), int src_clk_nr,
+-						int num_cs);
++extern void s3c64xx_spi0_set_platdata(int src_clk_nr, int num_cs);
+ 
+ /* defined by architecture to configure gpio */
+ extern int s3c64xx_spi0_cfg_gpio(void);
+-extern int s3c64xx_spi1_cfg_gpio(void);
+-extern int s3c64xx_spi2_cfg_gpio(void);
+ 
+ extern struct s3c64xx_spi_info s3c64xx_spi0_pdata;
+-extern struct s3c64xx_spi_info s3c64xx_spi1_pdata;
+-extern struct s3c64xx_spi_info s3c64xx_spi2_pdata;
+ #endif /*__SPI_S3C64XX_H */
+-- 
+2.34.1
 
-It would be more easy to keep the conversion regression-free however. A
-plain rename is simple to verify. And then converting to the new
-platform_get_irq_optional() can be done individually and without the
-need to do everything in a single step.
-
-> > Another thought: platform_get_irq emits an error message for all
-> > problems. Wouldn't it be consistent to let platform_get_irq_optional()
-> > emit an error message for all problems but "not found"?
-> > Alternatively remove the error printk from platform_get_irq().
->=20
-> Yes, all problems but not found are real errors.
-
-If you want to make platform_get_irq and its optional variant more
-similar to the others, dropping the error message is the way to go.
-
-> > > > So you need some more effort to convince me of your POV.
-> > > >
-> > > > > Even for clocks, you cannot assume that you can always blindly use
-> > > > > the returned dummy (actually a NULL pointer) to call into the clk
-> > > > > API.  While this works fine for simple use cases, where you just
-> > > > > want to enable/disable an optional clock (clk_prepare_enable() and
-> > > > > clk_disable_unprepare()), it does not work for more complex use c=
-ases.
-> > > >
-> > > > Agreed. But for clks and gpiods and regulators the simple case is q=
-uite
-> > > > usual. For irqs it isn't.
-> > >
-> > > It is for devices that can have either separate interrupts, or a sing=
-le
-> > > multiplexed interrupt.
-> > >
-> > > The logic in e.g. drivers/tty/serial/sh-sci.c and
-> > > drivers/spi/spi-rspi.c could be simplified and improved (currently
-> > > it doesn't handle deferred probe) if platform_get_irq_optional()
-> > > would return 0 instead of -ENXIO.
-> >
-> > Looking at sh-sci.c the irq handling logic could be improved even
-> > without a changed platform_get_irq_optional():
-> >
-> > diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-> > index 968967d722d4..c7dc9fb84844 100644
-> > --- a/drivers/tty/serial/sh-sci.c
-> > +++ b/drivers/tty/serial/sh-sci.c
-> > @@ -2873,11 +2873,13 @@ static int sci_init_single(struct platform_devi=
-ce *dev,
-> >          * interrupt ID numbers, or muxed together with another interru=
-pt.
-> >          */
-> >         if (sci_port->irqs[0] < 0)
-> > -               return -ENXIO;
-> > +               return sci_port->irqs[0];
-> >
-> > -       if (sci_port->irqs[1] < 0)
-> > +       if (sci_port->irqs[1] =3D=3D -ENXIO)
-> >                 for (i =3D 1; i < ARRAY_SIZE(sci_port->irqs); i++)
-> >                         sci_port->irqs[i] =3D sci_port->irqs[0];
-> > +       else if (sci_port->irqs[1] < 0)
-> > +               return sci_port->irqs[1];
-> >
-> >         sci_port->params =3D sci_probe_regmap(p);
-> >         if (unlikely(sci_port->params =3D=3D NULL))
-> >
-> > And then the code flow is actively irritating. sci_init_single() copies
-> > irqs[0] to all other irqs[i] and then sci_request_irq() loops over the
-> > already requested irqs and checks for duplicates. A single place that
-> > identifies the exact set of required irqs would already help a lot.
->=20
-> Yeah, it's ugly and convoluted, like the wide set of hardware the
-> driver supports.
->=20
-> > Also for spi-rspi.c I don't see how platform_get_irq_byname_optional()
-> > returning 0 instead of -ENXIO would help. Please talk in patches.
->=20
-> --- a/drivers/spi/spi-rspi.c
-> +++ b/drivers/spi/spi-rspi.c
-> @@ -1420,17 +1420,25 @@ static int rspi_probe(struct platform_device *pde=
-v)
->         ctlr->max_native_cs =3D rspi->ops->num_hw_ss;
->=20
->         ret =3D platform_get_irq_byname_optional(pdev, "rx");
-> -       if (ret < 0) {
-> +       if (ret < 0)
-> +               goto error2;
-> +
-> +       if (!ret) {
->                 ret =3D platform_get_irq_byname_optional(pdev, "mux");
-> -               if (ret < 0)
-> +               if (!ret)
->                         ret =3D platform_get_irq(pdev, 0);
-> +               if (ret < 0)
-> +                       goto error2;
-> +
->                 if (ret >=3D 0)
->                         rspi->rx_irq =3D rspi->tx_irq =3D ret;
->         } else {
->                 rspi->rx_irq =3D ret;
->                 ret =3D platform_get_irq_byname(pdev, "tx");
-> -               if (ret >=3D 0)
-> -                       rspi->tx_irq =3D ret;
-> +               if (ret < 0)
-> +                       goto error2;
-> +
-> +               rspi->tx_irq =3D ret;
->         }
->=20
->         if (rspi->rx_irq =3D=3D rspi->tx_irq) {
-
-This is not a simplification, just looking at the line count and the
-added gotos. That's because it also improves error handling and so the
-effect isn't easily spotted.
-
-> I like it when the "if (ret < ) ..." error handling is the first check to=
- do.
-
-That's a relevant difference between us.
-
-> With -ENXIO, it becomes more convoluted. and looks less nice (IMHO).
->=20
-> > Preferably first simplify in-driver logic to make the conversion to the
-> > new platform_get_irq_optional() actually reviewable.
->=20
-> So I have to choose between
->=20
->     if (ret < 0 && ret !=3D -ENXIO)
->             return ret;
->=20
->     if (ret) {
->             ...
->     }
->=20
-> and
->=20
->     if (ret =3D=3D -ENXIO) {
->             ...
->     } else if (ret < 0)
->             return ret;
->     }
-
-I would do the latter, then it's in the normal order for error handling
-
-	handle some specific errors;
-	forward unhandled errors up the stack;
-	handle success;
-
-but it seems you prefer to not call "not found" an error. Actually I
-think it's an advantage that the driver has to mention -ENXIO, feels
-like proper error handling to me. I guess we won't agree about that
-though.
-
-What about the following idea (in pythonic pseudo code for simplicity):
-
-	# the rspi device either has two irqs, one for rx and one for
-	# tx, or a single one for both together.
-
-	def muxed_hander(irq):
-		status =3D readl(STATUS)
-		if status & IF_RX:
-			rx_handler()
-		if status & IF_TX:
-			tx_handler()
-
-	def probe_muxed_irq():
-		irq =3D platform_get_irq_by_name("mux")
-		if irq < 0:
-			return irq;
-
-		request_irq(irq, muxed_handler)
-
-	def probe_separate_irqs():
-		txirq =3D platform_get_irq_by_name("tx")
-		if txirq < 0:
-			return txirq
-
-		rxirq =3D platform_get_irq_by_name("rx")
-		if rxirq < 0:
-			return rxirq
-
-		request_irq(txirq, tx_handler)
-		request_irq(rxirq, rx_handler)
-
-	def probe():
-		ret =3D probe_separate_irqs()
-		if ret =3D=3D -ENXIO:
-			ret =3D probe_muxed_irq()
-
-		if ret < 0:
-			return ret
-
-looks clean (to me that is) and allows to skip the demuxing in
-tx_handler and rx_handler (which might or might not yield improved
-runtime behaviour). Maybe a bit more verbose, but simpler to grasp for a
-human, isn't it?
-
-> with the final target being
->=20
->     if (ret < 0)
->             return ret;
->=20
->     if (ret) {
->             ...
->     }
->=20
-> So the first option means the final change is smaller, but it looks less
-> nice than the second option (IMHO).
-> But the second option means more churn.
->=20
-> > > So there are three reasons: because the absence of an optional IRQ
-> > > is not an error, and thus that should not cause (a) an error code
-> > > to be returned, and (b) an error message to be printed, and (c)
-> > > because it can simplify the logic in device drivers.
-> >
-> > I don't agree to (a). If the value signaling not-found is -ENXIO or 0
-> > (or -ENODEV) doesn't matter much. I wouldn't deviate from the return
-> > code semantics of platform_get_irq() just for having to check against 0
-> > instead of -ENXIO. Zero is then just another magic value.
->=20
-> Zero is a natural magic value (also for pointers).
-> Errors are always negative.
-> Positive values are cookies (or pointers) associated with success.
-
-Yeah, the issue where we don't agree is if "not-found" is special enough
-to deserve the natural magic value. For me -ENXIO is magic enough to
-handle the absence of an irq line. I consider it even the better magic
-value.
-
-> > (c) still has to be proven, see above.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---aw3dtkiiyid6id5x
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHlof4ACgkQwfwUeK3K
-7Aniewf+MoaFo3EYfzYPpJGODkMHLkkxMbHUg8vSMqRQM6WJsf8c9vxwcsWAL4ve
-Et7WTI1iMsw9uc3Wiag0LUt2KFm0pxr+OCAyIEsfQ/5exnZOmiPovOmrt8eNPe8c
-hTXRJzXnsS9aZP/mJjPEqSZKaBTA/0WYUaKJUQsHq0cxBBtQCeUlMtXmCgCcRUFZ
-NK/trtp/5N3W9bLhTFaZ+tCe0aYS5iQAihlnquEZNjJjeTyuZfN/pCbeiAZdDFv1
-S85HGZU7QsH9jV00tdrlAze2aLGJ11VXdnibbL3l5ITXHpJKBdpBFZHGazA0P5iG
-b1PnP722liY900ec+sr8AE7Gyb3swA==
-=kGnZ
------END PGP SIGNATURE-----
-
---aw3dtkiiyid6id5x--
