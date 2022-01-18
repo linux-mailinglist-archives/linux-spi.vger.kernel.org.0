@@ -2,199 +2,136 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 146804922E6
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Jan 2022 10:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36806492363
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jan 2022 10:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345538AbiARJho convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Tue, 18 Jan 2022 04:37:44 -0500
-Received: from mail-ua1-f44.google.com ([209.85.222.44]:44993 "EHLO
-        mail-ua1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbiARJhl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jan 2022 04:37:41 -0500
-Received: by mail-ua1-f44.google.com with SMTP id f24so1463520uab.11;
-        Tue, 18 Jan 2022 01:37:40 -0800 (PST)
+        id S233523AbiARJ5Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Jan 2022 04:57:16 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:43522
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233538AbiARJ5P (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jan 2022 04:57:15 -0500
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id AA0173F1E1
+        for <linux-spi@vger.kernel.org>; Tue, 18 Jan 2022 09:57:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642499829;
+        bh=MFO8uJDAvBhLowCeOE4JP5TX6QErB5JH8USU7be5UeE=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=gn3YbZIGRooMwHrL9/n/44CimydkUw+K8B8ptA/n60IN2XuUBvrw6G6ZuKvEHpX8j
+         TjJ+LJrVqyd2E1sPrwU0Ai6ZIIr73tB0A3kUNLYXcUfa0ecOItQzdhF101MPapC61A
+         b9AcC8Tvq0sxO4xD9DGOeY17c/gKEMNMsm4S+DczR7rRY4eib5mCi7TTa9yaQR9gbS
+         MK6lN9gH+Z6nW8yoq5l4xdEJNFShfOmccfQfc7NdG0FiLVERfea9jtiDvww2cbRg6R
+         RBgujPkzGA8kVC78tX2bBrm+qviAle4A0r21+ckn0UPFRjqbQRinqvz4p04C8cDXuu
+         gx9gJ6Vs7qO/Q==
+Received: by mail-ed1-f70.google.com with SMTP id ej6-20020a056402368600b00402b6f12c3fso5081797edb.8
+        for <linux-spi@vger.kernel.org>; Tue, 18 Jan 2022 01:57:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=94RJUajJnozufTpAr/gV3w0KHJpzlohNQuBpMs4wyR0=;
-        b=MaJCYAKIZUUHoKESEVDo6QEMbUS0vkztkUHhvTyDRPuvl53gzl04ILCRAu0GnOtVRK
-         Fvsqi1dRCWirqq9t3YmOGL8oXLmj/c+ZZFTIODGLKPlzxX8Ns6wHkpRTbSPaEfsZ36u4
-         ORN6JM3Oeh3Dc1cjY/4ZEg13C7N7mPArKcEq7Xunw/e8ZvQsNOVSECVOCe87pXr4nh9N
-         126uQq6/jbqxCCxq2ZjYt3NQ0u+z0wbgBsZz9KBMihq0jkIt+i5HgIS0vNkewXXXDrgQ
-         OYktUJ7DOibltni3K4josLd5pAQEJihshjDkFlMyhvPPj/QLZQ+doQm3IWaMf8wZ+eqx
-         yM4w==
-X-Gm-Message-State: AOAM533+LPFA5XuBfxDmKTi3x58EAS+txDXKAUOxEGQc+6FNPhMYt6Ro
-        qt8Ud413mJQN8fsYU8zZH1yhJ+BVx0cQyYCj
-X-Google-Smtp-Source: ABdhPJyw+oic6AsAShUu1MGqZLa67XXZj9G+hQqL+tvjzZ6gUStjqN2CB20oVkNecThrkl9ruBrXVg==
-X-Received: by 2002:a9f:2424:: with SMTP id 33mr9064060uaq.67.1642498659372;
-        Tue, 18 Jan 2022 01:37:39 -0800 (PST)
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
-        by smtp.gmail.com with ESMTPSA id s47sm3681740uad.17.2022.01.18.01.37.37
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MFO8uJDAvBhLowCeOE4JP5TX6QErB5JH8USU7be5UeE=;
+        b=MHEsGe73zBHFo32mqtYtmUMqj1QQ7loVXiIUdXXr20OQUQYo3cYhgZ2mfapZ2UaLXM
+         khW14zzXzaXspQJNHRS48bNozLf/w0pw+p/K5zCp30j7avgeioyhNs4SNvnv8f4aeNJf
+         +VpYi7w29vBC86eDuYlqe1iXvgh0hcWYr0badSj+LbghX1hi1o7qq3/nC9lVimkFJqpp
+         ytwEOFnfnUCQvFp7DcjcLoHVt8dQ3spIvhbHgBdeSyX3jQuypBkEi/8uQEHkTO5bBK/J
+         MBXFZxsQImD/mO0pQL5A2LkKobztT8rhSkEkTjdQ0exS4XfenbhAQ6hsQg71Rt3F94KB
+         7Zfw==
+X-Gm-Message-State: AOAM533roH2Z2VuBlIkYWx2UPU+UKAEYtQn1LBO+VnRha07paeg4+Vog
+        FgeAzdzHWGhayhy0v8TFxS7YWnVwu5JZpMVUgzRKVKIY4iZlIiDvAIfIv84kSC7UjLU5kP7hicY
+        vL3GsOTfbrwusr2RaAx71uirA0qHZ2iLz3S1e0w==
+X-Received: by 2002:a05:6402:4487:: with SMTP id er7mr22619879edb.80.1642499829411;
+        Tue, 18 Jan 2022 01:57:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw82bMu0Ox8GmWEm0lEqeltlKhMHgQUplgcxOT7MOfUNw7zdvb0xlBkR22QRB6PDiK4TTVE8Q==
+X-Received: by 2002:a05:6402:4487:: with SMTP id er7mr22619872edb.80.1642499829224;
+        Tue, 18 Jan 2022 01:57:09 -0800 (PST)
+Received: from [192.168.0.41] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id j13sm6913874edw.89.2022.01.18.01.57.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 01:37:37 -0800 (PST)
-Received: by mail-ua1-f53.google.com with SMTP id c36so35282332uae.13;
-        Tue, 18 Jan 2022 01:37:37 -0800 (PST)
-X-Received: by 2002:a67:bc17:: with SMTP id t23mr5014894vsn.57.1642498657061;
- Tue, 18 Jan 2022 01:37:37 -0800 (PST)
+        Tue, 18 Jan 2022 01:57:08 -0800 (PST)
+Message-ID: <eeafdcd4-3527-f18e-e92c-0544bf2a83e8@canonical.com>
+Date:   Tue, 18 Jan 2022 10:57:08 +0100
 MIME-Version: 1.0
-References: <61b80939-357d-14f5-df99-b8d102a4e1a1@omp.ru> <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
- <c9026f17-2b3f-ee94-0ea3-5630f981fbc1@omp.ru> <CAMuHMdXVbRudGs69f9ZzaP1PXhteDNZiXA658eMFAwP4nr9r3w@mail.gmail.com>
- <20220117092444.opoedfcf5k5u6otq@pengutronix.de> <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
- <20220117114923.d5vajgitxneec7j7@pengutronix.de> <CAMuHMdWCKERO20R2iVHq8P=BaoauoBAtiampWzfMRYihi3Sb0g@mail.gmail.com>
- <20220117170609.yxaamvqdkivs56ju@pengutronix.de> <CAMuHMdXbuZqEpYivyS6hkaRN+CwTOGaHq_OROwVAWvDD6OXODQ@mail.gmail.com>
- <20220118090913.pjumkq4zf4iqtlha@pengutronix.de>
-In-Reply-To: <20220118090913.pjumkq4zf4iqtlha@pengutronix.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 18 Jan 2022 10:37:25 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUW8+Y_=uszD+JOZO3Lpa9oDayk+GO+cg276i2f2T285w@mail.gmail.com>
-Message-ID: <CAMuHMdUW8+Y_=uszD+JOZO3Lpa9oDayk+GO+cg276i2f2T285w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org, netdev <netdev@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        openipmi-developer@lists.sourceforge.net,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        platform-driver-x86@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH] spi: s3c64xx: Convert to use GPIO descriptors
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Cc:     linux-samsung-soc@vger.kernel.org,
+        Sylwester Nawrocki <snawrocki@kernel.org>
+References: <20220118023303.104419-1-linus.walleij@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220118023303.104419-1-linus.walleij@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Uwe,
+On 18/01/2022 03:33, Linus Walleij wrote:
+> Convert the S3C64xx SPI host to use GPIO descriptors.
+> 
+> In the process we tear out some unused code in the machine,
+> such as the unused config options for SPI controller 1 and
+> 2. New systems should use the device tree boot to enable these
+> SPI hosts.
+> 
+> We drop the ability to pass a custom pin config function
+> to the device while registering since nothing was using this.
+> 
+> Provide GPIO descriptor tables for the one user with CS
+> 0 and 1.
+> 
+> Cc: linux-samsung-soc@vger.kernel.org
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Cc: Sylwester Nawrocki <snawrocki@kernel.org>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+>  arch/arm/mach-s3c/Kconfig                 | 12 ----
+>  arch/arm/mach-s3c/devs.c                  | 77 +----------------------
+>  arch/arm/mach-s3c/mach-crag6410-module.c  | 13 ----
+>  arch/arm/mach-s3c/mach-crag6410.c         | 13 +++-
+>  arch/arm/mach-s3c/setup-spi-s3c64xx.c     |  9 ---
+>  arch/arm/mach-s3c/spi-core-s3c24xx.h      |  6 --
+>  drivers/spi/spi-s3c64xx.c                 | 50 ++++-----------
+>  include/linux/platform_data/spi-s3c64xx.h | 16 +----
+>  8 files changed, 27 insertions(+), 169 deletions(-)
+> 
+> diff --git a/arch/arm/mach-s3c/Kconfig b/arch/arm/mach-s3c/Kconfig
+> index 25606e668cf9..1899fc3f44fd 100644
+> --- a/arch/arm/mach-s3c/Kconfig
+> +++ b/arch/arm/mach-s3c/Kconfig
+> @@ -191,18 +191,6 @@ config S3C64XX_DEV_SPI0
+>  	  Compile in platform device definitions for S3C64XX's type
+>  	  SPI controller 0
+>  
+> -config S3C64XX_DEV_SPI1
+> -	bool
+> -	help
+> -	  Compile in platform device definitions for S3C64XX's type
+> -	  SPI controller 1
+> -
+> -config S3C64XX_DEV_SPI2
+> -	bool
+> -	help
+> -	  Compile in platform device definitions for S3C64XX's type
+> -	  SPI controller 2
+> -
+>  config SAMSUNG_DEV_TS
+>  	bool
+>  	help
 
-On Tue, Jan 18, 2022 at 10:09 AM Uwe Kleine-König
-<u.kleine-koenig@pengutronix.de> wrote:
-> On Tue, Jan 18, 2022 at 09:25:01AM +0100, Geert Uytterhoeven wrote:
-> > On Mon, Jan 17, 2022 at 6:06 PM Uwe Kleine-König
-> > <u.kleine-koenig@pengutronix.de> wrote:
-> > > On Mon, Jan 17, 2022 at 02:08:19PM +0100, Geert Uytterhoeven wrote:
-> > > > On Mon, Jan 17, 2022 at 12:49 PM Uwe Kleine-König
-> > > > <u.kleine-koenig@pengutronix.de> wrote:
-> > > > > > So there are three reasons: because the absence of an optional IRQ
-> > > > > > is not an error, and thus that should not cause (a) an error code
-> > > > > > to be returned, and (b) an error message to be printed, and (c)
-> > > > > > because it can simplify the logic in device drivers.
-> > > > >
-> > > > > I don't agree to (a). If the value signaling not-found is -ENXIO or 0
-> > > > > (or -ENODEV) doesn't matter much. I wouldn't deviate from the return
-> > > > > code semantics of platform_get_irq() just for having to check against 0
-> > > > > instead of -ENXIO. Zero is then just another magic value.
-> > > >
-> > > > Zero is a natural magic value (also for pointers).
-> > > > Errors are always negative.
-> > > > Positive values are cookies (or pointers) associated with success.
-> > >
-> > > Yeah, the issue where we don't agree is if "not-found" is special enough
-> > > to deserve the natural magic value. For me -ENXIO is magic enough to
-> > > handle the absence of an irq line. I consider it even the better magic
-> > > value.
-> >
-> > It differs from other subsystems (clk, gpio, reset), which do return
-> > zero on not found.
->
-> IMHO it doesn't matter at all that the return value is zero, relevant is
-> the semantic of the returned value. For clk, gpio, reset and regulator
-> NULL is a usable dummy, for irqs it's not. So what you do with the value
-> returned by platform_get_irq_whatever() is: you compare it with the
-> (magic?) not-found value, and if it matches, you enter a suitable
-> if-block.
->
-> For the (clk|gpiod|regulator)_get_optional() you don't have to check
-> against the magic not-found value (so no implementation detail magic
-> leaks into the caller code) and just pass it to the next API function.
-> (And my expectation would be that if you chose to represent not-found by
-> (void *)66 instead of NULL, you won't have to adapt any user, just the
-> framework internal checks. This is a good thing!)
+Looks good to me, but I would prefer to split the dead code removal
+(S3C64XX_DEV_SPI1 and S3C64XX_DEV_SPI2) from actual conversion. Such
+split should be doable and would make it much easier to see actual
+conversion.
 
-Ah, there is the wrong assumption: drivers sometimes do need to know
-if the resource was found, and thus do need to know about (void *)66,
--ENODEV, or -ENXIO.  I already gave examples for IRQ and clk before.
-I can imagine these exist for gpiod and regulator, too, as soon as
-you go beyond the trivial "enable" and "disable" use-cases.
 
-And 0/NULL vs. > 0 is the natural check here: missing, but not
-an error.  Even for IRQ this was envisioned before, when it was
-decided that vIRQ zero does not exist.
-(Inconsistent) Error codes are not, as missing optional resources
-are not error conditions.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+Krzysztof
