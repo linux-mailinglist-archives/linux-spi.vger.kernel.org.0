@@ -2,194 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09EC8492128
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Jan 2022 09:25:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1833C492171
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jan 2022 09:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344208AbiARIZV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Tue, 18 Jan 2022 03:25:21 -0500
-Received: from mail-ua1-f45.google.com ([209.85.222.45]:42760 "EHLO
-        mail-ua1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232989AbiARIZQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jan 2022 03:25:16 -0500
-Received: by mail-ua1-f45.google.com with SMTP id p1so35034049uap.9;
-        Tue, 18 Jan 2022 00:25:15 -0800 (PST)
+        id S1344726AbiARImb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Jan 2022 03:42:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344701AbiARImb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jan 2022 03:42:31 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C284C061574;
+        Tue, 18 Jan 2022 00:42:31 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id p125so2102336pga.2;
+        Tue, 18 Jan 2022 00:42:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=8YhW7kPz/0dwcgLNR6pHvdAKCVjhZDw2v5KzLLB3Sdw=;
+        b=KvVAmjNqIAM5rKgWxpNSO9sTeuTBkTii6FeT8E5Wj2ZUsNw7YvpM0V0oYuAhImPMlx
+         G9pCjbFfJmbGqwpavhKsyUCUybbfa5bGvcdxaH3jO1qPbT1UX2m4UhXF60jxrzUirEYB
+         ko75WxrIflNlP/blEogSwrKXzH85VGaugUPUJdu6JE4TOy28kErTqGA1SVSWBUfoa/3Y
+         QJDf3n+q/rLmigIVMzUYHIwbhRwMvcGpOH5Ma0sSBbvJYQ8WU0QSOhaqNheAR8qUaj3U
+         lO8xjxCfP0OdBkB9w+xmmHgQBdHZHda4nC66phqxpL1vR1N6oe8TKpSRxqRsVE5mqgJh
+         GwzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wwyuk2lsKqIfL1r34uR4hiV5J4os/EyMOhjZZucVxAA=;
-        b=I2i1nK3KE49ayM/k/7+QwdNB1Zw/V8rfgqp4QCmvWpqWYqVHuXXZLHkoGFbUNZwQoa
-         5n58deiE9GIRaPOlMyVpmgpPhdeM6+XjSafr9D/U+9wMw7QnCwIKSHifBPKaKoKI7ghV
-         GPjZiS0nW+lz1lWDERj4p5QQ60xQw9CHXpsjRJ1hmG+OzAfo7VdqIEEb5MXSZJ4tk/sN
-         wK6lF0d8e/ePocJHJLPejU1HF8xld5m/zmPX0RLIdCeaaIPTzpkjHd0Jw8D0cXvhbrYZ
-         FHbmY3rE4GmX6ZIIgeSp6MmNKyIiUbHsjMTOOage5nc+kV1Al0PTA5oAEiRtF6XNNBFK
-         UC4A==
-X-Gm-Message-State: AOAM531TjjIono2QQrSzMZER0NUpWw9YWmdyoa4VDcXGutV5AUI3N5Qk
-        NMu4UvqkxsalSADZQSGZWKANBWSt+9lqXV/t
-X-Google-Smtp-Source: ABdhPJxEapMDT1TLJpP3jj0kK0vs2RhIajlcXxONwhZS+EvdSgowj8ApkJ3nRAIXNWOHwgyRPrDJbQ==
-X-Received: by 2002:ab0:e13:: with SMTP id g19mr9097770uak.135.1642494314740;
-        Tue, 18 Jan 2022 00:25:14 -0800 (PST)
-Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
-        by smtp.gmail.com with ESMTPSA id j76sm4044397vke.27.2022.01.18.00.25.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 00:25:13 -0800 (PST)
-Received: by mail-ua1-f44.google.com with SMTP id 2so10353317uax.10;
-        Tue, 18 Jan 2022 00:25:13 -0800 (PST)
-X-Received: by 2002:ab0:4d42:: with SMTP id k2mr7281422uag.78.1642494312957;
- Tue, 18 Jan 2022 00:25:12 -0800 (PST)
-MIME-Version: 1.0
-References: <29f0c65d-77f2-e5b2-f6cc-422add8a707d@omp.ru> <20220114092557.jrkfx7ihg26ekzci@pengutronix.de>
- <61b80939-357d-14f5-df99-b8d102a4e1a1@omp.ru> <20220114202226.ugzklxv4wzr6egwj@pengutronix.de>
- <c9026f17-2b3f-ee94-0ea3-5630f981fbc1@omp.ru> <CAMuHMdXVbRudGs69f9ZzaP1PXhteDNZiXA658eMFAwP4nr9r3w@mail.gmail.com>
- <20220117092444.opoedfcf5k5u6otq@pengutronix.de> <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
- <20220117114923.d5vajgitxneec7j7@pengutronix.de> <CAMuHMdWCKERO20R2iVHq8P=BaoauoBAtiampWzfMRYihi3Sb0g@mail.gmail.com>
- <20220117170609.yxaamvqdkivs56ju@pengutronix.de>
-In-Reply-To: <20220117170609.yxaamvqdkivs56ju@pengutronix.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 18 Jan 2022 09:25:01 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXbuZqEpYivyS6hkaRN+CwTOGaHq_OROwVAWvDD6OXODQ@mail.gmail.com>
-Message-ID: <CAMuHMdXbuZqEpYivyS6hkaRN+CwTOGaHq_OROwVAWvDD6OXODQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        KVM list <kvm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-phy@lists.infradead.org,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        platform-driver-x86@vger.kernel.org,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Robert Richter <rric@kernel.org>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Corey Minyard <minyard@acm.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Borislav Petkov <bp@alien8.de>, Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        openipmi-developer@lists.sourceforge.net,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-edac@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Vinod Koul <vkoul@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Zha Qipeng <qipeng.zha@intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-mediatek@lists.infradead.org,
-        Brian Norris <computersforpeace@gmail.com>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=8YhW7kPz/0dwcgLNR6pHvdAKCVjhZDw2v5KzLLB3Sdw=;
+        b=GC8IZu0fgROHnOLx6LXnt33kr8JSVqRM/lwiEBzYxTVF4q0+oCT027gtxU9NTcu7lv
+         Y/NsbnTlxTQ8IInmnV5YGZm/NLNGpl8Eg/gNMWoglHqHllxFPklEENhnjLVlTwnjWh18
+         iufc++gMz0T9/vcnDYy5zPdfk4ofVxyFA8R+xxQGBsLUgwRZWm/Qr4jFsb7TQCwEWN0u
+         F2ObuD+T2N391yKtesDOsMNYj4IqWXIjPp574ScFNOMiMvxu5Jej3GQtqjtIaLrGrHxZ
+         OH1dLQTDltyshWZFMkJyQ8UWIdXjZELhyV5L5X0maIdZEugrQ1wUXZsYSBUduxFLAWOD
+         dt9A==
+X-Gm-Message-State: AOAM5330GvG20kVTfNJeMQuMdVVLCrw5McvOEjqFPeKp6dCNLoRIAXoH
+        abfsBDRQe8AV66dkVtgqCqc=
+X-Google-Smtp-Source: ABdhPJyEcHzyJwHvMz43RR4Vu4ljXITw8kYN/lExgQk+Xi1sPq1tghV2sVx/fdKxR0cGVQl75EwgKw==
+X-Received: by 2002:a63:4554:: with SMTP id u20mr22242363pgk.463.1642495350654;
+        Tue, 18 Jan 2022 00:42:30 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id t199sm14227787pgb.64.2022.01.18.00.42.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 18 Jan 2022 00:42:30 -0800 (PST)
+From:   Li-hao Kuo <lhjeff911@gmail.com>
+To:     p.zabel@pengutronix.de, broonie@kernel.org,
+        andyshevchenko@gmail.com, robh+dt@kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com,
+        Li-hao Kuo <lhjeff911@gmail.com>
+Subject: [PATCH v6 0/2] Add spi control driver for Sunplus SP7021 SoC
+Date:   Tue, 18 Jan 2022 16:42:37 +0800
+Message-Id: <cover.1642494310.git.lhjeff911@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Uwe,
+This is a patch series for SPI driver for Sunplus SP7021 SoC.
 
-On Mon, Jan 17, 2022 at 6:06 PM Uwe Kleine-König
-<u.kleine-koenig@pengutronix.de> wrote:
-> On Mon, Jan 17, 2022 at 02:08:19PM +0100, Geert Uytterhoeven wrote:
-> > On Mon, Jan 17, 2022 at 12:49 PM Uwe Kleine-König
-> > <u.kleine-koenig@pengutronix.de> wrote:
-> > > > The logic in e.g. drivers/tty/serial/sh-sci.c and
-> > > > drivers/spi/spi-rspi.c could be simplified and improved (currently
-> > > > it doesn't handle deferred probe) if platform_get_irq_optional()
-> > > > would return 0 instead of -ENXIO.
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control.
 
-> > > Also for spi-rspi.c I don't see how platform_get_irq_byname_optional()
-> > > returning 0 instead of -ENXIO would help. Please talk in patches.
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-[...]
+Li-hao Kuo (2):
+  spi: Add spi driver for Sunplus SP7021
+  dt-bindings:spi: Add Sunplus SP7021 schema
 
-> This is not a simplification, just looking at the line count and the
-> added gotos. That's because it also improves error handling and so the
-> effect isn't easily spotted.
+ .../bindings/spi/spi-sunplus-sp7021.yaml           |  81 +++
+ MAINTAINERS                                        |   7 +
+ drivers/spi/Kconfig                                |  11 +
+ drivers/spi/Makefile                               |   1 +
+ drivers/spi/spi-sunplus-sp7021.c                   | 602 +++++++++++++++++++++
+ 5 files changed, 702 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+ create mode 100644 drivers/spi/spi-sunplus-sp7021.c
 
-Yes, it's larger because it adds currently missing error handling.
+-- 
+2.7.4
 
-> What about the following idea (in pythonic pseudo code for simplicity):
-
-No idea what you gain by throwing in a language that is irrelevant
-to kernel programming (why no Rust? ;-)
-
-> > > > So there are three reasons: because the absence of an optional IRQ
-> > > > is not an error, and thus that should not cause (a) an error code
-> > > > to be returned, and (b) an error message to be printed, and (c)
-> > > > because it can simplify the logic in device drivers.
-> > >
-> > > I don't agree to (a). If the value signaling not-found is -ENXIO or 0
-> > > (or -ENODEV) doesn't matter much. I wouldn't deviate from the return
-> > > code semantics of platform_get_irq() just for having to check against 0
-> > > instead of -ENXIO. Zero is then just another magic value.
-> >
-> > Zero is a natural magic value (also for pointers).
-> > Errors are always negative.
-> > Positive values are cookies (or pointers) associated with success.
->
-> Yeah, the issue where we don't agree is if "not-found" is special enough
-> to deserve the natural magic value. For me -ENXIO is magic enough to
-> handle the absence of an irq line. I consider it even the better magic
-> value.
-
-It differs from other subsystems (clk, gpio, reset), which do return
-zero on not found.
-What's the point in having *_optional() APIs if they just return the
-same values as the non-optional ones?
-
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
