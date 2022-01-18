@@ -2,189 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3643492178
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Jan 2022 09:42:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4463492210
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Jan 2022 10:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344781AbiARImg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 18 Jan 2022 03:42:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
+        id S1345275AbiARJGv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 18 Jan 2022 04:06:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344741AbiARImf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jan 2022 03:42:35 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AEAC061574;
-        Tue, 18 Jan 2022 00:42:35 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id n11so21771526plf.4;
-        Tue, 18 Jan 2022 00:42:35 -0800 (PST)
+        with ESMTP id S1345215AbiARJGu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 18 Jan 2022 04:06:50 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBA0C061574
+        for <linux-spi@vger.kernel.org>; Tue, 18 Jan 2022 01:06:50 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id c10so53754829ybb.2
+        for <linux-spi@vger.kernel.org>; Tue, 18 Jan 2022 01:06:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=sRZuPiTJEdUveDe9XIdJ0lUjQKiDquSQ6JLnsl7QR58=;
-        b=Gu2FBVZCx6kiarInipQ0w9zFoUSfLZ9p06ySp+7+l17ICUL+pQchtXhIrjfK/V1ZAm
-         W3LF7Ka3JVlbDC43lHvC8mJtJvqYIiofRvTR7jEcwoLcBM0tUGgMcX5wC3kPYKNUo/wg
-         1p2G8FHRTBrQH8ehSktXNMrFtBmYxUM29uZw6htNO9ukvguZvz/b9FGJRlolfXfu224c
-         R1VROYURd6DT4hl9Z5ZX9Av4w4EpUSeOTMxXGXlOO7mE5vV0SsxgJ7kyLrND+3IQoCSP
-         ew+fAEbWzBvYsBZITN+5f8CzFidZEHmYfoVwEzRcF5WgGvfKjPieyA8XHimMql/Wxqjc
-         tXgA==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=AIHedDQeQ2nfeFyhlIY6iBZ7Eo/kAlP72EhStgPHV1I=;
+        b=bFbIZFrO20tVeHnfrbOf5kTdx0G/SAT5rW1Plwk765tZmY9OhnAnZt7H9wAnCdcz0t
+         KGJJ1IFvRrlIFyyf3OpODiLX2uvvgMkLZb2Pg3rHkla7YrWm8dPVkIdD4jxKBl9tZjgU
+         YEl9+0y7OM4wfPZG8wq4wesxMyTvlzvu9lrqm5xr/w4/bam5fdKYM4J5WdaYsNqKgTWU
+         peY41oy9PyZYn5UvpKGp90sGZmOyQG9GENoHsPtFEHTH/uwtUvtDitTmc5V6YGpXcdMm
+         nerXyKU+7yxDNkfVyR5CNiy+px+Ve13ICnm6vqwtNL37/aB+VGhLUW1YNzEKoSuYdMTG
+         8i9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=sRZuPiTJEdUveDe9XIdJ0lUjQKiDquSQ6JLnsl7QR58=;
-        b=qEXYIJV3bMfhm9Tp/m2O5E6dH1hfq0GnsVAflcsqaBZAdwm4vY9lqgD1WkTi45f7yG
-         t0q7+MAEe/GDJKJ5kAFY3s//8enzPRF+4M3szsnLCCfSSuU46001rKhiexkH//lf8EVk
-         6QHbEOiqT5Adpzd2BfADhcWTXy7q0/69hw9u3XV3B/NgTel6LCXQxvZrrabxpGeVGdxD
-         5FYNYZnnIzoKmVKJ6QZusjXWuViidPhg3o910BXritrhvEUHPu/q/hLlLJXYM9/4cBcC
-         FHxuv2SyVZbN/rIXiWrZ+TASvFs4CsSAkML1dD96wfLJzw3wjL6Rir8htTO+WGBmAoF3
-         UdUQ==
-X-Gm-Message-State: AOAM531D0LamDrldmldhcHHs/EUVyceyT8mJYVAWhoBhJ1o03PyINmwR
-        riLDsv9mWiFhhMYeGMcVBNw=
-X-Google-Smtp-Source: ABdhPJz8NXo0bWLTerju3Y0YAPe17DR8GQN1x+yx/bIbFUJq+EuqubAI5zhnSKbEA8BuUVVCUwtXLw==
-X-Received: by 2002:a17:90b:1d11:: with SMTP id on17mr20756778pjb.167.1642495354817;
-        Tue, 18 Jan 2022 00:42:34 -0800 (PST)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id t199sm14227787pgb.64.2022.01.18.00.42.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 18 Jan 2022 00:42:34 -0800 (PST)
-From:   Li-hao Kuo <lhjeff911@gmail.com>
-To:     p.zabel@pengutronix.de, broonie@kernel.org,
-        andyshevchenko@gmail.com, robh+dt@kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com,
-        Li-hao Kuo <lhjeff911@gmail.com>
-Subject: [PATCH v6 2/2] dt-bindings:spi: Add Sunplus SP7021 schema
-Date:   Tue, 18 Jan 2022 16:42:39 +0800
-Message-Id: <ef6d893b10afb7f76a910da031a0040c4596cd76.1642494310.git.lhjeff911@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1642494310.git.lhjeff911@gmail.com>
-References: <cover.1642494310.git.lhjeff911@gmail.com>
-In-Reply-To: <cover.1642494310.git.lhjeff911@gmail.com>
-References: <cover.1642494310.git.lhjeff911@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=AIHedDQeQ2nfeFyhlIY6iBZ7Eo/kAlP72EhStgPHV1I=;
+        b=jgbY2z4yb6U3+kSQXt0lt/+WgQL9VHb9P9iMfy8DvrpLBswL3tdvdVSiOT3xUjWuaz
+         tvL01cdq7w6RC46TECs7zHlTmy/KUGx3Uk8B0BxtRqhmnatKUEEFl3X5ge079t98acMF
+         yC8FEvbdOeFOFGR+1gIult1xcEdCTDNBVgzyZaKbF1HSNon35a4t9GJA6ICF0R5rBBiJ
+         IH3Uf/grBOUo4xv7nuzQFZCgJC7mup3tlMEFNMHOrODPCju3iFC+cQkyYTTWnSm9lGiA
+         4MSrH+xDtpfVDP/Qyvi/fvnPKdpgFWmnk+JLJX1MfcgHZ8I3SE+1kjf4PR9pf4n3BaKX
+         /Q4A==
+X-Gm-Message-State: AOAM530O/63clkprR6qatBywxpjmKr4cMVMhNkAFgi1KyF6aFjHlPHRt
+        C2RzebZeB65jz5aTIF6jPFTQGeCR35zlSCMjIMc=
+X-Google-Smtp-Source: ABdhPJwRbsRQ+CkmlR6OPnnbiekPrQEpsaTCCbWKAEH0vyO2CmbC3DSpp7LM58snge5WfZ7fe2WRq4+EERNT8vI3Ay0=
+X-Received: by 2002:a5b:34b:: with SMTP id q11mr31498784ybp.652.1642496809442;
+ Tue, 18 Jan 2022 01:06:49 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a05:7108:3655:0:0:0:0 with HTTP; Tue, 18 Jan 2022 01:06:48
+ -0800 (PST)
+Reply-To: asil.ajwad@gmail.com
+From:   Asil Ajwad <graceyaogokamboule@gmail.com>
+Date:   Mon, 17 Jan 2022 21:06:48 -1200
+Message-ID: <CA+Yy_gA7+jE7dqD=WebdT7kitHvMACkH44b4SxL-MC_huN-uuA@mail.gmail.com>
+Subject: Greetings,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add bindings for Sunplus SP7021 spi driver
-
-Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
----
-Changes in v6:
- - Change the interrupt-names 
-   mas_risc to master_risc
- - Addressed comments from Mr. Andy Shevchenko
-   Change the function name: mas is master and sla is slave.
-   Add temporary varilable (as suggested by Mr. Andy Shevchenko)
-   Modify clk setting
-   Modify the master-slave detection of the probe function.(as suggested by Mr. Andy Shevchenko)
-   Modify the return value of the probe function.(as suggested by Mr. Andy Shevchenko)
-   Change GPL version(as suggested by Mr. Andy Shevchenko)
-
- .../bindings/spi/spi-sunplus-sp7021.yaml           | 81 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 82 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
-
-diff --git a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
-new file mode 100644
-index 0000000..24382cd
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
-@@ -0,0 +1,81 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (C) Sunplus Co., Ltd. 2021
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/spi-sunplus-sp7021.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Sunplus sp7021 SPI controller
-+
-+allOf:
-+  - $ref: "spi-controller.yaml"
-+
-+maintainers:
-+  - Li-hao Kuo <lhjeff911@gmail.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - sunplus,sp7021-spi
-+
-+  reg:
-+    items:
-+      - the SPI master registers
-+      - the SPI slave registers
-+
-+  reg-names:
-+    items:
-+      - const: master
-+      - const: slave
-+
-+  interrupt-names:
-+    items:
-+      - const: dma_w
-+      - const: master_risc
-+      - const: slave_risc
-+
-+  interrupts:
-+    minItems: 3
-+
-+  clocks:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - interrupts
-+  - interrupt-names
-+  - clocks
-+  - clocks-names
-+  - resets
-+  - pinctrl-names
-+  - pinctrl-0
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/sp-sp7021.h>
-+    #include <dt-bindings/reset/sp-sp7021.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    spi@9C002D80 {
-+        compatible = "sunplus,sp7021-spi";
-+        reg = <0x9C002D80 0x80>, <0x9C002E00 0x80>;
-+        reg-names = "master", "slave";
-+        interrupt-parent = <&intc>;
-+        interrupt-names = "dma_w",
-+                          "master_risc",
-+                          "slave_risc";
-+        interrupts = <144 IRQ_TYPE_LEVEL_HIGH>,
-+                     <146 IRQ_TYPE_LEVEL_HIGH>,
-+                     <145 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&clkc SPI_COMBO_0>;
-+        resets = <&rstc RST_SPI_COMBO_0>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&pins_spi0>;
-+    };
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a07da20..2e14650 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18497,6 +18497,7 @@ SUNPLUS SPI CONTROLLER INTERFACE DRIVER
- M:	Li-hao Kuo <lhjeff911@gmail.com>
- L:	linux-spi@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
- F:	drivers/spi/spi-sunplus-sp7021.c
- 
- SUPERH
 -- 
-2.7.4
+Greetings,
 
+I am Mr.Asil Ajwad, I work with United Bank of Africa, can you use
+an ATM Visa Card to withdraw money at, ATM Cash Machine in your
+country, if yes I want to transfer abounded fund the sum of $10.5million
+US-Dollars, to you from my country, this is part of the money that was
+abounded by our late old client a politician who unfortunately lost
+his life and was forced out of power Du to his greedy act, the bank will
+
+change the account details to your name, and apply for a Visa Card
+with your details, the Visa Card will be send to you, and you can be
+withdrawing money with it always, whatever any amount you withdraw
+daily, you will send 60% to me and you will take 40%, the Visa Card
+and the bank account will be on your name, I will be waiting for your
+response for more details, thanks to you a lot for giving me your time.
+
+regards,
+Mr.Asil Ajwad.
