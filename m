@@ -2,93 +2,166 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3389493F85
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Jan 2022 19:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AEC5493FED
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Jan 2022 19:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356581AbiASSCx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 19 Jan 2022 13:02:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356594AbiASSCx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Jan 2022 13:02:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70ABC06161C;
-        Wed, 19 Jan 2022 10:02:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A05BFB81AD7;
-        Wed, 19 Jan 2022 18:02:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80FFFC340E1;
-        Wed, 19 Jan 2022 18:02:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642615370;
-        bh=9tsmIKk0A/T3ybmJ17Mz4x6hwbmwrWo01oEf1EtfEjU=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=jJWykbxU+FJqWWtuK0PcUFRanCqkBGyLrRziCzQSf8plu+pluU/Td6H73cHNYxCIA
-         m7zrsja+9y3cuPn1YZ5ctXGN+WLrMGbh6z5u0n61QO4yrnAhEHiQCxNVl1Mv/pwRDH
-         hubnVMBsBy5e79ejxoFmyQgdE8g7R2qQ4DLtCyT5oNIIALvuANtSuiLL1ZG9uVZdfS
-         zK3fWvRC4mVfe/tqu9xazLzJXMCcxfwEmPNBOT9sGWv4NcCm7ARJZ5NbBQqSPwDLj/
-         +XgkUObaFXIJ0kchLJboPIIY26VT0A+MTBwPVwhsTfQUcuQk5D1i1ROi57vDXZIktL
-         KKNmtFl3Su42w==
-From:   Mark Brown <broonie@kernel.org>
-To:     amelie.delaunay@foss.st.com,
-        Alain Volmat <alain.volmat@foss.st.com>
-Cc:     alexandre.torgue@foss.st.com, fabrice.gasnier@foss.st.com,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, mcoquelin.stm32@gmail.com,
-        linux-stm32@st-md-mailman.stormreply.com
-In-Reply-To: <20220119093245.624878-1-alain.volmat@foss.st.com>
-References: <20220119093245.624878-1-alain.volmat@foss.st.com>
-Subject: Re: [PATCH 0/2] spi: stm32: comments & SIMPLEX_RX fixes
-Message-Id: <164261536824.2816943.11806763183667927602.b4-ty@kernel.org>
-Date:   Wed, 19 Jan 2022 18:02:48 +0000
+        id S1356771AbiASS3o (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 19 Jan 2022 13:29:44 -0500
+Received: from mxout02.lancloud.ru ([45.84.86.82]:60414 "EHLO
+        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356737AbiASS3l (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 19 Jan 2022 13:29:41 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru EFD8920BF006
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: Re: [PATCH 1/2] platform: make platform_get_irq_optional() optional
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>
+CC:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-iio@vger.kernel.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "ALSA Development Mailing List" <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-phy@lists.infradead.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        <platform-driver-x86@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        "Saravanan Sekar" <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "Mark Brown" <broonie@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <openipmi-developer@lists.sourceforge.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        <linux-edac@vger.kernel.org>, "Tony Luck" <tony.luck@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        "Linux MMC List" <linux-mmc@vger.kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        "James Morse" <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        <linux-mediatek@lists.infradead.org>,
+        "Brian Norris" <computersforpeace@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+References: <20220117092444.opoedfcf5k5u6otq@pengutronix.de>
+ <CAMuHMdUgZUeraHadRAi2Z=DV+NuNBrKPkmAKsvFvir2MuquVoA@mail.gmail.com>
+ <20220117114923.d5vajgitxneec7j7@pengutronix.de>
+ <CAMuHMdWCKERO20R2iVHq8P=BaoauoBAtiampWzfMRYihi3Sb0g@mail.gmail.com>
+ <20220117170609.yxaamvqdkivs56ju@pengutronix.de>
+ <CAMuHMdXbuZqEpYivyS6hkaRN+CwTOGaHq_OROwVAWvDD6OXODQ@mail.gmail.com>
+ <20220118090913.pjumkq4zf4iqtlha@pengutronix.de>
+ <CAMuHMdUW8+Y_=uszD+JOZO3Lpa9oDayk+GO+cg276i2f2T285w@mail.gmail.com>
+ <20220118120806.pbjsat4ulg3vnhsh@pengutronix.de>
+ <CAMuHMdWkwV9XE_R5FZ=jPtDwLpDbEngG6+X2JmiDJCZJZvUjYA@mail.gmail.com>
+ <20220118142945.6y3rmvzt44pjpr4z@pengutronix.de>
+ <6370798a-7a7e-243d-99f9-09bf772ddbac@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <96ff907a-4ad2-5b2e-9bcc-09592d65a6df@omp.ru>
+Date:   Wed, 19 Jan 2022 21:29:28 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <6370798a-7a7e-243d-99f9-09bf772ddbac@omp.ru>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 19 Jan 2022 10:32:43 +0100, Alain Volmat wrote:
-> This series contains 2 fixes within the spi-stm32.c driver.  One is
-> removing comments regarding struct variables that do not exist and the
-> second one correct a previous STM32F4 related commit for SIMPLEX_RX which
-> happens to break SIMPLEX_RX for H7 since it enforces MUST_TX flags.
+On 1/19/22 7:12 PM, Sergey Shtylyov wrote:
+
+[...]
+>>> So there's still a need for two functions.
+>>
+>> Or a single function not emitting an error message together with the
+>> callers being responsible for calling dev_err().
+>>
+>> So the options in my preference order (first is best) are:
+>>
+>>  - Remove the printk from platform_get_irq() and remove
+>>    platform_get_irq_optional();
 > 
-> Alain Volmat (2):
->   spi: stm32: remove inexistant variables in struct stm32_spi_cfg
->     comment
->   spi: stm32: make SPI_MASTER_MUST_TX flags only specific to STM32F4
+>    Strong NAK here:
+> - dev_err() in our function saves a lot of (repeatable!) comments;
+
+   s/comments/code/.
+   Actually, I think I can accept the removal of dev_err_probe() in platform_get_irq()
+as this is not a common practice anyway (yet? :-))...
+
+> - we've already discussed that it's more optimal to check againt 0 than
+
+   Against. :-)
+
+>   against -ENXIO in the callers.
+
+   And we also aim to be the error code agnostic in the callers...
+
+>>  - Rename platform_get_irq_optional() to platform_get_irq_silently()
 > 
-> [...]
+>    NAK as well. We'd better off complaining about irq < 0 in this function.
 
-Applied to
+>>  - Keep platform_get_irq_optional() as is
+> 
+>    NAK, it's suboptimal in the call sites.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-linus
+   s/in/on/.
 
-Thanks!
+[...]
 
-[1/2] spi: stm32: remove inexistant variables in struct stm32_spi_cfg comment
-      commit: 3cefddb72f80dc8d49ce605628ceb6525cfd64da
-[2/2] spi: stm32: make SPI_MASTER_MUST_TX flags only specific to STM32F4
-      commit: 9df15d842a0f77f2b8ee29386f6d714e4220df57
+>> Best regards
+>> Uwe
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+MBR, Sergey
