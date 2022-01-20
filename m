@@ -2,198 +2,153 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5745E4954F8
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Jan 2022 20:36:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E08495538
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jan 2022 21:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377457AbiATTge (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Jan 2022 14:36:34 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:23796 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377473AbiATTga (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jan 2022 14:36:30 -0500
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220120193628epoutp02264349b8b95f7f6ad4c84103af2371ce~MEaqnqvAB0918109181epoutp02u
-        for <linux-spi@vger.kernel.org>; Thu, 20 Jan 2022 19:36:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220120193628epoutp02264349b8b95f7f6ad4c84103af2371ce~MEaqnqvAB0918109181epoutp02u
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1642707388;
-        bh=sAPYODDmKobS/13ARdP8DagXGjJLIEbBlus+ku63euc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=onrN18kZy7JxGyElUrtg3rRVGFttnAp8Gyqo4sXR5uWGn9lZ3ZulUIDiumAwwwU9D
-         exEE1EoZ6HIftjJyhZE8dkMYPLrP4JBeB5329yXEkOW+1Tj8y930iguuVauEf28odO
-         m7rPSc+QrkcYlgLhLv/vHeBqbvbJeboWMvXUNZ1Y=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20220120193628epcas5p3653549314ae792c4a72d61b5e687d4de~MEaqFJut70595105951epcas5p3F;
-        Thu, 20 Jan 2022 19:36:28 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.179]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4Jft6Z4C31z4x9Pp; Thu, 20 Jan
-        2022 19:36:22 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        3A.26.46822.DF8B9E16; Fri, 21 Jan 2022 04:33:17 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220120193622epcas5p3a65c8424c6a01aed9a87f5ac2a89eb06~MEakfKDpv1482614826epcas5p3M;
-        Thu, 20 Jan 2022 19:36:22 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220120193622epsmtrp13bb5c602dbd6b8bdbabb96ef9ec4a559~MEakeIEN82029720297epsmtrp1T;
-        Thu, 20 Jan 2022 19:36:22 +0000 (GMT)
-X-AuditID: b6c32a4a-dfbff7000000b6e6-cd-61e9b8fddcb0
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D0.93.29871.5B9B9E16; Fri, 21 Jan 2022 04:36:22 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-        [107.108.73.139]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220120193619epsmtip2fa2f3bcf81e595e2d56979e6a574cef0~MEaiTpHlp2383823838epsmtip2K;
-        Thu, 20 Jan 2022 19:36:19 +0000 (GMT)
-From:   Alim Akhtar <alim.akhtar@samsung.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linus.walleij@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
-        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        broonie@kernel.org, andi@etezian.org, linux-spi@vger.kernel.org,
-        Aswani Reddy <aswani.reddy@samsung.com>, linux-fsd@tesla.com,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Subject: [PATCH v2 3/3] arm64: dts: fsd: Add SPI device nodes
-Date:   Fri, 21 Jan 2022 00:54:38 +0530
-Message-Id: <20220120192438.25555-4-alim.akhtar@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220120192438.25555-1-alim.akhtar@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpmk+LIzCtJLcpLzFFi42LZdlhTQ/fvjpeJBv1nBSwezNvGZrH4x3Mm
-        i0Obt7JbTH34hM1i/pFzrBYb3/5gspjyZzmTxabH11gtHr4Kt7i8aw6bxYzz+5gsGj/eZLdY
-        tPULu0Xr3iPsDnwesxp62TyuL/nE7LFpVSebx51re9g8Ni+p9+jbsorR41/TXHaPz5vkAjii
-        sm0yUhNTUosUUvOS81My89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJzgM5WUihL
-        zCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gqpRak5BSYFOgVJ+YWl+al6+WlllgZGhgYmQIVJmRn
-        zFnRzF5wSKRi4e5DjA2MkwS6GDk5JARMJJ6+e8MCYgsJ7GaUeNDq0cXIBWR/YpT4uewFI4Tz
-        jVHi9cctTDAdUzf+Z4NI7GWUeLl1PguE08IkceTKfbBZbALaEnenQ3SICLhJ3GjsYAIpYha4
-        wyTx7vojdpCEsICtxLc7/WANLAKqEi9/TQNr4BWwkZi/YhrUOnmJ1RsOMIPYnED13x//ALtJ
-        QmAih8SlCVNZIIpcJH5fuscMYQtLvDq+hR3ClpJ42d8GZHMA2dkSPbuMIcI1EkvnHYNqtZc4
-        cGUOC0gJs4CmxPpd+iBhZgE+id7fT5ggOnklOtqEIKpVJZrfXYXqlJaY2N3NCmF7SPy6MokZ
-        Eg4TGCWOLNzGPoFRdhbC1AWMjKsYJVMLinPTU4tNC4zyUsvhEZWcn7uJEZwatbx2MD588EHv
-        ECMTB+MhRgkOZiURXqn6Z4lCvCmJlVWpRfnxRaU5qcWHGE2BQTaRWUo0OR+YnPNK4g1NLA1M
-        zMzMTCyNzQyVxHlPp29IFBJITyxJzU5NLUgtgulj4uCUamDq2Pk6wtP6yNcTdomioUuFGGbF
-        zZS5bbm02Cija32qp92S2S8u779sxLiXy6dy5oEXdwJWBG/btHaV5RHHyKcKD1j6Dx1VDDm4
-        JbVl+zNV/pWmmYc83E6I9naddlj3+s30s2Uf+6aGatuZ+5lXTGrrSjHJ15C4z1ZpN/FG+5Q7
-        nuJKQlzn+k/7XGmyOmFusvpxcd2r+XGaKo/m/D/aVVvh8L2FZeOh49Fv+RZw3ioK2SJyY61A
-        K5/E047y7oPF9vJey8umMPI/m7ddV6FrUdiqff7W8+4WHPrBaJN/Stvh5lHtUxsPS3z4qOzo
-        KytdH5l5RShu1y/hxl/TGfYeExDdbNB+kytkmh//jIXKt/SUWIozEg21mIuKEwFQy+KVFgQA
-        AA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrBLMWRmVeSWpSXmKPExsWy7bCSvO62nS8TDS6vZrR4MG8bm8XiH8+Z
-        LA5t3spuMfXhEzaL+UfOsVpsfPuDyWLKn+VMFpseX2O1ePgq3OLyrjlsFjPO72OyaPx4k91i
-        0dYv7Bate4+wO/B5zGroZfO4vuQTs8emVZ1sHneu7WHz2Lyk3qNvyypGj39Nc9k9Pm+SC+CI
-        4rJJSc3JLEst0rdL4MqYs6KZveCQSMXC3YcYGxgnCXQxcnJICJhITN34n62LkYtDSGA3o8TE
-        A1vZIBLSEtc3TmCHsIUlVv57zg5R1MQkseTLHkaQBJuAtsTd6VuYQGwRAQ+Jtn/3mEGKmAVe
-        MEkc3NgMViQsYCvx7U4/C4jNIqAq8fLXNLAGXgEbifkrIGwJAXmJ1RsOMIPYnED13x//AOsV
-        Aqp5eH878wRGvgWMDKsYJVMLinPTc4sNCwzzUsv1ihNzi0vz0vWS83M3MYIDW0tzB+P2VR/0
-        DjEycTAeYpTgYFYS4ZWqf5YoxJuSWFmVWpQfX1Sak1p8iFGag0VJnPdC18l4IYH0xJLU7NTU
-        gtQimCwTB6dUA1Ps3LjVy4/taM6xcj4m8+xW0OzSexrHVlw8OtG14d0nd4W7pgJXXrfJW3ts
-        mXt19a+qgND3Zu+LP24/rn22JSeWP+/zZU6N88Yzbxx8fFmbxW97q8eaKyt/MWaLbd29ei0z
-        74d9ah1Ve+MVp7wXqLnxqJfN4vT+R6bumZd2HHn8Y1bpAZ4yMQbJnaslFy/csdP2t1Hyg3UM
-        QeUbTmlcYuwtex7C/FvYsMEsc39VpvHOc8/vHMxszPIwe2w96R3vvOzgY4s+5RlIlnmIdXAs
-        Onp6WZ622VlR/T859Wdf7K6doRPkl9LBaXgz82rP7zuSey5lbfqRetQ94+KDgNszGqfnLK1y
-        s6q0Lbk643ma1DRpJZbijERDLeai4kQAFe203dsCAAA=
-X-CMS-MailID: 20220120193622epcas5p3a65c8424c6a01aed9a87f5ac2a89eb06
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220120193622epcas5p3a65c8424c6a01aed9a87f5ac2a89eb06
-References: <20220120192438.25555-1-alim.akhtar@samsung.com>
-        <CGME20220120193622epcas5p3a65c8424c6a01aed9a87f5ac2a89eb06@epcas5p3.samsung.com>
+        id S1377556AbiATUGt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Jan 2022 15:06:49 -0500
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:37862 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377548AbiATUGs (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jan 2022 15:06:48 -0500
+Received: by mail-ot1-f45.google.com with SMTP id i7-20020a9d68c7000000b0059396529af8so9021313oto.4;
+        Thu, 20 Jan 2022 12:06:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LyXjarcAT6UiTZlSxq7lxukI8C5X8DTNYYmieun7qOo=;
+        b=niH9cEIBLgz+YSeE4mWvyH1z2gKmQXOjoJPdgqxEJ4PZ++O0yz5GwBcmKUG5++KFo+
+         hFXcEMnciqA7rDEfcUXE9/8tBFjVIScIKesItx7I+PITEb+5GkIW9si8LYCXDv8ZxHwq
+         0P2BoA2S4bPaVdEBnrLohDfC+vUL+MhWryzhOuMPeeyqkwinChyoYZcWaYDX44pblOyC
+         owXcr2ETcscvc0lVIMkQMC8jVG8ZtEtxGP8G3eN32aCf2MyI53FwpNavuiDjQRZIRkYE
+         Wcg0MNx4g8qwx46cUpb0OZXMsBG/Ewiqk9hHbxcAOGife1mBRKNCPZ35MM8yLYUB5biU
+         wN/Q==
+X-Gm-Message-State: AOAM533zDUk/kwfvzHjXm4KjNQ9irmQGYvxanrgrgOTVf/gzqd1gYr54
+        V/GK1xGOixoq7ctLLfeG3A==
+X-Google-Smtp-Source: ABdhPJzYwX6+yULGoyMB5QB2aCp7quAHuNa0tI/8Lf4Zcr9g8tj+Os+bklYXt6lYNRUP0yqQyA0Ydg==
+X-Received: by 2002:a05:6830:22f7:: with SMTP id t23mr299858otc.213.1642709207628;
+        Thu, 20 Jan 2022 12:06:47 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id o10sm121243oiw.6.2022.01.20.12.06.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jan 2022 12:06:46 -0800 (PST)
+Received: (nullmailer pid 1857252 invoked by uid 1000);
+        Thu, 20 Jan 2022 20:06:45 -0000
+Date:   Thu, 20 Jan 2022 14:06:45 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Antipov <daantipov@gmail.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        Dmitry Antipov <dmanti@microsoft.com>
+Subject: Re: [PATCH v3 3/5] Documentation: DT bindings for HID over SPI.
+Message-ID: <YenA1ZxT0/ZHw+RH@robh.at.kernel.org>
+References: <20220115023135.234667-1-dmanti@microsoft.com>
+ <20220115023135.234667-4-dmanti@microsoft.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220115023135.234667-4-dmanti@microsoft.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Aswani Reddy <aswani.reddy@samsung.com>
+On Fri, Jan 14, 2022 at 06:31:33PM -0800, Dmitry Antipov wrote:
+> From: Dmitry Antipov <dmanti@microsoft.com>
+> 
+> Added documentation describes the required properties for implementing
+> Device Tree for a device supporting HID over SPI and also provides an
+> example.
 
-Adds device tree node for SPI IPs
+Bindings are in DT schema format now.
 
-Cc: linux-fsd@tesla.com
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
-Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
----
- arch/arm64/boot/dts/tesla/fsd.dtsi | 57 ++++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+> 
+> Signed-off-by: Dmitry Antipov <dmanti@microsoft.com>
+> ---
+>  .../bindings/input/hid-over-spi.txt           | 43 +++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+>  create mode 100755 Documentation/devicetree/bindings/input/hid-over-spi.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/input/hid-over-spi.txt b/Documentation/devicetree/bindings/input/hid-over-spi.txt
+> new file mode 100755
+> index 000000000000..5eba95b5724e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/input/hid-over-spi.txt
+> @@ -0,0 +1,43 @@
+> +* HID over SPI Device-Tree bindings
+> +
+> +HID over SPI provides support for Human Interface Devices over the SPI bus. HID
+> +Over SPI Protocol Specification 1.0 was written by Microsoft and is available at
+> +https://www.microsoft.com/en-us/download/details.aspx?id=103325.
+> +
+> +If this binding is used, the kernel module spi-hid will handle the communication
 
-diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
-index bab63c9f79dc..86cf1446d1fc 100644
---- a/arch/arm64/boot/dts/tesla/fsd.dtsi
-+++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
-@@ -29,6 +29,9 @@ aliases {
- 		pinctrl0 = &pinctrl_fsys0;
- 		pinctrl1 = &pinctrl_peric;
- 		pinctrl2 = &pinctrl_pmu;
-+		spi0 = &spi_0;
-+		spi1 = &spi_1;
-+		spi2 = &spi_2;
- 	};
- 
- 	cpus {
-@@ -667,6 +670,60 @@ pinctrl_fsys0: pinctrl@15020000 {
- 			reg = <0x0 0x15020000 0x0 0x1000>;
- 			interrupts = <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
- 		};
-+
-+		spi_0: spi@14140000 {
-+			compatible = "tesla,fsd-spi";
-+			reg = <0x0 0x14140000 0x0 0x100>;
-+			interrupts = <GIC_SPI 156 IRQ_TYPE_LEVEL_HIGH>;
-+			dmas = <&pdma1 4>, <&pdma1 5>;
-+			dma-names = "tx", "rx";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			clocks = <&clock_peric PERIC_PCLK_SPI0>,
-+				<&clock_peric PERIC_SCLK_SPI0>;
-+			clock-names = "spi", "spi_busclk0";
-+			samsung,spi-src-clk = <0>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&spi0_bus>;
-+			num-cs = <1>;
-+			status = "disabled";
-+		};
-+
-+		spi_1: spi@14150000 {
-+			compatible = "tesla,fsd-spi";
-+			reg = <0x0 0x14150000 0x0 0x100>;
-+			interrupts = <GIC_SPI 157 IRQ_TYPE_LEVEL_HIGH>;
-+			dmas = <&pdma1 6>, <&pdma1 7>;
-+			dma-names = "tx", "rx";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			clocks = <&clock_peric PERIC_PCLK_SPI1>,
-+				<&clock_peric PERIC_SCLK_SPI1>;
-+			clock-names = "spi", "spi_busclk0";
-+			samsung,spi-src-clk = <0>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&spi1_bus>;
-+			num-cs = <1>;
-+			status = "disabled";
-+		};
-+
-+		spi_2: spi@14160000 {
-+			compatible = "tesla,fsd-spi";
-+			reg = <0x0 0x14160000 0x0 0x100>;
-+			interrupts = <GIC_SPI 158 IRQ_TYPE_LEVEL_HIGH>;
-+			dmas = <&pdma1 8>, <&pdma1 9>;
-+			dma-names = "tx", "rx";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			clocks = <&clock_peric PERIC_PCLK_SPI2>,
-+				<&clock_peric PERIC_SCLK_SPI2>;
-+			clock-names = "spi", "spi_busclk0";
-+			samsung,spi-src-clk = <0>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&spi2_bus>;
-+			num-cs = <1>;
-+			status = "disabled";
-+		};
- 	};
- };
- 
--- 
-2.25.1
+What's a kernel module? ;) Bindings are OS independent (or supposed to 
+be), so kernel details do not belong here.
 
+> +with the device and the generic hid core layer will handle the protocol.
+> +
+> +Required properties:
+> +- compatible: must be "hid-over-spi"
+
+Bindings describe devices, not protocols. There is no such 
+'hid-over-spi' device. Please see the existing hid-over-i2c binding. 
+It's fine to have this compatible, but only as a fallback compatible.
+
+> +- interrupts: interrupt line
+> +- vdd-supply: phandle of the regulator that provides the supply voltage
+
+What happens when the device has 2 supplies? And there's some timing 
+requirement between them?
+
+> +- reset_gpio-gpios: gpio wired to the device reset line
+
+'reset-gpios' is the standard name.
+
+> +- post-power-on-delay-ms: time required by the device after enabling its
+> +regulators or powering it on, before it is ready for communication 
+> +- minimal-reset-delay-ms: minimum amount of time that device needs to be in
+> +reset state for the reset to take effect
+
+These properties are what happens when we try to do generic bindings. 
+It's a never-ending addition of more properties to try to describe 
+(poorly) the power sequencing requirements.
+
+> +- input-report-header-address: this property and the rest are described in HID
+> +Over SPI Protocol Spec 1.0
+> +- input-report-body-address
+> +- output-report-address
+> +- read-opcode
+> +- write-opcode
+> +- flags
+
+A bit too generic. We generally want to avoid having a property name 
+with 2 different types/meaning. It's not something we check for yet, but 
+I plan to at some point.
+
+> +
+> +Example:
+> +	spi-hid-dev0 {
+> +		compatible = "hid-over-spi";
+> +		reg = <0>;
+> +		interrupts-extended = <&tlmm 42 IRQ_TYPE_EDGE_FALLING>;
+> +		vdd-supply = <&pm8350c_l3>;
+> +		input-report-header-address = <0x1000>;
+> +		input-report-body-address = <0x1004>;
+> +		output-report-address = <0x2000>;
+> +		read-opcode = <0x0b>;
+> +		write-opcode = <0x02>;
+> +		flags = <0x00>;
+> +		reset_gpio-gpios = <&tlmm 25 GPIO_ACTIVE_LOW>;
+> +		post-power-on-delay-ms = <5>;
+> +		minimal-reset-delay-ms = <5>;
+> +		
+> +	};
+> -- 
+> 2.25.1
+> 
+> 
