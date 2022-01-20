@@ -2,122 +2,93 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 001CD4951A2
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Jan 2022 16:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 609FF4951B5
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jan 2022 16:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376765AbiATPmM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Thu, 20 Jan 2022 10:42:12 -0500
-Received: from mail-4018.proton.ch ([185.70.40.18]:21539 "EHLO
-        mail-4018.proton.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346423AbiATPmK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jan 2022 10:42:10 -0500
-Date:   Thu, 20 Jan 2022 15:42:06 +0000
-Authentication-Results: mail-4018.proton.ch; dkim=none
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-From:   conor dooley <mail@conchuod.ie>
-Cc:     Conor Dooley <Conor.Dooley@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?utf-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lewis Hanly <Lewis.Hanly@microchip.com>,
-        Daire.McNamara@microchip.com, Ivan.Griffin@microchip.com,
-        Atish Patra <atishp@rivosinc.com>
-Reply-To: conor dooley <mail@conchuod.ie>
-Subject: Re: [PATCH v4 03/14] dt-bindings: i2c: add bindings for microchip mpfs i2c
-Message-ID: <Op5n9imM72IZnLCmMZ8lEZ7GxZD-r4cYZDB6zF0DcNNRu5dwpGEgi7PyjsAfQFnTMEtB8DTS76wLNWcnTtfDMUa1KDZYO3_geq-oOVXOr50=@conchuod.ie>
-In-Reply-To: <CAMuHMdXU_M89W7w064YsjuFfqE2m_PeM9HVps0nmaC1+aUHAQw@mail.gmail.com>
-References: <20220117110755.3433142-1-conor.dooley@microchip.com> <20220117110755.3433142-4-conor.dooley@microchip.com> <CAMuHMdXwe3_F8NeePnoFrLwyzKUwnHtmETC=ambgsC2N3w_h8A@mail.gmail.com> <889dab52-95eb-f36d-0af9-beea958a97e7@microchip.com> <CAMuHMdXU_M89W7w064YsjuFfqE2m_PeM9HVps0nmaC1+aUHAQw@mail.gmail.com>
+        id S1346176AbiATPpu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Jan 2022 10:45:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346016AbiATPpu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jan 2022 10:45:50 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFCCC061574;
+        Thu, 20 Jan 2022 07:45:50 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id m11so30352234edi.13;
+        Thu, 20 Jan 2022 07:45:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bojt1cq8eqmehCFdf7q2oCFRQ8rKvEo0i4l4sBwygPU=;
+        b=qAYNgaEozdsfpabfPMCYsQnCjsGbRoQL3GhRsCiNxa78wkEQV0XxJZyA0taRKwd3od
+         7Si2s3y3I/5mp2hyJVM34lWEpuygDUJ8Q6nZvDB4Zqw3mMM8z/GYBHfmKoruMiZc7buI
+         CSnD4pn1VSfSnDPrZna+hS/zkxCH2MStkU4hWyp3Llg+eOXr0TUTMMixFl9t8e3GMF3d
+         eMy8xL+4eznGE949RJyHvWDumiohU5aIFvjY5Hthppky+OavJRTz5J115kseQnRkGx8E
+         f95LOFnq7nnPPdHGG6QMxP6bZy3MFP5sC/uFFACjPyc+uKBvPU6G1eHaZd/SuGNPpKRG
+         Czxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bojt1cq8eqmehCFdf7q2oCFRQ8rKvEo0i4l4sBwygPU=;
+        b=8BuwgRC6hizRxy71cvvHI3tg5cKN4YXqQU++4F43zRrj0NOyw4R3n5q0bEO9wa03S+
+         2rUvuxkiRlX5zlu4PMytyna883Mb1CzzIBAmW44wC8NKch7B1hQ0oCXY1j2WkFJYr8FP
+         BhMDxG1Bu0Wf4k0Qb0KmZMc5jmuJJuDG1pgPhZlvgtQDpV7EgCzFvEI0JzAuyhmF4nGI
+         UnkDjwL6OsTX+yivAj3x/WemUmjrntzz4OHl4XGcL8vgr6W4eZGsBieRkIWo379PK6r9
+         qtXAp0nRiSkqgoGhI7ZBywf/eM7vL453xmY47/RHENiFWaz7N+ObCn5WQMxQvM2jjmBR
+         QiJg==
+X-Gm-Message-State: AOAM530xxgJVA2GKvzeJCZqaf6s8tk9FmaZInvFdhht+TBH13ExHVLGE
+        Y5YFEldz0hyPtrnv44PksJzgZInvpRF7BYFc7RI=
+X-Google-Smtp-Source: ABdhPJwSlmq5dL42E/rJ/5HNGr0ky2W7IX4dNnb+7dy+H7+8bfDWemciLlOKSVFP2kfwc8pIeNknLGlmldEhwnzPVZs=
+X-Received: by 2002:a17:906:7948:: with SMTP id l8mr11438618ejo.636.1642693548839;
+ Thu, 20 Jan 2022 07:45:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.0 required=10.0 tests=ALL_TRUSTED shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+References: <20220118110928.120640-1-linus.walleij@linaro.org> <20220118110928.120640-3-linus.walleij@linaro.org>
+In-Reply-To: <20220118110928.120640-3-linus.walleij@linaro.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 20 Jan 2022 17:44:06 +0200
+Message-ID: <CAHp75Vev_xH_MPe0S1CDfC5tUetzfZEQVJpNsePRddK6czLnPA@mail.gmail.com>
+Subject: Re: [PATCH 3/3 v2] spi: s3c64xx: Convert to use GPIO descriptors
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
->Hi Conor,
->
->On Thu, Jan 20, 2022 at 2:42 PM <Conor.Dooley@microchip.com> wrote:
->> On 20/01/2022 08:30, Geert Uytterhoeven wrote:
->> > On Mon, Jan 17, 2022 at 12:06 PM <conor.dooley@microchip.com> wrote:
->> > Wouldn't it be more logical to have:
->> >
->> >      items:
->> >        - const: microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
->> >        - const: microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
->> >
->> > ?
->> This would be fine for mpfs-i2c since corei2c is a "superset" - but how
->> would that look for the fabric core? I don't think falling back from the
->> fabric core onto the "hard" one makes sense. This would mean the
->> following two entries:
->>
->> i2c2: i2c@44000000 { //fabric
->>         compatible = "microchip,corei2c-rtl-v7";
->> };
->> i2c1: i2c@2010b000 { //"hard" mpfs peripheral
->>         compatible = "microchip,mpfs-i2c", "microchip,corei2c-rtl-v7";
->> };
->
->Oops, I missed that you have both forms.
->But in se, they're the same IP core, just hard vs. soft? Then the
->below makes sense.
-A lot (but not all) of the peripherals on Polarfire SoC are "subsets"
-of the IP cores: I think corei2c is almost identical but for others
-the hard version has some of the optional features disabled or slight
-changes made.
+On Thu, Jan 20, 2022 at 9:40 AM Linus Walleij <linus.walleij@linaro.org> wrote:
 
-If the IP is already written why not use it ;)
->
->> But this generates errors in dt_binding_check w/ your suggestion - so
->> how about the following (similar to ti,omap4-i2c.yaml):
->>
->>    compatible:
->>      oneOf:
->>        - items:
->>          - const: microchip,mpfs-i2c #  Microchip PolarFire...
->>          - const: microchip,corei2c-rtl-v7 # Microchip Fabric...
->>        - const: microchip,corei2c-rtl-v7 # Microchip Fabric...
->>
->> Is there a prettier way than this duplication?
->
->I'm afraid not, and the above scheme is used a lot.
-Fair enough!
->
->> > If the IP core is reused, it can become:
->> >
->> >      items:
->> >        - enum:
->> >            - microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
->> >            - microchip,<foo>-i2c # ...
->> >        - const: microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
->> >
->> > That way the driver can just match on the second (fallback) value,
->> > and no further driver changes will be needed (until v8 or later).
+...
+
+> +static struct gpiod_lookup_table crag_spi0_gpiod_table = {
+> +       .dev_id = "s3c6410-spi.0",
+> +       .table = {
+> +               GPIO_LOOKUP_IDX("GPIOC", 3, "cs", 0, GPIO_ACTIVE_LOW),
+> +               GPIO_LOOKUP_IDX("GPION", 5, "cs", 1, GPIO_ACTIVE_LOW),
+
+> +               { },
+
+Since it will be v3 of the series, can we remove the comma in the
+terminator line?
+
+> +       },
+> +};
+
+...
+
+> +       /* This was dynamically allocated on the DT path */
+
+> +       if (spi->dev.of_node)
+
+I believe we may survive w/o this check(s).
+
+> +               kfree(cs);
+
+--
+With Best Regards,
+Andy Shevchenko
