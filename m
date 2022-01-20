@@ -2,103 +2,176 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C87D494B1D
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Jan 2022 10:53:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 170E3494B5E
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jan 2022 11:08:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359657AbiATJwK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Jan 2022 04:52:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237302AbiATJwJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jan 2022 04:52:09 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A8EC061574;
-        Thu, 20 Jan 2022 01:52:09 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id z22so26074429edd.12;
-        Thu, 20 Jan 2022 01:52:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=u7cI7G3trpUtnHCfqhJut3Gt91Xt99WAiwIJwAPsTAw=;
-        b=Bn4QBTi3qUFOEld4FbuzD4vMnYnTqwdK+G1fNwrrZ6KfaG0UQ+3HG73aYE5wwFlOZE
-         ESK+SW5NjSt6ewacY0L+HwFr2+b8zm6aBd3O+097nA53oDyjEfpU9vS8Bck09EYV+RQ1
-         te3/x2WvicezIlvYZpOJCzzPVtD9Idq8v/VBbccvQUAcml1ToyaFPu4NUwFD1AsXEOFp
-         XGXe0q2UUW3Ff86m0uWB3ulVW1MK07WVNLYpDcpqs1bp4fDDRI0c6p3q5nIEJ/j5Gc9D
-         fCANAT+CQIgfbw2LhqORBICjVk9HoYKOSBxyYaKNI0RmdqYONz61iyk3fqXwgffqIZwS
-         8tJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=u7cI7G3trpUtnHCfqhJut3Gt91Xt99WAiwIJwAPsTAw=;
-        b=H69uywMOhZcJ+TMdR8wDytA9OZn6yP6v2fSEDSGCoI7bpUsdxFptZ5kQ1Aw1hy7AC2
-         XAW1APsUQXCTzGvjnJmGgyaqRKNjX/VQlGJvyKi5Lom64KXLt5S8on6Ig6B4fZxbLO7V
-         21K6tXnxIyOta/2uuz0XlBqHTSOof7D57KDXty7FTFbBdqCuuBKRWWdvNZFmVQdcQYVF
-         EwwMf/BivrhEuVkqCrILO/JxRce14PsYZHPCDpGdOAEn7lhwJsC9CbuSZxCkDQf4ICSH
-         IxdmYbkO7lQgnBLgFvna3kTnPGyQLz7fiF5QPjdny6u/+iPi7p3GH4DVD2laE9+l8gmU
-         L1Aw==
-X-Gm-Message-State: AOAM532nr2hoBKpVC9KwCfLyMfrPQ2KuAFcgZ8p+ZI2UArYa+m0T/U5x
-        c06+ZI8Ika2YyENzyZTkKNa0YzJgtmjY3G/ah00=
-X-Google-Smtp-Source: ABdhPJx4+iS7ZkJcPZi0fD7oBM2YZShC8sysR8IZth0qPgv938kiIhEIqRFJ+pQme4LKAHtGx0LwZ2irIzmheauxbwA=
-X-Received: by 2002:a17:907:968c:: with SMTP id hd12mr27722577ejc.639.1642672327429;
- Thu, 20 Jan 2022 01:52:07 -0800 (PST)
+        id S241146AbiATKIa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Jan 2022 05:08:30 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:33530 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236681AbiATKI3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jan 2022 05:08:29 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20KA8AeK089861;
+        Thu, 20 Jan 2022 04:08:10 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1642673290;
+        bh=P8kUbe5/YmBgjhlSIALuH98FF7Q+bim6i3lUmmhpXw0=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=OaKUR5QJC36GGclJkX7U1qVq0LmyB5T97mfvnCsYnvLApIwDDcATAnCQfZCM4TY1p
+         0j1DR+RA2e0aUw9KOUNBN83JJf0ZxkwB+4McleWspaYySA/abS888S6f/Tuix2rtte
+         DZlX7E1Jvq7qsqd3rfdHRnce2tRA/zZ+e8SVrzyA=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20KA8Aqw028403
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 20 Jan 2022 04:08:10 -0600
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 20
+ Jan 2022 04:08:10 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 20 Jan 2022 04:08:10 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20KA89ip037887;
+        Thu, 20 Jan 2022 04:08:10 -0600
+Date:   Thu, 20 Jan 2022 15:38:09 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+CC:     Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-samsung-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>
+Subject: Re: [PATCH v3 2/4] spi: dt-bindings: samsung: convert to dtschema
+Message-ID: <20220120100809.mfe2eqkgpjjfpt3c@ti.com>
+References: <20220112100046.68068-1-krzysztof.kozlowski@canonical.com>
+ <20220112100046.68068-3-krzysztof.kozlowski@canonical.com>
+ <20220119192758.z3lvlkaeyeiqi73a@ti.com>
+ <5f912896-0635-fbe7-4fda-f4cb569190d9@canonical.com>
+ <20220120070620.wyeosdstbfcsaplt@ti.com>
+ <0c0a22ed-2c4b-374c-4f4c-06afd4e8681d@canonical.com>
+ <20220120090002.hg4jmb7q2s25k64y@ti.com>
+ <20220120092459.gbaoief77p2tynaf@krzk-bin>
 MIME-Version: 1.0
-References: <cover.1642494310.git.lhjeff911@gmail.com> <37998e515d561e762ee30d0ac4fca25a948e0c5c.1642494310.git.lhjeff911@gmail.com>
- <CAHp75VdKc3UDzaqM2G5J5+G90U6Spqyhz_vuOYKhqJ4V-uf=wg@mail.gmail.com> <a354d7c1dce4463ea57706dd5443fe7a@sphcmbx02.sunplus.com.tw>
-In-Reply-To: <a354d7c1dce4463ea57706dd5443fe7a@sphcmbx02.sunplus.com.tw>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 20 Jan 2022 11:51:30 +0200
-Message-ID: <CAHp75VcCpye1u3+PK=C3CT8fMHPSOsXTL5AhbLVy0YyGWfyfkQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
-To:     =?UTF-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
-Cc:     Li-hao Kuo <lhjeff911@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220120092459.gbaoief77p2tynaf@krzk-bin>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 11:22 AM Lh Kuo =E9=83=AD=E5=8A=9B=E8=B1=AA <lh.Kuo=
-@sunplus.com> wrote:
+On 20/01/22 10:24AM, Krzysztof Kozlowski wrote:
+> On Thu, Jan 20, 2022 at 02:30:02PM +0530, Pratyush Yadav wrote:
+> > On 20/01/22 08:36AM, Krzysztof Kozlowski wrote:
+> > > On 20/01/2022 08:06, Pratyush Yadav wrote:
+> > > > On 19/01/22 08:49PM, Krzysztof Kozlowski wrote:
+> > > >> On 19/01/2022 20:31, Pratyush Yadav wrote:
+> > > >>> On 12/01/22 11:00AM, Krzysztof Kozlowski wrote:
+> > > >>>> Convert the Samsung SoC (S3C24xx, S3C64xx, S5Pv210, Exynos) SPI
+> > > >>>> controller bindings to DT schema format
+> > > >>>>
+> > > >>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> > > >>>> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > > >>>> ---
+> > > >>>>  .../spi/samsung,spi-peripheral-props.yaml     |  35 ++++
+> > > >>>>  .../devicetree/bindings/spi/samsung,spi.yaml  | 187 ++++++++++++++++++
+> > > >>>>  .../bindings/spi/spi-peripheral-props.yaml    |   1 +
+> > > >>>>  .../devicetree/bindings/spi/spi-samsung.txt   | 122 ------------
+> > > >>>>  MAINTAINERS                                   |   2 +-
+> > > >>>>  5 files changed, 224 insertions(+), 123 deletions(-)
+> > > >>>>  create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
+> > > >>>>  create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi.yaml
+> > > >>>>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-samsung.txt
+> > > >>>>
+> > > >>>> diff --git a/Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
+> > > >>>> new file mode 100644
+> > > >>>> index 000000000000..aa5a1f48494b
+> > > >>>> --- /dev/null
+> > > >>>> +++ b/Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
+> > > >>>> @@ -0,0 +1,35 @@
+> > > >>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > >>>> +%YAML 1.2
+> > > >>>> +---
+> > > >>>> +$id: http://devicetree.org/schemas/spi/samsung,spi-peripheral-props.yaml#
+> > > >>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > >>>> +
+> > > >>>> +title: Peripheral-specific properties for Samsung S3C/S5P/Exynos SoC SPI controller
+> > > >>>> +
+> > > >>>> +maintainers:
+> > > >>>> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> > > >>>> +
+> > > >>>> +description:
+> > > >>>> +  See spi-peripheral-props.yaml for more info.
+> > > >>>> +
+> > > >>>> +properties:
+> > > >>>> +  controller-data:
+> > > >>>> +    type: object
+> > > >>>> +    additionalProperties: false
+> > > >>>> +
+> > > >>>> +    properties:
+> > > >>>> +      samsung,spi-feedback-delay:
+> > > >>>> +        description: |
+> > > >>>> +          The sampling phase shift to be applied on the miso line (to account
+> > > >>>> +          for any lag in the miso line). Valid values:
+> > > >>>> +           - 0: No phase shift.
+> > > >>>> +           - 1: 90 degree phase shift sampling.
+> > > >>>> +           - 2: 180 degree phase shift sampling.
+> > > >>>> +           - 3: 270 degree phase shift sampling.
+> > > >>>> +        $ref: /schemas/types.yaml#/definitions/uint32
+> > > >>>> +        enum: [0, 1, 2, 3]
+> > > >>>> +
+> > > >>>> +    required:
+> > > >>>> +      - samsung,spi-feedback-delay
+> > > >>>
+> > > >>> I am not quite sure if this required would work here. Let's say another 
+> > > >>> controller also uses a controller-data node, but it contains a different 
+> > > >>> set of properties. Won't this cause an error to be raised for that 
+> > > >>> controller since this property is not there?
+> > > >>
+> > > >> The controller-data is Samsung SPI specific (does not exist in any other
+> > > >> binding), so why would controller-data get added to a different controller?
+> > > > 
+> > > > It does not as of now, but the name is fairly generic and some 
+> > > > controller in the future might use it. I do not think it is a good idea 
+> > > > to list required properties in X-peripheral-props.yaml in general since 
+> > > > all those will be collected by spi-peripheral-props.yaml and so will 
+> > > > apply to _all_ controllers that reference it.
+> > > 
+> > > Right, but have in mind this is merely a bindings conversion. These were
+> > > made like this long time ago.
+> > 
+> > Yes, but the bindings infrastructure is not capable of handling these 
+> > required properties as of now. So even if your next patch was _not_ 
+> > making it optional, I would still say you should drop the "required:". 
+> > Even though the property is actually a required one, we currently do not 
+> > have the means to express that.
+> > 
+> > > 
+> > > I think we can drop the "required:" entirely with the commit 3/4 which
+> > > makes it optional.
+> > 
+> > I would prefer you never add it in the first place.
+> 
+> If I understand correctly, you propose to squash next patch making it
+> optional to this conversion? I believe there is a value in splitting
+> conversion of existing bindings from making changes to the bindings, but
+> I don't mind squashing them if that is desired.
 
-...
+No, I don't want you to squash the next patch. I want you to just drop 
+the "required:" property and call it a lossy conversion since there is 
+no way as of now to express that. In the ideal world you would have kept 
+it, and removed it in the next patch.
 
-> > > +       if (xfer->tx_buf)
-> > > +               dma_unmap_single(dev, xfer->tx_dma, xfer->len, DMA_TO=
-_DEVICE);
-> > > +       if (xfer->rx_buf)
-> > > +               dma_unmap_single(dev, xfer->rx_dma, xfer->len,
-> > > + DMA_FROM_DEVICE);
-> >
-> > Why can't you use SPI core DMA mapping code?
->
-> I didn't find the SPI core DMA mapping code for single maping.
-> The method currently used is the general DMA single-map code usage method=
-.
+> 
+> Best regards,
+> Krzysztof
+> 
 
-Why do you need single page mapping?
-What's wrong with SG mapping that SPI core provides?
-
-...
-
-> > > +       device_set_node(&ctlr->dev, pdev->dev.fwnode);
-> >
-> > Use dev_fwnode() in the second argument.
->
-> You mean as below ?
->
-> device_set_node(&ctlr->dev, dev_fwnode(dev));
-
-Yes.
-
---=20
-With Best Regards,
-Andy Shevchenko
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
