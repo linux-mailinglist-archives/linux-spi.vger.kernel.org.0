@@ -2,120 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1B04953BF
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Jan 2022 18:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F126495425
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jan 2022 19:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233310AbiATR6H (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Jan 2022 12:58:07 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:40728
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233314AbiATR6D (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jan 2022 12:58:03 -0500
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B68394002A
-        for <linux-spi@vger.kernel.org>; Thu, 20 Jan 2022 17:58:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642701481;
-        bh=bto/xpfUsOVGNmCnHot8/BAzxWmx4lezX3yYM6aPOPk=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=vhcDZZRFEmkY22c6I7rDHDL1V+VoQMk+AkUsg7tRkTtgS7i5bTgxltllAirbqj0aB
-         onvYTPf7zzdO1IUmOX778SJ/I5c4fEoefhVdkt6DtjwMFin5NM/W75vACwUJT60JVF
-         dfAZ+xddDrgcuKNn5MVP4rNGW58wrH14yi6SbRq5Lj6gFpI623GBdipUp1w+lLRzV9
-         LIu+oiFDhdo7ievbKBKwayvSDvEl4+1Gf2qkm0+yNs7JLkTFQa3mrO0IYLT0DyugJ5
-         P/B9eMHnZQtjnDH+XH4iklSCvP82IFUAVt7CGSj6N34KmiqKDoG4bOVhNqb7KDxIdh
-         Kf2MBL/ycgarA==
-Received: by mail-wm1-f69.google.com with SMTP id c188-20020a1c35c5000000b00346a2160ea8so3248676wma.9
-        for <linux-spi@vger.kernel.org>; Thu, 20 Jan 2022 09:58:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bto/xpfUsOVGNmCnHot8/BAzxWmx4lezX3yYM6aPOPk=;
-        b=dZcw+9prmBBWADcnEeaVrT/CMqD/mjYLt1c9UpjR9Ueba1+M3kfmNOGaBf6EnAus4s
-         kFMbwTNEal46fbqwrt6m3FOTc3v1T2+UgcVp2aWOWpVLi3T4Tj8NapYateBYpWw8gIny
-         aenSTDu/oDH/bOO3yisUxgCbH2ealVqZo5SP+eyOf7kIts9PDThyh5Y6PknEYHaDU9RD
-         RNCpSVVNff6GRJPfWIyzcwP8ZS7TE12RCUon5Mm97HbCh85SNIOhMUtz7Vf/y5kDbfkO
-         Syu2KtE44uLMsU6bC9WEqaAybAXBOyqWN2uuPpoF3dwP/4Sfyozc0vJ80Bn2zsv5uef8
-         ARhQ==
-X-Gm-Message-State: AOAM533UzIPCR2FsDolwzxEMNlHZVSHG3nv3gQFY+aej24A7yTt5q8ti
-        kCAe3gfpQyJSQGozfDXVfoswH73T5Y/pCaioAmHm+xgRNZKAHyzTOT1AvHA4VjpXG6R93+uEKf4
-        2rb+E9jo6CTBl5H/zIpD13o8OoapwuXdl8LG3TA==
-X-Received: by 2002:a1c:f012:: with SMTP id a18mr9989439wmb.73.1642701479319;
-        Thu, 20 Jan 2022 09:57:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyqTIBDSwhzIJAAvThOjafSh4STpzbcmwUKvBnw8h3aAFohpEEpbyymlmGUkzLSw2lwFS1cZQ==
-X-Received: by 2002:a1c:f012:: with SMTP id a18mr9989419wmb.73.1642701479169;
-        Thu, 20 Jan 2022 09:57:59 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id a15sm3345248wrp.41.2022.01.20.09.57.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 09:57:58 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        id S242898AbiATSZz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Jan 2022 13:25:55 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:50288 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238856AbiATSZy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jan 2022 13:25:54 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20KIPQTJ035437;
+        Thu, 20 Jan 2022 12:25:26 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1642703126;
+        bh=2/qtOiX8+RrhrE/rS2MPeAIX4aF+I40EDhFEBNmbWWs=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=y9WuRckUOeM+AD+vJnd2PCAaS9YpWbv3AURxDJuziO+sisVCApOE1M990Iarng8Ug
+         j8Y+w2Rjc3TSI8hFbuEanqcgLBaYzzxIKRgj4+LCiFlfgz6gG9dqaG224EGX/pdSW1
+         4QjfCcbFAB6R8RFU8GE1vlrQEAmG/gtacvC21zZo=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20KIPQpT126366
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 20 Jan 2022 12:25:26 -0600
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 20
+ Jan 2022 12:25:25 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 20 Jan 2022 12:25:26 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20KIPPOv044230;
+        Thu, 20 Jan 2022 12:25:25 -0600
+Date:   Thu, 20 Jan 2022 23:55:24 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+CC:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Benson Leung <bleung@chromium.org>,
         Guenter Roeck <groeck@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
         Sam Protsenko <semen.protsenko@linaro.org>,
-        Pratyush Yadav <p.yadav@ti.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-spi@vger.kernel.org
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v5 4/4] spi: s3c64xx: allow controller-data to be optional
-Date:   Thu, 20 Jan 2022 18:57:47 +0100
-Message-Id: <20220120175747.43403-5-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220120175747.43403-1-krzysztof.kozlowski@canonical.com>
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Subject: Re: [PATCH v5 2/4] spi: dt-bindings: samsung: convert to dtschema
+Message-ID: <20220120182524.d5fe3uigbelhcs7l@ti.com>
 References: <20220120175747.43403-1-krzysztof.kozlowski@canonical.com>
+ <20220120175747.43403-3-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220120175747.43403-3-krzysztof.kozlowski@canonical.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The Samsung SoC SPI driver requires to provide controller-data node
-for each of SPI peripheral device nodes.  Make this controller-data node
-optional, so DTS could be simpler.
+On 20/01/22 06:57PM, Krzysztof Kozlowski wrote:
+> Convert the Samsung SoC (S3C24xx, S3C64xx, S5Pv210, Exynos) SPI
+> controller bindings to DT schema format.
+> 
+> The conversion also drops requirement from providing controller-data and
+> its data for each of SPI peripheral device nodes.  The dtschema cannot
+> express this and the requirement is being relaxed in the driver now.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 
-Suggested-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-Reviewed-by: Andi Shyti <andi@etezian.org>
----
- drivers/spi/spi-s3c64xx.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+Thanks.
 
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 8755cd85e83c..386550fca81c 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -796,16 +796,14 @@ static struct s3c64xx_spi_csinfo *s3c64xx_get_slave_ctrldata(
- 		return ERR_PTR(-EINVAL);
- 	}
- 
--	data_np = of_get_child_by_name(slave_np, "controller-data");
--	if (!data_np) {
--		dev_err(&spi->dev, "child node 'controller-data' not found\n");
--		return ERR_PTR(-EINVAL);
--	}
--
- 	cs = kzalloc(sizeof(*cs), GFP_KERNEL);
--	if (!cs) {
--		of_node_put(data_np);
-+	if (!cs)
- 		return ERR_PTR(-ENOMEM);
-+
-+	data_np = of_get_child_by_name(slave_np, "controller-data");
-+	if (!data_np) {
-+		dev_info(&spi->dev, "feedback delay set to default (0)\n");
-+		return cs;
- 	}
- 
- 	of_property_read_u32(data_np, "samsung,spi-feedback-delay", &fb_delay);
+Acked-by: Pratyush Yadav <p.yadav@ti.com>
+
 -- 
-2.32.0
-
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
