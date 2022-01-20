@@ -2,81 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F126495425
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Jan 2022 19:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 959F8495440
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jan 2022 19:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242898AbiATSZz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Jan 2022 13:25:55 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:50288 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238856AbiATSZy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jan 2022 13:25:54 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20KIPQTJ035437;
-        Thu, 20 Jan 2022 12:25:26 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1642703126;
-        bh=2/qtOiX8+RrhrE/rS2MPeAIX4aF+I40EDhFEBNmbWWs=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=y9WuRckUOeM+AD+vJnd2PCAaS9YpWbv3AURxDJuziO+sisVCApOE1M990Iarng8Ug
-         j8Y+w2Rjc3TSI8hFbuEanqcgLBaYzzxIKRgj4+LCiFlfgz6gG9dqaG224EGX/pdSW1
-         4QjfCcbFAB6R8RFU8GE1vlrQEAmG/gtacvC21zZo=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20KIPQpT126366
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 20 Jan 2022 12:25:26 -0600
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 20
- Jan 2022 12:25:25 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 20 Jan 2022 12:25:26 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20KIPPOv044230;
-        Thu, 20 Jan 2022 12:25:25 -0600
-Date:   Thu, 20 Jan 2022 23:55:24 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-CC:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Subject: Re: [PATCH v5 2/4] spi: dt-bindings: samsung: convert to dtschema
-Message-ID: <20220120182524.d5fe3uigbelhcs7l@ti.com>
-References: <20220120175747.43403-1-krzysztof.kozlowski@canonical.com>
- <20220120175747.43403-3-krzysztof.kozlowski@canonical.com>
+        id S1347008AbiATSfG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Jan 2022 13:35:06 -0500
+Received: from mail-qt1-f169.google.com ([209.85.160.169]:35763 "EHLO
+        mail-qt1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230197AbiATSfF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jan 2022 13:35:05 -0500
+Received: by mail-qt1-f169.google.com with SMTP id 14so7178081qty.2;
+        Thu, 20 Jan 2022 10:35:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FHUSnLFWVr68wK0Ueu0o2cPAOvYPnfmPNV0janXaZlA=;
+        b=Od9DBn+/TilX42LQDllS2dZ+9svRWhDVSKGssMkOwWd/RJQ+M5F11U3+hl3oKAw960
+         6G2/pCpR/bFHFrJ4Q/lWW6sSYi6XaLJ731DzlDfHkLrc5pIa7H6Pau7vxr86qpdX9EPU
+         74sDuBPYV0GpKNDXz2m+J55zT/QIcd3YcBpZ6fqA5B9mK92pIgfv2HtW/MwRTJofEFUH
+         XP5eqPWA1/GVXLoVA4kYINJgct3IGiI/Q9JrNu4q1bxCHO04A2/rTkJSpBTqHh6/1LJh
+         kgLzXrsurTnbnVA30/qJV+9IXjDn5Vt5oPfomTRAouIlPeDEQRmdHGyGH7PODH9W0HVN
+         WKfw==
+X-Gm-Message-State: AOAM530LHMfZZihVYwElgmqfBcPbBCXgyFlmXAm646n9Snud9sOkTVMD
+        CTfZe0oObLRrSOul/KLvVOyWoMy/76kJ2x6BMIIFNYc/
+X-Google-Smtp-Source: ABdhPJxh8V2QeLQ/nWDipxCe0AWBLibWjl1rR7AAvTNd5Zde1YaKr6zv8pxnq0y9HBHVpHGY9eLCQVr2gN8l/fCMgfc=
+X-Received: by 2002:a05:622a:1881:: with SMTP id v1mr256994qtc.327.1642703703992;
+ Thu, 20 Jan 2022 10:35:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220120175747.43403-3-krzysztof.kozlowski@canonical.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20220120134326.5295-1-sbinding@opensource.cirrus.com> <20220120134326.5295-6-sbinding@opensource.cirrus.com>
+In-Reply-To: <20220120134326.5295-6-sbinding@opensource.cirrus.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 20 Jan 2022 19:34:53 +0100
+Message-ID: <CAJZ5v0hMdfnu5PUk3sPvzF_f+xvWaRkE=BUpSAFx_DJ9sB+JDw@mail.gmail.com>
+Subject: Re: [PATCH v4 5/9] platform/x86: i2c-multi-instantiate: Rename it for
+ a generic bus driver name
+To:     Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
+        <alsa-devel@alsa-project.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        patches@opensource.cirrus.com,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 20/01/22 06:57PM, Krzysztof Kozlowski wrote:
-> Convert the Samsung SoC (S3C24xx, S3C64xx, S5Pv210, Exynos) SPI
-> controller bindings to DT schema format.
-> 
-> The conversion also drops requirement from providing controller-data and
-> its data for each of SPI peripheral device nodes.  The dtschema cannot
-> express this and the requirement is being relaxed in the driver now.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+On Thu, Jan 20, 2022 at 2:43 PM Stefan Binding
+<sbinding@opensource.cirrus.com> wrote:
+>
+> From: Lucas Tanure <tanureal@opensource.cirrus.com>
+>
+> Rename I2C multi instantiate driver to bus-multi-instantiate for
+> upcoming addition of SPI support
 
-Thanks.
+TBH, I don't particularly like the new naming.
 
-Acked-by: Pratyush Yadav <p.yadav@ti.com>
+Namely, the "bus" part seems overly generic (and the "bmi"
+abbreviation brings something totally different to mind).
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+AFAICS this can cover serial interfaces only and specifically the ones
+where serial links can be represented as resources returned by the
+ACPI _CRS object.
+
+I would call it serial-multi-instance or similar.
