@@ -2,71 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA52494A7B
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Jan 2022 10:12:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EAC8494AC6
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jan 2022 10:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbiATJMN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Jan 2022 04:12:13 -0500
-Received: from 113.196.136.162.ll.static.sparqnet.net ([113.196.136.162]:42006
+        id S241729AbiATJbl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Jan 2022 04:31:41 -0500
+Received: from 113.196.136.162.ll.static.sparqnet.net ([113.196.136.162]:55096
         "EHLO mg.sunplus.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S240065AbiATJML (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jan 2022 04:12:11 -0500
-X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
-        ,3)
+        with ESMTP id S229687AbiATJbl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jan 2022 04:31:41 -0500
+X-MailGates: (compute_score:DELIVER,40,3)
 Received: from 172.17.9.202
-        by mg01.sunplus.com with MailGates ESMTP Server V5.0(11289:0:AUTH_RELAY)
-        (envelope-from <lh.Kuo@sunplus.com>); Thu, 20 Jan 2022 17:12:12 +0800 (CST)
+        by mg01.sunplus.com with MailGates ESMTP Server V5.0(11298:0:AUTH_RELAY)
+        (envelope-from <lh.Kuo@sunplus.com>); Thu, 20 Jan 2022 17:23:12 +0800 (CST)
 Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
  sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
- 15.0.1497.26; Thu, 20 Jan 2022 17:12:11 +0800
+ 15.0.1497.26; Thu, 20 Jan 2022 17:23:06 +0800
 Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
  sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
- 15.00.1497.026; Thu, 20 Jan 2022 17:12:11 +0800
-From:   =?big5?B?TGggS3VvILOipE+7qA==?= <lh.Kuo@sunplus.com>
-To:     Mark Brown <broonie@kernel.org>, Li-hao Kuo <lhjeff911@gmail.com>
-CC:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "andyshevchenko@gmail.com" <andyshevchenko@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?big5?B?V2VsbHMgTHUgp2aq2sTL?= <wells.lu@sunplus.com>
+ 15.00.1497.026; Thu, 20 Jan 2022 17:23:06 +0800
+From:   =?utf-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Li-hao Kuo <lhjeff911@gmail.com>
+CC:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
 Subject: RE: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
 Thread-Topic: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
-Thread-Index: AQHYDEdoNQA4Z8mYU0mSuzI8gOIgg6xohrWAgAMbElA=
-Date:   Thu, 20 Jan 2022 09:12:11 +0000
-Message-ID: <d202d04f32b8496293bd98e090322104@sphcmbx02.sunplus.com.tw>
+Thread-Index: AQHYDEdoNQA4Z8mYU0mSuzI8gOIgg6xqY3GAgAE/t3A=
+Date:   Thu, 20 Jan 2022 09:23:06 +0000
+Message-ID: <a354d7c1dce4463ea57706dd5443fe7a@sphcmbx02.sunplus.com.tw>
 References: <cover.1642494310.git.lhjeff911@gmail.com>
  <37998e515d561e762ee30d0ac4fca25a948e0c5c.1642494310.git.lhjeff911@gmail.com>
- <Yeb75aOOckAfNTTG@sirena.org.uk>
-In-Reply-To: <Yeb75aOOckAfNTTG@sirena.org.uk>
+ <CAHp75VdKc3UDzaqM2G5J5+G90U6Spqyhz_vuOYKhqJ4V-uf=wg@mail.gmail.com>
+In-Reply-To: <CAHp75VdKc3UDzaqM2G5J5+G90U6Spqyhz_vuOYKhqJ4V-uf=wg@mail.gmail.com>
 Accept-Language: zh-TW, en-US
 Content-Language: zh-TW
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-ms-exchange-transport-fromentityheader: Hosted
 x-originating-ip: [172.25.108.51]
-Content-Type: text/plain; charset="big5"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-SGkgTXIuIE1hcmsgQnJvd24gOg0KDQpUaGFua3MgZm9yIHlvdXIgY29tbWVudCwgSSB3aWxsIG1v
-ZGlmeSBpdCBpbiBuZXh0IG5leHQgc3VibWlzc2lvbg0KDQo+IA0KPiA+ICsJZm9yIChpID0gMDsg
-aSA8PSB4ZmVyX2NudDsgaSsrKSB7DQo+ID4gKwkJbXV0ZXhfbG9jaygmcHNwaW0tPmJ1Zl9sb2Nr
-KTsNCj4gDQo+IFRoaXMgbG9jayBpcyByZWR1bmRhbnQ6IGl0IGlzIG9ubHkgZXZlciBoZWxkIGlu
-IHRoaXMgZnVuY3Rpb24gd2hpY2ggaXMgZ3VhcmFudGVlZCBieSB0aGUgY29yZSB0byBuZXZlciBi
-ZQ0KPiBjYWxsZWQgdHdpY2UgY29uY3VycmVudGx5Lg0KDQpJIHdpbGwgbW9kaWZ5IGl0IGluIG5l
-eHQgbmV4dCBzdWJtaXNzaW9uDQoNCg0KPiA+ICsJcmV0ID0gZGV2bV9yZXF1ZXN0X2lycShkZXYs
-IHBzcGltLT5tX2lycSwgc3A3MDIxX3NwaV9tYXN0ZXJfaXJxLA0KPiA+ICsJCQkgICAgICAgSVJR
-Rl9UUklHR0VSX1JJU0lORywgcGRldi0+bmFtZSwgcHNwaW0pOw0KPiA+ICsJaWYgKHJldCkNCj4g
-PiArCQlyZXR1cm4gcmV0Ow0KPiA+ICsNCj4gPiArCXJldCA9IGRldm1fcmVxdWVzdF9pcnEoZGV2
-LCBwc3BpbS0+c19pcnEsIHNwNzAyMV9zcGlfc2xhdmVfaXJxLA0KPiA+ICsJCQkgICAgICAgSVJR
-Rl9UUklHR0VSX1JJU0lORywgcGRldi0+bmFtZSwgcHNwaW0pOw0KPiA+ICsJaWYgKHJldCkNCj4g
-PiArCQlyZXR1cm4gcmV0Ow0KPiANCj4gQXJlIHlvdSBzdXJlIHRoZSBkcml2ZXIgaXMgcmVhZHkg
-dG8gaGFuZGxlIGludGVycnVwdHMgd2l0aG91dCBhbnkgb2YgdGhlIG90aGVyIHJlc291cmNlcz8g
-IE5vcm1hbGx5DQo+IGludGVycnVwdHMgYXJlIG9uZSBvZiB0aGUgbGFzdCB0aGluZ3MgdG8gYmUg
-cmVxdWVzdGVkLg0KDQpJIHdpbGwgbW9kaWZ5IGl0IGluIG5leHQgbmV4dCBzdWJtaXNzaW9uDQoN
-Cg0K
+SGkgQW5keSBTaGV2Y2hlbmtvIDoNCg0KVGhhbmtzIGZvciB5b3VyIGNvbW1lbnQsIEkgaGF2ZSBz
+b21lIHF1ZXN0aW9ucyBhcyBiZWxvdy4NCg0KPiA+ICsgICAgICAgaWYgKHhmZXItPnR4X2J1ZikN
+Cj4gPiArICAgICAgICAgICAgICAgZG1hX3VubWFwX3NpbmdsZShkZXYsIHhmZXItPnR4X2RtYSwg
+eGZlci0+bGVuLCBETUFfVE9fREVWSUNFKTsNCj4gPiArICAgICAgIGlmICh4ZmVyLT5yeF9idWYp
+DQo+ID4gKyAgICAgICAgICAgICAgIGRtYV91bm1hcF9zaW5nbGUoZGV2LCB4ZmVyLT5yeF9kbWEs
+IHhmZXItPmxlbiwNCj4gPiArIERNQV9GUk9NX0RFVklDRSk7DQo+IA0KPiBXaHkgY2FuJ3QgeW91
+IHVzZSBTUEkgY29yZSBETUEgbWFwcGluZyBjb2RlPw0KDQpJIGRpZG4ndCBmaW5kIHRoZSBTUEkg
+Y29yZSBETUEgbWFwcGluZyBjb2RlIGZvciBzaW5nbGUgbWFwaW5nLiANClRoZSBtZXRob2QgY3Vy
+cmVudGx5IHVzZWQgaXMgdGhlIGdlbmVyYWwgRE1BIHNpbmdsZS1tYXAgY29kZSB1c2FnZSBtZXRo
+b2QuDQoNCg0KPiANCj4gPiArICAgICAgIGRldmljZV9zZXRfbm9kZSgmY3Rsci0+ZGV2LCBwZGV2
+LT5kZXYuZndub2RlKTsNCj4gDQo+IFVzZSBkZXZfZndub2RlKCkgaW4gdGhlIHNlY29uZCBhcmd1
+bWVudC4NCj4NCg0KWW91IG1lYW4gYXMgYmVsb3cgPw0KDQpkZXZpY2Vfc2V0X25vZGUoJmN0bHIt
+PmRldiwgZGV2X2Z3bm9kZShkZXYpKTsNCg0KQmVzdCBSZWdhcmRzLA0KTGktaGFvIEt1bw0K
