@@ -2,57 +2,131 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A28B949547D
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Jan 2022 19:58:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 410C14954ED
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jan 2022 20:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377357AbiATS4T (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Jan 2022 13:56:19 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36056 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377374AbiATS4Q (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jan 2022 13:56:16 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5912DB81E28
-        for <linux-spi@vger.kernel.org>; Thu, 20 Jan 2022 18:56:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EDC56C340E0;
-        Thu, 20 Jan 2022 18:56:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642704974;
-        bh=DcYa8XDS6orcWfCAUCqZf5Jljz4pxXTaBGgKAEmaTQo=;
-        h=Subject:From:Date:To:From;
-        b=plyfui58rZCiiYpplElymw9nnTSA4oCGOpOl5mgB8KNLxV8Xh1Q0A/KwIYI2XFaBl
-         RofHryYNKcqcQt5MmDsyfPHjH2HOEmty+rzlfxC5Uu7fiWKH/tKkD5tv4/ItlDQ6OH
-         fb9AlV3SFWCYoS9gEbjcZhTRpRUFk1Fuzb5DBa4iwH44HSpU0RmOJda/RBbLLf04yG
-         iv177fWoxF5c0EXU1iCDy+/TKJjs5XhlUXHY9f0ScjJZnEapTQfSOvmL35nhYPP8sD
-         bjym8RHRjIU5YirAwx66JcYJJ7c3ESBiGYZDXdc+bxZW6u+x3Ium+tE5Zy1o0ahC0O
-         //qy2YoVDZG2Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C8B3FF60796;
-        Thu, 20 Jan 2022 18:56:13 +0000 (UTC)
+        id S1377448AbiATTgS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Jan 2022 14:36:18 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:35024 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377433AbiATTgR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jan 2022 14:36:17 -0500
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220120193615epoutp04ab000d6c49e3e30214e251ac0604766d~MEaeK6EtQ0218502185epoutp04_
+        for <linux-spi@vger.kernel.org>; Thu, 20 Jan 2022 19:36:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220120193615epoutp04ab000d6c49e3e30214e251ac0604766d~MEaeK6EtQ0218502185epoutp04_
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1642707375;
+        bh=Qtn7upv8GZjDoLwHPDOTqVpHTQyLHTy5KXPqN6blMZI=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=ufoClSASShMge2QL7C+vbMR8eycWev2iAtB1f+/2CoiNXASaUhQRxvx6+vAkVTPQ3
+         5dkylfiiZkCTQzkPw5GGL9acy8vRjTglaiuRdgmyNKnqgfmo9602Vhj9dBPIkX2i4R
+         yNoxRWMGYU3nQMrTv4vfLmbA7GAk02ZN45opFhHc=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20220120193614epcas5p2aa24bcbf2e6e0be2260b9432f7336ab3~MEadSR0st0131201312epcas5p20;
+        Thu, 20 Jan 2022 19:36:14 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.174]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4Jft6K5w2vz4x9Pw; Thu, 20 Jan
+        2022 19:36:09 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        26.AE.06423.9A9B9E16; Fri, 21 Jan 2022 04:36:09 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220120193608epcas5p466c73dfdcc7eb5cdcd52516a635fca79~MEaX5wPYa1027310273epcas5p4t;
+        Thu, 20 Jan 2022 19:36:08 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220120193608epsmtrp25bbbdf5bd2072fd24e0044219a07a790~MEaX45_8V1490214902epsmtrp2q;
+        Thu, 20 Jan 2022 19:36:08 +0000 (GMT)
+X-AuditID: b6c32a49-b01ff70000001917-60-61e9b9a903d0
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1E.83.29871.8A9B9E16; Fri, 21 Jan 2022 04:36:08 +0900 (KST)
+Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
+        [107.108.73.139]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220120193606epsmtip2d837dd6dae9e8bff1606ead45f23784e~MEaWLVRXh1544215442epsmtip2C;
+        Thu, 20 Jan 2022 19:36:06 +0000 (GMT)
+From:   Alim Akhtar <alim.akhtar@samsung.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linus.walleij@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
+        broonie@kernel.org, andi@etezian.org, linux-spi@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Subject: [PATCH v2 0/3] Add FSD SPI support
+Date:   Fri, 21 Jan 2022 00:54:35 +0530
+Message-Id: <20220120192438.25555-1-alim.akhtar@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBKsWRmVeSWpSXmKPExsWy7bCmpu7KnS8TDSZvMLZ4MG8bm8XiH8+Z
+        LKY+fMJmMf/IOVaLjW9/MFlM+bOcyWLT42usFpd3zWGzmHF+H5NF48eb7BaLtn5ht2jde4Td
+        gcdjVkMvm8f1JZ+YPTat6mTzuHNtD5vH5iX1Hn1bVjF6fN4kF8AelW2TkZqYklqkkJqXnJ+S
+        mZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk4hOg65aZA3SokkJZYk4pUCggsbhYSd/Opii/
+        tCRVISO/uMRWKbUgJafApECvODG3uDQvXS8vtcTK0MDAyBSoMCE7Y1ZPfcETtoofV/4yNjAu
+        Ze1i5OSQEDCR+PRyGlsXIxeHkMBuRokLM5cxQjifGCVez9wK5XxjlFi88x1cy6mfr9khEnsZ
+        JfrenmSGcFqYJM7u+80GUsUmoC1xd/oWJhBbRMBN4kZjBxNIEbPAHCaJzavfM4MkhIGK1l85
+        xg5iswioSqxt2QjWzCtgI/Fx4hFmiHXyEqs3HADbICFwj13i8oEtbBAJF4lrsxawQ9jCEq+O
+        b4GypSQ+v9sLVMMBZGdL9OwyhgjXSCydd4wFwraXOHBlDgtICbOApsT6XfogYWYBPone30+Y
+        IDp5JTrahCCqVSWa312F6pSWmNjdDQ0ID4k3Mx+AvSgkECtx50MT6wRGmVkIQxcwMq5ilEwt
+        KM5NTy02LTDMSy2Hx01yfu4mRnCS0/LcwXj3wQe9Q4xMHIyHGCU4mJVEeKXqnyUK8aYkVlal
+        FuXHF5XmpBYfYjQFhtJEZinR5Hxgms0riTc0sTQwMTMzM7E0NjNUEuc9nb4hUUggPbEkNTs1
+        tSC1CKaPiYNTqoHJb+a0XYKfr8VdOp54MbXI8s7ppUEmtxfp7VuyYav85g2PH/hIq98t0ZmR
+        dOyA8CkRnzOHSmt7u1PjbW2XLn8zz+uNwwn3tV9P2BjM9JvfUVT/xCr065n2SO9Lv2fxqGso
+        v7ivMfnP/e7FFmsdRZXjF/qslqmSniwi+mCOzRbxEKPpWpGqu5Nn8H04yq3QdMnLe9PtfO7Z
+        VpxHrhZGfth0Su+2iXOC5Wm5PUd3Lv90efGOX9pPlmyM4HbMShaRO2+Ufz6dc+/K8vdmZ7x3
+        H6o62aCjOE+Mm7Vzw9EpvmsqvtoZuVWtnXEwwidIebUd5+3Sdz8KP+nc6D3vsrBw2sL3ftG7
+        1C1qf57v09y34cPqLUosxRmJhlrMRcWJAIg5A+b7AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrILMWRmVeSWpSXmKPExsWy7bCSvO6KnS8TDZZck7V4MG8bm8XiH8+Z
+        LKY+fMJmMf/IOVaLjW9/MFlM+bOcyWLT42usFpd3zWGzmHF+H5NF48eb7BaLtn5ht2jde4Td
+        gcdjVkMvm8f1JZ+YPTat6mTzuHNtD5vH5iX1Hn1bVjF6fN4kF8AexWWTkpqTWZZapG+XwJUx
+        q6e+4AlbxY8rfxkbGJeydjFyckgImEic+vmavYuRi0NIYDejxIKLN1kgEtIS1zdOYIewhSVW
+        /nsOVdTEJNH4azZYN5uAtsTd6VuYQGwRAQ+Jtn/3mEGKmAWWMUls33cCbJIwUNH6K8fAJrEI
+        qEqsbdnIBmLzCthIfJx4hBlig7zE6g0HmCcw8ixgZFjFKJlaUJybnltsWGCYl1quV5yYW1ya
+        l66XnJ+7iREcilqaOxi3r/qgd4iRiYPxEKMEB7OSCK9U/bNEId6UxMqq1KL8+KLSnNTiQ4zS
+        HCxK4rwXuk7GCwmkJ5akZqemFqQWwWSZODilGpiOX/gnkaLBlpElucnTe6rzc5EC8T1r92h+
+        ZK77s+HR2u+sz87xcu7ccqH1+unlsmKH1fRDIzaWmh+58/RDf+iZi7yLIs/eqa/bqrRDrUUt
+        Zl6K91x/u1Vu7iFyn0yy1t9xKZmpxtv2n+X/kzKZksw9f/55Lk2RnBjJdelJkMA8h9KPr1tr
+        YqJifM9y/y+q6mua+uP7kQSd/xGsLFZfTyql8elqTNkp+zTw2jLdB0y+b0QbTgeuv/n3xcV3
+        h/Z0s9yU2Zb7LUz02fkTMxZfbT6mt0NB+EX6J8HIp955N5615+8ymzPxYY3sqRLfknuqstPE
+        ywsPav77XrtwVs+JtRu55l6Xyq6fUu/E3HvbVodbiaU4I9FQi7moOBEAmxxRhrQCAAA=
+X-CMS-MailID: 20220120193608epcas5p466c73dfdcc7eb5cdcd52516a635fca79
+X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <164270497365.25930.7429697423670669163.git-patchwork-housekeeping@kernel.org>
-Date:   Thu, 20 Jan 2022 18:56:13 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220120193608epcas5p466c73dfdcc7eb5cdcd52516a635fca79
+References: <CGME20220120193608epcas5p466c73dfdcc7eb5cdcd52516a635fca79@epcas5p4.samsung.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v5] spi: dt-bindings: samsung: convert to dtschema (2022-01-20T17:57:43)
-  Superseding: [v4] spi: dt-bindings: samsung: convert to dtschema (2022-01-19T20:10:00):
-    [v4,1/5] ARM: dts: exynos: split dmas into array of phandles in Exynos5250
-    [v4,2/5] spi: dt-bindings: samsung: convert to dtschema
-    [v4,3/5] spi: dt-bindings: samsung: allow controller-data to be optional
-    [v4,4/5] mfd: dt-bindings: google,cros-ec: reference Samsung SPI bindings
-    [v4,5/5] spi: s3c64xx: allow controller-data to be optional
+Adds support for SPI controller found in Tesla FSD SoC
 
+-Changes since v1
+* Splited SPI changes from a larger inital patch set
+* Rebased on Krzysztof's latest (v5) SPI schema changes
+* Added tag
+
+Note: This series is depended on [1] patches which adds
+support of FSD SoC and on Krzysztof's v5 [2] of spi schema changes
+
+[1] https://lkml.org/lkml/2022/1/18/498
+[2] https://www.spinics.net/lists/kernel/msg4211991.html
+
+Alim Akhtar (2):
+  spi: dt-bindings: samsung: Add fsd spi compatible
+  spi: s3c64xx: Add spi port configuration for Tesla FSD SoC
+
+Aswani Reddy (1):
+  arm64: dts: fsd: Add SPI device nodes
+
+ .../devicetree/bindings/spi/samsung,spi.yaml  |  1 +
+ arch/arm64/boot/dts/tesla/fsd.dtsi            | 57 +++++++++++++++++++
+ drivers/spi/spi-s3c64xx.c                     | 13 +++++
+ 3 files changed, 71 insertions(+)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.25.1
 
