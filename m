@@ -2,93 +2,310 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 609FF4951B5
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Jan 2022 16:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8278E4951F5
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Jan 2022 17:04:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346176AbiATPpu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 20 Jan 2022 10:45:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346016AbiATPpu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jan 2022 10:45:50 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFCCC061574;
-        Thu, 20 Jan 2022 07:45:50 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id m11so30352234edi.13;
-        Thu, 20 Jan 2022 07:45:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bojt1cq8eqmehCFdf7q2oCFRQ8rKvEo0i4l4sBwygPU=;
-        b=qAYNgaEozdsfpabfPMCYsQnCjsGbRoQL3GhRsCiNxa78wkEQV0XxJZyA0taRKwd3od
-         7Si2s3y3I/5mp2hyJVM34lWEpuygDUJ8Q6nZvDB4Zqw3mMM8z/GYBHfmKoruMiZc7buI
-         CSnD4pn1VSfSnDPrZna+hS/zkxCH2MStkU4hWyp3Llg+eOXr0TUTMMixFl9t8e3GMF3d
-         eMy8xL+4eznGE949RJyHvWDumiohU5aIFvjY5Hthppky+OavJRTz5J115kseQnRkGx8E
-         f95LOFnq7nnPPdHGG6QMxP6bZy3MFP5sC/uFFACjPyc+uKBvPU6G1eHaZd/SuGNPpKRG
-         Czxg==
+        id S1376859AbiATQD7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 20 Jan 2022 11:03:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33208 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1376853AbiATQDv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 20 Jan 2022 11:03:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642694631;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lixuK47drG//j/RuSryoeq2vkz8TlRYpW2Ls5y5YAvA=;
+        b=gkCGPSKw/amZQSLX8IerbcmUfFFAvgJOyJQc+8kvpKAt3nTJhuzS6kLOTrfQnCOyi/SqO6
+        Glk/C/t3g5nO+U7hKw2P8yKEL2v3hnQvzXMG1/gjSctcOZYS3pgFHDGGi/PP+jlqcnmERl
+        zprCpTIV+jpjcwkEktQPIyQMXV81L6Y=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-78-nfRWxvU8MQ-BDuYCHG14gA-1; Thu, 20 Jan 2022 11:03:49 -0500
+X-MC-Unique: nfRWxvU8MQ-BDuYCHG14gA-1
+Received: by mail-ed1-f70.google.com with SMTP id o10-20020a056402438a00b00403212b6b1aso6270975edc.13
+        for <linux-spi@vger.kernel.org>; Thu, 20 Jan 2022 08:03:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bojt1cq8eqmehCFdf7q2oCFRQ8rKvEo0i4l4sBwygPU=;
-        b=8BuwgRC6hizRxy71cvvHI3tg5cKN4YXqQU++4F43zRrj0NOyw4R3n5q0bEO9wa03S+
-         2rUvuxkiRlX5zlu4PMytyna883Mb1CzzIBAmW44wC8NKch7B1hQ0oCXY1j2WkFJYr8FP
-         BhMDxG1Bu0Wf4k0Qb0KmZMc5jmuJJuDG1pgPhZlvgtQDpV7EgCzFvEI0JzAuyhmF4nGI
-         UnkDjwL6OsTX+yivAj3x/WemUmjrntzz4OHl4XGcL8vgr6W4eZGsBieRkIWo379PK6r9
-         qtXAp0nRiSkqgoGhI7ZBywf/eM7vL453xmY47/RHENiFWaz7N+ObCn5WQMxQvM2jjmBR
-         QiJg==
-X-Gm-Message-State: AOAM530xxgJVA2GKvzeJCZqaf6s8tk9FmaZInvFdhht+TBH13ExHVLGE
-        Y5YFEldz0hyPtrnv44PksJzgZInvpRF7BYFc7RI=
-X-Google-Smtp-Source: ABdhPJwSlmq5dL42E/rJ/5HNGr0ky2W7IX4dNnb+7dy+H7+8bfDWemciLlOKSVFP2kfwc8pIeNknLGlmldEhwnzPVZs=
-X-Received: by 2002:a17:906:7948:: with SMTP id l8mr11438618ejo.636.1642693548839;
- Thu, 20 Jan 2022 07:45:48 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lixuK47drG//j/RuSryoeq2vkz8TlRYpW2Ls5y5YAvA=;
+        b=e+y3cs/srawryDZYyZrxsTo6pfZZ2HDbwwgLogDewWi/byoZmqiLHtucN61s6bl3ta
+         ANoOVJgujjL3nAEiqkFfbiO/ko4NHhLM8okfqH5Y2laa5LmUH6CzgpMxj3Fk+1gdqPru
+         syX8uLzfsiDN57zlrbOfemaZq6bI2WiFgGGXtcOs0juy3xvYlk28sXeWUsIkNc94IkFg
+         bBWqFj9B8ww6dlyIYmIZEKwveeAepQPbHnjf5Fbp53pMjViV+PkPz7xU0pvnaXwqA6ii
+         vgpyusIf8za/Ciz8+UeXW5bTQRwCqaA9354dzUuEXkqZj5jA7MllRA8f2lH2+VN1k0hL
+         FbSw==
+X-Gm-Message-State: AOAM5333xR3gYggu7fqIMvE4V5zjvcZx02WebzS+HjfGdRYrx9mM1XK5
+        A41Hk3N8pYXN1oaEDDvDq5VnpS4VBE0J/pGaoEBnJF++TvUe+oB3ElSOSvbt71828HrT17WtsNe
+        7MgnkGXIpZCFPN0up1z7c
+X-Received: by 2002:a05:6402:158:: with SMTP id s24mr38071567edu.144.1642694628543;
+        Thu, 20 Jan 2022 08:03:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxe3h22D7eAd0PIsS5gA0oXNxsIv3oIJVCXkBo3+FeRiUR9f98dTJPy+EdnsnTqdgaYwJqUbw==
+X-Received: by 2002:a05:6402:158:: with SMTP id s24mr38071543edu.144.1642694628273;
+        Thu, 20 Jan 2022 08:03:48 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id h15sm1166290ejg.144.2022.01.20.08.03.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jan 2022 08:03:47 -0800 (PST)
+Message-ID: <f345f3b0-65c7-24ec-4cd7-4e6062f01d17@redhat.com>
+Date:   Thu, 20 Jan 2022 17:03:47 +0100
 MIME-Version: 1.0
-References: <20220118110928.120640-1-linus.walleij@linaro.org> <20220118110928.120640-3-linus.walleij@linaro.org>
-In-Reply-To: <20220118110928.120640-3-linus.walleij@linaro.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 20 Jan 2022 17:44:06 +0200
-Message-ID: <CAHp75Vev_xH_MPe0S1CDfC5tUetzfZEQVJpNsePRddK6czLnPA@mail.gmail.com>
-Subject: Re: [PATCH 3/3 v2] spi: s3c64xx: Convert to use GPIO descriptors
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v4 6/9] platform/x86: bus-multi-instantiate: Reorganize
+ I2C functions
+To:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+References: <20220120134326.5295-1-sbinding@opensource.cirrus.com>
+ <20220120134326.5295-7-sbinding@opensource.cirrus.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220120134326.5295-7-sbinding@opensource.cirrus.com>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=hdegoede@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 9:40 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+Hi,
 
-...
+On 1/20/22 14:43, Stefan Binding wrote:
+> From: Lucas Tanure <tanureal@opensource.cirrus.com>
+> 
+> Reorganize I2C functions to accommodate SPI support
+> Split the probe and factor out parts of the code
+> that will be used in the SPI support
+> 
+> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
+> ---
+>  drivers/platform/x86/bus-multi-instantiate.c | 150 ++++++++++++-------
+>  1 file changed, 96 insertions(+), 54 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/bus-multi-instantiate.c b/drivers/platform/x86/bus-multi-instantiate.c
+> index 982dfecfd27c..50f1540762e9 100644
+> --- a/drivers/platform/x86/bus-multi-instantiate.c
+> +++ b/drivers/platform/x86/bus-multi-instantiate.c
+> @@ -29,85 +29,129 @@ struct bmi_instance {
+>  
+>  struct bmi {
+>  	int i2c_num;
+> -	struct i2c_client *i2c_devs[];
+> +	struct i2c_client **i2c_devs;
+>  };
+>  
+> -static int bmi_probe(struct platform_device *pdev)
+> +static int bmi_get_irq(struct platform_device *pdev, struct acpi_device *adev,
+> +		       const struct bmi_instance *inst)
+> +{
+> +	int ret;
+> +
+> +	switch (inst->flags & IRQ_RESOURCE_TYPE) {
+> +	case IRQ_RESOURCE_GPIO:
+> +		ret = acpi_dev_gpio_irq_get(adev, inst->irq_idx);
+> +		break;
+> +	case IRQ_RESOURCE_APIC:
+> +		ret = platform_get_irq(pdev, inst->irq_idx);
+> +		break;
+> +	default:
+> +		ret = 0;
+> +		break;
+> +	}
+> +
+> +	if (ret < 0)
+> +		dev_err_probe(&pdev->dev, ret, "Error requesting irq at index %d: %d\n",
+> +			      inst->irq_idx, ret);
+> +
+> +	return ret;
+> +}
+> +
+> +static void bmi_devs_unregister(struct bmi *bmi)
+> +{
+> +	while (bmi->i2c_num > 0)
+> +		i2c_unregister_device(bmi->i2c_devs[--bmi->i2c_num]);
+> +}
+> +
+> +/**
+> + * bmi_i2c_probe - Instantiate multiple I2C devices from inst array
+> + * @pdev:	Platform device
+> + * @adev:	ACPI device
+> + * @bmi:	Internal struct for Bus multi instantiate driver
+> + * @inst:	Array of instances to probe
+> + *
+> + * Returns the number of I2C devices instantiate, Zero if none is found or a negative error code.
+> + */
+> +static int bmi_i2c_probe(struct platform_device *pdev, struct acpi_device *adev, struct bmi *bmi,
+> +			 const struct bmi_instance *inst_array)
+>  {
+>  	struct i2c_board_info board_info = {};
+> -	const struct bmi_instance *inst;
+>  	struct device *dev = &pdev->dev;
+> -	struct acpi_device *adev;
+> -	struct bmi *bmi;
+>  	char name[32];
+> -	int i, ret;
+> +	int i, ret = 0, count;
+>  
+> -	inst = device_get_match_data(dev);
+> -	if (!inst) {
+> -		dev_err(dev, "Error ACPI match data is missing\n");
+> -		return -ENODEV;
+> -	}
+> -
+> -	adev = ACPI_COMPANION(dev);
+> -
+> -	/* Count number of clients to instantiate */
+>  	ret = i2c_acpi_client_count(adev);
+> -	if (ret < 0)
+> +	if (ret <= 0)
+>  		return ret;
+> +	count = ret;
+>  
+> -	bmi = devm_kmalloc(dev, struct_size(bmi, i2c_devs, ret), GFP_KERNEL);
+> -	if (!bmi)
+> +	bmi->i2c_devs = devm_kcalloc(dev, count, sizeof(*bmi->i2c_devs), GFP_KERNEL);
+> +	if (!bmi->i2c_devs)
+>  		return -ENOMEM;
+>  
+> -	bmi->i2c_num = ret;
+> -
+> -	for (i = 0; i < bmi->i2c_num && inst[i].type; i++) {
+> +	for (i = 0; i < count && inst_array[i].type; i++) {
+>  		memset(&board_info, 0, sizeof(board_info));
+> -		strlcpy(board_info.type, inst[i].type, I2C_NAME_SIZE);
+> -		snprintf(name, sizeof(name), "%s-%s.%d", dev_name(dev), inst[i].type, i);
+> +		strscpy(board_info.type, inst_array[i].type, I2C_NAME_SIZE);
+> +		snprintf(name, sizeof(name), "%s-%s.%d", dev_name(dev), inst_array[i].type, i);
+>  		board_info.dev_name = name;
+> -		switch (inst[i].flags & IRQ_RESOURCE_TYPE) {
+> -		case IRQ_RESOURCE_GPIO:
+> -			ret = acpi_dev_gpio_irq_get(adev, inst[i].irq_idx);
+> -			if (ret < 0) {
+> -				dev_err(dev, "Error requesting irq at index %d: %d\n",
+> -						inst[i].irq_idx, ret);
+> -				goto error;
+> -			}
+> -			board_info.irq = ret;
+> -			break;
+> -		case IRQ_RESOURCE_APIC:
+> -			ret = platform_get_irq(pdev, inst[i].irq_idx);
+> -			if (ret < 0) {
+> -				dev_dbg(dev, "Error requesting irq at index %d: %d\n",
+> -					inst[i].irq_idx, ret);
+> -				goto error;
+> -			}
+> -			board_info.irq = ret;
+> -			break;
+> -		default:
+> -			board_info.irq = 0;
+> -			break;
+> -		}
+> +
+> +		ret = bmi_get_irq(pdev, adev, &inst_array[i]);
+> +		if (ret < 0)
+> +			goto error;
+> +		board_info.irq = ret;
+> +
+>  		bmi->i2c_devs[i] = i2c_acpi_new_device(dev, i, &board_info);
+>  		if (IS_ERR(bmi->i2c_devs[i])) {
+>  			ret = dev_err_probe(dev, PTR_ERR(bmi->i2c_devs[i]),
+>  					    "Error creating i2c-client, idx %d\n", i);
+>  			goto error;
+>  		}
+> +		bmi->i2c_num++;
+>  	}
+> -	if (i < bmi->i2c_num) {
+> +	if (bmi->i2c_num < count) {
+>  		dev_err(dev, "Error finding driver, idx %d\n", i);
+>  		ret = -ENODEV;
+>  		goto error;
+>  	}
+>  
+> -	platform_set_drvdata(pdev, bmi);
+> -	return 0;
+> +	dev_info(dev, "Instantiate %d I2C devices.\n", bmi->i2c_num);
 
-> +static struct gpiod_lookup_table crag_spi0_gpiod_table = {
-> +       .dev_id = "s3c6410-spi.0",
-> +       .table = {
-> +               GPIO_LOOKUP_IDX("GPIOC", 3, "cs", 0, GPIO_ACTIVE_LOW),
-> +               GPIO_LOOKUP_IDX("GPION", 5, "cs", 1, GPIO_ACTIVE_LOW),
+Bonus nitpick, please change this to:
 
-> +               { },
+	dev_info(dev, "Instantiated %d I2C devices.\n", bmi->i2c_num);
 
-Since it will be v3 of the series, can we remove the comma in the
-terminator line?
+IOW do s/Instantiate/Instantiated/
 
-> +       },
-> +};
+Regards,
 
-...
+Hans
 
-> +       /* This was dynamically allocated on the DT path */
 
-> +       if (spi->dev.of_node)
+>  
+> +	return bmi->i2c_num;
+>  error:
+> -	while (--i >= 0)
+> -		i2c_unregister_device(bmi->i2c_devs[i]);
+> +	dev_err_probe(dev, ret, "I2C error %d\n", ret);
+> +	bmi_devs_unregister(bmi);
+> +
+> +	return ret;
+> +}
+> +
+> +static int bmi_probe(struct platform_device *pdev)
+> +{
+> +	const struct bmi_instance *inst_array;
+> +	struct device *dev = &pdev->dev;
+> +	struct acpi_device *adev;
+> +	struct bmi *bmi;
+> +	int ret;
+> +
+> +	inst_array = device_get_match_data(dev);
+> +	if (!inst_array) {
+> +		dev_err(dev, "Error ACPI match data is missing\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	adev = ACPI_COMPANION(dev);
+> +	if (!adev)
+> +		return -ENODEV;
+> +
+> +	bmi = devm_kzalloc(dev, sizeof(*bmi), GFP_KERNEL);
+> +	if (!bmi)
+> +		return -ENOMEM;
+> +
+> +	platform_set_drvdata(pdev, bmi);
+> +
+> +	ret = bmi_i2c_probe(pdev, adev, bmi, inst_array);
+> +	if (ret > 0)
+> +		return 0;
+> +	if (ret == 0)
+> +		ret = -ENODEV;
+>  
+>  	return ret;
+>  }
+> @@ -115,10 +159,8 @@ static int bmi_probe(struct platform_device *pdev)
+>  static int bmi_remove(struct platform_device *pdev)
+>  {
+>  	struct bmi *bmi = platform_get_drvdata(pdev);
+> -	int i;
+>  
+> -	for (i = 0; i < bmi->i2c_num; i++)
+> -		i2c_unregister_device(bmi->i2c_devs[i]);
+> +	bmi_devs_unregister(bmi);
+>  
+>  	return 0;
+>  }
+> 
 
-I believe we may survive w/o this check(s).
-
-> +               kfree(cs);
-
---
-With Best Regards,
-Andy Shevchenko
