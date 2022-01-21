@@ -2,57 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 038E249613A
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Jan 2022 15:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6361A49614F
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Jan 2022 15:44:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350956AbiAUOjt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Jan 2022 09:39:49 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:53304 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbiAUOjs (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jan 2022 09:39:48 -0500
+        id S1381160AbiAUOoE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 Jan 2022 09:44:04 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:48752 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235452AbiAUOoE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jan 2022 09:44:04 -0500
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 45E7721982;
-        Fri, 21 Jan 2022 14:39:47 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id A0E1E1F3AF;
+        Fri, 21 Jan 2022 14:44:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1642775987; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1642776242; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=YAahMuqFx1y2j0gx3GLTjHZcyfAflC+QYlZqqlZMHYw=;
-        b=ylXZ/uq4riyl2WMBJerF50H8mr8mmJsjlX2lWZUHkkwGnix2p2Xw7mOLUlQRDeS7Trj7G7
-        +r8EymvLNE34/l5Cxvpfp33mrb67kq6ZbQtDSmzoZea34N59RaK9dIFO250PDbxwRVmeF3
-        AtWbwKUIPrM/8+tMDaV8vgIIyw2Ud8U=
+        bh=AdbKlDRug83o0KQNaUky39bFkRGjkGRzNFZeYdf1DRE=;
+        b=tRIwMNDz3VDHmWB8Q8lxhBuYnzpcfWiSIw+ZnIG3G6TyikAqBZMnhSKL3XitKxltgBNfL4
+        yiJ8pIRoPb/zuzE4LmjBV4r6+4nrknu85Str3U2mb0cyQNT7LBPIbI4wIxZ849Yxffvmol
+        LjDdCIyUDFzkAnYEqIwUdW7+qWIzxfM=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1642775987;
+        s=susede2_ed25519; t=1642776242;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=YAahMuqFx1y2j0gx3GLTjHZcyfAflC+QYlZqqlZMHYw=;
-        b=183+lWyCjbEjxA2fvSIfSHKWw+NcSIBEosL8NXuPOlEtW4z6puOb3/abH/CYseF1PWl9ik
-        dKn2juUMhwDFUxBw==
+        bh=AdbKlDRug83o0KQNaUky39bFkRGjkGRzNFZeYdf1DRE=;
+        b=ZDzg4gu5Hal1+1DoptQd99JQgTzLN6b8cI1jbVDnyWA5U3Tyr7W6H6LfWkMUSv5nr5zFvi
+        zokGH7nRu9XYJoDQ==
 Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
-        by relay2.suse.de (Postfix) with ESMTP id 32EFEA3B85;
-        Fri, 21 Jan 2022 14:39:47 +0000 (UTC)
-Date:   Fri, 21 Jan 2022 15:39:47 +0100
-Message-ID: <s5hmtjprw3w.wl-tiwai@suse.de>
+        by relay2.suse.de (Postfix) with ESMTP id 873E7A3B8B;
+        Fri, 21 Jan 2022 14:44:02 +0000 (UTC)
+Date:   Fri, 21 Jan 2022 15:44:02 +0100
+Message-ID: <s5hlez9rvwt.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Stefan Binding <sbinding@opensource.cirrus.com>
-Cc:     <platform-driver-x86@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-acpi@vger.kernel.org>,
-        'Lucas Tanure' <tanureal@opensource.cirrus.com>,
-        "'Rafael J . Wysocki'" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>, 'Takashi Iwai' <tiwai@suse.com>,
-        'Mark Gross' <markgross@kernel.org>,
-        'Hans de Goede' <hdegoede@redhat.com>,
-        'Mark Brown' <broonie@kernel.org>,
-        <patches@opensource.cirrus.com>, <linux-spi@vger.kernel.org>,
-        'Len Brown' <lenb@kernel.org>
-Subject: Re: [PATCH v4 8/9] ALSA: hda/realtek: Add support for HP Laptops
-In-Reply-To: <018c01d80ed3$b5a5a610$20f0f230$@opensource.cirrus.com>
-References: <20220120134326.5295-1-sbinding@opensource.cirrus.com>
-        <20220120134326.5295-9-sbinding@opensource.cirrus.com>
-        <s5ha6fqtokp.wl-tiwai@suse.de>
-        <018c01d80ed3$b5a5a610$20f0f230$@opensource.cirrus.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+Subject: Re: [PATCH v5 8/9] ALSA: hda/realtek: Add support for HP Laptops
+In-Reply-To: <20220121143254.6432-9-sbinding@opensource.cirrus.com>
+References: <20220121143254.6432-1-sbinding@opensource.cirrus.com>
+        <20220121143254.6432-9-sbinding@opensource.cirrus.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
  FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
  (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -62,55 +62,28 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 21 Jan 2022 15:32:24 +0100,
+On Fri, 21 Jan 2022 15:32:53 +0100,
 Stefan Binding wrote:
 > 
-> Hi Takashi,
-> 
-> > -----Original Message-----
-> > From: Alsa-devel <alsa-devel-bounces@alsa-project.org> On Behalf Of
-> > Takashi Iwai
-> > Sent: 20 January 2022 15:27
-> > To: Stefan Binding <sbinding@opensource.cirrus.com>
-> > Cc: platform-driver-x86@vger.kernel.org; alsa-devel@alsa-project.org;
-> linux-
-> > acpi@vger.kernel.org; Lucas Tanure <tanureal@opensource.cirrus.com>;
-> > Rafael J . Wysocki <rafael@kernel.org>; linux-kernel@vger.kernel.org;
-> > Takashi Iwai <tiwai@suse.com>; Mark Gross <markgross@kernel.org>; Hans
-> > de Goede <hdegoede@redhat.com>; Mark Brown <broonie@kernel.org>;
-> > patches@opensource.cirrus.com; linux-spi@vger.kernel.org; Len Brown
-> > <lenb@kernel.org>
-> > Subject: Re: [PATCH v4 8/9] ALSA: hda/realtek: Add support for HP Laptops
-> > 
-> > On Thu, 20 Jan 2022 14:43:25 +0100,
-> > Stefan Binding wrote:
-> > >
-> > > From: Lucas Tanure <tanureal@opensource.cirrus.com>
-> > >
-> > > Add support for two and four CS35L41 using the component
-> > > binding method
-> > >
-> > > Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
-> > > Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
-> > 
-> > I guess this patch won't be applicable until ACPI or other tree syncs
-> > with the latest Linus tree or sound git tree.  Must this patch be
-> > merged with other patches?
-> 
-> In order for these laptops to work correctly, it will need all of the
-> patches merged,
-> including both this change and the ACPI changes - without the ACPI changes,
-> some of the amps will not probe.
+> @@ -8926,7 +8953,21 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+>  	SND_PCI_QUIRK(0x103c, 0x8896, "HP EliteBook 855 G8 Notebook PC", ALC285_FIXUP_HP_MUTE_LED),
+>  	SND_PCI_QUIRK(0x103c, 0x8898, "HP EliteBook 845 G8 Notebook PC", ALC285_FIXUP_HP_LIMIT_INT_MIC_BOOST),
+>  	SND_PCI_QUIRK(0x103c, 0x88d0, "HP Pavilion 15-eh1xxx (mainboard 88D0)", ALC287_FIXUP_HP_GPIO_LED),
+> -	SND_PCI_QUIRK(0x103c, 0x89c3, "HP", ALC285_FIXUP_HP_GPIO_LED),
+> +	SND_PCI_QUIRK(0x103c, 0x896E, "HP EliteBook x360 830 G9", ALC245_FIXUP_CS35L41_SPI_2),
 
-Well, the question is whether merging it would break other things or
-not.
+Please use lower letters for the hex number to align with others.
+(Also other lines you've added.)
 
-Currently the sound on the laptop won't work anyway, and applying this
-in other tree would need the back-pull of existing HD-audio changes
-from sound.git tree or Linus treee, which is often cumbersome.  The
-goal is to plumb everything up in 5.17-rc as soon as possible, and
-it's often faster if each tree concentrates on only the responsible
-bits.
+Though, it's no urgent problem, and we can fix it later if the whole
+patch set can be merged now.  If v3 needs to be respinned, please
+apply the fix.
 
+With the correction to be done,
+
+Acked-by: Takashi Iwai <tiwai@suse.de>
+
+
+thanks,
 
 Takashi
