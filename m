@@ -2,97 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2652E4963E6
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Jan 2022 18:26:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B1549649C
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Jan 2022 18:56:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351662AbiAUR0u (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Jan 2022 12:26:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56970 "EHLO
+        id S1381169AbiAUR4W (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 Jan 2022 12:56:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239235AbiAUR0u (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jan 2022 12:26:50 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B875CC06173B;
-        Fri, 21 Jan 2022 09:26:49 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id z22so43824672edd.12;
-        Fri, 21 Jan 2022 09:26:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pkh0FnEnFTf5DbQ41FfAKMkOcMuij67nGb3VgoTKjSk=;
-        b=f6bF985qqlGqPAa7FIkrtKNrVjoO/px5P48r3ozibenZ97y414/fH3d3lcqFWNvKdY
-         CaNxtraprvPAXJ5Zkrwo5LAOhOAmtKBhtO0S5jIUa0jx9eHrU+t843jt/bLXjl5j6g7u
-         gEXMfWkLeC+0q/1Zds0GFBXLqtzuF21txtQIiuP0MGH4KkKctND7dimWsmlOpHOkJIZK
-         qI9twLL2yftwQ7icMcYh39glQ22CJMWhyuyrxYRYprdK9zf1N33DacjePmwn6BHeHa4z
-         smPEs4PpSTbHFNaLN2m3hv62Lf0Fdg12VA68u1MI+oprIEsqxG6F1BLBihsOWg76kmQA
-         k7UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pkh0FnEnFTf5DbQ41FfAKMkOcMuij67nGb3VgoTKjSk=;
-        b=HO2Bm3Vu80oCQrV+4dacl2V03hy4V0AZ52qTYzQqUe863fCyCTxAOb/pI59XrZioCs
-         GkmRCXk/ISt7OsJXGBK+RV1Y3TN8sn5+ZQAUDQVZB2O4sq5gdEQQHuQ56Llf7j8GrX7a
-         av/5rSIhYglzmcn5GX9ceLiml+6nKvXPIVgvbKunKS26fUvJorycb5zE0bxxtYS6JMZ9
-         1dvQsouv2crT5bq7w/+rdYsPQ9NJlEuqjZjH/DaDkzIbL30aZo6WHjcxTb4AXFh27Nwm
-         7o0CYt+q7cnsQc2Iwa3D0VUVmUb451GFIJizf8GLsOzyG6Aslm9A1zlZx8eWMIMAvNOg
-         Fl+w==
-X-Gm-Message-State: AOAM532HtG9Ea6MTbMmCeQIqLeAr7Sgf/h9kAw2OTlDn3xLnb+ybrl/h
-        mI4HPfIZuj7Ttfa1r2e0KUwHX8RfX5H8QHSiY2o=
-X-Google-Smtp-Source: ABdhPJyX4jzocmZGtPrYSNz0ftAZTSO+DM6khaWgxyfKIAFqpbAY2mpq3e3V7ZQRGb1Lya6bOmTDjJHk08ok/M1wQsA=
-X-Received: by 2002:a05:6402:35d3:: with SMTP id z19mr5015343edc.29.1642786008280;
- Fri, 21 Jan 2022 09:26:48 -0800 (PST)
+        with ESMTP id S1382011AbiAUR4T (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jan 2022 12:56:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95475C06173D
+        for <linux-spi@vger.kernel.org>; Fri, 21 Jan 2022 09:56:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 335A261B32
+        for <linux-spi@vger.kernel.org>; Fri, 21 Jan 2022 17:56:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9FA38C340E1;
+        Fri, 21 Jan 2022 17:56:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642787778;
+        bh=bvlWyehetIo3K8vI9o/ROUug93tF9xL8KPixYJtyAwU=;
+        h=Subject:From:Date:To:From;
+        b=Pv6PoCSXVlS2Hccts+xsE6LxTtmYK1P7MUp0U2FOS1jeXkQTXUSuCgQysYgWf30Lu
+         GXRCUaA1cDeY3KF69dSk5Bj23uQj76V/Bi8E09qpZpA0ps/AidoGEd2CZa2ArhyVxX
+         saCRMyhrnPzaJvBUubgR4q+75i1L/QE6Xb5o6WliMD5BGsJSGIjShJwtFDYlAIPmjI
+         nq9gdcPT5oB4iGdSMfy+8grPX2AMNsc8bKbnbb7Wc6Hu7iuX508vs2CONK9dPVjjNb
+         gSp3r44Lz0NxdP3fwTv9kW+zTP9420ocIDGxUYCeeSGXYjuy9SqDFaUY1OzdQibVFt
+         SU94uDX0Z/TpA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 88189F60795;
+        Fri, 21 Jan 2022 17:56:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220118230915.157797-1-linus.walleij@linaro.org>
- <20220118230915.157797-3-linus.walleij@linaro.org> <CAPLW+4=6A=FLKOum48VNUaGBUUXBa=sMYRn4n1_nTtR8a+0YQA@mail.gmail.com>
-In-Reply-To: <CAPLW+4=6A=FLKOum48VNUaGBUUXBa=sMYRn4n1_nTtR8a+0YQA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 21 Jan 2022 19:26:11 +0200
-Message-ID: <CAHp75VftUNC6xFVRJqJhTqHwLvehtT+2+M9j_TsnhAyOf039rQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3 v3] spi: s3c64xx: Convert to use GPIO descriptors
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <164278777855.24153.6635250349857481350.git-patchwork-housekeeping@kernel.org>
+Date:   Fri, 21 Jan 2022 17:56:18 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 1:52 PM Sam Protsenko
-<semen.protsenko@linaro.org> wrote:
-> On Wed, 19 Jan 2022 at 01:11, Linus Walleij <linus.walleij@linaro.org> wrote:
-> >
-> > Convert the S3C64xx SPI host to use GPIO descriptors.
-> >
-> > Provide GPIO descriptor tables for the one user with CS
-> > 0 and 1.
+Latest series: [v6] Support Spi in i2c-multi-instantiate driver (2022-01-21T17:24:22)
+  Superseding: [v5] Support Spi in i2c-multi-instantiate driver (2022-01-21T14:32:45):
+    [v5,1/9] spi: Make spi_alloc_device and spi_add_device public again
+    [v5,2/9] spi: Create helper API to lookup ACPI info for spi device
+    [v5,3/9] spi: Support selection of the index of the ACPI Spi Resource before alloc
+    [v5,4/9] spi: Add API to count spi acpi resources
+    [v5,5/9] platform/x86: i2c-multi-instantiate: Rename it for a generic serial driver name
+    [v5,6/9] platform/x86: serial-multi-instantiate: Reorganize I2C functions
+    [v5,7/9] platform/x86: serial-multi-instantiate: Add SPI support
+    [v5,8/9] ALSA: hda/realtek: Add support for HP Laptops
+    [v5,9/9] ACPI / scan: Create platform device for CS35L41
 
-...
-
-> >         /* Configure feedback delay */
-> > -       writel(cs->fb_delay & 0x3, sdd->regs + S3C64XX_SPI_FB_CLK);
-> > +       if (!cs)
-> > +               /* No delay if not defined */
-> > +               writel(0, sdd->regs + S3C64XX_SPI_FB_CLK);
-> > +       else
-> > +               writel(cs->fb_delay & 0x3, sdd->regs + S3C64XX_SPI_FB_CLK);
->
-> Looks good to me. I'd add {} braces and change "if (!cs)" to "if
-> (cs)", but that's hair splitting and not worth v4, it's fine as it is.
-
-If you are going to change code, then why not use positive conditions?
-
-  if (cs)
-    ...
-  else {
-    ...
-  }
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
