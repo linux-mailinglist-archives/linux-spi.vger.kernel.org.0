@@ -2,103 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7414495D4C
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Jan 2022 11:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 951C44960F5
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Jan 2022 15:32:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379819AbiAUKJy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Jan 2022 05:09:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240580AbiAUKJx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jan 2022 05:09:53 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3058C061574;
-        Fri, 21 Jan 2022 02:09:52 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id b13so41144170edn.0;
-        Fri, 21 Jan 2022 02:09:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=+nHiMUAJkmDRtT1AUkXpecRKxulMj5tC/X/ZVwXvTX4=;
-        b=ec8CeU9fMopF+iyri4E1qG/C22ppZFFNHMX3E4T1DA1zhNeXeVvLhhdwFBMspO5J3v
-         JAb8u1GE4vwHkTgKzHXvFPZTUFeLQrfK6UVtV+f+XqEnPE+laqy6eiCIzhmiRzPQFiyE
-         LRSboTvy7GhSK0Ap+TVXufp0dT5ljRnQ7lvSbotfQr2tSbdmohPEQkfSY9Xl4ZmWGZ0n
-         DRGPAb0n4qT57LZEtlnGekvuTGNepK16GKVF9qdytph4FcjNaOtmNJTUcr8Zha64wNPl
-         o1WB6WWBAScg+S/qbHpom5dFPRr3QNPd8cHEIsDXklcpcugfi4QgvUKolOEXEaVOXMSX
-         79iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=+nHiMUAJkmDRtT1AUkXpecRKxulMj5tC/X/ZVwXvTX4=;
-        b=U1Ht74ApnGRdcbBoBbnu8NKoY0Q8FAEWjuS48SFAxUzwmlXNbPSX3NdOboZGDi4s9b
-         Tc2vTonDSziYo+Jhqk2kdadwHIoQ2LOqBClDD7HheNkG0R0mX/0XqaEWGpwC2KmDahRk
-         Q+5ifmHouzP4SXX4tRJr4YwkL1PAK7muqNipH3sBXBfdegOR7tJfNSybRdlTh9Je7gqJ
-         NLs5ib0r+QgO1JfIGHSIykQSopW6huv4ZHmmXs5loXKB+W6VQcNtyCEnmcZ/SKkOtIcl
-         y4/1Fq8tfI75cANYBKgr8i1G4g1qs1/9ls5jrcJEedj3RV1gBAUF5y33+cN9TAvvPLqu
-         A/IA==
-X-Gm-Message-State: AOAM530HihnWJSH3zMz/QXD8vNfCIMC/U/3SkMm+okfq6uqiS6kiDCL4
-        +YHd/Vx6VmSa/wqCsyP40OkbFt+j5457E0QoyUg=
-X-Google-Smtp-Source: ABdhPJwSzqwy6NLX4yEOhFYJkTtQdtsqNz2Q2jwoJY94p1ChkT7wOUYm2RT29n3Kym151PPMMz/VsHhI3wojm16AsBE=
-X-Received: by 2002:aa7:c0c9:: with SMTP id j9mr3547651edp.270.1642759791349;
- Fri, 21 Jan 2022 02:09:51 -0800 (PST)
+        id S1381105AbiAUOcr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 Jan 2022 09:32:47 -0500
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:26636 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1351048AbiAUOcr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jan 2022 09:32:47 -0500
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20L5gDLg030246;
+        Fri, 21 Jan 2022 08:32:27 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ references : in-reply-to : subject : date : message-id : mime-version :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=JCEvGSRutgn1zFC3u9mSgqGgE4vlOvz4fCTu56u3JTw=;
+ b=RsDflDrf0XKHqhNTAJC8VW6MOGUpJBRGBBh2UiiBPkQRMD3ueYK1Vcba06/BBum8ElR3
+ fQZX7LJ/Am6NMoTGiiyfjPkv0dwb7w+OqITwLzR1mtACfXiz9Pwl5YBVoa/VhUyokQM0
+ 2nZLPinVN4ZAjNUcG8KqV5K2S423cMJJ1XPwILGeruJ+E1gHUPjwUAHu9jLUqK/Fly9q
+ UcWGN2izxYj/WgkdaHEVABi/rW+rfJmQqLyxaJkFAzz4XiIUP+6DofZW548h7fPaPDna
+ EsRoQty6yoHrf8OX5qrjJQJ/NhR1yOyz7ahoEhVRmCM9z3p7JgLCgTR6OPMZs+zgTgFD eA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3dqhynrnt4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 21 Jan 2022 08:32:27 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 21 Jan
+ 2022 14:32:25 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Fri, 21 Jan 2022 14:32:25 +0000
+Received: from LONN2DGDQ73 (unknown [198.90.238.138])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 7133F45D;
+        Fri, 21 Jan 2022 14:32:24 +0000 (UTC)
+From:   Stefan Binding <sbinding@opensource.cirrus.com>
+To:     'Takashi Iwai' <tiwai@suse.de>
+CC:     <platform-driver-x86@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-acpi@vger.kernel.org>,
+        'Lucas Tanure' <tanureal@opensource.cirrus.com>,
+        "'Rafael J . Wysocki'" <rafael@kernel.org>,
+        <linux-kernel@vger.kernel.org>, 'Takashi Iwai' <tiwai@suse.com>,
+        'Mark Gross' <markgross@kernel.org>,
+        'Hans de Goede' <hdegoede@redhat.com>,
+        'Mark Brown' <broonie@kernel.org>,
+        <patches@opensource.cirrus.com>, <linux-spi@vger.kernel.org>,
+        'Len Brown' <lenb@kernel.org>
+References: <20220120134326.5295-1-sbinding@opensource.cirrus.com> <20220120134326.5295-9-sbinding@opensource.cirrus.com> <s5ha6fqtokp.wl-tiwai@suse.de>
+In-Reply-To: <s5ha6fqtokp.wl-tiwai@suse.de>
+Subject: RE: [PATCH v4 8/9] ALSA: hda/realtek: Add support for HP Laptops
+Date:   Fri, 21 Jan 2022 14:32:24 +0000
+Message-ID: <018c01d80ed3$b5a5a610$20f0f230$@opensource.cirrus.com>
 MIME-Version: 1.0
-References: <cover.1642494310.git.lhjeff911@gmail.com> <37998e515d561e762ee30d0ac4fca25a948e0c5c.1642494310.git.lhjeff911@gmail.com>
- <CAHp75VdKc3UDzaqM2G5J5+G90U6Spqyhz_vuOYKhqJ4V-uf=wg@mail.gmail.com>
- <a354d7c1dce4463ea57706dd5443fe7a@sphcmbx02.sunplus.com.tw>
- <CAHp75VcCpye1u3+PK=C3CT8fMHPSOsXTL5AhbLVy0YyGWfyfkQ@mail.gmail.com> <ee5838c307f84bb99ace070292167a26@sphcmbx02.sunplus.com.tw>
-In-Reply-To: <ee5838c307f84bb99ace070292167a26@sphcmbx02.sunplus.com.tw>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 21 Jan 2022 12:09:15 +0200
-Message-ID: <CAHp75VcmFPCC0kDxOma6gunwFRf-eXEr6+ZxQs1dt5GH2quT4Q@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
-To:     =?UTF-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
-Cc:     Li-hao Kuo <lhjeff911@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQFrharyhx4ySa1JB46MXi1N1GyrjwJH3znKAcNcDSGtJkEkwA==
+Content-Language: en-gb
+X-Proofpoint-ORIG-GUID: sOEA562_2qwbgUYCx1ispTGtLe8T2Ttx
+X-Proofpoint-GUID: sOEA562_2qwbgUYCx1ispTGtLe8T2Ttx
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 8:54 AM Lh Kuo =E9=83=AD=E5=8A=9B=E8=B1=AA <lh.Kuo@=
-sunplus.com> wrote:
->
-> > > > > +       if (xfer->tx_buf)
-> > > > > +               dma_unmap_single(dev, xfer->tx_dma, xfer->len, DM=
-A_TO_DEVICE);
-> > > > > +       if (xfer->rx_buf)
-> > > > > +               dma_unmap_single(dev, xfer->rx_dma, xfer->len,
-> > > > > + DMA_FROM_DEVICE);
-> > > >
-> > > > Why can't you use SPI core DMA mapping code?
-> > >
-> > > I didn't find the SPI core DMA mapping code for single maping.
-> > > The method currently used is the general DMA single-map code usage me=
-thod.
+Hi Takashi,
+
+> -----Original Message-----
+> From: Alsa-devel <alsa-devel-bounces@alsa-project.org> On Behalf Of
+> Takashi Iwai
+> Sent: 20 January 2022 15:27
+> To: Stefan Binding <sbinding@opensource.cirrus.com>
+> Cc: platform-driver-x86@vger.kernel.org; alsa-devel@alsa-project.org;
+linux-
+> acpi@vger.kernel.org; Lucas Tanure <tanureal@opensource.cirrus.com>;
+> Rafael J . Wysocki <rafael@kernel.org>; linux-kernel@vger.kernel.org;
+> Takashi Iwai <tiwai@suse.com>; Mark Gross <markgross@kernel.org>; Hans
+> de Goede <hdegoede@redhat.com>; Mark Brown <broonie@kernel.org>;
+> patches@opensource.cirrus.com; linux-spi@vger.kernel.org; Len Brown
+> <lenb@kernel.org>
+> Subject: Re: [PATCH v4 8/9] ALSA: hda/realtek: Add support for HP Laptops
+> 
+> On Thu, 20 Jan 2022 14:43:25 +0100,
+> Stefan Binding wrote:
 > >
-> > Why do you need single page mapping?
-> > What's wrong with SG mapping that SPI core provides?
->
-> SP7021 SPI slave dma only supports single dma in one trigger.
-> It is not suitable for using SG mapping.
-> If the length of the transfer is larger than the length of the SG-mapping=
-,
-> Slave-mode will get error in the transfer.
+> > From: Lucas Tanure <tanureal@opensource.cirrus.com>
+> >
+> > Add support for two and four CS35L41 using the component
+> > binding method
+> >
+> > Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+> > Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
+> 
+> I guess this patch won't be applicable until ACPI or other tree syncs
+> with the latest Linus tree or sound git tree.  Must this patch be
+> merged with other patches?
 
-Same story for SPI DesignWare on Intel Medfield, where no SG transfers
-are supported by hardware. Nevertheless, the DMA driver takes care of
-this and on each interrupt recharges a channel to continue. Why can't
-the same be implemented here?
+In order for these laptops to work correctly, it will need all of the
+patches merged,
+including both this change and the ACPI changes - without the ACPI changes,
+some of the amps will not probe.
+
+Thanks,
+Stefan
 
 
---=20
-With Best Regards,
-Andy Shevchenko
+
