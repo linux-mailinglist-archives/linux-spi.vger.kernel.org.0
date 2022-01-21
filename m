@@ -2,107 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B5449663D
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Jan 2022 21:12:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA79496741
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Jan 2022 22:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbiAUUMX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Jan 2022 15:12:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
+        id S229646AbiAUVUa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 Jan 2022 16:20:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231717AbiAUUMW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jan 2022 15:12:22 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB374C06173B;
-        Fri, 21 Jan 2022 12:12:21 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id s13so3033123ejy.3;
-        Fri, 21 Jan 2022 12:12:21 -0800 (PST)
+        with ESMTP id S229459AbiAUVU3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jan 2022 16:20:29 -0500
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B48EC06173B
+        for <linux-spi@vger.kernel.org>; Fri, 21 Jan 2022 13:20:29 -0800 (PST)
+Received: by mail-lf1-x143.google.com with SMTP id u14so5395438lfo.11
+        for <linux-spi@vger.kernel.org>; Fri, 21 Jan 2022 13:20:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TWFhQ8AyYyJtKJhYHxbzZAy/uyi61n/qj66gr+QR1JU=;
-        b=C8EOiSjCDvxrWY2Ruh48zw6GmmqDRMiC4Xh4oNcfGcsAk4QxT/4WpK9v30k7R8BJTP
-         Ox33CjNanCQL5JyR5uyLDlkgeLcOdifO5g9DsCa0rbRNbnWai+SokHAOH8jjHzhYibLU
-         +zS9PNDuW/W449Hl6zRgYlVFU1GH8q3F2fwCNvg0PKdCaFYlX1Oi9gpQMYDiEgeBBn4E
-         gepuFb5h9afDmvRCUqdyNzK+46+J1POQ0Dw50E6frm5NfGq4duBsbIy48/Su6VdUdePn
-         8FaHt4DcROcLF95bgfpKvTH6CankmVX8ujX+aQajQ6ivme+VErteaMSP9P5K3Gatceg+
-         C3/g==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=1RY497F4Js1ZkS1NvUImoCfD4OONsaeH8Hpb9xJrupI=;
+        b=VIScscRyQgHufMGahyeAo54X3i4Qn8jfaoQebRBCxo8/jmah0gL5oC/YlNcY2eOjhm
+         jUEdNaT+jqL7fZFb1TSTWzcKTPR0GwfeBDfyRouz8zQt3MUoaaSn3bO5GbLX6EevjeFW
+         mNLzU2r5BS/26zDjgA60WkoklG7whP7/+4k1NV4bs/EdxWfizwiwQXPAAJQi5kS3piN8
+         X2btYq5o2K0lqGAVPJfAp3TRDM2/KwHhh4OMO75ZiGjD1UPZV7PW++qOOVmED0gUJDk6
+         405kW/4jsbv8JTI2IpKs+dvZnKXOU4jZhgWWdWMRCRn1tXlwyAGR/SQXusE9ZiOlU44N
+         6gTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TWFhQ8AyYyJtKJhYHxbzZAy/uyi61n/qj66gr+QR1JU=;
-        b=gWDzKTdcP9JrRU/Q4pUA6Ov+KCNcvk2raJiEhNKJS4ncMXPDZ40zkQhM5h0pxYCQ5y
-         azS8bM1Aq2qRYMkrqf8VqxDgep5vnYMApmPkAvwB1NFAqIL64Lye0w+saeyv2/PbixiC
-         CkSc6kvB7L8MY7O4Ld0i5L853tbQ/GGh8LKHd3AenCM9dsf1cV4DDOA9t/qcWVTxBang
-         i+o1z5HVkQ8X8jAGKwSd9Eke1zOzV0/lUtlC8ZPc4i5rstwWtjB876bo946gPimueacX
-         8WZFFB4ngj0T1+0dv9wuxQauIcCP/7uASO6c0THpioT9pA5vM8XYaxZtYmtTGep/MF9K
-         3B0Q==
-X-Gm-Message-State: AOAM532ZzETPGpZkaYQ6dKHa41rx4ZnupIL9IeKOlXqAodRgd+gdYzq7
-        uG5hwMos9A0fi+6I1S9E5jxTlU7R0G0VtKduQpkmNTkhLB8=
-X-Google-Smtp-Source: ABdhPJxiTTwzTmbtx9DNC7Ah5PIXbFyKWQWSb2hxPEtw2WvBrKl7feHCqB0yc+Flx4KZez6dtVy+19KCludTGmAPY9M=
-X-Received: by 2002:a17:906:3004:: with SMTP id 4mr4419944ejz.579.1642795940215;
- Fri, 21 Jan 2022 12:12:20 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=1RY497F4Js1ZkS1NvUImoCfD4OONsaeH8Hpb9xJrupI=;
+        b=2TAMH83N6W5VEm5vt0/CksjV885x9Zpy9eJdDy6ZEpw7DtsVonD2mQDemVvJMLejUe
+         nX9KMgduy2hKfoqZTdsC3gCTed5nZr0eVBFWx5e3T2he/VDCd6mJwUmnSbXYi0ATiw5B
+         1tuML7C5ZBYwB6X7ej0m9P2GV6qNUwQo1dalnQ2kVCpd+zyDMWBZaQ34Aoer9eITtjzM
+         QE/zKXqnQKUNXtDQYD4toye5yBUH00HIR9XYxPWGZmmDJxjxtg9sBT40xC5Qu70eTjdG
+         iEIs8SnQ5hfSJEJK9q4kaIdHf8Am5sG+JkyrZgE2UGz4QLxf2YJE5EUpMERxiCZeYC3z
+         av1g==
+X-Gm-Message-State: AOAM533bHKyTumR5sgpKyghAPC3VUOpQH40BAuKitS7zfHPUSqZuI4pm
+        Vqnwr2OEBVeTyzkcHzRI7PNMlw4+tpttLwvXSN8=
+X-Google-Smtp-Source: ABdhPJzNIE4nJnmhf004J+ovr0/Ms9/pqfa25deDOwr28IEZarWN8zoUp8plTo1P9fHFeSc7eZtpBhK3dFQxEdUvQEY=
+X-Received: by 2002:a05:6512:3f25:: with SMTP id y37mr4881649lfa.675.1642800027588;
+ Fri, 21 Jan 2022 13:20:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20220118145251.1548-1-sbinding@opensource.cirrus.com>
- <20220118145251.1548-6-sbinding@opensource.cirrus.com> <CAJZ5v0g0n201FPcG9LBNG3e4UdNYSWmj_1sN3MxLxmK=GoF+tA@mail.gmail.com>
- <a3522b5e-fb36-b959-d2ea-d141d3ad9999@opensource.cirrus.com> <CAJZ5v0h8MWb3sSuqWHUcm9TVWP0uJ+=GmzAuqVtNag2LP+0kYQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0h8MWb3sSuqWHUcm9TVWP0uJ+=GmzAuqVtNag2LP+0kYQ@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 21 Jan 2022 22:11:43 +0200
-Message-ID: <CAHp75VekU6j4vB_ej8k1f5JcTrAfm10aeekZo8_=jenK1KRbUA@mail.gmail.com>
-Subject: Re: [PATCH v3 05/10] platform/x86: i2c-multi-instantiate: Move it to
- drivers/acpi folder
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Lucas tanure <tanureal@opensource.cirrus.com>,
-        Stefan Binding <sbinding@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
-        <alsa-devel@alsa-project.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        patches@opensource.cirrus.com
+Received: by 2002:a05:6512:3981:0:0:0:0 with HTTP; Fri, 21 Jan 2022 13:20:26
+ -0800 (PST)
+Reply-To: lisahaman11@gmail.com
+From:   Miss Lisha Haman <obiikem77777@gmail.com>
+Date:   Fri, 21 Jan 2022 22:20:26 +0100
+Message-ID: <CAAFUGsLHpfFNgGk_YB05dZi4D2wjiAzV3qsjjHBDceNc7SuAZQ@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 9:53 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> On Wed, Jan 19, 2022 at 6:33 PM Lucas tanure
-> <tanureal@opensource.cirrus.com> wrote:
-> > On 1/19/22 16:53, Rafael J. Wysocki wrote:
-> > > On Tue, Jan 18, 2022 at 3:53 PM Stefan Binding
-> > > <sbinding@opensource.cirrus.com> wrote:
+My dear I am Miss Lisha Haman 23 years of age , I am the only daughter
+to Dr Abdul Haman from France-Paris who work with (SEMAFO) the biggest
+Canadian gold producer here in West Africa Burkina Faso,
 
-...
+Unfortunately my father was a victim on the deadliest attack by the
+jihadist On the 6 November 2019 when gunmen ambushed a convoy
+transporting workers of the Canadian mining firm Semafo, it is my sad
+moment each time I think about this, but the reason why I contacted
+you is that I have my late father receipt of deposit he made with a
+bank in abroad with my name as next of kin, The total amount deposited
+was 3.7 million United Stated dollars,
 
-> > > Why are you moving it away from platform/x86?
-> > >
-> > > Adding SPI to the mix doesn't seem to be a sufficient reason.
-> > >
-> > > If this were going to be needed on non-x86, that would be a good
-> > > reason for moving it, but is that actually the case?  If so, why isn't
-> > > that mentioned in the changelog above?
-> > >
-> >
-> > It was a request made by Andy Shevchenko:
-> > https://lkml.org/lkml/2021/12/3/347
->
-> But he hasn't given any reasons why that'd be better.
+Now I decided to travel for the money but embassy here deny me visa
+due to the Corona virus outbreak,
 
-My thoughts were that these are related to ACPI handling the serial
-buses in one place. However, counter arguments might be that the cases
-of the resources like this are found only on x86 hardware (while ACPI
-should be agnostic to that) and that the i2c and spi already do ACPI
-stuff on their own. That said, there are pros and cons and I'm fine
-with either choice at the end of the day.
+I talk to the bank regarding my visa problem and they advise me to
+look for my relative trusted bank account so that they will transfer
+the total fund in there, But I am the only daughter of my father and
+have no relative to present, that is why I want to present you to the
+bank as my relative who will receive the total fund on my behalf and
+also take care of me as well,
 
--- 
-With Best Regards,
-Andy Shevchenko
+please send me your complete
+
+full details such as, Your Full Name:
+
+Home and Office Addresses:
+
+Telephone Number:
+
+Occupation:
+
+Country of Residence:
+
+Your Bank account number where the bank will remit the fund
+
+Once I received your details, I will give you the bank contact so that
+you can contact them directly to discuss how they can transfer the
+total fund in your bank account so that you can relocate me to join
+you over there in your country,
+
+Sincerely
+
+lisahaman11@gmail.com
+
+Miss Lisha Haman
