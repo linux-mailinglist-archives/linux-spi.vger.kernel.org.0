@@ -2,97 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09820496520
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Jan 2022 19:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B5449663D
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Jan 2022 21:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382148AbiAUSeH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Jan 2022 13:34:07 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:56698
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1382155AbiAUSeG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jan 2022 13:34:06 -0500
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id BD98F3F4B6
-        for <linux-spi@vger.kernel.org>; Fri, 21 Jan 2022 18:34:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1642790045;
-        bh=rzjVc/hzS//b68XON/N1yvKj2eAA333KRQ8cX3B1duk=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=TXXVsQ/WhKw9R8fKz/7n852J7+AeKHEc8IgxQFsMradbnWYiDm/h2SJ6Rd/iIeUos
-         s2nWglAQwEiugQbk+RikrKxh2WwFMCThgZkbG2KXoOyS1tckmX2ls+LyLlzoGMlgUb
-         RmtJePlDwRZ1D7ssBmLhbAdWH77cuFfH49P5E8+pJxDCm8OnF81/FFxSYsO1VIc6fF
-         rOFs9Ltx7ZrHkCi8boRJtHqGn0yPGONXk8u+VhkJCCB/zYKhTEDsK8Lts6c0pi8xWM
-         UCImsQJ9SqtctO0YZh0JG0lbfrkqIw+tHHWgoAyBWkBBFYSdnd8j92XmZInqEVMPIx
-         +BM6Rm8XMXJ+g==
-Received: by mail-ed1-f72.google.com with SMTP id h11-20020a05640250cb00b003fa024f87c2so9460640edb.4
-        for <linux-spi@vger.kernel.org>; Fri, 21 Jan 2022 10:34:05 -0800 (PST)
+        id S232107AbiAUUMX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 Jan 2022 15:12:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231717AbiAUUMW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jan 2022 15:12:22 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB374C06173B;
+        Fri, 21 Jan 2022 12:12:21 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id s13so3033123ejy.3;
+        Fri, 21 Jan 2022 12:12:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TWFhQ8AyYyJtKJhYHxbzZAy/uyi61n/qj66gr+QR1JU=;
+        b=C8EOiSjCDvxrWY2Ruh48zw6GmmqDRMiC4Xh4oNcfGcsAk4QxT/4WpK9v30k7R8BJTP
+         Ox33CjNanCQL5JyR5uyLDlkgeLcOdifO5g9DsCa0rbRNbnWai+SokHAOH8jjHzhYibLU
+         +zS9PNDuW/W449Hl6zRgYlVFU1GH8q3F2fwCNvg0PKdCaFYlX1Oi9gpQMYDiEgeBBn4E
+         gepuFb5h9afDmvRCUqdyNzK+46+J1POQ0Dw50E6frm5NfGq4duBsbIy48/Su6VdUdePn
+         8FaHt4DcROcLF95bgfpKvTH6CankmVX8ujX+aQajQ6ivme+VErteaMSP9P5K3Gatceg+
+         C3/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rzjVc/hzS//b68XON/N1yvKj2eAA333KRQ8cX3B1duk=;
-        b=EBL0BSivvaCdEmtcYjnZozBY1pyQEBI0tjqiLzA8u3j0f2yrFLmkHdN3Yc3z9lNxpT
-         AtleAYtM5M+rhk+ggg3+WLeZLHntlFhBoSVt0BqEbGeULMWDWdaywKa72X94N82dKNqv
-         PUnCObTE8A3iPIl07OdGNEYgv+Du12+L0EzfJkTNLUOzwyQdWBJkyRH/0LbSp3eqGA04
-         CKH18eBBO6BUCYZSxZ7bLYtckSC1Q8ex11232Sxx8M1eyJOxtHSjEyHZmZaVfYNWjfvx
-         yq+lFMC3menUCvotTUYW6lueUK8vK/XVwuGWKXGfdEc/W771XR6g3GtEh/yWUvADi5Iw
-         uFxg==
-X-Gm-Message-State: AOAM533ZWVv1XYVy5sf02UiVNgfrfqxVgFFtTBV6qydIqXv2eqxbs90n
-        J6bK/WrTNwo1biLsXQTTLXw0SRGsZUOsNB8TL3quEIKeCwO9bFpLnuHu9BpiUlm7EirJDyaXz1w
-        W5+SPvM16qffCxPL8MvxT4LkX+ha2tX4suq9yyg==
-X-Received: by 2002:a17:906:17c6:: with SMTP id u6mr4264767eje.263.1642790045242;
-        Fri, 21 Jan 2022 10:34:05 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwFxrSulwwT1O8pILmYDkoX3mOFh5Ze91D39vMO/Ze+pPeAqAZF5qwP1SYFHjvCEaqXQxKq3g==
-X-Received: by 2002:a17:906:17c6:: with SMTP id u6mr4264755eje.263.1642790045110;
-        Fri, 21 Jan 2022 10:34:05 -0800 (PST)
-Received: from [192.168.0.51] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id z18sm2249888ejb.112.2022.01.21.10.34.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jan 2022 10:34:04 -0800 (PST)
-Message-ID: <5b90220f-c31d-cc8d-3e86-75ad8e56ab5e@canonical.com>
-Date:   Fri, 21 Jan 2022 19:34:03 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TWFhQ8AyYyJtKJhYHxbzZAy/uyi61n/qj66gr+QR1JU=;
+        b=gWDzKTdcP9JrRU/Q4pUA6Ov+KCNcvk2raJiEhNKJS4ncMXPDZ40zkQhM5h0pxYCQ5y
+         azS8bM1Aq2qRYMkrqf8VqxDgep5vnYMApmPkAvwB1NFAqIL64Lye0w+saeyv2/PbixiC
+         CkSc6kvB7L8MY7O4Ld0i5L853tbQ/GGh8LKHd3AenCM9dsf1cV4DDOA9t/qcWVTxBang
+         i+o1z5HVkQ8X8jAGKwSd9Eke1zOzV0/lUtlC8ZPc4i5rstwWtjB876bo946gPimueacX
+         8WZFFB4ngj0T1+0dv9wuxQauIcCP/7uASO6c0THpioT9pA5vM8XYaxZtYmtTGep/MF9K
+         3B0Q==
+X-Gm-Message-State: AOAM532ZzETPGpZkaYQ6dKHa41rx4ZnupIL9IeKOlXqAodRgd+gdYzq7
+        uG5hwMos9A0fi+6I1S9E5jxTlU7R0G0VtKduQpkmNTkhLB8=
+X-Google-Smtp-Source: ABdhPJxiTTwzTmbtx9DNC7Ah5PIXbFyKWQWSb2hxPEtw2WvBrKl7feHCqB0yc+Flx4KZez6dtVy+19KCludTGmAPY9M=
+X-Received: by 2002:a17:906:3004:: with SMTP id 4mr4419944ejz.579.1642795940215;
+ Fri, 21 Jan 2022 12:12:20 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v2 1/3] spi: dt-bindings: samsung: Add fsd spi compatible
-Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linus.walleij@linaro.org,
-        robh+dt@kernel.org, linux-samsung-soc@vger.kernel.org,
-        pankaj.dubey@samsung.com, broonie@kernel.org, andi@etezian.org,
-        linux-spi@vger.kernel.org, linux-fsd@tesla.com,
-        Adithya K V <adithya.kv@samsung.com>
-References: <20220120192438.25555-1-alim.akhtar@samsung.com>
- <CGME20220120193613epcas5p238851849d212e01d7d830d78ca7d6379@epcas5p2.samsung.com>
- <20220120192438.25555-2-alim.akhtar@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220120192438.25555-2-alim.akhtar@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220118145251.1548-1-sbinding@opensource.cirrus.com>
+ <20220118145251.1548-6-sbinding@opensource.cirrus.com> <CAJZ5v0g0n201FPcG9LBNG3e4UdNYSWmj_1sN3MxLxmK=GoF+tA@mail.gmail.com>
+ <a3522b5e-fb36-b959-d2ea-d141d3ad9999@opensource.cirrus.com> <CAJZ5v0h8MWb3sSuqWHUcm9TVWP0uJ+=GmzAuqVtNag2LP+0kYQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0h8MWb3sSuqWHUcm9TVWP0uJ+=GmzAuqVtNag2LP+0kYQ@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 21 Jan 2022 22:11:43 +0200
+Message-ID: <CAHp75VekU6j4vB_ej8k1f5JcTrAfm10aeekZo8_=jenK1KRbUA@mail.gmail.com>
+Subject: Re: [PATCH v3 05/10] platform/x86: i2c-multi-instantiate: Move it to
+ drivers/acpi folder
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Lucas tanure <tanureal@opensource.cirrus.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
+        <alsa-devel@alsa-project.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        patches@opensource.cirrus.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 20/01/2022 20:24, Alim Akhtar wrote:
-> Adds spi controller dt-binding compatible information for
-> Tesla Full Self-Driving (FSD) SoC.
-> 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Adithya K V <adithya.kv@samsung.com>
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> ---
->  Documentation/devicetree/bindings/spi/samsung,spi.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+On Fri, Jan 21, 2022 at 9:53 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> On Wed, Jan 19, 2022 at 6:33 PM Lucas tanure
+> <tanureal@opensource.cirrus.com> wrote:
+> > On 1/19/22 16:53, Rafael J. Wysocki wrote:
+> > > On Tue, Jan 18, 2022 at 3:53 PM Stefan Binding
+> > > <sbinding@opensource.cirrus.com> wrote:
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+...
 
+> > > Why are you moving it away from platform/x86?
+> > >
+> > > Adding SPI to the mix doesn't seem to be a sufficient reason.
+> > >
+> > > If this were going to be needed on non-x86, that would be a good
+> > > reason for moving it, but is that actually the case?  If so, why isn't
+> > > that mentioned in the changelog above?
+> > >
+> >
+> > It was a request made by Andy Shevchenko:
+> > https://lkml.org/lkml/2021/12/3/347
+>
+> But he hasn't given any reasons why that'd be better.
 
-Best regards,
-Krzysztof
+My thoughts were that these are related to ACPI handling the serial
+buses in one place. However, counter arguments might be that the cases
+of the resources like this are found only on x86 hardware (while ACPI
+should be agnostic to that) and that the i2c and spi already do ACPI
+stuff on their own. That said, there are pros and cons and I'm fine
+with either choice at the end of the day.
+
+-- 
+With Best Regards,
+Andy Shevchenko
