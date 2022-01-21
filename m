@@ -2,155 +2,103 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EF6495D04
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Jan 2022 10:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7414495D4C
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Jan 2022 11:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349709AbiAUJmt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Jan 2022 04:42:49 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4436 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbiAUJmt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jan 2022 04:42:49 -0500
-Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JgDqT4Y6xz67yhj;
-        Fri, 21 Jan 2022 17:39:33 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 21 Jan 2022 10:42:47 +0100
-Received: from localhost (10.47.75.29) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.21; Fri, 21 Jan
- 2022 09:42:46 +0000
-Date:   Fri, 21 Jan 2022 09:42:43 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] spi: pxa2xx_spi: Convert to use GPIO descriptors
-Message-ID: <20220121094243.0000651f@Huawei.com>
-In-Reply-To: <20220121012014.287288-1-linus.walleij@linaro.org>
-References: <20220121012014.287288-1-linus.walleij@linaro.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        id S1379819AbiAUKJy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 Jan 2022 05:09:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240580AbiAUKJx (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jan 2022 05:09:53 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3058C061574;
+        Fri, 21 Jan 2022 02:09:52 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id b13so41144170edn.0;
+        Fri, 21 Jan 2022 02:09:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=+nHiMUAJkmDRtT1AUkXpecRKxulMj5tC/X/ZVwXvTX4=;
+        b=ec8CeU9fMopF+iyri4E1qG/C22ppZFFNHMX3E4T1DA1zhNeXeVvLhhdwFBMspO5J3v
+         JAb8u1GE4vwHkTgKzHXvFPZTUFeLQrfK6UVtV+f+XqEnPE+laqy6eiCIzhmiRzPQFiyE
+         LRSboTvy7GhSK0Ap+TVXufp0dT5ljRnQ7lvSbotfQr2tSbdmohPEQkfSY9Xl4ZmWGZ0n
+         DRGPAb0n4qT57LZEtlnGekvuTGNepK16GKVF9qdytph4FcjNaOtmNJTUcr8Zha64wNPl
+         o1WB6WWBAScg+S/qbHpom5dFPRr3QNPd8cHEIsDXklcpcugfi4QgvUKolOEXEaVOXMSX
+         79iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+nHiMUAJkmDRtT1AUkXpecRKxulMj5tC/X/ZVwXvTX4=;
+        b=U1Ht74ApnGRdcbBoBbnu8NKoY0Q8FAEWjuS48SFAxUzwmlXNbPSX3NdOboZGDi4s9b
+         Tc2vTonDSziYo+Jhqk2kdadwHIoQ2LOqBClDD7HheNkG0R0mX/0XqaEWGpwC2KmDahRk
+         Q+5ifmHouzP4SXX4tRJr4YwkL1PAK7muqNipH3sBXBfdegOR7tJfNSybRdlTh9Je7gqJ
+         NLs5ib0r+QgO1JfIGHSIykQSopW6huv4ZHmmXs5loXKB+W6VQcNtyCEnmcZ/SKkOtIcl
+         y4/1Fq8tfI75cANYBKgr8i1G4g1qs1/9ls5jrcJEedj3RV1gBAUF5y33+cN9TAvvPLqu
+         A/IA==
+X-Gm-Message-State: AOAM530HihnWJSH3zMz/QXD8vNfCIMC/U/3SkMm+okfq6uqiS6kiDCL4
+        +YHd/Vx6VmSa/wqCsyP40OkbFt+j5457E0QoyUg=
+X-Google-Smtp-Source: ABdhPJwSzqwy6NLX4yEOhFYJkTtQdtsqNz2Q2jwoJY94p1ChkT7wOUYm2RT29n3Kym151PPMMz/VsHhI3wojm16AsBE=
+X-Received: by 2002:aa7:c0c9:: with SMTP id j9mr3547651edp.270.1642759791349;
+ Fri, 21 Jan 2022 02:09:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.75.29]
-X-ClientProxiedBy: lhreml702-chm.china.huawei.com (10.201.108.51) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+References: <cover.1642494310.git.lhjeff911@gmail.com> <37998e515d561e762ee30d0ac4fca25a948e0c5c.1642494310.git.lhjeff911@gmail.com>
+ <CAHp75VdKc3UDzaqM2G5J5+G90U6Spqyhz_vuOYKhqJ4V-uf=wg@mail.gmail.com>
+ <a354d7c1dce4463ea57706dd5443fe7a@sphcmbx02.sunplus.com.tw>
+ <CAHp75VcCpye1u3+PK=C3CT8fMHPSOsXTL5AhbLVy0YyGWfyfkQ@mail.gmail.com> <ee5838c307f84bb99ace070292167a26@sphcmbx02.sunplus.com.tw>
+In-Reply-To: <ee5838c307f84bb99ace070292167a26@sphcmbx02.sunplus.com.tw>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 21 Jan 2022 12:09:15 +0200
+Message-ID: <CAHp75VcmFPCC0kDxOma6gunwFRf-eXEr6+ZxQs1dt5GH2quT4Q@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
+To:     =?UTF-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
+Cc:     Li-hao Kuo <lhjeff911@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 21 Jan 2022 02:20:14 +0100
-Linus Walleij <linus.walleij@linaro.org> wrote:
+On Fri, Jan 21, 2022 at 8:54 AM Lh Kuo =E9=83=AD=E5=8A=9B=E8=B1=AA <lh.Kuo@=
+sunplus.com> wrote:
+>
+> > > > > +       if (xfer->tx_buf)
+> > > > > +               dma_unmap_single(dev, xfer->tx_dma, xfer->len, DM=
+A_TO_DEVICE);
+> > > > > +       if (xfer->rx_buf)
+> > > > > +               dma_unmap_single(dev, xfer->rx_dma, xfer->len,
+> > > > > + DMA_FROM_DEVICE);
+> > > >
+> > > > Why can't you use SPI core DMA mapping code?
+> > >
+> > > I didn't find the SPI core DMA mapping code for single maping.
+> > > The method currently used is the general DMA single-map code usage me=
+thod.
+> >
+> > Why do you need single page mapping?
+> > What's wrong with SG mapping that SPI core provides?
+>
+> SP7021 SPI slave dma only supports single dma in one trigger.
+> It is not suitable for using SG mapping.
+> If the length of the transfer is larger than the length of the SG-mapping=
+,
+> Slave-mode will get error in the transfer.
 
-> This converts the PXA2xx SPI driver to use GPIO descriptors
-> exclusively to retrieve GPIO chip select lines.
-> 
-> The device tree and ACPI paths of the driver already use
-> descriptors, hence ->use_gpio_descriptors is already set and
-> this codepath is well tested.
-> 
-> Convert all the PXA boards providing chip select GPIOs as
-> platform data and drop the old GPIO chipselect handling in
-> favor of the core managing it exclusively.
-> 
-> Cc: Marek Vasut <marek.vasut@gmail.com>
-> Cc: Daniel Mack <daniel@zonque.org>
-> Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
-> Cc: Robert Jarzmik <robert.jarzmik@free.fr>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
->  Documentation/spi/pxa2xx.rst   |  3 --
->  arch/arm/mach-pxa/corgi.c      | 26 +++++++---------
->  arch/arm/mach-pxa/hx4700.c     | 10 +++++-
->  arch/arm/mach-pxa/icontrol.c   | 26 +++++++++++++---
->  arch/arm/mach-pxa/littleton.c  | 10 +++++-
->  arch/arm/mach-pxa/magician.c   | 12 +++++--
->  arch/arm/mach-pxa/poodle.c     | 14 ++++++---
->  arch/arm/mach-pxa/spitz.c      | 26 +++++++---------
->  arch/arm/mach-pxa/stargate2.c  | 21 +++++++++++--
->  arch/arm/mach-pxa/z2.c         | 20 ++++++++++--
->  drivers/spi/spi-pxa2xx.c       | 57 ----------------------------------
->  include/linux/spi/pxa2xx_spi.h |  1 -
->  12 files changed, 117 insertions(+), 109 deletions(-)
-> 
+Same story for SPI DesignWare on Intel Medfield, where no SG transfers
+are supported by hardware. Nevertheless, the DMA driver takes care of
+this and on each interrupt recharges a channel to continue. Why can't
+the same be implemented here?
 
-...
 
-> diff --git a/arch/arm/mach-pxa/stargate2.c b/arch/arm/mach-pxa/stargate2.c
-> index 8ca02ec1d44c..650043023006 100644
-> --- a/arch/arm/mach-pxa/stargate2.c
-> +++ b/arch/arm/mach-pxa/stargate2.c
-> @@ -346,6 +346,23 @@ static struct pxa2xx_spi_controller pxa_ssp_master_2_info = {
->  	.num_chipselect = 1,
->  };
->  
-> +static struct gpiod_lookup_table pxa_ssp1_gpio_table = {
-> +	.dev_id = "pxa2xx-spi.1",
-> +	.table = {
-> +		GPIO_LOOKUP_IDX("gpio-pxa", 24, "cs", 0, GPIO_ACTIVE_LOW),
-> +		{ },
-> +	},
-> +};
-> +
-> +static struct gpiod_lookup_table pxa_ssp3_gpio_table = {
-> +	.dev_id = "pxa2xx-spi.3",
-> +	.table = {
-> +		GPIO_LOOKUP_IDX("gpio-pxa", 39, "cs", 0, GPIO_ACTIVE_LOW),
-> +		{ },
-> +	},
-> +};
-> +
-
-Nitpick, one line will do.
-
-As a side note I have a patch outstanding (from May 2021) to drop
-stargate2/imote2 on basis that I strongly suspect I'm the only person
-who still has access to hardware and I've not booted one for a few years.
-
-https://lore.kernel.org/all/20210523163606.1966355-1-jic23@kernel.org/
-Patch still applies cleanly.
-
-In meantime for stargate2/imote2 (same file)  Should both patches go in
-the merge conflict will be very obvious ;)
-
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-> +
->  /* An upcoming kernel change will scrap SFRM usage so these
->   * drivers have been moved to use GPIOs */
->  static struct pxa2xx_spi_chip staccel_chip_info = {
-> @@ -353,7 +370,6 @@ static struct pxa2xx_spi_chip staccel_chip_info = {
->  	.rx_threshold = 8,
->  	.dma_burst_size = 8,
->  	.timeout = 235,
-> -	.gpio_cs = 24,
->  };
->  
->  static struct pxa2xx_spi_chip cc2420_info = {
-> @@ -361,7 +377,6 @@ static struct pxa2xx_spi_chip cc2420_info = {
->  	.rx_threshold = 8,
->  	.dma_burst_size = 8,
->  	.timeout = 235,
-> -	.gpio_cs = 39,
->  };
->  
->  static struct spi_board_info spi_board_info[] __initdata = {
-> @@ -410,6 +425,8 @@ static void __init imote2_stargate2_init(void)
->  	pxa_set_btuart_info(NULL);
->  	pxa_set_stuart_info(NULL);
->  
-> +	gpiod_add_lookup_table(&pxa_ssp1_gpio_table);
-> +	gpiod_add_lookup_table(&pxa_ssp3_gpio_table);
->  	pxa2xx_set_spi_info(1, &pxa_ssp_master_0_info);
->  	pxa2xx_set_spi_info(2, &pxa_ssp_master_1_info);
->  	pxa2xx_set_spi_info(3, &pxa_ssp_master_2_info);
+--=20
+With Best Regards,
+Andy Shevchenko
