@@ -2,68 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6D24968F5
-	for <lists+linux-spi@lfdr.de>; Sat, 22 Jan 2022 01:57:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D25496BB0
+	for <lists+linux-spi@lfdr.de>; Sat, 22 Jan 2022 11:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbiAVA5a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Jan 2022 19:57:30 -0500
-Received: from mail-oo1-f45.google.com ([209.85.161.45]:34583 "EHLO
-        mail-oo1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231570AbiAVA51 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jan 2022 19:57:27 -0500
-Received: by mail-oo1-f45.google.com with SMTP id f4-20020a4ac484000000b002e3e221d769so3824650ooq.1;
-        Fri, 21 Jan 2022 16:57:27 -0800 (PST)
+        id S233239AbiAVKdQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 22 Jan 2022 05:33:16 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:47010
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233094AbiAVKdO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 22 Jan 2022 05:33:14 -0500
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8FD9240012
+        for <linux-spi@vger.kernel.org>; Sat, 22 Jan 2022 10:33:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1642847593;
+        bh=mEs+f11ymEwQZPMZ2yNnkqKc9mZDhZ/EMxOn0PWlPJA=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=tL3fZ5HjojSZNyGg2/ELLG+JUvE2WBe97BaG7rN+YW1Rpm9ebxEAnYuSK+36Yn6Sm
+         ilcEZ1oJPwEoToabugib+78oUIEcA+hQ2Z7VTr3AaPtBEIkPTelxtuob+cfHJCASox
+         syEHEaXp+SiuyKbbCcJ2/8FAEbE0y4R/4L0MOyM0q4a1cTfkZbnCPc88+ezeF6ks7U
+         b/Dx3uF3Q7S+7hJmP/eH23U7bzv7qwUozB0twRI0vXPy6v+KZvj6M4pF/DaTsrRn6k
+         z2fUrnTi1l4BqcwGC1zDwaUFcqDZoF32w+EDd50aP/TrjqV119GjivPz+gbhaASpf8
+         /mkv7a1Ys+NKA==
+Received: by mail-ej1-f70.google.com with SMTP id 9-20020a170906218900b0065e2a9110b9so784606eju.11
+        for <linux-spi@vger.kernel.org>; Sat, 22 Jan 2022 02:33:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UCFVPsYIbWn5LSHXfQRNXq3VUxkbUc2dAX7qlE1mnBI=;
-        b=YWTDN+pOEjcOEU+T70tzmx3yac/KKiUp076Y17xKmK9xCSw6rHHPSYfDjrKioFgTS5
-         VuyDaxEHAjGlcvo9HuD3MK5wE7EgDz3JCWbJ9yHOzp0qYgG5T46j4jDXKWRpZruePuAf
-         7OZThk+bK0BYjwLxF/yJyCCyO39I0jNKoDyLv5PJqStQGCzSOquq+N8ADTvKhWCHB4eQ
-         oYwfRrDZt7l89lEe3s6QORcVUbP1ZfWuiOLr+l+nylCez/8UJAnWwwW18Gf+HLuf4/e5
-         sgUuuOQUBWJFEFT7KiX2caKhqZ4VJQk+Nxgdh3qwVKTUuYVYpDrFxcusZQo4oAya0ve6
-         Ynkw==
-X-Gm-Message-State: AOAM532hYAld9KzJYzIWnhvt72O69KjXk0pMUYK6Fee6u7FA+Rgouo6v
-        dbv2Ej7U3couTRR7wKbUAA==
-X-Google-Smtp-Source: ABdhPJyco54px60GtmKl9r/Bro32Hth5e2wl+B7OHmLSFZXoTB8yx2Z2qpiBX2veogSbGhFQF1Kl7Q==
-X-Received: by 2002:a4a:94d3:: with SMTP id l19mr4140263ooi.94.1642813046635;
-        Fri, 21 Jan 2022 16:57:26 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id g91sm1877484otg.21.2022.01.21.16.57.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 16:57:26 -0800 (PST)
-Received: (nullmailer pid 1956568 invoked by uid 1000);
-        Sat, 22 Jan 2022 00:57:25 -0000
-Date:   Fri, 21 Jan 2022 18:57:25 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Leilk Liu <leilk.liu@mediatek.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        linux-mediatek@lists.infradead.org, linux-spi@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 3/3] dt-bindings: spi: Add compatible for Mediatek
- MT8186
-Message-ID: <YetWdZnqEODQtBMU@robh.at.kernel.org>
-References: <20220112103609.17421-1-leilk.liu@mediatek.com>
- <20220112103609.17421-4-leilk.liu@mediatek.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mEs+f11ymEwQZPMZ2yNnkqKc9mZDhZ/EMxOn0PWlPJA=;
+        b=2n7d3DMgOKnKy1+l1PdnKd12BPkDBUoNVTJs1bhsJ1Hx8ykvLz7Z9qwiajgXjlGjok
+         6ePLdBaAYKfqO7ceMpJAlYJQTGQaY8mgAN9/EyJeZg2vWTzu+NOgaocrZJUmxrVoK5AH
+         zRA5IvhrNtHqjHlYZ42dxYTpcLECovJrYEGCmK8Lkp1doihXh941jg3HSoSsX5Qdi2er
+         WNfo1kaey4QKiv4JyhR6vl8l1SpOWU3Okba0LxBIx+flA6VAV5bmIRdYPA7pAy4egCFp
+         u6dh3miRABulRWtqWqJBlLtSfsYlZRT9HBphG/MDM0zVw4OH4HiKLVU0ZXol09zJTvI2
+         g5Nw==
+X-Gm-Message-State: AOAM532mtrkpOllQl2cDmKsMlswxp+Ps9wxEi6Nh2fBZon2P9HlxjL4l
+        b4hmmVAqRSv5oj4nyLzShxWh81chIQpTsxKNkC+2CXxL/p3UCEwrvqo4Jzq+Q6zJhmISSIK+O6y
+        oYNwDE+AAD89UyzmV7CmCLJXNrJF3NSrrDgjaEerlAkAnrzrPVaoZLQ==
+X-Received: by 2002:a05:6402:2712:: with SMTP id y18mr7751443edd.337.1642847592951;
+        Sat, 22 Jan 2022 02:33:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwU3NQ0IukQs+QZK207vEa5wMx7Mph+E8lv8sh5VymdubKUP7F5ZeYqGNNI96g1mpj44AR9ntiVWdDTLxHhDmw=
+X-Received: by 2002:a05:6402:2712:: with SMTP id y18mr7751433edd.337.1642847592826;
+ Sat, 22 Jan 2022 02:33:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220112103609.17421-4-leilk.liu@mediatek.com>
+References: <20220120192438.25555-1-alim.akhtar@samsung.com>
+ <CGME20220120193613epcas5p238851849d212e01d7d830d78ca7d6379@epcas5p2.samsung.com>
+ <20220120192438.25555-2-alim.akhtar@samsung.com> <aa172f14-2328-fc7c-0063-5c0033970d1d@canonical.com>
+ <YevcOlARxNcBeDJE@jack.zhora.eu>
+In-Reply-To: <YevcOlARxNcBeDJE@jack.zhora.eu>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Date:   Sat, 22 Jan 2022 11:33:01 +0100
+Message-ID: <CA+Eumj7ab9E_4sbVPSQjOc-ZwM9LVdrgE=rj3duYKBYHjtDhyA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] spi: dt-bindings: samsung: Add fsd spi compatible
+To:     Andi Shyti <andi@etezian.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linus.walleij@linaro.org,
+        robh+dt@kernel.org, linux-samsung-soc@vger.kernel.org,
+        pankaj.dubey@samsung.com, broonie@kernel.org,
+        linux-spi@vger.kernel.org, linux-fsd@tesla.com,
+        Adithya K V <adithya.kv@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 12 Jan 2022 18:36:09 +0800, Leilk Liu wrote:
-> This commit adds dt-binding documentation of spi bus for Mediatek MT8186 SoC
-> Platform.
-> 
-> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
-> ---
->  Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+On Sat, 22 Jan 2022 at 11:28, Andi Shyti <andi@etezian.org> wrote:
+>
+> Hi Krzysztof and Alim,
+>
+> On Fri, Jan 21, 2022 at 07:33:15PM +0100, Krzysztof Kozlowski wrote:
+> > On 20/01/2022 20:24, Alim Akhtar wrote:
+> > > Adds spi controller dt-binding compatible information for
+> > > Tesla Full Self-Driving (FSD) SoC.
+> > >
+> > > Cc: linux-fsd@tesla.com
+> > > Signed-off-by: Adithya K V <adithya.kv@samsung.com>
+> > > Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> > > ---
+> > >  Documentation/devicetree/bindings/spi/samsung,spi.yaml | 1 +
+> > >  1 file changed, 1 insertion(+)
+> >
+> > I think you forgot to mention - in cover letter - that this depends on
+> > my Samsung SPI bindings conversion to dtschema.
+>
+> It's written in the cover letter:
+>
+> "Note: This series is depended on [1] patches which adds
+> support of FSD SoC and on Krzysztof's v5 [2] of spi schema
+> changes"
 
-Acked-by: Rob Herring <robh@kernel.org>
+Indeed, it is. I simply could not find the cover letter so I assumed
+none was sent, but it just got hidden.
