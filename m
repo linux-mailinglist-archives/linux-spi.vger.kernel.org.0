@@ -2,59 +2,62 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A5F4967F2
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Jan 2022 23:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6B04968CE
+	for <lists+linux-spi@lfdr.de>; Sat, 22 Jan 2022 01:35:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbiAUWnc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Jan 2022 17:43:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
+        id S230249AbiAVAfI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 Jan 2022 19:35:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230459AbiAUWnc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jan 2022 17:43:32 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D017FC06173B
-        for <linux-spi@vger.kernel.org>; Fri, 21 Jan 2022 14:43:31 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id a28so6614705lfl.7
-        for <linux-spi@vger.kernel.org>; Fri, 21 Jan 2022 14:43:31 -0800 (PST)
+        with ESMTP id S229457AbiAVAfI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jan 2022 19:35:08 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794ECC06173B
+        for <linux-spi@vger.kernel.org>; Fri, 21 Jan 2022 16:35:07 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id w7so2496544ljw.11
+        for <linux-spi@vger.kernel.org>; Fri, 21 Jan 2022 16:35:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=/qCdmK9xD3uQH9zkCKfN+SiEDJjVMDSPCdTFLlRdNFQ=;
-        b=zToSlTXmHM32C8W3M+B9mCtB/QyBf+3/QEyOn3iXr5tcugjOHgZL0Im1nkm07C7XBp
-         q/GipdxD4Zj/PXw9OCuFOCioXTN9xG6L6qA60dFeuhkhqhJlobIpLeahyIMeJsJ72VcZ
-         99nuEyYVEgvrgw7RMMbAzofM7oCBZXAHSbZF/2KsQ4GaRlTbNeLJVFiM/7ArQOf77nFp
-         VK6PudBPKaw+gZp36tljbOT2wEOJ52W++dYOpcPuq97L0d/2gL6tH+ZfcxyOg8lE+J8o
-         lnDu99jGk7REjvcZgyQfbD134QXskNBD4ORiO85vu49x68llIvZuSelV6cOJler9JbZ9
-         569w==
+        bh=654Szygw/tZcaYl4fUeQ1fdXpz986cxMelGUP0eFVWE=;
+        b=kO+vT7xRfvKRAVm6xVSTdpfUIQb+G16JImVW23N94jR6Ad7kuIMKeYyPqaVmXWlFPn
+         84Yt1MgnQUsvw5j8tsKdowqXHYdLm8HeCL/B2EmiDO26BNSo58aiAYlwglra2NFItWKj
+         W89oBTEdTh3CPrP1sB+W/y1vU1v4QZdknjLx0sFh1kelCaHB6krYBDTXZ61DqsdqCa2L
+         2F61ojZkLhzINH/48wewo6GSZNkSe7YGHapRTyg8b4PRwpIBuLbVncnQOjjsnwE9zA3e
+         6J2hg+Q/ogHywJhPReXT+TZ0BV0iWgF1lbEm9SlXuDl5CY7HFi+QsJpVfjZkmmqq5sOV
+         EtGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=/qCdmK9xD3uQH9zkCKfN+SiEDJjVMDSPCdTFLlRdNFQ=;
-        b=48CGO3THC7zb5mYnU93Kh8IKhK3t5wctc9az8FSyWAECeJJdR6XiDeH+s2hDAVmNzu
-         f+xaN1UMCV0s0He+s1Px4wn/exqzCzpMTcTRzTj3yDEg0Fv7F4UArw/geOxknc9ke1Aa
-         JM7nB8nmf+iRsry8ddJQCbr7nLWTYYflt5+ZuTd+6zGjqUT1IF3eGy5cIz0w3clxOQsm
-         2WsQ+W4M+wD7oiivsoLiY/1hYqCaW4SxzDUeX62b4YqYXCZNWa33gkOi0CsPwYFPcKJS
-         s7yFK2/wK5h6RArOC+PT8sZyVKO88FLqg1umrYa3SYka2sOyCwOb0pUOQdES0ver1pSL
-         a0Lw==
-X-Gm-Message-State: AOAM530Rav7c2ZetADtxylfmYm8nvtxUOb8/XuEWa45j9FFw6qYKHWQG
-        nb5booR9Gnvfbixq1a47lik6bJz9Uumxiw==
-X-Google-Smtp-Source: ABdhPJxH3nsBlvwHaCq2TYXSeX/2ttqM84xWeIDvZ8LHmdC5+WsldhXwS19DD58TgswjFQb7M0/fHw==
-X-Received: by 2002:a05:6512:20ca:: with SMTP id u10mr5095790lfr.71.1642805010123;
-        Fri, 21 Jan 2022 14:43:30 -0800 (PST)
+        bh=654Szygw/tZcaYl4fUeQ1fdXpz986cxMelGUP0eFVWE=;
+        b=3/fI+MrD7IHi/PafJ7s2/6y+ksIwq0uTsx/gdiKQPmeLvKPNGwrYZhQhNk0F/Bmx0c
+         r9j+i3tK7kzJqxdTygr7PO06JNQpz2O7DKwh/+4qg0a8Kl6pcCE0I6VPv8mSPJW+EaPo
+         QSh/8Fnl4x/MalsskyMuT4rCAQwJ/uAdvaT9SNoyDvpBopOPIaVCiAXPknCypI/gXYG4
+         Mp0ECr6Qweti+DiW+LHpSeIXn1GEDUIn0xlHkFA+Qy+T2f3+0cJ3TsvDDlM32julZf2p
+         YLrtC8eKF7xLqM5GiJn6z7ebJLVRPFDr2ht8n8MzpaUP1M0dmv07AARSha/GEN9aYftG
+         aIEw==
+X-Gm-Message-State: AOAM5319Ry3Gt8ZhHxg0kKnaIv7FRnXNb2bimB/NuP3qYVQtePbv/xqG
+        J1D93cO3jSPSWdijsU/wssJU8w==
+X-Google-Smtp-Source: ABdhPJwfw+/zewjqFmpFXLYiPOoriWdawrGuqa104Va27XOeLFhg/jIK1aTOWXdR+gKsHrbGWTEllw==
+X-Received: by 2002:a2e:b74c:: with SMTP id k12mr4513921ljo.206.1642811705806;
+        Fri, 21 Jan 2022 16:35:05 -0800 (PST)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id s16sm381195lfr.300.2022.01.21.14.43.28
+        by smtp.gmail.com with ESMTPSA id b7sm85257lfi.125.2022.01.21.16.35.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 14:43:29 -0800 (PST)
+        Fri, 21 Jan 2022 16:35:05 -0800 (PST)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Lukas Wunner <lukas@wunner.de>,
-        Martin Sperl <kernel@martin.sperl.org>
-Subject: [PATCH] spi: bcm2835aux: Convert to use GPIO descriptors
-Date:   Fri, 21 Jan 2022 23:41:26 +0100
-Message-Id: <20220121224126.312227-1-linus.walleij@linaro.org>
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Mason Zhang <Mason.Zhang@mediatek.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Peter Hess <peter.hess@ph-home.de>,
+        Leilk Liu <leilk.liu@mediatek.com>
+Subject: [PATCH] spi: mt65xx: Convert to GPIO descriptors
+Date:   Sat, 22 Jan 2022 01:33:02 +0100
+Message-Id: <20220122003302.374304-1-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -62,62 +65,80 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This one is pretty straight forward to switch over, the driver
-already relies on inspecting cs_gpio just check cs_gpiod instead
-and stop the special handling of requesting the GPIO and stuff
-the core will take care of.
+The MT65xx driver was already relying on the core to get some
+GPIO line numbers so it can be (hopefully) trivially converted
+to use descriptors instead.
 
-Cc: Lukas Wunner <lukas@wunner.de>
-Cc: Martin Sperl <kernel@martin.sperl.org>
+Cc: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Cc: Mason Zhang <Mason.Zhang@mediatek.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Peter Hess <peter.hess@ph-home.de>
+Cc: Leilk Liu <leilk.liu@mediatek.com>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/spi/spi-bcm2835aux.c | 19 ++++---------------
- 1 file changed, 4 insertions(+), 15 deletions(-)
+ drivers/spi/spi-mt65xx.c | 23 ++++++-----------------
+ 1 file changed, 6 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/spi/spi-bcm2835aux.c b/drivers/spi/spi-bcm2835aux.c
-index 7d709a8c833b..af795700e31a 100644
---- a/drivers/spi/spi-bcm2835aux.c
-+++ b/drivers/spi/spi-bcm2835aux.c
-@@ -22,7 +22,6 @@
+diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+index a15de10ee286..4f49b2e93ca7 100644
+--- a/drivers/spi/spi-mt65xx.c
++++ b/drivers/spi/spi-mt65xx.c
+@@ -12,7 +12,7 @@
+ #include <linux/ioport.h>
+ #include <linux/module.h>
  #include <linux/of.h>
- #include <linux/of_address.h>
- #include <linux/of_device.h>
 -#include <linux/of_gpio.h>
- #include <linux/of_irq.h>
- #include <linux/regmap.h>
- #include <linux/spi/spi.h>
-@@ -450,20 +449,9 @@ static int bcm2835aux_spi_setup(struct spi_device *spi)
- 	/* sanity check for native cs */
- 	if (spi->mode & SPI_NO_CS)
- 		return 0;
--	if (gpio_is_valid(spi->cs_gpio)) {
--		/* with gpio-cs set the GPIO to the correct level
--		 * and as output (in case the dt has the gpio not configured
--		 * as output but native cs)
--		 */
--		ret = gpio_direction_output(spi->cs_gpio,
--					    (spi->mode & SPI_CS_HIGH) ? 0 : 1);
--		if (ret)
--			dev_err(&spi->dev,
--				"could not set gpio %i as output: %i\n",
--				spi->cs_gpio, ret);
--
--		return ret;
--	}
-+
-+	if (spi->cs_gpiod)
-+		return 0;
++#include <linux/gpio/consumer.h>
+ #include <linux/platform_device.h>
+ #include <linux/platform_data/spi-mt65xx.h>
+ #include <linux/pm_runtime.h>
+@@ -605,8 +605,9 @@ static int mtk_spi_setup(struct spi_device *spi)
+ 	if (!spi->controller_data)
+ 		spi->controller_data = (void *)&mtk_default_chip_info;
  
- 	/* for dt-backwards compatibility: only support native on CS0
- 	 * known things not supported with broken native CS:
-@@ -519,6 +507,7 @@ static int bcm2835aux_spi_probe(struct platform_device *pdev)
- 	master->prepare_message = bcm2835aux_spi_prepare_message;
- 	master->unprepare_message = bcm2835aux_spi_unprepare_message;
- 	master->dev.of_node = pdev->dev.of_node;
+-	if (mdata->dev_comp->need_pad_sel && gpio_is_valid(spi->cs_gpio))
+-		gpio_direction_output(spi->cs_gpio, !(spi->mode & SPI_CS_HIGH));
++	if (mdata->dev_comp->need_pad_sel && spi->cs_gpiod)
++		/* CS de-asserted, gpiolib will handle inversion */
++		gpiod_direction_output(spi->cs_gpiod, 0);
+ 
+ 	return 0;
+ }
+@@ -730,6 +731,7 @@ static int mtk_spi_probe(struct platform_device *pdev)
+ 	master->can_dma = mtk_spi_can_dma;
+ 	master->setup = mtk_spi_setup;
+ 	master->set_cs_timing = mtk_spi_set_hw_cs_timing;
 +	master->use_gpio_descriptors = true;
  
- 	bs = spi_master_get_devdata(master);
+ 	of_id = of_match_node(mtk_spi_of_match, pdev->dev.of_node);
+ 	if (!of_id) {
+@@ -853,25 +855,12 @@ static int mtk_spi_probe(struct platform_device *pdev)
+ 			goto err_disable_runtime_pm;
+ 		}
  
+-		if (!master->cs_gpios && master->num_chipselect > 1) {
++		if (!master->cs_gpiods && master->num_chipselect > 1) {
+ 			dev_err(&pdev->dev,
+ 				"cs_gpios not specified and num_chipselect > 1\n");
+ 			ret = -EINVAL;
+ 			goto err_disable_runtime_pm;
+ 		}
+-
+-		if (master->cs_gpios) {
+-			for (i = 0; i < master->num_chipselect; i++) {
+-				ret = devm_gpio_request(&pdev->dev,
+-							master->cs_gpios[i],
+-							dev_name(&pdev->dev));
+-				if (ret) {
+-					dev_err(&pdev->dev,
+-						"can't get CS GPIO %i\n", i);
+-					goto err_disable_runtime_pm;
+-				}
+-			}
+-		}
+ 	}
+ 
+ 	if (mdata->dev_comp->dma_ext)
 -- 
 2.34.1
 
