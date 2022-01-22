@@ -2,109 +2,163 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3034968E6
-	for <lists+linux-spi@lfdr.de>; Sat, 22 Jan 2022 01:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 277F04968E8
+	for <lists+linux-spi@lfdr.de>; Sat, 22 Jan 2022 01:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbiAVAux (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 21 Jan 2022 19:50:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43290 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiAVAuw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jan 2022 19:50:52 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C076C06173B
-        for <linux-spi@vger.kernel.org>; Fri, 21 Jan 2022 16:50:51 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id k7so2535756lji.7
-        for <linux-spi@vger.kernel.org>; Fri, 21 Jan 2022 16:50:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HGpUF12jdfhtE2Axmf64xifJBTmaB3b/GxoI4KJDpi4=;
-        b=YVoDNv9wkJsBaKp68HNIjtvd/tPjXT1H9k3doDzZLtLIpqFK0z+UpRn0/eOFCtFjU9
-         KctjKw1Cis713iqrb5fPKVupJgRqnYOIDZbSGvKnIfet5ydxeDnrCTvjEpT2rNcNMvQK
-         Ie5HrTOSDfgKQBvi91xVI/iWY8XWykBggKZUqskdQ5oRYjHdB2eUGpwTezcqd271kZSf
-         byQgId9jsfXjMjdGRr6R3BvQhBPRiE2i1FYT0yTrRH2gDUtRBFDjTG9tzu7gW6Y4Dzvx
-         FoA/Ubf7CljyzrGK1LrTYZXnjL27GMpvd/4fXCYx0FkC2A/hJf25VfMOmS0BCWtcCiCZ
-         tfBA==
+        id S231136AbiAVAxN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 21 Jan 2022 19:53:13 -0500
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:35675 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229457AbiAVAxN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 21 Jan 2022 19:53:13 -0500
+Received: by mail-ot1-f41.google.com with SMTP id n22-20020a9d2016000000b0059bd79f7777so13440664ota.2;
+        Fri, 21 Jan 2022 16:53:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HGpUF12jdfhtE2Axmf64xifJBTmaB3b/GxoI4KJDpi4=;
-        b=7bQaWvZ9St2UqEac9kD/cCaP5Hi7jDp0gLz55cZjHfVS0/J+pys0SS3LCxjEYISZzl
-         lCIBw18DY6BW8+EjyZLXTpdMotALGw3NV3+tUtc4VW9ModPUfK63Czra6ESZbETJawCf
-         kTtgmwE2GQJ8gdmYr5hTJ0lAuyHvwfLvEAL90z+6GH3UioXy+cDuHOfbp8o9F6jpGAop
-         3j2plngTTytXSKLFRY4ph8dFSZld52e0Fqkbb6Smhp0uKBuka1PRbKX3igWq5gOYonoO
-         XyvD70PR9NmpFjqX3rq1LTOPWwXo0yJlxQqdOSLd9JOb8AlF16l2gYpvo+ecfDbHuOve
-         3k/Q==
-X-Gm-Message-State: AOAM532lDA6AwNcGz8rkwlOVq9B24D7+tkjjN0/6arsYSM+DMolmbXMF
-        RZvLuDyvSoSienu5FyfJQRZ5jhtRrHF7mA==
-X-Google-Smtp-Source: ABdhPJwKqaEGoQsONMpGd67gKBbQq1sPNHuWnMX7W5YJVROk5xhjIHJULwds6nLv1oFB14B22HteOA==
-X-Received: by 2002:a2e:874f:: with SMTP id q15mr4819926ljj.137.1642812649576;
-        Fri, 21 Jan 2022 16:50:49 -0800 (PST)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id y23sm306906ljy.127.2022.01.21.16.50.48
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NwEsLoY/zSy6+8ww4zg4hbAmBeGUwDI4bJpwjmotxhw=;
+        b=Dtan1CUsWJkMAMqArFn70vhAn0T5iXrSLZRc4aCUoZIhGIIbsa/K4P8kxNKeisZNLO
+         1SGzR/R/vqQk9G3TnJgT++G1Y37jhpwBaPc7XxQCwdBDQJoEjJzRxTiuLirMzd+wT8ZQ
+         XW8oStnN3nGOHoqfQt2yO/1ew4yZajCJ4RAaD1V2oFH3uMzWkWANh637DqPJuoptrPzn
+         LyUF5VR+1X5X+LawK/f8R3UVYWG7AlP1E3IECVHVMopSERWWbbG7ns20dPCe8v9u9WUx
+         1jc2DmIc9W31OU0F/E+/+oWHAAKUKyZqMAafZE3ucQ8tXmaw4AlIkPVQORdh8fzUYJZt
+         +OlQ==
+X-Gm-Message-State: AOAM531z0L+S4K9QuTBw72UhNid1Tns+D9HAiYlYjXku1zLEG3UpGQKs
+        8xL21DgoA/S31wJ4ab16OA==
+X-Google-Smtp-Source: ABdhPJxtvDyzMhYHyXQ+iSpTb2lRwqvIuBsflwOHWmHmO5EdG97wJnvBRPsDourd04+3nSBlNcks0Q==
+X-Received: by 2002:a9d:7d11:: with SMTP id v17mr4619824otn.34.1642812792929;
+        Fri, 21 Jan 2022 16:53:12 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id k17sm1771351otk.80.2022.01.21.16.53.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jan 2022 16:50:49 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Purna Chandra Mandal <purna.mandal@microchip.com>
-Subject: [PATCH] spi: pic32: Convert to use GPIO descriptors
-Date:   Sat, 22 Jan 2022 01:48:46 +0100
-Message-Id: <20220122004846.374930-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 21 Jan 2022 16:53:12 -0800 (PST)
+Received: (nullmailer pid 1949948 invoked by uid 1000);
+        Sat, 22 Jan 2022 00:53:11 -0000
+Date:   Fri, 21 Jan 2022 18:53:11 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Leilk Liu <leilk.liu@mediatek.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH V2 1/3] dt-bindings: spi: Convert spi-slave-mt27xx to
+ json-schema
+Message-ID: <YetVd7IR7FDt+nz3@robh.at.kernel.org>
+References: <20220112103609.17421-1-leilk.liu@mediatek.com>
+ <20220112103609.17421-2-leilk.liu@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220112103609.17421-2-leilk.liu@mediatek.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The driver already relies on the core looking up GPIO lines
-from the core, so this is trivial to switch over to using
-GPIO descriptors.
+On Wed, Jan 12, 2022 at 06:36:07PM +0800, Leilk Liu wrote:
+> Convert Mediatek ARM SOC's SPI Slave controller binding
+> to json-schema format.
+> 
+> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> ---
+>  .../spi/mediatek,spi-slave-mt27xx.yaml        | 73 +++++++++++++++++++
+>  .../bindings/spi/spi-slave-mt27xx.txt         | 33 ---------
+>  2 files changed, 73 insertions(+), 33 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-slave-mt27xx.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml
+> new file mode 100644
+> index 000000000000..3364fff08cca
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml
+> @@ -0,0 +1,73 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/mediatek,spi-slave-mt27xx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: SPI Slave controller for MediaTek ARM SoCs
+> +
+> +maintainers:
+> +  - Leilk Liu <leilk.liu@mediatek.com>
+> +
+> +allOf:
+> +  - $ref: /spi/spi-controller.yaml#
+> +
+> +properties:
+> +  compatible:
 
-Cc: Purna Chandra Mandal <purna.mandal@microchip.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/spi/spi-pic32.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt2712-spi-slave
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt8195-spi-slave
 
-diff --git a/drivers/spi/spi-pic32.c b/drivers/spi/spi-pic32.c
-index f86433b29260..7e5c09a7d489 100644
---- a/drivers/spi/spi-pic32.c
-+++ b/drivers/spi/spi-pic32.c
-@@ -591,18 +591,16 @@ static int pic32_spi_setup(struct spi_device *spi)
- 	 * unreliable/erroneous SPI transactions.
- 	 * To avoid that we will always handle /CS by toggling GPIO.
- 	 */
--	if (!gpio_is_valid(spi->cs_gpio))
-+	if (!spi->cs_gpiod)
- 		return -EINVAL;
- 
--	gpio_direction_output(spi->cs_gpio, !(spi->mode & SPI_CS_HIGH));
--
- 	return 0;
- }
- 
- static void pic32_spi_cleanup(struct spi_device *spi)
- {
--	/* de-activate cs-gpio */
--	gpio_direction_output(spi->cs_gpio, !(spi->mode & SPI_CS_HIGH));
-+	/* de-activate cs-gpio, gpiolib will handle inversion */
-+	gpiod_direction_output(spi->cs_gpiod, 0);
- }
- 
- static int pic32_spi_dma_prep(struct pic32_spi *pic32s, struct device *dev)
-@@ -784,6 +782,7 @@ static int pic32_spi_probe(struct platform_device *pdev)
- 	master->unprepare_message	= pic32_spi_unprepare_message;
- 	master->prepare_transfer_hardware	= pic32_spi_prepare_hardware;
- 	master->unprepare_transfer_hardware	= pic32_spi_unprepare_hardware;
-+	master->use_gpio_descriptors = true;
- 
- 	/* optional DMA support */
- 	ret = pic32_spi_dma_prep(pic32s, &pdev->dev);
--- 
-2.34.1
+Just:
 
+       enum:
+         - mediatek,mt2712-spi-slave
+         - mediatek,mt8195-spi-slave
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: clock used for the clock gate
+
+Just 'maxItems: 1'
+
+> +
+> +  clock-names:
+> +    items:
+> +      - const: spi
+> +
+> +  assigned-clocks:
+> +    maxItems: 1
+> +    description: |
+> +      The mux clock for the given platform.
+> +
+> +  assigned-clock-parents:
+> +    maxItems: 1
+> +    description: |
+> +      The parent of mux clock for the given platform.
+
+You can drop assigned-clocks. They are always allowed on nodes with 
+'clocks'.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/mt2712-clk.h>
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    spi@10013000 {
+> +      compatible = "mediatek,mt2712-spi-slave";
+> +      reg = <0x10013000 0x100>;
+> +      interrupts = <GIC_SPI 283 IRQ_TYPE_LEVEL_LOW>;
+> +      clocks = <&infracfg CLK_INFRA_AO_SPI1>;
+> +      clock-names = "spi";
+> +      assigned-clocks = <&topckgen CLK_TOP_SPISLV_SEL>;
+> +      assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL1_D2>;
+> +    };
