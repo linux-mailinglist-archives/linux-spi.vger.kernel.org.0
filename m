@@ -2,102 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D025497622
-	for <lists+linux-spi@lfdr.de>; Sun, 23 Jan 2022 23:49:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C36864977AB
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Jan 2022 04:27:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240418AbiAWWtd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 23 Jan 2022 17:49:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbiAWWt2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 23 Jan 2022 17:49:28 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170CDC06173B
-        for <linux-spi@vger.kernel.org>; Sun, 23 Jan 2022 14:49:28 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nBlfq-0001GQ-BO; Sun, 23 Jan 2022 23:49:26 +0100
-Received: from pengutronix.de (unknown [195.138.59.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 9DCD72062F;
-        Sun, 23 Jan 2022 22:49:25 +0000 (UTC)
-Date:   Sun, 23 Jan 2022 23:49:22 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH 5/5] spi: make remove callback a void function
-Message-ID: <20220123224922.hnnblbdt7ff2oiwk@pengutronix.de>
-References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
- <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
+        id S241040AbiAXD1y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 23 Jan 2022 22:27:54 -0500
+Received: from mswedge1.sunplus.com ([60.248.182.113]:60700 "EHLO
+        mg.sunplus.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S241038AbiAXD1x (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 23 Jan 2022 22:27:53 -0500
+X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
+        ,3)
+Received: from 172.17.9.112
+        by mg01.sunplus.com with MailGates ESMTP Server V5.0(11311:0:AUTH_RELAY)
+        (envelope-from <lh.Kuo@sunplus.com>); Mon, 24 Jan 2022 11:27:51 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx02.sunplus.com.tw (172.17.9.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.26; Mon, 24 Jan 2022 11:27:45 +0800
+Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
+ sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
+ 15.00.1497.026; Mon, 24 Jan 2022 11:27:45 +0800
+From:   =?utf-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Li-hao Kuo <lhjeff911@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Subject: RE: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
+Thread-Topic: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
+Thread-Index: AQHYDEdoNQA4Z8mYU0mSuzI8gOIgg6xqY3GAgAE/t3D//4TFAIABjwHAgAAISoCABMfgEA==
+Date:   Mon, 24 Jan 2022 03:27:45 +0000
+Message-ID: <638055e6c4dd4f66bab98c12bd5bd74a@sphcmbx02.sunplus.com.tw>
+References: <cover.1642494310.git.lhjeff911@gmail.com>
+ <37998e515d561e762ee30d0ac4fca25a948e0c5c.1642494310.git.lhjeff911@gmail.com>
+ <CAHp75VdKc3UDzaqM2G5J5+G90U6Spqyhz_vuOYKhqJ4V-uf=wg@mail.gmail.com>
+ <a354d7c1dce4463ea57706dd5443fe7a@sphcmbx02.sunplus.com.tw>
+ <CAHp75VcCpye1u3+PK=C3CT8fMHPSOsXTL5AhbLVy0YyGWfyfkQ@mail.gmail.com>
+ <ee5838c307f84bb99ace070292167a26@sphcmbx02.sunplus.com.tw>
+ <CAHp75VcmFPCC0kDxOma6gunwFRf-eXEr6+ZxQs1dt5GH2quT4Q@mail.gmail.com>
+In-Reply-To: <CAHp75VcmFPCC0kDxOma6gunwFRf-eXEr6+ZxQs1dt5GH2quT4Q@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.51]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rtkpivr4wsk5oybh"
-Content-Disposition: inline
-In-Reply-To: <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
---rtkpivr4wsk5oybh
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 23.01.2022 18:52:01, Uwe Kleine-K=C3=B6nig wrote:
-> The value returned by an spi driver's remove function is mostly ignored.
-> (Only an error message is printed if the value is non-zero that the
-> error is ignored.)
->=20
-> So change the prototype of the remove function to return no value. This
-> way driver authors are not tempted to assume that passing an error to
-> the upper layer is a good idea. All drivers are adapted accordingly.
-> There is no intended change of behaviour, all callbacks were prepared to
-> return 0 before.
->=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/net/can/m_can/tcan4x5x-core.c                 |  4 +---
->  drivers/net/can/spi/hi311x.c                          |  4 +---
->  drivers/net/can/spi/mcp251x.c                         |  4 +---
->  drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c        |  4 +---
-
-For the CAN changes:
-
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---rtkpivr4wsk5oybh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHt228ACgkQqclaivrt
-76nCMAgAj2xkyf4Z1Y7tvEAxM2dJ6PYPh/yY8fCaqnP+HVdp/VSxt1eE1yDvAA+9
-zfYFYtXyb832KTEAZFmSZHLxHH9p9NtyZvgdoR40Hsoo0lxuDYCQccPF58CLpsof
-xlHro1MvKdV3wFirAYwmR3TnoQ/NIUps0+XFw0UVoWok0XoN/bn8oYfpeO70frkM
-L0/gRqclTdwM/Q/GLTiRdfYszeizj6MFUcUJaf1b8/hxOJ94EaBSYEdcx9YYnATz
-Er8Jv4/BYP/Zj9sKMNJA+bddgotwMA8tVaI+uBVvXtycdwAAilJj8Q6Xq+ZVRbTY
-2RMSxJwzV9g/FPqx827h1DJi1thh8g==
-=IHI7
------END PGP SIGNATURE-----
-
---rtkpivr4wsk5oybh--
+PiA+ID4gPiA+ID4gKyAgICAgICBpZiAoeGZlci0+dHhfYnVmKQ0KPiA+ID4gPiA+ID4gKyAgICAg
+ICAgICAgICAgIGRtYV91bm1hcF9zaW5nbGUoZGV2LCB4ZmVyLT50eF9kbWEsIHhmZXItPmxlbiwg
+RE1BX1RPX0RFVklDRSk7DQo+ID4gPiA+ID4gPiArICAgICAgIGlmICh4ZmVyLT5yeF9idWYpDQo+
+ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgZG1hX3VubWFwX3NpbmdsZShkZXYsIHhmZXItPnJ4
+X2RtYSwgeGZlci0+bGVuLA0KPiA+ID4gPiA+ID4gKyBETUFfRlJPTV9ERVZJQ0UpOw0KPiA+ID4g
+PiA+DQo+ID4gPiA+ID4gV2h5IGNhbid0IHlvdSB1c2UgU1BJIGNvcmUgRE1BIG1hcHBpbmcgY29k
+ZT8NCj4gPiA+ID4NCj4gPiA+ID4gSSBkaWRuJ3QgZmluZCB0aGUgU1BJIGNvcmUgRE1BIG1hcHBp
+bmcgY29kZSBmb3Igc2luZ2xlIG1hcGluZy4NCj4gPiA+ID4gVGhlIG1ldGhvZCBjdXJyZW50bHkg
+dXNlZCBpcyB0aGUgZ2VuZXJhbCBETUEgc2luZ2xlLW1hcCBjb2RlIHVzYWdlIG1ldGhvZC4NCj4g
+PiA+DQo+ID4gPiBXaHkgZG8geW91IG5lZWQgc2luZ2xlIHBhZ2UgbWFwcGluZz8NCj4gPiA+IFdo
+YXQncyB3cm9uZyB3aXRoIFNHIG1hcHBpbmcgdGhhdCBTUEkgY29yZSBwcm92aWRlcz8NCj4gPg0K
+PiA+IFNQNzAyMSBTUEkgc2xhdmUgZG1hIG9ubHkgc3VwcG9ydHMgc2luZ2xlIGRtYSBpbiBvbmUg
+dHJpZ2dlci4NCj4gPiBJdCBpcyBub3Qgc3VpdGFibGUgZm9yIHVzaW5nIFNHIG1hcHBpbmcuDQo+
+ID4gSWYgdGhlIGxlbmd0aCBvZiB0aGUgdHJhbnNmZXIgaXMgbGFyZ2VyIHRoYW4gdGhlIGxlbmd0
+aCBvZiB0aGUNCj4gPiBTRy1tYXBwaW5nLCBTbGF2ZS1tb2RlIHdpbGwgZ2V0IGVycm9yIGluIHRo
+ZSB0cmFuc2Zlci4NCj4gDQo+IFNhbWUgc3RvcnkgZm9yIFNQSSBEZXNpZ25XYXJlIG9uIEludGVs
+IE1lZGZpZWxkLCB3aGVyZSBubyBTRyB0cmFuc2ZlcnMgYXJlIHN1cHBvcnRlZCBieSBoYXJkd2Fy
+ZS4NCj4gTmV2ZXJ0aGVsZXNzLCB0aGUgRE1BIGRyaXZlciB0YWtlcyBjYXJlIG9mIHRoaXMgYW5k
+IG9uIGVhY2ggaW50ZXJydXB0IHJlY2hhcmdlcyBhIGNoYW5uZWwgdG8gY29udGludWUuDQo+IFdo
+eSBjYW4ndCB0aGUgc2FtZSBiZSBpbXBsZW1lbnRlZCBoZXJlPw0KPiANCj4gDQpJIHRoaW5rIGl0
+IHNob3VsZCB3b3JrIGluIG1hc3Rlci4gc3BpIG1hc3RlciBtdXN0IGFjdGl2ZWx5IHNlbmQgY2xr
+IGFuZCBkYXRlIHRvIHNsYXZlIGRldmljZS4NCkFuZCB5ZXMsIGluIHRoZSAibWFzdGVyIiBtb2Rl
+IGl0IGNhbiBoYW5kbGUgU0ctRE1BIG9uIGVhY2ggaW50ZXJydXB0Lg0KQnV0IGlmIHdvcmtpbmcg
+aW4gInNsYXZlIiBtb2RlLCB0aGUgbWFzdGVyIHdpbGwgbm90IGtub3cgdGhlIHN0YXRlIG9mIHRo
+ZSBzbGF2ZS4gU2xhdmVzIHdvcmsgb24gaW50ZXJydXB0IGFuZCByZWNoYXJnZSBjaGFubmVscy4N
+CldoZW4gbWFzdGVyIHNlbmQgY2xrIGFuZCBkYXRlIGluIHRoZSBzYW1lIHRpbWUuIEl0IG1heSBs
+b3NlIGRhdGEgYW5kIGVycm9ycyBvY2N1cg0KDQoNCg==
