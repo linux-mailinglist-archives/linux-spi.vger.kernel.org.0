@@ -2,159 +2,190 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6B949859C
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Jan 2022 18:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B624997DF
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Jan 2022 22:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244053AbiAXRBN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 24 Jan 2022 12:01:13 -0500
-Received: from mailout4.samsung.com ([203.254.224.34]:51659 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243895AbiAXRBN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Jan 2022 12:01:13 -0500
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220124170110epoutp048caf093c7bc004b24102d21057f75de3~NQ4NGL0M-1130711307epoutp04T
-        for <linux-spi@vger.kernel.org>; Mon, 24 Jan 2022 17:01:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220124170110epoutp048caf093c7bc004b24102d21057f75de3~NQ4NGL0M-1130711307epoutp04T
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1643043670;
-        bh=83VTFefNOOVIvD1TeUCpJROFSX+M5uWagKuPIDdCXIY=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=QATqPK6lRANb3ZjC9t2p+W2KwZDZSwX2i2mM/CgRQBmVeJ6l4nFvCHd53HEOvsvyL
-         h4fX86YhyopBg9rf4fJbyS2g452UGYD3ObrsZyz0r4UoICM3lR872rOLptoJ6jMQ8T
-         P9jXBfFb6pjPcGe58w+clAAWOLObRBd43vAzHSYI=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220124170108epcas5p4d637040355668959fb1daa10aaae4a17~NQ4L-Ptsb2304923049epcas5p44;
-        Mon, 24 Jan 2022 17:01:08 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.177]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4JjGTR1zMPz4x9Pv; Mon, 24 Jan
-        2022 17:00:59 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2B.38.46822.9E9DEE16; Tue, 25 Jan 2022 01:55:05 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220124170058epcas5p4cba1540f63abdf832a74f690ad76f28a~NQ4CXbHSs2304923049epcas5p4v;
-        Mon, 24 Jan 2022 17:00:58 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220124170058epsmtrp1df9335a206cbfd912786e0ae95434d0e~NQ4CWinAW2043120431epsmtrp18;
-        Mon, 24 Jan 2022 17:00:58 +0000 (GMT)
-X-AuditID: b6c32a4a-de5ff7000000b6e6-aa-61eed9e97d13
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EE.00.08738.A4BDEE16; Tue, 25 Jan 2022 02:00:58 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220124170056epsmtip250cb478e3013d73c6c775011103dcdbf~NQ4APwByP1523815238epsmtip2X;
-        Mon, 24 Jan 2022 17:00:56 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Andi Shyti'" <andi@etezian.org>
-Cc:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linus.walleij@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@canonical.com>,
-        <linux-samsung-soc@vger.kernel.org>, <pankaj.dubey@samsung.com>,
-        <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        "'Aswani Reddy'" <aswani.reddy@samsung.com>, <linux-fsd@tesla.com>
-In-Reply-To: <YevfmeGwmwLml+6b@jack.zhora.eu>
-Subject: RE: [PATCH v2 3/3] arm64: dts: fsd: Add SPI device nodes
-Date:   Mon, 24 Jan 2022 22:30:54 +0530
-Message-ID: <048801d81143$f5585ec0$e0091c40$@samsung.com>
+        id S1449795AbiAXVRG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Jan 2022 16:17:06 -0500
+Received: from mxout02.lancloud.ru ([45.84.86.82]:57190 "EHLO
+        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1445138AbiAXVCV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Jan 2022 16:02:21 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 817A9209B103
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH] driver core: platform: Rename platform_get_irq_optional()
+ to platform_get_irq_silent()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+CC:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-iio@vger.kernel.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "ALSA Development Mailing List" <alsa-devel@alsa-project.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-phy@lists.infradead.org>, Jiri Slaby <jirislaby@kernel.org>,
+        <openipmi-developer@lists.sourceforge.net>,
+        "Khuong Dinh" <khuong@os.amperecomputing.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Corey Minyard <minyard@acm.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        <platform-driver-x86@vger.kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        <linux-edac@vger.kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        <netdev@vger.kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        "Linux MMC List" <linux-mmc@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        "James Morse" <james.morse@arm.com>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        <linux-mediatek@lists.infradead.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+References: <CAMuHMdWsMGPiQaPS0-PJ_+Mc5VQ37YdLfbHr_aS40kB+SfW-aw@mail.gmail.com>
+ <20220112213121.5ruae5mxwj6t3qiy@pengutronix.de>
+ <Yd9L9SZ+g13iyKab@sirena.org.uk>
+ <20220113110831.wvwbm75hbfysbn2d@pengutronix.de>
+ <YeA7CjOyJFkpuhz/@sirena.org.uk>
+ <20220113194358.xnnbhsoyetihterb@pengutronix.de>
+ <YeF05vBOzkN+xYCq@smile.fi.intel.com>
+ <20220115154539.j3tsz5ioqexq2yuu@pengutronix.de>
+ <YehdsUPiOTwgZywq@smile.fi.intel.com>
+ <20220120075718.5qtrpc543kkykaow@pengutronix.de>
+ <Ye6/NgfxsZnpXE09@smile.fi.intel.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <15796e57-f7d4-9c66-3b53-0b026eaf31d8@omp.ru>
+Date:   Tue, 25 Jan 2022 00:02:06 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQIlRa7NAXyP9WKiX5aeFVThmKbe4gH4FQMDAd/j86ICC5i7Zquo37lA
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCJsWRmVeSWpSXmKPExsWy7bCmlu7Lm+8SDa7fl7JY/OM5k8WhzVvZ
-        LaY+fMJmMf/IOVaLjW9/MFlM+bOcyWLT42usFg9fhVtc3jWHzWLG+X1MFo0fb7JbLNr6hd2i
-        de8Rdgdej1kNvWwe15d8YvbYtKqTzePOtT1sHpuX1Hv0bVnF6PGvaS67x+dNcgEcUdk2GamJ
-        KalFCql5yfkpmXnptkrewfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6ZOUAXKymUJeaUAoUC
-        EouLlfTtbIryS0tSFTLyi0tslVILUnIKTAr0ihNzi0vz0vXyUkusDA0MjEyBChOyMx7/X8BW
-        8IGn4sexV0wNjC3cXYycHBICJhJfLyxi7mLk4hAS2M0osffPPHYI5xOjxM2ti6Eynxkl/n9c
-        wgjTsnDtFzaIxC5GiWtrnzFBOC8ZJV7OWc8KUsUmoCuxY3EbG4gtIqAqsfTxTLAOZoFGZomW
-        3lvMIAlOoKKDqxYwgdjCAo4Sa9YuY+li5OBgAWpYecIDJMwrYCkx7dxrZghbUOLkzCcsIDaz
-        gLzE9rdzmCEuUpD4+XQZK8QuN4nDx26xQtSIS7w8egTsHwmBGxwSm+aAvMAB5LhIbN9QBNEr
-        LPHq+BZ2CFtK4mV/GztESbZEzy5jiHCNxNJ5x1ggbHuJA1fmgF3JLKApsX6XPsQmPone30+Y
-        IDp5JTrahCCqVSWa312F6pSWmNjdzQphe0j8ujKJeQKj4iwkf81C8tcsJPfPQli2gJFlFaNk
-        akFxbnpqsWmBUV5qOTy6k/NzNzGCk7OW1w7Ghw8+6B1iZOJgPMQowcGsJMJblfIuUYg3JbGy
-        KrUoP76oNCe1+BCjKTCsJzJLiSbnA/NDXkm8oYmlgYmZmZmJpbGZoZI47+n0DYlCAumJJanZ
-        qakFqUUwfUwcnFINTD6TlaufevXuUjlUJBCYOfPLpcXyPfZ3mFq5lj6dyu+6QWxu+jItgY3a
-        ev8rmm5xRj+fInmFdfHOCdZLrohO9eorrZumveB081+B8M3/jGR+/10hwXGmZZVfe49l/NEz
-        MXxa3dE5c4+IqB3PmaV5P65h0p/Wl6LPT81sjYu6s+JW94+FNYaHqwScQmesyJ3Y8ClOrjjK
-        eP+Wnb6Fy5c+vGwkuunkfB696oKiwLijSgdunk7gcc+Yfvz3zy2VrnOULwuXhHwNntF1ZOvp
-        c44Pmo49d+jeXO9RzK9xr6r0yq3EZwe3ObE1cJ8/9+XEfJvZjlxu+XzvdK2XaFvG1x/3ZAy7
-        USR/isVwa+5lCe9ly5RYijMSDbWYi4oTASToz6RXBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLIsWRmVeSWpSXmKPExsWy7bCSvK7X7XeJBhcWy1ss/vGcyeLQ5q3s
-        FlMfPmGzmH/kHKvFxrc/mCym/FnOZLHp8TVWi4evwi0u75rDZjHj/D4mi8aPN9ktFm39wm7R
-        uvcIuwOvx6yGXjaP60s+MXtsWtXJ5nHn2h42j81L6j36tqxi9PjXNJfd4/MmuQCOKC6blNSc
-        zLLUIn27BK6Mx/8XsBV84Kn4cewVUwNjC3cXIyeHhICJxMK1X9i6GLk4hAR2MEocazvOCpGQ
-        lri+cQI7hC0ssfLfc3aIoueMEjOO3GcGSbAJ6ErsWNzGBmKLCKhKLH08E2wSs0Avs8SENztY
-        IToeMEp0/pgBNooTqOPgqgVMILawgKPEmrXLWLoYOThYgLpXnvAACfMKWEpMO/eaGcIWlDg5
-        8wlYCbOAnkTbRkaQMLOAvMT2t3OYIY5TkPj5dBkrxA1uEoeP3WKFqBGXeHn0CPsERuFZSCbN
-        Qpg0C8mkWUg6FjCyrGKUTC0ozk3PLTYsMMpLLdcrTswtLs1L10vOz93ECI5RLa0djHtWfdA7
-        xMjEwXiIUYKDWUmEtyrlXaIQb0piZVVqUX58UWlOavEhRmkOFiVx3gtdJ+OFBNITS1KzU1ML
-        UotgskwcnFINTNNVMiKXFLSKRFixTVw0911wrqXl1OLTDHtjPF/FVWyoElf2ubo9+RbbK+6s
-        hAMvpt7g2+Psmf3wtm5dw8NneicCjG/MeFTAFjvPc95UD1epMP4H+lMZvLq6E7cFBTZ9C1L1
-        +6n6b+NyyxXes/53a2qqv50Y+D79dcTf1N+VN0zLrcX3qvCdEGBnO7RY4udcXknRYxKRjxji
-        Hv8x9GjktLhSfMbsfKLv129/sqqWiByYOU/21TqOf9dEyo24OC3nFE9K1n3JXLNl9z8t/XKP
-        5l/ajSUxZXsCjr26HmStX3f31krFQ9rHtFmyX7UE9+5zZFt2ZEL+pV8u6z+aR8wNvZC1T0wp
-        3nN9Ro+FB2+3EktxRqKhFnNRcSIAqAil20ADAAA=
-X-CMS-MailID: 20220124170058epcas5p4cba1540f63abdf832a74f690ad76f28a
-X-Msg-Generator: CA
+In-Reply-To: <Ye6/NgfxsZnpXE09@smile.fi.intel.com>
 Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220120193622epcas5p3a65c8424c6a01aed9a87f5ac2a89eb06
-References: <20220120192438.25555-1-alim.akhtar@samsung.com>
-        <CGME20220120193622epcas5p3a65c8424c6a01aed9a87f5ac2a89eb06@epcas5p3.samsung.com>
-        <20220120192438.25555-4-alim.akhtar@samsung.com>
-        <YevfmeGwmwLml+6b@jack.zhora.eu>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Thanks Andi for review
+Hello!
 
->-----Original Message-----
->From: Andi Shyti [mailto:andi@etezian.org]
->Sent: Saturday, January 22, 2022 4:13 PM
->To: Alim Akhtar <alim.akhtar@samsung.com>
->Cc: linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
->devicetree@vger.kernel.org; linus.walleij@linaro.org; robh+dt@kernel.org;
->krzysztof.kozlowski@canonical.com; linux-samsung-soc@vger.kernel.org;
->pankaj.dubey@samsung.com; broonie@kernel.org; andi@etezian.org; linux-
->spi@vger.kernel.org; Aswani Reddy <aswani.reddy@samsung.com>; linux-
->fsd@tesla.com
->Subject: Re: [PATCH v2 3/3] arm64: dts: fsd: Add SPI device nodes
->
->Hi Alim and Aswani,
->
->On Fri, Jan 21, 2022 at 12:54:38AM +0530, Alim Akhtar wrote:
->> From: Aswani Reddy <aswani.reddy@samsung.com>
+On 1/24/22 6:01 PM, Andy Shevchenko wrote:
+
+>>>>>>> It'd certainly be good to name anything that doesn't correspond to one
+>>>>>>> of the existing semantics for the API (!) something different rather
+>>>>>>> than adding yet another potentially overloaded meaning.
+>>>>>>
+>>>>>> It seems we're (at least) three who agree about this. Here is a patch
+>>>>>> fixing the name.
+>>>>>
+>>>>> And similar number of people are on the other side.
+>>>>
+>>>> If someone already opposed to the renaming (and not only the name) I
+>>>> must have missed that.
+>>>>
+>>>> So you think it's a good idea to keep the name
+>>>> platform_get_irq_optional() despite the "not found" value returned by it
+>>>> isn't usable as if it were a normal irq number?
+>>>
+>>> I meant that on the other side people who are in favour of Sergey's patch.
+>>> Since that I commented already that I opposed the renaming being a standalone
+>>> change.
+>>>
+>>> Do you agree that we have several issues with platform_get_irq*() APIs?
+[...]
+>>> 2. The vIRQ0 handling: a) WARN() followed by b) returned value 0
 >>
->> Adds device tree node for SPI IPs
+>> I'm happy with the vIRQ0 handling. Today platform_get_irq() and it's
+>> silent variant returns either a valid and usuable irq number or a
+>> negative error value. That's totally fine.
+> 
+> It might return 0.
+> Actually it seems that the WARN() can only be issued in two cases:
+> - SPARC with vIRQ0 in one of the array member
+> - fallback to ACPI for GPIO IRQ resource with index 0
+
+   You have probably missed the recent discovery that arch/sh/boards/board-aps4*.c
+causes IRQ0 to be passed as a direct IRQ resource?
+
+> But the latter is bogus, because it would mean a bug in the ACPI code.
+
+   Worth changing >= 0 to > 0 there, maybe?
+
+> The bottom line here is the SPARC case. Anybody familiar with the platform
+> can shed a light on this. If there is no such case, we may remove warning
+> along with ret = 0 case from platfrom_get_irq().
+
+   I'm afraid you're too fast here... :-)
+   We'll have a really hard time if we continue to allow IRQ0 to be returned by
+platform_get_irq() -- we'll have oto fileter it out in the callers then...
+
+>>> 3. The specific cookie for "IRQ not found, while no error happened" case
 >>
->> Cc: linux-fsd@tesla.com
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->> Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
->> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
->
->Reviewed-by: Andi Shyti <andi@etezian.org>
->
->Please, also allow me another nit-commnent for the next patches:
->the tag section is in chronological order. I suppose that first Aswani
-wrote the
->patch, then you sent it to the mailing list and at the end Krzysztof has
->reviewed it, this means that the right order is:
->
->  Signed-off-by: Aswani Reddy <aswani.reddy@samsung.com>
->  Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
->  Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->
-Sure, will update it in the next version of the patch set.
+>> Not sure what you mean here. I have no problem that a situation I can
+>> cope with is called an error for the query function. I just do error
+>> handling and continue happily. So the part "while no error happened" is
+>> irrelevant to me.
+> 
+> I meant that instead of using special error code, 0 is very much good for
+> the cases when IRQ is not found. It allows to distinguish -ENXIO from the
+> low layer from -ENXIO with this magic meaning.
 
->Thank you,
->Andi
+   I don't see how -ENXIO can trickle from the lower layers, frankly...
 
+[...]
+
+MBR, Sergey
