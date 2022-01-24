@@ -2,86 +2,170 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C36864977AB
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Jan 2022 04:27:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C9F4978B9
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Jan 2022 06:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241040AbiAXD1y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 23 Jan 2022 22:27:54 -0500
-Received: from mswedge1.sunplus.com ([60.248.182.113]:60700 "EHLO
-        mg.sunplus.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S241038AbiAXD1x (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 23 Jan 2022 22:27:53 -0500
-X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
-        ,3)
-Received: from 172.17.9.112
-        by mg01.sunplus.com with MailGates ESMTP Server V5.0(11311:0:AUTH_RELAY)
-        (envelope-from <lh.Kuo@sunplus.com>); Mon, 24 Jan 2022 11:27:51 +0800 (CST)
-Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
- sphcmbx02.sunplus.com.tw (172.17.9.112) with Microsoft SMTP Server (TLS) id
- 15.0.1497.26; Mon, 24 Jan 2022 11:27:45 +0800
-Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
- sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
- 15.00.1497.026; Mon, 24 Jan 2022 11:27:45 +0800
-From:   =?utf-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Li-hao Kuo <lhjeff911@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Subject: RE: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
-Thread-Topic: [PATCH v6 1/2] spi: Add spi driver for Sunplus SP7021
-Thread-Index: AQHYDEdoNQA4Z8mYU0mSuzI8gOIgg6xqY3GAgAE/t3D//4TFAIABjwHAgAAISoCABMfgEA==
-Date:   Mon, 24 Jan 2022 03:27:45 +0000
-Message-ID: <638055e6c4dd4f66bab98c12bd5bd74a@sphcmbx02.sunplus.com.tw>
-References: <cover.1642494310.git.lhjeff911@gmail.com>
- <37998e515d561e762ee30d0ac4fca25a948e0c5c.1642494310.git.lhjeff911@gmail.com>
- <CAHp75VdKc3UDzaqM2G5J5+G90U6Spqyhz_vuOYKhqJ4V-uf=wg@mail.gmail.com>
- <a354d7c1dce4463ea57706dd5443fe7a@sphcmbx02.sunplus.com.tw>
- <CAHp75VcCpye1u3+PK=C3CT8fMHPSOsXTL5AhbLVy0YyGWfyfkQ@mail.gmail.com>
- <ee5838c307f84bb99ace070292167a26@sphcmbx02.sunplus.com.tw>
- <CAHp75VcmFPCC0kDxOma6gunwFRf-eXEr6+ZxQs1dt5GH2quT4Q@mail.gmail.com>
-In-Reply-To: <CAHp75VcmFPCC0kDxOma6gunwFRf-eXEr6+ZxQs1dt5GH2quT4Q@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [172.25.108.51]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S231765AbiAXFyF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 24 Jan 2022 00:54:05 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:52882 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230091AbiAXFyE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 24 Jan 2022 00:54:04 -0500
+X-UUID: b5ff8953b84541e8925667c9a742ef53-20220124
+X-UUID: b5ff8953b84541e8925667c9a742ef53-20220124
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <leilk.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1566526862; Mon, 24 Jan 2022 13:54:02 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 24 Jan 2022 13:54:01 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 24 Jan 2022 13:54:00 +0800
+Message-ID: <284792c07f1adcd2ceeab287c6f38c35ee689c0a.camel@mediatek.com>
+Subject: Re: [PATCH V2 1/3] dt-bindings: spi: Convert spi-slave-mt27xx to
+ json-schema
+From:   Leilk Liu <leilk.liu@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
+Date:   Mon, 24 Jan 2022 13:54:00 +0800
+In-Reply-To: <YetVd7IR7FDt+nz3@robh.at.kernel.org>
+References: <20220112103609.17421-1-leilk.liu@mediatek.com>
+         <20220112103609.17421-2-leilk.liu@mediatek.com>
+         <YetVd7IR7FDt+nz3@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-PiA+ID4gPiA+ID4gKyAgICAgICBpZiAoeGZlci0+dHhfYnVmKQ0KPiA+ID4gPiA+ID4gKyAgICAg
-ICAgICAgICAgIGRtYV91bm1hcF9zaW5nbGUoZGV2LCB4ZmVyLT50eF9kbWEsIHhmZXItPmxlbiwg
-RE1BX1RPX0RFVklDRSk7DQo+ID4gPiA+ID4gPiArICAgICAgIGlmICh4ZmVyLT5yeF9idWYpDQo+
-ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgZG1hX3VubWFwX3NpbmdsZShkZXYsIHhmZXItPnJ4
-X2RtYSwgeGZlci0+bGVuLA0KPiA+ID4gPiA+ID4gKyBETUFfRlJPTV9ERVZJQ0UpOw0KPiA+ID4g
-PiA+DQo+ID4gPiA+ID4gV2h5IGNhbid0IHlvdSB1c2UgU1BJIGNvcmUgRE1BIG1hcHBpbmcgY29k
-ZT8NCj4gPiA+ID4NCj4gPiA+ID4gSSBkaWRuJ3QgZmluZCB0aGUgU1BJIGNvcmUgRE1BIG1hcHBp
-bmcgY29kZSBmb3Igc2luZ2xlIG1hcGluZy4NCj4gPiA+ID4gVGhlIG1ldGhvZCBjdXJyZW50bHkg
-dXNlZCBpcyB0aGUgZ2VuZXJhbCBETUEgc2luZ2xlLW1hcCBjb2RlIHVzYWdlIG1ldGhvZC4NCj4g
-PiA+DQo+ID4gPiBXaHkgZG8geW91IG5lZWQgc2luZ2xlIHBhZ2UgbWFwcGluZz8NCj4gPiA+IFdo
-YXQncyB3cm9uZyB3aXRoIFNHIG1hcHBpbmcgdGhhdCBTUEkgY29yZSBwcm92aWRlcz8NCj4gPg0K
-PiA+IFNQNzAyMSBTUEkgc2xhdmUgZG1hIG9ubHkgc3VwcG9ydHMgc2luZ2xlIGRtYSBpbiBvbmUg
-dHJpZ2dlci4NCj4gPiBJdCBpcyBub3Qgc3VpdGFibGUgZm9yIHVzaW5nIFNHIG1hcHBpbmcuDQo+
-ID4gSWYgdGhlIGxlbmd0aCBvZiB0aGUgdHJhbnNmZXIgaXMgbGFyZ2VyIHRoYW4gdGhlIGxlbmd0
-aCBvZiB0aGUNCj4gPiBTRy1tYXBwaW5nLCBTbGF2ZS1tb2RlIHdpbGwgZ2V0IGVycm9yIGluIHRo
-ZSB0cmFuc2Zlci4NCj4gDQo+IFNhbWUgc3RvcnkgZm9yIFNQSSBEZXNpZ25XYXJlIG9uIEludGVs
-IE1lZGZpZWxkLCB3aGVyZSBubyBTRyB0cmFuc2ZlcnMgYXJlIHN1cHBvcnRlZCBieSBoYXJkd2Fy
-ZS4NCj4gTmV2ZXJ0aGVsZXNzLCB0aGUgRE1BIGRyaXZlciB0YWtlcyBjYXJlIG9mIHRoaXMgYW5k
-IG9uIGVhY2ggaW50ZXJydXB0IHJlY2hhcmdlcyBhIGNoYW5uZWwgdG8gY29udGludWUuDQo+IFdo
-eSBjYW4ndCB0aGUgc2FtZSBiZSBpbXBsZW1lbnRlZCBoZXJlPw0KPiANCj4gDQpJIHRoaW5rIGl0
-IHNob3VsZCB3b3JrIGluIG1hc3Rlci4gc3BpIG1hc3RlciBtdXN0IGFjdGl2ZWx5IHNlbmQgY2xr
-IGFuZCBkYXRlIHRvIHNsYXZlIGRldmljZS4NCkFuZCB5ZXMsIGluIHRoZSAibWFzdGVyIiBtb2Rl
-IGl0IGNhbiBoYW5kbGUgU0ctRE1BIG9uIGVhY2ggaW50ZXJydXB0Lg0KQnV0IGlmIHdvcmtpbmcg
-aW4gInNsYXZlIiBtb2RlLCB0aGUgbWFzdGVyIHdpbGwgbm90IGtub3cgdGhlIHN0YXRlIG9mIHRo
-ZSBzbGF2ZS4gU2xhdmVzIHdvcmsgb24gaW50ZXJydXB0IGFuZCByZWNoYXJnZSBjaGFubmVscy4N
-CldoZW4gbWFzdGVyIHNlbmQgY2xrIGFuZCBkYXRlIGluIHRoZSBzYW1lIHRpbWUuIEl0IG1heSBs
-b3NlIGRhdGEgYW5kIGVycm9ycyBvY2N1cg0KDQoNCg==
+On Fri, 2022-01-21 at 18:53 -0600, Rob Herring wrote:
+> On Wed, Jan 12, 2022 at 06:36:07PM +0800, Leilk Liu wrote:
+> > Convert Mediatek ARM SOC's SPI Slave controller binding
+> > to json-schema format.
+> > 
+> > Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> > ---
+> >  .../spi/mediatek,spi-slave-mt27xx.yaml        | 73
+> > +++++++++++++++++++
+> >  .../bindings/spi/spi-slave-mt27xx.txt         | 33 ---------
+> >  2 files changed, 73 insertions(+), 33 deletions(-)
+> >  create mode 100644
+> > Documentation/devicetree/bindings/spi/mediatek,spi-slave-
+> > mt27xx.yaml
+> >  delete mode 100644 Documentation/devicetree/bindings/spi/spi-
+> > slave-mt27xx.txt
+> > 
+> > diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-
+> > slave-mt27xx.yaml
+> > b/Documentation/devicetree/bindings/spi/mediatek,spi-slave-
+> > mt27xx.yaml
+> > new file mode 100644
+> > index 000000000000..3364fff08cca
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-slave-
+> > mt27xx.yaml
+> > @@ -0,0 +1,73 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: 
+> > http://devicetree.org/schemas/spi/mediatek,spi-slave-mt27xx.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: SPI Slave controller for MediaTek ARM SoCs
+> > +
+> > +maintainers:
+> > +  - Leilk Liu <leilk.liu@mediatek.com>
+> > +
+> > +allOf:
+> > +  - $ref: /spi/spi-controller.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - items:
+> > +          - enum:
+> > +              - mediatek,mt2712-spi-slave
+> > +      - items:
+> > +          - enum:
+> > +              - mediatek,mt8195-spi-slave
+> 
+> Just:
+> 
+>        enum:
+>          - mediatek,mt2712-spi-slave
+>          - mediatek,mt8195-spi-slave
+> 
+OK, I'll fix it.
+
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: clock used for the clock gate
+> 
+> Just 'maxItems: 1'
+> 
+OK, I'll fix it.
+
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: spi
+> > +
+> > +  assigned-clocks:
+> > +    maxItems: 1
+> > +    description: |
+> > +      The mux clock for the given platform.
+> > +
+> > +  assigned-clock-parents:
+> > +    maxItems: 1
+> > +    description: |
+> > +      The parent of mux clock for the given platform.
+> 
+> You can drop assigned-clocks. They are always allowed on nodes with 
+> 'clocks'.
+> 
+OK, I'll fix it.
+
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - clocks
+> > +  - clock-names
+> > +
+> > +unevaluatedProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/clock/mt2712-clk.h>
+> > +    #include <dt-bindings/gpio/gpio.h>
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > +
+> > +    spi@10013000 {
+> > +      compatible = "mediatek,mt2712-spi-slave";
+> > +      reg = <0x10013000 0x100>;
+> > +      interrupts = <GIC_SPI 283 IRQ_TYPE_LEVEL_LOW>;
+> > +      clocks = <&infracfg CLK_INFRA_AO_SPI1>;
+> > +      clock-names = "spi";
+> > +      assigned-clocks = <&topckgen CLK_TOP_SPISLV_SEL>;
+> > +      assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL1_D2>;
+> > +    };
+
