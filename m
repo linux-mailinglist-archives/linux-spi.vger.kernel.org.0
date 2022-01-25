@@ -2,89 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A9949B699
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Jan 2022 15:44:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68FDE49B6AD
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Jan 2022 15:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357630AbiAYOkB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Jan 2022 09:40:01 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43802 "EHLO
+        id S1383050AbiAYOob (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Jan 2022 09:44:31 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45920 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233897AbiAYOfL (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jan 2022 09:35:11 -0500
+        with ESMTP id S1389255AbiAYOkO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jan 2022 09:40:14 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E67A16158D;
-        Tue, 25 Jan 2022 14:35:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96CCFC340E0;
-        Tue, 25 Jan 2022 14:35:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C577615F0
+        for <linux-spi@vger.kernel.org>; Tue, 25 Jan 2022 14:40:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B0DDDC340F8;
+        Tue, 25 Jan 2022 14:40:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643121309;
-        bh=AtXE1ueZkQ0gD/YVVUt8Nlfb9yoVnUlbr62Nxv00e8g=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=aUOSrB7eahx+kVWfvtqKQACe0SMJ5/eCsiYIjBeF0gpL3lWBKjx70vzanZY2O14wJ
-         +ODbKZxSUgHL+VxW6Y9NqwIlfUF76R2ZyIywUt0cCA9fjiCuXgVmSOkkZw5g6WTK5x
-         2TWDPsc1UJq8LHWvlue8u2FSkgxt37XVpbuhdj1DM3mQG/AuRUO1PD690sL+evUEK2
-         1TGHlMFnRdA6HU0kqDWODQV7pxiHgyecKiy56SVux5/GCB8bEwZuIllS5Jw66tdNme
-         hifq6bgCshbXnzlQxAmznZAxllfKWRtdBozAeCHtyjUiSIRvjrajqdEeEwlfYwMsiW
-         q+1v3FaG8s8ow==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-spi@vger.kernel.org, Li-hao Kuo <lhjeff911@gmail.com>,
-        p.zabel@pengutronix.de, robh+dt@kernel.org,
-        andyshevchenko@gmail.com
-Cc:     lh.kuo@sunplus.com, wells.lu@sunplus.com
-In-Reply-To: <cover.1642494310.git.lhjeff911@gmail.com>
-References: <cover.1642494310.git.lhjeff911@gmail.com>
-Subject: Re: [PATCH v6 0/2] Add spi control driver for Sunplus SP7021 SoC
-Message-Id: <164312130733.3602551.286294700422515308.b4-ty@kernel.org>
-Date:   Tue, 25 Jan 2022 14:35:07 +0000
-MIME-Version: 1.0
+        s=k20201202; t=1643121610;
+        bh=CcptRaMG/J44aEtr5zb/HldC4B/f88/35aMzwo5p46o=;
+        h=Subject:From:Date:To:From;
+        b=l18q5SEr9riVu2AqKKu5VIYW2VHhCQaHgarDHVCGD6NF6grCe1ReNkSAMCRHbJ3+y
+         JjPUsB4YRf/Eq+eN3U3x5RvkzZdm0zAP01R611Nt/ZcPAPgoohdHwtBh7J+Z3xwsV4
+         yqQIa7K66QA4tkDf4ZbHPF/T8Gb5JXLk320j6mEYc3EDcHOrANyx49c8Rx52pZA97+
+         n/wo2j5vZDeC04DBtaKADLTjyi5xqlZwc4vpFnFsEEkQ2tUOg7fghQ1WGqEu3wpJr7
+         sRLf3qeAnzXDXMqw+swRFEIl0KLot65aediH8gqGAO+7SLgZxYUYPucNdMDVNl33hn
+         +Nts+u77C3zDA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 93CFFF6079C;
+        Tue, 25 Jan 2022 14:40:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <164312161054.15682.3194632369773761183.git-patchwork-summary@kernel.org>
+Date:   Tue, 25 Jan 2022 14:40:10 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 18 Jan 2022 16:42:37 +0800, Li-hao Kuo wrote:
-> This is a patch series for SPI driver for Sunplus SP7021 SoC.
-> 
-> Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
-> many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
-> etc.) into a single chip. It is designed for industrial control.
-> 
-> Refer to:
-> https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
-> https://tibbo.com/store/plus1.html
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: Add spi control driver for Sunplus SP7021 SoC
+  Submitter: Li-hao Kuo <lhjeff911@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=606178
+  Lore link: https://lore.kernel.org/r/cover.1642494310.git.lhjeff911@gmail.com
+    Patches: [v6,1/2] spi: Add spi driver for Sunplus SP7021
 
-Thanks!
 
-[1/2] spi: Add spi driver for Sunplus SP7021
-      commit: f62ca4e2a863033d9b3b5a00a0d897557c9da6c5
-[2/2] dt-bindings:spi: Add Sunplus SP7021 schema
-      (no commit info)
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
