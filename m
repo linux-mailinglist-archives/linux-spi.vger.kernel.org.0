@@ -2,54 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7008649B1E5
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Jan 2022 11:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4C249B1E4
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Jan 2022 11:45:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344585AbiAYKb3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S245457AbiAYKb3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Tue, 25 Jan 2022 05:31:29 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:32956 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345277AbiAYKVR (ORCPT
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37118 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345567AbiAYKVR (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jan 2022 05:21:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA5EC061773;
+        Tue, 25 Jan 2022 02:21:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8A4361645;
-        Tue, 25 Jan 2022 10:21:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85412C340E0;
-        Tue, 25 Jan 2022 10:21:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A13F61640;
+        Tue, 25 Jan 2022 10:21:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C112EC340EC;
+        Tue, 25 Jan 2022 10:21:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643106071;
-        bh=dDZYgGbA0BHGN18HiUB3PXb8Mel6TNqbFMOFcstIxX0=;
+        s=k20201202; t=1643106075;
+        bh=Waq7iN55oJ8pZCq6646pwR8UIZfAhl1qVIhA0SINmac=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Dk+O+jx9RNfAIRNl+G5yibdxkkq8aTGXmW91f6mxjLCST3oy+fJt+u4/SRVhCxwpw
-         V4COe9T6WaXtk7IlXR17mBCgwBp4NdpQVxrZVQBMRo4fukpDBetZZE/3AhUipDYJfZ
-         xDjnOl5awl586lrBjMlr+/CxVsQxyeLRfUN/t+E2n5TSLam4ejfcYmGSP8J+81pjOo
-         E1JEbrV6QM5bmj7eTrXB6ABpB8aUHr/6lJay6YVAuVOwXsam2ucGeIdLB6MC6PKHJh
-         rs61dpnbb/ib/qZXwyOem11DRLndWGy6AorM4XzUTNqRuyGvWbZ7/xy4q12565R+d4
-         GBF9r1mIDxWGQ==
+        b=pvu50lKVRJh3onH/Z32EVmvRYm3q0PBN258cJjHpIaXsupS5fTTh6F2oMoNgrs3KR
+         s6Q55ltp8Oa8LkNSRW4OKStlf/tL3BEd4iwR8uSaNxdNmlodpefLvwEFSiAvSwRvBH
+         fwxCgj6I3VlHCIZpCqNBiK12CvzgeNCy1ZF8n1pPrUvJW7i3u3KsbLDBms+/z295PG
+         i30cE8f8o/rHBUX7Y5VxqokgaFvx3+68ImfR57mYdP9H6pQbISNeFv8M86sZ4TO/a6
+         HN+A/ikS0KiKx4J5YOlWMDLXvWG8wKBWG/QiMp/0QrvF11t43Bbz0Rd14r9LyQAm3T
+         n7M3hrwixwh2A==
 From:   Mark Brown <broonie@kernel.org>
-To:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linus.walleij@linaro.org, conor.dooley@microchip.com,
-        linux-kernel@vger.kernel.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, aou@eecs.berkeley.edu,
-        lee.jones@linaro.org, jassisinghbrar@gmail.com,
-        linux-usb@vger.kernel.org, thierry.reding@gmail.com,
-        palmer@dabbelt.com, linux-pwm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, gregkh@linuxfoundation.org,
-        bgolaszewski@baylibre.com, linux-crypto@vger.kernel.org,
-        robh+dt@kernel.org, u.kleine-koenig@pengutronix.de,
-        linux-i2c@vger.kernel.org, paul.walmsley@sifive.com
-Cc:     geert@linux-m68k.org, bin.meng@windriver.com,
-        lewis.hanly@microchip.com, ivan.griffin@microchip.com,
-        krzysztof.kozlowski@canonical.com, heiko@sntech.de,
-        atishp@rivosinc.com, daire.mcnamara@microchip.com
-In-Reply-To: <20220117110755.3433142-1-conor.dooley@microchip.com>
-References: <20220117110755.3433142-1-conor.dooley@microchip.com>
-Subject: Re: (subset) [PATCH v4 00/14] Update the Icicle Kit device tree
-Message-Id: <164310606421.75071.15666469655719890555.b4-ty@kernel.org>
-Date:   Tue, 25 Jan 2022 10:21:04 +0000
+To:     Linus Walleij <linus.walleij@linaro.org>, linux-spi@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        linux-samsung-soc@vger.kernel.org
+In-Reply-To: <20220118110928.120640-1-linus.walleij@linaro.org>
+References: <20220118110928.120640-1-linus.walleij@linaro.org>
+Subject: Re: [PATCH 1/3 v2] spi: s3c64xx: Delete unused boardfile helpers
+Message-Id: <164310607451.75071.12191982229329069475.b4-ty@kernel.org>
+Date:   Tue, 25 Jan 2022 10:21:14 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,15 +48,12 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 17 Jan 2022 11:07:41 +0000, conor.dooley@microchip.com wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Tue, 18 Jan 2022 12:09:26 +0100, Linus Walleij wrote:
+> The helpers to use SPI host 1 and 2 are unused in the kernel
+> and taking up space and maintenance hours. New systems should
+> use device tree and not this, so delete the code.
 > 
-> This series updates the Microchip Icicle Kit device tree by adding a
-> host of peripherals, and some updates to the memory map. In addition,
-> the device tree has been split into a third part, which contains "soft"
-> peripherals that are in the fpga fabric.
 > 
-> [...]
 
 Applied to
 
@@ -73,8 +61,12 @@ Applied to
 
 Thanks!
 
-[06/14] dt-bindings: spi: add bindings for microchip mpfs spi
-        commit: 2da187304e556ac59cf2dacb323cc78ded988169
+[1/3] spi: s3c64xx: Delete unused boardfile helpers
+      commit: f1ba938e4f98941dc2b77795062e49444ec1fee1
+[2/3] spi: s3c64xx: Drop custom gpio setup argument
+      commit: 3b5529ae7f3578da633e8ae2ec0715a55a248f9f
+[3/3] spi: s3c64xx: Convert to use GPIO descriptors
+      commit: a45cf3cc72dd9cfde9db8af32cdf9c431f53f9bc
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
