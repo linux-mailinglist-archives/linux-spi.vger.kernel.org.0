@@ -2,45 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4C249B1E4
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Jan 2022 11:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE8649B1E6
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Jan 2022 11:45:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245457AbiAYKb3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 25 Jan 2022 05:31:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37118 "EHLO
+        id S1355360AbiAYKba (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Jan 2022 05:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345567AbiAYKVR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jan 2022 05:21:17 -0500
+        with ESMTP id S1345598AbiAYKVT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jan 2022 05:21:19 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA5EC061773;
-        Tue, 25 Jan 2022 02:21:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA7CC061774;
+        Tue, 25 Jan 2022 02:21:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A13F61640;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AFFE61631;
+        Tue, 25 Jan 2022 10:21:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FA9FC340E9;
         Tue, 25 Jan 2022 10:21:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C112EC340EC;
-        Tue, 25 Jan 2022 10:21:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643106075;
-        bh=Waq7iN55oJ8pZCq6646pwR8UIZfAhl1qVIhA0SINmac=;
+        s=k20201202; t=1643106077;
+        bh=GZBZI8el6N7chcs1+Q4bact+nbq/SBhs/tMlshfzetM=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=pvu50lKVRJh3onH/Z32EVmvRYm3q0PBN258cJjHpIaXsupS5fTTh6F2oMoNgrs3KR
-         s6Q55ltp8Oa8LkNSRW4OKStlf/tL3BEd4iwR8uSaNxdNmlodpefLvwEFSiAvSwRvBH
-         fwxCgj6I3VlHCIZpCqNBiK12CvzgeNCy1ZF8n1pPrUvJW7i3u3KsbLDBms+/z295PG
-         i30cE8f8o/rHBUX7Y5VxqokgaFvx3+68ImfR57mYdP9H6pQbISNeFv8M86sZ4TO/a6
-         HN+A/ikS0KiKx4J5YOlWMDLXvWG8wKBWG/QiMp/0QrvF11t43Bbz0Rd14r9LyQAm3T
-         n7M3hrwixwh2A==
+        b=PteXvhymNpG2cqn3OKRGKkKJQe37mBDe0IJrF+j+CBR6AfbMPIHJhaBsCduvvP/lh
+         JjY2MXnjOqLi0ZfhzxPiGoBKxHeKA1um9jIPsEBhg4llb3qZstXpNK3KdjwmEsmHYJ
+         ZuF3ibrKsSA0IxV/nQK4kSUA7BERZmE5WJ/I5T1kTyf/fh46le7NN/EOUbVFGRf5bY
+         /07D0kLGIxWCGG6xj33xja2gDecTQ0ajQJ1Dq0tQM6GKienvXGmvgm65V8DpQ0acNe
+         2KkVSY+Sw+ZbrpAnjj14lP/qMpGUsrZD5xhOgWE2LyyEQTDV9RAK4di5+Aycm+r8dl
+         4ebFdIWhCGKsA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Linus Walleij <linus.walleij@linaro.org>, linux-spi@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Sylwester Nawrocki <snawrocki@kernel.org>,
         linux-samsung-soc@vger.kernel.org
-In-Reply-To: <20220118110928.120640-1-linus.walleij@linaro.org>
-References: <20220118110928.120640-1-linus.walleij@linaro.org>
-Subject: Re: [PATCH 1/3 v2] spi: s3c64xx: Delete unused boardfile helpers
-Message-Id: <164310607451.75071.12191982229329069475.b4-ty@kernel.org>
-Date:   Tue, 25 Jan 2022 10:21:14 +0000
+In-Reply-To: <20220118230915.157797-1-linus.walleij@linaro.org>
+References: <20220118230915.157797-1-linus.walleij@linaro.org>
+Subject: Re: [PATCH 1/3 v3] spi: s3c64xx: Delete unused boardfile helpers
+Message-Id: <164310607598.75071.11615059052850898088.b4-ty@kernel.org>
+Date:   Tue, 25 Jan 2022 10:21:15 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -48,7 +48,7 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 18 Jan 2022 12:09:26 +0100, Linus Walleij wrote:
+On Wed, 19 Jan 2022 00:09:13 +0100, Linus Walleij wrote:
 > The helpers to use SPI host 1 and 2 are unused in the kernel
 > and taking up space and maintenance hours. New systems should
 > use device tree and not this, so delete the code.
