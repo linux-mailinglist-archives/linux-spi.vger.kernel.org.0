@@ -2,239 +2,113 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8748249B249
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Jan 2022 11:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1356F49B24B
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Jan 2022 11:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346013AbiAYKsz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Tue, 25 Jan 2022 05:48:55 -0500
-Received: from mail-ua1-f51.google.com ([209.85.222.51]:34740 "EHLO
-        mail-ua1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359754AbiAYKnd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jan 2022 05:43:33 -0500
-Received: by mail-ua1-f51.google.com with SMTP id y4so36590173uad.1;
-        Tue, 25 Jan 2022 02:43:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KUBI31PDeAnUzGFlBJuIh4dmvfrE44RhBRVMq2wEYSI=;
-        b=jEQDW5yodRmRVP9NIHGKf/Zqv7fciKPRB1CkTV3fKwnJqJOR9nObuvchECsV6CkowS
-         0RXMHwpiWGb2Tc8Kq8ywS8r7D5Ou/pBi+AuAod7u3AaDFL1+Z/eF6fLMeHVSznOTnWUW
-         90tv/NIVrXuMtI8sY04pwv/Mro4kUzc+Bpth5wWllcKADG4aGhnhIjbJhQzaV5RtPjzw
-         s1FdjjAQnwFOzetd3JADKbmMtsbUPpwqNRzajLB0hDQGa0Rgfbp8HOVlhxI+mK2MNTJd
-         Q5wTqyofT3OihGmTPOd6QhPLpcrEB7UCAoEmrVZTRCK/nWOxls32FCorF6O1NqCujuDv
-         dJSg==
-X-Gm-Message-State: AOAM531YcK63o+balcc5pV241srngLS5LTpT15FAMrvagHXIW5gKB3jS
-        U2c1AOPoRhAwTItUF4uz4P44uZUF4VS28vTX
-X-Google-Smtp-Source: ABdhPJwAP7sGEC010JKTiaYioiu/UTc4Mp89rGwnkrkLZob5IjBWSJ5wyDMZldWcel/u/8J+O6Kjog==
-X-Received: by 2002:a67:e146:: with SMTP id o6mr1664843vsl.4.1643107407326;
-        Tue, 25 Jan 2022 02:43:27 -0800 (PST)
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com. [209.85.221.178])
-        by smtp.gmail.com with ESMTPSA id s134sm3300983vkb.16.2022.01.25.02.43.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 02:43:27 -0800 (PST)
-Received: by mail-vk1-f178.google.com with SMTP id j185so8365206vkc.1;
-        Tue, 25 Jan 2022 02:43:27 -0800 (PST)
-X-Received: by 2002:a05:6102:34e:: with SMTP id e14mr295625vsa.68.1643107051968;
- Tue, 25 Jan 2022 02:37:31 -0800 (PST)
+        id S1346850AbiAYKs6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 25 Jan 2022 05:48:58 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:39940 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359764AbiAYKnf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 25 Jan 2022 05:43:35 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D81FECE17C7
+        for <linux-spi@vger.kernel.org>; Tue, 25 Jan 2022 10:43:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 32635C340E0;
+        Tue, 25 Jan 2022 10:43:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643107408;
+        bh=/rrUl+qR1YNVIgqUDkL0H2qNI8hz6wKuxvCchemjhDU=;
+        h=Subject:From:Date:To:From;
+        b=i2f4jpykV5wuetzkNRVSTMyZKDUvNOINFUutSKo24ixa0LBL+Bp0ZjtObBqWU0SQT
+         dWputjbq20cekv5p3eNHnuaCzD42ojgxYfsC5ha2JGmpMOfuFfMoyE+eDPqho94I6M
+         rpwxpLmx4btXn3RTz5QUvABZxGcTMQRZ7UTRi0ef2AA1nN9XBBRJo5ywenJ2hW19bK
+         bf+wjeBZzYbqNA1ebvxZVVB080TMa4hRnpXc13F0g8DzAN56Ez8VxbzwYHM/dS+NKe
+         WQchsp55sO8SIimW71Va0Tus7m2pV6MSM2Drxn4VJUAO9UJQcBFEukNI0uAx+LLJr7
+         DwVRtv3Tr5qPQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 120F4F6079C;
+        Tue, 25 Jan 2022 10:43:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de> <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 25 Jan 2022 11:37:19 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWCRyyq1=5+YnXgt2=B-qXMGWXC4XtnP_GHGvghdaH_XQ@mail.gmail.com>
-Message-ID: <CAMuHMdWCRyyq1=5+YnXgt2=B-qXMGWXC4XtnP_GHGvghdaH_XQ@mail.gmail.com>
-Subject: Re: [PATCH 5/5] spi: make remove callback a void function
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Mark Brown <broonie@kernel.org>,
-        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Emma Anholt <emma@anholt.net>,
-        David Lechner <david@lechnology.com>,
-        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dan Robertson <dan@dlrobertson.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Kent Gustavsson <kent@minoris.se>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Charles-Antoine Couret <charles-antoine.couret@nexvision.fr>,
-        Antti Palosaari <crope@iki.fi>,
-        Lee Jones <lee.jones@linaro.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eric Piel <eric.piel@tremplin-utc.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Harry Morris <h.morris@cascoda.com>,
-        Varka Bhadram <varkabhadram@gmail.com>,
-        Xue Liu <liuxuenetmail@gmail.com>, Alan Ott <alan@signal11.us>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ajay Singh <ajay.kathat@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Solomon Peachy <pizza@shaftnet.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Mark Greer <mgreer@animalcreek.com>,
-        Benson Leung <bleung@chromium.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        James Schulman <james.schulman@cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Alexandru Ardelean <ardeleanalex@gmail.com>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Antoniu Miclaus <antoniu.miclaus@analog.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        =?UTF-8?Q?Ronald_Tschal=C3=A4r?= <ronald@innovation.ch>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Heiko Schocher <hs@denx.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Matt Kline <matt@bitbashing.io>,
-        Torin Cooper-Bennun <torin@maxiluxsystems.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Nanyong Sun <sunnanyong@huawei.com>,
-        Yang Shen <shenyang39@huawei.com>,
-        dingsenjie <dingsenjie@yulong.com>,
-        Aditya Srivastava <yashsri421@gmail.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michael Walle <michael@walle.cc>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        wengjianfeng <wengjianfeng@yulong.com>,
-        Sidong Yang <realwakka@gmail.com>,
-        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
-        Davidlohr Bueso <dbueso@suse.de>, Claudius Heine <ch@denx.de>,
-        Jiri Prchal <jiri.prchal@aksignal.cz>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
-        linux-wireless@vger.kernel.org, libertas-dev@lists.infradead.org,
-        platform-driver-x86@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <164310740801.20501.303001098958988080.git-patchwork-summary@kernel.org>
+Date:   Tue, 25 Jan 2022 10:43:28 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Jan 23, 2022 at 6:54 PM Uwe Kleine-König
-<u.kleine-koenig@pengutronix.de> wrote:
-> The value returned by an spi driver's remove function is mostly ignored.
-> (Only an error message is printed if the value is non-zero that the
-> error is ignored.)
->
-> So change the prototype of the remove function to return no value. This
-> way driver authors are not tempted to assume that passing an error to
-> the upper layer is a good idea. All drivers are adapted accordingly.
-> There is no intended change of behaviour, all callbacks were prepared to
-> return 0 before.
->
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Hello:
 
->  drivers/spi/spi-slave-system-control.c                |  3 +--
->  drivers/spi/spi-slave-time.c                          |  3 +--
->  drivers/spi/spi.c                                     | 11 ++---------
->  drivers/spi/spidev.c                                  |  4 +---
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Series: dt-bindinds/dts: support i.MX8ULP
+  Submitter: Peng Fan (OSS) <peng.fan@oss.nxp.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=586229
+  Lore link: https://lore.kernel.org/r/20211126074002.1535696-1-peng.fan@oss.nxp.com
+    Patches: [V6,1/7] dt-bindings: i2c: imx-lpi2c: Add imx8ulp compatible string
+             [V6,3/7] dt-bindings: timer: tpm-timer: Add imx8ulp compatible string
 
-Gr{oetje,eeting}s,
+Series: dmaengine: kill off dma_slave_config->slave_id
+  Submitter: Arnd Bergmann <arnd@kernel.org>
+  Committer: Vinod Koul <vkoul@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=584207
+  Lore link: https://lore.kernel.org/r/20211122222203.4103644-1-arnd@kernel.org
+    Patches: [v2,01/11] ASoC: tegra20-spdif: stop setting slave_id
+             [v2,02/11] ASoC: dai_dma: remove slave_id field
+             [v2,03/11] spi: pic32: stop setting dma_config->slave_id
+             [v2,04/11] mmc: bcm2835: stop setting chan_config->slave_id
+             [v2,05/11] dmaengine: shdma: remove legacy slave_id parsing
+             [v2,06/11] dmaengine: pxa/mmp: stop referencing config->slave_id
+             [v2,07/11] dmaengine: sprd: stop referencing config->slave_id
+             [v2,08/11] dmaengine: qcom-adm: stop abusing slave_id config
+             [v2,09/11] dmaengine: xilinx_dpdma: stop using slave_id field
+             [v2,10/11] dmaengine: tegra20-apb: stop checking config->slave_id
+             [v2,11/11] dmaengine: remove slave_id config field
 
-                        Geert
+Series: [1/4] mtd: dataflash: Warn about failure to unregister mtd device
+  Submitter: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+  Committer: Miquel Raynal <miquel.raynal@bootlin.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=576757
+  Lore link: https://lore.kernel.org/r/20211108093153.63792-1-u.kleine-koenig@pengutronix.de
+    Patches: [1/4] mtd: dataflash: Warn about failure to unregister mtd device
+             [2/4] mtd: mchp23k256: Warn about failure to unregister mtd device
+             [3/4] mtd: mchp48l640: Warn about failure to unregister mtd device
+             [4/4] mtd: sst25l: Warn about failure to unregister mtd device
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Series: Add basic SoC support for mediatek mt8195
+  Submitter: Tinghan Shen <tinghan.shen@mediatek.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=598221
+  Lore link: https://lore.kernel.org/r/20211220121825.6446-1-tinghan.shen@mediatek.com
+    Patches: [v7,1/4] dt-bindings: arm: mediatek: add mt8195 pericfg compatible
+             [v7,3/4] dt-bindings: pinctrl: mt8195: add wrapping node of pin configurations
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Series: [1/3,v3] spi: s3c64xx: Delete unused boardfile helpers
+  Submitter: Linus Walleij <linus.walleij@linaro.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=606407
+  Lore link: https://lore.kernel.org/r/20220118230915.157797-1-linus.walleij@linaro.org
+    Patches: [1/3,v3] spi: s3c64xx: Delete unused boardfile helpers
+             [2/3,v3] spi: s3c64xx: Drop custom gpio setup argument
+
+Series: Update the Icicle Kit device tree
+  Submitter:  <conor.dooley@microchip.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=605968
+  Lore link: https://lore.kernel.org/r/20220117110755.3433142-1-conor.dooley@microchip.com
+    Patches: [v4,01/14] dt-bindings: soc/microchip: update syscontroller compatibles
+             [v4,06/14] dt-bindings: spi: add bindings for microchip mpfs spi
+
+
+Total patches: 23
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
