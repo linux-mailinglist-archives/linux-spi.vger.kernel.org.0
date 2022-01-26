@@ -2,93 +2,125 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD5749C83D
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Jan 2022 12:04:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA5E49C87B
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Jan 2022 12:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233257AbiAZLEz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 26 Jan 2022 06:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
+        id S240596AbiAZLTD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Wed, 26 Jan 2022 06:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233215AbiAZLEz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Jan 2022 06:04:55 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E228C06161C;
-        Wed, 26 Jan 2022 03:04:55 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id c9so22058851plg.11;
-        Wed, 26 Jan 2022 03:04:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=RR4ouPM813OFDy+c0edjOK1JRioWIwLVRFDpfla460c=;
-        b=HP+tuwnNz6Y8+d3OMO5kJD2QNVUOgiTLtaVUi8wf1JlUByCQWmDWDbDr/kNgfWoBhb
-         7QYoWHRB9esF44iy+btd+d6ZfWligwEPii61Qclc4Vpjnhjo8wWqsLmwToWWi/Z7KaBl
-         jfKTrU0vecIWJesPNgZBvHRaU+dKM3DgjbfDg7eFmkWUxizbfMcFH9eJRjSbBBMJzsDN
-         WLLuq3MBzCD1SGEJvpT+pawxdNmNOF52nPcZbinDLvNtEnwTF3Jf9hUaV0V60PzZ05dZ
-         ZjfHms8JFXWTiwo7GZTFH4MmCGHkh3HxYxokd2jZRZe2JJ2bxdrWsvXHbqFWgepKJTAa
-         /Eqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=RR4ouPM813OFDy+c0edjOK1JRioWIwLVRFDpfla460c=;
-        b=h7lkzufyQx8eY1BtAcJUHdUbQ5F0XPj3qPuv6zHgqrSHjrBoS7flOhDNHttmPPMOdH
-         OU0paSXJp9I9nn84Lt4/kF7L3j1EmT2PWl347++qsyhTr1TO3weg/9qqcowGqygGkPDK
-         +gqTeQddAD7+KTjWYqKW8orcJbTjGchPvPSoZDSt4DjQPXZWvlwNU0A0nuEgA7O9DAob
-         L67kcHzya5o4yIK57EtYOfllw59AiNVCw5e7jmghwvOYDmhxmmSYav7ci5fmDd+TEmcj
-         6/C+ZdJcvPCeBjaCFqcwCTZ4j4K6vkgOtClSTtdbRbnynMRKTBnSiqTC1irl9gvjyKPV
-         OcOA==
-X-Gm-Message-State: AOAM530whIcYHrdunW2UfnAt5Y9vZn1n4nombAf9mpX4eNyLem+6G+Lm
-        otBCXhCuyKlAR2WknNF6iuc=
-X-Google-Smtp-Source: ABdhPJx2FwKdI5cKtqHUQdZWmt2+i2FAlaBuvr89STNb/9Amb3meY+F5YYosOYWzHq/p02vC+1Ny/w==
-X-Received: by 2002:a17:90b:3106:: with SMTP id gc6mr8081129pjb.77.1643195094691;
-        Wed, 26 Jan 2022 03:04:54 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id s12sm1706080pfd.112.2022.01.26.03.04.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 03:04:54 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] spi: meson-spicc: add IRQ check in meson_spicc_probe
-Date:   Wed, 26 Jan 2022 11:04:47 +0000
-Message-Id: <20220126110447.24549-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S240604AbiAZLTB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Jan 2022 06:19:01 -0500
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F625C061749
+        for <linux-spi@vger.kernel.org>; Wed, 26 Jan 2022 03:18:59 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8435B10000A;
+        Wed, 26 Jan 2022 11:18:56 +0000 (UTC)
+Date:   Wed, 26 Jan 2022 12:18:55 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        linux-mtd@lists.infradead.org, Michal Simek <monstr@monstr.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] spi: dt-bindings: Describe stacked/parallel
+ memories modes
+Message-ID: <20220126121855.1139be2d@xps13>
+In-Reply-To: <CAL_Jsq+1X1V8UUHgfKaSbhZLtche3bqnCj62jFRVWzQLEc3hng@mail.gmail.com>
+References: <20211210201039.729961-1-miquel.raynal@bootlin.com>
+        <20211210201039.729961-3-miquel.raynal@bootlin.com>
+        <YbjVSNAC8M5Y1nHp@robh.at.kernel.org>
+        <20211216160226.4fac5ccc@xps13>
+        <CAL_Jsq+1X1V8UUHgfKaSbhZLtche3bqnCj62jFRVWzQLEc3hng@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This check misses checking for  platform_get_irq()'s call and may passes
-the negative error codes to devm_request_irq(), which takes unsigned IRQ #,
-causing it to fail with -EINVAL, overriding an original error code.
-Stop calling devm_request_irq() with invalid IRQ #s.
+Hi Rob,
 
-Fixes: 454fa271bc4e ("spi: Add Meson SPICC driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/spi/spi-meson-spicc.c | 5 +++++
- 1 file changed, 5 insertions(+)
+> > It seemed like the only possible way (that the tooling would validate)
+> > was to use:
+> >
+> > bindings:       $ref: /schemas/types.yaml#/definitions/uint64-matrix
+> >
+> > So I assumed I was defining a matrix of AxB elements, where A is the
+> > number of devices I want to "stack" and B is the number of values
+> > needed to describe its size, so 1.  
+> 
+> Yeah, that's well reasoned and I agree. The other array case is you
+> have N values where each value represents different data rather than
+> instances of the same data. The challenge is for the schema fixups to
+> recognize which is which without saying the schema must look like
+> exactly X or Y as there will be exceptions.
 
-diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
-index c208efeadd18..0bc7daa7afc8 100644
---- a/drivers/spi/spi-meson-spicc.c
-+++ b/drivers/spi/spi-meson-spicc.c
-@@ -693,6 +693,11 @@ static int meson_spicc_probe(struct platform_device *pdev)
- 	writel_relaxed(0, spicc->base + SPICC_INTREG);
- 
- 	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0) {
-+		ret = irq;
-+		goto out_master;
-+	}
-+
- 	ret = devm_request_irq(&pdev->dev, irq, meson_spicc_irq,
- 			       0, NULL, spicc);
- 	if (ret) {
--- 
-2.17.1
+Ok, now I see the problem on the tooling side and why you chose not to
+use this syntax.
 
+> > I realized that the following example, which I was expecting to work,
+> > was failing:
+> >
+> > bindings:       $ref: /schemas/types.yaml#/definitions/uint64-array
+> > dt:             <property> = <uint64>, <uint64>;
+> >
+> > Indeed, as you propose, this actually works but describes two values
+> > (tied somehow) into a single element, which is not exactly what I
+> > wanted:
+> >
+> > bindings:       $ref: /schemas/types.yaml#/definitions/uint64-array
+> > dt:             <property> = <uint64 uint64>;
+> >
+> > But more disturbing, all the following constructions worked, when using
+> > 32-bits values instead:
+> >
+> > bindings:       $ref: /schemas/types.yaml#/definitions/uint32-array
+> > dt:             <property> = <uint32 uint32>;
+> >
+> > bindings:       $ref: /schemas/types.yaml#/definitions/uint32-array
+> > dt:             <property> = <uint32>, <uint32>;
+> >
+> > bindings:       $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> > dt:             <property> = <uint32 uint32>;
+> >
+> > bindings:       $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> > dt:             <property> = <uint32>, <uint32>;  
+> 
+> That works because there's some really ugly code to transform the
+> schema into both forms.
+
+Good to know, this kind of puzzled me when I tried all the
+configurations :)
+
+> > I am fine waiting a bit if you think there is a need for some tooling
+> > update on your side. Otherwise, do you really think that this solution
+> > is the one we should really use?
+> >
+> > bindings:       $ref: /schemas/types.yaml#/definitions/uint64-array
+> > dt:             <property> = <uint64 uint64>;  
+> 
+> Because of the /bits/ issue, yes.
+> 
+> More importantly, the bracketing in dts files is not going to matter
+> soon (from a validation perspective). I'm working on moving validation
+> from using the yaml encoded DT (which depends on and preserves
+> brackets) to using dtbs. This will use the schemas to decode the
+> property values into the right format/type.
+
+Ok.
+
+Well, thanks for the feedback, with the latest dt-schema the tooling
+now validates the binding so I am going to send it as a v6 to collect
+your Ack.
+
+Thanks,
+Miquèl
