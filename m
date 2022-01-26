@@ -2,92 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B18AD49C5E8
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Jan 2022 10:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D41549C803
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Jan 2022 11:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238826AbiAZJMl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 26 Jan 2022 04:12:41 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:37706 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230488AbiAZJMl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Jan 2022 04:12:41 -0500
-X-UUID: c8df4e01a67146da9e049773fb53051c-20220126
-X-UUID: c8df4e01a67146da9e049773fb53051c-20220126
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <guochun.mao@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1566007041; Wed, 26 Jan 2022 17:12:37 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 26 Jan 2022 17:12:36 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 26 Jan 2022 17:12:35 +0800
-From:   <guochun.mao@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Bayi Cheng <bayi.cheng@mediatek.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Bin Zhang <bin.zhang@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <project_global_chrome_upstream_group@mediatek.com>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        Guochun Mao <guochun.mao@mediatek.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] spi: spi-mtk-nor: make some internal variables static
-Date:   Wed, 26 Jan 2022 17:11:59 +0800
-Message-ID: <20220126091159.27513-1-guochun.mao@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        id S233444AbiAZKw2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 26 Jan 2022 05:52:28 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:47651 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233434AbiAZKw1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Jan 2022 05:52:27 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id E96EE6000E;
+        Wed, 26 Jan 2022 10:52:23 +0000 (UTC)
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        linux-mtd@lists.infradead.org, Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org
+Cc:     Julien Su <juliensu@mxic.com.tw>,
+        Jaime Liao <jaimeliao@mxic.com.tw>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+Subject: Re: [PATCH v9 13/13] spi: mxic: Add support for pipelined ECC operations
+Date:   Wed, 26 Jan 2022 11:52:23 +0100
+Message-Id: <20220126105223.882479-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220104083631.40776-14-miquel.raynal@bootlin.com>
+References: 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'493b08141c0086ddb2126179cca7a8a7936b3582'
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Guochun Mao <guochun.mao@mediatek.com>
+On Tue, 2022-01-04 at 08:36:31 UTC, Miquel Raynal wrote:
+> Some SPI-NAND chips do not have a proper on-die ECC engine providing
+> error correction/detection. This is particularly an issue on embedded
+> devices with limited resources because all the computations must
+> happen in software, unless an external hardware engine is provided.
+> 
+> These external engines are new and can be of two categories: external
+> or pipelined. Macronix is providing both, the former being already
+> supported. The second, however, is very SoC implementation dependent
+> and must be instantiated by the SPI host controller directly.
+> 
+> An entire subsystem has been contributed to support these engines which
+> makes the insertion into another subsystem such as SPI quite
+> straightforward without the need for a lot of specific functions.
+> 
+> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> Reviewed-by: Mark Brown <broonie@kernel.org>
 
-Variables mtk_nor_caps_mt8173, mtk_nor_caps_mt8186 and
-mtk_nor_caps_mt8192 are not declared.
-Make them static.
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi-mem-ecc.
 
-Fixes: 5b177234e9fd ("spi: spi-mtk-nor: improve device table for adding more capabilities")
-Signed-off-by: Guochun Mao <guochun.mao@mediatek.com>
-Reported-by: kernel test robot <lkp@intel.com>
----
- drivers/spi/spi-mtk-nor.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/spi/spi-mtk-nor.c b/drivers/spi/spi-mtk-nor.c
-index 455b4dcb26e9..94fb09696677 100644
---- a/drivers/spi/spi-mtk-nor.c
-+++ b/drivers/spi/spi-mtk-nor.c
-@@ -770,17 +770,17 @@ static const struct spi_controller_mem_ops mtk_nor_mem_ops = {
- 	.exec_op = mtk_nor_exec_op
- };
- 
--const struct mtk_nor_caps mtk_nor_caps_mt8173 = {
-+static const struct mtk_nor_caps mtk_nor_caps_mt8173 = {
- 	.dma_bits = 32,
- 	.extra_dummy_bit = 0,
- };
- 
--const struct mtk_nor_caps mtk_nor_caps_mt8186 = {
-+static const struct mtk_nor_caps mtk_nor_caps_mt8186 = {
- 	.dma_bits = 32,
- 	.extra_dummy_bit = 1,
- };
- 
--const struct mtk_nor_caps mtk_nor_caps_mt8192 = {
-+static const struct mtk_nor_caps mtk_nor_caps_mt8192 = {
- 	.dma_bits = 36,
- 	.extra_dummy_bit = 0,
- };
--- 
-2.25.1
-
+Miquel
