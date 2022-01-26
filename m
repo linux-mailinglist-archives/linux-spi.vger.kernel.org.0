@@ -2,125 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA5E49C87B
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Jan 2022 12:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F2749C895
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Jan 2022 12:26:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240596AbiAZLTD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Wed, 26 Jan 2022 06:19:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240604AbiAZLTB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Jan 2022 06:19:01 -0500
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F625C061749
-        for <linux-spi@vger.kernel.org>; Wed, 26 Jan 2022 03:18:59 -0800 (PST)
+        id S240668AbiAZL0L (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 26 Jan 2022 06:26:11 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:52123 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233677AbiAZL0L (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 26 Jan 2022 06:26:11 -0500
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8435B10000A;
-        Wed, 26 Jan 2022 11:18:56 +0000 (UTC)
-Date:   Wed, 26 Jan 2022 12:18:55 +0100
+        by mail.gandi.net (Postfix) with ESMTPSA id 7938960002;
+        Wed, 26 Jan 2022 11:26:08 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Richard Weinberger <richard@nod.at>,
+To:     Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Tudor Ambarus <Tudor.Ambarus@microchip.com>,
         Pratyush Yadav <p.yadav@ti.com>,
         Michael Walle <michael@walle.cc>,
-        linux-mtd@lists.infradead.org, Michal Simek <monstr@monstr.eu>,
+        <linux-mtd@lists.infradead.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        Michal Simek <monstr@monstr.eu>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH v4 2/3] spi: dt-bindings: Describe stacked/parallel
- memories modes
-Message-ID: <20220126121855.1139be2d@xps13>
-In-Reply-To: <CAL_Jsq+1X1V8UUHgfKaSbhZLtche3bqnCj62jFRVWzQLEc3hng@mail.gmail.com>
-References: <20211210201039.729961-1-miquel.raynal@bootlin.com>
-        <20211210201039.729961-3-miquel.raynal@bootlin.com>
-        <YbjVSNAC8M5Y1nHp@robh.at.kernel.org>
-        <20211216160226.4fac5ccc@xps13>
-        <CAL_Jsq+1X1V8UUHgfKaSbhZLtche3bqnCj62jFRVWzQLEc3hng@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH v6 0/3] Stacked/parallel memories bindings
+Date:   Wed, 26 Jan 2022 12:26:04 +0100
+Message-Id: <20220126112608.955728-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rob,
+Hello Rob, Mark, Tudor & Pratyush,
 
-> > It seemed like the only possible way (that the tooling would validate)
-> > was to use:
-> >
-> > bindings:       $ref: /schemas/types.yaml#/definitions/uint64-matrix
-> >
-> > So I assumed I was defining a matrix of AxB elements, where A is the
-> > number of devices I want to "stack" and B is the number of values
-> > needed to describe its size, so 1.  
-> 
-> Yeah, that's well reasoned and I agree. The other array case is you
-> have N values where each value represents different data rather than
-> instances of the same data. The challenge is for the schema fixups to
-> recognize which is which without saying the schema must look like
-> exactly X or Y as there will be exceptions.
+Here is a sixth versions for these bindings, which applies on top of
+the v5.17-rc1 now that Pratyush's work as been merged.
+(https://lore.kernel.org/all/20211109181911.2251-1-p.yadav@ti.com/)
 
-Ok, now I see the problem on the tooling side and why you chose not to
-use this syntax.
-
-> > I realized that the following example, which I was expecting to work,
-> > was failing:
-> >
-> > bindings:       $ref: /schemas/types.yaml#/definitions/uint64-array
-> > dt:             <property> = <uint64>, <uint64>;
-> >
-> > Indeed, as you propose, this actually works but describes two values
-> > (tied somehow) into a single element, which is not exactly what I
-> > wanted:
-> >
-> > bindings:       $ref: /schemas/types.yaml#/definitions/uint64-array
-> > dt:             <property> = <uint64 uint64>;
-> >
-> > But more disturbing, all the following constructions worked, when using
-> > 32-bits values instead:
-> >
-> > bindings:       $ref: /schemas/types.yaml#/definitions/uint32-array
-> > dt:             <property> = <uint32 uint32>;
-> >
-> > bindings:       $ref: /schemas/types.yaml#/definitions/uint32-array
-> > dt:             <property> = <uint32>, <uint32>;
-> >
-> > bindings:       $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> > dt:             <property> = <uint32 uint32>;
-> >
-> > bindings:       $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> > dt:             <property> = <uint32>, <uint32>;  
-> 
-> That works because there's some really ugly code to transform the
-> schema into both forms.
-
-Good to know, this kind of puzzled me when I tried all the
-configurations :)
-
-> > I am fine waiting a bit if you think there is a need for some tooling
-> > update on your side. Otherwise, do you really think that this solution
-> > is the one we should really use?
-> >
-> > bindings:       $ref: /schemas/types.yaml#/definitions/uint64-array
-> > dt:             <property> = <uint64 uint64>;  
-> 
-> Because of the /bits/ issue, yes.
-> 
-> More importantly, the bracketing in dts files is not going to matter
-> soon (from a validation perspective). I'm working on moving validation
-> from using the yaml encoded DT (which depends on and preserves
-> brackets) to using dtbs. This will use the schemas to decode the
-> property values into the right format/type.
-
-Ok.
-
-Well, thanks for the feedback, with the latest dt-schema the tooling
-now validates the binding so I am going to send it as a v6 to collect
-your Ack.
-
-Thanks,
+Cheers,
 Miquèl
+
+Changes in v6:
+* Added Pratyush's acks.
+* The tooling now validates the binding (updating dt-schema is
+  necesary).
+* Updated the maxItems field to 4 as a "big enough value" as discussed.
+
+Changes in v5:
+* Used the uint64-array instead of the matrix type.
+* Updated the example as well to use a single "/bits/ 64" cast because
+  doing it twice, despite being supported by the language itself, is not
+  yet something that we can use for describing bindings.
+
+Changes in v4:
+* Changed the type of properties to uint64-arrays in order to be able to
+  describe the size of each element in the array.
+* Updated the example accordingly.
+
+Changes in v3:
+* Rebased on top of Pratyush's recent changes.
+* Dropped the commit allowing to provide two reg entries on the node
+  name.
+* Dropped the commit referencing spi-controller.yaml from
+  jedec,spi-nor.yaml, now replaced by spi-peripheral-props.yaml and
+  already done in Pratyush's series.
+* Added Rob's Ack.
+* Enhanced a commit message.
+* Moved the new properties to the new SPI peripheral binding file.
+
+Changes in v2:
+* Dropped the dtc changes for now.
+* Moved the properties in the device's nodes, not the controller's.
+* Dropped the useless #address-cells change.
+* Added a missing "minItems".
+* Moved the new properties in the spi-controller.yaml file.
+* Added an example using two stacked memories in the
+  spi-controller.yaml file.
+* Renamed the properties to drop the Xilinx prefix.
+* Added a patch to fix the spi-nor jedec yaml file.
+
+Miquel Raynal (3):
+  dt-bindings: mtd: spi-nor: Allow two CS per device
+  spi: dt-bindings: Describe stacked/parallel memories modes
+  spi: dt-bindings: Add an example with two stacked flashes
+
+ .../bindings/mtd/jedec,spi-nor.yaml           |  3 ++-
+ .../bindings/spi/spi-controller.yaml          |  7 ++++++
+ .../bindings/spi/spi-peripheral-props.yaml    | 25 +++++++++++++++++++
+ 3 files changed, 34 insertions(+), 1 deletion(-)
+
+-- 
+2.27.0
+
