@@ -2,65 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B7249DE8E
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Jan 2022 10:56:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74FED49E149
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Jan 2022 12:40:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232024AbiA0J4T (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 27 Jan 2022 04:56:19 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45694 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238454AbiA0J4T (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Jan 2022 04:56:19 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4969D61C04
-        for <linux-spi@vger.kernel.org>; Thu, 27 Jan 2022 09:56:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B5067C340EA;
-        Thu, 27 Jan 2022 09:56:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643277377;
-        bh=7+7N0Y8HnzwF5HCbLGK1tgeZa1h/5wbGQIWAX8KVUu8=;
-        h=Subject:From:Date:To:From;
-        b=aUhjqi1hQNY9GX19bKZAkDpzxk0stv+ZoqFSmm1MwkgBGi7p92K1j/k9zw6BXoERG
-         xzL3rEG381lfyQSz3XvxS+mc8eO9DogQUUclW80Tf4O1JuFxNA7DmNlDdajSQ0ozkg
-         0rJtkv/5LK7Dt6M4ZgzK7cG2JBsrrsF2jrKGDyjoIKev1sljxXqm9eZEVEFnCDZcqY
-         iL4IY/amXOaEraDbttMVMEcr36YH31SgBuykHTjY/cUiYztfEgikCht1EZAGfQtCaF
-         q+gzrZxCX0XhEUKQGXqPqznwdwg1t+3BT4Cmp/t1PpLs3LeQtLC9bNXEVGMdaGAUnz
-         VD/kPmVI1OEdw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 982B4E5D07E;
-        Thu, 27 Jan 2022 09:56:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S230084AbiA0LkF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 27 Jan 2022 06:40:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234432AbiA0LkE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Jan 2022 06:40:04 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF606C06173B
+        for <linux-spi@vger.kernel.org>; Thu, 27 Jan 2022 03:40:03 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id x7so4746133lfu.8
+        for <linux-spi@vger.kernel.org>; Thu, 27 Jan 2022 03:40:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=XAn7F1Fj4WW9ou4Ks1O1eievoG8rv+B64FUIJS5WS5I=;
+        b=xbJwK8QUtP3cFKL/TfgXiBgqq7vvd2bTIygX0QOOqyLDZJeHYh9BHpnGux3lgn1pDe
+         ygf4Nm6JS1xfMNgnw4Ju/vbsEGT3dWAMqO80eEcnjLURmd10OV+Op9zWMRNmCiuDUjaO
+         P93BhteJLGp6j5hSjnsT8d7IE28UmLxfNblh6i4coQUdWQvhkr/N8xJ25Mayv9cyv6bH
+         2h4blnUw6fbqlWKdiWvF7eSqpX6VwQoe8P7/Zrg6lN1s7HoVMDkWJ99Yh8Qgfz/j9PUV
+         /rgwslp3fSpDWWo9Ba/LaXiDl7oOXivfF8vc+2YJST/7E379NBY0S9znC9RmA010eihv
+         tPXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XAn7F1Fj4WW9ou4Ks1O1eievoG8rv+B64FUIJS5WS5I=;
+        b=D/VZQ+ZbDlr/RiOEMt5F4G02NNqm9InW4ChqYNkPPwSsbByaee060+oF43UlntWnaJ
+         cBbDG3BH51qPzbHz/rjHoLa5lO3+0BVXXI8Vn/b6R68FVYsil4sfTGcr4e5YyHSolrMH
+         yYi6HcQGnyFMNMxkDq+ifDfT5T8x540udvMsYFxLoRMLLD6MERJ5HmI9rfn/f52XNYp8
+         G2HKySGX0k33x0BOaBRNCSrKPtpkq1bLYrbq3UDsO6Pt9Brtrqhv+ZcPS6jt8TZdvuua
+         Ae6QzmOcL2X0RAsRYoHmcmS9ptIZwI6JNrlaa4v45tVIi5XzDuj6WxYHcjDvEMN/5b4y
+         s1SQ==
+X-Gm-Message-State: AOAM530zSm92qh71kUjJ3MYPXXnHDoHdEBF+oPRYwnhN8MsmCVCyZgPe
+        TK5tSdohq6PNDPR247Sv/39S+EuUsarUgh02PpLTvw==
+X-Google-Smtp-Source: ABdhPJwp8sAbw7gkUfgdbqcZH4GVpI/BBc/VRUG5kngzAflTWlKrExOL6Fav6G4XfQIUQgg/og8qSObWAvSAR/cyoHE=
+X-Received: by 2002:a05:6512:3d21:: with SMTP id d33mr2549872lfv.373.1643283602134;
+ Thu, 27 Jan 2022 03:40:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <164327737761.18588.11763996135550040294.git-patchwork-housekeeping@kernel.org>
-Date:   Thu, 27 Jan 2022 09:56:17 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de> <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 27 Jan 2022 12:39:22 +0100
+Message-ID: <CAPDyKFrZQ0JUjNt_bcxLXVGZ6NtLdUktN7v_4fj--ntoO26TPg@mail.gmail.com>
+Subject: Re: [PATCH 5/5] spi: make remove callback a void function
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>, linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v10] External ECC engines & Macronix support (2022-01-27T09:17:55)
-  Superseding: [v9] External ECC engines & Macronix support (2022-01-04T08:36:18):
-    [v9,01/13] spi: spi-mem: Introduce a capability structure
-    [v9,02/13] spi: spi-mem: Check the controller extra capabilities
-    [v9,03/13] spi: cadence-quadspi: Provide a capability structure
-    [v9,04/13] spi: mxic: Provide a capability structure
-    [v9,05/13] spi: spi-mem: Kill the spi_mem_dtr_supports_op() helper
-    [v9,06/13] spi: spi-mem: Add an ecc parameter to the spi_mem_op structure
-    [v9,07/13] mtd: spinand: Delay a little bit the dirmap creation
-    [v9,08/13] mtd: spinand: Create direct mapping descriptors for ECC operations
-    [v9,09/13] spi: mxic: Fix the transmit path
-    [v9,10/13] spi: mxic: Create a helper to configure the controller before an operation
-    [v9,11/13] spi: mxic: Create a helper to ease the start of an operation
-    [v9,12/13] spi: mxic: Add support for direct mapping
-    [v9,13/13] spi: mxic: Add support for pipelined ECC operations
+- To avoid spamming lists/people, I have dropped most of them from the
+to/cc list
 
+On Sun, 23 Jan 2022 at 18:54, Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> The value returned by an spi driver's remove function is mostly ignored.
+> (Only an error message is printed if the value is non-zero that the
+> error is ignored.)
+>
+> So change the prototype of the remove function to return no value. This
+> way driver authors are not tempted to assume that passing an error to
+> the upper layer is a good idea. All drivers are adapted accordingly.
+> There is no intended change of behaviour, all callbacks were prepared to
+> return 0 before.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org> # For MMC
 
+[...]
+
+Kind regards
+Uffe
