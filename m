@@ -2,18 +2,22 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9239749DDAE
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Jan 2022 10:18:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A2F49DDB2
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Jan 2022 10:18:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234997AbiA0JS1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 27 Jan 2022 04:18:27 -0500
-Received: from relay11.mail.gandi.net ([217.70.178.231]:44251 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235076AbiA0JS1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Jan 2022 04:18:27 -0500
+        id S238426AbiA0JSb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 27 Jan 2022 04:18:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60324 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238398AbiA0JSa (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Jan 2022 04:18:30 -0500
+X-Greylist: delayed 80777 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Jan 2022 01:18:29 PST
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9407FC061714;
+        Thu, 27 Jan 2022 01:18:29 -0800 (PST)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 50C8B100006;
-        Thu, 27 Jan 2022 09:18:24 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3D710100011;
+        Thu, 27 Jan 2022 09:18:26 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>
 Cc:     Richard Weinberger <richard@nod.at>,
@@ -26,10 +30,12 @@ Cc:     Richard Weinberger <richard@nod.at>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Julien Su <juliensu@mxic.com.tw>,
         Jaime Liao <jaimeliao@mxic.com.tw>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v10 08/13] mtd: spinand: Create direct mapping descriptors for ECC operations
-Date:   Thu, 27 Jan 2022 10:18:03 +0100
-Message-Id: <20220127091808.1043392-9-miquel.raynal@bootlin.com>
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        stable@vger.kernel.org, Mason Yang <masonccyang@mxic.com.tw>,
+        Zhengxun Li <zhengxunli@mxic.com.tw>
+Subject: [PATCH v10 09/13] spi: mxic: Fix the transmit path
+Date:   Thu, 27 Jan 2022 10:18:04 +0100
+Message-Id: <20220127091808.1043392-10-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220127091808.1043392-1-miquel.raynal@bootlin.com>
 References: <20220127091808.1043392-1-miquel.raynal@bootlin.com>
@@ -40,101 +46,65 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-In order for pipelined ECC engines to be able to enable/disable the ECC
-engine only when needed and avoid races when future parallel-operations
-will be supported, we need to provide the information about the use of
-the ECC engine in the direct mapping hooks. As direct mapping
-configurations are meant to be static, it is best to create two new
-mappings: one for regular 'raw' accesses and one for accesses involving
-correction. It is up to the driver to use or not the new ECC enable
-boolean contained in the spi-mem operation.
+By working with external hardware ECC engines, we figured out that
+Under certain circumstances, it is needed for the SPI controller to
+check INT_TX_EMPTY and INT_RX_NOT_EMPTY in both receive and transmit
+path (not only in the receive path). The delay penalty being
+negligible, move this code in the common path.
 
-As dirmaps are not free (they consume a few pages of MMIO address space)
-and because these extra entries are only meant to be used by pipelined
-engines, let's limit their use to this specific type of engine and save
-a bit of memory with all the other setups.
-
+Fixes: b942d80b0a39 ("spi: Add MXIC controller driver")
+Cc: stable@vger.kernel.org
+Suggested-by: Mason Yang <masonccyang@mxic.com.tw>
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
-Link: https://lore.kernel.org/linux-mtd/20220104083631.40776-9-miquel.raynal@bootlin.com
+Reviewed-by: Zhengxun Li <zhengxunli@mxic.com.tw>
+Reviewed-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/linux-mtd/20220104083631.40776-10-miquel.raynal@bootlin.com
 ---
- drivers/mtd/nand/spi/core.c | 35 +++++++++++++++++++++++++++++++++--
- include/linux/mtd/spinand.h |  2 ++
- 2 files changed, 35 insertions(+), 2 deletions(-)
+ drivers/spi/spi-mxic.c | 28 ++++++++++++----------------
+ 1 file changed, 12 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
-index bb6b026b558b..ff8336870bc0 100644
---- a/drivers/mtd/nand/spi/core.c
-+++ b/drivers/mtd/nand/spi/core.c
-@@ -381,7 +381,10 @@ static int spinand_read_from_cache_op(struct spinand_device *spinand,
+diff --git a/drivers/spi/spi-mxic.c b/drivers/spi/spi-mxic.c
+index 6bec0a7c77d3..22a82f5f74b5 100644
+--- a/drivers/spi/spi-mxic.c
++++ b/drivers/spi/spi-mxic.c
+@@ -304,25 +304,21 @@ static int mxic_spi_data_xfer(struct mxic_spi *mxic, const void *txbuf,
+ 
+ 		writel(data, mxic->regs + TXD(nbytes % 4));
+ 
++		ret = readl_poll_timeout(mxic->regs + INT_STS, sts,
++					 sts & INT_TX_EMPTY, 0, USEC_PER_SEC);
++		if (ret)
++			return ret;
++
++		ret = readl_poll_timeout(mxic->regs + INT_STS, sts,
++					 sts & INT_RX_NOT_EMPTY, 0,
++					 USEC_PER_SEC);
++		if (ret)
++			return ret;
++
++		data = readl(mxic->regs + RXD);
+ 		if (rxbuf) {
+-			ret = readl_poll_timeout(mxic->regs + INT_STS, sts,
+-						 sts & INT_TX_EMPTY, 0,
+-						 USEC_PER_SEC);
+-			if (ret)
+-				return ret;
+-
+-			ret = readl_poll_timeout(mxic->regs + INT_STS, sts,
+-						 sts & INT_RX_NOT_EMPTY, 0,
+-						 USEC_PER_SEC);
+-			if (ret)
+-				return ret;
+-
+-			data = readl(mxic->regs + RXD);
+ 			data >>= (8 * (4 - nbytes));
+ 			memcpy(rxbuf + pos, &data, nbytes);
+-			WARN_ON(readl(mxic->regs + INT_STS) & INT_RX_NOT_EMPTY);
+-		} else {
+-			readl(mxic->regs + RXD);
  		}
- 	}
+ 		WARN_ON(readl(mxic->regs + INT_STS) & INT_RX_NOT_EMPTY);
  
--	rdesc = spinand->dirmaps[req->pos.plane].rdesc;
-+	if (req->mode == MTD_OPS_RAW)
-+		rdesc = spinand->dirmaps[req->pos.plane].rdesc;
-+	else
-+		rdesc = spinand->dirmaps[req->pos.plane].rdesc_ecc;
- 
- 	while (nbytes) {
- 		ret = spi_mem_dirmap_read(rdesc, column, nbytes, buf);
-@@ -452,7 +455,10 @@ static int spinand_write_to_cache_op(struct spinand_device *spinand,
- 			       req->ooblen);
- 	}
- 
--	wdesc = spinand->dirmaps[req->pos.plane].wdesc;
-+	if (req->mode == MTD_OPS_RAW)
-+		wdesc = spinand->dirmaps[req->pos.plane].wdesc;
-+	else
-+		wdesc = spinand->dirmaps[req->pos.plane].wdesc_ecc;
- 
- 	while (nbytes) {
- 		ret = spi_mem_dirmap_write(wdesc, column, nbytes, buf);
-@@ -865,6 +871,31 @@ static int spinand_create_dirmap(struct spinand_device *spinand,
- 
- 	spinand->dirmaps[plane].rdesc = desc;
- 
-+	if (nand->ecc.engine->integration != NAND_ECC_ENGINE_INTEGRATION_PIPELINED) {
-+		spinand->dirmaps[plane].wdesc_ecc = spinand->dirmaps[plane].wdesc;
-+		spinand->dirmaps[plane].rdesc_ecc = spinand->dirmaps[plane].rdesc;
-+
-+		return 0;
-+	}
-+
-+	info.op_tmpl = *spinand->op_templates.update_cache;
-+	info.op_tmpl.data.ecc = true;
-+	desc = devm_spi_mem_dirmap_create(&spinand->spimem->spi->dev,
-+					  spinand->spimem, &info);
-+	if (IS_ERR(desc))
-+		return PTR_ERR(desc);
-+
-+	spinand->dirmaps[plane].wdesc_ecc = desc;
-+
-+	info.op_tmpl = *spinand->op_templates.read_cache;
-+	info.op_tmpl.data.ecc = true;
-+	desc = devm_spi_mem_dirmap_create(&spinand->spimem->spi->dev,
-+					  spinand->spimem, &info);
-+	if (IS_ERR(desc))
-+		return PTR_ERR(desc);
-+
-+	spinand->dirmaps[plane].rdesc_ecc = desc;
-+
- 	return 0;
- }
- 
-diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
-index 6988956b8492..3aa28240a77f 100644
---- a/include/linux/mtd/spinand.h
-+++ b/include/linux/mtd/spinand.h
-@@ -389,6 +389,8 @@ struct spinand_info {
- struct spinand_dirmap {
- 	struct spi_mem_dirmap_desc *wdesc;
- 	struct spi_mem_dirmap_desc *rdesc;
-+	struct spi_mem_dirmap_desc *wdesc_ecc;
-+	struct spi_mem_dirmap_desc *rdesc_ecc;
- };
- 
- /**
 -- 
 2.27.0
 
