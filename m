@@ -2,21 +2,21 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABDF449DDAC
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Jan 2022 10:18:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0186349DDAD
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Jan 2022 10:18:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235069AbiA0JSZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 27 Jan 2022 04:18:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
+        id S235073AbiA0JS0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 27 Jan 2022 04:18:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234997AbiA0JSY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Jan 2022 04:18:24 -0500
+        with ESMTP id S234997AbiA0JSZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Jan 2022 04:18:25 -0500
 Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF90C061714
-        for <linux-spi@vger.kernel.org>; Thu, 27 Jan 2022 01:18:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DA9C061714
+        for <linux-spi@vger.kernel.org>; Thu, 27 Jan 2022 01:18:25 -0800 (PST)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2F88C100015;
-        Thu, 27 Jan 2022 09:18:21 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id C4866100002;
+        Thu, 27 Jan 2022 09:18:22 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Mark Brown <broonie@kernel.org>, <linux-spi@vger.kernel.org>
 Cc:     Richard Weinberger <richard@nod.at>,
@@ -30,9 +30,9 @@ Cc:     Richard Weinberger <richard@nod.at>,
         Julien Su <juliensu@mxic.com.tw>,
         Jaime Liao <jaimeliao@mxic.com.tw>,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v10 06/13] spi: spi-mem: Add an ecc parameter to the spi_mem_op structure
-Date:   Thu, 27 Jan 2022 10:18:01 +0100
-Message-Id: <20220127091808.1043392-7-miquel.raynal@bootlin.com>
+Subject: [PATCH v10 07/13] mtd: spinand: Delay a little bit the dirmap creation
+Date:   Thu, 27 Jan 2022 10:18:02 +0100
+Message-Id: <20220127091808.1043392-8-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220127091808.1043392-1-miquel.raynal@bootlin.com>
 References: <20220127091808.1043392-1-miquel.raynal@bootlin.com>
@@ -43,82 +43,52 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Soon the SPI-NAND core will need a way to request a SPI controller to
-enable ECC support for a given operation. This is because of the
-pipelined integration of certain ECC engines, which are directly managed
-by the SPI controller itself.
-
-Introduce a spi_mem_op additional field for this purpose: ecc.
-
-So far this field is left unset and checked to be false by all
-the SPI controller drivers in their ->supports_op() hook, as they all
-call spi_mem_default_supports_op().
+As we will soon tweak the dirmap creation to act a little bit
+differently depending on the picked ECC engine, we need to initialize
+dirmaps after ECC engines. This should not have any effect as dirmaps
+are not yet used at this point.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Acked-by: Pratyush Yadav <p.yadav@ti.com>
 Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
-Link: https://lore.kernel.org/linux-mtd/20220104083631.40776-7-miquel.raynal@bootlin.com
+Link: https://lore.kernel.org/linux-mtd/20220104083631.40776-8-miquel.raynal@bootlin.com
 ---
- drivers/spi/spi-mem.c       | 5 +++++
- include/linux/spi/spi-mem.h | 5 +++++
- 2 files changed, 10 insertions(+)
+ drivers/mtd/nand/spi/core.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-index ed966d8129eb..f38ac31961c9 100644
---- a/drivers/spi/spi-mem.c
-+++ b/drivers/spi/spi-mem.c
-@@ -178,6 +178,11 @@ bool spi_mem_default_supports_op(struct spi_mem *mem,
- 			return false;
- 	}
+diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
+index 2c8685f1f2fa..bb6b026b558b 100644
+--- a/drivers/mtd/nand/spi/core.c
++++ b/drivers/mtd/nand/spi/core.c
+@@ -1208,14 +1208,6 @@ static int spinand_init(struct spinand_device *spinand)
+ 	if (ret)
+ 		goto err_free_bufs;
  
-+	if (op->data.ecc) {
-+		if (!spi_mem_controller_is_capable(ctlr, ecc))
-+			return false;
+-	ret = spinand_create_dirmaps(spinand);
+-	if (ret) {
+-		dev_err(dev,
+-			"Failed to create direct mappings for read/write operations (err = %d)\n",
+-			ret);
+-		goto err_manuf_cleanup;
+-	}
+-
+ 	ret = nanddev_init(nand, &spinand_ops, THIS_MODULE);
+ 	if (ret)
+ 		goto err_manuf_cleanup;
+@@ -1250,6 +1242,14 @@ static int spinand_init(struct spinand_device *spinand)
+ 	mtd->ecc_strength = nanddev_get_ecc_conf(nand)->strength;
+ 	mtd->ecc_step_size = nanddev_get_ecc_conf(nand)->step_size;
+ 
++	ret = spinand_create_dirmaps(spinand);
++	if (ret) {
++		dev_err(dev,
++			"Failed to create direct mappings for read/write operations (err = %d)\n",
++			ret);
++		goto err_cleanup_ecc_engine;
 +	}
 +
- 	return spi_mem_check_buswidth(mem, op);
- }
- EXPORT_SYMBOL_GPL(spi_mem_default_supports_op);
-diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-index 4a1bfe689872..051050b40309 100644
---- a/include/linux/spi/spi-mem.h
-+++ b/include/linux/spi/spi-mem.h
-@@ -89,6 +89,7 @@ enum spi_mem_data_dir {
-  * @dummy.dtr: whether the dummy bytes should be sent in DTR mode or not
-  * @data.buswidth: number of IO lanes used to send/receive the data
-  * @data.dtr: whether the data should be sent in DTR mode or not
-+ * @data.ecc: whether error correction is required or not
-  * @data.dir: direction of the transfer
-  * @data.nbytes: number of data bytes to send/receive. Can be zero if the
-  *		 operation does not involve transferring data
-@@ -119,6 +120,7 @@ struct spi_mem_op {
- 	struct {
- 		u8 buswidth;
- 		u8 dtr : 1;
-+		u8 ecc : 1;
- 		enum spi_mem_data_dir dir;
- 		unsigned int nbytes;
- 		union {
-@@ -126,6 +128,7 @@ struct spi_mem_op {
- 			const void *out;
- 		} buf;
- 	} data;
-+
- };
+ 	return 0;
  
- #define SPI_MEM_OP(__cmd, __addr, __dummy, __data)		\
-@@ -288,9 +291,11 @@ struct spi_controller_mem_ops {
- /**
-  * struct spi_controller_mem_caps - SPI memory controller capabilities
-  * @dtr: Supports DTR operations
-+ * @ecc: Supports operations with error correction
-  */
- struct spi_controller_mem_caps {
- 	bool dtr;
-+	bool ecc;
- };
- 
- #define spi_mem_controller_is_capable(ctlr, cap)	\
+ err_cleanup_ecc_engine:
 -- 
 2.27.0
 
