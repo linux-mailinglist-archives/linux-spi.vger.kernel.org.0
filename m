@@ -2,22 +2,19 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE6A49DDC6
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Jan 2022 10:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BDF49DE37
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Jan 2022 10:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238481AbiA0JU7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Thu, 27 Jan 2022 04:20:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60910 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238480AbiA0JU6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Jan 2022 04:20:58 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC1CC061714
-        for <linux-spi@vger.kernel.org>; Thu, 27 Jan 2022 01:20:58 -0800 (PST)
+        id S234585AbiA0Jhz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Thu, 27 Jan 2022 04:37:55 -0500
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:42509 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231940AbiA0Jhz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Jan 2022 04:37:55 -0500
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id AEA9C20010;
-        Thu, 27 Jan 2022 09:20:53 +0000 (UTC)
-Date:   Thu, 27 Jan 2022 10:20:52 +0100
+        by mail.gandi.net (Postfix) with ESMTPSA id 130892000B;
+        Thu, 27 Jan 2022 09:37:50 +0000 (UTC)
+Date:   Thu, 27 Jan 2022 10:37:49 +0100
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     Richard Weinberger <richard@nod.at>,
@@ -32,13 +29,13 @@ Cc:     Richard Weinberger <richard@nod.at>,
         Boris Brezillon <boris.brezillon@collabora.com>,
         Xiangsheng Hou <xiangsheng.hou@mediatek.com>
 Subject: Re: [PATCH v9 01/13] spi: spi-mem: Introduce a capability structure
-Message-ID: <20220127102052.5d6d5bc0@xps13>
+Message-ID: <20220127103749.5b195f03@xps13>
 In-Reply-To: <YfGHy/MsQhaWCeYM@sirena.org.uk>
 References: <20220104083631.40776-2-miquel.raynal@bootlin.com>
-        <20220126105333.883267-1-miquel.raynal@bootlin.com>
-        <YfF4UhhVFu749ZYK@sirena.org.uk>
-        <20220126183601.42d38e88@xps13>
-        <YfGHy/MsQhaWCeYM@sirena.org.uk>
+ <20220126105333.883267-1-miquel.raynal@bootlin.com>
+ <YfF4UhhVFu749ZYK@sirena.org.uk>
+ <20220126183601.42d38e88@xps13>
+ <YfGHy/MsQhaWCeYM@sirena.org.uk>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
