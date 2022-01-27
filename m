@@ -2,64 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E86F49E19D
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Jan 2022 12:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B864849E19F
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Jan 2022 12:53:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236038AbiA0LwM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 27 Jan 2022 06:52:12 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:51908 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235985AbiA0LwM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Jan 2022 06:52:12 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 88FBE1F44C9C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643284331;
-        bh=DdkbTxmQp+SAGpru29bn+MIufi/Uo6XEdozCAJeoQCA=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=F2bnAYU8uI72bl5vlNkwoqevgKkS8YDqOxLqWH1AVI/Oz7uHfuEyR2j1zlyRhCyrU
-         KA4dQOtCZrxMGXoJNRq5seiVWzZCcw7dWVNTYeT9sO4+oFRlbjxZ+baq1p+f20q0bt
-         l4KiSkx3weERNzfRa/d5V0F7XfkQm+WGf/8ffo6194uFGj2SoibE7nT6pl6n1KrAoN
-         vwOFTqU93wATdpATITdELcYrF4I43+lqnZ/FP6HG4vz1L8kYT4qTKCZNWDX23artwK
-         6dKyGDJE+/acBBCHrCZk4dqguiUHm/rOI82QUlKMJv2GYNxKDnY6TF6HXop3r0dAfx
-         Vh9z9PNzauPgQ==
-Subject: Re: [PATCH] spi: spi-mtk-nor: make some internal variables static
-To:     guochun.mao@mediatek.com, Mark Brown <broonie@kernel.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Bayi Cheng <bayi.cheng@mediatek.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Bin Zhang <bin.zhang@mediatek.com>,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        project_global_chrome_upstream_group@mediatek.com,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-References: <20220126091159.27513-1-guochun.mao@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <528883a0-0d55-a44e-ea18-3b0293505f54@collabora.com>
-Date:   Thu, 27 Jan 2022 12:52:08 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S236050AbiA0Lxa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 27 Jan 2022 06:53:30 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:32067 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235985AbiA0Lxa (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Jan 2022 06:53:30 -0500
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JkzQj19W6z1FD0P;
+        Thu, 27 Jan 2022 19:49:33 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 27 Jan 2022 19:53:28 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 27 Jan
+ 2022 19:53:28 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>
+CC:     <p.zabel@pengutronix.de>, <broonie@kernel.org>,
+        <lhjeff911@gmail.com>
+Subject: [PATCH -next] spi: Fix missing unlock on error in sp7021_spi_master_transfer_one()
+Date:   Thu, 27 Jan 2022 19:58:15 +0800
+Message-ID: <20220127115815.3148950-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20220126091159.27513-1-guochun.mao@mediatek.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Il 26/01/22 10:11, guochun.mao@mediatek.com ha scritto:
-> From: Guochun Mao <guochun.mao@mediatek.com>
-> 
-> Variables mtk_nor_caps_mt8173, mtk_nor_caps_mt8186 and
-> mtk_nor_caps_mt8192 are not declared.
-> Make them static.
-> 
-> Fixes: 5b177234e9fd ("spi: spi-mtk-nor: improve device table for adding more capabilities")
-> Signed-off-by: Guochun Mao <guochun.mao@mediatek.com>
-> Reported-by: kernel test robot <lkp@intel.com>
+Add the missing unlock before return from sp7021_spi_master_transfer_one()
+in the error handling case.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Fixes: f62ca4e2a863 ("spi: Add spi driver for Sunplus SP7021")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/spi/spi-sunplus-sp7021.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/spi/spi-sunplus-sp7021.c b/drivers/spi/spi-sunplus-sp7021.c
+index 627b9c3024e9..cbbb1664017e 100644
+--- a/drivers/spi/spi-sunplus-sp7021.c
++++ b/drivers/spi/spi-sunplus-sp7021.c
+@@ -351,6 +351,7 @@ static int sp7021_spi_master_transfer_one(struct spi_controller *ctlr, struct sp
+ 
+ 		if (!wait_for_completion_interruptible_timeout(&pspim->isr_done, timeout)) {
+ 			dev_err(&spi->dev, "wait_for_completion err\n");
++			mutex_unlock(&pspim->buf_lock);
+ 			return -ETIMEDOUT;
+ 		}
+ 
+-- 
+2.25.1
 
