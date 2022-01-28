@@ -2,61 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FDE24A03FA
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jan 2022 23:57:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0AC84A0479
+	for <lists+linux-spi@lfdr.de>; Sat, 29 Jan 2022 00:47:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239207AbiA1W5B (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Jan 2022 17:57:01 -0500
-Received: from wp029.wappy.ne.jp ([203.137.0.194]:59244 "EHLO
-        wp029.wappy.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiA1W5A (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jan 2022 17:57:00 -0500
-X-Greylist: delayed 424 seconds by postgrey-1.27 at vger.kernel.org; Fri, 28 Jan 2022 17:56:59 EST
-Received: by wp029.wappy.ne.jp (Postfix, from userid 48)
-        id ACEA8344559E; Sat, 29 Jan 2022 07:49:54 +0900 (JST)
-To:     linux-spi@vger.kernel.org
-Subject: =?UTF-8?B?44CQ44OP44OD44OI44Os44Oz44K/44Or44CR44GK5ZWP5ZCI44Gb5pyJ6Zuj?=  =?UTF-8?B?44GG44GU44GW44GE44G+44GZ44CC77yI6Ieq5YuV6L+U5L+h44Oh44O844Or?=  =?UTF-8?B?77yJ?=
-X-PHP-Originating-Script: 10092:class-phpmailer.php
-Date:   Fri, 28 Jan 2022 22:49:54 +0000
-From:   =?UTF-8?B?44OP44OD44OIIOODrOODs+OCv+ODqw==?= 
-        <info@officehut-rental.com>
-Message-ID: <0daf289a2fbd507ee69ad31cff5839b8@officehut-rental.com>
-X-Priority: 3
-X-Mailer: PHPMailer (phpmailer.sourceforge.net) [version 2.0.4]
+        id S1351800AbiA1XrO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Jan 2022 18:47:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347866AbiA1XrN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jan 2022 18:47:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552D9C06174A;
+        Fri, 28 Jan 2022 15:47:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA17961F31;
+        Fri, 28 Jan 2022 23:47:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02819C340E7;
+        Fri, 28 Jan 2022 23:47:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643413630;
+        bh=iNytjglSwIU8s0+h6erELVVSV91M1C1VRXtxDVxTAac=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=s4r58rKCpAZku+KAwDpt6mdrvCK13XEAitBqpT9R3cb3LDZy7wri6BuXyPHq3s81o
+         x2kOReJ4kjwUQ4PuJe6GxOVGwvzs9tSUdwROMoXFAFdz4nPX4LRtt9pPZPcKoZEJUy
+         jI+AamI5iB8S2eY+6YnYWM9yKQ2qrwA20iHpIeYyeRZC6f3CVBbmqPaL6GvqLXpzop
+         q7jQ18fhWalMot6OvOHphHHTdfL7DizgqBvB/0ALIXc/MaZJgSkixrD8S1kZ/1s8L0
+         KGKeJBTiPgNHfo33AXlecs0Keng1mMlUzjWlCoarbMeScwpT3/AEFW2LcN+quFJMVg
+         0j581gynUOX8A==
+From:   Mark Brown <broonie@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        agross@kernel.org, bjorn.andersson@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-spi@vger.kernel.org
+In-Reply-To: <1b14e4ce91a33c16b2c655389c728071a9c9aa2e.1641643601.git.christophe.jaillet@wanadoo.fr>
+References: <1b14e4ce91a33c16b2c655389c728071a9c9aa2e.1641643601.git.christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] spi: qcom: geni: Simplify DMA setting
+Message-Id: <164341362873.694916.2694684212503292812.b4-ty@kernel.org>
+Date:   Fri, 28 Jan 2022 23:47:08 +0000
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-❤️ Laurie want to meet you! Click Here: https://clck.ru/aq8tU?31b9 ❤️様
+On Sat, 8 Jan 2022 13:07:54 +0100, Christophe JAILLET wrote:
+> As stated in [1], dma_set_mask() with a 64-bit mask will never fail if
+> dev->dma_mask is non-NULL.
+> So, if it fails, the 32 bits case will also fail for the same reason.
+> 
+> Simplify code and remove some dead code accordingly.
+> 
+> [1]: https://lkml.org/lkml/2021/6/7/398
+> 
+> [...]
 
-この度はお問合せいただき誠にありがとうございます。
-承りました内容は以下の通りです。
+Applied to
 
-===================================================
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-お名前：　❤️ Laurie want to meet you! Click Here: https://clck.ru/aq8tU?31b9 ❤️　（8ir1hc）
-E-mailアドレス：　linux-spi@vger.kernel.org
-市区町村：　hnzoea
-TEL：　091680748110
-FAX：　091680748110
-携帯電話：　091680748110
-お問い合わせ内容：　dfe89y
+Thanks!
 
-===================================================
+[1/1] spi: qcom: geni: Simplify DMA setting
+      commit: bef8c5fdf50b573351571e94525800c41d9830f2
 
-内容を確認後、追って返信させて頂きますので今しばらくお待ちください。 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-万一、このメールに記載されている内容に心当たりのない場合は、
-大変お手数ですが info@officehut-rental.com までご連絡ください。
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-------------------------------------------------------------------
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-ハット レンタル　井上真吾
-http://officehut-rental.com
-〒488-0068　愛知県尾張旭市南原山町字南原山76-1
-TEL：0561-52-7873／FAX：0561-51-1325
-E-mail：info@officehut-rental.com
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
+Thanks,
+Mark
