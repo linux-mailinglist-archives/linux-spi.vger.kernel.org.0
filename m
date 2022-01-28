@@ -2,56 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B05B349FE7D
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jan 2022 17:56:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9FF849FE8D
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jan 2022 18:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350287AbiA1Q4Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Jan 2022 11:56:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
+        id S1350380AbiA1RAD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Jan 2022 12:00:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245711AbiA1Q4Q (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jan 2022 11:56:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5A4C061714
-        for <linux-spi@vger.kernel.org>; Fri, 28 Jan 2022 08:56:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D821B8264E
-        for <linux-spi@vger.kernel.org>; Fri, 28 Jan 2022 16:56:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D17F8C340E0;
-        Fri, 28 Jan 2022 16:56:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643388973;
-        bh=mhCwGLpT+QxP5bmlN6JmWZDXVfZGCfOwjzHFN+Y0qag=;
-        h=Subject:From:Date:To:From;
-        b=LmherHZzg2aF6NIRqZOmUeHoj1agI0g+8R4MBum8T9+jE7ImlFhH+NUpfcfN9VLM/
-         zafTl5Vt4VoTgHoAuORF+CSUtx6dLXkym4Axrwoy8daZWfNdgg+T02X6Yn6dxfkn1P
-         FYcEVZ6AUfQB/AeqarD82w8aJCB7KrVdwh0GsUbWpEc2eMYt0vZLdpWu7ti4m23hEF
-         +HpHDlZHCpUKhQkNbbZ2LRfnZvbKQ9s88F2CCufWhFiXTO02+WznmZhEen9TMGKQq8
-         fjOtpwJEMcfSpBvnFQkEqqKFG8iMAhmZ6imSO5EU98T4wPSYE1k+EQodgXmvP5T1my
-         Vkhvh8Hj/Ghlg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BC5B5F60799;
-        Fri, 28 Jan 2022 16:56:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <164338897376.26130.15967795145235028846.git-patchwork-housekeeping@kernel.org>
-Date:   Fri, 28 Jan 2022 16:56:13 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+        with ESMTP id S245576AbiA1RAC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jan 2022 12:00:02 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9783C061714;
+        Fri, 28 Jan 2022 09:00:02 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id g20so5664516pgn.10;
+        Fri, 28 Jan 2022 09:00:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=+C9vX6xCDqvkQ70Y80+HH81TrwKxhCYxQC092GOuFQc=;
+        b=QBncfqMh62y6OfBYS1O3hAMenwW5HA6+1y1SzVQ8DuwIlu81PHahMSu4lYyNz92mqw
+         VCF7g1LAZaC1G/HAkQZ4nlqC38oR1+hl9oZCpz0EZu0pyV810arjgJuBtUeVgjReBUfA
+         Suk1P9W7f+nF9D6eDIpEd8ePa5w5+54TPqPLIZJx6x1xDwDkJsUxOFa2WeL35XZ8FdKE
+         Vi59dpo1/2lfCuBKe6zmlb+X+TQ8Cmm1gnnQdjfbHDoJKHVBcUY/dzKqoFAOGq6E+1Rp
+         jLEwgtp1hN1j5oJGw/+gWFoDsQoa1B6DLDgeYQ39Xad30AuOTG2oZP27qUl6AoSFBX6g
+         uAcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=+C9vX6xCDqvkQ70Y80+HH81TrwKxhCYxQC092GOuFQc=;
+        b=tcMA3LvsLl3MIHCCJCeCMkFycGhsmBfhawl6cUJaGz4cnUqYWDRHMaPgQAgVesuzko
+         FgjmekiW6MXPjzJcD8RirW5GTastb0BIj2t+ICRSspt2oaR/HWrIMM/rA+wxEFP+Cyq/
+         7OnQdWY5H9Yys+j1dFS4zUos4hMb4PaIElqjcw6fuNKT35i2Qsq9trGkxcOYGvlzEsX/
+         u2BEphPK5AgF9yvf2appfq68sfjmMdxSsqy1u58eD9vdax2E8MFNYvdLisa6PAtyPEpw
+         nMVqSKm8aBfF/YBJ488UZCdAnjdT/YkHGi9AEDHaUGaU+w1z1rcjPF6ehMW6ZWWC6pRy
+         6pHg==
+X-Gm-Message-State: AOAM532k2rq6iWR8FhFTuzepJvjbteWH2TSW3wv7meG10t1qMkv1KuJx
+        dR71GzVuk3XB4V8NWSFtLEbPcRgXBj7SMhBseL4=
+X-Google-Smtp-Source: ABdhPJyB6CItxjnOMvt+FRSBG50hnskVKlJqSjGYtvtldH72NRe7B+pKu96pHf8ZvXRDUBG3VfvtFA==
+X-Received: by 2002:a63:e704:: with SMTP id b4mr7235174pgi.315.1643389202302;
+        Fri, 28 Jan 2022 09:00:02 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id o21sm22261791pgl.19.2022.01.28.09.00.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 09:00:02 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Mark Brown <broonie@kernel.org>, linux-tegra@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] spi: tegra210-quad: Fix missin IRQ check in tegra_qspi_probe
+Date:   Fri, 28 Jan 2022 16:59:56 +0000
+Message-Id: <20220128165956.27821-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v3] spi: tegra20: Fix missing IRQ check in tegra_slink_probe (2022-01-28T16:47:41)
-  Superseding: [v2] spi: tegra20: Fix missing IRQ check in tegra_slink_probe (2022-01-28T16:18:07):
-    [v2] spi: tegra20: Fix missing IRQ check in tegra_slink_probe
+This func misses checking for platform_get_irq()'s call and may passes the
+negative error codes to request_threaded_irq(), which takes unsigned IRQ #,
+causing it to fail with -EINVAL, overriding an original error code.
+Stop calling request_threaded_irq() with invalid IRQ #s.
 
+Fixes: 921fc1838fb0 ("spi: tegra210-quad: Add support for Tegra210 QSPI controller")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/spi/spi-tegra210-quad.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
+diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
+index ce1bdb4767ea..cb00ac2fc7d8 100644
+--- a/drivers/spi/spi-tegra210-quad.c
++++ b/drivers/spi/spi-tegra210-quad.c
+@@ -1240,6 +1240,8 @@ static int tegra_qspi_probe(struct platform_device *pdev)
+ 
+ 	tqspi->phys = r->start;
+ 	qspi_irq = platform_get_irq(pdev, 0);
++	if (qspi_irq < 0)
++		return qspi_irq;
+ 	tqspi->irq = qspi_irq;
+ 
+ 	tqspi->clk = devm_clk_get(&pdev->dev, "qspi");
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.17.1
 
