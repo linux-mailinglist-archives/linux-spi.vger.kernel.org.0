@@ -2,89 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9FF849FE8D
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jan 2022 18:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 796A54A00AA
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jan 2022 20:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350380AbiA1RAD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Jan 2022 12:00:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245576AbiA1RAC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jan 2022 12:00:02 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9783C061714;
-        Fri, 28 Jan 2022 09:00:02 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id g20so5664516pgn.10;
-        Fri, 28 Jan 2022 09:00:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=+C9vX6xCDqvkQ70Y80+HH81TrwKxhCYxQC092GOuFQc=;
-        b=QBncfqMh62y6OfBYS1O3hAMenwW5HA6+1y1SzVQ8DuwIlu81PHahMSu4lYyNz92mqw
-         VCF7g1LAZaC1G/HAkQZ4nlqC38oR1+hl9oZCpz0EZu0pyV810arjgJuBtUeVgjReBUfA
-         Suk1P9W7f+nF9D6eDIpEd8ePa5w5+54TPqPLIZJx6x1xDwDkJsUxOFa2WeL35XZ8FdKE
-         Vi59dpo1/2lfCuBKe6zmlb+X+TQ8Cmm1gnnQdjfbHDoJKHVBcUY/dzKqoFAOGq6E+1Rp
-         jLEwgtp1hN1j5oJGw/+gWFoDsQoa1B6DLDgeYQ39Xad30AuOTG2oZP27qUl6AoSFBX6g
-         uAcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=+C9vX6xCDqvkQ70Y80+HH81TrwKxhCYxQC092GOuFQc=;
-        b=tcMA3LvsLl3MIHCCJCeCMkFycGhsmBfhawl6cUJaGz4cnUqYWDRHMaPgQAgVesuzko
-         FgjmekiW6MXPjzJcD8RirW5GTastb0BIj2t+ICRSspt2oaR/HWrIMM/rA+wxEFP+Cyq/
-         7OnQdWY5H9Yys+j1dFS4zUos4hMb4PaIElqjcw6fuNKT35i2Qsq9trGkxcOYGvlzEsX/
-         u2BEphPK5AgF9yvf2appfq68sfjmMdxSsqy1u58eD9vdax2E8MFNYvdLisa6PAtyPEpw
-         nMVqSKm8aBfF/YBJ488UZCdAnjdT/YkHGi9AEDHaUGaU+w1z1rcjPF6ehMW6ZWWC6pRy
-         6pHg==
-X-Gm-Message-State: AOAM532k2rq6iWR8FhFTuzepJvjbteWH2TSW3wv7meG10t1qMkv1KuJx
-        dR71GzVuk3XB4V8NWSFtLEbPcRgXBj7SMhBseL4=
-X-Google-Smtp-Source: ABdhPJyB6CItxjnOMvt+FRSBG50hnskVKlJqSjGYtvtldH72NRe7B+pKu96pHf8ZvXRDUBG3VfvtFA==
-X-Received: by 2002:a63:e704:: with SMTP id b4mr7235174pgi.315.1643389202302;
-        Fri, 28 Jan 2022 09:00:02 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id o21sm22261791pgl.19.2022.01.28.09.00.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 09:00:02 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Mark Brown <broonie@kernel.org>, linux-tegra@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] spi: tegra210-quad: Fix missin IRQ check in tegra_qspi_probe
-Date:   Fri, 28 Jan 2022 16:59:56 +0000
-Message-Id: <20220128165956.27821-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1350806AbiA1TLZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Jan 2022 14:11:25 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34858 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233548AbiA1TLZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jan 2022 14:11:25 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0086B826E6;
+        Fri, 28 Jan 2022 19:11:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0644FC340E7;
+        Fri, 28 Jan 2022 19:11:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643397082;
+        bh=nEtRS4da8A0SmzOxcQ3RPNezBvSUb6/LzZRgw/9lq2E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QLCC6rhhkXfPKby3V9ApuHBOZplcpuZbCFe2cgd61MP9BTM4XlZ3NQnYkBDcOqHu8
+         5XZJMCAObah5qnRXeAu0Sajy4zjDdxf/v6oDFigBHbc2rNwbIXzmQdWo1br2zbWkJY
+         J4IngMjXyl+ra+iXhcb2m1jTOEYJPpT5PE70hm72qCKkB8CW3VYQm3q2zrqFg1K4oX
+         B26PzSKX7k62V1AevuEqiEkJ8cbK601B+/qhiUK/WVDVBFAVWsJFEvydbcrKcJJ8gO
+         1r9UsXgxcKa2x5ttkfK7P/L8rd2J4ns+ep/2beQpzl98t6krTaoTv7c+MnkU96InBS
+         /O8YHJDHOnrRA==
+Date:   Fri, 28 Jan 2022 19:11:17 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     =?utf-8?B?6YOt5Yqb6LGq?= <lhjeff911@gmail.com>
+Cc:     sfr@canb.auug.org.au, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?utf-8?B?5ZGC6Iqz6aiwTHVXZWxscw==?= <wells.lu@sunplus.com>,
+        "lh.kuo" <lh.kuo@sunplus.com>
+Subject: Re: [PATCH -next] spi: Fix compiler warning for kernel test
+Message-ID: <YfQ/1aJzebxw2GS+@sirena.org.uk>
+References: <1643336485-10942-1-git-send-email-lhjeff911@gmail.com>
+ <CAGcXWkzM6wbhNFLbYoijq7iS_76nYVod1ySFEDu-BRgnBokEQA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="CLZg43y2TCF/HuSl"
+Content-Disposition: inline
+In-Reply-To: <CAGcXWkzM6wbhNFLbYoijq7iS_76nYVod1ySFEDu-BRgnBokEQA@mail.gmail.com>
+X-Cookie: Support your right to arm bears!!
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This func misses checking for platform_get_irq()'s call and may passes the
-negative error codes to request_threaded_irq(), which takes unsigned IRQ #,
-causing it to fail with -EINVAL, overriding an original error code.
-Stop calling request_threaded_irq() with invalid IRQ #s.
 
-Fixes: 921fc1838fb0 ("spi: tegra210-quad: Add support for Tegra210 QSPI controller")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/spi/spi-tegra210-quad.c | 2 ++
- 1 file changed, 2 insertions(+)
+--CLZg43y2TCF/HuSl
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
-index ce1bdb4767ea..cb00ac2fc7d8 100644
---- a/drivers/spi/spi-tegra210-quad.c
-+++ b/drivers/spi/spi-tegra210-quad.c
-@@ -1240,6 +1240,8 @@ static int tegra_qspi_probe(struct platform_device *pdev)
- 
- 	tqspi->phys = r->start;
- 	qspi_irq = platform_get_irq(pdev, 0);
-+	if (qspi_irq < 0)
-+		return qspi_irq;
- 	tqspi->irq = qspi_irq;
- 
- 	tqspi->clk = devm_clk_get(&pdev->dev, "qspi");
--- 
-2.17.1
+On Fri, Jan 28, 2022 at 10:47:41PM +0800, =E9=83=AD=E5=8A=9B=E8=B1=AA wrote:
+> Fix compiler warming for kernel test
+>=20
+> Fixes: f62ca4e2a863 ("spi: Add spi driver for Sunplus SP7021")
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
 
+Thanks for adding the signoff but this and the other two patches you
+just sent are breaking the tooling - they're sent with HMTL and it looks
+like the text parts have been corrupted with at least word wrapping:
+
+> -int sp7021_spi_slave_tx(struct spi_device *spi, struct spi_transfer *xfe=
+r)
+> +static int sp7021_spi_slave_tx(struct spi_device *spi, struct spi_transf=
+er
+> *xfer)
+
+so the diff doesn't work as-is.  Can you check and resend please, your
+normal posting mechanism works fine?
+
+--CLZg43y2TCF/HuSl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmH0P9UACgkQJNaLcl1U
+h9BlpAf/arzffOmwe38Eq6+7Svb1SVF6H10OslQsbhpYHIXILWEO9vxbVKoEKPLm
+RrzE+eEN8U8ve8d3fjzZbLkUmH3jU0/dFvVI2J38mg3MoDsinq/PCdw0+XiUKNU7
+iUns6AcfJX0GdKSdmm6RwuxAchYUl9OrrvEWkoUG6hY2x42anDHTRyZ2kSPuwwtW
+WDNvaZg0UlKwTzuHBp0U55wXLkeML99mQo4Pu3GSaLwLssoWGKrhLGdA7rJKxGg+
+Uw+QVmhtAzOONj0n2P5SvdZ8PQ8mBJ69FTooUM+dEuTSGKw+7SW3+x1pTYNwhfRG
+CXL+IUmVC32tQAurF/FXqx2RxoSyTg==
+=jzUF
+-----END PGP SIGNATURE-----
+
+--CLZg43y2TCF/HuSl--
