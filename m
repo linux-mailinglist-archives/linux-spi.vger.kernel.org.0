@@ -2,93 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F9F4A03C9
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jan 2022 23:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FDE24A03FA
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jan 2022 23:57:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237614AbiA1WfB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Jan 2022 17:35:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234804AbiA1WfB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jan 2022 17:35:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45111C061714
-        for <linux-spi@vger.kernel.org>; Fri, 28 Jan 2022 14:35:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09B81B80D79
-        for <linux-spi@vger.kernel.org>; Fri, 28 Jan 2022 22:35:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E69BC340E7;
-        Fri, 28 Jan 2022 22:34:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643409298;
-        bh=Yq+NKmglCcJf6VxEKFIQ3uZi517ZRefZwBxdT7JtlIg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r4NFg/R0I4hO4OnN0XXhGYU6nnk1z9BgxojWESsJ1w7T/WnGmxGEI4LGtruaRYasP
-         xxWVImUb87rY0l+GFIZambMoknvTBNIAzy2WOLNWBuF3t4vVf2PpwT+sF7IDx7jnIa
-         cjxmpIeqMqqLcrbSCW4xzxFwGlwW7t/trDuJTuNaY5D5CHu/VupA2D/YDZT8mMiSCk
-         y5nYnUAYFWI24ucgg5Rerk+rCSCGDh2kH/Dc6giMi+meIa7D5nWt+GCPmc1ucW2+fc
-         yfTWaiskcpLhSVKAGlv4iZCj3QsybEwbqbwysvXhm4iz2rTp9jmAnCjCLwFLatUfNF
-         l7jm15gmXd8fA==
-Date:   Fri, 28 Jan 2022 22:34:52 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     linux-spi@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Michael Walle <michael@walle.cc>,
-        linux-mtd@lists.infradead.org,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Julien Su <juliensu@mxic.com.tw>,
-        Jaime Liao <jaimeliao@mxic.com.tw>
-Subject: Re: [PATCH v10 00/13] External ECC engines & Macronix support
-Message-ID: <YfRvjJf+6Db89RRg@sirena.org.uk>
-References: <20220127091808.1043392-1-miquel.raynal@bootlin.com>
- <YfL5ApsG7c619+R0@sirena.org.uk>
- <20220128090812.5b7a5982@xps13>
+        id S239207AbiA1W5B (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Jan 2022 17:57:01 -0500
+Received: from wp029.wappy.ne.jp ([203.137.0.194]:59244 "EHLO
+        wp029.wappy.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229658AbiA1W5A (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jan 2022 17:57:00 -0500
+X-Greylist: delayed 424 seconds by postgrey-1.27 at vger.kernel.org; Fri, 28 Jan 2022 17:56:59 EST
+Received: by wp029.wappy.ne.jp (Postfix, from userid 48)
+        id ACEA8344559E; Sat, 29 Jan 2022 07:49:54 +0900 (JST)
+To:     linux-spi@vger.kernel.org
+Subject: =?UTF-8?B?44CQ44OP44OD44OI44Os44Oz44K/44Or44CR44GK5ZWP5ZCI44Gb5pyJ6Zuj?=  =?UTF-8?B?44GG44GU44GW44GE44G+44GZ44CC77yI6Ieq5YuV6L+U5L+h44Oh44O844Or?=  =?UTF-8?B?77yJ?=
+X-PHP-Originating-Script: 10092:class-phpmailer.php
+Date:   Fri, 28 Jan 2022 22:49:54 +0000
+From:   =?UTF-8?B?44OP44OD44OIIOODrOODs+OCv+ODqw==?= 
+        <info@officehut-rental.com>
+Message-ID: <0daf289a2fbd507ee69ad31cff5839b8@officehut-rental.com>
+X-Priority: 3
+X-Mailer: PHPMailer (phpmailer.sourceforge.net) [version 2.0.4]
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LgYrcwW1A+i1Y5Re"
-Content-Disposition: inline
-In-Reply-To: <20220128090812.5b7a5982@xps13>
-X-Cookie: Torque is cheap.
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+❤️ Laurie want to meet you! Click Here: https://clck.ru/aq8tU?31b9 ❤️様
 
---LgYrcwW1A+i1Y5Re
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+この度はお問合せいただき誠にありがとうございます。
+承りました内容は以下の通りです。
 
-On Fri, Jan 28, 2022 at 09:08:12AM +0100, Miquel Raynal wrote:
+===================================================
 
-> As three patches in this series were new/reworked I dropped your tag
-> there. I should have asked you again. Shall I add them (back) to the
-> following patches?
+お名前：　❤️ Laurie want to meet you! Click Here: https://clck.ru/aq8tU?31b9 ❤️　（8ir1hc）
+E-mailアドレス：　linux-spi@vger.kernel.org
+市区町村：　hnzoea
+TEL：　091680748110
+FAX：　091680748110
+携帯電話：　091680748110
+お問い合わせ内容：　dfe89y
 
-> 	spi: cadence-quadspi: Provide a capability structure
-> 	spi: mxic: Provide a capability structure
-> 	spi: spi-mem: Introduce a capability structure
+===================================================
 
-Yes, please.
+内容を確認後、追って返信させて頂きますので今しばらくお待ちください。 
 
---LgYrcwW1A+i1Y5Re
-Content-Type: application/pgp-signature; name="signature.asc"
+万一、このメールに記載されている内容に心当たりのない場合は、
+大変お手数ですが info@officehut-rental.com までご連絡ください。
 
------BEGIN PGP SIGNATURE-----
+------------------------------------------------------------------
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmH0b4sACgkQJNaLcl1U
-h9BXuQf/etoMdbvPgWgonTU6b8NUIY3ajlpqCNxICnnzCehv4KQf96azCUjthZ3S
-HCksv3/bC2PAkfNPeMM3+mfZD0MPdHmkh6++c/GhFT8RzMvaXJBUEW7fCtLnaanG
-v9DSaKA1ROaPjUnVy3dDbcE/sf9eY/O+tfWMNboEmuaWLnVIlzP83lrIqWBg9x+u
-pKeD7jAOAqMHw4z1yVu75GXBMgMQ+exMEAshMc/dqsxvBczAbbS1ncNltI4bB3sT
-6BYVFRFnqw5vxh+SX+l/kJKJocKQN2+dLrIEmykY/MhbKdfExgjwm/CsPzVzHhPR
-7bQsA2YZjwj9idg9IQLWF6ZRuyeT+Q==
-=dGGL
------END PGP SIGNATURE-----
+ハット レンタル　井上真吾
+http://officehut-rental.com
+〒488-0068　愛知県尾張旭市南原山町字南原山76-1
+TEL：0561-52-7873／FAX：0561-51-1325
+E-mail：info@officehut-rental.com
 
---LgYrcwW1A+i1Y5Re--
