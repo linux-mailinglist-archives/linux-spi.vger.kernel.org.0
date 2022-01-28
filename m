@@ -2,64 +2,63 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4073E49FE4E
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jan 2022 17:47:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A60E49FE6F
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jan 2022 17:52:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350236AbiA1Qrs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Jan 2022 11:47:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
+        id S1350321AbiA1Qwo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Jan 2022 11:52:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350235AbiA1Qrr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jan 2022 11:47:47 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91033C061714;
-        Fri, 28 Jan 2022 08:47:47 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id z10-20020a17090acb0a00b001b520826011so11394383pjt.5;
-        Fri, 28 Jan 2022 08:47:47 -0800 (PST)
+        with ESMTP id S1350319AbiA1Qwo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jan 2022 11:52:44 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D2EC061714;
+        Fri, 28 Jan 2022 08:52:44 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id k17so6562276plk.0;
+        Fri, 28 Jan 2022 08:52:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=4eWgk8DR7GAT8RScGPgtPJ9OOwKkWW5UUG5CMXRZ1BY=;
-        b=cHYZFwQFHKOpWZ8QZadM5qtwujFptR4ATqBWCNoQbylpkw6gGn+w75cuXeX0xyrCPj
-         S9t0ZM9P6JP/EBCH8jv436iJX06JP9f+qBRYFcfgUv6BnVlVMGKAIY4P0uvN2OR1zJj7
-         TxhTNwDYrEbNYSDG7YXC/pzBjdF09F04DK66m4vIZx9qV5N9IrmnPZKAtUelCdjp54p0
-         rxEdpJK4jmgMQMZOpYq2KqgnCTqncU+iiDurgywZg7jDHdXfnbHqrs2di8Fr5a8B6Gbg
-         OVNRryr6aUzKygxztXEYRxZQ7huAhfyUduQVDpgz5gJvHuj1zcfKha1vz5/bbD6ed7xN
-         R6AQ==
+        h=from:to:cc:subject:date:message-id;
+        bh=BTwHUa1RWCsQXFr28TUnMkGh0jWJXQC2xD9hGrZO8SM=;
+        b=qHcbaqTXTTWI+hpQpFpkoHjFxR9YTcdZu8PAdYe63XWywHBRFMMh8ZJeJcUpPU6a9l
+         ukrgFjyBBqtbVe/c7wb3kL7laYKWOuHBIAqtWOhJWHx8QRKkYyrlxUVBCf4e1TeV+FVK
+         xSdNlVad8yxkZzjIv9wQjqSPy30AVykprdUihJ/uXx/AiEf/B5dpS5n7U2xp/Z3GQT/Q
+         T7y3wLRN8VKN5Rnti3AwbssqfNvFOewdsLecPNt7m6E3VhrwWrQgon6iJrL8yVeDDyF2
+         6A4juq0Uq7vhAZHnSUP2Hg6781iaQCpvM7c8Y4SZyevc3H8wvorBuQI7I6lXVeySby5i
+         2GXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=4eWgk8DR7GAT8RScGPgtPJ9OOwKkWW5UUG5CMXRZ1BY=;
-        b=1wy1FYyE/k/YWVlZ48ob3mSjoDH69OYhbeBWdxLhM3iOZDuaIx5ZcZrpcVZhDzZaa/
-         N4v1iJcd+K8Ke7VM+dJv9vlrYfb6TIhbw4d5hbX1WNeYJeetj0DjLkqWB93818VYj506
-         GvP9puD0H23I+ykE2GmzLUu4kr9ooow3eKTDBmYaM3P7+JNoA1L0MwxDWR/96H6FNjul
-         sRyf/nynHriU9dbdSteh2rEaO/jILI+ZOVlh50aitgDAfLv3UQscR5PEwRhLKO+raSzX
-         v8cMasUMGl50MMFgVP6L52z4JFGWxljJVnV+Hgb3buyQ/R3WCAygZFPneXVrEpFpQXUI
-         LQuA==
-X-Gm-Message-State: AOAM532mYgEUw362BWDud15mzo+lt1decBciM2+aS7lrA0jMaOkkZR91
-        UajopcOJufcyZnS1/LiGVboVPAJQbrBUNHVAX8E=
-X-Google-Smtp-Source: ABdhPJzch/bx/xK6veOuRW6EwCaBlWtlLwEVKYSwAe/a9XLLwiiV+ZfsPbLgF2ega5d5XzNoyIuzkw==
-X-Received: by 2002:a17:902:bd4a:: with SMTP id b10mr5105001plx.152.1643388467079;
-        Fri, 28 Jan 2022 08:47:47 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=BTwHUa1RWCsQXFr28TUnMkGh0jWJXQC2xD9hGrZO8SM=;
+        b=GkJkMb4NUQDgu8Esj0wK1oA3KlhTVmIGiH4WmH+SsZppAVJzKXjX2wDtA+s78BiyJA
+         e+xO99X+I1BR3Aitsq3givWppt9wIj7CDKH5nzxtW5ZZ4Z8N8Nbf9E0PKfBLrJBIa9im
+         T6V8RfwfBp1QmQqNUVDhC6ByajVkVpUJYUQUqiTom7ylASdfKZO3C81fP2ctbUxV2luW
+         qJ1uY9LD2G5h4Gr1/wfghFRPsK/itED0UubmUPKYh3Oiy4tfkZ2alYZmfBiOfC0SMkXO
+         fvsa5TmxM1s+6Y/TD79ExKGlcSYHxuYfz2KYpZV7bFBuRyDQi+NSHs7bfUOxTlURQwkR
+         sktQ==
+X-Gm-Message-State: AOAM530m/bo7dd+H/wytsVFWYaVsfxPLkNKcDQl32UP+0frEeRZUfRk4
+        9gqhTd7a2yOvqeNxR+QXijtl+8iT3ksce9SaW7U=
+X-Google-Smtp-Source: ABdhPJwtjxg2rwlV8T8wjqiA81JrSYaZVYeKbshSSl/7neoZEMYuj1M5w4AKdET9sA/iyQQ+U4JPKg==
+X-Received: by 2002:a17:90b:4d82:: with SMTP id oj2mr20734075pjb.170.1643388764018;
+        Fri, 28 Jan 2022 08:52:44 -0800 (PST)
 Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id oo2sm3306726pjb.31.2022.01.28.08.47.44
+        by smtp.googlemail.com with ESMTPSA id w8sm4975178pfu.128.2022.01.28.08.52.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 08:47:46 -0800 (PST)
+        Fri, 28 Jan 2022 08:52:43 -0800 (PST)
 From:   Miaoqian Lin <linmq006@gmail.com>
 To:     Laxman Dewangan <ldewangan@nvidia.com>,
         Mark Brown <broonie@kernel.org>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        Stephen Warren <swarren@nvidia.com>, linux-spi@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+        Stephen Warren <swarren@nvidia.com>,
+        Grant Likely <grant.likely@secretlab.ca>,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Cc:     linmq006@gmail.com
-Subject: [PATCH v3] spi: tegra20: Fix missing IRQ check in tegra_slink_probe
-Date:   Fri, 28 Jan 2022 16:47:41 +0000
-Message-Id: <20220128164741.23846-1-linmq006@gmail.com>
+Subject: [PATCH] spi: tegra114: Add missing IRQ check in tegra_spi_probe
+Date:   Fri, 28 Jan 2022 16:52:38 +0000
+Message-Id: <20220128165238.25615-1-linmq006@gmail.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <adfcf465-cff1-e15e-89fa-fdc573b7820f@gmail.com>
-References: <adfcf465-cff1-e15e-89fa-fdc573b7820f@gmail.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -69,33 +68,27 @@ negative error codes to request_threaded_irq(), which takes unsigned IRQ #,
 causing it to fail with -EINVAL, overriding an original error code.
 Stop calling request_threaded_irq() with invalid IRQ #s.
 
-Fixes: dc4dc3605639 ("spi: tegra: add spi driver for SLINK controller")
+Fixes: f333a331adfa ("spi/tegra114: add spi driver")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
-Changes in v2:
-- fix wrong func name in commit message.
-Changes in v3:
-- fix Fixes tag info.
-- remove redundant error message.
----
- drivers/spi/spi-tegra20-slink.c | 4 ++++
+ drivers/spi/spi-tegra114.c | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
-index 2a03739a0c60..f8661963ecba 100644
---- a/drivers/spi/spi-tegra20-slink.c
-+++ b/drivers/spi/spi-tegra20-slink.c
-@@ -1100,6 +1100,10 @@ static int tegra_slink_probe(struct platform_device *pdev)
- 	reset_control_deassert(tspi->rst);
+diff --git a/drivers/spi/spi-tegra114.c b/drivers/spi/spi-tegra114.c
+index e9de1d958bbd..8f345247a8c3 100644
+--- a/drivers/spi/spi-tegra114.c
++++ b/drivers/spi/spi-tegra114.c
+@@ -1352,6 +1352,10 @@ static int tegra_spi_probe(struct platform_device *pdev)
+ 	tspi->phys = r->start;
  
  	spi_irq = platform_get_irq(pdev, 0);
 +	if (spi_irq < 0) {
 +		ret = spi_irq;
-+		goto exit_pm_put;
++		goto exit_free_master;
 +	}
  	tspi->irq = spi_irq;
- 	ret = request_threaded_irq(tspi->irq, tegra_slink_isr,
- 				   tegra_slink_isr_thread, IRQF_ONESHOT,
+ 
+ 	tspi->clk = devm_clk_get(&pdev->dev, "spi");
 -- 
 2.17.1
 
