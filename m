@@ -2,114 +2,80 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF5AB49ED7A
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Jan 2022 22:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9A449EF9D
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jan 2022 01:27:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240790AbiA0Vge (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 27 Jan 2022 16:36:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36896 "EHLO
+        id S1344599AbiA1A1y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 27 Jan 2022 19:27:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344401AbiA0Vgd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Jan 2022 16:36:33 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633D8C061714
-        for <linux-spi@vger.kernel.org>; Thu, 27 Jan 2022 13:36:33 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nDCRC-0006Rf-Ku; Thu, 27 Jan 2022 22:36:14 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nDCRB-00CpYf-FH; Thu, 27 Jan 2022 22:36:12 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nDCRA-001olD-2d; Thu, 27 Jan 2022 22:36:12 +0100
-Date:   Thu, 27 Jan 2022 22:36:07 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mark Brown <broonie@kernel.org>, linux-fbdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Noralf Tronnes <notro@tronnes.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-spi@vger.kernel.org,
-        kernel@pengutronix.de, Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH 2/5] staging: fbtft: Deduplicate driver registration
- macros
-Message-ID: <20220127213607.xbggvbm454u7qfid@pengutronix.de>
-References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
- <20220123175201.34839-3-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S1344814AbiA1A1G (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 27 Jan 2022 19:27:06 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E91DC06176A
+        for <linux-spi@vger.kernel.org>; Thu, 27 Jan 2022 16:27:06 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id h14so13602041ybe.12
+        for <linux-spi@vger.kernel.org>; Thu, 27 Jan 2022 16:27:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qdRDdfOMifbhNPhUjcrVIXglRFajzLbYO5C7vWkVOyI=;
+        b=pD42ABev/Zn+R/XfzVP+ywZUI5H1OuPJgjVMBlOM6pV+3pAC8QhOwRFY2gcAtGyLnS
+         ze/scWagZzi82n1LqGgmPxwdzbprK3szK5Z4gxbs5VTnccJP9edxP5EeIjzy5Xic8syo
+         VsrLdU9IoTXUb9M3Q3trjYYJFJr+rZ9UzkU3+v95nOcqP06hdKa/cN3uhSLjUyvP4051
+         cRYxVfLbUkLGzUs5JzHjiCY207caezP50NOEl/ZrhzUuaQETgOK0oOcTZ04NzCz3voYp
+         Er108koNs0Gn/HUECo2MWEpY/cZRa5vKYxOdy0B4QEDNIX7RmticVpDKSRs2ktrFd3QB
+         M3Hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qdRDdfOMifbhNPhUjcrVIXglRFajzLbYO5C7vWkVOyI=;
+        b=nroI4hEhGJ2W3ut45pFCDrhZt14RznjooDAqlkEFIZKPci2DWnPeO+h5+xbN5ZWXV8
+         yfKB3dvvt2M9jyT6pxDsFy8ib12g4m9pjzVNoSs09/xnmoOEWVPQD8m7cQ0cHR8Al/3Q
+         Sm4xI+CFxU4Ynpta8M+ACPXmXFsiUPHzcgugBeiOOkeDXPZaRTW0xzZhFDie27XCUidC
+         jIftouL/v5HrkhvHUFxjR+6YN7UKEusQ/Num/2DnfKpQWuWATiu8FV5E+es4//q1K9OC
+         HfdTn1jq8/H4r34dF4UcZJsFL7PmambmXsGULbyRtIUirX7cOR+zcvrGxJ/U9Hs9yVgO
+         ZPHQ==
+X-Gm-Message-State: AOAM533f4UayEf9cJrrHY/lmaEk+w31ZTuY2o5yEa8DVzDHynb30Cvhz
+        /uIYd0gNuZhcUlJQYxidbSPgSB11uoKFzylKs+EMVw==
+X-Google-Smtp-Source: ABdhPJyEHeCnt8072aS5AUWAZkfsvisDYFuHdUVNytIL9fWtMBaARyibHEmoYuicSkzWs8DVJANUgfOaiYjvPpbJkjo=
+X-Received: by 2002:a25:2451:: with SMTP id k78mr8656152ybk.511.1643329625442;
+ Thu, 27 Jan 2022 16:27:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="67mr4ifnx6prswud"
-Content-Disposition: inline
-In-Reply-To: <20220123175201.34839-3-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+References: <CGME20220125032821epcas5p128c99ca3654fce0ec046943c90211849@epcas5p1.samsung.com>
+ <20220125031604.76009-1-alim.akhtar@samsung.com> <20220125031604.76009-2-alim.akhtar@samsung.com>
+In-Reply-To: <20220125031604.76009-2-alim.akhtar@samsung.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 28 Jan 2022 01:26:54 +0100
+Message-ID: <CACRpkdYYE9vbiFhNqJNv5VM_+YAtr2Jbg-Anoq38OY1w34zhgg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] spi: dt-bindings: samsung: Add fsd spi compatible
+To:     Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski@canonical.com,
+        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
+        broonie@kernel.org, andi@etezian.org, linux-spi@vger.kernel.org,
+        linux-fsd@tesla.com, Adithya K V <adithya.kv@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, Jan 25, 2022 at 4:28 AM Alim Akhtar <alim.akhtar@samsung.com> wrote:
 
---67mr4ifnx6prswud
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Adds spi controller dt-binding compatible information for
+> Tesla Full Self-Driving (FSD) SoC.
+>
+> Cc: linux-fsd@tesla.com
+> Signed-off-by: Adithya K V <adithya.kv@samsung.com>
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Andi Shyti <andi@etezian.org>
 
-Hello Greg,
+The SoC is confirmed to be Tesla-specific, so:
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-On Sun, Jan 23, 2022 at 06:51:58PM +0100, Uwe Kleine-K=F6nig wrote:
-> The two macros FBTFT_REGISTER_DRIVER and FBTFT_REGISTER_SPI_DRIVER
-> contain quite some duplication: Both define an spi driver and an of device
-> table and the differences are quite subtle.
->=20
-> So create two new macros and use both twice.
->=20
-> Link: https://lore.kernel.org/r/20220118181338.207943-2-u.kleine-koenig@p=
-engutronix.de
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-
-You picked this patch into your staging-next branch, I guess from the
-original submission. Not sure how Mark wants to continue with the series
-=66rom this thread, but at least my plan was that he will create an
-immutable branch on top of 5.17-rc2 (assuming 5.17-rc2 will contain
-"staging: fbtft: Fix error path in fbtft_driver_module_init()") with the
-remaining 4 patches in this series.
-
-In a private mail you agreed to this procedure, but this didn't stop you
-taking this patch?! What is your plan here? The obvious (to me) options
-are:
-
- - Delay this series until after the next merge window.
- - You back out this patch from staging-next and ack here for Mark to
-   apply it to an immutable branch.
- - You keep this patch in staging-next and still ack here for Mark to
-   apply it to an immutable branch. Then the patch would be included
-   twice.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---67mr4ifnx6prswud
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHzEEQACgkQwfwUeK3K
-7AkdBQf/QYxLjRjjSpz8FTj3K6vGIxGPAC7hZKjN9Sekvmf8ql2qAJ0veXMox5Hs
-AVo6BooWW8n6qnIE6j05wMMcJz16iBdVNo5kOSFo1vt7rP0sXbp/i1UIiU1hBcTT
-Mt/oYvsLpnwdh0OyI7h3ZfOdHo05HG8l/fjCBsHMozW1wuGvVIHnbN9zMyLEClyC
-58/88JKuKUU0REoLty0vkSjzfwmbQoXTbrkXgGHUkUyzk5g4JekV2R+xIkhmVWp6
-49EtKM6Xg8ykJKh51BNltCBDtrvNRuw/oKa5atlrCgKAfhynZv29X/oPNg4jXVPw
-k3jTHuwnI9NtkZxvtNMmRylFxVvrtw==
-=JziW
------END PGP SIGNATURE-----
-
---67mr4ifnx6prswud--
+Yours,
+Linus Walleij
