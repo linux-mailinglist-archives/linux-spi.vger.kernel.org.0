@@ -2,69 +2,90 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C3749FD6B
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jan 2022 17:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A15CC49FDC3
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jan 2022 17:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbiA1QAM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Jan 2022 11:00:12 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44782 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbiA1QAM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jan 2022 11:00:12 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6F6C61EA3
-        for <linux-spi@vger.kernel.org>; Fri, 28 Jan 2022 16:00:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5EF19C340E7;
-        Fri, 28 Jan 2022 16:00:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643385611;
-        bh=aRSchdZyAHxjR1MkmMHkHKfNJ9/0XlWNBj97aXdo8rY=;
-        h=Subject:From:Date:To:From;
-        b=UX+JZx2RwnqLgaTbYC9CQ+UqFieSXJZ+lvvqjpyNC61cNPk6Yc3pS8wgYXmTiXFQh
-         xK3if6F0XdVK80xg1qN7QAhtL13v2/LyFZJ2bmBuzCqUIBnPH0mdbBj9d1I6OMiVOZ
-         XtnJ9Z3HR0D46PD8tyKDEXC1qsmrt/MPWMNum1oD1M65NpMDsoRPOG1m/991ERQUgT
-         mycsMfkl9WcuQhTsnVl4Mvfx5G5LbsOPzu8ZPBymtuNbf8qSaYtPBX192QP9wN/ePw
-         YsIQH2ojt/bwh6lmsoYrqUCS1YLRQQIabii+OIIuUwG/lcEgfwIy09gX6wbDifiXTT
-         PeOScgJ0uMe4w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3F8CBF60799;
-        Fri, 28 Jan 2022 16:00:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S235025AbiA1QPN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Jan 2022 11:15:13 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:49648 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231809AbiA1QPM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jan 2022 11:15:12 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20SGEWRI012070;
+        Fri, 28 Jan 2022 10:14:32 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1643386472;
+        bh=gE688ExdogvCPKToOIBjzqFYYVk92OO30aF7+rdLB2M=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=oNYxkL1/Oa40/xKLCGywNM9+iZN6kjTtwwOIJKR5X+9tgRbU+RonTzfieOpfQFwGI
+         ILWqjQgkSn3mdei6mJrBZcwMKvSzcXaBAhD5yr7B1D5QHOb4+FmENBpD9VhcQAEvgj
+         qKIQZCQ3xdFkaPiHWGnvSiBg3B+T/qWMW0tonMGI=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20SGEWFR070882
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 28 Jan 2022 10:14:32 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 28
+ Jan 2022 10:14:32 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 28 Jan 2022 10:14:32 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20SGEVmg073381;
+        Fri, 28 Jan 2022 10:14:31 -0600
+Date:   Fri, 28 Jan 2022 21:44:30 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Lima <mauro.lima@eclypsium.com>,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans-Gert Dahmen <hans-gert.dahmen@immu.ne>,
+        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>
+Subject: Re: [PATCH v5 2/3] mtd: spi-nor: intel-spi: Convert to SPI MEM
+Message-ID: <20220128161430.lfa3s6e3bu4urspu@ti.com>
+References: <20211220164625.9400-1-mika.westerberg@linux.intel.com>
+ <20211220164625.9400-3-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <164338561118.28831.1268255260410321045.git-patchwork-summary@kernel.org>
-Date:   Fri, 28 Jan 2022 16:00:11 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20211220164625.9400-3-mika.westerberg@linux.intel.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+On 20/12/21 07:46PM, Mika Westerberg wrote:
+> The preferred way to implement SPI-NOR controller drivers is through SPI
+> subsubsystem utilizing the SPI MEM core functions. This converts the
+> Intel SPI flash controller driver over the SPI MEM by moving the driver
+> from SPI-NOR subsystem to SPI subsystem and in one go make it use the
+> SPI MEM functions. The driver name will be changed from intel-spi to
+> spi-intel to match the convention used in the SPI subsystem.
+> 
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Mauro Lima <mauro.lima@eclypsium.com>
+> Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
+> Acked-by: Lee Jones <lee.jones@linaro.org>
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+I remember acking this patch but maybe it got dropped along the way. 
+Anyway,
 
-Patch: [-next] spi: Fix missing unlock on error in sp7021_spi_master_transfer_one()
-  Submitter: Yang Yingliang <yangyingliang@huawei.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=609069
-  Lore link: https://lore.kernel.org/r/20220127115815.3148950-1-yangyingliang@huawei.com
-
-Patch: spi: sunplus-sp7021: Unlock on error path
-  Submitter: Dan Carpenter <dan.carpenter@oracle.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=609518
-  Lore link: https://lore.kernel.org/r/20220128135611.GA29554@kili
-
-
-Total patches: 2
+Acked-by: Pratyush Yadav <p.yadav@ti.com>
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
