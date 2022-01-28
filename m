@@ -2,110 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A367949FE39
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Jan 2022 17:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4073E49FE4E
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Jan 2022 17:47:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245568AbiA1Qhv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Jan 2022 11:37:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
+        id S1350236AbiA1Qrs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Jan 2022 11:47:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350238AbiA1Qhp (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jan 2022 11:37:45 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC050C061749;
-        Fri, 28 Jan 2022 08:37:44 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id b9so12863114lfq.6;
-        Fri, 28 Jan 2022 08:37:44 -0800 (PST)
+        with ESMTP id S1350235AbiA1Qrr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jan 2022 11:47:47 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91033C061714;
+        Fri, 28 Jan 2022 08:47:47 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id z10-20020a17090acb0a00b001b520826011so11394383pjt.5;
+        Fri, 28 Jan 2022 08:47:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=B8h6z6vTvVv45oAmrgyCfcqvjrGp2v2Mo2IW1UAzWUo=;
-        b=AuvLkQ2XhwREP3BMZ5G5PyOAJoQFrg6OgvMBnZFdE+44Jb5XKut/AEm3vDJV67T0MS
-         LPatbl97xNvyzmQCwjRmOEyAzKDmoj0WPKTq7wYG6WeciqKeP+rT+fc8mRzV8Q1NWgi4
-         oezaNE9tNeEBJoyyeejKwfeWoL0i3hVdw72a77Ut9R0H5wDsSYbFeLqItukGbtrSI/4N
-         Wq0Jq3gaafv/SULC6zviIdlZQwPdTrAoM+P3lYvyVGKU/Um8urgo4+KXeI61N9ge1H9r
-         9YCFuR3WEqWU4IUxmrEZuN4vqw10NrAWwhRRcroxl+x7gDri0Lr81ojW3kOyJDa96NgH
-         sHHg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=4eWgk8DR7GAT8RScGPgtPJ9OOwKkWW5UUG5CMXRZ1BY=;
+        b=cHYZFwQFHKOpWZ8QZadM5qtwujFptR4ATqBWCNoQbylpkw6gGn+w75cuXeX0xyrCPj
+         S9t0ZM9P6JP/EBCH8jv436iJX06JP9f+qBRYFcfgUv6BnVlVMGKAIY4P0uvN2OR1zJj7
+         TxhTNwDYrEbNYSDG7YXC/pzBjdF09F04DK66m4vIZx9qV5N9IrmnPZKAtUelCdjp54p0
+         rxEdpJK4jmgMQMZOpYq2KqgnCTqncU+iiDurgywZg7jDHdXfnbHqrs2di8Fr5a8B6Gbg
+         OVNRryr6aUzKygxztXEYRxZQ7huAhfyUduQVDpgz5gJvHuj1zcfKha1vz5/bbD6ed7xN
+         R6AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=B8h6z6vTvVv45oAmrgyCfcqvjrGp2v2Mo2IW1UAzWUo=;
-        b=RxnkVrDZr7g3EjdQxo6mV70075IWyJwYPbdODjyas8iSpjyEvBu16fDZbG7aJHJj8x
-         ot5hJksnxTGLs6W8S4LVOkUlxI0IRDYDmA1Y2Rx5ko6xz7Iwb7qlAQvk9iZFr5IYolQx
-         qi38az8LEOpA2LIeK70OX0Snk1g50yiTXiRFLf6ucwgYKzKXjaDiIqO5F+rMNM2Sczp+
-         NvpJVtZXK/8+IjLYt5viMAr4NCOb32uAEyRg5coRVxZx5auPs8k29xuMDtvjh+hL9jyz
-         /e97oYO6NDb0FHnRrYKYyT9S5NACYoQPiG6HJPXehXqKBpm99oC3EJQYHSVciAAspsCd
-         U+xg==
-X-Gm-Message-State: AOAM530jWg2wRhRAvSWVjiYHFfUbPBU8Tqv4vHiqaNatecP6W97pEzL9
-        RQZd5fDfsNaYgMa3khYJleE=
-X-Google-Smtp-Source: ABdhPJwepF/k8wrz+uM6ysOf7kCdxjxF5vPSds8cOovFJXDNhG6OinULhJx36HBmNYE4wX6E87FWiA==
-X-Received: by 2002:a05:6512:118a:: with SMTP id g10mr1863288lfr.356.1643387862769;
-        Fri, 28 Jan 2022 08:37:42 -0800 (PST)
-Received: from [192.168.2.145] (109-252-138-126.dynamic.spd-mgts.ru. [109.252.138.126])
-        by smtp.googlemail.com with ESMTPSA id p16sm1941350ljn.55.2022.01.28.08.37.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jan 2022 08:37:42 -0800 (PST)
-Message-ID: <adfcf465-cff1-e15e-89fa-fdc573b7820f@gmail.com>
-Date:   Fri, 28 Jan 2022 19:37:41 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] spi: tegra20: Fix missing IRQ check in
- tegra_slink_probe
-Content-Language: en-US
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=4eWgk8DR7GAT8RScGPgtPJ9OOwKkWW5UUG5CMXRZ1BY=;
+        b=1wy1FYyE/k/YWVlZ48ob3mSjoDH69OYhbeBWdxLhM3iOZDuaIx5ZcZrpcVZhDzZaa/
+         N4v1iJcd+K8Ke7VM+dJv9vlrYfb6TIhbw4d5hbX1WNeYJeetj0DjLkqWB93818VYj506
+         GvP9puD0H23I+ykE2GmzLUu4kr9ooow3eKTDBmYaM3P7+JNoA1L0MwxDWR/96H6FNjul
+         sRyf/nynHriU9dbdSteh2rEaO/jILI+ZOVlh50aitgDAfLv3UQscR5PEwRhLKO+raSzX
+         v8cMasUMGl50MMFgVP6L52z4JFGWxljJVnV+Hgb3buyQ/R3WCAygZFPneXVrEpFpQXUI
+         LQuA==
+X-Gm-Message-State: AOAM532mYgEUw362BWDud15mzo+lt1decBciM2+aS7lrA0jMaOkkZR91
+        UajopcOJufcyZnS1/LiGVboVPAJQbrBUNHVAX8E=
+X-Google-Smtp-Source: ABdhPJzch/bx/xK6veOuRW6EwCaBlWtlLwEVKYSwAe/a9XLLwiiV+ZfsPbLgF2ega5d5XzNoyIuzkw==
+X-Received: by 2002:a17:902:bd4a:: with SMTP id b10mr5105001plx.152.1643388467079;
+        Fri, 28 Jan 2022 08:47:47 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id oo2sm3306726pjb.31.2022.01.28.08.47.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 08:47:46 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Laxman Dewangan <ldewangan@nvidia.com>,
         Mark Brown <broonie@kernel.org>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220128161807.10145-1-linmq006@gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20220128161807.10145-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Stephen Warren <swarren@nvidia.com>, linux-spi@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH v3] spi: tegra20: Fix missing IRQ check in tegra_slink_probe
+Date:   Fri, 28 Jan 2022 16:47:41 +0000
+Message-Id: <20220128164741.23846-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <adfcf465-cff1-e15e-89fa-fdc573b7820f@gmail.com>
+References: <adfcf465-cff1-e15e-89fa-fdc573b7820f@gmail.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-28.01.2022 19:18, Miaoqian Lin пишет:
-> This func misses checking for platform_get_irq()'s call and may passes the
-> negative error codes to request_threaded_irq(), which takes unsigned IRQ #,
-> causing it to fail with -EINVAL, overriding an original error code.
-> Stop calling request_threaded_irq() with invalid IRQ #s.
-> 
-> Fixes: e4bb903fda0e ("spi: tegra20-slink: Improve runtime PM usage")
+This func misses checking for platform_get_irq()'s call and may passes the
+negative error codes to request_threaded_irq(), which takes unsigned IRQ #,
+causing it to fail with -EINVAL, overriding an original error code.
+Stop calling request_threaded_irq() with invalid IRQ #s.
 
-I don't see how this patch is related to e4bb903fda0e. This tag is
-incorrect and should be removed.
+Fixes: dc4dc3605639 ("spi: tegra: add spi driver for SLINK controller")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+Changes in v2:
+- fix wrong func name in commit message.
+Changes in v3:
+- fix Fixes tag info.
+- remove redundant error message.
+---
+ drivers/spi/spi-tegra20-slink.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
-> Changes in v2:
-> - fix wrong func name in commit message.
-> ---
->  drivers/spi/spi-tegra20-slink.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
-> index 2a03739a0c60..0eea35882777 100644
-> --- a/drivers/spi/spi-tegra20-slink.c
-> +++ b/drivers/spi/spi-tegra20-slink.c
-> @@ -1100,6 +1100,11 @@ static int tegra_slink_probe(struct platform_device *pdev)
->  	reset_control_deassert(tspi->rst);
->  
->  	spi_irq = platform_get_irq(pdev, 0);
-> +	if (spi_irq < 0) {
-> +		dev_err(&pdev->dev, "Unable to request IRQ: %d\n", ret);
+diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
+index 2a03739a0c60..f8661963ecba 100644
+--- a/drivers/spi/spi-tegra20-slink.c
++++ b/drivers/spi/spi-tegra20-slink.c
+@@ -1100,6 +1100,10 @@ static int tegra_slink_probe(struct platform_device *pdev)
+ 	reset_control_deassert(tspi->rst);
+ 
+ 	spi_irq = platform_get_irq(pdev, 0);
++	if (spi_irq < 0) {
++		ret = spi_irq;
++		goto exit_pm_put;
++	}
+ 	tspi->irq = spi_irq;
+ 	ret = request_threaded_irq(tspi->irq, tegra_slink_isr,
+ 				   tegra_slink_isr_thread, IRQF_ONESHOT,
+-- 
+2.17.1
 
-The "ret" isn't assigned to spi_irq in the error message.
-
-Moreover, platform_get_irq() already prints error message [1] by itself.
-The duplicated message is unnecessary and should be removed.
-
-[1]
-https://elixir.bootlin.com/linux/v5.17-rc1/source/drivers/base/platform.c#L256
