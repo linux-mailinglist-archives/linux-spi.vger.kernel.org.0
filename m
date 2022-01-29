@@ -2,58 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34ABD4A2B7B
-	for <lists+linux-spi@lfdr.de>; Sat, 29 Jan 2022 04:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27AD74A2B89
+	for <lists+linux-spi@lfdr.de>; Sat, 29 Jan 2022 05:05:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345055AbiA2Dlb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 28 Jan 2022 22:41:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
+        id S1352281AbiA2EFS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 28 Jan 2022 23:05:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345056AbiA2Dla (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jan 2022 22:41:30 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C65C061714;
-        Fri, 28 Jan 2022 19:41:27 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id f6so5408864vsa.5;
-        Fri, 28 Jan 2022 19:41:27 -0800 (PST)
+        with ESMTP id S238931AbiA2EFR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 28 Jan 2022 23:05:17 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5513C061714;
+        Fri, 28 Jan 2022 20:05:17 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id v67so16157713oie.9;
+        Fri, 28 Jan 2022 20:05:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=jNEO6NZFFUT3tUjdLKmLDb1Z96reNNvzPGOdn0B6DJI=;
-        b=qd/JZvkmKz1WVQkQZZs9sGYcx6VIp+pQ5G9ObGdypVIRkx9CEMXcdtwZ72f3ftegB9
-         /Ty5wTQt+DbMgalX9kgtRSul38hIxjbOmPmYNWHiywBs1S7VdAg1M5UO9I+4XjZvAurk
-         kMx8jtedW90K2PeDugTuXBdWw338Z8KfY0gjkSmaQgPHV86H+sdQPHE55cZk/2gBsO+N
-         Be8WQkImpmLJwcqtMl1SlMNAkbwO7yvqQLOqJEmg5kluzipzVD+kH4WG938e5jCw5nKq
-         wUhMhdKg1U0G3gk05fZZz/CycfcGUEqm/iFNkzCELhA6JSewH1tx5glqJyeBF0fZHiEA
-         8n/Q==
+        b=igbcMb5GBjQd7Ocj8jzYOARhuDK0cqEXUQqwuz2Tj5+XjnhV886ZIDsGjANjup0ed/
+         F0fDaKVGzMfDUis3nWPG88cjJKdzW3E4E1RzOEDYDnymgVWo8QrNu47Og4lMbK+ZaLAC
+         ViyKFmYcx+0re8Sj7iY3O+3/D8lCPkfa+HkR/t3lQCrwuggQGIzc+FZfIaLK4gHwpXK/
+         lv24B1kZRYOdh021QoHdiRUAL6KferIbKm0cOuGtnBrm8mskLURP67+VqDP41ERaJpt1
+         4fvUXyCNDO3rzjMcrYgmztWf7LT2hKeCcHhMVuWuewwnDOlMIb/ibvMuuSDeJ1PUqsv8
+         54jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=jNEO6NZFFUT3tUjdLKmLDb1Z96reNNvzPGOdn0B6DJI=;
-        b=Z+7tRZK+6jS2kBLOu8EB3+wBVpyaisZ4GYFAr1ov2lf6EMNgXzh4r7c7gZOxdMwWVZ
-         anMXVGyJePWRmNusu4Nq7IPCmymY6XFbo8vtszpSEXSo4wRqytGdeIUoibQH+hb/+vp3
-         yv8XUSLUWH8qGvR+vfxAjpSDlAlRcYBd3RmJ9HoSVbm0IAnQmO0/A5aXTa3hhcp0Jh8h
-         tSyM+dgoPE3ZIF+lqX2Ce/fEZ0T5CpWTfHh9POi2SBpymu7v3VEI5VGIjRA1tmPQ2rjp
-         Ys5hWLkzhETFXaop5u2bqipurQqX6DtZchKg9b1czCoIIF/A/5TRh9VX9mx49P1wNjUN
-         5iKw==
-X-Gm-Message-State: AOAM533Ja8UZRYyV1rIEJAp1SkP8XhwBapbUSA8WdXg1gon9Czrvzzsx
-        q5CjVe/Hj5cfphmJ0clhl4ew6FAWcsoU0g==
-X-Google-Smtp-Source: ABdhPJymTuo7GVSCGQb5UXk9Xj1nYER7T+2JPW0EoGvWY4W/sFewsQamZXBA1yEDljuQODCbcIvLvg==
-X-Received: by 2002:a67:ee4b:: with SMTP id g11mr5251153vsp.32.1643427686238;
-        Fri, 28 Jan 2022 19:41:26 -0800 (PST)
+        b=DfU8CLpE02gpLEkvioT3ED+Jcr9QTd4JsePjZorYbI6v84qxUvV7XtlfAMHhzZOj8f
+         rAmHaASVFNM4We5JpudZhsOuXF11CmkEfKnpYDkNgXaOjVx8SMndUBz4tV/eeQcUdn17
+         hyBnY7Fo7D5GoNIgfNnxbDQrdlX1n3bT5g6dMi6fhJyNm+Gh0IfeviYnQ9SgUfM7GXFs
+         MGiWepkEQAuQVzBPBCJGjBy1xBvhtOUmtwvKIfiBR7hlT40Uws31bVELodI1oGdQbVPK
+         yJJBOHkd1JGTRtkKw3VMdfEvbhEij/zsbjlErKHZU4+el8iUj34CEFBPbsYfmlcBZrS4
+         LFEg==
+X-Gm-Message-State: AOAM533tOSx9h6RZuXGapXmTRxrJ1k7jm6X6wInx9y5TeDTJRDTLpsu6
+        fTA4MZBFz+2G3U8BwbhMsJVDOPmXvJK+pg==
+X-Google-Smtp-Source: ABdhPJwq0INgcVMtR5xe30Ih6oGN40MYwPGxEFDORwAmHPbXnEb7LiVVrL7YOAid95SUdwTnL2kJmQ==
+X-Received: by 2002:aca:42c2:: with SMTP id p185mr7417306oia.192.1643429116629;
+        Fri, 28 Jan 2022 20:05:16 -0800 (PST)
 Received: from tresc043793.tre-sc.gov.br ([187.94.103.218])
-        by smtp.gmail.com with ESMTPSA id b191sm2013261vkb.32.2022.01.28.19.41.23
+        by smtp.gmail.com with ESMTPSA id t21sm4972622oor.4.2022.01.28.20.05.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 19:41:25 -0800 (PST)
+        Fri, 28 Jan 2022 20:05:15 -0800 (PST)
 From:   Luiz Angelo Daros de Luca <luizluca@gmail.com>
 To:     linux-spi@vger.kernel.org
 Cc:     broonie@kernel.org, linux-kernel@vger.kernel.org,
         Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Subject: [PATCH net-next] spi: ath79: add mem_ops for fast-read
-Date:   Sat, 29 Jan 2022 00:40:47 -0300
-Message-Id: <20220129034047.12555-1-luizluca@gmail.com>
+Subject: [PATCH] spi: ath79: add mem_ops for fast-read
+Date:   Sat, 29 Jan 2022 01:04:53 -0300
+Message-Id: <20220129040453.8476-1-luizluca@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
