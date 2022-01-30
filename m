@@ -2,92 +2,66 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5BCA4A2E34
-	for <lists+linux-spi@lfdr.de>; Sat, 29 Jan 2022 12:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5531D4A33D8
+	for <lists+linux-spi@lfdr.de>; Sun, 30 Jan 2022 05:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235543AbiA2L32 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 29 Jan 2022 06:29:28 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:60328
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229379AbiA2L31 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 29 Jan 2022 06:29:27 -0500
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B1E123F2FF
-        for <linux-spi@vger.kernel.org>; Sat, 29 Jan 2022 11:29:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643455765;
-        bh=mQWIhzfALzmhNvVwAVuvuNXj69s9Y0aV8nVP8i/ovfg=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=W3b4Ht/4cyHvn6oQOBk+eEI9msPrFZI9VYd+hfm+ilmrQrV6oRgRPC1Sds+/pLImu
-         M6aRk/MmGFw2c7jOAUreBP10a3xp0g0pO51mRwEU1Cso3fuVei3d1Y3Y3UV+1fW+Kb
-         YtgXfa2jLdPDDbrlGj9Ro3el43AeeoHUCIYMhgL9HTe/KtvKutVXPtOisdj6Ito0Ph
-         ogItWaCXcCqeyztXAvI75s6sWVkGVoQfWed1woqgrodenMVTxHCExspscz/M0O1rrv
-         EVPwMc8ScaRPBdtXKwwKEbFeokQSnYhddv1SVIknuav0lh4OMiMYnUll5luJHvvFZF
-         lpH6swsDN91QQ==
-Received: by mail-ed1-f70.google.com with SMTP id ed6-20020a056402294600b004090fd8a936so4376822edb.23
-        for <linux-spi@vger.kernel.org>; Sat, 29 Jan 2022 03:29:25 -0800 (PST)
+        id S1354204AbiA3E2g (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 29 Jan 2022 23:28:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354195AbiA3E23 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 29 Jan 2022 23:28:29 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC86EC061763
+        for <linux-spi@vger.kernel.org>; Sat, 29 Jan 2022 20:28:24 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id o9-20020a9d7189000000b0059ee49b4f0fso9727480otj.2
+        for <linux-spi@vger.kernel.org>; Sat, 29 Jan 2022 20:28:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
+        b=QI2firgHOSt+2ZiRAEUqBnRqfCndbuygIyUz1kdYlPzS6AXkdk+mfMubksdM+6U8hJ
+         A4UbXdfo0bhasYFmsw5ceBBj4ub2bgaEqkI+Cp5foQd/M11l9HiEax3hX9+hB29fNDF1
+         4XtAbOKK0Jrn48roHo8mUNvKaz7FG0Csy4DWdnw8Q+/oXs7GbWFZBjN+ifwhy6Rfe8k0
+         Pzhs5uXUX+5v6iQyGpPCJWV84GisQUz+5cfOraMc3PalgV6vYI9t2Z4JMkhIMshepKV2
+         BM+Zj3o1QTUTRt1Kxwo+5vz+cvvR7n44irHUjPq0LbDCW52O0lwQK7qPtMHxw7vn0Id9
+         5U2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mQWIhzfALzmhNvVwAVuvuNXj69s9Y0aV8nVP8i/ovfg=;
-        b=eAvU/Zl1DAdEEjaprxJ5ZSEkHrbALvkl5mGtFHjj1dXNa9J8fDbdWATKjlatFs+aAT
-         b11Mn5b/cIzD7BCoLgyQB5IIB3/ge9I4zsN3y2djnC05ocnPs4sDmqg9vXNuQK9qJqc9
-         V8LsuKE0m/UqliZBDbVeAi9akVEUAUa2ohEryo1v49cFnbDEf5YoVD/ggikXJ2IXIx0e
-         mlTtTGBhmGFyTmnnrrWIUIAhAL2SLdnTEr3e7JK/ZMCozDJZ+iznQQ0Gw5frJ1SoJqxQ
-         ELYiZ/8mbsFnxUfJObDTgmBmz4pO5sQaW+sbk374j7kpQyBc5IDopGYhEbzAbrUc7uO/
-         d8Cw==
-X-Gm-Message-State: AOAM530ohvsxWtd2pEqMI+E/F22iXlejS8v8gMPuCJVkjeYfAZmmjo9P
-        SFkX90l54XPJUTL+w/WYfGeI0uJyImSRVJI9zT9O+bEvJGRmN1ispGRX+DL7+9bT0ORl1bVrWx3
-        dfq9BPHG8s6uyWFJLpv3LUkz8oRgfzvAtSSSJQw==
-X-Received: by 2002:a17:907:3f99:: with SMTP id hr25mr10190852ejc.588.1643455765341;
-        Sat, 29 Jan 2022 03:29:25 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzUWK6qByvVxIBS+9uu2vdLsOAJFd0ApGv7Ogy0hcRemfHrZnMyIWyq6RHHSeL54zf6jeCBQw==
-X-Received: by 2002:a17:907:3f99:: with SMTP id hr25mr10190835ejc.588.1643455765142;
-        Sat, 29 Jan 2022 03:29:25 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id jt17sm10943147ejb.161.2022.01.29.03.29.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Jan 2022 03:29:24 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linus.walleij@linaro.org, Aswani Reddy <aswani.reddy@samsung.com>,
-        linux-fsd@tesla.com, robh+dt@kernel.org, linux-spi@vger.kernel.org,
-        pankaj.dubey@samsung.com, devicetree@vger.kernel.org,
-        andi@etezian.org, linux-samsung-soc@vger.kernel.org,
-        broonie@kernel.org
-Subject: Re: (subset) [PATCH v3 3/3] arm64: dts: fsd: Add SPI device nodes
-Date:   Sat, 29 Jan 2022 12:29:22 +0100
-Message-Id: <164345575829.11115.173136141798893555.b4-ty@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220125031604.76009-4-alim.akhtar@samsung.com>
-References: <20220125031604.76009-1-alim.akhtar@samsung.com> <CGME20220125032828epcas5p22fbacf42ebfb1b78c1f74f48d37aa381@epcas5p2.samsung.com> <20220125031604.76009-4-alim.akhtar@samsung.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
+        b=J2l/09/7rzUqadrU8/0KQ7r6BCuxhQLqQS2l1JCM51cWvBorTsQkkumOo7LPRHEQwf
+         ZosDhRLuY6Ox72PWI6SCRufkbs1pnQ7THap7gc/BvksP7fYv1LYEVRUTolZcbypZPcQX
+         65uAaWVFNHIUEgR6Vs9VnexQqoI8AdHL1RFfxR7zczIJIMcZsilmVbt82PgJEhQ1pysD
+         XlFjsseY1Gbdw9FOF2ntmIdcj6yuVmFqNq/VJtEWH22KUZ4vyuSb+4TGtk2uufTWo7+e
+         wH791VpOHmb3sIEGc1VpMwGN1S1eKImMt+6MvGZx2sEgP1gzg69BSe+U0rG1sV79jF5c
+         gMow==
+X-Gm-Message-State: AOAM5339uwJF3W5Ir3IZP3UHrRfaQw8XfWbn1w4zwywCrt7woV++DarB
+        eXTPDjeR03GMU5ss6sggbfwKhn8nAoxNDUp7nehuS4VU2wg=
+X-Google-Smtp-Source: ABdhPJz3bgso8viJFkNwiW8XigzdjL6JZBPDE3NfxKOCgEqvWjdU/qagorQKM5joSRLXylFmq9/zlHP85rUYuZ5fTGQ=
+X-Received: by 2002:a25:6d45:: with SMTP id i66mr23246397ybc.352.1643516893721;
+ Sat, 29 Jan 2022 20:28:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:7010:2312:b0:201:cd76:102e with HTTP; Sat, 29 Jan 2022
+ 20:28:13 -0800 (PST)
+Reply-To: mrs.bill.chantalone01@gmail.com
+From:   "Mrs.Bill.Chantal" <grassroot309@gmail.com>
+Date:   Sun, 30 Jan 2022 05:28:13 +0100
+Message-ID: <CAO3iUMDzg_ZovNWXtuQhU6sDXk7LsNwvNc2pOb7zvX7pPCdMAw@mail.gmail.com>
+Subject: Hello....
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 25 Jan 2022 08:46:04 +0530, Alim Akhtar wrote:
-> From: Aswani Reddy <aswani.reddy@samsung.com>
-> 
-> Adds device tree node for SPI IPs
-> 
-> 
+You have been compensated with the sum of 9.5 million dollars in this
+united nation the payment will be issue into atm visa  card and send
+to you from the santander bank we need your address and your
+Whatsapp number  + 1 6465853907  this my email.ID
+( mrs.bill.chantal.roland@gmail.com )  contact  me
 
-Applied, thanks!
+Thanks my
 
-[3/3] arm64: dts: fsd: Add SPI device nodes
-      commit: bd1e3696a052b9b2bd3c1c72ef4bf800a3a1e286
-
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+mrs bill chantal
