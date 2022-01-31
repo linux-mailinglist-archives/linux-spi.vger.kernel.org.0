@@ -2,133 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE0C4A49A9
-	for <lists+linux-spi@lfdr.de>; Mon, 31 Jan 2022 15:50:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8604A4A3C
+	for <lists+linux-spi@lfdr.de>; Mon, 31 Jan 2022 16:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343589AbiAaOua (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 31 Jan 2022 09:50:30 -0500
-Received: from mga12.intel.com ([192.55.52.136]:33601 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242163AbiAaOua (ORCPT <rfc822;linux-spi@vger.kernel.org>);
-        Mon, 31 Jan 2022 09:50:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643640630; x=1675176630;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Kjxgvtg0vA5ioKCecgDjmRu4lWOUQ43UzEpU3sKhBqI=;
-  b=lhj5mheDeRTEssGXO+NfI/v4jsPLNgBc/9w0KtqCt09VeWakP2WwAkXq
-   9CHco4fcrSPuB9UK8JYnbhvU4gQauZY7UMZWhMiu+/4jSZ8ksUpBsYRHg
-   E/T2X5axAyqqWJuzTz00DS3KVgGKSTli6gRgGFI7VOB2xFloN8h/b+0of
-   A9q/YR586KBT0CW+wAv6Gp2dgSHee2lTarOW/6m5QiYMwDiV39ecxCwq2
-   UYFZVig2G4vkjqLmG95VrMjCbEujO4jyWjbuG1OOaqrZctIzCy/eQMV7G
-   0lMIO0NfQMEb5WkLn3InUZ8PLb4GUtgfevR3bcQd7hMG/UnAc3+R0gkGr
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="227444015"
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="227444015"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 06:50:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,331,1635231600"; 
-   d="scan'208";a="534193833"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 31 Jan 2022 06:50:27 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEY0g-000S1u-Pg; Mon, 31 Jan 2022 14:50:26 +0000
-Date:   Mon, 31 Jan 2022 22:49:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Pratyush Yadav <p.yadav@ti.com>, Mark Brown <broonie@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Takahiro Kuwano <tkuw584924@gmail.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: spi-mem: check if data buffers are on stack
-Message-ID: <202201312233.QPZMOWRk-lkp@intel.com>
-References: <20220131114508.1028306-1-p.yadav@ti.com>
+        id S230016AbiAaPQV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 31 Jan 2022 10:16:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231818AbiAaPQU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 Jan 2022 10:16:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5892DC061714
+        for <linux-spi@vger.kernel.org>; Mon, 31 Jan 2022 07:16:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2611CB82B3B
+        for <linux-spi@vger.kernel.org>; Mon, 31 Jan 2022 15:16:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DA86C340E8;
+        Mon, 31 Jan 2022 15:16:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643642178;
+        bh=zcH+Of4aTE+nokk5ZwSSo+DaIXQeqj/HWLsPzmZiGxA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Nd0cC/iR9+dnSJv68xVhTHyUeitPZFh/BHeW5QG6/98IAAF7othTki0o+/PPWVod0
+         EP4+nGVNTMnef719AmizoV91nNyTMfJQBf51y5FDLkn+1ZlMVIdfkSi35WhUcLIUnp
+         rJ9Je1jDMJLQmc+dDqAVs8d0BFU29q+27f6hKwcEdGl4DkMm5ih0NQYE9N9AXiI9Ef
+         4BfTALDIIAz4d9H/33VYP/QbrzoXGLYoRIGS5XCKf8HRbL3l/RaJb6dVpcfWYAqifc
+         oSue8w4a/ulQfOOj1U/h3ZvkC/qE1ntO9r/6KM2sm3MRrX2f62CXB2EJiR5QwNuwYY
+         DWtLV20ug5XGA==
+Date:   Mon, 31 Jan 2022 15:16:13 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-spi@vger.kernel.org, Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH] spi: st-ssc4: Covert to use GPIO descriptors
+Message-ID: <Yff9PerPmpM9hyND@sirena.org.uk>
+References: <20220125011047.495828-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1OcVIgecaatKOEzt"
 Content-Disposition: inline
-In-Reply-To: <20220131114508.1028306-1-p.yadav@ti.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220125011047.495828-1-linus.walleij@linaro.org>
+X-Cookie: I am two with nature.
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Pratyush,
 
-I love your patch! Yet something to improve:
+--1OcVIgecaatKOEzt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[auto build test ERROR on broonie-spi/for-next]
-[also build test ERROR on v5.17-rc2 next-20220131]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On Tue, Jan 25, 2022 at 02:10:47AM +0100, Linus Walleij wrote:
+> This switches the ST SSC SPI controller to use GPIO
+> descriptors from the core instead of GPIO numbers.
+> It is already using the core parsing of GPIO numbers
+> so the switch is pretty straight-forward.
 
-url:    https://github.com/0day-ci/linux/commits/Pratyush-Yadav/spi-spi-mem-check-if-data-buffers-are-on-stack/20220131-195211
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-config: arm-socfpga_defconfig (https://download.01.org/0day-ci/archive/20220131/202201312233.QPZMOWRk-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2cdbaca3943a4d6259119f185656328bd3805b68)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/0b93f667f8445e744ca4b8f80ce9a1ad4c981a2e
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Pratyush-Yadav/spi-spi-mem-check-if-data-buffers-are-on-stack/20220131-195211
-        git checkout 0b93f667f8445e744ca4b8f80ce9a1ad4c981a2e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
+This breaks an x86 allmodconfig build:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+/mnt/kernel/drivers/spi/spi-st-ssc4.c: In function 'spi_st_setup':
+/mnt/kernel/drivers/spi/spi-st-ssc4.c:180:6: error: unused variable 'ret' [-Werror=unused-variable]
+  180 |  int ret;
+      |      ^~~
 
-All errors (new ones prefixed by >>):
+--1OcVIgecaatKOEzt
+Content-Type: application/pgp-signature; name="signature.asc"
 
->> drivers/spi/spi-mem.c:212:6: error: implicit declaration of function 'object_is_on_stack' [-Werror,-Wimplicit-function-declaration]
-               object_is_on_stack(op->data.buf.in))
-               ^
-   1 error generated.
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmH3/TwACgkQJNaLcl1U
+h9AypAf9ExhJqKjs6U2z/1hJ90nHfLzp9SN90bAnZhWcPnZDnRtLynQRpfMrzA7u
+Q4OP0NYYm3hICFAsEZn/C2xACQ7KoeOliGP+vv7S/Jzsuq1rWyMXY58Iur4F80wq
+yv/OmbyGTLtz03TyOMB7kaxQN25pXDmlK3At+oluVRIJ/rxydvFdxAxvPeTftWwz
+1llvuNYvRsLituFEDElwY05HHbuibv2KwF3YLjmg2O6N8jLmA8AXdf+RP1h2w3b/
+eA36GhRgOT0xpkxvyF+5uurHqy9JfapNd1xVF0kJjdgM3KeioBfvqXXjBUIfXopV
+vVGlKMmPu23nSVzo0zwiV0j9G4nMKg==
+=bvhI
+-----END PGP SIGNATURE-----
 
-vim +/object_is_on_stack +212 drivers/spi/spi-mem.c
-
-   193	
-   194	static int spi_mem_check_op(const struct spi_mem_op *op)
-   195	{
-   196		if (!op->cmd.buswidth || !op->cmd.nbytes)
-   197			return -EINVAL;
-   198	
-   199		if ((op->addr.nbytes && !op->addr.buswidth) ||
-   200		    (op->dummy.nbytes && !op->dummy.buswidth) ||
-   201		    (op->data.nbytes && !op->data.buswidth))
-   202			return -EINVAL;
-   203	
-   204		if (!spi_mem_buswidth_is_valid(op->cmd.buswidth) ||
-   205		    !spi_mem_buswidth_is_valid(op->addr.buswidth) ||
-   206		    !spi_mem_buswidth_is_valid(op->dummy.buswidth) ||
-   207		    !spi_mem_buswidth_is_valid(op->data.buswidth))
-   208			return -EINVAL;
-   209	
-   210		/* Buffers must be DMA-able. */
-   211		if (op->data.dir == SPI_MEM_DATA_IN &&
- > 212		    object_is_on_stack(op->data.buf.in))
-   213			return -EINVAL;
-   214	
-   215		if (op->data.dir == SPI_MEM_DATA_OUT &&
-   216		    object_is_on_stack(op->data.buf.out))
-   217			return -EINVAL;
-   218	
-   219		return 0;
-   220	}
-   221	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--1OcVIgecaatKOEzt--
