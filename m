@@ -2,45 +2,53 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9026E4A488E
-	for <lists+linux-spi@lfdr.de>; Mon, 31 Jan 2022 14:48:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E17D54A489D
+	for <lists+linux-spi@lfdr.de>; Mon, 31 Jan 2022 14:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376583AbiAaNsS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 31 Jan 2022 08:48:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
+        id S241338AbiAaNt0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 31 Jan 2022 08:49:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358762AbiAaNsS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 Jan 2022 08:48:18 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6892BC061714;
-        Mon, 31 Jan 2022 05:48:17 -0800 (PST)
+        with ESMTP id S1379138AbiAaNtY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 Jan 2022 08:49:24 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE60C061714
+        for <linux-spi@vger.kernel.org>; Mon, 31 Jan 2022 05:49:23 -0800 (PST)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id AF11E60015;
-        Mon, 31 Jan 2022 13:48:14 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 28FF5FF80F;
+        Mon, 31 Jan 2022 13:49:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1643636895;
+        t=1643636962;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=scmOkaI+TyjdmDOiGryj2VGEm54oTCgShwxEMvffMbI=;
-        b=TYR4x20jM7rkpL42uk3v6X38JHHvKdvx9xC0tvx3KK0ckg4lL/O/Cr785l+KJ8gPTcmDNV
-        RdHs/8edUCO2UoaQ93qfep88JSepBsPZJSDjpab2Af5XtasM0dBX+320Jvw2BCp5bEiski
-        cYI3KvEeMeayMlwrVh5EX7UDpLVY7BicXCSxXeRwQILRQ/fZw1qWQUxJzraUz1qH81R1m5
-        OE2L4GOEJnI7Ej2mc4Zab/u+y/cFTxuOHvyMw4Bo5ObXF2KYS3H1AfOC9w2ILPCGzDDLt3
-        RmnQdcDcfTIWlMEHkwHj5S85oPbqjwa9J1qwDJZFg/Te9NSQXWgXBjSQu2aI4A==
-Date:   Mon, 31 Jan 2022 14:48:13 +0100
+        bh=2i0ebk4yhbArcz3JBloFwALfFKX+cehM0zWe+fzdaqA=;
+        b=P/8UCFDpXfQuQbnEIXdtMWcCpevXiyQ5YIBjaE/H0dHp69zfQSefMSzvoN6qOGuilAIEiP
+        cZ9wGzbT/PsReS4Z+rJgADtosmy/PgVvH1wV3EbLRixPwdSjZKL7DVRLV+dIJapaclIzAm
+        VIzSXH2WTy3QodtKVPp6U9ifhbb97EM069GRXkUI95O1kDGoRVW6E4xX5Mto1R84qWh/om
+        5Kr8dH62lUtxUSS4DRJ8nIE3c0o5JHt841DWVU62gZsg0ZeChRo+ueVxJFEKmSMARNU3kz
+        KZpXgFfVgAj3nCPiAgXtuBv9r1hk1ub8v12XswtdkW0MJejwXhwg+NlrX7hj+Q==
+Date:   Mon, 31 Jan 2022 14:49:17 +0100
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Pratyush Yadav <p.yadav@ti.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
         Michael Walle <michael@walle.cc>,
-        Takahiro Kuwano <tkuw584924@gmail.com>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] spi: spi-mem: check if data buffers are on stack
-Message-ID: <20220131144813.725f0736@xps13>
-In-Reply-To: <20220131114508.1028306-1-p.yadav@ti.com>
-References: <20220131114508.1028306-1-p.yadav@ti.com>
+        linux-mtd@lists.infradead.org,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Julien Su <juliensu@mxic.com.tw>,
+        Jaime Liao <jaimeliao@mxic.com.tw>
+Subject: Re: [PATCH v10 00/13] External ECC engines & Macronix support
+Message-ID: <20220131144917.63c36b92@xps13>
+In-Reply-To: <YfRvjJf+6Db89RRg@sirena.org.uk>
+References: <20220127091808.1043392-1-miquel.raynal@bootlin.com>
+        <YfL5ApsG7c619+R0@sirena.org.uk>
+        <20220128090812.5b7a5982@xps13>
+        <YfRvjJf+6Db89RRg@sirena.org.uk>
 Organization: Bootlin
 X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
@@ -50,43 +58,23 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Pratyush,
+Hi Mark,
 
-p.yadav@ti.com wrote on Mon, 31 Jan 2022 17:15:08 +0530:
+broonie@kernel.org wrote on Fri, 28 Jan 2022 22:34:52 +0000:
 
-> The buffers passed in the data phase must be DMA-able. Programmers often
-> don't realise this requirement and pass in buffers that reside on the
-> stack. This can be hard to spot when reviewing code. Reject ops if their
-> data buffer is on the stack to avoid this.
+> On Fri, Jan 28, 2022 at 09:08:12AM +0100, Miquel Raynal wrote:
 >=20
-> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-> ---
->  drivers/spi/spi-mem.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+> > As three patches in this series were new/reworked I dropped your tag
+> > there. I should have asked you again. Shall I add them (back) to the
+> > following patches? =20
 >=20
-> diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-> index 37f4443ce9a0..b3793a2979ee 100644
-> --- a/drivers/spi/spi-mem.c
-> +++ b/drivers/spi/spi-mem.c
-> @@ -207,6 +207,15 @@ static int spi_mem_check_op(const struct spi_mem_op =
-*op)
->  	    !spi_mem_buswidth_is_valid(op->data.buswidth))
->  		return -EINVAL;
-> =20
-> +	/* Buffers must be DMA-able. */
-> +	if (op->data.dir =3D=3D SPI_MEM_DATA_IN &&
-> +	    object_is_on_stack(op->data.buf.in))
-> +		return -EINVAL;
-> +
-> +	if (op->data.dir =3D=3D SPI_MEM_DATA_OUT &&
-> +	    object_is_on_stack(op->data.buf.out))
-> +		return -EINVAL;
+> > 	spi: cadence-quadspi: Provide a capability structure
+> > 	spi: mxic: Provide a capability structure
+> > 	spi: spi-mem: Introduce a capability structure =20
+>=20
+> Yes, please.
 
-Definitely a good idea.
-
-This change will depend on the spi-mem-ecc series. I will soon merge
-this branch into mtd/next so that any change that depends on it can be
-merged in mtd/next directly, if nobody disagrees.
+Great, thanks. I'll apply v10 soon, and will share an immutable tag.
 
 Thanks,
 Miqu=C3=A8l
