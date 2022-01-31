@@ -2,89 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1941B4A4C50
-	for <lists+linux-spi@lfdr.de>; Mon, 31 Jan 2022 17:39:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 564F64A4CBB
+	for <lists+linux-spi@lfdr.de>; Mon, 31 Jan 2022 18:07:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380555AbiAaQj5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 31 Jan 2022 11:39:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380554AbiAaQj4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 Jan 2022 11:39:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6D1C061714
-        for <linux-spi@vger.kernel.org>; Mon, 31 Jan 2022 08:39:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10578B82668
-        for <linux-spi@vger.kernel.org>; Mon, 31 Jan 2022 16:39:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 449C3C340ED;
-        Mon, 31 Jan 2022 16:39:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643647192;
-        bh=v1C0Jr5RsN68jb/ZAq9IrmJF7vxV5ynnLRU8szu5eFk=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=JFTu5Wgny35dgzxR6nzJ3EkugVpZ4NxFtv7fygzF/arRqUSw28WP3iacluZHFKdJ8
-         K5C43wxYIfTkPFNHUix5nswBydzhqyuBykw0F/MpvJ7XQfolbM1PvecNgiLidHshQC
-         jq0HvTYJLwJNQovIXmVhYXCtiiYc1ZiA0v7EfGATVpSrOT68vIhaPaMG3Ozg3zZQNr
-         +yIc1tdEEqIRXar1jq5zovqd2S3QHLjt5FUQb9vuYw/N+Y4y7kgct4W7f6gxsRWlA8
-         YU0e+LToo99fq1y4G9IbhqJGkQYdvx7Mg1MfqEEyxByySxFYU/JhOceh5r0174MQ0M
-         ZUjuq97ZE14zw==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Daniel Mack <daniel@zonque.org>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-In-Reply-To: <20220125005836.494807-1-linus.walleij@linaro.org>
-References: <20220125005836.494807-1-linus.walleij@linaro.org>
-Subject: Re: [PATCH v2] spi: pxa2xx_spi: Convert to use GPIO descriptors
-Message-Id: <164364719100.1030816.7957554200883067453.b4-ty@kernel.org>
-Date:   Mon, 31 Jan 2022 16:39:51 +0000
+        id S1380701AbiAaRHX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 31 Jan 2022 12:07:23 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:55928 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236802AbiAaRHV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 Jan 2022 12:07:21 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20VH7Dgx004911;
+        Mon, 31 Jan 2022 11:07:13 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1643648833;
+        bh=Y5ubGFQwLXLIAyG1M+qn3V/jyqUuK8grcewfac8oAY0=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=LDSh9FNE7lpjO8sCs0kzIK2xu2bRRwNoNh+4h8htvrrewZ7pvXC/k8hdr/WHidiwV
+         8/Kp/kdvjE5tKJ9OWB28FdSxQuKsLFBYxrByVdUj57/NhMeFQHZwp2tDPG104EHRu4
+         Kyf6PW8/xL7RYv//A6yQLgSij7ZSrO0RkOpCmESI=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20VH7DmI035872
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 31 Jan 2022 11:07:13 -0600
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 31
+ Jan 2022 11:07:12 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 31 Jan 2022 11:07:12 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20VH7BXX075932;
+        Mon, 31 Jan 2022 11:07:12 -0600
+Date:   Mon, 31 Jan 2022 22:37:11 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Takahiro Kuwano <tkuw584924@gmail.com>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] spi: spi-mem: check if data buffers are on stack
+Message-ID: <20220131170711.ydydtx3jeu3fl7pu@ti.com>
+References: <20220131114508.1028306-1-p.yadav@ti.com>
+ <YffqNEzjIkApR1HS@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YffqNEzjIkApR1HS@sirena.org.uk>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 25 Jan 2022 01:58:36 +0100, Linus Walleij wrote:
-> This converts the PXA2xx SPI driver to use GPIO descriptors
-> exclusively to retrieve GPIO chip select lines.
+On 31/01/22 01:55PM, Mark Brown wrote:
+> On Mon, Jan 31, 2022 at 05:15:08PM +0530, Pratyush Yadav wrote:
+> > The buffers passed in the data phase must be DMA-able. Programmers often
+> > don't realise this requirement and pass in buffers that reside on the
+> > stack. This can be hard to spot when reviewing code. Reject ops if their
+> > data buffer is on the stack to avoid this.
 > 
-> The device tree and ACPI paths of the driver already use
-> descriptors, hence ->use_gpio_descriptors is already set and
-> this codepath is well tested.
+> Acked-by: Mark Brown <broonie@kernel.org>
+
+Thanks. But seems like this is breaking build on arm-socfpga_defconfig. 
+Let me take a look into it.
+
 > 
-> [...]
+> > +	/* Buffers must be DMA-able. */
+> > +	if (op->data.dir == SPI_MEM_DATA_IN &&
+> > +	    object_is_on_stack(op->data.buf.in))
+> 
+> Might be worth a WARN_ON_ONCE() for debuggability?
 
-Applied to
+Okay, I'll add it.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: pxa2xx_spi: Convert to use GPIO descriptors
-      commit: 31455bbda2081af83f72bb4636348b12b82c37c1
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
