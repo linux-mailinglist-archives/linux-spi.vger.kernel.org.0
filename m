@@ -2,43 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 982534A4C4B
-	for <lists+linux-spi@lfdr.de>; Mon, 31 Jan 2022 17:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 246CF4A4C4D
+	for <lists+linux-spi@lfdr.de>; Mon, 31 Jan 2022 17:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378272AbiAaQjn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 31 Jan 2022 11:39:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:48100 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378669AbiAaQjm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 Jan 2022 11:39:42 -0500
+        id S1378669AbiAaQjs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 31 Jan 2022 11:39:48 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40424 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380553AbiAaQjs (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 Jan 2022 11:39:48 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 560D5608C1;
-        Mon, 31 Jan 2022 16:39:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EF5AC340E8;
-        Mon, 31 Jan 2022 16:39:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8811DB82BB5
+        for <linux-spi@vger.kernel.org>; Mon, 31 Jan 2022 16:39:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D78CEC340E8;
+        Mon, 31 Jan 2022 16:39:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643647181;
-        bh=gh0ij36m+BkjuG9o19AVvOS7Qg9b2ckuyQQVFCDdQZE=;
+        s=k20201202; t=1643647186;
+        bh=UMM43pxIfISBbrWOGdGoB7ZkrMYq739YAgFu5Kn9DzM=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Z3K0Gir315HthdqnazCCJ/E96tk2sk3bdH+Q+n0BR6QlvRs8hgqXomtzEtb09TwMe
-         vfRErpaa2vSxGIUxun/nhRTk1fVyS5h2LjSpIU+ztxqKfZdHHUic75EhA77maoAgFH
-         SSrkFvPAdMs9bb/miCpYOWHY+8yqwhMfK6/vxWkU36LZdFbczFB27Smkv767dYtPRN
-         6UsaGH9RYn7hLr4u0eJwpqG6uJO2adfig9YrT62Nj4OYSNoKzkrhVoXtq8gRvJdTB3
-         0ljWZ9MtmPG8fvgikE8KIuKP9BSMof8TUOUlqSds8gcBMCutatvVQvicovJwNpb2WU
-         piuYWJh8JebNg==
+        b=T22nfdCm6xj01Tv9QjLrqH0Ug4Khr0FyTdKjqTabHT3cKnqFi7XwdA0io6Kx1/A0O
+         EA2LPTs32GK5nvkq/KIpNjksc6bXyZd5H7S2ZU2dnzfOoKMjlU8qBNe2dlAOHpeuXs
+         8Xw1UBP5nhBNyWXEaTJ4Mubutn4w5qVJrR9ojc2KPcMYgKj+DC99UtjzMUjNxDDbqu
+         J4ES126SntW7J1oo+VCJSlCqhEspwrIZd5NeGGJuFX6wDu9tQppp2WXUa4ImXjzP47
+         x0ODyhwzwpeFjWgggjB+RIBqDRs0QBR49iNLJ8M2TVRbnAWTmLmdVY5pbV8Qt4sXtX
+         5ut+M5n4XqYkg==
 From:   Mark Brown <broonie@kernel.org>
-To:     matthias.bgg@gmail.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220131141708.888710-1-benjamin.gaignard@collabora.com>
-References: <20220131141708.888710-1-benjamin.gaignard@collabora.com>
-Subject: Re: [PATCH] spi: mediatek: Avoid NULL pointer crash in interrupt
-Message-Id: <164364718000.1030778.7318932635935946052.b4-ty@kernel.org>
-Date:   Mon, 31 Jan 2022 16:39:40 +0000
+To:     linux-spi@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Daniel Mack <daniel@zonque.org>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+In-Reply-To: <20220121012014.287288-1-linus.walleij@linaro.org>
+References: <20220121012014.287288-1-linus.walleij@linaro.org>
+Subject: Re: [PATCH] spi: pxa2xx_spi: Convert to use GPIO descriptors
+Message-Id: <164364718460.1030816.2508852341433231165.b4-ty@kernel.org>
+Date:   Mon, 31 Jan 2022 16:39:44 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -46,22 +47,24 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 31 Jan 2022 15:17:08 +0100, Benjamin Gaignard wrote:
-> In some case, like after a transfer timeout, master->cur_msg pointer
-> is NULL which led to a kernel crash when trying to use master->cur_msg->spi.
-> mtk_spi_can_dma(), pointed by master->can_dma, doesn't use this parameter
-> avoid the problem by setting NULL as second parameter.
+On Fri, 21 Jan 2022 02:20:14 +0100, Linus Walleij wrote:
+> This converts the PXA2xx SPI driver to use GPIO descriptors
+> exclusively to retrieve GPIO chip select lines.
 > 
+> The device tree and ACPI paths of the driver already use
+> descriptors, hence ->use_gpio_descriptors is already set and
+> this codepath is well tested.
 > 
+> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-linus
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/1] spi: mediatek: Avoid NULL pointer crash in interrupt
-      commit: f83a96e5f033fbbd21764705cb9c04234b96218e
+[1/1] spi: pxa2xx_spi: Convert to use GPIO descriptors
+      commit: 31455bbda2081af83f72bb4636348b12b82c37c1
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
