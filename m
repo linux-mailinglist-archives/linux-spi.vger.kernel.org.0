@@ -2,40 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9224A4C4F
-	for <lists+linux-spi@lfdr.de>; Mon, 31 Jan 2022 17:39:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1941B4A4C50
+	for <lists+linux-spi@lfdr.de>; Mon, 31 Jan 2022 17:39:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380553AbiAaQjx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 31 Jan 2022 11:39:53 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40498 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380554AbiAaQjw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 Jan 2022 11:39:52 -0500
+        id S1380555AbiAaQj5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 31 Jan 2022 11:39:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380554AbiAaQj4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 31 Jan 2022 11:39:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6D1C061714
+        for <linux-spi@vger.kernel.org>; Mon, 31 Jan 2022 08:39:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04B07B82BB6
-        for <linux-spi@vger.kernel.org>; Mon, 31 Jan 2022 16:39:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24A64C340F0;
-        Mon, 31 Jan 2022 16:39:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10578B82668
+        for <linux-spi@vger.kernel.org>; Mon, 31 Jan 2022 16:39:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 449C3C340ED;
+        Mon, 31 Jan 2022 16:39:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643647190;
-        bh=R22zzEUANd9Zwc1u+cfqq9GwP7RqrhaSLvlJDzEWGcg=;
+        s=k20201202; t=1643647192;
+        bh=v1C0Jr5RsN68jb/ZAq9IrmJF7vxV5ynnLRU8szu5eFk=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=UdGJZAL/WmUI3fX6L42KreFlUlpHq9Rl+ldM7ch1UOUuOpXUdKCMZF9MlP6kn/+Uc
-         WIWIMdr1S/vg1ShcKyyYg6fykJPtK3rYuUEXITyhEU2MEfACiO1G3vsmCAPlzdhpvH
-         bWkweC2Hn476B/39fOOLsl5HaqTod6WwiP/woqpWajVoEDrEakSVfAF+zUN/na3RzS
-         VsSxkow5qKyuRFOuvNuJofl4zYZ1oYLuUwT1yg43FrXEO29V2vxAaYBosOJtdD6CEn
-         kKqSOyjCfn0SRQrS+xneNxJGaZMwz+Ae6M78RVXirjoSJvRG4Qz5XLQkCEkXZUcQj5
-         R2E1VQrF0L9JA==
+        b=JFTu5Wgny35dgzxR6nzJ3EkugVpZ4NxFtv7fygzF/arRqUSw28WP3iacluZHFKdJ8
+         K5C43wxYIfTkPFNHUix5nswBydzhqyuBykw0F/MpvJ7XQfolbM1PvecNgiLidHshQC
+         jq0HvTYJLwJNQovIXmVhYXCtiiYc1ZiA0v7EfGATVpSrOT68vIhaPaMG3Ozg3zZQNr
+         +yIc1tdEEqIRXar1jq5zovqd2S3QHLjt5FUQb9vuYw/N+Y4y7kgct4W7f6gxsRWlA8
+         YU0e+LToo99fq1y4G9IbhqJGkQYdvx7Mg1MfqEEyxByySxFYU/JhOceh5r0174MQ0M
+         ZUjuq97ZE14zw==
 From:   Mark Brown <broonie@kernel.org>
 To:     linux-spi@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Cc:     Purna Chandra Mandal <purna.mandal@microchip.com>
-In-Reply-To: <20220122004846.374930-1-linus.walleij@linaro.org>
-References: <20220122004846.374930-1-linus.walleij@linaro.org>
-Subject: Re: [PATCH] spi: pic32: Convert to use GPIO descriptors
-Message-Id: <164364718984.1030816.11109974068346084925.b4-ty@kernel.org>
-Date:   Mon, 31 Jan 2022 16:39:49 +0000
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Daniel Mack <daniel@zonque.org>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+In-Reply-To: <20220125005836.494807-1-linus.walleij@linaro.org>
+References: <20220125005836.494807-1-linus.walleij@linaro.org>
+Subject: Re: [PATCH v2] spi: pxa2xx_spi: Convert to use GPIO descriptors
+Message-Id: <164364719100.1030816.7957554200883067453.b4-ty@kernel.org>
+Date:   Mon, 31 Jan 2022 16:39:51 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -43,12 +51,15 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, 22 Jan 2022 01:48:46 +0100, Linus Walleij wrote:
-> The driver already relies on the core looking up GPIO lines
-> from the core, so this is trivial to switch over to using
-> GPIO descriptors.
+On Tue, 25 Jan 2022 01:58:36 +0100, Linus Walleij wrote:
+> This converts the PXA2xx SPI driver to use GPIO descriptors
+> exclusively to retrieve GPIO chip select lines.
 > 
+> The device tree and ACPI paths of the driver already use
+> descriptors, hence ->use_gpio_descriptors is already set and
+> this codepath is well tested.
 > 
+> [...]
 
 Applied to
 
@@ -56,8 +67,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: pic32: Convert to use GPIO descriptors
-      commit: 99407f11b5657cd66625c6b55a73d38b67803a8c
+[1/1] spi: pxa2xx_spi: Convert to use GPIO descriptors
+      commit: 31455bbda2081af83f72bb4636348b12b82c37c1
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
