@@ -2,95 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C924A582E
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Feb 2022 09:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 722444A5B93
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Feb 2022 12:52:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbiBAICP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Feb 2022 03:02:15 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:45342 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbiBAICP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Feb 2022 03:02:15 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 211828La078868;
-        Tue, 1 Feb 2022 02:02:08 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1643702528;
-        bh=Aee/u77ubOE0vyCuYGfT7vvh+kz0CcyyjunwqH/rJt0=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=pXwOBe42PkEfc0ds2HXv4oGOc+XGWbu6OqHo0PuCjHuW2Y5opM3ii983StFkDwr7l
-         f4BRGeDC44bD7ZiNAvEm3vPD6KJcc++6XfQA0QQl2OGQnqk4rPnpoOEMSmNWmunqCg
-         opCqDpeBJ6/P8rs3W48JTdwPYHacMomd8GhD4hAg=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 211828cH037703
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 1 Feb 2022 02:02:08 -0600
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 1
- Feb 2022 02:02:08 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 1 Feb 2022 02:02:08 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2118275l116286;
-        Tue, 1 Feb 2022 02:02:08 -0600
-Date:   Tue, 1 Feb 2022 13:32:07 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     <Tudor.Ambarus@microchip.com>
-CC:     <broonie@kernel.org>, <michael@walle.cc>,
-        <miquel.raynal@bootlin.com>, <tkuw584924@gmail.com>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] spi: spi-mem: check if data buffers are on stack
-Message-ID: <20220201080207.bvqpzemldlvvykga@ti.com>
-References: <20220131114508.1028306-1-p.yadav@ti.com>
- <366bad2d-ebb3-a2a5-330d-ff9019d18733@microchip.com>
+        id S237354AbiBALwI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Feb 2022 06:52:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234147AbiBALwG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Feb 2022 06:52:06 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D96C061714
+        for <linux-spi@vger.kernel.org>; Tue,  1 Feb 2022 03:52:06 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <afa@pengutronix.de>)
+        id 1nErhS-0003Vm-14; Tue, 01 Feb 2022 12:51:54 +0100
+Received: from afa by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <afa@pengutronix.de>)
+        id 1nErhL-00GmlN-SF; Tue, 01 Feb 2022 12:51:47 +0100
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+To:     Alain Volmat <alain.volmat@foss.st.com>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     Dillon Min <dillon.minfei@gmail.com>, kernel@pengutronix.de,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [RFT PATCH] spi: stm32: ignore Rx queue not empty in stm32f4 Tx only mode
+Date:   Tue,  1 Feb 2022 12:51:41 +0100
+Message-Id: <20220201115142.3999860-1-a.fatoum@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <366bad2d-ebb3-a2a5-330d-ff9019d18733@microchip.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: afa@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 01/02/22 07:44AM, Tudor.Ambarus@microchip.com wrote:
-> On 1/31/22 13:45, Pratyush Yadav wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > The buffers passed in the data phase must be DMA-able. Programmers often
-> > don't realise this requirement and pass in buffers that reside on the
-> > stack. This can be hard to spot when reviewing code. Reject ops if their
-> > data buffer is on the stack to avoid this.
-> > 
-> > Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-> > ---
-> >  drivers/spi/spi-mem.c | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> > 
-> > diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-> > index 37f4443ce9a0..b3793a2979ee 100644
-> > --- a/drivers/spi/spi-mem.c
-> > +++ b/drivers/spi/spi-mem.c
-> > @@ -207,6 +207,15 @@ static int spi_mem_check_op(const struct spi_mem_op *op)
-> >             !spi_mem_buswidth_is_valid(op->data.buswidth))
-> >                 return -EINVAL;
-> > 
-> > +       /* Buffers must be DMA-able. */
-> > +       if (op->data.dir == SPI_MEM_DATA_IN &&
-> > +           object_is_on_stack(op->data.buf.in))
-> 
-> should we also check if the virt addr is valid?
-> if (object_is_on_stack(op->data.buf.in) || !virt_addr_valid(op->data.buf.in))
+STM32F4_SPI_SR_RXNE and STM32F4_SPI_SR_OVR are distinct bits in the same
+status register.  ~STM32F4_SPI_SR_OVR | STM32F4_SPI_SR_RXNE is thus
+equal to ~STM32F4_SPI_SR_OVR.
 
-When would virt addr not be valid? When someone passes a bad pointer? I 
-generally have not seen kernel APIs checking for pointer validity (other 
-than NULL). If you pass a bad pointer then expect bad things to happen. 
-Plus a bad pointer might also point to a valid virtual address, and we 
-have no way of catching that. Dunno...
+The original intention was likely for transmission-only transfers to
+ignore interrupts both for when the Rx queue has bytes (RXNE) as well
+as when these bytes haven't been read in time (OVR).
 
+Fix the typo by adding the missing parenthesis.
+
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+---
+Noticed reading driver code. Untested on actual Hardware.
+If you can test this, please do.
+---
+ drivers/spi/spi-stm32.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
+index 9bd3fd1652f7..56062f88881d 100644
+--- a/drivers/spi/spi-stm32.c
++++ b/drivers/spi/spi-stm32.c
+@@ -763,7 +763,7 @@ static irqreturn_t stm32f4_spi_irq_event(int irq, void *dev_id)
+ 	if (!spi->cur_usedma && (spi->cur_comm == SPI_SIMPLEX_TX ||
+ 				 spi->cur_comm == SPI_3WIRE_TX)) {
+ 		/* OVR flag shouldn't be handled for TX only mode */
+-		sr &= ~STM32F4_SPI_SR_OVR | STM32F4_SPI_SR_RXNE;
++		sr &= ~(STM32F4_SPI_SR_OVR | STM32F4_SPI_SR_RXNE);
+ 		mask |= STM32F4_SPI_SR_TXE;
+ 	}
+ 
 -- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+2.30.2
+
