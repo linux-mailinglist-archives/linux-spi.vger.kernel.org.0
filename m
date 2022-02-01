@@ -2,72 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8E34A655B
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Feb 2022 21:06:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 221F44A6646
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Feb 2022 21:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236954AbiBAUGE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Feb 2022 15:06:04 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:54912 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbiBAUGC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Feb 2022 15:06:02 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
- id 0f0dd5d4a55e3bee; Tue, 1 Feb 2022 21:06:01 +0100
-Received: from kreacher.localnet (unknown [213.134.162.64])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        id S242438AbiBAUqI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Feb 2022 15:46:08 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:52012 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242430AbiBAUqI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Feb 2022 15:46:08 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id BBC8F66B390;
-        Tue,  1 Feb 2022 21:06:00 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D8FD61716;
+        Tue,  1 Feb 2022 20:46:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AE058C340EB;
+        Tue,  1 Feb 2022 20:46:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643748367;
+        bh=Al5lSyWST5bcAKur+5iUl9Dlxd6YTNfMDkpqMgOM8K0=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=UMqueIWantw62xFdYR39Jx0Qn4vPl/iFmC2sBtmJTKH2QLhldfW1pdI6JzXjJzV9X
+         klI1/F+o++NDstWJs4zJJXC4Orgt7iJZfRkaMYRFAAOTA84TX0G7w0ZZrekaZRObDl
+         jJoSRQal6bVwcpDK1rJp4L5qaj7uf17Pty6PLKOZxDxZDhaCjy8HolQxpk/8lIBfTN
+         QoEjWbdYNjfHfeXJlexVeReSxsIiRtS77krTKlS2dGK+m7hAszOLA4HaDy+rQK+GUq
+         JfL5883wp6X6vVOLCIVCzyfwlw8Op3SSIloT4UX0qjhrvEDoJ40qfWW8JCp7JVpnVT
+         r+Uk9CNNL+D7A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9AF8FE5D08C;
+        Tue,  1 Feb 2022 20:46:07 +0000 (UTC)
+Subject: Re: [GIT PULL] SPI fixes for v5.17-rc2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220201155230.56F08C340EE@smtp.kernel.org>
+References: <20220201155230.56F08C340EE@smtp.kernel.org>
+X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220201155230.56F08C340EE@smtp.kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.17-rc2
+X-PR-Tracked-Commit-Id: f83a96e5f033fbbd21764705cb9c04234b96218e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 9f7fb8de5d9bac17b6392a14af40baf555d9129b
+Message-Id: <164374836762.6282.10486481202686970822.pr-tracker-bot@kernel.org>
+Date:   Tue, 01 Feb 2022 20:46:07 +0000
 To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-Subject: [PATCH] spi: Replace acpi_bus_get_device()
-Date:   Tue, 01 Feb 2022 21:05:59 +0100
-Message-ID: <2231987.ElGaqSPkdT@kreacher>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.162.64
-X-CLIENT-HOSTNAME: 213.134.162.64
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrgeefgddufeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefhgedtffejheekgeeljeevvedtuefgffeiieejuddutdekgfejvdehueejjeetvdenucfkphepvddufedrudefgedrudeivddrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeivddrieegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtohepsghrohhonhhivgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshhpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+The pull request you sent on Tue, 01 Feb 2022 15:52:16 +0000:
 
-Replace acpi_bus_get_device() that is going to be dropped with
-acpi_fetch_acpi_dev().
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.17-rc2
 
-No intentional functional impact.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/9f7fb8de5d9bac17b6392a14af40baf555d9129b
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/spi/spi.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thank you!
 
-Index: linux-pm/drivers/spi/spi.c
-===================================================================
---- linux-pm.orig/drivers/spi/spi.c
-+++ linux-pm/drivers/spi/spi.c
-@@ -2480,10 +2480,10 @@ static acpi_status acpi_register_spi_dev
- static acpi_status acpi_spi_add_device(acpi_handle handle, u32 level,
- 				       void *data, void **return_value)
- {
-+	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
- 	struct spi_controller *ctlr = data;
--	struct acpi_device *adev;
- 
--	if (acpi_bus_get_device(handle, &adev))
-+	if (!adev)
- 		return AE_OK;
- 
- 	return acpi_register_spi_device(ctlr, adev);
-
-
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
