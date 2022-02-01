@@ -2,101 +2,83 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 729014A60BC
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Feb 2022 16:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 404284A6233
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Feb 2022 18:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240668AbiBAPwc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Feb 2022 10:52:32 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59968 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237890AbiBAPwc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Feb 2022 10:52:32 -0500
+        id S241027AbiBARSq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Feb 2022 12:18:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240805AbiBARSq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Feb 2022 12:18:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEA0C06173B
+        for <linux-spi@vger.kernel.org>; Tue,  1 Feb 2022 09:18:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 748F3616F1;
-        Tue,  1 Feb 2022 15:52:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56F08C340EE;
-        Tue,  1 Feb 2022 15:52:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D0926126B
+        for <linux-spi@vger.kernel.org>; Tue,  1 Feb 2022 17:18:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85901C340F0;
+        Tue,  1 Feb 2022 17:18:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643730750;
-        bh=xyFhpr3jvuzfAfpWx0n2Wv4o630FQUkyQbxBuxBpSVk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=iYHe3715YCWF1ECJD8Pe9Od2ok7aYNlHptsmXCAWMU596LiLZCiyBzPExknvQeguf
-         QcKR9Ie/WTQZWG0TVHchawCku/4Tbk3PC3pJEmYKlYj1X5C/zMzWFGnTB1+EJ0u+YU
-         JkXV4Asgtgu2v9U9ClzdTqc/QBf8yf5B4dVp+vVhNDh6Ym4x5IMbdfv3HabsYGIG1n
-         hK8qz/4cPtSPlogC7WEuaFfWvkg4b1VtN5phpIROu0IOiKTJDejKUfoLBqN8DMhtFZ
-         BGvWFNnXNML6zXciya8BB2EmuLxwIbf5Hi9AjarqycE5c4e0rPwYtge3qtJwMviPhT
-         q7315rdlChTEw==
+        s=k20201202; t=1643735904;
+        bh=9gQwwfcbH9sKUiSH9MVtDlw0g0gv6oeHCHeIojLZ8CY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=FqKSm71gCCgL1fnuIVL9DKRCkmEyvTQD0KYJKq2z3U9CfCO+cwXxxrKVHLqC+c+kT
+         7yLPL12PvcxC+jGhH1zYX4XVCPMOYRdDvbCX8xzKpiFDGHPffr/Yrs6WVLe7TZDd6k
+         d13VAgPewIvrpSunJSTUo/trEJ1FK1x/HhhRYsj6Flsau+B03fiBVKuVRFyRhSR9r3
+         apGJYCfBKm1MRFjX+pF1DiYWZcZY8AJ2bo2by8QOizvhrjSk3BLKx+3umNty2egGSc
+         BWNM/jb9nbmQlgtWHt8p0+jb6vt2BGWmS0ggNhGx8rQT/ovTXRMAB4VYLFi3ibEc0F
+         0whc/KEIAKurA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v5.17-rc2
-Date:   Tue, 01 Feb 2022 15:52:16 +0000
-Message-Id: <20220201155230.56F08C340EE@smtp.kernel.org>
+To:     linux-spi@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
+Cc:     Martin Sperl <kernel@martin.sperl.org>,
+        Lukas Wunner <lukas@wunner.de>
+In-Reply-To: <20220121224126.312227-1-linus.walleij@linaro.org>
+References: <20220121224126.312227-1-linus.walleij@linaro.org>
+Subject: Re: [PATCH] spi: bcm2835aux: Convert to use GPIO descriptors
+Message-Id: <164373590325.2398858.13463837677080973733.b4-ty@kernel.org>
+Date:   Tue, 01 Feb 2022 17:18:23 +0000
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The following changes since commit 44ea62813f0ab3d718de480504f4dfd0bdd01858:
+On Fri, 21 Jan 2022 23:41:26 +0100, Linus Walleij wrote:
+> This one is pretty straight forward to switch over, the driver
+> already relies on inspecting cs_gpio just check cs_gpiod instead
+> and stop the special handling of requesting the GPIO and stuff
+> the core will take care of.
+> 
+> 
 
-  spi: don't include ptp_clock_kernel.h in spi.h (2022-01-07 17:14:30 +0000)
+Applied to
 
-are available in the Git repository at:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.17-rc2
+Thanks!
 
-for you to fetch changes up to f83a96e5f033fbbd21764705cb9c04234b96218e:
+[1/1] spi: bcm2835aux: Convert to use GPIO descriptors
+      commit: b651d1da86aa525c5a5b2bd61f528353c28d589d
 
-  spi: mediatek: Avoid NULL pointer crash in interrupt (2022-01-31 15:24:05 +0000)
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-----------------------------------------------------------------
-spi: Fixes for v5.17
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-There are quite a few fixes that have accumilated since the merge window
-here, all driver specific and none super urgent, plus a new device ID
-for the Rockchip driver.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-----------------------------------------------------------------
-Alain Volmat (2):
-      spi: stm32: remove inexistant variables in struct stm32_spi_cfg comment
-      spi: stm32: make SPI_MASTER_MUST_TX flags only specific to STM32F4
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-Benjamin Gaignard (1):
-      spi: mediatek: Avoid NULL pointer crash in interrupt
-
-Dongliang Mu (1):
-      spi: change clk_disable_unprepare to clk_unprepare
-
-Kamal Dasu (1):
-      spi: bcm-qspi: check for valid cs before applying chip select
-
-Kunihiko Hayashi (1):
-      spi: uniphier: Fix a bug that doesn't point to private data correctly
-
-Miaoqian Lin (1):
-      spi: meson-spicc: add IRQ check in meson_spicc_probe
-
-Nicolas Frattaroli (1):
-      spi: spi-rockchip: Add rk3568-spi compatible
-
-Patrice Chotard (1):
-      spi: stm32-qspi: Update spi registering
-
-Rob Herring (1):
-      spi: dt-bindings: Fix 'reg' child node schema
-
-Xin Xiong (1):
-      spi: uniphier: fix reference count leak in uniphier_spi_probe()
-
- .../bindings/spi/spi-peripheral-props.yaml         |  5 ++-
- .../devicetree/bindings/spi/spi-rockchip.yaml      |  1 +
- drivers/spi/spi-armada-3700.c                      |  2 +-
- drivers/spi/spi-bcm-qspi.c                         |  2 +-
- drivers/spi/spi-meson-spicc.c                      |  5 +++
- drivers/spi/spi-mt65xx.c                           |  2 +-
- drivers/spi/spi-stm32-qspi.c                       | 47 ++++++++--------------
- drivers/spi/spi-stm32.c                            |  7 ++--
- drivers/spi/spi-uniphier.c                         | 29 ++++++++-----
- 9 files changed, 53 insertions(+), 47 deletions(-)
+Thanks,
+Mark
