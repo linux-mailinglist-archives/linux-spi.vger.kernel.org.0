@@ -2,259 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9EE4A6271
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Feb 2022 18:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED224A6292
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Feb 2022 18:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241516AbiBAR3d (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Feb 2022 12:29:33 -0500
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:14862 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230437AbiBAR3d (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Feb 2022 12:29:33 -0500
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2117KbE7014216;
-        Tue, 1 Feb 2022 11:28:37 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- references : in-reply-to : subject : date : message-id : mime-version :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=952efIhSlZ3TVuH9E0mXPjBSblS+dfL5mu3ba5cMD9c=;
- b=LypIW3UKHaSaflDClwAKMuOmrBFbWx7FwaA/mf7GRUVZQaCskkog4akMbniphWitpqPI
- JXzlHSW6oHCYzNLL5YtO0JiwwwP7LICytuq2vXb6qgVuZvye6rrZBIzry6GpM0EZ5ZAE
- hajDtpcNsBfKNviNCdFu7T0ApG7OjTI/gucRpo213HsKfh8CFsE2SadMWCVP3j2P7kpl
- G2/8VS0FQWPrTbwvtAA/FHykiVtvNcadVyVdLRbyku+tXahG8lr2YLbj0Sqn94ocG8yC
- 0BxOizyEh0bvYA3bUEohvDNYz1BoYLzuQsAxVVFz6F84JL0IAkOf0Nb3WQ1wkqQKiI2Y tw== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3dxksx1xau-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 01 Feb 2022 11:28:36 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 1 Feb
- 2022 17:28:34 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Tue, 1 Feb 2022 17:28:34 +0000
-Received: from LONN2DGDQ73 (unknown [198.90.238.134])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 980C3459;
-        Tue,  1 Feb 2022 17:28:34 +0000 (UTC)
-From:   Stefan Binding <sbinding@opensource.cirrus.com>
-To:     'Hans de Goede' <hdegoede@redhat.com>,
-        'Mark Brown' <broonie@kernel.org>,
+        id S241524AbiBARhQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Feb 2022 12:37:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233776AbiBARhP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Feb 2022 12:37:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684F5C061714;
+        Tue,  1 Feb 2022 09:37:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0508A612E5;
+        Tue,  1 Feb 2022 17:37:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC84BC340EB;
+        Tue,  1 Feb 2022 17:37:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643737034;
+        bh=5+e2/1ovVlkoJZG7HnhqfG3Xn95vLy9k+cqRL0uJ2do=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sxW1qIGED3bDGK2mg5prOpEGSfiWe7+fT3a7V37OfTRi8YAXEE6+hyhVVbNrLuA32
+         mznzf9FkC9qKTCzrAUGCn4of/W1v78w5mW1Vl9gJGJz5Xlvq6Y1bSCXTlXVH0IH7rP
+         5yLlePfUTRbmaGnMsFHH3yUcK3EQq1nfxEOdr7zwk8+5+/dNtynakmCuofnjDoXTWW
+         Yy8Lvzhk0TTU+hKzLjKb1/btwnyYv0ICzYMniyYyT/wvq/RjgUkmTHnG4e/dD6IbWP
+         FP3pgRbqa9hJxOzvX2vwfNJpj8BAMyY/TkaGnp7t7wJP6uE2I+p4plxj1Jlzaw82We
+         hzxMb/hloQWPw==
+Date:   Tue, 1 Feb 2022 17:37:08 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     'Hans de Goede' <hdegoede@redhat.com>,
         "'Rafael J . Wysocki'" <rafael@kernel.org>,
         'Len Brown' <lenb@kernel.org>,
         'Mark Gross' <markgross@kernel.org>,
         'Jaroslav Kysela' <perex@perex.cz>,
-        'Takashi Iwai' <tiwai@suse.com>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-References: <20220121172431.6876-1-sbinding@opensource.cirrus.com> <20220121172431.6876-3-sbinding@opensource.cirrus.com> <36df02cc-d164-eb6a-4ce7-54d2ee916650@redhat.com>
-In-Reply-To: <36df02cc-d164-eb6a-4ce7-54d2ee916650@redhat.com>
-Subject: RE: [PATCH v6 2/9] spi: Create helper API to lookup ACPI info for spi device
-Date:   Tue, 1 Feb 2022 17:28:34 +0000
-Message-ID: <001101d81791$23f56090$6be021b0$@opensource.cirrus.com>
+        'Takashi Iwai' <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@opensource.cirrus.com
+Subject: Re: [PATCH v6 2/9] spi: Create helper API to lookup ACPI info for
+ spi device
+Message-ID: <YflvxPmiwL0TbjPM@sirena.org.uk>
+References: <20220121172431.6876-1-sbinding@opensource.cirrus.com>
+ <20220121172431.6876-3-sbinding@opensource.cirrus.com>
+ <36df02cc-d164-eb6a-4ce7-54d2ee916650@redhat.com>
+ <001101d81791$23f56090$6be021b0$@opensource.cirrus.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-gb
-Thread-Index: AQI3MpywMNCpYcMrzvtt+VeZtzYOngLs94vFAiNmdv6rmDmlEA==
-X-Proofpoint-ORIG-GUID: fc1BznT_2vBEkCcSo3Mrt0p79QgZa1GM
-X-Proofpoint-GUID: fc1BznT_2vBEkCcSo3Mrt0p79QgZa1GM
-X-Proofpoint-Spam-Reason: safe
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NYU0R5j8dZiNHmNm"
+Content-Disposition: inline
+In-Reply-To: <001101d81791$23f56090$6be021b0$@opensource.cirrus.com>
+X-Cookie: All's well that ends.
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi,
 
-> -----Original Message-----
-> From: Hans de Goede <hdegoede@redhat.com>
-> Sent: 01 February 2022 14:28
-> To: Stefan Binding <sbinding@opensource.cirrus.com>; Mark Brown
-> <broonie@kernel.org>; Rafael J . Wysocki <rafael@kernel.org>; Len =
-Brown
-> <lenb@kernel.org>; Mark Gross <markgross@kernel.org>; Jaroslav Kysela
-> <perex@perex.cz>; Takashi Iwai <tiwai@suse.com>
-> Cc: alsa-devel@alsa-project.org; linux-kernel@vger.kernel.org; linux-
-> spi@vger.kernel.org; linux-acpi@vger.kernel.org; platform-driver-
-> x86@vger.kernel.org; patches@opensource.cirrus.com
-> Subject: Re: [PATCH v6 2/9] spi: Create helper API to lookup ACPI info =
-for spi
-> device
->=20
-> Hi,
->=20
-> On 1/21/22 18:24, Stefan Binding wrote:
-> > This can then be used to find a spi resource inside an
-> > ACPI node, and allocate a spi device.
-> >
-> > Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
-> > ---
-> >  drivers/spi/spi.c       | 46 =
-++++++++++++++++++++++++++++++++---------
-> >  include/linux/spi/spi.h |  6 ++++++
-> >  2 files changed, 42 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> > index 1eb84101c4ad..13f4701f0694 100644
-> > --- a/drivers/spi/spi.c
-> > +++ b/drivers/spi/spi.c
-> > @@ -2410,8 +2410,18 @@ static int acpi_spi_add_resource(struct
-> acpi_resource *ares, void *data)
-> >  	return 1;
-> >  }
-> >
-> > -static acpi_status acpi_register_spi_device(struct spi_controller =
-*ctlr,
-> > -					    struct acpi_device *adev)
-> > +/**
-> > + * acpi_spi_device_alloc - Allocate a spi device, and fill it in =
-with ACPI
-> information
-> > + * @ctlr: controller to which the spi device belongs
-> > + * @adev: ACPI Device for the spi device
-> > + *
-> > + * This should be used to allocate a new spi device from and ACPI =
-Node.
-> > + * The caller is responsible for calling spi_add_device to register =
-the spi
-> device.
-> > + *
-> > + * Return: a pointer to the new device, or ERR_PTR on error.
-> > + */
-> > +struct spi_device *acpi_spi_device_alloc(struct spi_controller =
-*ctlr,
-> > +					 struct acpi_device *adev)
-> >  {
-> >  	acpi_handle parent_handle =3D NULL;
-> >  	struct list_head resource_list;
-> > @@ -2419,10 +2429,6 @@ static acpi_status
-> acpi_register_spi_device(struct spi_controller *ctlr,
-> >  	struct spi_device *spi;
-> >  	int ret;
-> >
-> > -	if (acpi_bus_get_status(adev) || !adev->status.present ||
-> > -	    acpi_device_enumerated(adev))
-> > -		return AE_OK;
-> > -
-> >  	lookup.ctlr		=3D ctlr;
-> >  	lookup.irq		=3D -1;
-> >
-> > @@ -2433,7 +2439,7 @@ static acpi_status =
-acpi_register_spi_device(struct
-> spi_controller *ctlr,
-> >
-> >  	if (ret < 0)
-> >  		/* found SPI in _CRS but it points to another controller */
-> > -		return AE_OK;
-> > +		return ERR_PTR(-ENODEV);
-> >
-> >  	if (!lookup.max_speed_hz &&
-> >  	    ACPI_SUCCESS(acpi_get_parent(adev->handle, &parent_handle))
-> &&
-> > @@ -2443,16 +2449,15 @@ static acpi_status
-> acpi_register_spi_device(struct spi_controller *ctlr,
-> >  	}
-> >
-> >  	if (!lookup.max_speed_hz)
-> > -		return AE_OK;
-> > +		return ERR_PTR(-ENODEV);
-> >
-> >  	spi =3D spi_alloc_device(ctlr);
-> >  	if (!spi) {
-> >  		dev_err(&ctlr->dev, "failed to allocate SPI device for %s\n",
-> >  			dev_name(&adev->dev));
-> > -		return AE_NO_MEMORY;
-> > +		return ERR_PTR(-ENOMEM);
-> >  	}
-> >
-> > -
-> >  	ACPI_COMPANION_SET(&spi->dev, adev);
-> >  	spi->max_speed_hz	=3D lookup.max_speed_hz;
-> >  	spi->mode		|=3D lookup.mode;
-> > @@ -2460,6 +2465,27 @@ static acpi_status
-> acpi_register_spi_device(struct spi_controller *ctlr,
-> >  	spi->bits_per_word	=3D lookup.bits_per_word;
-> >  	spi->chip_select	=3D lookup.chip_select;
-> >
-> > +	return spi;
-> > +}
-> > +EXPORT_SYMBOL_GPL(acpi_spi_device_alloc);
-> > +
-> > +static acpi_status acpi_register_spi_device(struct spi_controller =
-*ctlr,
-> > +					    struct acpi_device *adev)
-> > +{
-> > +	struct spi_device *spi;
-> > +
-> > +	if (acpi_bus_get_status(adev) || !adev->status.present ||
-> > +	    acpi_device_enumerated(adev))
-> > +		return AE_OK;
-> > +
-> > +	spi =3D acpi_spi_device_alloc(ctlr, adev);
-> > +	if (IS_ERR(spi)) {
-> > +		if (PTR_ERR(spi) =3D=3D -ENOMEM)
-> > +			return AE_NO_MEMORY;
-> > +		else
-> > +			return AE_OK;
-> > +	}
-> > +
-> >  	acpi_set_modalias(adev, acpi_device_hid(adev), spi->modalias,
-> >  			  sizeof(spi->modalias));
-> >
-> > diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-> > index 0346a3ff27fd..d159cef12f1a 100644
-> > --- a/include/linux/spi/spi.h
-> > +++ b/include/linux/spi/spi.h
-> > @@ -16,6 +16,7 @@
-> >  #include <linux/gpio/consumer.h>
-> >
-> >  #include <uapi/linux/spi/spi.h>
-> > +#include <linux/acpi.h>
-> >
-> >  struct dma_chan;
-> >  struct software_node;
-> > @@ -759,6 +760,11 @@ extern int devm_spi_register_controller(struct
-> device *dev,
-> >  					struct spi_controller *ctlr);
-> >  extern void spi_unregister_controller(struct spi_controller *ctlr);
-> >
-> > +#if IS_ENABLED(CONFIG_ACPI)
-> > +extern struct spi_device *acpi_spi_device_alloc(struct =
-spi_controller *ctlr,
-> > +						struct acpi_device *adev);
-> > +#endif
-> > +
->=20
-> There is no need to add a #ifdef about something which is just a
-> function prototype. Having this declared when CONFIG_ACPI is not set =
-is
-> harmless, please drop the #ifdef.
->=20
-> With that fixed, please add my R-b to the next version:
->=20
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
->=20
-> Regards,
->=20
-> Hans
+--NYU0R5j8dZiNHmNm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I was just fixing this, however, I just noticed that a subset of this =
-chain - including
-this patch - just got applied. Do you want me to fix this in a separate =
-patch?
+On Tue, Feb 01, 2022 at 05:28:34PM +0000, Stefan Binding wrote:
 
-Thanks,
-Stefan
+> I was just fixing this, however, I just noticed that a subset of this chain - including
+> this patch - just got applied. Do you want me to fix this in a separate patch?
 
->=20
->=20
->=20
-> >  /*
-> >   * SPI resource management while processing a SPI message
-> >   */
-> >
+Quoting from the mail you got saying that the series was applied:
 
+| If any updates are required or you are submitting further changes they
+| should be sent as incremental updates against current git, existing
+| patches will not be replaced.
 
+Please delete unneeded context from mails when replying.  Doing this
+makes it much easier to find your reply in the message, helping ensure
+it won't be missed by people scrolling through the irrelevant quoted
+material.
+
+Please fix your mail client to word wrap within paragraphs at something
+substantially less than 80 columns.  Doing this makes your messages much
+easier to read and reply to.
+
+--NYU0R5j8dZiNHmNm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmH5b8MACgkQJNaLcl1U
+h9Dzzgf/Qaojnc1Tj+koHQ+yotSwO0JMyuM6KElApYmMkU67dQwQgn79wFstjmqU
+I0QX8F3k8rDQaYuS7MjeWCee4raTsSQ3eQb3k0ORuUGE96RWPcsrK4MgpwIR+K/D
+uR7Bvva58ALZI0Y9u2nLwQGfcOeXt3TmUIIsmIgdBu0e3KAOfKcFD+98x/AOWGON
+/TiklP8RFuqYiMDAij6vS7RflZ3zlN1yR/aGqYgfgiH9UXBIpgJd8mZ42Nb3sCQg
+IbILq+R6RyR6bVUODSdegfsizQLkTRFK0EWQlgVtDNkmn8feOxPC0erAhCbI1kaK
+ukivFigIPevnB5Phdi5brz3lda3nGw==
+=z7h3
+-----END PGP SIGNATURE-----
+
+--NYU0R5j8dZiNHmNm--
