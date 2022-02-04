@@ -2,178 +2,116 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA65D4A9594
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Feb 2022 09:52:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74DD14A97C1
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Feb 2022 11:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357212AbiBDIwW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 4 Feb 2022 03:52:22 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:36848
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1357206AbiBDIwQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Feb 2022 03:52:16 -0500
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E03F74031B
-        for <linux-spi@vger.kernel.org>; Fri,  4 Feb 2022 08:52:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643964733;
-        bh=iqZrLHxxMKYXcwDk+JH/xBRKoG0uPSeGw2pYz3/v6kY=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=eBIHCkKi09tjJqdWDZBoh6iZZuDeagxiGhsi8PTmN4ZBY1JFJ1plEen9alndKBpaa
-         rZa25r7WemVcr/Bx6NCtnLoPmcYSswxky+lK1Vprp5zULdncJTDlsj1jhr9unEL+37
-         CgMZr3cuaInfjFgXPkhtTMkhf90SGkA4DcHjETpJOlai5o6oC6dhVu5GCEn7VKpEjI
-         em2yORSiXEHkXjyJWrN9LxinOyu8AyEXoRk1zfMSqqqEq9EL0xS4kzuezxyQSLbgmG
-         RXKUWjiTX6UVV2h+jy9Q48+0w78TVhk0SnYeH1JBQPaASjUrgyx5Z+aTKPi3YAcZ2c
-         67T+4OKW7Zwzw==
-Received: by mail-ed1-f70.google.com with SMTP id w15-20020a056402268f00b00408234dc1dfso2919495edd.16
-        for <linux-spi@vger.kernel.org>; Fri, 04 Feb 2022 00:52:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iqZrLHxxMKYXcwDk+JH/xBRKoG0uPSeGw2pYz3/v6kY=;
-        b=TydrxxvYcrGxKHhttAR6M7F/riuR0/iFtcNYQ1bjuDWdbA5XseQwGRn3hTUKeNcAsF
-         9bUFpBmo/MLGS1VKBT7QUMRU0bBMx+7RkuagzSa3RUX8GHS6h/x8N7YBDISQRaXkgKSK
-         UlkqTW6KiQguA4yzY7egoeFO9fk6MW9s80CnaHkD2fkLOAIkSSgXgUmuJMbleClDArHV
-         HSD9Db1ZmabxWYKsNqlf0kgaPotP/CXVc1pm+7xJhfjzMkMBuySqpwH2I8aPZyDkVd7f
-         f7WzkXF7iGOz0/mev1NoDXvwFmeSDZl/ZB46piiawR+5dDZUGRcocpXJjFDlg8i9eHz/
-         3X3Q==
-X-Gm-Message-State: AOAM530uYkpnK8u75e/0LvRHWxqXwLXggdlkuI7mjcVT0kB2RLPSHsct
-        nNWaRyr/IZjACYLUVtAG9qZKK1/OQDieBp0PoIp0SW0QuRwspiLbALrHVUf3dypojvCdUvuCtZX
-        VxUzOUwPfloSWiyunudOE3xDfAeb6nHS9U70nFg==
-X-Received: by 2002:a05:6402:3492:: with SMTP id v18mr1976669edc.345.1643964732883;
-        Fri, 04 Feb 2022 00:52:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwVcZDvspQCzKUyW5YG8zjDVQmYqY/DEAG3sfjKSfnQIzLHqmc3NlVf9LlkkFskfuUgLPJavA==
-X-Received: by 2002:a05:6402:3492:: with SMTP id v18mr1976597edc.345.1643964732578;
-        Fri, 04 Feb 2022 00:52:12 -0800 (PST)
-Received: from [192.168.0.81] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id z8sm418238ejc.197.2022.02.04.00.52.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 00:52:11 -0800 (PST)
-Message-ID: <ed615fdb-5c30-697e-f197-a3a93c5336b9@canonical.com>
-Date:   Fri, 4 Feb 2022 09:52:10 +0100
+        id S244451AbiBDKaD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 4 Feb 2022 05:30:03 -0500
+Received: from mail-bn8nam12on2089.outbound.protection.outlook.com ([40.107.237.89]:42944
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229851AbiBDKaC (ORCPT <rfc822;linux-spi@vger.kernel.org>);
+        Fri, 4 Feb 2022 05:30:02 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F1ZCHgwhA3szNajDPEHDqNdpNDPCBO5x8HNdqSxVEeGcy5ZA24WiA8HzByHV3yG0zc2l2/SnQxH0oqsOT33Z3ejsN5ZJZf3N0T6lS2qAO9nIp++aBkkG4+zEuVVxWri4c5l0jhO5M5mCyNEef8oCNyUJdXHpmrXmta9B44CMtrkk+bM5uMrbe20o/27oRAssaQ4S1YzK+85grVt5lTXtZZ1xJPuSVTTk4mdxMI1m3UrqsqD8kQ+KasTaIiOi2ttVe0DzibbqNPDlFuR/7LfXI9C6atzL2oQI5p8g68n9r/3NYjcBR2bGXRa77KbYHcC0kyrz7XchFt7tuFY3YOYUKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2sWgBZ5DuDnl4xixt2e5bzVuQ4XzbIBC9bpMRUqDb6c=;
+ b=IW8k43t1evvG7DIz8sO5yg7mErQVo+Okn4OEss/ZGsgBcQRv9o1RLQQNsqXIv0BhNyra04HNwy1QNwV9zIop+GUfFaJ5jRj17JfSIiA09exYXNVQ06i3MWhpZyvzicUEmYTDD4WI/vM/LAFcaBb0C6SyIFZTWxKs3GyWgx4BkcjNeFksTOdR8tP3xH8pOZZ19CQcen9ypD50MilgNkBz40xljPF4Hv+Icc3nlFGFjYKp/yrfdpLQUvqPPaVUd99qPKMTcwdHDx3KnmIfE46R6WUr63Y3lkZZti+bFjOOd4FfBoCwK5pUSVqj7NAJCof5B+xWlGOKkvQ2cbKX2eAG9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2sWgBZ5DuDnl4xixt2e5bzVuQ4XzbIBC9bpMRUqDb6c=;
+ b=lEVTB19/wl+OwHh9SEJVcwjXitrZL6dklpQBMl3cngQ8z0rkl3H23mtYkuuabFu5cx23JJtUAZ0snYzQtjTSPny+I4ZBKBodQ8+pj7P5W0Mj5/y5w6gor13qLiEdXgLhqDyph/Iq/L+rU6revuO1UHiGW5L087wvTBlnP866fj253yhGV9foJtxg3Im8GOhss3p2tYov3vNVjIgxlU4mCCIQJIOqmg5kL+ZSAv79iQC+PvFejeGF59YaTNsd0Z6Jc/c5esVyLH8mWOPdXhD7IvlCrnDaUugKeo6d9B9Yjefrr9hAHoqgAX311q5b9iH62icOxk3V8SV2ARX3n53KGQ==
+Received: from BN1PR14CA0025.namprd14.prod.outlook.com (2603:10b6:408:e3::30)
+ by MN2PR12MB3087.namprd12.prod.outlook.com (2603:10b6:208:d2::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.19; Fri, 4 Feb
+ 2022 10:30:00 +0000
+Received: from BN8NAM11FT034.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e3:cafe::c3) by BN1PR14CA0025.outlook.office365.com
+ (2603:10b6:408:e3::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
+ Transport; Fri, 4 Feb 2022 10:30:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ BN8NAM11FT034.mail.protection.outlook.com (10.13.176.139) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4951.12 via Frontend Transport; Fri, 4 Feb 2022 10:30:00 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 4 Feb
+ 2022 10:29:55 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Fri, 4 Feb 2022
+ 02:29:54 -0800
+Received: from kyarlagadda-linux.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server id 15.2.986.9 via Frontend
+ Transport; Fri, 4 Feb 2022 02:29:51 -0800
+From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
+To:     <broonie@kernel.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <linux-spi@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>
+CC:     <skomatineni@nvidia.com>, <ldewangan@nvidia.com>,
+        <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <p.zabel@pengutronix.de>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Subject: [PATCH 0/6] Tegra QUAD SPI combined sequence mode
+Date:   Fri, 4 Feb 2022 15:59:30 +0530
+Message-ID: <1643970576-31503-1-git-send-email-kyarlagadda@nvidia.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] HPE BMC GXP SUPPORT
-Content-Language: en-US
-To:     "Verdun, Jean-Marie" <verdun@hpe.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Corey Minyard <minyard@acm.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        SoC Team <soc@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Hao Fang <fanghao11@huawei.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Wang Kefeng <wangkefeng.wang@huawei.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "openipmi-developer@lists.sourceforge.net" 
-        <openipmi-developer@lists.sourceforge.net>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        netdev <netdev@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-References: <nick.hawkins@hpe.com>
- <20220202165315.18282-1-nick.hawkins@hpe.com>
- <CAL_Jsq+K2t5WYE056so1iZgZr7CBKvDEjAwnJVTyUFQcK-VFSA@mail.gmail.com>
- <e79133f2-f872-3ed6-4038-526e94e84909@canonical.com>
- <1FEAAC19-1DD7-40D7-98FD-30C2659E7C0F@hpe.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <1FEAAC19-1DD7-40D7-98FD-30C2659E7C0F@hpe.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b3072d96-665c-4758-d294-08d9e7c94c27
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3087:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB30877F7F356A482E7BC94C1BC3299@MN2PR12MB3087.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3173;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Li9ECOM5Ow7MAK8m1e+5i3QTzXMZIo0RkzGZ0gyZpy8iH2fu84yeff1Hv7u8ltgW7BV7kCMEJ9TtAF7IMWXD0113uvyM0iaagSWHhMrP/KKueFPgNUE90AosFvIkokNmJHEuna3L9wDzfKv8kiGtH5r7gYOKF3AlYLyy1R4XZIXSC+fzH1NbSgeyivA4Cmi0nRYLIA3qRfjrt553o1pzkr2vJDRComfRNHoahRm8aEALFfkAjLjquLXu2fSQGvgjaU2WrfIlltruwt/HqV3wtBvuqxZSoY73qeN2h5LpyAfEcbekejHq5a/iPQ4pPRihNS587dBt0FwREolknszSwPmuUh6AG4qfYFTK4fJQ0dgfQ1PvsN4b0kQyiRfN6f8HyiDFzgYTMlH/ZBZGfSV4CRGL+LXvtfEIdY5+haAFMxoHmVWC3KBftoQQXybSpu/0dMPVWATZgsbi9HtOE35VW9OHbW7vraZLaiJacIECbmlLPHXrQJ3cN1e6U6cKRjjtS/XsEWjhDfk7ES6x+EF0LAdvav8BkK9WzIvjUB+84mf5rdfF5/LJFcjo+3rNaJ28XKCgLVW7aVGi9BsANcJBdQBZGv+8VvBq9Z56X+VePBEhVggR5xrZHUPoWD0GKhLqnCNk9a9KK+MyGK2wVslv1UPWBgyi2PqLD1mIgSiJ+lZYStlg2//Bf42ShEvRHHTzHU37lSkl5Hw08HgBtH+YKQ==
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(82310400004)(8936002)(86362001)(336012)(426003)(6666004)(70206006)(70586007)(4326008)(8676002)(316002)(81166007)(356005)(4744005)(7696005)(186003)(40460700003)(2906002)(2616005)(107886003)(5660300002)(36860700001)(47076005)(508600001)(110136005)(54906003)(36756003)(83380400001)(26005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2022 10:30:00.0038
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3072d96-665c-4758-d294-08d9e7c94c27
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT034.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3087
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 03/02/2022 18:07, Verdun, Jean-Marie wrote:
-> 
->    > Maybe it does not look like, but this is actually a v2. Nick was asked
->    > to change the naming for the nodes already in v1. Unfortunately it did
->    > not happen, so we have vuart, spifi, vic and more.
-> 
->    > It is a waste of reviewers' time to ask them to perform the same review
->    > twice or to ignore their comments.
-> 
->     Hi Krysztof,
-> 
->     Accept our apologies if you think you lose your time, it is clearly not our
->     intent. 
-> 
->     This is the first time that we (I mean the team) introduce a new arch into
->     the linux kernel and I must admit that we had hard time to understand
->     from which angle we needed to start.
-> 
->     I will probably write a Documentation afterward, as it is easy to find doc
->     on how to introduce a patch or a driver, but not when you want to 
->     introduce a new chip. 
-> 
->     We are trying to do our best, and clearly want to follow all of your inputs.
->     Mistakes happen and they are clearly not intentional and not driven in 
->     a way to make you lose your time.
-> 
->     Helping others, and teaching something new is definitely a way to 
->     optimize your time and this is what you are currently doing with us.
-> 
->     We appreciate it and hope you will too.
+Add ACPI support for Tegra210 QUAD SPI driver and support
+new Tegra194 feature, combined sequence mode.
 
-I understand, I also maybe over-reacted on this. Just please go through
-the comments you got for first submission and either apply them or
-respond why you disagree.
+Krishna Yarlagadda (6):
+  spi: tegra210-quad: use device_reset method
+  dt-bindings: spi: Tegra234 QUAD SPI compatible
+  spi: tegra210-quad: add new chips to compatible
+  spi: tegra210-quad: add acpi support
+  dt-bindings: spi: Tegra QUAD SPI combined sequence
+  spi: tegra210-quad: combined sequence mode
 
-The next submissions (patchset split into several commits) should be a
-v3, preferably with cover letter (git format-patch --cover-letter -v3
-...) where you can document also changes you did to the patchset.
+ .../bindings/spi/nvidia,tegra210-quad.yaml         |   9 +
+ drivers/spi/spi-tegra210-quad.c                    | 313 +++++++++++++++++++--
+ 2 files changed, 291 insertions(+), 31 deletions(-)
 
-It looks for example like this:
-https://lore.kernel.org/linux-samsung-soc/31da451b-a36c-74fb-5667-d4193284c6cd@canonical.com/T/#mf98d2ac27a8481dc69dd110f9861c8318cade252
+-- 
+2.7.4
 
-or like this (where changelogs are in each patch, although ordering is
-not correct because dt-bindings should be the first in the series):
-https://lore.kernel.org/all/20220103233948.198119-1-Mr.Bossman075@gmail.com/
-
-
-Best regards,
-Krzysztof
