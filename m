@@ -2,76 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3833D4AA308
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Feb 2022 23:20:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0EBE4AA3E9
+	for <lists+linux-spi@lfdr.de>; Sat,  5 Feb 2022 00:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348594AbiBDWUT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 4 Feb 2022 17:20:19 -0500
-Received: from mail-ot1-f49.google.com ([209.85.210.49]:38723 "EHLO
-        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238837AbiBDWUS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Feb 2022 17:20:18 -0500
-Received: by mail-ot1-f49.google.com with SMTP id n6-20020a9d6f06000000b005a0750019a7so6145463otq.5;
-        Fri, 04 Feb 2022 14:20:18 -0800 (PST)
+        id S1377821AbiBDXDX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 4 Feb 2022 18:03:23 -0500
+Received: from mail-oi1-f171.google.com ([209.85.167.171]:42500 "EHLO
+        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239851AbiBDXDX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Feb 2022 18:03:23 -0500
+Received: by mail-oi1-f171.google.com with SMTP id v67so10231448oie.9;
+        Fri, 04 Feb 2022 15:03:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=sxZ5ZOHefV7TGCMx3CC+93djt+kWiLe2HpCoDPruzGA=;
-        b=xBj+T2Gn3eDuhd41nvI+bu0j0W9GR/2g7za8e2LpwFs7HFhBGl+jbTQUNUzeqpsK/h
-         K2BiRNijxkKmVrVlEwIjW9JhFnnYurRS2pesANU3ShFgiZhxh4S6N6JLNx0OuQQFdWkO
-         ICS1R1RqC+TVycEjpgxTqLpMkRXB5gdSIn/MtHl26raJ+ehSGCWBNnv81W5Mln+uFDZl
-         bi3/HYQ6pE0a86T30IflOEzmwPQedpZsDgxr+ste8Say+Zcbhe8X8QNViVYcY2gFSS0+
-         fUOpggCCtuFVsJbhhofiy3qYL5QJ/UzeSKj5kI0K9jldIrG2BhpFkI87hAEYrUBIOXhr
-         i+sw==
-X-Gm-Message-State: AOAM530pzkfYO2T6Y0gkfElhWQTYOPgYmGHlugrOg2xucStO0IR0h3Mr
-        ZY2mcMZQtu0ejJnSo5zKRysJE0qrNg==
-X-Google-Smtp-Source: ABdhPJzmUGS+U+icdKSfT+qh3JXJL3R+DgctsifiOiN2IRDb0ToL/KPxtgMyUZ1Qg1jPdQPwlcqHWQ==
-X-Received: by 2002:a9d:69d1:: with SMTP id v17mr407535oto.183.1644013218309;
-        Fri, 04 Feb 2022 14:20:18 -0800 (PST)
+        bh=HRBN3drX7LNP2CglYfthuDAO2TQ4Y16kM+T6H92Cb6k=;
+        b=RDdRTTxrrG/xYaW26F3C9Jp2y3+/RP0vjy/lnACC/8IlU4fDzHnna3B3Yi2SB9POMd
+         1imlxgIIglbs15HDgj2bt69B6kByw7t8kh3xM5x96vgYU3cjoWx/ITsfLg64pDlrK66+
+         1U0YBSQkDPnE0ZvgWZekTJlJ07sPLr0KKz3bnN3LWHKu+ehPaNJU3vBh8zwV6+utTYE/
+         8OAseSChtWEQebAQwRqCizpc3x77rgfCSVGauwaXNlkYrSc0su59jtSldP+rJZTl7FGu
+         +VeFquL/A1n4M62wLRy+xlDRY8kyswmag3MpyybIBA/DrUg4/zCE+yqoUrFXkMBXEaAS
+         SeUA==
+X-Gm-Message-State: AOAM531u9F+eP/2BvKYKJ/yp5MJZiiaQCpnaNcPAZlJQU+HM3MrB9Hbg
+        KSMzO+CmzT9oMV7cghQld0CaWZHlEg==
+X-Google-Smtp-Source: ABdhPJxZGN8zUGqe8CCQFcnofv9zbGm8GHdE4O+DkLg3DuLzo4Ke7310tsAgwmT4loZ02k4nEVDyQw==
+X-Received: by 2002:a05:6808:d47:: with SMTP id w7mr2519227oik.268.1644015802559;
+        Fri, 04 Feb 2022 15:03:22 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id f20sm1270009ooh.10.2022.02.04.14.20.16
+        by smtp.gmail.com with ESMTPSA id l4sm1289993otq.50.2022.02.04.15.03.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 14:20:17 -0800 (PST)
-Received: (nullmailer pid 3284346 invoked by uid 1000);
-        Fri, 04 Feb 2022 22:20:16 -0000
-Date:   Fri, 4 Feb 2022 16:20:16 -0600
+        Fri, 04 Feb 2022 15:03:21 -0800 (PST)
+Received: (nullmailer pid 3347992 invoked by uid 1000);
+        Fri, 04 Feb 2022 23:03:20 -0000
+Date:   Fri, 4 Feb 2022 17:03:20 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-mtd@lists.infradead.org, Michael Walle <michael@walle.cc>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Richard Weinberger <richard@nod.at>, linux-spi@vger.kernel.org,
-        Michal Simek <monstr@monstr.eu>,
-        Pratyush Yadav <p.yadav@ti.com>
-Subject: Re: [PATCH v6 2/3] spi: dt-bindings: Describe stacked/parallel
- memories modes
-Message-ID: <Yf2moBgtTRSrkmD3@robh.at.kernel.org>
-References: <20220126112608.955728-1-miquel.raynal@bootlin.com>
- <20220126112608.955728-3-miquel.raynal@bootlin.com>
+To:     Leilk Liu <leilk.liu@mediatek.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH V4 1/3] dt-bindings: spi: Convert spi-slave-mt27xx to
+ json-schema
+Message-ID: <Yf2wuML7yqiSUKqJ@robh.at.kernel.org>
+References: <20220125012330.13449-1-leilk.liu@mediatek.com>
+ <20220125012330.13449-2-leilk.liu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220126112608.955728-3-miquel.raynal@bootlin.com>
+In-Reply-To: <20220125012330.13449-2-leilk.liu@mediatek.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 26 Jan 2022 12:26:06 +0100, Miquel Raynal wrote:
-> Describe two new memories modes:
-> - A stacked mode when the bus is common but the address space extended
->   with an additinals wires.
-> - A parallel mode with parallel busses accessing parallel flashes where
->   the data is spread.
+On Tue, 25 Jan 2022 09:23:28 +0800, Leilk Liu wrote:
+> Convert Mediatek ARM SOC's SPI Slave controller binding
+> to json-schema format.
 > 
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> Acked-by: Pratyush Yadav <p.yadav@ti.com>
+> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
 > ---
->  .../bindings/spi/spi-peripheral-props.yaml    | 25 +++++++++++++++++++
->  1 file changed, 25 insertions(+)
+>  .../spi/mediatek,spi-slave-mt27xx.yaml        | 58 +++++++++++++++++++
+>  .../bindings/spi/spi-slave-mt27xx.txt         | 33 -----------
+>  2 files changed, 58 insertions(+), 33 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-slave-mt27xx.txt
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
