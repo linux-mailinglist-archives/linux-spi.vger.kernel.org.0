@@ -2,122 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5774A9AB3
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Feb 2022 15:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 019424AA2EE
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Feb 2022 23:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233983AbiBDOJ3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 4 Feb 2022 09:09:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42590 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232803AbiBDOJ3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Feb 2022 09:09:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E988C061714;
-        Fri,  4 Feb 2022 06:09:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E89A8B83742;
-        Fri,  4 Feb 2022 14:09:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 554A5C004E1;
-        Fri,  4 Feb 2022 14:09:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643983766;
-        bh=0Uun2P4TB48A1jqJfMKkkYNWDxl6cd7nzbvPWMj5TEo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XPui98YVAgK0vBO5CTHh7ceNAxtmay7KvmcVs0vev5W1dgzvqD4pfTGgf/Ym8X5Kp
-         uC1r/vT7gRFYUzq+61s1jtZsTH9xLMO5nsTuT7uVkFc6Bm8aBGP2e6zd0JOV/G5tfM
-         u0vk/GLCJeLfCT/dHRA0ySQH2PRR0p/oL94eimjr0ViJKlXrr7UwKGjz1OChRbnqhu
-         6CuzEa6jVzClu7EF1KI6VSmdmsxOpV6lspveiDZRaVHIoCTtohrN/jdzaQ1s5R6DnZ
-         mT12qVrhpkHZ/J9Y4sMkMHnGEJqzrKxjZhyfThMeuotDur8cfqDQeDyhxYvwNTTspL
-         Cj+C4RBRZf0GA==
-Date:   Fri, 4 Feb 2022 14:09:21 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        skomatineni@nvidia.com, ldewangan@nvidia.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        p.zabel@pengutronix.de
-Subject: Re: [PATCH 6/6] spi: tegra210-quad: combined sequence mode
-Message-ID: <Yf0zkdS2nqHOZjMG@sirena.org.uk>
-References: <1643970576-31503-1-git-send-email-kyarlagadda@nvidia.com>
- <1643970576-31503-7-git-send-email-kyarlagadda@nvidia.com>
+        id S1346815AbiBDWPY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 4 Feb 2022 17:15:24 -0500
+Received: from mail-ot1-f47.google.com ([209.85.210.47]:46614 "EHLO
+        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346848AbiBDWPX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Feb 2022 17:15:23 -0500
+Received: by mail-ot1-f47.google.com with SMTP id l12-20020a0568302b0c00b005a4856ff4ceso6100810otv.13;
+        Fri, 04 Feb 2022 14:15:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=N8RFHngLhDeWO4wQPXHQGcIdh24A8gAlUMWTLplW+TI=;
+        b=iYoKOD7LQyRzvMDM8duQPme7Oa96o2IjRLv8UmAWlGBjYnnMruE/HxIANiOuFH+Fby
+         dKjkg6VlDFQLJeoNv1Otr44yB21PRs27NlTVMZASA4dFClRGf6QK77x/VXVdbbujwPdU
+         tsZ9vjYiiH6WyM8phvD+9sOnGorEX9JlYludRmrq91kb4UCr+Awzd/HtGKXNuNjtIyRK
+         Ac1XW9hS8AeZJ83MX7/vIlDsdO92f3gwRYSj9FF9t2rGDu1yryj0/sGQkrk22eC8BECN
+         iQb/RuGfLsk36kATp65HUA4a16jnmbmELkwQjvqv5YNg2q4d/irFuJYNmclLYM3ItfY1
+         z/8Q==
+X-Gm-Message-State: AOAM532Cy9+AXvbKqkI9db/cG7dCmR1jBPiuYEoYT7RyzVvRyaA7cgi7
+        YofKNH9YioVFdiWI7dLISpztimM+iw==
+X-Google-Smtp-Source: ABdhPJw1r36BfQdNmjT2kjJd0xyM5pbLBON8ItumuXjTSCU4U75vKCiZ0SQbcnm/cAX7aMItBNevWw==
+X-Received: by 2002:a9d:4e03:: with SMTP id p3mr403290otf.299.1644012922815;
+        Fri, 04 Feb 2022 14:15:22 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id 31sm1243392otr.13.2022.02.04.14.15.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 14:15:22 -0800 (PST)
+Received: (nullmailer pid 3277483 invoked by uid 1000);
+        Fri, 04 Feb 2022 22:15:20 -0000
+Date:   Fri, 4 Feb 2022 16:15:20 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     linux-samsung-soc@vger.kernel.org,
+        Guenter Roeck <groeck@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        Andi Shyti <andi@etezian.org>, devicetree@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v6 1/4] spi: dt-bindings: samsung: convert to dtschema
+Message-ID: <Yf2leGSnt4tvMnnn@robh.at.kernel.org>
+References: <20220124082347.32747-1-krzysztof.kozlowski@canonical.com>
+ <20220124082347.32747-2-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="a24AQkG5lH/zcdwt"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1643970576-31503-7-git-send-email-kyarlagadda@nvidia.com>
-X-Cookie: Torque is cheap.
+In-Reply-To: <20220124082347.32747-2-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Mon, 24 Jan 2022 09:23:44 +0100, Krzysztof Kozlowski wrote:
+> Convert the Samsung SoC (S3C24xx, S3C64xx, S5Pv210, Exynos) SPI
+> controller bindings to DT schema format.
+> 
+> The conversion also drops requirement from providing controller-data and
+> its data for each of SPI peripheral device nodes.  The dtschema cannot
+> express this and the requirement is being relaxed in the driver now.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+> Acked-by: Pratyush Yadav <p.yadav@ti.com>
+> ---
+>  .../bindings/soc/samsung/exynos-usi.yaml      |   2 +-
+>  .../spi/samsung,spi-peripheral-props.yaml     |  33 ++++
+>  .../devicetree/bindings/spi/samsung,spi.yaml  | 187 ++++++++++++++++++
+>  .../bindings/spi/spi-peripheral-props.yaml    |   1 +
+>  .../devicetree/bindings/spi/spi-samsung.txt   | 122 ------------
+>  MAINTAINERS                                   |   2 +-
+>  6 files changed, 223 insertions(+), 124 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi-peripheral-props.yaml
+>  create mode 100644 Documentation/devicetree/bindings/spi/samsung,spi.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-samsung.txt
+> 
 
---a24AQkG5lH/zcdwt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Fri, Feb 04, 2022 at 03:59:36PM +0530, Krishna Yarlagadda wrote:
-
-> +	/* Process individual transfer list */
-> +	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
-> +		if (transfer_phase == CMD_TRANSFER) {
-
-> +		} else if (transfer_phase == ADDR_TRANSFER) {
-
-> +		} else {
-
-Looks like you're writing a switch statement here...
-
-> +			/* X1 SDR mode */
-> +			cmd_config = tegra_qspi_cmd_config(false, 0,
-> +							   xfer->len);
-> +			cmd_value = *((const u8 *)(xfer->tx_buf));
-> +
-> +			len = xfer->len;
-
-> +			/* X1 SDR mode */
-> +			addr_config = tegra_qspi_addr_config(false, 0,
-> +							     xfer->len);
-> +			address_value = *((const u32 *)(xfer->tx_buf));
-
-> +			/* Program Command, Address value in register */
-> +			tegra_qspi_writel(tqspi, cmd_value, QSPI_CMB_SEQ_CMD);
-> +			tegra_qspi_writel(tqspi, address_value,
-> +					  QSPI_CMB_SEQ_ADDR);
-> +			/* Program Command and Address config in register */
-> +			tegra_qspi_writel(tqspi, cmd_config,
-> +					  QSPI_CMB_SEQ_CMD_CFG);
-> +			tegra_qspi_writel(tqspi, addr_config,
-> +					  QSPI_CMB_SEQ_ADDR_CFG);
-
-It looks like the command and address have to be specific lengths?  If
-that's the case then
-
-> +	if (cdata->is_cmb_xfer && transfer_count == 3)
-> +		ret = tegra_qspi_combined_seq_xfer(tqspi, msg);
-> +	else
-> +		ret = tegra_qspi_non_combined_seq_xfer(tqspi, msg);
-
-This check needs to be more specific.  But like I said in reply to the
-binding patch I don't see why we can't just pattern match on the data
-without requiring a property here, we'd need to check that the message
-is suitable no matter what.
-
---a24AQkG5lH/zcdwt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmH9M5AACgkQJNaLcl1U
-h9CHWAf9Fv7WpqdKpI5qGpLRrspS+onHqhjxBDK3qP8XYNE8GGIoewvk/y93TrmP
-PT7a/zw1UGFtvHomlXqcnvm7KxGfbsOr+JfBbWQ8hrddfbof84GSaWNyRiJl80Y7
-gmMNPp1WfNen9c5z0wwyH0LS2c+6W4PdOwgipGoGQd4gh1vVzM1zRCja47CM1BD6
-r8WiE3UnnBch6gpC20Ggrb4qjb2piUie7wAdBcvf8Ol9CCU8olylsE9mkE8yTPXR
-5LJ02ayJG9HxTRxlhTG8zEGlhXTq/MI/is7a14BFQt2E3r92WqQBt26dp3jKcmlS
-k9jlTRaQCxNF0WpexPzjM5jpjPZefA==
-=0qb3
------END PGP SIGNATURE-----
-
---a24AQkG5lH/zcdwt--
+Reviewed-by: Rob Herring <robh@kernel.org>
