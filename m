@@ -2,116 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 973BB4A9A8E
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Feb 2022 15:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5774A9AB3
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Feb 2022 15:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359207AbiBDOCJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 4 Feb 2022 09:02:09 -0500
-Received: from relay4.hostedemail.com ([64.99.140.37]:17860 "EHLO
-        relay4.hostedemail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359208AbiBDOCI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Feb 2022 09:02:08 -0500
-Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay02.hostedemail.com (Postfix) with ESMTP id C1E642183A;
-        Fri,  4 Feb 2022 14:02:07 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf17.hostedemail.com (Postfix) with ESMTPA id A72A11B;
-        Fri,  4 Feb 2022 14:01:08 +0000 (UTC)
-Message-ID: <7cb1ce88cbf977801f2519178c270c1271100ac6.camel@perches.com>
-Subject: Re: [PATCH] HPE BMC GXP SUPPORT
-From:   Joe Perches <joe@perches.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     nick.hawkins@hpe.com, verdun@hpe.com,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Corey Minyard <minyard@acm.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Hao Fang <fanghao11@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Wang Kefeng <wangkefeng.wang@huawei.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Date:   Fri, 04 Feb 2022 06:01:44 -0800
-In-Reply-To: <Yf0cihUQ1byjnh3d@shell.armlinux.org.uk>
-References: <nick.hawkins@hpe.com>
-         <20220202165315.18282-1-nick.hawkins@hpe.com>
-         <Yf0Wm1kOV1Pss9HJ@shell.armlinux.org.uk>
-         <ad56e88206a8d66b715035362abe16ece0bde7d3.camel@perches.com>
-         <Yf0cihUQ1byjnh3d@shell.armlinux.org.uk>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        id S233983AbiBDOJ3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 4 Feb 2022 09:09:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232803AbiBDOJ3 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Feb 2022 09:09:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E988C061714;
+        Fri,  4 Feb 2022 06:09:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E89A8B83742;
+        Fri,  4 Feb 2022 14:09:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 554A5C004E1;
+        Fri,  4 Feb 2022 14:09:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643983766;
+        bh=0Uun2P4TB48A1jqJfMKkkYNWDxl6cd7nzbvPWMj5TEo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XPui98YVAgK0vBO5CTHh7ceNAxtmay7KvmcVs0vev5W1dgzvqD4pfTGgf/Ym8X5Kp
+         uC1r/vT7gRFYUzq+61s1jtZsTH9xLMO5nsTuT7uVkFc6Bm8aBGP2e6zd0JOV/G5tfM
+         u0vk/GLCJeLfCT/dHRA0ySQH2PRR0p/oL94eimjr0ViJKlXrr7UwKGjz1OChRbnqhu
+         6CuzEa6jVzClu7EF1KI6VSmdmsxOpV6lspveiDZRaVHIoCTtohrN/jdzaQ1s5R6DnZ
+         mT12qVrhpkHZ/J9Y4sMkMHnGEJqzrKxjZhyfThMeuotDur8cfqDQeDyhxYvwNTTspL
+         Cj+C4RBRZf0GA==
+Date:   Fri, 4 Feb 2022 14:09:21 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        skomatineni@nvidia.com, ldewangan@nvidia.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        p.zabel@pengutronix.de
+Subject: Re: [PATCH 6/6] spi: tegra210-quad: combined sequence mode
+Message-ID: <Yf0zkdS2nqHOZjMG@sirena.org.uk>
+References: <1643970576-31503-1-git-send-email-kyarlagadda@nvidia.com>
+ <1643970576-31503-7-git-send-email-kyarlagadda@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: A72A11B
-X-Spam-Status: No, score=-2.03
-X-Stat-Signature: c3yzg6zcu4cpdcebaczubogb94ck3gqq
-X-Rspamd-Server: rspamout07
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+KwoOMBfXWPFnO9qh3WITIVuG9hjhnLgA=
-X-HE-Tag: 1643983268-605794
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="a24AQkG5lH/zcdwt"
+Content-Disposition: inline
+In-Reply-To: <1643970576-31503-7-git-send-email-kyarlagadda@nvidia.com>
+X-Cookie: Torque is cheap.
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 2022-02-04 at 12:31 +0000, Russell King (Oracle) wrote:
-> On Fri, Feb 04, 2022 at 04:18:24AM -0800, Joe Perches wrote:
-> > On Fri, 2022-02-04 at 12:05 +0000, Russell King (Oracle) wrote:
-> > > On Wed, Feb 02, 2022 at 10:52:50AM -0600, nick.hawkins@hpe.com wrote:
-> > > > +	if (readb_relaxed(timer->control) & MASK_TCS_TC) {
-> > > > +		writeb_relaxed(MASK_TCS_TC, timer->control);
-> > > > +
-> > > > +		event_handler = READ_ONCE(timer->evt.event_handler);
-> > > > +		if (event_handler)
-> > > > +			event_handler(&timer->evt);
-> > > > +		return IRQ_HANDLED;
-> > > > +	} else {
-> > > > +		return IRQ_NONE;
-> > > > +	}
-> > > > +}
-> > 
-> > It's also less indented code and perhaps clearer to reverse the test
-> > 
-> > 	if (!readb_relaxed(timer->control) & MASK_TCS_TC)
-> 
-> This will need to be:
-> 
->  	if (!(readb_relaxed(timer->control) & MASK_TCS_TC))
 
-right, thanks.
+--a24AQkG5lH/zcdwt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Fri, Feb 04, 2022 at 03:59:36PM +0530, Krishna Yarlagadda wrote:
 
+> +	/* Process individual transfer list */
+> +	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+> +		if (transfer_phase == CMD_TRANSFER) {
+
+> +		} else if (transfer_phase == ADDR_TRANSFER) {
+
+> +		} else {
+
+Looks like you're writing a switch statement here...
+
+> +			/* X1 SDR mode */
+> +			cmd_config = tegra_qspi_cmd_config(false, 0,
+> +							   xfer->len);
+> +			cmd_value = *((const u8 *)(xfer->tx_buf));
+> +
+> +			len = xfer->len;
+
+> +			/* X1 SDR mode */
+> +			addr_config = tegra_qspi_addr_config(false, 0,
+> +							     xfer->len);
+> +			address_value = *((const u32 *)(xfer->tx_buf));
+
+> +			/* Program Command, Address value in register */
+> +			tegra_qspi_writel(tqspi, cmd_value, QSPI_CMB_SEQ_CMD);
+> +			tegra_qspi_writel(tqspi, address_value,
+> +					  QSPI_CMB_SEQ_ADDR);
+> +			/* Program Command and Address config in register */
+> +			tegra_qspi_writel(tqspi, cmd_config,
+> +					  QSPI_CMB_SEQ_CMD_CFG);
+> +			tegra_qspi_writel(tqspi, addr_config,
+> +					  QSPI_CMB_SEQ_ADDR_CFG);
+
+It looks like the command and address have to be specific lengths?  If
+that's the case then
+
+> +	if (cdata->is_cmb_xfer && transfer_count == 3)
+> +		ret = tegra_qspi_combined_seq_xfer(tqspi, msg);
+> +	else
+> +		ret = tegra_qspi_non_combined_seq_xfer(tqspi, msg);
+
+This check needs to be more specific.  But like I said in reply to the
+binding patch I don't see why we can't just pattern match on the data
+without requiring a property here, we'd need to check that the message
+is suitable no matter what.
+
+--a24AQkG5lH/zcdwt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmH9M5AACgkQJNaLcl1U
+h9CHWAf9Fv7WpqdKpI5qGpLRrspS+onHqhjxBDK3qP8XYNE8GGIoewvk/y93TrmP
+PT7a/zw1UGFtvHomlXqcnvm7KxGfbsOr+JfBbWQ8hrddfbof84GSaWNyRiJl80Y7
+gmMNPp1WfNen9c5z0wwyH0LS2c+6W4PdOwgipGoGQd4gh1vVzM1zRCja47CM1BD6
+r8WiE3UnnBch6gpC20Ggrb4qjb2piUie7wAdBcvf8Ol9CCU8olylsE9mkE8yTPXR
+5LJ02ayJG9HxTRxlhTG8zEGlhXTq/MI/is7a14BFQt2E3r92WqQBt26dp3jKcmlS
+k9jlTRaQCxNF0WpexPzjM5jpjPZefA==
+=0qb3
+-----END PGP SIGNATURE-----
+
+--a24AQkG5lH/zcdwt--
