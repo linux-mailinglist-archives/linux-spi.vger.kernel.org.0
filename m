@@ -2,71 +2,72 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0EBE4AA3E9
-	for <lists+linux-spi@lfdr.de>; Sat,  5 Feb 2022 00:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1854AA419
+	for <lists+linux-spi@lfdr.de>; Sat,  5 Feb 2022 00:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377821AbiBDXDX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 4 Feb 2022 18:03:23 -0500
-Received: from mail-oi1-f171.google.com ([209.85.167.171]:42500 "EHLO
-        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239851AbiBDXDX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Feb 2022 18:03:23 -0500
-Received: by mail-oi1-f171.google.com with SMTP id v67so10231448oie.9;
-        Fri, 04 Feb 2022 15:03:22 -0800 (PST)
+        id S1377979AbiBDXQD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 4 Feb 2022 18:16:03 -0500
+Received: from mail-oo1-f45.google.com ([209.85.161.45]:45837 "EHLO
+        mail-oo1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377955AbiBDXQB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Feb 2022 18:16:01 -0500
+Received: by mail-oo1-f45.google.com with SMTP id u25-20020a4ad0d9000000b002e8d4370689so6337666oor.12;
+        Fri, 04 Feb 2022 15:16:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=HRBN3drX7LNP2CglYfthuDAO2TQ4Y16kM+T6H92Cb6k=;
-        b=RDdRTTxrrG/xYaW26F3C9Jp2y3+/RP0vjy/lnACC/8IlU4fDzHnna3B3Yi2SB9POMd
-         1imlxgIIglbs15HDgj2bt69B6kByw7t8kh3xM5x96vgYU3cjoWx/ITsfLg64pDlrK66+
-         1U0YBSQkDPnE0ZvgWZekTJlJ07sPLr0KKz3bnN3LWHKu+ehPaNJU3vBh8zwV6+utTYE/
-         8OAseSChtWEQebAQwRqCizpc3x77rgfCSVGauwaXNlkYrSc0su59jtSldP+rJZTl7FGu
-         +VeFquL/A1n4M62wLRy+xlDRY8kyswmag3MpyybIBA/DrUg4/zCE+yqoUrFXkMBXEaAS
-         SeUA==
-X-Gm-Message-State: AOAM531u9F+eP/2BvKYKJ/yp5MJZiiaQCpnaNcPAZlJQU+HM3MrB9Hbg
-        KSMzO+CmzT9oMV7cghQld0CaWZHlEg==
-X-Google-Smtp-Source: ABdhPJxZGN8zUGqe8CCQFcnofv9zbGm8GHdE4O+DkLg3DuLzo4Ke7310tsAgwmT4loZ02k4nEVDyQw==
-X-Received: by 2002:a05:6808:d47:: with SMTP id w7mr2519227oik.268.1644015802559;
-        Fri, 04 Feb 2022 15:03:22 -0800 (PST)
+        bh=zT4cyu0nuwo5GooR+j/43ZxaYfcW5fEHuWFebSaPqMo=;
+        b=i81n8mlmUJajNJDAkkd+MiSnalgHDZSRKLJksSPtmoMpMlU05KDy5a/jpsJLtdGzws
+         5Nn1W97fRH3RmtHUpnmZj6BOySA1wPg2+jf6+toSKcpji8I2e87mAE+5K/nS6UUWTGW5
+         jW2+z1Hvx4WN1cXr0QXzJ5rBD+GAkglkdcwLZ4HWmLCKJYnJLi0eP+OJdsJkAKEl2kNE
+         0fRlNCRkmmFSFQZVmoEOsp04OTvm4jhibSjI/ItNpS13+CHELRNEMdVeXPWOiK5129if
+         Dd7SYVeoTwijZqJZt1t1qRLlazf+h8nBvvgu0cSYZ6J7vlewk5xomjp/7nCdRWul/wZA
+         WexQ==
+X-Gm-Message-State: AOAM533l4e+2kZoqB19NOsVh1GznONBeFZnEo7bpQAzYT4Xa1U2LeGqJ
+        +ylItSd+oaqm8IWx0Ck8PFEeDNKtaw==
+X-Google-Smtp-Source: ABdhPJxMX2u19Ur5MXMFNpLJpdmQdNuRdoNshQhWGHeGMn6DpeyCUka6VxdcVfXwqXzL9DiOKznDLw==
+X-Received: by 2002:a05:6871:542:: with SMTP id t2mr1379311oal.155.1644016561071;
+        Fri, 04 Feb 2022 15:16:01 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id l4sm1289993otq.50.2022.02.04.15.03.21
+        by smtp.gmail.com with ESMTPSA id s11sm1219857otq.69.2022.02.04.15.15.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 15:03:21 -0800 (PST)
-Received: (nullmailer pid 3347992 invoked by uid 1000);
-        Fri, 04 Feb 2022 23:03:20 -0000
-Date:   Fri, 4 Feb 2022 17:03:20 -0600
+        Fri, 04 Feb 2022 15:16:00 -0800 (PST)
+Received: (nullmailer pid 3364997 invoked by uid 1000);
+        Fri, 04 Feb 2022 23:15:59 -0000
+Date:   Fri, 4 Feb 2022 17:15:59 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Leilk Liu <leilk.liu@mediatek.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH V4 1/3] dt-bindings: spi: Convert spi-slave-mt27xx to
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH V4 2/3] dt-bindings: spi: Convert spi-mt65xx to
  json-schema
-Message-ID: <Yf2wuML7yqiSUKqJ@robh.at.kernel.org>
+Message-ID: <Yf2zr956n04yUr1v@robh.at.kernel.org>
 References: <20220125012330.13449-1-leilk.liu@mediatek.com>
- <20220125012330.13449-2-leilk.liu@mediatek.com>
+ <20220125012330.13449-3-leilk.liu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220125012330.13449-2-leilk.liu@mediatek.com>
+In-Reply-To: <20220125012330.13449-3-leilk.liu@mediatek.com>
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 25 Jan 2022 09:23:28 +0800, Leilk Liu wrote:
-> Convert Mediatek ARM SOC's SPI Slave controller binding
+On Tue, 25 Jan 2022 09:23:29 +0800, Leilk Liu wrote:
+> Convert Mediatek ARM SOC's SPI Master controller binding
 > to json-schema format.
 > 
 > Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
 > ---
->  .../spi/mediatek,spi-slave-mt27xx.yaml        | 58 +++++++++++++++++++
->  .../bindings/spi/spi-slave-mt27xx.txt         | 33 -----------
->  2 files changed, 58 insertions(+), 33 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-slave-mt27xx.yaml
->  delete mode 100644 Documentation/devicetree/bindings/spi/spi-slave-mt27xx.txt
+>  .../bindings/spi/mediatek,spi-mt65xx.yaml     | 101 ++++++++++++++++++
+>  .../devicetree/bindings/spi/spi-mt65xx.txt    |  68 ------------
+>  2 files changed, 101 insertions(+), 68 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/spi/spi-mt65xx.txt
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
