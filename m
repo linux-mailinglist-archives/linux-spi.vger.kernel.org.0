@@ -2,109 +2,81 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39CFE4AC2D3
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Feb 2022 16:21:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5063F4AC452
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Feb 2022 16:51:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241997AbiBGPSs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Feb 2022 10:18:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34590 "EHLO
+        id S229545AbiBGPs2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Feb 2022 10:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354785AbiBGPFj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Feb 2022 10:05:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5D4C0401C1;
-        Mon,  7 Feb 2022 07:05:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58AEE6145D;
-        Mon,  7 Feb 2022 15:05:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7672CC340F1;
-        Mon,  7 Feb 2022 15:05:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644246337;
-        bh=j5R4Gv27wDTelz/5MkpZClOBJ+BnL0TYVY4HhplRl4E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RsSjUqwnB108XHjy4DpeXhNZRDJQfdUVj5DgQLcXjvYwGZ3e02kLXwlIiEsuk/ob4
-         a3JAY6QGJ2ByFyuxOwNjC9TWd35teKnyd5hEwH5BE1KAJ7PmZOVKfadSvqBuL1MC4O
-         tuGE5UxdAiI/vcfCVHPvMXGpenjf+GQyxZ44zy0NFzgzY3UHxRJUPKGC9FF8hA7zUW
-         f4ErsoqYf1J4TUYGjUfpXljPLHCFKi7EItaAVxJBT8Q9ww5AtEDnWpMYHeCjfc+XsZ
-         i1R5nISuNaO3tm+Faok2X5kx7uINBpgFT0I7pz/6r7WXCimT2kcETLXLVYjJFP/bdB
-         vY5HMS9WKMQiA==
-Date:   Mon, 7 Feb 2022 15:05:32 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>
-Subject: Re: [PATCH 6/6] spi: tegra210-quad: combined sequence mode
-Message-ID: <YgE1PD2irQeinD9N@sirena.org.uk>
-References: <1643970576-31503-1-git-send-email-kyarlagadda@nvidia.com>
- <1643970576-31503-7-git-send-email-kyarlagadda@nvidia.com>
- <Yf0zkdS2nqHOZjMG@sirena.org.uk>
- <DM6PR12MB35630A9020EC4B309D877086C32C9@DM6PR12MB3563.namprd12.prod.outlook.com>
+        with ESMTP id S1357337AbiBGPjv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Feb 2022 10:39:51 -0500
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7330DC0401D1
+        for <linux-spi@vger.kernel.org>; Mon,  7 Feb 2022 07:39:50 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3274160004;
+        Mon,  7 Feb 2022 15:39:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1644248389;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P6v3WSju2B7mSE36VZ7dx7Lp44QoojX43k9fATwrWOw=;
+        b=o/rXLu07Eyo+I46bH5RdHiVgOo50cTJXJ+LCyfSjwRxVM6AYZ6D3DEJjnlRskxk+UtCtCK
+        cPijAl/ds1puX65m3yQJORcsMlUifaf+Noxcpmi8o8tvI+bv8Rgte1EEJTUOktO3PmlQjC
+        LndxjUGY+60VxbPoVVNc0CKUJbcLWQggjJv6bdTOPFpUfCQMPTWSPJe5GI1gupmZEaLgy3
+        FSWzLsYWLB4CgimoL3hT/bncNKa+UV1tj9fDahA4RtrIBkWFumDgfij0cJeuKIdwOBLQPK
+        vX+w5V+lxnW1Opmhm177ii60hoChiUnwMzolibXjT6VyAmoRVXLMVO1UmOtZ+g==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Michael Walle <michael@walle.cc>, linux-mtd@lists.infradead.org
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        Julien Su <juliensu@mxic.com.tw>,
+        Jaime Liao <jaimeliao@mxic.com.tw>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v11] spi: mxic: Add support for pipelined ECC operations
+Date:   Mon,  7 Feb 2022 16:39:46 +0100
+Message-Id: <20220207153946.710556-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220202144536.393792-1-miquel.raynal@bootlin.com>
+References: 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="L2V1A7HZ4pNge4n4"
-Content-Disposition: inline
-In-Reply-To: <DM6PR12MB35630A9020EC4B309D877086C32C9@DM6PR12MB3563.namprd12.prod.outlook.com>
-X-Cookie: Never give an inch!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'd6986e74ec6ee6a48ce9ee1d8051b2988d747558'
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Wed, 2022-02-02 at 14:45:36 UTC, Miquel Raynal wrote:
+> Some SPI-NAND chips do not have a proper on-die ECC engine providing
+> error correction/detection. This is particularly an issue on embedded
+> devices with limited resources because all the computations must
+> happen in software, unless an external hardware engine is provided.
+> 
+> These external engines are new and can be of two categories: external
+> or pipelined. Macronix is providing both, the former being already
+> supported. The second, however, is very SoC implementation dependent
+> and must be instantiated by the SPI host controller directly.
+> 
+> An entire subsystem has been contributed to support these engines which
+> makes the insertion into another subsystem such as SPI quite
+> straightforward without the need for a lot of specific functions.
+> 
+> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> Reviewed-by: Mark Brown <broonie@kernel.org>
 
---L2V1A7HZ4pNge4n4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi-mem-ecc.
 
-On Mon, Feb 07, 2022 at 02:54:00PM +0000, Krishna Yarlagadda wrote:
-
-> > > +	if (cdata->is_cmb_xfer && transfer_count == 3)
-> > > +		ret = tegra_qspi_combined_seq_xfer(tqspi, msg);
-> > > +	else
-> > > +		ret = tegra_qspi_non_combined_seq_xfer(tqspi, msg);
-
-> > This check needs to be more specific.  But like I said in reply to the binding
-> > patch I don't see why we can't just pattern match on the data without requiring
-> > a property here, we'd need to check that the message is suitable no matter
-> > what.
-
-> There is no real-world use case we encountered so far preventing us stick to pattern.
-> But this was to avoid any corner case where there could be 3 different transfers sent in single msg.
-
-So you'll remove the property and just pattern match on the message?
-
-Please fix your mail client to word wrap within paragraphs at something
-substantially less than 80 columns.  Doing this makes your messages much
-easier to read and reply to.
-
---L2V1A7HZ4pNge4n4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIBNTsACgkQJNaLcl1U
-h9BFNwf/ZmIVt/rPd9AefPfAWPMK3pHWlBlYzPmBgZi391BXYFZQwyI/4bJYQ7Ab
-PMBM5GNFjTtqa2KFmkQ9hikJEuxTzcXckRikQ0wO+kix9rydqC/DYSxKl0Bo/y1V
-syLYHM1voFHziWbqfnaFATKU88+CtaTHBNjfIqagE+MtUUZi8yeF+TJB444m4gxt
-Pp4o+Ux83APBvyLsuYWYT5ua22o4ChDhAjOTQWP/fh4Eywd/yBDDw4kYDB0GYEwg
-OR8NX5K+nZgz/TSavbQqeDx1NrY4WcV5TyFfGa4jajDXw1BlcgA2hZcwOMfO7MOI
-GscayI2JryM5qaUgVL3vSM7ePri9Jg==
-=5TVG
------END PGP SIGNATURE-----
-
---L2V1A7HZ4pNge4n4--
+Miquel
