@@ -2,141 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3EA4AAD9F
-	for <lists+linux-spi@lfdr.de>; Sun,  6 Feb 2022 04:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 743164AB32B
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Feb 2022 02:46:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381285AbiBFDao (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 5 Feb 2022 22:30:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
+        id S1347658AbiBGBqX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 6 Feb 2022 20:46:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381120AbiBFDan (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 5 Feb 2022 22:30:43 -0500
-X-Greylist: delayed 10803 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 05 Feb 2022 19:30:42 PST
-Received: from mx2.smtp.larsendata.com (mx2.smtp.larsendata.com [91.221.196.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B14C0401C4
-        for <linux-spi@vger.kernel.org>; Sat,  5 Feb 2022 19:30:41 -0800 (PST)
-Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
-        by mx2.smtp.larsendata.com (Halon) with ESMTPS
-        id 12f502cb-8454-11ec-ac19-0050568cd888;
-        Wed, 02 Feb 2022 18:15:17 +0000 (UTC)
-Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sam@ravnborg.org)
-        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 67A6F194BFA;
-        Wed,  2 Feb 2022 19:14:11 +0100 (CET)
-Date:   Wed, 2 Feb 2022 19:14:08 +0100
-X-Report-Abuse-To: abuse@mxhotel.dk
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     nick.hawkins@hpe.com
-Cc:     verdun@hpe.com, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Corey Minyard <minyard@acm.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Hao Fang <fanghao11@huawei.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Wang Kefeng <wangkefeng.wang@huawei.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] HPE BMC GXP SUPPORT
-Message-ID: <YfrJ8JWjyH9ptV4z@ravnborg.org>
-References: <nick.hawkins@hpe.com>
- <20220202165315.18282-1-nick.hawkins@hpe.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220202165315.18282-1-nick.hawkins@hpe.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        with ESMTP id S235981AbiBGBqW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 6 Feb 2022 20:46:22 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1A9C061348;
+        Sun,  6 Feb 2022 17:46:20 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id e28so10388095pfj.5;
+        Sun, 06 Feb 2022 17:46:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=9Q5/F8EmWvdY2BVBPwxUCP4JTGecrqYUq+/uZOYIhBk=;
+        b=awv32MCVB6xoA8hpTDqMvERErV8/3s6P/y8YvJbYK4x+foi07jjUmTSf3PCarpaTPZ
+         BTM2eGhHnAxAzpGZOicz+GfXFDgDgKfCJ6onRXJ9ROP+BKa+hMOnILXrzkZ1syBgRkL6
+         /C/JbTSluSQH3dJeNJcI6O2HRgJvnb2ZEiNWmY3lPmOVbV2d5bUhn2FkpCrUaibfbeCR
+         MckwQjxpTcH5ZCwJ42xi/K+HHtmbJRTFD53kdLTTG3CUypVNT03OI4C1H9IZZdwjNHJN
+         jNMAb7zLctwukNUTaEjJL18QLZflGl55TXwcDZC1RsIUk+FQzIvsk8eJ+9WfBWIGJPnc
+         Xtug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=9Q5/F8EmWvdY2BVBPwxUCP4JTGecrqYUq+/uZOYIhBk=;
+        b=1YkGqz+rptUYcKwqtMtRcgve7dsC5eCD21IfJHFLOQ7tW5UkNA+ftN5qyPNLPkjxc3
+         u5i3+SYAJvVTqkDnfs1DJcPMt7Tg8ru0Ned1u1HTJJ11PttDHhGObVWQJWXziYY8jXIc
+         sMoF+9tXzCJFEFGq+Y8MTFgn6nIjgZS+Jds1azXF5ahQ8Q/Ot9NBpgZ3WFUhgQvcAVMP
+         pR56Xnei8nQS0PN+qchyKKSPi7YaWht/mzQTFyowwnORGx51a9AODscvfO3KrY5084aR
+         srCUplQR8YfpeFhxmfMvylhperVhYQgsrhz43U0YGjBhGhLttSCwvlMzwD4Y8LWcvTyX
+         c2jQ==
+X-Gm-Message-State: AOAM531nkc57ha3qDIEKAh32gVPd3EQDG+aeoHXqxREyLj2jqG5Dg+Gh
+        wm+yxxbIfC0pg56iYSu3I6I=
+X-Google-Smtp-Source: ABdhPJzcXjq4UIXHIcwYc3lcDZJhfbJ3ZQf6vzr+6w38knHEzAa4wIZGvrfnDItDhT5sg6FBpanz4A==
+X-Received: by 2002:a63:5144:: with SMTP id r4mr7643965pgl.382.1644198380016;
+        Sun, 06 Feb 2022 17:46:20 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id g1sm9690899pfu.32.2022.02.06.17.46.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 06 Feb 2022 17:46:19 -0800 (PST)
+From:   Li-hao Kuo <lhjeff911@gmail.com>
+To:     broonie@kernel.org, robh+dt@kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com,
+        Li-hao Kuo <lhjeff911@gmail.com>
+Subject: [PATCH next] dt-bindings:spi: Fix test error for sp7021.
+Date:   Mon,  7 Feb 2022 09:46:34 +0800
+Message-Id: <b8a94fbfcab68b1279b09b6297099310c209927b.1644198244.git.lhjeff911@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Nick,
+Remove the include path and modify parameters for fix error for bt binding test
 
-good to see all this stuff coming mainline,
+Fixes: a708078eeb99  ("spi: Add Sunplus SP7021 schema")
+Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+---
+ Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-On Wed, Feb 02, 2022 at 10:52:50AM -0600, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
-> 
-> GXP is the name of the HPE SoC.
-> This SoC is used to implement BMC features of HPE servers
-> (all ProLiant, Synergy, and many Apollo, and Superdome machines)
-> It does support many features including:
-> 	ARMv7 architecture, and it is based on a Cortex A9 core
-> 	Use an AXI bus to which
-> 		a memory controller is attached, as well as
->                  multiple SPI interfaces to connect boot flash,
->                  and ROM flash, a 10/100/1000 Mac engine which
->                  supports SGMII (2 ports) and RMII
-> 		Multiple I2C engines to drive connectivity with a host infrastructure
-> 		A video engine which support VGA and DP, as well as
->                  an hardware video encoder
-> 		Multiple PCIe ports
-> 		A PECI interface, and LPC eSPI
-> 		Multiple UART for debug purpose, and Virtual UART for host connectivity
-> 		A GPIO engine
-> This Patch Includes:
-> 	Documentation for device tree bindings
-> 	Device Tree Bindings
-> 	GXP Timer Support
-> 	GXP Architecture Support
-> 
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
-> ---
->  .../bindings/display/hpe,gxp-thumbnail.txt    |  21 +
->  .../devicetree/bindings/gpio/hpe,gxp-gpio.txt |  16 +
-...
+diff --git a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+index 38589fd..298eac2 100644
+--- a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+@@ -59,8 +59,6 @@ unevaluatedProperties: false
+ 
+ examples:
+   - |
+-    #include <dt-bindings/clock/sp-sp7021.h>
+-    #include <dt-bindings/reset/sp-sp7021.h>
+     #include <dt-bindings/interrupt-controller/irq.h>
+     spi@9C002D80 {
+         compatible = "sunplus,sp7021-spi";
+@@ -73,8 +71,8 @@ examples:
+         interrupts = <144 IRQ_TYPE_LEVEL_HIGH>,
+                      <146 IRQ_TYPE_LEVEL_HIGH>,
+                      <145 IRQ_TYPE_LEVEL_HIGH>;
+-        clocks = <&clkc SPI_COMBO_0>;
+-        resets = <&rstc RST_SPI_COMBO_0>;
++        clocks = <&clkc 0x32>;
++        resets = <&rstc 0x22>;
+         pinctrl-names = "default";
+         pinctrl-0 = <&pins_spi0>;
+     };
+-- 
+2.7.4
 
-All new bindings must be in the DT-schema format (yaml files).
-This enables a lot of syntax checks and validation.
-
-We are slowly migrating away from the .txt based bindings.
-
-Also, for new bindings please follow the guide lines listed in
-Documentation/devicetree/bindings/submitting-patches.rst
-
-Consider including the bindings with the drivers using the bindings so
-things have a more natural split.
-
-	Sam
