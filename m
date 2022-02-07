@@ -2,84 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1984ACAB0
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Feb 2022 21:48:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF4C4ACB59
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Feb 2022 22:31:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234672AbiBGUsC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Feb 2022 15:48:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55718 "EHLO
+        id S238118AbiBGVbX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Feb 2022 16:31:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242685AbiBGUm7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Feb 2022 15:42:59 -0500
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D884C0401DA;
-        Mon,  7 Feb 2022 12:42:58 -0800 (PST)
-Received: by mail-oi1-f171.google.com with SMTP id u3so2486827oiv.12;
-        Mon, 07 Feb 2022 12:42:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rlE1V9OTk6BkuyItKfJDtXE3hovJxZT5HEVCUsaARlc=;
-        b=FbXej2qIduulG9djnqrz0rVXQndYbVTxSPxMKKg3HSh4RYdCeHy05ocM7wg4WQo7w+
-         Bf4JnfY9MfM1pXnm65SU4HXk/FN6LTpPflCAGQxBvzESdZRFIjiafUbILMm3tEUqCTAj
-         xtcOFxu9h9zxvNwXqkS1s47p18IXPkbWP+0Dy7VjM3bmP5tzjVbvS1b3IiptLEToEzsW
-         HMQn7qG7TAai+aXG7W4ZF9m/IdqNdIrqCKf6Lh6k5rRDmjPSQ0t8SS4KJMZ9T/WXvjsC
-         RrPIQKkkoxlrCX6sNKb5Y/CjVDsmztpFrK2zaPmaJLRClevoosADJgkxuPRwV3PA/c7g
-         V5Hw==
-X-Gm-Message-State: AOAM530h6smyg8IxjK3ovONBuKcrUSNUacYzLX/fAOjqDd0wQINsmfTG
-        4xvNHETJaN/tly/wJuKuaw==
-X-Google-Smtp-Source: ABdhPJzdEby2HALFZLU6QZB+I9qAgJ2rlgPsbx8QFyIGftJZxHXR/0k5XwciVAIo5f+eoTkU8xhLMA==
-X-Received: by 2002:a05:6808:99b:: with SMTP id a27mr354523oic.299.1644266577999;
-        Mon, 07 Feb 2022 12:42:57 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id g4sm4317453otl.1.2022.02.07.12.42.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 12:42:56 -0800 (PST)
-Received: (nullmailer pid 883752 invoked by uid 1000);
-        Mon, 07 Feb 2022 20:42:55 -0000
-Date:   Mon, 7 Feb 2022 14:42:55 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        andi@etezian.org, linux-spi@vger.kernel.org, linux-fsd@tesla.com,
-        robh+dt@kernel.org, linus.walleij@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski@canonical.com, broonie@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Adithya K V <adithya.kv@samsung.com>
-Subject: Re: [PATCH v3 1/3] spi: dt-bindings: samsung: Add fsd spi compatible
-Message-ID: <YgGET9UVDCxDA621@robh.at.kernel.org>
-References: <20220125031604.76009-1-alim.akhtar@samsung.com>
- <CGME20220125032821epcas5p128c99ca3654fce0ec046943c90211849@epcas5p1.samsung.com>
- <20220125031604.76009-2-alim.akhtar@samsung.com>
+        with ESMTP id S237960AbiBGVbX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Feb 2022 16:31:23 -0500
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 13:31:21 PST
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C4DC06173B;
+        Mon,  7 Feb 2022 13:31:21 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.88,350,1635199200"; 
+   d="scan'208";a="5266113"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 22:30:16 +0100
+Date:   Mon, 7 Feb 2022 22:30:15 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        Michal Simek <monstr@monstr.eu>,
+        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kbuild-all@lists.01.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] spi: spi-zynqmp-gqspi: fix for_each_child.cocci warnings
+Message-ID: <alpine.DEB.2.22.394.2202072228170.52266@hadrien>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125031604.76009-2-alim.akhtar@samsung.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 25 Jan 2022 08:46:02 +0530, Alim Akhtar wrote:
-> Adds spi controller dt-binding compatible information for
-> Tesla Full Self-Driving (FSD) SoC.
-> 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Adithya K V <adithya.kv@samsung.com>
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Reviewed-by: Andi Shyti <andi@etezian.org>
-> ---
->  Documentation/devicetree/bindings/spi/samsung,spi.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+From: kernel test robot <lkp@intel.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
+for_each_available_child_of_node should have of_node_put() before break.
+
+Generated by: scripts/coccinelle/iterators/for_each_child.cocci
+
+Fixes: f0fcd7d14036 ("spi: spi-zynqmp-gqspi: Fix suspend/resume")
+CC: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
+
+---
+
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15
+head:   1183ce490adb103e5e569b8ebd74c50c885ddc05
+commit: f0fcd7d140361b1f54cfd76afb8c3afc9bf218a5 [857/872] spi: spi-zynqmp-gqspi: Fix suspend/resume
+:::::: branch date: 3 days ago
+:::::: commit date: 3 days ago
+
+Please take the patch only if it's a positive warning. Thanks!
+
+ spi-zynqmp-gqspi.c |    2 ++
+ 1 file changed, 2 insertions(+)
+
+--- a/drivers/spi/spi-zynqmp-gqspi.c
++++ b/drivers/spi/spi-zynqmp-gqspi.c
+@@ -1395,6 +1395,7 @@ static int zynqmp_qspi_probe(struct plat
+ 					   &rx_bus_width);
+ 		if (!ret) {
+ 			xqspi->rx_bus_width = rx_bus_width;
++			of_node_put(nc);
+ 			break;
+ 		}
+ 	}
+@@ -1407,6 +1408,7 @@ static int zynqmp_qspi_probe(struct plat
+ 					   &tx_bus_width);
+ 		if (!ret) {
+ 			xqspi->tx_bus_width = tx_bus_width;
++			of_node_put(nc);
+ 			break;
+ 		}
+ 	}
