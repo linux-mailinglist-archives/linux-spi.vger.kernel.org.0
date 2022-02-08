@@ -2,43 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA734AE1B8
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Feb 2022 20:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2BF4AE1C0
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Feb 2022 20:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385631AbiBHTAZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 8 Feb 2022 14:00:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
+        id S1385693AbiBHTAd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 8 Feb 2022 14:00:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385660AbiBHTAY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 8 Feb 2022 14:00:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7D2C0612BA;
-        Tue,  8 Feb 2022 11:00:23 -0800 (PST)
+        with ESMTP id S1385707AbiBHTAa (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 8 Feb 2022 14:00:30 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69755C0612C3;
+        Tue,  8 Feb 2022 11:00:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 047A3614E5;
-        Tue,  8 Feb 2022 19:00:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91181C340ED;
-        Tue,  8 Feb 2022 19:00:21 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 064C7CE1C15;
+        Tue,  8 Feb 2022 19:00:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E120FC340EF;
+        Tue,  8 Feb 2022 19:00:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644346822;
-        bh=x7Cg6DsGf+3kZH0y3tn63HpnQtCVa0lOTBUssXE7/jk=;
+        s=k20201202; t=1644346824;
+        bh=0oEq0H6r2djLAksGfJSDTE7q5yoYgycV3Yo21Q05Kss=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=u2nZcWx9vdDcN5f8YxyKuKdv+DcFNJOu8INNPbfgMhmXsZOexeG4bjKXxHz95ngWg
-         wTQ1BzHnD7dzv4NBNS2FJbDM7J+OKMIQk+kmTo4HRr8QQdIcwpMABnYAlzNt5qBq8Z
-         5XOgIPYpWUSNjoBErT6HK8s6gAk8UAP6sQibfedvWrASqQapAEubbaSgbQ67+0stVd
-         /UdQx/itwa5jDtckv8d+vfU3PTyjjxE+CUKubOe1fyRyGfxEm7uRhpymgGegcMnEbV
-         cOx23m2grlp/dhfC4nHZ/WPXQlrZTYKqLoOVkm1AKEhqLdiTiqekudoaH3ZUmFAw05
-         gPGeEP78XKAjw==
+        b=SW9N2CZ50C5WB00+MOta5o/zk8QettLfBfnCL+Y+XRIcsnW/T+XGGYOj4/poT7TVJ
+         I/YOY0DEAPfna+JpUBmZGzP5bZUPjjzfnMqplcBox0CMWjrxr3fuqlFcRe8NBQqNMm
+         QK09n9SpQOdrjzMmvtipwp2UPuvE9NFnUKXzIkIj3vExFiwxLy7LO3Ca3tO75a/6e1
+         YwPwlvetyn5zBBXCEecoWTx2iur3vJcEOCQ4o42DGVmW3pm0PUAQbI5UR+NlkCpuev
+         OYCaQQOszIgo8HNcI6oOc8gy4AvTl/zmmSLPNQUTUVWoIPJqkfK2vSTp+bu9+gIYfE
+         CO3xpLhu/r7jA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     linux-spi@vger.kernel.org, kernel-janitors@vger.kernel.org
-In-Reply-To: <20220125065202.GA8807@kili>
-References: <20220125065202.GA8807@kili>
-Subject: Re: [PATCH] spi: spidev: prevent spidev->speed_hz from being zero
-Message-Id: <164434682130.1135514.6941363158812350659.b4-ty@kernel.org>
-Date:   Tue, 08 Feb 2022 19:00:21 +0000
+To:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        Li-hao Kuo <lhjeff911@gmail.com>
+Cc:     lh.kuo@sunplus.com, wells.lu@sunplus.com
+In-Reply-To: <b8a94fbfcab68b1279b09b6297099310c209927b.1644198244.git.lhjeff911@gmail.com>
+References: <b8a94fbfcab68b1279b09b6297099310c209927b.1644198244.git.lhjeff911@gmail.com>
+Subject: Re: [PATCH next] dt-bindings:spi: Fix test error for sp7021.
+Message-Id: <164434682261.1135514.9209006322953151639.b4-ty@kernel.org>
+Date:   Tue, 08 Feb 2022 19:00:22 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -52,17 +54,10 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 25 Jan 2022 09:52:02 +0300, Dan Carpenter wrote:
-> A zero value for spi->max_speed_hz or spidev->speed_hz does not make
-> sense and trying to set that can lead to divide by zero crashes in
-> a some of the drivers.
+On Mon, 7 Feb 2022 09:46:34 +0800, Li-hao Kuo wrote:
+> Remove the include path and modify parameters for fix error for bt binding test
 > 
-> drivers/spi/spi-s3c64xx.c:874 s3c64xx_spi_setup() error: potential divide by zero bug '/ spi->max_speed_hz'.
-> drivers/spi/spi-fsl-dspi.c:613 hz_to_spi_baud() error: potential divide by zero bug '/ speed_hz'.
-> drivers/spi/spi-xlp.c:146 xlp_spi_setup() error: potential divide by zero bug '/ (spi->max_speed_hz)'.
-> drivers/spi/spi-orion.c:162 orion_spi_baudrate_set() error: potential divide by zero bug '/ speed'.
 > 
-> [...]
 
 Applied to
 
@@ -70,8 +65,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spidev: prevent spidev->speed_hz from being zero
-      commit: 833026ad56f76d1a1035d6511fd5aeed308465fd
+[1/1] dt-bindings:spi: Fix test error for sp7021.
+      commit: 3b8ab4da3405d07ddfe434f17f9014740b30a19c
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
