@@ -2,47 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C095C4ADC02
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Feb 2022 16:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB84C4AE1BE
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Feb 2022 20:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379470AbiBHPIH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 8 Feb 2022 10:08:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
+        id S1385645AbiBHTAX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 8 Feb 2022 14:00:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351474AbiBHPIH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 8 Feb 2022 10:08:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920C8C061578;
-        Tue,  8 Feb 2022 07:08:06 -0800 (PST)
+        with ESMTP id S1385631AbiBHTAW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 8 Feb 2022 14:00:22 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580E9C0612AA;
+        Tue,  8 Feb 2022 11:00:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 593FDB81B82;
-        Tue,  8 Feb 2022 15:08:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF3D0C004E1;
-        Tue,  8 Feb 2022 15:08:02 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C107FCE1C1B;
+        Tue,  8 Feb 2022 19:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B42AFC004E1;
+        Tue,  8 Feb 2022 19:00:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644332884;
-        bh=m+XAn2rGWJrSsSfX1FShC6Eo8n+JIqs8s5P/WsHDYu4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=H9NTGjomupshEEFChzZO90ds52KO/6EFz6MAOstGYx9Q89l95PKattlrwWpNVnU+A
-         FD/83VYz9TWZloye0lhXlWHla4fIr4Uks8Te1yINurUUNhFJGtAbuFCon/ZGvk6sJf
-         JGpbXr7Hn5FcDtivxPfpXGWeXK7iu994/aDLqscm4IfQighmhUIW84N1LBFjbpgF5c
-         QGG25m0ywpRPJ/wAvyX8+3cb+AjP1xm1hDocu3YNYgLVVtiLIpy+KqFugyoY7lliGj
-         IABRY3/Z/ni3t8h16zO1sGWnbGFh7w9Ovd1XeMa5h0enpaHmSUS9NJ1CitT58CeYwE
-         Q9SjfY1GD4jKA==
+        s=k20201202; t=1644346817;
+        bh=zJd+H+BIPkR2OI3cFt0/lJSBS7oK/94+7PCJWcu8U/M=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=hoE1wnoZdIOBNhyQQdvZMVEKbdamCmwiLoxUBpPTTHa8SG7pRO9viyElKLyJwxSL/
+         oxeUkZdI1qrMhFXXCDjVTfAWWtkOUb7JwDIhmMuB+rFKuc45V0RDxKr0lJQ1Jg9QbM
+         73r/Pj6+oIMEFckMfW+dKnAffRRXz4dBOjdTwiXdF/UlnBCv41e7VTZh1nKkVdispC
+         ajwNQpsW66RwZwcNPn8O6/qVNkq4m4SA8gkodbfEXuD+cpefDW98jmDtMRlD5a99QT
+         +NHUEAfRGsYnQQkBr2O+pYINiHf5up34Gw5jYh3wraf8E7U2tIj5uZKXaobuX04KpM
+         t/dEGQEequoVQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Zhou Qingyang <zhou1615@umn.edu>
-Cc:     Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        linux-spi@vger.kernel.org, kjlu@umn.edu,
-        linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20211130172253.203700-1-zhou1615@umn.edu>
-References: <20211130172253.203700-1-zhou1615@umn.edu>
-Subject: Re: [PATCH] spi: spi-zynq-qspi: Fix a NULL pointer dereference in zynq_qspi_exec_mem_op()
-Message-Id: <164433288249.2965024.5625458005559637267.b4-ty@kernel.org>
-Date:   Tue, 08 Feb 2022 15:08:02 +0000
+To:     linux-kernel@vger.kernel.org,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Grant Likely <grant.likely@secretlab.ca>,
+        linux-spi@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        linux-tegra@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Stephen Warren <swarren@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+In-Reply-To: <20220128165238.25615-1-linmq006@gmail.com>
+References: <20220128165238.25615-1-linmq006@gmail.com>
+Subject: Re: [PATCH] spi: tegra114: Add missing IRQ check in tegra_spi_probe
+Message-Id: <164434681322.1135514.2854633035091330179.b4-ty@kernel.org>
+Date:   Tue, 08 Feb 2022 19:00:13 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,29 +58,22 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 1 Dec 2021 01:22:53 +0800, Zhou Qingyang wrote:
-> In zynq_qspi_exec_mem_op(), kzalloc() is directly used in memset(),
-> which could lead to a NULL pointer dereference on failure of
-> kzalloc().
+On Fri, 28 Jan 2022 16:52:38 +0000, Miaoqian Lin wrote:
+> This func misses checking for platform_get_irq()'s call and may passes the
+> negative error codes to request_threaded_irq(), which takes unsigned IRQ #,
+> causing it to fail with -EINVAL, overriding an original error code.
+> Stop calling request_threaded_irq() with invalid IRQ #s.
 > 
-> Fix this bug by adding a check of tmpbuf.
 > 
-> This bug was found by a static analyzer. The analysis employs
-> differential checking to identify inconsistent security operations
-> (e.g., checks or kfrees) between two code paths and confirms that the
-> inconsistent operations are not recovered in the current function or
-> the callers, so they constitute bugs.
-> 
-> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-linus
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/1] spi: spi-zynq-qspi: Fix a NULL pointer dereference in zynq_qspi_exec_mem_op()
-      commit: ab3824427b848da10e9fe2727f035bbeecae6ff4
+[1/1] spi: tegra114: Add missing IRQ check in tegra_spi_probe
+      commit: 4f92724d4b92c024e721063f520d66e11ca4b54b
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
