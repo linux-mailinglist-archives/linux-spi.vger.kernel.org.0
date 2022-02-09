@@ -2,126 +2,98 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E59014AEF92
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Feb 2022 11:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B904AF099
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Feb 2022 13:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiBIKzq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Feb 2022 05:55:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
+        id S231295AbiBIMDo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Feb 2022 07:03:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiBIKzo (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Feb 2022 05:55:44 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42748E0A665D;
-        Wed,  9 Feb 2022 02:33:51 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id z13so3543337pfa.3;
-        Wed, 09 Feb 2022 02:33:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h6uHadWE/39njI3VU+9mX9j/6jVx+OkIYtMIBoXqPnk=;
-        b=DP0yY9iOmpg4V3Ef5qPI0vrA+9KFzNb4Dj+xVQVwJtkAl8VpeO3Nu/zFfEuicePhC/
-         YS8bcFc4rydhmbSPoXuxcTz5ymgTQ7PxQ9h6aPmoZ6Y3vgAN5mdnL/jgddbq/LecnB/w
-         w0C7HWUnv4jQcHjzpCtY6HPj5ssVQHLbX26tsdm6m0el3GEACKIKNuoGJlIuyv5auM87
-         qorTfV76kKzXwayoPjfGYwrivMZpalBlune8219w2acqkdrJcNVRe2yeiCuEw4pxZ/3v
-         sdpiPZ2nVQJoLLkyNq7BaZS/a+b6uzROkHPMhFIrayMERY1NqIE8kmhzwYIuRZaEBUN4
-         zSVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h6uHadWE/39njI3VU+9mX9j/6jVx+OkIYtMIBoXqPnk=;
-        b=LAIJ5wLUQs53msiBOoO5b82kfDcNzW0kf14P1eTTHLQyA0+hsEOSG5uRsof/tiAyTE
-         Z685t0Zei3M8C13VDAmVy9PZSRiek/KU9LVonHErUlm93IUblKVQLId+no6fWV+zePZQ
-         QVbjq2slTC2wMzP5xRmbtyI2s3LeQYuIhejUuUgz63mWlWiKOXCz8BiJ7hIGSL48P7Rq
-         /jVT171mY4UBeGUdM6JpvHF7dD2OC3KABc3yjkXbJngOU8f1SoX/Jm4KiswORf3lw1oK
-         dF3Cu0sItMs9AneZw1x3T/W56Tzyk3IEBbP7h2gMmEwku3rCdAEKlt/Ga6n3hxG9XObz
-         thMg==
-X-Gm-Message-State: AOAM530HA6kSgXssD+AmfnTcUYt1Jq7etWgqO/FuakAa8pZGY64xtWPd
-        /lc9rZQDzyhlq5Ukm55tLpYRzFUw7jENBW1nE4E=
-X-Google-Smtp-Source: ABdhPJx6txqMEFnOUoWn8WwwTdBxOp1W0O2unJFtdjod4jdQ5PB5EM3kBKUlCAqk0DV/S662JMa0eMJ6vyqhrZPvpDo=
-X-Received: by 2002:a63:5d61:: with SMTP id o33mr1386466pgm.442.1644402830673;
- Wed, 09 Feb 2022 02:33:50 -0800 (PST)
+        with ESMTP id S232076AbiBIMDQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Feb 2022 07:03:16 -0500
+X-Greylist: delayed 3611 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 03:42:44 PST
+Received: from mail1.wrs.com (unknown-3-146.windriver.com [147.11.3.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFE4C0364A2;
+        Wed,  9 Feb 2022 03:42:44 -0800 (PST)
+Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.corp.ad.wrs.com [147.11.82.252])
+        by mail1.wrs.com (8.15.2/8.15.2) with ESMTPS id 219A0iO4024427
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 9 Feb 2022 02:00:44 -0800
+Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Wed, 9 Feb 2022 02:00:44 -0800
+Received: from pek-lpd-ccm3.wrs.com (128.224.156.163) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
+ 15.1.2242.12 via Frontend Transport; Wed, 9 Feb 2022 02:00:42 -0800
+From:   Yun Zhou <yun.zhou@windriver.com>
+To:     <broonie@kernel.org>, <yun.zhou@windriver.com>
+CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <ying.xue@windriver.com>
+Subject: [PATCH] spi: disable chipselect after complete transfer
+Date:   Wed, 9 Feb 2022 18:00:42 +0800
+Message-ID: <20220209100042.22941-1-yun.zhou@windriver.com>
+X-Mailer: git-send-email 2.26.1
 MIME-Version: 1.0
-References: <alpine.DEB.2.22.394.2202082148490.52266@hadrien>
-In-Reply-To: <alpine.DEB.2.22.394.2202082148490.52266@hadrien>
-From:   Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>
-Date:   Wed, 9 Feb 2022 11:33:34 +0100
-Message-ID: <CAPybu_30=ua4emx3hP2eFeJ4gtoOncah+X+NmsBdQq7cTuqZ+g@mail.gmail.com>
-Subject: Re: [PATCH] spi: spi-xilinx: fix for_each_child.cocci warnings
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
-        Tejas Prajapati Rameshchandra <tejaspra@xilinx.com>,
-        Naga Sureshkumar Relli <nagasure@xilinx.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "moderated list:ARM/S5P EXYNOS AR..." 
-        <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, kbuild-all@lists.01.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_FAIL,SPF_HELO_NONE,TO_EQ_FM_DOM_SPF_FAIL,TO_EQ_FM_SPF_FAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 9:51 PM Julia Lawall <julia.lawall@inria.fr> wrote:
->
-> From: kernel test robot <lkp@intel.com>
->
-> After for_each_available_child_of_node, of_node_put is needed before break
-> and return.
->
-> Generated by: scripts/coccinelle/iterators/for_each_child.cocci
->
-> Fixes: 3973536c4560 ("spi: spi-xilinx: Updated axi-qspi controller driver")
-> CC: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
+If there are 2 slaves or more on a spi bus, e.g. A and B, we processed a
+transfer to A, the CS will be selected for A whose 'last_cs_enable' will
+be recorded to true at the same time. Then we processed a transfer to B,
+the CS will be switched to B. And then if we transmit data to A again, it
+will not enable CS back to A because 'last_cs_enable' is true.
+In addition, if CS is not disabled, Some controllers in automatic
+transmission state will receive unpredictable data, such as Cadence SPI
+controller.
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->
-> tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15
-> head:   1183ce490adb103e5e569b8ebd74c50c885ddc05
-> commit: 3973536c456079bf3d09e9a97bf33d29422b183f [861/872] spi: spi-xilinx: Updated axi-qspi controller driver
-> :::::: branch date: 7 days ago
-> :::::: commit date: 7 days ago
->
->  spi-xilinx.c |    5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> --- a/drivers/spi/spi-xilinx.c
-> +++ b/drivers/spi/spi-xilinx.c
-> @@ -693,13 +693,16 @@ static int xilinx_spi_probe(struct platf
->                 if (startup_block) {
->                         ret = of_property_read_u32(nc, "reg",
->                                                    &cs_num);
-> -                       if (ret < 0)
-> +                       if (ret < 0) {
-> +                               of_node_put(nc);
->                                 return -EINVAL;
-> +                       }
->                 }
->                 ret = of_property_read_u32(nc, "spi-rx-bus-width",
->                                            &rx_bus_width);
->                 if (!ret) {
->                         xspi->rx_bus_width = rx_bus_width;
-> +                       of_node_put(nc);
->                         break;
->                 }
->         }
+Signed-off-by: Yun Zhou <yun.zhou@windriver.com>
+---
+ drivers/spi/spi.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-
-
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index fdd530b150a7..ebbba0b08186 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1417,7 +1417,6 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
+ 				    struct spi_message *msg)
+ {
+ 	struct spi_transfer *xfer;
+-	bool keep_cs = false;
+ 	int ret = 0;
+ 	struct spi_statistics *statm = &ctlr->statistics;
+ 	struct spi_statistics *stats = &msg->spi->statistics;
+@@ -1486,10 +1485,8 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
+ 		spi_transfer_delay_exec(xfer);
+ 
+ 		if (xfer->cs_change) {
+-			if (list_is_last(&xfer->transfer_list,
++			if (!list_is_last(&xfer->transfer_list,
+ 					 &msg->transfers)) {
+-				keep_cs = true;
+-			} else {
+ 				spi_set_cs(msg->spi, false, false);
+ 				_spi_transfer_cs_change_delay(msg, xfer);
+ 				spi_set_cs(msg->spi, true, false);
+@@ -1500,8 +1497,7 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
+ 	}
+ 
+ out:
+-	if (ret != 0 || !keep_cs)
+-		spi_set_cs(msg->spi, false, false);
++	spi_set_cs(msg->spi, false, false);
+ 
+ 	if (msg->status == -EINPROGRESS)
+ 		msg->status = ret;
 -- 
-Ricardo Ribalda
+2.26.1
+
