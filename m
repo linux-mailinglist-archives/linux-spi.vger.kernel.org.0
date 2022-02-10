@@ -1,82 +1,71 @@
 Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 923EE4AF884
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Feb 2022 18:30:10 +0100 (CET)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 9330B4B01DF
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Feb 2022 02:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbiBIR37 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Feb 2022 12:29:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
+        id S231232AbiBJBUz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Feb 2022 20:20:55 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238325AbiBIR36 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Feb 2022 12:29:58 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA067C05CB88;
-        Wed,  9 Feb 2022 09:30:00 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: tonyk)
-        with ESMTPSA id 65C3D1F45BE1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644427799;
-        bh=xT2tt+7x9ScJ7oQzrsb0MCXuuYZ/niEK3g8yTn+Jz+M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nLwqLFxXloHDF8MraubLj+wClqNUb89qfvjTf+h86iRzGEikTT+f/y1ZQu48AxN4m
-         aSwrNBn8zpkTNshytzA97vrvTD8TpwejCK8WrjZHo8yNcbxVowZqMN+dX5bkF04mVC
-         h0PXVbv93bE6Weklsh95tfDt3IwSnIRMrPvS80WYuSRKJAWIMtZP7Khq9mUMPjcJO8
-         4r8uRaenUPgpFCwnGWaNP6KYBK2gaXeFrf7SvhuAsS7IqlGVoT1GaQcwhr6n0mVUC7
-         +M0jhKfIyx8LJgyy+03pgO4LliqDcC6ALhgUT8o8UnE0EsKnKakQ5YlZmldICE1yR6
-         FvrMAWNvgu2fw==
-Message-ID: <233fa514-0cce-094d-183b-601aaa46df0d@collabora.com>
-Date:   Wed, 9 Feb 2022 14:29:53 -0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 3/3] spi: amd: Add support for version AMDI0062
-Content-Language: en-US
+        with ESMTP id S231213AbiBJBUy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Feb 2022 20:20:54 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43431EC4A;
+        Wed,  9 Feb 2022 17:20:50 -0800 (PST)
+X-UUID: ab0fc616f57e41478d26d069261dab1e-20220210
+X-UUID: ab0fc616f57e41478d26d069261dab1e-20220210
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <leilk.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 862682013; Thu, 10 Feb 2022 09:15:39 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 10 Feb 2022 09:15:38 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 10 Feb 2022 09:15:37 +0800
+Message-ID: <2707120457e962a78e3c4ffd231ca25a7138ae72.camel@mediatek.com>
+Subject: Re: [PATCH V5 0/3] Add compatible for Mediatek MT8186
+From:   Leilk Liu <leilk.liu@mediatek.com>
 To:     Mark Brown <broonie@kernel.org>
-Cc:     Sanjay R Mehta <sanju.mehta@amd.com>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-References: <20220209165733.43134-1-andrealmeid@collabora.com>
- <20220209165733.43134-4-andrealmeid@collabora.com>
- <YgP2fIbASQym9sUP@sirena.org.uk>
- <2126f6c0-fd6e-1f8e-b450-837270d03d31@collabora.com>
- <YgP5o0pBL/DuZsn4@sirena.org.uk>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
-In-Reply-To: <YgP5o0pBL/DuZsn4@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
+Date:   Thu, 10 Feb 2022 09:15:37 +0800
+In-Reply-To: <YgO+pXPtptHCQ9Zu@sirena.org.uk>
+References: <20220209014443.12443-1-leilk.liu@mediatek.com>
+         <YgO+pXPtptHCQ9Zu@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Às 14:28 de 09/02/22, Mark Brown escreveu:
-> On Wed, Feb 09, 2022 at 02:18:59PM -0300, André Almeida wrote:
->> Às 14:14 de 09/02/22, Mark Brown escreveu:
+On Wed, 2022-02-09 at 13:16 +0000, Mark Brown wrote:
+> On Wed, Feb 09, 2022 at 09:44:40AM +0800, Leilk Liu wrote:
+> > V5:
+> > 1. re-send these patchs based on v5.17-rc1.
+> > 2. add the flags: "Reviewed-by Rob Herring".
 > 
->>>> +
->>>> +	if (amd_spi->version == AMD_SPI_V2)
->>>> +		amd_spi_clear_chip(amd_spi, message->spi->chip_select);
->>>>  	spi_finalize_current_message(master);
->>>>  
->>>>  	return 0;
-> 
->>> Why is this one not a switch statement - what happens with v3?
-> 
->> A switch statement should work as well, but currently v1 does nothing
->> and there's no v3 for now. I think we can change for a switch if v3
->> requires to do something here as well.
-> 
-> Please write it in an extensible fashion now so people aren't tempted to
-> add an if/else tree.
+> Please do not submit new versions of already applied patches, please
+> submit incremental updates to the existing code.  Modifying existing
+> commits creates problems for other users building on top of those
+> commits so it's best practice to only change pubished git commits if
+> absolutely essential.
 
-Got it, I will fix it for the next patch version, thanks!
+Sorry to ignore the applied mail before I sent this new versions,
+thanks for your reminder.
+
