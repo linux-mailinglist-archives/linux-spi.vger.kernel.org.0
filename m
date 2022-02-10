@@ -2,50 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679B44B0C31
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Feb 2022 12:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF5B4B122A
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Feb 2022 16:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240773AbiBJLTD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 10 Feb 2022 06:19:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57862 "EHLO
+        id S243863AbiBJP5u (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 10 Feb 2022 10:57:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240778AbiBJLTC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Feb 2022 06:19:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A68FC7;
-        Thu, 10 Feb 2022 03:19:04 -0800 (PST)
+        with ESMTP id S243856AbiBJP5t (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Feb 2022 10:57:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C68A1;
+        Thu, 10 Feb 2022 07:57:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 011D2B82536;
-        Thu, 10 Feb 2022 11:19:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97200C340EE;
-        Thu, 10 Feb 2022 11:19:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5016B61C77;
+        Thu, 10 Feb 2022 15:57:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1F27C004E1;
+        Thu, 10 Feb 2022 15:57:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644491941;
-        bh=5J/dIHGwHKQr+CSn8R7NlZJrW4Hn1Viu4Q0/ctmXtRc=;
+        s=k20201202; t=1644508669;
+        bh=5a0H2dZ8NHiNHJT624T80SiJuLxas7HwdA6coL6AIJs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OZ33xLuhBaQhOVEK5GWlIGr1jdGVU8e5oJMHflDNpFmnjmxjymIOLmbJhW6LgP8hv
-         0hggYrSrs9SPmxFc6Z+tMYMW9TjPCvZn445zW7exb3Y36AvWmb8GTxbTXm4D0wUHl5
-         sj8/qxphNJ1+ftY8QDdAQSTfgjOGQHKtXPg8onN+9LzzuJyzbSbpeKTczx9Ry85vu9
-         fxUCvdsaMWcZjfiuGQ6vRrHxMZR9xMT58pqgfxfJyPhu7mdBUe4zeHAfbyEtvM5U24
-         lL9qI3YV2vhCeAf7/rr4A3pMyOYC9fzyFwsCtQJOXc4ZtuZ/goXbFs4NkplKfJEWZS
-         FMCG7NKSY+tUQ==
-Date:   Thu, 10 Feb 2022 11:18:57 +0000
+        b=l5QTW9HAsjdNi2/UJAjlx35fw12/TB6rehsgpGyA/+E6Hn1gKWbB1N+CEWkh1nBnp
+         BUVdN2oxaXOSDxP5412EVZVOenYKjNYbdKDjqJpMibv7wLM2E9A38mLdhDTE9wCX47
+         HlPbwNrR1DuiCdxIex0X/w27aNXiVBiog8QoMTy/VRgCl55o3+RGlQ+5FM1duFd8vT
+         xgOziHICD2DdyUby81ZtD4PxmGDOAy131tQEXNkREdG8c6YhNOUnf4w8olyIjGyF6n
+         9A1oumOfvHxJ/0W17r0vniRtCmu3154LSptFLt539HPQFLk2D6Qgc14jqWeqjS82Uq
+         KKiyYZsdIvq0w==
+Date:   Thu, 10 Feb 2022 15:57:45 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Yun Zhou <yun.zhou@windriver.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ying.xue@windriver.com
-Subject: Re: [PATCH] spi: disable chipselect after complete transfer
-Message-ID: <YgT0oU/5SMViNRu7@sirena.org.uk>
-References: <20220209100042.22941-1-yun.zhou@windriver.com>
- <YgPEWyEj7lbQJgAn@sirena.org.uk>
- <07aca74d-c74e-c2a3-b8eb-bdcf9ed21a55@windriver.com>
+To:     "Zhou, Yun" <Yun.Zhou@windriver.com>
+Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Xue, Ying" <Ying.Xue@windriver.com>
+Subject: Re: =?utf-8?B?5Zue5aSN?= =?utf-8?Q?=3A?= [PATCH] spi: disable
+ chipselect after complete transfer
+Message-ID: <YgU1+cIlANAkJCAL@sirena.org.uk>
+References: <SN6PR11MB3008AF5619B0B026836FD7429F2F9@SN6PR11MB3008.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zG9DLS7XB1MYP9NF"
+        protocol="application/pgp-signature"; boundary="YiQuSH9yRC2LqOqw"
 Content-Disposition: inline
-In-Reply-To: <07aca74d-c74e-c2a3-b8eb-bdcf9ed21a55@windriver.com>
+In-Reply-To: <SN6PR11MB3008AF5619B0B026836FD7429F2F9@SN6PR11MB3008.namprd11.prod.outlook.com>
 X-Cookie: Only God can make random selections.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -58,38 +58,57 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---zG9DLS7XB1MYP9NF
+--YiQuSH9yRC2LqOqw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Thu, Feb 10, 2022 at 10:03:16AM +0800, Yun Zhou wrote:
+On Thu, Feb 10, 2022 at 03:41:41PM +0000, Zhou, Yun wrote:
 
-> if the last xfer->cs_change is true, keep_cs will be true, and it will not
-> call spi_set_cs() to set CS to false. Do you mean to keep CS enabled in this
-> case?
+Please don't top post, reply in line with needed context.  This allows
+readers to readily follow the flow of conversation and understand what
+you are talking about and also helps ensure that everything in the
+discussion is being addressed.
 
-Yes, that's exactly what is supposed to happen in that case.
+> I am sorry that I can not agree with you.
 
-> I do not think it will break cs_change support. In my understanding,
-> cs_change indicates whether or not change CS after an xfer completed. But at
-> present if the last xfer->cs_change is true, we will not change CS to
-> disabled state. Is this the result we want? I'm confused.
+> If there are multiple messages, and each message only has one xfer,
+> and the cs_change of each xfer is 1, during the transmission of the
+> messages, the CS will keep active even until at the end. This must be
+> unreasonable.
 
-Yes, it behaves differently on the last transfer.
+This is not something that most drivers are expected to use, cs_change
+should only be being used at all for very unusual hardware and it should
+be used even less frequently for the last transfer in a message.  It is
+fragile and anyone using it really needs to know what they're doing but
+the feature is there.
 
---zG9DLS7XB1MYP9NF
+> I can't understand why it have to keep CS active after the
+> transmission is completed. Could you please explain this in detail?
+
+The feature predates me working on the SPI stack, the obvious examples
+would be a device that doesn't actually use chip select where you want
+to avoid all chip select changes or if you need to do some other actions
+in the middle of a SPI transaction for some reason (which would need a
+bunch of system level considerations to actually be safe/sensible like
+making sure you're not sharing the SPI bus).
+
+Please fix your mail client to word wrap within paragraphs at something
+substantially less than 80 columns.  Doing this makes your messages much
+easier to read and reply to.
+
+--YiQuSH9yRC2LqOqw
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIE9KAACgkQJNaLcl1U
-h9BMgwf/SLT/XaZtvAo8Uaw6oVOqfDXhs9k/DoP0JnwPdK5c2EQTEuExn70MLCGQ
-bAk0rWlHAgqpFMxc3XBsHDXXl4gP1KW91i8lIZNoEXbhDZ3sq4zOultAis7wV2c7
-Jc8bqyiLFvmFPv99uNXSLxXdfkR/At8Rb3xg0UlQFfT8cAp+u/6wFsJswGGNusmn
-ZJd2S6YXENaeAqhRB3M0hyw9EQ/ALcvN3gPsPDiQ33YlXhRE6Ovbb22Y/k3l/LWA
-nFGFBiHw9ZBSHYrYXdHx4zykqpVnwh5EcdwXz9MuwccakXTjCdxJpeN0g67df/2a
-B2+cIdJFMkkP0rQROoQQaVJ5PK1huw==
-=MnC8
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIFNfgACgkQJNaLcl1U
+h9AQQAf/ZYZzgXlybdG4bmNaHaYY6Cr0wodK4VZNJVP7SilnxhpMEOGIrIed8Wct
+D3O1mkLf6+qEMFfNQEab0cn9K/etC2aZIzJ0r32uHIkAyXdBTqlgc8nMdv4mlxiy
+kUaJlaqbndbwyTO0qDtJ36ivojXQMMhotL74z4yd+AGTZvR45qYI0+8ulgRAj2tq
+VMdCPGXVvXN84zDdGoPSwzdex5aFgw/HNkrFLRyQICTOZ9+pjRfR0S/vQbWYqLk2
+GM32zJ7q0DLYDV2U5+JqPnDvEEPtzjnUW+2MtIwRvfrOqtqYZQp5WBRrE7ouHZsi
+A4JOaFntUJChwkfupM1fU8NV3QFasw==
+=4awE
 -----END PGP SIGNATURE-----
 
---zG9DLS7XB1MYP9NF--
+--YiQuSH9yRC2LqOqw--
