@@ -2,85 +2,119 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0693A4B2444
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Feb 2022 12:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E01FC4B24A2
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Feb 2022 12:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349430AbiBKLZw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 11 Feb 2022 06:25:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45982 "EHLO
+        id S1349556AbiBKLoR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 11 Feb 2022 06:44:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234051AbiBKLZv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Feb 2022 06:25:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DB8E5D;
-        Fri, 11 Feb 2022 03:25:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S244508AbiBKLoR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Feb 2022 06:44:17 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19442EAB
+        for <linux-spi@vger.kernel.org>; Fri, 11 Feb 2022 03:44:16 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1CF7618BC;
-        Fri, 11 Feb 2022 11:25:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA9BBC340E9;
-        Fri, 11 Feb 2022 11:25:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644578750;
-        bh=ooE2AsnndLLEx4IulCajtBCoOFATRnSUIKVcqUODsfw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZVTDbyw3LUGxl1D//PLAAiRYqvaahdXQgc9XJv51V+RP3s3k7fRvuoSq46DWV7Cy4
-         FBKp/GWGXw/4DMwbZB2W2dA53fbdVizW64wfQl9yG6xtDLD+ExToVXX+Mj0C1jVUlO
-         CdTcYXUzaC6PfLmSwuOvUAN4mOWrcFyB6+g5r9RMR445u8DFUuPktsy+100pKVAXek
-         9974LFFHv7cy1+gl/GtWTEWQnPRYhaS8ag+k3nVoxF7N0CDjPoKyDEekY9IiHcappd
-         c9g8g+6gfDP0tUKrWjYHsK36u8LgSJUQD+EO/v8uHmtTtgfOCY6qPTO1DQMAStYJq0
-         adTis85IiCpUA==
-Date:   Fri, 11 Feb 2022 11:25:45 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jon Lin <jon.lin@rock-chips.com>
-Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/6] spi: rockchip: Fix error in getting num-cs property
-Message-ID: <YgZHuSCZWvl7XC1t@sirena.org.uk>
-References: <20220211034344.4130-1-jon.lin@rock-chips.com>
- <20220211034344.4130-3-jon.lin@rock-chips.com>
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C751B402B4
+        for <linux-spi@vger.kernel.org>; Fri, 11 Feb 2022 11:44:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644579854;
+        bh=svIxGzskW3ZGgG1rdvRW93P99PRrS06bKOYgS12kPfQ=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=TH+487q08fjSy/hzhIXv7Qeq4gVnUvyh7Z2M4wr/qksUqtB5n8AxoZRNeJmW//+fu
+         Ty+R7Aq2FwIJtKbAwzE+m0ovDmlc9bK4qhQ12YIv3Q2UkWb76UTc7GmprYXPA2PJaq
+         XRt8jyIsZZuv6HpKWW0M/lyJfQhFWRqJrS4eQRhHgr9YRkjhOM9imHcjvi1ytQvSFv
+         2WFIAdjXFr6gV039N2blCEpIX/v9bBJVbOPKYUJ5d7NV0/6tFwubZks7vhX2I0IWqI
+         BU2rHEkSK+emfgtc14yaAXdnedmAIwZ249pUTpVmZIwIUVXLw9szEtulYe/rJuGzkH
+         YOQkwRt5m4MHQ==
+Received: by mail-ed1-f69.google.com with SMTP id o6-20020a50c906000000b0040f6ac3dbb5so5162076edh.17
+        for <linux-spi@vger.kernel.org>; Fri, 11 Feb 2022 03:44:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=svIxGzskW3ZGgG1rdvRW93P99PRrS06bKOYgS12kPfQ=;
+        b=5B+r4zlvcn3B5Ua5nLkGFaIOY77o/aYFl3LsJ73HU15KBFjfPbJOOorrdlH8ZT/lic
+         I/Lbud39k/tgBOD6Qa0EzIeQ2mOGugwEZ+XW8Xie+kJSiEoO1UzGp2VWifx9UGpURU8X
+         a34kWQ968/dC7hqwywu9iiSaQVuOTO1qcsmpoLx/xqXnbA+jteXjnaTkKhAeE2yDrUGX
+         qOTtyDuUITrdEMQziQF+linJ8Zj7dr8lsvg3Uw6hHPFmEKinlzKf7kWGyQ6uFEDWELIW
+         UP9e/Cs+pb2SX9bXoEAiOBdtx1ydTxaQrSWpICvXB9bx3+1SHpkIUGT0XuT3/V5qwZ1w
+         qnjQ==
+X-Gm-Message-State: AOAM5313FW/Ah0HOu81Tusq6ViVTNs+KMSacrMZ7NncvWDUQzjHAWlEK
+        kdY2sTCxOZdxIrwtvcAoAzebocY/gexksc6vRxbdJPbOIOXVDForxu5cujczjaBEaEfr8HGUJuJ
+        3NikN4M6AiwBH4AM/nbryYrV+AUI4LwhqEq5Ivg==
+X-Received: by 2002:a50:fb85:: with SMTP id e5mr1446476edq.91.1644579854182;
+        Fri, 11 Feb 2022 03:44:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz2baTwCVDr7oz4C4PJ7yM5Z/qqexNJLfplboKRoblI0EytwPPoJwEaY3FsG58g8YJ8k6iUDQ==
+X-Received: by 2002:a50:fb85:: with SMTP id e5mr1446458edq.91.1644579853994;
+        Fri, 11 Feb 2022 03:44:13 -0800 (PST)
+Received: from [192.168.0.99] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id z13sm172232ejl.78.2022.02.11.03.44.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Feb 2022 03:44:13 -0800 (PST)
+Message-ID: <c375e5bd-53b9-e657-7c0a-7e2f9179688b@canonical.com>
+Date:   Fri, 11 Feb 2022 12:44:12 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+3G0Mf5QYROxU3Hp"
-Content-Disposition: inline
-In-Reply-To: <20220211034344.4130-3-jon.lin@rock-chips.com>
-X-Cookie: do {
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/6] dt-bindings: spi: Add compatible for Mediatek IPM IP
+ with single mode
+Content-Language: en-US
+To:     Leilk Liu <leilk.liu@mediatek.com>, Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20220209111938.16137-1-leilk.liu@mediatek.com>
+ <20220209111938.16137-2-leilk.liu@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220209111938.16137-2-leilk.liu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 09/02/2022 12:19, Leilk Liu wrote:
+> This commit adds dt-binding documentation for
+> Mediatek SPI IPM IP with single mode.
 
---+3G0Mf5QYROxU3Hp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Please do not use "This commit":
+https://elixir.bootlin.com/linux/v5.13/source/Documentation/process/submitting-patches.rst#L89
 
-On Fri, Feb 11, 2022 at 11:43:39AM +0800, Jon Lin wrote:
-> Get num-cs u32 from dts of_node property rather than u16.
+Wrap around 75-chars, just like our guidelines are saying.
 
-Bug fixes should go at the start of a series so they can be sent as
-fixes without dependencies on anything else.
+> 
+> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+> index bfa44acb1bdd..0a2fc0404cb3 100644
+> --- a/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+> @@ -41,6 +41,7 @@ properties:
+>                - mediatek,mt8135-spi
+>                - mediatek,mt8173-spi
+>                - mediatek,mt8183-spi
+> +              - mediatek,ipm-spi-single
+>  
+>    reg:
+>      maxItems: 1
 
---+3G0Mf5QYROxU3Hp
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIGR7kACgkQJNaLcl1U
-h9AF6wf+IsUGIpR8g7NGFO5SPH84Ca4yPmqUlnZbd6YyB6j9zQwVX+AO5vy8BILj
-wC4vTWKhaFTHmC8BVzFzLQk6J38QEYgFy94Y/Xi6g+8E193AVRqi3Zja3QPgoAJH
-uUB8kaq1NbLQigE5SqsIE0xOMpPLR4DnTuIr7MC/RhqXgM8lp2TNKHpZE9ZmOb5U
-0swruPV2Xj38yUSt+xJKj5a2RX8Dc0lGmU2t6XsxLf5IZCVJ4g0DTvxkPOM7Kcvc
-rhSHkDa07szRs1dtcimH0o96pnxaWI1wvSdwy17PfG81/a6j3Te77WaW99z04N56
-l/c8TMoVTf+bTlV53bljJT2p1frykg==
-=NXJy
------END PGP SIGNATURE-----
-
---+3G0Mf5QYROxU3Hp--
+Best regards,
+Krzysztof
