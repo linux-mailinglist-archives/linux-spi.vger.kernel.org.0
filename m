@@ -2,102 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E5E84B24A8
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Feb 2022 12:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 109844B24BB
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Feb 2022 12:48:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349561AbiBKLok (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 11 Feb 2022 06:44:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57656 "EHLO
+        id S1349611AbiBKLse (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 11 Feb 2022 06:48:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349555AbiBKLoj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Feb 2022 06:44:39 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3FBEAB
-        for <linux-spi@vger.kernel.org>; Fri, 11 Feb 2022 03:44:39 -0800 (PST)
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S1349610AbiBKLsd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Feb 2022 06:48:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812FFCF1;
+        Fri, 11 Feb 2022 03:48:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0EECD3F1D1
-        for <linux-spi@vger.kernel.org>; Fri, 11 Feb 2022 11:44:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644579878;
-        bh=ecHVwDlq+AQYKeIGcf4CvkI7mMqME8Svegbv9eL0bmA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=IXlLL6OtfmBNivpUQXvoQnsXfGg/xds0/6qPxL9Rcg9KV00mIceMRzOgBggycQOjk
-         cVpZeURair+Lb3f7VrgYdDSrms0SVrT75BMmnbxIJV69JZIUyUyqId8D+jsWNRgnZo
-         Sz92XcVZ4MjhgmuKnnT+/dM9pLbOhnqEPoUskJfga/bK/5UDtOAgA9uU2Io5ZXsDpb
-         SkL8rX9INOTOCFJh9Yg4VmpTwLskgPCNrZtiuIo2RrMeL/Pejb72kLAhpfTd7NvHz4
-         LylNYwyaIEvmO8gpjP5yji7kwPfTLk3exsC12f/t5BShX2SjR2RkopCZhduCB9bhXV
-         IAzMaX7OsmTNQ==
-Received: by mail-ej1-f71.google.com with SMTP id m4-20020a170906160400b006be3f85906eso3973744ejd.23
-        for <linux-spi@vger.kernel.org>; Fri, 11 Feb 2022 03:44:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ecHVwDlq+AQYKeIGcf4CvkI7mMqME8Svegbv9eL0bmA=;
-        b=Yx2lMJcRUNfiSJxrKFJezq91pxUJFOltF+Fw5dybIuTAbdtTWsJdVJThguVxfY0ZcI
-         ejkVYZP47kExU1tEnYuvUuS8hK4f4PH6E78V3L0t9kLyI2a1XHEXNIEoe98Hyus0ttLr
-         pLLWuYQ1zr7hZnHPaNTL8jxMLDJaNa1NOVo6tV9rpQFAXOzgpq5B/4awNUvfl3gCh+hp
-         2x7bP4zlb+/GkXgDmdgg+qmIity5T6JySpqukrniRx47RiCRrje3eUwLQLIiUBMWjNRf
-         OzNbrH6opDQl6ydVn6OzC1R8UW06/lcvwVKeNjk4Zx+5Dq+x8qELS/zvMMY3GDaZw9v5
-         03qQ==
-X-Gm-Message-State: AOAM533Toe6n7y2iLJxslKaiXk0k5z//mmb7sq67nNiOYGMnn8durdH/
-        swJ7bjrXYG4EVgiom7dPPAQQ6Dff7SC4bc3JDChOeREZ35UVouYwaLtYKddhUEHi598bv5tG8yF
-        xjxIrPW5MgaUtEZIGUv5T/5XvIswIX56c3iEKgA==
-X-Received: by 2002:a17:907:c26:: with SMTP id ga38mr1032320ejc.626.1644579877733;
-        Fri, 11 Feb 2022 03:44:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJznqvvnq5wXIqGOsU+p8aV3YUjGCSFQ0QQ2p8CHvwjdn3oe9wCw8FEpPx+8TbAPH99rTQcjyA==
-X-Received: by 2002:a17:907:c26:: with SMTP id ga38mr1032314ejc.626.1644579877581;
-        Fri, 11 Feb 2022 03:44:37 -0800 (PST)
-Received: from [192.168.0.99] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id v28sm10808602edw.95.2022.02.11.03.44.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Feb 2022 03:44:37 -0800 (PST)
-Message-ID: <bed10d2e-a3eb-ddcb-8b84-9b5ba7f138f1@canonical.com>
-Date:   Fri, 11 Feb 2022 12:44:36 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A31B61A2F;
+        Fri, 11 Feb 2022 11:48:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21A7BC340E9;
+        Fri, 11 Feb 2022 11:48:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644580111;
+        bh=YoCVOJggdhVgQz5b42wFoa68cSdGl/d4Njs42FeDO4s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HttKNvu1EEIIaVqh72OV3ri6kgbwsSa2NWzQhYw047IZmzoazzb4sryRTUc+rUd3+
+         PzqwbJDBOJ53y3E4JV55CuwyD/ofxsisIYnCT1nmDqgTO7zg+nsrvKS5QDxzELKoUQ
+         qFsiqc9SZoIu5btb3BmgM+BxlNbakU36kDt/G/c3dru6AED3pt0iOrFoKkqlE30z1S
+         lpXWvRtOiqExiT0gr86ugKFJJvCENouYtXpw1FSBXNBuKiNqkiExl0yyKwcnaDjV6z
+         V/4POKs+I1VS0SRDYfNk8IzuuWggjAITLOtF2O723xrpePyRvtEfgljQKZI2czGUB1
+         zEcCkismY9I1A==
+Date:   Fri, 11 Feb 2022 11:48:26 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Jon Lin <jon.lin@rock-chips.com>
+Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 5/6] spi: rockchip: Support cs-gpio
+Message-ID: <YgZNCoYeArYTECYC@sirena.org.uk>
+References: <20220211034344.4130-1-jon.lin@rock-chips.com>
+ <20220211034344.4130-5-jon.lin@rock-chips.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 3/6] dt-bindings: spi: Add compatible for Mediatek IPM IP
- with quad mode
-Content-Language: en-US
-To:     Leilk Liu <leilk.liu@mediatek.com>, Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20220209111938.16137-1-leilk.liu@mediatek.com>
- <20220209111938.16137-4-leilk.liu@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220209111938.16137-4-leilk.liu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="JOcgAXEiGUZsEFyr"
+Content-Disposition: inline
+In-Reply-To: <20220211034344.4130-5-jon.lin@rock-chips.com>
+X-Cookie: do {
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 09/02/2022 12:19, Leilk Liu wrote:
-> This commit adds dt-binding documentation for
-> Mediatek SPI IPM IP with quad mode.
-> 
-> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+
+--JOcgAXEiGUZsEFyr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Feb 11, 2022 at 11:43:41AM +0800, Jon Lin wrote:
+> 1.Add standard cs-gpio support
+> 2.Refer to spi-controller.yaml for details
+>=20
+> Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
 > ---
->  Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>=20
+> Changes in v10: None
+> Changes in v9: None
+> Changes in v8: None
+> Changes in v7: None
+> Changes in v6: None
+> Changes in v5: None
+> Changes in v4: None
+> Changes in v3: None
 
-Same comments as for patch 1 apply.
+Why is this the one patch in the series with any versioning information?
 
+> -		ROCKCHIP_SPI_SET_BITS(rs->regs + ROCKCHIP_SPI_SER,
+> -				      BIT(spi->chip_select));
+> +		if (spi->cs_gpiod)
+> +			ROCKCHIP_SPI_SET_BITS(rs->regs + ROCKCHIP_SPI_SER, 1);
+> +		else
+> +			ROCKCHIP_SPI_SET_BITS(rs->regs + ROCKCHIP_SPI_SER, BIT(spi->chip_sele=
+ct));
 
-Best regards,
-Krzysztof
+This appears to be making the device control chip select 0 if a GPIO
+chip select is used - that's going to work poorly if there's a device
+using that chip select.  It should be fine to prohibit that
+configuration if the hardware requires that a GPIO be controlled,
+especially if the native chip select can be pinmuxed to a GPIO, but it
+ought to be at least documented that this won't work and ideally
+detected.
+
+--JOcgAXEiGUZsEFyr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIGTQoACgkQJNaLcl1U
+h9DjPwf+OfcmObP2QW45XxCOJbf7uVjeWK5FG6A+YWwUTRr4kndfSY5uRxnkZLGC
+Kat9Z5P6BA4GLywzjFEWEoMotmyycFVQUOi0wrcCt/0ApT1GT3CqQcd69iEOBxpl
+KHgJjajQfjUt8N+sLjfVa4aX64khXYR6bIe9VwiVhGh4HgjKYaK1IeXVI/DvgGnl
+3gDqab+XiU/6O9AByXRIeAJFKaBJldHaEqG5nLRMiFrzusZ6iVOfGRFLCkNTfak4
+crACzQi+lc/Ue+ihwOpAHqZz4lJgY0k7GnIpULj+SqFH8aVPrRW+zUXXuGnHeamB
+7GKhEofIYj5SFkrd+luilKBU36pHPQ==
+=rrmN
+-----END PGP SIGNATURE-----
+
+--JOcgAXEiGUZsEFyr--
