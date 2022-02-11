@@ -2,51 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C0B4B24C1
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Feb 2022 12:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1334B250A
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Feb 2022 12:58:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237226AbiBKLt6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 11 Feb 2022 06:49:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40266 "EHLO
+        id S238142AbiBKL5g (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 11 Feb 2022 06:57:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiBKLt5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Feb 2022 06:49:57 -0500
+        with ESMTP id S1349775AbiBKL5f (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Feb 2022 06:57:35 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1B4F3B;
-        Fri, 11 Feb 2022 03:49:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629BEF59;
+        Fri, 11 Feb 2022 03:57:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96CB0619F3;
-        Fri, 11 Feb 2022 11:49:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 900A6C340E9;
-        Fri, 11 Feb 2022 11:49:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F27FB619D7;
+        Fri, 11 Feb 2022 11:57:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C8AFC340E9;
+        Fri, 11 Feb 2022 11:57:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644580196;
-        bh=EF0Nj0+jfw+hmL60rlX3GPZQeAvFkdT57GJorcn2C+s=;
+        s=k20201202; t=1644580640;
+        bh=Ldm8EIHYQkasgOKAyJYfBnfhmYzcyDdgCKPot/eIAKE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LJCK6YWtNBNPRCD5sV0Op6gm0WA/QbXpDupWki3+RxrW2M8pZErR3e5KIw8E6FBYm
-         E8krep5rmvS5LG9N5ZWfqUKW9vaZq5DrY1G3D9WVHfdBHbDmxjJDUN2uyErX8alN/w
-         wdC5AZPCgKR103Ob+eWEzbx0OFReLdASIbflGdTRNXxVrB3EEGqx8n5WZ09YKB7j1O
-         GP5kCxaeBySmp3zvTyCxVK8d0nEdPIEPnyv4HWX/RUlkaW6nnfl3RKRItty9p//ze7
-         Jj3Zx87t8lxJBTsInBN4aZ5Nvc+XJipYWQ2BWCwiJZPWfPgrm77UD8kO9I8foNJyg4
-         Pnj0WWTDqJE2Q==
-Date:   Fri, 11 Feb 2022 11:49:51 +0000
+        b=OVN/tu7d46VUpGsP/aB2HlzKRep/f4FLtWEiS4B8ITy+aVMgZUSYPr3Zeox/LWTeE
+         1LBl195xbe/y0SHR6KPmmhUh/Q1H5R8VH5kzdy82My44bWuE4dSayeShRL3L/ALyZE
+         OTZ1Isj2Cjg/zIZWbBh20CaUrCpK7nlK5NNsx5mIJl3n6KXgF+WLVTQVwz5aVbdqD2
+         Cz8Vw52wkCDUY2wbSsU63O7Gu3X4rYaCdkbBxD9Dishad9a1uXl3iDTvLztNZTj5SB
+         WspQPTbKt9OH60RC6Xifx7S+uHZcgLjrzE/X6xF+icNjz5v+cMMirR7D4vp6bQae27
+         J1QiwLBJdYDCw==
+Date:   Fri, 11 Feb 2022 11:57:15 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Jon Lin <jon.lin@rock-chips.com>
-Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] spi: rockchip: terminate dma transmission when slave
- abort
-Message-ID: <YgZNX4ZuSumZ/Yie@sirena.org.uk>
-References: <20220211034344.4130-1-jon.lin@rock-chips.com>
- <20220211034344.4130-6-jon.lin@rock-chips.com>
+To:     Lh Kuo =?utf-8?B?6YOt5Yqb6LGq?= <lh.Kuo@sunplus.com>
+Cc:     Tom Rix <trix@redhat.com>, Li-hao Kuo <lhjeff911@gmail.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Wells Lu =?utf-8?B?5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Subject: Re: [PATCH] spi: Fix warning for Clang build
+Message-ID: <YgZPGyMjJ10eK/SG@sirena.org.uk>
+References: <691d52b72f978f562136c587319852f5c65f08fe.1644460444.git.lhjeff911@gmail.com>
+ <YgT0LMcDpCEYHFYg@sirena.org.uk>
+ <99ab624e2af4414bb2a785f64f35bd95@sphcmbx02.sunplus.com.tw>
+ <aaaefa2b-e043-2bf8-28aa-d89deb3fbc2a@redhat.com>
+ <0b71842ec1b946729e74d73cbd354162@sphcmbx02.sunplus.com.tw>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rmnoW3paj3umB6SM"
+        protocol="application/pgp-signature"; boundary="NvE0JsC/dVXmBGff"
 Content-Disposition: inline
-In-Reply-To: <20220211034344.4130-6-jon.lin@rock-chips.com>
+In-Reply-To: <0b71842ec1b946729e74d73cbd354162@sphcmbx02.sunplus.com.tw>
 X-Cookie: do {
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -59,47 +62,65 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---rmnoW3paj3umB6SM
-Content-Type: text/plain; charset=us-ascii
+--NvE0JsC/dVXmBGff
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 11, 2022 at 11:43:42AM +0800, Jon Lin wrote:
+On Fri, Feb 11, 2022 at 04:59:00AM +0000, Lh Kuo =E9=83=AD=E5=8A=9B=E8=B1=
+=AA wrote:
+> Yes. I think the function can be simplified as follows
 
-> After slave abort, all DMA should be stopped, or it will affect the
-> next transmission:
-
-Again, this is a fix and should be at the start of the series.
-
+> static int sp7021_spi_slave_transfer_one(struct spi_controller *ctlr, str=
+uct spi_device *spi,
+> 				       struct spi_transfer *xfer)
+> {
+> 	struct sp7021_spi_ctlr *pspim =3D spi_master_get_devdata(ctlr);
+> 	struct device *dev =3D pspim->dev;
+> 	int ret;
 >=20
-> [   31.693877] Unable to handle kernel paging request at virtual address =
-ffffff8105a2a7c0
-> [   31.694643] Mem abort info:
-> [   31.694898]   ESR =3D 0x96000045
-> [   31.695179]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
-> [   31.695653]   SET =3D 0, FnV =3D 0
-> [   31.695931]   EA =3D 0, S1PTW =3D 0
+> 	mode =3D SP7021_SPI_IDLE;
+> 	if (xfer->tx_buf && xfer->rx_buf) {
+> 		dev_dbg(&ctlr->dev, "%s() wrong command\n", __func__);
+> 		return -EINVAL;
 
-Please think hard before including complete backtraces in upstream
-reports, they are very large and contain almost no useful information
-relative to their size so often obscure the relevant content in your
-message. If part of the backtrace is usefully illustrative (it often is
-for search engines if nothing else) then it's usually better to pull out
-the relevant sections.
+Since only unidirectional transfers are supported...
 
---rmnoW3paj3umB6SM
+> 	} else if (xfer->tx_buf) {
+> 		xfer->tx_dma =3D dma_map_single(dev, (void *)xfer->tx_buf,
+> 					      xfer->len, DMA_TO_DEVICE);
+> 		if (dma_mapping_error(dev, xfer->tx_dma))
+> 			return -ENOMEM;
+> 		ret =3D sp7021_spi_slave_tx(spi, xfer);
+> 	} else if (xfer->rx_buf) {
+> 		xfer->rx_dma =3D dma_map_single(dev, xfer->rx_buf, xfer->len,
+> 					      DMA_FROM_DEVICE);
+> 		if (dma_mapping_error(dev, xfer->rx_dma))
+> 			return -ENOMEM;
+> 		ret =3D sp7021_spi_slave_rx(spi, xfer);
+> 	}
+>=20
+> 	if (xfer->tx_buf)
+> 		dma_unmap_single(dev, xfer->tx_dma, xfer->len, DMA_TO_DEVICE);
+> 	if (xfer->rx_buf)
+> 		dma_unmap_single(dev, xfer->rx_dma, xfer->len, DMA_FROM_DEVICE);
+
+=2E..you could even fold the unmapping into the if/else tree above.
+Otherwise this looks good to me, please send a patch.
+
+--NvE0JsC/dVXmBGff
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIGTV4ACgkQJNaLcl1U
-h9C1KQf9GVPQqLpAYXPnTVXWv2GgFuiO3xWPa4fGn6NFNruqsC9kG0ILuIzo96nt
-Rt7bz7N2dqWB0CuQHZnyAPMmIe97An8dmUZkb1o4DzJVrQyQteZ1X6YQekbpvpSO
-kYS7IBZTqmQckxR0xKm9Wj9Sb6N+eZ3evbKgF+rGU1eIOeC0Qvaqd6QyNbddWEfB
-PuU4UpH42zkWR/tzrTM2sdZy82aylHomTEHRn1f+/bhOrPna9bn6PbV2nuJ5nOeN
-g4ARZsoRuFPYXn9dBvptd/YNinUyxuOLYgqyYl+r/XDgR7CPSH44s81EnsKNYO3N
-9zmtydE+XHf6scVEtKuzSoilb26imw==
-=5FlO
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIGTxsACgkQJNaLcl1U
+h9B+TAf/YCtAIAmkCrNTybdoi5JUfqSpnQIzE8Q9UGKolsOIQLunISnaeNXtPFCu
+K7h1RDK3bMlFZghiE7dtitnI2QhbCJXTaH7mmqhYD224nq/41RNvrvFoy++Cn3H5
+jeGrWoVrwXqDmRbCrrXXKI2nzSMWienupaPT2gXVjSmJWRCne2YP3sa79DRGhV8F
+5ZeBGh5ZLj6EEOrVJ2lx1OLd5bDhLOq1AZ+ZSBsMEvYXHYT0QDQ7xHdtmx6zSnZb
+YyXNrzFWb+GRgub6eVxDec5ki9uWwbsaRcVTcbBbDAiHX6MHMwmrLutXouYiOmcp
+XRkcoDiQlzVuaYIfpWbC8PW3KjiFyg==
+=0iSE
 -----END PGP SIGNATURE-----
 
---rmnoW3paj3umB6SM--
+--NvE0JsC/dVXmBGff--
