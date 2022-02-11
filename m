@@ -2,49 +2,63 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10634B2875
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Feb 2022 15:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3BA4B2B0C
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Feb 2022 17:56:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233454AbiBKO4W (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 11 Feb 2022 09:56:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50374 "EHLO
+        id S1350895AbiBKQzo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 11 Feb 2022 11:55:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351117AbiBKO4V (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Feb 2022 09:56:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E261DE
-        for <linux-spi@vger.kernel.org>; Fri, 11 Feb 2022 06:56:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 679F661F9E
-        for <linux-spi@vger.kernel.org>; Fri, 11 Feb 2022 14:56:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D3535C340E9;
-        Fri, 11 Feb 2022 14:56:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644591377;
-        bh=flwboD2V8DcJiXNtOFerNpu0TB5f1nOv7COrZXXU/Ps=;
-        h=Subject:From:Date:To:From;
-        b=L5NVPkQbeIn7DVBPZsw+CAClDcd6wX1pjEAiaj7/xBumR1iGBiPBH9d+NneLz2jVn
-         xKcqCGMq/CYWbE2HsCSWmt4w1v4Jrdc7MFFX7muFhPkUQdBz/KDv15TYnG+Dzwan9j
-         05aFDgIbicKEyw9GiltWsfjtyR38cLTTqFbOt4lzjv7XQzR7gDRjhTLcxX0WWU9c3e
-         733ytnTYaa91wXl6HgBmdlGwrg5qQ3a/G1BjVxETbhxr3rvvblJX3x54xiFzlrWfkE
-         Gb8dk/Ufh9wLuNmAbSIa3BrTA+xU+wSEDpAYsTun4a5h9j9l6n4rkYwjfNQKv6SDtr
-         VsuQ+C8G1jxWw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B28EBE5D09D;
-        Fri, 11 Feb 2022 14:56:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S233971AbiBKQzn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Feb 2022 11:55:43 -0500
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7866221F;
+        Fri, 11 Feb 2022 08:55:42 -0800 (PST)
+Received: by mail-qk1-f173.google.com with SMTP id g145so8798477qke.3;
+        Fri, 11 Feb 2022 08:55:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1UwYLCupktfjJ9mUj4/QYlTAZwDMfe5S5C3K0edWIBg=;
+        b=fUdBWbNdCXx8ojtAcgxNl4vXqIy2Os4aHxTwHDyP7r1/U05DTpOubeknxWtZjuOHci
+         UKoaxKwhX8MsrPNibB23ztkNWl2V40PdYb74ozlwtZqR4OBDTb4kISePmdQwijuW35lR
+         9dXo/JXi5rV7xaZ+YQpxZQ2AKdDA9dSEby3CF8epRhn2Eu4tL1RNSuS92+zk1BON5m4t
+         3OF2c3mpOGmO+leBQrwTHGd1OYkMVzpsoRmDZgiLN0b3RPl+22OBefNOdV7kYMHRLDNT
+         /lIERsbOqSJQN5u7sTeV1Kv45M33pf4nLbokjDl8Qri1xfxhxfRsZ8sBBYqd15w7AiCY
+         n1SQ==
+X-Gm-Message-State: AOAM530UaDFAwYsv0O7YPfNNcauHx1q/2LXUYaKNyrD//UtN57fMYOY9
+        KF8xibbKcshahNBufJ8vcjWLg0NOQg==
+X-Google-Smtp-Source: ABdhPJzWhtYP/lUed83bNEhXzwT/Rs7Lt75nHeV6b3tF2GWmTTD5Cck+mTKwvTJDx3LpaD35b0Op9A==
+X-Received: by 2002:a05:620a:d45:: with SMTP id o5mr1221552qkl.731.1644598541587;
+        Fri, 11 Feb 2022 08:55:41 -0800 (PST)
+Received: from robh.at.kernel.org ([2607:fb90:5fee:dfce:b6df:c3e1:b1e5:d6d8])
+        by smtp.gmail.com with ESMTPSA id bk19sm11503188qkb.125.2022.02.11.08.55.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 08:55:40 -0800 (PST)
+Received: (nullmailer pid 512729 invoked by uid 1000);
+        Fri, 11 Feb 2022 16:55:38 -0000
+Date:   Fri, 11 Feb 2022 10:55:38 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Leilk Liu <leilk.liu@mediatek.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 1/6] dt-bindings: spi: Add compatible for Mediatek IPM IP
+ with single mode
+Message-ID: <YgaVCmizWJfFMK5I@robh.at.kernel.org>
+References: <20220209111938.16137-1-leilk.liu@mediatek.com>
+ <20220209111938.16137-2-leilk.liu@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <164459137765.7030.6321080244770705518.git-patchwork-housekeeping@kernel.org>
-Date:   Fri, 11 Feb 2022 14:56:17 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209111938.16137-2-leilk.liu@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,14 +66,26 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] spi: amd: Add support for new controller version (2022-02-11T14:31:52)
-  Superseding: [v1] spi: amd: Add support for new controller version (2022-02-09T16:57:31):
-    [1/3] spi: amd: Use iopoll for busy waiting
-    [2/3] spi: amd: Remove needless rom_addr variable
-    [3/3] spi: amd: Add support for version AMDI0062
+On Wed, Feb 09, 2022 at 07:19:33PM +0800, Leilk Liu wrote:
+> This commit adds dt-binding documentation for
+> Mediatek SPI IPM IP with single mode.
+> 
+> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+> index bfa44acb1bdd..0a2fc0404cb3 100644
+> --- a/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+> @@ -41,6 +41,7 @@ properties:
+>                - mediatek,mt8135-spi
+>                - mediatek,mt8173-spi
+>                - mediatek,mt8183-spi
+> +              - mediatek,ipm-spi-single
 
+Is IPM an SoC? Compatible strings should be SoC specific or whatever 
+granularity could have a unique errata.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Rob
