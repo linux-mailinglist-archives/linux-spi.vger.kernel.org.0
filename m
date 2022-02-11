@@ -2,77 +2,64 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B54C04B283C
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Feb 2022 15:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C10634B2875
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Feb 2022 15:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350999AbiBKOsc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 11 Feb 2022 09:48:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44556 "EHLO
+        id S233454AbiBKO4W (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 11 Feb 2022 09:56:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235874AbiBKOsb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Feb 2022 09:48:31 -0500
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0513FFE;
-        Fri, 11 Feb 2022 06:48:31 -0800 (PST)
-Received: by mail-oo1-f54.google.com with SMTP id q145-20020a4a3397000000b002e85c7234b1so10586744ooq.8;
-        Fri, 11 Feb 2022 06:48:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=O7OnEPb9fuxvqN5g26fYv9LVZN/hhTSP1Ptizy/y4t4=;
-        b=4HYyEzVFEVplAPl4HkWUpZ7ErWnb3ju7MmUVmm1ecFTms/MnN0pQG815aSJjavyr4o
-         lYsq+f4gOy2z/GcPOlRulr2hA4N9MqydLzWVP0g/DPoWGndMhmfw18rval51TC1P2h2g
-         UHVSQ6bDfxxHvUARWiWQdtUvANQnDElFmtK2tl8HO0PNEyAxC+Kss+hCEiFoGwFgV33W
-         ODvDi79NZf5R3J0qLHf8XAHYw2dIljkk5jgRI8Gwo0HRvNVp5dk7g/LyERnYdFqMMDQL
-         WqUcbkap+WpPNbVmjY9YvS3FNMt/o/IDqdmc2peIUF9GSHQ7OysKI0jarpgnUbVQYYq8
-         LFyA==
-X-Gm-Message-State: AOAM531YrXm+HX6zEBMHOAJ+W96jgs4Q+McJ0zVg7JSSJWJzGClRnjJy
-        T3a5RCRsF57QjYwBxALHK/JhYngeiw==
-X-Google-Smtp-Source: ABdhPJwSho7dl9kUe2vpyZezvoFcWfxPQXu+OgRj2U5Ws1eHSTaaDMolpTOT7Wg0n/fvvuq5FPudzw==
-X-Received: by 2002:a05:6870:4:: with SMTP id a4mr242110oaa.228.1644590910339;
-        Fri, 11 Feb 2022 06:48:30 -0800 (PST)
-Received: from robh.at.kernel.org ([2607:fb90:20d7:a802:e6b0:6d9c:32f7:4bd9])
-        by smtp.gmail.com with ESMTPSA id g17sm9065240ots.73.2022.02.11.06.48.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 06:48:29 -0800 (PST)
-Received: (nullmailer pid 342457 invoked by uid 1000);
-        Fri, 11 Feb 2022 14:48:27 -0000
-Date:   Fri, 11 Feb 2022 08:48:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     ldewangan@nvidia.com, linux-spi@vger.kernel.org,
-        thierry.reding@gmail.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, skomatineni@nvidia.com,
-        broonie@kernel.org, p.zabel@pengutronix.de,
-        linux-tegra@vger.kernel.org, robh+dt@kernel.org,
-        jonathanh@nvidia.com
-Subject: Re: [PATCH 2/6] dt-bindings: spi: Tegra234 QUAD SPI compatible
-Message-ID: <YgZ3O7cMeLIqD8aE@robh.at.kernel.org>
-References: <1643970576-31503-1-git-send-email-kyarlagadda@nvidia.com>
- <1643970576-31503-3-git-send-email-kyarlagadda@nvidia.com>
+        with ESMTP id S1351117AbiBKO4V (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Feb 2022 09:56:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E261DE
+        for <linux-spi@vger.kernel.org>; Fri, 11 Feb 2022 06:56:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 679F661F9E
+        for <linux-spi@vger.kernel.org>; Fri, 11 Feb 2022 14:56:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D3535C340E9;
+        Fri, 11 Feb 2022 14:56:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644591377;
+        bh=flwboD2V8DcJiXNtOFerNpu0TB5f1nOv7COrZXXU/Ps=;
+        h=Subject:From:Date:To:From;
+        b=L5NVPkQbeIn7DVBPZsw+CAClDcd6wX1pjEAiaj7/xBumR1iGBiPBH9d+NneLz2jVn
+         xKcqCGMq/CYWbE2HsCSWmt4w1v4Jrdc7MFFX7muFhPkUQdBz/KDv15TYnG+Dzwan9j
+         05aFDgIbicKEyw9GiltWsfjtyR38cLTTqFbOt4lzjv7XQzR7gDRjhTLcxX0WWU9c3e
+         733ytnTYaa91wXl6HgBmdlGwrg5qQ3a/G1BjVxETbhxr3rvvblJX3x54xiFzlrWfkE
+         Gb8dk/Ufh9wLuNmAbSIa3BrTA+xU+wSEDpAYsTun4a5h9j9l6n4rkYwjfNQKv6SDtr
+         VsuQ+C8G1jxWw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B28EBE5D09D;
+        Fri, 11 Feb 2022 14:56:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1643970576-31503-3-git-send-email-kyarlagadda@nvidia.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <164459137765.7030.6321080244770705518.git-patchwork-housekeeping@kernel.org>
+Date:   Fri, 11 Feb 2022 14:56:17 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 04 Feb 2022 15:59:32 +0530, Krishna Yarlagadda wrote:
-> Add compatible string for Tegra234 for Tegra QUAD SPI
-> 
-> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> ---
->  Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Latest series: [v2] spi: amd: Add support for new controller version (2022-02-11T14:31:52)
+  Superseding: [v1] spi: amd: Add support for new controller version (2022-02-09T16:57:31):
+    [1/3] spi: amd: Use iopoll for busy waiting
+    [2/3] spi: amd: Remove needless rom_addr variable
+    [3/3] spi: amd: Add support for version AMDI0062
 
-Acked-by: Rob Herring <robh@kernel.org>
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
