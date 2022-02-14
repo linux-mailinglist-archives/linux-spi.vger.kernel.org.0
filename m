@@ -2,80 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB7F4B53AA
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Feb 2022 15:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36BBB4B54AC
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Feb 2022 16:23:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355309AbiBNOr7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Feb 2022 09:47:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51238 "EHLO
+        id S234633AbiBNPXT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Feb 2022 10:23:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355305AbiBNOr6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Feb 2022 09:47:58 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01864BFDF
-        for <linux-spi@vger.kernel.org>; Mon, 14 Feb 2022 06:47:50 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id l67-20020a1c2546000000b00353951c3f62so11004185wml.5
-        for <linux-spi@vger.kernel.org>; Mon, 14 Feb 2022 06:47:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=VqFIbMHS9PJxJt/MmXCU6mhg8T/EbdtODuacavlxAZA=;
-        b=Uz8HM22G11OlllXpa0uJQqZlDsuee2x2w569q1vQbJJNGHN0n8s3+O3Qxy+ArdyO0E
-         aQ2c3ueo8s1I4EZUiiWEJMFXJCPnXTJ7LytcJl9bpU1rCz9AcmB5Bvaa3eFIV+SuBgj9
-         rF9oxfaHfyai8TbI7eQeSmcAQBqvtDU08l4pIScZ/Ljv/kONmmqeUkq/yaQ5dgRTAZPU
-         yxfnDeC+nyrO1rdGY8VJ828QgVwci3oko+UGmqSPtHpd5flkrLtmW2o77PclYcR647Rj
-         Ut4WOyhvdJQF9McJTPTWpA1LpJhi2k9YX2vT4E3mKZkYHHBxOuU3uKWDn5meuSOGzP/s
-         cQCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=VqFIbMHS9PJxJt/MmXCU6mhg8T/EbdtODuacavlxAZA=;
-        b=vFE58wk1ojzzlb4H+Qkb61Tzu+rq4QuL595YHmv8JYjJXZ0lL/Axim4KcA5n+mxkpZ
-         ZFv2nC3nok3wKkU/U87l92Wa3Rk1M917X/R+N4xxN6LGKD98inqpUchRLEIZ4N14ShIc
-         1kZMrtMqmunv9BJHDyJbifvxhMcJsdLZWVe3RKZuZEK5T1ctMUuJ8sbTuQVU5v9Z9kpu
-         fv5GJVVy/CZLIiEQj1F2T6qAowBaJ4AGZ/XBTgxF6UWgdQOZxxh3/mCJGRDzJeDljI7A
-         5w/9m2Em+MLrt6Wmh+HtXaqT5/vJHzJX/rRXJ3RC53SY9UTm52LFuwuBad8PhSkzJk30
-         aZeg==
-X-Gm-Message-State: AOAM533KsbEkcsYs2SnBmW8+dCTcvkR7xQhtYmRPinbzBblnmlpufbmZ
-        h6PG20t83X2rJNM12sZ3dF5RJA==
-X-Google-Smtp-Source: ABdhPJxSw1FwkKhmXDhcwO+z+DvJYTP+fXzHbCfXunNctoyfkj9UEuX9KbRQKkkrTHVeacjS2FzjHw==
-X-Received: by 2002:a05:600c:3583:: with SMTP id p3mr5799657wmq.69.1644850069265;
-        Mon, 14 Feb 2022 06:47:49 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id a1sm30331629wrf.42.2022.02.14.06.47.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 06:47:48 -0800 (PST)
-Date:   Mon, 14 Feb 2022 14:47:46 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Andi Shyti <andi@etezian.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Pratyush Yadav <p.yadav@ti.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v6 1/4] spi: dt-bindings: samsung: convert to dtschema
-Message-ID: <Ygprkl4sLrW6T+iD@google.com>
-References: <20220124082347.32747-1-krzysztof.kozlowski@canonical.com>
- <20220124082347.32747-2-krzysztof.kozlowski@canonical.com>
- <YgFgQsV2bJS6mjQs@sirena.org.uk>
- <YgpkZzMWuuWpK8Tk@google.com>
- <YgppwvQwfJ1xycvT@sirena.org.uk>
+        with ESMTP id S1351745AbiBNPXT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Feb 2022 10:23:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3876D5FF3A;
+        Mon, 14 Feb 2022 07:23:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF595B81128;
+        Mon, 14 Feb 2022 15:23:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15DB6C340E9;
+        Mon, 14 Feb 2022 15:23:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644852188;
+        bh=3JMGKBYxjkkG0LTrAck6ppMgEqfjxVZfvq6OMBpO98k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oafNM6xAgMlR5WohDsa8ouONMtU7R1+t4LtpR/F4KegzeJVIb+afKAVpXEK4K1YTI
+         mUKDDvbFFR990noFbhEb6KW0opJ0VeUKqBiDm0xBOLjCIZYVw/zqeTp+mBBLdxcqP/
+         0kg5AbLYPsxHRl2BIlQ6nCyYbyuOmgcYmteR8ye0rhg68taPEsfif9fpKOAZR8Q5MD
+         jR9ClW+YNL2uVnu3DuFaIRx/lu7wSdLB2Npz54WTbqw7gbM3UI3fSFd3DCZo/T65Wa
+         VXbHkCVEqzfJ0rsG2YA5cakP3+sqX8V7qlvzMRp9Yhvy/xnKUYHSKofdpSj0hyDDwU
+         1M/UmkQRuXhgw==
+Date:   Mon, 14 Feb 2022 08:23:04 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Li-hao Kuo <lhjeff911@gmail.com>
+Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wells.lu@sunplus.com,
+        lh.kuo@sunplus.com, trix@redhat.com
+Subject: Re: [PATCH] spi: Fix warning for Clang build and simplify code
+Message-ID: <Ygpz2M9sH+vAKqNL@dev-arch.archlinux-ax161>
+References: <7d91e6ce29f9a8df2c53a47b4b977664020e237a.1644805060.git.lhjeff911@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YgppwvQwfJ1xycvT@sirena.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <7d91e6ce29f9a8df2c53a47b4b977664020e237a.1644805060.git.lhjeff911@gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,25 +54,109 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 14 Feb 2022, Mark Brown wrote:
-
-> On Mon, Feb 14, 2022 at 02:17:11PM +0000, Lee Jones wrote:
-> > On Mon, 07 Feb 2022, Mark Brown wrote:
-> > 
-> > > On Mon, Jan 24, 2022 at 09:23:44AM +0100, Krzysztof Kozlowski wrote:
-> > > > Convert the Samsung SoC (S3C24xx, S3C64xx, S5Pv210, Exynos) SPI
-> > > > controller bindings to DT schema format.
-> > > 
-> > > Reviewed-by: Mark Brown <broonie@kernel.org>
-> > 
-> > Do you need a PR?
+On Mon, Feb 14, 2022 at 10:20:11AM +0800, Li-hao Kuo wrote:
+> Clang build fails with
+> spi-sunplus-sp7021.c:405:2: error: variable 'ret' is used
+>   uninitialized whenever switch default is taken
+>         default:
 > 
-> It'd be good to have one in case it's needed.
+> simplify code
+> 
+> Restore initializing ret. and add return error at default
 
-No problem.
+This part of the commit message does not really match what the change
+does anymore and I think that the "simplify code" part of the message
+could be flushed out a little bit more, maybe something like:
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+"Hoist the calls to sp7021_spi_slave_tx() and sp7021_spi_slave_rx() into
+the if statments and rewrite the if statements to explicitly allow only
+unidirectional transfers."
+
+?
+
+> Fixes: 47e8fe57a66f ("spi: Modify irq request position and modify parameters")
+> Reported-by: Tom Rix <trix@redhat.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Reported-by: Mark Brown <broonie@kernel.org>
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+
+Regardless, the actual change itself looks fine. Feel free to carry
+this tag on future revisions:
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+> ---
+>  drivers/spi/spi-sunplus-sp7021.c | 38 +++++++++-----------------------------
+>  1 file changed, 9 insertions(+), 29 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-sunplus-sp7021.c b/drivers/spi/spi-sunplus-sp7021.c
+> index ba5ed9f..ade7a0f 100644
+> --- a/drivers/spi/spi-sunplus-sp7021.c
+> +++ b/drivers/spi/spi-sunplus-sp7021.c
+> @@ -69,12 +69,6 @@
+>  #define SP7021_SPI_DATA_SIZE		(255)
+>  #define SP7021_FIFO_DATA_LEN		(16)
+>  
+> -enum SP_SPI_MODE {
+> -	SP7021_SLAVE_READ = 0,
+> -	SP7021_SLAVE_WRITE = 1,
+> -	SP7021_SPI_IDLE = 2,
+> -};
+> -
+>  enum {
+>  	SP7021_MASTER_MODE = 0,
+>  	SP7021_SLAVE_MODE = 1,
+> @@ -375,40 +369,26 @@ static int sp7021_spi_slave_transfer_one(struct spi_controller *ctlr, struct spi
+>  {
+>  	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
+>  	struct device *dev = pspim->dev;
+> -	int mode, ret;
+> +	int ret;
+>  
+> -	mode = SP7021_SPI_IDLE;
+> -	if (xfer->tx_buf && xfer->rx_buf) {
+> -		dev_dbg(&ctlr->dev, "%s() wrong command\n", __func__);
+> -		return -EINVAL;
+> -	} else if (xfer->tx_buf) {
+> +	if (xfer->tx_buf && !xfer->rx_buf) {
+>  		xfer->tx_dma = dma_map_single(dev, (void *)xfer->tx_buf,
+>  					      xfer->len, DMA_TO_DEVICE);
+>  		if (dma_mapping_error(dev, xfer->tx_dma))
+>  			return -ENOMEM;
+> -		mode = SP7021_SLAVE_WRITE;
+> -	} else if (xfer->rx_buf) {
+> +		 ret = sp7021_spi_slave_tx(spi, xfer);
+> +		 dma_unmap_single(dev, xfer->tx_dma, xfer->len, DMA_TO_DEVICE);
+> +	} else if (xfer->rx_buf && !xfer->tx_buf) {
+>  		xfer->rx_dma = dma_map_single(dev, xfer->rx_buf, xfer->len,
+>  					      DMA_FROM_DEVICE);
+>  		if (dma_mapping_error(dev, xfer->rx_dma))
+>  			return -ENOMEM;
+> -		mode = SP7021_SLAVE_READ;
+> -	}
+> -
+> -	switch (mode) {
+> -	case SP7021_SLAVE_WRITE:
+> -		ret = sp7021_spi_slave_tx(spi, xfer);
+> -		break;
+> -	case SP7021_SLAVE_READ:
+>  		ret = sp7021_spi_slave_rx(spi, xfer);
+> -		break;
+> -	default:
+> -		break;
+> -	}
+> -	if (xfer->tx_buf)
+> -		dma_unmap_single(dev, xfer->tx_dma, xfer->len, DMA_TO_DEVICE);
+> -	if (xfer->rx_buf)
+>  		dma_unmap_single(dev, xfer->rx_dma, xfer->len, DMA_FROM_DEVICE);
+> +	} else {
+> +		dev_dbg(&ctlr->dev, "%s() wrong command\n", __func__);
+> +		return -EINVAL;
+> +	}
+>  
+>  	spi_finalize_current_transfer(ctlr);
+>  	return ret;
+> -- 
+> 2.7.4
+> 
