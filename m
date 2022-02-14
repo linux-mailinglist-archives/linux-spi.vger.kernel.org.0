@@ -2,152 +2,184 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ABFE4B485B
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Feb 2022 10:56:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 767724B4E34
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Feb 2022 12:27:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245307AbiBNJx2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Mon, 14 Feb 2022 04:53:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60850 "EHLO
+        id S1351138AbiBNLYw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-spi@lfdr.de>); Mon, 14 Feb 2022 06:24:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344982AbiBNJwJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Feb 2022 04:52:09 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BD66735D;
-        Mon, 14 Feb 2022 01:43:34 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21E9eP2H019510;
-        Mon, 14 Feb 2022 09:42:57 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e779vdmbn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 09:42:57 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21E9bfsY004418;
-        Mon, 14 Feb 2022 09:42:55 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06fra.de.ibm.com with ESMTP id 3e645jat6m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 09:42:55 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21E9WYme38797792
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Feb 2022 09:32:34 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 051CE52052;
-        Mon, 14 Feb 2022 09:42:53 +0000 (GMT)
-Received: from smtp.tlslab.ibm.com (unknown [9.101.4.1])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with SMTP id 6085952050;
-        Mon, 14 Feb 2022 09:42:52 +0000 (GMT)
-Received: from yukon.ibmuc.com (unknown [9.171.60.190])
-        by smtp.tlslab.ibm.com (Postfix) with ESMTP id 076D32201DE;
-        Mon, 14 Feb 2022 10:42:50 +0100 (CET)
-From:   =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
-To:     linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-aspeed@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
-Subject: [PATCH 10/10] spi: aspeed: Activate new spi-mem driver
-Date:   Mon, 14 Feb 2022 10:42:31 +0100
-Message-Id: <20220214094231.3753686-11-clg@kaod.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220214094231.3753686-1-clg@kaod.org>
-References: <20220214094231.3753686-1-clg@kaod.org>
+        with ESMTP id S1351226AbiBNLX7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Feb 2022 06:23:59 -0500
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AAC7E0AA;
+        Mon, 14 Feb 2022 02:59:32 -0800 (PST)
+Received: by mail-qv1-f50.google.com with SMTP id a19so14432712qvm.4;
+        Mon, 14 Feb 2022 02:59:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=3zUaM8opKL0LG20PPLjLO0sGhx6OMEFs8RjHjfjsiY4=;
+        b=tzYW5L5xOK2xjgIhwKD7wo4utCRQktTYnmyF5KtC7nyd4QwxINuVYG0oZDuj2UWxgT
+         v/aCYx8fYJ460CRM8cqFGhvZWVTV32Txdva7EilCtR5KuJUaUdqVVS7A7bSNU3h32VJ+
+         2pJ2Y3tGDfNi2ZOUy2aWpZT0nVb7NeQpDeHk76U1HFWgRfZgnwSl3z8nfQ4JYELBC7w+
+         anK5B90Xh4HPCL5PMFl7xyPXyFTTOvibl637EXBhEt2cmJo4/fZJ0Y71K7/l41QRDnHU
+         eA/djqj4anfQA78O8QEI0s/RYo5qs13hiZUR71hMLnibfSqINLjWfOOnZb42aq7YUf4q
+         CRrQ==
+X-Gm-Message-State: AOAM531hvoqH7tmhpaGYLCsoe+Zw1pr4CRNoNkqjMA02M0yksh9tEj9K
+        nnVGq0KJ/mQRARxLUWcaA+SwQIlmvrkhXw==
+X-Google-Smtp-Source: ABdhPJwrRq7LQh4v5o0CPVNGHtwumDUPKtYShp4qDGuprC6H2gTwWZ7lqh2fqI8sviBIFGzuhsrVZw==
+X-Received: by 2002:a1f:9092:: with SMTP id s140mr849683vkd.38.1644829287597;
+        Mon, 14 Feb 2022 01:01:27 -0800 (PST)
+Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com. [209.85.221.171])
+        by smtp.gmail.com with ESMTPSA id o2sm1719696vke.47.2022.02.14.01.01.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 01:01:27 -0800 (PST)
+Received: by mail-vk1-f171.google.com with SMTP id bj24so2718190vkb.8;
+        Mon, 14 Feb 2022 01:01:26 -0800 (PST)
+X-Received: by 2002:a1f:7307:: with SMTP id o7mr818150vkc.0.1644829286141;
+ Mon, 14 Feb 2022 01:01:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20220212201631.12648-1-s.shtylyov@omp.ru> <20220212201631.12648-2-s.shtylyov@omp.ru>
+ <20220214071351.pcvstrzkwqyrg536@pengutronix.de>
+In-Reply-To: <20220214071351.pcvstrzkwqyrg536@pengutronix.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 14 Feb 2022 10:01:14 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWi8gno_FBbc=AwsdRtDJik8_bANjQrrRtUOOBRjFN=KA@mail.gmail.com>
+Message-ID: <CAMuHMdWi8gno_FBbc=AwsdRtDJik8_bANjQrrRtUOOBRjFN=KA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] platform: make platform_get_irq_optional() optional
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, alsa-devel@alsa-project.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-phy@lists.infradead.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Guenter Roeck <groeck@chromium.org>, linux-spi@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Peter Korsgaard <peter@korsgaard.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        kvm@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
+        John Garry <john.garry@huawei.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Eric Auger <eric.auger@redhat.com>, netdev@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        linux-renesas-soc@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Brian Norris <computersforpeace@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: hi9H4j9w4wgHr4Kw5X0RWQekIHI7ip-1
-X-Proofpoint-ORIG-GUID: hi9H4j9w4wgHr4Kw5X0RWQekIHI7ip-1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-14_01,2022-02-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- malwarescore=0 adultscore=0 lowpriorityscore=0 mlxscore=0 clxscore=1034
- impostorscore=0 spamscore=0 suspectscore=0 priorityscore=1501
- mlxlogscore=588 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202140058
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The previous driver using the MTD SPI NOR interface is kept in case we
-find some issues but we should remove it quickly once the new driver
-using the spi-mem interface has been sufficiently exposed.
+Hi Uwe,
 
-Signed-off-by: Cédric Le Goater <clg@kaod.org>
----
- arch/arm/configs/aspeed_g4_defconfig | 2 +-
- arch/arm/configs/aspeed_g5_defconfig | 2 +-
- arch/arm/configs/multi_v5_defconfig  | 2 +-
- arch/arm/configs/multi_v7_defconfig  | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+On Mon, Feb 14, 2022 at 8:29 AM Uwe Kleine-König
+<u.kleine-koenig@pengutronix.de> wrote:
+> On Sat, Feb 12, 2022 at 11:16:30PM +0300, Sergey Shtylyov wrote:
+> > This patch is based on the former Andy Shevchenko's patch:
+> >
+> > https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchenko@linux.intel.com/
+> >
+> > Currently platform_get_irq_optional() returns an error code even if IRQ
+> > resource simply has not been found.  It prevents the callers from being
+> > error code agnostic in their error handling:
+> >
+> >       ret = platform_get_irq_optional(...);
+> >       if (ret < 0 && ret != -ENXIO)
+> >               return ret; // respect deferred probe
+> >       if (ret > 0)
+> >               ...we get an IRQ...
+> >
+> > All other *_optional() APIs seem to return 0 or NULL in case an optional
+> > resource is not available.  Let's follow this good example, so that the
+> > callers would look like:
+> >
+> >       ret = platform_get_irq_optional(...);
+> >       if (ret < 0)
+> >               return ret;
+> >       if (ret > 0)
+> >               ...we get an IRQ...
+> >
+> > Reported-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> > Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+>
+> While this patch is better than v1, I still don't like it for the
+> reasons discussed for v1. (i.e. 0 isn't usable as a dummy value which I
+> consider the real advantage for the other _get_optional() functions.)
 
-diff --git a/arch/arm/configs/aspeed_g4_defconfig b/arch/arm/configs/aspeed_g4_defconfig
-index 964536444cd7..b4a1b2ed1a17 100644
---- a/arch/arm/configs/aspeed_g4_defconfig
-+++ b/arch/arm/configs/aspeed_g4_defconfig
-@@ -64,7 +64,7 @@ CONFIG_MTD_BLOCK=y
- CONFIG_MTD_PARTITIONED_MASTER=y
- CONFIG_MTD_SPI_NOR=y
- # CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
--CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=y
-+CONFIG_SPI_ASPEED_SMC=y
- CONFIG_MTD_UBI=y
- CONFIG_MTD_UBI_FASTMAP=y
- CONFIG_MTD_UBI_BLOCK=y
-diff --git a/arch/arm/configs/aspeed_g5_defconfig b/arch/arm/configs/aspeed_g5_defconfig
-index e809236ca88b..ccc4240ee4b5 100644
---- a/arch/arm/configs/aspeed_g5_defconfig
-+++ b/arch/arm/configs/aspeed_g5_defconfig
-@@ -103,7 +103,7 @@ CONFIG_MTD_BLOCK=y
- CONFIG_MTD_PARTITIONED_MASTER=y
- CONFIG_MTD_SPI_NOR=y
- # CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
--CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=y
-+CONFIG_SPI_ASPEED_SMC=y
- CONFIG_MTD_UBI=y
- CONFIG_MTD_UBI_FASTMAP=y
- CONFIG_MTD_UBI_BLOCK=y
-diff --git a/arch/arm/configs/multi_v5_defconfig b/arch/arm/configs/multi_v5_defconfig
-index 49083ef05fb0..80a3ae02d759 100644
---- a/arch/arm/configs/multi_v5_defconfig
-+++ b/arch/arm/configs/multi_v5_defconfig
-@@ -103,7 +103,7 @@ CONFIG_MTD_RAW_NAND=y
- CONFIG_MTD_NAND_ATMEL=y
- CONFIG_MTD_NAND_ORION=y
- CONFIG_MTD_SPI_NOR=y
--CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=y
-+CONFIG_SPI_ASPEED_SMC=y
- CONFIG_MTD_UBI=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_ATMEL_SSC=m
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index fc1b69256b64..33572998dbbe 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -217,7 +217,7 @@ CONFIG_MTD_NAND_DAVINCI=y
- CONFIG_MTD_NAND_STM32_FMC2=y
- CONFIG_MTD_NAND_PL35X=y
- CONFIG_MTD_SPI_NOR=y
--CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=m
-+CONFIG_SPI_ASPEED_SMC=m
- CONFIG_MTD_UBI=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_RAM=y
--- 
-2.34.1
+IMHO the real advantage is the simplified error handling, which is the
+area where most of the current bugs are. So I applaud the core change.
 
+Also IMHO, the dummy value handling is a red herring.  Contrary to
+optional clocks and resets, a missing optional interrupt does not
+always mean there is nothing to do: in case of polling, something
+else must definitely be done.  So even if request_irq() would accept
+a dummy interrupt zero and just do nothing, it would give the false
+impression that that is all there is to do, while an actual check
+for zero with polling code handling may still need to be present,
+thus leading to more not less bugs.
+
+> Apart from that, I think the subject is badly chosen. With "Make
+> somefunc() optional" I would expect that you introduce a Kconfig symbol
+> that results in the function not being available when disabled.
+
+Agreed.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
