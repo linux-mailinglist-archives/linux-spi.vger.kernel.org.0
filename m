@@ -2,133 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FEEE4B3CC3
-	for <lists+linux-spi@lfdr.de>; Sun, 13 Feb 2022 19:11:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E382A4B3EEC
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Feb 2022 02:41:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233939AbiBMSLd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 13 Feb 2022 13:11:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58772 "EHLO
+        id S239014AbiBNBln (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 13 Feb 2022 20:41:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbiBMSLd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 13 Feb 2022 13:11:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76E4112;
-        Sun, 13 Feb 2022 10:11:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6BF99B80B59;
-        Sun, 13 Feb 2022 18:11:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 782C4C004E1;
-        Sun, 13 Feb 2022 18:11:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644775884;
-        bh=RhzS4TyIJobSkSb/B7mFTwIDZOdt7aPYZTOXJ00X+OQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YIK94Vh2eNUoX3KWJCCrg+DT+eXajBH/h2Af20XKZsXlvRybC2/qytKSEM+z+gH0X
-         1zl5aVq7zJ82cXW1pub+9bdrE3WvOJAPDnuer9eUKHkkVvOtOm88eH9rdNRUw3vLRX
-         x77B0aoOrxG84Qk6pjH/Rgz+SmODQWR8oRvC+Cpau7XTZorAUxi9HgWTq3xE+7+H1+
-         CKFWYxLHQrkSL7RE4a/BjNH/usyN96XLixPkrE5fRjk611meGhNZrofQpndwhSUlXK
-         y3fUQIOOf/NWHh7GoE0YzVr6G/18UUBuS3mT9lKdI3SC4+Ntij95eo0cQGcARoRe98
-         Q3e9bE/hUhwQw==
-Date:   Sun, 13 Feb 2022 11:11:19 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Lh Kuo =?utf-8?B?6YOt5Yqb6LGq?= <lh.Kuo@sunplus.com>
-Cc:     Tom Rix <trix@redhat.com>, Mark Brown <broonie@kernel.org>,
-        Li-hao Kuo <lhjeff911@gmail.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Wells Lu =?utf-8?B?5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Subject: Re: [PATCH] spi: Fix warning for Clang build
-Message-ID: <YglJx3kgSFUH7nqX@dev-arch.archlinux-ax161>
-References: <691d52b72f978f562136c587319852f5c65f08fe.1644460444.git.lhjeff911@gmail.com>
- <YgT0LMcDpCEYHFYg@sirena.org.uk>
- <99ab624e2af4414bb2a785f64f35bd95@sphcmbx02.sunplus.com.tw>
- <aaaefa2b-e043-2bf8-28aa-d89deb3fbc2a@redhat.com>
- <0b71842ec1b946729e74d73cbd354162@sphcmbx02.sunplus.com.tw>
+        with ESMTP id S229532AbiBNBln (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 13 Feb 2022 20:41:43 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22EC05132F;
+        Sun, 13 Feb 2022 17:41:31 -0800 (PST)
+X-UUID: f0c413031bcc4e2b86e2c29fc354615d-20220214
+X-UUID: f0c413031bcc4e2b86e2c29fc354615d-20220214
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <leilk.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 476888744; Mon, 14 Feb 2022 09:41:25 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 14 Feb 2022 09:41:24 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 14 Feb
+ 2022 09:41:23 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 14 Feb 2022 09:41:21 +0800
+Message-ID: <601d501fd2dc634120b771edb4b988b0670d8c1b.camel@mediatek.com>
+Subject: Re: [PATCH 1/6] dt-bindings: spi: Add compatible for Mediatek IPM
+ IP with single mode
+From:   Leilk Liu <leilk.liu@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
+Date:   Mon, 14 Feb 2022 09:41:20 +0800
+In-Reply-To: <c375e5bd-53b9-e657-7c0a-7e2f9179688b@canonical.com>
+References: <20220209111938.16137-1-leilk.liu@mediatek.com>
+         <20220209111938.16137-2-leilk.liu@mediatek.com>
+         <c375e5bd-53b9-e657-7c0a-7e2f9179688b@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0b71842ec1b946729e74d73cbd354162@sphcmbx02.sunplus.com.tw>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 04:59:00AM +0000, Lh Kuo 郭力豪 wrote:
-> Yes. I think the function can be simplified as follows
+On Fri, 2022-02-11 at 12:44 +0100, Krzysztof Kozlowski wrote:
+> On 09/02/2022 12:19, Leilk Liu wrote:
+> > This commit adds dt-binding documentation for
+> > Mediatek SPI IPM IP with single mode.
 > 
-> static int sp7021_spi_slave_transfer_one(struct spi_controller *ctlr, struct spi_device *spi,
-> 				       struct spi_transfer *xfer)
-> {
-> 	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
-> 	struct device *dev = pspim->dev;
-> 	int ret;
+> Please do not use "This commit":
 > 
-> 	mode = SP7021_SPI_IDLE;
-> 	if (xfer->tx_buf && xfer->rx_buf) {
-> 		dev_dbg(&ctlr->dev, "%s() wrong command\n", __func__);
-> 		return -EINVAL;
-> 	} else if (xfer->tx_buf) {
-> 		xfer->tx_dma = dma_map_single(dev, (void *)xfer->tx_buf,
-> 					      xfer->len, DMA_TO_DEVICE);
-> 		if (dma_mapping_error(dev, xfer->tx_dma))
-> 			return -ENOMEM;
-> 		ret = sp7021_spi_slave_tx(spi, xfer);
-> 	} else if (xfer->rx_buf) {
-> 		xfer->rx_dma = dma_map_single(dev, xfer->rx_buf, xfer->len,
-> 					      DMA_FROM_DEVICE);
-> 		if (dma_mapping_error(dev, xfer->rx_dma))
-> 			return -ENOMEM;
-> 		ret = sp7021_spi_slave_rx(spi, xfer);
-> 	}
+https://elixir.bootlin.com/linux/v5.13/source/Documentation/process/submitting-patches.rst#L89
 > 
-> 	if (xfer->tx_buf)
-> 		dma_unmap_single(dev, xfer->tx_dma, xfer->len, DMA_TO_DEVICE);
-> 	if (xfer->rx_buf)
-> 		dma_unmap_single(dev, xfer->rx_dma, xfer->len, DMA_FROM_DEVICE);
+> Wrap around 75-chars, just like our guidelines are saying.
 > 
-> 	spi_finalize_current_transfer(ctlr);
-> 	return ret;
-> }
+OK, I'll fix them,thanks
 
-Clang will still warn that ret is uninitialized when the else if
-branches are not taken.
+> > 
+> > Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> > ---
+> >  Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml | 1
+> > +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-
+> > mt65xx.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-
+> > mt65xx.yaml
+> > index bfa44acb1bdd..0a2fc0404cb3 100644
+> > --- a/Documentation/devicetree/bindings/spi/mediatek,spi-
+> > mt65xx.yaml
+> > +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-
+> > mt65xx.yaml
+> > @@ -41,6 +41,7 @@ properties:
+> >                - mediatek,mt8135-spi
+> >                - mediatek,mt8173-spi
+> >                - mediatek,mt8183-spi
+> > +              - mediatek,ipm-spi-single
+> >  
+> >    reg:
+> >      maxItems: 1
+> 
+> 
+> Best regards,
+> Krzysztof
 
-How about something like:
-
-static int sp7021_spi_slave_transfer_one(struct spi_controller *ctlr, struct spi_device *spi,
-				       struct spi_transfer *xfer)
-{
-	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
-	struct device *dev = pspim->dev;
-	int ret;
-
-	if (xfer->tx_buf && !xfer->rx_buf) {
-		xfer->tx_dma = dma_map_single(dev, (void *)xfer->tx_buf,
-					      xfer->len, DMA_TO_DEVICE);
-		if (dma_mapping_error(dev, xfer->tx_dma))
-			return -ENOMEM;
-		ret = sp7021_spi_slave_tx(spi, xfer);
-		dma_unmap_single(dev, xfer->tx_dma, xfer->len, DMA_TO_DEVICE);
-	} else if (xfer->rx_buf && !xfer->tx_buf) {
-		xfer->rx_dma = dma_map_single(dev, xfer->rx_buf, xfer->len,
-					      DMA_FROM_DEVICE);
-		if (dma_mapping_error(dev, xfer->rx_dma))
-			return -ENOMEM;
-		ret = sp7021_spi_slave_rx(spi, xfer);
-		dma_unmap_single(dev, xfer->rx_dma, xfer->len, DMA_FROM_DEVICE);
-	} else {
-		dev_dbg(&ctlr->dev, "%s() wrong command\n", __func__);
-		return -EINVAL;
-	}
-
-	spi_finalize_current_transfer(ctlr);
-	return ret;
-}
