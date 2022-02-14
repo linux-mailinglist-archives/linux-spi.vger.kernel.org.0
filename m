@@ -2,57 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A00214B509A
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Feb 2022 13:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C6D44B527A
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Feb 2022 14:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiBNMuQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Feb 2022 07:50:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42714 "EHLO
+        id S1354687AbiBNN6Q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Feb 2022 08:58:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353486AbiBNMuP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Feb 2022 07:50:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637034B85C;
-        Mon, 14 Feb 2022 04:50:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4A1161468;
-        Mon, 14 Feb 2022 12:50:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E67EFC340E9;
-        Mon, 14 Feb 2022 12:50:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644843003;
-        bh=dCZAZFFTFztaUC3w9E7PynQEzmnHStV4WtGOFsBCoMc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NxuzBnXVhRj04xQho/0LIHIQWG+EkuGcsPcdH80rm/QChJgLscBCwiEIrFWu1I9Ig
-         UgkI+xyU50G6u5+t+lNJSNW/HEtSdBRL0oOzFH83eXtZQbIQ92FiYwkLov3vpZGIln
-         NU8XzL8C6+/lhtAy4CvvbKb/v1blCUd1Vzi66K2EETkJn51JpahjmH3s+YByDuW9ja
-         Wv8BQ8RFp0aQs9sfW9RMtGqDJgjgwf0WTeSYGUA0j9DIxcQME/GuHEWBH8qrFL0uHQ
-         KFdJUAeG/I0dONMbAe6iDvOZwc7uzp5t6mTegnEiF+qjW7LkoDWHkGsp+1lwNnBHsy
-         UrI0lE4UaIkAA==
-Date:   Mon, 14 Feb 2022 12:49:58 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jon Lin <jon.lin@rock-chips.com>
-Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
+        with ESMTP id S1346175AbiBNN6J (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Feb 2022 08:58:09 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1634BCFD
+        for <linux-spi@vger.kernel.org>; Mon, 14 Feb 2022 05:58:02 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJbqA-0006T5-AI; Mon, 14 Feb 2022 14:56:30 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJbq0-00GYf6-Ms; Mon, 14 Feb 2022 14:56:19 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nJbpy-0038Nh-VX; Mon, 14 Feb 2022 14:56:18 +0100
+Date:   Mon, 14 Feb 2022 14:56:18 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>, kvm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-iio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, alsa-devel@alsa-project.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-phy@lists.infradead.org,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-serial@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Corey Minyard <minyard@acm.org>, linux-pm@vger.kernel.org,
+        John Garry <john.garry@huawei.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Mark Gross <markgross@kernel.org>, linux-gpio@vger.kernel.org,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Eric Auger <eric.auger@redhat.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        openipmi-developer@lists.sourceforge.net,
+        Jaroslav Kysela <perex@perex.cz>,
+        Benson Leung <bleung@chromium.org>,
         linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/6] spi: rockchip: Preset cs-high and clk polarity in
- setup progress
-Message-ID: <YgpP9j80OuhkCN8p@sirena.org.uk>
-References: <20220211034344.4130-1-jon.lin@rock-chips.com>
- <20220211034344.4130-2-jon.lin@rock-chips.com>
- <YgZHalrdhhilxROt@sirena.org.uk>
- <4222ce7d-a1e3-1728-fec2-976946b06ba9@rock-chips.com>
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Cornelia Huck <cohuck@redhat.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Zha Qipeng <qipeng.zha@intel.com>,
+        Richard Weinberger <richard@nod.at>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Brian Norris <computersforpeace@gmail.com>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] platform: make platform_get_irq_optional()
+ optional
+Message-ID: <20220214135618.kdiikxi3j4j4erks@pengutronix.de>
+References: <20220212201631.12648-1-s.shtylyov@omp.ru>
+ <20220212201631.12648-2-s.shtylyov@omp.ru>
+ <20220214071351.pcvstrzkwqyrg536@pengutronix.de>
+ <YgorLXUr8aT+1ttv@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WgfHOPUjhPwyc1Eh"
+        protocol="application/pgp-signature"; boundary="woc7fbustut2ntcm"
 Content-Disposition: inline
-In-Reply-To: <4222ce7d-a1e3-1728-fec2-976946b06ba9@rock-chips.com>
-X-Cookie: Am I in GRADUATE SCHOOL yet?
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <YgorLXUr8aT+1ttv@smile.fi.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,50 +110,82 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
---WgfHOPUjhPwyc1Eh
-Content-Type: text/plain; charset=utf-8
+--woc7fbustut2ntcm
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 14, 2022 at 04:40:19PM +0800, Jon Lin wrote:
-> =E5=9C=A8 2022/2/11 19:24, Mark Brown =E5=86=99=E9=81=93:
+Hello Andy,
 
-> > > +   cr0 |=3D ((spi->mode & 0x3) << CR0_SCPH_OFFSET);
-> > > +   if (spi->mode & SPI_CS_HIGH)
-> > > +           cr0 |=3D BIT(spi->chip_select) << CR0_SOI_OFFSET;
+On Mon, Feb 14, 2022 at 12:13:01PM +0200, Andy Shevchenko wrote:
+> On Mon, Feb 14, 2022 at 08:13:51AM +0100, Uwe Kleine-K=F6nig wrote:
+> > On Sat, Feb 12, 2022 at 11:16:30PM +0300, Sergey Shtylyov wrote:
+> > > This patch is based on the former Andy Shevchenko's patch:
+> > >=20
+> > > https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchenko=
+@linux.intel.com/
+> > >=20
+> > > Currently platform_get_irq_optional() returns an error code even if I=
+RQ
+> > > resource simply has not been found.  It prevents the callers from bei=
+ng
+> > > error code agnostic in their error handling:
+> > >=20
+> > > 	ret =3D platform_get_irq_optional(...);
+> > > 	if (ret < 0 && ret !=3D -ENXIO)
+> > > 		return ret; // respect deferred probe
+> > > 	if (ret > 0)
+> > > 		...we get an IRQ...
+> > >=20
+> > > All other *_optional() APIs seem to return 0 or NULL in case an optio=
+nal
+> > > resource is not available.  Let's follow this good example, so that t=
+he
+> > > callers would look like:
+> > >=20
+> > > 	ret =3D platform_get_irq_optional(...);
+> > > 	if (ret < 0)
+> > > 		return ret;
+> > > 	if (ret > 0)
+> > > 		...we get an IRQ...
+> > >=20
+> > > Reported-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> > > Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> >=20
+> > While this patch is better than v1, I still don't like it for the
+> > reasons discussed for v1. (i.e. 0 isn't usable as a dummy value which I
+> > consider the real advantage for the other _get_optional() functions.)
+>=20
+> I think you haven't reacted anyhow to my point that you mixing apples and
+> bananas together when comparing this 0 to the others _optional APIs.
 
-> > What ensures that this read/modify/write doesn't race with a transfer
-> > running on another client device in the case where the controller has
-> > more than one device connected?  Similarly with the mode, though it's
-> > not great to have devices with different modes connected to a single
-> > controller.
+Is this a question to me or Sergey?
 
-> I have no idea how to deal with the conflict configuration between
-> different cs, and also I find nothing strategy in others spi drivers.
-> As we all know, some configurations should be consistent for different
-> CS devices, such as SPI_CPOL, so I suggest the framework to make
-> corresponding early warning prompts.
+I fully agree, when the 0 of platform_get_irq_optional is an apple and
+the NULL of gpio_get_optional is a banana, I doubt "All other
+*_optional() APIs seem to return 0 or NULL in case an optional resource
+is not available.  Let's follow this good example, [...]".
 
-As covered in the documentation setup() for one device may run while
-another is active, therefore if multiple devices are configured in the
-same register you should use a lock to ensure there can't be multiple
-writes.  Note that the above appears to not just be setting the mode but
-also the chip select so if you've got two SPI_CS_HIGH devices then
-they'll both be going in and separately setting cr0.
+Best regards
+Uwe
 
---WgfHOPUjhPwyc1Eh
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--woc7fbustut2ntcm
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIKT/YACgkQJNaLcl1U
-h9AZKAf/VpLE2vWn6R3N7yXYDuY8eeyBOVUEXfG484ts/lnv56h0WYC6lFZRT6Ge
-4yg6uV+fWsAsC+jbNXgNg5+AOpVwuN/fDkAN/5E3bVOAVTnTaWDvT0A7U1YvsP+u
-IGrkUB3RTshl8j/w7V2v7axa+tWkEH8s6lkz1T+UhgqQFPeFtQfuHY6kRbuFYAGW
-IOs1d3Au4t0jQmhhT3dT9Q/2Cm0lM7nOCNxqh/JbkPD/G6Va1NKYh2dLSUgR2pZe
-tkD6K1gmx05dWC+olXHVLYu8ZHuqjJysmrrwpQM7pprHZAShZ8+MYW8UGnYPJ+Bx
-6k2s6LozuXeMH+w3ygNO8f4axFUKVQ==
-=xViN
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIKX38ACgkQwfwUeK3K
+7AnLpgf9EdBYBZTRjJVoNGFFTEqmmhehKa4KFk5v/UfvgXZenr00B/u2K/MHO4lF
+HHazTdjZ6XfXR0zlckqQaisXEU2TXb/YxxUC3K7hBgh1k2dtS14XlUQHbh2zQXQI
+HKw3Yitn6vDghQH9WkSROTJNBOvMg3PcAg8i5h8g17e0D9BI5sdJERnMTFNeMzpz
+cY95lA6BqyVoJn2GW+QxAKYiYCMB5CSNw3yIxV8nd8CKPKMUQNt4aX4EFwglsJKP
+dB7ddBCRW0+mJcywV7mjkU7B7q6hTtPyAkNBQrWYtaAY4xcsIH7E2T64AaNc4Rah
+C/iCiRD7LGScn9QG72fV+C+upY3/gg==
+=VmOP
 -----END PGP SIGNATURE-----
 
---WgfHOPUjhPwyc1Eh--
+--woc7fbustut2ntcm--
