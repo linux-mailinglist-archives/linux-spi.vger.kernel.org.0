@@ -2,93 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8F24B6368
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Feb 2022 07:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A044B4B67C5
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Feb 2022 10:39:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232695AbiBOG1z (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Feb 2022 01:27:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41982 "EHLO
+        id S233518AbiBOJjj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Feb 2022 04:39:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231919AbiBOG1z (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Feb 2022 01:27:55 -0500
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EAADE91
-        for <linux-spi@vger.kernel.org>; Mon, 14 Feb 2022 22:27:45 -0800 (PST)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 35C4530000E20;
-        Tue, 15 Feb 2022 07:27:43 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 282A6314429; Tue, 15 Feb 2022 07:27:43 +0100 (CET)
-Date:   Tue, 15 Feb 2022 07:27:43 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>
-Cc:     linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        with ESMTP id S233233AbiBOJjj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Feb 2022 04:39:39 -0500
+X-Greylist: delayed 1890 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 01:39:28 PST
+Received: from 1.mo548.mail-out.ovh.net (1.mo548.mail-out.ovh.net [178.32.121.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4A1E3730
+        for <linux-spi@vger.kernel.org>; Tue, 15 Feb 2022 01:39:28 -0800 (PST)
+Received: from mxplan5.mail.ovh.net (unknown [10.108.4.11])
+        by mo548.mail-out.ovh.net (Postfix) with ESMTPS id 8335821EFF;
+        Tue, 15 Feb 2022 09:07:53 +0000 (UTC)
+Received: from kaod.org (37.59.142.98) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 15 Feb
+ 2022 10:07:52 +0100
+Authentication-Results: garm.ovh; auth=pass (GARM-98R002b27b64c4-57a5-44f9-a47c-4a83fe5690ca,
+                    2487B4E7026A90D95ED29794538901B35B4D209A) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 82.64.250.170
+Message-ID: <76c3f352-a0fc-f72f-e66e-594f9249cb8c@kaod.org>
+Date:   Tue, 15 Feb 2022 10:07:51 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 03/10] spi: spi-mem: Add driver for Aspeed SMC controllers
+Content-Language: en-US
+To:     Lukas Wunner <lukas@wunner.de>
+CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
         Mark Brown <broonie@kernel.org>,
         Tudor Ambarus <tudor.ambarus@microchip.com>,
         Pratyush Yadav <p.yadav@ti.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-aspeed@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
+        <linux-aspeed@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>,
         Andrew Jeffery <andrew@aj.id.au>,
         Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/10] spi: spi-mem: Add driver for Aspeed SMC controllers
-Message-ID: <20220215062743.GA12431@wunner.de>
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
 References: <20220214094231.3753686-1-clg@kaod.org>
- <20220214094231.3753686-4-clg@kaod.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+ <20220214094231.3753686-4-clg@kaod.org> <20220215062743.GA12431@wunner.de>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <20220215062743.GA12431@wunner.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220214094231.3753686-4-clg@kaod.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [37.59.142.98]
+X-ClientProxiedBy: DAG6EX1.mxp5.local (172.16.2.51) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: 4e02782a-965d-4bc5-8fe7-6f59370c6abd
+X-Ovh-Tracer-Id: 7883832626687085383
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrjeefgdduvdejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepieegvdffkeegfeetuddttddtveduiefhgeduffekiedtkeekteekhfffleevleelnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrdelkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 10:42:24AM +0100, Cédric Le Goater wrote:
-> +static int aspeed_spi_probe(struct platform_device *pdev)
-> +{
-[...]
-> +	ctlr = spi_alloc_master(dev, sizeof(*aspi));
-> +	if (!ctlr)
-> +		return -ENOMEM;
+Hello Lukas,
 
-Use devm_spi_alloc_master() and remove the "put_controller" error path
-for simplicity.
+On 2/15/22 07:27, Lukas Wunner wrote:
+> On Mon, Feb 14, 2022 at 10:42:24AM +0100, CÃ©dric Le Goater wrote:
+>> +static int aspeed_spi_probe(struct platform_device *pdev)
+>> +{
+> [...]
+>> +	ctlr = spi_alloc_master(dev, sizeof(*aspi));
+>> +	if (!ctlr)
+>> +		return -ENOMEM;
+> 
+> Use devm_spi_alloc_master() and remove the "put_controller" error path
+> for simplicity.
+  
+yes.
 
+>> +	ret = devm_spi_register_controller(dev, ctlr);
+> [...]
+>> +static int aspeed_spi_remove(struct platform_device *pdev)
+>> +{
+>> +	struct spi_controller *ctlr = platform_get_drvdata(pdev);
+>> +	struct aspeed_spi *aspi = spi_controller_get_devdata(ctlr);
+>> +
+>> +	aspeed_spi_enable(aspi, false);
+>> +	spi_unregister_controller(ctlr);
+>> +	clk_disable_unprepare(aspi->clk);
+>> +	return 0;
+>> +}
+> 
+> You need to move the call to spi_unregister_controller() *before*
+> the call to aspeed_spi_enable().  The controller must be fully
+> operational until spi_unregister_controller() returns.
+> 
+> You also need to replace the call to devm_spi_register_controller()
+> in aspeed_spi_probe() with spi_register_controller().
+> Otherwise you'll unregister the controller twice because you're
+> calling spi_unregister_controller() in aspeed_spi_remove().
 
-> +	ret = devm_spi_register_controller(dev, ctlr);
-[...]
-> +static int aspeed_spi_remove(struct platform_device *pdev)
-> +{
-> +	struct spi_controller *ctlr = platform_get_drvdata(pdev);
-> +	struct aspeed_spi *aspi = spi_controller_get_devdata(ctlr);
-> +
-> +	aspeed_spi_enable(aspi, false);
-> +	spi_unregister_controller(ctlr);
-> +	clk_disable_unprepare(aspi->clk);
-> +	return 0;
-> +}
-
-You need to move the call to spi_unregister_controller() *before*
-the call to aspeed_spi_enable().  The controller must be fully
-operational until spi_unregister_controller() returns.
-
-You also need to replace the call to devm_spi_register_controller()
-in aspeed_spi_probe() with spi_register_controller().
-Otherwise you'll unregister the controller twice because you're
-calling spi_unregister_controller() in aspeed_spi_remove().
+ok. Understood. Done in v2.
 
 Thanks,
 
-Lukas
+C.
+
