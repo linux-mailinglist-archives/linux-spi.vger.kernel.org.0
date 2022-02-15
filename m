@@ -2,55 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A014B6CC6
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4224B6CC5
 	for <lists+linux-spi@lfdr.de>; Tue, 15 Feb 2022 13:55:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237988AbiBOMzO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Feb 2022 07:55:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37364 "EHLO
+        id S233983AbiBOMzT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Feb 2022 07:55:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238003AbiBOMzO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Feb 2022 07:55:14 -0500
+        with ESMTP id S237992AbiBOMzT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Feb 2022 07:55:19 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6272B43AEE
-        for <linux-spi@vger.kernel.org>; Tue, 15 Feb 2022 04:55:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612E0443E3;
+        Tue, 15 Feb 2022 04:55:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BA41ACE1DCD
-        for <linux-spi@vger.kernel.org>; Tue, 15 Feb 2022 12:55:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 010A4C340ED;
-        Tue, 15 Feb 2022 12:54:57 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BC9ADCE1F1B;
+        Tue, 15 Feb 2022 12:55:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C49C0C340F2;
+        Tue, 15 Feb 2022 12:55:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644929701;
-        bh=/K/C5MmofYFveDTJql+hvt9kSya/8PLf1e+nz7pSBUE=;
+        s=k20201202; t=1644929705;
+        bh=p1tJVXNyyLVvsyyu/uQ3N9eU1Jya4h24+Tsf3iiMlAQ=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=R7hIu3rkp7t8TBP1x4dbEH8eEWmADb0fTkAU6r0rvRlsLFoI666arD9towYOQ02da
-         66hkTPGC/n0wXBl6SXtj9n/3p74uv3bzdKG/k+vOMh/BYyBZZOfrXUq5UFEdZ5hNNW
-         hxqjiTKreZfcfyP198q4JRJ/LMCEdydDQj6GKrO6LGlmOtBZZE+tXGkWE+oNW2X80i
-         /pw3rlc3YC0DAdynZGhWuqvEHyjsAZK8apGrEOCp+1hst88lm9HvreRH8vfmhvS9OL
-         jolouQSrjjvix1KZUQb6favfRoMCDFA2XqOQ06ysQbRioXhvEj2dSmBIfYf1xv7eOl
-         /IBrE2nSO5/cQ==
+        b=Ms8Zgq+/dXjmfQCkUbxTAtEKx/ileHFkTsIXxFSmde9KNDBXk/KBRJvtbG1TPgsuf
+         E1cUngzylxKYVMy+Toj/hUXgfQJh+eaeQsv0MBSZNXLanPHtIJLbO7WYkXw2sqcSCa
+         7OMJ1ua1dpnwoVbsFcwzFbIzrKC04EW8k2jerH6C9D7Aw7Hut1rDmonUhJESxRHb2f
+         8j79HT6Mr3hcEw3RYYyVPSj2oSjcyUU3qyz0mi+UihB4Fdx1zCY3Ov2xyo8C0C08A7
+         nXB2SSFOTjmKjspcSjEvLxsUyDp2q0bYiVaSy+hWgOSSUz5JZlQRugtIVKJAHVO9ei
+         IuTpq8k7TyDFw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc:     Pratyush Yadav <p.yadav@ti.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-mtd@lists.infradead.org, Michael Walle <michael@walle.cc>,
-        Mauro Lima <mauro.lima@eclypsium.com>,
-        Hans-Gert Dahmen <hans-gert.dahmen@immu.ne>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Lee Jones <lee.jones@linaro.org>, linux-spi@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Jonathan Corbet <corbet@lwn.net>
-In-Reply-To: <20220209122706.42439-1-mika.westerberg@linux.intel.com>
-References: <20220209122706.42439-1-mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH v6 0/3] mtd: spi-nor / spi / MFD: Convert intel-spi to SPI MEM
-Message-Id: <164492969770.14011.5135767095761454169.b4-ty@kernel.org>
-Date:   Tue, 15 Feb 2022 12:54:57 +0000
+To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Li-hao Kuo <lhjeff911@gmail.com>
+Cc:     lh.kuo@sunplus.com, trix@redhat.com, nathan@kernel.org,
+        wells.lu@sunplus.com
+In-Reply-To: <7d91e6ce29f9a8df2c53a47b4b977664020e237a.1644805060.git.lhjeff911@gmail.com>
+References: <7d91e6ce29f9a8df2c53a47b4b977664020e237a.1644805060.git.lhjeff911@gmail.com>
+Subject: Re: [PATCH] spi: Fix warning for Clang build and simplify code
+Message-Id: <164492970350.14011.3679967978147631328.b4-ty@kernel.org>
+Date:   Tue, 15 Feb 2022 12:55:03 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -64,13 +54,13 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 9 Feb 2022 15:27:03 +0300, Mika Westerberg wrote:
-> Based on discussion on the patch I sent some time ago here:
+On Mon, 14 Feb 2022 10:20:11 +0800, Li-hao Kuo wrote:
+> Clang build fails with
+> spi-sunplus-sp7021.c:405:2: error: variable 'ret' is used
+>   uninitialized whenever switch default is taken
+>         default:
 > 
->   http://lists.infradead.org/pipermail/linux-mtd/2021-June/086867.html
-> 
-> it turns out that the preferred way to deal with the SPI flash controller
-> drivers is through SPI MEM which is part of Linux SPI subsystem.
+> simplify code
 > 
 > [...]
 
@@ -80,12 +70,8 @@ Applied to
 
 Thanks!
 
-[1/3] mtd: spi-nor: intel-spi: Disable write protection only if asked
-      commit: cd149eff8d2201a63c074a6d9d03e52926aa535d
-[2/3] mtd: spi-nor: intel-spi: Convert to SPI MEM
-      commit: e23e5a05d1fd9479586c40ffbcc056b3e34ef816
-[3/3] Documentation / MTD: Rename the intel-spi driver
-      commit: 4ab13489735d9b5b6e91634eab83922914a3310c
+[1/1] spi: Fix warning for Clang build and simplify code
+      commit: 5790597d7113faabb1714d3d1efa268e36eb4811
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
