@@ -2,114 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A044B4B67C5
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Feb 2022 10:39:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CEE84B6C1C
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Feb 2022 13:36:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233518AbiBOJjj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Feb 2022 04:39:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60306 "EHLO
+        id S237341AbiBOMg5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Feb 2022 07:36:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233233AbiBOJjj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Feb 2022 04:39:39 -0500
-X-Greylist: delayed 1890 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 01:39:28 PST
-Received: from 1.mo548.mail-out.ovh.net (1.mo548.mail-out.ovh.net [178.32.121.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4A1E3730
-        for <linux-spi@vger.kernel.org>; Tue, 15 Feb 2022 01:39:28 -0800 (PST)
-Received: from mxplan5.mail.ovh.net (unknown [10.108.4.11])
-        by mo548.mail-out.ovh.net (Postfix) with ESMTPS id 8335821EFF;
-        Tue, 15 Feb 2022 09:07:53 +0000 (UTC)
-Received: from kaod.org (37.59.142.98) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 15 Feb
- 2022 10:07:52 +0100
-Authentication-Results: garm.ovh; auth=pass (GARM-98R002b27b64c4-57a5-44f9-a47c-4a83fe5690ca,
-                    2487B4E7026A90D95ED29794538901B35B4D209A) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 82.64.250.170
-Message-ID: <76c3f352-a0fc-f72f-e66e-594f9249cb8c@kaod.org>
-Date:   Tue, 15 Feb 2022 10:07:51 +0100
+        with ESMTP id S229824AbiBOMg4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Feb 2022 07:36:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1645C10D6;
+        Tue, 15 Feb 2022 04:36:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64FED61690;
+        Tue, 15 Feb 2022 12:36:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 600B6C340EB;
+        Tue, 15 Feb 2022 12:36:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644928605;
+        bh=+Fx82csho4bi9Bhwr3sF7WXHtnIqEKHbXNQg/Lt7SSg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cCnN4ckpP3IPeqyTF2eF29V2sLdIB+sp/B/AmCTbv6MUdKamnqAk5jOZ7cVkugTgE
+         NzP3kPRCYTzfMT8rGT3+lvLvq4Lz8S/d0n1px65f3j8jOr4HS0fNMipfiihYM8JFcM
+         hkzFPignEDEPsDG5XucPKiFqfJ4LRuyml8DgpiURGX4PsxEBGzwGcanXCpJv6azgVn
+         Y6MdZSU23/+58Hc9QVfQIFmTZ4IxetLAKEGHRRB36/vU477zp89OfkKXqi2IT6pher
+         0rCOvLFA0LcIfPLpmAo0aWw7R1WtQBtZCdK8Y05rvPu/6C7CMwhtbsJOubaROnd+FJ
+         E1gSgNGyPhzOg==
+Date:   Tue, 15 Feb 2022 12:36:40 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Jon Lin <jon.lin@rock-chips.com>
+Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/6] spi: rockchip: Preset cs-high and clk polarity in
+ setup progress
+Message-ID: <YgueWHKur2w55s+0@sirena.org.uk>
+References: <20220211034344.4130-1-jon.lin@rock-chips.com>
+ <20220211034344.4130-2-jon.lin@rock-chips.com>
+ <YgZHalrdhhilxROt@sirena.org.uk>
+ <4222ce7d-a1e3-1728-fec2-976946b06ba9@rock-chips.com>
+ <YgpP9j80OuhkCN8p@sirena.org.uk>
+ <e0f0ca0d-40df-cf86-9471-9272bcc171f9@rock-chips.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 03/10] spi: spi-mem: Add driver for Aspeed SMC controllers
-Content-Language: en-US
-To:     Lukas Wunner <lukas@wunner.de>
-CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-aspeed@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220214094231.3753686-1-clg@kaod.org>
- <20220214094231.3753686-4-clg@kaod.org> <20220215062743.GA12431@wunner.de>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <20220215062743.GA12431@wunner.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.59.142.98]
-X-ClientProxiedBy: DAG6EX1.mxp5.local (172.16.2.51) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: 4e02782a-965d-4bc5-8fe7-6f59370c6abd
-X-Ovh-Tracer-Id: 7883832626687085383
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrjeefgdduvdejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepieegvdffkeegfeetuddttddtveduiefhgeduffekiedtkeekteekhfffleevleelnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrdelkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+aDZkCYiUMiCzT/F"
+Content-Disposition: inline
+In-Reply-To: <e0f0ca0d-40df-cf86-9471-9272bcc171f9@rock-chips.com>
+X-Cookie: I have accepted Provolone into my life!
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello Lukas,
 
-On 2/15/22 07:27, Lukas Wunner wrote:
-> On Mon, Feb 14, 2022 at 10:42:24AM +0100, Cédric Le Goater wrote:
->> +static int aspeed_spi_probe(struct platform_device *pdev)
->> +{
-> [...]
->> +	ctlr = spi_alloc_master(dev, sizeof(*aspi));
->> +	if (!ctlr)
->> +		return -ENOMEM;
-> 
-> Use devm_spi_alloc_master() and remove the "put_controller" error path
-> for simplicity.
-  
-yes.
+--+aDZkCYiUMiCzT/F
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->> +	ret = devm_spi_register_controller(dev, ctlr);
-> [...]
->> +static int aspeed_spi_remove(struct platform_device *pdev)
->> +{
->> +	struct spi_controller *ctlr = platform_get_drvdata(pdev);
->> +	struct aspeed_spi *aspi = spi_controller_get_devdata(ctlr);
->> +
->> +	aspeed_spi_enable(aspi, false);
->> +	spi_unregister_controller(ctlr);
->> +	clk_disable_unprepare(aspi->clk);
->> +	return 0;
->> +}
-> 
-> You need to move the call to spi_unregister_controller() *before*
-> the call to aspeed_spi_enable().  The controller must be fully
-> operational until spi_unregister_controller() returns.
-> 
-> You also need to replace the call to devm_spi_register_controller()
-> in aspeed_spi_probe() with spi_register_controller().
-> Otherwise you'll unregister the controller twice because you're
-> calling spi_unregister_controller() in aspeed_spi_remove().
+On Tue, Feb 15, 2022 at 11:00:54AM +0800, Jon Lin wrote:
+> =E5=9C=A8 2022/2/14 20:49, Mark Brown =E5=86=99=E9=81=93:
 
-ok. Understood. Done in v2.
+> > As covered in the documentation setup() for one device may run while
+> > another is active, therefore if multiple devices are configured in the
+> > same register you should use a lock to ensure there can't be multiple
+> > writes.  Note that the above appears to not just be setting the mode but
+> > also the chip select so if you've got two SPI_CS_HIGH devices then
+> > they'll both be going in and separately setting cr0.
 
-Thanks,
+> Is the io_mutex in function spi_setup is good enough?
 
-C.
+It's not supposed to be for that but looking at the code quickly I
+*think* setup() is never called with io_mutex held so it might well be
+fine - you should double check though.  If not you'd need to add another
+lock in your driver data.
 
+--+aDZkCYiUMiCzT/F
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmILnlgACgkQJNaLcl1U
+h9B2NAf/QN5joxtVPoutx+2TSlooN/Z0rZTKsAu3UvL8NbXQpUZK/TYIaBtXXMWp
+CaQgwdWxzZCAtUVulGlp1i8i/CKSyGevk9eYqtCiN3iKS96RmvScrd9Hrh746PZx
+RNbS+c6qFodIXVjq0RJPAAXIhH33HrFplqa0qipfbI4YEvKPZLAdJKi8hLEv51tP
+UpD0GpZ2StBDrwmHdRjGS7EtKJ9gbqqJBdokKnv1OXZobdBEWnkKq7btqxDyMkTo
+w9wNNM+xhOqWIZF+Jwm0lLVkju19tjqbZ5782yI+YSNhBMtp91PeN1efmLQs9+Lp
+PCwRQQDLfe8UttKpOX1qpaRZrMGprw==
+=DFZt
+-----END PGP SIGNATURE-----
+
+--+aDZkCYiUMiCzT/F--
