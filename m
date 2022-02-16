@@ -2,52 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9DB4B80EA
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Feb 2022 08:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 033D84B8151
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Feb 2022 08:22:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbiBPHHT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 16 Feb 2022 02:07:19 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33564 "EHLO
+        id S229996AbiBPHVh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 16 Feb 2022 02:21:37 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiBPHHT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Feb 2022 02:07:19 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216271F68D9;
-        Tue, 15 Feb 2022 23:06:30 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id e16so1265402qtq.6;
-        Tue, 15 Feb 2022 23:06:30 -0800 (PST)
+        with ESMTP id S229991AbiBPHVg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Feb 2022 02:21:36 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E43205FC;
+        Tue, 15 Feb 2022 23:21:16 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id s1so1282528qtw.9;
+        Tue, 15 Feb 2022 23:21:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=jms.id.au; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=tQsez3rBBuWL5P/PS1iF/3TVpjfzLMW/EONt+f9CiMQ=;
-        b=DEQtO8Rec0/pciyxC16dz5iaxsu3WmlWt3NyB5nPzDtrs1WiDLQmd6+hlVBLEnqVpu
-         1mebox8SJRxbZTV/O6jAS12dOueg+4F90FldQTblOj89+hrNeAHr+LIeLNdAliI56beR
-         pJC3N2/CeNgNv8Gka5T210xTzD/ClYHwqrGc4=
+        bh=pOcJAEz2qU41PX9tifsFjG0wojUZW1SvJzugMZiYuC0=;
+        b=nqq/1QEdzD/5W/nv2zTp9XXZj9GEXhlgKtfxNAWzCJpuPUnCuJDSykqaLEkUu73Eee
+         bpXiXJ2uphU0Cix+zo+9i2ba1WtVKzy4o7JqsKHE9ClIbqu0kFBMDG+Q5jLFF5yisf+P
+         DgWLheZ+6e0nB1COWgkhri2ulmv9D5ph51brU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=tQsez3rBBuWL5P/PS1iF/3TVpjfzLMW/EONt+f9CiMQ=;
-        b=TDjSbFRzILxTprlpKNOF0zeCQTtwkkp2mcRz1EH6RUbjk1toFcTL8A5dbtHg+2q/y4
-         wDY4okQhEFkOAfs4xuH5nKMDHJHmRUIUTt1Bf681Rt1GE5EQERGTJTWKfn6+6iPpWioU
-         441t1gVhlLAG6suFC8FcN7PAvJcKXnVUQRe70HvWykQ0yMerTmP5NYRaaICAC878t3Jz
-         gADgJHw7X6IE9UWlxmz//MzzpMCFvAmngrTgCo9hlu7eR9jsnP9di8w1/EceH/E3Qvpo
-         mEdmPRRHpjXUuD+ESAI2PoHQQq98kxuNoUK4jksHv8EKW6WyLdAbA/oy9GdkrA2ee6vq
-         WJ5Q==
-X-Gm-Message-State: AOAM532ucIQzNqt89KY4OQhtnmkEdcclFMud4oW9hV3jiMLczuKzgDt5
-        UEDOVqfsAxI1KZkxAKU1M7CUeh8Gek1UhBUNPlw=
-X-Google-Smtp-Source: ABdhPJxUrxTCwzi7Yj2+ExwwwoGmToAHQYb+adCONcmAx/DnApNmNJjP3jevLGycqiKtwihstXuDC7FCB3cmNTkPoqU=
-X-Received: by 2002:a05:622a:116:b0:2cd:5be1:3838 with SMTP id
- u22-20020a05622a011600b002cd5be13838mr1054529qtw.494.1644994936320; Tue, 15
- Feb 2022 23:02:16 -0800 (PST)
+        bh=pOcJAEz2qU41PX9tifsFjG0wojUZW1SvJzugMZiYuC0=;
+        b=b3DuuDw7rAfzLypkZTQ9E8Ziy8CX8Cy9lMZQUWibDXR1g7+sodh68U5eB9mS/yVdT9
+         UwqTWQtaOm/xqIpuoF/XYPOx/Sn0qdM73U/KFYDgoWvp8fXuKMVzaXWHmVnJZ731+JzE
+         uvxLAEDhE7WEuYXvPFeEdxYweXKCLOCgybMV/++2rAvYM0WI8Sb4qzcLRmAGU4Fzmpns
+         P08Y7b+mLmk+4+BLa2u/i2uVeKoajISw6X+ob++m2IYN2XEc8UldRTI2rUz9MhNh5Tnv
+         UgFcpWkAorDKiLZWmLstyceSNW/ts7TUNME6lpQja6wzN7fVo4OgZW/0IJYpwkC+yBgY
+         XmpA==
+X-Gm-Message-State: AOAM5327nLVOYUmuUj9W2hsR+btNLFxGI+kKkcP7ZTxHDVz8w+PnvTTf
+        3sTB/d/vmqTQrT3plpYon64EJzbUFLM423Wk0Ss=
+X-Google-Smtp-Source: ABdhPJzW11flgp0zEGjBDsbZmQaNh3HD4dBznYiqY29J473H7ttZH/tN26OSjf6pOvHePn5DcqbqrSr9Ss1Ny09UdS4=
+X-Received: by 2002:ac8:5b91:0:b0:2db:acb7:2412 with SMTP id
+ a17-20020ac85b91000000b002dbacb72412mr1055351qta.475.1644996075867; Tue, 15
+ Feb 2022 23:21:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20220214094231.3753686-1-clg@kaod.org> <20220214094231.3753686-11-clg@kaod.org>
-In-Reply-To: <20220214094231.3753686-11-clg@kaod.org>
+References: <20220214094231.3753686-1-clg@kaod.org>
+In-Reply-To: <20220214094231.3753686-1-clg@kaod.org>
 From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 16 Feb 2022 07:02:04 +0000
-Message-ID: <CACPK8XdvczyZ1QHtFm7JJAC7AY+QmWSx0MarUwLjUyOtC9DnSQ@mail.gmail.com>
-Subject: Re: [PATCH 10/10] spi: aspeed: Activate new spi-mem driver
+Date:   Wed, 16 Feb 2022 07:21:04 +0000
+Message-ID: <CACPK8Xe5_opc8W-00DZF1URcb2-OYSU6acjJg+c+aAoDxGBboA@mail.gmail.com>
+Subject: Re: [PATCH 00/10] spi: spi-mem: Add driver for Aspeed SMC controllers
 To:     =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
 Cc:     linux-spi@vger.kernel.org,
         linux-mtd <linux-mtd@lists.infradead.org>,
@@ -77,83 +77,111 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 14 Feb 2022 at 09:43, C=C3=A9dric Le Goater <clg@kaod.org> wrote:
+On Mon, 14 Feb 2022 at 09:42, C=C3=A9dric Le Goater <clg@kaod.org> wrote:
 >
-> The previous driver using the MTD SPI NOR interface is kept in case we
-> find some issues but we should remove it quickly once the new driver
-> using the spi-mem interface has been sufficiently exposed.
+> Hi,
 >
-> Signed-off-by: C=C3=A9dric Le Goater <clg@kaod.org>
-
-I suggest we drop the defconfig changes from both this patch and the
-first. This way we'll always have the new driver being built, with
-less churn.
-
-If you strongly prefer the way you've done it then that's fine too.
-
-> ---
->  arch/arm/configs/aspeed_g4_defconfig | 2 +-
->  arch/arm/configs/aspeed_g5_defconfig | 2 +-
->  arch/arm/configs/multi_v5_defconfig  | 2 +-
->  arch/arm/configs/multi_v7_defconfig  | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
+> This series adds a new SPI driver using the spi-mem interface for the
+> Aspeed static memory controllers of the AST2600, AST2500 and AST2400
+> SoCs.
 >
-> diff --git a/arch/arm/configs/aspeed_g4_defconfig b/arch/arm/configs/aspe=
-ed_g4_defconfig
-> index 964536444cd7..b4a1b2ed1a17 100644
-> --- a/arch/arm/configs/aspeed_g4_defconfig
-> +++ b/arch/arm/configs/aspeed_g4_defconfig
-> @@ -64,7 +64,7 @@ CONFIG_MTD_BLOCK=3Dy
->  CONFIG_MTD_PARTITIONED_MASTER=3Dy
->  CONFIG_MTD_SPI_NOR=3Dy
->  # CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
-> -CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=3Dy
-> +CONFIG_SPI_ASPEED_SMC=3Dy
->  CONFIG_MTD_UBI=3Dy
->  CONFIG_MTD_UBI_FASTMAP=3Dy
->  CONFIG_MTD_UBI_BLOCK=3Dy
-> diff --git a/arch/arm/configs/aspeed_g5_defconfig b/arch/arm/configs/aspe=
-ed_g5_defconfig
-> index e809236ca88b..ccc4240ee4b5 100644
-> --- a/arch/arm/configs/aspeed_g5_defconfig
-> +++ b/arch/arm/configs/aspeed_g5_defconfig
-> @@ -103,7 +103,7 @@ CONFIG_MTD_BLOCK=3Dy
->  CONFIG_MTD_PARTITIONED_MASTER=3Dy
->  CONFIG_MTD_SPI_NOR=3Dy
->  # CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
-> -CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=3Dy
-> +CONFIG_SPI_ASPEED_SMC=3Dy
->  CONFIG_MTD_UBI=3Dy
->  CONFIG_MTD_UBI_FASTMAP=3Dy
->  CONFIG_MTD_UBI_BLOCK=3Dy
-> diff --git a/arch/arm/configs/multi_v5_defconfig b/arch/arm/configs/multi=
-_v5_defconfig
-> index 49083ef05fb0..80a3ae02d759 100644
-> --- a/arch/arm/configs/multi_v5_defconfig
-> +++ b/arch/arm/configs/multi_v5_defconfig
-> @@ -103,7 +103,7 @@ CONFIG_MTD_RAW_NAND=3Dy
->  CONFIG_MTD_NAND_ATMEL=3Dy
->  CONFIG_MTD_NAND_ORION=3Dy
->  CONFIG_MTD_SPI_NOR=3Dy
-> -CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=3Dy
-> +CONFIG_SPI_ASPEED_SMC=3Dy
->  CONFIG_MTD_UBI=3Dy
->  CONFIG_BLK_DEV_LOOP=3Dy
->  CONFIG_ATMEL_SSC=3Dm
-> diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi=
-_v7_defconfig
-> index fc1b69256b64..33572998dbbe 100644
-> --- a/arch/arm/configs/multi_v7_defconfig
-> +++ b/arch/arm/configs/multi_v7_defconfig
-> @@ -217,7 +217,7 @@ CONFIG_MTD_NAND_DAVINCI=3Dy
->  CONFIG_MTD_NAND_STM32_FMC2=3Dy
->  CONFIG_MTD_NAND_PL35X=3Dy
->  CONFIG_MTD_SPI_NOR=3Dy
-> -CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=3Dm
-> +CONFIG_SPI_ASPEED_SMC=3Dm
->  CONFIG_MTD_UBI=3Dy
->  CONFIG_BLK_DEV_LOOP=3Dy
->  CONFIG_BLK_DEV_RAM=3Dy
+>  * AST2600 Firmware SPI Memory Controller (FMC)
+>  * AST2600 SPI Flash Controller (SPI1 and SPI2)
+>  * AST2500 Firmware SPI Memory Controller (FMC)
+>  * AST2500 SPI Flash Controller (SPI1 and SPI2)
+>  * AST2400 New Static Memory Controller (also referred as FMC)
+>  * AST2400 SPI Flash Controller (SPI)
+>
+> It is based on the current OpenBMC kernel driver [1], using directly
+> the MTD SPI-NOR interface and on a patchset [2] previously proposed
+> adding support for the AST2600 only. This driver takes a slightly
+> different approach to cover all 6 controllers.
+>
+> It does not make use of the controller register disabling Address and
+> Data byte lanes because is not available on the AST2400 SoC. We could
+> introduce a specific handler for new features available on recent SoCs
+> if needed. As there is not much difference on performance, the driver
+> chooses the common denominator: "User mode" which has been heavily
+> tested in [1]. "User mode" is also used as a fall back method when
+> flash device mapping window is too small.
+>
+> Problems to address with spi-mem were the configuration of the mapping
+> windows and the calibration of the read timings. The driver handles
+> them in the direct mapping handler when some knowledge on the size of
+> the flash device is know. It is not perfect but not incorrect either.
+> The algorithm is one from [1] because it doesn't require the DMA
+> registers which are not available on all controllers.
+>
+> Direct mapping for writes is not supported (yet). I have seen some
+> corruption with writes and I preferred to use the safer and proven
+> method of the initial driver [1]. We can improve that later.
+>
+> The driver supports Quad SPI RX transfers on the AST2600 SoC but it
+> didn't have the expected results. Therefore it is not activated yet.
+> This needs more tests.
+>
+> The series does not remove the current Aspeed SMC driver but prepares
+> ground for its removal by changing its CONFIG option. This last step
+> can be addressed as a followup when the new driver using the spi-mem
+> interface has been sufficiently exposed.
+>
+> Tested on:
+>
+>  * OpenPOWER Palmetto (AST2400)
+>  * Evaluation board (AST2500)
+>  * OpenPOWER Witherspoon (AST2500)
+>  * Evaluation board (AST2600 A0)
+>  * Rainier board (AST2600)
+
+Looks great! Thanks for doing this work C=C3=A9dric.
+
+I reviewed all of the patches. The device tree and defconfig ones,
+which we will send via my aspeed tree, are good to go.
+
+The others look good too, to the best of my knowledge.
+
+I'll do some more testing of your v2 when you send it out.
+
+Cheers,
+
+Joel
+
+>
+> [1] https://github.com/openbmc/linux/blob/dev-5.15/drivers/mtd/spi-nor/co=
+ntrollers/aspeed-smc.c
+> [2] https://patchwork.ozlabs.org/project/linux-aspeed/list/?series=3D2123=
+94
+>
+> Thanks,
+>
+> C.
+>
+> C=C3=A9dric Le Goater (10):
+>   mtd: spi-nor: aspeed: Rename Kconfig option
+>   dt-bindings: spi: Add Aspeed SMC controllers device tree binding
+>   spi: spi-mem: Add driver for Aspeed SMC controllers
+>   spi: aspeed: Add support for direct mapping
+>   spi: aspeed: Adjust direct mapping to device size
+>   spi: aspeed: Workaround AST2500 limitations
+>   spi: aspeed: Add support for the AST2400 SPI controller
+>   spi: aspeed: Calibrate read timings
+>   ARM: dts: aspeed: Enable Dual SPI RX transfers
+>   spi: aspeed: Activate new spi-mem driver
+>
+>  drivers/spi/spi-aspeed-smc.c                  | 1241 +++++++++++++++++
+>  .../bindings/spi/aspeed,ast2600-fmc.yaml      |   92 ++
+>  arch/arm/boot/dts/aspeed-g4.dtsi              |    6 +
+>  arch/arm/boot/dts/aspeed-g5.dtsi              |    7 +
+>  arch/arm/boot/dts/aspeed-g6.dtsi              |    8 +
+>  drivers/mtd/spi-nor/controllers/Kconfig       |    4 +-
+>  drivers/mtd/spi-nor/controllers/Makefile      |    2 +-
+>  drivers/spi/Kconfig                           |   11 +
+>  drivers/spi/Makefile                          |    1 +
+>  9 files changed, 1369 insertions(+), 3 deletions(-)
+>  create mode 100644 drivers/spi/spi-aspeed-smc.c
+>  create mode 100644 Documentation/devicetree/bindings/spi/aspeed,ast2600-=
+fmc.yaml
+>
 > --
 > 2.34.1
 >
