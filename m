@@ -2,46 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB204B8FCB
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Feb 2022 19:02:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 904124B8FCC
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Feb 2022 19:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234247AbiBPSCS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 16 Feb 2022 13:02:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51298 "EHLO
+        id S237381AbiBPSCV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 16 Feb 2022 13:02:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbiBPSCS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Feb 2022 13:02:18 -0500
+        with ESMTP id S237396AbiBPSCU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Feb 2022 13:02:20 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35122CC82
-        for <linux-spi@vger.kernel.org>; Wed, 16 Feb 2022 10:02:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7272CCA4;
+        Wed, 16 Feb 2022 10:02:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C6C96118E
-        for <linux-spi@vger.kernel.org>; Wed, 16 Feb 2022 18:02:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FB56C004E1;
-        Wed, 16 Feb 2022 18:02:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 535D361229;
+        Wed, 16 Feb 2022 18:02:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E00ACC340E8;
+        Wed, 16 Feb 2022 18:02:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645034524;
-        bh=l/k5GpJQVPT4Ln9GX9+sJsP+LrI33upgS3Bow25XLHQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=ROff79xuP+zg7Y71xqh5q18qXQr0gK4faM9Ow3Lm8MBLrBQd2odjCry5qNMtkDd0o
-         3cDVKsSS0N/Oh+S2ejpOLD61r02yr8ztarUVc029f9Y5TKxAnVOFLGcpH5Nyk9UCCK
-         LoBY+f/7+hrWD//z47/ZxpY8GjpSKcdBT3G15FnlD2mu4xMBkcAkgN91nTrlHGK73w
-         kAXyJQj5B+mk+wH3aR4QCQ/KR7ksPeUcEFThLQHuMXDWG6/AO4aDhVvIqgEFdfeO1Z
-         8jSVVTnqDeUo4GRHiy5l5pU3kpT5bx6CmICEwuZncBVTf0F6QUFoZZByh86yVL+V8A
-         bN6Ire9D44pJg==
+        s=k20201202; t=1645034525;
+        bh=0RPzGkqaulryzzUFTedNd/YW9tsR4nH6x1mJcKe4Kc8=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=iodmdVb7k2uEAmmaJY0bbHZN/l/i5+dv56IMwnV6KwPp1XvLGrZmLnBWb/SWFyUSZ
+         u58bn2HTu+qkLuzuswqwwLiz5NunwMAAbO5Yb8RAqmVLTfG+416+3eM42jPQWNRh3h
+         NvyrKZ91ps+qOC/Dss/r5MtiEukQ+/M7V6+iSuHj6sQgUs1wc4yPCUP1frB+vKFc8e
+         yBanqB7Mfop6YyRXID42VyRlIZrcA8/kWmQ2WSz9W6ks7sThfAagcicZGoDHiahzGq
+         C5JMWhDzU4Uw0Ymry920OB2YCUuyk2ij9b2V7t7uaBDO38ar5Xe+i6cVj/L170goOs
+         3CffTXseX/quA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-spi@vger.kernel.org
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>
-In-Reply-To: <20220216091317.1302254-1-jarkko.nikula@linux.intel.com>
-References: <20220216091317.1302254-1-jarkko.nikula@linux.intel.com>
-Subject: Re: [PATCH] spi: pxa2xx: Add support for Intel Raptor Lake PCH-S
-Message-Id: <164503452318.3088984.7333939263335657646.b4-ty@kernel.org>
-Date:   Wed, 16 Feb 2022 18:02:03 +0000
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+In-Reply-To: <20220215135139.4328-1-andriy.shevchenko@linux.intel.com>
+References: <20220215135139.4328-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2 1/1] spi: intel-pci: Add support for Intel Ice Lake-N SPI serial flash
+Message-Id: <164503452464.3088984.20078715577588354.b4-ty@kernel.org>
+Date:   Wed, 16 Feb 2022 18:02:04 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,11 +53,15 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 16 Feb 2022 11:13:17 +0200, Jarkko Nikula wrote:
-> Add support for LPSS SPI on Intel Raptor Lake PCH-S. It has four
-> controllers each having two chip selects.
+On Tue, 15 Feb 2022 15:51:39 +0200, Andy Shevchenko wrote:
+> Intel Ice Lake-N has the same SPI serial flash controller as Ice Lake-LP.
+> Add Ice Lake-N PCI ID to the driver list of supported devices.
 > 
+> The device can be found on MacBookPro16,2 [1].
 > 
+> [1]: https://linux-hardware.org/?probe=f1c5cf0c43
+> 
+> [...]
 
 Applied to
 
@@ -67,8 +69,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: pxa2xx: Add support for Intel Raptor Lake PCH-S
-      commit: 54d0fd06e2bd52d3b17648de787157a7c0625adb
+[1/1] spi: intel-pci: Add support for Intel Ice Lake-N SPI serial flash
+      commit: 47b34f495b8b75475952f12c521c4c1fc2fa09b4
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
