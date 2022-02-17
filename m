@@ -2,68 +2,201 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972414B9535
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Feb 2022 02:00:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16F0E4B9B86
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Feb 2022 09:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiBQBAn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 16 Feb 2022 20:00:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37028 "EHLO
+        id S238212AbiBQIxX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 17 Feb 2022 03:53:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiBQBAm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Feb 2022 20:00:42 -0500
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C51279935;
-        Wed, 16 Feb 2022 17:00:28 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V4f6lyc_1645059625;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V4f6lyc_1645059625)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 17 Feb 2022 09:00:26 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     lhjeff911@gmail.com
-Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] spi: clean up some inconsistent indenting
-Date:   Thu, 17 Feb 2022 09:00:24 +0800
-Message-Id: <20220217010024.111904-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        with ESMTP id S238191AbiBQIxW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Feb 2022 03:53:22 -0500
+X-Greylist: delayed 88496 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 00:53:08 PST
+Received: from 4.mo552.mail-out.ovh.net (4.mo552.mail-out.ovh.net [178.33.43.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD7B228206
+        for <linux-spi@vger.kernel.org>; Thu, 17 Feb 2022 00:53:07 -0800 (PST)
+Received: from mxplan5.mail.ovh.net (unknown [10.109.146.173])
+        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id ECDFB24EAF;
+        Thu, 17 Feb 2022 08:37:04 +0000 (UTC)
+Received: from kaod.org (37.59.142.97) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 17 Feb
+ 2022 09:37:03 +0100
+Authentication-Results: garm.ovh; auth=pass (GARM-97G002328e9798-957d-4e35-ae92-239b6e2566ca,
+                    6074F5EAC11FD030A47E229993F36105E76D55A4) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 82.64.250.170
+Message-ID: <a77fe4bb-c4d6-4329-b25e-26e990e8092b@kaod.org>
+Date:   Thu, 17 Feb 2022 09:37:02 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 02/10] dt-bindings: spi: Add Aspeed SMC controllers device
+ tree binding
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-aspeed@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220214094231.3753686-1-clg@kaod.org>
+ <20220214094231.3753686-3-clg@kaod.org> <YgwV5ZGCbrNhlk0s@robh.at.kernel.org>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <YgwV5ZGCbrNhlk0s@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [37.59.142.97]
+X-ClientProxiedBy: DAG2EX1.mxp5.local (172.16.2.11) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: 03c1adce-a0aa-4472-8090-987f0bcc8d30
+X-Ovh-Tracer-Id: 662029147249740676
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrjeejgdduvddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepudeutdegudegheefvdefhfeiteeifefhieduueethfffkeeiudeuueehgedugeefnecuffhomhgrihhnpeguvghvihgtvghtrhgvvgdrohhrghenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddrleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehmgihplhgrnhehrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheptghlgheskhgrohgurdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Eliminate the follow smatch warning:
-drivers/spi/spi-sunplus-sp7021.c:379 sp7021_spi_slave_transfer_one()
-warn: inconsistent indenting
+On 2/15/22 22:06, Rob Herring wrote:
+> On Mon, Feb 14, 2022 at 10:42:23AM +0100, Cédric Le Goater wrote:
+>> The "interrupt" property is optional because it is only necessary for
+>> controllers supporting DMAs (Not implemented yet in the new driver).
+>>
+>> Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+>> Signed-off-by: Cédric Le Goater <clg@kaod.org>
+>> ---
+>>   .../bindings/spi/aspeed,ast2600-fmc.yaml      | 92 +++++++++++++++++++
+>>   1 file changed, 92 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+>> new file mode 100644
+>> index 000000000000..ed71c4d86930
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+>> @@ -0,0 +1,92 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/spi/aspeed,ast2600-fmc.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Aspeed SMC controllers bindings
+>> +
+>> +maintainers:
+>> +  - Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+>> +  - Cédric Le Goater <clg@kaod.org>
+>> +
+>> +description: |
+>> +  This binding describes the Aspeed Static Memory Controllers (FMC and
+>> +  SPI) of the AST2400, AST2500 and AST2600 SOCs.
+>> +
+>> +allOf:
+>> +  - $ref: "spi-controller.yaml#"
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - aspeed,ast2600-fmc
+>> +      - aspeed,ast2600-spi
+>> +      - aspeed,ast2500-fmc
+>> +      - aspeed,ast2500-spi
+>> +      - aspeed,ast2400-fmc
+>> +      - aspeed,ast2400-spi
+>> +
+>> +  reg:
+>> +    items:
+>> +      - description: registers
+>> +      - description: memory mapping
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +patternProperties:
+>> +  "@[0-9a-f]+":
+>> +    type: object
+>> +
+>> +    properties:
+>> +      spi-rx-bus-width:
+>> +        enum: [1, 2, 4]
+>> +
+>> +    required:
+>> +      - reg
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - clocks
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +    #include <dt-bindings/interrupt-controller/aspeed-scu-ic.h>
+>> +    #include <dt-bindings/clock/ast2600-clock.h>
+>> +
+>> +    spi@1e620000 {
+>> +        reg = < 0x1e620000 0xc4
+>> +                0x20000000 0x10000000 >;
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +        compatible = "aspeed,ast2600-fmc";
+>> +        clocks = <&syscon ASPEED_CLK_AHB>;
+>> +        status = "disabled";
+> 
+> Why is your example disabled? Drop 'status'.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/spi/spi-sunplus-sp7021.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+my bad. I took the basic definition of the SoC and the devices
+are activated in the boards. I will fix in v2.
 
-diff --git a/drivers/spi/spi-sunplus-sp7021.c b/drivers/spi/spi-sunplus-sp7021.c
-index ade7a0fca8cb..f989f7b99296 100644
---- a/drivers/spi/spi-sunplus-sp7021.c
-+++ b/drivers/spi/spi-sunplus-sp7021.c
-@@ -376,8 +376,8 @@ static int sp7021_spi_slave_transfer_one(struct spi_controller *ctlr, struct spi
- 					      xfer->len, DMA_TO_DEVICE);
- 		if (dma_mapping_error(dev, xfer->tx_dma))
- 			return -ENOMEM;
--		 ret = sp7021_spi_slave_tx(spi, xfer);
--		 dma_unmap_single(dev, xfer->tx_dma, xfer->len, DMA_TO_DEVICE);
-+		ret = sp7021_spi_slave_tx(spi, xfer);
-+		dma_unmap_single(dev, xfer->tx_dma, xfer->len, DMA_TO_DEVICE);
- 	} else if (xfer->rx_buf && !xfer->tx_buf) {
- 		xfer->rx_dma = dma_map_single(dev, xfer->rx_buf, xfer->len,
- 					      DMA_FROM_DEVICE);
--- 
-2.20.1.7.g153144c
+Thanks,
+
+C.
+
+
+> 
+>> +        interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+>> +        flash@0 {
+>> +                reg = < 0 >;
+>> +                compatible = "jedec,spi-nor";
+>> +                spi-max-frequency = <50000000>;
+>> +                status = "disabled";
+> 
+> Ditto.
+> 
+>> +        };
+>> +        flash@1 {
+>> +                reg = < 1 >;
+>> +                compatible = "jedec,spi-nor";
+>> +                spi-max-frequency = <50000000>;
+>> +                status = "disabled";
+>> +        };
+>> +        flash@2 {
+>> +                reg = < 2 >;
+>> +                compatible = "jedec,spi-nor";
+>> +                spi-max-frequency = <50000000>;
+>> +                status = "disabled";
+>> +        };
+>> +    };
+>> -- 
+>> 2.34.1
+>>
+>>
 
