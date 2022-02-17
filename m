@@ -2,48 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A0E4BA851
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Feb 2022 19:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5984BA888
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Feb 2022 19:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244362AbiBQSde (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 17 Feb 2022 13:33:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59102 "EHLO
+        id S239866AbiBQSkc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 17 Feb 2022 13:40:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244490AbiBQSd3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Feb 2022 13:33:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB0D38A0;
-        Thu, 17 Feb 2022 10:32:29 -0800 (PST)
+        with ESMTP id S243607AbiBQSkb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Feb 2022 13:40:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9D74BFEA
+        for <linux-spi@vger.kernel.org>; Thu, 17 Feb 2022 10:40:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C4A161B01;
-        Thu, 17 Feb 2022 18:32:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 266F8C340E8;
-        Thu, 17 Feb 2022 18:32:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 44AB1B823D1
+        for <linux-spi@vger.kernel.org>; Thu, 17 Feb 2022 18:40:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E4F88C340EC;
+        Thu, 17 Feb 2022 18:40:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645122748;
-        bh=8YextsepZgUr4+oe5f01LRtpOeJxsq+lsISRRrHwJn0=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=VNBraLvw8tzhp5HQKFZZQSD/eEBmA9GYmGDGvVdYGnsnSsO4hMlTzHp8ezULp/NLk
-         h7CPFgftAYTLPNyj3edHai5GLyuHYAjLYbMroo6G6AvP4gKXYxxSTkH2BQzpOX63/C
-         vuRkB0sdMBQOZRaBPa8ElUHxUVBxqAky1tvm1UkCt2YKRg0qCC3TEPT6v92SD0zqiy
-         OeCX8+5JHLVdBgIHsHtg+1e5Cfl1REQXfB018lH2tCaqMm6UAYDJrMAn5EW4TnhdV0
-         iUztK2QZBL6h8tvOPfVqOp03wTgeLulMk54ltLJV5eFFkPaVOztdyqnrducnSFHq0n
-         /Di2Lbd1EjYnQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Jon Lin <jon.lin@rock-chips.com>
-Cc:     linux-spi@vger.kernel.org, heiko@sntech.de,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20220216014028.8123-1-jon.lin@rock-chips.com>
-References: <20220216014028.8123-1-jon.lin@rock-chips.com>
-Subject: Re: (subset) [PATCH v3 0/6] New support and problem adjustment of SPI rockchip
-Message-Id: <164512274685.3993181.4255845764381770585.b4-ty@kernel.org>
-Date:   Thu, 17 Feb 2022 18:32:26 +0000
-MIME-Version: 1.0
+        s=k20201202; t=1645123213;
+        bh=uc/BR9arzipJa/dOI+JvofTv0oDr1m075n0MpRJFsss=;
+        h=Subject:From:Date:To:From;
+        b=VWX3nnVgv8iDx8MGrwwAWmtSu4NWOXhHEYdZqlhSwqUsNsAHkz/267nlmfPIbMjrN
+         n61eSxu/FA4g1+OdwgwZxyK0jhBEq73IYo8Fkct3MWMK/ygRLXctPvBQ3RgYSgLHzR
+         UqGR1kuMeb82++rztNTJtfRjlwoVQrLXPpNfft/2xU+TOy7xkyPFVC2Hpdt1pFknm1
+         Crj+ZSaCJRk3n9jam9PF1R7bUonqDn72mOonI+OpjbTq6t2A1HmIzjDG0b6nUF/S5z
+         nrqEpsQMlWqIo7wMNJwCnW6nelQkl1hmpoV4wapdHUGbM7S7lO+m45R8gMuVKHmEiH
+         zSTUK1DrHd9NA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C82B3E6D446;
+        Thu, 17 Feb 2022 18:40:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <164512321374.2540.8068377713874691508.git-patchwork-summary@kernel.org>
+Date:   Thu, 17 Feb 2022 18:40:13 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -54,48 +52,72 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 16 Feb 2022 09:40:22 +0800, Jon Lin wrote:
-> Changes in v3:
-> - Support clear the bits of configure bits filed
-> 
-> Changes in v2:
-> - Fix patches should be at the start of the series
-> - Fix patches should be at the start of the series
-> - Delete useless messages
-> - Limit cs-high presetting to the chip select n <= 1
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: mediatek: Avoid NULL pointer crash in interrupt
+  Submitter: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=610034
+  Lore link: https://lore.kernel.org/r/20220131141708.888710-1-benjamin.gaignard@collabora.com
 
-Thanks!
+Series: [1/6] spi: rockchip: Stop spi slave dma receiver when cs inactive
+  Submitter: Jon Lin <jon.lin@rock-chips.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=613337
+  Lore link: https://lore.kernel.org/r/20220211034344.4130-1-jon.lin@rock-chips.com
+    Patches: [1/6] spi: rockchip: Stop spi slave dma receiver when cs inactive
+             [3/6] spi: rockchip: Fix error in getting num-cs property
+             [4/6] spi: rockchip: Suspend and resume the bus during NOIRQ_SYSTEM_SLEEP_PM ops
+             [6/6] spi: rockchip: clear interrupt status in error handler
 
-[3/6] spi: rockchip: Stop spi slave dma receiver when cs inactive
-      commit: 869f2c94db92f0f1d6acd0dff1c1ebb8160f5e29
-[4/6] spi: rockchip: Preset cs-high and clk polarity in setup progress
-      commit: 3a4bf922d42efa4e9a3dc803d1fd786d43e8a501
-[5/6] spi: rockchip: Suspend and resume the bus during NOIRQ_SYSTEM_SLEEP_PM ops
-      commit: e882575efc771f130a24322377dc1033551da11d
-[6/6] spi: rockchip: clear interrupt status in error handler
-      commit: 2fcdde56c44fe1cd13ce328128f509bbda2cdb41
+Series: New support and problem adjustment of SPI rockchip
+  Submitter: Jon Lin <jon.lin@rock-chips.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=614755
+  Lore link: https://lore.kernel.org/r/20220216014028.8123-1-jon.lin@rock-chips.com
+    Patches: [v3,1/6] spi: rockchip: Fix error in getting num-cs property
+             [v3,2/6] spi: rockchip: terminate dma transmission when slave abort
+             [v3,3/6] spi: rockchip: Stop spi slave dma receiver when cs inactive
+             [v3,5/6] spi: rockchip: Suspend and resume the bus during NOIRQ_SYSTEM_SLEEP_PM ops
+             [v3,6/6] spi: rockchip: clear interrupt status in error handler
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Patch: spi: meson-spicc: add IRQ check in meson_spicc_probe
+  Submitter: Miaoqian Lin <linmq006@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=608620
+  Lore link: https://lore.kernel.org/r/20220126110447.24549-1-linmq006@gmail.com
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Patch: spi: bcm-qspi: check for valid cs before applying chip select
+  Submitter: Kamal Dasu <kdasu.kdev@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=609218
+  Lore link: https://lore.kernel.org/r/20220127185359.27322-1-kdasu.kdev@gmail.com
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Patch: spi: dt-bindings: Fix 'reg' child node schema
+  Submitter: Rob Herring <robh@kernel.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=608851
+  Lore link: https://lore.kernel.org/r/20220126231326.1636199-1-robh@kernel.org
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Patch: [1/3] dt-bindings: spi: spi-rockchip: Add rk3568-spi compatible
+  Submitter: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=586477
+  Lore link: https://lore.kernel.org/r/20211126154344.724316-2-frattaroli.nicolas@gmail.com
 
-Thanks,
-Mark
+Patch: [v2,1/3] dt-bindings: spi: spi-rockchip: Add rk3568-spi compatible
+  Submitter: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=586695
+  Lore link: https://lore.kernel.org/r/20211127141910.12649-2-frattaroli.nicolas@gmail.com
+
+
+Total patches: 15
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
