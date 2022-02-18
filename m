@@ -2,42 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 835A04BBBA2
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Feb 2022 16:02:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB13D4BBBA0
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Feb 2022 16:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236365AbiBRPBt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Feb 2022 10:01:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50524 "EHLO
+        id S236665AbiBRPAo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Feb 2022 10:00:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236789AbiBRPAY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Feb 2022 10:00:24 -0500
+        with ESMTP id S236757AbiBRPA0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Feb 2022 10:00:26 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5F3E61C0;
-        Fri, 18 Feb 2022 06:59:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAE0ECC59;
+        Fri, 18 Feb 2022 06:59:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1645196349; x=1676732349;
+  t=1645196360; x=1676732360;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=1kB/UXvtaiyeXTg8NuvWf/Arx24JYsUgr40cN0Fyi6s=;
-  b=TdnaZrZsh2FuRviuIhCzd4htnrysYkQibMjtwxBWtx+e7t0qF7GZSZXV
-   DRdcB9F9STv/GFK7yauuqbFxBHV0nsD5ssBJbaPTRgueq9QlS4nktj+SB
-   H91ELhbbSikBpJIq1MzIxoAYMCe21UJ/MYN2QvBpeJteqBcRWpnsH8Q0h
-   gD8+y+TwOeGZNxLy5gf2JDImmouOOKK8EGzkzDPj8+EM3XCKEvpoH5PWV
-   j0/T8fjvqsEdaMoueku18Tx+h9SS2PJGx1/08+oe+apW4D9XvhoQUI5mW
-   Y1sLllrfYouK46McTrWZuqq6bfjCNQPZOlYn9OyqOnUNQ9EnyUbQMiIY1
-   g==;
+  bh=MMBmBCezp7nm9x2XqJiN9Nfc5zCWTIcgFPMneJ/ixI0=;
+  b=B89VH70NYOsqOO6aXTkiV57SZYEZx9GRZa8uxbV/iFU+AGVQ5XdRxpGe
+   vW1x3SF+tzRg535BJXBHlpsoaobo+XzHvc1ZAIc6XKnwlhF07gf0ch3Tq
+   DxDcy7Qo5CYzv9npn1yZT+jOtAWjlLpPXpFPx+lzNRJ+uWcUolG0VKBCw
+   j4dzaP2iOn/ZeMwqa9NTxhwobmFmwZdG5RVoueju7ghcvo/83+G2etQU3
+   Nyin13X7a+f9WcUIeqaHF0PVwHtvhKIR/2V1Z3gVBS2v1n+n7BRgM/glK
+   TdalgeUK1HvTu2VdMYnmErTjVWwhKLIKwtOQ+4sJ8A+1tQXB0lDLTHFXb
+   w==;
 X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="154088331"
+   d="scan'208";a="162789015"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Feb 2022 07:59:08 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Feb 2022 07:59:19 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 18 Feb 2022 07:59:08 -0700
+ 15.1.2375.17; Fri, 18 Feb 2022 07:59:19 -0700
 Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 18 Feb 2022 07:59:05 -0700
+ 15.1.2375.17 via Frontend Transport; Fri, 18 Feb 2022 07:59:16 -0700
 From:   Tudor Ambarus <tudor.ambarus@microchip.com>
 To:     <p.yadav@ti.com>, <michael@walle.cc>, <broonie@kernel.org>
 CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
@@ -45,9 +45,9 @@ CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
         <linux-spi@vger.kernel.org>, <nicolas.ferre@microchip.com>,
         <zhengxunli@mxic.com.tw>, <jaimeliao@mxic.com.tw>,
         Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH 1/4] spi: spi-mem: Allow specifying the byte order in DTR mode
-Date:   Fri, 18 Feb 2022 16:58:57 +0200
-Message-ID: <20220218145900.1440045-2-tudor.ambarus@microchip.com>
+Subject: [PATCH 4/4] mtd: spi-nor: core: Introduce SPI_NOR_DTR_BSWAP16 no_sfdp_flag
+Date:   Fri, 18 Feb 2022 16:59:00 +0200
+Message-ID: <20220218145900.1440045-5-tudor.ambarus@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220218145900.1440045-1-tudor.ambarus@microchip.com>
 References: <20220218145900.1440045-1-tudor.ambarus@microchip.com>
@@ -64,44 +64,69 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-There are NOR flashes (Macronix) that swap the bytes on a 16-bit boundary
-when configured in DTR mode. The byte order of 16-bit words is swapped
-when read or written in Double Transfer Rate (DTR) mode compared to
-Single Transfer Rate (STR) mode. If one writes D0 D1 D2 D3 bytes using
-1-1-1 mode, and uses 8D-8D-8D SPI mode for reading, it will read back
-D1 D0 D3 D2. Swapping the bytes is a bad design decision because this may
-introduce some endianness problems. It can affect the boot sequence if the
-entire boot sequence is not handled in either 8D-8D-8D mode or 1-1-1 mode.
-Fortunately there are controllers that can swap back the bytes at runtime,
-fixing the endiannesses. Provide a way for the upper layers to specify the
-byte order in DTR mode.
+Introduce SPI_NOR_DTR_BSWAP16 flag for flashes that don't define the
+mandatory BFPT table. When set it indicates that the byte order of 16-bit
+words is swapped when read in 8D-8D-8D mode compared to 1-1-1 mode.
 
 Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
 ---
- include/linux/spi/spi-mem.h | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/mtd/spi-nor/core.c | 5 ++++-
+ drivers/mtd/spi-nor/core.h | 5 ++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-index 85e2ff7b840d..e1878417420c 100644
---- a/include/linux/spi/spi-mem.h
-+++ b/include/linux/spi/spi-mem.h
-@@ -89,6 +89,8 @@ enum spi_mem_data_dir {
-  * @dummy.dtr: whether the dummy bytes should be sent in DTR mode or not
-  * @data.buswidth: number of IO lanes used to send/receive the data
-  * @data.dtr: whether the data should be sent in DTR mode or not
-+ * @data.dtr_bswap16: whether the byte order of 16-bit words is swapped when
-+ *		      read or written in DTR mode compared to STR mode.
-  * @data.dir: direction of the transfer
-  * @data.nbytes: number of data bytes to send/receive. Can be zero if the
-  *		 operation does not involve transferring data
-@@ -119,6 +121,7 @@ struct spi_mem_op {
- 	struct {
- 		u8 buswidth;
- 		u8 dtr : 1;
-+		u8 dtr_bswap16 : 1;
- 		enum spi_mem_data_dir dir;
- 		unsigned int nbytes;
- 		union {
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index 453d8c54d062..c3128a8e1544 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -2572,7 +2572,7 @@ static void spi_nor_no_sfdp_init_params(struct spi_nor *nor)
+ {
+ 	struct spi_nor_flash_parameter *params = nor->params;
+ 	struct spi_nor_erase_map *map = &params->erase_map;
+-	const u8 no_sfdp_flags = nor->info->no_sfdp_flags;
++	const u16 no_sfdp_flags = nor->info->no_sfdp_flags;
+ 	u8 i, erase_mask;
+ 
+ 	if (no_sfdp_flags & SPI_NOR_DUAL_READ) {
+@@ -2613,6 +2613,9 @@ static void spi_nor_no_sfdp_init_params(struct spi_nor *nor)
+ 					SPINOR_OP_PP, SNOR_PROTO_8_8_8_DTR);
+ 	}
+ 
++	if (no_sfdp_flags & SPI_NOR_DTR_BSWAP16)
++		nor->flags |= SNOR_F_DTR_BSWAP16;
++
+ 	/*
+ 	 * Sector Erase settings. Sort Erase Types in ascending order, with the
+ 	 * smallest erase size starting at BIT(0).
+diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+index 7c077d41c335..1cb887437193 100644
+--- a/drivers/mtd/spi-nor/core.h
++++ b/drivers/mtd/spi-nor/core.h
+@@ -362,6 +362,8 @@ struct spi_nor_fixups {
+  *   SPI_NOR_OCTAL_READ:      flash supports Octal Read.
+  *   SPI_NOR_OCTAL_DTR_READ:  flash supports octal DTR Read.
+  *   SPI_NOR_OCTAL_DTR_PP:    flash supports Octal DTR Page Program.
++ *   SPI_NOR_DTR_BSWAP16:     the byte order of 16-bit words is swapped when
++ *			      read or written in DTR mode compared to STR mode.
+  *
+  * @fixup_flags:    flags that indicate support that can be discovered via SFDP
+  *                  ideally, but can not be discovered for this particular flash
+@@ -404,7 +406,7 @@ struct flash_info {
+ #define USE_FSR				BIT(10)
+ #define SPI_NOR_XSR_RDY			BIT(11)
+ 
+-	u8 no_sfdp_flags;
++	u16 no_sfdp_flags;
+ #define SPI_NOR_SKIP_SFDP		BIT(0)
+ #define SECT_4K				BIT(1)
+ #define SECT_4K_PMC			BIT(2)
+@@ -413,6 +415,7 @@ struct flash_info {
+ #define SPI_NOR_OCTAL_READ		BIT(5)
+ #define SPI_NOR_OCTAL_DTR_READ		BIT(6)
+ #define SPI_NOR_OCTAL_DTR_PP		BIT(7)
++#define SPI_NOR_DTR_BSWAP16		BIT(8)
+ 
+ 	u8 fixup_flags;
+ #define SPI_NOR_4B_OPCODES		BIT(0)
 -- 
 2.25.1
 
