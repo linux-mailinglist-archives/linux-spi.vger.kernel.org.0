@@ -2,42 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 211C14BBB9B
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Feb 2022 16:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF204BBB9F
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Feb 2022 16:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236889AbiBRPAi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Feb 2022 10:00:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50530 "EHLO
+        id S236070AbiBRPBs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Feb 2022 10:01:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236810AbiBRPAZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Feb 2022 10:00:25 -0500
+        with ESMTP id S236753AbiBRPAY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Feb 2022 10:00:24 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9E7EAC9D;
-        Fri, 18 Feb 2022 06:59:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564FDE3886;
+        Fri, 18 Feb 2022 06:59:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1645196356; x=1676732356;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dvWZ47n0i84WPBOUsd+UoD28E/hVOOwEq0Yuclt9AKY=;
-  b=TuFOwg6Zpb93noGrQfMVsMZ9qYh6ckkFNf8NJD4KrGWmpCqeZv6tcKJ1
-   aIbc5xDBZmB6qx8NbvV1EqscVKrrIssqzY2k15Fej0A4TSiUzHiHnWIav
-   rysWvJnb+QDAYMDtCTPJih3T1/ssX15nL42pLCATzb4XRxqauFW1tlk3y
-   SPWOGJSY+iHigp3ehhyHFmDYo2WtmBRvfZ13muZJyBUS0JCJKVFKp5amn
-   ABWV7+vpn6sXDG85IjFyc1ktX07EUceYu5JQkETwXxF0vvnYRrcyweike
-   DAqJb7BxMiHmYhiFIAI6b50AQLuSGz3REbchPoAMu5o6e3xlAqF0hPnKB
-   w==;
+  t=1645196348; x=1676732348;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oPl3hd9ujCsquNcCi9as7ggff9q2Exrkg2DKeD9fC0s=;
+  b=neLiYy2Ylbctla9wT6H0P9dAW8toyICV3SCUy2SZnzNJsm/MqzaSvQun
+   NIJK6FgeI1Bz4iD325oQytbVGqbV4cnP+MKHyWCvNE4WU/FhDHWEoXddz
+   MK8x/ea3srLm6XJEqC3L74RbqjyXlJPBPEXh8+cOBDcBG/Bmzwc39wBJv
+   FIX4aFMk8PnTcircSNNdXD1M+nlWpVVwIvqWmnLw3bsyqOKYfDbFUeC4x
+   o90sjBqg4ipkcJxs6D3d0ded13/H8i80y9WhHi0UImmT786zYN2cfE9iw
+   Cw7/nVOCJvYRgcT88+WxGePo1SAQdti2erfi4+7fFsZLmbDJif8aaRATO
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.88,379,1635231600"; 
-   d="scan'208";a="153582936"
+   d="scan'208";a="162788983"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Feb 2022 07:59:16 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Feb 2022 07:59:05 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 18 Feb 2022 07:59:15 -0700
+ 15.1.2375.17; Fri, 18 Feb 2022 07:59:05 -0700
 Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 18 Feb 2022 07:59:12 -0700
+ 15.1.2375.17 via Frontend Transport; Fri, 18 Feb 2022 07:59:01 -0700
 From:   Tudor Ambarus <tudor.ambarus@microchip.com>
 To:     <p.yadav@ti.com>, <michael@walle.cc>, <broonie@kernel.org>
 CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
@@ -45,12 +45,10 @@ CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
         <linux-spi@vger.kernel.org>, <nicolas.ferre@microchip.com>,
         <zhengxunli@mxic.com.tw>, <jaimeliao@mxic.com.tw>,
         Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH 3/4] mtd: spi-nor: sfdp: Get the 8D-8D-8D byte order from BFPT
-Date:   Fri, 18 Feb 2022 16:58:59 +0200
-Message-ID: <20220218145900.1440045-4-tudor.ambarus@microchip.com>
+Subject: [PATCH 0/4] spi-mem: Allow specifying the byte order in DTR mode
+Date:   Fri, 18 Feb 2022 16:58:56 +0200
+Message-ID: <20220218145900.1440045-1-tudor.ambarus@microchip.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220218145900.1440045-1-tudor.ambarus@microchip.com>
-References: <20220218145900.1440045-1-tudor.ambarus@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -64,40 +62,33 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Parse BFPT in order to retrieve the byte order in 8D-8D-8D mode.
+There are NOR flashes (Macronix) that swap the bytes on a 16-bit boundary
+when configured in DTR mode. The byte order of 16-bit words is swapped
+when read or written in Double Transfer Rate (DTR) mode compared to
+Single Transfer Rate (STR) mode. If one writes D0 D1 D2 D3 bytes using
+1-1-1 mode, and uses 8D-8D-8D SPI mode for reading, it will read back
+D1 D0 D3 D2. Swapping the bytes may introduce some endianness problems.
+It can affect the boot sequence if the entire boot sequence is not handled
+in either 8D-8D-8D mode or 1-1-1 mode. Fortunately there are controllers
+that can swap back the bytes at runtime, fixing the endiannesses. Provide
+a way for the upper layers to specify the byte order in DTR mode.
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
----
- drivers/mtd/spi-nor/sfdp.c | 3 +++
- drivers/mtd/spi-nor/sfdp.h | 1 +
- 2 files changed, 4 insertions(+)
+Tested with atmel-quadspi and mx66lm1g45g.
 
-diff --git a/drivers/mtd/spi-nor/sfdp.c b/drivers/mtd/spi-nor/sfdp.c
-index a5211543d30d..551edbb039f0 100644
---- a/drivers/mtd/spi-nor/sfdp.c
-+++ b/drivers/mtd/spi-nor/sfdp.c
-@@ -633,6 +633,9 @@ static int spi_nor_parse_bfpt(struct spi_nor *nor,
- 		return -EOPNOTSUPP;
- 	}
- 
-+	if (bfpt.dwords[BFPT_DWORD(18)] & BFPT_DWORD18_BYTE_ORDER_SWAPPED)
-+		nor->flags |= SNOR_F_DTR_BSWAP16;
-+
- 	return spi_nor_post_bfpt_fixups(nor, bfpt_header, &bfpt);
- }
- 
-diff --git a/drivers/mtd/spi-nor/sfdp.h b/drivers/mtd/spi-nor/sfdp.h
-index bbf80d2990ab..9a834ea31c16 100644
---- a/drivers/mtd/spi-nor/sfdp.h
-+++ b/drivers/mtd/spi-nor/sfdp.h
-@@ -97,6 +97,7 @@ struct sfdp_bfpt {
- #define BFPT_DWORD18_CMD_EXT_INV		(0x1UL << 29) /* Invert */
- #define BFPT_DWORD18_CMD_EXT_RES		(0x2UL << 29) /* Reserved */
- #define BFPT_DWORD18_CMD_EXT_16B		(0x3UL << 29) /* 16-bit opcode */
-+#define BFPT_DWORD18_BYTE_ORDER_SWAPPED		BIT(31)
- 
- struct sfdp_parameter_header {
- 	u8		id_lsb;
+Tudor Ambarus (4):
+  spi: spi-mem: Allow specifying the byte order in DTR mode
+  mtd: spi-nor: core: Allow specifying the byte order in DTR mode
+  mtd: spi-nor: sfdp: Get the 8D-8D-8D byte order from BFPT
+  mtd: spi-nor: core: Introduce SPI_NOR_DTR_BSWAP16 no_sfdp_flag
+
+ drivers/mtd/spi-nor/core.c  | 36 +++++++++++++++++++++++++++++-------
+ drivers/mtd/spi-nor/core.h  |  6 +++++-
+ drivers/mtd/spi-nor/sfdp.c  |  3 +++
+ drivers/mtd/spi-nor/sfdp.h  |  1 +
+ include/linux/mtd/spi-nor.h | 17 +++++++++++++++++
+ include/linux/spi/spi-mem.h |  3 +++
+ 6 files changed, 58 insertions(+), 8 deletions(-)
+
 -- 
 2.25.1
 
