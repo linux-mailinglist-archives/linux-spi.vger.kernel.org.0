@@ -2,85 +2,95 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BBDA4BABE7
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Feb 2022 22:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB774BAF55
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Feb 2022 02:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231499AbiBQVjX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 17 Feb 2022 16:39:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43204 "EHLO
+        id S231392AbiBRB4p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 17 Feb 2022 20:56:45 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiBQVjW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Feb 2022 16:39:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEE1C2E75;
-        Thu, 17 Feb 2022 13:39:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55E26B8248E;
-        Thu, 17 Feb 2022 21:39:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ADF6C36AE2;
-        Thu, 17 Feb 2022 21:39:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645133945;
-        bh=cSPYXK1JW5UK6sE5McEoYlfjZ/NZ0FAAfdbIUE9k830=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pAQWn4Peh7EqlXhkYcEfu2RCqsRvgYztaVYRebyg8WU/zZb8UbfTofV6yzUTSHQ6U
-         EXZUco6QHD9omCg+m/OeMBQ447BEAzYpx7PTyoYz5BUpVqvEdv4SgZPDzBMSsxEcC/
-         hHuGBmqKS6mlToqzpJhXxobL5fveSEL6CaXdetkWoS8+u3v0eD4S+ayGqSKnePtWQ0
-         H+1vJUYl7zHSWbLZh8JcuSSUbfWVYRZwFZOv0h9Yia3FrvyfLpHGDxQY1pT/zI0t5F
-         S4J+GiEU6wS279URzi/KiumL4If4qIIYV6dLFQHZMOEXyhWe3FlOFVkxgD+mHiE2Ol
-         f2VVuIX6hFw9g==
-Received: by mail-ej1-f45.google.com with SMTP id a23so10360402eju.3;
-        Thu, 17 Feb 2022 13:39:04 -0800 (PST)
-X-Gm-Message-State: AOAM532X8XJXOzO4Pz9CIeHNlw8iiff2ZapDxGuzGyLWDU2d4u1xe0F4
-        PbttIQgnJXSCFcfYVJoyJ5Bot7ntCQejxQZTzg==
-X-Google-Smtp-Source: ABdhPJxlrvsn0M9oD3a/hsk9VOmrl1n2EhdiqnAbIxgbtJltj4GV/17YOEggdpjFx6SRI36nR53yiVeqeV8PQLPYwjU=
-X-Received: by 2002:a17:906:960c:b0:6cf:cd37:658c with SMTP id
- s12-20020a170906960c00b006cfcd37658cmr4049578ejx.325.1645133943296; Thu, 17
- Feb 2022 13:39:03 -0800 (PST)
-MIME-Version: 1.0
-References: <b8a94fbfcab68b1279b09b6297099310c209927b.1644198244.git.lhjeff911@gmail.com>
-In-Reply-To: <b8a94fbfcab68b1279b09b6297099310c209927b.1644198244.git.lhjeff911@gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 17 Feb 2022 15:38:52 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJO=4A5f_26KNcoMWJj3YWxd=qnwE7V90MUCW9muYtH1g@mail.gmail.com>
-Message-ID: <CAL_JsqJO=4A5f_26KNcoMWJj3YWxd=qnwE7V90MUCW9muYtH1g@mail.gmail.com>
-Subject: Re: [PATCH next] dt-bindings:spi: Fix test error for sp7021.
-To:     Li-hao Kuo <lhjeff911@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        "LH.Kuo" <lh.kuo@sunplus.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229673AbiBRB4o (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Feb 2022 20:56:44 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857CB5C341;
+        Thu, 17 Feb 2022 17:56:28 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id om7so7280893pjb.5;
+        Thu, 17 Feb 2022 17:56:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=WHpd6Sk/XqYh0Nmb203v+Ms5w8m3DPKkCa4xdTTw7C8=;
+        b=GRQCNflMzwSiCrZxgdp/birK1ikdDMUfUZqq53GBOycuXlfK+u55Xio3IRY2pmgDrG
+         6vpkrL+tfZrr6H3e9kVqTGU3vXDxWGKl2PEoBFuZu/YNSnSJ5/eTpmHX1fRuyCAsy38P
+         A/90aP3Zl4ZPaaFgXt7/u+tWODDpypYdXqzkQD9mLuUI0a9KBlcPtSi93FxI9IO2SwPc
+         O/Ez/W3kDBl1a68ZlU9b6PrSpnZgj5LtKJawXOibKX7o2K8517M3tdIbBJ1sZuTfUI3+
+         Gkz41RcwdK3bOOE3CYPi+DvONT9us4OGolEDWsmedZ/gizCsujhhs9hxhaNeRV8uq2j0
+         zKuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=WHpd6Sk/XqYh0Nmb203v+Ms5w8m3DPKkCa4xdTTw7C8=;
+        b=zeY6iZcJ1hmpL8DOwzdHo3jpst6iXXJFBLmICbCZO8whu3PMr/CUFcLCIajTX/IACp
+         6U6Q0ae5RmMN3hyPnUvgM+6m8iTVbFGz7g1J60X8NKUnQpRV8Cpgw837U4kd1J2G/NFo
+         zUYVKgMP1nDdOdEvysREIAF0q+7RJXcX2vvmpka7silfM6pdlWTQXw+dUfJY3GewqJIa
+         EBMKa/YR1t/p1hXcJDV6MDztQrfqwArHhno75/saVHN9fYc/c+NbsQCCCUkck5pIeT+V
+         GZYqQmK3Tg9dBXzzIGku2M7lYANWdoaxvnmXQvp4cbeAOBQRR898P1+wud2Dk56afWLX
+         3igg==
+X-Gm-Message-State: AOAM531zu/Lq7f+eSza5Ikp54USftZ/XSkBXxNNNKUZXZ+bxG1HUTOCe
+        JDxlPdpUR3QIAhIUqMEu4lKgjhaXfxFc9Q==
+X-Google-Smtp-Source: ABdhPJyGF9SFBwyyZSZ95lmmAgCDOnmg5xfmy+Ly6ZrFBOdqdYSznKxxD5LTEC/EHLfKh+4q3rSGEA==
+X-Received: by 2002:a17:902:d353:b0:14a:18ab:298c with SMTP id l19-20020a170902d35300b0014a18ab298cmr5303458plk.87.1645149387808;
+        Thu, 17 Feb 2022 17:56:27 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id g18sm87493pfc.108.2022.02.17.17.56.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 17 Feb 2022 17:56:27 -0800 (PST)
+From:   Li-hao Kuo <lhjeff911@gmail.com>
+To:     broonie@kernel.org, robh+dt@kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com,
+        Li-hao Kuo <lhjeff911@gmail.com>
+Subject: [PATCH] dt-bindings: spi: delete unused required and adjust the item.
+Date:   Fri, 18 Feb 2022 09:56:44 +0800
+Message-Id: <6a86f8c481be417972ef1b1e3b902ccf95706547.1645149279.git.lhjeff911@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, Feb 6, 2022 at 7:46 PM Li-hao Kuo <lhjeff911@gmail.com> wrote:
->
-> Remove the include path and modify parameters for fix error for bt binding test
->
-> Fixes: a708078eeb99  ("spi: Add Sunplus SP7021 schema")
-> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
-> ---
->  Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+delete unused required(clock-name)
+adjust position (interrupts)
 
-Unfortunately, this fix exposes another issue:
+Fixes: 3b8ab4da34 ("spi: Fix test error for sp7021")
 
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.example.dt.yaml:
-spi@9C002D80: 'clocks-names' is a required property
-From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+Reported-by: Rob Herring <robh+dt@kernel.org>
+Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+---
+ Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Please test your stuff!
+diff --git a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+index 298eac2..9df08d7 100644
+--- a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+@@ -47,10 +47,9 @@ required:
+   - compatible
+   - reg
+   - reg-names
+-  - interrupts
+   - interrupt-names
++  - interrupts
+   - clocks
+-  - clocks-names
+   - resets
+   - pinctrl-names
+   - pinctrl-0
+-- 
+2.7.4
 
-Rob
