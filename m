@@ -2,58 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FDCD4BC889
-	for <lists+linux-spi@lfdr.de>; Sat, 19 Feb 2022 14:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7E24BC88C
+	for <lists+linux-spi@lfdr.de>; Sat, 19 Feb 2022 14:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiBSNVy (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 19 Feb 2022 08:21:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37984 "EHLO
+        id S234755AbiBSNV5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 19 Feb 2022 08:21:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiBSNVx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 19 Feb 2022 08:21:53 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA57BD6;
-        Sat, 19 Feb 2022 05:21:33 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id a8so21496662ejc.8;
-        Sat, 19 Feb 2022 05:21:33 -0800 (PST)
+        with ESMTP id S233128AbiBSNVz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 19 Feb 2022 08:21:55 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F663100A;
+        Sat, 19 Feb 2022 05:21:35 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id m3so14225626eda.10;
+        Sat, 19 Feb 2022 05:21:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language
          :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=fvuoOelNYUnuMw3RclEAhuWky9HY1ItIURN9LiLCtBE=;
-        b=A9baqpgIaLoiyIClgnlI8nQkXVzJwoe0eugY7NROFOJ6j8QraPv2HwSPS/Z323hdck
-         KavmMKJuF6uLw59HQ9kMEyaEGryARBpJXKIW3mu6/G75KoOVw6U2NG1dH5toDfhnxFLA
-         pF4h1GyD+88QxRW2+8oyG3rShvVYC3jdoSB73HcZ6iHRjFm54hRrQtAxveTXRkqWKmFc
-         NUgFVy2HEZV8iRguDefeh0sj97PKbvK2KnxCjyAM2qE9qW1zUayw9Vyl31M/01U/iWPh
-         TrkVZvfxCoygGUKgzysP3PA+x97+LTYB492XeYz5DTFWjw5F2w66DpFVa93gOtHxeDAw
-         kK6g==
+        bh=fpauG+TRD67lEqkFOUl8ovsHrrNt32JAGPgb9gRTuM8=;
+        b=I/9sZ1OlbKLvWG4qtIMulQQCHX0woCYxCWVD+KGU+EVfwIa6zMU8zx4F83avXtbBQ6
+         f01FSr/FPuSp8Ipyy5Y+HkHOmsiS4V0DLXhC8YHCBWPvze4MnUs5QoaOpJjKf7FI+o1S
+         Vuin6ENVt8OBCEfS0OQpSqoG16g58qzQImmEjAzAqWlz0KGAcwz703LG32JhWzWmbrYp
+         d4oXy4FGqOBwOp3yMy4iNHlBk1H4sZ5SvMphtk/XCFCyejKkZVUv/mx5YyYcgo3xCngL
+         79z+yRe8gujGZYFXO3uvDaHkREF9m6nxdi3H8ksBjYYU9BZVRS4EjetYRwsdjy5VCtzn
+         108w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=fvuoOelNYUnuMw3RclEAhuWky9HY1ItIURN9LiLCtBE=;
-        b=4Kk/q2UMpdlsD3/ZUewWU20bXCmtu2KQfjitb2JYK7/6duI5AJJES0R3iAPp13AWTs
-         G3jwryQEdfw9zZLIX/GOIliUcZMuW9pIEZtj4Csc/QMxl6N7GwxFHaQa/FUM8wjKLXHM
-         DzlDKy8ngQZEPbu83hqV/zSlkkO26E8k91RB7ek6+mplQuGmVHC/k2iHQ98JPY75GlxN
-         j/0syTWzOj4AdFTduR7FDzOBZEVv4lSnOYQB/YjwyZSSUzTDssDPgC4Nk/shCfR5Oh/z
-         kGPsA7FitXka4KRzCTrjA1ryrPA4APup9tRu64monE+DwN4MNvB9e5XZCcB7Bd7EGyiy
-         dHOw==
-X-Gm-Message-State: AOAM5308XI95BX95/I/2gl5lOp+OAMDangR3oiUlov+hhtfNFMSSlkDs
-        q2jU5hQIAqPVvIs6zJKCuL4=
-X-Google-Smtp-Source: ABdhPJzqpPkqjcbqzzs0Iy+XWNBKleezaBJfKQY7AcpRwS61+T49RYqYpFuYKzO7oARcEK8qWX0Sjg==
-X-Received: by 2002:a17:906:ad90:b0:6cf:74f1:a34 with SMTP id la16-20020a170906ad9000b006cf74f10a34mr9780970ejb.175.1645276892319;
-        Sat, 19 Feb 2022 05:21:32 -0800 (PST)
+        bh=fpauG+TRD67lEqkFOUl8ovsHrrNt32JAGPgb9gRTuM8=;
+        b=fqmeL5n4lRlgzMEkX3ytWvZbp4eI7DvJxQmdP56Mn9hcKC5zoog5EzWzUmkbvCyMP/
+         2xYYclTWVkxVPisNIeJJO2HJEIVNGOTerFYBJi2JK5xqjTrxbO8oCoJ2/ltkl2pa4uzd
+         vFRg4L9x5KE7ImsWH7ekjx2qJZ8wy9iNL7edjslOCxkAQ8akNxwdos6pQOzptokkpPBY
+         kGerE2DrsTacDJBvTGbSQCwOiPUuow9zqlcwTXojfogGxmhz4lY4RCY0ghD6vL+X4vJf
+         Xm68j4PuD+rM/MBuqBL6I2r/ytvo073V4tR1Qt4VSPG0R0K9tY20oxcN8ln8fB+pKLuK
+         //jg==
+X-Gm-Message-State: AOAM531HylMc4P5M/Unldu31+9esJ4QXeWUmgYWQtwM8t+WVoCMIAjBS
+        CP1G6sbuX9u6lKPThsJhuNg=
+X-Google-Smtp-Source: ABdhPJyMdwhFMviXX9vaz5IRwMK3brlTzx8iFzc1fr7HKR2rhSXRpPUyZaN8i6BBGVmPmevkmF7BpA==
+X-Received: by 2002:a50:8713:0:b0:410:db7a:4b2a with SMTP id i19-20020a508713000000b00410db7a4b2amr12665564edb.140.1645276893863;
+        Sat, 19 Feb 2022 05:21:33 -0800 (PST)
 Received: from ?IPV6:2003:ea:8f4d:2b00:5cf9:df09:c1b3:d44d? (p200300ea8f4d2b005cf9df09c1b3d44d.dip0.t-ipconnect.de. [2003:ea:8f4d:2b00:5cf9:df09:c1b3:d44d])
-        by smtp.googlemail.com with ESMTPSA id o21sm1302818ejh.114.2022.02.19.05.21.31
+        by smtp.googlemail.com with ESMTPSA id y23sm3287387ejk.153.2022.02.19.05.21.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Feb 2022 05:21:31 -0800 (PST)
-Message-ID: <e527eabe-3fe2-ceb6-7981-a4c3b6661fb5@gmail.com>
-Date:   Sat, 19 Feb 2022 14:16:50 +0100
+        Sat, 19 Feb 2022 05:21:33 -0800 (PST)
+Message-ID: <d8fff247-d3ce-79f0-6d0b-dcce44457681@gmail.com>
+Date:   Sat, 19 Feb 2022 14:17:54 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.1
-Subject: [PATCH 2/6] dt-bindings: vendor-prefixes: Add Titan Micro Electronics
+Subject: [PATCH 3/6] dt-bindings: auxdisplay: Add Titan Micro Electronics
+ TM1628
 Content-Language: en-US
 From:   Heiner Kallweit <hkallweit1@gmail.com>
 To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
@@ -84,30 +85,106 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Andreas Färber <afaerber@suse.de>
+Add a YAML schema binding for TM1628 auxdisplay
+(7/11-segment LED) controller.
 
-Assign vendor prefix "titanmec", matching their domain name.
+This patch is partially based on previous RFC work from
+Andreas Färber <afaerber@suse.de>.
 
-Acked-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Andreas Färber <afaerber@suse.de>
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ .../bindings/auxdisplay/titanmec,tm1628.yaml  | 82 +++++++++++++++++++
+ 1 file changed, 82 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index ebe294516..38bfb462c 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1229,6 +1229,8 @@ patternProperties:
-     description: Texas Instruments
-   "^tianma,.*":
-     description: Tianma Micro-electronics Co., Ltd.
-+  "^titanmec,.*":
-+    description: Shenzhen Titan Micro Electronics Co., Ltd.
-   "^tlm,.*":
-     description: Trusted Logic Mobility
-   "^tmt,.*":
+diff --git a/Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml b/Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml
+new file mode 100644
+index 000000000..d9cbbc950
+--- /dev/null
++++ b/Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml
+@@ -0,0 +1,82 @@
++# SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/leds/titanmec,tm1628.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Titan Micro Electronics TM1628 LED controller
++
++properties:
++  compatible:
++    enum:
++    - titanmec,tm1628
++
++  reg:
++    maxItems: 1
++
++  grid:
++    description:
++      Mapping of display digit position to grid number.
++      This implicitly defines the display size.
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    minItems: 1
++    maxItems: 7
++
++  segment-mapping:
++    description:
++      Mapping of 7 segment display segments A-G to bit numbers 1-12.
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    minItems: 7
++    maxItems: 7
++
++  "#address-cells":
++    const: 2
++
++  "#size-cells":
++    const: 0
++
++required:
++  - compatible
++  - reg
++
++patternProperties:
++  "^.*@[1-7],([1-9]|1[0-6])$":
++    type: object
++    description: |
++      Properties for a single LED.
++
++    properties:
++      reg:
++        description: |
++          1-based grid number, followed by 1-based segment bit number.
++        maxItems: 1
++
++    required:
++      - reg
++
++examples:
++  - |
++    #include <dt-bindings/leds/common.h>
++
++    spi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        led-controller@0 {
++            compatible = "titanmec,tm1628";
++            reg = <0>;
++            spi-3-wire;
++            spi-lsb-first;
++            spi-max-frequency = <500000>;
++            grid = /bits/ 8 <4 3 2 1>;
++            segment-mapping = /bits/ 8 <4 5 6 1 2 3 7>;
++            #address-cells = <2>;
++            #size-cells = <0>;
++
++            alarmn@5,4 {
++                reg = <5 4>;
++                function = LED_FUNCTION_ALARM;
++            };
++        };
++    };
++...
 -- 
 2.35.1
 
