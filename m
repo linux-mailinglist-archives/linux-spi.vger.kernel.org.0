@@ -2,58 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209634BC88B
-	for <lists+linux-spi@lfdr.de>; Sat, 19 Feb 2022 14:21:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 083594BC88E
+	for <lists+linux-spi@lfdr.de>; Sat, 19 Feb 2022 14:21:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234098AbiBSNV4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 19 Feb 2022 08:21:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38124 "EHLO
+        id S234964AbiBSNWC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 19 Feb 2022 08:22:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiBSNVz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 19 Feb 2022 08:21:55 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48A2BD6;
-        Sat, 19 Feb 2022 05:21:36 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id lw4so21434992ejb.12;
-        Sat, 19 Feb 2022 05:21:36 -0800 (PST)
+        with ESMTP id S234934AbiBSNWB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 19 Feb 2022 08:22:01 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230BF13CD4;
+        Sat, 19 Feb 2022 05:21:38 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id qk11so21521528ejb.2;
+        Sat, 19 Feb 2022 05:21:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language
          :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=6/CbbKb963ZeCrGB3DpHf3S/LmT0OSOkIfiP6ix0yNw=;
-        b=g8yJlYskzqTuBRAAEoQM+HWpp7cbLRi4aY04uw1k85i8g9VrN7PveuKbxE0xjXz4W4
-         0m8evUE7XQDbQU2cJ/aNI445xwopOp7kGMWScIfUk9veu3ArqpGJ4skEVEV4M7czBpdJ
-         HZVLz0XIreUBuFamppgdxrnMECREn1Nw2b8TeOcc6WmwgnmdWYPKlTb3nW3w778z+FrG
-         1wMKa7bVwyw8ke4zopRSHWr4XCEV+19sHsOqDY7CBrIwTFReTdSdG/TvSVYJ4AshYgsA
-         t9HyUZi+py5V9U9rKO8qcYoy/lHN8XeJsoLit22RP2uMU4w+jnswk+NZysuVCJ7NNVLn
-         cj3w==
+        bh=KpQK1gfePu1e2tBX2grUcsGjzBBgRCeFnQOH8xBSly4=;
+        b=N33+xmC05XyjZ7JqPO53Tl5+bN+omEhOoSoHrGodc4YDdJ2hdF2O1T6ybNcgO4Ri3S
+         sMmbb5pdN3oGapsNfAQWveuL/ad7dSRuLuyTagF3uKVkVNfdYOEYz+uLk+0raJ/irzBS
+         HBZKZLvWetxKM0NY5QM17MkCqtpTp6JuWfYUmIUXkpnjOZNWC2knvECHIyyAqKFu5O2L
+         f7JP+XkhViGsxr6zXA/4Bthw6RpakTqqrAIhTqV4sCplC3ojGQ6iZ94rYBEIPpxFnL6G
+         O+igroZ08sQDeGynHxeR2al3gcWC15TB6+ZaBAmMgLDj7nMvHRxiAPxBreqb6pZCeC/l
+         fcwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=6/CbbKb963ZeCrGB3DpHf3S/LmT0OSOkIfiP6ix0yNw=;
-        b=DV4KRANqozRvInbNa09HqcnbR/sRwKrq5ogsWpgKrvDv3bVZ9ebQaWzlF75aoKnOcu
-         0fufG7gSpwpCNXglvQNf7FyuRREtazFnL2NTNUONmzXQwTgW0lsgo/cezy2oafwuWA3e
-         7EKlCOEI9qU1ZnPG6RdbJ62KfUGqzuQkgWbDd10MoOaWlXzsOxzVvC2k/hqrxOh7qOH3
-         E6xnuIYAzubYl7R1Xwo27uePhINW0JYw8/wdEGwSP5MappzaZ/lZ5WQrgmyE8olvqLsv
-         +EaW90C+d70vI17UfC3BroDa+yu8QeBx0TNq6Y30TPsk9drri/liWacVg6tFkHOYiE3i
-         Jyhg==
-X-Gm-Message-State: AOAM530/RzBjk6ix6MQohq7TKZu3a8Dep2c81UakpyvmzDoiEQ8aRZgL
-        JPwCmogGI89IYR88bsujPOU=
-X-Google-Smtp-Source: ABdhPJzhAyytukio3fsv22UT9/mGIL0fYpo82E0oO6KLYaHugboccaHhai7rq9lexRYpVBewgQTSaA==
-X-Received: by 2002:a17:906:6b8e:b0:6cd:7d22:e5b6 with SMTP id l14-20020a1709066b8e00b006cd7d22e5b6mr10437171ejr.259.1645276895195;
-        Sat, 19 Feb 2022 05:21:35 -0800 (PST)
+        bh=KpQK1gfePu1e2tBX2grUcsGjzBBgRCeFnQOH8xBSly4=;
+        b=4AZJdycfZFtDtyezAS9dN5unTTmICOnxHQpZ1jM7HqmyOyAhdF445JkYFPVJD3rXeV
+         ScyowkY3jvdihPjquAdhriCTJkJXgorhlhsfEoQxvddfHzffD+e2WjURwg/wHhXVV8pC
+         xnL9zl6gMYe5scKSP/4T7H5Gx86AnpdBpS2uZFJJyetXuHcJv430mFJYY0f9vcR35mB+
+         /pnWyu8WBP44D3l9rr61EQWlnzPBERPMNUvF54zM3G/+8e8CSv3wEsnMOLaiipfi6EGF
+         5V5ERnrLDc+0bn82Xq7s9fSquANWJOgs0yGHEDJRYaME3X5woh/Yv0SwYNaIhOTct9UN
+         5Lkw==
+X-Gm-Message-State: AOAM532zsgzLRNxtEQaIGTqJLGUTqZkr+jgM51rK1JTujyDO89mRMYWn
+        BdpWxHsAOE1dbND7/m1P6TU=
+X-Google-Smtp-Source: ABdhPJyQUYYa50pDp0HZpcKIg/sd7iNu5qS06WWWtvShT3O8EdTQh0geqDD0oXQHImOYAq9H3Vw/cA==
+X-Received: by 2002:a17:906:3905:b0:6cf:7ef5:fee0 with SMTP id f5-20020a170906390500b006cf7ef5fee0mr9721904eje.307.1645276896577;
+        Sat, 19 Feb 2022 05:21:36 -0800 (PST)
 Received: from ?IPV6:2003:ea:8f4d:2b00:5cf9:df09:c1b3:d44d? (p200300ea8f4d2b005cf9df09c1b3d44d.dip0.t-ipconnect.de. [2003:ea:8f4d:2b00:5cf9:df09:c1b3:d44d])
-        by smtp.googlemail.com with ESMTPSA id p9sm3272675ejn.104.2022.02.19.05.21.34
+        by smtp.googlemail.com with ESMTPSA id bl12sm3208813ejb.75.2022.02.19.05.21.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Feb 2022 05:21:34 -0800 (PST)
-Message-ID: <ab21016c-503b-9ccf-6d64-07d25ac0a13f@gmail.com>
-Date:   Sat, 19 Feb 2022 14:18:30 +0100
+        Sat, 19 Feb 2022 05:21:36 -0800 (PST)
+Message-ID: <b72023b1-b0b4-1c1f-6300-c069201f4757@gmail.com>
+Date:   Sat, 19 Feb 2022 14:19:30 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.1
-Subject: [PATCH 4/6] docs: ABI: document tm1628 attribute display-text
+Subject: [PATCH 5/6] auxdisplay: add support for Titanmec TM1628 7 segment
+ display controller
 Content-Language: en-US
 From:   Heiner Kallweit <hkallweit1@gmail.com>
 To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
@@ -73,7 +74,7 @@ Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
 References: <4172e59f-b9d5-d87d-9dbd-a6f683a2173c@gmail.com>
 In-Reply-To: <4172e59f-b9d5-d87d-9dbd-a6f683a2173c@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -84,28 +85,444 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Document the attribute for reading / writing the text to be displayed on
-the 7 segment display.
+This patch adds support for the Titanmec TM1628 7 segment display
+controller. It's based on previous RFC work from Andreas Färber.
+The RFC version placed the driver in the LED subsystem, but this was
+NAK'ed by the LED maintainer. Therefore I moved the driver to
+/drivers/auxdisplay what seems most reasonable to me.
+
+Further changes to the RFC version:
+- Driver can be built also w/o LED class support, for displays that
+  don't have any symbols to be exposed as LED's.
+- Simplified the code and rewrote a lot of it.
+- Driver is now kind of a MVP, but functionality should be sufficient
+  for most use cases.
+- Use the existing 7 segment support in uapi/linux/map_to_7segment.h
+  as suggested by Geert Uytterhoeven.
+
+Note: There's a number of chips from other manufacturers that are
+      almost identical, e.g. FD628, SM1628. Only difference I saw so
+      far is that they partially support other display modes.
+      TM1628: 6x12, 7x11
+      SM1628C: 4x13, 5x12, 6x11, 7x10
+      For typical displays on devices using these chips this
+      difference shouldn't matter.
+
+Successfully tested on a TX3 Mini TV box that has an SM1628C and a
+display with 4 digits and 7 symbols.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- Documentation/ABI/testing/sysfs-devices-auxdisplay-tm1628 | 7 +++++++
- 1 file changed, 7 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-devices-auxdisplay-tm1628
+ drivers/auxdisplay/Kconfig  |  10 +
+ drivers/auxdisplay/Makefile |   1 +
+ drivers/auxdisplay/tm1628.c | 368 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 379 insertions(+)
+ create mode 100644 drivers/auxdisplay/tm1628.c
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-auxdisplay-tm1628 b/Documentation/ABI/testing/sysfs-devices-auxdisplay-tm1628
+diff --git a/drivers/auxdisplay/Kconfig b/drivers/auxdisplay/Kconfig
+index 64012cda4..25ef2e452 100644
+--- a/drivers/auxdisplay/Kconfig
++++ b/drivers/auxdisplay/Kconfig
+@@ -203,6 +203,16 @@ config ARM_CHARLCD
+ 	  line and the Linux version on the second line, but that's
+ 	  still useful.
+ 
++config TM1628
++	tristate "TM1628 driver for LED 7/11 segment displays"
++	depends on SPI
++	depends on OF || COMPILE_TEST
++	help
++	  Say Y to enable support for Titan Micro Electronics TM1628
++	  LED controller.
++	  It's a 3-wire SPI device controlling a two-dimensional grid of
++	  LEDs. Dimming is applied to all outputs through an internal PWM.
++
+ menuconfig PARPORT_PANEL
+ 	tristate "Parallel port LCD/Keypad Panel support"
+ 	depends on PARPORT
+diff --git a/drivers/auxdisplay/Makefile b/drivers/auxdisplay/Makefile
+index 6968ed4d3..7728e17e1 100644
+--- a/drivers/auxdisplay/Makefile
++++ b/drivers/auxdisplay/Makefile
+@@ -14,3 +14,4 @@ obj-$(CONFIG_HT16K33)		+= ht16k33.o
+ obj-$(CONFIG_PARPORT_PANEL)	+= panel.o
+ obj-$(CONFIG_LCD2S)		+= lcd2s.o
+ obj-$(CONFIG_LINEDISP)		+= line-display.o
++obj-$(CONFIG_TM1628)		+= tm1628.o
+diff --git a/drivers/auxdisplay/tm1628.c b/drivers/auxdisplay/tm1628.c
 new file mode 100644
-index 000000000..382757e72
+index 000000000..a39b63828
 --- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-devices-auxdisplay-tm1628
-@@ -0,0 +1,7 @@
-+What:		/sys/devices/.../display-text
-+Date:		February 2022
-+Contact:	Heiner Kallweit <hkallweit1@gmail.com>
-+Description:
-+		The text to be displayed on the 7 segment display.
-+		Any printable character is allowed as input, but some
-+		can not be displayed in a readable way with 7 segments.
++++ b/drivers/auxdisplay/tm1628.c
+@@ -0,0 +1,368 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Titan Micro Electronics TM1628 LED controller
++ *
++ * Copyright (c) 2019 Andreas Färber
++ */
++
++#include <linux/delay.h>
++#include <linux/leds.h>
++#include <linux/module.h>
++#include <linux/property.h>
++#include <linux/spi/spi.h>
++#include <uapi/linux/map_to_7segment.h>
++
++#define TM1628_CMD_DISPLAY_MODE		(0 << 6)
++#define TM1628_DISPLAY_MODE_6_12	0x02
++#define TM1628_DISPLAY_MODE_7_11	0x03
++
++#define TM1628_CMD_DATA			(1 << 6)
++#define TM1628_DATA_TEST_MODE		BIT(3)
++#define TM1628_DATA_FIXED_ADDR		BIT(2)
++#define TM1628_DATA_WRITE_DATA		0x00
++#define TM1628_DATA_READ_DATA		0x02
++
++#define TM1628_CMD_DISPLAY_CTRL		(2 << 6)
++#define TM1628_DISPLAY_CTRL_DISPLAY_ON	BIT(3)
++
++#define TM1628_CMD_SET_ADDRESS		(3 << 6)
++
++#define TM1628_BRIGHTNESS_MAX		7
++
++/* Physical limits, depending on the mode the chip may support less */
++#define MAX_GRID_SIZE			7
++#define MAX_SEGMENT_NUM			16
++
++struct tm1628_led {
++	struct led_classdev	leddev;
++	struct tm1628		*ctrl;
++	u32			grid;
++	u32			seg;
++};
++
++struct tm1628 {
++	struct spi_device		*spi;
++	__le16				data[MAX_GRID_SIZE];
++	struct mutex			disp_lock;
++	char				text[MAX_GRID_SIZE + 1];
++	u8				segment_mapping[7];
++	u8				grid[MAX_GRID_SIZE];
++	int				grid_size;
++	struct tm1628_led		leds[];
++};
++
++/* Command 1: Display Mode Setting */
++static int tm1628_set_display_mode(struct spi_device *spi, u8 grid_mode)
++{
++	u8 cmd = TM1628_CMD_DISPLAY_MODE | grid_mode;
++
++	return spi_write(spi, &cmd, 1);
++}
++
++/* Command 3: Address Setting */
++static int tm1628_set_address(struct spi_device *spi, u8 offset)
++{
++	u8 cmd = TM1628_CMD_SET_ADDRESS | (offset * sizeof(__le16));
++
++	return spi_write(spi, &cmd, 1);
++}
++
++/* Command 2: Data Setting */
++static int tm1628_write_data(struct spi_device *spi, unsigned int offset,
++			     unsigned int len)
++{
++	struct tm1628 *s = spi_get_drvdata(spi);
++	u8 cmd = TM1628_CMD_DATA | TM1628_DATA_WRITE_DATA;
++	struct spi_transfer xfers[] = {
++		{
++			.tx_buf = &cmd,
++			.len = 1,
++		},
++		{
++			.tx_buf = (__force void *)(s->data + offset),
++			.len = len * sizeof(__le16),
++		},
++	};
++
++	if (offset + len > MAX_GRID_SIZE) {
++		dev_err(&spi->dev, "Invalid data address offset %u len %u\n",
++			offset, len);
++		return -EINVAL;
++	}
++
++	tm1628_set_address(spi, offset);
++
++	return spi_sync_transfer(spi, xfers, ARRAY_SIZE(xfers));
++}
++
++/* Command 4: Display Control */
++static int tm1628_set_display_ctrl(struct spi_device *spi, bool on)
++{
++	u8 cmd = TM1628_CMD_DISPLAY_CTRL | TM1628_BRIGHTNESS_MAX;
++
++	if (on)
++		cmd |= TM1628_DISPLAY_CTRL_DISPLAY_ON;
++
++	return spi_write(spi, &cmd, 1);
++}
++
++static int tm1628_show_text(struct tm1628 *s)
++{
++	static SEG7_CONVERSION_MAP(map_seg7, MAP_ASCII7SEG_ALPHANUM);
++	int i, ret;
++
++	int msg_len = strlen(s->text);
++
++	mutex_lock(&s->disp_lock);
++
++	for (i = 0; i < s->grid_size; i++) {
++		int pos = s->grid[i] - 1;
++
++		if (i < msg_len) {
++			int char7_raw = map_to_seg7(&map_seg7, s->text[i]);
++			int j, char7;
++
++			for (j = 0, char7 = 0; j < 7; j++) {
++				if (char7_raw & BIT(j))
++					char7 |= BIT(s->segment_mapping[j] - 1);
++			}
++
++			s->data[pos] = cpu_to_le16(char7);
++		} else {
++			s->data[pos] = 0;
++		}
++	}
++
++	ret = tm1628_write_data(s->spi, 0, s->grid_size);
++
++	mutex_unlock(&s->disp_lock);
++
++	return ret;
++}
++
++static int tm1628_led_set_brightness(struct led_classdev *led_cdev,
++				     enum led_brightness brightness)
++{
++	struct tm1628_led *led = container_of(led_cdev, struct tm1628_led, leddev);
++	struct tm1628 *s = led->ctrl;
++	int offset, ret;
++	__le16 bit;
++
++	offset = led->grid - 1;
++	bit = cpu_to_le16(BIT(led->seg - 1));
++
++	mutex_lock(&s->disp_lock);
++
++	if (brightness == LED_OFF)
++		s->data[offset] &= ~bit;
++	else
++		s->data[offset] |= bit;
++
++	ret = tm1628_write_data(s->spi, offset, 1);
++
++	mutex_unlock(&s->disp_lock);
++
++	return ret;
++}
++
++static enum led_brightness tm1628_led_get_brightness(struct led_classdev *led_cdev)
++{
++	struct tm1628_led *led = container_of(led_cdev, struct tm1628_led, leddev);
++	struct tm1628 *s = led->ctrl;
++	int offset;
++	__le16 bit;
++	bool on;
++
++	offset = led->grid - 1;
++	bit = cpu_to_le16(BIT(led->seg - 1));
++
++	mutex_lock(&s->disp_lock);
++	on = s->data[offset] & bit;
++	mutex_unlock(&s->disp_lock);
++
++	return on ? LED_ON : LED_OFF;
++}
++
++static int tm1628_register_led(struct tm1628 *s, struct fwnode_handle *node,
++			       u32 grid, u32 seg, struct tm1628_led *led)
++{
++	struct device *dev = &s->spi->dev;
++	struct led_init_data init_data = { .fwnode = node };
++
++	led->ctrl = s;
++	led->grid = grid;
++	led->seg  = seg;
++	led->leddev.max_brightness = LED_ON;
++	led->leddev.brightness_set_blocking = tm1628_led_set_brightness;
++	led->leddev.brightness_get = tm1628_led_get_brightness;
++
++	return devm_led_classdev_register_ext(dev, &led->leddev, &init_data);
++}
++
++static ssize_t display_text_show(struct device *dev, struct device_attribute *attr,
++				 char *buf)
++{
++	struct tm1628 *s = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%s\n", s->text);
++}
++
++static ssize_t display_text_store(struct device *dev, struct device_attribute *attr,
++				  const char *buf, size_t count)
++{
++	struct tm1628 *s = dev_get_drvdata(dev);
++	int ret, i;
++
++	if (count > s->grid_size + 1) /* consider trailing newline */
++		return -E2BIG;
++
++	for (i = 0; i < count && isprint(buf[i]); i++)
++		s->text[i] = buf[i];
++
++	s->text[i] = '\0';
++
++	ret = tm1628_show_text(s);
++	if (ret < 0)
++		return ret;
++
++	return count;
++}
++
++static const DEVICE_ATTR_RW(display_text);
++
++static int tm1628_spi_probe(struct spi_device *spi)
++{
++	struct fwnode_handle *child;
++	struct tm1628_led *leds;
++	unsigned int num_leds;
++	struct tm1628 *s;
++	int ret, i;
++
++	num_leds = device_get_child_node_count(&spi->dev);
++
++	s = devm_kzalloc(&spi->dev, struct_size(s, leds, num_leds), GFP_KERNEL);
++	if (!s)
++		return -ENOMEM;
++
++	s->spi = spi;
++	spi_set_drvdata(spi, s);
++
++	mutex_init(&s->disp_lock);
++
++	msleep(200); /* according to TM1628 datasheet */
++
++	/* clear screen */
++	ret = tm1628_write_data(spi, 0, MAX_GRID_SIZE);
++	if (ret)
++		return ret;
++	/* Assume that subsequent SPI transfers will be ok if first was ok */
++
++	/* For now we support 6x12 mode only. This should be sufficient for most use cases */
++	tm1628_set_display_mode(spi, TM1628_DISPLAY_MODE_6_12);
++
++	tm1628_set_display_ctrl(spi, true);
++
++	if (!IS_REACHABLE(CONFIG_LEDS_CLASS))
++		goto no_leds;
++
++	leds = s->leds;
++
++	device_for_each_child_node(&spi->dev, child) {
++		u32 reg[2];
++
++		ret = fwnode_property_read_u32_array(child, "reg", reg, 2);
++		if (ret) {
++			dev_err(&spi->dev, "Reading %s reg property failed (%d)\n",
++				fwnode_get_name(child), ret);
++			continue;
++		}
++
++		if (reg[0] == 0 || reg[0] > MAX_GRID_SIZE) {
++			dev_err(&spi->dev, "Invalid grid %u at %s\n",
++				reg[0], fwnode_get_name(child));
++			continue;
++		}
++
++		if (reg[1] == 0 || reg[1] > MAX_SEGMENT_NUM) {
++			dev_err(&spi->dev, "Invalid segment %u at %s\n",
++				reg[1], fwnode_get_name(child));
++			continue;
++		}
++
++		ret = tm1628_register_led(s, child, reg[0], reg[1], leds++);
++		if (ret) {
++			dev_err(&spi->dev, "Failed to register LED %s (%d)\n",
++				fwnode_get_name(child), ret);
++			continue;
++		}
++	}
++
++no_leds:
++	ret = device_property_count_u8(&spi->dev, "grid");
++	if (ret < 1 || ret > MAX_GRID_SIZE) {
++		dev_err(&spi->dev, "Invalid display length (%d)\n", ret);
++		return -EINVAL;
++	}
++
++	s->grid_size = ret;
++
++	ret = device_property_read_u8_array(&spi->dev, "grid", s->grid, s->grid_size);
++	if (ret < 0)
++		return ret;
++
++	for (i = 0; i < s->grid_size; i++) {
++		if (s->grid[i] < 1 || s->grid[i] > s->grid_size)
++			return -EINVAL;
++	}
++
++	ret = device_property_read_u8_array(&spi->dev, "segment-mapping", s->segment_mapping, 7);
++	if (ret < 0)
++		return ret;
++
++	for (i = 0; i < 7; i++) {
++		if (s->segment_mapping[i] < 1 || s->segment_mapping[i] > MAX_SEGMENT_NUM)
++			return -EINVAL;
++	}
++
++	return device_create_file(&spi->dev, &dev_attr_display_text);
++}
++
++static void tm1628_spi_remove(struct spi_device *spi)
++{
++	device_remove_file(&spi->dev, &dev_attr_display_text);
++	tm1628_set_display_ctrl(spi, false);
++}
++
++static void tm1628_spi_shutdown(struct spi_device *spi)
++{
++	tm1628_set_display_ctrl(spi, false);
++}
++
++static const struct of_device_id tm1628_spi_of_matches[] = {
++	{ .compatible = "titanmec,tm1628" },
++	{}
++};
++MODULE_DEVICE_TABLE(of, tm1628_spi_of_matches);
++
++static const struct spi_device_id tm1628_spi_id_table[] = {
++	{ "tm1628" },
++	{},
++};
++MODULE_DEVICE_TABLE(spi, tm1628_spi_id_table);
++
++static struct spi_driver tm1628_spi_driver = {
++	.probe = tm1628_spi_probe,
++	.remove = tm1628_spi_remove,
++	.shutdown = tm1628_spi_shutdown,
++	.id_table = tm1628_spi_id_table,
++
++	.driver = {
++		.name = "tm1628",
++		.of_match_table = tm1628_spi_of_matches,
++	},
++};
++module_spi_driver(tm1628_spi_driver);
++
++MODULE_DESCRIPTION("TM1628 LED controller driver");
++MODULE_AUTHOR("Andreas Färber");
++MODULE_LICENSE("GPL");
 -- 
 2.35.1
 
