@@ -2,167 +2,268 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 606244BD640
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Feb 2022 07:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6594BD6F2
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Feb 2022 08:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235270AbiBUGcx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Feb 2022 01:32:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54450 "EHLO
+        id S233371AbiBUHgz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 21 Feb 2022 02:36:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345176AbiBUGcv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Feb 2022 01:32:51 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9811D8;
-        Sun, 20 Feb 2022 22:32:29 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id u1so25192018wrg.11;
-        Sun, 20 Feb 2022 22:32:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=TVB1SAwyejdejCoebVJa4rEH4qtbM8FunJaGvyM3xDM=;
-        b=iM9rYwji7ExpIYsMATDt3yW2TvXSImXKy56t9ZnCBnNRyO+AslIr0JjDxly7meBJNS
-         XPjTZIEJ2MxaBO+A/wWNBg6Z8uq39L8PSFfLo7MV8szZKnCg6cC0lcSz0mxX/HUvJ///
-         TZ5u8EC8YdenrWo/0aeQ854OfRtrNyOZo7BUUubaQZqm4YzwYXu6TfcKhxapndcPhiHY
-         bpuQ3lj0caDNdo7axv8aGGS1HMhqpDpIlrmxt9Eo++ZZcKu2yVr8zZb1sheFDbrnWhn3
-         +CdgL1HoKv+E1pSyfqT9E3g2QrS2ijx701r+jwlN4ZvwQ0UlMKYmXSw6VPyJE35UWduB
-         O52Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=TVB1SAwyejdejCoebVJa4rEH4qtbM8FunJaGvyM3xDM=;
-        b=eoiw5HLgPQO2DTDWeQ+tmi+lAc4hcNGcOpfFnh3zTauoXwM2GOuVZsL1TiW4AUethJ
-         Y7AvHjrcpXZaEQtXrUaIhvybVK0h9bBm8bP4PBt8ifdEBHmEgNUc7ZQ8uenICE+Ei9ww
-         FSB9FKMshA7J9tcJ831cG+2226yyPAnDvSOwn5JF4+wH48/V6nyVKl++ygw/Knd7qQEe
-         Qd2FIVTmoIihBzUyZ0zJteW79d2RzxEuPYOkAG+JbUNxjdLanVBwB+4xqQD2YnpVMbT4
-         Tzi0T+tokbo0PH9HOaHL/qzWsuTcHJZwLsTgK45RkivkeJzM55YMdd0XN3Kanc6dC7PN
-         g31w==
-X-Gm-Message-State: AOAM532guFJl3eOhLRijfFtx93CIXl+gGbDVK8x+hpVc8dw77HlhBXJU
-        dEUpLmG0HvW6NTGabMjR0qg=
-X-Google-Smtp-Source: ABdhPJx+1Angj51NlGm4D2VR44yakbH8bYZ+MvkrSDPFeVRwcN3Ulhy+q7jJf6Yf2bNkid5hRieHAA==
-X-Received: by 2002:a05:6000:258:b0:1e4:eee1:93b9 with SMTP id m24-20020a056000025800b001e4eee193b9mr14735201wrz.558.1645425147536;
-        Sun, 20 Feb 2022 22:32:27 -0800 (PST)
-Received: from smtpclient.apple ([167.99.200.149])
-        by smtp.gmail.com with ESMTPSA id s2sm6429180wmc.45.2022.02.20.22.32.24
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 20 Feb 2022 22:32:27 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
-Subject: Re: [PATCH 0/6] auxdisplay: Add support for the Titanmec TM1628 7
- segment display controller
-From:   Christian Hewitt <christianshewitt@gmail.com>
-In-Reply-To: <4172e59f-b9d5-d87d-9dbd-a6f683a2173c@gmail.com>
-Date:   Mon, 21 Feb 2022 10:32:22 +0400
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        =?utf-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-amlogic@lists.infradead.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <5B4B8165-5D64-4336-A149-DF55C47D5ACE@gmail.com>
-References: <4172e59f-b9d5-d87d-9dbd-a6f683a2173c@gmail.com>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-X-Mailer: Apple Mail (2.3693.40.0.1.81)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229991AbiBUHgy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Feb 2022 02:36:54 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7883510C2;
+        Sun, 20 Feb 2022 23:36:31 -0800 (PST)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 4B6D02223A;
+        Mon, 21 Feb 2022 08:36:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1645428988;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=McJiiDcSySGNH2U65XfL8OxHJxlppjWgEM/d7vGkbFA=;
+        b=O4nkwCwb2am2xs9AbnAFw2R+ogz2UonnBNH709+VuDg5tN0t1SFU1xqxZXajG7n3JvKHiG
+        Ds8fdzaCsNCAI3bIEK9WY90H7TrUo/jWhTd1e8tyHWJxTaWTW9YspFM9TuhTq1639QlJEB
+        TL5Wr1QVdR7SA/DoSSmIVYPmsO/5KTg=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 21 Feb 2022 08:36:24 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc:     p.yadav@ti.com, broonie@kernel.org, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        nicolas.ferre@microchip.com, zhengxunli@mxic.com.tw,
+        jaimeliao@mxic.com.tw
+Subject: Re: [PATCH 2/4] mtd: spi-nor: core: Allow specifying the byte order
+ in DTR mode
+In-Reply-To: <20220218145900.1440045-3-tudor.ambarus@microchip.com>
+References: <20220218145900.1440045-1-tudor.ambarus@microchip.com>
+ <20220218145900.1440045-3-tudor.ambarus@microchip.com>
+User-Agent: Roundcube Webmail/1.4.12
+Message-ID: <e5d42f6e3cf9084b26e72263a8a0ddc9@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-resend from correct mail account:
+Am 2022-02-18 15:58, schrieb Tudor Ambarus:
+> Macronix swaps bytes on a 16-bit boundary when configured in Octal DTR.
+> The byte order of 16-bit words is swapped when read or write written in
+> 8D-8D-8D mode compared to STR modes. Swapping the bytes is a bad design
+> decision because this may affect the boot sequence if the entire boot
+> sequence is not handled in either 8D-8D-8D mode or 1-1-1 mode. Allow
+> operations to specify the byte order in DTR mode, so that controllers 
+> can
+> swap the bytes back at run-time to fix the endianness, if they are 
+> capable.
+> 
+> The byte order in 8D-8D-8D mode can be retrieved at run-time by 
+> checking
+> BFPT[DWORD(18)] BIT(31). When set to one, the "Byte order of 16-bit 
+> words
+> is swapped when read in 8D-8D-8D mode compared to 1-1-1 mode.". It 
+> doesn't
+> specify if this applies to both register and data operations. Macronix 
+> is
+> the single user of this byte swap and it doesn't have clear rules, as 
+> it
+> contains register operations that require data swap (RDPASS, WRPASS,
+> PASSULK, RDSFDP) and register operations that don't require data swap
+> (WRFBR). All these are not common and can be handled in 1-1-1 mode, so 
+> we
+> can ignore them for now. All the other register operations are done on 
+> one
+> byte length. The read register operations are actually in 8D-8D-8S 
+> mode,
+> as they send the data value twice, on each half of the clock cycle. In 
+> case
+> of a register write of one byte, the memory supports receiving the 
+> register
+> value only on the first byte, thus it discards the value of the byte on 
+> the
+> second half of the clock cycle. Swapping the bytes for one byte 
+> register
+> writes is not required, and for one byte register reads it doesn't 
+> matter.
+> Thus swap the bytes only for read or page program operations.
+> 
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> ---
+>  drivers/mtd/spi-nor/core.c  | 31 +++++++++++++++++++++++++------
+>  drivers/mtd/spi-nor/core.h  |  1 +
+>  include/linux/mtd/spi-nor.h | 17 +++++++++++++++++
+>  3 files changed, 43 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> index 04ea180118e3..453d8c54d062 100644
+> --- a/drivers/mtd/spi-nor/core.c
+> +++ b/drivers/mtd/spi-nor/core.c
+> @@ -106,6 +106,9 @@ void spi_nor_spimem_setup_op(const struct spi_nor 
+> *nor,
+>  		op->dummy.dtr = true;
+>  		op->data.dtr = true;
+> 
+> +		if (spi_nor_protocol_is_dtr_bswap16(proto))
+> +			op->data.dtr_bswap16 = true;
+> +
+>  		/* 2 bytes per clock cycle in DTR mode. */
+>  		op->dummy.nbytes *= 2;
+> 
+> @@ -388,7 +391,7 @@ int spi_nor_read_sr(struct spi_nor *nor, u8 *sr)
+>  				   SPI_MEM_OP_NO_DUMMY,
+>  				   SPI_MEM_OP_DATA_IN(1, sr, 0));
+> 
+> -		if (nor->reg_proto == SNOR_PROTO_8_8_8_DTR) {
+> +		if (spi_nor_protocol_is_octal_dtr(nor->reg_proto)) {
+>  			op.addr.nbytes = nor->params->rdsr_addr_nbytes;
+>  			op.dummy.nbytes = nor->params->rdsr_dummy;
+>  			/*
+> @@ -432,7 +435,7 @@ static int spi_nor_read_fsr(struct spi_nor *nor, u8 
+> *fsr)
+>  				   SPI_MEM_OP_NO_DUMMY,
+>  				   SPI_MEM_OP_DATA_IN(1, fsr, 0));
+> 
+> -		if (nor->reg_proto == SNOR_PROTO_8_8_8_DTR) {
+> +		if (spi_nor_protocol_is_octal_dtr(nor->reg_proto)) {
+>  			op.addr.nbytes = nor->params->rdsr_addr_nbytes;
+>  			op.dummy.nbytes = nor->params->rdsr_dummy;
+>  			/*
+> @@ -2488,7 +2491,7 @@ static int spi_nor_set_addr_width(struct spi_nor 
+> *nor)
+>  {
+>  	if (nor->addr_width) {
+>  		/* already configured from SFDP */
+> -	} else if (nor->read_proto == SNOR_PROTO_8_8_8_DTR) {
+> +	} else if (spi_nor_protocol_is_octal_dtr(nor->read_proto)) {
+>  		/*
+>  		 * In 8D-8D-8D mode, one byte takes half a cycle to transfer. So
+>  		 * in this protocol an odd address width cannot be used because
+> @@ -2701,6 +2704,19 @@ static void spi_nor_init_fixup_flags(struct 
+> spi_nor *nor)
+>  		nor->flags |= SNOR_F_IO_MODE_EN_VOLATILE;
+>  }
+> 
+> +static void spi_nor_set_dtr_bswap16_ops(struct spi_nor *nor)
+> +{
+> +	struct spi_nor_flash_parameter *params = nor->params;
+> +	u32 mask = SNOR_HWCAPS_READ_8_8_8_DTR | SNOR_HWCAPS_PP_8_8_8_DTR;
+> +
+> +	if ((params->hwcaps.mask & mask) == mask) {
+> +		params->reads[SNOR_CMD_READ_8_8_8_DTR].proto |=
+> +			SNOR_PROTO_IS_DTR_BSWAP16;
+> +		params->page_programs[SNOR_CMD_PP_8_8_8_DTR].proto |=
+> +			SNOR_PROTO_IS_DTR_BSWAP16;
+> +	}
+> +}
+> +
+>  /**
+>   * spi_nor_late_init_params() - Late initialization of default flash
+> parameters.
+>   * @nor:	pointer to a 'struct spi_nor'
+> @@ -2721,6 +2737,9 @@ static void spi_nor_late_init_params(struct 
+> spi_nor *nor)
+>  	spi_nor_init_flags(nor);
+>  	spi_nor_init_fixup_flags(nor);
+> 
+> +	if (nor->flags & SNOR_F_DTR_BSWAP16)
+> +		spi_nor_set_dtr_bswap16_ops(nor);
+> +
+>  	/*
+>  	 * NOR protection support. When locking_ops are not provided, we pick
+>  	 * the default ones.
+> @@ -2899,8 +2918,8 @@ static int spi_nor_octal_dtr_enable(struct
+> spi_nor *nor, bool enable)
+>  	if (!nor->params->octal_dtr_enable)
+>  		return 0;
+> 
+> -	if (!(nor->read_proto == SNOR_PROTO_8_8_8_DTR &&
+> -	      nor->write_proto == SNOR_PROTO_8_8_8_DTR))
+> +	if (!(spi_nor_protocol_is_octal_dtr(nor->read_proto) &&
+> +	      spi_nor_protocol_is_octal_dtr(nor->write_proto)))
+>  		return 0;
+> 
+>  	if (!(nor->flags & SNOR_F_IO_MODE_EN_VOLATILE))
+> @@ -2968,7 +2987,7 @@ static int spi_nor_init(struct spi_nor *nor)
+>  		spi_nor_try_unlock_all(nor);
+> 
+>  	if (nor->addr_width == 4 &&
+> -	    nor->read_proto != SNOR_PROTO_8_8_8_DTR &&
+> +	    !spi_nor_protocol_is_octal_dtr(nor->read_proto) &&
+>  	    !(nor->flags & SNOR_F_4B_OPCODES)) {
+>  		/*
+>  		 * If the RESET# pin isn't hooked up properly, or the system
+> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+> index 2afb610853a9..7c077d41c335 100644
+> --- a/drivers/mtd/spi-nor/core.h
+> +++ b/drivers/mtd/spi-nor/core.h
+> @@ -29,6 +29,7 @@ enum spi_nor_option_flags {
+>  	SNOR_F_IO_MODE_EN_VOLATILE = BIT(14),
+>  	SNOR_F_SOFT_RESET	= BIT(15),
+>  	SNOR_F_SWP_IS_VOLATILE	= BIT(16),
+> +	SNOR_F_DTR_BSWAP16	= BIT(17),
+>  };
+> 
+>  struct spi_nor_read_command {
+> diff --git a/include/linux/mtd/spi-nor.h b/include/linux/mtd/spi-nor.h
+> index fc90fce26e33..6e9660475c5b 100644
+> --- a/include/linux/mtd/spi-nor.h
+> +++ b/include/linux/mtd/spi-nor.h
+> @@ -168,6 +168,11 @@
+>  	 SNOR_PROTO_DATA_MASK)
+> 
+>  #define SNOR_PROTO_IS_DTR	BIT(24)	/* Double Transfer Rate */
+> +/*
+> + * Byte order of 16-bit words is swapped when read or written in DTR 
+> mode
+> + * compared to STR mode.
+> + */
+> +#define SNOR_PROTO_IS_DTR_BSWAP16	BIT(25)
+> 
+>  #define SNOR_PROTO_STR(_inst_nbits, _addr_nbits, _data_nbits)	\
+>  	(SNOR_PROTO_INST(_inst_nbits) |				\
+> @@ -201,6 +206,18 @@ static inline bool spi_nor_protocol_is_dtr(enum
+> spi_nor_protocol proto)
+>  	return !!(proto & SNOR_PROTO_IS_DTR);
+>  }
+> 
+> +static inline bool spi_nor_protocol_is_octal_dtr(enum spi_nor_protocol 
+> proto)
+> +{
+> +	return ((proto & SNOR_PROTO_8_8_8_DTR) == SNOR_PROTO_8_8_8_DTR);
 
-> On 19 Feb 2022, at 5:13 pm, Heiner Kallweit <hkallweit1@gmail.com> =
-wrote:
->=20
-> This series adds support for the Titanmec TM1628 7 segment display
-> controller. It's based on previous RFC work from Andreas F=C3=A4rber.
-> The RFC version placed the driver in the LED subsystem, but this was
-> NAK'ed by the LED maintainer. Therefore I moved the driver to
-> /drivers/auxdisplay what seems most reasonable to me.
->=20
-> To be decided is through which tree this series should go.
-> I'd think SPI would be most suited, but that's a decision I
-> leave up to the respective maintainers.
->=20
-> Further changes to the RFC version:
-> - Driver can be built also w/o LED class support, for displays that
-> don't have any symbols to be exposed as LED's.
-> - Simplified the code and rewrote a lot of it.
-> - Driver is now kind of a MVP, but functionality should be sufficient
-> for most use cases.
-> - Use the existing 7 segment support in uapi/linux/map_to_7segment.h
-> as suggested by Geert Uytterhoeven.
->=20
-> Note: There's a number of chips from other manufacturers that are
->     almost identical, e.g. FD628, SM1628. Only difference I saw so
->     far is that they partially support other display modes.
->     TM1628: 6x12, 7x11
->     SM1628C: 4x13, 5x12, 6x11, 7x10
->     For typical displays on devices using these chips this
->     difference shouldn't matter.
->=20
-> Successfully tested on a TX3 Mini TV box that has an SM1628C and a
-> display with 4 digits and 7 symbols.
+This looks wrong what if there are 0's in SNOR_PROTO_8_8_8_DTR? If this
+happens to be the same as SNOR_PROTO_MASK (which doesn't exist) this
+deserves a comment.
 
-Thanks for dusting off sources and working on this! - it=E2=80=99s =
-another piece
-of the upstream puzzle for distros that install on Android boxes.
+> +}
+> +
+> +static inline bool spi_nor_protocol_is_dtr_bswap16(enum 
+> spi_nor_protocol proto)
+> +{
+> +	u32 mask = SNOR_PROTO_IS_DTR | SNOR_PROTO_IS_DTR_BSWAP16;
+> +
+> +	return ((proto & mask) == mask);
 
-I needed the following patch to address compile issues (missing include,
-and the recent void/int change in linux-next (I=E2=80=99m using 5.17.y):
+isn't "return proto & SNOR_PROTO_IS_DTR_BSWAP16;" enough here?
 
-diff --git a/drivers/auxdisplay/tm1628.c b/drivers/auxdisplay/tm1628.c
-index a39b638282c1..ab3557f8b330 100644
---- a/drivers/auxdisplay/tm1628.c
-+++ b/drivers/auxdisplay/tm1628.c
-@@ -5,6 +5,7 @@
-* Copyright (c) 2019 Andreas F=C3=A4rber
-*/
+> +}
+> +
+>  static inline u8 spi_nor_get_protocol_inst_nbits(enum spi_nor_protocol 
+> proto)
+>  {
+>  	return ((unsigned long)(proto & SNOR_PROTO_INST_MASK)) >>
 
-+#include <linux/ctype.h>
-#include <linux/delay.h>
-#include <linux/leds.h>
-#include <linux/module.h>
-@@ -327,10 +328,11 @@ static int tm1628_spi_probe(struct spi_device =
-*spi)
-      return device_create_file(&spi->dev, &dev_attr_display_text);
-}
-
--static void tm1628_spi_remove(struct spi_device *spi)
-+static int tm1628_spi_remove(struct spi_device *spi)
-{
-      device_remove_file(&spi->dev, &dev_attr_display_text);
-      tm1628_set_display_ctrl(spi, false);
-+       return 0;
-}
-
-static void tm1628_spi_shutdown(struct spi_device *spi)
-
-I also needed CONFIG_SPI_GPIO=3Dy in kernel config. With this added the
-driver probes on my TX3 mini box and the display goes dark overwriting
-the default =E2=80=98boot=E2=80=99 text. The following systemd service =
-and script sets
-the clock and flashes the colon separator on/off to count seconds:
-
-=
-https://github.com/chewitt/LibreELEC.tv/commit/c8f1ebe6f6c366188f18f9d2b40=
-1de6c2979fdd7
-
-With the include fixup and maybe a Kconfig tweak, for the series:
-
-Tested-by: Christian Hewitt <christianshewitt@gmail.com>=
+-michael
