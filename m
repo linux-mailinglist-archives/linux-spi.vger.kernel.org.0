@@ -2,67 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C08A4BEC20
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Feb 2022 21:56:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 005E44BED08
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Feb 2022 23:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbiBUU4q (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Feb 2022 15:56:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33704 "EHLO
+        id S233190AbiBUWK5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 21 Feb 2022 17:10:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbiBUU4q (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Feb 2022 15:56:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3EA237F1
-        for <linux-spi@vger.kernel.org>; Mon, 21 Feb 2022 12:56:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A416F60EAE
-        for <linux-spi@vger.kernel.org>; Mon, 21 Feb 2022 20:56:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 09C80C340E9;
-        Mon, 21 Feb 2022 20:56:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645476982;
-        bh=Oem+DmFW7L3tinCQDP6YEXruBFxZWbJ5mkVgsUJwV60=;
-        h=Subject:From:Date:To:From;
-        b=OROuVRAtrKEa6tGtyPJmr82iyIU+jXT/mWh/IQmhnbrI3j+0tVEgQ+4SdUXFweWQ8
-         +BKwrhpDbk5yuhfYxseWMeK4THVLaXN4X3lhqwSc7e9QEmzAl8A5B3JTiLqgG7nPQG
-         5kZJk+UwHW8zJB321avTdEvE3zK7CEjqYYh8isjI48PT1DVvU++pyujjzcFDuVAWGR
-         3ARi+FC6PrjCStNoLrpujpZ+0sF0QAXakVvFlJOMLUIeVP1yY64Ku/Br8ytYZRmZ3w
-         gIN4MusZ31Ve1tO/+VYQ9qlb3wMKR4NcbcF46mhbP7JG/8YsPldVIXyW6JimKawfnR
-         5d0ipEUkmoQEQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EA0F6E6D3E8;
-        Mon, 21 Feb 2022 20:56:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232574AbiBUWK5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Feb 2022 17:10:57 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3086522BE8;
+        Mon, 21 Feb 2022 14:10:33 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id c23so13003679ioi.4;
+        Mon, 21 Feb 2022 14:10:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Z+rAJszSEvmqBNoUmCp25Rx7tCIKTIKIJ/vzygiTiNU=;
+        b=S7pZm6u3CUoSRWhIevbFJ7iuyoYizjOdMSrxZ8r5RYDp1p/T4i4IpM0PCpfmdSAVcL
+         UspswO6GnBhtK4pnq1X6wszMSj9Qbsyo1bmUaKtW5ECHW+tAFw/cx98GWGBDlrl/ZEbm
+         /us86SMszml4cBbd63fB8JUK3oLLh+VA4qLagehggzFdAXcivvtO6gvP7v9QqVDieBJk
+         PqYhMZFivFCM10K4TFHmmcpRLeSofD39RY1xNLxwjRSoXzkpHbiwh2Zd0HQ3keaph3qb
+         DrH064wnjRX3k7hlMa9QPxwj4aVFWmTjvbcD6ssLzl1xv9zmUa4ADZ4sR37IKZwuF4HQ
+         no2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z+rAJszSEvmqBNoUmCp25Rx7tCIKTIKIJ/vzygiTiNU=;
+        b=rOZHwkH64W2WSNtvTYIq4gTTfwm1KYUYeDOy7c5h/ByiFI1mhBx8JZsEc/zGooLb1K
+         UIFasiX5yRg55qgXj9LqBUM+ASporjiAewnLAq0rEH/6LyIyJ84fI4/i/z5/SsrDOuxI
+         jK/G/jwkteRxj+gM3vd9cRdAlJbF28jMkEGhI6C9n+C947hQ46EKhKdw1fqz8mx5dUnt
+         o2vI0gGdhwg+2Cu0F8rXGStLFGK6t0RrTyAlKNeP3BXwlB7dUicY+acU/kddcoE/xR45
+         8y6BOQgnoZ2W4nKbLehZ74R1/YbfwFFVsViwICfkDVrYGcXVfM6MNM/ujSJ37e+u9TG1
+         yWGQ==
+X-Gm-Message-State: AOAM532DhD0bdI9GroxLs8C9w3AcgxDPEB6z+jMGhq3wrKMKUkW7L9tF
+        6R5cTY1FoOxDJ0l9HDS9eZdpU5axjSINlcNigkU=
+X-Google-Smtp-Source: ABdhPJxtX6h0gkfIJdOs/LpUaxa9CUaWdh6MY9eyTlILX66v8ZCa3R/8q03D8mwPRfzvvOim7xMhQagxBJ4rkaaFK7U=
+X-Received: by 2002:a02:a1ca:0:b0:314:c448:2a4e with SMTP id
+ o10-20020a02a1ca000000b00314c4482a4emr10360369jah.186.1645481432583; Mon, 21
+ Feb 2022 14:10:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <164547698195.29769.6735813941451652342.git-patchwork-housekeeping@kernel.org>
-Date:   Mon, 21 Feb 2022 20:56:21 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1f39432b-84e2-e6dc-a6b8-c48ad5cf2210@gmail.com>
+In-Reply-To: <1f39432b-84e2-e6dc-a6b8-c48ad5cf2210@gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 21 Feb 2022 23:10:21 +0100
+Message-ID: <CANiq72ko6=dYBvbRc5T7Qq_2mxRtq1NpvcV_saMbTDfz0PK1aw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] auxdisplay: Add support for the Titanmec TM1628 7
+ segment display controller
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] auxdisplay: Add support for the Titanmec TM1628 7 segment display controller (2022-02-21T20:19:21)
-  Superseding: [v1] auxdisplay: Add support for the Titanmec TM1628 7 segment display controller (2022-02-19T13:13:12):
-    [1/6] spi: gpio: Implement LSB First bitbang support
-    [2/6] dt-bindings: vendor-prefixes: Add Titan Micro Electronics
-    [3/6] dt-bindings: auxdisplay: Add Titan Micro Electronics TM1628
-    [4/6] docs: ABI: document tm1628 attribute display-text
-    [5/6] auxdisplay: add support for Titanmec TM1628 7 segment display controller
-    [6/6] arm64: dts: meson-gxl-s905w-tx3-mini: add support for the 7 segment display
+On Mon, Feb 21, 2022 at 9:19 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
+>
+> v2:
+> - (re-)add Andreas' SoB to two patches
 
+But those were also developed by you too, right? i.e. it should have a
+Co-developed-by too, otherwise it looks like you only handled the
+patch:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+```
+Example of a patch submitted by the From: author::
 
+        <changelog>
+
+        Co-developed-by: First Co-Author <first@coauthor.example.org>
+        Signed-off-by: First Co-Author <first@coauthor.example.org>
+        Co-developed-by: Second Co-Author <second@coauthor.example.org>
+        Signed-off-by: Second Co-Author <second@coauthor.example.org>
+        Signed-off-by: From Author <from@author.example.org>
+```
+
+Cheers,
+Miguel
