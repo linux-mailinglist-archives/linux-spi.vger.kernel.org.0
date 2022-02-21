@@ -2,49 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7A34BD66D
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Feb 2022 07:56:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 606244BD640
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Feb 2022 07:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345263AbiBUGhH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Feb 2022 01:37:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60730 "EHLO
+        id S235270AbiBUGcx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 21 Feb 2022 01:32:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345294AbiBUGhE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Feb 2022 01:37:04 -0500
-X-Greylist: delayed 304 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 20 Feb 2022 22:36:40 PST
-Received: from m239-7.eu.mailgun.net (m239-7.eu.mailgun.net [185.250.239.7])
-        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id E90C121A6
-        for <linux-spi@vger.kernel.org>; Sun, 20 Feb 2022 22:36:40 -0800 (PST)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=hewittfamily.org.uk;
- q=dns/txt; s=s1; t=1645425400; h=To: References: Message-Id:
- Content-Transfer-Encoding: Cc: Date: In-Reply-To: From: Subject:
- Mime-Version: Content-Type: Sender;
- bh=nh91ABop/kMzqvCnHihv6nbKToFnlhJ3AYmAB1JeUWk=; b=ecBPG241+obwfYs9LdKa1jybI3G68VE3uW3ranYngVAswad3dequYHM8+pPmIuDO8kRvLSpC
- V8xkswAsaBFfiAIeHCwAL+HqEBLINsaDWt5z2kIB9Dy3c0nNKHcTFL2bkunnLrA4zGsS+d21
- Q1S4EwK/6AUdsqMJJ2wby7ulAGqyh0MxVAzqSYz+h+jHQCq/i/qoW5w4ZKj9Wp3xpJdNPAzO
- yIaWn9LKqXib017Pdf3WoRT3DcR4t39efS1prfDpjRD6sVCTyL0mOmjLsSF/372G4k+CX5vm
- QDDRDH2AsVhCbcsybuB22ESU40f0bReb0KXqZLRiaruaLPfN0BdnvQ==
-X-Mailgun-Sending-Ip: 185.250.239.7
-X-Mailgun-Sid: WyJhNzNkZCIsICJsaW51eC1zcGlAdmdlci5rZXJuZWwub3JnIiwgImUzNzIwIl0=
-Received: from mail.hewittfamily.org.uk (<unknown> [87.200.95.144]) by
- smtp-out-n01.prod.eu-central-1.postgun.com with SMTP id
- 621331c5a6f2f5d904897640 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 21 Feb 2022 06:31:33
- GMT
-Sender: andrew@hewittfamily.org.uk
-Received: from smtpclient.apple (unknown [167.99.200.149])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.hewittfamily.org.uk (Postfix) with ESMTPSA id A9BD06A6C53;
-        Mon, 21 Feb 2022 10:31:26 +0400 (+04)
+        with ESMTP id S1345176AbiBUGcv (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Feb 2022 01:32:51 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9811D8;
+        Sun, 20 Feb 2022 22:32:29 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id u1so25192018wrg.11;
+        Sun, 20 Feb 2022 22:32:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=TVB1SAwyejdejCoebVJa4rEH4qtbM8FunJaGvyM3xDM=;
+        b=iM9rYwji7ExpIYsMATDt3yW2TvXSImXKy56t9ZnCBnNRyO+AslIr0JjDxly7meBJNS
+         XPjTZIEJ2MxaBO+A/wWNBg6Z8uq39L8PSFfLo7MV8szZKnCg6cC0lcSz0mxX/HUvJ///
+         TZ5u8EC8YdenrWo/0aeQ854OfRtrNyOZo7BUUubaQZqm4YzwYXu6TfcKhxapndcPhiHY
+         bpuQ3lj0caDNdo7axv8aGGS1HMhqpDpIlrmxt9Eo++ZZcKu2yVr8zZb1sheFDbrnWhn3
+         +CdgL1HoKv+E1pSyfqT9E3g2QrS2ijx701r+jwlN4ZvwQ0UlMKYmXSw6VPyJE35UWduB
+         O52Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=TVB1SAwyejdejCoebVJa4rEH4qtbM8FunJaGvyM3xDM=;
+        b=eoiw5HLgPQO2DTDWeQ+tmi+lAc4hcNGcOpfFnh3zTauoXwM2GOuVZsL1TiW4AUethJ
+         Y7AvHjrcpXZaEQtXrUaIhvybVK0h9bBm8bP4PBt8ifdEBHmEgNUc7ZQ8uenICE+Ei9ww
+         FSB9FKMshA7J9tcJ831cG+2226yyPAnDvSOwn5JF4+wH48/V6nyVKl++ygw/Knd7qQEe
+         Qd2FIVTmoIihBzUyZ0zJteW79d2RzxEuPYOkAG+JbUNxjdLanVBwB+4xqQD2YnpVMbT4
+         Tzi0T+tokbo0PH9HOaHL/qzWsuTcHJZwLsTgK45RkivkeJzM55YMdd0XN3Kanc6dC7PN
+         g31w==
+X-Gm-Message-State: AOAM532guFJl3eOhLRijfFtx93CIXl+gGbDVK8x+hpVc8dw77HlhBXJU
+        dEUpLmG0HvW6NTGabMjR0qg=
+X-Google-Smtp-Source: ABdhPJx+1Angj51NlGm4D2VR44yakbH8bYZ+MvkrSDPFeVRwcN3Ulhy+q7jJf6Yf2bNkid5hRieHAA==
+X-Received: by 2002:a05:6000:258:b0:1e4:eee1:93b9 with SMTP id m24-20020a056000025800b001e4eee193b9mr14735201wrz.558.1645425147536;
+        Sun, 20 Feb 2022 22:32:27 -0800 (PST)
+Received: from smtpclient.apple ([167.99.200.149])
+        by smtp.gmail.com with ESMTPSA id s2sm6429180wmc.45.2022.02.20.22.32.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 20 Feb 2022 22:32:27 -0800 (PST)
 Content-Type: text/plain;
         charset=utf-8
 Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
 Subject: Re: [PATCH 0/6] auxdisplay: Add support for the Titanmec TM1628 7
  segment display controller
-From:   Christian Hewitt <andrew@hewittfamily.org.uk>
+From:   Christian Hewitt <christianshewitt@gmail.com>
 In-Reply-To: <4172e59f-b9d5-d87d-9dbd-a6f683a2173c@gmail.com>
-Date:   Mon, 21 Feb 2022 10:31:16 +0400
+Date:   Mon, 21 Feb 2022 10:32:22 +0400
 Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         =?utf-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
@@ -60,16 +70,13 @@ Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         linux-amlogic@lists.infradead.org
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <5A223478-0404-4D2D-BE7E-85A6E852174F@hewittfamily.org.uk>
+Message-Id: <5B4B8165-5D64-4336-A149-DF55C47D5ACE@gmail.com>
 References: <4172e59f-b9d5-d87d-9dbd-a6f683a2173c@gmail.com>
 To:     Heiner Kallweit <hkallweit1@gmail.com>
 X-Mailer: Apple Mail (2.3693.40.0.1.81)
-X-Synology-Spam-Status: score=3.742, required 5, TO_DN_EQ_ADDR_SOME 0, TO_DN_SOME 0, MV_CASE 0.5, __THREADED 0, __INR_AND_NO_REF 0, FREEMAIL_TO 0, RCVD_COUNT_ZERO 0, FROM_EQ_ENVFROM 0, MIME_TRACE 0, __NOT_SPOOFED 0, __BODY_URI_ONLY 0, MID_RHS_MATCH_FROM 0, NO_RECEIVED -0.001, FROM_HAS_DN 0, FREEMAIL_ENVRCPT 0, TO_MATCH_ENVRCPT_ALL 0, TAGGED_RCPT 0, MIME_GOOD -0.1, SCC_BODY_URI_ONLY 0.833, RCPT_COUNT_TWELVE 0, __HDRS_LCASE_KNOWN 0, SUSPICIOUS_RECIPS 2.51
-X-Synology-Spam-Flag: no
-X-Synology-Virus-Status: no
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,6 +84,7 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+resend from correct mail account:
 
 > On 19 Feb 2022, at 5:13 pm, Heiner Kallweit <hkallweit1@gmail.com> =
 wrote:
@@ -93,20 +101,20 @@ wrote:
 >=20
 > Further changes to the RFC version:
 > - Driver can be built also w/o LED class support, for displays that
->  don't have any symbols to be exposed as LED's.
+> don't have any symbols to be exposed as LED's.
 > - Simplified the code and rewrote a lot of it.
 > - Driver is now kind of a MVP, but functionality should be sufficient
->  for most use cases.
+> for most use cases.
 > - Use the existing 7 segment support in uapi/linux/map_to_7segment.h
->  as suggested by Geert Uytterhoeven.
+> as suggested by Geert Uytterhoeven.
 >=20
 > Note: There's a number of chips from other manufacturers that are
->      almost identical, e.g. FD628, SM1628. Only difference I saw so
->      far is that they partially support other display modes.
->      TM1628: 6x12, 7x11
->      SM1628C: 4x13, 5x12, 6x11, 7x10
->      For typical displays on devices using these chips this
->      difference shouldn't matter.
+>     almost identical, e.g. FD628, SM1628. Only difference I saw so
+>     far is that they partially support other display modes.
+>     TM1628: 6x12, 7x11
+>     SM1628C: 4x13, 5x12, 6x11, 7x10
+>     For typical displays on devices using these chips this
+>     difference shouldn't matter.
 >=20
 > Successfully tested on a TX3 Mini TV box that has an SM1628C and a
 > display with 4 digits and 7 symbols.
@@ -123,8 +131,8 @@ index a39b638282c1..ab3557f8b330 100644
 --- a/drivers/auxdisplay/tm1628.c
 +++ b/drivers/auxdisplay/tm1628.c
 @@ -5,6 +5,7 @@
- * Copyright (c) 2019 Andreas F=C3=A4rber
- */
+* Copyright (c) 2019 Andreas F=C3=A4rber
+*/
 
 +#include <linux/ctype.h>
 #include <linux/delay.h>
@@ -132,14 +140,14 @@ index a39b638282c1..ab3557f8b330 100644
 #include <linux/module.h>
 @@ -327,10 +328,11 @@ static int tm1628_spi_probe(struct spi_device =
 *spi)
-       return device_create_file(&spi->dev, &dev_attr_display_text);
+      return device_create_file(&spi->dev, &dev_attr_display_text);
 }
 
 -static void tm1628_spi_remove(struct spi_device *spi)
 +static int tm1628_spi_remove(struct spi_device *spi)
 {
-       device_remove_file(&spi->dev, &dev_attr_display_text);
-       tm1628_set_display_ctrl(spi, false);
+      device_remove_file(&spi->dev, &dev_attr_display_text);
+      tm1628_set_display_ctrl(spi, false);
 +       return 0;
 }
 
@@ -157,5 +165,4 @@ https://github.com/chewitt/LibreELEC.tv/commit/c8f1ebe6f6c366188f18f9d2b40=
 
 With the include fixup and maybe a Kconfig tweak, for the series:
 
-Tested-by: Christian Hewitt <christianshewitt@gmail.com>
-
+Tested-by: Christian Hewitt <christianshewitt@gmail.com>=
