@@ -2,92 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B764BFCA1
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Feb 2022 16:31:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3012F4BFCA6
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Feb 2022 16:32:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233469AbiBVPbw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 22 Feb 2022 10:31:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
+        id S233346AbiBVPdH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Feb 2022 10:33:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbiBVPbw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Feb 2022 10:31:52 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4413D163053;
-        Tue, 22 Feb 2022 07:31:26 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        with ESMTP id S230478AbiBVPdH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Feb 2022 10:33:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92FEC792D;
+        Tue, 22 Feb 2022 07:32:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E8E261F3A3;
-        Tue, 22 Feb 2022 15:31:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1645543884; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mDPR/RXvsCjUbyhuXvYy8h8gwyiPv74HOWucNF3wYxk=;
-        b=lIS/6beohKMQq+8gS6SQYcDHOi/ruXQaNMzRNoW3jHVhGZc+JZqJvuFFu6bq/4qAuJtIPC
-        h47tif6zGyKNdSGDQNdmvctntW3su9UxqbflWCLMN4A4mGO/UYmiMfB+FDz2Z5CVx1EHo2
-        MQ37RTB+gL/CONYWVUhtMkZuqMrIbjw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1645543884;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mDPR/RXvsCjUbyhuXvYy8h8gwyiPv74HOWucNF3wYxk=;
-        b=ugoYPahRmWnja57J9+RNhmgpFpPRC15aLeQzJRi79k+bbxIb7tI2exn4EmcoUmH1SHy3FV
-        5e2o0hwpoQcXzCAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8C03D13BC3;
-        Tue, 22 Feb 2022 15:31:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sLXXH8wBFWLrJAAAMHmgww
-        (envelope-from <afaerber@suse.de>); Tue, 22 Feb 2022 15:31:24 +0000
-Message-ID: <587391d0-f364-b2b6-399d-8994f4a17385@suse.de>
-Date:   Tue, 22 Feb 2022 16:31:24 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id A357BB81899;
+        Tue, 22 Feb 2022 15:32:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C803C340F4;
+        Tue, 22 Feb 2022 15:32:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645543959;
+        bh=faAoL7FirSWjNy55jYu7eqkfiUMVq2Vo5OiepkX3N08=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=bl+UEg5QaJZxoajp2TaskeWeTKSrLzWyByqmHkRk1Km7HkHqMwDqQiw9GaHleloTU
+         oTcnGOP6qt5aQB1NRQhifAF+GXjzL5MWPP68puZ7HG4IZE3+qsghyK1oLk6SMrRtlx
+         zl/VjUm0bgy5n78ywoMGHz2oBvQAGi0g7gxR9lsyuCMbHvQzJ9SpmDt2CAhBFFM2UQ
+         xRoPPLxE7oHJ9Ysmt2rb6jGt+g6Y44njJBPk18lNXVrK0aHe62IjJh9ldfkS0kUBZl
+         LS+yWz18iqtbx+wXDEeCoIWn+FnJHmHqHBihLrxgnniq5WP8QjsgTG11jzSGbFsrDP
+         KhaweSV8YFPcA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+        Dillon Min <dillon.minfei@gmail.com>,
+        linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220201115142.3999860-1-a.fatoum@pengutronix.de>
+References: <20220201115142.3999860-1-a.fatoum@pengutronix.de>
+Subject: Re: [RFT PATCH] spi: stm32: ignore Rx queue not empty in stm32f4 Tx only mode
+Message-Id: <164554395470.3556326.18373522553071948963.b4-ty@kernel.org>
+Date:   Tue, 22 Feb 2022 15:32:34 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 0/6] auxdisplay: Add support for the Titanmec TM1628 7
- segment display controller
-Content-Language: en-US
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-amlogic@lists.infradead.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        "linux-realtek-soc@lists.infradead.org" 
-        <linux-realtek-soc@lists.infradead.org>
-References: <4172e59f-b9d5-d87d-9dbd-a6f683a2173c@gmail.com>
- <CANiq72mi5fj07cfo6T4jPmp=EiRtE_uDeHHCqjG9h+duPrUMKg@mail.gmail.com>
- <ecdbfb3a-e214-a059-95b9-1ebf2f625295@gmail.com>
- <862fc0e3-6c76-8dea-6725-a6c45ade1ecd@suse.de>
- <09bf3d8a-2902-723b-80d2-0c4d1c24f53d@gmail.com>
- <a890337b-39e4-f796-2d53-05edd2d69c80@suse.de>
- <1530c337-22b5-b20d-27ae-50696344e80f@baylibre.com>
-From:   =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>
-Organization: SUSE Software Solutions Germany GmbH
-In-Reply-To: <1530c337-22b5-b20d-27ae-50696344e80f@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -96,44 +59,41 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 22.02.22 15:48, Neil Armstrong wrote:
-> On 22/02/2022 13:12, Andreas Färber wrote:
->> On 19.02.22 18:16, Heiner Kallweit wrote:
->>> On 19.02.2022 17:07, Andreas Färber wrote:
->>>> [...] (And most Realtek platforms got
->>>> broken by removing the adjustable text base defines.)
->>>>
->>> I'm not aware of the Realtek platform issue, do you have a link to a
->>> related discussion?
->>
->> Realtek has a boot ROM at the beginning of memory space, which has been
->> a problem from the first RFC and for most bootloaders required to tweak
->> the kernel's text offset for successful boot. (Some not Open Source (LK)
->> and/or not openly flashable.)
->>
->> http://lists.infradead.org/pipermail/linux-arm-kernel/2017-February/487718.html
->>
->>
->> In 2020 that arm64 feature got removed without any further discussion:
->>
->> https://lore.kernel.org/all/20200825135440.11288-1-ardb@kernel.org/
+On Tue, 1 Feb 2022 12:51:41 +0100, Ahmad Fatoum wrote:
+> STM32F4_SPI_SR_RXNE and STM32F4_SPI_SR_OVR are distinct bits in the same
+> status register.  ~STM32F4_SPI_SR_OVR | STM32F4_SPI_SR_RXNE is thus
+> equal to ~STM32F4_SPI_SR_OVR.
 > 
-> Note the TEXT_OFFSET is only an issue with Amlogic vendor bootloader,
-> it has never been an issue with mainline U-Boot.
+> The original intention was likely for transmission-only transfers to
+> ignore interrupts both for when the Rx queue has bytes (RXNE) as well
+> as when these bytes haven't been read in time (OVR).
+> 
+> [...]
 
-There is no mainline U-Boot for Realtek DHC (!= Amlogic Meson) though!
+Applied to
 
-More important drivers than LED got blocked here, too, like MMC and USB
-and pinctrl and clk.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-And as hinted above, some Realtek boards come with a vendor LK that I
-can't even patch a downstream version of.
+Thanks!
 
-Regards,
-Andreas
+[1/1] spi: stm32: ignore Rx queue not empty in stm32f4 Tx only mode
+      commit: 5741150c808b2bbeb1017609f3029daf6651b7d5
 
--- 
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5, 90409 Nürnberg, Germany
-GF: Ivo Totev
-HRB 36809 (AG Nürnberg)
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
