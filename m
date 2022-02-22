@@ -2,55 +2,55 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891BF4C014F
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Feb 2022 19:30:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 156934C017B
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Feb 2022 19:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233201AbiBVSbB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 22 Feb 2022 13:31:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
+        id S233666AbiBVShZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Feb 2022 13:37:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234988AbiBVSbA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Feb 2022 13:31:00 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD56DEFF99
-        for <linux-spi@vger.kernel.org>; Tue, 22 Feb 2022 10:30:34 -0800 (PST)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        with ESMTP id S231931AbiBVShZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Feb 2022 13:37:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB01E0AD5;
+        Tue, 22 Feb 2022 10:36:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 909CE82133;
-        Tue, 22 Feb 2022 19:30:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1645554631;
-        bh=RG7G/4yRq2MgeSa72YQHUwoZ6w+iE30qGeH5RtbZkvM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=zM0ErT2XDjL6MAyXaFydSAcOYL9oSRYQ5KxMaXMal6Q31qwyEofpuZs4p0rlaxAHy
-         8DlVdRwz3HfgU70hKl5GCdydx8cy5mabTZeaZU+gdopcy75k97/ELJWDrdqbL1eVMC
-         bQBGi0M55NsffH4MHw2yfBHM136lZczmO+hxW0JWjsAzphhlLCRb4WLousvjNKrAvB
-         gxM9Ye7TNwqxLsmkUCZ6VV1vilLawbieqkmk6wjSC1GKMdoZWyohrwJkX2CrSxV5qg
-         Vvj3sZOK0EVyQ0RwDVOLShG8Jgf3DP0irsg+y8oXNVZZzATxSiC01v19teRqZ8xc0u
-         mIO5pESenoPTQ==
-Message-ID: <8060ae0e-700e-3b72-3ab9-e7ca8e19ad9e@denx.de>
-Date:   Tue, 22 Feb 2022 19:30:31 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6FE161583;
+        Tue, 22 Feb 2022 18:36:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B962FC340E8;
+        Tue, 22 Feb 2022 18:36:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645555017;
+        bh=cZVj2to85O+PQ1olYQUt+4ZXnAEO+ZaqtiSsiAd1RxM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ncoQ56LcvCbF+u+RDOVbS5WMYctSGS9KigK1X7tIBDCpf74Mppj/zc3uqIC64Z9d7
+         pYAHF4JeS9R8WeQ9VZ6Ohf7Ru0Enwxzv82bFJTbmaoEDgHitKd9yU2UOf6yhEChtaj
+         6oqRzOakk4SoVpz6KkRFDaMSNxZhuT5aOguo4/tMK06cXL3kZno46ta0Z+Vi7+32mA
+         V3bgzUfMx0ViTP9Lt5QYYLEZ1dGdmImasTwcgPolvCx7SGFJ43KcCGzycLAxUbOzcY
+         tdvTN/SvINbmqyqyaVWC0wVc6ogksodwqUm8s88Mi5/u3DbKZG3Rd0cu11yYOsjcAL
+         iL8vgnSPjplDA==
+Date:   Tue, 22 Feb 2022 18:36:51 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        skomatineni@nvidia.com, ldewangan@nvidia.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        p.zabel@pengutronix.de
+Subject: Re: [PATCH v2 4/5] spi: tegra210-quad: add acpi support
+Message-ID: <YhUtQ/8Kgcx4OY4S@sirena.org.uk>
+References: <20220222175611.58051-1-kyarlagadda@nvidia.com>
+ <20220222175611.58051-5-kyarlagadda@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] [RFC] spi: cadence-quadspi: Disable DAC on SoCFPGA
-Content-Language: en-US
-To:     Dinh Nguyen <dinguyen@kernel.org>, linux-spi@vger.kernel.org
-Cc:     Pratyush Yadav <p.yadav@ti.com>
-References: <20220221043238.295369-1-marex@denx.de>
- <79280984-e71d-e767-bb67-bd2a2fe31858@kernel.org>
- <ccdc4738-0fb0-d3f6-5c56-d61eb8e8bf33@denx.de>
- <04e70d1a-c07b-e1dc-aea6-36fe9b7ce667@kernel.org>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <04e70d1a-c07b-e1dc-aea6-36fe9b7ce667@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2dt5HGRedkKEQZId"
+Content-Disposition: inline
+In-Reply-To: <20220222175611.58051-5-kyarlagadda@nvidia.com>
+X-Cookie: I smell a wumpus.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,51 +59,45 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 2/22/22 16:49, Dinh Nguyen wrote:
-> 
-> 
-> On 2/21/22 11:05, Marek Vasut wrote:
->> On 2/21/22 17:38, Dinh Nguyen wrote:
->>>
->>>
->>> On 2/20/22 22:32, Marek Vasut wrote:
->>>> On SoCFPGA Gen5, DAC memcpy_fromio() in cqspi_direct_read_execute()
->>>> leads to data abort, disable DAC to avoid triggering it:
->>>>
->>>> Unhandled fault: imprecise external abort (0x1406) at 0x0400d3e9
->>>> [0400d3e9] *pgd=00000000
->>>>
->>>> Signed-off-by: Marek Vasut <marex@denx.de>
->>>> Cc: Dinh Nguyen <dinguyen@kernel.org>
->>>> Cc: Pratyush Yadav <p.yadav@ti.com>
->>>> ---
->>>>   drivers/spi/spi-cadence-quadspi.c | 2 +-
->>>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/spi/spi-cadence-quadspi.c 
->>>> b/drivers/spi/spi-cadence-quadspi.c
->>>> index b808c94641fa6..65f2c2449be09 100644
->>>> --- a/drivers/spi/spi-cadence-quadspi.c
->>>> +++ b/drivers/spi/spi-cadence-quadspi.c
->>>> @@ -1870,7 +1870,7 @@ static const struct cqspi_driver_platdata 
->>>> intel_lgm_qspi = {
->>>>   };
->>>>   static const struct cqspi_driver_platdata socfpga_qspi = {
->>>> -    .quirks = CQSPI_NO_SUPPORT_WR_COMPLETION,
->>>> +    .quirks = CQSPI_DISABLE_DAC_MODE | CQSPI_NO_SUPPORT_WR_COMPLETION,
->>>>   };
->>>>   static const struct cqspi_driver_platdata versal_ospi = {
->>>
->>> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
->>
->> Is this DAC really not working on socfpga gen5 or is there some other 
->> issue ?
-> 
-> I don't know the answer to this question. What is the DAC in the QSPI 
-> module and how do I go about testing it?
 
-DAC = direct access.
+--2dt5HGRedkKEQZId
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-How do you go about testing this -- compile kernel with/without this 
-patch, boot on SoCFPGA Gen5 with QSPI NOR attached, the kernel crashes 
-without this patch on imprecise external abort.
+On Tue, Feb 22, 2022 at 11:26:10PM +0530, Krishna Yarlagadda wrote:
+
+> Add ACPI ID for Tegra QUAD SPI. Switch to common device property calls.
+> Skip clock calls that are not updated in ACPI boot.
+
+> @@ -1377,6 +1400,8 @@ static int __maybe_unused tegra_qspi_runtime_suspen=
+d(struct device *dev)
+>  	struct spi_master *master =3D dev_get_drvdata(dev);
+>  	struct tegra_qspi *tqspi =3D spi_master_get_devdata(master);
+> =20
+> +	if (has_acpi_companion(tqspi->dev))
+> +		return 0;
+>  	/* flush all write which are in PPSB queue by reading back */
+>  	tegra_qspi_readl(tqspi, QSPI_COMMAND1);
+
+As well as clock stuff this is also skipping flushing of pending writes
+- is that intentional?  It's not called out in the changelog and seems
+like something that could cause issues if someone runs on a system where
+the firmware does implement runtime suspend.
+
+--2dt5HGRedkKEQZId
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIVLUIACgkQJNaLcl1U
+h9B91Af/V0Mz9zlkixlXsHowRNpP67V4tM0YmpfXrzB6Y1fCXNS+xNOoCC7CqsD7
+tkhG66C+UKCmENOKOso53ErNiSYDswdKQdawM8fEmRI0Bm2CNhyG6JayCeCmsgCx
+v2AMcW2Kw0pNAWJzR0SqJzreyT7A+zc4IrSt0dq45CFesYbwiayeEX11vzhzEL6z
+8WZwfG1N4bCKWQnt/Fhu7unGmM42hIuWB3dXKm7XZP3+3QxxwUNYOPE6ZSUn6Vyz
+wS9jxAknsbiNB7Nd8fayHaQrBF8w3Tw6Kg4oNLAFx198yz87DvcCUUlr2c2W/zgs
+WRAEZKb3NizNWeBI6yHA0py8jXNEvQ==
+=n2OX
+-----END PGP SIGNATURE-----
+
+--2dt5HGRedkKEQZId--
