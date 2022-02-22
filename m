@@ -2,64 +2,65 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B0494BF7F2
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Feb 2022 13:16:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 619764BF7FA
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Feb 2022 13:19:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbiBVMRR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 22 Feb 2022 07:17:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55076 "EHLO
+        id S231704AbiBVMTw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Feb 2022 07:19:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbiBVMRR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Feb 2022 07:17:17 -0500
+        with ESMTP id S231174AbiBVMTu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Feb 2022 07:19:50 -0500
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9A24A3DB;
-        Tue, 22 Feb 2022 04:16:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58499AD9C;
+        Tue, 22 Feb 2022 04:19:25 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 87AF321102;
-        Tue, 22 Feb 2022 12:16:50 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 91C1621119;
+        Tue, 22 Feb 2022 12:19:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1645532210; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1645532364; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=iVdf8vg0qvzMS+2GhWg8uKMuS0wEUJUmGhQCjRnv8iA=;
-        b=xN0BV/BxKJm7YJCApumTK7Jzkj0N+o/vGum7SA+cr4WsMJq0ceT7pXNDmE9p4lJMxVB5Qu
-        EOyAiOGgcaypZhC6h6g5E+87vqgJ/iz6ul8L71V8Zr7t+8wzExLkQDqWHlUcsoRr7m226L
-        trTgni3RUp5XzYxjOY4BfokGEGeUD1k=
+        bh=q8Aq0Ckoy74UZCe6DtMgK4l1xKOMqpQJP0j1u4pDmBA=;
+        b=nyEYrnboomUbw6rCwTPb7I0dekr6bEn9xChtG9zRkJR3sbUzbhVFb6D5+asxxxpZMdvzo8
+        ByBGxYkf7C12/StskBQvJB2EgHYlOF8NDsGM7pqKJb9Ke9F/XCKIdWr+DHmNUJQizA8hW6
+        39kbTbS2mSaJ1aN94DYWqsIDBEVVC7A=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1645532210;
+        s=susede2_ed25519; t=1645532364;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=iVdf8vg0qvzMS+2GhWg8uKMuS0wEUJUmGhQCjRnv8iA=;
-        b=jqx0APy4xTNeoCtOF2oDQRy3QyzZAdZr0+IWQToeeAn6Gb9UOL6HGy5lhJPouVobl3pcCy
-        WnQNdcob+qcS88DA==
+        bh=q8Aq0Ckoy74UZCe6DtMgK4l1xKOMqpQJP0j1u4pDmBA=;
+        b=ncMPLE1l+dm8/do9nyZnyHtQiSxSCh69BhwyWgnVTFpHWnSlnn2IjQjLF8KEpr5KO3DJoO
+        RMrYwA3l+zhiiLCg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3842713BA0;
-        Tue, 22 Feb 2022 12:16:50 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4760113C1E;
+        Tue, 22 Feb 2022 12:19:24 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id c8OWDDLUFGIyOAAAMHmgww
-        (envelope-from <afaerber@suse.de>); Tue, 22 Feb 2022 12:16:50 +0000
-Message-ID: <f0eeb2f4-b47d-f0d8-2169-388899d1cfdf@suse.de>
-Date:   Tue, 22 Feb 2022 13:16:49 +0100
+        id 7FpJEMzUFGJsOQAAMHmgww
+        (envelope-from <afaerber@suse.de>); Tue, 22 Feb 2022 12:19:24 +0000
+Message-ID: <9b229724-9715-f8cd-6a2e-d7373893f021@suse.de>
+Date:   Tue, 22 Feb 2022 13:19:23 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.1
-Subject: Re: [PATCH v2 5/6] auxdisplay: add support for Titanmec TM1628 7
+Subject: Re: [PATCH v2 0/6] auxdisplay: Add support for the Titanmec TM1628 7
  segment display controller
 Content-Language: en-US
 To:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
 Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Miguel Ojeda <ojeda@kernel.org>,
         Neil Armstrong <narmstrong@baylibre.com>,
         Kevin Hilman <khilman@baylibre.com>,
@@ -71,12 +72,11 @@ Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>
 References: <1f39432b-84e2-e6dc-a6b8-c48ad5cf2210@gmail.com>
- <3facc242-0ce6-9170-1fee-a5ec0a66660a@gmail.com>
- <CAMuHMdUnDQKtGuN+n-t3P8e4nf9VLB+9q8fGyCh643T4Y1Knag@mail.gmail.com>
- <288225b9-85e0-0c46-5d8b-c91f76c796e5@gmail.com>
+ <CANiq72ko6=dYBvbRc5T7Qq_2mxRtq1NpvcV_saMbTDfz0PK1aw@mail.gmail.com>
+ <d8baa907-a8c8-17d3-e724-df490a0fff83@gmail.com>
 From:   =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>
 Organization: SUSE Software Solutions Germany GmbH
-In-Reply-To: <288225b9-85e0-0c46-5d8b-c91f76c796e5@gmail.com>
+In-Reply-To: <d8baa907-a8c8-17d3-e724-df490a0fff83@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -89,66 +89,24 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 22.02.22 10:44, Heiner Kallweit wrote:
-> On 22.02.2022 09:19, Geert Uytterhoeven wrote:
->> Hi Heiner,
->>
->> On Mon, Feb 21, 2022 at 9:26 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
->>> This patch adds support for the Titanmec TM1628 7 segment display
->>> controller. It's based on previous RFC work from Andreas Färber.
->>> The RFC version placed the driver in the LED subsystem, but this was
->>> NAK'ed by the LED maintainer. Therefore I moved the driver to
->>> /drivers/auxdisplay what seems most reasonable to me.
+On 21.02.22 23:57, Heiner Kallweit wrote:
+> On 21.02.2022 23:10, Miguel Ojeda wrote:
+>> On Mon, Feb 21, 2022 at 9:19 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
 >>>
->>> Further changes to the RFC version:
->>> - Driver can be built also w/o LED class support, for displays that
->>>   don't have any symbols to be exposed as LED's.
->>> - Simplified the code and rewrote a lot of it.
->>> - Driver is now kind of a MVP, but functionality should be sufficient
->>>   for most use cases.
->>> - Use the existing 7 segment support in uapi/linux/map_to_7segment.h
->>>   as suggested by Geert Uytterhoeven.
->>>
->>> Note: There's a number of chips from other manufacturers that are
->>>       almost identical, e.g. FD628, SM1628. Only difference I saw so
->>>       far is that they partially support other display modes.
->>>       TM1628: 6x12, 7x11
->>>       SM1628C: 4x13, 5x12, 6x11, 7x10
->>>       For typical displays on devices using these chips this
->>>       difference shouldn't matter.
->>>
->>> Successfully tested on a TX3 Mini TV box that has an SM1628C and a
->>> display with 4 digits and 7 symbols.
->>>
->>> Tested-by: Christian Hewitt <christianshewitt@gmail.com>
->>> Signed-off-by: Andreas Färber <afaerber@suse.de>
->>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+>>> v2:
+>>> - (re-)add Andreas' SoB to two patches
 >>
->> Thanks for your patch!
->>
->>> --- /dev/null
->>> +++ b/drivers/auxdisplay/tm1628.c
->>
->>> +static int tm1628_show_text(struct tm1628 *s)
->>> +{
->>> +       static SEG7_CONVERSION_MAP(map_seg7, MAP_ASCII7SEG_ALPHANUM);
->>
->> This mapping can not be overridden by the user.  Is there any
->> specific reason you didn't make the mapping configurable from sysfs,
->> cfr. map_seg7_{show,store}() in include/uapi/linux/map_to_7segment.h?
+>> But those were also developed by you too, right? i.e. it should have a
+>> Co-developed-by too, otherwise it looks like you only handled the
+>> patch:
 >>
 > 
-> The more features an initial driver version includes, the more discussion
-> topics pop up and make it less likely that we end up with at least something.
-> I think there's a reason why the driver was resting since the initial
-> attempt 2 yrs ago. Therefore I'd like to keep it as a MVP. 
-> If somebody should have the need for add-on features, then they can be
-> added later.
+> Right, about half of the original code was reworked. Let's see whether and
+> which feedback comes for v2. If a v3 should be needed, I'll follow your
+> suggestion.
 
-As I pointed out in your v1, I did implement all that already, as was
-requested by Geert on my RFC:
-
-https://github.com/afaerber/linux/commit/bbecf951348c7de8ba922c6c002a09369b717d82
+The dispute is that he apparently only looked at my RFC but didn't ask
+me or check himself for newer code, which there was.
 
 Regards,
 Andreas
