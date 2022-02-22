@@ -2,157 +2,217 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2C14BF4ED
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Feb 2022 10:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC454BF57A
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Feb 2022 11:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbiBVJpS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 22 Feb 2022 04:45:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
+        id S230447AbiBVKKY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Feb 2022 05:10:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiBVJpS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Feb 2022 04:45:18 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5437158E86;
-        Tue, 22 Feb 2022 01:44:52 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id u18so35496372edt.6;
-        Tue, 22 Feb 2022 01:44:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=y/k/AioN9+eoLWmfmqCmaYerC3/rpiBltJOkbhRfuKo=;
-        b=ggukSYH3F1aj0DqRb/pyNJ3aD9IDXokfr/6mfS3z+2TTpHy3OQu+yuBjkmHC1TJnst
-         LCioxYDGsibKubf7qUMiKZ8DnJGtUGbLLHcbg+phUpEaAiUMk4Y7b0dP43e+bRYN0nfY
-         OWNhAWD5Dwd9W9hG3bt11wgv7zmnaN9sv/djnqw7x4ISDsnp7R04OTpPMhwoF/icARk6
-         KRNAqNa3CjERa6Wzej+W9PfoVFfSjPvOqHMfJxMpbXZxODOfDbGT5rm9BeqlEs3UtRhz
-         /mRK+uhcbpC4zbHQifYsI/Vps6BJb36bBvxG9/qS5Jj40JO6LrvGchFCD1p/KVyleFRl
-         Pvjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=y/k/AioN9+eoLWmfmqCmaYerC3/rpiBltJOkbhRfuKo=;
-        b=fn/OZaPijgGaBn6qcoV8MaE62VYI2+RYJJqHsyJMtugwUkoWcI7zH4qJr0D4Ba1cRy
-         nutOyhqcmCCVV29rccfrKOu6Ihi81et5xFBvsA9l8i84mSiAWXiUCHN2Sj3rHxjIHe3l
-         ROPY17Cta0MLzxeq8BVcUUDQuEfmbGnZPpy1ZoKjZzeMJivhwGTY4HGtAqczxFZ5rW0h
-         PAThVPhK+TUpD1hHSdICp5t+NaGdlVJLdQeCYpY3BFTOx+1ONjRaOoCqkvj55/NBzJB4
-         4q3OmaRQ2+KYQSZC8AW0KfCTU7PjbEL5w82u0+5wJ18bxZH2v2NX6qYD1NkNwZVi+5oD
-         FvYQ==
-X-Gm-Message-State: AOAM531PPu8Pqj8ELaDXwadjByXICaP75j3iL25yLr9gYgCOVWSHAmDc
-        lHMnwz8z/3IrHhnj3aKJGzzKZ8iXtRw=
-X-Google-Smtp-Source: ABdhPJxtKCo6VkE4slXbqR04gcY71XE2ln0AckmC+kbLRg/IAv4KvvOvkQyRYuK4fC37+ROEf9lMNg==
-X-Received: by 2002:a05:6402:268c:b0:411:e086:b7d1 with SMTP id w12-20020a056402268c00b00411e086b7d1mr25128967edd.111.1645523091170;
-        Tue, 22 Feb 2022 01:44:51 -0800 (PST)
-Received: from ?IPV6:2003:ea:8f4d:2b00:5cc0:13e2:26a9:58d0? (p200300ea8f4d2b005cc013e226a958d0.dip0.t-ipconnect.de. [2003:ea:8f4d:2b00:5cc0:13e2:26a9:58d0])
-        by smtp.googlemail.com with ESMTPSA id h8sm9759966edk.14.2022.02.22.01.44.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Feb 2022 01:44:50 -0800 (PST)
-Message-ID: <288225b9-85e0-0c46-5d8b-c91f76c796e5@gmail.com>
-Date:   Tue, 22 Feb 2022 10:44:45 +0100
+        with ESMTP id S230442AbiBVKJt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Feb 2022 05:09:49 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FE11C935;
+        Tue, 22 Feb 2022 02:09:23 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id DAA191F442C2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645524562;
+        bh=JxbXr9ACueoKHRqZRjfnrevBI7Jf+2vW88nX1Uz2Uiw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RiFfI5jInD+h90OnlAlKkj5f+sczBcQFJNBi9knbaDNKGUg2IgKrCVVelakbbbCt8
+         XgqWi16ODlh84vZmd1BEyWnPlKEkBtvctlyI14Pp6M0M+IY0gQZqhR20Em5c8ITtPp
+         NSoDxEHm2gVh6N8X6XYVRwvkupWYTf5C6oJstHt7/c/RsI6nynCoH2pn1gE3CioSTS
+         IBLlT7Pm3/2VZcFdR8ZD00LaEIlB0j8Qn961vdiZgW0cjiWhG49eIZrvEPoKePdIF9
+         vFlzkYKkrtRMD6mZ1PyOCQqNEjAoLKAKUifrz4qQRzyBDQF/d95Dzjtn6LiKnSRS9x
+         lDfbuzkKxCRDg==
+Message-ID: <3d333da3-82cb-acdd-fba0-d555d94fbfa2@collabora.com>
+Date:   Tue, 22 Feb 2022 11:09:19 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH V2 2/6] spi: mediatek: add IPM single mode design support
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>
-References: <1f39432b-84e2-e6dc-a6b8-c48ad5cf2210@gmail.com>
- <3facc242-0ce6-9170-1fee-a5ec0a66660a@gmail.com>
- <CAMuHMdUnDQKtGuN+n-t3P8e4nf9VLB+9q8fGyCh643T4Y1Knag@mail.gmail.com>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v2 5/6] auxdisplay: add support for Titanmec TM1628 7
- segment display controller
-In-Reply-To: <CAMuHMdUnDQKtGuN+n-t3P8e4nf9VLB+9q8fGyCh643T4Y1Knag@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Leilk Liu <leilk.liu@mediatek.com>, Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20220221040717.3729-1-leilk.liu@mediatek.com>
+ <20220221040717.3729-3-leilk.liu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220221040717.3729-3-leilk.liu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 22.02.2022 09:19, Geert Uytterhoeven wrote:
-> Hi Heiner,
+Il 21/02/22 05:07, Leilk Liu ha scritto:
+> this patch add the support of IPM single mode design.
 > 
-> On Mon, Feb 21, 2022 at 9:26 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
->> This patch adds support for the Titanmec TM1628 7 segment display
->> controller. It's based on previous RFC work from Andreas Färber.
->> The RFC version placed the driver in the LED subsystem, but this was
->> NAK'ed by the LED maintainer. Therefore I moved the driver to
->> /drivers/auxdisplay what seems most reasonable to me.
->>
->> Further changes to the RFC version:
->> - Driver can be built also w/o LED class support, for displays that
->>   don't have any symbols to be exposed as LED's.
->> - Simplified the code and rewrote a lot of it.
->> - Driver is now kind of a MVP, but functionality should be sufficient
->>   for most use cases.
->> - Use the existing 7 segment support in uapi/linux/map_to_7segment.h
->>   as suggested by Geert Uytterhoeven.
->>
->> Note: There's a number of chips from other manufacturers that are
->>       almost identical, e.g. FD628, SM1628. Only difference I saw so
->>       far is that they partially support other display modes.
->>       TM1628: 6x12, 7x11
->>       SM1628C: 4x13, 5x12, 6x11, 7x10
->>       For typical displays on devices using these chips this
->>       difference shouldn't matter.
->>
->> Successfully tested on a TX3 Mini TV box that has an SM1628C and a
->> display with 4 digits and 7 symbols.
->>
->> Tested-by: Christian Hewitt <christianshewitt@gmail.com>
->> Signed-off-by: Andreas Färber <afaerber@suse.de>
->> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> ---
+>   drivers/spi/spi-mt65xx.c | 103 +++++++++++++++++++++++++++++++++------
+>   1 file changed, 87 insertions(+), 16 deletions(-)
 > 
-> Thanks for your patch!
-> 
->> --- /dev/null
->> +++ b/drivers/auxdisplay/tm1628.c
-> 
->> +static int tm1628_show_text(struct tm1628 *s)
->> +{
->> +       static SEG7_CONVERSION_MAP(map_seg7, MAP_ASCII7SEG_ALPHANUM);
-> 
-> This mapping can not be overridden by the user.  Is there any
-> specific reason you didn't make the mapping configurable from sysfs,
-> cfr. map_seg7_{show,store}() in include/uapi/linux/map_to_7segment.h?
-> 
+> diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+> index bbfeb8046c17..5fa677a589a4 100644
+> --- a/drivers/spi/spi-mt65xx.c
+> +++ b/drivers/spi/spi-mt65xx.c
+> @@ -31,6 +31,7 @@
+>   #define SPI_CFG2_REG                      0x0028
+>   #define SPI_TX_SRC_REG_64                 0x002c
+>   #define SPI_RX_DST_REG_64                 0x0030
+> +#define SPI_CFG3_IPM_REG                  0x0040
+>   
+>   #define SPI_CFG0_SCK_HIGH_OFFSET          0
+>   #define SPI_CFG0_SCK_LOW_OFFSET           8
+> @@ -48,6 +49,7 @@
+>   #define SPI_CFG1_CS_IDLE_MASK             0xff
+>   #define SPI_CFG1_PACKET_LOOP_MASK         0xff00
+>   #define SPI_CFG1_PACKET_LENGTH_MASK       0x3ff0000
+> +#define SPI_CFG1_IPM_PACKET_LENGTH_MASK   GENMASK(31, 16)
+>   #define SPI_CFG2_SCK_HIGH_OFFSET          0
+>   #define SPI_CFG2_SCK_LOW_OFFSET           16
+>   
+> @@ -68,7 +70,13 @@
+>   #define SPI_CMD_TX_ENDIAN            BIT(15)
+>   #define SPI_CMD_FINISH_IE            BIT(16)
+>   #define SPI_CMD_PAUSE_IE             BIT(17)
+> +#define SPI_CMD_IPM_NONIDLE_MODE     BIT(19)
+> +#define SPI_CMD_IPM_SPIM_LOOP        BIT(21)
+> +#define SPI_CMD_IPM_GET_TICKDLY_OFFSET    22
+>   
+> +#define SPI_CMD_IPM_GET_TICKDLY_MASK	GENMASK(24, 22)
+> +#define SPI_CFG3_IPM_HALF_DUPLEX_DIR		BIT(2)
+> +#define SPI_CFG3_IPM_HALF_DUPLEX_EN		BIT(3)
+>   #define MT8173_SPI_MAX_PAD_SEL 3
+>   
+>   #define MTK_SPI_PAUSE_INT_STATUS 0x2
+> @@ -78,6 +86,7 @@
+>   
+>   #define MTK_SPI_MAX_FIFO_SIZE 32U
+>   #define MTK_SPI_PACKET_SIZE 1024
+> +#define MTK_SPI_IPM_PACKET_SIZE SZ_64K
+>   #define MTK_SPI_32BITS_MASK  (0xffffffff)
+>   
+>   #define DMA_ADDR_EXT_BITS (36)
+> @@ -93,6 +102,9 @@ struct mtk_spi_compatible {
+>   	bool dma_ext;
+>   	/* some IC no need unprepare SPI clk */
+>   	bool no_need_unprepare;
+> +	/* IPM design improve some single mode features */
+> +	bool ipm_design;
+> +
+>   };
+>   
+>   struct mtk_spi {
+> @@ -116,6 +128,12 @@ static const struct mtk_spi_compatible mt2712_compat = {
+>   	.must_tx = true,
+>   };
+>   
+> +static const struct mtk_spi_compatible ipm_compat_single = {
+> +	.enhance_timing = true,
+> +	.dma_ext = true,
+> +	.ipm_design = true,
+> +};
+> +
+>   static const struct mtk_spi_compatible mt6765_compat = {
+>   	.need_pad_sel = true,
+>   	.must_tx = true,
+> @@ -157,6 +175,9 @@ static const struct mtk_chip_config mtk_default_chip_info = {
+>   };
+>   
+>   static const struct of_device_id mtk_spi_of_match[] = {
+> +	{ .compatible = "mediatek,ipm-spi-single",
+> +		.data = (void *)&ipm_compat_single,
+> +	},
+>   	{ .compatible = "mediatek,mt2701-spi",
+>   		.data = (void *)&mtk_common_compat,
+>   	},
+> @@ -275,12 +296,11 @@ static int mtk_spi_set_hw_cs_timing(struct spi_device *spi)
+>   	return 0;
+>   }
+>   
+> -static int mtk_spi_prepare_message(struct spi_master *master,
+> -				   struct spi_message *msg)
+> +static int mtk_spi_hw_init(struct spi_master *master,
+> +			   struct spi_device *spi)
+>   {
+>   	u16 cpha, cpol;
+>   	u32 reg_val;
+> -	struct spi_device *spi = msg->spi;
+>   	struct mtk_chip_config *chip_config = spi->controller_data;
+>   	struct mtk_spi *mdata = spi_master_get_devdata(master);
+>   
+> @@ -288,6 +308,15 @@ static int mtk_spi_prepare_message(struct spi_master *master,
+>   	cpol = spi->mode & SPI_CPOL ? 1 : 0;
+>   
+>   	reg_val = readl(mdata->base + SPI_CMD_REG);
+> +	if (mdata->dev_comp->ipm_design) {
+> +		/* SPI transfer without idle time until packet length done */
+> +		reg_val |= SPI_CMD_IPM_NONIDLE_MODE;
+> +		if (spi->mode & SPI_LOOP)
+> +			reg_val |= SPI_CMD_IPM_SPIM_LOOP;
+> +		else
+> +			reg_val &= ~SPI_CMD_IPM_SPIM_LOOP;
+> +	}
+> +
+>   	if (cpha)
+>   		reg_val |= SPI_CMD_CPHA;
+>   	else
+> @@ -344,18 +373,33 @@ static int mtk_spi_prepare_message(struct spi_master *master,
+>   		writel(mdata->pad_sel[spi->chip_select],
+>   		       mdata->base + SPI_PAD_SEL_REG);
+>   
+> -	/* tick delay */
+> -	reg_val = readl(mdata->base + SPI_CFG1_REG);
+> -	reg_val &= ~SPI_CFG1_GET_TICK_DLY_MASK;
+> -	reg_val |= ((chip_config->tick_delay & 0x7)
+> -		<< SPI_CFG1_GET_TICK_DLY_OFFSET);
+> -	writel(reg_val, mdata->base + SPI_CFG1_REG);
 
-The more features an initial driver version includes, the more discussion
-topics pop up and make it less likely that we end up with at least something.
-I think there's a reason why the driver was resting since the initial
-attempt 2 yrs ago. Therefore I'd like to keep it as a MVP. 
-If somebody should have the need for add-on features, then they can be
-added later.
+Hello Leilk,
 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
+with this change, you are excluding this code from MT2712: is that
+intentional?
+If it is, then this should reside in a different commit with a Fixes
+tag, also explaining the reason for not setting the tick delay on
+that SoC.
 
-Heiner
+Also, please don't remove the /* tick delay */ comment.
 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+Regards,
+Angelo
+
+> +	if (mdata->dev_comp->enhance_timing) {
+> +		if (mdata->dev_comp->ipm_design) {
+> +			reg_val = readl(mdata->base + SPI_CMD_REG);
+> +			reg_val &= ~SPI_CMD_IPM_GET_TICKDLY_MASK;
+> +			reg_val |= ((chip_config->tick_delay & 0x7)
+> +				   << SPI_CMD_IPM_GET_TICKDLY_OFFSET);
+> +			writel(reg_val, mdata->base + SPI_CMD_REG);
+> +		} else {
+> +			reg_val = readl(mdata->base + SPI_CFG1_REG);
+> +			reg_val &= ~SPI_CFG1_GET_TICK_DLY_MASK;
+> +			reg_val |= ((chip_config->tick_delay & 0x7)
+> +				<< SPI_CFG1_GET_TICK_DLY_OFFSET);
+> +			writel(reg_val, mdata->base + SPI_CFG1_REG);
+> +		}
+> +	}
+>   
+>   	/* set hw cs timing */
+>   	mtk_spi_set_hw_cs_timing(spi);
+>   	return 0;
+>   }
 
