@@ -2,174 +2,158 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028FD4C1A8B
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Feb 2022 19:02:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE95A4C1B0C
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Feb 2022 19:39:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240484AbiBWSDK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 23 Feb 2022 13:03:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32870 "EHLO
+        id S243976AbiBWSjk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 23 Feb 2022 13:39:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241883AbiBWSDJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Feb 2022 13:03:09 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CD043EE4;
-        Wed, 23 Feb 2022 10:02:41 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id r13so31081589ejd.5;
-        Wed, 23 Feb 2022 10:02:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=kKy0SIhSKIu0kr4V4JEIbxoglz4OmTrfglh5tt6nsYg=;
-        b=k5evABcfUyMDmcpbRWLMKTTEaE66zAD51+aTidnEBLz/X0eLhEfO4FfyJROQfgKKkZ
-         6NFb0sXaXWJXY4YS2U50ElYdvQcEPC3gtcXu/5zIued4WEl/3wU3n4B2GwqLFVuu2Mp5
-         hAJTUC7df+NVZTVWBjobcwliXZEz4e4GljvtB1kbs5m/qTrDGWxz6AsrMnZZfTtlVqMf
-         wvws7+tf6RPO1f5b48wBrNRKEdOSFUDUtdnma0e8Zd7I0eKgJwfqRp4eEwarceFzh+Qv
-         YlPE0PSGOIA3drZxTWuyFj+SfjB/u86wgMNEE6wgRLvgk81gIEn5/LJyeFVCnRvwg6Gx
-         goag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=kKy0SIhSKIu0kr4V4JEIbxoglz4OmTrfglh5tt6nsYg=;
-        b=S483reHrwKeieU01UVoGIN+uZGZHZqL5PLQ4YEGOI3ygmrmgE5XDdANViIrSuPhXgK
-         MAAdjtFLWcDk+RGD0u60Ex6vikl+ethncO5KIvFO2WFOIlHYMK32wG7kufPa5y+ILn1f
-         VeNxcd/uamCECpiRe/3aBRw7kg8rqPppzGfUfHTh3nFhY4XloRWs2KOgDNUqCS+1xQ9D
-         Jjq2uFiblLqfJa3JXpBKRuFMqwiIeYiikIAvnFn3M02he66V1qPlp1iEnckAtkTKkP/p
-         M5uqLuy5S4/X6gK8/DJTQamXZoVhKE4TRc1g2m/n10/MyteAi7mvKry4AkgKFfzvNBap
-         Rj5g==
-X-Gm-Message-State: AOAM533/NQYnyivdTtdoj5Ueilph8mtMzFi/pfrb6P0mVHGA13AnpF+i
-        ZUOuLe+NDoh5Vz9kVIdE1U8=
-X-Google-Smtp-Source: ABdhPJw5Ridx0IVbRGILzyG7eR4owfLekmgpSCrFo3IamQ1/zAZc80600sF7xC0hx1HShrZ57axLlA==
-X-Received: by 2002:a17:906:91c8:b0:6c5:76a6:688b with SMTP id b8-20020a17090691c800b006c576a6688bmr719712ejx.174.1645639360129;
-        Wed, 23 Feb 2022 10:02:40 -0800 (PST)
-Received: from ?IPV6:2003:ea:8f4d:2b00:d12c:c0a:f603:b44d? (p200300ea8f4d2b00d12c0c0af603b44d.dip0.t-ipconnect.de. [2003:ea:8f4d:2b00:d12c:c0a:f603:b44d])
-        by smtp.googlemail.com with ESMTPSA id d18sm148151ejd.95.2022.02.23.10.02.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 10:02:39 -0800 (PST)
-Message-ID: <b0cb189b-8015-bf2b-5852-b2e42bc79bb2@gmail.com>
-Date:   Wed, 23 Feb 2022 19:02:16 +0100
+        with ESMTP id S237880AbiBWSjk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Feb 2022 13:39:40 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543F449CBA;
+        Wed, 23 Feb 2022 10:39:11 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21NIcp5C012312;
+        Wed, 23 Feb 2022 12:38:51 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1645641531;
+        bh=VlmLvNgPCe5L7g2q46zh3SU4EKwQf3NcvwX8kmi+hUA=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=xKURzZxvW+WP32Fpl1fCWJ3EEqsRpzEMUb/t94kLSXojbDmZkQY40tDTRrLPsy3Ys
+         px4LKDr3kAHZKAL36DRdY80IxrkvrMLIolj5woEvWL7Cn9bvGT8eaQGrwxL93v4Y8P
+         wUeSKqdkX3cQHB33RXSXLTu4V/qcTuLjiFt5T+NE=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21NIcpQO112522
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 23 Feb 2022 12:38:51 -0600
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 23
+ Feb 2022 12:38:50 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 23 Feb 2022 12:38:50 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21NIcoo4017359;
+        Wed, 23 Feb 2022 12:38:50 -0600
+Date:   Thu, 24 Feb 2022 00:08:49 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     <Tudor.Ambarus@microchip.com>
+CC:     <michael@walle.cc>, <broonie@kernel.org>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <Nicolas.Ferre@microchip.com>,
+        <zhengxunli@mxic.com.tw>, <jaimeliao@mxic.com.tw>
+Subject: Re: [PATCH 0/4] spi-mem: Allow specifying the byte order in DTR mode
+Message-ID: <20220223183849.xcwciv2ybnkdnauk@ti.com>
+References: <20220218145900.1440045-1-tudor.ambarus@microchip.com>
+ <44f655d027b49b87065915f6ba2744d2@walle.cc>
+ <81d7c569-d6c2-9167-e007-eda72f34842b@microchip.com>
+ <23fbbf2dde387e3832b4ca23d46816c0@walle.cc>
+ <7cd74ef3-5a7d-4e65-3436-ee3399ca56a3@microchip.com>
+ <e39d06684b8f3a63103f40f0e99e030e@walle.cc>
+ <3cd510ad-a6ab-d4a0-92e3-9156a0c7ddbf@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: [PATCH v3 5/5] arm64: dts: meson-gxl-s905w-tx3-mini: add support for
- the 7 segment display
-Content-Language: en-US
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Miguel Ojeda <ojeda@kernel.org>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-References: <4eb7b036-a9b9-3bd2-4e84-f56ba4b1a740@gmail.com>
-In-Reply-To: <4eb7b036-a9b9-3bd2-4e84-f56ba4b1a740@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <3cd510ad-a6ab-d4a0-92e3-9156a0c7ddbf@microchip.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This patch adds support for the 7 segment display of the device.
+Hi Tudor,
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
- .../dts/amlogic/meson-gxl-s905w-tx3-mini.dts  | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
+On 22/02/22 02:43PM, Tudor.Ambarus@microchip.com wrote:
+> On 2/22/22 16:27, Michael Walle wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > Am 2022-02-22 15:23, schrieb Tudor.Ambarus@microchip.com:
+> >> On 2/22/22 16:13, Michael Walle wrote:
+> >>> EXTERNAL EMAIL: Do not click links or open attachments unless you know
+> >>> the content is safe
+> >>>
+> >>> Am 2022-02-22 14:54, schrieb Tudor.Ambarus@microchip.com:
+> >>>> On 2/21/22 09:44, Michael Walle wrote:
+> >>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you
+> >>>>> know
+> >>>>> the content is safe
+> >>>>>
+> >>>>> Am 2022-02-18 15:58, schrieb Tudor Ambarus:
+> >>>>>> Fortunately there are controllers
+> >>>>>> that can swap back the bytes at runtime, fixing the endiannesses.
+> >>>>>> Provide
+> >>>>>> a way for the upper layers to specify the byte order in DTR mode.
+> >>>>>
+> >>>>> Are there any patches for the atmel-quadspi yet? What happens if
+> >>>>
+> >>>> not public, but will publish them these days.
+> >>>>
+> >>>>> the controller doesn't support it? Will there be a software
+> >>>>> fallback?
+> >>>>
+> >>>> no need for a fallback, the controller can ignore
+> >>>> op->data.dtr_bswap16
+> >>>> if
+> >>>> it can't swap bytes.
+> >>>
+> >>> I don't understand. If the controller doesn't swap the 16bit values,
+> >>> you will read the wrong content, no?
+> >>>
+> >>
+> >> In linux no, because macronix swaps bytes on a 2 byte boundary both on
+> >> reads and on page program. The problem is when you mix 8D-8D-8D mode
+> >> and
+> >> 1-1-1 mode along the boot stages. Let's assume you write all boot
+> >> binaries
+> >> in 1-1-1 mode. When reaching u-boot if you enable 8D-8D-8D mode, when
+> >> u-boot
+> >> will try to get the kernel it will fail, as the flash swaps the bytes
+> >> compared
+> >> to what was written with 1-1-1 mode. You write D0 D1 D2 D3 in 1-1-1
+> >> mode and
+> >> when reaching u-boot you will read D1 D0 D3 D2 and it will mess the
+> >> kernel image.
+> > 
+> > But you have to consider also 3rd parties, like an external programmer
+> > or
+> 
+> Why? If you use the same mode when reading and writing, everything is fine.
+> I'm not sure what's your suggestion here.
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-tx3-mini.dts b/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-tx3-mini.dts
-index 6705c2082..20bbd931e 100644
---- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-tx3-mini.dts
-+++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-tx3-mini.dts
-@@ -10,6 +10,7 @@
- 
- #include "meson-gxl-s905x.dtsi"
- #include "meson-gx-p23x-q20x.dtsi"
-+#include <dt-bindings/leds/common.h>
- 
- / {
- 	compatible = "oranth,tx3-mini", "amlogic,s905w", "amlogic,meson-gxl";
-@@ -19,6 +20,64 @@ memory@0 {
- 		device_type = "memory";
- 		reg = <0x0 0x0 0x0 0x40000000>; /* 1 GiB or 2 GiB */
- 	};
-+
-+	spi {
-+		compatible = "spi-gpio";
-+		sck-gpios = <&gpio GPIODV_27  GPIO_ACTIVE_HIGH>;
-+		mosi-gpios = <&gpio GPIODV_26 GPIO_ACTIVE_HIGH>;
-+		cs-gpios = <&gpio_ao GPIOAO_4 GPIO_ACTIVE_LOW>;
-+		num-chipselects = <1>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		tm1628: led-controller@0 {
-+			compatible = "titanmec,tm1628";
-+			reg = <0>;
-+			spi-3wire;
-+			spi-lsb-first;
-+			spi-rx-delay-us = <1>;
-+			spi-max-frequency = <500000>;
-+			#address-cells = <2>;
-+			#size-cells = <0>;
-+
-+			segment-mapping = /bits/ 8 <4 5 6 1 2 3 7>;
-+			grid = /bits/ 8 <4 3 2 1>;
-+
-+			alarm@5,1 {
-+				reg = <5 1>;
-+				function = LED_FUNCTION_ALARM;
-+			};
-+
-+			usb@5,2 {
-+				reg = <5 2>;
-+				function = LED_FUNCTION_USB;
-+			};
-+			play@5,3 {
-+				reg = <5 3>;
-+				function = "play";
-+			};
-+
-+			pause@5,4 {
-+				reg = <5 4>;
-+				function = "pause";
-+			};
-+
-+			colon@5,5 {
-+				reg = <5 5>;
-+				function = "colon";
-+			};
-+
-+			lan@5,6 {
-+				reg = <5 6>;
-+				function = LED_FUNCTION_LAN;
-+			};
-+
-+			wlan@5,7 {
-+				reg = <5 7>;
-+				function = LED_FUNCTION_WLAN;
-+			};
-+		};
-+	};
- };
- 
- &ir {
+So our stance here is that we don't care about external programs?
+
+If that is the case then why bother with all this anyway? Since the swap 
+happens at both page program and read, what you write is what you read 
+back. Who cares the order stored in the actual flash memory as long as 
+the data read is correct?
+
+If we do care about external programs, then what would happen if the
+external program writes data in 8D-8D-8D mode _without_ swapping the 
+bytes? This would also cause data corruption. You can't control what 
+they mode they use, and you can't detect it later either.
+
+I think there is no winning here. You just have to say that external 
+programs should write in 8D-8D-8D mode or it won't boot.
+
+> 
+> > another OS. So, there has to be *one correct* way of writing/reading
+> > these
+> > bytes.
+> > 
+> 
+> 
+
 -- 
-2.35.1
-
-
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
