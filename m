@@ -2,132 +2,187 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6B74C1CF3
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Feb 2022 21:13:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EF94C1D27
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Feb 2022 21:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240574AbiBWUNw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 23 Feb 2022 15:13:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
+        id S241216AbiBWU2p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 23 Feb 2022 15:28:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240070AbiBWUNu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Feb 2022 15:13:50 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15E64CD58
-        for <linux-spi@vger.kernel.org>; Wed, 23 Feb 2022 12:13:22 -0800 (PST)
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E2A9E3FCA5
-        for <linux-spi@vger.kernel.org>; Wed, 23 Feb 2022 20:13:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645647200;
-        bh=iwWa9JcbVhEYFFR9LsmnA7bsxJWJbrU0gOV0sfgjYeA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=cI/tJAvy+59rX/HeN0ACfqpYH5S3izKFMYoFoFAgkbOSW5iIvD8tW4zj1SbRaccEb
-         jCDS62WhBfKKaAjAIpAD05STZpNB5yss5fyENkCEFadTAaT8qNANQ4I7y62ylKgKSj
-         bIRR6DMN/7Xi0OsqknNjCOQSHMPz8IOcl2Fn1oMyMONhPtMibRmCVJmXMQYlPIf6it
-         Z2tF91HFd6mBVj5imC/U54rO6FfirhYvha4IZ1w4H3CaMSlkil/MwNHyJHH436MBRq
-         qO8zkcpx3eXDBUeJxNCuF9tczD6T2qe6D7YCzOwTa/+GKQeN0yqAaY4c259htijkBB
-         rz/3ukAoTfC6g==
-Received: by mail-lj1-f199.google.com with SMTP id 20-20020a2e0914000000b0024635d136ddso5971585ljj.22
-        for <linux-spi@vger.kernel.org>; Wed, 23 Feb 2022 12:13:20 -0800 (PST)
+        with ESMTP id S240361AbiBWU2o (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Feb 2022 15:28:44 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713214D63E;
+        Wed, 23 Feb 2022 12:28:16 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id d62so194014iog.13;
+        Wed, 23 Feb 2022 12:28:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=j3u+xo/IEURdRuin0oiVWN0xAJWJDqfhSkcI9D3SfbI=;
+        b=HbEIXELccuOf0hWVOgXBf/snUQeXov/yYyjP2y/iHQ1N8apQnriYHgb1QiDBCRjucB
+         GFA1t85Aer1wIUGOFXAPvtAmhlxBWB0xgpkk21J9b2dz+QAFk2e2BgDDyz8va5phPiuX
+         wVAgGAEIrYi9HkLGRNr/Ttsc4nCSrxZWRZY9Dijt94m59kJFy1xrgFriprUcxnAQG3Cb
+         DrMoIRMeriV+iic5UYI/Z2rf248LdxDKF+kZ2S4oBD80JEOMH4bP7vZZjJ4jLtvzyCFP
+         f2OBsAsTCoSwAZNuJsxC0cpSLu1A0hCqprC2++26DQ1GD+LHcUx5Z/KvePQwLIdVMnB8
+         PlTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iwWa9JcbVhEYFFR9LsmnA7bsxJWJbrU0gOV0sfgjYeA=;
-        b=0EHJ2xQymomf2ByWhjBqnI6z29kUqwscr+btyP1IR3DwBw6l4ElWOLY+D7lyOF8eX7
-         wVAZRVh74/CbjpiaYesn6zBmOoh/xoj6+yPhVvObI52i5lkljjp2jGznDp/gSNpN9ogg
-         LUmgIOUUO/yM0/voF70hoasP9bsMl7j2rklyxkSLvlK/TBWZxspovZNgY3M6P0R5kyVK
-         4FC9tVUvewKFSc2xa9CJp8Rs3j02WK9yizgMXcs6cCIvjRvATA7TAdhFwf7iqu4m5yVE
-         uJ+KEnhPjE1Xp6XT7GIfEcIwEwNj4TZMrdozKW53uZqRn/Hc78NuIvwKXNKByFoppZuD
-         IQHA==
-X-Gm-Message-State: AOAM531YElEZOD2M5LUzDnEPVOsYNOOzeNTglhUr8Y7H1bfmT/xThUiU
-        g0NBj+gm+ap18imOpHrUmUZlr88oRwIcMFr8RxJprHsbEjH4TCAsYHgrpe5SxznaUP6gT/XqFqW
-        JSWUKjwivbC6xcRyTNTZV3UwmI/LGCLPixVNlZA==
-X-Received: by 2002:a50:d4d2:0:b0:410:9fa2:60d6 with SMTP id e18-20020a50d4d2000000b004109fa260d6mr1046095edj.35.1645647190030;
-        Wed, 23 Feb 2022 12:13:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz26puqYUhlyjvmoVu/kDMW076CFmPiGqR/4gF9iezSP9z6kTJySAPUmRGeoBQCBAPnogL/Qg==
-X-Received: by 2002:a50:d4d2:0:b0:410:9fa2:60d6 with SMTP id e18-20020a50d4d2000000b004109fa260d6mr1046041edj.35.1645647189826;
-        Wed, 23 Feb 2022 12:13:09 -0800 (PST)
-Received: from [192.168.0.127] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id ee30sm359292edb.4.2022.02.23.12.13.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 12:13:09 -0800 (PST)
-Message-ID: <ab308509-0f81-6f6b-7b94-0ac1086de53a@canonical.com>
-Date:   Wed, 23 Feb 2022 21:13:07 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=j3u+xo/IEURdRuin0oiVWN0xAJWJDqfhSkcI9D3SfbI=;
+        b=ObNZYI/EwiHubX37TC5I0i78AjaJrk+sZEM6dgh87bA2GPT0ewCmIQY7xdCRZ83J8V
+         zT5Qy3y/tbD/nnOzmHfDMaJ4f8G+eI2ZFn4tYUMJwhXD7qgo/jk6atmcMoYkt/+EVIUN
+         K/YMMRGSmek6eszer0gpsbjGefXnF3ywbdIXh0OUzO0fDllNkHfvCMIKz6Bbg0gmZgMH
+         8k2/EVjISp66E1HpYT+BUExqxWqbqGR689CiWZNr0bezzbJCjerFqvP4NrojkkV8P4tv
+         40Hj6L/7+kEYbuip8J+tXQEMYnm08dpoDxFaVMS6sjpF0z7Lx9Sjfz6mysCGbpWEwmUZ
+         9L0g==
+X-Gm-Message-State: AOAM533cKy2p4V6kuTh74dSTitCeFXNwVGGpT3VO+anTgde9KspgnFUd
+        3VRK614WX58fhGvdvUp+Bybb2Fg7kTz7DedHfGM=
+X-Google-Smtp-Source: ABdhPJxDbCKBFfm9B/Fyen9WfJDQ4/pWumus5ny8gK7Ns5ZEcNWZuqum9MH+JjV6MrvcXvPBGWuuoR+i6zvcIt8dD0c=
+X-Received: by 2002:a05:6638:204d:b0:314:a290:48c with SMTP id
+ t13-20020a056638204d00b00314a290048cmr1124167jaj.264.1645648095765; Wed, 23
+ Feb 2022 12:28:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 07/11] spi: use helper for safer setting of
- driver_override
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-References: <20220223191310.347669-1-krzysztof.kozlowski@canonical.com>
- <20220223191441.348109-1-krzysztof.kozlowski@canonical.com>
- <YhaTWiSQl6pTVxqC@sirena.org.uk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <YhaTWiSQl6pTVxqC@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <4eb7b036-a9b9-3bd2-4e84-f56ba4b1a740@gmail.com> <944317db-b659-cb36-addf-c33623a4ff60@gmail.com>
+In-Reply-To: <944317db-b659-cb36-addf-c33623a4ff60@gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 23 Feb 2022 21:28:04 +0100
+Message-ID: <CANiq72kdeuJhaEUOBAB3uYm9SA4Wm0U5=DNgxFMxiGDacUgaBA@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] auxdisplay: add support for Titanmec TM1628 7
+ segment display controller
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 23/02/2022 21:04, Mark Brown wrote:
-> On Wed, Feb 23, 2022 at 08:14:37PM +0100, Krzysztof Kozlowski wrote:
-> 
->> Remove also "const" from the definition of spi_device.driver_override,
->> because it is not correct.  The SPI driver already treats it as
->> dynamic, not const, memory.
-> 
-> We don't modify the string do we, we just allocate a new one?
+On Wed, Feb 23, 2022 at 7:02 PM Heiner Kallweit <hkallweit1@gmail.com> wrot=
+e:
+>
+> Co-Developed-by: Heiner Kallweit <hkallweit1@gmail.com>
 
-Actually you're right - the SPI and VDPA implementations operate on
-"const char *". The others do not, so I can convert them to "const char
-*". Thanks!
+If you (Heiner) are going to be the "From" author, then this line
+should not be here.
 
-Best regards,
-Krzysztof
+> +         Say Y to enable support for Titan Micro Electronics TM1628
+> +         LED controller.
+> +         It's a 3-wire SPI device controlling a two-dimensional grid of
+> +         LEDs. Dimming is applied to all outputs through an internal PWM=
+.
+
+Maybe a newline between paragraphs?
+
+> + * Copyright (c) 2019 Andreas F=C3=A4rber
+
+...here: should there be entries for you (Heiner) too? If not, should
+Andreas be the "From" author?
+
+This also applies to the `MODULE_AUTHOR`.
+
+Also it may be a good idea to add the emails:
+
+    MODULE_AUTHOR("Andreas F=C3=A4rber <afaerber@suse.de>");
+    MODULE_AUTHOR("Heiner Kallweit <hkallweit1@gmail.com>");
+
+(You may also want to consider adding an entry on `MAINTAINERS`).
+
+> +       u8 cmd =3D TM1628_CMD_DISPLAY_MODE | grid_mode;
+
+Consider using `const` for some of the variables.
+
+> +       for (i =3D 0; i < s->grid_size; i++) {
+> +               int pos =3D s->grid[i] - 1;
+> +
+> +               if (i < msg_len) {
+
+Consider inverting the condition, doing the set to `0` + `continue;`
+to avoid the indentation.
+
+> +       struct tm1628_led *led =3D container_of(led_cdev, struct tm1628_l=
+ed, leddev);
+> +       struct tm1628 *s =3D led->ctrl;
+> +       int offset;
+> +       __le16 bit;
+
+Style: sometimes the variables are initialized right away using a
+value from above, but other times they are done below.
+
+> +       if (count > s->grid_size + 1) /* consider trailing newline */
+
+Style: sometimes comments are trailing the line, others are above.
+Also, sometimes they start with uppercase, but in other cases they do
+not.
+
+Also, about the `+ 1`: is it possible that sysfs gives us a buffer
+full of `isprint()`? i.e. is it possible that `grid_size =3D=3D
+MAX_GRID_SIZE` and `count =3D=3D MAX_GRID_SIZE + 1` and then we perform an
+out-of-bounds store to `MAX_GRID_SIZE + 2` in `text`?
+
+> +       ret =3D tm1628_write_data(spi, 0, MAX_GRID_SIZE);
+> +       if (ret)
+> +               return ret;
+> +       /* Assume that subsequent SPI transfers will be ok if first was o=
+k */
+
+If not, is there a consequence? i.e. why wouldn't one check and fail
+similarly in the `tm1628_set_*` calls below?
+
+> +       if (!IS_REACHABLE(CONFIG_LEDS_CLASS))
+> +               goto no_leds;
+
+What about putting the code in the `if` body (negating the condition)?
+
+> +       num_leds =3D 0;
+
+This is reusing the variable for a different purpose, no? i.e. if we
+did not get here, we would have no leds, yet we would report the
+number above.
+
+> +       device_for_each_child_node(&spi->dev, child) {
+> +               u32 reg[2];
+> +
+> +               ret =3D fwnode_property_read_u32_array(child, "reg", reg,=
+ 2);
+> +               if (ret) {
+> +                       dev_err(&spi->dev, "Reading %s reg property faile=
+d (%d)\n",
+> +                               fwnode_get_name(child), ret);
+
+Is a failure expected? i.e. this `continue;`s, but should it fail or
+is it OK to proceed?
+
+> +       for (i =3D 0; i < 7; i++) {
+
+Maybe a `#define` for several of the `7`s around?
+
+> +static void tm1628_spi_remove(struct spi_device *spi)
+
+Doesn't `.remove` return `int`?
+
+Thanks!
+
+Cheers,
+Miguel
