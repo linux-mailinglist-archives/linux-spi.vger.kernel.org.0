@@ -2,187 +2,305 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4EF94C1D27
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Feb 2022 21:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B68B74C1DC8
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Feb 2022 22:33:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241216AbiBWU2p (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 23 Feb 2022 15:28:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
+        id S242799AbiBWVdv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 23 Feb 2022 16:33:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240361AbiBWU2o (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Feb 2022 15:28:44 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713214D63E;
-        Wed, 23 Feb 2022 12:28:16 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id d62so194014iog.13;
-        Wed, 23 Feb 2022 12:28:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=j3u+xo/IEURdRuin0oiVWN0xAJWJDqfhSkcI9D3SfbI=;
-        b=HbEIXELccuOf0hWVOgXBf/snUQeXov/yYyjP2y/iHQ1N8apQnriYHgb1QiDBCRjucB
-         GFA1t85Aer1wIUGOFXAPvtAmhlxBWB0xgpkk21J9b2dz+QAFk2e2BgDDyz8va5phPiuX
-         wVAgGAEIrYi9HkLGRNr/Ttsc4nCSrxZWRZY9Dijt94m59kJFy1xrgFriprUcxnAQG3Cb
-         DrMoIRMeriV+iic5UYI/Z2rf248LdxDKF+kZ2S4oBD80JEOMH4bP7vZZjJ4jLtvzyCFP
-         f2OBsAsTCoSwAZNuJsxC0cpSLu1A0hCqprC2++26DQ1GD+LHcUx5Z/KvePQwLIdVMnB8
-         PlTQ==
+        with ESMTP id S242756AbiBWVdu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Feb 2022 16:33:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57E354F458
+        for <linux-spi@vger.kernel.org>; Wed, 23 Feb 2022 13:33:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645652000;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JVrDSsHDee470/2N5kdB0CUYnm9UIRcjrM+Vqrir8YU=;
+        b=RAzwl9Sez1TeT+nmEa1yYBZAZQ4KRu+18SqJ5YvCiLsN5ZoOFX4CZPFTlGdfYriTr4/+WA
+        XXnR0ENpAnH0WVYQ6IDWFU8hF6VB+UXAFAgohlr+Zsldn+5r5XNapYpdZ3IxnHR1NhHHKK
+        OVHzWqSkiwNvtpVRgw7agSTzlkdlpqo=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-329-ZNWajGVeMAuimyxEktmsFg-1; Wed, 23 Feb 2022 16:33:19 -0500
+X-MC-Unique: ZNWajGVeMAuimyxEktmsFg-1
+Received: by mail-wm1-f69.google.com with SMTP id 187-20020a1c19c4000000b0037cc0d56524so1686573wmz.2
+        for <linux-spi@vger.kernel.org>; Wed, 23 Feb 2022 13:33:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=j3u+xo/IEURdRuin0oiVWN0xAJWJDqfhSkcI9D3SfbI=;
-        b=ObNZYI/EwiHubX37TC5I0i78AjaJrk+sZEM6dgh87bA2GPT0ewCmIQY7xdCRZ83J8V
-         zT5Qy3y/tbD/nnOzmHfDMaJ4f8G+eI2ZFn4tYUMJwhXD7qgo/jk6atmcMoYkt/+EVIUN
-         K/YMMRGSmek6eszer0gpsbjGefXnF3ywbdIXh0OUzO0fDllNkHfvCMIKz6Bbg0gmZgMH
-         8k2/EVjISp66E1HpYT+BUExqxWqbqGR689CiWZNr0bezzbJCjerFqvP4NrojkkV8P4tv
-         40Hj6L/7+kEYbuip8J+tXQEMYnm08dpoDxFaVMS6sjpF0z7Lx9Sjfz6mysCGbpWEwmUZ
-         9L0g==
-X-Gm-Message-State: AOAM533cKy2p4V6kuTh74dSTitCeFXNwVGGpT3VO+anTgde9KspgnFUd
-        3VRK614WX58fhGvdvUp+Bybb2Fg7kTz7DedHfGM=
-X-Google-Smtp-Source: ABdhPJxDbCKBFfm9B/Fyen9WfJDQ4/pWumus5ny8gK7Ns5ZEcNWZuqum9MH+JjV6MrvcXvPBGWuuoR+i6zvcIt8dD0c=
-X-Received: by 2002:a05:6638:204d:b0:314:a290:48c with SMTP id
- t13-20020a056638204d00b00314a290048cmr1124167jaj.264.1645648095765; Wed, 23
- Feb 2022 12:28:15 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JVrDSsHDee470/2N5kdB0CUYnm9UIRcjrM+Vqrir8YU=;
+        b=22F56adBjKUlRgy8REo2kuAuke/qEN8GgL5Rf86+fVqY1TgQB5yQXrg3uKDAZ5defc
+         vDnaBgsdaTBFE6l2PIh7mUbrvRT2iB2ZcSdqAdNL18oH2ebJ0vrc0vb9xjhJNC7ZZoC3
+         QRGvby8EcB+Ah477r9ujyrKXWCatZJ6WuTHFe/0vSYf5UhS2ZR46Lk+1N81zT+pca31W
+         7d+c8mB6tKa8smsKMZVFGJ5u8GdB36zfUcfuoAZ9sXMgqLparoYuLCprhNxl1inTMiMV
+         lwDnRU0OYBsvd1pul1tpII+DKtJXq9mha6QRJPpAc0qd53rfTWtocI27KaZBsOd//0q8
+         fBtA==
+X-Gm-Message-State: AOAM532S8j2lI++AJxUYHzYX2rPtduROmN6lgL9NQ3o6K8DpjHWPCUlk
+        AGh0o9C3JvXIsjvmXCKqIilI1QwHAPC8ux9CeakEiWBuMVR5ugu4zYUMeX+Kq0WfbiL537+Nw/f
+        KTEb54WuihadObFCGAqFN
+X-Received: by 2002:a5d:6f0a:0:b0:1e4:a354:a7e with SMTP id ay10-20020a5d6f0a000000b001e4a3540a7emr1081145wrb.423.1645651998036;
+        Wed, 23 Feb 2022 13:33:18 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzVh3zKelOjcgzztRyyTOBFC5U69RZ7Dwi6phYx+UQ7pZLlXHi6mmPrXmx8tSFwquULC08JMw==
+X-Received: by 2002:a5d:6f0a:0:b0:1e4:a354:a7e with SMTP id ay10-20020a5d6f0a000000b001e4a3540a7emr1081114wrb.423.1645651997698;
+        Wed, 23 Feb 2022 13:33:17 -0800 (PST)
+Received: from redhat.com ([2.55.166.187])
+        by smtp.gmail.com with ESMTPSA id l5sm677279wmq.7.2022.02.23.13.33.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 13:33:17 -0800 (PST)
+Date:   Wed, 23 Feb 2022 16:33:10 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v2 01/11] driver: platform: add and use helper for safer
+ setting of driver_override
+Message-ID: <20220223162538-mutt-send-email-mst@kernel.org>
+References: <20220223191310.347669-1-krzysztof.kozlowski@canonical.com>
+ <20220223191310.347669-2-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-References: <4eb7b036-a9b9-3bd2-4e84-f56ba4b1a740@gmail.com> <944317db-b659-cb36-addf-c33623a4ff60@gmail.com>
-In-Reply-To: <944317db-b659-cb36-addf-c33623a4ff60@gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 23 Feb 2022 21:28:04 +0100
-Message-ID: <CANiq72kdeuJhaEUOBAB3uYm9SA4Wm0U5=DNgxFMxiGDacUgaBA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] auxdisplay: add support for Titanmec TM1628 7
- segment display controller
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220223191310.347669-2-krzysztof.kozlowski@canonical.com>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=mst@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 7:02 PM Heiner Kallweit <hkallweit1@gmail.com> wrot=
-e:
->
-> Co-Developed-by: Heiner Kallweit <hkallweit1@gmail.com>
+On Wed, Feb 23, 2022 at 08:13:00PM +0100, Krzysztof Kozlowski wrote:
+> Several core drivers and buses expect that driver_override is a
+> dynamically allocated memory thus later they can kfree() it.
+> 
+> However such assumption is not documented, there were in the past and
+> there are already users setting it to a string literal. This leads to
+> kfree() of static memory during device release (e.g. in error paths or
+> during unbind):
+> 
+>     kernel BUG at ../mm/slub.c:3960!
+>     Internal error: Oops - BUG: 0 [#1] PREEMPT SMP ARM
+>     ...
+>     (kfree) from [<c058da50>] (platform_device_release+0x88/0xb4)
+>     (platform_device_release) from [<c0585be0>] (device_release+0x2c/0x90)
+>     (device_release) from [<c0a69050>] (kobject_put+0xec/0x20c)
+>     (kobject_put) from [<c0f2f120>] (exynos5_clk_probe+0x154/0x18c)
+>     (exynos5_clk_probe) from [<c058de70>] (platform_drv_probe+0x6c/0xa4)
+>     (platform_drv_probe) from [<c058b7ac>] (really_probe+0x280/0x414)
+>     (really_probe) from [<c058baf4>] (driver_probe_device+0x78/0x1c4)
+>     (driver_probe_device) from [<c0589854>] (bus_for_each_drv+0x74/0xb8)
+>     (bus_for_each_drv) from [<c058b48c>] (__device_attach+0xd4/0x16c)
+>     (__device_attach) from [<c058a638>] (bus_probe_device+0x88/0x90)
+>     (bus_probe_device) from [<c05871fc>] (device_add+0x3dc/0x62c)
+>     (device_add) from [<c075ff10>] (of_platform_device_create_pdata+0x94/0xbc)
+>     (of_platform_device_create_pdata) from [<c07600ec>] (of_platform_bus_create+0x1a8/0x4fc)
+>     (of_platform_bus_create) from [<c0760150>] (of_platform_bus_create+0x20c/0x4fc)
+>     (of_platform_bus_create) from [<c07605f0>] (of_platform_populate+0x84/0x118)
+>     (of_platform_populate) from [<c0f3c964>] (of_platform_default_populate_init+0xa0/0xb8)
+>     (of_platform_default_populate_init) from [<c01031f8>] (do_one_initcall+0x8c/0x404)
+>     (do_one_initcall) from [<c0f012c0>] (kernel_init_freeable+0x3d0/0x4d8)
+>     (kernel_init_freeable) from [<c0a7def0>] (kernel_init+0x8/0x114)
+>     (kernel_init) from [<c01010b4>] (ret_from_fork+0x14/0x20)
+> 
+> Provide a helper which clearly documents the usage of driver_override.
+> This will allow later to reuse the helper and reduce amount of
+> duplicated code.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  drivers/base/driver.c           | 44 +++++++++++++++++++++++++++++++++
+>  drivers/base/platform.c         | 24 +++---------------
+>  include/linux/device/driver.h   |  1 +
+>  include/linux/platform_device.h |  6 ++++-
+>  4 files changed, 54 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/base/driver.c b/drivers/base/driver.c
+> index 8c0d33e182fd..79efe51bb4c0 100644
+> --- a/drivers/base/driver.c
+> +++ b/drivers/base/driver.c
+> @@ -30,6 +30,50 @@ static struct device *next_device(struct klist_iter *i)
+>  	return dev;
+>  }
+>  
+> +/*
+> + * set_driver_override() - Helper to set or clear driver override.
+> + * @dev: Device to change
+> + * @override: Address of string to change (e.g. &device->driver_override);
+> + *            The contents will be freed and hold newly allocated override.
+> + * @s: NULL terminated string, new driver name to force a match, pass empty
 
-If you (Heiner) are going to be the "From" author, then this line
-should not be here.
+Don't you mean NUL terminated?
+Do all callers really validate that it's NUL terminated?
 
-> +         Say Y to enable support for Titan Micro Electronics TM1628
-> +         LED controller.
-> +         It's a 3-wire SPI device controlling a two-dimensional grid of
-> +         LEDs. Dimming is applied to all outputs through an internal PWM=
-.
+> + *     string to clear it
+> + *
+> + * Helper to setr or clear driver override in a device, intended for the cases
 
-Maybe a newline between paragraphs?
+set?
 
-> + * Copyright (c) 2019 Andreas F=C3=A4rber
-
-...here: should there be entries for you (Heiner) too? If not, should
-Andreas be the "From" author?
-
-This also applies to the `MODULE_AUTHOR`.
-
-Also it may be a good idea to add the emails:
-
-    MODULE_AUTHOR("Andreas F=C3=A4rber <afaerber@suse.de>");
-    MODULE_AUTHOR("Heiner Kallweit <hkallweit1@gmail.com>");
-
-(You may also want to consider adding an entry on `MAINTAINERS`).
-
-> +       u8 cmd =3D TM1628_CMD_DISPLAY_MODE | grid_mode;
-
-Consider using `const` for some of the variables.
-
-> +       for (i =3D 0; i < s->grid_size; i++) {
-> +               int pos =3D s->grid[i] - 1;
+> + * when the driver_override field is allocated by driver/bus code.
+> + *
+> + * Returns: 0 on success or a negative error code on failure.
+> + */
+> +int driver_set_override(struct device *dev, char **override, const char *s)
+> +{
+> +	char *new, *old, *cp;
 > +
-> +               if (i < msg_len) {
-
-Consider inverting the condition, doing the set to `0` + `continue;`
-to avoid the indentation.
-
-> +       struct tm1628_led *led =3D container_of(led_cdev, struct tm1628_l=
-ed, leddev);
-> +       struct tm1628 *s =3D led->ctrl;
-> +       int offset;
-> +       __le16 bit;
-
-Style: sometimes the variables are initialized right away using a
-value from above, but other times they are done below.
-
-> +       if (count > s->grid_size + 1) /* consider trailing newline */
-
-Style: sometimes comments are trailing the line, others are above.
-Also, sometimes they start with uppercase, but in other cases they do
-not.
-
-Also, about the `+ 1`: is it possible that sysfs gives us a buffer
-full of `isprint()`? i.e. is it possible that `grid_size =3D=3D
-MAX_GRID_SIZE` and `count =3D=3D MAX_GRID_SIZE + 1` and then we perform an
-out-of-bounds store to `MAX_GRID_SIZE + 2` in `text`?
-
-> +       ret =3D tm1628_write_data(spi, 0, MAX_GRID_SIZE);
-> +       if (ret)
-> +               return ret;
-> +       /* Assume that subsequent SPI transfers will be ok if first was o=
-k */
-
-If not, is there a consequence? i.e. why wouldn't one check and fail
-similarly in the `tm1628_set_*` calls below?
-
-> +       if (!IS_REACHABLE(CONFIG_LEDS_CLASS))
-> +               goto no_leds;
-
-What about putting the code in the `if` body (negating the condition)?
-
-> +       num_leds =3D 0;
-
-This is reusing the variable for a different purpose, no? i.e. if we
-did not get here, we would have no leds, yet we would report the
-number above.
-
-> +       device_for_each_child_node(&spi->dev, child) {
-> +               u32 reg[2];
+> +	if (!dev || !override || !s)
+> +		return -EINVAL;
 > +
-> +               ret =3D fwnode_property_read_u32_array(child, "reg", reg,=
- 2);
-> +               if (ret) {
-> +                       dev_err(&spi->dev, "Reading %s reg property faile=
-d (%d)\n",
-> +                               fwnode_get_name(child), ret);
+> +	new = kstrndup(s, strlen(s), GFP_KERNEL);
 
-Is a failure expected? i.e. this `continue;`s, but should it fail or
-is it OK to proceed?
 
-> +       for (i =3D 0; i < 7; i++) {
+what's the point of this kstrndup then? why not just kstrdup?
 
-Maybe a `#define` for several of the `7`s around?
+> +	if (!new)
+> +		return -ENOMEM;
+> +
+> +	cp = strchr(new, '\n');
+> +	if (cp)
+> +		*cp = '\0';
+> +
+> +	device_lock(dev);
+> +	old = *override;
+> +	if (strlen(new)) {
 
-> +static void tm1628_spi_remove(struct spi_device *spi)
+We are re-reading the string like 3 times here.
 
-Doesn't `.remove` return `int`?
+> +		*override = new;
+> +	} else {
+> +		kfree(new);
+> +		*override = NULL;
+> +	}
+> +	device_unlock(dev);
+> +
+> +	kfree(old);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(driver_set_override);
+> +
+>  /**
+>   * driver_for_each_device - Iterator for devices bound to a driver.
+>   * @drv: Driver we're iterating.
+> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+> index 6cb04ac48bf0..d8853b32ea10 100644
+> --- a/drivers/base/platform.c
+> +++ b/drivers/base/platform.c
+> @@ -1275,31 +1275,15 @@ static ssize_t driver_override_store(struct device *dev,
+>  				     const char *buf, size_t count)
+>  {
+>  	struct platform_device *pdev = to_platform_device(dev);
+> -	char *driver_override, *old, *cp;
+> +	int ret;
+>  
+>  	/* We need to keep extra room for a newline */
+>  	if (count >= (PAGE_SIZE - 1))
+>  		return -EINVAL;
 
-Thanks!
+Given everyone seems to repeat this check, how about passing
+in count and doing the validation in the helper?
+We will then also avoid the need to do strlen and strchr.
 
-Cheers,
-Miguel
+
+> -	driver_override = kstrndup(buf, count, GFP_KERNEL);
+> -	if (!driver_override)
+> -		return -ENOMEM;
+> -
+> -	cp = strchr(driver_override, '\n');
+> -	if (cp)
+> -		*cp = '\0';
+> -
+> -	device_lock(dev);
+> -	old = pdev->driver_override;
+> -	if (strlen(driver_override)) {
+> -		pdev->driver_override = driver_override;
+> -	} else {
+> -		kfree(driver_override);
+> -		pdev->driver_override = NULL;
+> -	}
+> -	device_unlock(dev);
+> -
+> -	kfree(old);
+> +	ret = driver_set_override(dev, &pdev->driver_override, buf);
+> +	if (ret)
+> +		return ret;
+>  
+>  	return count;
+>  }
+> diff --git a/include/linux/device/driver.h b/include/linux/device/driver.h
+> index 15e7c5e15d62..81c0d9f65a40 100644
+> --- a/include/linux/device/driver.h
+> +++ b/include/linux/device/driver.h
+> @@ -151,6 +151,7 @@ extern int __must_check driver_create_file(struct device_driver *driver,
+>  extern void driver_remove_file(struct device_driver *driver,
+>  			       const struct driver_attribute *attr);
+>  
+> +int driver_set_override(struct device *dev, char **override, const char *s);
+>  extern int __must_check driver_for_each_device(struct device_driver *drv,
+>  					       struct device *start,
+>  					       void *data,
+> diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
+> index 7c96f169d274..37ac14459499 100644
+> --- a/include/linux/platform_device.h
+> +++ b/include/linux/platform_device.h
+> @@ -31,7 +31,11 @@ struct platform_device {
+>  	struct resource	*resource;
+>  
+>  	const struct platform_device_id	*id_entry;
+> -	char *driver_override; /* Driver name to force a match */
+> +	/*
+> +	 * Driver name to force a match, use
+> +	 * driver_set_override() to set or clear it.
+> +	 */
+> +	char *driver_override;
+>  
+>  	/* MFD cell pointer */
+>  	struct mfd_cell *mfd_cell;
+> -- 
+> 2.32.0
+
