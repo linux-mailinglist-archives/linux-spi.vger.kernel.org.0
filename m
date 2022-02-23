@@ -2,60 +2,60 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE364C1BBA
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Feb 2022 20:14:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C8B4C1BA2
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Feb 2022 20:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244256AbiBWTPI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 23 Feb 2022 14:15:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56874 "EHLO
+        id S244212AbiBWTOt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 23 Feb 2022 14:14:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244272AbiBWTPC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Feb 2022 14:15:02 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B82541306
-        for <linux-spi@vger.kernel.org>; Wed, 23 Feb 2022 11:14:32 -0800 (PST)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        with ESMTP id S244213AbiBWTOr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Feb 2022 14:14:47 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE77541301
+        for <linux-spi@vger.kernel.org>; Wed, 23 Feb 2022 11:14:06 -0800 (PST)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2E3623FCAB
-        for <linux-spi@vger.kernel.org>; Wed, 23 Feb 2022 19:14:28 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C76763FCA9
+        for <linux-spi@vger.kernel.org>; Wed, 23 Feb 2022 19:14:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645643668;
-        bh=rf7a9EFQwPOyocENu81tYUT+5dnJvDmCZPPvLR/17AA=;
+        s=20210705; t=1645643645;
+        bh=BfVj2+YbqU03eg9FI58FYBrziSuvlZ92uC4zdqn5CTE=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=ffYe0XNyyWXyek12HaiFiTXKErFGQeIqJTpNzzVs2AzcmAiF7EGrpiqLIj9pqfs+U
-         Smp4hkWa+0HIEUa1OhwO5fs2hGYhHqvvhGYj5IeayDmHL/IDXfPKAaFsf5ceC9Jvpj
-         AcoorYWrBeKllEDZhZgsCv0BTh5N33Sm8cM+9M/LWqBwgBNFrCYXjfBJc/dUdXGqKi
-         w3eNCWZT3fu8vrmS+4e1KIzNItWnRzWmMoL1uGy4trTCF9TZQYvAA/CgHN5BBZUZrm
-         R4HLAkmv/bWHrion3FB+QfH2C1j7kSma9RFYQYgy6g9HRiJW+IcrIcYJNdPPEWTcIF
-         YnUD9s491/Nkw==
-Received: by mail-ed1-f72.google.com with SMTP id dy17-20020a05640231f100b00412897682b4so12295570edb.18
-        for <linux-spi@vger.kernel.org>; Wed, 23 Feb 2022 11:14:28 -0800 (PST)
+        b=SDjF+Q+h7u/x9jzvva25GaxBBfHEWmwXHjmswXZr/YBjhrKzixShHqVKuRuw29Ao9
+         CqpGHjIzAjXA+bW23wu51uQMtKljxAWOK5X+i2rv68AovCBS/hyrZAZp5MTdPrwyMs
+         lc3oZDrh0Q5tWvm9eSAOhlNwngyifq2uMnEuuY4nY0k1CC3ytjX2PiL6psT8GqPGxH
+         FNuumS6aR/FkAO3FRYMCh795Ub+PZUz2cJIfvvCT/kgE2xFdqx8pzLZM2gkEFd6frt
+         JlPChaVLBCbgnxDzLYFOd7p0cuu8nQ5+RteNGKbsS98yPCDH9q1R5NZ40K2U9ewCAf
+         ll3BhyVVFigGA==
+Received: by mail-ed1-f71.google.com with SMTP id eg48-20020a05640228b000b00413041cd917so5377810edb.12
+        for <linux-spi@vger.kernel.org>; Wed, 23 Feb 2022 11:14:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rf7a9EFQwPOyocENu81tYUT+5dnJvDmCZPPvLR/17AA=;
-        b=VQ3kqnkqc6EOTtbPgXc5D1RHBLuii5qrsvW3aI+7unTnSRFSpw6+L+/+x+C///C7V7
-         DU33hpJSuYIP9qWW6poATumfq/Lz9WDlJGEf5vr1fp8vufdALWsfBZZgvuSj+St3tv3V
-         uYmyYEWWRslCVpw6iEP27Y5pT0Aa3t0+aiW9V4v6ppYzKoRVvNkwZ4fJ5+iG2h77zI56
-         qQLskoRCcUi0XtOKvKioBn1UHHm2SGM0aG6DyHrKvO5El39aQwat+xZDwRvslCwUgxUy
-         a+rQJz4L7qRX+1zk6cbUhMlJvNd+ccXgQwrDTghhfnRP3Tbq8wmIDKdP0AKmMqnJQFOg
-         C9ag==
-X-Gm-Message-State: AOAM5311pifpsjtdtbo5RzqXXDvvxc2C8tPxM89inGkJc49XiFlnPCwe
-        L6HCAulXWmdBhe4euNTkrjoOz9vCSYFlggIaJeMT/C0OlTu1gmwku30SmNK/c9SvKCmPP+06+Qn
-        EoZZYAcMtHtI2dF/RQVC0FsDrPo2nUHAOyvOAdg==
-X-Received: by 2002:a17:906:e244:b0:6cd:24e3:ab8b with SMTP id gq4-20020a170906e24400b006cd24e3ab8bmr856434ejb.633.1645643640107;
-        Wed, 23 Feb 2022 11:14:00 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyXgfLS9GHyX1kCvT/o1Mu24QLFIsYnwLPgsBOYcxKH/GiFu7jQtQB6sjAsK4TU39w3xnST4g==
-X-Received: by 2002:a17:906:e244:b0:6cd:24e3:ab8b with SMTP id gq4-20020a170906e24400b006cd24e3ab8bmr856416ejb.633.1645643639914;
-        Wed, 23 Feb 2022 11:13:59 -0800 (PST)
+        bh=BfVj2+YbqU03eg9FI58FYBrziSuvlZ92uC4zdqn5CTE=;
+        b=IJekcxYQkXJ6mjgld94OS20pwXWEf0RK01wkJ13O+aLlNY8AU+EuNkY3j3prco0YVr
+         6PgpnhST1OkKI5CRZTQpvz5pPS3rSPhjMx0CEK8hSoERkvU97IX3DZcuREsR9UOr8WEB
+         7T/Hh3dms9PUo/exGllunD33ANVK29sTOx4QJ9f9KLwWmPeHiREy3tvFtWA4xygBLj5A
+         zAzZkhlfjgLTgew1c0hHkAtfKFcwOGi/xa2lTNVUiI26FJlBEhIMDbE51+fgNR/OH86M
+         HsoYWt1AUqOMQnj8N9A2y/kEyf3i4icpZWkCnrH79H3u4osGcrHySXR/gqGd6nA/tUh/
+         MuwA==
+X-Gm-Message-State: AOAM532GDYHHQI8UxOsqe3QGuZPhYBrO1VV3cGXk9J4TkNTBCh4LztUW
+        DjYcTmmhLePk6UOc8pa6wTNsNifnhukLBdE/HM8pr2lhYs27Y4afRuZcZ2xBt2eVCxlntJXXzSd
+        NDeEG5vMtCTsul22g1aHfDz7cwnAuhomzm+Ls/A==
+X-Received: by 2002:a17:907:271b:b0:6b8:7863:bf3e with SMTP id w27-20020a170907271b00b006b87863bf3emr962557ejk.188.1645643642494;
+        Wed, 23 Feb 2022 11:14:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxXMYb4BEMYhrxOu6QSGckuJedkkcxoYAbkZ+2GxGDgO4kr7mPrVFflFNpyN2dv7nSCwE216w==
+X-Received: by 2002:a17:907:271b:b0:6b8:7863:bf3e with SMTP id w27-20020a170907271b00b006b87863bf3emr962519ejk.188.1645643642300;
+        Wed, 23 Feb 2022 11:14:02 -0800 (PST)
 Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id q5sm212611ejc.115.2022.02.23.11.13.57
+        by smtp.gmail.com with ESMTPSA id q5sm212611ejc.115.2022.02.23.11.14.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 11:13:58 -0800 (PST)
+        Wed, 23 Feb 2022 11:14:01 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -92,9 +92,9 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH v2 05/11] pci: use helper for safer setting of driver_override
-Date:   Wed, 23 Feb 2022 20:13:04 +0100
-Message-Id: <20220223191310.347669-6-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v2 06/11] s390: cio: use helper for safer setting of driver_override
+Date:   Wed, 23 Feb 2022 20:13:05 +0100
+Message-Id: <20220223191310.347669-7-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220223191310.347669-1-krzysztof.kozlowski@canonical.com>
 References: <20220223191310.347669-1-krzysztof.kozlowski@canonical.com>
@@ -102,7 +102,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,17 +115,17 @@ code.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- drivers/pci/pci-sysfs.c | 24 ++++--------------------
+ drivers/s390/cio/css.c | 24 ++++--------------------
  1 file changed, 4 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-index 602f0fb0b007..16a163d4623e 100644
---- a/drivers/pci/pci-sysfs.c
-+++ b/drivers/pci/pci-sysfs.c
-@@ -567,31 +567,15 @@ static ssize_t driver_override_store(struct device *dev,
+diff --git a/drivers/s390/cio/css.c b/drivers/s390/cio/css.c
+index fa8293335077..2ced49be1912 100644
+--- a/drivers/s390/cio/css.c
++++ b/drivers/s390/cio/css.c
+@@ -338,31 +338,15 @@ static ssize_t driver_override_store(struct device *dev,
  				     const char *buf, size_t count)
  {
- 	struct pci_dev *pdev = to_pci_dev(dev);
+ 	struct subchannel *sch = to_subchannel(dev);
 -	char *driver_override, *old, *cp;
 +	int ret;
  
@@ -142,17 +142,17 @@ index 602f0fb0b007..16a163d4623e 100644
 -		*cp = '\0';
 -
 -	device_lock(dev);
--	old = pdev->driver_override;
+-	old = sch->driver_override;
 -	if (strlen(driver_override)) {
--		pdev->driver_override = driver_override;
+-		sch->driver_override = driver_override;
 -	} else {
 -		kfree(driver_override);
--		pdev->driver_override = NULL;
+-		sch->driver_override = NULL;
 -	}
 -	device_unlock(dev);
 -
 -	kfree(old);
-+	ret = driver_set_override(dev, &pdev->driver_override, buf);
++	ret = driver_set_override(dev, &dev->driver_override, buf);
 +	if (ret)
 +		return ret;
  
