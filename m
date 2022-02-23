@@ -2,134 +2,232 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC174C0671
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Feb 2022 01:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AD64C076E
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Feb 2022 02:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234887AbiBWAyc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 22 Feb 2022 19:54:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40698 "EHLO
+        id S235623AbiBWBw1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 22 Feb 2022 20:52:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234184AbiBWAyb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Feb 2022 19:54:31 -0500
-X-Greylist: delayed 114520 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Feb 2022 16:54:04 PST
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C7142485
-        for <linux-spi@vger.kernel.org>; Tue, 22 Feb 2022 16:54:04 -0800 (PST)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 8CB9D837B6;
-        Wed, 23 Feb 2022 01:54:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1645577641;
-        bh=3Hia9aVnYftQUtK30bXGetOk4TVgMlVUQ6GpO3Na7CY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MFoPrCWLorAWQvDp0l2s8soUX0sV26Qmh+QqgKZd/1HFwm8fzHN/eJ7DX7wIDeX28
-         JnBYX5M92Zazylf0ZyOWcqs/1bnQN2BcNFnutkPwNcf3+fg7LeNaLHE7jSbLb5kTGE
-         eSYh+W7EGIrqsTPTHLoaswBUVPs6eygOfFlRWk1+2Exhf1O+HRr7foMwIq6Mg15QPU
-         Ij/2Rb1q6BFVPMkJ8RKIIyOFVYSvrGWswaDnToq3mObRPk3xg5hHXe3Wr9rJa5R0pg
-         pIZjhJU4mUZT2TaWpbdkEd68lfbOvf2xCt9xxoISCbMXuHdJVY8PjWKf4/DWhtF3x3
-         MrIf1E0HieTGA==
-Message-ID: <bbc84e6b-68ce-84cb-7bc2-3ac844ec3710@denx.de>
-Date:   Wed, 23 Feb 2022 01:54:01 +0100
+        with ESMTP id S236076AbiBWBw0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 22 Feb 2022 20:52:26 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E581141;
+        Tue, 22 Feb 2022 17:51:53 -0800 (PST)
+X-UUID: 08f0cd9317294c4cabb126ea836f5f00-20220223
+X-UUID: 08f0cd9317294c4cabb126ea836f5f00-20220223
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <leilk.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1968855812; Wed, 23 Feb 2022 09:51:45 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 23 Feb 2022 09:51:44 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 23 Feb 2022 09:51:44 +0800
+Message-ID: <048044adfba3786bd94ec1878832376979fc9513.camel@mediatek.com>
+Subject: Re: [PATCH V2 2/6] spi: mediatek: add IPM single mode design support
+From:   Leilk Liu <leilk.liu@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
+Date:   Wed, 23 Feb 2022 09:51:44 +0800
+In-Reply-To: <3d333da3-82cb-acdd-fba0-d555d94fbfa2@collabora.com>
+References: <20220221040717.3729-1-leilk.liu@mediatek.com>
+         <20220221040717.3729-3-leilk.liu@mediatek.com>
+         <3d333da3-82cb-acdd-fba0-d555d94fbfa2@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] [RFC] spi: cadence-quadspi: Disable DAC on SoCFPGA
-Content-Language: en-US
-To:     Dinh Nguyen <dinguyen@kernel.org>, linux-spi@vger.kernel.org
-Cc:     Pratyush Yadav <p.yadav@ti.com>
-References: <20220221043238.295369-1-marex@denx.de>
- <79280984-e71d-e767-bb67-bd2a2fe31858@kernel.org>
- <ccdc4738-0fb0-d3f6-5c56-d61eb8e8bf33@denx.de>
- <04e70d1a-c07b-e1dc-aea6-36fe9b7ce667@kernel.org>
- <8060ae0e-700e-3b72-3ab9-e7ca8e19ad9e@denx.de>
- <8dc7a7d6-d24f-b3a6-32b9-64cdb8c6f3be@kernel.org>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <8dc7a7d6-d24f-b3a6-32b9-64cdb8c6f3be@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 2/22/22 22:32, Dinh Nguyen wrote:
+On Tue, 2022-02-22 at 11:09 +0100, AngeloGioacchino Del Regno wrote:
+> Il 21/02/22 05:07, Leilk Liu ha scritto:
+> > this patch add the support of IPM single mode design.
+> > 
+> > Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> > ---
+> >   drivers/spi/spi-mt65xx.c | 103 +++++++++++++++++++++++++++++++++-
+> > -----
+> >   1 file changed, 87 insertions(+), 16 deletions(-)
+> > 
+> > diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+> > index bbfeb8046c17..5fa677a589a4 100644
+> > --- a/drivers/spi/spi-mt65xx.c
+> > +++ b/drivers/spi/spi-mt65xx.c
+> > @@ -31,6 +31,7 @@
+> >   #define SPI_CFG2_REG                      0x0028
+> >   #define SPI_TX_SRC_REG_64                 0x002c
+> >   #define SPI_RX_DST_REG_64                 0x0030
+> > +#define SPI_CFG3_IPM_REG                  0x0040
+> >   
+> >   #define SPI_CFG0_SCK_HIGH_OFFSET          0
+> >   #define SPI_CFG0_SCK_LOW_OFFSET           8
+> > @@ -48,6 +49,7 @@
+> >   #define SPI_CFG1_CS_IDLE_MASK             0xff
+> >   #define SPI_CFG1_PACKET_LOOP_MASK         0xff00
+> >   #define SPI_CFG1_PACKET_LENGTH_MASK       0x3ff0000
+> > +#define SPI_CFG1_IPM_PACKET_LENGTH_MASK   GENMASK(31, 16)
+> >   #define SPI_CFG2_SCK_HIGH_OFFSET          0
+> >   #define SPI_CFG2_SCK_LOW_OFFSET           16
+> >   
+> > @@ -68,7 +70,13 @@
+> >   #define SPI_CMD_TX_ENDIAN            BIT(15)
+> >   #define SPI_CMD_FINISH_IE            BIT(16)
+> >   #define SPI_CMD_PAUSE_IE             BIT(17)
+> > +#define SPI_CMD_IPM_NONIDLE_MODE     BIT(19)
+> > +#define SPI_CMD_IPM_SPIM_LOOP        BIT(21)
+> > +#define SPI_CMD_IPM_GET_TICKDLY_OFFSET    22
+> >   
+> > +#define SPI_CMD_IPM_GET_TICKDLY_MASK	GENMASK(24, 22)
+> > +#define SPI_CFG3_IPM_HALF_DUPLEX_DIR		BIT(2)
+> > +#define SPI_CFG3_IPM_HALF_DUPLEX_EN		BIT(3)
+> >   #define MT8173_SPI_MAX_PAD_SEL 3
+> >   
+> >   #define MTK_SPI_PAUSE_INT_STATUS 0x2
+> > @@ -78,6 +86,7 @@
+> >   
+> >   #define MTK_SPI_MAX_FIFO_SIZE 32U
+> >   #define MTK_SPI_PACKET_SIZE 1024
+> > +#define MTK_SPI_IPM_PACKET_SIZE SZ_64K
+> >   #define MTK_SPI_32BITS_MASK  (0xffffffff)
+> >   
+> >   #define DMA_ADDR_EXT_BITS (36)
+> > @@ -93,6 +102,9 @@ struct mtk_spi_compatible {
+> >   	bool dma_ext;
+> >   	/* some IC no need unprepare SPI clk */
+> >   	bool no_need_unprepare;
+> > +	/* IPM design improve some single mode features */
+> > +	bool ipm_design;
+> > +
+> >   };
+> >   
+> >   struct mtk_spi {
+> > @@ -116,6 +128,12 @@ static const struct mtk_spi_compatible
+> > mt2712_compat = {
+> >   	.must_tx = true,
+> >   };
+> >   
+> > +static const struct mtk_spi_compatible ipm_compat_single = {
+> > +	.enhance_timing = true,
+> > +	.dma_ext = true,
+> > +	.ipm_design = true,
+> > +};
+> > +
+> >   static const struct mtk_spi_compatible mt6765_compat = {
+> >   	.need_pad_sel = true,
+> >   	.must_tx = true,
+> > @@ -157,6 +175,9 @@ static const struct mtk_chip_config
+> > mtk_default_chip_info = {
+> >   };
+> >   
+> >   static const struct of_device_id mtk_spi_of_match[] = {
+> > +	{ .compatible = "mediatek,ipm-spi-single",
+> > +		.data = (void *)&ipm_compat_single,
+> > +	},
+> >   	{ .compatible = "mediatek,mt2701-spi",
+> >   		.data = (void *)&mtk_common_compat,
+> >   	},
+> > @@ -275,12 +296,11 @@ static int mtk_spi_set_hw_cs_timing(struct
+> > spi_device *spi)
+> >   	return 0;
+> >   }
+> >   
+> > -static int mtk_spi_prepare_message(struct spi_master *master,
+> > -				   struct spi_message *msg)
+> > +static int mtk_spi_hw_init(struct spi_master *master,
+> > +			   struct spi_device *spi)
+> >   {
+> >   	u16 cpha, cpol;
+> >   	u32 reg_val;
+> > -	struct spi_device *spi = msg->spi;
+> >   	struct mtk_chip_config *chip_config = spi->controller_data;
+> >   	struct mtk_spi *mdata = spi_master_get_devdata(master);
+> >   
+> > @@ -288,6 +308,15 @@ static int mtk_spi_prepare_message(struct
+> > spi_master *master,
+> >   	cpol = spi->mode & SPI_CPOL ? 1 : 0;
+> >   
+> >   	reg_val = readl(mdata->base + SPI_CMD_REG);
+> > +	if (mdata->dev_comp->ipm_design) {
+> > +		/* SPI transfer without idle time until packet length
+> > done */
+> > +		reg_val |= SPI_CMD_IPM_NONIDLE_MODE;
+> > +		if (spi->mode & SPI_LOOP)
+> > +			reg_val |= SPI_CMD_IPM_SPIM_LOOP;
+> > +		else
+> > +			reg_val &= ~SPI_CMD_IPM_SPIM_LOOP;
+> > +	}
+> > +
+> >   	if (cpha)
+> >   		reg_val |= SPI_CMD_CPHA;
+> >   	else
+> > @@ -344,18 +373,33 @@ static int mtk_spi_prepare_message(struct
+> > spi_master *master,
+> >   		writel(mdata->pad_sel[spi->chip_select],
+> >   		       mdata->base + SPI_PAD_SEL_REG);
+> >   
+> > -	/* tick delay */
+> > -	reg_val = readl(mdata->base + SPI_CFG1_REG);
+> > -	reg_val &= ~SPI_CFG1_GET_TICK_DLY_MASK;
+> > -	reg_val |= ((chip_config->tick_delay & 0x7)
+> > -		<< SPI_CFG1_GET_TICK_DLY_OFFSET);
+> > -	writel(reg_val, mdata->base + SPI_CFG1_REG);
 > 
+> Hello Leilk,
 > 
-> On 2/22/22 12:30, Marek Vasut wrote:
->> On 2/22/22 16:49, Dinh Nguyen wrote:
->>>
->>>
->>> On 2/21/22 11:05, Marek Vasut wrote:
->>>> On 2/21/22 17:38, Dinh Nguyen wrote:
->>>>>
->>>>>
->>>>> On 2/20/22 22:32, Marek Vasut wrote:
->>>>>> On SoCFPGA Gen5, DAC memcpy_fromio() in cqspi_direct_read_execute()
->>>>>> leads to data abort, disable DAC to avoid triggering it:
->>>>>>
->>>>>> Unhandled fault: imprecise external abort (0x1406) at 0x0400d3e9
->>>>>> [0400d3e9] *pgd=00000000
->>>>>>
->>>>>> Signed-off-by: Marek Vasut <marex@denx.de>
->>>>>> Cc: Dinh Nguyen <dinguyen@kernel.org>
->>>>>> Cc: Pratyush Yadav <p.yadav@ti.com>
->>>>>> ---
->>>>>>   drivers/spi/spi-cadence-quadspi.c | 2 +-
->>>>>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/drivers/spi/spi-cadence-quadspi.c 
->>>>>> b/drivers/spi/spi-cadence-quadspi.c
->>>>>> index b808c94641fa6..65f2c2449be09 100644
->>>>>> --- a/drivers/spi/spi-cadence-quadspi.c
->>>>>> +++ b/drivers/spi/spi-cadence-quadspi.c
->>>>>> @@ -1870,7 +1870,7 @@ static const struct cqspi_driver_platdata 
->>>>>> intel_lgm_qspi = {
->>>>>>   };
->>>>>>   static const struct cqspi_driver_platdata socfpga_qspi = {
->>>>>> -    .quirks = CQSPI_NO_SUPPORT_WR_COMPLETION,
->>>>>> +    .quirks = CQSPI_DISABLE_DAC_MODE | 
->>>>>> CQSPI_NO_SUPPORT_WR_COMPLETION,
->>>>>>   };
->>>>>>   static const struct cqspi_driver_platdata versal_ospi = {
->>>>>
->>>>> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
->>>>
->>>> Is this DAC really not working on socfpga gen5 or is there some 
->>>> other issue ?
->>>
->>> I don't know the answer to this question. What is the DAC in the QSPI 
->>> module and how do I go about testing it?
->>
->> DAC = direct access.
->>
->> How do you go about testing this -- compile kernel with/without this 
->> patch, boot on SoCFPGA Gen5 with QSPI NOR attached, the kernel crashes 
->> without this patch on imprecise external abort.
-> 
-> Hmm...I just tested v5.17-rc3 on a C5 board and QSPI looks to be working 
-> fine:
-> 
-> [    1.744489] spi-nor spi1.0: found n25q512ax3, expected mt25qu02g
-> [    1.750534] dma-pl330 ffe01000.pdma: Reset Channel-0  CS-f FTC-40000
-> [    1.756941] spi-nor spi1.0: n25q512ax3 (65536 Kbytes)
-> [    1.762369] 2 fixed-partitions partitions found on MTD device 
-> ff705000.spi.0
-> [    1.769425] Creating 2 MTD partitions on "ff705000.spi.0":
-> [    1.774925] 0x000000000000-0x000000800000 : "Flash 0 Raw Data"
-> [    1.781942] 0x000000800000-0x000008000000 : "Flash 0 jffs2 Filesystem"
-> [    1.788468] mtd: partition "Flash 0 jffs2 Filesystem" extends beyond 
-> the end of device "ff705000.spi.0" -- size truncated to 0x3800000
+> with this change, you are excluding this code from MT2712: is that
+> intentional?
+> If it is, then this should reside in a different commit with a Fixes
+> tag, also explaining the reason for not setting the tick delay on
+> that SoC.
+It's different for MT2712 and the other ICs for tick delay. I'll send a
+patch with fixes tag, thanks
 
-I wonder if we might be missing some clock enable somewhere.
+> 
+> Also, please don't remove the /* tick delay */ comment.
+> 
+OK, I'll fix it,thanks
 
-Can you mail me the whole boot log ? (I'm using u-boot 2022.01 btw.)
+> Regards,
+> Angelo
+> 
+> > +	if (mdata->dev_comp->enhance_timing) {
+> > +		if (mdata->dev_comp->ipm_design) {
+> > +			reg_val = readl(mdata->base + SPI_CMD_REG);
+> > +			reg_val &= ~SPI_CMD_IPM_GET_TICKDLY_MASK;
+> > +			reg_val |= ((chip_config->tick_delay & 0x7)
+> > +				   << SPI_CMD_IPM_GET_TICKDLY_OFFSET);
+> > +			writel(reg_val, mdata->base + SPI_CMD_REG);
+> > +		} else {
+> > +			reg_val = readl(mdata->base + SPI_CFG1_REG);
+> > +			reg_val &= ~SPI_CFG1_GET_TICK_DLY_MASK;
+> > +			reg_val |= ((chip_config->tick_delay & 0x7)
+> > +				<< SPI_CFG1_GET_TICK_DLY_OFFSET);
+> > +			writel(reg_val, mdata->base + SPI_CFG1_REG);
+> > +		}
+> > +	}
+> >   
+> >   	/* set hw cs timing */
+> >   	mtk_spi_set_hw_cs_timing(spi);
+> >   	return 0;
+> >   }
+> 
+> 
+
