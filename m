@@ -2,188 +2,146 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 298194C19BC
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Feb 2022 18:16:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B3F4C1A4E
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Feb 2022 18:56:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243334AbiBWRRP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 23 Feb 2022 12:17:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
+        id S239248AbiBWR5N (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 23 Feb 2022 12:57:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238195AbiBWRRP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Feb 2022 12:17:15 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC59340FE
-        for <linux-spi@vger.kernel.org>; Wed, 23 Feb 2022 09:16:45 -0800 (PST)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 08C9183CA4;
-        Wed, 23 Feb 2022 18:16:42 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1645636603;
-        bh=RgbkOZTT6CdelzgfuHz+sgXFDq3+udCp8tIBFBR3nKw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YQorQK8QIr6WHlKqCRpIh2TRB5prnJ+pZTj9XicR4E1fbSadCCB5gM451vAtdqRB5
-         Z03lchYm/S6DnplKUh+uL2tmP8lTk4L5xNG9tyYrp+cfDeyg0XkJdwkyt9x+5KySc8
-         hCAG/DWdH0H0VPLrM/HBAEnSeDYnGixpIpR/stdiVD4maEYzDCpciT0TGUCOejd0UQ
-         ALm0zDjKNKDAG4yFFqob+ELE2LpqWxG7mPF31O2ppy7r8zWaLaZYCQtjith+n8NrDe
-         P9oBRPpsYhIHjjMgOJJqjaxVHhiWNh1dPbrE2q4+D5rZYWdZAW4rS+g2u3KZsVtD7P
-         2OjaK9I9tzWRA==
-Message-ID: <b44d9a9b-001e-a5ed-2450-0b10b6a222b1@denx.de>
-Date:   Wed, 23 Feb 2022 18:16:42 +0100
+        with ESMTP id S235343AbiBWR5N (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Feb 2022 12:57:13 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FAF011A03;
+        Wed, 23 Feb 2022 09:56:43 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id a23so53902027eju.3;
+        Wed, 23 Feb 2022 09:56:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :content-language:content-transfer-encoding;
+        bh=/PO6oqBBGLbyvnqDkql90p5GH0BalUjP2WrLAq+W6DM=;
+        b=X3C0wg3eFLnHA9PM74bynyVtyRjKYKBcIwrmbsmKgoypi6OAPm98mCcej94ww9OypS
+         YwcLXyfFURJcodXTmmH8Ai05ohGE2Zsjk+lH3/Ui5KYWDtGZbcnVKDU7hn3kfcdCrQ5X
+         BDwTE5FjAY/fEwAYlXmrK5bv917qFcFlc/QrKSX4yl0uIQEHdiOz0bMb0xY6cc9R2bqo
+         9/ArYoxhOekhmKcf/2cPKEPqVpXxpmdLygDk1Ris0ZFweTk08cbJk1vqSZcTSJCzHi3r
+         t/1uvCd2dYqvNPAwpV5BzJiOyXSD0dJ6uJ54DRIj5dIfayiS+5OOv9CBX7xwwgAiEY/2
+         /0Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:content-language:content-transfer-encoding;
+        bh=/PO6oqBBGLbyvnqDkql90p5GH0BalUjP2WrLAq+W6DM=;
+        b=hiiLHEVDfzR7BbRp3ymwjP+TpQlZG9wBAx5K5govF+mZEDJIq18B/RR7vL29F1L8Ox
+         vIlkOtqld/tLgY099D2QNRV8AOMqAbwV7XFga9MBuYk1nLRTIYMPueONhuEQmgjKZjVb
+         vaf2ACKQNteS7VOSEyeXxlYzB+BfnLYIV0KkyVdpfFfU4y4wZYhy87ybYkUJwRbhMoCI
+         dNQqWBvBz33Yvu51ZAN3KgJAkX1Va1VQ0OBUA01FQFvJsCm4MMiMuh9cK0/oOLwC1ODh
+         5vf3m9D0MN9UjItKxNqCCLjVuAtlHFqwJQjGiOFCBL/PENf2u1mc6RfunjXhwkcBmTHD
+         7Ijg==
+X-Gm-Message-State: AOAM531USj530ggreyH7swpbVNpkXGyCHCsu0CoGnapt57ZTf21qNs9K
+        S90in5f7PYpJpGqq35NSJko=
+X-Google-Smtp-Source: ABdhPJyKbqAtnZB6CoBgZ25tIKyZpF49TmXYoUgQOdRxHjja/3AY3gCHBz6ChJ9vPCjvUTj9+IdTDQ==
+X-Received: by 2002:a17:906:848f:b0:6cf:7234:8ae with SMTP id m15-20020a170906848f00b006cf723408aemr686250ejx.620.1645639001900;
+        Wed, 23 Feb 2022 09:56:41 -0800 (PST)
+Received: from ?IPV6:2003:ea:8f4d:2b00:d12c:c0a:f603:b44d? (p200300ea8f4d2b00d12c0c0af603b44d.dip0.t-ipconnect.de. [2003:ea:8f4d:2b00:d12c:c0a:f603:b44d])
+        by smtp.googlemail.com with ESMTPSA id j6sm141682eje.158.2022.02.23.09.56.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 09:56:41 -0800 (PST)
+Message-ID: <4eb7b036-a9b9-3bd2-4e84-f56ba4b1a740@gmail.com>
+Date:   Wed, 23 Feb 2022 18:56:35 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] [RFC] spi: cadence-quadspi: Disable DAC on SoCFPGA
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH v3 0/5] auxdisplay: Add support for the Titanmec TM1628 7
+ segment display controller
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Miguel Ojeda <ojeda@kernel.org>
+Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
 Content-Language: en-US
-To:     Dinh Nguyen <dinguyen@kernel.org>, linux-spi@vger.kernel.org
-Cc:     Pratyush Yadav <p.yadav@ti.com>
-References: <20220221043238.295369-1-marex@denx.de>
- <79280984-e71d-e767-bb67-bd2a2fe31858@kernel.org>
- <ccdc4738-0fb0-d3f6-5c56-d61eb8e8bf33@denx.de>
- <04e70d1a-c07b-e1dc-aea6-36fe9b7ce667@kernel.org>
- <8060ae0e-700e-3b72-3ab9-e7ca8e19ad9e@denx.de>
- <8dc7a7d6-d24f-b3a6-32b9-64cdb8c6f3be@kernel.org>
- <bbc84e6b-68ce-84cb-7bc2-3ac844ec3710@denx.de>
- <cd1e80f1-b12e-d8c4-e7f2-bfbc21ebf57c@kernel.org>
- <861ec3ba-65c5-d4e9-d1f4-9f7e5408f7cf@denx.de>
- <0ad3907c-660c-af7a-89b6-ca6954c08813@kernel.org>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <0ad3907c-660c-af7a-89b6-ca6954c08813@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 2/23/22 17:46, Dinh Nguyen wrote:
-> 
-> 
-> On 2/23/22 10:43, Marek Vasut wrote:
->> On 2/23/22 17:28, Dinh Nguyen wrote:
->>>
->>>
->>> On 2/22/22 18:54, Marek Vasut wrote:
->>>> On 2/22/22 22:32, Dinh Nguyen wrote:
->>>>>
->>>>>
->>>>> On 2/22/22 12:30, Marek Vasut wrote:
->>>>>> On 2/22/22 16:49, Dinh Nguyen wrote:
->>>>>>>
->>>>>>>
->>>>>>> On 2/21/22 11:05, Marek Vasut wrote:
->>>>>>>> On 2/21/22 17:38, Dinh Nguyen wrote:
->>>>>>>>>
->>>>>>>>>
->>>>>>>>> On 2/20/22 22:32, Marek Vasut wrote:
->>>>>>>>>> On SoCFPGA Gen5, DAC memcpy_fromio() in 
->>>>>>>>>> cqspi_direct_read_execute()
->>>>>>>>>> leads to data abort, disable DAC to avoid triggering it:
->>>>>>>>>>
->>>>>>>>>> Unhandled fault: imprecise external abort (0x1406) at 0x0400d3e9
->>>>>>>>>> [0400d3e9] *pgd=00000000
->>>>>>>>>>
->>>>>>>>>> Signed-off-by: Marek Vasut <marex@denx.de>
->>>>>>>>>> Cc: Dinh Nguyen <dinguyen@kernel.org>
->>>>>>>>>> Cc: Pratyush Yadav <p.yadav@ti.com>
->>>>>>>>>> ---
->>>>>>>>>>   drivers/spi/spi-cadence-quadspi.c | 2 +-
->>>>>>>>>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>>>>>
->>>>>>>>>> diff --git a/drivers/spi/spi-cadence-quadspi.c 
->>>>>>>>>> b/drivers/spi/spi-cadence-quadspi.c
->>>>>>>>>> index b808c94641fa6..65f2c2449be09 100644
->>>>>>>>>> --- a/drivers/spi/spi-cadence-quadspi.c
->>>>>>>>>> +++ b/drivers/spi/spi-cadence-quadspi.c
->>>>>>>>>> @@ -1870,7 +1870,7 @@ static const struct 
->>>>>>>>>> cqspi_driver_platdata intel_lgm_qspi = {
->>>>>>>>>>   };
->>>>>>>>>>   static const struct cqspi_driver_platdata socfpga_qspi = {
->>>>>>>>>> -    .quirks = CQSPI_NO_SUPPORT_WR_COMPLETION,
->>>>>>>>>> +    .quirks = CQSPI_DISABLE_DAC_MODE | 
->>>>>>>>>> CQSPI_NO_SUPPORT_WR_COMPLETION,
->>>>>>>>>>   };
->>>>>>>>>>   static const struct cqspi_driver_platdata versal_ospi = {
->>>>>>>>>
->>>>>>>>> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
->>>>>>>>
->>>>>>>> Is this DAC really not working on socfpga gen5 or is there some 
->>>>>>>> other issue ?
->>>>>>>
->>>>>>> I don't know the answer to this question. What is the DAC in the 
->>>>>>> QSPI module and how do I go about testing it?
->>>>>>
->>>>>> DAC = direct access.
->>>>>>
->>>>>> How do you go about testing this -- compile kernel with/without 
->>>>>> this patch, boot on SoCFPGA Gen5 with QSPI NOR attached, the 
->>>>>> kernel crashes without this patch on imprecise external abort.
->>>>>
->>>>> Hmm...I just tested v5.17-rc3 on a C5 board and QSPI looks to be 
->>>>> working fine:
->>>>>
->>>>> [    1.744489] spi-nor spi1.0: found n25q512ax3, expected mt25qu02g
->>>>> [    1.750534] dma-pl330 ffe01000.pdma: Reset Channel-0  CS-f 
->>>>> FTC-40000
->>>>> [    1.756941] spi-nor spi1.0: n25q512ax3 (65536 Kbytes)
->>>>> [    1.762369] 2 fixed-partitions partitions found on MTD device 
->>>>> ff705000.spi.0
->>>>> [    1.769425] Creating 2 MTD partitions on "ff705000.spi.0":
->>>>> [    1.774925] 0x000000000000-0x000000800000 : "Flash 0 Raw Data"
->>>>> [    1.781942] 0x000000800000-0x000008000000 : "Flash 0 jffs2 
->>>>> Filesystem"
->>>>> [    1.788468] mtd: partition "Flash 0 jffs2 Filesystem" extends 
->>>>> beyond the end of device "ff705000.spi.0" -- size truncated to 
->>>>> 0x3800000
->>>>
->>>> I wonder if we might be missing some clock enable somewhere.
->>>>
->>>> Can you mail me the whole boot log ? (I'm using u-boot 2022.01 btw.)
->>>
->>> I tested with U-Boot 2022.01 as well:
->>>
->>>
->>> => run nfsboot_dinh
->>> Kernel image @ 0x1000000 [ 0x000000 - 0x54edd0 ]
->>> ## Flattened Device Tree blob at 02000000
->>>     Booting using the fdt blob at 0x2000000
->>>     Loading Device Tree to 09ff8000, end 09fffeb1 ... OK
->>>
->>> Starting kernel ...
->>>
->>> Deasserting all peripheral resets
->>> [    0.000000] Booting Linux on physical CPU 0x0
->>> [    0.000000] Linux version 5.17.0-rc3 (dinguyen@linux-builds1) 
->>> (arm-linux-gnue abihf-gcc (Ubuntu/Linaro 7.5.0-3ubuntu1~18.04) 7.5.0, 
->>> GNU ld (GNU Binutils for U buntu) 2.30) #1 SMP Wed Feb 23 08:51:18 
->>> CST 2022
->>> [    0.000000] CPU: ARMv7 Processor [413fc090] revision 0 (ARMv7), 
->>> cr=10c5387d
->>> [    0.000000] CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing 
->>> instructio n cache
->>> [    0.000000] OF: fdt: Machine model: Altera SOCFPGA Cyclone V SoC 
->>> Development  Kit
->>> [    0.000000] Memory policy: Data cache writealloc
->>
->> This is weird.
->>
->> One more thing, I have two SPI NORs on this CQSPI, one on each chip 
->> select, do you think that can make any difference ?
->>
->> Besides that, I used latest next for my tests, not latest linus tree.
-> 
-> Let me test on latest next.
+This series adds support for the Titanmec TM1628 7 segment display
+controller. It's based on previous RFC work from Andreas Färber.
+The RFC version placed the driver in the LED subsystem, but this was
+NAK'ed by the LED maintainer. Therefore I moved the driver to
+/drivers/auxdisplay what seems most reasonable to me.
 
-Thank you
+Further changes to the RFC version:
+- Driver can be built also w/o LED class support, for displays that
+  don't have any symbols to be exposed as LED's.
+- Simplified the code and rewrote a lot of it.
+- Driver is now kind of a MVP, but functionality should be sufficient
+  for most use cases.
+- Use the existing 7 segment support in uapi/linux/map_to_7segment.h
+  as suggested by Geert Uytterhoeven.
 
-If you cannot reproduce it there, drop this patch and I'll revisit this 
-on my side.
+Note: There's a number of chips from other manufacturers that are
+      almost identical, e.g. FD628, SM1628. Only difference I saw so
+      far is that they partially support other display modes.
+      TM1628: 6x12, 7x11
+      SM1628C: 4x13, 5x12, 6x11, 7x10
+      For typical displays on devices using these chips this
+      difference shouldn't matter.
+
+Successfully tested on a TX3 Mini TV box that has an SM1628C and a
+display with 4 digits and 7 symbols.
+
+v2:
+- (re-)add Andreas' SoB to two patches
+- fix YAML issues
+- include ctype.h explicitly
+- add info message in probe()
+
+v3:
+- remove patch 1 because it has been applied via the SPI tree already
+- fix remaining YAML issues in patch 2
+- follow Miguel's suggestion on usage of Co-Developed-by
+
+Andreas Färber (1):
+  dt-bindings: vendor-prefixes: Add Titan Micro Electronics
+
+Heiner Kallweit (4):
+  dt-bindings: auxdisplay: Add Titan Micro Electronics TM1628
+  docs: ABI: document tm1628 attribute display-text
+  auxdisplay: add support for Titanmec TM1628 7 segment display
+    controller
+  arm64: dts: meson-gxl-s905w-tx3-mini: add support for the 7 segment
+    display
+
+ .../testing/sysfs-devices-auxdisplay-tm1628   |   7 +
+ .../bindings/auxdisplay/titanmec,tm1628.yaml  |  92 +++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ .../dts/amlogic/meson-gxl-s905w-tx3-mini.dts  |  59 +++
+ drivers/auxdisplay/Kconfig                    |  10 +
+ drivers/auxdisplay/Makefile                   |   1 +
+ drivers/auxdisplay/tm1628.c                   | 376 ++++++++++++++++++
+ 7 files changed, 547 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-devices-auxdisplay-tm1628
+ create mode 100644 Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml
+ create mode 100644 drivers/auxdisplay/tm1628.c
+
+-- 
+2.35.1
+
