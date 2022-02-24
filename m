@@ -2,51 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D3D4C3967
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 00:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4B74C396D
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 00:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235935AbiBXXAM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Feb 2022 18:00:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
+        id S230153AbiBXXAs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 24 Feb 2022 18:00:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235920AbiBXXAJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Feb 2022 18:00:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CA02177FC;
-        Thu, 24 Feb 2022 14:59:38 -0800 (PST)
+        with ESMTP id S235925AbiBXXAq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Feb 2022 18:00:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7844521EB99
+        for <linux-spi@vger.kernel.org>; Thu, 24 Feb 2022 15:00:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4CCAB829EB;
-        Thu, 24 Feb 2022 22:59:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74E25C340EF;
-        Thu, 24 Feb 2022 22:59:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D5E861BBE
+        for <linux-spi@vger.kernel.org>; Thu, 24 Feb 2022 23:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 724D2C340EF;
+        Thu, 24 Feb 2022 23:00:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645743575;
-        bh=qE4XyM/mZdO91/dwF8RysGfMurvwkXipPfmnP9dak8w=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=dR3hi76re7kAtMsa+aJ7Ekrp3v5K2UbVEcjxAdiN7XhYIzNYrXKO1m1NJm3nYAKIU
-         AtHWIkO8jqFoyP/QgLY3aAntINce8+mf8mA3D6pDUpeodQug+3EgkduRkTz+5MIIAS
-         e/raYQB2aNNXY1KjR23Ug/C7R42CdvlR8Twpb7Bv3phXikIleWLfDIrHpo++uU1Q+n
-         N84RQqW6VM+nafp//BmyuJpadaCRKOX9/HZ1cAubSoyE5dcFH79iT7gBx3D15qxKMA
-         0E1zQiXAv+hJCGgVDCwzaH2Uu/uqbdiI9MWxixr/v2K+2z7Tuhk5YT8G1Djt2oAgQj
-         IdEyss2gmVj+A==
-From:   Mark Brown <broonie@kernel.org>
-To:     thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-tegra@vger.kernel.org,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        linux-spi@vger.kernel.org
-Cc:     robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, p.zabel@pengutronix.de,
-        skomatineni@nvidia.com, ldewangan@nvidia.com
-In-Reply-To: <20220222175611.58051-1-kyarlagadda@nvidia.com>
-References: <20220222175611.58051-1-kyarlagadda@nvidia.com>
-Subject: Re: (subset) [PATCH v2 0/5] Tegra QUAD SPI combined sequence mode
-Message-Id: <164574357320.4024751.14439329373672289056.b4-ty@kernel.org>
-Date:   Thu, 24 Feb 2022 22:59:33 +0000
-MIME-Version: 1.0
+        s=k20201202; t=1645743613;
+        bh=vwfdBFOGjDLw66JzZiN2HSEVaD+wBCd9eUane6YItRw=;
+        h=Subject:From:Date:To:From;
+        b=J1FLXwEUIbFFj4zwBDNN/7Gn6fYd0Us8RPSfyvBdam68PF5Rl39bxsHpu/tOA1B2p
+         biypeqLprlcEAh8OfeULYSSfr7MHX7dhhvjxV3ejC0wdnmVPC/UrfKWoP3ig4ZJ94g
+         uwXsKn8KbQTxTanyjTAn2YmWuPcLl5O5lTsKE3O6bsLWndxpiOpG03/cIbhh1khlzd
+         hVN7XX7ZWAksoOiMwkzmGLbM+oks1SH/HoUTZADzHIAeU3n6PqcUOdyexGA+zcK7AR
+         ylE73tpSPNhf3AgRQSjmgtwhrVZ6D5HD+Adb4P4b5rFhCyEkrVhJ1UsUibskifpkcK
+         7UTOFmrxr3XwQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4E6A1E6D453;
+        Thu, 24 Feb 2022 23:00:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <164574361323.23657.18021516420520694338.git-patchwork-summary@kernel.org>
+Date:   Thu, 24 Feb 2022 23:00:13 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,45 +52,24 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 22 Feb 2022 23:26:06 +0530, Krishna Yarlagadda wrote:
-> Add ACPI support for Tegra210 QUAD SPI driver and support
-> new Tegra194 feature, combined sequence mode.
-> 
-> v2 changes:
-> - use combined sequence mode as default
-> - remove property to switch transfer modes
-> - fix compilation warnings
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: Tegra QUAD SPI combined sequence mode
+  Submitter: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=616839
+  Lore link: https://lore.kernel.org/r/20220222175611.58051-1-kyarlagadda@nvidia.com
+    Patches: [v2,1/5] spi: tegra210-quad: use device_reset method
+             [v2,2/5] dt-bindings: spi: Tegra234 QUAD SPI compatible
+             [v2,3/5] spi: tegra210-quad: add new chips to compatible
 
-Thanks!
 
-[1/5] spi: tegra210-quad: use device_reset method
-      commit: ac982578e7d340dc4f4fd243f4a4b24787d28c3f
-[2/5] dt-bindings: spi: Tegra234 QUAD SPI compatible
-      commit: de2f678b11bdcbabb6d804c543f9a3325c0e83bf
-[3/5] spi: tegra210-quad: add new chips to compatible
-      commit: ea23f0e148b82e5bcbc6c814926f53133552f0f3
+Total patches: 3
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
