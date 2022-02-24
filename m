@@ -2,59 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6C24C36A2
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Feb 2022 21:11:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A22824C3697
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Feb 2022 21:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234256AbiBXUMG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Feb 2022 15:12:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
+        id S234250AbiBXUMJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 24 Feb 2022 15:12:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234251AbiBXUMF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Feb 2022 15:12:05 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2872CF25;
-        Thu, 24 Feb 2022 12:11:35 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id i11so4449788eda.9;
-        Thu, 24 Feb 2022 12:11:35 -0800 (PST)
+        with ESMTP id S234257AbiBXUMI (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Feb 2022 15:12:08 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85785193CB;
+        Thu, 24 Feb 2022 12:11:36 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id s24so4469412edr.5;
+        Thu, 24 Feb 2022 12:11:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language
          :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=kKy0SIhSKIu0kr4V4JEIbxoglz4OmTrfglh5tt6nsYg=;
-        b=QdhW2DCKhmJB5VXGZFJfH7ZF47QkssFORrQn+dwi6ampYfc6DbEvRiB00HukSiD/Xx
-         xLmiCT2E+0K7MEAubTf+4e0pwdJIUhbpjdSNkBFiQM9oSLRRPyKxD+fJ9LpLvIGP0jHI
-         gVpuP4MOmdWQXm7hdJ0juO9V3caTWucEcmf7YJYjMDHOm8Zhon1+lFFhYdophwymy1/R
-         2tfuko9MQKHhISTAmDY4Pk8RjadWxJOiNCLxJo9RN+c5fGuwOjOYy1xD9HcZ7r34HmwW
-         1KPwI/Y/yU1HE1nMsY/2lMK7LLYb+XfJatje+2/IjL056fag2LcCeBtt1ebuE76P9/Hb
-         LxRA==
+        bh=e5NyuFcM6LQ6ck24zC5Lh3fqt3x4cs5RkTNn8b8l2Vk=;
+        b=WW8m6ltpaXjzsUeL8mbZAG+qShtaE0rRC0oJsgH8l16Cgy1HBjPK4SjOi6cc9YXKLY
+         FUJfNFr4zzbeWHGgcbrVYOkyb359yLsSYLIrICroCc8Dfz4N/OTVGEFeAQkxOPu1f4fW
+         PdpD74HRc1Mh9mlT8MkTomiwLIow77sUEE7l5bCUAs1MTdH8+GjcMaAHlm/i3oW9N6lW
+         Si0W3p3tf3bl4ssdMwkdDn6imwemZIgV1yNF8z8s2AjajQPK0btKxnLUyZkCK8p8XCxF
+         Pw8OXgy/8d/mAVufBvqg3c7mwsawDB35XWDB57W2ZxP9rBvOon7fcgYsVtfbpk58Rlmf
+         OfHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=kKy0SIhSKIu0kr4V4JEIbxoglz4OmTrfglh5tt6nsYg=;
-        b=ugB0kRDwc5pFa63WUmE+TjebA3/auaE4lCnOtxlRgc30cObfpgzZ/3ZKBaQH/4tWfy
-         aqFb91fJYgFMWoG29DFhtRKbpcJ6oMQDXQvKKufCsC4cG0lKXKRyaIChxiCXWtDAX9Ja
-         2Lu2d54T8NGhVVodAIeUN0mGrkGtOZUE9GDAcR6KfDNep/D/g7pP1LzJORxDheYsndRd
-         +oJmrpCqF79q3wIn0QUp2xSHbdCj9nibq2DfeeWj6uDXcxl3DwRS4iKyN9j4h8+SfXNw
-         xWsrwKDGnTtSKNy8EPXU6yzlm8REbdeX0tWUrOeVl4JWHnfkspfqm99c6MuXb/W+fVwW
-         qxuA==
-X-Gm-Message-State: AOAM531ynbun2q0l3pevoGICy5GXvhweOwHsJieiSCHfyqkB7U6SG9yP
-        Ebv8QNxzcTmlwdi7rRiMXhM=
-X-Google-Smtp-Source: ABdhPJxCCcYxGn8Kcl7NsKJCzdQ4Vl6lcaApJwLzVwVutqb4KSaWgUcrjJg1sBfXDTuQvMAevfEsmA==
-X-Received: by 2002:a50:8e44:0:b0:40f:d71f:bdf5 with SMTP id 4-20020a508e44000000b0040fd71fbdf5mr4038143edx.166.1645733493712;
-        Thu, 24 Feb 2022 12:11:33 -0800 (PST)
+        bh=e5NyuFcM6LQ6ck24zC5Lh3fqt3x4cs5RkTNn8b8l2Vk=;
+        b=RIk080JzsCivaXVCpL2QwnYI5RKM0+TMy7ytPE5dlYTa8VOHkq5idH6ezoauTauxYT
+         cn7co+PA35KWz0Dp3A2g8ZpQM29OtZqdwwf1oRT5KGaIfPQ9Lf800+VIdrOKlth/352d
+         04rz4xYgGHaBFnkvOVWi9Rcq3J0jurLhxEwWmmNnZzRhOuWpO3sErfQOndsjZi5iJn3E
+         H6RHg96+LlUeDOivwaVSuAAJegLFSYzwnRFJplmY9s5HMHVqvyIfZNTMJLJ15ADcUGCk
+         Xqxc+l/WGY8v4iYFUTjsB2d4bvkoWDSbVEVeVjAD7rJo5IrGVrFvZnSOhlRKr2wuWRW+
+         2gEw==
+X-Gm-Message-State: AOAM530YCb9WlgtVOcApkScbjQ1S8IQnrQPK93l6gE83cCAzvfUZXbYQ
+        mrFRT6S+iiMQQP2hHoScs4w3joRdSXE=
+X-Google-Smtp-Source: ABdhPJzgq2waSqW60Mpej34aIb3d1OVbopNz58VxC3hrhDTV4U4+trNRV9CIxszo/Xe4sDO01llm9A==
+X-Received: by 2002:a05:6402:c90:b0:410:a0a7:ca5b with SMTP id cm16-20020a0564020c9000b00410a0a7ca5bmr3812607edb.417.1645733495020;
+        Thu, 24 Feb 2022 12:11:35 -0800 (PST)
 Received: from ?IPV6:2003:ea:8f4d:2b00:70ad:e6bd:1cea:7edd? (p200300ea8f4d2b0070ade6bd1cea7edd.dip0.t-ipconnect.de. [2003:ea:8f4d:2b00:70ad:e6bd:1cea:7edd])
-        by smtp.googlemail.com with ESMTPSA id q15-20020a1709060e4f00b006cdf4535cf2sm130234eji.67.2022.02.24.12.11.32
+        by smtp.googlemail.com with ESMTPSA id b7-20020a50e787000000b00412d6970125sm229061edn.104.2022.02.24.12.11.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 12:11:33 -0800 (PST)
-Message-ID: <a9db41fc-3409-7a5f-00b1-e9619b80ca5e@gmail.com>
-Date:   Thu, 24 Feb 2022 21:10:30 +0100
+        Thu, 24 Feb 2022 12:11:34 -0800 (PST)
+Message-ID: <0cd06b4a-026b-5705-b36b-1914e63bbf0b@gmail.com>
+Date:   Thu, 24 Feb 2022 21:11:16 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.1
-Subject: [PATCH v4 5/6] arm64: dts: meson-gxl-s905w-tx3-mini: add support for
- the 7 segment display
+Subject: [PATCH v4 6/6] MAINTAINERS: Add entry for tm1628 auxdisplay driver
 Content-Language: en-US
 From:   Heiner Kallweit <hkallweit1@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -85,90 +84,31 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This patch adds support for the 7 segment display of the device.
+Add maintainer entry for tm1628 7-segment LED display driver.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- .../dts/amlogic/meson-gxl-s905w-tx3-mini.dts  | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-tx3-mini.dts b/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-tx3-mini.dts
-index 6705c2082..20bbd931e 100644
---- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-tx3-mini.dts
-+++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-tx3-mini.dts
-@@ -10,6 +10,7 @@
+diff --git a/MAINTAINERS b/MAINTAINERS
+index eb321d82f..d66da447d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19672,6 +19672,13 @@ W:	http://sourceforge.net/projects/tlan/
+ F:	Documentation/networking/device_drivers/ethernet/ti/tlan.rst
+ F:	drivers/net/ethernet/ti/tlan.*
  
- #include "meson-gxl-s905x.dtsi"
- #include "meson-gx-p23x-q20x.dtsi"
-+#include <dt-bindings/leds/common.h>
- 
- / {
- 	compatible = "oranth,tx3-mini", "amlogic,s905w", "amlogic,meson-gxl";
-@@ -19,6 +20,64 @@ memory@0 {
- 		device_type = "memory";
- 		reg = <0x0 0x0 0x0 0x40000000>; /* 1 GiB or 2 GiB */
- 	};
++TM1628 LED CONTROLLER DRIVER
++M:	Heiner Kallweit <hkallweit1@gmail.com>
++S:	Maintained
++F:	Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml
++F:	Documentation/ABI/testing/sysfs-devices-auxdisplay-tm1628
++F:	drivers/auxdisplay/tm1628.c
 +
-+	spi {
-+		compatible = "spi-gpio";
-+		sck-gpios = <&gpio GPIODV_27  GPIO_ACTIVE_HIGH>;
-+		mosi-gpios = <&gpio GPIODV_26 GPIO_ACTIVE_HIGH>;
-+		cs-gpios = <&gpio_ao GPIOAO_4 GPIO_ACTIVE_LOW>;
-+		num-chipselects = <1>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		tm1628: led-controller@0 {
-+			compatible = "titanmec,tm1628";
-+			reg = <0>;
-+			spi-3wire;
-+			spi-lsb-first;
-+			spi-rx-delay-us = <1>;
-+			spi-max-frequency = <500000>;
-+			#address-cells = <2>;
-+			#size-cells = <0>;
-+
-+			segment-mapping = /bits/ 8 <4 5 6 1 2 3 7>;
-+			grid = /bits/ 8 <4 3 2 1>;
-+
-+			alarm@5,1 {
-+				reg = <5 1>;
-+				function = LED_FUNCTION_ALARM;
-+			};
-+
-+			usb@5,2 {
-+				reg = <5 2>;
-+				function = LED_FUNCTION_USB;
-+			};
-+			play@5,3 {
-+				reg = <5 3>;
-+				function = "play";
-+			};
-+
-+			pause@5,4 {
-+				reg = <5 4>;
-+				function = "pause";
-+			};
-+
-+			colon@5,5 {
-+				reg = <5 5>;
-+				function = "colon";
-+			};
-+
-+			lan@5,6 {
-+				reg = <5 6>;
-+				function = LED_FUNCTION_LAN;
-+			};
-+
-+			wlan@5,7 {
-+				reg = <5 7>;
-+				function = LED_FUNCTION_WLAN;
-+			};
-+		};
-+	};
- };
- 
- &ir {
+ TM6000 VIDEO4LINUX DRIVER
+ M:	Mauro Carvalho Chehab <mchehab@kernel.org>
+ L:	linux-media@vger.kernel.org
 -- 
 2.35.1
 
