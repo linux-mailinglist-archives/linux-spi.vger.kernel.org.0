@@ -2,111 +2,165 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BAF4C412B
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 10:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1DA44C418E
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 10:36:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238945AbiBYJTb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Feb 2022 04:19:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
+        id S233982AbiBYJhN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Feb 2022 04:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232671AbiBYJTb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Feb 2022 04:19:31 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C3E252917;
-        Fri, 25 Feb 2022 01:18:59 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21P9IBjF017495;
-        Fri, 25 Feb 2022 03:18:11 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1645780691;
-        bh=rvWbhCJfnEIOUkIutnw+J3DZO5DRfhnDxkBwC3aC8fE=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=Dii+kV0O8lo7+yx9O7UyWiW3gSP6WIDtP/4eZgE9Ho3Cw26ca86US8X/AxQnfks1G
-         nASL/KcwxckCgSbhpmVeBT9xnbVkTil2IopvLPhBkrOnoL+iOuszuj3r/4TahYOuuD
-         xnFsC8AoW1vpbjkbo3nNFSOHCla7+eB+KnEynj/M=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21P9IB0H081229
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 25 Feb 2022 03:18:11 -0600
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 25
- Feb 2022 03:18:10 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 25 Feb 2022 03:18:10 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21P9IAlO009024;
-        Fri, 25 Feb 2022 03:18:10 -0600
-Date:   Fri, 25 Feb 2022 14:48:09 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>
-CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-aspeed@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 08/10] spi: aspeed: Calibrate read timings
-Message-ID: <20220225091809.gvup3mcst45szi6x@ti.com>
-References: <20220214094231.3753686-1-clg@kaod.org>
- <20220214094231.3753686-9-clg@kaod.org>
+        with ESMTP id S239161AbiBYJhK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Feb 2022 04:37:10 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6788626D
+        for <linux-spi@vger.kernel.org>; Fri, 25 Feb 2022 01:36:34 -0800 (PST)
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1159E3F1A1
+        for <linux-spi@vger.kernel.org>; Fri, 25 Feb 2022 09:36:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645781793;
+        bh=mwBGuSv1vzWcEgYl2MgCXz9QnnQmXLrpGmSTa9ywwuI=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=qk45lsTpLT74Z731Io80odzcwBaoFTxG+Ex9+UdRPhdmJoGO9vW6y4Mb2oCr/hm3P
+         a3qd6+kEXaJtSUP9Zl/ZtXqLzBxM3SABsJxlR5a8Il+l1tZX8I88h/yKKSUUV6I01g
+         DRFJxqp7rC4/ai+ha0dw0AHBcOvES48XJhLinWjnK6HIYzDvQdZv8YY+X82rBA815f
+         dmRZwh/gCIT80u78M+aOlLhHR7VlFPIT54eSAKS0o1ICxbK2oej410Ty4oKK942k66
+         7iCUwLl8iMrf0pv37dqGhyIPijzTANBJE7OHXSNGASwWf0nUHLabKJoDTXWAK/SRre
+         c8UfUrM4p9Awg==
+Received: by mail-wm1-f69.google.com with SMTP id c5-20020a1c3505000000b0034a0dfc86aaso1301217wma.6
+        for <linux-spi@vger.kernel.org>; Fri, 25 Feb 2022 01:36:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mwBGuSv1vzWcEgYl2MgCXz9QnnQmXLrpGmSTa9ywwuI=;
+        b=ziwH23UwUuigdYrNSnzzsK/ppQLIS63lbBbzX8+7CzlY4MaRUyuhjY/0nY7KRgAmnI
+         9l0jHdLfmntODTm+ro4NGXtOswq5PodGjpqn8OaUvhRtCVKBgbv5vmyOVJym7uPH3imv
+         f39CE8UpRJKe0pvmyFsZQtitoTUAgBr8OV2AO91RBmuu8GJxXBKxeB4/MVPwZ15OJe7l
+         Qr2O6dzxcIc5gNHisgPXMI3ERA1gAApS8EfUQXv1ur0+ISoat0YUttdKKhADkSU8h9K3
+         yqCnrO2ZFtln8XyUkBxJSjKjMhY1meOhkTqZMaYFMzoH/e6ahjVgz3f6RMHJwvPgLtj5
+         qNvg==
+X-Gm-Message-State: AOAM532ie+Wge9MFU6sT9rd8KMvvKvzwj+Fy+CXKUXKU0w57tpdLZK4z
+        C9SOFrSjJfFpTP5hWb4M00ayBdcmNSbpfOnfziKBaAOuufwhVazw3P5Q3m5RpMrJGt7EPU57tpU
+        PRNLN2nrGrmfzAwvEzWVEAWwz05ZG55QGmS5zkw==
+X-Received: by 2002:a17:906:4cca:b0:6ce:6a06:bf7 with SMTP id q10-20020a1709064cca00b006ce6a060bf7mr5644759ejt.109.1645781782638;
+        Fri, 25 Feb 2022 01:36:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxvGXs5zpBbIxYfXArg3HJWTHPHMBjqJChT5RpHzF7M3/UrStNiNcxogS5o2fNS3FLp8Ip6Ag==
+X-Received: by 2002:a17:906:4cca:b0:6ce:6a06:bf7 with SMTP id q10-20020a1709064cca00b006ce6a060bf7mr5644737ejt.109.1645781782424;
+        Fri, 25 Feb 2022 01:36:22 -0800 (PST)
+Received: from [192.168.0.130] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id bo9-20020a170906d04900b006ce6b8e05c1sm773655ejb.150.2022.02.25.01.36.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Feb 2022 01:36:21 -0800 (PST)
+Message-ID: <0aff95ff-5b79-8ae9-48fd-720a9f27cbce@canonical.com>
+Date:   Fri, 25 Feb 2022 10:36:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220214094231.3753686-9-clg@kaod.org>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 05/11] pci: use helper for safer setting of
+ driver_override
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+References: <20220224235206.GA302751@bhelgaas>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220224235206.GA302751@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 14/02/22 10:42AM, Cédric Le Goater wrote:
-> To accommodate the different response time of SPI transfers on different
-> boards and different SPI NOR devices, the Aspeed controllers provide a
-> set of Read Timing Compensation registers to tune the timing delays
-> depending on the frequency being used. The AST2600 SoC has one of
-> these registers per device. On the AST2500 and AST2400 SoCs, the
-> timing register is shared by all devices which is a bit problematic to
-> get good results other than for one device.
+On 25/02/2022 00:52, Bjorn Helgaas wrote:
+> On Thu, Feb 24, 2022 at 08:49:15AM +0100, Krzysztof Kozlowski wrote:
+>> On 23/02/2022 22:51, Bjorn Helgaas wrote:
+>>> In subject, to match drivers/pci/ convention, do something like:
+>>>
+>>>   PCI: Use driver_set_override() instead of open-coding
+>>>
+>>> On Wed, Feb 23, 2022 at 08:13:04PM +0100, Krzysztof Kozlowski wrote:
+>>>> Use a helper for seting driver_override to reduce amount of duplicated
+>>>> code.
+>>>> @@ -567,31 +567,15 @@ static ssize_t driver_override_store(struct device *dev,
+>>>>  				     const char *buf, size_t count)
+>>>>  {
+>>>>  	struct pci_dev *pdev = to_pci_dev(dev);
+>>>> -	char *driver_override, *old, *cp;
+>>>> +	int ret;
+>>>>  
+>>>>  	/* We need to keep extra room for a newline */
+>>>>  	if (count >= (PAGE_SIZE - 1))
+>>>>  		return -EINVAL;
+>>>
+>>> This check makes no sense in the new function.  Michael alluded to
+>>> this as well.
+>>
+>> I am not sure if I got your comment properly. You mean here:
+>> 1. Move this check to driver_set_override()?
+>> 2. Remove the check entirely?
 > 
-> The algorithm first reads a golden buffer at low speed and then performs
-> reads with different clocks and delay cycle settings to find a breaking
-> point. This selects a default good frequency for the CEx control register.
-> The current settings are bit optimistic as we pick the first delay giving
-> good results. A safer approach would be to determine an interval and
-> choose the middle value.
+> I was mistaken about the purpose of the comment and the check.  I
+> thought it had to do with *this* function, and this function doesn't
+> add a newline, and there's no obvious connection with PAGE_SIZE.
 > 
-> Due to the lack of API, calibration is performed when the direct mapping
-> for reads is created.
-
-The dirmap_create mapping says nothing about _when_ it should be called. 
-So there is no guarantee that it will only be called after the flash is 
-fully initialized. I suggest you either make this a requirement of the 
-API, or create a new API that guarantees it will only be called after 
-the flash is initialized, like [0].
-
-[0] https://patchwork.ozlabs.org/project/linux-mtd/patch/20210311191216.7363-2-p.yadav@ti.com/
-
+> But looking closer, I think the "extra room for a newline" is really
+> to make sure that *driver_override_show()* can add a newline and have
+> it still fit within the PAGE_SIZE sysfs limit.
 > 
-> Cc: Pratyush Yadav <p.yadav@ti.com>
-> Signed-off-by: Cédric Le Goater <clg@kaod.org>
-> ---
+> Most driver_override_*() functions have the same comment, so maybe
+> this was obvious to everybody except me :)  I do see that spi.c adds
+> "when displaying value" at the end, which helps a lot.
+> 
+> Sorry for the wild goose chase.
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+I think I will move this check anyway to driver_set_override() helper,
+because there is no particular benefit to have duplicated all over. The
+helper will receive "count" argument so can perform all checks.
+
+
+Best regards,
+Krzysztof
