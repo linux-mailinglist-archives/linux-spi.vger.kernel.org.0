@@ -2,51 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4494C3A9E
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 02:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4B64C3AB3
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 02:01:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236236AbiBYBAW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Feb 2022 20:00:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36644 "EHLO
+        id S236091AbiBYBAY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 24 Feb 2022 20:00:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235011AbiBYBAV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Feb 2022 20:00:21 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7062804FE;
-        Thu, 24 Feb 2022 16:59:50 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id y5so3358535pfe.4;
-        Thu, 24 Feb 2022 16:59:50 -0800 (PST)
+        with ESMTP id S235011AbiBYBAX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Feb 2022 20:00:23 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46ACB2819A5;
+        Thu, 24 Feb 2022 16:59:53 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id ev16-20020a17090aead000b001bc3835fea8so3487781pjb.0;
+        Thu, 24 Feb 2022 16:59:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HarL5/zDESWzDbkIHnU59WJXVsMBep1/fNRKYTr9jAE=;
-        b=FEfUlf6EJgS98MtGimS+TaZAMOGU6ogXn3khmumCxAAHVsHW6YXrKCekr2UDEgRB6G
-         zF9FBHE6aWk0I9tmg60kDIWT/6LVG6tpQh2j+7D3fd5ASqfGthjCTinqmBT6+YaVvfWK
-         Zdruapk3pnFmjL8jpYOA+glnNRxIdogcYrv6MVi59UzvdarSCAAt6ZKi/R9ewIrH6eRO
-         01ISaoULIU5VkjmxibPWUENWZSgZfMDDDWMywZyXBDmiEeTVvJdEULq7Y+uh72zjXdl8
-         z0QTiFSD4MdLVLfYDWrwnpudbYqstC6rGvfGlaS4pAsfZKzJstl5jYzK3z06FpaTkJch
-         pcwQ==
+        bh=1LYyiuzySTYab5AWLbomJLC5ogjyw6DZmtGr16Spi3E=;
+        b=kA4ahrerTGSfUevzXA6H2Nksdb2K+8y4H8Xe552TZ11Kq+zljpuVJewrtwLwelw66j
+         BXGMOhMfp5uOO5mEGvNLvdMsaLS+nh8E0XYtecGZpVI5LkBA/zZscDlq6vqFtSAdHOMX
+         esiiflHUCm1zm6gxSQuKW/xl37CpWl2iQGsQQ0pQPkwKT9ENJC/L+vSy5bmgk8CY/v11
+         WGSPEczMSLgoY5FmnaKEti1Myhkhqy1eWvUlgxLPcWwCLTL9R6Cm0Ska8TGJyWtLyQvQ
+         JMzb7HlAjTP/kYhj58GGd1QfXokG+cK3tNI+RIhfuhmEQ+/7wKvaLvMTh0GjNXofDqd6
+         xwkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HarL5/zDESWzDbkIHnU59WJXVsMBep1/fNRKYTr9jAE=;
-        b=yFoesZoI5ljVpJB+vBPnXfWhmkjh1JYG01UPcqPr1eA1dbGwVI8H4/FfDkyQJ9CVeU
-         WOtj5wHcL0x+SKuAiM8y2meARoTHL4i1k4IXdIhwsT0aJlTgXDx6JUFVavEjdwxMXNOP
-         BxBXtQucTSzyN3LzbIFg5RyUI6X2cHezK1BQbBbO4nNIo+HUzVHOquxmNvhEYbNZTtJj
-         g0xx8Pwo3owpg23hBJj6ty3TlVpXEI9NlxC0UOvhYV3VWomRgt6kY38vUXl1H+PCOISM
-         ArEoFbV5Hu4JqV/7zDz7HklbqDr3a5944Y64SXfNFKlokQdtbgcYL3ZaZSfRxzkEjvUd
-         andQ==
-X-Gm-Message-State: AOAM530yQOqafWLV/8AnXWrP5jdi/EjClKNo2uiz/TjDBzWI0fCN+koE
-        A7Tyte3lfqjXxyEKyMGJbo0=
-X-Google-Smtp-Source: ABdhPJwFN51nYhY5jXI1+TkBsvmb7jPAdyQOkOIghEZDXb52VVLNKcu/nuYLzyhsOgeagqbOZlU0Ow==
-X-Received: by 2002:a65:6a13:0:b0:373:14f6:5d33 with SMTP id m19-20020a656a13000000b0037314f65d33mr4216673pgu.62.1645750790165;
-        Thu, 24 Feb 2022 16:59:50 -0800 (PST)
+        bh=1LYyiuzySTYab5AWLbomJLC5ogjyw6DZmtGr16Spi3E=;
+        b=7lKwvc+uy3qjjvQQEim7UJ2bSt7njp3NJ00sQUwesjvIt/nG9yjfqfAgef9dO8bc5a
+         xVhzF19TfzoBBTtZp3suRi9i43gGjwR5eIGlW2vgPXzfsurKoRHcPp2Mt7UycKsn4oDU
+         2F9fcd4ebXe1cWCGzbyZ/TKS8vPEXyWcsG50L9wOvThJsybE+WaTJU4A0A2D6h1pvkQD
+         M4upeHiJ3g7Rh+2zJaozbRAIt5RtymjTJCQZRUINapyYK1TtaDDFUM0lNx4+3gIIm6lA
+         c1VU8yUWTOVLwZno6IiBb6T+b7caSw2mG9ifj27k/YyGwEIpx5xwSjhEozMHMaY9BGqY
+         eGpA==
+X-Gm-Message-State: AOAM532Na8EQDd0FlupxqQW/G5KNHxNQI7/jTNOhWOagMblL0O5QUsMO
+        sxwXlFYEQnr5QSr9+24hrymmGDwGnp4=
+X-Google-Smtp-Source: ABdhPJyHupZy2cugbsFgHGZ8p4gJ5YOcfPBkYXZtYFXlhIZnrIVfdN/VaqdAmLOmeEh0xvbMpk/3JQ==
+X-Received: by 2002:a17:90a:2849:b0:1bc:50a8:6970 with SMTP id p9-20020a17090a284900b001bc50a86970mr702116pjf.193.1645750792788;
+        Thu, 24 Feb 2022 16:59:52 -0800 (PST)
 Received: from thelio.corp.microsoft.com ([2001:4898:80e8:36:37cd:6bd:2964:3d5e])
-        by smtp.gmail.com with ESMTPSA id w5-20020a056a0014c500b004f3a5535431sm742070pfu.4.2022.02.24.16.59.49
+        by smtp.gmail.com with ESMTPSA id w5-20020a056a0014c500b004f3a5535431sm742070pfu.4.2022.02.24.16.59.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 16:59:49 -0800 (PST)
+        Thu, 24 Feb 2022 16:59:52 -0800 (PST)
 From:   Dmitry Antipov <daantipov@gmail.com>
 X-Google-Original-From: Dmitry Antipov <dmanti@microsoft.com>
 To:     Jiri Kosina <jikos@kernel.org>,
@@ -57,9 +57,9 @@ To:     Jiri Kosina <jikos@kernel.org>,
         Felipe Balbi <balbi@kernel.org>
 Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
         linux-spi@vger.kernel.org, Dmitry Antipov <dmanti@microsoft.com>
-Subject: [PATCH v4 3/6] Documentation: DT bindings for Microsoft G6 Touch Digitizer
-Date:   Thu, 24 Feb 2022 16:59:33 -0800
-Message-Id: <20220225005936.3485405-4-dmanti@microsoft.com>
+Subject: [PATCH v4 4/6] Documentation: Correction in HID output_report callback description.
+Date:   Thu, 24 Feb 2022 16:59:34 -0800
+Message-Id: <20220225005936.3485405-5-dmanti@microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220225005936.3485405-1-dmanti@microsoft.com>
 References: <20220225005936.3485405-1-dmanti@microsoft.com>
@@ -77,127 +77,30 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 From: Dmitry Antipov <dmanti@microsoft.com>
 
-Documentation describes the required and optional properties for
-implementing Device Tree for a Microsoft G6 Touch Digitizer that
-supports HID over SPI Protocol 1.0 specification.
+Originally output_report callback was described as must-be asynchronous,
+but that is not the case in some implementations, namely i2c-hid.
+Correct the documentation to say that it may be asynchronous.
 
 Signed-off-by: Dmitry Antipov <dmanti@microsoft.com>
 ---
- .../input/microsoft,g6-touch-digitizer.yaml   | 105 ++++++++++++++++++
- 1 file changed, 105 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/input/microsoft,g6-touch-digitizer.yaml
+ Documentation/hid/hid-transport.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/input/microsoft,g6-touch-digitizer.yaml b/Documentation/devicetree/bindings/input/microsoft,g6-touch-digitizer.yaml
-new file mode 100644
-index 000000000000..e516717527e9
---- /dev/null
-+++ b/Documentation/devicetree/bindings/input/microsoft,g6-touch-digitizer.yaml
-@@ -0,0 +1,105 @@
-+# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/input/microsoft,g6-touch-digitizer.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Microsoft G6 Touch Digitizer
-+
-+maintainers:
-+  - Dmitry Antipov <dmanti@microsoft.com>
-+
-+description: |
-+  Microsoft G6 touch digitizer is a HID over SPI device supporting HID Over SPI
-+  Protocol Specification 1.0, available at
-+  https://www.microsoft.com/en-us/download/details.aspx?id=103325.
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: microsoft,g6-touch-digitizer
-+      - items:
-+        - const: microsoft,g6-touch-digitizer
-+        - const: hid-over-spi
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  reset-gpios:
-+    maxItems: 1
-+    description:
-+      GPIO specifier for the digitizer's reset pin (active low). The line must
-+      be flagged with GPIO_ACTIVE_LOW.
-+
-+  vdd-supply:
-+    description:
-+      Regulator for the VDD supply voltage.
-+
-+  input-report-header-address:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      This property and the rest are described in HID Over SPI Protocol Spec 1.0
-+
-+  input-report-body-address:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  output-report-address:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  read-opcode:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  write-opcode:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  hid-over-spi-flags:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  post-power-on-delay-ms:
-+    description:
-+      Optional time in ms required by the device after enabling its regulators
-+      or powering it on, before it is ready for communication.
-+
-+  minimal-reset-delay-ms:
-+    description:
-+      Optional minimum amount of time in ms that device needs to be in reset
-+      state for the reset to take effect.
-+
-+required:
-+  - compatible
-+  - interrupts
-+  - reset-gpios
-+  - vdd-supply
-+  - input-report-header-address
-+  - input-report-body-address
-+  - output-report-address
-+  - read-opcode
-+  - write-opcode
-+  - hid-over-spi-flags
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+    spi-hid-dev0 {
-+      compatible = "microsoft,g6-touch-digitizer", "hid-over-spi";
-+      reg = <0>;
-+      interrupts-extended = <&gpio 42 IRQ_TYPE_EDGE_FALLING>;
-+      reset-gpios = <&gpio 27 GPIO_ACTIVE_LOW>;
-+      vdd-supply = <&pm8350c_l3>;
-+      pinctrl-names = "default";
-+      pinctrl-0 = <&ts_d6_reset_assert &ts_d6_int_bias>;
-+      input-report-header-address = <0x1000>;
-+      input-report-body-address = <0x1004>;
-+      output-report-address = <0x2000>;
-+      read-opcode = <0x0b>;
-+      write-opcode = <0x02>;
-+      hid-over-spi-flags = <0x00>;
-+      post-power-on-delay-ms = <5>;
-+      minimal-reset-delay-ms = <5>;
-+    };
+diff --git a/Documentation/hid/hid-transport.rst b/Documentation/hid/hid-transport.rst
+index 6f1692da296c..2008cf432af1 100644
+--- a/Documentation/hid/hid-transport.rst
++++ b/Documentation/hid/hid-transport.rst
+@@ -327,8 +327,8 @@ The available HID callbacks are:
+ 
+    Send raw output report via intr channel. Used by some HID device drivers
+    which require high throughput for outgoing requests on the intr channel. This
+-   must not cause SET_REPORT calls! This must be implemented as asynchronous
+-   output report on the intr channel!
++   must not cause SET_REPORT calls! This call might be asynchronous, so the
++   caller should not expect an immediate response!
+ 
+    ::
+ 
 -- 
 2.25.1
 
