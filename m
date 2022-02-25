@@ -2,51 +2,63 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C094C4C7F
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 18:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9124C4E2B
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 19:58:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243833AbiBYRgr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Feb 2022 12:36:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39106 "EHLO
+        id S233877AbiBYS6g (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Feb 2022 13:58:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243832AbiBYRgn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Feb 2022 12:36:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290B01DF853;
-        Fri, 25 Feb 2022 09:36:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6DBCB832CB;
-        Fri, 25 Feb 2022 17:36:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06304C340E7;
-        Fri, 25 Feb 2022 17:36:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645810568;
-        bh=QPiQ0/Y3PgpODkPwCxa8qFsECGEgnhU38/p/hdBcPNs=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=d3j+jLgkWmnUiY2e7rDCPZH5HeVPykaBRziJwuA/tAYyUvC0wk2XsslZDFX1aPUkQ
-         mEfvfV/imwvCB6G20ZmD9OskZ2ZQJBC2l7EYJRtQpPKDDS9yLZytKZktWiL0I8zqY8
-         RK4brKxEJfUhlD6UeRG51cUBlvljYK2+szZhGtMES7/9zeMCHVZV/p+KxSxFMSzFOV
-         ebrsbzfApyrmgCjV821thZFxopup27Eskm5Q8EBdj77DRX3PwEpXrdNKw4vEhMJR1K
-         krY7NFweAE5uwisyTvwTFDPoTGpYtMjPIJZA3H9VaT5MiUL22ao9LinC1Wrgj0iESy
-         B/fNJpe9UllGQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, Li-hao Kuo <lhjeff911@gmail.com>,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com
-In-Reply-To: <097bbc8b703b17e8fb3e3f6f6d2f97fe668bd5c5.1645770648.git.lhjeff911@gmail.com>
-References: <097bbc8b703b17e8fb3e3f6f6d2f97fe668bd5c5.1645770648.git.lhjeff911@gmail.com>
-Subject: Re: [PATCH] spi: dt-bindings: remove unused required property
-Message-Id: <164581056673.2562676.17852885347289085467.b4-ty@kernel.org>
-Date:   Fri, 25 Feb 2022 17:36:06 +0000
+        with ESMTP id S230443AbiBYS6e (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Feb 2022 13:58:34 -0500
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCDB1E5A7E;
+        Fri, 25 Feb 2022 10:58:00 -0800 (PST)
+Received: by mail-oi1-f178.google.com with SMTP id s5so8286169oic.10;
+        Fri, 25 Feb 2022 10:58:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XSJqpyXOMhS5kw8V/AvAh+G8eD23sLN1cYoPcwgSo8E=;
+        b=118+1Rxu2UaqJraskJQQigouB7XOUHGYv0ly0Rwqn/sA0L9zK+RdAFbBUjkLx1p1oe
+         Wvnd74PI1oGuh54WfXO4BJdx9eDFTgfFsjNCIahd6GpKVANpRQWGrvj6ff7r3XtrxZNX
+         bL+tQt4D9PwtSS+5fYYi1FIgGCSkdtlz/7T2narTyLoynYZ3dnSquXKt2lDk1NVmFqYp
+         R0yzeHGS92W5OXpDFE+/9RQ9lspZkVYvDFfSfKYsCHkObFBZueo6edifE1Q1vrESn86S
+         AoUr6NWicQmFlqF1NaBlIE4TvYG2sUkIToe4UNrZsIOtteoyKQlgYyX4n64aOS/baBvq
+         wuTg==
+X-Gm-Message-State: AOAM530Hs/GRKy82q5HxbzsSSx9xlNvwSZzMaPo4hp7XOJbXaQiCcj2W
+        T0zR4ouf6PLOO6c1V+epcA==
+X-Google-Smtp-Source: ABdhPJzRL9I3juGZd4RbqTGsMJXhz2hWy20wQ1cZOx4PfY+9S5H2lzmLZ7u4WHIoeRBMZsSwD3TCkQ==
+X-Received: by 2002:a05:6808:13d6:b0:2d5:1d7e:5f1 with SMTP id d22-20020a05680813d600b002d51d7e05f1mr2542906oiw.41.1645815480271;
+        Fri, 25 Feb 2022 10:58:00 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id s30-20020a056870611e00b000d2672a8d13sm1732106oae.12.2022.02.25.10.57.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Feb 2022 10:57:59 -0800 (PST)
+Received: (nullmailer pid 1247848 invoked by uid 1000);
+        Fri, 25 Feb 2022 18:57:58 -0000
+Date:   Fri, 25 Feb 2022 12:57:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Leilk Liu <leilk.liu@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mediatek@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH V2 1/6] dt-bindings: spi: Add compatible for Mediatek IPM
+ IP with single mode
+Message-ID: <YhkmtgZzKiFn8ntK@robh.at.kernel.org>
+References: <20220221040717.3729-1-leilk.liu@mediatek.com>
+ <20220221040717.3729-2-leilk.liu@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220221040717.3729-2-leilk.liu@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,41 +66,14 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 25 Feb 2022 14:31:53 +0800, Li-hao Kuo wrote:
-> fix issue
-> /builds/robherring/linux-dt/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.example.dt.yaml:
-> spi@9C002D80: 'clocks-names' is a required property
-> From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
-> delete unused required(clock-name)
+On Mon, 21 Feb 2022 12:07:12 +0800, Leilk Liu wrote:
+> This patch adds dt-binding documentation for Mediatek SPI IPM IP with
+> single mode.
 > 
-> Fixes: 3b8ab4da34 ("spi: Fix test error for sp7021")
+> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> [...]
 
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: dt-bindings: remove unused required property
-      commit: 83854c231262d2ad43c4fb32414ba25304f925d8
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Acked-by: Rob Herring <robh@kernel.org>
