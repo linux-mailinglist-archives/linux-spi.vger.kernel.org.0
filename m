@@ -2,53 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C2B4C3F50
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 08:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBED84C3F4C
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 08:50:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238249AbiBYHva (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Feb 2022 02:51:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58114 "EHLO
+        id S234048AbiBYHvV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Feb 2022 02:51:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233813AbiBYHva (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Feb 2022 02:51:30 -0500
-X-Greylist: delayed 835 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Feb 2022 23:50:55 PST
-Received: from TWHMLLG3.macronix.com (twhmllg3.macronix.com [122.147.135.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837951AAFD9;
-        Thu, 24 Feb 2022 23:50:55 -0800 (PST)
-Received: from TWHMLLG3.macronix.com (localhost [127.0.0.2] (may be forged))
-        by TWHMLLG3.macronix.com with ESMTP id 21P7axKH033262;
-        Fri, 25 Feb 2022 15:36:59 +0800 (GMT-8)
-        (envelope-from zhengxunli@mxic.com.tw)
-Received: from twhfmlp1.macronix.com (twhfmlp1.macronix.com [172.17.20.91])
-        by TWHMLLG3.macronix.com with ESMTP id 21P7ZmSO032150;
-        Fri, 25 Feb 2022 15:35:48 +0800 (GMT-8)
-        (envelope-from zhengxunli@mxic.com.tw)
-Received: from MXML06C.mxic.com.tw (mxml06c.mxic.com.tw [172.17.14.55])
-        by Forcepoint Email with ESMTP id C0D21930209A44DCA07D;
-        Fri, 25 Feb 2022 15:35:48 +0800 (CST)
-In-Reply-To: <12107fcd-eb74-4c71-25c9-1acaeaf45ea8@microchip.com>
-References: <20220218145900.1440045-1-tudor.ambarus@microchip.com> <44f655d027b49b87065915f6ba2744d2@walle.cc> <81d7c569-d6c2-9167-e007-eda72f34842b@microchip.com> <23fbbf2dde387e3832b4ca23d46816c0@walle.cc> <7cd74ef3-5a7d-4e65-3436-ee3399ca56a3@microchip.com> <e39d06684b8f3a63103f40f0e99e030e@walle.cc> <3cd510ad-a6ab-d4a0-92e3-9156a0c7ddbf@microchip.com> <20220223183849.xcwciv2ybnkdnauk@ti.com> <6eb179ec-0b12-de30-829e-83ec6b964f21@microchip.com> <779069a1-7389-ab70-9f03-81090d0600ba@microchip.com> <a85e2d1862cfff477e97c39509b2b74d@walle.cc> <12107fcd-eb74-4c71-25c9-1acaeaf45ea8@microchip.com>
-To:     <Tudor.Ambarus@microchip.com>
-Cc:     broonie@kernel.org, jaimeliao@mxic.com.tw,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-spi@vger.kernel.org, michael@walle.cc,
-        miquel.raynal@bootlin.com, Nicolas.Ferre@microchip.com,
-        p.yadav@ti.com, richard@nod.at, vigneshr@ti.com
-Subject: Re: [PATCH 0/4] spi-mem: Allow specifying the byte order in DTR mode
+        with ESMTP id S233813AbiBYHvU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Feb 2022 02:51:20 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FE91AAFCF;
+        Thu, 24 Feb 2022 23:50:48 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21P7oArn092127;
+        Fri, 25 Feb 2022 01:50:10 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1645775410;
+        bh=EE1HknnGs341fweb74p5Qo4hBGv3hC8wo+SMvmEQFYk=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=H6LMFX+QWdtSUd9VvRoMYXp26qbIWJ9Tggb5Zbkp7PLFAQKbI0xYk2cEzbkKNE651
+         FLs/Vx3F5JAB5l+hTbumoFTuxAYP+T5CQ+rBxUiCsZbNcfpRkib5z9/AQK6mwJdEVG
+         qz4KCVtYvxXIQDVkaL8TYT4lfSxkAFQE9h6xF8sk=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21P7o9pQ032657
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 25 Feb 2022 01:50:10 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 25
+ Feb 2022 01:50:08 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 25 Feb 2022 01:50:08 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21P7o7Ew043530;
+        Fri, 25 Feb 2022 01:50:08 -0600
+Date:   Fri, 25 Feb 2022 13:20:07 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-aspeed@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 03/10] spi: spi-mem: Add driver for Aspeed SMC controllers
+Message-ID: <20220225075007.73xypamm3zbjnkg6@ti.com>
+References: <20220214094231.3753686-1-clg@kaod.org>
+ <20220214094231.3753686-4-clg@kaod.org>
 MIME-Version: 1.0
-X-KeepSent: 51615557:F936F0DA-482587F4:00215504;
- type=4; name=$KeepSent
-X-Mailer: Lotus Notes Release 8.5.3FP6 SHF907 April 26, 2018
-Message-ID: <OF51615557.F936F0DA-ON482587F4.00215504-482587F4.0029BB12@mxic.com.tw>
-From:   zhengxunli@mxic.com.tw
-Date:   Fri, 25 Feb 2022 15:35:48 +0800
-X-MIMETrack: Serialize by Router on MXML06C/TAIWAN/MXIC(Release 9.0.1FP10 HF265|July 25, 2018) at
- 2022/02/25 PM 03:35:48,
-        Serialize complete at 2022/02/25 PM 03:35:48
-Content-Type: text/plain; charset="Big5"
-Content-Transfer-Encoding: base64
-X-MAIL: TWHMLLG3.macronix.com 21P7ZmSO032150
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220214094231.3753686-4-clg@kaod.org>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,169 +74,159 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 14/02/22 10:42AM, Cédric Le Goater wrote:
+> This SPI driver adds support for the Aspeed static memory controllers
+> of the AST2600, AST2500 and AST2400 SoCs using the spi-mem interface.
+> 
+>  * AST2600 Firmware SPI Memory Controller (FMC)
+>    . BMC firmware
+>    . 3 chip select pins (CE0 ~ CE2)
+>    . Only supports SPI type flash memory
+>    . different segment register interface
+>    . single, dual and quad mode.
+> 
+>  * AST2600 SPI Flash Controller (SPI1 and SPI2)
+>    . host firmware
+>    . 2 chip select pins (CE0 ~ CE1)
+>    . different segment register interface
+>    . single, dual and quad mode.
+> 
+>  * AST2500 Firmware SPI Memory Controller (FMC)
+>    . BMC firmware
+>    . 3 chip select pins (CE0 ~ CE2)
+>    . supports SPI type flash memory (CE0-CE1)
+>    . CE2 can be of NOR type flash but this is not supported by the driver
+>    . single, dual mode.
+> 
+>  * AST2500 SPI Flash Controller (SPI1 and SPI2)
+>    . host firmware
+>    . 2 chip select pins (CE0 ~ CE1)
+>    . single, dual mode.
+> 
+>  * AST2400 New Static Memory Controller (also referred as FMC)
+>    . BMC firmware
+>    . New register set
+>    . 5 chip select pins (CE0 ∼ CE4)
+>    . supports NOR flash, NAND flash and SPI flash memory.
+>    . single, dual and quad mode.
+> 
+> Each controller has a memory range on which flash devices contents are
+> mapped. Each device is assigned a window that can be changed at bootime
+> with the Segment Address Registers.
+> 
+> Each SPI flash device can then be accessed in two modes: Command and
+> User. When in User mode, SPI transfers are initiated with accesses to
+> the memory segment of a device. When in Command mode, memory
+> operations on the memory segment of a device generate SPI commands
+> automatically using a Control Register for the settings.
+> 
+> This initial patch adds support for User mode. Command mode needs a little
+> more work to check that the memory window on the AHB bus fits the device
+> size. It will come later when support for direct mapping is added.
+> 
+> Single and dual mode RX transfers are supported. Other types than SPI
+> are not supported.
+> 
+> Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> Signed-off-by: Cédric Le Goater <clg@kaod.org>
+> ---
+>  drivers/spi/spi-aspeed-smc.c            | 766 ++++++++++++++++++++++++
+>  drivers/mtd/spi-nor/controllers/Kconfig |   2 +-
+>  drivers/spi/Kconfig                     |  11 +
+>  drivers/spi/Makefile                    |   1 +
+>  4 files changed, 779 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/spi/spi-aspeed-smc.c
+> 
+[...]
+> +
+> +/* support for 1-1-1, 1-1-2 or 1-1-4 */
+> +static bool aspeed_spi_supports_op(struct spi_mem *mem, const struct spi_mem_op *op)
+> +{
+> +	if (op->cmd.buswidth > 1)
+> +		return false;
+> +
+> +	if (op->addr.nbytes != 0) {
+> +		if (op->addr.buswidth > 1 || op->addr.nbytes > 4)
+> +			return false;
+> +	}
+> +
+> +	if (op->dummy.nbytes != 0) {
+> +		if (op->dummy.buswidth > 1 || op->dummy.nbytes > 7)
+> +			return false;
+> +	}
+> +
+> +	if (op->data.nbytes != 0 && op->data.buswidth > 4)
+> +		return false;
+> +
+> +	if (!spi_mem_default_supports_op(mem, op))
+> +		return false;
+> +
+> +	return true;
 
-SGkgYWxsLA0KDQo8VHVkb3IuQW1iYXJ1c0BtaWNyb2NoaXAuY29tPiB3cm90ZSBvbiAyMDIyLzAy
-LzI0IKRVpMggMDY6Mjc6NTc6DQoNCj4gPFR1ZG9yLkFtYmFydXNAbWljcm9jaGlwLmNvbT4gDQo+
-IDIwMjIvMDIvMjQgpFWkyCAwNjoyOA0KPiANCj4gVG8NCj4gDQo+IDxtaWNoYWVsQHdhbGxlLmNj
-PiwgPHAueWFkYXZAdGkuY29tPiwgDQo+IA0KPiBjYw0KPiANCj4gPHAueWFkYXZAdGkuY29tPiwg
-PGJyb29uaWVAa2VybmVsLm9yZz4sIDxtaXF1ZWwucmF5bmFsQGJvb3RsaW4uY29tPiwNCj4gPHJp
-Y2hhcmRAbm9kLmF0PiwgPHZpZ25lc2hyQHRpLmNvbT4sIDxsaW51eC0NCj4gbXRkQGxpc3RzLmlu
-ZnJhZGVhZC5vcmc+LCA8bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZz4sIDxsaW51eC0NCj4g
-c3BpQHZnZXIua2VybmVsLm9yZz4sIDxOaWNvbGFzLkZlcnJlQG1pY3JvY2hpcC5jb20+LCANCj4g
-PHpoZW5neHVubGlAbXhpYy5jb20udHc+LCA8amFpbWVsaWFvQG14aWMuY29tLnR3Pg0KPiANCj4g
-U3ViamVjdA0KPiANCj4gUmU6IFtQQVRDSCAwLzRdIHNwaS1tZW06IEFsbG93IHNwZWNpZnlpbmcg
-dGhlIGJ5dGUgb3JkZXIgaW4gRFRSIG1vZGUNCj4gDQo+IE9uIDIvMjQvMjIgMTE6MzcsIE1pY2hh
-ZWwgV2FsbGUgd3JvdGU6DQo+ID4gRVhURVJOQUwgRU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBv
-ciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3UgDQo+IGtub3cgdGhlIGNvbnRlbnQgaXMgc2Fm
-ZQ0KPiA+IA0KPiA+IEFtIDIwMjItMDItMjQgMDc6MzcsIHNjaHJpZWIgVHVkb3IuQW1iYXJ1c0Bt
-aWNyb2NoaXAuY29tOg0KPiA+PiBPbiAyLzI0LzIyIDA4OjA4LCBUdWRvci5BbWJhcnVzQG1pY3Jv
-Y2hpcC5jb20gd3JvdGU6DQo+ID4+PiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtz
-IG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdSANCmtub3cNCj4gPj4+IHRoZSBjb250ZW50
-IGlzIHNhZmUNCj4gPj4+DQo+ID4+PiBPbiAyLzIzLzIyIDIwOjM4LCBQcmF0eXVzaCBZYWRhdiB3
-cm90ZToNCj4gPj4+PiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4g
-YXR0YWNobWVudHMgdW5sZXNzIHlvdQ0KPiA+Pj4+IGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZQ0K
-PiA+Pj4+DQo+ID4+Pj4gSGkgVHVkb3IsDQo+ID4+Pj4NCj4gPj4+PiBPbiAyMi8wMi8yMiAwMjo0
-M1BNLCBUdWRvci5BbWJhcnVzQG1pY3JvY2hpcC5jb20gd3JvdGU6DQo+ID4+Pj4+IE9uIDIvMjIv
-MjIgMTY6MjcsIE1pY2hhZWwgV2FsbGUgd3JvdGU6DQo+ID4+Pj4+PiBFWFRFUk5BTCBFTUFJTDog
-RG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdQ0KPiA+Pj4+
-Pj4ga25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo+ID4+Pj4+Pg0KPiA+Pj4+Pj4gQW0gMjAyMi0w
-Mi0yMiAxNToyMywgc2NocmllYiBUdWRvci5BbWJhcnVzQG1pY3JvY2hpcC5jb206DQo+ID4+Pj4+
-Pj4gT24gMi8yMi8yMiAxNjoxMywgTWljaGFlbCBXYWxsZSB3cm90ZToNCj4gPj4+Pj4+Pj4gRVhU
-RVJOQUwgRU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVz
-cyANCnlvdQ0KPiA+Pj4+Pj4+PiBrbm93DQo+ID4+Pj4+Pj4+IHRoZSBjb250ZW50IGlzIHNhZmUN
-Cj4gPj4+Pj4+Pj4NCj4gPj4+Pj4+Pj4gQW0gMjAyMi0wMi0yMiAxNDo1NCwgc2NocmllYiBUdWRv
-ci5BbWJhcnVzQG1pY3JvY2hpcC5jb206DQo+ID4+Pj4+Pj4+PiBPbiAyLzIxLzIyIDA5OjQ0LCBN
-aWNoYWVsIFdhbGxlIHdyb3RlOg0KPiA+Pj4+Pj4+Pj4+IEVYVEVSTkFMIEVNQUlMOiBEbyBub3Qg
-Y2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MNCj4gPj4+Pj4+Pj4+PiB5b3UN
-Cj4gPj4+Pj4+Pj4+PiBrbm93DQo+ID4+Pj4+Pj4+Pj4gdGhlIGNvbnRlbnQgaXMgc2FmZQ0KPiA+
-Pj4+Pj4+Pj4+DQo+ID4+Pj4+Pj4+Pj4gQW0gMjAyMi0wMi0xOCAxNTo1OCwgc2NocmllYiBUdWRv
-ciBBbWJhcnVzOg0KPiA+Pj4+Pj4+Pj4+PiBGb3J0dW5hdGVseSB0aGVyZSBhcmUgY29udHJvbGxl
-cnMNCj4gPj4+Pj4+Pj4+Pj4gdGhhdCBjYW4gc3dhcCBiYWNrIHRoZSBieXRlcyBhdCBydW50aW1l
-LCBmaXhpbmcgdGhlDQo+ID4+Pj4+Pj4+Pj4+IGVuZGlhbm5lc3Nlcy4NCj4gPj4+Pj4+Pj4+Pj4g
-UHJvdmlkZQ0KPiA+Pj4+Pj4+Pj4+PiBhIHdheSBmb3IgdGhlIHVwcGVyIGxheWVycyB0byBzcGVj
-aWZ5IHRoZSBieXRlIG9yZGVyIGluIERUUg0KPiA+Pj4+Pj4+Pj4+PiBtb2RlLg0KPiA+Pj4+Pj4+
-Pj4+DQo+ID4+Pj4+Pj4+Pj4gQXJlIHRoZXJlIGFueSBwYXRjaGVzIGZvciB0aGUgYXRtZWwtcXVh
-ZHNwaSB5ZXQ/IFdoYXQgaGFwcGVucw0KPiA+Pj4+Pj4+Pj4+IGlmDQo+ID4+Pj4+Pj4+Pg0KPiA+
-Pj4+Pj4+Pj4gbm90IHB1YmxpYywgYnV0IHdpbGwgcHVibGlzaCB0aGVtIHRoZXNlIGRheXMuDQo+
-ID4+Pj4+Pj4+Pg0KPiA+Pj4+Pj4+Pj4+IHRoZSBjb250cm9sbGVyIGRvZXNuJ3Qgc3VwcG9ydCBp
-dD8gV2lsbCB0aGVyZSBiZSBhIHNvZnR3YXJlDQo+ID4+Pj4+Pj4+Pj4gZmFsbGJhY2s/DQo+ID4+
-Pj4+Pj4+Pg0KPiA+Pj4+Pj4+Pj4gbm8gbmVlZCBmb3IgYSBmYWxsYmFjaywgdGhlIGNvbnRyb2xs
-ZXIgY2FuIGlnbm9yZQ0KPiA+Pj4+Pj4+Pj4gb3AtPmRhdGEuZHRyX2Jzd2FwMTYNCj4gPj4+Pj4+
-Pj4+IGlmDQo+ID4+Pj4+Pj4+PiBpdCBjYW4ndCBzd2FwIGJ5dGVzLg0KPiA+Pj4+Pj4+Pg0KPiA+
-Pj4+Pj4+PiBJIGRvbid0IHVuZGVyc3RhbmQuIElmIHRoZSBjb250cm9sbGVyIGRvZXNuJ3Qgc3dh
-cCB0aGUgMTZiaXQNCj4gPj4+Pj4+Pj4gdmFsdWVzLA0KPiA+Pj4+Pj4+PiB5b3Ugd2lsbCByZWFk
-IHRoZSB3cm9uZyBjb250ZW50LCBubz8NCj4gPj4+Pj4+Pj4NCj4gPj4+Pj4+Pg0KPiA+Pj4+Pj4+
-IEluIGxpbnV4IG5vLCBiZWNhdXNlIG1hY3Jvbml4IHN3YXBzIGJ5dGVzIG9uIGEgMiBieXRlIGJv
-dW5kYXJ5DQo+ID4+Pj4+Pj4gYm90aCBvbg0KPiA+Pj4+Pj4+IHJlYWRzIGFuZCBvbiBwYWdlIHBy
-b2dyYW0uIFRoZSBwcm9ibGVtIGlzIHdoZW4geW91IG1peCA4RC04RC04RA0KPiA+Pj4+Pj4+IG1v
-ZGUNCj4gPj4+Pj4+PiBhbmQNCj4gPj4+Pj4+PiAxLTEtMSBtb2RlIGFsb25nIHRoZSBib290IHN0
-YWdlcy4gTGV0J3MgYXNzdW1lIHlvdSB3cml0ZSBhbGwgDQpib290DQo+ID4+Pj4+Pj4gYmluYXJp
-ZXMNCj4gPj4+Pj4+PiBpbiAxLTEtMSBtb2RlLiBXaGVuIHJlYWNoaW5nIHUtYm9vdCBpZiB5b3Ug
-ZW5hYmxlIDhELThELThEIG1vZGUsDQo+ID4+Pj4+Pj4gd2hlbg0KPiA+Pj4+Pj4+IHUtYm9vdA0K
-PiA+Pj4+Pj4+IHdpbGwgdHJ5IHRvIGdldCB0aGUga2VybmVsIGl0IHdpbGwgZmFpbCwgYXMgdGhl
-IGZsYXNoIHN3YXBzIHRoZQ0KPiA+Pj4+Pj4+IGJ5dGVzDQo+ID4+Pj4+Pj4gY29tcGFyZWQNCj4g
-Pj4+Pj4+PiB0byB3aGF0IHdhcyB3cml0dGVuIHdpdGggMS0xLTEgbW9kZS4gWW91IHdyaXRlIEQw
-IEQxIEQyIEQzIGluDQo+ID4+Pj4+Pj4gMS0xLTENCj4gPj4+Pj4+PiBtb2RlIGFuZA0KPiA+Pj4+
-Pj4+IHdoZW4gcmVhY2hpbmcgdS1ib290IHlvdSB3aWxsIHJlYWQgRDEgRDAgRDMgRDIgYW5kIGl0
-IHdpbGwgbWVzcw0KPiA+Pj4+Pj4+IHRoZQ0KPiA+Pj4+Pj4+IGtlcm5lbCBpbWFnZS4NCj4gPj4+
-Pj4+DQo+ID4+Pj4+PiBCdXQgeW91IGhhdmUgdG8gY29uc2lkZXIgYWxzbyAzcmQgcGFydGllcywg
-bGlrZSBhbiBleHRlcm5hbA0KPiA+Pj4+Pj4gcHJvZ3JhbW1lcg0KPiA+Pj4+Pj4gb3INCj4gPj4+
-Pj4NCj4gPj4+Pj4gV2h5PyBJZiB5b3UgdXNlIHRoZSBzYW1lIG1vZGUgd2hlbiByZWFkaW5nIGFu
-ZCB3cml0aW5nLCBldmVyeXRoaW5nDQo+ID4+Pj4+IGlzIGZpbmUuDQo+ID4+Pj4+IEknbSBub3Qg
-c3VyZSB3aGF0J3MgeW91ciBzdWdnZXN0aW9uIGhlcmUuDQo+ID4+Pj4NCj4gPj4+PiBTbyBvdXIg
-c3RhbmNlIGhlcmUgaXMgdGhhdCB3ZSBkb24ndCBjYXJlIGFib3V0IGV4dGVybmFsIHByb2dyYW1z
-Pz4NCj4gPj4+PiBJZiB0aGF0IGlzIHRoZSBjYXNlIHRoZW4gd2h5IGJvdGhlciB3aXRoIGFsbCB0
-aGlzIGFueXdheT8gU2luY2UgdGhlDQo+ID4+Pj4gc3dhcA0KPiA+Pj4+IGhhcHBlbnMgYXQgYm90
-aCBwYWdlIHByb2dyYW0gYW5kIHJlYWQsIHdoYXQgeW91IHdyaXRlIGlzIHdoYXQgeW91DQo+ID4+
-Pj4gcmVhZA0KPiA+Pj4+IGJhY2suIFdobyBjYXJlcyB0aGUgb3JkZXIgc3RvcmVkIGluIHRoZSBh
-Y3R1YWwgZmxhc2ggbWVtb3J5IGFzIGxvbmcNCj4gPj4+PiBhcw0KPiA+Pj4+IHRoZSBkYXRhIHJl
-YWQgaXMgY29ycmVjdD8NCj4gPj4+Pg0KPiA+Pj4+IElmIHdlIGRvIGNhcmUgYWJvdXQgZXh0ZXJu
-YWwgcHJvZ3JhbXMsIHRoZW4gd2hhdCB3b3VsZCBoYXBwZW4gaWYgDQp0aGUNCj4gPj4+PiBleHRl
-cm5hbCBwcm9ncmFtIHdyaXRlcyBkYXRhIGluIDhELThELThEIG1vZGUgX3dpdGhvdXRfIHN3YXBw
-aW5nIA0KdGhlDQo+ID4+Pj4gYnl0ZXM/IFRoaXMgd291bGQgYWxzbyBjYXVzZSBkYXRhIGNvcnJ1
-cHRpb24uIFlvdSBjYW4ndCBjb250cm9sIA0Kd2hhdA0KPiA+Pj4+IHRoZXkgbW9kZSB0aGV5IHVz
-ZSwgYW5kIHlvdSBjYW4ndCBkZXRlY3QgaXQgbGF0ZXIgZWl0aGVyLg0KPiA+Pj4+DQo+ID4+Pj4g
-SSB0aGluayB0aGVyZSBpcyBubyB3aW5uaW5nIGhlcmUuIFlvdSBqdXN0IGhhdmUgdG8gc2F5IHRo
-YXQgDQpleHRlcm5hbA0KPiA+Pj4+IHByb2dyYW1zIHNob3VsZCB3cml0ZSBpbiA4RC04RC04RCBt
-b2RlIG9yIGl0IHdvbid0IGJvb3QuDQo+ID4gDQo+ID4gSU1ITyBpdCBzaG91bGQganVzdCB3b3Jr
-IHRoYXQgeW91IGNhbiB1c2UgMVMtMVMtMVMgbW9kZSBhbmQgOEQtOEQtOEQgDQpvbg0KPiA+IHRo
-ZQ0KPiA+IHNhbWUgZmxhc2guIEFmdGVyIGFsbCwgdGhhdCBpcyBUdWRvcidzIHVzZSBjYXNlLiBU
-aGUgUk9NIGFjY2VzcyB0aGUNCj4gPiBmbGFzaA0KPiA+IGluIHNpbmdsZSBiaXQgbW9kZSBhbmQg
-bGludXggaW4gOEQtOEQtOEQgbW9kZS4gTWF5YmUgdS1ib290IHdpbGwgdXNlDQo+ID4gcXVhZA0K
-PiA+IG1vZGUgaW4gYmV0d2Vlbi4gQWxsIG9mIHRoZXNlIGFjY2Vzc2VzIHNob3VsZCByZXR1cm4g
-dGhlIHNhbWUgZmxhc2gNCj4gPiBjb250ZW50Lg0KPiA+IA0KPiA+Pj4gSG93IGFib3V0IHN3YXBw
-aW5nIHRoZSBieXRlcyBqdXN0IGF0IHVzZXIgcmVxdWVzdD8gTWF5YmUgd2l0aCBhDQo+ID4+PiBL
-Y29uZmlnDQo+ID4+PiBvcHRpb24uDQo+ID4+DQo+ID4+IE1pY2hhZWwgaGFzIHN1Z2dlc3RlZCBv
-biAjaXJjIHRvIGFsd2F5cyBzd2FwIHRoZSBieXRlczogaWYgdGhlIFNQSQ0KPiA+PiBjb250cm9s
-bGVyDQo+ID4+IGNhbid0IGRvIGl0LCB0byBkbyBpdCBpbiBzb2Z0d2FyZSBhdCBTUEkgTk9SIGxl
-dmVsLiBJIGRvbid0IGtub3cgd2hhdA0KPiA+PiB0byBzYXkNCj4gPj4gYWJvdXQgdGhpcywgYmVj
-YXVzZSBKRURFQzIxNiBqdXN0IGluZm9ybXMgdGhlIHJlYWRlciBJIGd1ZXNzOg0KPiA+PiAiQnl0
-ZSBvcmRlciBvZiAxNi1iaXQgd29yZHMgaXMgc3dhcHBlZCB3aGVuIHJlYWQgaW4gOEQtOEQtOEQg
-bW9kZQ0KPiA+PiBjb21wYXJlZCB0bw0KPiA+PiAxLTEtMSBtb2RlLiIsIHRoaXMgZG9lc24ndCBs
-b29rIGxpa2UgYSBoYXJkIHJlcXVlc3QuIFRoZSBkb3duc2lkZSB0bw0KPiA+PiBkb2luZw0KPiA+
-PiB0aGUgc3dhcHBpbmcgaW4gc29mdHdhcmUgaXMgcGVyZm9ybWFuY2UgcGVuYWx0eSB3aGljaCB3
-aWxsIG1ha2UNCj4gPj4gbWFjcm9uaXgNCj4gPj4gdXNlcnMgaGF2ZSBzZWNvbmQgdGhvdWdodHMu
-IEkgZG9uJ3QgaGF2ZSBhIHN0cm9uZyBvcGluaW9uLCBidXQgSSBsZWFuDQo+ID4+IHRvd2FyZHMN
-Cj4gPj4gZG9pbmcgdGhlIHN3YXAganVzdCBhdCB1c2VyIHJlcXVlc3QsIHJlZ2FyZGxlc3MgaWYg
-SSBkbyBpdCB2aWEgdGhlIA0KU1BJDQo+ID4+IGNvbnRyb2xsZXINCj4gPj4gb3IgaW4gc29mdHdh
-cmUuDQo+ID4gDQo+ID4gSnVzdCBoYXZpbmcgYW5kIG9wdC1pbiB3aWxsIGJlIGEgbWVzcyBpbiB0
-aGUgZnV0dXJlIHdpdGggZmxhc2hlcw0KPiA+IGNvbnRhaW5pbmcNCj4gPiBieXRlIHN3YXBwZWQg
-Y29udGVudCBhbmQgd2UgY2FuJ3QgZXZlbiBmaXggaXQgYW5kIHdlIHdpbGwgaGF2ZSB0byBsaXZl
-DQo+ID4gd2l0aA0KPiA+IHRoYXQgZm9yZXZlci4gSU1ITyByaWdodCBub3cgaXMgdGhlIGJlc3Qg
-dGltZSB0byBjaXJjdW12ZW50IHRoYXQNCj4gPiBzY2VuYXJpby4NCj4gPiBJIGRvbid0IGhhdmUg
-YW55dGhpbmcgYWdhaW5zdCBtYWtlIGl0IHVzZXIgY29uZmlndXJhYmxlLCBidXQgaXQgc2hvdWxk
-DQo+ID4gYmUNCj4gPiBhbiBvcHQtb3V0Lg0KPiA+IA0KPiANCj4gc291bmRzIGdvb2QgdG8gbWUN
-Cj4gDQo+ID4gSSBoYXZlbid0IGxvb2tlZCBhdCBhbnkgY29udHJvbGxlcnMgd2hvIGNhbiBkbyA4
-RC04RC04RCBhY2Nlc3NlcywgDQptYXliZQ0KPiA+IG1vc3QNCj4gPiBvZiB0aGVtIGNhbiBkbyB0
-aGUgc3dhcHBpbmcgb24gdGhlaXIgb3duPyBTbyBpZiB5b3UgZG9uJ3Qgd2FudCB0bw0KPiA+IHN1
-cHBvcnQgYQ0KPiA+IHNvZnR3YXJlIGZhbGxiYWNrLCB0aGVuIHdlIHNob3VsZCBqdXN0IHNheSB0
-aGlzIG1vZGUgaXNuJ3Qgc3VwcG9ydGVkIA0KaWYNCj4gPiB0aGUgY29udHJvbGxlciBjYW4ndCBk
-byB0aGUgYnl0ZSBzd2FwcGluZyBhbmQgd2UgZmFsbCBiYWNrIHRvIGEgc2xvd2VyDQo+ID4gbW9k
-ZS4NCj4gDQo+IFNvZnR3YXJlIGZhbGxiYWNrIG9yIG1vZGUgZG93bmdyYWRlIC0gYm90aCBhcmUg
-Z29vZCBpZGVhcy4NCj4gUHJhdHl1c2gsIGNhbiB5b3VyIE9jdGFsIFNQSSBjb250cm9sbGVyIHN3
-YXAgYnl0ZXMgb24gYSAxNiBiaXQgYm91bmRhcnk/DQo+IA0KPiBUaGUgb25seSBkZWJhdGUgdGhh
-dCB3ZSBoYXZlIGlzIHdoZXRoZXIgdG8gYWx3YXlzIHN3YXAgKG9yIGRvd25ncmFkZSksDQo+IHRo
-dXMgdG8gaGF2ZSB0aGUgc2FtZSBieXRlIG9yZGVyIGFzIGluIDEtMS0xLCBvciB0byBpbnRyb2R1
-Y2UgYSBLY29uZmlnIA0Kb3B0aW9uDQo+IHRoYXQgd2lsbCBvcHQtb3V0IHRoZSBzd2FwLCBpc24n
-dCBpdD8gS2NvbmZpZyBpcyBhIGJpdCB1Z2xpZXIsIGJ1dCANCj4gbW9yZSBmbGV4aWJsZSwNCj4g
-YW5kIHdlIHN0aWxsIGRvbid0IGtub3cgZm9yIHN1cmUgaWYgdGhlIHN3YXAgaXMgbWFuZGF0b3J5
-IG9yIG5vdC4gDQo+IENhbiBzb21lb25lIGZyb20NCj4gbWFjcm9uaXggc2hlZCBzb21lIGxpZ2h0
-IG9uIHRoaXMgdG9waWM/DQoNClRoZSBtYWNyb25peCBpbiA4RC04RC04RCBtb2RlIGFsd2F5cyBo
-YXMgdG8gc3dhcCBkYXRhIGR1cmluZyByZWFkIGFuZCANCnByb2dyYW0NCm9wZXJhdGlvbnMuIFVu
-Zm9ydHVuYXRlbHkgdGhpcyBpcyBvdXIgbGltaXRhdGlvbiwgc3dhcCBkYXRhIGF0IHRoZSBmbGFz
-aCANCmxheWVyDQpyZWR1Y2VzIHBlcmZvcm1hbmNlIGFuZCBkb2VzIG5vdCBzdXBwb3J0IGRpcm1h
-cCBtb2RlLiBJZiB0aGUgU1BJIA0KY29udHJvbGxlcnMNCmFsbCBzdXBwb3J0IHN3YXAgZGF0YSwg
-ZXZlcnl0aGluZyBpcyBmaW5lLCBidXQgYXMgZmFyIGFzIEkga25vdywgdGhpcyBpcyANCnJhcmUu
-DQoNCkFsbCBpbiBhbGwsIHlvdXIgb3BpbmlvbnMgYW5kIGNvbW1lbnRzIGFyZSB2YWx1YWJsZS4g
-TW9yZW92ZXIgdGhlIGxlYXJuZWQgDQpsZXNzb25zDQpjb3VsZCBiZSBpbnB1dCB0byBuZXh0IGdl
-bmVyYXRpb24gb2YgT2N0YUZsYXNoLg0KDQpUaGFua3MsDQpaaGVuZ3h1bg0KDQoNCkNPTkZJREVO
-VElBTElUWSBOT1RFOg0KDQpUaGlzIGUtbWFpbCBhbmQgYW55IGF0dGFjaG1lbnRzIG1heSBjb250
-YWluIGNvbmZpZGVudGlhbCBpbmZvcm1hdGlvbiANCmFuZC9vciBwZXJzb25hbCBkYXRhLCB3aGlj
-aCBpcyBwcm90ZWN0ZWQgYnkgYXBwbGljYWJsZSBsYXdzLiBQbGVhc2UgYmUgDQpyZW1pbmRlZCB0
-aGF0IGR1cGxpY2F0aW9uLCBkaXNjbG9zdXJlLCBkaXN0cmlidXRpb24sIG9yIHVzZSBvZiB0aGlz
-IGUtbWFpbCANCihhbmQvb3IgaXRzIGF0dGFjaG1lbnRzKSBvciBhbnkgcGFydCB0aGVyZW9mIGlz
-IHByb2hpYml0ZWQuIElmIHlvdSByZWNlaXZlIA0KdGhpcyBlLW1haWwgaW4gZXJyb3IsIHBsZWFz
-ZSBub3RpZnkgdXMgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSB0aGlzIG1haWwgYXMgDQp3ZWxsIGFz
-IGl0cyBhdHRhY2htZW50KHMpIGZyb20geW91ciBzeXN0ZW0uIEluIGFkZGl0aW9uLCBwbGVhc2Ug
-YmUgDQppbmZvcm1lZCB0aGF0IGNvbGxlY3Rpb24sIHByb2Nlc3NpbmcsIGFuZC9vciB1c2Ugb2Yg
-cGVyc29uYWwgZGF0YSBpcyANCnByb2hpYml0ZWQgdW5sZXNzIGV4cHJlc3NseSBwZXJtaXR0ZWQg
-YnkgcGVyc29uYWwgZGF0YSBwcm90ZWN0aW9uIGxhd3MuIA0KVGhhbmsgeW91IGZvciB5b3VyIGF0
-dGVudGlvbiBhbmQgY29vcGVyYXRpb24uDQoNCk1hY3Jvbml4IEludGVybmF0aW9uYWwgQ28uLCBM
-dGQuDQoNCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PQ0KDQoNCg0KPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KDQpDT05GSURF
-TlRJQUxJVFkgTk9URToNCg0KVGhpcyBlLW1haWwgYW5kIGFueSBhdHRhY2htZW50cyBtYXkgY29u
-dGFpbiBjb25maWRlbnRpYWwgaW5mb3JtYXRpb24gYW5kL29yIHBlcnNvbmFsIGRhdGEsIHdoaWNo
-IGlzIHByb3RlY3RlZCBieSBhcHBsaWNhYmxlIGxhd3MuIFBsZWFzZSBiZSByZW1pbmRlZCB0aGF0
-IGR1cGxpY2F0aW9uLCBkaXNjbG9zdXJlLCBkaXN0cmlidXRpb24sIG9yIHVzZSBvZiB0aGlzIGUt
-bWFpbCAoYW5kL29yIGl0cyBhdHRhY2htZW50cykgb3IgYW55IHBhcnQgdGhlcmVvZiBpcyBwcm9o
-aWJpdGVkLiBJZiB5b3UgcmVjZWl2ZSB0aGlzIGUtbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlm
-eSB1cyBpbW1lZGlhdGVseSBhbmQgZGVsZXRlIHRoaXMgbWFpbCBhcyB3ZWxsIGFzIGl0cyBhdHRh
-Y2htZW50KHMpIGZyb20geW91ciBzeXN0ZW0uIEluIGFkZGl0aW9uLCBwbGVhc2UgYmUgaW5mb3Jt
-ZWQgdGhhdCBjb2xsZWN0aW9uLCBwcm9jZXNzaW5nLCBhbmQvb3IgdXNlIG9mIHBlcnNvbmFsIGRh
-dGEgaXMgcHJvaGliaXRlZCB1bmxlc3MgZXhwcmVzc2x5IHBlcm1pdHRlZCBieSBwZXJzb25hbCBk
-YXRhIHByb3RlY3Rpb24gbGF3cy4gVGhhbmsgeW91IGZvciB5b3VyIGF0dGVudGlvbiBhbmQgY29v
-cGVyYXRpb24uDQoNCk1hY3Jvbml4IEludGVybmF0aW9uYWwgQ28uLCBMdGQuDQoNCj09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PQ0K
+Nitpick: You can just do return spi_mem_default_supports_op(mem, op);
 
+> +}
+> +
+[...]
+> +
+> +static int aspeed_spi_init_devices(struct platform_device *pdev, struct aspeed_spi *aspi)
+> +{
+> +	struct device_node *np;
+> +	unsigned int cs;
+> +	int ret;
+> +
+> +	for_each_available_child_of_node(aspi->dev->of_node, np) {
+> +		struct aspeed_spi_chip *chip;
+> +
+> +		if (!of_device_is_compatible(np, "jedec,spi-nor"))
+> +			continue;
+> +
+> +		ret = of_property_read_u32(np, "reg", &cs);
+> +		if (ret) {
+> +			dev_err(aspi->dev, "Couldn't not read chip select.\n");
+> +			of_node_put(np);
+> +			return ret;
+> +		}
+> +
+> +		if (cs > aspi->data->max_cs) {
+> +			dev_err(aspi->dev, "Chip select %d out of range.\n", cs);
+> +			of_node_put(np);
+> +			return -ERANGE;
+> +		}
+> +
+> +		chip = &aspi->chips[cs];
+> +		chip->aspi = aspi;
+> +		chip->cs = cs;
+> +
+> +		ret = aspeed_spi_chip_init(chip);
+> +		if (ret) {
+> +			of_node_put(np);
+> +			return ret;
+> +		}
+> +
+> +		if (of_property_read_u32(np, "spi-max-frequency", &chip->clk_freq))
+> +			chip->clk_freq = ASPEED_SPI_DEFAULT_FREQ;
+> +
+> +		aspi->num_cs++;
+> +	}
+
+SPI MEM already gives you all this information. Get it from there, don't 
+parse it yourself.
+
+You can get Chip Select via spi_mem->spi->chip_select.
+You can get clock frequency via spi_mem->spi->max_speed_hz.
+
+With these comments fixed,
+
+Acked-by: Pratyush Yadav <p.yadav@ti.com>
+
+> +
+> +	return 0;
+> +}
+> +
+[...]
+
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
