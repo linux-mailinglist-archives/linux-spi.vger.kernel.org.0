@@ -2,51 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C87384C3A9F
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 02:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D76C14C3AA7
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 02:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236227AbiBYBAN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Feb 2022 20:00:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
+        id S236233AbiBYBAQ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 24 Feb 2022 20:00:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236091AbiBYBAN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Feb 2022 20:00:13 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6402819A6;
-        Thu, 24 Feb 2022 16:59:42 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id p17so3384729plo.9;
-        Thu, 24 Feb 2022 16:59:42 -0800 (PST)
+        with ESMTP id S236091AbiBYBAQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Feb 2022 20:00:16 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28C12804FE;
+        Thu, 24 Feb 2022 16:59:45 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id v4so3458922pjh.2;
+        Thu, 24 Feb 2022 16:59:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KiS7zOH5DxfqTubKO3X1OdfXi3Y10HKd6+IRDg8Pzvc=;
-        b=l/5nZQNcrYoXeyoWHpZnsfjkyGH0hOrm8sEt0pKyiZwYz9yYl0LW8WT1AniShvkhMX
-         OAbl8fTdI8cxE27BdATCuPJsEGsbc61xLnZE6n2B7XEBOpbh63MXVZEFf4x1yBjtTz7l
-         7Xr9FmJ4P6jQMz9640WXzViGlSdZpaNMrid8j8Sp/VdlSi3QJmA5tuusp0ENVdx2TRTe
-         zM1zdWPOUgj6MGNv7kisVOb0SixFNl0cY3lMd8khRcljCERLtT471Y30gbb2P1n9VNmV
-         aOB/Kd1jEaa04gDwm12gU8GQlIlNkA0Kf4XpV9i5LokhTDcSND2oBXzAGbesn+CpGGGq
-         m/BA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=iyT2GuPTXkTjkm6mgXba55Gka6UiyKyqHH8exrFhwZs=;
+        b=INX2p11o5cxymZOBn5JdiSz4t9cclINTplxsmdL1XPsEy5YFGJsgX9fPWHvAmSG342
+         sIs8q4ZZGt7ncnxL1bM4PixnbA58s+BXbWtd7Sa9Qw/Y2v/IF8VMxnmyGfNegxynBOB+
+         /w0aGuEEtrwZe+VwhK501ZPDtVpJsymi2Qa1xiFT4n9Me4IIVh8lRsefqv9AaW9dhh4N
+         g6C65x7fw4OwN+bguVgP/EuoXgj5sWpftI+oV7t0ZptCcy8S4huTa6y875yrEMUNIChn
+         tSVMF3LBSiccWDr2Xe/hGt7mYdv/9zAzUw6hp2xO/9xmJYIXtpaEkUPRP2W1QegkC2a1
+         ENdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KiS7zOH5DxfqTubKO3X1OdfXi3Y10HKd6+IRDg8Pzvc=;
-        b=WjOfBpaSAx09cuJwzfM3uAdvRB3LpzbS3dH0ugw/2rwDzv5X/w3HMFV1G4GdOr+yMb
-         YWjEyZ1ONMgDVW+E4pVk1J54OHfj10e0Uo6CsY8aD3smLvwLu3L2tJW/Em1pPULjDT+I
-         u/FrNMAdBF7bkIZXQ8mnhk11P1lbU5ZkrjcMoz+fqhHADRJUxcsFNo7s+EyGpLU6grMf
-         N4eW+bJR3MoyPe1SJsAo54ljTOnOgmGI5IqLjHNkv6ubRxvcjCZksbtChyqoYDbYoJUx
-         +OXP4OxEQMNnALRSKprPtEcld4OKwQy3rz971MEa2OtqMjeGQT6Yb3+ePPIk9XE1GJle
-         koPw==
-X-Gm-Message-State: AOAM53344vBuRptYXhOr1CUardL9DRs2vAQJC3jr+KPOGz+ycvCpi4Bd
-        qz2LHXd+ZaPAQqh5VaG0M7M=
-X-Google-Smtp-Source: ABdhPJzXNPFmZeZtZk9oSlMbAG48Y0zgkHECLyhKZFU5kWKJIKXyCb/+zLSVlNc0MDaQNl4N+OhY4Q==
-X-Received: by 2002:a17:902:76c5:b0:14e:e325:9513 with SMTP id j5-20020a17090276c500b0014ee3259513mr4990167plt.55.1645750781894;
-        Thu, 24 Feb 2022 16:59:41 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=iyT2GuPTXkTjkm6mgXba55Gka6UiyKyqHH8exrFhwZs=;
+        b=N0blV/vpUzsD0etyEU4xR68whdpHZYtqvdodxGYyeiGKg7YXrSm2JEn2Rz5Q+wDZLg
+         s92ZUb9BAmoUMZK/HJAdo4iNeIivLHu7vp2pYZc+sPLL4YzN7filtUQADIkTNVjVApd6
+         uFLrkOeaZ58JGBPD45ojKjey9bgPhbMgqmyfgjogf48csNE7r0ZutUE9pZ41XRpgdNY5
+         TAvYMx1D1t97br4aBz/OzHTukgfh+eMKc/9EzzW7wEUn4TDSYP3EWhYn2WcUWCaJJ+bT
+         nyaDM+CJRyZhVPPWBB2LlDxnb2IdzA8pJys7VlXzNbm55hBAzZh8Cn5G0Vwt6gCN0Y8H
+         WCig==
+X-Gm-Message-State: AOAM531tns+Ws4FHsK+8A7SDZDIDYzJE+Xk2wbF6CDuW4dCHOSEo3sWl
+        P9LMXSbHNaOrYgVGpuTQicI=
+X-Google-Smtp-Source: ABdhPJyzrKjtyL/s5LlgGiZaXsisYkfPP5OGOZFr0WRnbRaRTX+pgHBLEX43sM5iWvml6X3M6JBxHA==
+X-Received: by 2002:a17:90a:2c0c:b0:1b9:fa47:1caf with SMTP id m12-20020a17090a2c0c00b001b9fa471cafmr735590pjd.34.1645750784632;
+        Thu, 24 Feb 2022 16:59:44 -0800 (PST)
 Received: from thelio.corp.microsoft.com ([2001:4898:80e8:36:37cd:6bd:2964:3d5e])
-        by smtp.gmail.com with ESMTPSA id w5-20020a056a0014c500b004f3a5535431sm742070pfu.4.2022.02.24.16.59.40
+        by smtp.gmail.com with ESMTPSA id w5-20020a056a0014c500b004f3a5535431sm742070pfu.4.2022.02.24.16.59.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 16:59:41 -0800 (PST)
+        Thu, 24 Feb 2022 16:59:44 -0800 (PST)
 From:   Dmitry Antipov <daantipov@gmail.com>
 X-Google-Original-From: Dmitry Antipov <dmanti@microsoft.com>
 To:     Jiri Kosina <jikos@kernel.org>,
@@ -57,10 +57,12 @@ To:     Jiri Kosina <jikos@kernel.org>,
         Felipe Balbi <balbi@kernel.org>
 Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
         linux-spi@vger.kernel.org, Dmitry Antipov <dmanti@microsoft.com>
-Subject: [PATCH v4 0/6] Add spi-hid, transport for HID over SPI bus
-Date:   Thu, 24 Feb 2022 16:59:30 -0800
-Message-Id: <20220225005936.3485405-1-dmanti@microsoft.com>
+Subject: [PATCH v4 1/6] HID: Add BUS_SPI support when printing out device info in hid_connect()
+Date:   Thu, 24 Feb 2022 16:59:31 -0800
+Message-Id: <20220225005936.3485405-2-dmanti@microsoft.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220225005936.3485405-1-dmanti@microsoft.com>
+References: <20220225005936.3485405-1-dmanti@microsoft.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,53 +75,30 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Surface Duo devices use a touch digitizer that communicates to the main
-SoC via SPI and presents itself as a HID device. This patch's goal is to
-add the spi-hid transport driver to drivers/hid. The driver follows the
-publically available HID Over SPI Protocol Specification version 1.0.
+From: Dmitry Antipov <dmanti@microsoft.com>
 
-The specification is available at
-https://www.microsoft.com/en-us/download/details.aspx?id=103325.
+If connecting a hid_device with bus field indicating BUS_SPI print out
+"SPI" in the debug print.
 
-In the initial commits there are some HID core changes to support a SPI
-device, a change to HID documentation, HID over SPI Device Tree
-bindings, and finally the SPI HID transport driver.
+Signed-off-by: Dmitry Antipov <dmanti@microsoft.com>
+---
+ drivers/hid/hid-core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Dmitry Antipov (6):
-  HID: Add BUS_SPI support when printing out device info in
-    hid_connect()
-  HID: define HID_SPI_DEVICE macro in hid.h
-  Documentation: DT bindings for Microsoft G6 Touch Digitizer
-  Documentation: Correction in HID output_report callback description.
-  HID: add spi-hid, transport driver for HID over SPI bus
-  Defconfig: add CONFIG_SPI_HID=m
-
- .../input/microsoft,g6-touch-digitizer.yaml   |  105 ++
- Documentation/hid/hid-transport.rst           |    4 +-
- arch/arm64/configs/defconfig                  |    1 +
- drivers/hid/Kconfig                           |    2 +
- drivers/hid/Makefile                          |    1 +
- drivers/hid/hid-core.c                        |    3 +
- drivers/hid/spi-hid/Kconfig                   |   25 +
- drivers/hid/spi-hid/Makefile                  |   12 +
- drivers/hid/spi-hid/spi-hid-core.c            | 1326 +++++++++++++++++
- drivers/hid/spi-hid/spi-hid-core.h            |  188 +++
- drivers/hid/spi-hid/spi-hid-of.c              |  141 ++
- drivers/hid/spi-hid/spi-hid-of.h              |   30 +
- drivers/hid/spi-hid/spi-hid_trace.h           |  194 +++
- drivers/hid/spi-hid/trace.c                   |    9 +
- include/linux/hid.h                           |    2 +
- 15 files changed, 2041 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/input/microsoft,g6-touch-digitizer.yaml
- create mode 100644 drivers/hid/spi-hid/Kconfig
- create mode 100644 drivers/hid/spi-hid/Makefile
- create mode 100644 drivers/hid/spi-hid/spi-hid-core.c
- create mode 100644 drivers/hid/spi-hid/spi-hid-core.h
- create mode 100644 drivers/hid/spi-hid/spi-hid-of.c
- create mode 100644 drivers/hid/spi-hid/spi-hid-of.h
- create mode 100644 drivers/hid/spi-hid/spi-hid_trace.h
- create mode 100644 drivers/hid/spi-hid/trace.c
-
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index dbed2524fd47..65350ad985fe 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -2005,6 +2005,9 @@ int hid_connect(struct hid_device *hdev, unsigned int connect_mask)
+ 	case BUS_I2C:
+ 		bus = "I2C";
+ 		break;
++	case BUS_SPI:
++		bus = "SPI";
++		break;
+ 	case BUS_VIRTUAL:
+ 		bus = "VIRTUAL";
+ 		break;
 -- 
 2.25.1
 
