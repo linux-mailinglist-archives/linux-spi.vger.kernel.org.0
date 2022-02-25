@@ -2,94 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B624C3E67
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 07:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA124C3F12
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 08:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237837AbiBYGcK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Feb 2022 01:32:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
+        id S238134AbiBYHdb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Feb 2022 02:33:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235199AbiBYGcJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Feb 2022 01:32:09 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1030C1AF38;
-        Thu, 24 Feb 2022 22:31:36 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id e6so2403731pgn.2;
-        Thu, 24 Feb 2022 22:31:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=iKmbb5ucbZp5K7dfHQDKEihiAqkn6WCzt4BOscJ3yD4=;
-        b=kjuQjICBQ7dzWL0H/JHSeBz9vXXK+N2w6OIQWMZYKn728gA+JsM9ImX+xK4fv67CHU
-         w1FbkB/Are/1QZY/DC0fOkz6oDA1I6pn45aKA+DCxkDKbX9tsPrbJ5mD6b2E1ZPmghlS
-         z7Ypk5R5jGI2Jc9Hm8xp5Lf3FeGxa5VEVSjg1gTzviJdVCsg/qBJ1uj6yRnkVmTXX0aV
-         hOOXhR+EL4Zq8Kbc8yA9aorJ/Pkih9IIuLbmjRLeKcB0NQTBiOkyHagK7nq4Fm0b1AGf
-         P0LrEUpXlUjYYbQOMh0v1rHFXIe/qbO1bbhcIihio65jXmlSpnuOETYW2A4wRUbnlwES
-         Eo8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=iKmbb5ucbZp5K7dfHQDKEihiAqkn6WCzt4BOscJ3yD4=;
-        b=svg2oTuMq2Z/Ro5YrPeyHbW6C7Oep4n5FKopoZX9tA7TG4mYHqXyOAD7LUhk6dmF9m
-         pKtg9nI+mjXYhDWEY73la2jeOvTxcdNl85c9WzFZNqBpcxswRRDYezJkf/mCJ+QWQ+vr
-         xL6ocZwf9r7ZB0DGHcsmvXOqsFcZP1dSaMMhX6BdclFYRrXyHLTLvYle4wKa/4PIElQa
-         3GUO0x6ZciAKXgKmrVcVVn4C3vqJPJrUm8ASPMMHeIptYj1ckBtoF170H5qR9Uocmzwa
-         p6wEi/CUTw6yF01p8p8FNkzvwCOGqDRJzqMtQPtbD2c8kn3YwjoWYsAKPrdgp5ZrR7KL
-         wzgw==
-X-Gm-Message-State: AOAM5313Ft1XhomV68vzv7+isw9/nPAAqPLikm1C44Tc0ctXBoKp3dMR
-        WV5Lpl37Vcs4cT1RfRcMTGc=
-X-Google-Smtp-Source: ABdhPJxJNKzhvpVLd0yf5JAP3wYExfPs1r7+3tbNJ5EuzHC0v6If/KgvuR9ngHo98GPGUOn+O520sA==
-X-Received: by 2002:aa7:81c3:0:b0:4f2:6d3f:6158 with SMTP id c3-20020aa781c3000000b004f26d3f6158mr6366120pfn.82.1645770695471;
-        Thu, 24 Feb 2022 22:31:35 -0800 (PST)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id f18-20020a056a001ad200b004bf321765dfsm1647472pfv.95.2022.02.24.22.31.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 24 Feb 2022 22:31:35 -0800 (PST)
-From:   Li-hao Kuo <lhjeff911@gmail.com>
-To:     broonie@kernel.org, robh+dt@kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com,
-        Li-hao Kuo <lhjeff911@gmail.com>
-Subject: [PATCH] spi: dt-bindings: remove unused required property
-Date:   Fri, 25 Feb 2022 14:31:53 +0800
-Message-Id: <097bbc8b703b17e8fb3e3f6f6d2f97fe668bd5c5.1645770648.git.lhjeff911@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231272AbiBYHdb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Feb 2022 02:33:31 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95A225D6F3;
+        Thu, 24 Feb 2022 23:32:59 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21P7Vu6H114581;
+        Fri, 25 Feb 2022 01:31:56 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1645774316;
+        bh=1jhEkkUHjPfXmVDqozvs1ZMseyvKYmDv+DanJ2yLQfg=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=u4KS62z8fWz1UQ7srRh4oX1GPiPrzgXvR2Ys9m6s4t2UvOoUSvcPw1s4LOOt7ceX3
+         Q9hn3ZnhQX+XsFX9fgCKWkUkoK6aMu5Ita6W9oPoSFyGqTIpCLHo2FdU+x1qb5PZ6r
+         +eV6PlHxDi8vKVCizPZ9NOQhLP2o4tGwo/Bb5RKE=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21P7VunC068247
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 25 Feb 2022 01:31:56 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 25
+ Feb 2022 01:31:56 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 25 Feb 2022 01:31:56 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21P7VtmG125179;
+        Fri, 25 Feb 2022 01:31:56 -0600
+Date:   Fri, 25 Feb 2022 13:01:55 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-aspeed@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 01/10] mtd: spi-nor: aspeed: Rename Kconfig option
+Message-ID: <20220225073155.f2cxfhm7surf34d4@ti.com>
+References: <20220214094231.3753686-1-clg@kaod.org>
+ <20220214094231.3753686-2-clg@kaod.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220214094231.3753686-2-clg@kaod.org>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-fix issue
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.example.dt.yaml:
-spi@9C002D80: 'clocks-names' is a required property
-From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
-delete unused required(clock-name)
+On 14/02/22 10:42AM, Cédric Le Goater wrote:
+> To prepare transition to the new Aspeed SMC SPI controller driver using
+> the spi-mem interface, change the kernel CONFIG option of the current
+> driver to reflect that the implementation uses the MTD SPI-NOR interface.
+> Once the new driver is sufficiently exposed, we should remove the old one.
 
-Fixes: 3b8ab4da34 ("spi: Fix test error for sp7021")
+I don't quite understand the reasoning behind this. Why keep the old 
+driver around? Why not directly replace it with the new one? Does the 
+new one have any limitations that this one doesn't?
 
-Reported-by: Rob Herring <robh+dt@kernel.org>
-Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
----
- Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
-index 298eac2..3a58cf0 100644
---- a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
-@@ -50,7 +50,6 @@ required:
-   - interrupts
-   - interrupt-names
-   - clocks
--  - clocks-names
-   - resets
-   - pinctrl-names
-   - pinctrl-0
 -- 
-2.7.4
-
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
