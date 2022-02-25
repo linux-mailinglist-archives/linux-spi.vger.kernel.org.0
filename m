@@ -2,136 +2,125 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F214C4BBE
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 18:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB674C4C12
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 18:25:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243516AbiBYROR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Feb 2022 12:14:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
+        id S243644AbiBYRZE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Feb 2022 12:25:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240804AbiBYROQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Feb 2022 12:14:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91AB1A8043;
-        Fri, 25 Feb 2022 09:13:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E5EE61D73;
-        Fri, 25 Feb 2022 17:13:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E452C340E7;
-        Fri, 25 Feb 2022 17:13:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645809222;
-        bh=4sE4Gtevnk8/TCjMANbcRjCHG8DgJ5S+RZAsg3tQewo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=aKNMEZYO9GYS47EsbtSGoBp7jQ6cq+PB2zbte+AwwqqiqpcVRMxGDM0F0Afex5ZJW
-         4rYESli2esu86LIUX6eb+GIiQqKG0aJoZCwpzqlHuXkixzO/1AezAk2443Z9c992ps
-         XywAbCY1/AWyw1jhDZ3bHZQXnfC+/H1QPWErc949Yi5ixSLpl4/cO2POfTAAfrxKho
-         CAVXpDY7lijl79zw4wxpFlP592n7RcY/q2RQ45t4e4X5U4/DfLgdvmThUjLUu/hMNF
-         a6Vl3pNKPQMeAYVdX3MJ7TCbUyat1DVH9TvH+imzTBTV3gNbtHMVmiV6Fa05o9r3/n
-         oKdbLx9yzFJlA==
-Date:   Fri, 25 Feb 2022 11:13:41 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH v2 05/11] pci: use helper for safer setting of
- driver_override
-Message-ID: <20220225171341.GA364850@bhelgaas>
+        with ESMTP id S235641AbiBYRZB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Feb 2022 12:25:01 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF671AAA43;
+        Fri, 25 Feb 2022 09:24:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645809869; x=1677345869;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OlurqVaDNqAkiulsXHgdN0qyGkN75qpZRRBUn3kZErg=;
+  b=H66otDR65GatZVxkB1xllDxbIWgCj3bOVGWnoE7yLWDEJiFtWFzpx2FA
+   QsLtD9QlQNOw4u6LLle+pg2y4WenwDGXxCPCs9s01JwpG++fhu10zgzpu
+   CI3n4XB9vrnY8SmmrQXD8iwG9DjfXBDUxYP6AfgZMhgJj+kDA0w7wQSka
+   XtopMpZ90ViPQgAtsIGTswH7iNM9EM7rnEz4lvzPFjCdYF8sE2+70/QxZ
+   36eYbfLZtoVlkYsRlzx/vv5lUWQD9e33Ckw/LnEp4sS7Dj3SmZamwlEGu
+   ijhYbfylFuZtB/0FgGUrq7ZpewZSrWE+MBbNlB7fAudhVJg/QK1OXeeRL
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="252736969"
+X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
+   d="scan'208";a="252736969"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 09:24:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,136,1643702400"; 
+   d="scan'208";a="707929863"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 25 Feb 2022 09:23:58 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 9D20894; Fri, 25 Feb 2022 19:24:15 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v1 01/11] spi: pxa2xx-pci: Refactor CE4100 to use ->setup()
+Date:   Fri, 25 Feb 2022 19:23:40 +0200
+Message-Id: <20220225172350.69797-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0aff95ff-5b79-8ae9-48fd-720a9f27cbce@canonical.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 10:36:20AM +0100, Krzysztof Kozlowski wrote:
-> On 25/02/2022 00:52, Bjorn Helgaas wrote:
-> > On Thu, Feb 24, 2022 at 08:49:15AM +0100, Krzysztof Kozlowski wrote:
-> >> On 23/02/2022 22:51, Bjorn Helgaas wrote:
-> >>> In subject, to match drivers/pci/ convention, do something like:
-> >>>
-> >>>   PCI: Use driver_set_override() instead of open-coding
-> >>>
-> >>> On Wed, Feb 23, 2022 at 08:13:04PM +0100, Krzysztof Kozlowski wrote:
-> >>>> Use a helper for seting driver_override to reduce amount of duplicated
-> >>>> code.
-> >>>> @@ -567,31 +567,15 @@ static ssize_t driver_override_store(struct device *dev,
-> >>>>  				     const char *buf, size_t count)
-> >>>>  {
-> >>>>  	struct pci_dev *pdev = to_pci_dev(dev);
-> >>>> -	char *driver_override, *old, *cp;
-> >>>> +	int ret;
-> >>>>  
-> >>>>  	/* We need to keep extra room for a newline */
-> >>>>  	if (count >= (PAGE_SIZE - 1))
-> >>>>  		return -EINVAL;
-> >>>
-> >>> This check makes no sense in the new function.  Michael alluded to
-> >>> this as well.
-> >>
-> >> I am not sure if I got your comment properly. You mean here:
-> >> 1. Move this check to driver_set_override()?
-> >> 2. Remove the check entirely?
-> > 
-> > I was mistaken about the purpose of the comment and the check.  I
-> > thought it had to do with *this* function, and this function doesn't
-> > add a newline, and there's no obvious connection with PAGE_SIZE.
-> > 
-> > But looking closer, I think the "extra room for a newline" is really
-> > to make sure that *driver_override_show()* can add a newline and have
-> > it still fit within the PAGE_SIZE sysfs limit.
-> > 
-> > Most driver_override_*() functions have the same comment, so maybe
-> > this was obvious to everybody except me :)  I do see that spi.c adds
-> > "when displaying value" at the end, which helps a lot.
-> > 
-> > Sorry for the wild goose chase.
-> 
-> I think I will move this check anyway to driver_set_override() helper,
-> because there is no particular benefit to have duplicated all over. The
-> helper will receive "count" argument so can perform all checks.
+Refactor CE4100 handling code to use ->setup() instead of spreading
+potentially confusing conditional.
 
-Thanks, I think that would be good!
+Besides that, it will allow to refactor further to avoid intermediate
+storage for the used configuration parameters.
 
-Bjorn
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/spi/spi-pxa2xx-pci.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/spi/spi-pxa2xx-pci.c b/drivers/spi/spi-pxa2xx-pci.c
+index 6d60972e4e20..bd20379d9342 100644
+--- a/drivers/spi/spi-pxa2xx-pci.c
++++ b/drivers/spi/spi-pxa2xx-pci.c
+@@ -30,7 +30,7 @@ enum {
+ struct pxa_spi_info {
+ 	enum pxa_ssp_type type;
+ 	int port_id;
+-	int num_chipselect;
++	unsigned int num_chipselect;
+ 	unsigned long max_clk_rate;
+ 
+ 	/* DMA channel request parameters */
+@@ -114,6 +114,14 @@ static int lpss_spi_setup(struct pci_dev *dev, struct pxa_spi_info *c)
+ 	return 0;
+ }
+ 
++static int ce4100_spi_setup(struct pci_dev *dev, struct pxa_spi_info *c)
++{
++	c->num_chipselect = dev->devfn;
++	c->max_clk_rate = 3686400;
++
++	return 0;
++}
++
+ static int mrfld_spi_setup(struct pci_dev *dev, struct pxa_spi_info *c)
+ {
+ 	struct dw_dma_slave *tx, *rx;
+@@ -163,8 +171,7 @@ static struct pxa_spi_info spi_info_configs[] = {
+ 	[PORT_CE4100] = {
+ 		.type = PXA25x_SSP,
+ 		.port_id =  -1,
+-		.num_chipselect = -1,
+-		.max_clk_rate = 3686400,
++		.setup = ce4100_spi_setup,
+ 	},
+ 	[PORT_BYT] = {
+ 		.type = LPSS_BYT_SSP,
+@@ -248,7 +255,7 @@ static int pxa2xx_spi_pci_probe(struct pci_dev *dev,
+ 	}
+ 
+ 	memset(&spi_pdata, 0, sizeof(spi_pdata));
+-	spi_pdata.num_chipselect = (c->num_chipselect > 0) ? c->num_chipselect : dev->devfn;
++	spi_pdata.num_chipselect = c->num_chipselect;
+ 	spi_pdata.dma_filter = c->dma_filter;
+ 	spi_pdata.tx_param = c->tx_param;
+ 	spi_pdata.rx_param = c->rx_param;
+-- 
+2.34.1
+
