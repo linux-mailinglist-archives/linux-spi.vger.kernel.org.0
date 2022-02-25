@@ -2,59 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A454C50A0
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 22:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BCF34C50A4
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 22:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238629AbiBYVYb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Feb 2022 16:24:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
+        id S238653AbiBYVYd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Feb 2022 16:24:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238653AbiBYVY0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Feb 2022 16:24:26 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D661F18DA9C;
-        Fri, 25 Feb 2022 13:23:49 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id cm8so9172339edb.3;
-        Fri, 25 Feb 2022 13:23:49 -0800 (PST)
+        with ESMTP id S238822AbiBYVY1 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Feb 2022 16:24:27 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1C9190B7F;
+        Fri, 25 Feb 2022 13:23:51 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id i11so9122418eda.9;
+        Fri, 25 Feb 2022 13:23:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language
          :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=QFvRzvIdRv3xplrJSGk7DMQfwafyCoO+jIxn5A7f+Mo=;
-        b=geFvYOtYlAzZW5zPxS0omthKPQef/gERvsIFmb0VHNW6XMnc+Z5ob5eozbesva5yPr
-         72J4JMaInvqxY2jqPbpaI1UkEjzb4uzUPFcZXW48EeYT4cbfennd8+ZOH2vQF4LExoOo
-         xt8I0sW+fKIPcboP/lp6KEpt5b8ve0SgyvFiel7TFGIRpGvz+lY7qejjkxbkDq7hkQcG
-         CtOCaK2tSj4Qeg+kYGLwwMgfzrbNVPnX+UK4yVGcxhtPNHoOKuAl15GkXT04mzr2VAgl
-         nBsMcjStzMttlCxfjct7DaL5VmhC+r7JnzZrLhHRxLZzOo8I2TyC3NsS0mSkEZ8rU8cb
-         gEgA==
+        bh=UVQe4QpHFzuLZpN6vaQunZm/CaPTqOiqz/VUjJgbjIY=;
+        b=kaIHl/LJkdJS1GsMcUT8EPAy28bkiKpgVIuR7Ckd8pBLs7N9Ps7oK7Zg1IABnceVjk
+         wBVwWlmP0ZVa5tEQxlnKMN2IheP35af6KLq3O6YncNLr4b4/IHOSoe4gjuPwPjuro4+x
+         ty1cGK+HJD5urjdLI0xAj8st0OE7QYNHU6cZlnKhM6lGkSib5SB+H5YoTKPPpZMpUmJR
+         QJKTxYYU9d0F0jV4rNTkD7ctoPZMpvNWn/NrXqcsA80NcwFy8yFfL9rz5seMq7Z3HayK
+         nPLsP86VzXFoYFrFHYY2bIrYByBu+upgFFSezqO3RptCToX2Qa+oV635kPJbr/F0wyc3
+         8JnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=QFvRzvIdRv3xplrJSGk7DMQfwafyCoO+jIxn5A7f+Mo=;
-        b=RmHRJNmK6mLZdTHxXjFWX++0A0BZSKU0cI2DF+nhGvE+VBkavg6uesNP76FLlDkjUU
-         aU+mcy4mgIHOrM7xUJSwP0AYnHxta45MvP9TuYZ/qGlp+woe5VURT0ZuOa/MkaT8oXPG
-         St0N6YA71cQXgdjTibXXpYLqYMbP+H8G2hsioXJuV9zPiT+xUJV+MbSZOZ0CSb0eM1Pf
-         3x1JqR6O1F2KSMUyWy0ZMees8aLbmwjQU85wc0yi96kj3B1d6PS+uR9RqvXyemVmqqxn
-         WVjcEpr3fL/i/6Pz1QtZbK4eFDkkpGBjpWrpN+zBxql8kP0h7DwojsQKg4GCfDKm3xMf
-         RHOg==
-X-Gm-Message-State: AOAM531zivMMHLLS3fmUaAH2/HDd++CBKcOvzhXDmKtkiMe8pXxAGr1o
-        PtCdtO5TAjj0ylPg0MVS71c=
-X-Google-Smtp-Source: ABdhPJybxPWcIY7zb9JmvYjISMMVpmpNYRzrKQ7c/vcl+xvi88vo5XSX1q9NnfQSZTQIWu8iqUMpJA==
-X-Received: by 2002:a05:6402:6da:b0:3fd:cacb:f4b2 with SMTP id n26-20020a05640206da00b003fdcacbf4b2mr9055727edy.332.1645824228405;
-        Fri, 25 Feb 2022 13:23:48 -0800 (PST)
+        bh=UVQe4QpHFzuLZpN6vaQunZm/CaPTqOiqz/VUjJgbjIY=;
+        b=aCzWRZN82Cdrn6W6t1iUDNepx1lq3ZRAADkGPxSph3CDGZiy5UWaAGqKdCVTTwPDF7
+         LIz2RgdrRsDuhNVqNcrrRlKBh8hX7t6Ob6aWS2yAumY53Rs6C9rEgrtOh6sS3E7bU/FY
+         8yIf39OqFS2rzKWP7mv4vzaspN9Bs2AbgIZEEfTkOjaAcgvBGI7OYARkk3Ys1zt/Bu70
+         YnD8P6pfjwXYkU4jr51XLgCznPhS5sYYAiSxocnpIrJaQOfiMtBGxBprwlH/X0RBXQ7a
+         RREht5S9JLsMhi8gxU2ns1Zd/GwDCKxadvGlSmEdT8dkQrGFgVgOI1cQ/lqLg34IQAPp
+         Po4w==
+X-Gm-Message-State: AOAM531+pgMayoqO/PDXMoqj6ZmVu2zmIqEFvEaWuPlWjLc6n8fxSlV5
+        VmTr2uB4lQNiznd35FnwlTo=
+X-Google-Smtp-Source: ABdhPJzVIlBCczq4S+kTfnqXgmTqkiY8UrCJ1lwdNVQJ0089sdMxaAY8UWYBfi5xnmZiKwi563Lnhg==
+X-Received: by 2002:a05:6402:1148:b0:413:11e0:1f58 with SMTP id g8-20020a056402114800b0041311e01f58mr9009941edw.113.1645824229928;
+        Fri, 25 Feb 2022 13:23:49 -0800 (PST)
 Received: from ?IPV6:2a01:c22:7326:e100:c9d3:3c62:2c99:d44b? (dynamic-2a01-0c22-7326-e100-c9d3-3c62-2c99-d44b.c22.pool.telefonica.de. [2a01:c22:7326:e100:c9d3:3c62:2c99:d44b])
-        by smtp.googlemail.com with ESMTPSA id c17-20020a05640227d100b00410ece2072dsm1999591ede.95.2022.02.25.13.23.47
+        by smtp.googlemail.com with ESMTPSA id ka6-20020a170907990600b006ce54c95e3csm1435030ejc.161.2022.02.25.13.23.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Feb 2022 13:23:47 -0800 (PST)
-Message-ID: <2671e6e3-8f18-8b70-244b-9e1415bfdf8f@gmail.com>
-Date:   Fri, 25 Feb 2022 22:13:16 +0100
+        Fri, 25 Feb 2022 13:23:49 -0800 (PST)
+Message-ID: <95c57066-82b4-1c32-4324-77f9a79451c0@gmail.com>
+Date:   Fri, 25 Feb 2022 22:16:55 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.1
-Subject: [PATCH v5 2/6] dt-bindings: auxdisplay: Add Titan Micro Electronics
- TM1628
+Subject: [PATCH v5 3/6] docs: ABI: document tm1628 attribute display_text
 Content-Language: en-US
 From:   Heiner Kallweit <hkallweit1@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -74,7 +73,7 @@ Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
 References: <90668779-b53d-b3e7-5327-af11ff4a1d18@gmail.com>
 In-Reply-To: <90668779-b53d-b3e7-5327-af11ff4a1d18@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -85,123 +84,29 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add a YAML schema binding for TM1628 auxdisplay
-(7/11-segment LED) controller.
+Document the attribute for reading / writing the text to be displayed on
+the 7 segment display.
 
-This patch is partially based on previous work from
-Andreas Färber <afaerber@suse.de>.
-
-Co-developed-by: Andreas Färber <afaerber@suse.de>
-Signed-off-by: Andreas Färber <afaerber@suse.de>
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
-v5:
-- add vendor prefix to driver-specific properties
----
- .../bindings/auxdisplay/titanmec,tm1628.yaml  | 92 +++++++++++++++++++
- 1 file changed, 92 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml
+ Documentation/ABI/testing/sysfs-devices-auxdisplay-tm1628 | 7 +++++++
+ 1 file changed, 7 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-devices-auxdisplay-tm1628
 
-diff --git a/Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml b/Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml
+diff --git a/Documentation/ABI/testing/sysfs-devices-auxdisplay-tm1628 b/Documentation/ABI/testing/sysfs-devices-auxdisplay-tm1628
 new file mode 100644
-index 000000000..2a1ef692c
+index 000000000..382757e72
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml
-@@ -0,0 +1,92 @@
-+# SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/auxdisplay/titanmec,tm1628.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Titan Micro Electronics TM1628 LED controller
-+
-+maintainers:
-+  - Andreas Färber <afaerber@suse.de>
-+  - Heiner Kallweit <hkallweit1@gmail.com>
-+
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+
-+properties:
-+  compatible:
-+    const: titanmec,tm1628
-+
-+  reg:
-+    maxItems: 1
-+
-+  titanmec,grid:
-+    description:
-+      Mapping of display digit position to grid number.
-+      This implicitly defines the display size.
-+    $ref: /schemas/types.yaml#/definitions/uint8-array
-+    minItems: 1
-+    maxItems: 7
-+
-+  titanmec,segment-mapping:
-+    description:
-+      Mapping of 7 segment display segments A-G to bit numbers 1-12.
-+    $ref: /schemas/types.yaml#/definitions/uint8-array
-+    minItems: 7
-+    maxItems: 7
-+
-+  "#address-cells":
-+    const: 2
-+
-+  "#size-cells":
-+    const: 0
-+
-+required:
-+  - compatible
-+  - reg
-+
-+patternProperties:
-+  "^.*@[1-7],([1-9]|1[0-6])$":
-+    type: object
-+    $ref: /schemas/leds/common.yaml#
-+    unevaluatedProperties: false
-+    description: |
-+      Properties for a single LED.
-+
-+    properties:
-+      reg:
-+        description: |
-+          1-based grid number, followed by 1-based segment bit number.
-+        maxItems: 1
-+
-+    required:
-+      - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/leds/common.h>
-+
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        led-controller@0 {
-+            compatible = "titanmec,tm1628";
-+            reg = <0>;
-+            spi-3-wire;
-+            spi-lsb-first;
-+            spi-max-frequency = <500000>;
-+            titanmec,grid = /bits/ 8 <4 3 2 1>;
-+            titanmec,segment-mapping = /bits/ 8 <4 5 6 1 2 3 7>;
-+            #address-cells = <2>;
-+            #size-cells = <0>;
-+
-+            alarm@5,4 {
-+                reg = <5 4>;
-+                function = LED_FUNCTION_ALARM;
-+            };
-+        };
-+    };
-+...
++++ b/Documentation/ABI/testing/sysfs-devices-auxdisplay-tm1628
+@@ -0,0 +1,7 @@
++What:		/sys/devices/.../display_text
++Date:		February 2022
++Contact:	Heiner Kallweit <hkallweit1@gmail.com>
++Description:
++		The text to be displayed on the 7 segment display.
++		Any printable character is allowed as input, but some
++		can not be displayed in a readable way with 7 segments.
 -- 
 2.35.1
-
 
 
