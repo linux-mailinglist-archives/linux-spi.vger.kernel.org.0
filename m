@@ -2,67 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9776C4C5115
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Feb 2022 22:56:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 088A04C5385
+	for <lists+linux-spi@lfdr.de>; Sat, 26 Feb 2022 04:14:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233143AbiBYV5B (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Feb 2022 16:57:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34182 "EHLO
+        id S229615AbiBZDPV (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 25 Feb 2022 22:15:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbiBYV5A (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Feb 2022 16:57:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBC8218CCF
-        for <linux-spi@vger.kernel.org>; Fri, 25 Feb 2022 13:56:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 943ECB83348
-        for <linux-spi@vger.kernel.org>; Fri, 25 Feb 2022 21:56:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 33079C340E7;
-        Fri, 25 Feb 2022 21:56:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645826185;
-        bh=muxUvIqyq0ZQMt+B+hLhBPk4UTVuDkChTecxlX5cPQ4=;
-        h=Subject:From:Date:To:From;
-        b=GyBcXp/PdpkyYoO9LKN/kERedb6GHOVmi6+dFdTqSiKIw8FQ/hrQ0vhGcYg1fEt2h
-         w6NYKoyH4qyBiaeZ68uJaY53yyWtRFJEAcba7K7kChUveMG1C2OXKM7UdNDQ7Xvm8o
-         29m1jmqyCRkrJICBdMGVfPzYUkirPUFzRx5uND75O97AEvtSxhE5CCxGm4h3GtfgDr
-         vDpektZl4SS9CObsvrgAzJzQ0bsTJ3A+bYYBOvzXNvwEa3BZvf2vaPIXRvRqecU1Zk
-         M8Js/cq6yuAk1CrQqtZtS9GOaQjHzhm/qcGk3Y/WYUlYajFgzDrKCm6Aij8RUwaPrV
-         ujNpTBbNOTFdQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1A0EAE6D453;
-        Fri, 25 Feb 2022 21:56:25 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229490AbiBZDPU (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Feb 2022 22:15:20 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8ED274862;
+        Fri, 25 Feb 2022 19:14:42 -0800 (PST)
+X-UUID: e21475f7b4c549fc9a0f10ba516aafd6-20220226
+X-UUID: e21475f7b4c549fc9a0f10ba516aafd6-20220226
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <leilk.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 196907578; Sat, 26 Feb 2022 11:14:36 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 26 Feb 2022 11:14:35 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sat, 26 Feb
+ 2022 11:14:35 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 26 Feb 2022 11:14:34 +0800
+Message-ID: <f879ce25aab1d7e4a413455cb2a2454930cc9164.camel@mediatek.com>
+Subject: Re: [PATCH V2 5/6] dt-bindings: spi: support spi-hclk
+From:   Leilk Liu <leilk.liu@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
+Date:   Sat, 26 Feb 2022 11:14:34 +0800
+In-Reply-To: <YhkoEJiLMs8jfUAm@robh.at.kernel.org>
+References: <20220221040717.3729-1-leilk.liu@mediatek.com>
+         <20220221040717.3729-6-leilk.liu@mediatek.com>
+         <YhkoEJiLMs8jfUAm@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <164582618510.725.7926059204479086989.git-patchwork-housekeeping@kernel.org>
-Date:   Fri, 25 Feb 2022 21:56:25 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v5] auxdisplay: Add support for the Titanmec TM1628 7 segment display controller (2022-02-25T21:09:10)
-  Superseding: [v4] auxdisplay: Add support for the Titanmec TM1628 7 segment display controller (2022-02-24T20:00:38):
-    [v4,1/6] dt-bindings: vendor-prefixes: Add Titan Micro Electronics
-    [v4,2/6] dt-bindings: auxdisplay: Add Titan Micro Electronics TM1628
-    [v4,3/6] docs: ABI: document tm1628 attribute display_text
-    [v4,4/6] auxdisplay: add support for Titanmec TM1628 7 segment display controller
-    [v4,5/6] arm64: dts: meson-gxl-s905w-tx3-mini: add support for the 7 segment display
-    [v4,6/6] MAINTAINERS: Add entry for tm1628 auxdisplay driver
+On Fri, 2022-02-25 at 13:03 -0600, Rob Herring wrote:
+> On Mon, Feb 21, 2022 at 12:07:16PM +0800, Leilk Liu wrote:
+> > this patch support spi-hclk.
+> > 
+> > Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> > ---
+> >  Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml | 2
+> > ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-
+> > mt65xx.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-
+> > mt65xx.yaml
+> > index 241c0f5880d3..6920ced5451e 100644
+> > --- a/Documentation/devicetree/bindings/spi/mediatek,spi-
+> > mt65xx.yaml
+> > +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-
+> > mt65xx.yaml
+> > @@ -55,12 +55,14 @@ properties:
+> >        - description: clock used for the parent clock
+> >        - description: clock used for the muxes clock
+> >        - description: clock used for the clock gate
+> > +      - description: clock used for the AHB bus, this clock is
+> > optional
+> 
+> Not optional unless you have minItems.
+> 
+OK, I'll add minItems,thanks for your comment.
 
+> >  
+> >    clock-names:
+> 
+>        minItems: 3
+> 
+Got it, thanks
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> 
+> >      items:
+> >        - const: parent-clk
+> >        - const: sel-clk
+> >        - const: spi-clk
+> > +      - const: spi-hclk
+> >  
+> >    mediatek,pad-select:
+> >      $ref: /schemas/types.yaml#/definitions/uint32-array
+> > -- 
+> > 2.25.1
+> > 
+> > 
 
