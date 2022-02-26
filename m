@@ -2,53 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 162754C538B
-	for <lists+linux-spi@lfdr.de>; Sat, 26 Feb 2022 04:24:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8824C5829
+	for <lists+linux-spi@lfdr.de>; Sat, 26 Feb 2022 21:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbiBZDZ0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 25 Feb 2022 22:25:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
+        id S229667AbiBZU5A (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 26 Feb 2022 15:57:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiBZDZ0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 25 Feb 2022 22:25:26 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B3922A66FA;
-        Fri, 25 Feb 2022 19:24:51 -0800 (PST)
-X-UUID: 4e154502a2f54f34b9485a1a52a4924e-20220226
-X-UUID: 4e154502a2f54f34b9485a1a52a4924e-20220226
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <leilk.liu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 354081521; Sat, 26 Feb 2022 11:24:48 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Sat, 26 Feb 2022 11:24:46 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 26 Feb 2022 11:24:46 +0800
-Message-ID: <55a65e5aa412f101e02c81ddb5fa38c128743db2.camel@mediatek.com>
-Subject: Re: [PATCH V2 3/6] dt-bindings: spi: Add compatible for Mediatek
- IPM IP with quad mode
-From:   Leilk Liu <leilk.liu@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
-Date:   Sat, 26 Feb 2022 11:24:46 +0800
-In-Reply-To: <YhknmEtjpN7Lmoru@robh.at.kernel.org>
-References: <20220221040717.3729-1-leilk.liu@mediatek.com>
-         <20220221040717.3729-4-leilk.liu@mediatek.com>
-         <YhknmEtjpN7Lmoru@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S229642AbiBZU47 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 26 Feb 2022 15:56:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D1A1B0BD7
+        for <linux-spi@vger.kernel.org>; Sat, 26 Feb 2022 12:56:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E0F961022
+        for <linux-spi@vger.kernel.org>; Sat, 26 Feb 2022 20:56:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 08F9AC340E8;
+        Sat, 26 Feb 2022 20:56:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645908984;
+        bh=SyN0+1IMowPIFJYvAYh/MFfFCtgLs+POJrcRB01SU/Q=;
+        h=Subject:From:Date:To:From;
+        b=QnxOpdeFp7WirQS5IHmJgb/6c+sbg42itkXhhL2Jbp4VZ7POXI6uTgPMiilNaxeA6
+         f33glbe5kH3oTe/P2HCS18sj5FDzZZDh7UuPDwUdHw3jjq9uGRgar9kgW+X9Zu/HYG
+         Ri7GLZugJOqiB0ED8483aWl/9cNF6eQRce51inC66qHnZ+Lpkfw1z6I4OpVxJijSyJ
+         CUqVA43qPNOfOjqZuoJKZVYaLA37/SonQsjRQoMUEvuYqBtS8zHDgfb2+pInT4s7ST
+         UwiGDXEm6CZja9Od2b+3DTMc/fmfsRMGdbLF61jPeu9Z8W+lplrGGJJcuMaA7WcYye
+         vTk+uHdp+YhwA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D46E9E6D3DE;
+        Sat, 26 Feb 2022 20:56:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <164590898378.31715.7074745808928484195.git-patchwork-housekeeping@kernel.org>
+Date:   Sat, 26 Feb 2022 20:56:23 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,60 +52,12 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, 2022-02-25 at 13:01 -0600, Rob Herring wrote:
-> On Mon, Feb 21, 2022 at 12:07:14PM +0800, Leilk Liu wrote:
-> > This patch adds dt-binding documentation for Mediatek SPI IPM IP
-> > with
-> > quad mode.
-> > 
-> > Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
-> > ---
-> >  Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml | 1
-> > +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-
-> > mt65xx.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-
-> > mt65xx.yaml
-> > index 0a2fc0404cb3..241c0f5880d3 100644
-> > --- a/Documentation/devicetree/bindings/spi/mediatek,spi-
-> > mt65xx.yaml
-> > +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-
-> > mt65xx.yaml
-> > @@ -42,6 +42,7 @@ properties:
-> >                - mediatek,mt8173-spi
-> >                - mediatek,mt8183-spi
-> >                - mediatek,ipm-spi-single
-> > +              - mediatek,ipm-spi-quad
-> 
-> Can't you use the existing width properties to distinguish? Or is
-> the 
-> programming not a superset?
-> 
-"mediatek,ipm-spi-quad" include the feature of "mediatek,ipm-spi-
-single".
-
-> Is 'ipm' an SoC? If not, these need to be SoC specific.
-> 
-IPM is an version of SPI ip, we use this IP with ICs now.
-So I define a compatible strings "mediatek,ipm-spi-xxx", then I can
-reuse this strings with many ICs.
-Currently, we plan to upstream MT7986 IC, this IC has two spi
-controller ports, one support single mode only, the other support
-single & quad mode both.
-for example:
-spi0 {
-  ...
-  compatible = "mediatek,ipm-spi-single";
-  ...
-}
-
-spi1 {
-  ...
-  compatible = "mediatek,ipm-spi-quad";
-  ...
-}
+Latest series: [v1] spi: use sysfs_emit() for printing statistics and add trailing newline (2022-02-18T13:58:35)
+  Superseding: [v1] spi: use sysfs_emit() for printing statistics and add trailing newline (2022-02-18T12:22:20):
+    spi: use sysfs_emit() for printing statistics and add trailing newline
 
 
-> Rob
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
