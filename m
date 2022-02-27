@@ -2,126 +2,190 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C314C5A5B
-	for <lists+linux-spi@lfdr.de>; Sun, 27 Feb 2022 11:01:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA304C5B72
+	for <lists+linux-spi@lfdr.de>; Sun, 27 Feb 2022 14:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiB0KBk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 27 Feb 2022 05:01:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47770 "EHLO
+        id S231239AbiB0NxZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 27 Feb 2022 08:53:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiB0KBj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 27 Feb 2022 05:01:39 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1B75B898;
-        Sun, 27 Feb 2022 02:01:03 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4K5zY44n28z9sSG;
-        Sun, 27 Feb 2022 11:00:56 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id jcT6yo0T7hlH; Sun, 27 Feb 2022 11:00:56 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4K5zY25gj6z9sSf;
-        Sun, 27 Feb 2022 11:00:54 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id DEA6B8B774;
-        Sun, 27 Feb 2022 11:00:53 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id XCJvHrToxK_C; Sun, 27 Feb 2022 11:00:53 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.62])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9B70A8B76E;
-        Sun, 27 Feb 2022 11:00:53 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21RA0kvx262875
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Sun, 27 Feb 2022 11:00:46 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21RA0kI3262874;
-        Sun, 27 Feb 2022 11:00:46 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Pratyush Yadav <p.yadav@ti.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH v1 2/2] spi: fsl-spi: Implement trailing clock mode
-Date:   Sun, 27 Feb 2022 11:00:35 +0100
-Message-Id: <f66ae24b31f10f7c3a999a77a6cfab7b2d073c6a.1645950971.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1645950971.git.christophe.leroy@csgroup.eu>
-References: <cover.1645950971.git.christophe.leroy@csgroup.eu>
+        with ESMTP id S231247AbiB0NxX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 27 Feb 2022 08:53:23 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C6465D0
+        for <linux-spi@vger.kernel.org>; Sun, 27 Feb 2022 05:52:43 -0800 (PST)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1F9883FCAF
+        for <linux-spi@vger.kernel.org>; Sun, 27 Feb 2022 13:52:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645969952;
+        bh=beBPqukoSZCIAAv6gBbQLkWehzWMNdiQtzWlJ1M8u3o=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=n+5o2Quq7M9byT70m/qbScueEGjHYHdl7Azplo/F/s9AZMlOjpfZVKpTfKFQGoRi/
+         iCyOzkZVd0LSIZT9F4NuadPH+ZR2rRpImOsLak2F2jtzy5lSBGLXl8m5U40r3eXsB2
+         zCZo9VieIVQpG3QuF1M83XjMVapLo6fErknNw0O99p4Uwezbjp1KWkQsvY1g0z91kG
+         Hdo1OslIuSdByBjyo/xtfdajm904IMTqcjdpPE5jTV92bjkWg3/BbwejnMTNyVkL0b
+         QmHPVVmYHqw2MbHbVoXU6FfzY5ru3Suew5wrcf6td6idjliLLU3ElgPL4IIz1YO8tK
+         bBK8WJzzuJqKA==
+Received: by mail-ed1-f70.google.com with SMTP id d11-20020a50c88b000000b00410ba7a14acso4249094edh.6
+        for <linux-spi@vger.kernel.org>; Sun, 27 Feb 2022 05:52:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=beBPqukoSZCIAAv6gBbQLkWehzWMNdiQtzWlJ1M8u3o=;
+        b=Maw1tR246cRgOlKQ+EMmVoMgrURBNcpwX/EIRBYkwLwQpyASZrnsdvjgM2v+V63ITu
+         HLhBj9sDXqaII+orM/4lYpN/UVn6044qOh4fLb/brFObIy/K+3GY4Olr9xOy/AXODTZF
+         MWfH6qfP7zvJBwphooAbJfpKB0hxMRu1BSTI+zGVTj9IoL/45YeRdCKXYU9u5wFzl8jD
+         3Rqpv7HEUFzjMOJse+34i3fM1Ac57Y6mkfegQ2xdmSZIRPcL0LDmKQxHJsOBXso4H0Nh
+         InHF1XRHk/c6sauSQjGr6jNFNqqHBJyol5JQdpNaCUE92BpypdJCpJ2Bgws2ESVLIAB+
+         n7+g==
+X-Gm-Message-State: AOAM5315IYZbKZrvS4EMO3igRYhut3YMHQgSJeZ22Fyo87D+xIO/fK/p
+        WilKxV+eXaVNXM5U7Q+6ZIWAj3TIirYKzO8haa+qp6hqr2d9hxEuK8UeSVkE1q8taSWd5daXFQY
+        iVpOFUYylYT/rvpkxOgWkELgiChvxqZKrQOjdig==
+X-Received: by 2002:a05:6402:50d4:b0:413:2a27:6b56 with SMTP id h20-20020a05640250d400b004132a276b56mr15602853edb.228.1645969951014;
+        Sun, 27 Feb 2022 05:52:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyMchrZ/z130i6cHNU0MCCxUHxTeH+44NX7i1itMtaADlHbWFNXu2qsfZhNkboTf+/7DLObYg==
+X-Received: by 2002:a05:6402:50d4:b0:413:2a27:6b56 with SMTP id h20-20020a05640250d400b004132a276b56mr15602826edb.228.1645969950731;
+        Sun, 27 Feb 2022 05:52:30 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id r22-20020a17090638d600b006d584aaa9c9sm3393333ejd.133.2022.02.27.05.52.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Feb 2022 05:52:30 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v3 00/11] Fix broken usage of driver_override (and kfree of static memory)
+Date:   Sun, 27 Feb 2022 14:52:03 +0100
+Message-Id: <20220227135214.145599-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1645956034; l=1641; s=20211009; h=from:subject:message-id; bh=+/edlFsipl1R0bA5PHoJ/lea+KiQ9syUn/TTp9M1b1Y=; b=Pkged1be6SnqRV4Kv1E8B7mE0+6VpfL/P2ti9pyN5c9goG1XAy5+eB1ruUfz9J96BQlB94rE8TWf beWCdbvLAVWGoC1kFFrkyaFRRU8PLMBEUkDxTVt24FuiygFOaxmf
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-In order to support IDT 801034 QUAD PCM CODEC, implement the
-trailing clock mode.
+Hi,
 
-On fsl SPI, the minimum we can implement is a 4 bits shot.
+This is a continuation of my old patchset from 2019. [1]
+Back then, few drivers set driver_override wrong. I fixed Exynos
+in a different way after discussions. QCOM NGD was not fixed
+and a new user appeared - IMX SCU.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- drivers/spi/spi-fsl-lib.c |  2 +-
- drivers/spi/spi-fsl-spi.c | 15 +++++++++++++--
- 2 files changed, 14 insertions(+), 3 deletions(-)
+It seems "char *" in driver_override looks too consty, so we
+tend to make a mistake of storing there string literals.
 
-diff --git a/drivers/spi/spi-fsl-lib.c b/drivers/spi/spi-fsl-lib.c
-index 76e1192eb025..a13f3b4db55f 100644
---- a/drivers/spi/spi-fsl-lib.c
-+++ b/drivers/spi/spi-fsl-lib.c
-@@ -88,7 +88,7 @@ void mpc8xxx_spi_probe(struct device *dev, struct resource *mem,
- 
- 	/* the spi->mode bits understood by this driver: */
- 	master->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH
--			| SPI_LSB_FIRST | SPI_LOOP;
-+			| SPI_LSB_FIRST | SPI_LOOP | SPI_TRAILING;
- 
- 	master->dev.of_node = dev->of_node;
- 
-diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
-index bdf94cc7be1a..6a52955d9051 100644
---- a/drivers/spi/spi-fsl-spi.c
-+++ b/drivers/spi/spi-fsl-spi.c
-@@ -424,13 +424,24 @@ static int fsl_spi_do_one_msg(struct spi_master *master,
- 		}
- 	}
- 
--	m->status = status;
--
- 	if (status || !cs_change) {
- 		ndelay(nsecs);
- 		fsl_spi_chipselect(spi, BITBANG_CS_INACTIVE);
- 	}
- 
-+	if (!status && spi->mode & SPI_TRAILING) {
-+		struct spi_transfer t = {
-+			.len = 1,
-+			.tx_buf = "",
-+			.bits_per_word = 4
-+		};
-+
-+		status = fsl_spi_setup_transfer(spi, &t);
-+		if (!status)
-+			status = fsl_spi_bufs(spi, &t, 0);
-+	}
-+	m->status = status;
-+
- 	fsl_spi_setup_transfer(spi, NULL);
- 	spi_finalize_current_message(master);
- 	return 0;
+Changes since latest v2
+=======================
+1. Make all driver_override fields as "const char *", just like SPI
+   and VDPA. (Mark)
+2. Move "count" check to the new helper and add "count" argument. (Michael)
+3. Fix typos in docs, patch subject. Extend doc. (Michael, Bjorn)
+4. Compare pointers to reduce number of string readings in the helper.
+5. Fix clk-imx return value.
+
+Changes since latest v1 (not the old 2019 solution):
+====================================================
+https://lore.kernel.org/all/708eabb1-7b35-d525-d4c3-451d4a3de84f@rasmusvillemoes.dk/
+1. Add helper for setting driver_override.
+2. Use the helper.
+
+Dependencies (and stable):
+==========================
+1. All patches, including last three fixes, depend on the first patch
+   introducing the helper.
+2. The last three commits - fixes - are probably not backportable
+   directly, because of this dependency. I don't know how to express
+   this dependency here, since stable-kernel-rules.rst mentions only commits as
+   possible dependencies.
+
+[1] https://lore.kernel.org/all/1550484960-2392-3-git-send-email-krzk@kernel.org/
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (11):
+  driver: platform: Add helper for safer setting of driver_override
+  amba: Use driver_set_override() instead of open-coding
+  fsl-mc: Use driver_set_override() instead of open-coding
+  hv: Use driver_set_override() instead of open-coding
+  PCI: Use driver_set_override() instead of open-coding
+  s390: cio: Use driver_set_override() instead of open-coding
+  spi: Use helper for safer setting of driver_override
+  vdpa: Use helper for safer setting of driver_override
+  clk: imx: scu: Fix kfree() of static memory on setting driver_override
+  slimbus: qcom-ngd: Fix kfree() of static memory on setting
+    driver_override
+  rpmsg: Fix kfree() of static memory on setting driver_override
+
+ drivers/amba/bus.c              | 28 +++---------------
+ drivers/base/driver.c           | 51 +++++++++++++++++++++++++++++++++
+ drivers/base/platform.c         | 28 +++---------------
+ drivers/bus/fsl-mc/fsl-mc-bus.c | 25 +++-------------
+ drivers/clk/imx/clk-scu.c       |  7 ++++-
+ drivers/hv/vmbus_drv.c          | 28 +++---------------
+ drivers/pci/pci-sysfs.c         | 28 +++---------------
+ drivers/rpmsg/rpmsg_core.c      |  3 +-
+ drivers/rpmsg/rpmsg_internal.h  | 13 +++++++--
+ drivers/rpmsg/rpmsg_ns.c        | 14 +++++++--
+ drivers/s390/cio/cio.h          |  7 ++++-
+ drivers/s390/cio/css.c          | 28 +++---------------
+ drivers/slimbus/qcom-ngd-ctrl.c | 13 ++++++++-
+ drivers/spi/spi.c               | 26 +++--------------
+ drivers/vdpa/vdpa.c             | 29 +++----------------
+ include/linux/amba/bus.h        |  7 ++++-
+ include/linux/device/driver.h   |  2 ++
+ include/linux/fsl/mc.h          |  6 ++--
+ include/linux/hyperv.h          |  7 ++++-
+ include/linux/pci.h             |  7 ++++-
+ include/linux/platform_device.h |  7 ++++-
+ include/linux/rpmsg.h           |  6 ++--
+ include/linux/spi/spi.h         |  2 ++
+ include/linux/vdpa.h            |  4 ++-
+ 24 files changed, 171 insertions(+), 205 deletions(-)
+
 -- 
-2.34.1
+2.32.0
 
