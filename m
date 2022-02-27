@@ -2,67 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D938E4C5F1A
-	for <lists+linux-spi@lfdr.de>; Sun, 27 Feb 2022 22:38:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 858A94C5FA5
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Feb 2022 00:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbiB0Vin (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 27 Feb 2022 16:38:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58552 "EHLO
+        id S231750AbiB0XAk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 27 Feb 2022 18:00:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiB0Vim (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 27 Feb 2022 16:38:42 -0500
-X-Greylist: delayed 609 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Feb 2022 13:38:04 PST
-Received: from 9.mo552.mail-out.ovh.net (9.mo552.mail-out.ovh.net [87.98.180.222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC7949C9D
-        for <linux-spi@vger.kernel.org>; Sun, 27 Feb 2022 13:38:04 -0800 (PST)
-Received: from mxplan5.mail.ovh.net (unknown [10.109.143.118])
-        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id E30F222C9F;
-        Sun, 27 Feb 2022 21:27:53 +0000 (UTC)
-Received: from kaod.org (37.59.142.103) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Sun, 27 Feb
- 2022 22:27:52 +0100
-Authentication-Results: garm.ovh; auth=pass (GARM-103G005bd4da659-6e74-42ae-98f4-7b2406606e6c,
-                    949565DF20DEE76D4A77FF7731A75FE8B07B1F6B) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 82.64.250.170
-Message-ID: <890fce14-8001-74c9-21a9-0de117e743ef@kaod.org>
-Date:   Sun, 27 Feb 2022 22:27:52 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 08/10] spi: aspeed: Calibrate read timings
-Content-Language: en-US
-To:     Pratyush Yadav <p.yadav@ti.com>
-CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        with ESMTP id S229714AbiB0XAj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 27 Feb 2022 18:00:39 -0500
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D99BF6D4C9;
+        Sun, 27 Feb 2022 15:00:01 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.90,142,1643641200"; 
+   d="scan'208";a="111726405"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 28 Feb 2022 08:00:01 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 1047F40062C3;
+        Mon, 28 Feb 2022 07:59:58 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
         Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-aspeed@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220214094231.3753686-1-clg@kaod.org>
- <20220214094231.3753686-9-clg@kaod.org>
- <20220225091809.gvup3mcst45szi6x@ti.com>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <20220225091809.gvup3mcst45szi6x@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.59.142.103]
-X-ClientProxiedBy: DAG6EX2.mxp5.local (172.16.2.52) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: 9a51f072-26f3-48de-b05f-06cdd16eb070
-X-Ovh-Tracer-Id: 17066672266216704900
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrleekgddugeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepudetudefueeffedvjeeiieffleegtefgledthfelueevieetgeekuedvffdtteehnecuffhomhgrihhnpehoiihlrggsshdrohhrghenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddtfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-spi@vger.kernel.org
+Subject: [PATCH] spi: dt-bindings: renesas,rspi: Document RZ/V2L SoC
+Date:   Sun, 27 Feb 2022 22:59:56 +0000
+Message-Id: <20220227225956.29570-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,62 +45,43 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 2/25/22 10:18, Pratyush Yadav wrote:
-> On 14/02/22 10:42AM, Cédric Le Goater wrote:
->> To accommodate the different response time of SPI transfers on different
->> boards and different SPI NOR devices, the Aspeed controllers provide a
->> set of Read Timing Compensation registers to tune the timing delays
->> depending on the frequency being used. The AST2600 SoC has one of
->> these registers per device. On the AST2500 and AST2400 SoCs, the
->> timing register is shared by all devices which is a bit problematic to
->> get good results other than for one device.
->>
->> The algorithm first reads a golden buffer at low speed and then performs
->> reads with different clocks and delay cycle settings to find a breaking
->> point. This selects a default good frequency for the CEx control register.
->> The current settings are bit optimistic as we pick the first delay giving
->> good results. A safer approach would be to determine an interval and
->> choose the middle value.
->>
->> Due to the lack of API, calibration is performed when the direct mapping
->> for reads is created.
-> 
-> The dirmap_create mapping says nothing about _when_ it should be called.
-> So there is no guarantee that it will only be called after the flash is
-> fully initialized. 
+Add RSPI binding documentation for Renesas RZ/V2L SoC.
 
-spi_nor_create_read_dirmap() is called after spi_nor_scan() in spi_nor_probe().
-Since a spi_mem_dirmap_info descriptor is created using the nor fields :
+RSPI block is identical to one found on RZ/A, so no driver changes are
+required. The fallback compatible string "renesas,rspi-rz" will be used
+on RZ/V2L.
 
-	struct spi_mem_dirmap_info info = {
-		.op_tmpl = SPI_MEM_OP(SPI_MEM_OP_CMD(nor->read_opcode, 0),
-				      SPI_MEM_OP_ADDR(nor->addr_width, 0, 0),
-				      SPI_MEM_OP_DUMMY(nor->read_dummy, 0),
-				      SPI_MEM_OP_DATA_IN(0, NULL, 0)),
-		.offset = 0,
-		.length = nor->params->size,
-	};
-	struct spi_mem_op *op = &info.op_tmpl;
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
+DTSI changes have been posted as part of series [0].
 
-the spi-mem framework makes the assumption that the nor object is initialized.
+[0] https://patchwork.kernel.org/project/linux-renesas-soc/
+patch/20220227203744.18355-13-prabhakar.mahadev-lad.rj@bp.renesas.com/
+---
+ Documentation/devicetree/bindings/spi/renesas,rspi.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> I suggest you either make this a requirement of the API,
-
-how ?
-
-Thanks,
-
-C.
-
-
-> or create a new API that guarantees it will only be called after
-> the flash is initialized, like [0].
-> 
-> [0] https://patchwork.ozlabs.org/project/linux-mtd/patch/20210311191216.7363-2-p.yadav@ti.com/
-> 
->>
->> Cc: Pratyush Yadav <p.yadav@ti.com>
->> Signed-off-by: Cédric Le Goater <clg@kaod.org>
->> ---
-> 
+diff --git a/Documentation/devicetree/bindings/spi/renesas,rspi.yaml b/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
+index 76e6d9e52fc7..a902f0ca2198 100644
+--- a/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
++++ b/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
+@@ -22,6 +22,7 @@ properties:
+               - renesas,rspi-r7s72100  # RZ/A1H
+               - renesas,rspi-r7s9210   # RZ/A2
+               - renesas,r9a07g044-rspi # RZ/G2{L,LC}
++              - renesas,r9a07g054-rspi # RZ/V2L
+           - const: renesas,rspi-rz     # RZ/A and RZ/G2{L,LC}
+ 
+       - items:
+@@ -124,6 +125,7 @@ allOf:
+             enum:
+               - renesas,qspi
+               - renesas,r9a07g044-rspi
++              - renesas,r9a07g054-rspi
+     then:
+       required:
+         - resets
+-- 
+2.17.1
 
