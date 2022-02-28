@@ -2,112 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B149C4C6FA8
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Feb 2022 15:37:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8415A4C6FE5
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Feb 2022 15:47:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbiB1Oib (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Feb 2022 09:38:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33826 "EHLO
+        id S237320AbiB1Orh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Feb 2022 09:47:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236629AbiB1Oia (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Feb 2022 09:38:30 -0500
-X-Greylist: delayed 68966 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Feb 2022 06:37:51 PST
-Received: from 3.mo548.mail-out.ovh.net (3.mo548.mail-out.ovh.net [188.165.32.156])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F7E2B24D
-        for <linux-spi@vger.kernel.org>; Mon, 28 Feb 2022 06:37:49 -0800 (PST)
-Received: from mxplan5.mail.ovh.net (unknown [10.109.146.107])
-        by mo548.mail-out.ovh.net (Postfix) with ESMTPS id 050CE2339A;
-        Mon, 28 Feb 2022 14:37:45 +0000 (UTC)
-Received: from kaod.org (37.59.142.100) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 28 Feb
- 2022 15:37:44 +0100
-Authentication-Results: garm.ovh; auth=pass (GARM-100R003a3ef605e-0c0a-4f25-99c2-225566a87550,
-                    252894939833E8233A028C6995915A29C4CB1534) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 82.64.250.170
-Message-ID: <423d3bfa-c963-c765-fa65-700db9980804@kaod.org>
-Date:   Mon, 28 Feb 2022 15:37:44 +0100
+        with ESMTP id S237302AbiB1Orh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Feb 2022 09:47:37 -0500
+Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82927F6D9;
+        Mon, 28 Feb 2022 06:46:56 -0800 (PST)
+Received: by mail-ua1-f42.google.com with SMTP id j7so1515627uap.5;
+        Mon, 28 Feb 2022 06:46:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xkv1u/oC76T/ywctXkUzgjlhF9lYc1skXbf9g5YwS34=;
+        b=ElMMzwsq7ked7M/P6tEDkLBQgTgVfGhI9f21GfPbIDDYX8NHcQzyPQIR/lvDpIBHyA
+         ACAizw9+Qpy1coW6Tr9TtSk79mRlOZmPENSkTK45/Jihbyaxc+cFjFncy+LxbdXbrBDf
+         VF7bvoSGSJbG7w8wMX8w+HN+ejYWM0D/Z0mhyEyHG9anGBvssYskmbRsk1iinK0z+J4l
+         daVqQcFJstVe8q8G9sEDUI2hqIZRAnrvbVco+QkUmvVQcOdutowqQ8kWDSmRnirvacpk
+         yHwPY/0tUX5LMtj5dRb44WQew6ndWhBFWgX7LotwGIVeoX0DP1L0dxz45TdJaFaz6y2f
+         eKVg==
+X-Gm-Message-State: AOAM533VL3g+ynC6Gzz/XfyfTFRO09tc5oKa0SkKPSpswY/hU54LAzbO
+        KQd4A2Fp6Hf0H/2n/dZcpjYqaiq2yVeTmg==
+X-Google-Smtp-Source: ABdhPJwyccWMwvsmSnvTIQGHHXslnVzc56z/FNNteTpLXMxgDMutY5LYTGNIRb/5jsfRz+Q3TK84kw==
+X-Received: by 2002:a9f:2482:0:b0:341:c96f:e71d with SMTP id 2-20020a9f2482000000b00341c96fe71dmr7305025uar.9.1646059615937;
+        Mon, 28 Feb 2022 06:46:55 -0800 (PST)
+Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com. [209.85.221.174])
+        by smtp.gmail.com with ESMTPSA id o16-20020a05610232d000b0031b075821b4sm1240982vss.27.2022.02.28.06.46.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 06:46:55 -0800 (PST)
+Received: by mail-vk1-f174.google.com with SMTP id l10so5271849vki.9;
+        Mon, 28 Feb 2022 06:46:55 -0800 (PST)
+X-Received: by 2002:a1f:6087:0:b0:328:e94a:54b3 with SMTP id
+ u129-20020a1f6087000000b00328e94a54b3mr7895015vkb.20.1646059615405; Mon, 28
+ Feb 2022 06:46:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 01/10] mtd: spi-nor: aspeed: Rename Kconfig option
-Content-Language: en-US
-To:     Joel Stanley <joel@jms.id.au>
-CC:     Pratyush Yadav <p.yadav@ti.com>, <linux-spi@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        devicetree <devicetree@vger.kernel.org>,
+References: <20220227225956.29570-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220227225956.29570-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 28 Feb 2022 15:46:44 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU_HUHnqj0XmXxH9LEFNqt=wVf=nX9XHd3x0-3iDLsv0A@mail.gmail.com>
+Message-ID: <CAMuHMdU_HUHnqj0XmXxH9LEFNqt=wVf=nX9XHd3x0-3iDLsv0A@mail.gmail.com>
+Subject: Re: [PATCH] spi: dt-bindings: renesas,rspi: Document RZ/V2L SoC
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220214094231.3753686-1-clg@kaod.org>
- <20220214094231.3753686-2-clg@kaod.org>
- <20220225073155.f2cxfhm7surf34d4@ti.com>
- <688b7a65-d4b6-682b-494a-1d4178699dba@kaod.org>
- <CACPK8XeCfLmEJSLV6q5BLpCVztzG3dZehCgqrjgrNr7LaOiReQ@mail.gmail.com>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <CACPK8XeCfLmEJSLV6q5BLpCVztzG3dZehCgqrjgrNr7LaOiReQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.59.142.100]
-X-ClientProxiedBy: DAG7EX1.mxp5.local (172.16.2.61) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: cd52e354-2258-48f9-a7dc-fd9434f95e6a
-X-Ovh-Tracer-Id: 16012829951295261572
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddruddttddgieeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepieegvdffkeegfeetuddttddtveduiefhgeduffekiedtkeekteekhfffleevleelnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrddutddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehmgihplhgrnhehrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheptghlgheskhgrohgurdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-spi <linux-spi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 2/28/22 07:07, Joel Stanley wrote:
-> On Sun, 27 Feb 2022 at 18:50, Cédric Le Goater <clg@kaod.org> wrote:
->>
->> On 2/25/22 08:31, Pratyush Yadav wrote:
->>> On 14/02/22 10:42AM, Cédric Le Goater wrote:
->>>> To prepare transition to the new Aspeed SMC SPI controller driver using
->>>> the spi-mem interface, change the kernel CONFIG option of the current
->>>> driver to reflect that the implementation uses the MTD SPI-NOR interface.
->>>> Once the new driver is sufficiently exposed, we should remove the old one.
->>>
->>> I don't quite understand the reasoning behind this. Why keep the old
->>> driver around? Why not directly replace it with the new one? Does the
->>> new one have any limitations that this one doesn't?
->>
->> No. The old one has more limitations than the new one. The old one in
->> mainline is half baked since we could never merge the necessary bits
->> for training. We have been keeping a full version in the OpenBMC tree.
->>
->> Joel, could we simply drop the old driver in mainline and keep the old
->> one in the OpenBMC tree until we feel comfortable ? I guess we need
->> more testing.
-> 
-> I would answer Pratyush's question with: the old one is well tested,
-> and the new one is not. We would intend to keep the old one around for
-> a release cycle or two, and once we're confident the new one is stable
-> we would remove the old.
+On Mon, Feb 28, 2022 at 12:00 AM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Add RSPI binding documentation for Renesas RZ/V2L SoC.
+>
+> RSPI block is identical to one found on RZ/A, so no driver changes are
+> required. The fallback compatible string "renesas,rspi-rz" will be used
+> on RZ/V2L.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-yes but we could handle the transition in the OpenBMC tree without putting
-the burden on mainline.
-  
-mainline would only have the newer spi-mem based driver, the OpenBMC tree
-would have it also, along with the older SPI-NOR based driver.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-So this patch renaming the Kconfig option would only apply to the OpenBMC
-tree.
+Gr{oetje,eeting}s,
 
-C.
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
