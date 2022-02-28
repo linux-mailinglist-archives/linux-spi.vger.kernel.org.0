@@ -2,45 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15FA04C7835
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Feb 2022 19:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD1E4C7850
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Feb 2022 19:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238062AbiB1Snj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Feb 2022 13:43:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
+        id S230212AbiB1SuA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Feb 2022 13:50:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241009AbiB1Sm6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Feb 2022 13:42:58 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7BC33896;
-        Mon, 28 Feb 2022 10:39:27 -0800 (PST)
+        with ESMTP id S232060AbiB1St7 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Feb 2022 13:49:59 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5D329C86;
+        Mon, 28 Feb 2022 10:49:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646073567; x=1677609567;
+  t=1646074159; x=1677610159;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=cLNm/VUYWKW7XICeFUo0QNpQOnVWM5sHuOgBRbXTVlY=;
-  b=Rpu9Jzvo8iVWLHOXH3qPvJbbYNH+2WsModpTKUu+b/xWSx3rrxpte/ya
-   I5gfvp+o9tVX1Nfx5vWW+Q6enbDPo058mlm+QxMn7c4OApi58ZSpaMjkd
-   uNe2fUyHZsL1Yk//QcHlyHXbSZcZogVJrHP59/xP/XZ3PqURFDziFnp6T
-   2CVZyNcUZfKXRyLILweaCz73lU4PJ1oOFI4aLBD3QhOJsvd7dXUXEk7ZU
-   dItuwORxhVOjIq+MIheLtBFF/ClBusOoDvU9JGe1MNU1E3jwD7tdWLsG+
-   mHd0W8lBa/HzJ39w6VbdUrgnME3SwCiPQM3IPYKWEB7J4gIeiObGlw1a6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="253147895"
+  bh=jGNtYOYp/OrcQLCV4U/MBjkrMD4iTbDpW9b9kMxP6Io=;
+  b=LRSx1EVuSFRIbtEZVpUkmG7vOW1033+9HXERGTRb3QfvIZtvwCp3DSC6
+   Nc1e2QOPBLfFMCKAQU14zdchvCik8ZzTweS9OXW09X3llikh28Kjt8yrY
+   br7b19bzXBLBJWJdkH6ru973UYg/nx6kCdpDrYxE3wTZ2eHiM97gMm+6s
+   JC53Io1rJa3n6RxuxgJ9V/QE5EJ9hJdrIcJr+D3kHhaCTu3Es5qIGXEO/
+   Y43hVTFUK/QFrYogFD+W9mwME8MZjCLplOf9SY14sa5u/SDOneMOLKSIL
+   HPiEEzfJY0tMUXc3odiZnKUM08d62iK6RMwX9AbkVIfL3Ce62chwGXd1d
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="316172792"
 X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="253147895"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 10:39:19 -0800
+   d="scan'208";a="316172792"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 10:49:19 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="640981128"
+   d="scan'208";a="708752385"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 28 Feb 2022 10:39:16 -0800
+  by orsmga005.jf.intel.com with ESMTP; 28 Feb 2022 10:49:17 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nOkvU-0007gx-3w; Mon, 28 Feb 2022 18:39:16 +0000
-Date:   Tue, 1 Mar 2022 02:38:31 +0800
+        id 1nOl5A-0007hS-Cv; Mon, 28 Feb 2022 18:49:16 +0000
+Date:   Tue, 1 Mar 2022 02:48:49 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         Mark Brown <broonie@kernel.org>,
@@ -51,15 +51,15 @@ Cc:     kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
         devicetree@vger.kernel.org
 Subject: Re: [PATCH v2 2/2] spi: fsl-spi: Implement trailing bits
-Message-ID: <202203010220.Yzk53fCj-lkp@intel.com>
+Message-ID: <202203010212.oQMKRiPl-lkp@intel.com>
 References: <fe4a3946a66ede73f6d6871700f2aaf0171372a1.1646060734.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <fe4a3946a66ede73f6d6871700f2aaf0171372a1.1646060734.git.christophe.leroy@csgroup.eu>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,9 +70,9 @@ X-Mailing-List: linux-spi@vger.kernel.org
 
 Hi Christophe,
 
-I love your patch! Perhaps something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test WARNING on v5.17-rc6]
+[auto build test ERROR on v5.17-rc6]
 [cannot apply to broonie-spi/for-next next-20220228]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
@@ -80,8 +80,8 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/Add-support-for-components-requiring-trailing-clock-after-transfer/20220228-231740
 base:    7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220301/202203010220.Yzk53fCj-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220301/202203010212.oQMKRiPl-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -91,21 +91,21 @@ reproduce (this is a W=1 build):
         git checkout 7eb07c4d26401389204fcc6cf685c18c89b64ef8
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
    drivers/spi/spi-fsl-spi.c: In function 'fsl_spi_do_one_msg':
->> drivers/spi/spi-fsl-spi.c:435:35: warning: initialization of 'const void *' from 'long unsigned int' makes pointer from integer without a cast [-Wint-conversion]
+>> drivers/spi/spi-fsl-spi.c:435:35: error: 'empty_zero_page' undeclared (first use in this function)
      435 |                         .tx_buf = empty_zero_page,
          |                                   ^~~~~~~~~~~~~~~
-   drivers/spi/spi-fsl-spi.c:435:35: note: (near initialization for 't.tx_buf')
+   drivers/spi/spi-fsl-spi.c:435:35: note: each undeclared identifier is reported only once for each function it appears in
 
 
-vim +435 drivers/spi/spi-fsl-spi.c
+vim +/empty_zero_page +435 drivers/spi/spi-fsl-spi.c
 
    356	
    357	static int fsl_spi_do_one_msg(struct spi_master *master,
