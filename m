@@ -2,74 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49EAD4C7D0C
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Feb 2022 23:09:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E34D04C7D11
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Feb 2022 23:10:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbiB1WKY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Feb 2022 17:10:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
+        id S229664AbiB1WKx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Feb 2022 17:10:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiB1WKX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Feb 2022 17:10:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738FCC681F;
-        Mon, 28 Feb 2022 14:09:43 -0800 (PST)
+        with ESMTP id S229634AbiB1WKw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Feb 2022 17:10:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E963C6833
+        for <linux-spi@vger.kernel.org>; Mon, 28 Feb 2022 14:10:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39DA4B81698;
-        Mon, 28 Feb 2022 22:09:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D10FC340EE;
-        Mon, 28 Feb 2022 22:09:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3279161299
+        for <linux-spi@vger.kernel.org>; Mon, 28 Feb 2022 22:10:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 97ADBC340EE;
+        Mon, 28 Feb 2022 22:10:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646086180;
-        bh=C3m4pnnTAF+o+8Z+tsT22TMwOAoIvmDl7rQIHuiLdMA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BdRbVBZNF8SyrlpXKAsHjo1A6k3f944Uzsh5hy2UmK5ywn8cPtoiWatoTWpomjQzc
-         x44Jv7/Wzxo8T+fSgsmyLRYgbKXOQkqEy86p/ln+HE5A679Zvs+XoyM7aJWc8wSHt6
-         ACqagutJzp7I7JrJGyMxpDRREGY/HUyTANKgF4FJ/99jkm+o2X+/pda0xDuvY8MbdY
-         Sv4Zfi/zQD1hFPf6GsOnP6lA5hiuplekt76UNCcR1YonNLI47HOJfCmRDkLAT1NcBE
-         yuQHyRRcOkNLJGUq9zBF6RREf+bF8FScygNYfOz5OBENPb041Vfalb0bt696k7uf4U
-         g+dDDXgOJFcHA==
-Date:   Mon, 28 Feb 2022 22:09:31 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee.jones@linaro.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Another pass removing cases of 'allOf'
- containing a '$ref'
-Message-ID: <Yh1IG9daOUOB52rf@sirena.org.uk>
-References: <20220228213802.1639658-1-robh@kernel.org>
+        s=k20201202; t=1646086212;
+        bh=fSEDoi5H9xqMlJe492+MZPp1nq7RbdUh4MUuBfqXz5w=;
+        h=Subject:From:Date:To:From;
+        b=afR/sI0k3NfQRfmaQsPyBzQIeHMWijlvmRVj2VxKdgie/9+s5Wth8J8DCr9c1gC7s
+         rDp+lc1LoqfgiYjlGRheo0O2lRl7Dp0P6hzz6T/LvCt1ua/NfBnWNODOCNPwh24s+a
+         WjSoh5jEA+hFwdHIF/YVY12spyyUDH4VvS2/RbCn7HS9KdR0vYozfdCFGnMBVStnT7
+         czc86ECirSz3d1W5MWtFMeMWysH6aojvKT6dlnGtpm6tJynYDqvIBE/LZAahrn0eiB
+         WJYTHP47BneODACFeDRB8sM/bb+MXIheg/kmw26KAO+rbLxKfpka5sKcpsh7z3dJ13
+         3p855K2YMUTRQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7A8C5E6D4BB;
+        Mon, 28 Feb 2022 22:10:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xC2AwCckB4yHmCdp"
-Content-Disposition: inline
-In-Reply-To: <20220228213802.1639658-1-robh@kernel.org>
-X-Cookie: Killing turkeys causes winter.
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <164608621244.15510.13201187038096927843.git-patchwork-summary@kernel.org>
+Date:   Mon, 28 Feb 2022 22:10:12 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -80,36 +52,22 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hello:
 
---xC2AwCckB4yHmCdp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-On Mon, Feb 28, 2022 at 03:38:02PM -0600, Rob Herring wrote:
-> Another pass at removing unnecessary use of 'allOf' with a '$ref'.
->=20
-> json-schema versions draft7 and earlier have a weird behavior in that
-> any keywords combined with a '$ref' are ignored (silently). The correct
-> form was to put a '$ref' under an 'allOf'. This behavior is now changed
-> in the 2019-09 json-schema spec and '$ref' can be mixed with other
-> keywords.
+Patch: [v2] spi: use specific last_cs instead of last_cs_enable
+  Submitter: Yun Zhou <yun.zhou@windriver.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=615434
+  Lore link: https://lore.kernel.org/r/20220217141234.72737-1-yun.zhou@windriver.com
 
-Acked-by: Mark Brown <broonie@kernel.org>
 
---xC2AwCckB4yHmCdp
-Content-Type: application/pgp-signature; name="signature.asc"
+Total patches: 1
 
------BEGIN PGP SIGNATURE-----
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIdSBoACgkQJNaLcl1U
-h9Brnwf9Gb7P9H3jku9OngoretGUxGN4DtDmr+0Bvk7ZZFkSIVQYVBROL0mmUfer
-wPLiKHS48VJM6irhxRMqHLa1CrIeAmJHZpkg0R1JH1Iw36fWPZiBTfrDG8qubOti
-l/cEx7Jmxoj2EtB8xcTpbYGqwOqSZtDkAz1smUIh3coKzArwCPjkAYE59GjQ28SS
-F+P6ze1awYqRh/vkZC5ge03hrBhxOKU1iVyqv4iRfWtwCXRxYM3aPTs4aLB/T0NW
-svINogVRgGsGVmY7gRufv1wI7bJle7+MP7byPwsqzx2AXthe0fYt3x457mV59wjc
-Ej2pLNgE/IiOKyZ8gmWU8kkWHOh2hQ==
-=Hxgn
------END PGP SIGNATURE-----
 
---xC2AwCckB4yHmCdp--
