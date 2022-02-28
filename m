@@ -2,55 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8415A4C6FE5
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Feb 2022 15:47:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD534C6FFC
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Feb 2022 15:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237320AbiB1Orh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Feb 2022 09:47:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
+        id S233775AbiB1OtJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Feb 2022 09:49:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237302AbiB1Orh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Feb 2022 09:47:37 -0500
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82927F6D9;
-        Mon, 28 Feb 2022 06:46:56 -0800 (PST)
-Received: by mail-ua1-f42.google.com with SMTP id j7so1515627uap.5;
-        Mon, 28 Feb 2022 06:46:56 -0800 (PST)
+        with ESMTP id S237382AbiB1OtH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Feb 2022 09:49:07 -0500
+Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19DF2C119;
+        Mon, 28 Feb 2022 06:48:26 -0800 (PST)
+Received: by mail-vs1-f54.google.com with SMTP id u10so13168125vsu.13;
+        Mon, 28 Feb 2022 06:48:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xkv1u/oC76T/ywctXkUzgjlhF9lYc1skXbf9g5YwS34=;
-        b=ElMMzwsq7ked7M/P6tEDkLBQgTgVfGhI9f21GfPbIDDYX8NHcQzyPQIR/lvDpIBHyA
-         ACAizw9+Qpy1coW6Tr9TtSk79mRlOZmPENSkTK45/Jihbyaxc+cFjFncy+LxbdXbrBDf
-         VF7bvoSGSJbG7w8wMX8w+HN+ejYWM0D/Z0mhyEyHG9anGBvssYskmbRsk1iinK0z+J4l
-         daVqQcFJstVe8q8G9sEDUI2hqIZRAnrvbVco+QkUmvVQcOdutowqQ8kWDSmRnirvacpk
-         yHwPY/0tUX5LMtj5dRb44WQew6ndWhBFWgX7LotwGIVeoX0DP1L0dxz45TdJaFaz6y2f
-         eKVg==
-X-Gm-Message-State: AOAM533VL3g+ynC6Gzz/XfyfTFRO09tc5oKa0SkKPSpswY/hU54LAzbO
-        KQd4A2Fp6Hf0H/2n/dZcpjYqaiq2yVeTmg==
-X-Google-Smtp-Source: ABdhPJwyccWMwvsmSnvTIQGHHXslnVzc56z/FNNteTpLXMxgDMutY5LYTGNIRb/5jsfRz+Q3TK84kw==
-X-Received: by 2002:a9f:2482:0:b0:341:c96f:e71d with SMTP id 2-20020a9f2482000000b00341c96fe71dmr7305025uar.9.1646059615937;
-        Mon, 28 Feb 2022 06:46:55 -0800 (PST)
-Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com. [209.85.221.174])
-        by smtp.gmail.com with ESMTPSA id o16-20020a05610232d000b0031b075821b4sm1240982vss.27.2022.02.28.06.46.55
+        bh=DJ23gsehcCRJL2hoURWULkun0rl03C0V1Ey0lXOHbSY=;
+        b=i3NG4tfvV/iC07EH6ziOJ6zfvvgCXGc02zCj31nd6pEZSu9XGilc4VXTB5+NhmTGp7
+         AYStCorhM1DIYiT2VjRgUwckcmw1bi1i4nVaJuTaeiY36P9mRiQOhxtMgUcKecsGIApw
+         O8HIEqmoxsjewKwaRDVGjtuoHFKJ8L6isWKljFiNGfP1APDMUItRIRzrhECqRZqMK/xz
+         B7022oRWzgoU/tD3Bmqs0TFfAGlN8JP5XecxqlBFByq+dZG7m18JmKJz7oIrRMxPAvIU
+         L0LFIqyiIctzuuwQVoP03Fjr9RjpvdzzZMv+u60HIW7VZDJ5I5oMF1W1k8LQDIw3KJ+D
+         96pg==
+X-Gm-Message-State: AOAM5336AsrK/r4V/DclPL1tpqx8wMHjWuqnCObRL6SH8nLW2QhsxDf0
+        KXo1iuOLmB0B2r3EPlIcTopne2+eD8hmgw==
+X-Google-Smtp-Source: ABdhPJxEFKePXraclsm7QPYxSyxAs3Pl32KE4X4J2ukyv3vTpIx0Nb6aU8Ib712+eEOMKS03Y1mIFQ==
+X-Received: by 2002:a05:6102:14a5:b0:31e:7404:50e0 with SMTP id d37-20020a05610214a500b0031e740450e0mr4905554vsv.62.1646059705548;
+        Mon, 28 Feb 2022 06:48:25 -0800 (PST)
+Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com. [209.85.221.171])
+        by smtp.gmail.com with ESMTPSA id j192-20020a1f23c9000000b003319491b375sm1673594vkj.32.2022.02.28.06.48.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 06:46:55 -0800 (PST)
-Received: by mail-vk1-f174.google.com with SMTP id l10so5271849vki.9;
-        Mon, 28 Feb 2022 06:46:55 -0800 (PST)
-X-Received: by 2002:a1f:6087:0:b0:328:e94a:54b3 with SMTP id
- u129-20020a1f6087000000b00328e94a54b3mr7895015vkb.20.1646059615405; Mon, 28
- Feb 2022 06:46:55 -0800 (PST)
+        Mon, 28 Feb 2022 06:48:25 -0800 (PST)
+Received: by mail-vk1-f171.google.com with SMTP id j5so5252012vkc.12;
+        Mon, 28 Feb 2022 06:48:25 -0800 (PST)
+X-Received: by 2002:a05:6122:ca1:b0:330:b95b:e048 with SMTP id
+ ba33-20020a0561220ca100b00330b95be048mr8261499vkb.39.1646059704668; Mon, 28
+ Feb 2022 06:48:24 -0800 (PST)
 MIME-Version: 1.0
 References: <20220227225956.29570-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 In-Reply-To: <20220227225956.29570-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 28 Feb 2022 15:46:44 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU_HUHnqj0XmXxH9LEFNqt=wVf=nX9XHd3x0-3iDLsv0A@mail.gmail.com>
-Message-ID: <CAMuHMdU_HUHnqj0XmXxH9LEFNqt=wVf=nX9XHd3x0-3iDLsv0A@mail.gmail.com>
+Date:   Mon, 28 Feb 2022 15:48:13 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWiQSj3nhxJGjghKhrx+qT+=Ry-Txw6tJrk0aBBcr0Vvg@mail.gmail.com>
+Message-ID: <CAMuHMdWiQSj3nhxJGjghKhrx+qT+=Ry-Txw6tJrk0aBBcr0Vvg@mail.gmail.com>
 Subject: Re: [PATCH] spi: dt-bindings: renesas,rspi: Document RZ/V2L SoC
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>, Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -80,6 +81,17 @@ On Mon, Feb 28, 2022 at 12:00 AM Lad Prabhakar
 >
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+
+> --- a/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
+> @@ -22,6 +22,7 @@ properties:
+>                - renesas,rspi-r7s72100  # RZ/A1H
+>                - renesas,rspi-r7s9210   # RZ/A2
+>                - renesas,r9a07g044-rspi # RZ/G2{L,LC}
+> +              - renesas,r9a07g054-rspi # RZ/V2L
+>            - const: renesas,rspi-rz     # RZ/A and RZ/G2{L,LC}
+
+The last comment looks a bit strange now. Perhaps just drop it?
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
