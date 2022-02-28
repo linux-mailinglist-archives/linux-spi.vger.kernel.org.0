@@ -2,106 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD534C6FFC
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Feb 2022 15:48:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E27AC4C705A
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Feb 2022 16:11:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233775AbiB1OtJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Feb 2022 09:49:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
+        id S237479AbiB1PMN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Feb 2022 10:12:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237382AbiB1OtH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Feb 2022 09:49:07 -0500
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19DF2C119;
-        Mon, 28 Feb 2022 06:48:26 -0800 (PST)
-Received: by mail-vs1-f54.google.com with SMTP id u10so13168125vsu.13;
-        Mon, 28 Feb 2022 06:48:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DJ23gsehcCRJL2hoURWULkun0rl03C0V1Ey0lXOHbSY=;
-        b=i3NG4tfvV/iC07EH6ziOJ6zfvvgCXGc02zCj31nd6pEZSu9XGilc4VXTB5+NhmTGp7
-         AYStCorhM1DIYiT2VjRgUwckcmw1bi1i4nVaJuTaeiY36P9mRiQOhxtMgUcKecsGIApw
-         O8HIEqmoxsjewKwaRDVGjtuoHFKJ8L6isWKljFiNGfP1APDMUItRIRzrhECqRZqMK/xz
-         B7022oRWzgoU/tD3Bmqs0TFfAGlN8JP5XecxqlBFByq+dZG7m18JmKJz7oIrRMxPAvIU
-         L0LFIqyiIctzuuwQVoP03Fjr9RjpvdzzZMv+u60HIW7VZDJ5I5oMF1W1k8LQDIw3KJ+D
-         96pg==
-X-Gm-Message-State: AOAM5336AsrK/r4V/DclPL1tpqx8wMHjWuqnCObRL6SH8nLW2QhsxDf0
-        KXo1iuOLmB0B2r3EPlIcTopne2+eD8hmgw==
-X-Google-Smtp-Source: ABdhPJxEFKePXraclsm7QPYxSyxAs3Pl32KE4X4J2ukyv3vTpIx0Nb6aU8Ib712+eEOMKS03Y1mIFQ==
-X-Received: by 2002:a05:6102:14a5:b0:31e:7404:50e0 with SMTP id d37-20020a05610214a500b0031e740450e0mr4905554vsv.62.1646059705548;
-        Mon, 28 Feb 2022 06:48:25 -0800 (PST)
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com. [209.85.221.171])
-        by smtp.gmail.com with ESMTPSA id j192-20020a1f23c9000000b003319491b375sm1673594vkj.32.2022.02.28.06.48.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 06:48:25 -0800 (PST)
-Received: by mail-vk1-f171.google.com with SMTP id j5so5252012vkc.12;
-        Mon, 28 Feb 2022 06:48:25 -0800 (PST)
-X-Received: by 2002:a05:6122:ca1:b0:330:b95b:e048 with SMTP id
- ba33-20020a0561220ca100b00330b95be048mr8261499vkb.39.1646059704668; Mon, 28
- Feb 2022 06:48:24 -0800 (PST)
-MIME-Version: 1.0
-References: <20220227225956.29570-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220227225956.29570-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 28 Feb 2022 15:48:13 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWiQSj3nhxJGjghKhrx+qT+=Ry-Txw6tJrk0aBBcr0Vvg@mail.gmail.com>
-Message-ID: <CAMuHMdWiQSj3nhxJGjghKhrx+qT+=Ry-Txw6tJrk0aBBcr0Vvg@mail.gmail.com>
-Subject: Re: [PATCH] spi: dt-bindings: renesas,rspi: Document RZ/V2L SoC
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Mark Brown <broonie@kernel.org>,
+        with ESMTP id S236188AbiB1PML (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Feb 2022 10:12:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC417D013;
+        Mon, 28 Feb 2022 07:11:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16AC860F82;
+        Mon, 28 Feb 2022 15:11:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE607C340E7;
+        Mon, 28 Feb 2022 15:11:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646061091;
+        bh=9cfu46kfT0YYObqGd09mZYMm5lKn9yaccVHWiLQMjEY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UNJPrKLu9xKuVbNg+b73ZeDZ6fTwEpn8JeSaUWWaTs9Ar7jGusXTUtQLnJE5PiBBa
+         MSu0zp06O9wrBXxINiV+jy5pci+ZA4poZv5uZunsBrzFEH1Yl57sIVv46muYq3SJJy
+         4FbFDC0PmUfbBwMmIyxwowjd6yGHS59vojsHrohyLG1/GGNedtnRf7SzPlU8vByiJ7
+         nckt5sBFnQAf0X/H9cR1dzg+771XU9ieJlTj01f6Yzdykv2ehQNM2ikoRfJ5U9m/TO
+         TFgXHnVoByTJFoo3+OSCHW1iT7PRMFnib82XfugbGQjFyNd9k4njSLRdtZYY2pp7YX
+         6yizDZz7LTTOA==
+Date:   Mon, 28 Feb 2022 15:11:26 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-spi <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH 1/3] dt-bindings: spi: Update clocks property for ARM
+ pl022
+Message-ID: <YhzmHgV3L+3nmt+Y@sirena.org.uk>
+References: <20220228124345.99474-1-singh.kuldeep87k@gmail.com>
+ <20220228124345.99474-2-singh.kuldeep87k@gmail.com>
+ <6e14bdd4-5924-dd58-41ef-5bdb5561913b@arm.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="JIbKIh/u1QuU3fht"
+Content-Disposition: inline
+In-Reply-To: <6e14bdd4-5924-dd58-41ef-5bdb5561913b@arm.com>
+X-Cookie: Killing turkeys causes winter.
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 12:00 AM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add RSPI binding documentation for Renesas RZ/V2L SoC.
->
-> RSPI block is identical to one found on RZ/A, so no driver changes are
-> required. The fallback compatible string "renesas,rspi-rz" will be used
-> on RZ/V2L.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-> --- a/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
-> @@ -22,6 +22,7 @@ properties:
->                - renesas,rspi-r7s72100  # RZ/A1H
->                - renesas,rspi-r7s9210   # RZ/A2
->                - renesas,r9a07g044-rspi # RZ/G2{L,LC}
-> +              - renesas,r9a07g054-rspi # RZ/V2L
->            - const: renesas,rspi-rz     # RZ/A and RZ/G2{L,LC}
+--JIbKIh/u1QuU3fht
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The last comment looks a bit strange now. Perhaps just drop it?
+On Mon, Feb 28, 2022 at 02:26:12PM +0000, Robin Murphy wrote:
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Who says that minItems is missing? Looking at the PL022 TRM[1] it seems
+> clear that SSPCLK is pretty fundamental to useful operation. If that DT ever
+> worked, it must be that the same clock is wired to both inputs, and the fact
+> that that's how the neighbouring PL011 is described is strongly suggestive.
 
-Gr{oetje,eeting}s,
+Well, it could also be that the clock is wired to some other clock which
+is always on (which I guess is why the driver allows this in the first
+place, there's a lot of sloppy code around stuff like that in the tree).
 
-                        Geert
+> If the point of schema is to find errors in DTs, doesn't it make more sense
+> to fix the DTs than to weaken the schema just to shut it up?
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+I do agree on this point though, given that the clock is actually
+required for useful operation what's happening here is that the schema
+is detecting an error in the use of the binding.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--JIbKIh/u1QuU3fht
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIc5h0ACgkQJNaLcl1U
+h9CHCwf/TtI0aqZuzjNSWV4dcV7lKWubKyQkOIckU3pacyuWAGNxWwihWd0w5FMd
+lyZAHmDVTpD+fwI3zaJ/eBLn0RPET3/dzHhQBKvDg/ejGIoWFjdIfIwZ5YC+Is3r
+B2QzdK33gFHdSEAtN+wsgAiLdkZfZMxW5xTKa/59ub/5kFSlfoTXKGhfls2uD27w
++U3oT20NaGZl//aoqoJ+9w0KIb1HTBZcmu4NTJ3FzaZ5hEsafS/z9s7Emap3e+EX
+sxWbB6atRl6loSvbvvzKGg+HVA79itnSRDnWkGZ2szwULwOQjZMi4GhitOVchsoG
+cBxG8hBKA7EjTW+jzGk49VVBaiwzAA==
+=vkXY
+-----END PGP SIGNATURE-----
+
+--JIbKIh/u1QuU3fht--
