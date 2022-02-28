@@ -2,46 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24BCD4C6F9F
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Feb 2022 15:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B149C4C6FA8
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Feb 2022 15:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237204AbiB1OhH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Feb 2022 09:37:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
+        id S231599AbiB1Oib (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Feb 2022 09:38:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237201AbiB1OhE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Feb 2022 09:37:04 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6BB137ED9C;
-        Mon, 28 Feb 2022 06:36:25 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 30E99D6E;
-        Mon, 28 Feb 2022 06:36:25 -0800 (PST)
-Received: from [10.57.39.47] (unknown [10.57.39.47])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EC8653F73D;
-        Mon, 28 Feb 2022 06:36:23 -0800 (PST)
-Message-ID: <f22e9ddc-3103-2785-5504-fcc95d08cc8b@arm.com>
-Date:   Mon, 28 Feb 2022 14:36:23 +0000
+        with ESMTP id S236629AbiB1Oia (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Feb 2022 09:38:30 -0500
+X-Greylist: delayed 68966 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Feb 2022 06:37:51 PST
+Received: from 3.mo548.mail-out.ovh.net (3.mo548.mail-out.ovh.net [188.165.32.156])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F7E2B24D
+        for <linux-spi@vger.kernel.org>; Mon, 28 Feb 2022 06:37:49 -0800 (PST)
+Received: from mxplan5.mail.ovh.net (unknown [10.109.146.107])
+        by mo548.mail-out.ovh.net (Postfix) with ESMTPS id 050CE2339A;
+        Mon, 28 Feb 2022 14:37:45 +0000 (UTC)
+Received: from kaod.org (37.59.142.100) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 28 Feb
+ 2022 15:37:44 +0100
+Authentication-Results: garm.ovh; auth=pass (GARM-100R003a3ef605e-0c0a-4f25-99c2-225566a87550,
+                    252894939833E8233A028C6995915A29C4CB1534) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 82.64.250.170
+Message-ID: <423d3bfa-c963-c765-fa65-700db9980804@kaod.org>
+Date:   Mon, 28 Feb 2022 15:37:44 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 3/3] dt-bindings: spi: Add spiclk to clock-names property
- in pl022
-Content-Language: en-GB
-To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 01/10] mtd: spi-nor: aspeed: Rename Kconfig option
+Content-Language: en-US
+To:     Joel Stanley <joel@jms.id.au>
+CC:     Pratyush Yadav <p.yadav@ti.com>, <linux-spi@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
         Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-References: <20220228124345.99474-1-singh.kuldeep87k@gmail.com>
- <20220228124345.99474-4-singh.kuldeep87k@gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220228124345.99474-4-singh.kuldeep87k@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220214094231.3753686-1-clg@kaod.org>
+ <20220214094231.3753686-2-clg@kaod.org>
+ <20220225073155.f2cxfhm7surf34d4@ti.com>
+ <688b7a65-d4b6-682b-494a-1d4178699dba@kaod.org>
+ <CACPK8XeCfLmEJSLV6q5BLpCVztzG3dZehCgqrjgrNr7LaOiReQ@mail.gmail.com>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <CACPK8XeCfLmEJSLV6q5BLpCVztzG3dZehCgqrjgrNr7LaOiReQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [37.59.142.100]
+X-ClientProxiedBy: DAG7EX1.mxp5.local (172.16.2.61) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: cd52e354-2258-48f9-a7dc-fd9434f95e6a
+X-Ovh-Tracer-Id: 16012829951295261572
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddruddttddgieeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepieegvdffkeegfeetuddttddtveduiefhgeduffekiedtkeekteekhfffleevleelnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrddutddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehmgihplhgrnhehrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheptghlgheskhgrohgurdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,37 +73,41 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 2022-02-28 12:43, Kuldeep Singh wrote:
-> Fix below dtc warning by making necessary addition of "spiclk" in
-> clock-names property.
+On 2/28/22 07:07, Joel Stanley wrote:
+> On Sun, 27 Feb 2022 at 18:50, Cédric Le Goater <clg@kaod.org> wrote:
+>>
+>> On 2/25/22 08:31, Pratyush Yadav wrote:
+>>> On 14/02/22 10:42AM, Cédric Le Goater wrote:
+>>>> To prepare transition to the new Aspeed SMC SPI controller driver using
+>>>> the spi-mem interface, change the kernel CONFIG option of the current
+>>>> driver to reflect that the implementation uses the MTD SPI-NOR interface.
+>>>> Once the new driver is sufficiently exposed, we should remove the old one.
+>>>
+>>> I don't quite understand the reasoning behind this. Why keep the old
+>>> driver around? Why not directly replace it with the new one? Does the
+>>> new one have any limitations that this one doesn't?
+>>
+>> No. The old one has more limitations than the new one. The old one in
+>> mainline is half baked since we could never merge the necessary bits
+>> for training. We have been keeping a full version in the OpenBMC tree.
+>>
+>> Joel, could we simply drop the old driver in mainline and keep the old
+>> one in the OpenBMC tree until we feel comfortable ? I guess we need
+>> more testing.
 > 
-> arch/arm64/boot/dts/broadcom/stingray/bcm958742t.dt.yaml: spi@190000:
-> clock-names:0: 'spiclk' is not one of ['SSPCLK', 'sspclk']
->      From schema: Documentation/devicetree/bindings/spi/spi-pl022.yaml
-> arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dt.yaml: spi@66190000:
-> clock-names:0: 'spiclk' is not one of ['SSPCLK', 'sspclk']
->      From schema: Documentation/devicetree/bindings/spi/spi-pl022.yaml
+> I would answer Pratyush's question with: the old one is well tested,
+> and the new one is not. We would intend to keep the old one around for
+> a release cycle or two, and once we're confident the new one is stable
+> we would remove the old.
 
-As before, what makes the binding at fault rather than that DT? The 
-PL022's actual input is named SSPCLK, not SPICLK, so why should a driver 
-which wants to look up that clock by name expect to look for "spiclk"?
+yes but we could handle the transition in the OpenBMC tree without putting
+the burden on mainline.
+  
+mainline would only have the newer spi-mem based driver, the OpenBMC tree
+would have it also, along with the older SPI-NOR based driver.
 
-Robin.
+So this patch renaming the Kconfig option would only apply to the OpenBMC
+tree.
 
-> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-> ---
->   Documentation/devicetree/bindings/spi/spi-pl022.yaml | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/spi-pl022.yaml b/Documentation/devicetree/bindings/spi/spi-pl022.yaml
-> index 5f6926a58b15..fb3075a0c7fd 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-pl022.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-pl022.yaml
-> @@ -45,6 +45,7 @@ properties:
->             - enum:
->                 - sspclk
->                 - SSPCLK
-> +              - spiclk
->             - const: apb_pclk
->   
->     pl022,autosuspend-delay:
+C.
+
