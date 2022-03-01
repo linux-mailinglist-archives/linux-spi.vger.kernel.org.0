@@ -2,148 +2,142 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8314C8647
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Mar 2022 09:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 480F64C86C6
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Mar 2022 09:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233357AbiCAITg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Mar 2022 03:19:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50968 "EHLO
+        id S233469AbiCAIm4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Mar 2022 03:42:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231503AbiCAITf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Mar 2022 03:19:35 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D7B12609;
-        Tue,  1 Mar 2022 00:18:54 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6776A478;
-        Tue,  1 Mar 2022 09:18:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1646122732;
-        bh=GUeID2Un8vVSdeuDNIEpa8RZjMMEHoy9L8wSmXbuUy8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=miR5YmRNNJOlmDq2Yqs9dB5x+/XGsPj5xCWEd5d4QNz5EOGQpnsdmFZxXhyD4MKIk
-         rbf5ayN8604es0VCCAiQRs20sEQGYm4i485kkz8RqNa01HdgUMWxmhGcc7qoMO3hEb
-         q2nC3FtfDQ133CVtcapt7269jyXQ9M8016CxGHSY=
-Date:   Tue, 1 Mar 2022 10:18:42 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee.jones@linaro.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
+        with ESMTP id S233478AbiCAImz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Mar 2022 03:42:55 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012BD88B0D
+        for <linux-spi@vger.kernel.org>; Tue,  1 Mar 2022 00:42:13 -0800 (PST)
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D10B84092C
+        for <linux-spi@vger.kernel.org>; Tue,  1 Mar 2022 08:42:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646124131;
+        bh=dZm4dVdpcvNRhKnzE3iapZ6aqr4LkpURHZ0F0cP2Ffk=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=TLNHlmxrUBpyKtMZlieR6+TUF85CJeSxMBCpowUxzlAksivCxkUvOqUEijHPC6ZTC
+         wsrSsWayqArQJuZe9PmD1juWFliS4CFGfeoErfCbyjsVsHEGRbk8HZTGmeK9eKdVws
+         Q8BmuI+hGwVZNA1C194YSq2L8W3U0ipASTunqm7rCiS/c3ccTgkjt8mZhqqb7SBKCx
+         uiIo1OTYIy26gmc5rP6dnanI8huvQAoXMxR96hmDwRmGV41wrItfJEHEG1rEuUdM00
+         8gAKekp/oghkVtdcUgf/SEQ2/H59lBO0OUSDMT1++AZit8HNXzrxK3hDtrrPjOGDRx
+         6QuG2/3UemQQg==
+Received: by mail-lj1-f199.google.com with SMTP id bd5-20020a05651c168500b002467c7cdfb2so4210844ljb.16
+        for <linux-spi@vger.kernel.org>; Tue, 01 Mar 2022 00:42:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=dZm4dVdpcvNRhKnzE3iapZ6aqr4LkpURHZ0F0cP2Ffk=;
+        b=blhE5HDxsIkplmMIx4fpoD27MA/SgKbBcBFfJSwHqMzGkafd1Ir3HP4nQBTDXXPhfQ
+         UFzZNUnsQbHwkxDitVwa8ryQZgYDzczI6LGyxZciZoplOUJ3iYxAV+ImHBdKsn0moERg
+         3dpy7hkwYdq64qW+gqwWd1ZkVW97sWNlpPIC5Q8A58GQbgaOzk3UHvlNnClZfuBqwh9t
+         I1HwrlYugXle/gl2FTFT6bdM+3Ch+Qj5PbP+cJ6k1DGCAVmr3+9qU+YFfv2F6DYBspVs
+         9eLHVEgRgH4iWt3i/TtaPQsjNigOsn9FEkagFyAd1kTGFU+p9grlzHELYrdBJplc0pWm
+         L/0A==
+X-Gm-Message-State: AOAM530cnkt3mRbTWxO7j3KgXUQeGlnANxJbpzxTtPCEuunr2dsBY8Ot
+        dvXxtovVOMpOy0wc1EJp5hw8clDSjO+DIeW3KIeUbFajdIILmbwZKTURxErm/JNBmSlPGOdHiGy
+        6RvL4r/V7cN4Jky+gjgcb88sMN5P0Y0G7+uWnRQ==
+X-Received: by 2002:a17:907:248a:b0:69b:ba2d:62cd with SMTP id zg10-20020a170907248a00b0069bba2d62cdmr18284933ejb.212.1646124119343;
+        Tue, 01 Mar 2022 00:41:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxkLsXZPJFLzXPV5FGYgxl+qkbahIyWcZp4Gh4Ixdg/+bf55XzGLZMALWtwePubTl5fD9ILsg==
+X-Received: by 2002:a17:907:248a:b0:69b:ba2d:62cd with SMTP id zg10-20020a170907248a00b0069bba2d62cdmr18284886ejb.212.1646124119100;
+        Tue, 01 Mar 2022 00:41:59 -0800 (PST)
+Received: from [192.168.0.135] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id bo14-20020a170906d04e00b006ce98d9c3e3sm5116757ejb.194.2022.03.01.00.41.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Mar 2022 00:41:58 -0800 (PST)
+Message-ID: <59ba1fd5-4be5-278f-47df-d26c341da73a@canonical.com>
+Date:   Tue, 1 Mar 2022 09:41:57 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 05/11] PCI: Use driver_set_override() instead of
+ open-coding
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Another pass removing cases of 'allOf'
- containing a '$ref'
-Message-ID: <Yh3W4r7rNSI60rVT@pendragon.ideasonboard.com>
-References: <20220228213802.1639658-1-robh@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220228213802.1639658-1-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+References: <20220228200606.GA516338@bhelgaas>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220228200606.GA516338@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Rob,
-
-Thank you for the patch.
-
-On Mon, Feb 28, 2022 at 03:38:02PM -0600, Rob Herring wrote:
-> Another pass at removing unnecessary use of 'allOf' with a '$ref'.
+On 28/02/2022 21:06, Bjorn Helgaas wrote:
+> On Sun, Feb 27, 2022 at 02:52:08PM +0100, Krzysztof Kozlowski wrote:
+>> Use a helper for seting driver_override to reduce amount of duplicated
+>> code. Make the driver_override field const char, because it is not
+>> modified by the core and it matches other subsystems.
 > 
-> json-schema versions draft7 and earlier have a weird behavior in that
-> any keywords combined with a '$ref' are ignored (silently). The correct
-> form was to put a '$ref' under an 'allOf'. This behavior is now changed
-> in the 2019-09 json-schema spec and '$ref' can be mixed with other
-> keywords.
+> s/seting/setting/
+> or even better, s/for seting/to set/
 > 
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-phy@lists.infradead.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-remoteproc@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-spi@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> 
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> 
+>> -	char		*driver_override; /* Driver name to force a match */
+>> +	/*
+>> +	 * Driver name to force a match.
+>> +	 * Do not set directly, because core frees it.
+>> +	 * Use driver_set_override() to set or clear it.
+> 
+> Wrap this comment to fill 78 columns or so.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Thanks, I'll fix both.
 
-> ---
->  .../bindings/connector/usb-connector.yaml         |  3 +--
->  .../bindings/display/brcm,bcm2711-hdmi.yaml       |  3 +--
->  .../bindings/display/bridge/adi,adv7511.yaml      |  5 ++---
->  .../bindings/display/bridge/synopsys,dw-hdmi.yaml |  5 ++---
->  .../bindings/display/panel/display-timings.yaml   |  3 +--
->  .../devicetree/bindings/display/ste,mcde.yaml     |  4 ++--
->  .../devicetree/bindings/input/adc-joystick.yaml   |  9 ++++-----
->  .../bindings/leds/cznic,turris-omnia-leds.yaml    |  3 +--
->  .../devicetree/bindings/leds/leds-lp50xx.yaml     |  3 +--
->  .../devicetree/bindings/mfd/google,cros-ec.yaml   | 12 ++++--------
->  .../devicetree/bindings/mtd/nand-controller.yaml  |  8 +++-----
->  .../bindings/mtd/rockchip,nand-controller.yaml    |  3 +--
->  .../devicetree/bindings/net/ti,cpsw-switch.yaml   |  3 +--
->  .../bindings/phy/phy-stm32-usbphyc.yaml           |  3 +--
->  .../bindings/power/supply/sbs,sbs-manager.yaml    |  4 +---
->  .../bindings/remoteproc/ti,k3-r5f-rproc.yaml      |  3 +--
->  .../devicetree/bindings/soc/ti/ti,pruss.yaml      | 15 +++------------
->  .../devicetree/bindings/sound/st,stm32-sai.yaml   |  3 +--
->  .../devicetree/bindings/sound/tlv320adcx140.yaml  | 13 ++++++-------
->  .../devicetree/bindings/spi/spi-controller.yaml   |  4 +---
->  .../devicetree/bindings/usb/st,stusb160x.yaml     |  4 +---
->  21 files changed, 39 insertions(+), 74 deletions(-)
 
--- 
-Regards,
-
-Laurent Pinchart
+Best regards,
+Krzysztof
