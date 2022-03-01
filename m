@@ -2,69 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D154C955C
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Mar 2022 21:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B95094C959A
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Mar 2022 21:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235007AbiCAUGT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Tue, 1 Mar 2022 15:06:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
+        id S237727AbiCAUPS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 1 Mar 2022 15:15:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbiCAUGT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Mar 2022 15:06:19 -0500
-X-Greylist: delayed 53903 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 01 Mar 2022 12:05:36 PST
-Received: from exmail.wanlianyida.cn (unknown [120.133.63.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CE360CCF
-        for <linux-spi@vger.kernel.org>; Tue,  1 Mar 2022 12:05:36 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by exmail.wanlianyida.cn (Postfix) with ESMTP id 04B96673D384
-        for <linux-spi@vger.kernel.org>; Tue,  1 Mar 2022 10:15:19 +0800 (CST)
-Received: from exmail.wanlianyida.cn ([127.0.0.1])
-        by localhost (exmail.wanlianyida.cn [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id LcT7rK33V62P for <linux-spi@vger.kernel.org>;
-        Tue,  1 Mar 2022 10:15:18 +0800 (CST)
-Received: from localhost (localhost [127.0.0.1])
-        by exmail.wanlianyida.cn (Postfix) with ESMTP id 9A3F369FC28F
-        for <linux-spi@vger.kernel.org>; Tue,  1 Mar 2022 08:38:13 +0800 (CST)
-X-Virus-Scanned: amavisd-new at exmail.wanlianyida.cn
-Received: from exmail.wanlianyida.cn ([127.0.0.1])
-        by localhost (exmail.wanlianyida.cn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id lvd87eYR-495 for <linux-spi@vger.kernel.org>;
-        Tue,  1 Mar 2022 08:38:13 +0800 (CST)
-Received: from [212.193.30.241] (unknown [212.193.30.241])
-        by exmail.wanlianyida.cn (Postfix) with ESMTPSA id 3885D6A15E85
-        for <linux-spi@vger.kernel.org>; Tue,  1 Mar 2022 08:10:24 +0800 (CST)
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S237693AbiCAUPM (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Mar 2022 15:15:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8363575C35;
+        Tue,  1 Mar 2022 12:14:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CDEC61707;
+        Tue,  1 Mar 2022 20:14:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19A0AC340EE;
+        Tue,  1 Mar 2022 20:14:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646165669;
+        bh=Xu0+i5k46GDbxoq5qyFGw7zlYHWQ576m6QBwAW8Us3k=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=O1uaehbcynWOhf4b1dNa0JoTLbD8vUttnuioyV73lUoR7WRDQ/WjnEsp6iVt9qOmE
+         JULvDJuEfIZ+jgT2zwRl/ONscXQfukyRCMJtmwI1ALU4+fO9rgU6cxIwA1yIAfBMJN
+         wrHr4TAhPW/qxElvw7tOufifEcvLTebL4WHQLuTQDied3zB2pG+tADzEgKnrI/7bgI
+         5A5BLaX4GQ0S0b316JxQaolOImqohsN7L7RGvGjAQRwpfbcim/qjUVfZoqV/rIUSoQ
+         g6I4vk8gYuA6UeY1K+LcRXbmQgwm7wuu+8dgAIawHdYX+oUMrJIo+n975QjENJUf2y
+         q9J6JzE2osaHw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jon Lin <jon.lin@rock-chips.com>, Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, heiko@sntech.de,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.16 08/28] spi: rockchip: Fix error in getting num-cs property
+Date:   Tue,  1 Mar 2022 15:13:13 -0500
+Message-Id: <20220301201344.18191-8-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220301201344.18191-1-sashal@kernel.org>
+References: <20220301201344.18191-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: 
-To:     linux-spi@vger.kernel.org
-From:   globalcharity@outreach.com
-Date:   Tue, 01 Mar 2022 01:10:22 +0100
-Reply-To: info@multi-pcooperative.com
-Message-Id: <20220301001025.3885D6A15E85@exmail.wanlianyida.cn>
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_60,BODY_EMPTY,
-        LOTS_OF_MONEY,RCVD_IN_VALIDITY_RPBL,RDNS_NONE,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.7613]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [120.133.63.173 listed in bl.score.senderscore.com]
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.8 RDNS_NONE Delivered to internal network by a host with no rDNS
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.8 BODY_EMPTY No body text in message
-X-Spam-Level: *****
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Your e-mail linux-spi@vger.kernel.org was selected. You have been granted a donation of $820,000.00 from
-Lyda Hill charity project. Contact us for more details.
-Thank you.
+From: Jon Lin <jon.lin@rock-chips.com>
+
+[ Upstream commit 9382df0a98aad5bbcd4d634790305a1d786ad224 ]
+
+Get num-cs u32 from dts of_node property rather than u16.
+
+Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
+Link: https://lore.kernel.org/r/20220216014028.8123-2-jon.lin@rock-chips.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/spi/spi-rockchip.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
+index 553b6b9d02222..4f65ba3dd19c2 100644
+--- a/drivers/spi/spi-rockchip.c
++++ b/drivers/spi/spi-rockchip.c
+@@ -654,7 +654,7 @@ static int rockchip_spi_probe(struct platform_device *pdev)
+ 	struct spi_controller *ctlr;
+ 	struct resource *mem;
+ 	struct device_node *np = pdev->dev.of_node;
+-	u32 rsd_nsecs;
++	u32 rsd_nsecs, num_cs;
+ 	bool slave_mode;
+ 
+ 	slave_mode = of_property_read_bool(np, "spi-slave");
+@@ -764,8 +764,9 @@ static int rockchip_spi_probe(struct platform_device *pdev)
+ 		 * rk spi0 has two native cs, spi1..5 one cs only
+ 		 * if num-cs is missing in the dts, default to 1
+ 		 */
+-		if (of_property_read_u16(np, "num-cs", &ctlr->num_chipselect))
+-			ctlr->num_chipselect = 1;
++		if (of_property_read_u32(np, "num-cs", &num_cs))
++			num_cs = 1;
++		ctlr->num_chipselect = num_cs;
+ 		ctlr->use_gpio_descriptors = true;
+ 	}
+ 	ctlr->dev.of_node = pdev->dev.of_node;
+-- 
+2.34.1
+
