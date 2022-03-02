@@ -2,88 +2,130 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 021054CA124
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Mar 2022 10:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0534CA1A9
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Mar 2022 11:03:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240656AbiCBJsS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 2 Mar 2022 04:48:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
+        id S239430AbiCBKEG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 2 Mar 2022 05:04:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240383AbiCBJsN (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Mar 2022 04:48:13 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F042656F
-        for <linux-spi@vger.kernel.org>; Wed,  2 Mar 2022 01:47:30 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id e22so1041584qvf.9
-        for <linux-spi@vger.kernel.org>; Wed, 02 Mar 2022 01:47:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=oVymzacBmHlfSEBN0NUcViscc1BlJREjJA6+b6RGOmg=;
-        b=QWdde23KNX46k7WkqryQHz1i3nNKX3hJ6bUw0DjcHiOt75WWu7w5auh04nLkT/xnOJ
-         R0VQHYTpPb3pK1dC5Q61RFQMwi4trskiEVa2TQn04UuisHYWibAazS7ATmu54TIBxXdA
-         5lK9Ys3nLH2M+OL5YbUWmBjXKkfNKuHDhT335FY7373hVh3ljtDU7hufDm+HoFdxRSC5
-         irTZ1zsjvdJCrCgb+ck2wdaojqCCFwevHlYpXu0UnAPPXOqgUXh+Q4uM4deQ12SqSBxO
-         anQ3SzaZnzqNuLNM3DIBa/tSUB0jwrQxi9OOPrEA2SXa6sqI0YSXgXVQjBwH2TaK1Eg7
-         1gOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=oVymzacBmHlfSEBN0NUcViscc1BlJREjJA6+b6RGOmg=;
-        b=cxmOKqigRUlxJHkBhYD5wt/hl293R9hBK4yZ2Wionb4OXYUosCbpouWq4Fwkg7Ka3c
-         kUtWt41S5syWGRoOXmEkNWeMWlat/cTLFx4rPcA7xIvFIuZlwy1STJJ/nWZdncO22qQj
-         uokP39wNrVFkDVO38qRHQBlHYVtVxOE3dMtoIvFkMufISo+Ha7oXVhmxPM9C4KbfGVZB
-         +A6xqwOm6b1Div7t6K3aD4bLqxGoepSpHDgxhhEApcDLcwXaV2VxMZRtk889yzLUus/y
-         /aJQi8IphgSSokoBRvV/dpZYkNb+Sz/b0u7ZUouM5C+h6BMniA2axYDd31jL4ePHzaC3
-         MCxQ==
-X-Gm-Message-State: AOAM532FY3R/3W21KoEFgAlC0WjeoCqgUgJ0+DDCS099k8iUGHJ+6lHb
-        3fo6GxrgP1I9NgSwq+hNCc22gXFf+LzS9XmLcl8=
-X-Google-Smtp-Source: ABdhPJwbpxn+o5lpNUFUhQmBWdx4hvUvkX98PANWZ50On8S1tPm3b2kQMdzMgrFsQtUtHu3RHExhB4D+i2WeoxrhN7I=
-X-Received: by 2002:a05:6214:f2d:b0:432:dc5f:ea15 with SMTP id
- iw13-20020a0562140f2d00b00432dc5fea15mr14989081qvb.81.1646214448456; Wed, 02
- Mar 2022 01:47:28 -0800 (PST)
+        with ESMTP id S237229AbiCBKEF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Mar 2022 05:04:05 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E7B5AEF4;
+        Wed,  2 Mar 2022 02:03:22 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 222A2vmS063787;
+        Wed, 2 Mar 2022 04:02:57 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1646215377;
+        bh=kzmAL4ny+b45rxh4hmDCUUkeFdO+HSD8mHyPXmdqx28=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=jP/E/dCOqyWe+EM99Tf5536jGnNFwZFtO+EukKIujh7KfhMoZiOWoPWxWUucTveM5
+         0o44PJtBJsGIO4nsSo/rRHL+ESqLTr0DIgX8M2MeWsSsEfJS8woKhzJwUm154fNRic
+         8em28FYVPjiu1Xil631fwUzWDzrBjhXfvghoVeew=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 222A2vJD092066
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 2 Mar 2022 04:02:57 -0600
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 2
+ Mar 2022 04:02:57 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 2 Mar 2022 04:02:56 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 222A2uoV112376;
+        Wed, 2 Mar 2022 04:02:56 -0600
+Date:   Wed, 2 Mar 2022 15:32:55 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+CC:     <michael@walle.cc>, <broonie@kernel.org>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <nicolas.ferre@microchip.com>,
+        <zhengxunli@mxic.com.tw>, <jaimeliao@mxic.com.tw>
+Subject: Re: [PATCH 1/4] spi: spi-mem: Allow specifying the byte order in DTR
+ mode
+Message-ID: <20220302100255.gseqjbdyxrgmt3zf@ti.com>
+References: <20220218145900.1440045-1-tudor.ambarus@microchip.com>
+ <20220218145900.1440045-2-tudor.ambarus@microchip.com>
 MIME-Version: 1.0
-Received: by 2002:ad4:5443:0:0:0:0:0 with HTTP; Wed, 2 Mar 2022 01:47:27 -0800 (PST)
-From:   Anna Zakharchenko <fpar.org@gmail.com>
-Date:   Wed, 2 Mar 2022 10:47:27 +0100
-Message-ID: <CALr0R0oEzU-WF+OhADUDAnG2qytOv4T7_0dX6YBZoqPbR=3=NA@mail.gmail.com>
-Subject: Re: Help me in Ukraine
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.8 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220218145900.1440045-2-tudor.ambarus@microchip.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello,
+Hi Tudor,
 
+I'm reviewing the code here. I still have not thought through the 
+discussion about Kconfig option yet.
 
-I am a Russian widow trapped in Ukraine's Donbass region amid Vladimir
-Putin's senseless conflict. During the 2014 battle in the Donbass, I
-lost my husband, a prominent Ukrainian businessman, who died without
-having children with me. I am currently in an underground bunker in
-Donetsk Oblast, a separatist war zone recognized by Russian President
-Vladimir Putin. I urgently request your assistance in moving my family
-trust fund worth =C2=A33,500,000.00 from the UK to your country to prevent
-European Union sanctions from seizing my money because I am a Russian
-citizen.
+On 18/02/22 04:58PM, Tudor Ambarus wrote:
+> There are NOR flashes (Macronix) that swap the bytes on a 16-bit boundary
+> when configured in DTR mode. The byte order of 16-bit words is swapped
 
-Please help me save and protect this money. You will receive 30% of
-the total money as a reward for your efforts, while you must keep 70%
-for me until the conflict is over. For more information, you can
-contact me directly at (anna@sc2000.net).
+s/DTR mode/ Octal DTR mode/
 
+I don't think this would apply to a 4D-4D-4D flash since it would only 
+transmit one byte per clock cycle.
 
-Cordially
-Anna Zakharchenko
-My email address is: anna@sc2000.net
+> when read or written in Double Transfer Rate (DTR) mode compared to
+> Single Transfer Rate (STR) mode. If one writes D0 D1 D2 D3 bytes using
+> 1-1-1 mode, and uses 8D-8D-8D SPI mode for reading, it will read back
+> D1 D0 D3 D2. Swapping the bytes is a bad design decision because this may
+> introduce some endianness problems. It can affect the boot sequence if the
+> entire boot sequence is not handled in either 8D-8D-8D mode or 1-1-1 mode.
+> Fortunately there are controllers that can swap back the bytes at runtime,
+> fixing the endiannesses. Provide a way for the upper layers to specify the
+> byte order in DTR mode.
+> 
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> ---
+>  include/linux/spi/spi-mem.h | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
+> index 85e2ff7b840d..e1878417420c 100644
+> --- a/include/linux/spi/spi-mem.h
+> +++ b/include/linux/spi/spi-mem.h
+> @@ -89,6 +89,8 @@ enum spi_mem_data_dir {
+>   * @dummy.dtr: whether the dummy bytes should be sent in DTR mode or not
+>   * @data.buswidth: number of IO lanes used to send/receive the data
+>   * @data.dtr: whether the data should be sent in DTR mode or not
+> + * @data.dtr_bswap16: whether the byte order of 16-bit words is swapped when
+> + *		      read or written in DTR mode compared to STR mode.
+>   * @data.dir: direction of the transfer
+>   * @data.nbytes: number of data bytes to send/receive. Can be zero if the
+>   *		 operation does not involve transferring data
+> @@ -119,6 +121,7 @@ struct spi_mem_op {
+>  	struct {
+>  		u8 buswidth;
+>  		u8 dtr : 1;
+> +		u8 dtr_bswap16 : 1;
+
+You also need to add this capability to spi_controller_mem_caps and 
+update spi_mem_default_supports_op() to check for it.
+
+>  		enum spi_mem_data_dir dir;
+>  		unsigned int nbytes;
+>  		union {
+> -- 
+> 2.25.1
+> 
+
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
