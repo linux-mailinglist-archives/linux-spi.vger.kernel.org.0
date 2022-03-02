@@ -2,55 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A804CB224
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Mar 2022 23:18:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A514CB22A
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Mar 2022 23:21:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244472AbiCBWTB (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 2 Mar 2022 17:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
+        id S244820AbiCBWVj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 2 Mar 2022 17:21:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244615AbiCBWS5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Mar 2022 17:18:57 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FD73585C;
-        Wed,  2 Mar 2022 14:18:13 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id e2so3000448qte.12;
-        Wed, 02 Mar 2022 14:18:13 -0800 (PST)
+        with ESMTP id S234048AbiCBWVh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Mar 2022 17:21:37 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44C1D21E7;
+        Wed,  2 Mar 2022 14:20:52 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id f21so2513849qke.13;
+        Wed, 02 Mar 2022 14:20:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=jms.id.au; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=2JRE6tbH9Jchu709JG4dssWGKFhyKl3gMsPnj2zX+PA=;
-        b=kKssYOalX/FXhhqROEbcNxZ1Xddce0m3w13wsWFdcHHXL+HS5ZulI1OyHuKUp6bDlo
-         Z/YGveSc8kPzpploW3uii7UvJwBRhXAO8FZR9fMfes3JHn0N6Q+he2swoS8YiW+Rchpo
-         ocKtuGRvBEXB90CPMVjaIv0uBqWcVElO9/IuA=
+        bh=IwOBwMpi2OwEzG0VtigJWsM6dutoMlGx5jRzY5Yz/Vc=;
+        b=MtnSgvQxlGt5TGIFQMfRkRf4KK1L85s9MA4ZXLuK105X6YoXUOfkr173xoepXU0fiu
+         UuhHi/gN1IKGbUa02Oi4DiEVaJZ/yqhWE6k0hILSueUBtPjBk8tj7hvZICj1J1mOVdmZ
+         oUIkmayyOSwIO+lHl6kgMI1DLJJXj1VZG2GzU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2JRE6tbH9Jchu709JG4dssWGKFhyKl3gMsPnj2zX+PA=;
-        b=24UiNq9lOQTCDaqb82Au7mQ0X6R3HKdZu8a8NCZ/c9liNV2XWdQ024/MbtFfH2AgNW
-         C+Raakn0BkQfm/5E9VpF2l4TUUt0KSGVq+SdNr0+zNexgSAOCXOzzIK5M5yZBghx8p4R
-         cO4s94aZq4mPxYzG04wG8zw5ZCNunp+71z/JGOLczLcI8vjWR07UQzfYx2WOVpREzmlf
-         seMPw6e5lfBu7X6sJtHwdZTCpjTZGUweClVW/384Vsam8VJW5hQEh/GeveSQVHULa5dc
-         oXfwrGysI1U8lpgpj89X4gFOj/tZX3+/0WwlTEH47StlB+Z0z7aPnpKjBeeUSyEayuG1
-         vOpQ==
-X-Gm-Message-State: AOAM533jxrQc1RbgLLa96OSbzT2S+jT178ba9G5swlbobNEHSwrYs5wU
-        Bs6dezYeLXGxoS+eY/B4Ff0O7a4J3AYEQFQULL4=
-X-Google-Smtp-Source: ABdhPJxRlFb0AT7SCyWwi+w7C/nNOeB3qsPtkPJA5AY8m0O88pSi5Hia8/814ex0IlxYX3s0CwkZASyT+/WE78Emhfs=
-X-Received: by 2002:a05:622a:283:b0:2de:b3a2:b52d with SMTP id
- z3-20020a05622a028300b002deb3a2b52dmr22224392qtw.625.1646259492771; Wed, 02
- Mar 2022 14:18:12 -0800 (PST)
+        bh=IwOBwMpi2OwEzG0VtigJWsM6dutoMlGx5jRzY5Yz/Vc=;
+        b=e1Oi98LtqavbdZN9J/P/BBEVEuhKCC3x9KXZn/7/8jciqZZ3iikr86U/CIFo80Tm+3
+         DLTANobBbBDwzmGMOiAHNzDcTvyExDpdmfth4IKVYLdnOMkbUl+9yW2hFzLLM8X/5ryu
+         1qXho148uVBPtMlIEGh1trkE/4NQQf4L9Waqc3LTvtGgHdqoodakIUeSN7ieMFQtMKJm
+         A+UNvftx7ugznortQszmn1dBwUCPUn8maPoPajRo50+hR110ygt9rDBaT6wSYF2S8QFB
+         m5qgqlYQYHOik1W1FDSE/3xUwCzLINtkgCy3XrEuHOCtopQytNxvUBYxgV+bdAe6FiRc
+         JwpA==
+X-Gm-Message-State: AOAM533Y6zJPoTccfdMiNtSNmCpBODAOdPTyky86bAYwtbAv0CCLQblb
+        wqodjceF4DPv7W9kOAYI52UG6qtFMyPYjcgQr88=
+X-Google-Smtp-Source: ABdhPJxvmmE3gaxqf1AN8AAcq15J2+/3h1dIbI7rXUBxAE1ecVlQbf15Jy/H6IC8/REhnKs2t2BL89C3wdGw7Mg0B6A=
+X-Received: by 2002:a05:620a:2fc:b0:649:a4e:c430 with SMTP id
+ a28-20020a05620a02fc00b006490a4ec430mr17818002qko.347.1646259651990; Wed, 02
+ Mar 2022 14:20:51 -0800 (PST)
 MIME-Version: 1.0
-References: <20220302173114.927476-1-clg@kaod.org> <20220302173114.927476-3-clg@kaod.org>
-In-Reply-To: <20220302173114.927476-3-clg@kaod.org>
+References: <20220302173114.927476-1-clg@kaod.org> <20220302173114.927476-4-clg@kaod.org>
+In-Reply-To: <20220302173114.927476-4-clg@kaod.org>
 From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 2 Mar 2022 22:18:00 +0000
-Message-ID: <CACPK8XdqYJeRkGN3j0qKfSnbYHgAsogKhv7e1PGTY+MBy=N=Rg@mail.gmail.com>
-Subject: Re: [PATCH v2 02/10] ARM: dts: aspeed: Adjust "reg" property of
- FMC/SPI controllers
-To:     =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
-        Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 2 Mar 2022 22:20:40 +0000
+Message-ID: <CACPK8XcWZ6jQEo4-78fMrSxqZW5Cc8ecsNf+j5X7av-HbJwMKg@mail.gmail.com>
+Subject: Re: [PATCH v2 03/10] dt-bindings: spi: Add Aspeed SMC controllers
+ device tree binding
+To:     =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
 Cc:     linux-spi@vger.kernel.org,
         linux-mtd <linux-mtd@lists.infradead.org>,
         Mark Brown <broonie@kernel.org>,
@@ -63,6 +62,7 @@ Cc:     linux-spi@vger.kernel.org,
         Andrew Jeffery <andrew@aj.id.au>,
         Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
         devicetree <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -78,126 +78,140 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 2 Mar 2022 at 17:32, C=C3=A9dric Le Goater <clg@kaod.org> wrote:
+On Wed, 2 Mar 2022 at 17:31, C=C3=A9dric Le Goater <clg@kaod.org> wrote:
 >
-> This is compatible with the current driver and addresses issues when
-> running 'make dt_binding_check'.
-
-Hey Rob, why does the checking rule complain about this style of reg proper=
-ty?
-
+> The "interrupt" property is optional because it is only necessary for
+> controllers supporting DMAs (Not implemented yet in the new driver).
 >
 > Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
 > Signed-off-by: C=C3=A9dric Le Goater <clg@kaod.org>
+
+Reviewed-by: Joel Stanley <joel@jms.id.au>
+
 > ---
->  arch/arm/boot/dts/aspeed-g4.dtsi | 6 ++----
->  arch/arm/boot/dts/aspeed-g5.dtsi | 9 +++------
->  arch/arm/boot/dts/aspeed-g6.dtsi | 9 +++------
->  3 files changed, 8 insertions(+), 16 deletions(-)
+>  .../bindings/spi/aspeed,ast2600-fmc.yaml      | 90 +++++++++++++++++++
+>  MAINTAINERS                                   |  9 ++
+>  2 files changed, 99 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/aspeed,ast2600-=
+fmc.yaml
 >
-> diff --git a/arch/arm/boot/dts/aspeed-g4.dtsi b/arch/arm/boot/dts/aspeed-=
-g4.dtsi
-> index f14dace34c5a..9ae67e83cf60 100644
-> --- a/arch/arm/boot/dts/aspeed-g4.dtsi
-> +++ b/arch/arm/boot/dts/aspeed-g4.dtsi
-> @@ -54,8 +54,7 @@ ahb {
->                 ranges;
+> diff --git a/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yam=
+l b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+> new file mode 100644
+> index 000000000000..0289a4f52196
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+> @@ -0,0 +1,90 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/aspeed,ast2600-fmc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Aspeed SMC controllers bindings
+> +
+> +maintainers:
+> +  - Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> +  - C=C3=A9dric Le Goater <clg@kaod.org>
+> +
+> +description: |
+> +  This binding describes the Aspeed Static Memory Controllers (FMC and
+> +  SPI) of the AST2400, AST2500 and AST2600 SOCs.
+> +
+> +allOf:
+> +  - $ref: "spi-controller.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - aspeed,ast2600-fmc
+> +      - aspeed,ast2600-spi
+> +      - aspeed,ast2500-fmc
+> +      - aspeed,ast2500-spi
+> +      - aspeed,ast2400-fmc
+> +      - aspeed,ast2400-spi
+> +
+> +  reg:
+> +    items:
+> +      - description: registers
+> +      - description: memory mapping
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +patternProperties:
+> +  "@[0-9a-f]+":
+> +    type: object
+> +
+> +    properties:
+> +      spi-rx-bus-width:
+> +        enum: [1, 2, 4]
+> +
+> +    required:
+> +      - reg
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/aspeed-scu-ic.h>
+> +    #include <dt-bindings/clock/ast2600-clock.h>
+> +
+> +    spi@1e620000 {
+> +        reg =3D <0x1e620000 0xc4>, <0x20000000 0x10000000>;
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +        compatible =3D "aspeed,ast2600-fmc";
+> +        clocks =3D <&syscon ASPEED_CLK_AHB>;
+> +        interrupts =3D <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+> +        flash@0 {
+> +                reg =3D < 0 >;
+> +                compatible =3D "jedec,spi-nor";
+> +                spi-max-frequency =3D <50000000>;
+> +                spi-rx-bus-width =3D <2>;
+> +        };
+> +        flash@1 {
+> +                reg =3D < 1 >;
+> +                compatible =3D "jedec,spi-nor";
+> +                spi-max-frequency =3D <50000000>;
+> +                spi-rx-bus-width =3D <2>;
+> +        };
+> +        flash@2 {
+> +                reg =3D < 2 >;
+> +                compatible =3D "jedec,spi-nor";
+> +                spi-max-frequency =3D <50000000>;
+> +                spi-rx-bus-width =3D <2>;
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 4175103e928d..f5ab77548ef6 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2925,6 +2925,15 @@ S:       Maintained
+>  F:     Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml
+>  F:     drivers/mmc/host/sdhci-of-aspeed*
 >
->                 fmc: spi@1e620000 {
-> -                       reg =3D < 0x1e620000 0x94
-> -                               0x20000000 0x10000000 >;
-> +                       reg =3D <0x1e620000 0x94>, <0x20000000 0x10000000=
->;
->                         #address-cells =3D <1>;
->                         #size-cells =3D <0>;
->                         compatible =3D "aspeed,ast2400-fmc";
-> @@ -91,8 +90,7 @@ flash@4 {
->                 };
->
->                 spi: spi@1e630000 {
-> -                       reg =3D < 0x1e630000 0x18
-> -                               0x30000000 0x10000000 >;
-> +                       reg =3D <0x1e630000 0x18>, <0x30000000 0x10000000=
->;
->                         #address-cells =3D <1>;
->                         #size-cells =3D <0>;
->                         compatible =3D "aspeed,ast2400-spi";
-> diff --git a/arch/arm/boot/dts/aspeed-g5.dtsi b/arch/arm/boot/dts/aspeed-=
-g5.dtsi
-> index 7495f93c5069..c3e0a8e13c8a 100644
-> --- a/arch/arm/boot/dts/aspeed-g5.dtsi
-> +++ b/arch/arm/boot/dts/aspeed-g5.dtsi
-> @@ -55,8 +55,7 @@ ahb {
->                 ranges;
->
->                 fmc: spi@1e620000 {
-> -                       reg =3D < 0x1e620000 0xc4
-> -                               0x20000000 0x10000000 >;
-> +                       reg =3D <0x1e620000 0xc4>, <0x20000000 0x10000000=
->;
->                         #address-cells =3D <1>;
->                         #size-cells =3D <0>;
->                         compatible =3D "aspeed,ast2500-fmc";
-> @@ -84,8 +83,7 @@ flash@2 {
->                 };
->
->                 spi1: spi@1e630000 {
-> -                       reg =3D < 0x1e630000 0xc4
-> -                               0x30000000 0x08000000 >;
-> +                       reg =3D <0x1e630000 0xc4>, <0x30000000 0x08000000=
->;
->                         #address-cells =3D <1>;
->                         #size-cells =3D <0>;
->                         compatible =3D "aspeed,ast2500-spi";
-> @@ -106,8 +104,7 @@ flash@1 {
->                 };
->
->                 spi2: spi@1e631000 {
-> -                       reg =3D < 0x1e631000 0xc4
-> -                               0x38000000 0x08000000 >;
-> +                       reg =3D <0x1e631000 0xc4>, <0x38000000 0x08000000=
->;
->                         #address-cells =3D <1>;
->                         #size-cells =3D <0>;
->                         compatible =3D "aspeed,ast2500-spi";
-> diff --git a/arch/arm/boot/dts/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed-=
-g6.dtsi
-> index c32e87fad4dc..1ad05dde19d2 100644
-> --- a/arch/arm/boot/dts/aspeed-g6.dtsi
-> +++ b/arch/arm/boot/dts/aspeed-g6.dtsi
-> @@ -95,8 +95,7 @@ gic: interrupt-controller@40461000 {
->                         };
->
->                 fmc: spi@1e620000 {
-> -                       reg =3D < 0x1e620000 0xc4
-> -                               0x20000000 0x10000000 >;
-> +                       reg =3D <0x1e620000 0xc4>, <0x20000000 0x10000000=
->;
->                         #address-cells =3D <1>;
->                         #size-cells =3D <0>;
->                         compatible =3D "aspeed,ast2600-fmc";
-> @@ -124,8 +123,7 @@ flash@2 {
->                 };
->
->                 spi1: spi@1e630000 {
-> -                       reg =3D < 0x1e630000 0xc4
-> -                               0x30000000 0x10000000 >;
-> +                       reg =3D <0x1e630000 0xc4>, <0x30000000 0x10000000=
->;
->                         #address-cells =3D <1>;
->                         #size-cells =3D <0>;
->                         compatible =3D "aspeed,ast2600-spi";
-> @@ -146,8 +144,7 @@ flash@1 {
->                 };
->
->                 spi2: spi@1e631000 {
-> -                       reg =3D < 0x1e631000 0xc4
-> -                               0x50000000 0x10000000 >;
-> +                       reg =3D <0x1e631000 0xc4>, <0x50000000 0x10000000=
->;
->                         #address-cells =3D <1>;
->                         #size-cells =3D <0>;
->                         compatible =3D "aspeed,ast2600-spi";
+> +ASPEED SMC SPI DRIVER
+> +M:     Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> +M:     C=C3=A9dric Le Goater <clg@kaod.org>
+> +L:     linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
+> +L:     openbmc@lists.ozlabs.org (moderated for non-subscribers)
+> +L:     linux-spi@vger.kernel.org
+> +S:     Maintained
+> +F:     Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+> +
+>  ASPEED VIDEO ENGINE DRIVER
+>  M:     Eddie James <eajames@linux.ibm.com>
+>  L:     linux-media@vger.kernel.org
 > --
 > 2.34.1
 >
