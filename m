@@ -2,130 +2,134 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0534CA1A9
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Mar 2022 11:03:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A93204CA2AD
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Mar 2022 12:01:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239430AbiCBKEG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 2 Mar 2022 05:04:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
+        id S241169AbiCBLCT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 2 Mar 2022 06:02:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237229AbiCBKEF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Mar 2022 05:04:05 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E7B5AEF4;
-        Wed,  2 Mar 2022 02:03:22 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 222A2vmS063787;
-        Wed, 2 Mar 2022 04:02:57 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1646215377;
-        bh=kzmAL4ny+b45rxh4hmDCUUkeFdO+HSD8mHyPXmdqx28=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=jP/E/dCOqyWe+EM99Tf5536jGnNFwZFtO+EukKIujh7KfhMoZiOWoPWxWUucTveM5
-         0o44PJtBJsGIO4nsSo/rRHL+ESqLTr0DIgX8M2MeWsSsEfJS8woKhzJwUm154fNRic
-         8em28FYVPjiu1Xil631fwUzWDzrBjhXfvghoVeew=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 222A2vJD092066
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 2 Mar 2022 04:02:57 -0600
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 2
- Mar 2022 04:02:57 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 2 Mar 2022 04:02:56 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 222A2uoV112376;
-        Wed, 2 Mar 2022 04:02:56 -0600
-Date:   Wed, 2 Mar 2022 15:32:55 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-CC:     <michael@walle.cc>, <broonie@kernel.org>,
-        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <nicolas.ferre@microchip.com>,
-        <zhengxunli@mxic.com.tw>, <jaimeliao@mxic.com.tw>
-Subject: Re: [PATCH 1/4] spi: spi-mem: Allow specifying the byte order in DTR
- mode
-Message-ID: <20220302100255.gseqjbdyxrgmt3zf@ti.com>
-References: <20220218145900.1440045-1-tudor.ambarus@microchip.com>
- <20220218145900.1440045-2-tudor.ambarus@microchip.com>
+        with ESMTP id S241170AbiCBLCR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Mar 2022 06:02:17 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F9B6F48B
+        for <linux-spi@vger.kernel.org>; Wed,  2 Mar 2022 03:01:34 -0800 (PST)
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A05A93F602
+        for <linux-spi@vger.kernel.org>; Wed,  2 Mar 2022 11:01:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646218892;
+        bh=Si9sQ7yLz6JK6Nen6lACTBVX2ecHMiwS0ByLXYRxjJA=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=pLSvMdDulJ05pxvaVpoKjZv/j7P9qWQA3vDXV3M0gXO2ZWu/B8wnzxIXfWR7GhUCK
+         uNEeUkggCFsxOtUbDiYQrTnCg0tL9MA34v5qn2otWZ/DTTmc+hz+Ym7Gnz7LOB9Vk4
+         IVHFfGKidhRX/RlpDbeH5cSkrUXQldipZcuQa9wI2yfA4ryyn0FqALa8seUPQbfjCA
+         ThMiQyDCmLN+o5WYVPDX4wWUYFkNYbsgad8GZX8QSuKe4aJjbGhkk12hyK2p3mKEG0
+         kb9DBje4AQueKp0Usjxbo1Jv1V4cin4KuVTg+Ey4mbY/3+8X3/oW9eQ7cTyGJzg9lI
+         auHCONcUh9i8g==
+Received: by mail-wr1-f72.google.com with SMTP id x15-20020a5d6b4f000000b001ee6c0aa287so498389wrw.9
+        for <linux-spi@vger.kernel.org>; Wed, 02 Mar 2022 03:01:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Si9sQ7yLz6JK6Nen6lACTBVX2ecHMiwS0ByLXYRxjJA=;
+        b=DLXRZDwHBzt4QLEIgxbip6+NT+u2fLSlZVmi75KQdB/bh5g6YyIF5R/Y6lb4/vDuuK
+         RXOeLOlfNVm40wKSJiFyIGgiy++ZZ6cyWQdiB+Gq2hvoI/5jxq/+BiFObzo+zYFOoH2e
+         rYEZBJH8Ss1w0tzU6n3WDzQNkbSy/6h4DRIHyN+OEX1z8Axct75Cff06UTIxizygfmzc
+         BdInX2QTHiumc+/aj7YSHBnljxOaNeRt/Gfah8i3hjTFHlRQ+uNmJYh24zIX7IMBU9cS
+         sRCrmNQN56kR+CqmfIeAqVycsbENV58r7HV3tAB2ybcSOYKObhRvduL0zMH7qTsoo+fK
+         ZWtg==
+X-Gm-Message-State: AOAM531gY6wHaBEEL0yyTbaMKzWK7H7IyqCMdtIeoYjwujEyGo2Jwzsz
+        hPhVoP7/OA17DpKgow+Cn7djQX1jMrMvMH4NapLl83fnVTtgF2KdXpIIx6G6QA4p1g3DETRXPdI
+        JCt0zFoMAu8kZ1D0WFPGsdtERGXSGVybYsr9vdA==
+X-Received: by 2002:a05:6402:369a:b0:413:81b5:7b64 with SMTP id ej26-20020a056402369a00b0041381b57b64mr22935816edb.163.1646218881949;
+        Wed, 02 Mar 2022 03:01:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwaXIpVKlG8abGyix74I9rTqmFoJz7zygw3QnLROE8hwqkRWj9/wBCxZT5ACGsypW51MBpi7Q==
+X-Received: by 2002:a05:6402:369a:b0:413:81b5:7b64 with SMTP id ej26-20020a056402369a00b0041381b57b64mr22935729edb.163.1646218881424;
+        Wed, 02 Mar 2022 03:01:21 -0800 (PST)
+Received: from [192.168.0.136] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id et3-20020a170907294300b006d6534ef273sm5617821ejc.156.2022.03.02.03.01.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 03:01:20 -0800 (PST)
+Message-ID: <22099da9-fad0-a5fb-f45a-484635ca485f@canonical.com>
+Date:   Wed, 2 Mar 2022 12:01:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220218145900.1440045-2-tudor.ambarus@microchip.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 06/11] s390: cio: Use driver_set_override() instead of
+ open-coding
+Content-Language: en-US
+To:     Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+References: <20220227135214.145599-1-krzysztof.kozlowski@canonical.com>
+ <20220227135214.145599-7-krzysztof.kozlowski@canonical.com>
+ <b2295eba-722a-67e2-baae-20dac9d72625@linux.ibm.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <b2295eba-722a-67e2-baae-20dac9d72625@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Tudor,
-
-I'm reviewing the code here. I still have not thought through the 
-discussion about Kconfig option yet.
-
-On 18/02/22 04:58PM, Tudor Ambarus wrote:
-> There are NOR flashes (Macronix) that swap the bytes on a 16-bit boundary
-> when configured in DTR mode. The byte order of 16-bit words is swapped
-
-s/DTR mode/ Octal DTR mode/
-
-I don't think this would apply to a 4D-4D-4D flash since it would only 
-transmit one byte per clock cycle.
-
-> when read or written in Double Transfer Rate (DTR) mode compared to
-> Single Transfer Rate (STR) mode. If one writes D0 D1 D2 D3 bytes using
-> 1-1-1 mode, and uses 8D-8D-8D SPI mode for reading, it will read back
-> D1 D0 D3 D2. Swapping the bytes is a bad design decision because this may
-> introduce some endianness problems. It can affect the boot sequence if the
-> entire boot sequence is not handled in either 8D-8D-8D mode or 1-1-1 mode.
-> Fortunately there are controllers that can swap back the bytes at runtime,
-> fixing the endiannesses. Provide a way for the upper layers to specify the
-> byte order in DTR mode.
+On 01/03/2022 17:01, Vineeth Vijayan wrote:
 > 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-> ---
->  include/linux/spi/spi-mem.h | 3 +++
->  1 file changed, 3 insertions(+)
+> On 2/27/22 14:52, Krzysztof Kozlowski wrote:
+>> Use a helper for seting driver_override to reduce amount of duplicated
+>> code. Make the driver_override field const char, because it is not
+>> modified by the core and it matches other subsystems.
+> s/seting/setting/
 > 
-> diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-> index 85e2ff7b840d..e1878417420c 100644
-> --- a/include/linux/spi/spi-mem.h
-> +++ b/include/linux/spi/spi-mem.h
-> @@ -89,6 +89,8 @@ enum spi_mem_data_dir {
->   * @dummy.dtr: whether the dummy bytes should be sent in DTR mode or not
->   * @data.buswidth: number of IO lanes used to send/receive the data
->   * @data.dtr: whether the data should be sent in DTR mode or not
-> + * @data.dtr_bswap16: whether the byte order of 16-bit words is swapped when
-> + *		      read or written in DTR mode compared to STR mode.
->   * @data.dir: direction of the transfer
->   * @data.nbytes: number of data bytes to send/receive. Can be zero if the
->   *		 operation does not involve transferring data
-> @@ -119,6 +121,7 @@ struct spi_mem_op {
->  	struct {
->  		u8 buswidth;
->  		u8 dtr : 1;
-> +		u8 dtr_bswap16 : 1;
-
-You also need to add this capability to spi_controller_mem_caps and 
-update spi_mem_default_supports_op() to check for it.
-
->  		enum spi_mem_data_dir dir;
->  		unsigned int nbytes;
->  		union {
-> -- 
-> 2.25.1
+> Also could you please change the title to start with "s390/cio:"
+> instead of "s390 : cio"
 > 
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+Sure, thanks for review!
+
+
+Best regards,
+Krzysztof
