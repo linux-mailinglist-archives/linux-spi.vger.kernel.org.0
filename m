@@ -2,86 +2,88 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04BC44CA0B3
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Mar 2022 10:27:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 021054CA124
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Mar 2022 10:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbiCBJ20 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 2 Mar 2022 04:28:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
+        id S240656AbiCBJsS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 2 Mar 2022 04:48:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234664AbiCBJ2Z (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Mar 2022 04:28:25 -0500
-X-Greylist: delayed 403 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Mar 2022 01:27:39 PST
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B4452BB2D
-        for <linux-spi@vger.kernel.org>; Wed,  2 Mar 2022 01:27:38 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowACXefL0Nh9iViXtAQ--.26036S2;
-        Wed, 02 Mar 2022 17:20:52 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     broonie@kernel.org, michal.simek@xilinx.com
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] spi: spi-zynqmp-gqspi: Handle error for dma_set_mask
-Date:   Wed,  2 Mar 2022 17:20:51 +0800
-Message-Id: <20220302092051.121343-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S240383AbiCBJsN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Mar 2022 04:48:13 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F042656F
+        for <linux-spi@vger.kernel.org>; Wed,  2 Mar 2022 01:47:30 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id e22so1041584qvf.9
+        for <linux-spi@vger.kernel.org>; Wed, 02 Mar 2022 01:47:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=oVymzacBmHlfSEBN0NUcViscc1BlJREjJA6+b6RGOmg=;
+        b=QWdde23KNX46k7WkqryQHz1i3nNKX3hJ6bUw0DjcHiOt75WWu7w5auh04nLkT/xnOJ
+         R0VQHYTpPb3pK1dC5Q61RFQMwi4trskiEVa2TQn04UuisHYWibAazS7ATmu54TIBxXdA
+         5lK9Ys3nLH2M+OL5YbUWmBjXKkfNKuHDhT335FY7373hVh3ljtDU7hufDm+HoFdxRSC5
+         irTZ1zsjvdJCrCgb+ck2wdaojqCCFwevHlYpXu0UnAPPXOqgUXh+Q4uM4deQ12SqSBxO
+         anQ3SzaZnzqNuLNM3DIBa/tSUB0jwrQxi9OOPrEA2SXa6sqI0YSXgXVQjBwH2TaK1Eg7
+         1gOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=oVymzacBmHlfSEBN0NUcViscc1BlJREjJA6+b6RGOmg=;
+        b=cxmOKqigRUlxJHkBhYD5wt/hl293R9hBK4yZ2Wionb4OXYUosCbpouWq4Fwkg7Ka3c
+         kUtWt41S5syWGRoOXmEkNWeMWlat/cTLFx4rPcA7xIvFIuZlwy1STJJ/nWZdncO22qQj
+         uokP39wNrVFkDVO38qRHQBlHYVtVxOE3dMtoIvFkMufISo+Ha7oXVhmxPM9C4KbfGVZB
+         +A6xqwOm6b1Div7t6K3aD4bLqxGoepSpHDgxhhEApcDLcwXaV2VxMZRtk889yzLUus/y
+         /aJQi8IphgSSokoBRvV/dpZYkNb+Sz/b0u7ZUouM5C+h6BMniA2axYDd31jL4ePHzaC3
+         MCxQ==
+X-Gm-Message-State: AOAM532FY3R/3W21KoEFgAlC0WjeoCqgUgJ0+DDCS099k8iUGHJ+6lHb
+        3fo6GxrgP1I9NgSwq+hNCc22gXFf+LzS9XmLcl8=
+X-Google-Smtp-Source: ABdhPJwbpxn+o5lpNUFUhQmBWdx4hvUvkX98PANWZ50On8S1tPm3b2kQMdzMgrFsQtUtHu3RHExhB4D+i2WeoxrhN7I=
+X-Received: by 2002:a05:6214:f2d:b0:432:dc5f:ea15 with SMTP id
+ iw13-20020a0562140f2d00b00432dc5fea15mr14989081qvb.81.1646214448456; Wed, 02
+ Mar 2022 01:47:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowACXefL0Nh9iViXtAQ--.26036S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtr45GF45CF45Xry8JFW8WFg_yoWDJFg_Cw
-        47ZFn5Grs0v39Fy3Z7Kry3AryqvrZ8ZF4UZFWkKa1FqrWDJr9xZayUZryxCr10v3y7urs3
-        Cr1jq3ykAr13WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb48FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VUjItC5UUUU
-        U==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Received: by 2002:ad4:5443:0:0:0:0:0 with HTTP; Wed, 2 Mar 2022 01:47:27 -0800 (PST)
+From:   Anna Zakharchenko <fpar.org@gmail.com>
+Date:   Wed, 2 Mar 2022 10:47:27 +0100
+Message-ID: <CALr0R0oEzU-WF+OhADUDAnG2qytOv4T7_0dX6YBZoqPbR=3=NA@mail.gmail.com>
+Subject: Re: Help me in Ukraine
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.8 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-As the potential failure of the dma_set_mask(),
-it should be better to check it and return error
-if fails.
+Hello,
 
-Fixes: 126bdb606fd2 ("spi: spi-zynqmp-gqspi: return -ENOMEM if dma_map_single fails")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/spi/spi-zynqmp-gqspi.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
-index 328b6559bb19..2b5afae8ff7f 100644
---- a/drivers/spi/spi-zynqmp-gqspi.c
-+++ b/drivers/spi/spi-zynqmp-gqspi.c
-@@ -1172,7 +1172,10 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
- 		goto clk_dis_all;
- 	}
- 
--	dma_set_mask(&pdev->dev, DMA_BIT_MASK(44));
-+	ret = dma_set_mask(&pdev->dev, DMA_BIT_MASK(44));
-+	if (ret)
-+		goto clk_dis_all;
-+
- 	ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
- 	ctlr->num_chipselect = GQSPI_DEFAULT_NUM_CS;
- 	ctlr->mem_ops = &zynqmp_qspi_mem_ops;
--- 
-2.25.1
+I am a Russian widow trapped in Ukraine's Donbass region amid Vladimir
+Putin's senseless conflict. During the 2014 battle in the Donbass, I
+lost my husband, a prominent Ukrainian businessman, who died without
+having children with me. I am currently in an underground bunker in
+Donetsk Oblast, a separatist war zone recognized by Russian President
+Vladimir Putin. I urgently request your assistance in moving my family
+trust fund worth =C2=A33,500,000.00 from the UK to your country to prevent
+European Union sanctions from seizing my money because I am a Russian
+citizen.
 
+Please help me save and protect this money. You will receive 30% of
+the total money as a reward for your efforts, while you must keep 70%
+for me until the conflict is over. For more information, you can
+contact me directly at (anna@sc2000.net).
+
+
+Cordially
+Anna Zakharchenko
+My email address is: anna@sc2000.net
