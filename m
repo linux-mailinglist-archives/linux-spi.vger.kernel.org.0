@@ -2,174 +2,215 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06BC4CAF51
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Mar 2022 21:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E504CB141
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Mar 2022 22:26:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240207AbiCBUGi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 2 Mar 2022 15:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38188 "EHLO
+        id S244867AbiCBV1c (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 2 Mar 2022 16:27:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237774AbiCBUGh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Mar 2022 15:06:37 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FE4CA0FE;
-        Wed,  2 Mar 2022 12:05:54 -0800 (PST)
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 2FB451F45056;
-        Wed,  2 Mar 2022 20:05:52 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646251552;
-        bh=EC3Sx7CTK8chpFEIlSWop6GT/woJveb8eyelTtp0crI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BVCWm5oC6KGgaBo1E8EZsegF4Znj5jYzCLWXjwdV3e7uMKTFIU48r26VCbvHGGjCU
-         AtPtx3Kt4edD8Cr4xTBF+CyD8P3WrPBXLlXo/+g8Dv2z0K+XbL/Kdk6HD/d99LQPSl
-         jadXzbibKkrNt223YKJAJVqqqH8XYTCfK1JVDSAlNpGbNfDsUTIA7vpENpzDOovIjQ
-         U5bMOU7iYM95gEhbr8ftl4M2+zXZBoxcxS3ONe18Zb8190+c69bYu4oxJWQp7OP/rF
-         IB2lLRgJ4eHAvITIkCYUZ6+tBSCejtclMCRJ8HJZUsdto1qNo7YsbzLuNYg5PuFfUc
-         zbP6wHe/nGjXg==
-Date:   Wed, 2 Mar 2022 21:05:46 +0100
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Apurva Nandan <a-nandan@ti.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        with ESMTP id S237821AbiCBV1b (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Mar 2022 16:27:31 -0500
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CBABDE6E;
+        Wed,  2 Mar 2022 13:26:48 -0800 (PST)
+Received: by mail-oo1-f42.google.com with SMTP id n5-20020a4a9545000000b0031d45a442feso3484806ooi.3;
+        Wed, 02 Mar 2022 13:26:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=hbPLIPVEhqYqHfs1Um9iAPDP4qWKQ+uSdm7/6sopBSs=;
+        b=Mv+LaJYB+SA4Gbw/TvkgP6UXGUyDAZl7xfL9R5cyflND5dmC+AIgvmlm/sue5gq32N
+         G9ibPWfiMfcS5ujeZ63a/xhF33/qb3AEGL71TzJ9xkXY1oT0GHsYyDkHINacAqBCLaa5
+         4Hak2Pw6NQX0CEqdXEQvp5E7NJi0LeFfaUntYSZLm2uD2kwO0Yw5GlkvLKpP78fA4rf3
+         JW8L1DORTSxKni4xRJvo5OXaOZYY/4jeVJ3UOK3ZgrRNZZCiQ/0jE0rr6ubEYN0l4vW1
+         3qJcUTKojMK94z3xwG/rxocbzJbBbZmqJqDcQR9IAkp0bQD765NVKEfIXKiYg2BplKs0
+         oLug==
+X-Gm-Message-State: AOAM533SYjxdYNBVRtRqL7/8fKqz7mHYTIhgQGKujWHxbTQoVOYgbRfw
+        1vEXYC3YcMVSc204wIkADA==
+X-Google-Smtp-Source: ABdhPJze+wINl7VQoz5UIFxIOi5ofrkD+iYOPHxAw6NzR+bGkT+e8/nTZouORjU+OMOwKXIhDU/5pA==
+X-Received: by 2002:a05:6870:1242:b0:d3:6168:3191 with SMTP id 2-20020a056870124200b000d361683191mr1471979oao.9.1646256407349;
+        Wed, 02 Mar 2022 13:26:47 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id p185-20020aca5bc2000000b002d97bda3871sm49303oib.54.2022.03.02.13.26.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 13:26:46 -0800 (PST)
+Received: (nullmailer pid 79377 invoked by uid 1000);
+        Wed, 02 Mar 2022 21:26:45 -0000
+Date:   Wed, 2 Mar 2022 15:26:45 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>
+Cc:     linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        Mark Brown <broonie@kernel.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <p.yadav@ti.com>
-Subject: Re: [PATCH v3 05/17] mtd: spinand: Define ctrl_ops for non-page
- read/write op templates
-Message-ID: <20220302210546.486239b4@collabora.com>
-In-Reply-To: <259637a6-e63f-56f0-6cdf-6bd21f8e4453@ti.com>
-References: <20220101074250.14443-1-a-nandan@ti.com>
-        <20220101074250.14443-6-a-nandan@ti.com>
-        <20220103110107.45594e78@collabora.com>
-        <bf3ea909-e0a5-eeac-12e9-c8a809685f48@ti.com>
-        <20220215183705.574df0c1@collabora.com>
-        <259637a6-e63f-56f0-6cdf-6bd21f8e4453@ti.com>
-Organization: Collabora
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        linux-aspeed@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 03/10] dt-bindings: spi: Add Aspeed SMC controllers
+ device tree binding
+Message-ID: <Yh/hFS2XW9SjK4Pl@robh.at.kernel.org>
+References: <20220302173114.927476-1-clg@kaod.org>
+ <20220302173114.927476-4-clg@kaod.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220302173114.927476-4-clg@kaod.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 2 Mar 2022 21:00:55 +0530
-Apurva Nandan <a-nandan@ti.com> wrote:
+On Wed, Mar 02, 2022 at 06:31:07PM +0100, Cédric Le Goater wrote:
+> The "interrupt" property is optional because it is only necessary for
+> controllers supporting DMAs (Not implemented yet in the new driver).
+> 
+> Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> Signed-off-by: Cédric Le Goater <clg@kaod.org>
+> ---
+>  .../bindings/spi/aspeed,ast2600-fmc.yaml      | 90 +++++++++++++++++++
+>  MAINTAINERS                                   |  9 ++
+>  2 files changed, 99 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+> new file mode 100644
+> index 000000000000..0289a4f52196
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+> @@ -0,0 +1,90 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/aspeed,ast2600-fmc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Aspeed SMC controllers bindings
+> +
+> +maintainers:
+> +  - Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> +  - Cédric Le Goater <clg@kaod.org>
+> +
+> +description: |
+> +  This binding describes the Aspeed Static Memory Controllers (FMC and
+> +  SPI) of the AST2400, AST2500 and AST2600 SOCs.
+> +
+> +allOf:
+> +  - $ref: "spi-controller.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - aspeed,ast2600-fmc
+> +      - aspeed,ast2600-spi
+> +      - aspeed,ast2500-fmc
+> +      - aspeed,ast2500-spi
+> +      - aspeed,ast2400-fmc
+> +      - aspeed,ast2400-spi
+> +
+> +  reg:
+> +    items:
+> +      - description: registers
+> +      - description: memory mapping
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +patternProperties:
+> +  "@[0-9a-f]+":
+> +    type: object
+> +
+> +    properties:
+> +      spi-rx-bus-width:
+> +        enum: [1, 2, 4]
+> +
+> +    required:
+> +      - reg
 
-> >> 1. read_cache, write_cache, update_cache op templates don't fit well
-> >> with the other non-data ops, as
-> >> these data ops are used to create a dirmap, and that can be done only
-> >> once at probe time. Hence, there
-> >> is a different mechanism of selecting of data ops and non-data ops. =20
-> > Not sure I see why this is a problem. You can populate data-ops for all
-> > modes, and pick the one that provides the best perfs when you create
-> > the dirmap (which should really be at the end of the probe, if it's not
-> > already).
-> > =20
-> >> Hence, this division in the op templates
-> >> struct as data_ops and ctrl_ops is required. Currently, the core only
-> >> supports using a single protocol for
-> >> data ops, chosen at the time of probing. =20
-> > Again, I don't see why you need to differentiate the control and data
-> > ops when populating this table. Those are just operations the NAND
-> > supports, and the data operations is just a subset.
-> > =20
-> >> 2. If we use this single op_templates struct, I can't think of any good
-> >> way to initialize these in the
-> >> manufacturers driver (winbond.c), refer to 17th patch in this series.
-> >> Could you please suggest a macro
-> >> implementation also for winbond.c with the suggested op_templates stru=
-ct. =20
-> > First replace the op_variants field by something more generic:
-> >
-> > struct spinand_info {
-> > ...
-> > 	const struct spinand_op_variants **ops_variants;
-> > ...
-> > };
-> >
-> > #define SPINAND_OP_VARIANTS(_id, ...) \
-> > 	[SPI_NAND_OP_ ## _id] =3D { __VA_ARGS__ }
-> >
-> > #define SPINAND_OPS_VARIANTS(name, ...)
-> > 	const struct spinand_op_variants name[]{
-> > 		__VA_ARGS__,
-> > 	};
-> >
-> > #define SPINAND_INFO_OPS_VARIANTS(defs)
-> > 	.ops_variants =3D defs
-> >
-> > ...
-> >
-> > static SPINAND_OPS_VARIANTS(w35n01jw_ops_variants,
-> > 		SPINAND_OP_VARIANTS(READ_CACHE,
-> > 			SPINAND_PAGE_READ_FROM_CACHE_OCTALIO_DTR_OP(0, 24, NULL, 0),
-> > 			SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0),
-> > 			...)),
-> > 		SPINAND_OP_VARIANTS(WRITE_CACHE,
-> > 			SPINAND_PROG_LOAD_OCTALIO_DTR(true, 0, NULL, 0),
-> > 			SPINAND_PROG_LOAD(true, 0, NULL, 0)),
-> > 		...
-> > 		SPINAND_OP_VARIANTS(RESET,
-> > 			SPINAND_RESET_OP_OCTAL_DTR,
-> > 			SPINAND_RESET_OP,
-> > 		...
-> > 		);
-> > ... =20
->=20
-> I find a issue with this implementation, please give corrective suggestio=
-ns:
->=20
-> In type of op variant listing, there is no way to specify the protocol=20
-> of the op in the variants struct itself.
->  =C2=A0=C2=A0=C2=A0 - This will lead to filtering/sorting/searching of op=
-s for finding=20
-> the protocols in the spinand core
->  =C2=A0=C2=A0=C2=A0 while in spinand_match_and_init(), which I don't feel=
- is a good way=20
-> for protocol based op categorization.
+No need for required here, spi-controller.yaml already enforces that.
 
-You'll have to go over all those operations to check which ones are
-supported by the controller anyway. And it's not like the
-classification is complicated since the cmd bus-width+DTR seems to be
-the discriminant, and it's stored directly in the operation template.
+Otherwise,
 
->  =C2=A0=C2=A0=C2=A0 - This would also lead to complexities in cases of mi=
-xed mode=20
-> operations.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-Not sure what you mean by mixed mode. Are you referring to something
-like 1S-8D-8D? IIUC, all we care about is the mode used for the cmd
-cycle. I don't think there are commands to switch between stateless
-(1S-x[S,D]-x[S,D]) modes (assuming 1S-xD-xD is a thing).
-
->  =C2=A0=C2=A0=C2=A0 - In addition, we can't simply choose the first suppo=
-rted protocol=20
-> in each op id, as some ops have
->  =C2=A0=C2=A0=C2=A0 intendependency of protocol with other ops. This is b=
-ecause=20
-> non-data ops (like reset, block erase..)
->  =C2=A0=C2=A0=C2=A0 cannot be in different protocols at same time, so it =
-would make=20
-> sense to have some form of protocol
->  =C2=A0=C2=A0=C2=A0 based arrangement while listing them.
-
-I'm not suggesting to choose the first supported operation and use it
-unconditionally, but instead choose one operation per stateful mode
-(1S, 2S, 4S, ..., 8D) and use the appropriate template depending on
-the mode the flash is currently in.
-
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/aspeed-scu-ic.h>
+> +    #include <dt-bindings/clock/ast2600-clock.h>
+> +
+> +    spi@1e620000 {
+> +        reg = <0x1e620000 0xc4>, <0x20000000 0x10000000>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        compatible = "aspeed,ast2600-fmc";
+> +        clocks = <&syscon ASPEED_CLK_AHB>;
+> +        interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+> +        flash@0 {
+> +                reg = < 0 >;
+> +                compatible = "jedec,spi-nor";
+> +                spi-max-frequency = <50000000>;
+> +                spi-rx-bus-width = <2>;
+> +        };
+> +        flash@1 {
+> +                reg = < 1 >;
+> +                compatible = "jedec,spi-nor";
+> +                spi-max-frequency = <50000000>;
+> +                spi-rx-bus-width = <2>;
+> +        };
+> +        flash@2 {
+> +                reg = < 2 >;
+> +                compatible = "jedec,spi-nor";
+> +                spi-max-frequency = <50000000>;
+> +                spi-rx-bus-width = <2>;
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 4175103e928d..f5ab77548ef6 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2925,6 +2925,15 @@ S:	Maintained
+>  F:	Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml
+>  F:	drivers/mmc/host/sdhci-of-aspeed*
+>  
+> +ASPEED SMC SPI DRIVER
+> +M:	Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> +M:	Cédric Le Goater <clg@kaod.org>
+> +L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
+> +L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
+> +L:	linux-spi@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+> +
+>  ASPEED VIDEO ENGINE DRIVER
+>  M:	Eddie James <eajames@linux.ibm.com>
+>  L:	linux-media@vger.kernel.org
+> -- 
+> 2.34.1
+> 
+> 
