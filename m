@@ -2,162 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C32F64C9B5B
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Mar 2022 03:46:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB1EC4C9E49
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Mar 2022 08:15:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235939AbiCBCqw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 1 Mar 2022 21:46:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48714 "EHLO
+        id S239793AbiCBHQX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 2 Mar 2022 02:16:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239087AbiCBCqt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 1 Mar 2022 21:46:49 -0500
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3356A9E02
-        for <linux-spi@vger.kernel.org>; Tue,  1 Mar 2022 18:46:06 -0800 (PST)
-Received: by mail-oo1-xc34.google.com with SMTP id 6-20020a4a0906000000b0031d7eb98d31so427144ooa.10
-        for <linux-spi@vger.kernel.org>; Tue, 01 Mar 2022 18:46:06 -0800 (PST)
+        with ESMTP id S232279AbiCBHQW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 2 Mar 2022 02:16:22 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D89D47AE8;
+        Tue,  1 Mar 2022 23:15:40 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id mg21-20020a17090b371500b001bef9e4657cso645878pjb.0;
+        Tue, 01 Mar 2022 23:15:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wjdqSaPpltqhLridozcEUTEQoIYV6/3L4YmJnQ5z0lY=;
-        b=LN9nnhqICRhttXAVr1od9T1t/Ymtpxhtz4tHsjH3dYjcd3Rkq9C9wMhSXlkrlSYC1A
-         DlJ/JptFxg1yVABD2c1AkWjsPC7Du3KLmBhl0PmcAe7J/mlUk1cp6g/yIWvbZRRK/ixo
-         +bm5IDVzJdC4fxWuoEI4G5CHndK46TO9kW9KbAaQI641rdN+rU1dvb6VBLEpmuuVwgUt
-         80QLDod/jgV5iicQ0WoUYh+G5NUspA9Y6GZrYqrOz6zP3KBF8+B00J/JX/kKtJbsLcZw
-         Nn9Y0EtKII81vB9nbqmK7v/AXIDRsz2QxYS4EGE2oGDGOXpVkmABqBHnLwBv01oaAEdI
-         u6og==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DsSqX4r0z/r+w8Wj2n7nu/2FEq4vM6QzbWoDE19qgSw=;
+        b=oGyqkbwUZWLjGm2rQ5CdtFXSrWgQOGHhProB0qxT5CJMBzsqkimjnk2vHlZSADpYdG
+         pl/h8fUiz5xnsW98hmlkzX3VCdI5w7nyvnRaj41BojYaFrXa1ChaWhVwbLin6wxrcq7i
+         rM52rSoy3RT9RQMDvlLhv5WGtAJJD2qfhPVUQ6kq+6khIWE9waG7w3orcBINWTwxl2i9
+         lF82azIMPtFkfif/4jkLsDe5q/m77dGK9Z2y2F6VT4YkJpEN+fv2vIq8WsblL08Wq+l7
+         tCB+3pVjXeJ0CYOqoMvmDQiK0JKM4Ax8ovuwsO9UfE6+iwQVAuHiMOUjjuwmRMRmeeJ2
+         byvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wjdqSaPpltqhLridozcEUTEQoIYV6/3L4YmJnQ5z0lY=;
-        b=xEhQKN83f/83sWkQ8Cbu8nqeW0sTxoUO849MXIygoRVq4IAnYsldElNXOVwaVIAP1V
-         5UhwLICQ9tHh3znngKb7TfJ2fp+DuSUVSBCjcWOHjBupo3xc0kjK9EgpqTjk9S300L7t
-         XzEvN0MXrWunSVkc4CL4IN2QiLueYv5FaCGsCAyaO2TBqZmq6aNWAG7pluM8XPE86W7V
-         I9ZL+Xba/0iWpHpTqe8sW4xVJL4rWCHYwjx6Izaes0isP1xO2p7oYFDy2bqsly8rb1zM
-         +py8zlgnXv3TrMdtv1TdX1jxXbJfIFO0siI9w2m/9XCFhIteuhq7A2oOD1tUD2HdqShi
-         xFvQ==
-X-Gm-Message-State: AOAM531Qd+VZpFW67QSXSLBD7DI/qPpaC/dexsccIVVNOaC+/KsiHvDi
-        YjGPWAsIGATMkQeualGcY5lt2Q==
-X-Google-Smtp-Source: ABdhPJyABJwssvqzs0MiuFje5MNOUuD4BXQpc8Bd2B6R1kdb3joprE0iJZUcrLXMN5kygRaNyqLzdA==
-X-Received: by 2002:a05:6820:1396:b0:31c:59f4:2fe4 with SMTP id i22-20020a056820139600b0031c59f42fe4mr13722344oow.10.1646189166017;
-        Tue, 01 Mar 2022 18:46:06 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id 23-20020a9d0b97000000b005ad33994e93sm7196700oth.31.2022.03.01.18.46.04
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DsSqX4r0z/r+w8Wj2n7nu/2FEq4vM6QzbWoDE19qgSw=;
+        b=raeKpc4C+J/EqQEE9Aqr0LrblkH7tuACexoHx0IXj/d3Pb/CD51p+CWCSYWPbnHJ2I
+         fKzlyKPRikWZh17mLcTjzkBOYUi2Ib/StOkw5OOu0dj0QIPHBejE1QTy/lWowVuvBQ3k
+         pvLqk4+qYC+hnqnhDjnPuAtRIp6KWUrQVMMd2KWJV0D8YXh5k8SqGpgmgjA36QH2RHbZ
+         GWMQ9h383E4kbkLchlcJbXHCSlOcWj00n5KD1f0Nh7vFzdkpXxR5nPZ/dJwMpq/SI7aj
+         1pJIs6ukl8B+Ze2TNHqqVDNoJgoeVtlkJGSRoc1W8kjKwpvbHof3Z6NZMeH/teXSEnrq
+         VG0Q==
+X-Gm-Message-State: AOAM530OtSXkudw1oHY0yP+jssEpYVJf8ZFZ3/duYk8HXLKqXOrDamlm
+        acxMZ9wy66rGEvf4ppaXaks=
+X-Google-Smtp-Source: ABdhPJw7Bb9ODt+6n4ApKF4fp/A4k/wWtL9d4ZNZ7r0g/Plq7SmO9JXZxOhY6qnnQgcvF1wXT4h0sg==
+X-Received: by 2002:a17:902:9895:b0:151:6a35:dab2 with SMTP id s21-20020a170902989500b001516a35dab2mr14071435plp.118.1646205340137;
+        Tue, 01 Mar 2022 23:15:40 -0800 (PST)
+Received: from localhost.localdomain (118-166-40-238.dynamic-ip.hinet.net. [118.166.40.238])
+        by smtp.gmail.com with ESMTPSA id lk9-20020a17090b33c900b001bc7c2dfcdbsm4219098pjb.37.2022.03.01.23.15.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 18:46:05 -0800 (PST)
-Date:   Tue, 1 Mar 2022 18:47:56 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee.jones@linaro.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Another pass removing cases of 'allOf'
- containing a '$ref'
-Message-ID: <Yh7a3Gl6PPamTjY5@ripper>
-References: <20220228213802.1639658-1-robh@kernel.org>
+        Tue, 01 Mar 2022 23:15:39 -0800 (PST)
+From:   Xingbang Liu <liu.airalert@gmail.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, broonie@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xingbang Liu <liu.airalert@gmail.com>
+Subject: [PATCH] spi: qup: replace spin_lock_irqsave by spin_lock in hard IRQ
+Date:   Wed,  2 Mar 2022 15:15:21 +0800
+Message-Id: <20220302071521.6638-1-liu.airalert@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228213802.1639658-1-robh@kernel.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon 28 Feb 13:38 PST 2022, Rob Herring wrote:
+The code has been in a irq-disabled context since it is hard IRQ. There
+is no necessity to do it again.
 
-> Another pass at removing unnecessary use of 'allOf' with a '$ref'.
-> 
-> json-schema versions draft7 and earlier have a weird behavior in that
-> any keywords combined with a '$ref' are ignored (silently). The correct
-> form was to put a '$ref' under an 'allOf'. This behavior is now changed
-> in the 2019-09 json-schema spec and '$ref' can be mixed with other
-> keywords.
-> 
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-phy@lists.infradead.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-remoteproc@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-spi@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/connector/usb-connector.yaml         |  3 +--
->  .../bindings/display/brcm,bcm2711-hdmi.yaml       |  3 +--
->  .../bindings/display/bridge/adi,adv7511.yaml      |  5 ++---
->  .../bindings/display/bridge/synopsys,dw-hdmi.yaml |  5 ++---
->  .../bindings/display/panel/display-timings.yaml   |  3 +--
->  .../devicetree/bindings/display/ste,mcde.yaml     |  4 ++--
->  .../devicetree/bindings/input/adc-joystick.yaml   |  9 ++++-----
->  .../bindings/leds/cznic,turris-omnia-leds.yaml    |  3 +--
->  .../devicetree/bindings/leds/leds-lp50xx.yaml     |  3 +--
->  .../devicetree/bindings/mfd/google,cros-ec.yaml   | 12 ++++--------
->  .../devicetree/bindings/mtd/nand-controller.yaml  |  8 +++-----
->  .../bindings/mtd/rockchip,nand-controller.yaml    |  3 +--
->  .../devicetree/bindings/net/ti,cpsw-switch.yaml   |  3 +--
->  .../bindings/phy/phy-stm32-usbphyc.yaml           |  3 +--
->  .../bindings/power/supply/sbs,sbs-manager.yaml    |  4 +---
->  .../bindings/remoteproc/ti,k3-r5f-rproc.yaml      |  3 +--
+Signed-off-by: Xingbang Liu <liu.airalert@gmail.com>
+---
+ drivers/spi/spi-qup.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-For the remoteproc binding:
+diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
+index d39dec6d1c91..00d6084306b4 100644
+--- a/drivers/spi/spi-qup.c
++++ b/drivers/spi/spi-qup.c
+@@ -593,7 +593,6 @@ static irqreturn_t spi_qup_qup_irq(int irq, void *dev_id)
+ {
+ 	struct spi_qup *controller = dev_id;
+ 	u32 opflags, qup_err, spi_err;
+-	unsigned long flags;
+ 	int error = 0;
+ 
+ 	qup_err = readl_relaxed(controller->base + QUP_ERROR_FLAGS);
+@@ -625,10 +624,10 @@ static irqreturn_t spi_qup_qup_irq(int irq, void *dev_id)
+ 		error = -EIO;
+ 	}
+ 
+-	spin_lock_irqsave(&controller->lock, flags);
++	spin_lock(&controller->lock);
+ 	if (!controller->error)
+ 		controller->error = error;
+-	spin_unlock_irqrestore(&controller->lock, flags);
++	spin_unlock(&controller->lock);
+ 
+ 	if (spi_qup_is_dma_xfer(controller->mode)) {
+ 		writel_relaxed(opflags, controller->base + QUP_OPERATIONAL);
+-- 
+2.25.1
 
-Acked-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Thanks,
-Bjorn
