@@ -2,144 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61144CD01C
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Mar 2022 09:37:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4566C4CD08C
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Mar 2022 09:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234009AbiCDIik convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Fri, 4 Mar 2022 03:38:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S235028AbiCDI5V (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 4 Mar 2022 03:57:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233857AbiCDIid (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Mar 2022 03:38:33 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD3A13D43;
-        Fri,  4 Mar 2022 00:37:44 -0800 (PST)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2246nhFQ017693;
-        Fri, 4 Mar 2022 08:37:11 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ekdugspgp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Mar 2022 08:37:11 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2248ImeY010004;
-        Fri, 4 Mar 2022 08:37:10 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3ekdugspg7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Mar 2022 08:37:10 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2248XlHM010638;
-        Fri, 4 Mar 2022 08:37:08 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3ek4kg97j0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Mar 2022 08:37:08 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2248b6s451970322
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 4 Mar 2022 08:37:06 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 341724203F;
-        Fri,  4 Mar 2022 08:37:06 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 853A442042;
-        Fri,  4 Mar 2022 08:37:05 +0000 (GMT)
-Received: from smtp.tlslab.ibm.com (unknown [9.101.4.1])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Fri,  4 Mar 2022 08:37:05 +0000 (GMT)
-Received: from yukon.home (unknown [9.171.91.16])
-        by smtp.tlslab.ibm.com (Postfix) with ESMTP id D69A52201B4;
-        Fri,  4 Mar 2022 09:37:03 +0100 (CET)
-From:   =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
-To:     linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-aspeed@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Tao Ren <rentao.bupt@gmail.com>,
-        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
-Subject: [PATCH v3 11/11] ARM: dts: aspeed-g4: Set spi-max-frequency for all flashes
-Date:   Fri,  4 Mar 2022 09:36:43 +0100
-Message-Id: <20220304083643.1079142-12-clg@kaod.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220304083643.1079142-1-clg@kaod.org>
-References: <20220304083643.1079142-1-clg@kaod.org>
+        with ESMTP id S229789AbiCDI5S (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Mar 2022 03:57:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65AC719DEB2
+        for <linux-spi@vger.kernel.org>; Fri,  4 Mar 2022 00:56:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE62E60F7E
+        for <linux-spi@vger.kernel.org>; Fri,  4 Mar 2022 08:56:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 37C47C340E9;
+        Fri,  4 Mar 2022 08:56:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646384190;
+        bh=DydWMl6hnaY+6W/4OHk1UNMYw/6C7Tn5U+fT+5hOzTo=;
+        h=Subject:From:Date:To:From;
+        b=nkH43lt34lHBpsIwk9T1azd1FZAeQRuvX/blO0VGP3wLeGVcxwUSsXh7NtEiHqN7h
+         m/7i99S5vjcYTrjK6Qx8wgwLPHHpHabTnPcJ6ucdz4LEDJq+qDWTNkqTnLkq1C1nmb
+         9qoMQ57SMmAN7gkeGTtF4+iYbbzPttnVWmQXkWvgtzymR85lfoC2QRNxb626VhuX3Z
+         ZIFPMQ0OyhtqWrIUx9IOSdphVVleSzDnCml+yEmQupd4sdZgueSb8jZq06c9jThbaJ
+         8KOXs+mw1WFQOVejLIXbbJPq0+kHsYg5RACtlmmSNBANdpG2lQxF3JHc9IsntJK7OQ
+         9tfXLDP4fXwtw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1D10BE6D4BB;
+        Fri,  4 Mar 2022 08:56:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: dXmtnNI1AnUr8V6nXnOeTvrdE58i-J2O
-X-Proofpoint-GUID: w-KiLHvfWE73I9HXg9UR0oRRTFpGTbay
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-04_02,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- mlxlogscore=631 malwarescore=0 lowpriorityscore=0 adultscore=0
- clxscore=1034 mlxscore=0 priorityscore=1501 impostorscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203040044
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <164638419011.19733.14569852788333776735.git-patchwork-housekeeping@kernel.org>
+Date:   Fri, 04 Mar 2022 08:56:30 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Tao Ren <rentao.bupt@gmail.com>
+Latest series: [v3] spi: spi-mem: Add driver for Aspeed SMC controllers (2022-03-04T08:36:40)
+  Superseding: [v2] spi: spi-mem: Add driver for Aspeed SMC controllers (2022-03-02T17:31:07):
+    [v2,01/10] mtd: spi-nor: aspeed: Rename Kconfig option
+    [v2,02/10] ARM: dts: aspeed: Adjust "reg" property of FMC/SPI controllers
+    [v2,03/10] dt-bindings: spi: Add Aspeed SMC controllers device tree binding
+    [v2,04/10] spi: spi-mem: Add driver for Aspeed SMC controllers
+    [v2,05/10] spi: aspeed: Add support for direct mapping
+    [v2,06/10] spi: aspeed: Adjust direct mapping to device size
+    [v2,07/10] spi: aspeed: Workaround AST2500 limitations
+    [v2,08/10] spi: aspeed: Add support for the AST2400 SPI controller
+    [v2,09/10] spi: aspeed: Calibrate read timings
+    [v2,10/10] ARM: dts: aspeed: Enable Dual SPI RX transfers
 
-Set "spi-max-frequency" to 50 MHz for all the flashes under the FMC
-controller to ensure the clock frequency is calculated correctly.
 
-Suggested-by: Cédric Le Goater <clg@kaod.org>
-Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
-Signed-off-by: Cédric Le Goater <clg@kaod.org>
----
- arch/arm/boot/dts/aspeed-g4.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/arch/arm/boot/dts/aspeed-g4.dtsi b/arch/arm/boot/dts/aspeed-g4.dtsi
-index 31e6569db97e..d3d919dcb8d4 100644
---- a/arch/arm/boot/dts/aspeed-g4.dtsi
-+++ b/arch/arm/boot/dts/aspeed-g4.dtsi
-@@ -72,24 +72,28 @@ flash@1 {
- 				reg = < 1 >;
- 				compatible = "jedec,spi-nor";
- 				spi-rx-bus-width = <2>;
-+				spi-max-frequency = <50000000>;
- 				status = "disabled";
- 			};
- 			flash@2 {
- 				reg = < 2 >;
- 				compatible = "jedec,spi-nor";
- 				spi-rx-bus-width = <2>;
-+				spi-max-frequency = <50000000>;
- 				status = "disabled";
- 			};
- 			flash@3 {
- 				reg = < 3 >;
- 				compatible = "jedec,spi-nor";
- 				spi-rx-bus-width = <2>;
-+				spi-max-frequency = <50000000>;
- 				status = "disabled";
- 			};
- 			flash@4 {
- 				reg = < 4 >;
- 				compatible = "jedec,spi-nor";
- 				spi-rx-bus-width = <2>;
-+				spi-max-frequency = <50000000>;
- 				status = "disabled";
- 			};
- 		};
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
