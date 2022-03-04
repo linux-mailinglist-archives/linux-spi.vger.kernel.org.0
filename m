@@ -2,124 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77934CC289
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Mar 2022 17:21:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 856EB4CCDFB
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Mar 2022 07:46:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234918AbiCCQWF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 3 Mar 2022 11:22:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
+        id S234092AbiCDGrf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 4 Mar 2022 01:47:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiCCQWC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 3 Mar 2022 11:22:02 -0500
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60069.outbound.protection.outlook.com [40.107.6.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70237199D5D;
-        Thu,  3 Mar 2022 08:21:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kkuPBfTO9mBmW3J+Tp+naqgfqtL3+O6wXdzJVFKpbgshlsr7uABUNBl5jFSVgqcd7Az3BrFCc9rEeIHxd2s3/AfYLsUdtnA2lHANiYwyhQW25ZYuOjYbcnJfjIB3KG+HMZ7QokQ5vI5TRWy5lLey8eaGpxrDP4dTdb+WE0Cx7HHJ0jq+RRONJV0BDBsoswVrAdfvdIQWmJi88YaTOOIKrsr+Mwt2D+dMdRRPa/zXN8LEYNT58zxR+5T/orBCm5M9SZpJIRBwKxNawd+/LqrPVK9xTjxgL1IkAWIaq9W9itLaYYAx/VTWMcn8lcqDI+Ze4W6DgTNqmpM/0xPp3xPpAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z0CmRnVTVpFbd4Bzh38q+wbyUw/F751LcToN8Pzy20M=;
- b=T10O+OHMu60ipEFj0Q1ySO9XHu2CYWTwM76pRMP25quccPNEHseGdIgsE4Nie/16tpIqjCZMrxzqzbi+ZK+B6ZcXYu12yRzhYdFPdnysepc0Vg0BR+sBd9JGvlbuOaoMbUmFcwdnYU8VukwD2Ljs6XLQjEEFN4MOzL8dAQZZ5EuydENe6mtVXhcxgQEN6a2OohLoy/LpjzUIuSUUvbeqHAYWwQYHj3xhfDuIpNRi2Wb3Ap4VAOMR2+AYwkCfZ/LXzrESvT+y9q8YznlXfpbIbGWiHeGLXZbfjTyW5qO+NkfVTfZOdNT7RUnERFOk/0LtX6zePcMCIyQxm6NqXhqVGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z0CmRnVTVpFbd4Bzh38q+wbyUw/F751LcToN8Pzy20M=;
- b=cggOm/uBQzbj/tYelh1mQCMKgV7z5SzhcW0lsvPrKrDvpSgyWi7rZ96l1bYPgZaA6Y8Y4/U/mn3YytmULKc1Gey1Q4pJsBfHL/Mrw533c6c5IjRq2Qxts2c+ahqiJ9pisBR6gp1dhYiuIK9PZmTqYtw3Y6YXty2YOGHpkZy0GmU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8774.eurprd04.prod.outlook.com (2603:10a6:10:2e1::21)
- by DB9PR04MB9354.eurprd04.prod.outlook.com (2603:10a6:10:36c::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Thu, 3 Mar
- 2022 16:21:15 +0000
-Received: from DU2PR04MB8774.eurprd04.prod.outlook.com
- ([fe80::2911:de67:4045:3f28]) by DU2PR04MB8774.eurprd04.prod.outlook.com
- ([fe80::2911:de67:4045:3f28%6]) with mapi id 15.20.5038.014; Thu, 3 Mar 2022
- 16:21:15 +0000
-Date:   Thu, 3 Mar 2022 10:21:08 -0600
-From:   Han Xu <han.xu@nxp.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] dt-bindings: spi: Update NXP Flexspi maintainer details
-Message-ID: <20220303162108.cxngob4yg736nrau@umbrella>
-References: <20220302192915.6193-1-singh.kuldeep87k@gmail.com>
- <YiDnFEcpx5OiNMaj@sirena.org.uk>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YiDnFEcpx5OiNMaj@sirena.org.uk>
-User-Agent: NeoMutt/20171215
-X-ClientProxiedBy: SN6PR05CA0015.namprd05.prod.outlook.com
- (2603:10b6:805:de::28) To DU2PR04MB8774.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::21)
+        with ESMTP id S229889AbiCDGrd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 4 Mar 2022 01:47:33 -0500
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C657218CC21;
+        Thu,  3 Mar 2022 22:46:45 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowADHqPHQtSFiSwAcAg--.15700S2;
+        Fri, 04 Mar 2022 14:46:41 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     broonie@kernel.org, michal.simek@xilinx.com
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] spi: spi-zynq-qspi: Handle error for clk_enable
+Date:   Fri,  4 Mar 2022 14:46:39 +0800
+Message-Id: <20220304064639.416690-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7b5aab0f-d74d-44fd-44ab-08d9fd31d6f3
-X-MS-TrafficTypeDiagnostic: DB9PR04MB9354:EE_
-X-Microsoft-Antispam-PRVS: <DB9PR04MB93547C108EE88603F1D9D6E097049@DB9PR04MB9354.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gXwbeBUJjOxfBLob65FJbjLH/T/xdiMh4livF3TT9PnpSN6aVehdmIEA4dbUy9d/7I3XmI0d/DFoIeVU/zrIua7rNwxeS18hsK0XHlrqErq4+zQdhc13dJNA8k+vyb8j8KS+9YhHTOo0F8W7d1tXn2KT86z2xIPqF7tAFO5K6gDH6Sbuw03JGVNZ7aoxN8qzKvLp1swyN+qNPr7FF03jmLPYeGQECS/cyZo3+Q4EuiZhihxBff0LJcOCu9bNNSML7Y7MwXRc9wA25F6uIQEMKjOKNwnxiRpXhk+oDZSBSSz4xrABYc8rzE2fEL8FvNkWOurnSBr/kjkSCjR6ZSw+SiahZ6Fy3EN6CCeIr8KpGvwV0A3mVmbKJfy54wBfCCFl6MVvxJWTn8eGZLDC4rmlNRO+R95E0UANpOzfJ7MqmvnBBS4x5/KNt7t7pPxOyBH1/10GLJvkEOG6OcnFyutAbuoHmGnqlK7gzK6jVxwFEJf73I53/IEsto5aAnzL9HHr2/e5cI7t+0E1ZDB8JKoMVAeJO/rcIQsCB11CUMe3pxUR6eArtim+NxKTDawmoNIY2j17nA9cMjQ2XeGPTq1CnqZPd8EA7LEmAj5o9AdIzTemU9R2/vNyjDUL8T582LgaflzxLI/8btTNVqLPh3zVm/rv18pRDZ3odQIhGYcBCd59xYC3vqMvqB2iLigiTmlQ4yeS4ZqxNuzgjj1ayoI49A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8774.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(8936002)(83380400001)(86362001)(54906003)(44832011)(6916009)(498600001)(15650500001)(6486002)(33716001)(1076003)(26005)(186003)(5660300002)(6666004)(66476007)(558084003)(66946007)(38350700002)(66556008)(8676002)(38100700002)(4326008)(6506007)(9686003)(6512007)(52116002)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?e9VYJk9k6HOMtVuqt4/EavfHkc9b7nFgNi9VA+7skT1vKcxH5Fw5XldO5ZKZ?=
- =?us-ascii?Q?DJ5M/SalsYvRhkEvF9vzyoVvK0Ev6blPrBte1GlwRapHtw7novsnnXuOYOWG?=
- =?us-ascii?Q?4ZebBmkfFv+GS1WMJhmNfnwfy//2nEZDIgLuMPXXkkLfE9ynZ7BpsufMQDMo?=
- =?us-ascii?Q?kACO9gZrSYyNCvlDaeD3cF3bSyiWegtGcJTnfprH52CLP0JlYWalWGCFDy/v?=
- =?us-ascii?Q?iVx2rcYFcNddSo6faPvpF9AdKT0UvVGyf2Pp4218YimLfdySspgYcjSrOdfQ?=
- =?us-ascii?Q?wkPooKT0KD7HfjhqcjVMHGij+80JuIbLyU6Qjy1hGZ0IVR/UiiC+lxSjgpwC?=
- =?us-ascii?Q?k8jihRXWubQ56ujzBrg7B7V5TkRp1suz7kJNEmHJEOUv6o3usqQ1ccZI/3t4?=
- =?us-ascii?Q?c88ybB0OjNFEHzI2lpsDML0CUEdicoe+yEqjnWGS2DzYaK+07yBZbr6D+pky?=
- =?us-ascii?Q?+LSpGJmiAczAJVO06b3VdTJcUEHCQ2kobx4sZJtzCyi1n8IXI3XvBFkBP8Fi?=
- =?us-ascii?Q?lGkXmzMfnC4njbEO6mHrbwMHPRKsWqTioA+VK38NAa80y+6myX70BVRr+k4l?=
- =?us-ascii?Q?RrXmcFGv+NU2t2W/WfULlf4E23ELW8fDDmj5qKSOiikynn7txpvBiKA0QDpT?=
- =?us-ascii?Q?wUfA4K6p9fARcL3/A+cbXBbmKnVTQVO6iK/UevUrLYZlbqsgVenzuUWGoQig?=
- =?us-ascii?Q?Ao0o/gulQPQHVSGPdz0AOw3ZQEgww2vY6THGAzUksfx9sUIblWCC6rhUSkmg?=
- =?us-ascii?Q?t5AdgpyDDQxDu/4C2kbbxC7uVwpaIPoO7e0M1iacaaa/AUuQ9X2QKb1cyC9F?=
- =?us-ascii?Q?2yeBn23CMZIf0a/HBqqg9V6NITPoyoyNOXEUNUBXowl70hPC2ZWgPLwtCgKR?=
- =?us-ascii?Q?hm0lR/JFu0/yLp2JnpF2nP12lwXe3l6xyR5QyWkgICIPR6nsB7/IqdiVG2s9?=
- =?us-ascii?Q?4Zl+k1RWl8F0luFKCrYczCeUzUItAgasMTfaIJvcQqaRCTkLhaPgZ6T0ejtR?=
- =?us-ascii?Q?2lFLUy4Ck3PKvt8NmSjRpVQ4c26G02Zn95E7xPSfx0/sQCYlAhNsq8gl1CNz?=
- =?us-ascii?Q?KE5ljkRyYtZHmGUADqWgYfMgdUAmvz41BCMdihzfopmqgK7DVYOvAOXgELXk?=
- =?us-ascii?Q?xhYh6bxhtfdh9KNnauutME2HRVA/iS37b1i/w2Kn73CE+W4u4aKxzNWYtZ8X?=
- =?us-ascii?Q?GmaQj2sJeutxdPBGT2TEPstFM5Y1ZgRAy+aWy2KOm+C6Oax5YWv0TSOKHTDz?=
- =?us-ascii?Q?C2E5VQPbLZAQ0zMBzCp9Cgz8pEZ8DB6zn7zaXAwKuvG3hv1mZjbCTCITumQ6?=
- =?us-ascii?Q?RjP+GiTu5pf8vBZd6Di1q1jx3ZWk0oJ4zEqo1QFYAPPINFy/M1x5W345lSaz?=
- =?us-ascii?Q?/dNA1N5y0IYzTgIxTCVtd8xFmXYEjy3yS5HardEyc+oLFRIHuw61mnz19FBb?=
- =?us-ascii?Q?ZzIyzJSIqBMhU0GtpUki5Ne+kVFmdWRYMMcu7g4Mnq+34iSbOtAOH5NEO6CM?=
- =?us-ascii?Q?/PKW8vrF3CqZb+TyDFrsrkzcXd6KVROSor61rGYzEB9fGKYiCLoxW2ubh8Ft?=
- =?us-ascii?Q?nxI5CnNLD7cowoLxUpI=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b5aab0f-d74d-44fd-44ab-08d9fd31d6f3
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8774.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2022 16:21:15.2689
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: f1HM+aZXOJCJyyHPJXw+RjZn/lkySwuVDAW6wJxaqWg+hFmrpMKEzOaqrRKltzlo
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9354
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowADHqPHQtSFiSwAcAg--.15700S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xr47tF17AF47CryxZr1rtFb_yoWkGrg_Ca
+        17XrZIqrs8uw4xCF1xtr4DAFyUurs5Xr12q3Wvqay3trZxJrnFqrWDZrWUJ34fZw1UCrs3
+        Cr429340yr43CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbzxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+        xKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+        67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 22/03/03 04:04PM, Mark Brown wrote:
-> On Thu, Mar 03, 2022 at 12:59:15AM +0530, Kuldeep Singh wrote:
-> > Add Han Xu as flexspi maintainer.
-> > Also, update my email address as previous one is not working anymore.
-> 
-> Han, are you OK with this?
+As the potential failure of the clk_enable(),
+it should be better to check it and return error
+if fails.
 
-Yes, I will take it over.
+Fixes: 67dca5e580f1 ("spi: spi-mem: Add support for Zynq QSPI controller")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/spi/spi-zynq-qspi.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
+index 78f31b61a2aa..77ea6b522348 100644
+--- a/drivers/spi/spi-zynq-qspi.c
++++ b/drivers/spi/spi-zynq-qspi.c
+@@ -379,12 +379,21 @@ static int zynq_qspi_setup_op(struct spi_device *spi)
+ {
+ 	struct spi_controller *ctlr = spi->master;
+ 	struct zynq_qspi *qspi = spi_controller_get_devdata(ctlr);
++	int ret;
+ 
+ 	if (ctlr->busy)
+ 		return -EBUSY;
+ 
+-	clk_enable(qspi->refclk);
+-	clk_enable(qspi->pclk);
++	ret = clk_enable(qspi->refclk);
++	if (ret)
++		return ret;
++
++	ret = clk_enable(qspi->pclk);
++	if (ret) {
++		clk_disable(qspi->refclk);
++		return ret;
++	}
++
+ 	zynq_qspi_write(qspi, ZYNQ_QSPI_ENABLE_OFFSET,
+ 			ZYNQ_QSPI_ENABLE_ENABLE_MASK);
+ 
+-- 
+2.25.1
+
