@@ -2,45 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C1C4D0891
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Mar 2022 21:40:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E1A4D088D
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Mar 2022 21:40:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245373AbiCGUkp (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Mar 2022 15:40:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
+        id S239323AbiCGUkt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Mar 2022 15:40:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245363AbiCGUkk (ORCPT
+        with ESMTP id S245358AbiCGUkk (ORCPT
         <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Mar 2022 15:40:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620957A992;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2587B562;
         Mon,  7 Mar 2022 12:39:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0DB19B8170D;
-        Mon,  7 Mar 2022 20:39:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D084C340E9;
-        Mon,  7 Mar 2022 20:39:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 19E756150B;
+        Mon,  7 Mar 2022 20:39:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 485ECC340EF;
+        Mon,  7 Mar 2022 20:39:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646685582;
-        bh=MFEDq2n1I3WmHMz8Kow++qRNInnWnoXDBUgAcH7XvzE=;
+        s=k20201202; t=1646685584;
+        bh=mZvkk4eExyyshNaj1KkfsbMVNXCaa6NAACmHjXogaa8=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=b4tO1DNqOx/0jhQZuhWK5AlDL887sre7rBG6ciHsdXbBiGvNZtYOflpJX6RnSu1lm
-         vCdHcm3TeOYF6pdSYo+ob1FPbahCG9anHTxgsP70KPidlmVNcNZrADA66oeqYux1iN
-         denyUai9gHEbP0euUe90hxwYKGDc3mv3fFTpFgTxQNfbNokAQYh9/Lib2S3XLQnLzQ
-         Rg7+Y+vlfgFEyN/Nz5v23maT/f+U2dQfexhpKaFRBj2GYDfgI1L2fSt1/pcBm1l4O4
-         VEsmsLdGy2C8xTjCih/bIXaXV8gXnMJxh5/CIIzRKDhPtvz13UYC/u1+Hg1PIgTdF/
-         pxlbspMhMa2tA==
+        b=GIrCUnOhLb7pfVCwvXPpt8dnoS+MokHmtSh3YR2uHJZ/4wim7fXxYTx8AZWAQ7CMI
+         lUzB5E6I5sYQPVFI4uCL64CAubi3e8nml1IqfH4lWhvx8vz4OXzvwyUnIcxoUinfrG
+         meF2kFpQlf1PZSilnA3L0J4wvz1hAf32HvW/KSzig0//tcbBw+MAXvPcXcuJ2QPx7M
+         KZ7KU6ieJN+h5GVcyYPy9wIbrXiy9jBeEpMJff6np/eijZaeRTlifIFNGPgUNoLhZU
+         xD5gpGlwRcPEnq9SzHFpU75u/+87icOHtyixrdWRjToteDe7GkJJFtRFxqFAVq7wqy
+         ATS3Gxc+XrAbw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Han Xu <han.xu@nxp.com>, Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20220302192915.6193-1-singh.kuldeep87k@gmail.com>
-References: <20220302192915.6193-1-singh.kuldeep87k@gmail.com>
-Subject: Re: [PATCH] dt-bindings: spi: Update NXP Flexspi maintainer details
-Message-Id: <164668558136.3137564.9240243225598212483.b4-ty@kernel.org>
-Date:   Mon, 07 Mar 2022 20:39:41 +0000
+To:     Jon Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     linux-tegra@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org
+In-Reply-To: <20220307113529.315685-1-jonathanh@nvidia.com>
+References: <20220307113529.315685-1-jonathanh@nvidia.com>
+Subject: Re: [PATCH] dt-bindings: spi: Fix Tegra QSPI example
+Message-Id: <164668558302.3137564.11139957927665508409.b4-ty@kernel.org>
+Date:   Mon, 07 Mar 2022 20:39:43 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,11 +55,16 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 3 Mar 2022 00:59:15 +0530, Kuldeep Singh wrote:
-> Add Han Xu as flexspi maintainer.
-> Also, update my email address as previous one is not working anymore.
+On Mon, 7 Mar 2022 11:35:29 +0000, Jon Hunter wrote:
+> When running dt_binding_check on the nvidia,tegra210-quad.yaml binding
+> document the following error is reported ...
 > 
+>  nvidia,tegra210-quad.example.dt.yaml:0:0: /example-0/spi@70410000/flash@0:
+>  	failed to match any schema with compatible: ['spi-nor']
 > 
+> Update the example in the binding document to fix the above error.
+> 
+> [...]
 
 Applied to
 
@@ -66,8 +72,8 @@ Applied to
 
 Thanks!
 
-[1/1] dt-bindings: spi: Update NXP Flexspi maintainer details
-      commit: af524ae5ad13a9c28acf0b2ec4489d5903c4fbed
+[1/1] dt-bindings: spi: Fix Tegra QSPI example
+      commit: 320689a1b543ca1396b3ed43bb18045e4a7ffd79
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
