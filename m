@@ -2,124 +2,167 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0C74D14E6
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Mar 2022 11:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF074D16F1
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Mar 2022 13:12:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345904AbiCHKfi (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 8 Mar 2022 05:35:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47082 "EHLO
+        id S234183AbiCHMMz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 8 Mar 2022 07:12:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345918AbiCHKfh (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 8 Mar 2022 05:35:37 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A004348E;
-        Tue,  8 Mar 2022 02:34:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646735675; x=1678271675;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=818ZiUqupFKx30M4QQyr2CZvlTpag7QHU9v/hFaDbMM=;
-  b=O1JAu2sgxKODjeBJSgX0ggf7LowM4PUNMnn25Bn5o+hVMmPBqTsvx7sV
-   tB9gUwDODtaQBW5cDbfue9mFm1Fbd/9c0g4NKcGEQcFdvJaDXndDun1Xw
-   Tb5+pZJJN1wxNifPLHJOi9Z8bdQGIKRD936Ed2J7PjAEJXwhUOEBcILAi
-   UZ/N99rlG6QxDyhJpLydMdmihLMstshjBWR2M7ELsDTwAvCrSv1fBbHOE
-   A8D3cU6M7autkVg2Os59+C55QTSGhmD26ILXyJ551g2v3Exd9Tk/wnVb4
-   Jg8KDowC/FLJISQodi+jwSZgwnWVv5Og5TJcxn7Ci7XCPJpmi15bSx+F3
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="234605624"
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="234605624"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 02:34:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
-   d="scan'208";a="643612251"
-Received: from srikandan-ilbpg12.png.intel.com ([10.88.229.69])
-  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2022 02:34:32 -0800
-From:   nandhini.srikandan@intel.com
-To:     fancer.lancer@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, mgross@linux.intel.com,
-        kris.pan@intel.com, kenchappa.demakkanavar@intel.com,
-        furong.zhou@intel.com, mallikarjunappa.sangannavar@intel.com,
-        mahesh.r.vaidya@intel.com, nandhini.srikandan@intel.com,
-        rashmi.a@intel.com
-Subject: [PATCH v4 3/3] spi: dw: Add support for master mode selection for DWC SSI controller
-Date:   Tue,  8 Mar 2022 18:33:31 +0800
-Message-Id: <20220308103331.4116-4-nandhini.srikandan@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220308103331.4116-1-nandhini.srikandan@intel.com>
-References: <20220308103331.4116-1-nandhini.srikandan@intel.com>
+        with ESMTP id S1346713AbiCHMMw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 8 Mar 2022 07:12:52 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3283E3F309
+        for <linux-spi@vger.kernel.org>; Tue,  8 Mar 2022 04:11:55 -0800 (PST)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220308121153epoutp04b1265bbff3a3bf09df0abe408b0b4ec2~aZq6Okiz_0153101531epoutp04j
+        for <linux-spi@vger.kernel.org>; Tue,  8 Mar 2022 12:11:53 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220308121153epoutp04b1265bbff3a3bf09df0abe408b0b4ec2~aZq6Okiz_0153101531epoutp04j
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1646741513;
+        bh=nbpUiPJb6DAB35cqz3m0Iso2I5r9whjfQKQ36UphvM4=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=ODn8ESy4BhkAsgJkLxX5udXfbAbpRvkiadUQX0XPtd1qg1dyfgZ0wlmAan/nDc1Of
+         kQAiZD9B2iD2cyiUyqUJhBhzEGihj47540JHCuom7NJkuqjZTyswmtQ4Pd/5OTb80h
+         a9rCrXxEFdPIQJUuVCBifUDFsZxmcvdSWX75JnHQ=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20220308121152epcas5p382b2493083563f7570bdf116c457fa2c~aZq5T9r6P2162121621epcas5p3p;
+        Tue,  8 Mar 2022 12:11:52 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.181]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4KCZ1v5gJpz4x9Q1; Tue,  8 Mar
+        2022 12:11:47 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A9.92.06423.1F747226; Tue,  8 Mar 2022 21:11:29 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220308121129epcas5p3d75125bb41b8a1dff64aaf3a5e39233c~aZqjuVJ-A1148011480epcas5p3y;
+        Tue,  8 Mar 2022 12:11:29 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220308121129epsmtrp172f5ed8d3668975f9cfaf3c7bf8ac186~aZqjthJwS0976509765epsmtrp13;
+        Tue,  8 Mar 2022 12:11:29 +0000 (GMT)
+X-AuditID: b6c32a49-b13ff70000001917-64-622747f17b1d
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        66.F0.03370.1F747226; Tue,  8 Mar 2022 21:11:29 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220308121127epsmtip1e9e971685fe88f2fbdad4bc95a12be13~aZqiCxuKO1793517935epsmtip1N;
+        Tue,  8 Mar 2022 12:11:27 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Mark Brown'" <broonie@kernel.org>,
+        "'Lee Jones'" <lee.jones@linaro.org>
+Cc:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linus.walleij@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@canonical.com>,
+        <linux-samsung-soc@vger.kernel.org>, <pankaj.dubey@samsung.com>,
+        <andi@etezian.org>, <linux-spi@vger.kernel.org>
+In-Reply-To: <YfABHDjdTgxytcUY@sirena.org.uk>
+Subject: RE: [PATCH v3 0/3] Add FSD SPI support
+Date:   Tue, 8 Mar 2022 17:41:26 +0530
+Message-ID: <00ec01d832e5$a44f7540$ecee5fc0$@samsung.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQJV3yAl5ku9A9ijKFdi1q5JHbSM/QF8HCEnAbm4M2OroF1WYA==
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDJsWRmVeSWpSXmKPExsWy7bCmlu5Hd/Ukg59zzSwW/3jOZDH14RM2
+        i/lHzrFabHz7g8ni/tejjBZT/ixnstj0+BqrxeVdc9gsZpzfx2TR+PEmu8WirV/YLVr3HmF3
+        4PGY1dDL5nF9ySdmj02rOtk87lzbw+axeUm9R9+WVYwenzfJBbBHZdtkpCampBYppOYl56dk
+        5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAB2qpFCWmFMKFApILC5W0rezKcov
+        LUlVyMgvLrFVSi1IySkwKdArTswtLs1L18tLLbEyNDAwMgUqTMjOWLJnM2vBYt6K9x9mMTYw
+        bubuYuTkkBAwkdh2+ykbiC0ksJtR4u8agy5GLiD7E6PEzT1/WSGcz4wSu/vOscB0HPuwmR0i
+        sYtR4vvsc1BVLxklzt37zwpSxSagK7FjcRvYXBEBf4mDuyeygBQxC+xkkti17QY7SIITqOj0
+        tgdgtrCAvsSKN5vBGlgEVCQ2dJ9gArF5BSwlTjTcY4OwBSVOznwCdgazgLzE9rdzmCFOUpD4
+        +XQZK8QyJ4mt755B1YhLvDx6BOxUCYEzHBIbDm5kg2hwkVi76RpUs7DEq+Nb2CFsKYmX/W1A
+        NgeQnS3Rs8sYIlwjsXTeMaj37SUOXJnDAlLCLKApsX6XPsQqPone30+YIDp5JTrahCCqVSWa
+        312F6pSWmNjdzQphe0hs6vvEPoFRcRaSx2YheWwWkgdmISxbwMiyilEytaA4Nz212LTAMC+1
+        HB7fyfm5mxjByVjLcwfj3Qcf9A4xMnEwHmKU4GBWEuG9f14lSYg3JbGyKrUoP76oNCe1+BCj
+        KTC0JzJLiSbnA/NBXkm8oYmlgYmZmZmJpbGZoZI47+n0DYlCAumJJanZqakFqUUwfUwcnFIN
+        TLMCTzgE+uWEBJdpM2o0WT4R33fKj33eD0GXkns1f89v6laIO2biXvr2zDffLT9O3Uq8ffOx
+        f/P6rSmbCuvvimkd1KjrOdLJc51lXm3UpYPfPPyUWxbHcD3cs9BwduYXc8vM/8kGybta2iW2
+        zmfexMZzxKlHYoJJcRlzxTTX5ulCv4pOcG3Uye2t4v6qlLVg56r4r6c2rPT8vuv9+2nnZyea
+        ab/cw34pYkNTnrCC7aygR00Jp2NOzoy12e9zlDvx48odH1vWSwv+fC+UH7h42tppLOu4l7pP
+        FONIb34/79WGP7s5F8fsUOhfeXrRH++Ncn4NAlf7VJi8I9deK/J0N5NNn7ekfXa8RmGUg7hj
+        oRJLcUaioRZzUXEiADlKaWlPBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCIsWRmVeSWpSXmKPExsWy7bCSnO5Hd/Ukg/UPJCwW/3jOZDH14RM2
+        i/lHzrFabHz7g8ni/tejjBZT/ixnstj0+BqrxeVdc9gsZpzfx2TR+PEmu8WirV/YLVr3HmF3
+        4PGY1dDL5nF9ySdmj02rOtk87lzbw+axeUm9R9+WVYwenzfJBbBHcdmkpOZklqUW6dslcGUs
+        2bOZtWAxb8X7D7MYGxg3c3cxcnJICJhIHPuwmb2LkYtDSGAHo8S8bfvYIRLSEtc3ToCyhSVW
+        /nsOVfScUeL2/6NMIAk2AV2JHYvb2EBsEQF/ia//u1lBipgFDjNJ7GjbwgKSEBJYzyix6b8u
+        iM0J1HB62wOwqcIC+hIr3mwGa2YRUJHY0H0CbCivgKXEiYZ7bBC2oMTJmU+A5nAADdWTaNvI
+        CBJmFpCX2P52DjPEcQoSP58uY4W4wUli67tnLBA14hIvjx5hn8AoPAvJpFkIk2YhmTQLSccC
+        RpZVjJKpBcW56bnFhgVGeanlesWJucWleel6yfm5mxjBEamltYNxz6oPeocYmTgYDzFKcDAr
+        ifDeP6+SJMSbklhZlVqUH19UmpNafIhRmoNFSZz3QtfJeCGB9MSS1OzU1ILUIpgsEwenVAOT
+        P0uo0eKPXRL7JXds2dxRU3aosn/LGSOxgL1n7M5GMGX/2rBD8AV3a2Fz56vsmoX8t+R3qb+y
+        W7pi1gLHZV91jUWXs3hNVexcG8+lsCIj9Fezt9YEp/i4KyYreBaW/2/z+dfP+l6nNmPrHKnm
+        J5utFNm35M+ZPKmhSvqp4GZWS/7bdS49bTYbmibG8ds7cVw8MWXexOON05MLyr09bpUaHFky
+        X0GtOJSV0XY5n6Oz0o2vq5yl3z6f6LM3dWbWjGRp02LObZvvzyhV1t4svlLqVMnpqUvErBT/
+        V566XPjkjsdzpY5ZCTkqctPDXA6kbT2TeWdKT87J3O2xnPpud1bw7hd9MnF618qDzvsDvCYq
+        sRRnJBpqMRcVJwIAJYYXkjcDAAA=
+X-CMS-MailID: 20220308121129epcas5p3d75125bb41b8a1dff64aaf3a5e39233c
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220125032811epcas5p3ef7b2f4e4906c1da8ccb4a0b3ed9a591
+References: <CGME20220125032811epcas5p3ef7b2f4e4906c1da8ccb4a0b3ed9a591@epcas5p3.samsung.com>
+        <20220125031604.76009-1-alim.akhtar@samsung.com>
+        <YfABHDjdTgxytcUY@sirena.org.uk>
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Nandhini Srikandan <nandhini.srikandan@intel.com>
+Hi Mark and Lee Jones
 
-Add support to select the controller mode as master mode by setting
-Bit 31 of CTRLR0 register. This feature is supported for controller
-versions above v1.02.
+>-----Original Message-----
+>From: Mark Brown [mailto:broonie@kernel.org]
+>Sent: Tuesday, January 25, 2022 7:25 PM
+>To: Alim Akhtar <alim.akhtar@samsung.com>
+>Cc: linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
+>devicetree@vger.kernel.org; linus.walleij@linaro.org; robh+dt@kernel.org;
+>krzysztof.kozlowski@canonical.com; linux-samsung-soc@vger.kernel.org;
+>pankaj.dubey@samsung.com; andi@etezian.org; linux-spi@vger.kernel.org
+>Subject: Re: [PATCH v3 0/3] Add FSD SPI support
+>
+>On Tue, Jan 25, 2022 at 08:46:01AM +0530, Alim Akhtar wrote:
+>
+>> Note: This series is depended on [1] patches which adds support of FSD
+>> SoC and on Krzysztof's v6 [2] of spi schema changes
+>>
+>> [1]
+>> https://protect2.fireeye.com/v1/url?k=43e76061-1c7c5970-43e6eb2e-0cc47
+>> a31cdbc-d2d9ba5a4358198f&q=1&e=9e61db9b-cfb7-4110-a13c-
+>a1cb0d92a251&u=
+>> https%3A%2F%2Flkml.org%2Flkml%2F2022%2F1%2F24%2F583
+>> [2]
+>> https://protect2.fireeye.com/v1/url?k=e2ddfc2b-bd46c53a-e2dc7764-0cc47
+>> a31cdbc-0d6dbb90b0110bab&q=1&e=9e61db9b-cfb7-4110-a13c-
+>a1cb0d92a251&u=
+>> https%3A%2F%2Flkml.org%2Flkml%2F2022%2F1%2F24%2F120
+>
+>Please resend this when it can be applied, either wait until the
+dependencies
+>are in place or rebase on top of current code.  In general only build time
+>dependencies matter here, the SoC support being merged shouldn't be an
+>issue one way or another.
 
-Signed-off-by: Nandhini Srikandan <nandhini.srikandan@intel.com>
----
- drivers/spi/spi-dw-core.c | 4 ++--
- drivers/spi/spi-dw.h      | 7 +++----
- 2 files changed, 5 insertions(+), 6 deletions(-)
+I re-send these patches (couple of them) as I see the dependencies has
+landed into MFD tree.
+Because of the immutable branch between MFD, SPI and DT due to the current
+merge window, I assume this will go via MFD tree. Let me know if any
+concerns. 
+Thanks!
 
-diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-index ecea471ff42c..68bfdf2c4dc7 100644
---- a/drivers/spi/spi-dw-core.c
-+++ b/drivers/spi/spi-dw-core.c
-@@ -307,8 +307,8 @@ static u32 dw_spi_prepare_cr0(struct dw_spi *dws, struct spi_device *spi)
- 		if (spi->mode & SPI_LOOP)
- 			cr0 |= DW_HSSI_CTRLR0_SRL;
- 
--		if (dws->caps & DW_SPI_CAP_KEEMBAY_MST)
--			cr0 |= DW_HSSI_CTRLR0_KEEMBAY_MST;
-+		/* CTRLR0[31] MST */
-+		cr0 |= DW_HSSI_CTRLR0_MST;
- 	}
- 
- 	return cr0;
-diff --git a/drivers/spi/spi-dw.h b/drivers/spi/spi-dw.h
-index d5ee5130601e..2583b7314c41 100644
---- a/drivers/spi/spi-dw.h
-+++ b/drivers/spi/spi-dw.h
-@@ -23,7 +23,7 @@
- 	((_dws)->ip == DW_ ## _ip ## _ID)
- 
- #define __dw_spi_ver_cmp(_dws, _ip, _ver, _op) \
--	(dw_spi_ip_is(_dws, _ip) && (_dws)->ver _op DW_ ## _ip ## _ver)
-+	(dw_spi_ip_is(_dws, _ip) && (_dws)->ver _op DW_ ## _ip ## _ ## _ver)
- 
- #define dw_spi_ver_is(_dws, _ip, _ver) __dw_spi_ver_cmp(_dws, _ip, _ver, ==)
- 
-@@ -31,8 +31,7 @@
- 
- /* DW SPI controller capabilities */
- #define DW_SPI_CAP_CS_OVERRIDE		BIT(0)
--#define DW_SPI_CAP_KEEMBAY_MST		BIT(1)
--#define DW_SPI_CAP_DFS32		BIT(2)
-+#define DW_SPI_CAP_DFS32		BIT(1)
- 
- /* Register offsets (Generic for both DWC APB SSI and DWC SSI IP-cores) */
- #define DW_SPI_CTRLR0			0x00
-@@ -100,7 +99,7 @@
-  * 0: SSI is slave
-  * 1: SSI is master
-  */
--#define DW_HSSI_CTRLR0_KEEMBAY_MST		BIT(31)
-+#define DW_HSSI_CTRLR0_MST			BIT(31)
- 
- /* Bit fields in CTRLR1 */
- #define DW_SPI_NDF_MASK				GENMASK(15, 0)
--- 
-2.17.1
 
