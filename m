@@ -2,58 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C24114D0C2C
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Mar 2022 00:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C824D0D06
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Mar 2022 01:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239664AbiCGXnX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 7 Mar 2022 18:43:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
+        id S239175AbiCHAxH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 7 Mar 2022 19:53:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239450AbiCGXnV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Mar 2022 18:43:21 -0500
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446842194;
-        Mon,  7 Mar 2022 15:42:26 -0800 (PST)
-Received: by mail-oi1-f174.google.com with SMTP id w127so6681098oig.10;
-        Mon, 07 Mar 2022 15:42:26 -0800 (PST)
+        with ESMTP id S233782AbiCHAxG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 7 Mar 2022 19:53:06 -0500
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E21C329B4;
+        Mon,  7 Mar 2022 16:52:11 -0800 (PST)
+Received: by mail-oi1-f173.google.com with SMTP id s207so445609oie.11;
+        Mon, 07 Mar 2022 16:52:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=EsKRRIoThK3MQ1H0laF62b7WY6ong2NDteh+bOwJmMY=;
-        b=uNGJNvEZ3c7sUj690++lMeWOHEdSGjYbdfeXseO49lI5v08xyDyCVxkiSoLG2wp9Et
-         qRp95WV95eKK8TDQ3FV3MsseuK0o5/RCG+Bj+rxeVvi1imgYsJS2+29DCKQQ3hX/3OqS
-         cPnPJcYuwoG8oJm/9TZ5k5FWukQHXN10W4+RAcRQlN0D77BFhVLqkL5o+9Pap2jv7I9+
-         ThmWs/fSddbdId1+OM/9cZFRjxmE2QAJaeOoQM7wlMH9/wtJ8IDEd4jNaiwpgmsp55Bk
-         l5Cu/c7rPzLiVpotvs2wsIdEpzmNgvqekozcowGgBDy4eKbtOCbwLhqNbZCfPvTSJ4it
-         4uOQ==
-X-Gm-Message-State: AOAM530eX0SExzoU+CYNLuZemMrVsJMtVFZXE15K1K4/WzH847fmHJVt
-        NnTIekTiyHPmPyhrZfcLlA==
-X-Google-Smtp-Source: ABdhPJwirVFf7NgTIaWCdemavUPZ6EK5UqamWYmsiMJjOCqd6t3G8W+ppN3LvgLKqKkNIV99E6Sjxg==
-X-Received: by 2002:a05:6808:14cc:b0:2d9:a01a:48ac with SMTP id f12-20020a05680814cc00b002d9a01a48acmr946191oiw.247.1646696545606;
-        Mon, 07 Mar 2022 15:42:25 -0800 (PST)
+        bh=td2dQrLboBYxumnDQKShw1XpxIe3rYbrby2068uMMkU=;
+        b=gitu32eHVSpYHZXU9cTbr/U2e5RJiPHWq9J9r9iBiRkDHG/1SKErsc4BUyKsKsoaDf
+         UqRx0b94CDct/FrXIq2oaIv5NoS0jM2Q/hukfwRfgyoRPXQVqt2aH0iwS3eJOuZgEjMl
+         stvTa+9/qW+9vwZJ+ChsKfy8M3Bqsueoa5TghQIHAbFxP0TkZnvkBkYPNsUiIlKtMYoS
+         u4pIIk5rbZ7nmsgG5te5KHWXLZ6hUXjB5BVCbnDXLMYcM3m0/y1Jz1St8z7ZYabRD9kT
+         1d5XJSghJ2ANQVQuIdacrT74/RmTh/A4bUdnHCOXynSHShDqdCSJG2GlKx20IuCwbojF
+         A5Fg==
+X-Gm-Message-State: AOAM532MQ3KKFlqYjTme4YoIH28JZACsPJUbft2lTiz9f6Ekj0cVUYjG
+        Xlx7/BfVaIK6Yocd0X1WAjIBst75Dw==
+X-Google-Smtp-Source: ABdhPJxSn+4z1/FosMK1XhAw6ohhDDkJ4pH6slHP5dt44vFixTof+W76bqSyA9UYoEi4proM/zVDSg==
+X-Received: by 2002:a05:6808:1708:b0:2d9:a868:9883 with SMTP id bc8-20020a056808170800b002d9a8689883mr1156916oib.158.1646700730641;
+        Mon, 07 Mar 2022 16:52:10 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w4-20020a4adec4000000b0032109de628esm1060794oou.6.2022.03.07.15.42.24
+        by smtp.gmail.com with ESMTPSA id dw7-20020a056870770700b000d9aa7a6d63sm6261234oab.6.2022.03.07.16.52.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 15:42:24 -0800 (PST)
-Received: (nullmailer pid 3487473 invoked by uid 1000);
-        Mon, 07 Mar 2022 23:42:23 -0000
-Date:   Mon, 7 Mar 2022 17:42:23 -0600
+        Mon, 07 Mar 2022 16:52:09 -0800 (PST)
+Received: (nullmailer pid 3597630 invoked by uid 1000);
+        Tue, 08 Mar 2022 00:52:08 -0000
+Date:   Mon, 7 Mar 2022 18:52:08 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Leilk Liu <leilk.liu@mediatek.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH V3 6/7] dt-bindings: spi: support spi-hclk
-Message-ID: <YiaYXwj0C8NeWjzz@robh.at.kernel.org>
-References: <20220307065230.12655-1-leilk.liu@mediatek.com>
- <20220307065230.12655-7-leilk.liu@mediatek.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>, linux-spi@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] spi: Add optional number of additional clock
+ cycles to be generated
+Message-ID: <YiaouHFtlIG8nQxu@robh.at.kernel.org>
+References: <cover.1646060734.git.christophe.leroy@csgroup.eu>
+ <6b6bad3844828c22de3acfb9e7fbac877a48d5a4.1646060734.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220307065230.12655-7-leilk.liu@mediatek.com>
+In-Reply-To: <6b6bad3844828c22de3acfb9e7fbac877a48d5a4.1646060734.git.christophe.leroy@csgroup.eu>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -65,43 +64,28 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 02:52:29PM +0800, Leilk Liu wrote:
-> this patch support spi-hclk.
+On Mon, 28 Feb 2022 16:15:45 +0100, Christophe Leroy wrote:
+> Some components require a few clock cycles with chipselect off before
+> or/and after the data transfer done with CS on.
 > 
-> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> Typically IDT 801034 QUAD PCM CODEC datasheet states "Note *: CCLK
+> should have one cycle before CS goes low, and two cycles after
+> CS goes high".
+> 
+> The cycles "before" are implicitely provided by all previous activity
+> on the SPI bus. But the cycles "after" must be provided in order to
+> achieve the SPI transfer.
+> 
+> In order to use that kind of component, implement a new option for
+> SPI slaves in order to implement trailing clock of a given number of
+> bits with ChipSelect off at the end of the transfer.
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 > ---
->  .../devicetree/bindings/spi/mediatek,spi-mt65xx.yaml          | 4 ++++
->  1 file changed, 4 insertions(+)
+>  .../devicetree/bindings/spi/spi-peripheral-props.yaml      | 5 +++++
+>  drivers/spi/spi.c                                          | 7 +++++--
+>  include/linux/spi/spi.h                                    | 1 +
+>  3 files changed, 11 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
-> index a8a15a9a6c46..195793aa79b7 100644
-> --- a/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
-> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
-> @@ -51,16 +51,20 @@ properties:
->      maxItems: 1
->  
->    clocks:
-> +    minItems: 3
->      items:
->        - description: clock used for the parent clock
->        - description: clock used for the muxes clock
->        - description: clock used for the clock gate
-> +      - description: clock used for the AHB bus, this clock is optional
->  
->    clock-names:
-> +    minItems: 3
->      items:
->        - const: parent-clk
->        - const: sel-clk
->        - const: spi-clk
-> +      - const: spi-hclk
 
-'spi' is redundant. Just 'hclk'.
-
->  
->    mediatek,pad-select:
->      $ref: /schemas/types.yaml#/definitions/uint32-array
-> -- 
-> 2.25.1
-> 
-> 
+Acked-by: Rob Herring <robh@kernel.org>
