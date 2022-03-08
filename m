@@ -2,58 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2395B4D1919
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Mar 2022 14:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA904D19CF
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Mar 2022 14:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347113AbiCHNZO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 8 Mar 2022 08:25:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
+        id S243655AbiCHN7G (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 8 Mar 2022 08:59:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347076AbiCHNZO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 8 Mar 2022 08:25:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B284419BA;
-        Tue,  8 Mar 2022 05:24:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 921C861021;
-        Tue,  8 Mar 2022 13:24:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFB05C340EB;
-        Tue,  8 Mar 2022 13:24:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646745857;
-        bh=2OP/eO/kKD41zP+nPYneJuXvy2X1h4oBHVDkq7AXBHk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VDSjQmdkbKuyhd+55xQKCz4GtjwszGiCDUkEuKpCSR8hE5cqNfiCrTop7XwCOqgAN
-         1DCg6OGXKqMBYmljJfaAAW2B3cr9nfxT+8pG4AQerKxBIT3qNnPAOlQ6wSvNTLS9Qz
-         GjOquXI0OsKXbaeHE2DYJgV+JoIgeZm6TZPqUAinV86ccj3ZP0p3v3iJc1tLU4gqBO
-         gHQ3ERipbupWZyPgSGU4gGB8+1wrOKyctli+bCj7yRBOnbCjOi5YeGtaSJ7Zqdz+4W
-         eGCnciKbDn0s/hrMjzwmTKWj4yC/VuxFgh8MdLMHLH268MbIt9bsKM6g/r2kSzN7If
-         0GYYGJ4Szwjgg==
-Date:   Tue, 8 Mar 2022 13:24:10 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Alim Akhtar <alim.akhtar@samsung.com>, lee.jones@linaro.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        with ESMTP id S241473AbiCHN7F (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 8 Mar 2022 08:59:05 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35161B794
+        for <linux-spi@vger.kernel.org>; Tue,  8 Mar 2022 05:58:07 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id u1so28651353wrg.11
+        for <linux-spi@vger.kernel.org>; Tue, 08 Mar 2022 05:58:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=6YorkRdQ5ODwIMAwkUuKb6tGCEoxWYA4agUcSrocd/g=;
+        b=IpWevBUGGjyc07sxf4d2Wsp0YSQ5tGlrYfhlfBt1B391HgmVtpJnFHOhJ4/GhS8TRi
+         RxWNzTqTe0+DxCmPJoFVAds4PSDtOrPIQuJFcDxI/Vi9C+PZsurE7gafwm2eK0kdM9QL
+         Ok68ouAXklyteNGH0NEQ75QQ5M+wY/XUklT1e6AEGUC+W/xzD9hgyGLqG2Dxe2RKXQT+
+         6PY6NgjGZy5HRxpxslGTGiKh3gfNFKMiC64T1sxMp2OAWhc61GihicN0wx6KNwCH3btk
+         tkYRj4TK9K08koGVCo4O/kUz7xa/UPfgOqfPDw9zrDcSWk7yTdrpEKbyfPbR1D8V/R5Q
+         8qww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=6YorkRdQ5ODwIMAwkUuKb6tGCEoxWYA4agUcSrocd/g=;
+        b=HtjlEeYKGEGsNQHM3l6twspjfxfd8FpP0KVkpw8WZlRUNkq4ivYQtwyg9PMiLNHkGs
+         +qzFpg5QwBtWaNavrCafiAuK8kT//jCYAmE+BjYjg+pI/h169d2flgfrzwpIwH/iHRRD
+         pNg46TPA7eIoNGWE0aBtjYgZqg1fIEnlrvOJHswppGrLbPS1W+vQf+9PflVBSebF47Ej
+         M+suoOZdE+W02b7hhyVoZNPyjB6EqJjZypbt7rrW6iRxOU+Y9KMMZ6P4NOjxlWu6KEVa
+         MzjtYj30iBJgBmLSi2rg3wukNzAGiSp0/qC1NluosaorLxxU1A1CnB8L3WVshheZWyXi
+         iUzg==
+X-Gm-Message-State: AOAM532xXl0f7/59EEeRYd0SpyLe5paQM8jmSkoQ7NVuKsar1kg1PBVc
+        W2tivK8a/ox4Ym1YpGDKKz2jgQ==
+X-Google-Smtp-Source: ABdhPJy0ijONgUXV2hKiTA5G3/CPfstf6wOumLH9rFqg0Zj3RwwwYyDIDBPDqhbcFBxSq8y/I/Dh0Q==
+X-Received: by 2002:a5d:410c:0:b0:1ef:766b:ef5b with SMTP id l12-20020a5d410c000000b001ef766bef5bmr12193064wrp.183.1646747886241;
+        Tue, 08 Mar 2022 05:58:06 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id b1-20020a5d40c1000000b001f1dd6ea504sm8503309wrq.59.2022.03.08.05.58.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 05:58:05 -0800 (PST)
+Date:   Tue, 8 Mar 2022 13:58:03 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linus.walleij@linaro.org,
         robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
         linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        andi@etezian.org, linux-spi@vger.kernel.org, lee.jones@linaro.org,
-        linux-fsd@tesla.com, Adithya K V <adithya.kv@samsung.com>
+        andi@etezian.org, linux-spi@vger.kernel.org, linux-fsd@tesla.com,
+        Adithya K V <adithya.kv@samsung.com>
 Subject: Re: [RESEND PATCH v3 1/2] spi: dt-bindings: samsung: Add fsd spi
  compatible
-Message-ID: <YidY+ncMVhp7bBvh@sirena.org.uk>
+Message-ID: <Yidg64QGGzIbduQ2@google.com>
 References: <CGME20220308120701epcas5p3d3d2f5c01055e8c1721ae0ec6c2aa681@epcas5p3.samsung.com>
  <20220308121640.27344-1-alim.akhtar@samsung.com>
+ <YidY+ncMVhp7bBvh@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ay8euQKf9LBmoJfJ"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220308121640.27344-1-alim.akhtar@samsung.com>
-X-Cookie: Dental health is next to mental health.
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YidY+ncMVhp7bBvh@sirena.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,33 +79,27 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Tue, 08 Mar 2022, Mark Brown wrote:
 
---Ay8euQKf9LBmoJfJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> On Tue, Mar 08, 2022 at 05:46:39PM +0530, Alim Akhtar wrote:
+> 
+> > - Resend of FSD SPI support patches as the dependencies has landed in MFD
+> >   tree, hope this will go via MFD tree (as there are dependency between
+> > MFD, SPI and DT)
+> 
+> I either need a pull request for the MFD changes or to wait until those
+> changes have come in via Linus' tree.
 
-On Tue, Mar 08, 2022 at 05:46:39PM +0530, Alim Akhtar wrote:
+You mean this one:
 
-> - Resend of FSD SPI support patches as the dependencies has landed in MFD
->   tree, hope this will go via MFD tree (as there are dependency between
-> MFD, SPI and DT)
+  https://lore.kernel.org/all/YiYC7eYx2SpPILyl@google.com/
 
-I either need a pull request for the MFD changes or to wait until those
-changes have come in via Linus' tree.
+  spi: dt-bindings: samsung: Convert to dtschema
 
---Ay8euQKf9LBmoJfJ
-Content-Type: application/pgp-signature; name="signature.asc"
+Or something else?
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmInWPkACgkQJNaLcl1U
-h9CUfwf/Qzn9eCU7vhJ5e9qENOzG4TrHBFrMB0oR7Ps/0JjlDi5kpsuIw0h8uWUB
-kkOSVcSj+z0SjLkdRc3/hJrHOQhnUfVM/XWdBwD4O2PZyvof2jzedOWnktKxihh2
-NdVl+aYTWEv8PZKwMrSzGfdCS2vucqpekU5qzqa0Xls0sHcv8pBq/tWhVBlKHGGj
-SXcmdagwZ444x9lCPYoz8rF4L2+kv5tmW8RX1AXOyP8r//ZI1IGvZXXBle0exhgk
-KJAioG9R+eE9NroiaFLojLlLLc2SOvcH15KYSQy+xVURr4SZg3xwrvNSBkcaSTkj
-sbAKgQabKLFPE1QDvtsmaGfxqMcRaw==
-=IP6W
------END PGP SIGNATURE-----
-
---Ay8euQKf9LBmoJfJ--
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
