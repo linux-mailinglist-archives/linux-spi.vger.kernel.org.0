@@ -2,87 +2,105 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1AB4D30BD
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Mar 2022 15:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8F04D3580
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Mar 2022 18:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233304AbiCIODk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 9 Mar 2022 09:03:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
+        id S236938AbiCIRUO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 9 Mar 2022 12:20:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233393AbiCIODj (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Mar 2022 09:03:39 -0500
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0183227CC5;
-        Wed,  9 Mar 2022 06:02:41 -0800 (PST)
-Received: by mail-ot1-f51.google.com with SMTP id o106-20020a9d2273000000b005b21f46878cso1800231ota.3;
-        Wed, 09 Mar 2022 06:02:40 -0800 (PST)
+        with ESMTP id S237117AbiCIRUE (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 9 Mar 2022 12:20:04 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688E4D1989;
+        Wed,  9 Mar 2022 09:18:54 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id z16so2901499pfh.3;
+        Wed, 09 Mar 2022 09:18:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/EHiQ5RK0tydATcXcFAZtxqI0UCJ2812+lItUeQolzs=;
+        b=pVXNn5vPtFs79c5r/sZZmwnZEmqaMNVksMoDyN4FpUXlD4u3j9DQvLRatq2vl1Aou5
+         60pAgGMG/pczWIXlJ8pxt5jrK8ZcF3nCrq+7fIYQ7cv7FGY4lANStJL2oQz2ebVboWIB
+         ufB7dgig/4Tle6jYUtOOyRUSPlwMY2c3ySt6TbkrXk6IbCNUqOsUJ7u5KeijKa92eIbJ
+         RZkfMqv8iZMxiD3V4K8GsY/xC3wiLBV1B/d5kUCtxWoy5ZLKtSAVYuAeKzRp6DevWWZ9
+         u3K9s/PhoiiqXQfaJmPqpPAcYzDX1thPlAKLf9q7A/v5Jb2JZpSRcxlljPTqCpe2Ofa7
+         QEHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=l2bsT/eha6vQRCunWyuGCCZHXPrqQ9VTlY5oTvI04YI=;
-        b=3nyGjQ6JPF6p/Ta+LUnBKDn14m30XR+P/5Ba27LvReYPxSUAIs3vrG6h24Z/k2stdq
-         Nb0nXfWpv+cnE39tXbzW+62X/c1WB0TXzUHUfk9VTM6TDx7hW6ClveWko/v3PEO1H48y
-         Ecpx/G11lxHIHK+djOQbBizxy5jeWMRV7rrlMh1Bx6QQQsmOXEhTYNkoSPvYGIaaeEWh
-         Szgf9PeqBg43bvf2r9nfTWQhijM4gXk4VmFBS/5lAAjVy02SqD3YudNUjAJRcQ1DuYdk
-         /ucsDWodaSen8qKBomvyH69aVNaoLcYun7PBfpLeoyAHeRAXjitnamczI73B8IDC6KTN
-         g3Vg==
-X-Gm-Message-State: AOAM533mLVTat3JbeIssiRSBq4HQYYpZwNr8S+cUq/DOpvoSRmN9Oial
-        3BsIYkMF/HaALgOI9IgtJQ==
-X-Google-Smtp-Source: ABdhPJzd/R0M9Di5kVne+hQYW3KIlYwUwdKbU/tPCjkd3SYy5tmwWk2sEh5o27IvJtXqUKCC5IpBMQ==
-X-Received: by 2002:a9d:325:0:b0:5b2:4b69:4e73 with SMTP id 34-20020a9d0325000000b005b24b694e73mr4181198otv.34.1646834560263;
-        Wed, 09 Mar 2022 06:02:40 -0800 (PST)
-Received: from rob (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r21-20020a05683002f500b005b249ffa43fsm961722ote.22.2022.03.09.06.02.38
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/EHiQ5RK0tydATcXcFAZtxqI0UCJ2812+lItUeQolzs=;
+        b=3QAC7hhtXN96xXTxw7htrQbv2RDHtTgxNNrVxkR54t0J2aomwPs5YX/xKu+sVGq1ds
+         MZOc+eq3tfIbW6jRWtcg0tsO6vIGQv++zLD9WGtVLpckjjpZrynO/1Z89lPdK/0un5BR
+         kcFpvRtUlQy16fDI99WB4O1Zk68vqGZYXXrYomf3QUoJsQUvSxtgce48PetwBIkjJhyY
+         W1vym7dRRyM1t52iRPeUAnzGDs8GYmxc0YXeautPEGVY5d7vDI91Rq4QO18CQbHBgtFI
+         2N5VghPDV3xNDLN4nijAUZoKM8KvMpeR3u6pE5X1aXenbFAlfB2B6YoW6ojih9kzU4nq
+         IGQA==
+X-Gm-Message-State: AOAM533VQQBac258AUH2lQYfAHVc2kmK8MAtka0/Skdy3yUtRW3SxjWB
+        u9jtWt5sQ+34lnKWAolzUf8=
+X-Google-Smtp-Source: ABdhPJwfs6H5I4GdOStkd+gj3PUGN8nkvoPHoPXpJzByV9t6/ZMtKBDDfi4l+sV2kEf/I5ScvaffnA==
+X-Received: by 2002:a05:6a00:1806:b0:4f6:f3e8:b3a0 with SMTP id y6-20020a056a00180600b004f6f3e8b3a0mr732392pfa.43.1646846333867;
+        Wed, 09 Mar 2022 09:18:53 -0800 (PST)
+Received: from localhost.localdomain ([122.161.53.68])
+        by smtp.gmail.com with ESMTPSA id o5-20020a655bc5000000b00372f7ecfcecsm2879429pgr.37.2022.03.09.09.18.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 06:02:39 -0800 (PST)
-Received: (nullmailer pid 2797503 invoked by uid 1000);
-        Wed, 09 Mar 2022 14:02:38 -0000
-Date:   Wed, 9 Mar 2022 07:02:38 -0700
-From:   Rob Herring <robh@kernel.org>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     skomatineni@nvidia.com, linux-spi@vger.kernel.org,
-        robh+dt@kernel.org, jonathanh@nvidia.com,
-        devicetree@vger.kernel.org, ashishsingha@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        broonie@kernel.org, ldewangan@nvidia.com, thierry.reding@gmail.com,
-        p.zabel@pengutronix.de
-Subject: Re: [PATCH v4] arm64: tegra: Add QSPI controllers on Tegra234
-Message-ID: <20220309140238.GA2797451@robh.at.kernel.org>
-References: <20220308183026.66394-1-kyarlagadda@nvidia.com>
+        Wed, 09 Mar 2022 09:18:53 -0800 (PST)
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH v3] spi: Update clock-names property for arm pl022
+Date:   Wed,  9 Mar 2022 22:48:47 +0530
+Message-Id: <20220309171847.5345-1-singh.kuldeep87k@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220308183026.66394-1-kyarlagadda@nvidia.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 09 Mar 2022 00:00:26 +0530, Krishna Yarlagadda wrote:
-> From: Ashish Singhal <ashishsingha@nvidia.com>
-> 
-> This adds the QSPI controllers on the Tegra234 SoC and populates the
-> SPI NOR flash device for the Jetson AGX Orin platform.
-> 
-> Signed-off-by: Ashish Singhal <ashishsingha@nvidia.com>
-> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> ---
-> v4:
-> sort definitions in include and dt files
-> 
->  .../boot/dts/nvidia/tegra234-p3701-0000.dtsi  | 12 ++++++++
->  arch/arm64/boot/dts/nvidia/tegra234.dtsi      | 28 +++++++++++++++++++
->  include/dt-bindings/clock/tegra234-clock.h    |  8 ++++++
->  include/dt-bindings/reset/tegra234-reset.h    |  2 ++
->  4 files changed, 50 insertions(+)
-> 
+PL022 has two input clocks named sspclk and apb_pclk. Current schema
+refers to two notations of sspclk which are indeed same and thus one can
+be dropped. Update clock-names property to reflect the same.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+---
+v3:
+- Drop SSPCLK
+- New patch, and drop last 2 patches
+
+v2:
+- Keep actual warning and remove path to file
+- Reword commit message a bit
+
+ Documentation/devicetree/bindings/spi/spi-pl022.yaml | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/spi/spi-pl022.yaml b/Documentation/devicetree/bindings/spi/spi-pl022.yaml
+index 6d633728fc2b..bda45ff3d294 100644
+--- a/Documentation/devicetree/bindings/spi/spi-pl022.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-pl022.yaml
+@@ -38,9 +38,7 @@ properties:
+ 
+   clock-names:
+     items:
+-      - enum:
+-          - SSPCLK
+-          - sspclk
++      - const: sspclk
+       - const: apb_pclk
+ 
+   pl022,autosuspend-delay:
+-- 
+2.25.1
+
