@@ -2,220 +2,338 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A214D40D2
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Mar 2022 06:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 797234D4215
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Mar 2022 08:57:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239601AbiCJFci (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 10 Mar 2022 00:32:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36366 "EHLO
+        id S232086AbiCJH6x (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 10 Mar 2022 02:58:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239600AbiCJFc3 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Mar 2022 00:32:29 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40C310529C;
-        Wed,  9 Mar 2022 21:31:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1646890286; x=1678426286;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=d/Y6BaDPbH20EuZY8BT4jqENKauVPDiIRdhFn9oDB7g=;
-  b=XQ9eLxlg6cD9ZMkZP2KVniC9k2r5DPdM3tkJCSAC2zk+Vgu4vPRxsTNP
-   uF7/ZdDEgG7M9WTIwwHyAetxRuSBZS2QUG4YXWW2VYtE0uFE0owv3Trl3
-   gZ/60jnWzSlHHyIrr0uO0SVm2xRI3YjugPUKLS6bZyCp5cq1QnuPlQ60r
-   sfx3+6aEr9/RwuZ+YJx8fVYZZSUbXJYxGNM3bi2wakMwhnZgmz7Ux7AWe
-   el3P5Dap1+/GPQ+6vzjVqR7lhtwf7MUTGQLINrjUEs1lIOX5cWdan/c9c
-   r6LYF7xonM6i+EJ3TaoWIyqzNPBuW//H2Lw2ohrOnmmCWo4Hrr1BgG1cr
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,169,1643698800"; 
-   d="scan'208";a="88463604"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Mar 2022 22:31:24 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 9 Mar 2022 22:31:24 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17 via Frontend Transport; Wed, 9 Mar 2022 22:31:24 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jQPpwSoDb2N3MdD6W0XPsLX8od4bv+qwtLFbUqiacvphJ7/6NjqCke/a/yNeo9RYLHy3RVTakY7pRL2b3agNT1WccYaQKV/CCaRQw7D4spHr650EXJUVS8WIkm0O03mVub/CFtce03q8vp9mgFXh5QrOxfQULLYCnZWQPoM/qmRGKmfITDErA07Ddz1HSpheJcEoDMyAe5v0VeG+YxUVCMmiRdk6hbyVGCQIvsHV2G+lvHxi9CpTh/C6re20eyfXeCD8xFDavRqMUS+TNdFTHPG3J/KY3kTfvWZYF9KrsYvEgKg4JnZSIEUsGE5raMDtsUAB8uaGEMEOz+6+8ZaFOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d/Y6BaDPbH20EuZY8BT4jqENKauVPDiIRdhFn9oDB7g=;
- b=lv4aW1GOf2mwfVmj4LMvCI5RMgbgn42mZhdhvkg7/K010pJfN9YGKqbZNZutly1v3Wsl1fMWxzsWazrQ7AU1iOXvy3b8bpNnvpd2lQiKdn8jRm2vigFK5hqw1vtArkDweSpPWrD41t94zxme9s4+YSqbFTU4R8DQyw8aWNbdTS7XeoCw26/dHnek1J0B/DgrCH1wCDb/2uBpFtT0osfDafGT8U2z0eauPdCpDzA6QcFa5EMQdCs5hxUXWq0f9F2jUCzul62O/T4A+j07jtVjsoo0z1Sq9k9ICXhKN2GRVIF42ZpiUjnGujabLf3lZKkckKX+ccMdj1kuijurfruSGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d/Y6BaDPbH20EuZY8BT4jqENKauVPDiIRdhFn9oDB7g=;
- b=STJuU6lA9Gv8cJodI6upKRThOziMY7KlQUASE3NDyjO/SvYlSo2+PgzmzAR9R9hb7Byx3Rq7zHMiMeFF5Cb14QuglctZcmlD2YlE1NXMPds4jX7FzfISuuJN0xod+/+sTbmds3GJFS5VxsjXtREVEvv6FC8sk79UCDucbOoDtQI=
-Received: from SA2PR11MB4874.namprd11.prod.outlook.com (2603:10b6:806:f9::23)
- by LV2PR11MB6048.namprd11.prod.outlook.com (2603:10b6:408:178::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.17; Thu, 10 Mar
- 2022 05:31:20 +0000
-Received: from SA2PR11MB4874.namprd11.prod.outlook.com
- ([fe80::dc94:3c7c:8ef8:21b9]) by SA2PR11MB4874.namprd11.prod.outlook.com
- ([fe80::dc94:3c7c:8ef8:21b9%6]) with mapi id 15.20.5038.027; Thu, 10 Mar 2022
- 05:31:19 +0000
-From:   <Tudor.Ambarus@microchip.com>
-To:     <p.yadav@ti.com>
-CC:     <michael@walle.cc>, <broonie@kernel.org>,
-        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <Nicolas.Ferre@microchip.com>,
-        <zhengxunli@mxic.com.tw>, <jaimeliao@mxic.com.tw>
-Subject: Re: [PATCH 1/4] spi: spi-mem: Allow specifying the byte order in DTR
- mode
-Thread-Topic: [PATCH 1/4] spi: spi-mem: Allow specifying the byte order in DTR
- mode
-Thread-Index: AQHYNEARTqKlJy3ddkuP8VF4XCV4dA==
-Date:   Thu, 10 Mar 2022 05:31:19 +0000
-Message-ID: <f0501c29-ae70-185d-8f40-4a249e49575e@microchip.com>
-References: <20220218145900.1440045-1-tudor.ambarus@microchip.com>
- <20220218145900.1440045-2-tudor.ambarus@microchip.com>
- <20220302100255.gseqjbdyxrgmt3zf@ti.com>
-In-Reply-To: <20220302100255.gseqjbdyxrgmt3zf@ti.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7ced78d1-a960-4fa0-9f33-08da025734b6
-x-ms-traffictypediagnostic: LV2PR11MB6048:EE_
-x-microsoft-antispam-prvs: <LV2PR11MB6048B636193345E775CDE903F00B9@LV2PR11MB6048.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MHLcIsAAIDzaVwYNb+3ky3gEe7cOdzrJsooED3OZpzdDLVb4oUMJigpy3GpxWHZ1n7L4t99ftpvKlB9aKn0dC6JgtYoZd2fwLpMFMAFB7VwTLRq21SW4COQb1QX060Bmi+OyZv261JuQhi2l5mXpBNGpjt4gXNhOi7bewnO9dfz3Wc31HUBd9sjUJWV2VyPRambmpETBHtCN902H9FkbMvohjSAW3ZUBcDArSzAhs1qAYYtxcevio01GNwj7K3BbKuTkeCXSqOIGjFAMPjEHazJKwFNSw6Ux87cPLz74zRyOxINitpE+pLgR6KBQU+XhDpiqariFpA52wUmRQ2LTRvIcvh8S4wxczeQpVE5219+J8CM+5CiIgzUXM0mwclIcK716YFKYDCHm1vilB/Sb9/kRxm5rdZCuW37GMZfmnI226TljWF1jLBRKIVO+OfIOxW7tVXe5eUGVG2KMNuAEj7m6iLRV/5mY2mFTVB3UZ/szU5ZadXgqvFU9g8i3WppFakyQG1V2UK7DCpQLrbLDl0a/Y8xgdXgDi5NfTfan9wlbaaASeigEymt37kSEgq/mnL6KAitsVnMVaIof5VeTvUBBDaTdTWrt2twEt9EI8r747C89XysKl2loD2QZ8ANLEA1jd2kms1MDERWNlPwfPC1Py8JiU2TYxHA89v8MAlsX3GuN22UXGXyGL6SnvANwXxGPvarad0hCHswxBqIpzHpiJt1m2LNBK2AeJyoBLL3YvGZ4quMN3xOqbxTXHCoGVb3oZcaIh3ZhOjDa2cHyXw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB4874.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(54906003)(53546011)(316002)(5660300002)(86362001)(6916009)(8936002)(7416002)(122000001)(31686004)(38070700005)(6512007)(6506007)(4326008)(91956017)(8676002)(2906002)(36756003)(66556008)(66476007)(83380400001)(26005)(66446008)(2616005)(186003)(71200400001)(66946007)(64756008)(6486002)(508600001)(76116006)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZjBTTWMwWCtHdHJtR2RDUEpTLzRuTisrNkxYek13QmR2M1BFc3NVRXlkYjZO?=
- =?utf-8?B?OTg0T0lPM01ub083NTNyb0JmcEJiSm9QQWhhd1V6OGlXc2dWZWFlQ3BkMjJR?=
- =?utf-8?B?SHlnTU85Z3QrdDUrbkhSVEhKaTNudWxTU2g5Qm5YZHgwQ01uYktmZ2NJSk90?=
- =?utf-8?B?VTJnRWVZaEtUWUlnNE0wT0tkaWZGOGxBbXdMNWw5UWtuR0lyck5JTmI3dGdJ?=
- =?utf-8?B?alZvRmYxUS9kSzRNZThjcEdNMWxOS2ZzYnIxeFZIbmtEOThpZUdVbUV2KzVz?=
- =?utf-8?B?L1FkdjBtYXAyTWNTS0JzRlgxRzJvMTRvNS9HYXQ5YlIxSE0vRmpIYkJLeitU?=
- =?utf-8?B?WThaMWRtL3hvdjNyY0ttMUZPMlJEQVgwVEVBZjlsL25QVmRyVytMNGRaT0d0?=
- =?utf-8?B?ekQvRnFCZ3gzUHpPY2F2YzZFVnluWHJZYTJHdGR3cFdSWndwdnRqUVNwQkpl?=
- =?utf-8?B?dHE0aExrUHhqNGtuYmwxRTIwRWlzOXdUUitxOFc2eXdEVnl1WUIrZkdFdEVD?=
- =?utf-8?B?VDNXSW92VWNwNllESXBDR3lmbXBLenoyT3FhNzdOZ01LNWdFcGY5Q3hFcWp2?=
- =?utf-8?B?M3YvN3BrempwUzRUS3FEeE1FODd6RzNueG1tRWRUcHEyekJPWUZKd3JCZG9h?=
- =?utf-8?B?WW9jNis0dHRnNk5HQnI5QXFXSGtxek1UeHFmR1IwL0lCclh0VURCN2tXemxZ?=
- =?utf-8?B?UzFFSWk1OW1KK0o1YVUwSVIzR3A5WGw1ZE1PZDkwZCtqZGFMUzhVQ2d3bmpC?=
- =?utf-8?B?MkY1Tysydm40OUdWdHpPaHRTYkE0bXpma1FIQUtDWXJzbE12OE9YaFBCVG03?=
- =?utf-8?B?d3ppZkdJSFhlbjJaR3FoQ0xjZ3FURVN3SmZaaE1kUlZzcmV5SVVCaEppVWFh?=
- =?utf-8?B?alh2TGh5TWNpb09PVjRPUXo1ZUw5TytSK0NyaG5EYUtGOWhhVGdDYjRsWDBj?=
- =?utf-8?B?QytLZFJXc3RqZHd2clZFV3N4VE5xcllZc3VTNWtlK1lxSHc5YVNna0dkT1lH?=
- =?utf-8?B?SmUyeUltNG5TZnRuU3NhZmFFN2FQQzhqSzBVYmEzZnhqaHBhV3ZoaFR5a1Vv?=
- =?utf-8?B?YTFHYWN3TEhJSU10d0gxZldwcEZLZzBkQWNHRnNsSzVVaGZxcmE5cmFoUVZ5?=
- =?utf-8?B?RVhPVURvb05jWFZxdEpNME5tQi9IYnJXa0FSYTdjVWdwZTJHZWVoVkwzRlRx?=
- =?utf-8?B?VXNWU3VndVQwTlF5ckpUd3F5TkpxVklZU3R5UFBLbXVyY0I3di82TExYNDE1?=
- =?utf-8?B?RkVTeWNVODVDNHlFTEFPZE9JbVFiVzBYbC9zWU5nREZQVEprcmI2L2ZDem5N?=
- =?utf-8?B?Z2U1V1d3Q1B5OFdpRnpoYUVOSDg4TUxmRlN6b1VvNTh6OVVhaXVPV21mRTg2?=
- =?utf-8?B?U0ZUeVlBNGM0RFZvQmFYSkk2MGFhaStmM3NCMmltZVFqSXNHQlBOVDlzWjVk?=
- =?utf-8?B?UGFnSlRyR2RoajZaQXo2Mm4xWWYwVWF4b055TllhSGdsbnBscHNwK2dycVZC?=
- =?utf-8?B?YXNHbVh0Z3hvWk9KOHZ2Z2RnbURwNHdpbWRvbFM5eTJVbVRYM1d1RkllTjQy?=
- =?utf-8?B?Um1CbERLRVB5c1VLNlJoMGY0cXBDd21KbE5oSEpidEVsRFA0VzBzdGdLamUv?=
- =?utf-8?B?VDN3YWlMZk1rMlZZcEhjOXV6TU42QXRjVlJqMVZBTzVjc1FPRmxDN210ZmRn?=
- =?utf-8?B?Q28vcXVxS28rMHMzSWVlcnZKTk5xUWF6RFl6Zk9BeUtYUnNsb1JMRGRwcHRn?=
- =?utf-8?B?d2Y1emxqeGZaWEx4aGxaeHZBeEc4ODgwY0NHSlBJVGhBUFNTVnJRNG1JSUo2?=
- =?utf-8?B?OGpEdjQ1Z0FoNGZ0SG9mRjJDeWZIdXBUWW9qU21mT2pzMUQwU080bDk5RGhZ?=
- =?utf-8?B?eVlueGsxRGdQUno1NEpoM0UxdG9TakZpYmd6WVVHT3dLVG9kUG1xN0NoQ0t0?=
- =?utf-8?B?ZExsck9vNGpYY2J4U29YY1llSThSSVNWdG9zNW91RkpsN2lHTWNQWk1Xbmpy?=
- =?utf-8?B?VWlvVWdpNGZoTjFTdFhPbVg3Q1UrNHIzcU5ubnZITnAwTzRpLytBdkNyeGRT?=
- =?utf-8?B?OVpTRHh6bzRDclpFN1ZpVExqTHNmVG40dVRMRUNLQnFnOXdlbk10VmpKajd5?=
- =?utf-8?B?MCtvL3B3d1dJL1dRWExpSDFPeXRQRW9ScTQ0dHYwRGRzcXVKVUV1VFpGYlFv?=
- =?utf-8?B?a05OVWczRVNXMW1SMzYxTEVON1B6Tk1HaUdFMTZxOU05b3cxRE45TFM1K08z?=
- =?utf-8?B?U05vQzJjb0c1U2VMNm55aDNyN09nPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <16B0A8C120090B4895199AFA0F874CF6@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S231814AbiCJH6x (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Mar 2022 02:58:53 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E99B060078;
+        Wed,  9 Mar 2022 23:57:50 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22A7vEBQ005739;
+        Thu, 10 Mar 2022 01:57:14 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1646899034;
+        bh=BrTgXQ4YJOICIAG05mVu7WDFSnxZku3w7EKnMSxmmeM=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Zbc9j+aHUzXqQHtZuRG2qxTs7iaTSv4g387t5ScUFEprJNEvX0aty1aZWmkPARpGE
+         1O1y/j3188L/k97rYbSgFXtTSRowcdkj4L+0uS5T1sz0jWoPu521m+vI6zeNTXCpDS
+         HVpm3qSkorbhW7qYue+A8/aghzo/eRsDVRciXzA8=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22A7vEa5034992
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 10 Mar 2022 01:57:14 -0600
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 10
+ Mar 2022 01:57:13 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 10 Mar 2022 01:57:13 -0600
+Received: from [10.250.235.173] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22A7v7L1020714;
+        Thu, 10 Mar 2022 01:57:08 -0600
+Message-ID: <12c7a6a6-8b49-1c3e-087f-79c77388b091@ti.com>
+Date:   Thu, 10 Mar 2022 13:27:06 +0530
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB4874.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ced78d1-a960-4fa0-9f33-08da025734b6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2022 05:31:19.5190
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: A4pjnrFb2QuCuFg4iWpFy2n4ksiTiCPWNFXokZwxR+MXpedZt8vx7klRk0Hvz9sqCecZ0Hhsw/6N09VI5TaXBs8mZ7MP59tnJergFb281FM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR11MB6048
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 05/17] mtd: spinand: Define ctrl_ops for non-page
+ read/write op templates
+Content-Language: en-US
+To:     Boris Brezillon <boris.brezillon@collabora.com>
+CC:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <p.yadav@ti.com>
+References: <20220101074250.14443-1-a-nandan@ti.com>
+ <20220101074250.14443-6-a-nandan@ti.com>
+ <20220103110107.45594e78@collabora.com>
+ <bf3ea909-e0a5-eeac-12e9-c8a809685f48@ti.com>
+ <20220215183705.574df0c1@collabora.com>
+From:   Apurva Nandan <a-nandan@ti.com>
+In-Reply-To: <20220215183705.574df0c1@collabora.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-T24gMy8yLzIyIDEyOjAyLCBQcmF0eXVzaCBZYWRhdiB3cm90ZToNCj4gRVhURVJOQUwgRU1BSUw6
-IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25vdyB0
-aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBIaSBUdWRvciwNCg0KSGksIFByYXR5dXNoLA0KDQo+
-IA0KPiBJJ20gcmV2aWV3aW5nIHRoZSBjb2RlIGhlcmUuIEkgc3RpbGwgaGF2ZSBub3QgdGhvdWdo
-dCB0aHJvdWdoIHRoZQ0KPiBkaXNjdXNzaW9uIGFib3V0IEtjb25maWcgb3B0aW9uIHlldC4NCj4g
-DQo+IE9uIDE4LzAyLzIyIDA0OjU4UE0sIFR1ZG9yIEFtYmFydXMgd3JvdGU6DQo+PiBUaGVyZSBh
-cmUgTk9SIGZsYXNoZXMgKE1hY3Jvbml4KSB0aGF0IHN3YXAgdGhlIGJ5dGVzIG9uIGEgMTYtYml0
-IGJvdW5kYXJ5DQo+PiB3aGVuIGNvbmZpZ3VyZWQgaW4gRFRSIG1vZGUuIFRoZSBieXRlIG9yZGVy
-IG9mIDE2LWJpdCB3b3JkcyBpcyBzd2FwcGVkDQo+IA0KPiBzL0RUUiBtb2RlLyBPY3RhbCBEVFIg
-bW9kZS8NCj4gDQo+IEkgZG9uJ3QgdGhpbmsgdGhpcyB3b3VsZCBhcHBseSB0byBhIDRELTRELTRE
-IGZsYXNoIHNpbmNlIGl0IHdvdWxkIG9ubHkNCj4gdHJhbnNtaXQgb25lIGJ5dGUgcGVyIGNsb2Nr
-IGN5Y2xlLg0KDQpGcm9tIHdoYXQgSSBzZWUsIGZsYXNoZXMgdGhhdCBjbGFpbSAiUVBJIERUUiBz
-dXBwb3J0IiB0aGV5IGFjdHVhbGx5IHN1cHBvcnQNCjRTLTRELTRELiBKRVNEMjUxLTEgdGFsa3Mg
-YWJvdXQgNFMtNEQtNEQgdG9vLiBTbyBkYXRhIGlzIGxhdGNoZWQgb24gYm90aCByaXNpbmcNCmFu
-ZCBmYWxsaW5nIGVkZ2VzIG9mIHRoZSBjbG9jay4gQnV0IEknbSBvayB3aXRoIHlvdXIgcHJvcG9z
-YWwgYmVjYXVzZSB3ZSBkb24ndA0KaGF2ZSBhbnkgcHJvb2YgaWYgdGhlcmUgYXJlIGFueSBRUEkg
-RFRSIGZsYXNoZXMgdGhhdCBzd2FwIGJ5dGVzIGluIERUUi4NCg0KPiANCj4+IHdoZW4gcmVhZCBv
-ciB3cml0dGVuIGluIERvdWJsZSBUcmFuc2ZlciBSYXRlIChEVFIpIG1vZGUgY29tcGFyZWQgdG8N
-Cj4+IFNpbmdsZSBUcmFuc2ZlciBSYXRlIChTVFIpIG1vZGUuIElmIG9uZSB3cml0ZXMgRDAgRDEg
-RDIgRDMgYnl0ZXMgdXNpbmcNCj4+IDEtMS0xIG1vZGUsIGFuZCB1c2VzIDhELThELThEIFNQSSBt
-b2RlIGZvciByZWFkaW5nLCBpdCB3aWxsIHJlYWQgYmFjaw0KPj4gRDEgRDAgRDMgRDIuIFN3YXBw
-aW5nIHRoZSBieXRlcyBpcyBhIGJhZCBkZXNpZ24gZGVjaXNpb24gYmVjYXVzZSB0aGlzIG1heQ0K
-Pj4gaW50cm9kdWNlIHNvbWUgZW5kaWFubmVzcyBwcm9ibGVtcy4gSXQgY2FuIGFmZmVjdCB0aGUg
-Ym9vdCBzZXF1ZW5jZSBpZiB0aGUNCj4+IGVudGlyZSBib290IHNlcXVlbmNlIGlzIG5vdCBoYW5k
-bGVkIGluIGVpdGhlciA4RC04RC04RCBtb2RlIG9yIDEtMS0xIG1vZGUuDQo+PiBGb3J0dW5hdGVs
-eSB0aGVyZSBhcmUgY29udHJvbGxlcnMgdGhhdCBjYW4gc3dhcCBiYWNrIHRoZSBieXRlcyBhdCBy
-dW50aW1lLA0KPj4gZml4aW5nIHRoZSBlbmRpYW5uZXNzZXMuIFByb3ZpZGUgYSB3YXkgZm9yIHRo
-ZSB1cHBlciBsYXllcnMgdG8gc3BlY2lmeSB0aGUNCj4+IGJ5dGUgb3JkZXIgaW4gRFRSIG1vZGUu
-DQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogVHVkb3IgQW1iYXJ1cyA8dHVkb3IuYW1iYXJ1c0BtaWNy
-b2NoaXAuY29tPg0KPj4gLS0tDQo+PiAgaW5jbHVkZS9saW51eC9zcGkvc3BpLW1lbS5oIHwgMyAr
-KysNCj4+ICAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspDQo+Pg0KPj4gZGlmZiAtLWdp
-dCBhL2luY2x1ZGUvbGludXgvc3BpL3NwaS1tZW0uaCBiL2luY2x1ZGUvbGludXgvc3BpL3NwaS1t
-ZW0uaA0KPj4gaW5kZXggODVlMmZmN2I4NDBkLi5lMTg3ODQxNzQyMGMgMTAwNjQ0DQo+PiAtLS0g
-YS9pbmNsdWRlL2xpbnV4L3NwaS9zcGktbWVtLmgNCj4+ICsrKyBiL2luY2x1ZGUvbGludXgvc3Bp
-L3NwaS1tZW0uaA0KPj4gQEAgLTg5LDYgKzg5LDggQEAgZW51bSBzcGlfbWVtX2RhdGFfZGlyIHsN
-Cj4+ICAgKiBAZHVtbXkuZHRyOiB3aGV0aGVyIHRoZSBkdW1teSBieXRlcyBzaG91bGQgYmUgc2Vu
-dCBpbiBEVFIgbW9kZSBvciBub3QNCj4+ICAgKiBAZGF0YS5idXN3aWR0aDogbnVtYmVyIG9mIElP
-IGxhbmVzIHVzZWQgdG8gc2VuZC9yZWNlaXZlIHRoZSBkYXRhDQo+PiAgICogQGRhdGEuZHRyOiB3
-aGV0aGVyIHRoZSBkYXRhIHNob3VsZCBiZSBzZW50IGluIERUUiBtb2RlIG9yIG5vdA0KPj4gKyAq
-IEBkYXRhLmR0cl9ic3dhcDE2OiB3aGV0aGVyIHRoZSBieXRlIG9yZGVyIG9mIDE2LWJpdCB3b3Jk
-cyBpcyBzd2FwcGVkIHdoZW4NCj4+ICsgKiAgICAgICAgICAgICAgICAgcmVhZCBvciB3cml0dGVu
-IGluIERUUiBtb2RlIGNvbXBhcmVkIHRvIFNUUiBtb2RlLg0KPj4gICAqIEBkYXRhLmRpcjogZGly
-ZWN0aW9uIG9mIHRoZSB0cmFuc2Zlcg0KPj4gICAqIEBkYXRhLm5ieXRlczogbnVtYmVyIG9mIGRh
-dGEgYnl0ZXMgdG8gc2VuZC9yZWNlaXZlLiBDYW4gYmUgemVybyBpZiB0aGUNCj4+ICAgKiAgICAg
-ICAgICAgIG9wZXJhdGlvbiBkb2VzIG5vdCBpbnZvbHZlIHRyYW5zZmVycmluZyBkYXRhDQo+PiBA
-QCAtMTE5LDYgKzEyMSw3IEBAIHN0cnVjdCBzcGlfbWVtX29wIHsNCj4+ICAgICAgIHN0cnVjdCB7
-DQo+PiAgICAgICAgICAgICAgIHU4IGJ1c3dpZHRoOw0KPj4gICAgICAgICAgICAgICB1OCBkdHIg
-OiAxOw0KPj4gKyAgICAgICAgICAgICB1OCBkdHJfYnN3YXAxNiA6IDE7DQoNCmJ1dCBJIHdvdWxk
-IGtlZXAgdGhpcyBuYW1lIGhlcmUgYXMgaXQgaXMsIHdpdGhvdXQgcHJlcGVuZGluZyBvY3RhbC4N
-Cg0KPiANCj4gWW91IGFsc28gbmVlZCB0byBhZGQgdGhpcyBjYXBhYmlsaXR5IHRvIHNwaV9jb250
-cm9sbGVyX21lbV9jYXBzIGFuZA0KPiB1cGRhdGUgc3BpX21lbV9kZWZhdWx0X3N1cHBvcnRzX29w
-KCkgdG8gY2hlY2sgZm9yIGl0Lg0KDQpzdXJlLCB3aWxsIGRvLg0KDQpUaGFua3MhDQp0YQ0KPiAN
-Cj4+ICAgICAgICAgICAgICAgZW51bSBzcGlfbWVtX2RhdGFfZGlyIGRpcjsNCj4+ICAgICAgICAg
-ICAgICAgdW5zaWduZWQgaW50IG5ieXRlczsNCj4+ICAgICAgICAgICAgICAgdW5pb24gew0KPj4g
-LS0NCj4+IDIuMjUuMQ0KPj4NCj4gDQo+IC0tDQo+IFJlZ2FyZHMsDQo+IFByYXR5dXNoIFlhZGF2
-DQo+IFRleGFzIEluc3RydW1lbnRzIEluYy4NCg0K
+Hi Boris,
+
+On 15/02/22 23:07, Boris Brezillon wrote:
+> Hi Apurva,
+>
+> On Tue, 15 Feb 2022 21:03:52 +0530
+> Apurva Nandan <a-nandan@ti.com> wrote:
+>
+>> Hi Boris,
+>>
+>> On 03/01/22 15:31, Boris Brezillon wrote:
+>>> On Sat, 1 Jan 2022 13:12:38 +0530
+>>> Apurva Nandan <a-nandan@ti.com> wrote:
+>>>   
+>>>> 'ctrl_ops' are op templates for non-page read/write operations,
+>>>> which are: reset, get_feature, set_feature, write_enable, block_erase,
+>>>> page_read and program_execute ops. The 'ctrl_ops' struct contains in it
+>>>> op templates for each of this op, as well as enum spinand_protocol
+>>>> denoting protocol of all these ops.
+>>>>
+>>>> We require these new op templates because of deviation in standard
+>>>> SPINAND ops by manufacturers and also due to changes when there is a
+>>>> change in SPI protocol/mode. This prevents the core from live-patching
+>>>> and vendor-specific adjustments in ops.
+>>>>
+>>>> Define 'ctrl_ops', add macros to initialize it and add it in
+>>>> spinand_device.
+>>>>
+>>>> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+>>>> ---
+>>>>    include/linux/mtd/spinand.h | 33 +++++++++++++++++++++++++++++++++
+>>>>    1 file changed, 33 insertions(+)
+>>>>
+>>>> diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
+>>>> index 439d8ce40e1d..e5df6220ec1e 100644
+>>>> --- a/include/linux/mtd/spinand.h
+>>>> +++ b/include/linux/mtd/spinand.h
+>>>> @@ -356,6 +356,35 @@ struct spinand_op_variants {
+>>>>    			sizeof(struct spi_mem_op),			\
+>>>>    	}
+>>>>    
+>>>> +struct spinand_ctrl_ops {
+>>>> +	const struct {
+>>>> +		struct spi_mem_op reset;
+>>>> +		struct spi_mem_op get_feature;
+>>>> +		struct spi_mem_op set_feature;
+>>>> +		struct spi_mem_op write_enable;
+>>>> +		struct spi_mem_op block_erase;
+>>>> +		struct spi_mem_op page_read;
+>>>> +		struct spi_mem_op program_execute;
+>>>> +	} ops;
+>>>> +	const enum spinand_protocol protocol;
+>>> Do you really need that protocol field?
+>>>   
+>>>> +};
+>>>> +
+>>>> +#define SPINAND_CTRL_OPS(__protocol, __reset, __get_feature, __set_feature,	\
+>>>> +			 __write_enable, __block_erase, __page_read,		\
+>>>> +			 __program_execute)					\
+>>>> +	{									\
+>>>> +		.ops = {							\
+>>>> +			.reset = __reset,					\
+>>>> +			.get_feature = __get_feature,				\
+>>>> +			.set_feature = __set_feature,				\
+>>>> +			.write_enable = __write_enable,				\
+>>>> +			.block_erase = __block_erase,				\
+>>>> +			.page_read = __page_read,				\
+>>>> +			.program_execute = __program_execute,			\
+>>>> +		},								\
+>>>> +		.protocol = __protocol,						\
+>>>> +	}
+>>>> +
+>>>>    /**
+>>>>     * spinand_ecc_info - description of the on-die ECC implemented by a SPI NAND
+>>>>     *		      chip
+>>>> @@ -468,6 +497,8 @@ struct spinand_dirmap {
+>>>>     * @data_ops.read_cache: read cache op template
+>>>>     * @data_ops.write_cache: write cache op template
+>>>>     * @data_ops.update_cache: update cache op template
+>>>> + * @ctrl_ops: various SPI mem op templates for handling the flash device, i.e.
+>>>> + *	      non page-read/write ops.
+>>>>     * @select_target: select a specific target/die. Usually called before sending
+>>>>     *		   a command addressing a page or an eraseblock embedded in
+>>>>     *		   this die. Only required if your chip exposes several dies
+>>>> @@ -498,6 +529,8 @@ struct spinand_device {
+>>>>    		const struct spi_mem_op *update_cache;
+>>>>    	} data_ops;
+>>>>    
+>>>> +	const struct spinand_ctrl_ops *ctrl_ops;
+>>>> +
+>>> Okay, I had something slightly different in mind. First, I'd put all
+>>> templates in a struct:
+>>>
+>>> struct spinand_op_templates {
+>>> 	const struct spi_mem_op *read_cache;
+>>> 	const struct spi_mem_op *write_cache;
+>>> 	const struct spi_mem_op *update_cache;
+>>> 	const struct spi_mem_op *reset;
+>>> 	const struct spi_mem_op *get_feature;
+>>> 	const struct spi_mem_op *set_feature;
+>>> 	const struct spi_mem_op *write_enable;
+>>> 	const struct spi_mem_op *block_erase;
+>>> 	const struct spi_mem_op *page_load;
+>>> 	const struct spi_mem_op *program_execute;
+>>> };
+>>>
+>>> Then, at the spinand level, I'd define an array of templates:
+>>>
+>>> enum spinand_protocol {
+>>> 	SPINAND_1S_1S_1S,
+>>> 	SPINAND_2S_2S_2S,
+>>> 	SPINAND_4S_4S_4S,
+>>> 	SPINAND_8S_8S_8S,
+>>> 	SPINAND_8D_8D_8D,
+>>> 	SPINAND_NUM_PROTOCOLS,
+>>> };
+>>>
+>>> struct spinand_device {
+>>> 	...
+>>> 	enum spinand_protocol protocol;
+>>> 	const struct spinand_op_templates *op_templates[SPINAND_NUM_PROTOCOLS];
+> It should probably be
+>
+> 	struct spinand_op_templates op_templates[SPINAND_NUM_PROTOCOLS];
+>
+> with the spinand_op_templates struct defined as:
+>
+> struct spinand_op_templates {
+>   	struct spi_mem_op read_cache;
+>   	struct spi_mem_op write_cache;
+>   	struct spi_mem_op update_cache;
+>   	struct spi_mem_op reset;
+>   	struct spi_mem_op get_feature;
+>   	struct spi_mem_op set_feature;
+>   	struct spi_mem_op write_enable;
+>   	struct spi_mem_op block_erase;
+>   	struct spi_mem_op page_load;
+>   	struct spi_mem_op program_execute;
+> };
+>
+> so the NAND framework can populate these ops.
+>
+> Or maybe even better, define an enum that contains all the ops:
+>
+> enum spinand_op_id {
+> 	SPI_NAND_OP_READ_CACHE,
+> 	SPI_NAND_OP_WRITE_CACHE,
+> 	SPI_NAND_OP_UPDATE_CACHE,
+> 	SPI_NAND_OP_RESET,
+> ...
+> 	SPI_NAND_NUM_OPS,
+> };
+>
+> struct spinand_device {
+> 	...
+>   	enum spinand_protocol protocol;
+>   	struct spi_mem_op op_templates[SPINAND_NUM_PROTOCOLS][SPI_NAND_NUM_OPS];
+> 	...
+> };
+>
+>>> This way, you can easily pick the right set of operations based
+>>> on the protocol/mode you're in:
+>>>
+>>> #define spinand_get_op_template(spinand, opname) \
+>>> 	((spinand)->op_templates[(spinand)->protocol]->opname)
+>>>
+>>> static int spinand_read_reg_op(struct spinand_device *spinand, u8 reg, u8 *val)
+>>> {
+>>> 	struct spi_mem_op op = *spinand_get_op_template(spinand, get_feature);
+>>> 	int ret;
+>>>
+>>> 	...
+>>> }
+>> I find a couple of issues with this  method,
+>>
+>> 1. read_cache, write_cache, update_cache op templates don't fit well
+>> with the other non-data ops, as
+>> these data ops are used to create a dirmap, and that can be done only
+>> once at probe time. Hence, there
+>> is a different mechanism of selecting of data ops and non-data ops.
+> Not sure I see why this is a problem. You can populate data-ops for all
+> modes, and pick the one that provides the best perfs when you create
+> the dirmap (which should really be at the end of the probe, if it's not
+> already).
+>
+>> Hence, this division in the op templates
+>> struct as data_ops and ctrl_ops is required. Currently, the core only
+>> supports using a single protocol for
+>> data ops, chosen at the time of probing.
+> Again, I don't see why you need to differentiate the control and data
+> ops when populating this table. Those are just operations the NAND
+> supports, and the data operations is just a subset.
+>
+>> 2. If we use this single op_templates struct, I can't think of any good
+>> way to initialize these in the
+>> manufacturers driver (winbond.c), refer to 17th patch in this series.
+>> Could you please suggest a macro
+>> implementation also for winbond.c with the suggested op_templates struct.
+> First replace the op_variants field by something more generic:
+>
+> struct spinand_info {
+> ...
+> 	const struct spinand_op_variants **ops_variants;
+> ...
+> };
+>
+> #define SPINAND_OP_VARIANTS(_id, ...) \
+> 	[SPI_NAND_OP_ ## _id] = { __VA_ARGS__ }
+>
+> #define SPINAND_OPS_VARIANTS(name, ...)
+> 	const struct spinand_op_variants name[]{
+> 		__VA_ARGS__,
+> 	};
+>
+> #define SPINAND_INFO_OPS_VARIANTS(defs)
+> 	.ops_variants = defs
+
+If we modify these macros, it would require other spinand vendor drivers 
+to change (toshiba, micron, etc).
+The older macros suit them well, should we go about changing them to 
+this new macro (will require re-testing all of them),
+or can we keep them unchanged and have new set of macros with different 
+name (please give suggestion for it) for op variants.
+
+>
+> ...
+>
+> static SPINAND_OPS_VARIANTS(w35n01jw_ops_variants,
+> 		SPINAND_OP_VARIANTS(READ_CACHE,
+> 			SPINAND_PAGE_READ_FROM_CACHE_OCTALIO_DTR_OP(0, 24, NULL, 0),
+> 			SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0),
+> 			...)),
+> 		SPINAND_OP_VARIANTS(WRITE_CACHE,
+> 			SPINAND_PROG_LOAD_OCTALIO_DTR(true, 0, NULL, 0),
+> 			SPINAND_PROG_LOAD(true, 0, NULL, 0)),
+> 		...
+> 		SPINAND_OP_VARIANTS(RESET,
+> 			SPINAND_RESET_OP_OCTAL_DTR,
+> 			SPINAND_RESET_OP,
+> 		...
+> 		);
+> ...
+>
+>
+> 	SPINAND_INFO("W35N01JW",
+> 		     SPINAND_ID(SPINAND_READID_METHOD_OPCODE_DUMMY, 0xdc),
+> 		     NAND_MEMORG(1, 4096, 128, 64, 512, 20, 1, 1, 1),
+> 		     NAND_ECCREQ(1, 512),
+> 		     SPINAND_HAS_OCTAL_DTR_BIT | SPINAND_HAS_CR_FEAT_BIT,
+> 		     SPINAND_ECCINFO(&w35n01jw_ooblayout, NULL),
+> 		     SPINAND_INFO_OPS_VARIANTS(&w35n01jw_ops_variants)),
+>
+> You also need to adjust spinand_match_and_init() to account for this
+> new layout and put each template op in the right subset based on
+> op.cmd.width and op.cmd.dtr.
+>
+> Regards,
+>
+> Boris
