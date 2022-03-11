@@ -2,66 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A32F4D6805
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Mar 2022 18:47:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D57E24D6955
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Mar 2022 21:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350367AbiCKRsz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 11 Mar 2022 12:48:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59930 "EHLO
+        id S1351187AbiCKUUK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 11 Mar 2022 15:20:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348199AbiCKRsu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Mar 2022 12:48:50 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1140143381;
-        Fri, 11 Mar 2022 09:47:41 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22BHlDXT021105;
-        Fri, 11 Mar 2022 11:47:13 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1647020833;
-        bh=pdP+i9m2lw1qpqeGFBrxp+l79uJC+mKNJuBzp+PYH+8=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=aRiuC3tc34x7CtK/Tz9/INvJh3X3MRMjZrXxbp1LrtQPZs1uQq52SBK5vlOIOsq2d
-         aP+PwInlCWjivPgYud86F5xtAeSGGy5rVswtp4YJWBMVxIofOh74yOcJHW9C+VzPKe
-         KI1eyO+dAQwGRUNwI+9ywSNIshSEa27vjd14vW1w=
-Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22BHlDtl116195
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 11 Mar 2022 11:47:13 -0600
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 11
- Mar 2022 11:47:12 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 11 Mar 2022 11:47:12 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22BHlBZx049523;
-        Fri, 11 Mar 2022 11:47:12 -0600
-Date:   Fri, 11 Mar 2022 23:17:11 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     <Tudor.Ambarus@microchip.com>
-CC:     <michael@walle.cc>, <broonie@kernel.org>,
-        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <Nicolas.Ferre@microchip.com>,
-        <zhengxunli@mxic.com.tw>, <jaimeliao@mxic.com.tw>
-Subject: Re: [PATCH 1/4] spi: spi-mem: Allow specifying the byte order in DTR
- mode
-Message-ID: <20220311174711.wexljqvqx6cgmeub@ti.com>
-References: <20220218145900.1440045-1-tudor.ambarus@microchip.com>
- <20220218145900.1440045-2-tudor.ambarus@microchip.com>
- <20220302100255.gseqjbdyxrgmt3zf@ti.com>
- <f0501c29-ae70-185d-8f40-4a249e49575e@microchip.com>
+        with ESMTP id S1351180AbiCKUUJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Mar 2022 15:20:09 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EC71AAFDF
+        for <linux-spi@vger.kernel.org>; Fri, 11 Mar 2022 12:19:04 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id ay7so10598445oib.8
+        for <linux-spi@vger.kernel.org>; Fri, 11 Mar 2022 12:19:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=byy3khpUB/C66OcuZpBogrh1vBdJYZWOahv4ARsAqeU=;
+        b=JsI+MgGwcNWNo5mFTmDhFQFX43IPSGP8AHmpadTTq1/jegWXkSYGxRbyYSNd2GGAfZ
+         QJL9ePsqy1+pQCjIkYOKeRZF/4ou56BLTl43xcIPQgKVuLYTvOOSpWVMBXvPzi3iVcEE
+         M9OokvdpojzL0W3mpYKQGxN00uuF3MValP5LkZwv7tBK8MbHNCEdcUSp8EyQgNvmdObM
+         dV8uEHfL0A+kbdg4/kBwvllnMdB0q6LY78GBq99WSqCsQB+n/5bFK7oLoh//RzZWPskK
+         DuBKl43ZqA2bbLdc1tjjtMkwJymKeQrW5rKztLf0fnJNsCRRE5EUHhDiGz2DbwyIRrvz
+         mrcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=byy3khpUB/C66OcuZpBogrh1vBdJYZWOahv4ARsAqeU=;
+        b=jvczo/zAzICpo752ehUuuryEjnFKvqcJCuDfgxMVSQing2mEXL1CL5AY0PNlr0Dt15
+         /NovL9H7xHvK3VdAekmKxXW6sIQYx5LENjbc0eM6vEudRum+cIusJ5n58T/A4Mr9LQMa
+         BOo6633WfvvObL1Pv6z8/qsX/SN4jStJfBGbiaYmogERCK6gqC/0hUKII7kZVjWf47GK
+         1dk1L5hLU0EMfWgOIDDZ1NIcRf6SpZXDdhl5QATzcwqrQekfCyIa2pgfR79FC/iWcsN9
+         MXSBAaeazyh6jxZWGk9FOSYoyHbuze6IkWOkr4Oo+4cOe6iFxBKF0y5fVCjCwvbqVu9K
+         Tn1w==
+X-Gm-Message-State: AOAM531AcHZSMKoKgaPCfMu/DBGQz39zIb4gghL0+woWFdmAKnTDx6Tp
+        M42zn1BWeivsLpZQ/U9xK8TLYw==
+X-Google-Smtp-Source: ABdhPJwiCKmAYCnvMQUHkha6DRmgbP0TH7H+cC730Evh2nxJN9gacFfI6shVehimGVsKyYdMWq24uQ==
+X-Received: by 2002:a05:6808:1406:b0:2d9:a01a:4bcb with SMTP id w6-20020a056808140600b002d9a01a4bcbmr7858798oiv.242.1647029943809;
+        Fri, 11 Mar 2022 12:19:03 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id r41-20020a056870582900b000d6cbaf589esm3887680oap.40.2022.03.11.12.19.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 12:19:02 -0800 (PST)
+Date:   Fri, 11 Mar 2022 14:19:00 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v3 11/11] rpmsg: Fix kfree() of static memory on setting
+ driver_override
+Message-ID: <YiuutCsuf4j192cJ@builder.lan>
+References: <20220227135214.145599-1-krzysztof.kozlowski@canonical.com>
+ <20220227135329.145862-5-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f0501c29-ae70-185d-8f40-4a249e49575e@microchip.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220227135329.145862-5-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,107 +103,124 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 10/03/22 05:31AM, Tudor.Ambarus@microchip.com wrote:
-> On 3/2/22 12:02, Pratyush Yadav wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > Hi Tudor,
-> 
-> Hi, Pratyush,
-> 
-> > 
-> > I'm reviewing the code here. I still have not thought through the
-> > discussion about Kconfig option yet.
-> > 
-> > On 18/02/22 04:58PM, Tudor Ambarus wrote:
-> >> There are NOR flashes (Macronix) that swap the bytes on a 16-bit boundary
-> >> when configured in DTR mode. The byte order of 16-bit words is swapped
-> > 
-> > s/DTR mode/ Octal DTR mode/
-> > 
-> > I don't think this would apply to a 4D-4D-4D flash since it would only
-> > transmit one byte per clock cycle.
-> 
-> From what I see, flashes that claim "QPI DTR support" they actually support
-> 4S-4D-4D. JESD251-1 talks about 4S-4D-4D too. So data is latched on both rising
-> and falling edges of the clock. But I'm ok with your proposal because we don't
-> have any proof if there are any QPI DTR flashes that swap bytes in DTR.
+On Sun 27 Feb 07:53 CST 2022, Krzysztof Kozlowski wrote:
 
-I think this problem fundamentally applies to Octal DTR and above (if 
-there is ever 16-line DTR (hexadecimal DTR?) in the future). In your 4D 
-data phase, you can only send _one_ byte per cycle. So the byte order 
-inter-cycle does not matter as it does in 8D mode. Similarly, for a 
-16-line STR this would also apply, since that has 2 bytes per cycle. For 
-a 16-line DTR there are now 4 bytes per cycle and so on.
+> The driver_override field from platform driver should not be initialized
+> from static memory (string literal) because the core later kfree() it,
+> for example when driver_override is set via sysfs.
+> 
+> Use dedicated helper to set driver_override properly.
+> 
+> Fixes: 950a7388f02b ("rpmsg: Turn name service into a stand alone driver")
+> Fixes: c0cdc19f84a4 ("rpmsg: Driver for user space endpoint interface")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-And the BFPT bit that you use to enable this swap also says "Byte order 
-in 8D-8D-8D mode". So I really don't think it makes sense for QPI DTR.
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-> 
-> > 
-> >> when read or written in Double Transfer Rate (DTR) mode compared to
-> >> Single Transfer Rate (STR) mode. If one writes D0 D1 D2 D3 bytes using
-> >> 1-1-1 mode, and uses 8D-8D-8D SPI mode for reading, it will read back
-> >> D1 D0 D3 D2. Swapping the bytes is a bad design decision because this may
-> >> introduce some endianness problems. It can affect the boot sequence if the
-> >> entire boot sequence is not handled in either 8D-8D-8D mode or 1-1-1 mode.
-> >> Fortunately there are controllers that can swap back the bytes at runtime,
-> >> fixing the endiannesses. Provide a way for the upper layers to specify the
-> >> byte order in DTR mode.
-> >>
-> >> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-> >> ---
-> >>  include/linux/spi/spi-mem.h | 3 +++
-> >>  1 file changed, 3 insertions(+)
-> >>
-> >> diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-> >> index 85e2ff7b840d..e1878417420c 100644
-> >> --- a/include/linux/spi/spi-mem.h
-> >> +++ b/include/linux/spi/spi-mem.h
-> >> @@ -89,6 +89,8 @@ enum spi_mem_data_dir {
-> >>   * @dummy.dtr: whether the dummy bytes should be sent in DTR mode or not
-> >>   * @data.buswidth: number of IO lanes used to send/receive the data
-> >>   * @data.dtr: whether the data should be sent in DTR mode or not
-> >> + * @data.dtr_bswap16: whether the byte order of 16-bit words is swapped when
-> >> + *                 read or written in DTR mode compared to STR mode.
-> >>   * @data.dir: direction of the transfer
-> >>   * @data.nbytes: number of data bytes to send/receive. Can be zero if the
-> >>   *            operation does not involve transferring data
-> >> @@ -119,6 +121,7 @@ struct spi_mem_op {
-> >>       struct {
-> >>               u8 buswidth;
-> >>               u8 dtr : 1;
-> >> +             u8 dtr_bswap16 : 1;
-> 
-> but I would keep this name here as it is, without prepending octal.
-
-I won't nitpick much on the member name as long as the comment 
-describing its role is clear enough.
-
-> 
-> > 
-> > You also need to add this capability to spi_controller_mem_caps and
-> > update spi_mem_default_supports_op() to check for it.
-> 
-> sure, will do.
-> 
-> Thanks!
-> ta
-> > 
-> >>               enum spi_mem_data_dir dir;
-> >>               unsigned int nbytes;
-> >>               union {
-> >> --
-> >> 2.25.1
-> >>
-> > 
-> > --
-> > Regards,
-> > Pratyush Yadav
-> > Texas Instruments Inc.
-> 
-
--- 
 Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+Bjorn
+
+> ---
+>  drivers/rpmsg/rpmsg_core.c     |  3 ++-
+>  drivers/rpmsg/rpmsg_internal.h | 13 +++++++++++--
+>  drivers/rpmsg/rpmsg_ns.c       | 14 ++++++++++++--
+>  include/linux/rpmsg.h          |  6 ++++--
+>  4 files changed, 29 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+> index d9e612f4f0f2..6e2bf2742973 100644
+> --- a/drivers/rpmsg/rpmsg_core.c
+> +++ b/drivers/rpmsg/rpmsg_core.c
+> @@ -397,7 +397,8 @@ field##_store(struct device *dev, struct device_attribute *attr,	\
+>  	      const char *buf, size_t sz)				\
+>  {									\
+>  	struct rpmsg_device *rpdev = to_rpmsg_device(dev);		\
+> -	char *new, *old;						\
+> +	const char *old;						\
+> +	char *new;							\
+>  									\
+>  	new = kstrndup(buf, sz, GFP_KERNEL);				\
+>  	if (!new)							\
+> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
+> index b1245d3ed7c6..31345d6e9a7e 100644
+> --- a/drivers/rpmsg/rpmsg_internal.h
+> +++ b/drivers/rpmsg/rpmsg_internal.h
+> @@ -92,10 +92,19 @@ int rpmsg_release_channel(struct rpmsg_device *rpdev,
+>   */
+>  static inline int rpmsg_chrdev_register_device(struct rpmsg_device *rpdev)
+>  {
+> +	int ret;
+> +
+>  	strcpy(rpdev->id.name, "rpmsg_chrdev");
+> -	rpdev->driver_override = "rpmsg_chrdev";
+> +	ret = driver_set_override(&rpdev->dev, &rpdev->driver_override,
+> +				  "rpmsg_chrdev", strlen("rpmsg_chrdev"));
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = rpmsg_register_device(rpdev);
+> +	if (ret)
+> +		kfree(rpdev->driver_override);
+>  
+> -	return rpmsg_register_device(rpdev);
+> +	return ret;
+>  }
+>  
+>  #endif
+> diff --git a/drivers/rpmsg/rpmsg_ns.c b/drivers/rpmsg/rpmsg_ns.c
+> index 762ff1ae279f..95a51543f5ad 100644
+> --- a/drivers/rpmsg/rpmsg_ns.c
+> +++ b/drivers/rpmsg/rpmsg_ns.c
+> @@ -20,12 +20,22 @@
+>   */
+>  int rpmsg_ns_register_device(struct rpmsg_device *rpdev)
+>  {
+> +	int ret;
+> +
+>  	strcpy(rpdev->id.name, "rpmsg_ns");
+> -	rpdev->driver_override = "rpmsg_ns";
+> +	ret = driver_set_override(&rpdev->dev, &rpdev->driver_override,
+> +				  "rpmsg_ns", strlen("rpmsg_ns"));
+> +	if (ret)
+> +		return ret;
+> +
+>  	rpdev->src = RPMSG_NS_ADDR;
+>  	rpdev->dst = RPMSG_NS_ADDR;
+>  
+> -	return rpmsg_register_device(rpdev);
+> +	ret = rpmsg_register_device(rpdev);
+> +	if (ret)
+> +		kfree(rpdev->driver_override);
+> +
+> +	return ret;
+>  }
+>  EXPORT_SYMBOL(rpmsg_ns_register_device);
+>  
+> diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
+> index 02fa9116cd60..20c8cd1cde21 100644
+> --- a/include/linux/rpmsg.h
+> +++ b/include/linux/rpmsg.h
+> @@ -41,7 +41,9 @@ struct rpmsg_channel_info {
+>   * rpmsg_device - device that belong to the rpmsg bus
+>   * @dev: the device struct
+>   * @id: device id (used to match between rpmsg drivers and devices)
+> - * @driver_override: driver name to force a match
+> + * @driver_override: driver name to force a match; do not set directly,
+> + *                   because core frees it; use driver_set_override() to
+> + *                   set or clear it.
+>   * @src: local address
+>   * @dst: destination address
+>   * @ept: the rpmsg endpoint of this channel
+> @@ -51,7 +53,7 @@ struct rpmsg_channel_info {
+>  struct rpmsg_device {
+>  	struct device dev;
+>  	struct rpmsg_device_id id;
+> -	char *driver_override;
+> +	const char *driver_override;
+>  	u32 src;
+>  	u32 dst;
+>  	struct rpmsg_endpoint *ept;
+> -- 
+> 2.32.0
+> 
