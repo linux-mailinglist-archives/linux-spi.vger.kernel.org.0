@@ -2,109 +2,118 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6A54D581D
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Mar 2022 03:25:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B37E94D5873
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Mar 2022 03:56:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235609AbiCKC0t (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 10 Mar 2022 21:26:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
+        id S1345789AbiCKC4N (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 10 Mar 2022 21:56:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243490AbiCKC0r (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Mar 2022 21:26:47 -0500
-X-Greylist: delayed 359 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Mar 2022 18:25:45 PST
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99E91A616E
-        for <linux-spi@vger.kernel.org>; Thu, 10 Mar 2022 18:25:45 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id A99785C01D7;
-        Thu, 10 Mar 2022 21:20:07 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Thu, 10 Mar 2022 21:20:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; bh=VaT3pxot9g5Z0z
-        nqn/4P4m9tGg8Kgve6dIgEH+GSsDY=; b=c1JBDvpgFPlaeZTszV7UGRyh8S2NjC
-        6sEMyBHPKesGgJjUjU61rYHnAWwYBSRhIWpvcKaBJsB8Ed9f/vDoQ0Mfcwn6ii5A
-        MMPQ2MC18yRADliZ1/8Z2qIC0/o/73sZcobS96HTy8CZqtjTrYvgu0RmhYLpzGcH
-        81oCzC84ESje5ySiiEpId2g1zChMQo5AtVEkmvzQiIRRihi5TMYrCHllEh+hj/cF
-        5foiVKPL1mN4xA+vrPWxHXiEvJN/qbwV9K/oYnZj3bwH966JYypP3yVO0nIB5/1u
-        jwSSXVyUT9I6yWguap8gvFZMgx8lPOttuhHoAdnhXEDSZ04smbiD9Vdw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=VaT3pxot9g5Z0znqn/4P4m9tGg8Kgve6dIgEH+GSs
-        DY=; b=Z3niQzn0nDkRgp+6zy4wb0trcNr4NLEYJU3rldoy0Zr3PMOaw8GneciQs
-        mG8VNqCXi1TiP9LC2evCnVY4nCrYGcdRBP5lTIvYsGAaCmtr14nkM8rP9rjuvS1N
-        0LEG4jH+rq/n7rpCQzoRZ+vaQXZ02HW3XJg1S1+N8ZZkMfzK0UO3J2CzpgPWxWH9
-        R9DV1PxJfI4U73UWbDXget2EqhB/XVFCKigQOZV3zWHXIKqTKMHpo+ciQwx+n2D8
-        U8Ll4wr2hjhkWaJLarOlLQNyEjesfzX6ZFkTOEwIzgg7boBUENOpkKpbDbRgxqT4
-        p1+X5cQaMqhTspqqN1Xbk8JzLWG8Q==
-X-ME-Sender: <xms:17EqYpiP4iwS9UPBvddr7vWnAEtN4EZ8Ysh14sPr0vQNu-oSXNnU8A>
-    <xme:17EqYuDPjyFdWRebyaVeriQBkqBoSP2g7tUjxPduG8FaqWCGmJ1cWpbOdfMLrAYc5
-    OxLIViNdhQLrWubxg>
-X-ME-Received: <xmr:17EqYpEa31hi9are-bzUTIWXgMKhK5p8uHrUmYo4K6JiJFdqopk9d4MUOm49Ssb_zvbf7VfbuJCPZKT-gkYW_XiT7nbbxKgBGTRzewnNYzPjc4yWmqve4r_DhA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddvuddggeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepgfevffetleehffejueekvdekvdeitdehveegfeekheeuieeiueet
-    uefgtedtgeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:17EqYuQBbMm-L6xdLC1dUXZ7ARDnkaPyOj84iFQ6qRQ4z4ZtbPePUA>
-    <xmx:17EqYmxqI3-G6XEuvlDR9wY47p3ko2bwg47e2FUPZHjG7aAE5wFlxQ>
-    <xmx:17EqYk70JzhrqVxn3zA8SdAiZdP8qzh-hyULriknL_Fl1tvecKnTCQ>
-    <xmx:17EqYqhMsJJm5Co2_7TQzt7WoKELl2wqokXDKGjikTQlteGPW-tl-Q>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 10 Mar 2022 21:20:04 -0500 (EST)
-Subject: Re: [PATCH 12/14] ARM: dts: suniv: licheepi-nano: add SPI flash
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mesih Kilinc <mesihkilinc@gmail.com>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Jesse Taube <mr.bossman075@gmail.com>,
-        Giulio Benetti <giulio.benetti@benettiengineering.com>,
-        George Hilliard <thirtythreeforty@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, Mark Brown <broonie@kernel.org>,
-        linux-spi@vger.kernel.org
-References: <20220307143421.1106209-1-andre.przywara@arm.com>
- <20220307143421.1106209-13-andre.przywara@arm.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <4fc0ea6a-f08d-3032-fc8b-373b80edc5cb@sholland.org>
-Date:   Thu, 10 Mar 2022 20:20:04 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        with ESMTP id S1345811AbiCKC4M (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 10 Mar 2022 21:56:12 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B941A6F97;
+        Thu, 10 Mar 2022 18:55:08 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id mv5-20020a17090b198500b001bf2a039831so9880316pjb.5;
+        Thu, 10 Mar 2022 18:55:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Me7hT9AANgy5+2Wv0ivBaS8/sti8zcauVvAwoiWjGZ8=;
+        b=LBYuGtdQ52NNz1BpOrKepKeWw3H0APbePuZdtR8reLvS4ufZLcGHyAJ+NkYSxEwbsR
+         1L4pPldLz6w7oBlQKyTdvQvgLWPfEBb2oNJXaYraH0uey/fmAzjfOg2HD511FBAYb06e
+         U3jcaitOJur6kmuAfFtSRRsqRbGM/Tr9fkwUnjfmLfKa6ephY3HRzoddeCPyZp1L2kgW
+         T+/vLS3AvOTbpPuAWBVjlFdeU6qBZVlVwwCBW5LdgZFJc2u44V9AL4HCZtwhwBWWD4wW
+         qEAzqmHCNQeXuIxXbv0F+fQmYniPBUq6T0FCzQZWONRELMatbefTz/BBpgRPY1qeEPDu
+         xD4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Me7hT9AANgy5+2Wv0ivBaS8/sti8zcauVvAwoiWjGZ8=;
+        b=Ilign7OFgdQ+JtscWu84Lg2U1lisH5cLqTrRFQSZPfBQyEvh7EbxgZutGtMenuKy4w
+         m6+I0B+Bzm3OBZgJeWbq7y5AeI2nvwV6o0PYAfeT7CAdp0WUNL4Sk8ye7kZTqVTaObdV
+         a2oTBoe/mChaJv9GT6KliJMy+ECbTuHdFDX0VaOcoXoPufs2tBe88rRXkAIdi0M8P+8v
+         aIVTqyLtRW743OsyGFutN3FGyaP5C4v0Ba3+p9pjt6MVJz0cy/XXKSdART9yrdLCsIDt
+         mlIFuZpkCEIdFl96tfjBCLuRwgWFNmH8jrZtNuHVwNdnZGO+xj89yfT6CgGwWYW2mJQf
+         nUEg==
+X-Gm-Message-State: AOAM532mWiM1zSqJGRlGF8Yg7bvnireRpOcjHkFulSzKSile8ObC5GIl
+        CrYwP7AEUydADIXUWU84xmI=
+X-Google-Smtp-Source: ABdhPJzmED5JxuqhDqb9IERzE0ga9+GHJcB/S360Jr/np9+iD9u0O6IBcfMXq3aOZZ9/ga5WV+ewxQ==
+X-Received: by 2002:a17:902:ce09:b0:151:96e2:d4b5 with SMTP id k9-20020a170902ce0900b0015196e2d4b5mr8008486plg.3.1646967308379;
+        Thu, 10 Mar 2022 18:55:08 -0800 (PST)
+Received: from 9a2d8922b8f1 ([122.161.53.68])
+        by smtp.gmail.com with ESMTPSA id g13-20020a056a000b8d00b004f75395b2b4sm8398196pfj.55.2022.03.10.18.55.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 18:55:08 -0800 (PST)
+Date:   Fri, 11 Mar 2022 08:25:02 +0530
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: spi: Update clocks property for ARM
+ pl022
+Message-ID: <20220311025502.GB54098@9a2d8922b8f1>
+References: <20220308072125.38381-1-singh.kuldeep87k@gmail.com>
+ <Yip2MZdQNjMz/Cos@robh.at.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20220307143421.1106209-13-andre.przywara@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yip2MZdQNjMz/Cos@robh.at.kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 3/7/22 8:34 AM, Andre Przywara wrote:
-> Most LicheePi Nano boards come with soldered SPI flash, so enable SPI0
-> in the .dts and describe the flash chip. There is evidence of different
-> flash chips used, also of boards with no flash chip soldered, but the
-> Winbond 16MiB model is the most common, so use that for the compatible
-> string.  The actual flash chip model will be auto-detected at runtime
-> anyway.
+On Thu, Mar 10, 2022 at 04:05:37PM -0600, Rob Herring wrote:
+> On Tue, Mar 08, 2022 at 12:51:24PM +0530, Kuldeep Singh wrote:
+> > Add missing minItems property to clocks in ARM pl022 bindings.
+> > 
+> > This helps in resolving below warnings:
+> > clocks: [[4]] is too short
+> > clock-names: ['apb_pclk'] is too short
 > 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> Again, the error is in the dts files, not the schema.
 
-Acked-by: Samuel Holland <samuel@sholland.org>
+Rob, kindly note this series number is deprecated and I have sent v3
+version some time back. Here's the link:
+
+https://lore.kernel.org/linux-spi/20220309171847.5345-1-singh.kuldeep87k@gmail.com/T/#u
+
+> 
+> 
+> There's 2 possible answers. First, both clock inputs use the same source 
+> clock. That's an easy fix. List the clock twice. Second, one clock is 
+> not described in DT or visible to s/w. It still has to be in the h/w and 
+> could be described as a 'fixed-clock'. A DT should either be all in with 
+> clocks or not use the clock binding IMO. Describing some clocks and not 
+> others is not a good solution.
+> 
+> For example, let's look at bcm-cygnus as one of the single clock 
+> examples. The first thing I notice is there is a apb_pclk already 
+> defined. The pl330 uses it. The watchdog (also Primecell) lists the 
+> source clock twice. So what should pl022 be? IDK, ask the Broadcom 
+> folks. If they don't know, then list the source clock twice. That's 
+> effectively no change from what we have now.
+
+Yes, I took motivation from sp805 watchdog(primecell) while resolving DT
+conflicts. I found LG and amd seattle platform with single clock in DT
+for which I have sent patches. Link is below:
+
+https://lore.kernel.org/linux-devicetree/CAL_Jsq+k+ridWTkdy4xwTC7VxUTU8tu+Q2BA9kbQVA222PWvZw@mail.gmail.com/
+
+Moreover, I observed that clocks and clock-names are not required
+properties for pl022. I am wondering reason behind the same when you
+first made changes. Any specific reason not adding them which I am not
+aware of or it just got missed?
+
+- Kuldeep
