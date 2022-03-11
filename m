@@ -2,56 +2,50 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 953784D610D
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Mar 2022 12:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F324D626E
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Mar 2022 14:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbiCKLz0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 11 Mar 2022 06:55:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
+        id S240720AbiCKNeY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 11 Mar 2022 08:34:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242969AbiCKLz0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Mar 2022 06:55:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA7514CCA7;
-        Fri, 11 Mar 2022 03:54:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B829061D00;
-        Fri, 11 Mar 2022 11:54:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7F1BC340E9;
-        Fri, 11 Mar 2022 11:54:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646999662;
-        bh=ykSXSV6tQWA2E+or1u18GiVLKsanR1JUBZpDAnWso2I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ESQc/AGN91K3UbGs/tXKANTj5neQ8S1R9b4+VBWDYIfim/6FhHVMZ3b0qqbQt5pUL
-         umocvHubvU6PbxqKaQgRuwO9P6keUe5pZ7hL4Vs5m/tWuBl4ypT4wwzBhHf8qAUkAv
-         CVMl4zq7zOdx0As2GMaqVSLbZc7SiGUVD23Dvb9XCJgL6cVE15t8xvEezbtQzGbYfb
-         BjY8PT6R4DI9Kd9rDMB1ZUdLcRk4Pm5Nb3+J44PUuNqJGehiCqJjVD2azxRB1ReDBQ
-         bMFJQjIMYpBcHrV58lKGzRmX/7qs8bfa7z08WjEqAJPtMYi7/4CaWmZtE+cdDCXf9C
-         69QjueolzFRgQ==
-Date:   Fri, 11 Mar 2022 11:54:17 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Amit Kumar Kumar Mahapatra <akumarma@xilinx.com>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        git <git@xilinx.com>, Michal Simek <michals@xilinx.com>
-Subject: Re: [PATCH 2/2] spi: spi-cadence: Fix kernel-doc format for
- resume/suspend
-Message-ID: <Yis4aZmoO3ANXigm@sirena.org.uk>
-References: <20220310164235.32230-1-amit.kumar-mahapatra@xilinx.com>
- <20220310164235.32230-3-amit.kumar-mahapatra@xilinx.com>
- <YipHjjg/sLRqQVX6@sirena.org.uk>
- <BN0PR02MB7933108D2F4C657D850CE131BA0C9@BN0PR02MB7933.namprd02.prod.outlook.com>
+        with ESMTP id S243586AbiCKNeX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Mar 2022 08:34:23 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FA671342F3;
+        Fri, 11 Mar 2022 05:33:19 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A647D14BF;
+        Fri, 11 Mar 2022 05:33:18 -0800 (PST)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB26B3FA27;
+        Fri, 11 Mar 2022 05:33:16 -0800 (PST)
+Date:   Fri, 11 Mar 2022 13:33:14 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mesih Kilinc <mesihkilinc@gmail.com>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        Jesse Taube <mr.bossman075@gmail.com>,
+        Giulio Benetti <giulio.benetti@benettiengineering.com>,
+        George Hilliard <thirtythreeforty@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH 11/14] ARM: dts: suniv: F1C100: add SPI support
+Message-ID: <20220311133314.739ebab4@donnerap.cambridge.arm.com>
+In-Reply-To: <15ed4319-9645-089c-9977-94dfd2fd79c5@sholland.org>
+References: <20220307143421.1106209-1-andre.przywara@arm.com>
+        <20220307143421.1106209-12-andre.przywara@arm.com>
+        <15ed4319-9645-089c-9977-94dfd2fd79c5@sholland.org>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3T6Cyi7jzuUct+9P"
-Content-Disposition: inline
-In-Reply-To: <BN0PR02MB7933108D2F4C657D850CE131BA0C9@BN0PR02MB7933.namprd02.prod.outlook.com>
-X-Cookie: A fool and his money are soon popular.
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,37 +54,102 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On Thu, 10 Mar 2022 20:19:57 -0600
+Samuel Holland <samuel@sholland.org> wrote:
 
---3T6Cyi7jzuUct+9P
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Samuel,
 
-On Fri, Mar 11, 2022 at 11:32:57AM +0000, Amit Kumar Kumar Mahapatra wrote:
+many thanks for having a look!
 
-> 1/2 patch of this series aligns the runtime suspend/resume API prefix wit=
-h the=20
-> rest of the functions by changing it from "cnds" to "cdns".
-> 2/2 patch of this series fixes the kernel-doc warning in runtime suspend/=
-resume=20
-> APIs.=20
+> On 3/7/22 8:34 AM, Andre Przywara wrote:
+> > The F1C100 series contains two SPI controllers, and many boards use SPI0
+> > for a SPI flash, as the BROM is able to boot from that.
+> > 
+> > Describe the two controllers in the SoC .dtsi, and also add the PortC
+> > pins for SPI0, since this is where BROM looks at when trying to boot
+> > from the commonly used SPI flash.
+> > 
+> > The SPI controller seems to be the same as in the H3 chips, but it lacks
+> > a separate mod clock. The manual says it's connected to AHB directly.
+> > We don't export that AHB clock directly, but can use the AHB *gate* clock
+> > as a clock source, since the MMC driver is not supposed to change the AHB  
+> 
+> Do you mean the SPI driver here?
 
-The warning being fixed is that the name of the runtime suspend/resume
-functions which were just renamed doesn't match the documentation.
+Yes, indeed.
 
---3T6Cyi7jzuUct+9P
-Content-Type: application/pgp-signature; name="signature.asc"
+> 
+> > frequency anyway.
+> > 
+> > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> > ---
+> >  arch/arm/boot/dts/suniv-f1c100s.dtsi | 33 ++++++++++++++++++++++++++++
+> >  1 file changed, 33 insertions(+)
+> > 
+> > diff --git a/arch/arm/boot/dts/suniv-f1c100s.dtsi b/arch/arm/boot/dts/suniv-f1c100s.dtsi
+> > index 6f2f97458fe0..f8ec1c7a2ca9 100644
+> > --- a/arch/arm/boot/dts/suniv-f1c100s.dtsi
+> > +++ b/arch/arm/boot/dts/suniv-f1c100s.dtsi
+> > @@ -105,6 +105,34 @@ mmc1: mmc@1c10000 {
+> >  			#size-cells = <0>;
+> >  		};
+> >  
+> > +		spi0: spi@1c05000 {
+> > +			compatible = "allwinner,suniv-f1c100s-spi",
+> > +				     "allwinner,sun8i-h3-spi";
+> > +			reg = <0x01c05000 0x1000>;
+> > +			interrupts = <10>;
+> > +			clocks = <&ccu CLK_BUS_SPI0>, <&ccu CLK_BUS_SPI0>;
+> > +			clock-names = "ahb", "mod";
+> > +			resets = <&ccu RST_BUS_SPI0>;
+> > +			status = "disabled";
+> > +			num-cs = <1>;
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +		};
+> > +
+> > +		spi1: spi@1c06000 {
+> > +			compatible = "allwinner,suniv-f1c100s-spi",
+> > +				     "allwinner,sun8i-h3-spi";
+> > +			reg = <0x01c06000 0x1000>;
+> > +			interrupts = <11>;
+> > +			clocks = <&ccu CLK_BUS_SPI1>, <&ccu CLK_BUS_SPI1>;
+> > +			clock-names = "ahb", "mod";
+> > +			resets = <&ccu RST_BUS_SPI1>;
+> > +			status = "disabled";
+> > +			num-cs = <1>;
+> > +			#address-cells = <1>;
+> > +			#size-cells = <0>;
+> > +		};
+> > +  
+> 
+> Please keep the nodes sorted by address. These should come before the MMC
+> controllers.
 
------BEGIN PGP SIGNATURE-----
+Argh, sorry, I thought I fixed that up, but it must have messed that
+up after a rebase.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIrOGgACgkQJNaLcl1U
-h9B1nAf9EIt9LcIFxF2fFRJ4cWaxW6H6fYMllvbXw+QaMCodrtaNyd9KBZapOPsK
-pgZKRxyC8x4PrXGZhab2lzv+jPKwaqiVJgP81slxi90ZwexMfO3KYoOGZM6c3bfE
-6NcCyQB8dF653GLZImX9F+39YIAeRvctU+Yzn4ihLIm7lbsOlpyoGTRphY5MBP9O
-AazijygAnSxS0gjkWQacfAmBaopHMx5BPsUk6PP/s1Ekq/DQMVxG13wUE9u3G90B
-4iO89KYADda/8MOZ3IV0Zjc5o5WbxOQAIgPMZBNeluWmA5vMS2Wn2UcyVz6THzfz
-dj1gw4RZqUBqIPI4HNxYFwRFeOG9Mg==
-=zhAd
------END PGP SIGNATURE-----
+Will send a fixed version.
 
---3T6Cyi7jzuUct+9P--
+Cheers,
+Andre
+
+> 
+> >  		ccu: clock@1c20000 {
+> >  			compatible = "allwinner,suniv-f1c100s-ccu";
+> >  			reg = <0x01c20000 0x400>;
+> > @@ -138,6 +166,11 @@ mmc0_pins: mmc0-pins {
+> >  				drive-strength = <30>;
+> >  			};
+> >  
+> > +			spi0_pc_pins: spi0-pc-pins {
+> > +				pins = "PC0", "PC1", "PC2", "PC3";
+> > +				function = "spi0";
+> > +			};
+> > +
+> >  			uart0_pe_pins: uart0-pe-pins {
+> >  				pins = "PE0", "PE1";
+> >  				function = "uart0";
+> >   
+> 
+
