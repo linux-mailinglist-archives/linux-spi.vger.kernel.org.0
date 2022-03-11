@@ -2,100 +2,52 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D57E24D6955
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Mar 2022 21:19:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C754D6966
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Mar 2022 21:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351187AbiCKUUK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 11 Mar 2022 15:20:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
+        id S1351228AbiCKUYF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 11 Mar 2022 15:24:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351180AbiCKUUJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Mar 2022 15:20:09 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EC71AAFDF
-        for <linux-spi@vger.kernel.org>; Fri, 11 Mar 2022 12:19:04 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id ay7so10598445oib.8
-        for <linux-spi@vger.kernel.org>; Fri, 11 Mar 2022 12:19:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=byy3khpUB/C66OcuZpBogrh1vBdJYZWOahv4ARsAqeU=;
-        b=JsI+MgGwcNWNo5mFTmDhFQFX43IPSGP8AHmpadTTq1/jegWXkSYGxRbyYSNd2GGAfZ
-         QJL9ePsqy1+pQCjIkYOKeRZF/4ou56BLTl43xcIPQgKVuLYTvOOSpWVMBXvPzi3iVcEE
-         M9OokvdpojzL0W3mpYKQGxN00uuF3MValP5LkZwv7tBK8MbHNCEdcUSp8EyQgNvmdObM
-         dV8uEHfL0A+kbdg4/kBwvllnMdB0q6LY78GBq99WSqCsQB+n/5bFK7oLoh//RzZWPskK
-         DuBKl43ZqA2bbLdc1tjjtMkwJymKeQrW5rKztLf0fnJNsCRRE5EUHhDiGz2DbwyIRrvz
-         mrcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=byy3khpUB/C66OcuZpBogrh1vBdJYZWOahv4ARsAqeU=;
-        b=jvczo/zAzICpo752ehUuuryEjnFKvqcJCuDfgxMVSQing2mEXL1CL5AY0PNlr0Dt15
-         /NovL9H7xHvK3VdAekmKxXW6sIQYx5LENjbc0eM6vEudRum+cIusJ5n58T/A4Mr9LQMa
-         BOo6633WfvvObL1Pv6z8/qsX/SN4jStJfBGbiaYmogERCK6gqC/0hUKII7kZVjWf47GK
-         1dk1L5hLU0EMfWgOIDDZ1NIcRf6SpZXDdhl5QATzcwqrQekfCyIa2pgfR79FC/iWcsN9
-         MXSBAaeazyh6jxZWGk9FOSYoyHbuze6IkWOkr4Oo+4cOe6iFxBKF0y5fVCjCwvbqVu9K
-         Tn1w==
-X-Gm-Message-State: AOAM531AcHZSMKoKgaPCfMu/DBGQz39zIb4gghL0+woWFdmAKnTDx6Tp
-        M42zn1BWeivsLpZQ/U9xK8TLYw==
-X-Google-Smtp-Source: ABdhPJwiCKmAYCnvMQUHkha6DRmgbP0TH7H+cC730Evh2nxJN9gacFfI6shVehimGVsKyYdMWq24uQ==
-X-Received: by 2002:a05:6808:1406:b0:2d9:a01a:4bcb with SMTP id w6-20020a056808140600b002d9a01a4bcbmr7858798oiv.242.1647029943809;
-        Fri, 11 Mar 2022 12:19:03 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id r41-20020a056870582900b000d6cbaf589esm3887680oap.40.2022.03.11.12.19.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 12:19:02 -0800 (PST)
-Date:   Fri, 11 Mar 2022 14:19:00 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v3 11/11] rpmsg: Fix kfree() of static memory on setting
- driver_override
-Message-ID: <YiuutCsuf4j192cJ@builder.lan>
-References: <20220227135214.145599-1-krzysztof.kozlowski@canonical.com>
- <20220227135329.145862-5-krzysztof.kozlowski@canonical.com>
+        with ESMTP id S1348009AbiCKUYB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Mar 2022 15:24:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C259811A36;
+        Fri, 11 Mar 2022 12:22:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DDD561F75;
+        Fri, 11 Mar 2022 20:22:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64346C340E9;
+        Fri, 11 Mar 2022 20:22:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647030176;
+        bh=hGX9MsfyNkk7q3/BlkAl2hVFK1xekhCsP3ahf/1eBZ0=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=FZzy1vAB32AauL3AM70HR1hnX/R8uBfnFcrLuxNFJ4LdBrP9hRWNqjgcNYG1J910+
+         kcAri5HLRJBA8JFJ9aCMIdsF98nNIGg/RNiNxDDK3Z8os9YY6XwQEpWFDpqJz3kIRk
+         pUpK/bxQXOMUiu27vQt6Ob4btlk81yQIU6W52k4pbNM0cF9KK5+oSp/hCTs0DAHDN6
+         7HIObJDUhp6ALhn1Evz9oSegoPYoXaJuE/PYWY8Fbghhng20eSNEsTTaPvwQi33uhx
+         hRssiLji+0majkXHLAHJ2cdqbsGHjevGMKK7ZXdAzdgSmuvIyNDdNg13jwFW8lB2LM
+         wmkX3ROltPnbQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+In-Reply-To: <20220309171847.5345-1-singh.kuldeep87k@gmail.com>
+References: <20220309171847.5345-1-singh.kuldeep87k@gmail.com>
+Subject: Re: [PATCH v3] spi: Update clock-names property for arm pl022
+Message-Id: <164703017513.264521.4229870520812086440.b4-ty@kernel.org>
+Date:   Fri, 11 Mar 2022 20:22:55 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220227135329.145862-5-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,124 +55,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun 27 Feb 07:53 CST 2022, Krzysztof Kozlowski wrote:
-
-> The driver_override field from platform driver should not be initialized
-> from static memory (string literal) because the core later kfree() it,
-> for example when driver_override is set via sysfs.
+On Wed, 9 Mar 2022 22:48:47 +0530, Kuldeep Singh wrote:
+> PL022 has two input clocks named sspclk and apb_pclk. Current schema
+> refers to two notations of sspclk which are indeed same and thus one can
+> be dropped. Update clock-names property to reflect the same.
 > 
-> Use dedicated helper to set driver_override properly.
 > 
-> Fixes: 950a7388f02b ("rpmsg: Turn name service into a stand alone driver")
-> Fixes: c0cdc19f84a4 ("rpmsg: Driver for user space endpoint interface")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Applied to
 
-Regards,
-Bjorn
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> ---
->  drivers/rpmsg/rpmsg_core.c     |  3 ++-
->  drivers/rpmsg/rpmsg_internal.h | 13 +++++++++++--
->  drivers/rpmsg/rpmsg_ns.c       | 14 ++++++++++++--
->  include/linux/rpmsg.h          |  6 ++++--
->  4 files changed, 29 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-> index d9e612f4f0f2..6e2bf2742973 100644
-> --- a/drivers/rpmsg/rpmsg_core.c
-> +++ b/drivers/rpmsg/rpmsg_core.c
-> @@ -397,7 +397,8 @@ field##_store(struct device *dev, struct device_attribute *attr,	\
->  	      const char *buf, size_t sz)				\
->  {									\
->  	struct rpmsg_device *rpdev = to_rpmsg_device(dev);		\
-> -	char *new, *old;						\
-> +	const char *old;						\
-> +	char *new;							\
->  									\
->  	new = kstrndup(buf, sz, GFP_KERNEL);				\
->  	if (!new)							\
-> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
-> index b1245d3ed7c6..31345d6e9a7e 100644
-> --- a/drivers/rpmsg/rpmsg_internal.h
-> +++ b/drivers/rpmsg/rpmsg_internal.h
-> @@ -92,10 +92,19 @@ int rpmsg_release_channel(struct rpmsg_device *rpdev,
->   */
->  static inline int rpmsg_chrdev_register_device(struct rpmsg_device *rpdev)
->  {
-> +	int ret;
-> +
->  	strcpy(rpdev->id.name, "rpmsg_chrdev");
-> -	rpdev->driver_override = "rpmsg_chrdev";
-> +	ret = driver_set_override(&rpdev->dev, &rpdev->driver_override,
-> +				  "rpmsg_chrdev", strlen("rpmsg_chrdev"));
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = rpmsg_register_device(rpdev);
-> +	if (ret)
-> +		kfree(rpdev->driver_override);
->  
-> -	return rpmsg_register_device(rpdev);
-> +	return ret;
->  }
->  
->  #endif
-> diff --git a/drivers/rpmsg/rpmsg_ns.c b/drivers/rpmsg/rpmsg_ns.c
-> index 762ff1ae279f..95a51543f5ad 100644
-> --- a/drivers/rpmsg/rpmsg_ns.c
-> +++ b/drivers/rpmsg/rpmsg_ns.c
-> @@ -20,12 +20,22 @@
->   */
->  int rpmsg_ns_register_device(struct rpmsg_device *rpdev)
->  {
-> +	int ret;
-> +
->  	strcpy(rpdev->id.name, "rpmsg_ns");
-> -	rpdev->driver_override = "rpmsg_ns";
-> +	ret = driver_set_override(&rpdev->dev, &rpdev->driver_override,
-> +				  "rpmsg_ns", strlen("rpmsg_ns"));
-> +	if (ret)
-> +		return ret;
-> +
->  	rpdev->src = RPMSG_NS_ADDR;
->  	rpdev->dst = RPMSG_NS_ADDR;
->  
-> -	return rpmsg_register_device(rpdev);
-> +	ret = rpmsg_register_device(rpdev);
-> +	if (ret)
-> +		kfree(rpdev->driver_override);
-> +
-> +	return ret;
->  }
->  EXPORT_SYMBOL(rpmsg_ns_register_device);
->  
-> diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
-> index 02fa9116cd60..20c8cd1cde21 100644
-> --- a/include/linux/rpmsg.h
-> +++ b/include/linux/rpmsg.h
-> @@ -41,7 +41,9 @@ struct rpmsg_channel_info {
->   * rpmsg_device - device that belong to the rpmsg bus
->   * @dev: the device struct
->   * @id: device id (used to match between rpmsg drivers and devices)
-> - * @driver_override: driver name to force a match
-> + * @driver_override: driver name to force a match; do not set directly,
-> + *                   because core frees it; use driver_set_override() to
-> + *                   set or clear it.
->   * @src: local address
->   * @dst: destination address
->   * @ept: the rpmsg endpoint of this channel
-> @@ -51,7 +53,7 @@ struct rpmsg_channel_info {
->  struct rpmsg_device {
->  	struct device dev;
->  	struct rpmsg_device_id id;
-> -	char *driver_override;
-> +	const char *driver_override;
->  	u32 src;
->  	u32 dst;
->  	struct rpmsg_endpoint *ept;
-> -- 
-> 2.32.0
-> 
+Thanks!
+
+[1/1] spi: Update clock-names property for arm pl022
+      commit: 1889421a891ff439b25495011b8b75f81660abca
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
