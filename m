@@ -2,198 +2,174 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10BE4D6724
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Mar 2022 18:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A32F4D6805
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Mar 2022 18:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233283AbiCKRHI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 11 Mar 2022 12:07:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
+        id S1350367AbiCKRsz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 11 Mar 2022 12:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbiCKRHH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Mar 2022 12:07:07 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CECA9954
-        for <linux-spi@vger.kernel.org>; Fri, 11 Mar 2022 09:06:03 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id l20so16062580lfg.12
-        for <linux-spi@vger.kernel.org>; Fri, 11 Mar 2022 09:06:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2aDtzt7CPJr9qOT3rSv/Vnnb69TtrcL0aLs6lMBg+RQ=;
-        b=fihSNRu/3B6xviVANjQXeWIgkl9rWuTxp2RY4naCEIHiEhHDQXPUACZvtMlbVYdWIq
-         FkqQmZueWwuFdWSoyFknM+JLtSkytidZsvq0kqYeGdBcmK80l6I4k1gaf0nJBzLy+X67
-         lniyOf7zhGdjLFpBXnGd9SLkjq+/O3gnX+JoTbjopDX48JaWDhJ+Jj1mso2YDmXp5Mv9
-         2u73hGjscsoXhhqtJzCNTuPrQGG+X3KTguzrXFBuENH5+pYPJn7zRlVNVgp5M0OHwhPi
-         SeaCIxMV0kPUyd81Vyj0YuLrS/CSzuWIwB9bxmMfIADO8AI3JTqSZf3iMf/IF9ZKfUXT
-         LDAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2aDtzt7CPJr9qOT3rSv/Vnnb69TtrcL0aLs6lMBg+RQ=;
-        b=ms4iB6FUgFewkFTHgSOAmiCY1BW3ofnxjufakLr8cv7DPpiee9+4S1Q+rYnOMvPR1v
-         ccgei5z1wDE+s60YJZumcrIM24SAF9Z6dZR0YD50ROjOAwqyDiqCmsmts4voyeATT/g9
-         R3KcWe7N1Z2RRtLtou2IcWTWybsq+AcMbTWf5DD1DIEBxtrIc6sStBVkE8wsinvKgHxu
-         nJc9c8M54qekn/Bqk0lwvakqVk2uyHA5Tb3VhpxfdVBseoVBdXaCqNZd7AG0HTEsM5xz
-         hrs/n9RxCxCW78jqxHBPuwro7+4NFdoGCR6CjRLBvbb9GJ9wB5GyFD8mn7jEzA6Eziso
-         9dug==
-X-Gm-Message-State: AOAM530CMqJm5C02UDefJEKG2BlBe/07eLbZVL0IBRzZDawHOEUre9TK
-        YHR3I2+582FFZrA/qEA8+VQ=
-X-Google-Smtp-Source: ABdhPJy5bQ5UNhgWrHx5uPScEsFVjndYUE0tHclTWzsV0QdMPl0FgdupxiYVDWfEirJwlbxG2MlirA==
-X-Received: by 2002:a05:6512:1513:b0:448:39c0:def0 with SMTP id bq19-20020a056512151300b0044839c0def0mr6595118lfb.469.1647018360058;
-        Fri, 11 Mar 2022 09:06:00 -0800 (PST)
-Received: from mobilestation ([95.79.188.22])
-        by smtp.gmail.com with ESMTPSA id y10-20020a2e9d4a000000b0024608dc3520sm1821954ljj.125.2022.03.11.09.05.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 09:05:59 -0800 (PST)
-Date:   Fri, 11 Mar 2022 20:05:58 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Niklas Cassel <Niklas.Cassel@wdc.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Mark Brown <broonie@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH] spi: dw: assert reset before deasserting reset
-Message-ID: <20220311170558.5bj4vwbalufpmc3f@mobilestation>
-References: <20220301111715.3062886-1-Niklas.Cassel@wdc.com>
- <20220311142550.haw5jnrjycavr43m@mobilestation>
- <Yitv+tKTH2RpTV2K@x1-carbon>
+        with ESMTP id S1348199AbiCKRsu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 11 Mar 2022 12:48:50 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1140143381;
+        Fri, 11 Mar 2022 09:47:41 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22BHlDXT021105;
+        Fri, 11 Mar 2022 11:47:13 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1647020833;
+        bh=pdP+i9m2lw1qpqeGFBrxp+l79uJC+mKNJuBzp+PYH+8=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=aRiuC3tc34x7CtK/Tz9/INvJh3X3MRMjZrXxbp1LrtQPZs1uQq52SBK5vlOIOsq2d
+         aP+PwInlCWjivPgYud86F5xtAeSGGy5rVswtp4YJWBMVxIofOh74yOcJHW9C+VzPKe
+         KI1eyO+dAQwGRUNwI+9ywSNIshSEa27vjd14vW1w=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22BHlDtl116195
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 11 Mar 2022 11:47:13 -0600
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 11
+ Mar 2022 11:47:12 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 11 Mar 2022 11:47:12 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22BHlBZx049523;
+        Fri, 11 Mar 2022 11:47:12 -0600
+Date:   Fri, 11 Mar 2022 23:17:11 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     <Tudor.Ambarus@microchip.com>
+CC:     <michael@walle.cc>, <broonie@kernel.org>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <Nicolas.Ferre@microchip.com>,
+        <zhengxunli@mxic.com.tw>, <jaimeliao@mxic.com.tw>
+Subject: Re: [PATCH 1/4] spi: spi-mem: Allow specifying the byte order in DTR
+ mode
+Message-ID: <20220311174711.wexljqvqx6cgmeub@ti.com>
+References: <20220218145900.1440045-1-tudor.ambarus@microchip.com>
+ <20220218145900.1440045-2-tudor.ambarus@microchip.com>
+ <20220302100255.gseqjbdyxrgmt3zf@ti.com>
+ <f0501c29-ae70-185d-8f40-4a249e49575e@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <Yitv+tKTH2RpTV2K@x1-carbon>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <f0501c29-ae70-185d-8f40-4a249e49575e@microchip.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 03:51:23PM +0000, Niklas Cassel wrote:
-> On Fri, Mar 11, 2022 at 05:25:50PM +0300, Serge Semin wrote:
-> > Hello Niklas
+On 10/03/22 05:31AM, Tudor.Ambarus@microchip.com wrote:
+> On 3/2/22 12:02, Pratyush Yadav wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > Hi Tudor,
 > 
-> Hello Serge,
+> Hi, Pratyush,
 > 
 > > 
-> > On Tue, Mar 01, 2022 at 11:17:20AM +0000, Niklas Cassel wrote:
-> > > From: Niklas Cassel <niklas.cassel@wdc.com>
-> > > 
-> > > Simply deasserting reset just ensures that the hardware is taken out of
-> > > reset, if it was booted with the hardware reset asserted.
-> > > 
-> > > In order actually reset the SPI controller, we need to assert reset before
-> > > deasserting.
-> > > 
-> > > By doing this, we ensure that the hardware is not in some bad state, and we
-> > > ensure that the hardware registers get set to their reset default, clearing
-> > > any setting set by e.g. a bootloader.
-> > > 
-> > > Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
-> > > ---
-> > >  drivers/spi/spi-dw-mmio.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > > 
-> > > diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-> > > index 5101c4c6017b..eb1dacb45ca2 100644
-> > > --- a/drivers/spi/spi-dw-mmio.c
-> > > +++ b/drivers/spi/spi-dw-mmio.c
-> > > @@ -289,6 +289,8 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
-> > >  		ret = PTR_ERR(dwsmmio->rstc);
-> > >  		goto out_clk;
-> > >  	}
+> > I'm reviewing the code here. I still have not thought through the
+> > discussion about Kconfig option yet.
 > > 
-> > > +	reset_control_assert(dwsmmio->rstc);
-> > > +	udelay(2);
+> > On 18/02/22 04:58PM, Tudor Ambarus wrote:
+> >> There are NOR flashes (Macronix) that swap the bytes on a 16-bit boundary
+> >> when configured in DTR mode. The byte order of 16-bit words is swapped
 > > 
-> > Do we really need this? dw_spi_add_host() is doing a sort of soft reset
-> > anyway by calling the dw_spi_hw_init() method. Do you have a real
-> > platform, which requires to do a full hard-reset?
-> 
-> Does this solve a real problem that I've seen with the SPI controller?
-> No.
-> 
-
-> Which register write in dw_spi_hw_init() is doing a soft reset?
-> I assume that you mean one of the writes in dw_spi_reset_chip(),
-> probably DW_SPI_SSIENR.
-> I don't think us toggling this register will reset all registers
-> to their reset default values.
-
-Well, you are right it isn't a true soft reset, that's why I added
-"sort of".) Anyway after calling that method the main DW SSI registers
-are supposed to be in a known state. Of course it doesn't reset the
-controller RTL logic, and some of the CSRs will still be left randomly
-initialized in case of bootloader doings.
-
-> 
-> I think it is a good to start off with all registers in their
-> default reset values.
-> 
-> Arguably, I think it looks wrong to see a reset_control_deassert()
-> without any previous reset_control_assert().
-> 
-> Do a simple:
-> git grep -C 10 reset_control_deassert drivers/spi/
-> 
-> And you see that most SPI drivers (and most other device drivers for
-> that matter), usually assert reset before deasserting it, in order
-> to ensure that a reset pulse is actually sent to the hardware.
-> 
-> Simply deasserting reset, will have the hardware in a "fresh" state
-> if it was a cold boot (where reset is usually asserted until deasserted),
-> but will not have the hardware in a "fresh" state if booted via a boot
-> loader. This is an inconsistency, and could potentially lead to issues
-> that are only noticed if booting via a bootloader.
-> 
-
-No objection then seeing Mark is also inclined to have a full
-hard-reset cycle here too.
-
+> > s/DTR mode/ Octal DTR mode/
 > > 
-> > What about the self-reset based controllers?
+> > I don't think this would apply to a 4D-4D-4D flash since it would only
+> > transmit one byte per clock cycle.
 > 
-> Not sure what specific feature in the SPI controller you are
-> referring to.
+> From what I see, flashes that claim "QPI DTR support" they actually support
+> 4S-4D-4D. JESD251-1 talks about 4S-4D-4D too. So data is latched on both rising
+> and falling edges of the clock. But I'm ok with your proposal because we don't
+> have any proof if there are any QPI DTR flashes that swap bytes in DTR.
 
-I am speaking about the reset-controller lines. They can be of two
-types: manually asserted/de-asserted and self-deasserted. It's
-platform-specific and mainly depends on the reset-controller
-implementation.
+I think this problem fundamentally applies to Octal DTR and above (if 
+there is ever 16-line DTR (hexadecimal DTR?) in the future). In your 4D 
+data phase, you can only send _one_ byte per cycle. So the byte order 
+inter-cycle does not matter as it does in 8D mode. Similarly, for a 
+16-line STR this would also apply, since that has 2 bytes per cycle. For 
+a 16-line DTR there are now 4 bytes per cycle and so on.
 
-Seeing you are adding a full-reset cycle anyway, I suggest to add a
-support for the both types of reset. Like this:
-
-#include <linux/delay.h>
-...
-
-ret = reset_control_assert(dwsmmio->rstc);
-if (ret == -ENOTSUPP) {
-	ret = reset_control_reset(dwsmmio->rstc);
-} else if (!ret) {
-	udelay(2);
-	ret = reset_control_deassert(dwsmmio->rstc);
-}
-if (ret)
-	goto out;
-
-* Please don't forget to add the include line.
-
-BTW, I just figured it out. There is some incoherency in the
-cleanup-on-error path of the dw_spi_mmio_probe() method. If
-devm_reset_control_get_optional_exclusive() fails to get reset-control
-then pclk will be left enabled. At the same time if init_func() fails
-then pm_runtime_disable() will be called with not having
-pm_runtime_enable() executed yet. If I don't miss something could you
-fix that too?
-
--Sergey
+And the BFPT bit that you use to enable this swap also says "Byte order 
+in 8D-8D-8D mode". So I really don't think it makes sense for QPI DTR.
 
 > 
+> > 
+> >> when read or written in Double Transfer Rate (DTR) mode compared to
+> >> Single Transfer Rate (STR) mode. If one writes D0 D1 D2 D3 bytes using
+> >> 1-1-1 mode, and uses 8D-8D-8D SPI mode for reading, it will read back
+> >> D1 D0 D3 D2. Swapping the bytes is a bad design decision because this may
+> >> introduce some endianness problems. It can affect the boot sequence if the
+> >> entire boot sequence is not handled in either 8D-8D-8D mode or 1-1-1 mode.
+> >> Fortunately there are controllers that can swap back the bytes at runtime,
+> >> fixing the endiannesses. Provide a way for the upper layers to specify the
+> >> byte order in DTR mode.
+> >>
+> >> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> >> ---
+> >>  include/linux/spi/spi-mem.h | 3 +++
+> >>  1 file changed, 3 insertions(+)
+> >>
+> >> diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
+> >> index 85e2ff7b840d..e1878417420c 100644
+> >> --- a/include/linux/spi/spi-mem.h
+> >> +++ b/include/linux/spi/spi-mem.h
+> >> @@ -89,6 +89,8 @@ enum spi_mem_data_dir {
+> >>   * @dummy.dtr: whether the dummy bytes should be sent in DTR mode or not
+> >>   * @data.buswidth: number of IO lanes used to send/receive the data
+> >>   * @data.dtr: whether the data should be sent in DTR mode or not
+> >> + * @data.dtr_bswap16: whether the byte order of 16-bit words is swapped when
+> >> + *                 read or written in DTR mode compared to STR mode.
+> >>   * @data.dir: direction of the transfer
+> >>   * @data.nbytes: number of data bytes to send/receive. Can be zero if the
+> >>   *            operation does not involve transferring data
+> >> @@ -119,6 +121,7 @@ struct spi_mem_op {
+> >>       struct {
+> >>               u8 buswidth;
+> >>               u8 dtr : 1;
+> >> +             u8 dtr_bswap16 : 1;
 > 
-> Kind regards,
-> Niklas
+> but I would keep this name here as it is, without prepending octal.
+
+I won't nitpick much on the member name as long as the comment 
+describing its role is clear enough.
+
+> 
+> > 
+> > You also need to add this capability to spi_controller_mem_caps and
+> > update spi_mem_default_supports_op() to check for it.
+> 
+> sure, will do.
+> 
+> Thanks!
+> ta
+> > 
+> >>               enum spi_mem_data_dir dir;
+> >>               unsigned int nbytes;
+> >>               union {
+> >> --
+> >> 2.25.1
+> >>
+> > 
+> > --
+> > Regards,
+> > Pratyush Yadav
+> > Texas Instruments Inc.
+> 
+
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
