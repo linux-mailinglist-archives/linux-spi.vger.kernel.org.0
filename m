@@ -2,225 +2,156 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CFDB4D76D7
-	for <lists+linux-spi@lfdr.de>; Sun, 13 Mar 2022 17:35:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C44864D819C
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Mar 2022 12:48:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbiCMQgZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 13 Mar 2022 12:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
+        id S231233AbiCNLtl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Mar 2022 07:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235028AbiCMQgY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 13 Mar 2022 12:36:24 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0E22CC98
-        for <linux-spi@vger.kernel.org>; Sun, 13 Mar 2022 09:35:13 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id o83so7567663oif.0
-        for <linux-spi@vger.kernel.org>; Sun, 13 Mar 2022 09:35:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ob4h2d72COnkU3FY3eI+a2UFXuCW1/ScRGHi/UryDqA=;
-        b=TushXGzzRAzyI9MGE9XPNO4vBoxXifNjIKjCnoUkI+mEzZl6CZhW5uEBUDRGoJGHaD
-         yQBQqhTD3jqe3Itl2ih/VYfS2AVqG46q374zGDDL6gBW9JTc2T4zamHj1VeOliVF2mVe
-         Mqmi1px5JxbR15ozq99jBei8hZ++gA42ZIUv22DaY3YHKN7MSH1i0dMTim51IysvPyWn
-         +Gq7wMLMPYLJus5ZwQeaEpMbCZ2JUARUML+mTdMXf95/FsrZn42VmhERTaicPLLP/owq
-         ciqGfh1nxr0ORhDiIRQdbTxVCt0nq6AhVdIEdvPLp0OXeiH7hklifcXG8UdDVkB7o7r7
-         6HBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ob4h2d72COnkU3FY3eI+a2UFXuCW1/ScRGHi/UryDqA=;
-        b=oo36CT0k1sEaoKbeiKDb655QPmA8RpGByLHyt5vv52BCyFPjpXmut4zswJ1+CBzCxp
-         EaJ04gjr+2G8YLZezKWUGDU4zEy0fmhCbVyBmwXs77nSZcBnc9uabzOjnJhU9oEcxrCD
-         fDqFNjx9ciGfEI0DUFnrQK1OXP9+gqxt69o7m+6P6kjT53RBNTg14gWWQbabuWjob00E
-         cQ8rijF0eo9AtZaXX1tS9/fx66G7lC3TTH3MHpoOVQUvGh3I4nn30y+riu5OHs57KhCm
-         mrV9WrUCPJvSoWJx6fdW4PKw14jTuhbmt5Vt2eaS38Bf0Fn0qlKf3YeQw4QCL0J0tTDB
-         6wbw==
-X-Gm-Message-State: AOAM533OJvdo7Y2QO0ogFm6qovo6F9rtHzcsxrEK3cm+TjX9LmQn80GL
-        3HwPSAIsSRqjaR/yNVj/BDRgfg==
-X-Google-Smtp-Source: ABdhPJyf3k5XJ/dltTqtkT8q4cm/xQn+rQVTI2+AHnpPI0GfXenHJMCY3JJm9uRIMdQCmtTZS4KxuA==
-X-Received: by 2002:a54:4e81:0:b0:2ec:ae99:e02d with SMTP id c1-20020a544e81000000b002ecae99e02dmr5435442oiy.261.1647189311060;
-        Sun, 13 Mar 2022 09:35:11 -0700 (PDT)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id e3-20020a056870450300b000da5424e4b0sm5514643oao.50.2022.03.13.09.35.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Mar 2022 09:35:10 -0700 (PDT)
-Date:   Sun, 13 Mar 2022 11:35:07 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v4 11/11] rpmsg: Fix kfree() of static memory on setting
- driver_override
-Message-ID: <Yi4dOxArKLNyMFZy@builder.lan>
-References: <20220312132856.65163-1-krzysztof.kozlowski@canonical.com>
- <20220312132856.65163-12-krzysztof.kozlowski@canonical.com>
+        with ESMTP id S238089AbiCNLtl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Mar 2022 07:49:41 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631523ED2B;
+        Mon, 14 Mar 2022 04:48:31 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22EBlGTZ124224;
+        Mon, 14 Mar 2022 06:47:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1647258436;
+        bh=A+p09ykpYT6VHc3fsURK5eWzEGL+2zDBzN5kHFSBz8c=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=E1jemJllSfQqx5Izpc3mGcNV1DwGMELTSSOwpBuYCP43xPhZii6hINMNW1Hj81dOO
+         rmJylF2qoYC4E2OkfUcK/wRQJReI4n4IyL8ReF+qVz+I0/0JGaOuFj/TkrC8x1dgCf
+         ZB5zSHcvK4jMP0XJpmz/LBSoJYPpnByi1Yjz+3ks=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22EBlGeJ040925
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 14 Mar 2022 06:47:16 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 14
+ Mar 2022 06:47:16 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 14 Mar 2022 06:47:16 -0500
+Received: from [10.250.235.173] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22EBlBgu022886;
+        Mon, 14 Mar 2022 06:47:12 -0500
+Message-ID: <1dfd6a3d-452a-1e71-ca26-1fffe6db1636@ti.com>
+Date:   Mon, 14 Mar 2022 17:17:10 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220312132856.65163-12-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 05/17] mtd: spinand: Define ctrl_ops for non-page
+ read/write op templates
+Content-Language: en-US
+To:     Boris Brezillon <boris.brezillon@collabora.com>
+CC:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <p.yadav@ti.com>
+References: <20220101074250.14443-1-a-nandan@ti.com>
+ <20220101074250.14443-6-a-nandan@ti.com>
+ <20220103110107.45594e78@collabora.com>
+ <bf3ea909-e0a5-eeac-12e9-c8a809685f48@ti.com>
+ <20220215183705.574df0c1@collabora.com>
+ <12c7a6a6-8b49-1c3e-087f-79c77388b091@ti.com>
+ <20220310094053.1d86d13a@collabora.com>
+From:   Apurva Nandan <a-nandan@ti.com>
+In-Reply-To: <20220310094053.1d86d13a@collabora.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat 12 Mar 07:28 CST 2022, Krzysztof Kozlowski wrote:
 
-> The driver_override field from platform driver should not be initialized
-> from static memory (string literal) because the core later kfree() it,
-> for example when driver_override is set via sysfs.
-> 
-> Use dedicated helper to set driver_override properly.
-> 
-> Fixes: 950a7388f02b ("rpmsg: Turn name service into a stand alone driver")
-> Fixes: c0cdc19f84a4 ("rpmsg: Driver for user space endpoint interface")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Regards,
-Bjorn
-
-> ---
->  drivers/rpmsg/rpmsg_core.c     |  3 ++-
->  drivers/rpmsg/rpmsg_internal.h | 13 +++++++++++--
->  drivers/rpmsg/rpmsg_ns.c       | 14 ++++++++++++--
->  include/linux/rpmsg.h          |  6 ++++--
->  4 files changed, 29 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-> index d9e612f4f0f2..6e2bf2742973 100644
-> --- a/drivers/rpmsg/rpmsg_core.c
-> +++ b/drivers/rpmsg/rpmsg_core.c
-> @@ -397,7 +397,8 @@ field##_store(struct device *dev, struct device_attribute *attr,	\
->  	      const char *buf, size_t sz)				\
->  {									\
->  	struct rpmsg_device *rpdev = to_rpmsg_device(dev);		\
-> -	char *new, *old;						\
-> +	const char *old;						\
-> +	char *new;							\
->  									\
->  	new = kstrndup(buf, sz, GFP_KERNEL);				\
->  	if (!new)							\
-> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
-> index b1245d3ed7c6..31345d6e9a7e 100644
-> --- a/drivers/rpmsg/rpmsg_internal.h
-> +++ b/drivers/rpmsg/rpmsg_internal.h
-> @@ -92,10 +92,19 @@ int rpmsg_release_channel(struct rpmsg_device *rpdev,
->   */
->  static inline int rpmsg_chrdev_register_device(struct rpmsg_device *rpdev)
->  {
-> +	int ret;
-> +
->  	strcpy(rpdev->id.name, "rpmsg_chrdev");
-> -	rpdev->driver_override = "rpmsg_chrdev";
-> +	ret = driver_set_override(&rpdev->dev, &rpdev->driver_override,
-> +				  "rpmsg_chrdev", strlen("rpmsg_chrdev"));
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = rpmsg_register_device(rpdev);
-> +	if (ret)
-> +		kfree(rpdev->driver_override);
->  
-> -	return rpmsg_register_device(rpdev);
-> +	return ret;
->  }
->  
->  #endif
-> diff --git a/drivers/rpmsg/rpmsg_ns.c b/drivers/rpmsg/rpmsg_ns.c
-> index 762ff1ae279f..95a51543f5ad 100644
-> --- a/drivers/rpmsg/rpmsg_ns.c
-> +++ b/drivers/rpmsg/rpmsg_ns.c
-> @@ -20,12 +20,22 @@
->   */
->  int rpmsg_ns_register_device(struct rpmsg_device *rpdev)
->  {
-> +	int ret;
-> +
->  	strcpy(rpdev->id.name, "rpmsg_ns");
-> -	rpdev->driver_override = "rpmsg_ns";
-> +	ret = driver_set_override(&rpdev->dev, &rpdev->driver_override,
-> +				  "rpmsg_ns", strlen("rpmsg_ns"));
-> +	if (ret)
-> +		return ret;
-> +
->  	rpdev->src = RPMSG_NS_ADDR;
->  	rpdev->dst = RPMSG_NS_ADDR;
->  
-> -	return rpmsg_register_device(rpdev);
-> +	ret = rpmsg_register_device(rpdev);
-> +	if (ret)
-> +		kfree(rpdev->driver_override);
-> +
-> +	return ret;
->  }
->  EXPORT_SYMBOL(rpmsg_ns_register_device);
->  
-> diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
-> index 02fa9116cd60..20c8cd1cde21 100644
-> --- a/include/linux/rpmsg.h
-> +++ b/include/linux/rpmsg.h
-> @@ -41,7 +41,9 @@ struct rpmsg_channel_info {
->   * rpmsg_device - device that belong to the rpmsg bus
->   * @dev: the device struct
->   * @id: device id (used to match between rpmsg drivers and devices)
-> - * @driver_override: driver name to force a match
-> + * @driver_override: driver name to force a match; do not set directly,
-> + *                   because core frees it; use driver_set_override() to
-> + *                   set or clear it.
->   * @src: local address
->   * @dst: destination address
->   * @ept: the rpmsg endpoint of this channel
-> @@ -51,7 +53,7 @@ struct rpmsg_channel_info {
->  struct rpmsg_device {
->  	struct device dev;
->  	struct rpmsg_device_id id;
-> -	char *driver_override;
-> +	const char *driver_override;
->  	u32 src;
->  	u32 dst;
->  	struct rpmsg_endpoint *ept;
-> -- 
-> 2.32.0
-> 
+On 10/03/22 14:10, Boris Brezillon wrote:
+> On Thu, 10 Mar 2022 13:27:06 +0530
+> Apurva Nandan <a-nandan@ti.com> wrote:
+>
+>>>>> This way, you can easily pick the right set of operations based
+>>>>> on the protocol/mode you're in:
+>>>>>
+>>>>> #define spinand_get_op_template(spinand, opname) \
+>>>>> 	((spinand)->op_templates[(spinand)->protocol]->opname)
+>>>>>
+>>>>> static int spinand_read_reg_op(struct spinand_device *spinand, u8 reg, u8 *val)
+>>>>> {
+>>>>> 	struct spi_mem_op op = *spinand_get_op_template(spinand, get_feature);
+>>>>> 	int ret;
+>>>>>
+>>>>> 	...
+>>>>> }
+>>>> I find a couple of issues with this  method,
+>>>>
+>>>> 1. read_cache, write_cache, update_cache op templates don't fit well
+>>>> with the other non-data ops, as
+>>>> these data ops are used to create a dirmap, and that can be done only
+>>>> once at probe time. Hence, there
+>>>> is a different mechanism of selecting of data ops and non-data ops.
+>>> Not sure I see why this is a problem. You can populate data-ops for all
+>>> modes, and pick the one that provides the best perfs when you create
+>>> the dirmap (which should really be at the end of the probe, if it's not
+>>> already).
+>>>   
+>>>> Hence, this division in the op templates
+>>>> struct as data_ops and ctrl_ops is required. Currently, the core only
+>>>> supports using a single protocol for
+>>>> data ops, chosen at the time of probing.
+>>> Again, I don't see why you need to differentiate the control and data
+>>> ops when populating this table. Those are just operations the NAND
+>>> supports, and the data operations is just a subset.
+>>>   
+>>>> 2. If we use this single op_templates struct, I can't think of any good
+>>>> way to initialize these in the
+>>>> manufacturers driver (winbond.c), refer to 17th patch in this series.
+>>>> Could you please suggest a macro
+>>>> implementation also for winbond.c with the suggested op_templates struct.
+>>> First replace the op_variants field by something more generic:
+>>>
+>>> struct spinand_info {
+>>> ...
+>>> 	const struct spinand_op_variants **ops_variants;
+>>> ...
+>>> };
+>>>
+>>> #define SPINAND_OP_VARIANTS(_id, ...) \
+>>> 	[SPI_NAND_OP_ ## _id] = { __VA_ARGS__ }
+>>>
+>>> #define SPINAND_OPS_VARIANTS(name, ...)
+>>> 	const struct spinand_op_variants name[]{
+>>> 		__VA_ARGS__,
+>>> 	};
+>>>
+>>> #define SPINAND_INFO_OPS_VARIANTS(defs)
+>>> 	.ops_variants = defs
+>> If we modify these macros, it would require other spinand vendor drivers
+>> to change (toshiba, micron, etc).
+>> The older macros suit them well, should we go about changing them to
+>> this new macro (will require re-testing all of them),
+>> or can we keep them unchanged and have new set of macros with different
+>> name (please give suggestion for it) for op variants.
+> I'd rather have everything converted to the new approach (we don't want
+> 2 ways of describing the same thing), and I'm not sure you can make the
+> old macros map to the new solution, so I fear you'll have to patch all
+> vendors. This being said, I'm fine providing simple wrappers if that
+> helps, but I don't see how they'd make the description simpler/more
+> compact to be honest.
+Okay, I will convert all of the vendor drivers, but please note I don't 
+have any way to test the changes on all the flashes.
