@@ -2,56 +2,67 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECCC84D8699
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Mar 2022 15:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E264D8701
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Mar 2022 15:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242240AbiCNOSZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Mar 2022 10:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
+        id S236773AbiCNOgj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Mar 2022 10:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233443AbiCNOSY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Mar 2022 10:18:24 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B6019C35
-        for <linux-spi@vger.kernel.org>; Mon, 14 Mar 2022 07:17:13 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nTlVO-00055c-Di; Mon, 14 Mar 2022 15:17:02 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nTlVO-000f3h-KM; Mon, 14 Mar 2022 15:17:01 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nTlVM-0097bR-25; Mon, 14 Mar 2022 15:17:00 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        linux-spi@vger.kernel.org,
-        Alexandru Ardelean <aardelean@deviqon.com>
-Subject: [PATCH v8 15/16] spi: davinci: Simplify using devm_clk_get_enabled()
-Date:   Mon, 14 Mar 2022 15:16:42 +0100
-Message-Id: <20220314141643.22184-16-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
-References: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S229925AbiCNOgj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Mar 2022 10:36:39 -0400
+Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806AD3CFC7;
+        Mon, 14 Mar 2022 07:35:27 -0700 (PDT)
+Received: by mail-vk1-f171.google.com with SMTP id bk1so8442684vkb.5;
+        Mon, 14 Mar 2022 07:35:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=ZysgtXfsvATJN+SzsQw8W599UCzEtICCfKvj8cL/+Gg=;
+        b=aGF8rnoZYeM65FIThcGMDozm5aW2n5v24bj7a8VULlgxdK490IiSAmZw+4SWKABpWa
+         jz1/j7mLWVBH3bd3RqU/r+05PGDbF6uditrl2C6xHcZ2WC6zy5XlQO1UQjj50o/oRzyc
+         bELq/xGw2fiPo+/7CHfDcuX3jA2wBhkqpEzyORm22Fb1+5LAtmeBC6c2sz5ryczyhnYr
+         7FkqT9qIORrWeCWwvT8aGogU9h9OlyIali9CI0h3X5fQdYDEDajSoowvB9OjMSEyB9zq
+         ooYwg6Iptfk3Lt4aFOQ+hvQvFBu2bIkYIo7vFpSwjzvyyT08qrCsL9OuXZew66vqCHla
+         WM8g==
+X-Gm-Message-State: AOAM533EjsZrWOelB5qsqCkvGBG3DYn7kC9bL0QmGcogotcX4KgLduvo
+        c0JIVrsJM+K2rDrVE0paSjiHp7KxdldEIA==
+X-Google-Smtp-Source: ABdhPJwsawgClGzDb5RYaSW7oDljl3abuBQaB5et3JoDtgbPLz2wV4K6ahh7jB6w9dHWrtuG0+eMcA==
+X-Received: by 2002:ac5:ca0e:0:b0:336:d060:f33f with SMTP id c14-20020ac5ca0e000000b00336d060f33fmr10149957vkm.39.1647268526280;
+        Mon, 14 Mar 2022 07:35:26 -0700 (PDT)
+Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com. [209.85.217.49])
+        by smtp.gmail.com with ESMTPSA id u6-20020ac5c926000000b00330e8c9b1d6sm2289641vkl.39.2022.03.14.07.35.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Mar 2022 07:35:25 -0700 (PDT)
+Received: by mail-vs1-f49.google.com with SMTP id z85so17311046vsz.5;
+        Mon, 14 Mar 2022 07:35:25 -0700 (PDT)
+X-Received: by 2002:a05:6102:364a:b0:322:b4b4:6407 with SMTP id
+ s10-20020a056102364a00b00322b4b46407mr7372287vsu.39.1647268525337; Mon, 14
+ Mar 2022 07:35:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1947; i=uwe@kleine-koenig.org; h=from:subject; bh=uXL2iClBr1/xsK4NdutfQp3FIymaPJh9Nybp2LKWUQU=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBiL04bUNoNywMLrnMk7dCMHbS3a4oBLVxh/NHNEhO1 U30gwtWJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYi9OGwAKCRDB/BR4rcrsCYOJB/ 9oEzouRi1Ckh5iTABz7MlU9mi34InkSRPvTZ65mynG/0tFBTCS9WlHelrx9cZ/0HcH7xXtZUlqxSzj lvEiVnU+AzHYd4usMiGtBRmF+GdRaVewPPGTyJl8PUT8L79En9n7jZWDRJAMTEa/mS9JKg1CMRa+Xd tPS97z8aASx1obsqhcJ6J1PR3Gy+MM1990ATNrw8NgdrtztGlXC9HYuWQ8/GLZ5EmS8UKSbESM9K2J vQdQa+pFAo0B53vKF9dynciF0kZNjpadcvgRxg5IhVutBe/A1ly2s5xu2oCGt/GCPPVGxqIWNdU2p8 7lCldEvfQzyconxB6XlnwUiCO4Co5s
-X-Developer-Key: i=uwe@kleine-koenig.org; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220314115354.144023-1-Julia.Lawall@inria.fr> <20220314115354.144023-22-Julia.Lawall@inria.fr>
+In-Reply-To: <20220314115354.144023-22-Julia.Lawall@inria.fr>
+Reply-To: wens@csie.org
+From:   Chen-Yu Tsai <wens@csie.org>
+Date:   Mon, 14 Mar 2022 22:35:14 +0800
+X-Gmail-Original-Message-ID: <CAGb2v65eFvx+by=t3DEqV1w3ciQ4ruWtDXW=6teSFDqKMWzXxg@mail.gmail.com>
+Message-ID: <CAGb2v65eFvx+by=t3DEqV1w3ciQ4ruWtDXW=6teSFDqKMWzXxg@mail.gmail.com>
+Subject: Re: [PATCH 21/30] spi: sun4i: fix typos in comments
+To:     Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     Mark Brown <broonie@kernel.org>, kernel-janitors@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-spi@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-sunxi@lists.linux.dev,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,64 +70,11 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-devm_clk_get_enabled() returns the clk already (prepared and) enabled
-and the automatically called cleanup cares for disabling (and
-unpreparing). So simplify .probe() and .remove() accordingly.
+On Mon, Mar 14, 2022 at 7:55 PM Julia Lawall <Julia.Lawall@inria.fr> wrote:
+>
+> Various spelling mistakes in comments.
+> Detected with the help of Coccinelle.
+>
+> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-Acked-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Alexandru Ardelean <aardelean@deviqon.com>
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/spi/spi-davinci.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/spi/spi-davinci.c b/drivers/spi/spi-davinci.c
-index d112c2cac042..5448510c285f 100644
---- a/drivers/spi/spi-davinci.c
-+++ b/drivers/spi/spi-davinci.c
-@@ -925,14 +925,11 @@ static int davinci_spi_probe(struct platform_device *pdev)
- 
- 	dspi->bitbang.master = master;
- 
--	dspi->clk = devm_clk_get(&pdev->dev, NULL);
-+	dspi->clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(dspi->clk)) {
- 		ret = -ENODEV;
- 		goto free_master;
- 	}
--	ret = clk_prepare_enable(dspi->clk);
--	if (ret)
--		goto free_master;
- 
- 	master->use_gpio_descriptors = true;
- 	master->dev.of_node = pdev->dev.of_node;
-@@ -957,7 +954,7 @@ static int davinci_spi_probe(struct platform_device *pdev)
- 
- 	ret = davinci_spi_request_dma(dspi);
- 	if (ret == -EPROBE_DEFER) {
--		goto free_clk;
-+		goto free_master;
- 	} else if (ret) {
- 		dev_info(&pdev->dev, "DMA is not supported (%d)\n", ret);
- 		dspi->dma_rx = NULL;
-@@ -1001,8 +998,6 @@ static int davinci_spi_probe(struct platform_device *pdev)
- 		dma_release_channel(dspi->dma_rx);
- 		dma_release_channel(dspi->dma_tx);
- 	}
--free_clk:
--	clk_disable_unprepare(dspi->clk);
- free_master:
- 	spi_master_put(master);
- err:
-@@ -1028,8 +1023,6 @@ static int davinci_spi_remove(struct platform_device *pdev)
- 
- 	spi_bitbang_stop(&dspi->bitbang);
- 
--	clk_disable_unprepare(dspi->clk);
--
- 	if (dspi->dma_rx) {
- 		dma_release_channel(dspi->dma_rx);
- 		dma_release_channel(dspi->dma_tx);
--- 
-2.35.1
-
+Acked-by: Chen-Yu Tsai <wens@csie.org>
