@@ -2,156 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44864D819C
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Mar 2022 12:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 600F44D8561
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Mar 2022 13:48:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbiCNLtl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Mar 2022 07:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
+        id S235406AbiCNMtA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Mar 2022 08:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238089AbiCNLtl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Mar 2022 07:49:41 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631523ED2B;
-        Mon, 14 Mar 2022 04:48:31 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22EBlGTZ124224;
-        Mon, 14 Mar 2022 06:47:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1647258436;
-        bh=A+p09ykpYT6VHc3fsURK5eWzEGL+2zDBzN5kHFSBz8c=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=E1jemJllSfQqx5Izpc3mGcNV1DwGMELTSSOwpBuYCP43xPhZii6hINMNW1Hj81dOO
-         rmJylF2qoYC4E2OkfUcK/wRQJReI4n4IyL8ReF+qVz+I0/0JGaOuFj/TkrC8x1dgCf
-         ZB5zSHcvK4jMP0XJpmz/LBSoJYPpnByi1Yjz+3ks=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22EBlGeJ040925
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 14 Mar 2022 06:47:16 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 14
- Mar 2022 06:47:16 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 14 Mar 2022 06:47:16 -0500
-Received: from [10.250.235.173] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22EBlBgu022886;
-        Mon, 14 Mar 2022 06:47:12 -0500
-Message-ID: <1dfd6a3d-452a-1e71-ca26-1fffe6db1636@ti.com>
-Date:   Mon, 14 Mar 2022 17:17:10 +0530
+        with ESMTP id S238520AbiCNMr5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Mar 2022 08:47:57 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCBD387A8;
+        Mon, 14 Mar 2022 05:41:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=41PUcU9tzULCiIgb8Uibh/5DuRgn44vcqHlit9be1ys=;
+  b=da5ZDADTYjfUb4CkZvv1ifI5i+2sUHWvJw+dkr6l96rFI9+3qCoi3gnv
+   q0ycGdD5ccrm59796HzJuglqTi/Zn7sM07eq2eqJ7FQY8P7GtUxL24J6z
+   5W/zcd3/E6fo/TuVnTzoYm6lik0f+KcMTza69NkDCls6kpW1/h8PdxP5f
+   k=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
+   d="scan'208";a="25997332"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:53:59 +0100
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     linux-can@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-spi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, platform-driver-x86@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-leds@vger.kernel.org, Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-clk@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-rdma@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-s390@vger.kernel.org,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        linux-power@fi.rohmeurope.com, Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 00/30] fix typos in comments
+Date:   Mon, 14 Mar 2022 12:53:24 +0100
+Message-Id: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 05/17] mtd: spinand: Define ctrl_ops for non-page
- read/write op templates
-Content-Language: en-US
-To:     Boris Brezillon <boris.brezillon@collabora.com>
-CC:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Mark Brown <broonie@kernel.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <p.yadav@ti.com>
-References: <20220101074250.14443-1-a-nandan@ti.com>
- <20220101074250.14443-6-a-nandan@ti.com>
- <20220103110107.45594e78@collabora.com>
- <bf3ea909-e0a5-eeac-12e9-c8a809685f48@ti.com>
- <20220215183705.574df0c1@collabora.com>
- <12c7a6a6-8b49-1c3e-087f-79c77388b091@ti.com>
- <20220310094053.1d86d13a@collabora.com>
-From:   Apurva Nandan <a-nandan@ti.com>
-In-Reply-To: <20220310094053.1d86d13a@collabora.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Various spelling mistakes in comments.
+Detected with the help of Coccinelle.
 
-On 10/03/22 14:10, Boris Brezillon wrote:
-> On Thu, 10 Mar 2022 13:27:06 +0530
-> Apurva Nandan <a-nandan@ti.com> wrote:
->
->>>>> This way, you can easily pick the right set of operations based
->>>>> on the protocol/mode you're in:
->>>>>
->>>>> #define spinand_get_op_template(spinand, opname) \
->>>>> 	((spinand)->op_templates[(spinand)->protocol]->opname)
->>>>>
->>>>> static int spinand_read_reg_op(struct spinand_device *spinand, u8 reg, u8 *val)
->>>>> {
->>>>> 	struct spi_mem_op op = *spinand_get_op_template(spinand, get_feature);
->>>>> 	int ret;
->>>>>
->>>>> 	...
->>>>> }
->>>> I find a couple of issues with this  method,
->>>>
->>>> 1. read_cache, write_cache, update_cache op templates don't fit well
->>>> with the other non-data ops, as
->>>> these data ops are used to create a dirmap, and that can be done only
->>>> once at probe time. Hence, there
->>>> is a different mechanism of selecting of data ops and non-data ops.
->>> Not sure I see why this is a problem. You can populate data-ops for all
->>> modes, and pick the one that provides the best perfs when you create
->>> the dirmap (which should really be at the end of the probe, if it's not
->>> already).
->>>   
->>>> Hence, this division in the op templates
->>>> struct as data_ops and ctrl_ops is required. Currently, the core only
->>>> supports using a single protocol for
->>>> data ops, chosen at the time of probing.
->>> Again, I don't see why you need to differentiate the control and data
->>> ops when populating this table. Those are just operations the NAND
->>> supports, and the data operations is just a subset.
->>>   
->>>> 2. If we use this single op_templates struct, I can't think of any good
->>>> way to initialize these in the
->>>> manufacturers driver (winbond.c), refer to 17th patch in this series.
->>>> Could you please suggest a macro
->>>> implementation also for winbond.c with the suggested op_templates struct.
->>> First replace the op_variants field by something more generic:
->>>
->>> struct spinand_info {
->>> ...
->>> 	const struct spinand_op_variants **ops_variants;
->>> ...
->>> };
->>>
->>> #define SPINAND_OP_VARIANTS(_id, ...) \
->>> 	[SPI_NAND_OP_ ## _id] = { __VA_ARGS__ }
->>>
->>> #define SPINAND_OPS_VARIANTS(name, ...)
->>> 	const struct spinand_op_variants name[]{
->>> 		__VA_ARGS__,
->>> 	};
->>>
->>> #define SPINAND_INFO_OPS_VARIANTS(defs)
->>> 	.ops_variants = defs
->> If we modify these macros, it would require other spinand vendor drivers
->> to change (toshiba, micron, etc).
->> The older macros suit them well, should we go about changing them to
->> this new macro (will require re-testing all of them),
->> or can we keep them unchanged and have new set of macros with different
->> name (please give suggestion for it) for op variants.
-> I'd rather have everything converted to the new approach (we don't want
-> 2 ways of describing the same thing), and I'm not sure you can make the
-> old macros map to the new solution, so I fear you'll have to patch all
-> vendors. This being said, I'm fine providing simple wrappers if that
-> helps, but I don't see how they'd make the description simpler/more
-> compact to be honest.
-Okay, I will convert all of the vendor drivers, but please note I don't 
-have any way to test the changes on all the flashes.
+---
+
+ drivers/base/devres.c                               |    4 ++--
+ drivers/clk/qcom/gcc-sm6125.c                       |    2 +-
+ drivers/clk/ti/clkctrl.c                            |    2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c              |    4 ++--
+ drivers/gpu/drm/amd/display/dc/bios/command_table.c |    6 +++---
+ drivers/gpu/drm/amd/pm/amdgpu_pm.c                  |    2 +-
+ drivers/gpu/drm/bridge/analogix/analogix_dp_core.c  |    4 ++--
+ drivers/gpu/drm/sti/sti_gdp.c                       |    2 +-
+ drivers/infiniband/hw/qib/qib_iba7220.c             |    4 ++--
+ drivers/leds/leds-pca963x.c                         |    2 +-
+ drivers/media/i2c/ov5695.c                          |    2 +-
+ drivers/mfd/rohm-bd9576.c                           |    2 +-
+ drivers/mtd/ubi/block.c                             |    2 +-
+ drivers/net/can/usb/ucan.c                          |    4 ++--
+ drivers/net/ethernet/packetengines/yellowfin.c      |    2 +-
+ drivers/net/wireless/ath/ath6kl/htc_mbox.c          |    2 +-
+ drivers/net/wireless/cisco/airo.c                   |    2 +-
+ drivers/net/wireless/mediatek/mt76/mt7915/init.c    |    2 +-
+ drivers/net/wireless/realtek/rtlwifi/rtl8821ae/dm.c |    6 +++---
+ drivers/platform/x86/uv_sysfs.c                     |    2 +-
+ drivers/s390/crypto/pkey_api.c                      |    2 +-
+ drivers/scsi/aic7xxx/aicasm/aicasm.c                |    2 +-
+ drivers/scsi/elx/libefc_sli/sli4.c                  |    2 +-
+ drivers/scsi/lpfc/lpfc_mbox.c                       |    2 +-
+ drivers/scsi/qla2xxx/qla_gs.c                       |    2 +-
+ drivers/spi/spi-sun4i.c                             |    2 +-
+ drivers/staging/rtl8723bs/core/rtw_mlme.c           |    2 +-
+ drivers/usb/gadget/udc/snps_udc_core.c              |    2 +-
+ fs/kernfs/file.c                                    |    2 +-
+ kernel/events/core.c                                |    2 +-
+ 30 files changed, 39 insertions(+), 39 deletions(-)
