@@ -2,54 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 145804D92F0
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Mar 2022 04:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00ACC4D932D
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Mar 2022 04:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344604AbiCODZh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 14 Mar 2022 23:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52664 "EHLO
+        id S234022AbiCOD5l (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 14 Mar 2022 23:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344603AbiCODZg (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Mar 2022 23:25:36 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BAC235853;
-        Mon, 14 Mar 2022 20:24:25 -0700 (PDT)
-X-UUID: 4029fad27efa4cad91d526e453de6fe5-20220315
-X-UUID: 4029fad27efa4cad91d526e453de6fe5-20220315
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <leilk.liu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1372009443; Tue, 15 Mar 2022 11:24:20 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 15 Mar 2022 11:24:19 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 15 Mar
- 2022 11:24:19 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 15 Mar 2022 11:24:18 +0800
-From:   Leilk Liu <leilk.liu@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        Leilk Liu <leilk.liu@mediatek.com>
-Subject: [PATCH V4 6/6] spi: mediatek: support hclk
-Date:   Tue, 15 Mar 2022 11:24:11 +0800
-Message-ID: <20220315032411.2826-7-leilk.liu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220315032411.2826-1-leilk.liu@mediatek.com>
-References: <20220315032411.2826-1-leilk.liu@mediatek.com>
+        with ESMTP id S237491AbiCOD5k (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 14 Mar 2022 23:57:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170CD48E46
+        for <linux-spi@vger.kernel.org>; Mon, 14 Mar 2022 20:56:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C50C6B80FB5
+        for <linux-spi@vger.kernel.org>; Tue, 15 Mar 2022 03:56:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8B2D0C340E8;
+        Tue, 15 Mar 2022 03:56:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647316585;
+        bh=Pm/b03D5n+pgy4Jp+PehDMlphI51IL+OkogGXHoC+T8=;
+        h=Subject:From:Date:To:From;
+        b=QaWDEMXnn9fv/x6npjYI7c1oocLN7KRPZuDyrMDHJ0gvki+VR7Y3oma9dn1FMHGdu
+         tg2miasNgNxJ0rTC7LQiWf9553R/R8kyS2ZQ52/POTpJr62k9aSlPjbNNoFmZl+Eua
+         cyzacafVCQ7AARYmiu9bxQ0y4wkG+urDg5crxhrzaP5LTSakGJmEcdB0Xcws4IdfWY
+         IjkfqTMHNZkdKh/2Y4GmS8iTHHTjugK0eoKWmEaCL+N9TwpcXDb2guyQSdfWurxk0r
+         ZlitKwd6fyNVT4QM8uuO1g6oME/N4SjhwgwNjquP9h5Vob6HyV6H/KoEIxrHNCT6qm
+         IcnsuP9Iwd2Dg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6E0B8E6BBCA;
+        Tue, 15 Mar 2022 03:56:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <164731658544.7665.3213499169321237802.git-patchwork-housekeeping@kernel.org>
+Date:   Tue, 15 Mar 2022 03:56:25 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,182 +52,18 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-this patch adds hclk support.
+Latest series: [v4] spi: mediatek: add single/quad mode support (2022-03-15T03:24:06)
+  Superseding: [v3] spi: mediatek: add single/quad mode support (2022-03-07T06:52:23):
+    [V3,1/7] spi: mediatek: support tick_delay without enhance_timing
+    [V3,2/7] dt-bindings: spi: Add compatible for MT7986 with single mode
+    [V3,3/7] spi: mediatek: add MT7986 single mode design support
+    [V3,4/7] dt-bindings: spi: Add compatible for MT7986 with quad mode
+    [V3,5/7] spi: mediatek: add spi memory support for MT7986
+    [V3,6/7] dt-bindings: spi: support spi-hclk
+    [V3,7/7] spi: mediatek: support spi-hclk
 
-Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
----
- drivers/spi/spi-mt65xx.c | 85 ++++++++++++++++++++++++++++++++--------
- 1 file changed, 69 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-index 8958c3fa4fea..d4a602e78aa7 100644
---- a/drivers/spi/spi-mt65xx.c
-+++ b/drivers/spi/spi-mt65xx.c
-@@ -130,7 +130,7 @@ struct mtk_spi {
- 	u32 state;
- 	int pad_num;
- 	u32 *pad_sel;
--	struct clk *parent_clk, *sel_clk, *spi_clk;
-+	struct clk *parent_clk, *sel_clk, *spi_clk, *spi_hclk;
- 	struct spi_transfer *cur_transfer;
- 	u32 xfer_len;
- 	u32 num_xfered;
-@@ -1252,25 +1252,38 @@ static int mtk_spi_probe(struct platform_device *pdev)
- 		goto err_put_master;
- 	}
- 
-+	mdata->spi_hclk = devm_clk_get(&pdev->dev, "hclk");
-+	if (!IS_ERR(mdata->spi_hclk)) {
-+		ret = clk_prepare_enable(mdata->spi_hclk);
-+		if (ret < 0) {
-+			dev_err(&pdev->dev, "failed to enable hclk (%d)\n", ret);
-+			goto err_put_master;
-+		}
-+	}
-+
- 	ret = clk_prepare_enable(mdata->spi_clk);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "failed to enable spi_clk (%d)\n", ret);
--		goto err_put_master;
-+		goto err_disable_spi_hclk;
- 	}
- 
- 	ret = clk_set_parent(mdata->sel_clk, mdata->parent_clk);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "failed to clk_set_parent (%d)\n", ret);
--		clk_disable_unprepare(mdata->spi_clk);
--		goto err_put_master;
-+		goto err_disable_spi_clk;
- 	}
- 
- 	mdata->spi_clk_hz = clk_get_rate(mdata->spi_clk);
- 
--	if (mdata->dev_comp->no_need_unprepare)
-+	if (mdata->dev_comp->no_need_unprepare) {
- 		clk_disable(mdata->spi_clk);
--	else
-+		if (!IS_ERR(mdata->spi_hclk))
-+			clk_disable(mdata->spi_hclk);
-+	} else {
- 		clk_disable_unprepare(mdata->spi_clk);
-+		if (!IS_ERR(mdata->spi_hclk))
-+			clk_disable_unprepare(mdata->spi_hclk);
-+	}
- 
- 	pm_runtime_enable(&pdev->dev);
- 
-@@ -1310,6 +1323,11 @@ static int mtk_spi_probe(struct platform_device *pdev)
- 
- err_disable_runtime_pm:
- 	pm_runtime_disable(&pdev->dev);
-+err_disable_spi_clk:
-+	clk_disable_unprepare(mdata->spi_clk);
-+err_disable_spi_hclk:
-+	if (!IS_ERR(mdata->spi_hclk))
-+		clk_disable_unprepare(mdata->spi_hclk);
- err_put_master:
- 	spi_master_put(master);
- 
-@@ -1325,8 +1343,11 @@ static int mtk_spi_remove(struct platform_device *pdev)
- 
- 	mtk_spi_reset(mdata);
- 
--	if (mdata->dev_comp->no_need_unprepare)
-+	if (mdata->dev_comp->no_need_unprepare) {
- 		clk_unprepare(mdata->spi_clk);
-+		if (!IS_ERR(mdata->spi_hclk))
-+			clk_unprepare(mdata->spi_hclk);
-+	}
- 
- 	return 0;
- }
-@@ -1342,8 +1363,11 @@ static int mtk_spi_suspend(struct device *dev)
- 	if (ret)
- 		return ret;
- 
--	if (!pm_runtime_suspended(dev))
-+	if (!pm_runtime_suspended(dev)) {
- 		clk_disable_unprepare(mdata->spi_clk);
-+		if (!IS_ERR(mdata->spi_hclk))
-+			clk_disable_unprepare(mdata->spi_hclk);
-+	}
- 
- 	return ret;
- }
-@@ -1360,11 +1384,23 @@ static int mtk_spi_resume(struct device *dev)
- 			dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
- 			return ret;
- 		}
-+
-+		if (!IS_ERR(mdata->spi_hclk)) {
-+			clk_prepare_enable(mdata->spi_hclk);
-+			if (ret < 0) {
-+				dev_err(dev, "failed to enable spi_hclk (%d)\n", ret);
-+				clk_disable_unprepare(mdata->spi_clk);
-+				return ret;
-+			}
-+		}
- 	}
- 
- 	ret = spi_master_resume(master);
--	if (ret < 0)
-+	if (ret < 0) {
- 		clk_disable_unprepare(mdata->spi_clk);
-+		if (!IS_ERR(mdata->spi_hclk))
-+			clk_disable_unprepare(mdata->spi_hclk);
-+	}
- 
- 	return ret;
- }
-@@ -1376,10 +1412,15 @@ static int mtk_spi_runtime_suspend(struct device *dev)
- 	struct spi_master *master = dev_get_drvdata(dev);
- 	struct mtk_spi *mdata = spi_master_get_devdata(master);
- 
--	if (mdata->dev_comp->no_need_unprepare)
-+	if (mdata->dev_comp->no_need_unprepare) {
- 		clk_disable(mdata->spi_clk);
--	else
-+		if (!IS_ERR(mdata->spi_hclk))
-+			clk_disable(mdata->spi_hclk);
-+	} else {
- 		clk_disable_unprepare(mdata->spi_clk);
-+		if (!IS_ERR(mdata->spi_hclk))
-+			clk_disable_unprepare(mdata->spi_hclk);
-+	}
- 
- 	return 0;
- }
-@@ -1390,13 +1431,25 @@ static int mtk_spi_runtime_resume(struct device *dev)
- 	struct mtk_spi *mdata = spi_master_get_devdata(master);
- 	int ret;
- 
--	if (mdata->dev_comp->no_need_unprepare)
-+	if (mdata->dev_comp->no_need_unprepare) {
- 		ret = clk_enable(mdata->spi_clk);
--	else
-+		if (!IS_ERR(mdata->spi_hclk))
-+			clk_enable(mdata->spi_hclk);
-+	} else {
- 		ret = clk_prepare_enable(mdata->spi_clk);
--	if (ret < 0) {
--		dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
--		return ret;
-+		if (ret < 0) {
-+			dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
-+			return ret;
-+		}
-+
-+		if (!IS_ERR(mdata->spi_hclk)) {
-+			ret = clk_prepare_enable(mdata->spi_hclk);
-+			if (ret < 0) {
-+				dev_err(dev, "failed to enable spi_hclk (%d)\n", ret);
-+				clk_disable_unprepare(mdata->spi_clk);
-+				return ret;
-+			}
-+		}
- 	}
- 
- 	return 0;
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
