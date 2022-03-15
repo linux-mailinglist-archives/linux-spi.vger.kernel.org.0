@@ -2,73 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C20F4D9CA1
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Mar 2022 14:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 006E34DA067
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Mar 2022 17:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346628AbiCONvb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Mar 2022 09:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
+        id S242803AbiCOQt4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Mar 2022 12:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348820AbiCONva (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Mar 2022 09:51:30 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C010532FE
-        for <linux-spi@vger.kernel.org>; Tue, 15 Mar 2022 06:50:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DFD55CE182D
-        for <linux-spi@vger.kernel.org>; Tue, 15 Mar 2022 13:50:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3314DC340ED;
-        Tue, 15 Mar 2022 13:50:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647352214;
-        bh=3183iCl7T9xhzz6E7y9lnPsIcCTsFIz30kLnFnD95cY=;
-        h=Subject:From:Date:To:From;
-        b=A762jYGJGiIegX4RvGKM/EtRMr2zaUjjYx/mLDjV+ziP5+KMBwiJBK7X5JtNBVafl
-         nOLH1jF+dIaq1fqjobrKV32Tx5DYGt1Xd0FhAvcWIQ8ScOkgQ1U+LOXZAoi5WqNBYg
-         XwzWtCaAEntBAUbNuW1t8/EOM66LHrirKoh6Vwn+nfMoKli7Qcm9f7bkJPaZvfcjEZ
-         820qI7IR49n0eT09Pm+K8u3ddi3Z0wQ+mA+6xMpKeCM5l10QZF/7rpNhS8xSPOq3NI
-         BqF065k8NdZWIGzkBlin2pBGrVx5Qe8/Dp4UKdh3tVlwMfVdQWDmT8i3iWFyQJ5SyS
-         V/no6qTaZp0Jg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0D22BE6BBCA;
-        Tue, 15 Mar 2022 13:50:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1349556AbiCOQty (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Mar 2022 12:49:54 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60304553B
+        for <linux-spi@vger.kernel.org>; Tue, 15 Mar 2022 09:48:41 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id bn33so27317973ljb.6
+        for <linux-spi@vger.kernel.org>; Tue, 15 Mar 2022 09:48:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zt/r5r2zHXpo2duxNnaYNgAPA5dxpfI76juAqVaexSw=;
+        b=Y8ZdU+nyxKNyEdgJPvaWFUnJeWVz2wDo7JAxJf0kQlI3siurpvUSwzZXG6ifa5fbmg
+         MltEjmXOo5W/lLyp5KhMrgLIzMlNAy0/jeohNDmB9yR04no6Qu+KmI3XIpDHN31hjRkQ
+         amVOlehEnYI4vI6vTRY9fPOaSRRx8KBdzOaJg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zt/r5r2zHXpo2duxNnaYNgAPA5dxpfI76juAqVaexSw=;
+        b=arbQhTGGIRb4p93K8AvfUYzFEB6wI3tSExoj+6zc1l9Qs95SrnvtiWZTQj+NRqdkyf
+         xe2WJxVsRKHJjuf4vSV6T7XEJcfrEP9IqyfmbJ40/hXhmVRNkRal3HPGL1+nM5i0IThV
+         e2TsFURHeROyqe628H6vpdZoofwOWGaK3nGsgzeoIYW/hv4A+vo/FHq6tzUMJ7sdBFyR
+         X+gP3+50IY05Zp1qRFJXodyLURhm/kw225LLRy5PT07dl54Rsa0ZBE6DX3KmwAJq7pUH
+         FmxX1dI6Asb4pxlCAShelY7EcevVkGPiNJ67NX/dCisEeSD/Ncu1mXpckuQZrsrl/9Fr
+         BFDw==
+X-Gm-Message-State: AOAM530KHKHw7LpprRPhMhENMBb6sCi1nttD5V/iMg6uYdVwGQ3NgGFf
+        PQUmw+ECL4B9Xd8Pin907D8FgVtpprZ5skCx
+X-Google-Smtp-Source: ABdhPJy6+bssWai+T58/l/XQFvCW2BDG2nQvMGCOlvAiJTqlUSPkBwtWxFrtd2uU+zipM0HB23nkUg==
+X-Received: by 2002:a2e:b5a1:0:b0:244:d3b4:dc24 with SMTP id f1-20020a2eb5a1000000b00244d3b4dc24mr18108382ljn.83.1647362918287;
+        Tue, 15 Mar 2022 09:48:38 -0700 (PDT)
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
+        by smtp.gmail.com with ESMTPSA id c7-20020a2e9d87000000b00247ebe11990sm4410596ljj.10.2022.03.15.09.48.36
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Mar 2022 09:48:37 -0700 (PDT)
+Received: by mail-lj1-f172.google.com with SMTP id c15so10737888ljr.9
+        for <linux-spi@vger.kernel.org>; Tue, 15 Mar 2022 09:48:36 -0700 (PDT)
+X-Received: by 2002:a2e:804b:0:b0:247:e81f:87e9 with SMTP id
+ p11-20020a2e804b000000b00247e81f87e9mr18220509ljg.176.1647362916222; Tue, 15
+ Mar 2022 09:48:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <164735221393.3473.3743207190937113726.git-patchwork-summary@kernel.org>
-Date:   Tue, 15 Mar 2022 13:50:13 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220310121327.63C6FC340E8@smtp.kernel.org> <CAHk-=wgN6bYPgaB7g0zGXQ5HnbVQ9910o9OQMBLs_S_ax4H67A@mail.gmail.com>
+ <YinzW413m6p0H/i1@sirena.org.uk> <CAMuHMdU9t2wLonWBjkXBdxxyK_oJiOUTSqrYVrZWjsY2JKEJ2g@mail.gmail.com>
+In-Reply-To: <CAMuHMdU9t2wLonWBjkXBdxxyK_oJiOUTSqrYVrZWjsY2JKEJ2g@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 15 Mar 2022 09:48:19 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiZnS6n1ROQg3FHd=bcVTHi-sKutKT+toiViQEH47ZACg@mail.gmail.com>
+Message-ID: <CAHk-=wiZnS6n1ROQg3FHd=bcVTHi-sKutKT+toiViQEH47ZACg@mail.gmail.com>
+Subject: Re: [GIT PULL] SPI fixes for v5.17-rc7
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+On Tue, Mar 15, 2022 at 2:08 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> I had noticed while reviewing the patch, but changing to size_t wouldn't
+> help much, as other related code paths treat the value as unsigned int
+> anyway.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+.. but it really would.
 
-Series: spi: mediatek: add single/quad mode support
-  Submitter: Leilk Liu <leilk.liu@mediatek.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=623390
-  Lore link: https://lore.kernel.org/r/20220315032411.2826-1-leilk.liu@mediatek.com
-    Patches: [V4,1/6] spi: mediatek: support tick_delay without enhance_timing
+Note that the paths *after* this code don't matter. Because the result
+is guaranteed to fit in 'unsigned int' anyway.
 
+Put another way:
 
-Total patches: 1
+    min_t(unsigned int,x,y)
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+is buggy if one of x/y is 'size_t'. Why? Because if that one gets
+truncated, you're doing 'min()' with a value that may be artificially
+much too small (that was exactly the problem commit 1a4e53d2fc4f:
+"spi: Fix invalid sgs value")fixed).
 
+But the situation is _not_ true in the reverse. Look:
 
+    min(size_t,x,y)
+
+is guaranteed to fit in 'unsigned int' as long as _one_ of x,y fits in
+'unsigned int' - even if the other doesn't. Because then 'min()' will
+just pick the one that already had the right size.
+
+To make it really concrete, compare
+
+    min_t(unsigned int, 5, 0x100000001);
+    min_t(size_t, 5, 0x100000001);
+
+on a 64-bit machine (ie size_t is 64-bits, and unsigned int is 32-bit).
+
+One returns 1. The other returns 5. Both fit the result in 'unsigned
+int', but one of them is wrong.
+
+                Linus
