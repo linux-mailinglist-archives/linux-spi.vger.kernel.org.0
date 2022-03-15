@@ -2,37 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFA64D97CC
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Mar 2022 10:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 374654D97D5
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Mar 2022 10:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240794AbiCOJjR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Mar 2022 05:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60230 "EHLO
+        id S1346715AbiCOJjl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Mar 2022 05:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346697AbiCOJjQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Mar 2022 05:39:16 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC76112609;
-        Tue, 15 Mar 2022 02:38:03 -0700 (PDT)
+        with ESMTP id S1346723AbiCOJjg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Mar 2022 05:39:36 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D781D0E9;
+        Tue, 15 Mar 2022 02:38:21 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id D71161F436D5
+        with ESMTPSA id 172021F436D5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647337082;
-        bh=hZ3Ozc14j72XOG+b1t+GWcovi4uvCyAsuQVFavKh/sc=;
+        s=mail; t=1647337100;
+        bh=2g+bi31SH2nt5LwkrpZcDsw8tRwzI6EeAAglevEM+O0=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=R7SGXBVCLCthgJfbqNC649m2NSEhAmzxNhj9UIBmYiQfZ+UuBx+Om3Ph9ejXUlrGw
-         b3sXqViSiqFKuv92g78KV63TidJpbB7q23XrfzGhKoY5rvrEGoo8xEKWi80Ukv+4TF
-         LBsQ/APy3skr+3tXnNAAsd2HWPsORbBSUO7w3a3sC4yCs1/2Atuw6PmU1KZnPfQEOr
-         ibYvS3dTk98lYZx8W1zV8i69uwnjgE5JLnpirElozBMPaCwbYWKnjk8K/nGWN0Kw1A
-         ul+x+ebjfR25QCMP2jrkrvxR19DzFopWAvDUy79jhlrRSBJCNQcUa5BsK5yaMc4MXN
-         5GC8jvbUL72Jw==
-Message-ID: <e3facd86-9e93-bda7-b6dd-c18f1660466a@collabora.com>
-Date:   Tue, 15 Mar 2022 10:37:59 +0100
+        b=WVFUcQ7oKf62TwQkqJBIiau9mLy2Y7iMN9owG/L9eJtno70/6cwNGoySPzg7A5Zgs
+         vSWSnJMZtP9+uWNPWu7Adei8JWaabvsolehkcPuj8yxc9svrJ2oiE4wXrABPtRmh0v
+         flZlEqntv9hVNofoeDB3EpyvjPJR/JU1BNyDIVtK5Xp7nNZBVgBQg0NTfhgngN9L8a
+         Xh/zZntxQG5vZFFv02CXCZksgzbuFBv/GSHbwm275ixE1iHnmx9oR+KWQmkchrQAks
+         sGjM7pSHBpiKI5DOOfj/TandHt2yQ+PPzv4QNQNmwHDdX0R82+XaZpNx7vQyu+OcDw
+         +o85KkyHv1Yrw==
+Message-ID: <140282ef-5174-b86b-cca0-559c24fec2c0@collabora.com>
+Date:   Tue, 15 Mar 2022 10:38:17 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.1
-Subject: Re: [PATCH V4 6/6] spi: mediatek: support hclk
+Subject: Re: [PATCH V4 2/6] dt-bindings: spi: Add compatible for MT7986
 Content-Language: en-US
 To:     Leilk Liu <leilk.liu@mediatek.com>, Mark Brown <broonie@kernel.org>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -41,10 +41,10 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
         linux-mediatek@lists.infradead.org
 References: <20220315032411.2826-1-leilk.liu@mediatek.com>
- <20220315032411.2826-7-leilk.liu@mediatek.com>
+ <20220315032411.2826-3-leilk.liu@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220315032411.2826-7-leilk.liu@mediatek.com>
+In-Reply-To: <20220315032411.2826-3-leilk.liu@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -58,203 +58,30 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 Il 15/03/22 04:24, Leilk Liu ha scritto:
-> this patch adds hclk support.
+> This patch adds dt-binding documentation for MT7986.
 > 
 > Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
 > ---
->   drivers/spi/spi-mt65xx.c | 85 ++++++++++++++++++++++++++++++++--------
->   1 file changed, 69 insertions(+), 16 deletions(-)
+>   .../devicetree/bindings/spi/mediatek,spi-mt65xx.yaml          | 4 ++++
+>   1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-> index 8958c3fa4fea..d4a602e78aa7 100644
-> --- a/drivers/spi/spi-mt65xx.c
-> +++ b/drivers/spi/spi-mt65xx.c
-> @@ -130,7 +130,7 @@ struct mtk_spi {
->   	u32 state;
->   	int pad_num;
->   	u32 *pad_sel;
-> -	struct clk *parent_clk, *sel_clk, *spi_clk;
-> +	struct clk *parent_clk, *sel_clk, *spi_clk, *spi_hclk;
->   	struct spi_transfer *cur_transfer;
->   	u32 xfer_len;
->   	u32 num_xfered;
-> @@ -1252,25 +1252,38 @@ static int mtk_spi_probe(struct platform_device *pdev)
->   		goto err_put_master;
->   	}
->   
-> +	mdata->spi_hclk = devm_clk_get(&pdev->dev, "hclk");
-> +	if (!IS_ERR(mdata->spi_hclk)) {
-
-What you're doing here can be simplified by using devm_clk_get_optional() instead.
-Please use that.
-
-> +		ret = clk_prepare_enable(mdata->spi_hclk);
-> +		if (ret < 0) {
-> +			dev_err(&pdev->dev, "failed to enable hclk (%d)\n", ret);
-> +			goto err_put_master;
-> +		}
-> +	}
-> +
->   	ret = clk_prepare_enable(mdata->spi_clk);
->   	if (ret < 0) {
->   		dev_err(&pdev->dev, "failed to enable spi_clk (%d)\n", ret);
-> -		goto err_put_master;
-> +		goto err_disable_spi_hclk;
->   	}
->   
->   	ret = clk_set_parent(mdata->sel_clk, mdata->parent_clk);
->   	if (ret < 0) {
->   		dev_err(&pdev->dev, "failed to clk_set_parent (%d)\n", ret);
-> -		clk_disable_unprepare(mdata->spi_clk);
-> -		goto err_put_master;
-> +		goto err_disable_spi_clk;
->   	}
->   
->   	mdata->spi_clk_hz = clk_get_rate(mdata->spi_clk);
->   
-> -	if (mdata->dev_comp->no_need_unprepare)
-> +	if (mdata->dev_comp->no_need_unprepare) {
->   		clk_disable(mdata->spi_clk);
-> -	else
-> +		if (!IS_ERR(mdata->spi_hclk))
-> +			clk_disable(mdata->spi_hclk);
-> +	} else {
->   		clk_disable_unprepare(mdata->spi_clk);
-> +		if (!IS_ERR(mdata->spi_hclk))
-> +			clk_disable_unprepare(mdata->spi_hclk);
-> +	}
->   
->   	pm_runtime_enable(&pdev->dev);
->   
-> @@ -1310,6 +1323,11 @@ static int mtk_spi_probe(struct platform_device *pdev)
->   
->   err_disable_runtime_pm:
->   	pm_runtime_disable(&pdev->dev);
-> +err_disable_spi_clk:
-> +	clk_disable_unprepare(mdata->spi_clk);
-> +err_disable_spi_hclk:
-> +	if (!IS_ERR(mdata->spi_hclk))
-
-When using devm_clk_get_optional(), you can simply omit this check, since it will
-be impossible to reach this point with an error pointer stored in spi_hclk.
-
-> +		clk_disable_unprepare(mdata->spi_hclk);
->   err_put_master:
->   	spi_master_put(master);
->   
-> @@ -1325,8 +1343,11 @@ static int mtk_spi_remove(struct platform_device *pdev)
->   
->   	mtk_spi_reset(mdata);
->   
-> -	if (mdata->dev_comp->no_need_unprepare)
-> +	if (mdata->dev_comp->no_need_unprepare) {
->   		clk_unprepare(mdata->spi_clk);
-> +		if (!IS_ERR(mdata->spi_hclk))
-> +			clk_unprepare(mdata->spi_hclk);
-> +	}
->   
->   	return 0;
->   }
-> @@ -1342,8 +1363,11 @@ static int mtk_spi_suspend(struct device *dev)
->   	if (ret)
->   		return ret;
->   
-> -	if (!pm_runtime_suspended(dev))
-> +	if (!pm_runtime_suspended(dev)) {
->   		clk_disable_unprepare(mdata->spi_clk);
-> +		if (!IS_ERR(mdata->spi_hclk))
-> +			clk_disable_unprepare(mdata->spi_hclk);
-> +	}
->   
->   	return ret;
->   }
-> @@ -1360,11 +1384,23 @@ static int mtk_spi_resume(struct device *dev)
->   			dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
->   			return ret;
->   		}
-> +
-> +		if (!IS_ERR(mdata->spi_hclk)) {
-
-Since you will be using devm_clk_get_optional(), you can also omit this check.
-
-> +			clk_prepare_enable(mdata->spi_hclk);
-
-There's a typo. ret = clk_prepare_enable....
-
-> +			if (ret < 0) {
-> +				dev_err(dev, "failed to enable spi_hclk (%d)\n", ret);
-> +				clk_disable_unprepare(mdata->spi_clk);
-> +				return ret;
-> +			}
-> +		}
->   	}
->   
->   	ret = spi_master_resume(master);
-> -	if (ret < 0)
-> +	if (ret < 0) {
->   		clk_disable_unprepare(mdata->spi_clk);
-> +		if (!IS_ERR(mdata->spi_hclk))
-
-Same here and everywhere else, no error check if you set this as optional clock.
-
-> +			clk_disable_unprepare(mdata->spi_hclk);
-> +	}
->   
->   	return ret;
->   }
-> @@ -1376,10 +1412,15 @@ static int mtk_spi_runtime_suspend(struct device *dev)
->   	struct spi_master *master = dev_get_drvdata(dev);
->   	struct mtk_spi *mdata = spi_master_get_devdata(master);
->   
-> -	if (mdata->dev_comp->no_need_unprepare)
-> +	if (mdata->dev_comp->no_need_unprepare) {
->   		clk_disable(mdata->spi_clk);
-> -	else
-> +		if (!IS_ERR(mdata->spi_hclk))
-> +			clk_disable(mdata->spi_hclk);
-> +	} else {
->   		clk_disable_unprepare(mdata->spi_clk);
-> +		if (!IS_ERR(mdata->spi_hclk))
-> +			clk_disable_unprepare(mdata->spi_hclk);
-> +	}
->   
->   	return 0;
->   }
-> @@ -1390,13 +1431,25 @@ static int mtk_spi_runtime_resume(struct device *dev)
->   	struct mtk_spi *mdata = spi_master_get_devdata(master);
->   	int ret;
->   
-> -	if (mdata->dev_comp->no_need_unprepare)
-> +	if (mdata->dev_comp->no_need_unprepare) {
->   		ret = clk_enable(mdata->spi_clk);
-> -	else
-> +		if (!IS_ERR(mdata->spi_hclk))
-> +			clk_enable(mdata->spi_hclk);
-> +	} else {
->   		ret = clk_prepare_enable(mdata->spi_clk);
-> -	if (ret < 0) {
-> -		dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
-> -		return ret;
-> +		if (ret < 0) {
-> +			dev_err(dev, "failed to enable spi_clk (%d)\n", ret);
-> +			return ret;
-> +		}
-> +
-> +		if (!IS_ERR(mdata->spi_hclk)) {
-> +			ret = clk_prepare_enable(mdata->spi_hclk);
-> +			if (ret < 0) {
-> +				dev_err(dev, "failed to enable spi_hclk (%d)\n", ret);
-> +				clk_disable_unprepare(mdata->spi_clk);
-> +				return ret;
-> +			}
-> +		}
->   	}
->   
->   	return 0;
-> 
-
-
-Regards,
-Angelo
+> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+> index bfa44acb1bdd..7247a177466b 100644
+> --- a/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+> @@ -30,6 +30,10 @@ properties:
+>                 - mediatek,mt8192-spi
+>                 - mediatek,mt8195-spi
+>             - const: mediatek,mt6765-spi
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt7986-spi-ipm
+> +          - const: mediatek,spi-ipm
+>         - items:
+>             - enum:
+>                 - mediatek,mt2701-spi
 
 
