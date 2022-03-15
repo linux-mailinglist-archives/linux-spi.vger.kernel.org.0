@@ -2,94 +2,165 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A17424D972F
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Mar 2022 10:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A8234D97B0
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Mar 2022 10:32:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236860AbiCOJKG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Mar 2022 05:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
+        id S1346627AbiCOJd0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Mar 2022 05:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346389AbiCOJKE (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Mar 2022 05:10:04 -0400
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1131FA6E;
-        Tue, 15 Mar 2022 02:08:52 -0700 (PDT)
-Received: by mail-qk1-f182.google.com with SMTP id s16so14964270qks.4;
-        Tue, 15 Mar 2022 02:08:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2xx8wYiI3Auov5aMTFD+LrfQ8Z5rJfn+rHNp7V2YEwA=;
-        b=RBb51v6gBZlQE/AdV5G7Bsl1owsrQD5t8TwGIew/F1sWho2hvKWxoZ9TlLGDvboEl/
-         LWIBxlbeYyLO/y4rbyD/gYkAslRCsQwVPPKZ6++qfN3Ifc6CeGGaAAlvLvrev11euNOA
-         dvTd9ASRj+7bcWQlRtAjRZrS7odhUC+RyMmGN16Jw2D70e8twwhB+LBekHpOE+RTz+Oz
-         TNL5qdiS3+zP/rH2NWmAhBVUXQ3uXi3oR96sBaZHWcEBzAA/xVAtRhZXJOI3HYTqnTZx
-         pQjuG6EnbphgQfuQ763SpLaGZOfORcnNHyNSqXVPP6i/ubYEnggCAF+XSHX16aJtKE09
-         JGYA==
-X-Gm-Message-State: AOAM533vEr67FfjSzWbutugaX6vbsnfHkVLE4oSXQjWxtQ9nxaX9x6Xn
-        +n6C+ZDXyis7u686xIT47qkZ4kz1C/FFfQ==
-X-Google-Smtp-Source: ABdhPJy1EC8pwBKk0DOqF/zJeeuVgf5YBZSTq456Lt8UaqeKwhwkLbwSZKstHH87Y4DZ2xjGwHTyIA==
-X-Received: by 2002:a05:620a:4014:b0:67d:9a20:b4b7 with SMTP id h20-20020a05620a401400b0067d9a20b4b7mr9809794qko.190.1647335331721;
-        Tue, 15 Mar 2022 02:08:51 -0700 (PDT)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id d189-20020a3768c6000000b0067b248d6b3bsm9146903qkc.46.2022.03.15.02.08.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 02:08:51 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id v130so35952937ybe.13;
-        Tue, 15 Mar 2022 02:08:51 -0700 (PDT)
-X-Received: by 2002:a25:dc4:0:b0:629:2337:f9ea with SMTP id
- 187-20020a250dc4000000b006292337f9eamr21738218ybn.6.1647335331083; Tue, 15
- Mar 2022 02:08:51 -0700 (PDT)
+        with ESMTP id S1346640AbiCOJdO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Mar 2022 05:33:14 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04FD04ECFF;
+        Tue, 15 Mar 2022 02:32:02 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 57BBF1F43621
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647336720;
+        bh=QE/YbRmb8tZucb45FCoOsfQ+iIuuTe3bEnOlGJc219M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=PwTm2ystHVQqrE7oJkq3lebCs09xm0AIRE5RM3D3XtTSMfacCKD+Z7RYNEeGbvZTk
+         A/DPtUD7N32kEAAFoDsKy1D9dyBsyV7uVQNWkYNKH2AfR6WUnWypyRxTm8ceVPPYQZ
+         G+gfOWjmy1xSoSXxgA1F3eIQH2nkuKq+GTyeMkGAWEdiq7ig4uavwS223BnIIYH9/u
+         uFvAIB2C2QHzaXIy47HKbu5dAG3Y5NimtTbipf3E+Ku1PjHMmbO9Fs80ccMIkPi5gu
+         WnU8IV92fOPqUkZ3xnR40U2mC40cZjGdX3xPNAnilVEJ11/dyw1gihQ7lJDR99ZI2A
+         vjGHGzR3lV7PA==
+Message-ID: <b237c1fe-9ddd-0a2e-ecf2-05bfb984c5dd@collabora.com>
+Date:   Tue, 15 Mar 2022 10:31:57 +0100
 MIME-Version: 1.0
-References: <20220310121327.63C6FC340E8@smtp.kernel.org> <CAHk-=wgN6bYPgaB7g0zGXQ5HnbVQ9910o9OQMBLs_S_ax4H67A@mail.gmail.com>
- <YinzW413m6p0H/i1@sirena.org.uk>
-In-Reply-To: <YinzW413m6p0H/i1@sirena.org.uk>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 15 Mar 2022 10:08:38 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU9t2wLonWBjkXBdxxyK_oJiOUTSqrYVrZWjsY2JKEJ2g@mail.gmail.com>
-Message-ID: <CAMuHMdU9t2wLonWBjkXBdxxyK_oJiOUTSqrYVrZWjsY2JKEJ2g@mail.gmail.com>
-Subject: Re: [GIT PULL] SPI fixes for v5.17-rc7
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH V4 4/6] spi: mediatek: add spi memory support for ipm
+ design
+Content-Language: en-US
+To:     Leilk Liu <leilk.liu@mediatek.com>, Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20220315032411.2826-1-leilk.liu@mediatek.com>
+ <20220315032411.2826-5-leilk.liu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220315032411.2826-5-leilk.liu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
+Il 15/03/22 04:24, Leilk Liu ha scritto:
+> this patch add the support of spi-mem for ipm design.
+> 
+> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> ---
+>   drivers/spi/spi-mt65xx.c | 349 ++++++++++++++++++++++++++++++++++++++-
+>   1 file changed, 348 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+> index 1a0b3208dfca..8958c3fa4fea 100644
+> --- a/drivers/spi/spi-mt65xx.c
+> +++ b/drivers/spi/spi-mt65xx.c
 
-On Thu, Mar 10, 2022 at 3:46 PM Mark Brown <broonie@kernel.org> wrote:
-> On Thu, Mar 10, 2022 at 04:25:34AM -0800, Linus Torvalds wrote:
-> > On Thu, Mar 10, 2022 at 4:13 AM Mark Brown <broonie@kernel.org> wrote:
-> > > One fix for type conversion issues when working out maximum
-> > > scatter/gather segment sizes which caused problems for some systems
-> > > which where the limits overflow due to the type conversion.
->
-> > Side note: 'ctrl->max_dma_len' is a 'size_t', so even 'unsigned int'
-> > isn't necessarily a sufficient type.
->
-> Hrm, yes - thanks for spotting that.
+...snip...
 
-I had noticed while reviewing the patch, but changing to size_t wouldn't
-help much, as other related code paths treat the value as unsigned int
-anyway.
+> +
+> +static void of_mtk_spi_parse_dt(struct spi_master *master, struct device_node *nc)
+> +{
+> +	struct mtk_spi *mdata = spi_master_get_devdata(master);
+> +	u32 value;
+> +
+> +	if (!of_property_read_u32(nc, "spi-tx-bus-width", &value)) {
 
-Gr{oetje,eeting}s,
+Hello Leilk,
 
-                        Geert
+thanks for considering my advice about "spi-{tx,rx}-bus-width", but there's
+something that you have misunderstood about it.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Simply, you don't need this function at all. Whatever you are doing here is
+already being performed in the Linux SPI framework: at the end of the probe
+function, this driver is calling the (legacy) devm_spi_register_master(),
+which calls devm_spi_register_controller().
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+In drivers/spi/spi.c, function spi_register_controller(), will in turn call
+of_register_spi_devices(ctlr) -> of_register_spi_device(ctlr, nc)... that
+will end up finally calling function of_spi_parse_dt(ctlr, spi, nc).
+
+The last mentioned function already contains the logic and setup to check
+devicetree properties "spi-tx-bus-width" and "spi-rx-bus-width" (and some
+others, as well).
+
+This means that spi-mt65xx.c already probed these even before your IPM
+implementation, hence ***function of_mtk_spi_parse_dt() is not needed***.
+
+Simply drop it and don't check for these properties: that's already done.
+
+
+Regards,
+Angelo
+
+> +		switch (value) {
+> +		case 1:
+> +			break;
+> +		case 2:
+> +			master->mode_bits |= SPI_TX_DUAL;
+> +			break;
+> +		case 4:
+> +			master->mode_bits |= SPI_TX_QUAD;
+> +			break;
+> +		default:
+> +			dev_warn(mdata->dev,
+> +				 "spi-tx-bus-width %d not supported\n",
+> +				value);
+> +			break;
+> +		}
+> +	}
+> +
+> +	if (!of_property_read_u32(nc, "spi-rx-bus-width", &value)) {
+> +		switch (value) {
+> +		case 1:
+> +			break;
+> +		case 2:
+> +			master->mode_bits |= SPI_RX_DUAL;
+> +			break;
+> +		case 4:
+> +			master->mode_bits |= SPI_RX_QUAD;
+> +			break;
+> +		case 8:
+> +			master->mode_bits |= SPI_RX_OCTAL;
+> +			break;
+> +		default:
+> +			dev_warn(mdata->dev,
+> +				 "spi-rx-bus-width %d not supported\n",
+> +				value);
+> +			break;
+> +		}
+> +	}
+> +}
+> +
+>   static int mtk_spi_probe(struct platform_device *pdev)
+>   {
+>   	struct spi_master *master;
+> @@ -830,6 +1170,13 @@ static int mtk_spi_probe(struct platform_device *pdev)
+>   	if (mdata->dev_comp->ipm_design)
+>   		master->mode_bits |= SPI_LOOP;
+>   
+> +	if (mdata->dev_comp->ipm_design) {
+> +		mdata->dev = &pdev->dev;
+> +		master->mem_ops = &mtk_spi_mem_ops;
+> +		of_mtk_spi_parse_dt(master, pdev->dev.of_node);
+> +		init_completion(&mdata->spimem_done);
+> +	}
+> +
+>   	if (mdata->dev_comp->need_pad_sel) {
+>   		mdata->pad_num = of_property_count_u32_elems(
+>   			pdev->dev.of_node,
