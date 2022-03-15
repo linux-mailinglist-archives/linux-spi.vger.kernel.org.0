@@ -2,114 +2,226 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006E34DA067
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Mar 2022 17:48:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5804DA1D2
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Mar 2022 19:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242803AbiCOQt4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Mar 2022 12:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
+        id S1350872AbiCOSCZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Mar 2022 14:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349556AbiCOQty (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Mar 2022 12:49:54 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60304553B
-        for <linux-spi@vger.kernel.org>; Tue, 15 Mar 2022 09:48:41 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id bn33so27317973ljb.6
-        for <linux-spi@vger.kernel.org>; Tue, 15 Mar 2022 09:48:41 -0700 (PDT)
+        with ESMTP id S243063AbiCOSCY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Mar 2022 14:02:24 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A329D58E6E;
+        Tue, 15 Mar 2022 11:01:11 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id h13so25237638ede.5;
+        Tue, 15 Mar 2022 11:01:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=zt/r5r2zHXpo2duxNnaYNgAPA5dxpfI76juAqVaexSw=;
-        b=Y8ZdU+nyxKNyEdgJPvaWFUnJeWVz2wDo7JAxJf0kQlI3siurpvUSwzZXG6ifa5fbmg
-         MltEjmXOo5W/lLyp5KhMrgLIzMlNAy0/jeohNDmB9yR04no6Qu+KmI3XIpDHN31hjRkQ
-         amVOlehEnYI4vI6vTRY9fPOaSRRx8KBdzOaJg=
+        bh=9egEby/kGDQx/H2AywacJdMEq9UWb27T57iBP6MKY/M=;
+        b=X459zaz8rBpHmz1eWRM/nXKPoCcWwgv93mgo1kUIqKJmmrFSVbFmtlBkSyc7oZbqEA
+         9iE/wpN2ldzWFyDARevE8q4aWwftUcTWrj/hZGCp5c/nWOErfTWiotj502O2E3wRub8x
+         fAvwgbWwEpPPMZKlHleAIZ5b3NuCDHQaUCu3o6zMz3Pk9oBOWUhxp7FqU8z4OYlvff33
+         vjwTCIZda48THwgM2za8HjIs/dPh3/+wx8u7uUvYGGau/xbCmqh8QSdYU72RKq3dM+TV
+         7s/9EfIhX6BorS0N3xa1MT7AdVO4JDq0rPwvec+a1/gkrmCnUuEgVF5WsgvwobwSbCSf
+         ZFuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=zt/r5r2zHXpo2duxNnaYNgAPA5dxpfI76juAqVaexSw=;
-        b=arbQhTGGIRb4p93K8AvfUYzFEB6wI3tSExoj+6zc1l9Qs95SrnvtiWZTQj+NRqdkyf
-         xe2WJxVsRKHJjuf4vSV6T7XEJcfrEP9IqyfmbJ40/hXhmVRNkRal3HPGL1+nM5i0IThV
-         e2TsFURHeROyqe628H6vpdZoofwOWGaK3nGsgzeoIYW/hv4A+vo/FHq6tzUMJ7sdBFyR
-         X+gP3+50IY05Zp1qRFJXodyLURhm/kw225LLRy5PT07dl54Rsa0ZBE6DX3KmwAJq7pUH
-         FmxX1dI6Asb4pxlCAShelY7EcevVkGPiNJ67NX/dCisEeSD/Ncu1mXpckuQZrsrl/9Fr
-         BFDw==
-X-Gm-Message-State: AOAM530KHKHw7LpprRPhMhENMBb6sCi1nttD5V/iMg6uYdVwGQ3NgGFf
-        PQUmw+ECL4B9Xd8Pin907D8FgVtpprZ5skCx
-X-Google-Smtp-Source: ABdhPJy6+bssWai+T58/l/XQFvCW2BDG2nQvMGCOlvAiJTqlUSPkBwtWxFrtd2uU+zipM0HB23nkUg==
-X-Received: by 2002:a2e:b5a1:0:b0:244:d3b4:dc24 with SMTP id f1-20020a2eb5a1000000b00244d3b4dc24mr18108382ljn.83.1647362918287;
-        Tue, 15 Mar 2022 09:48:38 -0700 (PDT)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
-        by smtp.gmail.com with ESMTPSA id c7-20020a2e9d87000000b00247ebe11990sm4410596ljj.10.2022.03.15.09.48.36
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 09:48:37 -0700 (PDT)
-Received: by mail-lj1-f172.google.com with SMTP id c15so10737888ljr.9
-        for <linux-spi@vger.kernel.org>; Tue, 15 Mar 2022 09:48:36 -0700 (PDT)
-X-Received: by 2002:a2e:804b:0:b0:247:e81f:87e9 with SMTP id
- p11-20020a2e804b000000b00247e81f87e9mr18220509ljg.176.1647362916222; Tue, 15
- Mar 2022 09:48:36 -0700 (PDT)
+        bh=9egEby/kGDQx/H2AywacJdMEq9UWb27T57iBP6MKY/M=;
+        b=XzfM2y1/piwXOHyvUJCRTcLMyV5F25NwyAJ3OpzE3GPeEYCL6U9QtqD23JMPJV0Dlm
+         7Cd9roX0kyKTR3QEyPNBz7P1CTQQdguanEMw4FSfhmX7UWjfUgLeQiCFa+zIQZPXBRbP
+         fVruSaKpdK9Nj2pQUqrEVlgMh/AZYNyEU8/ABFX10M8ukj2vAlNcIGthtma/HVPMpqFG
+         eqHaWFywtWxx7W7kKn/3gr//Ca7cgl6MKQVOIjdnR0sT7WwYJmwA+p+LxEmrnryMr8zr
+         3zGqTbm/cgWVzJypTcsv1YoAaYPodndYKENU1w65gMnmadBR4NPRWrr/poSTTz9kAVwH
+         +/lQ==
+X-Gm-Message-State: AOAM530LkyqLKpknuIcsqFSJWgP9d+kI2fTmX20AJM3dDQJS36PD0aSm
+        M3ETKmWVYbHCuaFa4FQN0K7Dpq3rsDCIzIWhgY0=
+X-Google-Smtp-Source: ABdhPJz09b9Fm75ixFJtzUGUkS6dUid3EAUCrWF+jfN6zd2zyejpSwybW8/2BkPFf2PjWP6mgqXTNKVgn2eTNF92NTk=
+X-Received: by 2002:a05:6402:3589:b0:416:7de7:cdde with SMTP id
+ y9-20020a056402358900b004167de7cddemr26440456edc.218.1647367269998; Tue, 15
+ Mar 2022 11:01:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220310121327.63C6FC340E8@smtp.kernel.org> <CAHk-=wgN6bYPgaB7g0zGXQ5HnbVQ9910o9OQMBLs_S_ax4H67A@mail.gmail.com>
- <YinzW413m6p0H/i1@sirena.org.uk> <CAMuHMdU9t2wLonWBjkXBdxxyK_oJiOUTSqrYVrZWjsY2JKEJ2g@mail.gmail.com>
-In-Reply-To: <CAMuHMdU9t2wLonWBjkXBdxxyK_oJiOUTSqrYVrZWjsY2JKEJ2g@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 15 Mar 2022 09:48:19 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiZnS6n1ROQg3FHd=bcVTHi-sKutKT+toiViQEH47ZACg@mail.gmail.com>
-Message-ID: <CAHk-=wiZnS6n1ROQg3FHd=bcVTHi-sKutKT+toiViQEH47ZACg@mail.gmail.com>
-Subject: Re: [GIT PULL] SPI fixes for v5.17-rc7
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Mark Brown <broonie@kernel.org>,
+References: <20220312132856.65163-1-krzysztof.kozlowski@canonical.com> <20220312132856.65163-2-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220312132856.65163-2-krzysztof.kozlowski@canonical.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 15 Mar 2022 19:59:56 +0200
+Message-ID: <CAHp75Vd6yu0OA6wYvPVs8J1wRDPyb6tCYXOjp9poweJd0sfPcw@mail.gmail.com>
+Subject: Re: [PATCH v4 01/11] driver: platform: Add helper for safer setting
+ of driver_override
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
         linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 2:08 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+On Sat, Mar 12, 2022 at 5:16 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
 >
-> I had noticed while reviewing the patch, but changing to size_t wouldn't
-> help much, as other related code paths treat the value as unsigned int
-> anyway.
+> Several core drivers and buses expect that driver_override is a
+> dynamically allocated memory thus later they can kfree() it.
+>
+> However such assumption is not documented, there were in the past and
+> there are already users setting it to a string literal. This leads to
+> kfree() of static memory during device release (e.g. in error paths or
+> during unbind):
+>
+>     kernel BUG at ../mm/slub.c:3960!
+>     Internal error: Oops - BUG: 0 [#1] PREEMPT SMP ARM
+>     ...
+>     (kfree) from [<c058da50>] (platform_device_release+0x88/0xb4)
+>     (platform_device_release) from [<c0585be0>] (device_release+0x2c/0x90)
+>     (device_release) from [<c0a69050>] (kobject_put+0xec/0x20c)
+>     (kobject_put) from [<c0f2f120>] (exynos5_clk_probe+0x154/0x18c)
+>     (exynos5_clk_probe) from [<c058de70>] (platform_drv_probe+0x6c/0xa4)
+>     (platform_drv_probe) from [<c058b7ac>] (really_probe+0x280/0x414)
+>     (really_probe) from [<c058baf4>] (driver_probe_device+0x78/0x1c4)
+>     (driver_probe_device) from [<c0589854>] (bus_for_each_drv+0x74/0xb8)
+>     (bus_for_each_drv) from [<c058b48c>] (__device_attach+0xd4/0x16c)
+>     (__device_attach) from [<c058a638>] (bus_probe_device+0x88/0x90)
+>     (bus_probe_device) from [<c05871fc>] (device_add+0x3dc/0x62c)
+>     (device_add) from [<c075ff10>] (of_platform_device_create_pdata+0x94/0xbc)
+>     (of_platform_device_create_pdata) from [<c07600ec>] (of_platform_bus_create+0x1a8/0x4fc)
+>     (of_platform_bus_create) from [<c0760150>] (of_platform_bus_create+0x20c/0x4fc)
+>     (of_platform_bus_create) from [<c07605f0>] (of_platform_populate+0x84/0x118)
+>     (of_platform_populate) from [<c0f3c964>] (of_platform_default_populate_init+0xa0/0xb8)
+>     (of_platform_default_populate_init) from [<c01031f8>] (do_one_initcall+0x8c/0x404)
 
-.. but it really would.
+>     (do_one_initcall) from [<c0f012c0>] (kernel_init_freeable+0x3d0/0x4d8)
+>     (kernel_init_freeable) from [<c0a7def0>] (kernel_init+0x8/0x114)
+>     (kernel_init) from [<c01010b4>] (ret_from_fork+0x14/0x20)
 
-Note that the paths *after* this code don't matter. Because the result
-is guaranteed to fit in 'unsigned int' anyway.
+I believe you may remove these three.
 
-Put another way:
+> Provide a helper which clearly documents the usage of driver_override.
+> This will allow later to reuse the helper and reduce amount of
 
-    min_t(unsigned int,x,y)
+the amount
 
-is buggy if one of x/y is 'size_t'. Why? Because if that one gets
-truncated, you're doing 'min()' with a value that may be artificially
-much too small (that was exactly the problem commit 1a4e53d2fc4f:
-"spi: Fix invalid sgs value")fixed).
+> duplicated code.
 
-But the situation is _not_ true in the reverse. Look:
+> Convert the platform driver to use new helper and make the
 
-    min(size_t,x,y)
+a new
 
-is guaranteed to fit in 'unsigned int' as long as _one_ of x,y fits in
-'unsigned int' - even if the other doesn't. Because then 'min()' will
-just pick the one that already had the right size.
+> driver_override field const char (it is not modified by the core).
 
-To make it really concrete, compare
+...
 
-    min_t(unsigned int, 5, 0x100000001);
-    min_t(size_t, 5, 0x100000001);
+> +/**
+> + * driver_set_override() - Helper to set or clear driver override.
+> + * @dev: Device to change
+> + * @override: Address of string to change (e.g. &device->driver_override);
+> + *            The contents will be freed and hold newly allocated override.
+> + * @s: NUL terminated string, new driver name to force a match, pass empty
 
-on a 64-bit machine (ie size_t is 64-bits, and unsigned int is 32-bit).
+NUL-terminated? (44 vs 115 occurrences)
 
-One returns 1. The other returns 5. Both fit the result in 'unsigned
-int', but one of them is wrong.
+> + *     string to clear it
+> + * @len: length of @s
+> + *
+> + * Helper to set or clear driver override in a device, intended for the cases
+> + * when the driver_override field is allocated by driver/bus code.
+> + *
+> + * Returns: 0 on success or a negative error code on failure.
+> + */
+> +int driver_set_override(struct device *dev, const char **override,
+> +                       const char *s, size_t len)
+> +{
+> +       const char *new, *old;
+> +       char *cp;
+> +
+> +       if (!dev || !override || !s)
+> +               return -EINVAL;
+> +
+> +       /*
+> +        * The stored value will be used in sysfs show callback (sysfs_emit()),
+> +        * which has a length limit of PAGE_SIZE and adds a trailing newline.
+> +        * Thus we can store one character less to avoid truncation during sysfs
+> +        * show.
+> +        */
+> +       if (len >= (PAGE_SIZE - 1))
+> +               return -EINVAL;
+> +
+> +       new = kstrndup(s, len, GFP_KERNEL);
+> +       if (!new)
+> +               return -ENOMEM;
+> +
+> +       cp = strchr(new, '\n');
+> +       if (cp)
+> +               *cp = '\0';
 
-                Linus
+AFAIU you may reduce memory footprint by
+
+cp = strnchr(new, len, '\n');
+if (cp)
+  len = s - cp;
+
+new = kstrndup(...);
+
+> +       device_lock(dev);
+> +       old = *override;
+> +       if (cp != new) {
+> +               *override = new;
+> +       } else {
+> +               kfree(new);
+> +               *override = NULL;
+> +       }
+> +       device_unlock(dev);
+> +
+> +       kfree(old);
+> +
+> +       return 0;
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko
