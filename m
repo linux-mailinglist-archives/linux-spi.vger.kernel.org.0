@@ -2,35 +2,35 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05914DB2C9
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Mar 2022 15:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B93BE4DB2E8
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Mar 2022 15:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356806AbiCPOUX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 16 Mar 2022 10:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
+        id S1356694AbiCPOV3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 16 Mar 2022 10:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356728AbiCPOUR (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Mar 2022 10:20:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21F71EEC8;
-        Wed, 16 Mar 2022 07:18:12 -0700 (PDT)
+        with ESMTP id S1356705AbiCPOU4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Mar 2022 10:20:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10BE25C7B;
+        Wed, 16 Mar 2022 07:18:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D9ADD61387;
-        Wed, 16 Mar 2022 14:18:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9281C340EC;
-        Wed, 16 Mar 2022 14:18:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53570B81B7C;
+        Wed, 16 Mar 2022 14:18:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 055E7C340F1;
+        Wed, 16 Mar 2022 14:18:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647440291;
-        bh=cVDdsbpYFuHyz0xlac1F0bWymJbKHPQtOUNFav6KMT0=;
+        s=k20201202; t=1647440324;
+        bh=fZ0NMhp8ITe263nvjodv6Z57zmXNL/LGHoSpLaRSkNE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AnoHw7jvHtBqxfU0Lq/J4k7YHfRiIPvoJc/RAK9oRkLSK1mAhqIPkatXl4hXOObtZ
-         1FNRYIv2Kx3cD4kHV/MYIEN+wqWuYVVP0XtI22PDfXUhGeHjBgsEwzPeoS3ac3gduO
-         +FBhMSlYGjA4c4457qEEVeM0ozrnRaSJwjb277/yBUNFeB7ISdt4L1tQtuLGDnAkbM
-         JFx2SsAzUlhJU9vw2NaXEZGTjuaTllXD8mZ/gywNyEq6IDnsr4LJks4kzAc7014o5I
-         6JUV0BTIF1WWeU9ymY0+XVZw5IMk2zyG90wkqJyRuKJ4xC5geqp+FWWONvKUw4UFz5
-         ECmDHvrdBIXiw==
+        b=TfaQWrQAzvnP7II+ybcpwpdOJutI2ULyOeWurSbWd4/nYFHms1n1vdXDc+T4duktZ
+         vu+d6fNKIhWZmc9uItdBx56bH1LeIl32oYXj1ZOBcSJezdaW4PNfdAGcTsjxjdbv6+
+         kBn9uEw+BISmGEGms+K1Q6Zb4oaVsnFU0+h6kwBkd/2XftsSkx4roovuEDsZJQ7jlm
+         OHuswtNpB9UVM9bb9/8G+++xqXBCEPiMgFwPn6MPUAaYdqpThimHNbHb4RsqMsZTDD
+         QF4GIX2jQeO0oVoTA+ZLjeRpeX93JeCFgqxSZHJ6Swm64mgbBVXLcQx6K2XAIXZMBi
+         7dl1/mBx0iONw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
@@ -38,12 +38,12 @@ Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 6/7] spi: Fix invalid sgs value
-Date:   Wed, 16 Mar 2022 10:17:37 -0400
-Message-Id: <20220316141738.248513-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 5/6] spi: Fix invalid sgs value
+Date:   Wed, 16 Mar 2022 10:18:16 -0400
+Message-Id: <20220316141817.248621-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220316141738.248513-1-sashal@kernel.org>
-References: <20220316141738.248513-1-sashal@kernel.org>
+In-Reply-To: <20220316141817.248621-1-sashal@kernel.org>
+References: <20220316141817.248621-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -81,10 +81,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index ac05c9c86488..837fa947dec7 100644
+index 49f592e433a8..518c8e0eef7f 100644
 --- a/drivers/spi/spi.c
 +++ b/drivers/spi/spi.c
-@@ -844,10 +844,10 @@ int spi_map_buf(struct spi_controller *ctlr, struct device *dev,
+@@ -779,10 +779,10 @@ int spi_map_buf(struct spi_controller *ctlr, struct device *dev,
  	int i, ret;
  
  	if (vmalloced_buf || kmap_buf) {
