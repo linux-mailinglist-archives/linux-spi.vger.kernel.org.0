@@ -2,77 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 894524DB65C
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Mar 2022 17:41:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 340974DB79E
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Mar 2022 18:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235295AbiCPQmM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 16 Mar 2022 12:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51400 "EHLO
+        id S241009AbiCPRyk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 16 Mar 2022 13:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234888AbiCPQmM (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Mar 2022 12:42:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471B66CA67;
-        Wed, 16 Mar 2022 09:40:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F06F5B81C4E;
-        Wed, 16 Mar 2022 16:40:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2555EC340E9;
-        Wed, 16 Mar 2022 16:40:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647448855;
-        bh=Zup3poA3bavvhTcRqI3Ak9LCuwt+HercxiUK+Q87cp0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZO08rqhbqtkQU5pJh6w0asmBru02yOv3aida7ya7nzt7wDAkUqEqCzTDsmPB5HYJ/
-         TtaHI0+6iEC4lSGjuWlxtxUksAPSiBfHD87dgXr5gf73Qv6DEBzLDWWXZ046kHgg2D
-         Bz1AvgdcRMW6ZifgKWKig+PJ3s3AXIg5fqGBbFOIqcYfRcLLQwt41fpJ2sQ4U5criu
-         hNUhxAbzoFyB1BU4/Vk7xR5glziv4EaaAOAGjJwVihKHigs1YU0DiOvWX+NApGBQhq
-         atjoC0ubD6TK5LZrzS55BmOP6RRkjkvWVFJ3x0CpzwfxsFYQcka4t0KT/r3LDInaTu
-         Xn4ttQ7P7awig==
-Date:   Wed, 16 Mar 2022 12:40:51 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH AUTOSEL 5.16 12/13] spi: Fix invalid sgs value
-Message-ID: <YjITE6eOTyZBNhwI@sashalap>
-References: <20220316141354.247750-1-sashal@kernel.org>
- <20220316141354.247750-12-sashal@kernel.org>
- <CAMuHMdVtGb6LCTbDKo9vn=1MmP+RZJTe2=VNTtrNsPa-=1Q6zA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdVtGb6LCTbDKo9vn=1MmP+RZJTe2=VNTtrNsPa-=1Q6zA@mail.gmail.com>
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S235933AbiCPRyj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Mar 2022 13:54:39 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79DB52717E;
+        Wed, 16 Mar 2022 10:53:23 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.90,187,1643641200"; 
+   d="scan'208";a="114638884"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 17 Mar 2022 02:53:22 +0900
+Received: from localhost.localdomain (unknown [10.226.92.179])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 8119040C92AF;
+        Thu, 17 Mar 2022 02:53:20 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-spi@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH] spi: Fix erroneous sgs value with min_t()
+Date:   Wed, 16 Mar 2022 17:53:17 +0000
+Message-Id: <20220316175317.465-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 05:07:28PM +0100, Geert Uytterhoeven wrote:
->Hi Sasha,
->
->On Wed, Mar 16, 2022 at 3:15 PM Sasha Levin <sashal@kernel.org> wrote:
->> From: Biju Das <biju.das.jz@bp.renesas.com>
->>
->> [ Upstream commit 1a4e53d2fc4f68aa654ad96d13ad042e1a8e8a7d ]
->
->This commit is not 100% correct, cfr.
->https://lore.kernel.org/lkml/CAHk-=wiZnS6n1ROQg3FHd=bcVTHi-sKutKT+toiViQEH47ZACg@mail.gmail.com
->Please postpone backporting until the issue has been resolved.
+While computing sgs in spi_map_buf(), the data type
+used in min_t() for max_seg_size is 'unsigned int' where
+as that of ctlr->max_dma_len is 'size_t'.
 
-Will check back in a week, thanks!
+min_t(unsigned int,x,y) gives wrong results if one of x/y is
+'size_t'
 
+Consider the below examples on a 64-bit machine (ie size_t is
+64-bits, and unsigned int is 32-bit).
+    case 1) min_t(unsigned int, 5, 0x100000001);
+    case 2) min_t(size_t, 5, 0x100000001);
+
+Case 1 returns '1', where as case 2 returns '5'. As you can see
+the result from case 1 is wrong.
+
+This patch fixes the above issue by using the data type of the
+parameters that are used in min_t with maximum data length.
+
+Fixes: commit 1a4e53d2fc4f68aa ("spi: Fix invalid sgs value")
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Suggested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ drivers/spi/spi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index d96082dc3340..fb2896cdb3ce 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1019,10 +1019,10 @@ int spi_map_buf(struct spi_controller *ctlr, struct device *dev,
+ 	int i, ret;
+ 
+ 	if (vmalloced_buf || kmap_buf) {
+-		desc_len = min_t(unsigned int, max_seg_size, PAGE_SIZE);
++		desc_len = min_t(unsigned long, max_seg_size, PAGE_SIZE);
+ 		sgs = DIV_ROUND_UP(len + offset_in_page(buf), desc_len);
+ 	} else if (virt_addr_valid(buf)) {
+-		desc_len = min_t(unsigned int, max_seg_size, ctlr->max_dma_len);
++		desc_len = min_t(size_t, max_seg_size, ctlr->max_dma_len);
+ 		sgs = DIV_ROUND_UP(len, desc_len);
+ 	} else {
+ 		return -EINVAL;
 -- 
-Thanks,
-Sasha
+2.17.1
+
