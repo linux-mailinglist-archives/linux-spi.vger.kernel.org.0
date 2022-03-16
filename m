@@ -2,133 +2,150 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94F44DA2C6
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Mar 2022 19:56:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12DE04DA6F5
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Mar 2022 01:39:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237322AbiCOS5k (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 15 Mar 2022 14:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
+        id S1343667AbiCPAkH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 15 Mar 2022 20:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233823AbiCOS5k (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Mar 2022 14:57:40 -0400
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D714E393;
-        Tue, 15 Mar 2022 11:56:27 -0700 (PDT)
-Received: by mail-qt1-f172.google.com with SMTP id 11so2931qtt.9;
-        Tue, 15 Mar 2022 11:56:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x1R6MexnAYDRxJBUb0QgsDJ7MygsbxDZQB18nTdrN9k=;
-        b=zsKLQZVmMlABXEa4cZ2YMoJAGJVQ673L6ghBnwPWKtAL+GwsEts0zqp9R164LRxKcx
-         KydyC9yZfvnhbaPgstS1tHeyX9cWM0Z5ZDDKup6sDEYdFxZP6cpO/5SQF/0x94qSY81a
-         WPE60yp2S2uLwqKiOMYSNXKtZUq8alqlYgzeLKuMRU55WW7RZpivZ47GJTwt+ib8+FII
-         zE1VoHAZ0dhv0ArCxiWkjx1LywikG4tg9c7sgKbZN339oLow9aeyxUvp2ArTdASEeTpC
-         5gyseyGCZF7EddIsjzLhJycIMGDyyLiOXmtDUZnXHzgCVXqDtDmsEbtU4QZgc/lLz3tG
-         5Y7A==
-X-Gm-Message-State: AOAM532ulcFFpic5uaZRguyjwSq8yRfvOzXUJTqlMF0kH+dcHrrXTFoS
-        NjGAHE11z7yVpkxpMIfyCVkIPak5oT5+HQ==
-X-Google-Smtp-Source: ABdhPJzm94DKiM/MVYEHZOrTxKXpLow5k0BvpABrrV9RCaueeaHtasWKDreg/aRQIjvHq0YXKEqfHg==
-X-Received: by 2002:ac8:5c90:0:b0:2de:37cd:8af6 with SMTP id r16-20020ac85c90000000b002de37cd8af6mr23372119qta.437.1647370586013;
-        Tue, 15 Mar 2022 11:56:26 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id a13-20020a05622a064d00b002e1b8d9d6cfsm10246974qtb.32.2022.03.15.11.56.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 11:56:25 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id y142so275695ybe.11;
-        Tue, 15 Mar 2022 11:56:25 -0700 (PDT)
-X-Received: by 2002:a25:aa0e:0:b0:633:7c3b:94a0 with SMTP id
- s14-20020a25aa0e000000b006337c3b94a0mr3416103ybi.546.1647370585424; Tue, 15
- Mar 2022 11:56:25 -0700 (PDT)
+        with ESMTP id S231308AbiCPAkG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 15 Mar 2022 20:40:06 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D73B31203;
+        Tue, 15 Mar 2022 17:38:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AA8661476;
+        Tue, 15 Mar 2022 17:38:52 -0700 (PDT)
+Received: from [10.57.42.204] (unknown [10.57.42.204])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5AA973F73D;
+        Tue, 15 Mar 2022 17:38:50 -0700 (PDT)
+Message-ID: <8d138801-5447-5e88-25d2-3eb13d294530@arm.com>
+Date:   Wed, 16 Mar 2022 00:38:43 +0000
 MIME-Version: 1.0
-References: <20220310121327.63C6FC340E8@smtp.kernel.org> <CAHk-=wgN6bYPgaB7g0zGXQ5HnbVQ9910o9OQMBLs_S_ax4H67A@mail.gmail.com>
- <YinzW413m6p0H/i1@sirena.org.uk> <CAMuHMdU9t2wLonWBjkXBdxxyK_oJiOUTSqrYVrZWjsY2JKEJ2g@mail.gmail.com>
- <CAHk-=wiZnS6n1ROQg3FHd=bcVTHi-sKutKT+toiViQEH47ZACg@mail.gmail.com>
-In-Reply-To: <CAHk-=wiZnS6n1ROQg3FHd=bcVTHi-sKutKT+toiViQEH47ZACg@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 15 Mar 2022 19:56:13 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWd_eAGjXRAODXvufoXT_QqqOpuLJTAj9ZG7d-EQyRKBw@mail.gmail.com>
-Message-ID: <CAMuHMdWd_eAGjXRAODXvufoXT_QqqOpuLJTAj9ZG7d-EQyRKBw@mail.gmail.com>
-Subject: Re: [GIT PULL] SPI fixes for v5.17-rc7
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v5 0/6] auxdisplay: Add support for the Titanmec TM1628 7
+ segment display controller
+Content-Language: en-GB
+To:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Miguel Ojeda <ojeda@kernel.org>
+Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+References: <90668779-b53d-b3e7-5327-af11ff4a1d18@gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <90668779-b53d-b3e7-5327-af11ff4a1d18@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Linus,
+On 2022-02-25 21:09, Heiner Kallweit wrote:
+> This series adds support for the Titanmec TM1628 7 segment display
+> controller. It's based on previous RFC work from Andreas Färber.
+> The RFC version placed the driver in the LED subsystem, but this was
+> NAK'ed by the LED maintainer. Therefore I moved the driver to
+> /drivers/auxdisplay what seems most reasonable to me.
+> 
+> Further changes to the RFC version:
+> - Driver can be built also w/o LED class support, for displays that
+>    don't have any symbols to be exposed as LED's.
+> - Simplified the code and rewrote a lot of it.
+> - Driver is now kind of a MVP, but functionality should be sufficient
+>    for most use cases.
+> - Use the existing 7 segment support in uapi/linux/map_to_7segment.h
+>    as suggested by Geert Uytterhoeven.
+> 
+> Note: There's a number of chips from other manufacturers that are
+>        almost identical, e.g. FD628, SM1628. Only difference I saw so
+>        far is that they partially support other display modes.
+>        TM1628: 6x12, 7x11
+>        SM1628C: 4x13, 5x12, 6x11, 7x10
+>        For typical displays on devices using these chips this
+>        difference shouldn't matter.
+> 
+> Successfully tested on a TX3 Mini TV box that has an SM1628C and a
+> display with 4 digits and 7 symbols.
 
-On Tue, Mar 15, 2022 at 5:48 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> On Tue, Mar 15, 2022 at 2:08 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > I had noticed while reviewing the patch, but changing to size_t wouldn't
-> > help much, as other related code paths treat the value as unsigned int
-> > anyway.
->
-> .. but it really would.
->
-> Note that the paths *after* this code don't matter. Because the result
-> is guaranteed to fit in 'unsigned int' anyway.
->
-> Put another way:
->
->     min_t(unsigned int,x,y)
->
-> is buggy if one of x/y is 'size_t'. Why? Because if that one gets
-> truncated, you're doing 'min()' with a value that may be artificially
-> much too small (that was exactly the problem commit 1a4e53d2fc4f:
-> "spi: Fix invalid sgs value")fixed).
->
-> But the situation is _not_ true in the reverse. Look:
->
->     min(size_t,x,y)
->
-> is guaranteed to fit in 'unsigned int' as long as _one_ of x,y fits in
-> 'unsigned int' - even if the other doesn't. Because then 'min()' will
-> just pick the one that already had the right size.
->
-> To make it really concrete, compare
->
->     min_t(unsigned int, 5, 0x100000001);
->     min_t(size_t, 5, 0x100000001);
->
-> on a 64-bit machine (ie size_t is 64-bits, and unsigned int is 32-bit).
->
-> One returns 1. The other returns 5. Both fit the result in 'unsigned
-> int', but one of them is wrong.
+FWIW I gave this a go on my Beelink A1, which has an AiP1618 and a clock 
+display which would mapped like so:
 
-You're absolutely right. So the code should be changed to:
+	titanmec,segment-mapping = /bits/ 8 <1 2 3 13 12 5 4>;
+	titanmec,grid = /bits/ 8 <5 4 2 1>;
 
-        if (vmalloced_buf || kmap_buf) {
--                desc_len = min_t(unsigned int, max_seg_size, PAGE_SIZE);
-+               desc_len = min_t(unsigned long, max_seg_size, PAGE_SIZE);
-                sgs = DIV_ROUND_UP(len + offset_in_page(buf), desc_len);
-        } else if (virt_addr_valid(buf)) {
--               desc_len = min_t(unsigned int, max_seg_size, ctlr->max_dma_len);
-+               desc_len = min_t(size_t, max_seg_size, ctlr->max_dma_len);
-                sgs = DIV_ROUND_UP(len, desc_len);
-        } else {
-                return -EINVAL;
-        }
+(grid 3 segment 2 is used for a colon in the middle)
 
-Gr{oetje,eeting}s,
+If I bodge around the lack of support for non-contiguous grids, it does 
+otherwise work fairly well, other than being 6-segment displays because 
+it needs to be in display mode 1 to drive SEG13 rather than GRID6. I 
+wonder if we could be a bit cleverer about picking a display mode based 
+on the grid/segment numbers used?
 
-                        Geert
+I also have a couple of those TM1638 breakout boards with 8 digits, 8 
+single LEDs and 8 buttons that I might have a go with too. Have you 
+given any thought to how the DT binding might support inputs as well? 
+(The best time to be future-proof is before it's merged...)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Cheers,
+Robin.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> v2:
+> - (re-)add Andreas' SoB to two patches
+> - fix YAML issues
+> - include ctype.h explicitly
+> - add info message in probe()
+> 
+> v3:
+> - remove patch 1 because it has been applied via the SPI tree already
+> - fix remaining YAML issues in patch 2
+> - follow Miguel's suggestion on usage of Co-Developed-by
+> 
+> v4:
+> - add patch for MAINTAINERS entry
+> - incorporate Miguel's review comments
+> - Replace Co-Developed-by with Co-developed-by (checkpatch)
+> v5:
+> - add vendor prefix to driver-specific dt properties
+> 
+> Andreas Färber (1):
+>    dt-bindings: vendor-prefixes: Add Titan Micro Electronics
+> 
+> Heiner Kallweit (5):
+>    dt-bindings: auxdisplay: Add Titan Micro Electronics TM1628
+>    docs: ABI: document tm1628 attribute display-text
+>    auxdisplay: add support for Titanmec TM1628 7 segment display
+>      controller
+>    arm64: dts: meson-gxl-s905w-tx3-mini: add support for the 7 segment
+>      display
+>    MAINTAINERS: Add entry for tm1628 auxdisplay driver
+> 
+>   .../testing/sysfs-devices-auxdisplay-tm1628   |   7 +
+>   .../bindings/auxdisplay/titanmec,tm1628.yaml  |  92 +++++
+>   .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+>   MAINTAINERS                                   |   7 +
+>   .../dts/amlogic/meson-gxl-s905w-tx3-mini.dts  |  59 +++
+>   drivers/auxdisplay/Kconfig                    |  11 +
+>   drivers/auxdisplay/Makefile                   |   1 +
+>   drivers/auxdisplay/tm1628.c                   | 376 ++++++++++++++++++
+>   8 files changed, 555 insertions(+)
+>   create mode 100644 Documentation/ABI/testing/sysfs-devices-auxdisplay-tm1628
+>   create mode 100644 Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml
+>   create mode 100644 drivers/auxdisplay/tm1628.c
+> 
