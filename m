@@ -2,59 +2,110 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0AF4DAC9A
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Mar 2022 09:39:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1AC4DAD09
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Mar 2022 09:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354541AbiCPIlI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 16 Mar 2022 04:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53418 "EHLO
+        id S1354729AbiCPI6Y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 16 Mar 2022 04:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354506AbiCPIlH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Mar 2022 04:41:07 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA46D5FF24;
-        Wed, 16 Mar 2022 01:39:52 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id B4D912223E;
-        Wed, 16 Mar 2022 09:39:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1647419990;
+        with ESMTP id S1354713AbiCPI6V (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Mar 2022 04:58:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0EAFE6517E
+        for <linux-spi@vger.kernel.org>; Wed, 16 Mar 2022 01:57:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647421021;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mfWEyVdNhZ2PEbQ7xLSXglp7UcYPsmqDrsv7e0s9JhA=;
-        b=BaKtRWUqplLjFdATAVwcnIXV8nbQ51yM+K4qZ++8hd8s5flFZjiaJoEAIlCC+aJKmvf//V
-        FArxoXQyWkOcWvnvVtAy1ih5ZuFDyLNlnSIdZQ5CJLmrduoaotqd38R3ArdxHSK2Yp1evs
-        skS46O66wMZw0ZFQqN9iHY0wN9T6gIc=
+        bh=0Bc153qdO6aJS+V+8boSatM96Pn9LsInVn8PpJNJpKY=;
+        b=V60Ao4Zw1OA7tAOzdGW44leJ0jkElJhSPole8p+6UPMribGjSmwXawi+d7wL2Q1uaj/FON
+        k2CwETmF1FBe7qqQ65ImSpIasQTWKeABDsfs/Z/Z9ZDbgpp3vQdsjJ7ohAKIiOP5I7+x9l
+        Ax1/tYInHk81E+ISM4zKnhPSG9WCdaE=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-673-Pj0VjEPnPfKT3-VZQscAHg-1; Wed, 16 Mar 2022 04:56:59 -0400
+X-MC-Unique: Pj0VjEPnPfKT3-VZQscAHg-1
+Received: by mail-wr1-f72.google.com with SMTP id t15-20020a5d534f000000b001f1e5759cebso326372wrv.7
+        for <linux-spi@vger.kernel.org>; Wed, 16 Mar 2022 01:56:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0Bc153qdO6aJS+V+8boSatM96Pn9LsInVn8PpJNJpKY=;
+        b=r/tB93cHN2Ol2jM3fzeXMDixSFquFMoMHXO4QfdtJJlDF8NWWkGX1sxcTtvR+UWXkU
+         3hecpZ604IoGrYmVwg1uNe9KGZxvLHocJpDyCtwo/m9squ+S/3PGBQS8QCnkkT1/+nnC
+         FkDV+va8wtYu8HoWBZjxKrNdRUsOZRzZLaeO3t/TZjJoOeSAK/gIQHNgq15XHfEnVEL5
+         QYG6RMxpvBcWYr5wfEHNsX3gekZPCCIbovV4dBd9PZ2whg7+7g0jkC8S4WheagS5PbWx
+         PRZjvGTeZgw5ZUWq3yRP+Kf+KDmTseSvVr4+UOuOzRKT60vQf0c7V3V7BOmark3AXXJs
+         NuCQ==
+X-Gm-Message-State: AOAM533dIphlOXaCYpe4PYP8nYEnz4/yw+LcGJxwQ24XwBuyLB+bKdF6
+        3bsBsWgwKDG9m22EeHlA4mWH8TArYRXXn0HnSfxrBJhfh0I9QdCNFrXYq2MorN93XsHh7KenE4r
+        1DtWZPUoYs81sPiSFMXtv
+X-Received: by 2002:a5d:4d4b:0:b0:1f1:d99e:1122 with SMTP id a11-20020a5d4d4b000000b001f1d99e1122mr23570209wru.604.1647421018439;
+        Wed, 16 Mar 2022 01:56:58 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxxg+HdKFc+OlgI5Uf6j74GkTyT+tlDfMeOChHK9/5Na0k8DDsBUyiZqTzroGOmIKGPRSv82g==
+X-Received: by 2002:a5d:4d4b:0:b0:1f1:d99e:1122 with SMTP id a11-20020a5d4d4b000000b001f1d99e1122mr23570190wru.604.1647421018228;
+        Wed, 16 Mar 2022 01:56:58 -0700 (PDT)
+Received: from redhat.com ([2.53.2.35])
+        by smtp.gmail.com with ESMTPSA id p1-20020a5d59a1000000b00203d83b0ae4sm1136056wrr.109.2022.03.16.01.56.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 01:56:57 -0700 (PDT)
+Date:   Wed, 16 Mar 2022 04:56:48 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v4 08/11] vdpa: Use helper for safer setting of
+ driver_override
+Message-ID: <20220316045633-mutt-send-email-mst@kernel.org>
+References: <20220312132856.65163-1-krzysztof.kozlowski@canonical.com>
+ <20220312132856.65163-9-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 16 Mar 2022 09:39:48 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Tudor.Ambarus@microchip.com, p.yadav@ti.com, broonie@kernel.org,
-        miquel.raynal@bootlin.com, richard@nod.at,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Nicolas.Ferre@microchip.com,
-        zhengxunli@mxic.com.tw, jaimeliao@mxic.com.tw,
-        andreasilvagni@macronix.com
-Subject: Re: [PATCH v2 0/6] spi-mem: Allow specifying the byte order in DTR
- mode
-In-Reply-To: <8e6e3dcb-0771-560f-4eb8-d49e7cf1f1df@ti.com>
-References: <20220311080147.453483-1-tudor.ambarus@microchip.com>
- <76eb13b6-9263-975f-3196-312259634301@ti.com>
- <9e0b6bde-838d-b8a4-9fe7-75c4f916fb27@microchip.com>
- <8e6e3dcb-0771-560f-4eb8-d49e7cf1f1df@ti.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <09fe05b41a8b325150d44969ebf39d01@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220312132856.65163-9-krzysztof.kozlowski@canonical.com>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=mst@redhat.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,212 +113,76 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Am 2022-03-16 08:08, schrieb Vignesh Raghavendra:
-> On 15/03/22 12:28 pm, Tudor.Ambarus@microchip.com wrote:
->> On 3/15/22 08:08, Vignesh Raghavendra wrote:
->>> EXTERNAL EMAIL: Do not click links or open attachments unless you 
->>> know the content is safe
->>> 
->>> Hi,
->> 
->> Hi,
->> 
->>> 
->>> On 11/03/22 1:31 pm, Tudor Ambarus wrote:
->>>> There are NOR flashes (Macronix) that swap the bytes on a 16-bit 
->>>> boundary
->>>> when configured in Octal DTR mode. The byte order of 16-bit words is
->>>> swapped when read or written in Octal Double Transfer Rate (DTR) 
->>>> mode
->>>> compared to Single Transfer Rate (STR) modes. If one writes D0 D1 D2 
->>>> D3
->>>> bytes using 1-1-1 mode, and uses 8D-8D-8D SPI mode for reading, it 
->>>> will
->>>> read back D1 D0 D3 D2. Swapping the bytes is a bad design decision 
->>>> because
->>>> it may introduce some endianness problems. It can affect the boot 
->>>> sequence
->>>> if the entire boot sequence is not handled in either 8D-8D-8D mode 
->>>> or 1-1-1
->>>> mode. So we must swap the bytes back to have the same byte order as 
->>>> in STR
->>>> modes. Fortunately there are controllers that can swap the bytes 
->>>> back at
->>>> runtime, addressing the flash's endiannesses requirements.
->>>> If the controllers are not capable of swapping the bytes, the 
->>>> protocol is
->>>> downgraded via spi_nor_spimem_adjust_hwcaps(). When available, the 
->>>> swapping
->>>> of the bytes is always done regardless if it's a data or register 
->>>> access,
->>>> so that we comply with the JESD216 requirements: "Byte order of 
->>>> 16-bit
->>>> words is swapped when read in 8D-8D-8D mode compared to 1-1-1".
->>>> 
->>> 
->>> Sorry, bit late to the thread. But, dropping 8D-8D-8D mode support is
->> 
->> no worries
->> 
->>> quite restrictive IMO.
->>> 
->>> AFAIK, SFDP standard does not dictate how data should be stored in 
->>> flash
->>> or how SW should interpret after reading data from flash. It merely
->>> indicates endian-ness compared to 1-1-1 mode.
->>> 
->>> So, its up to various system SWs like bootloader/Linux to work 
->>> according
->>> to pre-aligned layout as there is no rule that data needs to be 
->>> stored
->>> in byte order.
->>> 
->>> We have two types of controllers:
->>> 
->>> 1. SPI controllers supporting swapping endian-ness on the fly:
->>> -> For such flashes, better choice is to have SWAP option always
->>> enabled. So that data written in 8D-8D-8D mode can be read correctly 
->>> in
->>> 1-1-1 mode and vice-versa.
->>> ( I am assuming SWAP option of controller is only effective in 
->>> 8D-8D-8D
->>> mode and is NOP in 1-1-1 or other modes)
->>> 
->>> But, its possible that "ROM" or other non-upgradable SWs may choose 
->>> not
->>> make to use of this SWAP option of HW to keep things simple in which
->>> case, they cannot boot from 8D-8D-8D mode with above setting. Such SW
->>> don't always have knowledge of flash and cannot be forced to have a
->>> constraint to enable byte swap on read.
->>> 
->>> So, IMO, its best left to system integrators to specify whether or 
->>> not
->>> SWAP option needs to be enabled (perhaps via DT as its per flash
->>> specific property?)
->> 
->> we can't use DT for configuration, maybe a Kconfig instead. Are there 
->> any
->> other options?
->> 
+On Sat, Mar 12, 2022 at 02:28:53PM +0100, Krzysztof Kozlowski wrote:
+> Use a helper to set driver_override to reduce amount of duplicated code.
 > 
-> Problem with Kconfig is that it cannot be used when there are multiple
-> flash instances on the board and both behave differently.
-> 
-> This is similar to big-endian vs little-endian property used by CFI
-> physmap driver and other places in kernel[1]
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-On more thing to consider is that if we are using Kconfig things
-cannot be changed during runtime. While this might be ok when you
-are building your typical embedded distribution, there are efforts
-to be able to boot standard distributions on embedded platforms (see
-ARM SystemReady). A Kconfig option won't work there.
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
--michael
+feel free to merge with the rest of the patchset.
 
->>> 
->>> 2.  SPI controllers don't support endian-ness SWAP on the fly:
->>> It is still possible to reliably read and write data as long as its
->>> written and read back in same mode.
->>> 
->>> De-rating speeds because of absence of this support would mean 
->>> reduction
->>> of speed by **16 times** (maybe even higher as 8D mode tends to 
->>> support
->>> higher bus freqs). Swapping bytes in Linux before writing or after
->>> reading is not an option either as it negatively impacts performance.
->>> 
->>> Asking ROM/bootloaders to swap bytes based on SFDP indication is
->>> restrictive too as it involves boot time penalty and most systems 
->>> with
->>> OSPI flashes are using them to achieve super fast boot times.
->>> 
->>> One more case to consider is flashes that dont have SFDP table to
->>> indicate byte order but follow Macronix's convention. In such cases, 
->>> its
->>> better for SPI NOR layer to be as dumb as possible and not really do 
->>> any
->>> byte swapping, leaving it up to user space to handle/interpret data
->>> appropriately.
->>> 
->>> Also, Macronix is probably in violation of xSPI spec (JESD251A 
->>> 6.9.5.2
->>> 8D-8D-8D Profile 1.0) where diagrams clearly show data output should 
->>> be
->>> D0 D1 D2 D3... So ROMs following xSPI spec (which is the only spec
->>> providing flash agnostic way of switching to 8D mode and reading data 
->>> in
->>> 8D mode) would not care about SFDP bit indicating byteorder and its 
->>> up
->>> to flasher programs to take care of the same
->> 
->> This is a bit in contradiction, because if the ROMs follow xSPI, thus 
->> little
->> endian byte order, they should swap the bytes.
->> 
+> ---
+>  drivers/vdpa/vdpa.c  | 29 ++++-------------------------
+>  include/linux/vdpa.h |  4 +++-
+>  2 files changed, 7 insertions(+), 26 deletions(-)
 > 
-> As I indicated below xSPI (JESD251) spec seems to align on little 
-> endian
-> order. So, don't really need to swap the bytes on read. Anyways impact
-> on performance prohibits such support and thus most ROM designs will
-> expect flashing program to take care of it (especially in case where
-> controller does not support on the fly swapping).
-> 
->>> 
->>> IMO, kernel device drivers should just provide access to underlying 
->>> HW
->>> and not have too much intelligence to interpret data/take decisions
->>> 
->>> So, simpler constraint to put is:
->>> Flasher programs should program data in the same mode in which
->>> ROM/bootloder/Linux is expected to read the data on that system.
->> 
->> No, this constraint doesn't cover all possible cases: take a 1-1-1 
->> ROMcode,
->> 8D-8D-8D for other bootloaders and kernel. You need to dynamically 
->> change modes
->> in the flasher program in order to address this use case, which is a 
->> no go.
->> 
-> 
-> Flash programmer need not change the mode, but needs to generate a byte
-> swapped image and write it knowing that image is being flashed in
-> 8D-8D-8D mode and read in 1-1-1 mode or vice versa.
-> 
->>> 
->>> For Macronix like flashes, if one has a ROM/bootloader that only
->>> supports 1-1-1 mode and flashing data in 8D-8D-8D mode with Linux, 
->>> then
->>> please generate a byte-swapped image offline and flash it. Don't 
->>> impose
->> 
->> we can't do that, see the example from above.
->> 
-> 
-> See above, no need to change mode dynamically.
-> 
->>> penalty on systems that do best to handle this messy situation.
->>> I see this as the only option with least performance penalty.
->>> 
->> 
->> I take from this that we should let the byte swap be 
->> user-configurable,
->> thus a Kconfig. Which I'm not against it, but it will give users
->> headaches to sync all the software components. Making such a decision
->> implies that users know SPI NOR internal details, which also is a bit
->> stretched. Let's sync so that we move forward with this. Opinions?
->> 
-> 
-> I am fine with things being configurable
-> 
-> Only issues with Kconfig: it does not help systems with multiple OSPIs
-> with different endian-ness.
-> 
-> 
-> [1] Documentation/devicetree/bindings/mtd/mtd-physmap.yaml
-> 
-> 
-> Regards
-> Vignesh
+> diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
+> index 1ea525433a5c..2dabed1df35c 100644
+> --- a/drivers/vdpa/vdpa.c
+> +++ b/drivers/vdpa/vdpa.c
+> @@ -77,32 +77,11 @@ static ssize_t driver_override_store(struct device *dev,
+>  				     const char *buf, size_t count)
+>  {
+>  	struct vdpa_device *vdev = dev_to_vdpa(dev);
+> -	const char *driver_override, *old;
+> -	char *cp;
+> +	int ret;
+>  
+> -	/* We need to keep extra room for a newline */
+> -	if (count >= (PAGE_SIZE - 1))
+> -		return -EINVAL;
+> -
+> -	driver_override = kstrndup(buf, count, GFP_KERNEL);
+> -	if (!driver_override)
+> -		return -ENOMEM;
+> -
+> -	cp = strchr(driver_override, '\n');
+> -	if (cp)
+> -		*cp = '\0';
+> -
+> -	device_lock(dev);
+> -	old = vdev->driver_override;
+> -	if (strlen(driver_override)) {
+> -		vdev->driver_override = driver_override;
+> -	} else {
+> -		kfree(driver_override);
+> -		vdev->driver_override = NULL;
+> -	}
+> -	device_unlock(dev);
+> -
+> -	kfree(old);
+> +	ret = driver_set_override(dev, &vdev->driver_override, buf, count);
+> +	if (ret)
+> +		return ret;
+>  
+>  	return count;
+>  }
+> diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
+> index 721089bb4c84..37117404660e 100644
+> --- a/include/linux/vdpa.h
+> +++ b/include/linux/vdpa.h
+> @@ -64,7 +64,9 @@ struct vdpa_mgmt_dev;
+>   * struct vdpa_device - representation of a vDPA device
+>   * @dev: underlying device
+>   * @dma_dev: the actual device that is performing DMA
+> - * @driver_override: driver name to force a match
+> + * @driver_override: driver name to force a match; do not set directly,
+> + *                   because core frees it; use driver_set_override() to
+> + *                   set or clear it.
+>   * @config: the configuration ops for this device.
+>   * @cf_mutex: Protects get and set access to configuration layout.
+>   * @index: device index
+> -- 
+> 2.32.0
 
--- 
--michael
