@@ -2,126 +2,107 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98FFF4DB59D
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Mar 2022 17:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD684DB61B
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Mar 2022 17:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344138AbiCPQI6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 16 Mar 2022 12:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
+        id S241508AbiCPQ2F (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 16 Mar 2022 12:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343865AbiCPQI6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Mar 2022 12:08:58 -0400
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C68E6006F;
-        Wed, 16 Mar 2022 09:07:43 -0700 (PDT)
-Received: by mail-qk1-f175.google.com with SMTP id g8so2253476qke.2;
-        Wed, 16 Mar 2022 09:07:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3kQi/ATz8vXUZ8yEbTxILdWl+W/EazBouregaIRmudw=;
-        b=zH6HSMbLokaaI4W5CrJVgrJsrUGiuwlM/WIS1wLB2JFZUCc337J+nApRrsMmGRXnMh
-         s57C4FO+9dAyP3WA0vYUt0DOwvU5wBgWLDPcM/EElEgYzAQnFl7jYOm3XuJR0HIJBuvS
-         AgSZTLmHqNtWvdqCbT8N1tQ9JE66ftpl/WvqjbRGkoqHUeMBnxj0lgXCmJo8aSfBrwed
-         9Bnumu3AdKQc2wV91rHL1NJoVzGNJlIC78g82Mg7hAVNPftewaixOeyWyYdrgwkrvVtz
-         mCrg8/6SYJ/Wo99/f6E4paNOF6PeOYrkNKnXwyZ8h1VVPt4rqQ3wT1xfeZp14MZPAcV3
-         x4cA==
-X-Gm-Message-State: AOAM530xfhnh4U5Lwg6dOJO+V2Nbqx3lbAXJfWTAlxklb+DIm4X1dyW1
-        etMJL8+8hoHbaa8LJe+AU+N7QUtflwqfrw==
-X-Google-Smtp-Source: ABdhPJxzJ5J1YB0KYzMUusjiJwklstERWjnbu4Y+blpzMppdSnLNkCUp1Hf3QxbYf4OA7bUL080HRg==
-X-Received: by 2002:a37:68d0:0:b0:67b:3c3c:eeaa with SMTP id d199-20020a3768d0000000b0067b3c3ceeaamr389583qkc.616.1647446862155;
-        Wed, 16 Mar 2022 09:07:42 -0700 (PDT)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id s64-20020a375e43000000b0067b0e68092csm1106455qkb.91.2022.03.16.09.07.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Mar 2022 09:07:42 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2db2add4516so29105987b3.1;
-        Wed, 16 Mar 2022 09:07:40 -0700 (PDT)
-X-Received: by 2002:a81:618b:0:b0:2db:d952:8a39 with SMTP id
- v133-20020a81618b000000b002dbd9528a39mr936600ywb.132.1647446859767; Wed, 16
- Mar 2022 09:07:39 -0700 (PDT)
+        with ESMTP id S236791AbiCPQ2E (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 16 Mar 2022 12:28:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97116BDDA;
+        Wed, 16 Mar 2022 09:26:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C5F961777;
+        Wed, 16 Mar 2022 16:26:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85946C340E9;
+        Wed, 16 Mar 2022 16:26:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647448008;
+        bh=2nnKMfOwy60kOx/dFCU2LdQ34r1p3osdvyviEMynWTI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n4YfrMJd77X25AWiIN5jRctkMf5lHY8cb9isdVd0prFcRRjfSqMQ6jWDQpygQ08qr
+         PjgTgeecv2IVOTmqFBuA/MCP0j/5PlWaq7qy+qrqkvbUkJbiwSMf91GgnHBtf4/R+S
+         ST93Pl/1ScspNnONPY4BkUks4iX+Xu8tWCSeFV1a0ByR7M2vpI/LxiJgadG2bb3t2X
+         hqqYJCMBcWd8t9QLAK+3+KsEGtl2ukfx2T85ZwD+d/hHeZH4qx1asN+87G++vcbcDu
+         dn2NdI1MHVqd5nSf9HwX56XjqkDerlvaoNgbyAgxMKVojkMEV2gY8E06sYsxy2nlwB
+         ahUErQ4X0nIfQ==
+Date:   Wed, 16 Mar 2022 16:26:44 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [GIT PULL] SPI fixes for v5.17-rc7
+Message-ID: <YjIPxMrt5rzQ2AtQ@sirena.org.uk>
+References: <20220310121327.63C6FC340E8@smtp.kernel.org>
+ <CAHk-=wgN6bYPgaB7g0zGXQ5HnbVQ9910o9OQMBLs_S_ax4H67A@mail.gmail.com>
+ <YinzW413m6p0H/i1@sirena.org.uk>
+ <CAMuHMdU9t2wLonWBjkXBdxxyK_oJiOUTSqrYVrZWjsY2JKEJ2g@mail.gmail.com>
+ <CAHk-=wiZnS6n1ROQg3FHd=bcVTHi-sKutKT+toiViQEH47ZACg@mail.gmail.com>
+ <CAMuHMdWd_eAGjXRAODXvufoXT_QqqOpuLJTAj9ZG7d-EQyRKBw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220316141354.247750-1-sashal@kernel.org> <20220316141354.247750-12-sashal@kernel.org>
-In-Reply-To: <20220316141354.247750-12-sashal@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 16 Mar 2022 17:07:28 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVtGb6LCTbDKo9vn=1MmP+RZJTe2=VNTtrNsPa-=1Q6zA@mail.gmail.com>
-Message-ID: <CAMuHMdVtGb6LCTbDKo9vn=1MmP+RZJTe2=VNTtrNsPa-=1Q6zA@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.16 12/13] spi: Fix invalid sgs value
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="SsEmDHQKnJRn53dV"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWd_eAGjXRAODXvufoXT_QqqOpuLJTAj9ZG7d-EQyRKBw@mail.gmail.com>
+X-Cookie: Androphobia:
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Sasha,
 
-On Wed, Mar 16, 2022 at 3:15 PM Sasha Levin <sashal@kernel.org> wrote:
-> From: Biju Das <biju.das.jz@bp.renesas.com>
->
-> [ Upstream commit 1a4e53d2fc4f68aa654ad96d13ad042e1a8e8a7d ]
+--SsEmDHQKnJRn53dV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This commit is not 100% correct, cfr.
-https://lore.kernel.org/lkml/CAHk-=wiZnS6n1ROQg3FHd=bcVTHi-sKutKT+toiViQEH47ZACg@mail.gmail.com
-Please postpone backporting until the issue has been resolved.
+On Tue, Mar 15, 2022 at 07:56:13PM +0100, Geert Uytterhoeven wrote:
 
->
-> max_seg_size is unsigned int and it can have a value up to 2^32
-> (for eg:-RZ_DMAC driver sets dma_set_max_seg_size as U32_MAX)
-> When this value is used in min_t() as an integer type, it becomes
-> -1 and the value of sgs becomes 0.
->
-> Fix this issue by replacing the 'int' data type with 'unsigned int'
-> in min_t().
->
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Link: https://lore.kernel.org/r/20220307184843.9994-1-biju.das.jz@bp.renesas.com
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  drivers/spi/spi.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index 8ba87b7f8f1a..ed4e6983eda0 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -1021,10 +1021,10 @@ int spi_map_buf(struct spi_controller *ctlr, struct device *dev,
->         int i, ret;
->
+> You're absolutely right. So the code should be changed to:
+>=20
 >         if (vmalloced_buf || kmap_buf) {
-> -               desc_len = min_t(int, max_seg_size, PAGE_SIZE);
-> +               desc_len = min_t(unsigned int, max_seg_size, PAGE_SIZE);
->                 sgs = DIV_ROUND_UP(len + offset_in_page(buf), desc_len);
+> -                desc_len =3D min_t(unsigned int, max_seg_size, PAGE_SIZE=
+);
+> +               desc_len =3D min_t(unsigned long, max_seg_size, PAGE_SIZE=
+);
+>                 sgs =3D DIV_ROUND_UP(len + offset_in_page(buf), desc_len);
 >         } else if (virt_addr_valid(buf)) {
-> -               desc_len = min_t(int, max_seg_size, ctlr->max_dma_len);
-> +               desc_len = min_t(unsigned int, max_seg_size, ctlr->max_dma_len);
->                 sgs = DIV_ROUND_UP(len, desc_len);
+> -               desc_len =3D min_t(unsigned int, max_seg_size, ctlr->max_=
+dma_len);
+> +               desc_len =3D min_t(size_t, max_seg_size, ctlr->max_dma_le=
+n);
+>                 sgs =3D DIV_ROUND_UP(len, desc_len);
 >         } else {
 >                 return -EINVAL;
+>         }
 
-Gr{oetje,eeting}s,
+Can you send a patch please?
 
-                        Geert
+--SsEmDHQKnJRn53dV
+Content-Type: application/pgp-signature; name="signature.asc"
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-----BEGIN PGP SIGNATURE-----
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIyD8MACgkQJNaLcl1U
+h9AzpQf+LnSWYHu2jiVKTMWxaK4MuIrtWbY4TF5hm0iG1/NQIuLeAWLNGmw7BbJ0
+m/SVbtXjMBH5RGGo3NJiFfIN6OWxRA72VtBvdnJEXhwHbBBnz4C79i3IHWHvH6Kv
+qfjfKNXhJjGc9qZH44SjB2fAtV3UiqrmfK0TPCbWcr80bjuVJN0xWv7zbOwuxof+
+6CBtqECgNIn487PRfCal4+vtT74YvbiG72h8gKGyGmV2KG7AGSKvf/bAhv558Npu
+taL/ZE0m10dt4q5pNR0BHH4E1RaZmJUMxfQ3/9qs3gmnp8zbE7EO8yb2oe9vMa4f
+9YiivPW922behRiGkQbrtvhUNrq2DQ==
+=rKFJ
+-----END PGP SIGNATURE-----
+
+--SsEmDHQKnJRn53dV--
