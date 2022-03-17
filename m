@@ -2,107 +2,194 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9554F4DC481
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Mar 2022 12:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51EF54DC888
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Mar 2022 15:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232865AbiCQLLo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 17 Mar 2022 07:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52498 "EHLO
+        id S234910AbiCQOQv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 17 Mar 2022 10:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232640AbiCQLLn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Mar 2022 07:11:43 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B27881DBA89
-        for <linux-spi@vger.kernel.org>; Thu, 17 Mar 2022 04:10:25 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-255-MiCiRbVUN16QRgYdqh5Xig-1; Thu, 17 Mar 2022 11:10:22 +0000
-X-MC-Unique: MiCiRbVUN16QRgYdqh5Xig-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Thu, 17 Mar 2022 11:10:21 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Thu, 17 Mar 2022 11:10:21 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Vignesh Raghavendra' <vigneshr@ti.com>,
-        'Michael Walle' <michael@walle.cc>
-CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        "p.yadav@ti.com" <p.yadav@ti.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>
-Subject: RE: [PATCH v2 0/6] spi-mem: Allow specifying the byte order in DTR
- mode
-Thread-Topic: [PATCH v2 0/6] spi-mem: Allow specifying the byte order in DTR
- mode
-Thread-Index: AQHYOQSPIX1seC7nAUuKrYcK6uPoWazCAVMggAFSn4CAAATp8IAABzYAgAAFzgA=
-Date:   Thu, 17 Mar 2022 11:10:21 +0000
-Message-ID: <fcae2d955b3f43af8d64f1aa50fbc685@AcuMS.aculab.com>
-References: <20220311080147.453483-1-tudor.ambarus@microchip.com>
- <76eb13b6-9263-975f-3196-312259634301@ti.com>
- <b60064231d33581c20279172cf8f765e@walle.cc>
- <0f271365-354b-82e2-02a2-9d69a6ac85b1@ti.com>
- <9bc530d1fdaf4490a00fee150f963ac7@AcuMS.aculab.com>
- <bc2083a8903fdabc65083f7e5232ca2d@walle.cc>
- <8b765d24cb9a422bb383aad07251b65f@AcuMS.aculab.com>
- <c17fe9c6-0757-dbb6-6efb-69d05d7ff589@ti.com>
-In-Reply-To: <c17fe9c6-0757-dbb6-6efb-69d05d7ff589@ti.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        with ESMTP id S234870AbiCQOQg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 17 Mar 2022 10:16:36 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C2FA11F79B;
+        Thu, 17 Mar 2022 07:15:20 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: tonyk)
+        with ESMTPSA id 15BE31F454EA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1647526518;
+        bh=Rvj6hXhx5oIiMiRqmZhlQH3DWaZRCDTwJBG35a0p9L8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LdgTTzMOJD8D6qwFBMDuLepdYJp+dym4eoyhYqf66I14W9X5oiG3kQZoQLSlrr5gF
+         Q3Qn2PdHii409uSmzNNymxZFRFb3wUHEN7HJyu0yzPpprqdWpBF0RcyxU+4/KTM/Go
+         iRiK4YZhw/sA9mk/D9NSBbA4ewIoOOghbXqqhCGoEWsWEuaDC75EftPaflvDkdhtg6
+         zWSbuXzFU9e0oXkgGM9BXq2xT64EtYJOg/o1mi5sJ4uv7hhzAbLE3KQvOQ1edb89O0
+         L2HXMoU885/Pdo8IOM9YQb8Up4vSxKv+JPKibyJcoRUP26q7g3WZ2S/FVbCVOTLEyp
+         byGh/7RYluMbQ==
+From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+To:     Sanjay R Mehta <sanju.mehta@amd.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Stephen Rothwell <sfr@canb.auug.org.au>, krisman@collabora.com,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+Subject: [PATCH] spi: amd: Configure device speed
+Date:   Thu, 17 Mar 2022 11:14:53 -0300
+Message-Id: <20220317141453.15868-1-andrealmeid@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-RnJvbTogVmlnbmVzaCBSYWdoYXZlbmRyYQ0KPiBTZW50OiAxNyBNYXJjaCAyMDIyIDEwOjI0DQou
-Li4NCj4gTW9kZXJuIE9TUEkvUVNQSSBmbGFzaCBjb250cm9sbGVycyBwcm92aWRlIE1NSU8gaW50
-ZXJmYWNlIHRvIHJlYWQgZnJvbQ0KPiBmbGFzaCB3aGVyZSBETUEgY2FuIHB1bGwgZGF0YSBhcyBp
-ZiB0aG91Z2ggeW91IGFyZSByZWFkaW5nIGZyb20gT24gY2hpcCBSQU0NCg0KU28gdGhlIGNwdSBk
-b2VzIGFuIE1NSU8gcmVhZCBjeWNsZSB0byB0aGUgY29udHJvbGxlciB3aGljaCBkb2Vzbid0DQpj
-b21wbGV0ZSB1bnRpbCAoZm9yIHRoZSBuaWJibGUtbW9kZSBzcGkgZGV2aWNlIEkgaGF2ZSk6DQox
-KSBDaGlwc2VsZWN0IGlzIGFzc2VydGVkLg0KMikgVGhlIDgtYml0IGNvbW1hbmQgaGFzIGJlZW4g
-Y2xvY2tlZCBvdXQuDQozKSBUaGUgMzJiaXQgYWRkcmVzcyBoYXZlIGJlZW4gY2xvY2tlZCBvdXQg
-KDggY2xvY2tzIGluIG5pYmJsZXMpLg0KNCkgQSBmZXcgKHByb2JhYmx5IDQpIGV4dHJhIGRlbGF5
-IGNsb2NrcyBhcmUgYWRkZWQuDQo1KSBUaGUgZGF0YSBpcyByZWFkIC0gOCBjbG9ja3MgZm9yIDMy
-Yml0cyBpbiBuaWJibGUgbW9kZS4NCjYpIENoaXBzZWxlY3QgaXMgcmVtb3ZlZC4NCg0KTm93IHlv
-dSBjYW4gZG8gbG9uZyBzZXF1ZW50aWFsIHJlYWRzIHdpdGhvdXQgYWxsIHRoZSByZWQgdGFwZS4N
-CkJ1dCBhIHJhbmRvbSByZWFkIGluIG5pYmJsZSBtb2RlIGlzIGFib3V0IDMwIGNsb2Nrcy4NCjE2
-IGJpdCBtb2RlIHNhdmVzIDYgY2xvY2tzIGZvciB0aGUgZGF0YSBhbmQgbWF5YmUgNiBmb3IgdGhl
-IGFkZHJlc3M/DQoNClRoZSBjb250cm9sbGVyIGNvdWxkIGRvICdjbGV2ZXIgc3R1ZmYnIGZvciBz
-ZXF1ZW50aWFsIHJlYWRzLg0KQXQgYSBjb3N0IG9mIHNsb3dpbmcgZG93biByYW5kb20gcmVhZHMu
-DQoNClNvIGV2ZW4gYXQgNDAwTUh6IGl0IGlzbid0IHRoYXQgZmFzdC4NCg0KSWYgdGhlIE1NSU8g
-aW50ZXJmYWNlIHRvIHRoZSBmbGFzaCBjb250cm9sbGVyIGlzIFBDSWUgeW91IGNhbg0KYWRkIGlu
-IGEgbG9hZCBvZiBleHRyYSBsYXRlbmN5IGZvciB0aGUgY3B1IHJlYWQgaXRzZWxmLg0KDQpXaGls
-ZSBQQ0llIGFsbG93cyBtdWx0aXBsZSByZWFkIHJlcXVlc3RzIHRvIGJlIG91dHN0YW5kaW5nLA0K
-dGhlIEludGVsIGNwdSBJJ3ZlIGxvb2tlZCBhdCBzZXJpYWxpc2UgdGhlIHJlYWRzIGZyb20gZWFj
-aA0KY3B1IGNvcmUgKGVhY2ggY3B1IGFsd2F5cyB1c2VzIHRoZSBzYW1lIFRMUCB0YWcpLg0KDQpO
-b3cgbG9uZ2VyIHJlYWQgVExQIGhlbHAgYSBsb3QgKElJUkMgbWF4IGlzIDI1NiBieXRlcykuDQpC
-dXQgdGhlIHg4NiBjcHUgd2lsbCBvbmx5IGdlbmVyYXRlIHJlYWQgVExQIGZvciByZWdpc3RlciBy
-ZWFkcy4NCllvdSBuZWVkIHRvIHVzZSBBVlg1MTIgcmVnaXN0ZXJzIChvciBjYWNoZSBsaW5lIGZl
-dGNoZXMpIHRvDQpnZXQgYmV0dGVyIHRocm91Z2hwdXQhDQoNClRoZSBhbHRlcm5hdGl2ZSBpcyBn
-ZXR0aW5nIHRoZSBmbGFzaCBjb250cm9sbGVyIHRvIGlzc3VlDQp0aGUgcmVhZC93cml0ZSBUTFAg
-Zm9yIG1lbW9yeSB0cmFuc2ZlcnMuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3Mg
-TGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQ
-VCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+Create mechanism to configure device clock frequency. For now, it can
+only set the device to use the maximum speed.
+
+Signed-off-by: André Almeida <andrealmeid@collabora.com>
+---
+ drivers/spi/spi-amd.c | 98 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 98 insertions(+)
+
+diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
+index d909afac6e21..ce4cce50496b 100644
+--- a/drivers/spi/spi-amd.c
++++ b/drivers/spi/spi-amd.c
+@@ -35,6 +35,36 @@
+ 
+ #define AMD_SPI_MEM_SIZE	200
+ 
++#define AMD_SPI_ENA_REG		0x20
++#define AMD_SPI_ALT_SPD_SHIFT	20
++#define AMD_SPI_ALT_SPD_MASK	GENMASK(23, AMD_SPI_ALT_SPD_SHIFT)
++#define AMD_SPI_SPI100_SHIFT	0
++#define AMD_SPI_SPI100_MASK	GENMASK(AMD_SPI_SPI100_SHIFT, AMD_SPI_SPI100_SHIFT)
++#define AMD_SPI_SPEED_REG	0x6C
++#define AMD_SPI_SPD7_SHIFT	8
++#define AMD_SPI_SPD7_MASK	GENMASK(13, AMD_SPI_SPD7_SHIFT)
++
++#define AMD_SPI_MAX_HZ		100000000
++#define AMD_SPI_MIN_HZ		800000
++
++/* Set device speed to the maximum frequency supported */
++static bool max_speed;
++module_param(max_speed, bool, 0644);
++
++enum amd_spi_speed {
++	F_66_66MHz,
++	F_33_33MHz,
++	F_22_22MHz,
++	F_16_66MHz,
++	F_100MHz,
++	F_800KHz,
++	SPI_SPD6,
++	SPI_SPD7,
++	F_50MHz = 0x4,
++	F_4MHz = 0x32,
++	F_3_17MHz = 0x3F
++};
++
+ /* M_CMD OP codes for SPI */
+ #define AMD_SPI_XFER_TX		1
+ #define AMD_SPI_XFER_RX		2
+@@ -48,6 +78,19 @@ struct amd_spi {
+ 	void __iomem *io_remap_addr;
+ 	unsigned long io_base_addr;
+ 	enum amd_spi_versions version;
++	unsigned int speed_hz;
++};
++
++/**
++ * struct amd_spi_freq - Matches device speed with values to write in regs
++ * @speed_hz: Device frequency
++ * @ena: Value to be written to "enable register"
++ * @spd7: Some frequencies requires to have a value written at SPISPEED register
++ */
++struct amd_spi_freq {
++	unsigned int speed_hz;
++	unsigned int enable_val;
++	unsigned int spd7_val;
+ };
+ 
+ static inline u8 amd_spi_readreg8(struct amd_spi *amd_spi, int idx)
+@@ -170,12 +213,67 @@ static int amd_spi_execute_opcode(struct amd_spi *amd_spi)
+ 	}
+ }
+ 
++static const struct amd_spi_freq amd_spi_freq[] = {
++	{ AMD_SPI_MAX_HZ,   F_100MHz,         0},
++	{       66660000, F_66_66MHz,         0},
++	{       50000000,   SPI_SPD7,   F_50MHz},
++	{       33330000, F_33_33MHz,         0},
++	{       22220000, F_22_22MHz,         0},
++	{       16660000, F_16_66MHz,         0},
++	{        4000000,   SPI_SPD7,    F_4MHz},
++	{        3170000,   SPI_SPD7, F_3_17MHz},
++	{ AMD_SPI_MIN_HZ,   F_800KHz,         0},
++};
++
++static int amd_set_spi_freq(struct amd_spi *amd_spi, u32 speed_hz)
++{
++	unsigned int i, spd7_val, enable_val;
++
++	if (speed_hz == amd_spi->speed_hz)
++		return 0;
++
++	if (speed_hz < AMD_SPI_MIN_HZ)
++		return -EINVAL;
++
++	for (i = 0; i < ARRAY_SIZE(amd_spi_freq); i++) {
++		if (speed_hz >= amd_spi_freq[i].speed_hz) {
++			if (amd_spi->speed_hz == amd_spi_freq[i].speed_hz)
++				return 0;
++
++			amd_spi->speed_hz = amd_spi_freq[i].speed_hz;
++
++			enable_val = (amd_spi_freq[i].enable_val << AMD_SPI_ALT_SPD_SHIFT)
++				     & AMD_SPI_ALT_SPD_MASK;
++			amd_spi_setclear_reg32(amd_spi, AMD_SPI_ENA_REG, enable_val,
++					       AMD_SPI_ALT_SPD_MASK);
++
++			if (amd_spi->speed_hz == AMD_SPI_MAX_HZ)
++				amd_spi_setclear_reg32(amd_spi, AMD_SPI_ENA_REG, 1,
++						       AMD_SPI_SPI100_MASK);
++
++			if (amd_spi_freq[i].spd7_val) {
++				spd7_val = (amd_spi_freq[i].spd7_val << AMD_SPI_SPD7_SHIFT)
++					   & AMD_SPI_SPD7_MASK;
++				amd_spi_setclear_reg32(amd_spi, AMD_SPI_SPEED_REG, spd7_val,
++						       AMD_SPI_SPD7_MASK);
++			}
++
++			return 0;
++		}
++	}
++
++	return -EINVAL;
++};
++
+ static int amd_spi_master_setup(struct spi_device *spi)
+ {
+ 	struct amd_spi *amd_spi = spi_master_get_devdata(spi->master);
+ 
+ 	amd_spi_clear_fifo_ptr(amd_spi);
+ 
++	if (max_speed)
++		amd_set_spi_freq(amd_spi, spi->max_speed_hz);
++
+ 	return 0;
+ }
+ 
+-- 
+2.35.1
 
