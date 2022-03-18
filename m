@@ -2,100 +2,230 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 013F34DDA0A
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Mar 2022 13:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D94C4DDB4E
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Mar 2022 15:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236463AbiCRNAr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Mar 2022 09:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42568 "EHLO
+        id S236994AbiCROMY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Mar 2022 10:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234085AbiCRNAr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Mar 2022 09:00:47 -0400
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109752D0B26
-        for <linux-spi@vger.kernel.org>; Fri, 18 Mar 2022 05:59:27 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 485C2300002A8;
-        Fri, 18 Mar 2022 13:59:25 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 3BD702D2CC4; Fri, 18 Mar 2022 13:59:25 +0100 (CET)
-Date:   Fri, 18 Mar 2022 13:59:25 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Miguel Angel Ajo <majopela@redhat.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-spi@vger.kernel.org
-Subject: Re: bcm2711 / RPi4 not functional after d62069c22eda
-Message-ID: <20220318125925.GA21543@wunner.de>
-References: <CAC3B9fn9DWezr3rspLbomuRLtRjSvW89cLMWR9TTCYsX=PDM_w@mail.gmail.com>
- <CAC3B9fkpO13QhCgVO-qyynbwdh_z60CKgpUhn-40NyGNGz_q8Q@mail.gmail.com>
+        with ESMTP id S234620AbiCROMX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Mar 2022 10:12:23 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3181D1042AE;
+        Fri, 18 Mar 2022 07:11:04 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22ICns4Z011658;
+        Fri, 18 Mar 2022 14:10:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=+Zonnu1cRoX95VJfyuHHAuo36ESL7gzP0rIKXUfIgCo=;
+ b=V49VlplC0tMHzuXeCADWhjQNlstUaeixwg23xzYbeJ7EkSQowVDCUHy1wcg+1cltujcU
+ 0oiByhZ17RAe3BAdRJpBoywMdnNHDpD8U9JiDjAvYxN0wX2o4fbK0dag/tNEsNaaBdVQ
+ awVY1WrHkOMkUZiPQ8LeL2ZZPqFZeXs01h9/h6ZDKFKBOVd3XmjZr8jpF6YH0OhRREyO
+ Vp8VEUylkFyuJ2mginQG/txDJmOfl6VFtB5JXuaAUAgYtcMXha6xfPWK7e8Q+Hh7A80m
+ 2xohiO/i1l2FI8Lf5iv8ck3rw87XqUbPgfjjqEILeRXW0vBAjIyY5QC7Z+GUBjZXxjY6 4A== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3euxtr9c97-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Mar 2022 14:10:52 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22IE7WBN017764;
+        Fri, 18 Mar 2022 14:10:51 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma04dal.us.ibm.com with ESMTP id 3erk5ad44k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Mar 2022 14:10:51 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22IEAnKU10289560
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Mar 2022 14:10:49 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 92014112069;
+        Fri, 18 Mar 2022 14:10:49 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5E099112064;
+        Fri, 18 Mar 2022 14:10:48 +0000 (GMT)
+Received: from [9.163.28.80] (unknown [9.163.28.80])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 18 Mar 2022 14:10:48 +0000 (GMT)
+Message-ID: <acec0279-f5a2-2b0c-e044-6200e7a37e37@linux.ibm.com>
+Date:   Fri, 18 Mar 2022 09:10:47 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAC3B9fkpO13QhCgVO-qyynbwdh_z60CKgpUhn-40NyGNGz_q8Q@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] spi: fsi: Implement a timeout for polling status
+Content-Language: en-US
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi@vger.kernel.org
+References: <20220317211426.38940-1-eajames@linux.ibm.com>
+ <CACPK8Xd42+NgTfS8ERagv-1GkAb8XiY8U71Q8Hz0wQ9dEUJekQ@mail.gmail.com>
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <CACPK8Xd42+NgTfS8ERagv-1GkAb8XiY8U71Q8Hz0wQ9dEUJekQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: iOwkf6G1zoXNOjsObzSjWU5vMS0ZwXlh
+X-Proofpoint-ORIG-GUID: iOwkf6G1zoXNOjsObzSjWU5vMS0ZwXlh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-18_10,2022-03-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ spamscore=0 phishscore=0 adultscore=0 malwarescore=0 bulkscore=0
+ impostorscore=0 priorityscore=1501 lowpriorityscore=0 mlxscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2203180078
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-[cc += linux-spi; please do not write developers directly without cc'ing
-relevant lists]
 
-On Fri, Mar 18, 2022 at 11:54:35AM +0100, Miguel Angel Ajo wrote:
-> On Fri, Mar 18, 2022 at 11:47 AM Miguel Angel Ajo <majopela@redhat.com>
-> wrote:
-> >     I wanted to share a regression found after commit:
-> >
-> > d62069c22eda spi: bcm2835: Remove shared interrupt support
-[...]
-> > After this commit I get:
-> >
-> > [root@rpi4-64 ~]# dmesg | grep spi
-> > [   18.781250] spi-bcm2835 fe204000.spi: could not register SPI
-> > controller: -517
-> > [   19.134138] spi-bcm2835 fe204000.spi: could not register SPI
-> > controller: -517
-> > [   19.895147] spi-bcm2835 fe204000.spi: could not register SPI
-> > controller: -517
-> > [   20.400137] spi-bcm2835 fe204000.spi: could not register SPI
-> > controller: -517
-
-Those are transient errors, -517 is -EPROBE_DEFER.  Probing fails
-because a resource is not available (yet), to be retried again later
-if/when it becomes available.
+On 3/17/22 23:19, Joel Stanley wrote:
+> On Thu, 17 Mar 2022 at 21:14, Eddie James <eajames@linux.ibm.com> wrote:
+>> The data transfer routines must poll the status register to
+>> determine when more data can be shifted in or out. If the hardware
+>> gets into a bad state, these polling loops may never exit. Prevent
+>> this by returning an error if a timeout is exceeded.
+> This makes sense. We may even want to put this code in regardless.
+>
+> However, I'm wondering why the code in fsi_spi_status didn't catch this.
 
 
-> > ecfbd3c introduced support for the bcm2711 SoC that shares
-> > one interrupt over multiple spi controller instances.
-> >
-> > Do we have a more detailed description of the exact issue for
-> > which we reverted?, is there a plan to re-introduce the shared interrupt
-> > support while fixing the issue?
+Same, which is why I thought the problem couldn't be happening here for 
+a long time. See below with what I think is going on.
 
-See here for why the commit was reverted:
 
-https://lore.kernel.org/linux-spi/20200529174358.som3snunfxch6phi@wunner.de/
+>
+>> static int fsi_spi_status(struct fsi_spi *ctx, u64 *status, const char *dir)
+>> {
+>>         int rc = fsi_spi_read_reg(ctx, SPI_FSI_STATUS, status);
+> You mentioned the error condition is we get back 0xff. That means that
+> status will be 0xffff_ffff_ffff_ffff ?
+>
+> Did you observe status being this value?
 
-There was a second attempt to introduce shared interrupt support,
-but after a lengthy discussion, it was not pursued to fruition:
 
-https://lore.kernel.org/linux-spi/20200604212819.715-1-f.fainelli@gmail.com/
+No, I think my observation of 0xff is not universal. I suspect that 
+while the CFAM is IN reset, 0xff is returned, but once it's been reset, 
+valid (though maybe uninitialized) data is returned. I observed a status 
+of 0x0001100000000000, which means the controller is idle, which makes 
+sense since it's been reset. So the issue occurs if we start an 
+operation before a CFAM reset and are waiting for it to complete during 
+the CFAM reset, but we also don't get any failed/invalid data FSI 
+operations during/after the reset (very timing dependent - the FSI 
+master does lock during the reset but doesn't wait afterwards for the 
+hardware to initialize).
 
-So I believe shared interrupt support only exists in the Raspberry Pi
-Foundation's downstream kernel, but not yet in the mainline kernel.
 
-Thanks,
+>
+>>         if (rc)
+>>                 return rc;
+>>
+>>         if (*status & SPI_FSI_STATUS_ANY_ERROR) {
+> I think that we're checking against 0xffe0f000.
+>
+>>                 dev_err(ctx->dev, "%s error: %016llx\n", dir, *status);
+>>
+>>                 rc = fsi_spi_reset(ctx);
+>>                 if (rc)
+>>                         return rc;
+> Is the problem here? fsi_spi_reset writes to the clock config
+> registers, but doesn't read the status.
+>
+> Obviously doing the writes causes a call to fsi_spi_check_status, but
+> that checks the FSI2SPI bridge, not the SPI master.
+>
+> ...but it doesn't matter, because we're either going to return an
+> error from the reset, or return EREMOTEIO, so there's no masking of
+> the error.
 
-Lukas
+
+Not sure I follow. I don't think we were hitting this path in this error 
+scenario. Do you think we need to check the status after a reset? It 
+should always be the same.
+
+
+>
+>>                 return -EREMOTEIO;
+>>         }
+>>
+>>         return 0;
+>> }
+>
+>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+>> ---
+>>   drivers/spi/spi-fsi.c | 10 ++++++++++
+>>   1 file changed, 10 insertions(+)
+>>
+>> diff --git a/drivers/spi/spi-fsi.c b/drivers/spi/spi-fsi.c
+>> index b6c7467f0b59..d403a7a3021d 100644
+>> --- a/drivers/spi/spi-fsi.c
+>> +++ b/drivers/spi/spi-fsi.c
+>> @@ -25,6 +25,7 @@
+>>
+>>   #define SPI_FSI_BASE                   0x70000
+>>   #define SPI_FSI_INIT_TIMEOUT_MS                1000
+>> +#define SPI_FSI_STATUS_TIMEOUT_MS      100
+> Can you add a comment (or put something in the commit message) about
+> why you chose 100ms.
+
+
+Hm, sure, but I chose it pretty arbitrarily. I'm not sure how to choose 
+something like this.
+
+
+>
+>>   #define SPI_FSI_MAX_RX_SIZE            8
+>>   #define SPI_FSI_MAX_TX_SIZE            40
+>>
+>> @@ -299,6 +300,7 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
+>>                                   struct spi_transfer *transfer)
+>>   {
+>>          int rc = 0;
+>> +       unsigned long end;
+>>          u64 status = 0ULL;
+>>
+>>          if (transfer->tx_buf) {
+>> @@ -315,10 +317,14 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
+>>                          if (rc)
+>>                                  return rc;
+>>
+>> +                       end = jiffies + msecs_to_jiffies(SPI_FSI_STATUS_TIMEOUT_MS);
+>>                          do {
+>>                                  rc = fsi_spi_status(ctx, &status, "TX");
+>>                                  if (rc)
+>>                                          return rc;
+>> +
+>> +                               if (time_after(jiffies, end))
+>> +                                       return -ETIMEDOUT;
+>>                          } while (status & SPI_FSI_STATUS_TDR_FULL);
+>>
+>>                          sent += nb;
+>> @@ -329,10 +335,14 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
+>>                  u8 *rx = transfer->rx_buf;
+>>
+>>                  while (transfer->len > recv) {
+>> +                       end = jiffies + msecs_to_jiffies(SPI_FSI_STATUS_TIMEOUT_MS);
+>>                          do {
+>>                                  rc = fsi_spi_status(ctx, &status, "RX");
+>>                                  if (rc)
+>>                                          return rc;
+>> +
+>> +                               if (time_after(jiffies, end))
+>> +                                       return -ETIMEDOUT;
+>>                          } while (!(status & SPI_FSI_STATUS_RDR_FULL));
+>>
+>>                          rc = fsi_spi_read_reg(ctx, SPI_FSI_DATA_RX, &in);
+>> --
+>> 2.27.0
+>>
