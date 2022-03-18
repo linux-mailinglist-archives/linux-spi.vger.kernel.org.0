@@ -2,199 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF6E4DE2D8
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Mar 2022 21:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7D34DE30C
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Mar 2022 21:58:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239385AbiCRUvs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Mar 2022 16:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
+        id S240943AbiCRU7f (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Mar 2022 16:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240847AbiCRUvq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Mar 2022 16:51:46 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91B66108551;
-        Fri, 18 Mar 2022 13:50:26 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 565441515;
-        Fri, 18 Mar 2022 13:50:26 -0700 (PDT)
-Received: from [10.57.43.230] (unknown [10.57.43.230])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3FBB43F7D7;
-        Fri, 18 Mar 2022 13:50:24 -0700 (PDT)
-Message-ID: <3bf14cf0-f00d-f718-30ea-e63272f3ce72@arm.com>
-Date:   Fri, 18 Mar 2022 20:50:19 +0000
+        with ESMTP id S240948AbiCRU7b (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Mar 2022 16:59:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7004AE2C;
+        Fri, 18 Mar 2022 13:58:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9ED360EE8;
+        Fri, 18 Mar 2022 20:58:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19ABBC340E8;
+        Fri, 18 Mar 2022 20:58:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647637088;
+        bh=dJlguLWz9Eu/tegMYxnjfLVGayVps0C/hKd+hIGT7B4=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=pZXbBUJxjPvbTDOofi7A65A0oJxaDpgdoSyqFMBL1b8skBA1pr5sk6EEHvwXPDgPJ
+         G6aqR+QI54plcHRBllUdGK22TZLn9KHYJGRgBTFKLjGp1o1iinjAT+fzphATgd8nTh
+         4s5PSbQwTsK4JASrNggdyparqjPjfJQZ2EAmR+DVGaTnNxzTQT9arnt6JCLfIEpK75
+         XaDRBPZwpQCCa/FvoZKgoo/EK49xE2YokGrd4cYWD9i5LPV9LiuUnMI60pR/Cva4SW
+         jvx9qTXCE3lL6xxynwVewN+nB6P7SqF8HYyKlrSJCkWG5wwpX+/XYB1lamXSvjgX88
+         9VVfcePRTflMg==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-spi@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
+Cc:     joel@jms.id.au, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220317211426.38940-1-eajames@linux.ibm.com>
+References: <20220317211426.38940-1-eajames@linux.ibm.com>
+Subject: Re: [PATCH] spi: fsi: Implement a timeout for polling status
+Message-Id: <164763708679.2336580.18094786186372148755.b4-ty@kernel.org>
+Date:   Fri, 18 Mar 2022 20:58:06 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v5 2/6] dt-bindings: auxdisplay: Add Titan Micro
- Electronics TM1628
-Content-Language: en-GB
-To:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Miguel Ojeda <ojeda@kernel.org>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-References: <90668779-b53d-b3e7-5327-af11ff4a1d18@gmail.com>
- <2671e6e3-8f18-8b70-244b-9e1415bfdf8f@gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <2671e6e3-8f18-8b70-244b-9e1415bfdf8f@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 2022-02-25 21:13, Heiner Kallweit wrote:
-> Add a YAML schema binding for TM1628 auxdisplay
-> (7/11-segment LED) controller.
+On Thu, 17 Mar 2022 16:14:26 -0500, Eddie James wrote:
+> The data transfer routines must poll the status register to
+> determine when more data can be shifted in or out. If the hardware
+> gets into a bad state, these polling loops may never exit. Prevent
+> this by returning an error if a timeout is exceeded.
 > 
-> This patch is partially based on previous work from
-> Andreas Färber <afaerber@suse.de>.
 > 
-> Co-developed-by: Andreas Färber <afaerber@suse.de>
-> Signed-off-by: Andreas Färber <afaerber@suse.de>
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
-> v5:
-> - add vendor prefix to driver-specific properties
-> ---
->   .../bindings/auxdisplay/titanmec,tm1628.yaml  | 92 +++++++++++++++++++
->   1 file changed, 92 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml b/Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml
-> new file mode 100644
-> index 000000000..2a1ef692c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml
-> @@ -0,0 +1,92 @@
-> +# SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/auxdisplay/titanmec,tm1628.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Titan Micro Electronics TM1628 LED controller
-> +
-> +maintainers:
-> +  - Andreas Färber <afaerber@suse.de>
-> +  - Heiner Kallweit <hkallweit1@gmail.com>
-> +
-> +allOf:
-> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: titanmec,tm1628
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  titanmec,grid:
-> +    description:
-> +      Mapping of display digit position to grid number.
-> +      This implicitly defines the display size.
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    minItems: 1
-> +    maxItems: 7
-> +
-> +  titanmec,segment-mapping:
-> +    description:
-> +      Mapping of 7 segment display segments A-G to bit numbers 1-12.
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    minItems: 7
-> +    maxItems: 7
-> +
-> +  "#address-cells":
-> +    const: 2
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
 
-Would it be fair to say that "spi-lsb-first" and "spi-3wire" are also 
-required? The chips aren't configurable so won't exactly be usable any 
-other way. Furthermore I believe the transmission format actually works 
-out equivalent to SPI mode 3, so should warrant "spi-cpha" and 
-"spi-cpol" as well.
+Applied to
 
-> +
-> +patternProperties:
-> +  "^.*@[1-7],([1-9]|1[0-6])$":
-> +    type: object
-> +    $ref: /schemas/leds/common.yaml#
-> +    unevaluatedProperties: false
-> +    description: |
-> +      Properties for a single LED.
-> +
-> +    properties:
-> +      reg:
-> +        description: |
-> +          1-based grid number, followed by 1-based segment bit number.
-> +        maxItems: 1
-> +
-> +    required:
-> +      - reg
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-I'm concerned that this leaves us no room to support the additional 
-keypad functionality in future. Having now double-checked a datasheet, 
-the inputs are also a two-dimensional mux (sharing the segment lines), 
-so the device effectively has two distinct but numerically-overlapping 
-child address spaces - one addressed by (grid,segment) and the other by 
-(segment,key).
+Thanks!
 
-Rob, Krysztof, any thoughts on the best DT idiom to leave accommodation 
-for that? I'm thinking either require an intermediate node to contain 
-each notional address space, or perhaps add another leading address cell 
-to select between them? I don't believe any of these things have further 
-functionality beyond that.
+[1/1] spi: fsi: Implement a timeout for polling status
+      commit: 89b35e3f28514087d3f1e28e8f5634fbfd07c554
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-Robin.
-
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/leds/common.h>
-> +
-> +    spi {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        led-controller@0 {
-> +            compatible = "titanmec,tm1628";
-> +            reg = <0>;
-> +            spi-3-wire;
-> +            spi-lsb-first;
-> +            spi-max-frequency = <500000>;
-> +            titanmec,grid = /bits/ 8 <4 3 2 1>;
-> +            titanmec,segment-mapping = /bits/ 8 <4 5 6 1 2 3 7>;
-> +            #address-cells = <2>;
-> +            #size-cells = <0>;
-> +
-> +            alarm@5,4 {
-> +                reg = <5 4>;
-> +                function = LED_FUNCTION_ALARM;
-> +            };
-> +        };
-> +    };
-> +...
+Mark
