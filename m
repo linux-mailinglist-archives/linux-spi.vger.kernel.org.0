@@ -2,86 +2,79 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D94C4DDB4E
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Mar 2022 15:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1C44DDCF9
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Mar 2022 16:32:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236994AbiCROMY (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 18 Mar 2022 10:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
+        id S238057AbiCRPd2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 18 Mar 2022 11:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234620AbiCROMX (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Mar 2022 10:12:23 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3181D1042AE;
-        Fri, 18 Mar 2022 07:11:04 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22ICns4Z011658;
-        Fri, 18 Mar 2022 14:10:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=+Zonnu1cRoX95VJfyuHHAuo36ESL7gzP0rIKXUfIgCo=;
- b=V49VlplC0tMHzuXeCADWhjQNlstUaeixwg23xzYbeJ7EkSQowVDCUHy1wcg+1cltujcU
- 0oiByhZ17RAe3BAdRJpBoywMdnNHDpD8U9JiDjAvYxN0wX2o4fbK0dag/tNEsNaaBdVQ
- awVY1WrHkOMkUZiPQ8LeL2ZZPqFZeXs01h9/h6ZDKFKBOVd3XmjZr8jpF6YH0OhRREyO
- Vp8VEUylkFyuJ2mginQG/txDJmOfl6VFtB5JXuaAUAgYtcMXha6xfPWK7e8Q+Hh7A80m
- 2xohiO/i1l2FI8Lf5iv8ck3rw87XqUbPgfjjqEILeRXW0vBAjIyY5QC7Z+GUBjZXxjY6 4A== 
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3euxtr9c97-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Mar 2022 14:10:52 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 22IE7WBN017764;
-        Fri, 18 Mar 2022 14:10:51 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma04dal.us.ibm.com with ESMTP id 3erk5ad44k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Mar 2022 14:10:51 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 22IEAnKU10289560
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Mar 2022 14:10:49 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 92014112069;
-        Fri, 18 Mar 2022 14:10:49 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5E099112064;
-        Fri, 18 Mar 2022 14:10:48 +0000 (GMT)
-Received: from [9.163.28.80] (unknown [9.163.28.80])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 18 Mar 2022 14:10:48 +0000 (GMT)
-Message-ID: <acec0279-f5a2-2b0c-e044-6200e7a37e37@linux.ibm.com>
-Date:   Fri, 18 Mar 2022 09:10:47 -0500
+        with ESMTP id S238231AbiCRPcz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 18 Mar 2022 11:32:55 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9A723F3C7
+        for <linux-spi@vger.kernel.org>; Fri, 18 Mar 2022 08:31:33 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id q11so7196999pln.11
+        for <linux-spi@vger.kernel.org>; Fri, 18 Mar 2022 08:31:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YZDc1n1Qj1g+iYOlQ71R/QnMyeerP7vB3YlY2gtmVQs=;
+        b=TO1dJFjplhLStEuldURPec3qGDKlIamsXAbMOZmKmL/R/nJFm7TfGUEExvIFdT/a5t
+         XPMNDLF2SwNPowMCs5kWIZa9ugA0bVuuouNfvV5ioaKlgyYMEEbC6lyY5va2usn+8m84
+         btyTt7HyPb3A0hJP0P5Dd43ODDMaUyw8YrzwcnocEZaL4eowAxrMKzkXYRDxAwJHm68o
+         hxecDFRR9xR01p1iQAX9fucSwSOOlfU+5S0UaF1b9G4igcUT0Wx7I+ERVSZfFtpN74ZX
+         DZsr/iVkULf+GnHSjt2Fo+nM11WsNgvHVuoUcpsyAmryP3lLOY5O6kITOiHXy4fLKPdy
+         QCTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YZDc1n1Qj1g+iYOlQ71R/QnMyeerP7vB3YlY2gtmVQs=;
+        b=hIkgeqvnWBSGlz0V8XOpXcmIX7+pp/4gZnnByXyHMolsY45rJurDQFsjuQT2h2Bzyd
+         I5LPixD/PkBKcOXLWIIsLLIc6G9KdCiq3HT4uWGwsDfSxH76uZDvetVFIYQIrp0s31L6
+         69Bgq2RlBe89Tao3ROvzv5aYRLgPriFDauXOoAH/Fl9NjT1kJOG8DZni2xhcZrk3jYei
+         rXMu5Rk26sTFuw06wVK58MYws46r3/XJZ+w/5F9kjjrEMoCB8yCLXMRN9XW1C9TNpEa5
+         0hDmWI6piiCedu82FswMvR+tSYGZdmHeoYklUjegd03ZoUFKuniHyJyViK4kLRIWZbuu
+         NSSQ==
+X-Gm-Message-State: AOAM530TLC0bHzje8BMuRM1AKYViW2QCfBeWeN/Etqga/275k1Vrisxt
+        9zVs0w8cDb8dUFsnlpGj5XM=
+X-Google-Smtp-Source: ABdhPJxxYecAXXJGYrf9oIQKz0gMdN1nAGtiONhbJACeeYMCdpr7FsU242EwS0mhc2MYdo3aJB54dg==
+X-Received: by 2002:a17:902:ce02:b0:151:a86d:dc2b with SMTP id k2-20020a170902ce0200b00151a86ddc2bmr10875065plg.57.1647617492693;
+        Fri, 18 Mar 2022 08:31:32 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id il7-20020a17090b164700b001bfc017a0adsm13562267pjb.37.2022.03.18.08.31.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Mar 2022 08:31:32 -0700 (PDT)
+Message-ID: <f3e046b0-9afa-c0dc-8e60-eb9723ecfc99@gmail.com>
+Date:   Fri, 18 Mar 2022 08:31:30 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] spi: fsi: Implement a timeout for polling status
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: bcm2711 / RPi4 not functional after d62069c22eda
 Content-Language: en-US
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Lukas Wunner <lukas@wunner.de>,
+        Miguel Angel Ajo <majopela@redhat.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
         linux-spi@vger.kernel.org
-References: <20220317211426.38940-1-eajames@linux.ibm.com>
- <CACPK8Xd42+NgTfS8ERagv-1GkAb8XiY8U71Q8Hz0wQ9dEUJekQ@mail.gmail.com>
-From:   Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <CACPK8Xd42+NgTfS8ERagv-1GkAb8XiY8U71Q8Hz0wQ9dEUJekQ@mail.gmail.com>
+References: <CAC3B9fn9DWezr3rspLbomuRLtRjSvW89cLMWR9TTCYsX=PDM_w@mail.gmail.com>
+ <CAC3B9fkpO13QhCgVO-qyynbwdh_z60CKgpUhn-40NyGNGz_q8Q@mail.gmail.com>
+ <20220318125925.GA21543@wunner.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220318125925.GA21543@wunner.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: iOwkf6G1zoXNOjsObzSjWU5vMS0ZwXlh
-X-Proofpoint-ORIG-GUID: iOwkf6G1zoXNOjsObzSjWU5vMS0ZwXlh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-18_10,2022-03-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- spamscore=0 phishscore=0 adultscore=0 malwarescore=0 bulkscore=0
- impostorscore=0 priorityscore=1501 lowpriorityscore=0 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203180078
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,142 +83,71 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
-On 3/17/22 23:19, Joel Stanley wrote:
-> On Thu, 17 Mar 2022 at 21:14, Eddie James <eajames@linux.ibm.com> wrote:
->> The data transfer routines must poll the status register to
->> determine when more data can be shifted in or out. If the hardware
->> gets into a bad state, these polling loops may never exit. Prevent
->> this by returning an error if a timeout is exceeded.
-> This makes sense. We may even want to put this code in regardless.
->
-> However, I'm wondering why the code in fsi_spi_status didn't catch this.
 
+On 3/18/2022 5:59 AM, Lukas Wunner wrote:
+> [cc += linux-spi; please do not write developers directly without cc'ing
+> relevant lists]
+> 
+> On Fri, Mar 18, 2022 at 11:54:35AM +0100, Miguel Angel Ajo wrote:
+>> On Fri, Mar 18, 2022 at 11:47 AM Miguel Angel Ajo <majopela@redhat.com>
+>> wrote:
+>>>      I wanted to share a regression found after commit:
+>>>
+>>> d62069c22eda spi: bcm2835: Remove shared interrupt support
+> [...]
+>>> After this commit I get:
+>>>
+>>> [root@rpi4-64 ~]# dmesg | grep spi
+>>> [   18.781250] spi-bcm2835 fe204000.spi: could not register SPI
+>>> controller: -517
+>>> [   19.134138] spi-bcm2835 fe204000.spi: could not register SPI
+>>> controller: -517
+>>> [   19.895147] spi-bcm2835 fe204000.spi: could not register SPI
+>>> controller: -517
+>>> [   20.400137] spi-bcm2835 fe204000.spi: could not register SPI
+>>> controller: -517
+> 
+> Those are transient errors, -517 is -EPROBE_DEFER.  Probing fails
+> because a resource is not available (yet), to be retried again later
+> if/when it becomes available.
 
-Same, which is why I thought the problem couldn't be happening here for 
-a long time. See below with what I think is going on.
+You would want to check whether you have these two commits in your tree 
+as well:
 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=266423e60ea1b953fcc0cd97f3dad85857e434d1
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e8f24c58d1b69ecf410a673c22f546dc732bb879
 
->
->> static int fsi_spi_status(struct fsi_spi *ctx, u64 *status, const char *dir)
->> {
->>         int rc = fsi_spi_read_reg(ctx, SPI_FSI_STATUS, status);
-> You mentioned the error condition is we get back 0xff. That means that
-> status will be 0xffff_ffff_ffff_ffff ?
->
-> Did you observe status being this value?
+or neither, because the first commit forces a lockstep update of the DTS.
 
+The SPI driver does not uses that many shared resources besides 
+interrupts, clocks and chip-select overs GPIOs, the first one is 
+unlikely to be the problem, and so is the second, thus leaving the third 
+resource as a candidate to defer on.
 
-No, I think my observation of 0xff is not universal. I suspect that 
-while the CFAM is IN reset, 0xff is returned, but once it's been reset, 
-valid (though maybe uninitialized) data is returned. I observed a status 
-of 0x0001100000000000, which means the controller is idle, which makes 
-sense since it's been reset. So the issue occurs if we start an 
-operation before a CFAM reset and are waiting for it to complete during 
-the CFAM reset, but we also don't get any failed/invalid data FSI 
-operations during/after the reset (very timing dependent - the FSI 
-master does lock during the reset but doesn't wait afterwards for the 
-hardware to initialize).
+> 
+> 
+>>> ecfbd3c introduced support for the bcm2711 SoC that shares
+>>> one interrupt over multiple spi controller instances.
+>>>
+>>> Do we have a more detailed description of the exact issue for
+>>> which we reverted?, is there a plan to re-introduce the shared interrupt
+>>> support while fixing the issue?
+> 
+> See here for why the commit was reverted:
+> 
+> https://lore.kernel.org/linux-spi/20200529174358.som3snunfxch6phi@wunner.de/
+> 
+> There was a second attempt to introduce shared interrupt support,
+> but after a lengthy discussion, it was not pursued to fruition:
+> 
+> https://lore.kernel.org/linux-spi/20200604212819.715-1-f.fainelli@gmail.com/
+> 
+> So I believe shared interrupt support only exists in the Raspberry Pi
+> Foundation's downstream kernel, but not yet in the mainline kernel.
+> 
+> Thanks,
+> 
+> Lukas
 
-
->
->>         if (rc)
->>                 return rc;
->>
->>         if (*status & SPI_FSI_STATUS_ANY_ERROR) {
-> I think that we're checking against 0xffe0f000.
->
->>                 dev_err(ctx->dev, "%s error: %016llx\n", dir, *status);
->>
->>                 rc = fsi_spi_reset(ctx);
->>                 if (rc)
->>                         return rc;
-> Is the problem here? fsi_spi_reset writes to the clock config
-> registers, but doesn't read the status.
->
-> Obviously doing the writes causes a call to fsi_spi_check_status, but
-> that checks the FSI2SPI bridge, not the SPI master.
->
-> ...but it doesn't matter, because we're either going to return an
-> error from the reset, or return EREMOTEIO, so there's no masking of
-> the error.
-
-
-Not sure I follow. I don't think we were hitting this path in this error 
-scenario. Do you think we need to check the status after a reset? It 
-should always be the same.
-
-
->
->>                 return -EREMOTEIO;
->>         }
->>
->>         return 0;
->> }
->
->> Signed-off-by: Eddie James <eajames@linux.ibm.com>
->> ---
->>   drivers/spi/spi-fsi.c | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
->>
->> diff --git a/drivers/spi/spi-fsi.c b/drivers/spi/spi-fsi.c
->> index b6c7467f0b59..d403a7a3021d 100644
->> --- a/drivers/spi/spi-fsi.c
->> +++ b/drivers/spi/spi-fsi.c
->> @@ -25,6 +25,7 @@
->>
->>   #define SPI_FSI_BASE                   0x70000
->>   #define SPI_FSI_INIT_TIMEOUT_MS                1000
->> +#define SPI_FSI_STATUS_TIMEOUT_MS      100
-> Can you add a comment (or put something in the commit message) about
-> why you chose 100ms.
-
-
-Hm, sure, but I chose it pretty arbitrarily. I'm not sure how to choose 
-something like this.
-
-
->
->>   #define SPI_FSI_MAX_RX_SIZE            8
->>   #define SPI_FSI_MAX_TX_SIZE            40
->>
->> @@ -299,6 +300,7 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
->>                                   struct spi_transfer *transfer)
->>   {
->>          int rc = 0;
->> +       unsigned long end;
->>          u64 status = 0ULL;
->>
->>          if (transfer->tx_buf) {
->> @@ -315,10 +317,14 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
->>                          if (rc)
->>                                  return rc;
->>
->> +                       end = jiffies + msecs_to_jiffies(SPI_FSI_STATUS_TIMEOUT_MS);
->>                          do {
->>                                  rc = fsi_spi_status(ctx, &status, "TX");
->>                                  if (rc)
->>                                          return rc;
->> +
->> +                               if (time_after(jiffies, end))
->> +                                       return -ETIMEDOUT;
->>                          } while (status & SPI_FSI_STATUS_TDR_FULL);
->>
->>                          sent += nb;
->> @@ -329,10 +335,14 @@ static int fsi_spi_transfer_data(struct fsi_spi *ctx,
->>                  u8 *rx = transfer->rx_buf;
->>
->>                  while (transfer->len > recv) {
->> +                       end = jiffies + msecs_to_jiffies(SPI_FSI_STATUS_TIMEOUT_MS);
->>                          do {
->>                                  rc = fsi_spi_status(ctx, &status, "RX");
->>                                  if (rc)
->>                                          return rc;
->> +
->> +                               if (time_after(jiffies, end))
->> +                                       return -ETIMEDOUT;
->>                          } while (!(status & SPI_FSI_STATUS_RDR_FULL));
->>
->>                          rc = fsi_spi_read_reg(ctx, SPI_FSI_DATA_RX, &in);
->> --
->> 2.27.0
->>
+-- 
+Florian
