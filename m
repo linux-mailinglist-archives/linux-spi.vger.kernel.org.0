@@ -2,163 +2,74 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC014E3578
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Mar 2022 01:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9499B4E3606
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Mar 2022 02:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233668AbiCVAKJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 21 Mar 2022 20:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49562 "EHLO
+        id S234924AbiCVBlT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 21 Mar 2022 21:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233645AbiCVAKG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Mar 2022 20:10:06 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A19192365
-        for <linux-spi@vger.kernel.org>; Mon, 21 Mar 2022 17:07:39 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id o68-20020a17090a0a4a00b001c686a48263so672214pjo.1
-        for <linux-spi@vger.kernel.org>; Mon, 21 Mar 2022 17:07:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lN2wYlOmw3Dp7VdKLX/Ah0t27d8sLMi66eUav/fZlz4=;
-        b=3ylO89xv5QvHxF31gCi0K6M3cMzuJI1gXak8x08U6MdAKZC9klzR2d9gLrjeZ6vyQ0
-         A1Pkx38oO2fyf9ZtiaAUs//wXOERoTQZgUBT40UYRTsTvOozaahk2zkVDz6bH4pRbnAA
-         nB9gTjFNSzX+jgOsTaoxnrnnkTWHWOZKWRCve2fKK47lC9OYyz0/D2ydxtZEIl+VWVdI
-         CVGTmR3jt/tU5mXnOom9tiBeffam+WmVvXdL9zs3Gd8WSR00bvpUEdSPmLuAyYJve2gw
-         iGBEvEXhCnDBEHIp4GCEk0ZepQGnQDppzAg8qncCTRu/OidvHgmF47zRYcRz0PlBSQ17
-         ZJ8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=lN2wYlOmw3Dp7VdKLX/Ah0t27d8sLMi66eUav/fZlz4=;
-        b=PxQu0b9+cI8kAEUWBEOR26+HG1bNt6vYYRgAIMm8KUaB2K56WJi5DyvAbGFgunqHir
-         7a5AsbRhAavfE3T7Lsp1gCJd3N8TFcZ4zNNu9I5Ww2nUaSPvQ4q5fKg+wLWzqKZ4lcfu
-         mNhlMnkAYUwfn9aJXYADZyq3r9dLPZFAbayKIGZev3jmvsUj3IKbViE0YnxU6jvk3jHU
-         HNHmMautCYn6uGQ5xtgpUK6n+JcFOqDNZM1IZE/sEz/qr+ZmChap5ZBXCuhCSSmVTsQI
-         zV5opE887pD0E4mBEEFpvaMrhiCmuV37JbZP0bRLX/HZsZinLYiwtDvxJ4oId1HVIx0w
-         yTkw==
-X-Gm-Message-State: AOAM530DZxHosvDlOvAbSE48rEpjof8wrXWHEpoPhuF6iCOd/u9uygR/
-        PdT0tqkl1J+cq5Qg9uFnlQ/p+A==
-X-Google-Smtp-Source: ABdhPJxKHErpIeAj3JtNr9yjff2+0r7m9xM5Ee5pq+5GOlTu6y040CdRI9jaZdt+fyyN7rHAzjJY6g==
-X-Received: by 2002:a17:90a:cce:b0:1bf:6387:30d9 with SMTP id 14-20020a17090a0cce00b001bf638730d9mr1778565pjt.196.1647907546056;
-        Mon, 21 Mar 2022 17:05:46 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id d2-20020a056a0024c200b004f6b6817549sm22062826pfv.173.2022.03.21.17.05.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 17:05:45 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 17:05:45 -0700 (PDT)
-X-Google-Original-Date: Mon, 21 Mar 2022 17:05:20 PDT (-0700)
-Subject:     Re: [PATCH 00/12] Initial support for Nuclei DemoSoC w/ UX600
-In-Reply-To: <mhng-624abf1a-c1e9-40aa-97a5-07a5b9676942@palmer-ri-x1c9>
-CC:     robh+dt@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     icenowy@nucleisys.com
-Message-ID: <mhng-b11934a9-100f-457b-a35e-46bdcd7f43f4@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S234911AbiCVBlT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 21 Mar 2022 21:41:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0224F165B4;
+        Mon, 21 Mar 2022 18:39:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E4CD615F8;
+        Tue, 22 Mar 2022 01:39:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E4A42C36AE5;
+        Tue, 22 Mar 2022 01:39:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647913189;
+        bh=knokuBBRUmom8/6Y0gPAHPzXAtRD36I778GZXHEe18A=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=tTXO62Ir/U//TV21TWA4Y0QIbCVIE2JywQONezYc9c/z3wEV+ww37c5ZEOnurJ70X
+         cFryI6n3lxjZJ/gk/Jrhrq2B1kMLB1vYv256nK+UmkoFoytk/su2s0KsRxjxa8pa/M
+         3k3d/cJUl65aKi/L+NcTXbFkGJS7hADh++fZ457CiXS8JVygE27jYcrcMHnIKk9BAk
+         94/PRBbIrDvS9uO4ojfTj/g1XU9HpTNYY6nN5gbQTihv9XJed7pHydIFVQfZahWAa+
+         PImTf+JjYZndqIF67woph5Nz2KlVjNowq7ocbQ06gcwweMY4PpkwatxE0YW4fZ4d35
+         PNdADrrTls3sQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CECDAE7BB0B;
+        Tue, 22 Mar 2022 01:39:49 +0000 (UTC)
+Subject: Re: [GIT PULL] SPI updates for v5.18
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220321123625.BA8CDC340F2@smtp.kernel.org>
+References: <20220321123625.BA8CDC340F2@smtp.kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220321123625.BA8CDC340F2@smtp.kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v5.18
+X-PR-Tracked-Commit-Id: 89b35e3f28514087d3f1e28e8f5634fbfd07c554
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ad9c6ee642a61adae93dfa35582b5af16dc5173a
+Message-Id: <164791318984.2267.17556409524025409104.pr-tracker-bot@kernel.org>
+Date:   Tue, 22 Mar 2022 01:39:49 +0000
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 22 Feb 2022 08:56:42 PST (-0800), Palmer Dabbelt wrote:
-> On Sat, 19 Feb 2022 06:45:43 PST (-0800), icenowy@nucleisys.com wrote:
->> 在 2022-01-27星期四的 23:16 +0800，Icenowy Zheng写道：
->>> This patchset adds support for Nuclei DemoSoC (which is an evaluation
->>> platform made with Nuclei CPU cores and mainly peripherals in
->>> original
->>> Hummingbird E203 project, running on FPGA) with UX600 CPU cores.
->>>
->>> Most patches are for DT bindings, the remaining ones are adding a
->>> Kconfig option and some DTS/DTSI files. The last one is a workaround
->>> for
->>> a severe bug in currently released versions of UX600, which is found
->>> in 5.17 kernel, in which Sv48 support is added to Linux.
->>>
->>> Two non-technical patches are in this patchset too, for MAINTAINERS
->>> and .mailmap items.
->>
->> Ping, could any RISC-V maintainers review these patches, especially the
->> SATP workaround one?
->
-> Sorry, I remember having written this but I guess it got lost.  IIRC my
-> main worry here was that, at least as far as I can tell, DemoSOC is an
-> FPGA development board.  If this is actually in production somewhere
-> then it's a different story, but IIUC the general rule is not to accept
-> code for development hardware that can be updated.
->
-> Assuming DemoSOC can be updated, I'd also argue that we should have some
-> sort of version attached to it in DT entries.  Without some versioning
-> we'll end up lost when trying to later determine what we're actually
-> running on.
->
-> As far as the errata goes: it looks fine to me, but I'd like to see some
-> sort of description of what the errata actually is (ie, some
-> documentation from the manufacturer).  I know that's not always
-> possible, but without some desciption of what the bug is it gets tricky
-> to mainain this sort of stuff.  For example: we've got sv57 patches
-> now, so how do I know what to do with them on this target?
+The pull request you sent on Mon, 21 Mar 2022 12:36:04 +0000:
 
-Just following up on this one.  Not sure if I missed it, but I can't 
-find a reply.
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v5.18
 
->
->>
->>>
->>> Icenowy Zheng (12):
->>>   dt-bindings: vendor-prefixes: add Nuclei
->>>   RISC-V: add Nuclei SoC Kconfig option
->>>   dt-bindings: riscv: add compatible strings for Nuclei UX600 series
->>>   dt-bindings: timer: add compatible for Nuclei UX600 CLINT-compat
->>> timer
->>>   dt-bindings: interrupt-controller: add compatible string for UX600
->>>     PLIC
->>>   dt-bindings: serial: add compatible string for Nuclei DemoSoC UART
->>>   dt-bindings: spi: add compatible string for Nuclei DemoSoC SPI
->>>   dt-bindings: riscv: add binding for Nuclei platform boards
->>>   riscv: dts: add device tree for Nuclei DemoSoC w/ UX600 on DDR200T
->>>   RISC-V: workaround Nuclei UX600 cores with broken SATP CSR
->>>   MAINTAINERS: add myself as Nuclei SoCs/CPUs supporter
->>>   mailmap: add Icenowy Zheng's Nuclei mail addresses
->>>
->>>  .mailmap                                      |  1 +
->>>  .../sifive,plic-1.0.0.yaml                    |  1 +
->>>  .../devicetree/bindings/riscv/cpus.yaml       |  7 ++
->>>  .../devicetree/bindings/riscv/nuclei.yaml     | 27 ++++++++
->>>  .../bindings/serial/sifive-serial.yaml        |  1 +
->>>  .../devicetree/bindings/spi/spi-sifive.yaml   |  1 +
->>>  .../bindings/timer/sifive,clint.yaml          |  1 +
->>>  .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
->>>  MAINTAINERS                                   |  7 ++
->>>  arch/riscv/Kconfig.socs                       |  6 ++
->>>  arch/riscv/boot/dts/Makefile                  |  1 +
->>>  arch/riscv/boot/dts/nuclei/Makefile           |  2 +
->>>  .../dts/nuclei/nuclei-demosoc-ddr200t.dtsi    | 41 ++++++++++++
->>>  .../nuclei/nuclei-demosoc-ux600-ddr200t.dts   | 13 ++++
->>>  .../boot/dts/nuclei/nuclei-demosoc-ux600.dtsi | 49 ++++++++++++++
->>>  .../riscv/boot/dts/nuclei/nuclei-demosoc.dtsi | 67
->>> +++++++++++++++++++
->>>  arch/riscv/include/asm/vendorid_list.h        |  1 +
->>>  arch/riscv/mm/init.c                          | 17 +++++
->>>  18 files changed, 245 insertions(+)
->>>  create mode 100644
->>> Documentation/devicetree/bindings/riscv/nuclei.yaml
->>>  create mode 100644 arch/riscv/boot/dts/nuclei/Makefile
->>>  create mode 100644 arch/riscv/boot/dts/nuclei/nuclei-demosoc-
->>> ddr200t.dtsi
->>>  create mode 100644 arch/riscv/boot/dts/nuclei/nuclei-demosoc-ux600-
->>> ddr200t.dts
->>>  create mode 100644 arch/riscv/boot/dts/nuclei/nuclei-demosoc-
->>> ux600.dtsi
->>>  create mode 100644 arch/riscv/boot/dts/nuclei/nuclei-demosoc.dtsi
->>>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ad9c6ee642a61adae93dfa35582b5af16dc5173a
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
