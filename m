@@ -2,93 +2,94 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BEE14E57A1
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Mar 2022 18:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1408D4E58E8
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Mar 2022 20:06:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239602AbiCWRiN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 23 Mar 2022 13:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55384 "EHLO
+        id S240306AbiCWTID (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 23 Mar 2022 15:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343733AbiCWRiH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Mar 2022 13:38:07 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40A47EA0C;
-        Wed, 23 Mar 2022 10:36:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648056997; x=1679592997;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dgKB7CXUgH7XBh9+a33zflluzHIzN/Jnr1ZGBzp7T/c=;
-  b=l8nx9v4Mq32PxU/I4Rk7LP5d11vm3xhq04wmaMf1S+BbrdVJx+JM7/ZD
-   /86geW0he9e1gxmBSC1e/0WJuXhhEDfnOitPPXby/t7nZz2uWv4u8MYdj
-   rz30IpWJ7vvD2CTkqIii+2OXc5fwuBpM/zdMZpu6WFK9/XPUs7Tqqn34y
-   gXKoZgSme50IdxAuH1Yhf+uaSkAj+eTQ1DaJTKJA8wPT8+AAyeiSZeszp
-   18H11VqW+we4Q0ue7EMT7W+gr23pZlncia6HNfRdXb51zly4F8zQOLD2r
-   L/Dft7kA86HZ/w/Sf/NP9YT99pGbpnQBJUfqwQzH02U1j/NCNBQAS4Nbf
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="257006208"
-X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
-   d="scan'208";a="257006208"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 10:23:30 -0700
-X-IronPort-AV: E=Sophos;i="5.90,204,1643702400"; 
-   d="scan'208";a="561004083"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2022 10:23:28 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nX4hA-005KMq-Jz;
-        Wed, 23 Mar 2022 19:22:52 +0200
-Date:   Wed, 23 Mar 2022 19:22:52 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
+        with ESMTP id S233186AbiCWTIC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 23 Mar 2022 15:08:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06339FE5;
+        Wed, 23 Mar 2022 12:06:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7197BB81FDB;
+        Wed, 23 Mar 2022 19:06:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E752C340E8;
+        Wed, 23 Mar 2022 19:06:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648062390;
+        bh=rnGUy1NYDMq+7asXvjQLF0WtVU2uMWXPW+J0p8Njwwk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hBxxdAyelIlHLZsZY6i6A0dlqCPZlkuJuBwhS0Ir1MliarGAiEtO1qi1sBfHa5pht
+         0EmNHpCjn0JUleJaGDzyhSaS+E+1uWxWKlpab6RpnJLtpTlTEGNLTPqHDMrYZBZHyM
+         7F6+4lBA0O+OUtswzh/JXx7w2wifWt8U0irfq3SLSkS08+Xj6ca/0O8B9oBuJdUgUm
+         eb+iq+DqLFS11BtrbGme8hQ+bmea3Sa+7nhEuhqUCn3bP1S/6VqeGibPaMVDuTcW2t
+         DiOQ/VFrH2vxTWTJbXeWwK3h3yvIyq23keVJIKVx2qGoNy5K0yNtuv4eeCouX2qBcM
+         QqjE6OkYxRzOQ==
+Date:   Wed, 23 Mar 2022 19:06:25 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v1 1/4] spidev: Do not use atomic bit operations when
  allocating minor
-Message-ID: <YjtXbDyCWZxKnf4Y@smile.fi.intel.com>
+Message-ID: <YjtvsYs+x3LRaLVP@sirena.org.uk>
 References: <20220323140215.2568-1-andriy.shevchenko@linux.intel.com>
  <YjtNJe4Pgp3WIwOa@sirena.org.uk>
+ <YjtXbDyCWZxKnf4Y@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rnXVjJVxKarMt6/o"
 Content-Disposition: inline
-In-Reply-To: <YjtNJe4Pgp3WIwOa@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YjtXbDyCWZxKnf4Y@smile.fi.intel.com>
+X-Cookie: Nice guys get sick.
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 04:39:01PM +0000, Mark Brown wrote:
-> On Wed, Mar 23, 2022 at 04:02:12PM +0200, Andy Shevchenko wrote:
-> > There is no need to use atomic bit operations when allocating a minor
-> > number since it's done under a mutex. Moreover, one of the operations
-> > that is in use is non-atomic anyway.
 
-...
+--rnXVjJVxKarMt6/o
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> >  	if (status == 0) {
-> > -		set_bit(minor, minors);
-> > +		__set_bit(minor, minors);
-> >  		list_add(&spidev->device_entry, &device_list);
-> 
-> There's no *need* but the __ looks suspicious...  what's the upside
-> here?
+On Wed, Mar 23, 2022 at 07:22:52PM +0200, Andy Shevchenko wrote:
+> On Wed, Mar 23, 2022 at 04:39:01PM +0000, Mark Brown wrote:
 
-It's exactly what is written in the commit message
+> > There's no *need* but the __ looks suspicious...  what's the upside
+> > here?
 
-__*_bit() are non-atomic
-*_bit() are atomic
+> It's exactly what is written in the commit message
 
-Since they are wrapped by mutex, the atomic ones are not needed.
+> __*_bit() are non-atomic
+> *_bit() are atomic
 
--- 
-With Best Regards,
-Andy Shevchenko
+> Since they are wrapped by mutex, the atomic ones are not needed.
 
+Yes, it's not needed but what meaningful harm does it do?
 
+--rnXVjJVxKarMt6/o
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmI7b7AACgkQJNaLcl1U
+h9ASSAf8DMDeomgtofuXgc4yoT8avnHb1qkmLcsZIhCT6MJIKZwPwNvyzAdzuquz
+rDDTfNfq0ZFb0j6SAYRSgPPPRk69i3vdy1hT+T7ykaIaJ1laQDlJsKq3XxkIOSbB
+hSGvZlp7dp/WITrwX4QPefJD2ENNoDSOnElrqjRLCivmjhd3wwAjD8YyGCTgtUhg
+hxvJ2jI7J1LtFdmcqtuu/hTvs3TluKo7DcLCuzuNWs6Yllm7F7i7tWdLvJ0I3mCc
+WaZKh5l6sdZNfBWQsy5C6Nrj7qkrok5mgqaN8i+kqEbW1OTnevvQuAtlq/QJfAGt
+zWkYYvdMEevnFgC/jNRrBVdMWWZNYw==
+=mCxY
+-----END PGP SIGNATURE-----
+
+--rnXVjJVxKarMt6/o--
