@@ -2,122 +2,100 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3DA4E5F52
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Mar 2022 08:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC854E610E
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Mar 2022 10:25:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236019AbiCXH12 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Mar 2022 03:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
+        id S1344426AbiCXJ0g (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 24 Mar 2022 05:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234921AbiCXH11 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Mar 2022 03:27:27 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EFA986F4;
-        Thu, 24 Mar 2022 00:25:56 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id r13so7327601ejd.5;
-        Thu, 24 Mar 2022 00:25:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XVilrVPHAzNXojXt+GjJOL6H62xOPCwBdLhdn2DWXIM=;
-        b=otovnpD5nrCVnZOsLSqe8I1OIJRwaeI6Wprpx5/aY+tLRP2xckrtLUD/siXLU0Txf3
-         21HyGWc+9cV2Rn0XxJyTxE6UL5SEDgTZw98y9gKL3wnDu0AEcS/eFNTmcJm4p2Y8Bfg9
-         QTEjKShf9Y8EAQ/C9rEPAfjempmv8JNNth7q8lGJ6Vr2y90i4WZVXozSuNiDgHBgcd7U
-         ZjfRmpiI6Ou7+clTpm9JLqeDfSaHFj4Eev5TNir7uoSlHyP0sxtAG35Kuy+WV0TsirBo
-         0XCSnJKarnaRYK/EGYD4aYAaWI1Hx+7q/SleHBCKJHXoL+NxnOez9BUQc2A4WYp4otFp
-         UM+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XVilrVPHAzNXojXt+GjJOL6H62xOPCwBdLhdn2DWXIM=;
-        b=jfzqnxW9w4TZhkya9vuopczhWxzMhx4XRtO7Cb7Gi/ZsDR5QWcRZbO+3XtPczBrqal
-         KJbw1kHdCQrtRgFD7qv8HdThMsYJkDMI1v45B+OmdvyKLButgG2CTw8FHBubRX3RQ1o4
-         WE2Dg0VAXT4HO37G1ASAvJVBBkN6Af7d2P91ttPTjK+Otu+NrPVmVOw1xWGU8rwbCPre
-         Ng6zWd5TyD5yhJrA8EdBDPs/AEeo0gyJ4hzrYqxiPrQYIkYhGux9BCf4RbALXWkiv6X9
-         vrH+cTe7u4klWYrw1XWEJAtHGtO8RsfmE8SPCIYI3vqcZbmsk73qWje0buwmDgqrZsJc
-         UVCQ==
-X-Gm-Message-State: AOAM531M3XDF/QkWmEeauynp2NfFLA1jjgaoyjgxr+DMWkvXLODsUX6s
-        EIeO1bVemxEFAjh4mpZZ0XA=
-X-Google-Smtp-Source: ABdhPJzRiymZM6GpooNPxU4tvHwmcChIBJjf+hQ5ofKWj78Tx4y6dAWhErrocnZuydc4KL0kfbKuNg==
-X-Received: by 2002:a17:907:8a25:b0:6d7:d59:6912 with SMTP id sc37-20020a1709078a2500b006d70d596912mr4275772ejc.259.1648106754763;
-        Thu, 24 Mar 2022 00:25:54 -0700 (PDT)
-Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id hg11-20020a1709072ccb00b006cee4fb36c7sm770476ejc.64.2022.03.24.00.25.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 00:25:54 -0700 (PDT)
-From:   Jakob Koschel <jakobkoschel@gmail.com>
+        with ESMTP id S232772AbiCXJ0f (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Mar 2022 05:26:35 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BC76D4FD;
+        Thu, 24 Mar 2022 02:25:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648113904; x=1679649904;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6xswe2NDduqgra8KW8XqaVdTAYDUAbdLTGvm1CKnFGw=;
+  b=GIhyhnXecC2QrlDWTI89tbKgRE5XjigDmn2mSs6SS6AeODGk3agRRVRl
+   AuMHlkQNrdWd097EZsb0FR5zuWPYE5ZgtOZJCImYn3dDLBEr+OnS3cokd
+   BXA2j6FZsJkf46QiJjlydNiFGHHWPowW5hSoBNiQikXWBcr4PHCwqjZeq
+   CJHH8gAzUK+7vApsHUHHk9VXe6SjArCdzjxtsQXwJHfCYSiwc/og1iSoh
+   51zD7M0iUnIJ90Wp8YDb8UZs4zlz6zFPe2cEdYiXc0rJWPKdxqAolYLl+
+   12b/eQrl/OjTRURnbMrSr7/ljoqwUF5I9NjybPL1m4jPKgCromkQaS7KW
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="283185382"
+X-IronPort-AV: E=Sophos;i="5.90,206,1643702400"; 
+   d="scan'208";a="283185382"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 02:25:04 -0700
+X-IronPort-AV: E=Sophos;i="5.90,206,1643702400"; 
+   d="scan'208";a="519709826"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 02:25:02 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nXJhi-005imM-Q3;
+        Thu, 24 Mar 2022 11:24:26 +0200
+Date:   Thu, 24 Mar 2022 11:24:26 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
-        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [PATCH] spi: spidev: replace usage of found with dedicated list iterator variable
-Date:   Thu, 24 Mar 2022 08:25:34 +0100
-Message-Id: <20220324072534.63420-1-jakobkoschel@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/4] spidev: Do not use atomic bit operations when
+ allocating minor
+Message-ID: <Yjw4yjgordnSo+7M@smile.fi.intel.com>
+References: <20220323140215.2568-1-andriy.shevchenko@linux.intel.com>
+ <YjtNJe4Pgp3WIwOa@sirena.org.uk>
+ <YjtXbDyCWZxKnf4Y@smile.fi.intel.com>
+ <YjtvsYs+x3LRaLVP@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YjtvsYs+x3LRaLVP@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-To move the list iterator variable into the list_for_each_entry_*()
-macro in the future it should be avoided to use the list iterator
-variable after the loop body.
+On Wed, Mar 23, 2022 at 07:06:25PM +0000, Mark Brown wrote:
+> On Wed, Mar 23, 2022 at 07:22:52PM +0200, Andy Shevchenko wrote:
+> > On Wed, Mar 23, 2022 at 04:39:01PM +0000, Mark Brown wrote:
+> 
+> > > There's no *need* but the __ looks suspicious...  what's the upside
+> > > here?
+> 
+> > It's exactly what is written in the commit message
+> 
+> > __*_bit() are non-atomic
+> > *_bit() are atomic
+> 
+> > Since they are wrapped by mutex, the atomic ones are not needed.
+> 
+> Yes, it's not needed but what meaningful harm does it do?
 
-To *never* use the list iterator variable after the loop it was
-concluded to use a separate iterator variable instead of a
-found boolean [1].
+There are basically two points:
 
-This removes the need to use a found variable and simply checking if
-the variable was set, can determine if the break/goto was hit.
+1) in one driver the additional lock may not be influential, but
+   if many drivers will do the same, it will block CPUs for no
+   purpose;
 
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
----
- drivers/spi/spidev.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+2) derived from the above, if one copies'n'pastes the code, esp.
+   using spin locks, it may become an unneeded code and performance
+   degradation.
 
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index a5cceca8b82b..2c5e685826ad 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -561,19 +561,20 @@ spidev_compat_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 
- static int spidev_open(struct inode *inode, struct file *filp)
- {
--	struct spidev_data	*spidev;
-+	struct spidev_data	*spidev = NULL, *iter;
- 	int			status = -ENXIO;
- 
- 	mutex_lock(&device_list_lock);
- 
--	list_for_each_entry(spidev, &device_list, device_entry) {
--		if (spidev->devt == inode->i_rdev) {
-+	list_for_each_entry(iter, &device_list, device_entry) {
-+		if (iter->devt == inode->i_rdev) {
- 			status = 0;
-+			spidev = iter;
- 			break;
- 		}
- 	}
- 
--	if (status) {
-+	if (!spidev) {
- 		pr_debug("spidev: nothing for minor %d\n", iminor(inode));
- 		goto err_find_dev;
- 	}
 
-base-commit: f443e374ae131c168a065ea1748feac6b2e76613
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
