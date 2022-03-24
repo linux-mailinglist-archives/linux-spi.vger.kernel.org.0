@@ -2,100 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC854E610E
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Mar 2022 10:25:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B23C4E6522
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Mar 2022 15:29:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344426AbiCXJ0g (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 24 Mar 2022 05:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
+        id S1350935AbiCXOaO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 24 Mar 2022 10:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232772AbiCXJ0f (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Mar 2022 05:26:35 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BC76D4FD;
-        Thu, 24 Mar 2022 02:25:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648113904; x=1679649904;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6xswe2NDduqgra8KW8XqaVdTAYDUAbdLTGvm1CKnFGw=;
-  b=GIhyhnXecC2QrlDWTI89tbKgRE5XjigDmn2mSs6SS6AeODGk3agRRVRl
-   AuMHlkQNrdWd097EZsb0FR5zuWPYE5ZgtOZJCImYn3dDLBEr+OnS3cokd
-   BXA2j6FZsJkf46QiJjlydNiFGHHWPowW5hSoBNiQikXWBcr4PHCwqjZeq
-   CJHH8gAzUK+7vApsHUHHk9VXe6SjArCdzjxtsQXwJHfCYSiwc/og1iSoh
-   51zD7M0iUnIJ90Wp8YDb8UZs4zlz6zFPe2cEdYiXc0rJWPKdxqAolYLl+
-   12b/eQrl/OjTRURnbMrSr7/ljoqwUF5I9NjybPL1m4jPKgCromkQaS7KW
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10295"; a="283185382"
-X-IronPort-AV: E=Sophos;i="5.90,206,1643702400"; 
-   d="scan'208";a="283185382"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 02:25:04 -0700
-X-IronPort-AV: E=Sophos;i="5.90,206,1643702400"; 
-   d="scan'208";a="519709826"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 02:25:02 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nXJhi-005imM-Q3;
-        Thu, 24 Mar 2022 11:24:26 +0200
-Date:   Thu, 24 Mar 2022 11:24:26 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
+        with ESMTP id S1350950AbiCXOaN (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 24 Mar 2022 10:30:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EAD5A27D7;
+        Thu, 24 Mar 2022 07:28:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D93316158E;
+        Thu, 24 Mar 2022 14:28:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F6E4C340EC;
+        Thu, 24 Mar 2022 14:28:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648132120;
+        bh=4qAeM0JdotrQvJ/HZMb0Us3bJl6HxRWRX8r9heyrxaE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SoA0D6N5l8aWdF5RxYtg1Dp9h0kTny57KHxmvKFrFjYZ/VnWibNOlKdFq+Ra8XeAm
+         /Q26XmCBrfYJBuAJM2gOgXgj5W4hsR5c/ms7Uj736aiQLVIj0XSqqsqOWUlTPUO5aL
+         9cnDO4rRY9zRNW7BauF2wztarK8DrGKOsB2R2ZUap9KjnvLiwer2+zj6xhAwFBSaZB
+         hAfuHwi1FH+QuFV0aRNEPoxlKYBQ96XfonYizUXOcMWYstdzJwlzuBV8WGEXddMK2U
+         bec2mMoX+XFHGFs2KAT956jtMnj+VP0Dd/s0isgEDbIOeexndAzpPFrrgloH09wO+b
+         WZj5MzmU2gpAw==
+Date:   Thu, 24 Mar 2022 14:28:36 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v1 1/4] spidev: Do not use atomic bit operations when
  allocating minor
-Message-ID: <Yjw4yjgordnSo+7M@smile.fi.intel.com>
+Message-ID: <YjyAFNYpDjSQnIN1@sirena.org.uk>
 References: <20220323140215.2568-1-andriy.shevchenko@linux.intel.com>
  <YjtNJe4Pgp3WIwOa@sirena.org.uk>
  <YjtXbDyCWZxKnf4Y@smile.fi.intel.com>
  <YjtvsYs+x3LRaLVP@sirena.org.uk>
+ <Yjw4yjgordnSo+7M@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dKOZZHhcOIvaUSFy"
 Content-Disposition: inline
-In-Reply-To: <YjtvsYs+x3LRaLVP@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yjw4yjgordnSo+7M@smile.fi.intel.com>
+X-Cookie: Orders subject to approval.
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 07:06:25PM +0000, Mark Brown wrote:
-> On Wed, Mar 23, 2022 at 07:22:52PM +0200, Andy Shevchenko wrote:
-> > On Wed, Mar 23, 2022 at 04:39:01PM +0000, Mark Brown wrote:
-> 
-> > > There's no *need* but the __ looks suspicious...  what's the upside
-> > > here?
-> 
-> > It's exactly what is written in the commit message
-> 
-> > __*_bit() are non-atomic
-> > *_bit() are atomic
-> 
-> > Since they are wrapped by mutex, the atomic ones are not needed.
-> 
-> Yes, it's not needed but what meaningful harm does it do?
 
-There are basically two points:
+--dKOZZHhcOIvaUSFy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-1) in one driver the additional lock may not be influential, but
-   if many drivers will do the same, it will block CPUs for no
-   purpose;
+On Thu, Mar 24, 2022 at 11:24:26AM +0200, Andy Shevchenko wrote:
+> On Wed, Mar 23, 2022 at 07:06:25PM +0000, Mark Brown wrote:
 
-2) derived from the above, if one copies'n'pastes the code, esp.
-   using spin locks, it may become an unneeded code and performance
-   degradation.
+> > Yes, it's not needed but what meaningful harm does it do?
 
+> There are basically two points:
 
+> 1) in one driver the additional lock may not be influential, but
+>    if many drivers will do the same, it will block CPUs for no
+>    purpose;
 
--- 
-With Best Regards,
-Andy Shevchenko
+> 2) derived from the above, if one copies'n'pastes the code, esp.
+>    using spin locks, it may become an unneeded code and performance
+>    degradation.
 
+I think if these are serious issues they need to be addressed in the API
+so that code doing the fancy unlocked stuff that needs atomicity is the
+code that has the __ and looks like it's doing something tricky and
+peering into internals.
 
+--dKOZZHhcOIvaUSFy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmI8gBMACgkQJNaLcl1U
+h9By4gf7BRudaID9+lgjz75qSGjV25y2Q4R5DrX7G8DYKkNssivBFsA8BxGmrvpV
+O2kz4kYAx1YjnxwklsKdVXAxomQOfdvNl9CWgBJM8VqkIyVS5XQSJunudbOpjJ45
+5jFQZuuj9iaCx8TiH9UKc4/hMIbvtuV8i/aWd6KAPzxpIVh3IZGnlSOOS+mAnLux
+2HVDROxvCi8a3/UnG7phOEOFzWFuDDWMpeLJlN+wO4c1w3LsxcBa+N1TavT3ZQlL
+Yiopw+GQam3hQn8B5C+j3YzfESvK/ghYtFHHLGBoY7BcWQ82h/WXEKcf8DMFnfyo
+UMZh7ZjlESFCSVDuRclf2sRaOMS8yQ==
+=oZfL
+-----END PGP SIGNATURE-----
+
+--dKOZZHhcOIvaUSFy--
