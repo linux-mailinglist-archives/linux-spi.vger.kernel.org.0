@@ -2,106 +2,62 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B0E4E9FB1
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Mar 2022 21:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B75E4EA0DC
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Mar 2022 21:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244755AbiC1TV5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Mar 2022 15:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54300 "EHLO
+        id S1343945AbiC1T7A (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Mar 2022 15:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244720AbiC1TVz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Mar 2022 15:21:55 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9595DE4E;
-        Mon, 28 Mar 2022 12:20:14 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id b13so11762221pfv.0;
-        Mon, 28 Mar 2022 12:20:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GJEJWucPHfNfh0owOSh1kHfEuPNtGB0oLcBX/58o8qM=;
-        b=JP/IsseErt3A3GaLZ07OVojIgAwMlkKQXJbU0k6teFguY4PSuv5O56wntHbS7cQX8M
-         ygcQ6cP8WIS0Oe2g9kgoYbVhd8a6t3rkAW349ZzBJVb/5xDkScINNk6VtNUf4fFLXf7l
-         MOKxSppY//7Wm1FNURCk/MdfjSzRBSxBZkg7bZT8DxtUeOp1w8uP/24JIM16Bn1fw7bh
-         8sLIsZi+o3DMg0VPJZwvau0LqCUve5dgtRttgqoVqmmpzUdQv0+o+C9eszP9egtXRt9X
-         UH6I5aTsqmQ4QwCY0uw/FSHFWrv2FpMv6+o+sUda7CtYZp7bITnlqF1nE+ypDgwRqjof
-         nexQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GJEJWucPHfNfh0owOSh1kHfEuPNtGB0oLcBX/58o8qM=;
-        b=mj+VxfjPN6MKQgobI8EM6U1wj+BhrVTvRxnWrkwE0nt8w4OwaHM4z9I6IitusGDmMg
-         W3GzgfRwIY7gbn+LofPfKzObY6/BdR7EsldqP5exGwqRbJqdVPTWeb6rrPTpuSuwXPKM
-         iDYtHEJ+9QoP6i7S67WXE728IMyhROzjakclx8sqoxh23dA74qAVB9HmawAsKSO4JVk2
-         KEb6XijqAXRUykw8YZHDTATnyoHqJPVQlfz/YHGpX+7S4FxY5H6jLchAunJxfzYxi57H
-         dPqDfheWB4aHu+aDNkQjn7x/KYvz5gG4kzL5oXYq1QcO4q5eyXq9lnZ5PXQtiDTFj9Nw
-         KC/Q==
-X-Gm-Message-State: AOAM533WPk0Lhlyt5KaEm9GsI/DeMUXO4HVsaoEh2JlvKHL6Z8WM8ikS
-        wyLG6/jOEXrHFCBlF8ytZljMrPAzk/U=
-X-Google-Smtp-Source: ABdhPJwR9Pf/sSAf0tS1ztVneZEH22dR8Gn749LLOhJ7HmycSZ5LiQpEf7U7uAqx2SXRA97/1JMA+Q==
-X-Received: by 2002:a65:56cb:0:b0:378:82ed:d74 with SMTP id w11-20020a6556cb000000b0037882ed0d74mr11408905pgs.491.1648495213750;
-        Mon, 28 Mar 2022 12:20:13 -0700 (PDT)
-Received: from localhost.localdomain ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id nn7-20020a17090b38c700b001c9ba103530sm265339pjb.48.2022.03.28.12.20.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 12:20:13 -0700 (PDT)
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Mukesh Savaliya <msavaliy@codeaurora.org>,
-        Akash Asthana <akashast@codeaurora.org>
-Cc:     Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: spi: qcom-qspi: Add minItems to interconnect-names
-Date:   Tue, 29 Mar 2022 00:50:06 +0530
-Message-Id: <20220328192006.18523-1-singh.kuldeep87k@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S1344193AbiC1T6G (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Mar 2022 15:58:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65905B3F5
+        for <linux-spi@vger.kernel.org>; Mon, 28 Mar 2022 12:56:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 62C506140B
+        for <linux-spi@vger.kernel.org>; Mon, 28 Mar 2022 19:56:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C1B44C340F0;
+        Mon, 28 Mar 2022 19:56:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648497384;
+        bh=ugiFHGItx5T7NdQRJ0gvYJBIoyogceohXHdGFzTOZho=;
+        h=Subject:From:Date:To:From;
+        b=dfOS0LF7SmEd55tnretLz2ttBGiA5Ts5E9NQUXY5uIqp3PdhZFtM42v7QTNXzE2F1
+         EyPQci1fHX/1ptcqH+nmv7qbxGR+dJaTa89TsnYAJJkwJR54xXY2d/6+XgyRzkPs2e
+         /AbCMD6ONUpkL/z7Z+R2rW+n2kmAv2r8lAZ+BwgqiC6W7FvIbiVEBjC2g+HFnK3ti5
+         l2JnoE/8jjjyrwCrqvgtcuSDAG6F4qzSw2zuUGEE+Ec4cflPmZoUHxe15pL6MWoS/v
+         QlP/VNQ5mYv/EL3Ldkicew9gdbUVKLDcdKRqf24UP/HkPZTceXEFiEnG1rpH1l7tZU
+         da0j4Nppp691A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A30FFE7BB0B;
+        Mon, 28 Mar 2022 19:56:24 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <164849738466.12223.3388557805139558886.git-patchwork-housekeeping@kernel.org>
+Date:   Mon, 28 Mar 2022 19:56:24 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Add minItems constraint to interconnect-names as well. The schema
-currently tries to match 2 names and fail for DTs with single entry.
+Latest series: [v2] dt-bindings: spi: qcom-qspi: Add minItems to interconnect-names (2022-03-28T19:20:06)
+  Superseding: [v1] dt-bindings: spi: qcom-qspi: Add minItems to interconnect-names (2022-03-26T21:21:34):
+    dt-bindings: spi: qcom-qspi: Add minItems to interconnect-names
 
-With the change applied, below interconnect-names values are possible:
-['qspi-config'], ['qspi-config', 'qspi-memory']
 
-Fixes: 8f9c291558ea ("dt-bindings: spi: Add interconnect binding for QSPI")
-Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
----
-v2:
-- Reword commit description
-
- Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
-index 055524fe8327..116f3746c1e6 100644
---- a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
-@@ -49,6 +49,7 @@ properties:
-     maxItems: 2
- 
-   interconnect-names:
-+    minItems: 1
-     items:
-       - const: qspi-config
-       - const: qspi-memory
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
