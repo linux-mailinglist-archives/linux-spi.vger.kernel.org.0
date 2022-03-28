@@ -2,61 +2,72 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ABD54E995F
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Mar 2022 16:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8884C4E9EAC
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Mar 2022 20:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243783AbiC1O0b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 28 Mar 2022 10:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
+        id S236783AbiC1R7c (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 28 Mar 2022 13:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243782AbiC1O0a (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Mar 2022 10:26:30 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0521EEDA;
-        Mon, 28 Mar 2022 07:24:49 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id t5so12784309pfg.4;
-        Mon, 28 Mar 2022 07:24:49 -0700 (PDT)
+        with ESMTP id S245013AbiC1R71 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 28 Mar 2022 13:59:27 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA74B1CB3E;
+        Mon, 28 Mar 2022 10:57:40 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id l4-20020a17090a49c400b001c6840df4a3so114523pjm.0;
+        Mon, 28 Mar 2022 10:57:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=8cccm2I+4KQDgNNYHUDY+ywBQCQ8yCeJGNdK8lQVpuc=;
-        b=IYjEsW9/LupErXbLGzSBAZGPm9cCPnTKQASA/r1SBiEmUA2dpVFLdeb2ZVCXU44JL6
-         hHLbYKI8oltUMlu8JBtd5XdaOkpZLw8t0R0Qk3BOYb/57dhke2Zt8wOysMbre1rTno73
-         j685lnflFzMCJBuK5UOPaBwHUIH0X+jovn3Ui3ow2QunV10XwCrekr1QUQZ1TiSZQgDu
-         wJLk0ue9OLiv+vTTgkK7Zrzk+UAPK6IZKFZiK4Ct1eCvYmFyZU0lHdTzq8qfitd3o1c6
-         dCdnDHDxsWAlntgHnilGr5DWLF+np4WSww4TTMbnLwfn9G3yOB/M1RhzDW61qCU51JHH
-         7j8Q==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ru5STglB2zaqzk2ISNkVscCvEPD1049nB4SkKXNL7aY=;
+        b=gI3QQv2kSAmpt0UKXi4hyz5Z75cM9QSiYGY0oPgC9FKtldB9ybyCM8sYIqaLMT3FNe
+         qHUdNif5/vwutsVRztMny4TW41z6W/Si7RanrTOI1pRUZ8sOVXL8nAVrEoMpkKuyUAx0
+         5LFd2LscYC3BPgyetpc7raUTd7A/aI8njpoz7sdDDEnXnW65cAXhUxmSPGkZTV2JVORX
+         IfiHjVSUy+RtrqgIRyFJRH3upKTFr7okUfiDFHcpjuRagX7WDneV34HALme3ikb6E2xE
+         R7O2+aJJLQS9DtqNs6acuEK4b10ScY/1WWQMXzYFdsPouvwN/EzVBd/bRZcE3boWJgpA
+         OdVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=8cccm2I+4KQDgNNYHUDY+ywBQCQ8yCeJGNdK8lQVpuc=;
-        b=qBow+QEsFFsLeLO6VKOgAb0FfAItHZHsf0kr2kT/yotuxPP8qJCiv6F6/eBGD6571y
-         p8y6PgjoaVUglkrLH/jgpZ4snB29D4xphrja+Sty1la55VcN4tq5yIsLi4PPQjV1Zkm2
-         JEPg4vP1hljX1iuF8G3Pvrmgo9imD/n41stArNtOaKRIocIe62I1xSnMx3c0NcD06Idp
-         RL3tq+f6VVtF8QjAeEqTjvEmDKuXy1DiAqe4yZOQq1oOrWZDvy7ddFxUiNKYBNkjrb2m
-         0dw0JBvWLlEhPC54/Ac+HffddyoMZt2PfLwRKeKD39BIh4uJ/qm7maEPNgp+ldf5X2sn
-         Yqmw==
-X-Gm-Message-State: AOAM531BCAz2uvHeDaZIKx7pXD+cMPorGDUssP/wgHAKrrMc+moOuPgH
-        Ydy/HHje1vMvCSqwopRIwuy9CGgxPnQ=
-X-Google-Smtp-Source: ABdhPJwA5iDbCHTLuYfWrqG6KuF3HtRxj7SDoNnVwtk1l8KQzi1iaq7qdTa9xXCJo2ckFBal+JZfYQ==
-X-Received: by 2002:a05:6a00:2485:b0:4f6:b5c5:ee8e with SMTP id c5-20020a056a00248500b004f6b5c5ee8emr23446306pfv.21.1648477489258;
-        Mon, 28 Mar 2022 07:24:49 -0700 (PDT)
-Received: from mail.broadcom.net ([192.19.11.250])
-        by smtp.gmail.com with ESMTPSA id oo17-20020a17090b1c9100b001bf0ccc59c2sm21664206pjb.16.2022.03.28.07.24.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 07:24:48 -0700 (PDT)
-From:   Kamal Dasu <kdasu.kdev@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ru5STglB2zaqzk2ISNkVscCvEPD1049nB4SkKXNL7aY=;
+        b=ysQh3D6+prUQK0KVMFwZagJWbSwFqPzygDbstq+lftUSSflDXNEqc5kx4Cm9rZLiVz
+         oRknbQvtE++wBHSugRlqLDRh0ctf/VL1drd685/lqLYCVdDb6Z21R7hIiSkefs39Y2TT
+         fRkVy2bvW6ZYR59pF1BCwLGj7oeCjKslwScg+iSGnkxNOIaskrN6PrlPo075vf9fecSb
+         oOILdyweX1M1ChGyxlR5bbAu3+z6H9CHMLH3hycYKwG9G7vbB0s+KKKE2nzdv6Tbjviw
+         NW04Ajw2WWA/cDlJBfHWSh+gfJViNeSYPxd5KuUk26NkIENCsSGdT10dkZ7yLSD2CVzX
+         RkXA==
+X-Gm-Message-State: AOAM532vS9TS9bZdVzZfbJGkig7FAhSxzA2k0klx2pdpMzRnLo7VydbA
+        ERv1gxizkU/lyfnjgC27j0k=
+X-Google-Smtp-Source: ABdhPJzVDjJFYqlq4l42s18z0HI6/2ECMzjNyGHvBc313YSSOV6lxUCpmCrPdpNrO+7gP/V+F7YI2w==
+X-Received: by 2002:a17:902:e791:b0:151:dbbd:aeae with SMTP id cp17-20020a170902e79100b00151dbbdaeaemr27081116plb.171.1648490260101;
+        Mon, 28 Mar 2022 10:57:40 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id l185-20020a6388c2000000b0038614ed80c0sm14455595pgd.41.2022.03.28.10.57.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Mar 2022 10:57:39 -0700 (PDT)
+Message-ID: <dbb15de0-5e13-3706-47a8-d6edb7c221ee@gmail.com>
+Date:   Mon, 28 Mar 2022 10:57:18 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] spi: bcm-qspi: fix MSPI only access with
+ bcm_qspi_exec_mem_op()
+Content-Language: en-US
 To:     Kamal Dasu <kdasu.kdev@gmail.com>,
         bcm-kernel-feedback-list@broadcom.com,
         Mark Brown <broonie@kernel.org>,
         Boris Brezillon <bbrezillon@kernel.org>
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: bcm-qspi: fix MSPI only access with bcm_qspi_exec_mem_op()
-Date:   Mon, 28 Mar 2022 10:24:42 -0400
-Message-Id: <20220328142442.7553-1-kdasu.kdev@gmail.com>
-X-Mailer: git-send-email 2.17.1
+References: <20220328142442.7553-1-kdasu.kdev@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220328142442.7553-1-kdasu.kdev@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,37 +76,13 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This fixes case where MSPI controller is used to access spi-nor
-flash and BSPI block is not present.
+On 3/28/22 07:24, Kamal Dasu wrote:
+> This fixes case where MSPI controller is used to access spi-nor
+> flash and BSPI block is not present.
+> 
+> Fixes: 5f195ee7d830 ("spi: bcm-qspi: Implement the spi_mem interface")
+> Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
 
-Fixes: 5f195ee7d830 ("spi: bcm-qspi: Implement the spi_mem interface")
-Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
----
- drivers/spi/spi-bcm-qspi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
-index 86c76211b3d3..cad2d55dcd3d 100644
---- a/drivers/spi/spi-bcm-qspi.c
-+++ b/drivers/spi/spi-bcm-qspi.c
-@@ -1205,7 +1205,7 @@ static int bcm_qspi_exec_mem_op(struct spi_mem *mem,
- 	addr = op->addr.val;
- 	len = op->data.nbytes;
- 
--	if (bcm_qspi_bspi_ver_three(qspi) == true) {
-+	if (has_bspi(qspi) && bcm_qspi_bspi_ver_three(qspi) == true) {
- 		/*
- 		 * The address coming into this function is a raw flash offset.
- 		 * But for BSPI <= V3, we need to convert it to a remapped BSPI
-@@ -1224,7 +1224,7 @@ static int bcm_qspi_exec_mem_op(struct spi_mem *mem,
- 	    len < 4)
- 		mspi_read = true;
- 
--	if (mspi_read)
-+	if (!has_bspi(qspi) || mspi_read)
- 		return bcm_qspi_mspi_exec_mem_op(spi, op);
- 
- 	ret = bcm_qspi_bspi_set_mode(qspi, op, 0);
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.17.1
-
+Florian
