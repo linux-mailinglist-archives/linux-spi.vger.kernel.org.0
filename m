@@ -2,192 +2,177 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168724EB35C
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Mar 2022 20:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 892464EB3EC
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Mar 2022 21:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240558AbiC2SdW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 29 Mar 2022 14:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
+        id S237945AbiC2TLc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 29 Mar 2022 15:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240561AbiC2SdW (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Mar 2022 14:33:22 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EF5179B05
-        for <linux-spi@vger.kernel.org>; Tue, 29 Mar 2022 11:31:38 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id b18so16039674qtk.13
-        for <linux-spi@vger.kernel.org>; Tue, 29 Mar 2022 11:31:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=W/oK6sM4ly8ciPv3HqbUf+UoHjKVAuJvmsGxf7C07XM=;
-        b=AkqJ8FvnClT5W9pqnSQ5ailNTDbLT6CMlSToNZS33c/RnqCN/NYE9xMZyx+U2xntTa
-         jUe2rJFjFOcRdxYH2GSOxSDBaK22UDBX2uBtT7/XtAZ2oYhlJ0mbCGsDJyAYAaVNCwSA
-         jk8lxriks1hBWyR14C/xYJUH14kk99O8a2UbaP9Nvorx5s2M4yfn/qUTVUOJt7NhPiul
-         t5QFtZ3JFbtuNR0qarOeckpYT9upUjvjJZ6LMDjrp2oRNVIZZxuIEwTft0RmQa2LHIlJ
-         K87OMzBL2sAqbJZjOKkmoHBOxdxtFBd/K8JDX8Ns9W8JVStO2/+qK4HxX2+7j5ezC+Ks
-         kkzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=W/oK6sM4ly8ciPv3HqbUf+UoHjKVAuJvmsGxf7C07XM=;
-        b=VzylxzVwTICjALnnlR2oWX59fqqWWtsINnEljvRauA3b6A6d5FfsWk7RWwJy64niN+
-         kkXKyg2XztvqkS5VNdQVT6yNwVU2htupRDKituoEP2Fc7SFF98oZBHjYkH60taVrcJbg
-         tqW84TemnT20tHLZ5RjvpgnCk5T+GYDJD2aLGexn98nGMngT6568RpiFzrJKz6EfT3Ft
-         iNUAHOAjRXBuAWbuxUgaEafy4z5oLluvPmHTxrTEJJEaTmm+V73iuaDEbBOzhSiIJfPD
-         K1XLB+0U1iNj6uTT/eyKjuMNqSsZuQW2YIhVOaSHuD1yoJg22BjrMSGsheV/Z/GVGWKt
-         LvRA==
-X-Gm-Message-State: AOAM532MRIpXUVLr8wi9cZIE3ZAGPvGcPQ1Gfb+tZ2J4bKMHR80Fhog5
-        hbxhyhVrSHmG3rU94dM+Mj54uaalqnQ=
-X-Google-Smtp-Source: ABdhPJzc6GTuCd9vwE/MxZxx0hOL4zRXY3OvwF3mJDjDNo788w0P3JGrauUFTh5tjXhM20UyeFMkTQ==
-X-Received: by 2002:ac8:5787:0:b0:2e1:c602:cff2 with SMTP id v7-20020ac85787000000b002e1c602cff2mr29941487qta.133.1648578697500;
-        Tue, 29 Mar 2022 11:31:37 -0700 (PDT)
-Received: from localhost (pppoe-209-91-167-254.vianet.ca. [209.91.167.254])
-        by smtp.gmail.com with ESMTPSA id f8-20020ac859c8000000b002e232e04cafsm16461384qtf.88.2022.03.29.11.31.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 11:31:37 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 14:31:35 -0400
-From:   Trevor Woerner <twoerner@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-spi@vger.kernel.org, vz@mleia.com,
-        alexandre.belloni@bootlin.com
-Subject: Re: spi-pl022 on lpc32xx
-Message-ID: <20220329183135.GA6427@localhost>
-References: <20220328190104.GA11946@localhost>
- <CACRpkdY2ynzAyQz3q2gHnZMA+Opr-b=w=dA4YMqH=i0Rv+OYcg@mail.gmail.com>
+        with ESMTP id S240852AbiC2TLc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Mar 2022 15:11:32 -0400
+X-Greylist: delayed 638 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 29 Mar 2022 12:09:48 PDT
+Received: from mail.mleia.com (mleia.com [178.79.152.223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1312AF1DF
+        for <linux-spi@vger.kernel.org>; Tue, 29 Mar 2022 12:09:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+        t=1648580348; bh=zxM3pn+KIF9KAbgXNUU2mWVIVmI13y2vEetlzWdhaMc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BdAptG5zJq2fUy+zuPBdfXL6/5rWYhJJXO8OxSJHy1UiKP5n/qXLE90aYh40HzNFP
+         qu5UW4XOGAopJZjErrcdAVgaRDH0vNAokfCvkBGL+7szWrd/Vw8dWCp/bZCWbXL4QW
+         +G0s8Itfyo5fRNmsrgTj0NnKLnXkIYsvLEUeY5oGkag0QtTm6XXjmLZ0YympCMv1Kp
+         Waz+lec3ZKXsPlO92HyQJZwPd8MTJJFqtkgdnC3VcSmgnbvHpubscjLQR0Vj9bUYgS
+         S9q48d7eCdl5//mLIn/5bGydirTuW5l2/c4rM1DyosTOcL9YrbOFST6yuX7JtzSEyW
+         SMBs75XuNT8tA==
+Received: from mail.mleia.com (localhost [127.0.0.1])
+        by mail.mleia.com (Postfix) with ESMTP id 8843C3A3A17;
+        Tue, 29 Mar 2022 18:59:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+        t=1648580348; bh=zxM3pn+KIF9KAbgXNUU2mWVIVmI13y2vEetlzWdhaMc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BdAptG5zJq2fUy+zuPBdfXL6/5rWYhJJXO8OxSJHy1UiKP5n/qXLE90aYh40HzNFP
+         qu5UW4XOGAopJZjErrcdAVgaRDH0vNAokfCvkBGL+7szWrd/Vw8dWCp/bZCWbXL4QW
+         +G0s8Itfyo5fRNmsrgTj0NnKLnXkIYsvLEUeY5oGkag0QtTm6XXjmLZ0YympCMv1Kp
+         Waz+lec3ZKXsPlO92HyQJZwPd8MTJJFqtkgdnC3VcSmgnbvHpubscjLQR0Vj9bUYgS
+         S9q48d7eCdl5//mLIn/5bGydirTuW5l2/c4rM1DyosTOcL9YrbOFST6yuX7JtzSEyW
+         SMBs75XuNT8tA==
+Received: from [192.168.1.102] (88-113-46-102.elisa-laajakaista.fi [88.113.46.102])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by mail.mleia.com (Postfix) with ESMTPSA id 45D4B3A3A05;
+        Tue, 29 Mar 2022 18:59:08 +0000 (UTC)
+Message-ID: <c796837e-7cd8-517f-dbd0-85ec3dbc4b86@mleia.com>
+Date:   Tue, 29 Mar 2022 21:59:07 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CACRpkdY2ynzAyQz3q2gHnZMA+Opr-b=w=dA4YMqH=i0Rv+OYcg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: spi-pl022 on lpc32xx
+Content-Language: en-US
+To:     Trevor Woerner <twoerner@gmail.com>, linux-spi@vger.kernel.org
+Cc:     linus.walleij@linaro.org, alexandre.belloni@bootlin.com
+References: <20220328190104.GA11946@localhost>
+From:   Vladimir Zapolskiy <vz@mleia.com>
+In-Reply-To: <20220328190104.GA11946@localhost>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20220329_185908_577425_F6B826EB 
+X-CRM114-Status: GOOD (  32.84  )
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue 2022-03-29 @ 06:06:01 PM, Linus Walleij wrote:
-> On Mon, Mar 28, 2022 at 9:01 PM Trevor Woerner <twoerner@gmail.com> wrote:
-> 
-> > I'm wondering if anyone is successfully using the current spi-pl022 driver to
-> > interact with an SPI device (preferably on a lpc32xx-based machine)?
-> 
-> I'm using it in with the Cypress CY8CTMA340 touchscreen in
-> arch/arm/boot/dts/ste-href-tvk1281618-r3.dtsi
-> like this:
-> 
->               spi@80111000 {
->                         compatible = "arm,pl022", "arm,primecell";
->                         reg = <0x80111000 0x1000>;
->                         interrupts = <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
->                         #address-cells = <1>;
->                         #size-cells = <0>;
-> 
->                         /* Same clock wired to kernel and pclk */
->                         clocks = <&prcc_pclk 2 1>, <&prcc_pclk 2 1>;
->                         clock-names = "sspclk", "apb_pclk";
->                         dmas = <&dma 33 0 0x2>, /* Logical - DevToMem */
->                                <&dma 33 0 0x0>; /* Logical - MemToDev */
->                         dma-names = "rx", "tx";
->                         power-domains = <&pm_domains DOMAIN_VAPE>;
->                         num-cs = <1>;
->                         cs-gpios = <&gpio6 24 GPIO_ACTIVE_LOW>;
->                         pinctrl-names = "default";
->                         pinctrl-0 = <&spi2_default_mode>;
-> 
->                         touchscreen@0 {
->                                 compatible = "cypress,cy8ctma340";
->                                 /*
->                                  * Actually the max frequency is 6
-> MHz, but over 2 MHz the
->                                  * data rate needs to be restricted to
-> max 2Mbps which the
->                                  * SPI framework cannot handle.
->                                  */
->                                 spi-max-frequency = <2000000>;
->                                 reg = <0>;
->                                 interrupt-parent = <&gpio2>;
->                                 interrupts = <20 IRQ_TYPE_EDGE_FALLING>;
->                                 vcpin-supply = <&ab8500_ldo_aux1_reg>;
->                                 vdd-supply = <&db8500_vsmps2_reg>;
->                                 reset-gpios = <&gpio4 15 GPIO_ACTIVE_LOW>;
->                                 touchscreen-size-x = <480>;
->                                 touchscreen-size-y = <854>;
->                                 active-interval-ms = <0>;
->                                 touch-timeout-ms = <255>;
->                                 lowpower-interval-ms = <10>;
->                                 bootloader-key = /bits/ 8 <0x00 0x01
-> 0x02 0x03 0x04 0x05 0x06 0x07>;
->                                 pinctrl-names = "default";
->                                 pinctrl-0 = <&cyttsp_tvk_mode>;
->                         };
->                 };
-> 
-> It works just fine with DMA and all.
+Hi Trevor,
 
-Okay, thanks for the reply! It's good to know this driver is being used.
-
-> > I've spent the better part of the last week poking at this. I've tried many
-> > combinations of device tree, but what I think should work is:
-> >
-> >         &ssp0 {
-> >                 status = "okay";
+On 3/28/22 22:01, Trevor Woerner wrote:
+> Hi,
 > 
-> The main definition of the SSP is elsewhere in the node with ssp0:, so I
-> have no idea how this is configured really.
-
-I'm not sure what you mean here. lpc32xx.dtsi defines the ssp0 node and
-disables it. On the lpc32xx one must choose between spi and ssp since this SoC
-has controllers for both. However the Linux kernel only has a driver for ssp
-(i.e. the spi-pl022 driver).
-
-> >                 num-cs = <1>;
-> >                 cs-gpios = <&gpio 3 4 1>;
+> I have a spi-nor chip (m25p16) connected to the SPI1 bus of an LPC32xx-based
+> machine that I can't get working.
 > 
-> Use #include <dt-bindings/gpio/gpio.h> and GPIO_ACTIVE_LOW
-> for the flag so it gets readable.
-
-Awesome, thanks!
-
-> >                 m25p16@0 {
-> >                         compatible = "jedec,spi-nor";
-> >                         reg = <0>;
-> >                         spi-max-frequency = <500000>;
-> >
-> >                         pl022,interface = <0>;
-> >                         pl022,com-mode = <1>;
+> The LPC32xx has both an SPI controller and an SSP controller, but only one can
+> be active at a time. The SSP is an ARM primecell component which is a "SPI on
+> steroids" device. The SSP can be run in several modes, one of which is "SPI"
+> mode.
 > 
-> com-mode 1 (polling) really? Why? Are interrupts broken
-> on your silicon?
+> The LPC32xx machine does not have a SPI driver in the kernel, but it does have
+> a driver for the SSP controller. Since there is no SPI driver, I'm using the
+> SSP driver in "SPI" mode, but not having much luck.
 
-Right now I'm getting nothing back from the spi-nor. I see the SPI subsystem
-sending out the 0x9f, I see the pl022 driver writing it to the data register,
-I've added some code to the pl022 driver to print out the status register, and
-the "receive FIFO not empty flag" (RNE) never goes up. In polling mode it'll
-eventually time out and I'll get to a prompt (to reflash and reboot). In
-interrupt mode I'd have to yank the power, boot to a different image, flash
-from there, and reboot. So polling mode make the build/flash/reboot cycle
-faster :-)
+I have a feeling that Sylvain Lemieux once reported that the PrimeCell SPI
+driver worked for him, but here I might be wrong.
 
-> I made zero default on both in
-> commit 413c601e8fd0e4adab67e0775dd84e63be6d803e
-> "spi: pl022: User more sensible defaults"
+> I can see the SPI subsystem sending the 0x9f command (READ ID), the spi-pl022
+> driver writes the command to the SSP data register, but the flag in the SSP
+> status register to say data has been received never goes up.
 > 
-> So the first one can be omitted.
+> I'm wondering if anyone is successfully using the current spi-pl022 driver to
+> interact with an SPI device (preferably on a lpc32xx-based machine)?
 > 
-> > The pl-022 driver is quite aggressive about shutting off the SSP and raising
-> > the chip select after a message is sent, so I modified my driver to leave the
-> > SSP enabled and keeping the (active-low) chip select low (in case those were
-> > affecting the reply) but there's no change.
+> I've spent the better part of the last week poking at this. I've tried many
+> combinations of device tree, but what I think should work is:
 > 
-> These things should be fine. It's tested on quite a lot of systems.
+> 	&ssp0 {
+> 		status = "okay";
+> 		num-cs = <1>;
+> 		cs-gpios = <&gpio 3 4 1>;
+> 
+> 		m25p16@0 {
+> 			compatible = "jedec,spi-nor";
+> 			reg = <0>;
+> 			spi-max-frequency = <500000>;
+> 
+> 			pl022,interface = <0>;
+> 			pl022,com-mode = <1>;
+> 		};
+> 	};
+> 
 
-Thanks, good to know.
+FWIW on my board I do use both SSP0 and SSP1 at once, but I didn't rebase
+the dts/kernel for a long time, so the examples might be outdated:
 
-Best regards,
-	Trevor
+&ssp0 {
+	num-cs = <1>;
+	cs-gpios = <&gpio 3 5 GPIO_ACTIVE_HIGH>; /* SSEL0 */
+
+	sc16is752@0 {
+		compatible = "nxp,sc16is752";
+		reg = <0>;
+		spi-max-frequency = <4000000>;
+
+		/* 18.432 MHz external oscillator */
+		clocks = <&xtal_18432k>;
+
+		/* Interrupt to GPI_07 */
+		interrupt-parent = <&sic2>;
+		interrupts = <15 IRQ_TYPE_EDGE_FALLING>;
+	};
+};
+
+&ssp1 {
+	num-cs = <1>;
+	cs-gpios = <&gpio 3 4 GPIO_ACTIVE_HIGH>;
+
+	s25fl216k@0 {
+		compatible = "s25fl216k", "jedec,spi-nor";
+		reg = <0>;
+		spi-max-frequency = <150000>;
+		spi-cpol;
+		spi-cpha;
+	};
+};
+
+Also SSP0 is enabled on PhyTec phy3250 board, there is an at25 eeprom on it,
+I've just briefly checked the device tree node, and apparently it contains
+some references/properties specific to the PL022 SPI driver.
+
+> I've tried a couple other compatible strings ("micron,m25p16", "st,m25p16"),
+> I've tried a range of frequencies (from 0.5MHz to 33MHz). The 3 options for
+> interface are 0 (SPI), 1 (TI), or 2 (Microwire) and I've tried all of them. I
+> don't believe the DMA system works generically on the lpc32xx but I've tried
+> both interrupt <0> and polling <1> for the com-mode. I believe SPI1 and SSP0
+> are the same and SPI2 and SSP1 are the same (which is why I'm using SSP0
+> here).
+> 
+> The pl-022 driver is quite aggressive about shutting off the SSP and raising
+> the chip select after a message is sent, so I modified my driver to leave the
+> SSP enabled and keeping the (active-low) chip select low (in case those were
+> affecting the reply) but there's no change.
+> 
+> One thing that's curious is that the platform_info->bus_id is -1. This bus
+> number comes from the parent device (spi core). I wonder if this driver is not
+> registering itself correctly with the spi core?
+> 
+> Best regards,
+>   	Trevor
+
+--
+Best wishes,
+Vladimir
