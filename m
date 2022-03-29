@@ -2,358 +2,113 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0B04EB3D9
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Mar 2022 21:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4724EB3E4
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Mar 2022 21:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240800AbiC2TGx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 29 Mar 2022 15:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39060 "EHLO
+        id S238694AbiC2TJh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 29 Mar 2022 15:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240790AbiC2TGx (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Mar 2022 15:06:53 -0400
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A20122225;
-        Tue, 29 Mar 2022 12:05:06 -0700 (PDT)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-de48295467so19767885fac.2;
-        Tue, 29 Mar 2022 12:05:06 -0700 (PDT)
+        with ESMTP id S239047AbiC2TJf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Mar 2022 15:09:35 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988C71903D6
+        for <linux-spi@vger.kernel.org>; Tue, 29 Mar 2022 12:07:51 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id g20so21797944edw.6
+        for <linux-spi@vger.kernel.org>; Tue, 29 Mar 2022 12:07:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=yhgPOGAVmyQr7JxdPjvW6xGasXtlIg7HxSen89iggoA=;
+        b=OCLOATCC9xXHVe4a0iMgeyHyhhwx8hbFCql6lAWZvnXG6d3sl/0QVexDFmktE2G0cM
+         Lv3SQOqZ6DCUE2xARSMBDfBg0pj5nfqD2mFIixTpQ5gGMGTIc25MrGY7yqM+tzPPm76o
+         KsDOA9necaa8FVNViYZzmvRu1l1+k+Sqx2rweYEub8JliEyRHYUoHu0G/XgflEel9NhZ
+         hj/Ikup+9G9g8s4rozkVh3YwNMT/UepwWnlki6SL8MUnK/lWFxEnpa4veLB993w9o/yH
+         jZUcfeO5X9eQK3dOFmBvHk0oF+UmtemkpeZ9qBQo70c5sRVpDxHc8DFPyzbdTAbxtm7F
+         OOWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=C0fHGk8solBUwXEuvvbLiG4BS1qC06k2gDKvwiDcY74=;
-        b=aB0D5iqW4E7tdWOVTPHBN9d17OS20n14DWQWg7jg8magYAyo5wlq+aMR3WBxAREOp6
-         ZsXa0QdnTh1K6cvmsbFbnVIBNcC02KYbqeN3aqkvPloiF0sJDoYSWLh4MdzgmrOLPIkp
-         98/5fNrJeEhD8uPguU/w8BKRY+gCNBwql3URpj7YgQXwDqn6PZUGZqvoeebDNLGv4dkd
-         rRta1UUn5DYwugyUvtTHYSe1ZAdhbTZ6FASgDgccjCu7VvFw/pg+3MGZX0mw9qENnGgg
-         hGE79GjJ5VkawZSdEd2FSGhZ4dkJPNN44+imnsRiepY08uDbQmLK4kl0XRNXutDLZ9MN
-         LSsQ==
-X-Gm-Message-State: AOAM530OSYJeUl61Q6HPR/irO+uEd4yrf0trN2D9E5/degr9eIJq0AMP
-        ayYeFurSzJZvlS0ChlvuSMJ0ctiqWA==
-X-Google-Smtp-Source: ABdhPJz1Bx8ksFzUwFes11/foyFaLpEM9LHtstOTOVAf5T1JXMVinwSbxsyK1H0HtBldY43Q6RaYyQ==
-X-Received: by 2002:a05:6871:a5:b0:d4:41d7:d341 with SMTP id u37-20020a05687100a500b000d441d7d341mr405725oaa.6.1648580704727;
-        Tue, 29 Mar 2022 12:05:04 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r8-20020a05683001c800b005cdadc2a837sm9319567ota.70.2022.03.29.12.05.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 12:05:03 -0700 (PDT)
-Received: (nullmailer pid 1067579 invoked by uid 1000);
-        Tue, 29 Mar 2022 19:05:00 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yhgPOGAVmyQr7JxdPjvW6xGasXtlIg7HxSen89iggoA=;
+        b=5NuKICUhCtuBSmwavI35QXAhv8Q6Lzx6z1Rh3529r7heZnUgcGM/0MRtT7fo4un7kM
+         Q272mHDrv4rcJEr3EDQjuJojBho+uyC931KXOtDBXJBoKF63+LATufVb2oBq3pBuK1SS
+         CAkqb9DKRayUYAre/euyesJ/olh2lLPbkWqPdsvepAZQerJhMlcAS3w1hOsK+C3nqBa+
+         uxRQmS46DAhrZp1QP6R0yWYa4lUvjr4lcr49iTtKlj/yeKoysX4cH6UaBXlGQn+HNhWv
+         MSs+AAKN5Ox/LAhaObc9q8kub06eGfJN0ZRJv4BDFAT2A8V6U3wb71ts93msDOxoGtsV
+         M9hg==
+X-Gm-Message-State: AOAM5327ofP5hONtt8iNJXYTcukVyyDhvq42vtbu0pdoFDWs8x5ykrlV
+        9OEFQEzeKuetNe05Z4WtG6+opb+hK1e3r2Lk
+X-Google-Smtp-Source: ABdhPJwZDEHSCgrPPVgyK2IEKdK01rzfZ1/0otBReDcM0nkYrFyjBbB5TNRPyJ1p2EYESvb6AhyExQ==
+X-Received: by 2002:a05:6402:2065:b0:407:eb07:740 with SMTP id bd5-20020a056402206500b00407eb070740mr6480403edb.406.1648580870206;
+        Tue, 29 Mar 2022 12:07:50 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id k12-20020aa7c38c000000b0041939d9ccd0sm8789447edq.81.2022.03.29.12.07.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Mar 2022 12:07:49 -0700 (PDT)
+Message-ID: <98910392-a7f0-3ba5-1aff-165dac8be0c6@linaro.org>
+Date:   Tue, 29 Mar 2022 21:07:48 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] spi: dt-bindings: qcom,spi-geni-qcom: convert to
+ dtschema
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-kernel@vger.kernel.org,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>
-In-Reply-To: <20220329112902.252937-5-krzysztof.kozlowski@linaro.org>
-References: <20220329112902.252937-1-krzysztof.kozlowski@linaro.org> <20220329112902.252937-5-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH 4/4] spi: dt-bindings: qcom,spi-qup: convert to dtschema
-Date:   Tue, 29 Mar 2022 14:05:00 -0500
-Message-Id: <1648580700.650850.1067578.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        linux-spi@vger.kernel.org
+References: <20220329112717.252647-1-krzysztof.kozlowski@linaro.org>
+ <1648580700.635474.1067575.nullmailer@robh.at.kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1648580700.635474.1067575.nullmailer@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 29 Mar 2022 13:29:02 +0200, Krzysztof Kozlowski wrote:
-> Convert the Qualcomm Universal Peripheral (QUP) Serial Peripheral
-> Interface (SPI) bindings to DT Schema.
+On 29/03/2022 21:05, Rob Herring wrote:
+> On Tue, 29 Mar 2022 13:27:16 +0200, Krzysztof Kozlowski wrote:
+>> Convert the GENI based Qualcomm Universal Peripheral (QUP) Serial
+>> Peripheral Interface (SPI) bindings to DT Schema.
+>>
+>> The original bindings in TXT were not complete, so add during conversion
+>> properties already used in DTS and/or in the driver: reg-names, dmas,
+>> interconnects, operating points and power-domains.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  .../bindings/spi/qcom,spi-geni-qcom.txt       |  39 ------
+>>  .../bindings/spi/qcom,spi-geni-qcom.yaml      | 131 ++++++++++++++++++
+>>  2 files changed, 131 insertions(+), 39 deletions(-)
+>>  delete mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.txt
+>>  create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+>>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/spi/qcom,spi-qup.txt  | 103 ------------------
->  .../devicetree/bindings/spi/qcom,spi-qup.yaml |  82 ++++++++++++++
->  2 files changed, 82 insertions(+), 103 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
->  create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qup.yaml
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.example.dt.yaml:0:0: /example-0/spi@880000/tpm@0: failed to match any schema with compatible: ['google,cr50']
 > 
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
-
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
-
-Full log is available here: https://patchwork.ozlabs.org/patch/1610591
+I will try to find some better example for the child device (or skip it?).
 
 
-spi@78b5000: clock-names:0: 'core' was expected
-	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dt.yaml
-	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dt.yaml
-
-spi@78b5000: clock-names:1: 'iface' was expected
-	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dt.yaml
-	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dt.yaml
-
-spi@78b5000: dma-names:0: 'tx' was expected
-	arch/arm64/boot/dts/qcom/apq8016-sbc.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-mtp.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dt.yaml
-	arch/arm/boot/dts/qcom-apq8016-sbc.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1-c1.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c3.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c2.dt.yaml
-	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dt.yaml
-
-spi@78b5000: dma-names:1: 'rx' was expected
-	arch/arm64/boot/dts/qcom/apq8016-sbc.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-mtp.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dt.yaml
-	arch/arm/boot/dts/qcom-apq8016-sbc.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1-c1.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c3.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c2.dt.yaml
-	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dt.yaml
-
-spi@78b6000: clock-names:0: 'core' was expected
-	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dt.yaml
-	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dt.yaml
-
-spi@78b6000: clock-names:1: 'iface' was expected
-	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dt.yaml
-	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dt.yaml
-
-spi@78b6000: dma-names:0: 'tx' was expected
-	arch/arm64/boot/dts/qcom/apq8016-sbc.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-mtp.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dt.yaml
-	arch/arm/boot/dts/qcom-apq8016-sbc.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1-c1.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c3.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c2.dt.yaml
-	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dt.yaml
-
-spi@78b6000: dma-names:1: 'rx' was expected
-	arch/arm64/boot/dts/qcom/apq8016-sbc.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-mtp.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dt.yaml
-	arch/arm/boot/dts/qcom-apq8016-sbc.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1-c1.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c3.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dt.yaml
-	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c2.dt.yaml
-	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dt.yaml
-
-spi@78b7000: clock-names:0: 'core' was expected
-	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dt.yaml
-	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dt.yaml
-
-spi@78b7000: clock-names:1: 'iface' was expected
-	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dt.yaml
-	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dt.yaml
-
-spi@78b7000: dma-names:0: 'tx' was expected
-	arch/arm64/boot/dts/qcom/apq8016-sbc.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-mtp.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dt.yaml
-	arch/arm/boot/dts/qcom-apq8016-sbc.dt.yaml
-	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dt.yaml
-
-spi@78b7000: dma-names:1: 'rx' was expected
-	arch/arm64/boot/dts/qcom/apq8016-sbc.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-mtp.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dt.yaml
-	arch/arm/boot/dts/qcom-apq8016-sbc.dt.yaml
-	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dt.yaml
-
-spi@78b8000: clock-names:0: 'core' was expected
-	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dt.yaml
-	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dt.yaml
-
-spi@78b8000: clock-names:1: 'iface' was expected
-	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dt.yaml
-	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dt.yaml
-
-spi@78b8000: dma-names:0: 'tx' was expected
-	arch/arm64/boot/dts/qcom/apq8016-sbc.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-mtp.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dt.yaml
-	arch/arm/boot/dts/qcom-apq8016-sbc.dt.yaml
-	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dt.yaml
-
-spi@78b8000: dma-names:1: 'rx' was expected
-	arch/arm64/boot/dts/qcom/apq8016-sbc.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-mtp.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dt.yaml
-	arch/arm/boot/dts/qcom-apq8016-sbc.dt.yaml
-	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dt.yaml
-
-spi@78b9000: clock-names:0: 'core' was expected
-	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dt.yaml
-	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dt.yaml
-
-spi@78b9000: clock-names:1: 'iface' was expected
-	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dt.yaml
-	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dt.yaml
-
-spi@78b9000: dma-names:0: 'tx' was expected
-	arch/arm64/boot/dts/qcom/apq8016-sbc.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-mtp.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dt.yaml
-	arch/arm/boot/dts/qcom-apq8016-sbc.dt.yaml
-	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dt.yaml
-
-spi@78b9000: dma-names:1: 'rx' was expected
-	arch/arm64/boot/dts/qcom/apq8016-sbc.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-mtp.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dt.yaml
-	arch/arm/boot/dts/qcom-apq8016-sbc.dt.yaml
-	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dt.yaml
-
-spi@78ba000: dma-names:0: 'tx' was expected
-	arch/arm64/boot/dts/qcom/apq8016-sbc.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-mtp.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dt.yaml
-	arch/arm/boot/dts/qcom-apq8016-sbc.dt.yaml
-	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dt.yaml
-
-spi@78ba000: dma-names:1: 'rx' was expected
-	arch/arm64/boot/dts/qcom/apq8016-sbc.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-mtp.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-j5.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dt.yaml
-	arch/arm/boot/dts/qcom-apq8016-sbc.dt.yaml
-	arch/arm/boot/dts/qcom-msm8916-samsung-serranove.dt.yaml
-
-spi@7af5000: clock-names:0: 'core' was expected
-	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dt.yaml
-	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dt.yaml
-
-spi@7af5000: clock-names:1: 'iface' was expected
-	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dt.yaml
-	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dt.yaml
-
+Best regards,
+Krzysztof
