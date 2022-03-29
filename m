@@ -2,118 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D004EB3F2
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Mar 2022 21:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9784EB420
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Mar 2022 21:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240869AbiC2TNl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 29 Mar 2022 15:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37932 "EHLO
+        id S237442AbiC2Tc7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 29 Mar 2022 15:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240860AbiC2TNl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Mar 2022 15:13:41 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51211E33A5
-        for <linux-spi@vger.kernel.org>; Tue, 29 Mar 2022 12:11:57 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id g20so21810137edw.6
-        for <linux-spi@vger.kernel.org>; Tue, 29 Mar 2022 12:11:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Zs4+wicwiuzKeibf/6a5M7Gi78Hfv23A59sxjvNvMUU=;
-        b=wRMGvtYne2xt5h30GhOYcCw/PFtzV2Z5DknJEIfkjSyA9c59a8gelUpGWkjL9N3J27
-         XBf0a2apTd/mbbpjfJAkeIivA4hkd7eIiteudnX+Glepx99Z+Z/qDDZug0p54xkjwyYF
-         mlGMdKDSTnFpKs5iPYqXqYa0vWC+6mlqnPdC8jlYiNRcxNnyijdyJdMRW/4N6+7IoMQQ
-         MI0LNClF9+F3C+2DkRecHDITk0WYfwFxLUWk0lsuPh8y1kHJZemXFOfzPn3WRpPfl33g
-         pJFH0dWWHTqEGiwElq2W7nu+QkkDB+sdCJ0x2OnqaC9FAwJfgusIlEEHuZn9WzXobkaO
-         pE3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Zs4+wicwiuzKeibf/6a5M7Gi78Hfv23A59sxjvNvMUU=;
-        b=K3Wi86ZeI3cM+CfVQehporjsJ77VnxjVa6v2e8IafAhBEX8PaA6dFX8eDr+n+/aEr1
-         xy0NEBXvi1/yV1PRiUwEImUEmJVwTslwI3vyJE0Fo30+wX88ceHb9romV4X3Q8nvGBVD
-         lKNRsODxw9WcwpoS+VgGggE6dOcsLFdVJkvRIRGi2ob/L69rS9FW0+Tkw5x1GUoTQEJc
-         siNHLErV85sqJ1+ZROb/ukYxQAZoUHOBlyfZHhUNrrfY9jBhYokANcqo9Ml7sbK9jf4F
-         pg4b2cMCW0pDJ1OxgbGpAiP+sQfqdYWRYoxAAbk9ZkaizjUXYnYkjaiX7UWdLcybXV6R
-         mUfg==
-X-Gm-Message-State: AOAM533GSQ7YzpS4i9JBGL4d2cXN8JGkNgmwMgI153wEGsdZn1aTdJ8E
-        wAC8Wh8slFQ0DVIfCMU8HOGGjw==
-X-Google-Smtp-Source: ABdhPJwCTzbCOxjzUYik789yfqeDFi1lbcyCdm8UwGFPA7I3vtWU95A1xbvTgjVm0+950GczLqagPQ==
-X-Received: by 2002:a05:6402:3719:b0:412:fc6b:f271 with SMTP id ek25-20020a056402371900b00412fc6bf271mr6572253edb.345.1648581115904;
-        Tue, 29 Mar 2022 12:11:55 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id k3-20020a05640212c300b0041605b2d9c1sm8867928edx.58.2022.03.29.12.11.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 12:11:55 -0700 (PDT)
-Message-ID: <d810a2c2-688b-e07e-0444-5013ef02362f@linaro.org>
-Date:   Tue, 29 Mar 2022 21:11:54 +0200
+        with ESMTP id S240971AbiC2Tcs (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 29 Mar 2022 15:32:48 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF973B7C6D
+        for <linux-spi@vger.kernel.org>; Tue, 29 Mar 2022 12:31:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=y1ipC1cpa1iw38bXt7kXRu+jOzzA
+        8giV9UgB2XeS6Xg=; b=AkM5Bxti/QKKcFqioRrwnyWRcY9movcfshJF2ha9lf5e
+        OBbdG8vb4hkenwwWSYu6t6tEKXZlRYl+rNoy9cgwIRL0ctXrL5I64C8RLWN8sFiw
+        Swp646l18Optgl2UOPGDJ4hM0cbFm1YirKoYhDnS0n4Btz/7E0lnc23d7lG2gNg=
+Received: (qmail 1912088 invoked from network); 29 Mar 2022 21:30:59 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 29 Mar 2022 21:30:59 +0200
+X-UD-Smtp-Session: l3s3148p1@xFrCd2DbhuIgAQnoAFHmAKSkhU0Puvxy
+Date:   Tue, 29 Mar 2022 21:30:56 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Mark Brown <broonie@kernel.org>, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 1/2] mtd: hyperbus: rpc-if: Fix RPM imbalance in probe
+ error path
+Message-ID: <YkNecA5xIWl21LW+@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Mark Brown <broonie@kernel.org>, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+References: <d196bb5849843993557a9b10f3bd28a752e5e8e0.1648562287.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 4/4] spi: dt-bindings: qcom,spi-qup: convert to dtschema
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>
-References: <20220329112902.252937-1-krzysztof.kozlowski@linaro.org>
- <20220329112902.252937-5-krzysztof.kozlowski@linaro.org>
- <1648580700.650850.1067578.nullmailer@robh.at.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1648580700.650850.1067578.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ByFni+gSrBaOyIw3"
+Content-Disposition: inline
+In-Reply-To: <d196bb5849843993557a9b10f3bd28a752e5e8e0.1648562287.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 29/03/2022 21:05, Rob Herring wrote:
-> On Tue, 29 Mar 2022 13:29:02 +0200, Krzysztof Kozlowski wrote:
->> Convert the Qualcomm Universal Peripheral (QUP) Serial Peripheral
->> Interface (SPI) bindings to DT Schema.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  .../devicetree/bindings/spi/qcom,spi-qup.txt  | 103 ------------------
->>  .../devicetree/bindings/spi/qcom,spi-qup.yaml |  82 ++++++++++++++
->>  2 files changed, 82 insertions(+), 103 deletions(-)
->>  delete mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
->>  create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qup.yaml
->>
-> 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
-> 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/patch/1610591
-> 
-> 
-> spi@78b5000: clock-names:0: 'core' was expected
-> 	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dt.yaml
-> 	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dt.yaml
-> 
-> spi@78b5000: clock-names:1: 'iface' was expected
-> 	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dt.yaml
-> 	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dt.yaml
 
-All of these (and dma-names) should be fixed with my DTS patches in the
-series.
+--ByFni+gSrBaOyIw3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Mar 29, 2022 at 04:00:38PM +0200, Geert Uytterhoeven wrote:
+> If rpcif_hw_init() fails, Runtime PM is left enabled.
+>=20
+> Fixes: b04cc0d912eb80d3 ("memory: renesas-rpc-if: Add support for RZ/G2L")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Good catch!
+
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
-Best regards,
-Krzysztof
+--ByFni+gSrBaOyIw3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJDXmsACgkQFA3kzBSg
+KbaLExAAr5kzeoqpZu30Yv3xsOmLfmACfNFvXT3zAL41CSGIFKFWhGgQTQK10BLq
+PxXemL5mOM62X/DkBg1olWr55QqDwUmo2A3gpE2H/WprjHGmQ7N9kvA1DLzWTi++
+TMuO+RuTvP7XKWfpX7IumW0vPfRlyRC6sqdys3vKwfYjvBU8ITcsRS0h4+XHeGfX
+bRBuGk2SeK5080IoKJvKql21FIYl6Hr8a1pD28m6x3NaYnw6SufQZ9++FoQXSkgn
+dAp4ue7zHUSgaG0HPTuYGP9jNKk6K0wui7TQsviJGwLdLDFO4mRDYkwoSWbirzpl
+jKirRWrpdLMmHM0LVISmUI8dkV96fM/Hr0L8ZzrRYLCXQMcV+vt1ZwzGjWWLr8DI
+XWJrr3DL2+b5I+u1Xw3nxsFGDVhgLz12w9xbZTAm3gPYFCVnG3wSGDXgPNuslJDv
+4ML9yToOVBsyMcaw1Z+4dK0jWktQA7bKrNx4KDPLv+CR2mMPLWvOxVs7MImdimYr
+GYu/D1IU/K6BUAnFosZDmm85qlnZrrPnXMl/VHI3kRMhWZDzdF29XlmXWNG/gPb8
+e+eoTMmACEdg0d6Fhum1OuRnAaYMM2OzVs9QkGFmna3UlXgOvUcIiU2z95yHvx4C
+iEXIL7rcvyv651bOeE3bm21pcJWb+sKy/ZmM3LLvkA6ymwf5bxQ=
+=jHfi
+-----END PGP SIGNATURE-----
+
+--ByFni+gSrBaOyIw3--
