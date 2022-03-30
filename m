@@ -2,77 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E801D4EBB17
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Mar 2022 08:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4F84EBB67
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Mar 2022 09:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243407AbiC3Gui (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 30 Mar 2022 02:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
+        id S243587AbiC3HEx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 30 Mar 2022 03:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243398AbiC3Gud (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Mar 2022 02:50:33 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE8F8CDB2
-        for <linux-spi@vger.kernel.org>; Tue, 29 Mar 2022 23:48:41 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id bq8so25551524ejb.10
-        for <linux-spi@vger.kernel.org>; Tue, 29 Mar 2022 23:48:41 -0700 (PDT)
+        with ESMTP id S243617AbiC3HEw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Mar 2022 03:04:52 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854AEE72AF
+        for <linux-spi@vger.kernel.org>; Wed, 30 Mar 2022 00:03:06 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id qa43so39529592ejc.12
+        for <linux-spi@vger.kernel.org>; Wed, 30 Mar 2022 00:03:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3frxpVZce2nBNt3706nuqBBrB6UAiD1if/n7un9zI7M=;
-        b=IOIoLxtEStyNGXLaiPfpEGSgWEir/G/yMzS+kf3oMtYR5oGZW5yVwfvF5XMcm1JKqT
-         VJrCXVD/iAAL6ZhFZJAHX2nq3npHPXucf760QqLSc2kQenm8tlTXihEtrIGarg43AL/g
-         0NEt/rdRPA5ywhHixqgEbmT4jokRdzjiR52LatBKrqQnptQekajqPIDv15Jj9zlO2MwG
-         +Q0hNFP8na+2lKnctrMnfyKDy25DWKV8M/l6lJ7Vb1IPSNTyR9fY7TLcskxYG19xnRhv
-         64Y2DiC6PpSoeXL/YYcmRxFec204JgOki162qzMJuHQzCxpqf9HS2tzOkXr59Nf2aM7l
-         3+9w==
+        bh=oshmNo9QpI++PBeGcUfK8FqiE0bcDHOAFRmb1sC62DQ=;
+        b=k4L+d4Wg3xJWIOSafNRXZNWhQTmcoDKyUDF5jigBkuv5rDoybp1GjNA0AOEWk4KhxR
+         9Ek1wCA4dNwrCI4LrlhCmVdQib3oIuVhZIfPMyyaDsKSlLBFFlrrsu3hXDSi4FCLaq8O
+         bxMPx/L0Ab3u5PXng11itfMgvoFsCVnuSm6IROuxZV4/2/tfmk1By5lfFU7RgUClNHQY
+         hhyYUVFbZnLCvr1l+g2RvBGgWM85Y8kggIevWklVLjjJZ2D5r73TTlmI1ep/tazn38jv
+         2D5DJ7jqiiP9r/QpOl4QjXsmkjbrRtyUEwrD+oGqET1/suW9lbYevp+F7uCV+2lwDyJ8
+         9HLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=3frxpVZce2nBNt3706nuqBBrB6UAiD1if/n7un9zI7M=;
-        b=PJvqHwMwN9tis50sTG8wuDwnUSBZI6iboz+/o6mqh7zXyYmy6BdykGSXEqRw2gUTni
-         PTe5RgTzIEZyEhLBY4XcoGdbZ+LYkKj2OTwOGnTK5QbMWck7zA0CsJNShELMymWFH2Qx
-         FfHhm0XECH+U79WRaTYUykQ/WvytXmKG/RDYK1/MCyRqj/cgW4LxMj1FH7gR2PNqYBIA
-         e/uy5lI6l8KCp7vezX/2fLdrcuQTZTLiT0PWgySQddPwZlaaltxbhtM/TdRywxqWWgMP
-         OKkw3lI7mB72icYp/gslfi36n3iPl4rUWrbUgrH0h/VDJTqGsvRuaPLhMBWd+AVtnkmI
-         hUPA==
-X-Gm-Message-State: AOAM533386nCQiYvXr5JQJvFlcQ7E2t85smrnW6XT7t5i+g7EkbsluR9
-        3vPGvQhnBl59IWBBq7bOuUvjUdiamC4CqFZe
-X-Google-Smtp-Source: ABdhPJye35/TV3C3GPqx2/usMTOpf2+2acjTfiN817foc/PVZIxXA5JCiKGDLF4JGGBqeDlJa/ZG/w==
-X-Received: by 2002:a17:907:1b27:b0:6d9:ceb6:7967 with SMTP id mp39-20020a1709071b2700b006d9ceb67967mr40017117ejc.186.1648622919623;
-        Tue, 29 Mar 2022 23:48:39 -0700 (PDT)
+        bh=oshmNo9QpI++PBeGcUfK8FqiE0bcDHOAFRmb1sC62DQ=;
+        b=YMmvmn+8GfOQIaOAY2Mz23D0/i31DJhomSh54lRzQXqckwAHAkhF7vGBCL/MxkiJqi
+         VV7N/gFb5DNDADKeY1kD47nTEvxIMpVKCpqHTV9mHany4BCMzbMbXUp1wfPKIqMeX5Et
+         M9R/EXzwRXIZbNMG/igc17WWvrhgxUWa6eVGau+0pmpbk2ofYUXPHztBX255oOGfGrXQ
+         DMDfltFqBIjFyL5GiDNuYm2juKIUXcdc7EJqgywiD651t9R3Kxl2ndRHt4YcQUOa3JYn
+         ypwAFYGXbig+WUkinIO78qKi+nO/6FFYJcQyREDX2CgpkQ01Hfvc3igJQM2q2dg4VHFw
+         aCvw==
+X-Gm-Message-State: AOAM530iBHgQRLsKjAPewuDAyXmmIXVDRCTfGQp8h2lXuVJLxi9ctHGn
+        1UEHcyYp/ulKDnJKbpkQNY/ZaQ==
+X-Google-Smtp-Source: ABdhPJz5xHARA4VHf0zoxalwHrQm8Dw4UegHI0/zWR/8z1C7CPrOhvZ3Plw3MZxcMWnMCtZoV+Dp5g==
+X-Received: by 2002:a17:907:2cc7:b0:6df:b76d:940d with SMTP id hg7-20020a1709072cc700b006dfb76d940dmr37968892ejc.742.1648623785083;
+        Wed, 30 Mar 2022 00:03:05 -0700 (PDT)
 Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id a5-20020aa7cf05000000b0041919e52a38sm9248731edy.46.2022.03.29.23.48.38
+        by smtp.gmail.com with ESMTPSA id g2-20020aa7dc42000000b00418ef55eabcsm9447609edu.83.2022.03.30.00.03.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 23:48:39 -0700 (PDT)
-Message-ID: <ac686e08-008f-be08-db5e-b6d4d08df315@linaro.org>
-Date:   Wed, 30 Mar 2022 08:48:38 +0200
+        Wed, 30 Mar 2022 00:03:04 -0700 (PDT)
+Message-ID: <f9d83e70-75cf-56f2-9c3e-05381b12325b@linaro.org>
+Date:   Wed, 30 Mar 2022 09:03:03 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] spi: dt-bindings: qcom,spi-geni-qcom: convert to
- dtschema
+Subject: Re: [PATCH] dt-bindings: qcom: update maintainers (drop Akash and
+ Mukesh)
 Content-Language: en-US
 To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20220329112717.252647-1-krzysztof.kozlowski@linaro.org>
- <20220330062313.GA51331@9a2d8922b8f1>
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org
+References: <20220329113718.254642-1-krzysztof.kozlowski@linaro.org>
+ <20220330054751.GA51248@9a2d8922b8f1>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220330062313.GA51331@9a2d8922b8f1>
+In-Reply-To: <20220330054751.GA51248@9a2d8922b8f1>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,157 +79,23 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 30/03/2022 08:23, Kuldeep Singh wrote:
-> On Tue, Mar 29, 2022 at 01:27:16PM +0200, Krzysztof Kozlowski wrote:
->> Convert the GENI based Qualcomm Universal Peripheral (QUP) Serial
->> Peripheral Interface (SPI) bindings to DT Schema.
->>
->> The original bindings in TXT were not complete, so add during conversion
->> properties already used in DTS and/or in the driver: reg-names, dmas,
->> interconnects, operating points and power-domains.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  .../bindings/spi/qcom,spi-geni-qcom.txt       |  39 ------
->>  .../bindings/spi/qcom,spi-geni-qcom.yaml      | 131 ++++++++++++++++++
->>  2 files changed, 131 insertions(+), 39 deletions(-)
->>  delete mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.txt
->>  create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.txt b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.txt
->> deleted file mode 100644
->> index c8c1e913f4e7..000000000000
->> --- a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.txt
->> +++ /dev/null
->> @@ -1,39 +0,0 @@
->> -GENI based Qualcomm Universal Peripheral (QUP) Serial Peripheral Interface (SPI)
->> -
->> -The QUP v3 core is a GENI based AHB slave that provides a common data path
->> -(an output FIFO and an input FIFO) for serial peripheral interface (SPI)
->> -mini-core.
->> -
->> -SPI in master mode supports up to 50MHz, up to four chip selects, programmable
->> -data path from 4 bits to 32 bits and numerous protocol variants.
->> -
->> -Required properties:
->> -- compatible:		Must contain "qcom,geni-spi".
->> -- reg:			Must contain SPI register location and length.
->> -- interrupts:		Must contain SPI controller interrupts.
->> -- clock-names:		Must contain "se".
->> -- clocks:		Serial engine core clock needed by the device.
->> -- #address-cells:	Must be <1> to define a chip select address on
->> -			the SPI bus.
->> -- #size-cells:		Must be <0>.
->> -
->> -SPI Controller nodes must be child of GENI based Qualcomm Universal
->> -Peripharal. Please refer GENI based QUP wrapper controller node bindings
->> -described in Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml.
->> -
->> -SPI slave nodes must be children of the SPI master node and conform to SPI bus
->> -binding as described in Documentation/devicetree/bindings/spi/spi-bus.txt.
->> -
->> -Example:
->> -	spi0: spi@a84000 {
->> -		compatible = "qcom,geni-spi";
->> -		reg = <0xa84000 0x4000>;
->> -		interrupts = <GIC_SPI 354 IRQ_TYPE_LEVEL_HIGH>;
->> -		clock-names = "se";
->> -		clocks = <&clock_gcc GCC_QUPV3_WRAP0_S0_CLK>;
->> -		pinctrl-names = "default", "sleep";
->> -		pinctrl-0 = <&qup_1_spi_2_active>;
->> -		pinctrl-1 = <&qup_1_spi_2_sleep>;
->> -		#address-cells = <1>;
->> -		#size-cells = <0>;
->> -	};
->> diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
->> new file mode 100644
->> index 000000000000..a85ff02ba1db
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
->> @@ -0,0 +1,131 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/spi/qcom,spi-geni-qcom.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: GENI based Qualcomm Universal Peripheral (QUP) Serial Peripheral Interface (SPI)
->> +
->> +maintainers:
->> +  - Andy Gross <agross@kernel.org>
->> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
->> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> +
->> +description:
->> +  The QUP v3 core is a GENI based AHB slave that provides a common data path
->> +  (an output FIFO and an input FIFO) for serial peripheral interface (SPI)
->> +  mini-core.
->> +
->> +  SPI in master mode supports up to 50MHz, up to four chip selects,
->> +  programmable data path from 4 bits to 32 bits and numerous protocol variants.
->> +
->> +  SPI Controller nodes must be child of GENI based Qualcomm Universal
->> +  Peripharal. Please refer GENI based QUP wrapper controller node bindings
->> +  described in Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml.
->> +
->> +allOf:
->> +  - $ref: /spi/spi-controller.yaml#
+On 30/03/2022 07:47, Kuldeep Singh wrote:
+> On Tue, Mar 29, 2022 at 01:37:17PM +0200, Krzysztof Kozlowski wrote:
+>> Emails to Akash Asthana and Mukesh Savaliya bounce (550: Recipient
+>> address rejected: User unknown in virtual alias table), so switch
+>> maintainers to Andy and Bjorn (as Qualcomm platform maintainers).
 > 
-> Rob sometime back sent an update on how to refer absolute paths.
-> Please see below:
-> https://lore.kernel.org/linux-spi/20220325215652.525383-1-robh@kernel.org/
-
-Yes, this is wrong. I copied other existing schema without checking. :(
-
+> Thanks Krzysztof as it was really anonoying to hear bounce emails.
 > 
->> +
->> +properties:
->> +  compatible:
->> +    const: qcom,geni-spi
->> +
->> +  clocks:
->> +    maxItems: 1
->> +
->> +  clock-names:
->> +    const: se
->> +
->> +  dmas:
->> +    maxItems: 2
->> +
->> +  dma-names:
->> +    items:
->> +      - const: tx
->> +      - const: rx
->> +
->> +  interconnects:
->> +    minItems: 2
-> 
-> We can skip minItems here.
-> As minimim value defaults to maximum if not defined.
+> One thing, I heard bounce from Akash only and not from Mukesh.
+> Did you hear bounce from Mukesh as well?
 
-True.
+Yes, both:
+550 5.1.1 <msavaliy@codeaurora.org>: Recipient address rejected: User
+unknown in virtual alias table
 
-> 
->> +    maxItems: 2
->> +
->> +  interconnect-names:
->> +    items:
->> +      - const: qup-core
->> +      - const: qup-config
-> 
-> Some properties like clocks, dmas, dma-names, interconnect etc. are
-> defined as common child properties of geni based qup.
-> Please see Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-> 
-> Shouldn't we skip these entities here? as spi reference will anyway be
-> used in geni-se.yaml.
-
-We could have them there, just like we could store all of this schema
-there. Having something half-here-half-there will not work, because this
-schema won't validate.
-
-Therefore all of child properties from qcom,geni-se.yaml should be
-rather moved to child schema (which is included directly in my patch #2).
+I think there might be a change in the email domain, so the best would
+be if Akash and Mukesh simply updated the file...
 
 
 Best regards,
