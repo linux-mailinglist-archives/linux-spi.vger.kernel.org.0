@@ -2,101 +2,169 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4F84EBB67
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Mar 2022 09:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA2E4EBF52
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Mar 2022 12:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243587AbiC3HEx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 30 Mar 2022 03:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
+        id S245645AbiC3K6P (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 30 Mar 2022 06:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243617AbiC3HEw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Mar 2022 03:04:52 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854AEE72AF
-        for <linux-spi@vger.kernel.org>; Wed, 30 Mar 2022 00:03:06 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id qa43so39529592ejc.12
-        for <linux-spi@vger.kernel.org>; Wed, 30 Mar 2022 00:03:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=oshmNo9QpI++PBeGcUfK8FqiE0bcDHOAFRmb1sC62DQ=;
-        b=k4L+d4Wg3xJWIOSafNRXZNWhQTmcoDKyUDF5jigBkuv5rDoybp1GjNA0AOEWk4KhxR
-         9Ek1wCA4dNwrCI4LrlhCmVdQib3oIuVhZIfPMyyaDsKSlLBFFlrrsu3hXDSi4FCLaq8O
-         bxMPx/L0Ab3u5PXng11itfMgvoFsCVnuSm6IROuxZV4/2/tfmk1By5lfFU7RgUClNHQY
-         hhyYUVFbZnLCvr1l+g2RvBGgWM85Y8kggIevWklVLjjJZ2D5r73TTlmI1ep/tazn38jv
-         2D5DJ7jqiiP9r/QpOl4QjXsmkjbrRtyUEwrD+oGqET1/suW9lbYevp+F7uCV+2lwDyJ8
-         9HLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oshmNo9QpI++PBeGcUfK8FqiE0bcDHOAFRmb1sC62DQ=;
-        b=YMmvmn+8GfOQIaOAY2Mz23D0/i31DJhomSh54lRzQXqckwAHAkhF7vGBCL/MxkiJqi
-         VV7N/gFb5DNDADKeY1kD47nTEvxIMpVKCpqHTV9mHany4BCMzbMbXUp1wfPKIqMeX5Et
-         M9R/EXzwRXIZbNMG/igc17WWvrhgxUWa6eVGau+0pmpbk2ofYUXPHztBX255oOGfGrXQ
-         DMDfltFqBIjFyL5GiDNuYm2juKIUXcdc7EJqgywiD651t9R3Kxl2ndRHt4YcQUOa3JYn
-         ypwAFYGXbig+WUkinIO78qKi+nO/6FFYJcQyREDX2CgpkQ01Hfvc3igJQM2q2dg4VHFw
-         aCvw==
-X-Gm-Message-State: AOAM530iBHgQRLsKjAPewuDAyXmmIXVDRCTfGQp8h2lXuVJLxi9ctHGn
-        1UEHcyYp/ulKDnJKbpkQNY/ZaQ==
-X-Google-Smtp-Source: ABdhPJz5xHARA4VHf0zoxalwHrQm8Dw4UegHI0/zWR/8z1C7CPrOhvZ3Plw3MZxcMWnMCtZoV+Dp5g==
-X-Received: by 2002:a17:907:2cc7:b0:6df:b76d:940d with SMTP id hg7-20020a1709072cc700b006dfb76d940dmr37968892ejc.742.1648623785083;
-        Wed, 30 Mar 2022 00:03:05 -0700 (PDT)
-Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id g2-20020aa7dc42000000b00418ef55eabcsm9447609edu.83.2022.03.30.00.03.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 00:03:04 -0700 (PDT)
-Message-ID: <f9d83e70-75cf-56f2-9c3e-05381b12325b@linaro.org>
-Date:   Wed, 30 Mar 2022 09:03:03 +0200
+        with ESMTP id S245633AbiC3K6N (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Mar 2022 06:58:13 -0400
+Received: from mail.mleia.com (mleia.com [178.79.152.223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7C4264F6C
+        for <linux-spi@vger.kernel.org>; Wed, 30 Mar 2022 03:56:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+        t=1648637786; bh=4IIWQUgWGsZ11QKKnaAI5uwjc5+4qsqXHmvopyeu08Q=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=sKg8wM7/S4xPfgalgPUuhNcgK8CAWPT95zHeug7JUeCD0Q4wA1PUrifrh61FsonLE
+         IRTLsS7UFDgHyHARwNKIjhH2oDBYULcJ0y7p+QPtsAt5jpsNPEPTRB93rZwtax69j3
+         7adwXfrwPv+5/Bir3kg49GfOCAhd0PMbLV4ZbrZjCheITBoP0mqTeFLi/LiFDQFPwy
+         NegvglXje8eil4tYpcabfFVYcsngDKwQqZudpVVR8xvqE3xypsYFDTE8LzGxh6c9ws
+         GGCFsn44ozVmkMqE8EuGPMLfCPL9XLlm2hVxrLJG5cEXlFN00FJ7RmkF0ZOw47aRIz
+         /gUNw5g5BCQBg==
+Received: from mail.mleia.com (localhost [127.0.0.1])
+        by mail.mleia.com (Postfix) with ESMTP id 7900D3A3D70;
+        Wed, 30 Mar 2022 10:56:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
+        t=1648637786; bh=4IIWQUgWGsZ11QKKnaAI5uwjc5+4qsqXHmvopyeu08Q=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=sKg8wM7/S4xPfgalgPUuhNcgK8CAWPT95zHeug7JUeCD0Q4wA1PUrifrh61FsonLE
+         IRTLsS7UFDgHyHARwNKIjhH2oDBYULcJ0y7p+QPtsAt5jpsNPEPTRB93rZwtax69j3
+         7adwXfrwPv+5/Bir3kg49GfOCAhd0PMbLV4ZbrZjCheITBoP0mqTeFLi/LiFDQFPwy
+         NegvglXje8eil4tYpcabfFVYcsngDKwQqZudpVVR8xvqE3xypsYFDTE8LzGxh6c9ws
+         GGCFsn44ozVmkMqE8EuGPMLfCPL9XLlm2hVxrLJG5cEXlFN00FJ7RmkF0ZOw47aRIz
+         /gUNw5g5BCQBg==
+Received: from [192.168.1.102] (88-113-46-102.elisa-laajakaista.fi [88.113.46.102])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.mleia.com (Postfix) with ESMTPSA id 3D0373A3D2B;
+        Wed, 30 Mar 2022 10:56:26 +0000 (UTC)
+Message-ID: <e060912b-0a7d-9fd5-edde-c27a8da55569@mleia.com>
+Date:   Wed, 30 Mar 2022 13:56:25 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: qcom: update maintainers (drop Akash and
- Mukesh)
+Subject: Re: spi-pl022 on lpc32xx
 Content-Language: en-US
-To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org
-References: <20220329113718.254642-1-krzysztof.kozlowski@linaro.org>
- <20220330054751.GA51248@9a2d8922b8f1>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220330054751.GA51248@9a2d8922b8f1>
-Content-Type: text/plain; charset=UTF-8
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Trevor Woerner <twoerner@gmail.com>
+Cc:     linux-spi@vger.kernel.org, alexandre.belloni@bootlin.com
+References: <20220328190104.GA11946@localhost>
+ <CACRpkdY2ynzAyQz3q2gHnZMA+Opr-b=w=dA4YMqH=i0Rv+OYcg@mail.gmail.com>
+ <20220329183135.GA6427@localhost>
+ <CACRpkdZUW0wQrJxnA1pcJ9AO6-FOVEx6pXczg0iz2UnQMCEWpw@mail.gmail.com>
+From:   Vladimir Zapolskiy <vz@mleia.com>
+In-Reply-To: <CACRpkdZUW0wQrJxnA1pcJ9AO6-FOVEx6pXczg0iz2UnQMCEWpw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20220330_105626_514181_B638520B 
+X-CRM114-Status: GOOD (  29.72  )
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 30/03/2022 07:47, Kuldeep Singh wrote:
-> On Tue, Mar 29, 2022 at 01:37:17PM +0200, Krzysztof Kozlowski wrote:
->> Emails to Akash Asthana and Mukesh Savaliya bounce (550: Recipient
->> address rejected: User unknown in virtual alias table), so switch
->> maintainers to Andy and Bjorn (as Qualcomm platform maintainers).
+Hi Linus, Trevor,
+
+On 3/30/22 00:33, Linus Walleij wrote:
+> On Tue, Mar 29, 2022 at 8:31 PM Trevor Woerner <twoerner@gmail.com> wrote:
 > 
-> Thanks Krzysztof as it was really anonoying to hear bounce emails.
+>>>>          &ssp0 {
+>>>>                  status = "okay";
+>>>
+>>> The main definition of the SSP is elsewhere in the node with ssp0:, so I
+>>> have no idea how this is configured really.
+>>
+>> I'm not sure what you mean here. lpc32xx.dtsi defines the ssp0 node and
+>> disables it.
 > 
-> One thing, I heard bounce from Akash only and not from Mukesh.
-> Did you hear bounce from Mukesh as well?
+> Yeah that is what I'm asking about. So now that I look at that:
+> 
+>                          ssp0: spi@20084000 {
+>                                  compatible = "arm,pl022", "arm,primecell";
+>                                  reg = <0x20084000 0x1000>;
+>                                  interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
+>                                  clocks = <&clk LPC32XX_CLK_SSP0>;
+>                                  clock-names = "apb_pclk";
+>                                  #address-cells = <1>;
+>                                  #size-cells = <0>;
+>                                  status = "disabled";
+>                          };
+> 
+> Just apb_pclk? You need sspclk as well. If the same clock is used for
+> both then add the same clock with the name "sspclk" *before* the
+> apb_pclk, so:
+> 
+> clocks = <&clk LPC32XX_CLK_SSP0>, <&clk LPC32XX_CLK_SSP0>;
+> clock-names = "sspclk", "apb_pclk";
+> 
+> NOTE: I don't know if this is what the SoC is actually routing to the SSP.
+> Consult the LPC32xx docs to figure out which clock is actually connected
+> to the SSPCLK input of the PL022.
+> 
+>>>>                  m25p16@0 {
+>>>>                          compatible = "jedec,spi-nor";
+>>>>                          reg = <0>;
+>>>>                          spi-max-frequency = <500000>;
+>>>>
+>>>>                          pl022,interface = <0>;
+>>>>                          pl022,com-mode = <1>;
+>>>
+>>> com-mode 1 (polling) really? Why? Are interrupts broken
+>>> on your silicon?
+>>
+>> Right now I'm getting nothing back from the spi-nor. I see the SPI subsystem
+>> sending out the 0x9f, I see the pl022 driver writing it to the data register,
+>> I've added some code to the pl022 driver to print out the status register, and
+>> the "receive FIFO not empty flag" (RNE) never goes up. In polling mode it'll
+>> eventually time out and I'll get to a prompt (to reflash and reboot). In
+>> interrupt mode I'd have to yank the power, boot to a different image, flash
+>> from there, and reboot. So polling mode make the build/flash/reboot cycle
+>> faster :-)
+> 
+> I'd bet on the clock (which is obviously wrong) and if you have a pin
+> controller then inspect the pin multiplexing too. You have
+> drivers/pinctrl/pinctrl-lpc18xx.c
+> but there is no driver for lpc32xx? So how is pin multiplexing
+> actually set up on this platform?
 
-Yes, both:
-550 5.1.1 <msavaliy@codeaurora.org>: Recipient address rejected: User
-unknown in virtual alias table
+years ago you've asked the same question, and the answer is that there is no
+pinctrl IP or controls on the SoC. This sounds weird, but that's how it goes.
 
-I think there might be a change in the email domain, so the best would
-be if Akash and Mukesh simply updated the file...
+There are just a few multiplexed pins, and a pin function selection is done
+on basis of powering up a corresponding particular IP while keeping
+conflicting ones disabled. Such implicit pin multiplexing is inconvenient,
+but working, fortunately the SoC is simple to have such a model supported.
 
+The newer LPC18xx/LPC43xx has a pin control IP, and it makes everything much
+more transparent and comprehensible, but it's not transferable to LPC32xx.
 
-Best regards,
-Krzysztof
+> How are these two SPI and SSP controllers actually sharing these
+> pins without any configuration anywhere? It just gives me the feel
+> that an lpc32xx pin control driver is missing.
+> 
+> On LPC18xx it looks like this:
+> 
+>                 pinctrl: pinctrl@40086000 {
+>                          compatible = "nxp,lpc1850-scu";
+>                          reg = <0x40086000 0x1000>;
+>                          clocks = <&ccu1 CLK_CPU_SCU>;
+>                  };
+> 
+> SCU sounds like "system control unit" doesn't LPC32xx have one
+> of these? Where is that configured then?
+> 
+> Yours,
+> Linus Walleij
+
+--
+Best wishes,
+Vladimir
