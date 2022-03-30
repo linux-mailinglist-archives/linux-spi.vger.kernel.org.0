@@ -2,113 +2,227 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 525124ECC16
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Mar 2022 20:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1894D4ECD26
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Mar 2022 21:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350081AbiC3S06 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 30 Mar 2022 14:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60046 "EHLO
+        id S1350835AbiC3TWZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 30 Mar 2022 15:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345078AbiC3S0b (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Mar 2022 14:26:31 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D623749FB2
-        for <linux-spi@vger.kernel.org>; Wed, 30 Mar 2022 11:23:49 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-de48295467so22926448fac.2
-        for <linux-spi@vger.kernel.org>; Wed, 30 Mar 2022 11:23:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
-        b=U1oUia1Thamt6Z7oWm6PGNKOk9RXK6Jv76DGrI1cLcYRcY5/d1Tt5qepQRdZm6lsyq
-         RBa/xpJM28ShOu5ibphzafHjPKptRC4OMeOVco0xYKihrCNFhnaGQOBDSvUdgHWgE3gf
-         cWTbx+dPO2nv/wujOZrrbxfJpePUzp7QZ1RCloUPxJhGXTvBKUziPieC1LSkK8oSaB+t
-         E85QJNBGnQK8HE8wei7Zq5jQSpeI5JY8kzofCGcJSUHLIHQXWsBy6ta+brl9WPLZzyWA
-         2jPBZlOFyxLxFI8awBJCcZtcLmSyu35IRMr8cJ72zb2pokIUUqe6EUB9pKUwVKwbq4my
-         ou5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
-        b=ulDlm4lBPrjuUmfUu1cVqSv/2091UqulJ4NgWoFnNULHbW9ktl0XFjnUVA+Hgs45s8
-         BGjk9uuAP/8bn6htNVHKDWB9EUyedHYruAUhEpciai13boHsdkOjdPDaTQdn88eDwXCC
-         +i/L9snnJOFF/IKszRv+h7aEqX+QZ1fVeb2WDk3VJ+7MeDTP5CaTOnE0lAW0zDGV96MD
-         2ELcz6httNmM+YYxM8xux0lDkAqy//nETE5hWrjNwg022q4t4vYyNH7Wufn/SImmNE0b
-         pRhvrWPJVSc6wdbxtNz8O8NDB75wWoNu7pQZ0IeB8rwn0zmxnA3WkPJbhjys+/hBFe7z
-         fK2Q==
-X-Gm-Message-State: AOAM532m2oe2bpMF4GkOdOP2sF2hjNd4EzGe5wyqhtfQKzdj2jePsj4w
-        MwPofKDZDuAGzEqoN/+mfSHxopzMB+cjUrslzjit4uqvP6NA
-X-Google-Smtp-Source: ABdhPJzkTl+tJbylc9dRvis6ZhULbTl7j4ynIkLgm4b/Lu4YSrf6PCWjehKBvofPJCmWKHUKJGD0xbE01MjL0VC50Jo=
-X-Received: by 2002:a17:90b:3143:b0:1c7:5cee:3948 with SMTP id
- ip3-20020a17090b314300b001c75cee3948mr852445pjb.140.1648664618224; Wed, 30
- Mar 2022 11:23:38 -0700 (PDT)
+        with ESMTP id S1350723AbiC3TWO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Mar 2022 15:22:14 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B3A98F73;
+        Wed, 30 Mar 2022 12:20:07 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22UJJ9pl115222;
+        Wed, 30 Mar 2022 14:19:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1648667949;
+        bh=HXP0I68YYcbtnXwobfKnkky9m9FMx1koQq3CNDnNl/s=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=b0dOSS3TBcb/XaU+beH5EgUePch8ipiuqJc1igewV0Pxye9W5HprO2qYOuhIHwRk/
+         epiXZ65HYC8iwP3u0uiNHN3KmCFiN6pvTFd7tFvE4+KOA4WnsRNzMpXTHtEy0Wy4pi
+         27SK/+GWs9/gD0iLusC1GEna6+Li4O6jeKrI3xeo=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22UJJ9wk031699
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 30 Mar 2022 14:19:09 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 30
+ Mar 2022 14:19:09 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 30 Mar 2022 14:19:09 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22UJJ8cX013600;
+        Wed, 30 Mar 2022 14:19:09 -0500
+Date:   Thu, 31 Mar 2022 00:49:08 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-aspeed@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Tao Ren <rentao.bupt@gmail.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v4 02/11] dt-bindings: spi: Add Aspeed SMC controllers
+ device tree binding
+Message-ID: <20220330191908.nhg52a5ayzczpzai@ti.com>
+References: <20220325100849.2019209-1-clg@kaod.org>
+ <20220325100849.2019209-3-clg@kaod.org>
 MIME-Version: 1.0
-Reply-To: isabellasayouba0@gmail.com
-Sender: 040stherchurch@gmail.com
-Received: by 2002:a05:6a20:691d:b0:76:6cf5:d552 with HTTP; Wed, 30 Mar 2022
- 11:23:37 -0700 (PDT)
-From:   Mrs Isabella Sayouba <isabellasayouba0@gmail.com>
-Date:   Wed, 30 Mar 2022 18:23:37 +0000
-X-Google-Sender-Auth: _Xe1kByDkvq-Dn04BagO7gok_qM
-Message-ID: <CAAzQq761QVaWKiKernxpKjqNCK+6V9mRKHBnOcqF8rXJO9Y+aA@mail.gmail.com>
-Subject: =?UTF-8?B?44GC44GE44GV44Gk44CC?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220325100849.2019209-3-clg@kaod.org>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-44GC44GE44GV44Gk44CCDQoNCua2meOCkua1geOBl+OBquOBjOOCieOBk+OBruODoeODvOODq+OC
-kuabuOOBhOOBpuOBhOOBvuOBmeOAguengeOBruebruOBq+OBr+Wkp+OBjeOBquaCsuOBl+OBv+OB
-jOOBguOCiuOBvuOBmeOAguengeOBruWQjeWJjeOBr+OCpOOCtuODmeODqeODu+OCteODqOOCpuOD
-kOOBleOCk+OBp+OBmeOAguODgeODpeODi+OCuOOCouWHuui6q+OBp+OAgeODluODq+OCreODiuOD
-leOCoeOCveOBrueXhemZouOBi+OCiemAo+e1oeOCkuWPluOCiuOBvuOBmeOAguengeOBr+OBguOB
-quOBn+OBq+W/g+OCkumWi+OBhOOBpuaEn+WLleOBl+OBn+OBruOBp+OAgeOBguOBquOBn+OBq+ip
-seOBmeS7peWkluOBq+mBuOaKnuiCouOBr+OBguOCiuOBvuOBm+OCk+OAguengeOBr+OAgTIwMTHl
-ubTjgavkuqHjgY/jgarjgovliY3jgavjg5bjg6vjgq3jg4rjg5XjgqHjgr3jga7jg4Hjg6Xjg4vj
-grjjgqLlpKfkvb/jgag55bm06ZaT5YON44GE44Gm44GE44GfU2F5b3ViYQ0KQnJvd27msI/jgajn
-tZDlqZrjgZfjgb7jgZfjgZ/jgILlrZDkvpvjgarjgZfjgacxMeW5tOmWk+e1kOWpmuOBl+OBn+OA
-gg0KDQrlvbzjga/jgZ/jgaPjgZ815pel6ZaT57aa44GE44Gf55+t44GE55eF5rCX44Gu5b6M44Gn
-5q2744Gr44G+44GX44Gf44CC5b2844Gu5q275b6M44CB56eB44Gv5YaN5ama44GX44Gq44GE44GT
-44Go44Gr5rG644KB44G+44GX44Gf44CC5Lqh44GP44Gq44Gj44Gf5aSr44GM55Sf44GN44Gm44GE
-44Gf44Go44GN44CB5b2844Gv57eP6aGNODUw5LiH44OJ44Or44KS6aCQ44GR44G+44GX44Gf44CC
-DQrvvIg4MDDkuIc1MDAw44OJ44Or77yJ6KW/44Ki44OV44Oq44Kr44Gu44OW44Or44Kt44OK44OV
-44Kh44K944Gu6aaW6YO944Ov44Ks44OJ44Kl44Kw44O844Gu6YqA6KGM44Gn44CC54++5Zyo44CB
-44GT44Gu44GK6YeR44Gv44G+44Gg6YqA6KGM44Gr44GC44KK44G+44GZ44CC5b2844Gv44GT44Gu
-44GK6YeR44KS44OW44Or44Kt44OK44OV44Kh44K944Gu6Ymx5qWt44GL44KJ44Gu6YeR44Gu6Ly4
-5Ye644Gr5Yip55So44Gn44GN44KL44KI44GG44Gr44GX44G+44GX44Gf44CCDQoNCuacgOi/keOA
-geengeOBruWMu+iAheOBr+engeOBjOeZjOOBqOiEs+WNkuS4reOBruWVj+mhjOOBruOBn+OCgeOB
-qzfjg7bmnIjplpPjga/ntprjgYvjgarjgYTjgaDjgo3jgYbjgajnp4HjgavoqIDjgYTjgb7jgZfj
-gZ/jgILnp4HjgpLmnIDjgoLmgqnjgb7jgZvjgabjgYTjgovjga7jga/ohLPljZLkuK3jga7nl4Xm
-sJfjgafjgZnjgILnp4Hjga7nirbmhYvjgpLnn6XjgaPjgZ/jga7jgafjgIHnp4Hjga/jgZPjga7j
-gYrph5HjgpLjgYLjgarjgZ/jgavmuKHjgZfjgabjgIHmgbXjgb7jgozjgarjgYTkurrjgIXjga7k
-uJboqbHjgpLjgZnjgovjgZPjgajjgavjgZfjgb7jgZfjgZ/jgILjgYLjgarjgZ/jga/jgZPjga7j
-gYrph5HjgpLnp4HjgYzjgZPjgZPjgafmjIfnpLrjgZnjgovmlrnms5XjgafliKnnlKjjgZnjgovj
-gafjgZfjgofjgYbjgILnp4Hjga/jgYLjgarjgZ/jgavjgYLjgarjgZ/jga7lgIvkurrnmoTjgark
-vb/nlKjjga7jgZ/jgoHjgavnt4/jgYrph5Hjga4zMOODkeODvOOCu+ODs+ODiOOCkuWPluOBo+OB
-puassuOBl+OBhOOBp+OBmeOAguOBiumHkeOBrjcw77yF44Gv56eB44Gu5ZCN5YmN44Gn5a2k5YWQ
-6Zmi44KS5bu644Gm44CB6YCa44KK44Gu6LKn44GX44GE5Lq644CF44KS5Yqp44GR44KL44Gf44KB
-44Gr5L2/44GG44Gn44GX44KH44GG44CC56eB44Gv5a2k5YWQ44Go44GX44Gm6IKy44Gh44G+44GX
-44Gf44GM44CB56We44Gu5a6244KS57at5oyB44GZ44KL44Gf44KB44Gg44GR44Gr44CB5a625peP
-44Gr44Gv6Kqw44KC44GE44G+44Gb44KT44CC44GT44Gu55eF5rCX44GM56eB44KS44Go44Gm44KC
-6Ium44GX44KB44Gf44Gu44Gn44CB56We44GM56eB44Gu572q44KS6LWm44GX44CB5qW95ZyS44Gn
-56eB44Gu6a2C44KS5Y+X44GR5YWl44KM44KL44KI44GG44Gr44GT44KM44KS44GX44Gm44GE44KL
-44Gu44Gn44GZ44CCDQoNCui/lOS/oeOCkuWPl+OBkeWPluOCiuasoeesrOOAgeODluODq+OCreOD
-iuODleOCoeOCveOBrumKgOihjOOBrumAo+e1oeWFiOOCkuOBiuefpeOCieOBm+OBl+OBvuOBmeOA
-guOBvuOBn+OAgemKgOihjOOBruePvuWcqOOBruWPl+WPluS6uuOBp+OBguOCi+OBk+OBqOOCkuio
-vOaYjuOBmeOCi+aoqemZkOabuOOCkueZuuihjOOBmeOCi+OCiOOBhumKgOihjOmVt+OBq+aMh+ek
-uuOBl+OBvuOBmeOAguengeOBjOOBk+OBk+OBp+i/sOOBueOBn+OCiOOBhuOBq+OBguOBquOBn+OB
-jOOBneOCjOOBq+W/nOOBmOOBpuihjOWLleOBmeOCi+OBk+OBqOOCkuengeOBq+S/neiovOOBl+OB
-puOBj+OBoOOBleOBhOOAgg0KDQrjgqTjgrbjg5njg6njg7vjgrXjg6jjgqbjg5DlpKvkurrjgYvj
-gonjgIINCg==
+On 25/03/22 11:08AM, Cédric Le Goater wrote:
+> The "interrupt" property is optional because it is only necessary for
+> controllers supporting DMAs (Not implemented yet in the new driver).
+> 
+> Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> Tested-by: Joel Stanley <joel@jms.id.au>
+> Tested-by: Tao Ren <rentao.bupt@gmail.com>
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Cédric Le Goater <clg@kaod.org>
+> ---
+>  .../bindings/spi/aspeed,ast2600-fmc.yaml      | 87 +++++++++++++++++++
+>  MAINTAINERS                                   |  9 ++
+>  2 files changed, 96 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+> new file mode 100644
+> index 000000000000..e16bbcd38560
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+> @@ -0,0 +1,87 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/aspeed,ast2600-fmc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Aspeed SMC controllers bindings
+> +
+> +maintainers:
+> +  - Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> +  - Cédric Le Goater <clg@kaod.org>
+> +
+> +description: |
+> +  This binding describes the Aspeed Static Memory Controllers (FMC and
+> +  SPI) of the AST2400, AST2500 and AST2600 SOCs.
+> +
+> +allOf:
+> +  - $ref: "spi-controller.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - aspeed,ast2600-fmc
+> +      - aspeed,ast2600-spi
+> +      - aspeed,ast2500-fmc
+> +      - aspeed,ast2500-spi
+> +      - aspeed,ast2400-fmc
+> +      - aspeed,ast2400-spi
+> +
+> +  reg:
+> +    items:
+> +      - description: registers
+> +      - description: memory mapping
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +patternProperties:
+> +  "@[0-9a-f]+":
+> +    type: object
+> +
+> +    properties:
+> +      spi-rx-bus-width:
+> +        enum: [1, 2, 4]
+
+No need for this. It should already be taken care of by 
+spi-peripheral-props.yaml
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/aspeed-scu-ic.h>
+> +    #include <dt-bindings/clock/ast2600-clock.h>
+> +
+> +    spi@1e620000 {
+> +        reg = <0x1e620000 0xc4>, <0x20000000 0x10000000>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        compatible = "aspeed,ast2600-fmc";
+> +        clocks = <&syscon ASPEED_CLK_AHB>;
+> +        interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+
+Nitpick: Add a blank line here
+
+> +        flash@0 {
+> +                reg = < 0 >;
+> +                compatible = "jedec,spi-nor";
+> +                spi-max-frequency = <50000000>;
+> +                spi-rx-bus-width = <2>;
+> +        };
+
+and here
+
+> +        flash@1 {
+> +                reg = < 1 >;
+> +                compatible = "jedec,spi-nor";
+> +                spi-max-frequency = <50000000>;
+> +                spi-rx-bus-width = <2>;
+> +        };
+
+and here. Looks a bit nicer.
+
+> +        flash@2 {
+> +                reg = < 2 >;
+> +                compatible = "jedec,spi-nor";
+> +                spi-max-frequency = <50000000>;
+> +                spi-rx-bus-width = <2>;
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index ea9d74b6236f..7d5f81dcd837 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -3021,6 +3021,15 @@ S:	Maintained
+>  F:	Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml
+>  F:	drivers/mmc/host/sdhci-of-aspeed*
+>  
+> +ASPEED SMC SPI DRIVER
+> +M:	Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> +M:	Cédric Le Goater <clg@kaod.org>
+> +L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
+> +L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
+> +L:	linux-spi@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+> +
+>  ASPEED VIDEO ENGINE DRIVER
+>  M:	Eddie James <eajames@linux.ibm.com>
+>  L:	linux-media@vger.kernel.org
+> -- 
+> 2.34.1
+> 
+
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
