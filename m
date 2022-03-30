@@ -2,44 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2F0F4EC1E3
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Mar 2022 13:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1ACD4EC4AA
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Mar 2022 14:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245375AbiC3L5S (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 30 Mar 2022 07:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
+        id S243155AbiC3Mnw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 30 Mar 2022 08:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345956AbiC3LzP (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Mar 2022 07:55:15 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2107.outbound.protection.outlook.com [40.107.255.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81EF5AE6F;
-        Wed, 30 Mar 2022 04:53:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NzNiRw3FH5wvA7t8l2DqBJKGLf5+obmXo3mnl/lOvxa021I+0sjJ0xdwO9T0x2W9z6K6khlVZ8tmKnjXgYngVN+5zpJEVK8TGRBqHsYw1Xqnd4C8pDD4+VwdiTnzQ9DyNYo9G8ybDVmR7s97cxuYae931REOzoezqbBb4ssP6osczzZozs/P3qZ6aC6yGyR+IkJpg0tK+QyPLHfpBTqk0LhQ8zUTn64ZcurJG11wafETllZzf0SCFxkSOlxZfbbMO5Lzv2N9R2r+9qx3qC3bBAl8o54ueFhdFBDMexyBNRQLDrbADA67FawgbqACSDBj0U/yF5vVTyKAWA6xg0QxOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qOvaaezuJyFuyPxmnvJGcHpf4orjsbUoescrUl1DS/c=;
- b=B8iNghMh+AXBkYQpUKzmOmoruOx4pUi5EAWN6VlATFWWVmz0YArlvXqMh13jKNRtPaGNUSzpyZza3qhjYVvw8mQ1HCl96/1XZFpsPRSFX1hd4YLzy3Th1Hwg4H055ymOfs0OsVqp8VWoorpow5lV9sOhMw7+czoiZxv/q+MjEEdNdJftK+r4/LNx6765c18jI3GEz7wcAudOHNw7kAgzOokZIIA/VJRYXmHDRSe8hFPLEKnJnbBp/WwyXMnq4BmXf+ox34oW7s7P2dmwCP0vCZXsI4okehyKdImHCyk+8GmedORPlcg+aIhspYpnZNWwmyKyq/co9j43kTwZjku8gQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qOvaaezuJyFuyPxmnvJGcHpf4orjsbUoescrUl1DS/c=;
- b=BWU74Zf+QgoGFT5UReySGv8+Pw4ZoUtzJ7h6Ei2nTKrbxuIKuPFkxhH8X6348HlL6m468oNG7emfYOS0Wirsa883sj4klF1VMvznLCtnQBlMcYB6Wqh4+DQSYyEoXfF8ILZgpjAYvjNEFfQdq8tiQ4/bg74iQOr/oyoEysbxXqPg9uxGLs+pUiMMBlaMX9RCiScGFEJ7sb5WNJCnhiBuOwMR9N9lN9W9/9yg5bSIazEaBFpJKXZ2g3xoSIR0f/YWjqs5p8FgJ+4/wWGJggKkEyLyLH/0jXaVOxFjvPaRuL3hgDNB4Rdk7bH9g0LW4B5VOFJFFa1Kpt6eW+6BKk/S8A==
-Received: from HK0PR06MB2786.apcprd06.prod.outlook.com (2603:1096:203:5b::22)
- by PU1PR06MB2117.apcprd06.prod.outlook.com (2603:1096:803:36::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.22; Wed, 30 Mar
- 2022 11:53:11 +0000
-Received: from HK0PR06MB2786.apcprd06.prod.outlook.com
- ([fe80::38d7:bb1c:a4f0:a327]) by HK0PR06MB2786.apcprd06.prod.outlook.com
- ([fe80::38d7:bb1c:a4f0:a327%7]) with mapi id 15.20.5102.022; Wed, 30 Mar 2022
- 11:53:11 +0000
-From:   Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-To:     =?utf-8?B?Q8OpZHJpYyBMZSBHb2F0ZXI=?= <clg@kaod.org>,
+        with ESMTP id S1345549AbiC3Mne (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Mar 2022 08:43:34 -0400
+X-Greylist: delayed 637 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Mar 2022 05:35:31 PDT
+Received: from 10.mo552.mail-out.ovh.net (10.mo552.mail-out.ovh.net [87.98.187.244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368092976E1
+        for <linux-spi@vger.kernel.org>; Wed, 30 Mar 2022 05:35:30 -0700 (PDT)
+Received: from mxplan5.mail.ovh.net (unknown [10.109.138.42])
+        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id 4EBBA21147;
+        Wed, 30 Mar 2022 12:14:41 +0000 (UTC)
+Received: from kaod.org (37.59.142.106) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 30 Mar
+ 2022 14:14:41 +0200
+Authentication-Results: garm.ovh; auth=pass (GARM-106R00678022d9b-b981-4cb9-a8d6-ab598787562b,
+                    C01A700CFB7B2A582AB77A6F9CDE148205597502) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 82.64.250.170
+Message-ID: <0ec477b5-e404-536f-ff60-39f43208c3cc@kaod.org>
+Date:   Wed, 30 Mar 2022 14:14:40 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 08/11] spi: aspeed: Calibrate read timings
+Content-Language: en-US
+To:     Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
         "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
         "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>
 CC:     Mark Brown <broonie@kernel.org>,
@@ -57,353 +50,475 @@ CC:     Mark Brown <broonie@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Tao Ren <rentao.bupt@gmail.com>
-Subject: RE: [PATCH v4 08/11] spi: aspeed: Calibrate read timings
-Thread-Topic: [PATCH v4 08/11] spi: aspeed: Calibrate read timings
-Thread-Index: AQHYQDBlhRJ1CVqB1EKLdmJgf4F2MKzX0z/A
-Date:   Wed, 30 Mar 2022 11:53:11 +0000
-Message-ID: <HK0PR06MB2786548534B370AE0C691C32B21F9@HK0PR06MB2786.apcprd06.prod.outlook.com>
 References: <20220325100849.2019209-1-clg@kaod.org>
  <20220325100849.2019209-9-clg@kaod.org>
-In-Reply-To: <20220325100849.2019209-9-clg@kaod.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 52772daa-7e16-4392-54b4-08da1243dd56
-x-ms-traffictypediagnostic: PU1PR06MB2117:EE_
-x-microsoft-antispam-prvs: <PU1PR06MB2117AF512B6FE7ED55FDC2CCB21F9@PU1PR06MB2117.apcprd06.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: t+zk6DnXE8e4NztSNY84OATLye3JmG002s08X06qBUO4HjVCjRLuVIw+94EUnlT9ksdTRUNhlAgk6BY6Y0c9RmbXNbmOLtnXsXzfRhx5ohOD0aW+7a2iRLBjIRvt8nTrI/KRD5ky2dAFgO8ZkCDYUrr9B0g20F41+TfeWzxMhGIV+c3e6AaiP6hixhOVA8MhlOeKSrEg7Eyc7pKQzMpL8lcY4ky7vFyw42zlavT48v+REdhqvDv44p6b02IJ8OXQn//BrPQieJ4Nyo1a+TJVl0wJtg15sq+hLE1LVxvrTSAq6gMW+8Dllxzwn/wmiffcLeE1V/yCSqURtbHZ5dVNmJK7x/8bFKNy6FK1mjYPXt3OVKESW/kMUVL09dc3QS7yBzhfzO4xlcTj3PoOPy7UNhWNNZWC+x9n/RBrtktjiZWBF2kCJJK4/gx1WnE09TiVTibS2iMvQ4DSbj557eGvcxVprDDGfHsqLrcc7cUmkPQKTC+uo9wgETbwoysSpd7bQ+95K9zaPiQ+jrTlINmCLecDxAZusT5MgP70dlPENPyTEFQsMeyDAPfVpUBAw1gCtsTO1V0FA+CewN2m65VZPDxiS/pCskdlmmBCF3bQ2dM7lIX2+vXyfGuxttpVdH39XJ55P4JeL5AXHAE+4pkGMQKvze4PqLXe7KPMtTZw+nNKDXOxAbGzTFnSMLClKCLpVXeZT/fXT/ALI/V5l5zTEg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB2786.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(346002)(396003)(376002)(136003)(39840400004)(366004)(33656002)(7416002)(83380400001)(7696005)(53546011)(6506007)(8936002)(2906002)(55016003)(52536014)(5660300002)(30864003)(508600001)(186003)(26005)(66946007)(66556008)(66446008)(316002)(110136005)(122000001)(54906003)(38100700002)(4326008)(66476007)(64756008)(38070700005)(8676002)(86362001)(66574015)(9686003)(76116006)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TlRUK2pCSFVRbUxheFpzZVZ0NUQyNjFKQ2t2K1J4NmViNXl2ZkUzbUpPa0Fj?=
- =?utf-8?B?MTE1Yy9RUlduOUo2T2FVMm5tdEhrWUYyY1cyS25QL3RJZkYvS1pDWDBzSjBM?=
- =?utf-8?B?SVgxWHg1WXdoaWdrR2JuMks3U1hoNGs4NlZCV2U2YVdFQVRxR2kveFE1MVo1?=
- =?utf-8?B?RmdQRWt0emhmdUxrKzh1elFTYWZWT291M3dWenVvQnF6dHhwMWx6blpWWWla?=
- =?utf-8?B?NEp3Rm1VR3luUktUZ1cvMzFiaGJzWFVuZFhXa0tZdGZOZDI3WlJPZEpsZ1Vr?=
- =?utf-8?B?cnYxQkVkL1hFMW9CKy9FaTJwOXIzdGYwNkhPYlc1K1I5Tng4K2hZOC9MS3dm?=
- =?utf-8?B?WG1WdEYvWUJsNXVwWHFCdEdZWmJBQzEyR2IrV0NBeTIybVFOZ280dGQyVGwx?=
- =?utf-8?B?MkpaYWJxU3J1bE83cC9HbGVISVUyYWhFeHJOTGNERzJ0WUVhMHk2dFpSKzFk?=
- =?utf-8?B?aERFWjgzTW5vR3V2c0FucmdwWmh2Z2Q4Z0syVTd6VEFMR1BzaVZ5dE0vMEhu?=
- =?utf-8?B?amgrVndWSExNWWdyYlNsaC96aUpYL3AzYzlraXZtSXJHWDNDRmdwMHcxcG9m?=
- =?utf-8?B?eEhSQ3FhTkdMNytRSTUvVHprZkhYWStrWjJWSlVJb2Z3R29NTE5UUDFZSDVM?=
- =?utf-8?B?OFgyTWpUY2NkYnF6Qk9lMmVOUzNaN3lNVXBsYVdhT1ZERjkwWFQzdUQ4b01Z?=
- =?utf-8?B?MEpmZGRJbXVLNjVXb1pNYVRIeHRXRDNicjFjdFpZdHM2SEszdE1sMEJpOGdz?=
- =?utf-8?B?T3FmR2xrSEgwZVR4TzRoV0xzYXIyOEw2aVhrd3laMDVjMmxqbTEwOGFsSHZH?=
- =?utf-8?B?WTNCZmRHK2kyaWVDNjJ2c0dTWVdOVkVqZ1g3U2s5RHhoWHJCZ1RaWnE3enY3?=
- =?utf-8?B?RG9FNVZFeWxlWFk3YlM3VUlwd3BCWjhxeGNBZ0haaXJ6eTcwdXQzcE5hUTg0?=
- =?utf-8?B?NG1EdjFTMVVlYjRUc3JKNmdaajF1dktCMUROSDhucXcrZmp2SkNLVzN6Mzc0?=
- =?utf-8?B?YUZ0MkQ2cFlxTnZIbE9pVFFVcW5qcUVyc0EvWXFncDJLRnVnM3kyN3grTkpM?=
- =?utf-8?B?dks1QWhPNVI2SFI5VStoSHZCaWRuOERWdm1zdWlwelZKaXY1eVhSdDlNUGNU?=
- =?utf-8?B?Q3RkRUhTUG9ycWFQSDNzZ2lzRWNLcEFrZ2xZMmlXOEU5Wnl6WVdEbmhHdmEw?=
- =?utf-8?B?cHJjNGt5T2NvU083Z0hVYnc0K0VCRzVnMlgwT3J4OVQrT2lCNTFSOTd4ZW5H?=
- =?utf-8?B?R3FTL1RtVmgrdFVWcE5FZlViKzVXUjlaYTZ3enFmaE9PNENBNjdNZjhzamRt?=
- =?utf-8?B?eFlIUndGZlNFcUZIWjYrMFdSblZLNlFFMWs3MjkzSFhSUG9hTFpHbkxhQndM?=
- =?utf-8?B?ZE03dWNXZU1iaGhVMi9DQ1FJQU5lL05WM0FpL3hEaEUyek8rSEFhRVJZNW5N?=
- =?utf-8?B?QmU0Z2JxTUt5djNaOThSeGYrNUhkN0p0RGI4VEVmWHZ2YlFiYWlKSWdvK3NK?=
- =?utf-8?B?b3U5TnJ5cUNxTC9wMG9Ib1VzaVg1eFYraFY2WGlaMmNYOGhxZzhHd2RYa0pL?=
- =?utf-8?B?bzFENnY2YTJPUTh2cTJPK25xSTRDQWd4UE9Ia0Z1QUZRMyt1VVI0RnNsWU9D?=
- =?utf-8?B?YllzcjIxcVV5Y2JTVVNqYjIwRXBGVklHa21OVm1hOTJUakl2djhqcXE3YWVE?=
- =?utf-8?B?cnJpU2ZVZHlVanlCaE9zUG1nZHhNOTBjUXc2ZDZrek9IODV4MUZ3Wkduaml4?=
- =?utf-8?B?NHh5cDZBTzBrakpkTTNxbStjNjlFSWlWcE9HVm5SZkRWZXJ4ZVdiVmZmMHMy?=
- =?utf-8?B?TFo1UUozV2xQZ3JCK2g2bnpLKzh2S2ZnRDBGTlY0MVRNS0FNUkRjMEliU21I?=
- =?utf-8?B?eWI5NEdkaklHTjJtdkFZRTlCSEhhbGNJNDZWSStRRzl0blQzMkdXQnBsRXpM?=
- =?utf-8?B?TUgvbi8rYk5CS0s2NmsvQlUrTGlVS1lGS3RYcFo2bjczM1d5WlAvRlFkMmx6?=
- =?utf-8?B?N1ZZZXF5Uy9sUGUrM2gxQjBIWVNOZXRTVi9UQ1BJOUhwUDZBbDNQcDNTZXJH?=
- =?utf-8?B?Z3BjSFpkRVp3Q0RZN3VHQy9RWkVZd092Y0Q4cW1uMHhNcEFOK3IxdkU1Y0Ew?=
- =?utf-8?B?SXl3cG1QTDdwZndqQ3ovUkJJaGFLaW1GS1dRSU0vQVJWcWJKT0hXNUNROFZ2?=
- =?utf-8?B?cHJLWVpjRktkN2l6V29JVE9HQ2djZ1g3NklnUzUvQTdZUXlKbkdiY0RVTEFX?=
- =?utf-8?B?UmVYWnljL2pSelFtMDVBUUlKajZBMlAxeFROanUya0N4SjRLMmxwbGhxK0p3?=
- =?utf-8?B?bXR0eXZBdHMxRDJsWDRHaHM5Si9jWGxqbHZ5Y0dsaU9YOHBybDZkdEhkanRl?=
- =?utf-8?Q?xtwmfi/bx0PsOmUk=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB2786.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 52772daa-7e16-4392-54b4-08da1243dd56
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Mar 2022 11:53:11.0315
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7RNzaqFRNj2q3EentNeVU3nbFTNIYT4hMj2+M/WrF8QVxkUxWjR18GZVp4MmPmNhXbd2Bn/25bUv1rBeO9Xs+LIDx2pN7PFkHRL3E91wXCQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PU1PR06MB2117
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+ <HK0PR06MB2786548534B370AE0C691C32B21F9@HK0PR06MB2786.apcprd06.prod.outlook.com>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <HK0PR06MB2786548534B370AE0C691C32B21F9@HK0PR06MB2786.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [37.59.142.106]
+X-ClientProxiedBy: DAG9EX2.mxp5.local (172.16.2.82) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: 2f049999-23ca-433c-9185-ba95e6497958
+X-Ovh-Tracer-Id: 5310025437221849927
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudeivddgheduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepueevledvjeetgeetfeeiveeftefffedvvdeikeetveelfeeglefgueetvdefvdefnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddtieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehrvghnthgrohdrsghuphhtsehgmhgrihhlrdgtohhm
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-SGkgQ8OpZHJpYyBMZSwNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBD
-w6lkcmljIExlIEdvYXRlciA8Y2xnQGthb2Qub3JnPg0KPiBTZW50OiBGcmlkYXksIE1hcmNoIDI1
-LCAyMDIyIDY6MDkgUE0NCj4gVG86IGxpbnV4LXNwaUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LW10
-ZEBsaXN0cy5pbmZyYWRlYWQub3JnDQo+IFN1YmplY3Q6IFtQQVRDSCB2NCAwOC8xMV0gc3BpOiBh
-c3BlZWQ6IENhbGlicmF0ZSByZWFkIHRpbWluZ3MNCj4gDQo+IFRvIGFjY29tbW9kYXRlIHRoZSBk
-aWZmZXJlbnQgcmVzcG9uc2UgdGltZSBvZiBTUEkgdHJhbnNmZXJzIG9uIGRpZmZlcmVudA0KPiBi
-b2FyZHMgYW5kIGRpZmZlcmVudCBTUEkgTk9SIGRldmljZXMsIHRoZSBBc3BlZWQgY29udHJvbGxl
-cnMgcHJvdmlkZSBhIHNldCBvZg0KPiBSZWFkIFRpbWluZyBDb21wZW5zYXRpb24gcmVnaXN0ZXJz
-IHRvIHR1bmUgdGhlIHRpbWluZyBkZWxheXMgZGVwZW5kaW5nIG9uDQo+IHRoZSBmcmVxdWVuY3kg
-YmVpbmcgdXNlZC4gVGhlIEFTVDI2MDAgU29DIGhhcyBvbmUgb2YgdGhlc2UgcmVnaXN0ZXJzIHBl
-cg0KPiBkZXZpY2UuIE9uIHRoZSBBU1QyNTAwIGFuZCBBU1QyNDAwIFNvQ3MsIHRoZSB0aW1pbmcg
-cmVnaXN0ZXIgaXMgc2hhcmVkIGJ5IGFsbA0KPiBkZXZpY2VzIHdoaWNoIGlzIHByb2JsZW1hdGlj
-IHRvIGdldCBnb29kIHJlc3VsdHMgb3RoZXIgdGhhbiBmb3Igb25lIGRldmljZS4NCj4gDQo+IFRo
-ZSBhbGdvcml0aG0gZmlyc3QgcmVhZHMgYSBnb2xkZW4gYnVmZmVyIGF0IGxvdyBzcGVlZCBhbmQg
-dGhlbiBwZXJmb3JtcyByZWFkcw0KPiB3aXRoIGRpZmZlcmVudCBjbG9ja3MgYW5kIGRlbGF5IGN5
-Y2xlIHNldHRpbmdzIHRvIGZpbmQgYSBicmVha2luZyBwb2ludC4gVGhpcw0KPiBzZWxlY3RzIGEg
-ZGVmYXVsdCBnb29kIGZyZXF1ZW5jeSBmb3IgdGhlIENFeCBjb250cm9sIHJlZ2lzdGVyLg0KPiBU
-aGUgY3VycmVudCBzZXR0aW5ncyBhcmUgYSBiaXQgb3B0aW1pc3RpYyBhcyB3ZSBwaWNrIHRoZSBm
-aXJzdCBkZWxheSBnaXZpbmcgZ29vZA0KPiByZXN1bHRzLiBBIHNhZmVyIGFwcHJvYWNoIHdvdWxk
-IGJlIHRvIGRldGVybWluZSBhbiBpbnRlcnZhbCBhbmQgY2hvb3NlIHRoZQ0KPiBtaWRkbGUgdmFs
-dWUuDQo+IA0KPiBDYWxpYnJhdGlvbiBpcyBwZXJmb3JtZWQgd2hlbiB0aGUgZGlyZWN0IG1hcHBp
-bmcgZm9yIHJlYWRzIGlzIGNyZWF0ZWQuDQo+IFNpbmNlIHRoZSB1bmRlcmx5aW5nIHNwaS1ub3Ig
-b2JqZWN0IG5lZWRzIHRvIGJlIGluaXRpYWxpemVkIHRvIGNyZWF0ZSB0aGUNCj4gc3BpX21lbSBv
-cGVyYXRpb24gZm9yIGRpcmVjdCBtYXBwaW5nLCB3ZSBzaG91bGQgYmUgZmluZS4gSGF2aW5nIGEg
-c3BlY2lmaWMNCj4gQVBJIHdvdWxkIGNsYXJpZnkgdGhlIHJlcXVpcmVtZW50cyB0aG91Z2guDQo+
-IA0KPiBDYzogUHJhdHl1c2ggWWFkYXYgPHAueWFkYXZAdGkuY29tPg0KPiBSZXZpZXdlZC1ieTog
-Sm9lbCBTdGFubGV5IDxqb2VsQGptcy5pZC5hdT4NCj4gVGVzdGVkLWJ5OiBKb2VsIFN0YW5sZXkg
-PGpvZWxAam1zLmlkLmF1Pg0KPiBUZXN0ZWQtYnk6IFRhbyBSZW4gPHJlbnRhby5idXB0QGdtYWls
-LmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogQ8OpZHJpYyBMZSBHb2F0ZXIgPGNsZ0BrYW9kLm9yZz4N
-Cj4gLS0tDQo+ICBkcml2ZXJzL3NwaS9zcGktYXNwZWVkLXNtYy5jIHwgMjgxDQo+ICsrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+ICAxIGZpbGUgY2hhbmdlZCwgMjgxIGluc2Vy
-dGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3NwaS9zcGktYXNwZWVkLXNtYy5j
-IGIvZHJpdmVycy9zcGkvc3BpLWFzcGVlZC1zbWMuYyBpbmRleA0KPiA3ZjMwNmRhN2M0NGUuLjY2
-MDQ1MTY2N2EzOSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9zcGkvc3BpLWFzcGVlZC1zbWMuYw0K
-PiArKysgYi9kcml2ZXJzL3NwaS9zcGktYXNwZWVkLXNtYy5jDQo+IEBAIC0zMyw2ICszMyw4IEBA
-DQo+ICAjZGVmaW5lICAgQ1RSTF9JT19BRERSRVNTXzRCCQlCSVQoMTMpCS8qIEFTVDI0MDAgU1BJ
-IG9ubHkgKi8NCj4gICNkZWZpbmUgICBDVFJMX0lPX0RVTU1ZX1NFVChkdW1teSkJCQkJCVwNCj4g
-IAkoKCgoKGR1bW15KSA+PiAyKSAmIDB4MSkgPDwgMTQpIHwgKCgoZHVtbXkpICYgMHgzKSA8PCA2
-KSkNCj4gKyNkZWZpbmUgICBDVFJMX0ZSRVFfU0VMX1NISUZUCQk4DQo+ICsjZGVmaW5lICAgQ1RS
-TF9GUkVRX1NFTF9NQVNLCQlHRU5NQVNLKDExLA0KPiBDVFJMX0ZSRVFfU0VMX1NISUZUKQ0KPiAg
-I2RlZmluZSAgIENUUkxfQ0VfU1RPUF9BQ1RJVkUJCUJJVCgyKQ0KPiAgI2RlZmluZSAgIENUUkxf
-SU9fTU9ERV9DTURfTUFTSwkJR0VOTUFTSygxLCAwKQ0KPiAgI2RlZmluZSAgIENUUkxfSU9fTU9E
-RV9OT1JNQUwJCTB4MA0KPiBAQCAtNDUsNiArNDcsOSBAQA0KPiAgLyogQ0V4IEFkZHJlc3MgRGVj
-b2RpbmcgUmFuZ2UgUmVnaXN0ZXIgKi8NCj4gICNkZWZpbmUgQ0UwX1NFR01FTlRfQUREUl9SRUcJ
-CTB4MzANCj4gDQo+ICsvKiBDRXggUmVhZCB0aW1pbmcgY29tcGVuc2F0aW9uIHJlZ2lzdGVyICov
-DQo+ICsjZGVmaW5lIENFMF9USU1JTkdfQ09NUEVOU0FUSU9OX1JFRwkweDk0DQo+ICsNCj4gIGVu
-dW0gYXNwZWVkX3NwaV9jdGxfcmVnX3ZhbHVlIHsNCj4gIAlBU1BFRURfU1BJX0JBU0UsDQo+ICAJ
-QVNQRUVEX1NQSV9SRUFELA0KPiBAQCAtNzAsMTAgKzc1LDE1IEBAIHN0cnVjdCBhc3BlZWRfc3Bp
-X2RhdGEgew0KPiAgCWJvb2wJaGFzdHlwZTsNCj4gIAl1MzIJbW9kZV9iaXRzOw0KPiAgCXUzMgl3
-ZTA7DQo+ICsJdTMyCXRpbWluZzsNCj4gKwl1MzIJaGNsa19tYXNrOw0KPiArCXUzMgloZGl2X21h
-eDsNCj4gDQo+ICAJdTMyICgqc2VnbWVudF9zdGFydCkoc3RydWN0IGFzcGVlZF9zcGkgKmFzcGks
-IHUzMiByZWcpOw0KPiAgCXUzMiAoKnNlZ21lbnRfZW5kKShzdHJ1Y3QgYXNwZWVkX3NwaSAqYXNw
-aSwgdTMyIHJlZyk7DQo+ICAJdTMyICgqc2VnbWVudF9yZWcpKHN0cnVjdCBhc3BlZWRfc3BpICph
-c3BpLCB1MzIgc3RhcnQsIHUzMiBlbmQpOw0KPiArCWludCAoKmNhbGlicmF0ZSkoc3RydWN0IGFz
-cGVlZF9zcGlfY2hpcCAqY2hpcCwgdTMyIGhkaXYsDQo+ICsJCQkgY29uc3QgdTggKmdvbGRlbl9i
-dWYsIHU4ICp0ZXN0X2J1Zik7DQo+ICB9Ow0KPiANCj4gICNkZWZpbmUgQVNQRUVEX1NQSV9NQVhf
-TlVNX0NTCTUNCj4gQEAgLTUxNyw2ICs1MjcsOCBAQCBzdGF0aWMgaW50IGFzcGVlZF9zcGlfY2hp
-cF9hZGp1c3Rfd2luZG93KHN0cnVjdA0KPiBhc3BlZWRfc3BpX2NoaXAgKmNoaXAsDQo+ICAJcmV0
-dXJuIDA7DQo+ICB9DQo+IA0KPiArc3RhdGljIGludCBhc3BlZWRfc3BpX2RvX2NhbGlicmF0aW9u
-KHN0cnVjdCBhc3BlZWRfc3BpX2NoaXAgKmNoaXApOw0KPiArDQo+ICBzdGF0aWMgaW50IGFzcGVl
-ZF9zcGlfZGlybWFwX2NyZWF0ZShzdHJ1Y3Qgc3BpX21lbV9kaXJtYXBfZGVzYyAqZGVzYykgIHsN
-Cj4gIAlzdHJ1Y3QgYXNwZWVkX3NwaSAqYXNwaSA9DQo+IHNwaV9jb250cm9sbGVyX2dldF9kZXZk
-YXRhKGRlc2MtPm1lbS0+c3BpLT5tYXN0ZXIpOw0KPiBAQCAtNTY1LDYgKzU3Nyw4IEBAIHN0YXRp
-YyBpbnQgYXNwZWVkX3NwaV9kaXJtYXBfY3JlYXRlKHN0cnVjdA0KPiBzcGlfbWVtX2Rpcm1hcF9k
-ZXNjICpkZXNjKQ0KPiAgCWNoaXAtPmN0bF92YWxbQVNQRUVEX1NQSV9SRUFEXSA9IGN0bF92YWw7
-DQo+ICAJd3JpdGVsKGNoaXAtPmN0bF92YWxbQVNQRUVEX1NQSV9SRUFEXSwgY2hpcC0+Y3RsKTsN
-Cj4gDQo+ICsJcmV0ID0gYXNwZWVkX3NwaV9kb19jYWxpYnJhdGlvbihjaGlwKTsNCj4gKw0KPiAg
-CWRldl9pbmZvKGFzcGktPmRldiwgIkNFJWQgcmVhZCBidXN3aWR0aDolZCBbMHglMDh4XVxuIiwN
-Cj4gIAkJIGNoaXAtPmNzLCBvcC0+ZGF0YS5idXN3aWR0aCwgY2hpcC0+Y3RsX3ZhbFtBU1BFRURf
-U1BJX1JFQURdKTsNCj4gDQo+IEBAIC04MTIsNiArODI2LDI0OSBAQCBzdGF0aWMgdTMyIGFzcGVl
-ZF9zcGlfc2VnbWVudF9hc3QyNjAwX3JlZyhzdHJ1Y3QNCj4gYXNwZWVkX3NwaSAqYXNwaSwNCj4g
-IAkJKChlbmQgLSAxKSAmIEFTVDI2MDBfU0VHX0FERFJfTUFTSyk7DQo+ICB9DQo+IA0KPiArLyoN
-Cj4gKyAqIFJlYWQgdGltaW5nIGNvbXBlbnNhdGlvbiBzZXF1ZW5jZXMNCj4gKyAqLw0KPiArDQo+
-ICsjZGVmaW5lIENBTElCUkFURV9CVUZfU0laRSBTWl8xNksNCj4gKw0KPiArc3RhdGljIGJvb2wg
-YXNwZWVkX3NwaV9jaGVja19yZWFkcyhzdHJ1Y3QgYXNwZWVkX3NwaV9jaGlwICpjaGlwLA0KPiAr
-CQkJCSAgIGNvbnN0IHU4ICpnb2xkZW5fYnVmLCB1OCAqdGVzdF9idWYpIHsNCj4gKwlpbnQgaTsN
-Cj4gKw0KPiArCWZvciAoaSA9IDA7IGkgPCAxMDsgaSsrKSB7DQo+ICsJCW1lbWNweV9mcm9taW8o
-dGVzdF9idWYsIGNoaXAtPmFoYl9iYXNlLCBDQUxJQlJBVEVfQlVGX1NJWkUpOw0KPiArCQlpZiAo
-bWVtY21wKHRlc3RfYnVmLCBnb2xkZW5fYnVmLCBDQUxJQlJBVEVfQlVGX1NJWkUpICE9IDApIHsg
-I2lmDQo+ICtkZWZpbmVkKFZFUkJPU0VfREVCVUcpDQo+ICsJCQlwcmludF9oZXhfZHVtcF9ieXRl
-cyhERVZJQ0VfTkFNRSAiICBmYWlsOiAiLA0KPiBEVU1QX1BSRUZJWF9OT05FLA0KPiArCQkJCQkg
-ICAgIHRlc3RfYnVmLCAweDEwMCk7DQo+ICsjZW5kaWYNCj4gKwkJCXJldHVybiBmYWxzZTsNCj4g
-KwkJfQ0KPiArCX0NCj4gKwlyZXR1cm4gdHJ1ZTsNCj4gK30NCj4gKw0KPiArI2RlZmluZSBGUkVB
-RF9UUEFTUyhpKQkoKChpKSAvIDIpIHwgKCgoaSkgJiAxKSA/IDAgOiA4KSkNCj4gKw0KPiArLyoN
-Cj4gKyAqIFRoZSB0aW1pbmcgcmVnaXN0ZXIgaXMgc2hhcmVkIGJ5IGFsbCBkZXZpY2VzLiBPbmx5
-IHVwZGF0ZSBmb3IgQ0UwLg0KPiArICovDQo+ICtzdGF0aWMgaW50IGFzcGVlZF9zcGlfY2FsaWJy
-YXRlKHN0cnVjdCBhc3BlZWRfc3BpX2NoaXAgKmNoaXAsIHUzMiBoZGl2LA0KPiArCQkJCWNvbnN0
-IHU4ICpnb2xkZW5fYnVmLCB1OCAqdGVzdF9idWYpIHsNCj4gKwlzdHJ1Y3QgYXNwZWVkX3NwaSAq
-YXNwaSA9IGNoaXAtPmFzcGk7DQo+ICsJY29uc3Qgc3RydWN0IGFzcGVlZF9zcGlfZGF0YSAqZGF0
-YSA9IGFzcGktPmRhdGE7DQo+ICsJaW50IGk7DQo+ICsJaW50IGdvb2RfcGFzcyA9IC0xLCBwYXNz
-X2NvdW50ID0gMDsNCj4gKwl1MzIgc2hpZnQgPSAoaGRpdiAtIDEpIDw8IDI7DQo+ICsJdTMyIG1h
-c2sgPSB+KDB4ZnUgPDwgc2hpZnQpOw0KPiArCXUzMiBmcmVhZF90aW1pbmdfdmFsID0gMDsNCj4g
-Kw0KPiArCS8qIFRyeSBIQ0xLIGRlbGF5IDAuLjUsIGVhY2ggb25lIHdpdGgvd2l0aG91dCBkZWxh
-eSBhbmQgbG9vayBmb3IgYQ0KPiArCSAqIGdvb2QgcGFpci4NCj4gKwkgKi8NCj4gKwlmb3IgKGkg
-PSAwOyBpIDwgMTI7IGkrKykgew0KPiArCQlib29sIHBhc3M7DQo+ICsNCj4gKwkJaWYgKGNoaXAt
-PmNzID09IDApIHsNCj4gKwkJCWZyZWFkX3RpbWluZ192YWwgJj0gbWFzazsNCj4gKwkJCWZyZWFk
-X3RpbWluZ192YWwgfD0gRlJFQURfVFBBU1MoaSkgPDwgc2hpZnQ7DQo+ICsJCQl3cml0ZWwoZnJl
-YWRfdGltaW5nX3ZhbCwgYXNwaS0+cmVncyArIGRhdGEtPnRpbWluZyk7DQo+ICsJCX0NCj4gKwkJ
-cGFzcyA9IGFzcGVlZF9zcGlfY2hlY2tfcmVhZHMoY2hpcCwgZ29sZGVuX2J1ZiwgdGVzdF9idWYp
-Ow0KPiArCQlkZXZfZGJnKGFzcGktPmRldiwNCj4gKwkJCSIgICogWyUwOHhdICVkIEhDTEsgZGVs
-YXksICVkbnMgREkgZGVsYXkgOiAlcyIsDQo+ICsJCQlmcmVhZF90aW1pbmdfdmFsLCBpIC8gMiwg
-KGkgJiAxKSA/IDAgOiA0LA0KPiArCQkJcGFzcyA/ICJQQVNTIiA6ICJGQUlMIik7DQo+ICsJCWlm
-IChwYXNzKSB7DQo+ICsJCQlwYXNzX2NvdW50Kys7DQo+ICsJCQlpZiAocGFzc19jb3VudCA9PSAz
-KSB7DQo+ICsJCQkJZ29vZF9wYXNzID0gaSAtIDE7DQo+ICsJCQkJYnJlYWs7DQo+ICsJCQl9DQo+
-ICsJCX0gZWxzZSB7DQo+ICsJCQlwYXNzX2NvdW50ID0gMDsNCj4gKwkJfQ0KPiArCX0NCj4gKw0K
-PiArCS8qIE5vIGdvb2Qgc2V0dGluZyBmb3IgdGhpcyBmcmVxdWVuY3kgKi8NCj4gKwlpZiAoZ29v
-ZF9wYXNzIDwgMCkNCj4gKwkJcmV0dXJuIC0xOw0KPiArDQo+ICsJLyogV2UgaGF2ZSBhdCBsZWFz
-dCBvbmUgcGFzcyBvZiBtYXJnaW4sIGxldCdzIHVzZSBmaXJzdCBwYXNzICovDQo+ICsJaWYgKGNo
-aXAtPmNzID09IDApIHsNCj4gKwkJZnJlYWRfdGltaW5nX3ZhbCAmPSBtYXNrOw0KPiArCQlmcmVh
-ZF90aW1pbmdfdmFsIHw9IEZSRUFEX1RQQVNTKGdvb2RfcGFzcykgPDwgc2hpZnQ7DQo+ICsJCXdy
-aXRlbChmcmVhZF90aW1pbmdfdmFsLCBhc3BpLT5yZWdzICsgZGF0YS0+dGltaW5nKTsNCj4gKwl9
-DQo+ICsJZGV2X2RiZyhhc3BpLT5kZXYsICIgKiAtPiBnb29kIGlzIHBhc3MgJWQgWzB4JTA4eF0i
-LA0KPiArCQlnb29kX3Bhc3MsIGZyZWFkX3RpbWluZ192YWwpOw0KPiArCXJldHVybiAwOw0KPiAr
-fQ0KPiArDQo+ICtzdGF0aWMgYm9vbCBhc3BlZWRfc3BpX2NoZWNrX2NhbGliX2RhdGEoY29uc3Qg
-dTggKnRlc3RfYnVmLCB1MzIgc2l6ZSkgew0KPiArCWNvbnN0IHUzMiAqdGIzMiA9IChjb25zdCB1
-MzIgKil0ZXN0X2J1ZjsNCj4gKwl1MzIgaSwgY250ID0gMDsNCj4gKw0KPiArCS8qIFdlIGNoZWNr
-IGlmIHdlIGhhdmUgZW5vdWdoIHdvcmRzIHRoYXQgYXJlIG5laXRoZXIgYWxsIDANCj4gKwkgKiBu
-b3IgYWxsIDEncyBzbyB0aGUgY2FsaWJyYXRpb24gY2FuIGJlIGNvbnNpZGVyZWQgdmFsaWQuDQo+
-ICsJICoNCj4gKwkgKiBJIHVzZSBhbiBhcmJpdHJhcnkgdGhyZXNob2xkIGZvciBub3cgb2YgNjQN
-Cj4gKwkgKi8NCj4gKwlzaXplID4+PSAyOw0KPiArCWZvciAoaSA9IDA7IGkgPCBzaXplOyBpKysp
-IHsNCj4gKwkJaWYgKHRiMzJbaV0gIT0gMCAmJiB0YjMyW2ldICE9IDB4ZmZmZmZmZmYpDQo+ICsJ
-CQljbnQrKzsNCj4gKwl9DQo+ICsJcmV0dXJuIGNudCA+PSA2NDsNCj4gK30NCj4gKw0KPiArc3Rh
-dGljIGNvbnN0IHUzMiBhc3BlZWRfc3BpX2hjbGtfZGl2c1tdID0gew0KPiArCTB4ZiwgLyogSENM
-SyAqLw0KPiArCTB4NywgLyogSENMSy8yICovDQo+ICsJMHhlLCAvKiBIQ0xLLzMgKi8NCj4gKwkw
-eDYsIC8qIEhDTEsvNCAqLw0KPiArCTB4ZCwgLyogSENMSy81ICovDQo+ICt9Ow0KPiArDQo+ICsj
-ZGVmaW5lIEFTUEVFRF9TUElfSENMS19ESVYoaSkgXA0KPiArCShhc3BlZWRfc3BpX2hjbGtfZGl2
-c1soaSkgLSAxXSA8PCBDVFJMX0ZSRVFfU0VMX1NISUZUKQ0KPiArDQo+ICtzdGF0aWMgaW50IGFz
-cGVlZF9zcGlfZG9fY2FsaWJyYXRpb24oc3RydWN0IGFzcGVlZF9zcGlfY2hpcCAqY2hpcCkgew0K
-PiArCXN0cnVjdCBhc3BlZWRfc3BpICphc3BpID0gY2hpcC0+YXNwaTsNCj4gKwljb25zdCBzdHJ1
-Y3QgYXNwZWVkX3NwaV9kYXRhICpkYXRhID0gYXNwaS0+ZGF0YTsNCj4gKwl1MzIgYWhiX2ZyZXEg
-PSBhc3BpLT5jbGtfZnJlcTsNCj4gKwl1MzIgbWF4X2ZyZXEgPSBjaGlwLT5jbGtfZnJlcTsNCj4g
-Kwl1MzIgY3RsX3ZhbDsNCj4gKwl1OCAqZ29sZGVuX2J1ZiA9IE5VTEw7DQo+ICsJdTggKnRlc3Rf
-YnVmID0gTlVMTDsNCj4gKwlpbnQgaSwgcmMsIGJlc3RfZGl2ID0gLTE7DQo+ICsNCj4gKwlkZXZf
-ZGJnKGFzcGktPmRldiwgImNhbGN1bGF0ZSB0aW1pbmcgY29tcGVuc2F0aW9uIC0gQUhCIGZyZXE6
-ICVkIE1IeiIsDQo+ICsJCWFoYl9mcmVxIC8gMTAwMDAwMCk7DQo+ICsNCj4gKwkvKg0KPiArCSAq
-IHVzZSB0aGUgcmVsYXRlZCBsb3cgZnJlcXVlbmN5IHRvIGdldCBjaGVjayBjYWxpYnJhdGlvbiBk
-YXRhDQo+ICsJICogYW5kIGdldCBnb2xkZW4gZGF0YS4NCj4gKwkgKi8NCj4gKwljdGxfdmFsID0g
-Y2hpcC0+Y3RsX3ZhbFtBU1BFRURfU1BJX1JFQURdICYgZGF0YS0+aGNsa19tYXNrOw0KPiArCXdy
-aXRlbChjdGxfdmFsLCBjaGlwLT5jdGwpOw0KPiArDQo+ICsJdGVzdF9idWYgPSBremFsbG9jKENB
-TElCUkFURV9CVUZfU0laRSAqIDIsIEdGUF9LRVJORUwpOw0KPiArCWlmICghdGVzdF9idWYpDQo+
-ICsJCXJldHVybiAtRU5PTUVNOw0KPiArDQo+ICsJZ29sZGVuX2J1ZiA9IHRlc3RfYnVmICsgQ0FM
-SUJSQVRFX0JVRl9TSVpFOw0KPiArDQo+ICsJbWVtY3B5X2Zyb21pbyhnb2xkZW5fYnVmLCBjaGlw
-LT5haGJfYmFzZSwgQ0FMSUJSQVRFX0JVRl9TSVpFKTsNCj4gKwlpZiAoIWFzcGVlZF9zcGlfY2hl
-Y2tfY2FsaWJfZGF0YShnb2xkZW5fYnVmLCBDQUxJQlJBVEVfQlVGX1NJWkUpKSB7DQo+ICsJCWRl
-dl9pbmZvKGFzcGktPmRldiwgIkNhbGlicmF0aW9uIGFyZWEgdG9vIHVuaWZvcm0sIHVzaW5nIGxv
-dyBzcGVlZCIpOw0KPiArCQlnb3RvIG5vX2NhbGliOw0KPiArCX0NCj4gKw0KPiArI2lmIGRlZmlu
-ZWQoVkVSQk9TRV9ERUJVRykNCj4gKwlwcmludF9oZXhfZHVtcF9ieXRlcyhERVZJQ0VfTkFNRSAi
-ICBnb29kOiAiLCBEVU1QX1BSRUZJWF9OT05FLA0KPiArCQkJICAgICBnb2xkZW5fYnVmLCAweDEw
-MCk7DQo+ICsjZW5kaWYNCj4gKw0KPiArCS8qIE5vdyB3ZSBpdGVyYXRlIHRoZSBIQ0xLIGRpdmlk
-ZXJzIHVudGlsIHdlIGZpbmQgb3VyIGJyZWFraW5nIHBvaW50ICovDQo+ICsJZm9yIChpID0gQVJS
-QVlfU0laRShhc3BlZWRfc3BpX2hjbGtfZGl2cyk7IGkgPiBkYXRhLT5oZGl2X21heCAtIDE7IGkt
-LSkgew0KPiArCQl1MzIgdHYsIGZyZXE7DQo+ICsNCj4gKwkJZnJlcSA9IGFoYl9mcmVxIC8gaTsN
-Cj4gKwkJaWYgKGZyZXEgPiBtYXhfZnJlcSkNCj4gKwkJCWNvbnRpbnVlOw0KPiArDQo+ICsJCS8q
-IFNldCB0aGUgdGltaW5nICovDQo+ICsJCXR2ID0gY2hpcC0+Y3RsX3ZhbFtBU1BFRURfU1BJX1JF
-QURdIHwgQVNQRUVEX1NQSV9IQ0xLX0RJVihpKTsNCj4gKwkJd3JpdGVsKHR2LCBjaGlwLT5jdGwp
-Ow0KPiArCQlkZXZfZGJnKGFzcGktPmRldiwgIlRyeWluZyBIQ0xLLyVkIFslMDh4XSAuLi4iLCBp
-LCB0dik7DQo+ICsJCXJjID0gZGF0YS0+Y2FsaWJyYXRlKGNoaXAsIGksIGdvbGRlbl9idWYsIHRl
-c3RfYnVmKTsNCj4gKwkJaWYgKHJjID09IDApDQo+ICsJCQliZXN0X2RpdiA9IGk7DQo+ICsJfQ0K
-PiArDQo+ICsJLyogTm90aGluZyBmb3VuZCA/ICovDQo+ICsJaWYgKGJlc3RfZGl2IDwgMCkgew0K
-PiArCQlkZXZfd2Fybihhc3BpLT5kZXYsICJObyBnb29kIGZyZXF1ZW5jeSwgdXNpbmcgZHVtYiBz
-bG93Iik7DQo+ICsJfSBlbHNlIHsNCj4gKwkJZGV2X2RiZyhhc3BpLT5kZXYsICJGb3VuZCBnb29k
-IHJlYWQgdGltaW5ncyBhdCBIQ0xLLyVkIiwNCj4gYmVzdF9kaXYpOw0KPiArDQo+ICsJCS8qIFJl
-Y29yZCB0aGUgZnJlcSAqLw0KPiArCQlmb3IgKGkgPSAwOyBpIDwgQVNQRUVEX1NQSV9NQVg7IGkr
-KykNCj4gKwkJCWNoaXAtPmN0bF92YWxbaV0gPSAoY2hpcC0+Y3RsX3ZhbFtpXSAmIGRhdGEtPmhj
-bGtfbWFzaykgfA0KPiArCQkJCUFTUEVFRF9TUElfSENMS19ESVYoYmVzdF9kaXYpOw0KPiArCX0N
-Cj4gKw0KPiArbm9fY2FsaWI6DQoNCi0gTWF5YmUsIGlmIHRoZSBjYWxpYnJhdGlvbiBwcm9jZXNz
-IGlzIG5vdCBleGVjdXRlZCwgdGhlIGZyZXF1ZW5jeSBzZXR0aW5nIGNhbGN1bGF0ZWQgZnJvbSBt
-YXhfZnJlcXVlbmN5IGluIHRoZSBkZXZpY2UgdHJlZSBjYW4gYmUgZmlsbGVkIGluIEZNQzEwIGlu
-c3RlYWQgb2YgdXNpbmcgZHVtYiBzbG93IG9uZSwgMTIuNU1IeiwgYWx3YXlzLg0KIEZvciBleGFt
-cGxlLCBleGNlcHQgZm9yIHVuaWZvcm0gY29udGVudCBjYXNlLCB0aGUgY2FsaWJyYXRpb24gcHJv
-Y2VzcyB3aWxsIGJlIGlnbm9yZWQgd2hlbiBTUEkgY2xvY2sgZnJlcXVlbmN5IGluIHRoZSBkZXZp
-Y2UgdHJlZSBpcyBzbWFsbGVyIHRoYW4gNDBNSHouDQotIFRoZSBmdW5jdGlvbiwgYXNwZWVkXzI2
-MDBfc3BpX2Nsa19iYXNpY19zZXR0aW5nLCBpbiBbMl0gY2FuIGJlIGFkZGVkIHRvIHN1cHBvcnQg
-bG93ZXIgU1BJIGNsb2NrIGZyZXF1ZW5jeSwgZS5nLiwgNE1Iei4NCiBGb3IgQVNUMjYwMCwgU1BJ
-IGNsb2NrIGZyZXF1ZW5jeSBjYW4gYmUgY2FsY3VsYXRlZCBieSBIQ0xLLyhGTUMxMFsyNzoyNF0g
-KyBGTUMxMFsxMTo4XSkuDQoNCj4gKwl3cml0ZWwoY2hpcC0+Y3RsX3ZhbFtBU1BFRURfU1BJX1JF
-QURdLCBjaGlwLT5jdGwpOw0KPiArCWtmcmVlKHRlc3RfYnVmKTsNCj4gKwlyZXR1cm4gMDsNCj4g
-K30NCj4gKw0KPiArI2RlZmluZSBUSU1JTkdfREVMQVlfREkJCUJJVCgzKQ0KPiArI2RlZmluZSBU
-SU1JTkdfREVMQVlfSENZQ0xFX01BWAk1DQo+ICsjZGVmaW5lIFRJTUlOR19SRUdfQVNUMjYwMChj
-aGlwKQkJCQlcDQo+ICsJKChjaGlwKS0+YXNwaS0+cmVncyArIChjaGlwKS0+YXNwaS0+ZGF0YS0+
-dGltaW5nICsJXA0KPiArCSAoY2hpcCktPmNzICogNCkNCj4gKw0KPiArc3RhdGljIGludCBhc3Bl
-ZWRfc3BpX2FzdDI2MDBfY2FsaWJyYXRlKHN0cnVjdCBhc3BlZWRfc3BpX2NoaXAgKmNoaXAsIHUz
-Mg0KPiBoZGl2LA0KPiArCQkJCQljb25zdCB1OCAqZ29sZGVuX2J1ZiwgdTggKnRlc3RfYnVmKSB7
-DQo+ICsJc3RydWN0IGFzcGVlZF9zcGkgKmFzcGkgPSBjaGlwLT5hc3BpOw0KPiArCWludCBoY3lj
-bGU7DQo+ICsJdTMyIHNoaWZ0ID0gKGhkaXYgLSAyKSA8PCAzOw0KPiArCXUzMiBtYXNrID0gfigw
-eGZ1IDw8IHNoaWZ0KTsNCj4gKwl1MzIgZnJlYWRfdGltaW5nX3ZhbCA9IDA7DQo+ICsNCj4gKwlm
-b3IgKGhjeWNsZSA9IDA7IGhjeWNsZSA8PSBUSU1JTkdfREVMQVlfSENZQ0xFX01BWDsgaGN5Y2xl
-KyspIHsNCj4gKwkJaW50IGRlbGF5X25zOw0KPiArCQlib29sIHBhc3MgPSBmYWxzZTsNCj4gKw0K
-PiArCQlmcmVhZF90aW1pbmdfdmFsICY9IG1hc2s7DQo+ICsJCWZyZWFkX3RpbWluZ192YWwgfD0g
-aGN5Y2xlIDw8IHNoaWZ0Ow0KPiArDQo+ICsJCS8qIG5vIERJIGlucHV0IGRlbGF5IGZpcnN0ICAq
-Lw0KPiArCQl3cml0ZWwoZnJlYWRfdGltaW5nX3ZhbCwgVElNSU5HX1JFR19BU1QyNjAwKGNoaXAp
-KTsNCj4gKwkJcGFzcyA9IGFzcGVlZF9zcGlfY2hlY2tfcmVhZHMoY2hpcCwgZ29sZGVuX2J1Ziwg
-dGVzdF9idWYpOw0KPiArCQlkZXZfZGJnKGFzcGktPmRldiwNCj4gKwkJCSIgICogWyUwOHhdICVk
-IEhDTEsgZGVsYXksIERJIGRlbGF5IG5vbmUgOiAlcyIsDQo+ICsJCQlmcmVhZF90aW1pbmdfdmFs
-LCBoY3ljbGUsIHBhc3MgPyAiUEFTUyIgOiAiRkFJTCIpOw0KPiArCQlpZiAocGFzcykNCj4gKwkJ
-CXJldHVybiAwOw0KPiArDQo+ICsJCS8qIEFkZCBESSBpbnB1dCBkZWxheXMgICovDQo+ICsJCWZy
-ZWFkX3RpbWluZ192YWwgJj0gbWFzazsNCj4gKwkJZnJlYWRfdGltaW5nX3ZhbCB8PSAoVElNSU5H
-X0RFTEFZX0RJIHwgaGN5Y2xlKSA8PCBzaGlmdDsNCj4gKw0KPiArCQlmb3IgKGRlbGF5X25zID0g
-MDsgZGVsYXlfbnMgPCAweDEwOyBkZWxheV9ucysrKSB7DQo+ICsJCQlmcmVhZF90aW1pbmdfdmFs
-ICY9IH4oMHhmIDw8ICg0ICsgc2hpZnQpKTsNCj4gKwkJCWZyZWFkX3RpbWluZ192YWwgfD0gZGVs
-YXlfbnMgPDwgKDQgKyBzaGlmdCk7DQo+ICsNCj4gKwkJCXdyaXRlbChmcmVhZF90aW1pbmdfdmFs
-LCBUSU1JTkdfUkVHX0FTVDI2MDAoY2hpcCkpOw0KPiArCQkJcGFzcyA9IGFzcGVlZF9zcGlfY2hl
-Y2tfcmVhZHMoY2hpcCwgZ29sZGVuX2J1ZiwgdGVzdF9idWYpOw0KPiArCQkJZGV2X2RiZyhhc3Bp
-LT5kZXYsDQo+ICsJCQkJIiAgKiBbJTA4eF0gJWQgSENMSyBkZWxheSwgREkgZGVsYXkgJWQuJWRu
-cyA6ICVzIiwNCj4gKwkJCQlmcmVhZF90aW1pbmdfdmFsLCBoY3ljbGUsIChkZWxheV9ucyArIDEp
-IC8gMiwNCj4gKwkJCQkoZGVsYXlfbnMgKyAxKSAmIDEgPyA1IDogNSwgcGFzcyA/ICJQQVNTIiA6
-ICJGQUlMIik7DQo+ICsJCQkvKg0KPiArCQkJICogVE9ETzogVGhpcyBpcyBvcHRpbWlzdGljLiBX
-ZSBzaG91bGQgbG9vaw0KPiArCQkJICogZm9yIGEgd29ya2luZyBpbnRlcnZhbCBhbmQgc2F2ZSB0
-aGUgbWlkZGxlDQo+ICsJCQkgKiB2YWx1ZSBpbiB0aGUgcmVhZCB0aW1pbmcgcmVnaXN0ZXIuDQo+
-ICsJCQkgKi8NCj4gKwkJCWlmIChwYXNzKQ0KPiArCQkJCXJldHVybiAwOw0KPiArCQl9DQo+ICsJ
-fQ0KPiArDQo+ICsJLyogTm8gZ29vZCBzZXR0aW5nIGZvciB0aGlzIGZyZXF1ZW5jeSAqLw0KPiAr
-CXJldHVybiAtMTsNCj4gK30NCj4gKw0KPiAgLyoNCj4gICAqIFBsYXRmb3JtIGRlZmluaXRpb25z
-DQo+ICAgKi8NCj4gQEAgLTgyMCw2ICsxMDc3LDEwIEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgYXNw
-ZWVkX3NwaV9kYXRhDQo+IGFzdDI0MDBfZm1jX2RhdGEgPSB7DQo+ICAJLmhhc3R5cGUgICAgICAg
-PSB0cnVlLA0KPiAgCS53ZTAJICAgICAgID0gMTYsDQo+ICAJLmN0bDAJICAgICAgID0gQ0UwX0NU
-UkxfUkVHLA0KPiArCS50aW1pbmcJICAgICAgID0gQ0UwX1RJTUlOR19DT01QRU5TQVRJT05fUkVH
-LA0KPiArCS5oY2xrX21hc2sgICAgID0gMHhmZmZmZjBmZiwNCj4gKwkuaGRpdl9tYXggICAgICA9
-IDEsDQo+ICsJLmNhbGlicmF0ZSAgICAgPSBhc3BlZWRfc3BpX2NhbGlicmF0ZSwNCj4gIAkuc2Vn
-bWVudF9zdGFydCA9IGFzcGVlZF9zcGlfc2VnbWVudF9zdGFydCwNCj4gIAkuc2VnbWVudF9lbmQg
-ICA9IGFzcGVlZF9zcGlfc2VnbWVudF9lbmQsDQo+ICAJLnNlZ21lbnRfcmVnICAgPSBhc3BlZWRf
-c3BpX3NlZ21lbnRfcmVnLA0KPiBAQCAtODMwLDYgKzEwOTEsMTAgQEAgc3RhdGljIGNvbnN0IHN0
-cnVjdCBhc3BlZWRfc3BpX2RhdGENCj4gYXN0MjQwMF9zcGlfZGF0YSA9IHsNCj4gIAkuaGFzdHlw
-ZSAgICAgICA9IGZhbHNlLA0KPiAgCS53ZTAJICAgICAgID0gMCwNCj4gIAkuY3RsMAkgICAgICAg
-PSAweDA0LA0KPiArCS50aW1pbmcJICAgICAgID0gMHgxNCwNCj4gKwkuaGNsa19tYXNrICAgICA9
-IDB4ZmZmZmYwZmYsDQo+ICsJLmhkaXZfbWF4ICAgICAgPSAxLA0KPiArCS5jYWxpYnJhdGUgICAg
-ID0gYXNwZWVkX3NwaV9jYWxpYnJhdGUsDQo+ICAJLyogTm8gc2VnbWVudCByZWdpc3RlcnMgKi8N
-Cj4gIH07DQo+IA0KPiBAQCAtODM4LDYgKzExMDMsMTAgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBh
-c3BlZWRfc3BpX2RhdGENCj4gYXN0MjUwMF9mbWNfZGF0YSA9IHsNCj4gIAkuaGFzdHlwZSAgICAg
-ICA9IHRydWUsDQo+ICAJLndlMAkgICAgICAgPSAxNiwNCj4gIAkuY3RsMAkgICAgICAgPSBDRTBf
-Q1RSTF9SRUcsDQo+ICsJLnRpbWluZwkgICAgICAgPSBDRTBfVElNSU5HX0NPTVBFTlNBVElPTl9S
-RUcsDQo+ICsJLmhjbGtfbWFzayAgICAgPSAweGZmZmZmMGZmLA0KPiArCS5oZGl2X21heCAgICAg
-ID0gMSwNCj4gKwkuY2FsaWJyYXRlICAgICA9IGFzcGVlZF9zcGlfY2FsaWJyYXRlLA0KPiAgCS5z
-ZWdtZW50X3N0YXJ0ID0gYXNwZWVkX3NwaV9zZWdtZW50X3N0YXJ0LA0KPiAgCS5zZWdtZW50X2Vu
-ZCAgID0gYXNwZWVkX3NwaV9zZWdtZW50X2VuZCwNCj4gIAkuc2VnbWVudF9yZWcgICA9IGFzcGVl
-ZF9zcGlfc2VnbWVudF9yZWcsDQo+IEBAIC04NDgsNiArMTExNywxMCBAQCBzdGF0aWMgY29uc3Qg
-c3RydWN0IGFzcGVlZF9zcGlfZGF0YQ0KPiBhc3QyNTAwX3NwaV9kYXRhID0gew0KPiAgCS5oYXN0
-eXBlICAgICAgID0gZmFsc2UsDQo+ICAJLndlMAkgICAgICAgPSAxNiwNCj4gIAkuY3RsMAkgICAg
-ICAgPSBDRTBfQ1RSTF9SRUcsDQo+ICsJLnRpbWluZwkgICAgICAgPSBDRTBfVElNSU5HX0NPTVBF
-TlNBVElPTl9SRUcsDQo+ICsJLmhjbGtfbWFzayAgICAgPSAweGZmZmZmMGZmLA0KPiArCS5oZGl2
-X21heCAgICAgID0gMSwNCj4gKwkuY2FsaWJyYXRlICAgICA9IGFzcGVlZF9zcGlfY2FsaWJyYXRl
-LA0KPiAgCS5zZWdtZW50X3N0YXJ0ID0gYXNwZWVkX3NwaV9zZWdtZW50X3N0YXJ0LA0KPiAgCS5z
-ZWdtZW50X2VuZCAgID0gYXNwZWVkX3NwaV9zZWdtZW50X2VuZCwNCj4gIAkuc2VnbWVudF9yZWcg
-ICA9IGFzcGVlZF9zcGlfc2VnbWVudF9yZWcsDQo+IEBAIC04NTksNiArMTEzMiwxMCBAQCBzdGF0
-aWMgY29uc3Qgc3RydWN0IGFzcGVlZF9zcGlfZGF0YQ0KPiBhc3QyNjAwX2ZtY19kYXRhID0gew0K
-PiAgCS5tb2RlX2JpdHMgICAgID0gU1BJX1JYX1FVQUQgfCBTUElfUlhfUVVBRCwNCj4gIAkud2Uw
-CSAgICAgICA9IDE2LA0KPiAgCS5jdGwwCSAgICAgICA9IENFMF9DVFJMX1JFRywNCj4gKwkudGlt
-aW5nCSAgICAgICA9IENFMF9USU1JTkdfQ09NUEVOU0FUSU9OX1JFRywNCj4gKwkuaGNsa19tYXNr
-ICAgICA9IDB4ZjBmZmYwZmYsDQo+ICsJLmhkaXZfbWF4ICAgICAgPSAyLA0KPiArCS5jYWxpYnJh
-dGUgICAgID0gYXNwZWVkX3NwaV9hc3QyNjAwX2NhbGlicmF0ZSwNCj4gIAkuc2VnbWVudF9zdGFy
-dCA9IGFzcGVlZF9zcGlfc2VnbWVudF9hc3QyNjAwX3N0YXJ0LA0KPiAgCS5zZWdtZW50X2VuZCAg
-ID0gYXNwZWVkX3NwaV9zZWdtZW50X2FzdDI2MDBfZW5kLA0KPiAgCS5zZWdtZW50X3JlZyAgID0g
-YXNwZWVkX3NwaV9zZWdtZW50X2FzdDI2MDBfcmVnLA0KPiBAQCAtODcwLDYgKzExNDcsMTAgQEAg
-c3RhdGljIGNvbnN0IHN0cnVjdCBhc3BlZWRfc3BpX2RhdGENCj4gYXN0MjYwMF9zcGlfZGF0YSA9
-IHsNCj4gIAkubW9kZV9iaXRzICAgICA9IFNQSV9SWF9RVUFEIHwgU1BJX1JYX1FVQUQsDQo+ICAJ
-LndlMAkgICAgICAgPSAxNiwNCj4gIAkuY3RsMAkgICAgICAgPSBDRTBfQ1RSTF9SRUcsDQo+ICsJ
-LnRpbWluZwkgICAgICAgPSBDRTBfVElNSU5HX0NPTVBFTlNBVElPTl9SRUcsDQo+ICsJLmhjbGtf
-bWFzayAgICAgPSAweGYwZmZmMGZmLA0KPiArCS5oZGl2X21heCAgICAgID0gMiwNCj4gKwkuY2Fs
-aWJyYXRlICAgICA9IGFzcGVlZF9zcGlfYXN0MjYwMF9jYWxpYnJhdGUsDQo+ICAJLnNlZ21lbnRf
-c3RhcnQgPSBhc3BlZWRfc3BpX3NlZ21lbnRfYXN0MjYwMF9zdGFydCwNCj4gIAkuc2VnbWVudF9l
-bmQgICA9IGFzcGVlZF9zcGlfc2VnbWVudF9hc3QyNjAwX2VuZCwNCj4gIAkuc2VnbWVudF9yZWcg
-ICA9IGFzcGVlZF9zcGlfc2VnbWVudF9hc3QyNjAwX3JlZywNCj4gLS0NCj4gMi4zNC4xDQoNCg0K
-QmVzdCBXaXNoZXMsDQpDaGluLVRpbmcNCg==
+On 3/30/22 13:53, Chin-Ting Kuo wrote:
+> Hi Cédric Le,
+> 
+>> -----Original Message-----
+>> From: Cédric Le Goater <clg@kaod.org>
+>> Sent: Friday, March 25, 2022 6:09 PM
+>> To: linux-spi@vger.kernel.org; linux-mtd@lists.infradead.org
+>> Subject: [PATCH v4 08/11] spi: aspeed: Calibrate read timings
+>>
+>> To accommodate the different response time of SPI transfers on different
+>> boards and different SPI NOR devices, the Aspeed controllers provide a set of
+>> Read Timing Compensation registers to tune the timing delays depending on
+>> the frequency being used. The AST2600 SoC has one of these registers per
+>> device. On the AST2500 and AST2400 SoCs, the timing register is shared by all
+>> devices which is problematic to get good results other than for one device.
+>>
+>> The algorithm first reads a golden buffer at low speed and then performs reads
+>> with different clocks and delay cycle settings to find a breaking point. This
+>> selects a default good frequency for the CEx control register.
+>> The current settings are a bit optimistic as we pick the first delay giving good
+>> results. A safer approach would be to determine an interval and choose the
+>> middle value.
+>>
+>> Calibration is performed when the direct mapping for reads is created.
+>> Since the underlying spi-nor object needs to be initialized to create the
+>> spi_mem operation for direct mapping, we should be fine. Having a specific
+>> API would clarify the requirements though.
+>>
+>> Cc: Pratyush Yadav <p.yadav@ti.com>
+>> Reviewed-by: Joel Stanley <joel@jms.id.au>
+>> Tested-by: Joel Stanley <joel@jms.id.au>
+>> Tested-by: Tao Ren <rentao.bupt@gmail.com>
+>> Signed-off-by: Cédric Le Goater <clg@kaod.org>
+>> ---
+>>   drivers/spi/spi-aspeed-smc.c | 281
+>> +++++++++++++++++++++++++++++++++++
+>>   1 file changed, 281 insertions(+)
+>>
+>> diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c index
+>> 7f306da7c44e..660451667a39 100644
+>> --- a/drivers/spi/spi-aspeed-smc.c
+>> +++ b/drivers/spi/spi-aspeed-smc.c
+>> @@ -33,6 +33,8 @@
+>>   #define   CTRL_IO_ADDRESS_4B		BIT(13)	/* AST2400 SPI only */
+>>   #define   CTRL_IO_DUMMY_SET(dummy)					\
+>>   	(((((dummy) >> 2) & 0x1) << 14) | (((dummy) & 0x3) << 6))
+>> +#define   CTRL_FREQ_SEL_SHIFT		8
+>> +#define   CTRL_FREQ_SEL_MASK		GENMASK(11,
+>> CTRL_FREQ_SEL_SHIFT)
+>>   #define   CTRL_CE_STOP_ACTIVE		BIT(2)
+>>   #define   CTRL_IO_MODE_CMD_MASK		GENMASK(1, 0)
+>>   #define   CTRL_IO_MODE_NORMAL		0x0
+>> @@ -45,6 +47,9 @@
+>>   /* CEx Address Decoding Range Register */
+>>   #define CE0_SEGMENT_ADDR_REG		0x30
+>>
+>> +/* CEx Read timing compensation register */
+>> +#define CE0_TIMING_COMPENSATION_REG	0x94
+>> +
+>>   enum aspeed_spi_ctl_reg_value {
+>>   	ASPEED_SPI_BASE,
+>>   	ASPEED_SPI_READ,
+>> @@ -70,10 +75,15 @@ struct aspeed_spi_data {
+>>   	bool	hastype;
+>>   	u32	mode_bits;
+>>   	u32	we0;
+>> +	u32	timing;
+>> +	u32	hclk_mask;
+>> +	u32	hdiv_max;
+>>
+>>   	u32 (*segment_start)(struct aspeed_spi *aspi, u32 reg);
+>>   	u32 (*segment_end)(struct aspeed_spi *aspi, u32 reg);
+>>   	u32 (*segment_reg)(struct aspeed_spi *aspi, u32 start, u32 end);
+>> +	int (*calibrate)(struct aspeed_spi_chip *chip, u32 hdiv,
+>> +			 const u8 *golden_buf, u8 *test_buf);
+>>   };
+>>
+>>   #define ASPEED_SPI_MAX_NUM_CS	5
+>> @@ -517,6 +527,8 @@ static int aspeed_spi_chip_adjust_window(struct
+>> aspeed_spi_chip *chip,
+>>   	return 0;
+>>   }
+>>
+>> +static int aspeed_spi_do_calibration(struct aspeed_spi_chip *chip);
+>> +
+>>   static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)  {
+>>   	struct aspeed_spi *aspi =
+>> spi_controller_get_devdata(desc->mem->spi->master);
+>> @@ -565,6 +577,8 @@ static int aspeed_spi_dirmap_create(struct
+>> spi_mem_dirmap_desc *desc)
+>>   	chip->ctl_val[ASPEED_SPI_READ] = ctl_val;
+>>   	writel(chip->ctl_val[ASPEED_SPI_READ], chip->ctl);
+>>
+>> +	ret = aspeed_spi_do_calibration(chip);
+>> +
+>>   	dev_info(aspi->dev, "CE%d read buswidth:%d [0x%08x]\n",
+>>   		 chip->cs, op->data.buswidth, chip->ctl_val[ASPEED_SPI_READ]);
+>>
+>> @@ -812,6 +826,249 @@ static u32 aspeed_spi_segment_ast2600_reg(struct
+>> aspeed_spi *aspi,
+>>   		((end - 1) & AST2600_SEG_ADDR_MASK);
+>>   }
+>>
+>> +/*
+>> + * Read timing compensation sequences
+>> + */
+>> +
+>> +#define CALIBRATE_BUF_SIZE SZ_16K
+>> +
+>> +static bool aspeed_spi_check_reads(struct aspeed_spi_chip *chip,
+>> +				   const u8 *golden_buf, u8 *test_buf) {
+>> +	int i;
+>> +
+>> +	for (i = 0; i < 10; i++) {
+>> +		memcpy_fromio(test_buf, chip->ahb_base, CALIBRATE_BUF_SIZE);
+>> +		if (memcmp(test_buf, golden_buf, CALIBRATE_BUF_SIZE) != 0) { #if
+>> +defined(VERBOSE_DEBUG)
+>> +			print_hex_dump_bytes(DEVICE_NAME "  fail: ",
+>> DUMP_PREFIX_NONE,
+>> +					     test_buf, 0x100);
+>> +#endif
+>> +			return false;
+>> +		}
+>> +	}
+>> +	return true;
+>> +}
+>> +
+>> +#define FREAD_TPASS(i)	(((i) / 2) | (((i) & 1) ? 0 : 8))
+>> +
+>> +/*
+>> + * The timing register is shared by all devices. Only update for CE0.
+>> + */
+>> +static int aspeed_spi_calibrate(struct aspeed_spi_chip *chip, u32 hdiv,
+>> +				const u8 *golden_buf, u8 *test_buf) {
+>> +	struct aspeed_spi *aspi = chip->aspi;
+>> +	const struct aspeed_spi_data *data = aspi->data;
+>> +	int i;
+>> +	int good_pass = -1, pass_count = 0;
+>> +	u32 shift = (hdiv - 1) << 2;
+>> +	u32 mask = ~(0xfu << shift);
+>> +	u32 fread_timing_val = 0;
+>> +
+>> +	/* Try HCLK delay 0..5, each one with/without delay and look for a
+>> +	 * good pair.
+>> +	 */
+>> +	for (i = 0; i < 12; i++) {
+>> +		bool pass;
+>> +
+>> +		if (chip->cs == 0) {
+>> +			fread_timing_val &= mask;
+>> +			fread_timing_val |= FREAD_TPASS(i) << shift;
+>> +			writel(fread_timing_val, aspi->regs + data->timing);
+>> +		}
+>> +		pass = aspeed_spi_check_reads(chip, golden_buf, test_buf);
+>> +		dev_dbg(aspi->dev,
+>> +			"  * [%08x] %d HCLK delay, %dns DI delay : %s",
+>> +			fread_timing_val, i / 2, (i & 1) ? 0 : 4,
+>> +			pass ? "PASS" : "FAIL");
+>> +		if (pass) {
+>> +			pass_count++;
+>> +			if (pass_count == 3) {
+>> +				good_pass = i - 1;
+>> +				break;
+>> +			}
+>> +		} else {
+>> +			pass_count = 0;
+>> +		}
+>> +	}
+>> +
+>> +	/* No good setting for this frequency */
+>> +	if (good_pass < 0)
+>> +		return -1;
+>> +
+>> +	/* We have at least one pass of margin, let's use first pass */
+>> +	if (chip->cs == 0) {
+>> +		fread_timing_val &= mask;
+>> +		fread_timing_val |= FREAD_TPASS(good_pass) << shift;
+>> +		writel(fread_timing_val, aspi->regs + data->timing);
+>> +	}
+>> +	dev_dbg(aspi->dev, " * -> good is pass %d [0x%08x]",
+>> +		good_pass, fread_timing_val);
+>> +	return 0;
+>> +}
+>> +
+>> +static bool aspeed_spi_check_calib_data(const u8 *test_buf, u32 size) {
+>> +	const u32 *tb32 = (const u32 *)test_buf;
+>> +	u32 i, cnt = 0;
+>> +
+>> +	/* We check if we have enough words that are neither all 0
+>> +	 * nor all 1's so the calibration can be considered valid.
+>> +	 *
+>> +	 * I use an arbitrary threshold for now of 64
+>> +	 */
+>> +	size >>= 2;
+>> +	for (i = 0; i < size; i++) {
+>> +		if (tb32[i] != 0 && tb32[i] != 0xffffffff)
+>> +			cnt++;
+>> +	}
+>> +	return cnt >= 64;
+>> +}
+>> +
+>> +static const u32 aspeed_spi_hclk_divs[] = {
+>> +	0xf, /* HCLK */
+>> +	0x7, /* HCLK/2 */
+>> +	0xe, /* HCLK/3 */
+>> +	0x6, /* HCLK/4 */
+>> +	0xd, /* HCLK/5 */
+>> +};
+>> +
+>> +#define ASPEED_SPI_HCLK_DIV(i) \
+>> +	(aspeed_spi_hclk_divs[(i) - 1] << CTRL_FREQ_SEL_SHIFT)
+>> +
+>> +static int aspeed_spi_do_calibration(struct aspeed_spi_chip *chip) {
+>> +	struct aspeed_spi *aspi = chip->aspi;
+>> +	const struct aspeed_spi_data *data = aspi->data;
+>> +	u32 ahb_freq = aspi->clk_freq;
+>> +	u32 max_freq = chip->clk_freq;
+>> +	u32 ctl_val;
+>> +	u8 *golden_buf = NULL;
+>> +	u8 *test_buf = NULL;
+>> +	int i, rc, best_div = -1;
+>> +
+>> +	dev_dbg(aspi->dev, "calculate timing compensation - AHB freq: %d MHz",
+>> +		ahb_freq / 1000000);
+>> +
+>> +	/*
+>> +	 * use the related low frequency to get check calibration data
+>> +	 * and get golden data.
+>> +	 */
+>> +	ctl_val = chip->ctl_val[ASPEED_SPI_READ] & data->hclk_mask;
+>> +	writel(ctl_val, chip->ctl);
+>> +
+>> +	test_buf = kzalloc(CALIBRATE_BUF_SIZE * 2, GFP_KERNEL);
+>> +	if (!test_buf)
+>> +		return -ENOMEM;
+>> +
+>> +	golden_buf = test_buf + CALIBRATE_BUF_SIZE;
+>> +
+>> +	memcpy_fromio(golden_buf, chip->ahb_base, CALIBRATE_BUF_SIZE);
+>> +	if (!aspeed_spi_check_calib_data(golden_buf, CALIBRATE_BUF_SIZE)) {
+>> +		dev_info(aspi->dev, "Calibration area too uniform, using low speed");
+>> +		goto no_calib;
+>> +	}
+>> +
+>> +#if defined(VERBOSE_DEBUG)
+>> +	print_hex_dump_bytes(DEVICE_NAME "  good: ", DUMP_PREFIX_NONE,
+>> +			     golden_buf, 0x100);
+>> +#endif
+>> +
+>> +	/* Now we iterate the HCLK dividers until we find our breaking point */
+>> +	for (i = ARRAY_SIZE(aspeed_spi_hclk_divs); i > data->hdiv_max - 1; i--) {
+>> +		u32 tv, freq;
+>> +
+>> +		freq = ahb_freq / i;
+>> +		if (freq > max_freq)
+>> +			continue;
+>> +
+>> +		/* Set the timing */
+>> +		tv = chip->ctl_val[ASPEED_SPI_READ] | ASPEED_SPI_HCLK_DIV(i);
+>> +		writel(tv, chip->ctl);
+>> +		dev_dbg(aspi->dev, "Trying HCLK/%d [%08x] ...", i, tv);
+>> +		rc = data->calibrate(chip, i, golden_buf, test_buf);
+>> +		if (rc == 0)
+>> +			best_div = i;
+>> +	}
+>> +
+>> +	/* Nothing found ? */
+>> +	if (best_div < 0) {
+>> +		dev_warn(aspi->dev, "No good frequency, using dumb slow");
+>> +	} else {
+>> +		dev_dbg(aspi->dev, "Found good read timings at HCLK/%d",
+>> best_div);
+>> +
+>> +		/* Record the freq */
+>> +		for (i = 0; i < ASPEED_SPI_MAX; i++)
+>> +			chip->ctl_val[i] = (chip->ctl_val[i] & data->hclk_mask) |
+>> +				ASPEED_SPI_HCLK_DIV(best_div);
+>> +	}
+>> +
+>> +no_calib:
+> 
+> - Maybe, if the calibration process is not executed, the frequency setting calculated from max_frequency in the device tree can be filled in FMC10 instead of using dumb slow one, 12.5MHz, always.
+
+Indeed.
+
+>   For example, except for uniform content case, the calibration process will be ignored when SPI clock frequency in the device tree is smaller than 40MHz.
+> - The function, aspeed_2600_spi_clk_basic_setting, in [2] can be added to support lower SPI clock frequency, e.g., 4MHz.
+>   For AST2600, SPI clock frequency can be calculated by HCLK/(FMC10[27:24] + FMC10[11:8]).
+
+Could you please send patches on top of this series ? Here are the branches :
+
+   https://github.com/legoater/linux/commits/openbmc-5.15
+   https://github.com/legoater/linux/commits/aspeed         (mainline)
+
+I can include them when I resend a v5.
+
+Thanks,
+
+C.
+
+
+> 
+>> +	writel(chip->ctl_val[ASPEED_SPI_READ], chip->ctl);
+>> +	kfree(test_buf);
+>> +	return 0;
+>> +}
+>> +
+>> +#define TIMING_DELAY_DI		BIT(3)
+>> +#define TIMING_DELAY_HCYCLE_MAX	5
+>> +#define TIMING_REG_AST2600(chip)				\
+>> +	((chip)->aspi->regs + (chip)->aspi->data->timing +	\
+>> +	 (chip)->cs * 4)
+>> +
+>> +static int aspeed_spi_ast2600_calibrate(struct aspeed_spi_chip *chip, u32
+>> hdiv,
+>> +					const u8 *golden_buf, u8 *test_buf) {
+>> +	struct aspeed_spi *aspi = chip->aspi;
+>> +	int hcycle;
+>> +	u32 shift = (hdiv - 2) << 3;
+>> +	u32 mask = ~(0xfu << shift);
+>> +	u32 fread_timing_val = 0;
+>> +
+>> +	for (hcycle = 0; hcycle <= TIMING_DELAY_HCYCLE_MAX; hcycle++) {
+>> +		int delay_ns;
+>> +		bool pass = false;
+>> +
+>> +		fread_timing_val &= mask;
+>> +		fread_timing_val |= hcycle << shift;
+>> +
+>> +		/* no DI input delay first  */
+>> +		writel(fread_timing_val, TIMING_REG_AST2600(chip));
+>> +		pass = aspeed_spi_check_reads(chip, golden_buf, test_buf);
+>> +		dev_dbg(aspi->dev,
+>> +			"  * [%08x] %d HCLK delay, DI delay none : %s",
+>> +			fread_timing_val, hcycle, pass ? "PASS" : "FAIL");
+>> +		if (pass)
+>> +			return 0;
+>> +
+>> +		/* Add DI input delays  */
+>> +		fread_timing_val &= mask;
+>> +		fread_timing_val |= (TIMING_DELAY_DI | hcycle) << shift;
+>> +
+>> +		for (delay_ns = 0; delay_ns < 0x10; delay_ns++) {
+>> +			fread_timing_val &= ~(0xf << (4 + shift));
+>> +			fread_timing_val |= delay_ns << (4 + shift);
+>> +
+>> +			writel(fread_timing_val, TIMING_REG_AST2600(chip));
+>> +			pass = aspeed_spi_check_reads(chip, golden_buf, test_buf);
+>> +			dev_dbg(aspi->dev,
+>> +				"  * [%08x] %d HCLK delay, DI delay %d.%dns : %s",
+>> +				fread_timing_val, hcycle, (delay_ns + 1) / 2,
+>> +				(delay_ns + 1) & 1 ? 5 : 5, pass ? "PASS" : "FAIL");
+>> +			/*
+>> +			 * TODO: This is optimistic. We should look
+>> +			 * for a working interval and save the middle
+>> +			 * value in the read timing register.
+>> +			 */
+>> +			if (pass)
+>> +				return 0;
+>> +		}
+>> +	}
+>> +
+>> +	/* No good setting for this frequency */
+>> +	return -1;
+>> +}
+>> +
+>>   /*
+>>    * Platform definitions
+>>    */
+>> @@ -820,6 +1077,10 @@ static const struct aspeed_spi_data
+>> ast2400_fmc_data = {
+>>   	.hastype       = true,
+>>   	.we0	       = 16,
+>>   	.ctl0	       = CE0_CTRL_REG,
+>> +	.timing	       = CE0_TIMING_COMPENSATION_REG,
+>> +	.hclk_mask     = 0xfffff0ff,
+>> +	.hdiv_max      = 1,
+>> +	.calibrate     = aspeed_spi_calibrate,
+>>   	.segment_start = aspeed_spi_segment_start,
+>>   	.segment_end   = aspeed_spi_segment_end,
+>>   	.segment_reg   = aspeed_spi_segment_reg,
+>> @@ -830,6 +1091,10 @@ static const struct aspeed_spi_data
+>> ast2400_spi_data = {
+>>   	.hastype       = false,
+>>   	.we0	       = 0,
+>>   	.ctl0	       = 0x04,
+>> +	.timing	       = 0x14,
+>> +	.hclk_mask     = 0xfffff0ff,
+>> +	.hdiv_max      = 1,
+>> +	.calibrate     = aspeed_spi_calibrate,
+>>   	/* No segment registers */
+>>   };
+>>
+>> @@ -838,6 +1103,10 @@ static const struct aspeed_spi_data
+>> ast2500_fmc_data = {
+>>   	.hastype       = true,
+>>   	.we0	       = 16,
+>>   	.ctl0	       = CE0_CTRL_REG,
+>> +	.timing	       = CE0_TIMING_COMPENSATION_REG,
+>> +	.hclk_mask     = 0xfffff0ff,
+>> +	.hdiv_max      = 1,
+>> +	.calibrate     = aspeed_spi_calibrate,
+>>   	.segment_start = aspeed_spi_segment_start,
+>>   	.segment_end   = aspeed_spi_segment_end,
+>>   	.segment_reg   = aspeed_spi_segment_reg,
+>> @@ -848,6 +1117,10 @@ static const struct aspeed_spi_data
+>> ast2500_spi_data = {
+>>   	.hastype       = false,
+>>   	.we0	       = 16,
+>>   	.ctl0	       = CE0_CTRL_REG,
+>> +	.timing	       = CE0_TIMING_COMPENSATION_REG,
+>> +	.hclk_mask     = 0xfffff0ff,
+>> +	.hdiv_max      = 1,
+>> +	.calibrate     = aspeed_spi_calibrate,
+>>   	.segment_start = aspeed_spi_segment_start,
+>>   	.segment_end   = aspeed_spi_segment_end,
+>>   	.segment_reg   = aspeed_spi_segment_reg,
+>> @@ -859,6 +1132,10 @@ static const struct aspeed_spi_data
+>> ast2600_fmc_data = {
+>>   	.mode_bits     = SPI_RX_QUAD | SPI_RX_QUAD,
+>>   	.we0	       = 16,
+>>   	.ctl0	       = CE0_CTRL_REG,
+>> +	.timing	       = CE0_TIMING_COMPENSATION_REG,
+>> +	.hclk_mask     = 0xf0fff0ff,
+>> +	.hdiv_max      = 2,
+>> +	.calibrate     = aspeed_spi_ast2600_calibrate,
+>>   	.segment_start = aspeed_spi_segment_ast2600_start,
+>>   	.segment_end   = aspeed_spi_segment_ast2600_end,
+>>   	.segment_reg   = aspeed_spi_segment_ast2600_reg,
+>> @@ -870,6 +1147,10 @@ static const struct aspeed_spi_data
+>> ast2600_spi_data = {
+>>   	.mode_bits     = SPI_RX_QUAD | SPI_RX_QUAD,
+>>   	.we0	       = 16,
+>>   	.ctl0	       = CE0_CTRL_REG,
+>> +	.timing	       = CE0_TIMING_COMPENSATION_REG,
+>> +	.hclk_mask     = 0xf0fff0ff,
+>> +	.hdiv_max      = 2,
+>> +	.calibrate     = aspeed_spi_ast2600_calibrate,
+>>   	.segment_start = aspeed_spi_segment_ast2600_start,
+>>   	.segment_end   = aspeed_spi_segment_ast2600_end,
+>>   	.segment_reg   = aspeed_spi_segment_ast2600_reg,
+>> --
+>> 2.34.1
+> 
+> 
+> Best Wishes,
+> Chin-Ting
+
