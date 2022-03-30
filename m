@@ -2,44 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1894D4ECD26
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Mar 2022 21:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 071DB4ECD4D
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Mar 2022 21:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350835AbiC3TWZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 30 Mar 2022 15:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41992 "EHLO
+        id S1344369AbiC3Tg3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 30 Mar 2022 15:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350723AbiC3TWO (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Mar 2022 15:22:14 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B3A98F73;
-        Wed, 30 Mar 2022 12:20:07 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22UJJ9pl115222;
-        Wed, 30 Mar 2022 14:19:09 -0500
+        with ESMTP id S238626AbiC3Tg2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 30 Mar 2022 15:36:28 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C138E35852;
+        Wed, 30 Mar 2022 12:34:42 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22UJXi4m046522;
+        Wed, 30 Mar 2022 14:33:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1648667949;
-        bh=HXP0I68YYcbtnXwobfKnkky9m9FMx1koQq3CNDnNl/s=;
+        s=ti-com-17Q1; t=1648668824;
+        bh=lATsb8az9X9XmEcERPmUw69V9BSNCdtovwIoDrV13fU=;
         h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=b0dOSS3TBcb/XaU+beH5EgUePch8ipiuqJc1igewV0Pxye9W5HprO2qYOuhIHwRk/
-         epiXZ65HYC8iwP3u0uiNHN3KmCFiN6pvTFd7tFvE4+KOA4WnsRNzMpXTHtEy0Wy4pi
-         27SK/+GWs9/gD0iLusC1GEna6+Li4O6jeKrI3xeo=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22UJJ9wk031699
+        b=mgqHyePzDmGD1e9tb8ogWdhwMw+5rGy3QCgv3mdV+Nv/3v+IagWN8aLndO1oHda/c
+         3q3/abi9A06/Dg6ao8fYThvN7ZpO4i87Se990w1YfjZUweBqow37RXhNEObzuifIw7
+         I4vZYI45kRXHSeg1n3b/mkN0PbTB1iJBD75Fa1TU=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22UJXiiP039554
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 30 Mar 2022 14:19:09 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 30 Mar 2022 14:33:44 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 30
- Mar 2022 14:19:09 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2022 14:33:44 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 30 Mar 2022 14:19:09 -0500
+ Frontend Transport; Wed, 30 Mar 2022 14:33:44 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22UJJ8cX013600;
-        Wed, 30 Mar 2022 14:19:09 -0500
-Date:   Thu, 31 Mar 2022 00:49:08 +0530
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22UJXhOg045641;
+        Wed, 30 Mar 2022 14:33:44 -0500
+Date:   Thu, 31 Mar 2022 01:03:43 +0530
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>
 CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
@@ -53,18 +53,17 @@ CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
         Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
         <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Tao Ren <rentao.bupt@gmail.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v4 02/11] dt-bindings: spi: Add Aspeed SMC controllers
- device tree binding
-Message-ID: <20220330191908.nhg52a5ayzczpzai@ti.com>
+        <linux-kernel@vger.kernel.org>, Tao Ren <rentao.bupt@gmail.com>
+Subject: Re: [PATCH v4 03/11] spi: spi-mem: Convert Aspeed SMC driver to
+ spi-mem
+Message-ID: <20220330193343.qg5kcr6twerde6ho@ti.com>
 References: <20220325100849.2019209-1-clg@kaod.org>
- <20220325100849.2019209-3-clg@kaod.org>
+ <20220325100849.2019209-4-clg@kaod.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220325100849.2019209-3-clg@kaod.org>
+In-Reply-To: <20220325100849.2019209-4-clg@kaod.org>
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -76,151 +75,222 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 25/03/22 11:08AM, Cédric Le Goater wrote:
-> The "interrupt" property is optional because it is only necessary for
-> controllers supporting DMAs (Not implemented yet in the new driver).
+Hi Cedric,
+
+Thanks for doing the conversion.
+
+On 25/03/22 11:08AM, CÃ©dric Le Goater wrote:
+> This SPI driver adds support for the Aspeed static memory controllers
+> of the AST2600, AST2500 and AST2400 SoCs using the spi-mem interface.
 > 
-> Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+>  * AST2600 Firmware SPI Memory Controller (FMC)
+>    . BMC firmware
+>    . 3 chip select pins (CE0 ~ CE2)
+>    . Only supports SPI type flash memory
+>    . different segment register interface
+>    . single, dual and quad mode.
+> 
+>  * AST2600 SPI Flash Controller (SPI1 and SPI2)
+>    . host firmware
+>    . 2 chip select pins (CE0 ~ CE1)
+>    . different segment register interface
+>    . single, dual and quad mode.
+> 
+>  * AST2500 Firmware SPI Memory Controller (FMC)
+>    . BMC firmware
+>    . 3 chip select pins (CE0 ~ CE2)
+>    . supports SPI type flash memory (CE0-CE1)
+>    . CE2 can be of NOR type flash but this is not supported by the driver
+>    . single, dual mode.
+> 
+>  * AST2500 SPI Flash Controller (SPI1 and SPI2)
+>    . host firmware
+>    . 2 chip select pins (CE0 ~ CE1)
+>    . single, dual mode.
+> 
+>  * AST2400 New Static Memory Controller (also referred as FMC)
+>    . BMC firmware
+>    . New register set
+>    . 5 chip select pins (CE0 âˆ¼ CE4)
+>    . supports NOR flash, NAND flash and SPI flash memory.
+>    . single, dual and quad mode.
+> 
+> Each controller has a memory range on which flash devices contents are
+> mapped. Each device is assigned a window that can be changed at bootime
+> with the Segment Address Registers.
+> 
+> Each SPI flash device can then be accessed in two modes: Command and
+> User. When in User mode, SPI transfers are initiated with accesses to
+> the memory segment of a device. When in Command mode, memory
+> operations on the memory segment of a device generate SPI commands
+> automatically using a Control Register for the settings.
+> 
+> This initial patch adds support for User mode. Command mode needs a little
+> more work to check that the memory window on the AHB bus fits the device
+> size. It will come later when support for direct mapping is added.
+> 
+> Single and dual mode RX transfers are supported. Other types than SPI
+> are not supported.
+> 
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
 > Tested-by: Joel Stanley <joel@jms.id.au>
 > Tested-by: Tao Ren <rentao.bupt@gmail.com>
-> Reviewed-by: Joel Stanley <joel@jms.id.au>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Cédric Le Goater <clg@kaod.org>
+> Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> Signed-off-by: CÃ©dric Le Goater <clg@kaod.org>
 > ---
->  .../bindings/spi/aspeed,ast2600-fmc.yaml      | 87 +++++++++++++++++++
->  MAINTAINERS                                   |  9 ++
->  2 files changed, 96 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+>  drivers/mtd/spi-nor/controllers/aspeed-smc.c  | 910 ------------------
+>  drivers/spi/spi-aspeed-smc.c                  | 709 ++++++++++++++
+>  .../devicetree/bindings/mtd/aspeed-smc.txt    |  51 -
+>  MAINTAINERS                                   |   1 +
+>  drivers/mtd/spi-nor/controllers/Kconfig       |  10 -
+>  drivers/mtd/spi-nor/controllers/Makefile      |   1 -
+>  drivers/spi/Kconfig                           |  11 +
+>  drivers/spi/Makefile                          |   1 +
+>  8 files changed, 722 insertions(+), 972 deletions(-)
+>  delete mode 100644 drivers/mtd/spi-nor/controllers/aspeed-smc.c
+>  create mode 100644 drivers/spi/spi-aspeed-smc.c
+>  delete mode 100644 Documentation/devicetree/bindings/mtd/aspeed-smc.txt
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
-> new file mode 100644
-> index 000000000000..e16bbcd38560
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
-> @@ -0,0 +1,87 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/aspeed,ast2600-fmc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+[...]
+> +static void aspeed_spi_send_cmd_addr(struct aspeed_spi_chip *chip, u8 addr_nbytes,
+> +				     u64 offset, u32 opcode)
+> +{
+> +	struct aspeed_spi *aspi = chip->aspi;
+> +	__be32 temp;
+> +	u32 cmdaddr;
 > +
-> +title: Aspeed SMC controllers bindings
-> +
-> +maintainers:
-> +  - Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-> +  - Cédric Le Goater <clg@kaod.org>
-> +
-> +description: |
-> +  This binding describes the Aspeed Static Memory Controllers (FMC and
-> +  SPI) of the AST2400, AST2500 and AST2600 SOCs.
-> +
-> +allOf:
-> +  - $ref: "spi-controller.yaml#"
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - aspeed,ast2600-fmc
-> +      - aspeed,ast2600-spi
-> +      - aspeed,ast2500-fmc
-> +      - aspeed,ast2500-spi
-> +      - aspeed,ast2400-fmc
-> +      - aspeed,ast2400-spi
-> +
-> +  reg:
-> +    items:
-> +      - description: registers
-> +      - description: memory mapping
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +patternProperties:
-> +  "@[0-9a-f]+":
-> +    type: object
-> +
-> +    properties:
-> +      spi-rx-bus-width:
-> +        enum: [1, 2, 4]
+> +	switch (addr_nbytes) {
+> +	default:
+> +		dev_warn_once(aspi->dev, "Unexpected address width %u, defaulting to 3",
+> +			      addr_nbytes);
+> +		fallthrough;
 
-No need for this. It should already be taken care of by 
-spi-peripheral-props.yaml
+I think it is better if you reject ops where addr width is not 3 or 4. 
+This you can drop this. Or if you really want to keep it, you can change 
+it to a WARN_ON() and return an error.
 
+> +	case 3:
+> +		cmdaddr = offset & 0xFFFFFF;
+> +		cmdaddr |= opcode << 24;
 > +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
+> +		temp = cpu_to_be32(cmdaddr);
+> +		aspeed_spi_write_to_ahb(chip->ahb_base, &temp, 4);
+> +		break;
+> +	case 4:
+> +		temp = cpu_to_be32(offset);
+> +		aspeed_spi_write_to_ahb(chip->ahb_base, &opcode, 1);
+> +		aspeed_spi_write_to_ahb(chip->ahb_base, &temp, 4);
+> +		break;
+> +	}
+> +}
 > +
-> +unevaluatedProperties: false
+[...]
+> +/* support for 1-1-1, 1-1-2 or 1-1-4 */
+> +static bool aspeed_spi_supports_op(struct spi_mem *mem, const struct spi_mem_op *op)
+> +{
+> +	if (op->cmd.buswidth > 1)
+> +		return false;
 > +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/aspeed-scu-ic.h>
-> +    #include <dt-bindings/clock/ast2600-clock.h>
+> +	if (op->addr.nbytes != 0) {
+> +		if (op->addr.buswidth > 1 || op->addr.nbytes > 4)
+
+As mentioned above, this should reject ops with addr width 1 and 2.
+
+> +			return false;
+> +	}
 > +
-> +    spi@1e620000 {
-> +        reg = <0x1e620000 0xc4>, <0x20000000 0x10000000>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        compatible = "aspeed,ast2600-fmc";
-> +        clocks = <&syscon ASPEED_CLK_AHB>;
-> +        interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-
-Nitpick: Add a blank line here
-
-> +        flash@0 {
-> +                reg = < 0 >;
-> +                compatible = "jedec,spi-nor";
-> +                spi-max-frequency = <50000000>;
-> +                spi-rx-bus-width = <2>;
-> +        };
-
-and here
-
-> +        flash@1 {
-> +                reg = < 1 >;
-> +                compatible = "jedec,spi-nor";
-> +                spi-max-frequency = <50000000>;
-> +                spi-rx-bus-width = <2>;
-> +        };
-
-and here. Looks a bit nicer.
-
-> +        flash@2 {
-> +                reg = < 2 >;
-> +                compatible = "jedec,spi-nor";
-> +                spi-max-frequency = <50000000>;
-> +                spi-rx-bus-width = <2>;
-> +        };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index ea9d74b6236f..7d5f81dcd837 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -3021,6 +3021,15 @@ S:	Maintained
->  F:	Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml
->  F:	drivers/mmc/host/sdhci-of-aspeed*
->  
-> +ASPEED SMC SPI DRIVER
-> +M:	Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-> +M:	Cédric Le Goater <clg@kaod.org>
-> +L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
-> +L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
-> +L:	linux-spi@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+> +	if (op->dummy.nbytes != 0) {
+> +		if (op->dummy.buswidth > 1 || op->dummy.nbytes > 7)
+> +			return false;
+> +	}
 > +
->  ASPEED VIDEO ENGINE DRIVER
->  M:	Eddie James <eajames@linux.ibm.com>
->  L:	linux-media@vger.kernel.org
-> -- 
-> 2.34.1
-> 
+> +	if (op->data.nbytes != 0 && op->data.buswidth > 4)
+> +		return false;
+> +
+> +	return spi_mem_default_supports_op(mem, op);
+> +}
+> +
+> +static int do_aspeed_spi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+> +{
+> +	struct aspeed_spi *aspi = spi_controller_get_devdata(mem->spi->master);
+> +	struct aspeed_spi_chip *chip = &aspi->chips[mem->spi->chip_select];
+> +	u32 addr_mode, addr_mode_backup;
+> +	u32 ctl_val;
+> +	int ret = 0;
+> +
+> +	dev_dbg(aspi->dev,
+> +		"CE%d %s OP %#x mode:%d.%d.%d.%d naddr:%#x ndummies:%#x len:%#x",
+> +		chip->cs, op->data.dir == SPI_MEM_DATA_IN ? "read" : "write",
+> +		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
+> +		op->dummy.buswidth, op->data.buswidth,
+> +		op->addr.nbytes, op->dummy.nbytes, op->data.nbytes);
+> +
+> +	addr_mode = readl(aspi->regs + CE_CTRL_REG);
+> +	addr_mode_backup = addr_mode;
+> +
+> +	ctl_val = chip->ctl_val[ASPEED_SPI_BASE];
+> +	ctl_val &= ~CTRL_IO_CMD_MASK;
+> +
+> +	ctl_val |= op->cmd.opcode << CTRL_COMMAND_SHIFT;
+> +
+> +	/* 4BYTE address mode */
+> +	if (op->addr.nbytes) {
+> +		if (op->addr.nbytes == 4)
+> +			addr_mode |= (0x11 << chip->cs);
+> +		else
+> +			addr_mode &= ~(0x11 << chip->cs);
+> +	}
+> +
+> +	if (op->dummy.buswidth && op->dummy.nbytes)
+
+Nitpick: op->dummy.nbytes being set should imply op->dummy.buswidth > 0.
+
+> +		ctl_val |= CTRL_IO_DUMMY_SET(op->dummy.nbytes / op->dummy.buswidth);
+> +
+> +	if (op->data.nbytes != 0) {
+> +		if (op->data.buswidth)
+
+Nitpick: op->data.nbytes != 0 should imply op->data.buswidth > 0.
+
+> +			ctl_val |= aspeed_spi_get_io_mode(op);
+> +	}
+> +
+> +	if (op->data.dir == SPI_MEM_DATA_OUT)
+> +		ctl_val |= CTRL_IO_MODE_WRITE;
+> +	else
+> +		ctl_val |= CTRL_IO_MODE_READ;
+> +
+> +	if (addr_mode != addr_mode_backup)
+> +		writel(addr_mode, aspi->regs + CE_CTRL_REG);
+> +	writel(ctl_val, chip->ctl);
+> +
+> +	if (op->data.dir == SPI_MEM_DATA_IN) {
+> +		if (!op->addr.nbytes)
+> +			ret = aspeed_spi_read_reg(chip, op);
+> +		else
+> +			ret = aspeed_spi_read_user(chip, op, op->addr.val,
+> +						   op->data.nbytes, op->data.buf.in);
+> +	} else {
+> +		if (!op->addr.nbytes)
+> +			ret = aspeed_spi_write_reg(chip, op);
+> +		else
+> +			ret = aspeed_spi_write_user(chip, op);
+> +	}
+> +
+> +	/* Restore defaults */
+> +	if (addr_mode != addr_mode_backup)
+> +		writel(addr_mode_backup, aspi->regs + CE_CTRL_REG);
+> +	writel(chip->ctl_val[ASPEED_SPI_READ], chip->ctl);
+
+Why do you need to restore defaults here? Do you expect some other piece 
+of software to use it as well?
+
+The patch looks good to me apart from these.
+
+> +	return ret;
+> +}
+> +
+[...]
 
 -- 
 Regards,
