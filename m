@@ -2,200 +2,166 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DAB04ED839
-	for <lists+linux-spi@lfdr.de>; Thu, 31 Mar 2022 13:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6094ED98A
+	for <lists+linux-spi@lfdr.de>; Thu, 31 Mar 2022 14:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234929AbiCaLKl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 31 Mar 2022 07:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58146 "EHLO
+        id S236000AbiCaMWm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 31 Mar 2022 08:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234928AbiCaLKk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 31 Mar 2022 07:10:40 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526711CFE3;
-        Thu, 31 Mar 2022 04:08:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1648724932; x=1680260932;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=02Kh2G2tw1qOTPyK+LDa8jdNbMtL/fx3qG1NfJSeKik=;
-  b=C+MSWkbDRQIFHYsHi8HHf7bWZ/W2J+R/cZCGJ1udCzC5P3D+gduqlzcl
-   rhs0ExPfmz/Kn2D7R7T8diu556l4AadhI7TJNzCcnS0iHudKPhQjoDAu2
-   ZbVdo2yj/Lbdo70Mam/nRJA482EjBAGfvFkfZCarUXSFvtN15vMau2C8/
-   488g/cvNtQCAiuFHaaTwecZupsO9oxVnt5/ehY2UofGqWi0LV+WkO9082
-   EdrITuD49/zIH35mmGsoIUdMtdkEF8zGkl951gG/0Fad1ewalOSwu4PiU
-   KphoPxzCgQ+laM6HEkFsYp4tafGj8bYSUHeQyvxWpS5PjOlB7o6VsJaLA
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,225,1643670000"; 
-   d="scan'208";a="23014419"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 31 Mar 2022 13:08:49 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 31 Mar 2022 13:08:49 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 31 Mar 2022 13:08:49 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1648724929; x=1680260929;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=02Kh2G2tw1qOTPyK+LDa8jdNbMtL/fx3qG1NfJSeKik=;
-  b=fmGDfhDW0ykWnC7EMETyE0ONjdB22ZxXonzMJubQHsqbMHpk/5+KGEjs
-   ias1KCg4lel6V2JyEFjjBQo8zp6J2d6un/gCav8QR3thg0wszxYikDcit
-   ikBSk2liQSWDtfqfX7C+gHycepq0aigDXduiGPGxv13LMl/lpsEZjSUCA
-   2mi+QnzG77wBXsU0aDsUn+ULyJX2RwJeepBgf22tvjtoBNaKlY9R5ktK3
-   qpFEBL4PtM2/W7OVFNL52QmUXQvoBYQYIW2Ulm9PrXICwCc5vzoNffHkt
-   0ip+ZITy+AW3/CsllFW6MH3zkw833S4oS6iWaDVrZCsXy50gS7dqpQLsL
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,225,1643670000"; 
-   d="scan'208";a="23014418"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 31 Mar 2022 13:08:49 +0200
-Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.49.14])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 0D494280065;
-        Thu, 31 Mar 2022 13:08:49 +0200 (CEST)
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        with ESMTP id S235996AbiCaMWl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 31 Mar 2022 08:22:41 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840B365170;
+        Thu, 31 Mar 2022 05:20:53 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22VCK404046663;
+        Thu, 31 Mar 2022 07:20:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1648729204;
+        bh=U/Bd5JEPMZiETyPMjxTZkK0xTLGPXruq7bxamvC/BPE=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=p/8v7ChWKtnstAQkNaNKlPYO5HNv82HVDZDet7QGSG/V+7MQvfJ0L1rLZSrS3cYVQ
+         L60fynQTGf9ZeFkH483HHSEwH8AuIsvGGAlRHDANvK833a3Z8cySbMJzx2T82HQjcI
+         FeQy5iJdInmuqxeeAnxXgE+wrN+S9S16BOMbqRyk=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22VCK4cX045704
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 31 Mar 2022 07:20:04 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 31
+ Mar 2022 07:20:03 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 31 Mar 2022 07:20:03 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22VCK2XC083438;
+        Thu, 31 Mar 2022 07:20:03 -0500
+Date:   Thu, 31 Mar 2022 17:50:02 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        Ramuthevar Vadivel Murugan 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Subject: [PATCH] spi: cadence-quadspi: fix protocol setup for non-1-1-X operations
-Date:   Thu, 31 Mar 2022 13:08:19 +0200
-Message-Id: <20220331110819.133392-1-matthias.schiffer@ew.tq-group.com>
-X-Mailer: git-send-email 2.25.1
+        <linux-aspeed@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Tao Ren <rentao.bupt@gmail.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v4 02/11] dt-bindings: spi: Add Aspeed SMC controllers
+ device tree binding
+Message-ID: <20220331122002.55vwda6fnnenuqhf@ti.com>
+References: <20220325100849.2019209-1-clg@kaod.org>
+ <20220325100849.2019209-3-clg@kaod.org>
+ <20220330191908.nhg52a5ayzczpzai@ti.com>
+ <2a411a3e-4b7f-c116-b595-f33bffccb4e7@kaod.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2a411a3e-4b7f-c116-b595-f33bffccb4e7@kaod.org>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-cqspi_set_protocol() only set the data width, but ignored the command
-and address width (except for 8-8-8 DTR ops), leading to corruption of
-all transfers using 1-X-X or X-X-X ops. Fix by setting the other two
-widths as well.
+On 31/03/22 09:36AM, Cédric Le Goater wrote:
+> Hello Pratyush,
+> 
+> On 3/30/22 21:19, Pratyush Yadav wrote:
+> > On 25/03/22 11:08AM, Cédric Le Goater wrote:
+> > > The "interrupt" property is optional because it is only necessary for
+> > > controllers supporting DMAs (Not implemented yet in the new driver).
+> > > 
+> > > Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> > > Tested-by: Joel Stanley <joel@jms.id.au>
+> > > Tested-by: Tao Ren <rentao.bupt@gmail.com>
+> > > Reviewed-by: Joel Stanley <joel@jms.id.au>
+> > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > Signed-off-by: Cédric Le Goater <clg@kaod.org>
+> > > ---
+> > >   .../bindings/spi/aspeed,ast2600-fmc.yaml      | 87 +++++++++++++++++++
+> > >   MAINTAINERS                                   |  9 ++
+> > >   2 files changed, 96 insertions(+)
+> > >   create mode 100644 Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+> > > new file mode 100644
+> > > index 000000000000..e16bbcd38560
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+> > > @@ -0,0 +1,87 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/spi/aspeed,ast2600-fmc.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Aspeed SMC controllers bindings
+> > > +
+> > > +maintainers:
+> > > +  - Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> > > +  - Cédric Le Goater <clg@kaod.org>
+> > > +
+> > > +description: |
+> > > +  This binding describes the Aspeed Static Memory Controllers (FMC and
+> > > +  SPI) of the AST2400, AST2500 and AST2600 SOCs.
+> > > +
+> > > +allOf:
+> > > +  - $ref: "spi-controller.yaml#"
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - aspeed,ast2600-fmc
+> > > +      - aspeed,ast2600-spi
+> > > +      - aspeed,ast2500-fmc
+> > > +      - aspeed,ast2500-spi
+> > > +      - aspeed,ast2400-fmc
+> > > +      - aspeed,ast2400-spi
+> > > +
+> > > +  reg:
+> > > +    items:
+> > > +      - description: registers
+> > > +      - description: memory mapping
+> > > +
+> > > +  clocks:
+> > > +    maxItems: 1
+> > > +
+> > > +  interrupts:
+> > > +    maxItems: 1
+> > > +
+> > > +patternProperties:
+> > > +  "@[0-9a-f]+":
+> > > +    type: object
+> > > +
+> > > +    properties:
+> > > +      spi-rx-bus-width:
+> > > +        enum: [1, 2, 4]
+> > 
+> > No need for this. It should already be taken care of by
+> > spi-peripheral-props.yaml
+> 
+> So we could drop the whole 'patternProperties' section ?
 
-While we're at it, simplify the code a bit by replacing the
-CQSPI_INST_TYPE_* constants with ilog2().
+Yes.
 
-Tested on a TI AM64x with a Macronix MX25U51245G QSPI flash with 1-4-4
-read and write operations.
+[...]
 
-Fixes: a314f6367787 ("mtd: spi-nor: Convert cadence-quadspi to use spi-mem framework")
-Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
----
- drivers/spi/spi-cadence-quadspi.c | 46 ++++++++-----------------------
- 1 file changed, 12 insertions(+), 34 deletions(-)
-
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index b0c9f62ccefb..616ada891974 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -19,6 +19,7 @@
- #include <linux/iopoll.h>
- #include <linux/jiffies.h>
- #include <linux/kernel.h>
-+#include <linux/log2.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
- #include <linux/of.h>
-@@ -102,12 +103,6 @@ struct cqspi_driver_platdata {
- #define CQSPI_TIMEOUT_MS			500
- #define CQSPI_READ_TIMEOUT_MS			10
- 
--/* Instruction type */
--#define CQSPI_INST_TYPE_SINGLE			0
--#define CQSPI_INST_TYPE_DUAL			1
--#define CQSPI_INST_TYPE_QUAD			2
--#define CQSPI_INST_TYPE_OCTAL			3
--
- #define CQSPI_DUMMY_CLKS_PER_BYTE		8
- #define CQSPI_DUMMY_BYTES_MAX			4
- #define CQSPI_DUMMY_CLKS_MAX			31
-@@ -376,10 +371,6 @@ static unsigned int cqspi_calc_dummy(const struct spi_mem_op *op, bool dtr)
- static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
- 			      const struct spi_mem_op *op)
- {
--	f_pdata->inst_width = CQSPI_INST_TYPE_SINGLE;
--	f_pdata->addr_width = CQSPI_INST_TYPE_SINGLE;
--	f_pdata->data_width = CQSPI_INST_TYPE_SINGLE;
--
- 	/*
- 	 * For an op to be DTR, cmd phase along with every other non-empty
- 	 * phase should have dtr field set to 1. If an op phase has zero
-@@ -389,32 +380,23 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
- 		       (!op->addr.nbytes || op->addr.dtr) &&
- 		       (!op->data.nbytes || op->data.dtr);
- 
--	switch (op->data.buswidth) {
--	case 0:
--		break;
--	case 1:
--		f_pdata->data_width = CQSPI_INST_TYPE_SINGLE;
--		break;
--	case 2:
--		f_pdata->data_width = CQSPI_INST_TYPE_DUAL;
--		break;
--	case 4:
--		f_pdata->data_width = CQSPI_INST_TYPE_QUAD;
--		break;
--	case 8:
--		f_pdata->data_width = CQSPI_INST_TYPE_OCTAL;
--		break;
--	default:
--		return -EINVAL;
--	}
-+	f_pdata->inst_width = 0;
-+	if (op->cmd.buswidth)
-+		f_pdata->inst_width = ilog2(op->cmd.buswidth);
-+
-+	f_pdata->addr_width = 0;
-+	if (op->addr.buswidth)
-+		f_pdata->addr_width = ilog2(op->addr.buswidth);
-+
-+	f_pdata->data_width = 0;
-+	if (op->data.buswidth)
-+		f_pdata->data_width = ilog2(op->data.buswidth);
- 
- 	/* Right now we only support 8-8-8 DTR mode. */
- 	if (f_pdata->dtr) {
- 		switch (op->cmd.buswidth) {
- 		case 0:
--			break;
- 		case 8:
--			f_pdata->inst_width = CQSPI_INST_TYPE_OCTAL;
- 			break;
- 		default:
- 			return -EINVAL;
-@@ -422,9 +404,7 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
- 
- 		switch (op->addr.buswidth) {
- 		case 0:
--			break;
- 		case 8:
--			f_pdata->addr_width = CQSPI_INST_TYPE_OCTAL;
- 			break;
- 		default:
- 			return -EINVAL;
-@@ -432,9 +412,7 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
- 
- 		switch (op->data.buswidth) {
- 		case 0:
--			break;
- 		case 8:
--			f_pdata->data_width = CQSPI_INST_TYPE_OCTAL;
- 			break;
- 		default:
- 			return -EINVAL;
 -- 
-2.25.1
-
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
