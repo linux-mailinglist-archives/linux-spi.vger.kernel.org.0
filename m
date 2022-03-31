@@ -2,76 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5B24EDE50
-	for <lists+linux-spi@lfdr.de>; Thu, 31 Mar 2022 18:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59CDF4EDF00
+	for <lists+linux-spi@lfdr.de>; Thu, 31 Mar 2022 18:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239556AbiCaQFw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 31 Mar 2022 12:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
+        id S240146AbiCaQoD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 31 Mar 2022 12:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239580AbiCaQFv (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 31 Mar 2022 12:05:51 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBF94E3AB
-        for <linux-spi@vger.kernel.org>; Thu, 31 Mar 2022 09:04:03 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id o10so359362ejd.1
-        for <linux-spi@vger.kernel.org>; Thu, 31 Mar 2022 09:04:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=i8exGV0bEfz7fockPDZIKH4DGjNDQmL1A2DdSanaA7k=;
-        b=IhU2wwo68dPixujjFS6hH/gAYbuctadDiy/If18pSZUCMCNprATz0oYCXVL5pSvVAG
-         bhDMnPn5qkBHVe8jw2TCF2PXVjYKf+ieCgLJFAK6XGGN2nQFld+ECzvY/SIPJYcK9gar
-         LISOK+NThskRi1GE4JJnYnqto41X30GBteiG5ZwKxGoXY8/tim9YCiR3yi5dQhOOL/M5
-         95UR5fxHjsJ1VVqVnffDD40i8cbp2LyeElS1YoxqN1KS5PdwyUb/8vJ+OQMuuSSRixW3
-         EZUrjFuKmD2ALNe0zmGdJdq/2/wIlD0BaWp7f89F18JUF4/hWybszVCMB3SaCCqcNn8x
-         iJhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=i8exGV0bEfz7fockPDZIKH4DGjNDQmL1A2DdSanaA7k=;
-        b=m1L047dof/cudW1XwddDHOSeN8+ACSgP8xEyfQrePYDBOpQF+w1CEz1HPpmitfZm5Y
-         i6FxOOiUvb60g2mLAOTezQDZHCQqi7t4W+bNthQQmGSCWQ+kuRLqvP/2Vk6U8bc4AV5Y
-         xPDhOD6x7ecyCT6bqC6Tvvtm/81NZpMkaI+qHThyMiamhz1AbYB2o/az+I2XLosHdtOl
-         w9fQME/myXpwHyNLD99UIXy1VDzvxmQuvG3qr6OAVTIhr5MDs9+ZUNq1gW6rOkoFo/c4
-         BV0at2xa8rHlPXmIg/jRWAZTG2V7YQW97f5zG3oOxG4dHp0VbmmD6KTugW2fW2Ovhq0T
-         05Uw==
-X-Gm-Message-State: AOAM5324Ec9PtcfgBGSAcB6Baag4dahaOTEu2GA5vXgxlj8GNSEBq7W1
-        5AZpEY2kQ1cyqmkODUYnWAkVKA==
-X-Google-Smtp-Source: ABdhPJy69ag8KVOrx4BRxgGGK2T7r/5GAGO/MSehpQqn+sTUWTGcI/9ZWNOTYQpCVeKhWbd54mQOjw==
-X-Received: by 2002:a17:907:1b07:b0:6e4:b202:db8f with SMTP id mp7-20020a1709071b0700b006e4b202db8fmr2701516ejc.76.1648742641536;
-        Thu, 31 Mar 2022 09:04:01 -0700 (PDT)
-Received: from [192.168.0.167] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id b25-20020a056402139900b0041904036ab1sm11452823edv.5.2022.03.31.09.04.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 09:04:01 -0700 (PDT)
-Message-ID: <1e2a48f8-e6b5-abf9-0996-3b8d2d97b4de@linaro.org>
-Date:   Thu, 31 Mar 2022 18:04:00 +0200
+        with ESMTP id S232615AbiCaQoC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 31 Mar 2022 12:44:02 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E0420E947;
+        Thu, 31 Mar 2022 09:42:13 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22VGfHbT077632;
+        Thu, 31 Mar 2022 11:41:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1648744877;
+        bh=q4I8OmbE9lpXlZiTsZ65bC0HGywDTKwPLArPoG/uE2k=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=q0Xzj8+bwKSW6n1SqCu0ajMaUE0JPYpjhHRhw91vS23GJPbmNB2y4KvnSyMwK4b0G
+         tICwB/nlIKOZogc7v+AgBb7Nkgi4L+dNaEnoD/OTRXYvqtb41WlnIaWJh/1ja6UlnB
+         Z/18XT7txfkmCyGW5GBJXH9G+eMWUZRcGGK66ZrM=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22VGfHo6024529
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 31 Mar 2022 11:41:17 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 31
+ Mar 2022 11:41:17 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 31 Mar 2022 11:41:17 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22VGfG1R087297;
+        Thu, 31 Mar 2022 11:41:16 -0500
+Date:   Thu, 31 Mar 2022 22:11:15 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>
+CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-aspeed@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Tao Ren <rentao.bupt@gmail.com>
+Subject: Re: [PATCH v4 08/11] spi: aspeed: Calibrate read timings
+Message-ID: <20220331164115.w5q3wxlmwcg3w4ns@ti.com>
+References: <20220325100849.2019209-1-clg@kaod.org>
+ <20220325100849.2019209-9-clg@kaod.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 0/4] spi: dt-bindings: qcom: convert qcom,spi-qup to DT
- schema
-Content-Language: en-US
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>
-References: <20220331155320.714754-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220331155320.714754-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220325100849.2019209-9-clg@kaod.org>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,29 +74,69 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 31/03/2022 17:53, Krzysztof Kozlowski wrote:
-> Hi,
-> 
-> Changes since v1
-> ================
-> 1. Fix path in com/qcom,gsbi.txt.
-> 2. Merge clock-names in example, correct $ref path (Kuldeep).
-> 
-> Merging
-> =======
-> The DTS patches are independent and silence warnings pointed
-> out by schema.
-> 
-> Best regards,
-> Krzysztof
-> 
-> Cc: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-> 
+Hi,
 
-I forgot to add the ack from Kuldeep:
+On 25/03/22 11:08AM, Cédric Le Goater wrote:
+> To accommodate the different response time of SPI transfers on different
+> boards and different SPI NOR devices, the Aspeed controllers provide a
+> set of Read Timing Compensation registers to tune the timing delays
+> depending on the frequency being used. The AST2600 SoC has one of these
+> registers per device. On the AST2500 and AST2400 SoCs, the timing
+> register is shared by all devices which is problematic to get good
+> results other than for one device.
+> 
+> The algorithm first reads a golden buffer at low speed and then performs
+> reads with different clocks and delay cycle settings to find a breaking
+> point. This selects a default good frequency for the CEx control register.
+> The current settings are a bit optimistic as we pick the first delay giving
+> good results. A safer approach would be to determine an interval and
+> choose the middle value.
+> 
+> Calibration is performed when the direct mapping for reads is created.
+> Since the underlying spi-nor object needs to be initialized to create
+> the spi_mem operation for direct mapping, we should be fine. Having a
+> specific API would clarify the requirements though.
+> 
+> Cc: Pratyush Yadav <p.yadav@ti.com>
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
+> Tested-by: Joel Stanley <joel@jms.id.au>
+> Tested-by: Tao Ren <rentao.bupt@gmail.com>
+> Signed-off-by: Cédric Le Goater <clg@kaod.org>
+> ---
+>  drivers/spi/spi-aspeed-smc.c | 281 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 281 insertions(+)
+> 
+[...]
+> @@ -517,6 +527,8 @@ static int aspeed_spi_chip_adjust_window(struct aspeed_spi_chip *chip,
+>  	return 0;
+>  }
+>  
+> +static int aspeed_spi_do_calibration(struct aspeed_spi_chip *chip);
+> +
+>  static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
+>  {
+>  	struct aspeed_spi *aspi = spi_controller_get_devdata(desc->mem->spi->master);
+> @@ -565,6 +577,8 @@ static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
+>  	chip->ctl_val[ASPEED_SPI_READ] = ctl_val;
+>  	writel(chip->ctl_val[ASPEED_SPI_READ], chip->ctl);
+>  
+> +	ret = aspeed_spi_do_calibration(chip);
+> +
 
-Acked-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+I am still not convinced this is a good idea. The API does not say 
+anywhere what dirmap_create must be called after the flash is completely 
+initialized, though that is what is done currently in practice. I think 
+an explicit API to mark flash as "ready for calibration" would be a 
+better idea.
 
+Tudor/Mark/Miquel, what do you think?
 
-Best regards,
-Krzysztof
+>  	dev_info(aspi->dev, "CE%d read buswidth:%d [0x%08x]\n",
+>  		 chip->cs, op->data.buswidth, chip->ctl_val[ASPEED_SPI_READ]);
+>  
+[...]
+
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
