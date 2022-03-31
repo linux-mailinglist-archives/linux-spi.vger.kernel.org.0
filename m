@@ -2,75 +2,70 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6094ED98A
-	for <lists+linux-spi@lfdr.de>; Thu, 31 Mar 2022 14:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA1C4EDDF6
+	for <lists+linux-spi@lfdr.de>; Thu, 31 Mar 2022 17:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236000AbiCaMWm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 31 Mar 2022 08:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
+        id S239271AbiCaPzT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 31 Mar 2022 11:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235996AbiCaMWl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 31 Mar 2022 08:22:41 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840B365170;
-        Thu, 31 Mar 2022 05:20:53 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22VCK404046663;
-        Thu, 31 Mar 2022 07:20:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1648729204;
-        bh=U/Bd5JEPMZiETyPMjxTZkK0xTLGPXruq7bxamvC/BPE=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=p/8v7ChWKtnstAQkNaNKlPYO5HNv82HVDZDet7QGSG/V+7MQvfJ0L1rLZSrS3cYVQ
-         L60fynQTGf9ZeFkH483HHSEwH8AuIsvGGAlRHDANvK833a3Z8cySbMJzx2T82HQjcI
-         FeQy5iJdInmuqxeeAnxXgE+wrN+S9S16BOMbqRyk=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22VCK4cX045704
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 31 Mar 2022 07:20:04 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 31
- Mar 2022 07:20:03 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 31 Mar 2022 07:20:03 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22VCK2XC083438;
-        Thu, 31 Mar 2022 07:20:03 -0500
-Date:   Thu, 31 Mar 2022 17:50:02 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>
-CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-aspeed@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Tao Ren <rentao.bupt@gmail.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v4 02/11] dt-bindings: spi: Add Aspeed SMC controllers
- device tree binding
-Message-ID: <20220331122002.55vwda6fnnenuqhf@ti.com>
-References: <20220325100849.2019209-1-clg@kaod.org>
- <20220325100849.2019209-3-clg@kaod.org>
- <20220330191908.nhg52a5ayzczpzai@ti.com>
- <2a411a3e-4b7f-c116-b595-f33bffccb4e7@kaod.org>
+        with ESMTP id S233019AbiCaPzS (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 31 Mar 2022 11:55:18 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3259C1E3FD
+        for <linux-spi@vger.kernel.org>; Thu, 31 Mar 2022 08:53:30 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id x34so28652894ede.8
+        for <linux-spi@vger.kernel.org>; Thu, 31 Mar 2022 08:53:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XfqnpxEBLu1gt/dV+MpD3O2O3QJUWpLD1wEVvGzFG+k=;
+        b=ZYT8C/9Sf2/mU8nHDNHlcSA5Xv5Crgz93bGknHOlYsuRBRvkcRhPSA0TdbXxnxlHtC
+         6Ueqia9muU32k0nbRZcS0lyxhVUsU7lDyU/mlU+1DTdyf8YSKCJ3zDxgYjiZTPEJZv7h
+         1KEPonjd/Bai1bU4g5AiWvl4nHhBN9R7qZXYmYZoYBUKoxNYQzOscReUvEz7j4AxIPrI
+         bUCK0ha9rOVYqMewOI/s1Pn9GlDFWkalWNcG123mJSilbyKEezdpXX42by1IhRQP3ojf
+         ogG/18GIgKw277U9iH4Ivz32ykY16uf3pMvHjqMxiSWW3y+k1mOJZOOEB88e+vaIV/qc
+         bwZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XfqnpxEBLu1gt/dV+MpD3O2O3QJUWpLD1wEVvGzFG+k=;
+        b=56lRnN+H0CjsaNHHLWXNmtSFLyKDvgMV85yvQHtyjuP8JgshXyXLzDzZL26plFTJAn
+         e8kkHWlo7X2nAe9yD3Pq4CSYEP1yeFRMzRy4Jfp644qREqWvDppMxt8tZYQ+M6rJxMJN
+         llKJhvt1v2vanf8RmbCtATzB0dG4Ir0NwslX57ajr6gNKnDEJTpKJwNFm6y4UKLLzOxE
+         44zRoOu/wdEnMIP7S84Mdw+Cv+5mtZTVQATc4BspKwuKO+4r6dhjeL3sKdZ8BO3aGP5J
+         CAbVOc5F1oZUmi5PazemifI2eDUXPNOIZLsCP8ee+hFy/cpU7ZpOT8qUfRomuk0XgI+u
+         UJPQ==
+X-Gm-Message-State: AOAM532K788ME/1lsBFGKm8dZRfiIhUsbSomGs0vPRcRpTIaPqTZqmD2
+        ElZLbGSLayg64Rv4Dh/zTaG8ag==
+X-Google-Smtp-Source: ABdhPJz78zD5NmLuCynbTIQIfUn3lkSnR/YHoY9TISYRgxpFTIMDeF9dNJV6AF94dMfTO/oNAX41MQ==
+X-Received: by 2002:a05:6402:5243:b0:419:4ce2:cb5c with SMTP id t3-20020a056402524300b004194ce2cb5cmr17315679edd.151.1648742008767;
+        Thu, 31 Mar 2022 08:53:28 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id z6-20020a056402274600b004194fc1b7casm11658583edd.48.2022.03.31.08.53.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 08:53:28 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Subject: [PATCH v2 0/4] spi: dt-bindings: qcom: convert qcom,spi-qup to DT schema
+Date:   Thu, 31 Mar 2022 17:53:16 +0200
+Message-Id: <20220331155320.714754-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2a411a3e-4b7f-c116-b595-f33bffccb4e7@kaod.org>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,90 +73,39 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 31/03/22 09:36AM, Cédric Le Goater wrote:
-> Hello Pratyush,
-> 
-> On 3/30/22 21:19, Pratyush Yadav wrote:
-> > On 25/03/22 11:08AM, Cédric Le Goater wrote:
-> > > The "interrupt" property is optional because it is only necessary for
-> > > controllers supporting DMAs (Not implemented yet in the new driver).
-> > > 
-> > > Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-> > > Tested-by: Joel Stanley <joel@jms.id.au>
-> > > Tested-by: Tao Ren <rentao.bupt@gmail.com>
-> > > Reviewed-by: Joel Stanley <joel@jms.id.au>
-> > > Reviewed-by: Rob Herring <robh@kernel.org>
-> > > Signed-off-by: Cédric Le Goater <clg@kaod.org>
-> > > ---
-> > >   .../bindings/spi/aspeed,ast2600-fmc.yaml      | 87 +++++++++++++++++++
-> > >   MAINTAINERS                                   |  9 ++
-> > >   2 files changed, 96 insertions(+)
-> > >   create mode 100644 Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
-> > > new file mode 100644
-> > > index 000000000000..e16bbcd38560
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
-> > > @@ -0,0 +1,87 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/spi/aspeed,ast2600-fmc.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Aspeed SMC controllers bindings
-> > > +
-> > > +maintainers:
-> > > +  - Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-> > > +  - Cédric Le Goater <clg@kaod.org>
-> > > +
-> > > +description: |
-> > > +  This binding describes the Aspeed Static Memory Controllers (FMC and
-> > > +  SPI) of the AST2400, AST2500 and AST2600 SOCs.
-> > > +
-> > > +allOf:
-> > > +  - $ref: "spi-controller.yaml#"
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - aspeed,ast2600-fmc
-> > > +      - aspeed,ast2600-spi
-> > > +      - aspeed,ast2500-fmc
-> > > +      - aspeed,ast2500-spi
-> > > +      - aspeed,ast2400-fmc
-> > > +      - aspeed,ast2400-spi
-> > > +
-> > > +  reg:
-> > > +    items:
-> > > +      - description: registers
-> > > +      - description: memory mapping
-> > > +
-> > > +  clocks:
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupts:
-> > > +    maxItems: 1
-> > > +
-> > > +patternProperties:
-> > > +  "@[0-9a-f]+":
-> > > +    type: object
-> > > +
-> > > +    properties:
-> > > +      spi-rx-bus-width:
-> > > +        enum: [1, 2, 4]
-> > 
-> > No need for this. It should already be taken care of by
-> > spi-peripheral-props.yaml
-> 
-> So we could drop the whole 'patternProperties' section ?
+Hi,
 
-Yes.
+Changes since v1
+================
+1. Fix path in com/qcom,gsbi.txt.
+2. Merge clock-names in example, correct $ref path (Kuldeep).
 
-[...]
+Merging
+=======
+The DTS patches are independent and silence warnings pointed
+out by schema.
+
+Best regards,
+Krzysztof
+
+Cc: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+
+Krzysztof Kozlowski (4):
+  ARM: dts: qcom: ipq4019: align dmas in SPI with DT schema
+  arm64: dts: qcom: msm8916: align dmas in SPI with DT schema
+  arm64: dts: qcom: qcs404: align clocks in SPI with DT schema
+  spi: dt-bindings: qcom,spi-qup: convert to dtschema
+
+ .../bindings/soc/qcom/qcom,gsbi.txt           |   2 +-
+ .../devicetree/bindings/spi/qcom,spi-qup.txt  | 103 ------------------
+ .../devicetree/bindings/spi/qcom,spi-qup.yaml |  81 ++++++++++++++
+ arch/arm/boot/dts/qcom-ipq4019.dtsi           |   8 +-
+ arch/arm64/boot/dts/qcom/msm8916.dtsi         |  24 ++--
+ arch/arm64/boot/dts/qcom/qcs404.dtsi          |  36 +++---
+ 6 files changed, 116 insertions(+), 138 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qup.yaml
 
 -- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+2.32.0
+
