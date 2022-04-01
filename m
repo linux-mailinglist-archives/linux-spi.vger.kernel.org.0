@@ -2,130 +2,104 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1554EF064
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Apr 2022 16:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 097B54EF875
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Apr 2022 18:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347340AbiDAOf0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 1 Apr 2022 10:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
+        id S1346981AbiDAQ4G (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 1 Apr 2022 12:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347413AbiDAOcb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Apr 2022 10:32:31 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F371EB82C
-        for <linux-spi@vger.kernel.org>; Fri,  1 Apr 2022 07:28:55 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id a17so3150939edm.9
-        for <linux-spi@vger.kernel.org>; Fri, 01 Apr 2022 07:28:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1adJU3bhpcLZT1nUnce0EbLAPPbeXtcoClCStkyt9oM=;
-        b=VZ39SYrJ6PEuCxfqeqF/rIXuHwNzeIMR4RSC49UzVjrWCxHsx0BHlKRiOJeA1aqUBh
-         na4Lqb60PW31/7aJkHlKz9+Z08pkCtFhMyaXwX8Iy9jpon6g4s2pKRT0RCBleow+tdtW
-         QEiPis/ejow0d2ueveCIyUc4iwSnr38jDYFT1GE4dFhiPG2Udvvm/zmLMNbKxlfnEv9T
-         xXEkatWlkg9mzdM+9/XY5ee1SCfy1wGgdgcSrCJTna7dFOWET+ne5lUiyS7OR2YiKL05
-         F4AECbU5SrJABBKxCxYd09Lp7o/CQMl/NRSvMaytCitplDniftvzBoHs8IuJsmG2EI/r
-         5AOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1adJU3bhpcLZT1nUnce0EbLAPPbeXtcoClCStkyt9oM=;
-        b=E28xhH6efkcCZlF2Kx9YTgHIwhrdLDBxD+I/YlFwyWKpS6ZsMiT36FLaUhMV//DEkJ
-         YUoxJuTyIALhOu4itDTFuYkQu1O4mkSSa+e/Qz2BRdMbVGgZSvJGUsC1H6VZnEtGWqQm
-         bNWv3xq0EOdnF3L5P1SISZLxX6QnmxtLMNp3LAZSHBjxJ9XFqFd/R37AIYetTwPsJwoq
-         G9y3G/hf+wiyhJPBivGpKLO/3cO2m8KbrUa+dG7YmiUkqFYJLv3n4exMyHcSyB1IjtP+
-         iiWwfOExidJav+qS0zyFU4Z8m6G6JNGIk8z2hWgZRvU2g5/0pZF5hwg/vBttvIpk8qvS
-         1gsA==
-X-Gm-Message-State: AOAM531P1bjiRnf0OccxU6QOuRqKgZ7jSJ2fGuzrFZKoaZAIUG+xigAm
-        cSyH0HdyWv6uYY1hEhZzDAdY4g==
-X-Google-Smtp-Source: ABdhPJwzpAYQRuMQgEMzKTOmbEnykgFo3n9w7xJ0j1Au8dBsZfXNwd8pz6gGo426T8lHlCYDUd4yPw==
-X-Received: by 2002:a05:6402:2681:b0:419:4564:1bd4 with SMTP id w1-20020a056402268100b0041945641bd4mr21552795edd.358.1648823333577;
-        Fri, 01 Apr 2022 07:28:53 -0700 (PDT)
-Received: from [192.168.0.170] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id f17-20020a056402355100b0041925e80963sm1285501edd.41.2022.04.01.07.28.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Apr 2022 07:28:53 -0700 (PDT)
-Message-ID: <67df9824-898c-192f-7baf-a1f05936f0ab@linaro.org>
-Date:   Fri, 1 Apr 2022 16:28:52 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/2] spi: dt-bindings: qcom,spi-geni-qcom: convert to
- dtschema
-Content-Language: en-US
-To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        with ESMTP id S1349886AbiDAQzc (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Apr 2022 12:55:32 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5E924966;
+        Fri,  1 Apr 2022 09:52:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=hnfwsLgZVOZIuT10KF5Y8OYWiXObcAHQE/c7M1fjDc0=; b=HcYyiy+58bOxPhq9eI47Tx4i59
+        sFiUQBSBqbPaBq4b62MYXvR9ZMNc1DF+F2aVc/N0teqxKpX3wkmMZgqderzDUiVs/YNd/8O2i/l8o
+        0qMhyxBxiakSw/uZJp6jfESpENPZ42VPX+gwwqCPPHqtNxADYdnSqPC28wHOABKh3XFHAnKSlHnEf
+        +G+cpromG2/59eQrdza4WQ3RfbknpilV5m+nPLHZKsp+WNTd/5NFrtibL2W2lild0ETI6YbTpi/oA
+        sq2/yN6KTYDSBg9Vkbredx4xNHlGEkG6Cq+x91FDkgLMdCHNtZLRBaTyK9xXY3ycQdrdijDl1x6ht
+        cZFHnk+g==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58084)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1naKV6-0006Mv-OR; Fri, 01 Apr 2022 17:51:52 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1naKV1-0000Ms-D9; Fri, 01 Apr 2022 17:51:47 +0100
+Date:   Fri, 1 Apr 2022 17:51:47 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Robin Gong <yibin.gong@nxp.com>
+Cc:     vkoul@kernel.org, mark.rutland@arm.com, broonie@kernel.org,
+        robh+dt@kernel.org, catalin.marinas@arm.com, will.deacon@arm.com,
+        shawnguo@kernel.org, festevam@gmail.com, s.hauer@pengutronix.de,
+        martin.fuzzey@flowbird.group, u.kleine-koenig@pengutronix.de,
+        dan.j.williams@intel.com, matthias.schiffer@ew.tq-group.com,
+        frieder.schrempf@kontron.de, m.felsch@pengutronix.de,
+        l.stach@pengutronix.de, xiaoning.wang@nxp.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-References: <20220331160248.716234-1-krzysztof.kozlowski@linaro.org>
- <20220331175817.GA91341@9a2d8922b8f1>
- <ddc12aab-3cff-16a1-9ec9-a246240f9521@linaro.org>
- <20220401135224.GA40286@9a2d8922b8f1>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220401135224.GA40286@9a2d8922b8f1>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        linux-spi@vger.kernel.org, linux-imx@nxp.com,
+        kernel@pengutronix.de, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v15 11/12] dmaengine: imx-sdma: add uart rom script
+Message-ID: <Ykcto7pM3xSGRIse@shell.armlinux.org.uk>
+References: <1626201709-19643-1-git-send-email-yibin.gong@nxp.com>
+ <1626201709-19643-12-git-send-email-yibin.gong@nxp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1626201709-19643-12-git-send-email-yibin.gong@nxp.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 01/04/2022 15:52, Kuldeep Singh wrote:
-> On Thu, Mar 31, 2022 at 09:40:08PM +0200, Krzysztof Kozlowski wrote:
->> On 31/03/2022 19:58, Kuldeep Singh wrote:
->>> On Thu, Mar 31, 2022 at 06:02:47PM +0200, Krzysztof Kozlowski wrote:
->>>> Convert the GENI based Qualcomm Universal Peripheral (QUP) Serial
->>>> Peripheral Interface (SPI) bindings to DT Schema.
->>>>
->>>> The original bindings in TXT were not complete, so add during conversion
->>>> properties already used in DTS and/or in the driver: reg-names, dmas,
->>>> interconnects, operating points and power-domains.
->>>>
->>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Wed, Jul 14, 2021 at 02:41:48AM +0800, Robin Gong wrote:
+> For the compatibility of NXP internal legacy kernel before 4.19 which
+> is based on uart ram script and upstreaming kernel based on uart rom
+> script, add both uart ram/rom script in latest sdma firmware. By default
+> uart rom script used.
+> Besides, add two multi-fifo scripts for SAI/PDM on i.mx8m/8mm and add
+> back qspi script miss for v4(i.mx7d/8m/8mm family, but v3 is for i.mx6).
 > 
-> [...]
+> rom script:
+>         uart_2_mcu_addr
+> 	uartsh_2_mcu_addr /* through spba bus */
+> am script:
+> 	uart_2_mcu_ram_addr
+> 	uartsh_2_mcu_ram_addr /* through spba bus */
 > 
->>>> +  reg:
->>>> +    maxItems: 1
->>>> +
->>>> +  reg-names:
->>>> +    const: se
->>>
->>> Why reg-names is required?
->>> Reg contain max 1 value, we can skip reg-names like other users.
->>>
->>> Also, "se" is used as clock name and using it again for reg-names?
->>> I think this is wrong and reg-names shouldn't be documented.
->>
->> reg-names are not required. If you ask why they are documented? As I
->> wrote in commit msg - bindings were not fully updated to DTSes being used.
-> 
-> Hi Krzysztof,
-> 
-> Power-domains, operating-points etc. makes sense, but reg-names?
-> 
-> With quick search, sm8150.dtsi is the only user of reg-names. Moreover,
-> there is no reference in driver to incorporate it.
-> Driver(drivers/spi/spi-geni-qcom.c) looks for "se" as clock name and not
-> as reg-name. If there's one, kindly help in pointing out.
-> 
-> It seems you are adding reg-names because some DT is using it and no
-> other reason. And with no reference even in driver, that's surely not a
-> way to go ahead as you have been advising the same in past.
+> Please get latest sdma firmware from the below and put them into the path
+> (/lib/firmware/imx/sdma/):
+> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+> /tree/imx/sdma
 
-I don't mind dropping it.
+Thanks for breaking my platforms when upgrading from 5.13 to 5.16, that
+was a really nice experience.
 
-Best regards,
-Krzysztof
+This is _not_ what we do with the Linux kernel. We do not require random
+bits of userspace to be upgraded/downgraded in lock-step with the
+kernel. There is absolutely no reason for this to happen in this case.
+
+The SDMA firmware is already versioned. You know what version is
+present. Randomly renaming stuff in a structure that represents the
+contents of firmware like this is just not on.
+
+I know it's taken 9 months to find this, but PLEASE do not ever do this
+again, and never think this kind of thing is acceptable. It isn't.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
