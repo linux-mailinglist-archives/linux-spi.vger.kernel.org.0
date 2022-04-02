@@ -2,104 +2,105 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 097B54EF875
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Apr 2022 18:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F28D4F0036
+	for <lists+linux-spi@lfdr.de>; Sat,  2 Apr 2022 11:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346981AbiDAQ4G (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 1 Apr 2022 12:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
+        id S1354194AbiDBJwn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 2 Apr 2022 05:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349886AbiDAQzc (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 1 Apr 2022 12:55:32 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5E924966;
-        Fri,  1 Apr 2022 09:52:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=hnfwsLgZVOZIuT10KF5Y8OYWiXObcAHQE/c7M1fjDc0=; b=HcYyiy+58bOxPhq9eI47Tx4i59
-        sFiUQBSBqbPaBq4b62MYXvR9ZMNc1DF+F2aVc/N0teqxKpX3wkmMZgqderzDUiVs/YNd/8O2i/l8o
-        0qMhyxBxiakSw/uZJp6jfESpENPZ42VPX+gwwqCPPHqtNxADYdnSqPC28wHOABKh3XFHAnKSlHnEf
-        +G+cpromG2/59eQrdza4WQ3RfbknpilV5m+nPLHZKsp+WNTd/5NFrtibL2W2lild0ETI6YbTpi/oA
-        sq2/yN6KTYDSBg9Vkbredx4xNHlGEkG6Cq+x91FDkgLMdCHNtZLRBaTyK9xXY3ycQdrdijDl1x6ht
-        cZFHnk+g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58084)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1naKV6-0006Mv-OR; Fri, 01 Apr 2022 17:51:52 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1naKV1-0000Ms-D9; Fri, 01 Apr 2022 17:51:47 +0100
-Date:   Fri, 1 Apr 2022 17:51:47 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Robin Gong <yibin.gong@nxp.com>
-Cc:     vkoul@kernel.org, mark.rutland@arm.com, broonie@kernel.org,
-        robh+dt@kernel.org, catalin.marinas@arm.com, will.deacon@arm.com,
-        shawnguo@kernel.org, festevam@gmail.com, s.hauer@pengutronix.de,
-        martin.fuzzey@flowbird.group, u.kleine-koenig@pengutronix.de,
-        dan.j.williams@intel.com, matthias.schiffer@ew.tq-group.com,
-        frieder.schrempf@kontron.de, m.felsch@pengutronix.de,
-        l.stach@pengutronix.de, xiaoning.wang@nxp.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-imx@nxp.com,
-        kernel@pengutronix.de, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v15 11/12] dmaengine: imx-sdma: add uart rom script
-Message-ID: <Ykcto7pM3xSGRIse@shell.armlinux.org.uk>
-References: <1626201709-19643-1-git-send-email-yibin.gong@nxp.com>
- <1626201709-19643-12-git-send-email-yibin.gong@nxp.com>
+        with ESMTP id S1354189AbiDBJwl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 2 Apr 2022 05:52:41 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CE0657BE;
+        Sat,  2 Apr 2022 02:50:48 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KVsjd2M5Zz9sSQ;
+        Sat,  2 Apr 2022 11:50:45 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id z3MUvRq6RmtZ; Sat,  2 Apr 2022 11:50:45 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KVsjd1DWVz9sSK;
+        Sat,  2 Apr 2022 11:50:45 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 125F78B76D;
+        Sat,  2 Apr 2022 11:50:40 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id HCQ8W1xZ0UnK; Sat,  2 Apr 2022 11:50:40 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.136])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id CE5D98B768;
+        Sat,  2 Apr 2022 11:50:39 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2329oSiI683640
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sat, 2 Apr 2022 11:50:28 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2329oSfu683638;
+        Sat, 2 Apr 2022 11:50:28 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: [PATCH] spi: Prepare cleanup of powerpc's asm/prom.h
+Date:   Sat,  2 Apr 2022 11:50:21 +0200
+Message-Id: <5ed3298d8b5b1b5bf681d79584c61cb495852f4e.1648833423.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1626201709-19643-12-git-send-email-yibin.gong@nxp.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1648893020; l=1125; s=20211009; h=from:subject:message-id; bh=AN5+sJJJcquHvC2UPmI8GuxRgyVnpRlVKbnl/IP79Gc=; b=Fie+6glCGNPKokhM39eJzMe0z6W7PURsdfNqy7vMjCl9usnHh1FN57C9J6/EsQWtuuSXk/GHvDEo 1NQvLrlZA4x0XpUmOOvZf/TtHls5JEQdfQz2h4EZEVNLA2LSrlii
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, Jul 14, 2021 at 02:41:48AM +0800, Robin Gong wrote:
-> For the compatibility of NXP internal legacy kernel before 4.19 which
-> is based on uart ram script and upstreaming kernel based on uart rom
-> script, add both uart ram/rom script in latest sdma firmware. By default
-> uart rom script used.
-> Besides, add two multi-fifo scripts for SAI/PDM on i.mx8m/8mm and add
-> back qspi script miss for v4(i.mx7d/8m/8mm family, but v3 is for i.mx6).
-> 
-> rom script:
->         uart_2_mcu_addr
-> 	uartsh_2_mcu_addr /* through spba bus */
-> am script:
-> 	uart_2_mcu_ram_addr
-> 	uartsh_2_mcu_ram_addr /* through spba bus */
-> 
-> Please get latest sdma firmware from the below and put them into the path
-> (/lib/firmware/imx/sdma/):
-> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
-> /tree/imx/sdma
+powerpc's asm/prom.h brings some headers that it doesn't
+need itself.
 
-Thanks for breaking my platforms when upgrading from 5.13 to 5.16, that
-was a really nice experience.
+In order to clean it up, first add missing headers in
+users of asm/prom.h
 
-This is _not_ what we do with the Linux kernel. We do not require random
-bits of userspace to be upgraded/downgraded in lock-step with the
-kernel. There is absolutely no reason for this to happen in this case.
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ drivers/spi/spi-mpc52xx-psc.c | 1 +
+ drivers/spi/spi-mpc52xx.c     | 3 +++
+ 2 files changed, 4 insertions(+)
 
-The SDMA firmware is already versioned. You know what version is
-present. Randomly renaming stuff in a structure that represents the
-contents of firmware like this is just not on.
-
-I know it's taken 9 months to find this, but PLEASE do not ever do this
-again, and never think this kind of thing is acceptable. It isn't.
-
+diff --git a/drivers/spi/spi-mpc52xx-psc.c b/drivers/spi/spi-mpc52xx-psc.c
+index 21ef5d481faf..7654736c2c0e 100644
+--- a/drivers/spi/spi-mpc52xx-psc.c
++++ b/drivers/spi/spi-mpc52xx-psc.c
+@@ -20,6 +20,7 @@
+ #include <linux/spi/spi.h>
+ #include <linux/fsl_devices.h>
+ #include <linux/slab.h>
++#include <linux/of_irq.h>
+ 
+ #include <asm/mpc52xx.h>
+ #include <asm/mpc52xx_psc.h>
+diff --git a/drivers/spi/spi-mpc52xx.c b/drivers/spi/spi-mpc52xx.c
+index 51041526546d..3ebdce804b90 100644
+--- a/drivers/spi/spi-mpc52xx.c
++++ b/drivers/spi/spi-mpc52xx.c
+@@ -19,6 +19,9 @@
+ #include <linux/io.h>
+ #include <linux/of_gpio.h>
+ #include <linux/slab.h>
++#include <linux/of_address.h>
++#include <linux/of_irq.h>
++
+ #include <asm/time.h>
+ #include <asm/mpc52xx.h>
+ 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.35.1
+
