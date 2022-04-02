@@ -2,105 +2,144 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F28D4F0036
-	for <lists+linux-spi@lfdr.de>; Sat,  2 Apr 2022 11:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1F24F056E
+	for <lists+linux-spi@lfdr.de>; Sat,  2 Apr 2022 20:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354194AbiDBJwn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 2 Apr 2022 05:52:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
+        id S245145AbiDBSmO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 2 Apr 2022 14:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354189AbiDBJwl (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 2 Apr 2022 05:52:41 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CE0657BE;
-        Sat,  2 Apr 2022 02:50:48 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KVsjd2M5Zz9sSQ;
-        Sat,  2 Apr 2022 11:50:45 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id z3MUvRq6RmtZ; Sat,  2 Apr 2022 11:50:45 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KVsjd1DWVz9sSK;
-        Sat,  2 Apr 2022 11:50:45 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 125F78B76D;
-        Sat,  2 Apr 2022 11:50:40 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id HCQ8W1xZ0UnK; Sat,  2 Apr 2022 11:50:40 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.136])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id CE5D98B768;
-        Sat,  2 Apr 2022 11:50:39 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2329oSiI683640
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Sat, 2 Apr 2022 11:50:28 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2329oSfu683638;
-        Sat, 2 Apr 2022 11:50:28 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH] spi: Prepare cleanup of powerpc's asm/prom.h
-Date:   Sat,  2 Apr 2022 11:50:21 +0200
-Message-Id: <5ed3298d8b5b1b5bf681d79584c61cb495852f4e.1648833423.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S244978AbiDBSmL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 2 Apr 2022 14:42:11 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A31B47AE0
+        for <linux-spi@vger.kernel.org>; Sat,  2 Apr 2022 11:40:18 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id w21so8642509wra.2
+        for <linux-spi@vger.kernel.org>; Sat, 02 Apr 2022 11:40:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R0bwaoRy8YP0Kka6d0PR4kRnGp6k/gPNidKoi7gvCCI=;
+        b=URDJ3cCHTnlp0bYj+GpNw8EIKiC1517X/uMlkAr23rxB/6VlQHcy/jrd0G6QM65nZX
+         2Luj++y1IZb5rOWXfFShm94mRf+nigTy7tk8+eiRNSXmVSUA07YeV8/G97iDXbAoySFP
+         wtrkxCHLyhLHZXrDRoMbnW0AFkVAsb18orB2ZK0Z0Cv0QD2unyangyc7QXsFHPjYOXpL
+         8GglQZrPbQSNPWHhMzsfoAWjBOF3ddtl1U3te8n8yEn7LmKtTNDeL/wO/j8yzMPDi0wd
+         d1Qc2LmnDf8Hkm2wZSQ0NW+bcExEihlFBUGL2EhfHKzYp4q8vERtnhJuda6dEG07gAHZ
+         /cWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R0bwaoRy8YP0Kka6d0PR4kRnGp6k/gPNidKoi7gvCCI=;
+        b=rxN8eeFKfHNVy2QYl4YSERAwo16WOsjNHT9P5OwOLL+LhhghpLjJlII6PUgL8wpbL6
+         8jSGPoe09AqV0JU0yDPAC/o2L5imjICJC6todvvyFiMi4SknweGBOWJF171WzasDNQ3t
+         nCPgM68H4U5KzZ5mWSolMIF6Gd4l9D+uJJOYZJOk9VDCvgx6rWYIdP39QjJqX5bHggNw
+         Bjbc932RD8Qwe0IJV+V+sp1ICuevoBbPQ838HXDoaXd9TiTsjquSxKhubYt+Bde7UzK2
+         Sjnp1V4ZmzPVNElQlSNze2PlEjmvAfLSRS/TGmzlI326SL5osXVy4ntET0uHvGEmNhDf
+         RWMA==
+X-Gm-Message-State: AOAM532/szBn35U2ntzSyWaHMWvKjiOWU/9a3RiJdEa/OrteR3RvHxNG
+        mr6ofVoeFEY3q5zWa8vwQAqW7A==
+X-Google-Smtp-Source: ABdhPJyr8f7Kmujacwvt6D5jb632G4JW2j0OdeTO8iHDHsAdsWcTY+7h1E41JoLr7Iu+uJ1G3+sN2g==
+X-Received: by 2002:a05:6000:1887:b0:204:2917:ad3e with SMTP id a7-20020a056000188700b002042917ad3emr11877380wri.138.1648924816609;
+        Sat, 02 Apr 2022 11:40:16 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id m20-20020a05600c4f5400b0038b5162260csm6760502wmq.23.2022.04.02.11.40.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Apr 2022 11:40:16 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 0/9] dt-bindings: qcom: convert entire GSBI (QUP I2C/SPI/UART) to DT schema
+Date:   Sat,  2 Apr 2022 20:40:02 +0200
+Message-Id: <20220402184011.132465-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1648893020; l=1125; s=20211009; h=from:subject:message-id; bh=AN5+sJJJcquHvC2UPmI8GuxRgyVnpRlVKbnl/IP79Gc=; b=Fie+6glCGNPKokhM39eJzMe0z6W7PURsdfNqy7vMjCl9usnHh1FN57C9J6/EsQWtuuSXk/GHvDEo 1NQvLrlZA4x0XpUmOOvZf/TtHls5JEQdfQz2h4EZEVNLA2LSrlii
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-powerpc's asm/prom.h brings some headers that it doesn't
-need itself.
+Hi,
 
-In order to clean it up, first add missing headers in
-users of asm/prom.h
+Changes since v2
+================
+1. Several new schema patches (GSBI, I2C and UART schema).
+2. Several DTS fixes for clocks and DMAs. The choice of dma tx-rx
+   and clocks core-iface was by more-or-less number of fixes needed.
+3. Add Kuldeep acks to patches without changes.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- drivers/spi/spi-mpc52xx-psc.c | 1 +
- drivers/spi/spi-mpc52xx.c     | 3 +++
- 2 files changed, 4 insertions(+)
+Changes since v1
+================
+1. Fix path in com/qcom,gsbi.txt.
+2. Merge clock-names in example, correct $ref path (Kuldeep).
 
-diff --git a/drivers/spi/spi-mpc52xx-psc.c b/drivers/spi/spi-mpc52xx-psc.c
-index 21ef5d481faf..7654736c2c0e 100644
---- a/drivers/spi/spi-mpc52xx-psc.c
-+++ b/drivers/spi/spi-mpc52xx-psc.c
-@@ -20,6 +20,7 @@
- #include <linux/spi/spi.h>
- #include <linux/fsl_devices.h>
- #include <linux/slab.h>
-+#include <linux/of_irq.h>
- 
- #include <asm/mpc52xx.h>
- #include <asm/mpc52xx_psc.h>
-diff --git a/drivers/spi/spi-mpc52xx.c b/drivers/spi/spi-mpc52xx.c
-index 51041526546d..3ebdce804b90 100644
---- a/drivers/spi/spi-mpc52xx.c
-+++ b/drivers/spi/spi-mpc52xx.c
-@@ -19,6 +19,9 @@
- #include <linux/io.h>
- #include <linux/of_gpio.h>
- #include <linux/slab.h>
-+#include <linux/of_address.h>
-+#include <linux/of_irq.h>
-+
- #include <asm/time.h>
- #include <asm/mpc52xx.h>
- 
+Merging
+=======
+1. The DTS patches are independent and silence warnings pointed
+    out by schema.
+
+2. The DT schema patches should be taken together as GSBI (final patch)
+   depends on previous bindings.
+
+Best regards,
+Krzysztof
+
+Cc: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+
+Krzysztof Kozlowski (9):
+  arm64: dts: qcom: align dmas in I2C/SPI/UART with DT schema
+  arm64: dts: qcom: align clocks in I2C/SPI with DT schema
+  ARM: dts: qcom: ipq4019: align dmas in SPI/UART with DT schema
+  ARM: dts: qcom: ipq4019: align clocks in I2C with DT schema
+  ARM: dts: qcom: msm8660: disable GSBI8
+  spi: dt-bindings: qcom,spi-qup: convert to dtschema
+  dt-bindings: serial: qcom,msm-uartdm: convert to dtschema
+  dt-bindings: i2c: qcom,i2c-qup: convert to dtschema
+  dt-bindings: qcom: qcom,gsbi: convert to dtschema
+
+ .../devicetree/bindings/i2c/qcom,i2c-qup.txt  |  40 ------
+ .../devicetree/bindings/i2c/qcom,i2c-qup.yaml |  89 ++++++++++++
+ .../bindings/serial/qcom,msm-uartdm.txt       |  81 -----------
+ .../bindings/serial/qcom,msm-uartdm.yaml      | 112 +++++++++++++++
+ .../bindings/soc/qcom/qcom,gsbi.txt           |  87 ------------
+ .../bindings/soc/qcom/qcom,gsbi.yaml          | 133 ++++++++++++++++++
+ .../devicetree/bindings/spi/qcom,spi-qup.txt  | 103 --------------
+ .../devicetree/bindings/spi/qcom,spi-qup.yaml |  81 +++++++++++
+ arch/arm/boot/dts/qcom-ipq4019.dtsi           |  36 ++---
+ arch/arm/boot/dts/qcom-msm8660.dtsi           |   1 +
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi         |  20 +--
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi         |  40 +++---
+ arch/arm64/boot/dts/qcom/msm8916.dtsi         |  68 ++++-----
+ arch/arm64/boot/dts/qcom/msm8953.dtsi         |  48 +++----
+ arch/arm64/boot/dts/qcom/msm8994.dtsi         |  42 +++---
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |  36 ++---
+ arch/arm64/boot/dts/qcom/qcs404.dtsi          |  92 ++++++------
+ 17 files changed, 607 insertions(+), 502 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-qup.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-qup.yaml
+ delete mode 100644 Documentation/devicetree/bindings/serial/qcom,msm-uartdm.txt
+ create mode 100644 Documentation/devicetree/bindings/serial/qcom,msm-uartdm.yaml
+ delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qup.yaml
+
 -- 
-2.35.1
+2.32.0
 
