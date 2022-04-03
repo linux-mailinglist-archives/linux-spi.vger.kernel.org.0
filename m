@@ -2,60 +2,61 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 008514F0AAC
-	for <lists+linux-spi@lfdr.de>; Sun,  3 Apr 2022 17:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D1C4F0AB0
+	for <lists+linux-spi@lfdr.de>; Sun,  3 Apr 2022 17:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359170AbiDCPjg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 3 Apr 2022 11:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
+        id S232259AbiDCPkd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 3 Apr 2022 11:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358557AbiDCPjf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 3 Apr 2022 11:39:35 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E66B393DC
-        for <linux-spi@vger.kernel.org>; Sun,  3 Apr 2022 08:37:41 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id w21so10985181wra.2
-        for <linux-spi@vger.kernel.org>; Sun, 03 Apr 2022 08:37:41 -0700 (PDT)
+        with ESMTP id S1358459AbiDCPkb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 3 Apr 2022 11:40:31 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7043C26F7
+        for <linux-spi@vger.kernel.org>; Sun,  3 Apr 2022 08:38:36 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id u3so10981641wrg.3
+        for <linux-spi@vger.kernel.org>; Sun, 03 Apr 2022 08:38:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=eDFMs7EElGjgVXSi1G28DbTYKExJESQOSQxzUR+xKqM=;
-        b=lnbGEtlamweYbPt09LLUZZmY1OEhSHyThX/GrCcNl6El493Cx8SaCgtQqMkE17prcX
-         J4LfZqyU7meN7ZKBqPiiaqhEz48OQnHqLhAsz6amdsKGeWKgN2kgs5yDi1GqwrBu1PqX
-         Gbm4GlMU9jc9lgq2KPbfHuzHqtBonIWl+PqeIdB1b5Cpz4H5t624nAEKk4q2tOus8EbX
-         ze51geAwftRiFo4VVmbrccFnbRQ7WwQvc/jJ302DDtrGiVE1dmAAG1WFhfGrfBVVPuXt
-         MzsCJc8qaT8+5p98TbBnT842jG/MYim7LYqY2m7SIu/Lrq4rx6om8VKeS5BRzJaTTgMA
-         j12g==
+        bh=sEXxi1oey9g2W1h5KyCkUsYbDt35qHocHgmTe1tpXso=;
+        b=JcpLNe9/pudDEVRHxP+QM8uFpur6LRnLKIvN74+hO6fHL1sIymSzFuSaQyxNjmwYv2
+         s08Q71x4QJOW7Nh/1LbUf3OIY+3t8DFVw3/w/m14RKBsVEjJ8N737SMA2WP2SfEVwxyZ
+         PtGiXUoDTa+sVdEwFlcPzAYunvHinNAb1BuxiifJ/b3ac3Lsunq+Nn/6a661aRBmNlRw
+         N/7oCshyxl+lICX2Tf3oMNRyPrdhwhKCzAOmpahP1FkeCt+QwPTz0gJzgNnMXsS9XUX/
+         0w6UuhpvnLqRjGUYqWZebaQs7UBuhnEB0uCU0WAmpuwMVW6WYOc1qY9Wrjb2WbFz069y
+         A/ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=eDFMs7EElGjgVXSi1G28DbTYKExJESQOSQxzUR+xKqM=;
-        b=wH1kPxjTj6NJPDCk9mEr0IUXwrMzn+g4MKyp6KmWme9VUZ5fraX8xnQCSH0k46reR9
-         ufD6xK6RjdBiDOPKqf+woQUJyA93CgutcKK0VbclWjqFcEnFhzrDi8Vza+m+22oFBcvQ
-         TiURCezZ9cgH/8top2+Z016sTJ0CiPyMBygaY5Zc7eStnMdOF22FSBjkv/tPHCKjr170
-         Cxh7bwhGJZNZVuuPxROAFf6mT+IF6HOcB70qsfEPyS6R1zdUaQf4Ta2EkaHKyQsAF4oN
-         NYhBaVOSEHJG0jt0QCcZeb85jKBvW99vIiV+Cm+RdAdvV63oTXZuPPcJ97hur8DZ3T6m
-         RQJQ==
-X-Gm-Message-State: AOAM532FE3FIl3q73fiJv0mGa88vTIgtQR3Hcnew5Diedk4nVpxynxfA
-        cGmgru8Xjs+pSuYg2sGYGqF9wA==
-X-Google-Smtp-Source: ABdhPJzno6MvWVjCp8ZyExCrnTXODZzrLF1ozU8hgn7hmy1XaDLiOBxe1FQc2Cu1D2oZQReX5TZNZw==
-X-Received: by 2002:a5d:47c3:0:b0:204:5b8:225c with SMTP id o3-20020a5d47c3000000b0020405b8225cmr14059127wrc.474.1649000259960;
-        Sun, 03 Apr 2022 08:37:39 -0700 (PDT)
+        bh=sEXxi1oey9g2W1h5KyCkUsYbDt35qHocHgmTe1tpXso=;
+        b=DD5iGXw+FYSA+oQl/TqEQv4uC/jlXIbKbFxA3SZkbJ5VXfGUs3r7DZeYM8Oz1rxhwh
+         gtxzcbafszQ04a045sX98CtyT6z6GTQxF8SOJogOsFtOxYH9kn22vbCZhwM8KIIxjQPT
+         pyujKtT9SqJ8fL6ev7ZrYYDwkptOOqVhIW9cQN+8lAT15V4Nx0QEsWy8CkrngKIvfXlD
+         in2+YYQFu3p5ig5xOCwkNWdye8P4w1mYzu7JYAYObOo7QxCYPm4/pvpudcVdgdCLyG1S
+         WlHrWKXLY2Yc/5XR2iWjedVyYdmXtKo6zjBm7/A4qKrD9Mp16NL7u6mFwVirBtu/GmVv
+         avZA==
+X-Gm-Message-State: AOAM5304YB04eUEp4tWku5tdy48zRaAPsIDtyuyZ/XULHSUHPuMqCJex
+        qkeJzP5RTdPHpCJn2tnOPDADUw==
+X-Google-Smtp-Source: ABdhPJzjTyPm0Buqxb9GeLrcApRwPGIC65Z+MHoPlQL+zDOwSv6J3ZSmjdbYZuXDAfLM93+fdC300w==
+X-Received: by 2002:a5d:64c4:0:b0:206:10a0:4034 with SMTP id f4-20020a5d64c4000000b0020610a04034mr1155255wri.104.1649000315078;
+        Sun, 03 Apr 2022 08:38:35 -0700 (PDT)
 Received: from [192.168.0.172] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id m63-20020a1c2642000000b0038e5fa06b50sm4607976wmm.31.2022.04.03.08.37.38
+        by smtp.gmail.com with ESMTPSA id r4-20020a05600c35c400b0038cbd8c41e9sm14788866wmq.12.2022.04.03.08.38.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Apr 2022 08:37:39 -0700 (PDT)
-Message-ID: <817dda10-39db-adfc-376d-a3d5e037937e@linaro.org>
-Date:   Sun, 3 Apr 2022 17:37:38 +0200
+        Sun, 03 Apr 2022 08:38:34 -0700 (PDT)
+Message-ID: <d2815bca-22c2-691c-1fc0-07fe87a401f2@linaro.org>
+Date:   Sun, 3 Apr 2022 17:38:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 3/4] dt-bindings: spi: add binding doc for spi-mtk-snfi
+Subject: Re: [PATCH resend 3/4] dt-bindings: spi: add binding doc for
+ spi-mtk-snfi
 Content-Language: en-US
-To:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@lists.infradead.org
+To:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org
 Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -70,7 +71,6 @@ Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Paul Cercueil <paul@crapouillou.net>,
         Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
-        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
         "moderated list:ARM/Mediatek SoC support" 
@@ -79,10 +79,10 @@ Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         <linux-mediatek@lists.infradead.org>,
         open list <linux-kernel@vger.kernel.org>,
         "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
-References: <20220403131154.1267887-1-gch981213@gmail.com>
- <20220403131154.1267887-4-gch981213@gmail.com>
+References: <20220403131453.1269229-1-gch981213@gmail.com>
+ <20220403131453.1269229-4-gch981213@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220403131154.1267887-4-gch981213@gmail.com>
+In-Reply-To: <20220403131453.1269229-4-gch981213@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -95,86 +95,13 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 03/04/2022 15:11, Chuanhong Guo wrote:
+On 03/04/2022 15:14, Chuanhong Guo wrote:
 > Add device-tree binding documentation for Mediatek SPI-NAND Flash
 > Interface.
-
-Thank you for your patch. There is something to discuss/improve.
-
 > 
 > Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-> ---
->  .../bindings/spi/mediatek,spi-mtk-snfi.yaml   | 87 +++++++++++++++++++
->  1 file changed, 87 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
-> new file mode 100644
-> index 000000000000..166c6b50b9d1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
-> @@ -0,0 +1,87 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/mediatek,spi-mtk-snfi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: SPI-NAND flash controller for MediaTek ARM SoCs
-> +
-> +maintainers:
-> +  - Chuanhong Guo <gch981213@gmail.com>
-> +
-> +description: |
-> +  The Mediatek SPI-NAND flash controller is an extended version of
-> +  the Mediatek NAND flash controller. It can perform standard SPI
-> +  instructions with one continuous write and one read for up-to 0xa0
-> +  bytes. It also supports typical SPI-NAND page cache operations
-> +  in single, dual or quad IO mode with piplined ECC encoding/decoding
-> +  using the accompanying ECC engine. There should be only one spi
-> +  slave device following generic spi bindings.
-> +
-> +allOf:
-> +  - $ref: /schemas/spi/spi-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt7622-snand
-> +      - mediatek,mt7629-snand
 
-One blank line, please.
-
-> +  reg:
-> +    items:
-> +      - description: core registers
-> +
-> +  interrupts:
-> +    items:
-> +      - description: NFI interrupt
-> +
-> +  clocks:
-> +    items:
-> +      - description: clock used for the controller
-> +      - description: clock used for the SPI bus
-> +
-> +  clock-names:
-> +    items:
-> +      - const: nfi_clk
-> +      - const: pad_clk
-> +
-> +  ecc-engine:
-
-The nand-chip.yaml defines a nand-ecc-engine, so how about using that
-one? I know mtk-nand.txt uses ecc-engine, but for new schema better to
-use properties from existing YAML.
-
-> +    description: device-tree node of the accompanying ECC engine.
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +
-
-Rest looks good, thank you!
-
+I responded to you first version.
 
 Best regards,
 Krzysztof
