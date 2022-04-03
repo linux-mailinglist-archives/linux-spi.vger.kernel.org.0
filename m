@@ -2,62 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D1C4F0AB0
-	for <lists+linux-spi@lfdr.de>; Sun,  3 Apr 2022 17:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 763C94F0AE0
+	for <lists+linux-spi@lfdr.de>; Sun,  3 Apr 2022 17:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232259AbiDCPkd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 3 Apr 2022 11:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
+        id S1359392AbiDCPs2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 3 Apr 2022 11:48:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358459AbiDCPkb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 3 Apr 2022 11:40:31 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7043C26F7
-        for <linux-spi@vger.kernel.org>; Sun,  3 Apr 2022 08:38:36 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id u3so10981641wrg.3
-        for <linux-spi@vger.kernel.org>; Sun, 03 Apr 2022 08:38:36 -0700 (PDT)
+        with ESMTP id S233356AbiDCPru (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 3 Apr 2022 11:47:50 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D74326FA;
+        Sun,  3 Apr 2022 08:45:55 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id h63so8510033iof.12;
+        Sun, 03 Apr 2022 08:45:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=sEXxi1oey9g2W1h5KyCkUsYbDt35qHocHgmTe1tpXso=;
-        b=JcpLNe9/pudDEVRHxP+QM8uFpur6LRnLKIvN74+hO6fHL1sIymSzFuSaQyxNjmwYv2
-         s08Q71x4QJOW7Nh/1LbUf3OIY+3t8DFVw3/w/m14RKBsVEjJ8N737SMA2WP2SfEVwxyZ
-         PtGiXUoDTa+sVdEwFlcPzAYunvHinNAb1BuxiifJ/b3ac3Lsunq+Nn/6a661aRBmNlRw
-         N/7oCshyxl+lICX2Tf3oMNRyPrdhwhKCzAOmpahP1FkeCt+QwPTz0gJzgNnMXsS9XUX/
-         0w6UuhpvnLqRjGUYqWZebaQs7UBuhnEB0uCU0WAmpuwMVW6WYOc1qY9Wrjb2WbFz069y
-         A/ng==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pGyUTVKMo02GKY33McJFWCWUIseC1H085Y7lLhijdJc=;
+        b=JJ49hrhhVCU0Gm4xCQ9lxBgLf18xe1UJ+WIknacd4WCSYkq9OE+B9VSOCHU/aapJ42
+         PErCF4OxA2tknmH61SbcGBcBz9PY2jJ8WsPBzzijTA3Oeadw+u5uWnWyLO4Z+kPQp8mJ
+         Dnqfw854vABsmSSuhmzZm4boVh56jQAqt/T0rO+/E0NRfGIDD7SbUorHRsWIDxiWMXb1
+         tOWjF6Yy0K31uQ5XfNp2Y6eN+cqV2EbdIcdfIvMw9VxcS5zBS33xAHRXAHWd2uV4hl1p
+         /bvsYK7MGOl0tzu8cyPK4MN5OaShYICYs7ZN7PFc0XZd7QsS/9/yHHAxSQz6F229znE0
+         K2+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=sEXxi1oey9g2W1h5KyCkUsYbDt35qHocHgmTe1tpXso=;
-        b=DD5iGXw+FYSA+oQl/TqEQv4uC/jlXIbKbFxA3SZkbJ5VXfGUs3r7DZeYM8Oz1rxhwh
-         gtxzcbafszQ04a045sX98CtyT6z6GTQxF8SOJogOsFtOxYH9kn22vbCZhwM8KIIxjQPT
-         pyujKtT9SqJ8fL6ev7ZrYYDwkptOOqVhIW9cQN+8lAT15V4Nx0QEsWy8CkrngKIvfXlD
-         in2+YYQFu3p5ig5xOCwkNWdye8P4w1mYzu7JYAYObOo7QxCYPm4/pvpudcVdgdCLyG1S
-         WlHrWKXLY2Yc/5XR2iWjedVyYdmXtKo6zjBm7/A4qKrD9Mp16NL7u6mFwVirBtu/GmVv
-         avZA==
-X-Gm-Message-State: AOAM5304YB04eUEp4tWku5tdy48zRaAPsIDtyuyZ/XULHSUHPuMqCJex
-        qkeJzP5RTdPHpCJn2tnOPDADUw==
-X-Google-Smtp-Source: ABdhPJzjTyPm0Buqxb9GeLrcApRwPGIC65Z+MHoPlQL+zDOwSv6J3ZSmjdbYZuXDAfLM93+fdC300w==
-X-Received: by 2002:a5d:64c4:0:b0:206:10a0:4034 with SMTP id f4-20020a5d64c4000000b0020610a04034mr1155255wri.104.1649000315078;
-        Sun, 03 Apr 2022 08:38:35 -0700 (PDT)
-Received: from [192.168.0.172] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id r4-20020a05600c35c400b0038cbd8c41e9sm14788866wmq.12.2022.04.03.08.38.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Apr 2022 08:38:34 -0700 (PDT)
-Message-ID: <d2815bca-22c2-691c-1fc0-07fe87a401f2@linaro.org>
-Date:   Sun, 3 Apr 2022 17:38:33 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pGyUTVKMo02GKY33McJFWCWUIseC1H085Y7lLhijdJc=;
+        b=S200oOhb8tkdTRGclsQ2ysQ0ITgBprcgHckQP8cdlyvZ9QmCtdyWKtrEmcAJNedNKp
+         7M4Lu5+efuGx0vffglICGXUMCWe5m5/o4LHdqQtKwrPgSNOwgvwd40z1qD/bcD3KI3SZ
+         TbQb6QkUf9bd25ZRLQOJKRUJdRiiLR559gYuJ1rjmX1CHpmo01RYiNaaugzrLGqBDqhn
+         EmuNUOnCBBcinjrAbLN7xIpmdDCGFGB5UYhxXn0WTQMXxOB2LwPtCeCxhze3V/jlxtLQ
+         gCv+Nq4WqrHTlOoxviBf4c9bi8glcSsivSiY0bIZKqwg4Q6Vf5CCUU8/oiG/Fbl8qbZG
+         lBiQ==
+X-Gm-Message-State: AOAM5328NDgl77fhnpc3hMLm0x8+UC7sYrDxx9y8mHEishUEGm5yjZQo
+        67IJZbvLFdKx1dfX9FAjpie9ZNmhvLJMivixIXs=
+X-Google-Smtp-Source: ABdhPJxVtmRE6+JACUKYpv+v9aTat7WMhYxwZcAH/zg3oa+UdFpdX0n4dR/yutCA3MbI52TRFosqYTW1JwrmFtaBlgM=
+X-Received: by 2002:a5e:9302:0:b0:648:c246:291 with SMTP id
+ k2-20020a5e9302000000b00648c2460291mr3633567iom.88.1649000755209; Sun, 03 Apr
+ 2022 08:45:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH resend 3/4] dt-bindings: spi: add binding doc for
- spi-mtk-snfi
-Content-Language: en-US
-To:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+References: <20220403131154.1267887-1-gch981213@gmail.com> <20220403131154.1267887-4-gch981213@gmail.com>
+ <817dda10-39db-adfc-376d-a3d5e037937e@linaro.org>
+In-Reply-To: <817dda10-39db-adfc-376d-a3d5e037937e@linaro.org>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Sun, 3 Apr 2022 23:45:44 +0800
+Message-ID: <CAJsYDVKYsz7c2yVe7TmPu_7kvBDXTih4+cceLsay2YJm21YntA@mail.gmail.com>
+Subject: Re: [PATCH 3/4] dt-bindings: spi: add binding doc for spi-mtk-snfi
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-spi@lists.infradead.org, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -71,6 +68,7 @@ Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Paul Cercueil <paul@crapouillou.net>,
         Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
+        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
         "moderated list:ARM/Mediatek SoC support" 
@@ -79,29 +77,60 @@ Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         <linux-mediatek@lists.infradead.org>,
         open list <linux-kernel@vger.kernel.org>,
         "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
-References: <20220403131453.1269229-1-gch981213@gmail.com>
- <20220403131453.1269229-4-gch981213@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220403131453.1269229-4-gch981213@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 03/04/2022 15:14, Chuanhong Guo wrote:
-> Add device-tree binding documentation for Mediatek SPI-NAND Flash
-> Interface.
-> 
-> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+Hi!
 
-I responded to you first version.
+On Sun, Apr 3, 2022 at 11:37 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> [...]
+> > +  compatible:
+> > +    enum:
+> > +      - mediatek,mt7622-snand
+> > +      - mediatek,mt7629-snand
+>
+> One blank line, please.
 
-Best regards,
-Krzysztof
+I'll fix this in the next version.
+
+>
+> > +  reg:
+> > +    items:
+> > +      - description: core registers
+> > +
+> > +  interrupts:
+> > +    items:
+> > +      - description: NFI interrupt
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: clock used for the controller
+> > +      - description: clock used for the SPI bus
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: nfi_clk
+> > +      - const: pad_clk
+> > +
+> > +  ecc-engine:
+>
+> The nand-chip.yaml defines a nand-ecc-engine, so how about using that
+> one? I know mtk-nand.txt uses ecc-engine, but for new schema better to
+> use properties from existing YAML.
+
+The ecc-engine code is shared between mtk_nand.c and this driver, and
+the property name is defined in the shared part. I left it as-is so that
+existing dt for mtk_nand doesn't break.
+
+-- 
+Regards,
+Chuanhong Guo
