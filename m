@@ -2,65 +2,108 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 162EC4F0A0B
-	for <lists+linux-spi@lfdr.de>; Sun,  3 Apr 2022 15:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E694F0A26
+	for <lists+linux-spi@lfdr.de>; Sun,  3 Apr 2022 16:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234624AbiDCN61 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 3 Apr 2022 09:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
+        id S1358318AbiDCOWe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 3 Apr 2022 10:22:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233681AbiDCN61 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 3 Apr 2022 09:58:27 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D75A366BA
-        for <linux-spi@vger.kernel.org>; Sun,  3 Apr 2022 06:56:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F41C9CE0DA1
-        for <linux-spi@vger.kernel.org>; Sun,  3 Apr 2022 13:56:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3D51DC340F2;
-        Sun,  3 Apr 2022 13:56:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648994189;
-        bh=311DHnOBS5GX6GvfzFiGAqf7kZQSO4HiV/i6klPfz/k=;
-        h=Subject:From:Date:To:From;
-        b=OsiYRyM5jDCPCokqiQhf3xZj1seGGEs25xT46V9/VkavQj7xdWcbzwcCN4ti95QmT
-         UWOarJ52II8qw6lPZWDfHd+PquKqB2xy8i5a2TEkPeBS/GZmrPFcw46LqMTxh4iCXF
-         XMuBOAF2Iem2JEUnfg7hFw7JG7WHUbQa4bitlBkUNfLNh35DmJZ87BoOt0HZ1hp9+R
-         VQnsF9uvw3ltcQNjyinUETmItQcMUQ5Dc5dUs21CgM8b2fiiSEjQIm+uxUpibF1LhR
-         0KPySNpgSJvAiYoyWKfoxsfyMrgs0fPPqJyTFkllWo9LX3bwk7Oh3s5m6eYEu0BPkf
-         2svO5QQKpVg/g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1F169E6BBCA;
-        Sun,  3 Apr 2022 13:56:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <164899418912.20685.8183222527904522969.git-patchwork-housekeeping@kernel.org>
-Date:   Sun, 03 Apr 2022 13:56:29 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S236161AbiDCOWd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 3 Apr 2022 10:22:33 -0400
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF93396A1;
+        Sun,  3 Apr 2022 07:20:38 -0700 (PDT)
+Received: by mail-ot1-f44.google.com with SMTP id n19-20020a9d7113000000b005cd9cff76c3so5577360otj.1;
+        Sun, 03 Apr 2022 07:20:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=IhdvutP6+1VN96Sw+l5rljGDZzsDxpR3h7q1f/N7UZo=;
+        b=ifeO/0nr8m0s/2shOX7IKX9aVXd9LriBiEeK8vAvxvajBL2YfxBGMPaGG9TnLH++Lh
+         a3eSo1M+FpOfH52OT5Xhg4Hq5TK/De3JoUwl2UVFClqwSae3y7twKwFwy7BQ9uTJLFPq
+         PeS7RvKArYT6euY3wovGMLfXtXMP+DjxDXZ3ukIo2iIuCInJnYSMDUzs4UXEXe9/lTky
+         ZIqsUL3n36OB/qAqNLGnCKFLJes0+w8bubK32p28pHCWdoAfmPC/jWy4KK7aO7LPNLOP
+         K+dwfR3ExaMVLQ63JWw5pnMtM2MvLzmyLflRuXqfr38aO8fk9MPvv5URaVpX2aVDIzVD
+         k1FA==
+X-Gm-Message-State: AOAM531sLtIZHVpY1R9J+C1hVPBL8XvfYVwBUBSMLWMVxOCY+EAOLdZu
+        VTns3u/sgGr9nRotFVhZ/w==
+X-Google-Smtp-Source: ABdhPJwL6nKTkad4e13KB87xfRjBKcTmMkYqLyj+VlysWvRbdX14GGrw5+09grM+gkgg3WSF68Touw==
+X-Received: by 2002:a05:6830:34a1:b0:5c4:3dca:b666 with SMTP id c33-20020a05683034a100b005c43dcab666mr10640719otu.328.1648995637852;
+        Sun, 03 Apr 2022 07:20:37 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 190-20020a4a0dc7000000b003244ae0bbd5sm3032383oob.7.2022.04.03.07.20.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Apr 2022 07:20:37 -0700 (PDT)
+Received: (nullmailer pid 3013370 invoked by uid 1000);
+        Sun, 03 Apr 2022 14:20:36 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-spi@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20220402184011.132465-8-krzysztof.kozlowski@linaro.org>
+References: <20220402184011.132465-1-krzysztof.kozlowski@linaro.org> <20220402184011.132465-8-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 7/9] dt-bindings: serial: qcom,msm-uartdm: convert to dtschema
+Date:   Sun, 03 Apr 2022 09:20:36 -0500
+Message-Id: <1648995636.595500.3013369.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v1] spi: add support for Mediatek SPI-NAND controller (2022-04-03T13:14:49)
-  Superseding: [v1] spi: add support for Mediatek SPI-NAND controller (2022-04-03T13:11:50):
-    [1/4] mtd: nand: make mtk_ecc.c a separated module
-    [2/4] spi: add driver for MTK SPI NAND Flash Interface
-    [3/4] dt-bindings: spi: add binding doc for spi-mtk-snfi
-    [4/4] arm64: dts: mediatek: add dt node for MTK SNFI
+On Sat, 02 Apr 2022 20:40:09 +0200, Krzysztof Kozlowski wrote:
+> Convert the Qualcomm MSM Serial UARTDM bindings to DT Schema.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/serial/qcom,msm-uartdm.txt       |  81 -------------
+>  .../bindings/serial/qcom,msm-uartdm.yaml      | 112 ++++++++++++++++++
+>  2 files changed, 112 insertions(+), 81 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/serial/qcom,msm-uartdm.txt
+>  create mode 100644 Documentation/devicetree/bindings/serial/qcom,msm-uartdm.yaml
+> 
 
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/serial/qcom,msm-uartdm.example.dt.yaml: serial@f991e000: dma-names:0: 'tx' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/serial/qcom,msm-uartdm.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/serial/qcom,msm-uartdm.example.dt.yaml: serial@f991e000: dma-names:1: 'rx' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/serial/qcom,msm-uartdm.yaml
+
+doc reference errors (make refcheckdocs):
+Warning: Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt references a file that doesn't exist: Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
+Warning: Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt references a file that doesn't exist: Documentation/devicetree/bindings/serial/qcom,msm-uartdm.txt
+Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt: Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
+Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt: Documentation/devicetree/bindings/serial/qcom,msm-uartdm.txt
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
