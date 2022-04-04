@@ -2,68 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D104F1AC5
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 23:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 002974F1ABF
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 23:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379214AbiDDVS6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Apr 2022 17:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
+        id S1379173AbiDDVS4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Apr 2022 17:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378963AbiDDQK6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 12:10:58 -0400
+        with ESMTP id S1379833AbiDDSOj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 14:14:39 -0400
 Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DFBDF4E;
-        Mon,  4 Apr 2022 09:09:01 -0700 (PDT)
-Received: by mail-oi1-f178.google.com with SMTP id z8so10545169oix.3;
-        Mon, 04 Apr 2022 09:09:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C09C3EA8F;
+        Mon,  4 Apr 2022 11:12:43 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id k10so10957430oia.0;
+        Mon, 04 Apr 2022 11:12:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=cezylBcNKJIb7u3t+c6rzI4fkWol+SJJy81HJ0NVukk=;
-        b=eQB7UTSAKpyr2i1uSIGLihmH4foHNvfHZo8GkAKqNeCNXjGBa1rQCXD+czhoOTdLrV
-         IIeFZemdqC4gAaoz9wzGBjwT416R1w0Sl6wmXUm/8AOuuuX7vUbd1wXZ5x9OMsIIzZga
-         v2qgevPwRC3lK5CSm2BYCC0mKmDwFt4w09nkGktckYummLpndLu8LYqZbkg/p9OjeOVf
-         Y1zmdkDm94SNuFic67W4yfQeATNrQdtxUtI4cfDIvXX1nuCb77Y6Hhrm7cZCTB+se7oI
-         Ujx/lRBUiEoT+pO8OL6AHLYLGNVlscrZPwRc2RpKXlKkwKZ1evIODXMC9WQxIjCd7FI7
-         E7eA==
-X-Gm-Message-State: AOAM533PPDC+D0FH29F1SsGWXvhv6XgocUoRN1dVyCwi3Myi/TLHY3k8
-        D6yVtz81/SLGU1aOshEdbg==
-X-Google-Smtp-Source: ABdhPJxu7q0HR0nZflSaNkabmyqrbGx7Kocd4s/sq7R0bRlhaws0t4qgX1Nk2HPeARa/X2rziRYFcw==
-X-Received: by 2002:a05:6808:ecb:b0:2f7:41cc:21b9 with SMTP id q11-20020a0568080ecb00b002f741cc21b9mr10234348oiv.156.1649088540993;
-        Mon, 04 Apr 2022 09:09:00 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5XS6wd7KBJkWjJUIjJgiow3emNKY1rL+GG1As3obGiU=;
+        b=gkWFV+6DejGHSNi9kc7Ghv5YFK3/z0xF0wF/r0+jvntMTzyzS9MrLO9X1OStIQ3ULk
+         Kwl4shaHWslF4g45h1iEvQvqPzrmroh2+bfIXoXIF7pCLug8dK30+RiExbTjINq6zwBq
+         C6nUv3wOJd/vPiRuAi1BL94rmf6qVYUvuPwQCHNy6a8MWRSUy81hUwlu/O3H3PyM4e3i
+         AMoOqSUuDonxBfacmphtkDdH1YRkzIworzpxfrl2VwDwsgahfF4wizU2FysXMeA8d7Jz
+         /6TR4yH6HB/Z0D55psasyRCkjUOjIGk0LeDV/+dN1buLkJmlpWwfT5VP8q5TPE6aEiRE
+         Oe7w==
+X-Gm-Message-State: AOAM530cpPPPehsIFugmEgbz36jVv4Eys7kwlYvBBRZoONT6ojJMRf9f
+        dtP8broRh/UKaGAQM/vQkA==
+X-Google-Smtp-Source: ABdhPJwd/bAV5beScgDIr/RlKmA9hCr/TJhNTGDzZzAUz4bpVpq2T2M+qtBiWdusjWeAdtrIZ2Mh5g==
+X-Received: by 2002:a05:6808:4d2:b0:2ee:f75b:41d9 with SMTP id a18-20020a05680804d200b002eef75b41d9mr208098oie.20.1649095962562;
+        Mon, 04 Apr 2022 11:12:42 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m65-20020acabc44000000b002ed13d0fe6fsm4309194oif.23.2022.04.04.09.08.59
+        by smtp.gmail.com with ESMTPSA id i4-20020a4addc4000000b00324bd261e5fsm4088420oov.11.2022.04.04.11.12.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 09:09:00 -0700 (PDT)
-Received: (nullmailer pid 1436950 invoked by uid 1000);
-        Mon, 04 Apr 2022 16:08:58 -0000
+        Mon, 04 Apr 2022 11:12:41 -0700 (PDT)
+Received: (nullmailer pid 1649882 invoked by uid 1000);
+        Mon, 04 Apr 2022 18:12:40 -0000
+Date:   Mon, 4 Apr 2022 13:12:40 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Chuanhong Guo <gch981213@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-spi@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Roger Quadros <rogerq@kernel.org>,
-        Yu Kuai <yukuai3@huawei.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-mediatek@lists.infradead.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-mtd@lists.infradead.org
-In-Reply-To: <20220404131818.1817794-5-gch981213@gmail.com>
-References: <20220404131818.1817794-1-gch981213@gmail.com> <20220404131818.1817794-5-gch981213@gmail.com>
-Subject: Re: [PATCH v3 4/5] dt-bindings: spi: add binding doc for spi-mtk-snfi
-Date:   Mon, 04 Apr 2022 11:08:58 -0500
-Message-Id: <1649088538.050456.1436949.nullmailer@robh.at.kernel.org>
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: qcom: update maintainers (drop Akash and
+ Mukesh)
+Message-ID: <Yks1GJRkM4PjE/W1@robh.at.kernel.org>
+References: <20220329113718.254642-1-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220329113718.254642-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -75,45 +65,53 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 04 Apr 2022 21:18:17 +0800, Chuanhong Guo wrote:
-> Add device-tree binding documentation for Mediatek SPI-NAND Flash
-> Interface.
+On Tue, Mar 29, 2022 at 01:37:17PM +0200, Krzysztof Kozlowski wrote:
+> Emails to Akash Asthana and Mukesh Savaliya bounce (550: Recipient
+> address rejected: User unknown in virtual alias table), so switch
+> maintainers to Andy and Bjorn (as Qualcomm platform maintainers).
 > 
-> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+> Cc: Andy Gross <agross@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
-> Changes since v1:
->   1. add a blank line between properties in dt binding doc
->   2. rename ecc-engine to nand-ecc-engine for the generic properties
+>  Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml  | 4 ++--
+>  Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> Change since v2: none
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+> index 1ca081b1664e..1bc12b6a7e01 100644
+> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+> @@ -7,8 +7,8 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>  title: GENI Serial Engine QUP Wrapper Controller
+>  
+>  maintainers:
+> -  - Mukesh Savaliya <msavaliy@codeaurora.org>
+> -  - Akash Asthana <akashast@codeaurora.org>
+> +  - Andy Gross <agross@kernel.org>
+
+Andy is no longer active AFAIK, so I don't think I'd add him.
+
+> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+>  
+>  description: |
+>   Generic Interface (GENI) based Qualcomm Universal Peripheral (QUP) wrapper
+> diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
+> index 055524fe8327..e009cb3e6dc9 100644
+> --- a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
+> @@ -8,8 +8,8 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>  title: Qualcomm Quad Serial Peripheral Interface (QSPI)
+>  
+>  maintainers:
+> -  - Mukesh Savaliya <msavaliy@codeaurora.org>
+> -  - Akash Asthana <akashast@codeaurora.org>
+> +  - Andy Gross <agross@kernel.org>
+> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+>  
+>  description: The QSPI controller allows SPI protocol communication in single,
+>    dual, or quad wire transmission modes for read/write access to slaves such
+> -- 
+> 2.32.0
 > 
->  .../bindings/spi/mediatek,spi-mtk-snfi.yaml   | 88 +++++++++++++++++++
->  1 file changed, 88 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
 > 
-
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.example.dt.yaml: spi@1100d000: 'ecc-engine' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
-Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.example.dt.yaml:0:0: /example-0/soc/spi@1100d000/flash@0: failed to match any schema with compatible: ['spi-nand']
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
