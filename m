@@ -2,129 +2,92 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584CA4F15BF
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 15:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D014F15FC
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 15:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351293AbiDDNVS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Apr 2022 09:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47054 "EHLO
+        id S234781AbiDDNge (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Apr 2022 09:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351320AbiDDNVQ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 09:21:16 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEB721E34;
-        Mon,  4 Apr 2022 06:19:17 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id w21so8317575pgm.7;
-        Mon, 04 Apr 2022 06:19:17 -0700 (PDT)
+        with ESMTP id S233478AbiDDNgd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 09:36:33 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0623B57F;
+        Mon,  4 Apr 2022 06:34:36 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id x131so5070185ybe.11;
+        Mon, 04 Apr 2022 06:34:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tS+NAQ+2D7agIki50tkRPL+/ag2LxAizn5hQjD0npls=;
-        b=PET9hD0TOOlxzcMYMOfT1jjstVzlrGrI95uhZTqi8ziGnO+Kvzo8GzeLdfN9KuJXb5
-         dEsJUm8Ddlf7AwD3XMS/Xr8vEud0/HcAkCM0vpQqVUIo8JjWdELmuNe66OFwFOZYoQjD
-         7GozIrPEnrDgYaGmcuESoUq0X2y19O4CebzlfArPMfAixrP6qVfjH1ahPxV5u78/OZUQ
-         LXgDU3mxfbtjB0Rbo89eQDw/bsgR9ZE2pOXv96OiS5d2B8UFWtP156ujm7OwzrM5GT+b
-         w/fHjp/86V7nVlbqjbBrRuQvdbxRVNf3ERNvNnvZf1XyiKXXL0bQ29RgW/qP0Lbej6Uh
-         Oayg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YaTxLCUntWttTrySEX5v0WWGqUyOjlg+VT/NTYbEi1k=;
+        b=XhW31WQQOkGD/WqzKYUh6DrLwiPMTC47Zm3P6AnIsAE4hVYbBQtmt0AzmS+qNT8x4f
+         qzYoraXVz01ewciISt+1ftpiwzYFEgcVUEQDf+45O5ouJPNVC00wd/00bVh6GPsndgj/
+         AzphLzXni/vxQleqvUQLfnBV7uc42FBqQ2Y3SAlwRNP7BQgNz9MBLtN9fjv059fWlS+f
+         h2OxbFYZHvTKk+xPRW+HxVoN5vP5UQUBwT7XABsoYBTPr6C+r36nW+TFb7yIm8zSVnfS
+         cz3NljZzji6hoFpTU7I7FSYNNX/c/ktjSGKWm47e50EUlnBUr3yWOy8kA5wiM+u8RDtK
+         iNPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tS+NAQ+2D7agIki50tkRPL+/ag2LxAizn5hQjD0npls=;
-        b=SVGp2PfG2N6+w7mirHr3rR8jbK4D+vhQi9IFRdYrspOOKZxZapvc4o+3CtfT/pj85+
-         9tOIRdgJwYERs2LVv3xiPCN6nOYxOQ554PUHq4YrDreWvVY/yyU8eh7EHOH3IstnO8up
-         bCPmWtpfvhbFTmaGyPEKljJNM4zIugCVVA+IFK/IyiwXoWNqSJycLHYAFuAUsFJAv9CM
-         MglK3hLsRKPcP6zSFPA8zDcV2oLGQyQTjojldKFrSbqcnhqExSQKofLLEvgpqWl1usaK
-         5eJP0zh7d0exyrPRL8gAU5jm9IDBXPq4gJUhqsBhbD2mXiZQMU79LDxDNDFBDN81XWLy
-         IQrg==
-X-Gm-Message-State: AOAM532kWMA7afOQOL+ijJc6pEVm9ODvPolCSzxlRcaUh2d1W67z2Wbz
-        taJlZbM7hgsfB06/FP8CrG87QIAk9Yu83YX27Dg=
-X-Google-Smtp-Source: ABdhPJzLAMviS73DnsYXW0jI9f5cwwNFWa83DUwdZUIbuOqsebhBjg6JkDgNrUtBEulaxOE4IIAkYw==
-X-Received: by 2002:a05:6a00:182a:b0:4fd:dee2:6371 with SMTP id y42-20020a056a00182a00b004fddee26371mr12945796pfa.8.1649078357014;
-        Mon, 04 Apr 2022 06:19:17 -0700 (PDT)
-Received: from guoguo-omen.lan ([2401:c080:1400:4da2:b701:47d5:9291:4cf9])
-        by smtp.gmail.com with ESMTPSA id q13-20020a056a00088d00b004e1bea9c582sm12475705pfj.43.2022.04.04.06.19.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 06:19:16 -0700 (PDT)
-From:   Chuanhong Guo <gch981213@gmail.com>
-To:     linux-spi@vger.kernel.org
-Cc:     Chuanhong Guo <gch981213@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YaTxLCUntWttTrySEX5v0WWGqUyOjlg+VT/NTYbEi1k=;
+        b=Pc2YXpit9m4D3Pm7BkpQYGhCJzZ/pB4KiU1MMwbPsLvyyd1F1B1ne8U6EiFyI7qxAC
+         5cakCATcSdqF6JTkUUab7RaziU5BNbStHDhb1NMYZbuchuSPz404DK06eLmipOwuQgFj
+         kgc+gp2ewsI27afluPyA0cEz1OSG0TfDgdpTnGxFiEyeSNuzR6W9PuvTpuE/gxGMVDnD
+         yQDxpo02Abynr6kL0ovYVRoMGEj/KVY+Vut1raAV2FYu7wHiKQJUdhcjg/G+vzZYZ3VD
+         T++77hVr3FTvawYEkUTt+vMqkcd+JaSNh4uBLO+G08sN8y915HXi4qFvIH+htdDeD7KF
+         u8Cg==
+X-Gm-Message-State: AOAM5308Ean4wtyfdUyTClB2cZn2ub1Jq4JCzgkPqeg7ua6iEx/jwmos
+        pZFRs7OAJA/Lo6tpjFRYGU1Gh06WlxlPnTUxVuE=
+X-Google-Smtp-Source: ABdhPJxKtp10ufyLemxrLYs1Do/IZNZpDWiRF3iXVcHDtm+e+UdCgHS55mIXAUc3/LdnzK4WupgU7fiKHMOuZIjbuOU=
+X-Received: by 2002:a25:374d:0:b0:63d:84a2:237d with SMTP id
+ e74-20020a25374d000000b0063d84a2237dmr12786814yba.417.1649079276152; Mon, 04
+ Apr 2022 06:34:36 -0700 (PDT)
+MIME-Version: 1.0
+References: <d196bb5849843993557a9b10f3bd28a752e5e8e0.1648562287.git.geert+renesas@glider.be>
+In-Reply-To: <d196bb5849843993557a9b10f3bd28a752e5e8e0.1648562287.git.geert+renesas@glider.be>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 4 Apr 2022 14:34:10 +0100
+Message-ID: <CA+V-a8uiP8TX2MJs2cvMdxJCt5cSmvYTm3biQYmAg+TH=yw7ng@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mtd: hyperbus: rpc-if: Fix RPM imbalance in probe
+ error path
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support),
-        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support), linux-kernel@vger.kernel.org (open list),
-        linux-mtd@lists.infradead.org (open list:NAND FLASH SUBSYSTEM)
-Subject: [PATCH v3 5/5] arm64: dts: mediatek: add mtk-snfi for mt7622
-Date:   Mon,  4 Apr 2022 21:18:18 +0800
-Message-Id: <20220404131818.1817794-6-gch981213@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220404131818.1817794-1-gch981213@gmail.com>
-References: <20220404131818.1817794-1-gch981213@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Mark Brown <broonie@kernel.org>, linux-mtd@lists.infradead.org,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-This patch adds a device-tree node for the MTK SPI-NAND Flash Interface
-for MT7622 device tree.
+On Tue, Mar 29, 2022 at 3:09 PM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+> If rpcif_hw_init() fails, Runtime PM is left enabled.
+>
+> Fixes: b04cc0d912eb80d3 ("memory: renesas-rpc-if: Add support for RZ/G2L")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> For the mtd tree.
+>
+>  drivers/mtd/hyperbus/rpc-if.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
----
-Changes since v1:
-  1. use the newly introduced nand-ecc-engine instead
-  2. reword commit message
-Change since v2: None
- arch/arm64/boot/dts/mediatek/mt7622.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/mediatek/mt7622.dtsi b/arch/arm64/boot/dts/mediatek/mt7622.dtsi
-index 6f8cb3ad1e84..4b8f7dc1ec23 100644
---- a/arch/arm64/boot/dts/mediatek/mt7622.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt7622.dtsi
-@@ -545,6 +545,18 @@ nandc: nfi@1100d000 {
- 		status = "disabled";
- 	};
- 
-+	snfi: spi@1100d000 {
-+		compatible = "mediatek,mt7622-snand";
-+		reg = <0 0x1100d000 0 0x1000>;
-+		interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_LOW>;
-+		clocks = <&pericfg CLK_PERI_NFI_PD>, <&pericfg CLK_PERI_SNFI_PD>;
-+		clock-names = "nfi_clk", "pad_clk";
-+		nand-ecc-engine = <&bch>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		status = "disabled";
-+	};
-+
- 	bch: ecc@1100e000 {
- 		compatible = "mediatek,mt7622-ecc";
- 		reg = <0 0x1100e000 0 0x1000>;
--- 
-2.35.1
-
+Cheers,
+Prabhakar
