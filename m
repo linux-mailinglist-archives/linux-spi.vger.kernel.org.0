@@ -2,56 +2,56 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D014F15FC
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 15:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34DFB4F1605
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 15:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234781AbiDDNge (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Apr 2022 09:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49420 "EHLO
+        id S1354561AbiDDNjo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Apr 2022 09:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233478AbiDDNgd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 09:36:33 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0623B57F;
-        Mon,  4 Apr 2022 06:34:36 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id x131so5070185ybe.11;
-        Mon, 04 Apr 2022 06:34:36 -0700 (PDT)
+        with ESMTP id S1353940AbiDDNjn (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 09:39:43 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CE43B56C;
+        Mon,  4 Apr 2022 06:37:47 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id l36so10150921ybj.12;
+        Mon, 04 Apr 2022 06:37:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=YaTxLCUntWttTrySEX5v0WWGqUyOjlg+VT/NTYbEi1k=;
-        b=XhW31WQQOkGD/WqzKYUh6DrLwiPMTC47Zm3P6AnIsAE4hVYbBQtmt0AzmS+qNT8x4f
-         qzYoraXVz01ewciISt+1ftpiwzYFEgcVUEQDf+45O5ouJPNVC00wd/00bVh6GPsndgj/
-         AzphLzXni/vxQleqvUQLfnBV7uc42FBqQ2Y3SAlwRNP7BQgNz9MBLtN9fjv059fWlS+f
-         h2OxbFYZHvTKk+xPRW+HxVoN5vP5UQUBwT7XABsoYBTPr6C+r36nW+TFb7yIm8zSVnfS
-         cz3NljZzji6hoFpTU7I7FSYNNX/c/ktjSGKWm47e50EUlnBUr3yWOy8kA5wiM+u8RDtK
-         iNPg==
+        bh=CdtxabZCkayl/u9mZin0h4LkVmWtRoG1gJbU+RkSoQ8=;
+        b=S3tazSMp95YVk10K+C1+7z9a5+OIqt0m8oYQr9qyUcpePiFtbcJqHykyPQ+CZzH9AQ
+         kpGOfP1Yr7FZi8tTGZ2aVNGX6mVUL6Q/bxB+KtTLT6OFcEPrv9wnnpwD2NXxQCde6UOH
+         KkFJGPSpgFfHpBWEesc1CAHTSNqGzvOgj6UaZ+CxZ5Me4WssaGT36t3myiAYdmIw8yZA
+         wRmzq0S1+7WpISN8DfeXD1k2Xkxkh8exI++OmIDCtM5rfmbK2tvAgEgf89BMMHKmKtKQ
+         mISpw48mD5yt9Va1PT+Ru9aeTg5n/X26BNHZHWcYnrwRX4pT4J3Yd3CuChY+XTbN0LcD
+         6Lww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=YaTxLCUntWttTrySEX5v0WWGqUyOjlg+VT/NTYbEi1k=;
-        b=Pc2YXpit9m4D3Pm7BkpQYGhCJzZ/pB4KiU1MMwbPsLvyyd1F1B1ne8U6EiFyI7qxAC
-         5cakCATcSdqF6JTkUUab7RaziU5BNbStHDhb1NMYZbuchuSPz404DK06eLmipOwuQgFj
-         kgc+gp2ewsI27afluPyA0cEz1OSG0TfDgdpTnGxFiEyeSNuzR6W9PuvTpuE/gxGMVDnD
-         yQDxpo02Abynr6kL0ovYVRoMGEj/KVY+Vut1raAV2FYu7wHiKQJUdhcjg/G+vzZYZ3VD
-         T++77hVr3FTvawYEkUTt+vMqkcd+JaSNh4uBLO+G08sN8y915HXi4qFvIH+htdDeD7KF
-         u8Cg==
-X-Gm-Message-State: AOAM5308Ean4wtyfdUyTClB2cZn2ub1Jq4JCzgkPqeg7ua6iEx/jwmos
-        pZFRs7OAJA/Lo6tpjFRYGU1Gh06WlxlPnTUxVuE=
-X-Google-Smtp-Source: ABdhPJxKtp10ufyLemxrLYs1Do/IZNZpDWiRF3iXVcHDtm+e+UdCgHS55mIXAUc3/LdnzK4WupgU7fiKHMOuZIjbuOU=
-X-Received: by 2002:a25:374d:0:b0:63d:84a2:237d with SMTP id
- e74-20020a25374d000000b0063d84a2237dmr12786814yba.417.1649079276152; Mon, 04
- Apr 2022 06:34:36 -0700 (PDT)
+        bh=CdtxabZCkayl/u9mZin0h4LkVmWtRoG1gJbU+RkSoQ8=;
+        b=NZB5ZltPqKtXyZEti2WzRc5ZdSItUC9h+75LVpPFn8nsKfFHDoRrF2cKvfSYYJ5Dmk
+         f5fF6TStGUiRCGTvPVm/XoGxNrxdrrUFy2QE/n67TpwyU78rMiNzpZdyEkBIXxSlqqGu
+         24PVLOWcKw01EOifhUacQCeFqy0wXLjJ//9foXqFrGQdhN6BOcSONgLvsjVQLTc4LCFm
+         /tw1tFnspu0Mu8K676t8IZkE2F0nTW2zHAur8w20wqCcanljSUY8cw9xGggYfvWOb6N2
+         zQMGa7sjPRLiP1OvyvWXPZiUYlo8loth7SeBkrDixM4/o/6/BUZlftGVgx8pvq/UKkR0
+         U8ow==
+X-Gm-Message-State: AOAM532X8oeFjpYPn2f0kj2xOdn3daO1BDI+ZZqT2ZTkLHYdEI1jj65c
+        qSLUVJ4YuvBG9zMtMeZ6NHgVgmb4lUzYSQlNQ8g=
+X-Google-Smtp-Source: ABdhPJxbAy9yWW5qwS38SKA/aFDQRijv4oZ8eoG3oeO2nf+VK69vJdJuF2/CQR4Z0PZ8NjCsfPOe39yuACBLYAF10Fg=
+X-Received: by 2002:a25:3204:0:b0:63d:b2b3:ea7b with SMTP id
+ y4-20020a253204000000b0063db2b3ea7bmr6670689yby.431.1649079466725; Mon, 04
+ Apr 2022 06:37:46 -0700 (PDT)
 MIME-Version: 1.0
 References: <d196bb5849843993557a9b10f3bd28a752e5e8e0.1648562287.git.geert+renesas@glider.be>
-In-Reply-To: <d196bb5849843993557a9b10f3bd28a752e5e8e0.1648562287.git.geert+renesas@glider.be>
+ <1c78a1f447d019bb66b6e7787f520ae78821e2ae.1648562287.git.geert+renesas@glider.be>
+In-Reply-To: <1c78a1f447d019bb66b6e7787f520ae78821e2ae.1648562287.git.geert+renesas@glider.be>
 From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 4 Apr 2022 14:34:10 +0100
-Message-ID: <CA+V-a8uiP8TX2MJs2cvMdxJCt5cSmvYTm3biQYmAg+TH=yw7ng@mail.gmail.com>
-Subject: Re: [PATCH 1/2] mtd: hyperbus: rpc-if: Fix RPM imbalance in probe
- error path
+Date:   Mon, 4 Apr 2022 14:37:20 +0100
+Message-ID: <CA+V-a8vbnksh5u+WWW6jYGd14ccVyHibey8--KvF8LWTxQQgXg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] spi: rpc-if: Fix RPM imbalance in probe error path
 To:     Geert Uytterhoeven <geert+renesas@glider.be>
 Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -74,7 +74,7 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 3:09 PM Geert Uytterhoeven
+On Tue, Mar 29, 2022 at 8:13 PM Geert Uytterhoeven
 <geert+renesas@glider.be> wrote:
 >
 > If rpcif_hw_init() fails, Runtime PM is left enabled.
@@ -82,9 +82,9 @@ On Tue, Mar 29, 2022 at 3:09 PM Geert Uytterhoeven
 > Fixes: b04cc0d912eb80d3 ("memory: renesas-rpc-if: Add support for RZ/G2L")
 > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > ---
-> For the mtd tree.
+> For the spi tree.
 >
->  drivers/mtd/hyperbus/rpc-if.c | 8 ++++++--
+>  drivers/spi/spi-rpc-if.c | 8 ++++++--
 >  1 file changed, 6 insertions(+), 2 deletions(-)
 >
 Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
