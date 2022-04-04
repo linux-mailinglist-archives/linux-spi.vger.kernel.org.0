@@ -2,319 +2,215 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C204F11C5
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 11:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F59F4F11D5
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 11:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351010AbiDDJQJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Apr 2022 05:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
+        id S1352979AbiDDJT1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Apr 2022 05:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350832AbiDDJQD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 05:16:03 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D2F3B3D7;
-        Mon,  4 Apr 2022 02:14:07 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id e9so6380085ilu.9;
-        Mon, 04 Apr 2022 02:14:06 -0700 (PDT)
+        with ESMTP id S231165AbiDDJTZ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 05:19:25 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E503B3D4;
+        Mon,  4 Apr 2022 02:17:29 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a6so7579465ejk.0;
+        Mon, 04 Apr 2022 02:17:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=u9UXLHNcrmX+u+vMYyDcVz6XNsVrgbzMhY+q8oGLZp4=;
-        b=oR6yq2REp7ra3dM6jM3FH98T/gPx28zZdefaXVui0EEPW7iGnjBLsqxJnRVyBL5WyO
-         Ps5167LxUNzzloOOia40pCLsB1gfD6kuSfRzw2zcHVDaoWrwIqEPHsBY+8BGqWNgckCu
-         oY1Vct4VTA+lylhmQvJXaVLTFQCOJTEwFc62lFdL2ZjK/Rnr82l8fYzPemnOPCAMmEET
-         fuB10Z9mW+1xDLrUQjmRqrQChEYVJsByfvhuR7O2pEvLBC/d2TONnmvE+YmTohXeZdWg
-         2J66uAJsZUFxexF0KYlp1+5er6bK9oiyPx4UVwStvJbwaQHIOZs2oikupHwhxPJEz3mV
-         sg5g==
+         :cc;
+        bh=aFF6p4tYsR549sWrfv4bnU2v+ruL8I5/W5YzMr/thlg=;
+        b=hQlbcki1WeC3gkSnk83L4xArF1FpAwUwcbPIaOMkJlzK+bh9pgMN60HjAqA9G0XpuC
+         3Bprvok5U0s7Z1W/ZawyWzSbHo70bfJbRx7oPeBhE/2fGvpn7wCQbZqlvuNGvgHsVjQq
+         r/wKFSU7xB5ZHODeRpMa6ErNEopcgryJWjRJjgXQCJkk3liL7jI4iywOC/rM00bXTbtl
+         pmNkssVD/iJNe8tAe5q9UEBT+HP+cJeGalWYEIgNn71NWfAeNK0dD/7xSnaeqbeBCKsb
+         THPnJ2jW59TDoW+ic9pCzBwfUOBySS1J3o8UfMTFXNWAg/FIQ3SVn0tuGl33QwLfjnUE
+         +cQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=u9UXLHNcrmX+u+vMYyDcVz6XNsVrgbzMhY+q8oGLZp4=;
-        b=VBjrOORTekFeGQxS9O8zAj08RYYb/tlYAxhC2dG7CDmYShbAjSU2xqEzTuEgmrP4UX
-         7zYeDZRHIxDGVckXcSDGrQtoT9E601zc/1qcoL7S/H4pR3afiNvY+ZQJF233dpoZsq2e
-         QeYBXld+6Cg0MMt7VhoI1T1TG49nL2Re5UrQGti9Ax3kuPU4e5QXry8AzESETuozRbLr
-         01mT7NmlUcFC5SO6N+xCm1Zv6R4RO92Eb5Ne/CSafmPzYaNh0SuuMh3DDtPThLEi0sss
-         Uxop+Cnza2YB5054dSSLTwfbwKGhHpElBEmFFKe1U2ZAacPyHhapdd8jaDCeErotiHZ+
-         0jtQ==
-X-Gm-Message-State: AOAM532tIXjJTzeHBryPjfcKrQjpeyUH0F9ICuN/KSXoGhCIJcZUgFF9
-        9xb1htWIC3ELPvzizKkFtISGDAvguETYbQhrjrY=
-X-Google-Smtp-Source: ABdhPJyCjR9pG11w/ipN74ADBjKgVA4MbSqEFKTr/rBObmUFkq0xAMdUJg+sDbd4xIgKypFNB6puqIzickWE6Blk3iU=
-X-Received: by 2002:a92:ca0f:0:b0:2c8:c6f3:6a14 with SMTP id
- j15-20020a92ca0f000000b002c8c6f36a14mr4879147ils.200.1649063646248; Mon, 04
- Apr 2022 02:14:06 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=aFF6p4tYsR549sWrfv4bnU2v+ruL8I5/W5YzMr/thlg=;
+        b=I3AArcNIwFddVXB0NHsRI/yxeAnDM/xpK7wJpTP1jOZAgPr6CJRPO4jMtXEzaOtmcF
+         oYuudev5rUTB/NgggQd4jEFFMKo/VbXTMtb78q29qkyBljDcWtIANZNK2fPi7Xlgd3YS
+         MuUncrQe1dtRsPyD+03XbmOklLTSkJUXY/WrmMcbuOgNgWOaZIEYRXQjgpt8WjqKVm9o
+         JkMvQseHWwStQNhX4sVDWAJ/t/qIXhN75vM2AOpCj1SpX2S0EN+US4F3lB8I6LkBW9oT
+         ZoQ0trwWieWmyQwEnSEXWfmNthhOd4upMZ/IwwJaySWNNivlP+F0GKG7TgR67mWODXZc
+         Zevg==
+X-Gm-Message-State: AOAM533wub4fvBO9TaRLtc6rmd3mrXwzZu78VzM1TnNr1MzwFl5bjYco
+        +kXmmE1UZvxcV0y9CJUj5ZnAmYpEFXYYLveSBGc=
+X-Google-Smtp-Source: ABdhPJztVV4vk0bsoiQVYou423ZyvJCH+cGZa4t4gBoSJScuWRUyyZG1JPNItw+pyflHlcb4ktsJ/PrqzuCd6UZZVuc=
+X-Received: by 2002:a17:907:e8d:b0:6e0:19e7:9549 with SMTP id
+ ho13-20020a1709070e8d00b006e019e79549mr10112344ejc.44.1649063847683; Mon, 04
+ Apr 2022 02:17:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220404040153.1509966-1-gch981213@gmail.com> <20220404040153.1509966-3-gch981213@gmail.com>
- <20220404095937.20089db7@xps13>
-In-Reply-To: <20220404095937.20089db7@xps13>
-From:   Chuanhong Guo <gch981213@gmail.com>
-Date:   Mon, 4 Apr 2022 17:13:55 +0800
-Message-ID: <CAJsYDVK6ya7FR90CtAjbpbF-_+c0GVnsKsN=1wYaoBFx=ysUtQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] spi: add driver for MTK SPI NAND Flash Interface
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
+References: <20220403183758.192236-1-krzysztof.kozlowski@linaro.org> <20220403183758.192236-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220403183758.192236-2-krzysztof.kozlowski@linaro.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 4 Apr 2022 12:16:23 +0300
+Message-ID: <CAHp75Vczm9f9Bx_w4nW31cnBgwEzPiN-Eqn-7DKZuB+Hew0F=Q@mail.gmail.com>
+Subject: Re: [PATCH v6 01/12] driver: platform: Add helper for safer setting
+ of driver_override
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi!
+On Sun, Apr 3, 2022 at 9:38 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> Several core drivers and buses expect that driver_override is a
+> dynamically allocated memory thus later they can kfree() it.
+>
+> However such assumption is not documented, there were in the past and
+> there are already users setting it to a string literal. This leads to
+> kfree() of static memory during device release (e.g. in error paths or
+> during unbind):
+>
+>     kernel BUG at ../mm/slub.c:3960!
+>     Internal error: Oops - BUG: 0 [#1] PREEMPT SMP ARM
+>     ...
+>     (kfree) from [<c058da50>] (platform_device_release+0x88/0xb4)
+>     (platform_device_release) from [<c0585be0>] (device_release+0x2c/0x90)
+>     (device_release) from [<c0a69050>] (kobject_put+0xec/0x20c)
+>     (kobject_put) from [<c0f2f120>] (exynos5_clk_probe+0x154/0x18c)
+>     (exynos5_clk_probe) from [<c058de70>] (platform_drv_probe+0x6c/0xa4)
+>     (platform_drv_probe) from [<c058b7ac>] (really_probe+0x280/0x414)
+>     (really_probe) from [<c058baf4>] (driver_probe_device+0x78/0x1c4)
+>     (driver_probe_device) from [<c0589854>] (bus_for_each_drv+0x74/0xb8)
+>     (bus_for_each_drv) from [<c058b48c>] (__device_attach+0xd4/0x16c)
+>     (__device_attach) from [<c058a638>] (bus_probe_device+0x88/0x90)
+>     (bus_probe_device) from [<c05871fc>] (device_add+0x3dc/0x62c)
+>     (device_add) from [<c075ff10>] (of_platform_device_create_pdata+0x94/0xbc)
+>     (of_platform_device_create_pdata) from [<c07600ec>] (of_platform_bus_create+0x1a8/0x4fc)
+>     (of_platform_bus_create) from [<c0760150>] (of_platform_bus_create+0x20c/0x4fc)
+>     (of_platform_bus_create) from [<c07605f0>] (of_platform_populate+0x84/0x118)
+>     (of_platform_populate) from [<c0f3c964>] (of_platform_default_populate_init+0xa0/0xb8)
+>     (of_platform_default_populate_init) from [<c01031f8>] (do_one_initcall+0x8c/0x404)
+>
+> Provide a helper which clearly documents the usage of driver_override.
+> This will allow later to reuse the helper and reduce the amount of
+> duplicated code.
+>
+> Convert the platform driver to use a new helper and make the
+> driver_override field const char (it is not modified by the core).
 
-On Mon, Apr 4, 2022 at 3:59 PM Miquel Raynal <miquel.raynal@bootlin.com> wr=
-ote:
->
-> Hi Chuanhong,
->
-> gch981213@gmail.com wrote on Mon,  4 Apr 2022 12:01:50 +0800:
->
-> > This driver implements support for the SPI-NAND mode of MTK NAND Flash
-> > Interface as a SPI-MEM controller with piplined ECC capability.
-> >
-> > Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-> > ---
-> >
-> > Change since v1:
-> >   fix CI warnings
-> >
-> >  drivers/spi/Kconfig        |   10 +
-> >  drivers/spi/Makefile       |    1 +
-> >  drivers/spi/spi-mtk-snfi.c | 1351 ++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 1362 insertions(+)
-> >  create mode 100644 drivers/spi/spi-mtk-snfi.c
-> >
-> > diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-> > index d2815eb361c0..739eec7d0c15 100644
-> > --- a/drivers/spi/Kconfig
-> > +++ b/drivers/spi/Kconfig
-> > @@ -590,6 +590,16 @@ config SPI_MTK_NOR
-> >         SPI interface as well as several SPI NOR specific instructions
-> >         via SPI MEM interface.
-> >
-> > +config SPI_MTK_SNFI
-> > +     tristate "MediaTek SPI NAND Flash Interface"
-> > +     depends on ARCH_MEDIATEK || COMPILE_TEST
-> > +     depends on MTD_NAND_ECC_MEDIATEK
-> > +     help
-> > +       This enables support for SPI-NAND mode on the MediaTek NAND
-> > +       Flash Interface found on MediaTek ARM SoCs. This controller
-> > +       is implemented as a SPI-MEM controller with pipelined ECC
-> > +       capcability.
-> > +
-> >  config SPI_NPCM_FIU
-> >       tristate "Nuvoton NPCM FLASH Interface Unit"
-> >       depends on ARCH_NPCM || COMPILE_TEST
-> > diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-> > index 3aa28ed3f761..51541ff17e67 100644
-> > --- a/drivers/spi/Makefile
-> > +++ b/drivers/spi/Makefile
-> > @@ -76,6 +76,7 @@ obj-$(CONFIG_SPI_MPC52xx)           +=3D spi-mpc52xx.=
-o
-> >  obj-$(CONFIG_SPI_MT65XX)                +=3D spi-mt65xx.o
-> >  obj-$(CONFIG_SPI_MT7621)             +=3D spi-mt7621.o
-> >  obj-$(CONFIG_SPI_MTK_NOR)            +=3D spi-mtk-nor.o
-> > +obj-$(CONFIG_SPI_MTK_SNFI)           +=3D spi-mtk-snfi.o
-> >  obj-$(CONFIG_SPI_MXIC)                       +=3D spi-mxic.o
-> >  obj-$(CONFIG_SPI_MXS)                        +=3D spi-mxs.o
-> >  obj-$(CONFIG_SPI_NPCM_FIU)           +=3D spi-npcm-fiu.o
-> > diff --git a/drivers/spi/spi-mtk-snfi.c b/drivers/spi/spi-mtk-snfi.c
-> > new file mode 100644
-> > index 000000000000..e8f8f30bd7ee
-> > --- /dev/null
-> > +++ b/drivers/spi/spi-mtk-snfi.c
->
-> [...]
->
-> > +static struct mtk_snand *nand_to_mtk_snand(struct nand_device *nand)
-> > +{
-> > +     struct nand_ecc_engine *eng =3D nand->ecc.engine;
-> > +
-> > +     return container_of(eng, struct mtk_snand, ecc_eng);
-> > +}
-> > +
-> > +static inline int snand_prepare_bouncebuf(struct mtk_snand *snf, size_=
-t size)
-> > +{
-> > +     if (snf->buf_len >=3D size)
-> > +             return 0;
-> > +     if (snf->buf)
-> > +             dmam_free_coherent(snf->dev, snf->buf_len, snf->buf,
-> > +                                snf->buf_dma);
->
-> Can't we use a single coherent buffer once for all?
+...
 
-This only reallocates when the page size changes to a larger one,
-so there's at most two allocations: one during probe and the other
-one in the first call to init_ctx. The other solution is to allocate a
-buffer for the maximum supported page size but I think that's a
-waste of memory.
+> +int driver_set_override(struct device *dev, const char **override,
+> +                       const char *s, size_t len)
+> +{
+> +       const char *new, *old;
+> +       char *cp;
 
->
-> > +     snf->buf =3D
-> > +             dmam_alloc_coherent(snf->dev, size, &snf->buf_dma, GFP_KE=
-RNEL);
-> > +     if (!snf->buf)
-> > +             return -ENOMEM;
-> > +     snf->buf_len =3D size;
-> > +     memset(snf->buf, 0xff, snf->buf_len);
-> > +     return 0;
-> > +}
-> > +
->
-> [...]
->
-> > +static int mtk_snand_ecc_init_ctx(struct nand_device *nand)
-> > +{
-> > +     struct mtk_snand *snf =3D nand_to_mtk_snand(nand);
-> > +     struct nand_ecc_props *conf =3D &nand->ecc.ctx.conf;
-> > +     struct mtd_info *mtd =3D nanddev_to_mtd(nand);
-> > +     int ret;
-> > +
-> > +     ret =3D mtk_snand_setup_pagefmt(snf, nand->memorg.pagesize,
-> > +                                   nand->memorg.oobsize);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     mtd_set_ooblayout(mtd, &mtk_snand_ooblayout);
-> > +
-> > +     // This driver ignores any ECC capability configured by user or
-> > +     // requested by the nand chip because the BootROM and MTK bootloa=
-der
-> > +     // expects the page format to be the exact one as calculated in
-> > +     // setup_pagefmt.
->
-> I don't like this :)
->
-> I understand that the boot partition might have specific constraints,
-> but other partitions (or if we don't use the NAND to boot?) should
-> probably be usable with other ECC schemes.
+> +       if (!override || !s)
+> +               return -EINVAL;
 
-In this controller, the ECC step size is fixed and it can only change
-ECC strength. The calculated ECC correction capability is the max
-possible one supported by the controller.
-I still want the default behavior to match the boot partition
-requirement, because we can't just tell end-users to customize
-their dts by taking apart their device and figure out which flash
-is used.
+Still not sure if we should distinguish (s == NULL && len == 0) from
+(s != NULL && len == 0).
+Supplying the latter seems confusing (yes, I see that in the old code). Perhaps
+!s test, in case you want to leave it, should be also commented.
 
-I can implement the following:
-1. select the minimum capability exceeding ecc.user_conf
-2. If that doesn't exist, use the calculated one and warn
-   if it doesn't meet ecc.requirements
-Is this OK?
+Another approach is to split above to two checks and move !s after !len.
 
->
-> > +     conf->step_size =3D snf->caps->sector_size;
-> > +     conf->strength =3D snf->ecc_cfg.strength;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int mtk_snand_ecc_prepare_io_req(struct nand_device *nand,
-> > +                                     struct nand_page_io_req *req)
-> > +{
-> > +     struct mtk_snand *snf =3D nand_to_mtk_snand(nand);
-> > +     int ret;
-> > +
-> > +     ret =3D mtk_snand_setup_pagefmt(snf, nand->memorg.pagesize,
-> > +                                   nand->memorg.oobsize);
-> > +     if (ret)
-> > +             return ret;
-> > +     snf->autofmt =3D true;
-> > +     return 0;
-> > +}
-> > +
-> > +static int mtk_snand_ecc_finish_io_req(struct nand_device *nand,
-> > +                                    struct nand_page_io_req *req)
-> > +{
-> > +     struct mtk_snand *snf =3D nand_to_mtk_snand(nand);
-> > +     struct mtd_info *mtd =3D nanddev_to_mtd(nand);
-> > +
-> > +     snf->autofmt =3D false;
-> > +     if ((req->mode =3D=3D MTD_OPS_RAW) || (req->type !=3D NAND_PAGE_R=
-EAD))
-> > +             return 0;
-> > +
-> > +     if (snf->ecc_stats.failed)
-> > +             mtd->ecc_stats.failed +=3D snf->ecc_stats.failed;
-> > +     mtd->ecc_stats.corrected +=3D snf->ecc_stats.corrected;
-> > +     return snf->ecc_stats.failed ? -EBADMSG : snf->ecc_stats.bitflips=
-;
->
-> Did you verify that nandbiterrs -i succeeds?
+> +       /*
+> +        * The stored value will be used in sysfs show callback (sysfs_emit()),
+> +        * which has a length limit of PAGE_SIZE and adds a trailing newline.
+> +        * Thus we can store one character less to avoid truncation during sysfs
+> +        * show.
+> +        */
+> +       if (len >= (PAGE_SIZE - 1))
+> +               return -EINVAL;
 
-I did a insmod mtd_nandbiterrs.ko dev=3Dx and the reported bitflips in
-kernel log is correct.
+Perhaps explain the case in the comment here?
 
-Is there a userspace tool for this? I'd like to use that instead of a
-kernel module in the future.
+> +       if (!len) {
+> +               device_lock(dev);
+> +               old = *override;
+> +               *override = NULL;
 
->
-> > +}
-> > +
-> > +static struct nand_ecc_engine_ops mtk_snfi_ecc_engine_ops =3D {
-> > +     .init_ctx =3D mtk_snand_ecc_init_ctx,
-> > +     .prepare_io_req =3D mtk_snand_ecc_prepare_io_req,
-> > +     .finish_io_req =3D mtk_snand_ecc_finish_io_req,
->
-> I believe you need to take care of the bounce buffer in the exit path?
+> +               device_unlock(dev);
+> +               goto out_free;
 
-No. The buffer should be left there for non-ecc spi-mem operations.
+You may deduplicate this one, by
 
->
-> > +};
-> > +
-> > +static void mtk_snand_read_fdm(struct mtk_snand *snf, uint8_t *buf)
-> > +{
-> > +     uint32_t vall, valm;
-> > +     uint8_t *oobptr =3D buf;
-> > +     int i, j;
-> > +
-> > +     for (i =3D 0; i < snf->nfi_cfg.nsectors; i++) {
-> > +             vall =3D nfi_read32(snf, NFI_FDML(i));
-> > +             valm =3D nfi_read32(snf, NFI_FDMM(i));
-> > +
-> > +             for (j =3D 0; j < snf->caps->fdm_size; j++)
-> > +                     oobptr[j] =3D (j >=3D 4 ? valm : vall) >> ((j % 4=
-) * 8);
-> > +
-> > +             oobptr +=3D snf->caps->fdm_size;
-> > +     }
-> > +}
->
-> Thanks,
-> Miqu=C3=A8l
+               goto out_unlock_free;
+
+But I understand your intention to keep lock-unlock in one place, so
+perhaps dropping that label would be even better in this case and
+keeping it
+
+       kfree(old);
+       return 0;
+
+here instead of goto.
+
+> +       }
+> +
+> +       cp = strnchr(s, len, '\n');
+> +       if (cp)
+> +               len = cp - s;
+> +
+> +       new = kstrndup(s, len, GFP_KERNEL);
+> +       if (!new)
+> +               return -ENOMEM;
+> +
+> +       device_lock(dev);
+> +       old = *override;
+> +       if (cp != s) {
+> +               *override = new;
+> +       } else {
+> +               kfree(new);
+> +               *override = NULL;
+> +       }
+> +       device_unlock(dev);
+> +
+> +out_free:
+> +       kfree(old);
+> +
+> +       return 0;
+> +}
 
 
-
---
-Regards,
-Chuanhong Guo
+-- 
+With Best Regards,
+Andy Shevchenko
