@@ -2,58 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D444F1680
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 15:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F7C4F1688
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 15:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353627AbiDDNv4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Apr 2022 09:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
+        id S1357478AbiDDNyT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Apr 2022 09:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359060AbiDDNvz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 09:51:55 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C3713FA9
-        for <linux-spi@vger.kernel.org>; Mon,  4 Apr 2022 06:49:56 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id p189so5972546wmp.3
-        for <linux-spi@vger.kernel.org>; Mon, 04 Apr 2022 06:49:56 -0700 (PDT)
+        with ESMTP id S1354630AbiDDNyT (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 09:54:19 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594D03EAA7
+        for <linux-spi@vger.kernel.org>; Mon,  4 Apr 2022 06:52:22 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id f6-20020a1c3806000000b0038e4a0fc5easo5628874wma.3
+        for <linux-spi@vger.kernel.org>; Mon, 04 Apr 2022 06:52:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=d8lIwh8tiIkMFx11fFktp0oGVk3nbpQUUWnZgWL5Jnc=;
-        b=W+UEgv5UP7GXJYs7QCG6QtMn7aXfPo+PDkNKW5aMvKgZsee9uyRmczhK/6PCLslrKm
-         tSzbF8FkOxo4jSezbxKMnPAHm/lARrn+xP0kN/gp6snbd9diecPFDLZmy5bU1lqRS+cQ
-         iOFJp0xD4OiAfjWsb3KoT0vqhIyIwBq+QcdJjrIMveCI7SKroJ0jKwEXOFnLozRJWrf9
-         7VVizkFvRzvR5UF/2b0g42XataFHeKD0pzFn+5W44xkDBWHaiOmNwtMW+K0/yjeAdZpZ
-         8/J///8nE3oojWSxI1Kon5NFJP6beXJd57Zd8RrkepeKE/GgEdQaBrSmx3aDRP2wzM/X
-         xKyA==
+        bh=orXe1JLKj3eWkUs/vG6CQ9PlkRdOEKGc+GDPsHVwVSQ=;
+        b=WyC0hsymaV9UJHv9CIIXVy5p7WAbo4Q2u4e/nQE8HTIvyVX+5wdSM80i3/YtDNM3dA
+         nFxLwmjCRR4j+YdelKwwidGUkes+I7rlhDtqLa3IKaZNsVPlTlDq/QO0BQ6qVP0je9OT
+         1KQWXQYyhRucsEQVJGeqI/1oag6jR6qJ+cpdIBQP61sV6fJrMSJdJNDvAWu7ipDaovrk
+         jaFOfrKqq+R7VrCp0uRUIN43Uty6xJJp+LO/trJziABkk5vpAwDRXNfUNDUkNiYdTG4w
+         fMycIQYXPOwR68torwpWP58A1znnlOrwUM69KoiR6aDC7bxjiCIH4ZcT3MZx21MsXAXX
+         uvUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=d8lIwh8tiIkMFx11fFktp0oGVk3nbpQUUWnZgWL5Jnc=;
-        b=LRBmGs9q+quVIq3CG44xXfEvCIKBg6XoOuZV7q/FoCT9D1rAKkTUYbHhNd82z7MBrP
-         FPKWziV/gcbFt3EtbnbxljMgSqOSVER8pIzMxRWTcSoYqupYekXg8QwHg6Ps0syDmMI3
-         QXdP7aGWyOElcbLdRIDvfuRwrTbW25GII0hXLXBXNfoWVu4hLAoco4FSaNruZ7P8RTxc
-         H6F6VdF5DWngFhsHIgzk5ZmMZjZknkLqu5xgNHym+Vom+KO1tIkYuY3TfpzINyvHiuxW
-         xNwVTNbOTNgkstc37FCol2/YbW9cRi1V7z18RxwnGbcZRLK9u91Dac2BCIoixA5Oc6x8
-         V7UA==
-X-Gm-Message-State: AOAM530c/UjJ9+SZa1fd233Z3Aunad7NUuoF8cxG3xPENPhpc2NOPUE+
-        OiMyfdx0UUUiWHH4QsMp2kCeNg==
-X-Google-Smtp-Source: ABdhPJx1C13/G0jo9mcTjjBok/lghKbqEZJvW3uyonaeOQWgDSX154xlSCC+Ip2L56ywjoSX1G9fSw==
-X-Received: by 2002:a1c:7715:0:b0:380:ed9b:debd with SMTP id t21-20020a1c7715000000b00380ed9bdebdmr19498320wmi.54.1649080195394;
-        Mon, 04 Apr 2022 06:49:55 -0700 (PDT)
+        bh=orXe1JLKj3eWkUs/vG6CQ9PlkRdOEKGc+GDPsHVwVSQ=;
+        b=7wCpYTyohoMa7AnskjV4T7Ann4blBgXAADkGCd7LfXVMq+p/fIeKJ5Zgte07VDD7lq
+         5/fPCF+rwjeZ7UvuLb9yHJh/iMDOeiNpSVN4ltLR9Fh2Q8JNlvZ8O+IrtdnhspwWDann
+         wpT7BXKO6izcDR7+7EukqoKQA0nEQI1nwWClELBeo4tmC24UYuuKnsHYtyO38O00cz7G
+         ZpgkEDJtT9CvwAIVM8AS4IMxyfZpoOKqXtFwYFE6VjTNxjrSNrEl2iHzecbGS0DXStyM
+         jW2s0Pn7JB30YZyLpKokmQ5okbkUygPIbOfrsV+Pa/Ot2Bj65HcamaCQ2JfWNd4u0Ie1
+         jBFg==
+X-Gm-Message-State: AOAM5323CvVyQZJYDnUZGfSXSKXI2rD5vEafo4Qh7aG2QfYNowIHRApX
+        1DcCiwZTewroxPRy0aqf29RIRCwlSSj5Vkrq
+X-Google-Smtp-Source: ABdhPJw89vFXoJ5SBTppIPxaGW7RRNdgP5jNO3Xa+1KintPNh7R1vx4e+9D+kd9JBLe3HI5yTVSsVQ==
+X-Received: by 2002:a1c:e908:0:b0:38c:782c:2a62 with SMTP id q8-20020a1ce908000000b0038c782c2a62mr19502739wmc.135.1649080340874;
+        Mon, 04 Apr 2022 06:52:20 -0700 (PDT)
 Received: from [192.168.0.176] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id f18-20020a5d6652000000b001e669ebd528sm9306837wrw.91.2022.04.04.06.49.54
+        by smtp.gmail.com with ESMTPSA id p125-20020a1c2983000000b0038e5ca446bcsm8269468wmp.5.2022.04.04.06.52.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 06:49:54 -0700 (PDT)
-Message-ID: <f86a0be9-ab40-9878-82f0-d892e674d165@linaro.org>
-Date:   Mon, 4 Apr 2022 15:49:53 +0200
+        Mon, 04 Apr 2022 06:52:20 -0700 (PDT)
+Message-ID: <14c921b5-4240-a026-252a-d5fb60836b34@linaro.org>
+Date:   Mon, 4 Apr 2022 15:52:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v2 4/5] dt-bindings: spi: add binding doc for spi-mtk-snfi
+Subject: Re: [PATCH v3 4/5] dt-bindings: spi: add binding doc for spi-mtk-snfi
 Content-Language: en-US
 To:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org
 Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
@@ -78,10 +78,10 @@ Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         <linux-mediatek@lists.infradead.org>,
         open list <linux-kernel@vger.kernel.org>,
         "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
-References: <20220404040153.1509966-1-gch981213@gmail.com>
- <20220404040153.1509966-5-gch981213@gmail.com>
+References: <20220404131818.1817794-1-gch981213@gmail.com>
+ <20220404131818.1817794-5-gch981213@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220404040153.1509966-5-gch981213@gmail.com>
+In-Reply-To: <20220404131818.1817794-5-gch981213@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -94,16 +94,17 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 04/04/2022 06:01, Chuanhong Guo wrote:
+On 04/04/2022 15:18, Chuanhong Guo wrote:
 > Add device-tree binding documentation for Mediatek SPI-NAND Flash
 > Interface.
 > 
 > Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
 > ---
-> 
 > Changes since v1:
 >   1. add a blank line between properties in dt binding doc
 >   2. rename ecc-engine to nand-ecc-engine for the generic properties
+> 
+> Change since v2: none
 > 
 >  .../bindings/spi/mediatek,spi-mtk-snfi.yaml   | 88 +++++++++++++++++++
 >  1 file changed, 88 insertions(+)
@@ -174,7 +175,10 @@ On 04/04/2022 06:01, Chuanhong Guo wrote:
 > +  - clock-names
 > +  - ecc-engine
 
-Wrong name.
+Slightly slow down resends (max 1 per day). You sent v3 without giving a
+chance to review this.
+
+Wrong name here.
 
 
 Best regards,
