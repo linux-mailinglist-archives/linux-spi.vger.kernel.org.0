@@ -2,36 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC1A4F1317
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 12:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7174D4F1371
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 12:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357571AbiDDKad (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Apr 2022 06:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
+        id S1358853AbiDDK4a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Apr 2022 06:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237099AbiDDKac (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 06:30:32 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87332263D;
-        Mon,  4 Apr 2022 03:28:33 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 399F524000B;
-        Mon,  4 Apr 2022 10:28:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649068109;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HCsUi7kOI3d6Xo1Mm1jD9G/wtU6d4VrhYaApfm09KZI=;
-        b=gbwGaNha7rEyqNkTaxQbeooF06FS+a4ZuW9tSlSN+P/9d25inyojXEX05W4+wQ30vvrXWu
-        P5dme+NQYjzbThTQ+GaAKh9EhHFG2eI4w7kYqefsxf5lpvcV8TzTa8UrPfqtfNGkHMFjVc
-        ZFGBPby619uiBHPpESgx7+HRU39TAIHjRhReYvti2QHS5rKUtMU5o8mDBnA9AgfBVNU6xL
-        Rwzowagr2P1dk76ve5wQz6BBx+b1dma1beoBR5Sghf0UCyQXIwtjBJ+9anfxb0noEA6329
-        vqEORxQb7TJ7AFCXOmglRk8d/qbchxUB32ymQ6qiD6I4hcn9hEFI899uDT5qEQ==
-Date:   Mon, 4 Apr 2022 12:28:24 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Chuanhong Guo <gch981213@gmail.com>
+        with ESMTP id S1358571AbiDDK4Y (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 06:56:24 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A27340F5;
+        Mon,  4 Apr 2022 03:54:29 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id 125so10680845iov.10;
+        Mon, 04 Apr 2022 03:54:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6rE17aokLscUeZldWdcl+4+hAX8YeB4QD9pUd4GrjIM=;
+        b=TtY+/cMcXBcL8IdYOINrQltPY2JNCPfd2Awm3ZptGepcymCrJ3HbII3+X/9Ys3fHuv
+         4iCZx4zOnwwrvLnGrZ3sSBV5UeUQRXeGFGiaYmn9YqpxCGlzhG1eRkzW0TxfS5Jm/hM4
+         zINrPwRZM7x3FcLUgaHacw3Oz4YJWellZsVpIAyIq8BUnJbGlyraFuEymXpU7UfYdD7r
+         +ZDMMIurR+tpkRsVxx2Vac/rQeWxgpYJJTomab6ShmerwgPvcH57JqOw+IjympgRYdgr
+         eUsU/pdzW9runBz+psuMNZO6RCjSu8ygZaeOOqn/wggHyW8mamGNKvJKczPXMDuKt85v
+         5+PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6rE17aokLscUeZldWdcl+4+hAX8YeB4QD9pUd4GrjIM=;
+        b=T+juA9+3w+B/+jy0r6FLVis5Ix5XPDD1XZMfH1EHRJ8j6JovhLZgflObaL4vRhplpj
+         72lVKLMaqfRNNOGyH1vRYwTBTOamoAMKBJE3yki89UHzTAF3v510tJ5Joh3KDE1R0nTG
+         QcvOom7m/DNjzv7OOynJw8FTV22bUwPTHfOKA8JCS4aoYyrRnB4JbR42287jxGkPDtOj
+         JyqBnb4FZe11S/mwtInGgPyBD+cwBJyGP8KPXbE9h2zeSKeWhesOMpyqXXOOdKY7DPWX
+         wmCNfJ5YOwvumomyTADnPgAyp6HfPyhN54giL2LfmulaZLXmraGeG63uS4+qofv/7GsN
+         tW+A==
+X-Gm-Message-State: AOAM530HjYKChTfOyvEA2qkxO878hy8ab6Kujs+5aacIByEyzl61mxdw
+        7F2DVvXd2Lhtkp1fAQIq//ga0fWaZWsvaXJCdm4=
+X-Google-Smtp-Source: ABdhPJy6dWkX7SvStDXsR6rYoheGmMRXvU/7VnD9jCFC5zDIQw6Mmc9tyZgib54eWMjb5UYf/h7INW0fl0bt4WedkxE=
+X-Received: by 2002:a05:6638:d16:b0:323:63cd:c144 with SMTP id
+ q22-20020a0566380d1600b0032363cdc144mr11635735jaj.76.1649069668361; Mon, 04
+ Apr 2022 03:54:28 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220404040153.1509966-1-gch981213@gmail.com> <20220404040153.1509966-3-gch981213@gmail.com>
+ <20220404095937.20089db7@xps13> <CAJsYDVK6ya7FR90CtAjbpbF-_+c0GVnsKsN=1wYaoBFx=ysUtQ@mail.gmail.com>
+ <20220404122824.63a1c857@xps13>
+In-Reply-To: <20220404122824.63a1c857@xps13>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Mon, 4 Apr 2022 18:54:17 +0800
+Message-ID: <CAJsYDVJXH0MUB2wPydzqFgF8Y82HsUY7FLu1duCOCyVO-oXZqw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] spi: add driver for MTK SPI NAND Flash Interface
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
 Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -54,296 +76,96 @@ Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         <linux-mediatek@lists.infradead.org>,
         open list <linux-kernel@vger.kernel.org>,
         "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
-Subject: Re: [PATCH v2 2/5] spi: add driver for MTK SPI NAND Flash Interface
-Message-ID: <20220404122824.63a1c857@xps13>
-In-Reply-To: <CAJsYDVK6ya7FR90CtAjbpbF-_+c0GVnsKsN=1wYaoBFx=ysUtQ@mail.gmail.com>
-References: <20220404040153.1509966-1-gch981213@gmail.com>
-        <20220404040153.1509966-3-gch981213@gmail.com>
-        <20220404095937.20089db7@xps13>
-        <CAJsYDVK6ya7FR90CtAjbpbF-_+c0GVnsKsN=1wYaoBFx=ysUtQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Chuanhong,
+Hi!
 
-gch981213@gmail.com wrote on Mon, 4 Apr 2022 17:13:55 +0800:
-
-> Hi!
->=20
-> On Mon, Apr 4, 2022 at 3:59 PM Miquel Raynal <miquel.raynal@bootlin.com> =
-wrote:
-> >
-> > Hi Chuanhong,
-> >
-> > gch981213@gmail.com wrote on Mon,  4 Apr 2022 12:01:50 +0800:
-> > =20
-> > > This driver implements support for the SPI-NAND mode of MTK NAND Flash
-> > > Interface as a SPI-MEM controller with piplined ECC capability.
+On Mon, Apr 4, 2022 at 6:28 PM Miquel Raynal <miquel.raynal@bootlin.com> wrote:
+> [...]
+> > > > +
+> > > > +     // This driver ignores any ECC capability configured by user or
+> > > > +     // requested by the nand chip because the BootROM and MTK bootloader
+> > > > +     // expects the page format to be the exact one as calculated in
+> > > > +     // setup_pagefmt.
 > > >
-> > > Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-> > > ---
+> > > I don't like this :)
 > > >
-> > > Change since v1:
-> > >   fix CI warnings
+> > > I understand that the boot partition might have specific constraints,
+> > > but other partitions (or if we don't use the NAND to boot?) should
+> > > probably be usable with other ECC schemes.
+> >
+> > In this controller, the ECC step size is fixed and it can only change
+> > ECC strength.
+>
+> That's fine.
+>
+> > The calculated ECC correction capability is the max
+> > possible one supported by the controller.
+> > I still want the default behavior to match the boot partition
+> > requirement,
+>
+> That is okay, but that does not mean you can only support this one.
+>
+> > because we can't just tell end-users to customize
+> > their dts by taking apart their device and figure out which flash
+> > is used.
+>
+> They don't have to do so. In theory they should not request anything,
+> the core would take care of all of that. But they can request specific
+> values by using the DT and you must follow them in the driver.
+>
+> On his side the core is responsible of telling you which strength
+> should be used otherwise and the driver is expected to use it.
+
+The core provided ecc strength may be smaller than the
+calculated one. e.g. A nand chip may only have a requirement
+of 8/512bits ECC. But if it has a 2k+128 pagesize, this
+controller can do 12/512bits ECC and the bootrom expects the
+latter.
+
+> You should take the user requirements first. If there are no
+> user inputs, you should in theory look at the device's requirements.
+
+I'll take the user requirements if there is one. If there isn't, I'll
+follow the calculated strength instead of the device requirement
+so that user doesn't have to specify a custom strength in dt.
+
+> [...]
+> > > > +static struct nand_ecc_engine_ops mtk_snfi_ecc_engine_ops = {
+> > > > +     .init_ctx = mtk_snand_ecc_init_ctx,
+> > > > +     .prepare_io_req = mtk_snand_ecc_prepare_io_req,
+> > > > +     .finish_io_req = mtk_snand_ecc_finish_io_req,
 > > >
-> > >  drivers/spi/Kconfig        |   10 +
-> > >  drivers/spi/Makefile       |    1 +
-> > >  drivers/spi/spi-mtk-snfi.c | 1351 ++++++++++++++++++++++++++++++++++=
-++
-> > >  3 files changed, 1362 insertions(+)
-> > >  create mode 100644 drivers/spi/spi-mtk-snfi.c
-> > >
-> > > diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-> > > index d2815eb361c0..739eec7d0c15 100644
-> > > --- a/drivers/spi/Kconfig
-> > > +++ b/drivers/spi/Kconfig
-> > > @@ -590,6 +590,16 @@ config SPI_MTK_NOR
-> > >         SPI interface as well as several SPI NOR specific instructions
-> > >         via SPI MEM interface.
-> > >
-> > > +config SPI_MTK_SNFI
-> > > +     tristate "MediaTek SPI NAND Flash Interface"
-> > > +     depends on ARCH_MEDIATEK || COMPILE_TEST
-> > > +     depends on MTD_NAND_ECC_MEDIATEK
-> > > +     help
-> > > +       This enables support for SPI-NAND mode on the MediaTek NAND
-> > > +       Flash Interface found on MediaTek ARM SoCs. This controller
-> > > +       is implemented as a SPI-MEM controller with pipelined ECC
-> > > +       capcability.
-> > > +
-> > >  config SPI_NPCM_FIU
-> > >       tristate "Nuvoton NPCM FLASH Interface Unit"
-> > >       depends on ARCH_NPCM || COMPILE_TEST
-> > > diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-> > > index 3aa28ed3f761..51541ff17e67 100644
-> > > --- a/drivers/spi/Makefile
-> > > +++ b/drivers/spi/Makefile
-> > > @@ -76,6 +76,7 @@ obj-$(CONFIG_SPI_MPC52xx)           +=3D spi-mpc52x=
-x.o
-> > >  obj-$(CONFIG_SPI_MT65XX)                +=3D spi-mt65xx.o
-> > >  obj-$(CONFIG_SPI_MT7621)             +=3D spi-mt7621.o
-> > >  obj-$(CONFIG_SPI_MTK_NOR)            +=3D spi-mtk-nor.o
-> > > +obj-$(CONFIG_SPI_MTK_SNFI)           +=3D spi-mtk-snfi.o
-> > >  obj-$(CONFIG_SPI_MXIC)                       +=3D spi-mxic.o
-> > >  obj-$(CONFIG_SPI_MXS)                        +=3D spi-mxs.o
-> > >  obj-$(CONFIG_SPI_NPCM_FIU)           +=3D spi-npcm-fiu.o
-> > > diff --git a/drivers/spi/spi-mtk-snfi.c b/drivers/spi/spi-mtk-snfi.c
-> > > new file mode 100644
-> > > index 000000000000..e8f8f30bd7ee
-> > > --- /dev/null
-> > > +++ b/drivers/spi/spi-mtk-snfi.c =20
+> > > I believe you need to take care of the bounce buffer in the exit path?
 > >
-> > [...]
-> > =20
-> > > +static struct mtk_snand *nand_to_mtk_snand(struct nand_device *nand)
-> > > +{
-> > > +     struct nand_ecc_engine *eng =3D nand->ecc.engine;
-> > > +
-> > > +     return container_of(eng, struct mtk_snand, ecc_eng);
-> > > +}
-> > > +
-> > > +static inline int snand_prepare_bouncebuf(struct mtk_snand *snf, siz=
-e_t size)
-> > > +{
-> > > +     if (snf->buf_len >=3D size)
-> > > +             return 0;
-> > > +     if (snf->buf)
-> > > +             dmam_free_coherent(snf->dev, snf->buf_len, snf->buf,
-> > > +                                snf->buf_dma); =20
-> >
-> > Can't we use a single coherent buffer once for all? =20
->=20
-> This only reallocates when the page size changes to a larger one,
-> so there's at most two allocations: one during probe and the other
-> one in the first call to init_ctx. The other solution is to allocate a
-> buffer for the maximum supported page size but I think that's a
-> waste of memory.
+> > No. The buffer should be left there for non-ecc spi-mem operations.
+>
+> AFAIR you initialize the buffer in the ECC part, so if it must be used
+> without ECC you should probably allocate it for the SPI controller.
 
-Ok, fine.
+I did. the setup_pagefmt is called once with the minimal page+oob size
+in probe.
 
->=20
-> > =20
-> > > +     snf->buf =3D
-> > > +             dmam_alloc_coherent(snf->dev, size, &snf->buf_dma, GFP_=
-KERNEL);
-> > > +     if (!snf->buf)
-> > > +             return -ENOMEM;
-> > > +     snf->buf_len =3D size;
-> > > +     memset(snf->buf, 0xff, snf->buf_len);
-> > > +     return 0;
-> > > +}
-> > > + =20
-> >
-> > [...]
-> > =20
-> > > +static int mtk_snand_ecc_init_ctx(struct nand_device *nand)
-> > > +{
-> > > +     struct mtk_snand *snf =3D nand_to_mtk_snand(nand);
-> > > +     struct nand_ecc_props *conf =3D &nand->ecc.ctx.conf;
-> > > +     struct mtd_info *mtd =3D nanddev_to_mtd(nand);
-> > > +     int ret;
-> > > +
-> > > +     ret =3D mtk_snand_setup_pagefmt(snf, nand->memorg.pagesize,
-> > > +                                   nand->memorg.oobsize);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +
-> > > +     mtd_set_ooblayout(mtd, &mtk_snand_ooblayout);
-> > > +
-> > > +     // This driver ignores any ECC capability configured by user or
-> > > +     // requested by the nand chip because the BootROM and MTK bootl=
-oader
-> > > +     // expects the page format to be the exact one as calculated in
-> > > +     // setup_pagefmt. =20
-> >
-> > I don't like this :)
-> >
-> > I understand that the boot partition might have specific constraints,
-> > but other partitions (or if we don't use the NAND to boot?) should
-> > probably be usable with other ECC schemes. =20
->=20
-> In this controller, the ECC step size is fixed and it can only change
-> ECC strength.
+> In
+> any way, you need to free that memory at some point (when removing the
+> driver).
 
-That's fine.
+I was using the devm api for this allocation so kernel should take
+care of that.
 
-> The calculated ECC correction capability is the max
-> possible one supported by the controller.
-> I still want the default behavior to match the boot partition
-> requirement,
+I'll change the DMA to use streamed API in the next version to avoid
+an extra memory copy in reading, and the allocated buffer will be
+freed in remove().
 
-That is okay, but that does not mean you can only support this one.
-
-> because we can't just tell end-users to customize
-> their dts by taking apart their device and figure out which flash
-> is used.
-
-They don't have to do so. In theory they should not request anything,
-the core would take care of all of that. But they can request specific
-values by using the DT and you must follow them in the driver.
-
-On his side the core is responsible of telling you which strength
-should be used otherwise and the driver is expected to use it.
-
-> I can implement the following:
-
-You should take the user requirements first. If there are no
-user inputs, you should in theory look at the device's requirements.
-
-> 1. select the minimum capability exceeding ecc.user_conf
-> 2. If that doesn't exist, use the calculated one and warn
->    if it doesn't meet ecc.requirements
-> Is this OK?
->=20
-> > =20
-> > > +     conf->step_size =3D snf->caps->sector_size;
-> > > +     conf->strength =3D snf->ecc_cfg.strength;
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int mtk_snand_ecc_prepare_io_req(struct nand_device *nand,
-> > > +                                     struct nand_page_io_req *req)
-> > > +{
-> > > +     struct mtk_snand *snf =3D nand_to_mtk_snand(nand);
-> > > +     int ret;
-> > > +
-> > > +     ret =3D mtk_snand_setup_pagefmt(snf, nand->memorg.pagesize,
-> > > +                                   nand->memorg.oobsize);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +     snf->autofmt =3D true;
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int mtk_snand_ecc_finish_io_req(struct nand_device *nand,
-> > > +                                    struct nand_page_io_req *req)
-> > > +{
-> > > +     struct mtk_snand *snf =3D nand_to_mtk_snand(nand);
-> > > +     struct mtd_info *mtd =3D nanddev_to_mtd(nand);
-> > > +
-> > > +     snf->autofmt =3D false;
-> > > +     if ((req->mode =3D=3D MTD_OPS_RAW) || (req->type !=3D NAND_PAGE=
-_READ))
-> > > +             return 0;
-> > > +
-> > > +     if (snf->ecc_stats.failed)
-> > > +             mtd->ecc_stats.failed +=3D snf->ecc_stats.failed;
-> > > +     mtd->ecc_stats.corrected +=3D snf->ecc_stats.corrected;
-> > > +     return snf->ecc_stats.failed ? -EBADMSG : snf->ecc_stats.bitfli=
-ps; =20
-> >
-> > Did you verify that nandbiterrs -i succeeds? =20
->=20
-> I did a insmod mtd_nandbiterrs.ko dev=3Dx and the reported bitflips in
-> kernel log is correct.
->=20
-> Is there a userspace tool for this? I'd like to use that instead of a
-> kernel module in the future.
-
-Yes, you can give the mtd-utils test suite a try. Almost all the tools
-have been migrated there. There even is a Buildroot package.
-
-> > > +}
-> > > +
-> > > +static struct nand_ecc_engine_ops mtk_snfi_ecc_engine_ops =3D {
-> > > +     .init_ctx =3D mtk_snand_ecc_init_ctx,
-> > > +     .prepare_io_req =3D mtk_snand_ecc_prepare_io_req,
-> > > +     .finish_io_req =3D mtk_snand_ecc_finish_io_req, =20
-> >
-> > I believe you need to take care of the bounce buffer in the exit path? =
-=20
->=20
-> No. The buffer should be left there for non-ecc spi-mem operations.
-
-AFAIR you initialize the buffer in the ECC part, so if it must be used
-without ECC you should probably allocate it for the SPI controller. In
-any way, you need to free that memory at some point (when removing the
-driver).
-
->=20
-> > =20
-> > > +};
-> > > +
-> > > +static void mtk_snand_read_fdm(struct mtk_snand *snf, uint8_t *buf)
-> > > +{
-> > > +     uint32_t vall, valm;
-> > > +     uint8_t *oobptr =3D buf;
-> > > +     int i, j;
-> > > +
-> > > +     for (i =3D 0; i < snf->nfi_cfg.nsectors; i++) {
-> > > +             vall =3D nfi_read32(snf, NFI_FDML(i));
-> > > +             valm =3D nfi_read32(snf, NFI_FDMM(i));
-> > > +
-> > > +             for (j =3D 0; j < snf->caps->fdm_size; j++)
-> > > +                     oobptr[j] =3D (j >=3D 4 ? valm : vall) >> ((j %=
- 4) * 8);
-> > > +
-> > > +             oobptr +=3D snf->caps->fdm_size;
-> > > +     }
-> > > +} =20
-> >
-> > Thanks,
-> > Miqu=C3=A8l =20
->=20
->=20
->=20
-> --
-> Regards,
-> Chuanhong Guo
-
-
-Thanks,
-Miqu=C3=A8l
+-- 
+Regards,
+Chuanhong Guo
