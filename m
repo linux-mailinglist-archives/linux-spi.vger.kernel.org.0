@@ -2,46 +2,72 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3CF4F1697
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 15:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4297B4F16BC
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 16:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359332AbiDDN6b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Apr 2022 09:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
+        id S1376892AbiDDOGg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Apr 2022 10:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376505AbiDDN62 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 09:58:28 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F973EB87
-        for <linux-spi@vger.kernel.org>; Mon,  4 Apr 2022 06:56:32 -0700 (PDT)
+        with ESMTP id S1357098AbiDDOGe (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 10:06:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BF11D306;
+        Mon,  4 Apr 2022 07:04:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6F353CE183F
-        for <linux-spi@vger.kernel.org>; Mon,  4 Apr 2022 13:56:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A26F5C2BBE4;
-        Mon,  4 Apr 2022 13:56:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78C1E613EF;
+        Mon,  4 Apr 2022 14:04:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F5C3C340EE;
+        Mon,  4 Apr 2022 14:04:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649080588;
-        bh=Z6VkBpvYoLUxdepy0TWLDhQCgUY8NNSIg/i2OSZpHz0=;
-        h=Subject:From:Date:To:From;
-        b=BYBng9+YZITE/0b74wE2rHm3XNczKq8qVv+MePs5msZchAlCtnD2EaMUXNIG2EgLm
-         8zofMDjxDcaNyfWINtX5CpT/QrXTvlzJmLi4g+6EtAqCuru9ga80R8GY2e2v4kxwml
-         vLIVpOoghOWyEapiWEb/bsXaApOju7iRkvQrI9HRL/hvzbntdyle5PNQrsEXd637fB
-         24q0+v37G1KS3uDf/RxEhjmAfUr70rwEU6TiPX1dnCoDuPx+kCjHE21jAHKBdMwBk8
-         K8Tz12TbvfUYyS6SJYg6OLCySwiKilE5OTIk2Ia0ut+3IOzJI5mvZ/YpvpTIqT4pPb
-         T+zthlL7X8hHg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 794D0E85B8C;
-        Mon,  4 Apr 2022 13:56:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1649081072;
+        bh=+YodnbKNfkD+6Cay2I53zzP9Fet7F7fDGOH+q3ST2WA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XgkScUB9MqKjZwqfpE1regXlQ5YzXGwZsjnqo4dN0muVS235eUAjnw+BKIJMC3P4m
+         z3OHgXZpTOB/WHZYJA9jUwZzTmJMOfGhlDEdCeTQBFZwBNyKINzUgpQKS7N9cgTE2t
+         2G5Sbbdk0eOTP5DXRKBy9PSppWpPGWb8xPvzHh65q1nQ5gGnS+LN3ubFpTGJ+HcY5Q
+         Wo6wNLTqeOCXaF+xSe11nzC86MLLXuMbYh0aSPF7hzFPIazdaUw5VM4TDyTXCcL+lT
+         fNKMei4vhBaiGivTLUqzE0n4UGyL6/BR7ZN3io5o+HtGVmolDL8eSoEDVPFMRnH1Rn
+         EprzCWdbSK/tQ==
+Date:   Mon, 4 Apr 2022 15:04:25 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
+Subject: Re: [PATCH v3 4/5] dt-bindings: spi: add binding doc for spi-mtk-snfi
+Message-ID: <Ykr66c+KEaO8vltj@sirena.org.uk>
+References: <20220404131818.1817794-1-gch981213@gmail.com>
+ <20220404131818.1817794-5-gch981213@gmail.com>
+ <14c921b5-4240-a026-252a-d5fb60836b34@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <164908058840.14328.2006723963077161239.git-patchwork-housekeeping@kernel.org>
-Date:   Mon, 04 Apr 2022 13:56:28 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/iF9jkJodygiQRcM"
+Content-Disposition: inline
+In-Reply-To: <14c921b5-4240-a026-252a-d5fb60836b34@linaro.org>
+X-Cookie: Did I say I was a sardine?  Or a bus???
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,16 +78,45 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v3] spi: add support for Mediatek SPI-NAND controller (2022-04-04T13:18:13)
-  Superseding: [v2] spi: add support for Mediatek SPI-NAND controller (2022-04-04T04:01:48):
-    [v2,1/5] mtd: nand: make mtk_ecc.c a separated module
-    [v2,2/5] spi: add driver for MTK SPI NAND Flash Interface
-    [v2,3/5] mtd: nand: mtk-ecc: also parse nand-ecc-engine if available
-    [v2,4/5] dt-bindings: spi: add binding doc for spi-mtk-snfi
-    [v2,5/5] arm64: dts: mediatek: add mtk-snfi for mt7622
 
+--/iF9jkJodygiQRcM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+On Mon, Apr 04, 2022 at 03:52:19PM +0200, Krzysztof Kozlowski wrote:
+> On 04/04/2022 15:18, Chuanhong Guo wrote:
 
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - clocks
+> > +  - clock-names
+> > +  - ecc-engine
+
+> Slightly slow down resends (max 1 per day). You sent v3 without giving a
+> chance to review this.
+
+> Wrong name here.
+
+Please delete unneeded context from mails when replying.  Doing this
+makes it much easier to find your reply in the message, helping ensure
+it won't be missed by people scrolling through the irrelevant quoted
+material.
+
+--/iF9jkJodygiQRcM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJK+ugACgkQJNaLcl1U
+h9DovAf9FvUfyz38jWX01k0PPwcjlxGKC4qUprMZogZ5XZdSB9lbzlD1miFEYdQz
+UmBtAiLNTO9ZfPHJnyV5Wl2Xkdfoc8+InivnS9xjXylc98GlA5FHzjTEiSiJz8ZU
+k0lp3kaJX6E0Q76hUKDEt66W3Su90IfnKfOal2MuUzS2JGIeR0zE8bQneXElLoAw
+cXKz/Xz6py2LiOtIoJ86NRLOV9h0lGFgRmKgG0CAIV7a+xPpkfBpxrX2dFKtZKYw
+/sBjRC5tpXdt1TFrzhgkKPH2srhbxZXmIZmtgjId78zdrF2vX5GJJiYs19dc/7jq
+tOAfJXMJ8GTUrroa2H6zauEsIlxtJA==
+=yGjl
+-----END PGP SIGNATURE-----
+
+--/iF9jkJodygiQRcM--
