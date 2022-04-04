@@ -2,136 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63B74F1AC1
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 23:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7634F1EC9
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Apr 2022 00:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379210AbiDDVS5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Apr 2022 17:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
+        id S242440AbiDDVzD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Apr 2022 17:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379838AbiDDSQD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 14:16:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D543EA8F
-        for <linux-spi@vger.kernel.org>; Mon,  4 Apr 2022 11:14:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D41E660DE3
-        for <linux-spi@vger.kernel.org>; Mon,  4 Apr 2022 18:14:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3B7F5C2BBE4;
-        Mon,  4 Apr 2022 18:14:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649096046;
-        bh=VYnRnWU3yeqo4xx/P9yaXwOT8GETW/dtByQJVhF6p64=;
-        h=Subject:From:Date:To:From;
-        b=f0DOhQapqiMlRVdsQSdrArEyhmvGIxqltfE9zK9I7TghtvS8tpy3Gl+paSxddnAFe
-         kuTDpUtCX+HqKtC7yxdn2+rjAbakAWc0vLdTq2tyd2BzR8pRKB+amHQStz8iSw+zrA
-         cZA1q7Q81ThkQE2bwUx+uwUmAGsLrmkoXo+5A7ZTdW1XAcsuiZ+LfCymYDuSAD0OTF
-         4ZAQjzzyk4GGpuguEYB8c4k9IFEINr3w0nFjAAvekp/2NiRbrqwLjTsWLNVZ8mobZi
-         E2MqfCWhIEPIT4qKcvOlGzHs12l7fIjxKE7nog9oHhMsf0lnaDadrLGnkl9izIUmZ1
-         QePG6eAO4zXNg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0F331E85B8C;
-        Mon,  4 Apr 2022 18:14:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1386607AbiDDVjB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 17:39:01 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1378836B4B;
+        Mon,  4 Apr 2022 14:30:14 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-deb9295679so12305934fac.6;
+        Mon, 04 Apr 2022 14:30:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qO84CfyeG8iQGLXkEG50rgeD59wqZwaLgIBh/t/ojMg=;
+        b=HsmJIsf61LqqCsikAYhyggZusCW9413QaQsJybN0D5n2szIq4UAcUtH4gplqM7Uu1P
+         59vAP+nI5RlE8fmgKNy43gzbgEFB2c5F2U4ozRRLJV2J+W4gYTSooGxz3mrRI0ya8gPE
+         oanIChNbMno+8+ixxh7Tk3qQPFhuEZqU3l6UqXnJJukKyTD1B/Vf7NtUDiyPQLcFVAV0
+         97aoRC49qCQUJc4HQqDe3GygpXtMZ4mqzNOE5TBVHdEvX5ix37vPjos0EntxncnL+vMF
+         MnMpqYNGAHox8UXkHiHytuicNxRKXbNwLwvpH6Xe0OJf9HBXMzmcay4PH2B9T+adC6qH
+         1oBQ==
+X-Gm-Message-State: AOAM531GxnWuRbas+HsHf7U4+QVVaysAcu5B6d968SND06edoUNGNqsA
+        C4D1JqeQC7FYRtIX5+nobKpNHaOC3w==
+X-Google-Smtp-Source: ABdhPJz7wTyN+ISEFmrLxVwpC8vLauUt6p+w3JsBQDP0IZwbVZUQL9Jq3oj+UEBZux7/f3TlPP5uqQ==
+X-Received: by 2002:a05:6870:8327:b0:d7:8685:5129 with SMTP id p39-20020a056870832700b000d786855129mr92203oae.75.1649107761930;
+        Mon, 04 Apr 2022 14:29:21 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id fz16-20020a056870ed9000b000dde87bcdfdsm4587637oab.53.2022.04.04.14.29.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 14:29:21 -0700 (PDT)
+Received: (nullmailer pid 2016194 invoked by uid 1000);
+        Mon, 04 Apr 2022 21:29:20 -0000
+Date:   Mon, 4 Apr 2022 16:29:20 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-serial@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v3 6/9] spi: dt-bindings: qcom,spi-qup: convert to
+ dtschema
+Message-ID: <YktjMPY6/DCrJ9mv@robh.at.kernel.org>
+References: <20220402184011.132465-1-krzysztof.kozlowski@linaro.org>
+ <20220402184011.132465-7-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <164909604600.22481.8272585257889455540.git-patchwork-summary@kernel.org>
-Date:   Mon, 04 Apr 2022 18:14:06 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220402184011.132465-7-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello:
+On Sat, 02 Apr 2022 20:40:08 +0200, Krzysztof Kozlowski wrote:
+> Convert the Qualcomm Universal Peripheral (QUP) Serial Peripheral
+> Interface (SPI) bindings to DT Schema.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+> ---
+>  .../devicetree/bindings/spi/qcom,spi-qup.txt  | 103 ------------------
+>  .../devicetree/bindings/spi/qcom,spi-qup.yaml |  81 ++++++++++++++
+>  2 files changed, 81 insertions(+), 103 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
+>  create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qup.yaml
+> 
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
-
-Series: Update the Icicle Kit device tree
-  Submitter: Conor Dooley <conor.dooley@microchip.com>
-  Committer: Palmer Dabbelt <palmer@rivosinc.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=605968
-  Lore link: https://lore.kernel.org/r/20220117110755.3433142-1-conor.dooley@microchip.com
-    Patches: [v4,01/14] dt-bindings: soc/microchip: update syscontroller compatibles
-             [v4,07/14] dt-bindings: usb: add bindings for microchip mpfs musb
-             [v4,09/14] riscv: dts: microchip: use clk defines for icicle kit
-             [v4,12/14] riscv: dts: microchip: update peripherals in icicle kit device tree
-             [v4,14/14] MAINTAINERS: update riscv/microchip entry
-
-Series: External ECC engines & Macronix support
-  Submitter: Miquel Raynal <miquel.raynal@bootlin.com>
-  Committer: Miquel Raynal <miquel.raynal@bootlin.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=609005
-  Lore link: https://lore.kernel.org/r/20220127091808.1043392-1-miquel.raynal@bootlin.com
-    Patches: [v10,01/13] spi: spi-mem: Introduce a capability structure
-             [v10,02/13] spi: spi-mem: Check the controller extra capabilities
-             [v10,03/13] spi: cadence-quadspi: Provide a capability structure
-             [v10,04/13] spi: mxic: Provide a capability structure
-             [v10,05/13] spi: spi-mem: Kill the spi_mem_dtr_supports_op() helper
-             [v10,06/13] spi: spi-mem: Add an ecc parameter to the spi_mem_op structure
-             [v10,07/13] mtd: spinand: Delay a little bit the dirmap creation
-             [v10,08/13] mtd: spinand: Create direct mapping descriptors for ECC operations
-             [v10,09/13] spi: mxic: Fix the transmit path
-             [v10,10/13] spi: mxic: Create a helper to configure the controller before an operation
-             [v10,11/13] spi: mxic: Create a helper to ease the start of an operation
-             [v10,12/13] spi: mxic: Add support for direct mapping
-
-Series: Support Spi in i2c-multi-instantiate driver
-  Submitter: Stefan Binding <sbinding@opensource.cirrus.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=607335
-  Lore link: https://lore.kernel.org/r/20220121172431.6876-1-sbinding@opensource.cirrus.com
-    Patches: [v6,1/9] spi: Make spi_alloc_device and spi_add_device public again
-             [v6,5/9] platform/x86: i2c-multi-instantiate: Rename it for a generic serial driver name
-             [v6,6/9] platform/x86: serial-multi-instantiate: Reorganize I2C functions
-             [v6,7/9] platform/x86: serial-multi-instantiate: Add SPI support
-             [v6,8/9] ALSA: hda/realtek: Add support for HP Laptops
-             [v6,9/9] ACPI / scan: Create platform device for CS35L41
-
-Patch: [v11] spi: mxic: Add support for pipelined ECC operations
-  Submitter: Miquel Raynal <miquel.raynal@bootlin.com>
-  Committer: Miquel Raynal <miquel.raynal@bootlin.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=610697
-  Lore link: https://lore.kernel.org/r/20220202144536.393792-1-miquel.raynal@bootlin.com
-
-Patch: dt-bindings: Fix missing '/schemas' in $ref paths
-  Submitter: Rob Herring <robh@kernel.org>
-  Committer: Rob Herring <robh@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=626437
-  Lore link: https://lore.kernel.org/r/20220325215652.525383-1-robh@kernel.org
-
-Patch: [GIT,PULL] Immutable branch with spi in i2c-multi-instantiate changes
-  Submitter: Hans de Goede <hdegoede@redhat.com>
-  Committer: Takashi Iwai <tiwai@suse.de>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=610764
-  Lore link: https://lore.kernel.org/r/2062f567-9756-1e13-bb50-89c7211955fd@redhat.com
-
-Patch: dt-bindings: Another pass removing cases of 'allOf' containing a '$ref'
-  Submitter: Rob Herring <robh@kernel.org>
-  Committer: Rob Herring <robh@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=618890
-  Lore link: https://lore.kernel.org/r/20220228213802.1639658-1-robh@kernel.org
-
-Patch: spi: qcom: geni: Simplify DMA setting
-  Submitter: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=603752
-  Lore link: https://lore.kernel.org/r/1b14e4ce91a33c16b2c655389c728071a9c9aa2e.1641643601.git.christophe.jaillet@wanadoo.fr
-
-
-Total patches: 28
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Reviewed-by: Rob Herring <robh@kernel.org>
