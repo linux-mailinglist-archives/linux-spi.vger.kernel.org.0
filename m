@@ -2,91 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F7C4F1688
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 15:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3CF4F1697
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 15:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357478AbiDDNyT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Apr 2022 09:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
+        id S1359332AbiDDN6b (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Apr 2022 09:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354630AbiDDNyT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 09:54:19 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594D03EAA7
-        for <linux-spi@vger.kernel.org>; Mon,  4 Apr 2022 06:52:22 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id f6-20020a1c3806000000b0038e4a0fc5easo5628874wma.3
-        for <linux-spi@vger.kernel.org>; Mon, 04 Apr 2022 06:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=orXe1JLKj3eWkUs/vG6CQ9PlkRdOEKGc+GDPsHVwVSQ=;
-        b=WyC0hsymaV9UJHv9CIIXVy5p7WAbo4Q2u4e/nQE8HTIvyVX+5wdSM80i3/YtDNM3dA
-         nFxLwmjCRR4j+YdelKwwidGUkes+I7rlhDtqLa3IKaZNsVPlTlDq/QO0BQ6qVP0je9OT
-         1KQWXQYyhRucsEQVJGeqI/1oag6jR6qJ+cpdIBQP61sV6fJrMSJdJNDvAWu7ipDaovrk
-         jaFOfrKqq+R7VrCp0uRUIN43Uty6xJJp+LO/trJziABkk5vpAwDRXNfUNDUkNiYdTG4w
-         fMycIQYXPOwR68torwpWP58A1znnlOrwUM69KoiR6aDC7bxjiCIH4ZcT3MZx21MsXAXX
-         uvUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=orXe1JLKj3eWkUs/vG6CQ9PlkRdOEKGc+GDPsHVwVSQ=;
-        b=7wCpYTyohoMa7AnskjV4T7Ann4blBgXAADkGCd7LfXVMq+p/fIeKJ5Zgte07VDD7lq
-         5/fPCF+rwjeZ7UvuLb9yHJh/iMDOeiNpSVN4ltLR9Fh2Q8JNlvZ8O+IrtdnhspwWDann
-         wpT7BXKO6izcDR7+7EukqoKQA0nEQI1nwWClELBeo4tmC24UYuuKnsHYtyO38O00cz7G
-         ZpgkEDJtT9CvwAIVM8AS4IMxyfZpoOKqXtFwYFE6VjTNxjrSNrEl2iHzecbGS0DXStyM
-         jW2s0Pn7JB30YZyLpKokmQ5okbkUygPIbOfrsV+Pa/Ot2Bj65HcamaCQ2JfWNd4u0Ie1
-         jBFg==
-X-Gm-Message-State: AOAM5323CvVyQZJYDnUZGfSXSKXI2rD5vEafo4Qh7aG2QfYNowIHRApX
-        1DcCiwZTewroxPRy0aqf29RIRCwlSSj5Vkrq
-X-Google-Smtp-Source: ABdhPJw89vFXoJ5SBTppIPxaGW7RRNdgP5jNO3Xa+1KintPNh7R1vx4e+9D+kd9JBLe3HI5yTVSsVQ==
-X-Received: by 2002:a1c:e908:0:b0:38c:782c:2a62 with SMTP id q8-20020a1ce908000000b0038c782c2a62mr19502739wmc.135.1649080340874;
-        Mon, 04 Apr 2022 06:52:20 -0700 (PDT)
-Received: from [192.168.0.176] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id p125-20020a1c2983000000b0038e5ca446bcsm8269468wmp.5.2022.04.04.06.52.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 06:52:20 -0700 (PDT)
-Message-ID: <14c921b5-4240-a026-252a-d5fb60836b34@linaro.org>
-Date:   Mon, 4 Apr 2022 15:52:19 +0200
+        with ESMTP id S1376505AbiDDN62 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 09:58:28 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F973EB87
+        for <linux-spi@vger.kernel.org>; Mon,  4 Apr 2022 06:56:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6F353CE183F
+        for <linux-spi@vger.kernel.org>; Mon,  4 Apr 2022 13:56:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A26F5C2BBE4;
+        Mon,  4 Apr 2022 13:56:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649080588;
+        bh=Z6VkBpvYoLUxdepy0TWLDhQCgUY8NNSIg/i2OSZpHz0=;
+        h=Subject:From:Date:To:From;
+        b=BYBng9+YZITE/0b74wE2rHm3XNczKq8qVv+MePs5msZchAlCtnD2EaMUXNIG2EgLm
+         8zofMDjxDcaNyfWINtX5CpT/QrXTvlzJmLi4g+6EtAqCuru9ga80R8GY2e2v4kxwml
+         vLIVpOoghOWyEapiWEb/bsXaApOju7iRkvQrI9HRL/hvzbntdyle5PNQrsEXd637fB
+         24q0+v37G1KS3uDf/RxEhjmAfUr70rwEU6TiPX1dnCoDuPx+kCjHE21jAHKBdMwBk8
+         K8Tz12TbvfUYyS6SJYg6OLCySwiKilE5OTIk2Ia0ut+3IOzJI5mvZ/YpvpTIqT4pPb
+         T+zthlL7X8hHg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 794D0E85B8C;
+        Mon,  4 Apr 2022 13:56:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 4/5] dt-bindings: spi: add binding doc for spi-mtk-snfi
-Content-Language: en-US
-To:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
-References: <20220404131818.1817794-1-gch981213@gmail.com>
- <20220404131818.1817794-5-gch981213@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220404131818.1817794-5-gch981213@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <164908058840.14328.2006723963077161239.git-patchwork-housekeeping@kernel.org>
+Date:   Mon, 04 Apr 2022 13:56:28 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,92 +52,16 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 04/04/2022 15:18, Chuanhong Guo wrote:
-> Add device-tree binding documentation for Mediatek SPI-NAND Flash
-> Interface.
-> 
-> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-> ---
-> Changes since v1:
->   1. add a blank line between properties in dt binding doc
->   2. rename ecc-engine to nand-ecc-engine for the generic properties
-> 
-> Change since v2: none
-> 
->  .../bindings/spi/mediatek,spi-mtk-snfi.yaml   | 88 +++++++++++++++++++
->  1 file changed, 88 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
-> new file mode 100644
-> index 000000000000..7d57570ad617
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
-> @@ -0,0 +1,88 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/mediatek,spi-mtk-snfi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: SPI-NAND flash controller for MediaTek ARM SoCs
-> +
-> +maintainers:
-> +  - Chuanhong Guo <gch981213@gmail.com>
-> +
-> +description: |
-> +  The Mediatek SPI-NAND flash controller is an extended version of
-> +  the Mediatek NAND flash controller. It can perform standard SPI
-> +  instructions with one continuous write and one read for up-to 0xa0
-> +  bytes. It also supports typical SPI-NAND page cache operations
-> +  in single, dual or quad IO mode with piplined ECC encoding/decoding
-> +  using the accompanying ECC engine. There should be only one spi
-> +  slave device following generic spi bindings.
-> +
-> +allOf:
-> +  - $ref: /schemas/spi/spi-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt7622-snand
-> +      - mediatek,mt7629-snand
-> +
-> +  reg:
-> +    items:
-> +      - description: core registers
-> +
-> +  interrupts:
-> +    items:
-> +      - description: NFI interrupt
-> +
-> +  clocks:
-> +    items:
-> +      - description: clock used for the controller
-> +      - description: clock used for the SPI bus
-> +
-> +  clock-names:
-> +    items:
-> +      - const: nfi_clk
-> +      - const: pad_clk
-> +
-> +  nand-ecc-engine:
-> +    description: device-tree node of the accompanying ECC engine.
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - ecc-engine
-
-Slightly slow down resends (max 1 per day). You sent v3 without giving a
-chance to review this.
-
-Wrong name here.
+Latest series: [v3] spi: add support for Mediatek SPI-NAND controller (2022-04-04T13:18:13)
+  Superseding: [v2] spi: add support for Mediatek SPI-NAND controller (2022-04-04T04:01:48):
+    [v2,1/5] mtd: nand: make mtk_ecc.c a separated module
+    [v2,2/5] spi: add driver for MTK SPI NAND Flash Interface
+    [v2,3/5] mtd: nand: mtk-ecc: also parse nand-ecc-engine if available
+    [v2,4/5] dt-bindings: spi: add binding doc for spi-mtk-snfi
+    [v2,5/5] arm64: dts: mediatek: add mtk-snfi for mt7622
 
 
-Best regards,
-Krzysztof
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
