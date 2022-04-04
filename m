@@ -2,102 +2,132 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C679E4F0CFD
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 01:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DED504F0DD9
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 06:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376679AbiDCXkq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 3 Apr 2022 19:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56694 "EHLO
+        id S232409AbiDDEEH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Apr 2022 00:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbiDCXko (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 3 Apr 2022 19:40:44 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103291081;
-        Sun,  3 Apr 2022 16:38:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649029130; x=1680565130;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dk8wwoPAa+9gWRt+JbyfUk76inxYSrqYeknZJrDq4/I=;
-  b=badX6T0/+4YUthVB4EG8SCsfzblDdG1HK5qmZyQWj+zu8/imPIWmvP/6
-   HtsoQUAbeRtzltIL1OU6FaUiy5EENMv26fph+5opn82deXJKtKM8UMumi
-   f4fsnQ1oJCuoaDLTzhNc8tvGpcfIPpycsbPvqR6nd3NfBuhpwE3GexBgc
-   aSnWt12xLI4O0ge7eP+t5QJPyclvS+J3bzLaQnj/L66F6AZuTmxxqtMiO
-   TT8GGY06+w+WSrVmLPOwGfLRsupvr1bbBeqDxXjQiQwrojCgtQigsCWAn
-   UFPpCybigqM5NntFpX8kzwgcS33hwgQiOK5PimPOKCj6FGe1hU4wEq5RE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="240352748"
-X-IronPort-AV: E=Sophos;i="5.90,233,1643702400"; 
-   d="scan'208";a="240352748"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 16:38:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,233,1643702400"; 
-   d="scan'208";a="548456613"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 03 Apr 2022 16:38:48 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nb9nz-0001I9-M1;
-        Sun, 03 Apr 2022 23:38:47 +0000
-Date:   Mon, 4 Apr 2022 07:38:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: Re: [PATCH resend 1/4] mtd: nand: make mtk_ecc.c a separated module
-Message-ID: <202204040718.xQeZrzYD-lkp@intel.com>
-References: <20220403131453.1269229-2-gch981213@gmail.com>
+        with ESMTP id S231343AbiDDEEG (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 00:04:06 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEAA393FC;
+        Sun,  3 Apr 2022 21:02:08 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id s8so7763394pfk.12;
+        Sun, 03 Apr 2022 21:02:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gApwyK6UJMIHFi8j3HHI6lVYvVDscNhbn/b45ZD8vYw=;
+        b=PpAMX76Z/yH5s5E86XWDfdb0tshq5E8aUG6vKlOuwz+RxiadMZC6gwVk8hp/IvSKdy
+         pWDbVcIvhaAzCuy6MyDBJG2dxgKFmd2PUF157wQmlFwd1dygPQr7kpgfjuJPSZpZeV8W
+         KJ8XB6IA9wYH8pFUDUrggUJW7xHL4Z3Jfto/zT/xPYv3oFpJgBXB6AOYoiNplFnNBxhi
+         QjnpR9G8KK2BCcUi5zT0OooJ64wrDp1LHF79wrS/9T9wiMGZ5Lrpbk8fcfgAtt+rvBGB
+         f/JIRwKjXsgZbcHHbbAEl/MMqr5KGQN35kxhWJzqNfO2wjz9Wqyu3wTfB+BG6AbwBbg9
+         CU7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gApwyK6UJMIHFi8j3HHI6lVYvVDscNhbn/b45ZD8vYw=;
+        b=YtwCYkmCJjnhBamtZ+HjiXz6yVUc3JrjGDJ6kSRaH4zBKfH70a4NgOYbkhC+uUltMW
+         wAYsFRmGCGfEFSi26dgmIcFNU5Cjybf2b3MSkJAc2+QcWuqVA8t69Z4YJ9sF7viD2s4c
+         0UFogWRbhMvYCdYpbMS8WvLXMz1WaXXoW5EJwSmG2nmZlD0gsE38D5v49tXpM0dGkQOh
+         86DjsKJhsj3bfNmVSrFBGwGdtk/M+2te8dZ++CsxDNO0QobHWJSToh7ClWGVtCytGzJX
+         YDNafHx9iyc9NWMkQdgK+AXchJDF/TwgNuAe0ZGRoBia4yiefoxFlviyF0262WcznLEU
+         ilqA==
+X-Gm-Message-State: AOAM530/4kzd+gh/+4M5wjfg4gDmNBqzqvjZVk96zvwMT21dKE65Bed7
+        FT9IQNGfJkNwc9JmzEvRfbKwryZ7SjtVrmUfpZLhIw==
+X-Google-Smtp-Source: ABdhPJzYjDiKmixeywLrVGsyvmxU0FRdWO7nMbcfY2jZXT0DudGOSkM6UFaGrSEgSvmTt6mXFmBOzQ==
+X-Received: by 2002:aa7:88c2:0:b0:4fa:ba98:4f6f with SMTP id k2-20020aa788c2000000b004faba984f6fmr22013214pff.41.1649044928130;
+        Sun, 03 Apr 2022 21:02:08 -0700 (PDT)
+Received: from guoguo-omen.lan ([2401:c080:1400:4da2:b701:47d5:9291:4cf9])
+        by smtp.gmail.com with ESMTPSA id j70-20020a638b49000000b003985b5ddaa1sm8756191pge.49.2022.04.03.21.02.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Apr 2022 21:02:07 -0700 (PDT)
+From:   Chuanhong Guo <gch981213@gmail.com>
+To:     linux-spi@vger.kernel.org
+Cc:     Chuanhong Guo <gch981213@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
+        support),
+        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
+        support), linux-kernel@vger.kernel.org (open list),
+        linux-mtd@lists.infradead.org (open list:NAND FLASH SUBSYSTEM)
+Subject: [PATCH v2 0/5] spi: add support for Mediatek SPI-NAND controller
+Date:   Mon,  4 Apr 2022 12:01:48 +0800
+Message-Id: <20220404040153.1509966-1-gch981213@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220403131453.1269229-2-gch981213@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Chuanhong,
+Mediatek has an extended version of their NAND Flash Interface which
+has a SPI-NAND mode. In this mode, the controller can perform 1-bit
+spi-mem ops for up-to 0xa0 bytes and typical SPI-NAND single, dual
+and quad IO page cache ops with 2-byte address. Additionally, the
+page cache ops can be performed with ECC and auto data formatting
+using the ECC engine of the controller.
 
-Thank you for the patch! Yet something to improve:
+This patchset implements support of this mode as a separated SPI-MEM
+driver with piplined ECC engine.
 
-[auto build test ERROR on next-20220401]
-[cannot apply to mtd/nand/next broonie-spi/for-next robh/for-next v5.17 v5.17-rc8 v5.17-rc7 v5.17]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Changes since v1:
+ add a blank line between properties in dt binding doc
+ rename ecc-engine to nand-ecc-engine for the generic properties
+ fix warnings/errors from the CI
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chuanhong-Guo/spi-add-support-for-Mediatek-SPI-NAND-controller/20220403-211703
-base:    e5071887cd2296a7704dbcd10c1cedf0f11cdbd5
-config: alpha-allmodconfig (https://download.01.org/0day-ci/archive/20220404/202204040718.xQeZrzYD-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/48656e578a2cec7121f79d875d14403f5b56096e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chuanhong-Guo/spi-add-support-for-Mediatek-SPI-NAND-controller/20220403-211703
-        git checkout 48656e578a2cec7121f79d875d14403f5b56096e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash
+Chuanhong Guo (5):
+  mtd: nand: make mtk_ecc.c a separated module
+  spi: add driver for MTK SPI NAND Flash Interface
+  mtd: nand: mtk-ecc: also parse nand-ecc-engine if available
+  dt-bindings: spi: add binding doc for spi-mtk-snfi
+  arm64: dts: mediatek: add mtk-snfi for mt7622
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   alpha-linux-ld: drivers/mtd/nand/ecc-mtk.o: in function `mtk_ecc_driver_exit':
->> ecc-mtk.o:(.exit.text+0x0): multiple definition of `cleanup_module'; drivers/mtd/nand/ecc-mxic.o:ecc-mxic.o:(.exit.text+0x0): first defined here
-   alpha-linux-ld: drivers/mtd/nand/ecc-mtk.o: in function `mtk_ecc_driver_init':
->> ecc-mtk.o:(.init.text+0x0): multiple definition of `init_module'; drivers/mtd/nand/ecc-mxic.o:ecc-mxic.o:(.init.text+0x0): first defined here
+ .../bindings/spi/mediatek,spi-mtk-snfi.yaml   |   88 ++
+ arch/arm64/boot/dts/mediatek/mt7622.dtsi      |   12 +
+ drivers/mtd/nand/Kconfig                      |    7 +
+ drivers/mtd/nand/Makefile                     |    1 +
+ drivers/mtd/nand/{raw/mtk_ecc.c => ecc-mtk.c} |    8 +-
+ drivers/mtd/nand/raw/Kconfig                  |    1 +
+ drivers/mtd/nand/raw/Makefile                 |    2 +-
+ drivers/mtd/nand/raw/mtk_nand.c               |    2 +-
+ drivers/spi/Kconfig                           |   10 +
+ drivers/spi/Makefile                          |    1 +
+ drivers/spi/spi-mtk-snfi.c                    | 1351 +++++++++++++++++
+ .../linux/mtd/nand-ecc-mtk.h                  |    0
+ 12 files changed, 1478 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+ rename drivers/mtd/nand/{raw/mtk_ecc.c => ecc-mtk.c} (98%)
+ create mode 100644 drivers/spi/spi-mtk-snfi.c
+ rename drivers/mtd/nand/raw/mtk_ecc.h => include/linux/mtd/nand-ecc-mtk.h (100%)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
