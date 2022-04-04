@@ -2,92 +2,180 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34DFB4F1605
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 15:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D444F1680
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 15:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354561AbiDDNjo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Apr 2022 09:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
+        id S1353627AbiDDNv4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Apr 2022 09:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353940AbiDDNjn (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 09:39:43 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CE43B56C;
-        Mon,  4 Apr 2022 06:37:47 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id l36so10150921ybj.12;
-        Mon, 04 Apr 2022 06:37:47 -0700 (PDT)
+        with ESMTP id S1359060AbiDDNvz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 09:51:55 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C3713FA9
+        for <linux-spi@vger.kernel.org>; Mon,  4 Apr 2022 06:49:56 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id p189so5972546wmp.3
+        for <linux-spi@vger.kernel.org>; Mon, 04 Apr 2022 06:49:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CdtxabZCkayl/u9mZin0h4LkVmWtRoG1gJbU+RkSoQ8=;
-        b=S3tazSMp95YVk10K+C1+7z9a5+OIqt0m8oYQr9qyUcpePiFtbcJqHykyPQ+CZzH9AQ
-         kpGOfP1Yr7FZi8tTGZ2aVNGX6mVUL6Q/bxB+KtTLT6OFcEPrv9wnnpwD2NXxQCde6UOH
-         KkFJGPSpgFfHpBWEesc1CAHTSNqGzvOgj6UaZ+CxZ5Me4WssaGT36t3myiAYdmIw8yZA
-         wRmzq0S1+7WpISN8DfeXD1k2Xkxkh8exI++OmIDCtM5rfmbK2tvAgEgf89BMMHKmKtKQ
-         mISpw48mD5yt9Va1PT+Ru9aeTg5n/X26BNHZHWcYnrwRX4pT4J3Yd3CuChY+XTbN0LcD
-         6Lww==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=d8lIwh8tiIkMFx11fFktp0oGVk3nbpQUUWnZgWL5Jnc=;
+        b=W+UEgv5UP7GXJYs7QCG6QtMn7aXfPo+PDkNKW5aMvKgZsee9uyRmczhK/6PCLslrKm
+         tSzbF8FkOxo4jSezbxKMnPAHm/lARrn+xP0kN/gp6snbd9diecPFDLZmy5bU1lqRS+cQ
+         iOFJp0xD4OiAfjWsb3KoT0vqhIyIwBq+QcdJjrIMveCI7SKroJ0jKwEXOFnLozRJWrf9
+         7VVizkFvRzvR5UF/2b0g42XataFHeKD0pzFn+5W44xkDBWHaiOmNwtMW+K0/yjeAdZpZ
+         8/J///8nE3oojWSxI1Kon5NFJP6beXJd57Zd8RrkepeKE/GgEdQaBrSmx3aDRP2wzM/X
+         xKyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CdtxabZCkayl/u9mZin0h4LkVmWtRoG1gJbU+RkSoQ8=;
-        b=NZB5ZltPqKtXyZEti2WzRc5ZdSItUC9h+75LVpPFn8nsKfFHDoRrF2cKvfSYYJ5Dmk
-         f5fF6TStGUiRCGTvPVm/XoGxNrxdrrUFy2QE/n67TpwyU78rMiNzpZdyEkBIXxSlqqGu
-         24PVLOWcKw01EOifhUacQCeFqy0wXLjJ//9foXqFrGQdhN6BOcSONgLvsjVQLTc4LCFm
-         /tw1tFnspu0Mu8K676t8IZkE2F0nTW2zHAur8w20wqCcanljSUY8cw9xGggYfvWOb6N2
-         zQMGa7sjPRLiP1OvyvWXPZiUYlo8loth7SeBkrDixM4/o/6/BUZlftGVgx8pvq/UKkR0
-         U8ow==
-X-Gm-Message-State: AOAM532X8oeFjpYPn2f0kj2xOdn3daO1BDI+ZZqT2ZTkLHYdEI1jj65c
-        qSLUVJ4YuvBG9zMtMeZ6NHgVgmb4lUzYSQlNQ8g=
-X-Google-Smtp-Source: ABdhPJxbAy9yWW5qwS38SKA/aFDQRijv4oZ8eoG3oeO2nf+VK69vJdJuF2/CQR4Z0PZ8NjCsfPOe39yuACBLYAF10Fg=
-X-Received: by 2002:a25:3204:0:b0:63d:b2b3:ea7b with SMTP id
- y4-20020a253204000000b0063db2b3ea7bmr6670689yby.431.1649079466725; Mon, 04
- Apr 2022 06:37:46 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=d8lIwh8tiIkMFx11fFktp0oGVk3nbpQUUWnZgWL5Jnc=;
+        b=LRBmGs9q+quVIq3CG44xXfEvCIKBg6XoOuZV7q/FoCT9D1rAKkTUYbHhNd82z7MBrP
+         FPKWziV/gcbFt3EtbnbxljMgSqOSVER8pIzMxRWTcSoYqupYekXg8QwHg6Ps0syDmMI3
+         QXdP7aGWyOElcbLdRIDvfuRwrTbW25GII0hXLXBXNfoWVu4hLAoco4FSaNruZ7P8RTxc
+         H6F6VdF5DWngFhsHIgzk5ZmMZjZknkLqu5xgNHym+Vom+KO1tIkYuY3TfpzINyvHiuxW
+         xNwVTNbOTNgkstc37FCol2/YbW9cRi1V7z18RxwnGbcZRLK9u91Dac2BCIoixA5Oc6x8
+         V7UA==
+X-Gm-Message-State: AOAM530c/UjJ9+SZa1fd233Z3Aunad7NUuoF8cxG3xPENPhpc2NOPUE+
+        OiMyfdx0UUUiWHH4QsMp2kCeNg==
+X-Google-Smtp-Source: ABdhPJx1C13/G0jo9mcTjjBok/lghKbqEZJvW3uyonaeOQWgDSX154xlSCC+Ip2L56ywjoSX1G9fSw==
+X-Received: by 2002:a1c:7715:0:b0:380:ed9b:debd with SMTP id t21-20020a1c7715000000b00380ed9bdebdmr19498320wmi.54.1649080195394;
+        Mon, 04 Apr 2022 06:49:55 -0700 (PDT)
+Received: from [192.168.0.176] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id f18-20020a5d6652000000b001e669ebd528sm9306837wrw.91.2022.04.04.06.49.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Apr 2022 06:49:54 -0700 (PDT)
+Message-ID: <f86a0be9-ab40-9878-82f0-d892e674d165@linaro.org>
+Date:   Mon, 4 Apr 2022 15:49:53 +0200
 MIME-Version: 1.0
-References: <d196bb5849843993557a9b10f3bd28a752e5e8e0.1648562287.git.geert+renesas@glider.be>
- <1c78a1f447d019bb66b6e7787f520ae78821e2ae.1648562287.git.geert+renesas@glider.be>
-In-Reply-To: <1c78a1f447d019bb66b6e7787f520ae78821e2ae.1648562287.git.geert+renesas@glider.be>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 4 Apr 2022 14:37:20 +0100
-Message-ID: <CA+V-a8vbnksh5u+WWW6jYGd14ccVyHibey8--KvF8LWTxQQgXg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] spi: rpc-if: Fix RPM imbalance in probe error path
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 4/5] dt-bindings: spi: add binding doc for spi-mtk-snfi
+Content-Language: en-US
+To:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Mark Brown <broonie@kernel.org>, linux-mtd@lists.infradead.org,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Paul Cercueil <paul@crapouillou.net>,
+        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
+References: <20220404040153.1509966-1-gch981213@gmail.com>
+ <20220404040153.1509966-5-gch981213@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220404040153.1509966-5-gch981213@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 8:13 PM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
->
-> If rpcif_hw_init() fails, Runtime PM is left enabled.
->
-> Fixes: b04cc0d912eb80d3 ("memory: renesas-rpc-if: Add support for RZ/G2L")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On 04/04/2022 06:01, Chuanhong Guo wrote:
+> Add device-tree binding documentation for Mediatek SPI-NAND Flash
+> Interface.
+> 
+> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
 > ---
-> For the spi tree.
->
->  drivers/spi/spi-rpc-if.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> Changes since v1:
+>   1. add a blank line between properties in dt binding doc
+>   2. rename ecc-engine to nand-ecc-engine for the generic properties
+> 
+>  .../bindings/spi/mediatek,spi-mtk-snfi.yaml   | 88 +++++++++++++++++++
+>  1 file changed, 88 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+> new file mode 100644
+> index 000000000000..7d57570ad617
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+> @@ -0,0 +1,88 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/mediatek,spi-mtk-snfi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: SPI-NAND flash controller for MediaTek ARM SoCs
+> +
+> +maintainers:
+> +  - Chuanhong Guo <gch981213@gmail.com>
+> +
+> +description: |
+> +  The Mediatek SPI-NAND flash controller is an extended version of
+> +  the Mediatek NAND flash controller. It can perform standard SPI
+> +  instructions with one continuous write and one read for up-to 0xa0
+> +  bytes. It also supports typical SPI-NAND page cache operations
+> +  in single, dual or quad IO mode with piplined ECC encoding/decoding
+> +  using the accompanying ECC engine. There should be only one spi
+> +  slave device following generic spi bindings.
+> +
+> +allOf:
+> +  - $ref: /schemas/spi/spi-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt7622-snand
+> +      - mediatek,mt7629-snand
+> +
+> +  reg:
+> +    items:
+> +      - description: core registers
+> +
+> +  interrupts:
+> +    items:
+> +      - description: NFI interrupt
+> +
+> +  clocks:
+> +    items:
+> +      - description: clock used for the controller
+> +      - description: clock used for the SPI bus
+> +
+> +  clock-names:
+> +    items:
+> +      - const: nfi_clk
+> +      - const: pad_clk
+> +
+> +  nand-ecc-engine:
+> +    description: device-tree node of the accompanying ECC engine.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - ecc-engine
 
-Cheers,
-Prabhakar
+Wrong name.
+
+
+Best regards,
+Krzysztof
