@@ -2,39 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4297B4F16BC
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 16:04:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 506DE4F16CF
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Apr 2022 16:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376892AbiDDOGg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 4 Apr 2022 10:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55186 "EHLO
+        id S1376868AbiDDORb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 4 Apr 2022 10:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357098AbiDDOGe (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 10:06:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BF11D306;
-        Mon,  4 Apr 2022 07:04:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78C1E613EF;
-        Mon,  4 Apr 2022 14:04:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F5C3C340EE;
-        Mon,  4 Apr 2022 14:04:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649081072;
-        bh=+YodnbKNfkD+6Cay2I53zzP9Fet7F7fDGOH+q3ST2WA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XgkScUB9MqKjZwqfpE1regXlQ5YzXGwZsjnqo4dN0muVS235eUAjnw+BKIJMC3P4m
-         z3OHgXZpTOB/WHZYJA9jUwZzTmJMOfGhlDEdCeTQBFZwBNyKINzUgpQKS7N9cgTE2t
-         2G5Sbbdk0eOTP5DXRKBy9PSppWpPGWb8xPvzHh65q1nQ5gGnS+LN3ubFpTGJ+HcY5Q
-         Wo6wNLTqeOCXaF+xSe11nzC86MLLXuMbYh0aSPF7hzFPIazdaUw5VM4TDyTXCcL+lT
-         fNKMei4vhBaiGivTLUqzE0n4UGyL6/BR7ZN3io5o+HtGVmolDL8eSoEDVPFMRnH1Rn
-         EprzCWdbSK/tQ==
-Date:   Mon, 4 Apr 2022 15:04:25 +0100
-From:   Mark Brown <broonie@kernel.org>
+        with ESMTP id S237149AbiDDORa (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 4 Apr 2022 10:17:30 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26F51FCDE;
+        Mon,  4 Apr 2022 07:15:34 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id z7so11419359iom.1;
+        Mon, 04 Apr 2022 07:15:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5E21fn+577TVIeU8kFomfMeng4iJST9d5OAfTwxTna4=;
+        b=WLjYGWfI8NieOzOaszwCD3go3mVW5B5I2+6Yg+OjcgoBVT7LMgFMz6W9axdgJItbWS
+         kcNOl5cStadfExLLKu1xE9sG/bZt6/C3t0E0rkMUhT97PYyBmtMH6qcC8UJoejnKPJSW
+         zUyrXFK85nzQBkDjkerQYx7AfBEO8Ed1TWxT4udvEf1T5G+3EPY4EACkL4d0Kp7UB+Ll
+         zKiPdNxmZwIOuItE+UUMShHUPUoGhjVPS21SyhceuXkqX0zhq2MCbu1hMm0b2oYm6sCC
+         Zi2FjqPaGKGlZSm3r6Ep1XtWCIDha1NmDS1Es3E2ck8hZA+Msy/JGHviUvTH1Awt+9QW
+         puDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5E21fn+577TVIeU8kFomfMeng4iJST9d5OAfTwxTna4=;
+        b=RtI3Hy3XQlmpXXnsM4b47SM2ZKmUi8zoYYufleBQCCOZGgy8/2MZsEz3xH3gz3G6am
+         DgsTEPPaiS3wSaa0taFzmSpg3gdYxa1fns4aEvPNt8VnfgBubb6x6A0HV/nNlJeMOcnl
+         ghKWKWaRNSdfmuxusIVPuvh4ig4OLXegfUOehBXKl9L/0A/ey30SSzD8VdCc/etv6vJ3
+         eahOEo2MY4RQczw5ODH2XlxPkmi+we4FjRfTq+hR8midiZTJiZzrtdxm2BTINKLh6EVM
+         szJ39qdiUKpPVeZVNrqX2Uhx79F8LkIWVGEpPArHtHrpBijWxhQ8fA0OLuCLhuEreUeG
+         lAwA==
+X-Gm-Message-State: AOAM531pPX66foVxdXEwq+Y4Nv4HmNoyn+AwZBXzgkQ/jPM/fkybdrLJ
+        RhkRvVqMC9EIBhSPA4opA6HovGBLaPmsGadpLa0=
+X-Google-Smtp-Source: ABdhPJxbrZxaxxa23c8KuLbVlw6fjbA5zoUQwfxTtjRwR9H1HCw24823wBw9jzwWM0Oe8D9H9Q79Z4l3QqfPkd0Fz5k=
+X-Received: by 2002:a6b:8e91:0:b0:645:c11f:e322 with SMTP id
+ q139-20020a6b8e91000000b00645c11fe322mr113988iod.162.1649081734248; Mon, 04
+ Apr 2022 07:15:34 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220404131818.1817794-1-gch981213@gmail.com> <20220404131818.1817794-5-gch981213@gmail.com>
+ <14c921b5-4240-a026-252a-d5fb60836b34@linaro.org>
+In-Reply-To: <14c921b5-4240-a026-252a-d5fb60836b34@linaro.org>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Mon, 4 Apr 2022 22:15:23 +0800
+Message-ID: <CAJsYDVLY7HByymtd8kbdNGQ-oHMvpvU+CkWQgz+jOoANEwuKPQ@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] dt-bindings: spi: add binding doc for spi-mtk-snfi
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org,
+Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -57,35 +76,22 @@ Cc:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org,
         <linux-mediatek@lists.infradead.org>,
         open list <linux-kernel@vger.kernel.org>,
         "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
-Subject: Re: [PATCH v3 4/5] dt-bindings: spi: add binding doc for spi-mtk-snfi
-Message-ID: <Ykr66c+KEaO8vltj@sirena.org.uk>
-References: <20220404131818.1817794-1-gch981213@gmail.com>
- <20220404131818.1817794-5-gch981213@gmail.com>
- <14c921b5-4240-a026-252a-d5fb60836b34@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/iF9jkJodygiQRcM"
-Content-Disposition: inline
-In-Reply-To: <14c921b5-4240-a026-252a-d5fb60836b34@linaro.org>
-X-Cookie: Did I say I was a sardine?  Or a bus???
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi!
 
---/iF9jkJodygiQRcM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Mon, Apr 04, 2022 at 03:52:19PM +0200, Krzysztof Kozlowski wrote:
-> On 04/04/2022 15:18, Chuanhong Guo wrote:
-
+On Mon, Apr 4, 2022 at 9:52 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> [...]
 > > +required:
 > > +  - compatible
 > > +  - reg
@@ -93,30 +99,18 @@ On Mon, Apr 04, 2022 at 03:52:19PM +0200, Krzysztof Kozlowski wrote:
 > > +  - clocks
 > > +  - clock-names
 > > +  - ecc-engine
-
+>
 > Slightly slow down resends (max 1 per day). You sent v3 without giving a
 > chance to review this.
 
+I made some big changes to the driver for other review comments so I
+decided to send v3 for a review of the new version. I'll wait a bit next
+time.
+
 > Wrong name here.
 
-Please delete unneeded context from mails when replying.  Doing this
-makes it much easier to find your reply in the message, helping ensure
-it won't be missed by people scrolling through the irrelevant quoted
-material.
+Oops. I'll fix this in the next version.
 
---/iF9jkJodygiQRcM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJK+ugACgkQJNaLcl1U
-h9DovAf9FvUfyz38jWX01k0PPwcjlxGKC4qUprMZogZ5XZdSB9lbzlD1miFEYdQz
-UmBtAiLNTO9ZfPHJnyV5Wl2Xkdfoc8+InivnS9xjXylc98GlA5FHzjTEiSiJz8ZU
-k0lp3kaJX6E0Q76hUKDEt66W3Su90IfnKfOal2MuUzS2JGIeR0zE8bQneXElLoAw
-cXKz/Xz6py2LiOtIoJ86NRLOV9h0lGFgRmKgG0CAIV7a+xPpkfBpxrX2dFKtZKYw
-/sBjRC5tpXdt1TFrzhgkKPH2srhbxZXmIZmtgjId78zdrF2vX5GJJiYs19dc/7jq
-tOAfJXMJ8GTUrroa2H6zauEsIlxtJA==
-=yGjl
------END PGP SIGNATURE-----
-
---/iF9jkJodygiQRcM--
+--
+Regards,
+Chuanhong Guo
