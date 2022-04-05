@@ -2,51 +2,63 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 449E94F5188
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Apr 2022 04:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F11F34F518C
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Apr 2022 04:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351738AbiDFCFE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Apr 2022 22:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37886 "EHLO
+        id S1357993AbiDFCFO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Apr 2022 22:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1458051AbiDERGa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Apr 2022 13:06:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE34AC055;
-        Tue,  5 Apr 2022 10:04:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 449D0B81E8B;
-        Tue,  5 Apr 2022 17:04:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9940C385A1;
-        Tue,  5 Apr 2022 17:04:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649178269;
-        bh=iGN91+OiBItNZNzY+Mn+vZ/ESbyWFHcFeK6CblH8sQw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nQZ6tqagjnEpbIvhMEyUXiNO0AQegHgbIMoiap6q9+4lMoK0pXeq1oRmztByxY98g
-         YNspkHtIX+jJXKjcUVjfjZKQ2UxBvQEdgHrP97VMJmqM5Kopm/gEHhfztMezezKOkq
-         HoXMiPCcWVAQlxPfosqTX2z4F5MmHZ6koOEik3tExhBOhssf5ekfneV2bzstCQKdPx
-         uZDkPCI7BQwR6mtvvatZNyCcIa6U0+Wq/1eenyZr6FYTdpceFPFJRVM9S+l5t4bJXs
-         99DK5bpO1mDq2sOIPa8H4fxy2nQnVOxXkbh8KOD0eAVdUkIqwf5JY+CvGT/AkflbO6
-         CstoCAedzwk0w==
-Date:   Tue, 5 Apr 2022 18:04:24 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v1] ACPI: bus: Eliminate acpi_bus_get_device()
-Message-ID: <Ykx2mOzf/xy8NMXr@sirena.org.uk>
-References: <5817980.lOV4Wx5bFT@kreacher>
+        with ESMTP id S1573543AbiDETUD (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Apr 2022 15:20:03 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A765EEBB90;
+        Tue,  5 Apr 2022 12:18:03 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 235JHxYK082442;
+        Tue, 5 Apr 2022 14:17:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649186279;
+        bh=E9zif9I5bUgBOTveI/9CsfWv9DV8Jc8LKT9ySYgZmtY=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=mGH/m1LnUZ0aqJzLlvnsqjtJr02p9p4rvmihNAh+eTCUiV9wJqfjsuTthz8zlG2Zf
+         TgU20lX6XohEfDssOB1uD97wUkPGjYehfw8ver6y2FnF33Vp/OX5b4no3k6eepe2LZ
+         ie5MK98lk/hrhJZHrVX/gBSzn6GANX1sxbl3ItXs=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 235JHx8t010500
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 5 Apr 2022 14:17:59 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 5
+ Apr 2022 14:17:58 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 5 Apr 2022 14:17:58 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 235JHwCh019604;
+        Tue, 5 Apr 2022 14:17:58 -0500
+Date:   Wed, 6 Apr 2022 00:47:57 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
+CC:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>, <git@xilinx.com>,
+        <saikrishna12468@gmail.com>, <sgoud@xilinx.com>
+Subject: Re: [PATCH 2/2] spi: cadence-quadspi: Add support for OSPI device
+ reset
+Message-ID: <20220405191757.3rzc6q477reusywp@ti.com>
+References: <1649156437-15609-1-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
+ <1649156437-15609-3-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="QPzbWFNPsCze9VF6"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <5817980.lOV4Wx5bFT@kreacher>
-X-Cookie: diplomacy, n:
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <1649156437-15609-3-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,37 +67,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+On 05/04/22 04:30PM, Sai Krishna Potthuri wrote:
+> Cadence OSPI controller always start in SDR mode and it doesn't know
+> the current mode of the flash device (SDR or DDR). This creates issue
+> during Cadence OSPI driver probe if OSPI flash device is in DDR mode.
+> This patch add OSPI flash device reset using HW reset pin for Xilinx
+> Versal platform, this will make sure both Controller and Flash device
+> are in same mode (SDR).
 
---QPzbWFNPsCze9VF6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Is this supposed to reset the OSPI flash or the controller? If you are 
+resetting it in the flash then you should handle this from the flash 
+driver, not from here.
 
-On Tue, Apr 05, 2022 at 06:57:10PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->=20
-> Replace the last instance of acpi_bus_get_device(), added recently
-> by commit 87e59b36e5e2 ("spi: Support selection of the index of the
-> ACPI Spi Resource before alloc"), with acpi_fetch_acpi_dev() and
-> finally drop acpi_bus_get_device() that has no more users.
+Also, as of now at least, SPI NOR only works when the flash is in SDR 
+mode. For TI platforms, we reset the flash in the bootloader (U-Boot), 
+before handing control off to the kernel. If you do want to properly 
+handle flashes that are handed to the kernel in DDR mode, I would 
+suggest you update SPI NOR instead to detect the flash mode and work 
+from there. This would also allow us to support flashes that boot in DDR 
+mode, so would still be in DDR mode even after a reset.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+> Xilinx Versal platform has a dedicated pin used for OSPI device reset.
+> As part of the reset sequence, configure the pin to enable
+> hysteresis and set the direction of the pin to output before toggling
+> the pin. Provided the required delay ranges while toggling the pin to
+> meet the most of the OSPI flash devices reset pulse width, reset recovery
+> and CS high to reset high timings.
+> 
+> Signed-off-by: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
+[...]
 
-Or I can take this via the SPI tree?
-
---QPzbWFNPsCze9VF6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJMdpcACgkQJNaLcl1U
-h9DxDwf/QLzs4X1kcw3lh2J1QFJoikeWfy+wjpGlQvnW8BFu5QtafcdLIgozDZLJ
-4p+4bi2dgUoJlaYf0/aDSVE+lI5bUigDn0eaRZQSrbhKFOY3mN4WgiGuBzMMvUav
-FSqLEmUbUv8kAnBjiCpa0ICwnYSKuvIdyoN799H8ab8Nh3Wo0lQdWb38fZXiEyMm
-0EufArY7CQSoQOK8pyKbZY9hmuC8YtlwTY6MHe4wM6UY2likXlCjcjj5sGJQI/h+
-Qq/tWw4Hfb9uklMZQG1YfAOynbIW2xH25ozOyttT6oJdmtQs5RBGt+uAIg0njVC1
-NBjlVEy49YGv9PSoLycg3OObkem2Ew==
-=j4ZY
------END PGP SIGNATURE-----
-
---QPzbWFNPsCze9VF6--
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.
