@@ -2,105 +2,115 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165344F5185
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Apr 2022 04:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA354F5189
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Apr 2022 04:40:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243711AbiDFCEw (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Apr 2022 22:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53932 "EHLO
+        id S1356447AbiDFCFI (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Apr 2022 22:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457548AbiDEQKZ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Apr 2022 12:10:25 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5BF25CD;
-        Tue,  5 Apr 2022 09:08:26 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id 8so9556552ilq.4;
-        Tue, 05 Apr 2022 09:08:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hW77YXphKvERuG5H+iUJ9uDZUjTyhWglFK1sbd/bTfk=;
-        b=fUC31B96e41c6xmeoqpvrYUa+mUJ1GYiAW7u8dnTGZSOQ7OWqfyoSDvmCBT+eQyqiM
-         UNdcfy7aDYv4YEBK6yTK4m94iqB4mpunTxsY35VKeoiyjYBvjZlArvV/DuQ1TafofBsN
-         B8jnMYbhZHuAtG0EsMlbVVyM5/HNlK6BRp6Hl4XkThnT78hLnj3HpF4llnx3+OYAEU5U
-         x3+rpPlMUisFFcYPr6dB1CgV3FqngwVsHqBKUAIg5DreEgngpLsbr+alvkf5CRYW+Tcu
-         pxzT1+QZCWMKPsEZ8VNqb0XAtv+y2b5SWNMcGsIME24NejuAZ2pboYge6GEjQcCKTQBQ
-         O4Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hW77YXphKvERuG5H+iUJ9uDZUjTyhWglFK1sbd/bTfk=;
-        b=X3Yex+MEBVhAG3/uZ8d6gsQ+pFedAT/jzjz+4U5Hgt4rTpenIrhM/lOr3PiYAm2qwN
-         eooQBUfQj6+umEpIiRTHC0B6HX7Ve1TKFNeqds0G2r+AXLkqI6qgNRPXtPOyoLJL33lw
-         AqANT7Om+Fnxtsa1fMsywqU/0dJNGG3knh/PxXVe0+fIdlhe1YlQX5bQniTK4jz2Cksh
-         nB6garagGC048M//npDyJZxD1IlwiG3cEffSnlKTViXy5VTpO2iRFCXMHT7/mvWpFVcV
-         3ZRsnGQsOAN+KkjZIvhBQSBI0/RqFTm8DB1f1R9ikTmtC9ktDi/5wa+bfPSkVP3PBbap
-         4vfg==
-X-Gm-Message-State: AOAM531/ssIyQKmteSgBSeIGHIjitpNzfFsoI4H7luqs2hPB0Q7iVL1m
-        nhTcDZHiZz8mh6VZsMKQr3WliDNvST5s7lwTGB8=
-X-Google-Smtp-Source: ABdhPJz0ff0WGn+zTKCeGfDo2EgfINMJ8I4npVJmeR2s6MXHr0OMaXaR8zU6qWKRN7KTFA46Gm77KGlaYFiEhbvOSdU=
-X-Received: by 2002:a92:7f11:0:b0:2ca:50f9:63d6 with SMTP id
- a17-20020a927f11000000b002ca50f963d6mr2222344ild.150.1649174906221; Tue, 05
- Apr 2022 09:08:26 -0700 (PDT)
+        with ESMTP id S1457915AbiDEQ7M (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Apr 2022 12:59:12 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C618B4A915;
+        Tue,  5 Apr 2022 09:57:13 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 742f0ee565e3f865; Tue, 5 Apr 2022 18:57:12 +0200
+Received: from kreacher.localnet (unknown [213.134.181.136])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 8220B66BCB7;
+        Tue,  5 Apr 2022 18:57:11 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
+Subject: [PATCH v1] ACPI: bus: Eliminate acpi_bus_get_device()
+Date:   Tue, 05 Apr 2022 18:57:10 +0200
+Message-ID: <5817980.lOV4Wx5bFT@kreacher>
 MIME-Version: 1.0
-References: <20220404131818.1817794-1-gch981213@gmail.com> <20220404131818.1817794-5-gch981213@gmail.com>
- <1649088538.050456.1436949.nullmailer@robh.at.kernel.org> <CAJsYDVLaXAoL=TcPun6rckcA_cdUS-zFy_7M6uCpfzX+jbQEag@mail.gmail.com>
- <20220405092024.25d97c33@xps13> <YkxlsU+P33ip2oWH@robh.at.kernel.org>
-In-Reply-To: <YkxlsU+P33ip2oWH@robh.at.kernel.org>
-From:   Chuanhong Guo <gch981213@gmail.com>
-Date:   Wed, 6 Apr 2022 00:08:15 +0800
-Message-ID: <CAJsYDVL_-dkxRsU24NmWA4KuHTVSJwjbr_9kcVcLao=LYSz+Jw@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] dt-bindings: spi: add binding doc for spi-mtk-snfi
-To:     Rob Herring <robh@kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-spi@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Roger Quadros <rogerq@kernel.org>,
-        Yu Kuai <yukuai3@huawei.com>,
-        linux-mediatek@lists.infradead.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-mtd@lists.infradead.org
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-CLIENT-IP: 213.134.181.136
+X-CLIENT-HOSTNAME: 213.134.181.136
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejgedguddtfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhephfegtdffjeehkeegleejveevtdeugfffieeijeduuddtkefgjedvheeujeejtedvnecukfhppedvudefrddufeegrddukedurddufeeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekuddrudefiedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegsrhhoohhnihgvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhsphhisehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi!
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-On Tue, Apr 5, 2022 at 11:52 PM Rob Herring <robh@kernel.org> wrote:
-> > You can try including spi-nand.yaml (like you do with
-> > spi-controller.yaml). You should no longer need to define
-> > nand-ecc-engine then as it is already described there?
->
-> Including spi-nand.yaml is wrong. If that just landed, then this may
-> have run before the base moved to v5.18-rc1.
+Replace the last instance of acpi_bus_get_device(), added recently
+by commit 87e59b36e5e2 ("spi: Support selection of the index of the
+ACPI Spi Resource before alloc"), with acpi_fetch_acpi_dev() and
+finally drop acpi_bus_get_device() that has no more users.
 
-spi-nand.yaml is in v5.18 only and I'm able to reproduce the
-spi-nand complaint by cherry-picking the commit to v5.17 and
-running the check.
-This means I don't need to do anything with the spi-nand error
-then.
-Thanks for the hint.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/scan.c     |   13 -------------
+ drivers/spi/spi.c       |    3 ++-
+ include/acpi/acpi_bus.h |    1 -
+ 3 files changed, 2 insertions(+), 15 deletions(-)
 
--- 
-Regards,
-Chuanhong Guo
+Index: linux-pm/drivers/spi/spi.c
+===================================================================
+--- linux-pm.orig/drivers/spi/spi.c
++++ linux-pm/drivers/spi/spi.c
+@@ -2406,7 +2406,8 @@ static int acpi_spi_add_resource(struct
+ 			} else {
+ 				struct acpi_device *adev;
+ 
+-				if (acpi_bus_get_device(parent_handle, &adev))
++				adev = acpi_fetch_acpi_dev(parent_handle);
++				if (!adev)
+ 					return -ENODEV;
+ 
+ 				ctlr = acpi_spi_find_controller_by_adev(adev);
+Index: linux-pm/include/acpi/acpi_bus.h
+===================================================================
+--- linux-pm.orig/include/acpi/acpi_bus.h
++++ linux-pm/include/acpi/acpi_bus.h
+@@ -511,7 +511,6 @@ extern int unregister_acpi_notifier(stru
+  * External Functions
+  */
+ 
+-int acpi_bus_get_device(acpi_handle handle, struct acpi_device **device);
+ struct acpi_device *acpi_fetch_acpi_dev(acpi_handle handle);
+ acpi_status acpi_bus_get_status_handle(acpi_handle handle,
+ 				       unsigned long long *sta);
+Index: linux-pm/drivers/acpi/scan.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/scan.c
++++ linux-pm/drivers/acpi/scan.c
+@@ -588,19 +588,6 @@ static struct acpi_device *handle_to_dev
+ 	return adev;
+ }
+ 
+-int acpi_bus_get_device(acpi_handle handle, struct acpi_device **device)
+-{
+-	if (!device)
+-		return -EINVAL;
+-
+-	*device = handle_to_device(handle, NULL);
+-	if (!*device)
+-		return -ENODEV;
+-
+-	return 0;
+-}
+-EXPORT_SYMBOL(acpi_bus_get_device);
+-
+ /**
+  * acpi_fetch_acpi_dev - Retrieve ACPI device object.
+  * @handle: ACPI handle associated with the requested ACPI device object.
+
+
+
