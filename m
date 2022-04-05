@@ -2,44 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDF44F5180
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Apr 2022 04:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F444F5186
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Apr 2022 04:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239670AbiDFCEu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Apr 2022 22:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
+        id S232707AbiDFCE6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Apr 2022 22:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573649AbiDETal (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Apr 2022 15:30:41 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C178DDF47;
-        Tue,  5 Apr 2022 12:28:41 -0700 (PDT)
+        with ESMTP id S1573651AbiDETcA (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Apr 2022 15:32:00 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A61245BD;
+        Tue,  5 Apr 2022 12:30:00 -0700 (PDT)
 Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 235JRwNC034240;
-        Tue, 5 Apr 2022 14:27:58 -0500
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 235JT7v0086205;
+        Tue, 5 Apr 2022 14:29:07 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649186878;
-        bh=ryPzySi+sY1PGhJYHg8EDNmmr6lLqwb9RbsI5qhyyH0=;
+        s=ti-com-17Q1; t=1649186947;
+        bh=K6V7TPiYW5egh0QkAFamj9lYiWdXR9/TvlKT47ppIq0=;
         h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=aaRdE5nnYIrJf5T+fvuEYm5nR9xQxzxlSRRn/11310CZYxzxNFRWA3N/1ujm2T/TD
-         iQut+m7fr7M0lJZSODgNTzU3SajLEUSGBv+SS5169QFUIrTVCzmMAtYMs4uXO5c/Ao
-         KSacvEvmH13gp+mUPEcdV2goz9m+jWLuc4CEsZn8=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 235JRw2p027239
+        b=MrGqygw5Y0qzb98LDu4K9gmmpDA0a3r7eP8I2sJaULvfKVEmp5mo5i2HJflFd5Em4
+         dAuFBuxgxLpO9Dn5Ol49nd+6fwzHcUTEtOSoZAv187V8xf3Ycpr2ZJwiHW0oamcn+h
+         Em7g2rSjF9eGzsMDf7YqRkqPnpXJjqmoPy+LV8GM=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 235JT7tY028192
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 5 Apr 2022 14:27:58 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 5 Apr 2022 14:29:07 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 5
- Apr 2022 14:27:58 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2022 14:29:06 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 5 Apr 2022 14:27:58 -0500
+ Frontend Transport; Tue, 5 Apr 2022 14:29:06 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 235JRvNp005681;
-        Tue, 5 Apr 2022 14:27:58 -0500
-Date:   Wed, 6 Apr 2022 00:57:57 +0530
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 235JT5Pr030591;
+        Tue, 5 Apr 2022 14:29:05 -0500
+Date:   Wed, 6 Apr 2022 00:59:04 +0530
 From:   Pratyush Yadav <p.yadav@ti.com>
 To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>
 CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
@@ -54,17 +54,18 @@ CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
         <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, Tao Ren <rentao.bupt@gmail.com>
-Subject: Re: [PATCH v4 04/11] spi: aspeed: Add support for direct mapping
-Message-ID: <20220405192757.v356zx2u4mpgpnlq@ti.com>
+Subject: Re: [PATCH v4 03/11] spi: spi-mem: Convert Aspeed SMC driver to
+ spi-mem
+Message-ID: <20220405192904.rwwpwwyepumsdywv@ti.com>
 References: <20220325100849.2019209-1-clg@kaod.org>
- <20220325100849.2019209-5-clg@kaod.org>
- <20220330194548.zldbkaoctlhgwcl2@ti.com>
- <3e5ea70d-805a-ff30-663b-e802d9116a49@kaod.org>
+ <20220325100849.2019209-4-clg@kaod.org>
+ <20220330193343.qg5kcr6twerde6ho@ti.com>
+ <3b7ecaa4-1de9-3a4c-b057-805a5e6d2e48@kaod.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3e5ea70d-805a-ff30-663b-e802d9116a49@kaod.org>
+In-Reply-To: <3b7ecaa4-1de9-3a4c-b057-805a5e6d2e48@kaod.org>
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -76,164 +77,231 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 04/04/22 09:11AM, Cédric Le Goater wrote:
-> On 3/30/22 21:45, Pratyush Yadav wrote:
-> > On 25/03/22 11:08AM, Cédric Le Goater wrote:
-> > > Use direct mapping to read the flash device contents. This operation
-> > > mode is called "Command mode" on Aspeed SoC SMC controllers. It uses a
-> > > Control Register for the settings to apply when a memory operation is
-> > > performed on the flash device mapping window.
+On 04/04/22 09:06AM, CÃ©dric Le Goater wrote:
+> On 3/30/22 21:33, Pratyush Yadav wrote:
+> > Hi Cedric,
+> > 
+> > Thanks for doing the conversion.
+> > 
+> > On 25/03/22 11:08AM, CÃ©dric Le Goater wrote:
+> > > This SPI driver adds support for the Aspeed static memory controllers
+> > > of the AST2600, AST2500 and AST2400 SoCs using the spi-mem interface.
 > > > 
-> > > If the window is not big enough, fall back to the "User mode" to
-> > > perform the read.
+> > >   * AST2600 Firmware SPI Memory Controller (FMC)
+> > >     . BMC firmware
+> > >     . 3 chip select pins (CE0 ~ CE2)
+> > >     . Only supports SPI type flash memory
+> > >     . different segment register interface
+> > >     . single, dual and quad mode.
 > > > 
-> > > Since direct mapping now handles all reads of the flash device
-> > > contents, also use memcpy_fromio for other address spaces, such as
-> > > SFDP.
+> > >   * AST2600 SPI Flash Controller (SPI1 and SPI2)
+> > >     . host firmware
+> > >     . 2 chip select pins (CE0 ~ CE1)
+> > >     . different segment register interface
+> > >     . single, dual and quad mode.
 > > > 
-> > > Direct mapping for writes will come later when validated.
+> > >   * AST2500 Firmware SPI Memory Controller (FMC)
+> > >     . BMC firmware
+> > >     . 3 chip select pins (CE0 ~ CE2)
+> > >     . supports SPI type flash memory (CE0-CE1)
+> > >     . CE2 can be of NOR type flash but this is not supported by the driver
+> > >     . single, dual mode.
+> > > 
+> > >   * AST2500 SPI Flash Controller (SPI1 and SPI2)
+> > >     . host firmware
+> > >     . 2 chip select pins (CE0 ~ CE1)
+> > >     . single, dual mode.
+> > > 
+> > >   * AST2400 New Static Memory Controller (also referred as FMC)
+> > >     . BMC firmware
+> > >     . New register set
+> > >     . 5 chip select pins (CE0 âˆ¼ CE4)
+> > >     . supports NOR flash, NAND flash and SPI flash memory.
+> > >     . single, dual and quad mode.
+> > > 
+> > > Each controller has a memory range on which flash devices contents are
+> > > mapped. Each device is assigned a window that can be changed at bootime
+> > > with the Segment Address Registers.
+> > > 
+> > > Each SPI flash device can then be accessed in two modes: Command and
+> > > User. When in User mode, SPI transfers are initiated with accesses to
+> > > the memory segment of a device. When in Command mode, memory
+> > > operations on the memory segment of a device generate SPI commands
+> > > automatically using a Control Register for the settings.
+> > > 
+> > > This initial patch adds support for User mode. Command mode needs a little
+> > > more work to check that the memory window on the AHB bus fits the device
+> > > size. It will come later when support for direct mapping is added.
+> > > 
+> > > Single and dual mode RX transfers are supported. Other types than SPI
+> > > are not supported.
 > > > 
 > > > Reviewed-by: Joel Stanley <joel@jms.id.au>
 > > > Tested-by: Joel Stanley <joel@jms.id.au>
 > > > Tested-by: Tao Ren <rentao.bupt@gmail.com>
-> > > Signed-off-by: Cédric Le Goater <clg@kaod.org>
+> > > Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> > > Signed-off-by: CÃ©dric Le Goater <clg@kaod.org>
 > > > ---
-> > >   drivers/spi/spi-aspeed-smc.c | 67 ++++++++++++++++++++++++++++++++++--
-> > >   1 file changed, 65 insertions(+), 2 deletions(-)
+> > >   drivers/mtd/spi-nor/controllers/aspeed-smc.c  | 910 ------------------
+> > >   drivers/spi/spi-aspeed-smc.c                  | 709 ++++++++++++++
+> > >   .../devicetree/bindings/mtd/aspeed-smc.txt    |  51 -
+> > >   MAINTAINERS                                   |   1 +
+> > >   drivers/mtd/spi-nor/controllers/Kconfig       |  10 -
+> > >   drivers/mtd/spi-nor/controllers/Makefile      |   1 -
+> > >   drivers/spi/Kconfig                           |  11 +
+> > >   drivers/spi/Makefile                          |   1 +
+> > >   8 files changed, 722 insertions(+), 972 deletions(-)
+> > >   delete mode 100644 drivers/mtd/spi-nor/controllers/aspeed-smc.c
+> > >   create mode 100644 drivers/spi/spi-aspeed-smc.c
+> > >   delete mode 100644 Documentation/devicetree/bindings/mtd/aspeed-smc.txt
 > > > 
-> > > diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
-> > > index 997ec2e45118..0951766baef4 100644
-> > > --- a/drivers/spi/spi-aspeed-smc.c
-> > > +++ b/drivers/spi/spi-aspeed-smc.c
-> > > @@ -322,8 +322,8 @@ static int do_aspeed_spi_exec_op(struct spi_mem *mem, const struct spi_mem_op *o
-> > >   		if (!op->addr.nbytes)
-> > >   			ret = aspeed_spi_read_reg(chip, op);
-> > >   		else
-> > > -			ret = aspeed_spi_read_user(chip, op, op->addr.val,
-> > > -						   op->data.nbytes, op->data.buf.in);
-> > > +			memcpy_fromio(op->data.buf.in, chip->ahb_base + op->addr.val,
-> > > +				      op->data.nbytes);
-> > 
-> > I think I commented on this earlier too, though I failed to respond to
-> > your reply. Let me bring the topic back up. I think this can cause an
-> > invalid memory address to be accessed. Not all SPI MEM consumers will
-> > use dirmap APIs, and they won't use them all the time. For example, SPI
-> > NOR can perform some operations to reset the flash before shutting down.
-> > For example, SPI NOR turns off 4byte address mode during shutdown. This
-> > will be a register read/write operation, which usually has a different
-> > opcode.
-> 
-> It's only a small optimization for startup when the SFDP probing is done.
-> There are quite a few reads which are large :
-> 
->   spi-aspeed-smc 1e630000.spi: CE0 read OP 0x5a mode:1.1.1.1 naddr:0x3 ndummies:0x1 len:0x10
->   spi-aspeed-smc 1e630000.spi: CE0 read OP 0x5a mode:1.1.1.1 naddr:0x3 ndummies:0x1 len:0x10
->   spi-aspeed-smc 1e630000.spi: CE0 read OP 0x5a mode:1.1.1.1 naddr:0x3 ndummies:0x1 len:0x120
->   spi-aspeed-smc 1e630000.spi: CE0 read OP 0x5a mode:1.1.1.1 naddr:0x3 ndummies:0x1 len:0x40
->   spi-aspeed-smc 1e630000.spi: CE0 read OP 0x5a mode:1.1.1.1 naddr:0x3 ndummies:0x1 len:0x8
-
-Is the overhead large enough to cause any significant delays? This would 
-only happen once, it is not on a hot path.
-
-Anyway, I had not noticed earlier that you set opcode, dummy, etc. in 
-do_aspeed_spi_exec_op() so I was thinking you would always end up using 
-the "main" read operation for this.
-
-I am fine with this as long as you add range checks to make sure there 
-are no overflows.
-
-> 
-> > 
-> > So I think you should keep dirmap and exec_op() independent of each
-> > other.
-> 
-> OK. I understand. It's not a problem as it works either way.
-> 
-> Thanks,
-> 
-> C.
-> 
-> 
-> > >   	} else {
-> > >   		if (!op->addr.nbytes)
-> > >   			ret = aspeed_spi_write_reg(chip, op);
-> > > @@ -403,10 +403,73 @@ static int aspeed_spi_chip_set_default_window(struct aspeed_spi_chip *chip)
-> > >   	return chip->ahb_window_size ? 0 : -1;
-> > >   }
-> > > +static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
+> > [...]
+> > > +static void aspeed_spi_send_cmd_addr(struct aspeed_spi_chip *chip, u8 addr_nbytes,
+> > > +				     u64 offset, u32 opcode)
 > > > +{
-> > > +	struct aspeed_spi *aspi = spi_controller_get_devdata(desc->mem->spi->master);
-> > > +	struct aspeed_spi_chip *chip = &aspi->chips[desc->mem->spi->chip_select];
-> > > +	struct spi_mem_op *op = &desc->info.op_tmpl;
+> > > +	struct aspeed_spi *aspi = chip->aspi;
+> > > +	__be32 temp;
+> > > +	u32 cmdaddr;
+> > > +
+> > > +	switch (addr_nbytes) {
+> > > +	default:
+> > > +		dev_warn_once(aspi->dev, "Unexpected address width %u, defaulting to 3",
+> > > +			      addr_nbytes);
+> > > +		fallthrough;
+> > 
+> > I think it is better if you reject ops where addr width is not 3 or 4.
+> > This you can drop this. Or if you really want to keep it, you can change
+> > it to a WARN_ON() and return an error.
+> 
+> OK. This is a left over from the initial driver.
+> 
+> I have added both at WARN_ONCE() and a 'return -EOPNOTSUPP'
+> 
+> > > +	case 3:
+> > > +		cmdaddr = offset & 0xFFFFFF;
+> > > +		cmdaddr |= opcode << 24;
+> > > +
+> > > +		temp = cpu_to_be32(cmdaddr);
+> > > +		aspeed_spi_write_to_ahb(chip->ahb_base, &temp, 4);
+> > > +		break;
+> > > +	case 4:
+> > > +		temp = cpu_to_be32(offset);
+> > > +		aspeed_spi_write_to_ahb(chip->ahb_base, &opcode, 1);
+> > > +		aspeed_spi_write_to_ahb(chip->ahb_base, &temp, 4);
+> > > +		break;
+> > > +	}
+> > > +}
+> > > +
+> > [...]
+> > > +/* support for 1-1-1, 1-1-2 or 1-1-4 */
+> > > +static bool aspeed_spi_supports_op(struct spi_mem *mem, const struct spi_mem_op *op)
+> > > +{
+> > > +	if (op->cmd.buswidth > 1)
+> > > +		return false;
+> > > +
+> > > +	if (op->addr.nbytes != 0) {
+> > > +		if (op->addr.buswidth > 1 || op->addr.nbytes > 4)
+> > 
+> > As mentioned above, this should reject ops with addr width 1 and 2.
+> 
+> yes
+> 
+> > > +			return false;
+> > > +	}
+> > > +
+> > > +	if (op->dummy.nbytes != 0) {
+> > > +		if (op->dummy.buswidth > 1 || op->dummy.nbytes > 7)
+> > > +			return false;
+> > > +	}
+> > > +
+> > > +	if (op->data.nbytes != 0 && op->data.buswidth > 4)
+> > > +		return false;
+> > > +
+> > > +	return spi_mem_default_supports_op(mem, op);
+> > > +}
+> > > +
+> > > +static int do_aspeed_spi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+> > > +{
+> > > +	struct aspeed_spi *aspi = spi_controller_get_devdata(mem->spi->master);
+> > > +	struct aspeed_spi_chip *chip = &aspi->chips[mem->spi->chip_select];
+> > > +	u32 addr_mode, addr_mode_backup;
 > > > +	u32 ctl_val;
 > > > +	int ret = 0;
 > > > +
-> > > +	chip->clk_freq = desc->mem->spi->max_speed_hz;
+> > > +	dev_dbg(aspi->dev,
+> > > +		"CE%d %s OP %#x mode:%d.%d.%d.%d naddr:%#x ndummies:%#x len:%#x",
+> > > +		chip->cs, op->data.dir == SPI_MEM_DATA_IN ? "read" : "write",
+> > > +		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
+> > > +		op->dummy.buswidth, op->data.buswidth,
+> > > +		op->addr.nbytes, op->dummy.nbytes, op->data.nbytes);
 > > > +
-> > > +	/* Only for reads */
-> > > +	if (op->data.dir != SPI_MEM_DATA_IN)
-> > > +		return -EOPNOTSUPP;
+> > > +	addr_mode = readl(aspi->regs + CE_CTRL_REG);
+> > > +	addr_mode_backup = addr_mode;
 > > > +
-> > > +	if (desc->info.length > chip->ahb_window_size)
-> > > +		dev_warn(aspi->dev, "CE%d window (%dMB) too small for mapping",
-> > > +			 chip->cs, chip->ahb_window_size >> 20);
+> > > +	ctl_val = chip->ctl_val[ASPEED_SPI_BASE];
+> > > +	ctl_val &= ~CTRL_IO_CMD_MASK;
 > > > +
-> > > +	/* Define the default IO read settings */
-> > > +	ctl_val = readl(chip->ctl) & ~CTRL_IO_CMD_MASK;
-> > > +	ctl_val |= aspeed_spi_get_io_mode(op) |
-> > > +		op->cmd.opcode << CTRL_COMMAND_SHIFT |
-> > > +		CTRL_IO_DUMMY_SET(op->dummy.nbytes / op->dummy.buswidth) |
-> > > +		CTRL_IO_MODE_READ;
+> > > +	ctl_val |= op->cmd.opcode << CTRL_COMMAND_SHIFT;
 > > > +
-> > > +	/* Tune 4BYTE address mode */
+> > > +	/* 4BYTE address mode */
 > > > +	if (op->addr.nbytes) {
-> > > +		u32 addr_mode = readl(aspi->regs + CE_CTRL_REG);
-> > > +
 > > > +		if (op->addr.nbytes == 4)
 > > > +			addr_mode |= (0x11 << chip->cs);
 > > > +		else
 > > > +			addr_mode &= ~(0x11 << chip->cs);
-> > > +		writel(addr_mode, aspi->regs + CE_CTRL_REG);
 > > > +	}
 > > > +
-> > > +	/* READ mode is the controller default setting */
-> > > +	chip->ctl_val[ASPEED_SPI_READ] = ctl_val;
-> > > +	writel(chip->ctl_val[ASPEED_SPI_READ], chip->ctl);
-> > > +
-> > > +	dev_info(aspi->dev, "CE%d read buswidth:%d [0x%08x]\n",
-> > > +		 chip->cs, op->data.buswidth, chip->ctl_val[ASPEED_SPI_READ]);
-> > > +
-> > > +	return ret;
-> > > +}
-> > > +
-> > > +static ssize_t aspeed_spi_dirmap_read(struct spi_mem_dirmap_desc *desc,
-> > > +				      u64 offset, size_t len, void *buf)
-> > > +{
-> > > +	struct aspeed_spi *aspi = spi_controller_get_devdata(desc->mem->spi->master);
-> > > +	struct aspeed_spi_chip *chip = &aspi->chips[desc->mem->spi->chip_select];
-> > > +
-> > > +	/* Switch to USER command mode if mapping window is too small */
-> > > +	if (chip->ahb_window_size < offset + len)
-> > > +		aspeed_spi_read_user(chip, &desc->info.op_tmpl, offset, len, buf);
-> > > +	else
-> > > +		memcpy_fromio(buf, chip->ahb_base + offset, len);
-> > > +
-> > > +	return len;
-> > > +}
-> > > +
-> > >   static const struct spi_controller_mem_ops aspeed_spi_mem_ops = {
-> > >   	.supports_op = aspeed_spi_supports_op,
-> > >   	.exec_op = aspeed_spi_exec_op,
-> > >   	.get_name = aspeed_spi_get_name,
-> > > +	.dirmap_create = aspeed_spi_dirmap_create,
-> > > +	.dirmap_read = aspeed_spi_dirmap_read,
-> > >   };
-> > >   static void aspeed_spi_chip_set_type(struct aspeed_spi *aspi, unsigned int cs, int type)
-> > > -- 
-> > > 2.34.1
-> > > 
+> > > +	if (op->dummy.buswidth && op->dummy.nbytes)
 > > 
+> > Nitpick: op->dummy.nbytes being set should imply op->dummy.buswidth > 0.
+> > 
+> > > +		ctl_val |= CTRL_IO_DUMMY_SET(op->dummy.nbytes / op->dummy.buswidth);
+> > > +
+> > > +	if (op->data.nbytes != 0) {
+> > > +		if (op->data.buswidth)
+> > 
+> > Nitpick: op->data.nbytes != 0 should imply op->data.buswidth > 0.
 > 
+> Indeed. Fixed both.
+> 
+> > > +			ctl_val |= aspeed_spi_get_io_mode(op);
+> > > +	}
+> > > +
+> > > +	if (op->data.dir == SPI_MEM_DATA_OUT)
+> > > +		ctl_val |= CTRL_IO_MODE_WRITE;
+> > > +	else
+> > > +		ctl_val |= CTRL_IO_MODE_READ;
+> > > +
+> > > +	if (addr_mode != addr_mode_backup)
+> > > +		writel(addr_mode, aspi->regs + CE_CTRL_REG);
+> > > +	writel(ctl_val, chip->ctl);
+> > > +
+> > > +	if (op->data.dir == SPI_MEM_DATA_IN) {
+> > > +		if (!op->addr.nbytes)
+> > > +			ret = aspeed_spi_read_reg(chip, op);
+> > > +		else
+> > > +			ret = aspeed_spi_read_user(chip, op, op->addr.val,
+> > > +						   op->data.nbytes, op->data.buf.in);
+> > > +	} else {
+> > > +		if (!op->addr.nbytes)
+> > > +			ret = aspeed_spi_write_reg(chip, op);
+> > > +		else
+> > > +			ret = aspeed_spi_write_user(chip, op);
+> > > +	}
+> > > +
+> > > +	/* Restore defaults */
+> > > +	if (addr_mode != addr_mode_backup)
+> > > +		writel(addr_mode_backup, aspi->regs + CE_CTRL_REG);
+> > > +	writel(chip->ctl_val[ASPEED_SPI_READ], chip->ctl);
+> > 
+> > Why do you need to restore defaults here? Do you expect some other piece
+> > of software to use it as well?
+> 
+> We expect the controller to be correctly set when dirmap_read() is called.
+> But it is only required in the next patch.
+
+Okay. This should be fine then.
+
 
 -- 
 Regards,
