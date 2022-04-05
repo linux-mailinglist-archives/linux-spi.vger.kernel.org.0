@@ -2,47 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD6F4F35E6
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Apr 2022 15:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2B94F35F7
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Apr 2022 15:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241091AbiDEKzs (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Apr 2022 06:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60068 "EHLO
+        id S241500AbiDEK4g (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Apr 2022 06:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347090AbiDEJp7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Apr 2022 05:45:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AEDC51588;
-        Tue,  5 Apr 2022 02:32:22 -0700 (PDT)
+        with ESMTP id S1347104AbiDEJqB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Apr 2022 05:46:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34436D4E3;
+        Tue,  5 Apr 2022 02:32:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AFF6616C1;
-        Tue,  5 Apr 2022 09:32:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88018C385A2;
-        Tue,  5 Apr 2022 09:32:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E4A8616AE;
+        Tue,  5 Apr 2022 09:32:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 289B6C385A4;
+        Tue,  5 Apr 2022 09:32:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649151141;
-        bh=VRTf+8SLE8ZMTKojd3EASetnluqVW687H4SXF0zsW2E=;
+        s=k20201202; t=1649151143;
+        bh=4sUt83BgTOE5J9hysaJUhknfGWeSQ6S+Ynto5f4x3DY=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=JGtBZ/oDh86pEqP+OmDia+U3LygBe08H1yRMKvoSoDISAgKGXy9tazlTO7w983gk8
-         tRYxp5nx+OL45gpWUhCLHHHVZcisMk6kb9WrRhpJPki1J88iS4hLxtKUjHiSVklUSh
-         Rb15NCy14wT1yiNxK3cKubuuTUB7A/+rav0vyE0QxGG8ryr7l0xzlR0s2ZBfeR3lsg
-         LqpAthEpMyNIaQN8XWNaJGEkWFRZOZhezzEgkukHfO8jnH4i2YwJr0RzgPmYIO6+MJ
-         Nd644F067ZxZDUOCGMdwXw9YKd2rYSWqDl23K4eVZwjZo1wB+cY1qcI29ZP4LaZwE0
-         H+hZtYTka4yUg==
+        b=Pm8J9hUCvcDjpvYrEvJzkvHiV/px742+iYYyeBW9xSpfsX1ALiIM519J15mSPWlvd
+         QCphgPP/Cep4YhtKPiicISTkYl+4QeLqWrMM9BtEeOGkKUQkz13Bqwe1mH2B7FLUuh
+         qdOflx/MdupPABcek0e9lKPBzJ0W2C3RH+pcBZs6o1ZtQfJxUteMyq0/6bUmBDvle8
+         J3eKkdjVEtCmA9yR34C/Vzf62Dzc3IHY5h4d1KGO68Cg+3ph+5E00f8Th72kH75ZMx
+         wLmCgunuohj4lt1ii5+WDdT3GR19VA1SICgtIwC7PlVH1Yt52e35Esoawppjwfqkb5
+         /POA2/BXHzpCw==
 From:   Mark Brown <broonie@kernel.org>
-To:     vigneshr@ti.com, richard@nod.at, wsa+renesas@sang-engineering.com,
-        geert+renesas@glider.be, biju.das.jz@bp.renesas.com,
-        prabhakar.mahadev-lad.rj@bp.renesas.com, miquel.raynal@bootlin.com,
-        krzk@kernel.org
-Cc:     linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org
-In-Reply-To: <d196bb5849843993557a9b10f3bd28a752e5e8e0.1648562287.git.geert+renesas@glider.be>
-References: <d196bb5849843993557a9b10f3bd28a752e5e8e0.1648562287.git.geert+renesas@glider.be>
-Subject: Re: (subset) [PATCH 1/2] mtd: hyperbus: rpc-if: Fix RPM imbalance in probe error path
-Message-Id: <164915113927.276894.7805335417707613893.b4-ty@kernel.org>
-Date:   Tue, 05 Apr 2022 10:32:19 +0100
+To:     leilk.liu@mediatek.com
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, linux-mediatek@lists.infradead.org,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        matthias.bgg@gmail.com
+In-Reply-To: <20220321013922.24067-1-leilk.liu@mediatek.com>
+References: <20220321013922.24067-1-leilk.liu@mediatek.com>
+Subject: Re: [PATCH V6 0/3] spi: mediatek: add single/quad mode support
+Message-Id: <164915114188.276894.4149061684421416704.b4-ty@kernel.org>
+Date:   Tue, 05 Apr 2022 10:32:21 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,10 +55,19 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 29 Mar 2022 16:00:38 +0200, Geert Uytterhoeven wrote:
-> If rpcif_hw_init() fails, Runtime PM is left enabled.
+On Mon, 21 Mar 2022 09:39:19 +0800, Leilk Liu wrote:
+> This series of patches are based on spi for-next, and provide 3 patches to support MT7986.
 > 
+> V6:
+>  1. remove SPI_CFG3_IPM_PIN_MODE_OFFSET.
+>  2. add Reviewed-by: AngeloGioacchino Del Regno
 > 
+> V5:
+>  1. remove 3 patches that already applied.
+>  2. use devm_clk_get_optional.
+>  3. remove of_mtk_spi_parse_dt()
+> 
+> [...]
 
 Applied to
 
@@ -67,8 +75,12 @@ Applied to
 
 Thanks!
 
-[2/2] spi: rpc-if: Fix RPM imbalance in probe error path
-      commit: 2f8cf5f642e80f8b6b0e660a9c86924a1f41cd80
+[1/3] spi: mediatek: add spi memory support for ipm design
+      commit: 9f763fd20da7d892ffaedac0c58d821922f8a674
+[2/3] dt-bindings: spi: support hclk
+      commit: a4765dfb80a7333aaac394a5ba20056d11b55636
+[3/3] spi: mediatek: support hclk
+      commit: a740f4e684c020ea57a8a198a9322d739f7ab6d5
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
