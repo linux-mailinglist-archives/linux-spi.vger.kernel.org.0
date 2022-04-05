@@ -2,48 +2,71 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B12A4F23CA
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Apr 2022 08:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E3F4F2491
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Apr 2022 09:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbiDEG6X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 5 Apr 2022 02:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46680 "EHLO
+        id S229979AbiDEHWt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 5 Apr 2022 03:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiDEG6W (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Apr 2022 02:58:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02D81087
-        for <linux-spi@vger.kernel.org>; Mon,  4 Apr 2022 23:56:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 583D66158E
-        for <linux-spi@vger.kernel.org>; Tue,  5 Apr 2022 06:56:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BD786C340F3;
-        Tue,  5 Apr 2022 06:56:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649141783;
-        bh=ESPSbCMcO6E3gFNBHPXZgEuOqUoUeJR0dCymGoIj1ZU=;
-        h=Subject:From:Date:To:From;
-        b=V5y2c6LVBQdHNfBZlFUhUx43zcV/3uo2UAgXjIGF9qlX0EKvnH98+TLznzBrrSDWY
-         GT1S7TqKdXu6Wy8EJH0wBnPCK2522kqQl23tp/04NHpit3155dRshK+g0GKOmqNINZ
-         LvzvxT038/oKEwR0anwEuAsC3NXYCtVISSiNcH1ZejSmfTAHSfX2HJqKoV3oWbgdqC
-         8II4AnJGWKeHuG6oCXOTJgULOtoSxkfB9p5V8X6pgYTrezLqDeKdPq5AaxmrphoZax
-         FEoZ5QmP8FDCmiIps1eoVUUOSIxIssKdnDbCHjzkt1K4bR+EH4230eZAhe9i3ev8K8
-         OYBN7DNVNG4UQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A8DAAE85BCB;
-        Tue,  5 Apr 2022 06:56:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S231799AbiDEHWo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 5 Apr 2022 03:22:44 -0400
+X-Greylist: delayed 84052 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Apr 2022 00:20:37 PDT
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28F01D8;
+        Tue,  5 Apr 2022 00:20:36 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id D202024000C;
+        Tue,  5 Apr 2022 07:20:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1649143234;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zpvfYdyA2PB7667ZTFEYC37nx0xbGndnvQLkh+GtoUc=;
+        b=h7hY9Jo6S5R/X/FMHAFNGYaEyyD9HrfcpGcmAW5frfsecCC8u0xeUQQZ7JJb45pOrHonQB
+        5BUPWLjFDMmnXKq8WFiKDZ403XDFDD3uIdBDZGdjYfUK2vA9d+Kl12efhuNWtX6uUBeAD1
+        ZagFg9uip+bqYD9yNMQuWKLcKDvGVechHM2qXYq5Z7w0TZ7+vA4RMnPoIGlT4x8B7KblfB
+        V24FmKwjDy+xZkws3pak/3FMAGk01NGyF9vPRPS4j6lir8BcHO7X57ZJqSo0K/d1ua1lm8
+        udxlvKJRsxYPs3EMlnJ/PgeLM42VMwMEJGAUGncNYDAaN0Gxb83tniqf8XtcTg==
+Date:   Tue, 5 Apr 2022 09:20:24 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Chuanhong Guo <gch981213@gmail.com>
+Cc:     Rob Herring <robh@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        linux-spi@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Roger Quadros <rogerq@kernel.org>,
+        Yu Kuai <yukuai3@huawei.com>,
+        linux-mediatek@lists.infradead.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v3 4/5] dt-bindings: spi: add binding doc for
+ spi-mtk-snfi
+Message-ID: <20220405092024.25d97c33@xps13>
+In-Reply-To: <CAJsYDVLaXAoL=TcPun6rckcA_cdUS-zFy_7M6uCpfzX+jbQEag@mail.gmail.com>
+References: <20220404131818.1817794-1-gch981213@gmail.com>
+        <20220404131818.1817794-5-gch981213@gmail.com>
+        <1649088538.050456.1436949.nullmailer@robh.at.kernel.org>
+        <CAJsYDVLaXAoL=TcPun6rckcA_cdUS-zFy_7M6uCpfzX+jbQEag@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <164914178368.20798.1381690780497321739.git-patchwork-housekeeping@kernel.org>
-Date:   Tue, 05 Apr 2022 06:56:23 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,24 +75,46 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v2] dt-bindings: qcom: update maintainers (drop Akash and Mukesh) (2022-04-05T06:37:24)
-  Superseding: [v1] dt-bindings: qcom: update maintainers (drop Akash and Mukesh) (2022-03-29T11:37:17):
-    dt-bindings: qcom: update maintainers (drop Akash and Mukesh)
+Hello,
 
-Latest series: [v4] dt-bindings: qcom: convert entire GSBI (QUP I2C/SPI/UART) to DT schema (2022-04-05T06:34:44)
-  Superseding: [v3] dt-bindings: qcom: convert entire GSBI (QUP I2C/SPI/UART) to DT schema (2022-04-02T18:40:02):
-    [v3,1/9] arm64: dts: qcom: align dmas in I2C/SPI/UART with DT schema
-    [v3,2/9] arm64: dts: qcom: align clocks in I2C/SPI with DT schema
-    [v3,3/9] ARM: dts: qcom: ipq4019: align dmas in SPI/UART with DT schema
-    [v3,4/9] ARM: dts: qcom: ipq4019: align clocks in I2C with DT schema
-    [v3,5/9] ARM: dts: qcom: msm8660: disable GSBI8
-    [v3,6/9] spi: dt-bindings: qcom,spi-qup: convert to dtschema
-    [v3,7/9] dt-bindings: serial: qcom,msm-uartdm: convert to dtschema
-    [v3,8/9] dt-bindings: i2c: qcom,i2c-qup: convert to dtschema
-    [v3,9/9] dt-bindings: qcom: qcom,gsbi: convert to dtschema
+gch981213@gmail.com wrote on Tue, 5 Apr 2022 10:55:51 +0800:
 
+> Hi Rob!
+>=20
+> On Tue, Apr 5, 2022 at 12:09 AM Rob Herring <robh@kernel.org> wrote:
+> > [...]
+> > My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_chec=
+k'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> >
+> > yamllint warnings/errors:
+> >
+> > dtschema/dtc warnings/errors:
+> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sp=
+i/mediatek,spi-mtk-snfi.example.dt.yaml: spi@1100d000: 'ecc-engine' is a re=
+quired property
+> >         From schema: /builds/robherring/linux-dt-review/Documentation/d=
+evicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+> > Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.example.dt.=
+yaml:0:0: /example-0/soc/spi@1100d000/flash@0: failed to match any schema w=
+ith compatible: ['spi-nand'] =20
+>=20
+> I ran the tests myself and it's only complaining about the ecc-engine nam=
+e:
+>=20
+> /home/user/src/kernels/linux/Documentation/devicetree/bindings/spi/mediat=
+ek,spi-mtk-snfi.example.dtb:
+> spi@1100d000: 'ecc-engine' is a required property
+> From schema: /home/user/src/kernels/linux/Documentation/devicetree/bindin=
+gs/spi/mediatek,spi-mtk-snfi.yaml
+>=20
+> It says nothing about the spi-nand part.
+> I'd like to keep the flash@0 node in the example to demonstrate the
+> nand-ecc-engine usage. What should I do?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+You can try including spi-nand.yaml (like you do with
+spi-controller.yaml). You should no longer need to define
+nand-ecc-engine then as it is already described there?
 
+Thanks,
+Miqu=C3=A8l
