@@ -2,93 +2,86 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 230FA4F6A1B
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Apr 2022 21:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E68054F6A8F
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Apr 2022 21:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbiDFTkO (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 6 Apr 2022 15:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58840 "EHLO
+        id S233431AbiDFTym (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 6 Apr 2022 15:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbiDFTjf (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Apr 2022 15:39:35 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62EB1A3967;
-        Wed,  6 Apr 2022 10:45:13 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-e1dcc0a327so3746539fac.1;
-        Wed, 06 Apr 2022 10:45:13 -0700 (PDT)
+        with ESMTP id S236809AbiDFTyB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Apr 2022 15:54:01 -0400
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7E525FD67;
+        Wed,  6 Apr 2022 11:09:21 -0700 (PDT)
+Received: by mail-oi1-f175.google.com with SMTP id 12so3199905oix.12;
+        Wed, 06 Apr 2022 11:09:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=L5TvrQjpMWSCvDIj2tp5HdoUF6y6vYimFqx2SemcKe8=;
-        b=U8EDWZGrOhyYcDyd0nLKND9znK9AbRVolGZ8Nf/mIbB+8XJvs3EWdYjLxFehq+14z3
-         ZZzG1qrZW2bI8voW7Q7JHk1N833DoP+LqKUaDNRXZBVWnDzybUnX0KMl3w/TTarlSjRs
-         AAzgwpOj/46iHJ4IZG/yF/7bG24IgdHGK1jDmPRjR0m5DW/QKjtXQb8FPo79lw3ZiPnE
-         fRGXWt5T9Z92SvIGKuBjmi0YYowGVBlLouGOTVMZVMOj2L/4PtglqeXiExxjYMn7BJJO
-         h6slRrskX9TSs4+rId56jpuPCiwfAuofW5TEILdr9/UUe55oMOlNBVqTVduhgX1VNWua
-         R/7w==
-X-Gm-Message-State: AOAM531VtMy+yroPWIWLTn9ccR+x4LQE+I5m9i9pzprfUybomeIZMsj6
-        K9TvERxkDVtrhCU9B9m6nA==
-X-Google-Smtp-Source: ABdhPJxevK8UXw8048KxmB62o7gsRRl5YC6His46gPTV8+KpOCTt5xixSjhRHKnoLPd4JALpA8l/5w==
-X-Received: by 2002:a05:6870:210b:b0:de:6ec1:3f59 with SMTP id f11-20020a056870210b00b000de6ec13f59mr4505084oae.171.1649267112959;
-        Wed, 06 Apr 2022 10:45:12 -0700 (PDT)
+        bh=ZCv5Z3on9AQtD9yYpps2anAChZwta6wJ94nkSs1cqXY=;
+        b=6tNtHGh0XXL8x91EXpnuaSzYGH9VGigyzFELNLpty8TqaiFTb/tHiCrFovm9SOOx0K
+         lf/DjaHJj53h8NPHPmgIPg1LXFzn3K/XseX2+THdsgGCYz/nV1RPe6kkNKp56p4Qat6B
+         7RjnAV1vveiMf8X/tFq19ecLk+jQkBAIibvMhjY/BSZWHhEY7oYShGORWTA9x8gkg3fI
+         VfxuRqOSv3Fg96Zd5AInCi9rZ/VKVYQmV5HPp1bQV35I8e3j8V6Dl/n0AnjJpaEXmsIb
+         5XRThCMu6Ebf2VcaO9Y/Dkh324u4Txfu05Is/rD6WjltXeXtkbPlqh8teGBaE2dchaVr
+         8CKQ==
+X-Gm-Message-State: AOAM530RRf13ASe9KLMLnr4NysFOXFkjV+FuyBTh2aWTwG7I8FGT3xFs
+        SAw0JbD3LaDcoqKwkV1NKA==
+X-Google-Smtp-Source: ABdhPJx5Gu4gGUEd9ZN30X4nIljJqIliTezdh62bKAP3TJPDFaPvtdOjU2y3V053IinzgSoWLXyQDg==
+X-Received: by 2002:a05:6808:4d4:b0:2ec:f4e0:2b84 with SMTP id a20-20020a05680804d400b002ecf4e02b84mr4008798oie.153.1649268560875;
+        Wed, 06 Apr 2022 11:09:20 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id hg14-20020a056870790e00b000e1c070a73asm6082977oab.55.2022.04.06.10.45.11
+        by smtp.gmail.com with ESMTPSA id o19-20020a4a9593000000b0032176119e65sm6454944ooi.34.2022.04.06.11.09.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 10:45:11 -0700 (PDT)
-Received: (nullmailer pid 2481762 invoked by uid 1000);
-        Wed, 06 Apr 2022 17:45:10 -0000
-Date:   Wed, 6 Apr 2022 12:45:10 -0500
+        Wed, 06 Apr 2022 11:09:20 -0700 (PDT)
+Received: (nullmailer pid 2516021 invoked by uid 1000);
+        Wed, 06 Apr 2022 18:09:19 -0000
+Date:   Wed, 6 Apr 2022 13:09:19 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     devicetree@vger.kernel.org,
-        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-serial@vger.kernel.org,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>, Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH v3 2/2] dt-bindings: qcom: qcom,geni-se: refer to
- dtschema for SPI
-Message-ID: <Yk3RpmKj0eRKnCdU@robh.at.kernel.org>
-References: <20220404064017.68634-1-krzysztof.kozlowski@linaro.org>
- <20220404064017.68634-2-krzysztof.kozlowski@linaro.org>
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH v4 7/9] dt-bindings: serial: qcom,msm-uartdm: convert to
+ dtschema
+Message-ID: <Yk3XT0n2l75Is4dq@robh.at.kernel.org>
+References: <20220405063451.12011-1-krzysztof.kozlowski@linaro.org>
+ <20220405063451.12011-8-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220404064017.68634-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220405063451.12011-8-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 04 Apr 2022 08:40:17 +0200, Krzysztof Kozlowski wrote:
-> After adding DT schema for the SPI controller, the Qualcomm GENI Serial
-> Engine QUP Wrapper Controller bindings can reference it directly for
-> full schema validation.
+On Tue, 05 Apr 2022 08:34:49 +0200, Krzysztof Kozlowski wrote:
+> Convert the Qualcomm MSM Serial UARTDM bindings to DT Schema.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-> 
 > ---
-> 
-> Changes since v2:
-> 1. Add tag.
-> 
-> Changes since v1:
-> 1. None
-> 
-> Patch depends on previous patch (DT schema conversion).
-> ---
->  .../bindings/soc/qcom/qcom,geni-se.yaml       | 22 +------------------
->  1 file changed, 1 insertion(+), 21 deletions(-)
+>  .../bindings/serial/qcom,msm-uartdm.txt       |  81 -------------
+>  .../bindings/serial/qcom,msm-uartdm.yaml      | 112 ++++++++++++++++++
+>  2 files changed, 112 insertions(+), 81 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/serial/qcom,msm-uartdm.txt
+>  create mode 100644 Documentation/devicetree/bindings/serial/qcom,msm-uartdm.yaml
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
