@@ -2,96 +2,157 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF9A4F6B07
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Apr 2022 22:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD524F6E96
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Apr 2022 01:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbiDFUOq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 6 Apr 2022 16:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43628 "EHLO
+        id S237827AbiDFXi5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 6 Apr 2022 19:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236982AbiDFUNz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Apr 2022 16:13:55 -0400
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3131140A1;
-        Wed,  6 Apr 2022 10:44:59 -0700 (PDT)
-Received: by mail-ot1-f42.google.com with SMTP id a17-20020a9d3e11000000b005cb483c500dso2205336otd.6;
-        Wed, 06 Apr 2022 10:44:59 -0700 (PDT)
+        with ESMTP id S229755AbiDFXi4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Apr 2022 19:38:56 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD191FCD24
+        for <linux-spi@vger.kernel.org>; Wed,  6 Apr 2022 16:36:57 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id q12so297480pla.9
+        for <linux-spi@vger.kernel.org>; Wed, 06 Apr 2022 16:36:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pensando.io; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=21ZJRRzPBF6FcLzLA+5OerzfnCr3C60pEPJqVVBmqTY=;
+        b=fKwn0tUMW047EyEj2Owp8YI5iW6CAw7fzm93kE70JaSkisqGFGRYw0WSQ995y/Ahdq
+         b5/KCNurRH6P5x7lXbwcqz0zzAE+yKIziwzwdqasM8LjpbSn+FORgzLng6ddJwykKYrm
+         Cd/1iatq5/fR7IkJzWYaoNcwzcgT3D5fxa1Aykz9Z4tVz0Cio1oD0tzlY1vOeULqgofo
+         AwyAlp0RPJIhg+tw0v7IFvDyp/1GnWipihXFIoDrCISvL+bWWPs3XPdoOvOfNHJYmf6S
+         dOw4iFaedBTqWWlN2+STe3zBU8+pRxzgGbeC5VsbDjmU7417KuUWs/Q71WxPyhQ3XfGp
+         7FDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UQGAhVkoMVchgmtJMVhAtK7JRG3UaGk6gAi1FHksJok=;
-        b=CxQ0tfR/V0mUHbcjblolrvkLrAtOuBoAnQSQ9ujIar9o8fprzjeQkvLC6lTvTlxSi3
-         aH0gqT9y4k3T9r8rDk7LBi5FS6ImS1jEw7AO/Jfbl/23gFYCdNYYaY79Or+wZxKs1Ibd
-         KjS12E7UQ5/3ZtUZK4wV0fwuKLhzpET28ovQ28EAXCLPkaM8YqtfUNMw724ic/Jqd+md
-         mxzn9VBcicTAUW44xqPREQwA/WLcvOxpJP/DBADaqK7//GpMZlbnkFN1JEjiGpyTgh+L
-         u4lt8ZhbFfegDDjNsysJ7k3g9VtwE/xkWpL1h2d4s0oiGXhpQi2Ms/cBZny5u5TqyRdp
-         fvpg==
-X-Gm-Message-State: AOAM530EAr7Xcj9g6P8BdZpRKKk7zk4Pybo5vE0vQSn/EpTJkQ3+3CJJ
-        oyvKF2CdpEyaygGwjUB2zg==
-X-Google-Smtp-Source: ABdhPJxmVkSyx43KIty/v1EZpatUCR4dvx3Ts6J5KNstYq0qO+8+CbAh29CaRQszr4r5SfRUiJs+4A==
-X-Received: by 2002:a05:6830:82a:b0:5b2:36d5:1603 with SMTP id t10-20020a056830082a00b005b236d51603mr3472144ots.240.1649267098688;
-        Wed, 06 Apr 2022 10:44:58 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e4-20020a056870920400b000e1bdf90ba5sm6236468oaf.22.2022.04.06.10.44.57
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=21ZJRRzPBF6FcLzLA+5OerzfnCr3C60pEPJqVVBmqTY=;
+        b=Fqz4WWBb5bxQgeZWKS5ercssTV0Fgy3lQsUfzysBRWvjhbjwk6tqFdUCJBkuDtDOYL
+         PuIQS4d2ftlkPpHrFcqIZn6NVAc7geS1uqnDf0M5kHg46/kENX4Tndqwzkk8VCP7S0tm
+         h4E39Hip44Nphngsv726sRdoYDdARlLKQcz10XTYIgZQBf7m5oiKFohUYQjqvGxfbsRx
+         b6h19rPj5F+IZrYybNFZut9YHgpNHdXqEnhS6ZteEH6CbX33xcYg2440jqKwZToCJItq
+         JJiFXrKTuQb57vmFxR2FeSYYnO8h8GqTe/UgpUmmtRcrK13kNjM2XEQIu+h0QIkFZSM6
+         PTEA==
+X-Gm-Message-State: AOAM5319sQ1d+6ozGQEFRKcGWgstinFCVl1U9pzZjyMkURjAvNaQ9Geb
+        iHofMrvVUMF3bfdxL/6r+9eqpA==
+X-Google-Smtp-Source: ABdhPJw6de6LxMX24kxKqOkwU7ahEUMqpmaXcVTLkvOJdN5e2XGTxzipHvLO3QMVfxr0Ma+CwQjFTQ==
+X-Received: by 2002:a17:90a:b115:b0:1ca:9d56:24f9 with SMTP id z21-20020a17090ab11500b001ca9d5624f9mr12636918pjq.130.1649288217192;
+        Wed, 06 Apr 2022 16:36:57 -0700 (PDT)
+Received: from platform-dev1.pensando.io ([12.226.153.42])
+        by smtp.gmail.com with ESMTPSA id m21-20020a17090a7f9500b001c97c6bcaf4sm6903667pjl.39.2022.04.06.16.36.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 10:44:58 -0700 (PDT)
-Received: (nullmailer pid 2481314 invoked by uid 1000);
-        Wed, 06 Apr 2022 17:44:57 -0000
-Date:   Wed, 6 Apr 2022 12:44:57 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Subject: Re: [PATCH v3 1/2] spi: dt-bindings: qcom,spi-geni-qcom: convert to
- dtschema
-Message-ID: <Yk3RmTJD5XHX1hIM@robh.at.kernel.org>
-References: <20220404064017.68634-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220404064017.68634-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Wed, 06 Apr 2022 16:36:56 -0700 (PDT)
+From:   Brad Larson <brad@pensando.io>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        broonie@kernel.org, fancer.lancer@gmail.com,
+        adrian.hunter@intel.com, ulf.hansson@linaro.org, olof@lixom.net,
+        brad@pensando.io, dac2@pensando.io, linux-gpio@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 00/11] Support Pensando Elba SoC
+Date:   Wed,  6 Apr 2022 16:36:37 -0700
+Message-Id: <20220406233648.21644-1-brad@pensando.io>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 04 Apr 2022 08:40:16 +0200, Krzysztof Kozlowski wrote:
-> Convert the GENI based Qualcomm Universal Peripheral (QUP) Serial
-> Peripheral Interface (SPI) bindings to DT Schema.
-> 
-> The original bindings in TXT were not complete, so add during conversion
-> properties already used in DTS and/or in the driver: dmas,
-> interconnects, operating points and power-domains.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Changes since v2:
-> 1. Drop reg-names.
-> 
-> Changes since v1:
-> 1. Correct $ref path and remove interconnect minItems (Kuldeep).
-> 2. Remove child tpm device from example.
-> 3. Pad reg hex addresses with 00.
-> ---
->  .../bindings/spi/qcom,spi-geni-qcom.txt       |  39 ------
->  .../bindings/spi/qcom,spi-geni-qcom.yaml      | 116 ++++++++++++++++++
->  2 files changed, 116 insertions(+), 39 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.txt
->  create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-> 
+This series enables support for Pensando Elba SoC based platforms.
+The Elba SoC has the following features:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+- Sixteen ARM64 A72 cores
+- Dual DDR 4/5 memory controllers
+- 32 lanes of PCIe Gen3/4 to the Host
+- Network interfaces: Dual 200GE, Quad 100GE, 50GE, 25GE, 10GE and
+  also a single 1GE management port.
+- Storage/crypto offloads and 144 programmable P4 cores.
+- QSPI and EMMC for SoC storage
+- Two SPI interfaces for peripheral management
+- I2C bus for platform management
+
+This is a respin based on review inputs.  The version of 
+dtschema used is 2022.3.2.  Changes from V3:
+
+0001-dt-bindings-arm-add-Pensando-boards.patch
+- Add description and board compatible
+
+0003-dt-bindings-mmc-Add-Pensando-Elba-SoC-binding.patch
+- Change from elba-emmc to elba-sd4hc to match file convention
+- Use minItems: 1 and maxItems: 2 to pass schema check
+
+0005-dt-bindings-spi-dw-Add-Pensando-Elba-SoC-SPI-Control.patch
+- Add required property pensando,syscon-spics to go with
+  pensando,elba-spi
+
+0006-MAINTAINERS-Add-entry-for-PENSANDO.patch
+- Change Maintained to Supported
+
+0007-arm64-Add-config-for-Pensando-SoC-platforms.patch
+- Fix a typo on interface max speed
+
+0008-spi-cadence-quadspi-Add-compatible-for-Pensando-Elba.patch
+- Update due to spi-cadence-quadspi.c changes
+
+0009-mmc-sdhci-cadence-Add-Pensando-Elba-SoC-support.patch
+- Change from elba-emmc to elba-sd4hc to match file convention
+
+0010-spi-dw-Add-support-for-Pensando-Elba-SoC.patch
+- Use more descriptive dt property pensando,syscon-spics
+- Minor changes from review input
+
+0011-arm64-dts-Add-Pensando-Elba-SoC-support.patch
+- Changed to dual copyright (GPL-2.0+ OR MIT)
+- Minor changes from review input
+
+Brad Larson (11):
+  dt-bindings: arm: add Pensando boards
+  dt-bindings: Add vendor prefix for Pensando Systems
+  dt-bindings: mmc: Add Pensando Elba SoC binding
+  dt-bindings: spi: Add compatible for Pensando Elba SoC
+  dt-bindings: spi: dw: Add Pensando Elba SoC SPI Controller bindings
+  MAINTAINERS: Add entry for PENSANDO
+  arm64: Add config for Pensando SoC platforms
+  spi: cadence-quadspi: Add compatible for Pensando Elba SoC
+  mmc: sdhci-cadence: Add Pensando Elba SoC support
+  spi: dw: Add support for Pensando Elba SoC
+  arm64: dts: Add Pensando Elba SoC support
+
+ .../bindings/arm/pensando,elba.yaml           |  26 +++
+ .../devicetree/bindings/mmc/cdns,sdhci.yaml   |   4 +-
+ .../bindings/spi/cdns,qspi-nor.yaml           |   3 +-
+ .../bindings/spi/snps,dw-apb-ssi.yaml         |  17 ++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |   7 +
+ arch/arm64/Kconfig.platforms                  |  12 ++
+ arch/arm64/boot/dts/Makefile                  |   1 +
+ arch/arm64/boot/dts/pensando/Makefile         |   3 +
+ arch/arm64/boot/dts/pensando/elba-16core.dtsi | 189 ++++++++++++++++++
+ .../boot/dts/pensando/elba-asic-common.dtsi   |  98 +++++++++
+ arch/arm64/boot/dts/pensando/elba-asic.dts    |  28 +++
+ .../boot/dts/pensando/elba-flash-parts.dtsi   | 106 ++++++++++
+ arch/arm64/boot/dts/pensando/elba.dtsi        | 189 ++++++++++++++++++
+ drivers/mmc/host/Kconfig                      |   1 +
+ drivers/mmc/host/sdhci-cadence.c              | 148 ++++++++++++--
+ drivers/spi/spi-cadence-quadspi.c             |  19 ++
+ drivers/spi/spi-dw-mmio.c                     |  85 ++++++++
+ 18 files changed, 922 insertions(+), 16 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/pensando,elba.yaml
+ create mode 100644 arch/arm64/boot/dts/pensando/Makefile
+ create mode 100644 arch/arm64/boot/dts/pensando/elba-16core.dtsi
+ create mode 100644 arch/arm64/boot/dts/pensando/elba-asic-common.dtsi
+ create mode 100644 arch/arm64/boot/dts/pensando/elba-asic.dts
+ create mode 100644 arch/arm64/boot/dts/pensando/elba-flash-parts.dtsi
+ create mode 100644 arch/arm64/boot/dts/pensando/elba.dtsi
+
+-- 
+2.17.1
+
