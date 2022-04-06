@@ -2,88 +2,147 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D994F643D
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Apr 2022 18:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 205714F6440
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Apr 2022 18:07:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236737AbiDFP6e (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 6 Apr 2022 11:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
+        id S236817AbiDFQAS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 6 Apr 2022 12:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237058AbiDFP5h (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Apr 2022 11:57:37 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C4B5A85DD;
-        Wed,  6 Apr 2022 06:22:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4366FCE232F;
-        Wed,  6 Apr 2022 13:22:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B691CC385A1;
-        Wed,  6 Apr 2022 13:22:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649251363;
-        bh=8Tfbq//FlhZWD3Cw0VcZ0rfbLlylOVhmSLZROKwe0ws=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lmBKWZHZuPJb7WAFtjmHzE/A7eR9iNmRM6gDhTJrTFKzuVwpEjo8veG1B++eysUT0
-         FxzMEUHBRHcS/LHAjbeskVhKzc2ELWFr+dJJ9KHx0QET1OYTSjIdvOjEqRMa5mAoz3
-         F1VfdYvybYCJxj+isHL5g1nvQsMKoHkXzAEFCX8twgWd768A4QXygNsqvc0F+8wns2
-         3jXDy5GjyFowV87vx4kSqXnO8fyubYhagNDSgPjA6zTpq2NrWUZWProh/eFMEEgkVy
-         zMyu+JiEtBbBj2zbmizF6G9JexLL7zqB9sXHk6OuYTOM5DkYPbdLFbFz1V8EYR0CNJ
-         CyJw3AOOEPJLA==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: core: add dma_map_dev for __spi_unmap_msg()
-Date:   Wed,  6 Apr 2022 18:52:38 +0530
-Message-Id: <20220406132238.1029249-1-vkoul@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S236567AbiDFP7q (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Apr 2022 11:59:46 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6B525E324;
+        Wed,  6 Apr 2022 06:28:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1649251733; x=1680787733;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Czi26NrfwMoH/x1j5H0r+4QfXvJ3RCxa8l9zjCCm750=;
+  b=PEhPxBL1wxXwuWew6OqpROWADo9iY23YxrjJ5f3bFPyJeRGeHKsvay8i
+   z+cAyuV91pUdBoi+hkjfnyPLO8Kieq+71Tlk7P6RM+IhfJEv6EVHK9j0o
+   BqRTcFq8gJE/sdsXCHkwYRc3BIbn+Dz70PBw/o8sD0ag7tB2CFO4yJf1l
+   AiaeRDwV+kzece0hzbQs6WYZsMghDan5xRm8KZcoQ7j+fcddBK9n+nszE
+   X8UUjy6juSYHWtcJMwVIO1cClGLfvOP4ik10QT6mo9ZW7+WUnmje5sHiT
+   yE+M3XZD0RITtMv+H/w7CodCk7kuyGg/rUatPWK20ENqxT7VMNpMwBRnK
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,239,1643670000"; 
+   d="scan'208";a="23132845"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 06 Apr 2022 15:28:51 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 06 Apr 2022 15:28:51 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 06 Apr 2022 15:28:51 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1649251731; x=1680787731;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Czi26NrfwMoH/x1j5H0r+4QfXvJ3RCxa8l9zjCCm750=;
+  b=duaJpFpIUmkCqo80X4zugsdBh+HlqbekiXO9a8eDBymJgQfvo+fcTeyE
+   pgORznI20if+Nn63Af9yNITceu5sCa1uLeLYR0B2HA+w7erjGc4x5JR7j
+   2CZUxBjn0v5ftkdlssGbx2MAaU0ZcglTMJtxhPHxoYAtTtJ844JmUet7g
+   mpXtsFMaRBIUQvYdnhPabiKGggiGVPPzy1IQpkEkDexq4vTXa4lzTK+8M
+   abxeYZ3v75iOWWQO65yjxpCR0s3aa4srXQxJbsKtU/en+427sOkcNUVOa
+   4HfaBVUYJ+Jm+8+Ps2bHeqFaFkDLuRiYvJWhwg4Fn73J+OkAj3yJ84NWV
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,239,1643670000"; 
+   d="scan'208";a="23132844"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 06 Apr 2022 15:28:51 +0200
+Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.49.14])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 30966280065;
+        Wed,  6 Apr 2022 15:28:51 +0200 (CEST)
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Mark Brown <broonie@kernel.org>, Pratyush Yadav <p.yadav@ti.com>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Ramuthevar Vadivel Murugan 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Subject: [PATCH v2] spi: cadence-quadspi: fix incorrect supports_op() return value
+Date:   Wed,  6 Apr 2022 15:28:32 +0200
+Message-Id: <20220406132832.199777-1-matthias.schiffer@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Commit b470e10eb43f ("spi: core: add dma_map_dev for dma device") added
-dma_map_dev for _spi_map_msg() but missed to add for unmap routine,
-__spi_unmap_msg(), so add it now.
+Since the conversion to spi-mem, the driver advertised support for
+various operations that cqspi_set_protocol() was never expected to handle
+correctly - in particuar all non-DTR operations with command or address
+buswidth > 1. For DTR, all operations except for 8-8-8 would fail, as
+cqspi_set_protocol() returns -EINVAL.
 
-Fixes: b470e10eb43f ("spi: core: add dma_map_dev for dma device")
-Cc: stable@vger.kernel.org # v5.14+
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+In non-DTR mode, this resulted in data corruption for SPI-NOR flashes that
+support such operations. As a minimal fix that can be backported to stable
+kernels, simply disallow the unsupported operations again to avoid this
+issue.
+
+Fixes: a314f6367787 ("mtd: spi-nor: Convert cadence-quadspi to use spi-mem framework")
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 ---
- drivers/spi/spi.c | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index c4dd1200fe99..32443ae175fd 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1130,11 +1130,15 @@ static int __spi_unmap_msg(struct spi_controller *ctlr, struct spi_message *msg)
+As discussed, here's the minimal fix to disallow the accidentally enabled
+1-X-X and X-X-X operations again. As a bonus, I also added proper handling
+for non-8-8-8 DTR ops to cqspi_supports_mem_op() to avoid -EINVAL in
+cqspi_set_protocol() for these ops.
+
+The patch is based on spi for-5.18 now. It will unfortunately not
+cherry-pick cleanly to 5.10 and 5.15, but I can take care of submitting a
+backport patch once this is in Linus's tree.
+
+I also have patches for 5.19/next that add proper support for 1-X-X and
+X-X-X (without DTR for now, as I haven't tested DTR), which remove most
+of the code of cqspi_set_protocol(). I will submit the follow-up patches
+once this fix patch is accepted.
+
+
+ drivers/spi/spi-cadence-quadspi.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index b0c9f62ccefb..c898321d4e94 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -1437,9 +1437,24 @@ static bool cqspi_supports_mem_op(struct spi_mem *mem,
+ 	all_false = !op->cmd.dtr && !op->addr.dtr && !op->dummy.dtr &&
+ 		    !op->data.dtr;
  
- 	if (ctlr->dma_tx)
- 		tx_dev = ctlr->dma_tx->device->dev;
-+	else if (ctlr->dma_map_dev)
-+		tx_dev = ctlr->dma_map_dev;
- 	else
- 		tx_dev = ctlr->dev.parent;
+-	/* Mixed DTR modes not supported. */
+-	if (!(all_true || all_false))
++	if (all_true) {
++		/* Right now we only support 8-8-8 DTR mode. */
++		if (op->cmd.nbytes && op->cmd.buswidth != 8)
++			return false;
++		if (op->addr.nbytes && op->addr.buswidth != 8)
++			return false;
++		if (op->data.nbytes && op->data.buswidth != 8)
++			return false;
++	} else if (all_false) {
++		/* Only 1-1-X ops are supported without DTR */
++		if (op->cmd.nbytes && op->cmd.buswidth > 1)
++			return false;
++		if (op->addr.nbytes && op->addr.buswidth > 1)
++			return false;
++	} else {
++		/* Mixed DTR modes are not supported. */
+ 		return false;
++	}
  
- 	if (ctlr->dma_rx)
- 		rx_dev = ctlr->dma_rx->device->dev;
-+	else if (ctlr->dma_map_dev)
-+		rx_dev = ctlr->dma_map_dev;
- 	else
- 		rx_dev = ctlr->dev.parent;
- 
+ 	return spi_mem_default_supports_op(mem, op);
+ }
 -- 
-2.34.1
+2.25.1
 
