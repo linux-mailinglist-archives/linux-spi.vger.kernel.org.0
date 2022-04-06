@@ -2,120 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8904F5F98
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Apr 2022 15:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 046E34F6149
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Apr 2022 16:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232477AbiDFNVo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 6 Apr 2022 09:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
+        id S234346AbiDFOLM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 6 Apr 2022 10:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232046AbiDFNVS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Apr 2022 09:21:18 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC80440681;
-        Wed,  6 Apr 2022 03:05:04 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 81D921F43907
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649239457;
-        bh=XUxXaare05hfWrZ9x/t+yRjVsjX8d4GEmSTC5zA1iFw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L2muotn5s9Yp9A9I2KoCPXK9oM1ZQs4U/ilbTjYmHFiPb08VTpMMYuBGP/z8HtSii
-         VZ52j4N8BKPRa5pTyeFokGbo5QYKuS7tluGgM1kSR7eLuK5ujIIbcMHNIcLB+K6pIY
-         mqC2ro5QSywgX7c0J/lL7vDb2Omb99NvKhkoGYtjezN5l85n8VmMc7/tTm8dQKERSt
-         UFQuGo7hYSEP5TMJ5dZj7OucuyJFcHjrBBDJDCJ8dXJDeQYFVJ13XnNQUtrW08rZ43
-         5UIeeCNUSoKEZoj6CUbyf19DBBTge2poGfmS4SmCDRli+rcQDZYVdcAnv1Dwiu6Beo
-         6FffnJMr+4cHg==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     broonie@kernel.org
-Cc:     matthias.bgg@gmail.com, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        nfraprado@collabora.com, kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 4/7] spi: mt65xx: Move pm_runtime_enable() call to remove all gotos
-Date:   Wed,  6 Apr 2022 12:04:06 +0200
-Message-Id: <20220406100409.93113-5-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220406100409.93113-1-angelogioacchino.delregno@collabora.com>
-References: <20220406100409.93113-1-angelogioacchino.delregno@collabora.com>
+        with ESMTP id S234557AbiDFOLC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 6 Apr 2022 10:11:02 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CC410FAF7;
+        Wed,  6 Apr 2022 03:05:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1649239549; x=1680775549;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UzpLkLsQSybYrDctDJM7hazMV+345ZJBUluwhHnkHow=;
+  b=zV7ZUNi0+RKZ+oCQB4whtuJTcbI6/vCjFes8qlF2BG7eWjbV5IOkP3MS
+   XqUg7ZzCIKqGQN91shMqA9PGfV8kBAqgjg96OPIaHpInqx8/FYm6FKRwP
+   taIopUY0tQffylehSitNVsyzIk0TjHFhMy5nEA9WsJhKeb337ngOPxYvw
+   e9qwq4ZzpiXvGTggpazLZ8QGTx8BDXP2v0ys1RrDDaNpi1pZn8YptOny3
+   qgEhRzrhfzKaCC20oyDT2bClg5vUP0MhkQKXLG/AljQHcuWn+lSjA2k0L
+   WMIghSev/ylqVlomf3HAWNO3qrL0dWyGIVhqOSzll6zYjItoiPzWeFiui
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,239,1643698800"; 
+   d="scan'208";a="91453048"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Apr 2022 03:03:45 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 6 Apr 2022 03:03:44 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 6 Apr 2022 03:03:42 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <broonie@kernel.org>
+CC:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <claudiu.beznea@microchip.com>, <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Tudor Ambarus" <tudor.ambarus@microchip.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH 1/2] spi: atmel-quadspi.c: Fix the buswidth adjustment between spi-mem and controller
+Date:   Wed, 6 Apr 2022 13:03:39 +0300
+Message-ID: <20220406100340.224975-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The last goto in the probe function can be removed by calling
-pm_runtime_enable() right before devm_spi_register_master(), as
-only some init checks were being performed after enabling pm.
-This is a cleanup and brings no functional changes.
+Use the spi_mem_default_supports_op() core helper in order to take into
+account the buswidth specified by the user in device tree.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: <stable@vger.kernel.org>
+Fixes: 0e6aae08e9ae ("spi: Add QuadSPI driver for Atmel SAMA5D2")
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
 ---
- drivers/spi/spi-mt65xx.c | 18 ++++++------------
- 1 file changed, 6 insertions(+), 12 deletions(-)
+ drivers/spi/atmel-quadspi.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-index 7f381d84a005..b8ec04795141 100644
---- a/drivers/spi/spi-mt65xx.c
-+++ b/drivers/spi/spi-mt65xx.c
-@@ -906,22 +906,18 @@ static int mtk_spi_probe(struct platform_device *pdev)
- 	else
- 		clk_disable_unprepare(mdata->spi_clk);
- 
--	pm_runtime_enable(dev);
--
- 	if (mdata->dev_comp->need_pad_sel) {
- 		if (mdata->pad_num != master->num_chipselect) {
- 			dev_err(dev,
- 				"pad_num does not match num_chipselect(%d != %d)\n",
- 				mdata->pad_num, master->num_chipselect);
--			ret = -EINVAL;
--			goto err_disable_runtime_pm;
-+			return -EINVAL;
- 		}
- 
- 		if (!master->cs_gpiods && master->num_chipselect > 1) {
- 			dev_err(dev,
- 				"cs_gpios not specified and num_chipselect > 1\n");
--			ret = -EINVAL;
--			goto err_disable_runtime_pm;
-+			return -EINVAL;
- 		}
- 	}
- 
-@@ -934,18 +930,16 @@ static int mtk_spi_probe(struct platform_device *pdev)
- 		dev_notice(dev, "SPI dma_set_mask(%d) failed, ret:%d\n",
- 			   addr_bits, ret);
- 
-+	pm_runtime_enable(dev);
+diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
+index 92d9610df1fd..938017a60c8e 100644
+--- a/drivers/spi/atmel-quadspi.c
++++ b/drivers/spi/atmel-quadspi.c
+@@ -277,6 +277,9 @@ static int atmel_qspi_find_mode(const struct spi_mem_op *op)
+ static bool atmel_qspi_supports_op(struct spi_mem *mem,
+ 				   const struct spi_mem_op *op)
+ {
++	if (!spi_mem_default_supports_op(mem, op))
++		return false;
 +
- 	ret = devm_spi_register_master(dev, master);
- 	if (ret) {
-+		pm_runtime_disable(dev);
- 		dev_err(dev, "failed to register master (%d)\n", ret);
--		goto err_disable_runtime_pm;
-+		return ret;
- 	}
+ 	if (atmel_qspi_find_mode(op) < 0)
+ 		return false;
  
- 	return 0;
--
--err_disable_runtime_pm:
--	pm_runtime_disable(dev);
--
--	return ret;
- }
- 
- static int mtk_spi_remove(struct platform_device *pdev)
 -- 
-2.35.1
+2.25.1
 
