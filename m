@@ -2,96 +2,172 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6F74F87A1
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Apr 2022 21:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51CBF4F87AA
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Apr 2022 21:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232841AbiDGTFJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Apr 2022 15:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S232263AbiDGTI0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Apr 2022 15:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiDGTFH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 15:05:07 -0400
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E55722F3E5;
-        Thu,  7 Apr 2022 12:03:05 -0700 (PDT)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so7376791fac.7;
-        Thu, 07 Apr 2022 12:03:05 -0700 (PDT)
+        with ESMTP id S232779AbiDGTIY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 15:08:24 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EEB1B9326
+        for <linux-spi@vger.kernel.org>; Thu,  7 Apr 2022 12:06:23 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id c42so7536954edf.3
+        for <linux-spi@vger.kernel.org>; Thu, 07 Apr 2022 12:06:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gOv/51dHbvSvAxLzxG0YE6pJrgjLizkZFj88kA5U1Ts=;
+        b=O9N5piyZ8ghdKuId5L9aiMvkNuf62owbuCE+bZDTC6+xdnskK2aUwjkRUGOHdchCvA
+         /J+QuQpbFJM/EfFm8RsWGeBGnPnBdya6DSH3nBGlfOGxOQfphaxLgDC+zzgMMt+VmjXu
+         OSMZhW68bPY1HCTsk1/kZgPdo6KTzbrFSetJ89hvIb1T7A9C/NsRlGJk36F6rGcSxWLF
+         js+BATsURtMBOD9XP5WBgZ8B9ahlWlXnGEpQSISIIdLvqgDDKE4wkVtb80Yln+Nyneo5
+         sOOhyqrnY0o9IB8O7pFrrQJI/FsA2bBNe7fN2rsX34K5jkhc7gGS5VTCFiWFKPd1F1JU
+         lubQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NQ6NbUsNxmOVH45bPoaIurWw7GEZCEr+aG9zT4r8iZk=;
-        b=GuoRTcHc9BrU1WYY4ew0sprG/1ibx9HAkoZBtsk2EU4K2wdeBUapN8cLb0MJQ7le78
-         mjQjyVpVZ3HIt1uUPCAgZqXKXlW3MNllYpoJdi/ukqjpfGTscXalTxycvucAHG+3VBoZ
-         xxfLn6uoB4IArcowu32vYvSt1Kly0TfJqbsMjRZy16Tk7KC3lIQlFdSyWpk7CtEKMvTo
-         PvEtPJPRB9LNEdmrJo9e5N8Ixko4JH0nQg0FdwydYXO5gKiPEUHAHbZzlnCXZcnTUdFP
-         2rAaoLOXyubMGgwGs6eacdencKwbAd54BpkCKwmJ30psMpbnrZpfZJItxvnzvQ50nr3I
-         Eqzg==
-X-Gm-Message-State: AOAM533Cf3w/zo0h0dIA4MKsEkN575MSVw+pkmm/wCRrEMk1CztQ6A4P
-        COy7RkE9jkJKPjk8eXJJbM05NxX0Pw==
-X-Google-Smtp-Source: ABdhPJwjcQsN14WCT4vuJ2Ixk7iwlioV4sNsxqAdHX8vMZZKKLCQdUfhAOOFojZ3iNXQynPHiVIlJg==
-X-Received: by 2002:a05:6870:e9a7:b0:de:e59a:7376 with SMTP id r39-20020a056870e9a700b000dee59a7376mr7688592oao.194.1649358184393;
-        Thu, 07 Apr 2022 12:03:04 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r25-20020a4aea99000000b0032447305d70sm7598890ooh.23.2022.04.07.12.03.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 12:03:03 -0700 (PDT)
-Received: (nullmailer pid 1789446 invoked by uid 1000);
-        Thu, 07 Apr 2022 19:03:03 -0000
-Date:   Thu, 7 Apr 2022 14:03:03 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: align SPI NOR node name with dtschema
-Message-ID: <Yk81Z5G+2B9arV9a@robh.at.kernel.org>
-References: <20220407143405.295907-1-krzysztof.kozlowski@linaro.org>
- <Yk8AJcFRmYEryqra@sirena.org.uk>
- <67f75e49-e0c1-463f-da39-4a2efe7cce3c@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gOv/51dHbvSvAxLzxG0YE6pJrgjLizkZFj88kA5U1Ts=;
+        b=nnAt1Gp6UIWg+W9wV+TVVVeT5ORJUf8rx1xAv5KrzKC3zEiyoCJSHf8tJn6t0IkgP4
+         d/mplb2EDhpmm63Bzgendj8+ElvbUZGOxtRvZqGLa3QNTDy+SKcckBcafYfKy9APPvxJ
+         uSLva2WHioxEEamD175pexOYFU2DH08VwPHQ7pNHF4k1drJMFF6IJ5JTjFkMGTqOC3w+
+         lT6swHpRzhvwU/4PgyTsS5ToFbKSDx8lBWqlKOl4ydZMwnvTMusTdrS+Yzbhy7pLS/Ig
+         4MNOLc7pAaNYwklyb12lBLc7Bp1nlSU28oiWHKJPfJJ8oeXu9l60HLXsIzLWrDzf0QKU
+         thig==
+X-Gm-Message-State: AOAM530LgIhNqUwYDhRFLN741eAcC1anG6QycPmQ6hplmJUO1zwkpfLS
+        1+yKT/dWRVY0fQIeJzvFfxDscQ==
+X-Google-Smtp-Source: ABdhPJyhh/Yt+dDqYCjKan4H/N0nxJOJereGCAdjBh0lD6wnLfFa+OHp2IVxiD8+UeuiyRjWGDtvFA==
+X-Received: by 2002:a50:e79b:0:b0:41c:dd2c:3e19 with SMTP id b27-20020a50e79b000000b0041cdd2c3e19mr15774315edn.291.1649358382461;
+        Thu, 07 Apr 2022 12:06:22 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id q15-20020a1709060e4f00b006cdf4535cf2sm7890988eji.67.2022.04.07.12.06.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 12:06:21 -0700 (PDT)
+Message-ID: <eed2f337-3d5a-3440-d19e-c5ff032409ab@linaro.org>
+Date:   Thu, 7 Apr 2022 21:06:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <67f75e49-e0c1-463f-da39-4a2efe7cce3c@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 11/11] arm64: dts: Add Pensando Elba SoC support
+Content-Language: en-US
+To:     Brad Larson <brad@pensando.io>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        broonie@kernel.org, fancer.lancer@gmail.com,
+        adrian.hunter@intel.com, ulf.hansson@linaro.org, olof@lixom.net,
+        dac2@pensando.io, linux-gpio@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220406233648.21644-1-brad@pensando.io>
+ <20220406233648.21644-12-brad@pensando.io>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220406233648.21644-12-brad@pensando.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 05:23:40PM +0200, Krzysztof Kozlowski wrote:
-> On 07/04/2022 17:15, Mark Brown wrote:
-> > On Thu, Apr 07, 2022 at 04:34:05PM +0200, Krzysztof Kozlowski wrote:
-> >> The node names should be generic and SPI NOR dtschema expects "flash".
-> >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >> ---
-> >>  Documentation/devicetree/bindings/mtd/hisilicon,fmc-spi-nor.txt | 2 +-
-> >>  Documentation/devicetree/bindings/spi/spi-davinci.txt           | 2 +-
-> >>  Documentation/devicetree/bindings/spi/spi-pl022.yaml            | 2 +-
-> > 
-> > Acked-by: Mark Brown <broonie@kernel.org>
-> > 
-> > but it would be easier to split this into per subsystem stuff.
+On 07/04/2022 01:36, Brad Larson wrote:
+> Add Pensando common and Elba SoC specific device nodes
 > 
-> With DTS changes I had 22 patches, so splitting is a trade-off. If
-> that's preferred (actually can reduce conflicts), I'll split it and send
-> a v2.
+> Signed-off-by: Brad Larson <brad@pensando.io>
+> ---
+> Change from V3:
+> - Changed to dual copyright (GPL-2.0+ OR MIT)
+> - Minor changes from review input
 
-I've applied it.
+Thank you for your patch. There is something to discuss/improve.
 
-Really, I would have just fixed spi-pl022.yaml. In general, I'm not that 
-interested in taking fixes on the .txt bindings.
+(...)
 
-Rob
+> +&i2c0 {
+> +	clock-frequency = <100000>;
+> +	status = "okay";
+> +	rtc@51 {
+> +		compatible = "nxp,pcf85263";
+> +		reg = <0x51>;
+> +	};
+> +};
+> +
+> +&spi0 {
+> +	num-cs = <4>;
+> +	cs-gpios = <0>, <0>, <&porta 1 GPIO_ACTIVE_LOW>,
+> +		   <&porta 7 GPIO_ACTIVE_LOW>;
+> +	status = "okay";
+> +	spi0_cs0@0 {
+
+Generic node name needed matching the class of a devicxe.
+
+> +		compatible = "semtech,sx1301";	/* Enable spidev */
+
+This comment is a bit odd... did you just use random compatible from
+spidev instead of defining proper compatible?
+
+
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+
+Why address/size cells?
+
+> +		spi-max-frequency = <12000000>;
+> +		reg = <0>;
+
+Please put reg just after compatible. It's the most common pattern.
+
+> +	};
+> +
+> +	spi0_cs1@1 {
+> +		compatible = "semtech,sx1301";
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		spi-max-frequency = <12000000>;
+> +		reg = <1>;
+> +	};
+> +
+
+(...)
+
+> +
+> +		emmc: mmc@30440000 {
+> +			compatible = "pensando,elba-sd4hc", "cdns,sd4hc";
+> +			clocks = <&emmc_clk>;
+> +			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
+> +			reg = <0x0 0x30440000 0x0 0x10000>,
+> +			      <0x0 0x30480044 0x0 0x4>;	/* byte-lane ctrl */
+> +			cdns,phy-input-delay-sd-highspeed = <0x4>;
+> +			cdns,phy-input-delay-legacy = <0x4>;
+> +			cdns,phy-input-delay-sd-uhs-sdr50 = <0x6>;
+> +			cdns,phy-input-delay-sd-uhs-ddr50 = <0x16>;
+> +			mmc-ddr-1_8v;
+> +			status = "disabled";
+> +		};
+> +
+> +		mssoc: mssoc@307c0000 {
+
+Generic node name.
+
+> +			compatible = "syscon", "simple-mfd";
+
+This does not look correct. Syscon is okay, but why do you need
+simple-mfd (there are no children here)?
+
+> +			reg = <0x0 0x307c0000 0x0 0x3000>;
+> +		};
+> +	};
+> +};
+
+
+Best regards,
+Krzysztof
