@@ -2,114 +2,96 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C92184F8793
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Apr 2022 20:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6F74F87A1
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Apr 2022 21:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347076AbiDGTB2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Apr 2022 15:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59690 "EHLO
+        id S232841AbiDGTFJ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Apr 2022 15:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243246AbiDGTB1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 15:01:27 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC42322C6F1
-        for <linux-spi@vger.kernel.org>; Thu,  7 Apr 2022 11:59:25 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id l26so12843642ejx.1
-        for <linux-spi@vger.kernel.org>; Thu, 07 Apr 2022 11:59:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=sTr0gBmLvMOTcBTMuv173ZMChpC1v8ipaGPwhgHz+JQ=;
-        b=oWGYd1JLkOJ9QEVCWJKDcZP9ehCv+WtvoGnx7u5pd/2u9PIan5YFtZkJ4CXdAVzhFz
-         04fuvoyhVzm1l41hIxYib/5yZ8DxwQzfpJ1CV4Csuz4ea2HNE2esYYy8N4JoHogSBXrL
-         3wOnnUlq/pX7PtlrEXpfqCIqffp/SZpWAStOTaZTjpNou92lGilXPkQfknoPijg3fZ1u
-         m8SuFxCjPVvDqVrUJdGoo2MRwwhpjmzzUU6Jd+W+DycWXVKEHFrvBEwULOPhOW/YQlpE
-         H4u9zKFKcwRqLDIzxIIfUlhAptwVgO6fXrJRfqR7VZfnd7kx3OS0mc/g/LciTKSZ8xin
-         x16g==
+        with ESMTP id S229736AbiDGTFH (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 15:05:07 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E55722F3E5;
+        Thu,  7 Apr 2022 12:03:05 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so7376791fac.7;
+        Thu, 07 Apr 2022 12:03:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=sTr0gBmLvMOTcBTMuv173ZMChpC1v8ipaGPwhgHz+JQ=;
-        b=DodY+OeIe4fZAz+VwzUXbIT9w3b12odQl9U9gqmB4K8tw3xdag9xH0Ocahn9suAqUj
-         HbqTHW4G0LzVmauK9i1KlvAEEzKrtVlmoZhlwIZEnEeYIIpyI6PnYKH1NUVaYopNVnLE
-         6xRbURJs09Yer/AbNb7fg5DE7pyQRagA+AsGSVV53lC7TpQy6iV/+nO2o+n2NEQqhFyW
-         he+1+G7wJjA85jMB5CK/rTkixLk1YcI2oVp2fnpxMKIObca0E1P8smryFzyP+yCvJu6p
-         iNZexpoU9kHmjOfSxduO5jx72AOsGSerq4uKn0d61KAItondxIIgm1JdjGSq9dw+0mnX
-         PkBQ==
-X-Gm-Message-State: AOAM530RAXrFvkN1/5utDpBK5TfxcXOxWWldf//ruJnjjRAa/KNYyR2W
-        s/Ck3Cv8ZJ+EfclQ8myRMghRRg==
-X-Google-Smtp-Source: ABdhPJwhTbizX6MeC2DcKhsowU47cwwjFzCXCG/Vhy17jPGD4JK/qkPHNjvEBuou3RE3FYrN2qj2Pw==
-X-Received: by 2002:a17:907:3e1d:b0:6d7:1031:7e0 with SMTP id hp29-20020a1709073e1d00b006d7103107e0mr14393976ejc.580.1649357964303;
-        Thu, 07 Apr 2022 11:59:24 -0700 (PDT)
-Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id gt17-20020a170906f21100b006e6f9ab4830sm6169002ejb.186.2022.04.07.11.59.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 11:59:23 -0700 (PDT)
-Message-ID: <7363c5bb-89ed-b6aa-b346-f314a058f2a7@linaro.org>
-Date:   Thu, 7 Apr 2022 20:59:22 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 04/11] dt-bindings: spi: Add compatible for Pensando Elba
- SoC
-Content-Language: en-US
-To:     Brad Larson <brad@pensando.io>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NQ6NbUsNxmOVH45bPoaIurWw7GEZCEr+aG9zT4r8iZk=;
+        b=GuoRTcHc9BrU1WYY4ew0sprG/1ibx9HAkoZBtsk2EU4K2wdeBUapN8cLb0MJQ7le78
+         mjQjyVpVZ3HIt1uUPCAgZqXKXlW3MNllYpoJdi/ukqjpfGTscXalTxycvucAHG+3VBoZ
+         xxfLn6uoB4IArcowu32vYvSt1Kly0TfJqbsMjRZy16Tk7KC3lIQlFdSyWpk7CtEKMvTo
+         PvEtPJPRB9LNEdmrJo9e5N8Ixko4JH0nQg0FdwydYXO5gKiPEUHAHbZzlnCXZcnTUdFP
+         2rAaoLOXyubMGgwGs6eacdencKwbAd54BpkCKwmJ30psMpbnrZpfZJItxvnzvQ50nr3I
+         Eqzg==
+X-Gm-Message-State: AOAM533Cf3w/zo0h0dIA4MKsEkN575MSVw+pkmm/wCRrEMk1CztQ6A4P
+        COy7RkE9jkJKPjk8eXJJbM05NxX0Pw==
+X-Google-Smtp-Source: ABdhPJwjcQsN14WCT4vuJ2Ixk7iwlioV4sNsxqAdHX8vMZZKKLCQdUfhAOOFojZ3iNXQynPHiVIlJg==
+X-Received: by 2002:a05:6870:e9a7:b0:de:e59a:7376 with SMTP id r39-20020a056870e9a700b000dee59a7376mr7688592oao.194.1649358184393;
+        Thu, 07 Apr 2022 12:03:04 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r25-20020a4aea99000000b0032447305d70sm7598890ooh.23.2022.04.07.12.03.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 12:03:03 -0700 (PDT)
+Received: (nullmailer pid 1789446 invoked by uid 1000);
+        Thu, 07 Apr 2022 19:03:03 -0000
+Date:   Thu, 7 Apr 2022 14:03:03 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Cc:     arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        broonie@kernel.org, fancer.lancer@gmail.com,
-        adrian.hunter@intel.com, ulf.hansson@linaro.org, olof@lixom.net,
-        dac2@pensando.io, linux-gpio@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220406233648.21644-1-brad@pensando.io>
- <20220406233648.21644-5-brad@pensando.io>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220406233648.21644-5-brad@pensando.io>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] dt-bindings: align SPI NOR node name with dtschema
+Message-ID: <Yk81Z5G+2B9arV9a@robh.at.kernel.org>
+References: <20220407143405.295907-1-krzysztof.kozlowski@linaro.org>
+ <Yk8AJcFRmYEryqra@sirena.org.uk>
+ <67f75e49-e0c1-463f-da39-4a2efe7cce3c@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <67f75e49-e0c1-463f-da39-4a2efe7cce3c@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 07/04/2022 01:36, Brad Larson wrote:
-> Document the cadence qspi controller compatible for Pensando Elba SoC
-> boards.  The Elba qspi fifo size is 1024.
+On Thu, Apr 07, 2022 at 05:23:40PM +0200, Krzysztof Kozlowski wrote:
+> On 07/04/2022 17:15, Mark Brown wrote:
+> > On Thu, Apr 07, 2022 at 04:34:05PM +0200, Krzysztof Kozlowski wrote:
+> >> The node names should be generic and SPI NOR dtschema expects "flash".
+> >>
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >> ---
+> >>  Documentation/devicetree/bindings/mtd/hisilicon,fmc-spi-nor.txt | 2 +-
+> >>  Documentation/devicetree/bindings/spi/spi-davinci.txt           | 2 +-
+> >>  Documentation/devicetree/bindings/spi/spi-pl022.yaml            | 2 +-
+> > 
+> > Acked-by: Mark Brown <broonie@kernel.org>
+> > 
+> > but it would be easier to split this into per subsystem stuff.
 > 
-> Signed-off-by: Brad Larson <brad@pensando.io>
-> ---
->  Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> index 0a537fa3a641..bc298e413842 100644
-> --- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> +++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> @@ -30,6 +30,7 @@ properties:
->                - intel,lgm-qspi
->                - xlnx,versal-ospi-1.0
->                - intel,socfpga-qspi
-> +              - pensando,elba-qspi
->            - const: cdns,qspi-nor
->        - const: cdns,qspi-nor
->  
-> @@ -48,7 +49,7 @@ properties:
->      description:
->        Size of the data FIFO in words.
->      $ref: "/schemas/types.yaml#/definitions/uint32"
-> -    enum: [ 128, 256 ]
-> +    enum: [ 128, 256, 1024 ]
+> With DTS changes I had 22 patches, so splitting is a trade-off. If
+> that's preferred (actually can reduce conflicts), I'll split it and send
+> a v2.
 
-Is 1024 valid for other controllers? If not, then probably this should
-be further constraint in allOf:if:then...
+I've applied it.
 
-Best regards,
-Krzysztof
+Really, I would have just fixed spi-pl022.yaml. In general, I'm not that 
+interested in taking fixes on the .txt bindings.
+
+Rob
