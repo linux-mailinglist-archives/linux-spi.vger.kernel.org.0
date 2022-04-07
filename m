@@ -2,86 +2,73 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8634F82AF
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Apr 2022 17:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6B24F82C5
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Apr 2022 17:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344564AbiDGPXZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Apr 2022 11:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
+        id S1344583AbiDGPZq (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Apr 2022 11:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344553AbiDGPXY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 11:23:24 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD9F1FC9C8
-        for <linux-spi@vger.kernel.org>; Thu,  7 Apr 2022 08:21:23 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id w18so6767803edi.13
-        for <linux-spi@vger.kernel.org>; Thu, 07 Apr 2022 08:21:23 -0700 (PDT)
+        with ESMTP id S1344610AbiDGPZo (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 11:25:44 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2440E217384
+        for <linux-spi@vger.kernel.org>; Thu,  7 Apr 2022 08:23:42 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id f18so6828529edc.5
+        for <linux-spi@vger.kernel.org>; Thu, 07 Apr 2022 08:23:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WrflAjleUvotKO6ONszyHWgkRAJT1uadUqHg4VfzFzw=;
-        b=ToNWt1yjm4njDg28WkBmwydHhMb541dvaQNQm/KL/cpKnfBRg6JWbY/rX8tn9HeDVZ
-         JQi/QRYWOH7cb7EF8CrtWZS7j2bg6kYik82SJqZa4gRnATt4ag7QdG0o+5AwrRmvwDaQ
-         e9Kowb7F+hf8ve+dE2EQHxPvEoCLy40ZEnun26C4ZXBXAEQUK95H8DB/xWu7cHbFNNH0
-         D03DbnfwyQ/vDQ31m1ijbaJaqYZrIAvJrJse+ITTxqO2P4aTk9Yl0GfSJUgebiCHV0fq
-         NHuWYj6CiLEyQOc7ST62qk5HmqdceF9ExmnZDK9OASV30dfkoRaoK7R0yFS5X4E8mhZT
-         lVYQ==
+        bh=SRJLkMyHvzi95y55Vn5Iq6WvE2FMbtq9vylE1+a7zq4=;
+        b=FUhf0Yz9rc3d4pIj7ttd/N6bOFguOSqX0iP2Dj3sEZHZM8bY7Vn/J9Am/GtNHIdv0p
+         HOormLf5sdc/+pw28UHba8FOquWhPSDcoiOENy6xWdRqk2D6gcr/x3DaRN3cKLcIUTEp
+         qL5OA2o3TQHIlbMjx7Saqa4+WRlko39bz8RoIyrGVwtqKFrviQnw5pB8K7q1Ph+QeaDO
+         zR1A8m/jTaYCG4NGdMyRmjnUFFGwyM+tBsjYeb7UfWRMKCZ0UhZ1Vzey86C48XeECYK2
+         yNxMK03PJ9b9GguOpi4FtgXwrAsmMDpxpY+GkL4WiQBuYRuASHbQrsWzR2mes0EJ8fbY
+         ywqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=WrflAjleUvotKO6ONszyHWgkRAJT1uadUqHg4VfzFzw=;
-        b=PYOwFUWlafs+X7qA0XYm5VZM1ttEdAfpht0RPumzbh0Mt+9PopsCT0e0Hz/c6mmIfJ
-         OC2x4Aor8UZ3uLQyDdUp1TK93e+BE/hkektHVamaLD7GnuMggHwQBayqEqXXVjTGUGiS
-         GBq6pVP8yHBlxtBk3648FVrXxoiL2FJ4eI5VdjqS8I/++yDE9UY/jbpuS+CvrAel2X2W
-         8qpdNNGreOgnH+gQE6gu4xiVBnZeQJPGAyX715MmUeXrz6QJcLR8glJee197GkOi5LkC
-         Woz04QgMBnJZLEoUn6jRTIpO1XPRZKmAX3CJLSN5fDqDlysVsJh5Jh9qTRf2+DyZKUBT
-         j1qw==
-X-Gm-Message-State: AOAM5302fC6Vfw23kSGQ4dpT5nr/mqA2b9x11HHHuMcp1GPFyFRr4c2R
-        jHf70ShVQ/X/T4WIB9b4Ajq2Nw==
-X-Google-Smtp-Source: ABdhPJzJ72Zd0fdqGMuGZTMhO7l74vyKe6JXeXWfSy5lBxiAwbOFxqPN9om6goQRd5yHHkKcX8M22g==
-X-Received: by 2002:aa7:d682:0:b0:419:3b78:e489 with SMTP id d2-20020aa7d682000000b004193b78e489mr14947186edr.372.1649344882144;
-        Thu, 07 Apr 2022 08:21:22 -0700 (PDT)
+        bh=SRJLkMyHvzi95y55Vn5Iq6WvE2FMbtq9vylE1+a7zq4=;
+        b=RjpZrq1YuqZsPoXkKe1liVUx620BYY+Lmx4PX/bQ6ItR/MO3yfG3pzyrUduOXo7y1Z
+         9jvNRefICfVVWqUYOnS9q7/gK8MKCcTK8KaidjbMMKVb+wpNM0bUWEOpxzSFnBY6yHBS
+         he/5jJmH2pi5rTFqWI56TP0VG1j4ALAUacCU8OPMUqy6rJgEBEwl/oxiIe1ZoacIOO9p
+         iEQBLeTzCAW2UWghR3Wm3Xxicrum6qyfA37wddhJQNh+KCDAd5/rLHPqbeDLEBdECsYN
+         iSx5VYaIDDVGt8UZIIQwaOpuFVaUvg95FOLfELapJYHOgazjN12HyyPnGNiHNPxgc6o7
+         FI9Q==
+X-Gm-Message-State: AOAM530Qhrwe4Jxo/Y5EhqKNjl1oaLb7jipuP4DuvBwiRJnuMrDcu28n
+        t28dHLF3XDbYc09RgJ9QXUNhmw==
+X-Google-Smtp-Source: ABdhPJxpe8sU19S4ZyP0NmK+CtJZABE3mnsomrt0BfI1Ai2vqC4WVJcaC76McVCKILcMcHQzBik/0g==
+X-Received: by 2002:a05:6402:207a:b0:41d:80c:45 with SMTP id bd26-20020a056402207a00b0041d080c0045mr3671422edb.248.1649345021527;
+        Thu, 07 Apr 2022 08:23:41 -0700 (PDT)
 Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id ka6-20020a170907990600b006ce54c95e3csm7740203ejc.161.2022.04.07.08.21.20
+        by smtp.gmail.com with ESMTPSA id k22-20020a170906971600b006e840b36f5asm375813ejx.91.2022.04.07.08.23.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 08:21:21 -0700 (PDT)
-Message-ID: <c6d85486-16af-d798-5e55-a6801e5402c0@linaro.org>
-Date:   Thu, 7 Apr 2022 17:21:20 +0200
+        Thu, 07 Apr 2022 08:23:41 -0700 (PDT)
+Message-ID: <67f75e49-e0c1-463f-da39-4a2efe7cce3c@linaro.org>
+Date:   Thu, 7 Apr 2022 17:23:40 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v4 4/5] dt-bindings: spi: add binding doc for spi-mtk-snfi
+Subject: Re: [PATCH] dt-bindings: align SPI NOR node name with dtschema
 Content-Language: en-US
-To:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
-References: <20220407150652.21885-1-gch981213@gmail.com>
- <20220407150652.21885-5-gch981213@gmail.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220407143405.295907-1-krzysztof.kozlowski@linaro.org>
+ <Yk8AJcFRmYEryqra@sirena.org.uk>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220407150652.21885-5-gch981213@gmail.com>
+In-Reply-To: <Yk8AJcFRmYEryqra@sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -94,18 +81,23 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 07/04/2022 17:06, Chuanhong Guo wrote:
-> Add device-tree binding documentation for Mediatek SPI-NAND Flash
-> Interface.
+On 07/04/2022 17:15, Mark Brown wrote:
+> On Thu, Apr 07, 2022 at 04:34:05PM +0200, Krzysztof Kozlowski wrote:
+>> The node names should be generic and SPI NOR dtschema expects "flash".
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  Documentation/devicetree/bindings/mtd/hisilicon,fmc-spi-nor.txt | 2 +-
+>>  Documentation/devicetree/bindings/spi/spi-davinci.txt           | 2 +-
+>>  Documentation/devicetree/bindings/spi/spi-pl022.yaml            | 2 +-
 > 
-> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-> ---
+> Acked-by: Mark Brown <broonie@kernel.org>
 > 
+> but it would be easier to split this into per subsystem stuff.
 
-Looks good. The subject should be rather "spi: dt-bindings:" (as
-requirement for SPI subsystem).
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+With DTS changes I had 22 patches, so splitting is a trade-off. If
+that's preferred (actually can reduce conflicts), I'll split it and send
+a v2.
 
 Best regards,
 Krzysztof
