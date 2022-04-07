@@ -2,118 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F31594F8688
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Apr 2022 19:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1A54F87A6
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Apr 2022 21:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346576AbiDGRtA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Apr 2022 13:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
+        id S229736AbiDGTGj (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Apr 2022 15:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235671AbiDGRs7 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 13:48:59 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D632186FB;
-        Thu,  7 Apr 2022 10:46:58 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-d39f741ba0so7107973fac.13;
-        Thu, 07 Apr 2022 10:46:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MmJLuyekwoblpDX5b95jqgHit0wkMxVufsew2de6Slo=;
-        b=0T5kaHlE1ipsHES8GxwMFE+DH+UvG7yo9S1SjOA8OaNGX0IYQzJZo76rn0/intxKMZ
-         K8NK3KQ1dN+0sl8WOZ02/N46Lc8fb9hrdG7BdBQd2iepC2Bim6q1d53u3BLucg4zT9pu
-         O5kShshmE5PSZIfYNoVJqV0hZ+vGJI8F3GV5Gp9/M2YeuL1sMKhqbJtxOGn5yZUnclsv
-         9MvEAozfXc7r2sGIEsRav/byS/MGRed01yqoFimbNOb7vvXb9E1hDvlrp5Jr1uDG1OY1
-         rxI1Ll9U6ANtOtjiPL6Q5XEX2Lp8guKUMCzVwiZXEuCELrGDCMXgTFmJdlu3R/TlmPyD
-         V+FA==
-X-Gm-Message-State: AOAM530oNeayLCliorKugaC151UzHBIFWIX6pJXW/QHK11eSjUUf03Kw
-        7cLwE1yj+jZ9IFecKMYE2Q==
-X-Google-Smtp-Source: ABdhPJw754vwBgnN/nBlQiTizQIA1UI3kDsgOYrCH4cfGSEpTe/2uKtRnMgf93qE3ml0Uw6wprvEeA==
-X-Received: by 2002:a05:6870:2310:b0:da:b3f:2b76 with SMTP id w16-20020a056870231000b000da0b3f2b76mr6804229oao.277.1649353617755;
-        Thu, 07 Apr 2022 10:46:57 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o17-20020a9d5c11000000b005b2611a13edsm8263373otk.61.2022.04.07.10.46.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 10:46:57 -0700 (PDT)
-Received: (nullmailer pid 1614078 invoked by uid 1000);
-        Thu, 07 Apr 2022 17:46:56 -0000
-Date:   Thu, 7 Apr 2022 12:46:56 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        Kuldeep Singh <singh.kuldeep87k@gmail.com>
-Subject: Re: [PATCH v4 0/9] dt-bindings: qcom: convert entire GSBI (QUP
- I2C/SPI/UART) to DT schema
-Message-ID: <Yk8jkJepgcRMo73l@robh.at.kernel.org>
-References: <20220405063451.12011-1-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S233740AbiDGTGj (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 15:06:39 -0400
+X-Greylist: delayed 1350 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Apr 2022 12:04:38 PDT
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DE92317AE
+        for <linux-spi@vger.kernel.org>; Thu,  7 Apr 2022 12:04:38 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.94.2)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1ncX4w-0001rM-SW; Thu, 07 Apr 2022 20:41:59 +0200
+Date:   Thu, 7 Apr 2022 19:41:54 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     Chuanhong Guo <gch981213@gmail.com>
+Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
+Subject: Re: [PATCH v4 0/5] spi: add support for Mediatek SPI-NAND controller
+Message-ID: <Yk8wctUzF7eWYOZD@makrotopia.org>
+References: <20220407150652.21885-1-gch981213@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220405063451.12011-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220407150652.21885-1-gch981213@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 08:34:42AM +0200, Krzysztof Kozlowski wrote:
-> Hi,
+On Thu, Apr 07, 2022 at 11:06:47PM +0800, Chuanhong Guo wrote:
+> Mediatek has an extended version of their NAND Flash Interface which
+> has a SPI-NAND mode. In this mode, the controller can perform 1-bit
+> spi-mem ops for up-to 0xa0 bytes and typical SPI-NAND single, dual
+> and quad IO page cache ops with 2-byte address. Additionally, the
+> page cache ops can be performed with ECC and auto data formatting
+> using the ECC engine of the controller.
 > 
-> Changes since v3
-> ================
-> 1. Correct dmas in serial/UART bindings example.
-> 2. Use "const" in compatible for GSBI.
-> 3. Add review tags.
-> 
-> Changes since v2
-> ================
-> 1. Several new schema patches (GSBI, I2C and UART schema).
-> 2. Several DTS fixes for clocks and DMAs. The choice of dma tx-rx
->    and clocks core-iface was by more-or-less number of fixes needed.
-> 3. Add Kuldeep acks to patches without changes.
-> 
-> Changes since v1
-> ================
-> 1. Fix path in com/qcom,gsbi.txt.
-> 2. Merge clock-names in example, correct $ref path (Kuldeep).
-> 
-> Merging
-> =======
-> 1. The DTS patches are independent and silence warnings pointed
->     out by schema.
-> 
-> 2. The DT schema patches should be taken together as GSBI (final patch)
->    depends on previous bindings.
-> 
-> Best regards,
-> Krzysztof
-> 
-> Cc: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-> 
-> Krzysztof Kozlowski (9):
->   arm64: dts: qcom: align dmas in I2C/SPI/UART with DT schema
->   arm64: dts: qcom: align clocks in I2C/SPI with DT schema
->   ARM: dts: qcom: ipq4019: align dmas in SPI/UART with DT schema
->   ARM: dts: qcom: ipq4019: align clocks in I2C with DT schema
->   ARM: dts: qcom: msm8660: disable GSBI8
->   spi: dt-bindings: qcom,spi-qup: convert to dtschema
->   dt-bindings: serial: qcom,msm-uartdm: convert to dtschema
->   dt-bindings: i2c: qcom,i2c-qup: convert to dtschema
->   dt-bindings: qcom: qcom,gsbi: convert to dtschema
+> This patchset implements support of this mode as a separated SPI-MEM
+> driver with piplined ECC engine.
+              ^^^^^^^^
+missing 'e':  pipelined
 
-Patches 6-9 applied.
+For the whole series:
+Tested-by: Daniel Golle <daniel@makrotopia.org>
 
-Rob
+> 
+> Changes since v1:
+>  add a blank line between properties in dt binding doc
+>  rename ecc-engine to nand-ecc-engine for the generic properties
+>  fix warnings/errors from the CI
+> 
+> Changes since v2:
+>  use streamed DMA api to avoid an extra memory copy during read
+>  make ECC engine config a per-nand context
+>  take user-requested ECC strength into account
+> 
+> Change since v3:
+>  fix a missed ecc-engine rename in doc from v1
+> 
+> Chuanhong Guo (5):
+>   mtd: nand: make mtk_ecc.c a separated module
+>   spi: add driver for MTK SPI NAND Flash Interface
+>   mtd: nand: mtk-ecc: also parse nand-ecc-engine if available
+>   dt-bindings: spi: add binding doc for spi-mtk-snfi
+>   arm64: dts: mediatek: add mtk-snfi for mt7622
+> 
+>  .../bindings/spi/mediatek,spi-mtk-snfi.yaml   |   88 +
+>  arch/arm64/boot/dts/mediatek/mt7622.dtsi      |   12 +
+>  drivers/mtd/nand/Kconfig                      |    7 +
+>  drivers/mtd/nand/Makefile                     |    1 +
+>  drivers/mtd/nand/{raw/mtk_ecc.c => ecc-mtk.c} |    8 +-
+>  drivers/mtd/nand/raw/Kconfig                  |    1 +
+>  drivers/mtd/nand/raw/Makefile                 |    2 +-
+>  drivers/mtd/nand/raw/mtk_nand.c               |    2 +-
+>  drivers/spi/Kconfig                           |   10 +
+>  drivers/spi/Makefile                          |    1 +
+>  drivers/spi/spi-mtk-snfi.c                    | 1442 +++++++++++++++++
+>  .../linux/mtd/nand-ecc-mtk.h                  |    0
+>  12 files changed, 1569 insertions(+), 5 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+>  rename drivers/mtd/nand/{raw/mtk_ecc.c => ecc-mtk.c} (98%)
+>  create mode 100644 drivers/spi/spi-mtk-snfi.c
+>  rename drivers/mtd/nand/raw/mtk_ecc.h => include/linux/mtd/nand-ecc-mtk.h (100%)
+> 
+> -- 
+> 2.35.1
+> 
+> 
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
