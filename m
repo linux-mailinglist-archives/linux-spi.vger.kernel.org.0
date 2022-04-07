@@ -2,172 +2,126 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51CBF4F87AA
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Apr 2022 21:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E1604F8882
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Apr 2022 22:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232263AbiDGTI0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Apr 2022 15:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58078 "EHLO
+        id S229688AbiDGUcz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Apr 2022 16:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232779AbiDGTIY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 15:08:24 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EEB1B9326
-        for <linux-spi@vger.kernel.org>; Thu,  7 Apr 2022 12:06:23 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id c42so7536954edf.3
-        for <linux-spi@vger.kernel.org>; Thu, 07 Apr 2022 12:06:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gOv/51dHbvSvAxLzxG0YE6pJrgjLizkZFj88kA5U1Ts=;
-        b=O9N5piyZ8ghdKuId5L9aiMvkNuf62owbuCE+bZDTC6+xdnskK2aUwjkRUGOHdchCvA
-         /J+QuQpbFJM/EfFm8RsWGeBGnPnBdya6DSH3nBGlfOGxOQfphaxLgDC+zzgMMt+VmjXu
-         OSMZhW68bPY1HCTsk1/kZgPdo6KTzbrFSetJ89hvIb1T7A9C/NsRlGJk36F6rGcSxWLF
-         js+BATsURtMBOD9XP5WBgZ8B9ahlWlXnGEpQSISIIdLvqgDDKE4wkVtb80Yln+Nyneo5
-         sOOhyqrnY0o9IB8O7pFrrQJI/FsA2bBNe7fN2rsX34K5jkhc7gGS5VTCFiWFKPd1F1JU
-         lubQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gOv/51dHbvSvAxLzxG0YE6pJrgjLizkZFj88kA5U1Ts=;
-        b=nnAt1Gp6UIWg+W9wV+TVVVeT5ORJUf8rx1xAv5KrzKC3zEiyoCJSHf8tJn6t0IkgP4
-         d/mplb2EDhpmm63Bzgendj8+ElvbUZGOxtRvZqGLa3QNTDy+SKcckBcafYfKy9APPvxJ
-         uSLva2WHioxEEamD175pexOYFU2DH08VwPHQ7pNHF4k1drJMFF6IJ5JTjFkMGTqOC3w+
-         lT6swHpRzhvwU/4PgyTsS5ToFbKSDx8lBWqlKOl4ydZMwnvTMusTdrS+Yzbhy7pLS/Ig
-         4MNOLc7pAaNYwklyb12lBLc7Bp1nlSU28oiWHKJPfJJ8oeXu9l60HLXsIzLWrDzf0QKU
-         thig==
-X-Gm-Message-State: AOAM530LgIhNqUwYDhRFLN741eAcC1anG6QycPmQ6hplmJUO1zwkpfLS
-        1+yKT/dWRVY0fQIeJzvFfxDscQ==
-X-Google-Smtp-Source: ABdhPJyhh/Yt+dDqYCjKan4H/N0nxJOJereGCAdjBh0lD6wnLfFa+OHp2IVxiD8+UeuiyRjWGDtvFA==
-X-Received: by 2002:a50:e79b:0:b0:41c:dd2c:3e19 with SMTP id b27-20020a50e79b000000b0041cdd2c3e19mr15774315edn.291.1649358382461;
-        Thu, 07 Apr 2022 12:06:22 -0700 (PDT)
-Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id q15-20020a1709060e4f00b006cdf4535cf2sm7890988eji.67.2022.04.07.12.06.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 12:06:21 -0700 (PDT)
-Message-ID: <eed2f337-3d5a-3440-d19e-c5ff032409ab@linaro.org>
-Date:   Thu, 7 Apr 2022 21:06:20 +0200
+        with ESMTP id S229751AbiDGUcq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 16:32:46 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C952921C6;
+        Thu,  7 Apr 2022 13:17:28 -0700 (PDT)
+Received: from tr.lan (ip-89-176-112-137.net.upcbroadband.cz [89.176.112.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 49EA483936;
+        Thu,  7 Apr 2022 21:49:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1649360991;
+        bh=Y9uLVCHFNZeAMheEdRMSrKkwnqJgsFDn460DerI5fKU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KJAI1xoGWF4qAAY4NUOLuu+6SfZYKW3ODOH/X/avcicETSQFJX2GgjEn0SH8+Pmc7
+         HLX0HeAT9hDL8RbVC1hyH8EydDiTMmwERxb2RNZ31tEzDi6Gf6Nbhs019OvnIU6kr8
+         +rpqhdPDV6TCcIzxDoKAI4g9bVPZ6yqXHuRznvEvcbAK7qDflXtk9qIJNFZTiDVYkx
+         s6gfbM5KZBFMSI5Oxtb/dE6dJrOpiPuhK7++8cqoVKC3dHdymqWsB13c+z4/vJvPqq
+         1aP45orYYNrPKN2I8AP6KzjbuYEqI0UK7mODdwt1FEQJMVXn33zpAaGN/zKVgoBO6c
+         zb859lIlzjNBw==
+From:   Marek Vasut <marex@denx.de>
+To:     linux-spi@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: [PATCH] dt-bindings: spi: Add YAML DT binding document for trivial devices
+Date:   Thu,  7 Apr 2022 21:49:36 +0200
+Message-Id: <20220407194936.223041-1-marex@denx.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 11/11] arm64: dts: Add Pensando Elba SoC support
-Content-Language: en-US
-To:     Brad Larson <brad@pensando.io>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        broonie@kernel.org, fancer.lancer@gmail.com,
-        adrian.hunter@intel.com, ulf.hansson@linaro.org, olof@lixom.net,
-        dac2@pensando.io, linux-gpio@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220406233648.21644-1-brad@pensando.io>
- <20220406233648.21644-12-brad@pensando.io>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220406233648.21644-12-brad@pensando.io>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 07/04/2022 01:36, Brad Larson wrote:
-> Add Pensando common and Elba SoC specific device nodes
-> 
-> Signed-off-by: Brad Larson <brad@pensando.io>
-> ---
-> Change from V3:
-> - Changed to dual copyright (GPL-2.0+ OR MIT)
-> - Minor changes from review input
+Document trivial SPI devices in single YAML DT binding document.
+Currently this overlaps Linux kernel spidev.
 
-Thank you for your patch. There is something to discuss/improve.
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: devicetree@vger.kernel.org
+To: linux-spi@vger.kernel.org
+---
+ .../devicetree/bindings/spi/trivial.yaml      | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/trivial.yaml
 
-(...)
+diff --git a/Documentation/devicetree/bindings/spi/trivial.yaml b/Documentation/devicetree/bindings/spi/trivial.yaml
+new file mode 100644
+index 0000000000000..6d6e682948dfc
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/trivial.yaml
+@@ -0,0 +1,51 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/trivial.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Trivial SPI device DT bindings
++
++maintainers:
++  - Marek Vasut <marex@denx.de>
++  - Mark Brown <broonie@kernel.org>
++
++properties:
++  compatible:
++    enum:
++      - cisco,spi-petra
++      - dh,dhcom-board
++      - lineartechnology,ltc2488
++      - lwn,bk4
++      - menlo,m53cpld
++      - micron,spi-authenta
++      - rohm,dh2228fv
++      - semtech,sx1301
++
++  reg:
++    description: Chip select
++    maxItems: 1
++
++  spi-max-frequency: true
++  spi-cs-high: true
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    spi {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      spidev@0 {
++        compatible = "rohm,dh2228fv";
++        reg = <0>;
++        spi-max-frequency = <1000000>;
++      };
++    };
+-- 
+2.35.1
 
-> +&i2c0 {
-> +	clock-frequency = <100000>;
-> +	status = "okay";
-> +	rtc@51 {
-> +		compatible = "nxp,pcf85263";
-> +		reg = <0x51>;
-> +	};
-> +};
-> +
-> +&spi0 {
-> +	num-cs = <4>;
-> +	cs-gpios = <0>, <0>, <&porta 1 GPIO_ACTIVE_LOW>,
-> +		   <&porta 7 GPIO_ACTIVE_LOW>;
-> +	status = "okay";
-> +	spi0_cs0@0 {
-
-Generic node name needed matching the class of a devicxe.
-
-> +		compatible = "semtech,sx1301";	/* Enable spidev */
-
-This comment is a bit odd... did you just use random compatible from
-spidev instead of defining proper compatible?
-
-
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-
-Why address/size cells?
-
-> +		spi-max-frequency = <12000000>;
-> +		reg = <0>;
-
-Please put reg just after compatible. It's the most common pattern.
-
-> +	};
-> +
-> +	spi0_cs1@1 {
-> +		compatible = "semtech,sx1301";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		spi-max-frequency = <12000000>;
-> +		reg = <1>;
-> +	};
-> +
-
-(...)
-
-> +
-> +		emmc: mmc@30440000 {
-> +			compatible = "pensando,elba-sd4hc", "cdns,sd4hc";
-> +			clocks = <&emmc_clk>;
-> +			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
-> +			reg = <0x0 0x30440000 0x0 0x10000>,
-> +			      <0x0 0x30480044 0x0 0x4>;	/* byte-lane ctrl */
-> +			cdns,phy-input-delay-sd-highspeed = <0x4>;
-> +			cdns,phy-input-delay-legacy = <0x4>;
-> +			cdns,phy-input-delay-sd-uhs-sdr50 = <0x6>;
-> +			cdns,phy-input-delay-sd-uhs-ddr50 = <0x16>;
-> +			mmc-ddr-1_8v;
-> +			status = "disabled";
-> +		};
-> +
-> +		mssoc: mssoc@307c0000 {
-
-Generic node name.
-
-> +			compatible = "syscon", "simple-mfd";
-
-This does not look correct. Syscon is okay, but why do you need
-simple-mfd (there are no children here)?
-
-> +			reg = <0x0 0x307c0000 0x0 0x3000>;
-> +		};
-> +	};
-> +};
-
-
-Best regards,
-Krzysztof
