@@ -2,102 +2,172 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3659A4F89F7
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Apr 2022 00:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B73014F8A17
+	for <lists+linux-spi@lfdr.de>; Fri,  8 Apr 2022 00:15:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbiDGUvn (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Apr 2022 16:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
+        id S230300AbiDGVA0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Apr 2022 17:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbiDGUvC (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 16:51:02 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE7131F2BA;
-        Thu,  7 Apr 2022 13:43:51 -0700 (PDT)
-Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MulyX-1ntOth3jXf-00rq0f; Thu, 07 Apr 2022 22:38:46 +0200
-Received: by mail-wr1-f53.google.com with SMTP id a2so296936wrh.5;
-        Thu, 07 Apr 2022 13:38:46 -0700 (PDT)
-X-Gm-Message-State: AOAM530ai52r9ufA7kTLGlcyas14gLwlkPzi/xiF1Bx/MVbPAy5/7mTX
-        mN7HScK10aw8zhSJPM6kcOobrSCmcdPlCY4RV2c=
-X-Google-Smtp-Source: ABdhPJy/SgVGQPTQl0Z9Jj7qvw3Sglc2LkZldTdO5JZKiCcu9L8Hp1QDfF0ep5w8MjBFmfVBXWNB7IIvt2RfSfgvQwI=
-X-Received: by 2002:a05:6000:154d:b0:207:9101:8f24 with SMTP id
- 13-20020a056000154d00b0020791018f24mr802419wry.317.1649363926543; Thu, 07 Apr
- 2022 13:38:46 -0700 (PDT)
+        with ESMTP id S230245AbiDGVA0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 17:00:26 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDBC15EDDB
+        for <linux-spi@vger.kernel.org>; Thu,  7 Apr 2022 13:58:18 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id k2so7827599edj.9
+        for <linux-spi@vger.kernel.org>; Thu, 07 Apr 2022 13:58:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gOv/51dHbvSvAxLzxG0YE6pJrgjLizkZFj88kA5U1Ts=;
+        b=LtV+LimrEebMzUK1IOhvEXGb2ymNgMZl7qh+Db0K2zNRN9P2+inYAeLmBHYB2w6OkO
+         mn/kik52wDH8tc8FUpvnPbCEntUH62DwQiMG6ydiIqlYKJmkEYvdOUC8WI9fYcl0ysB1
+         H6FwSKAovj274rvZkqlyUAzRkERYk49kh8aZUoMkYXZSgZxVakbuGIBuJ5MwSay6PeWy
+         mzuQZ7aln0oPp2FhclYJyvKN5snzc2HBQQSTWgLAs7rRk1QNqx4VpUvRU2ENIa5w2Yxt
+         4cczopCH7g7pzQE8kYQ/fYdIrqeKWaHCjByr9giggQf34469Y2UAfBvapmZcmSD+hqiH
+         /fjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gOv/51dHbvSvAxLzxG0YE6pJrgjLizkZFj88kA5U1Ts=;
+        b=5OV7Fex1ViDOztRafMCX7DXOxX8Q40JnWNaI7c7K4/I2x45CCcvBwK3H76LaQnFOVH
+         +honfljBHTWuQPrAywO/TNiAPu+Ns8J4KghByASHzLWWIsQvcyQCaL8SF1bD2ms29xu9
+         m7nNuBkAJdmVo1mu5sDNzk2AUbd/KTljbAp9bWWQ+kLtze08nw/tYFdtU6nc3eEC8v38
+         tsYwgh1uUa1cHVwYhsZx4z1vxEMQLImc0onyajdXSP2ivAbcrZWThbzSbrO3yfk3UB+8
+         XzWhzRSQcAmjeRilbFmF99pZUEayLZDGDi6glx/sgBR5TjEWqzg6njVV2dDWvVSoSH0l
+         AGTw==
+X-Gm-Message-State: AOAM532Dv6kPrTFYoWfcMWPyfAa9xHkfUTf/gJPuUdUYbukwcHLCvSud
+        CUZZAF8iG89E1eIAH+CMxHNuqg==
+X-Google-Smtp-Source: ABdhPJzKZKgo7bJk0AYUXlwb2y8mbmmQYcn7Gd1R46cDu+04zIt7arhMKkYnlMab8y4eU6cP1/Q3hg==
+X-Received: by 2002:a05:6402:3604:b0:41c:c4e6:2988 with SMTP id el4-20020a056402360400b0041cc4e62988mr16115607edb.157.1649365097189;
+        Thu, 07 Apr 2022 13:58:17 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id b11-20020a17090630cb00b006e83fb1e6b1sm738450ejb.100.2022.04.07.13.58.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 13:58:16 -0700 (PDT)
+Message-ID: <827e5f9c-13ef-08fb-d167-80c6c4ea5631@linaro.org>
+Date:   Thu, 7 Apr 2022 22:58:15 +0200
 MIME-Version: 1.0
-References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-10-brad@pensando.io>
- <CAK8P3a1RdHTngDVqg4KnVA3N8EjDfbpQ=cEcz_CK8NmG2EgYLQ@mail.gmail.com>
- <3c8e94e1-fb8e-0d8f-4e79-b8313a1da5cb@intel.com> <CAK9rFnwsMd1+oQ8cg8Biw7HM=R6aOudfK7Ja+E+iGVgfrvC9Gg@mail.gmail.com>
-In-Reply-To: <CAK9rFnwsMd1+oQ8cg8Biw7HM=R6aOudfK7Ja+E+iGVgfrvC9Gg@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 7 Apr 2022 22:38:31 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a28ef+DgcKrMG03b5Og-W+afieoqF1zvNkXdG22qA8i7g@mail.gmail.com>
-Message-ID: <CAK8P3a28ef+DgcKrMG03b5Og-W+afieoqF1zvNkXdG22qA8i7g@mail.gmail.com>
-Subject: Re: [PATCH 09/11] mmc: sdhci-cadence: Add Pensando Elba SoC support
-To:     Brad Larson <brad@pensando.io>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        David Clear <dac2@pensando.io>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:o+5RPQIna+gLLkibDSf2fxD5OHxRZ7cFKWDQu2hSxDFX8cL2ozw
- dBRBfnC3YHm3Sj26oGBZ9vZ5OibxClaK/qHQ8TzNau7RL6AFZ2dVJtULWNrkpGTotxJgnCE
- rw2CREtNEwogmnSw8BqH5JVuZTkgoA+ehLW3TUolhlboqj2OOExX/ogwHiHgwQSk8Hq2Cbz
- BNn3FJC1YDc91BAIJQiuw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:JiwMnTpDL4E=:wO5ksrBM4sf9BGnIYfujL7
- UZK24sW+KeZc/eg41jcx+Yx5Ky5nzwChDpKySgfivmkttaQMvv2uwSK0vSwBB13NofOU6dMGI
- niIMxCgeQeeTfgJ8uQYj1J26JmDlI3zgNzhchs3eZZ0MIZkgjSTdvWaqsOmT2lQPOE3gm5zmf
- BFzO5itUAb1VEubP8TnyOEyhhZmfXX1PS8/eQfPkxw9BBsKSpZzX0Ipxu0M/pXhbft5QXXVn5
- QTRde2/fQEjYwypYdHrTHR6dElTW6YSsuZu1RNxTlC+/ZCNwcCSaldR/uvjO7vhCKcrq3eVhX
- XxKOQwpVQY5nwsrzs5out0PXZOdgY484FKqqRxmJL8VautBAyaBxKZbWFLCGa2QUHbBqics2y
- 8QNwLeTiXJthpJRObMunbojqPEB0HOmv0tVO4J0I+ewkyQXGbxNej87rQvNzT7QjFyuvS0PYP
- 4cpRCkFdyS2ZcTDFB0VhzX1Tqvhw/1SqL3BIpNJ5u8Tt32bAPw2DQ4urBS6XgBXpa3tgmPwcY
- Cwkezb13+YxjxziBHfGQWHK0xWKZYQ5WEOf+kFnw9eHQ2L6R1PKFWUxSOK90HHp3yx3lgMXVw
- mWBktMHAVWLTGC02pX6tPGexYqqCisBNevWjNC5ZseMCG8Lv10gu8CVMwTNpEh0vBJx8u7Awx
- PHWbmrH/X3ZYCAxafkapjZMa8d9hZY9CLbRLy0utvAtztmc4gkWzyzGF7wp0I3FVTVeo=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 11/11] arm64: dts: Add Pensando Elba SoC support
+Content-Language: en-US
+To:     Brad Larson <brad@pensando.io>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        broonie@kernel.org, fancer.lancer@gmail.com,
+        adrian.hunter@intel.com, ulf.hansson@linaro.org, olof@lixom.net,
+        dac2@pensando.io, linux-gpio@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220406233648.21644-1-brad@pensando.io>
+ <20220406233648.21644-12-brad@pensando.io>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220406233648.21644-12-brad@pensando.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 7:06 PM Brad Larson <brad@pensando.io> wrote:
-> On Thu, Apr 7, 2022 at 12:13 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >
-> > What is the relationship between cadence and pensando elba?
->
-> Pensando licensed the cadence controller, its 100% cadence IP.  The
-> integration issue we ran into was with the accessors where we have the
-> workaround.  The initial patch added a separate Elba driver file but
-> the feedback was the Elba support didn't justify doing that and to add
-> to sdhci-cacence.c.
+On 07/04/2022 01:36, Brad Larson wrote:
+> Add Pensando common and Elba SoC specific device nodes
+> 
+> Signed-off-by: Brad Larson <brad@pensando.io>
+> ---
+> Change from V3:
+> - Changed to dual copyright (GPL-2.0+ OR MIT)
+> - Minor changes from review input
 
-I looked back at the earlier reviews now, I think the main problem with
-versions 1 and 2 was that it had the abstraction the wrong way around,
-so you added the complexity of having multiple files, without the benefits.
+Thank you for your patch. There is something to discuss/improve.
 
-I still think that the cleanest approach would be to have it the way I
-suggested in my reply to v1, with an elba specific platform driver
-that calls into the generic cadence code, but the generic code knowing
-nothing about the front-end.
+(...)
 
-Then again, it sounds like there was already an agreement about
-the approach you took here, so let's stay with that and hope we don't
-get any other chips with the same IP block in the future.
+> +&i2c0 {
+> +	clock-frequency = <100000>;
+> +	status = "okay";
+> +	rtc@51 {
+> +		compatible = "nxp,pcf85263";
+> +		reg = <0x51>;
+> +	};
+> +};
+> +
+> +&spi0 {
+> +	num-cs = <4>;
+> +	cs-gpios = <0>, <0>, <&porta 1 GPIO_ACTIVE_LOW>,
+> +		   <&porta 7 GPIO_ACTIVE_LOW>;
+> +	status = "okay";
+> +	spi0_cs0@0 {
 
-         Arnd
+Generic node name needed matching the class of a devicxe.
+
+> +		compatible = "semtech,sx1301";	/* Enable spidev */
+
+This comment is a bit odd... did you just use random compatible from
+spidev instead of defining proper compatible?
+
+
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+
+Why address/size cells?
+
+> +		spi-max-frequency = <12000000>;
+> +		reg = <0>;
+
+Please put reg just after compatible. It's the most common pattern.
+
+> +	};
+> +
+> +	spi0_cs1@1 {
+> +		compatible = "semtech,sx1301";
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		spi-max-frequency = <12000000>;
+> +		reg = <1>;
+> +	};
+> +
+
+(...)
+
+> +
+> +		emmc: mmc@30440000 {
+> +			compatible = "pensando,elba-sd4hc", "cdns,sd4hc";
+> +			clocks = <&emmc_clk>;
+> +			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
+> +			reg = <0x0 0x30440000 0x0 0x10000>,
+> +			      <0x0 0x30480044 0x0 0x4>;	/* byte-lane ctrl */
+> +			cdns,phy-input-delay-sd-highspeed = <0x4>;
+> +			cdns,phy-input-delay-legacy = <0x4>;
+> +			cdns,phy-input-delay-sd-uhs-sdr50 = <0x6>;
+> +			cdns,phy-input-delay-sd-uhs-ddr50 = <0x16>;
+> +			mmc-ddr-1_8v;
+> +			status = "disabled";
+> +		};
+> +
+> +		mssoc: mssoc@307c0000 {
+
+Generic node name.
+
+> +			compatible = "syscon", "simple-mfd";
+
+This does not look correct. Syscon is okay, but why do you need
+simple-mfd (there are no children here)?
+
+> +			reg = <0x0 0x307c0000 0x0 0x3000>;
+> +		};
+> +	};
+> +};
+
+
+Best regards,
+Krzysztof
