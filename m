@@ -2,37 +2,37 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC334F760C
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Apr 2022 08:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BFC94F7685
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Apr 2022 08:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241171AbiDGGdU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Apr 2022 02:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
+        id S239927AbiDGGr1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Apr 2022 02:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241237AbiDGGdD (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 02:33:03 -0400
+        with ESMTP id S235680AbiDGGr0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 02:47:26 -0400
 Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C41B57;
-        Wed,  6 Apr 2022 23:31:01 -0700 (PDT)
-Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M7JvO-1ndTCa0PRk-007inq; Thu, 07 Apr 2022 08:31:00 +0200
-Received: by mail-wr1-f42.google.com with SMTP id d3so6293631wrb.7;
-        Wed, 06 Apr 2022 23:30:59 -0700 (PDT)
-X-Gm-Message-State: AOAM531mvRP+YU0Ma1WSLPxsQoAwx+cMBs5z+r9nbD38NqjP8feQ/rj5
-        e5qQLgdq3mc4ISiC77+AmUFK9RnkQLtEiRaiSE8=
-X-Google-Smtp-Source: ABdhPJyKRyRW3k/cQmPVF80spQCMRGb5SVS98DqNmPx2g8IW88njX3uUl4iA4i0AVSL8t67eZnNZkGCEOKSOf5l4kho=
-X-Received: by 2002:a5d:6505:0:b0:205:9a98:e184 with SMTP id
- x5-20020a5d6505000000b002059a98e184mr8803769wru.317.1649313059590; Wed, 06
- Apr 2022 23:30:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E08B207A34;
+        Wed,  6 Apr 2022 23:45:26 -0700 (PDT)
+Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MKbXu-1nHWBt0UBg-00KyG1; Thu, 07 Apr 2022 08:45:25 +0200
+Received: by mail-wr1-f48.google.com with SMTP id u3so6355900wrg.3;
+        Wed, 06 Apr 2022 23:45:24 -0700 (PDT)
+X-Gm-Message-State: AOAM531W2o5KY3VJWh4KsSVH8HI8tkuFTDmT8uFeyfwUAKfejUnRDo91
+        /D/PFMVgOcW+H7tHrofPPpTOEQbY33+eU5b8X7E=
+X-Google-Smtp-Source: ABdhPJwsoybhLaXFjVbw9+Vc+qPMhYVfNmGEl4gaT+Zb4xyPM1SU8zwIvCuEH2wtfDORtGv8O2YNAP5pFGOwsiaZ1iY=
+X-Received: by 2002:adf:d081:0:b0:1ef:9378:b7cc with SMTP id
+ y1-20020adfd081000000b001ef9378b7ccmr9605655wrh.407.1649313924632; Wed, 06
+ Apr 2022 23:45:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-4-brad@pensando.io>
-In-Reply-To: <20220406233648.21644-4-brad@pensando.io>
+References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-10-brad@pensando.io>
+In-Reply-To: <20220406233648.21644-10-brad@pensando.io>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 7 Apr 2022 08:30:43 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2wZwza=tUzxpHTHTnahf-bUS2-e80rW-wzN3aWodD1vQ@mail.gmail.com>
-Message-ID: <CAK8P3a2wZwza=tUzxpHTHTnahf-bUS2-e80rW-wzN3aWodD1vQ@mail.gmail.com>
-Subject: Re: [PATCH 03/11] dt-bindings: mmc: Add Pensando Elba SoC binding
+Date:   Thu, 7 Apr 2022 08:45:08 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1RdHTngDVqg4KnVA3N8EjDfbpQ=cEcz_CK8NmG2EgYLQ@mail.gmail.com>
+Message-ID: <CAK8P3a1RdHTngDVqg4KnVA3N8EjDfbpQ=cEcz_CK8NmG2EgYLQ@mail.gmail.com>
+Subject: Re: [PATCH 09/11] mmc: sdhci-cadence: Add Pensando Elba SoC support
 To:     Brad Larson <brad@pensando.io>
 Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -49,23 +49,23 @@ Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         DTML <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:L1k9lwuF84IUYFFiRBIy1y9YRO/zDLweXc/0M4LdGijxfIFw9tc
- uhWCJ5iCNpeSZY5AKy4xxUeM4Wong5Tg7ALVzPdKQPCUMJJAcJtcpStGanwP1SUr0Bt4OUF
- zuTEsc/MN1WkvfT9lVoeshnnoUV7pC6yTjLkFyLC2SYctOWFZ/CZh6Y9d1ihtZIDHUtVTXH
- YqTqVULdun1tWZ8WAFiRQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:L92u0FhEV/M=:4ckcr4vHSN8nZ/BuLXu0U0
- VgEajCa4He4/5g6iP1UDFWjIyNYOlCij2e1hvTyaJ32aE3Lg93MVMnDn1bJmiSHU3xBaQbHsf
- pkHg5HoLJ1iIwKS0SRrDx67MgqM67aB0dm8Oshuupr4ZMqZFG14FHqkU0yOkcV3RlM1HxIdpk
- mEXOJVh5ZDH06xbV1wBI6D14w1i4eppXJnGlUsHkwIltJ0F+hOe6sJD6y5HsjKuU5wvH5u0/K
- kYMY9cF8c/41FarVV1i/ffZgGqa+OW2m7q3GOWs4pl10iH8P8FkQlu8QqPOzF9YKgfhMOvzM9
- mxYvq09vFBrk0I/j6suvN2B4Z4jJ7l1hdHpr4cT8mFKINst5cVR+bDb9KipMGWaVP8kg+Jupp
- XnVEFeeWXhxj4LuJcVZv7t2TgiVgbKsdRrjOzjjj+G3VO0RgxT3Msbd8KAOJUA0jq3bWquFZC
- HdSZpb07ltwRlOyguEzGLRePMPFaSaO8u+YwLnag9UZ0wnnfCR9ldag4YtJ8gauu3d0oNfhSF
- Z6Vg3CNFY9P5E+s5Z6ONiD04y21Vz4fh2cggNCZmF1iCONu6X9HxoLN6vFT9bRd0KiNWVG7K9
- K/qrStWZqBhhe8h8k0Lv95GMQqCIp1UYq0KvO0+fU+YHhwpAH1y56TMZ3r6VrQQ5P55UW3Buu
- v/YGKwXlMQGXoWxjBdq7TYtcB27df5zlbdh0U7ZtIRbus8A3PFVgTJ3oKtEFXjTxdL8lyBbk2
- 1uIxG0ra8by+fDj+0zORF8eU/aLGQENdGpZV8FxzSBQw41ESfHRh7oHGtTyts/Z4LN7bIwfxE
- 4SP5DBUZ4qs5lVeA5qZBcJa9Et54IG3LTbDgbC230KzJIndKL8=
+X-Provags-ID: V03:K1:16QUAd4m1hM+RCRM1ldXGIJ7ItAtpJGmDbRF74wz3JHNwuXUB22
+ WMvO4cpdgDkTXruzTypokbYXHC4lCkDSYV8f9kF15CohYnWf9ZYIGKJTt+3MgiGeEKY4wpG
+ 5TbyUbEhnJaQdrIQ0d5kTCOGydOXeOkDpop4iOMyW7kG2XzBXfIJutCykU8czNNSDK0pHWB
+ qGFPjjdLRY5lasyx40EWA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:IJJS/BzDVK0=:xk0Lcc4sVb2EaVlKnHWqH4
+ tPb/S8lOBJ+fTK4GuZ9Yg+qIa0NzWC5AaeO3NuL1NLyqlpN0uIw6XbsRDWm4GPfQlPdJ/FZf2
+ nvWa8weLhr363hyM7JNvdP+RbP8ZKfCZmtHJsAPxerbecIQSYlfFFeShtg43JAM21NtSuzXR2
+ NVbZkiXRxjz8MC5Cb1GQ6tsxZqASeeqfdkxQaxYUUi67gOE1g8fdlB/ARWN87PR+oATALsmi7
+ x2PQJ+VxyBjO6zziBZEKq9wz7vG3lAe51/DqeFuumIy/DTK1OIgtAwhImz7ykLAMtkIeLAFdv
+ FTKzjawxf+v430v7soR00qQuEkK5BNAMR84HJpSUe94gzl+YgvSIciv38meIRqBZpvshnf7fs
+ 9rxnK6/HP9L0NRrKN+WNlgQ2Ji+WQg+fIvIAda4nOhNmnndhbYEvveylk7SrYqpvdbTNIZmIm
+ A1If3U1mOxkOQ3uiEmQ7YI0sMOZSRJJrq/dkDz7Vw9a+/DKxGhRPWXwi9NwKPy7kd7FjcqW7Z
+ TQe5aO2JZ7C3dtLksZPYnE4ubp153Zpv4lRSydE+n8d4MoI7CgZrZzMs/jn7ctc0zaXajpAWZ
+ cSiCrFS2nEPZ7DLVtC8Fmnnqza+TQ3GNu+t9Z5BlUXmy5ZK67furvUfK30ncQMGvFMq+Y8kaQ
+ XZiUF5QrqnBRgz1w6j+njsviKZ9Kg4KyoeNfD0VvSBD/EsHMrzZuYvKlkjPaPC4d3XiGFIYla
+ 6CNpKCdEpqk8hKT0j6i/ciLe6iC51v2YPR7SffrBzeu/Qx3JgFzfYFkkaE4V+PLYq4ojOlHJC
+ wDS78SvKMB8tkE4dWgXvnb+cQEc5bp7m+cveWcMFh46O8eV/d4=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -76,41 +76,59 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On Thu, Apr 7, 2022 at 1:36 AM Brad Larson <brad@pensando.io> wrote:
+> @@ -350,7 +461,7 @@ static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
+>  static int sdhci_cdns_probe(struct platform_device *pdev)
+>  {
+>         struct sdhci_host *host;
+> -       const struct sdhci_pltfm_data *data;
+> +       const struct sdhci_cdns_drv_data *data;
+>         struct sdhci_pltfm_host *pltfm_host;
+>         struct sdhci_cdns_priv *priv;
+>         struct clk *clk;
+> @@ -369,10 +480,10 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
 >
-> Pensando Elba ARM 64-bit SoC is integrated with this IP and
-> explicitly controls byte-lane enables resulting in an additional
-> reg property resource.
+>         data = of_device_get_match_data(dev);
+>         if (!data)
+> -               data = &sdhci_cdns_pltfm_data;
+> +               data = &sdhci_cdns_drv_data;
 >
-> Signed-off-by: Brad Larson <brad@pensando.io>
-> ---
-> Change from V3:
-> - Change from elba-emmc to elba-sd4hc to match file convention
-> - Use minItems: 1 and maxItems: 2 to pass schema check
->
->  Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> index 4207fed62dfe..278a71b27488 100644
-> --- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> @@ -19,10 +19,12 @@ properties:
->        - enum:
->            - microchip,mpfs-sd4hc
->            - socionext,uniphier-sd4hc
-> +          - pensando,elba-sd4hc
->        - const: cdns,sd4hc
->
->    reg:
-> -    maxItems: 1
-> +    minItems: 1
-> +    maxItems: 2
->
+>         nr_phy_params = sdhci_cdns_phy_param_count(dev->of_node);
+> -       host = sdhci_pltfm_init(pdev, data,
+> +       host = sdhci_pltfm_init(pdev, &data->pltfm_data,
+>                                 struct_size(priv, phy_params, nr_phy_params));
+>         if (IS_ERR(host)) {
+>                 ret = PTR_ERR(host);
+> @@ -389,6 +500,11 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
+>         host->ioaddr += SDHCI_CDNS_SRS_BASE;
+>         host->mmc_host_ops.hs400_enhanced_strobe =
+>                                 sdhci_cdns_hs400_enhanced_strobe;
+> +       if (data->init) {
+> +               ret = data->init(pdev);
+> +               if (ret)
+> +                       goto free;
+> +       }
+>         sdhci_enable_v4_mode(host);
+>         __sdhci_read_caps(host, &version, NULL, NULL);
 
-Shouldn't the binding describe what the register areas are? If there
-is only one of them, it is fairly clear, but when you have the choice
-between one and two, it gets ambiguous, and there is a risk that
-another SoC might have a different register area in the second entry,
-making it incompatible.
+I'm not sure about the abstraction here. The approach of having a single
+driver with some platform specific quirks like you do here works fine if the
+differences between hardware implementations are fairly minor, but if there
+are a larger number of variants, or the differences become too big, the
+better approach is to have separate top-level driver instances that call
+into a more generic driver, continuing the call chain
 
-        Arnd
+elba_drv_init()
+ -> sdhci_cdns_probe()
+     -> sdhci_pltfm_init()
+         -> sdhci_add_host()
+             -> mmc_add_host()
+
+with each one being a more specific version of the one below it.
+At the moment, it doesn't quite require having a custom driver,
+but I fear that it it would get hard to rework if it continues to grow
+other front-ends. It may be better to do the abstraction right away,
+even if the elba driver becomes rather trivial.
+
+Ulf, any preferences?
+
+         Arnd
