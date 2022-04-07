@@ -2,172 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73014F8A17
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Apr 2022 00:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E66C94F8A52
+	for <lists+linux-spi@lfdr.de>; Fri,  8 Apr 2022 00:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbiDGVA0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Apr 2022 17:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43436 "EHLO
+        id S230320AbiDGVDR (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Apr 2022 17:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiDGVA0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 17:00:26 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDBC15EDDB
-        for <linux-spi@vger.kernel.org>; Thu,  7 Apr 2022 13:58:18 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id k2so7827599edj.9
-        for <linux-spi@vger.kernel.org>; Thu, 07 Apr 2022 13:58:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gOv/51dHbvSvAxLzxG0YE6pJrgjLizkZFj88kA5U1Ts=;
-        b=LtV+LimrEebMzUK1IOhvEXGb2ymNgMZl7qh+Db0K2zNRN9P2+inYAeLmBHYB2w6OkO
-         mn/kik52wDH8tc8FUpvnPbCEntUH62DwQiMG6ydiIqlYKJmkEYvdOUC8WI9fYcl0ysB1
-         H6FwSKAovj274rvZkqlyUAzRkERYk49kh8aZUoMkYXZSgZxVakbuGIBuJ5MwSay6PeWy
-         mzuQZ7aln0oPp2FhclYJyvKN5snzc2HBQQSTWgLAs7rRk1QNqx4VpUvRU2ENIa5w2Yxt
-         4cczopCH7g7pzQE8kYQ/fYdIrqeKWaHCjByr9giggQf34469Y2UAfBvapmZcmSD+hqiH
-         /fjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gOv/51dHbvSvAxLzxG0YE6pJrgjLizkZFj88kA5U1Ts=;
-        b=5OV7Fex1ViDOztRafMCX7DXOxX8Q40JnWNaI7c7K4/I2x45CCcvBwK3H76LaQnFOVH
-         +honfljBHTWuQPrAywO/TNiAPu+Ns8J4KghByASHzLWWIsQvcyQCaL8SF1bD2ms29xu9
-         m7nNuBkAJdmVo1mu5sDNzk2AUbd/KTljbAp9bWWQ+kLtze08nw/tYFdtU6nc3eEC8v38
-         tsYwgh1uUa1cHVwYhsZx4z1vxEMQLImc0onyajdXSP2ivAbcrZWThbzSbrO3yfk3UB+8
-         XzWhzRSQcAmjeRilbFmF99pZUEayLZDGDi6glx/sgBR5TjEWqzg6njVV2dDWvVSoSH0l
-         AGTw==
-X-Gm-Message-State: AOAM532Dv6kPrTFYoWfcMWPyfAa9xHkfUTf/gJPuUdUYbukwcHLCvSud
-        CUZZAF8iG89E1eIAH+CMxHNuqg==
-X-Google-Smtp-Source: ABdhPJzKZKgo7bJk0AYUXlwb2y8mbmmQYcn7Gd1R46cDu+04zIt7arhMKkYnlMab8y4eU6cP1/Q3hg==
-X-Received: by 2002:a05:6402:3604:b0:41c:c4e6:2988 with SMTP id el4-20020a056402360400b0041cc4e62988mr16115607edb.157.1649365097189;
-        Thu, 07 Apr 2022 13:58:17 -0700 (PDT)
-Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id b11-20020a17090630cb00b006e83fb1e6b1sm738450ejb.100.2022.04.07.13.58.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 13:58:16 -0700 (PDT)
-Message-ID: <827e5f9c-13ef-08fb-d167-80c6c4ea5631@linaro.org>
-Date:   Thu, 7 Apr 2022 22:58:15 +0200
+        with ESMTP id S230024AbiDGVDQ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 17:03:16 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A4616A697;
+        Thu,  7 Apr 2022 14:01:14 -0700 (PDT)
+Received: from tr.lan (ip-89-176-112-137.net.upcbroadband.cz [89.176.112.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 9E56783CD8;
+        Thu,  7 Apr 2022 23:01:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1649365272;
+        bh=KVa0TB5KRW3+rYxYiVmwiy/UGOgcAL0M7kFkPIFnFKU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=T7JxgYorIKmgXKL60OXWSLmwzXlVstp6kwEhyHL4QBFF980XwsPg8s3wf37+/By23
+         v9EyNsWA6uWXFO+XLOHy1VKTREvt9oBcG1r0CgDCC3FugwkezM0ZM2a6TbZ9dgjwWn
+         SXrAr0IbNVcFk0RDiFXJPCY/xh1hgsxK3gjLynQFzO49RQsXrMvXWGKjg2OZqAwUiG
+         lYrUj0zBZmJ0GyogJaAgnd00OXaZ5/OZN0Yk72YpHVrNo47izNadGd5QYhpYBXaBXl
+         xpn59UqVyJ4pkGi7SbvHSyc3b7ddeXeLF1z31riTNVxF6fgT3MccpqQTDauu+AYkwn
+         0tn1N1xxyX7GQ==
+From:   Marek Vasut <marex@denx.de>
+To:     linux-spi@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>, Fabio Estevam <festevam@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>
+Subject: [PATCH] dt-bindings: trivial-devices: Document CPLD on DH electronics boards
+Date:   Thu,  7 Apr 2022 23:01:06 +0200
+Message-Id: <20220407210106.256027-1-marex@denx.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 11/11] arm64: dts: Add Pensando Elba SoC support
-Content-Language: en-US
-To:     Brad Larson <brad@pensando.io>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        broonie@kernel.org, fancer.lancer@gmail.com,
-        adrian.hunter@intel.com, ulf.hansson@linaro.org, olof@lixom.net,
-        dac2@pensando.io, linux-gpio@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220406233648.21644-1-brad@pensando.io>
- <20220406233648.21644-12-brad@pensando.io>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220406233648.21644-12-brad@pensando.io>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 07/04/2022 01:36, Brad Larson wrote:
-> Add Pensando common and Elba SoC specific device nodes
-> 
-> Signed-off-by: Brad Larson <brad@pensando.io>
-> ---
-> Change from V3:
-> - Changed to dual copyright (GPL-2.0+ OR MIT)
-> - Minor changes from review input
+The CPLD on DH electronics boards is used to model arbitrary custom
+glue logic, however it does have SPI interface. Document the CPLD DT
+binding as trivial SPI device.
 
-Thank you for your patch. There is something to discuss/improve.
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: NXP Linux Team <linux-imx@nxp.com>
+To: linux-spi@vger.kernel.org
+---
+ Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-(...)
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 550a2e5c9e05d..b2801b666078c 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -87,6 +87,8 @@ properties:
+           - devantech,srf08
+             # Devantech SRF10 ultrasonic ranger
+           - devantech,srf10
++            # DH electronics GmbH on-board CPLD trivial SPI device
++          - dh,dhcom-board
+             # DA9053: flexible system level PMIC with multicore support
+           - dlg,da9053
+             # DA9063: system PMIC for quad-core application processors
+-- 
+2.35.1
 
-> +&i2c0 {
-> +	clock-frequency = <100000>;
-> +	status = "okay";
-> +	rtc@51 {
-> +		compatible = "nxp,pcf85263";
-> +		reg = <0x51>;
-> +	};
-> +};
-> +
-> +&spi0 {
-> +	num-cs = <4>;
-> +	cs-gpios = <0>, <0>, <&porta 1 GPIO_ACTIVE_LOW>,
-> +		   <&porta 7 GPIO_ACTIVE_LOW>;
-> +	status = "okay";
-> +	spi0_cs0@0 {
-
-Generic node name needed matching the class of a devicxe.
-
-> +		compatible = "semtech,sx1301";	/* Enable spidev */
-
-This comment is a bit odd... did you just use random compatible from
-spidev instead of defining proper compatible?
-
-
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-
-Why address/size cells?
-
-> +		spi-max-frequency = <12000000>;
-> +		reg = <0>;
-
-Please put reg just after compatible. It's the most common pattern.
-
-> +	};
-> +
-> +	spi0_cs1@1 {
-> +		compatible = "semtech,sx1301";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		spi-max-frequency = <12000000>;
-> +		reg = <1>;
-> +	};
-> +
-
-(...)
-
-> +
-> +		emmc: mmc@30440000 {
-> +			compatible = "pensando,elba-sd4hc", "cdns,sd4hc";
-> +			clocks = <&emmc_clk>;
-> +			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
-> +			reg = <0x0 0x30440000 0x0 0x10000>,
-> +			      <0x0 0x30480044 0x0 0x4>;	/* byte-lane ctrl */
-> +			cdns,phy-input-delay-sd-highspeed = <0x4>;
-> +			cdns,phy-input-delay-legacy = <0x4>;
-> +			cdns,phy-input-delay-sd-uhs-sdr50 = <0x6>;
-> +			cdns,phy-input-delay-sd-uhs-ddr50 = <0x16>;
-> +			mmc-ddr-1_8v;
-> +			status = "disabled";
-> +		};
-> +
-> +		mssoc: mssoc@307c0000 {
-
-Generic node name.
-
-> +			compatible = "syscon", "simple-mfd";
-
-This does not look correct. Syscon is okay, but why do you need
-simple-mfd (there are no children here)?
-
-> +			reg = <0x0 0x307c0000 0x0 0x3000>;
-> +		};
-> +	};
-> +};
-
-
-Best regards,
-Krzysztof
