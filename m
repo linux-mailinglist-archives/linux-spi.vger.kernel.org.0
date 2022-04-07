@@ -2,58 +2,58 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10ECF4F8779
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Apr 2022 20:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B8A4F8789
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Apr 2022 20:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347036AbiDGS4a (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Apr 2022 14:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
+        id S1347057AbiDGS76 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Apr 2022 14:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238938AbiDGS43 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 14:56:29 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF092C1
-        for <linux-spi@vger.kernel.org>; Thu,  7 Apr 2022 11:54:25 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id i27so12757931ejd.9
-        for <linux-spi@vger.kernel.org>; Thu, 07 Apr 2022 11:54:25 -0700 (PDT)
+        with ESMTP id S1347056AbiDGS76 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 14:59:58 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4BD22AC7A
+        for <linux-spi@vger.kernel.org>; Thu,  7 Apr 2022 11:57:56 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id bg10so12822842ejb.4
+        for <linux-spi@vger.kernel.org>; Thu, 07 Apr 2022 11:57:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=P5t7OevoqfgFjRrAxyC45i6wviQtAlsVjUBZbWy7gH4=;
-        b=KL/jdqB/8wdHm4tVl+cty3roBUjEw3Xvp55KEqJIMDyghPTHAE0/0T73Vd1qsKJxin
-         5+YJC8KR/eytHSAoJ6LIrG5Di+EIl7xOGc9zdSUw+zGv0Wi41TCRv/qpA2nov2p8/yCt
-         XATM2jxZJLIAX/CKfNSEoGfFNp+SIFMAWP+sezxJUrUgekOvp1DIIeP+HAZ01uC2tR0O
-         2J3yaYFjUv/mbjagVfCubLMLtnPEpZV9JNecY+kqDzwvHBnx0MH6dko+rasZiCf6GnjY
-         5y1AC2uDPaL3nLiPAPLc1doKpIV2oTGzQgXJKd6nxUwl05S7APxhLtM7MhcuDJph+mSu
-         akfA==
+        bh=SStO+Hy5++Lfb3g3WM6HTmeRTlehAMSfC5x1LN925d0=;
+        b=pffEq134LMK9q44k1NUZbvtMIapNh/q3WfROiHVN7L1cCwp0gRQ+TZf4GzSrwo/pLu
+         xPNdVOA64orFoZADlNoWj5XOmMg7MBio+VcQP0/mh1EDb/hC8AtZrj0HkvehddY2q8oq
+         7+IggfWRxtVuyLLHYu+xrBkJIH3lL4VrQURDL9VB12d7dpxCA5kUz0x03/VYaKp5303Y
+         x9P75BYq3A60VyyoHrmtdnKfvzizdSdDtH6YGyyMPWK6sfIjAAgkMFznRWaAhVRZAOmf
+         mo7Hihy5sVzOTOVsRpKXy6Y4kRYOC8BW5jXz8eHJI4MLJgdwD/8hcg4bPl76oK06Dqtp
+         Ilrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=P5t7OevoqfgFjRrAxyC45i6wviQtAlsVjUBZbWy7gH4=;
-        b=1PbnAZiA+YBvan0GueSU6yP3REIqVK3EU5RamN62ickawifhQiTWMH9H/hQoEtua8O
-         HTv0B58fmRJGLCXqi4wgsq1fyThCMTTnVbe6eRSTmLUhmv6/eKMs1SqvYTK5T+IgSwGp
-         IFfogDim9otHKkk24pdhyKwJgBYKFch9mRTQwE1QT78eP170JHzcu5qU5kFoUPcYvUcB
-         spWyxjXqZ9ScvxMlZQ+UhR1/5B8FXr/SD96KMmjKR3qxSXRUhraEoOIOpXE+Aia+ItIO
-         I3O2QDk6+/PbUYXWoYzSjZJPRBHKDfRzaqaNsSqMOnvyM4EpRyZ2VB1SugDG39DQfVZT
-         7NRA==
-X-Gm-Message-State: AOAM532d43VrTbEHHDJG8BzfgI+KOM9BDV1h6R0JX3uJBVLY645mGoyE
-        sRRrmB9zmWMqYxp6UfRzs4EzyQ==
-X-Google-Smtp-Source: ABdhPJycXKO2QYwQvSX8Ts92BaP32pn1JJgkuHfAY4U1V8JbdPo1sOdSx8Jvd+rm4dqfMoRhPVwlig==
-X-Received: by 2002:a17:907:3e22:b0:6e7:d37:204e with SMTP id hp34-20020a1709073e2200b006e70d37204emr14870135ejc.375.1649357664158;
-        Thu, 07 Apr 2022 11:54:24 -0700 (PDT)
+        bh=SStO+Hy5++Lfb3g3WM6HTmeRTlehAMSfC5x1LN925d0=;
+        b=pgQ7F5uw+4uq2B8GCsk4OdXEHhEDpZYkYjbI7q8yWxBYsLZw+y/CkXA302av2V25oX
+         I9IEQCYXovxk8L4QluGdxDk/ZbldVESENRGQFGqOhBRgAZxL1iK1AS3A6MHWmCGBXYbA
+         slFT5qYMFSCJ/Ffyh/KC9T6qJkg0H1CPqG+3CwwR2h5n/ar8JhThYMwltwBBeW6h0sb3
+         n7bIBNzqziM0qJLvFAVx7RNppwyrmYHRR6HV7FFegNRnK8aSOH0EXwJlOkysPsXwIHjT
+         uJEy722DTfagiD9JJUZUu3iJkfGeye//++t8ndEMqNSSD06UD3BhD+hve7HvpaVhbfz/
+         ADJg==
+X-Gm-Message-State: AOAM533OfComUprmeJgjvlRZzCDpMFaYHlXNPclTju8gn5Dl51FObFhv
+        s9gVAyJq3VssMR1jSG1C3Ms2Xw==
+X-Google-Smtp-Source: ABdhPJxLu1ldArMYGdKSMNZ+//fBUb3UGN+WRJC1fJrCRxdzP/spu3u2wXjkYdcG6b+VzwcYx5d1Jg==
+X-Received: by 2002:a17:907:216f:b0:6ce:d85f:35cf with SMTP id rl15-20020a170907216f00b006ced85f35cfmr15416379ejb.517.1649357875010;
+        Thu, 07 Apr 2022 11:57:55 -0700 (PDT)
 Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id x9-20020a05640226c900b0041d015bb8a5sm1380703edd.26.2022.04.07.11.54.23
+        by smtp.gmail.com with ESMTPSA id o18-20020a1709064f9200b006e7f229b332sm4692136eju.36.2022.04.07.11.57.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 11:54:23 -0700 (PDT)
-Message-ID: <a2f89f06-f586-2bf3-fbfa-f0fd1b6ad057@linaro.org>
-Date:   Thu, 7 Apr 2022 20:54:22 +0200
+        Thu, 07 Apr 2022 11:57:54 -0700 (PDT)
+Message-ID: <888c0f62-7845-715e-12a1-7b16f84d2ae9@linaro.org>
+Date:   Thu, 7 Apr 2022 20:57:53 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 01/11] dt-bindings: arm: add Pensando boards
+Subject: Re: [PATCH 03/11] dt-bindings: mmc: Add Pensando Elba SoC binding
 Content-Language: en-US
 To:     Brad Larson <brad@pensando.io>,
         linux-arm-kernel@lists.infradead.org
@@ -64,9 +64,9 @@ Cc:     arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com,
         linux-spi@vger.kernel.org, linux-mmc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20220406233648.21644-1-brad@pensando.io>
- <20220406233648.21644-2-brad@pensando.io>
+ <20220406233648.21644-4-brad@pensando.io>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220406233648.21644-2-brad@pensando.io>
+In-Reply-To: <20220406233648.21644-4-brad@pensando.io>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,25 +80,45 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 On 07/04/2022 01:36, Brad Larson wrote:
-> Document the compatible for Pensando Elba SoC boards.
+> Pensando Elba ARM 64-bit SoC is integrated with this IP and
+> explicitly controls byte-lane enables resulting in an additional
+> reg property resource.
 > 
 > Signed-off-by: Brad Larson <brad@pensando.io>
 > ---
 > Change from V3:
-> - Add description and board compatible
+> - Change from elba-emmc to elba-sd4hc to match file convention
+> - Use minItems: 1 and maxItems: 2 to pass schema check
 > 
->  .../bindings/arm/pensando,elba.yaml           | 26 +++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/pensando,elba.yaml
+>  Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/pensando,elba.yaml b/Documentation/devicetree/bindings/arm/pensando,elba.yaml
+> diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> index 4207fed62dfe..278a71b27488 100644
+> --- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> @@ -19,10 +19,12 @@ properties:
+>        - enum:
+>            - microchip,mpfs-sd4hc
+>            - socionext,uniphier-sd4hc
+> +          - pensando,elba-sd4hc
 
-It seems you ignored to Cc devicetree binding maintainers for all your
-devicetree bindings patches.
+Put your entry in alphabetical order.
 
-Please rebase on a recent kernel tree and use scripts/get_maintainers.pl
-to get list of people to Cc. Your tree could not have my address, but
-why Rob is missing is a surprise...
+>        - const: cdns,sd4hc
+>  
+>    reg:
+> -    maxItems: 1
+> +    minItems: 1
+> +    maxItems: 2
+
+This needs allOf:if:then: which sets constraint on number of items per
+different compatible.
+
+>  
+>    interrupts:
+>      maxItems: 1
+
 
 Best regards,
 Krzysztof
