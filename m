@@ -2,56 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A504F7D75
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Apr 2022 13:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DAD84F7E01
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Apr 2022 13:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbiDGLEl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Apr 2022 07:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
+        id S244773AbiDGLZ4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 7 Apr 2022 07:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiDGLEk (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 07:04:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F7E3EB87;
-        Thu,  7 Apr 2022 04:02:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S232523AbiDGLZ4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 07:25:56 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFD8637E;
+        Thu,  7 Apr 2022 04:23:55 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E866B82723;
-        Thu,  7 Apr 2022 11:02:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DE78C385A4;
-        Thu,  7 Apr 2022 11:02:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649329358;
-        bh=ORFRCbWj/EjWk7E0RjZgO03e0x3on7bow6Av33bkjT8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uddIV8PLjQHuNS3bEbtmBzYq7XWxueW2ZlUmcSI+VdZw+SJRjnL1Krj/ofUQ0ovrc
-         dfQRQOB3gEV5WKkUlwla/LhPC0S/Lv80fMe+MjrOAV34VbB2tmzwk8VxOD3GWCrNSr
-         qNLdsvRfXzoMeGHFmFbfTkDBaM8lhlt45NaTrpI1cpGODDvsCzduHUZi7XS6GLkqFs
-         seW5uXM4uc1CbZ3FJ/4xN59iyfVgZ2tQtFISKwJAkcYRww40QQ3L5nJtuuin2zPCKf
-         Paw7lCd8xjK9glYz6xgfaU7BDopLEutsmCIQf+vbhrqA8o5uJGZ2eJq/qVyz4mFOcQ
-         nomzEyCaNl4tw==
-Date:   Thu, 7 Apr 2022 12:02:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, tudor.ambarus@microchip.com,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, Manohar.Puri@microchip.com
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 6F93022175;
+        Thu,  7 Apr 2022 13:23:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1649330633;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zGgRGtTK60vlO5rrtbSkRkY0I7pneiIfRmRnhVQTqiA=;
+        b=eJq/xpGUixdj2taujpeYf62eEyp0Tsxjm2RpOu01SoSj6ZQChrYPmr+NwcUKMGycjOLgQJ
+        qlwynXfDHgBa7PMLhfOxqcYEI2PZa8Httt1JeL8KbhWIX8a8iQVIBYtHNlNFJYkg5w1zeA
+        ZYsUZe1PvNp09PTgmjjEZbnSQUVFSG0=
+From:   Michael Walle <michael@walle.cc>
+To:     broonie@kernel.org
+Cc:     Manohar.Puri@microchip.com, UNGLinuxDriver@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        devicetree@vger.kernel.org, kavyasree.kotagiri@microchip.com,
+        krzk+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        nicolas.ferre@microchip.com, robh+dt@kernel.org,
+        tudor.ambarus@microchip.com, Michael Walle <michael@walle.cc>
 Subject: Re: [PATCH] spi: atmel,quadspi: Define lan966x QSPI
-Message-ID: <Yk7Ex5ltaxC7Z+N6@sirena.org.uk>
-References: <20220407105420.10765-1-kavyasree.kotagiri@microchip.com>
+Date:   Thu,  7 Apr 2022 13:23:45 +0200
+Message-Id: <20220407112345.148316-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <Yk7Ex5ltaxC7Z+N6@sirena.org.uk>
+References: <Yk7Ex5ltaxC7Z+N6@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sl+D9xSOnfbnTo44"
-Content-Disposition: inline
-In-Reply-To: <20220407105420.10765-1-kavyasree.kotagiri@microchip.com>
-X-Cookie: Look ere ye leap.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,37 +57,24 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+> > @@ -19,6 +19,7 @@ properties:
+> >        - microchip,sam9x60-qspi
+> >        - microchip,sama7g5-qspi
+> >        - microchip,sama7g5-ospi
+> > +      - microchip,lan966x-qspi
+> 
+> Generally DT compatibles should be for specific SoCs rather than having
+> wildcards in them, even if that means you have to list a lot of SoCs.
+> Having used wildcards in the past doesn't mean it's a good idea to
+> continue adding them!
 
---sl+D9xSOnfbnTo44
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The subject should also be prefixed with "dt-bindings: ".
 
-On Thu, Apr 07, 2022 at 04:24:20PM +0530, Kavyasree Kotagiri wrote:
+Mark, I did a git log on
+Documentation/devicetree/bindings/spi/atmel,quadspi.yaml and all the
+subjects are without "dt-bindings:" although the original patch was with
+that prefix [1]. Is that intended?
 
-> @@ -19,6 +19,7 @@ properties:
->        - microchip,sam9x60-qspi
->        - microchip,sama7g5-qspi
->        - microchip,sama7g5-ospi
-> +      - microchip,lan966x-qspi
+-michael
 
-Generally DT compatibles should be for specific SoCs rather than having
-wildcards in them, even if that means you have to list a lot of SoCs.
-Having used wildcards in the past doesn't mean it's a good idea to
-continue adding them!
-
---sl+D9xSOnfbnTo44
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJOxMcACgkQJNaLcl1U
-h9D9FggAgc5pFn36W0ydx/B1WZBx3FF3Ku7q2SH56VgVypwvh1h6vvhFkLNiDRee
-MwBh7/AZmQhxK9frdGJhVWJ4UWtcPFA71G8qWLEAPCnK3t/EDX675CtOo5zg63Sl
-vAnlpHS2MN1TeV/ys48hVR383PQ/pqICHZ3x+Ul7n8lPJKgMom2e7AOpM4QSbOON
-0RURSFVSctdeSKs/k5uAapS9kK5JsyOk+65MKtMCVHiRnu0PJCkr3ZxuelZntgbS
-188yvdtjBylm/4qGsPncB0/VEh1JOhN0yPiZaWJ6Wb5vDxDvwrwwhsVuzfzeXkTH
-ae4jeAjWZkfIXs1ixYoNw4Nh5pUAGw==
-=1tb3
------END PGP SIGNATURE-----
-
---sl+D9xSOnfbnTo44--
+[1] https://lore.kernel.org/linux-devicetree/163962128492.2075495.3678727080606971257.b4-ty@kernel.org/
