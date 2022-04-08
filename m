@@ -2,105 +2,101 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791274F8AAD
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Apr 2022 02:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE1F4F8F08
+	for <lists+linux-spi@lfdr.de>; Fri,  8 Apr 2022 09:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232944AbiDHAcx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 7 Apr 2022 20:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
+        id S232077AbiDHGe1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 8 Apr 2022 02:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232174AbiDHAcw (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 7 Apr 2022 20:32:52 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE05429F11A;
-        Thu,  7 Apr 2022 17:30:50 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so8172178fac.7;
-        Thu, 07 Apr 2022 17:30:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=W70F/zd2AKch386n29+TKgnYuWJ1dPUuzRF3aXkzTdw=;
-        b=fFKOEndy7Ln5agkPC4XFZoNfgDqQbp2yoUL3N8MqfVEfb2BOTC6v2XpKZeDyL5SEO3
-         CiU39HDryUSfa1mwqS0QvM+T9lc/rbaiDtcHLWm7wU3BDQeAMPpUfWpQjICrT2fy0vLl
-         4kl996yLvN1+wZ97fo7THLWpI+Kw+PjpWTPM2rvNk7rCPJop9Ke4Ts2j+hmciv7rJrtB
-         6lguvJnbrF4fUKbxwGz82D8o9l/RgPjYtxkpT9w9Ta9f+RA35F3WkRsmfDISz53iLSSU
-         JNFKwICX4oTMEZut5T/qbZHhk1eeEuCl6wwqXlfGPMHfg/m/OVsm+ztc/4cV/hycZUqt
-         nIpQ==
-X-Gm-Message-State: AOAM532vXUtPe3Ez2lm5CAoZHRMIPVr2jqqpVNzrIS3C39ahIfYsyU5J
-        oMhNx2sJRfAFtFYWRhxNpqEt8Tl3YA==
-X-Google-Smtp-Source: ABdhPJyh0KtpubbGQRl0vMSxyBRMX5cXuTTcgR9gbNVftxyA3x9smxRykHIUBImThHKPQ9vZmgat8w==
-X-Received: by 2002:a05:6870:d154:b0:e2:8d2f:b725 with SMTP id f20-20020a056870d15400b000e28d2fb725mr47677oac.56.1649377849962;
-        Thu, 07 Apr 2022 17:30:49 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l33-20020a0568302b2100b005cdad9100desm8818369otv.40.2022.04.07.17.30.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 17:30:49 -0700 (PDT)
-Received: (nullmailer pid 2311421 invoked by uid 1000);
-        Fri, 08 Apr 2022 00:30:48 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Marek Vasut <marex@denx.de>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org
-In-Reply-To: <20220407194936.223041-1-marex@denx.de>
-References: <20220407194936.223041-1-marex@denx.de>
-Subject: Re: [PATCH] dt-bindings: spi: Add YAML DT binding document for trivial devices
-Date:   Thu, 07 Apr 2022 19:30:48 -0500
-Message-Id: <1649377848.893085.2311420.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S229566AbiDHGe0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Apr 2022 02:34:26 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129272F3D0B;
+        Thu,  7 Apr 2022 23:32:21 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 11A44FF809;
+        Fri,  8 Apr 2022 06:32:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1649399540;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jFdqjPdj+EvQat/TUNxFw2X8022yUvS5IZjp3j3BFUg=;
+        b=HZtCP6Wv6ySD0icGoZTFTcn9erdtWYbltosDs4PvpCpMxgvVbqxZOwGFCPXs4mP+geopHC
+        66AjK7hhyS1PIKCZp/d9CLLG6qvXnzHpWvG/W1xns6Osq3u/ZiQNfre7ORWJVDqAZD2Uzy
+        UUHHGAtbF/kvSL3lOHzfxyfKcyfBpema+mbmt09dFRGPRoHbGgTMpVifC5sHvUmHz6XRdy
+        AID1g+5ccBsNVpM1YKUBuraZYKkMTQwGdRuB4XBDelrdRtMJtmiddDu/t+Qtx9dTcW+vfJ
+        we59+GvY1I4OGG4lSHaWC6lQVhXZa9wOPNovYUVcOnciymWg04dGqDNlPHXLtA==
+Date:   Fri, 8 Apr 2022 08:32:14 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Chuanhong Guo <gch981213@gmail.com>
+Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
+        support),
+        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
+        support), linux-kernel@vger.kernel.org (open list),
+        linux-mtd@lists.infradead.org (open list:NAND FLASH SUBSYSTEM)
+Subject: Re: [PATCH v4 1/5] mtd: nand: make mtk_ecc.c a separated module
+Message-ID: <20220408083214.1473e88a@xps13>
+In-Reply-To: <20220407150652.21885-2-gch981213@gmail.com>
+References: <20220407150652.21885-1-gch981213@gmail.com>
+        <20220407150652.21885-2-gch981213@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 07 Apr 2022 21:49:36 +0200, Marek Vasut wrote:
-> Document trivial SPI devices in single YAML DT binding document.
-> Currently this overlaps Linux kernel spidev.
-> 
-> Signed-off-by: Marek Vasut <marex@denx.de>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> To: linux-spi@vger.kernel.org
+Hi Chuanhong,
+
+gch981213@gmail.com wrote on Thu,  7 Apr 2022 23:06:48 +0800:
+
+> this code will be used in mediatek snfi spi-mem controller with
+> pipelined ECC engine.
+>=20
+> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
 > ---
->  .../devicetree/bindings/spi/trivial.yaml      | 51 +++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/trivial.yaml
-> 
+>=20
+> Change since v1:
+>   actually make it a module instead of a part of nandcore.o
+>     (ECC_MXIC probablly needs a similar fix.)
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+Please do not hesitate to propose something about it.
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+Otherwise on the MTD side the series looks good (besides the two
+comments you already received).
 
-Full log is available here: https://patchwork.ozlabs.org/patch/
+I don't know if something changed regarding the comments style in the
+spi subsystem, but using // everywhere looks strange, it's usually
+reserved for the SPDX tag, but I'll let Mark comment on it.
 
+Otherwise, MTD patches 1 and 3 look fine.
 
-/: '#address-cells', '#size-cells', 'aliases', 'chosen', 'cpus', 'fxosc', 'iio-hwmon', 'leds', 'memory@80000000', 'model', 'oscillator-audio', 'oscillator-ethernet', 'regulator-3p3v', 'regulator-vcc3v3mcu', 'soc', 'spi-gpio', 'sxosc', 'syscon-reboot' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/vf610-bk4.dtb
-
-channel@0: '#address-cells', '#size-cells', 'spi-cpha' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/am335x-sancloud-bbe-lite.dtb
-
-/: compatible: ['lwn,bk4', 'fsl,vf610'] is too long
-	arch/arm/boot/dts/vf610-bk4.dtb
-
-dac@0: 'spi-cpha', 'spi-cpol' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/rv1108-elgin-r1.dtb
-
-/: 'reg' is a required property
-	arch/arm/boot/dts/vf610-bk4.dtb
-
-slave: 'reg' is a required property
-	arch/arm/boot/dts/vf610-bk4.dtb
-
-spidev0@0: 'fsl,spi-cs-sck-delay', 'fsl,spi-sck-cs-delay' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/vf610-bk4.dtb
-
+Thanks,
+Miqu=C3=A8l
