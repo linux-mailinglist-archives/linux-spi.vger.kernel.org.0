@@ -2,74 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1764F9B06
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Apr 2022 18:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4173C4F9CCC
+	for <lists+linux-spi@lfdr.de>; Fri,  8 Apr 2022 20:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234077AbiDHQvW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 Apr 2022 12:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
+        id S238435AbiDHSfX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 8 Apr 2022 14:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234207AbiDHQvV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Apr 2022 12:51:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E3F127BE1;
-        Fri,  8 Apr 2022 09:49:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6FCBCB82AB3;
-        Fri,  8 Apr 2022 16:49:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3F95BC385A8;
-        Fri,  8 Apr 2022 16:49:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649436554;
-        bh=n8OefGfWJmU2Q8NJK8cALcPoHUUvnBG35UH0onnI9ac=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=EcFXGi4EbqOJHDbFg8ZvEpnAVrBxeMks1WJbp1Zm3rKiB5/pF2q8aw9RgldfPoYcg
-         xlcj0OmYGFP768J/8zEPgPm5lesKu7a2MEd6bvhVXCxVxMQ3G0bdlGHzBuzOmOoM8d
-         bXG5CCguMAzGs6+VYPjk90zMdCmKA8PRM78ab3RBBvXALDclKX6tgF5Yl/XYpvNqb5
-         Y9EvGpoLwbvGYoU3ByOHuUFmlQ2d4t8x82gBkX+bE6DXVaFKY+TTnGUnOlTjP6z/mk
-         F5wa+S24v61tlNw4d83qgzF0h9ynCiq6IeMcKM++Ti4PoM4vthBk25ulKzP+yo1U19
-         VnMsnwgOZNPiA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 28F70E85BCB;
-        Fri,  8 Apr 2022 16:49:14 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v5.18-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220408145718.166A6C385A3@smtp.kernel.org>
-References: <20220408145718.166A6C385A3@smtp.kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220408145718.166A6C385A3@smtp.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.18-rc1
-X-PR-Tracked-Commit-Id: 2c7d1b281286c46049cd22b43435cecba560edde
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d00c50b35101b862c3db270ffeba53a63a1063d9
-Message-Id: <164943655416.24432.10191237600657481484.pr-tracker-bot@kernel.org>
-Date:   Fri, 08 Apr 2022 16:49:14 +0000
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S234781AbiDHSfW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Apr 2022 14:35:22 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29351107CE;
+        Fri,  8 Apr 2022 11:33:18 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id f23so16582324ybj.7;
+        Fri, 08 Apr 2022 11:33:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=wtNwrz7oRIWjkIPNvrbEkRmxAgqdmLlbehB5ZSkoXhg=;
+        b=BnQhROQvxrbGrbElkJbj7N/Oj8j5L7dnboqyh/6P9sjpz9JZG9ADzD7efNXRN6l5YQ
+         y/gGmWwgEibNNLaSHwpwUjqDJWKp+XzuGbjMDEPt5SQkNyaIXUfrUatlGXf8xbw/MyQn
+         7SlzrtmwRzT8SST92P04UK8xsgY/atZCGOFd7PPghXWFziNH9iJiKvxOfEWuEtFyI6cD
+         qn4C1O04b7kyNKenBd092nPomkTjc5opjWfvzUt6oRo2qLsucCaAgw2j4n65lHsCgpyr
+         RLf63x9F4pFMyLiYPXoSU8jH8Ai8dzjIp9x4oawUFMKtZqXaNzZXiaEOVoix804trpjW
+         UXxQ==
+X-Gm-Message-State: AOAM532CD5o7C7jpF48uesLvjsmE4HZrr/aZO5AijJeJ32NF4pIP/t/P
+        t7/IcPBLZ+tjrRGb9nJgfrjR26m5V92SknKwHwUP6lc1J7Y=
+X-Google-Smtp-Source: ABdhPJyCzEXS/CjHXhyPsWMJqSys0t+S6V0CILcgBrheHoAVd1X28DycdTMQiCI7UTHXXlQEhZcWRp02kibzFAZnjpc=
+X-Received: by 2002:a25:8409:0:b0:63c:bea7:30af with SMTP id
+ u9-20020a258409000000b0063cbea730afmr13740174ybk.633.1649442798030; Fri, 08
+ Apr 2022 11:33:18 -0700 (PDT)
+MIME-Version: 1.0
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 8 Apr 2022 20:33:07 +0200
+Message-ID: <CAJZ5v0g+31PFhkoROu18aT2CLGkn61v7aLgiPC3M_zbqqf_yCg@mail.gmail.com>
+Subject: [GIT PULL] ACPI updates for v5.18-rc2
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The pull request you sent on Fri, 08 Apr 2022 15:57:02 +0100:
+Hi Linus,
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.18-rc1
+Please pull from the tag
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d00c50b35101b862c3db270ffeba53a63a1063d9
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-5.18-rc2
 
-Thank you!
+with top-most commit 87ad236001eb95cf1760ccaf7670c94722231097
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+ Merge branch 'acpi-bus'
+
+on top of commit 3123109284176b1532874591f7c81f3837bbdc17
+
+ Linux 5.18-rc1
+
+to receive ACPI updates for 5.18-rc2.
+
+These revert a problematic commit from the 5.17 development cycle
+and finalize the elimination of acpi_bus_get_device() that mostly
+took place during the recent merge window.
+
+Specifics:
+
+ - Revert an ACPI processor driver change related to cache
+   invalidation in acpi_idle_play_dead() that clearly was a mistake
+   and introduced user-visible regressions (Akihiko Odaki).
+
+ - Replace the last instance of acpi_bus_get_device() added during
+   the recent merge window and drop the function to prevent more
+   users of it from being added (Rafael Wysocki).
+
+Thanks!
+
+
+---------------
+
+Akihiko Odaki (1):
+      Revert "ACPI: processor: idle: Only flush cache on entering C3"
+
+Rafael J. Wysocki (1):
+      ACPI: bus: Eliminate acpi_bus_get_device()
+
+---------------
+
+ drivers/acpi/processor_idle.c |  3 +--
+ drivers/acpi/scan.c           | 13 -------------
+ drivers/spi/spi.c             |  3 ++-
+ include/acpi/acpi_bus.h       |  1 -
+ 4 files changed, 3 insertions(+), 17 deletions(-)
