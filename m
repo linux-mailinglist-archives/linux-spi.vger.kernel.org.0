@@ -2,101 +2,99 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE1F4F8F08
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Apr 2022 09:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E13574F9068
+	for <lists+linux-spi@lfdr.de>; Fri,  8 Apr 2022 10:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbiDHGe1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 Apr 2022 02:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
+        id S230487AbiDHILo (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 8 Apr 2022 04:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiDHGe0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Apr 2022 02:34:26 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129272F3D0B;
-        Thu,  7 Apr 2022 23:32:21 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 11A44FF809;
-        Fri,  8 Apr 2022 06:32:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649399540;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jFdqjPdj+EvQat/TUNxFw2X8022yUvS5IZjp3j3BFUg=;
-        b=HZtCP6Wv6ySD0icGoZTFTcn9erdtWYbltosDs4PvpCpMxgvVbqxZOwGFCPXs4mP+geopHC
-        66AjK7hhyS1PIKCZp/d9CLLG6qvXnzHpWvG/W1xns6Osq3u/ZiQNfre7ORWJVDqAZD2Uzy
-        UUHHGAtbF/kvSL3lOHzfxyfKcyfBpema+mbmt09dFRGPRoHbGgTMpVifC5sHvUmHz6XRdy
-        AID1g+5ccBsNVpM1YKUBuraZYKkMTQwGdRuB4XBDelrdRtMJtmiddDu/t+Qtx9dTcW+vfJ
-        we59+GvY1I4OGG4lSHaWC6lQVhXZa9wOPNovYUVcOnciymWg04dGqDNlPHXLtA==
-Date:   Fri, 8 Apr 2022 08:32:14 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Chuanhong Guo <gch981213@gmail.com>
-Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support),
-        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support), linux-kernel@vger.kernel.org (open list),
-        linux-mtd@lists.infradead.org (open list:NAND FLASH SUBSYSTEM)
-Subject: Re: [PATCH v4 1/5] mtd: nand: make mtk_ecc.c a separated module
-Message-ID: <20220408083214.1473e88a@xps13>
-In-Reply-To: <20220407150652.21885-2-gch981213@gmail.com>
-References: <20220407150652.21885-1-gch981213@gmail.com>
-        <20220407150652.21885-2-gch981213@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        with ESMTP id S229520AbiDHILl (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Apr 2022 04:11:41 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C3031DFF;
+        Fri,  8 Apr 2022 01:09:37 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id p8so6936237qvv.5;
+        Fri, 08 Apr 2022 01:09:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wvrPdbilEiNQ6xA/V3yxjuFCkZh5Xedbmn0/+sfMiOA=;
+        b=b8/zWJkkt+8LFdvr03PPHOxb+Z6y6VXc6MmQTX/FjDS1Cm2Bcj194BwvwDL941Q5FX
+         fcims+D8y7aaodn7XoNS4JQ3bJ96a63/8P+iSwgU4xNMCqZY7WqqY/plPl2s+FLPeEJy
+         lo9ynUaBl+Toh8y5XrDjLwlEYKP5pe/zHiDLhVoFWYW/2wPsWzEqngC0Tl2OUopjqMgX
+         4kgeYjdD650syf2yLeFrpKeHPVWA2b9TwOb9T5aiCDK79N0XnviF/SmXgW+Tyu40gWEi
+         HsoMPF78023Xg826hz0Cj2QEjgrTOgx7hxIByOgulLmcy1vCnfrmkLeSP6/vOlYACvAY
+         frLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wvrPdbilEiNQ6xA/V3yxjuFCkZh5Xedbmn0/+sfMiOA=;
+        b=tmBuMJxAN0z1tmtNtOixMeEl9ZKg62dsUrJfFmHO0yeb0eSX4hxMLbpYDoFKnxDEns
+         N/k8ONBVTzwYEqsY2+mQ0VNrmKSPutTPK8hvtc6azu3jCXx/FpvesPAVDUpoZaDgmL3/
+         M0tkrpHu79RHmKAltFrCU6D9WZBRlK2oP4xhQuyos8lEAsrdsXpDX4ZtHrFExWmMuEAC
+         dErUCd8IKR64NJ1lRxl3iU4kIhm0zVuZzclWdEE7zxjBko/joWbaCvN68sOJzlfA/knS
+         s4YHwhs8P3M/b2MWCXpc9cN1tBUqkL8fRRIbW5xFiusG3wor4VYxKcm0CXSyFGw1G38P
+         MrxQ==
+X-Gm-Message-State: AOAM5300O96ZGXCSoezI8MggWt4a4uumrR2nB2+g1iJiy8wHTJY2wqH3
+        y7SMuOb81CnWyF/CPJ3i0mEEn9gZhVY=
+X-Google-Smtp-Source: ABdhPJyvbQrNsswukOsqSflO07qr+g2xhSpqnKYHPs4QUTSGdNb8QFb9n0tAUILqhHI0FriQs/pplA==
+X-Received: by 2002:ad4:478a:0:b0:443:e160:28e2 with SMTP id z10-20020ad4478a000000b00443e16028e2mr15175141qvy.76.1649405377090;
+        Fri, 08 Apr 2022 01:09:37 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id e15-20020a05622a110f00b002e1ed105652sm16799392qty.2.2022.04.08.01.09.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 01:09:36 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     broonie@kernel.org
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] spi: spi-ti-qspi: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Date:   Fri,  8 Apr 2022 08:09:31 +0000
+Message-Id: <20220408080931.2494356-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Chuanhong,
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-gch981213@gmail.com wrote on Thu,  7 Apr 2022 23:06:48 +0800:
+Using pm_runtime_resume_and_get is more appropriate
+for simplifing code
 
-> this code will be used in mediatek snfi spi-mem controller with
-> pipelined ECC engine.
->=20
-> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-> ---
->=20
-> Change since v1:
->   actually make it a module instead of a part of nandcore.o
->     (ECC_MXIC probablly needs a similar fix.)
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/spi/spi-ti-qspi.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Please do not hesitate to propose something about it.
+diff --git a/drivers/spi/spi-ti-qspi.c b/drivers/spi/spi-ti-qspi.c
+index e06aafe169e0..e6e8b062766f 100644
+--- a/drivers/spi/spi-ti-qspi.c
++++ b/drivers/spi/spi-ti-qspi.c
+@@ -172,9 +172,8 @@ static int ti_qspi_setup(struct spi_device *spi)
+ 	dev_dbg(qspi->dev, "hz: %d, clock divider %d\n",
+ 			qspi->spi_max_frequency, clk_div);
+ 
+-	ret = pm_runtime_get_sync(qspi->dev);
++	ret = pm_runtime_resume_and_get(qspi->dev);
+ 	if (ret < 0) {
+-		pm_runtime_put_noidle(qspi->dev);
+ 		dev_err(qspi->dev, "pm_runtime_get_sync() failed\n");
+ 		return ret;
+ 	}
+-- 
+2.25.1
 
-Otherwise on the MTD side the series looks good (besides the two
-comments you already received).
-
-I don't know if something changed regarding the comments style in the
-spi subsystem, but using // everywhere looks strange, it's usually
-reserved for the SPDX tag, but I'll let Mark comment on it.
-
-Otherwise, MTD patches 1 and 3 look fine.
-
-Thanks,
-Miqu=C3=A8l
