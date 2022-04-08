@@ -2,71 +2,42 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6244F95C8
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Apr 2022 14:29:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C464F98BE
+	for <lists+linux-spi@lfdr.de>; Fri,  8 Apr 2022 16:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235714AbiDHMaH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 8 Apr 2022 08:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
+        id S234109AbiDHO71 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 8 Apr 2022 10:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235720AbiDHMaF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Apr 2022 08:30:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A5133DF84;
-        Fri,  8 Apr 2022 05:28:01 -0700 (PDT)
+        with ESMTP id S237248AbiDHO7Z (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 8 Apr 2022 10:59:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52785116B79;
+        Fri,  8 Apr 2022 07:57:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70F3B620CC;
-        Fri,  8 Apr 2022 12:28:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76F3EC385A3;
-        Fri,  8 Apr 2022 12:27:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE012B82BA9;
+        Fri,  8 Apr 2022 14:57:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 166A6C385A3;
+        Fri,  8 Apr 2022 14:57:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649420880;
-        bh=N5V72NGw/oH3V7jhL2eqxDT7AtT93lmGpSFjPpUk84o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XseQyrskrKHG2ZYifsSWw4C0ORCYktjrfjWSS39eovOSoMO70/BK0nmdZOGe8uAF7
-         nKHlITp70+P8S0fd+qQJKPAgFNDqnYWtysO05tDP6ghJh2fYhJPqQ6GgRtHFwy3rPu
-         bseVljcG6Btzk+eq4LvPQqWFKCdu63bpDcbMiXjEUtkTnZKsNitovhrBcQNiTI1fXl
-         rw65czT4wA2biLWos9N6btp2k8Qwm1fuY8d8ndxnc/DNxkMSdUOwyCip/QzvW0HLo6
-         uQywsCY3cal71kllpexhjuoo/Re0tlIlEPRLL4/IMR/dXK3oeND7VV5XRw95GdGJZH
-         dlRqLt/vN92aw==
-Date:   Fri, 8 Apr 2022 13:27:53 +0100
+        s=k20201202; t=1649429838;
+        bh=WuczYS6ilAC0AV8hX0hQJdmcl49iTXUZaYKgxq2uR1Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UDxdQEexibzMsvBr/rRCMhO/EiYMa86SvH/a4dYsZAFk++FJ7oLXmDPceXRgKgvZQ
+         5S7M9m1EsHbTNq6AqO15i0HimsklSJn5PzwGe5V47F7rK+eal5Cn7FhokI2U3njWgF
+         h97Wiw3CrWf2HN/x1NYk1KYeQCJURtktp67IH06UpGsnqRKg0cZImz1LSZU4ZNufv1
+         zCetyjkRXTMvu1CmQeCm99TOqcUfK0iBMohR7lTledHNQd6RK6UiQ4IrW5rL2ypKY5
+         tX+DzC7Z3ZO8Fm/exmhEUt6nqUMDFFRtwmZkcHHhp3c8ZQF2ck2XHvvEngOEbfr48w
+         0CROFI1rn2mdg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
-Subject: Re: [PATCH v4 1/5] mtd: nand: make mtk_ecc.c a separated module
-Message-ID: <YlAqSQ5w3y39aOy+@sirena.org.uk>
-References: <20220407150652.21885-1-gch981213@gmail.com>
- <20220407150652.21885-2-gch981213@gmail.com>
- <20220408083214.1473e88a@xps13>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZqHgdsk0cLf7iTJ6"
-Content-Disposition: inline
-In-Reply-To: <20220408083214.1473e88a@xps13>
-X-Cookie: Look ere ye leap.
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v5.18-rc1
+Date:   Fri, 08 Apr 2022 15:57:02 +0100
+Message-Id: <20220408145718.166A6C385A3@smtp.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -77,38 +48,44 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
---ZqHgdsk0cLf7iTJ6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-On Fri, Apr 08, 2022 at 08:32:14AM +0200, Miquel Raynal wrote:
+are available in the Git repository at:
 
-> Otherwise on the MTD side the series looks good (besides the two
-> comments you already received).
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.18-rc1
 
-What's the plan for merging then?
+for you to fetch changes up to 2c7d1b281286c46049cd22b43435cecba560edde:
 
-> I don't know if something changed regarding the comments style in the
-> spi subsystem, but using // everywhere looks strange, it's usually
-> reserved for the SPDX tag, but I'll let Mark comment on it.
+  spi: bcm-qspi: fix MSPI only access with bcm_qspi_exec_mem_op() (2022-04-06 15:50:11 +0100)
 
-I generally request that, it looks messy if the comment block at the top
-mixes styles.
+----------------------------------------------------------------
+spi: Fixes for v5.18
 
---ZqHgdsk0cLf7iTJ6
-Content-Type: application/pgp-signature; name="signature.asc"
+A small collection of fixes that have arrived since the merge window,
+the most noticable one is a fix for unmapping messages when the mapping
+was done with the struct device supplied to do the mapping overridden.
 
------BEGIN PGP SIGNATURE-----
+----------------------------------------------------------------
+Christophe JAILLET (1):
+      spi: mxic: Fix an error handling path in mxic_spi_probe()
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJQKkgACgkQJNaLcl1U
-h9CYWQf/aDU1pdMHOR+7llwkDyWQ1V82hUYybIHSsJissvDGWXzsR2f07fHLNOFM
-euloPRzwBaIkluvEtWUg48dvzNObDlNeV93OL5Fx+GQiYlHUq+X4GyfDaLuLGb7o
-cLvaD9w6MuQ33+vUy5/+yHIFymOVH7gqcTo2yXe4U23naTjMP4fedx8VW9BcztrQ
-kcQ7315oY/dOUy/We5tewUENw4MaXshvpPdaMAue4qU+C1vxygPIMdze3oPi6t3R
-YC1PjdjMaAC7HDqENoCzW97DuTNb43yj5Upg+9ZaRA/na0G2e/Q29+R7t5kuEYRx
-jOOZiAm5s7dtfFVI5Xy0BYSh/5sysA==
-=WOzd
------END PGP SIGNATURE-----
+Geert Uytterhoeven (1):
+      spi: rpc-if: Fix RPM imbalance in probe error path
 
---ZqHgdsk0cLf7iTJ6--
+Kamal Dasu (1):
+      spi: bcm-qspi: fix MSPI only access with bcm_qspi_exec_mem_op()
+
+Matthias Schiffer (1):
+      spi: cadence-quadspi: fix protocol setup for non-1-1-X operations
+
+Vinod Koul (1):
+      spi: core: add dma_map_dev for __spi_unmap_msg()
+
+ drivers/spi/spi-bcm-qspi.c        |  4 ++--
+ drivers/spi/spi-cadence-quadspi.c | 46 ++++++++++-----------------------------
+ drivers/spi/spi-mxic.c            |  1 +
+ drivers/spi/spi-rpc-if.c          |  8 +++++--
+ drivers/spi/spi.c                 |  4 ++++
+ 5 files changed, 25 insertions(+), 38 deletions(-)
