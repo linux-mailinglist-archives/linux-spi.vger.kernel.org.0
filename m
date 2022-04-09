@@ -2,43 +2,59 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420AC4FA665
-	for <lists+linux-spi@lfdr.de>; Sat,  9 Apr 2022 11:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DAC04FA6CF
+	for <lists+linux-spi@lfdr.de>; Sat,  9 Apr 2022 12:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239492AbiDIJUb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 9 Apr 2022 05:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
+        id S234343AbiDIKmM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 9 Apr 2022 06:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbiDIJUa (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 9 Apr 2022 05:20:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A1D228D33;
-        Sat,  9 Apr 2022 02:18:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EF9D60FAB;
-        Sat,  9 Apr 2022 09:18:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78324C385A4;
-        Sat,  9 Apr 2022 09:18:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649495903;
-        bh=HRj2ph9RMUyXwra0gXtHRn1nyHaJjzAtQD3t2s5KYJ0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AHS5Jj7J6JDx8J1TVTuAyBMocSIXGTxG3hMYNwaYcz7XgHW0aOfpb1J6uZZnPw6EE
-         eMjMh2QWm3AQT2ZP1HinG15KNNRnhYLFwY2cY0Lw6bS6tFmaeIjcOCBwPOdjFlgsh6
-         XinfNqMUwLeQMVurCiXv+4NGPDOPz9u3ISFVF9sI296ypa54cMQmooHlBbAK36H9Ow
-         KpclSoF1fDsvFINd/axKZPLgMjchk/1iaD8WBV/EBsCyRFxDFYD7sPO1SMiQDt5Rwu
-         AinW/0BmtLnDSrrlVLQnsWIZhdDrd+RRyX4Ju48G8YZMdqalhATuzwklfaYvDHyTZ/
-         yl9vNSw/5aovQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=billy-the-mountain.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nd7Ea-002xta-UC; Sat, 09 Apr 2022 10:18:21 +0100
-Date:   Sat, 09 Apr 2022 10:18:20 +0100
-Message-ID: <87tub21uoz.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
+        with ESMTP id S236305AbiDIKmL (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 9 Apr 2022 06:42:11 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50646165AE
+        for <linux-spi@vger.kernel.org>; Sat,  9 Apr 2022 03:40:03 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id z12so62708edl.2
+        for <linux-spi@vger.kernel.org>; Sat, 09 Apr 2022 03:40:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IH+smdr6HwLu60QJ4rEGM3k3Dwd3Lj1hSShNkYwWADk=;
+        b=rty0p7mqU35z9SiXjeEgTFu8FRbCxhvexcOsUrlIt2BwWJXSFqETpUfh2SurdgIZHw
+         Cxf0QKOMKHkPNrhcH+CV/QQI0ne3PxKaMbZa9I+apWEeb3EmZRb9Xm9DsSqN3fd/y5YS
+         pujlC6id7v5BvTbGc3HuJ3meNyErqCDv1e1p9GFTGXZe48ilLPuKzwrjFVesKoG0u3Rd
+         WRhs2UyS+RLKF8stOLNdwGkLc1oThzFAxJLrYbxYz1oBgY5hIwVZIBQVuyp2DfS8r7Kt
+         NJXmg74A/HlxVPmM6HPI+ZNCN1XkvSzC8vGEn11aQYEYh6aNEXbVNeickzbYxvhJcYfz
+         SGAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IH+smdr6HwLu60QJ4rEGM3k3Dwd3Lj1hSShNkYwWADk=;
+        b=zBqFeHncMDvkUvJURCNLRKU2wk19wTCOjJdVZJkrb1RrDxu3whRuoIHl3dpfIbVP+d
+         0Lk6uLtcx3NhIDjSPJVPRIAZMKYAlnobHTTSRT8z+Ld+vtBCWCvtYObRwvgqMA4XJXVB
+         cOuuM4II5Zbn6eksR25iYbW64IvLBEO82CAajPGVMf1UZOgdLwkdQDhXCDiJrnRdnSiW
+         sqQLDbkqCHG2GSSDx8HxsbcxjAY6MMYUbQWV8xVjJeJqHgzPDNtedSv58AMaO8AtnHPf
+         FcyTSNkCqElvYLB6pbKGYkjuzu+ahwiLJArdK1Pi/vMq52uyg88FY4giVl5Z9iawNuef
+         drgw==
+X-Gm-Message-State: AOAM533D23WuiVdyG3ub8lV/qPV2pcLL+20HniJKC7fxzeBifFWa4NHw
+        Zw0rZj4C7XWKPGJGu4DWAyhUgg==
+X-Google-Smtp-Source: ABdhPJyKA/1xZ2gv355sS2o5W8tQkWswcamJ0HPKtJp41RHmX4J+r9pD8t6bnrZaAwz6XaMcPo2fow==
+X-Received: by 2002:aa7:c58d:0:b0:41d:6d1:6f43 with SMTP id g13-20020aa7c58d000000b0041d06d16f43mr12679263edq.125.1649500801722;
+        Sat, 09 Apr 2022 03:40:01 -0700 (PDT)
+Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id e12-20020a170906c00c00b006e66eff7584sm8204774ejz.102.2022.04.09.03.40.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 09 Apr 2022 03:40:01 -0700 (PDT)
+Message-ID: <49c1d200-8c07-b306-a400-86ee6a637bb4@linaro.org>
+Date:   Sat, 9 Apr 2022 12:39:59 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 01/11] dt-bindings: arm: add Pensando boards
+Content-Language: en-US
 To:     Brad Larson <brad@pensando.io>
 Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -56,24 +72,17 @@ Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 11/11] arm64: dts: Add Pensando Elba SoC support
-In-Reply-To: <CAK9rFnyRTX+VM5g9P-ar=3VaExhHcwR8DzLvxtv-tG8cN9gqEQ@mail.gmail.com>
 References: <20220406233648.21644-1-brad@pensando.io>
-        <20220406233648.21644-12-brad@pensando.io>
-        <9c08f621be28dba65e811bc9cdedc882@kernel.org>
-        <CAK9rFnyRTX+VM5g9P-ar=3VaExhHcwR8DzLvxtv-tG8cN9gqEQ@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: brad@pensando.io, linux-arm-kernel@lists.infradead.org, arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com, broonie@kernel.org, fancer.lancer@gmail.com, adrian.hunter@intel.com, ulf.hansson@linaro.org, olof@lixom.net, dac2@pensando.io, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, linux-mmc@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+ <20220406233648.21644-2-brad@pensando.io>
+ <05febd3f-bfdb-13c2-8cce-b9dc422c5eae@linaro.org>
+ <CAK9rFnyRrS_LvoZ_j66cKDHgecqcqzJN5krSxdCquBanViKyHg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAK9rFnyRrS_LvoZ_j66cKDHgecqcqzJN5krSxdCquBanViKyHg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,37 +90,23 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sat, 09 Apr 2022 03:38:55 +0100,
-Brad Larson <brad@pensando.io> wrote:
+On 09/04/2022 04:19, Brad Larson wrote:
+> On Thu, Apr 7, 2022 at 11:45 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>> Change from V3:
+>>> - Add description and board compatible
+>>
+>> That's a bit confusing... the subject is for v1.
 > 
-> On Thu, Apr 7, 2022 at 12:57 AM Marc Zyngier <maz@kernel.org> wrote:
-> >
-> > > +             gic: interrupt-controller@800000 {
-> > > +                     compatible = "arm,gic-v3";
-> > > +                     #interrupt-cells = <3>;
-> > > +                     #address-cells = <2>;
-> > > +                     #size-cells = <2>;
-> > > +                     ranges;
-> > > +                     interrupt-controller;
-> > > +                     reg = <0x0 0x800000 0x0 0x200000>,      /* GICD */
-> > > +                           <0x0 0xa00000 0x0 0x200000>;      /* GICR */
-> >
-> > You are still missing the GICV and GICH regions that are
-> > provided by the CPU. I already pointed that out in [1].
-> >
-> > The Cortex-A72 TRM will tell you where to find them (at
-> > an offset from PERIPHBASE).
-> 
-> Hi Marc,
-> 
-> Got the addresses, neither region is used, and will be included in the
-> next submission.
+> Goal was to identify in the cover letter patch the key changes from
+> the V3 patchset to this V4 patchset.  Then in each patch that had a
+> material change highlight that in the patch itself.  Will try and make
+> it more clear.
 
-Not sure what you mean by these regions being unused here (the Linux
-kernel definitely makes use of them). Note that you'll also need to
-add GICC (which I forgot to mention above).
+This is fine, I am talking about the subject - it is marked as a v1, so
+it's confusing to see a changelog.
 
-	M.
+One way to achieve this is: "git format-patch -v4 -11 ..."
 
--- 
-Without deviation from the norm, progress is not possible.
+Best regards,
+Krzysztof
