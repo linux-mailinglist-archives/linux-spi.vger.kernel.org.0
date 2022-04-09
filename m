@@ -2,56 +2,75 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BBBB4FA2BB
-	for <lists+linux-spi@lfdr.de>; Sat,  9 Apr 2022 06:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 420AC4FA665
+	for <lists+linux-spi@lfdr.de>; Sat,  9 Apr 2022 11:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239483AbiDIEl3 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 9 Apr 2022 00:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
+        id S239492AbiDIJUb (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 9 Apr 2022 05:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239490AbiDIEl0 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 9 Apr 2022 00:41:26 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984E43A71C;
-        Fri,  8 Apr 2022 21:39:21 -0700 (PDT)
+        with ESMTP id S229964AbiDIJUa (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 9 Apr 2022 05:20:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A1D228D33;
+        Sat,  9 Apr 2022 02:18:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 07504CE2EEB;
-        Sat,  9 Apr 2022 04:39:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6AEC1C385A0;
-        Sat,  9 Apr 2022 04:39:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EF9D60FAB;
+        Sat,  9 Apr 2022 09:18:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78324C385A4;
+        Sat,  9 Apr 2022 09:18:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649479158;
-        bh=Z7QYTmVS6p3z2NybpQqu5jAgAyXrncGJtZmjaHDUYuY=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=ocg7JTrb/zZeby5WUjfpKKtbnNiHL4SpfThqfKoRVfOYHkCXaRSwANo78DklkBCA6
-         8Ngxxj0bGl4uoFw9bnhawYAkeXLsOUK88zI3nTFPLzPHK5R753RxdJ5P7sVVDhvpXW
-         YXmHIukqiNaWODdsh+PxlqROQbceluOCk/W6I5FtsQOOO/ync8d4FeqaqExF2NMofX
-         HIerhvQbS3BnbKRq+SCpRneyelWIFn6/yOuX2Zs56pHTx7b1X0GukCRm6NYwniQQkM
-         Ebu1gKLX/k3pMlMgyjQkhWVcOwGX8miGJhHXnLq1oLGLVNBUeIAIrkul7XKQsjobkY
-         fLg1Fv4pSR6Xg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 510A5E85D15;
-        Sat,  9 Apr 2022 04:39:18 +0000 (UTC)
-Subject: Re: [GIT PULL] ACPI updates for v5.18-rc2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0g+31PFhkoROu18aT2CLGkn61v7aLgiPC3M_zbqqf_yCg@mail.gmail.com>
-References: <CAJZ5v0g+31PFhkoROu18aT2CLGkn61v7aLgiPC3M_zbqqf_yCg@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0g+31PFhkoROu18aT2CLGkn61v7aLgiPC3M_zbqqf_yCg@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.18-rc2
-X-PR-Tracked-Commit-Id: 87ad236001eb95cf1760ccaf7670c94722231097
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d017a3167bcb76caedf2b444645bf4db75f775a5
-Message-Id: <164947915832.5739.5376590233982977489.pr-tracker-bot@kernel.org>
-Date:   Sat, 09 Apr 2022 04:39:18 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>
+        s=k20201202; t=1649495903;
+        bh=HRj2ph9RMUyXwra0gXtHRn1nyHaJjzAtQD3t2s5KYJ0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AHS5Jj7J6JDx8J1TVTuAyBMocSIXGTxG3hMYNwaYcz7XgHW0aOfpb1J6uZZnPw6EE
+         eMjMh2QWm3AQT2ZP1HinG15KNNRnhYLFwY2cY0Lw6bS6tFmaeIjcOCBwPOdjFlgsh6
+         XinfNqMUwLeQMVurCiXv+4NGPDOPz9u3ISFVF9sI296ypa54cMQmooHlBbAK36H9Ow
+         KpclSoF1fDsvFINd/axKZPLgMjchk/1iaD8WBV/EBsCyRFxDFYD7sPO1SMiQDt5Rwu
+         AinW/0BmtLnDSrrlVLQnsWIZhdDrd+RRyX4Ju48G8YZMdqalhATuzwklfaYvDHyTZ/
+         yl9vNSw/5aovQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=billy-the-mountain.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nd7Ea-002xta-UC; Sat, 09 Apr 2022 10:18:21 +0100
+Date:   Sat, 09 Apr 2022 10:18:20 +0100
+Message-ID: <87tub21uoz.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Brad Larson <brad@pensando.io>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Olof Johansson <olof@lixom.net>,
+        David Clear <dac2@pensando.io>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 11/11] arm64: dts: Add Pensando Elba SoC support
+In-Reply-To: <CAK9rFnyRTX+VM5g9P-ar=3VaExhHcwR8DzLvxtv-tG8cN9gqEQ@mail.gmail.com>
+References: <20220406233648.21644-1-brad@pensando.io>
+        <20220406233648.21644-12-brad@pensando.io>
+        <9c08f621be28dba65e811bc9cdedc882@kernel.org>
+        <CAK9rFnyRTX+VM5g9P-ar=3VaExhHcwR8DzLvxtv-tG8cN9gqEQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: brad@pensando.io, linux-arm-kernel@lists.infradead.org, arnd@arndb.de, linus.walleij@linaro.org, bgolaszewski@baylibre.com, broonie@kernel.org, fancer.lancer@gmail.com, adrian.hunter@intel.com, ulf.hansson@linaro.org, olof@lixom.net, dac2@pensando.io, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, linux-mmc@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,15 +81,37 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The pull request you sent on Fri, 8 Apr 2022 20:33:07 +0200:
+On Sat, 09 Apr 2022 03:38:55 +0100,
+Brad Larson <brad@pensando.io> wrote:
+> 
+> On Thu, Apr 7, 2022 at 12:57 AM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > > +             gic: interrupt-controller@800000 {
+> > > +                     compatible = "arm,gic-v3";
+> > > +                     #interrupt-cells = <3>;
+> > > +                     #address-cells = <2>;
+> > > +                     #size-cells = <2>;
+> > > +                     ranges;
+> > > +                     interrupt-controller;
+> > > +                     reg = <0x0 0x800000 0x0 0x200000>,      /* GICD */
+> > > +                           <0x0 0xa00000 0x0 0x200000>;      /* GICR */
+> >
+> > You are still missing the GICV and GICH regions that are
+> > provided by the CPU. I already pointed that out in [1].
+> >
+> > The Cortex-A72 TRM will tell you where to find them (at
+> > an offset from PERIPHBASE).
+> 
+> Hi Marc,
+> 
+> Got the addresses, neither region is used, and will be included in the
+> next submission.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.18-rc2
+Not sure what you mean by these regions being unused here (the Linux
+kernel definitely makes use of them). Note that you'll also need to
+add GICC (which I forgot to mention above).
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d017a3167bcb76caedf2b444645bf4db75f775a5
-
-Thank you!
+	M.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Without deviation from the norm, progress is not possible.
