@@ -2,79 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BD14FBF78
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Apr 2022 16:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B064FC37B
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Apr 2022 19:31:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347437AbiDKOsr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 11 Apr 2022 10:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
+        id S1348873AbiDKRdk (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 Apr 2022 13:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiDKOsq (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Apr 2022 10:48:46 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281751FCFD;
-        Mon, 11 Apr 2022 07:46:31 -0700 (PDT)
-Received: from apollo.. (unknown [IPv6:2a02:810b:4340:43bf:4685:ff:fe12:5967])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id DEA542223E;
-        Mon, 11 Apr 2022 16:46:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1649688389;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+RSECJ+CEyfjPWT/tfdNYeMHsiQqq7qeZXL2Sxx3RMg=;
-        b=b2Gv4nuR8HsYZyaaiYxiXBbclBKcL++tLeiPy2bZrup4of7iR+blbz96N+cjJqyeLX4Nqa
-        aNaZwKademI++CiAskjbwa4xhAd7J8BerpzT/sLEPVmaPDdqg6z7AkRUNHN9x+Ih0VtXmy
-        sj7pUIaK8w6yaZmpbsPr5VZVb64E5zc=
-From:   Michael Walle <michael@walle.cc>
-To:     kavyasree.kotagiri@microchip.com
-Cc:     Claudiu.Beznea@microchip.com, Manohar.Puri@microchip.com,
-        Nicolas.Ferre@microchip.com, Tudor.Ambarus@microchip.com,
-        UNGLinuxDriver@microchip.com, alexandre.belloni@bootlin.com,
-        broonie@kernel.org, devicetree@vger.kernel.org, krzk+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, robh+dt@kernel.org,
-        Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH] spi: atmel,quadspi: Define lan966x QSPI
-Date:   Mon, 11 Apr 2022 16:46:19 +0200
-Message-Id: <20220411144619.101883-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <CO1PR11MB48654DEFB31E8F8AB00C180292E99@CO1PR11MB4865.namprd11.prod.outlook.com>
-References: <CO1PR11MB48654DEFB31E8F8AB00C180292E99@CO1PR11MB4865.namprd11.prod.outlook.com>
+        with ESMTP id S1344040AbiDKRdi (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Apr 2022 13:33:38 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB9062FE54;
+        Mon, 11 Apr 2022 10:31:22 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.90,252,1643641200"; 
+   d="scan'208";a="117440362"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 12 Apr 2022 02:31:21 +0900
+Received: from localhost.localdomain (unknown [10.226.92.73])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id CBD7B40BBA4C;
+        Tue, 12 Apr 2022 02:31:18 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-spi@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Vinod Koul <vkoul@kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH] spi: spi-rspi: Remove setting {src,dst}_{addr,addr_width} based on DMA direction
+Date:   Mon, 11 Apr 2022 18:31:15 +0100
+Message-Id: <20220411173115.6619-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-> > > LAN966x SoC supports 3 QSPI controllers. Each of them support
-> > > data and clock frequency upto 100Mhz DDR and QUAD protocol.
-> >
-> > How is this IP different than microchip,sama7g5-qspi? Does this speed
-> > limitation come from the IP itself or from the board that you're using?
-> >
-> > Neither of these instances support octal mode?
-> >
-> Thanks for your comments. All the three instances support only QUAD
-> protocol.
-> You are correct. There is no difference from sama7g5-qspi. Please ignore
-> this patch. I will send next version of dt patches where I will use
-> "microchip,sama7g5-qspi" for all my qspi nodes.
+The direction field in the DMA config is deprecated. The rspi driver
+sets {src,dst}_{addr,addr_width} based on the DMA direction and
+it results in dmaengine_slave_config() failure as RZ DMAC driver
+validates {src,dst}_addr_width values independent of DMA direction.
 
-Are you sure? There is a max frequency property in Tudor's sama7g5-qspi
-driver (200/133MHz) which doesn't match neither the LAN9668 manual (which
-states 150MHz on QSPI0 and 100MHZ on QSPI1, funny enough there is no
-mention of QSPI2) nor does it match the max frequency set in the downstream
-linux driver (24 MHz).
+This patch fixes the issue by passing both {src,dst}_{addr,addr_width}
+values independent of DMA direction.
 
--michael
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Suggested-by: Vinod Koul <vkoul@kernel.org>
+---
+ drivers/spi/spi-rspi.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/spi/spi-rspi.c b/drivers/spi/spi-rspi.c
+index bd5708d7e5a1..7a014eeec2d0 100644
+--- a/drivers/spi/spi-rspi.c
++++ b/drivers/spi/spi-rspi.c
+@@ -1108,14 +1108,11 @@ static struct dma_chan *rspi_request_dma_chan(struct device *dev,
+ 	}
+ 
+ 	memset(&cfg, 0, sizeof(cfg));
++	cfg.dst_addr = port_addr + RSPI_SPDR;
++	cfg.src_addr = port_addr + RSPI_SPDR;
++	cfg.dst_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
++	cfg.src_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
+ 	cfg.direction = dir;
+-	if (dir == DMA_MEM_TO_DEV) {
+-		cfg.dst_addr = port_addr;
+-		cfg.dst_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
+-	} else {
+-		cfg.src_addr = port_addr;
+-		cfg.src_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
+-	}
+ 
+ 	ret = dmaengine_slave_config(chan, &cfg);
+ 	if (ret) {
+@@ -1146,12 +1143,12 @@ static int rspi_request_dma(struct device *dev, struct spi_controller *ctlr,
+ 	}
+ 
+ 	ctlr->dma_tx = rspi_request_dma_chan(dev, DMA_MEM_TO_DEV, dma_tx_id,
+-					     res->start + RSPI_SPDR);
++					     res->start);
+ 	if (!ctlr->dma_tx)
+ 		return -ENODEV;
+ 
+ 	ctlr->dma_rx = rspi_request_dma_chan(dev, DMA_DEV_TO_MEM, dma_rx_id,
+-					     res->start + RSPI_SPDR);
++					     res->start);
+ 	if (!ctlr->dma_rx) {
+ 		dma_release_channel(ctlr->dma_tx);
+ 		ctlr->dma_tx = NULL;
+-- 
+2.25.1
+
