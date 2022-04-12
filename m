@@ -2,46 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22DB4FC9CE
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Apr 2022 02:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 295F34FCA7A
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Apr 2022 02:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242810AbiDLAsd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 11 Apr 2022 20:48:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
+        id S245312AbiDLAyE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 11 Apr 2022 20:54:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243074AbiDLAsS (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Apr 2022 20:48:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D6D2F008;
-        Mon, 11 Apr 2022 17:45:53 -0700 (PDT)
+        with ESMTP id S1343985AbiDLAxY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Apr 2022 20:53:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E49340C4;
+        Mon, 11 Apr 2022 17:48:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1155F612A8;
-        Tue, 12 Apr 2022 00:45:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A56B5C385A4;
-        Tue, 12 Apr 2022 00:45:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACF7A617E9;
+        Tue, 12 Apr 2022 00:48:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D805C385A4;
+        Tue, 12 Apr 2022 00:48:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649724352;
-        bh=Y1aB9MwLiATjOiD+6V5TB0Qd/gFN1usrajp7Ns/Ldzs=;
+        s=k20201202; t=1649724495;
+        bh=eT3XsyhJrW/hV7OjSBlOwD8UrNHf86QPPrWbSdZ2ZsY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D/bnrfkZWNVlNy8jIOBnpQl3+nJDwapiI9WNm+v3di4e8kGBbHdfzkA2A9B/PCaPd
-         +larWqif6xIcw1NYx3/EFid7u5byWKb3743m4GNL61lxBIRb3Jy2b0GtReyu1Aa0rP
-         rTsGY7DHDShyvnVou2GnAUAqPcWupBjfvPS46uCeCR6f3giYKjbESCF5yjGQWKoAHV
-         GTz+N/eTV5td+cln126gOJovnToWof9Q0ka36I0QkUZOzK8SEdRu+3xm4hl7BmRZ3l
-         d52MOyVqaJ2sN92Yu4PndKygmJvtpejm4J2w1VR/r/sD8na1qEqbM5aB47X5KN27ss
-         PzYBqHKkROxuw==
+        b=Hn+4MS7QuU5EC2gMkWMpCHlOfjOceV80KyfKGFIk/FtlPqpmzZ5bxmPl1E7AYrdLk
+         4nXo6sV+K3SDFaKt82lm+BHV2Au8ynvFgYHxH6a7dgGr4ayA9Km6r6IJqys24GANH9
+         O1PD66Hp+pbT3rc1+MFRU4SwlH6jjdapjvYumiDcwg+Q3xL78H5aH/XctsqzzKaSOA
+         2euFLSwlWaPma0MmEoxgnwTcvFDG9NH+b35eejaqqtYpuwKLYLMOrNRt8nvGp+903n
+         mhSYWiYrhUm6d8YT1E24KjlUua4McKuJFFOH3k9l7hiXnsanQNr/fJpd3Io9TZp/OK
+         Pigd2dzzl5xGw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.17 34/49] spi: cadence-quadspi: fix protocol setup for non-1-1-X operations
-Date:   Mon, 11 Apr 2022 20:43:52 -0400
-Message-Id: <20220412004411.349427-34-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 28/41] spi: cadence-quadspi: fix protocol setup for non-1-1-X operations
+Date:   Mon, 11 Apr 2022 20:46:40 -0400
+Message-Id: <20220412004656.350101-28-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412004411.349427-1-sashal@kernel.org>
-References: <20220412004411.349427-1-sashal@kernel.org>
+In-Reply-To: <20220412004656.350101-1-sashal@kernel.org>
+References: <20220412004656.350101-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -80,10 +80,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 12 insertions(+), 34 deletions(-)
 
 diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index b808c94641fa..75f356041138 100644
+index 101cc71bffa7..1a6294a06e72 100644
 --- a/drivers/spi/spi-cadence-quadspi.c
 +++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -19,6 +19,7 @@
+@@ -18,6 +18,7 @@
  #include <linux/iopoll.h>
  #include <linux/jiffies.h>
  #include <linux/kernel.h>
@@ -91,7 +91,7 @@ index b808c94641fa..75f356041138 100644
  #include <linux/module.h>
  #include <linux/of_device.h>
  #include <linux/of.h>
-@@ -102,12 +103,6 @@ struct cqspi_driver_platdata {
+@@ -93,12 +94,6 @@ struct cqspi_driver_platdata {
  #define CQSPI_TIMEOUT_MS			500
  #define CQSPI_READ_TIMEOUT_MS			10
  
@@ -104,7 +104,7 @@ index b808c94641fa..75f356041138 100644
  #define CQSPI_DUMMY_CLKS_PER_BYTE		8
  #define CQSPI_DUMMY_BYTES_MAX			4
  #define CQSPI_DUMMY_CLKS_MAX			31
-@@ -376,10 +371,6 @@ static unsigned int cqspi_calc_dummy(const struct spi_mem_op *op, bool dtr)
+@@ -322,10 +317,6 @@ static unsigned int cqspi_calc_dummy(const struct spi_mem_op *op, bool dtr)
  static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
  			      const struct spi_mem_op *op)
  {
@@ -115,7 +115,7 @@ index b808c94641fa..75f356041138 100644
  	/*
  	 * For an op to be DTR, cmd phase along with every other non-empty
  	 * phase should have dtr field set to 1. If an op phase has zero
-@@ -389,32 +380,23 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
+@@ -335,32 +326,23 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
  		       (!op->addr.nbytes || op->addr.dtr) &&
  		       (!op->data.nbytes || op->data.dtr);
  
@@ -159,7 +159,7 @@ index b808c94641fa..75f356041138 100644
  			break;
  		default:
  			return -EINVAL;
-@@ -422,9 +404,7 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
+@@ -368,9 +350,7 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
  
  		switch (op->addr.buswidth) {
  		case 0:
@@ -169,7 +169,7 @@ index b808c94641fa..75f356041138 100644
  			break;
  		default:
  			return -EINVAL;
-@@ -432,9 +412,7 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
+@@ -378,9 +358,7 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
  
  		switch (op->data.buswidth) {
  		case 0:
