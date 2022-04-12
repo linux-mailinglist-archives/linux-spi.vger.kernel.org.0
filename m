@@ -2,46 +2,44 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B64144FE9C1
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Apr 2022 23:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1578D4FE9CF
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Apr 2022 23:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbiDLVDG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Apr 2022 17:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
+        id S229895AbiDLVFg (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Apr 2022 17:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiDLVDF (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Apr 2022 17:03:05 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E998C624F;
-        Tue, 12 Apr 2022 13:50:43 -0700 (PDT)
+        with ESMTP id S229436AbiDLVFg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Apr 2022 17:05:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD4914A6C7;
+        Tue, 12 Apr 2022 13:52:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 48A9DCE20E5;
-        Tue, 12 Apr 2022 20:43:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8D95C385A1;
-        Tue, 12 Apr 2022 20:43:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46AC7B82008;
+        Tue, 12 Apr 2022 20:43:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C4B8C385A8;
+        Tue, 12 Apr 2022 20:43:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649796218;
-        bh=R1XhCzCCwjDR5qBtwumVM1053ajSl182DoQ3ugbJpBY=;
+        s=k20201202; t=1649796219;
+        bh=M3bH5tJjawfGnNazRXpM08pIjIgoih+NhAuD9hNkluo=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=UndEVf4CzoFIAqWZeN9FSC0yVmiZZsEJu+0zZmjofklFfW2/7YaXJE8OyupXOKCUY
-         mapiKjtv82At9S2yszH49LjtzfGkMbqInKwofrfhybBQLjiptIa1K+WZQbUNwKCq6V
-         118rCoVfA0Ho6WB7rNGfRsZ1zIZAu9Q6KAzozteMD+GMlpwp0cAbpswIiOOGL3ZrhS
-         7WBrJqH3dFJeukj3qBnWm4zxcXv/wo0nMLs8T/Ic7LqFGbhmadXhZ9F0bWG4974CnU
-         dSI2jQmpTR1UefYq8x9vTUJvVBU3UGGefhPx39nkH+BysNo5ChHG1Yr8egcBSPIgSs
-         Uxy685zCOXc2A==
+        b=Lvuhw04fQ+8xsrTQdeje0PY30Cg8y9LsU5yjeS7MSItnguP23C4pkhneTLtxaHs5h
+         BWRjToIXF/92r8tc7ouehiBPzd3JDMzYQs+G2G6n8JtJiN+ga5Vz794liB9UV9oLtB
+         7Dvu5xRbOy/h8Stx5jiJ2mQX4zUfhLpTQoC8NqTr97mCr7pAvyhkMfWQkypp5LUCPw
+         1NONMqj3Mu0XbVwUKK8sZ5T//2z19Aour3kivk/DTEVdAUWLBqJfPu3Eh77nAp2XOg
+         kR0l72hbK/o8A4UktSFukggyclm73MnCgmUxKIsaXV1+eMYgkFZTQ51mdSrxhMJt/B
+         nzJVwHKVMSVBA==
 From:   Mark Brown <broonie@kernel.org>
-To:     biju.das.jz@bp.renesas.com
-Cc:     Chris.Paterson2@renesas.com, vkoul@kernel.org,
-        linux-spi@vger.kernel.org, geert+renesas@glider.be,
-        biju.das@bp.renesas.com, linux-renesas-soc@vger.kernel.org,
-        prabhakar.mahadev-lad.rj@bp.renesas.com
-In-Reply-To: <20220411173115.6619-1-biju.das.jz@bp.renesas.com>
-References: <20220411173115.6619-1-biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH] spi: spi-rspi: Remove setting {src,dst}_{addr,addr_width} based on DMA direction
-Message-Id: <164979621667.474093.7041894961679858887.b4-ty@kernel.org>
-Date:   Tue, 12 Apr 2022 21:43:36 +0100
+To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        paul.kocialkowski@bootlin.com
+Cc:     thomas.petazzoni@bootlin.com
+In-Reply-To: <20220412122207.130181-1-paul.kocialkowski@bootlin.com>
+References: <20220412122207.130181-1-paul.kocialkowski@bootlin.com>
+Subject: Re: [PATCH] spi: core: Only check bits_per_word validity when explicitly provided
+Message-Id: <164979621877.474093.2840489613136118928.b4-ty@kernel.org>
+Date:   Tue, 12 Apr 2022 21:43:38 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,14 +53,14 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 11 Apr 2022 18:31:15 +0100, Biju Das wrote:
-> The direction field in the DMA config is deprecated. The rspi driver
-> sets {src,dst}_{addr,addr_width} based on the DMA direction and
-> it results in dmaengine_slave_config() failure as RZ DMAC driver
-> validates {src,dst}_addr_width values independent of DMA direction.
+On Tue, 12 Apr 2022 14:22:07 +0200, Paul Kocialkowski wrote:
+> On SPI device probe, the core will call spi_setup in spi_add_device
+> before the corresponding driver was probed. When this happens, the
+> bits_per_word member of the device is not yet set by the driver,
+> resulting in the default being set to 8 bits-per-word.
 > 
-> This patch fixes the issue by passing both {src,dst}_{addr,addr_width}
-> values independent of DMA direction.
+> However some controllers do not support 8 bits-per-word at all, which
+> results in a failure when checking the bits-per-word validity.
 > 
 > [...]
 
@@ -72,8 +70,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-rspi: Remove setting {src,dst}_{addr,addr_width} based on DMA direction
-      commit: 6f381481a5b236cb53d6de2c49c6ef83a4d0f432
+[1/1] spi: core: Only check bits_per_word validity when explicitly provided
+      commit: b3fe2e516741368a643d79527ebccfe557217a53
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
