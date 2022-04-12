@@ -2,47 +2,47 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624324FE925
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Apr 2022 21:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2134FE9D7
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Apr 2022 23:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbiDLT6R (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Apr 2022 15:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
+        id S230210AbiDLVGa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Apr 2022 17:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231470AbiDLT5h (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Apr 2022 15:57:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3DA5E172;
-        Tue, 12 Apr 2022 12:50:38 -0700 (PDT)
+        with ESMTP id S231438AbiDLVG2 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Apr 2022 17:06:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6260C1546B2;
+        Tue, 12 Apr 2022 13:53:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED08A61BEF;
-        Tue, 12 Apr 2022 19:50:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2128C385A1;
-        Tue, 12 Apr 2022 19:50:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0488561C52;
+        Tue, 12 Apr 2022 20:43:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6889C385A5;
+        Tue, 12 Apr 2022 20:43:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649793037;
-        bh=nT93jamfbYnoTsEm4Lz28WvUjv7TcUJr8AkbHMTMDsE=;
+        s=k20201202; t=1649796216;
+        bh=Cmw8wmLgMEm8YJZuVKcAlwoKMyj8hH9LZ8YJbZn6dfM=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=FFTT6xhZR3P/Za71GH6f8NdS9a3R+L4wdP/9Dnnt9P9nSVQMSXWkFM2e/xJok2D+w
-         BoUuK5stxD3hBYUF2nP+768waVpkiZtg1kz1Y+50upJV2x2JWRyb0Bxdrj41Gr9+so
-         8cEA4J9JScVxL2v3NJJiV0OK+6FUGIDqnrydku9ZE8tX47x2Ef5skrIpNOlqpIIzjI
-         9ZIW0MJYtT9veiko9WPcNEBI7mc/F5MO0MXiKOyFqPBhYrLQKnaPbyhh1yv2FRlg6h
-         KP6iWtKTADlDuw9lwfVhDiOteHLpemmKzcYva+0WDI/ijYl2upquQg/EUsr/Sv++/O
-         /ktC1HEV/ziBA==
+        b=GvOYUPMSkR39kxQKaw0TQCI0PjxuXpOpFHVMIfeP7m5k5YZQLJIC1sGObDUBJ97JH
+         8zp8urhr371YvawcSwzW2E7uspGz0uK2sVE2Of7JnSRoEY6KECPedYOQKxuXp6myS9
+         Vu6tBniFKYdwZ1xywAB+GG9/DrBVXhMo9yo9BMQzLmMMzHY+yVH0fw9gJiPMpa1pMw
+         MPc0y+sd8iIMQGXuGqpDRjZlX96bsHFa+6P3Lkvk2JjB5v5cB15n3OGbSKo85mR7kx
+         /QDEgymq7Z3pqqPGyoFI/9fgb2TDpQRmNSG9LBpcRgSGK+yhm4isRim8Y6/6U+C4eE
+         /JYwt6ZpNTJ8A==
 From:   Mark Brown <broonie@kernel.org>
-To:     allen-kh.cheng@mediatek.com, ikjn@chromium.org,
-        matthias.bgg@gmail.com
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-spi@vger.kernel.org
-In-Reply-To: <20220412115743.22641-1-allen-kh.cheng@mediatek.com>
-References: <20220412115743.22641-1-allen-kh.cheng@mediatek.com>
-Subject: Re: [PATCH] spi: spi-mtk-nor: initialize spi controller after resume
-Message-Id: <164979303551.449574.9303978009033918270.b4-ty@kernel.org>
-Date:   Tue, 12 Apr 2022 20:50:35 +0100
+To:     cgel.zte@gmail.com
+Cc:     chi.minghao@zte.com.cn, zealci@zte.com.cn,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alexandre.torgue@foss.st.com, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, mcoquelin.stm32@gmail.com,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220412070906.2532091-1-chi.minghao@zte.com.cn>
+References: <20220412070906.2532091-1-chi.minghao@zte.com.cn>
+Subject: Re: [PATCH] spi: spi-stm32-qspi: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Message-Id: <164979621440.474093.2676903357878820514.b4-ty@kernel.org>
+Date:   Tue, 12 Apr 2022 21:43:34 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,15 +56,13 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 12 Apr 2022 19:57:43 +0800, Allen-KH Cheng wrote:
-> After system resumes, the registers of nor controller are
-> initialized with default values. The nor controller will
-> not function properly.
+On Tue, 12 Apr 2022 07:09:06 +0000, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
-> To handle both issues above, we add mtk_nor_init() in
-> mtk_nor_resume after pm_runtime_force_resume().
+> Using pm_runtime_resume_and_get is more appropriate
+> for simplifing code
 > 
-> [...]
+> 
 
 Applied to
 
@@ -72,8 +70,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-mtk-nor: initialize spi controller after resume
-      commit: 317c2045618cc1f8d38beb8c93a7bdb6ad8638c6
+[1/1] spi: spi-stm32-qspi: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+      commit: c6cf1fafb65dda10f3babcec76991cbc304d02b9
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
