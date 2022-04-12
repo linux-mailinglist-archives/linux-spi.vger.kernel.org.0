@@ -2,183 +2,161 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 295F34FCA7A
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Apr 2022 02:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7580B4FDB22
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Apr 2022 12:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245312AbiDLAyE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 11 Apr 2022 20:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59022 "EHLO
+        id S232246AbiDLJ4Y (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Apr 2022 05:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343985AbiDLAxY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 11 Apr 2022 20:53:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E49340C4;
-        Mon, 11 Apr 2022 17:48:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ACF7A617E9;
-        Tue, 12 Apr 2022 00:48:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D805C385A4;
-        Tue, 12 Apr 2022 00:48:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649724495;
-        bh=eT3XsyhJrW/hV7OjSBlOwD8UrNHf86QPPrWbSdZ2ZsY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hn+4MS7QuU5EC2gMkWMpCHlOfjOceV80KyfKGFIk/FtlPqpmzZ5bxmPl1E7AYrdLk
-         4nXo6sV+K3SDFaKt82lm+BHV2Au8ynvFgYHxH6a7dgGr4ayA9Km6r6IJqys24GANH9
-         O1PD66Hp+pbT3rc1+MFRU4SwlH6jjdapjvYumiDcwg+Q3xL78H5aH/XctsqzzKaSOA
-         2euFLSwlWaPma0MmEoxgnwTcvFDG9NH+b35eejaqqtYpuwKLYLMOrNRt8nvGp+903n
-         mhSYWiYrhUm6d8YT1E24KjlUua4McKuJFFOH3k9l7hiXnsanQNr/fJpd3Io9TZp/OK
-         Pigd2dzzl5xGw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 28/41] spi: cadence-quadspi: fix protocol setup for non-1-1-X operations
-Date:   Mon, 11 Apr 2022 20:46:40 -0400
-Message-Id: <20220412004656.350101-28-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412004656.350101-1-sashal@kernel.org>
-References: <20220412004656.350101-1-sashal@kernel.org>
+        with ESMTP id S1356335AbiDLHfR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Apr 2022 03:35:17 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D254A3C5;
+        Tue, 12 Apr 2022 00:09:14 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id a11so18367725qtb.12;
+        Tue, 12 Apr 2022 00:09:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ou8zotsDb6wXIPljnzHu4XUowbgMosM63Cn663rp46M=;
+        b=LVlh/tRvH71ktLfuib9NCViHKA8f0kEJc4AmJMpKEDE5aEjyO+V+Vbm2CUWH07lJad
+         8/9Tj/cMllX/mRTxp3rXVBvjiov+7QAmYwTWqc3COJWNC8H4B/h1XOUidXW+zbkzaZwP
+         oD5jdVXyteqNosnRQJ3vAAHRnHa+MMkuAJzZrtJelhDsHes4oqS8RcOcL9BOxZXRTcxw
+         s1KSsomLF/OjH77XNPs2juRaOEuhRKQ87HrpU+/4SzEO0JJM1jzjbW43lpadSFzTLgXN
+         /J/qdATZY47naHznlo84/HmjjjBnQ5bL38g62skwnmnINWkRKGqzDEAW2O9uViIBz45V
+         DK4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ou8zotsDb6wXIPljnzHu4XUowbgMosM63Cn663rp46M=;
+        b=r8mpVtXroBiV6zLDdXxz0XgGHE2bfOp1AcZGWAPvAj4fTrEa2WGRqKnBebYgJiszfz
+         8Ge81IBoAITg50fXURXWdEeCYOFZjmF+2qJZi2oUg4zmbEIDv+WJmSIXNGUa+VNBD+vq
+         iJ9Z1rtQ1BW5dYCQRZob6tt27ZFsrkNxbSWhbgHYCEaQ5kbyVC1Yd03go2hd/sXesn31
+         YckH1G69pEPeSHsLhZfF3F6fCNOwS8op7iR2AJLIc87GPuubrY1TwLyXIsDfrjfwYdvp
+         6TflLg3YKilsyuSfSlESlQvzkZMCEj2+puXN5mJVoqMjNv3K4YgmsHsbXFbEsU4nKU0z
+         L9OA==
+X-Gm-Message-State: AOAM533jL0EweC4YN7eK60dc9G+POmPgg10XqZX9fr71Uc/9E/ejAs6G
+        DIwiNZFlxVd0egqlgb7Oa9E=
+X-Google-Smtp-Source: ABdhPJx4DR/2lIWNbxf+QPOcGkQ+ZbHPL7PSoRYaKAeefy7mBD1ijw/kEHdShjr7h9+JBy+VPiAijA==
+X-Received: by 2002:ac8:7c55:0:b0:2e1:d535:d881 with SMTP id o21-20020ac87c55000000b002e1d535d881mr2266217qtv.188.1649747353658;
+        Tue, 12 Apr 2022 00:09:13 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id x20-20020ac85f14000000b002e1ee1c56c3sm27634358qta.76.2022.04.12.00.09.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 00:09:12 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     broonie@kernel.org
+Cc:     mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] spi: spi-stm32-qspi: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Date:   Tue, 12 Apr 2022 07:09:06 +0000
+Message-Id: <20220412070906.2532091-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-[ Upstream commit 97e4827d775faa9a32b5e1a97959c69dd77d17a3 ]
+Using pm_runtime_resume_and_get is more appropriate
+for simplifing code
 
-cqspi_set_protocol() only set the data width, but ignored the command
-and address width (except for 8-8-8 DTR ops), leading to corruption of
-all transfers using 1-X-X or X-X-X ops. Fix by setting the other two
-widths as well.
-
-While we're at it, simplify the code a bit by replacing the
-CQSPI_INST_TYPE_* constants with ilog2().
-
-Tested on a TI AM64x with a Macronix MX25U51245G QSPI flash with 1-4-4
-read and write operations.
-
-Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Link: https://lore.kernel.org/r/20220331110819.133392-1-matthias.schiffer@ew.tq-group.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/spi/spi-cadence-quadspi.c | 46 ++++++++-----------------------
- 1 file changed, 12 insertions(+), 34 deletions(-)
+ drivers/spi/spi-stm32-qspi.c | 30 ++++++++++--------------------
+ 1 file changed, 10 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 101cc71bffa7..1a6294a06e72 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -18,6 +18,7 @@
- #include <linux/iopoll.h>
- #include <linux/jiffies.h>
- #include <linux/kernel.h>
-+#include <linux/log2.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
- #include <linux/of.h>
-@@ -93,12 +94,6 @@ struct cqspi_driver_platdata {
- #define CQSPI_TIMEOUT_MS			500
- #define CQSPI_READ_TIMEOUT_MS			10
+diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+index ffdc55f87e82..b3586521d08e 100644
+--- a/drivers/spi/spi-stm32-qspi.c
++++ b/drivers/spi/spi-stm32-qspi.c
+@@ -463,11 +463,9 @@ static int stm32_qspi_poll_status(struct spi_mem *mem, const struct spi_mem_op *
+ 	if (!spi_mem_supports_op(mem, op))
+ 		return -EOPNOTSUPP;
  
--/* Instruction type */
--#define CQSPI_INST_TYPE_SINGLE			0
--#define CQSPI_INST_TYPE_DUAL			1
--#define CQSPI_INST_TYPE_QUAD			2
--#define CQSPI_INST_TYPE_OCTAL			3
--
- #define CQSPI_DUMMY_CLKS_PER_BYTE		8
- #define CQSPI_DUMMY_BYTES_MAX			4
- #define CQSPI_DUMMY_CLKS_MAX			31
-@@ -322,10 +317,6 @@ static unsigned int cqspi_calc_dummy(const struct spi_mem_op *op, bool dtr)
- static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
- 			      const struct spi_mem_op *op)
- {
--	f_pdata->inst_width = CQSPI_INST_TYPE_SINGLE;
--	f_pdata->addr_width = CQSPI_INST_TYPE_SINGLE;
--	f_pdata->data_width = CQSPI_INST_TYPE_SINGLE;
--
- 	/*
- 	 * For an op to be DTR, cmd phase along with every other non-empty
- 	 * phase should have dtr field set to 1. If an op phase has zero
-@@ -335,32 +326,23 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
- 		       (!op->addr.nbytes || op->addr.dtr) &&
- 		       (!op->data.nbytes || op->data.dtr);
- 
--	switch (op->data.buswidth) {
--	case 0:
--		break;
--	case 1:
--		f_pdata->data_width = CQSPI_INST_TYPE_SINGLE;
--		break;
--	case 2:
--		f_pdata->data_width = CQSPI_INST_TYPE_DUAL;
--		break;
--	case 4:
--		f_pdata->data_width = CQSPI_INST_TYPE_QUAD;
--		break;
--	case 8:
--		f_pdata->data_width = CQSPI_INST_TYPE_OCTAL;
--		break;
--	default:
--		return -EINVAL;
+-	ret = pm_runtime_get_sync(qspi->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(qspi->dev);
++	ret = pm_runtime_resume_and_get(qspi->dev);
++	if (ret < 0)
+ 		return ret;
 -	}
-+	f_pdata->inst_width = 0;
-+	if (op->cmd.buswidth)
-+		f_pdata->inst_width = ilog2(op->cmd.buswidth);
-+
-+	f_pdata->addr_width = 0;
-+	if (op->addr.buswidth)
-+		f_pdata->addr_width = ilog2(op->addr.buswidth);
-+
-+	f_pdata->data_width = 0;
-+	if (op->data.buswidth)
-+		f_pdata->data_width = ilog2(op->data.buswidth);
  
- 	/* Right now we only support 8-8-8 DTR mode. */
- 	if (f_pdata->dtr) {
- 		switch (op->cmd.buswidth) {
- 		case 0:
--			break;
- 		case 8:
--			f_pdata->inst_width = CQSPI_INST_TYPE_OCTAL;
- 			break;
- 		default:
- 			return -EINVAL;
-@@ -368,9 +350,7 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
+ 	mutex_lock(&qspi->lock);
  
- 		switch (op->addr.buswidth) {
- 		case 0:
--			break;
- 		case 8:
--			f_pdata->addr_width = CQSPI_INST_TYPE_OCTAL;
- 			break;
- 		default:
- 			return -EINVAL;
-@@ -378,9 +358,7 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
+@@ -490,11 +488,9 @@ static int stm32_qspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 	struct stm32_qspi *qspi = spi_controller_get_devdata(mem->spi->master);
+ 	int ret;
  
- 		switch (op->data.buswidth) {
- 		case 0:
--			break;
- 		case 8:
--			f_pdata->data_width = CQSPI_INST_TYPE_OCTAL;
- 			break;
- 		default:
- 			return -EINVAL;
+-	ret = pm_runtime_get_sync(qspi->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(qspi->dev);
++	ret = pm_runtime_resume_and_get(qspi->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	mutex_lock(&qspi->lock);
+ 	if (op->data.dir == SPI_MEM_DATA_IN && op->data.nbytes)
+@@ -536,11 +532,9 @@ static ssize_t stm32_qspi_dirmap_read(struct spi_mem_dirmap_desc *desc,
+ 	u32 addr_max;
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(qspi->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(qspi->dev);
++	ret = pm_runtime_resume_and_get(qspi->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	mutex_lock(&qspi->lock);
+ 	/* make a local copy of desc op_tmpl and complete dirmap rdesc
+@@ -583,11 +577,9 @@ static int stm32_qspi_setup(struct spi_device *spi)
+ 	if (!spi->max_speed_hz)
+ 		return -EINVAL;
+ 
+-	ret = pm_runtime_get_sync(qspi->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(qspi->dev);
++	ret = pm_runtime_resume_and_get(qspi->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	presc = DIV_ROUND_UP(qspi->clk_rate, spi->max_speed_hz) - 1;
+ 
+@@ -851,11 +843,9 @@ static int __maybe_unused stm32_qspi_resume(struct device *dev)
+ 
+ 	pinctrl_pm_select_default_state(dev);
+ 
+-	ret = pm_runtime_get_sync(dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(dev);
++	ret = pm_runtime_resume_and_get(dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	writel_relaxed(qspi->cr_reg, qspi->io_base + QSPI_CR);
+ 	writel_relaxed(qspi->dcr_reg, qspi->io_base + QSPI_DCR);
 -- 
-2.35.1
+2.25.1
 
