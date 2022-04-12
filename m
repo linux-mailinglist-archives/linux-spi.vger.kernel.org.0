@@ -2,67 +2,72 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C78E4FDC69
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Apr 2022 13:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A894FDCA3
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Apr 2022 13:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242105AbiDLK0S (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Apr 2022 06:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
+        id S229751AbiDLKhH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Apr 2022 06:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358401AbiDLKKI (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Apr 2022 06:10:08 -0400
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73B972E10;
-        Tue, 12 Apr 2022 02:12:51 -0700 (PDT)
-Received: by mail-qt1-f179.google.com with SMTP id s6so4087412qta.1;
-        Tue, 12 Apr 2022 02:12:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AkECA0wcXPkNVP5UUzbpxuKdY10vBfhtx3lvTK3ip6U=;
-        b=Z/iymKhNeD2J2v2XHjIE0ytcg1BA+GIQuwJpHfoMh4pCwaNJeXvhAaNc6hejSkc3m3
-         jRkbdIQ1lUs9955JdaaMKjT4x8KHIwXQ8qdrZXTr+79XEI6bxaz0XNb/ERaZWNNcgqUi
-         qKlu/s7ydSGccPiwIBuz/gNMZ0O6N7emGxq1SAJDGbbjK5cutc880O90q6R3L55cST9m
-         TY1tRzwumEj2siJM3hd/rDqIFxiZqVVoS9iyi2yssr8y3xEoQlWq/cMiOYU4DozBKjhf
-         Vt1Uz9bWqCy+fiowGEl8GJ39RTksQDjUk4Xgtr9hQpeXFwvUj5oQBUA60JY4zZ8ijkJZ
-         JdJA==
-X-Gm-Message-State: AOAM533si6dTyjKmg/T/utuAUSrtAHK7pWXEtK0oqP29dI3wrYsIaWW4
-        IJuxxbKSpLzkhdTiA2dNt7Tgh2vX/21Ynvo9
-X-Google-Smtp-Source: ABdhPJyD/i/77zfWNKW+mEm/kTnlXvC0xn4ydoYn5kZhOF5U/BxUtQTXMf7vAzoiaIcusIJleFrmsA==
-X-Received: by 2002:ac8:5893:0:b0:2e1:c7f6:9992 with SMTP id t19-20020ac85893000000b002e1c7f69992mr2480536qta.23.1649754770846;
-        Tue, 12 Apr 2022 02:12:50 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id v67-20020a379346000000b0069bdb3bb132sm7949931qkd.37.2022.04.12.02.12.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 02:12:50 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id m132so2744592ybm.4;
-        Tue, 12 Apr 2022 02:12:50 -0700 (PDT)
-X-Received: by 2002:a5b:24e:0:b0:63d:cba0:3d55 with SMTP id
- g14-20020a5b024e000000b0063dcba03d55mr24406484ybp.613.1649754770194; Tue, 12
- Apr 2022 02:12:50 -0700 (PDT)
+        with ESMTP id S1354197AbiDLKdh (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Apr 2022 06:33:37 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A038953A42;
+        Tue, 12 Apr 2022 02:33:25 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23C7gt62028744;
+        Tue, 12 Apr 2022 11:32:58 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=UICnyf3oPsQTzRC0I9H7zVlnLQiOcv6ykqLEagOPP+A=;
+ b=IZiYzbQebMHtNJebYRpmBh7Lqy92kJ9sBKCGLq14bPG5DvZMzlvjveRPSsU/fG8nFkZc
+ d7L+1c5QT0rmaKfaygh6U3kvSXCAm2v8IxvHHnXgIMxkt+03qgjPomdHlCyq9vhxHMUQ
+ TYbBnYgDgnja+vR7iGrAVCMwaYCKnEC0b0/S2uP76yfzcYWdeNlsCkO7v7PhVPbQEVSP
+ cnVRGjd3hOfOyY59a3X7inTOlAz/lsdR0LRsbEPxvnKKjmYZO0JCg8oVGdj0RIapw7Tx
+ u8uJpNiaBIOLA8CMZzlU3E58cl+T1Yl98ZwOJgrGZK6M0b5KOj23WKUy8wUz2VU/XQ+J qw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3fb74y6cgq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Apr 2022 11:32:58 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D4773100038;
+        Tue, 12 Apr 2022 11:32:55 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CC121216833;
+        Tue, 12 Apr 2022 11:32:55 +0200 (CEST)
+Received: from [10.201.21.201] (10.75.127.49) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 12 Apr
+ 2022 11:32:54 +0200
+Message-ID: <8daae353-911c-3102-756f-1f0448704355@foss.st.com>
+Date:   Tue, 12 Apr 2022 11:32:53 +0200
 MIME-Version: 1.0
-References: <20220411173115.6619-1-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20220411173115.6619-1-biju.das.jz@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 12 Apr 2022 11:12:39 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWifFd1P941mNdvmvRTYCG0Fg0XagwPTkdVts27664t6w@mail.gmail.com>
-Message-ID: <CAMuHMdWifFd1P941mNdvmvRTYCG0Fg0XagwPTkdVts27664t6w@mail.gmail.com>
-Subject: Re: [PATCH] spi: spi-rspi: Remove setting {src,dst}_{addr,addr_width}
- based on DMA direction
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [Linux-stm32] [PATCH] spi: spi-stm32-qspi: using
+ pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Content-Language: en-US
+To:     <cgel.zte@gmail.com>, <broonie@kernel.org>
+CC:     Zeal Robot <zealci@zte.com.cn>, <linux-kernel@vger.kernel.org>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        <mcoquelin.stm32@gmail.com>, <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220412070906.2532091-1-chi.minghao@zte.com.cn>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <20220412070906.2532091-1-chi.minghao@zte.com.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-12_03,2022-04-11_01,2022-02-23_01
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,29 +75,97 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 7:31 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> The direction field in the DMA config is deprecated. The rspi driver
-> sets {src,dst}_{addr,addr_width} based on the DMA direction and
-> it results in dmaengine_slave_config() failure as RZ DMAC driver
-> validates {src,dst}_addr_width values independent of DMA direction.
->
-> This patch fixes the issue by passing both {src,dst}_{addr,addr_width}
-> values independent of DMA direction.
->
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Suggested-by: Vinod Koul <vkoul@kernel.org>
+Hi 
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-(QSPI on Koelsch)
+On 4/12/22 09:09, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> Using pm_runtime_resume_and_get is more appropriate
+> for simplifing code
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> ---
+>  drivers/spi/spi-stm32-qspi.c | 30 ++++++++++--------------------
+>  1 file changed, 10 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+> index ffdc55f87e82..b3586521d08e 100644
+> --- a/drivers/spi/spi-stm32-qspi.c
+> +++ b/drivers/spi/spi-stm32-qspi.c
+> @@ -463,11 +463,9 @@ static int stm32_qspi_poll_status(struct spi_mem *mem, const struct spi_mem_op *
+>  	if (!spi_mem_supports_op(mem, op))
+>  		return -EOPNOTSUPP;
+>  
+> -	ret = pm_runtime_get_sync(qspi->dev);
+> -	if (ret < 0) {
+> -		pm_runtime_put_noidle(qspi->dev);
+> +	ret = pm_runtime_resume_and_get(qspi->dev);
+> +	if (ret < 0)
+>  		return ret;
+> -	}
+>  
+>  	mutex_lock(&qspi->lock);
+>  
+> @@ -490,11 +488,9 @@ static int stm32_qspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+>  	struct stm32_qspi *qspi = spi_controller_get_devdata(mem->spi->master);
+>  	int ret;
+>  
+> -	ret = pm_runtime_get_sync(qspi->dev);
+> -	if (ret < 0) {
+> -		pm_runtime_put_noidle(qspi->dev);
+> +	ret = pm_runtime_resume_and_get(qspi->dev);
+> +	if (ret < 0)
+>  		return ret;
+> -	}
+>  
+>  	mutex_lock(&qspi->lock);
+>  	if (op->data.dir == SPI_MEM_DATA_IN && op->data.nbytes)
+> @@ -536,11 +532,9 @@ static ssize_t stm32_qspi_dirmap_read(struct spi_mem_dirmap_desc *desc,
+>  	u32 addr_max;
+>  	int ret;
+>  
+> -	ret = pm_runtime_get_sync(qspi->dev);
+> -	if (ret < 0) {
+> -		pm_runtime_put_noidle(qspi->dev);
+> +	ret = pm_runtime_resume_and_get(qspi->dev);
+> +	if (ret < 0)
+>  		return ret;
+> -	}
+>  
+>  	mutex_lock(&qspi->lock);
+>  	/* make a local copy of desc op_tmpl and complete dirmap rdesc
+> @@ -583,11 +577,9 @@ static int stm32_qspi_setup(struct spi_device *spi)
+>  	if (!spi->max_speed_hz)
+>  		return -EINVAL;
+>  
+> -	ret = pm_runtime_get_sync(qspi->dev);
+> -	if (ret < 0) {
+> -		pm_runtime_put_noidle(qspi->dev);
+> +	ret = pm_runtime_resume_and_get(qspi->dev);
+> +	if (ret < 0)
+>  		return ret;
+> -	}
+>  
+>  	presc = DIV_ROUND_UP(qspi->clk_rate, spi->max_speed_hz) - 1;
+>  
+> @@ -851,11 +843,9 @@ static int __maybe_unused stm32_qspi_resume(struct device *dev)
+>  
+>  	pinctrl_pm_select_default_state(dev);
+>  
+> -	ret = pm_runtime_get_sync(dev);
+> -	if (ret < 0) {
+> -		pm_runtime_put_noidle(dev);
+> +	ret = pm_runtime_resume_and_get(dev);
+> +	if (ret < 0)
+>  		return ret;
+> -	}
+>  
+>  	writel_relaxed(qspi->cr_reg, qspi->io_base + QSPI_CR);
+>  	writel_relaxed(qspi->dcr_reg, qspi->io_base + QSPI_DCR);
 
-Gr{oetje,eeting}s,
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
-                        Geert
+Thanks
+Patrice
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
