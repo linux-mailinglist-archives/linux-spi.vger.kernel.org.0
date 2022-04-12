@@ -2,47 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2134FE9D7
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Apr 2022 23:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B64144FE9C1
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Apr 2022 23:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbiDLVGa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Apr 2022 17:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58088 "EHLO
+        id S231180AbiDLVDG (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 12 Apr 2022 17:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbiDLVG2 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Apr 2022 17:06:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6260C1546B2;
-        Tue, 12 Apr 2022 13:53:59 -0700 (PDT)
+        with ESMTP id S231237AbiDLVDF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Apr 2022 17:03:05 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E998C624F;
+        Tue, 12 Apr 2022 13:50:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0488561C52;
-        Tue, 12 Apr 2022 20:43:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6889C385A5;
-        Tue, 12 Apr 2022 20:43:34 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 48A9DCE20E5;
+        Tue, 12 Apr 2022 20:43:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8D95C385A1;
+        Tue, 12 Apr 2022 20:43:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649796216;
-        bh=Cmw8wmLgMEm8YJZuVKcAlwoKMyj8hH9LZ8YJbZn6dfM=;
+        s=k20201202; t=1649796218;
+        bh=R1XhCzCCwjDR5qBtwumVM1053ajSl182DoQ3ugbJpBY=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=GvOYUPMSkR39kxQKaw0TQCI0PjxuXpOpFHVMIfeP7m5k5YZQLJIC1sGObDUBJ97JH
-         8zp8urhr371YvawcSwzW2E7uspGz0uK2sVE2Of7JnSRoEY6KECPedYOQKxuXp6myS9
-         Vu6tBniFKYdwZ1xywAB+GG9/DrBVXhMo9yo9BMQzLmMMzHY+yVH0fw9gJiPMpa1pMw
-         MPc0y+sd8iIMQGXuGqpDRjZlX96bsHFa+6P3Lkvk2JjB5v5cB15n3OGbSKo85mR7kx
-         /QDEgymq7Z3pqqPGyoFI/9fgb2TDpQRmNSG9LBpcRgSGK+yhm4isRim8Y6/6U+C4eE
-         /JYwt6ZpNTJ8A==
+        b=UndEVf4CzoFIAqWZeN9FSC0yVmiZZsEJu+0zZmjofklFfW2/7YaXJE8OyupXOKCUY
+         mapiKjtv82At9S2yszH49LjtzfGkMbqInKwofrfhybBQLjiptIa1K+WZQbUNwKCq6V
+         118rCoVfA0Ho6WB7rNGfRsZ1zIZAu9Q6KAzozteMD+GMlpwp0cAbpswIiOOGL3ZrhS
+         7WBrJqH3dFJeukj3qBnWm4zxcXv/wo0nMLs8T/Ic7LqFGbhmadXhZ9F0bWG4974CnU
+         dSI2jQmpTR1UefYq8x9vTUJvVBU3UGGefhPx39nkH+BysNo5ChHG1Yr8egcBSPIgSs
+         Uxy685zCOXc2A==
 From:   Mark Brown <broonie@kernel.org>
-To:     cgel.zte@gmail.com
-Cc:     chi.minghao@zte.com.cn, zealci@zte.com.cn,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alexandre.torgue@foss.st.com, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, mcoquelin.stm32@gmail.com,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220412070906.2532091-1-chi.minghao@zte.com.cn>
-References: <20220412070906.2532091-1-chi.minghao@zte.com.cn>
-Subject: Re: [PATCH] spi: spi-stm32-qspi: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Message-Id: <164979621440.474093.2676903357878820514.b4-ty@kernel.org>
-Date:   Tue, 12 Apr 2022 21:43:34 +0100
+To:     biju.das.jz@bp.renesas.com
+Cc:     Chris.Paterson2@renesas.com, vkoul@kernel.org,
+        linux-spi@vger.kernel.org, geert+renesas@glider.be,
+        biju.das@bp.renesas.com, linux-renesas-soc@vger.kernel.org,
+        prabhakar.mahadev-lad.rj@bp.renesas.com
+In-Reply-To: <20220411173115.6619-1-biju.das.jz@bp.renesas.com>
+References: <20220411173115.6619-1-biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH] spi: spi-rspi: Remove setting {src,dst}_{addr,addr_width} based on DMA direction
+Message-Id: <164979621667.474093.7041894961679858887.b4-ty@kernel.org>
+Date:   Tue, 12 Apr 2022 21:43:36 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,13 +55,16 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, 12 Apr 2022 07:09:06 +0000, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On Mon, 11 Apr 2022 18:31:15 +0100, Biju Das wrote:
+> The direction field in the DMA config is deprecated. The rspi driver
+> sets {src,dst}_{addr,addr_width} based on the DMA direction and
+> it results in dmaengine_slave_config() failure as RZ DMAC driver
+> validates {src,dst}_addr_width values independent of DMA direction.
 > 
-> Using pm_runtime_resume_and_get is more appropriate
-> for simplifing code
+> This patch fixes the issue by passing both {src,dst}_{addr,addr_width}
+> values independent of DMA direction.
 > 
-> 
+> [...]
 
 Applied to
 
@@ -70,8 +72,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-stm32-qspi: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-      commit: c6cf1fafb65dda10f3babcec76991cbc304d02b9
+[1/1] spi: spi-rspi: Remove setting {src,dst}_{addr,addr_width} based on DMA direction
+      commit: 6f381481a5b236cb53d6de2c49c6ef83a4d0f432
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
