@@ -2,249 +2,87 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5624FFBD1
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Apr 2022 18:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 168234FFCEC
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Apr 2022 19:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237070AbiDMQ4O (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Apr 2022 12:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49350 "EHLO
+        id S237430AbiDMRir (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Apr 2022 13:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237069AbiDMQ4M (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Apr 2022 12:56:12 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8728869CD1;
-        Wed, 13 Apr 2022 09:53:49 -0700 (PDT)
-Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KdpX609T6z67nHV;
-        Thu, 14 Apr 2022 00:51:34 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Wed, 13 Apr 2022 18:53:46 +0200
-Received: from localhost (10.81.205.148) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Apr
- 2022 17:53:44 +0100
-Date:   Wed, 13 Apr 2022 17:53:41 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Agathe Porte" <agathe.porte@nokia.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Jean Delvare" <jdelvare@suse.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        <linux-hwmon@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-iio@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH] dt-bindings: Fix array constraints on scalar properties
-Message-ID: <20220413175341.000030d9@Huawei.com>
-In-Reply-To: <20220413140121.3132837-1-robh@kernel.org>
-References: <20220413140121.3132837-1-robh@kernel.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        with ESMTP id S237432AbiDMRin (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Apr 2022 13:38:43 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939346C94C
+        for <linux-spi@vger.kernel.org>; Wed, 13 Apr 2022 10:36:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CB0BCCE26C8
+        for <linux-spi@vger.kernel.org>; Wed, 13 Apr 2022 17:36:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F12C385A4;
+        Wed, 13 Apr 2022 17:36:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649871378;
+        bh=0RPtgd1qClYIHhQ7dmPuWpuvG5riLw53lNvfFVuPIek=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=UYgpByAoxucAVys9e9xYKVUUl+9fX1d+3JSoporNbm+03yuyIhNPkYX/qypGE/2EA
+         TFuIN3C399Sa3t5ZRt/ViHUZ+QKml6VY0XaHhrh9lgrQ7BfmQ8C40QADB5nCQqnxZF
+         OmYv2lTtZuxWdfFeBW1BipC32SjA3tQnb+lrz4yqKacie21EMYH4OVmhfriwrYUGj7
+         2813GTYcycDXuHzK3mT4Kr5gS17mFe2MTexfnw4Q/9zwttXyqWv4wEruReUk9PwywZ
+         dqeKag6b14hFtYhZaZipMastZ0EdRZS7yC250TI2p2K0io3Cg2szaCTn0t9EX6l+gD
+         Oo6k//yqoyLCA==
+From:   Mark Brown <broonie@kernel.org>
+To:     mika.westerberg@linux.intel.com
+Cc:     linux-spi@vger.kernel.org
+In-Reply-To: <20220411112116.53281-1-mika.westerberg@linux.intel.com>
+References: <20220411112116.53281-1-mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH] spi: intel: Add support for Raptor Lake-S SPI serial flash
+Message-Id: <164987137733.70105.17697260829140995605.b4-ty@kernel.org>
+Date:   Wed, 13 Apr 2022 18:36:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.81.205.148]
-X-ClientProxiedBy: lhreml743-chm.china.huawei.com (10.201.108.193) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 13 Apr 2022 09:01:21 -0500
-Rob Herring <robh@kernel.org> wrote:
-
-> Scalar properties shouldn't have array constraints (minItems, maxItems,
-> items). These constraints can simply be dropped with any constraints under
-> 'items' moved up a level.
+On Mon, 11 Apr 2022 14:21:16 +0300, Mika Westerberg wrote:
+> Intel Raptor Lake-S has the same SPI serial flash controller as Alder
+> Lake-P. Add Raptor Lake-S PCI ID to the driver list of supported
+> devices.
 > 
-> Cc: Agathe Porte <agathe.porte@nokia.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> Cc: Olivier Moysan <olivier.moysan@foss.st.com>
-> Cc: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: Lars-Peter Clausen <lars@metafoo.de>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-> Cc: Yunfei Dong <yunfei.dong@mediatek.com>
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: linux-hwmon@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-iio@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: linux-remoteproc@vger.kernel.org
-> Cc: linux-spi@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml       | 5 ++---
->  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 4 +---
-
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
->  Documentation/devicetree/bindings/media/coda.yaml            | 1 -
->  .../devicetree/bindings/media/mediatek,vcodec-decoder.yaml   | 2 --
->  .../devicetree/bindings/media/mediatek,vcodec-encoder.yaml   | 2 --
->  .../bindings/media/mediatek,vcodec-subdev-decoder.yaml       | 1 -
->  .../devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml | 4 +---
->  Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml  | 2 --
->  8 files changed, 4 insertions(+), 17 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
-> index 801ca9ba7d34..e7493e25a7d2 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
-> @@ -58,9 +58,8 @@ patternProperties:
->            The value (two's complement) to be programmed in the channel specific N correction register.
->            For remote channels only.
->          $ref: /schemas/types.yaml#/definitions/int32
-> -        items:
-> -          minimum: -128
-> -          maximum: 127
-> +        minimum: -128
-> +        maximum: 127
->  
->      required:
->        - reg
-> diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
-> index 7c260f209687..952bc900d0fa 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
-> @@ -108,9 +108,7 @@ patternProperties:
->            - [1-5]: order 1 to 5.
->            For audio purpose it is recommended to use order 3 to 5.
->          $ref: /schemas/types.yaml#/definitions/uint32
-> -        items:
-> -          minimum: 0
-> -          maximum: 5
-> +        maximum: 5
->  
->        "#io-channel-cells":
->          const: 1
-> diff --git a/Documentation/devicetree/bindings/media/coda.yaml b/Documentation/devicetree/bindings/media/coda.yaml
-> index 36781ee4617f..c9d5adbc8c4a 100644
-> --- a/Documentation/devicetree/bindings/media/coda.yaml
-> +++ b/Documentation/devicetree/bindings/media/coda.yaml
-> @@ -65,7 +65,6 @@ properties:
->    iram:
->      $ref: /schemas/types.yaml#/definitions/phandle
->      description: phandle pointing to the SRAM device node
-> -    maxItems: 1
->  
->  required:
->    - compatible
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
-> index 9b179bb44dfb..aa55ca65d6ed 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
-> @@ -63,13 +63,11 @@ properties:
->  
->    mediatek,vpu:
->      $ref: /schemas/types.yaml#/definitions/phandle
-> -    maxItems: 1
->      description:
->        Describes point to vpu.
->  
->    mediatek,scp:
->      $ref: /schemas/types.yaml#/definitions/phandle
-> -    maxItems: 1
->      description:
->        Describes point to scp.
->  
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
-> index e7b65a91c92c..2746dea3ce79 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
-> @@ -55,13 +55,11 @@ properties:
->  
->    mediatek,vpu:
->      $ref: /schemas/types.yaml#/definitions/phandle
-> -    maxItems: 1
->      description:
->        Describes point to vpu.
->  
->    mediatek,scp:
->      $ref: /schemas/types.yaml#/definitions/phandle
-> -    maxItems: 1
->      description:
->        Describes point to scp.
->  
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> index 7687be0f50aa..c73bf2352aca 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> @@ -61,7 +61,6 @@ properties:
->  
->    mediatek,scp:
->      $ref: /schemas/types.yaml#/definitions/phandle
-> -    maxItems: 1
->      description: |
->        The node of system control processor (SCP), using
->        the remoteproc & rpmsg framework.
-> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml
-> index 2424de733ee4..d99a729d2710 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml
-> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml
-> @@ -104,8 +104,7 @@ properties:
->    qcom,smem-state-names:
->      $ref: /schemas/types.yaml#/definitions/string
->      description: The names of the state bits used for SMP2P output
-> -    items:
-> -      - const: stop
-> +    const: stop
->  
->    glink-edge:
->      type: object
-> @@ -130,7 +129,6 @@ properties:
->        qcom,remote-pid:
->          $ref: /schemas/types.yaml#/definitions/uint32
->          description: ID of the shared memory used by GLINK for communication with WPSS
-> -        maxItems: 1
->  
->      required:
->        - interrupts
-> diff --git a/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml b/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
-> index b104899205f6..5de710adfa63 100644
-> --- a/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
-> +++ b/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
-> @@ -124,7 +124,6 @@ properties:
->      description: |
->        Override the default TX fifo size.  Unit is words.  Ignored if 0.
->      $ref: /schemas/types.yaml#/definitions/uint32
-> -    maxItems: 1
->      default: 64
->  
->    renesas,rx-fifo-size:
-> @@ -132,7 +131,6 @@ properties:
->      description: |
->        Override the default RX fifo size.  Unit is words.  Ignored if 0.
->      $ref: /schemas/types.yaml#/definitions/uint32
-> -    maxItems: 1
->      default: 64
->  
->  required:
 
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: intel: Add support for Raptor Lake-S SPI serial flash
+      commit: 299d8b74519d04042f8803d0604e08a1a7e31e5e
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
