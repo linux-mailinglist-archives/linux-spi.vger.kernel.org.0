@@ -2,92 +2,169 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 501364FFD92
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Apr 2022 20:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9954550016B
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Apr 2022 23:52:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237175AbiDMSOH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Apr 2022 14:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
+        id S229801AbiDMVyx (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Apr 2022 17:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiDMSOG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Apr 2022 14:14:06 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C69136E0C;
-        Wed, 13 Apr 2022 11:11:43 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23DIBaIs042051;
-        Wed, 13 Apr 2022 13:11:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649873496;
-        bh=YqQ5rhFaUeIpx8tuzzpS1g5Fp/H5CjLBRHeqIyn+Wi0=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=jiB1kSKVqqdFwHaPL0yEw+MBlOXKriOi6k0T/pibExHaE9uWWJBIPoQVIUkDnn3Nb
-         BHCDucxff1xtEEpcssM21NG2fn5novsjea/qEIXPucM7AnUVmBj2ji1ErVb4kdwoHn
-         WXQDV377Zm/tFrnNvz3siZE4QX1b2HAmjrJ+YUCE=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23DIBaPt009306
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 13 Apr 2022 13:11:36 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 13
- Apr 2022 13:11:36 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 13 Apr 2022 13:11:36 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23DIBZTt058236;
-        Wed, 13 Apr 2022 13:11:35 -0500
-Date:   Wed, 13 Apr 2022 23:41:34 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-CC:     Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Ramuthevar Vadivel Murugan 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] spi: cadence-quadspi: fix incorrect supports_op()
- return value
-Message-ID: <20220413181134.izsam4fuogl6inbj@ti.com>
-References: <20220406132832.199777-1-matthias.schiffer@ew.tq-group.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220406132832.199777-1-matthias.schiffer@ew.tq-group.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S234549AbiDMVyw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Apr 2022 17:54:52 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F26826AC1
+        for <linux-spi@vger.kernel.org>; Wed, 13 Apr 2022 14:52:29 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id ll10so3302908pjb.5
+        for <linux-spi@vger.kernel.org>; Wed, 13 Apr 2022 14:52:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5II3n/+h3pivxbaF4Zlsk6J/11Tk5zgxZni781mRMks=;
+        b=vfNOMQF23PUUYhslMTsPc88fGqI/w/7RwE3Y+rQbjASYPl1JRZYkjCyiqvR+MlNzjz
+         fs2BJzp2MtxsYq0rjo9jR3eolql9ISfdEKQYRfPMxgEdaE4ykzR81x9JJxc3ZmQVfTy/
+         +Kl+ROe0ehO9bvmvKH6Z7EmRt1BzTnkuD+jte2bv9VSUZ3h/KYJMKSG8njJfZtK2WdeG
+         z8+4B2CWJ+qjrPf8He1vdE9f0rTayzBgPLWqKP4Iem19hdierTtX1G45FwqOcebVuZhw
+         NvMGsTlw3Ihv93OUD9UtUxgKAeb4QgFul2h4JTVPIdfoJ6c+uU1bWQvj2Au486LKCU1+
+         Eqng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=5II3n/+h3pivxbaF4Zlsk6J/11Tk5zgxZni781mRMks=;
+        b=Q/JjraN9hFTsMFZFVfHgfp0ah6auURdXYbT3CVRQxvJ3RxOCv3Xv5iEKjDcLpS13pq
+         nb26hGAsQh29TJFTDVsqgawy5Lqi9cgJKDYMmkcyIKvRwsJZ874+6I8rYgdTdD7XwOVA
+         gwNGNhRfYIhDxU8eH6dqm/riSbXS7PgtN57Xsbce98EiKjDXV0GMi+cHgOw9rkjaDha6
+         cMhc8X0VFAqHf5xYsRPKwfzO9Duw3ksBC0OzFhuFTg5yo+QEEgNdmif1OR3lJNa05/Jb
+         f+Ed1UkjmI3GMj+f6/atCRpp9uNgV+R4qwoqCnSO3lPBQAw1lh3X3CkavcgI6zhr9pOl
+         jQVw==
+X-Gm-Message-State: AOAM531X3+wdNR2XEW6UgZEWkhqOKxLA9e61ELwZAxbM9w4W4I8TG6e/
+        s+snTOXhP3V5xJTiBTOYFLoKug==
+X-Google-Smtp-Source: ABdhPJzH9INoE7i/6xgm6BLOYIKln7WffJZnT0GLl47dO+VUcGZI8dfFW0KpRsmGzjOhjaom6Cr93Q==
+X-Received: by 2002:a17:902:7006:b0:156:3cbe:6b04 with SMTP id y6-20020a170902700600b001563cbe6b04mr43467020plk.68.1649886748497;
+        Wed, 13 Apr 2022 14:52:28 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id k6-20020a056a00134600b004faba67f9d4sm37928pfu.197.2022.04.13.14.52.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 14:52:27 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 14:52:27 -0700 (PDT)
+X-Google-Original-Date: Wed, 13 Apr 2022 14:52:19 PDT (-0700)
+Subject:     Re: [PATCH 00/12] Initial support for Nuclei DemoSoC w/ UX600
+In-Reply-To: <mhng-b11934a9-100f-457b-a35e-46bdcd7f43f4@palmer-ri-x1c9>
+CC:     robh+dt@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     icenowy@nucleisys.com
+Message-ID: <mhng-aeb81250-47b1-4189-a668-695c410d2450@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 06/04/22 03:28PM, Matthias Schiffer wrote:
-> Since the conversion to spi-mem, the driver advertised support for
-> various operations that cqspi_set_protocol() was never expected to handle
-> correctly - in particuar all non-DTR operations with command or address
-> buswidth > 1. For DTR, all operations except for 8-8-8 would fail, as
-> cqspi_set_protocol() returns -EINVAL.
-> 
-> In non-DTR mode, this resulted in data corruption for SPI-NOR flashes that
-> support such operations. As a minimal fix that can be backported to stable
-> kernels, simply disallow the unsupported operations again to avoid this
-> issue.
-> 
-> Fixes: a314f6367787 ("mtd: spi-nor: Convert cadence-quadspi to use spi-mem framework")
-> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+On Mon, 21 Mar 2022 17:05:45 PDT (-0700), Palmer Dabbelt wrote:
+> On Tue, 22 Feb 2022 08:56:42 PST (-0800), Palmer Dabbelt wrote:
+>> On Sat, 19 Feb 2022 06:45:43 PST (-0800), icenowy@nucleisys.com wrote:
+>>> 在 2022-01-27星期四的 23:16 +0800，Icenowy Zheng写道：
+>>>> This patchset adds support for Nuclei DemoSoC (which is an evaluation
+>>>> platform made with Nuclei CPU cores and mainly peripherals in
+>>>> original
+>>>> Hummingbird E203 project, running on FPGA) with UX600 CPU cores.
+>>>>
+>>>> Most patches are for DT bindings, the remaining ones are adding a
+>>>> Kconfig option and some DTS/DTSI files. The last one is a workaround
+>>>> for
+>>>> a severe bug in currently released versions of UX600, which is found
+>>>> in 5.17 kernel, in which Sv48 support is added to Linux.
+>>>>
+>>>> Two non-technical patches are in this patchset too, for MAINTAINERS
+>>>> and .mailmap items.
+>>>
+>>> Ping, could any RISC-V maintainers review these patches, especially the
+>>> SATP workaround one?
+>>
+>> Sorry, I remember having written this but I guess it got lost.  IIRC my
+>> main worry here was that, at least as far as I can tell, DemoSOC is an
+>> FPGA development board.  If this is actually in production somewhere
+>> then it's a different story, but IIUC the general rule is not to accept
+>> code for development hardware that can be updated.
+>>
+>> Assuming DemoSOC can be updated, I'd also argue that we should have some
+>> sort of version attached to it in DT entries.  Without some versioning
+>> we'll end up lost when trying to later determine what we're actually
+>> running on.
+>>
+>> As far as the errata goes: it looks fine to me, but I'd like to see some
+>> sort of description of what the errata actually is (ie, some
+>> documentation from the manufacturer).  I know that's not always
+>> possible, but without some desciption of what the bug is it gets tricky
+>> to mainain this sort of stuff.  For example: we've got sv57 patches
+>> now, so how do I know what to do with them on this target?
+>
+> Just following up on this one.  Not sure if I missed it, but I can't
+> find a reply.
 
-I suppose it is too late now since the patch is already applied. But 
-FWIW,
+Checking up on this one more time, I still can't find any replies.  It's 
+at the top of my queue, but I'm going to drop it until the questions get 
+resolved.
 
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
-
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+>
+>>
+>>>
+>>>>
+>>>> Icenowy Zheng (12):
+>>>>   dt-bindings: vendor-prefixes: add Nuclei
+>>>>   RISC-V: add Nuclei SoC Kconfig option
+>>>>   dt-bindings: riscv: add compatible strings for Nuclei UX600 series
+>>>>   dt-bindings: timer: add compatible for Nuclei UX600 CLINT-compat
+>>>> timer
+>>>>   dt-bindings: interrupt-controller: add compatible string for UX600
+>>>>     PLIC
+>>>>   dt-bindings: serial: add compatible string for Nuclei DemoSoC UART
+>>>>   dt-bindings: spi: add compatible string for Nuclei DemoSoC SPI
+>>>>   dt-bindings: riscv: add binding for Nuclei platform boards
+>>>>   riscv: dts: add device tree for Nuclei DemoSoC w/ UX600 on DDR200T
+>>>>   RISC-V: workaround Nuclei UX600 cores with broken SATP CSR
+>>>>   MAINTAINERS: add myself as Nuclei SoCs/CPUs supporter
+>>>>   mailmap: add Icenowy Zheng's Nuclei mail addresses
+>>>>
+>>>>  .mailmap                                      |  1 +
+>>>>  .../sifive,plic-1.0.0.yaml                    |  1 +
+>>>>  .../devicetree/bindings/riscv/cpus.yaml       |  7 ++
+>>>>  .../devicetree/bindings/riscv/nuclei.yaml     | 27 ++++++++
+>>>>  .../bindings/serial/sifive-serial.yaml        |  1 +
+>>>>  .../devicetree/bindings/spi/spi-sifive.yaml   |  1 +
+>>>>  .../bindings/timer/sifive,clint.yaml          |  1 +
+>>>>  .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+>>>>  MAINTAINERS                                   |  7 ++
+>>>>  arch/riscv/Kconfig.socs                       |  6 ++
+>>>>  arch/riscv/boot/dts/Makefile                  |  1 +
+>>>>  arch/riscv/boot/dts/nuclei/Makefile           |  2 +
+>>>>  .../dts/nuclei/nuclei-demosoc-ddr200t.dtsi    | 41 ++++++++++++
+>>>>  .../nuclei/nuclei-demosoc-ux600-ddr200t.dts   | 13 ++++
+>>>>  .../boot/dts/nuclei/nuclei-demosoc-ux600.dtsi | 49 ++++++++++++++
+>>>>  .../riscv/boot/dts/nuclei/nuclei-demosoc.dtsi | 67
+>>>> +++++++++++++++++++
+>>>>  arch/riscv/include/asm/vendorid_list.h        |  1 +
+>>>>  arch/riscv/mm/init.c                          | 17 +++++
+>>>>  18 files changed, 245 insertions(+)
+>>>>  create mode 100644
+>>>> Documentation/devicetree/bindings/riscv/nuclei.yaml
+>>>>  create mode 100644 arch/riscv/boot/dts/nuclei/Makefile
+>>>>  create mode 100644 arch/riscv/boot/dts/nuclei/nuclei-demosoc-
+>>>> ddr200t.dtsi
+>>>>  create mode 100644 arch/riscv/boot/dts/nuclei/nuclei-demosoc-ux600-
+>>>> ddr200t.dts
+>>>>  create mode 100644 arch/riscv/boot/dts/nuclei/nuclei-demosoc-
+>>>> ux600.dtsi
+>>>>  create mode 100644 arch/riscv/boot/dts/nuclei/nuclei-demosoc.dtsi
+>>>>
