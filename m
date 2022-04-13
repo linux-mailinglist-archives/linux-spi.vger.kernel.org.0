@@ -2,128 +2,250 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 127184FF75F
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Apr 2022 15:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5894FF851
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Apr 2022 16:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234836AbiDMNHu (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Apr 2022 09:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
+        id S234564AbiDMODt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Apr 2022 10:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235117AbiDMNH1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Apr 2022 09:07:27 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9EC3153C;
-        Wed, 13 Apr 2022 06:05:06 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id k5so3388799lfg.9;
-        Wed, 13 Apr 2022 06:05:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MguF2RYo44MgrbhGTKMKxgWnE3eXi7QoNyV4A0lbMkU=;
-        b=OMGKkYidNXblMlGPauRd7HZZrDaGyhOAGqWUKhUW7b9lIZpPhYesNwO0osykEVGO6Q
-         6isboAeZeKTcv5//xD2RZcP74xvNR4w0yKIS0N0s+dPMX4K5nnj9sDXSrkhLJA5roxkl
-         yCks0Zdmv9i1+2CAbRI8eqtGFYLF7+KX2WqWjZcIBMSX1AtiEfYLODPfk+IJzegO78sS
-         vBp8fU6tDB3u7OC/eMs/eP0EfN/351DSlipBOaNYv8/fDoRO4EDvNlC6lnmIsTZzYmr2
-         a9eK5fpZvoGfS4Q3aYYS8i9TeGSJrofKQs4N/Ddpm+/+200i8srxT2BZJQ8KHD54YJev
-         OteQ==
+        with ESMTP id S233491AbiDMODp (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Apr 2022 10:03:45 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7924475F;
+        Wed, 13 Apr 2022 07:01:24 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-df02f7e2c9so2063692fac.10;
+        Wed, 13 Apr 2022 07:01:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MguF2RYo44MgrbhGTKMKxgWnE3eXi7QoNyV4A0lbMkU=;
-        b=eWzxYkxAG6E9+MLa68jhHiROn7YbVmV3ooYWpHRLiTSzi3nswAFlTgfZkbUC24m5v1
-         jyPVCzwbW5DbGacFjpBqtWClbleWoGARS4dQVeFiqfLX6zFK7aro63PnHpH1Ar4PuK33
-         5YlL+lPsg//dcNAX5XM31RZknwxTtpIu4gngjQStp+Pvtnlt0HtsKeRtnmzSS4wT0Mz7
-         +sILXNtiML9u2i31OPhMVzFR38VyH+PzxtsqWDc7+Pg4GYuhvRq7/n3dAvIm0/Rlp51K
-         macZIv5FGY+OYzgggXlPUe1SGe8lZveCKZBShq0uuElQur26THv0lI+AWGqOQ1BtDV3O
-         /2tw==
-X-Gm-Message-State: AOAM531HNwvs9/AjEMJvtPe/kXrZfiH9j29SsDgm2NdEMmUNNX6wIk/r
-        VO9RpbD/psT1a1BtwQCWN8c=
-X-Google-Smtp-Source: ABdhPJzUZEtK+7+xivPvVN1qQdh3Ze9UHqVekTAgLrdc4Qpf/Dm2vVfyTcwmYpLG2GVL/DSvCFAkjQ==
-X-Received: by 2002:a05:6512:b19:b0:44a:b7c4:3d94 with SMTP id w25-20020a0565120b1900b0044ab7c43d94mr27445841lfu.358.1649855104383;
-        Wed, 13 Apr 2022 06:05:04 -0700 (PDT)
-Received: from mobilestation ([95.79.134.149])
-        by smtp.gmail.com with ESMTPSA id p25-20020a056512329900b0046bc5c83fb7sm451552lfe.148.2022.04.13.06.05.03
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Kj/dMLICDp8pu3HTv362IKpvU4oSd9uXdOmA9Gpau0o=;
+        b=z0VpJoE5jcdkaUq22SCpK0IKN+VixZhFFmt0goYR5g5tGzi1IpYvH0lAYOxjuJggQ7
+         T/x96Oru4CIvuI8M+dhyEJEZbHZ1ZysTO99PDr6HnsRHfYKiOyIzNs7Ft/ZsaPleOzSy
+         UlSUcJqA1l821n+RWh0ni46GEy7Zp7aR4Qpc97vXFlE8IGFxwxroJSteUgzt3aumEwYW
+         byU8lW7xaKZn9SW6zum6mH+Yv/k4pdRpPEbjnqtCQ+AyLg8OOcBoRfJiXCaq13X8yFPo
+         4gfvfpicibivSJ8PEBCNEGxWbbU9JGfiJp5NGVTREAEP89edntIXQV5cI2bGF48RZYCW
+         OEPQ==
+X-Gm-Message-State: AOAM530WRuKZlmd5p/hLe+v+zauBUTh7vybbvnO+uMw1GPuzJdIG1I7U
+        UzV63H/mO/PbuCEJOxFmPTWQQ0ASMA==
+X-Google-Smtp-Source: ABdhPJysepoRmg0UJTcPB4IkpN1yDuH8vtXxsQePwZZquqTXl0dPKH9xPDWoEW7s3ArRKkyQKapuAw==
+X-Received: by 2002:a05:6870:8896:b0:da:f5e5:5b62 with SMTP id m22-20020a056870889600b000daf5e55b62mr4345486oam.229.1649858483572;
+        Wed, 13 Apr 2022 07:01:23 -0700 (PDT)
+Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.googlemail.com with ESMTPSA id c20-20020a4a2854000000b00329d3f076aasm2157772oof.24.2022.04.13.07.01.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 06:05:03 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 16:05:02 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     nandhini.srikandan@intel.com
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        broonie@kernel.org, robh+dt@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        mgross@linux.intel.com, kris.pan@intel.com,
-        kenchappa.demakkanavar@intel.com, furong.zhou@intel.com,
-        mallikarjunappa.sangannavar@intel.com, mahesh.r.vaidya@intel.com,
-        rashmi.a@intel.com
-Subject: Re: [PATCH v4 2/3] spi: dw: Add support for Intel Thunder Bay SPI
- controller
-Message-ID: <20220413130502.amnwjuspgmm2mj3s@mobilestation>
-References: <20220308103331.4116-1-nandhini.srikandan@intel.com>
- <20220308103331.4116-3-nandhini.srikandan@intel.com>
+        Wed, 13 Apr 2022 07:01:23 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Agathe Porte <agathe.porte@nokia.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Olivier Moysan <olivier.moysan@foss.st.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-hwmon@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: [PATCH] dt-bindings: Fix array constraints on scalar properties
+Date:   Wed, 13 Apr 2022 09:01:21 -0500
+Message-Id: <20220413140121.3132837-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220308103331.4116-3-nandhini.srikandan@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Mar 08, 2022 at 06:33:30PM +0800, nandhini.srikandan@intel.com wrote:
-> From: Nandhini Srikandan <nandhini.srikandan@intel.com>
-> 
-> Add support for Intel Thunder Bay SPI controller, which uses DesignWare
-> DWC_ssi core and also add common init function for both Keem Bay and
-> Thunder Bay.
+Scalar properties shouldn't have array constraints (minItems, maxItems,
+items). These constraints can simply be dropped with any constraints under
+'items' moved up a level.
 
-Please see my comments to the patch
-[PATCH v4 3/3] spi: dw: Add support for master mode selection for DWC SSI controller
-of this series. I think this patch should go after that one so to
-introduce a safer conversion of the DWC AHB SSI functionality.
+Cc: Agathe Porte <agathe.porte@nokia.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: Olivier Moysan <olivier.moysan@foss.st.com>
+Cc: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc: Jonathan Cameron <jic23@kernel.org>
+Cc: Lars-Peter Clausen <lars@metafoo.de>
+Cc: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Cc: Yunfei Dong <yunfei.dong@mediatek.com>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: linux-hwmon@vger.kernel.org
+Cc: alsa-devel@alsa-project.org
+Cc: linux-iio@vger.kernel.org
+Cc: linux-media@vger.kernel.org
+Cc: linux-remoteproc@vger.kernel.org
+Cc: linux-spi@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml       | 5 ++---
+ .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 4 +---
+ Documentation/devicetree/bindings/media/coda.yaml            | 1 -
+ .../devicetree/bindings/media/mediatek,vcodec-decoder.yaml   | 2 --
+ .../devicetree/bindings/media/mediatek,vcodec-encoder.yaml   | 2 --
+ .../bindings/media/mediatek,vcodec-subdev-decoder.yaml       | 1 -
+ .../devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml | 4 +---
+ Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml  | 2 --
+ 8 files changed, 4 insertions(+), 17 deletions(-)
 
--Sergey
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+index 801ca9ba7d34..e7493e25a7d2 100644
+--- a/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+@@ -58,9 +58,8 @@ patternProperties:
+           The value (two's complement) to be programmed in the channel specific N correction register.
+           For remote channels only.
+         $ref: /schemas/types.yaml#/definitions/int32
+-        items:
+-          minimum: -128
+-          maximum: 127
++        minimum: -128
++        maximum: 127
+ 
+     required:
+       - reg
+diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
+index 7c260f209687..952bc900d0fa 100644
+--- a/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
+@@ -108,9 +108,7 @@ patternProperties:
+           - [1-5]: order 1 to 5.
+           For audio purpose it is recommended to use order 3 to 5.
+         $ref: /schemas/types.yaml#/definitions/uint32
+-        items:
+-          minimum: 0
+-          maximum: 5
++        maximum: 5
+ 
+       "#io-channel-cells":
+         const: 1
+diff --git a/Documentation/devicetree/bindings/media/coda.yaml b/Documentation/devicetree/bindings/media/coda.yaml
+index 36781ee4617f..c9d5adbc8c4a 100644
+--- a/Documentation/devicetree/bindings/media/coda.yaml
++++ b/Documentation/devicetree/bindings/media/coda.yaml
+@@ -65,7 +65,6 @@ properties:
+   iram:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description: phandle pointing to the SRAM device node
+-    maxItems: 1
+ 
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
+index 9b179bb44dfb..aa55ca65d6ed 100644
+--- a/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
++++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
+@@ -63,13 +63,11 @@ properties:
+ 
+   mediatek,vpu:
+     $ref: /schemas/types.yaml#/definitions/phandle
+-    maxItems: 1
+     description:
+       Describes point to vpu.
+ 
+   mediatek,scp:
+     $ref: /schemas/types.yaml#/definitions/phandle
+-    maxItems: 1
+     description:
+       Describes point to scp.
+ 
+diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
+index e7b65a91c92c..2746dea3ce79 100644
+--- a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
++++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
+@@ -55,13 +55,11 @@ properties:
+ 
+   mediatek,vpu:
+     $ref: /schemas/types.yaml#/definitions/phandle
+-    maxItems: 1
+     description:
+       Describes point to vpu.
+ 
+   mediatek,scp:
+     $ref: /schemas/types.yaml#/definitions/phandle
+-    maxItems: 1
+     description:
+       Describes point to scp.
+ 
+diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+index 7687be0f50aa..c73bf2352aca 100644
+--- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
++++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+@@ -61,7 +61,6 @@ properties:
+ 
+   mediatek,scp:
+     $ref: /schemas/types.yaml#/definitions/phandle
+-    maxItems: 1
+     description: |
+       The node of system control processor (SCP), using
+       the remoteproc & rpmsg framework.
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml
+index 2424de733ee4..d99a729d2710 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml
+@@ -104,8 +104,7 @@ properties:
+   qcom,smem-state-names:
+     $ref: /schemas/types.yaml#/definitions/string
+     description: The names of the state bits used for SMP2P output
+-    items:
+-      - const: stop
++    const: stop
+ 
+   glink-edge:
+     type: object
+@@ -130,7 +129,6 @@ properties:
+       qcom,remote-pid:
+         $ref: /schemas/types.yaml#/definitions/uint32
+         description: ID of the shared memory used by GLINK for communication with WPSS
+-        maxItems: 1
+ 
+     required:
+       - interrupts
+diff --git a/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml b/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
+index b104899205f6..5de710adfa63 100644
+--- a/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
++++ b/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
+@@ -124,7 +124,6 @@ properties:
+     description: |
+       Override the default TX fifo size.  Unit is words.  Ignored if 0.
+     $ref: /schemas/types.yaml#/definitions/uint32
+-    maxItems: 1
+     default: 64
+ 
+   renesas,rx-fifo-size:
+@@ -132,7 +131,6 @@ properties:
+     description: |
+       Override the default RX fifo size.  Unit is words.  Ignored if 0.
+     $ref: /schemas/types.yaml#/definitions/uint32
+-    maxItems: 1
+     default: 64
+ 
+ required:
+-- 
+2.32.0
 
-> 
-> Signed-off-by: Nandhini Srikandan <nandhini.srikandan@intel.com>
-> ---
->  drivers/spi/spi-dw-mmio.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-> index 5101c4c6017b..26c40ea6dd12 100644
-> --- a/drivers/spi/spi-dw-mmio.c
-> +++ b/drivers/spi/spi-dw-mmio.c
-> @@ -214,11 +214,10 @@ static int dw_spi_hssi_init(struct platform_device *pdev,
->  	return 0;
->  }
->  
-> -static int dw_spi_keembay_init(struct platform_device *pdev,
-> -			       struct dw_spi_mmio *dwsmmio)
-> +static int dw_spi_intel_init(struct platform_device *pdev,
-> +			     struct dw_spi_mmio *dwsmmio)
->  {
->  	dwsmmio->dws.ip = DW_HSSI_ID;
-> -	dwsmmio->dws.caps = DW_SPI_CAP_KEEMBAY_MST;
->  
->  	return 0;
->  }
-> @@ -349,7 +348,8 @@ static const struct of_device_id dw_spi_mmio_of_match[] = {
->  	{ .compatible = "amazon,alpine-dw-apb-ssi", .data = dw_spi_alpine_init},
->  	{ .compatible = "renesas,rzn1-spi", .data = dw_spi_pssi_init},
->  	{ .compatible = "snps,dwc-ssi-1.01a", .data = dw_spi_hssi_init},
-> -	{ .compatible = "intel,keembay-ssi", .data = dw_spi_keembay_init},
-> +	{ .compatible = "intel,keembay-ssi", .data = dw_spi_intel_init},
-> +	{ .compatible = "intel,thunderbay-ssi", .data = dw_spi_intel_init},
->  	{ .compatible = "microchip,sparx5-spi", dw_spi_mscc_sparx5_init},
->  	{ .compatible = "canaan,k210-spi", dw_spi_canaan_k210_init},
->  	{ /* end of table */}
-> -- 
-> 2.17.1
-> 
