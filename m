@@ -2,100 +2,84 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD4884FF3AF
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Apr 2022 11:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A55EC4FF5C1
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Apr 2022 13:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234530AbiDMJjZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Apr 2022 05:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
+        id S231624AbiDMLfH (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Apr 2022 07:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234442AbiDMJjY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Apr 2022 05:39:24 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537AB541B4;
-        Wed, 13 Apr 2022 02:37:04 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id s137so1293701pgs.5;
-        Wed, 13 Apr 2022 02:37:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZIbqNzlM4mGyXngbvjcRG1LQx/UAY6/404TR2/PWwFs=;
-        b=j8GfcResZEwut76VbSxBlfk8dbQVlR/c6a10PTJq1uirvnk1P3Mbf+HyHcxtJ1p5hj
-         Gwx43aaHNSsBcKYUlaYbg1Cg74OSxxrZFYOt2Lo9MzYF3LJPDI1DQHRWb4uKTiYnhQXA
-         M+B6g4BKwOihidCO0V6RaUxc1BUESxcM71p9YUwLzUhjCBJN/YYJJGO8cSom54IT2sIC
-         pysgQbnApUHSFR6rSjDTZby7noM9q80dnKDNp/cHbi0rvDVcwJQSDzdyyJo7zLfQFakh
-         JCrp609KqPe+18ASLprBBLFxtgiaeaeUTI1TAmWyv/FvmGVjYjAJbL7U1+6PHkZeOnU/
-         D0WQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZIbqNzlM4mGyXngbvjcRG1LQx/UAY6/404TR2/PWwFs=;
-        b=Gd7xQZ/t8n9Tt1m28HBTrchLbH2npKgYoqT6Z/nc5aigv7a3kyRinwtviIPyFGHi3y
-         zF+uQrlFJlbSQDC98T50/c8nFbVX7JnicS0PAHSnH5N6B9AJYcaznUvtUX8VMOFMPF1f
-         rtIbvsm2AZqIbEZCxgZBRzGplf3lX5tt1EVxeq6NW8NsgWus10psjjAL5DYVH23idpnu
-         z8oFZEvqPSODbfkCcMcX/pL7S5EkPX66S60Sa51Mx/UHsEV54Wln1Pw28ShJR6DXI3QS
-         KjuOtfnHmh6FQ7xYnd/7qeP0XhrXbA1CoRMWNB0HbMCkF3uf938GW8X+xwSPSgRhoko2
-         7RBw==
-X-Gm-Message-State: AOAM5322AJ3w9F3sn3V5yETUgJSpxrOGIq+9luyFqm6OjY41sDWJrqkI
-        1rMSPeLYlsxF4hfmGgY+4ms=
-X-Google-Smtp-Source: ABdhPJyP10IR9XEvNvaxdXCbbuP6cBLOlt/6ra1wKwndHOwZHpzIuU325rdV0pyhDg3hMTSZjTFxEQ==
-X-Received: by 2002:a63:ec43:0:b0:382:11ef:b94a with SMTP id r3-20020a63ec43000000b0038211efb94amr34761353pgj.409.1649842623860;
-        Wed, 13 Apr 2022 02:37:03 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id y15-20020a17090a1f4f00b001c7ecaf9e13sm2391836pjy.35.2022.04.13.02.37.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 02:37:03 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     broonie@kernel.org
+        with ESMTP id S235183AbiDMLfF (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Apr 2022 07:35:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D063059A68;
+        Wed, 13 Apr 2022 04:32:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CA43B82266;
+        Wed, 13 Apr 2022 11:32:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94526C385A4;
+        Wed, 13 Apr 2022 11:32:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649849561;
+        bh=gzldEAhkSlGw2gr/JMOT8tx+AqRd92XMtLA3Z5OFrPs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DD9JvnckP0MTbU2i4YW0bWhjd2OZ9uHA/i1bElQpPeBXJ3hxkiIRmKAKxqRlN1pi3
+         YDU2TD3JuY3+eTM6BABRIajBIWiAt2QJrCz3wR3DvO259kF/8489CADAT+R2HOL5sl
+         UnT8WFT9FNCHfKHL5AQcWizn5yXdlpkq2VvLMs9eVhgIj7yOkpSdCjwQgr3yLTA/DE
+         v33Df+BSou3aMyM07cGg2KorkA6ccBPro1DrCjIAe4JGg1D/Dcj4CqWn1zW2qnm6Rl
+         Rkp5aduaqpycns0FRHwMtJImgExJZgAut6AscerkeLdkkkedDOHXC016MnrBJiGGKh
+         8LIQRHprvd99w==
+Date:   Wed, 13 Apr 2022 12:32:36 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Li-hao Kuo <lhjeff911@gmail.com>
 Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] spi: spi-cadence-quadspi: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Wed, 13 Apr 2022 09:36:56 +0000
-Message-Id: <20220413093656.2538504-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        wells.lu@sunplus.com, lh.kuo@sunplus.com, nathan@kernel.org,
+        trix@redhat.com
+Subject: Re: [PATCH] spi: remove spin_lock_irq in the irq procress
+Message-ID: <Yla01C6MJbaieIwR@sirena.org.uk>
+References: <9e12d806c5554b4ed18c644f71f6662fcf0d0516.1649813822.git.lhjeff911@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9OabIZ/xS33zCkIN"
+Content-Disposition: inline
+In-Reply-To: <9e12d806c5554b4ed18c644f71f6662fcf0d0516.1649813822.git.lhjeff911@gmail.com>
+X-Cookie: The horror... the horror!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Using pm_runtime_resume_and_get is more appropriate
-for simplifing code
+--9OabIZ/xS33zCkIN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/spi/spi-mem.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+On Wed, Apr 13, 2022 at 09:38:00AM +0800, Li-hao Kuo wrote:
+> - remove spin_lock_irq and spin_unlock_irq in the irq funciton
 
-diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-index 0e8dafc62d94..7d7091aa0c22 100644
---- a/drivers/spi/spi-mem.c
-+++ b/drivers/spi/spi-mem.c
-@@ -262,9 +262,8 @@ static int spi_mem_access_start(struct spi_mem *mem)
- 	if (ctlr->auto_runtime_pm) {
- 		int ret;
- 
--		ret = pm_runtime_get_sync(ctlr->dev.parent);
-+		ret = pm_runtime_resume_and_get(ctlr->dev.parent);
- 		if (ret < 0) {
--			pm_runtime_put_noidle(ctlr->dev.parent);
- 			dev_err(&ctlr->dev, "Failed to power device: %d\n",
- 				ret);
- 			return ret;
--- 
-2.25.1
+It looks like this is the only use of the lock so the variable can be
+removed as well?
 
+--9OabIZ/xS33zCkIN
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJWtNMACgkQJNaLcl1U
+h9DUwAf+J1KzKpnUBAYD2uKiRJjnSozJD1uSqKu5bnfpmx4Q4SSdRMAzWnUXk52U
++x6sXNL0xzKDOvYmp+hkarALktHLNasdIKApPgjpTGGtUZTHKkFQ3AuoMyvfIsp7
+V9rrJDkqvOuTA3MVjXH9T+9PDJBtCZGMWGzifGGRc3tVj5KD5NyfEDyLHvAwfqt4
+H0GMvmOoyQo292rUidkKE+By1fBMaXhRn2oJeDe/ALswJWrXUeHmimGRXzLyVVwF
+IgEfPt9VKdZS3slBCZz3/30hpip1uh3nKX9rUORz7tAt97rZ0D/wBcSa4FgFByQB
+KGepCQoMhPNcenyiKsjbF6U4uSjvCQ==
+=QREO
+-----END PGP SIGNATURE-----
+
+--9OabIZ/xS33zCkIN--
