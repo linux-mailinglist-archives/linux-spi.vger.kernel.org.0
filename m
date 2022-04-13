@@ -2,43 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168234FFCEC
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Apr 2022 19:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ACED4FFCE9
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Apr 2022 19:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237430AbiDMRir (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 13 Apr 2022 13:38:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
+        id S237427AbiDMRin (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Apr 2022 13:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237432AbiDMRin (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Apr 2022 13:38:43 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939346C94C
-        for <linux-spi@vger.kernel.org>; Wed, 13 Apr 2022 10:36:21 -0700 (PDT)
+        with ESMTP id S235917AbiDMRim (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Apr 2022 13:38:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066E66C977;
+        Wed, 13 Apr 2022 10:36:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CB0BCCE26C8
-        for <linux-spi@vger.kernel.org>; Wed, 13 Apr 2022 17:36:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F12C385A4;
-        Wed, 13 Apr 2022 17:36:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A22C861EE3;
+        Wed, 13 Apr 2022 17:36:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F147C385A3;
+        Wed, 13 Apr 2022 17:36:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649871378;
-        bh=0RPtgd1qClYIHhQ7dmPuWpuvG5riLw53lNvfFVuPIek=;
+        s=k20201202; t=1649871380;
+        bh=2vNABeBZQ+H0ZHBmPE9Li3qkyTfEc1acEFbKIGMvhic=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=UYgpByAoxucAVys9e9xYKVUUl+9fX1d+3JSoporNbm+03yuyIhNPkYX/qypGE/2EA
-         TFuIN3C399Sa3t5ZRt/ViHUZ+QKml6VY0XaHhrh9lgrQ7BfmQ8C40QADB5nCQqnxZF
-         OmYv2lTtZuxWdfFeBW1BipC32SjA3tQnb+lrz4yqKacie21EMYH4OVmhfriwrYUGj7
-         2813GTYcycDXuHzK3mT4Kr5gS17mFe2MTexfnw4Q/9zwttXyqWv4wEruReUk9PwywZ
-         dqeKag6b14hFtYhZaZipMastZ0EdRZS7yC250TI2p2K0io3Cg2szaCTn0t9EX6l+gD
-         Oo6k//yqoyLCA==
+        b=cBFQDx0apSqSgapak4T6kjgMK5eLVa1o1UFFHyVGNeld3JMKnzi4Vb4DrmFtRJUR1
+         wtfl62qJAuXpp6GM4NjkCM30XbTma2nhOwnaoCtnvdI5jmFwNRfcbirSaqA+Gr6RJM
+         EKCSutm57rcPdAO16zaP6n9UDeNNz/S4aOFwYCtca5G0Zu3+3mSz468Dntyy71aA6P
+         kSKdlYbkMA4QJex0pzAolJSu0ithWdxVAylEwe+ENTtZ9CMPufp1lg4cVmjaquyIkr
+         zkOFXaqV7shwmLNvq0jm+Y9uf8iO23aACqRMLqpzP0v0VdWx1vrzj/NEHJWHy3RUO6
+         xnT1qgXp8w4Eg==
 From:   Mark Brown <broonie@kernel.org>
-To:     mika.westerberg@linux.intel.com
-Cc:     linux-spi@vger.kernel.org
-In-Reply-To: <20220411112116.53281-1-mika.westerberg@linux.intel.com>
-References: <20220411112116.53281-1-mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH] spi: intel: Add support for Raptor Lake-S SPI serial flash
-Message-Id: <164987137733.70105.17697260829140995605.b4-ty@kernel.org>
-Date:   Wed, 13 Apr 2022 18:36:17 +0100
+To:     p.yadav@ti.com, matthias.schiffer@ew.tq-group.com
+Cc:     tudor.ambarus@microchip.com, linux-kernel@vger.kernel.org,
+        vigneshr@ti.com, vadivel.muruganx.ramuthevar@linux.intel.com,
+        linux-spi@vger.kernel.org
+In-Reply-To: <20220406132832.199777-1-matthias.schiffer@ew.tq-group.com>
+References: <20220406132832.199777-1-matthias.schiffer@ew.tq-group.com>
+Subject: Re: [PATCH v2] spi: cadence-quadspi: fix incorrect supports_op() return value
+Message-Id: <164987137835.70105.4695547877202856949.b4-ty@kernel.org>
+Date:   Wed, 13 Apr 2022 18:36:18 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -52,12 +54,19 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Mon, 11 Apr 2022 14:21:16 +0300, Mika Westerberg wrote:
-> Intel Raptor Lake-S has the same SPI serial flash controller as Alder
-> Lake-P. Add Raptor Lake-S PCI ID to the driver list of supported
-> devices.
+On Wed, 6 Apr 2022 15:28:32 +0200, Matthias Schiffer wrote:
+> Since the conversion to spi-mem, the driver advertised support for
+> various operations that cqspi_set_protocol() was never expected to handle
+> correctly - in particuar all non-DTR operations with command or address
+> buswidth > 1. For DTR, all operations except for 8-8-8 would fail, as
+> cqspi_set_protocol() returns -EINVAL.
 > 
+> In non-DTR mode, this resulted in data corruption for SPI-NOR flashes that
+> support such operations. As a minimal fix that can be backported to stable
+> kernels, simply disallow the unsupported operations again to avoid this
+> issue.
 > 
+> [...]
 
 Applied to
 
@@ -65,8 +74,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: intel: Add support for Raptor Lake-S SPI serial flash
-      commit: 299d8b74519d04042f8803d0604e08a1a7e31e5e
+[1/1] spi: cadence-quadspi: fix incorrect supports_op() return value
+      commit: f1d388f216aeb41a5df518815ae559d14a6d438e
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
