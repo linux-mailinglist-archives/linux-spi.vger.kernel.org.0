@@ -2,97 +2,162 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C8E24FEC5B
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Apr 2022 03:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2CE4FF234
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Apr 2022 10:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbiDMBke (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 12 Apr 2022 21:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
+        id S231206AbiDMInf (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 13 Apr 2022 04:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231538AbiDMBkd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 12 Apr 2022 21:40:33 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E554BB97;
-        Tue, 12 Apr 2022 18:38:14 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id e8-20020a17090a118800b001cb13402ea2so558790pja.0;
-        Tue, 12 Apr 2022 18:38:14 -0700 (PDT)
+        with ESMTP id S234484AbiDMInX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 13 Apr 2022 04:43:23 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6460E4707E
+        for <linux-spi@vger.kernel.org>; Wed, 13 Apr 2022 01:41:00 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id z99so1485040ede.5
+        for <linux-spi@vger.kernel.org>; Wed, 13 Apr 2022 01:41:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=FHnPLloxi4vtZdgy1A8R9HJFeUvpP1KwxVP1zs+LIe0=;
-        b=VaqQDvsG2iIQr3Hc//BnO/Da4eSRCfbKxcQZWVRpfOJBruCCPEdLOSMXm9DrJzmP75
-         Bcqi0FLgLHuN+c1XsEutTXLxEbJKFaqjJzVhcWXFmQRl2RieG2mBKlvKvpGLPSPVUULV
-         bJ9GjtPRrm9K3LIeNE5mgjYxXSJQ6pmY4aYpBB3mLExkkm6lwOITJPk60eJ/YKqyU6yO
-         6qxLVOMJ0Lmascmjy1m3l+xrA/rM1KZUcBHf8ufnLfr+qTueQUHVjktWr7hh1BZfluxu
-         nyBDwJi6EQE29uy79lt5ZOzyUjFqP6maoCyARG48UADdEr/+nJqrwqld1ZIqjhDK2U0R
-         oDZg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=vnyM2Iiv5ssFwZ+YfhSIPkTVc84CfyYTFaqlrMujJwU=;
+        b=JIbqyng6xlRV93M1Iu4dTb27ybe+M5EN2beeOTia2QovfKwHZWLGjr66cUx0YdX3/v
+         8nbu5XWVqbuUMx1VHW7Jp0LjTMIRW/JvtKlPAPwmC12IguAK8nAZjvST8nPijS6soEVz
+         lCEGXpJKRGImWyHRDfmKyn0IwmzTivzO/Vs8MDv+1cJ+MoZ5YxwAJ+kc5wqtfsrfRjlw
+         dl24/2CzxrUZbd2CgYUV995GGUYyvDMWOghjruTd1pRrJ7LcOsA6BV8p7XbkZUzO9Tat
+         9Hf6SigjF0nx23JEKIGKUT0nPYsQzEA7bWg8dt6IDJV7Ni9PpqpqRJKKkXLn7s8NY1Kj
+         Fn2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=FHnPLloxi4vtZdgy1A8R9HJFeUvpP1KwxVP1zs+LIe0=;
-        b=wggiWhhAj6wI2/Q12CDOgeLklLLc+eyFhpKO1+dVUUBqpkKTBEx107ysvCoAaurJ4F
-         WFBT2hQG2yX/JvDDIJio/JtsSu3PzeH/DRoEYjyBbuhcl6NJEZqVVLi4DngucsUCSDzD
-         NP+wqkI4id5jxj+YfcOBix0fHHN2HnYm+FcDhx4ywoKz9obWF8cL0Qpaxb7Bu6//Uktc
-         yZ1FNRirf1PoasFiCEIKjnOSGgAWI9PnjNoWhy9B+KDoILJlRfdb0WuCv2rEsitFnKmd
-         FoEPZ5nP/zCVcJX3Ivr9L9QpsIIxztanHySlq9Qh1YQop4aQGc+DYi4TegqffThdvvc4
-         A9OA==
-X-Gm-Message-State: AOAM530dGyOnmy0xpz+8QAn8Cn928FcishgkRlI2g/S3Bm8R3u8MREL2
-        dE9bmucSJJRR/uGtjJUx5nM=
-X-Google-Smtp-Source: ABdhPJyGMxyv1B4c7Z4hnf6gYAia8+nV6TnCa5TI7MJ6bwInkfOM0Q9nfxJcxTarO1ziq4pZYfW39A==
-X-Received: by 2002:a17:902:7409:b0:158:3a78:3e43 with SMTP id g9-20020a170902740900b001583a783e43mr18615185pll.145.1649813893914;
-        Tue, 12 Apr 2022 18:38:13 -0700 (PDT)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id v4-20020a17090a00c400b001cb4f242c92sm793492pjd.26.2022.04.12.18.38.11
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 12 Apr 2022 18:38:13 -0700 (PDT)
-From:   Li-hao Kuo <lhjeff911@gmail.com>
-To:     broonie@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com, nathan@kernel.org,
-        trix@redhat.com, Li-hao Kuo <lhjeff911@gmail.com>
-Subject: [PATCH] spi: remove spin_lock_irq in the irq procress
-Date:   Wed, 13 Apr 2022 09:38:00 +0800
-Message-Id: <9e12d806c5554b4ed18c644f71f6662fcf0d0516.1649813822.git.lhjeff911@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vnyM2Iiv5ssFwZ+YfhSIPkTVc84CfyYTFaqlrMujJwU=;
+        b=LTRGclDCKZb6Xc70ZlqlS4nnFy3uzE4upmB1vysPiypLTEU3FlYKvcxB6cg1CJTWwa
+         3vCU+52Mk4jMoOuf6nT0d0ZKhdwSk6Qud02ox4zVmS4lkXVQdXrtM4bunSX++cjRcuQY
+         Ovm1O4oOmwZx6sbyqvjqeW1ugysFxbrh34jRGNlGhlREJfVeFIQmWloXNAjq1nacobkE
+         7k9ISoJJVeFxCUQvQE4AMW8VFhAyNU0u8Pqq44w9abZV4kdaX7b6VyyKzlN3ntKUbB2A
+         7WCfakqXxiXFihh7+ZwX++yAEgSN76wNV0eGl4zsVF1CN5uq169WYgPim8dmKawN5Lz2
+         ObOA==
+X-Gm-Message-State: AOAM533Icjp3Ez6J6KlYgPGiqwKtctTre5O4TpydKj0XzqHNxiWe6uhp
+        ZJiqFl4Zz6fFEbBrBnucVp7LLA==
+X-Google-Smtp-Source: ABdhPJwtqQ40ij3I2sXCRUOzsMpUdkisZ2t9soK7OyZx79O22lSzuKtXAWN17iTj1ggfo92pAD3X0Q==
+X-Received: by 2002:aa7:c40b:0:b0:41d:9886:90a0 with SMTP id j11-20020aa7c40b000000b0041d988690a0mr5089328edq.275.1649839258932;
+        Wed, 13 Apr 2022 01:40:58 -0700 (PDT)
+Received: from [192.168.0.202] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id o15-20020a50d80f000000b0041cc1f4f5e0sm902910edj.62.2022.04.13.01.40.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 01:40:58 -0700 (PDT)
+Message-ID: <f967f1b2-80a2-8418-d5e8-1e2ac41730a6@linaro.org>
+Date:   Wed, 13 Apr 2022 10:40:57 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v6 12/12] rpmsg: Fix kfree() of static memory on setting
+ driver_override
+Content-Language: en-US
+To:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Stuart Yoder <stuyoder@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20220403183758.192236-1-krzysztof.kozlowski@linaro.org>
+ <20220403183758.192236-13-krzysztof.kozlowski@linaro.org>
+ <OS0PR01MB59226666C2C6805C86304BE586ED9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <OS0PR01MB59226666C2C6805C86304BE586ED9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-- remove spin_lock_irq and spin_unlock_irq in the irq funciton
+On 12/04/2022 16:10, Biju Das wrote:
+> Hi Krzysztof Kozlowski,
+> 
+> Thanks for the patch.
+> 
+>> Subject: [PATCH v6 12/12] rpmsg: Fix kfree() of static memory on setting
+>> driver_override
+>>
+>> The driver_override field from platform driver should not be initialized
+>> from static memory (string literal) because the core later kfree() it, for
+>> example when driver_override is set via sysfs.
+>>
+>> Use dedicated helper to set driver_override properly.
+>>
+>> Fixes: 950a7388f02b ("rpmsg: Turn name service into a stand alone driver")
+>> Fixes: c0cdc19f84a4 ("rpmsg: Driver for user space endpoint interface")
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>> ---
+>>  drivers/rpmsg/rpmsg_internal.h | 13 +++++++++++--
+>>  drivers/rpmsg/rpmsg_ns.c       | 14 ++++++++++++--
+>>  include/linux/rpmsg.h          |  6 ++++--
+>>  3 files changed, 27 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/rpmsg/rpmsg_internal.h
+>> b/drivers/rpmsg/rpmsg_internal.h index d4b23fd019a8..1a2fb8edf5d3 100644
+>> --- a/drivers/rpmsg/rpmsg_internal.h
+>> +++ b/drivers/rpmsg/rpmsg_internal.h
+>> @@ -94,10 +94,19 @@ int rpmsg_release_channel(struct rpmsg_device *rpdev,
+>>   */
+>>  static inline int rpmsg_ctrldev_register_device(struct rpmsg_device
+>> *rpdev)  {
+>> +	int ret;
+>> +
+>>  	strcpy(rpdev->id.name, "rpmsg_ctrl");
+>> -	rpdev->driver_override = "rpmsg_ctrl";
+>> +	ret = driver_set_override(&rpdev->dev, &rpdev->driver_override,
+>> +				  "rpmsg_ctrl", strlen("rpmsg_ctrl"));
+> 
+> Is it not possible to use rpdev->id.name instead of "rpmsg_ctrl" ?
+> rpdev->id.name has "rpmsg_ctrl" from strcpy(rpdev->id.name, "rpmsg_ctrl");
+> 
+> Same for "rpmsg_ns" as well
 
-Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
----
- drivers/spi/spi-sunplus-sp7021.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+It's possible. I kept the pattern of duplicating the string literal
+because original code had it, but I don't mind to change it. In the
+output assembler that might be additional instruction - need to
+dereference the rpdev pointer - but that does not matter much.
 
-diff --git a/drivers/spi/spi-sunplus-sp7021.c b/drivers/spi/spi-sunplus-sp7021.c
-index f989f7b..120623c 100644
---- a/drivers/spi/spi-sunplus-sp7021.c
-+++ b/drivers/spi/spi-sunplus-sp7021.c
-@@ -199,8 +199,6 @@ static irqreturn_t sp7021_spi_master_irq(int irq, void *dev)
- 	if (tx_len == 0 && total_len == 0)
- 		return IRQ_NONE;
- 
--	spin_lock_irq(&pspim->lock);
--
- 	rx_cnt = FIELD_GET(SP7021_RX_CNT_MASK, fd_status);
- 	if (fd_status & SP7021_RX_FULL_FLAG)
- 		rx_cnt = pspim->data_unit;
-@@ -239,7 +237,7 @@ static irqreturn_t sp7021_spi_master_irq(int irq, void *dev)
- 
- 	if (isrdone)
- 		complete(&pspim->isr_done);
--	spin_unlock_irq(&pspim->lock);
-+
- 	return IRQ_HANDLED;
- }
- 
--- 
-2.7.4
 
+Best regards,
+Krzysztof
