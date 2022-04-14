@@ -2,84 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB8650102B
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Apr 2022 16:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4695018F6
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Apr 2022 18:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244379AbiDNNgP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 14 Apr 2022 09:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
+        id S238820AbiDNQoe (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 14 Apr 2022 12:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244763AbiDNN2G (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 14 Apr 2022 09:28:06 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39B3A5E95;
-        Thu, 14 Apr 2022 06:20:52 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id t67so9385826ybi.2;
-        Thu, 14 Apr 2022 06:20:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Q/gbAEREb62A8JevuFxQMwwR0Kq1AX0d797Hsd3s/CI=;
-        b=h+0BbF6sL4P9IeOcFTP3fUX4pLFM2G+jWWL7otAPjya+NOFgkW/ui40SHY/sZAhHS4
-         qmoS/HCiMFZ4xJbootTmWiqv5CVvquVUizsFTmMAXk6R9UMr+wniH/k+IO1f54So0cBk
-         hKGJe6FmDckivfj3yze2asz/Dp13VnroJOR7SM/s/a28Ejtw/dK5n6cQLTSmQuBb6F9G
-         1jN+nNtyU2+tHCYV8Zyq0uptEJkrXSBpLVvthDv6On6WtT49dlHByS2f/X/sWnODoKrc
-         C1QQuvIS2R2U9J4wfIj+juph9RscMlH9ugpiNc70/1F2gfgO8AibxxY9/lZgIHHdnCM8
-         LKDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Q/gbAEREb62A8JevuFxQMwwR0Kq1AX0d797Hsd3s/CI=;
-        b=7kRkR3LXLvwsMY4kfT462LGssc46rn3d+KPvRN6HN9CikvnaHk++5o9pmRkkhQX+jt
-         d8UFZGTUEmvn1mFsqKrSDEJPBxjc48TMZxOmZloN7JVt02fuBC/JRNpzhRtrj8ujP7NL
-         A/41t+y/vAMSioS6rTedU31gJG+QK7Q/EKm64HHThjgV4XcOff5v8ULtRzJsX0wo7VgO
-         ENh+iuucop/3zKT8LHZwVW+CpGnLFVvkiBTDwtYjqJwQGBEkp+EGqO81I1Z/DXSiXRB4
-         s4fcp4hd5vv2ep6/kr7l9UjUxAJjVGHmVqcr8uRFbCv9FDAAOV7gFhjN0SdwczsFG7vS
-         vGDA==
-X-Gm-Message-State: AOAM530TMKM0bgjPOolEFPdQyInm/+DxODjpojtnY61etFzqjfo7DNUn
-        6XPqY+G4kziEwvyBgEiNOytF8L2/XJDc8nGakP0=
-X-Google-Smtp-Source: ABdhPJzA/6wH5wYipanebt4UPB8IhFL/56DXJMDetAOQZrPeoPqghdPu3W8hC1001/DfVHUEum/cKtygewIJYc7kpes=
-X-Received: by 2002:a25:cf11:0:b0:641:bfc8:4fc7 with SMTP id
- f17-20020a25cf11000000b00641bfc84fc7mr1733774ybg.366.1649942451985; Thu, 14
- Apr 2022 06:20:51 -0700 (PDT)
+        with ESMTP id S238132AbiDNQmY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 14 Apr 2022 12:42:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C253410EDFA;
+        Thu, 14 Apr 2022 09:12:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0DAABB82A7D;
+        Thu, 14 Apr 2022 16:12:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91DE2C385A9;
+        Thu, 14 Apr 2022 16:12:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649952735;
+        bh=A8+Hd4LUylBX9Ympns5AtofQeZ2djkNsDkrod7uIVw0=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=aFvA5ryAyuecc7diC3xU/PXHHmdgc8VgyRrG2VxOr2oKO7h0ELHChZpkamB2mKXEV
+         vo4qMt27uYDeaYhdtrzu0VA1RgS1ImxSst2PWTgtfH/a7eluzTsNVYDtD0MRcr2MI7
+         VofkoWyDuQp2Q0tCBScWyV8cUmUEit4Z17H2rrRjLtPwOcVToQm4ShB/UFNu/VTPi4
+         +sIZpBk/RIG5vlfWtQq9my0Nzf2NzWrNm3WHTmvzIo9zyY4DdnTVopCiuzZ8FDWRr2
+         mXRF5qWBTQbQerKoa/9S72STTbMQ3BIsw/A8sTsF755lEyaNn4NKPmo5qTp2vV4cDZ
+         HxhxpxYmTuD0w==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-kernel@vger.kernel.org, paul.kocialkowski@bootlin.com,
+        linux-spi@vger.kernel.org
+Cc:     thomas.petazzoni@bootlin.com, dan.carpenter@oracle.com
+In-Reply-To: <20220414084040.975520-1-paul.kocialkowski@bootlin.com>
+References: <20220414084040.975520-1-paul.kocialkowski@bootlin.com>
+Subject: Re: [PATCH] spi: core: Initialize returned status in spi_setup
+Message-Id: <164995273428.1502382.15341436161467838466.b4-ty@kernel.org>
+Date:   Thu, 14 Apr 2022 17:12:14 +0100
 MIME-Version: 1.0
-References: <9e12d806c5554b4ed18c644f71f6662fcf0d0516.1649813822.git.lhjeff911@gmail.com>
- <Yla01C6MJbaieIwR@sirena.org.uk>
-In-Reply-To: <Yla01C6MJbaieIwR@sirena.org.uk>
-From:   =?UTF-8?B?6YOt5Yqb6LGq?= <lhjeff911@gmail.com>
-Date:   Thu, 14 Apr 2022 21:18:34 +0800
-Message-ID: <CAGcXWkx6fZZ3kMnGuXtAA+WatJMf1dq_vd6fiFAocH9b03CWcg@mail.gmail.com>
-Subject: Re: [PATCH] spi: remove spin_lock_irq in the irq procress
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?B?5ZGC6Iqz6aiwTHVXZWxscw==?= <wells.lu@sunplus.com>,
-        "lh.kuo" <lh.kuo@sunplus.com>, nathan@kernel.org,
-        Tom Rix <trix@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mr.Mark :
+On Thu, 14 Apr 2022 10:40:40 +0200, Paul Kocialkowski wrote:
+> The previous commit that made bits-per-word validation conditional
+> results in leaving no unconditional affectation of the status variable.
+> 
+> Since the variable is returned at the end of the function, initialize
+> it to avoid returning an undefined value.
+> 
+> 
+> [...]
 
-I will remove the variable "psim->lock" in the next patch
+Applied to
 
-Li-hao Kuo
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Mark Brown <broonie@kernel.org> =E6=96=BC 2022=E5=B9=B44=E6=9C=8813=E6=97=
-=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=887:32=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Wed, Apr 13, 2022 at 09:38:00AM +0800, Li-hao Kuo wrote:
-> > - remove spin_lock_irq and spin_unlock_irq in the irq funciton
->
-> It looks like this is the only use of the lock so the variable can be
-> removed as well?
+Thanks!
+
+[1/1] spi: core: Initialize returned status in spi_setup
+      commit: 73f93db5c49b9f52c902e5dc6c750bf9832e0450
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
