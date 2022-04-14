@@ -2,66 +2,49 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABEE05008F5
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Apr 2022 10:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B07ED500AA8
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Apr 2022 11:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237997AbiDNI7G (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 14 Apr 2022 04:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41390 "EHLO
+        id S241106AbiDNJ7X (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 14 Apr 2022 05:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234223AbiDNI7F (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 14 Apr 2022 04:59:05 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE0A673FA;
-        Thu, 14 Apr 2022 01:56:41 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id bg24so4530746pjb.1;
-        Thu, 14 Apr 2022 01:56:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zJj0UqeehCQsN4Xsljy1mLrJNDwRrnMwVoHxOrCmruk=;
-        b=XAnSCPf45feayAiQJDcbbOZGPr0mczsE1EkeRIwDufqq9WNmmSL+PC4z/OB1sA55Og
-         BstOunTuD1XzQ9WNDjtymkIfjab7utQO9ZqfaieqtpxERYy7eHZJGtllMkzcuDdzkAPq
-         2HhvOLMlfFnmH7rHGeBB0BXxgNrESRnv+mCoSTPRdJmYAOGTtpgxameDcoOFsAmb3Z/Y
-         ql6UMD86vSkooNh3ukOHfpAK9mGj+xNSllANOaXHI9t/vav+vNP3M9mbsWmzsiBk5g0n
-         BbKjwJfGN/WIXyd8/mhwtbUqB3ycSLusVw8YKeKbbMPhhj5oVFcrUTt3Z5KLwcNTO8CY
-         JZtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zJj0UqeehCQsN4Xsljy1mLrJNDwRrnMwVoHxOrCmruk=;
-        b=270yLdHe9oz5UbNGNDp6MQp1xjF0B32QubFCHyx8mB8w3OjCp7GdZDH1bCCgKYSRh5
-         0HKbdopQOZ6oXFW5HMGGlK76Qi9q3wWd0oaFzyQT8I0sQdJB46gAQX8+9WNfDQfhbkYq
-         8Q2NXtgik3+PP7qdtdE2MmRvvcjXoKLq9Tepw9Db9RzplWkzvy8LU8S+xvry1wxpvROa
-         7mP/yVk65ib+m7ecBrzHXltYMyNIETIuBRXh/nyu94cA+cM8oehnskbMIM4dgR6n8Ncq
-         UE/XCUmU8RqkpICtUFyL4HsxR9O7FtiYNWAeZ7yJmSMAcoH2On1GpR/oIkplIR355Lav
-         jyeQ==
-X-Gm-Message-State: AOAM533+kefi/VqEvH4ECDUO1BHDxUcpNH3ZwUM4Mv5yMyAF9gQLiwbn
-        xAK0nTmqZHRMzTZFJUO4Mt8=
-X-Google-Smtp-Source: ABdhPJyU1GAJajitmjYE1zlcwQQKHg0fVH3VBwvjDNx5ASzWtGEu2JKZslqCcLzQGqSVtvdAwW8Bqg==
-X-Received: by 2002:a17:90a:f00c:b0:1cb:8361:c78e with SMTP id bt12-20020a17090af00c00b001cb8361c78emr2566127pjb.133.1649926601047;
-        Thu, 14 Apr 2022 01:56:41 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id t14-20020a056a00138e00b004fb1d833668sm1550715pfg.33.2022.04.14.01.56.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 01:56:40 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     broonie@kernel.org
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] spi: spi-cadence-quadspi: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Thu, 14 Apr 2022 08:56:37 +0000
-Message-Id: <20220414085637.2541805-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S241941AbiDNJ7U (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 14 Apr 2022 05:59:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED98270924
+        for <linux-spi@vger.kernel.org>; Thu, 14 Apr 2022 02:56:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FCE461BB3
+        for <linux-spi@vger.kernel.org>; Thu, 14 Apr 2022 09:56:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E5703C385A5;
+        Thu, 14 Apr 2022 09:56:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649930189;
+        bh=RxitJMnxdQjHoOX3WAi8fjcjnrFdC20DM26iiIFlNL4=;
+        h=Subject:From:Date:To:From;
+        b=ruze0hr+c/CpJPbUCkzW60BX5zM5Q1nWraO+86JmbFpjE3XetCv5/ncO9WS5Gr+dH
+         m/WUnzRoQnCDtsnS3pq7KSgsIqxsxBRNDn1QV5uZKuAmzuc3/4I8Yk386mCIM4zAYT
+         tysrFCNanCStd9A+xNYnE3WadRWzfWUScSRjbblnvOGaip7DEh0ydHbzY41DTkIl5l
+         zIs6/mhi1sXj2dF/FG3BbpyLgJx92cKZPRWgJUYKAPLEvrWp1XANi5zS6ESaJDIfRX
+         0Jjlg9eCT8esXBiioTAc9zeD2JduJ3J8RvJAOPcvKctq4fYXaWyh7bxqQNb9Z3XZW9
+         EU1eCuettwWHg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C0CF3E85D15;
+        Thu, 14 Apr 2022 09:56:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Subject: Patchwork housekeeping for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <164993018973.11462.882548643132849596.git-patchwork-housekeeping@kernel.org>
+Date:   Thu, 14 Apr 2022 09:56:29 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,37 +52,12 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+Latest series: [v1] spi: spi-cadence-quadspi: using pm_runtime_resume_and_get instead of pm_runtime_get_sync (2022-04-14T08:56:37)
+  Superseding: [v1] spi: spi-cadence-quadspi: using pm_runtime_resume_and_get instead of pm_runtime_get_sync (2022-04-13T09:36:56):
+    spi: spi-cadence-quadspi: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
 
-Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
-pm_runtime_put_noidle. This change is just to simplify the code, no
-actual functional changes.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/spi/spi-cadence-quadspi.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index b0c9f62ccefb..eda0646fb6a1 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -1707,11 +1707,9 @@ static int cqspi_probe(struct platform_device *pdev)
- 	}
- 
- 	pm_runtime_enable(dev);
--	ret = pm_runtime_get_sync(dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(dev);
-+	ret = pm_runtime_resume_and_get(dev);
-+	if (ret < 0)
- 		goto probe_master_put;
--	}
- 
- 	ret = clk_prepare_enable(cqspi->clk);
- 	if (ret) {
 -- 
-2.25.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
