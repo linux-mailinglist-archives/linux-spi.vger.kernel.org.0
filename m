@@ -2,122 +2,113 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314D7501AB8
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Apr 2022 20:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FBA450268A
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Apr 2022 10:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344334AbiDNSE4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 14 Apr 2022 14:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57268 "EHLO
+        id S1348877AbiDOIOt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 15 Apr 2022 04:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiDNSEz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 14 Apr 2022 14:04:55 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC26085974;
-        Thu, 14 Apr 2022 11:02:29 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-dacc470e03so6032894fac.5;
-        Thu, 14 Apr 2022 11:02:29 -0700 (PDT)
+        with ESMTP id S235107AbiDOIOr (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 Apr 2022 04:14:47 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E1A366AC;
+        Fri, 15 Apr 2022 01:12:18 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id 22so379506pfu.1;
+        Fri, 15 Apr 2022 01:12:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=V1TQqJ8Dwm+rkTp7MnC8Cpp/Mlay65J8IEUqFYwowU0=;
+        b=IoHFyoV/QMaWz5slv3dX8BWXMPwkrW8AOmkucgTgu9oEOFR9T1jbQ7lCV5zzzgcjD1
+         5Lvi0ZPc+3KsmwhyGygW48c5TaeNeHcCvItjnVIoV54QUU+yglZJqpXAL5J8WHquclUE
+         83t7e+ew1kTsla1lP6uSg3df/NT5SvzYCn+pZ33zqAX4E6zsPZxGs1UTUYFCSNZLj0HX
+         iXS9Z0QuXkNw/yqBNP/IqgENg8Qe0WUBtm7ESVwHv8FXUtv5p6OcYCy7tU0e/lOpqLFi
+         PriaBMITZiDucgPqwbeaxQw5B49/+OPiUjk6DLqOnTZTbTrBDzeD3IgL/qiu5lxt01Tl
+         Hefw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9kQY7KYrORAXRdj8BS7CtbvQFtLXKlCapss2LUGGejI=;
-        b=c8PYoXzbecyFSTn4hc9onZzN6TAVpvknh/77qbaTtRdVZV0/2AjHBKudu75x9iAf7Q
-         JkEm2f513e8Zq9oSfCMJu07c6YC4XHqRv67cGA0/EvyXfBNVwH5T/1riA1S04zOrgU0E
-         07zP/0KUO8wVS6bNhu1wLwIXAtwyvTBcxyXzz2UI9RUUDM5a/Nfel3X1QfARxfgZ9yWA
-         3XcYxmoH5Yye4P5jsKa/ENb5g6PEYBnex0cryVfvZSXkBGXR0vmhBcErbZl4vFY0QFu1
-         pfsMUnNe9TTElVj2X8v1dytjf4EcybN6CCCWgv00M0oIQ4QS3Zyzy7+Ih4ycLUzXPDs3
-         dZbg==
-X-Gm-Message-State: AOAM533rkZcWzuqcflzn/kGItqBSp3pON5n05xL1svkg4t2BFqmKfONs
-        GiYZbGj7EG82RHSN6vpxvA==
-X-Google-Smtp-Source: ABdhPJxg/IzXLr9/pK68rl/yhXiL0WZz7ZwJQGzyFx0L13S4P88U4n2DfT3AFMuvduEA0czJc4UQrw==
-X-Received: by 2002:a05:6870:c892:b0:de:5f75:d8 with SMTP id er18-20020a056870c89200b000de5f7500d8mr2133742oab.133.1649959349136;
-        Thu, 14 Apr 2022 11:02:29 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e22-20020a056870239600b000e2f0c69849sm940449oap.11.2022.04.14.11.02.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 11:02:28 -0700 (PDT)
-Received: (nullmailer pid 2320842 invoked by uid 1000);
-        Thu, 14 Apr 2022 18:02:27 -0000
-Date:   Thu, 14 Apr 2022 13:02:27 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        linux-media@vger.kernel.org,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-hwmon@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Agathe Porte <agathe.porte@nokia.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [PATCH] dt-bindings: Fix array constraints on scalar properties
-Message-ID: <Ylhhs2hgbQg8Ugeb@robh.at.kernel.org>
-References: <20220413140121.3132837-1-robh@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220413140121.3132837-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=V1TQqJ8Dwm+rkTp7MnC8Cpp/Mlay65J8IEUqFYwowU0=;
+        b=UXXtNKMuQ2BGEPA6pKH5rjtNRR2w08L6crHBdhKftChHleW72cYQygqopJ4bFH/Xut
+         GrcWLGLVydEYJpNUfFd7XJa5ynxEzjmrSRbwlbrciiVg052K4zXc7h7O5hipNCE5EqdD
+         h+LwUH5i5HYoUdaibPGFm+xclC84gcnkmFiWocALzjYh28G11qco05z/jqqNbtmHaMex
+         0+cPjCL/vxk48sz5tw6VmAfQv18ZzZu4PFfR4u3fyNZQmPE6O0hJohSRKUaILiln8ASf
+         ABV5+8EqOrctUdGiwXJT140EINtN5Dxo/PGUgR9BqWM8gUpy02lxWghjtGXNOlvKEQho
+         WWHA==
+X-Gm-Message-State: AOAM530jXYJmIL+oJvCTi5IMvEiLtgVywJv8cN5HO6G+ixS6df4FmUPz
+        6/bKSj50zY1EoJt5k3p7HvalG3DsxjTmOQ==
+X-Google-Smtp-Source: ABdhPJw4LGqz6LhFvkjeGdZOe+Ng0d6Qv/gkkbgVfLnFZ3lW4zTCWZ7c2+/mD8uJo4XEBoLqooqkDA==
+X-Received: by 2002:a63:4523:0:b0:399:1124:1574 with SMTP id s35-20020a634523000000b0039911241574mr5351198pga.609.1650010337684;
+        Fri, 15 Apr 2022 01:12:17 -0700 (PDT)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id 5-20020a631045000000b0039d942d18f0sm3790376pgq.48.2022.04.15.01.12.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 15 Apr 2022 01:12:17 -0700 (PDT)
+From:   Li-hao Kuo <lhjeff911@gmail.com>
+To:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com, nathan@kernel.org,
+        trix@redhat.com, Li-hao Kuo <lhjeff911@gmail.com>
+Subject: [PATCH] spi: remove spin_lock_irq and variable in the irq procress
+Date:   Fri, 15 Apr 2022 16:12:04 +0800
+Message-Id: <f9991d6064d892d22ac7c2dfabe16309e9d03888.1650010304.git.lhjeff911@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 13 Apr 2022 09:01:21 -0500, Rob Herring wrote:
-> Scalar properties shouldn't have array constraints (minItems, maxItems,
-> items). These constraints can simply be dropped with any constraints under
-> 'items' moved up a level.
-> 
-> Cc: Agathe Porte <agathe.porte@nokia.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> Cc: Olivier Moysan <olivier.moysan@foss.st.com>
-> Cc: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: Lars-Peter Clausen <lars@metafoo.de>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-> Cc: Yunfei Dong <yunfei.dong@mediatek.com>
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: linux-hwmon@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-iio@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: linux-remoteproc@vger.kernel.org
-> Cc: linux-spi@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml       | 5 ++---
->  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 4 +---
->  Documentation/devicetree/bindings/media/coda.yaml            | 1 -
->  .../devicetree/bindings/media/mediatek,vcodec-decoder.yaml   | 2 --
->  .../devicetree/bindings/media/mediatek,vcodec-encoder.yaml   | 2 --
->  .../bindings/media/mediatek,vcodec-subdev-decoder.yaml       | 1 -
->  .../devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml | 4 +---
->  Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml  | 2 --
->  8 files changed, 4 insertions(+), 17 deletions(-)
-> 
+remove spin_lock_irq spin_unlock_irq and variable in the irq funciton
 
-Applied, thanks!
+Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+---
+ drivers/spi/spi-sunplus-sp7021.c | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/drivers/spi/spi-sunplus-sp7021.c b/drivers/spi/spi-sunplus-sp7021.c
+index f989f7b..f1fa887 100644
+--- a/drivers/spi/spi-sunplus-sp7021.c
++++ b/drivers/spi/spi-sunplus-sp7021.c
+@@ -85,8 +85,6 @@ struct sp7021_spi_ctlr {
+ 	int s_irq;
+ 	struct clk *spi_clk;
+ 	struct reset_control *rstc;
+-	// irq spin lock
+-	spinlock_t lock;
+ 	// data xfer lock
+ 	struct mutex buf_lock;
+ 	struct completion isr_done;
+@@ -199,8 +197,6 @@ static irqreturn_t sp7021_spi_master_irq(int irq, void *dev)
+ 	if (tx_len == 0 && total_len == 0)
+ 		return IRQ_NONE;
+ 
+-	spin_lock_irq(&pspim->lock);
+-
+ 	rx_cnt = FIELD_GET(SP7021_RX_CNT_MASK, fd_status);
+ 	if (fd_status & SP7021_RX_FULL_FLAG)
+ 		rx_cnt = pspim->data_unit;
+@@ -239,7 +235,6 @@ static irqreturn_t sp7021_spi_master_irq(int irq, void *dev)
+ 
+ 	if (isrdone)
+ 		complete(&pspim->isr_done);
+-	spin_unlock_irq(&pspim->lock);
+ 	return IRQ_HANDLED;
+ }
+ 
+@@ -446,7 +441,6 @@ static int sp7021_spi_controller_probe(struct platform_device *pdev)
+ 	pspim->mode = mode;
+ 	pspim->ctlr = ctlr;
+ 	pspim->dev = dev;
+-	spin_lock_init(&pspim->lock);
+ 	mutex_init(&pspim->buf_lock);
+ 	init_completion(&pspim->isr_done);
+ 	init_completion(&pspim->slave_isr);
+-- 
+2.7.4
+
