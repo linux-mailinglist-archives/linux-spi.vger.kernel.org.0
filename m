@@ -2,113 +2,63 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBA450268A
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Apr 2022 10:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E62502BCD
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Apr 2022 16:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348877AbiDOIOt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 15 Apr 2022 04:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
+        id S1354578AbiDOOZa (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 15 Apr 2022 10:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235107AbiDOIOr (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 Apr 2022 04:14:47 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E1A366AC;
-        Fri, 15 Apr 2022 01:12:18 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id 22so379506pfu.1;
-        Fri, 15 Apr 2022 01:12:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=V1TQqJ8Dwm+rkTp7MnC8Cpp/Mlay65J8IEUqFYwowU0=;
-        b=IoHFyoV/QMaWz5slv3dX8BWXMPwkrW8AOmkucgTgu9oEOFR9T1jbQ7lCV5zzzgcjD1
-         5Lvi0ZPc+3KsmwhyGygW48c5TaeNeHcCvItjnVIoV54QUU+yglZJqpXAL5J8WHquclUE
-         83t7e+ew1kTsla1lP6uSg3df/NT5SvzYCn+pZ33zqAX4E6zsPZxGs1UTUYFCSNZLj0HX
-         iXS9Z0QuXkNw/yqBNP/IqgENg8Qe0WUBtm7ESVwHv8FXUtv5p6OcYCy7tU0e/lOpqLFi
-         PriaBMITZiDucgPqwbeaxQw5B49/+OPiUjk6DLqOnTZTbTrBDzeD3IgL/qiu5lxt01Tl
-         Hefw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=V1TQqJ8Dwm+rkTp7MnC8Cpp/Mlay65J8IEUqFYwowU0=;
-        b=UXXtNKMuQ2BGEPA6pKH5rjtNRR2w08L6crHBdhKftChHleW72cYQygqopJ4bFH/Xut
-         GrcWLGLVydEYJpNUfFd7XJa5ynxEzjmrSRbwlbrciiVg052K4zXc7h7O5hipNCE5EqdD
-         h+LwUH5i5HYoUdaibPGFm+xclC84gcnkmFiWocALzjYh28G11qco05z/jqqNbtmHaMex
-         0+cPjCL/vxk48sz5tw6VmAfQv18ZzZu4PFfR4u3fyNZQmPE6O0hJohSRKUaILiln8ASf
-         ABV5+8EqOrctUdGiwXJT140EINtN5Dxo/PGUgR9BqWM8gUpy02lxWghjtGXNOlvKEQho
-         WWHA==
-X-Gm-Message-State: AOAM530jXYJmIL+oJvCTi5IMvEiLtgVywJv8cN5HO6G+ixS6df4FmUPz
-        6/bKSj50zY1EoJt5k3p7HvalG3DsxjTmOQ==
-X-Google-Smtp-Source: ABdhPJw4LGqz6LhFvkjeGdZOe+Ng0d6Qv/gkkbgVfLnFZ3lW4zTCWZ7c2+/mD8uJo4XEBoLqooqkDA==
-X-Received: by 2002:a63:4523:0:b0:399:1124:1574 with SMTP id s35-20020a634523000000b0039911241574mr5351198pga.609.1650010337684;
-        Fri, 15 Apr 2022 01:12:17 -0700 (PDT)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id 5-20020a631045000000b0039d942d18f0sm3790376pgq.48.2022.04.15.01.12.15
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 15 Apr 2022 01:12:17 -0700 (PDT)
-From:   Li-hao Kuo <lhjeff911@gmail.com>
-To:     broonie@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com, nathan@kernel.org,
-        trix@redhat.com, Li-hao Kuo <lhjeff911@gmail.com>
-Subject: [PATCH] spi: remove spin_lock_irq and variable in the irq procress
-Date:   Fri, 15 Apr 2022 16:12:04 +0800
-Message-Id: <f9991d6064d892d22ac7c2dfabe16309e9d03888.1650010304.git.lhjeff911@gmail.com>
+        with ESMTP id S1354530AbiDOOZC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 Apr 2022 10:25:02 -0400
+Received: from out28-195.mail.aliyun.com (out28-195.mail.aliyun.com [115.124.28.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200EBD0A98;
+        Fri, 15 Apr 2022 07:22:22 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.4008999|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_news_journal|0.00800017-0.00285194-0.989148;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047201;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.NRMqfJt_1650032529;
+Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NRMqfJt_1650032529)
+          by smtp.aliyun-inc.com(33.32.109.194);
+          Fri, 15 Apr 2022 22:22:17 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     broonie@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org
+Cc:     linux-spi@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        paul@crapouillou.net, contact@artur-rojek.eu,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, reimu@sudomaker.com
+Subject: [PATCH 0/3] Improve SPI support for Ingenic SoCs.
+Date:   Fri, 15 Apr 2022 22:22:05 +0800
+Message-Id: <1650032528-118220-1-git-send-email-zhouyanjie@wanyeetech.com>
 X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-remove spin_lock_irq spin_unlock_irq and variable in the irq funciton
+1.Add support for using GPIOs as chip select lines on Ingenic SoCs.
+2.Add support for probing the spi-ingenic driver on the JZ4775 SoC,
+  the X1000 SoC, and the X2000 SoC.
+3.Modify annotation texts to be more in line with the current state.
 
-Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
----
- drivers/spi/spi-sunplus-sp7021.c | 6 ------
- 1 file changed, 6 deletions(-)
+周琰杰 (Zhou Yanjie) (3):
+  SPI: Ingenic: Add support for use GPIO as chip select line.
+  dt-bindings: SPI: Add bindings for new Ingenic SoCs.
+  SPI: Ingenic: Add support for new Ingenic SoCs.
 
-diff --git a/drivers/spi/spi-sunplus-sp7021.c b/drivers/spi/spi-sunplus-sp7021.c
-index f989f7b..f1fa887 100644
---- a/drivers/spi/spi-sunplus-sp7021.c
-+++ b/drivers/spi/spi-sunplus-sp7021.c
-@@ -85,8 +85,6 @@ struct sp7021_spi_ctlr {
- 	int s_irq;
- 	struct clk *spi_clk;
- 	struct reset_control *rstc;
--	// irq spin lock
--	spinlock_t lock;
- 	// data xfer lock
- 	struct mutex buf_lock;
- 	struct completion isr_done;
-@@ -199,8 +197,6 @@ static irqreturn_t sp7021_spi_master_irq(int irq, void *dev)
- 	if (tx_len == 0 && total_len == 0)
- 		return IRQ_NONE;
- 
--	spin_lock_irq(&pspim->lock);
--
- 	rx_cnt = FIELD_GET(SP7021_RX_CNT_MASK, fd_status);
- 	if (fd_status & SP7021_RX_FULL_FLAG)
- 		rx_cnt = pspim->data_unit;
-@@ -239,7 +235,6 @@ static irqreturn_t sp7021_spi_master_irq(int irq, void *dev)
- 
- 	if (isrdone)
- 		complete(&pspim->isr_done);
--	spin_unlock_irq(&pspim->lock);
- 	return IRQ_HANDLED;
- }
- 
-@@ -446,7 +441,6 @@ static int sp7021_spi_controller_probe(struct platform_device *pdev)
- 	pspim->mode = mode;
- 	pspim->ctlr = ctlr;
- 	pspim->dev = dev;
--	spin_lock_init(&pspim->lock);
- 	mutex_init(&pspim->buf_lock);
- 	init_completion(&pspim->isr_done);
- 	init_completion(&pspim->slave_isr);
+ .../devicetree/bindings/spi/ingenic,spi.yaml       |  3 ++
+ drivers/spi/Kconfig                                |  4 +-
+ drivers/spi/spi-ingenic.c                          | 49 +++++++++++++++++++---
+ 3 files changed, 49 insertions(+), 7 deletions(-)
+
 -- 
 2.7.4
 
