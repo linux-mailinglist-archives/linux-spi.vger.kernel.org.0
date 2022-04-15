@@ -2,48 +2,76 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A80F502C4F
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Apr 2022 17:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ABF9503092
+	for <lists+linux-spi@lfdr.de>; Sat, 16 Apr 2022 01:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354803AbiDOPHD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 15 Apr 2022 11:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
+        id S1353351AbiDOVNL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 15 Apr 2022 17:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiDOPHB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 Apr 2022 11:07:01 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6655415838;
-        Fri, 15 Apr 2022 08:04:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1650035066; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XRWVXKW+RZN7vxEYxFynwfobJo7XniIQKD+eb2wTdOc=;
-        b=o+MOZCEA+EYYqJcDDf9v+gfNQWTX15W/ct4ImD4k2t4pcDD/fftevnqeK4QRv0jcSQ3vcv
-        5o5nxEqFodGTaJD1WKhzcOU0uuk/zSmLToMZJJf6jBt30cz29mMAmbAPmK6N2XCmZhGQkW
-        pFWBhJ3cTDeDpVYAzaz0Ysvq0juJLRo=
-Date:   Fri, 15 Apr 2022 16:04:16 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 3/3] SPI: Ingenic: Add support for new Ingenic SoCs.
-To:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
-Cc:     broonie@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        linux-spi@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        contact@artur-rojek.eu, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, reimu@sudomaker.com
-Message-Id: <47ZDAR.RKPJNNUQZQO22@crapouillou.net>
-In-Reply-To: <1650032528-118220-4-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1650032528-118220-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <1650032528-118220-4-git-send-email-zhouyanjie@wanyeetech.com>
+        with ESMTP id S1352683AbiDOVNJ (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 Apr 2022 17:13:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7D95F4C3;
+        Fri, 15 Apr 2022 14:10:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0D5C62062;
+        Fri, 15 Apr 2022 21:10:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7711BC385A5;
+        Fri, 15 Apr 2022 21:10:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650057031;
+        bh=hTD0B/ky7f7FMFyiSVk17MG8LBketxa+tXJ+WwagC1g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V+FxkMidGJVAMy8I8ZjU6W8unLIAGmCTvYPYwvI+pK4/rM0YNTJW1TKzvt6ORzSWa
+         mQpvM9soZMhCKWU1pOvZ42qHdtKCNBui65twYoY8Ttu9T3j6CTq2iodxZVaCd5fCVD
+         lVD+UL20Kn5WWZznDmjOGrvyFXRUcH+/OzhwB+OrIJHzobJ8ADZuvdNt/b5kW1He2Q
+         LwhYAhGCxk8hXsRxWuCLoSG9IHlgDmdyLVsvZp3NT/GSBtqZHT1LUlGMam5hj8oT0V
+         RNWkLSMYcMn0MvixDbRz92U/EYpvfYTraWaY3UHAVubjOE0Yj8jP6Ek5DP2XbmWHrF
+         NyaLjonPuHaEQ==
+Date:   Fri, 15 Apr 2022 23:10:25 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v4 8/9] dt-bindings: i2c: qcom,i2c-qup: convert to
+ dtschema
+Message-ID: <YlnfQZHLW8WiL6ck@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Rob Herring <robh@kernel.org>
+References: <20220405063451.12011-1-krzysztof.kozlowski@linaro.org>
+ <20220405063451.12011-9-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jS4lqlkeTSJ92k82"
+Content-Disposition: inline
+In-Reply-To: <20220405063451.12011-9-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -51,176 +79,42 @@ List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
 
+--jS4lqlkeTSJ92k82
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Le ven., avril 15 2022 at 22:22:08 +0800, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou=
- Yanjie)=20
-<zhouyanjie@wanyeetech.com> a =C3=A9crit :
-> 1.Since it would be dangerous to specify a newer SoC's compatible
->   string as the fallback of an older SoC's compatible string, we
->   add support for the "ingenic,jz4775-spi" compatible string in
->   the driver.
+On Tue, Apr 05, 2022 at 08:34:50AM +0200, Krzysztof Kozlowski wrote:
+> Convert the Qualcomm Universal Peripheral (QUP) I2C controller to DT
+> Schema.
 >=20
->   This will permit to support the JZ4775 by having:
->   compatible =3D "ingenic,jz4775-spi";
+> Add missing properties: dma and dma-names, pinctrl states (to indicate
+> support for sleep pinctrl).
 >=20
->   Instead of doing:
->   compatible =3D "ingenic,jz4775-spi", "ingenic,jz4780-spi";
->=20
-> 2.Add support for probing the spi-ingenic driver on the X1000 SoC
->   from Ingenic. From the X1000 SoC onwards, the maximum frequency
->   allowed by the SSI module of Ingenic SoCs has been changed from
->   54MHz to 50MHz. So "max_speed_hz" is introduced in "jz_soc_info"
->   to set different maximum frequency values.
->=20
-> 3.Add support for probing the spi-ingenic driver on the X2000 SoC
->   from Ingenic. The X2000 SoC has only one native chip select line,
->   so "max_native_cs" is introduced in "jz_soc_info" to set different
->   maximum number of native chip select lines.
->=20
-> 4.Because of the introduction of support for the X-series SoCs, the
->   current driver is not only applicable to the JZ-series SoCs, so
->   the description texts has been modified to avoid misunderstanding.
->=20
-> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
-eetech.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-
-Cheers,
--Paul
-
-> ---
->  drivers/spi/Kconfig       |  4 ++--
->  drivers/spi/spi-ingenic.c | 42=20
-> +++++++++++++++++++++++++++++++++++++-----
->  2 files changed, 39 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-> index d2815eb..cca92a8 100644
-> --- a/drivers/spi/Kconfig
-> +++ b/drivers/spi/Kconfig
-> @@ -419,10 +419,10 @@ config SPI_IMX
->  	  This enables support for the Freescale i.MX SPI controllers.
->=20
->  config SPI_INGENIC
-> -	tristate "Ingenic JZ47xx SoCs SPI controller"
-> +	tristate "Ingenic SoCs SPI controller"
->  	depends on MACH_INGENIC || COMPILE_TEST
->  	help
-> -	  This enables support for the Ingenic JZ47xx SoCs SPI controller.
-> +	  This enables support for the Ingenic SoCs SPI controller.
->=20
->  	  To compile this driver as a module, choose M here: the module
->  	  will be called spi-ingenic.
-> diff --git a/drivers/spi/spi-ingenic.c b/drivers/spi/spi-ingenic.c
-> index 672e4ed..ff507c8 100644
-> --- a/drivers/spi/spi-ingenic.c
-> +++ b/drivers/spi/spi-ingenic.c
-> @@ -1,8 +1,9 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /*
-> - * SPI bus driver for the Ingenic JZ47xx SoCs
-> + * SPI bus driver for the Ingenic SoCs
->   * Copyright (c) 2017-2021 Artur Rojek <contact@artur-rojek.eu>
->   * Copyright (c) 2017-2021 Paul Cercueil <paul@crapouillou.net>
-> + * Copyright (c) 2022 =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie)=20
-> <zhouyanjie@wanyeetech.com>
->   */
->=20
->  #include <linux/clk.h>
-> @@ -52,6 +53,9 @@ struct jz_soc_info {
->  	u32 bits_per_word_mask;
->  	struct reg_field flen_field;
->  	bool has_trendian;
-> +
-> +	unsigned int max_speed_hz;
-> +	unsigned int max_native_cs;
->  };
->=20
->  struct ingenic_spi {
-> @@ -418,7 +422,7 @@ static int spi_ingenic_probe(struct=20
-> platform_device *pdev)
->=20
->  	if (of_property_read_u32(dev->of_node, "num-cs", &num_cs)) {
->  		dev_warn(dev, "Number of chip select lines not specified.\n");
-> -		num_cs =3D 2;
-> +		num_cs =3D pdata->max_native_cs;
->  	}
->=20
->  	platform_set_drvdata(pdev, ctlr);
-> @@ -433,9 +437,9 @@ static int spi_ingenic_probe(struct=20
-> platform_device *pdev)
->  	ctlr->max_dma_len =3D SPI_INGENIC_FIFO_SIZE;
->  	ctlr->bits_per_word_mask =3D pdata->bits_per_word_mask;
->  	ctlr->min_speed_hz =3D 7200;
-> -	ctlr->max_speed_hz =3D 54000000;
-> +	ctlr->max_speed_hz =3D pdata->max_speed_hz;
->  	ctlr->use_gpio_descriptors =3D true;
-> -	ctlr->max_native_cs =3D 2;
-> +	ctlr->max_native_cs =3D pdata->max_native_cs;
->  	ctlr->num_chipselect =3D num_cs;
->  	ctlr->dev.of_node =3D pdev->dev.of_node;
->=20
-> @@ -459,17 +463,44 @@ static const struct jz_soc_info jz4750_soc_info=20
-> =3D {
->  	.bits_per_word_mask =3D SPI_BPW_RANGE_MASK(2, 17),
->  	.flen_field =3D REG_FIELD(REG_SSICR1, 4, 7),
->  	.has_trendian =3D false,
-> +
-> +	.max_speed_hz =3D 54000000,
-> +	.max_native_cs =3D 2,
->  };
->=20
->  static const struct jz_soc_info jz4780_soc_info =3D {
->  	.bits_per_word_mask =3D SPI_BPW_RANGE_MASK(2, 32),
->  	.flen_field =3D REG_FIELD(REG_SSICR1, 3, 7),
->  	.has_trendian =3D true,
-> +
-> +	.max_speed_hz =3D 54000000,
-> +	.max_native_cs =3D 2,
-> +};
-> +
-> +static const struct jz_soc_info x1000_soc_info =3D {
-> +	.bits_per_word_mask =3D SPI_BPW_RANGE_MASK(2, 32),
-> +	.flen_field =3D REG_FIELD(REG_SSICR1, 3, 7),
-> +	.has_trendian =3D true,
-> +
-> +	.max_speed_hz =3D 50000000,
-> +	.max_native_cs =3D 2,
-> +};
-> +
-> +static const struct jz_soc_info x2000_soc_info =3D {
-> +	.bits_per_word_mask =3D SPI_BPW_RANGE_MASK(2, 32),
-> +	.flen_field =3D REG_FIELD(REG_SSICR1, 3, 7),
-> +	.has_trendian =3D true,
-> +
-> +	.max_speed_hz =3D 50000000,
-> +	.max_native_cs =3D 1,
->  };
->=20
->  static const struct of_device_id spi_ingenic_of_match[] =3D {
->  	{ .compatible =3D "ingenic,jz4750-spi", .data =3D &jz4750_soc_info },
-> +	{ .compatible =3D "ingenic,jz4775-spi", .data =3D &jz4780_soc_info },
->  	{ .compatible =3D "ingenic,jz4780-spi", .data =3D &jz4780_soc_info },
-> +	{ .compatible =3D "ingenic,x1000-spi", .data =3D &x1000_soc_info },
-> +	{ .compatible =3D "ingenic,x2000-spi", .data =3D &x2000_soc_info },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, spi_ingenic_of_match);
-> @@ -483,7 +514,8 @@ static struct platform_driver spi_ingenic_driver=20
-> =3D {
->  };
->=20
->  module_platform_driver(spi_ingenic_driver);
-> -MODULE_DESCRIPTION("SPI bus driver for the Ingenic JZ47xx SoCs");
-> +MODULE_DESCRIPTION("SPI bus driver for the Ingenic SoCs");
->  MODULE_AUTHOR("Artur Rojek <contact@artur-rojek.eu>");
->  MODULE_AUTHOR("Paul Cercueil <paul@crapouillou.net>");
-> +MODULE_AUTHOR("=E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wan=
-yeetech.com>");
->  MODULE_LICENSE("GPL");
-> --
-> 2.7.4
->=20
+Applied to for-next, thanks!
 
 
+--jS4lqlkeTSJ92k82
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJZ3z0ACgkQFA3kzBSg
+KbYVrxAAonu+vXUa438r37KHxJshUk6l4hKBEmIN1TRXQcNGgQarW4PerP6LTuMy
+m5uxa+qeLb5qC3ZmyKCmnH/Taqwqf/cE/BhVRWj4rIVwD9UcKRu/d3T4RguiaRDb
+x4Kmzh/GlYHVMDois2VTMldHNlbbXyy742Yy+mEC3DxlG0Q6gN1RMmpl6idgXCRy
+QTfS2+RWeqgC1wszBVSESN/sc0lygLP6u4gXwhtgXeoJSlvHkQ+PbcX1FpAPfxQQ
+8NJBbSJ/5m2jv/+2/8oI6yk3FnwzR55z0Gvw5UtyRxKFg1XbVrvTxqWULQgQsW6A
+Qh4aQyfSE2XTAkSrdr/LW5OBkPyIH3E4Cdul0g162oKmq8uzm1c/ULqRCdboW6vS
+NP1MpqZq+Oi5AzecxZCldN0/KpoGHRSQ5tfkaoMyBTxbhYc3xaTRk0HpTVmsTO36
+tESXEBbJ7m/+37KKa3rE36rV1lvKVuEdy0+pq9xlhRORgkeLe5xnYcHGyG+uK81a
++aoPYdbH0yAfUPfrfnK3XVEnkzz22OnSySf7hiR6Pmx5UBxPaDwLtmUGbLbXti3y
+lG45x3HrVOScvZT9fUmpa7CN8rUSIj/3VazkefX8nqD3t7bwaY+qSFgAbnWlI/iM
+RlaqsxsXhbeD1ddus3rSAQXCGuPwZ2a+5bKmr4EJmz2Mr3Oh7HE=
+=BQnm
+-----END PGP SIGNATURE-----
+
+--jS4lqlkeTSJ92k82--
