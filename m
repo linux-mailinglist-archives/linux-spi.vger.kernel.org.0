@@ -2,119 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABF9503092
-	for <lists+linux-spi@lfdr.de>; Sat, 16 Apr 2022 01:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60480503505
+	for <lists+linux-spi@lfdr.de>; Sat, 16 Apr 2022 09:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353351AbiDOVNL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 15 Apr 2022 17:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
+        id S230208AbiDPHw1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 16 Apr 2022 03:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352683AbiDOVNJ (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 15 Apr 2022 17:13:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7D95F4C3;
-        Fri, 15 Apr 2022 14:10:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D0D5C62062;
-        Fri, 15 Apr 2022 21:10:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7711BC385A5;
-        Fri, 15 Apr 2022 21:10:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650057031;
-        bh=hTD0B/ky7f7FMFyiSVk17MG8LBketxa+tXJ+WwagC1g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V+FxkMidGJVAMy8I8ZjU6W8unLIAGmCTvYPYwvI+pK4/rM0YNTJW1TKzvt6ORzSWa
-         mQpvM9soZMhCKWU1pOvZ42qHdtKCNBui65twYoY8Ttu9T3j6CTq2iodxZVaCd5fCVD
-         lVD+UL20Kn5WWZznDmjOGrvyFXRUcH+/OzhwB+OrIJHzobJ8ADZuvdNt/b5kW1He2Q
-         LwhYAhGCxk8hXsRxWuCLoSG9IHlgDmdyLVsvZp3NT/GSBtqZHT1LUlGMam5hj8oT0V
-         RNWkLSMYcMn0MvixDbRz92U/EYpvfYTraWaY3UHAVubjOE0Yj8jP6Ek5DP2XbmWHrF
-         NyaLjonPuHaEQ==
-Date:   Fri, 15 Apr 2022 23:10:25 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v4 8/9] dt-bindings: i2c: qcom,i2c-qup: convert to
- dtschema
-Message-ID: <YlnfQZHLW8WiL6ck@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Rob Herring <robh@kernel.org>
-References: <20220405063451.12011-1-krzysztof.kozlowski@linaro.org>
- <20220405063451.12011-9-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S230183AbiDPHwY (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 16 Apr 2022 03:52:24 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379C36561
+        for <linux-spi@vger.kernel.org>; Sat, 16 Apr 2022 00:49:39 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id h5so10073676pgc.7
+        for <linux-spi@vger.kernel.org>; Sat, 16 Apr 2022 00:49:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
+        b=bJd2DIgtyK+bZCVQpMa9XLiI7bVnFQgVFeGzbZ6bXamjrEFIUCNaIDR9YpvR5iTRQC
+         EoRjHn2hxdGgHpTmUXoJLhLdkz8kw8CpdMkf+RjOM2yxgJf0M2w5tnzpw0NiczM9cGQm
+         aTRY2J48j2+AVBVM6ZplapTERLwB7sqpQHn0KTPy+GATyEE1HlWbU25nZewZyTln9PiO
+         eb2iuPe3VcoLkYjZ6tmC44EeIcF1BzRiek/y+/+gg720T1wEvd/5m2iOgdTIUS3isI5Z
+         q2z1OdX/gYACU6OexrbNcXzEKBC+MKUq0Bm7V68HpmeyS3D5tFhEEP1iOfnkPKJo7x6w
+         XtNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
+        b=2JBd4cJwmufQKh9l9y29iHzm7IA5HEmS0bn+zvc/fVpGz1DaSAtWETBY9ib6Oibijb
+         0jIQkE6KEjtOFItWljw52hcH2Hj5PNVGs2uLIE8VQQvCq0j0SW2PYIWXCycvgi5u4CYp
+         lOOaceB8aJnbjlgST4xbdxsW25SfHiAcNzq+eLPZpzK8vioJ7F/mUz6HSfDNj3H1NjNV
+         NjmAdIkLGL6LFmgEgiIsy/eJlEKOEHHLn6kfVePXQXnsJHkWvKa3GJ6021xC5K5zt8NN
+         EWOB0gZRid5JqIzkhR3wJ3jwa1rnKAlwvmu7yC1IXYx92pOEWVMIvVZag+QtPsne0j6V
+         90mw==
+X-Gm-Message-State: AOAM530DdSd9GjlPvA7ZyyaQrJpcWlZ1fvzcN2vi98JNxrodxQ/B7NXY
+        UeBGtbsg1Fl+J7A5C50eRw5gUjY3WIPa2lYIYWKL905oA9A=
+X-Google-Smtp-Source: ABdhPJzPQ782jxaaybf4v05kBQtFRTzv0MMrux20NcZ4Q10XmGrK6dnUIabFDBNBmBOv8fFyQY5zqzYAgf4Cnc3KaCc=
+X-Received: by 2002:a92:508:0:b0:2cb:ebd8:a76b with SMTP id
+ q8-20020a920508000000b002cbebd8a76bmr1009500ile.156.1650095366830; Sat, 16
+ Apr 2022 00:49:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jS4lqlkeTSJ92k82"
-Content-Disposition: inline
-In-Reply-To: <20220405063451.12011-9-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a05:6638:1309:0:0:0:0 with HTTP; Sat, 16 Apr 2022 00:49:26
+ -0700 (PDT)
+Reply-To: daniel.seyba@yahoo.com
+From:   Seyba Daniel <royhalton13@gmail.com>
+Date:   Sat, 16 Apr 2022 09:49:26 +0200
+Message-ID: <CALSxb2w9zQYotuLcRSCPns53ksvT9UrEMVx-1Cp1f8RE7er3cA@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:541 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [royhalton13[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [royhalton13[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hello,
 
---jS4lqlkeTSJ92k82
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I am so sorry contacting you in this means especially when we have never
+met before. I urgently seek your service to represent me in investing in
+your region / country and you will be rewarded for your service without
+affecting your present job with very little time invested in it.
 
-On Tue, Apr 05, 2022 at 08:34:50AM +0200, Krzysztof Kozlowski wrote:
-> Convert the Qualcomm Universal Peripheral (QUP) I2C controller to DT
-> Schema.
->=20
-> Add missing properties: dma and dma-names, pinctrl states (to indicate
-> support for sleep pinctrl).
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+My interest is in buying real estate, private schools or companies with
+potentials for rapid growth in long terms.
 
-Applied to for-next, thanks!
+So please confirm interest by responding back.
 
+My dearest regards
 
---jS4lqlkeTSJ92k82
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJZ3z0ACgkQFA3kzBSg
-KbYVrxAAonu+vXUa438r37KHxJshUk6l4hKBEmIN1TRXQcNGgQarW4PerP6LTuMy
-m5uxa+qeLb5qC3ZmyKCmnH/Taqwqf/cE/BhVRWj4rIVwD9UcKRu/d3T4RguiaRDb
-x4Kmzh/GlYHVMDois2VTMldHNlbbXyy742Yy+mEC3DxlG0Q6gN1RMmpl6idgXCRy
-QTfS2+RWeqgC1wszBVSESN/sc0lygLP6u4gXwhtgXeoJSlvHkQ+PbcX1FpAPfxQQ
-8NJBbSJ/5m2jv/+2/8oI6yk3FnwzR55z0Gvw5UtyRxKFg1XbVrvTxqWULQgQsW6A
-Qh4aQyfSE2XTAkSrdr/LW5OBkPyIH3E4Cdul0g162oKmq8uzm1c/ULqRCdboW6vS
-NP1MpqZq+Oi5AzecxZCldN0/KpoGHRSQ5tfkaoMyBTxbhYc3xaTRk0HpTVmsTO36
-tESXEBbJ7m/+37KKa3rE36rV1lvKVuEdy0+pq9xlhRORgkeLe5xnYcHGyG+uK81a
-+aoPYdbH0yAfUPfrfnK3XVEnkzz22OnSySf7hiR6Pmx5UBxPaDwLtmUGbLbXti3y
-lG45x3HrVOScvZT9fUmpa7CN8rUSIj/3VazkefX8nqD3t7bwaY+qSFgAbnWlI/iM
-RlaqsxsXhbeD1ddus3rSAQXCGuPwZ2a+5bKmr4EJmz2Mr3Oh7HE=
-=BQnm
------END PGP SIGNATURE-----
-
---jS4lqlkeTSJ92k82--
+Seyba Daniel
