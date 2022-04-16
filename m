@@ -2,106 +2,122 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60480503505
-	for <lists+linux-spi@lfdr.de>; Sat, 16 Apr 2022 09:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF5650366D
+	for <lists+linux-spi@lfdr.de>; Sat, 16 Apr 2022 14:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbiDPHw1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 16 Apr 2022 03:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
+        id S231847AbiDPL5w (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 16 Apr 2022 07:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbiDPHwY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 16 Apr 2022 03:52:24 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379C36561
-        for <linux-spi@vger.kernel.org>; Sat, 16 Apr 2022 00:49:39 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id h5so10073676pgc.7
-        for <linux-spi@vger.kernel.org>; Sat, 16 Apr 2022 00:49:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
-        b=bJd2DIgtyK+bZCVQpMa9XLiI7bVnFQgVFeGzbZ6bXamjrEFIUCNaIDR9YpvR5iTRQC
-         EoRjHn2hxdGgHpTmUXoJLhLdkz8kw8CpdMkf+RjOM2yxgJf0M2w5tnzpw0NiczM9cGQm
-         aTRY2J48j2+AVBVM6ZplapTERLwB7sqpQHn0KTPy+GATyEE1HlWbU25nZewZyTln9PiO
-         eb2iuPe3VcoLkYjZ6tmC44EeIcF1BzRiek/y+/+gg720T1wEvd/5m2iOgdTIUS3isI5Z
-         q2z1OdX/gYACU6OexrbNcXzEKBC+MKUq0Bm7V68HpmeyS3D5tFhEEP1iOfnkPKJo7x6w
-         XtNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
-        b=2JBd4cJwmufQKh9l9y29iHzm7IA5HEmS0bn+zvc/fVpGz1DaSAtWETBY9ib6Oibijb
-         0jIQkE6KEjtOFItWljw52hcH2Hj5PNVGs2uLIE8VQQvCq0j0SW2PYIWXCycvgi5u4CYp
-         lOOaceB8aJnbjlgST4xbdxsW25SfHiAcNzq+eLPZpzK8vioJ7F/mUz6HSfDNj3H1NjNV
-         NjmAdIkLGL6LFmgEgiIsy/eJlEKOEHHLn6kfVePXQXnsJHkWvKa3GJ6021xC5K5zt8NN
-         EWOB0gZRid5JqIzkhR3wJ3jwa1rnKAlwvmu7yC1IXYx92pOEWVMIvVZag+QtPsne0j6V
-         90mw==
-X-Gm-Message-State: AOAM530DdSd9GjlPvA7ZyyaQrJpcWlZ1fvzcN2vi98JNxrodxQ/B7NXY
-        UeBGtbsg1Fl+J7A5C50eRw5gUjY3WIPa2lYIYWKL905oA9A=
-X-Google-Smtp-Source: ABdhPJzPQ782jxaaybf4v05kBQtFRTzv0MMrux20NcZ4Q10XmGrK6dnUIabFDBNBmBOv8fFyQY5zqzYAgf4Cnc3KaCc=
-X-Received: by 2002:a92:508:0:b0:2cb:ebd8:a76b with SMTP id
- q8-20020a920508000000b002cbebd8a76bmr1009500ile.156.1650095366830; Sat, 16
- Apr 2022 00:49:26 -0700 (PDT)
+        with ESMTP id S230085AbiDPL5w (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 16 Apr 2022 07:57:52 -0400
+Received: from out28-169.mail.aliyun.com (out28-169.mail.aliyun.com [115.124.28.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D78433A26;
+        Sat, 16 Apr 2022 04:55:19 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.0743753|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0592862-0.00168624-0.939028;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047208;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.NRpv9hL_1650110114;
+Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NRpv9hL_1650110114)
+          by smtp.aliyun-inc.com(33.40.31.76);
+          Sat, 16 Apr 2022 19:55:16 +0800
+Subject: Re: [PATCH 1/3] SPI: Ingenic: Add support for use GPIO as chip select
+ line.
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     broonie@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        linux-spi@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        contact@artur-rojek.eu, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, reimu@sudomaker.com
+References: <1650032528-118220-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1650032528-118220-2-git-send-email-zhouyanjie@wanyeetech.com>
+ <61ZDAR.SD20HFTWMIBH3@crapouillou.net>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <d7926a1d-c5e3-6519-6a52-1bd3ca3cf773@wanyeetech.com>
+Date:   Sat, 16 Apr 2022 19:55:13 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Received: by 2002:a05:6638:1309:0:0:0:0 with HTTP; Sat, 16 Apr 2022 00:49:26
- -0700 (PDT)
-Reply-To: daniel.seyba@yahoo.com
-From:   Seyba Daniel <royhalton13@gmail.com>
-Date:   Sat, 16 Apr 2022 09:49:26 +0200
-Message-ID: <CALSxb2w9zQYotuLcRSCPns53ksvT9UrEMVx-1Cp1f8RE7er3cA@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+In-Reply-To: <61ZDAR.SD20HFTWMIBH3@crapouillou.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:541 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [royhalton13[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [royhalton13[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hello,
+Hi Paul,
 
-I am so sorry contacting you in this means especially when we have never
-met before. I urgently seek your service to represent me in investing in
-your region / country and you will be rewarded for your service without
-affecting your present job with very little time invested in it.
+On 2022/4/15 下午11:00, Paul Cercueil wrote:
+> Hi Zhou,
+>
+> Le ven., avril 15 2022 at 22:22:06 +0800, 周琰杰 (Zhou Yanjie) 
+> <zhouyanjie@wanyeetech.com> a écrit :
+>> Add support for using GPIOs as chip select lines on Ingenic SoCs.
+>>
+>> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>> ---
+>>  drivers/spi/spi-ingenic.c | 11 +++++++++--
+>>  1 file changed, 9 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/spi/spi-ingenic.c b/drivers/spi/spi-ingenic.c
+>> index 03077a7..672e4ed 100644
+>> --- a/drivers/spi/spi-ingenic.c
+>> +++ b/drivers/spi/spi-ingenic.c
+>> @@ -380,7 +380,7 @@ static int spi_ingenic_probe(struct 
+>> platform_device *pdev)
+>>      struct spi_controller *ctlr;
+>>      struct ingenic_spi *priv;
+>>      void __iomem *base;
+>> -    int ret;
+>> +    int num_cs, ret;
+>>
+>>      pdata = of_device_get_match_data(dev);
+>>      if (!pdata) {
+>> @@ -416,6 +416,11 @@ static int spi_ingenic_probe(struct 
+>> platform_device *pdev)
+>>      if (IS_ERR(priv->flen_field))
+>>          return PTR_ERR(priv->flen_field);
+>>
+>> +    if (of_property_read_u32(dev->of_node, "num-cs", &num_cs)) {
+>> +        dev_warn(dev, "Number of chip select lines not specified.\n");
+>> +        num_cs = 2;
+>> +    }
+>> +
+>>      platform_set_drvdata(pdev, ctlr);
+>>
+>>      ctlr->prepare_transfer_hardware = spi_ingenic_prepare_hardware;
+>> @@ -429,7 +434,9 @@ static int spi_ingenic_probe(struct 
+>> platform_device *pdev)
+>>      ctlr->bits_per_word_mask = pdata->bits_per_word_mask;
+>>      ctlr->min_speed_hz = 7200;
+>>      ctlr->max_speed_hz = 54000000;
+>> -    ctlr->num_chipselect = 2;
+>> +    ctlr->use_gpio_descriptors = true;
+>
+> I wonder if this should be set conditionally instead. Maybe set it to 
+> "true" if the "num-cs" property exists?
+>
 
-My interest is in buying real estate, private schools or companies with
-potentials for rapid growth in long terms.
+I'm not too sure, but it seems some other drivers like "spi-sun6i.c", 
+"spi-stm32.c", "spi-s3c64xx.c", "spi-pic32.c", etc. set it unconditionally.
 
-So please confirm interest by responding back.
 
-My dearest regards
-
-Seyba Daniel
+> The rest looks good to me.
+>
+> Cheers,
+> -Paul
+>
+>> +    ctlr->max_native_cs = 2;
+>> +    ctlr->num_chipselect = num_cs;
+>>      ctlr->dev.of_node = pdev->dev.of_node;
+>>
+>>      if (spi_ingenic_request_dma(ctlr, dev))
+>> -- 
+>> 2.7.4
+>>
+>
