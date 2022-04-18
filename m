@@ -2,93 +2,113 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D725049A3
-	for <lists+linux-spi@lfdr.de>; Sun, 17 Apr 2022 23:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE75504F26
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Apr 2022 13:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233153AbiDQVgL (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 17 Apr 2022 17:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46818 "EHLO
+        id S237763AbiDRLDt (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 18 Apr 2022 07:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232635AbiDQVgK (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 17 Apr 2022 17:36:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9396A13F17;
-        Sun, 17 Apr 2022 14:33:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13A62B80CBE;
-        Sun, 17 Apr 2022 21:33:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86589C385A4;
-        Sun, 17 Apr 2022 21:33:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650231209;
-        bh=6qcNJcVy5PMZaik/AXmASsHLrpgx9xdYiTGeqrVUfqI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UPbEGMlL1SoYoeGuWyHFUE2DEgY4TWH95SgRJfjx4qdmeO6u4bqONa+Wz0/VXUGJK
-         x2qkuTkP83j1KC3Xyk28hOtR22HMLJfkGhk4aoKZogHxbgYELho0KrIvXWWKHDHR1s
-         tgjA4FQ/9Mneyo+WlD/1GSplPVKzHS24XVuqCyf3OsSusqsBIKrPEI6hffPyiPB8Ky
-         /C9KZk/rd/3LP4gk1ryqej1sckWtjjZfoVcGcoRfZA5yfwps28vVs8/z6/9leFcHai
-         PGbNc0+/PEh3qW/E4BgMPvWeZ8uctZ9U4fIz25JSLt/KTR2XjxHBTybwFwhls2ITtz
-         gtN4lEkFm9uZw==
-Date:   Sun, 17 Apr 2022 17:33:28 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        linux-spi@vger.kernel.org, Pratyush Yadav <p.yadav@ti.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.17 34/49] spi: cadence-quadspi: fix protocol
- setup for non-1-1-X operations
-Message-ID: <YlyHqKVBC9u1F9xS@sashalap>
-References: <20220412004411.349427-1-sashal@kernel.org>
- <20220412004411.349427-34-sashal@kernel.org>
- <d618fc184f162b1da8d75729b5939bed52308040.camel@ew.tq-group.com>
- <YlVrbR6Giy2OXe1R@sirena.org.uk>
+        with ESMTP id S237808AbiDRLDs (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 Apr 2022 07:03:48 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3AB7BF73;
+        Mon, 18 Apr 2022 04:01:09 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id x18so4027172qtw.4;
+        Mon, 18 Apr 2022 04:01:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dwnN1oZ2LBUhFwxk5+UwL2jilzH2HcfZqt40jbuN85g=;
+        b=Ew5aYmqoNZIBryg+/E0QMgxvgFLxw5e9Ojf7kgtsq/5GRadgfw/nNX3Qherv83WaDW
+         iBDcTdV/wEpae8an3zhtaGa1aAKjwbgz7rCSSeWkuSBSgl8eDpwpk/+K8X2CExTtWjym
+         6ZQ9//pDyCj+d7iYK1dyd/Df+NNcBEQhaXehiSxOlNcauhhznehaj21Qav9EkJdgRJ28
+         8OOMy/GIvnbG2CrW9wqJu8HNgkKZx7LWSyVfu9OI5gX8Ll3KJVni/PLVhrWeRgs7E6Ox
+         TUbgZuWPESrkP6rnfdVAYggWzS5oFQrksZzEh4NJTMaG23q19J36Hpi2Ixf1KOTki338
+         IvWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dwnN1oZ2LBUhFwxk5+UwL2jilzH2HcfZqt40jbuN85g=;
+        b=EKxMYztnX2LLaWCDiH9C1gNKw6fxwgt7qdxtNixJ4yJ0BaDcRpjRubSfuOHHWJ0Wf3
+         mzofWq4b2GmwEeh6GCIEknkNFYKlK6buiAzivhj0NkeyEo3ZatxqNSGBPO4u3+rC0ny/
+         pY18b7VY34ipFRGExVCkpT+S/rh2HVO27tw0YB0cKhy9GJ3/mhz+PnJnGkKP+Kx30gc7
+         nxe6pCJ5WTCJvO6MA4wEL7H0fbbKLobU4+M1amH2vQTZYVvNah8e3h+WzoAP3n3N5AgB
+         JeVmYgQaHb4koVym/RiHQNFnZdwxCbUGCJnTUgYYsIhD8Ub2snqKHs6jxiV/3nelbDZR
+         vkGA==
+X-Gm-Message-State: AOAM532EaVOGaxVeK92LccjLUlBMFHwxXJbvIoS9bZYiXDbJb9E3eXZL
+        Z3qgsFL7gpkTqDb6ChI46awoddrIos0=
+X-Google-Smtp-Source: ABdhPJx8bBnkbnz7qkrkHRfSsDkReqERjEpBnW0mYBmi7AnalzZJiv5KbdOiFZ5/5N+rhvABa73VGw==
+X-Received: by 2002:ac8:7294:0:b0:2f1:e250:f21f with SMTP id v20-20020ac87294000000b002f1e250f21fmr6702394qto.526.1650279669141;
+        Mon, 18 Apr 2022 04:01:09 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id u129-20020a376087000000b0067e401d7177sm6753428qkb.3.2022.04.18.04.01.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 04:01:08 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     ldewangan@nvidia.com
+Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] spi: spi-tegra20-sflash: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Date:   Mon, 18 Apr 2022 11:01:03 +0000
+Message-Id: <20220418110103.2558955-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <YlVrbR6Giy2OXe1R@sirena.org.uk>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 01:07:09PM +0100, Mark Brown wrote:
->On Tue, Apr 12, 2022 at 01:49:19PM +0200, Matthias Schiffer wrote:
->
->Please don't top post, reply in line with needed context.  This allows
->readers to readily follow the flow of conversation and understand what
->you are talking about and also helps ensure that everything in the
->discussion is being addressed.
->
->> what's your plan regarding this patch and the other patch I sent [1]? I
->> think there has been some confusion regarding which solution we want to
->> backport to stable kernels (well, at least I'm confused...)
->
->Well, it's up to the stable people what they choose to backport -
->they're generally fairly aggressive about what they pick up so I guess
->they want to take this one?
->
->> I'm fine with this patch getting backported, but in that case [1]
->> doesn't make sense anymore (in fact I expected this patch to be dropped
->> for now when I submitted [1], due to Pratyush Yadav's concerns).
->
->> [1] https://patchwork.kernel.org/project/spi-devel-general/patch/20220406132832.199777-1-matthias.schiffer@ew.tq-group.com/
->
->For the benefit of those playing at home that's "spi: cadence-quadspi:
->fix incorrect supports_op() return value".  It's much more the sort of
->thing I'd expect to see backported to stable so it seems good from that
->point of view.
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-I'm a bit confused as I don't see the other patch in Linus's tree?
+Using pm_runtime_resume_and_get is more appropriate
+for simplifing code
 
-I'll queue this one up then...
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/spi/spi-tegra20-sflash.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/spi/spi-tegra20-sflash.c b/drivers/spi/spi-tegra20-sflash.c
+index 2888d8a8dc6d..220ee08c4a06 100644
+--- a/drivers/spi/spi-tegra20-sflash.c
++++ b/drivers/spi/spi-tegra20-sflash.c
+@@ -486,10 +486,9 @@ static int tegra_sflash_probe(struct platform_device *pdev)
+ 			goto exit_pm_disable;
+ 	}
+ 
+-	ret = pm_runtime_get_sync(&pdev->dev);
++	ret = pm_runtime_resume_and_get(&pdev->dev);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "pm runtime get failed, e = %d\n", ret);
+-		pm_runtime_put_noidle(&pdev->dev);
+ 		goto exit_pm_disable;
+ 	}
+ 
+@@ -549,9 +548,8 @@ static int tegra_sflash_resume(struct device *dev)
+ 	struct tegra_sflash_data *tsd = spi_master_get_devdata(master);
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(dev);
++	ret = pm_runtime_resume_and_get(dev);
+ 	if (ret < 0) {
+-		pm_runtime_put_noidle(dev);
+ 		dev_err(dev, "pm runtime failed, e = %d\n", ret);
+ 		return ret;
+ 	}
 -- 
-Thanks,
-Sasha
+2.25.1
+
+
