@@ -2,119 +2,205 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F88E50671D
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Apr 2022 10:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA883506A71
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Apr 2022 13:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240442AbiDSIt6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 19 Apr 2022 04:49:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47276 "EHLO
+        id S1351511AbiDSLht (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 19 Apr 2022 07:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346851AbiDSIt4 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 19 Apr 2022 04:49:56 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462D11DA5F;
-        Tue, 19 Apr 2022 01:47:14 -0700 (PDT)
+        with ESMTP id S1351350AbiDSLhd (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 19 Apr 2022 07:37:33 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315B25FC0
+        for <linux-spi@vger.kernel.org>; Tue, 19 Apr 2022 04:34:49 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id t11so32218098eju.13
+        for <linux-spi@vger.kernel.org>; Tue, 19 Apr 2022 04:34:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1650358034; x=1681894034;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jmtUmX9TsVdQnWmEZl+ibd5oWqIkKPblhcl2o3QfvF0=;
-  b=MHlLkr+KP0nfuBc3YHIlNBCnlK8plBYD0A9Ahvt/Wr4jHFQ7mbVTrhGo
-   TizCLDNlI7zh99nhOgZ8leQot2ya8jlDMB2qI8PqiXdUG7eBFM0EnnGM8
-   RXSIFXRHNBQGgivFA9nUCJ157/2xEi/jzwrE1ebDvDUFKf9oxoDHMknkY
-   lSYMyjCLU6H8cSCQtyK5dlRPXeqyU6F7/P8xqXvtIlVkUdi70WrUVvtkg
-   4LX60wSfndMYYakZcG9WkYGP8hVRCrOoBWZejZyqLzzx5jneG6RLA71pf
-   Tc4bxt9OhZ3kHMwwLXgc3b55IQbQwe9tNNbrLgxyeYpHJKy1PIk2v+2Z6
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,272,1643670000"; 
-   d="scan'208";a="23351063"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 19 Apr 2022 10:47:08 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 19 Apr 2022 10:47:09 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Tue, 19 Apr 2022 10:47:09 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1650358029; x=1681894029;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jmtUmX9TsVdQnWmEZl+ibd5oWqIkKPblhcl2o3QfvF0=;
-  b=PmJlmtyeml1T/3hMMy7BHykfYDtq+L1iy8xf1Nlj9j/kqfsDYfEMHEFA
-   s8n7Eh9bbwOsELAAdqUzfs+luCJBiJS/38ifLo2dmRQmmoGAl9aaVXzkV
-   GRjSBFE2Pp7fHzG9feDhueZMRI2wT0MN4I2eoWqYX/H6LRLNq5qFOmxKJ
-   kHWyKdVhAjzMw9EAxXCWrhCNYhJpW98NA4kYTDdeBXe78SRBLrRHZNMiV
-   BHnX30w3+dZXRXr+hLzse8VZtZUjeTyzdE/dwCaAyepxPe2F3TYCX//zs
-   JTCo78Ur7R1TWoVt7p3EyaxVygYDXJdyp2gA6ubETxEIN1vmp1QjdiiuS
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,272,1643670000"; 
-   d="scan'208";a="23351046"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 19 Apr 2022 10:47:02 +0200
-Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.49.14])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 013C8280075;
-        Tue, 19 Apr 2022 10:46:57 +0200 (CEST)
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Pratyush Yadav <p.yadav@ti.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Ramuthevar Vadivel Murugan 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Subject: [PATCH 2/2] spi: cadence-quadspi: allow operations with cmd/addr buswidth >1
-Date:   Tue, 19 Apr 2022 10:46:40 +0200
-Message-Id: <20220419084640.191299-2-matthias.schiffer@ew.tq-group.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220419084640.191299-1-matthias.schiffer@ew.tq-group.com>
-References: <20220419084640.191299-1-matthias.schiffer@ew.tq-group.com>
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+RS2KaOerzQuwGLCJlNRvQqdlqz9kGKXmmE/o8hIMxc=;
+        b=KQats4yWut+GAInZpgo6wlkPKVDagbM3R0tOSjC/tXzsGfNp7h99Zs58vCptEscTpK
+         mbbyQT/so7ThPQX6ZBwVgU/6/OMYPhZ3b8NWVo58v/AWgjGj/c13IinU0JZUxgsLmUbX
+         wtYV4iKZ7ZxkIIXJYr27Z/OtYMBaCbJnYhLBGRpddVl1U1LTnJSB6NA88CzMeSaiqqqr
+         2PHKBRlsALK1YRRnJegN2W7zECiyg6PKkD33wHtut9O6mBuGtDG4eNOOmh7evJgldNFD
+         daON6jPbeCRx5RgbYuUVlqa5xdPtHbcMYVioGRHSRAffliIvrFMlh5w4Z4HpNMVbB8RB
+         CtMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+RS2KaOerzQuwGLCJlNRvQqdlqz9kGKXmmE/o8hIMxc=;
+        b=U2H7r+Ft0RlUJU3VdCpYy5kLf+DIhseX9LVHwV/wvmidw4zKKqgRGIBz24OJf5Y1u9
+         USazxHH+qPVIFY9Lp4siGNMfLU2+M57Xzk+SMFwhDUlQyT96BJOv5kdWNzvwwych/bgd
+         x+rx8E4rvAyPhas96aubeFzy9ya/sZDTCyIqE1w8Vcd3rA3+JlRYt7wCXqi5WmpoksSp
+         XMKc+IYEq9FrZVWQ1tzhuzNf+XwtNiNWz/1xUhrHnMPYZv0flczRoFf6TVJmcGDFEZvU
+         SWCxHFlLnlPxl2BQRv2Qb64F7j8ooUlgs8SBQPIhaY4bOv6PqgvOFtYQWEZfcb0zEPGr
+         j9xg==
+X-Gm-Message-State: AOAM530/O+CLVAtvDU+fupwdOKFbO+wTInL6QBIG9ZEp8d8zt+EzzsAB
+        gNWC26kG71+mSNx1VuL58dklzw==
+X-Google-Smtp-Source: ABdhPJzqToh0YQRiewe8EqLT6PK01CMGRMmUim2jYYjkDbBJ++z/iu7RXEodKQaWchfKBfcBWKLKsQ==
+X-Received: by 2002:a17:907:6e90:b0:6ef:ef41:ac10 with SMTP id sh16-20020a1709076e9000b006efef41ac10mr750787ejc.187.1650368087470;
+        Tue, 19 Apr 2022 04:34:47 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id ce21-20020a170906b25500b006e89869cbf9sm5608802ejb.105.2022.04.19.04.34.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 04:34:46 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Stuart Yoder <stuyoder@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v7 00/12] Fix broken usage of driver_override (and kfree of static memory)
+Date:   Tue, 19 Apr 2022 13:34:23 +0200
+Message-Id: <20220419113435.246203-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-With the improved cqspi_set_protocol(), ops with cmd/addr
-buswidth >1 are now working correctly.
+Hi,
 
-Tested on a TI AM64x with a Macronix MX25U51245G QSPI flash using 1-4-4
-operations.
+This is a continuation of my old patchset from 2019. [1]
+Back then, few drivers set driver_override wrong. I fixed Exynos
+in a different way after discussions. QCOM NGD was not fixed
+and a new user appeared - IMX SCU.
 
-DTR operations are currently untested, so we leave them disabled for now
-(except for the previosly allowed 8-8-8 ops).
+It seems "char *" in driver_override looks too consty, so we
+tend to make a mistake of storing there string literals.
 
-Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
----
- drivers/spi/spi-cadence-quadspi.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+Changes since latest v7
+=======================
+1. Patch #1: remove out_free label, document clearing override in kerneldoc and
+   in code-comments (Andy).
+2. Patch #12 (rpmsg): do not duplicate string (Biju).
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 96d14f3847b5..08f39f52e32a 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -1370,13 +1370,7 @@ static bool cqspi_supports_mem_op(struct spi_mem *mem,
- 			return false;
- 		if (op->data.nbytes && op->data.buswidth != 8)
- 			return false;
--	} else if (all_false) {
--		/* Only 1-1-X ops are supported without DTR */
--		if (op->cmd.nbytes && op->cmd.buswidth > 1)
--			return false;
--		if (op->addr.nbytes && op->addr.buswidth > 1)
--			return false;
--	} else {
-+	} else if (!all_false) {
- 		/* Mixed DTR modes are not supported. */
- 		return false;
- 	}
+Changes since latest v6
+=======================
+1. Patch #1: Don't check for !dev and handle len==0 (Andy).
+2. New patch #11 (rpmsg): split constifying of local variable to a new patch.
+
+Changes since latest v5
+=======================
+1. Patch #11 (rpmsg): split from previous patch 11 - easier to understand the
+   need of it.
+2. Fix build issue in patch 12 (rpmsg).
+
+Changes since latest v4
+=======================
+1. Correct commit msgs and comments after Andy's review.
+2. Re-order code in new helper (patch #1) (Andy).
+3. Add tags.
+
+Changes since latest v3
+=======================
+1. Wrap comments, extend comment in driver_set_override() about newline.
+2. Minor commit msg fixes.
+3. Add tags.
+
+Changes since latest v2
+=======================
+1. Make all driver_override fields as "const char *", just like SPI
+   and VDPA. (Mark)
+2. Move "count" check to the new helper and add "count" argument. (Michael)
+3. Fix typos in docs, patch subject. Extend doc. (Michael, Bjorn)
+4. Compare pointers to reduce number of string readings in the helper.
+5. Fix clk-imx return value.
+
+Changes since latest v1 (not the old 2019 solution):
+====================================================
+https://lore.kernel.org/all/708eabb1-7b35-d525-d4c3-451d4a3de84f@rasmusvillemoes.dk/
+1. Add helper for setting driver_override.
+2. Use the helper.
+
+Dependencies (and stable):
+==========================
+1. All patches, including last three fixes, depend on the first patch
+   introducing the helper.
+2. The last three commits - fixes - are probably not backportable
+   directly, because of this dependency. I don't know how to express
+   this dependency here, since stable-kernel-rules.rst mentions only commits as
+   possible dependencies.
+
+[1] https://lore.kernel.org/all/1550484960-2392-3-git-send-email-krzk@kernel.org/
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (12):
+  driver: platform: Add helper for safer setting of driver_override
+  amba: Use driver_set_override() instead of open-coding
+  fsl-mc: Use driver_set_override() instead of open-coding
+  hv: Use driver_set_override() instead of open-coding
+  PCI: Use driver_set_override() instead of open-coding
+  s390/cio: Use driver_set_override() instead of open-coding
+  spi: Use helper for safer setting of driver_override
+  vdpa: Use helper for safer setting of driver_override
+  clk: imx: scu: Fix kfree() of static memory on setting driver_override
+  slimbus: qcom-ngd: Fix kfree() of static memory on setting
+    driver_override
+  rpmsg: Constify local variable in field store macro
+  rpmsg: Fix kfree() of static memory on setting driver_override
+
+ drivers/amba/bus.c              | 28 ++-----------
+ drivers/base/driver.c           | 69 +++++++++++++++++++++++++++++++++
+ drivers/base/platform.c         | 28 ++-----------
+ drivers/bus/fsl-mc/fsl-mc-bus.c | 25 ++----------
+ drivers/clk/imx/clk-scu.c       |  7 +++-
+ drivers/hv/vmbus_drv.c          | 28 ++-----------
+ drivers/pci/pci-sysfs.c         | 28 ++-----------
+ drivers/rpmsg/rpmsg_core.c      |  3 +-
+ drivers/rpmsg/rpmsg_internal.h  | 13 ++++++-
+ drivers/rpmsg/rpmsg_ns.c        | 14 ++++++-
+ drivers/s390/cio/cio.h          |  6 ++-
+ drivers/s390/cio/css.c          | 28 ++-----------
+ drivers/slimbus/qcom-ngd-ctrl.c | 13 ++++++-
+ drivers/spi/spi.c               | 26 ++-----------
+ drivers/vdpa/vdpa.c             | 29 ++------------
+ include/linux/amba/bus.h        |  6 ++-
+ include/linux/device/driver.h   |  2 +
+ include/linux/fsl/mc.h          |  6 ++-
+ include/linux/hyperv.h          |  6 ++-
+ include/linux/pci.h             |  6 ++-
+ include/linux/platform_device.h |  6 ++-
+ include/linux/rpmsg.h           |  6 ++-
+ include/linux/spi/spi.h         |  2 +
+ include/linux/vdpa.h            |  4 +-
+ 24 files changed, 184 insertions(+), 205 deletions(-)
+
 -- 
-2.25.1
+2.32.0
 
