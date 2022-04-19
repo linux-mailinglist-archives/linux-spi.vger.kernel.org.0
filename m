@@ -2,93 +2,211 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3423505160
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Apr 2022 14:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1747650671C
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Apr 2022 10:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239138AbiDRMee (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 18 Apr 2022 08:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51930 "EHLO
+        id S1344465AbiDSItz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 19 Apr 2022 04:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239820AbiDRMda (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 18 Apr 2022 08:33:30 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CFC1BE98
-        for <linux-spi@vger.kernel.org>; Mon, 18 Apr 2022 05:26:50 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id l7so26606533ejn.2
-        for <linux-spi@vger.kernel.org>; Mon, 18 Apr 2022 05:26:49 -0700 (PDT)
+        with ESMTP id S240442AbiDSIty (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 19 Apr 2022 04:49:54 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2132D22B0D;
+        Tue, 19 Apr 2022 01:47:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=I3d5udvKIjqAWucjjIKmuyn7gYiBA99VwyV2DIv8hOs=;
-        b=O6i40JuKQXOyvwtn8Dy33ZqEQOG5EHZzXGoOpqZzNZ9ieOhuYgUKLhfzpGxvbXiAfC
-         Vwf80nHGzunG0NFoscB2CnQZ0JQu4sPahErZnIz5NgO6On1mSrWR8+eqgUYGkK04Z/cm
-         am6eYB6HIbNfNKmvh6CfzcqdjEqDMZklnqPh2wvAj+hoM7Z/WC2jzgm+/aKNM463g1jw
-         g7uQ/8uHdj6HIoospz4Bv4O6YviYZPMRyTqevmkLEkrfzf/jDuJ6B+t56CgXYgzMzeUH
-         zqzjkk8aXXXyzV9RR8CD0OyiQVQF/FlvxcK4hkfLOu+q4NO8TFovZ3kQgN5AmwmO6rfZ
-         2wEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=I3d5udvKIjqAWucjjIKmuyn7gYiBA99VwyV2DIv8hOs=;
-        b=uFyTLcZH8WrHkoz+e+wV1zfyde7cV9PXxRJSjdra6oNoP56uVtSMQiZ6HYsXtc0DHW
-         vx29PXIB8cZ3lvbQ0ZKH8aPXEKW1GZHAg7AgIuxKI8CubzADTb2JjENmxpwND8sBHtZH
-         4/FxnuuNHWc/+kTajbNeTvjuSqIViGKS5G679pQ8EC07/7sXXiqAPqXEPQeEfyG/qZft
-         mqIlMf53ZTNWy9NbWuBYEpg8AvCqRcoW2nvQ5yFidiSk4XeC+pKbWq/T3vDUSHhxkK6o
-         q0VMGBOy0p1JnotEw409n73ySZx4KtQ0ErKVq55rB8oMzI9ppJQqlBvlBzy10xq5j1dN
-         ZmAg==
-X-Gm-Message-State: AOAM530NYSlFrliHqfsLTP9xbXFmiYaKig3CkI84lzZx/rauRf+iqyZ9
-        93rpAu4GTEuV5DzeKyfz/ZJ1CA==
-X-Google-Smtp-Source: ABdhPJw1EAebv52D0fGCecrKQNHXpvA1WtVaDZlB3PXnrtrkiLQTkMClotu0rgBrzw31XDzOlJMw2A==
-X-Received: by 2002:a17:906:7a51:b0:6e8:8e6c:f182 with SMTP id i17-20020a1709067a5100b006e88e6cf182mr8740413ejo.506.1650284808614;
-        Mon, 18 Apr 2022 05:26:48 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id gj3-20020a170906e10300b006e8ac161bcfsm4539377ejb.203.2022.04.18.05.26.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 05:26:47 -0700 (PDT)
-Message-ID: <a81e72f0-f01f-723e-fb0e-7667b2d3ff3f@linaro.org>
-Date:   Mon, 18 Apr 2022 14:26:46 +0200
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1650358032; x=1681894032;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lfyGlOwBn9Oqk37H4rCgm5uXFJD2It20JCnLmPhZ6qc=;
+  b=nKUze+PQ/ooAXXn2udk4YcGVo3KvxcEdHO6u74CcAUCoiFoeE5QH+Ngz
+   6ICMtfLqpmpr3qf7KZ9d9halBXPrtvTOp1iRegOdcsjqtQBjHk0ZEVr5h
+   nRXpJRZH15vy5oYL+q6pA/Ok8hqgqfggk9jksYygUUgKUCxxvepKVWhsb
+   tmnvsCktu522tfeNU9d67kjPYFGkZ7e3OV3q/MP47hRkoos2SPzHhT1M9
+   lyE+ORp4Uf1WkM7G20cAFoRJc0Y8XXukYPvGJpgUtGuX2OCbpeLa0Pw3c
+   xN5svtCE+sVo3N4DHprQSnqdr3L3yDFnmL5Q7MqeARGbrgc3jD1j3kTCR
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,272,1643670000"; 
+   d="scan'208";a="23351059"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 19 Apr 2022 10:47:08 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 19 Apr 2022 10:47:08 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 19 Apr 2022 10:47:08 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1650358028; x=1681894028;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lfyGlOwBn9Oqk37H4rCgm5uXFJD2It20JCnLmPhZ6qc=;
+  b=RlbZYs6HbEw/+0ju8CZhkYtUstSpLJf9etbQRRkb5MkyHLqGTXty7gGs
+   AWMIaG5Oqa2iCru62idW4JbbQdvphu7ckJXNLp+7sc+c1RXR2Q8dDONTh
+   OsPAWcxsy+TQ5LQmK0xwmL5v9K3bAMxhdjch8hzgYz1U7lVVbnoTH7/QQ
+   ge0S1dM1LC4mlYz9DH238Rb3Uxd7ZpXkaj6Pa0Pk16Hahk9eEDgRhI5fT
+   Ep0mJeqCytzu3uz3EC5UqS8rgT0Ovt2vNR7Fzkk0Fluf4CE6KdFH5VB33
+   4wVFKQLdjNo91TuR3g3ydOUJp06klAZ676OxwomCv7LMgwU6+EXKfoHHG
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,272,1643670000"; 
+   d="scan'208";a="23351045"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 19 Apr 2022 10:47:02 +0200
+Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.49.14])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id CE4CF280070;
+        Tue, 19 Apr 2022 10:46:57 +0200 (CEST)
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Pratyush Yadav <p.yadav@ti.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Ramuthevar Vadivel Murugan 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Subject: [PATCH 1/2] spi: cadence-quadspi: further simplify cqspi_set_protocol()
+Date:   Tue, 19 Apr 2022 10:46:39 +0200
+Message-Id: <20220419084640.191299-1-matthias.schiffer@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/3] dt-bindings: SPI: Add bindings for new Ingenic SoCs.
-Content-Language: en-US
-To:     =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>, broonie@kernel.org,
-        robh+dt@kernel.org, krzk+dt@kernel.org
-Cc:     linux-spi@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        paul@crapouillou.net, contact@artur-rojek.eu,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, reimu@sudomaker.com
-References: <1650032528-118220-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1650032528-118220-3-git-send-email-zhouyanjie@wanyeetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1650032528-118220-3-git-send-email-zhouyanjie@wanyeetech.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 15/04/2022 16:22, 周琰杰 (Zhou Yanjie) wrote:
-> Add the SPI bindings for the JZ4775 SoC, the X1000 SoC,
-> and the X2000 SoC from Ingenic.
-> 
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+- Remove checks for unsupported modes that are already handled by
+  supports_op(). This allows to change the function to return void.
+- Distinguishing DTR and non-DTR modes is not necessary for the setup of
+  the bus widths
+- Only cmd DTR flag needs to be checked, supports_op() already checks
+  that the DTR flags of all relevant parts of the op match
+- Check nbytes instead of buswidth for 0, for consistency with
+  supports_op() etc.
 
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+---
+ drivers/spi/spi-cadence-quadspi.c | 73 +++++--------------------------
+ 1 file changed, 10 insertions(+), 63 deletions(-)
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 19686fb47bb3..96d14f3847b5 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -368,58 +368,13 @@ static unsigned int cqspi_calc_dummy(const struct spi_mem_op *op, bool dtr)
+ 	return dummy_clk;
+ }
+ 
+-static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
+-			      const struct spi_mem_op *op)
++static void cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
++			       const struct spi_mem_op *op)
+ {
+-	/*
+-	 * For an op to be DTR, cmd phase along with every other non-empty
+-	 * phase should have dtr field set to 1. If an op phase has zero
+-	 * nbytes, ignore its dtr field; otherwise, check its dtr field.
+-	 */
+-	f_pdata->dtr = op->cmd.dtr &&
+-		       (!op->addr.nbytes || op->addr.dtr) &&
+-		       (!op->data.nbytes || op->data.dtr);
+-
+-	f_pdata->inst_width = 0;
+-	if (op->cmd.buswidth)
+-		f_pdata->inst_width = ilog2(op->cmd.buswidth);
+-
+-	f_pdata->addr_width = 0;
+-	if (op->addr.buswidth)
+-		f_pdata->addr_width = ilog2(op->addr.buswidth);
+-
+-	f_pdata->data_width = 0;
+-	if (op->data.buswidth)
+-		f_pdata->data_width = ilog2(op->data.buswidth);
+-
+-	/* Right now we only support 8-8-8 DTR mode. */
+-	if (f_pdata->dtr) {
+-		switch (op->cmd.buswidth) {
+-		case 0:
+-		case 8:
+-			break;
+-		default:
+-			return -EINVAL;
+-		}
+-
+-		switch (op->addr.buswidth) {
+-		case 0:
+-		case 8:
+-			break;
+-		default:
+-			return -EINVAL;
+-		}
+-
+-		switch (op->data.buswidth) {
+-		case 0:
+-		case 8:
+-			break;
+-		default:
+-			return -EINVAL;
+-		}
+-	}
+-
+-	return 0;
++	f_pdata->inst_width = op->cmd.nbytes ? ilog2(op->cmd.buswidth) : 0;
++	f_pdata->addr_width = op->addr.nbytes ? ilog2(op->addr.buswidth) : 0;
++	f_pdata->data_width = op->data.nbytes ? ilog2(op->data.buswidth) : 0;
++	f_pdata->dtr = op->cmd.dtr;
+ }
+ 
+ static int cqspi_wait_idle(struct cqspi_st *cqspi)
+@@ -549,9 +504,7 @@ static int cqspi_command_read(struct cqspi_flash_pdata *f_pdata,
+ 	size_t read_len;
+ 	int status;
+ 
+-	status = cqspi_set_protocol(f_pdata, op);
+-	if (status)
+-		return status;
++	cqspi_set_protocol(f_pdata, op);
+ 
+ 	status = cqspi_enable_dtr(f_pdata, op, CQSPI_REG_OP_EXT_STIG_LSB,
+ 				  f_pdata->dtr);
+@@ -622,9 +575,7 @@ static int cqspi_command_write(struct cqspi_flash_pdata *f_pdata,
+ 	size_t write_len;
+ 	int ret;
+ 
+-	ret = cqspi_set_protocol(f_pdata, op);
+-	if (ret)
+-		return ret;
++	cqspi_set_protocol(f_pdata, op);
+ 
+ 	ret = cqspi_enable_dtr(f_pdata, op, CQSPI_REG_OP_EXT_STIG_LSB,
+ 			       f_pdata->dtr);
+@@ -1244,9 +1195,7 @@ static ssize_t cqspi_write(struct cqspi_flash_pdata *f_pdata,
+ 	const u_char *buf = op->data.buf.out;
+ 	int ret;
+ 
+-	ret = cqspi_set_protocol(f_pdata, op);
+-	if (ret)
+-		return ret;
++	cqspi_set_protocol(f_pdata, op);
+ 
+ 	ret = cqspi_write_setup(f_pdata, op);
+ 	if (ret)
+@@ -1348,9 +1297,7 @@ static ssize_t cqspi_read(struct cqspi_flash_pdata *f_pdata,
+ 	int ret;
+ 
+ 	ddata = of_device_get_match_data(dev);
+-	ret = cqspi_set_protocol(f_pdata, op);
+-	if (ret)
+-		return ret;
++	cqspi_set_protocol(f_pdata, op);
+ 
+ 	ret = cqspi_read_setup(f_pdata, op);
+ 	if (ret)
+-- 
+2.25.1
 
-
-Best regards,
-Krzysztof
