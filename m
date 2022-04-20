@@ -2,103 +2,121 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61CF508476
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Apr 2022 11:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 950E95084C9
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Apr 2022 11:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiDTJIM (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 Apr 2022 05:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37914 "EHLO
+        id S1377108AbiDTJW6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 Apr 2022 05:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377089AbiDTJHt (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Apr 2022 05:07:49 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D1F25F9;
-        Wed, 20 Apr 2022 02:05:03 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id bz24so529649qtb.2;
-        Wed, 20 Apr 2022 02:05:03 -0700 (PDT)
+        with ESMTP id S1377153AbiDTJW5 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Apr 2022 05:22:57 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0862522B3B
+        for <linux-spi@vger.kernel.org>; Wed, 20 Apr 2022 02:20:10 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id y20so2204922eju.7
+        for <linux-spi@vger.kernel.org>; Wed, 20 Apr 2022 02:20:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GWU0CFZHZcK0qVtLfhFSoJd+WGMELdBWCS1aTnDQr3U=;
-        b=Iv2nZ/RlP644ADdG0Hr0RG7R/5gfSIQHdry7ICG8dKhB1iHWDcQCWdF7CfrLtk4hGv
-         gQRXUT6pvM1qpHMrUoWSoaUV1nendQ7v3rdf8Uo4ZSqn/yEYDQSFYpJlfYvjvgwHdcse
-         JK4il4+3AiMnBm+F1NoGl433RbNvIJTR8uHZqZVSPPiWiusSgQyakK2Ri0ArABjsRPP/
-         bX0WQMZxc9kZiZ47tVtutgaqh0iRmbdFXjMzyVYZ/UMZBiwUgzv0829jphGWtb1vLK+o
-         QUiQtVS2bBRa+ZDO7SijfGJhpI9dkaw/9B+k7LMSq7L9ImXT2X0n1a4o9ZY0ezJOQg3W
-         2iAw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=nAIc8jlNaoNP4j8LrfgKPUem0987eG/5mImWoVHHT10=;
+        b=rSRtnZiF0xfnneRi/FQEzgnTo4L29Yzksiymt9g7h909EamxwG1M03+cfLGJz2BCOj
+         30CAL0kYOBVzStPIrvYb0monKtCFSnzsD3kwCqSU+bWHouMJvSzgKzZ6TdGkdgNy2yzz
+         C01rq4MLEeIVrGL5bI2/gmeJphR7o7jGVzdRCQK8jV3eM/SIu9DarQScr8dPeApgsm4q
+         PVkvnWdJ0MciYcWlYYKEOAtj/lRtmYDnu4oNkN19u4GUIU3PjvK/cEdkwCiD73LdOoQg
+         xyjB1TqyC1taYNXURg86XIpc8UnubKhBcODOIH7ohGWzGoAIPK9A3eD02O9kuRE3/jfE
+         /lCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=GWU0CFZHZcK0qVtLfhFSoJd+WGMELdBWCS1aTnDQr3U=;
-        b=hj43+746/1PmvjiPhQQ4wUA5QVqDiwrpHr+xsceyekMCVIfR46vKevX/MKAhdWruB3
-         PnEHXPe6Kod+UIdm139F4stdnZQmg/a2WFy+Xo01m7MEOSSoMHsFYEbomDyMy9+vxcWW
-         KgbRAnE09OSnKaQxoPCueyKolNwB9Zamg5/XAt7i9CeCXDWH4+9AmPhmbuqMANq3oXpv
-         EcxD0y/xQ8l0G4zvcMwR0vpiDfzQH1j8UXtNYRSTUWk4ZU7hFzdMpV67EYbOaHdLQKWR
-         OjtktK3ppW9m1SDZkLERjdc0d1oJ8PXw+fRLuBycSJjflVmqdTgB0oLUMQSAeqLKLiQ1
-         pYAQ==
-X-Gm-Message-State: AOAM530HQcccfY/XB+AqMvaSJsktTCHuDs2HzhlJx2RPVVuZQHFRUTDi
-        owjK29tB4k6B63uul+QzXBw=
-X-Google-Smtp-Source: ABdhPJynC+cZt0N24fBHq9t1/ImAPBCuJFzgMh6bLZNrRU9DO1Wd9RchF3AZrg8Hkwza637Uw3GtwQ==
-X-Received: by 2002:a05:622a:1ba5:b0:2f1:f540:e04b with SMTP id bp37-20020a05622a1ba500b002f1f540e04bmr11914803qtb.62.1650445502343;
-        Wed, 20 Apr 2022 02:05:02 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id f28-20020a05620a20dc00b0069d98e6bff9sm1249602qka.32.2022.04.20.02.04.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 02:05:01 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     alain.volmat@foss.st.com
-Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] spi: stm32: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Wed, 20 Apr 2022 09:04:52 +0000
-Message-Id: <20220420090452.2588930-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        bh=nAIc8jlNaoNP4j8LrfgKPUem0987eG/5mImWoVHHT10=;
+        b=ZV0jgSQBkAlGqfsdui2i7jYYN3PmHxeJiWqtvuICD86dNNdWLP0ocsbnkvFA5Wk80k
+         cUaj2FHB8/H0xF3GaWNgUDGEKZc3h+BkWEgExISfCEFe7/dcCgxGyBhBnTiel+pt6siS
+         w4CL4WshWPJ8+yy1+1Dpa7GceWbZ9RnTNY5LOIXsLiycSRCDs6p9ne4QbKk7t4uQ9nvQ
+         YZ5B7VW/2SFQYc1hSFj3ep77ZcywC46GanGVhCbahdK5DPkfBX+1J1kLog50K4wjAw4K
+         ykBczQj3+AVx4PZPwlxCL+fiuNcGWhg6vKeT5dkcAsdhieDXb+9HrTptkneCkzOdjkEB
+         gH0g==
+X-Gm-Message-State: AOAM530cmz0olwj1GEsGO5zkdWdAowYCK8XkC8Lt1lVKUYd0nGEbJL21
+        tgtCn+j2OubT7JhLZuoXiI39Nw==
+X-Google-Smtp-Source: ABdhPJzOe0WrGTYQeCapieJbroGE75Jk3m16hGQK/9UYOPl2KmErfi3BqssRPBI5BShzU5h2D40NFw==
+X-Received: by 2002:a17:906:7a51:b0:6e8:8e6c:f182 with SMTP id i17-20020a1709067a5100b006e88e6cf182mr17160922ejo.506.1650446408596;
+        Wed, 20 Apr 2022 02:20:08 -0700 (PDT)
+Received: from [192.168.0.223] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id kx5-20020a170907774500b006e1382b8192sm6643906ejc.147.2022.04.20.02.20.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 02:20:08 -0700 (PDT)
+Message-ID: <529de1fd-7e98-1634-c61e-0e69ddcd9e73@linaro.org>
+Date:   Wed, 20 Apr 2022 11:20:06 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v7 00/12] Fix broken usage of driver_override (and kfree
+ of static memory)
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Stuart Yoder <stuyoder@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20220419113435.246203-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220419113435.246203-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On 19/04/2022 13:34, Krzysztof Kozlowski wrote:
 
-Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
-pm_runtime_put_noidle. This change is just to simplify the code, no
-actual functional changes.
+Hi Greg, Rafael,
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/spi/spi-stm32.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+The patchset was for some time on the lists, got some reviews, some
+changes/feedback which I hope I applied/responded.
 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index a6adc20f6862..6fe617b445a5 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -2000,9 +2000,8 @@ static int __maybe_unused stm32_spi_resume(struct device *dev)
- 		return ret;
- 	}
- 
--	ret = pm_runtime_get_sync(dev);
-+	ret = pm_runtime_resume_and_get(dev);
- 	if (ret < 0) {
--		pm_runtime_put_noidle(dev);
- 		dev_err(dev, "Unable to power device:%d\n", ret);
- 		return ret;
- 	}
--- 
-2.25.1
+Entire set depends on the driver core changes, so maybe you could pick
+up everything via drivers core tree?
+
+> Dependencies (and stable):
+> ==========================
+> 1. All patches, including last three fixes, depend on the first patch
+>    introducing the helper.
+> 2. The last three commits - fixes - are probably not backportable
+>    directly, because of this dependency. I don't know how to express
+>    this dependency here, since stable-kernel-rules.rst mentions only commits as
+>    possible dependencies.
 
 
+Best regards,
+Krzysztof
