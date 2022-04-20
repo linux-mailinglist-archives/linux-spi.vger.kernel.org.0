@@ -2,121 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 950E95084C9
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Apr 2022 11:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B015085B5
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Apr 2022 12:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377108AbiDTJW6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 Apr 2022 05:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
+        id S1377586AbiDTKXX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 Apr 2022 06:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377153AbiDTJW5 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Apr 2022 05:22:57 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0862522B3B
-        for <linux-spi@vger.kernel.org>; Wed, 20 Apr 2022 02:20:10 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id y20so2204922eju.7
-        for <linux-spi@vger.kernel.org>; Wed, 20 Apr 2022 02:20:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nAIc8jlNaoNP4j8LrfgKPUem0987eG/5mImWoVHHT10=;
-        b=rSRtnZiF0xfnneRi/FQEzgnTo4L29Yzksiymt9g7h909EamxwG1M03+cfLGJz2BCOj
-         30CAL0kYOBVzStPIrvYb0monKtCFSnzsD3kwCqSU+bWHouMJvSzgKzZ6TdGkdgNy2yzz
-         C01rq4MLEeIVrGL5bI2/gmeJphR7o7jGVzdRCQK8jV3eM/SIu9DarQScr8dPeApgsm4q
-         PVkvnWdJ0MciYcWlYYKEOAtj/lRtmYDnu4oNkN19u4GUIU3PjvK/cEdkwCiD73LdOoQg
-         xyjB1TqyC1taYNXURg86XIpc8UnubKhBcODOIH7ohGWzGoAIPK9A3eD02O9kuRE3/jfE
-         /lCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nAIc8jlNaoNP4j8LrfgKPUem0987eG/5mImWoVHHT10=;
-        b=ZV0jgSQBkAlGqfsdui2i7jYYN3PmHxeJiWqtvuICD86dNNdWLP0ocsbnkvFA5Wk80k
-         cUaj2FHB8/H0xF3GaWNgUDGEKZc3h+BkWEgExISfCEFe7/dcCgxGyBhBnTiel+pt6siS
-         w4CL4WshWPJ8+yy1+1Dpa7GceWbZ9RnTNY5LOIXsLiycSRCDs6p9ne4QbKk7t4uQ9nvQ
-         YZ5B7VW/2SFQYc1hSFj3ep77ZcywC46GanGVhCbahdK5DPkfBX+1J1kLog50K4wjAw4K
-         ykBczQj3+AVx4PZPwlxCL+fiuNcGWhg6vKeT5dkcAsdhieDXb+9HrTptkneCkzOdjkEB
-         gH0g==
-X-Gm-Message-State: AOAM530cmz0olwj1GEsGO5zkdWdAowYCK8XkC8Lt1lVKUYd0nGEbJL21
-        tgtCn+j2OubT7JhLZuoXiI39Nw==
-X-Google-Smtp-Source: ABdhPJzOe0WrGTYQeCapieJbroGE75Jk3m16hGQK/9UYOPl2KmErfi3BqssRPBI5BShzU5h2D40NFw==
-X-Received: by 2002:a17:906:7a51:b0:6e8:8e6c:f182 with SMTP id i17-20020a1709067a5100b006e88e6cf182mr17160922ejo.506.1650446408596;
-        Wed, 20 Apr 2022 02:20:08 -0700 (PDT)
-Received: from [192.168.0.223] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id kx5-20020a170907774500b006e1382b8192sm6643906ejc.147.2022.04.20.02.20.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 02:20:08 -0700 (PDT)
-Message-ID: <529de1fd-7e98-1634-c61e-0e69ddcd9e73@linaro.org>
-Date:   Wed, 20 Apr 2022 11:20:06 +0200
+        with ESMTP id S1377530AbiDTKXV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Apr 2022 06:23:21 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C3A1D0F3;
+        Wed, 20 Apr 2022 03:20:33 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23KAKPWT008426;
+        Wed, 20 Apr 2022 05:20:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650450025;
+        bh=WQz1NXqH44zqQrsGYhOZZwpDPw6pIXS8bNm5c+6Gswg=;
+        h=From:To:CC:Subject:Date;
+        b=ERHtbJypMGZGDVRQh/XWzhjbTclYMIQU4Gpyidl6lY+v8OvjiySyT3+HXHXujtThY
+         X/EIknPBxFig8l9xqh2Aw9NV6sva2+fu3in+OaXa4+Dyy4Ak3CoNoIkyMVwEwagzeL
+         lU4JJ/Q1V91SkEhUXalp5sMldQhtblH9muVeY2lM=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23KAKP10018050
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 20 Apr 2022 05:20:25 -0500
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 20
+ Apr 2022 05:20:25 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 20 Apr 2022 05:20:25 -0500
+Received: from pratyush-4F-325.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23KAKMq7033245;
+        Wed, 20 Apr 2022 05:20:23 -0500
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Pratyush Yadav <p.yadav@ti.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Takahiro Kuwano <tkuw584924@gmail.com>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] spi: spi-mem: check if data buffers are on stack
+Date:   Wed, 20 Apr 2022 15:50:22 +0530
+Message-ID: <20220420102022.3310970-1-p.yadav@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v7 00/12] Fix broken usage of driver_override (and kfree
- of static memory)
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Stuart Yoder <stuyoder@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-References: <20220419113435.246203-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220419113435.246203-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 19/04/2022 13:34, Krzysztof Kozlowski wrote:
+The buffers passed in the data phase must be DMA-able. Programmers often
+don't realise this requirement and pass in buffers that reside on the
+stack. This can be hard to spot when reviewing code. Reject ops if their
+data buffer is on the stack to avoid this.
 
-Hi Greg, Rafael,
+Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+Acked-by: Mark Brown <broonie@kernel.org>
+---
 
-The patchset was for some time on the lists, got some reviews, some
-changes/feedback which I hope I applied/responded.
+Changes in v2:
+- Include task_stack.h. It might not get included indirectly on some
+  platforms and can cause build failures.
+- Add a WARN_ON_ONCE() for debuggability.
+- Add Mark's Ack.
 
-Entire set depends on the driver core changes, so maybe you could pick
-up everything via drivers core tree?
+ drivers/spi/spi-mem.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-> Dependencies (and stable):
-> ==========================
-> 1. All patches, including last three fixes, depend on the first patch
->    introducing the helper.
-> 2. The last three commits - fixes - are probably not backportable
->    directly, because of this dependency. I don't know how to express
->    this dependency here, since stable-kernel-rules.rst mentions only commits as
->    possible dependencies.
+diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+index 7d7091aa0c22..e8de4f5017cd 100644
+--- a/drivers/spi/spi-mem.c
++++ b/drivers/spi/spi-mem.c
+@@ -10,6 +10,7 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/spi/spi.h>
+ #include <linux/spi/spi-mem.h>
++#include <linux/sched/task_stack.h>
 
+ #include "internals.h"
 
-Best regards,
-Krzysztof
+@@ -211,6 +212,15 @@ static int spi_mem_check_op(const struct spi_mem_op *op)
+ 	    !spi_mem_buswidth_is_valid(op->data.buswidth))
+ 		return -EINVAL;
+
++	/* Buffers must be DMA-able. */
++	if (WARN_ON_ONCE(op->data.dir == SPI_MEM_DATA_IN &&
++			 object_is_on_stack(op->data.buf.in)))
++		return -EINVAL;
++
++	if (WARN_ON_ONCE(op->data.dir == SPI_MEM_DATA_OUT &&
++			 object_is_on_stack(op->data.buf.out)))
++		return -EINVAL;
++
+ 	return 0;
+ }
+
+--
+2.34.1
+
