@@ -2,71 +2,54 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A95B5087AB
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Apr 2022 14:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3129D5088BC
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Apr 2022 15:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236824AbiDTMJA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 Apr 2022 08:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46458 "EHLO
+        id S1357489AbiDTNHS (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 Apr 2022 09:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378384AbiDTMJA (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Apr 2022 08:09:00 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378D536B5E
-        for <linux-spi@vger.kernel.org>; Wed, 20 Apr 2022 05:06:13 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 11so2044740edw.0
-        for <linux-spi@vger.kernel.org>; Wed, 20 Apr 2022 05:06:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=UlAja3YPVFSaCcjRJzEPZI+7Ai3V2k+mQnAfV+fzWps=;
-        b=QSywyv596dXT8X/29BiGuSl4JY9hscZylHITHlYHy6CCE9hWlNmZw73t+jbz33HpHh
-         8mVDucM15hiz0lfxr7SdFoUF315ped2/T1bMg3X5YCoNi8FZdtHj50dlDpaXhGDKAndj
-         UkbdP1+Pv9YnYKALr48m32NTXWYqMpT/WTzghaxEwbR/OZrcQ9J/kvwDL9xuZs8QwUta
-         pBAAcWi0VhP58Ol2iL/pIHCe9vQyEsQ/+wLpTFfffKEexRqeSiSZ2577ltVHnnLbxUh5
-         loeCMuybCRKGN2HGqtdh3nC4prfEWbSWFbERVTF+2hKpuw9k48L36UljxXj14zsmfp5z
-         lEkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UlAja3YPVFSaCcjRJzEPZI+7Ai3V2k+mQnAfV+fzWps=;
-        b=Q9mEjCBNZJUWjxzu1mGB9epITw/kv7hoQPC63a3MqTn/tU486yf9DEe8cuGzke5Ace
-         WTXnAb9YdvrmippJr0eACOTF1QB8oB/02YGRpjkGvbu3bJAKBHXcrFnL45q5nzX7h08v
-         6G0mMe4zIdVKkA1a/AOGMCmTbfK2Qz9mRmqf6Zdz2BIhL0To6/ro3smz9JOHdgDZInzB
-         4eIyjty/e/2qhvu/gW0DVCl7epHhC0zD12YPnEstT1p2/Sl3y8qpifSzWJOcA1eA6E6Y
-         EQdWZbr/KMXQOfhpGRVPtqaIkek17KZyymyjHUbmpuQFHqfmtbf4wUexD4ipAlZd0YJW
-         duqQ==
-X-Gm-Message-State: AOAM531IGZHyJfzxegFxsIErZDWg63IUWF8kxb2ee37Cb2eZCVSULeWI
-        WaRCP0iDqplkPq8fNOJYvQhWJw==
-X-Google-Smtp-Source: ABdhPJzJlKoCJPioJ/m0NnVQMdZ6j2pDYJ7mzkCaxZoPVg5LHSGsEo73lBQ7kzJo1XeAYP0Uv/JK+Q==
-X-Received: by 2002:a05:6402:2694:b0:423:fd1f:30c2 with SMTP id w20-20020a056402269400b00423fd1f30c2mr9265290edd.343.1650456371790;
-        Wed, 20 Apr 2022 05:06:11 -0700 (PDT)
-Received: from [192.168.0.225] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id vr7-20020a170906bfe700b006e8325fe130sm6570787ejb.31.2022.04.20.05.06.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 05:06:11 -0700 (PDT)
-Message-ID: <d74f62d7-7aea-b31f-1c2f-540c54df289c@linaro.org>
-Date:   Wed, 20 Apr 2022 14:06:10 +0200
+        with ESMTP id S1352604AbiDTNHR (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Apr 2022 09:07:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A2415A13;
+        Wed, 20 Apr 2022 06:04:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82E8BB81F0D;
+        Wed, 20 Apr 2022 13:04:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF021C385A1;
+        Wed, 20 Apr 2022 13:04:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650459869;
+        bh=xWASg+ifbn2uVha8nfvnCveQNEqoOf0q74ePOsRwNE8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HGh9s/mBegJmMEJbl/CbemQQcdqWqduGRlNe8NolJJusCEepEAGhP4EIUYzP/EgAC
+         GmuHVNPpK+iY7/laRC1PcOFQ8cpjNFtqmpzHDe3CluEkHLai1DAEMoDTuFedKXwv4n
+         02rUGQNbuCh5T+gfrxsgqLHPaWEkhxiINgl1ZtLap/qWGm68arBvMRzcquZsz27pN2
+         DcLj2pe6sdgfrFoRCEz59tymcpcqYvFc+3wd7pHxzlVmvsDX1rT78GZyPxJ+vATnrp
+         ShoPqO+kiXzVLoocs7Sam6hHnvymZNhWjD4zIoSYhPvjV7aSln8ZYv562U88W/ebiG
+         DJeBzBek6avpQ==
+Date:   Wed, 20 Apr 2022 14:04:24 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Takahiro Kuwano <tkuw584924@gmail.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] spi: spi-mem: check if data buffers are on stack
+Message-ID: <YmAE2IVRgPyWxmbn@sirena.org.uk>
+References: <20220420102022.3310970-1-p.yadav@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2 v4] dt-bindings: dspi: added for semtech sx1301
-Content-Language: en-US
-To:     Changming Huang <jerry.huang@nxp.com>, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, shawnguo@kernel.org,
-        leoyang.li@nxp.com, linux-arm-kernel@lists.infradead.org
-References: <20220420073146.38086-1-jerry.huang@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220420073146.38086-1-jerry.huang@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="aiCEfvR0m8oWhfqc"
+Content-Disposition: inline
+In-Reply-To: <20220420102022.3310970-1-p.yadav@ti.com>
+X-Cookie: Will it improve my CASH FLOW?
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,37 +57,45 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 20/04/2022 09:31, Changming Huang wrote:
-> Add DT Binding doc for semtech sx1301
-> 
-> Signed-off-by: Changming Huang <jerry.huang@nxp.com>
+
+--aiCEfvR0m8oWhfqc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Apr 20, 2022 at 03:50:22PM +0530, Pratyush Yadav wrote:
+> The buffers passed in the data phase must be DMA-able. Programmers often
+> don't realise this requirement and pass in buffers that reside on the
+> stack. This can be hard to spot when reviewing code. Reject ops if their
+> data buffer is on the stack to avoid this.
+>=20
+> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+> Acked-by: Mark Brown <broonie@kernel.org>
 > ---
-> changes in v4:
->   - rename example node, adjust description
-> changes in v3:
->   - add the dt-bindings
-> 
->  .../bindings/spi/semtech,sx1301.yaml          | 45 +++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/semtech,sx1301.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/semtech,sx1301.yaml b/Documentation/devicetree/bindings/spi/semtech,sx1301.yaml
-> new file mode 100644
-> index 000000000000..420fe8d23a1e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/semtech,sx1301.yaml
-> @@ -0,0 +1,45 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/semtech,sx1301.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Semtech sx1301 SPI controller bindings
+>=20
+> Changes in v2:
+> - Include task_stack.h. It might not get included indirectly on some
+>   platforms and can cause build failures.
+> - Add a WARN_ON_ONCE() for debuggability.
+> - Add Mark's Ack.
 
-This is still wrong.
+Since this is now an isolated patch does that mean whatever meant that I
+acked rather than applying this patch has gone in and I can now apply it
+directly?
 
-Please also answer Michael's comments.
+--aiCEfvR0m8oWhfqc
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Best regards,
-Krzysztof
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJgBNcACgkQJNaLcl1U
+h9AVUAf/Thouk4ikZ3+sC6mFcLBnUb0rdoYUyN/9GyPZwVx0Bu6Bj3KLvfMdR2HI
++tn5BCsE8epyRgcCG0tiCfD0Mmv/CV68z8GPMnDdQGtvnMVRSKy9VsBhAuzvy68x
+e9lQdmScs6JUJezqCJIGHW+ElYAGR8lymrCHbfFsI1/0+WTj6LueWOAR4m4e3F9P
+KNkk50p8ulvfQBu++34jUgHOOJF1HktB5DfqpY4UabmP+iUMvm10Cj6WytRZoztG
+CcpugWP1yiqoiLjEQQal8tYvLMIWMmSlGPYl2nylVGxGCzf07TZNtk17R1CIGQjN
+zMcrx5SUsSY7THkrvpdybENmrvUVow==
+=CnG+
+-----END PGP SIGNATURE-----
+
+--aiCEfvR0m8oWhfqc--
