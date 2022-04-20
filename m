@@ -2,60 +2,114 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9F5507D10
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Apr 2022 01:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC02507FB0
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Apr 2022 05:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241999AbiDSXGz (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 19 Apr 2022 19:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55396 "EHLO
+        id S239413AbiDTDxh (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 19 Apr 2022 23:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234794AbiDSXGy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 19 Apr 2022 19:06:54 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E16D427167;
-        Tue, 19 Apr 2022 16:04:09 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 94FFC1FB;
-        Tue, 19 Apr 2022 16:04:09 -0700 (PDT)
-Received: from [10.57.41.251] (unknown [10.57.41.251])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5405C3F5A1;
-        Tue, 19 Apr 2022 16:04:07 -0700 (PDT)
-Message-ID: <586f6f11-fb29-7f76-200a-d73a653f9889@arm.com>
-Date:   Wed, 20 Apr 2022 00:04:01 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v5 2/6] dt-bindings: auxdisplay: Add Titan Micro
- Electronics TM1628
-Content-Language: en-GB
-To:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Miguel Ojeda <ojeda@kernel.org>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-References: <90668779-b53d-b3e7-5327-af11ff4a1d18@gmail.com>
- <2671e6e3-8f18-8b70-244b-9e1415bfdf8f@gmail.com>
- <3bf14cf0-f00d-f718-30ea-e63272f3ce72@arm.com>
- <9e2fc38a-a51e-7635-970c-64948fc6eae4@kernel.org>
- <80937566-6455-b1bf-0a5d-a7b54dd3adc5@gmail.com>
- <5fde764f-4caf-8017-3cbd-3918f3390b6a@gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <5fde764f-4caf-8017-3cbd-3918f3390b6a@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        with ESMTP id S234405AbiDTDxg (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 19 Apr 2022 23:53:36 -0400
+Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-eopbgr30041.outbound.protection.outlook.com [40.107.3.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84ED22612E;
+        Tue, 19 Apr 2022 20:50:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DhNfNPsJQzQs1W3qBSeybiKm9188IR3tBe7Z5r9FzQpajACTCbawOryxOS6DXX2Qf8pC0I5ZZsXJ7Sgatyv2FG2H7/T60mIlmyhmxvMstw2+SaDQMAZTbig8aQWpRjASN5NXeiTtBxVApKhqQK4WjUjk/APgOGySg2cM/zN0rvS1LSJVbI1l+e4DpemQMdBZLFJ1OPwAfIYo/BLdC3+3duHmVliQ0a48DQaxCV1EuTFXENSjlYYCmlahJuaJlyhMXsIAy+BES0yEdxt5LMkxqaLm4MgwLsFFoM5d0tjGVhUeapySVYBSS4AG10V0UkbJ0nfXeolWVED44fH0aArYFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xxlqP6OHIOCvlxRARt3ReLaM7NcJsSeYdUyyxvgI24Q=;
+ b=m++l/VYtLNC5O+sZERStqA2EtV3K16Dkv3bPPxtYUPBjVfbR6oOLq7WPyMRcD0hiXFg9fl3x8sle9BdYFKvyt1/oQuJK4jNKeu0n0A58JQoljoPN+X2Guw8X6SBlhd+iCX+MC7LfA4asBKGuUgF4g9IKqmk++mmoX7cigfIefA1Fk0859LiE9GjKdDrlBZxFqh0hQZc8a6QPyEYp867RKxvF1hz/dPcoO8YrLLim90V804KsV2l7AZlsJkuhcmikxZSqKC6SIbO+iv9Y1wVvubi+rmU1Pr8wQO2+mOtIOpw13OOqMc/kXDwyOUULMVNytZDuCDdD9KUCCkbUbMKRxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xxlqP6OHIOCvlxRARt3ReLaM7NcJsSeYdUyyxvgI24Q=;
+ b=N/iADxSuh7HgTuscAhCb8YvkeBaSZ6NZ9xFw700sF2Kck+Gvz/RKGYyLNpGVoYKxSJwnYRRGZCUVhvQa/zsEtak4BaqQeiIc3xfgGdanlWAuBPglU+RmLz8j7uDC8NDAJqEyGF6zMnCKgloM1is3jCuXJTyGatTHuPWbBg45Pw4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VE1PR04MB6477.eurprd04.prod.outlook.com (2603:10a6:803:11e::14)
+ by AM0PR04MB5025.eurprd04.prod.outlook.com (2603:10a6:208:cd::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13; Wed, 20 Apr
+ 2022 03:50:49 +0000
+Received: from VE1PR04MB6477.eurprd04.prod.outlook.com
+ ([fe80::60ad:e5ec:cdfd:1b01]) by VE1PR04MB6477.eurprd04.prod.outlook.com
+ ([fe80::60ad:e5ec:cdfd:1b01%3]) with mapi id 15.20.5186.014; Wed, 20 Apr 2022
+ 03:50:48 +0000
+From:   Changming Huang <jerry.huang@nxp.com>
+To:     broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shawnguo@kernel.org, leoyang.li@nxp.com,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Changming Huang <jerry.huang@nxp.com>
+Subject: [PATCH 1/2 v3] dt-bindings: dspi: added for semtech sx1301
+Date:   Wed, 20 Apr 2022 11:50:44 +0800
+Message-Id: <20220420035045.33940-1-jerry.huang@nxp.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0023.apcprd02.prod.outlook.com
+ (2603:1096:4:195::11) To VE1PR04MB6477.eurprd04.prod.outlook.com
+ (2603:10a6:803:11e::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 045cf1be-b069-4303-cf7a-08da2280f4aa
+X-MS-TrafficTypeDiagnostic: AM0PR04MB5025:EE_
+X-Microsoft-Antispam-PRVS: <AM0PR04MB50256B2AB5A1AF50085259F3FEF59@AM0PR04MB5025.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KtW56lDBxxHmw/wznA4Yuk6xmzXH/fgkxwT4d9PPIsJJzasUFNZgTHK7Ga9sISDAQ5gQ1z0PoVRnXZLoEySKOhRdrqqT65ISKRQZ0wLQ01uPlUdIbxtSbN+jUR+zfxuDPxYtaS85UScdGtsGxuRf/0UVWkpnzmqQ+GHxmGVK6zqG0xIfBCMx+I2MTj4n3uOydCP8GbPwOjN63Z2jF1HYEp+TuottmSp9MxKNvBHU9VCyLkP/b6D7irPpOIPYUGvILHyHnTO/jMNCIP6mWW2wLk8lNvyy15rrLfkXsLYr8MSnGes5Wuznp4bt0P88C6oCZe4LDuLKJUAlK7HeekXfGmIjivXncqXWn1T2UPykGXLGPJcV9GvSj7PydbjF8T4LepmBUPTMg3DW9cUOuVMr2URwL4GIVeARrAGNdPgsgXv8F+CJ4ITQUMr7YV1uu/I/cQtwsxk/SwZPGQO0YfgVG+vxRhg1sBTTjyg7bP1yTked4Joc6k2wLhR9uaz4qdVLWrKbd2ZZuWXSi77yUHeA5iyKESlE8jzYexqbmGzsCjTQyWhYU4DLEymypjnh2CYxZ6YkA6rxw4nrGKozE9+yU4rn0Mq6WDnjYHiRdXUDbtVnoZhIK5DDZ6/1PQHwVbnpBTPw0ynSx0f3f69fSclTOuC3AsufbAdJqu3sugdRf5Ab/BIE39nx5epyaFI4fdsOKYeYITaiy1osWGgC9vGtUvJuBjuj0EDoFfn2+b4f3h5iKhsTUnJLpxoNvO6TPTDUA7reSmhbKOVIhZ7NIxp2p7Iu72pflhabwdqHvPloj6LWeWkTrbz+pSQ4P4hmPGrQsqVqxFfYfNGo8eW5OJWI5Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6477.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2616005)(186003)(1076003)(66556008)(66476007)(4326008)(8676002)(316002)(38350700002)(38100700002)(36756003)(66946007)(5660300002)(52116002)(26005)(6486002)(6506007)(6512007)(6666004)(86362001)(508600001)(8936002)(966005)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ED/fCgtHVqYjYQeZYg2ayg6JG7I6RDG/W+k14t+JPWJUXgL3KSfizo3TL5Ys?=
+ =?us-ascii?Q?P77drbbYQOkM4siggSLW1JSMbqW5rJjCKd5qwglNEDgqvYGnMyDtEBhNqCtd?=
+ =?us-ascii?Q?ci8cHKVzC1guwYo/dVlM/7lrDtow4MRwhwNKqsU94Q203S8JHC2px5qXiqk4?=
+ =?us-ascii?Q?IeqpVrkv8C3JKYJVUKn2w4Rz8keodwVTCn4eibAD2io52e9+n7nKPvkkuj6z?=
+ =?us-ascii?Q?4MdK32BcTNih0FzpUiz3xyQjzQVF5pmolbm/BkIZ7jRTZsyxfQK8G3xcHTCN?=
+ =?us-ascii?Q?1IIKXZ+wpbKl+bUTNAgL7ozgn9idjIv/4SOGo9L+AK6TwqEM/XPyb7Je+FTt?=
+ =?us-ascii?Q?eFwsaGLEdGt+1y0pJa8EY9tTVMzeTyq7fPVRQjSBVAzRZbuGul/p3CZ5XuHU?=
+ =?us-ascii?Q?Vs5rWYLgcLjnhT7BUY6ENCDjOJv6LM1d8u6d7AtaLP13lQCmN8o6qH8cyO5M?=
+ =?us-ascii?Q?VKGqeiAYTYk/+3qUe7gdTJvdclITMwzAZ2ej95G3FwR0uXWbvHPdcZy+eD6D?=
+ =?us-ascii?Q?N7ttGmiFlbJC2TPknCcTeycMSefGZXlsr8aW/8obtf/0ayWWJE4cRaf3A5sp?=
+ =?us-ascii?Q?swCwS+DQnV9IHzs/6WoPSoDsZ6BzGBCQUBVcqgHDCd0GgQpIChr8/oLvrlzN?=
+ =?us-ascii?Q?BflcKgOW3aARj01Zc58BMJt8IfGz4mmp+agwuaQo8UwPmfxIdS6xTXcdj6Az?=
+ =?us-ascii?Q?8ey1yHNq4CsJH8f362+Z2eVbB/vIxVC0x53Ex6lGxAm7jzZBXuFe187+ufA9?=
+ =?us-ascii?Q?7VRs55jAYlOxdCW33eZn69TZ8o+woBVZ6A3WFZgFt72EHi+UJ720sBdHLSdc?=
+ =?us-ascii?Q?lpT/P5Cy46uk9zqCUSg0KKjj0gzH8skWKOkBDRElDtd+hl/iBrasEOpn74CX?=
+ =?us-ascii?Q?ENoh/uedED6cQZxqLZbzIOZKp/wUm+fZzYUTpMyqk/HjvVD+l8b4C7TSOcvo?=
+ =?us-ascii?Q?ojTzJubjlNCJPemYnKDk+ejAsuMIwW+n+FUmioQMHysBERMKcDPNPbpW0XVY?=
+ =?us-ascii?Q?UTWZElNkX0hCBYo+OrfYxFhJnQH2fBKqgZLGcQkJIbTz1qXghWWuXZTKQB2Q?=
+ =?us-ascii?Q?icOpH65n5LiTbx+1+uMSS4IWKqBDlXg5TXkCeyqnF9oPCEro4xQbPBLWeqac?=
+ =?us-ascii?Q?AKWAxkZ9JrS3DhEp1+L4m9rtDZJMqEw7TwhADwxYvCAZbKz8TUm6lTb1HfEl?=
+ =?us-ascii?Q?2uMxHdOACfXNjmv7V45ZuYu4+IX5Ug+FpTDp+Is7eg3SKaOPKjmfF4Q2cthC?=
+ =?us-ascii?Q?/wYNpujlbzCuVHhu+jeaa7sKJA8G4d8MAFwxwLOA2YPEDW0oZIDMjLasAefc?=
+ =?us-ascii?Q?T3iqE5yN+zhbBTHBsRPuTqdorG3BqbJA1xnTcp0pTJEKndRBUP+260t6IV25?=
+ =?us-ascii?Q?rO6Oig7bXKssTMABsJXXpw2IKJ/mdSpohmsokhbT9X8GNO9BH9lx/7QpWJgs?=
+ =?us-ascii?Q?1sAsyOhKQqEXeiW4AVC+rvlH4fmtnyumR41U603iPwFeMOu+ZS7Qv+jBkfJ/?=
+ =?us-ascii?Q?CHCN94DDzJF1FFJKD1Ih/n1TUHLH+7JulMJHdfUVflQ+cE48zlTYwZUDEZWU?=
+ =?us-ascii?Q?m4W5ASFVeEH/mM0S61/JuocPTmtB38bSycR9DuC71JhdACnFr11p7Y49lIy1?=
+ =?us-ascii?Q?7zB878mr5t7QHGE0zufGrjcJHdD9fYSCQgQHCBdrdCQSaKf/KHo+dgchUsLH?=
+ =?us-ascii?Q?ICnmmFjSXe1aR5rEX8lk/mjme6BsKrKttRu9armv8cG9mWX1LRtnneTy+jTt?=
+ =?us-ascii?Q?TFALY92cISbya3j7RZ4XXrwB48W1KnE=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 045cf1be-b069-4303-cf7a-08da2280f4aa
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6477.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2022 03:50:48.4683
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: k2VFpB11RkDzI7tGK/0CEMC9AlgDsuBb0IwbXeW+M2kHTVYe+xkv+mWOpDYuZY8fxE7bfrVL5iKbtfu1rnD5kw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5025
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,144 +117,68 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 2022-03-30 06:54, Heiner Kallweit wrote:
-> On 23.03.2022 21:33, Heiner Kallweit wrote:
->> On 21.03.2022 09:34, Krzysztof Kozlowski wrote:
->>> On 18/03/2022 21:50, Robin Murphy wrote:
->>>> On 2022-02-25 21:13, Heiner Kallweit wrote:
->>>>> Add a YAML schema binding for TM1628 auxdisplay
->>>>> (7/11-segment LED) controller.
->>>>>
->>>>> This patch is partially based on previous work from
->>>>> Andreas Färber <afaerber@suse.de>.
->>>>>
->>>>> Co-developed-by: Andreas Färber <afaerber@suse.de>
->>>>> Signed-off-by: Andreas Färber <afaerber@suse.de>
->>>>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
->>>>> ---
->>>>> v5:
->>>>> - add vendor prefix to driver-specific properties
->>>>> ---
->>>>>    .../bindings/auxdisplay/titanmec,tm1628.yaml  | 92 +++++++++++++++++++
->>>>>    1 file changed, 92 insertions(+)
->>>>>    create mode 100644 Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml b/Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml
->>>>> new file mode 100644
->>>>> index 000000000..2a1ef692c
->>>>> --- /dev/null
->>>>> +++ b/Documentation/devicetree/bindings/auxdisplay/titanmec,tm1628.yaml
->>>>> @@ -0,0 +1,92 @@
->>>>> +# SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
->>>>> +%YAML 1.2
->>>>> +---
->>>>> +$id: http://devicetree.org/schemas/auxdisplay/titanmec,tm1628.yaml#
->>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>> +
->>>>> +title: Titan Micro Electronics TM1628 LED controller
->>>>> +
->>>>> +maintainers:
->>>>> +  - Andreas Färber <afaerber@suse.de>
->>>>> +  - Heiner Kallweit <hkallweit1@gmail.com>
->>>>> +
->>>>> +allOf:
->>>>> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
->>>>> +
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    const: titanmec,tm1628
->>>>> +
->>>>> +  reg:
->>>>> +    maxItems: 1
->>>>> +
->>>>> +  titanmec,grid:
->>>>> +    description:
->>>>> +      Mapping of display digit position to grid number.
->>>>> +      This implicitly defines the display size.
->>>>> +    $ref: /schemas/types.yaml#/definitions/uint8-array
->>>>> +    minItems: 1
->>>>> +    maxItems: 7
->>>>> +
->>>>> +  titanmec,segment-mapping:
->>>>> +    description:
->>>>> +      Mapping of 7 segment display segments A-G to bit numbers 1-12.
->>>>> +    $ref: /schemas/types.yaml#/definitions/uint8-array
->>>>> +    minItems: 7
->>>>> +    maxItems: 7
->>>>> +
->>>>> +  "#address-cells":
->>>>> +    const: 2
->>>>> +
->>>>> +  "#size-cells":
->>>>> +    const: 0
->>>>> +
->>>>> +required:
->>>>> +  - compatible
->>>>> +  - reg
->>>>
->>>> Would it be fair to say that "spi-lsb-first" and "spi-3wire" are also
->>>> required? The chips aren't configurable so won't exactly be usable any
->>>> other way. Furthermore I believe the transmission format actually works
->>>> out equivalent to SPI mode 3, so should warrant "spi-cpha" and
->>>> "spi-cpol" as well.
->>>>
->>>>> +
->>>>> +patternProperties:
->>>>> +  "^.*@[1-7],([1-9]|1[0-6])$":
->>>>> +    type: object
->>>>> +    $ref: /schemas/leds/common.yaml#
->>>>> +    unevaluatedProperties: false
->>>>> +    description: |
->>>>> +      Properties for a single LED.
->>>>> +
->>>>> +    properties:
->>>>> +      reg:
->>>>> +        description: |
->>>>> +          1-based grid number, followed by 1-based segment bit number.
->>>>> +        maxItems: 1
->>>>> +
->>>>> +    required:
->>>>> +      - reg
->>>>
->>>> I'm concerned that this leaves us no room to support the additional
->>>> keypad functionality in future. Having now double-checked a datasheet,
->>>> the inputs are also a two-dimensional mux (sharing the segment lines),
->>>> so the device effectively has two distinct but numerically-overlapping
->>>> child address spaces - one addressed by (grid,segment) and the other by
->>>> (segment,key).
->>>>
->>>> Rob, Krysztof, any thoughts on the best DT idiom to leave accommodation
->>>> for that? I'm thinking either require an intermediate node to contain
->>>> each notional address space, or perhaps add another leading address cell
->>>> to select between them? I don't believe any of these things have further
->>>> functionality beyond that.
->>>
->>> I think intermediate nodes - leds, keys - are more appropriate, because
->>> it is self-describing. Additional address space number would require
->>> decoding this "0" or "1" into LED/key. For complex devices - like PMICs
->>> with regulators, RTC and clocks - we already have such patterns.
->>>
->> Then it's just the question who can implement such an intermediate node
->> based on what has been done so far.
->>
-> As it is now it seems we end up with empty hands again and have to wait
-> further two years for the next one to make an attempt.
-> That's a pity because for most users the relevant use cases are supported.
+Add DT Binding doc for semtech sx1301
 
-Or, y'know, we could just reach a productive conclusion rather than 
-doom-and-gloom catastrophising. I apologise for not having much time for 
-non-work-related kernel hacking at the moment, but it didn't seem 
-particularly urgent to follow up on this in the middle of a merge window 
-anyway. In the course of helpfully being left to address my own review 
-feedback, I did eventually get round to implementing the intermediate 
-"leds" node[1] last weekend, but having now stumbled across the 
-matrix-keymap helpers and common "linux,keymap" property, I'm personally 
-inclined to think that that's even cleaner than a "keys" node with 
-children that we'd have to write more parsing code for, and thus may 
-well make the whole intermediate node notion moot anyway. If only anyone 
-had pointed it out sooner...
+Signed-off-by: Changming Huang <jerry.huang@nxp.com>
+---
+changes in v3:
+  - add the dt-bindings
 
-Thanks,
-Robin.
+ .../bindings/spi/semtech,sx1301.yaml          | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/semtech,sx1301.yaml
 
-[1] https://gitlab.arm.com/linux-arm/linux-rm/-/commits/tm1628
+diff --git a/Documentation/devicetree/bindings/spi/semtech,sx1301.yaml b/Documentation/devicetree/bindings/spi/semtech,sx1301.yaml
+new file mode 100644
+index 000000000000..f65fb5809218
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/semtech,sx1301.yaml
+@@ -0,0 +1,45 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/semtech,sx1301.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Semtech sx1301 devicetree bindings
++
++allOf:
++  - $ref: "spi-controller.yaml"
++
++maintainers:
++  - Changming Huang <jerry.huang@nxp.com>
++
++properties:
++  compatible:
++    const: semtech,sx1301
++
++  reg:
++    maxItems: 1
++
++  spi-max-frequency: true
++
++  fsl,spi-cs-sck-delay: true
++
++  fsl,spi-sck-cs-delay: true
++
++required:
++  - compatible
++  - reg
++  - spi-max-frequency
++
++additionalProperties: false
++
++examples:
++  - |
++    mikrobus@0 {
++      compatible = "semtech,sx1301";
++      reg = <0>;
++      spi-max-frequency = <2000000>;
++      fsl,spi-cs-sck-delay = <1000000>;
++      fsl,spi-sck-cs-delay = <50>;
++    };
++
++...
+-- 
+2.25.1
+
