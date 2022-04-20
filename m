@@ -2,48 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 544C1509237
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Apr 2022 23:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A5550925C
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Apr 2022 23:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382586AbiDTVoC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 Apr 2022 17:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
+        id S234964AbiDTVxP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 Apr 2022 17:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382616AbiDTVoB (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Apr 2022 17:44:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517C14550D
-        for <linux-spi@vger.kernel.org>; Wed, 20 Apr 2022 14:41:14 -0700 (PDT)
+        with ESMTP id S1357179AbiDTVxO (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Apr 2022 17:53:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AE42ED6B
+        for <linux-spi@vger.kernel.org>; Wed, 20 Apr 2022 14:50:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CC213B82194
-        for <linux-spi@vger.kernel.org>; Wed, 20 Apr 2022 21:41:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B471C385A8;
-        Wed, 20 Apr 2022 21:41:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1500F61993
+        for <linux-spi@vger.kernel.org>; Wed, 20 Apr 2022 21:50:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 79610C385A0;
+        Wed, 20 Apr 2022 21:50:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650490871;
-        bh=ZJASXpwSw7EWB3yJ2BJMT6aN8Jg1dz8Snmgwr1sKRVs=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=FMvsoVGcPrcYM4OlyvF2c0VoWCVd9AMCEaR4+ir5agnFPA8LH1TFactw1hb1tDZhQ
-         BWGY6vrEV1UGKr8rrUyWw6KUFA7eT2L075iXvOK+N6UM36KLAKwPZ/YmIEIPerQhcU
-         DOHL+CUHBYHnIblLJaFBdgH5MZ2wxLYhI5jBkfo4lziTqNCwKX0w0Ipuuhlf90NbCv
-         Z8wjjKaO2XolaUDzXRryJF0l4HWWjXXqbpl15rcR7CbsrXancSKeerCPeg/zrsNIWw
-         8FmkyJh8EANOshDg9CFapWSmjYx5sxB/bnzd7jNzpeQO0jVtQShqRtbIVOWu5GeZmd
-         XS0Ta2EuS5kYg==
-From:   Mark Brown <broonie@kernel.org>
-To:     mika.westerberg@linux.intel.com
-Cc:     michael@walle.cc, boris.brezillon@collabora.com,
-        tudor.ambarus@microchip.com, hongli.li@intel.com, p.yadav@ti.com,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
-In-Reply-To: <20220420104350.19510-1-mika.westerberg@linux.intel.com>
-References: <20220420104350.19510-1-mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH v2] spi: intel: Implement dirmap hooks
-Message-Id: <165049086976.143449.15707260832201661600.b4-ty@kernel.org>
-Date:   Wed, 20 Apr 2022 22:41:09 +0100
-MIME-Version: 1.0
+        s=k20201202; t=1650491426;
+        bh=fvaHBdxleNALBIqIWTOM+O8zIV2WxFDWk+0duJ2+EDU=;
+        h=Subject:From:Date:To:From;
+        b=Dl4NajETOh8L7Ia2UN110feNyImLe4k+ytXSHJusZNDc5Hq5OIVlMJ60sxSZE+/dD
+         w8mWl4FT+wVyn6xwxqvOP0k+C53QFkj4PlpvUY7461t5hTVc4v3oYtnojdLkyFENLv
+         HTWENAY4ORBVpbOo0jnnu2Pk4fFLOngO93rcozdPEQJRx1i8WzHlj5ZlyF4W39+IZX
+         X73ufhnnejQOCZ1N1ez39+mRt680g4xAsDE/1F3fKcihepBSroiwczprTYVCvJ/OG0
+         vg+ZYFsjiRUT4S1pWSNnbTNQW3b43qhXgBWmL1UyLAWLJpTQmeDpsNGleT/hf7GKjr
+         g+fmNdN5uRktw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 52282E7399D;
+        Wed, 20 Apr 2022 21:50:26 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <165049142628.27071.10205626903836117084.git-patchwork-summary@kernel.org>
+Date:   Wed, 20 Apr 2022 21:50:26 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,40 +51,23 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 20 Apr 2022 13:43:50 +0300, Mika Westerberg wrote:
-> Currently the driver goes over the supported opcodes list each time
-> ->exec_op() is called and finds the suitable for the given operation.
-> This consumes unnecessary amount of CPU cycles because the operation is
-> always the same. For this reason populate dirmap hooks for the driver so
-> that we cache the selected operation and then simply call it on each
-> read/write.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: MediaTek SPI controller cleanups and documentation
+  Submitter: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=629992
+  Lore link: https://lore.kernel.org/r/20220407114428.167091-1-angelogioacchino.delregno@collabora.com
+    Patches: [v2,1/8] spi: mt65xx: Simplify probe function with devm_spi_alloc_master
+             [v2,2/8] spi: mt65xx: Switch to device_get_match_data()
 
-Thanks!
 
-[1/1] spi: intel: Implement dirmap hooks
-      commit: c2b5a40c9e50651a29ee9d110f7ebc41b8720efa
+Total patches: 2
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
