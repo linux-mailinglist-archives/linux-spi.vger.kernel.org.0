@@ -2,46 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09242509236
+	by mail.lfdr.de (Postfix) with ESMTP id 544C1509237
 	for <lists+linux-spi@lfdr.de>; Wed, 20 Apr 2022 23:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382602AbiDTVoA (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 20 Apr 2022 17:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
+        id S1382586AbiDTVoC (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 20 Apr 2022 17:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382624AbiDTVn6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Apr 2022 17:43:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83721488A7;
-        Wed, 20 Apr 2022 14:41:10 -0700 (PDT)
+        with ESMTP id S1382616AbiDTVoB (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 20 Apr 2022 17:44:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517C14550D
+        for <linux-spi@vger.kernel.org>; Wed, 20 Apr 2022 14:41:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17B9D61952;
-        Wed, 20 Apr 2022 21:41:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDCC7C385A0;
-        Wed, 20 Apr 2022 21:41:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC213B82194
+        for <linux-spi@vger.kernel.org>; Wed, 20 Apr 2022 21:41:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B471C385A8;
+        Wed, 20 Apr 2022 21:41:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650490869;
-        bh=4o+rRgdBUkHNDZ6Md2nImSgDPD+EYrSKUa+rPtXadeI=;
+        s=k20201202; t=1650490871;
+        bh=ZJASXpwSw7EWB3yJ2BJMT6aN8Jg1dz8Snmgwr1sKRVs=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=ONozDncWv/9yq2y5PKHzUcm2FYVPLlZnFOsIeN0bbgcRTTSRX2WoBwy42E07hdiE6
-         NlPH2ISCS3bnvFwDYqDGEXFkpgLr/mj78xJ7eJCbQLpaNCcJKoeF+G0mBegJNxuTBT
-         fRdUokWLXUpIWbkoVRYuaWoy557fpTDM4yveQ/p51dleTWq5HjqOiCvCf6s0V0S/zq
-         G4mcJhYw4g33cMfkO3pX3p3nvCeX9mqBB9V1yuKlQhpVArMRtzCB4VGNKo5NStiEax
-         Ot4k1UyZ6tNtdOQn9ujbJrZI6C8bOWgx5NfpICM4NFaYrlwqErYF2iLO6jatceYW7f
-         dM3UXWBDPSALw==
+        b=FMvsoVGcPrcYM4OlyvF2c0VoWCVd9AMCEaR4+ir5agnFPA8LH1TFactw1hb1tDZhQ
+         BWGY6vrEV1UGKr8rrUyWw6KUFA7eT2L075iXvOK+N6UM36KLAKwPZ/YmIEIPerQhcU
+         DOHL+CUHBYHnIblLJaFBdgH5MZ2wxLYhI5jBkfo4lziTqNCwKX0w0Ipuuhlf90NbCv
+         Z8wjjKaO2XolaUDzXRryJF0l4HWWjXXqbpl15rcR7CbsrXancSKeerCPeg/zrsNIWw
+         8FmkyJh8EANOshDg9CFapWSmjYx5sxB/bnzd7jNzpeQO0jVtQShqRtbIVOWu5GeZmd
+         XS0Ta2EuS5kYg==
 From:   Mark Brown <broonie@kernel.org>
-To:     angelogioacchino.delregno@collabora.com
-Cc:     linux-mediatek@lists.infradead.org, nfraprado@collabora.com,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
-        matthias.bgg@gmail.com, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-In-Reply-To: <20220407114428.167091-1-angelogioacchino.delregno@collabora.com>
-References: <20220407114428.167091-1-angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v2 0/8] MediaTek SPI controller cleanups and documentation
-Message-Id: <165049086768.143449.12761284074720810678.b4-ty@kernel.org>
-Date:   Wed, 20 Apr 2022 22:41:07 +0100
+To:     mika.westerberg@linux.intel.com
+Cc:     michael@walle.cc, boris.brezillon@collabora.com,
+        tudor.ambarus@microchip.com, hongli.li@intel.com, p.yadav@ti.com,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
+In-Reply-To: <20220420104350.19510-1-mika.westerberg@linux.intel.com>
+References: <20220420104350.19510-1-mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH v2] spi: intel: Implement dirmap hooks
+Message-Id: <165049086976.143449.15707260832201661600.b4-ty@kernel.org>
+Date:   Wed, 20 Apr 2022 22:41:09 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,13 +53,13 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Thu, 7 Apr 2022 13:44:20 +0200, AngeloGioacchino Del Regno wrote:
-> This series performs some cleanups to the spi-mt65xx driver, removing
-> all gotos, simplifying the probe function and adding kerneldoc to the
-> driver structures.
-> 
-> Changes in v2:
-> - Rebased over next-20220407 for new spimem commits
+On Wed, 20 Apr 2022 13:43:50 +0300, Mika Westerberg wrote:
+> Currently the driver goes over the supported opcodes list each time
+> ->exec_op() is called and finds the suitable for the given operation.
+> This consumes unnecessary amount of CPU cycles because the operation is
+> always the same. For this reason populate dirmap hooks for the driver so
+> that we cache the selected operation and then simply call it on each
+> read/write.
 > 
 > [...]
 
@@ -70,22 +69,8 @@ Applied to
 
 Thanks!
 
-[1/8] spi: mt65xx: Simplify probe function with devm_spi_alloc_master
-      commit: ace145802350e0f8eec4a40522a1b1d5a4f90114
-[2/8] spi: mt65xx: Switch to device_get_match_data()
-      commit: 7f7cdef7288a7da117a54249b680b04f503f8a67
-[3/8] spi: mt65xx: Add and use pointer to struct device in mtk_spi_probe()
-      commit: 6b4440584b92851af44b235ad825c8554dd143c0
-[4/8] spi: mt65xx: Move clock parent setting to remove clock disable gotos
-      commit: 5dee8bb8d14dc7536cec58cc1d94148dce89dfc5
-[5/8] spi: mt65xx: Move pm_runtime_enable() call to remove all gotos
-      commit: 5088b3136439896c2858173402f32dada4db69f6
-[6/8] spi: mt65xx: Simplify probe function with dev_err_probe()
-      commit: 20cdbb80095711decef6401f839aca8476be1910
-[7/8] spi: mt65xx: Add kerneldoc for driver structures
-      commit: 3c5cd2e23fe4c840b437496e131e1f74afaebbbd
-[8/8] spi: mt65xx: Fix definitions indentation
-      commit: 8e8a9e364a3b3053f689a649df1107e61b9e3bed
+[1/1] spi: intel: Implement dirmap hooks
+      commit: c2b5a40c9e50651a29ee9d110f7ebc41b8720efa
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
