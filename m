@@ -2,131 +2,89 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD3B50A3D3
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Apr 2022 17:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E9850A444
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Apr 2022 17:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240095AbiDUPTd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 Apr 2022 11:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
+        id S233603AbiDUPe0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 Apr 2022 11:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384968AbiDUPTd (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Apr 2022 11:19:33 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94CB36E1D;
-        Thu, 21 Apr 2022 08:16:42 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        with ESMTP id S1390157AbiDUPcb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Apr 2022 11:32:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2459443FB;
+        Thu, 21 Apr 2022 08:29:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id AEC7E221D4;
-        Thu, 21 Apr 2022 17:16:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1650554200;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=odKtWziO2WG/lqEMmbPEUMEcrAn1teMSt8jVk5MPZY8=;
-        b=EJS8v/SJvQW/cid+n5Ivz1rgMJEjaoOyH1ZMDe0L+cfpbecS+YBXTqL64X660RmcRNXU0f
-        +Ycsy0L/nyTddJT1877XYmyZsJVQpamG4p9go5FuyKtAqYcN/zzOvX7Y1jNXtiU1S1ukux
-        2XDZj2k5b2Ml5wrYzYi3COTdPJyLMh0=
+        by ams.source.kernel.org (Postfix) with ESMTPS id 518FAB826C3;
+        Thu, 21 Apr 2022 15:29:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D584C385A1;
+        Thu, 21 Apr 2022 15:29:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650554977;
+        bh=EKJGYb/V8GuIQV2zCWM7O0DO+UDppn4OJfYvUz7po+4=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=KBNkMN0czT2PfINytqkWxw1iGN4gSdEllXA54JqEFZuLV9p9bixBRSxFeZKAU9/0s
+         7BPtvbembm1+MwxHSY0i4mtQ5XPeZ0WRnQD38MTtlsrQCFPxPHuZE+AIz7jnHaG8f8
+         0FP9oiLMkEk3tFOFZBrJ2XzSi86RFOCp9KzTYcwj8ozU0LDgvNRbYPG37sctnCBvRs
+         +kXi5SWfTAEmJ+q6KKcefT+QlZEEl8HsxdaknJpbDBAUojHtkGtOZL4Y/o9eHxqqaU
+         POI5VH07vxnQHLGMsfaPBIKlnmrAPnMgkDxdJLxrVHtViSsGnXnq5waTbQnfV4qDB1
+         YnS1BncQVESGg==
+From:   Mark Brown <broonie@kernel.org>
+To:     p.yadav@ti.com
+Cc:     tudor.ambarus@microchip.com, linux-spi@vger.kernel.org,
+        tkuw584924@gmail.com, michael@walle.cc, miquel.raynal@bootlin.com,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220420102022.3310970-1-p.yadav@ti.com>
+References: <20220420102022.3310970-1-p.yadav@ti.com>
+Subject: Re: [PATCH v2] spi: spi-mem: check if data buffers are on stack
+Message-Id: <165055497529.347641.5916575094061881222.b4-ty@kernel.org>
+Date:   Thu, 21 Apr 2022 16:29:35 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 21 Apr 2022 17:16:40 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Rob Herring <robh@kernel.org>
-Cc:     krzysztof.kozlowski@linaro.org, broonie@kernel.org,
-        devicetree@vger.kernel.org, jerry.huang@nxp.com,
-        krzysztof.kozlowski+dt@linaro.org, leoyang.li@nxp.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, shawnguo@kernel.org,
-        Vladimir Oltean <olteanv@gmail.com>
-Subject: Re: [EXT] Re: [PATCH 1/2 v4] dt-bindings: dspi: added for semtech
- sx1301
-In-Reply-To: <YmFo+EntwxIsco/t@robh.at.kernel.org>
-References: <f6086989-a4c1-4223-fad0-79bd5719432e@linaro.org>
- <20220421094421.288672-1-michael@walle.cc>
- <YmFo+EntwxIsco/t@robh.at.kernel.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <30f2f62406bab8225cc88013b414016d@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Am 2022-04-21 16:23, schrieb Rob Herring:
-
-> What's needed here is a connector node (and driver) for the mikrobus
-> socket. The connector node's purpose is to decouple the host DT from
-> add-on board overlay DT. Something like this:
-
-Funny I had a similar idea to have a connector with all the
-properties, but I failed to see how that would be of any help.
-
-Do you mind an example of such an overlay? Judging by the spi
-and i2c subnode, I guess it will amend the connector node and
-fill in it's devices?
-
-And all the child device properties will reference the connector,
-correct?
-
-> connector {
-> 	// And a more specific compatible if pins can have alt funcs?
-> 	// Spec version needed?
-> 	compatible = "mikrobus-socket";
+On Wed, 20 Apr 2022 15:50:22 +0530, Pratyush Yadav wrote:
+> The buffers passed in the data phase must be DMA-able. Programmers often
+> don't realise this requirement and pass in buffers that reside on the
+> stack. This can be hard to spot when reviewing code. Reject ops if their
+> data buffer is on the stack to avoid this.
 > 
-> 	// Will need regulators defined if child devices expect
-> 	// regulators
-> 	vcc-33-supply = <&reg33>;
-> 	vcc-5-supply = <&reg5v>;
 > 
-> 	i2c-parent = <&i2c1>; // Already a defined property
-> 	spi-parent = <&spi0>; // New
 
-uart/serial needed too?
+Applied to
 
-> 
-> 	// RST pin
-> 	reset-gpios = <&gpio 4 0>;
-> 
-> 	// remap 'INT' (index 0) to host interrupt
-> 	#interrupt-cells = <2>;
-> 	#address-cells = <0>;
-> 	interrupt-map = <0 0 &gpio 3 0>;
-> 
-> 	spi {
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-For example:
+Thanks!
 
-my-device@0 {
-   reg = <0>;  // really needed? there is only one SPI CS line
-   compatible = "my-device";
-   reset-gpios = // may be left unset if it's optional, but what
-                 // what if it is a required property and in hardware
-                 // its connected to the RST pin of the module?
-   other-gpios = <&connector 2>;
-   vdd-supply = // what comes here? <&connector VCC_33>?
-   interrupts-extended = <&connector 0 ..>;
-}
+[1/1] spi: spi-mem: check if data buffers are on stack
+      commit: 8868c03f3ca584abec7bb53d6c3f7c5ab6b60949
 
--michael
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-> 		//devices
-> 	};
-> 
-> 	i2c {
-> 
-> 	};
-> };
-> 
-> The DT spec defines 'foo-map' properties extending interrupt-map.
-> Currently only GPIO is defined. We might want to do the same thing for
-> PWM. Or we make the connector node both a PWM consumer and provider.
-> 
-> Rob
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
