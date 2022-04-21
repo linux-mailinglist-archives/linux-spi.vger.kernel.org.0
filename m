@@ -2,48 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E9850A444
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Apr 2022 17:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9426450A43F
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Apr 2022 17:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233603AbiDUPe0 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Thu, 21 Apr 2022 11:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
+        id S1389017AbiDUPd7 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Thu, 21 Apr 2022 11:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390157AbiDUPcb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Apr 2022 11:32:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2459443FB;
-        Thu, 21 Apr 2022 08:29:39 -0700 (PDT)
+        with ESMTP id S1390147AbiDUPd4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Thu, 21 Apr 2022 11:33:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F029FC9
+        for <linux-spi@vger.kernel.org>; Thu, 21 Apr 2022 08:31:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 518FAB826C3;
-        Thu, 21 Apr 2022 15:29:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D584C385A1;
-        Thu, 21 Apr 2022 15:29:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4DD6CB826C5
+        for <linux-spi@vger.kernel.org>; Thu, 21 Apr 2022 15:31:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 05315C385A8;
+        Thu, 21 Apr 2022 15:31:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650554977;
-        bh=EKJGYb/V8GuIQV2zCWM7O0DO+UDppn4OJfYvUz7po+4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=KBNkMN0czT2PfINytqkWxw1iGN4gSdEllXA54JqEFZuLV9p9bixBRSxFeZKAU9/0s
-         7BPtvbembm1+MwxHSY0i4mtQ5XPeZ0WRnQD38MTtlsrQCFPxPHuZE+AIz7jnHaG8f8
-         0FP9oiLMkEk3tFOFZBrJ2XzSi86RFOCp9KzTYcwj8ozU0LDgvNRbYPG37sctnCBvRs
-         +kXi5SWfTAEmJ+q6KKcefT+QlZEEl8HsxdaknJpbDBAUojHtkGtOZL4Y/o9eHxqqaU
-         POI5VH07vxnQHLGMsfaPBIKlnmrAPnMgkDxdJLxrVHtViSsGnXnq5waTbQnfV4qDB1
-         YnS1BncQVESGg==
-From:   Mark Brown <broonie@kernel.org>
-To:     p.yadav@ti.com
-Cc:     tudor.ambarus@microchip.com, linux-spi@vger.kernel.org,
-        tkuw584924@gmail.com, michael@walle.cc, miquel.raynal@bootlin.com,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220420102022.3310970-1-p.yadav@ti.com>
-References: <20220420102022.3310970-1-p.yadav@ti.com>
-Subject: Re: [PATCH v2] spi: spi-mem: check if data buffers are on stack
-Message-Id: <165055497529.347641.5916575094061881222.b4-ty@kernel.org>
-Date:   Thu, 21 Apr 2022 16:29:35 +0100
-MIME-Version: 1.0
+        s=k20201202; t=1650555064;
+        bh=JTYQxLySbDF73cSHXX+3+wViuw8+6qclZcxBzdYo85I=;
+        h=Subject:From:Date:To:From;
+        b=EPBrxU9Aeos1p+KJCPiULDjwp0I3Lj40+t6vsJ8pFPpFnbHoTEdx1/x7NEsPLYDIa
+         hYYN9F1BI1sPcnHvHxDRHwCoPua5xoG5aKFyGmS0jd7cqoCbXf0sD+M1D4P/9qas+p
+         7oWu0GB3SxmtSRO9+vQkw7zZp2mU4Iszg5XghLHrjK01gPMo5Wnpembh9l6gI9uhbt
+         W/eIq8qzugesSbor0xMqMDcUQGnLqb/tDorCi1iCcsPIxL473A5S7b37B915xzyVuk
+         ONchUpo6Qaqq5WFbBVKWHVPnCZtv24S4CpIpEnYLkIWlGmnPG/cAIhEuKPQucIztCD
+         8OcSdxIDbNY2Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E54A1E85D90;
+        Thu, 21 Apr 2022 15:31:03 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <165055506393.23603.7054816891294663372.git-patchwork-summary@kernel.org>
+Date:   Thu, 21 Apr 2022 15:31:03 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,38 +51,22 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 20 Apr 2022 15:50:22 +0530, Pratyush Yadav wrote:
-> The buffers passed in the data phase must be DMA-able. Programmers often
-> don't realise this requirement and pass in buffers that reside on the
-> stack. This can be hard to spot when reviewing code. Reject ops if their
-> data buffer is on the stack to avoid this.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: [v2] spi: spi-mem: check if data buffers are on stack
+  Submitter: Pratyush Yadav <p.yadav@ti.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=633730
+  Lore link: https://lore.kernel.org/r/20220420102022.3310970-1-p.yadav@ti.com
 
-Thanks!
 
-[1/1] spi: spi-mem: check if data buffers are on stack
-      commit: 8868c03f3ca584abec7bb53d6c3f7c5ab6b60949
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
