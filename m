@@ -2,51 +2,51 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A2A50C578
-	for <lists+linux-spi@lfdr.de>; Sat, 23 Apr 2022 02:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD6250C588
+	for <lists+linux-spi@lfdr.de>; Sat, 23 Apr 2022 02:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbiDVXxF (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 22 Apr 2022 19:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
+        id S231211AbiDVXxr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 22 Apr 2022 19:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbiDVXww (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 Apr 2022 19:52:52 -0400
+        with ESMTP id S231425AbiDVXxf (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 22 Apr 2022 19:53:35 -0400
 Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98CEBE1B;
-        Fri, 22 Apr 2022 16:49:57 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 200063201F73;
-        Fri, 22 Apr 2022 19:49:56 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7EAC13A4F2;
+        Fri, 22 Apr 2022 16:50:39 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id C9E0E320187F;
+        Fri, 22 Apr 2022 19:50:37 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 22 Apr 2022 19:49:57 -0400
+  by compute3.internal (MEProxy); Fri, 22 Apr 2022 19:50:38 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1650671395; x=
-        1650757795; bh=vKy+K0ni749aGVp+1oUC/yUMfQ0rzndD82fCAttAbls=; b=I
-        QUFboe/5AQmRcwyaB4Nb8DjhXr3/OX+EGDDjQEJS5FEGvBf9iRDPfM/GQ+rb2eLv
-        QUsxcPKTECFn4w47l6xFooMRparSFqIh4NCG4rhT6+zT+oV9D6fpj/ZbJAv+8e5t
-        OEI0Skw+gP9+KdKL+1u1Qr556bNkPm6v0rCoOgqN3x3yTYEvGPGLdpO4J58JXfoy
-        omQbr4AOz2IJni+uGdRL1Sg/6CQDcp3hehvOQeOTF3tLVf4qrIOj2d8dw0eXN3XZ
-        Dt4LYK58KfCekA8amlZfZkQwZ5yerRQO0smpzxoBk/3ngc64AqWpbzlP28KKtgVn
-        BqFUlWrmGeNxHpQSzoUEw==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1650671437; x=
+        1650757837; bh=JTmfJSoBxmkYutkVl8SbHqIqpWLHfszZQf/Bky78BUw=; b=Q
+        3oEU4+dAhiRsgGY/yqjcz/SNuzpKZs7F0rBJ4of1XHv2NgEjm3xQbdvt2EaD70du
+        2znxkfjerkhvzM0c0LtrbwlhcofCt05U8GdbpIRATUbciRyg9VnFKZvzJxH9tHAM
+        lsdEJAhZ1zWc1W4OreH3lYupHaHNc6P3uRW4+kJzJbzGBs7/1XS90l3mAJQ+sbTp
+        932cgeLvIHE/4Mj90U4H/Rb13zfRR7Q6eAwz1HHQ6tda/n5sR/YLIoGc9yhy/v+x
+        F9WuUgIsEhw8XGqD+Mm+GswFV/DoHZVNkWF9g5gc+OIM7d53Bz92Pr4zmhMjrfj/
+        s1khZI/6j6J+I9bFabxjw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1650671395; x=1650757795; bh=vKy+K0ni749aG
-        Vp+1oUC/yUMfQ0rzndD82fCAttAbls=; b=T9ewHHHZEsqAyTYuiyjezBFUP39vE
-        gkyPYoombSoCnbFKeGbM+06AiZXm0Nz9XWrhDNLYQvXvXW/lnAxgEYg6bAPdnkb/
-        v3OroeCELRX5gbOcF1AjJytWbiuIT+EH1jQVV0xqhUE5gzEZWwIXcikxUQb/B2x8
-        JiA7DlzwEtscmeuyX9ziXICMsZZcNv9Y8ZGH+vLsjZ0FBXCxw8FimZrrtuYDEpp9
-        +BnSLOxwaaqWFDYrGDZIXL0qWbK8sliWjeREKliNasgZRR3UWz1NdMeUfw8EckhT
-        XGzmS8SNDp7Bp1YBEPqwOUpMDuleNGbA28wGyCuGd3mOyuMIw2q+m6SMA==
-X-ME-Sender: <xms:Iz9jYpVHAElTXT1A04lzN_2IAyaIrdg6vAjuggnSo78INErm_nSJRg>
-    <xme:Iz9jYpl0wNCKI6zZ-7ceQ7XD0qJKrVX9TjYcP6hprLNCOGmMOAff8HqPgGWJyjs1s
-    PfbASJN6mBYASdMpQ>
-X-ME-Received: <xmr:Iz9jYlZzH-13ZBlo8zJjOk5utsmyXxku-bSuoTAMHrp1vGJnXQkqGGZ-3QuYClamA-8aymO0KpLtN1Tl7BcRrGxsblmBIA7JCKYSyImxETYsYbwe9Geb5Cnh2Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtdehgddvjecutefuodetggdotefrodftvf
+        :x-sasl-enc; s=fm1; t=1650671437; x=1650757837; bh=JTmfJSoBxmkYu
+        tkVl8SbHqIqpWLHfszZQf/Bky78BUw=; b=O1tVusST0IwPSKIFoNUXc7v8+zDzS
+        eSc7DzTJBup2BHe68ktXVGjKcSN5i7kV03q0eWn4V+4DUZJT0+moqrO9MbKf3/I5
+        bm62MhKuE76XlaUj3+7xSDcQuAzc4bXIl6+4HgJ9GlJt4AWvNQ+kkAJSFza0ATWw
+        kEPdlkoK3miIUCFVuiuSkpxaftXmhXdoYd25sTMsc7hH/SuA3GEu2b+gvut7yE6i
+        N6SbHCG1uAfDDRTIT6Ct9PP3KZfYCYTZoSbk7qVx5SZ4N2ZIRDmpiSWq45ujG8v4
+        UGRtzVRlm5FItHt4IaHSlL3BJmVO92rQhDgKOyIfSt/lhJjYYJ0xTAOvA==
+X-ME-Sender: <xms:TT9jYgAzLY8FgpToDVv3-tzYXCe4i0fbLZa3NJgZN9HrYW0zx6zqag>
+    <xme:TT9jYijTBt72XsVcN1rAagjh1dfbfdVmKzQLZWa9t892yV-7JoCf15hWQKfr_gjFG
+    PgDhLmRTBQdgjB2ew>
+X-ME-Received: <xmr:TT9jYjkw3vo8QKb4xv2GYU0agPDqFDNF8-v0R32fRWnOkzSWfb9-eFH0Y6jjvkuT1Jj6m3XzWsA1yJcPomLb0jO4ngl7H2pucl7j9LT21thCkM_rhXbRmFRm3w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtdehgddvkecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
@@ -54,14 +54,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtdehgddvjecutefuodetggdote
     ftrfgrthhtvghrnhepffdtveekvdegkeeuueetgfetffeileevudekuefhheelvdfhiedt
     heduhfduhefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:Iz9jYsXLLmQ3lKYPeeGB2AceYi-2C_hxLtiSZknptl96WTp3ji6j2w>
-    <xmx:Iz9jYjmF3565fz7a2MPubOYPkVdycAn-J1gOcr01J0ZxAEdZFs1keQ>
-    <xmx:Iz9jYpeLTzYPRyEpDwN-19gMEgp1OsJ63eUNZUxusR_1H-XjEHaRYg>
-    <xmx:Iz9jYshn0h9669BfJZkrI9fFw5wSGCcd24HPTgWgZrtJYnV21C2ihA>
+X-ME-Proxy: <xmx:TT9jYmwqXZeCAV26RZNdkP9eD7pURixf6AwBnQgqlurQLRgSYLioqA>
+    <xmx:TT9jYlTcmyZUD98vg0eGnYzd2-QQqf4KkHyteCJIGvuDwaYCvcAe5w>
+    <xmx:TT9jYhbkpu5l66EoEkyb9r-gWFjGgUoakbnU8PhN5n0UCY0OumN3Eg>
+    <xmx:TT9jYi--Af9oPO7fYc76mHgfTYGsl01QxH_KZXH3w1EVKfX24t11rw>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 22 Apr 2022 19:49:54 -0400 (EDT)
-Subject: Re: [PATCH 1/4] dt-bindings: spi: sun6i: add DT bindings for
- Allwinner R329 SPI
+ 22 Apr 2022 19:50:36 -0400 (EDT)
+Subject: Re: [PATCH 2/4] spi: sun6i: change OF match data to a struct
 To:     Icenowy Zheng <icenowy@aosc.io>, Mark Brown <broonie@kernel.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -70,14 +69,14 @@ Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org, Icenowy Zheng <icenowy@aosc.io>
 References: <20220422155639.1071645-1-icenowy@outlook.com>
- <BYAPR20MB2472E8B10BFEF75E7950BBC0BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+ <BYAPR20MB24722F3BAFB536A8BFEC733ABCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
 From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <9ae7d1ee-4e2d-f3c1-f55f-e96b0e449b63@sholland.org>
-Date:   Fri, 22 Apr 2022 18:49:53 -0500
+Message-ID: <ccb1fcaa-640b-d485-6a6d-744398e4e130@sholland.org>
+Date:   Fri, 22 Apr 2022 18:50:36 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <BYAPR20MB2472E8B10BFEF75E7950BBC0BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+In-Reply-To: <BYAPR20MB24722F3BAFB536A8BFEC733ABCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -93,36 +92,9 @@ X-Mailing-List: linux-spi@vger.kernel.org
 On 4/22/22 10:56 AM, icenowy@outlook.com wrote:
 > From: Icenowy Zheng <icenowy@aosc.io>
 > 
-> Allwinner R329 SPI has two controllers, and the second one has helper
-> functions for MIPI-DBI Type C.
-> 
-> Add compatible strings for these controllers
+> As we're adding more properties to the OF match data, convert it to a
+> struct now.
 > 
 > Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
-> ---
->  .../devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml        | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> index ca4c95345a49..6354635241fc 100644
-> --- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> @@ -21,6 +21,8 @@ properties:
->      oneOf:
->        - const: allwinner,sun6i-a31-spi
->        - const: allwinner,sun8i-h3-spi
-> +      - const: allwinner,sun50i-r329-spi
-> +      - const: allwinner,sun50i-r329-spi-dbi
 
-As far as I'm aware, the SPI portion of the DBI controller is
-register-compatible with the regular SPI controller. So I would expect using
-that as a fallback compatible for the DBI variant.
-
-Regards,
-Samuel
-
->        - items:
->            - enum:
->                - allwinner,sun8i-r40-spi
-> 
-
+Reviewed-by: Samuel Holland <samuel@sholland.org>
