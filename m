@@ -2,63 +2,102 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7263C50CB79
-	for <lists+linux-spi@lfdr.de>; Sat, 23 Apr 2022 16:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE22D50CBE1
+	for <lists+linux-spi@lfdr.de>; Sat, 23 Apr 2022 17:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbiDWO7d (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 23 Apr 2022 10:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S232663AbiDWPny (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sat, 23 Apr 2022 11:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiDWO7c (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 23 Apr 2022 10:59:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64FF7893A
-        for <linux-spi@vger.kernel.org>; Sat, 23 Apr 2022 07:56:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0406FB80688
-        for <linux-spi@vger.kernel.org>; Sat, 23 Apr 2022 14:56:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A66CEC385A5;
-        Sat, 23 Apr 2022 14:56:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650725792;
-        bh=zGlQ+zJEMKSECy147Pt5T1gpDRKNIF2e7QRQuTiO+hE=;
-        h=Subject:From:Date:To:From;
-        b=c4HjXEo28upWsHABiFco186tWduC/30Nw0H4nO3ZP2tq5X7dz2TQVsBnv67p6BPDS
-         K6V2gA247tVMX/2sQjphZykeU0vo+nKxK7US4LUT4pURrXmkErkPUED085jTEIhh2i
-         SX2+NTkCYMybFkjp8DbZj4c/fmVpDYJeZmHPKmw2q7kQzDbUrF3xFAeQTHSMJU/R/E
-         EHgT+o7Pvi9YNWd02zb+7fkh0TyqXcXk77g8V6MqGQbIUc+gZi3B2tAZj4KAFdzPCh
-         MFTGtdhaY4q5HvnppUK4lt+G/BZ8VPybSUJ/T4rP6nQ8f2VR/+3gkO5EDboMYz5cfU
-         2CPbTookviabQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 92398E7399D;
-        Sat, 23 Apr 2022 14:56:32 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S231442AbiDWPnw (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sat, 23 Apr 2022 11:43:52 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DB229810;
+        Sat, 23 Apr 2022 08:40:54 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id 12so12295817oix.12;
+        Sat, 23 Apr 2022 08:40:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YzCcIN29nkpvI2UER8MH1YJgdnaztNku+DeAKFhxois=;
+        b=bPS7lQeO3AQ9qev+LMicfaSd2cBgPI+se275RPpaKqQnwfecEh47E4m9+HnMlB0ezP
+         t6O+ZVYNxjEDkV0BNMRbjM4IEZg+d8uXP/a7Emf+4OabAtCghFGftpb1bWV1mukLZ8qV
+         RmdYuBQUi3GSKaz/iM2CI3M2EvqekDDUQVCXfQEbBLiLMYE7astTlYy5L2VXmKgRzj7B
+         CoF26P+LzBc+1L4r/Xt1dgQnJlw+HDue2aR6QLVbKodN2yN4GD24YRBW4ltHto2V2ytr
+         5lYcNiReAge0Gp2UGylopYkGkUeXhgvRDOBrifLjOVh7PF9pQeb4wISN00XN+b7O9Vf6
+         MwfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YzCcIN29nkpvI2UER8MH1YJgdnaztNku+DeAKFhxois=;
+        b=hg16LRLjvb1ddbAc7rP3ZOH/MDx/VdY2SiIbNeJv6MhAkT/0B9HUs0lXNhY0cQT2Z0
+         UNLWnOfEmfbVSZ18lF8XHceyqkuxWvDCpERWCaZHKDauG4Xsdx9vq+UzUols91cnCjzX
+         2IYUAj/PEnOnRUvRiq1QLkiDP5B8zCya19girCXq+mNv30y2zZnDIvqliwFU0WIv1+C1
+         1h7cK/z/fFqsgwG0EtwFdX0X8sb1A0Wsp3TmLy+CvjC0STavdlgJr6wCQ+vekmyxTkEQ
+         XBxdDNO7eLXVhHQ6BmlDThdZRcsEnymnsgmapkprwyrOgx3lTV5Ba2S5XV6WMFqbKpuE
+         210w==
+X-Gm-Message-State: AOAM530188DCOBOgCKR6fwFQdRDL4aKz6LPBNp8u1rm0N/qmHIX0tvPP
+        udoxDrtYtGxDIl3ErEbzudMlK2PQYVz7EKYwfaKOOqvLhMc=
+X-Google-Smtp-Source: ABdhPJwlk6fRtYGJNDzgjZpgoGD57WULA7uK7+foP97nQ4fYkNdwcgA5K3hCFaH4kNK0C2c1xex2GncA6WGM8t0RhGI=
+X-Received: by 2002:a05:6808:2396:b0:325:b6e:6cf0 with SMTP id
+ bp22-20020a056808239600b003250b6e6cf0mr943271oib.288.1650728453616; Sat, 23
+ Apr 2022 08:40:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <165072579259.6999.16819153359336296367.git-patchwork-housekeeping@kernel.org>
-Date:   Sat, 23 Apr 2022 14:56:32 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220409120819.3124209-1-gch981213@gmail.com>
+In-Reply-To: <20220409120819.3124209-1-gch981213@gmail.com>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Sat, 23 Apr 2022 23:40:41 +0800
+Message-ID: <CAJsYDVJa+UAZNKsYCDSDjjN4NYWZ987y9d_rpaKnmH-Q9i=Nxw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/5] spi: add support for Mediatek SPI-NAND controller
+To:     linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v3] Improve SPI support for Ingenic SoCs. (2022-04-23T14:38:42)
-  Superseding: [v2] Improve SPI support for Ingenic SoCs. (2022-04-22T19:09:42):
-    [v2,1/3] SPI: Ingenic: Add support for use GPIO as chip select line.
-    [v2,2/3] dt-bindings: SPI: Add bindings for new Ingenic SoCs.
-    [v2,3/3] SPI: Ingenic: Add support for new Ingenic SoCs.
+On Sat, Apr 9, 2022 at 8:08 PM Chuanhong Guo <gch981213@gmail.com> wrote:
+>
+> Mediatek has an extended version of their NAND Flash Interface which
+> has a SPI-NAND mode. In this mode, the controller can perform 1-bit
+> spi-mem ops for up-to 0xa0 bytes and typical SPI-NAND single, dual
+> and quad IO page cache ops with 2-byte address. Additionally, the
+> page cache ops can be performed with ECC and auto data formatting
+> using the ECC engine of the controller.
 
+There are two missing register configurations in this series.
+It wasn't affecting me back then because the bootloader set them
+for me. I'll send a v6 soon.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Regards,
+Chuanhong Guo
