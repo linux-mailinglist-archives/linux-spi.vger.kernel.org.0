@@ -2,65 +2,105 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB9D50CF0B
-	for <lists+linux-spi@lfdr.de>; Sun, 24 Apr 2022 05:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B07FF50D0B7
+	for <lists+linux-spi@lfdr.de>; Sun, 24 Apr 2022 11:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237999AbiDXD7d (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sat, 23 Apr 2022 23:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
+        id S238691AbiDXJJ1 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 24 Apr 2022 05:09:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235089AbiDXD73 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sat, 23 Apr 2022 23:59:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC6DDEFE
-        for <linux-spi@vger.kernel.org>; Sat, 23 Apr 2022 20:56:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ADEFDB80956
-        for <linux-spi@vger.kernel.org>; Sun, 24 Apr 2022 03:56:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4AD54C385A7;
-        Sun, 24 Apr 2022 03:56:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650772587;
-        bh=jqzndcpp+uDVyG9HidSA7XdOl0KteNZuyk4k/XjM98w=;
-        h=Subject:From:Date:To:From;
-        b=Qw6Vjn8JN/LbfbzU3ZuOVHxznrWS05rjzaVSQ0FL71BX2qjWMiUA8BwFQkNejTHxD
-         yg0CcRg3i6ftTtmkj8xXdl3p0FM6u1dlll9pB8mfOhmUB5Ae83ngf0kEPwO0F5rczr
-         LHr7F43gGcri2FYlgosUS8T/X9mgIcJ8qJEtkmGawYB53SgtDBAHhDNi3xSs6Re9fi
-         t6zYpJwKiHVd7xt/b4NbSey/xwuoUiqJWAqSjFOYVzoCs8wtw4x9JvOZjvl0VFiqEu
-         9odbeV4QWb1OjFLWeF7YnVxShrM0N9KeeWpWcPx2aLqeCBYLJf+YyX8/k0URI47hBB
-         A3MFcHITHiK+Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2E654E8DBDA;
-        Sun, 24 Apr 2022 03:56:27 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232261AbiDXJJ0 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 24 Apr 2022 05:09:26 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46985A158;
+        Sun, 24 Apr 2022 02:06:26 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id q7so9188571wrm.5;
+        Sun, 24 Apr 2022 02:06:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Nv7r/xRUGHwguyXkYCmqmqghuT1NE5yzHjE3f6i/LMg=;
+        b=ZVhDU9S5WmmPTCXR4kxee+/C3o4Z3ZwdtmINHqCOjN+3oKVVPMCuZGuFk+LzvEF6Mb
+         WdXVQYeIQH4wNaouNJTONrKiDQ31XBKBvlRiWEtVX+4SCKNzZSXsn7Z1JMud0muXJrC6
+         DFHYyqv3NX4XqcLRsAw1tfby6rMGuqvrWQX0/o6cNZmp23bl2S6X+TQMxAMLTB/0TYcS
+         ZR1VZL2r8QzHu7fu3RI4d3oGBROHoKNzf9wIgtOGr4CT42lV4G2xKjguVNq08jccw5be
+         0jHP8TrdDWe1K1gPWw5C+kIR/eXZUJVm6xa/AWGFhzaXt3prmlLjFwJBUX4oovDCSl2M
+         ddMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Nv7r/xRUGHwguyXkYCmqmqghuT1NE5yzHjE3f6i/LMg=;
+        b=UIXX//Yn2GImPbL30sr6n8sbJ6j6T2G9atn4BpMWaii1FcdoTDOtZECKCtUQgCxG92
+         m1+mf6ue5YKBzZqH3p2+eXQVOrnuEQ0IxN8ZHmjVRSo3waBgE2MHTwt44AmydhpeKn+1
+         c21ewkfO+EnClpT9jjf2ZMHHnp2ks03tSWamaLSXroNpcQK3s3LqwKTD8XBLs87P7mep
+         7fmJP3U1+XSrLzygYrHBgvZzHhFIoSmv3zKIh1wgREshZpk9ZijOYhHVdveK8F+KgAp8
+         awZg9+e7cB4PzTIzB5z7IpmorV1qv9qm2dKSRDHXvA3XGVrcByHmpvKnAp+IwCpjLar7
+         FWvg==
+X-Gm-Message-State: AOAM532eLm7niDCECHMAbaJmKLb4jLL+vDW9iuhpd5phCXKf/UVDnGa0
+        ImoWbZWb4D0HVCy5c0KDblY=
+X-Google-Smtp-Source: ABdhPJy21ZMmMPYkeKcJPoKjZ9cyNADB0FQ2uMsA6brqM3EG5dDW2OkgMgQYVf6yQYf7HRrgwizR9w==
+X-Received: by 2002:adf:f943:0:b0:203:e832:129 with SMTP id q3-20020adff943000000b00203e8320129mr10044687wrr.626.1650791185142;
+        Sun, 24 Apr 2022 02:06:25 -0700 (PDT)
+Received: from ?IPV6:2a01:c22:7675:9d00:50f9:6d67:ac70:5180? (dynamic-2a01-0c22-7675-9d00-50f9-6d67-ac70-5180.c22.pool.telefonica.de. [2a01:c22:7675:9d00:50f9:6d67:ac70:5180])
+        by smtp.googlemail.com with ESMTPSA id f4-20020a7bc8c4000000b0038ebbe10c5esm8581477wml.25.2022.04.24.02.06.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Apr 2022 02:06:24 -0700 (PDT)
+Message-ID: <aa97c09e-aa82-e2c4-326e-991330e65de7@gmail.com>
+Date:   Sun, 24 Apr 2022 11:06:08 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v5 0/6] auxdisplay: Add support for the Titanmec TM1628 7
+ segment display controller
+Content-Language: en-US
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+References: <90668779-b53d-b3e7-5327-af11ff4a1d18@gmail.com>
+ <CANiq72m+OVcX1gPit94D1hjzkduyVFoCWXKSXTxpUDFtKs8z6g@mail.gmail.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+In-Reply-To: <CANiq72m+OVcX1gPit94D1hjzkduyVFoCWXKSXTxpUDFtKs8z6g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From:   patchwork-bot+spi-devel-general@kernel.org
-Message-Id: <165077258718.14633.3477654668463396462.git-patchwork-housekeeping@kernel.org>
-Date:   Sun, 24 Apr 2022 03:56:27 +0000
-To:     linux-spi@vger.kernel.org, broonie@kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Latest series: [v6] spi: add support for Mediatek SPI-NAND controller (2022-04-24T03:25:22)
-  Superseding: [v5] spi: add support for Mediatek SPI-NAND controller (2022-04-09T12:08:14):
-    [v5,1/5] mtd: nand: make mtk_ecc.c a separated module
-    [v5,2/5] spi: add driver for MTK SPI NAND Flash Interface
-    [v5,3/5] mtd: nand: mtk-ecc: also parse nand-ecc-engine if available
-    [v5,4/5] spi: dt-bindings: add binding doc for spi-mtk-snfi
-    [v5,5/5] arm64: dts: mediatek: add mtk-snfi for mt7622
+On 23.04.2022 22:57, Miguel Ojeda wrote:
+> On Fri, Feb 25, 2022 at 10:09 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
+>>
+>> This series adds support for the Titanmec TM1628 7 segment display
+>> controller. It's based on previous RFC work from Andreas Färber.
+> 
+> AFAIU the discussion has converged at this point, correct? Is there
+> any feedback left to address?
+> 
+Still open is to define DT bindings that can support also the key input
+feature of the chip. Robin picked up this topic and has some ideas.
 
+> Cheers,
+> Miguel
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Heiner
