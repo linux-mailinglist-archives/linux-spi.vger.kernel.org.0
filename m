@@ -2,58 +2,40 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9375E5119F0
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Apr 2022 16:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C159151191D
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Apr 2022 16:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237175AbiD0OIW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 Apr 2022 10:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
+        id S237412AbiD0ORD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 Apr 2022 10:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237145AbiD0OIV (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Apr 2022 10:08:21 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210BE4AE25;
-        Wed, 27 Apr 2022 07:05:10 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-e93ff05b23so2013768fac.9;
-        Wed, 27 Apr 2022 07:05:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3hAzmL94k6R9PwkKXXDpGCbbCeAgk5EGfllFRPaGn08=;
-        b=HNvd+Ncao495WuWbhT8whxMuymyeDcIYnt+m0HM6k6KkBPP2Sh0pI9S6cJp6DT7HQD
-         vCGkd+dNC+MMLnNUOXdJh1s2obJ/IBCUcb/I9sHpWnvraeIcZfBoLP8sB/M6uf5nuZUB
-         jVg/y+edEM4PI/G6Eq825jjXMLiy7XTNGUwTa6VKaur4egl01rn38rNdslmGbFbJjdsa
-         YaR6DQlWLLV15v5phbJgwas4qaXdBvfndEH0EIyeRnTzfTwonZ8Q/hEHPjPFQQ+R0xrE
-         z5vql8ypg+IKoFcY13Rb8CLaOjyouSJ6LW8r9E31Ohf6QEYBEiY3TU4OYEhZC+4Jcc/j
-         3gJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3hAzmL94k6R9PwkKXXDpGCbbCeAgk5EGfllFRPaGn08=;
-        b=UzCuMpIE/kwjUhSN8B2dYHj73uGMvQkx3+bJV9B1zt0sjyuq8xSCUla8F0NPkXgWNl
-         cLcgEiXoQ7lFJSC8QBayx9aVxN9bu4iczn38zCWA+aMM50JLpabSqTxSV8EuAgCdh38o
-         DjrievTCE/ZCaBG/KhPuntR/+vHomu+i2t1U/bQaxXOu3Jp8YV3S4A3gWtwDZYYincY1
-         P8hnfsH7bJhwF18uJZ8ZRIRkSbATnyuhP7rt8bITqENJcnL1wDO804xKYyYi3B3uhhZm
-         0kvV8566WRkSgLPUhdMc6q+Q9xRDXH0UkBgZoG0VM5ZeDtknAyLKJiR3BmVRlKXZW0k7
-         PZMw==
-X-Gm-Message-State: AOAM530tYknnwwWtqVbcvckp/dMZKVrV+gyhvpzfMDxjOI22AQUcNYAD
-        xsr6aSvj4et1Xa6n6SMmvb5AAQhdfVkbx0NVz6s=
-X-Google-Smtp-Source: ABdhPJyJ03JPry6wbVQvJLHPYEG6SEWlxtrv4m0q9UnxBaFVB1qV8pE7PrJeQOeOS/99rpb2LllTG2sPJShUFpwQQz0=
-X-Received: by 2002:a05:6871:824:b0:e9:1a6c:1e76 with SMTP id
- q36-20020a056871082400b000e91a6c1e76mr8582101oap.98.1651068309461; Wed, 27
- Apr 2022 07:05:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220424032527.673605-1-gch981213@gmail.com> <20220427112857.7ddd7fc8@xps13>
-In-Reply-To: <20220427112857.7ddd7fc8@xps13>
-From:   Chuanhong Guo <gch981213@gmail.com>
-Date:   Wed, 27 Apr 2022 22:04:57 +0800
-Message-ID: <CAJsYDV+DfBEmWr7D1aO8F=3WMurAg6aEhf5gY86BXOUSyJ2nXA@mail.gmail.com>
-Subject: Re: [PATCH v6 0/5] spi: add support for Mediatek SPI-NAND controller
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S237393AbiD0ORC (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Apr 2022 10:17:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0506053B50;
+        Wed, 27 Apr 2022 07:13:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B06DFB82751;
+        Wed, 27 Apr 2022 14:13:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34185C385A9;
+        Wed, 27 Apr 2022 14:13:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651068829;
+        bh=YRr62X1KC5ng1LU4kmCYYrPiYAa/FMG0PmYtGBvTSd0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jp0majI7UjWwC8FLYui36TU6U/wwA7CUyylwj6NAoHTeojNVT550lHLbgA9aJK/wQ
+         FZPc6pqY5naKiec48+BKfQ0t/jX/vAdL0OtqiAX8k19DOMyKpVTnW2Ktdsp96uu7rX
+         v4O6lToN80jNleN/6Esd/qgLAGp8P9d1mlG4pLM9rpCsXZARsaAJwG4y2QZgQ9PClm
+         vy7yzzSgGcmZvjTBUVl7NsoFkbM6BCfH1kMJaDukYik5lpdF0umPockeea8qrSdSG9
+         2JXUx3CRyi7l32931F9MEKFdqS271YDlMhQGk8QO4hYB2viStfjD+TiF90nywvNTh9
+         5n49mp5csBdgg==
+Date:   Wed, 27 Apr 2022 15:13:42 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Chuanhong Guo <gch981213@gmail.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-spi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Richard Weinberger <richard@nod.at>,
@@ -74,33 +56,60 @@ Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         <linux-mediatek@lists.infradead.org>,
         open list <linux-kernel@vger.kernel.org>,
         "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v6 0/5] spi: add support for Mediatek SPI-NAND controller
+Message-ID: <YmlPlhKTrRXZo/Sx@sirena.org.uk>
+References: <20220424032527.673605-1-gch981213@gmail.com>
+ <20220427112857.7ddd7fc8@xps13>
+ <CAJsYDV+DfBEmWr7D1aO8F=3WMurAg6aEhf5gY86BXOUSyJ2nXA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4i1ELcqcSD2FWPzu"
+Content-Disposition: inline
+In-Reply-To: <CAJsYDV+DfBEmWr7D1aO8F=3WMurAg6aEhf5gY86BXOUSyJ2nXA@mail.gmail.com>
+X-Cookie: Buckle up!
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Miquel!
 
-On Wed, Apr 27, 2022 at 5:29 PM Miquel Raynal <miquel.raynal@bootlin.com> wrote:
->
-> [...]
->
-> The patch actually look independent, so if it's fine for you I can take
-> the two mtd patches and let you merge the spi/binding changes.
+--4i1ELcqcSD2FWPzu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Out of curiosity:
-Wouldn't that break the build for spi subsystem? Because...
+On Wed, Apr 27, 2022 at 10:04:57PM +0800, Chuanhong Guo wrote:
+> On Wed, Apr 27, 2022 at 5:29 PM Miquel Raynal <miquel.raynal@bootlin.com> wrote:
 
-> >  rename drivers/mtd/nand/raw/mtk_ecc.h => include/linux/mtd/nand-ecc-mtk.h (100%)
+> > The patch actually look independent, so if it's fine for you I can take
+> > the two mtd patches and let you merge the spi/binding changes.
 
-The spi driver needs this header file which is moved in the mtd patch.
+> Out of curiosity:
+> Wouldn't that break the build for spi subsystem? Because...
 
--- 
-Regards,
-Chuanhong Guo
+> > >  rename drivers/mtd/nand/raw/mtk_ecc.h => include/linux/mtd/nand-ecc-mtk.h (100%)
+
+> The spi driver needs this header file which is moved in the mtd patch.
+
+Ah, that'll be an issue indeed - if I could get a signed tag with the
+dependency in it I can go ahead with the SPI bits?
+
+--4i1ELcqcSD2FWPzu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJpT5UACgkQJNaLcl1U
+h9CoCggAgr/UCrnXyGYR548Hq8CNekwM2Sb0hIKaUwNi7p1ZqciUlWwzMJKtAYrV
+ZTgWlLGUMY476SBCyrtHlucuB+DKBwCikrUnMMsEk39+pMEXSNPdKLnjG7hqd6Qr
+u/8Px3mAdyBzOgdcIlxcTl8kgIvR+aqMSzkjsRJaZ3csuqCnN8NVQAHJ+yLBqkrg
+bEr083uX8PyGSTCQc+v7HaMXce143J8bJYj0lFWJ23znLRf4Lb6PemUQhcoXCF2H
+d+3GC4HLLB9cUfyTT5FqxE17wgACp6rjjIMuSc7BgTmwM9g61EfIqVjUYtRpTBTm
+980Mme+EQalOui5TWB1hYXW0VXicHQ==
+=2Qhu
+-----END PGP SIGNATURE-----
+
+--4i1ELcqcSD2FWPzu--
