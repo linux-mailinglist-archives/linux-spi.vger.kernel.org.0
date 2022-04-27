@@ -2,135 +2,106 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B55B51155E
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Apr 2022 13:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5735119CC
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Apr 2022 16:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232169AbiD0LKD (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 Apr 2022 07:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
+        id S234061AbiD0NOm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 Apr 2022 09:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232362AbiD0LHy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Apr 2022 07:07:54 -0400
-Received: from smtp108.ord1d.emailsrvr.com (smtp108.ord1d.emailsrvr.com [184.106.54.108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1958427718B
-        for <linux-spi@vger.kernel.org>; Wed, 27 Apr 2022 04:01:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mev.co.uk;
-        s=20190130-41we5z8j; t=1651056874;
-        bh=TWYQidF18CD3BHzOD5gTEys7gjZpmZbfQHDWi01K3ao=;
-        h=From:To:Subject:Date:From;
-        b=IpmFVq0oy0B6ns0kBEx3tQdWLuM4d0H6gsSCDvGqECmH+Zzy4TBTJxNFRIcH2On0L
-         I5fPLHQ3Yuf3LWMVHElrwRNZs0w1Sc7uZGMzj+Blj5f+Nwcum6ux5cHYKW5fciDn/v
-         fpTYlDG5Jt9FBo+9qIzP66ukMFo9v8mMnyQLGbzE=
-X-Auth-ID: abbotti@mev.co.uk
-Received: by smtp6.relay.ord1d.emailsrvr.com (Authenticated sender: abbotti-AT-mev.co.uk) with ESMTPSA id 4FA86E00E0;
-        Wed, 27 Apr 2022 06:54:33 -0400 (EDT)
-From:   Ian Abbott <abbotti@mev.co.uk>
-To:     stable@vger.kernel.org
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
+        with ESMTP id S235466AbiD0NOm (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Apr 2022 09:14:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BCD1C1DC9;
+        Wed, 27 Apr 2022 06:11:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9304F61B98;
+        Wed, 27 Apr 2022 13:11:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7FC1C385A9;
+        Wed, 27 Apr 2022 13:11:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651065090;
+        bh=tpIYWICrW+Xe2NYo9+47DtMMvdK4RGp2TzuVJyjTpZk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b7unDFzV3JJ93notz6nFF8qVCFjJ34yZONp6aEjymzwqcKThuj8hPwyIEQp4oyGjH
+         Nc8Jwo6xRw7wqIP7Ns8of9TW2BnweRHUiYUyrMjQd1DIb/sLx9hQOnbS/xVOVBlv5D
+         jpweLVNSIvktWp6sp2qD0AeGPbAvvsw9GSj5Ubo+mhE7jJs0Z6hnFu8O2reeakEaLB
+         nPLS2QiotHoSXJ2c9gVDgnvYgW4X9HhFztis9wB6kcWMjX6hXOyg4MLlwCCTNp8Lsd
+         AB4wZIhMFlANHQU5JDN2+CIqPmx13fGtsyUgPL929Tsl5VD/ZlR4FVRmhmN8ti2Q2M
+         0XpGV3FuVmuYw==
+Date:   Wed, 27 Apr 2022 14:11:22 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
-        Ian Abbott <abbotti@mev.co.uk>
-Subject: [PATCH 5.15 2/2] ARM: dts: socfpga: change qspi to "intel,socfpga-qspi"
-Date:   Wed, 27 Apr 2022 11:54:07 +0100
-Message-Id: <20220427105407.40167-3-abbotti@mev.co.uk>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220427105407.40167-1-abbotti@mev.co.uk>
-References: <20220427105407.40167-1-abbotti@mev.co.uk>
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
+Subject: Re: [PATCH v6 0/5] spi: add support for Mediatek SPI-NAND controller
+Message-ID: <YmlA+tqqigjkRyMZ@sirena.org.uk>
+References: <20220424032527.673605-1-gch981213@gmail.com>
+ <20220427112857.7ddd7fc8@xps13>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Classification-ID: 3bf3f977-eed8-458c-82a7-dc4c605c474d-3-1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3/axAlvjop7jo6tE"
+Content-Disposition: inline
+In-Reply-To: <20220427112857.7ddd7fc8@xps13>
+X-Cookie: Buckle up!
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-From: Dinh Nguyen <dinguyen@kernel.org>
 
-commit 36de991e93908f7ad5c2a0eac9c4ecf8b723fa4a upstream.
+--3/axAlvjop7jo6tE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Because of commit 9cb2ff111712 ("spi: cadence-quadspi: Disable Auto-HW polling"),
-which does a write to the CQSPI_REG_WR_COMPLETION_CTRL register
-regardless of any condition. Well, the Cadence QuadSPI controller on
-Intel's SoCFPGA platforms does not implement the
-CQSPI_REG_WR_COMPLETION_CTRL register, thus a write to this register
-results in a crash!
+On Wed, Apr 27, 2022 at 11:28:57AM +0200, Miquel Raynal wrote:
 
-So starting with v5.16, I introduced the patch
-98d948eb833 ("spi: cadence-quadspi: fix write completion support"),
-which adds the dts compatible "intel,socfpga-qspi" that is specific for
-versions that doesn't have the CQSPI_REG_WR_COMPLETION_CTRL register implemented.
+> The patch actually look independent, so if it's fine for you I can take
+> the two mtd patches and let you merge the spi/binding changes.
 
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-[IA: submitted for linux-5.15.y]
-Signed-off-by: Ian Abbott <abbotti@mev.co.uk>
----
-v3: revert back to "intel,socfpga-qspi"
-v2: use both "cdns,qspi-nor" and "cdns,qspi-nor-0010"
----
- arch/arm/boot/dts/socfpga.dtsi                    | 2 +-
- arch/arm/boot/dts/socfpga_arria10.dtsi            | 2 +-
- arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi | 2 +-
- arch/arm64/boot/dts/intel/socfpga_agilex.dtsi     | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+> Would this work for you?
 
-diff --git a/arch/arm/boot/dts/socfpga.dtsi b/arch/arm/boot/dts/socfpga.dtsi
-index 0b021eef0b53..7c1d6423d7f8 100644
---- a/arch/arm/boot/dts/socfpga.dtsi
-+++ b/arch/arm/boot/dts/socfpga.dtsi
-@@ -782,7 +782,7 @@ ocram: sram@ffff0000 {
- 		};
- 
- 		qspi: spi@ff705000 {
--			compatible = "cdns,qspi-nor";
-+			compatible = "intel,socfpga-qspi", "cdns,qspi-nor";
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 			reg = <0xff705000 0x1000>,
-diff --git a/arch/arm/boot/dts/socfpga_arria10.dtsi b/arch/arm/boot/dts/socfpga_arria10.dtsi
-index a574ea91d9d3..3ba431dfa8c9 100644
---- a/arch/arm/boot/dts/socfpga_arria10.dtsi
-+++ b/arch/arm/boot/dts/socfpga_arria10.dtsi
-@@ -756,7 +756,7 @@ usb0-ecc@ff8c8800 {
- 		};
- 
- 		qspi: spi@ff809000 {
--			compatible = "cdns,qspi-nor";
-+			compatible = "intel,socfpga-qspi", "cdns,qspi-nor";
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 			reg = <0xff809000 0x100>,
-diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-index d301ac0d406b..3ec301bd08a9 100644
---- a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-+++ b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-@@ -594,7 +594,7 @@ emac0-tx-ecc@ff8c0400 {
- 		};
- 
- 		qspi: spi@ff8d2000 {
--			compatible = "cdns,qspi-nor";
-+			compatible =  "intel,socfpga-qspi", "cdns,qspi-nor";
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 			reg = <0xff8d2000 0x100>,
-diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-index de1e98c99ec5..f4270cf18996 100644
---- a/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-+++ b/arch/arm64/boot/dts/intel/socfpga_agilex.dtsi
-@@ -628,7 +628,7 @@ sdmmca-ecc@ff8c8c00 {
- 		};
- 
- 		qspi: spi@ff8d2000 {
--			compatible = "cdns,qspi-nor";
-+			compatible = "intel,socfpga-qspi", "cdns,qspi-nor";
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 			reg = <0xff8d2000 0x100>,
--- 
-2.35.1
+That sounds great.
 
+--3/axAlvjop7jo6tE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJpQPkACgkQJNaLcl1U
+h9D1ngf/VxXyRrmMrFHXOQIT/K9jzEroGCHRoT3IkpzG2UwCERVkL3XY1VX8Bem6
+oeIQERn5z5pFMCvgeLOWDvW4LuV0J0E2Wp9IjvFxdX8fA5K7Tbg3albH0isMfcUp
+FZcnMXUynnhcg/dTJYMXHunlQH+8yv84MjxSqq1wDmrHWCy76vraVev5n2eoBdo9
+fQ06pKoqMEgkf1ICdUnlW8i9Y8LgmlZSyj7iGRhfw3H2MxBIHVmi2TOdAYM2u/eC
+sanKESRfPqRjsbK6kkTy4oePpH0uR+aRLqzqtX9qcF/Wnw+A+WZBc8gQPZZqLvjX
+9YGhLRk4sIgGwjyxbojuoeAw+pqSrA==
+=3uM/
+-----END PGP SIGNATURE-----
+
+--3/axAlvjop7jo6tE--
