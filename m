@@ -2,107 +2,77 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C826F511FAC
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Apr 2022 20:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F100511E06
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Apr 2022 20:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239293AbiD0PQZ (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 Apr 2022 11:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
+        id S239789AbiD0PiT (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 Apr 2022 11:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239216AbiD0PQY (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Apr 2022 11:16:24 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2003136E1D;
-        Wed, 27 Apr 2022 08:13:08 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id EBD57FF807;
-        Wed, 27 Apr 2022 15:13:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1651072387;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=77woMB9sIvE36mfc5Tehmi9aSEDP7KlMxvPibRtT2hY=;
-        b=ezWpYA4+8e7y5MyQ8IuWyHLreUzgT/6Y2GMum2gh2jsNxMk4nQbU0HQSmS6K4F/T/OuDdP
-        3n+IB8jRO6U7q369DZZsSacWNPgAWWythX5mundXVJtfVO+YI0m72NSy++vE65oqU6pI3k
-        5W3wvL2Cm3UheSG7FqcDKo8XRpAgUiXovPMQIaPslimXRusFD6bAaAv1Njl2E8umvnxckZ
-        jRswnkAuKSohoiTa6W0NqGWu4fKk77ioHnDSLdpACQxmJ1Dm9PG04Hq3Yqpregl9OpshyF
-        vedacIlLlmdEZRe+Ot4/HAO/6F9cs+ibR1UrrBcbMa6s/NOlJKQkD7WhbHuAxw==
-Date:   Wed, 27 Apr 2022 17:13:02 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
-Subject: Re: [PATCH v6 0/5] spi: add support for Mediatek SPI-NAND
- controller
-Message-ID: <20220427171302.5d374ea9@xps13>
-In-Reply-To: <YmlPlhKTrRXZo/Sx@sirena.org.uk>
-References: <20220424032527.673605-1-gch981213@gmail.com>
-        <20220427112857.7ddd7fc8@xps13>
-        <CAJsYDV+DfBEmWr7D1aO8F=3WMurAg6aEhf5gY86BXOUSyJ2nXA@mail.gmail.com>
-        <YmlPlhKTrRXZo/Sx@sirena.org.uk>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        with ESMTP id S240098AbiD0PiP (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Apr 2022 11:38:15 -0400
+Received: from smtp96.ord1d.emailsrvr.com (smtp96.ord1d.emailsrvr.com [184.106.54.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380891816D5
+        for <linux-spi@vger.kernel.org>; Wed, 27 Apr 2022 08:35:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mev.co.uk;
+        s=20190130-41we5z8j; t=1651073700;
+        bh=dFJHFsLRZTyNfS0SkWwtBPTu73T8OM5Iqc9DWInCJ6g=;
+        h=From:To:Subject:Date:From;
+        b=KUCb6ZJehsrOrzmlH3xyAYvvnmu3+72FhzUdsz9xu93xuslFhMwEVmqWdY4AlenwS
+         uAVxHaHZZgGBYf5QTJ3wNjzAVGTK0U15L+MQ64hdgiM9D3cQC9ZKX+nvu41fc4UceX
+         QIXF02MzJwqR5MnBMmwTkyi28hX8INpgAr2wV5iw=
+X-Auth-ID: abbotti@mev.co.uk
+Received: by smtp13.relay.ord1d.emailsrvr.com (Authenticated sender: abbotti-AT-mev.co.uk) with ESMTPSA id D6BBCC019D;
+        Wed, 27 Apr 2022 11:34:59 -0400 (EDT)
+From:   Ian Abbott <abbotti@mev.co.uk>
+To:     linux-spi@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>, linux-kernel@vger.kernel.org,
+        Ian Abbott <abbotti@mev.co.uk>
+Subject: [PATCH] spi: cadence-quadspi: fix Direct Access Mode disable for SoCFPGA
+Date:   Wed, 27 Apr 2022 16:34:46 +0100
+Message-Id: <20220427153446.10113-1-abbotti@mev.co.uk>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Classification-ID: be3968db-419c-4c49-af1b-b8e23ba017e0-1-1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Hi Mark,
+The Cadence QSPI compatible string required for the SoCFPGA platform
+changed from the default "cdns,qspi-nor" to "intel,socfpga-qspi" with
+the introduction of an additional quirk in
+commit 98d948eb8331 ("spi: cadence-quadspi: fix write completion support").
+However, that change did not preserve the previously used
+quirk for this platform.  Reinstate the `CQSPI_DISABLE_DAC_MODE` quirk
+for the SoCFPGA platform.
 
-broonie@kernel.org wrote on Wed, 27 Apr 2022 15:13:42 +0100:
+Fixes: 98d948eb8331 ("spi: cadence-quadspi: fix write completion support")
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Signed-off-by: Ian Abbott <abbotti@mev.co.uk>
+---
+ drivers/spi/spi-cadence-quadspi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> On Wed, Apr 27, 2022 at 10:04:57PM +0800, Chuanhong Guo wrote:
-> > On Wed, Apr 27, 2022 at 5:29 PM Miquel Raynal <miquel.raynal@bootlin.co=
-m> wrote: =20
->=20
-> > > The patch actually look independent, so if it's fine for you I can ta=
-ke
-> > > the two mtd patches and let you merge the spi/binding changes. =20
->=20
-> > Out of curiosity:
-> > Wouldn't that break the build for spi subsystem? Because... =20
->=20
-> > > >  rename drivers/mtd/nand/raw/mtk_ecc.h =3D> include/linux/mtd/nand-=
-ecc-mtk.h (100%) =20
->=20
-> > The spi driver needs this header file which is moved in the mtd patch. =
-=20
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 41922a5ea1f4..30307392c75a 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -1781,7 +1781,7 @@ static const struct cqspi_driver_platdata intel_lgm_qspi = {
+ };
+ 
+ static const struct cqspi_driver_platdata socfpga_qspi = {
+-	.quirks = CQSPI_NO_SUPPORT_WR_COMPLETION,
++	.quirks = CQSPI_DISABLE_DAC_MODE | CQSPI_NO_SUPPORT_WR_COMPLETION,
+ };
+ 
+ static const struct cqspi_driver_platdata versal_ospi = {
+-- 
+2.35.1
 
-Ah, yeah, right.
-
-> Ah, that'll be an issue indeed - if I could get a signed tag with the
-> dependency in it I can go ahead with the SPI bits?
-
-Ok, I'll share an immutable tag.
-
-Thanks,
-Miqu=C3=A8l
