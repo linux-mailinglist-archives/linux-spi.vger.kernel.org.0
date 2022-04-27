@@ -2,39 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5735119CC
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Apr 2022 16:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9375E5119F0
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Apr 2022 16:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234061AbiD0NOm (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 27 Apr 2022 09:14:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
+        id S237175AbiD0OIW (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 27 Apr 2022 10:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235466AbiD0NOm (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Apr 2022 09:14:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BCD1C1DC9;
-        Wed, 27 Apr 2022 06:11:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9304F61B98;
-        Wed, 27 Apr 2022 13:11:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7FC1C385A9;
-        Wed, 27 Apr 2022 13:11:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651065090;
-        bh=tpIYWICrW+Xe2NYo9+47DtMMvdK4RGp2TzuVJyjTpZk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b7unDFzV3JJ93notz6nFF8qVCFjJ34yZONp6aEjymzwqcKThuj8hPwyIEQp4oyGjH
-         Nc8Jwo6xRw7wqIP7Ns8of9TW2BnweRHUiYUyrMjQd1DIb/sLx9hQOnbS/xVOVBlv5D
-         jpweLVNSIvktWp6sp2qD0AeGPbAvvsw9GSj5Ubo+mhE7jJs0Z6hnFu8O2reeakEaLB
-         nPLS2QiotHoSXJ2c9gVDgnvYgW4X9HhFztis9wB6kcWMjX6hXOyg4MLlwCCTNp8Lsd
-         AB4wZIhMFlANHQU5JDN2+CIqPmx13fGtsyUgPL929Tsl5VD/ZlR4FVRmhmN8ti2Q2M
-         0XpGV3FuVmuYw==
-Date:   Wed, 27 Apr 2022 14:11:22 +0100
-From:   Mark Brown <broonie@kernel.org>
+        with ESMTP id S237145AbiD0OIV (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 27 Apr 2022 10:08:21 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210BE4AE25;
+        Wed, 27 Apr 2022 07:05:10 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-e93ff05b23so2013768fac.9;
+        Wed, 27 Apr 2022 07:05:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3hAzmL94k6R9PwkKXXDpGCbbCeAgk5EGfllFRPaGn08=;
+        b=HNvd+Ncao495WuWbhT8whxMuymyeDcIYnt+m0HM6k6KkBPP2Sh0pI9S6cJp6DT7HQD
+         vCGkd+dNC+MMLnNUOXdJh1s2obJ/IBCUcb/I9sHpWnvraeIcZfBoLP8sB/M6uf5nuZUB
+         jVg/y+edEM4PI/G6Eq825jjXMLiy7XTNGUwTa6VKaur4egl01rn38rNdslmGbFbJjdsa
+         YaR6DQlWLLV15v5phbJgwas4qaXdBvfndEH0EIyeRnTzfTwonZ8Q/hEHPjPFQQ+R0xrE
+         z5vql8ypg+IKoFcY13Rb8CLaOjyouSJ6LW8r9E31Ohf6QEYBEiY3TU4OYEhZC+4Jcc/j
+         3gJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3hAzmL94k6R9PwkKXXDpGCbbCeAgk5EGfllFRPaGn08=;
+        b=UzCuMpIE/kwjUhSN8B2dYHj73uGMvQkx3+bJV9B1zt0sjyuq8xSCUla8F0NPkXgWNl
+         cLcgEiXoQ7lFJSC8QBayx9aVxN9bu4iczn38zCWA+aMM50JLpabSqTxSV8EuAgCdh38o
+         DjrievTCE/ZCaBG/KhPuntR/+vHomu+i2t1U/bQaxXOu3Jp8YV3S4A3gWtwDZYYincY1
+         P8hnfsH7bJhwF18uJZ8ZRIRkSbATnyuhP7rt8bITqENJcnL1wDO804xKYyYi3B3uhhZm
+         0kvV8566WRkSgLPUhdMc6q+Q9xRDXH0UkBgZoG0VM5ZeDtknAyLKJiR3BmVRlKXZW0k7
+         PZMw==
+X-Gm-Message-State: AOAM530tYknnwwWtqVbcvckp/dMZKVrV+gyhvpzfMDxjOI22AQUcNYAD
+        xsr6aSvj4et1Xa6n6SMmvb5AAQhdfVkbx0NVz6s=
+X-Google-Smtp-Source: ABdhPJyJ03JPry6wbVQvJLHPYEG6SEWlxtrv4m0q9UnxBaFVB1qV8pE7PrJeQOeOS/99rpb2LllTG2sPJShUFpwQQz0=
+X-Received: by 2002:a05:6871:824:b0:e9:1a6c:1e76 with SMTP id
+ q36-20020a056871082400b000e91a6c1e76mr8582101oap.98.1651068309461; Wed, 27
+ Apr 2022 07:05:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220424032527.673605-1-gch981213@gmail.com> <20220427112857.7ddd7fc8@xps13>
+In-Reply-To: <20220427112857.7ddd7fc8@xps13>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Wed, 27 Apr 2022 22:04:57 +0800
+Message-ID: <CAJsYDV+DfBEmWr7D1aO8F=3WMurAg6aEhf5gY86BXOUSyJ2nXA@mail.gmail.com>
+Subject: Re: [PATCH v6 0/5] spi: add support for Mediatek SPI-NAND controller
 To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org,
+Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -56,52 +74,33 @@ Cc:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org,
         <linux-mediatek@lists.infradead.org>,
         open list <linux-kernel@vger.kernel.org>,
         "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
-Subject: Re: [PATCH v6 0/5] spi: add support for Mediatek SPI-NAND controller
-Message-ID: <YmlA+tqqigjkRyMZ@sirena.org.uk>
-References: <20220424032527.673605-1-gch981213@gmail.com>
- <20220427112857.7ddd7fc8@xps13>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3/axAlvjop7jo6tE"
-Content-Disposition: inline
-In-Reply-To: <20220427112857.7ddd7fc8@xps13>
-X-Cookie: Buckle up!
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
+Hi Miquel!
 
---3/axAlvjop7jo6tE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Wed, Apr 27, 2022 at 11:28:57AM +0200, Miquel Raynal wrote:
-
+On Wed, Apr 27, 2022 at 5:29 PM Miquel Raynal <miquel.raynal@bootlin.com> wrote:
+>
+> [...]
+>
 > The patch actually look independent, so if it's fine for you I can take
 > the two mtd patches and let you merge the spi/binding changes.
 
-> Would this work for you?
+Out of curiosity:
+Wouldn't that break the build for spi subsystem? Because...
 
-That sounds great.
+> >  rename drivers/mtd/nand/raw/mtk_ecc.h => include/linux/mtd/nand-ecc-mtk.h (100%)
 
---3/axAlvjop7jo6tE
-Content-Type: application/pgp-signature; name="signature.asc"
+The spi driver needs this header file which is moved in the mtd patch.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJpQPkACgkQJNaLcl1U
-h9D1ngf/VxXyRrmMrFHXOQIT/K9jzEroGCHRoT3IkpzG2UwCERVkL3XY1VX8Bem6
-oeIQERn5z5pFMCvgeLOWDvW4LuV0J0E2Wp9IjvFxdX8fA5K7Tbg3albH0isMfcUp
-FZcnMXUynnhcg/dTJYMXHunlQH+8yv84MjxSqq1wDmrHWCy76vraVev5n2eoBdo9
-fQ06pKoqMEgkf1ICdUnlW8i9Y8LgmlZSyj7iGRhfw3H2MxBIHVmi2TOdAYM2u/eC
-sanKESRfPqRjsbK6kkTy4oePpH0uR+aRLqzqtX9qcF/Wnw+A+WZBc8gQPZZqLvjX
-9YGhLRk4sIgGwjyxbojuoeAw+pqSrA==
-=3uM/
------END PGP SIGNATURE-----
-
---3/axAlvjop7jo6tE--
+-- 
+Regards,
+Chuanhong Guo
