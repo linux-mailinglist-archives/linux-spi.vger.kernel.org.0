@@ -2,226 +2,180 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95CB5514E4B
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Apr 2022 16:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF13515278
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Apr 2022 19:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377971AbiD2Oyd (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 29 Apr 2022 10:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59502 "EHLO
+        id S1379327AbiD2Rpl (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 29 Apr 2022 13:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377293AbiD2Oyb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 Apr 2022 10:54:31 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4420D7B562;
-        Fri, 29 Apr 2022 07:51:10 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220429145105euoutp02a4ff87d736e062c2b5b8d6949b4a8124~qZYvtOB600645106451euoutp02X;
-        Fri, 29 Apr 2022 14:51:05 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220429145105euoutp02a4ff87d736e062c2b5b8d6949b4a8124~qZYvtOB600645106451euoutp02X
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1651243865;
-        bh=5YBaHMY3mPIzdSas9KX5dsom+hzeyHCAeOerOpdnlGM=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=nUygAb0awXyLhsWvbplVvnPEjXFct41EUHXyvcagoZZduuCOiiwbl3paB7Z3NT/3Q
-         82B0Qh+kW/mKX0QfGho5StrLqkL+va0m/keORiKtboEXzCjt6tjtcL1fZ18g15k4AD
-         B60vtGBDgdRlTfWkIwVZJAghgRNvqBlidfNYJStg=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220429145104eucas1p1b664d55195f404d0491068056d04f953~qZYvTcF4l1233212332eucas1p1k;
-        Fri, 29 Apr 2022 14:51:04 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id F1.AF.10260.85BFB626; Fri, 29
-        Apr 2022 15:51:04 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220429145104eucas1p1b6a251590f370a28b664559a60a3b16b~qZYuz9Sd21955719557eucas1p10;
-        Fri, 29 Apr 2022 14:51:04 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220429145104eusmtrp2af05bf6f42d264c4ddf8aff43c3bcdf0~qZYuwfnSp2710627106eusmtrp2j;
-        Fri, 29 Apr 2022 14:51:04 +0000 (GMT)
-X-AuditID: cbfec7f5-bf3ff70000002814-43-626bfb583005
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id EB.21.09522.75BFB626; Fri, 29
-        Apr 2022 15:51:03 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220429145102eusmtip2cb3f061d2c2fe5223225a8705c3a0fc9~qZYs5kqVa2214722147eusmtip2R;
-        Fri, 29 Apr 2022 14:51:01 +0000 (GMT)
-Message-ID: <6e21f7d3-49d0-eda7-7a89-0f8ac69596a4@samsung.com>
-Date:   Fri, 29 Apr 2022 16:51:02 +0200
+        with ESMTP id S1357665AbiD2Rpk (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 Apr 2022 13:45:40 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EDA939A3;
+        Fri, 29 Apr 2022 10:42:20 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23THPWqp018608;
+        Fri, 29 Apr 2022 17:42:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=8x338saWQSdA1UydheMJ00f+qNZ6OWiVBPt8zZlM2yY=;
+ b=t+z3m2j7dKEUeyNe6YfjKBGegqc7Mgwc3XTL+gReIrgpcNckPwBahlf8amLMlRaF7a30
+ tIbSXKjuz5sFeE9RauzU8AXqMFIRXMLY0kBc5Jsyyucmbi9H4WU5tdd7P5Sd8kT+ud38
+ eCtBcQlun3NMWWxmevoxGvIV0cJTZT5sBtJmBcCwvNCol6ep1uuNAli2bAErRRVzeJCr
+ e9Nc595MHdMmQegP/PsXg4rXf2T47um/iYMK9vKSpTCs6ULDKbWDWK1LxPW9FhxOLH5F
+ Wyd+nCdvVBdgIb1Mt+X+RlPLH5v+TGqW7nx8f8m5vO7QnRiZUUMo6dR+G7n7ylhf7cgz oA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fmb5k7g2b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 Apr 2022 17:42:11 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23THafIu011824;
+        Fri, 29 Apr 2022 17:42:10 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2174.outbound.protection.outlook.com [104.47.57.174])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fp5yqeg4w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 Apr 2022 17:42:10 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=f/zF7ZBuaTNGwDf5d36q5LvWTKHQnzjhLBZN9krSpRHrbJRdpcDPN4VAHe1042pw0qJ2n8J4zpk/mUu8StBpJhD4cnWb5uIUxlc9TWfwd7Gn0XayR0y4MEN8ssFRnhGAa4m/HmKkl/eLrvKz4JWogqiuDyNeEyc52sUps/dXLM8t/hJTvQ7JAPO7Km2lq5r5Dg+c472noHtNdGR3eCXGZMT1TmSc9QXWnOopi12///t0ZDYQXWyUtItygYWwIsogGXvVcBlJk7pkzqu6O9+OK4pWGNhGCvD+AOMBXbaNjyO2l+/4OXg67D/gjXo7cmk6wslCyne0WrMc73WR8RSKvg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8x338saWQSdA1UydheMJ00f+qNZ6OWiVBPt8zZlM2yY=;
+ b=dMTzI20LdmpJ4L4Xucrz9teydBOwWRfCcnfZR1sknRJYNUYDPhVMeEx6bNXG+sBzOi7piJVS7O70SAc0pjmSGhrvVsQG0GTXX4nMIXR1pDMrqFCcWFF5sa0Tp2VaUs0Of8DtSuJJfNJQFSDQukl8Hedh7mPPu2nsi33gmEcsVWwXh4llfDKz8NIhnznLVYPWk70U6+zXkG+wkE+DHRTrA2ELHehjM/J2ug2NMOb8wNxWAPYKNYOpcvU2wMrpla4hUOMenmmT0vdgHG1vzKjttBSnAUowBDeVHIslSM8y13BML/TcnF7HftWlp+LLIsEYa8SpWWYAIZ/hQcQ/ecxObQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8x338saWQSdA1UydheMJ00f+qNZ6OWiVBPt8zZlM2yY=;
+ b=zvoIhHqmj3yki7xL319QsNif86VQEn1BVQSwZFeDP3dfozGfRnm398K1j6nribji/imWpr3RKLj6dYvxmv6D+jlxjURh1owdRocV9gNdTtqtnosoIfHjVgptOPU2oT7ZnJbkJz8SW7PgrLGb1F5fRMH7upVtQEifHGAG11tJ0z0=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by SA2PR10MB4537.namprd10.prod.outlook.com
+ (2603:10b6:806:116::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13; Fri, 29 Apr
+ 2022 17:42:08 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::b5d5:7b39:ca2d:1b87]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::b5d5:7b39:ca2d:1b87%5]) with mapi id 15.20.5164.025; Fri, 29 Apr 2022
+ 17:42:08 +0000
+Date:   Fri, 29 Apr 2022 20:41:37 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Chuanhong Guo <gch981213@gmail.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] spi: mtk-snfi: preserve dma_mapping_error() error codes
+Message-ID: <YmwjUcTKyQNrrn2g@kili>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-ClientProxiedBy: ZR0P278CA0143.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:40::22) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.8.0
-Subject: Re: [PATCH v7 12/12] rpmsg: Fix kfree() of static memory on setting
- driver_override
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Stuart Yoder <stuyoder@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <75b94ccd-b739-2164-bc4a-20025356cc34@linaro.org>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SbUxTVxjeuff29sJSuFQZR2aYKcyBiyhDkzMlKosud9ElSwbL5rLNIneU
-        tQXWiuAWB9LNuOpYxRngThAE+aggUuVDvinDzhYKiJCKQNzakfA5+RgbNuhaLm78OXme533e
-        8z7vyaFwsZX0p+ITjrGqBKlCQnoStXeWerZ+6JTHbLddCEDVlnESWe1OAt3vM2JoXNcBUHGG
-        DFlaZwhkXzaSqOVbA0C93KIAaYqqSDRYx6DJfD1AzZM1QuS45joM9kEBOt/aLUSz50YF6OL5
-        xyTSPinHUX/DJRJ155tIpOmRIF2hBkenZh8IkZ3LJ1FNUxuGzMMjAOUtXMTRdEc7jtqrh3BU
-        UlUpRL9nTgtRabfLl9VRIkAdhiFsXyBzYz6DZG5zI0KmwJDMGPTfk8zwYBPJ/JrjJBjdlTbA
-        tOZVCJmbxWnMBVspYL6rXxYy1TP1GNOrlTPzhoD3vA57RsSyivjjrGrbniOest8sOURSkX9q
-        5bKVTAfcS1rgQUF6B7zTPyDUAk9KTJcBeGasgeDJAoCNc3qSJ/MADrUWCp63tGmnVgulrkLn
-        3xhPZgHMcPS4CEWJ6D3QmO/jbiDoV2HJnIl0YxHtA+/mOgg39qVjYF7LKO7G6+hPYdvDCsyN
-        cdoPDjkur+D19E8AXh3fyesWD9jfyrgxSYdB7bR25U4P16gCcy7gPa9ATc3PuDsPpB2eUNtZ
-        IORT74cPKrswHq+DE6Zbq/pG+Oz25ZXMkE6EyznhvJwKBycrcB7vhsPWJ6TbgtMhsKphGy9H
-        wpKFzNVOL2ib9uETeMGs2mycl0XwzGkx794MOdP1/2a2997DdUDCrXkTbs3u3JpduP/nFgBC
-        D/zYZLUyjlWHJ7ApoWqpUp2cEBd6NFFpAK4vb3lq+qselE3MhhoBRgEjgBQuWS9aaJTFiEWx
-        0hNfsarEz1TJClZtBC9ThMRPdDT+hlRMx0mPsXKWTWJVz6sY5eGfjmH2vru1nzjnL105YO4N
-        LpG/nhaZMRDkrw958+GzoL3hisDG0J25Z8U35YfTwrZsjw5Q+hYuGRKiH0dKTniHGDejEHw0
-        YsNHoXMHMpfeoVo2pUSJTmfOL+2a+gFPKbfmF23Kjnxjwt588KT8c0Gmv+3kxoh0s0Yx2Ake
-        he1vqj7e+NauH4+kbgis+GK6TpMUfK3ty49rdFRs3eKt7EMBJpPXPcELXads46qgg1QtfPTB
-        P85zX/9SrCjt+uYP89nde2dGyrW6q1ujhqO415g/s2R9viqHxdos917esa83pDj5fvD1sfeV
-        Y+DdhYy6QzFzyrdzojWcNzVeRjY/fbHcOuCHphYlhFomDduCq9TSfwG+068WYQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrCKsWRmVeSWpSXmKPExsVy+t/xe7rhv7OTDCYfMrXYePolm8W5x79Z
-        LK5cPMRk8XLCYUaLJU0ZFqf3v2OxePz3EJvFvpZNjBYXZn1jtWhevJ7N4tp2D4vX81YxWux9
-        vZXd4slqILHp8TVWi4n7z7JbfOy5x2oxdeIHNouuXyuZLS7vmsNmcXbecTaL5vNKFhMWNjNb
-        NH68yW7xeNY8Noutew4wWZy6c5fRYu6XqcwWbw8fZLY4uPEWs8Wy9WvZLR71vWW3WH4WqG7S
-        4WWsFoc33WJyUPbY8LmJzWPnrLvsHgs2lXpsWtXJ5nHn2h42jxMzfrN4TFh0gNFj/9w17B6b
-        l9R7TL6xnNGjdcdfdo+N73YweVzoyvb4vEkugC9Kz6Yov7QkVSEjv7jEVina0MJIz9DSQs/I
-        xFLP0Ng81srIVEnfziYlNSezLLVI3y5BL+Ph6RksBYulKtb+PcfWwDhLrIuRk0NCwETiQNcb
-        ti5GLg4hgaWMEo8eX2KBSMhInJzWwAphC0v8udYFVfSeUaK7dR+Qw8HBK2AncWieIEgNi4Cq
-        xLJPx9lAbF4BQYmTM5+AzREVSJJ4se05I4gtLBAnceD2GiYQm1lAXOLWk/lMIDNFBKYBLW44
-        wwKRuMgpcXlfAsSyvUwSW/9tZwZJsAkYSnS97QLbwAm0eMGpmYwQDWYSXVu7oGx5ieats5kn
-        MArNQnLILCQLZyFpmYWkZQEjyypGkdTS4tz03GJDveLE3OLSvHS95PzcTYzA5Lbt2M/NOxjn
-        vfqod4iRiYPxEKMEB7OSCO+X3RlJQrwpiZVVqUX58UWlOanFhxhNgaExkVlKNDkfmF7zSuIN
-        zQxMDU3MLA1MLc2MlcR5PQs6EoUE0hNLUrNTUwtSi2D6mDg4pRqYpsb6rV6QVS1ZvWhGieA9
-        Kc5rk/+U8lRkubZKiRQJ7JTz5zq969OrF4eyhM5rvvR5nGxSvt+Uu/NW++3NuxK0O37W9ti4
-        PJm7Z0aZPsuNkmf+oXt9jt+suJdmalzVdHNPqv4RU9MXKrJ905qWx3hr3mjZ2bm5dfpm8ZdP
-        qosPp/0qebW4UvvHJS09U8aDV4MyCphbhZZ0XC4oc7P++sJ2wjS2HTfi9R2eJt3UbK95FsB9
-        8LDaL9Hs4rt+/Ir9XZGPbC11Ei9ecRK69+fYr8q+V83vVI5rrtHOSj/om5OX4jvtSJPwOUZ5
-        6yOeDVMj12wXEHPmiez0v3/P9r9i5udnO9YYyS5mf+ATGZ3wxk2JpTgj0VCLuag4EQDgSxtZ
-        9wMAAA==
-X-CMS-MailID: 20220429145104eucas1p1b6a251590f370a28b664559a60a3b16b
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220429122942eucas1p1820d0cd17a871d4953bac2b3de1dcdd9
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220429122942eucas1p1820d0cd17a871d4953bac2b3de1dcdd9
-References: <20220419113435.246203-1-krzysztof.kozlowski@linaro.org>
-        <20220419113435.246203-13-krzysztof.kozlowski@linaro.org>
-        <CGME20220429122942eucas1p1820d0cd17a871d4953bac2b3de1dcdd9@eucas1p1.samsung.com>
-        <870885de-33f3-e0ba-4d56-71c3c993ac87@samsung.com>
-        <75b94ccd-b739-2164-bc4a-20025356cc34@linaro.org>
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 32708fe6-39a6-4dee-ca70-08da2a0794dc
+X-MS-TrafficTypeDiagnostic: SA2PR10MB4537:EE_
+X-Microsoft-Antispam-PRVS: <SA2PR10MB45379F8A36184910DCC512C88EFC9@SA2PR10MB4537.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kuhCLFo3nJGxPw57QAhbUksKKR9JhrjyuzGqwK+0tNSBkjT3Lp9srl/eGtCyeAVuZ/KQINv/U1qiGGmXK6w+dATmk8CTxs6GzJQmK92+9oyyYXwC1y2mrVPZJbyP80OsB5IeDGhRr04r4JscJNl6w+n9IVL6JEN6zh6A1oGZ9un22qS5Wf7N/zEy3o9PUeCaCFF91JIRo3TkI8hAy0Ll8qDFb5IHEwrCY/8STaGueFObkw2j5c/2IzEVyJqQ3ZdiNRTr5LqaQOaKwiLclxIMZAzs2J02pY56QneSa1opVPOaUyNUqabiwZgGK9K8pEkO0c0nwrU3C2BXHreGZl3HKRYLUwMZ+Lg3NUh9iV1rQGHTG0ALx0V0HIi5yrtadHSoFZknmM3f/Ylw1RAPKD/uwIJTKJqaHNxQHw8aJDK+YnsDRWjUZjy2Rnuo9RypYxwZH7Q774ZwaHUu7WNdrP3JAOEHLcQAkySko6P3rBMKT2hORz3yb8ucMKySv0Bc1OrlEjmbOi4n9988QU3LXrt3r/hovLEVwjo/9B1XJIzCg2Z5StP2tqSNr/HGPJG9yfbVCHcmMCVEc3jgkt+qRPHxwdgCYgwz84o2VZ5/k4Th9AOecV63HaAdusjEUrfCek72s8e0lhPc/vd1j8d57+h1iuk7cqL9jowNOWHkhu464zCYnpX0j8snT9c/MWV5e/xrSXC5deHawxoH9VaKcfYpkA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(186003)(5660300002)(52116002)(66946007)(66556008)(33716001)(316002)(66476007)(44832011)(2906002)(83380400001)(8676002)(4326008)(8936002)(110136005)(54906003)(6486002)(86362001)(508600001)(38350700002)(38100700002)(6666004)(9686003)(6512007)(26005)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PdEKLIusnP3T5sAH4g48ZlrkMSyjICkC3O/CRtvybQrmJe/uHogKTx2AoJ2A?=
+ =?us-ascii?Q?mYh1RBxukqXZ9YIF36ehvQqcqN42Lj9q9DD2LkCJSyTneSiAekVh+tpZxvKy?=
+ =?us-ascii?Q?aOzO3B9m8sx5QOotnwSNW/Yo6VUJref4aUHDLWIcO8JoAVZtwXWlhK9gZiEh?=
+ =?us-ascii?Q?ueS+sZPN6pUEvcalrd55rxPiphiFm6gethhFMOhb+aHImDsa8gaskWzMTcAJ?=
+ =?us-ascii?Q?kgv1lgdkhEhMP3itp2815YR4tWBgVQ8rL5388vNr/8iZj8IZfX0tMJUxSdAm?=
+ =?us-ascii?Q?IZXrmuQIavBg0ctCrrrlXGDC1UPYVa4ij1qJX4XizL0Msu+XbfRJROU9wxkR?=
+ =?us-ascii?Q?qP9XIPe57xCditnvZXw7FrPIMLZrmlwS0ug1Q1bJPRD1Tw3KYQs01GI0tHf+?=
+ =?us-ascii?Q?HtW6wvVAOafH3k7LPEqwi/7QRu4rS3yzutEbgYa2/hH8WDPG/DN+QgoRirqk?=
+ =?us-ascii?Q?vpL41BsFxg8nJoL0GVlD9ajE42kUTqB25fA7yvCupCws9F/T5MQ2FMO67V1q?=
+ =?us-ascii?Q?WXtVNv7mX7mJf474vY6tikd9g9gOkOdTtKnittqhnVykFicmglyzUyxLMUeB?=
+ =?us-ascii?Q?hYqhGxVu5/tdfu2nue50H/J510NfgqMaGbq15Dus0rJie94wuvBusMea6IIE?=
+ =?us-ascii?Q?x6bV0IYdEE03+uip6kbKtGBtD5rpENASAyYcthnGZDqSzKBHo+7hCQGDB4yw?=
+ =?us-ascii?Q?+9LxIfC9gu4L86kVirJHFxupvZsVaKAs4VMocPv6efh4zcjhS3g/M0ArUKI5?=
+ =?us-ascii?Q?JAiGk15jMpDdgAVG8nhGNFeZQLsjbg5bnAE8GBaGGWihlvgzPhhBUuQiaRu+?=
+ =?us-ascii?Q?t89dC34EU/J09WWXiW3JVc+U2sdqos0dOB/Jjm5mUA91q+jLxHQ6D/zLClxy?=
+ =?us-ascii?Q?X/FD1RZ0uuou+bCrstaHRwGBfdKJqgYWYD+ixlbWSwHOFdUHng1f2UAix64L?=
+ =?us-ascii?Q?OHQyC8eqZsloNrXW/i66HUVDTntRcZ6aM9RdDFTY5eJ1ZSCUzoVvXic5U/YB?=
+ =?us-ascii?Q?dIzw/dd48y3DlkTX/z0/1lhE/Bkkmj1Vi7CU/LNT20ok42gDhAUWdK3yQVZ6?=
+ =?us-ascii?Q?j6lubfmDuoBF3ZDwYVDHCl7vjTM0y1AbZ8nTLoMRJkS3DJZGae7TPKxUYjkh?=
+ =?us-ascii?Q?LC+9gxEpzEH02myUzgNncyXXD0sFg+nNHz3EvKIuu6qfRaAOGzUNxwnkaT3G?=
+ =?us-ascii?Q?IGkHzDGoV6vbMUV92GnJ4c9MUO8eIYUDAWQhXYrAyG667S+BpuxEk7bOFg09?=
+ =?us-ascii?Q?TIuzaDE3zE8o6eGJMDurWVvW3Li9JXBbDg17MT6nhHWiysSPypbTAPkM2w+1?=
+ =?us-ascii?Q?Hk+IckjTAspEnPDfEGaCVGHuxlI7bzRkMOSc1oSv3wZjQHY0IryLLXoVHDCQ?=
+ =?us-ascii?Q?yvgctBcxQg4LHIleFDfkcYWt9d3q0iXG21TaOSmWn9E3Rty93QVM17yVuta1?=
+ =?us-ascii?Q?xOrSrHdIX9Bvcfqk6knPPdqxTqRxqRqTeihJ6he+ewqd9nl2ha0l5ab90BL+?=
+ =?us-ascii?Q?TMCnlPn+uaTvNh+zjEEj8gQIw4poH1pAnNh66f2/alXGDqBdVrd0jv33ZVTE?=
+ =?us-ascii?Q?fIjZ0PhqAaueXX5caSPsXQWxqs91/KfV0gqzXzk5FUu28WpkJ7vUzhW3Q6JX?=
+ =?us-ascii?Q?iSCqQzsq7yd5gFyNAK0F2/VrVAUEKNpgivrhuTsQ0dPlWdK+FZrVwkPq6MHc?=
+ =?us-ascii?Q?v65snYzJ+Sse3DpdzJj9zkjolOBTpy3y4AN3553nRED58+f+aennEvLVtDSU?=
+ =?us-ascii?Q?epy9b4LyFYX+OzvSzCuyylBAilBzKM8=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 32708fe6-39a6-4dee-ca70-08da2a0794dc
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2022 17:42:08.2762
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GFdPIZte4d521ted9jE7x0qktzokNLZ2Pf6fu1QbNG+oTeCBNgjnnlA0MBUvIy5QOhUDqHd+9rF9v++7y607199Rg3/c1wwmVOx6NtTnrSo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4537
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-04-29_06:2022-04-28,2022-04-29 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=999 mlxscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 adultscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204290088
+X-Proofpoint-GUID: DtzalwjGD2wQjqjluj1rxwUnY-uObKzZ
+X-Proofpoint-ORIG-GUID: DtzalwjGD2wQjqjluj1rxwUnY-uObKzZ
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 29.04.2022 16:16, Krzysztof Kozlowski wrote:
-> On 29/04/2022 14:29, Marek Szyprowski wrote:
->> On 19.04.2022 13:34, Krzysztof Kozlowski wrote:
->>> The driver_override field from platform driver should not be initialized
->>> from static memory (string literal) because the core later kfree() it,
->>> for example when driver_override is set via sysfs.
->>>
->>> Use dedicated helper to set driver_override properly.
->>>
->>> Fixes: 950a7388f02b ("rpmsg: Turn name service into a stand alone driver")
->>> Fixes: c0cdc19f84a4 ("rpmsg: Driver for user space endpoint interface")
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->> This patch landed recently in linux-next as commit 42cd402b8fd4 ("rpmsg:
->> Fix kfree() of static memory on setting driver_override"). In my tests I
->> found that it triggers the following issue during boot of the
->> DragonBoard410c SBC (arch/arm64/boot/dts/qcom/apq8016-sbc.dtb):
->>
->> ------------[ cut here ]------------
->> DEBUG_LOCKS_WARN_ON(lock->magic != lock)
->> WARNING: CPU: 1 PID: 8 at kernel/locking/mutex.c:582
->> __mutex_lock+0x1ec/0x430
->> Modules linked in:
->> CPU: 1 PID: 8 Comm: kworker/u8:0 Not tainted 5.18.0-rc4-next-20220429 #11815
->> Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
->> Workqueue: events_unbound deferred_probe_work_func
->> pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->> pc : __mutex_lock+0x1ec/0x430
->> lr : __mutex_lock+0x1ec/0x430
->> ..
->> Call trace:
->>    __mutex_lock+0x1ec/0x430
->>    mutex_lock_nested+0x38/0x64
->>    driver_set_override+0x124/0x150
->>    qcom_smd_register_edge+0x2a8/0x4ec
->>    qcom_smd_probe+0x54/0x80
->>    platform_probe+0x68/0xe0
->>    really_probe.part.0+0x9c/0x29c
->>    __driver_probe_device+0x98/0x144
->>    driver_probe_device+0xac/0x14c
->>    __device_attach_driver+0xb8/0x120
->>    bus_for_each_drv+0x78/0xd0
->>    __device_attach+0xd8/0x180
->>    device_initial_probe+0x14/0x20
->>    bus_probe_device+0x9c/0xa4
->>    deferred_probe_work_func+0x88/0xc4
->>    process_one_work+0x288/0x6bc
->>    worker_thread+0x248/0x450
->>    kthread+0x118/0x11c
->>    ret_from_fork+0x10/0x20
->> irq event stamp: 3599
->> hardirqs last  enabled at (3599): [<ffff80000919053c>]
->> _raw_spin_unlock_irqrestore+0x98/0x9c
->> hardirqs last disabled at (3598): [<ffff800009190ba4>]
->> _raw_spin_lock_irqsave+0xc0/0xcc
->> softirqs last  enabled at (3554): [<ffff800008010470>] _stext+0x470/0x5e8
->> softirqs last disabled at (3549): [<ffff8000080a4514>]
->> __irq_exit_rcu+0x180/0x1ac
->> ---[ end trace 0000000000000000 ]---
->>
->> I don't see any direct relation between the $subject and the above log,
->> but reverting the $subject on top of linux next-20220429 hides/fixes it.
->> Maybe there is a kind of memory trashing somewhere there and your change
->> only revealed it?
-> Thanks for the report. I think the error path of my patch is wrong - I
-> should not kfree(rpdev->driver_override) from the rpmsg code. That's the
-> only thing I see now...
->
-> Could you test following patch and tell if it helps?
-> https://pastebin.ubuntu.com/p/rp3q9Z5fXj/
+Return -ENOMEM of there is a dma mapping error.  Do not return success.
 
-This doesn't help, the issue is still reported.
+Fixes: 764f1b748164 ("spi: add driver for MTK SPI NAND Flash Interface")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/spi/spi-mtk-snfi.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Best regards
+diff --git a/drivers/spi/spi-mtk-snfi.c b/drivers/spi/spi-mtk-snfi.c
+index 2c556e304673..d66bf9762557 100644
+--- a/drivers/spi/spi-mtk-snfi.c
++++ b/drivers/spi/spi-mtk-snfi.c
+@@ -903,7 +903,8 @@ static int mtk_snand_read_page_cache(struct mtk_snand *snf,
+ 	nfi_write32(snf, NFI_CON, (snf->nfi_cfg.nsectors << CON_SEC_NUM_S));
+ 
+ 	buf_dma = dma_map_single(snf->dev, buf, dma_len, DMA_FROM_DEVICE);
+-	if (dma_mapping_error(snf->dev, buf_dma)) {
++	ret = dma_mapping_error(snf->dev, buf_dma);
++	if (ret) {
+ 		dev_err(snf->dev, "DMA mapping failed.\n");
+ 		goto cleanup;
+ 	}
+@@ -1092,7 +1093,8 @@ static int mtk_snand_write_page_cache(struct mtk_snand *snf,
+ 
+ 	nfi_write32(snf, NFI_CON, (snf->nfi_cfg.nsectors << CON_SEC_NUM_S));
+ 	buf_dma = dma_map_single(snf->dev, snf->buf, dma_len, DMA_TO_DEVICE);
+-	if (dma_mapping_error(snf->dev, buf_dma)) {
++	ret = dma_mapping_error(snf->dev, buf_dma);
++	if (ret) {
+ 		dev_err(snf->dev, "DMA mapping failed.\n");
+ 		goto cleanup;
+ 	}
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+2.35.1
 
