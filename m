@@ -2,136 +2,213 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50ED0514C67
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Apr 2022 16:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A514F514C92
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Apr 2022 16:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377035AbiD2OLU (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 29 Apr 2022 10:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
+        id S1377154AbiD2OT5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 29 Apr 2022 10:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377130AbiD2OLG (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 Apr 2022 10:11:06 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A4A31342;
-        Fri, 29 Apr 2022 07:07:18 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id p7-20020a05600c358700b00393e80c59daso5380916wmq.0;
-        Fri, 29 Apr 2022 07:07:18 -0700 (PDT)
+        with ESMTP id S1377006AbiD2OT4 (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 Apr 2022 10:19:56 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983C78FFBD
+        for <linux-spi@vger.kernel.org>; Fri, 29 Apr 2022 07:16:36 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id dk23so15722330ejb.8
+        for <linux-spi@vger.kernel.org>; Fri, 29 Apr 2022 07:16:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=F6U0EkqCPsQHAJyvN7uVwZZ/NZlhtUREfzw+eDMOBxU=;
-        b=FgBhORL/bHYdqcOTfAOYXjVyqsNMi4ftyxMRwi5DSgY5L0D2OPSFQXG5eXFPAM1evK
-         Re0fEJ45kGwAkXIw36ceyZt1hGE8GbtTvD9B3pC2EwbY9M5aya0oybJf6AP31aGHr5np
-         CH2OOSQzsSUQIpWT/mV/3CYU1Rwu2yzlrV5GmzNc61ajON2A4+yo5dT1srOb5eUHbns7
-         0IbUZRn613u1SrHKDoAkYd9Y+hGvKxafwv8pOsUavd4YSlxMiCXAMgztJz/1RqYtuCS4
-         kMmX01NwGxziPRVDnPZN7k5Hn4HKUqj3pFmKrsoADJJoZpJHbCkYpxwEBX1yubDzNzf+
-         4C+w==
+        bh=UdINARUtzcFoW7h6RyjDI8lgOBSw6WOSOqD14X2CFJU=;
+        b=R3GZ3IwUpu5UUm3UrgEWZ4yVRf5jvXz7GwFUllasFjFFL0aBEmLKNpewMp+KpvazTf
+         g8p8hr+kOKGqyfgS7Y6uQhzrVoBaclahGzEyJPahetcB4lmaLSZiOEXz2JI6zFxDHQpC
+         maW0lcQI5+oePb8/E6eX0hAdKzV8yvr+mZ4vk1i/OguhilfBrgpfSdkLeZzOH/QGszCI
+         RH2NayuUkJaUmwHXmH4I6VtjsZF4R1jZUbZ8lGtIMUIXu5uVYHzuEr+3e8Zq7RWXMNWD
+         XG+381AkVI2TTgKMvdTb9CLibCPzJlooCB/siw0KduRzu5GuQpMZWdmfj293jx06HRzp
+         Ng6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=F6U0EkqCPsQHAJyvN7uVwZZ/NZlhtUREfzw+eDMOBxU=;
-        b=GZOCnwjtaSXbbBtPKxP2iWtWWwuZO+boiyVGmfRnIghBVNVsHBgqLbToEH7Ap++pSu
-         bypHkxve5WLE5k2+AG5C7B5OTIQAQDsgBmIWHVeBMqyguVFFgb5eLBrMHgmhSk/OSjAl
-         3Eb7sAbs3vX52xP/3WUMmx127McSAVM6zkOoFuqI2gA+HIcFfRtwfKQ8H374JEPfe6ca
-         5laaFt3VVC1FiFoqovorbJ/fKolk2ztPDSK/UTDcYcEE8yHzF61r2wM3aFENrZtNur3H
-         ewqY1H9kLA98gtLJFGHipvqkOa769rQbAygdmkfi470vvYn4jv13g+hxRyqUE/LfCw3X
-         jkKA==
-X-Gm-Message-State: AOAM533kO4kMLKRBUl5fng9VZoSSOxRw1RQl37msUdYflu9ddS0qJgWV
-        nGx97fown3jAjNTaM/sbxKE=
-X-Google-Smtp-Source: ABdhPJxgo3nsWAeqRx16WilGR5Kx+5rmyDRvK20doz+vPEmTvwA8MNy6ugVxIjkZs01TFSvmOlipLQ==
-X-Received: by 2002:a1c:f606:0:b0:394:1a21:f68c with SMTP id w6-20020a1cf606000000b003941a21f68cmr3380937wmc.131.1651241236731;
-        Fri, 29 Apr 2022 07:07:16 -0700 (PDT)
-Received: from [192.168.0.43] (static-35-180-85-188.ipcom.comunitel.net. [188.85.180.35])
-        by smtp.gmail.com with ESMTPSA id o10-20020a5d47ca000000b0020a992ce36esm3230764wrc.1.2022.04.29.07.07.15
+        bh=UdINARUtzcFoW7h6RyjDI8lgOBSw6WOSOqD14X2CFJU=;
+        b=jMKWZ20S5MW99N2YJz1rqTmRtPJTy4PyvpAIX3vgP26OiEFkVNYtcwqy+ubEuR5uoI
+         MwfrgcweoSH1yWDgjUTph5B/GH1CqsxZJJk0VOIZkMnmNhCqt8GV+sjJhbtgXvLBSlXf
+         UBaTR4/2anlMhYQG8tHxOjaPRRfByltdjdgiT1NsaGHepAFPFKIbyMMrUIQQE501Xbcn
+         3eFxnzvW5AxB6IpSz1RqFUuuS+4itar55lsFUoskYFp2mT8hZNW2ydwT0qAeY1ik8xR1
+         FVgUhyQ6ka0zxXpRXj+k+0FCKZyUtmvyuGmaF+ByTjxpl1lWqqy3VTGsl7y31QyrhpBj
+         iTFw==
+X-Gm-Message-State: AOAM532GbbU+pga+4wvWvS7E7oZoHhqbipxIh3yDWnAktFx7pdKwcDc5
+        yGwn0KHItr8HI4ttOZIqj0kavQ==
+X-Google-Smtp-Source: ABdhPJykYBCwe9aQMDhIZ8XGDNf9p2LGcca3xyCDUbkpjt15wUq7VCOYejWxIXJEzJpfvaAJeCOHOw==
+X-Received: by 2002:a17:907:6d12:b0:6f3:d304:e259 with SMTP id sa18-20020a1709076d1200b006f3d304e259mr10624053ejc.110.1651241795135;
+        Fri, 29 Apr 2022 07:16:35 -0700 (PDT)
+Received: from [192.168.0.170] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id j12-20020a50ed0c000000b0042617ba63d4sm2982642eds.94.2022.04.29.07.16.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 07:07:16 -0700 (PDT)
-Message-ID: <6aa03759-9027-4841-9ad1-84cbc19fcb00@gmail.com>
-Date:   Fri, 29 Apr 2022 16:07:14 +0200
+        Fri, 29 Apr 2022 07:16:34 -0700 (PDT)
+Message-ID: <75b94ccd-b739-2164-bc4a-20025356cc34@linaro.org>
+Date:   Fri, 29 Apr 2022 16:16:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v6 5/5] arm64: dts: mediatek: add mtk-snfi for mt7622
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v7 12/12] rpmsg: Fix kfree() of static memory on setting
+ driver_override
 Content-Language: en-US
-To:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
-References: <20220424032527.673605-1-gch981213@gmail.com>
- <20220424032527.673605-6-gch981213@gmail.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220424032527.673605-6-gch981213@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Stuart Yoder <stuyoder@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20220419113435.246203-1-krzysztof.kozlowski@linaro.org>
+ <20220419113435.246203-13-krzysztof.kozlowski@linaro.org>
+ <CGME20220429122942eucas1p1820d0cd17a871d4953bac2b3de1dcdd9@eucas1p1.samsung.com>
+ <870885de-33f3-e0ba-4d56-71c3c993ac87@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <870885de-33f3-e0ba-4d56-71c3c993ac87@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-
-
-On 24/04/2022 05:25, Chuanhong Guo wrote:
-> This patch adds a device-tree node for the MTK SPI-NAND Flash Interface
-> for MT7622 device tree.
+On 29/04/2022 14:29, Marek Szyprowski wrote:
+> Hi Krzysztof,
 > 
-> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-
-Applied, thanks!
-
-> ---
-> Changes since v1:
->    1. use the newly introduced nand-ecc-engine instead
->    2. reword commit message
-> Change in v2-v6: none
+> On 19.04.2022 13:34, Krzysztof Kozlowski wrote:
+>> The driver_override field from platform driver should not be initialized
+>> from static memory (string literal) because the core later kfree() it,
+>> for example when driver_override is set via sysfs.
+>>
+>> Use dedicated helper to set driver_override properly.
+>>
+>> Fixes: 950a7388f02b ("rpmsg: Turn name service into a stand alone driver")
+>> Fixes: c0cdc19f84a4 ("rpmsg: Driver for user space endpoint interface")
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 > 
->   arch/arm64/boot/dts/mediatek/mt7622.dtsi | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
+> This patch landed recently in linux-next as commit 42cd402b8fd4 ("rpmsg: 
+> Fix kfree() of static memory on setting driver_override"). In my tests I 
+> found that it triggers the following issue during boot of the 
+> DragonBoard410c SBC (arch/arm64/boot/dts/qcom/apq8016-sbc.dtb):
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7622.dtsi b/arch/arm64/boot/dts/mediatek/mt7622.dtsi
-> index f232f8baf4e8..8c2563a3919a 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7622.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt7622.dtsi
-> @@ -545,6 +545,18 @@ nandc: nfi@1100d000 {
->   		status = "disabled";
->   	};
->   
-> +	snfi: spi@1100d000 {
-> +		compatible = "mediatek,mt7622-snand";
-> +		reg = <0 0x1100d000 0 0x1000>;
-> +		interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_LOW>;
-> +		clocks = <&pericfg CLK_PERI_NFI_PD>, <&pericfg CLK_PERI_SNFI_PD>;
-> +		clock-names = "nfi_clk", "pad_clk";
-> +		nand-ecc-engine = <&bch>;
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +		status = "disabled";
-> +	};
-> +
->   	bch: ecc@1100e000 {
->   		compatible = "mediatek,mt7622-ecc";
->   		reg = <0 0x1100e000 0 0x1000>;
+> ------------[ cut here ]------------
+> DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+> WARNING: CPU: 1 PID: 8 at kernel/locking/mutex.c:582 
+> __mutex_lock+0x1ec/0x430
+> Modules linked in:
+> CPU: 1 PID: 8 Comm: kworker/u8:0 Not tainted 5.18.0-rc4-next-20220429 #11815
+> Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> Workqueue: events_unbound deferred_probe_work_func
+> pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> pc : __mutex_lock+0x1ec/0x430
+> lr : __mutex_lock+0x1ec/0x430
+> ..
+> Call trace:
+>   __mutex_lock+0x1ec/0x430
+>   mutex_lock_nested+0x38/0x64
+>   driver_set_override+0x124/0x150
+>   qcom_smd_register_edge+0x2a8/0x4ec
+>   qcom_smd_probe+0x54/0x80
+>   platform_probe+0x68/0xe0
+>   really_probe.part.0+0x9c/0x29c
+>   __driver_probe_device+0x98/0x144
+>   driver_probe_device+0xac/0x14c
+>   __device_attach_driver+0xb8/0x120
+>   bus_for_each_drv+0x78/0xd0
+>   __device_attach+0xd8/0x180
+>   device_initial_probe+0x14/0x20
+>   bus_probe_device+0x9c/0xa4
+>   deferred_probe_work_func+0x88/0xc4
+>   process_one_work+0x288/0x6bc
+>   worker_thread+0x248/0x450
+>   kthread+0x118/0x11c
+>   ret_from_fork+0x10/0x20
+> irq event stamp: 3599
+> hardirqs last  enabled at (3599): [<ffff80000919053c>] 
+> _raw_spin_unlock_irqrestore+0x98/0x9c
+> hardirqs last disabled at (3598): [<ffff800009190ba4>] 
+> _raw_spin_lock_irqsave+0xc0/0xcc
+> softirqs last  enabled at (3554): [<ffff800008010470>] _stext+0x470/0x5e8
+> softirqs last disabled at (3549): [<ffff8000080a4514>] 
+> __irq_exit_rcu+0x180/0x1ac
+> ---[ end trace 0000000000000000 ]---
+> 
+> I don't see any direct relation between the $subject and the above log, 
+> but reverting the $subject on top of linux next-20220429 hides/fixes it. 
+> Maybe there is a kind of memory trashing somewhere there and your change 
+> only revealed it?
+
+Thanks for the report. I think the error path of my patch is wrong - I
+should not kfree(rpdev->driver_override) from the rpmsg code. That's the
+only thing I see now...
+
+Could you test following patch and tell if it helps?
+https://pastebin.ubuntu.com/p/rp3q9Z5fXj/
+
+-----
+
+diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
+index 3e81642238d2..1e2ad944e2ec 100644
+--- a/drivers/rpmsg/rpmsg_internal.h
++++ b/drivers/rpmsg/rpmsg_internal.h
+@@ -102,11 +102,7 @@ static inline int
+rpmsg_ctrldev_register_device(struct rpmsg_device *rpdev)
+        if (ret)
+                return ret;
+
+-       ret = rpmsg_register_device(rpdev);
+-       if (ret)
+-               kfree(rpdev->driver_override);
+-
+-       return ret;
++       return rpmsg_register_device(rpdev);
+ }
+
+ #endif
+diff --git a/drivers/rpmsg/rpmsg_ns.c b/drivers/rpmsg/rpmsg_ns.c
+index 8eb8f328237e..f26078467899 100644
+--- a/drivers/rpmsg/rpmsg_ns.c
++++ b/drivers/rpmsg/rpmsg_ns.c
+@@ -31,11 +31,7 @@ int rpmsg_ns_register_device(struct rpmsg_device *rpdev)
+        rpdev->src = RPMSG_NS_ADDR;
+        rpdev->dst = RPMSG_NS_ADDR;
+
+-       ret = rpmsg_register_device(rpdev);
+-       if (ret)
+-               kfree(rpdev->driver_override);
+-
+-       return ret;
++       return rpmsg_register_device(rpdev);
+ }
+ EXPORT_SYMBOL(rpmsg_ns_register_device);
