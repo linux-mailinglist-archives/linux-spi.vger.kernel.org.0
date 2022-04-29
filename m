@@ -2,60 +2,48 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B02514217
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Apr 2022 07:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA88514512
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Apr 2022 11:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352838AbiD2GB6 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 29 Apr 2022 02:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
+        id S238640AbiD2JJE (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Fri, 29 Apr 2022 05:09:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238152AbiD2GB6 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 Apr 2022 02:01:58 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2984D6FF74;
-        Thu, 28 Apr 2022 22:58:40 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23T5wZTg052873;
-        Fri, 29 Apr 2022 00:58:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1651211915;
-        bh=7ub+1jFKXKC1WMcZ3JRJEud9/CWYRZVayyMkec2wbXo=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=IJtbuOBwcsyZ326bj2xk/+6YZ9+tL33antxuEEC0gYWLkgxONT4dxCYpZSFwYZ5AM
-         fXiOSzum1nemXAsfPHJF+MO9bChKjPVExRYqOypp5OGk7gX+F2cTsBU74GBc9SH5Pc
-         aVN05ZWetVt8XiclPJggwz3CUkPixopvj8w5pgXo=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23T5wZA0108388
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 29 Apr 2022 00:58:35 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 29
- Apr 2022 00:58:34 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 29 Apr 2022 00:58:35 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23T5wXd6068304;
-        Fri, 29 Apr 2022 00:58:34 -0500
-Date:   Fri, 29 Apr 2022 11:28:33 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
+        with ESMTP id S1352838AbiD2JIt (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 Apr 2022 05:08:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391BF4DF5A;
+        Fri, 29 Apr 2022 02:05:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CAF99621FC;
+        Fri, 29 Apr 2022 09:05:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2CE7C385A4;
+        Fri, 29 Apr 2022 09:05:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651223131;
+        bh=TEUSeY6QOpRIp8RvXU7xeSEczkGUXMIRMG4kLddbXcQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TaP5y+lrGaw7OPGPN6F3BUuowAD3MwgoQSdd8Pc28NGb+cgSdIKmo/n2bNHO340n3
+         rdN4LdtjoDU2baZ482zVFvOraIZXVaoe7aOcX9BYbNmZqJLImhvVId9/FGT4rFXZ1Y
+         yXTZuzeH9jfMsfSpSc6V+6npvYfrVhI8O1NM+XkU=
+Date:   Fri, 29 Apr 2022 11:05:28 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Ian Abbott <abbotti@mev.co.uk>
-CC:     <linux-spi@vger.kernel.org>, Mark Brown <broonie@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] spi: cadence-quadspi: fix Direct Access Mode disable for
- SoCFPGA
-Message-ID: <20220429055833.ahgioqdjwgshpylk@ti.com>
-References: <20220427153446.10113-1-abbotti@mev.co.uk>
+Cc:     stable@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 5.15 0/2] ARM: socfpga: fix broken QuadSPI support
+Message-ID: <YmuqWLwyO2s/+FJf@kroah.com>
+References: <20220427105407.40167-1-abbotti@mev.co.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220427153446.10113-1-abbotti@mev.co.uk>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20220427105407.40167-1-abbotti@mev.co.uk>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,43 +51,24 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 27/04/22 04:34PM, Ian Abbott wrote:
-> The Cadence QSPI compatible string required for the SoCFPGA platform
-> changed from the default "cdns,qspi-nor" to "intel,socfpga-qspi" with
-> the introduction of an additional quirk in
-> commit 98d948eb8331 ("spi: cadence-quadspi: fix write completion support").
-> However, that change did not preserve the previously used
-> quirk for this platform.  Reinstate the `CQSPI_DISABLE_DAC_MODE` quirk
-> for the SoCFPGA platform.
+On Wed, Apr 27, 2022 at 11:54:05AM +0100, Ian Abbott wrote:
+> Write support on the Cadence QSPI controller on the Intel SoCFPGA
+> platform was broken by 9cb2ff111712 ("spi: cadence-quadspi: Disable
+> Auto-HW polling) and fixed by 98d948eb8331 ("spi: cadence-quadspi: fix
+> write completion support") and 36de991e9390 ("ARM: dts: socfpga: change
+> qspi to "intel,socfpga-qspi").
 > 
-> Fixes: 98d948eb8331 ("spi: cadence-quadspi: fix write completion support")
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Signed-off-by: Ian Abbott <abbotti@mev.co.uk>
-
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
-
-> ---
->  drivers/spi/spi-cadence-quadspi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> 1) spi: cadence-quadspi: fix write completion support
+> 2) ARM: dts: socfpga: change qspi to "intel,socfpga-qspi"
 > 
-> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-> index 41922a5ea1f4..30307392c75a 100644
-> --- a/drivers/spi/spi-cadence-quadspi.c
-> +++ b/drivers/spi/spi-cadence-quadspi.c
-> @@ -1781,7 +1781,7 @@ static const struct cqspi_driver_platdata intel_lgm_qspi = {
->  };
->  
->  static const struct cqspi_driver_platdata socfpga_qspi = {
-> -	.quirks = CQSPI_NO_SUPPORT_WR_COMPLETION,
-> +	.quirks = CQSPI_DISABLE_DAC_MODE | CQSPI_NO_SUPPORT_WR_COMPLETION,
->  };
->  
->  static const struct cqspi_driver_platdata versal_ospi = {
-> -- 
-> 2.35.1
+>  arch/arm/boot/dts/socfpga.dtsi                    |  2 +-
+>  arch/arm/boot/dts/socfpga_arria10.dtsi            |  2 +-
+>  arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi |  2 +-
+>  arch/arm64/boot/dts/intel/socfpga_agilex.dtsi     |  2 +-
+>  drivers/spi/spi-cadence-quadspi.c                 | 24 ++++++++++++++++++++---
+>  5 files changed, 25 insertions(+), 7 deletions(-)
 > 
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+Both now queued up, thanks.
+
+greg k-h
