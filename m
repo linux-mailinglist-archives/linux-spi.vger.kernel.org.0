@@ -2,95 +2,288 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7AE5162DE
-	for <lists+linux-spi@lfdr.de>; Sun,  1 May 2022 10:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2AE5163E9
+	for <lists+linux-spi@lfdr.de>; Sun,  1 May 2022 12:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbiEAIl2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 1 May 2022 04:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
+        id S1345097AbiEALAc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 1 May 2022 07:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231855AbiEAIl1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 1 May 2022 04:41:27 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6649047AF8
-        for <linux-spi@vger.kernel.org>; Sun,  1 May 2022 01:38:02 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id p18so13528223edr.7
-        for <linux-spi@vger.kernel.org>; Sun, 01 May 2022 01:38:02 -0700 (PDT)
+        with ESMTP id S245606AbiEALAb (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 1 May 2022 07:00:31 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5FF27B32
+        for <linux-spi@vger.kernel.org>; Sun,  1 May 2022 03:57:06 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso10740845pjj.2
+        for <linux-spi@vger.kernel.org>; Sun, 01 May 2022 03:57:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+yZt2h7tquI8MOBElSieXYW9QvRebVNtP1jshACVHMY=;
-        b=IAnXJV43NRFADs4sfQ5Fhxnm+oF1P9yB9foyJB6M+7deEY4d8P5JuEYzLo3q0xZPnx
-         SFhaovHue85djJGKmq9AkNnwem+sh/E/4VVdgUxDOekuc6sE8zzzcDCbqGzuniXlxJao
-         scd87UuUudYnB/mCowWZ122N4BznVPPcEkCj24k1WFNnJzqlDMu9A8AykjC6v+IiTAs+
-         s61Vtp/yRfQ/2vE+I1LWaGvtw8A1RLLuvYcrG0mPo315tvm/Mo3nULb7vO7u+SOchhtX
-         bQ1V+CFn8BDD3PWWf2u29lX2jNdggbSpt8W1oJu282+l+hLcLQ8Z17Gdd33NA6Iibjif
-         KXWQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ref09pVzmKehKJLaE3ql7rgQqo+jRk+JJ3BJb/yQNDo=;
+        b=EIiptmIOKoBAtGUjy79Rt6qQSdXP4sps+nmcDoC+HGp6BYYOOIzpc4iG104sUaHPbg
+         9HqBOLWttihdDo0Pr+hUp3DUdBQZsgfgIFaT5kWRyPAKgVsLsW9Hl2LAWoWg+yI0idSC
+         9im+lU6Cs36BZXmCopazdDCAAYi6otrXiaqk9HN47M25aME4JMxCLNr8gCf4NEhar3VO
+         7UKoqS0VmExOrUdn3sYNl2cp1pNJamlw8158Aui8lsw5yT8pdWtIgIwmZvuYy9QoOwVC
+         St+PouMioyuXozPKfXhQEY6B/YnXOLsw2EBWy7gVmYexthMZjTfcujQ3CkaHct4M4GQ1
+         vpHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+yZt2h7tquI8MOBElSieXYW9QvRebVNtP1jshACVHMY=;
-        b=xpWTFX37Ei0mEifGcmgTISUbX5A0CZhLyE3kMklhvTK3RQQpKWMtE4c32ghBWBh5yq
-         CG+Gd4035YQ8VU861sNNXXvDPL2GL9eJThSPTwtmMHJWuBrHwLZPVRT49qX0+aGvkLta
-         xdN6i3npoh3m8jcx8F/BWoSJtSKr7x6s4BNFbQVlCpy+uHBDOkL66TgSac9LBsm82qqc
-         kYXIRhcUMvBEUq7FF2n7FH8sWaWCD2//3QC9leAyxy9HxYxgGQWVZvx0h97wedoJVfDJ
-         tFrvw3FTB5FnHxTDCTSmLJQW6tmDgAy/7HVnnC/BMO5jlm1TA+0CEb82aM0h84E2eKD+
-         BLYw==
-X-Gm-Message-State: AOAM533Dj5jAJuGZEI1yRhVWkLR6LwySBYyYsZWzANuWhsMJg5WLtIrO
-        x2ykgdhRtpC7L3J1OVnIj7puypsOsemopw==
-X-Google-Smtp-Source: ABdhPJz+LKO6Io1lqkoIhnpK6XOP/wNeJg9pQJhB/B2DVQ3148XxuJciQ+6Ck+AeoicJaNLMKREpFA==
-X-Received: by 2002:a05:6402:26d3:b0:427:c57f:5333 with SMTP id x19-20020a05640226d300b00427c57f5333mr225317edd.61.1651394281018;
-        Sun, 01 May 2022 01:38:01 -0700 (PDT)
-Received: from [192.168.0.182] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id z19-20020aa7cf93000000b0042617ba63a6sm5024877edx.48.2022.05.01.01.38.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 May 2022 01:38:00 -0700 (PDT)
-Message-ID: <3f274302-dacc-5d99-2678-57870f05fd43@linaro.org>
-Date:   Sun, 1 May 2022 10:37:59 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] spi: dt-bindings: renesas,rspi: Document RZ/G2UL SoC
-Content-Language: en-US
-To:     Biju Das <biju.das.jz@bp.renesas.com>,
+        bh=ref09pVzmKehKJLaE3ql7rgQqo+jRk+JJ3BJb/yQNDo=;
+        b=FDTXEWSICGSiuW3xoblr+muDtTcGZzVODnFPvj1QfaE4ljdpILF8lud8blP7O36m1G
+         xigBCNhjyeqPngkqbMxvMvp6KP4UaYxqCY7zWTuz1mtPkkk8b411HyWn7CzgY5YLQhB2
+         g19Ktvrl5C+yxC2j9BR9pviOLu8KXWy1O1R93InMW9R3TJJ0efCFZqmvPi4nATCt76ig
+         19xe7phcf102bVJ2i0KE5mBNLIEABnfDyPuiFITvViNifOK6Z5G8Gnwpwfcx0uLF/B5I
+         OPQOD3j9jesdA3eeJgOR5yYo5VrP2mElklT9yh/DXhBLQqZlJ+QuBOmufQQuhDQ2pqoI
+         Bybg==
+X-Gm-Message-State: AOAM532tBkvATg1t2aixDo0HuOespSnqzcgow2sUIxwOSmh8kUXV+YkD
+        9HWktwMK7ATOPD4nMXXC4MwILw==
+X-Google-Smtp-Source: ABdhPJxXhYMF5cj6UvI5DKwEl9ozDUat1mEVxojaSzu68hCpYfpsnF7sdxQri4SH/D0isUTD91DS/w==
+X-Received: by 2002:a17:90a:a58d:b0:1db:ed34:e46d with SMTP id b13-20020a17090aa58d00b001dbed34e46dmr12731557pjq.124.1651402626080;
+        Sun, 01 May 2022 03:57:06 -0700 (PDT)
+Received: from localhost ([49.7.45.235])
+        by smtp.gmail.com with ESMTPSA id g11-20020aa7818b000000b0050dc76281d5sm2811611pfi.175.2022.05.01.03.57.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 May 2022 03:57:05 -0700 (PDT)
+From:   Jian Zhang <zhangjian.3032@bytedance.com>
+To:     openbmc@lists.ozlabs.org, joel@jms.id.au, clg@kaod.org
+Cc:     zhangjian_linux@163.com, Jian Zhang <zhangjian.3032@bytedance.com>,
         Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-References: <20220501082150.24662-1-biju.das.jz@bp.renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220501082150.24662-1-biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-kernel@vger.kernel.org (open list),
+        linux-spi@vger.kernel.org (open list:SPI SUBSYSTEM),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/ASPEED MACHINE
+        SUPPORT),
+        linux-aspeed@lists.ozlabs.org (moderated list:ARM/ASPEED MACHINE
+        SUPPORT)
+Subject: [PATCH linux dev-5.15] soc: aspeed: abr: Add sysfs attrs for flash toggle
+Date:   Sun,  1 May 2022 18:56:44 +0800
+Message-Id: <20220501105644.355062-1-zhangjian.3032@bytedance.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 01/05/2022 10:21, Biju Das wrote:
-> Add RSPI binding documentation for Renesas RZ/G2UL SoC.
-> 
-> RSPI block is identical to one found on RZ/A, so no driver changes are
-> required. The fallback compatible string "renesas,rspi-rz" will be used
-> on RZ/G2UL.
-> 
+Implement the flash toggle function in soc ast2600.
+Add two sysfs attrs named "access_primary" and "access_backup"
 
+attr "access_primary": Appears only in the backup flash startup
+store: Non-zero values will clear "Boot Flash source select indicator"
+to '0', the next reboot will boot from primary flash. Nothing will be
+done at 0.
+show: 0 means the next reboot will boot from primary, 1 will boot from
+backup.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+attr "access_backup": Appears only in the primary flash startup
+store: Non-zero values are the timeout time for abr WDT, WDT will be
+turned on immediately if written. The maximum value is 0x3ff, and unit
+is "0.1s". zero value will disable WDT.
+show: the time left(unit is 0.1s) in WDT timer. 0 means timer is not
+enabled. Thus, A non-zero value means that waiting until the WTD times
+out will automatically start from the backup.
 
+Signed-off-by: Jian Zhang <zhangjian.3032@bytedance.com>
+---
+ drivers/spi/spi-aspeed.c              | 62 ++++++++++++++++++
+ include/linux/soc/aspeed/aspeed-abr.h | 93 +++++++++++++++++++++++++++
+ 2 files changed, 155 insertions(+)
+ create mode 100644 include/linux/soc/aspeed/aspeed-abr.h
 
-Best regards,
-Krzysztof
+diff --git a/drivers/spi/spi-aspeed.c b/drivers/spi/spi-aspeed.c
+index 909b5fb175d6..abe3bfe2bd42 100644
+--- a/drivers/spi/spi-aspeed.c
++++ b/drivers/spi/spi-aspeed.c
+@@ -24,6 +24,7 @@
+ #include <linux/sizes.h>
+ #include <linux/spi/spi.h>
+ #include <linux/spi/spi-mem.h>
++#include <linux/soc/aspeed/aspeed-abr.h>
+ 
+ /* ASPEED FMC/SPI memory control register related */
+ #define OFFSET_CE_TYPE_SETTING		0x00
+@@ -127,6 +128,54 @@ struct aspeed_spi_controller {
+ 	spinlock_t lock;
+ };
+ 
++static ssize_t access_primary_show(struct device *dev,
++				   struct device_attribute *attr, char *buf)
++{
++	struct aspeed_spi_controller *ast_ctrl = dev_get_drvdata(dev);
++
++	return _access_primary_show(ast_ctrl->regs, attr, buf);
++}
++
++static ssize_t access_primary_store(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t size)
++{
++	struct aspeed_spi_controller *ast_ctrl = dev_get_drvdata(dev);
++
++	return _access_primary_store(ast_ctrl->regs, attr, buf, size);
++}
++
++static ssize_t access_backup_show(struct device *dev,
++				  struct device_attribute *attr, char *buf)
++{
++	struct aspeed_spi_controller *ast_ctrl = dev_get_drvdata(dev);
++
++	return _access_backup_show(ast_ctrl->regs, attr, buf);
++}
++
++static ssize_t access_backup_store(struct device *dev,
++				   struct device_attribute *attr,
++				   const char *buf, size_t size)
++{
++	struct aspeed_spi_controller *ast_ctrl = dev_get_drvdata(dev);
++
++	return _access_backup_store(ast_ctrl->regs, attr, buf, size);
++}
++
++static DEVICE_ATTR_RW(access_primary);
++static DEVICE_ATTR_RW(access_backup);
++
++static struct attribute *bswitch_primary_attrs[] = {
++	&dev_attr_access_primary.attr, NULL
++};
++
++static struct attribute *bswitch_backup_attrs[] = {
++	&dev_attr_access_backup.attr, NULL
++};
++
++ATTRIBUTE_GROUPS(bswitch_primary);
++ATTRIBUTE_GROUPS(bswitch_backup);
++
+ static uint32_t
+ aspeed_2600_spi_segment_start(struct aspeed_spi_controller *ast_ctrl,
+ 			      uint32_t reg)
+@@ -1393,6 +1442,19 @@ static int aspeed_spi_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto end;
+ 
++	if (of_device_is_compatible(dev->of_node, "aspeed,ast2600-fmc")) {
++		/* if boot from alt source, show access_primary, otherwise show access_backup */
++		if (readl(ast_ctrl->regs + OFFSET_ABR_CTRL_STATUS) &
++		    ABR_BOOT_SRC_INDICATE) {
++
++			if (devm_device_add_groups(dev, bswitch_primary_groups))
++				dev_warn(dev, "Could not add access_primary\n");
++		} else {
++			if (devm_device_add_groups(dev, bswitch_backup_groups))
++				dev_warn(dev, "Could not add access_backup\n");
++		}
++	}
++
+ 	ret = devm_spi_register_master(dev, spi_ctrl);
+ 
+ end:
+diff --git a/include/linux/soc/aspeed/aspeed-abr.h b/include/linux/soc/aspeed/aspeed-abr.h
+new file mode 100644
+index 000000000000..3542f76e0232
+--- /dev/null
++++ b/include/linux/soc/aspeed/aspeed-abr.h
+@@ -0,0 +1,93 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++
++#ifndef __ASPEED_ABR_H__
++#define __ASPEED_ABR_H__
++
++#include <linux/device.h>
++#include <linux/sysfs.h>
++#include <linux/io.h>
++
++#define OFFSET_ABR_CTRL_STATUS 0x64
++#define OFFSET_ABR_TIMER_RELOAD 0x68
++#define OFFSET_ABR_TIMER_RESTART 0x6c
++
++#define ABR_WDT_ENABLE BIT(0)
++#define ABR_BOOT_SRC_INDICATE BIT(4)
++#define ABR_RESTART_MAGIC 0x4755
++#define ABR_CLEAR_BOOT_SRC_MAGIC (0xEA << 16)
++#define ABR_RELOAD_MAX_VALUE 0x3ff
++
++static inline ssize_t _access_primary_show(void __iomem *regs,
++					   struct device_attribute *attr,
++					   char *buf)
++{
++	u32 status = readl(regs + OFFSET_ABR_CTRL_STATUS);
++
++	return sysfs_emit(buf, "%u\n", !(status & ABR_BOOT_SRC_INDICATE));
++}
++
++static inline ssize_t _access_primary_store(void __iomem *regs,
++					    struct device_attribute *attr,
++					    const char *buf, size_t size)
++{
++	unsigned long val;
++
++	if (kstrtoul(buf, 10, &val))
++		return -EINVAL;
++
++	/* write bit[23:16] = 0xEA */
++	if (val)
++		writel(readl(regs + OFFSET_ABR_CTRL_STATUS) |
++			       ABR_CLEAR_BOOT_SRC_MAGIC,
++		       regs + OFFSET_ABR_CTRL_STATUS);
++
++	return size;
++}
++
++static inline ssize_t _access_backup_show(void __iomem *regs,
++					  struct device_attribute *attr,
++					  char *buf)
++{
++	u32 status = readl(regs + OFFSET_ABR_CTRL_STATUS);
++	u32 timer_reload = readl(regs + OFFSET_ABR_TIMER_RELOAD);
++
++	if (!(status & ABR_WDT_ENABLE))
++		return sysfs_emit(buf, "%u\n", 0);
++	/* [31:16] Counter value status */
++	return sysfs_emit(buf, "%u\n", timer_reload >> 16);
++}
++
++static inline ssize_t _access_backup_store(void __iomem *regs,
++					   struct device_attribute *attr,
++					   const char *buf, size_t size)
++{
++	unsigned long count;
++
++	if (kstrtoul(buf, 10, &count))
++		return -EINVAL;
++
++	/* disable watchdog */
++	if (count == 0) {
++		writel(0, regs + OFFSET_ABR_CTRL_STATUS);
++		return size;
++	}
++
++	/*
++	 * bit[12:0] : Reload value of expire time
++	 * The time unit is 0.1 second. Default set at 22 seconds
++	 * 0: Immediately timeout
++	 */
++	count = count < ABR_RELOAD_MAX_VALUE ? count : ABR_RELOAD_MAX_VALUE;
++
++	writel(0, regs + OFFSET_ABR_CTRL_STATUS);
++	writel(count, regs + OFFSET_ABR_TIMER_RELOAD);
++
++	/* Write 0x4755 value to load the reload value into watchdog counter */
++	writel(ABR_RESTART_MAGIC, regs + OFFSET_ABR_TIMER_RESTART);
++
++	/* Enable watchdog */
++	writel(ABR_WDT_ENABLE, regs + OFFSET_ABR_CTRL_STATUS);
++	return size;
++}
++
++#endif
+-- 
+2.25.1
+
