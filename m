@@ -2,188 +2,82 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA905153AF
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Apr 2022 20:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8EB5162AB
+	for <lists+linux-spi@lfdr.de>; Sun,  1 May 2022 10:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379877AbiD2Scv (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Fri, 29 Apr 2022 14:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
+        id S244336AbiEAIZX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Sun, 1 May 2022 04:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379998AbiD2Scu (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Fri, 29 Apr 2022 14:32:50 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A69D3D99
-        for <linux-spi@vger.kernel.org>; Fri, 29 Apr 2022 11:29:29 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id kq17so16988009ejb.4
-        for <linux-spi@vger.kernel.org>; Fri, 29 Apr 2022 11:29:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1Zn4UF57t4pnfMwkACd31jjeal5RhpHnkwFarZTu/dQ=;
-        b=Yju2gP3H7feQ0jeMIY/hZkOEOoSoa00CEibfna6oVQzF9/eQ5+ytMAsdLe5WX7mHeQ
-         J61qzVV7hJgD2E7DTMm799fD1ExZWC92O5Z5MQJ3Izz75VW5dcvN/q6CSgHUbws9RglY
-         83cEuaWdBuKpqQTXIrafNSDyCsuv2Ew28D74WXz/Ik2eST10Un3FzGmvqMC8O+fYL4PC
-         8JQYD4vG/i4KtH8ZMZH0GPFGUg6Nz8RKmYkXLtDfxBXypISaZi6+WTwWX/9LGj3oj9Ql
-         L8++NV0TVRjT6Iqj0aHMEIgQOGyyJP0xnB5R1z3nGhE9kAKq1TuJQ1gQ5SW7rPZfWhCn
-         o50w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1Zn4UF57t4pnfMwkACd31jjeal5RhpHnkwFarZTu/dQ=;
-        b=ppJzv0iQ3NlBTtLB3pugGVsp/ivLwunPzL2bFlri/kanozAteEBaYMDS0C/E/3h9AE
-         MQozLKZaRE+Q1a2IEfqWo6hyCEWI5irCHNIDD3NmnmD1rVi1OfArpCbcpN/PJHPQNX+g
-         pob52BT30t9P2nVAHREB3vq8aLWt0UhNWFIA3FGja2aSzD548AYmjVm3Bh0vtMO1LG2+
-         yRK+NFu2ikru83eQLBJ9rgTTwg/O/cHSDvWqeF2i2fujno2VI0nfuhGply64/paid4zp
-         UhimWrQqoC4vXbY5X5CcLxKX/v1/qlxVzLZ56iJBq9WZ2hW1GA6xq8vJ4MSeHiYLRfJ2
-         ek4w==
-X-Gm-Message-State: AOAM530mkG43relfYuPKo5VwvAu0A15VAC1QrUoH43eg3L7LnRZ0edai
-        rDmdKaxU50YUHIk08+0a/7PhGw==
-X-Google-Smtp-Source: ABdhPJxnnexTfm1ciFrnHmiTZVvUaiD85uL4/xEhS6m4C1gFLe/tyvaZCnOhPWZFKjyEpqAej5KZuQ==
-X-Received: by 2002:a17:907:2cc6:b0:6f0:2de3:9446 with SMTP id hg6-20020a1709072cc600b006f02de39446mr581569ejc.690.1651256968301;
-        Fri, 29 Apr 2022 11:29:28 -0700 (PDT)
-Received: from [192.168.0.175] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id h14-20020a1709070b0e00b006f3ef214db9sm858906ejl.31.2022.04.29.11.29.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 11:29:27 -0700 (PDT)
-Message-ID: <cbf9aad1-cbdb-8886-f979-a793b070e2a1@linaro.org>
-Date:   Fri, 29 Apr 2022 20:29:25 +0200
+        with ESMTP id S243772AbiEAIZW (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Sun, 1 May 2022 04:25:22 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEF8731205;
+        Sun,  1 May 2022 01:21:56 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.91,189,1647270000"; 
+   d="scan'208";a="119713381"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 01 May 2022 17:21:56 +0900
+Received: from localhost.localdomain (unknown [10.226.92.14])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id ECE6C41DD2C7;
+        Sun,  1 May 2022 17:21:52 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH] spi: dt-bindings: renesas,rspi: Document RZ/G2UL SoC
+Date:   Sun,  1 May 2022 09:21:50 +0100
+Message-Id: <20220501082150.24662-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v7 12/12] rpmsg: Fix kfree() of static memory on setting
- driver_override
-Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Stuart Yoder <stuyoder@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-References: <20220419113435.246203-1-krzysztof.kozlowski@linaro.org>
- <20220419113435.246203-13-krzysztof.kozlowski@linaro.org>
- <CGME20220429122942eucas1p1820d0cd17a871d4953bac2b3de1dcdd9@eucas1p1.samsung.com>
- <870885de-33f3-e0ba-4d56-71c3c993ac87@samsung.com>
- <75b94ccd-b739-2164-bc4a-20025356cc34@linaro.org>
- <6e21f7d3-49d0-eda7-7a89-0f8ac69596a4@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <6e21f7d3-49d0-eda7-7a89-0f8ac69596a4@samsung.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 29/04/2022 16:51, Marek Szyprowski wrote:
-> On 29.04.2022 16:16, Krzysztof Kozlowski wrote:
->> On 29/04/2022 14:29, Marek Szyprowski wrote:
->>> On 19.04.2022 13:34, Krzysztof Kozlowski wrote:
->>>> The driver_override field from platform driver should not be initialized
->>>> from static memory (string literal) because the core later kfree() it,
->>>> for example when driver_override is set via sysfs.
->>>>
->>>> Use dedicated helper to set driver_override properly.
->>>>
->>>> Fixes: 950a7388f02b ("rpmsg: Turn name service into a stand alone driver")
->>>> Fixes: c0cdc19f84a4 ("rpmsg: Driver for user space endpoint interface")
->>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->>> This patch landed recently in linux-next as commit 42cd402b8fd4 ("rpmsg:
->>> Fix kfree() of static memory on setting driver_override"). In my tests I
->>> found that it triggers the following issue during boot of the
->>> DragonBoard410c SBC (arch/arm64/boot/dts/qcom/apq8016-sbc.dtb):
->>>
->>> ------------[ cut here ]------------
->>> DEBUG_LOCKS_WARN_ON(lock->magic != lock)
->>> WARNING: CPU: 1 PID: 8 at kernel/locking/mutex.c:582
->>> __mutex_lock+0x1ec/0x430
->>> Modules linked in:
->>> CPU: 1 PID: 8 Comm: kworker/u8:0 Not tainted 5.18.0-rc4-next-20220429 #11815
->>> Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
->>> Workqueue: events_unbound deferred_probe_work_func
->>> pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->>> pc : __mutex_lock+0x1ec/0x430
->>> lr : __mutex_lock+0x1ec/0x430
->>> ..
->>> Call trace:
->>>    __mutex_lock+0x1ec/0x430
->>>    mutex_lock_nested+0x38/0x64
->>>    driver_set_override+0x124/0x150
->>>    qcom_smd_register_edge+0x2a8/0x4ec
->>>    qcom_smd_probe+0x54/0x80
->>>    platform_probe+0x68/0xe0
->>>    really_probe.part.0+0x9c/0x29c
->>>    __driver_probe_device+0x98/0x144
->>>    driver_probe_device+0xac/0x14c
->>>    __device_attach_driver+0xb8/0x120
->>>    bus_for_each_drv+0x78/0xd0
->>>    __device_attach+0xd8/0x180
->>>    device_initial_probe+0x14/0x20
->>>    bus_probe_device+0x9c/0xa4
->>>    deferred_probe_work_func+0x88/0xc4
->>>    process_one_work+0x288/0x6bc
->>>    worker_thread+0x248/0x450
->>>    kthread+0x118/0x11c
->>>    ret_from_fork+0x10/0x20
->>> irq event stamp: 3599
->>> hardirqs last  enabled at (3599): [<ffff80000919053c>]
->>> _raw_spin_unlock_irqrestore+0x98/0x9c
->>> hardirqs last disabled at (3598): [<ffff800009190ba4>]
->>> _raw_spin_lock_irqsave+0xc0/0xcc
->>> softirqs last  enabled at (3554): [<ffff800008010470>] _stext+0x470/0x5e8
->>> softirqs last disabled at (3549): [<ffff8000080a4514>]
->>> __irq_exit_rcu+0x180/0x1ac
->>> ---[ end trace 0000000000000000 ]---
->>>
->>> I don't see any direct relation between the $subject and the above log,
->>> but reverting the $subject on top of linux next-20220429 hides/fixes it.
->>> Maybe there is a kind of memory trashing somewhere there and your change
->>> only revealed it?
->> Thanks for the report. I think the error path of my patch is wrong - I
->> should not kfree(rpdev->driver_override) from the rpmsg code. That's the
->> only thing I see now...
->>
->> Could you test following patch and tell if it helps?
->> https://pastebin.ubuntu.com/p/rp3q9Z5fXj/
-> 
-> This doesn't help, the issue is still reported.
+Add RSPI binding documentation for Renesas RZ/G2UL SoC.
 
-I think I screwed this part of code. The new helper uses device_lock()
-(the mutexes you see in backtrace) but in rpmsg it is called before
-device_register() which initializes the device.
+RSPI block is identical to one found on RZ/A, so no driver changes are
+required. The fallback compatible string "renesas,rspi-rz" will be used
+on RZ/G2UL.
 
-I don't have a device using qcom-smd rpmsg, so it's a bit tricky to
-reproduce.
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
+ Documentation/devicetree/bindings/spi/renesas,rspi.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Best regards,
-Krzysztof
+diff --git a/Documentation/devicetree/bindings/spi/renesas,rspi.yaml b/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
+index 2c3c6bd6ec45..f45d3b75d6de 100644
+--- a/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
++++ b/Documentation/devicetree/bindings/spi/renesas,rspi.yaml
+@@ -21,6 +21,7 @@ properties:
+           - enum:
+               - renesas,rspi-r7s72100  # RZ/A1H
+               - renesas,rspi-r7s9210   # RZ/A2
++              - renesas,r9a07g043-rspi # RZ/G2UL
+               - renesas,r9a07g044-rspi # RZ/G2{L,LC}
+               - renesas,r9a07g054-rspi # RZ/V2L
+           - const: renesas,rspi-rz
+@@ -124,6 +125,7 @@ allOf:
+           contains:
+             enum:
+               - renesas,qspi
++              - renesas,r9a07g043-rspi
+               - renesas,r9a07g044-rspi
+               - renesas,r9a07g054-rspi
+     then:
+-- 
+2.25.1
+
