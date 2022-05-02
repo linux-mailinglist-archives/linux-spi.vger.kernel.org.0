@@ -2,135 +2,141 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE7A516EA2
-	for <lists+linux-spi@lfdr.de>; Mon,  2 May 2022 13:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D27F75172B7
+	for <lists+linux-spi@lfdr.de>; Mon,  2 May 2022 17:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354962AbiEBLRK (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Mon, 2 May 2022 07:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
+        id S1385878AbiEBPhP (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 2 May 2022 11:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379775AbiEBLRH (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Mon, 2 May 2022 07:17:07 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA04DE93;
-        Mon,  2 May 2022 04:13:32 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id t6so19179217wra.4;
-        Mon, 02 May 2022 04:13:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=SC8skA+OBCO4ttnMU6A69mO02uNTXym35DLsl/48diU=;
-        b=JTQTr1GnJeZgk06pN6GhaUb2czWsZHnh/AlHrbSZz19/kw5xmFBnm05PNJiBpsipKw
-         WiPO8kbX3nazhOCZLjBYTRoSdC5iXl/YjAIxGxjexHt5VTWk21U5T7oQ+auduHMgFcJd
-         yXT4Yt1+ssKjfnOtJuDrE4tOA0x1zSpqQAH4DhhN5SJurEMG7vQ9JrQmHEMbJlNeG1xy
-         1GD/aklFtrnsasmbWmYey4hFJg446lYncvxLLK5pDP8rSMz8vZuvisuwWR98b1xsc4Qk
-         rxOzCV2A5UVCHoL5E/UwbFSrgbOIo+7JLx+75cjBsGJ4jmQWVrsbDo3WjCUCxN++sId9
-         wx4g==
+        with ESMTP id S1385863AbiEBPhK (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 2 May 2022 11:37:10 -0400
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48224BC22;
+        Mon,  2 May 2022 08:33:38 -0700 (PDT)
+Received: by mail-ot1-f42.google.com with SMTP id i11-20020a9d4a8b000000b005cda3b9754aso9933172otf.12;
+        Mon, 02 May 2022 08:33:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=SC8skA+OBCO4ttnMU6A69mO02uNTXym35DLsl/48diU=;
-        b=FjheUtmZGwH3HXmLsKGSmjltdcO6sXb2wGSLeapOHwzqugIIrVzMutrF2LvdnDCoUq
-         qZ6um+wovnaXBGaEPadGDdmC08InREzalwagq5WFqPriU8XZHb7U/FNbuUtoRufYsLJT
-         BegYd3NZOTFolvs6ihwjKBe6rb5bWlHwSkLdw55kga1oP7ORuUBHMHX4Nd3W2SCBW8IS
-         lTRviPLBQW6Jva/M4rsHovYeBhEzlHtuQmE72Z/FnS/zL8zkyBUMbya62u0T2oZ9O3Vr
-         Ei7y6An3Re/PuWaq5tW9rcaBANm3imUrYrp8dyU/QnQhUd8HsCACI83GjUGh5PLxyM5o
-         EW8A==
-X-Gm-Message-State: AOAM530B9JVv6OgCAcuoTp1zP3TsdcBp8BJUdFcYXfRzVm0pF9/6UVaq
-        EgOZtTODfPe4hr1u1AaBJrKfATwQI34=
-X-Google-Smtp-Source: ABdhPJwAZjweYGcKXuo+OPnc4VEy9KNTspk7hnk96q2DV2S8nKCINtxuBB5vrZYuZtadYwOzOTolVA==
-X-Received: by 2002:adf:e10a:0:b0:20a:86a3:d06f with SMTP id t10-20020adfe10a000000b0020a86a3d06fmr9415372wrz.249.1651490011107;
-        Mon, 02 May 2022 04:13:31 -0700 (PDT)
-Received: from localhost.localdomain ([213.215.174.110])
-        by smtp.gmail.com with ESMTPSA id c11-20020adfa70b000000b0020c5253d90esm9082836wrd.90.2022.05.02.04.13.30
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=SDazvwLtmD7iGR4/3qNdCTkP7LG5uBpWcYwGTxEc+2A=;
+        b=YHD5arfSvMRSB5p0CPCUeYNVppo5Nu6v8jeC/A90CUU19OiT4GKPjQZOaDjvdKvN6O
+         XU1DgiyS1pfiNGkSL4Ig0FvrI+1n0ccerzfljteYxsW4EJnVSPapnFhCrIX+ooB2K3Le
+         Os9TuT6fGT6GBi59AAehLq2p3cafT+wHMKKIIxyMdLGiL3mqvb4iyjUwcKp1Zr+/27ci
+         2K5jcMAtXGjrwKkpHE8BjeRtJi0v9nOj7x2r9Uc2eueMoOoMCqlkG3TIw+CpMXng9IAs
+         IUgWnOTnOvV07bzaKHlmqgVM2+/15HKwy2rJXidc4dieUf22WtNpo7S56taVVRI8ZDDu
+         9Crw==
+X-Gm-Message-State: AOAM530uX1bk8lScoSsS4hHJ45DyZ0Qm9mg0d7Q+OnbaxuEu6/7ex+lH
+        recJ2vNGPZZLKgNm6VSaKg==
+X-Google-Smtp-Source: ABdhPJyxhjWaL+KKrChyj8rFPZzTPAip2KUS5CJwmjTl5l+jgv7N6SL8bT0V7zetu7j4JXX4QkkOKg==
+X-Received: by 2002:a9d:491c:0:b0:605:c207:1f6b with SMTP id e28-20020a9d491c000000b00605c2071f6bmr4416443otf.41.1651505617521;
+        Mon, 02 May 2022 08:33:37 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a11-20020a4a9b0b000000b0035ec65ac944sm3482696ook.16.2022.05.02.08.33.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 04:13:30 -0700 (PDT)
-From:   Andrea Zanotti <andreazanottifo@gmail.com>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andrea Zanotti <andreazanottifo@gmail.com>
-Subject: [PATCH] spi: omap2-mcspi: add support for interword delay
-Date:   Mon,  2 May 2022 13:13:00 +0200
-Message-Id: <20220502111300.24754-1-andreazanottifo@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 02 May 2022 08:33:37 -0700 (PDT)
+Received: (nullmailer pid 1161769 invoked by uid 1000);
+        Mon, 02 May 2022 15:33:29 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
+Cc:     Joel Stanley <joel@jms.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        linux-kernel@vger.kernel.org, Tao Ren <rentao.bupt@gmail.com>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org,
+        Jae Hyun Yoo <quic_jaehyoo@quicinc.com>,
+        linux-aspeed@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>
+In-Reply-To: <20220502081341.203369-3-clg@kaod.org>
+References: <20220502081341.203369-1-clg@kaod.org> <20220502081341.203369-3-clg@kaod.org>
+Subject: Re: [PATCH v5 02/11] dt-bindings: spi: Add Aspeed SMC controllers device tree binding
+Date:   Mon, 02 May 2022 10:33:29 -0500
+Message-Id: <1651505609.452113.1161768.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,PP_MIME_FAKE_ASCII_TEXT,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-The module omap2-mcspi does not support the interword delay
-parameter present in the spi transfer. On one side, if the module
-is instructed to use the dma, this parameter is correctly ignored.
-However, without the usage of the dma, that parameter should be
-used.
+On Mon, 02 May 2022 10:13:32 +0200, Cédric Le Goater wrote:
+> The "interrupt" property is optional because it is only necessary for
+> controllers supporting DMAs (Not implemented yet in the new driver).
+> 
+> Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> Tested-by: Joel Stanley <joel@jms.id.au>
+> Tested-by: Tao Ren <rentao.bupt@gmail.com>
+> Tested-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Cédric Le Goater <clg@kaod.org>
+> ---
+>  .../bindings/spi/aspeed,ast2600-fmc.yaml      | 82 +++++++++++++++++++
+>  MAINTAINERS                                   |  9 ++
+>  2 files changed, 91 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+> 
 
-The patch introduce the handling of such delay in the omap2-mcspi
-module, using standard spi_delay struct. The patch has been tested
-using as benchmark a DM3730.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-The delay function used (spi_delay_exec) is already present in the
-kernel and it checks on its own the validity of the input, as such,
-no additional checks are present.
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml:62:1: [error] syntax error: found character '\t' that cannot start any token (syntax)
 
-The range of usage of the udelay function is incremented to 200 us,
-as the change from udelay to usleep_range introduces not
-neglectible delays.
+dtschema/dtc warnings/errors:
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.example.dts'
+Traceback (most recent call last):
+  File "/usr/local/bin/dt-extract-example", line 52, in <module>
+    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
+  File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/main.py", line 434, in load
+    return constructor.get_single_data()
+  File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py", line 119, in get_single_data
+    node = self.composer.get_single_node()
+  File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
+  File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
+  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
+  File "_ruamel_yaml.pyx", line 773, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 848, in _ruamel_yaml.CParser._compose_sequence_node
+  File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
+ruamel.yaml.scanner.ScannerError: while scanning a block scalar
+  in "<unicode string>", line 49, column 5
+found a tab character where an indentation space is expected
+  in "<unicode string>", line 62, column 1
+make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml:  while scanning a block scalar
+  in "<unicode string>", line 49, column 5
+found a tab character where an indentation space is expected
+  in "<unicode string>", line 62, column 1
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml: ignoring, error parsing file
+make: *** [Makefile:1401: dt_binding_check] Error 2
 
-Signed-off-by: Andrea Zanotti <andreazanottifo@gmail.com>
----
- drivers/spi/spi-omap2-mcspi.c | 6 ++++++
- drivers/spi/spi.c             | 2 +-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+doc reference errors (make refcheckdocs):
 
-diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
-index d4c9510af393..a79934be7037 100644
---- a/drivers/spi/spi-omap2-mcspi.c
-+++ b/drivers/spi/spi-omap2-mcspi.c
-@@ -758,6 +758,8 @@ omap2_mcspi_txrx_pio(struct spi_device *spi, struct spi_transfer *xfer)
- 				dev_vdbg(&spi->dev, "read-%d %02x\n",
- 						word_len, *(rx - 1));
- 			}
-+			/* Add word delay between each word */
-+			spi_delay_exec(&xfer->word_delay, xfer);
- 		} while (c);
- 	} else if (word_len <= 16) {
- 		u16		*rx;
-@@ -805,6 +807,8 @@ omap2_mcspi_txrx_pio(struct spi_device *spi, struct spi_transfer *xfer)
- 				dev_vdbg(&spi->dev, "read-%d %04x\n",
- 						word_len, *(rx - 1));
- 			}
-+			/* Add word delay between each word */
-+			spi_delay_exec(&xfer->word_delay, xfer);
- 		} while (c >= 2);
- 	} else if (word_len <= 32) {
- 		u32		*rx;
-@@ -852,6 +856,8 @@ omap2_mcspi_txrx_pio(struct spi_device *spi, struct spi_transfer *xfer)
- 				dev_vdbg(&spi->dev, "read-%d %08x\n",
- 						word_len, *(rx - 1));
- 			}
-+			/* Add word delay between each word */
-+			spi_delay_exec(&xfer->word_delay, xfer);
- 		} while (c >= 4);
- 	}
- 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 419de3d40481..5fa36c469ba0 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1143,7 +1143,7 @@ static void _spi_transfer_delay_ns(u32 ns)
- 	} else {
- 		u32 us = DIV_ROUND_UP(ns, 1000);
- 
--		if (us <= 10)
-+		if (us <= 200)
- 			udelay(us);
- 		else
- 			usleep_range(us, us + DIV_ROUND_UP(us, 10));
--- 
-2.17.1
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
