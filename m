@@ -2,288 +2,187 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2AE5163E9
-	for <lists+linux-spi@lfdr.de>; Sun,  1 May 2022 12:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBC4516BBF
+	for <lists+linux-spi@lfdr.de>; Mon,  2 May 2022 10:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345097AbiEALAc (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Sun, 1 May 2022 07:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
+        id S1358567AbiEBIRX (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Mon, 2 May 2022 04:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245606AbiEALAb (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Sun, 1 May 2022 07:00:31 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5FF27B32
-        for <linux-spi@vger.kernel.org>; Sun,  1 May 2022 03:57:06 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso10740845pjj.2
-        for <linux-spi@vger.kernel.org>; Sun, 01 May 2022 03:57:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ref09pVzmKehKJLaE3ql7rgQqo+jRk+JJ3BJb/yQNDo=;
-        b=EIiptmIOKoBAtGUjy79Rt6qQSdXP4sps+nmcDoC+HGp6BYYOOIzpc4iG104sUaHPbg
-         9HqBOLWttihdDo0Pr+hUp3DUdBQZsgfgIFaT5kWRyPAKgVsLsW9Hl2LAWoWg+yI0idSC
-         9im+lU6Cs36BZXmCopazdDCAAYi6otrXiaqk9HN47M25aME4JMxCLNr8gCf4NEhar3VO
-         7UKoqS0VmExOrUdn3sYNl2cp1pNJamlw8158Aui8lsw5yT8pdWtIgIwmZvuYy9QoOwVC
-         St+PouMioyuXozPKfXhQEY6B/YnXOLsw2EBWy7gVmYexthMZjTfcujQ3CkaHct4M4GQ1
-         vpHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ref09pVzmKehKJLaE3ql7rgQqo+jRk+JJ3BJb/yQNDo=;
-        b=FDTXEWSICGSiuW3xoblr+muDtTcGZzVODnFPvj1QfaE4ljdpILF8lud8blP7O36m1G
-         xigBCNhjyeqPngkqbMxvMvp6KP4UaYxqCY7zWTuz1mtPkkk8b411HyWn7CzgY5YLQhB2
-         g19Ktvrl5C+yxC2j9BR9pviOLu8KXWy1O1R93InMW9R3TJJ0efCFZqmvPi4nATCt76ig
-         19xe7phcf102bVJ2i0KE5mBNLIEABnfDyPuiFITvViNifOK6Z5G8Gnwpwfcx0uLF/B5I
-         OPQOD3j9jesdA3eeJgOR5yYo5VrP2mElklT9yh/DXhBLQqZlJ+QuBOmufQQuhDQ2pqoI
-         Bybg==
-X-Gm-Message-State: AOAM532tBkvATg1t2aixDo0HuOespSnqzcgow2sUIxwOSmh8kUXV+YkD
-        9HWktwMK7ATOPD4nMXXC4MwILw==
-X-Google-Smtp-Source: ABdhPJxXhYMF5cj6UvI5DKwEl9ozDUat1mEVxojaSzu68hCpYfpsnF7sdxQri4SH/D0isUTD91DS/w==
-X-Received: by 2002:a17:90a:a58d:b0:1db:ed34:e46d with SMTP id b13-20020a17090aa58d00b001dbed34e46dmr12731557pjq.124.1651402626080;
-        Sun, 01 May 2022 03:57:06 -0700 (PDT)
-Received: from localhost ([49.7.45.235])
-        by smtp.gmail.com with ESMTPSA id g11-20020aa7818b000000b0050dc76281d5sm2811611pfi.175.2022.05.01.03.57.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 May 2022 03:57:05 -0700 (PDT)
-From:   Jian Zhang <zhangjian.3032@bytedance.com>
-To:     openbmc@lists.ozlabs.org, joel@jms.id.au, clg@kaod.org
-Cc:     zhangjian_linux@163.com, Jian Zhang <zhangjian.3032@bytedance.com>,
-        Mark Brown <broonie@kernel.org>,
+        with ESMTP id S1349062AbiEBIRX (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Mon, 2 May 2022 04:17:23 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6D46402;
+        Mon,  2 May 2022 01:13:54 -0700 (PDT)
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by gandalf.ozlabs.org (Postfix) with ESMTP id 4KsG8070Qdz4xXk;
+        Mon,  2 May 2022 18:13:52 +1000 (AEST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KsG7s6K8Kz4x7Y;
+        Mon,  2 May 2022 18:13:45 +1000 (AEST)
+From:   =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+To:     linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-aspeed@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
         Andrew Jeffery <andrew@aj.id.au>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-spi@vger.kernel.org (open list:SPI SUBSYSTEM),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/ASPEED MACHINE
-        SUPPORT),
-        linux-aspeed@lists.ozlabs.org (moderated list:ARM/ASPEED MACHINE
-        SUPPORT)
-Subject: [PATCH linux dev-5.15] soc: aspeed: abr: Add sysfs attrs for flash toggle
-Date:   Sun,  1 May 2022 18:56:44 +0800
-Message-Id: <20220501105644.355062-1-zhangjian.3032@bytedance.com>
-X-Mailer: git-send-email 2.25.1
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+Subject: [PATCH v5 00/11] spi: spi-mem: Convert Aspeed SMC driver to spi-mem
+Date:   Mon,  2 May 2022 10:13:30 +0200
+Message-Id: <20220502081341.203369-1-clg@kaod.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Implement the flash toggle function in soc ast2600.
-Add two sysfs attrs named "access_primary" and "access_backup"
+Hi,
 
-attr "access_primary": Appears only in the backup flash startup
-store: Non-zero values will clear "Boot Flash source select indicator"
-to '0', the next reboot will boot from primary flash. Nothing will be
-done at 0.
-show: 0 means the next reboot will boot from primary, 1 will boot from
-backup.
+This series adds a new SPI driver using the spi-mem interface for the
+Aspeed static memory controllers of the AST2600, AST2500 and AST2400
+SoCs.
 
-attr "access_backup": Appears only in the primary flash startup
-store: Non-zero values are the timeout time for abr WDT, WDT will be
-turned on immediately if written. The maximum value is 0x3ff, and unit
-is "0.1s". zero value will disable WDT.
-show: the time left(unit is 0.1s) in WDT timer. 0 means timer is not
-enabled. Thus, A non-zero value means that waiting until the WTD times
-out will automatically start from the backup.
+ * AST2600 Firmware SPI Memory Controller (FMC)
+ * AST2600 SPI Flash Controller (SPI1 and SPI2)
+ * AST2500 Firmware SPI Memory Controller (FMC)
+ * AST2500 SPI Flash Controller (SPI1 and SPI2)
+ * AST2400 New Static Memory Controller (also referred as FMC)
+ * AST2400 SPI Flash Controller (SPI)
 
-Signed-off-by: Jian Zhang <zhangjian.3032@bytedance.com>
----
- drivers/spi/spi-aspeed.c              | 62 ++++++++++++++++++
- include/linux/soc/aspeed/aspeed-abr.h | 93 +++++++++++++++++++++++++++
- 2 files changed, 155 insertions(+)
- create mode 100644 include/linux/soc/aspeed/aspeed-abr.h
+It is based on the current OpenBMC kernel driver [1], using directly
+the MTD SPI-NOR interface and on a patchset [2] previously proposed
+adding support for the AST2600 only. This driver takes a slightly
+different approach to cover all 6 controllers.
 
-diff --git a/drivers/spi/spi-aspeed.c b/drivers/spi/spi-aspeed.c
-index 909b5fb175d6..abe3bfe2bd42 100644
---- a/drivers/spi/spi-aspeed.c
-+++ b/drivers/spi/spi-aspeed.c
-@@ -24,6 +24,7 @@
- #include <linux/sizes.h>
- #include <linux/spi/spi.h>
- #include <linux/spi/spi-mem.h>
-+#include <linux/soc/aspeed/aspeed-abr.h>
+It does not make use of the controller register disabling Address and
+Data byte lanes because is not available on the AST2400 SoC. We could
+introduce a specific handler for new features available on recent SoCs
+if needed. As there is not much difference on performance, the driver
+chooses the common denominator: "User mode" which has been heavily
+tested in [1]. "User mode" is also used as a fall back method when
+flash device mapping window is too small.
+
+Problems to address with spi-mem were the configuration of the mapping
+windows and the calibration of the read timings. The driver handles
+them in the direct mapping handler when some knowledge on the size of
+the flash device is know. It is not perfect but not incorrect either.
+The algorithm is one from [1] because it doesn't require the DMA
+registers which are not available on all controllers.
+
+Direct mapping for writes is not supported (yet). I have seen some
+corruption with writes and I preferred to use the safer and proven
+method of the initial driver [1]. We can improve that later.
+
+The driver supports Quad SPI RX transfers on the AST2600 SoC but it
+didn't have the expected results. Therefore it is not activated yet.
+There are some issues on the pinctrl to investigate first. 
+
+Tested on:
  
- /* ASPEED FMC/SPI memory control register related */
- #define OFFSET_CE_TYPE_SETTING		0x00
-@@ -127,6 +128,54 @@ struct aspeed_spi_controller {
- 	spinlock_t lock;
- };
+ * OpenPOWER Palmetto (AST2400)
+ * Facebook Wedge 100 BMC (AST2400) by Tao Ren <rentao.bupt@gmail.com>
+ * Evaluation board (AST2500) 
+ * Inspur FP5280G2 BMC (AST2500) by John Wang <wangzq.jn@gmail.com>
+ * Facebook Backpack CMM BMC (AST2500) by Tao Ren <rentao.bupt@gmail.com>
+ * OpenPOWER Witherspoon (AST2500)
+ * Evaluation board (AST2600 A0 and A3)
+ * Rainier board (AST2600)
  
-+static ssize_t access_primary_show(struct device *dev,
-+				   struct device_attribute *attr, char *buf)
-+{
-+	struct aspeed_spi_controller *ast_ctrl = dev_get_drvdata(dev);
-+
-+	return _access_primary_show(ast_ctrl->regs, attr, buf);
-+}
-+
-+static ssize_t access_primary_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t size)
-+{
-+	struct aspeed_spi_controller *ast_ctrl = dev_get_drvdata(dev);
-+
-+	return _access_primary_store(ast_ctrl->regs, attr, buf, size);
-+}
-+
-+static ssize_t access_backup_show(struct device *dev,
-+				  struct device_attribute *attr, char *buf)
-+{
-+	struct aspeed_spi_controller *ast_ctrl = dev_get_drvdata(dev);
-+
-+	return _access_backup_show(ast_ctrl->regs, attr, buf);
-+}
-+
-+static ssize_t access_backup_store(struct device *dev,
-+				   struct device_attribute *attr,
-+				   const char *buf, size_t size)
-+{
-+	struct aspeed_spi_controller *ast_ctrl = dev_get_drvdata(dev);
-+
-+	return _access_backup_store(ast_ctrl->regs, attr, buf, size);
-+}
-+
-+static DEVICE_ATTR_RW(access_primary);
-+static DEVICE_ATTR_RW(access_backup);
-+
-+static struct attribute *bswitch_primary_attrs[] = {
-+	&dev_attr_access_primary.attr, NULL
-+};
-+
-+static struct attribute *bswitch_backup_attrs[] = {
-+	&dev_attr_access_backup.attr, NULL
-+};
-+
-+ATTRIBUTE_GROUPS(bswitch_primary);
-+ATTRIBUTE_GROUPS(bswitch_backup);
-+
- static uint32_t
- aspeed_2600_spi_segment_start(struct aspeed_spi_controller *ast_ctrl,
- 			      uint32_t reg)
-@@ -1393,6 +1442,19 @@ static int aspeed_spi_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto end;
- 
-+	if (of_device_is_compatible(dev->of_node, "aspeed,ast2600-fmc")) {
-+		/* if boot from alt source, show access_primary, otherwise show access_backup */
-+		if (readl(ast_ctrl->regs + OFFSET_ABR_CTRL_STATUS) &
-+		    ABR_BOOT_SRC_INDICATE) {
-+
-+			if (devm_device_add_groups(dev, bswitch_primary_groups))
-+				dev_warn(dev, "Could not add access_primary\n");
-+		} else {
-+			if (devm_device_add_groups(dev, bswitch_backup_groups))
-+				dev_warn(dev, "Could not add access_backup\n");
-+		}
-+	}
-+
- 	ret = devm_spi_register_master(dev, spi_ctrl);
- 
- end:
-diff --git a/include/linux/soc/aspeed/aspeed-abr.h b/include/linux/soc/aspeed/aspeed-abr.h
-new file mode 100644
-index 000000000000..3542f76e0232
---- /dev/null
-+++ b/include/linux/soc/aspeed/aspeed-abr.h
-@@ -0,0 +1,93 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+
-+#ifndef __ASPEED_ABR_H__
-+#define __ASPEED_ABR_H__
-+
-+#include <linux/device.h>
-+#include <linux/sysfs.h>
-+#include <linux/io.h>
-+
-+#define OFFSET_ABR_CTRL_STATUS 0x64
-+#define OFFSET_ABR_TIMER_RELOAD 0x68
-+#define OFFSET_ABR_TIMER_RESTART 0x6c
-+
-+#define ABR_WDT_ENABLE BIT(0)
-+#define ABR_BOOT_SRC_INDICATE BIT(4)
-+#define ABR_RESTART_MAGIC 0x4755
-+#define ABR_CLEAR_BOOT_SRC_MAGIC (0xEA << 16)
-+#define ABR_RELOAD_MAX_VALUE 0x3ff
-+
-+static inline ssize_t _access_primary_show(void __iomem *regs,
-+					   struct device_attribute *attr,
-+					   char *buf)
-+{
-+	u32 status = readl(regs + OFFSET_ABR_CTRL_STATUS);
-+
-+	return sysfs_emit(buf, "%u\n", !(status & ABR_BOOT_SRC_INDICATE));
-+}
-+
-+static inline ssize_t _access_primary_store(void __iomem *regs,
-+					    struct device_attribute *attr,
-+					    const char *buf, size_t size)
-+{
-+	unsigned long val;
-+
-+	if (kstrtoul(buf, 10, &val))
-+		return -EINVAL;
-+
-+	/* write bit[23:16] = 0xEA */
-+	if (val)
-+		writel(readl(regs + OFFSET_ABR_CTRL_STATUS) |
-+			       ABR_CLEAR_BOOT_SRC_MAGIC,
-+		       regs + OFFSET_ABR_CTRL_STATUS);
-+
-+	return size;
-+}
-+
-+static inline ssize_t _access_backup_show(void __iomem *regs,
-+					  struct device_attribute *attr,
-+					  char *buf)
-+{
-+	u32 status = readl(regs + OFFSET_ABR_CTRL_STATUS);
-+	u32 timer_reload = readl(regs + OFFSET_ABR_TIMER_RELOAD);
-+
-+	if (!(status & ABR_WDT_ENABLE))
-+		return sysfs_emit(buf, "%u\n", 0);
-+	/* [31:16] Counter value status */
-+	return sysfs_emit(buf, "%u\n", timer_reload >> 16);
-+}
-+
-+static inline ssize_t _access_backup_store(void __iomem *regs,
-+					   struct device_attribute *attr,
-+					   const char *buf, size_t size)
-+{
-+	unsigned long count;
-+
-+	if (kstrtoul(buf, 10, &count))
-+		return -EINVAL;
-+
-+	/* disable watchdog */
-+	if (count == 0) {
-+		writel(0, regs + OFFSET_ABR_CTRL_STATUS);
-+		return size;
-+	}
-+
-+	/*
-+	 * bit[12:0] : Reload value of expire time
-+	 * The time unit is 0.1 second. Default set at 22 seconds
-+	 * 0: Immediately timeout
-+	 */
-+	count = count < ABR_RELOAD_MAX_VALUE ? count : ABR_RELOAD_MAX_VALUE;
-+
-+	writel(0, regs + OFFSET_ABR_CTRL_STATUS);
-+	writel(count, regs + OFFSET_ABR_TIMER_RELOAD);
-+
-+	/* Write 0x4755 value to load the reload value into watchdog counter */
-+	writel(ABR_RESTART_MAGIC, regs + OFFSET_ABR_TIMER_RESTART);
-+
-+	/* Enable watchdog */
-+	writel(ABR_WDT_ENABLE, regs + OFFSET_ABR_CTRL_STATUS);
-+	return size;
-+}
-+
-+#endif
+[1] https://github.com/openbmc/linux/blob/dev-5.15/drivers/mtd/spi-nor/controllers/aspeed-smc.c
+[2] https://patchwork.ozlabs.org/project/linux-aspeed/list/?series=212394
+
+Thanks,
+
+C. 
+
+Changes in v5:
+
+  - Rebased on 5.18-rc5
+  - More AST2600 tests from Jae Hyun Yoo
+  - Cleanups of aspeed,ast2600-fmc.yaml
+  - Modified aspeed_spi_send_cmd_addr() routine to return an error  
+  - Simplified conditions in exec_op() handler when computing
+    the controller setting
+  - Dropped the use of memcpy_fromio for the SFDP address space
+
+Changes in v4:
+
+  - Rebased on 5.18 
+  - Removal of the SPI-NOR base driver (we had enough tests)
+  - Fix for small size flash devices on AST2600 (Potin)
+
+Changes in v3:
+
+ - Fixed compile warning on aspeed_spi_dirmap_read() prototype reported
+   by kernel test robot 
+ - Removed unnecessary entry in ast2600-fmc.yaml
+ - New patch from Tao to set spi-max-frequency on all FMC devices
+
+Changes in v2:
+
+ - Fixed dt_binding_check warnings (Rob)
+ - New entry in MAINTAINERS 
+ - Addressed Lukas comments regarding the SPI controller registration
+   and device removal. Checked with driver bind/unbind   
+ - Introduced setup and cleanup handlers and removed routine looping
+   on the DT children properties (Pratyush)
+ - Clarified in commit log requirements for training.
+ - Removed defconfig changes of patch 1 since they were reverted in
+   the last patch (Joel)
+
+Cédric Le Goater (9):
+  ARM: dts: aspeed: Adjust "reg" property of FMC/SPI controllers
+  dt-bindings: spi: Add Aspeed SMC controllers device tree binding
+  spi: spi-mem: Convert Aspeed SMC driver to spi-mem
+  spi: aspeed: Add support for direct mapping
+  spi: aspeed: Adjust direct mapping to device size
+  spi: aspeed: Workaround AST2500 limitations
+  spi: aspeed: Add support for the AST2400 SPI controller
+  spi: aspeed: Calibrate read timings
+  ARM: dts: aspeed: Enable Dual SPI RX transfers
+
+Potin Lai (1):
+  mtd: spi-nor: aspeed: set the decoding size to at least 2MB for
+    AST2600
+
+Tao Ren (1):
+  ARM: dts: aspeed-g4: Set spi-max-frequency for all flashes
+
+ drivers/mtd/spi-nor/controllers/aspeed-smc.c  |  921 -------------
+ drivers/spi/spi-aspeed-smc.c                  | 1210 +++++++++++++++++
+ .../devicetree/bindings/mtd/aspeed-smc.txt    |   51 -
+ .../bindings/spi/aspeed,ast2600-fmc.yaml      |   82 ++
+ MAINTAINERS                                   |   10 +
+ arch/arm/boot/dts/aspeed-g4.dtsi              |   16 +-
+ arch/arm/boot/dts/aspeed-g5.dtsi              |   16 +-
+ arch/arm/boot/dts/aspeed-g6.dtsi              |   17 +-
+ drivers/mtd/spi-nor/controllers/Kconfig       |   10 -
+ drivers/mtd/spi-nor/controllers/Makefile      |    1 -
+ drivers/spi/Kconfig                           |   11 +
+ drivers/spi/Makefile                          |    1 +
+ 12 files changed, 1347 insertions(+), 999 deletions(-)
+ delete mode 100644 drivers/mtd/spi-nor/controllers/aspeed-smc.c
+ create mode 100644 drivers/spi/spi-aspeed-smc.c
+ delete mode 100644 Documentation/devicetree/bindings/mtd/aspeed-smc.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+
 -- 
-2.25.1
+2.35.1
 
