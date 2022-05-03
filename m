@@ -2,50 +2,46 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1C551890A
-	for <lists+linux-spi@lfdr.de>; Tue,  3 May 2022 17:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B098F51893B
+	for <lists+linux-spi@lfdr.de>; Tue,  3 May 2022 18:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238942AbiECPy4 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Tue, 3 May 2022 11:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
+        id S235749AbiECQEN (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 3 May 2022 12:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238980AbiECPyz (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 May 2022 11:54:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F4F3B3FE;
-        Tue,  3 May 2022 08:51:21 -0700 (PDT)
+        with ESMTP id S239087AbiECQDu (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 May 2022 12:03:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85E1DCC
+        for <linux-spi@vger.kernel.org>; Tue,  3 May 2022 09:00:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C87F66168F;
-        Tue,  3 May 2022 15:51:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47EAEC385A4;
-        Tue,  3 May 2022 15:51:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88673B81D8D
+        for <linux-spi@vger.kernel.org>; Tue,  3 May 2022 16:00:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3BB99C385A9;
+        Tue,  3 May 2022 16:00:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651593080;
-        bh=KkuXBkxl3M1SrH9rLok6F19ml6E97xmqNVUAIDYkAao=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=tkCBD57f4XuGs75eNLeGYryfiWyg7qyPfjTS6XQ4AE+XBPnow2RzhMXWphNrq5rns
-         4jcXJ5UaKfSwOXfY87Ztyu4nBPyPoJkW/zE8NVSCBRa0GfGkNJjEWVRSw3I+JTiSsf
-         ESxKe9L8fH+bhTTw6OnH0vmt52hattDLjsGanMW2aEajKTWN7wyvhxK303N10010Tq
-         IbXP55iAaVJ12+2+IwQ16Oycy+NKYvYKyP+nV0bznCMj+ExlTFcwT2tc0vMVdPufIA
-         Bwu/8TrpumXCZBp9WgMtdJvJdB/DCQptNkZlz9Y1pvywxU32BSAw6kISkddSFgyKeC
-         5tZVOXQpUKWAg==
-From:   Mark Brown <broonie@kernel.org>
-To:     biju.das.jz@bp.renesas.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     prabhakar.mahadev-lad.rj@bp.renesas.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, geert+renesas@glider.be,
-        Chris.Paterson2@renesas.com, biju.das@bp.renesas.com,
-        linux-renesas-soc@vger.kernel.org
-In-Reply-To: <20220501082150.24662-1-biju.das.jz@bp.renesas.com>
-References: <20220501082150.24662-1-biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH] spi: dt-bindings: renesas,rspi: Document RZ/G2UL SoC
-Message-Id: <165159307802.184303.18335939609476308379.b4-ty@kernel.org>
-Date:   Tue, 03 May 2022 16:51:18 +0100
-MIME-Version: 1.0
+        s=k20201202; t=1651593614;
+        bh=S7gZfpWnxhXPxpLMSe+fVhGn9C8ZSmLkpSCtnr4mTus=;
+        h=Subject:From:Date:To:From;
+        b=dxc415rkhtABoblagq0Td7fOUV3VS4YuzB/36I+W2aD//t6PVkaA8rbRfmpb3tq7e
+         VacvtrFLMMte+7qGgOPzRySU3E58818JyFSWc/VcRmaqe/N3h+r8356Q9P1rLxdUlK
+         SXekLwSJZvtmbiedHaGjph110fssbjlwX9+Qj3BBt8vcR2KOGbAOk1Dw6Z7UGDg3Ol
+         c8aBL2BzSxvI1hAmRUF0gZNJxpi7hApKfcR/N+f1PKleXWcQH36ld0ru3IuarpC9lJ
+         cMpbdPwbyVzNk9cguSdRWpMWePSp+G7hccjG6GKA9gVBJ5KngyVSNBCr/2NFVL3cd6
+         dJ9vtYj/G3L8Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 100EEF03848;
+        Tue,  3 May 2022 16:00:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From:   patchwork-bot+spi-devel-general@kernel.org
+Message-Id: <165159361398.31024.16077965831693399790.git-patchwork-summary@kernel.org>
+Date:   Tue, 03 May 2022 16:00:13 +0000
+To:     linux-spi@vger.kernel.org, broonie@kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,40 +52,28 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Sun, 1 May 2022 09:21:50 +0100, Biju Das wrote:
-> Add RSPI binding documentation for Renesas RZ/G2UL SoC.
-> 
-> RSPI block is identical to one found on RZ/A, so no driver changes are
-> required. The fallback compatible string "renesas,rspi-rz" will be used
-> on RZ/G2UL.
-> 
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: [RFC] spi: cadence-quadspi: Disable DAC on SoCFPGA
+  Submitter: Marek Vasut <marex@denx.de>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=616137
+  Lore link: https://lore.kernel.org/r/20220221043238.295369-1-marex@denx.de
 
-Thanks!
+Patch: spi: cadence-quadspi: fix Direct Access Mode disable for SoCFPGA
+  Submitter: Ian Abbott <abbotti@mev.co.uk>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=636235
+  Lore link: https://lore.kernel.org/r/20220427153446.10113-1-abbotti@mev.co.uk
 
-[1/1] spi: dt-bindings: renesas,rspi: Document RZ/G2UL SoC
-      commit: dfc6597eb1e1604575c6e061e1a9be0048d17b2c
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Total patches: 2
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
