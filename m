@@ -2,80 +2,91 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3CA51879B
-	for <lists+linux-spi@lfdr.de>; Tue,  3 May 2022 16:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 176D351890E
+	for <lists+linux-spi@lfdr.de>; Tue,  3 May 2022 17:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237622AbiECPDU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-spi@lfdr.de>); Tue, 3 May 2022 11:03:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
+        id S238901AbiECPy5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Tue, 3 May 2022 11:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237618AbiECPDT (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 May 2022 11:03:19 -0400
-X-Greylist: delayed 467 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 May 2022 07:59:47 PDT
-Received: from mail.megasoftsol.com (mail.megasoftsol.com [43.231.250.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DC239810
-        for <linux-spi@vger.kernel.org>; Tue,  3 May 2022 07:59:46 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.megasoftsol.com (Postfix) with ESMTP id 8B68990D9E6
-        for <linux-spi@vger.kernel.org>; Tue,  3 May 2022 20:17:06 +0530 (IST)
-Received: from mail.megasoftsol.com ([127.0.0.1])
-        by localhost (mail.megasoftsol.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id oBIarVpS6OlQ for <linux-spi@vger.kernel.org>;
-        Tue,  3 May 2022 20:17:06 +0530 (IST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.megasoftsol.com (Postfix) with ESMTP id 1CB5490D95F
-        for <linux-spi@vger.kernel.org>; Tue,  3 May 2022 20:17:06 +0530 (IST)
-X-Virus-Scanned: amavisd-new at megasoftsol.com
-Received: from mail.megasoftsol.com ([127.0.0.1])
-        by localhost (mail.megasoftsol.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id AvSGsdoAek-U for <linux-spi@vger.kernel.org>;
-        Tue,  3 May 2022 20:17:06 +0530 (IST)
-Received: from asda.co.uk (unknown [20.97.211.134])
-        (Authenticated sender: admin)
-        by mail.megasoftsol.com (Postfix) with ESMTPSA id 4D68C90D726
-        for <linux-spi@vger.kernel.org>; Tue,  3 May 2022 20:17:05 +0530 (IST)
-Reply-To: sales@asdaa.uk
-From:   ASDA Stores Limited <Hanes.Thomas23877@asda.co.uk>
-To:     linux-spi@vger.kernel.org
-Subject: 2nd Quater puchase request
-Date:   03 May 2022 14:49:33 +0000
-Message-ID: <20220503092157.7AB2EC1B41ECCE40@asda.co.uk>
+        with ESMTP id S238965AbiECPyy (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 May 2022 11:54:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90753B01B;
+        Tue,  3 May 2022 08:51:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53E18B81F30;
+        Tue,  3 May 2022 15:51:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 012CEC385A4;
+        Tue,  3 May 2022 15:51:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651593076;
+        bh=1MQKMXKM6m6N7ENrzmFtWOnFCNAixZZ29Xy7sbT9f6k=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=u/5G8RDJMMa9Zb/IkRaFZ2m1g6mVbsitHVzQuVm8qqwXip0I0ehrHHy549N7SM0s/
+         K3afGKvVzYHIlZPg/s6TLcmCkgT25AE5fKEbHeZQiCuw7oagOhziZ8/XgxWo/FJDCy
+         6k+OOehP3TFx2IHhcdPAbFY7wl3gzhpkv/YqjFYEH6fZbBhEwbT2MuEuVdbuSWkc4u
+         kQu6T0XBwA7KyCfAbQffQcu6w8ArI6p8cXpoRwuj8km1ggx0d6/q3qxjxSBdJivjsN
+         MWo2s6AQpduc80PfrSn5H0TYP/yJNd0k6EdRyxyD1fTL6CAAysMQytVWI0VuL2E+sQ
+         HEYx4IDW0EaAA==
+From:   Mark Brown <broonie@kernel.org>
+To:     abbotti@mev.co.uk, linux-spi@vger.kernel.org
+Cc:     p.yadav@ti.com, dinguyen@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220427153446.10113-1-abbotti@mev.co.uk>
+References: <20220427153446.10113-1-abbotti@mev.co.uk>
+Subject: Re: [PATCH] spi: cadence-quadspi: fix Direct Access Mode disable for SoCFPGA
+Message-Id: <165159307472.184303.9043361573440279705.b4-ty@kernel.org>
+Date:   Tue, 03 May 2022 16:51:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_50,
-        RCVD_IN_BL_SPAMCOP_NET,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-Dear linux-spi
+On Wed, 27 Apr 2022 16:34:46 +0100, Ian Abbott wrote:
+> The Cadence QSPI compatible string required for the SoCFPGA platform
+> changed from the default "cdns,qspi-nor" to "intel,socfpga-qspi" with
+> the introduction of an additional quirk in
+> commit 98d948eb8331 ("spi: cadence-quadspi: fix write completion support").
+> However, that change did not preserve the previously used
+> quirk for this platform.  Reinstate the `CQSPI_DISABLE_DAC_MODE` quirk
+> for the SoCFPGA platform.
+> 
+> [...]
 
-We are interested in having some of your hot selling product in 
-our stores and outlets spread all over United Kingdom, Northern 
-Island and Africa. ASDA Stores Limited is one of the highest-
-ranking Wholesale & Retail outlets in the United Kingdom. 
-  
-We shall furnish our detailed company profile in our next 
-correspondent. However, it would be appreciated if you can send 
-us your catalog through email to learn more about your company's 
-products and wholesale quote. It is hopeful that we can start a 
-viable long-lasting business relationship (partnership) with you.  
-  
-  
-Your prompt response would be delightfully appreciated. 
-  
-Best Wishes 
-  
-  
-Hanes S. Thomas 
-Procurement Office. 
-ASDA Stores Limited 
-Tel:  + 44 - 7451271650 
-WhatsApp: + 44 – 7441440360 
-Website: www.asda.co.uk
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: cadence-quadspi: fix Direct Access Mode disable for SoCFPGA
+      commit: f724c296f2f2cc3f9342b0fc26239635cbed856e
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
