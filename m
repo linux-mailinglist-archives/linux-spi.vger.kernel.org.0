@@ -2,43 +2,45 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 176D351890E
-	for <lists+linux-spi@lfdr.de>; Tue,  3 May 2022 17:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05EB4518909
+	for <lists+linux-spi@lfdr.de>; Tue,  3 May 2022 17:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238901AbiECPy5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        id S238949AbiECPy5 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
         Tue, 3 May 2022 11:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238965AbiECPyy (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 May 2022 11:54:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90753B01B;
-        Tue,  3 May 2022 08:51:18 -0700 (PDT)
+        with ESMTP id S238901AbiECPyz (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Tue, 3 May 2022 11:54:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919B93B3F9;
+        Tue,  3 May 2022 08:51:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53E18B81F30;
-        Tue,  3 May 2022 15:51:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 012CEC385A4;
-        Tue,  3 May 2022 15:51:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00237B81F2E;
+        Tue,  3 May 2022 15:51:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A422C385A9;
+        Tue,  3 May 2022 15:51:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651593076;
-        bh=1MQKMXKM6m6N7ENrzmFtWOnFCNAixZZ29Xy7sbT9f6k=;
+        s=k20201202; t=1651593077;
+        bh=iTiarTkByZ5RFQ9pQrV9iuj93cpQAxWxhkeao7MmLRY=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=u/5G8RDJMMa9Zb/IkRaFZ2m1g6mVbsitHVzQuVm8qqwXip0I0ehrHHy549N7SM0s/
-         K3afGKvVzYHIlZPg/s6TLcmCkgT25AE5fKEbHeZQiCuw7oagOhziZ8/XgxWo/FJDCy
-         6k+OOehP3TFx2IHhcdPAbFY7wl3gzhpkv/YqjFYEH6fZbBhEwbT2MuEuVdbuSWkc4u
-         kQu6T0XBwA7KyCfAbQffQcu6w8ArI6p8cXpoRwuj8km1ggx0d6/q3qxjxSBdJivjsN
-         MWo2s6AQpduc80PfrSn5H0TYP/yJNd0k6EdRyxyD1fTL6CAAysMQytVWI0VuL2E+sQ
-         HEYx4IDW0EaAA==
+        b=oQLRr72ENUz0DJtAhTaDsSR5JQg0UUhqNY1z+mBh/J9QSVRMHq3PRd4+R0Uf0ZRYR
+         wvYXr7t4DqXElh0fWn+cV3KGPdz1EhPUvX42E0g5ScW0L03HtsHVTzQrBdTUM8Dl+I
+         slMVp9SF2zkRjLaubne8yTvOS7I9BEj1BHJiJdODXmgdP7TJNiHF7shbrJ+3tvSFTV
+         PO7dl2Qxu/tOu5b6RHspmYJ/i1ueBI4JQCN3H9qUqmoHHzW8hqQ5Yhz8X0/ReKrXDb
+         TSh5EkMwWPY5R+tMx/k2d1MrAbhfred1l7jiWM+KfwRKQ1V5OfB0W+1+1VP8Jg6obu
+         uOUJMjfGzjwAw==
 From:   Mark Brown <broonie@kernel.org>
-To:     abbotti@mev.co.uk, linux-spi@vger.kernel.org
-Cc:     p.yadav@ti.com, dinguyen@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220427153446.10113-1-abbotti@mev.co.uk>
-References: <20220427153446.10113-1-abbotti@mev.co.uk>
-Subject: Re: [PATCH] spi: cadence-quadspi: fix Direct Access Mode disable for SoCFPGA
-Message-Id: <165159307472.184303.9043361573440279705.b4-ty@kernel.org>
-Date:   Tue, 03 May 2022 16:51:14 +0100
+To:     dan.carpenter@oracle.com, gch981213@gmail.com
+Cc:     linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
+        linux-spi@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        gch981213@gmail.com
+In-Reply-To: <YmwjUcTKyQNrrn2g@kili>
+References: <YmwjUcTKyQNrrn2g@kili>
+Subject: Re: [PATCH] spi: mtk-snfi: preserve dma_mapping_error() error codes
+Message-Id: <165159307628.184303.16325175750153523597.b4-ty@kernel.org>
+Date:   Tue, 03 May 2022 16:51:16 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -52,16 +54,10 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On Wed, 27 Apr 2022 16:34:46 +0100, Ian Abbott wrote:
-> The Cadence QSPI compatible string required for the SoCFPGA platform
-> changed from the default "cdns,qspi-nor" to "intel,socfpga-qspi" with
-> the introduction of an additional quirk in
-> commit 98d948eb8331 ("spi: cadence-quadspi: fix write completion support").
-> However, that change did not preserve the previously used
-> quirk for this platform.  Reinstate the `CQSPI_DISABLE_DAC_MODE` quirk
-> for the SoCFPGA platform.
+On Fri, 29 Apr 2022 20:41:37 +0300, Dan Carpenter wrote:
+> Return -ENOMEM of there is a dma mapping error.  Do not return success.
 > 
-> [...]
+> 
 
 Applied to
 
@@ -69,8 +65,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: cadence-quadspi: fix Direct Access Mode disable for SoCFPGA
-      commit: f724c296f2f2cc3f9342b0fc26239635cbed856e
+[1/1] spi: mtk-snfi: preserve dma_mapping_error() error codes
+      commit: 73c1a5153ec8c53100b13bccafbb29cd502ee086
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
