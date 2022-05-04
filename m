@@ -2,115 +2,57 @@ Return-Path: <linux-spi-owner@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C26A51A1FE
-	for <lists+linux-spi@lfdr.de>; Wed,  4 May 2022 16:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00DBD51A2DF
+	for <lists+linux-spi@lfdr.de>; Wed,  4 May 2022 17:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351180AbiEDOS2 (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
-        Wed, 4 May 2022 10:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34520 "EHLO
+        id S1351649AbiEDPEr (ORCPT <rfc822;lists+linux-spi@lfdr.de>);
+        Wed, 4 May 2022 11:04:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351195AbiEDOS1 (ORCPT
-        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 May 2022 10:18:27 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAA642490
-        for <linux-spi@vger.kernel.org>; Wed,  4 May 2022 07:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1651673691; x=1683209691;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3gz1SvToUvc61rP9gSGLK3Q0CP+ks8gO3XkKncVaLcU=;
-  b=fMT45tmFde2XzHg81790fsE6CNTWmrjFAlj8cgBBXEyjV1sSZdP7iKns
-   TVlSubFd3DJo/0nZAWM34pXF88ndgw2ixIERaX1xcBaM7Yggas2GtAd8y
-   p+fjeQFYhejAJUEdd4l7LiZDxQ0/+LBdp0AEKEo2i2oa4EDLxI66A3WpG
-   u+wveCngn4HFypEsh2Jv+TvG8natzwuCgFQB+sD6sGnogP1i6QPIBKUp5
-   Oa2ZcnDh/jKiOctkJ5k/7uNO0psTJ0krjpaeCgWbLRTemSCpDrfei2y9C
-   fAvfvUfNTG9KvGIdRwPvHBtW/0giextkmiKwKW04pmlgzObJiJwqCC7tQ
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.91,198,1647273600"; 
-   d="scan'208";a="198343925"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 04 May 2022 22:14:48 +0800
-IronPort-SDR: 59kFahxMGGCiBuVQAKZKqqASyhoY0GDqLOm7F4V+pFeSDrpPUVQP+Ydjbx8ulIYggtyPc7G3bU
- nlebGunbHoa7YJhBneeba9JeIldXP3C2xf/m8p9TDUNa9MCVng3bDyPoS9qVlkOBOEmsYINYJh
- X+Ho2jlPtgj8c1iSuOCp790ypgQVsetzA0U7r+r1sjeKFVdLlKFu2jbkqKQgE2EuTbkPTVj2YS
- hUPYty6Z1dPcXac7igTOYGiPBBZhE9l2op0ea55bRFA4Jv9n3fOS3OpLiAy3TzD2QfhDFTD8jH
- uoN7QFEKg5B889JhiwUa25VI
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 May 2022 06:45:30 -0700
-IronPort-SDR: aRtaOMqPn/7B/AKe/cxn9pMv2tP/uX8H18hjvKxVaeyhje2mb0IwXyTMDz5H3X/HgM0u9ndUHv
- rZKHPD6HaJ9ea3iYAeGRKCjae1XR9NirqXurhfVXqDdbqGQ3o4TBs/xeN3jvejRyDSzotO8Ftw
- +9KhR11/lwPd29/V5Qxbhj0LUcPEqXgJsKM3Qn4B7oihwNrWS6LYohs9KO4SU9geo6uMCm+ggS
- HNqBMLN6SZuegYuAM6Esh9JR0N+6Zm0CHAiP0xerhGqNv8feUPO5a9JxfaRTGlUuxT3VbeShGj
- iwc=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 May 2022 07:14:49 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Ktf3W3kjkz1SVpB
-        for <linux-spi@vger.kernel.org>; Wed,  4 May 2022 07:14:47 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1651673686; x=1654265687; bh=3gz1SvToUvc61rP9gSGLK3Q0CP+ks8gO3Xk
-        KncVaLcU=; b=Irb3PekokvtqFuHO2x930y5RXWVryj/RHb7TPBz8hyKjQQGiEZS
-        PNlDM4PBOewSd6GF6QqDO6PMCeng/9fFLxdgUo2KnanoesyieOuJq7vgIy5+qpxw
-        37+IgA4VWZihtrROBbzcaUPUO/1emO4SxozHORu/HDrxTdhpZr13EOxk5Ls2EfcV
-        /KiQamg4sm9jTZI9nmoP0HkKDzR49F0X1N8WiDmHBLdwWy+qovjqnq5+A1piy09q
-        sFZWZpyq0sV2yJfo6NNJ7PY1KHDv2FMcro0qaeTbOCc//hkT7yDUI4wcYnREho+7
-        1IyVSmCp4iio3QoJKV7OXxGBhwctFUqKhpQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id bTSRSCcnd3YW for <linux-spi@vger.kernel.org>;
-        Wed,  4 May 2022 07:14:46 -0700 (PDT)
-Received: from [10.225.81.200] (unknown [10.225.81.200])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Ktf3S0q49z1Rvlc;
-        Wed,  4 May 2022 07:14:44 -0700 (PDT)
-Message-ID: <a3d58159-292d-70e2-d811-e54c9b49c9c8@opensource.wdc.com>
-Date:   Wed, 4 May 2022 23:14:43 +0900
+        with ESMTP id S1351635AbiEDPEq (ORCPT
+        <rfc822;linux-spi@vger.kernel.org>); Wed, 4 May 2022 11:04:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E6714007;
+        Wed,  4 May 2022 08:01:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50B8A61B33;
+        Wed,  4 May 2022 15:01:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF16EC385AA;
+        Wed,  4 May 2022 15:01:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651676469;
+        bh=lq7MGiE/uWdKExD7GZm6qB1OLQ/BOLnq+9H9OKNCI9g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e3YGRO5x7g0G2kuoSOD5un+woBYe9Byxaa1Z/8j5ja2yflMPOeV7DJXCt4YZAx8gb
+         rcxXCc4rKiv6oWyCxFaxooRz/BqU8uz+gGWmMNX/YmoIS5TkA4xQIYnBxpkdPNqkpu
+         V+yKghw+rrjStX0LDKvN1ngCjpcTbBHO0zzqFh+Yz3htNxZ6zeZCfFxpM/JJRIOrje
+         KSe6QERHJDYNMqQsYDdpIXoL0WfN4YcdEOcxmrjAS8ibSVoRYO+Bx9wIAzjkO6cPkR
+         el77K9dJaEdthvq9L3gs1ilT7fZ1gTagePZQXiSSjSNrSon+ssw3DbRnJF3DvKiIVC
+         BsummrlNnAtZA==
+Date:   Wed, 4 May 2022 16:01:03 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: dt-bindings: qcom,spi-geni-qcom: allow three
+ interconnects
+Message-ID: <YnKVLxmz0hhQGNzI@sirena.org.uk>
+References: <20220504125119.190526-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH v1 2/4] powerpc/mpc5xxx: Switch
- mpc5xxx_get_bus_frequency() to use fwnode
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Wolfram Sang <wsa@kernel.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Anatolij Gustschin <agust@denx.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pantelis Antoniou <pantelis.antoniou@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-References: <20220504134449.64473-1-andriy.shevchenko@linux.intel.com>
- <20220504134449.64473-2-andriy.shevchenko@linux.intel.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220504134449.64473-2-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WALsIl/4pd65GNpK"
+Content-Disposition: inline
+In-Reply-To: <20220504125119.190526-1-krzysztof.kozlowski@linaro.org>
+X-Cookie: Chess tonight.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,18 +60,30 @@ Precedence: bulk
 List-ID: <linux-spi.vger.kernel.org>
 X-Mailing-List: linux-spi@vger.kernel.org
 
-On 2022/05/04 22:44, Andy Shevchenko wrote:
-> Switch mpc5xxx_get_bus_frequency() to use fwnode in order to help
-> cleaning up other parts of the kernel from OF specific code.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-For the pata bits,
+--WALsIl/4pd65GNpK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+On Wed, May 04, 2022 at 02:51:19PM +0200, Krzysztof Kozlowski wrote:
+> Recent Qualcomm Geni SPI nodes, e.g. on SM8450, come with three
+> interconnects.  This fixes dtbs_check warnings like:
 
--- 
-Damien Le Moal
-Western Digital Research
+This doesn't apply against current code, please check and resend.
+
+--WALsIl/4pd65GNpK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJylS8ACgkQJNaLcl1U
+h9BpLgf/dcTXk+ErdRCTFDJSRozps/gDg+xuxVHRZ7Qgv6577zzfqY06zM4HCDz8
+C235svq5OBM00PHmu4BG44hZQnVf0AbSt8Yhg+vp0F6BUWcsIgL9vvxX3ZMQHaJ8
+RcQsyw3eQgl9EB4lvq8CHWwDktv0seMYwVFD2KO9o9mfcI3L5KIHxx6AT0Er2ycx
+NJM+QW4Ivt3JDh3zACZ+hRwg9oK8xodudjTzjYNMOxGvKHNIpnLzfz9eNfn+GJ9s
+/KrW3zrUqcgr7+XXSag1uDGafpgNFwkbesHjCuS5evMPRoPLbNp55tqG48HbmswW
+l4oYNnFhsK11NLaFN02raNKij5y/fA==
+=Qh1y
+-----END PGP SIGNATURE-----
+
+--WALsIl/4pd65GNpK--
